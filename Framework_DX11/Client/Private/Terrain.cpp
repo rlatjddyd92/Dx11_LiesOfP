@@ -2,6 +2,7 @@
 #include "..\Public\Terrain.h"
 
 #include "GameInstance.h"
+#include "Layer.h"
 
 CTerrain::CTerrain(ID3D11Device * pDevice, ID3D11DeviceContext * pContext)
 	: CGameObject{ pDevice, pContext }
@@ -39,6 +40,7 @@ void CTerrain::Priority_Update(_float fTimeDelta)
 
 void CTerrain::Update(_float fTimeDelta)
 {
+	m_pGameInstance->Find_Layer(LEVEL_GAMEPLAY, TEXT("adsf"))->Get_ObjectList();
 	int a = 10;
 }
 
