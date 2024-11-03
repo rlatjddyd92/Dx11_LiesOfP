@@ -13,12 +13,15 @@ private:
 public:
 	HRESULT Initialize(HWND hWnd);
 	_bool Picking(_float3* pPickPos);
+	_bool Picking_Object(_uint* pPickID);
 	_vector Compute_Height(_fvector vWorldPos, _fmatrix ViewMatrix, _fmatrix ProjMatrix);
 
 private:
 	ID3D11Device*					m_pDevice = { nullptr };
 	ID3D11DeviceContext*			m_pContext = { nullptr };
 	ID3D11Texture2D*				m_pPickDepthTexture = { nullptr };
+	ID3D11Texture2D*				m_pPickObjectTexture = { nullptr };
+	ID3D11Texture2D*				m_pPickObjectTextureMini = { nullptr };
 	class CGameInstance*			m_pGameInstance = { nullptr };
 	HWND							m_hWnd = {};
 	_uint							m_iViewportWidth{}, m_iViewportHeight{};

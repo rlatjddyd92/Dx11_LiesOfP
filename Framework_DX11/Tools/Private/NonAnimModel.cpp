@@ -4,6 +4,8 @@
 #include "GameInstance.h"
 #include "ImGui_Manager.h"
 
+_int CNonAnimModel::m_iStaticHashId = 0;
+
 CNonAnimModel::CNonAnimModel(ID3D11Device* pDevice, ID3D11DeviceContext* pContext)
 	: CGameObject{ pDevice, pContext }
 {
@@ -36,6 +38,10 @@ HRESULT CNonAnimModel::Initialize(void* pArg)
 	m_iRenderGroupId = pDesc->iRenderGroupID;
 
 	memcpy(&m_tDesc, pDesc, sizeof(NONMODEL_DESC));
+
+	m_iStaticHashId++;
+	m_iHashId = m_iStaticHashId;
+	
 	return S_OK;
 }
 
@@ -62,6 +68,7 @@ void CNonAnimModel::Late_Update(_float fTimeDelta)
 	__super::Late_Update(fTimeDelta);
 
 	m_pGameInstance->Add_RenderObject(CRenderer::RG_NONBLEND, this);
+	m_pGameInstance->Add_RenderObject(CRenderer::RG_PICKING, this);
 }
 
 HRESULT CNonAnimModel::Render()
@@ -85,6 +92,47 @@ HRESULT CNonAnimModel::Render()
 
 
 		if (FAILED(m_pShaderCom->Begin(0)))
+			return E_FAIL;
+
+		if (FAILED(m_pModelCom->Render((_uint)i)))
+			return E_FAIL;
+	}
+
+	return S_OK;
+}
+
+HRESULT CNonAnimModel::Render_Picking()
+{
+	if (FAILED(m_pShaderCom->Bind_Matrix("g_WorldMatrix", m_pTransformCom->Get_WorldMatrix_Ptr())))
+		return E_FAIL;
+
+	if (FAILED(m_pShaderCom->Bind_Matrix("g_ViewMatrix", &m_pGameInstance->Get_Transform(CPipeLine::D3DTS_VIEW))))
+		return E_FAIL;
+	if (FAILED(m_pShaderCom->Bind_Matrix("g_ProjMatrix", &m_pGameInstance->Get_Transform(CPipeLine::D3DTS_PROJ))))
+		return E_FAIL;
+
+	uint32_t hash = static_cast<uint32_t>(m_iHashId * 2654435761); // 임의의 상수로 인덱스를 해시처럼 변환
+
+	UINT8 r = (hash >> 24) & 0xff;
+	UINT8 g = (hash >> 16) & 0xff;
+	UINT8 b = (hash >> 8) & 0xff;
+	UINT8 a = hash & 0xff;
+
+	_float4 fColor = _float4(r / 255.f, g / 255.f, b / 255.f, a / 255.f);
+
+	if (FAILED(m_pShaderCom->Bind_RawValue("g_fHashColor", &fColor, sizeof(_float4))))
+		return E_FAIL;
+
+	_uint		iNumMeshes = m_pModelCom->Get_NumMeshes();
+
+	for (size_t i = 0; i < iNumMeshes; i++)
+	{
+		m_pModelCom->Bind_MeshBoneMatrices(m_pShaderCom, "g_BoneMatrices", (_uint)i);
+
+		if (FAILED(m_pModelCom->Bind_Material(m_pShaderCom, "g_DiffuseTexture", TEXTURE_TYPE::DIFFUSE, (_uint)i)))
+			return E_FAIL;
+
+		if (FAILED(m_pShaderCom->Begin(2)))
 			return E_FAIL;
 
 		if (FAILED(m_pModelCom->Render((_uint)i)))

@@ -244,7 +244,6 @@ HRESULT CImGui_Manager::Ready_Controllers()
 	m_pController_MapTool = CController_MapTool::Get_Instance();
 	if (nullptr == m_pController_MapTool)
 		return E_FAIL;
-	m_pController_MapTool->Initialize();
 
 	m_pController_EffectTool = CController_EffectTool::Get_Instance();
 	if (nullptr == m_pController_EffectTool)

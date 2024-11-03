@@ -132,6 +132,11 @@ void CController_MapTool::Select_Obj()
 	{
 		//피킹 해제만 가능하게
 	}
+
+	if (m_pGameInstance->Get_KeyState(RBUTTON) == AWAY)
+	{
+		Picking();
+	}
 }
 
 void CController_MapTool::EditTransform()
@@ -553,6 +558,13 @@ void CController_MapTool::LoadMap()
 
 	fin.close();
 	MSG_BOX(TEXT("파일 읽기를 성공했습니다.."));
+}
+
+void CController_MapTool::Picking()
+{
+	_uint id;
+	m_pGameInstance->Picking_Object(&id);
+	int a = 10;
 }
 
 void CController_MapTool::Free()

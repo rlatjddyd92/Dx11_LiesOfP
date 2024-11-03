@@ -51,6 +51,8 @@ private:
 	void SaveMap();
 	void LoadMap();
 
+	void Picking();
+
 public:
 	virtual void Free() override;
 };

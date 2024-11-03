@@ -41,6 +41,7 @@ public:
 	virtual void Update(_float fTimeDelta) override;
 	virtual void Late_Update(_float fTimeDelta) override;
 	virtual HRESULT Render() override;
+	virtual HRESULT Render_Picking()override;
 
 	virtual _bool Is_Pick(_float3* vPickPos);
 	int Get_RenderTargetId() { return m_iRenderGroupId; }
@@ -53,6 +54,11 @@ public:
 
 private:
 	int m_iRenderGroupId = { 0 };
+
+	static _int m_iStaticHashId;
+
+	_int		m_iHashId;
+
 private:
 	HRESULT Ready_Components(NONMODEL_DESC* pNonAnimDesc);
 

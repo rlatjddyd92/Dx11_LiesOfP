@@ -43,6 +43,44 @@ HRESULT CPicking::Initialize(HWND hWnd)
 	if (FAILED(m_pDevice->CreateTexture2D(&TextureDesc, nullptr, &m_pPickDepthTexture)))
 		return E_FAIL;
 
+
+	//오브젝트 피킹용
+	//렌더타겟 복사용
+	D3D11_TEXTURE2D_DESC textureDesc;
+	ZeroMemory(&textureDesc, sizeof(D3D11_TEXTURE2D_DESC));
+	textureDesc.Width = (_int)ViewportDesc.Width;
+	textureDesc.Height = (_int)ViewportDesc.Height;
+	textureDesc.MipLevels = 1;
+	textureDesc.ArraySize = 1;
+	textureDesc.Format = DXGI_FORMAT_R32G32B32A32_SINT;
+	textureDesc.SampleDesc.Count = 1;
+	textureDesc.SampleDesc.Quality = 0;
+	textureDesc.CPUAccessFlags = D3D11_CPU_ACCESS_READ;
+	textureDesc.Usage = D3D11_USAGE_STAGING;
+	textureDesc.BindFlags = 0;
+	textureDesc.MiscFlags = 0;
+
+	if (FAILED(m_pDevice->CreateTexture2D(&textureDesc, nullptr, &m_pPickObjectTexture)))
+		return E_FAIL;
+
+	//고른 픽셀 복사용
+	D3D11_TEXTURE2D_DESC textureDescMini;
+	ZeroMemory(&textureDescMini, sizeof(D3D11_TEXTURE2D_DESC));
+	textureDescMini.Width = 1;
+	textureDescMini.Height = 1 ;
+	textureDescMini.MipLevels = 1;
+	textureDescMini.ArraySize = 1;
+	textureDescMini.Format = DXGI_FORMAT_R32G32B32A32_SINT;
+	textureDescMini.SampleDesc.Count = 1;
+	textureDescMini.SampleDesc.Quality = 0;
+	textureDescMini.CPUAccessFlags = D3D11_CPU_ACCESS_READ;
+	textureDescMini.Usage = D3D11_USAGE_STAGING;
+	textureDescMini.BindFlags = 0;
+	textureDescMini.MiscFlags = 0;
+
+	if (FAILED(m_pDevice->CreateTexture2D(&textureDescMini, nullptr, &m_pPickObjectTextureMini)))
+		return E_FAIL;
+
 	return S_OK;
 }
 
@@ -91,6 +129,52 @@ _bool CPicking::Picking(_float3 * pPickPos)
 	_vector vWorldPos = XMVector3TransformCoord(vViewPos, m_pGameInstance->Get_Transform_Inverse(CPipeLine::D3DTS_VIEW));
 
 	XMStoreFloat3(pPickPos, vWorldPos);
+
+	return true;
+}
+
+_bool CPicking::Picking_Object(_uint* pPickID)
+{
+	if (FAILED(m_pGameInstance->Copy_RenderTarget(TEXT("Target_PickDepth"), m_pPickObjectTexture)))
+		return false;
+
+	POINT			ptMouse{};
+	GetCursorPos(&ptMouse);
+	ScreenToClient(m_hWnd, &ptMouse);
+
+	if (ptMouse.x < 0 || ptMouse.x >= (_int)(m_iViewportWidth) ||
+		ptMouse.y < 0 || ptMouse.y >= (_int)(m_iViewportHeight))
+	{
+		return false;
+	}
+
+	// 텍스처 복사
+	D3D11_BOX srcBox;
+	srcBox.left = ptMouse.x;
+	srcBox.right = ptMouse.x + 1;
+	srcBox.bottom = ptMouse.y + 1;
+	srcBox.top = ptMouse.y;
+	srcBox.front = 0;
+	srcBox.back = 1;
+
+	D3D11_MAPPED_SUBRESOURCE msr = {};
+	//ZeroMemory(&msr, sizeof(D3D11_MAPPED_SUBRESOURCE));
+
+	m_pContext->CopySubresourceRegion(m_pPickObjectTextureMini, 0, 0, 0, 0, m_pPickObjectTexture, 0, &srcBox);
+
+	m_pContext->Map(m_pPickObjectTextureMini, 0, D3D11_MAP::D3D11_MAP_READ, 0, &msr);
+
+	// 픽셀의 RGBA 값 추출
+
+	_float4 fcolorValue = *reinterpret_cast<_float4*>(msr.pData);
+
+	// 각 색상 채널 추출
+	//uint8_t r = (colorValue & 0xFF);          // Red
+	//uint8_t g = (colorValue >> 8) & 0xFF;     // Green
+	//uint8_t b = (colorValue >> 16) & 0xFF;    // Blue
+	//uint8_t a = (colorValue >> 24) & 0xFF;    // Alpha
+	
+	m_pContext->Unmap(m_pPickObjectTextureMini, 0);
 
 	return true;
 }

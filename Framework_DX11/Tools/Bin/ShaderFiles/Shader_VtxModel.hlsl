@@ -3,6 +3,7 @@
 matrix			g_WorldMatrix, g_ViewMatrix, g_ProjMatrix;
 texture2D		g_DiffuseTexture;
 texture2D		g_NormalTexture;
+float4			g_fHashColor;
 
 struct VS_IN
 {
@@ -104,6 +105,20 @@ PS_OUT PS_MAIN(PS_IN In)
 	return Out;
 }
 
+struct PS_OUT_PICKING
+{
+    vector vColor : SV_TARGET0;
+};
+
+PS_OUT_PICKING PS_MAIN_PICKING(PS_IN In)
+{
+    PS_OUT_PICKING Out = (PS_OUT_PICKING) 0;
+
+    Out.vColor = g_fHashColor;
+
+    return Out;
+}
+
 struct PS_IN_NORMAL
 {
 	float4 vPosition : SV_POSITION;
@@ -171,4 +186,15 @@ technique11	DefaultTechnique
 		GeometryShader = NULL;
 		PixelShader = compile ps_5_0 PS_MAIN_NORMAL();
 	}
+
+    pass Picking //2
+    {
+        SetRasterizerState(RS_Default);
+        SetDepthStencilState(DSS_Default, 0);
+        SetBlendState(BS_Default, vector(0.f, 0.f, 0.f, 0.f), 0xffffffff);
+
+        VertexShader = compile vs_5_0 VS_MAIN();
+        GeometryShader = NULL;
+        PixelShader = compile ps_5_0 PS_MAIN_PICKING();
+    }
 }
