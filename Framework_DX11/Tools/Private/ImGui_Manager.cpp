@@ -157,62 +157,7 @@ void CImGui_Manager::Tool_UI()
 {
 	if (ImGui::BeginTabItem("UI Tool"))
 	{
-		if (ImGui::CollapsingHeader("UIPart Setting"))
-		{
-			ImGui::Combo("Select Part", m_pController_UITool->GetSelectIndex(), m_pController_UITool->GetUIPartName_Array(), 100);
-
-			_int iNowIndex = *m_pController_UITool->GetSelectIndex();
-
-			ImGui::NewLine();
-
-			ImGui::Text("Part Name : ");
-			ImGui::SameLine();
-			ImGui::Text(m_pController_UITool->GetUIPartName(iNowIndex));
-			//ImGui::InputText("ChangeName", m_pController_UITool->GetUIPartInfo(iNowIndex)->strUIPart_Name, sizeof(m_pController_UITool->GetUIPartInfo(iNowIndex)->strUIPart_Name));
-
-			ImGui::NewLine();
-
-			//ImGui::Text("Part Texture Path : ");
-			//ImGui::SameLine();
-			//ImGui::Text(m_pController_UITool->GetUIPartInfo(iNowIndex)->iTextureIndex);
-			//ImGui::InputInt("TextureIndex", &m_pController_UITool->GetUIPartInfo(iNowIndex)->iTextureIndex);
-
-			ImGui::NewLine();
-
-			ImGui::Text("Part Size : ");
-
-			ImGui::InputFloat("X", &m_pController_UITool->GetUIPartInfo(iNowIndex)->fSize.x);
-			ImGui::InputFloat("Y", &m_pController_UITool->GetUIPartInfo(iNowIndex)->fSize.y);
-
-		}
-
-		if (ImGui::CollapsingHeader("Socket Setting"))
-		{
-			//_int iNowIndex = *m_pController_UITool->GetSelectIndex();
-
-			//ImGui::InputInt("SetSocketNum", )
-
-
-
-
-			ImGui::Text("Add New Socket");
-			ImGui::Text("Move Socket");
-			ImGui::Text("Delete Socket");
-		}
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+		m_pController_UITool->UITool_Edit();
 
 		ImGui::EndTabItem();
 

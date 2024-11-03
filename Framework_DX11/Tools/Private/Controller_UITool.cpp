@@ -4,7 +4,202 @@
 
 IMPLEMENT_SINGLETON(CController_UITool)
 
+void CController_UITool::UITool_Edit()
+{
+	UIPage_Edit();
+}
+
 HRESULT CController_UITool::UITool_Render()
+{
+	//FontTest();
+
+	UISocket_Render();
+	UIPart_Render();
+
+	return S_OK;
+}
+
+void CController_UITool::UIPage_Edit()
+{
+	if (ImGui::CollapsingHeader("Page Setting"))
+	{
+		if (m_vecPageInfo.empty())
+		{
+			ImGui::Text("Empty Pagelist");
+			return;
+		}
+
+		ImGui::Text("Now Page : ");
+		ImGui::SameLine();
+		ImGui::Text(m_vecPageInfo[m_iNowSelectNum]->strUIPage_Name);
+
+		ImGuiComboFlags Flag = 0;
+
+		ImGui::Combo("SelectPage", &m_iNowSelectNum, m_ArrPageName, 100);
+
+		ImGui::InputText("PageName", m_InputPageName, sizeof(m_InputPageName));
+		if (ImGui::Button("ChangeName"))
+		{
+			_int iIndex = -1;
+
+			do
+			{
+				++iIndex;
+				m_vecPageInfo[m_iNowSelectNum]->strUIPage_Name[iIndex] = m_InputPageName[iIndex];
+				m_ArrPageName[m_iNowSelectNum][iIndex] = m_InputPageName[iIndex];
+			} while (m_InputPageName[iIndex] != '\0');
+		}
+	}
+
+	if (ImGui::CollapsingHeader("Socket Setting"))
+		UISocket_Edit();
+
+	if (ImGui::CollapsingHeader("Part Setting"))
+		UIPart_Edit();
+}
+
+void CController_UITool::UISocket_Edit()
+{
+	
+
+	ImGui::Text("SocketCount : ");
+	ImGui::SameLine();
+
+	_int iCount = m_vecPageInfo[m_iNowSelectNum]->vecSocket.size();
+	_tchar* tTemp = new _tchar[5];
+	swprintf(tTemp, 5, L"%d", iCount);
+	_char* szCount = new _char[5];
+	for (_int i = 0; i < 5; ++i)
+		szCount[i] = tTemp[i];
+
+	ImGui::Text(szCount);
+
+	ImGui::SeparatorText("AddSocket");
+	ImGui::InputText("SocketName", m_InputSocketName, sizeof(m_InputSocketName));
+	if (ImGui::Button("AddSocket"))
+	{
+		_int iIndex = -1;
+
+		USOCKET* pNew = new USOCKET;
+		pNew->strUISocket_Name = new _char[100];
+		do
+		{
+			++iIndex;
+			pNew->strUISocket_Name[iIndex] = m_InputSocketName[iIndex];
+		} while (m_InputSocketName[iIndex] != '\0');
+
+		m_vecPageInfo[m_iNowSelectNum]->vecSocket.push_back(pNew);
+	}
+
+	ImGui::PushItemWidth(100.f);
+
+
+	for (auto& iter : m_vecPageInfo[m_iNowSelectNum]->vecSocket)
+	{
+		ImGui::Text(iter->strUISocket_Name);
+		ImGui::SameLine();
+		ImGui::InputFloat("X", &iter->fPosition.x);
+		ImGui::SameLine();
+		ImGui::InputFloat("Y", &iter->fPosition.y);
+
+	}
+
+
+
+
+
+	Safe_Delete_Array(tTemp);
+	Safe_Delete_Array(szCount);
+}
+
+void CController_UITool::UIPart_Edit()
+{
+
+	ImGui::Text("PartCount : ");
+	ImGui::SameLine();
+
+	_int iCount = m_vecPageInfo[m_iNowSelectNum]->vecPart.size();
+	_tchar* tTemp = new _tchar[5];
+	swprintf(tTemp, 5, L"%d", iCount);
+	_char* szCount = new _char[5];
+	for (_int i = 0; i < 5; ++i)
+		szCount[i] = tTemp[i];
+
+	ImGui::Text(szCount);
+
+	ImGui::SeparatorText("AddPart");
+	ImGui::InputText("PartName", m_InputPartName, sizeof(m_InputPartName));
+	if (ImGui::Button("AddPart"))
+	{
+		_int iIndex = -1;
+
+		UPART* pNew = new UPART;
+		pNew->strUIPart_Name = new _char[100];
+		do
+		{
+			++iIndex;
+			pNew->strUIPart_Name[iIndex] = m_InputPartName[iIndex];
+		} while (m_InputPartName[iIndex] != '\0');
+
+		m_vecPageInfo[m_iNowSelectNum]->vecPart.push_back(pNew);
+	}
+
+	ImGui::PushItemWidth(100.f);
+
+
+	for (auto& iter : m_vecPageInfo[m_iNowSelectNum]->vecPart)
+	{
+		ImGui::Text(iter->strUIPart_Name);
+		ImGui::SameLine();
+		ImGui::InputFloat("X", &iter->fSize.x);
+		ImGui::SameLine();
+		ImGui::InputFloat("Y", &iter->fSize.y);
+		ImGui::SameLine();
+		ImGui::InputInt("Soc", &iter->iSocket_Index);
+		ImGui::SameLine();
+		ImGui::InputInt("Tex", &iter->iTexture_Index);
+
+
+		ImGui::SameLine();
+		if ((iter->iSocket_Index < 0) || (iter->iSocket_Index >= m_vecPageInfo[m_iNowSelectNum]->vecSocket.size()))
+			ImGui::Text(" ※InvalidSocket");
+		ImGui::SameLine();
+		if ((iter->iTexture_Index < 0) || (iter->iTexture_Index >= m_vecTextureInfo.size()))
+			ImGui::Text(" ※InvalidTexture");
+
+	}
+
+
+
+
+
+	Safe_Delete_Array(tTemp);
+	Safe_Delete_Array(szCount);
+
+}
+
+void CController_UITool::AddNewPage()
+{
+}
+
+void CController_UITool::UISocket_Render()
+{
+	// 소켓 위치와 좌표, 이름 표시 필요 
+	// * <- Center_1 (100.4, 302.5)
+
+	for (auto& iter : m_vecPageInfo[m_iNowSelectNum]->vecSocket)
+	{
+		
+	}
+
+
+}
+
+void CController_UITool::UIPart_Render()
+{
+}
+
+void CController_UITool::FontTest()
 {
 	// 폰트 테스트 
 
@@ -28,8 +223,6 @@ HRESULT CController_UITool::UITool_Render()
 	m_pGameInstance->Render_Text(TEXT("FONT_TITLE_72"), TEXT("r : TITLE_72"), { fX,fY + (fGap * 468),0.f,0.f });
 
 
-
-	return S_OK;
 }
 
 CController_UITool::CController_UITool()
@@ -40,69 +233,18 @@ CController_UITool::CController_UITool()
 
 HRESULT CController_UITool::Initialize()
 {
-	string strType = {};
-	for (_int i = 0; i < _int(PART_TYPE::TYPE_END); ++i)
-		m_UIPartTypeName[i] = new _char[20];
-
-	strType = "Static"; // 일반 : 이동 기능만 있는 UI
-	for (_int i = 0; i <= strType.size(); ++i)
-		m_UIPartTypeName[_int(PART_TYPE::TYPE_STATIC)][i] = strType[i];
-	
-	strType = "Bar"; // 바 : 최대치 대비 현재 수치의 비율에 따라 변화하는 UI (HP 바 등)
-	for (_int i = 0; i <= strType.size(); ++i)
-		m_UIPartTypeName[_int(PART_TYPE::TYPE_BAR)][i] = strType[i];
-
-	strType = "Shading"; // 쉐이딩 : 상황에 따라 색을 변경하는 UI
-	for (_int i = 0; i <= strType.size(); ++i)
-		m_UIPartTypeName[_int(PART_TYPE::TYPE_SHADING)][i] = strType[i];
-
-	strType = "Sprite"; // 스프라이트 : 스프라이트 애니메이션이 적용된 UI
-	for (_int i = 0; i <= strType.size(); ++i)
-		m_UIPartTypeName[_int(PART_TYPE::TYPE_SPRITE)][i] = strType[i];
-
-	strType = "Static_Text"; // 고정 텍스트 : 변경 없이 고정된 내용을 보여 주는 UI
-	for (_int i = 0; i <= strType.size(); ++i)
-		m_UIPartTypeName[_int(PART_TYPE::TYPE_STATIC_TEXT)][i] = strType[i];
-
-	strType = "Variable_Text"; // 변수 텍스트 : 연결된 변수의 내용을 텍스트로 보여 주는 UI
-	for (_int i = 0; i <= strType.size(); ++i)
-		m_UIPartTypeName[_int(PART_TYPE::TYPE_VARIABLE_TEXT)][i] = strType[i];
-
-
-	if (FAILED(InitializeResource()))
-		return E_FAIL;
-
-	for (_int i = 0; i < m_iPartIndex_NumMax; ++i)
-	{
-		m_UIPartName[i] = new _char[100];
-		_int iIndex = -1;
-
-		do
-		{
-			++iIndex;
-			m_UIPartName[i][iIndex] = m_vecUPart[i]->strUIPart_Name[iIndex];
-		} while (m_vecUPart[i]->strUIPart_Name[iIndex] != '\0');
-	}
-		
-
-
-
-
-
+	InitializeResource();
 
 	return S_OK;
 }
 
 HRESULT CController_UITool::InitializeResource()
 {
-	m_vecUPart.resize(m_iPartIndex_NumMax);
-
 	if (FAILED(InitializeTexture()))
 		return E_FAIL;
 
 	if (FAILED(InitializeFont()))
 		return E_FAIL;
-
 
 	if (FAILED(LoadPart()))
 		return E_FAIL;
@@ -122,45 +264,25 @@ HRESULT CController_UITool::SavePart()
 
 HRESULT CController_UITool::LoadPart()
 {
-	// 엑셀 파일 파싱
+	// 테스트 코드 
+	m_vecPageInfo.resize(m_iPageNum);
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-	// 임시 코드 
-
-	_int iCount = 0;
-
-	for (auto& iter : m_vecUPart)
+	for (_int i = 0; i < m_iPageNum; ++i)
 	{
-		iter = new UPART;
+		UPAGE* pNew = new UPAGE;
+		pNew->strUIPage_Name = new _char[100];
+		m_ArrPageName[i] = new _char[100];
 
-		string strTemp = "none";
-		char czNum =  '0' + iCount;
+		_char czTest[10] = "none";
 
-		strTemp += czNum;
+		for (_int j = 0; j <= 9; ++j)
+		{
+			pNew->strUIPage_Name[j] = czTest[j];
+			m_ArrPageName[i][j] = czTest[j];
+		}
 
-		++iCount;
-
-		iter->strUIPart_Name = new _char[100];
-
-		for (_int i = 0; i <= strTemp.size(); ++i)
-			iter->strUIPart_Name[i] = strTemp[i];
+		m_vecPageInfo[i] = pNew;
 	}
-		
-
 
 
 
@@ -192,25 +314,62 @@ HRESULT CController_UITool::InitializeFont()
 	return S_OK;
 }
 
+HRESULT CController_UITool::InitializeComponent()
+{
+	/* FOR.Com_Shader */
+
+
+
+
+
+
+	return S_OK;
+}
+
 void CController_UITool::Free()
 {
 	__super::Free();
 
 	Safe_Release(m_pGameInstance);
 
-	for (_int i = 0; i < 100; ++i)
-		Safe_Delete_Array(m_UIPartName[i]);
-
-	for (auto& iter : m_vecUPart)
+	for (auto& iter : m_vecTextureInfo)
 	{
-		Safe_Delete_Array(iter->strUIPart_Name);
-		iter->vecSocketPosition.clear();
+		Safe_Release(iter->Texture);
+		Safe_Delete_Array(iter->strTexturePath);
+		Safe_Delete_Array(iter->strTextureTag);
 		Safe_Delete(iter);
 	}
 
-	for (_int i = 0; i < _int(PART_TYPE::TYPE_END); ++i)
-		Safe_Delete_Array(m_UIPartTypeName[i]);
-	
+	m_vecTextureInfo.clear();
 
-	m_vecUPart.clear();
+	for (auto& iter : m_vecPageInfo)
+	{
+		Safe_Delete_Array(iter->strUIPage_Name);
+
+		for (auto& iterPart : iter->vecPart)
+		{
+			Safe_Delete_Array(iterPart->strUIPart_Name);
+			Safe_Delete(iterPart);
+		}
+
+		iter->vecPart.clear();
+
+		for (auto& iterSocket : iter->vecSocket)
+		{
+			Safe_Delete_Array(iterSocket->strUISocket_Name);
+			Safe_Delete(iterSocket);
+		}
+
+		iter->vecSocket.clear();
+		Safe_Delete(iter);
+	}
+
+	for (_int i = 0; i < 100; ++i)
+		Safe_Delete_Array(m_ArrPageName[i]);
+
+	//Safe_Delete_Array(m_ArrPageName);
+
+	m_vecTextureInfo.clear();
+
+	
 }

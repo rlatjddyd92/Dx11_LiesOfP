@@ -16,17 +16,6 @@ class CController_UITool : public CBase
 {
 	DECLARE_SINGLETON(CController_UITool)
 
-	enum class PART_TYPE
-	{
-		TYPE_STATIC,
-		TYPE_STATIC_TEXT,
-		TYPE_VARIABLE_TEXT,
-		TYPE_BAR,
-		TYPE_SHADING,
-		TYPE_SPRITE,
-		TYPE_END
-	};
-
 	enum class UI_FONT
 	{
 		FONT_INFO_12,
@@ -46,46 +35,68 @@ class CController_UITool : public CBase
 		FONT_END
 	};
 
+
 	typedef struct UIPART_INFO
 	{
-		PART_TYPE eType = PART_TYPE::TYPE_END;
 		_char* strUIPart_Name = {};
-		_int iUI_Index = -1;
-		_int iTextureIndex = -1;
-		_char* szTexture_Path = {};
+		_int iTexture_Index = -1;
+		_int iSocket_Index = -1;
 		_float2 fSize = { 0.f,0.f };
-		_int iSocket_Num = 0;
-		vector<_float2> vecSocketPosition;
-
 	}UPART;
+
+	typedef struct UITEXTURE_INFO
+	{
+		_char* strTexturePath = {};
+		_char* strTextureTag = {};
+		CTexture* Texture = { nullptr };
+	}UTEXTURE;
+
+	typedef struct UISOCKET_INFO
+	{
+		_char* strUISocket_Name = {};
+		_int iSocket_Index = -1;
+		_float2 fPosition = { 0.f,0.f }; // <- 중심점(Page의 포지션)에서 어디로 얼마나 떨어져 있는지
+
+	}USOCKET;
+
+	typedef struct UIPAGE_INFO
+	{
+		_char* strUIPage_Name = {};
+		_int iPage_Index = -1;
+
+		
+		_int iSocket_Num = 0; // 소켓 갯수
+		_int iPart_Num = 0; // 파트 갯수
+
+
+		_float2 fPosition = { 0.f,0.f }; // 페이지의 포지션
+		vector<USOCKET*> vecSocket;
+		vector<UPART*> vecPart;
+	}UPAGE;
 
 public:
 	vector<_wstring>& Get_PrototypeTags() { return m_PrototypeTags; }
 	_wstring& Get_PrtotypeTagIndex(_uint iIndex) { return m_PrototypeTags[iIndex]; }
 
-	void					Add_ProtytypeTag(_wstring strTag) { m_PrototypeTags.emplace_back(strTag); }
+	void Add_ProtytypeTag(_wstring strTag) { m_PrototypeTags.emplace_back(strTag); }
 
-	_int& GetUIPartNumMax() { return m_iPartIndex_NumMax; }
-	_char* GetUIPartName(_int iIndex) { return m_vecUPart[iIndex]->strUIPart_Name; }
 
-	_char* GetUIPartTypeName(_int iIndex) { return m_UIPartTypeName[iIndex]; }
 
-	UPART* GetUIPartInfo(_int iIndex) { return m_vecUPart[iIndex]; }
-
-	 _int* GetSelectIndex() { return &m_iSelectIndex; }
-	void SetSelectIndex(_int iIndex)
-	{
-		if ((iIndex >= 0) && (iIndex < m_iPartIndex_NumMax))
-			m_iSelectIndex = iIndex;
-	}
-
-	_char** GetUIPartName_Array() { return m_UIPartName; };
-
+public: // imgui 사용
+	void UITool_Edit(); 
 	HRESULT UITool_Render();
 
+private:
+	void UIPage_Edit();
+	void UISocket_Edit();
+	void UIPart_Edit();
 
+	void AddNewPage();
 
+	void UISocket_Render();
+	void UIPart_Render();
 
+	void FontTest();
 
 
 private:
@@ -101,26 +112,27 @@ private:
 	HRESULT LoadPart();
 	HRESULT InitializeTexture();
 	HRESULT InitializeFont();
+	HRESULT InitializeComponent();
+
 
 private:
 	class CGameInstance* m_pGameInstance = { nullptr };
 
 	vector<_wstring>	m_PrototypeTags;
-	_char* m_UIPartName[100] = {nullptr};
-	_char* m_UIPartTypeName[_int(PART_TYPE::TYPE_END)] = { nullptr };
 
+	_int m_iNowSelectNum = 0;
 
+	_int m_iTextureNum = 0;
+	_int m_iPageNum = 100;
 
-	_int m_iPartIndex_NumMax = 100;
-	_int m_iSelectIndex = 0;
+	_char* m_ArrPageName[100];
 
+	_char m_InputPageName[100] = "";
+	_char m_InputSocketName[100] = "";
+	_char m_InputPartName[100] = "";
 
-
-	vector<UPART*> m_vecUPart;
-	vector<CTexture*> m_vecTexture;
-
-
-
+	vector<UTEXTURE*> m_vecTextureInfo;
+	vector<UPAGE*> m_vecPageInfo;
 
 public:
 	virtual void Free() override;
