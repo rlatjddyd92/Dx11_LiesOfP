@@ -33,6 +33,9 @@ public:
 
 	_uint					Get_CurrentFrame() { return m_iCurrentFrame; }
 
+	void					Set_UFBIndices(_uint eCount, _uint iIndex) { m_UFBIndices[eCount] = iIndex; }
+	_uint					Get_UFBIndices(_uint eCount) { return m_UFBIndices[eCount]; }
+
 public:
 	virtual HRESULT Initialize_Prototype(TYPE eType, const _char* pModelFilePath, _fmatrix PreTransformMatrix);
 	virtual HRESULT Initialize(void* pArg) override;	
@@ -87,6 +90,10 @@ private:
 	_bool							m_isChangeAni = { false };	// 바꾸는중?
 
 	CHANGEANIMATION_DESC			m_tChaneAnimDesc = {};
+
+	//이봉준 애니메이션
+private:
+	vector<_uint>				m_UFBIndices;
 
 public:
 	HRESULT	Ready_Meshes(HANDLE* pFile);

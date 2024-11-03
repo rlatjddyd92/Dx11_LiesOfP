@@ -228,6 +228,8 @@ void CImGui_Manager::Tool_Animation()
 	{
 		ImGui::CollapsingHeader("Animation");
 
+		m_pController_AnimationTool->SetUp_AnimTool();
+
 		ImGui::EndTabItem();
 	}
 }
