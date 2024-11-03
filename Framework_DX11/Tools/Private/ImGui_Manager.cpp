@@ -1,0 +1,283 @@
+#include "stdafx.h"
+
+#ifdef _DEBUG
+#undef new
+#endif
+
+#include "imgui.h"
+#include "imgui_impl_win32.h"
+#include "imgui_impl_dx11.h"
+#include "ImGui_Manager.h"
+
+#ifdef _DEBUG
+#define new DBG_NEW
+#endif
+
+#include "Controller_MapTool.h"
+#include "Controller_EffectTool.h"
+#include "Controller_UITool.h"
+#include "Controller_AnimationTool.h"
+
+IMPLEMENT_SINGLETON(CImGui_Manager)
+
+
+CImGui_Manager::CImGui_Manager()
+	: m_pGameInstance{ CGameInstance::Get_Instance() }
+{
+	Safe_AddRef(m_pGameInstance);
+}
+
+HRESULT CImGui_Manager::Initialize(ID3D11Device* pDevice, ID3D11DeviceContext* pContext)
+{
+	m_pDevice = pDevice;
+	m_pContext = pContext;
+	Safe_AddRef(m_pDevice);
+	Safe_AddRef(m_pContext);
+
+	IMGUI_CHECKVERSION();
+	ImGui::CreateContext();
+
+	ImGui::StyleColorsDark();
+
+	ImGui_ImplWin32_Init(g_hWnd);
+	ImGui_ImplDX11_Init(m_pDevice, m_pContext);
+
+	Ready_Controllers();
+
+	return S_OK;
+}
+
+void CImGui_Manager::Render_ImGui()
+{
+	// 다른 함수에서 분리돼서 호출하면 에러가 남
+	// 그래서 구조가 좀 다름
+
+	ImGui_ImplDX11_NewFrame();
+	ImGui_ImplWin32_NewFrame();
+	ImGui::NewFrame();
+
+	// 업데이트 내에서 수치 조정할 것들을 처리해 줄 것임
+	Update_ImGui();
+
+	ImGui::Render();
+
+	ImGui_ImplDX11_RenderDrawData(ImGui::GetDrawData());
+}
+
+void CImGui_Manager::Update_ImGui()
+{
+	ImGui::Begin("TOOL PROJECT", NULL, ImGuiWindowFlags_MenuBar | ImGuiWindowFlags_HorizontalScrollbar
+		| ImGuiWindowFlags_AlwaysVerticalScrollbar);
+
+	// 위젯 안에 있는지 판단함
+	_bool isInUI = false;
+
+	ImVec2 window_pos = ImGui::GetWindowPos();
+	ImVec2 window_size = ImGui::GetWindowSize();
+
+	ImVec2 mouse_pos = ImGui::GetMousePos();
+	if (mouse_pos.x >= window_pos.x && mouse_pos.x <= (window_pos.x + window_size.x) &&
+		mouse_pos.y >= window_pos.y && mouse_pos.y <= (window_pos.y + window_size.y)) 
+	{
+		isInUI = true;
+	}
+
+	ImGuiTabBarFlags tab_bar_flags = ImGuiTabBarFlags_None;
+	if (ImGui::BeginTabBar("MyTabBar", tab_bar_flags))
+	{
+		Tool_Map();
+
+		Tool_Effect();
+
+		Tool_UI();
+
+		Tool_Animation();
+	}
+
+	ImGui::EndTabBar();
+
+	ImGui::End();
+}
+
+void CImGui_Manager::Tool_Map()
+{
+	if (ImGui::BeginTabItem("Map Tool"))
+	{
+		m_pController_MapTool->Select_Obj();
+
+		m_pController_MapTool->ShowPickPos();
+		m_pController_MapTool->EditTransform();
+
+		m_pController_MapTool->Control_Player();
+		m_pController_MapTool->Create_Map();
+		m_pController_MapTool->Save_Load();
+
+		ImGui::EndTabItem();
+	}
+}
+
+void CImGui_Manager::Tool_Effect()
+{
+	if (ImGui::BeginTabItem("Effect Tool"))
+	{
+		m_pController_EffectTool->Set_JumhoCamera(true);
+
+		bool bDemo = true;
+		ImGui::ShowDemoWindow(&bDemo);
+
+		if (ImGui::CollapsingHeader("Particle"))
+		{
+			m_pController_EffectTool->Check();
+			if (ImGui::Button("Create Particle"))
+			{
+				m_pController_EffectTool->Add_Particle();
+				m_pController_EffectTool->Update_Particle();
+			}
+			if (ImGui::Button("Update Particle"))
+			{
+
+			}
+
+		}
+
+		ImGui::Begin("EffectList");
+
+		m_pController_EffectTool->Select_Effect();
+
+		ImGui::End();
+
+
+		ImGui::EndTabItem();
+	}
+	else
+		m_pController_EffectTool->Set_JumhoCamera(false);
+}
+
+void CImGui_Manager::Tool_UI()
+{
+	if (ImGui::BeginTabItem("UI Tool"))
+	{
+		if (ImGui::CollapsingHeader("UIPart Setting"))
+		{
+			ImGui::Combo("Select Part", m_pController_UITool->GetSelectIndex(), m_pController_UITool->GetUIPartName_Array(), 100);
+
+			_int iNowIndex = *m_pController_UITool->GetSelectIndex();
+
+			ImGui::NewLine();
+
+			ImGui::Text("Part Name : ");
+			ImGui::SameLine();
+			ImGui::Text(m_pController_UITool->GetUIPartName(iNowIndex));
+			//ImGui::InputText("ChangeName", m_pController_UITool->GetUIPartInfo(iNowIndex)->strUIPart_Name, sizeof(m_pController_UITool->GetUIPartInfo(iNowIndex)->strUIPart_Name));
+
+			ImGui::NewLine();
+
+			//ImGui::Text("Part Texture Path : ");
+			//ImGui::SameLine();
+			//ImGui::Text(m_pController_UITool->GetUIPartInfo(iNowIndex)->iTextureIndex);
+			//ImGui::InputInt("TextureIndex", &m_pController_UITool->GetUIPartInfo(iNowIndex)->iTextureIndex);
+
+			ImGui::NewLine();
+
+			ImGui::Text("Part Size : ");
+
+			ImGui::InputFloat("X", &m_pController_UITool->GetUIPartInfo(iNowIndex)->fSize.x);
+			ImGui::InputFloat("Y", &m_pController_UITool->GetUIPartInfo(iNowIndex)->fSize.y);
+
+		}
+
+		if (ImGui::CollapsingHeader("Socket Setting"))
+		{
+			//_int iNowIndex = *m_pController_UITool->GetSelectIndex();
+
+			//ImGui::InputInt("SetSocketNum", )
+
+
+
+
+			ImGui::Text("Add New Socket");
+			ImGui::Text("Move Socket");
+			ImGui::Text("Delete Socket");
+		}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+		ImGui::EndTabItem();
+
+		// 241102 김성용
+		m_pController_UITool->UITool_Render();
+		// 241102 김성용
+	}
+}
+
+void CImGui_Manager::Tool_Animation()
+{
+	if (ImGui::BeginTabItem("Animation Tool"))
+	{
+		ImGui::CollapsingHeader("Animation");
+
+		ImGui::EndTabItem();
+	}
+}
+
+void CImGui_Manager::ImGui_Spacing(_uint iSpaceCount)
+{
+	for (_uint i = 0; i < iSpaceCount; ++i)
+	{
+		ImGui::Spacing();
+	}
+}
+HRESULT CImGui_Manager::Ready_Controllers()
+{
+	m_pController_MapTool = CController_MapTool::Get_Instance();
+	if (nullptr == m_pController_MapTool)
+		return E_FAIL;
+	m_pController_MapTool->Initialize();
+
+	m_pController_EffectTool = CController_EffectTool::Get_Instance();
+	if (nullptr == m_pController_EffectTool)
+		return E_FAIL;
+	m_pController_EffectTool->Initialize();
+
+	m_pController_UITool = CController_UITool::Get_Instance();
+	if (nullptr == m_pController_UITool)
+		return E_FAIL;
+	m_pController_UITool->Initialize();
+
+	m_pController_AnimationTool = CController_AnimationTool::Get_Instance();
+	if (nullptr == m_pController_AnimationTool)
+		return E_FAIL;
+	m_pController_AnimationTool->Initialize();
+
+	return S_OK;
+}
+void CImGui_Manager::Free()
+{
+	__super::Free();
+
+	m_pController_EffectTool->Destroy_Instance();
+	m_pController_UITool->Destroy_Instance();
+	m_pController_AnimationTool->Destroy_Instance();
+	m_pController_MapTool->Destroy_Instance();
+
+	ImGui_ImplDX11_Shutdown();
+	ImGui_ImplWin32_Shutdown();
+	ImGui::DestroyContext();
+
+	Safe_Release(m_pDevice);
+	Safe_Release(m_pContext);
+
+	Safe_Release(m_pGameInstance);
+}

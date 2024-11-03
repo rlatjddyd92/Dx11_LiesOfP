@@ -1,0 +1,21 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project>
+  <ProjectOutputs>
+    <ProjectOutput>
+      <FullPath>D:\GitProject\Dx11_LiesOfP\Framework_DX11\Tools\Bin\Tools.exe</FullPath>
+    </ProjectOutput>
+  </ProjectOutputs>
+  <ContentFiles>
+    <ContentFile>
+      <FullPath>D:\GitProject\Dx11_LiesOfP\Framework_DX11\Tools\Bin\Shader_VtxModel.cso</FullPath>
+    </ContentFile>
+    <ContentFile>
+      <FullPath>D:\GitProject\Dx11_LiesOfP\Framework_DX11\Tools\Bin\Shader_VtxNorTex.cso</FullPath>
+    </ContentFile>
+    <ContentFile>
+      <FullPath>D:\GitProject\Dx11_LiesOfP\Framework_DX11\Tools\Bin\Shader_VtxPosTex.cso</FullPath>
+    </ContentFile>
+  </ContentFiles>
+  <SatelliteDlls />
+  <NonRecipeFileRefs />
+</Project>
