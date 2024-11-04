@@ -112,27 +112,27 @@ PS_OUT PS_MAIN_DISTORTION(PS_IN In)
 
 technique11 DefaultTechnique
 {
-    pass Effect
-    {
-        SetRasterizerState(RS_Default);
-        SetDepthStencilState(DSS_Default, 0);
-        SetBlendState(BS_Default, vector(0.f, 0.f, 0.f, 0.f), 0xffffffff);
+    //pass Effect
+    //{
+    //    SetRasterizerState(RS_Default);
+    //    SetDepthStencilState(DSS_Default, 0);
+    //    SetBlendState(BS_Default, vector(0.f, 0.f, 0.f, 0.f), 0xffffffff);
 
-        VertexShader = compile vs_5_0 VS_MAIN();
-        GeometryShader = NULL;
-        PixelShader = compile ps_5_0 PS_MAIN_EFFECT(false);
-    }
+    //    VertexShader = compile vs_5_0 VS_MAIN();
+    //    GeometryShader = NULL;
+    //    PixelShader = compile ps_5_0 PS_MAIN_EFFECT(false);
+    //}
 
-    pass AlphaBlendEffect
-    {
-        SetRasterizerState(RS_Default);
-        SetDepthStencilState(DSS_None, 0);
-        SetBlendState(BS_AlphaBlend, vector(0.f, 0.f, 0.f, 0.f), 0xffffffff);
+    //pass AlphaBlendEffect
+    //{
+    //    SetRasterizerState(RS_Default);
+    //    SetDepthStencilState(DSS_None, 0);
+    //    SetBlendState(BS_AlphaBlend, vector(0.f, 0.f, 0.f, 0.f), 0xffffffff);
 
-        VertexShader = compile vs_5_0 VS_MAIN();
-        GeometryShader = NULL;
-        PixelShader = compile ps_5_0 PS_MAIN_EFFECT(true);
-    }
+    //    VertexShader = compile vs_5_0 VS_MAIN();
+    //    GeometryShader = NULL;
+    //    PixelShader = compile ps_5_0 PS_MAIN_EFFECT(true);
+    //}
 
     pass Distortion
     {
