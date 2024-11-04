@@ -45,7 +45,7 @@ CModel::CModel(const CModel & Prototype)
 
 	for (size_t i = 0; i < UFB_END; i++)
 	{
-		m_UFBIndices.emplace_back(512);
+		m_UFBIndices.emplace_back(1024);
 	}
 
 	m_isCloned = true;
@@ -186,12 +186,15 @@ _uint CModel::Setting_Animation(const _char* szAnimationmName, _double SpeedRati
 	return iAnimationIndex;
 }
 
-void CModel::Play_Animation(_float fTimeDelta)
+_vector CModel::Play_Animation(_float fTimeDelta, _bool* pOut)
 {
 	if (m_isChangeAni)
 	{
 		_bool isChangeEnd = false;
-
+		if (m_tChaneAnimDesc.fChangeTime == 0.f && pOut != nullptr)
+		{
+			*pOut = true;
+		}
 		m_tChaneAnimDesc.fChangeTime += fTimeDelta;
 
 		vector<CChannel*> CurrentChannels = m_Animations[m_iCurrentAnimIndex]->Get_Channels();
@@ -254,12 +257,30 @@ void CModel::Play_Animation(_float fTimeDelta)
 		m_iCurrentFrame = m_Animations[m_iCurrentAnimIndex]->Update_TransformationMatrices(m_Bones, &m_CurrentTrackPosition, m_KeyFrameIndices[m_iCurrentAnimIndex], m_isLoop, &m_isEnd_Animations[m_iCurrentAnimIndex], fTimeDelta);
 	}
 
+	_vector vRootMove{};
 	/* 모든 뼈가 가지고 있는 m_CombinedTransformationMatrix를 갱신한다. */
+	if (m_UFBIndices[UFB_ROOT] != 1024)
+	{
+		m_Bones[m_UFBIndices[UFB_ROOT]]->Update_CombinedTransformationMatrix(m_Bones, XMLoadFloat4x4(&m_PreTransformMatrix));
+		vRootMove = m_Bones[m_UFBIndices[UFB_ROOT]]->Get_CombinedTransformationMatrix().r[3];
+		if (m_CurrentTrackPosition == 0.f && pOut != nullptr)//애니메이션이 끝났는지에 대한 판단
+		{
+			*pOut = true;
+		}
+		_float4x4 RootMat = {};
+		XMStoreFloat4x4(&RootMat, m_Bones[m_UFBIndices[UFB_ROOT]]->Get_TransformationMatrix());
+		RootMat._41 = 0; RootMat._42 = 0; RootMat._43 = 0;
+
+		m_Bones[m_UFBIndices[UFB_ROOT]]->Set_TransformationMatrix(XMLoadFloat4x4(&RootMat));
+	}
+
 	for (auto& pBone : m_Bones)
 	{
 		/* 내 뼈의 행렬 * 부모의 컴바인드 */
 		pBone->Update_CombinedTransformationMatrix(m_Bones, XMLoadFloat4x4(&m_PreTransformMatrix));
 	}
+
+	return vRootMove;
 }
 
 HRESULT CModel::Bind_Material(CShader* pShader, const _char* pConstantName, TEXTURE_TYPE eMaterialType, _uint iMeshIndex)

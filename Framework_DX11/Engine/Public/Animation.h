@@ -20,9 +20,14 @@ public:
 	void						Set_SpeedRatio(_double SpeedRatio) { m_SpeedRatio = SpeedRatio; }
 
 	void						Add_EventKeyFrame(EVENT_KEYFRAME Event_Struct_KeyFrame) { m_EventKeyFrames.push_back(Event_Struct_KeyFrame); }
+	vector<EVENT_KEYFRAME>*		Get_EventKeyFrames_Ptr() { return &m_EventKeyFrames; }
 
+	//이봉준 애니메이션 툴 속도 제어, 
 	_double						Get_SpeedPerSec() { return m_SpeedPerSec; }
 	void						Set_SpeedPerSec(_double SpeedPerSec) { m_SpeedPerSec = SpeedPerSec; }
+
+	_double						Get_Duration() { return m_Duration; }
+
 public:
 	HRESULT Initialize(HANDLE* pFile, vector<_uint>& KeyFrameIndices, const class CModel* pModel);
 	_uint Update_TransformationMatrices(const vector<class CBone*>& Bones, _double* pCurrentTrackPosition, vector<_uint>& CurrentKeyFrameIndices, _bool isLoop, _bool* isEnd, _float fTimeDelta);

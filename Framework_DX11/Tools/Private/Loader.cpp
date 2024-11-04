@@ -289,10 +289,6 @@ HRESULT CLoader::Ready_Resources_For_ToolLevel()
 		CModel::Create(m_pDevice, m_pContext, CModel::TYPE_NONANIM, "../Bin/ModelData/NonAnim/Map/Structure/SM_Monastery_Deco_01.dat", PreTransformMatrix))))
 		return E_FAIL;
 
-	PreTransformMatrix = XMMatrixScaling(1.f, 1.f, 1.f) * XMMatrixRotationY(XMConvertToRadians(180.0f));
-	if (FAILED(m_pGameInstance->Add_Prototype(LEVEL_TOOL, TEXT("Prototype_AnimModel_Test"),
-		CModel::Create(m_pDevice, m_pContext, CModel::TYPE_ANIM, "../Bin/ModelData/Anim/Fiona/Fiona.dat", PreTransformMatrix))))
-		return E_FAIL;
 
 	lstrcpy(m_szLoadingText, TEXT("네비게이션을(를) 로딩중입니다."));
 	/* For.Prototype_Component_Navigation */
@@ -358,7 +354,13 @@ HRESULT CLoader::Ready_Resources_For_ToolLevel()
 
 HRESULT CLoader::Ready_Resources_For_ToolLevel_Map0()
 {
-	//_matrix      PreTransformMatrix = XMMatrixIdentity();
+	_matrix      PreTransformMatrix = XMMatrixIdentity();
+
+
+	PreTransformMatrix = XMMatrixScaling(0.01f, 0.01f, 0.01f) * XMMatrixRotationY(XMConvertToRadians(270.f));
+	if (FAILED(m_pGameInstance->Add_Prototype(LEVEL_TOOL, TEXT("Prototype_AnimModel_Test"),
+		CModel::Create(m_pDevice, m_pContext, CModel::TYPE_ANIM, "../Bin/ModelData/Anim/PlayerExample/PlayerExample.dat", PreTransformMatrix))))
+		return E_FAIL;
 
 	//// _finddata_t : <io.h>에서 제공하며 파일 정보를 저장하는 구조체
 	//_finddata_t fd;

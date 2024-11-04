@@ -48,6 +48,7 @@ public:
 	class CModel* m_pModelCom = { nullptr };
 
 	ANIMMODEL_DESC	m_tDesc;
+	_vector		m_vRootMoveStack{};
 
 private:
 	HRESULT Ready_Components(ANIMMODEL_DESC* pNonAnimDesc);

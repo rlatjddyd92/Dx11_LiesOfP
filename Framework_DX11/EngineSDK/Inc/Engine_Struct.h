@@ -40,7 +40,7 @@ namespace Engine
 	//이봉준 이벤트 키 프레임
 	typedef struct
 	{
-		_char*			dwEventName[256];
+		_char			szEventName[MAX_PATH];
 		_double			TrackPosition;
 	}EVENT_KEYFRAME;
 
