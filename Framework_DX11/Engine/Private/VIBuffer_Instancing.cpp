@@ -81,6 +81,9 @@ HRESULT CVIBuffer_Instancing::Initialize_Desc(const CVIBuffer_Instancing::INSTAN
 	m_vMinColor = Desc.vMinColor;
 	m_vMaxColor = Desc.vMaxColor;
 
+	if (m_vRange.x == m_vExceptRange.x && m_vRange.y == m_vExceptRange.y && m_vRange.z == m_vExceptRange.z)
+		m_vExceptRange = _float3(0.f, 0.f, 0.f);
+
 	m_pSpeed = new _float[m_iNumInstance];
 
 	for (size_t i = 0; i < m_iNumInstance; i++)

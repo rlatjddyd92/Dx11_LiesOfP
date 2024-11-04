@@ -128,24 +128,29 @@ void CImGui_Manager::Tool_Effect()
 		if (ImGui::CollapsingHeader("Particle"))
 		{
 			m_pController_EffectTool->Check();
-			if (ImGui::Button("Create Particle"))
-			{
-				m_pController_EffectTool->Add_Particle();
-				m_pController_EffectTool->Update_Particle();
-			}
-			if (ImGui::Button("Update Particle"))
-			{
-
-			}
-
 		}
 
 		ImGui::Begin("EffectList");
 
-		m_pController_EffectTool->Select_Effect();
+		m_pController_EffectTool->Select_Particle();
+		if (ImGui::Button("Create Particle"))
+		{
+			m_pController_EffectTool->Add_Particle();
+		}
+		if (ImGui::Button("Update Particle"))
+		{
+			m_pController_EffectTool->Update_Particle();
+		}
+		if (ImGui::Button("Get Particle"))
+		{
+			m_pController_EffectTool->Get_Particle();
+		}
+		if (ImGui::Button("Delete Particle"))
+		{
+			m_pController_EffectTool->Delete_Particle();
+		}
 
 		ImGui::End();
-
 
 		ImGui::EndTabItem();
 	}

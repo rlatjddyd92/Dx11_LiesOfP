@@ -3,6 +3,8 @@
 
 #include "GameInstance.h"
 
+#include "Controller_EffectTool.h"
+
 CTerrain::CTerrain(ID3D11Device* pDevice, ID3D11DeviceContext* pContext)
 	: CGameObject{ pDevice, pContext }
 {
@@ -50,12 +52,14 @@ void CTerrain::Late_Update(_float fTimeDelta)
 	//m_pVIBufferCom->Culling(m_pTransformCom->Get_WorldMatrix());
 	m_pNavigationCom->Update(XMLoadFloat4x4(m_pTransformCom->Get_WorldMatrix_Ptr()));
 
+	if(false == CController_EffectTool::Get_Instance()->Get_JunhoCamera())
+	{
 #ifdef _DEBUG
-
-	m_pGameInstance->Add_DebugObject(m_pNavigationCom);
+		m_pGameInstance->Add_DebugObject(m_pNavigationCom);
 #endif
-	m_pGameInstance->Add_RenderObject(CRenderer::RG_HEIGHT, this);
-	m_pGameInstance->Add_RenderObject(CRenderer::RG_NONBLEND, this);
+		m_pGameInstance->Add_RenderObject(CRenderer::RG_HEIGHT, this);
+		m_pGameInstance->Add_RenderObject(CRenderer::RG_NONBLEND, this);
+	}
 }
 
 HRESULT CTerrain::Render()
