@@ -9,6 +9,7 @@
 #include "Target_Manager.h"
 #include "Picking.h"
 #include "Frustum.h"
+#include "Layer.h"
 
 #include "Collider_Manager.h"
 #include "Key_Manager.h"
@@ -290,6 +291,26 @@ CCamera* CGameInstance::Find_Camera(_uint iLevelIndex)
 CGameObject* CGameInstance::Find_NearObject(CGameObject* pOwner, _uint iLevelIndex, const _wstring& strLayerTag)
 {
 	return m_pObject_Manager->Find_NearObject(pOwner, iLevelIndex, strLayerTag);
+}
+
+_uint CGameInstance::Get_Object_Layer_Count(_uint iLevelIndex)
+{
+	return m_pObject_Manager->Get_Object_Layer_Count(iLevelIndex);
+}
+
+_uint CGameInstance::Get_Layer_ObjectCount(_uint iLevelIndex, const _wstring& strLayerTag)
+{
+	CLayer* pLayer = m_pObject_Manager->Find_Layer(iLevelIndex, strLayerTag);
+
+	if (pLayer != nullptr)
+		return pLayer->Get_ObjectCount();
+
+	return 0;
+}
+
+_wstring CGameInstance::Get_LayerTag(_uint iLevelIndex, _uint index)
+{
+	return m_pObject_Manager->Get_LayerTag(iLevelIndex, index);
 }
 
 #pragma endregion

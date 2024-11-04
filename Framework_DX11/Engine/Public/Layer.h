@@ -24,7 +24,7 @@ public:
 public:
 	class CComponent* Find_Component(const _wstring& strComponentTag, _uint iIndex, _uint iPartObjIndex);
 	class CGameObject* Find_Object(_uint iIndex);
-
+	_uint Get_ObjectCount() { return m_GameObjects.size(); }
 private:
 	list<class CGameObject*>			m_GameObjects;
 

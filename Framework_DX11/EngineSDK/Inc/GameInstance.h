@@ -63,6 +63,12 @@ public:
 	class CGameObject*	Find_Player(_uint iLevelIndex = 0);
 	class CCamera*		Find_Camera(_uint iLevelIndex = 0);
 	class CGameObject*	Find_NearObject(class CGameObject* pOwner, _uint iLevelIndex, const _wstring& strLayerTag);
+
+	_uint Get_Object_Layer_Count(_uint iLevelIndex);
+	_uint Get_Layer_ObjectCount(_uint iLevelIndex, const _wstring& strLayerTag);
+	_wstring Get_LayerTag(_uint iLevelIndex, _uint index);
+
+
 #pragma endregion
 
 
