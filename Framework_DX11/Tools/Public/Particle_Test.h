@@ -15,6 +15,41 @@ class CParticle_Test final : public CGameObject
 public:
 	enum TYPE { TYPE_SPREAD, TYPE_MOVE, TYPE_CONVERGE, TYPE_SPREAD_INDEPENDENT, TYPE_MOVE_INDEPENDENT, TYPE_CONVERGE_INDEPENDENT, TYPE_END };
 
+	typedef struct
+	{
+		TYPE		eType = { TYPE_END };
+		_uint		iState = { 0 };
+		_float		fRenderRatio = { 0.f };
+		_Vec4		vPivot = {};
+		_float		fGravity = { 0.f };
+		_Vec4		vMoveDir = {};
+	}DEFAULT_DESC;
+
+	typedef struct
+	{
+		_Vec3		vRevolveAxis = {};
+		_float		fAngle = { 0.f };
+	}REVOLVE_DESC;
+
+	typedef struct
+	{
+		_float		fTimeInterval = { 0.f };
+		_float		fRandomRatio = { 0.f };
+	}RANDOM_DESC;
+
+	typedef struct
+	{
+		_float		fAccelSpeed = { 0.f };
+		_float		fAccelLimit = { 0.f };
+	}ACCEL_DESC;
+
+	typedef struct
+	{
+		_Vec3		vPos = {};
+		_Vec3		vRotation = {};
+		_Vec3		vScale = {};
+	}TRANSFORM_DESC;
+
 	typedef struct : CGameObject::GAMEOBJECT_DESC
 	{
 		_uint		iNumInstance = { 100 };
@@ -26,7 +61,14 @@ public:
 		_float2		vLifeTime = { 2.f, 4.f };
 		_float4		vMinColor = { 0.f, 0.f, 0.f, 1.f };
 		_float4		vMaxColor = { 0.f, 0.f, 0.f, 1.f };
+
+		DEFAULT_DESC DefaultDesc = {};
+		REVOLVE_DESC RevolveDesc = {};
+		RANDOM_DESC RandomDesc = {};
+		ACCEL_DESC AccelDesc = {};
+		TRANSFORM_DESC TransformDesc = {};
 	}PARTICLE_TEST_DESC;
+
 
 private:
 	CParticle_Test(ID3D11Device* pDevice, ID3D11DeviceContext* pContext);
@@ -34,48 +76,33 @@ private:
 	virtual ~CParticle_Test() = default;
 
 public:
-	void Set_Type(TYPE eType) {
-		m_eType = eType;
+	void Set_Default(DEFAULT_DESC desc) {
+		m_DefaultDesc = desc;
+	}
+	void Set_Revolev(REVOLVE_DESC desc) {
+		m_RevolveDesc = desc;
+	}
+	void Set_Random(RANDOM_DESC desc) {
+		m_RandomDesc = desc;
+	}
+	void Set_Accel(ACCEL_DESC desc) {
+		m_AccelDesc = desc;
 	}
 
-	void Set_State(_uint iState) {
-		m_iState = iState;
+	DEFAULT_DESC Get_Default() {
+		return m_DefaultDesc;
 	}
 
-	void Set_RenderRatio(_float fRenderRatio) {
-		m_fRenderRatio = fRenderRatio;
+	REVOLVE_DESC Get_Revolve() {
+		return m_RevolveDesc;
 	}
 
-	void Set_Pivot(_Vec4 vPivot) {
-		m_vPivot = vPivot;
+	RANDOM_DESC Get_Random() {
+		return m_RandomDesc;
 	}
 
-	void Set_Speed(_float fSpeed) {
-		m_fSpeed = fSpeed;
-	}
-
-	void Set_Gravity(_float fGravity) {
-		m_fGravity = fGravity;
-	}
-
-	void Set_MoveDir(_Vec4 vMoveDir) {
-		m_vMoveDir = vMoveDir;
-	}
-
-	void Set_RevolveAxis(_Vec3 vRevolveAxis) {
-		m_vRevolveAxis = vRevolveAxis;
-	}
-
-	void Set_Angle(_float fAngle) {
-		m_fAngle = fAngle;
-	}
-
-	void Set_TimeInterval(_float fTimeInterval) {
-		m_fTimeInterval = fTimeInterval;
-	}
-
-	void Set_RandomRatio(_float fRandomRatio) {
-		m_fRandomRatio = fRandomRatio;
+	ACCEL_DESC Get_Accel() {
+		return m_AccelDesc;
 	}
 
 public:
@@ -86,29 +113,19 @@ public:
 	virtual void Late_Update(_float fTimeDelta);
 	virtual HRESULT Render();
 
+public:
+	void Set_Transform(TRANSFORM_DESC& Desc);
+
 private:
 	class CShader* m_pShaderCom = { nullptr };
 	class CVIBuffer_Point_Instance* m_pVIBufferCom = { nullptr };
 	class CTexture* m_pTextureCom = { nullptr };
 
 private:
-	TYPE		m_eType = { TYPE_END };
-
-	_uint		m_iState = { 0 };	// 공전? 랜덤? 반복?
-	_float		m_fRenderRatio = { 0.f };
-	_Vec4		m_vPivot = {};
-	_float		m_fSpeed = { 0.f };
-	_float		m_fGravity = { 0.f };
-
-	_Vec4		m_vMoveDir = {};	// 단방향 이동 방향.
-
-	// 공전시
-	_Vec3		m_vRevolveAxis = {};
-	_float		m_fAngle = { 0.f };
-
-	// 랜덤시
-	_float		m_fTimeInterval = { 0.f };
-	_float		m_fRandomRatio = { 0.f };
+	DEFAULT_DESC m_DefaultDesc = {};
+	REVOLVE_DESC m_RevolveDesc = {};
+	RANDOM_DESC m_RandomDesc = {};
+	ACCEL_DESC m_AccelDesc = {};
 
 private:
 	HRESULT Ready_Components(PARTICLE_TEST_DESC* pDesc);

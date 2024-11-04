@@ -11,6 +11,7 @@
 #include "AnimModel.h"
 #include "NonAnimModel.h"
 #include "FreeCamera.h"
+#include "Particle_Test.h"
 
 #pragma comment(lib, "ole32.lib")	// 지우지 마세요
 
@@ -265,10 +266,21 @@ HRESULT CLoader::Ready_Resources_For_ToolLevel()
 		CTexture::Create(m_pDevice, m_pContext, TEXT("../Bin/Resources/Textures/SkyBox/Sky_%d.dds"), 4))))
 		return E_FAIL;
 
+	/* For. Prototype_Component_Texture_Sky */
+	if (FAILED(m_pGameInstance->Add_Prototype(LEVEL_TOOL, TEXT("Prototype_Component_Texture_Snow"),
+		CTexture::Create(m_pDevice, m_pContext, TEXT("../Bin/Resources/Textures/Snow/Snow.png"), 1))))
+		return E_FAIL;
+
 	lstrcpy(m_szLoadingText, TEXT("모델을(를) 로딩중입니다."));
 	/* For. Prototype_Component_VIBuffer_Terrain*/
 	if (FAILED(m_pGameInstance->Add_Prototype(LEVEL_TOOL, TEXT("Prototype_Component_VIBuffer_Terrain"),
 		CVIBuffer_Terrain::Create(m_pDevice, m_pContext, TEXT("../Bin/Resources/Textures/Terrain/Height.bmp")))))
+		return E_FAIL;
+
+	CVIBuffer_Instancing::INSTANCE_DESC ParticleDesc = {};
+	/* For. Prototype_Component_VIBuffer_Point_Instance */
+	if (FAILED(m_pGameInstance->Add_Prototype(LEVEL_TOOL, TEXT("Prototype_Component_VIBuffer_Point_Instance"),
+		CVIBuffer_Point_Instance::Create(m_pDevice, m_pContext, ParticleDesc))))
 		return E_FAIL;
 
 	_matrix		PreTransformMatrix = XMMatrixIdentity();
@@ -276,6 +288,8 @@ HRESULT CLoader::Ready_Resources_For_ToolLevel()
 	if (FAILED(m_pGameInstance->Add_Prototype(LEVEL_TOOL, TEXT("Prototype_Model_Test"),
 		CModel::Create(m_pDevice, m_pContext, CModel::TYPE_NONANIM, "../Bin/ModelData/NonAnim/Map/Structure/SM_Monastery_Deco_01.dat", PreTransformMatrix))))
 		return E_FAIL;
+
+
 
 	lstrcpy(m_szLoadingText, TEXT("네비게이션을(를) 로딩중입니다."));
 	/* For.Prototype_Component_Navigation */
@@ -299,6 +313,12 @@ HRESULT CLoader::Ready_Resources_For_ToolLevel()
 		CShader::Create(m_pDevice, m_pContext, TEXT("../Bin/ShaderFiles/Shader_VtxAnimModel.hlsl"), VTXANIMMESH::Elements, VTXANIMMESH::iNumElements))))
 		return E_FAIL;
 
+	/* For. Prototype_Component_Shader_VtxPointInstance */
+	if (FAILED(m_pGameInstance->Add_Prototype(LEVEL_TOOL, TEXT("Prototype_Component_Shader_VtxPointInstance"),
+		CShader::Create(m_pDevice, m_pContext, TEXT("../Bin/ShaderFiles/Shader_VtxPointInstance.hlsl"), VTXPOINTINSTANCE::Elements, VTXPOINTINSTANCE::iNumElements))))
+		return E_FAIL;
+
+
 	lstrcpy(m_szLoadingText, TEXT("사운드을(를) 로딩중입니다."));
 
 
@@ -316,6 +336,11 @@ HRESULT CLoader::Ready_Resources_For_ToolLevel()
 	/* For. Prototype_GameObject_FreeCamera */
 	if (FAILED(m_pGameInstance->Add_Prototype(TEXT("Prototype_GameObject_FreeCamera"),
 		CFreeCamera::Create(m_pDevice, m_pContext))))
+		return E_FAIL;
+
+	/* For. Prototype_GameObject_Particle_Test */
+	if (FAILED(m_pGameInstance->Add_Prototype(TEXT("Prototype_GameObject_Particle_Test"),
+		CParticle_Test::Create(m_pDevice, m_pContext))))
 		return E_FAIL;
 
 	m_isFinished_Main = true;
