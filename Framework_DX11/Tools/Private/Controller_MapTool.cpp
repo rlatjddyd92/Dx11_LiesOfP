@@ -26,7 +26,6 @@ HRESULT CController_MapTool::Initialize()
 
 HRESULT CController_MapTool::Control_Player()
 { 
-	
 	if (ImGui::Button("Create Player"))
 	{
 		//Player 생성 (한번만)
@@ -34,7 +33,7 @@ HRESULT CController_MapTool::Control_Player()
 		if (pPlayer == nullptr)
 		{
 			CNonAnimModel::NONMODEL_DESC Desc{};
-			Desc.vPosition = {0.f,0.f,0.f};
+			Desc.vPosition = m_vPickPos;
 			Desc.vScale = { 1.f,1.f,1.f };
 			Desc.vRotation = { 0.f,0.f,0.f };
 			Desc.iRenderGroupID = 0;
@@ -94,7 +93,7 @@ void CController_MapTool::Create_Map()
 				wstrLayerName.assign(strLayerName.begin(), strLayerName.end());
 
 				CNonAnimModel::NONMODEL_DESC Desc{};
-				Desc.vPosition = { 0.f,0.f,0.f };
+				Desc.vPosition = m_vPickPos;
 				Desc.vScale = { 1.f,1.f,1.f };
 				Desc.vRotation = { 0.f,0.f,0.f };
 				Desc.iRenderGroupID = i0;
@@ -209,6 +208,17 @@ void CController_MapTool::Pick_Object()
 
 	ImGui::Text("");
 	ImGui::PopItemWidth();
+
+	if (ImGui::Button("Delete"))
+	{
+		m_iPre_Picked_ID = m_iPickObject_ID;
+		m_iPickObject_ID = 0;
+		m_pSelectObject->Set_Dead(true);
+		m_pPreSelectObject = m_pSelectObject;
+		m_pSelectObject = nullptr;
+	}
+
+	ImGui::Text("");
 }
 
 void CController_MapTool::PickPos()
