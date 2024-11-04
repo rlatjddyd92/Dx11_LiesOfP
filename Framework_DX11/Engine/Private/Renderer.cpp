@@ -4,6 +4,7 @@
 #include "GameInstance.h"
 #include "Shader.h"
 #include "VIBuffer_Rect.h"
+#include "Texture.h"
 
 _uint		g_iSizeX = 8192;
 _uint		g_iSizeY = 4608;
@@ -185,7 +186,7 @@ HRESULT CRenderer::Initialize()
 	m_pSSAOShader = CShader::Create(m_pDevice, m_pContext, TEXT("../Bin/ShaderFiles/Shader_SSAO.hlsl"), VTXPOSTEX::Elements, VTXPOSTEX::iNumElements);
 	if (nullptr == m_pShader)
 		return E_FAIL;
-
+	m_pNoiseTexture_SSAO = CTexture::Create(m_pDevice, m_pContext, TEXT("../Bin/Resources/T_Tile_Noise_01_C_LGS.dds"), 1);
 	
 	m_pVIBuffer = CVIBuffer_Rect::Create(m_pDevice, m_pContext);
 	if (nullptr == m_pVIBuffer)
@@ -214,7 +215,7 @@ HRESULT CRenderer::Initialize()
 	//if (FAILED(m_pGameInstance->Ready_RT_Debug(TEXT("Target_Height"), ViewportDesc.Width - 150.f, 150.f, 300.f, 300.f)))
 	//	return E_FAIL;
 
-	if (FAILED(m_pGameInstance->Ready_RT_Debug(TEXT("Target_SSAO"), 100.f, 100.f, 200.f, 200.f)))
+	if (FAILED(m_pGameInstance->Ready_RT_Debug(TEXT("Target_SSAO_BlurXY"), 100.f, 100.f, 200.f, 200.f)))
 		return E_FAIL;
 	if (FAILED(m_pGameInstance->Ready_RT_Debug(TEXT("Target_PickObjectDepth"), 100.f, 300.f, 200.f, 200.f)))
 	return E_FAIL;
@@ -474,16 +475,13 @@ HRESULT CRenderer::Render_Deferred()
 
 HRESULT CRenderer::Render_SSAO()
 {
-	if (FAILED(m_pGameInstance->Begin_MRT(TEXT("MRT_SSAO"))))
-		return E_FAIL;
-
 	if (FAILED(m_pSSAOShader->Bind_Matrix("g_WorldMatrix", &m_WorldMatrix)))
 		return E_FAIL;
 	if (FAILED(m_pSSAOShader->Bind_Matrix("g_ViewMatrix", &m_ViewMatrix)))
 		return E_FAIL;
 	if (FAILED(m_pSSAOShader->Bind_Matrix("g_ProjMatrix", &m_ProjMatrix)))
 		return E_FAIL;
-	
+
 	if (FAILED(m_pSSAOShader->Bind_Matrix("g_CameraViewMatrix", &m_pGameInstance->Get_Transform(CPipeLine::D3DTS_VIEW))))
 		return E_FAIL;
 	if (FAILED(m_pSSAOShader->Bind_Matrix("g_ViewMatrixInv", &m_pGameInstance->Get_Transform_Inverse(CPipeLine::D3DTS_VIEW))))
@@ -491,12 +489,44 @@ HRESULT CRenderer::Render_SSAO()
 	if (FAILED(m_pSSAOShader->Bind_Matrix("g_ProjMatrixInv", &m_pGameInstance->Get_Transform_Inverse(CPipeLine::D3DTS_PROJ))))
 		return E_FAIL;
 
+
+	if (FAILED(m_pGameInstance->Begin_MRT(TEXT("MRT_SSAO"))))
+		return E_FAIL;
+
 	if (FAILED(m_pGameInstance->Bind_RT_ShaderResource(m_pSSAOShader, TEXT("Target_Normal"), "g_NormalTexture")))
 		return E_FAIL;
 	if (FAILED(m_pGameInstance->Bind_RT_ShaderResource(m_pSSAOShader, TEXT("Target_Depth"), "g_DepthTexture")))
 		return E_FAIL;
+	if (FAILED(m_pNoiseTexture_SSAO->Bind_ShadeResource(m_pSSAOShader, "g_NoiseTexture", 0)))
+		return E_FAIL;
 
 	m_pSSAOShader->Begin(0);
+	m_pVIBuffer->Bind_Buffers();
+	m_pVIBuffer->Render();
+
+	if (FAILED(m_pGameInstance->End_MRT()))
+		return E_FAIL;
+
+	if (FAILED(m_pGameInstance->Begin_MRT(TEXT("MRT_SSAO_BlurX"))))
+		return E_FAIL;
+
+	if (FAILED(m_pGameInstance->Bind_RT_ShaderResource(m_pSSAOShader, TEXT("Target_SSAO"), "g_SSAOTexture")))
+		return E_FAIL;
+
+	m_pSSAOShader->Begin(1);
+	m_pVIBuffer->Bind_Buffers();
+	m_pVIBuffer->Render();
+
+	if (FAILED(m_pGameInstance->End_MRT()))
+		return E_FAIL;
+
+	if (FAILED(m_pGameInstance->Begin_MRT(TEXT("MRT_SSAO_BlurXY"))))
+		return E_FAIL;
+
+	if (FAILED(m_pGameInstance->Bind_RT_ShaderResource(m_pSSAOShader, TEXT("Target_SSAO_BlurX"), "g_SSAOTexture")))
+		return E_FAIL;
+
+	m_pSSAOShader->Begin(2);
 	m_pVIBuffer->Bind_Buffers();
 	m_pVIBuffer->Render();
 
@@ -998,7 +1028,7 @@ HRESULT CRenderer::Render_Debug()
 	//m_pGameInstance->Render_MRT_Debug(TEXT("MRT_Bloom_BlurXY0"), m_pShader, m_pVIBuffer);
 	//m_pGameInstance->Render_MRT_Debug(TEXT("MRT_Bloom_BlurXY1"), m_pShader, m_pVIBuffer);
 	//m_pGameInstance->Render_MRT_Debug(TEXT("MRT_Bloom_BlurXY2"), m_pShader, m_pVIBuffer);
-	m_pGameInstance->Render_MRT_Debug(TEXT("MRT_SSAO"), m_pShader, m_pVIBuffer);
+	m_pGameInstance->Render_MRT_Debug(TEXT("MRT_SSAO_BlurXY"), m_pShader, m_pVIBuffer);
 	m_pGameInstance->Render_MRT_Debug(TEXT("MRT_Picking"), m_pShader, m_pVIBuffer);
 	//m_pGameInstance->Render_MRT_Debug(TEXT("MRT_ShadowObj"), m_pShader, m_pVIBuffer);
 	//m_pGameInstance->Render_MRT_Debug(TEXT("MRT_Final"), m_pShader, m_pVIBuffer);
@@ -1041,6 +1071,8 @@ void CRenderer::Free()
 	Safe_Release(m_pLightDepthStencilView);
 
 	Safe_Release(m_pSSAOShader);
+	Safe_Release(m_pNoiseTexture_SSAO);
+
 	Safe_Release(m_pBloomShader);
 	Safe_Release(m_pShader);
 

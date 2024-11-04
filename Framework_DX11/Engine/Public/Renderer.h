@@ -62,7 +62,16 @@ private:
 	ID3D11DepthStencilView*		m_pDownSampleDepthStencilView2 = nullptr;
 
 	_bool						m_isUseBloom = { true };
+
 	_bool						m_isUseSSAO = { true };
+	class CTexture*				m_pNoiseTexture_SSAO = { nullptr };
+	const _Matrix m_ToTextureMatrix =
+	{	
+		0.5f, 0.0f, 0.0f, 0.0f,
+		0.0f, -0.5f, 0.0f, 0.0f,
+		0.0f, 0.0f, 1.0f, 0.0f,
+		0.5f, 0.5f, 0.0f, 1.0f
+	};
 
 #ifdef _DEBUG
 private:
