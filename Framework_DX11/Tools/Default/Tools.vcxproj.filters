@@ -70,6 +70,9 @@
     <Filter Include="02.GameObjects\04.ParticleTest">
       <UniqueIdentifier>{fac53200-c293-4b2f-b5db-aed31b94a02c}</UniqueIdentifier>
     </Filter>
+    <Filter Include="02.GameObjects\05.UIRender">
+      <UniqueIdentifier>{00584ecd-1d69-4162-8868-8b153c51b33c}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="framework.h">
@@ -165,6 +168,9 @@
     <ClInclude Include="..\public\Particle_Test.h">
       <Filter>02.GameObjects\04.ParticleTest</Filter>
     </ClInclude>
+    <ClInclude Include="..\Public\UIRender.h">
+      <Filter>02.GameObjects\05.UIRender</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <Image Include="small.ico">
@@ -252,6 +258,9 @@
     </ClCompile>
     <ClCompile Include="..\private\Particle_Test.cpp">
       <Filter>02.GameObjects\04.ParticleTest</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Private\UIRender.cpp">
+      <Filter>02.GameObjects\05.UIRender</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
