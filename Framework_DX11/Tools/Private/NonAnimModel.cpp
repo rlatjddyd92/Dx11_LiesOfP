@@ -111,7 +111,7 @@ HRESULT CNonAnimModel::Render_Picking()
 	if (FAILED(m_pShaderCom->Bind_Matrix("g_ProjMatrix", &m_pGameInstance->Get_Transform(CPipeLine::D3DTS_PROJ))))
 		return E_FAIL;
 
-	uint32_t hash = static_cast<uint32_t>(m_iHashId * 2654435761); // 임의의 상수로 인덱스를 해시처럼 변환
+	uint32_t hash = static_cast<uint32_t>(m_iHashId ); // 임의의 상수로 인덱스를 해시처럼 변환
 
 	UINT8 r = (hash >> 24) & 0xff;
 	UINT8 g = (hash >> 16) & 0xff;

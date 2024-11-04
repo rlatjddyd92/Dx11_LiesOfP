@@ -164,16 +164,22 @@ _bool CPicking::Picking_Object(_uint* pPickID)
 
 	m_pContext->Map(m_pPickObjectTextureMini, 0, D3D11_MAP::D3D11_MAP_READ, 0, &msr);
 
-	// 픽셀의 RGBA 값 추출
-
+	// 픽셀의 색상 값 추출
 	_float4 fcolorValue = *reinterpret_cast<_float4*>(msr.pData);
 
-	// 각 색상 채널 추출
-	//uint8_t r = (colorValue & 0xFF);          // Red
-	//uint8_t g = (colorValue >> 8) & 0xFF;     // Green
-	//uint8_t b = (colorValue >> 16) & 0xFF;    // Blue
-	//uint8_t a = (colorValue >> 24) & 0xFF;    // Alpha
-	
+	// 각 색상 채널 추출 후 ID로 변환
+	UINT8 r = static_cast<UINT8>(fcolorValue.x * 255);
+	UINT8 g = static_cast<UINT8>(fcolorValue.y * 255);
+	UINT8 b = static_cast<UINT8>(fcolorValue.z * 255);
+	UINT8 a = static_cast<UINT8>(fcolorValue.w * 255);
+
+	uint32_t hash = (static_cast<uint32_t>(r) << 24) |
+		(static_cast<uint32_t>(g) << 16) |
+		(static_cast<uint32_t>(b) << 8) |
+		static_cast<uint32_t>(a);
+
+	*pPickID = static_cast<_uint>(hash);
+
 	m_pContext->Unmap(m_pPickObjectTextureMini, 0);
 
 	return true;
@@ -250,4 +256,6 @@ void CPicking::Free()
 	Safe_Release(m_pContext);
 	Safe_Release(m_pDevice);
 	Safe_Release(m_pPickDepthTexture);
+	Safe_Release(m_pPickObjectTexture);
+	Safe_Release(m_pPickObjectTextureMini);
 }

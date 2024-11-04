@@ -564,7 +564,7 @@ void CController_MapTool::Picking()
 {
 	_uint id;
 	m_pGameInstance->Picking_Object(&id);
-	int a = 10;
+	
 }
 
 void CController_MapTool::Free()
