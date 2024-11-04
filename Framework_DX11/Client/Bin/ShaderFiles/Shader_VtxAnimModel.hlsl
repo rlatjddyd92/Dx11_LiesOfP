@@ -97,7 +97,7 @@ PS_OUT PS_MAIN(PS_IN In)
 
 	Out.vDiffuse = vMtrlDiffuse;
 	Out.vNormal = vector(In.vNormal.xyz * 0.5f + 0.5f, 0.f);
-	Out.vDepth = vector(In.vProjPos.z / In.vProjPos.w, In.vProjPos.w / 1000.f, 0.f, 0.f);
+    Out.vDepth = vector(In.vProjPos.z / In.vProjPos.w, In.vProjPos.w / 1000.f, 0.f, 0.f);// x:0~F를 Z로 나눈 값 , y: view스페이스 깊이 정규화
 	Out.vPickDepth = vector(In.vProjPos.z / In.vProjPos.w, 0.f, 0.f, 0.f);
 
 

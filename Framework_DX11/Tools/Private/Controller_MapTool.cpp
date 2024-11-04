@@ -602,7 +602,7 @@ void CController_MapTool::Find_PickObject()
 	CGameObject* pGameObject = { nullptr };
 	CNonAnimModel* pNonAnimObject = { nullptr };
 
-	for (int i = 0; i < iLayerCount; i++)
+	for (_uint i = 0; i < iLayerCount; i++)
 	{
 		sLayerTag = m_pGameInstance->Get_LayerTag(LEVEL_TOOL, i); //i번째 레이어 태그
 

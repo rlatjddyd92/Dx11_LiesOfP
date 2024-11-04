@@ -243,7 +243,7 @@ CGameObject* CObject_Manager::Find_NearObject(CGameObject* pOwner, _uint iLevelI
 
 _uint CObject_Manager::Get_Object_Layer_Count(_uint iLevelIndex)
 {
-	return m_pLayers[iLevelIndex].size();
+	return (_uint)m_pLayers[iLevelIndex].size();
 }
 
 _wstring CObject_Manager::Get_LayerTag(_uint iLevelIndex, _uint index)

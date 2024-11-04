@@ -62,6 +62,7 @@ private:
 	ID3D11DepthStencilView*		m_pDownSampleDepthStencilView2 = nullptr;
 
 	_bool						m_isUseBloom = { true };
+	_bool						m_isUseSSAO = { true };
 
 #ifdef _DEBUG
 private:

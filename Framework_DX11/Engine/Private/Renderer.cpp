@@ -42,7 +42,7 @@ HRESULT CRenderer::Initialize()
 		return E_FAIL;
 	if (FAILED(m_pGameInstance->Add_RenderTarget(TEXT("Target_Depth"), (_uint)ViewportDesc.Width, (_uint)ViewportDesc.Height, DXGI_FORMAT_R32G32B32A32_FLOAT, _float4(0.f, 1.f, 0.f, 0.f))))
 		return E_FAIL;
-	if (FAILED(m_pGameInstance->Add_RenderTarget(TEXT("Target_PickDepth"), ViewportDesc.Width, ViewportDesc.Height, DXGI_FORMAT_R32G32B32A32_FLOAT, _float4(0.f, 0.f, 0.f, 0.f))))
+	if (FAILED(m_pGameInstance->Add_RenderTarget(TEXT("Target_PickDepth"), (_uint)ViewportDesc.Width, (_uint)ViewportDesc.Height, DXGI_FORMAT_R32G32B32A32_FLOAT, _float4(0.f, 0.f, 0.f, 0.f))))
 		return E_FAIL;
 	if (FAILED(m_pGameInstance->Add_RenderTarget(TEXT("Target_PickObjectDepth"), (_uint)ViewportDesc.Width, (_uint)ViewportDesc.Height, DXGI_FORMAT_R32G32B32A32_SINT, _float4(0.f, 0.f, 0.f, 0.f))))
 		return E_FAIL;
@@ -262,7 +262,6 @@ HRESULT CRenderer::Draw()
 
 	if (FAILED(Render_SSAO()))
 		return E_FAIL;
-
 	if (FAILED(Render_Bloom()))
 		return E_FAIL;
 
@@ -483,7 +482,9 @@ HRESULT CRenderer::Render_SSAO()
 		return E_FAIL;
 	if (FAILED(m_pSSAOShader->Bind_Matrix("g_ProjMatrix", &m_ProjMatrix)))
 		return E_FAIL;
-
+	
+	if (FAILED(m_pSSAOShader->Bind_Matrix("g_CameraViewMatrix", &m_pGameInstance->Get_Transform(CPipeLine::D3DTS_VIEW))))
+		return E_FAIL;
 	if (FAILED(m_pSSAOShader->Bind_Matrix("g_ViewMatrixInv", &m_pGameInstance->Get_Transform_Inverse(CPipeLine::D3DTS_VIEW))))
 		return E_FAIL;
 	if (FAILED(m_pSSAOShader->Bind_Matrix("g_ProjMatrixInv", &m_pGameInstance->Get_Transform_Inverse(CPipeLine::D3DTS_PROJ))))
@@ -504,8 +505,6 @@ HRESULT CRenderer::Render_SSAO()
 
 	return S_OK;
 }
-
-
 
 HRESULT CRenderer::Render_Bloom()
 {
