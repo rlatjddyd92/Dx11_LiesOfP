@@ -103,10 +103,10 @@ void CImGui_Manager::Tool_Map()
 {
 	if (ImGui::BeginTabItem("Map Tool"))
 	{
-		m_pController_MapTool->Select_Obj();
+		//m_pController_MapTool->Select_Obj();
 
-		m_pController_MapTool->ShowPickPos();
-		m_pController_MapTool->EditTransform();
+		m_pController_MapTool->PickPos();
+		m_pController_MapTool->Pick_Object();
 
 		m_pController_MapTool->Control_Player();
 		m_pController_MapTool->Create_Map();

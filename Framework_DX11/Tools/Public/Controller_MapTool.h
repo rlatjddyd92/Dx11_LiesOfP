@@ -24,9 +24,8 @@ public:
 	HRESULT Initialize();
 	HRESULT Control_Player();
 	void Create_Map();
-	void Select_Obj();
-	void EditTransform();
-	void ShowPickPos();
+	void Pick_Object();
+	void PickPos();
 	void Save_Load();
 private:
 	void Select_Map_Model();
@@ -40,6 +39,9 @@ private:
 	_int m_iListCount = { 0 };			//ListBox항목 개수
 	_int m_iListSelectNum = { 0 };		//ListBox항목중 선택한 인덱스
 
+	_uint m_iPickObject_ID = { 0 };
+	_uint m_iPre_Picked_ID={ 0 };
+
 	class CGameObject* m_pSelectObject = { nullptr };		//새로 선택한 물체
 	class CGameObject* m_pPreSelectObject = { nullptr };	//전에 선택했던 물체
 
@@ -47,11 +49,12 @@ private:
 	static _float3 m_vPosition; //오브젝트 좌표
 	static _float3 m_vRotation; //오브젝트 좌표
 
+	_float3 m_vPickPos = {}; //피킹한 좌표
+
 private:
 	void SaveMap();
 	void LoadMap();
-
-	void Picking();
+	void Find_PickObject();
 
 public:
 	virtual void Free() override;

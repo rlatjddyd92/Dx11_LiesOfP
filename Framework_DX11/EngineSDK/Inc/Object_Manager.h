@@ -35,6 +35,9 @@ public:
 	class CCamera*		Find_Camera(_uint iLevelIndex = 0);
 	class CGameObject*	Find_NearObject(class CGameObject* pOwner, _uint iLevelIndex, const _wstring& strLayerTag);
 
+	_uint Get_Object_Layer_Count(_uint iLevelIndex);
+	_wstring Get_LayerTag(_uint iLevelIndex, _uint index);
+
 private:
 
 	/* 원형객체들을 보관한다. */
@@ -44,7 +47,8 @@ private:
 	_uint										m_iNumLevels = {};
 	map<const _wstring, class CLayer*>*			m_pLayers = { nullptr };
 	typedef map<const _wstring, class CLayer*>		LAYERS;
-
+	
+	vector <_wstring> LayerTagList = {  };
 public:
 	static CObject_Manager* Create(_uint iNumLevels);
 	virtual void Free() override;

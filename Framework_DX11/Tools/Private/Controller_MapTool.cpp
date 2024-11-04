@@ -26,7 +26,6 @@ HRESULT CController_MapTool::Initialize()
 
 HRESULT CController_MapTool::Control_Player()
 { 
-	
 	if (ImGui::Button("Create Player"))
 	{
 		//Player 생성 (한번만)
@@ -34,7 +33,7 @@ HRESULT CController_MapTool::Control_Player()
 		if (pPlayer == nullptr)
 		{
 			CNonAnimModel::NONMODEL_DESC Desc{};
-			Desc.vPosition = {0.f,0.f,0.f};
+			Desc.vPosition = m_vPickPos;
 			Desc.vScale = { 1.f,1.f,1.f };
 			Desc.vRotation = { 0.f,0.f,0.f };
 			Desc.iRenderGroupID = 0;
@@ -94,7 +93,7 @@ void CController_MapTool::Create_Map()
 				wstrLayerName.assign(strLayerName.begin(), strLayerName.end());
 
 				CNonAnimModel::NONMODEL_DESC Desc{};
-				Desc.vPosition = { 0.f,0.f,0.f };
+				Desc.vPosition = m_vPickPos;
 				Desc.vScale = { 1.f,1.f,1.f };
 				Desc.vRotation = { 0.f,0.f,0.f };
 				Desc.iRenderGroupID = i0;
@@ -118,31 +117,39 @@ void CController_MapTool::Create_Map()
 	}
 }
 
-void CController_MapTool::Select_Obj()
-{
-	//임시로 무조건 플레이어가 선택되게
-	if (m_pGameInstance->Find_Player(LEVEL_TOOL) != nullptr)
-		m_pSelectObject = m_pGameInstance->Find_Player(LEVEL_TOOL);
-
-	if (m_pSelectObject == nullptr)
-	{
-		//피킹
-	}
-	else
-	{
-		//피킹 해제만 가능하게
-	}
-
-	if (m_pGameInstance->Get_KeyState(RBUTTON) == AWAY)
-	{
-		Picking();
-	}
-}
-
-void CController_MapTool::EditTransform()
+void CController_MapTool::Pick_Object()
 {
 	if (!ImGui::CollapsingHeader("Object Inform"))
 		return;
+	
+	//오브젝트 피킹 작동
+	if (m_pGameInstance->Get_KeyState(RBUTTON) == AWAY)
+	{
+		m_iPre_Picked_ID = m_iPickObject_ID;
+
+		m_pGameInstance->Picking_Object(&m_iPickObject_ID);
+
+		if (m_iPickObject_ID != 0)	//0은 허공을 선택한 것
+		{
+			if(m_pSelectObject != nullptr)	//처름 피킹한게 아닐때만
+			{
+				dynamic_cast<CNonAnimModel*>(m_pSelectObject)->Set_Selected(false);
+				m_pPreSelectObject = m_pSelectObject;
+			}
+
+			if(m_iPre_Picked_ID != m_iPickObject_ID)	//새로 고른거다
+			{
+				Find_PickObject();
+			}
+			else 
+			{
+				//같은걸 다시 고르면 선택 해제
+				m_pSelectObject = nullptr;
+				m_iPickObject_ID = 0;
+			}
+
+		}
+	}
 
 	ImGui::SeparatorText("Object Transform");
 
@@ -154,7 +161,7 @@ void CController_MapTool::EditTransform()
 
 	static int iSelectObj_RenderTargetID = 0;
 
-	if (m_pPreSelectObject != m_pSelectObject)	//새로 피킹할 경우
+	if (m_pPreSelectObject != m_pSelectObject && m_pSelectObject != nullptr)	//새로 피킹할 경우 Obj 정보를 띄우자
 	{
 		fScale[0] = m_pSelectObject->Get_Transform()->Get_Scaled().x;
 		fScale[1] = m_pSelectObject->Get_Transform()->Get_Scaled().y;
@@ -175,7 +182,7 @@ void CController_MapTool::EditTransform()
 
 		m_pPreSelectObject = m_pSelectObject;
 	}
-	else if(m_pSelectObject!= nullptr)	//변경한 값 적용
+	else if(m_pSelectObject!= nullptr)	//Imgui에서 변경한 값 적용
 	{
 		_float3 vPosition = {};
 		vPosition.x = fPos[0];
@@ -201,12 +208,34 @@ void CController_MapTool::EditTransform()
 
 	ImGui::Text("");
 	ImGui::PopItemWidth();
+
+	if (ImGui::Button("Delete"))
+	{
+		m_iPre_Picked_ID = m_iPickObject_ID;
+		m_iPickObject_ID = 0;
+		m_pSelectObject->Set_Dead(true);
+		m_pPreSelectObject = m_pSelectObject;
+		m_pSelectObject = nullptr;
+	}
+
+	ImGui::Text("");
 }
 
-void CController_MapTool::ShowPickPos()
+void CController_MapTool::PickPos()
 {
 	if (!ImGui::CollapsingHeader("Picking Inform"))
 		return;
+
+	if(m_pGameInstance->Get_KeyState(RBUTTON) == AWAY)
+		m_pGameInstance->Picking(&m_vPickPos);
+
+	static float fRot[3] = { 0.f,0.f,0.f};
+	fRot[0] = m_vPickPos.x;
+	fRot[1] = m_vPickPos.y;
+	fRot[2] = m_vPickPos.z;
+
+	ImGui::InputFloat3("PickPos3", fRot);
+
 }
 
 void CController_MapTool::Save_Load()
@@ -560,11 +589,38 @@ void CController_MapTool::LoadMap()
 	MSG_BOX(TEXT("파일 읽기를 성공했습니다.."));
 }
 
-void CController_MapTool::Picking()
+void CController_MapTool::Find_PickObject()
 {
-	_uint id;
-	m_pGameInstance->Picking_Object(&id);
-	
+	//모든 레이어를 돌면서 물체들의 id값을 비교해야한다.
+	_uint iLayerCount = m_pGameInstance->Get_Object_Layer_Count(LEVEL_TOOL);	//전체 레이어 수
+
+	_wstring sLayerTag = {};
+	_uint ObjectCount = 0;
+	CGameObject* pGameObject = { nullptr };
+	CNonAnimModel* pNonAnimObject = { nullptr };
+
+	for (int i = 0; i < iLayerCount; i++)
+	{
+		sLayerTag = m_pGameInstance->Get_LayerTag(LEVEL_TOOL, i); //i번째 레이어 태그
+
+		ObjectCount = m_pGameInstance->Get_Layer_ObjectCount(LEVEL_TOOL, sLayerTag);
+
+		for (_uint i = 0; i < ObjectCount; ++i)
+		{
+			pGameObject = m_pGameInstance->Find_Object(LEVEL_TOOL, sLayerTag, i);
+
+			pNonAnimObject = dynamic_cast<CNonAnimModel*>(pGameObject);
+			if (pNonAnimObject == nullptr)
+				continue;
+
+			if (m_iPickObject_ID == pNonAnimObject->Get_HashId())
+			{
+				m_pSelectObject = pGameObject;
+				pNonAnimObject->Set_Selected(true);
+				return;
+			}
+		}
+	}
 }
 
 void CController_MapTool::Free()

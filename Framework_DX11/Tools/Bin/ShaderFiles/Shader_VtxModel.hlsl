@@ -4,6 +4,7 @@ matrix			g_WorldMatrix, g_ViewMatrix, g_ProjMatrix;
 texture2D		g_DiffuseTexture;
 texture2D		g_NormalTexture;
 float4			g_fHashColor;
+bool			g_bSelect = false;
 
 struct VS_IN
 {
@@ -97,6 +98,12 @@ PS_OUT PS_MAIN(PS_IN In)
 
 	Out.vDiffuse = vDiffuse;
 
+    if (g_bSelect)
+    {
+        Out.vDiffuse *= 3.f;
+        Out.vDiffuse.b *= 5.f;
+    }
+       
 	/* -1.f ~ 1.f -> 0.f ~ 1.f */
 	Out.vNormal = vector(In.vNormal.xyz * 0.5f + 0.5f, 0.f);
 	Out.vDepth = vector(In.vProjPos.z / In.vProjPos.w, In.vProjPos.w / 1000.f, 0.f, 0.f);

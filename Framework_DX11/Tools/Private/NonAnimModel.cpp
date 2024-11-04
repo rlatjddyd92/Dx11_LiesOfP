@@ -81,6 +81,9 @@ HRESULT CNonAnimModel::Render()
 	if (FAILED(m_pShaderCom->Bind_Matrix("g_ProjMatrix", &m_pGameInstance->Get_Transform(CPipeLine::D3DTS_PROJ))))
 		return E_FAIL;
 
+	if(FAILED(m_pShaderCom->Bind_RawValue("g_bSelect", &m_bSelected, sizeof(_bool))))
+		return E_FAIL;
+
 	_uint		iNumMeshes = m_pModelCom->Get_NumMeshes();
 
 	for (size_t i = 0; i < iNumMeshes; i++)
@@ -97,6 +100,10 @@ HRESULT CNonAnimModel::Render()
 		if (FAILED(m_pModelCom->Render((_uint)i)))
 			return E_FAIL;
 	}
+
+	_bool bFalse = false;
+	if (FAILED(m_pShaderCom->Bind_RawValue("g_bSelect", &bFalse, sizeof(_bool))))
+		return E_FAIL;
 
 	return S_OK;
 }
