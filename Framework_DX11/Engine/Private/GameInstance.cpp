@@ -460,6 +460,11 @@ _bool CGameInstance::Picking(_float3 * pPickPos)
 	return m_pPicking->Picking(pPickPos);
 }
 
+_bool CGameInstance::Picking_Object(_uint* pPickID)
+{
+	return  m_pPicking->Picking_Object(pPickID);
+}
+
 _vector CGameInstance::Compute_Height(_fvector vWorldPos, _fmatrix ViewMatrix, _fmatrix ProjMatrix)
 {
 

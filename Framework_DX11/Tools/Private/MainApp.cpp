@@ -4,7 +4,6 @@
 #include "Level_Loading.h"
 #include "GameInstance.h"
 
-
 CMainApp::CMainApp()
 	: m_pGameInstance { CGameInstance::Get_Instance() }
 {
@@ -31,7 +30,6 @@ HRESULT CMainApp::Initialize()
 
 	if (FAILED(Open_Level(LEVEL_TOOL)))
 		return E_FAIL;
-
 
 	return S_OK;
 }

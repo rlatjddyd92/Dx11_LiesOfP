@@ -127,6 +127,7 @@ public:
 
 #pragma region PICKING
 	_bool Picking(_float3* pPickPos); 
+	_bool Picking_Object(_uint* pPickID);
 	_vector Compute_Height(_fvector vWorldPos, _fmatrix ViewMatrix, _fmatrix ProjMatrix);
 #pragma endregion
 

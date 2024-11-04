@@ -37,6 +37,7 @@ HRESULT CController_MapTool::Control_Player()
 			Desc.vPosition = {0.f,0.f,0.f};
 			Desc.vScale = { 1.f,1.f,1.f };
 			Desc.vRotation = { 0.f,0.f,0.f };
+			Desc.iRenderGroupID = 0;
 			strcpy_s(Desc.szModelTag, "Prototype_Model_Test");
 			if (FAILED(m_pGameInstance->Add_CloneObject_ToLayer(LEVEL_TOOL, TEXT("Layer_Player"), TEXT("Prototype_GameObject_NonAnim"), &Desc)))
 				return E_FAIL;
@@ -76,12 +77,16 @@ void CController_MapTool::Create_Map()
 
 				if (ImGui::BeginTabItem("Object"))
 				{
-					strLayerName = "Layer_Object";
+					strLayerName = "Layer_InteractObject";
 					ImGui::EndTabItem();
 				}
 
 				ImGui::EndTabBar();
 			}
+
+			//렌더타겟 아이디 설정 가능
+			static int i0 = 0;
+			ImGui::InputInt("RenderTarget ID", &i0);
 
 			//오브젝트 생성
 			if (ImGui::Button("Create Model") || m_pGameInstance->Get_KeyState(C) == AWAY)
@@ -92,6 +97,7 @@ void CController_MapTool::Create_Map()
 				Desc.vPosition = { 0.f,0.f,0.f };
 				Desc.vScale = { 1.f,1.f,1.f };
 				Desc.vRotation = { 0.f,0.f,0.f };
+				Desc.iRenderGroupID = i0;
 				strcpy_s(Desc.szModelTag, m_FileNames[m_iListSelectNum]);
 				if (FAILED(m_pGameInstance->Add_CloneObject_ToLayer(LEVEL_TOOL, wstrLayerName, TEXT("Prototype_GameObject_NonAnim"), &Desc)))
 					return;
@@ -126,6 +132,11 @@ void CController_MapTool::Select_Obj()
 	{
 		//피킹 해제만 가능하게
 	}
+
+	if (m_pGameInstance->Get_KeyState(RBUTTON) == AWAY)
+	{
+		Picking();
+	}
 }
 
 void CController_MapTool::EditTransform()
@@ -141,20 +152,26 @@ void CController_MapTool::EditTransform()
 
 	ImGui::PushItemWidth(300);
 
+	static int iSelectObj_RenderTargetID = 0;
+
 	if (m_pPreSelectObject != m_pSelectObject)	//새로 피킹할 경우
 	{
 		fScale[0] = m_pSelectObject->Get_Transform()->Get_Scaled().x;
 		fScale[1] = m_pSelectObject->Get_Transform()->Get_Scaled().y;
 		fScale[2] = m_pSelectObject->Get_Transform()->Get_Scaled().z;
 
-		fRot[0] = m_vRotation.x;
-		fRot[1] = m_vRotation.y;
-		fRot[2] = m_vRotation.z;
+		fRot[0] = m_pSelectObject->Get_Transform()->Get_CurrentRotation().x;
+		fRot[1] = m_pSelectObject->Get_Transform()->Get_CurrentRotation().y;
+		fRot[2] = m_pSelectObject->Get_Transform()->Get_CurrentRotation().z;
 
 		_Vec3 vPos = m_pSelectObject->Get_Transform()->Get_State(CTransform::STATE_POSITION);
 		fPos[0] = vPos.x;
 		fPos[1] = vPos.y;
 		fPos[2] = vPos.z;
+
+		CNonAnimModel* pSelect = dynamic_cast<CNonAnimModel*>(m_pSelectObject);
+		if(pSelect!= nullptr)
+			iSelectObj_RenderTargetID = pSelect->Get_RenderTargetId();
 
 		m_pPreSelectObject = m_pSelectObject;
 	}
@@ -170,11 +187,17 @@ void CController_MapTool::EditTransform()
 		m_pSelectObject->Get_Transform()->Set_Scaled(fScale[0], fScale[1], fScale[2]);
 
 		m_pSelectObject->Get_Transform()->Rotation(fRot[0], fRot[1], fRot[2]);
+
+		CNonAnimModel* pSelect = dynamic_cast<CNonAnimModel*>(m_pSelectObject);
+		if (pSelect != nullptr)
+			pSelect->Set_RenderTargetId(iSelectObj_RenderTargetID);
 	}
 
 	ImGui::DragFloat3("Scale(X, Y, Z)", &fScale[0], 0.05f, 0.1f, 100.f);
 	ImGui::DragFloat3("Rotation(X, Y, Z)", &fRot[0], 0.05f, -180.f, 180.f, 0);
 	ImGui::DragFloat3("Position(X, Y, Z)", &fPos[0], 0.05f, -180.f, 180.f, 0);
+
+	ImGui::InputInt("RenderTarget ID", &iSelectObj_RenderTargetID);
 
 	ImGui::Text("");
 	ImGui::PopItemWidth();
@@ -535,6 +558,13 @@ void CController_MapTool::LoadMap()
 
 	fin.close();
 	MSG_BOX(TEXT("파일 읽기를 성공했습니다.."));
+}
+
+void CController_MapTool::Picking()
+{
+	_uint id;
+	m_pGameInstance->Picking_Object(&id);
+	
 }
 
 void CController_MapTool::Free()

@@ -55,8 +55,6 @@ public:
 	void		Rotation(const _Vec4& vAxis, _float fRadian);
 	void		Rotation(_float fX, _float fY, _float fZ);
 
-	_Vec3		Get_Rotation_Dgree();
-
 	void		BillBoard();
 	void		BillBoard_NoHeight();
 
@@ -73,9 +71,9 @@ private:
 
 	_Matrix			m_WorldMatrix = {};
 
-	_float			m_fCurrentRotationX = {};
-	_float			m_fCurrentRotationY = {};
-	_float			m_fCurrentRotationZ = {};
+	_float			m_fCurrentRotationX = { 0.f };
+	_float			m_fCurrentRotationY = { 0.f };
+	_float			m_fCurrentRotationZ = { 0.f };
 
 public:
 	static CTransform* Create(ID3D11Device* pDevice, ID3D11DeviceContext* pContext, void* pArg);
