@@ -47,7 +47,7 @@ public:
 	HRESULT Render();
 
 public:
-	void Add_Point(_fvector vPos);
+	void Add_Point(_Vec3 vPos);
 	HRESULT Add_Cell(_float3* vPoints);
 
 	void Sort_Cell(_float3* vPoints);
@@ -62,7 +62,7 @@ private:
 	class CShader* m_pShader = { nullptr };
 
 	vector<class CCell*>	m_Cells;
-	vector<_float3>			m_vClickPoints;
+	vector<_Vec3>			m_vClickPoints;
 
 	_int					m_iSelectCellIndex = { -1 };
 
@@ -75,7 +75,7 @@ private:
 	_uint					m_iAreaNum = { 0 };
 
 private:
-	_float3 Find_ClosetPoint(_fvector vPos);
+	_Vec3 Find_ClosetPoint(_Vec3 vPos);
 
 public:
 	virtual void Free() override;
