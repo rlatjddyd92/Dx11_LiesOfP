@@ -319,10 +319,6 @@ void CTransform::Rotation(const _Vec4& vAxis, _float fRadian)
 
 void CTransform::Rotation(_float fX, _float fY, _float fZ)
 {
-	m_fCurrentRotationX = fX;
-	m_fCurrentRotationY = fY;
-	m_fCurrentRotationZ = fZ;
-
 	_Vec4		vRotation = XMQuaternionRotationRollPitchYaw(XMConvertToRadians(fX), XMConvertToRadians(fY), XMConvertToRadians(fZ));
 
 
@@ -337,6 +333,23 @@ void CTransform::Rotation(_float fX, _float fY, _float fZ)
 	Set_State(STATE_RIGHT, XMVector3TransformNormal(vRight, RotationMatrix));
 	Set_State(STATE_UP, XMVector3TransformNormal(vUp, RotationMatrix));
 	Set_State(STATE_LOOK, XMVector3TransformNormal(vLook, RotationMatrix));
+}
+
+_Vec3 CTransform::Get_CurrentRotation()
+{
+	_Matrix WorldMatrix; // 이미 정의된 월드 행렬을 사용한다고 가정
+
+	// 각 축 벡터를 정규화하여 직교성 유지
+	WorldMatrix.Right().Normalize();
+	WorldMatrix.Up().Normalize();
+	WorldMatrix.Forward().Normalize();
+
+	_Vec3 vRot;
+	vRot.x = XMConvertToDegrees(atan2(WorldMatrix.m[1][2], WorldMatrix.m[2][2]));
+	vRot.y = XMConvertToDegrees(atan2(-WorldMatrix.m[0][2], sqrt(WorldMatrix.m[1][2] * WorldMatrix.m[1][2] + WorldMatrix.m[2][2] * WorldMatrix.m[2][2])));
+	vRot.z = XMConvertToDegrees(atan2(WorldMatrix.m[0][1], WorldMatrix.m[0][0]));
+
+	return vRot;
 }
 
 

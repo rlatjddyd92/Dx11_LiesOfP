@@ -28,9 +28,6 @@ public:
 
 	_Matrix				Get_WorldMatrix_Inverse() const { return XMMatrixInverse(nullptr, Get_WorldMatrix()); }
 
-	_Vec3				Get_CurrentRotation() { return _Vec3(m_fCurrentRotationX, m_fCurrentRotationY, m_fCurrentRotationZ); }
-	void				Set_CurrentRotation(_Vec3 vRot) { m_fCurrentRotationX = vRot.x; m_fCurrentRotationY = vRot.y; m_fCurrentRotationZ = vRot.z; }
-
 public:	
 	virtual HRESULT Initialize_Prototype();
 	virtual HRESULT Initialize(void* pArg);
@@ -55,6 +52,7 @@ public:
 
 	void		Rotation(const _Vec4& vAxis, _float fRadian);
 	void		Rotation(_float fX, _float fY, _float fZ);
+	_Vec3		Get_CurrentRotation();
 
 	void		BillBoard();
 	void		BillBoard_NoHeight();
@@ -71,10 +69,6 @@ private:
 	_float			m_fRotationPerSec{};
 
 	_Matrix			m_WorldMatrix = {};
-
-	_float			m_fCurrentRotationX = { 0.f };
-	_float			m_fCurrentRotationY = { 0.f };
-	_float			m_fCurrentRotationZ = { 0.f };
 
 public:
 	static CTransform* Create(ID3D11Device* pDevice, ID3D11DeviceContext* pContext, void* pArg);

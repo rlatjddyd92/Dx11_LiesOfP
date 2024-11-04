@@ -145,11 +145,11 @@ void CController_MapTool::Pick_Object()
 	}
 	else if (m_pSelectObject != nullptr)	//Imgui에서 변경한 값 적용
 	{
-		m_pSelectObject->Get_Transform()->Set_State(CTransform::STATE_POSITION, vPos);
-
 		m_pSelectObject->Get_Transform()->Set_Scaled(vScale.x, vScale.y, vScale.z);
 
 		m_pSelectObject->Get_Transform()->Rotation(vRot.x, vRot.y, vRot.z);
+
+		m_pSelectObject->Get_Transform()->Set_State(CTransform::STATE_POSITION, vPos);
 
 		CNonAnimModel* pSelect = dynamic_cast<CNonAnimModel*>(m_pSelectObject);
 		if (pSelect != nullptr)
@@ -189,7 +189,8 @@ void CController_MapTool::Pick_Object()
 		_Matrix GizmoWorldMatrix = m_pSelectObject->Get_Transform()->Get_WorldMatrix();
 
 		//ImGuiZimo
-		ImGuizmo::DecomposeMatrixToComponents((_float*)&GizmoWorldMatrix, &vPos.x, &vRot.x, &vScale.x);
+
+		// 행렬 요소 재조합
 		ImGuizmo::RecomposeMatrixFromComponents(&vPos.x, &vRot.x, &vScale.x, (_float*)&GizmoWorldMatrix);
 
 		if (ImGuizmo::Manipulate(&ViewMatrix._11, &ProjMatrix._11			// 뷰, 투영행렬
@@ -204,10 +205,8 @@ void CController_MapTool::Pick_Object()
 			m_pSelectObject->Get_Transform()->Set_WorldMatrix(GizmoWorldMatrix);
 		}
 
-		vScale = m_pSelectObject->Get_Transform()->Get_Scaled();
-		m_pSelectObject->Get_Transform()->Set_CurrentRotation(vRot);
-		vRot = m_pSelectObject->Get_Transform()->Get_CurrentRotation();
-		vPos = (_Vec3)m_pSelectObject->Get_Transform()->Get_State(CTransform::STATE_POSITION);
+		// 행렬 요소 분해
+		ImGuizmo::DecomposeMatrixToComponents((_float*)&GizmoWorldMatrix, &vPos.x, &vRot.x, &vScale.x);
 	}
 #pragma endregion
 
