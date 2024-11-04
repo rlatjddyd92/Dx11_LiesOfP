@@ -70,6 +70,9 @@
     <Filter Include="02.GameObjects\04.ParticleTest">
       <UniqueIdentifier>{fac53200-c293-4b2f-b5db-aed31b94a02c}</UniqueIdentifier>
     </Filter>
+    <Filter Include="90.ImGuiManager\Navigation">
+      <UniqueIdentifier>{d881c33d-d8fb-4797-9af9-1a668f1e95e0}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="framework.h">
@@ -165,6 +168,9 @@
     <ClInclude Include="..\public\Particle_Test.h">
       <Filter>02.GameObjects\04.ParticleTest</Filter>
     </ClInclude>
+    <ClInclude Include="..\Public\NavigationController.h">
+      <Filter>90.ImGuiManager\Navigation</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <Image Include="small.ico">
@@ -252,6 +258,9 @@
     </ClCompile>
     <ClCompile Include="..\private\Particle_Test.cpp">
       <Filter>02.GameObjects\04.ParticleTest</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Private\NavigationController.cpp">
+      <Filter>90.ImGuiManager\Navigation</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

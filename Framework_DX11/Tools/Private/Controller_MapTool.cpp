@@ -6,6 +6,7 @@
 
 #include "Controller_MapTool.h"
 #include "GameInstance.h"
+#include "NavigationController.h"
 
 #include "NonAnimModel.h"
 
@@ -19,8 +20,14 @@ CController_MapTool::CController_MapTool()
 	Safe_AddRef(m_pGameInstance);
 }
 
-HRESULT CController_MapTool::Initialize()
+HRESULT CController_MapTool::Initialize(ID3D11Device* pDevice, ID3D11DeviceContext* pContext)
 {
+	m_pNavigationController = CNavigationController::Get_Instance();
+	if (nullptr == m_pNavigationController)
+		return E_FAIL;
+
+	//m_pNavigationController->Initialize(m_pDevice, m_pContext);
+
 	return S_OK;
 }
 
@@ -50,65 +57,20 @@ void CController_MapTool::Create_Map()
 {
 	ImGui::SeparatorText("Select Model");
 
-	string strLayerName;
-	_wstring wstrLayerName;
-
 	ImGuiTabBarFlags tab_bar_flags = ImGuiTabBarFlags_None;
 
 	if (ImGui::BeginTabBar("MapToolBar", tab_bar_flags))
 	{
 		if (ImGui::BeginTabItem("Map"))
 		{
-			if (ImGui::BeginTabBar("SelectModelType", tab_bar_flags))
-			{
-				if (ImGui::BeginTabItem("Monastery"))
-				{
-					Select_Map_Model();
-					strLayerName = "Layer_Map";
-					ImGui::EndTabItem();
-				}
-
-				if (ImGui::BeginTabItem("Monster"))
-				{
-					strLayerName = "Layer_Monster";
-					ImGui::EndTabItem();
-				}
-
-				if (ImGui::BeginTabItem("Object"))
-				{
-					strLayerName = "Layer_InteractObject";
-					ImGui::EndTabItem();
-				}
-
-				ImGui::EndTabBar();
-			}
-
-			//렌더타겟 아이디 설정 가능
-			static int i0 = 0;
-			ImGui::InputInt("RenderTarget ID", &i0);
-
-			//오브젝트 생성
-			if (ImGui::Button("Create Model") || m_pGameInstance->Get_KeyState(C) == AWAY)
-			{
-				wstrLayerName.assign(strLayerName.begin(), strLayerName.end());
-
-				CNonAnimModel::NONMODEL_DESC Desc{};
-				Desc.vPosition = m_vPickPos;
-				Desc.vScale = { 1.f,1.f,1.f };
-				Desc.vRotation = { 0.f,0.f,0.f };
-				Desc.iRenderGroupID = i0;
-				strcpy_s(Desc.szModelTag, m_FileNames[m_iListSelectNum]);
-				if (FAILED(m_pGameInstance->Add_CloneObject_ToLayer(LEVEL_TOOL, wstrLayerName, TEXT("Prototype_GameObject_NonAnim"), &Desc)))
-					return;
-
-			}ImGui::SameLine();
-			ImGui::Text("or Press \"C\" to Create");
+			Map_Menu();
 
 			ImGui::EndTabItem();
 		}
 
 		if (ImGui::BeginTabItem("Nav"))
 		{
+			Nav_Menu();
 
 			ImGui::EndTabItem();
 		}
@@ -602,7 +564,7 @@ void CController_MapTool::Find_PickObject()
 	CGameObject* pGameObject = { nullptr };
 	CNonAnimModel* pNonAnimObject = { nullptr };
 
-	for (int i = 0; i < iLayerCount; i++)
+	for (_uint i = 0; i < iLayerCount; i++)
 	{
 		sLayerTag = m_pGameInstance->Get_LayerTag(LEVEL_TOOL, i); //i번째 레이어 태그
 
@@ -626,6 +588,121 @@ void CController_MapTool::Find_PickObject()
 	}
 }
 
+void CController_MapTool::Map_Menu()
+{
+	string strLayerName;
+	_wstring wstrLayerName;
+
+	ImGuiTabBarFlags tab_bar_flags = ImGuiTabBarFlags_None;
+
+	if (ImGui::BeginTabBar("SelectModelType", tab_bar_flags))
+	{
+		if (ImGui::BeginTabItem("Monastery"))
+		{
+			Select_Map_Model();
+			strLayerName = "Layer_Map";
+			ImGui::EndTabItem();
+		}
+
+		if (ImGui::BeginTabItem("Monster"))
+		{
+			strLayerName = "Layer_Monster";
+			ImGui::EndTabItem();
+		}
+
+		if (ImGui::BeginTabItem("Object"))
+		{
+			strLayerName = "Layer_InteractObject";
+			ImGui::EndTabItem();
+		}
+
+		ImGui::EndTabBar();
+	}
+
+	//렌더타겟 아이디 설정 가능
+	static int i0 = 0;
+	ImGui::InputInt("RenderTarget ID", &i0);
+
+	//오브젝트 생성
+	if (ImGui::Button("Create Model") || m_pGameInstance->Get_KeyState(C) == AWAY)
+	{
+		wstrLayerName.assign(strLayerName.begin(), strLayerName.end());
+
+		CNonAnimModel::NONMODEL_DESC Desc{};
+		Desc.vPosition = m_vPickPos;
+		Desc.vScale = { 1.f,1.f,1.f };
+		Desc.vRotation = { 0.f,0.f,0.f };
+		Desc.iRenderGroupID = i0;
+		strcpy_s(Desc.szModelTag, m_FileNames[m_iListSelectNum]);
+		if (FAILED(m_pGameInstance->Add_CloneObject_ToLayer(LEVEL_TOOL, wstrLayerName, TEXT("Prototype_GameObject_NonAnim"), &Desc)))
+			return;
+
+	}ImGui::SameLine();
+	ImGui::Text("or Press \"C\" to Create");
+
+}
+
+void CController_MapTool::Nav_Menu()
+{
+	static int item_selected_idx = 0; // Here we store our selected data as an index.
+	static bool item_highlight = false;
+	int item_highlighted_idx = -1; // Here we store our highlighted data as an index.
+
+	//폴더 선택, 버튼 누를 때 한번만 실행
+	enum Nav_Mode
+	{
+		Mode_Create_Cell,
+		Mode_Cell_Select,
+		Mode_Point_Select
+	};
+
+	static int iMode = 0;
+
+	if (ImGui::RadioButton("Create Cell", iMode == Mode_Create_Cell))
+	{
+		iMode = Mode_Create_Cell;
+		item_selected_idx = 0;
+	} ImGui::SameLine();
+
+	if (ImGui::RadioButton("Select Cell", iMode == Mode_Cell_Select))
+	{
+		iMode = Mode_Cell_Select;
+		item_selected_idx = 0;
+	} ImGui::SameLine();
+
+	if (ImGui::RadioButton("Select Point", iMode == Mode_Point_Select))
+	{
+		iMode = Mode_Point_Select;
+		item_selected_idx = 0;
+	} ImGui::SameLine();
+
+	//////////////////////////////////////
+
+	{
+		ImGui::BeginChild("Cell List", ImVec2(150, 0), true);
+
+	/*	if (m_pNavigationController->Get_CellSize() != 0)
+		{
+			for (_uint i = 0; i < m_pNavigationController->Get_CellSize();)
+			{
+				_char szCell[MAX_PATH] = "Cell ";
+				_char szNum[MAX_PATH];
+				sprintf_s(szNum, "%d", i);
+				strcat_s(szCell, szNum);
+
+				if (ImGui::Selectable(szCell, m_iSelectCellIndex == i))
+				{
+					m_iSelectCellIndex = i;
+					m_pNavigationController->Set_SelectCell(m_iSelectCellIndex);
+				}
+				i++;
+			}
+		}*/
+		ImGui::EndChild();
+	}
+
+}
+
 void CController_MapTool::Free()
 {
 	__super::Free();
@@ -635,5 +712,6 @@ void CController_MapTool::Free()
 	}
 	m_FileNames.clear();
 
+	Safe_Release(m_pNavigationController);
 	Safe_Release(m_pGameInstance);
 }
