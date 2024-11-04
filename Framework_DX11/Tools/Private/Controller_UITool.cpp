@@ -67,7 +67,7 @@ void CController_UITool::UISocket_Edit()
 	ImGui::Text("SocketCount : ");
 	ImGui::SameLine();
 
-	_int iCount = m_vecPageInfo[m_iNowSelectNum]->vecSocket.size();
+	_int iCount = (_int)m_vecPageInfo[m_iNowSelectNum]->vecSocket.size();
 	_tchar* tTemp = new _tchar[5];
 	swprintf(tTemp, 5, L"%d", iCount);
 	_char* szCount = new _char[5];
@@ -124,7 +124,7 @@ void CController_UITool::UIPart_Edit()
 	ImGui::Text("PartCount : ");
 	ImGui::SameLine();
 
-	_int iCount = m_vecPageInfo[m_iNowSelectNum]->vecPart.size();
+	_int iCount = (_int)m_vecPageInfo[m_iNowSelectNum]->vecPart.size();
 	_tchar* tTemp = new _tchar[5];
 	swprintf(tTemp, 5, L"%d", iCount);
 	_char* szCount = new _char[5];

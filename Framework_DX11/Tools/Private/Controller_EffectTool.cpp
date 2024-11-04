@@ -215,7 +215,7 @@ void CController_EffectTool::Select_Particle()
 			Items.emplace_back(Label.c_str());
 	}
 
-	ImGui::ListBox("Particle List", &m_iSelectedParticleIndex, Items.data(), Items.size(), 5);
+	ImGui::ListBox("Particle List", &m_iSelectedParticleIndex, Items.data(), (_int)Items.size(), 5);
 }
 
 void CController_EffectTool::Delete_Particle()
