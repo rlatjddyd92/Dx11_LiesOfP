@@ -277,6 +277,12 @@ HRESULT CLoader::Ready_Resources_For_ToolLevel()
 		CModel::Create(m_pDevice, m_pContext, CModel::TYPE_NONANIM, "../Bin/ModelData/NonAnim/Map/Structure/SM_Monastery_Deco_01.dat", PreTransformMatrix))))
 		return E_FAIL;
 
+
+	PreTransformMatrix = XMMatrixScaling(1.f, 1.f, 1.f) * XMMatrixRotationY(XMConvertToRadians(180.0f));
+	if (FAILED(m_pGameInstance->Add_Prototype(LEVEL_TOOL, TEXT("Prototype_AnimModel_Test"),
+		CModel::Create(m_pDevice, m_pContext, CModel::TYPE_ANIM, "../Bin/ModelData/Anim/Fiona/Fiona.dat", PreTransformMatrix))))
+		return E_FAIL;
+
 	lstrcpy(m_szLoadingText, TEXT("네비게이션을(를) 로딩중입니다."));
 	/* For.Prototype_Component_Navigation */
 	if (FAILED(m_pGameInstance->Add_Prototype(LEVEL_TOOL, TEXT("Prototype_Component_Navigation"),
@@ -311,6 +317,11 @@ HRESULT CLoader::Ready_Resources_For_ToolLevel()
 	/* For. Prototype_GameObject_Monster */
 	if (FAILED(m_pGameInstance->Add_Prototype(TEXT("Prototype_GameObject_NonAnim"),
 		CNonAnimModel::Create(m_pDevice, m_pContext))))
+		return E_FAIL;
+
+	/* For. Prototype_GameObject_Monster */
+	if (FAILED(m_pGameInstance->Add_Prototype(TEXT("Prototype_GameObject_Anim"),
+		CAnimModel::Create(m_pDevice, m_pContext))))
 		return E_FAIL;
 
 	/* For. Prototype_GameObject_FreeCamera */

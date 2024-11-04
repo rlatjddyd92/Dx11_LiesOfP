@@ -74,4 +74,16 @@ namespace Engine
 
 		TEXTURE_END
 	};
+
+	//¿Ã∫¿¡ÿ ¿˙¿Â«“ ª¿
+	enum USEFULLBONE
+	{
+		UFB_ROOT,
+		UFB_HAND,
+		UFB_FOOT,
+		UFB_HEAD,
+		UFB_WEAPON,
+
+		UFB_END
+	};
 }

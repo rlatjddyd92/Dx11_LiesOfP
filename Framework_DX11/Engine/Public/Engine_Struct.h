@@ -37,6 +37,13 @@ namespace Engine
 		_double			TrackPosition;
 	}KEYFRAME;
 
+	//이봉준 이벤트 키 프레임
+	typedef struct
+	{
+		_char*			dwEventName[256];
+		_double			TrackPosition;
+	}EVENT_KEYFRAME;
+
 	typedef struct
 	{
 		_uint	iNextAnimIndex;

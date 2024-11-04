@@ -41,6 +41,13 @@ CModel::CModel(const CModel & Prototype)
 	for (auto& pMesh : m_Meshes)	
 		Safe_AddRef(pMesh);
 
+	m_UFBIndices.reserve(UFB_END);
+
+	for (size_t i = 0; i < UFB_END; i++)
+	{
+		m_UFBIndices.emplace_back(512);
+	}
+
 	m_isCloned = true;
 	m_eComponentType = MODEL;
 }
