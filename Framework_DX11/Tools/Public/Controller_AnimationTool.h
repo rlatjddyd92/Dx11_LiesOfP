@@ -15,13 +15,12 @@ BEGIN(Tools)
 class CController_AnimationTool : public CBase
 {
 	DECLARE_SINGLETON(CController_AnimationTool)
-
 private:
 	CController_AnimationTool();
 	virtual ~CController_AnimationTool() = default;
 
 public:
-	HRESULT Initialize();
+	HRESULT Initialize(ID3D11Device* pDevice, ID3D11DeviceContext* pContext);
 
 public:
 	void	SetUp_AnimTool();
@@ -36,10 +35,14 @@ public:
 	void	SetUp_Controller_Vertex();
 
 private:
+	class CGameInstance* m_pGameInstance = { nullptr };
+	ID3D11Device* m_pDevice = { nullptr };
+	ID3D11DeviceContext* m_pContext = { nullptr };
+
+private:
 	vector<CAnimation*>* m_pCopyAnimVec = {nullptr};
 	vector<CBone*>* m_pCopyBoneVec = { nullptr };
 private:
-	class CGameInstance* m_pGameInstance = { nullptr };
 	class CModel* m_pCopyModelCom = {nullptr};
 
 	_uint m_iSelected_Index_Anim{};

@@ -211,7 +211,7 @@ HRESULT CImGui_Manager::Ready_Controllers()
 	m_pController_AnimationTool = CController_AnimationTool::Get_Instance();
 	if (nullptr == m_pController_AnimationTool)
 		return E_FAIL;
-	m_pController_AnimationTool->Initialize();
+	m_pController_AnimationTool->Initialize(m_pDevice, m_pContext);
 
 	return S_OK;
 }

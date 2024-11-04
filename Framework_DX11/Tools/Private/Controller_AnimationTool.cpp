@@ -14,7 +14,7 @@ CController_AnimationTool::CController_AnimationTool()
 	Safe_AddRef(m_pGameInstance);
 }
 
-HRESULT CController_AnimationTool::Initialize()
+HRESULT CController_AnimationTool::Initialize(ID3D11Device* pDevice, ID3D11DeviceContext* pContext)
 {
 	//애니메이션 툴 피규어(위치나 이런부분 물어보기)
 	
