@@ -62,7 +62,6 @@ void CParticle_Snow::Update(_float fTimeDelta)
 	_uint iState = CVIBuffer_Instancing::STATE_RANDOM | CVIBuffer_Instancing::STATE_REVOLVE | CVIBuffer_Instancing::STATE_LOOP;
 	//iState &= ~CVIBuffer_Instancing::STATE_RANDOM;
 	//iState &= ~CVIBuffer_Instancing::STATE_REVOLVE;
-	m_pVIBufferCom->Converge(iState, m_fFrame, _Vec4(0.f, -1.f, 0.f, 1.f), 1.f, fTimeDelta, _Vec3(0.f, XMConvertToRadians(90.f), 0.f), 0.5f);
 }
 
 void CParticle_Snow::Late_Update(_float fTimeDelta)
