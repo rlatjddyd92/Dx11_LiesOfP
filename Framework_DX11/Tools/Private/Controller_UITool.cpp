@@ -49,6 +49,8 @@ void CController_UITool::UIPage_Edit()
 				m_ArrPageName[m_iNowSelectNum][iIndex] = m_InputPageName[iIndex];
 			} while (m_InputPageName[iIndex] != '\0');
 		}
+
+		ImGui::NewLine();
 	}
 
 	if (ImGui::CollapsingHeader("Socket Setting"))
@@ -74,6 +76,8 @@ void CController_UITool::UISocket_Edit()
 
 	ImGui::Text(szCount);
 
+	ImGui::PushItemWidth(100.f);
+
 	ImGui::SeparatorText("AddSocket");
 	ImGui::InputText("SocketName", m_InputSocketName, sizeof(m_InputSocketName));
 	if (ImGui::Button("AddSocket"))
@@ -90,9 +94,9 @@ void CController_UITool::UISocket_Edit()
 
 		m_vecPageInfo[m_iNowSelectNum]->vecSocket.push_back(pNew);
 	}
-
-	ImGui::PushItemWidth(100.f);
-
+	ImGui::SeparatorText("Socketlist");
+	
+	ImGui::PushItemWidth(50.f);
 
 	for (auto& iter : m_vecPageInfo[m_iNowSelectNum]->vecSocket)
 	{
@@ -110,6 +114,8 @@ void CController_UITool::UISocket_Edit()
 
 	Safe_Delete_Array(tTemp);
 	Safe_Delete_Array(szCount);
+
+	ImGui::NewLine();
 }
 
 void CController_UITool::UIPart_Edit()
@@ -126,6 +132,8 @@ void CController_UITool::UIPart_Edit()
 		szCount[i] = tTemp[i];
 
 	ImGui::Text(szCount);
+
+	ImGui::PushItemWidth(100.f);
 
 	ImGui::SeparatorText("AddPart");
 	ImGui::InputText("PartName", m_InputPartName, sizeof(m_InputPartName));
@@ -144,17 +152,18 @@ void CController_UITool::UIPart_Edit()
 		m_vecPageInfo[m_iNowSelectNum]->vecPart.push_back(pNew);
 	}
 
-	ImGui::PushItemWidth(100.f);
-
+	ImGui::SeparatorText("Partlist");
 
 	for (auto& iter : m_vecPageInfo[m_iNowSelectNum]->vecPart)
 	{
 		ImGui::Text(iter->strUIPart_Name);
 		ImGui::SameLine();
+		ImGui::PushItemWidth(50.f);
 		ImGui::InputFloat("X", &iter->fSize.x);
 		ImGui::SameLine();
 		ImGui::InputFloat("Y", &iter->fSize.y);
 		ImGui::SameLine();
+		ImGui::PushItemWidth(70.f);
 		ImGui::InputInt("Soc", &iter->iSocket_Index);
 		ImGui::SameLine();
 		ImGui::InputInt("Tex", &iter->iTexture_Index);
@@ -175,6 +184,8 @@ void CController_UITool::UIPart_Edit()
 
 	Safe_Delete_Array(tTemp);
 	Safe_Delete_Array(szCount);
+
+	ImGui::NewLine();
 
 }
 
