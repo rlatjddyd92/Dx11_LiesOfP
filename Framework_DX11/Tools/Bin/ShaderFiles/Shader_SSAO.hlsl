@@ -8,8 +8,6 @@ texture2D g_DepthTexture;
 texture2D g_NormalTexture;
 texture2D g_NoiseTexture;
 
-float2 g_vScreenSize;
-bool g_isSelectBright = false;
 float g_fRadius = 0.01f;
 
 // -1에서 1 사이의 값을 가지며, 화면에서 반구의 형태로 고르게 퍼져있는 벡터
@@ -96,7 +94,7 @@ PS_OUT PS_MAIN_SSAO(PS_IN In)
     vViewPos = vViewPos * fViewZ;
     vViewPos = mul(vViewPos, g_ProjMatrixInv);
     
-    int  iOcc = 0.f;
+    int  iOcc = 0;
     
     //주변 깊이를 체크
     for (int i = 0; i < 16; i++)
@@ -109,16 +107,16 @@ PS_OUT PS_MAIN_SSAO(PS_IN In)
         float2 vNewTexCoord = In.vTexcoord * vReflect.xy;
         
         // 이동한 좌표의 View 스페이스상의 Z값
-        float fSampleViewZ = g_DepthTexture.Sample(PointSampler, vNewTexCoord).y * 1000.f;
+        float fSampleViewZ = g_DepthTexture.Sample(PointSampler, vNewTexCoord).x;
         
         // 깊이 차이를 비교
-        if (fSampleViewZ < fViewZ)
+        if (fSampleViewZ < vDepthDesc.x)
         {
             iOcc += 1; // occlusion이 발생했음을 나타냄
         }
     }
     
-    Out.vColor = iOcc / 16.f;
+    Out.vColor = (float) iOcc / 16.f;
     
     return Out;
 }
@@ -129,7 +127,7 @@ technique11 DefaultTechnique
     pass SSAO
     {
         SetRasterizerState(RS_Default);
-        SetDepthStencilState(DSS_None, 0);
+        SetDepthStencilState(DSS_Default, 0);
         SetBlendState(BS_Default, vector(0.f, 0.f, 0.f, 0.f), 0xffffffff);
 		
         VertexShader = compile vs_5_0 VS_MAIN();
