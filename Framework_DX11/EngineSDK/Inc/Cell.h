@@ -22,6 +22,9 @@ public:
 		m_iNeighborIndices[eLine] = pNeighbor->m_iIndex;
 	}
 
+	void Set_AreaNum(_uint _iNum) { m_iAreaNum = _iNum; }
+	_uint Get_AreaNum() { return m_iAreaNum; }
+
 public:
 	HRESULT Initialize(const _float3* pPoints, _int iIndex);
 	_bool Compare_Points(_fvector vSour, _fvector vDest);
@@ -38,6 +41,7 @@ private:
 	_int							m_iIndex = {};
 	_float3							m_vPoints[POINT_END] = {};
 	_int							m_iNeighborIndices[LINE_END] = { -1, -1, -1 };
+	_uint							m_iAreaNum = { 0 };
 
 #ifdef _DEBUG
 private:

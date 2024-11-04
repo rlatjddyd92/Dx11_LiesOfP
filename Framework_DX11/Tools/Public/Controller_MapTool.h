@@ -21,7 +21,7 @@ private:
 	virtual ~CController_MapTool() = default;
 
 public:
-	HRESULT Initialize();
+	HRESULT Initialize(ID3D11Device* pDevice, ID3D11DeviceContext* pContext);
 	HRESULT Control_Player();
 	void Create_Map();
 	void Pick_Object();
@@ -33,6 +33,7 @@ private:
 
 private:
 	class CGameInstance* m_pGameInstance = { nullptr };
+	class CNavigationController* m_pNavigationController = { nullptr };
 
 	vector<const char*>	m_FileNames;	//ListBox에 띄울 항목들 이름
 
@@ -55,6 +56,8 @@ private:
 	void SaveMap();
 	void LoadMap();
 	void Find_PickObject();
+	void Map_Menu();
+	void Nav_Menu();
 
 public:
 	virtual void Free() override;

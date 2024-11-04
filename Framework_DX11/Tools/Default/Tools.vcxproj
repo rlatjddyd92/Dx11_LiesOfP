@@ -40,6 +40,7 @@
     <ClInclude Include="..\Public\Level_Logo.h" />
     <ClInclude Include="..\Public\Loader.h" />
     <ClInclude Include="..\Public\MainApp.h" />
+    <ClInclude Include="..\Public\NavigationController.h" />
     <ClInclude Include="..\Public\NonAnimModel.h" />
     <ClInclude Include="..\public\Particle_Test.h" />
     <ClInclude Include="..\Public\Terrain.h" />
@@ -76,6 +77,7 @@
     <ClCompile Include="..\Private\Level_Logo.cpp" />
     <ClCompile Include="..\Private\Loader.cpp" />
     <ClCompile Include="..\Private\MainApp.cpp" />
+    <ClCompile Include="..\Private\NavigationController.cpp" />
     <ClCompile Include="..\Private\NonAnimModel.cpp" />
     <ClCompile Include="..\private\Particle_Test.cpp" />
     <ClCompile Include="..\Private\Terrain.cpp" />
