@@ -22,17 +22,23 @@ CController_MapTool::CController_MapTool()
 
 HRESULT CController_MapTool::Initialize(ID3D11Device* pDevice, ID3D11DeviceContext* pContext)
 {
+	m_pDevice = pDevice;
+	m_pContext = pContext;
+	Safe_AddRef(m_pDevice);
+	Safe_AddRef(m_pContext);
+
 	m_pNavigationController = CNavigationController::Get_Instance();
 	if (nullptr == m_pNavigationController)
 		return E_FAIL;
 
-	//m_pNavigationController->Initialize(m_pDevice, m_pContext);
+	m_pNavigationController->Initialize(m_pDevice, m_pContext);
 
 	return S_OK;
 }
 
 HRESULT CController_MapTool::Control_Player()
 { 
+	ImGui::Text("");
 	if (ImGui::Button("Create Player"))
 	{
 		//Player »ý¼º (ÇÑ¹ø¸¸)
@@ -644,10 +650,6 @@ void CController_MapTool::Map_Menu()
 
 void CController_MapTool::Nav_Menu()
 {
-	static int item_selected_idx = 0; // Here we store our selected data as an index.
-	static bool item_highlight = false;
-	int item_highlighted_idx = -1; // Here we store our highlighted data as an index.
-
 	//Æú´õ ¼±ÅÃ, ¹öÆ° ´©¸¦ ¶§ ÇÑ¹ø¸¸ ½ÇÇà
 	enum Nav_Mode
 	{
@@ -661,46 +663,91 @@ void CController_MapTool::Nav_Menu()
 	if (ImGui::RadioButton("Create Cell", iMode == Mode_Create_Cell))
 	{
 		iMode = Mode_Create_Cell;
-		item_selected_idx = 0;
 	} ImGui::SameLine();
 
 	if (ImGui::RadioButton("Select Cell", iMode == Mode_Cell_Select))
 	{
 		iMode = Mode_Cell_Select;
-		item_selected_idx = 0;
 	} ImGui::SameLine();
 
 	if (ImGui::RadioButton("Select Point", iMode == Mode_Point_Select))
 	{
 		iMode = Mode_Point_Select;
-		item_selected_idx = 0;
-	} ImGui::SameLine();
+	}
 
 	//////////////////////////////////////
 
+	ImGui::Text("");
+	ImGui::Text("[Cell_List]");
+
+	ImGui::BeginChild("Cell List", ImVec2(150, 400), true);
+
+	_uint iCellCount = 0;
+	_int iSelectedCellList = 0;
+	iCellCount = m_pNavigationController->Get_CellSize();
+
+	if (iCellCount != 0)
 	{
-		ImGui::BeginChild("Cell List", ImVec2(150, 0), true);
-
-	/*	if (m_pNavigationController->Get_CellSize() != 0)
+		for (_uint i = 0; i < iCellCount; i++)
 		{
-			for (_uint i = 0; i < m_pNavigationController->Get_CellSize();)
-			{
-				_char szCell[MAX_PATH] = "Cell ";
-				_char szNum[MAX_PATH];
-				sprintf_s(szNum, "%d", i);
-				strcat_s(szCell, szNum);
+			_char szCell[MAX_PATH] = "Cell ";
+			_char szNum[MAX_PATH];
+			sprintf_s(szNum, "%d", i);
+			strcat_s(szCell, szNum);
 
-				if (ImGui::Selectable(szCell, m_iSelectCellIndex == i))
-				{
-					m_iSelectCellIndex = i;
-					m_pNavigationController->Set_SelectCell(m_iSelectCellIndex);
-				}
-				i++;
+			if (ImGui::Selectable(szCell, iSelectedCellList == i))
+			{
+				iSelectedCellList = i;
+				m_pNavigationController->Set_SelectCell(iSelectedCellList);
 			}
-		}*/
-		ImGui::EndChild();
+			i++;
+		}
+	}
+	ImGui::EndChild();
+	ImGui::SameLine();
+
+	ImGui::BeginGroup();
+	ImGui::BeginChild("Detail view", ImVec2(0, 400)); // Leave room for 1 line below us
+
+	ImGui::Text("Total Cell Count : %d", iCellCount);
+	ImGui::Text("Select Cell Index : %d", iCellCount);
+
+	//ABC Á¡ ÁÂÇ¥ ¶ç¿ì±â
+
+	if (iMode == Mode_Create_Cell)
+	{
+		//ÀúÀåÇÑ Á¡µé ÁÂÇ¥ ¶ç¿ì±â
+		Mode_Create_Cell_Menu();
+	}
+	else if (iMode == Mode_Cell_Select)
+	{
+		//ABC Á¡ ÁÂÇ¥ ¶ç¿ì±â
+	}
+	else
+	{
+		//¼±ÅÃÇÑ Á¡ ÁÂÇ¥ ¶ç¿ì±â
 	}
 
+	ImGui::EndChild();
+	ImGui::EndGroup();
+
+	
+	
+}
+
+void CController_MapTool::Mode_Create_Cell_Menu()
+{
+	//Cell »ý¼º±â´É
+	if (ImGui::Button("Add Point") || m_pGameInstance->Get_KeyState(C) == AWAY)
+	{
+		m_pNavigationController->Add_Point(m_vPickPos);
+	}
+	ImGui::SameLine();
+	ImGui::Text("or Press \"C\" to add Point");
+
+
+	//ABC Á¡ ÁÂÇ¥ ¶ç¿ì±â
+	//ÀúÀåÇÑ Á¡µé ÁÂÇ¥ ¶ç¿ì±â
 }
 
 void CController_MapTool::Free()
@@ -712,6 +759,9 @@ void CController_MapTool::Free()
 	}
 	m_FileNames.clear();
 
+	Safe_Release(m_pDevice);
+	Safe_Release(m_pContext);
+	Safe_Release(m_pNavigationController);
 	Safe_Release(m_pNavigationController);
 	Safe_Release(m_pGameInstance);
 }

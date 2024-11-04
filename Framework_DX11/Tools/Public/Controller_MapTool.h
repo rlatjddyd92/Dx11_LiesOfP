@@ -33,6 +33,10 @@ private:
 
 private:
 	class CGameInstance* m_pGameInstance = { nullptr };
+	ID3D11Device* m_pDevice = { nullptr };
+	ID3D11DeviceContext* m_pContext = { nullptr };
+
+private:
 	class CNavigationController* m_pNavigationController = { nullptr };
 
 	vector<const char*>	m_FileNames;	//ListBox에 띄울 항목들 이름
@@ -58,6 +62,7 @@ private:
 	void Find_PickObject();
 	void Map_Menu();
 	void Nav_Menu();
+	void Mode_Create_Cell_Menu();
 
 public:
 	virtual void Free() override;

@@ -133,52 +133,46 @@ HRESULT CNavigationController::Render()
 	return S_OK;
 }
 
-void CNavigationController::Add_Point(_fvector vPos)
+void CNavigationController::Add_Point(_Vec3 vPos)
 {
-	//_float3 vClickPos;
+	_Vec3 vClickPos = {};
 
-	//// 일정 이하 거리에 점이 있으며 그 점 위치로 바꿈
-	//vClickPos = Find_ClosetPoint(vPos);
+	// 일정 이하 거리에 점이 있으며 그 점 위치로 바꿈
+	vClickPos = Find_ClosetPoint(vPos);
 
-	//// 거리가 멀면 그냥 그대로 들어가게
-	//if (m_fClosetDistance > 0.5f)
-	//	XMStoreFloat3(&vClickPos, vPos);
+	// 거리가 멀면 그냥 그대로 들어가게
+	if (m_fClosetDistance > 0.5f)
+		XMStoreFloat3(&vClickPos, vPos);
 
-	//if (2 < m_vClickPoints.size())
-	//	return;
+	if (2 < m_vClickPoints.size())
+		return;
 
-	////if (0 == m_vClickedPoints.size())
-	////	Add_ClickedSymbol(vClickPosition, SYMBOL1);
-	////else if (1 == m_vClickedPoints.size())
-	////	Add_ClickedSymbol(vClickPosition, SYMBOL2);
+	m_vClickPoints.push_back(vClickPos);
 
-	//m_vClickPoints.push_back(vClickPos);
-	//m_vClickPos = vClickPos;
+	if (3 == m_vClickPoints.size())
+	{
+		_float3 vPoints[3];
 
-	//if (3 == m_vClickPoints.size())
-	//{
-	//	_float3 vPoints[3];
+		for (_uint i = 0; i < 3; ++i)
+			vPoints[i] = m_vClickPoints[i];
 
-	//	for (_uint i = 0; i < 3; ++i)
-	//		vPoints[i] = m_vClickPoints[i];
+		Add_Cell(vPoints);
 
-	//	Add_Cell(vPoints);
-
-	//	m_vClickPoints.clear();
-	//}
+		m_vClickPoints.clear();
+	}
 }
 
 HRESULT CNavigationController::Add_Cell(_float3* vPoints)
 {
-//	Sort_Cell(vPoints);
-//
-//	CCell* pCell = CCell::Create(m_pDevice, m_pContext, vPoints, (_int)m_Cells.size());
-//	if (nullptr == pCell)
-//		return E_FAIL;
-//
-////	pCell->Set_RoomNum(m_iRoomNum);
-//
-//	m_Cells.push_back(pCell);
+	Sort_Cell(vPoints);
+
+	//CCell* pCell = CCell::Create(m_pDevice, m_pContext, vPoints, (_int)m_Cells.size());
+	//if (nullptr == pCell)
+	//	return E_FAIL;
+
+//	pCell->Set_RoomNum(m_iRoomNum);
+
+	//m_Cells.push_back(pCell);
 
 	return S_OK;
 }
@@ -235,55 +229,48 @@ CCell* CNavigationController::Get_SelectCell()
 	return m_Cells[m_iSelectCellIndex];
 }
 
-_float3 CNavigationController::Find_ClosetPoint(_fvector vPos)
+_Vec3 CNavigationController::Find_ClosetPoint(_Vec3 vPos)
 {
-	_float3 vClilckPos = {};
-	//XMStoreFloat3(&vClilckPos, vPos);
+	_Vec3 vColsetPos = vPos;
+	//처음 Cell을 찍는 경우
+	if (m_Cells.size() == 0)
+		return vColsetPos;
 
-	//m_fClosetDistance = 100000.f;
+	for (_uint i = 0; i < m_Cells.size(); ++i)
+	{
+		CCell* pCell = m_Cells[i];
+		if (nullptr == pCell)
+			continue;
 
-	//if (m_Cells.size() == 0)
-	//	return vClilckPos;
+		_Vec3 vPoint[CCell::POINT_END];
 
-	//XMVECTOR vRayPos_Local = m_pGameInstance->Get_RayPos_Local();
-	//XMVECTOR vRayDir_Local = XMVector3Normalize(m_pGameInstance->Get_RayDir_Local());
+		//비교할 셀의 점들을 가져와 저장
+		vPoint[CCell::POINT_A] = pCell->Get_Point(CCell::POINT_A);
+		vPoint[CCell::POINT_B] = pCell->Get_Point(CCell::POINT_B);
+		vPoint[CCell::POINT_C] = pCell->Get_Point(CCell::POINT_C);
 
-	//for (_uint i = 0; i < m_Cells.size(); ++i)
-	//{
-	//	CCell* pCell = m_Cells[i];
-	//	if (nullptr == pCell)
-	//		continue;
+		//피킹한 곳에서 점들까지의 거리 계산, 가장 짧은 거리 저장
+		_float fDistance_A = XMVectorGetX(XMVector3Length(vPoint[CCell::POINT_A] - vColsetPos));
+		_float fDistance_B = XMVectorGetX(XMVector3Length(vPoint[CCell::POINT_B] - vColsetPos));
+		_float fDistance_C = XMVectorGetX(XMVector3Length(vPoint[CCell::POINT_C] - vColsetPos));
+		_float fClosetDistance = min(fDistance_A, fDistance_B);
+		fClosetDistance = min(fClosetDistance, fDistance_C);
 
-	//	_vector vPoint[CCell::POINT_END];
+		//만약 이전에 순회한 셀보다 거리가 크다면 continue,
+		//더 작다면 해당 점을 click 한 점으로 Store해준다.
+		if (m_fClosetDistance < fClosetDistance)
+			continue;
 
-	//	//비교할 셀의 점들을 가져와 저장
-	//	vPoint[CCell::POINT_A] = pCell->Get_Point(CCell::POINT_A);
-	//	vPoint[CCell::POINT_B] = pCell->Get_Point(CCell::POINT_B);
-	//	vPoint[CCell::POINT_C] = pCell->Get_Point(CCell::POINT_C);
+		m_fClosetDistance = fClosetDistance;
+		if (fDistance_A == m_fClosetDistance)
+			XMStoreFloat3(&vColsetPos, vPoint[CCell::POINT_A]);
+		else if (fDistance_B == m_fClosetDistance)
+			XMStoreFloat3(&vColsetPos, vPoint[CCell::POINT_B]);
+		else if (fDistance_C == m_fClosetDistance)
+			XMStoreFloat3(&vColsetPos, vPoint[CCell::POINT_C]);
+	}
 
-	//	//피킹한 곳에서 점들까지의 거리 계산, 가장 짧은 거리 저장
-	//	_float fDistance_A = XMVectorGetX(XMVector3Length(vPoint[CCell::POINT_A] - vPos));
-	//	_float fDistance_B = XMVectorGetX(XMVector3Length(vPoint[CCell::POINT_B] - vPos));
-	//	_float fDistance_C = XMVectorGetX(XMVector3Length(vPoint[CCell::POINT_C] - vPos));
-	//	_float fClosetDistance = min(fDistance_A, fDistance_B);
-	//	fClosetDistance = min(fClosetDistance, fDistance_C);
-
-	//	//만약 이전에 순회한 셀보다 거리가 크다면 continue,
-	//	//더 작다면 해당 점을 click 한 점으로 Store해준다.
-	//	if (m_fClosetDistance < fClosetDistance)
-	//		continue;
-
-	//	m_fClosetDistance = fClosetDistance;
-	//	if (fDistance_A == m_fClosetDistance)
-	//		XMStoreFloat3(&vClilckPos, vPoint[CCell::POINT_A]);
-	//	else if (fDistance_B == m_fClosetDistance)
-	//		XMStoreFloat3(&vClilckPos, vPoint[CCell::POINT_B]);
-	//	else if (fDistance_C == m_fClosetDistance)
-	//		XMStoreFloat3(&vClilckPos, vPoint[CCell::POINT_C]);
-	//}
-
-	return vClilckPos;
-
+	return vColsetPos;
 }
 
 _int CNavigationController::SelectCell(_float3 vPickPos)
@@ -348,6 +335,7 @@ void CNavigationController::Free()
 	m_Cells.clear();
 
 	Safe_Release(m_pDevice);
-	Safe_Release(m_pDevice);
+	Safe_Release(m_pContext);
+	Safe_Release(m_pShader);
 	Safe_Release(m_pGameInstance);
 }
