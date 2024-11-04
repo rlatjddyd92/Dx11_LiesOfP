@@ -41,7 +41,11 @@ public:
 	HRESULT Add_Particle();
 	void Check();
 	void Update_Particle();
-	void Select_Effect();
+	void Select_Particle();
+	void Get_Particle();
+	void Delete_Particle();
+
+	
 
 private:
 	class CGameInstance* m_pGameInstance = { nullptr };
@@ -60,34 +64,42 @@ private:
 	_float2		m_vSpeed = { 1.f, 2.f };
 	_float2		m_vLifeTime = { 2.f, 4.f };
 	_float4		m_vMinColor = { 0.f, 0.f, 0.f, 1.f };
-	_float4		m_vMaxColor = { 0.f, 0.f, 0.f, 1.f };
+	_float4		m_vMaxColor = { 1.f, 1.f, 1.f, 1.f };
 	
 	// Particle Action
 	_uint		m_iParticleType = { 0 };	// 퍼지거나 모이거나 단방향이거나
 	
 	_uint		m_iParticleState = { 0 };	// 공전? 랜덤? 반복?
-	_float		m_fRenderRatio = { 0.f };
-	_Vec4		m_vPivot = {};
-	_float		m_fSpeed = { 0.f };
+	_float		m_fRenderRatio = { 1.f };
+	_Vec4		m_vPivot = { 0.f, 0.f, 0.f, 1.f };
 	_float		m_fGravity = { 0.f };
 
 	_Vec4		m_vMoveDir = {};	// 단방향 이동 방향.
 
-	_Vec3		m_vRevolveAxis = {};
-	_float		m_fAngle = { 0.f };
+	_Vec3		m_vRevolveAxis = {0.f, 1.f, 0.f};
+	_float		m_fAngle = { 90.f };
 
-	_float		m_fTimeInterval = { 0.f };
-	_float		m_fRandomRatio = { 0.f };
+	_float		m_fTimeInterval = { 0.5f };
+	_float		m_fRandomRatio = { 0.5f };
+
+	_float		m_fAccelLimit = { 0.f };
+	_float		m_fAccelSpeed = { 1.f };
 
 	_bool		m_bRevolve = { false };
 	_bool		m_bRandom = { false };
 	_bool		m_bLoop = { false };
+	_bool		m_bAccel = { false };
+	_bool		m_bDecel = { false };
 
 	_Vec3		m_vPos = {};
 	_Vec3		m_vRotation = {};
-	_Vec3		m_vScale = {};
+	_Vec3		m_vScale = {1.f, 1.f, 1.f};
 
 	_uint		m_iParticleCount = {0};
+	_int		m_iSelectedParticleIndex = { 0 };
+
+private:
+	void Set_State();
 
 public:
 	virtual void Free() override;

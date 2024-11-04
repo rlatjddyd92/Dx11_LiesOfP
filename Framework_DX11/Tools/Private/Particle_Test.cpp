@@ -27,6 +27,13 @@ HRESULT CParticle_Test::Initialize(void* pArg)
     if (FAILED(Ready_Components(pDesc)))
         return E_FAIL;
 
+    m_DefaultDesc = pDesc->DefaultDesc;
+    m_RevolveDesc = pDesc->RevolveDesc;
+    m_RandomDesc = pDesc->RandomDesc;
+    m_AccelDesc = pDesc->AccelDesc;
+
+    Set_Transform(pDesc->TransformDesc);
+
     return S_OK;
 }
 
@@ -36,32 +43,54 @@ void CParticle_Test::Priority_Update(_float fTimeDelta)
 
 void CParticle_Test::Update(_float fTimeDelta)
 {
-    switch (m_eType)
+    _bool bOver = { false };
+    switch (m_DefaultDesc.eType)
     {
     case TYPE_SPREAD:
-        m_pVIBufferCom->Spread(m_iState, m_fRenderRatio, m_vPivot, m_fSpeed, m_fGravity, fTimeDelta, m_vRevolveAxis, XMConvertToRadians(m_fAngle), m_fTimeInterval, m_fRandomRatio);
+        bOver = m_pVIBufferCom->Spread(m_DefaultDesc.iState, m_DefaultDesc.fRenderRatio, m_DefaultDesc.vPivot, m_DefaultDesc.fGravity, fTimeDelta,
+            m_RevolveDesc.vRevolveAxis, XMConvertToRadians(m_RevolveDesc.fAngle),
+            m_RandomDesc.fTimeInterval, m_RandomDesc.fRandomRatio,
+            m_AccelDesc.fAccelLimit, m_AccelDesc.fAccelSpeed);
         break;
 
     case TYPE_MOVE:
-        m_pVIBufferCom->Move(m_iState, m_fRenderRatio, m_vMoveDir, m_fSpeed, m_fGravity, fTimeDelta, m_vPivot, m_vRevolveAxis, XMConvertToRadians(m_fAngle), m_fTimeInterval, m_fRandomRatio);
+        bOver = m_pVIBufferCom->Move(m_DefaultDesc.iState, m_DefaultDesc.fRenderRatio, m_DefaultDesc.vMoveDir, m_DefaultDesc.fGravity, fTimeDelta, m_DefaultDesc.vPivot,
+            m_RevolveDesc.vRevolveAxis, XMConvertToRadians(m_RevolveDesc.fAngle),
+            m_RandomDesc.fTimeInterval, m_RandomDesc.fRandomRatio,
+            m_AccelDesc.fAccelLimit, m_AccelDesc.fAccelSpeed);
         break;
 
     case TYPE_CONVERGE:
-        m_pVIBufferCom->Converge(m_iState, m_fRenderRatio, m_vPivot, m_fSpeed, fTimeDelta, m_vRevolveAxis, XMConvertToRadians(m_fAngle), m_fTimeInterval, m_fRandomRatio);
+        bOver = m_pVIBufferCom->Converge(m_DefaultDesc.iState, m_DefaultDesc.fRenderRatio, m_DefaultDesc.vPivot, fTimeDelta,
+            m_RevolveDesc.vRevolveAxis, XMConvertToRadians(m_RevolveDesc.fAngle),
+            m_RandomDesc.fTimeInterval, m_RandomDesc.fRandomRatio,
+            m_AccelDesc.fAccelLimit, m_AccelDesc.fAccelSpeed);
         break;
 
     case TYPE_SPREAD_INDEPENDENT:
-        m_pVIBufferCom->Spread_Independent(m_iState, m_pTransformCom->Get_WorldMatrix(), m_fRenderRatio, m_vPivot, m_fSpeed, m_fGravity, fTimeDelta, m_vRevolveAxis, XMConvertToRadians(m_fAngle), m_fTimeInterval, m_fRandomRatio);
-        break;
+        bOver = m_pVIBufferCom->Spread_Independent(m_DefaultDesc.iState, m_pTransformCom->Get_WorldMatrix(), m_DefaultDesc.fRenderRatio, m_DefaultDesc.vPivot, m_DefaultDesc.fGravity, fTimeDelta,
+            m_RevolveDesc.vRevolveAxis, XMConvertToRadians(m_RevolveDesc.fAngle),
+            m_RandomDesc.fTimeInterval, m_RandomDesc.fRandomRatio,
+            m_AccelDesc.fAccelLimit, m_AccelDesc.fAccelSpeed);
+            break;
 
     case TYPE_MOVE_INDEPENDENT:
-        m_pVIBufferCom->Move_Independent(m_iState, m_pTransformCom->Get_WorldMatrix(), m_fRenderRatio, m_vMoveDir, m_fSpeed, m_fGravity, fTimeDelta, m_vPivot, m_vRevolveAxis, XMConvertToRadians(m_fAngle), m_fTimeInterval, m_fRandomRatio);
+        bOver = m_pVIBufferCom->Move_Independent(m_DefaultDesc.iState, m_pTransformCom->Get_WorldMatrix(), m_DefaultDesc.fRenderRatio, m_DefaultDesc.vMoveDir, m_DefaultDesc.fGravity, fTimeDelta, m_DefaultDesc.vPivot,
+            m_RevolveDesc.vRevolveAxis, XMConvertToRadians(m_RevolveDesc.fAngle),
+            m_RandomDesc.fTimeInterval, m_RandomDesc.fRandomRatio,
+            m_AccelDesc.fAccelLimit, m_AccelDesc.fAccelSpeed);
         break;
 
     case TYPE_CONVERGE_INDEPENDENT:
-        m_pVIBufferCom->Converge_Independent(m_iState, m_pTransformCom->Get_WorldMatrix(), m_fRenderRatio, m_vPivot, m_fSpeed, fTimeDelta, m_vRevolveAxis, XMConvertToRadians(m_fAngle), m_fTimeInterval, m_fRandomRatio);
+        bOver = m_pVIBufferCom->Converge_Independent(m_DefaultDesc.iState, m_pTransformCom->Get_WorldMatrix(), m_DefaultDesc.fRenderRatio, m_DefaultDesc.vPivot, fTimeDelta,
+            m_RevolveDesc.vRevolveAxis, XMConvertToRadians(m_RevolveDesc.fAngle),
+            m_RandomDesc.fTimeInterval, m_RandomDesc.fRandomRatio,
+            m_AccelDesc.fAccelLimit, m_AccelDesc.fAccelSpeed);
         break;
     }
+
+    //if (true == bOver)
+    //    m_isDead = true;
 }
 
 void CParticle_Test::Late_Update(_float fTimeDelta)
@@ -71,7 +100,7 @@ void CParticle_Test::Late_Update(_float fTimeDelta)
 
 HRESULT CParticle_Test::Render()
 {
-    if(TYPE_CONVERGE == m_eType || TYPE_SPREAD == m_eType || TYPE_MOVE == m_eType)
+    if(TYPE_CONVERGE == m_DefaultDesc.eType || TYPE_SPREAD == m_DefaultDesc.eType || TYPE_MOVE == m_DefaultDesc.eType)
     {
         if (FAILED(m_pTransformCom->Bind_ShaderResource(m_pShaderCom, "g_WorldMatrix")))
             return E_FAIL;
@@ -100,6 +129,13 @@ HRESULT CParticle_Test::Render()
     return S_OK;
 }
 
+void CParticle_Test::Set_Transform(TRANSFORM_DESC& Desc)
+{
+    m_pTransformCom->Set_State(CTransform::STATE_POSITION, Desc.vPos);
+    m_pTransformCom->Rotation(XMConvertToRadians(Desc.vRotation.x), XMConvertToRadians(Desc.vRotation.y), XMConvertToRadians(Desc.vRotation.z));
+    m_pTransformCom->Set_Scaled(Desc.vScale.x, Desc.vScale.y, Desc.vScale.z);
+}
+
 HRESULT CParticle_Test::Ready_Components(PARTICLE_TEST_DESC* pDesc)
 {
     /* FOR.Com_Shader */
@@ -108,7 +144,7 @@ HRESULT CParticle_Test::Ready_Components(PARTICLE_TEST_DESC* pDesc)
         return E_FAIL;
 
     /* FOR.Com_Texture */
-    if (FAILED(__super::Add_Component(LEVEL_TOOL, TEXT("Prototype_Component_Texture_Test"),
+    if (FAILED(__super::Add_Component(LEVEL_TOOL, TEXT("Prototype_Component_Texture_Snow"),
         TEXT("Com_Texture"), reinterpret_cast<CComponent**>(&m_pTextureCom))))
         return E_FAIL;
 

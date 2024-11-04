@@ -1,1 +1,13 @@
-﻿  Client.vcxproj -> D:\GitProject\Dx11_LiesOfP\Binary_DX11\Client\Bin\Client.exe
+﻿FXC : warning X4717: Effects deprecated for D3DCompiler_47
+  
+  compilation object save succeeded; see D:\GitHubProjects\Dx11_LiesOfP\Binary_DX11\Client\Bin\Shader_VtxModel.cso
+FXC : warning X4717: Effects deprecated for D3DCompiler_47
+  
+  compilation object save succeeded; see D:\GitHubProjects\Dx11_LiesOfP\Binary_DX11\Client\Bin\Shader_VtxNorTex.cso
+FXC : warning X4717: Effects deprecated for D3DCompiler_47
+  
+  compilation object save succeeded; see D:\GitHubProjects\Dx11_LiesOfP\Binary_DX11\Client\Bin\Shader_VtxPosTex.cso
+C:\Program Files\Microsoft Visual Studio\2022\Community\MSBuild\Microsoft\VC\v170\Microsoft.Cpp.Unity.targets(192,5): warning : 'D:\GitProject\Dx11_LiesOfP\Binary_DX11\Client\Default\x64\Debug\unity_53HJLOVPAVVEI82L.cpp' 경로의 일부를 찾을 수 없습니다.
+  stdafx.cpp
+  unity_B3BCDFHNCP5AY7YD.cpp
+  Client.vcxproj -> D:\GitHubProjects\Dx11_LiesOfP\Binary_DX11\Client\Bin\Client.exe

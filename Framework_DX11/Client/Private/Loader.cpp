@@ -436,9 +436,9 @@ HRESULT CLoader::Ready_Resources_For_GamePlayLevel_Map0()
 	_matrix		PreTransformMatrix = XMMatrixIdentity();
 
 	/* For. Prototype_Component_Model_Fiona*/
-	PreTransformMatrix = XMMatrixRotationY(XMConvertToRadians(180.0f));
+	PreTransformMatrix = XMMatrixScaling(0.01f, 0.01f, 0.01f) * XMMatrixRotationY(XMConvertToRadians(180.0f));
 	if (FAILED(m_pGameInstance->Add_Prototype(LEVEL_GAMEPLAY, TEXT("Prototype_Component_Model_Fiona"),
-		CModel::Create(m_pDevice, m_pContext, CModel::TYPE_ANIM, "../Bin/ModelData/Anim/Fiona/Fiona.dat", PreTransformMatrix))))
+		CModel::Create(m_pDevice, m_pContext, CModel::TYPE_ANIM, "../Bin/ModelData/Anim/PlayerExample/PlayerExample.dat", PreTransformMatrix))))
 		return E_FAIL;
 
 	/* For. Prototype_Component_Model_ForkLift*/

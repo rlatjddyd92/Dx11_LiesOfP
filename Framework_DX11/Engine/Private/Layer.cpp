@@ -22,6 +22,7 @@ HRESULT CLayer::Priority_Update(_float fTimeDelta)
 	{
 		if ((*pGameObject)->Get_Dead())
 		{
+			Safe_Release(*pGameObject);
 			pGameObject = m_GameObjects.erase(pGameObject);
 		}
 		else
@@ -42,6 +43,7 @@ HRESULT CLayer::Update(_float fTimeDelta)
 	{
 		if ((*pGameObject)->Get_Dead())
 		{
+			Safe_Release(*pGameObject);
 			pGameObject = m_GameObjects.erase(pGameObject);
 		}
 		else
@@ -62,6 +64,7 @@ HRESULT CLayer::Late_Update(_float fTimeDelta)
 	{
 		if ((*pGameObject)->Get_Dead())
 		{
+			Safe_Release(*pGameObject);
 			pGameObject = m_GameObjects.erase(pGameObject);
 		}
 		else

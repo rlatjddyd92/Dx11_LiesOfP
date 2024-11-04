@@ -128,24 +128,29 @@ void CImGui_Manager::Tool_Effect()
 		if (ImGui::CollapsingHeader("Particle"))
 		{
 			m_pController_EffectTool->Check();
-			if (ImGui::Button("Create Particle"))
-			{
-				m_pController_EffectTool->Add_Particle();
-				m_pController_EffectTool->Update_Particle();
-			}
-			if (ImGui::Button("Update Particle"))
-			{
-
-			}
-
 		}
 
 		ImGui::Begin("EffectList");
 
-		m_pController_EffectTool->Select_Effect();
+		m_pController_EffectTool->Select_Particle();
+		if (ImGui::Button("Create Particle"))
+		{
+			m_pController_EffectTool->Add_Particle();
+		}
+		if (ImGui::Button("Update Particle"))
+		{
+			m_pController_EffectTool->Update_Particle();
+		}
+		if (ImGui::Button("Get Particle"))
+		{
+			m_pController_EffectTool->Get_Particle();
+		}
+		if (ImGui::Button("Delete Particle"))
+		{
+			m_pController_EffectTool->Delete_Particle();
+		}
 
 		ImGui::End();
-
 
 		ImGui::EndTabItem();
 	}
@@ -157,62 +162,7 @@ void CImGui_Manager::Tool_UI()
 {
 	if (ImGui::BeginTabItem("UI Tool"))
 	{
-		if (ImGui::CollapsingHeader("UIPart Setting"))
-		{
-			ImGui::Combo("Select Part", m_pController_UITool->GetSelectIndex(), m_pController_UITool->GetUIPartName_Array(), 100);
-
-			_int iNowIndex = *m_pController_UITool->GetSelectIndex();
-
-			ImGui::NewLine();
-
-			ImGui::Text("Part Name : ");
-			ImGui::SameLine();
-			ImGui::Text(m_pController_UITool->GetUIPartName(iNowIndex));
-			//ImGui::InputText("ChangeName", m_pController_UITool->GetUIPartInfo(iNowIndex)->strUIPart_Name, sizeof(m_pController_UITool->GetUIPartInfo(iNowIndex)->strUIPart_Name));
-
-			ImGui::NewLine();
-
-			//ImGui::Text("Part Texture Path : ");
-			//ImGui::SameLine();
-			//ImGui::Text(m_pController_UITool->GetUIPartInfo(iNowIndex)->iTextureIndex);
-			//ImGui::InputInt("TextureIndex", &m_pController_UITool->GetUIPartInfo(iNowIndex)->iTextureIndex);
-
-			ImGui::NewLine();
-
-			ImGui::Text("Part Size : ");
-
-			ImGui::InputFloat("X", &m_pController_UITool->GetUIPartInfo(iNowIndex)->fSize.x);
-			ImGui::InputFloat("Y", &m_pController_UITool->GetUIPartInfo(iNowIndex)->fSize.y);
-
-		}
-
-		if (ImGui::CollapsingHeader("Socket Setting"))
-		{
-			//_int iNowIndex = *m_pController_UITool->GetSelectIndex();
-
-			//ImGui::InputInt("SetSocketNum", )
-
-
-
-
-			ImGui::Text("Add New Socket");
-			ImGui::Text("Move Socket");
-			ImGui::Text("Delete Socket");
-		}
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+		m_pController_UITool->UITool_Edit();
 
 		ImGui::EndTabItem();
 
@@ -265,7 +215,7 @@ HRESULT CImGui_Manager::Ready_Controllers()
 	m_pController_AnimationTool = CController_AnimationTool::Get_Instance();
 	if (nullptr == m_pController_AnimationTool)
 		return E_FAIL;
-	m_pController_AnimationTool->Initialize();
+	m_pController_AnimationTool->Initialize(m_pDevice, m_pContext);
 
 	return S_OK;
 }

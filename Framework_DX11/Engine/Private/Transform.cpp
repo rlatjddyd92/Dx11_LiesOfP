@@ -323,14 +323,14 @@ void CTransform::Rotation(_float fX, _float fY, _float fZ)
 	m_fCurrentRotationY = fY;
 	m_fCurrentRotationZ = fZ;
 
-	_Vec3		vRotation = XMQuaternionRotationRollPitchYaw(XMConvertToRadians(fX), XMConvertToRadians(fY), XMConvertToRadians(fZ));
+	_Vec4		vRotation = XMQuaternionRotationRollPitchYaw(XMConvertToRadians(fX), XMConvertToRadians(fY), XMConvertToRadians(fZ));
 
 
 	_float3		vScaled = Get_Scaled();
 
-	_Vec3		vRight = XMVectorSet(1.f, 0.f, 0.f, 0.f) * vScaled.x;
-	_Vec3		vUp = XMVectorSet(0.f, 1.f, 0.f, 0.f) * vScaled.y;
-	_Vec3		vLook = XMVectorSet(0.f, 0.f, 1.f, 0.f) * vScaled.z;
+	_Vec4		vRight = XMVectorSet(1.f, 0.f, 0.f, 0.f) * vScaled.x;
+	_Vec4		vUp = XMVectorSet(0.f, 1.f, 0.f, 0.f) * vScaled.y;
+	_Vec4		vLook = XMVectorSet(0.f, 0.f, 1.f, 0.f) * vScaled.z;
 
 	_Matrix		RotationMatrix = XMMatrixRotationQuaternion(vRotation);
 
