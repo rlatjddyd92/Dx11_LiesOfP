@@ -36,7 +36,6 @@ VS_OUT VS_MAIN( VS_IN In)
     Out.vLifeTime = In.vLifeTime;
     Out.vColor = In.vColor;
     Out.vLook = In.TransformMatrix._31_32_33;;
-	
     
     return Out;
 }

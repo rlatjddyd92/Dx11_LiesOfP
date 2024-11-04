@@ -81,15 +81,15 @@ void CController_EffectTool::Check()
 	if (ImGui::TreeNode("Initialize"))
 	{
 		ImGui::SeparatorText("Initialize");
-		ImGui::InputInt("Instance Num", (_int*)&m_iNumInstance);
-		ImGui::InputFloat3("Instance Center", (_float*)&m_vCenter);
-		ImGui::InputFloat3("Instance Range", (_float*)&m_vRange);
-		ImGui::InputFloat3("Instance ExceptRange", (_float*)&m_vExceptRange);
-		ImGui::InputFloat2("Instance Size", (_float*)&m_vSize);
-		ImGui::InputFloat2("Instance Speed", (_float*)&m_vSpeed);
-		ImGui::InputFloat2("Instance LifeTime", (_float*)&m_vLifeTime);
-		ImGui::InputFloat4("Instance MinColor", (_float*)&m_vMinColor);
-		ImGui::InputFloat4("Instance MaxColor", (_float*)&m_vMaxColor);
+		ImGui::InputInt	("Num Instance", (_int*)&m_iNumInstance);
+		ImGui::InputFloat3("Center Instance", (_float*)&m_vCenter);
+		ImGui::InputFloat3("Range Instance", (_float*)&m_vRange);
+		ImGui::InputFloat3("ExceptRange Instance", (_float*)&m_vExceptRange);
+		ImGui::InputFloat2("Size Instance", (_float*)&m_vSize);
+		ImGui::InputFloat2("Speed Instance", (_float*)&m_vSpeed);
+		ImGui::InputFloat2("LifeTime Instance", (_float*)&m_vLifeTime);
+		ImGui::InputFloat4("MinColor Instance", (_float*)&m_vMinColor);
+		ImGui::InputFloat4("MaxColor Instance", (_float*)&m_vMaxColor);
 		ImGui::TreePop();
 	}
 	if (ImGui::TreeNode("Type/State"))
@@ -268,27 +268,27 @@ void CController_EffectTool::Get_Particle()
 	m_fAccelLimit = AccelDesc.fAccelLimit;
 	m_fAccelSpeed = AccelDesc.fAccelSpeed;
 
-	if (CVIBuffer_Point_Instance::STATE_REVOLVE == (m_iParticleState | CVIBuffer_Point_Instance::STATE_REVOLVE))
+	if (CVIBuffer_Point_Instance::STATE_REVOLVE == (m_iParticleState & CVIBuffer_Point_Instance::STATE_REVOLVE))
 		m_bRevolve = true;
 	else
 		m_bRevolve = false;
 
-	if (CVIBuffer_Point_Instance::STATE_RANDOM == (m_iParticleState | CVIBuffer_Point_Instance::STATE_RANDOM))
+	if (CVIBuffer_Point_Instance::STATE_RANDOM == (m_iParticleState & CVIBuffer_Point_Instance::STATE_RANDOM))
 		m_bRandom = true;
 	else
 		m_bRandom = false;
 
-	if (CVIBuffer_Point_Instance::STATE_LOOP == (m_iParticleState | CVIBuffer_Point_Instance::STATE_LOOP))
+	if (CVIBuffer_Point_Instance::STATE_LOOP == (m_iParticleState & CVIBuffer_Point_Instance::STATE_LOOP))
 		m_bLoop = true;
 	else
 		m_bLoop = false;
 
-	if (CVIBuffer_Point_Instance::STATE_ACCEL == (m_iParticleState | CVIBuffer_Point_Instance::STATE_ACCEL))
+	if (CVIBuffer_Point_Instance::STATE_ACCEL == (m_iParticleState & CVIBuffer_Point_Instance::STATE_ACCEL))
 		m_bAccel = true;
 	else
 		m_bAccel = false;
 
-	if (CVIBuffer_Point_Instance::STATE_DECEL == (m_iParticleState | CVIBuffer_Point_Instance::STATE_DECEL))
+	if (CVIBuffer_Point_Instance::STATE_DECEL == (m_iParticleState & CVIBuffer_Point_Instance::STATE_DECEL))
 		m_bDecel = true;
 	else
 		m_bDecel = false;
@@ -321,8 +321,6 @@ void CController_EffectTool::Set_State()
 		m_iParticleState |= CVIBuffer_Point_Instance::STATE_DECEL;
 	else
 		m_iParticleState &= ~CVIBuffer_Point_Instance::STATE_DECEL;
-
-
 }
 
 void CController_EffectTool::Free()
