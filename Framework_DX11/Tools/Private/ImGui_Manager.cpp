@@ -1,17 +1,5 @@
 #include "stdafx.h"
-
-#ifdef _DEBUG
-#undef new
-#endif
-
-#include "imgui.h"
-#include "imgui_impl_win32.h"
-#include "imgui_impl_dx11.h"
 #include "ImGui_Manager.h"
-
-#ifdef _DEBUG
-#define new DBG_NEW
-#endif
 
 #include "Controller_MapTool.h"
 #include "Controller_EffectTool.h"
@@ -55,6 +43,13 @@ void CImGui_Manager::Render_ImGui()
 	ImGui_ImplDX11_NewFrame();
 	ImGui_ImplWin32_NewFrame();
 	ImGui::NewFrame();
+
+	ImGuiIO& io = ImGui::GetIO(); (void)io;
+	ImGuizmo::BeginFrame();
+	ImGuizmo::SetRect(0, 0, io.DisplaySize.x, io.DisplaySize.y);
+	ImGuizmo::SetOrthographic(false);
+
+
 
 	// 업데이트 내에서 수치 조정할 것들을 처리해 줄 것임
 	Update_ImGui();

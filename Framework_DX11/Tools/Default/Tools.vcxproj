@@ -19,6 +19,12 @@
     </ProjectConfiguration>
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="..\..\ImGuizmo\GraphEditor.h" />
+    <ClInclude Include="..\..\ImGuizmo\ImCurveEdit.h" />
+    <ClInclude Include="..\..\ImGuizmo\ImGradient.h" />
+    <ClInclude Include="..\..\ImGuizmo\ImGuizmo.h" />
+    <ClInclude Include="..\..\ImGuizmo\ImSequencer.h" />
+    <ClInclude Include="..\..\ImGuizmo\ImZoomSlider.h" />
     <ClInclude Include="..\..\imgui\imconfig.h" />
     <ClInclude Include="..\..\imgui\imgui.h" />
     <ClInclude Include="..\..\imgui\imgui_impl_dx11.h" />
@@ -57,6 +63,11 @@
     <Image Include="Tools.ico" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="..\..\ImGuizmo\GraphEditor.cpp" />
+    <ClCompile Include="..\..\ImGuizmo\ImCurveEdit.cpp" />
+    <ClCompile Include="..\..\ImGuizmo\ImGradient.cpp" />
+    <ClCompile Include="..\..\ImGuizmo\ImGuizmo.cpp" />
+    <ClCompile Include="..\..\ImGuizmo\ImSequencer.cpp" />
     <ClCompile Include="..\..\imgui\imgui.cpp" />
     <ClCompile Include="..\..\imgui\imgui_demo.cpp" />
     <ClCompile Include="..\..\imgui\imgui_draw.cpp" />
@@ -226,7 +237,7 @@
       <SDLCheck>true</SDLCheck>
       <PreprocessorDefinitions>_DEBUG;_WINDOWS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>Default</ConformanceMode>
-      <AdditionalIncludeDirectories>../../EngineSDK/Inc/;../Default;../Public;../../imgui</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>../../EngineSDK/Inc/;../Default;../Public;../../imgui;../../ImGuizmo</AdditionalIncludeDirectories>
       <LanguageStandard>Default</LanguageStandard>
       <IncludeInUnityFile>true</IncludeInUnityFile>
       <CombineFilesOnlyFromTheSameFolder>true</CombineFilesOnlyFromTheSameFolder>

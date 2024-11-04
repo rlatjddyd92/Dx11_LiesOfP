@@ -216,7 +216,9 @@ HRESULT CRenderer::Initialize()
 
 	if (FAILED(m_pGameInstance->Ready_RT_Debug(TEXT("Target_SSAO"), 100.f, 100.f, 200.f, 200.f)))
 		return E_FAIL;
-
+	if (FAILED(m_pGameInstance->Ready_RT_Debug(TEXT("Target_PickObjectDepth"), 100.f, 300.f, 200.f, 200.f)))
+	return E_FAIL;
+ 
 	//if (FAILED(m_pGameInstance->Ready_RT_Debug(TEXT("Target_BackBuffer"), 600.f, 100.f, 200.f, 200.f)))
 	//	return E_FAIL;
 
@@ -248,6 +250,9 @@ HRESULT CRenderer::Add_RenderObject(RENDERGROUP eRenderGroupID, CGameObject * pR
 
 HRESULT CRenderer::Draw()
 {
+	if (FAILED(Render_Picking()))
+		return E_FAIL;
+
 	if (FAILED(Render_Priority()))
 		return E_FAIL;
 
@@ -265,11 +270,7 @@ HRESULT CRenderer::Draw()
 	if (FAILED(Render_Bloom()))
 		return E_FAIL;
 
-
 	if (FAILED(Render_Deferred()))
-		return E_FAIL;
-
-	if (FAILED(Render_Picking()))
 		return E_FAIL;
 
 	if (FAILED(Render_NonLights()))
@@ -498,7 +499,6 @@ HRESULT CRenderer::Render_SSAO()
 	m_pSSAOShader->Begin(0);
 	m_pVIBuffer->Bind_Buffers();
 	m_pVIBuffer->Render();
-
 
 	if (FAILED(m_pGameInstance->End_MRT()))
 		return E_FAIL;
@@ -999,6 +999,7 @@ HRESULT CRenderer::Render_Debug()
 	//m_pGameInstance->Render_MRT_Debug(TEXT("MRT_Bloom_BlurXY1"), m_pShader, m_pVIBuffer);
 	//m_pGameInstance->Render_MRT_Debug(TEXT("MRT_Bloom_BlurXY2"), m_pShader, m_pVIBuffer);
 	m_pGameInstance->Render_MRT_Debug(TEXT("MRT_SSAO"), m_pShader, m_pVIBuffer);
+	m_pGameInstance->Render_MRT_Debug(TEXT("MRT_Picking"), m_pShader, m_pVIBuffer);
 	//m_pGameInstance->Render_MRT_Debug(TEXT("MRT_ShadowObj"), m_pShader, m_pVIBuffer);
 	//m_pGameInstance->Render_MRT_Debug(TEXT("MRT_Final"), m_pShader, m_pVIBuffer);
 	//m_pGameInstance->Render_MRT_Debug(TEXT("MRT_Blur_X"), m_pShader, m_pVIBuffer);

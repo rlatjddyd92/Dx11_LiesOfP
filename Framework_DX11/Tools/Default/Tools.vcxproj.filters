@@ -73,6 +73,9 @@
     <Filter Include="90.ImGuiManager\Navigation">
       <UniqueIdentifier>{d881c33d-d8fb-4797-9af9-1a668f1e95e0}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Imguizmo">
+      <UniqueIdentifier>{945389fe-919d-4538-8f5f-edc46cd2032b}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="framework.h">
@@ -171,6 +174,24 @@
     <ClInclude Include="..\Public\NavigationController.h">
       <Filter>90.ImGuiManager\Navigation</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\ImGuizmo\GraphEditor.h">
+      <Filter>Imguizmo</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\ImGuizmo\ImCurveEdit.h">
+      <Filter>Imguizmo</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\ImGuizmo\ImGradient.h">
+      <Filter>Imguizmo</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\ImGuizmo\ImGuizmo.h">
+      <Filter>Imguizmo</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\ImGuizmo\ImSequencer.h">
+      <Filter>Imguizmo</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\ImGuizmo\ImZoomSlider.h">
+      <Filter>Imguizmo</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <Image Include="small.ico">
@@ -261,6 +282,21 @@
     </ClCompile>
     <ClCompile Include="..\Private\NavigationController.cpp">
       <Filter>90.ImGuiManager\Navigation</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\ImGuizmo\GraphEditor.cpp">
+      <Filter>Imguizmo</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\ImGuizmo\ImCurveEdit.cpp">
+      <Filter>Imguizmo</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\ImGuizmo\ImGradient.cpp">
+      <Filter>Imguizmo</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\ImGuizmo\ImGuizmo.cpp">
+      <Filter>Imguizmo</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\ImGuizmo\ImSequencer.cpp">
+      <Filter>Imguizmo</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

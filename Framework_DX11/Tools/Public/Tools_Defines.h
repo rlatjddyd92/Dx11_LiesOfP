@@ -16,6 +16,23 @@ extern HWND g_hWnd;
 using namespace Tools;
 using namespace std;
 
+
+
+#ifdef _DEBUG
+#undef new
+#endif
+
 #include "imgui.h"
 #include "imgui_impl_win32.h"
 #include "imgui_impl_dx11.h"
+
+#include "ImGuizmo.h"
+#include "GraphEditor.h"
+#include "ImSequencer.h"
+#include"ImZoomSlider.h"
+#include "ImGradient.h"
+#include "ImCurveEdit.h"
+
+#ifdef _DEBUG
+#define new DBG_NEW
+#endif

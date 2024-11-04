@@ -29,6 +29,7 @@ public:
 	_Matrix				Get_WorldMatrix_Inverse() const { return XMMatrixInverse(nullptr, Get_WorldMatrix()); }
 
 	_Vec3				Get_CurrentRotation() { return _Vec3(m_fCurrentRotationX, m_fCurrentRotationY, m_fCurrentRotationZ); }
+	void				Set_CurrentRotation(_Vec3 vRot) { m_fCurrentRotationX = vRot.x; m_fCurrentRotationY = vRot.y; m_fCurrentRotationZ = vRot.z; }
 
 public:	
 	virtual HRESULT Initialize_Prototype();

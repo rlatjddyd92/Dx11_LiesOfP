@@ -52,6 +52,21 @@ private:
 
 	_float3 m_vPickPos = {}; //ÇÇÅ·ÇÑ ÁÂÇ¥
 
+	using GIZMODESC = struct tagGizmoDesc
+	{
+		ImGuizmo::MODE CurrentGizmoMode = ImGuizmo::WORLD;
+		ImGuizmo::OPERATION CurrentGizmoOperation = ImGuizmo::TRANSLATE;
+		bool bUseSnap = false;
+		bool boundSizing = false;
+		bool boundSizingSnap = false;
+		float snap[3] = { 0.1f, 0.1f, 0.1f };
+		float bounds[6] = { -0.5f, -0.5f, -0.5f, 0.5f, 0.5f, 0.5f };
+		float boundsSnap[3] = { 0.1f, 0.1f, 0.1f };
+
+	};
+
+	GIZMODESC m_tGizmoDesc;
+
 private:
 	void SaveMap();
 	void LoadMap();

@@ -28,6 +28,8 @@ HRESULT CController_MapTool::Initialize(ID3D11Device* pDevice, ID3D11DeviceConte
 
 	//m_pNavigationController->Initialize(m_pDevice, m_pContext);
 
+	//m_pGizmoDesc = new tagGizmoDesc;
+
 	return S_OK;
 }
 
@@ -83,7 +85,7 @@ void CController_MapTool::Pick_Object()
 {
 	if (!ImGui::CollapsingHeader("Object Inform"))
 		return;
-	
+
 	//오브젝트 피킹 작동
 	if (m_pGameInstance->Get_KeyState(RBUTTON) == AWAY)
 	{
@@ -93,17 +95,17 @@ void CController_MapTool::Pick_Object()
 
 		if (m_iPickObject_ID != 0)	//0은 허공을 선택한 것
 		{
-			if(m_pSelectObject != nullptr)	//처름 피킹한게 아닐때만
+			if (m_pSelectObject != nullptr)	//처름 피킹한게 아닐때만
 			{
 				dynamic_cast<CNonAnimModel*>(m_pSelectObject)->Set_Selected(false);
 				m_pPreSelectObject = m_pSelectObject;
 			}
 
-			if(m_iPre_Picked_ID != m_iPickObject_ID)	//새로 고른거다
+			if (m_iPre_Picked_ID != m_iPickObject_ID)	//새로 고른거다
 			{
 				Find_PickObject();
 			}
-			else 
+			else
 			{
 				//같은걸 다시 고르면 선택 해제
 				m_pSelectObject = nullptr;
@@ -115,9 +117,9 @@ void CController_MapTool::Pick_Object()
 
 	ImGui::SeparatorText("Object Transform");
 
-	static float fScale[3] = { 1.f,1.f,1.f };
-	static float fRot[3] = { 0.f,0.f,0.f };
-	static float fPos[3] = { 0.f,0.f,0.f };
+	static _Vec3 vScale = { 1.f,1.f,1.f };
+	static _Vec3 vRot = { 0.f,0.f,0.f };
+	static _Vec3 vPos = { 0.f,0.f,0.f };
 
 	ImGui::PushItemWidth(300);
 
@@ -125,46 +127,87 @@ void CController_MapTool::Pick_Object()
 
 	if (m_pPreSelectObject != m_pSelectObject && m_pSelectObject != nullptr)	//새로 피킹할 경우 Obj 정보를 띄우자
 	{
-		fScale[0] = m_pSelectObject->Get_Transform()->Get_Scaled().x;
-		fScale[1] = m_pSelectObject->Get_Transform()->Get_Scaled().y;
-		fScale[2] = m_pSelectObject->Get_Transform()->Get_Scaled().z;
-
-		fRot[0] = m_pSelectObject->Get_Transform()->Get_CurrentRotation().x;
-		fRot[1] = m_pSelectObject->Get_Transform()->Get_CurrentRotation().y;
-		fRot[2] = m_pSelectObject->Get_Transform()->Get_CurrentRotation().z;
-
-		_Vec3 vPos = m_pSelectObject->Get_Transform()->Get_State(CTransform::STATE_POSITION);
-		fPos[0] = vPos.x;
-		fPos[1] = vPos.y;
-		fPos[2] = vPos.z;
+		vScale = m_pSelectObject->Get_Transform()->Get_Scaled();
+		vRot = m_pSelectObject->Get_Transform()->Get_CurrentRotation();
+		vPos = (_Vec3)m_pSelectObject->Get_Transform()->Get_State(CTransform::STATE_POSITION);
 
 		CNonAnimModel* pSelect = dynamic_cast<CNonAnimModel*>(m_pSelectObject);
-		if(pSelect!= nullptr)
+		if (pSelect != nullptr)
 			iSelectObj_RenderTargetID = pSelect->Get_RenderTargetId();
 
 		m_pPreSelectObject = m_pSelectObject;
 	}
-	else if(m_pSelectObject!= nullptr)	//Imgui에서 변경한 값 적용
+	else if (m_pSelectObject != nullptr)	//Imgui에서 변경한 값 적용
 	{
-		_float3 vPosition = {};
-		vPosition.x = fPos[0];
-		vPosition.y = fPos[1];
-		vPosition.z = fPos[2];
+		m_pSelectObject->Get_Transform()->Set_State(CTransform::STATE_POSITION, vPos);
 
-		m_pSelectObject->Get_Transform()->Set_State(CTransform::STATE_POSITION, vPosition);
+		m_pSelectObject->Get_Transform()->Set_Scaled(vScale.x, vScale.y, vScale.z);
 
-		m_pSelectObject->Get_Transform()->Set_Scaled(fScale[0], fScale[1], fScale[2]);
-
-		m_pSelectObject->Get_Transform()->Rotation(fRot[0], fRot[1], fRot[2]);
+		m_pSelectObject->Get_Transform()->Rotation(vRot.x, vRot.y, vRot.z);
 
 		CNonAnimModel* pSelect = dynamic_cast<CNonAnimModel*>(m_pSelectObject);
 		if (pSelect != nullptr)
 			pSelect->Set_RenderTargetId(iSelectObj_RenderTargetID);
 	}
 
-	ImGui::DragFloat3("Scale(X, Y, Z)", &fScale[0], 0.05f, 0.1f, 100.f);
-	ImGui::DragFloat3("Rotation(X, Y, Z)", &fRot[0], 0.05f, -180.f, 180.f, 0);
-	ImGui::DragFloat3("Position(X, Y, Z)", &fPos[0], 0.05f, -180.f, 180.f, 0);
+#pragma region ImGuiZimo
+	enum GIZMO
+	{
+		POSITION, ROTATION, SCALE
+	};
+	static int iGizmoOperation = 0;
+
+	if (ImGui::RadioButton("Pos", iGizmoOperation == POSITION))
+	{
+		iGizmoOperation = POSITION;
+		m_tGizmoDesc.CurrentGizmoOperation = ImGuizmo::TRANSLATE;
+	} ImGui::SameLine();
+
+	if (ImGui::RadioButton("Rot", iGizmoOperation == ROTATION))
+	{
+		iGizmoOperation = ROTATION;
+		m_tGizmoDesc.CurrentGizmoOperation = ImGuizmo::ROTATE;
+	} ImGui::SameLine();
+
+	if (ImGui::RadioButton("Scale", iGizmoOperation == SCALE))
+	{
+		iGizmoOperation = SCALE;
+		m_tGizmoDesc.CurrentGizmoOperation = ImGuizmo::SCALE;
+	}
+
+	_Matrix ViewMatrix = m_pGameInstance->Get_Transform(CPipeLine::D3DTS_VIEW);
+	_Matrix ProjMatrix = m_pGameInstance->Get_Transform(CPipeLine::D3DTS_PROJ);
+
+	if (m_pSelectObject != nullptr)
+	{
+		_Matrix GizmoWorldMatrix = m_pSelectObject->Get_Transform()->Get_WorldMatrix();
+
+		//ImGuiZimo
+		ImGuizmo::DecomposeMatrixToComponents((_float*)&GizmoWorldMatrix, &vPos.x, &vRot.x, &vScale.x);
+		ImGuizmo::RecomposeMatrixFromComponents(&vPos.x, &vRot.x, &vScale.x, (_float*)&GizmoWorldMatrix);
+
+		if (ImGuizmo::Manipulate(&ViewMatrix._11, &ProjMatrix._11			// 뷰, 투영행렬
+			, m_tGizmoDesc.CurrentGizmoOperation			// Tr, Rt, Sc
+			, m_tGizmoDesc.CurrentGizmoMode				// WORLD, LOCAL
+			, (_float*)&GizmoWorldMatrix					// 객체의 월드 행렬
+			, NULL							// 그냥 NULL 고정하자
+			, m_tGizmoDesc.bUseSnap ? &m_tGizmoDesc.snap[0] : NULL	// 위의 틱당 단위 설정들
+			, m_tGizmoDesc.boundSizing ? m_tGizmoDesc.bounds : NULL
+			, m_tGizmoDesc.boundSizingSnap ? m_tGizmoDesc.boundsSnap : NULL))
+		{
+			m_pSelectObject->Get_Transform()->Set_WorldMatrix(GizmoWorldMatrix);
+		}
+
+		vScale = m_pSelectObject->Get_Transform()->Get_Scaled();
+		m_pSelectObject->Get_Transform()->Set_CurrentRotation(vRot);
+		vRot = m_pSelectObject->Get_Transform()->Get_CurrentRotation();
+		vPos = (_Vec3)m_pSelectObject->Get_Transform()->Get_State(CTransform::STATE_POSITION);
+	}
+#pragma endregion
+
+	ImGui::DragFloat3("Scale(X, Y, Z)", (_float*)&vScale, 0.05f, 0.1f, 100.f);
+	ImGui::DragFloat3("Rotation(X, Y, Z)", (_float*)&vRot, 0.05f, -180.f, 180.f, 0);
+	ImGui::DragFloat3("Position(X, Y, Z)", (_float*)&vPos, 0.05f, -180.f, 180.f, 0);
 
 	ImGui::InputInt("RenderTarget ID", &iSelectObj_RenderTargetID);
 

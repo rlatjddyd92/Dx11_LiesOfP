@@ -118,12 +118,12 @@ HRESULT CNonAnimModel::Render_Picking()
 	if (FAILED(m_pShaderCom->Bind_Matrix("g_ProjMatrix", &m_pGameInstance->Get_Transform(CPipeLine::D3DTS_PROJ))))
 		return E_FAIL;
 
-	uint32_t hash = static_cast<uint32_t>(m_iHashId ); // 임의의 상수로 인덱스를 해시처럼 변환
+	uint32_t hash = static_cast<uint32_t>(m_iHashId * 100); // 임의의 상수로 인덱스를 해시처럼 변환
 
-	UINT8 r = (hash >> 24) & 0xff;
-	UINT8 g = (hash >> 16) & 0xff;
-	UINT8 b = (hash >> 8) & 0xff;
-	UINT8 a = hash & 0xff;
+	UINT8 a = (hash >> 24) & 0xff;
+	UINT8 r = (hash >> 16) & 0xff;
+	UINT8 g = (hash >> 8) & 0xff;
+	UINT8 b = (hash) & 0xff;
 
 	_float4 fColor = _float4(r / 255.f, g / 255.f, b / 255.f, a / 255.f);
 
@@ -134,11 +134,6 @@ HRESULT CNonAnimModel::Render_Picking()
 
 	for (size_t i = 0; i < iNumMeshes; i++)
 	{
-		m_pModelCom->Bind_MeshBoneMatrices(m_pShaderCom, "g_BoneMatrices", (_uint)i);
-
-		if (FAILED(m_pModelCom->Bind_Material(m_pShaderCom, "g_DiffuseTexture", TEXTURE_TYPE::DIFFUSE, (_uint)i)))
-			return E_FAIL;
-
 		if (FAILED(m_pShaderCom->Begin(2)))
 			return E_FAIL;
 

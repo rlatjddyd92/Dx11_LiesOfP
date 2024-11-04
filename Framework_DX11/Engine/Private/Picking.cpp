@@ -173,10 +173,12 @@ _bool CPicking::Picking_Object(_uint* pPickID)
 	UINT8 b = static_cast<UINT8>(fcolorValue.z * 255);
 	UINT8 a = static_cast<UINT8>(fcolorValue.w * 255);
 
-	uint32_t hash = (static_cast<uint32_t>(r) << 24) |
-		(static_cast<uint32_t>(g) << 16) |
-		(static_cast<uint32_t>(b) << 8) |
-		static_cast<uint32_t>(a);
+	uint32_t hash = (static_cast<uint32_t>(a) << 24) |
+		(static_cast<uint32_t>(r) << 16) |
+		(static_cast<uint32_t>(g) << 8) |
+		static_cast<uint32_t>(b);
+
+	hash /= 100;
 
 	*pPickID = static_cast<_uint>(hash);
 
