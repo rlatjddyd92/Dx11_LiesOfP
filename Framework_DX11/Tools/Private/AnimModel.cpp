@@ -58,11 +58,19 @@ void CAnimModel::Update(_float fTimeDelta)
 		}
 	}*/
 
+	if (*(m_tDesc.pUpdateCtr) == false)
+	{
+		return;
+	}
 	m_pModelCom->Play_Animation(fTimeDelta);
 }
 
 void CAnimModel::Late_Update(_float fTimeDelta)
 {
+	if (*(m_tDesc.pUpdateCtr) == false)
+	{
+		return;
+	}
 	/* 직교투영을 위한 월드행렬까지 셋팅하게 된다. */
 	__super::Late_Update(fTimeDelta);
 

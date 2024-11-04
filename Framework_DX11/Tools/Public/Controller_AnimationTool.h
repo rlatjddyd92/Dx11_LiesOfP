@@ -35,6 +35,8 @@ public:
 	void	Ready_PickModel();
 	void	SetUp_Controller_Vertex();
 
+	void	BlockObjCtr() { m_bObjRenderCtr = false; };
+
 private:
 	vector<CAnimation*>* m_pCopyAnimVec = {nullptr};
 	vector<CBone*>* m_pCopyBoneVec = { nullptr };
@@ -52,6 +54,7 @@ private:
 
 	_double m_AnimSpeedPS{};
 
+	_bool	m_bObjRenderCtr{true};
 
 public:
 	virtual void Free() override;

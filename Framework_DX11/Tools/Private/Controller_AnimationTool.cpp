@@ -22,6 +22,7 @@ HRESULT CController_AnimationTool::Initialize()
 	Desc.vPosition = { 1.f,5.f,1.f };
 	Desc.vScale = { 1.f,1.f,1.f };
 	Desc.vRotation = { 0.f,0.f,0.f };
+	Desc.pUpdateCtr = &m_bObjRenderCtr;
 
 	strcpy_s(Desc.szModelTag, "Prototype_AnimModel_Test");
 	if (FAILED(m_pGameInstance->Add_CloneObject_ToLayer(LEVEL_TOOL, TEXT("Layer_AnimationTool_Test"), TEXT("Prototype_GameObject_Anim"), &Desc)))
@@ -32,6 +33,7 @@ HRESULT CController_AnimationTool::Initialize()
 
 void CController_AnimationTool::SetUp_AnimTool()
 {
+	m_bObjRenderCtr = true;
 	CModel* pModel = dynamic_cast<CModel*>(m_pGameInstance->Find_Component(LEVEL_TOOL, TEXT("Layer_AnimationTool_Test"), TEXT("Com_Model")));
 	if (m_pCopyModelCom == nullptr)
 	{

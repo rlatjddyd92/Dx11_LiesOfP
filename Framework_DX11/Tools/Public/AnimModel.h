@@ -21,6 +21,9 @@ public:
 		_float3		vPosition;
 		_float3		vScale;
 		_float3		vRotation;
+
+		//¿Ã∫¿¡ÿ √ﬂ∞°
+		_bool*		pUpdateCtr;
 	}ANIMMODEL_DESC;
 
 private:
