@@ -6,7 +6,7 @@ matrix			g_LightViewMatrix, g_LightProjMatrix;
 matrix			g_StaticLightViewMatrix;
 texture2D		g_Texture;
 
-
+Texture2DArray	g_CascadeTextureArr;
 
 vector			g_vLightDir;
 vector			g_vLightPos;
@@ -137,6 +137,8 @@ PS_OUT_LIGHT PS_MAIN_LIGHT_DIRECTIONAL(PS_IN In)
 
 	Out.vSpecular = (g_vLightSpecular * g_vMtrlSpecular) * pow(max(dot(normalize(vReflect) * -1.f, normalize(vLook)), 0.f), 50.f);
 
+    //g_CascadeTextureArr.SampleCmpLevelZero();
+	
 	return Out;
 }
 

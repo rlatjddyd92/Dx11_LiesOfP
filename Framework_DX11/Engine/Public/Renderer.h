@@ -57,21 +57,17 @@ private:
 	/* Bloom */
 	_float						m_fSamplerRatio = { 5.f };
 
-	ID3D11DepthStencilView*		m_pDownSampleDepthStencilView0 = nullptr;
-	ID3D11DepthStencilView*		m_pDownSampleDepthStencilView1 = nullptr;
-	ID3D11DepthStencilView*		m_pDownSampleDepthStencilView2 = nullptr;
+	ID3D11DepthStencilView*		m_pDownSampleDepthStencilView0 = { nullptr };
+	ID3D11DepthStencilView*		m_pDownSampleDepthStencilView1 = { nullptr };
+	ID3D11DepthStencilView*		m_pDownSampleDepthStencilView2 = { nullptr };
 
 	_bool						m_isUseBloom = { true };
 
 	_bool						m_isUseSSAO = { true };
 	class CTexture*				m_pNoiseTexture_SSAO = { nullptr };
-	const _Matrix m_ToTextureMatrix =
-	{	
-		0.5f, 0.0f, 0.0f, 0.0f,
-		0.0f, -0.5f, 0.0f, 0.0f,
-		0.0f, 0.0f, 1.0f, 0.0f,
-		0.5f, 0.5f, 0.0f, 1.0f
-	};
+
+	/* Cascade */
+	ID3D11DepthStencilView*		m_pCascadeDSVArr = { nullptr };
 
 #ifdef _DEBUG
 private:
@@ -99,10 +95,12 @@ private:
 	HRESULT Render_Blend();
 	HRESULT Render_UI();
 
+	HRESULT Render_CascadeShdow();
+
 private:
 	HRESULT Ready_LightDepthStencilView();
 	HRESULT Copy_BackBuffer();
-	
+	HRESULT Ready_Cascade();
 
 #ifdef _DEBUG
 private:

@@ -202,6 +202,9 @@ HRESULT CRenderer::Initialize()
 	if (FAILED(Ready_LightDepthStencilView()))
 		return E_FAIL;
 
+	if (FAILED(Ready_Cascade()))
+		return E_FAIL;
+
 #ifdef _DEBUG
 	
 	//if (FAILED(m_pGameInstance->Ready_RT_Debug(TEXT("Target_Bloom_BlurXY0"), 100.f, 100.f, 200.f, 200.f)))
@@ -876,6 +879,20 @@ HRESULT CRenderer::Render_UI()
 	return S_OK;
 }
 
+HRESULT CRenderer::Render_CascadeShdow()
+{
+	D3D11_VIEWPORT			ViewPortDesc;
+	ZeroMemory(&ViewPortDesc, sizeof(D3D11_VIEWPORT));
+	ViewPortDesc.TopLeftX = 0;
+	ViewPortDesc.TopLeftY = 0;
+	ViewPortDesc.Width = (_float)g_iSizeX;
+	ViewPortDesc.Height = (_float)g_iSizeY;
+	ViewPortDesc.MinDepth = 0.f;
+	ViewPortDesc.MaxDepth = 1.f;
+
+	return S_OK;
+}
+
 HRESULT CRenderer::Ready_LightDepthStencilView()
 {
 	ID3D11Texture2D*		pDepthStencilTexture = nullptr;
@@ -901,6 +918,8 @@ HRESULT CRenderer::Ready_LightDepthStencilView()
 		return E_FAIL;
 
 	Safe_Release(pDepthStencilTexture);
+
+
 
 	/* Bloom */
 	D3D11_VIEWPORT		ViewportDesc;
@@ -1004,6 +1023,48 @@ HRESULT CRenderer::Copy_BackBuffer()
 	return S_OK;
 }
 
+HRESULT CRenderer::Ready_Cascade()
+{
+	ID3D11Texture2D* pDepthStencilArrTexture = nullptr;
+
+
+	D3D11_TEXTURE2D_DESC	TextureDesc;
+	ZeroMemory(&TextureDesc, sizeof(D3D11_TEXTURE2D_DESC));
+
+	TextureDesc.Width = 2560;
+	TextureDesc.Height = 1440;
+	TextureDesc.MipLevels = 0;
+	TextureDesc.ArraySize = 3;
+	TextureDesc.Format = DXGI_FORMAT_D32_FLOAT_S8X24_UINT;
+
+	TextureDesc.SampleDesc.Quality = 0;
+	TextureDesc.SampleDesc.Count = 1;
+
+	TextureDesc.Usage = D3D11_USAGE_DEFAULT;
+	TextureDesc.BindFlags = D3D11_BIND_DEPTH_STENCIL;
+	TextureDesc.CPUAccessFlags = 0;
+	TextureDesc.MiscFlags = 0;
+
+	if (FAILED(m_pDevice->CreateTexture2D(&TextureDesc, nullptr, &pDepthStencilArrTexture)))
+		return E_FAIL;
+
+	D3D11_DEPTH_STENCIL_VIEW_DESC DepthStencilViewDesc;
+	ZeroMemory(&DepthStencilViewDesc, sizeof(D3D11_DEPTH_STENCIL_VIEW_DESC));
+	DepthStencilViewDesc.Flags = 0;
+	DepthStencilViewDesc.Format = DXGI_FORMAT_D32_FLOAT_S8X24_UINT;
+	DepthStencilViewDesc.ViewDimension = D3D11_DSV_DIMENSION_TEXTURE2DARRAY;
+	DepthStencilViewDesc.Texture2DArray.MipSlice = 0;
+	DepthStencilViewDesc.Texture2DArray.ArraySize = 3;
+	DepthStencilViewDesc.Texture2DArray.FirstArraySlice = 0;
+
+	if (FAILED(m_pDevice->CreateDepthStencilView(pDepthStencilArrTexture, &DepthStencilViewDesc, &m_pCascadeDSVArr)))
+		return E_FAIL;
+
+	Safe_Release(pDepthStencilArrTexture);
+
+	return S_OK;
+}
+
 #ifdef _DEBUG
 
 HRESULT CRenderer::Render_Debug()
@@ -1072,6 +1133,8 @@ void CRenderer::Free()
 	Safe_Release(m_pDownSampleDepthStencilView1);
 	Safe_Release(m_pDownSampleDepthStencilView0);
 	Safe_Release(m_pLightDepthStencilView);
+
+	Safe_Release(m_pCascadeDSVArr);
 
 	Safe_Release(m_pSSAOShader);
 	Safe_Release(m_pNoiseTexture_SSAO);
