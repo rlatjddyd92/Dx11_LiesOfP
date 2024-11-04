@@ -341,7 +341,10 @@ void CController_MapTool::Select_Map_Model()
 void CController_MapTool::Show_List(_uint iFolder)
 {
 	//내용물 초기화 (capacity는 그냥 냅둠)
-	m_FileNames.erase(m_FileNames.begin(), m_FileNames.end());
+	for (auto& filename : m_FileNames) {
+		Safe_Delete_Array(filename);
+	}
+	m_FileNames.clear();
 
 	char szFolderFolderFullPath[128] = "../Bin/ModelData/NonAnim/Map/";    // 상대 경로
 	char szFolderFolderPathReset[128] = "../Bin/ModelData/NonAnim/Map/";
@@ -626,6 +629,11 @@ void CController_MapTool::Find_PickObject()
 void CController_MapTool::Free()
 {
 	__super::Free();
+
+	for (auto& filename : m_FileNames) {
+		Safe_Delete_Array(filename);
+	}
+	m_FileNames.clear();
 
 	Safe_Release(m_pGameInstance);
 }
