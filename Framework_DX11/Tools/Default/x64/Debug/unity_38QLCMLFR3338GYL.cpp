@@ -41,6 +41,9 @@
 #include "D:\GitProject\Dx11_LiesOfP\Framework_DX11\Tools\Private\NonAnimModel.cpp"
 
 
+#include "D:\GitProject\Dx11_LiesOfP\Framework_DX11\Tools\private\Particle_Test.cpp"
+
+
 #include "D:\GitProject\Dx11_LiesOfP\Framework_DX11\Tools\Private\Terrain.cpp"
 
 
