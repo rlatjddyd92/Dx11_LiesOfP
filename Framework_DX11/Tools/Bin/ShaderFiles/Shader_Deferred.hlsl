@@ -255,7 +255,7 @@ PS_OUT PS_MAIN_DEFERRED(PS_IN In)
 	return Out;	
 }
 
-PS_OUT PS_MAIN_FINAL(PS_IN In)
+PS_OUT PS_MAIN_BACKBUFFER(PS_IN In)
 {
 	PS_OUT		Out = (PS_OUT)0;
 
@@ -263,62 +263,6 @@ PS_OUT PS_MAIN_FINAL(PS_IN In)
 
 	return Out;
 }
-
-float		g_fWeights[13] = {
-	0.0561, 0.1353, 0.278, 0.4868, 0.7261, 0.9231, 1.f, 0.9231, 0.7261, 0.4868, 0.278, 0.1353, 0.0561
-};
-float		g_fWeightTotal = 6.21f;
-
-
-PS_OUT PS_MAIN_BLUR_X(PS_IN In)
-{
-	PS_OUT		Out = (PS_OUT)0;
-
-	float2		vBlurUV = (float2)0.f;
-
-	for (int i = -6; i < 7; i++)
-	{
-		vBlurUV = In.vTexcoord + float2(1.f / 1280.f * i, 0.f);
-		Out.vColor += g_fWeights[i + 6] * g_FinalTexture.Sample(LinearSampler, vBlurUV);
-		
-	}
-
-	Out.vColor /= 6.21f;
-
-	return Out;
-}
-
-PS_OUT PS_MAIN_BLUR_Y(PS_IN In)
-{
-	PS_OUT		Out = (PS_OUT)0;
-
-	float2		vBlurUV = (float2)0.f;
-
-	for (int i = -6; i < 7; i++)
-	{
-		vBlurUV = In.vTexcoord + float2(0.f, 1.f / 720.f * i);
-		Out.vColor += g_fWeights[i + 6] * g_BlurXTexture.Sample(LinearSampler, vBlurUV);
-
-	}
-
-	Out.vColor /= 6.21f;
-
-	return Out;
-}
-
-PS_OUT PS_MAIN_BLUR_FINAL(PS_IN In)
-{
-	PS_OUT		Out = (PS_OUT)0;
-
-	vector		vBlur = g_BlurYTexture.Sample(LinearSampler, In.vTexcoord);
-	vector		vFinal = g_FinalTexture.Sample(LinearSampler, In.vTexcoord);
-
-	Out.vColor = vBlur + vFinal * 0.5f;
-
-	return Out;
-}
-
-
 
 
 technique11	DefaultTechnique
@@ -370,7 +314,7 @@ technique11	DefaultTechnique
 		PixelShader = compile ps_5_0 PS_MAIN_DEFERRED();
 	}
 
-	pass Final
+	pass BackBuffer
 	{
 		SetRasterizerState(RS_Default);
 		SetDepthStencilState(DSS_None, 0);
@@ -378,39 +322,6 @@ technique11	DefaultTechnique
 
 		VertexShader = compile vs_5_0 VS_MAIN();
 		GeometryShader = NULL;
-		PixelShader = compile ps_5_0 PS_MAIN_FINAL();
-	}
-
-	pass Blur_X
-	{
-		SetRasterizerState(RS_Default);
-		SetDepthStencilState(DSS_None, 0);
-		SetBlendState(BS_Default, vector(0.f, 0.f, 0.f, 0.f), 0xffffffff);
-
-		VertexShader = compile vs_5_0 VS_MAIN();
-		GeometryShader = NULL;
-		PixelShader = compile ps_5_0 PS_MAIN_BLUR_X();
-	}
-
-	pass Blur_Y
-	{
-		SetRasterizerState(RS_Default);
-		SetDepthStencilState(DSS_None, 0);
-		SetBlendState(BS_Default, vector(0.f, 0.f, 0.f, 0.f), 0xffffffff);
-
-		VertexShader = compile vs_5_0 VS_MAIN();
-		GeometryShader = NULL;
-		PixelShader = compile ps_5_0 PS_MAIN_BLUR_Y();
-	}
-
-	pass BlurFinal
-	{
-		SetRasterizerState(RS_Default);
-		SetDepthStencilState(DSS_None, 0);
-		SetBlendState(BS_Default, vector(0.f, 0.f, 0.f, 0.f), 0xffffffff);
-
-		VertexShader = compile vs_5_0 VS_MAIN();
-		GeometryShader = NULL;
-		PixelShader = compile ps_5_0 PS_MAIN_BLUR_FINAL();
-	}
+        PixelShader = compile ps_5_0 PS_MAIN_BACKBUFFER();
+    }
 }

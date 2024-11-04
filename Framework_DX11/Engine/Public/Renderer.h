@@ -48,6 +48,8 @@ private:
 private:
 	class CShader*				m_pShader = { nullptr };
 	class CShader*				m_pBloomShader = { nullptr };
+	class CShader*				m_pSSAOShader = { nullptr };
+
 	class CVIBuffer_Rect*		m_pVIBuffer = { nullptr };
 
 	_float4x4					m_WorldMatrix{}, m_ViewMatrix{}, m_ProjMatrix{};
@@ -74,13 +76,14 @@ private:
 	HRESULT Render_NonBlend();
 	HRESULT Render_Lights();
 
+	HRESULT Render_Deferred();
+
+	HRESULT Render_SSAO();
 	HRESULT Render_Bloom();
 
-	HRESULT Render_Deferred();
 	HRESULT Render_Final();
-	HRESULT Render_Blur();
-	HRESULT Render_Picking();
 
+	HRESULT Render_Picking();
 
 	HRESULT Render_NonLights();
 	HRESULT Render_Blend();
@@ -88,7 +91,7 @@ private:
 
 private:
 	HRESULT Ready_LightDepthStencilView();
-
+	HRESULT Copy_BackBuffer();
 	
 
 #ifdef _DEBUG
