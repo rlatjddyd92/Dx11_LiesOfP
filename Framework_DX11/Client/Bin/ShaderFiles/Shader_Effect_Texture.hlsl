@@ -84,10 +84,20 @@ struct PS_OUT
 
 struct PS_OUT_EFFECT
 {
-    float4 vColor : SV_TARGET0;
-    float4 vEmissive : SV_TARGET1;
-    float4 vDistortion : SV_TARGET2;
+    vector vColor : SV_TARGET0;
+    vector vEmissive : SV_TARGET1;
+    vector vDistortion : SV_TARGET2;
 };
+
+PS_OUT_EFFECT PS_MAIN_EFFECT(PS_IN In, bool isAlphaBlend)
+{
+    PS_OUT Out = (PS_OUT) 0;
+    
+    
+    
+    vector vDiffuse = g_DiffuseTexture.Sample(LinearClampSampler, In.vTexcoord);
+    
+}
 
 PS_OUT PS_MAIN_DISTORTION(PS_IN In)
 {
@@ -102,6 +112,28 @@ PS_OUT PS_MAIN_DISTORTION(PS_IN In)
 
 technique11 DefaultTechnique
 {
+    pass Effect
+    {
+        SetRasterizerState(RS_Default);
+        SetDepthStencilState(DSS_Default, 0);
+        SetBlendState(BS_Default, vector(0.f, 0.f, 0.f, 0.f), 0xffffffff);
+
+        VertexShader = compile vs_5_0 VS_MAIN();
+        GeometryShader = NULL;
+        PixelShader = compile ps_5_0 PS_MAIN_EFFECT(false);
+    }
+
+    pass AlphaBlendEffect
+    {
+        SetRasterizerState(RS_Default);
+        SetDepthStencilState(DSS_None, 0);
+        SetBlendState(BS_AlphaBlend, vector(0.f, 0.f, 0.f, 0.f), 0xffffffff);
+
+        VertexShader = compile vs_5_0 VS_MAIN();
+        GeometryShader = NULL;
+        PixelShader = compile ps_5_0 PS_MAIN_EFFECT(true);
+    }
+
     pass Distortion
     {
         SetRasterizerState(RS_Default);
