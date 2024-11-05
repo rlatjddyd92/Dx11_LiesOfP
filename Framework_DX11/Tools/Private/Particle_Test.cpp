@@ -28,12 +28,13 @@ HRESULT CParticle_Test::Initialize(void* pArg)
         return E_FAIL;
 
     m_DefaultDesc = pDesc->DefaultDesc;
-    m_RevolveDesc = pDesc->RevolveDesc;
+    m_OrbitDesc = pDesc->OrbitDesc;
     m_RandomDesc = pDesc->RandomDesc;
     m_AccelDesc = pDesc->AccelDesc;
 
     Set_Transform(pDesc->TransformDesc);
 
+    m_iShaderIndex = pDesc->iShaderIndex;
     return S_OK;
 }
 
@@ -48,49 +49,49 @@ void CParticle_Test::Update(_float fTimeDelta)
     {
     case TYPE_SPREAD:
         bOver = m_pVIBufferCom->Spread(m_DefaultDesc.iState, m_DefaultDesc.fRenderRatio, m_DefaultDesc.vPivot, m_DefaultDesc.fGravity, fTimeDelta,
-            m_RevolveDesc.vRevolveAxis, XMConvertToRadians(m_RevolveDesc.fAngle),
+            m_OrbitDesc.vOrbitAxis, XMConvertToRadians(m_OrbitDesc.fAngle),
             m_RandomDesc.fTimeInterval, m_RandomDesc.fRandomRatio,
             m_AccelDesc.fAccelLimit, m_AccelDesc.fAccelSpeed);
         break;
 
     case TYPE_MOVE:
         bOver = m_pVIBufferCom->Move(m_DefaultDesc.iState, m_DefaultDesc.fRenderRatio, m_DefaultDesc.vMoveDir, m_DefaultDesc.fGravity, fTimeDelta, m_DefaultDesc.vPivot,
-            m_RevolveDesc.vRevolveAxis, XMConvertToRadians(m_RevolveDesc.fAngle),
+            m_OrbitDesc.vOrbitAxis, XMConvertToRadians(m_OrbitDesc.fAngle),
             m_RandomDesc.fTimeInterval, m_RandomDesc.fRandomRatio,
             m_AccelDesc.fAccelLimit, m_AccelDesc.fAccelSpeed);
         break;
 
     case TYPE_CONVERGE:
         bOver = m_pVIBufferCom->Converge(m_DefaultDesc.iState, m_DefaultDesc.fRenderRatio, m_DefaultDesc.vPivot, fTimeDelta,
-            m_RevolveDesc.vRevolveAxis, XMConvertToRadians(m_RevolveDesc.fAngle),
+            m_OrbitDesc.vOrbitAxis, XMConvertToRadians(m_OrbitDesc.fAngle),
             m_RandomDesc.fTimeInterval, m_RandomDesc.fRandomRatio,
             m_AccelDesc.fAccelLimit, m_AccelDesc.fAccelSpeed);
         break;
 
     case TYPE_SPREAD_INDEPENDENT:
         bOver = m_pVIBufferCom->Spread_Independent(m_DefaultDesc.iState, m_pTransformCom->Get_WorldMatrix(), m_DefaultDesc.fRenderRatio, m_DefaultDesc.vPivot, m_DefaultDesc.fGravity, fTimeDelta,
-            m_RevolveDesc.vRevolveAxis, XMConvertToRadians(m_RevolveDesc.fAngle),
+            m_OrbitDesc.vOrbitAxis, XMConvertToRadians(m_OrbitDesc.fAngle),
             m_RandomDesc.fTimeInterval, m_RandomDesc.fRandomRatio,
             m_AccelDesc.fAccelLimit, m_AccelDesc.fAccelSpeed);
             break;
 
     case TYPE_MOVE_INDEPENDENT:
         bOver = m_pVIBufferCom->Move_Independent(m_DefaultDesc.iState, m_pTransformCom->Get_WorldMatrix(), m_DefaultDesc.fRenderRatio, m_DefaultDesc.vMoveDir, m_DefaultDesc.fGravity, fTimeDelta, m_DefaultDesc.vPivot,
-            m_RevolveDesc.vRevolveAxis, XMConvertToRadians(m_RevolveDesc.fAngle),
+            m_OrbitDesc.vOrbitAxis, XMConvertToRadians(m_OrbitDesc.fAngle),
             m_RandomDesc.fTimeInterval, m_RandomDesc.fRandomRatio,
             m_AccelDesc.fAccelLimit, m_AccelDesc.fAccelSpeed);
         break;
 
     case TYPE_CONVERGE_INDEPENDENT:
         bOver = m_pVIBufferCom->Converge_Independent(m_DefaultDesc.iState, m_pTransformCom->Get_WorldMatrix(), m_DefaultDesc.fRenderRatio, m_DefaultDesc.vPivot, fTimeDelta,
-            m_RevolveDesc.vRevolveAxis, XMConvertToRadians(m_RevolveDesc.fAngle),
+            m_OrbitDesc.vOrbitAxis, XMConvertToRadians(m_OrbitDesc.fAngle),
             m_RandomDesc.fTimeInterval, m_RandomDesc.fRandomRatio,
             m_AccelDesc.fAccelLimit, m_AccelDesc.fAccelSpeed);
         break;
     }
 
-    //if (true == bOver)
-    //    m_isDead = true;
+    if (true == bOver)
+        m_isDead = true;
 }
 
 void CParticle_Test::Late_Update(_float fTimeDelta)
@@ -119,7 +120,7 @@ HRESULT CParticle_Test::Render()
         return E_FAIL;
     if (FAILED(m_pShaderCom->Bind_RawValue("g_vCamPosition", &m_pGameInstance->Get_CamPosition_Vec4(), sizeof(_Vec4))))
         return E_FAIL;
-    if (FAILED(m_pShaderCom->Begin(0)))
+    if (FAILED(m_pShaderCom->Begin(m_iShaderIndex)))
         return E_FAIL;
     if (FAILED(m_pVIBufferCom->Bind_Buffers()))
         return E_FAIL;
@@ -144,7 +145,7 @@ HRESULT CParticle_Test::Ready_Components(PARTICLE_TEST_DESC* pDesc)
         return E_FAIL;
 
     /* FOR.Com_Texture */
-    if (FAILED(__super::Add_Component(LEVEL_TOOL, TEXT("Prototype_Component_Texture_Snow"),
+    if (FAILED(__super::Add_Component(LEVEL_TOOL, pDesc->strPrototypeTextureTag,
         TEXT("Com_Texture"), reinterpret_cast<CComponent**>(&m_pTextureCom))))
         return E_FAIL;
 

@@ -36,7 +36,6 @@ VS_OUT VS_MAIN( VS_IN In)
     Out.vLifeTime = In.vLifeTime;
     Out.vColor = In.vColor;
     Out.vLook = In.TransformMatrix._31_32_33;;
-	
     
     return Out;
 }
@@ -107,6 +106,58 @@ void GS_MAIN(point GS_IN In[1], inout TriangleStream<GS_OUT> Container)
 	Container.RestartStrip();
 }
 
+[maxvertexcount(6)]
+void GS_DIR_MAIN(point GS_IN In[1], inout TriangleStream<GS_OUT> Container)
+{
+    GS_OUT Out[4];
+
+    float3 vCamDir = normalize(g_vCamPosition - In[0].vPosition).xyz;
+	// 빌보드용. : 룩 방향으로 점을 찍음.
+    float3 vLook = normalize(In[0].vLook);
+    float3 vUp = normalize(cross(vLook, vCamDir));
+    float3 vRight = normalize(cross(vUp, vLook));
+	
+    vLook *= In[0].vPSize.x;
+    vUp *= In[0].vPSize.y;
+	
+    Out[0].vPosition = float4(In[0].vPosition.xyz - vLook + vUp, 1.f);
+    Out[0].vTexcoord = float2(0.f, 0.0f);
+    Out[0].vLifeTime = In[0].vLifeTime;
+    Out[0].vColor = In[0].vColor;
+
+    Out[1].vPosition = float4(In[0].vPosition.xyz + vLook + vUp, 1.f);
+    Out[1].vTexcoord = float2(1.f, 0.0f);
+    Out[1].vLifeTime = In[0].vLifeTime;
+    Out[1].vColor = In[0].vColor;
+
+    Out[2].vPosition = float4(In[0].vPosition.xyz + vLook - vUp, 1.f);
+    Out[2].vTexcoord = float2(1.f, 1.f);
+    Out[2].vLifeTime = In[0].vLifeTime;
+    Out[2].vColor = In[0].vColor;
+
+    Out[3].vPosition = float4(In[0].vPosition.xyz - vLook - vUp, 1.f);
+    Out[3].vTexcoord = float2(0.f, 1.f);
+    Out[3].vLifeTime = In[0].vLifeTime;
+    Out[3].vColor = In[0].vColor;
+
+    matrix matVP = mul(g_ViewMatrix, g_ProjMatrix);
+
+    Out[0].vPosition = mul(Out[0].vPosition, matVP);
+    Out[1].vPosition = mul(Out[1].vPosition, matVP);
+    Out[2].vPosition = mul(Out[2].vPosition, matVP);
+    Out[3].vPosition = mul(Out[3].vPosition, matVP);
+
+    Container.Append(Out[0]);
+    Container.Append(Out[1]);
+    Container.Append(Out[2]);
+    Container.RestartStrip(); // 여기서부터 다시 찍겠다. 이거 안해주면 123으로 찍어버림.
+
+    Container.Append(Out[0]);
+    Container.Append(Out[2]);
+    Container.Append(Out[3]);
+    Container.RestartStrip();
+}
+
 /* Triangle : 정점 세개가 다 vs_main을 통과할때까지 대기 */
 /* 세개가 모두다 통과되면. 밑의 과정을 수행. */
 /* 리턴된 정점의 w로 정점의 xyzw를 나눈다. 투영 */
@@ -137,7 +188,6 @@ PS_OUT PS_MAIN(PS_IN In)
         discard;
 
     Out.vColor.rgb = In.vColor.rgb;
-    //Out.vColor.a = Out.vColor.a * (1.f - (In.vLifeTime.y / In.vLifeTime.x)); 
 
     if (In.vLifeTime.y >= In.vLifeTime.x)
         discard;
@@ -145,21 +195,63 @@ PS_OUT PS_MAIN(PS_IN In)
     return Out;
 }
 
+PS_OUT PS_MAIN_RTOA_GLOW(PS_IN In)
+{
+    PS_OUT Out = (PS_OUT) 0;
+	
+    Out.vColor = g_Texture.Sample(LinearSampler, In.vTexcoord);
+
+    Out.vColor.a = Out.vColor.r;
+
+    if (Out.vColor.a <= 0.1f)
+        discard;
+
+    if (In.vLifeTime.y >= In.vLifeTime.x)	// 1보다 커지면 꺼.
+        discard;
+
+    Out.vColor.r = 1.f - (1 - In.vColor.r) * (1 - Out.vColor.a);
+    Out.vColor.g = 1.f - (1 - In.vColor.g) * (1 - Out.vColor.a);
+    Out.vColor.b = 1.f - (1 - In.vColor.b) * (1 - Out.vColor.a);
+
+    return Out;
+}
 
 
 technique11	DefaultTechnique
 {
 	/* 빛연산 + 림라이트 + ssao + 노멀맵핑 + pbr*/
-	pass UI
+	pass DEFAULT // 0
 	{
 		SetRasterizerState(RS_Default);
 		SetDepthStencilState(DSS_Default, 0);
-		SetBlendState(BS_AlphaBlend, vector(0.f, 0.f, 0.f, 0.f), 0xffffffff);
+		SetBlendState(BS_Default, vector(0.f, 0.f, 0.f, 0.f), 0xffffffff);
 
 		VertexShader = compile vs_5_0 VS_MAIN();
 		GeometryShader = compile gs_5_0 GS_MAIN();
 		PixelShader = compile ps_5_0 PS_MAIN();
 	}
+
+    pass PARTICLE_RTOA_GLOW // 1
+    {
+        SetRasterizerState(RS_Default);
+        SetDepthStencilState(DSS_Default, 0);
+        SetBlendState(BS_Default, vector(0.f, 0.f, 0.f, 0.f), 0xffffffff);
+
+        VertexShader = compile vs_5_0 VS_MAIN();
+        GeometryShader = compile gs_5_0 GS_MAIN();
+        PixelShader = compile ps_5_0 PS_MAIN_RTOA_GLOW();
+    }
+
+    pass PARTICLE_DIR_RTOA_GLOW // 2
+    {
+        SetRasterizerState(RS_Default);
+        SetDepthStencilState(DSS_Default, 0);
+        SetBlendState(BS_Default, vector(0.f, 0.f, 0.f, 0.f), 0xffffffff);
+
+        VertexShader = compile vs_5_0 VS_MAIN();
+        GeometryShader = compile gs_5_0 GS_DIR_MAIN();
+        PixelShader = compile ps_5_0 PS_MAIN_RTOA_GLOW();
+    }
 
 	/* 디스토션 + 블렌딩 */
 	//pass Effect

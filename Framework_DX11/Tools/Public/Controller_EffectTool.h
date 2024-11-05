@@ -17,10 +17,10 @@ class CController_EffectTool : public CBase
 	DECLARE_SINGLETON(CController_EffectTool)
 
 public:
-	vector<_wstring>& Get_PrototypeTags() { return m_PrototypeTags; }
-	_wstring& Get_PrtotypeTagIndex(_uint iIndex) { return m_PrototypeTags[iIndex]; }
+	vector<_wstring>& Get_PrototypeTags() { return m_ParticlePrototypeTags; }
+	_wstring& Get_PrtotypeTagIndex(_uint iIndex) { return m_ParticlePrototypeTags[iIndex]; }
 
-	void Add_ProtytypeTag(_wstring strTag) { m_PrototypeTags.emplace_back(strTag); }
+	void Add_ProtytypeTag(_wstring strTag) { m_ParticlePrototypeTags.emplace_back(strTag); }
 
 	void Set_JumhoCamera(_bool bCamera) {
 		m_bJunHoCamera = bCamera;
@@ -39,7 +39,7 @@ public:
 
 public:
 	HRESULT Add_Particle();
-	void Check();
+	void Particle_Check();
 	void Update_Particle();
 	void Select_Particle();
 	void Get_Particle();
@@ -50,7 +50,7 @@ public:
 private:
 	class CGameInstance* m_pGameInstance = { nullptr };
 
-	vector<_wstring>	m_PrototypeTags;
+	vector<_wstring>	m_ParticlePrototypeTags;
 
 	_bool m_bJunHoCamera = { false };
 
@@ -76,7 +76,7 @@ private:
 
 	_Vec4		m_vMoveDir = {};	// 단방향 이동 방향.
 
-	_Vec3		m_vRevolveAxis = {0.f, 1.f, 0.f};
+	_Vec3		m_vOrbitAxis = {0.f, 1.f, 0.f};
 	_float		m_fAngle = { 90.f };
 
 	_float		m_fTimeInterval = { 0.5f };
@@ -85,7 +85,7 @@ private:
 	_float		m_fAccelLimit = { 0.f };
 	_float		m_fAccelSpeed = { 1.f };
 
-	_bool		m_bRevolve = { false };
+	_bool		m_bOrbit = { false };
 	_bool		m_bRandom = { false };
 	_bool		m_bLoop = { false };
 	_bool		m_bAccel = { false };
@@ -97,6 +97,10 @@ private:
 
 	_uint		m_iParticleCount = {0};
 	_int		m_iSelectedParticleIndex = { 0 };
+	_int		m_iSelectedTextureIndex = { 0 };
+
+	_uint		m_iShaderIndex = { 0 };
+	_uint		m_iMaxShaderIndex = { 2 };
 
 private:
 	void Set_State();

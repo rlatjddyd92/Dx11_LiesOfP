@@ -27,7 +27,7 @@ public:
 
 	typedef struct
 	{
-		_Vec3		vRevolveAxis = {};
+		_Vec3		vOrbitAxis = {};
 		_float		fAngle = { 0.f };
 	}REVOLVE_DESC;
 
@@ -63,10 +63,13 @@ public:
 		_float4		vMaxColor = { 0.f, 0.f, 0.f, 1.f };
 
 		DEFAULT_DESC DefaultDesc = {};
-		REVOLVE_DESC RevolveDesc = {};
+		REVOLVE_DESC OrbitDesc = {};
 		RANDOM_DESC RandomDesc = {};
 		ACCEL_DESC AccelDesc = {};
 		TRANSFORM_DESC TransformDesc = {};
+
+		_wstring strPrototypeTextureTag;
+		_uint iShaderIndex;
 	}PARTICLE_TEST_DESC;
 
 
@@ -80,7 +83,7 @@ public:
 		m_DefaultDesc = desc;
 	}
 	void Set_Revolev(REVOLVE_DESC desc) {
-		m_RevolveDesc = desc;
+		m_OrbitDesc = desc;
 	}
 	void Set_Random(RANDOM_DESC desc) {
 		m_RandomDesc = desc;
@@ -88,13 +91,16 @@ public:
 	void Set_Accel(ACCEL_DESC desc) {
 		m_AccelDesc = desc;
 	}
+	void Set_ShaderIndex(_uint iShaderIndex) {
+		m_iShaderIndex = iShaderIndex;
+	}
 
 	DEFAULT_DESC Get_Default() {
 		return m_DefaultDesc;
 	}
 
-	REVOLVE_DESC Get_Revolve() {
-		return m_RevolveDesc;
+	REVOLVE_DESC Get_Orbit() {
+		return m_OrbitDesc;
 	}
 
 	RANDOM_DESC Get_Random() {
@@ -123,9 +129,11 @@ private:
 
 private:
 	DEFAULT_DESC m_DefaultDesc = {};
-	REVOLVE_DESC m_RevolveDesc = {};
+	REVOLVE_DESC m_OrbitDesc = {};
 	RANDOM_DESC m_RandomDesc = {};
 	ACCEL_DESC m_AccelDesc = {};
+
+	_uint m_iShaderIndex = { 0 };
 
 private:
 	HRESULT Ready_Components(PARTICLE_TEST_DESC* pDesc);

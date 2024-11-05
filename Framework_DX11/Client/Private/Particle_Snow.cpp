@@ -59,9 +59,9 @@ void CParticle_Snow::Update(_float fTimeDelta)
 
 	m_fFrame = 1.f;
 		
-	_uint iState = CVIBuffer_Instancing::STATE_RANDOM | CVIBuffer_Instancing::STATE_REVOLVE | CVIBuffer_Instancing::STATE_LOOP;
+	_uint iState = CVIBuffer_Instancing::STATE_RANDOM | CVIBuffer_Instancing::STATE_ORBIT | CVIBuffer_Instancing::STATE_LOOP;
 	//iState &= ~CVIBuffer_Instancing::STATE_RANDOM;
-	//iState &= ~CVIBuffer_Instancing::STATE_REVOLVE;
+	//iState &= ~CVIBuffer_Instancing::STATE_ORBIT;
 }
 
 void CParticle_Snow::Late_Update(_float fTimeDelta)
