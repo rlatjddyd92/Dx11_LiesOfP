@@ -722,7 +722,7 @@ void CController_MapTool::Nav_Menu()
 	ImGui::Text("");
 	ImGui::Text("[Cell_List]");
 
-	ImGui::BeginChild("Cell List", ImVec2(150, 400), true);
+	ImGui::BeginChild("Cell List", ImVec2(150, 350), true);
 
 	_uint iCellCount = 0;
 	_int iSelectedCellList = 0;
@@ -773,12 +773,18 @@ void CController_MapTool::Nav_Menu()
 	ImGui::EndChild();
 	ImGui::EndGroup();
 
-	
+	//ABC 점 좌표 띄우기
 	
 }
 
 void CController_MapTool::Mode_Create_Cell_Menu()
 {
+	ImGui::SeparatorText("Create Cell");
+
+	//저장한 점들 개수
+	int iSavePointCount = m_pNavigationController->Get_SavePointsCount();
+	ImGui::Text("Save Point Count : %d", iSavePointCount);
+
 	//Cell 생성기능
 	if (ImGui::Button("Add Point") || m_pGameInstance->Get_KeyState(C) == AWAY)
 	{
@@ -786,10 +792,9 @@ void CController_MapTool::Mode_Create_Cell_Menu()
 	}
 	ImGui::SameLine();
 	ImGui::Text("or Press \"C\" to add Point");
+	
+	//Cell 타입 설정
 
-
-	//ABC 점 좌표 띄우기
-	//저장한 점들 좌표 띄우기
 }
 
 void CController_MapTool::Free()
