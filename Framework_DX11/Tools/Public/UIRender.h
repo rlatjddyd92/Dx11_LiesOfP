@@ -3,6 +3,7 @@
 #include "Tools_Defines.h"
 #include "UIObject.h"
 
+
 BEGIN(Engine)
 class CShader;
 class CTexture;
@@ -10,6 +11,7 @@ class CVIBuffer_Rect;
 END
 
 BEGIN(Tools)
+
 
 class CUIRender final : public CUIObject
 {
@@ -31,11 +33,6 @@ public:
 		FONT_TITLE_60,
 		FONT_TITLE_72,
 		FONT_END
-	};
-
-	enum class UI_TEXTURE
-	{
-		TEXTURE_END
 	};
 
 	typedef struct UITEXTURE_INFO
@@ -91,6 +88,8 @@ public:
 	const _char* GetTextureTag(_int iIndex) { return m_vecTextureInfo[iIndex]->strTextureTag; }
 	const _char* GetTextFontTag(_int iIndex) { return m_vecFont_char[iIndex]; }
 
+	_int GetTextureCount() { return m_vecTextureInfo.size(); }
+
 public:
 	class CShader* m_pShaderCom = { nullptr };
 	class CVIBuffer_Rect* m_pVIBufferCom = { nullptr };
@@ -99,12 +98,14 @@ private:
 	HRESULT Ready_Components();
 
 	void Ready_Font();
-
+	HRESULT Ready_Texture();
 
 	vector<UTEXTURE*> m_vecTextureInfo;
 	list<URCOM*> m_UIRenderlist;
 	vector<_char*> m_vecFont_char;
 	vector<_tchar*> m_vecFont_tchar;
+
+	
 
 public:
 	static CUIRender* Create(ID3D11Device* pDevice, ID3D11DeviceContext* pContext);

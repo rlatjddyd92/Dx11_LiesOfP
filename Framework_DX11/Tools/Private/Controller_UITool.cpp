@@ -12,8 +12,9 @@ void CController_UITool::UITool_Edit()
 HRESULT CController_UITool::UITool_Render()
 {
 	//FontTest();
+	//UIPart_Render();
+	m_pUIRender->Late_Update(0.f);
 
-	UIPart_Render();
 
 	return S_OK;
 }
@@ -99,120 +100,133 @@ void CController_UITool::UIPart_Edit()
 
 	ImGui::SeparatorText("Partlist");
 
-	for (auto& iter : m_vecPageInfo[m_iNowSelectNum]->vecPart)
+	ImGui::InputInt("SelectPart", &m_vecPageInfo[m_iNowSelectNum]->iNowSelectPart);
+
+	if ((m_vecPageInfo[m_iNowSelectNum]->iNowSelectPart >= 0) && ((m_vecPageInfo[m_iNowSelectNum]->iNowSelectPart < m_vecPageInfo[m_iNowSelectNum]->vecPart.size())))
 	{
-		if (ImGui::CollapsingHeader(iter->strUIPart_Name))
+		UPART* pNow = m_vecPageInfo[m_iNowSelectNum]->vecPart[m_vecPageInfo[m_iNowSelectNum]->iNowSelectPart];
+
+		ImGui::PushItemWidth(100.f);
+		// 부모 파트 정보
+
+		ImGui::SeparatorText("SetInfo");
+
+		ImGui::Text("ParentIndex");
+		ImGui::SameLine();
+		ImGui::InputInt("Parent", &pNow->iParentPart_Index);
+		ImGui::SameLine();
+		if (pNow->iParentPart_Index == -1)
+			ImGui::Text("Page(root Part)");
+		else if ((pNow->iParentPart_Index < 0) || (pNow->iParentPart_Index >= (_int)m_vecPageInfo[m_iNowSelectNum]->vecPart.size()))
+			ImGui::Text("※ WrongNum");
+		else
+			ImGui::Text(m_vecPageInfo[m_iNowSelectNum]->vecPart[pNow->iParentPart_Index]->strUIPart_Name);
+
+		// 사이즈
+		ImGui::Text("Size");
+		ImGui::SameLine();
+		ImGui::InputFloat("SizeX", &pNow->fSize.x);
+		ImGui::SameLine();
+		ImGui::InputFloat("SizeY", &pNow->fSize.y);
+
+		ImGui::SeparatorText("Texture");
+		// 텍스쳐
+		ImGui::Text("Texture");
+		ImGui::SameLine();
+		ImGui::InputInt("Tex: ", &pNow->iTexture_Index);
+		ImGui::SameLine();
+		if (pNow->iTexture_Index == -1)
+			ImGui::Text("none(NoTexture)");
+		else if ((pNow->iTexture_Index < 0) || (pNow->iTexture_Index >= m_pUIRender->GetTextureCount()))
+			ImGui::Text("※ WrongNum");
+		else
+			ImGui::Text(m_pUIRender->GetTextureTag(pNow->iTexture_Index));
+
+		ImGui::SeparatorText("Text");
+		// 텍스트 
+		ImGui::Text("TextFont");
+		ImGui::SameLine();
+		ImGui::InputInt("Font: ", &pNow->iFontIndex);
+		ImGui::SameLine();
+		if (pNow->iFontIndex == _int(CUIRender::UI_FONT::FONT_END))
+			ImGui::Text("none(NoText)");
+		else if ((pNow->iFontIndex < 0) || (pNow->iFontIndex >= (_int)CUIRender::UI_FONT::FONT_END))
+			ImGui::Text("※ WrongNum");
+		else
+			ImGui::Text(m_pUIRender->GetTextFontTag(pNow->iFontIndex));
+		ImGui::InputText("Text", m_InputText, sizeof(m_InputText));
+		if (ImGui::Button("InputText"))
 		{
-			ImGui::PushItemWidth(100.f);
-			// 부모 파트 정보
+			_int iIndex = -1;
 
-			ImGui::SeparatorText("SetInfo");
-
-			ImGui::Text("ParentIndex");
-			ImGui::SameLine();
-			ImGui::InputInt("Parent", &iter->iParentPart_Index);
-			ImGui::SameLine();
-			if (iter->iParentPart_Index == -1) 
-				ImGui::Text("Page(root Part)");
-			else if ((iter->iParentPart_Index <0) || (iter->iParentPart_Index >= (_int)m_vecPageInfo[m_iNowSelectNum]->vecPart.size()))
-				ImGui::Text("※ WrongNum");
-			else
-				ImGui::Text(m_vecPageInfo[m_iNowSelectNum]->vecPart[iter->iParentPart_Index]->strUIPart_Name);
-
-			// 사이즈
-			ImGui::Text("Size");
-			ImGui::SameLine();
-			ImGui::InputFloat("SizeX", &iter->fSize.x);
-			ImGui::SameLine();
-			ImGui::InputFloat("SizeY", &iter->fSize.y);
-
-			ImGui::SeparatorText("Texture");
-			// 텍스쳐
-			ImGui::Text("Texture");
-			ImGui::SameLine();
-			ImGui::InputInt("Tex: ", &iter->iTexture_Index);
-			ImGui::SameLine();
-			if (iter->iTexture_Index == -1)
-				ImGui::Text("none(NoTexture)");
-			else if ((iter->iTexture_Index < 0) || (iter->iTexture_Index >= (_int)CUIRender::UI_TEXTURE::TEXTURE_END))
-				ImGui::Text("※ WrongNum");
-			else
-				ImGui::Text(m_pUIRender->GetTextureTag(iter->iTexture_Index));
-
-			ImGui::SeparatorText("Text");
-			// 텍스트 
-			ImGui::Text("TextFont");
-			ImGui::SameLine();
-			ImGui::InputInt("Font: ", &iter->iFontIndex);
-			ImGui::SameLine();
-			if (iter->iFontIndex == _int(CUIRender::UI_FONT::FONT_END))
-				ImGui::Text("none(NoText)");
-			else if ((iter->iFontIndex < 0) || (iter->iFontIndex >= (_int)CUIRender::UI_FONT::FONT_END))
-				ImGui::Text("※ WrongNum");
-			else
-				ImGui::Text(m_pUIRender->GetTextFontTag(iter->iFontIndex));
-			ImGui::InputText("Text", m_InputText, sizeof(m_InputText));
-			if (ImGui::Button("InputText"))
+			pNow->szText = new _tchar[100];
+			do
 			{
-				_int iIndex = -1;
-
-				iter->szText = new _tchar[100];
-				do
-				{
-					++iIndex;
-					iter->szText[iIndex] = m_InputText[iIndex];
-				} while (m_InputText[iIndex] != '\0');
-			}
-
-			ImGui::SeparatorText("Position");
-			// 위치
-			ImGui::Text("Type");
-			ImGui::SameLine();
-			ImGui::Combo("MoveType", &iter->iMoveType, m_szPositionType, 3);
-
-			if (iter->iMoveType == _int(MOVETYPE::TYPE_STATIC))
-			{
-				ImGui::Text("Adjust");
-				ImGui::SameLine();
-				ImGui::InputFloat("Adj.x", &iter->fAdjust.x);
-				ImGui::SameLine();
-				ImGui::InputFloat("Adj.y", &iter->fAdjust.y);
-			}
-			else 
-			{
-				ImGui::Text("Adjust_Start");
-				ImGui::SameLine();
-				ImGui::InputFloat("Adj_S.x", &iter->fAdjust_Start.x);
-				ImGui::SameLine();
-				ImGui::InputFloat("Adj_S.y", &iter->fAdjust_Start.y);
-
-				ImGui::Text("Adjust_End");
-				ImGui::SameLine();
-				ImGui::InputFloat("Adj_E.x", &iter->fAdjust_End.x);
-				ImGui::SameLine();
-				ImGui::InputFloat("Adj_E.y", &iter->fAdjust_End.y);
-
-				if (iter->iMoveType == _int(MOVETYPE::TYPE_BAR))
-					ImGui::Combo("Direc", &iter->bBarDirecX, m_szBarDirec, 2);
-
-				if (ImGui::Button("InputAdjust"))
-				{
-					iter->MakeDirec();
-				}
-
-				ImGui::Text("SetPosition");
-				ImGui::SameLine();
-				ImGui::SliderFloat("Slider", &iter->fRatio, 0.f, 1.f);
-			}
+				++iIndex;
+				pNow->szText[iIndex] = m_InputText[iIndex];
+			} while (m_InputText[iIndex] != '\0');
 		}
+
+		ImGui::SeparatorText("Position");
+		// 위치
+		ImGui::Text("Type");
+		ImGui::SameLine();
+		ImGui::Combo("MoveType", &pNow->iMoveType, m_szPositionType, 3);
+
+		if (pNow->iMoveType == _int(MOVETYPE::TYPE_STATIC))
+		{
+			ImGui::Text("Adjust");
+			ImGui::SameLine();
+			ImGui::InputFloat("Adj.x", &pNow->fAdjust.x);
+			ImGui::SameLine();
+			ImGui::InputFloat("Adj.y", &pNow->fAdjust.y);
+		}
+		else
+		{
+			ImGui::Text("Adjust_Start");
+			ImGui::SameLine();
+			ImGui::InputFloat("Adj_S.x", &pNow->fAdjust_Start.x);
+			ImGui::SameLine();
+			ImGui::InputFloat("Adj_S.y", &pNow->fAdjust_Start.y);
+
+			ImGui::Text("Adjust_End");
+			ImGui::SameLine();
+			ImGui::InputFloat("Adj_E.x", &pNow->fAdjust_End.x);
+			ImGui::SameLine();
+			ImGui::InputFloat("Adj_E.y", &pNow->fAdjust_End.y);
+
+			if (pNow->iMoveType == _int(MOVETYPE::TYPE_BAR))
+				ImGui::Combo("Direc", &pNow->bBarDirecX, m_szBarDirec, 2);
+
+			if (ImGui::Button("InputAdjust"))
+			{
+				pNow->MakeDirec();
+			}
+
+			ImGui::Text("SetPosition");
+			ImGui::SameLine();
+			ImGui::SliderFloat("Slider", &pNow->fRatio, 0.f, 1.f);
+		}
+
+		
 	}
 
 
 
 
+	for (auto& iter : m_vecPageInfo[m_iNowSelectNum]->vecPart)
+	{
+		iter->MakeDirec();
+		
+		if (iter->iParentPart_Index == -1)
+			iter->MovePart(m_vecPageInfo[m_iNowSelectNum]->fPosition);
+		else 
+			iter->MovePart(m_vecPageInfo[m_iNowSelectNum]->vecPart[iter->iParentPart_Index]->fPosition);
+	}
 
 	Safe_Delete_Array(tTemp);
 	Safe_Delete_Array(szCount);
+	
 
 	ImGui::NewLine();
 
@@ -225,6 +239,9 @@ void CController_UITool::AddNewPage()
 
 void CController_UITool::UIPart_Render()
 {
+	
+
+
 }
 
 void CController_UITool::FontTest()
@@ -265,6 +282,7 @@ HRESULT CController_UITool::Initialize(ID3D11Device* pDevice, ID3D11DeviceContex
 	m_pContext = pContext;
 
 	m_pUIRender = CUIRender::Create(pDevice, pContext);
+	//m_pUIRender->SetUITool(this);
 	//Safe_AddRef(m_pUIRender);
 
 	InitializeResource();
@@ -284,9 +302,22 @@ HRESULT CController_UITool::InitializeResource()
 
 HRESULT CController_UITool::SavePart()
 {
+	/*string fileName = pPath;
+	WCHAR* TempName = new WCHAR[fileName.size()];
+	for (_int i = 0; i <= fileName.size(); ++i)
+		TempName[i] = fileName[i];
+
+	HANDLE hFile = CreateFile(TempName, GENERIC_WRITE, NULL, NULL, CREATE_ALWAYS, FILE_ATTRIBUTE_NORMAL, NULL);
+
+	if (INVALID_HANDLE_VALUE == hFile)
+		return;
+
+	DWORD dwByte(0);
 
 
+	WriteFile(hFile, &iSize, sizeof(_int), &dwByte, nullptr);
 
+	CloseHandle(hFile);*/
 
 
 	return S_OK;
@@ -294,6 +325,32 @@ HRESULT CController_UITool::SavePart()
 
 HRESULT CController_UITool::LoadPart()
 {
+	//string fileName = "../Bin/Resources/Textures/UI/UIPage.dat";
+	//WCHAR* TempName = new WCHAR[fileName.size() + 1];
+	//memset(TempName, 0, sizeof(TempName));
+	//for (_int i = 0; i <= fileName.size(); ++i)
+	//	TempName[i] = fileName[i];
+
+	//HANDLE hFile = CreateFile(TempName, GENERIC_READ, NULL, NULL, OPEN_EXISTING, FILE_ATTRIBUTE_NORMAL, NULL);
+	//if (INVALID_HANDLE_VALUE == hFile)
+	//	return;
+	//DWORD dwByte(0); // 예외 처리 변수
+
+
+	//ReadFile(hFile, &tTemp.eCon_Type, sizeof(CONTAINER), &dwByte, nullptr);
+
+
+
+
+	//CloseHandle(hFile);
+
+
+
+
+
+
+
+
 	// 테스트 코드 
 	m_vecPageInfo.resize(m_iPageNum);
 
