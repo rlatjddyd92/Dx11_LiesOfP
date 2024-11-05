@@ -59,8 +59,17 @@ void CChannel::Update_TransformationMatrix(const vector<class CBone*>& Bones, _u
 	/* 보간이 필요한 대부분 경우 */
 	else
 	{
-		while(CurrentTrackPosition >= m_KeyFrames[*pCurrentKeyFrameIndex + 1].TrackPosition)
-			++(*pCurrentKeyFrameIndex);
+		if (CurrentTrackPosition >= m_KeyFrames[*pCurrentKeyFrameIndex].TrackPosition)
+		{
+			while (CurrentTrackPosition >= m_KeyFrames[*pCurrentKeyFrameIndex + 1].TrackPosition)
+				++(*pCurrentKeyFrameIndex);
+		}
+		else
+		{
+			while (CurrentTrackPosition <= m_KeyFrames[*pCurrentKeyFrameIndex - 1].TrackPosition)
+				--(*pCurrentKeyFrameIndex);
+		}
+
 
 		_vector		vSourScale = XMLoadFloat3(&m_KeyFrames[*pCurrentKeyFrameIndex].vScale);
 		_vector		vDestScale = XMLoadFloat3(&m_KeyFrames[*pCurrentKeyFrameIndex + 1].vScale);

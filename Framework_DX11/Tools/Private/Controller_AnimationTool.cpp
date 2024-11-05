@@ -19,9 +19,10 @@ HRESULT CController_AnimationTool::Initialize(ID3D11Device* pDevice, ID3D11Devic
 	//애니메이션 툴 피규어(위치나 이런부분 물어보기)
 	
 	CAnimModel::ANIMMODEL_DESC Desc{};
-	Desc.vPosition = { 1.f,5.f,1.f };
+	Desc.vPosition = { 0.f,0.f,0.f };
 	Desc.vScale = { 1.f,1.f,1.f };
 	Desc.vRotation = { 0.f,0.f,0.f };
+	Desc.pUpdateCtr = &m_bObjRenderCtr;
 
 	strcpy_s(Desc.szModelTag, "Prototype_AnimModel_Test");
 	if (FAILED(m_pGameInstance->Add_CloneObject_ToLayer(LEVEL_TOOL, TEXT("Layer_AnimationTool_Test"), TEXT("Prototype_GameObject_Anim"), &Desc)))
@@ -32,6 +33,7 @@ HRESULT CController_AnimationTool::Initialize(ID3D11Device* pDevice, ID3D11Devic
 
 void CController_AnimationTool::SetUp_AnimTool()
 {
+	m_bObjRenderCtr = true;
 	CModel* pModel = dynamic_cast<CModel*>(m_pGameInstance->Find_Component(LEVEL_TOOL, TEXT("Layer_AnimationTool_Test"), TEXT("Com_Model")));
 	if (m_pCopyModelCom == nullptr)
 	{
@@ -53,6 +55,8 @@ void CController_AnimationTool::SetUp_AnimTool()
 			m_pCopyAnimVec = &m_pCopyModelCom->Get_Animations();
 
 			m_AnimSpeedPS = (*m_pCopyAnimVec)[m_iSelected_Index_Anim]->Get_SpeedPerSec();
+
+			m_AnimDuration = (*m_pCopyAnimVec)[m_iSelected_Index_Anim]->Get_Duration();
 		}
 
 		if (m_pCopyBoneVec == nullptr)
@@ -81,6 +85,7 @@ void CController_AnimationTool::SetUp_AnimTool()
 		{
 			ImGui::EndTabItem();
 		}
+
 		ImGui::EndTabItem();
 	}
 }
@@ -123,8 +128,9 @@ void CController_AnimationTool::ListUp_Anim()
 	{
 		if (m_iSelected_Index_Anim != m_iCurSelected_Index_Anim)
 		{
-			m_pCopyModelCom->SetUp_Animation(m_iSelected_Index_Anim, true);
+			m_pCopyModelCom->SetUp_NextAnimation(m_iSelected_Index_Anim, true);
 			m_AnimSpeedPS = (*m_pCopyAnimVec)[m_iSelected_Index_Anim]->Get_SpeedPerSec();
+			m_AnimDuration = (*m_pCopyAnimVec)[m_iSelected_Index_Anim]->Get_Duration();
 		}
 	}
 
@@ -134,6 +140,7 @@ void CController_AnimationTool::ListUp_Anim()
 
 void CController_AnimationTool::SetUp_Controller_Anim()
 {
+	ImGui::Text("\n");
 	//속도 관련
 	ImGui::InputDouble("SpeedPerSec", &m_AnimSpeedPS);
 
@@ -144,18 +151,127 @@ void CController_AnimationTool::SetUp_Controller_Anim()
 			(*m_pCopyAnimVec)[m_iSelected_Index_Anim]->Set_SpeedPerSec(m_AnimSpeedPS);
 		}
 	}
+	EVENT_KEYFRAME EventKeyDesc{};
+
+	ImGui::Text("\n");
+	ImGui::InputText("EventKey Name", m_szEvKeyFrameText, MAX_PATH);
 
 	//이펙트 관련
 	if (ImGui::Button("Add_EventKeyFrame"))
 	{
-		if (m_pCopyModelCom != nullptr)
+		if (m_pCopyModelCom != nullptr && strcmp(m_szEvKeyFrameText, ""))
 		{
-			//이벤트 방식 담을 캐릭터타입 받는 박스 만들고, 해당 박스랑 현재 키프레임 받게 만들기, 단 애니메이션을 재생 정지 시키고, 키프레임 조정이 되도록 한 후에
-			//EVENT_KEYFRAME Desc;
-			//Desc.TrackPosition = ;
-			//(*m_pCopyAnimVec)[m_iSelected_Index_Anim]->Add_EventKeyFrame();
+			strcpy_s(EventKeyDesc.szEventName, MAX_PATH, m_szEvKeyFrameText);
+			EventKeyDesc.TrackPosition = m_fAnimTrackPosition;
+			(*m_pCopyAnimVec)[m_iSelected_Index_Anim]->Add_EventKeyFrame(EventKeyDesc);
 		}
 	}
+
+	ImGui::Text("\n");
+	//정지 재생 관련
+	m_fAnimTrackPosition = (_float)m_pCopyModelCom->Get_CurrentTrackPosition();
+	
+	if (ImGui::SliderFloat("Anim Track", &m_fAnimTrackPosition, 0.f, m_AnimDuration))
+	{
+		if (!m_bIsAnimStopped)
+		{
+			m_bIsAnimStopped = true;
+		}
+	}
+
+	if (m_fAnimTrackPosition >= m_AnimDuration)
+	{
+		m_fAnimTrackPosition = m_AnimDuration - 0.1f;
+	}
+
+	if (m_bIsAnimStopped)
+	{
+		m_pCopyModelCom->Set_CurrentTrackPosition(m_fAnimTrackPosition);
+	}
+
+	ImGui::PushItemWidth(50); // 크기조정
+	ImGui::SameLine();
+	if (m_bIsAnimStopped)
+	{
+		if (ImGui::Button("Play Anim"))
+		{
+			m_bIsAnimStopped = false;
+		}
+		(*m_pCopyAnimVec)[m_iSelected_Index_Anim]->Set_SpeedRatio(0.f);
+	}
+	else
+	{
+		if (ImGui::Button("Pause Anim"))
+		{
+			m_bIsAnimStopped = true;
+		}
+		(*m_pCopyAnimVec)[m_iSelected_Index_Anim]->Set_SpeedRatio(1.f);
+	}
+	ImGui::PopItemWidth();
+
+
+	//저장한 키프레임들 확인
+	vector<EVENT_KEYFRAME>*  EvKeyFramesvec = (*m_pCopyAnimVec)[m_iSelected_Index_Anim]->Get_EventKeyFrames_Ptr();
+
+	m_iCurSelected_Index_KeyFrame = m_iSelected_Index_KeyFrame;
+
+	ImGui::Text("\n");
+	ImGui::PushItemWidth(300); // 크기조정
+	if (ImGui::BeginListBox("KeyFrame List"))
+	{
+		if (m_pCopyModelCom != nullptr)
+		{
+			bool is_selected{ false };
+			for (int i = 0; i < (*EvKeyFramesvec).size(); i++)
+			{
+				if (m_iSelected_Index_KeyFrame == i)
+				{
+					is_selected = true;
+				}
+
+				if (ImGui::Selectable((*EvKeyFramesvec)[i].szEventName, is_selected))
+				{
+					m_iSelected_Index_KeyFrame = i;
+				}
+
+
+				if (!is_selected)
+					ImGui::SetItemDefaultFocus();
+				is_selected = false;
+				// 반복문으로 리스트박스의 선택된 객체 찾기
+			}
+		}
+
+		ImGui::EndListBox();
+	}
+	if (m_pCopyModelCom != nullptr)
+	{
+		if (m_iSelected_Index_KeyFrame != m_iCurSelected_Index_KeyFrame)
+		{
+			//선택한 이벤트 키프레임의 위치로 이동
+			m_pCopyModelCom->Set_CurrentTrackPosition((*EvKeyFramesvec)[m_iSelected_Index_KeyFrame].TrackPosition);
+		}
+	}
+
+		//잘못된 키프레임 삭제
+	ImGui::SameLine();
+	if (ImGui::Button("Delete"))
+	{
+		(*EvKeyFramesvec).erase((*EvKeyFramesvec).begin() + m_iSelected_Index_KeyFrame);
+
+	}
+		//키프레임 정보 확인
+	ImGui::Text("\n");
+	if ((*EvKeyFramesvec).size() > m_iSelected_Index_KeyFrame)
+	{
+		ImGui::Text("%f", (*EvKeyFramesvec)[m_iSelected_Index_KeyFrame].TrackPosition);
+	}
+	else
+	{
+		--m_iSelected_Index_KeyFrame;
+	}
+	ImGui::PopItemWidth();
+
 	//콜라이더 관련
 
 
@@ -264,14 +380,16 @@ void CController_AnimationTool::SetUp_Controller_Bone()
 	}
 	ImGui::Text("\n");
 	_vector vPos{};
+	_float3 vTemp{};
 	if (m_pCopyModelCom != nullptr)
 	{
-		vPos = ((*m_pCopyBoneVec)[m_iSelected_Index_Bone])->Get_TransformationMatrix().r[CTransform::STATE_POSITION];
+		//vPos = ((*m_pCopyBoneVec)[m_iSelected_Index_Bone])->Get_TransformationMatrix().r[CTransform::STATE_POSITION];
+		vPos = ((*m_pCopyBoneVec)[m_iSelected_Index_Bone])->Get_CombinedTransformationMatrix().r[CTransform::STATE_POSITION];
 	}
 
-	ImGui::Text("Pos_X   %d", XMVectorGetX(vPos));
-	ImGui::Text("Pos_Y   %d", XMVectorGetY(vPos));
-	ImGui::Text("Pos_Z   %d", XMVectorGetZ(vPos));
+	ImGui::Text("Pos_X   %f", XMVectorGetX(vPos));
+	ImGui::Text("Pos_Y   %f", XMVectorGetY(vPos));
+	ImGui::Text("Pos_Z   %f", XMVectorGetZ(vPos));
 
 
 	ImGui::PushItemWidth(300); // 크기조정

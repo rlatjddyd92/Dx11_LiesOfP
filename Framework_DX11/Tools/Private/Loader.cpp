@@ -358,7 +358,13 @@ HRESULT CLoader::Ready_Resources_For_ToolLevel()
 
 HRESULT CLoader::Ready_Resources_For_ToolLevel_Map0()
 {
-	//_matrix      PreTransformMatrix = XMMatrixIdentity();
+	_matrix      PreTransformMatrix = XMMatrixIdentity();
+
+
+	PreTransformMatrix = XMMatrixScaling(0.01f, 0.01f, 0.01f) * XMMatrixRotationY(XMConvertToRadians(270.f));
+	if (FAILED(m_pGameInstance->Add_Prototype(LEVEL_TOOL, TEXT("Prototype_AnimModel_Test"),
+		CModel::Create(m_pDevice, m_pContext, CModel::TYPE_ANIM, "../Bin/ModelData/Anim/PlayerExample/PlayerExample.dat", PreTransformMatrix))))
+		return E_FAIL;
 
 	//// _finddata_t : <io.h>에서 제공하며 파일 정보를 저장하는 구조체
 	//_finddata_t fd;

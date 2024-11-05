@@ -21,6 +21,9 @@ public:
 		_float3		vPosition;
 		_float3		vScale;
 		_float3		vRotation;
+
+		//¿Ã∫¿¡ÿ √ﬂ∞°
+		_bool*		pUpdateCtr;
 	}ANIMMODEL_DESC;
 
 private:
@@ -45,6 +48,7 @@ public:
 	class CModel* m_pModelCom = { nullptr };
 
 	ANIMMODEL_DESC	m_tDesc;
+	_vector		m_vRootMoveStack{};
 
 private:
 	HRESULT Ready_Components(ANIMMODEL_DESC* pNonAnimDesc);

@@ -58,11 +58,41 @@ void CAnimModel::Update(_float fTimeDelta)
 		}
 	}*/
 
-	m_pModelCom->Play_Animation(fTimeDelta);
+	if (*(m_tDesc.pUpdateCtr) == false)
+	{
+		return;
+	}
+
+	_vector vPos = m_pTransformCom->Get_State(CTransform::STATE_POSITION);
+	_vector vRight = m_pTransformCom->Get_State(CTransform::STATE_RIGHT);
+	_vector vUp = m_pTransformCom->Get_State(CTransform::STATE_UP);
+	_vector vLook = m_pTransformCom->Get_State(CTransform::STATE_LOOK);
+
+	if (KEY_HOLD(KEY::I))
+		m_pTransformCom->Go_Straight(fTimeDelta);//m_pTransformCom->Set_State(CTransform::STATE_POSITION, XMVectorSetX(vPos, XMVectorGetX(vPos) + 0.1f));
+	
+	_bool	bEndCheck{false};
+	_vector vRootMove = m_pModelCom->Play_Animation(fTimeDelta, &bEndCheck);
+
+	if (bEndCheck == true)//조건을 애니메이션이 끝났을때 or 변경 되었을때로
+	{
+		vRootMove = m_vRootMoveStack = XMVectorSet(0, 0, 0, 1);
+	}
+	else
+	{
+		m_pTransformCom->Set_State(CTransform::STATE_POSITION, vPos + vRootMove - m_vRootMoveStack);
+		m_vRootMoveStack = vRootMove;
+	}
+
 }
 
 void CAnimModel::Late_Update(_float fTimeDelta)
 {
+	if (*(m_tDesc.pUpdateCtr) == false)
+	{
+		return;
+	}
+
 	/* 직교투영을 위한 월드행렬까지 셋팅하게 된다. */
 	__super::Late_Update(fTimeDelta);
 

@@ -32,6 +32,8 @@ public:
 	_bool					Get_IsEnd_Animation(_uint iAnimationIndex);
 
 	_uint					Get_CurrentFrame() { return m_iCurrentFrame; }
+	_double					Get_CurrentTrackPosition() { return m_CurrentTrackPosition; }
+	void					Set_CurrentTrackPosition(_double TrackPos) { m_CurrentTrackPosition = TrackPos; }
 
 	void					Set_UFBIndices(_uint eCount, _uint iIndex) { m_UFBIndices[eCount] = iIndex; }
 	_uint					Get_UFBIndices(_uint eCount) { return m_UFBIndices[eCount]; }
@@ -42,7 +44,7 @@ public:
 	virtual HRESULT Render(_uint iMeshIndex);
 
 public:
-	void Play_Animation(_float fTimeDelta);
+	_vector Play_Animation(_float fTimeDelta, _bool* pOut = nullptr);
 
 	void		SetUp_Animation(_uint iAnimationIndex, _bool isLoop = false);
 	HRESULT     SetUp_NextAnimation(_uint iNextAnimationIndex, _bool isLoop = false, _float fChangeDuration = 0.2f, _uint iStartFrame = 0);

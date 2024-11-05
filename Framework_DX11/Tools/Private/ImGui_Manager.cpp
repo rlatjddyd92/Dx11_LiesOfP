@@ -175,6 +175,10 @@ void CImGui_Manager::Tool_Animation()
 
 		ImGui::EndTabItem();
 	}
+	else
+	{
+		m_pController_AnimationTool->BlockObjCtr();
+	}
 }
 
 void CImGui_Manager::ImGui_Spacing(_uint iSpaceCount)
