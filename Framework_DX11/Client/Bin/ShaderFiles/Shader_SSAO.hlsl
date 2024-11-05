@@ -89,7 +89,7 @@ PS_OUT PS_MAIN_SSAO(PS_IN In)
     for (int i = 0; i < 16; i++)
     {
         // 노이즈 텍스처를 사용해 샘플 방향에 약간의 무작위성을 추가
-        float3 vRay = normalize(vSampleKernels[i] + g_NoiseTexture.Sample(PointSampler, In.vTexcoord).xyz * 0.1f); // 랜덤 Ray값
+        float3 vRay = normalize(vSampleKernels[i] + g_NoiseTexture.Sample(PointSampler, In.vTexcoord).xyz * 0.05f); // 랜덤 Ray값
         float3 vReflect = normalize(reflect(vRay, vNormal.xyz)) * g_fRadius;
         vReflect.x *= -1.f;
         
@@ -101,13 +101,13 @@ PS_OUT PS_MAIN_SSAO(PS_IN In)
         float fSampleViewZ = g_DepthTexture.Sample(PointSampler, vNewTexCoord).y * 1000.f;
        
         // 깊이 차이를 비교
-        if (fSampleViewZ <= fViewZ + 0.002f)
+        if (fSampleViewZ <= fViewZ + 0.0003f)
         {
             iOcc += 1;
         }
     }
     
-    Out.vColor = saturate((float) iOcc / 16.f);
+    Out.vColor = 1.f - saturate((float) iOcc / 16.f);
     
     return Out;
 }

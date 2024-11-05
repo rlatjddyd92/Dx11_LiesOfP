@@ -85,13 +85,13 @@ void CFreeCamera::Priority_Update(_float fTimeDelta)
 		{
 			/* 기본적인 제어*/
 			if (KEY_HOLD(KEY::W))
-				m_pTransformCom->Go_Straight(fTimeDelta);
+				m_pTransformCom->Go_Straight(fTimeDelta * 0.5f);
 			if (KEY_HOLD(KEY::S))
-				m_pTransformCom->Go_Backward(fTimeDelta);
+				m_pTransformCom->Go_Backward(fTimeDelta * 0.5f);
 			if (KEY_HOLD(KEY::A))
-				m_pTransformCom->Go_Left(fTimeDelta);
+				m_pTransformCom->Go_Left(fTimeDelta * 0.5f);
 			if (KEY_HOLD(KEY::D))
-				m_pTransformCom->Go_Right(fTimeDelta);
+				m_pTransformCom->Go_Right(fTimeDelta * 0.5f);
 
 
 			if (MouseMove = ptMouse.x - m_ptOldMousePos.x)

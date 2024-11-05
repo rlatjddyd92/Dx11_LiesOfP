@@ -151,14 +151,18 @@ PS_OUT PS_MAIN_NORMAL(PS_IN_NORMAL In)
 
 	vNormal = normalize(mul(vNormal, WorldMatrix));
 
-
-
-
 	if (0.3f >= vDiffuse.a)
 		discard;
 
+	
 	Out.vDiffuse = vDiffuse;
 
+    if (g_bSelect)
+    {
+        Out.vDiffuse *= 3.f;
+        Out.vDiffuse.b *= 5.f;
+    }
+	
 	/* -1.f ~ 1.f -> 0.f ~ 1.f */
 	Out.vNormal = vector(vNormal * 0.5f + 0.5f, 0.f);
 	Out.vDepth = vector(In.vProjPos.z / In.vProjPos.w, In.vProjPos.w / 1000.f, 0.f, 0.f);
