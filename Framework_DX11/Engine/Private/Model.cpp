@@ -82,6 +82,12 @@ _bool CModel::Get_IsEnd_Animation(_uint iAnimationIndex)
 	return m_isEnd_Animations[iAnimationIndex];
 }
 
+CTexture* CModel::Find_Texture(_uint iMeshNum, TEXTURE_TYPE eMaterialType)
+{
+	_uint iMaterialIndex = m_Meshes[iMeshNum]->Get_MaterialIndex();
+	return m_Materials[iMaterialIndex].pMaterialTextures[eMaterialType];
+}
+
 HRESULT CModel::Initialize_Prototype(TYPE eType, const _char * pModelFilePath, _fmatrix PreTransformMatrix)
 {
 	_uint		iFlag = { 0 };	

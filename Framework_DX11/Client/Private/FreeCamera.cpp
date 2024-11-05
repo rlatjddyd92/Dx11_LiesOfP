@@ -32,28 +32,40 @@ HRESULT CFreeCamera::Initialize(void * pArg)
 
 void CFreeCamera::Priority_Update(_float fTimeDelta)
 {
-	if (m_pGameInstance->Get_DIKeyState(DIK_W) & 0x80)
-		m_pTransformCom->Go_Straight(fTimeDelta);
-	if (m_pGameInstance->Get_DIKeyState(DIK_S) & 0x80)
-		m_pTransformCom->Go_Backward(fTimeDelta);
-	if (m_pGameInstance->Get_DIKeyState(DIK_A) & 0x80)
-		m_pTransformCom->Go_Left(fTimeDelta);
-	if (m_pGameInstance->Get_DIKeyState(DIK_D) & 0x80)
-		m_pTransformCom->Go_Right(fTimeDelta);
+	if (!m_isActive)
+		return;
 
-	_long		MouseMove = { 0 };
+	POINT		ptMouse = m_pGameInstance->Get_MosePos();
 
-	if (MouseMove = m_pGameInstance->Get_DIMouseMove(DIMM_X))
+	_long	MouseMove = {};
+
+	if (KEY_HOLD(KEY::LSHIFT))
 	{
-		m_pTransformCom->Turn(XMVectorSet(0.f, 1.f, 0.f, 0.f), fTimeDelta * MouseMove * m_fSensor);
-	}
-	
-	if (MouseMove = m_pGameInstance->Get_DIMouseMove(DIMM_Y))
-	{
-		m_pTransformCom->Turn(m_pTransformCom->Get_State(CTransform::STATE_RIGHT), fTimeDelta * MouseMove * m_fSensor);
+		/* 기본적인 제어*/
+		if (KEY_HOLD(KEY::W))
+			m_pTransformCom->Go_Straight(fTimeDelta);
+		if (KEY_HOLD(KEY::S))
+			m_pTransformCom->Go_Backward(fTimeDelta);
+		if (KEY_HOLD(KEY::A))
+			m_pTransformCom->Go_Left(fTimeDelta);
+		if (KEY_HOLD(KEY::D))
+			m_pTransformCom->Go_Right(fTimeDelta);
+
+
+		if (MouseMove = ptMouse.x - m_ptOldMousePos.x)
+		{
+			m_pTransformCom->Turn(XMVectorSet(0.f, 1.f, 0.f, 0.f), fTimeDelta * MouseMove * 0.1f);
+		}
+
+		if (MouseMove = ptMouse.y - m_ptOldMousePos.y)
+		{
+			m_pTransformCom->Turn(m_pTransformCom->Get_State(CTransform::STATE_RIGHT), fTimeDelta * MouseMove * 0.1f);
+		}
 	}
 
 	__super::Priority_Update(fTimeDelta);
+
+	m_ptOldMousePos = ptMouse;
 }
 
 void CFreeCamera::Update(_float fTimeDelta)

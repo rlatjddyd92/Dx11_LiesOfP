@@ -241,12 +241,12 @@ PS_OUT PS_MAIN_DEFERRED(PS_IN In)
 	
     float3 vEyeToCamera = normalize(g_vCamPosition.xyz - vPosition.xyz);
     vector vNormalDesc = g_NormalTexture.Sample(PointSampler, In.vTexcoord);
-    vector vNormal = float4(vNormalDesc.xyz * 2.f - 1.f, 0.f);
+    float3 vNormal = vNormalDesc.xyz * 2.f - 1.f;
     float fRim = 1.f - saturate(dot(vEyeToCamera, vNormal));
 
-    fRim = pow(fRim, 3.f);
+    fRim = pow(fRim, 5.f);
     vRimLightColor *= fRim;
-    Out.vColor.xyz += vRimLightColor.xyz;
+    Out.vColor.xyz = saturate(Out.vColor.xyz + vRimLightColor); // 0.5배로 줄임
 	
 	//// Bloom -> 더 나중으로 옮겨야함
  //   float4 vBloom = g_BloomTexture.Sample(LinearSampler, In.vTexcoord);

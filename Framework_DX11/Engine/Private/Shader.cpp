@@ -180,6 +180,21 @@ HRESULT CShader::Bind_RawValue(const _char * pConstantName, const void * pData, 
 	return pVariable->SetRawValue(pData, 0, iLength);	
 }
 
+HRESULT CShader::Bind_CBuffer(const _char* pConstantName, ID3D11Buffer* pBuffer)
+{
+	ID3DX11EffectVariable* pVariable = m_pEffect->GetVariableByName(pConstantName);
+	if (nullptr == pVariable)
+		return E_FAIL;
+
+	// Constant Buffer를 바인딩합니다.
+	ID3DX11EffectConstantBuffer* pConstantBuffer = pVariable->AsConstantBuffer();
+	if (nullptr == pConstantBuffer)
+		return E_FAIL;
+
+	pConstantBuffer->SetConstantBuffer(pBuffer);
+	return S_OK;
+}
+
 CShader * CShader::Create(ID3D11Device * pDevice, ID3D11DeviceContext * pContext, const _tchar * pShaderFilePath, const D3D11_INPUT_ELEMENT_DESC* pElementDesc, _uint iNumElements)
 {
 	CShader*		pInstance = new CShader(pDevice, pContext);
