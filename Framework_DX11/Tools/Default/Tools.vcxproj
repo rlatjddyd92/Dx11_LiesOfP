@@ -52,6 +52,7 @@
     <ClInclude Include="..\Public\Terrain.h" />
     <ClInclude Include="..\Public\ThreadPool.h" />
     <ClInclude Include="..\Public\Tools_Defines.h" />
+    <ClInclude Include="..\Public\UIRender.h" />
     <ClInclude Include="framework.h" />
     <ClInclude Include="Resource.h" />
     <ClInclude Include="stdafx.h" />
@@ -93,6 +94,7 @@
     <ClCompile Include="..\private\Particle_Test.cpp" />
     <ClCompile Include="..\Private\Terrain.cpp" />
     <ClCompile Include="..\Private\ThreadPool.cpp" />
+    <ClCompile Include="..\Private\UIRender.cpp" />
     <ClCompile Include="stdafx.cpp" />
     <ClCompile Include="Tools.cpp" />
   </ItemGroup>

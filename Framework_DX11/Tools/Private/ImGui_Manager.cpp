@@ -161,9 +161,7 @@ void CImGui_Manager::Tool_UI()
 
 		ImGui::EndTabItem();
 
-		// 241102 ±è¼º¿ë
 		m_pController_UITool->UITool_Render();
-		// 241102 ±è¼º¿ë
 	}
 }
 
@@ -201,7 +199,7 @@ HRESULT CImGui_Manager::Ready_Controllers()
 	m_pController_UITool = CController_UITool::Get_Instance();
 	if (nullptr == m_pController_UITool)
 		return E_FAIL;
-	m_pController_UITool->Initialize();
+	m_pController_UITool->Initialize(m_pDevice, m_pContext);
 
 	m_pController_AnimationTool = CController_AnimationTool::Get_Instance();
 	if (nullptr == m_pController_AnimationTool)
