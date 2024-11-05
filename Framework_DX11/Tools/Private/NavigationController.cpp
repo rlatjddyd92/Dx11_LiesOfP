@@ -2,6 +2,7 @@
 #include "NavigationController.h"
 
 #include "GameInstance.h"
+#include "Cell.h"
 
 IMPLEMENT_SINGLETON(CNavigationController)
 
@@ -90,23 +91,24 @@ HRESULT CNavigationController::Initialize(ID3D11Device* pDevice, ID3D11DeviceCon
 
 HRESULT CNavigationController::Render()
 {
-	/*if (m_Cells.size() == 0)
+
+#ifdef _DEBUG
+
+	if (m_Cells.size() == 0)
 		return S_OK;
 
 	_float4x4			WorldMatrix;
 	XMStoreFloat4x4(&WorldMatrix, XMMatrixIdentity());
 	WorldMatrix._42 += 0.1f;
 
-	if (FAILED(m_pShader->Bind_Matrix("g_ViewMatrix", &m_pGameInstance->Get_Transform_Float4x4(CPipeLine::D3DTS_VIEW))))
+	if (FAILED(m_pShader->Bind_Matrix("g_ViewMatrix", &m_pGameInstance->Get_Transform(CPipeLine::D3DTS_VIEW))))
 		return E_FAIL;
-	if (FAILED(m_pShader->Bind_Matrix("g_ProjMatrix", &m_pGameInstance->Get_Transform_Float4x4(CPipeLine::D3DTS_PROJ))))
+	if (FAILED(m_pShader->Bind_Matrix("g_ProjMatrix", &m_pGameInstance->Get_Transform(CPipeLine::D3DTS_PROJ))))
 		return E_FAIL;
 
 	_float4		vColor = _float4(0.f, 1.f, 0.f, 1.f);
 
 	int i = 0;
-
-#ifdef _DEBUG
 
 	for (auto& pCell : m_Cells)
 	{
@@ -126,10 +128,10 @@ HRESULT CNavigationController::Render()
 			pCell->Render();
 		}
 		i++;
-	}*/
+	}
 
 
-//#endif // _DEBUG
+#endif  _DEBUG
 	return S_OK;
 }
 
@@ -141,7 +143,7 @@ void CNavigationController::Add_Point(_Vec3 vPos)
 	vClickPos = Find_ClosetPoint(vPos);
 
 	// 거리가 멀면 그냥 그대로 들어가게
-	if (m_fClosetDistance > 0.5f)
+	if (m_fClosetDistance > 0.3f)
 		XMStoreFloat3(&vClickPos, vPos);
 
 	if (2 < m_vClickPoints.size())
@@ -166,59 +168,71 @@ HRESULT CNavigationController::Add_Cell(_float3* vPoints)
 {
 	Sort_Cell(vPoints);
 
-	//CCell* pCell = CCell::Create(m_pDevice, m_pContext, vPoints, (_int)m_Cells.size());
-	//if (nullptr == pCell)
-	//	return E_FAIL;
+	CCell::CELL_DESC pDesc = {};
+	pDesc.iIndex = (_int)m_Cells.size();
+	pDesc.iAreaNum = m_iAreaNum;
+	pDesc.iCellTypeNum = m_iCellType;
 
-//	pCell->Set_RoomNum(m_iRoomNum);
+	CCell* pCell = CCell::Create(m_pDevice, m_pContext, vPoints, &pDesc);
+	if (nullptr == pCell)
+		return E_FAIL;
 
-	//m_Cells.push_back(pCell);
+	m_Cells.push_back(pCell);
 
 	return S_OK;
 }
 
 void CNavigationController::Sort_Cell(_float3* vPoints)
 {
-	//_float3 vCurrenPoints[3];
-	//memcpy(vCurrenPoints, vPoints, sizeof(_float3) * 3);
+	_float3 vCurrenPoints[3];
+	memcpy(vCurrenPoints, vPoints, sizeof(_float3) * 3);
 
-	//// 가장 작은 x 찾기
-	//// 가장 작은 x가 0 중간이 1 큰 값이 2로 정렬됨
-	//for (_uint i = 0; i < 2; ++i)
-	//{
-	//	_uint iIndex_MinX = i;
-	//	_bool isSwap = false;
-	//	for (_uint j = i + 1; j < 3; ++j)
-	//	{
-	//		if (vCurrenPoints[iIndex_MinX].x > vCurrenPoints[j].x)
-	//		{
-	//			iIndex_MinX = j;
-	//			isSwap = true;
-	//		}
-	//	}
+	// 가장 작은 x 찾기
+	// 가장 작은 x가 0 중간이 1 큰 값이 2로 정렬됨
+	//가장 작은 x가 같으면 z가 작은게 0
+	for (_uint i = 0; i < 2; ++i)
+	{
+		_uint iIndex_MinX = i;
+		_bool isSwap = false;
+		for (_uint j = i + 1; j < 3; ++j)
+		{
+			if (vCurrenPoints[iIndex_MinX].x > vCurrenPoints[j].x)
+			{
+				iIndex_MinX = j;
+				isSwap = true;
+			}
+			else if(vCurrenPoints[iIndex_MinX].x == vCurrenPoints[j].x)
+			{
+				if (vCurrenPoints[iIndex_MinX].z > vCurrenPoints[j].z)
+				{
+					iIndex_MinX = j;
+					isSwap = true;
+				}
+			}
+		}
 
-	//	if (isSwap)
-	//	{
-	//		_float3 vTemp;
-	//		vTemp = vCurrenPoints[i];
-	//		vCurrenPoints[i] = vCurrenPoints[iIndex_MinX];
-	//		vCurrenPoints[iIndex_MinX] = vTemp;
-	//	}
-	//}
+		if (isSwap)
+		{
+			_float3 vTemp;
+			vTemp = vCurrenPoints[i];
+			vCurrenPoints[i] = vCurrenPoints[iIndex_MinX];
+			vCurrenPoints[iIndex_MinX] = vTemp;
+		}
+	}
 
-	//// 만약 작은 x의 z값이 중간 x의 z값보다 크면 그게 2번째가 되고, 작으면 3번째가 됨
-	////x툭 기준 중간 값은 항상 0번째(Cell 점 찍기의 시작점)가 됨
-	//vPoints[0] = vCurrenPoints[1];
-	//if (vCurrenPoints[0].z < vCurrenPoints[1].z)
-	//{
-	//	vPoints[1] = vCurrenPoints[2];
-	//	vPoints[2] = vCurrenPoints[0];
-	//}
-	//else
-	//{
-	//	vPoints[1] = vCurrenPoints[0];
-	//	vPoints[2] = vCurrenPoints[2];
-	//}
+	// 만약 작은 x의 z값이 중간 x의 z값보다 크면 그게 2번째가 되고, 작으면 3번째가 됨
+	//x툭 기준 중간 값은 항상 0번째(Cell 점 찍기의 시작점)가 됨
+	vPoints[0] = vCurrenPoints[1];
+	if (vCurrenPoints[0].z < vCurrenPoints[1].z)
+	{
+		vPoints[1] = vCurrenPoints[2];
+		vPoints[2] = vCurrenPoints[0];
+	}
+	else
+	{
+		vPoints[1] = vCurrenPoints[0];
+		vPoints[2] = vCurrenPoints[2];
+	}
 }
 
 CCell* CNavigationController::Get_SelectCell()
@@ -229,12 +243,15 @@ CCell* CNavigationController::Get_SelectCell()
 	return m_Cells[m_iSelectCellIndex];
 }
 
-_Vec3 CNavigationController::Find_ClosetPoint(_Vec3 vPos)
+_Vec3 CNavigationController::Find_ClosetPoint(_fvector vPos)
 {
-	_Vec3 vColsetPos = vPos;
-	//처음 Cell을 찍는 경우
+	_float3 vClilckPos;
+	XMStoreFloat3(&vClilckPos, vPos);
+
+	m_fClosetDistance = 100000.f;
+
 	if (m_Cells.size() == 0)
-		return vColsetPos;
+		return vClilckPos;
 
 	for (_uint i = 0; i < m_Cells.size(); ++i)
 	{
@@ -242,7 +259,7 @@ _Vec3 CNavigationController::Find_ClosetPoint(_Vec3 vPos)
 		if (nullptr == pCell)
 			continue;
 
-		_Vec3 vPoint[CCell::POINT_END];
+		_vector vPoint[CCell::POINT_END];
 
 		//비교할 셀의 점들을 가져와 저장
 		vPoint[CCell::POINT_A] = pCell->Get_Point(CCell::POINT_A);
@@ -250,9 +267,9 @@ _Vec3 CNavigationController::Find_ClosetPoint(_Vec3 vPos)
 		vPoint[CCell::POINT_C] = pCell->Get_Point(CCell::POINT_C);
 
 		//피킹한 곳에서 점들까지의 거리 계산, 가장 짧은 거리 저장
-		_float fDistance_A = XMVectorGetX(XMVector3Length(vPoint[CCell::POINT_A] - vColsetPos));
-		_float fDistance_B = XMVectorGetX(XMVector3Length(vPoint[CCell::POINT_B] - vColsetPos));
-		_float fDistance_C = XMVectorGetX(XMVector3Length(vPoint[CCell::POINT_C] - vColsetPos));
+		_float fDistance_A = XMVectorGetX(XMVector3Length(vPoint[CCell::POINT_A] - vPos));
+		_float fDistance_B = XMVectorGetX(XMVector3Length(vPoint[CCell::POINT_B] - vPos));
+		_float fDistance_C = XMVectorGetX(XMVector3Length(vPoint[CCell::POINT_C] - vPos));
 		_float fClosetDistance = min(fDistance_A, fDistance_B);
 		fClosetDistance = min(fClosetDistance, fDistance_C);
 
@@ -263,46 +280,48 @@ _Vec3 CNavigationController::Find_ClosetPoint(_Vec3 vPos)
 
 		m_fClosetDistance = fClosetDistance;
 		if (fDistance_A == m_fClosetDistance)
-			XMStoreFloat3(&vColsetPos, vPoint[CCell::POINT_A]);
+			XMStoreFloat3(&vClilckPos, vPoint[CCell::POINT_A]);
 		else if (fDistance_B == m_fClosetDistance)
-			XMStoreFloat3(&vColsetPos, vPoint[CCell::POINT_B]);
+			XMStoreFloat3(&vClilckPos, vPoint[CCell::POINT_B]);
 		else if (fDistance_C == m_fClosetDistance)
-			XMStoreFloat3(&vColsetPos, vPoint[CCell::POINT_C]);
+			XMStoreFloat3(&vClilckPos, vPoint[CCell::POINT_C]);
 	}
 
-	return vColsetPos;
+	return vClilckPos;
 }
 
-_int CNavigationController::SelectCell(_float3 vPickPos)
+_int CNavigationController::SelectCell(_float3 vPickPos, _int* iSelectNum)
 {
-	//if (Get_CellSize() == 0) //Cell이 없는 경우
-	//{
-	//	m_iSelectCellIndex = -1;
-	//	return -1;
-	//}
+	if (Get_CellSize() == 0) //Cell이 없는 경우
+	{
+		m_iSelectCellIndex = -1;
+		return -1;
+	}
 
-	//for (_uint i = 0; i < m_Cells.size(); ++i)
-	//{
-	//	CCell* pCell = m_Cells[i];
-	//	if (nullptr == pCell)
-	//		continue;
+	for (_uint i = 0; i < m_Cells.size(); ++i)
+	{
+		CCell* pCell = m_Cells[i];
+		if (nullptr == pCell)
+			continue;
 
-	//	_int			iNeighborIndex = { -1 };
+		_int			iNeighborIndex = { -1 };
 
-	//	if (true == m_Cells[i]->isIn(XMLoadFloat3(&vPickPos), &iNeighborIndex))
-	//	{
-	//		m_iSelectCellIndex = i;
-	//		return i;
-	//	}
-	//}
-	//m_iSelectCellIndex = -1;
+		if (true == m_Cells[i]->isIn(XMLoadFloat3(&vPickPos), &iNeighborIndex))
+		{
+			m_iSelectCellIndex = i;
+			*iSelectNum = m_iSelectCellIndex;
+			return i;
+		}
+	}
+	m_iSelectCellIndex = -1;
+	*iSelectNum = m_iSelectCellIndex;
 	return -1;
 }
 
 void CNavigationController::Delete_Selected(_uint iIndex)
 {
-	/*if (m_Cells[iIndex] != nullptr && iIndex < m_Cells.size())
-		m_Cells.erase(remove(m_Cells.begin(), m_Cells.end(), m_Cells[iIndex]), m_Cells.end());*/
+	if (m_Cells[iIndex] != nullptr && iIndex < m_Cells.size())
+		m_Cells.erase(remove(m_Cells.begin(), m_Cells.end(), m_Cells[iIndex]), m_Cells.end());
 	//remove와 erase의 단점을 보완하기 위해 둘 다 사용
 }
 
@@ -318,12 +337,12 @@ _float3 CNavigationController::Select_Vertex(_fvector vPos)
 
 void CNavigationController::Set_All_Selected_Vertex_to_this(_float3 vChangePos)
 {
-	/*for (auto& pCell : m_Cells)
+	for (auto& pCell : m_Cells)
 	{
 		pCell->CompareAndChange(m_vSelectVertexPos, vChangePos);
 
 		Sort_Cell(pCell->Get_All_Points());
-	}*/
+	}
 }
 
 void CNavigationController::Free()

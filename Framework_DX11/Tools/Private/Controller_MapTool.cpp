@@ -83,6 +83,8 @@ void CController_MapTool::Create_Map()
 			ImGui::EndTabItem();
 		}
 
+		m_pNavigationController->Render();
+
 		ImGui::EndTabBar();
 	}
 }
@@ -269,14 +271,14 @@ void CController_MapTool::Save_Load()
 
 	if (ImGui::Button("Save Nav"))
 	{
-		//SaveMap();
+		SaveNav();
 	}
 	ImGui::SameLine();
 	ImGui::Text("                           ");
 	ImGui::SameLine();
 	if (ImGui::Button("Load Nav"))
 	{
-		//LoadMap();
+		LoadNav();
 	}
 }
 
@@ -602,6 +604,101 @@ void CController_MapTool::LoadMap()
 	MSG_BOX(TEXT("파일 읽기를 성공했습니다.."));
 }
 
+void CController_MapTool::SaveNav()
+{
+	const char cFile[128] = "../Bin/DataFiles/Nav_Data.dat";
+	ofstream fout(cFile, ios::out | ios::binary);
+
+	//	fout.open();
+	if (!fout.is_open())    // 파일 열었다면
+	{
+		MSG_BOX(TEXT("Nav 파일 쓰기를 실패"));
+		return;
+	}
+
+	string strUint = {};
+
+	//전체 Cell개수 저장
+	_uint iCellCount = m_pNavigationController->Get_CellSize();
+	fout.write(reinterpret_cast<const char*>(&iCellCount), sizeof(_uint));
+
+	_float3 vPos = {};
+
+	for (_uint i = 0; i < iCellCount; ++i)
+	{
+		_uint iCellAreaNum = m_pNavigationController->Get_AreaNum(i);
+		fout.write(reinterpret_cast<const char*>(&iCellAreaNum), sizeof(_uint));
+
+		_uint iCellTypeNum= m_pNavigationController->Get_TypeNum(i);
+		fout.write(reinterpret_cast<const char*>(&iCellTypeNum), sizeof(_uint));
+
+		m_pNavigationController->Set_SelectCell(i);
+
+		XMStoreFloat3(&vPos, m_pNavigationController->Get_SelectCell()->Get_Point(CCell::POINT_A));
+		fout.write(reinterpret_cast<const char*>(&vPos.x), sizeof(_float));
+		fout.write(reinterpret_cast<const char*>(&vPos.y), sizeof(_float));
+		fout.write(reinterpret_cast<const char*>(&vPos.z), sizeof(_float));
+
+
+		XMStoreFloat3(&vPos, m_pNavigationController->Get_SelectCell()->Get_Point(CCell::POINT_B));
+		fout.write(reinterpret_cast<const char*>(&vPos.x), sizeof(_float));
+		fout.write(reinterpret_cast<const char*>(&vPos.y), sizeof(_float));
+		fout.write(reinterpret_cast<const char*>(&vPos.z), sizeof(_float));
+
+
+		XMStoreFloat3(&vPos, m_pNavigationController->Get_SelectCell()->Get_Point(CCell::POINT_C));
+		fout.write(reinterpret_cast<const char*>(&vPos.x), sizeof(_float));
+		fout.write(reinterpret_cast<const char*>(&vPos.y), sizeof(_float));
+		fout.write(reinterpret_cast<const char*>(&vPos.z), sizeof(_float));
+	}
+
+	fout.close();
+	MSG_BOX(TEXT("파일 쓰기를 성공"));
+}
+
+void CController_MapTool::LoadNav()
+{
+	m_pNavigationController->Delete_All_Cell();
+
+	const char cFile[128] = "../Bin/DataFiles/Nav_Data.dat";
+	ifstream fin(cFile, ios::in | ios::binary);
+
+	//	fin.open("../Bin/Map_Data.txt");
+	if (!fin.is_open())    // 파일 열었다면
+	{
+		MSG_BOX(TEXT("파일 읽기를 실패했어요.."));
+		return;
+	}
+
+	_uint iCellCout = { 0 };
+	fin.read(reinterpret_cast<char*>(&iCellCout), sizeof(iCellCout));
+
+	_float3 vPos = {};
+
+	for (int i = 0; i < iCellCout; ++i)
+	{
+		_uint iCellAreaNum = { };
+		fin.read(reinterpret_cast<char*>(&iCellAreaNum), sizeof(iCellAreaNum));
+		m_pNavigationController->Set_AreaNum(iCellAreaNum);
+
+		_uint iCellTypeNum = { };
+		fin.read(reinterpret_cast<char*>(&iCellTypeNum), sizeof(iCellTypeNum));
+		m_pNavigationController->Set_TypeNum(iCellTypeNum);
+
+		for (int j = 0; j < 3; ++j)
+		{
+			fin.read(reinterpret_cast<char*>(&vPos.x), sizeof(_float));
+			fin.read(reinterpret_cast<char*>(&vPos.y), sizeof(_float));
+			fin.read(reinterpret_cast<char*>(&vPos.z), sizeof(_float));
+
+			m_pNavigationController->Add_Point(XMLoadFloat3(&vPos));
+		}
+	}
+
+	fin.close();
+	MSG_BOX(TEXT("파일 읽기를 성공했습니다.."));
+}
+
 void CController_MapTool::Find_PickObject()
 {
 	//모든 레이어를 돌면서 물체들의 id값을 비교해야한다.
@@ -722,10 +819,12 @@ void CController_MapTool::Nav_Menu()
 	ImGui::Text("");
 	ImGui::Text("[Cell_List]");
 
+	static _int iSelectedCellNum = -1;
+
 	ImGui::BeginChild("Cell List", ImVec2(150, 350), true);
 
 	_uint iCellCount = 0;
-	_int iSelectedCellList = 0;
+
 	iCellCount = m_pNavigationController->Get_CellSize();
 
 	if (iCellCount != 0)
@@ -737,12 +836,12 @@ void CController_MapTool::Nav_Menu()
 			sprintf_s(szNum, "%d", i);
 			strcat_s(szCell, szNum);
 
-			if (ImGui::Selectable(szCell, iSelectedCellList == i))
+			if (ImGui::Selectable(szCell, iSelectedCellNum == i))
 			{
-				iSelectedCellList = i;
-				m_pNavigationController->Set_SelectCell(iSelectedCellList);
+				iSelectedCellNum = i;
+
+				m_pNavigationController->Set_SelectCell(iSelectedCellNum);
 			}
-			i++;
 		}
 	}
 	ImGui::EndChild();
@@ -751,23 +850,70 @@ void CController_MapTool::Nav_Menu()
 	ImGui::BeginGroup();
 	ImGui::BeginChild("Detail view", ImVec2(0, 400)); // Leave room for 1 line below us
 
-	ImGui::Text("Total Cell Count : %d", iCellCount);
-	ImGui::Text("Select Cell Index : %d", iCellCount);
+	ImGui::Text("[Selected Cell Inform]");
 
-	//ABC 점 좌표 띄우기
+	ImGui::Text("Total Cell Count : %d", iCellCount);
+	ImGui::Text("Select Cell Index : %d", iSelectedCellNum);
+	ImGui::SameLine(); ImGui::Text("    "); 	ImGui::SameLine();
+	if (ImGui::Button("Delete Cell"))
+	{
+		m_pNavigationController->Delete_Selected(iSelectedCellNum);
+		iSelectedCellNum = -1;
+	}
+
+	//ABC 점 좌표 띄우기 ->확인용
+
+	CCell* pCurrentCell = m_pNavigationController->Get_SelectCell();
+
+	_float3 vPoints[3] = { _float3(0.f,0.f,0.f),_float3(0.f,0.f,0.f),_float3(0.f,0.f,0.f) };
+
+	if (pCurrentCell != nullptr )
+	{
+		vPoints[0].x = XMVectorGetX(pCurrentCell->Get_Point(CCell::POINT_A));
+		vPoints[0].y = XMVectorGetY(pCurrentCell->Get_Point(CCell::POINT_A));
+		vPoints[0].z = XMVectorGetZ(pCurrentCell->Get_Point(CCell::POINT_A));
+
+		vPoints[1].x = XMVectorGetX(pCurrentCell->Get_Point(CCell::POINT_B));
+		vPoints[1].y = XMVectorGetY(pCurrentCell->Get_Point(CCell::POINT_B));
+		vPoints[1].z = XMVectorGetZ(pCurrentCell->Get_Point(CCell::POINT_B));
+
+		vPoints[2].x = XMVectorGetX(pCurrentCell->Get_Point(CCell::POINT_C));
+		vPoints[2].y = XMVectorGetY(pCurrentCell->Get_Point(CCell::POINT_C));
+		vPoints[2].z = XMVectorGetZ(pCurrentCell->Get_Point(CCell::POINT_C));
+	}
+
+	ImGui::Text("PointA :"); ImGui::SameLine(); ImGui::InputFloat3("##PointA", (_float*)&vPoints[0]);
+	ImGui::Text("PointB :"); ImGui::SameLine(); ImGui::InputFloat3("##PointB", (_float*)&vPoints[1]);
+	ImGui::Text("PointC :"); ImGui::SameLine(); ImGui::InputFloat3("##PointC", (_float*)&vPoints[2]);
+
+	int iSelectCellArea = 0;
+	int iSelectCellType = 0;
+
+	if(pCurrentCell != nullptr)
+	{
+		iSelectCellArea = pCurrentCell->Get_AreaNum();
+		iSelectCellType = pCurrentCell->Get_CellTypeNum();
+	}
+
+	ImGui::Text("Cell Type : %d", iSelectCellArea);
+	ImGui::Text("Cell Area Num : %d", iSelectCellType);
 
 	if (iMode == Mode_Create_Cell)
 	{
-		//저장한 점들 좌표 띄우기
 		Mode_Create_Cell_Menu();
 	}
 	else if (iMode == Mode_Cell_Select)
 	{
-		//ABC 점 좌표 띄우기
+		//Cell Picking
+		if(m_pGameInstance->Get_KeyState(RBUTTON) == AWAY)
+			m_pNavigationController->SelectCell(m_vPickPos,&iSelectedCellNum);
+
+		Mode_Select_Cell_Menu();
 	}
 	else
 	{
 		//선택한 점 좌표 띄우기
+		Mode_Select_Point_Menu();
 	}
 
 	ImGui::EndChild();
@@ -781,6 +927,17 @@ void CController_MapTool::Mode_Create_Cell_Menu()
 {
 	ImGui::SeparatorText("Create Cell");
 
+	//Cell 타입 설정
+	static int iCellAreaNum = 0;
+	static int iCellTypeNum = 0;
+
+	ImGui::InputInt("Cell Area Num", &iCellAreaNum);
+	ImGui::InputInt("Cell Type ID", &iCellTypeNum);
+
+	m_pNavigationController->Set_AreaNum(iCellAreaNum);
+	m_pNavigationController->Set_TypeNum(iCellTypeNum);
+
+
 	//저장한 점들 개수
 	int iSavePointCount = m_pNavigationController->Get_SavePointsCount();
 	ImGui::Text("Save Point Count : %d", iSavePointCount);
@@ -792,8 +949,69 @@ void CController_MapTool::Mode_Create_Cell_Menu()
 	}
 	ImGui::SameLine();
 	ImGui::Text("or Press \"C\" to add Point");
-	
-	//Cell 타입 설정
+
+
+}
+
+void CController_MapTool::Mode_Select_Cell_Menu()
+{
+	ImGui::SeparatorText("Change Cell Inform");
+
+	CCell* pCurrentCell = m_pNavigationController->Get_SelectCell();
+
+	if (pCurrentCell == nullptr)
+		return;
+
+	int iCellAreaNum = 0;
+	int iCellTypeNum = 0;
+
+	//새로운 셀을 고르면 정보 업데이트
+	if (m_iPrePickedCellIndex != m_pNavigationController->Get_SelectCellIndex() && m_pNavigationController->Get_SelectCellIndex() != -1)
+	{
+		iCellAreaNum = pCurrentCell->Get_AreaNum();
+		iCellTypeNum = pCurrentCell->Get_CellTypeNum();
+	}
+
+	ImGui::InputInt("Cell Area Num", &iCellAreaNum);
+	ImGui::InputInt("Cell Type ID", &iCellTypeNum);
+
+	if(pCurrentCell != nullptr)
+	{
+		pCurrentCell->Set_AreaNum(iCellAreaNum);
+		pCurrentCell->Set_CellTypeNum(iCellTypeNum);
+	}
+}
+
+void CController_MapTool::Mode_Select_Point_Menu()
+{
+	ImGui::SeparatorText("Change Vertex Pos");
+
+	static _float3 vSelectVertexPos = _float3(0.f, 0.f, 0.f);
+	static float fPos[3] = { 0.f,0.f,0.f };
+	static bool bChangeVertexPos = false;
+	ImGui::Checkbox("##Picking_TerrainPos", &bChangeVertexPos);	ImGui::SameLine();
+	ImGui::Text("Change_Pos (Click C)");
+
+	if (bChangeVertexPos == false)
+	{
+		//존재하는 점 중 가까운곳으로 피킹좌표 이동
+		m_vPickPos = m_pNavigationController->Select_Vertex(XMLoadFloat3(&m_vPickPos));
+
+		vSelectVertexPos = m_vPickPos;
+		fPos[0] = vSelectVertexPos.x;
+		fPos[1] = vSelectVertexPos.y;
+		fPos[2] = vSelectVertexPos.z;
+	}
+
+	ImGui::DragFloat3("Rotation(X, Y, Z)", &fPos[0], 0.05f);
+
+	if (KEY_AWAY(KEY::C))
+	{
+		vSelectVertexPos.x = fPos[0];
+		vSelectVertexPos.y = fPos[1];
+		vSelectVertexPos.z = fPos[2];
+		m_pNavigationController->Set_All_Selected_Vertex_to_this(vSelectVertexPos);
+	}
 
 }
 
