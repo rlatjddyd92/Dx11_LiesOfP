@@ -100,7 +100,9 @@ HRESULT CRenderer::Initialize()
 		return E_FAIL;
 
 	// ±¸ÇöÁß HDR LDR Tone
-	if (FAILED(m_pGameInstance->Add_RenderTarget(TEXT("Target_HDR"), (_uint)ViewportDesc.Width, (_uint)ViewportDesc.Height, DXGI_FORMAT_R32G32B32A32_FLOAT, _float4(0.f, 0.f, 0.f, 0.f))))
+	if (FAILED(m_pGameInstance->Add_RenderTarget(TEXT("Target_HDR"), (_uint)ViewportDesc.Width, (_uint)ViewportDesc.Height, DXGI_FORMAT_B8G8R8A8_UNORM, _float4(0.f, 0.f, 0.f, 0.f))))
+		return E_FAIL;
+	if (FAILED(m_pGameInstance->Add_RenderTarget(TEXT("Target_LDR"), (_uint)ViewportDesc.Width, (_uint)ViewportDesc.Height, DXGI_FORMAT_B8G8R8A8_UNORM, _float4(0.f, 0.f, 0.f, 0.f))))
 		return E_FAIL;
 
 	/* MRT_Priority */
@@ -137,6 +139,27 @@ HRESULT CRenderer::Initialize()
 	if (FAILED(m_pGameInstance->Add_MRT(TEXT("MRT_Picking"), TEXT("Target_PickObjectDepth"))))
 		return E_FAIL;
 
+#pragma region SSAO
+	/* MRT_SSAO */
+	if (FAILED(m_pGameInstance->Add_MRT(TEXT("MRT_SSAO"), TEXT("Target_SSAO"))))
+		return E_FAIL;
+
+	/* MRT_SSAO_BlurX */
+	if (FAILED(m_pGameInstance->Add_MRT(TEXT("MRT_SSAO_BlurX"), TEXT("Target_SSAO_BlurX"))))
+		return E_FAIL;
+
+	/* MRT_SSAO_BlurXY */
+	if (FAILED(m_pGameInstance->Add_MRT(TEXT("MRT_SSAO_BlurXY"), TEXT("Target_SSAO_BlurXY"))))
+		return E_FAIL;
+#pragma endregion 
+
+	/* MRT_HDR*/
+	if (FAILED(m_pGameInstance->Add_MRT(TEXT("MRT_HDR"), TEXT("Target_HDR"))))
+		return E_FAIL;
+	/* MRT_HDR*/
+	if (FAILED(m_pGameInstance->Add_MRT(TEXT("MRT_LDR"), TEXT("Target_LDR"))))
+		return E_FAIL;
+
 #pragma region Bloom
 	if (FAILED(m_pGameInstance->Add_MRT(TEXT("MRT_Bloom_DownSample0"), TEXT("Target_Bloom_DownSample0"))))
 		return E_FAIL;
@@ -164,19 +187,6 @@ HRESULT CRenderer::Initialize()
 		return E_FAIL;
 #pragma endregion
 
-#pragma region SSAO
-	/* MRT_SSAO */
-	if (FAILED(m_pGameInstance->Add_MRT(TEXT("MRT_SSAO"), TEXT("Target_SSAO"))))
-		return E_FAIL;
-
-	/* MRT_SSAO_BlurX */
-	if (FAILED(m_pGameInstance->Add_MRT(TEXT("MRT_SSAO_BlurX"), TEXT("Target_SSAO_BlurX"))))
-		return E_FAIL;
-
-	/* MRT_SSAO_BlurXY */
-	if (FAILED(m_pGameInstance->Add_MRT(TEXT("MRT_SSAO_BlurXY"), TEXT("Target_SSAO_BlurXY"))))
-		return E_FAIL;
-#pragma endregion 
 
 	/* MRT_Final */
 	if (FAILED(m_pGameInstance->Add_MRT(TEXT("MRT_BackBuffer"), TEXT("Target_BackBuffer"))))
@@ -187,13 +197,17 @@ HRESULT CRenderer::Initialize()
 		return E_FAIL;
 
 	m_pBloomShader = CShader::Create(m_pDevice, m_pContext, TEXT("../Bin/ShaderFiles/Shader_Bloom.hlsl"), VTXPOSTEX::Elements, VTXPOSTEX::iNumElements);
-	if (nullptr == m_pShader)
+	if (nullptr == m_pBloomShader)
 		return E_FAIL;
 
 	m_pSSAOShader = CShader::Create(m_pDevice, m_pContext, TEXT("../Bin/ShaderFiles/Shader_SSAO.hlsl"), VTXPOSTEX::Elements, VTXPOSTEX::iNumElements);
-	if (nullptr == m_pShader)
+	if (nullptr == m_pSSAOShader)
 		return E_FAIL;
 	m_pNoiseTexture_SSAO = CTexture::Create(m_pDevice, m_pContext, TEXT("../Bin/Resources/T_Tile_Noise_01_C_LGS.dds"), 1);
+
+	m_pHDRShader = CShader::Create(m_pDevice, m_pContext, TEXT("../Bin/ShaderFiles/Shader_HDR.hlsl"), VTXPOSTEX::Elements, VTXPOSTEX::iNumElements);
+	if (nullptr == m_pHDRShader)
+		return E_FAIL;
 	
 	m_pVIBuffer = CVIBuffer_Rect::Create(m_pDevice, m_pContext);
 	if (nullptr == m_pVIBuffer)
@@ -216,8 +230,8 @@ HRESULT CRenderer::Initialize()
 	//if (FAILED(m_pGameInstance->Ready_RT_Debug(TEXT("Target_Bloom_BlurXY1"), 100.f, 300.f, 200.f, 200.f)))
 	//	return E_FAIL;
 
-	//if (FAILED(m_pGameInstance->Ready_RT_Debug(TEXT("Target_Shade"), 350.f, 150.f, 300.f, 300.f)))
-	//	return E_FAIL;
+	if (FAILED(m_pGameInstance->Ready_RT_Debug(TEXT("Target_LDR"), 350.f, 150.f, 300.f, 300.f)))
+		return E_FAIL;
 	//if (FAILED(m_pGameInstance->Ready_RT_Debug(TEXT("Target_Specular"), 350.f, 450.f, 300.f, 300.f)))
 	//	return E_FAIL;
 	//if (FAILED(m_pGameInstance->Ready_RT_Debug(TEXT("Target_Height"), ViewportDesc.Width - 150.f, 150.f, 300.f, 300.f)))
@@ -225,9 +239,9 @@ HRESULT CRenderer::Initialize()
 
 	if (FAILED(m_pGameInstance->Ready_RT_Debug(TEXT("Target_SSAO_BlurXY"), 100.f, 100.f, 200.f, 200.f)))
 		return E_FAIL;
-	if (FAILED(m_pGameInstance->Ready_RT_Debug(TEXT("Target_PickObjectDepth"), 100.f, 300.f, 200.f, 200.f)))
+	if (FAILED(m_pGameInstance->Ready_RT_Debug(TEXT("Target_HDR"), 100.f, 300.f, 200.f, 200.f)))
 		return E_FAIL;
-	if (FAILED(m_pGameInstance->Ready_RT_Debug(TEXT("Target_ARM"), 100.f, 500.f, 200.f, 200.f)))
+	if (FAILED(m_pGameInstance->Ready_RT_Debug(TEXT("Target_Bloom_UpSample1"), 100.f, 500.f, 200.f, 200.f)))
 		return E_FAIL;
 	// 
 	//if (FAILED(m_pGameInstance->Ready_RT_Debug(TEXT("Target_BackBuffer"), 600.f, 100.f, 200.f, 200.f)))
@@ -259,6 +273,20 @@ HRESULT CRenderer::Add_RenderObject(RENDERGROUP eRenderGroupID, CGameObject * pR
 	return S_OK;
 }
 
+HRESULT CRenderer::Add_InstanceRenderObject(RENDERGROUP eRenderGroupID, CGameObject* pRenderObject, const _wstring strModelName)
+{
+	if (nullptr == pRenderObject ||
+		eRenderGroupID >= RG_END)
+		return E_FAIL;
+
+	if(m_InstanceRenderObjects->find(strModelName) == m_InstanceRenderObjects->end())
+		m_InstanceRenderObjects[eRenderGroupID][strModelName].push_back(pRenderObject);
+
+	Safe_AddRef(pRenderObject);
+
+	return S_OK;
+}
+
 HRESULT CRenderer::Draw()
 {
 	if (FAILED(Render_Picking()))
@@ -276,12 +304,16 @@ HRESULT CRenderer::Draw()
 	if (FAILED(Render_ShadowObj()))
 		return E_FAIL;
 
+	if (FAILED(Render_Deferred()))
+		return E_FAIL;
+
 	if (FAILED(Render_SSAO()))
+		return E_FAIL;
+	if (FAILED(Render_HDR()))
 		return E_FAIL;
 	if (FAILED(Render_Bloom()))
 		return E_FAIL;
-
-	if (FAILED(Render_Deferred()))
+	if(FAILED(Render_LDR()))
 		return E_FAIL;
 
 	if (FAILED(Render_NonLights()))
@@ -543,6 +575,47 @@ HRESULT CRenderer::Render_SSAO()
 	if (FAILED(m_pGameInstance->End_MRT()))
 		return E_FAIL;
 
+
+	if (FAILED(Copy_BackBuffer()))
+		return E_FAIL;
+
+	if (FAILED(m_pGameInstance->Bind_RT_ShaderResource(m_pSSAOShader, TEXT("Target_SSAO_BlurXY"), "g_SSAOTexture")))
+		return E_FAIL;
+	if (FAILED(m_pGameInstance->Bind_RT_ShaderResource(m_pSSAOShader, TEXT("Target_BackBuffer"), "g_BackTexture")))
+		return E_FAIL;
+
+	m_pSSAOShader->Begin(3);
+	m_pVIBuffer->Bind_Buffers();
+	m_pVIBuffer->Render();
+
+	return S_OK;
+}
+
+HRESULT CRenderer::Render_HDR()
+{
+	if (FAILED(Copy_BackBuffer()))
+		return E_FAIL;
+
+	if (FAILED(m_pGameInstance->Begin_MRT(TEXT("MRT_HDR"))))
+		return E_FAIL;
+
+	if (FAILED(m_pHDRShader->Bind_Matrix("g_WorldMatrix", &m_WorldMatrix)))
+		return E_FAIL;
+	if (FAILED(m_pHDRShader->Bind_Matrix("g_ViewMatrix", &m_ViewMatrix)))
+		return E_FAIL;
+	if (FAILED(m_pHDRShader->Bind_Matrix("g_ProjMatrix", &m_ProjMatrix)))
+		return E_FAIL;
+
+	if (FAILED(m_pGameInstance->Bind_RT_ShaderResource(m_pHDRShader, TEXT("Target_BackBuffer"), "g_BackTexture")))
+		return E_FAIL;
+
+	m_pHDRShader->Begin(0);
+	m_pVIBuffer->Bind_Buffers();
+	m_pVIBuffer->Render();
+
+	if (FAILED(m_pGameInstance->End_MRT()))
+		return E_FAIL;
+
 	return S_OK;
 }
 
@@ -582,7 +655,7 @@ HRESULT CRenderer::Render_Bloom()
 
 	m_pContext->RSSetViewports(iNumViewports, &ViewportDesc);
 
-	if (FAILED(m_pGameInstance->Bind_RT_ShaderResource(m_pBloomShader, TEXT("Target_Diffuse"), "g_DownSampleTexture")))
+	if (FAILED(m_pGameInstance->Bind_RT_ShaderResource(m_pBloomShader, TEXT("Target_HDR"), "g_DownSampleTexture")))
 		return E_FAIL;
 
 	if (FAILED(m_pBloomShader->Bind_RawValue("g_isSelectBright", &isSelectBright, sizeof(_bool))))
@@ -797,9 +870,35 @@ HRESULT CRenderer::Render_Bloom()
 	return S_OK;
 }
 
+HRESULT CRenderer::Render_LDR()
+{
+	if (FAILED(m_pGameInstance->Begin_MRT(TEXT("MRT_LDR"))))
+		return E_FAIL;
+
+	if (FAILED(m_pHDRShader->Bind_Matrix("g_WorldMatrix", &m_WorldMatrix)))
+		return E_FAIL;
+	if (FAILED(m_pHDRShader->Bind_Matrix("g_ViewMatrix", &m_ViewMatrix)))
+		return E_FAIL;
+	if (FAILED(m_pHDRShader->Bind_Matrix("g_ProjMatrix", &m_ProjMatrix)))
+		return E_FAIL;
+
+	if (FAILED(m_pGameInstance->Bind_RT_ShaderResource(m_pHDRShader, TEXT("Target_HDR"), "g_BackTexture")))
+		return E_FAIL;
+
+	m_pHDRShader->Begin(1);
+	m_pVIBuffer->Bind_Buffers();
+	m_pVIBuffer->Render();
+
+	if (FAILED(m_pGameInstance->End_MRT()))
+		return E_FAIL;
+
+	return S_OK;
+}
+
 HRESULT CRenderer::Render_Final()
 {
-	return E_NOTIMPL;
+	
+	return S_OK;
 }
 
 HRESULT CRenderer::Render_Picking()
@@ -1097,10 +1196,11 @@ HRESULT CRenderer::Render_Debug()
 	//m_pGameInstance->Render_MRT_Debug(TEXT("MRT_Bloom_BlurXY1"), m_pShader, m_pVIBuffer);
 	//m_pGameInstance->Render_MRT_Debug(TEXT("MRT_Bloom_BlurXY2"), m_pShader, m_pVIBuffer);
 	m_pGameInstance->Render_MRT_Debug(TEXT("MRT_SSAO_BlurXY"), m_pShader, m_pVIBuffer);
-	m_pGameInstance->Render_MRT_Debug(TEXT("MRT_Picking"), m_pShader, m_pVIBuffer);
+	m_pGameInstance->Render_MRT_Debug(TEXT("MRT_HDR"), m_pShader, m_pVIBuffer);
+	m_pGameInstance->Render_MRT_Debug(TEXT("MRT_LDR"), m_pShader, m_pVIBuffer);
 	//m_pGameInstance->Render_MRT_Debug(TEXT("MRT_ShadowObj"), m_pShader, m_pVIBuffer);
-	//m_pGameInstance->Render_MRT_Debug(TEXT("MRT_Final"), m_pShader, m_pVIBuffer);
-	//m_pGameInstance->Render_MRT_Debug(TEXT("MRT_Blur_X"), m_pShader, m_pVIBuffer);
+	m_pGameInstance->Render_MRT_Debug(TEXT("MRT_Bloom_UpSample1"), m_pShader, m_pVIBuffer);
+	m_pGameInstance->Render_MRT_Debug(TEXT("MRT_BackBuffer"), m_pShader, m_pVIBuffer);
 
 	return S_OK;
 }
@@ -1140,6 +1240,7 @@ void CRenderer::Free()
 
 	Safe_Release(m_pCascadeDSVArr);
 
+	Safe_Release(m_pHDRShader);
 	Safe_Release(m_pSSAOShader);
 	Safe_Release(m_pNoiseTexture_SSAO);
 

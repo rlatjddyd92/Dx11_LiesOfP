@@ -22,6 +22,7 @@ public:
 public:
 	HRESULT Initialize();
 	HRESULT Add_RenderObject(RENDERGROUP eRenderGroupID, class CGameObject* pRenderObject);
+	HRESULT Add_InstanceRenderObject(RENDERGROUP eRenderGroupID, class CGameObject* pRenderObject, const _wstring strModelName);
 	HRESULT Draw();
 
 #ifdef _DEBUG
@@ -42,13 +43,17 @@ private:
 	ID3D11Device*				m_pDevice = { nullptr };
 	ID3D11DeviceContext*		m_pContext = { nullptr };
 	ID3D11DepthStencilView*		m_pLightDepthStencilView = { nullptr };
-	list<class CGameObject*>	m_RenderObjects[RG_END];
 	class CGameInstance*		m_pGameInstance = { nullptr };
+
+	
+	list<class CGameObject*>	m_RenderObjects[RG_END];
+	map<_wstring, list<class CGameObject*>>	m_InstanceRenderObjects[RG_END];
 
 private:
 	class CShader*				m_pShader = { nullptr };
 	class CShader*				m_pBloomShader = { nullptr };
 	class CShader*				m_pSSAOShader = { nullptr };
+	class CShader*				m_pHDRShader = { nullptr };
 
 	class CVIBuffer_Rect*		m_pVIBuffer = { nullptr };
 
@@ -85,7 +90,9 @@ private:
 	HRESULT Render_Deferred();
 
 	HRESULT Render_SSAO();
+	HRESULT Render_HDR();
 	HRESULT Render_Bloom();
+	HRESULT Render_LDR();
 
 	HRESULT Render_Final();
 

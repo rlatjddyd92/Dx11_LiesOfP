@@ -9,6 +9,7 @@ texture2D g_DepthTexture;
 texture2D g_NormalTexture;
 texture2D g_NoiseTexture;
 texture2D g_SSAOTexture;
+texture2D g_BackTexture;
 
 float g_fRadius = 0.02f;
 
@@ -165,6 +166,18 @@ PS_OUT PS_MAIN_BLUR_Y(PS_IN In)
     return Out;
 }
 
+PS_OUT PS_MAIN_SSAO_FINAL(PS_IN In)
+{
+    PS_OUT Out = (PS_OUT) 0;
+    
+    float3 vSSAO = g_SSAOTexture.Sample(LinearSampler, In.vTexcoord);
+    float3 vBack = g_BackTexture.Sample(LinearSampler, In.vTexcoord);
+
+    Out.vColor = vector(vSSAO * vBack, 1.f);
+
+    return Out;
+}
+
 technique11 DefaultTechnique
 {
     pass SSAO
@@ -200,4 +213,14 @@ technique11 DefaultTechnique
         PixelShader = compile ps_5_0 PS_MAIN_BLUR_Y();
     }
 
+    pass SSAO_Final
+    {
+        SetRasterizerState(RS_Default);
+        SetDepthStencilState(DSS_None, 0);
+        SetBlendState(BS_Default, vector(0.f, 0.f, 0.f, 0.f), 0xffffffff);
+		
+        VertexShader = compile vs_5_0 VS_MAIN();
+        GeometryShader = NULL;
+        PixelShader = compile ps_5_0 PS_MAIN_SSAO_FINAL();
+    }
 }
