@@ -127,7 +127,7 @@ void CImGui_Manager::Tool_Effect()
 
 		if (ImGui::CollapsingHeader("Particle"))
 		{
-			m_pController_EffectTool->Check();
+			m_pController_EffectTool->Particle_Check();
 		}
 
 		ImGui::Begin("EffectList");

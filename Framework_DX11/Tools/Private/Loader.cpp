@@ -13,6 +13,8 @@
 #include "FreeCamera.h"
 #include "Particle_Test.h"
 
+#include "Controller_EffectTool.h"
+
 #pragma comment(lib, "ole32.lib")	// 지우지 마세요
 
 CLoader::CLoader(ID3D11Device* pDevice, ID3D11DeviceContext* pContext)
@@ -275,11 +277,13 @@ HRESULT CLoader::Ready_Resources_For_ToolLevel()
 	if (FAILED(m_pGameInstance->Add_Prototype(LEVEL_TOOL, TEXT("Prototype_Component_Texture_Particle_Spark"),
 		CTexture::Create(m_pDevice, m_pContext, TEXT("../Bin/Resources/Textures/Effect/Particle_Spark.dds"), 1))))
 		return E_FAIL;
+	CController_EffectTool::Get_Instance()->Add_ProtytypeTag(TEXT("Prototype_Component_Texture_Particle_Spark"));
 
 	/* For. Prototype_Component_Texture_Particle_Circle */
 	if (FAILED(m_pGameInstance->Add_Prototype(LEVEL_TOOL, TEXT("Prototype_Component_Texture_Particle_Circle"),
 		CTexture::Create(m_pDevice, m_pContext, TEXT("../Bin/Resources/Textures/Effect/Particle_Circle.dds"), 1))))
 		return E_FAIL;
+	CController_EffectTool::Get_Instance()->Add_ProtytypeTag(TEXT("Prototype_Component_Texture_Particle_Circle"));
 
 	lstrcpy(m_szLoadingText, TEXT("모델을(를) 로딩중입니다."));
 	/* For. Prototype_Component_VIBuffer_Terrain*/

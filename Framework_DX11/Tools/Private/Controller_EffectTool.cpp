@@ -45,9 +45,9 @@ HRESULT CController_EffectTool::Add_Particle()
 	DefaultDesc.fGravity = m_fGravity;
 	DefaultDesc.vMoveDir = m_vMoveDir;
 
-	CParticle_Test::REVOLVE_DESC RevolveDesc = {};
-	RevolveDesc.vRevolveAxis = m_vRevolveAxis;
-	RevolveDesc.fAngle = m_fAngle;
+	CParticle_Test::REVOLVE_DESC OrbitDesc = {};
+	OrbitDesc.vOrbitAxis = m_vOrbitAxis;
+	OrbitDesc.fAngle = m_fAngle;
 
 	CParticle_Test::RANDOM_DESC RandomDesc = {};
 	RandomDesc.fTimeInterval = m_fTimeInterval;
@@ -63,10 +63,17 @@ HRESULT CController_EffectTool::Add_Particle()
 	TransformDesc.vScale = m_vScale;
 
 	desc.DefaultDesc = DefaultDesc;
-	desc.RevolveDesc = RevolveDesc;
+	desc.OrbitDesc = OrbitDesc;
 	desc.RandomDesc = RandomDesc;
 	desc.AccelDesc = AccelDesc;
 	desc.TransformDesc = TransformDesc;
+
+	desc.strPrototypeTextureTag = m_ParticlePrototypeTags[m_iSelectedTextureIndex];
+
+	if (m_iMaxShaderIndex < m_iShaderIndex)
+		m_iShaderIndex = m_iMaxShaderIndex;
+
+	desc.iShaderIndex = m_iShaderIndex;
 
 	if (FAILED(m_pGameInstance->Add_CloneObject_ToLayer(LEVEL_TOOL, TEXT("Layer_Particle"), TEXT("Prototype_GameObject_Particle_Test"), &desc)))
 		return E_FAIL;
@@ -76,8 +83,33 @@ HRESULT CController_EffectTool::Add_Particle()
 	return S_OK;
 }
 
-void CController_EffectTool::Check()
+void CController_EffectTool::Particle_Check()
 {
+	if (ImGui::TreeNode("Texture"))
+	{
+		vector<string> strArray;
+
+		for (const auto& strPrototype : m_ParticlePrototypeTags)
+		{
+			int iSize = WideCharToMultiByte(CP_UTF8, 0, &strPrototype[0], (int)strPrototype.size(), nullptr, 0, nullptr, nullptr);
+			string strTo(iSize, 0);
+			WideCharToMultiByte(CP_UTF8, 0, &strPrototype[0], (int)strPrototype.size(), &strTo[0], iSize, nullptr, nullptr);
+			strArray.emplace_back(strTo);
+		}
+
+		vector<const _char*> szItems;
+		for (const auto& str : strArray)
+		{
+			szItems.emplace_back(str.c_str());
+		}
+
+		ImGui::ListBox("Texture List", &m_iSelectedTextureIndex, szItems.data(), (_int)szItems.size(), 5);
+
+		ImGui::SeparatorText("Shader");
+		ImGui::InputInt("Shader Index", (_int*)&m_iShaderIndex);
+
+		ImGui::TreePop();
+	}
 	if (ImGui::TreeNode("Initialize"))
 	{
 		ImGui::SeparatorText("Initialize");
@@ -109,7 +141,7 @@ void CController_EffectTool::Check()
 		ImGui::RadioButton("Converge_I", (_int*)&m_iParticleType, CParticle_Test::TYPE_CONVERGE_INDEPENDENT);
 
 		ImGui::SeparatorText("State");
-		ImGui::Checkbox("Revolve", &m_bRevolve);
+		ImGui::Checkbox("Orbit", &m_bOrbit);
 		ImGui::SameLine();
 		ImGui::Checkbox("Random", &m_bRandom);
 		ImGui::SameLine();
@@ -136,8 +168,8 @@ void CController_EffectTool::Check()
 		ImGui::InputFloat("Gravity", (_float*)&m_fGravity);
 		ImGui::InputFloat4("Move Dir", (_float*)&m_vMoveDir);
 
-		ImGui::SeparatorText("Particle Revolve"); 
-		ImGui::InputFloat3("Revolve Axis", (_float*)&m_vRevolveAxis);
+		ImGui::SeparatorText("Particle Orbit");
+		ImGui::InputFloat3("Orbit Axis", (_float*)&m_vOrbitAxis);
 		ImGui::InputFloat("Angle", (_float*)&m_fAngle);
 
 		ImGui::SeparatorText("Particle Random");
@@ -147,6 +179,7 @@ void CController_EffectTool::Check()
 		ImGui::SeparatorText("Particle Accel");
 		ImGui::InputFloat("Accel Speed", (_float*)&m_fAccelSpeed);
 		ImGui::InputFloat("Accel Limit", (_float*)&m_fAccelLimit);
+
 
 		ImGui::TreePop();
 	}
@@ -169,11 +202,11 @@ void CController_EffectTool::Update_Particle()
 
 	pParticle->Set_Default(DefaultDesc);
 
-	CParticle_Test::REVOLVE_DESC RevolveDesc = {};
-	RevolveDesc.vRevolveAxis = m_vRevolveAxis;
-	RevolveDesc.fAngle = m_fAngle;
+	CParticle_Test::REVOLVE_DESC OrbitDesc = {};
+	OrbitDesc.vOrbitAxis = m_vOrbitAxis;
+	OrbitDesc.fAngle = m_fAngle;
 	
-	pParticle->Set_Revolev(RevolveDesc);
+	pParticle->Set_Revolev(OrbitDesc);
 
 	CParticle_Test::RANDOM_DESC RandomDesc = {};
 	RandomDesc.fTimeInterval = m_fTimeInterval;
@@ -193,6 +226,11 @@ void CController_EffectTool::Update_Particle()
 	TransformDesc.vScale = m_vScale;
 
 	pParticle->Set_Transform(TransformDesc);
+
+	if (m_iMaxShaderIndex < m_iShaderIndex)
+		m_iShaderIndex = m_iMaxShaderIndex;
+
+	pParticle->Set_ShaderIndex(m_iShaderIndex);
 }
 
 void CController_EffectTool::Select_Particle()
@@ -240,7 +278,6 @@ void CController_EffectTool::Delete_Particle()
 
 		++iIndex;
 	}
-
 }
 
 void CController_EffectTool::Get_Particle()
@@ -248,7 +285,7 @@ void CController_EffectTool::Get_Particle()
 	CParticle_Test* pParticle = static_cast<CParticle_Test*>(m_pGameInstance->Find_Object(LEVEL_TOOL, TEXT("Layer_Particle"), m_iSelectedParticleIndex));
 
 	CParticle_Test::DEFAULT_DESC DefaultDesc = pParticle->Get_Default();
-	CParticle_Test::REVOLVE_DESC RevolveDesc = pParticle->Get_Revolve();
+	CParticle_Test::REVOLVE_DESC OrbitDesc = pParticle->Get_Orbit();
 	CParticle_Test::RANDOM_DESC RandomDesc = pParticle->Get_Random();
 	CParticle_Test::ACCEL_DESC AccelDesc = pParticle->Get_Accel();
 
@@ -259,8 +296,8 @@ void CController_EffectTool::Get_Particle()
 	m_fGravity = DefaultDesc.fGravity;
 	m_vMoveDir = DefaultDesc.vMoveDir;
 
-	m_vRevolveAxis = RevolveDesc.vRevolveAxis;
-	m_fAngle = RevolveDesc.fAngle;
+	m_vOrbitAxis = OrbitDesc.vOrbitAxis;
+	m_fAngle = OrbitDesc.fAngle;
 
 	m_fTimeInterval = RandomDesc.fTimeInterval;
 	m_fRandomRatio = RandomDesc.fRandomRatio;
@@ -268,10 +305,10 @@ void CController_EffectTool::Get_Particle()
 	m_fAccelLimit = AccelDesc.fAccelLimit;
 	m_fAccelSpeed = AccelDesc.fAccelSpeed;
 
-	if (CVIBuffer_Point_Instance::STATE_REVOLVE == (m_iParticleState & CVIBuffer_Point_Instance::STATE_REVOLVE))
-		m_bRevolve = true;
+	if (CVIBuffer_Point_Instance::STATE_ORBIT == (m_iParticleState & CVIBuffer_Point_Instance::STATE_ORBIT))
+		m_bOrbit = true;
 	else
-		m_bRevolve = false;
+		m_bOrbit = false;
 
 	if (CVIBuffer_Point_Instance::STATE_RANDOM == (m_iParticleState & CVIBuffer_Point_Instance::STATE_RANDOM))
 		m_bRandom = true;
@@ -297,10 +334,10 @@ void CController_EffectTool::Get_Particle()
 
 void CController_EffectTool::Set_State()
 {
-	if (true == m_bRevolve)
-		m_iParticleState |= CVIBuffer_Point_Instance::STATE_REVOLVE;
+	if (true == m_bOrbit)
+		m_iParticleState |= CVIBuffer_Point_Instance::STATE_ORBIT;
 	else
-		m_iParticleState &= ~CVIBuffer_Point_Instance::STATE_REVOLVE;
+		m_iParticleState &= ~CVIBuffer_Point_Instance::STATE_ORBIT;
 
 	if (true == m_bRandom)
 		m_iParticleState |= CVIBuffer_Point_Instance::STATE_RANDOM;

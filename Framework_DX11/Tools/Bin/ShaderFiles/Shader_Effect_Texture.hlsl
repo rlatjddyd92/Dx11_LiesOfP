@@ -91,7 +91,7 @@ struct PS_OUT_EFFECT
 
 PS_OUT_EFFECT PS_MAIN_EFFECT(PS_IN In, bool isAlphaBlend)
 {
-    PS_OUT Out = (PS_OUT) 0;
+    PS_OUT_EFFECT Out = (PS_OUT_EFFECT) 0;
     
     
     
