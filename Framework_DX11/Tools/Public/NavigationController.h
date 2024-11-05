@@ -36,6 +36,9 @@ public:
 	void Set_AreaNum(_uint _iNum) { m_iAreaNum = _iNum; }
 	_uint Get_AreaNum(_int _iIndex) { return m_Cells[_iIndex]->Get_AreaNum(); }
 
+	void Set_TypeNum(_uint _iNum) { m_iCellType = _iNum; }
+	_uint Get_TypeNum(_int _iIndex) { return m_Cells[_iIndex]->Get_CellTypeNum(); }
+
 	void Change_Cell_Inform(_uint _index, _uint _iType, _uint _iRoomNum);
 
 	_bool isCell_Picked(_float3 vPickPos);
@@ -53,6 +56,7 @@ public:
 	void Sort_Cell(_float3* vPoints);
 
 	CCell* Get_SelectCell();
+	_int Get_SavePointsCount() { return m_vClickPoints.size(); }
 
 private:
 	ID3D11Device* m_pDevice = { nullptr };
