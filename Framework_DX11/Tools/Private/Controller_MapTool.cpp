@@ -271,14 +271,14 @@ void CController_MapTool::Save_Load()
 
 	if (ImGui::Button("Save Nav"))
 	{
-		//SaveMap();
+		SaveNav();
 	}
 	ImGui::SameLine();
 	ImGui::Text("                           ");
 	ImGui::SameLine();
 	if (ImGui::Button("Load Nav"))
 	{
-		//LoadMap();
+		LoadNav();
 	}
 }
 
@@ -599,6 +599,101 @@ void CController_MapTool::LoadMap()
 
 	//	++i;
 	//}
+
+	fin.close();
+	MSG_BOX(TEXT("파일 읽기를 성공했습니다.."));
+}
+
+void CController_MapTool::SaveNav()
+{
+	const char cFile[128] = "../Bin/DataFiles/Nav_Data.dat";
+	ofstream fout(cFile, ios::out | ios::binary);
+
+	//	fout.open();
+	if (!fout.is_open())    // 파일 열었다면
+	{
+		MSG_BOX(TEXT("Nav 파일 쓰기를 실패"));
+		return;
+	}
+
+	string strUint = {};
+
+	//전체 Cell개수 저장
+	_uint iCellCount = m_pNavigationController->Get_CellSize();
+	fout.write(reinterpret_cast<const char*>(&iCellCount), sizeof(_uint));
+
+	_float3 vPos = {};
+
+	for (_uint i = 0; i < iCellCount; ++i)
+	{
+		_uint iCellAreaNum = m_pNavigationController->Get_AreaNum(i);
+		fout.write(reinterpret_cast<const char*>(&iCellAreaNum), sizeof(_uint));
+
+		_uint iCellTypeNum= m_pNavigationController->Get_TypeNum(i);
+		fout.write(reinterpret_cast<const char*>(&iCellTypeNum), sizeof(_uint));
+
+		m_pNavigationController->Set_SelectCell(i);
+
+		XMStoreFloat3(&vPos, m_pNavigationController->Get_SelectCell()->Get_Point(CCell::POINT_A));
+		fout.write(reinterpret_cast<const char*>(&vPos.x), sizeof(_float));
+		fout.write(reinterpret_cast<const char*>(&vPos.y), sizeof(_float));
+		fout.write(reinterpret_cast<const char*>(&vPos.z), sizeof(_float));
+
+
+		XMStoreFloat3(&vPos, m_pNavigationController->Get_SelectCell()->Get_Point(CCell::POINT_B));
+		fout.write(reinterpret_cast<const char*>(&vPos.x), sizeof(_float));
+		fout.write(reinterpret_cast<const char*>(&vPos.y), sizeof(_float));
+		fout.write(reinterpret_cast<const char*>(&vPos.z), sizeof(_float));
+
+
+		XMStoreFloat3(&vPos, m_pNavigationController->Get_SelectCell()->Get_Point(CCell::POINT_C));
+		fout.write(reinterpret_cast<const char*>(&vPos.x), sizeof(_float));
+		fout.write(reinterpret_cast<const char*>(&vPos.y), sizeof(_float));
+		fout.write(reinterpret_cast<const char*>(&vPos.z), sizeof(_float));
+	}
+
+	fout.close();
+	MSG_BOX(TEXT("파일 쓰기를 성공"));
+}
+
+void CController_MapTool::LoadNav()
+{
+	m_pNavigationController->Delete_All_Cell();
+
+	const char cFile[128] = "../Bin/DataFiles/Nav_Data.dat";
+	ifstream fin(cFile, ios::in | ios::binary);
+
+	//	fin.open("../Bin/Map_Data.txt");
+	if (!fin.is_open())    // 파일 열었다면
+	{
+		MSG_BOX(TEXT("파일 읽기를 실패했어요.."));
+		return;
+	}
+
+	_uint iCellCout = { 0 };
+	fin.read(reinterpret_cast<char*>(&iCellCout), sizeof(iCellCout));
+
+	_float3 vPos = {};
+
+	for (int i = 0; i < iCellCout; ++i)
+	{
+		_uint iCellAreaNum = { };
+		fin.read(reinterpret_cast<char*>(&iCellAreaNum), sizeof(iCellAreaNum));
+		m_pNavigationController->Set_AreaNum(iCellAreaNum);
+
+		_uint iCellTypeNum = { };
+		fin.read(reinterpret_cast<char*>(&iCellTypeNum), sizeof(iCellTypeNum));
+		m_pNavigationController->Set_TypeNum(iCellTypeNum);
+
+		for (int j = 0; j < 3; ++j)
+		{
+			fin.read(reinterpret_cast<char*>(&vPos.x), sizeof(_float));
+			fin.read(reinterpret_cast<char*>(&vPos.y), sizeof(_float));
+			fin.read(reinterpret_cast<char*>(&vPos.z), sizeof(_float));
+
+			m_pNavigationController->Add_Point(XMLoadFloat3(&vPos));
+		}
+	}
 
 	fin.close();
 	MSG_BOX(TEXT("파일 읽기를 성공했습니다.."));

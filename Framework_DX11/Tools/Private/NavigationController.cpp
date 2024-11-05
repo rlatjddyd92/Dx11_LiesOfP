@@ -177,9 +177,6 @@ HRESULT CNavigationController::Add_Cell(_float3* vPoints)
 	if (nullptr == pCell)
 		return E_FAIL;
 
-	//pCell->Set_AreaNum(m_iAreaNum);
-	//pCell->Set_CellTypeNum(m_iCellType);
-
 	m_Cells.push_back(pCell);
 
 	return S_OK;

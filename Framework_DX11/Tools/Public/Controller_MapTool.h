@@ -75,6 +75,8 @@ private:
 private:
 	void SaveMap();
 	void LoadMap();
+	void SaveNav();
+	void LoadNav();
 	void Find_PickObject();
 	void Map_Menu();
 	void Nav_Menu();
