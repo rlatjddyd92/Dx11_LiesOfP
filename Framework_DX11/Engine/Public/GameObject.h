@@ -42,6 +42,7 @@ public:
 	virtual HRESULT Render();
 	virtual HRESULT Render_Height() { return S_OK; }
 	virtual HRESULT Render_LightDepth() { return S_OK; }
+	virtual HRESULT Render_Picking() { return S_OK; }
 
 public:
 	virtual void OnCollisionEnter(CGameObject* pOther) {};

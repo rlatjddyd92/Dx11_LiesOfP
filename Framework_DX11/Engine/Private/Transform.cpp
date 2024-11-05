@@ -339,41 +339,6 @@ void CTransform::Rotation(_float fX, _float fY, _float fZ)
 	Set_State(STATE_LOOK, XMVector3TransformNormal(vLook, RotationMatrix));
 }
 
-_Vec3 CTransform::Get_Rotation_Dgree()
-{
-	_Vec3 vScale = Get_Scaled();
-
-	_Matrix RotationMatrix = m_WorldMatrix;
-	RotationMatrix._11 /= vScale.x;
-	RotationMatrix._12 /= vScale.x;
-	RotationMatrix._13 /= vScale.x;
-	RotationMatrix._21 /= vScale.y;
-	RotationMatrix._22 /= vScale.y;
-	RotationMatrix._23 /= vScale.y;
-	RotationMatrix._31 /= vScale.z;
-	RotationMatrix._32 /= vScale.z;
-	RotationMatrix._33 /= vScale.z;
-
-	_Quaternion rotationQuat = DirectX::SimpleMath::Quaternion::CreateFromRotationMatrix(RotationMatrix);
-
-	// Roll, Pitch, Yaw 계산
-	float fX = atan2(2.0f * (rotationQuat.y * rotationQuat.z + rotationQuat.w * rotationQuat.x),
-		rotationQuat.w * rotationQuat.w + rotationQuat.x * rotationQuat.x -
-		rotationQuat.y * rotationQuat.y - rotationQuat.z * rotationQuat.z);
-
-	float fY = asin(-2.0f * (rotationQuat.x * rotationQuat.z - rotationQuat.w * rotationQuat.y));
-
-	float fZ = atan2(2.0f * (rotationQuat.x * rotationQuat.y + rotationQuat.w * rotationQuat.z),
-		rotationQuat.w * rotationQuat.w - rotationQuat.x * rotationQuat.x -
-		rotationQuat.y * rotationQuat.y + rotationQuat.z * rotationQuat.z);
-
-	// 도 단위로 변환하여 반환
-	return DirectX::SimpleMath::Vector3(
-		DirectX::XMConvertToDegrees(fX),
-		DirectX::XMConvertToDegrees(fY),
-		DirectX::XMConvertToDegrees(fZ)
-	);
-}
 
 void CTransform::BillBoard()
 {
