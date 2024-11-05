@@ -105,7 +105,7 @@ public:
 	HRESULT Add_Light(const LIGHT_DESC& LightDesc);
 	const LIGHT_DESC* Get_LightDesc(_uint iIndex) const;
 	HRESULT Render_Lights(class CShader* pShader, class CVIBuffer_Rect* pVIBuffer);
-
+	_int Get_Total_LightCount();
 #pragma endregion
 
 #pragma region FONT_MANAGER

@@ -75,7 +75,7 @@
     </Filter>
     <Filter Include="Imguizmo">
       <UniqueIdentifier>{945389fe-919d-4538-8f5f-edc46cd2032b}</UniqueIdentifier>
-	</Filter>
+    </Filter>
     <Filter Include="02.GameObjects\05.UIRender">
       <UniqueIdentifier>{00584ecd-1d69-4162-8868-8b153c51b33c}</UniqueIdentifier>
     </Filter>
@@ -194,7 +194,7 @@
     </ClInclude>
     <ClInclude Include="..\..\ImGuizmo\ImZoomSlider.h">
       <Filter>Imguizmo</Filter>
-	</ClInclude>
+    </ClInclude>
     <ClInclude Include="..\Public\UIRender.h">
       <Filter>02.GameObjects\05.UIRender</Filter>
     </ClInclude>
@@ -303,7 +303,7 @@
     </ClCompile>
     <ClCompile Include="..\..\ImGuizmo\ImSequencer.cpp">
       <Filter>Imguizmo</Filter>
-	</ClCompile>
+    </ClCompile>
     <ClCompile Include="..\Private\UIRender.cpp">
       <Filter>02.GameObjects\05.UIRender</Filter>
     </ClCompile>

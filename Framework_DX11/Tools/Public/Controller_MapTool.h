@@ -80,9 +80,11 @@ private:
 	void Find_PickObject();
 	void Map_Menu();
 	void Nav_Menu();
+	void Light_Menu();
 	void Mode_Create_Cell_Menu();
 	void Mode_Select_Cell_Menu();
 	void Mode_Select_Point_Menu();
+	void Light_Create();
 
 public:
 	virtual void Free() override;
