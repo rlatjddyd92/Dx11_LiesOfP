@@ -1,8 +1,11 @@
 #include "Shader_Engine_Defines.hlsli"
 
 matrix			g_WorldMatrix, g_ViewMatrix, g_ProjMatrix;
+
 texture2D		g_DiffuseTexture;
 texture2D		g_NormalTexture;
+texture2D		g_ARMTexture;
+
 float4			g_fHashColor;
 bool			g_bSelect = false;
 
@@ -82,7 +85,8 @@ struct PS_OUT
 	vector vDiffuse : SV_TARGET0;
 	vector vNormal : SV_TARGET1;
 	vector vDepth : SV_TARGET2;
-	vector vPickDepth : SV_TARGET3;
+    vector vARM : SV_TARGET3;
+	vector vPickDepth : SV_TARGET4;
 };
 
 
@@ -106,7 +110,8 @@ PS_OUT PS_MAIN(PS_IN In)
        
 	/* -1.f ~ 1.f -> 0.f ~ 1.f */
 	Out.vNormal = vector(In.vNormal.xyz * 0.5f + 0.5f, 0.f);
-	Out.vDepth = vector(In.vProjPos.z / In.vProjPos.w, In.vProjPos.w / 1000.f, 0.f, 0.f);
+    Out.vDepth = vector(In.vProjPos.z / In.vProjPos.w, In.vProjPos.w / 1000.f, 0.f, 0.f);
+    Out.vARM = g_ARMTexture.Sample(LinearSampler, In.vTexcoord);
 	Out.vPickDepth = vector(In.vProjPos.z / In.vProjPos.w, 0.f, 0.f, 1.f);
 
 	return Out;
@@ -165,7 +170,8 @@ PS_OUT PS_MAIN_NORMAL(PS_IN_NORMAL In)
 	
 	/* -1.f ~ 1.f -> 0.f ~ 1.f */
 	Out.vNormal = vector(vNormal * 0.5f + 0.5f, 0.f);
-	Out.vDepth = vector(In.vProjPos.z / In.vProjPos.w, In.vProjPos.w / 1000.f, 0.f, 0.f);
+    Out.vDepth = vector(In.vProjPos.z / In.vProjPos.w, In.vProjPos.w / 1000.f, 0.f, 0.f);
+    Out.vARM = g_ARMTexture.Sample(LinearSampler, In.vTexcoord);
 	Out.vPickDepth = vector(In.vProjPos.z / In.vProjPos.w, 0.f, 0.f, 1.f);
 
 	return Out;

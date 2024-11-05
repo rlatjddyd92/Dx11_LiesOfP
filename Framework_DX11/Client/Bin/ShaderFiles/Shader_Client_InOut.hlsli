@@ -48,7 +48,8 @@ struct PS_OUT_MODEL
     vector vDiffuse : SV_TARGET0;
     vector vNormal : SV_TARGET1;
     vector vDepth : SV_TARGET2;
-    vector vPickDepth : SV_TARGET3;
+    vector vARM : SV_TARGET3;
+    vector vPickDepth : SV_TARGET4;
 };
 
 struct PS_IN_NORMAL
