@@ -43,6 +43,7 @@ private:
 
 	_int m_iListCount = { 0 };			//ListBox항목 개수
 	_int m_iListSelectNum = { 0 };		//ListBox항목중 선택한 인덱스
+	_int m_iPrePickedCellIndex = { -1 };	//피킹으로 고른 cell index	
 
 	_uint m_iPickObject_ID = { 0 };
 	_uint m_iPre_Picked_ID={ 0 };
@@ -78,6 +79,8 @@ private:
 	void Map_Menu();
 	void Nav_Menu();
 	void Mode_Create_Cell_Menu();
+	void Mode_Select_Cell_Menu();
+	void Mode_Select_Point_Menu();
 
 public:
 	virtual void Free() override;

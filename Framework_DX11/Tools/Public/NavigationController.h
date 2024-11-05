@@ -27,7 +27,7 @@ public:
 	_uint	Get_SelectCellIndex() { return m_iSelectCellIndex; }	//º±≈√«— ºø ¿Œµ¶Ω∫ π¯»£
 	void	Set_SelectCell(_uint iIndex) { m_iSelectCellIndex = iIndex; }
 
-	_int	SelectCell(_float3 vPickPos);
+	_int	SelectCell(_float3 vPickPos, _int* iSelectNum);
 	void	Delete_Selected(_uint iIndex);
 
 	_float3 Select_Vertex(_fvector vPos);
@@ -56,7 +56,7 @@ public:
 	void Sort_Cell(_float3* vPoints);
 
 	CCell* Get_SelectCell();
-	_int Get_SavePointsCount() { return m_vClickPoints.size(); }
+	_int Get_SavePointsCount() { return (_int)m_vClickPoints.size(); }
 
 private:
 	ID3D11Device* m_pDevice = { nullptr };
@@ -79,7 +79,7 @@ private:
 	_uint					m_iAreaNum = { 0 };
 
 private:
-	_Vec3 Find_ClosetPoint(_Vec3 vPos);
+	_Vec3 Find_ClosetPoint(_fvector vPos);
 
 public:
 	virtual void Free() override;

@@ -12,11 +12,34 @@ CCell::CCell(ID3D11Device * pDevice, ID3D11DeviceContext * pContext)
 	Safe_AddRef(m_pContext);
 }
 
-HRESULT CCell::Initialize(const _float3 * pPoints, _int iIndex)
+void CCell::CompareAndChange(_float3 _comparePos, _float3 _changePos)
+{
+	for (size_t i = 0; i < POINT_END; ++i)
+	{
+		if (true == XMVector3Equal(XMLoadFloat3(&_comparePos), XMLoadFloat3(&m_vPoints[i])))
+		{
+			m_vPoints[i] = _changePos;
+
+#ifdef _DEBUG
+			Safe_Release(m_pVIBuffer);
+#endif
+#ifdef _DEBUG
+			m_pVIBuffer = CVIBuffer_Cell::Create(m_pDevice, m_pContext, m_vPoints);
+			if (nullptr == m_pVIBuffer)
+				return;
+#endif
+		}
+	}
+}
+
+HRESULT CCell::Initialize(const _float3 * pPoints, void* pArg)
 {
 	memcpy(m_vPoints, pPoints, sizeof(_float3) * POINT_END);
 
-	m_iIndex = iIndex;
+	CELL_DESC* pDesc = static_cast<CELL_DESC*>(pArg);
+	m_iIndex = pDesc->iIndex;
+	m_iAreaNum = pDesc->iAreaNum;
+	m_iCellTypeNum = pDesc->iCellTypeNum;
 
 #ifdef _DEBUG
 	m_pVIBuffer = CVIBuffer_Cell::Create(m_pDevice, m_pContext, m_vPoints);
@@ -90,11 +113,11 @@ HRESULT CCell::Render()
 }
 #endif
 
-CCell * CCell::Create(ID3D11Device * pDevice, ID3D11DeviceContext * pContext, const _float3 * pPoints, _int iIndex)
+CCell * CCell::Create(ID3D11Device * pDevice, ID3D11DeviceContext * pContext, const _float3 * pPoints, void* pArg)
 {
 	CCell*		pInstance = new CCell(pDevice, pContext);
 
-	if (FAILED(pInstance->Initialize(pPoints, iIndex)))
+	if (FAILED(pInstance->Initialize(pPoints, pArg)))
 	{
 		MSG_BOX(TEXT("Failed to Created : CCell"));
 		Safe_Release(pInstance);

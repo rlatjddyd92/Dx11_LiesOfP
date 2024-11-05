@@ -46,7 +46,10 @@ HRESULT CNavigation::Initialize_Prototype(const _wstring& strNavigationDataFile)
 		if (0 == dwByte)
 			break;
 
-		CCell*		pCell = CCell::Create(m_pDevice, m_pContext, vPoints, (_int)m_Cells.size());
+		CCell::CELL_DESC desc = {};
+		desc.iIndex = (_int)m_Cells.size();
+
+		CCell*		pCell = CCell::Create(m_pDevice, m_pContext, vPoints, &desc);
 		if (nullptr == pCell)
 			return E_FAIL;
 

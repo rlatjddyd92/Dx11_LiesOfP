@@ -98,8 +98,6 @@ void CImGui_Manager::Tool_Map()
 {
 	if (ImGui::BeginTabItem("Map Tool"))
 	{
-		//m_pController_MapTool->Select_Obj();
-
 		m_pController_MapTool->PickPos();
 		m_pController_MapTool->Pick_Object();
 
