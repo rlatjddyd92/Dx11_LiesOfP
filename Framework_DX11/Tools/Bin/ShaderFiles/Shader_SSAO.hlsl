@@ -89,7 +89,7 @@ PS_OUT PS_MAIN_SSAO(PS_IN In)
     for (int i = 0; i < 16; i++)
     {
         // 노이즈 텍스처를 사용해 샘플 방향에 약간의 무작위성을 추가
-        float3 vRay = normalize(vSampleKernels[i] + g_NoiseTexture.Sample(PointSampler, In.vTexcoord).xyz); // 랜덤 Ray값
+        float3 vRay = normalize(vSampleKernels[i] ); // 랜덤 Ray값
         float3 vReflect = normalize(reflect(vRay, vNormal.xyz)) * g_fRadius;
         vReflect.x *= -1.f;
         
