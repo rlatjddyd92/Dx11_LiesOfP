@@ -90,7 +90,7 @@ PS_OUT PS_MAIN_SSAO(PS_IN In)
     for (int i = 0; i < 16; i++)
     {
         // 노이즈 텍스처를 사용해 샘플 방향에 약간의 무작위성을 추가
-        float3 vRay = normalize(vSampleKernels[i] + g_NoiseTexture.Sample(PointSampler, In.vTexcoord).xyz * 0.05f); // 랜덤 Ray값
+        float3 vRay = normalize(vSampleKernels[i] + g_NoiseTexture.Sample(PointSampler, In.vTexcoord).xyz * 0.02f); // 랜덤 Ray값
         float3 vReflect = normalize(reflect(vRay, vNormal.xyz)) * g_fRadius;
         vReflect.x *= -1.f;
         
@@ -113,11 +113,11 @@ PS_OUT PS_MAIN_SSAO(PS_IN In)
     return Out;
 }
 
-float g_fWeights[9] =
+float g_fWeights[13] =
 {
-    0.1f, 0.18f, 0.55f, 0.9f, 1.f, 0.9f, 0.55f, 0.18f, 0.1f
+    0.0561f, 0.1353f, 0.278f, 0.4868f, 0.7261f, 0.9231f, 1.f, 0.9231f, 0.7261f, 0.4868f, 0.278f, 0.1353f, 0.0561f
 };
-float g_fWeightTotal = 4.46f;
+float g_fWeightTotal = 6.21f;
 
 PS_OUT PS_MAIN_BLUR_X(PS_IN In)
 {
@@ -125,14 +125,14 @@ PS_OUT PS_MAIN_BLUR_X(PS_IN In)
     
     float2 vBlurTexCoord = (float2) 0.f;
 
-    for (int i = -4; i < 5; i++)
+    for (int i = -7; i < 7; i++)
     {
         vBlurTexCoord = In.vTexcoord + float2(1.f / 1280.f * i, 0.f);
         if (vBlurTexCoord.x > 1.f || vBlurTexCoord.y > 1.f || vBlurTexCoord.x < 0.f || vBlurTexCoord.y < 0.f)   // 화면 밖으로 나갈 경우 예외 처리
             continue;
         
         vector vSSAO = g_SSAOTexture.Sample(LinearBorderSampler, vBlurTexCoord);
-        Out.vColor += g_fWeights[i + 4] * vSSAO;
+        Out.vColor += g_fWeights[i + 7] * vSSAO;
 		
     }
 
@@ -149,14 +149,14 @@ PS_OUT PS_MAIN_BLUR_Y(PS_IN In)
     
     float2 vBlurTexCoord = (float2) 0.f;
 
-    for (int i = -4; i < 5; i++)
+    for (int i = -7; i < 7; i++)
     {
         vBlurTexCoord = In.vTexcoord + float2(0.f, 1.f / 720.f * i);
         if (vBlurTexCoord.x > 1.f || vBlurTexCoord.y > 1.f || vBlurTexCoord.x < 0.f || vBlurTexCoord.y < 0.f)   // 화면 밖으로 나갈 경우 예외 처리
             continue;
         
         vector vSSAO = g_SSAOTexture.Sample(LinearBorderSampler, vBlurTexCoord);
-        Out.vColor += g_fWeights[i + 4] * vSSAO;
+        Out.vColor += g_fWeights[i + 7] * vSSAO;
     }
 
     Out.vColor /= g_fWeightTotal;
