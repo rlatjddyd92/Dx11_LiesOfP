@@ -101,6 +101,8 @@ void CController_MapTool::Pick_Object()
 	if (!ImGui::CollapsingHeader("Object Inform"))
 		return;
 
+	static int iLightIndex = -1;
+
 	//오브젝트 피킹 작동
 	if (m_pGameInstance->Get_KeyState(RBUTTON) == AWAY)
 	{
@@ -110,7 +112,7 @@ void CController_MapTool::Pick_Object()
 
 		if (m_iPickObject_ID != 0)	//0은 허공을 선택한 것
 		{
-			if (m_pSelectObject != nullptr)	//처름 피킹한게 아닐때만
+			if (m_pSelectObject != nullptr)	//처음 피킹한게 아닐때만
 			{
 				dynamic_cast<CNonAnimModel*>(m_pSelectObject)->Set_Selected(false);
 				m_pPreSelectObject = m_pSelectObject;
@@ -119,6 +121,16 @@ void CController_MapTool::Pick_Object()
 			if (m_iPre_Picked_ID != m_iPickObject_ID)	//새로 고른거다
 			{
 				Find_PickObject();
+
+				CNonAnimModel* pSelect = dynamic_cast<CNonAnimModel*>(m_pSelectObject);
+				if (pSelect != nullptr)
+				{
+					//선택한게 조명인 경우
+					if (pSelect->Get_isLight())
+					{
+						iLightIndex = m_pGameInstance->Find_Light_Index(pSelect->Get_Transform()->Get_State(CTransform::STATE_POSITION));
+					}
+				}
 			}
 			else
 			{
@@ -162,7 +174,20 @@ void CController_MapTool::Pick_Object()
 
 		CNonAnimModel* pSelect = dynamic_cast<CNonAnimModel*>(m_pSelectObject);
 		if (pSelect != nullptr)
+		{
 			pSelect->Set_RenderTargetId(iSelectObj_RenderTargetID);
+
+			//선택한게 조명인 경우
+			if (pSelect->Get_isLight())
+			{
+				if(iLightIndex != -1)
+				{
+					LIGHT_DESC* pLightDesc = m_pGameInstance->Get_LightDesc(iLightIndex);
+					pLightDesc->vPosition = _Vec4(vPos.x, vPos.y, vPos.z, 1.f);
+				}
+			}
+		}
+
 	}
 
 #pragma region ImGuiZimo
@@ -234,6 +259,16 @@ void CController_MapTool::Pick_Object()
 		m_iPickObject_ID = 0;
 		m_pSelectObject->Set_Dead(true);
 		m_pPreSelectObject = m_pSelectObject;
+
+		//선택한게 조명인 경우
+		CNonAnimModel* pSelect = dynamic_cast<CNonAnimModel*>(m_pSelectObject);
+		if (pSelect != nullptr)
+		{
+			if (pSelect->Get_isLight() && iLightIndex != -1)
+			{
+				m_pGameInstance->Delete_Light(iLightIndex);
+			}
+		}
 		m_pSelectObject = nullptr;
 	}
 
@@ -1103,6 +1138,8 @@ void CController_MapTool::Light_Create()
 		if (FAILED(m_pGameInstance->Add_CloneObject_ToLayer(LEVEL_TOOL, wstrLayerName, TEXT("Prototype_GameObject_NonAnim"), &Desc)))
 			return;
 
+		//진짜 빛 넣기
+		//방향 노멀라이즈
 		LIGHT_DESC newLightDesc = {};
 		newLightDesc.eType = (LIGHT_DESC::TYPE)iLightType;
 		vDirection.Normalize();
@@ -1113,8 +1150,8 @@ void CController_MapTool::Light_Create()
 		newLightDesc.vAmbient = vAmbient;
 		newLightDesc.vSpecular = vSpecular;
 
-		//진짜 빛 넣기
-		//방향 노멀라이즈
+		if (FAILED(m_pGameInstance->Add_Light(newLightDesc)))
+			return ;
 
 	}ImGui::SameLine();
 	ImGui::Text("or Press \"C\" to Create");

@@ -50,6 +50,8 @@ public:
 	int Get_RenderTargetId() { return m_iRenderGroupId; }
 	void Set_RenderTargetId(int id) { m_iRenderGroupId = id; }
 	void Set_Selected(_bool bSelect) {m_bSelected = bSelect;}
+	_bool Get_isLight() { return m_isLight; }
+	
 public:
 	class CShader*	m_pShaderCom = { nullptr };
 	class CModel*	m_pModelCom = { nullptr };

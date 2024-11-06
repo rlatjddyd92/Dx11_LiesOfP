@@ -5,7 +5,7 @@ CLight_Manager::CLight_Manager()
 {
 }
 
-const LIGHT_DESC * CLight_Manager::Get_LightDesc(_uint iIndex) const
+LIGHT_DESC * CLight_Manager::Get_LightDesc(_uint iIndex) 
 {
 	auto	iter = m_Lights.begin();
 
@@ -38,6 +38,33 @@ HRESULT CLight_Manager::Render(CShader * pShader, CVIBuffer_Rect * pVIBuffer)
 		pLight->Render(pShader, pVIBuffer);
 
 	return S_OK;
+}
+
+void CLight_Manager::Delete_Light(_int iIndex)
+{
+	if (m_Lights[iIndex] != nullptr && iIndex < m_Lights.size())
+	{
+		Safe_Release(m_Lights[iIndex]);
+		m_Lights.erase(remove(m_Lights.begin(), m_Lights.end(), m_Lights[iIndex]), m_Lights.end());
+	}
+	//remove와 erase의 단점을 보완하기 위해 둘 다 사용
+}
+
+_int CLight_Manager::Find_Light_Index(_Vec4 vPos)
+{
+	int iIndex = 0;
+	for (auto& pLight : m_Lights)
+	{
+		LIGHT_DESC* pDesc = pLight->Get_LightDesc();
+		if (pDesc->vPosition.x == vPos.x && pDesc->vPosition.y == vPos.y && pDesc->vPosition.z == vPos.z && pDesc->vPosition.w == vPos.w)
+		{
+			return iIndex;
+		}
+		else
+			iIndex++;
+	}
+
+	return -1;
 }
 
 CLight_Manager * CLight_Manager::Create()
