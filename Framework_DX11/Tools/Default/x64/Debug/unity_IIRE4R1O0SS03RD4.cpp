@@ -17,6 +17,9 @@
 #include "C:\Users\wnsgh\GitHub\3D\Dx11_LiesOfP\Framework_DX11\Tools\Private\Controller_UITool.cpp"
 
 
+#include "C:\Users\wnsgh\GitHub\3D\Dx11_LiesOfP\Framework_DX11\Tools\private\Effect_Base.cpp"
+
+
 #include "C:\Users\wnsgh\GitHub\3D\Dx11_LiesOfP\Framework_DX11\Tools\Private\FreeCamera.cpp"
 
 
@@ -38,14 +41,23 @@
 #include "C:\Users\wnsgh\GitHub\3D\Dx11_LiesOfP\Framework_DX11\Tools\Private\MainApp.cpp"
 
 
+#include "C:\Users\wnsgh\GitHub\3D\Dx11_LiesOfP\Framework_DX11\Tools\Private\NavigationController.cpp"
+
+
 #include "C:\Users\wnsgh\GitHub\3D\Dx11_LiesOfP\Framework_DX11\Tools\Private\NonAnimModel.cpp"
 
 
-#include "C:\Users\wnsgh\GitHub\3D\Dx11_LiesOfP\Framework_DX11\Tools\private\Particle_Test.cpp"
+#include "C:\Users\wnsgh\GitHub\3D\Dx11_LiesOfP\Framework_DX11\Tools\private\Particle_Effect.cpp"
 
 
 #include "C:\Users\wnsgh\GitHub\3D\Dx11_LiesOfP\Framework_DX11\Tools\Private\Terrain.cpp"
 
 
+#include "C:\Users\wnsgh\GitHub\3D\Dx11_LiesOfP\Framework_DX11\Tools\private\Texture_Effect.cpp"
+
+
 #include "C:\Users\wnsgh\GitHub\3D\Dx11_LiesOfP\Framework_DX11\Tools\Private\ThreadPool.cpp"
+
+
+#include "C:\Users\wnsgh\GitHub\3D\Dx11_LiesOfP\Framework_DX11\Tools\Private\UIRender.cpp"
 

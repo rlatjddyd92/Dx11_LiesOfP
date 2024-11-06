@@ -1,23 +1,23 @@
 #include "stdafx.h"
-#include "Particle_Test.h"
+#include "Particle_Effect.h"
 #include "GameInstance.h"
 
-CParticle_Test::CParticle_Test(ID3D11Device* pDevice, ID3D11DeviceContext* pContext)
-    : CGameObject(pDevice, pContext)
+CParticle_Effect::CParticle_Effect(ID3D11Device* pDevice, ID3D11DeviceContext* pContext)
+    : CEffect_Base(pDevice, pContext)
 {
 }
 
-CParticle_Test::CParticle_Test(const CParticle_Test& Prototype)
-    : CGameObject(Prototype)
+CParticle_Effect::CParticle_Effect(const CParticle_Effect& Prototype)
+    : CEffect_Base(Prototype)
 {
 }
 
-HRESULT CParticle_Test::Initialize_Prototype()
+HRESULT CParticle_Effect::Initialize_Prototype()
 {
     return S_OK;
 }
 
-HRESULT CParticle_Test::Initialize(void* pArg)
+HRESULT CParticle_Effect::Initialize(void* pArg)
 {
     PARTICLE_TEST_DESC* pDesc = static_cast<PARTICLE_TEST_DESC*>(pArg);
 
@@ -35,14 +35,18 @@ HRESULT CParticle_Test::Initialize(void* pArg)
     Set_Transform(pDesc->TransformDesc);
 
     m_iShaderIndex = pDesc->iShaderIndex;
+    m_iRenderState = pDesc->iRenderState;
+
+    m_eEffectType = EFFECT_TYPE::TYPE_PARTICLE;
+
     return S_OK;
 }
 
-void CParticle_Test::Priority_Update(_float fTimeDelta)
+void CParticle_Effect::Priority_Update(_float fTimeDelta)
 {
 }
 
-void CParticle_Test::Update(_float fTimeDelta)
+void CParticle_Effect::Update(_float fTimeDelta)
 {
     _bool bOver = { false };
     switch (m_DefaultDesc.eType)
@@ -94,12 +98,19 @@ void CParticle_Test::Update(_float fTimeDelta)
         m_isDead = true;
 }
 
-void CParticle_Test::Late_Update(_float fTimeDelta)
+void CParticle_Effect::Late_Update(_float fTimeDelta)
 {
-    m_pGameInstance->Add_RenderObject(CRenderer::RG_NONLIGHT, this);
+    if (RS_BLUR == (RS_BLUR & m_iRenderState))
+    {
+
+    }
+    else
+    {
+        m_pGameInstance->Add_RenderObject(CRenderer::RG_NONLIGHT, this);
+    }
 }
 
-HRESULT CParticle_Test::Render()
+HRESULT CParticle_Effect::Render()
 {
     if(TYPE_CONVERGE == m_DefaultDesc.eType || TYPE_SPREAD == m_DefaultDesc.eType || TYPE_MOVE == m_DefaultDesc.eType)
     {
@@ -130,14 +141,14 @@ HRESULT CParticle_Test::Render()
     return S_OK;
 }
 
-void CParticle_Test::Set_Transform(TRANSFORM_DESC& Desc)
+void CParticle_Effect::Set_Transform(TRANSFORM_DESC& Desc)
 {
     m_pTransformCom->Set_State(CTransform::STATE_POSITION, Desc.vPos);
-    m_pTransformCom->Rotation(XMConvertToRadians(Desc.vRotation.x), XMConvertToRadians(Desc.vRotation.y), XMConvertToRadians(Desc.vRotation.z));
+    m_pTransformCom->Rotation(Desc.vRotation.x, Desc.vRotation.y, Desc.vRotation.z);
     m_pTransformCom->Set_Scaled(Desc.vScale.x, Desc.vScale.y, Desc.vScale.z);
 }
 
-HRESULT CParticle_Test::Ready_Components(PARTICLE_TEST_DESC* pDesc)
+HRESULT CParticle_Effect::Ready_Components(PARTICLE_TEST_DESC* pDesc)
 {
     /* FOR.Com_Shader */
     if (FAILED(__super::Add_Component(LEVEL_TOOL, TEXT("Prototype_Component_Shader_VtxPointInstance"),
@@ -168,33 +179,33 @@ HRESULT CParticle_Test::Ready_Components(PARTICLE_TEST_DESC* pDesc)
     return S_OK;
 }
 
-CParticle_Test* CParticle_Test::Create(ID3D11Device* pDevice, ID3D11DeviceContext* pContext)
+CParticle_Effect* CParticle_Effect::Create(ID3D11Device* pDevice, ID3D11DeviceContext* pContext)
 {
-    CParticle_Test* pInstance = new CParticle_Test(pDevice, pContext);
+    CParticle_Effect* pInstance = new CParticle_Effect(pDevice, pContext);
 
     if (FAILED(pInstance->Initialize_Prototype()))
     {
-        MSG_BOX(TEXT("Create Failed : CParticle_Test"));
+        MSG_BOX(TEXT("Create Failed : CParticle_Effect"));
         Safe_Release(pInstance);
     }
 
     return pInstance;
 }
 
-CGameObject* CParticle_Test::Clone(void* pArg)
+CGameObject* CParticle_Effect::Clone(void* pArg)
 {
-    CParticle_Test* pInstance = new CParticle_Test(*this);
+    CParticle_Effect* pInstance = new CParticle_Effect(*this);
 
     if (FAILED(pInstance->Initialize(pArg)))
     {
-        MSG_BOX(TEXT("Clone Failed : CParticle_Test"));
+        MSG_BOX(TEXT("Clone Failed : CParticle_Effect"));
         Safe_Release(pInstance);
     }
 
     return pInstance;
 }
 
-void CParticle_Test::Free()
+void CParticle_Effect::Free()
 {
     __super::Free();
 
