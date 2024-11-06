@@ -91,12 +91,24 @@ HRESULT CLoader::Ready_Resources_For_GamePlayLevel()
 	//	CModel::Create(m_pDevice, m_pContext, CModel::TYPE_ANIM, "../Bin/Resources/Models/Fiona/Fiona.fbx", "../Bin/ModelData/Anim/Fiona/", PreTransformMatrix))))
 	//	return E_FAIL;
 
-	/* For. Prototype_Component_Model_PlayerExample*/
-	PreTransformMatrix = XMMatrixRotationY(XMConvertToRadians(180.0f));
-	if (FAILED(m_pGameInstance->Add_Prototype(LEVEL_GAMEPLAY, TEXT("Prototype_Component_Model_PlayerExample"),
-		CModel::Create(m_pDevice, m_pContext, CModel::TYPE_ANIM, "../Bin/Resources/Models/PlayerExample/PlayerExample.fbx", "../Bin/ModelData/Anim/PlayerExample/", PreTransformMatrix))))
-		return E_FAIL;
+	///* For. Prototype_Component_Model_PlayerExample*/
+	//PreTransformMatrix = XMMatrixRotationY(XMConvertToRadians(180.0f));
+	//if (FAILED(m_pGameInstance->Add_Prototype(LEVEL_GAMEPLAY, TEXT("Prototype_Component_Model_PlayerExample"),
+	//	CModel::Create(m_pDevice, m_pContext, CModel::TYPE_ANIM, "../Bin/Resources/Models/PlayerExample/PlayerExample.fbx", "../Bin/ModelData/Anim/PlayerExample/", PreTransformMatrix))))
+	//	return E_FAIL;
 	
+	/* For. Prototype_Component_Model_Monster_CracassNormal */
+	PreTransformMatrix = XMMatrixRotationY(XMConvertToRadians(180.0f));
+	if (FAILED(m_pGameInstance->Add_Prototype(LEVEL_GAMEPLAY, TEXT("Prototype_Component_Model_Monster_CracassNormal"),
+		CModel::Create(m_pDevice, m_pContext, CModel::TYPE_ANIM, "../Bin/Resources/Models/CarcassNormal/CarcassNormal.fbx", "../Bin/ModelData/Anim/Monster/CarcassNormal/", PreTransformMatrix))))
+		return E_FAIL;
+
+	/* For. Prototype_Component_Model_Monster_CracassTail */
+	PreTransformMatrix = XMMatrixRotationY(XMConvertToRadians(180.0f));
+	if (FAILED(m_pGameInstance->Add_Prototype(LEVEL_GAMEPLAY, TEXT("Prototype_Component_Model_Monster_CracassTail"),
+		CModel::Create(m_pDevice, m_pContext, CModel::TYPE_ANIM, "../Bin/Resources/Models/CarcassTail/CarcassTail.fbx", "../Bin/ModelData/Anim/Monster/CarcassTail/", PreTransformMatrix))))
+		return E_FAIL;
+
 	lstrcpy(m_szLoadingText, TEXT("변환 완료"));
 
 	MSG_BOX(TEXT("변환이 완료되었습니다 종료해주세요"));
