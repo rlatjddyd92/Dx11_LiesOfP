@@ -101,8 +101,6 @@ void CController_MapTool::Pick_Object()
 	if (!ImGui::CollapsingHeader("Object Inform"))
 		return;
 
-	static int iLightIndex = -1;
-
 	//오브젝트 피킹 작동
 	if (m_pGameInstance->Get_KeyState(RBUTTON) == AWAY)
 	{
@@ -128,7 +126,7 @@ void CController_MapTool::Pick_Object()
 					//선택한게 조명인 경우
 					if (pSelect->Get_isLight())
 					{
-						iLightIndex = m_pGameInstance->Find_Light_Index(pSelect->Get_Transform()->Get_State(CTransform::STATE_POSITION));
+						m_iSelectedLightIndex = m_pGameInstance->Find_Light_Index(pSelect->Get_Transform()->Get_State(CTransform::STATE_POSITION));
 					}
 				}
 			}
@@ -136,6 +134,7 @@ void CController_MapTool::Pick_Object()
 			{
 				//같은걸 다시 고르면 선택 해제
 				m_pSelectObject = nullptr;
+				m_iSelectedLightIndex = -1;
 				m_iPickObject_ID = 0;
 			}
 
@@ -180,9 +179,9 @@ void CController_MapTool::Pick_Object()
 			//선택한게 조명인 경우
 			if (pSelect->Get_isLight())
 			{
-				if(iLightIndex != -1)
+				if(m_iSelectedLightIndex != -1)
 				{
-					LIGHT_DESC* pLightDesc = m_pGameInstance->Get_LightDesc(iLightIndex);
+					LIGHT_DESC* pLightDesc = m_pGameInstance->Get_LightDesc(m_iSelectedLightIndex);
 					pLightDesc->vPosition = _Vec4(vPos.x, vPos.y, vPos.z, 1.f);
 				}
 			}
@@ -250,7 +249,6 @@ void CController_MapTool::Pick_Object()
 
 	ImGui::InputInt("RenderTarget ID", &iSelectObj_RenderTargetID);
 
-	ImGui::Text("");
 	ImGui::PopItemWidth();
 
 	if (ImGui::Button("Delete"))
@@ -264,9 +262,9 @@ void CController_MapTool::Pick_Object()
 		CNonAnimModel* pSelect = dynamic_cast<CNonAnimModel*>(m_pSelectObject);
 		if (pSelect != nullptr)
 		{
-			if (pSelect->Get_isLight() && iLightIndex != -1)
+			if (pSelect->Get_isLight() && m_iSelectedLightIndex != -1)
 			{
-				m_pGameInstance->Delete_Light(iLightIndex);
+				m_pGameInstance->Delete_Light(m_iSelectedLightIndex);
 			}
 		}
 		m_pSelectObject = nullptr;
@@ -326,7 +324,6 @@ void CController_MapTool::Save_Load()
 
 void CController_MapTool::Select_Map_Model()
 {
-
 	static int item_selected_idx = 0; // Here we store our selected data as an index.
 	static bool item_highlight = false;
 	int item_highlighted_idx = -1; // Here we store our highlighted data as an index.
@@ -1110,8 +1107,8 @@ void CController_MapTool::Light_Create()
 	vDiffuse.y = color.y;
 	vDiffuse.z = color.z;
 
-	ImGui::DragFloat("Ambient", (_float*)&vAmbient, 0.05f, 0.f, 1.f);
-	ImGui::DragFloat("Specular", (_float*)&vSpecular, 0.05f, 0.f, 1.f);
+	ImGui::DragFloat4("Ambient", (_float*)&vAmbient, 0.05f, 0.f, 1.f);
+	ImGui::DragFloat4("Specular", (_float*)&vSpecular, 0.05f, 0.f, 1.f);
 
 	//렌더타겟 아이디 설정 가능
 	static int i0 = 0;
@@ -1157,6 +1154,91 @@ void CController_MapTool::Light_Create()
 	ImGui::Text("or Press \"C\" to Create");
 }
 
+void CController_MapTool::Light_Modify()
+{
+	if (m_iSelectedLightIndex == -1)	//선택한게 없다
+	{
+		m_iPreSelectedLightIndex = -1;
+		return;
+	}
+	
+	LIGHT_DESC* pDesc = {};
+	
+	static _Vec4 vDirection = { 1.f,1.f,1.f,1.f };
+	static _Vec4 vPosition = { 0.f,0.f,0.f,1.f };
+	static _float fRange = { 10.f };
+	static _Vec4 vDiffuse = { 1.f,1.f,1.f,1.f };
+	static _Vec4 vAmbient = { 1.f,1.f,1.f,1.f };
+	static _Vec4 vSpecular = { 1.f,1.f,1.f,1.f };
+
+	pDesc = m_pGameInstance->Get_LightDesc(m_iSelectedLightIndex);
+
+	if (m_iPreSelectedLightIndex != m_iSelectedLightIndex) //새로 선택하면 정보를 불러온다
+	{
+		
+		vDirection = pDesc->vDirection;
+		vPosition = pDesc->vPosition;
+		fRange = pDesc->fRange;
+		vDiffuse = pDesc->vDiffuse;
+		vAmbient = pDesc->vAmbient;
+		vSpecular = pDesc->vSpecular;
+
+		m_iPreSelectedLightIndex = m_iSelectedLightIndex;
+	}
+	else   //수정한 내용 적용
+	{
+		pDesc->vDirection = vDirection;
+		pDesc->vPosition = m_pSelectObject->Get_Transform()->Get_State(CTransform::STATE_POSITION);
+		pDesc->fRange = fRange;
+		pDesc->vDiffuse = vDiffuse;
+		pDesc->vAmbient = vAmbient;
+		pDesc->vSpecular = vSpecular;
+	}
+
+	enum Light_Type
+	{
+		Light_Point,
+		Light_Spot,
+		Light_GodRay
+	};
+
+	//구조체 세부 설정
+	static int iLightType = 0;
+
+	if (ImGui::RadioButton("Point", iLightType == Light_Point))
+	{
+		iLightType = Light_Point;
+	} ImGui::SameLine();
+
+	if (ImGui::RadioButton("Spot", iLightType == Light_Spot))
+	{
+		iLightType = Light_Spot;
+	} ImGui::SameLine();
+
+	if (ImGui::RadioButton("GodRay", iLightType == Light_GodRay))
+	{
+		iLightType = Light_GodRay;
+	}
+
+	//방향, 위치, 범위
+	ImGui::DragFloat4("Direction", (_float*)&vDirection, 0.05f, -1.f, 1.f);
+	//ImGui::DragFloat4("Position(X, Y, Z)", (_float*)&vPosition, 0.05f, -5000.f, 5000.f);
+	ImGui::DragFloat("Range", (_float*)&fRange, 0.05f, 0.f, 1000.f);
+
+	//색상값
+	static ImVec4 color = {};
+	color = ImVec4(vDiffuse.x , vDiffuse.y , vDiffuse.z , 1.f );
+	ImGuiColorEditFlags misc_flags = ImGuiColorEditFlags_NoOptions;
+
+	ImGui::ColorEdit3("MyColor##1", (float*)&color, misc_flags);
+	vDiffuse.x = color.x ;
+	vDiffuse.y = color.y ;
+	vDiffuse.z = color.z ;
+
+	ImGui::DragFloat4("Ambient", (_float*)&vAmbient, 0.05f, 0.f, 1.f);
+	ImGui::DragFloat4("Specular", (_float*)&vSpecular, 0.05f, 0.f, 1.f);
+}
+
 void CController_MapTool::Light_Menu()
 {
 	ImGui::Text("Total Light Count : %d", m_pGameInstance->Get_Total_LightCount());
@@ -1170,6 +1252,13 @@ void CController_MapTool::Light_Menu()
 		if (ImGui::BeginTabItem("Create"))
 		{
 			Light_Create();
+
+			ImGui::EndTabItem();
+		}	
+		
+		if (ImGui::BeginTabItem("Modify"))
+		{
+			Light_Modify();
 
 			ImGui::EndTabItem();
 		}
