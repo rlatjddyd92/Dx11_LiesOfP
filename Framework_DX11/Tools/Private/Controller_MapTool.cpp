@@ -90,6 +90,14 @@ void CController_MapTool::Create_Map()
 			ImGui::EndTabItem();
 		}
 
+
+		if (ImGui::BeginTabItem("Decal"))
+		{
+			Decal_Menu();
+
+			ImGui::EndTabItem();
+		}
+
 		m_pNavigationController->Render();
 
 		ImGui::EndTabBar();
@@ -265,6 +273,7 @@ void CController_MapTool::Pick_Object()
 			if (pSelect->Get_isLight() && m_iSelectedLightIndex != -1)
 			{
 				m_pGameInstance->Delete_Light(m_iSelectedLightIndex);
+				m_iSelectedLightIndex = -1;
 			}
 		}
 		m_pSelectObject = nullptr;
@@ -398,8 +407,8 @@ void CController_MapTool::Show_List(_uint iFolder)
 	m_FileNames.clear();
 
 	char szFolderFolderFullPath[128] = "../Bin/ModelData/NonAnim/Map/";    // 상대 경로
-	char szFolderFolderPathReset[128] = "../Bin/ModelData/NonAnim/Map/";
-	char szFolderFolderPath[128] = "../Bin/ModelData/NonAnim/Map/";
+	char szFolderPathReset[128] = "../Bin/ModelData/NonAnim/Map/";
+	char szFolderPath[128] = "../Bin/ModelData/NonAnim/Map/";
 	char szFolderHandlePath[128] = "";
 	char szFolderName[128] = "";
 	char szDat[128] = "*.dat";
@@ -421,7 +430,7 @@ void CController_MapTool::Show_List(_uint iFolder)
 	}
 
 	strcat_s(szFolderFolderFullPath, szFolderName);
-	strcat_s(szFolderFolderPathReset, szFolderName);
+	strcat_s(szFolderPathReset, szFolderName);
 
 	//dat파일 구분용 
 	strcpy_s(szFolderHandlePath, szFolderFolderFullPath);
@@ -440,12 +449,12 @@ void CController_MapTool::Show_List(_uint iFolder)
 	{
 		m_iListCount++;
 
-		strcpy_s(szFolderFolderPath, szFolderFolderPathReset);
-		strcat_s(szFolderFolderPath , fd.name);
+		strcpy_s(szFolderPath, szFolderPathReset);
+		strcat_s(szFolderPath , fd.name);
 
 		_char szFileName[MAX_PATH] = "";
 		_char szExt[MAX_PATH] = "";
-		_splitpath_s(szFolderFolderPath, nullptr, 0, nullptr, 0, szFileName, MAX_PATH, szExt, MAX_PATH);
+		_splitpath_s(szFolderPath, nullptr, 0, nullptr, 0, szFileName, MAX_PATH, szExt, MAX_PATH);
 
 		if (strcmp(szExt, ".dat"))
 		{
@@ -1195,31 +1204,6 @@ void CController_MapTool::Light_Modify()
 		pDesc->vSpecular = vSpecular;
 	}
 
-	enum Light_Type
-	{
-		Light_Point,
-		Light_Spot,
-		Light_GodRay
-	};
-
-	//구조체 세부 설정
-	static int iLightType = 0;
-
-	if (ImGui::RadioButton("Point", iLightType == Light_Point))
-	{
-		iLightType = Light_Point;
-	} ImGui::SameLine();
-
-	if (ImGui::RadioButton("Spot", iLightType == Light_Spot))
-	{
-		iLightType = Light_Spot;
-	} ImGui::SameLine();
-
-	if (ImGui::RadioButton("GodRay", iLightType == Light_GodRay))
-	{
-		iLightType = Light_GodRay;
-	}
-
 	//방향, 위치, 범위
 	ImGui::DragFloat4("Direction", (_float*)&vDirection, 0.05f, -1.f, 1.f);
 	//ImGui::DragFloat4("Position(X, Y, Z)", (_float*)&vPosition, 0.05f, -5000.f, 5000.f);
@@ -1266,6 +1250,160 @@ void CController_MapTool::Light_Menu()
 		ImGui::EndTabBar();
 	}
 	
+}
+
+void CController_MapTool::Decal_Menu()
+{
+#pragma region SHOW FOLDER LIST
+	//내용물 초기화 (capacity는 그냥 냅둠)
+	for (auto& filename : m_FileNames) {
+		Safe_Delete_Array(filename);
+	}
+	m_FileNames.clear();
+
+	char szFolderFindPath[128] = "../Bin/Resources/Textures/Decal/*";    // 상대 경로 -> 모든 파일을 돌겠다
+	char szFolderPathReset[128] = "../Bin/Resources/Textures/Decal/";
+	char szFolderPath[128] = "../Bin/Resources/Textures/Decal/";
+
+	_finddata_t fd;
+	intptr_t handle = _findfirst(szFolderFindPath, &fd);
+
+	if (handle == -1)
+		return;
+
+	int iResult = 0;
+	int iFolderCount = 0;
+
+	while (iResult != -1)
+	{
+		strcpy_s(szFolderPath, szFolderPathReset);
+		strcat_s(szFolderPath, fd.name);
+
+		_char szDirName[MAX_PATH] = "";
+		_char szFileName[MAX_PATH] = "";
+		_char szExt[MAX_PATH] = "";
+		_splitpath_s(szFolderPath, nullptr, 0, szDirName, MAX_PATH, szFileName, MAX_PATH, szExt, MAX_PATH);
+
+		if (!strcmp(szFileName, ".") || !strcmp(szFileName, "..") || !strcmp(szFileName, ""))
+		{
+			iResult = _findnext(handle, &fd);
+			continue;
+		}
+
+		iFolderCount++;
+
+		//_strup : 문자열 내용을 복사해 그 주소를 저장-> 주소에 따라 문자열이 바뀌는걸 막아 모두 동일해지는걸 막음
+		m_FileNames.push_back(_strdup(szFileName));
+
+		//_findnext : <io.h>에서 제공하며 다음 위치의 파일을 찾는 함수, 더이상 없다면 -1을 리턴
+		iResult = _findnext(handle, &fd);
+	}
+
+	static int item_selected_idx = 0; // Here we store our selected data as an index.
+	static bool item_highlight = false;
+	int item_highlighted_idx = -1; // Here we store our highlighted data as an index.
+
+	if (ImGui::BeginListBox("Folders"))
+	{
+		for (int n = 0; n < iFolderCount; n++)
+		{
+			const bool is_selected = (item_selected_idx == n);
+			if (ImGui::Selectable(m_FileNames[n], is_selected))
+				item_selected_idx = n;
+
+			if (item_highlight && ImGui::IsItemHovered())
+				item_highlighted_idx = n;
+
+			// Set the initial focus when opening the combo (scrolling + keyboard navigation focus)
+			if (is_selected)
+				ImGui::SetItemDefaultFocus();
+
+			m_iListSelectNum = item_selected_idx;
+		}
+		ImGui::EndListBox();
+	}
+#pragma endregion
+
+#pragma region SHOW IMAGES LIST
+	//내용물 초기화 (capacity는 그냥 냅둠)
+	for (auto& filename : m_FileNames2) {
+		Safe_Delete_Array(filename);
+	}
+	m_FileNames2.clear();
+
+	char szImageFindPath[128] = "../Bin/Resources/Textures/Decal/";    // 상대 경로 -> 모든 파일을 돌겠다
+	char szImagePathReset[128] = "../Bin/Resources/Textures/Decal/";
+	char szImagePath[128] = "../Bin/Resources/Textures/Decal/";
+
+	//폴더 리스트에서 선택한 인덱스로 파일 검색 경로 생성
+	strcat_s(szImageFindPath, m_FileNames[m_iListSelectNum]);
+	strcat_s(szImageFindPath, "/*.*");
+
+	handle = _findfirst(szImageFindPath, &fd);
+
+	if (handle == -1)
+		return;
+
+	iResult = 0;
+	int iImagesCount = 0;
+
+	while (iResult != -1)
+	{
+		strcpy_s(szImagePath, szImageFindPath);
+		strcat_s(szImagePath, fd.name);
+
+		_char szDirName[MAX_PATH] = "";
+		_char szFileName[MAX_PATH] = "";
+		_char szExt[MAX_PATH] = "";
+		_splitpath_s(szImagePath, nullptr, 0, szDirName, MAX_PATH, szFileName, MAX_PATH, szExt, MAX_PATH);
+
+		if (!strcmp(szExt, ".") || !strcmp(szExt, "..") || strcmp(szExt, ".dds"))
+		{
+			iResult = _findnext(handle, &fd);
+			continue;
+		}
+
+		iImagesCount++;
+
+		//_strup : 문자열 내용을 복사해 그 주소를 저장-> 주소에 따라 문자열이 바뀌는걸 막아 모두 동일해지는걸 막음
+		m_FileNames2.push_back(_strdup(fd.name));
+
+		//_findnext : <io.h>에서 제공하며 다음 위치의 파일을 찾는 함수, 더이상 없다면 -1을 리턴
+		iResult = _findnext(handle, &fd);
+	}
+
+	static int item_selected_Image_idx = -1; // Here we store our selected data as an index.
+	static bool item_Image_highlight = false;
+	int item_Image_highlighted_idx = -1; // Here we store our highlighted data as an index.
+
+	if (ImGui::BeginListBox("Images"))
+	{
+		for (int n = 0; n < iImagesCount; n++)
+		{
+			const bool is_selected = (item_selected_Image_idx == n);
+			if (ImGui::Selectable(m_FileNames2[n], is_selected))
+				item_selected_Image_idx = n;
+
+			if (item_Image_highlight && ImGui::IsItemHovered())
+				item_Image_highlighted_idx = n;
+
+			// Set the initial focus when opening the combo (scrolling + keyboard navigation focus)
+			if (is_selected)
+				ImGui::SetItemDefaultFocus();
+
+			 item_selected_Image_idx;
+		}
+		ImGui::EndListBox();
+	}
+#pragma endregion
+
+	if (item_selected_Image_idx != -1)
+	{
+		ImGui::Begin("Preview", NULL, ImGuiWindowFlags_MenuBar | ImGuiWindowFlags_HorizontalScrollbar
+			| ImGuiWindowFlags_AlwaysVerticalScrollbar);
+
+		ImGui::End();
+	}
 }
 
 void CController_MapTool::Free()
