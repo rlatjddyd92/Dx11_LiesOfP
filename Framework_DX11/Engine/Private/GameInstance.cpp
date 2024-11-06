@@ -15,6 +15,9 @@
 #include "Key_Manager.h"
 #include "PhysX_Manager.h"
 
+// 2024-11-06 ±è¼º¿ë
+#include "CSVFile_Manager.h"
+
 IMPLEMENT_SINGLETON(CGameInstance)
 
 CGameInstance::CGameInstance()
@@ -100,6 +103,11 @@ HRESULT CGameInstance::Initialize_Engine(HINSTANCE hInst, _uint iNumLevels, cons
 
 	m_pPhysX_Manager = CPhysX_Manager::Create();
 	if (nullptr == m_pPhysX_Manager)
+		return E_FAIL;
+
+	// 2024-11-06 ±è¼º¿ë
+	m_pCSVFile_Manager = CCSVFile_Manager::Create();
+	if (nullptr == m_pCSVFile_Manager)
 		return E_FAIL;
 
 	return S_OK;
@@ -551,11 +559,49 @@ _bool CGameInstance::RayCast_PhysX(_vector vRayPos, _vector vRayDir, _vector* vH
 }
 #pragma endregion
 
+// 2024-11-06 ±è¼º¿ë Ãß°¡
+#pragma region CSVFile_Manager
+HRESULT CGameInstance::FileOpenByRow(const _char* FilePath, _bool bIsRead)
+{
+	return m_pCSVFile_Manager->FileOpenByRow(FilePath, bIsRead);
+}
+_bool CGameInstance::LoadDataByRow(vector<_wstring>* vecDataBuffer)
+{
+	return m_pCSVFile_Manager->LoadDataByRow(vecDataBuffer);
+}
+_bool CGameInstance::SaveDataByRow(vector<_wstring>& vecDataBuffer)
+{
+	return m_pCSVFile_Manager->SaveDataByRow(vecDataBuffer);
+}
+void CGameInstance::FileClose()
+{
+	m_pCSVFile_Manager->FileClose();
+}
+HRESULT CGameInstance::LoadDataByFile(const _char* FilePath, vector<vector<_wstring>>* vecDataBuffer)
+{
+	return m_pCSVFile_Manager->LoadDataByFile(FilePath, vecDataBuffer);
+}
+HRESULT CGameInstance::SaveDataByFile(const _char* FilePath, vector<vector<_wstring>>& vecDataBuffer)
+{
+	return m_pCSVFile_Manager->SaveDataByFile(FilePath, vecDataBuffer);
+}
+_bool CGameInstance::IsFileRead()
+{
+	return m_pCSVFile_Manager->IsFileRead();
+}
+_bool CGameInstance::IsFileWrite()
+{
+	return m_pCSVFile_Manager->IsFileWrite();
+}
+#pragma endregion
+
 void CGameInstance::Release_Engine()
 {
 	Safe_Release(m_pPhysX_Manager);
 	Safe_Release(m_pKey_Manager);
 	Safe_Release(m_pCollider_Manager);
+	// 2024-11-06 ±è¼º¿ë
+	Safe_Release(m_pCSVFile_Manager);
 
 	Safe_Release(m_pFrustum);
 	Safe_Release(m_pPicking);

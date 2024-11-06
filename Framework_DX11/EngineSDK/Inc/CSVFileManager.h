@@ -17,8 +17,8 @@ private:
 
 public:
 	HRESULT		Initialize();
-	void		FileLoadStart(const _char* FilePath, _int iDataStartRow);
-	void		GetDataByRow(_char* DataBuffer, _int iDataColumn);
+	HRESULT		FileLoadStart(const _char* FilePath, _int iDataStartRow);
+	_bool		GetDataByRow(_char** DataBuffer, _int iDataColumn, _int iDataTextMaxLength = 200);
 	void		FileLoadEnd();
 
 

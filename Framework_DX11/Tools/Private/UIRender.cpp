@@ -359,7 +359,7 @@ void CUIRender::Free()
 
 	for (auto& iter : m_vecTextureInfo)
 	{
-		Safe_Release(iter->Texture);
+		//Safe_Release(iter->Texture);
 		Safe_Delete_Array(iter->strTexturePath);
 		Safe_Delete_Array(iter->strTextureTag);
 		Safe_Delete(iter);
