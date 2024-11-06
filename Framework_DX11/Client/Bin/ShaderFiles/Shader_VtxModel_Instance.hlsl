@@ -13,14 +13,13 @@ VS_OUT_MODEL VS_MAIN(VS_IN_MODEL_INSTANCE In)
 	
 	matrix			matWV, matWVP;
 
-    matrix TransformMatrix = float4x4(In.vRight, In.vUp, In.vLook, In.vTranslation);
-    vector vPosition = mul(float4(In.vPosition, 1.f), TransformMatrix);
+    matrix WorldMatrix = float4x4(In.vRight, In.vUp, In.vLook, In.vTranslation);
 	
-    matWV = mul(TransformMatrix, g_ViewMatrix);
+    matWV = mul(WorldMatrix, g_ViewMatrix);
 	matWVP = mul(matWV, g_ProjMatrix);
 
-    Out.vPosition = mul(vPosition, matWVP);
-	Out.vNormal = normalize(mul(vector(In.vNormal, 0.f), g_WorldMatrix));
+    Out.vPosition = mul(vector(In.vPosition, 1.f), matWVP);
+    Out.vNormal = normalize(mul(vector(In.vNormal, 0.f), WorldMatrix));
 	Out.vTexcoord = In.vTexcoord;
 	Out.vProjPos = Out.vPosition;
 

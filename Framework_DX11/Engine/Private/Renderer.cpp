@@ -99,10 +99,12 @@ HRESULT CRenderer::Initialize()
 	if (FAILED(m_pGameInstance->Add_RenderTarget(TEXT("Target_SSAO_BlurXY"), (_uint)ViewportDesc.Width, (_uint)ViewportDesc.Height, DXGI_FORMAT_R16G16B16A16_UNORM, _float4(1.f, 1.f, 1.f, 1.f))))
 		return E_FAIL;
 
-	// 구현중 HDR LDR Tone
 	if (FAILED(m_pGameInstance->Add_RenderTarget(TEXT("Target_HDR"), (_uint)ViewportDesc.Width, (_uint)ViewportDesc.Height, DXGI_FORMAT_B8G8R8A8_UNORM, _float4(0.f, 0.f, 0.f, 0.f))))
 		return E_FAIL;
 	if (FAILED(m_pGameInstance->Add_RenderTarget(TEXT("Target_LDR"), (_uint)ViewportDesc.Width, (_uint)ViewportDesc.Height, DXGI_FORMAT_B8G8R8A8_UNORM, _float4(0.f, 0.f, 0.f, 0.f))))
+		return E_FAIL;
+
+	if (FAILED(m_pGameInstance->Add_RenderTarget(TEXT("Target_Cascade"), (_uint)2560, (_uint)1440, DXGI_FORMAT_R32G32B32A32_FLOAT, _float4(1.f, 1.f, 1.f, 1.f), 3)))
 		return E_FAIL;
 
 	/* MRT_Priority */
@@ -220,7 +222,7 @@ HRESULT CRenderer::Initialize()
 	if (FAILED(Ready_LightDepthStencilView()))
 		return E_FAIL;
 
-	if (FAILED(Ready_Cascade()))
+	if (FAILED(Ready_CascadeDepthStencilView()))
 		return E_FAIL;
 
 #ifdef _DEBUG
@@ -380,16 +382,16 @@ HRESULT CRenderer::Render_ShadowObj()
 	if (FAILED(m_pGameInstance->Begin_MRT(TEXT("MRT_ShadowObj"), m_pLightDepthStencilView)))
 		return E_FAIL;
 
-	D3D11_VIEWPORT			ViewPortDesc;
-	ZeroMemory(&ViewPortDesc, sizeof(D3D11_VIEWPORT));
-	ViewPortDesc.TopLeftX = 0;
-	ViewPortDesc.TopLeftY = 0;
-	ViewPortDesc.Width = (_float)g_iSizeX;
-	ViewPortDesc.Height = (_float)g_iSizeY;
-	ViewPortDesc.MinDepth = 0.f;
-	ViewPortDesc.MaxDepth = 1.f;
+	D3D11_VIEWPORT			ViewportDesc;
+	ZeroMemory(&ViewportDesc, sizeof(D3D11_VIEWPORT));
+	ViewportDesc.TopLeftX = 0;
+	ViewportDesc.TopLeftY = 0;
+	ViewportDesc.Width = (_float)g_iSizeX;
+	ViewportDesc.Height = (_float)g_iSizeY;
+	ViewportDesc.MinDepth = 0.f;
+	ViewportDesc.MaxDepth = 1.f;
 
-	m_pContext->RSSetViewports(1, &ViewPortDesc); 
+	m_pContext->RSSetViewports(1, &ViewportDesc); 
 
 	for (auto& pGameObject : m_RenderObjects[RG_SHADOWOBJ])
 	{
@@ -403,15 +405,15 @@ HRESULT CRenderer::Render_ShadowObj()
 	if (FAILED(m_pGameInstance->End_MRT()))
 		return E_FAIL;
 
-	ZeroMemory(&ViewPortDesc, sizeof(D3D11_VIEWPORT));
-	ViewPortDesc.TopLeftX = 0;
-	ViewPortDesc.TopLeftY = 0;
-	ViewPortDesc.Width = (_float)1280.f;
-	ViewPortDesc.Height = (_float)720.f;
-	ViewPortDesc.MinDepth = 0.f;
-	ViewPortDesc.MaxDepth = 1.f;
+	ZeroMemory(&ViewportDesc, sizeof(D3D11_VIEWPORT));
+	ViewportDesc.TopLeftX = 0;
+	ViewportDesc.TopLeftY = 0;
+	ViewportDesc.Width = (_float)1280.f;
+	ViewportDesc.Height = (_float)720.f;
+	ViewportDesc.MinDepth = 0.f;
+	ViewportDesc.MaxDepth = 1.f;
 
-	m_pContext->RSSetViewports(1, &ViewPortDesc);
+	m_pContext->RSSetViewports(1, &ViewportDesc);
 
 	return S_OK;
 }
@@ -935,11 +937,6 @@ HRESULT CRenderer::Render_NonLights()
 	return S_OK;
 }
 
-//_bool Compare(CGameObject* pSour, CGameObject* pDest)
-//{
-//	return dynamic_cast<CBlendObject*>(pSour)->Get_ViewZ() > dynamic_cast<CBlendObject*>(pDest)->Get_ViewZ();
-//}
-
 HRESULT CRenderer::Render_Blend()
 {
 	/*WeightBlend*/
@@ -982,16 +979,24 @@ HRESULT CRenderer::Render_UI()
 	return S_OK;
 }
 
-HRESULT CRenderer::Render_CascadeShdow()
+HRESULT CRenderer::Render_Cascade()
 {
-	D3D11_VIEWPORT			ViewPortDesc;
-	ZeroMemory(&ViewPortDesc, sizeof(D3D11_VIEWPORT));
-	ViewPortDesc.TopLeftX = 0;
-	ViewPortDesc.TopLeftY = 0;
-	ViewPortDesc.Width = (_float)g_iSizeX;
-	ViewPortDesc.Height = (_float)g_iSizeY;
-	ViewPortDesc.MinDepth = 0.f;
-	ViewPortDesc.MaxDepth = 1.f;
+	D3D11_VIEWPORT			ViewportDesc;
+	ZeroMemory(&ViewportDesc, sizeof(D3D11_VIEWPORT));
+	ViewportDesc.TopLeftX = 0;
+	ViewportDesc.TopLeftY = 0;
+	ViewportDesc.Width = 2560;
+	ViewportDesc.Height = 1440;
+	ViewportDesc.MinDepth = 0.f;
+	ViewportDesc.MaxDepth = 1.f;
+
+	m_pContext->RSSetViewports(1, &ViewportDesc);
+
+	if (FAILED(m_pGameInstance->Begin_MRT(TEXT("MRT_Cascade"), m_pCascadeDepthStencilViewArr)))
+		return E_FAIL;
+
+	if (FAILED(m_pGameInstance->End_MRT()))
+		return E_FAIL;
 
 	return S_OK;
 }
@@ -1126,7 +1131,7 @@ HRESULT CRenderer::Copy_BackBuffer()
 	return S_OK;
 }
 
-HRESULT CRenderer::Ready_Cascade()
+HRESULT CRenderer::Ready_CascadeDepthStencilView()
 {
 	ID3D11Texture2D* pDepthStencilArrTexture = nullptr;
 
@@ -1136,7 +1141,7 @@ HRESULT CRenderer::Ready_Cascade()
 
 	TextureDesc.Width = 2560;
 	TextureDesc.Height = 1440;
-	TextureDesc.MipLevels = 0;
+	TextureDesc.MipLevels = 1;
 	TextureDesc.ArraySize = 3;
 	TextureDesc.Format = DXGI_FORMAT_D32_FLOAT_S8X24_UINT;
 
@@ -1157,13 +1162,24 @@ HRESULT CRenderer::Ready_Cascade()
 	DepthStencilViewDesc.Format = DXGI_FORMAT_D32_FLOAT_S8X24_UINT;
 	DepthStencilViewDesc.ViewDimension = D3D11_DSV_DIMENSION_TEXTURE2DARRAY;
 	DepthStencilViewDesc.Texture2DArray.MipSlice = 0;
-	DepthStencilViewDesc.Texture2DArray.ArraySize = 3;
+	DepthStencilViewDesc.Texture2DArray.ArraySize = 3; // 1로 해야하나?
 	DepthStencilViewDesc.Texture2DArray.FirstArraySlice = 0;
 
-	if (FAILED(m_pDevice->CreateDepthStencilView(pDepthStencilArrTexture, &DepthStencilViewDesc, &m_pCascadeDSVArr)))
+	if (FAILED(m_pDevice->CreateDepthStencilView(pDepthStencilArrTexture, &DepthStencilViewDesc, &m_pCascadeDepthStencilViewArr)))
 		return E_FAIL;
 
 	Safe_Release(pDepthStencilArrTexture);
+
+	// 각 캐스케이드가 나타낼 깊이 범위 설정.
+	float cascadeSplits[3] = { 0.0f };
+	float nearPlane = 0.1f;
+	float farPlane = 1000.0f;
+	float delta = farPlane - nearPlane;
+
+	for (int i = 0; i < 3; ++i) {
+		float lambda = (i + 1) / 3.f;
+		cascadeSplits[i] = nearPlane + lambda * delta;
+	}
 
 	return S_OK;
 }
@@ -1236,9 +1252,9 @@ void CRenderer::Free()
 	Safe_Release(m_pDownSampleDepthStencilView2);
 	Safe_Release(m_pDownSampleDepthStencilView1);
 	Safe_Release(m_pDownSampleDepthStencilView0);
-	Safe_Release(m_pLightDepthStencilView);
 
-	Safe_Release(m_pCascadeDSVArr);
+	Safe_Release(m_pLightDepthStencilView);
+	Safe_Release(m_pCascadeDepthStencilViewArr);
 
 	Safe_Release(m_pHDRShader);
 	Safe_Release(m_pSSAOShader);

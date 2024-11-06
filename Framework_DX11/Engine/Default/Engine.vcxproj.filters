@@ -196,6 +196,9 @@
     <Filter Include="01.Utility\97.CSVFileManager">
       <UniqueIdentifier>{a318eb36-df00-4b66-85dc-c9029b0fbc28}</UniqueIdentifier>
     </Filter>
+    <Filter Include="01.Utility\03.Components\Model\Instance">
+      <UniqueIdentifier>{4f337ae3-4578-49df-8b04-d6616acae1d1}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\Private\Base.cpp">
@@ -380,6 +383,9 @@
     </ClCompile>
     <ClCompile Include="..\Private\CSVFileManager.cpp">
       <Filter>01.Utility\97.CSVFileManager</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Private\Instance_Manager.cpp">
+      <Filter>01.Utility\03.Components\Model\Instance</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -580,6 +586,9 @@
     </ClInclude>
     <ClInclude Include="..\Public\CSVFileManager.h">
       <Filter>01.Utility\97.CSVFileManager</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Public\Instance_Manager.h">
+      <Filter>01.Utility\03.Components\Model\Instance</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

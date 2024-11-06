@@ -72,7 +72,7 @@ private:
 	class CTexture*				m_pNoiseTexture_SSAO = { nullptr };
 
 	/* Cascade */
-	ID3D11DepthStencilView*		m_pCascadeDSVArr = { nullptr };
+	ID3D11DepthStencilView*		m_pCascadeDepthStencilViewArr = { nullptr };
 
 #ifdef _DEBUG
 private:
@@ -102,12 +102,12 @@ private:
 	HRESULT Render_Blend();
 	HRESULT Render_UI();
 
-	HRESULT Render_CascadeShdow();
+	HRESULT Render_Cascade();
 
 private:
 	HRESULT Ready_LightDepthStencilView();
 	HRESULT Copy_BackBuffer();
-	HRESULT Ready_Cascade();
+	HRESULT Ready_CascadeDepthStencilView();
 
 #ifdef _DEBUG
 private:
