@@ -101,6 +101,8 @@ HRESULT CCSVFile_Manager::LoadDataByFile(const _char* FilePath, vector<vector<_w
 		else
 			break;
 	}
+
+	FileClose();
 	
 	return S_OK;
 }
@@ -115,6 +117,8 @@ HRESULT CCSVFile_Manager::SaveDataByFile(const _char* FilePath, vector<vector<_w
 		if (!SaveDataByRow(iter))
 			break;
 	}
+
+	FileClose();
 
 	return S_OK;
 }

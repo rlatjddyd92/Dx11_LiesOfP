@@ -124,6 +124,10 @@ void CController_UITool::UIPart_Edit()
 		else
 			ImGui::Text(m_vecPageInfo[m_iNowSelectNum]->vecPart[pNow->iParentPart_Index]->strUIPart_Name);
 
+		ImGui::Text("GroupIndex");
+		ImGui::SameLine();
+		ImGui::InputInt("Group", &pNow->iGroupIndex);
+
 		// ªÁ¿Ã¡Ó
 		ImGui::Text("Size");
 		ImGui::SameLine();
@@ -296,13 +300,16 @@ HRESULT CController_UITool::InitializeResource()
 {
 	
 
+	if (FAILED(LoadPage()))
+		return E_FAIL;
+
 	if (FAILED(LoadPart()))
 		return E_FAIL;
 
 	return S_OK;
 }
 
-HRESULT CController_UITool::SavePart()
+HRESULT CController_UITool::SavePage()
 {
 	
 
@@ -310,9 +317,51 @@ HRESULT CController_UITool::SavePart()
 	return S_OK;
 }
 
-HRESULT CController_UITool::LoadPart()
+HRESULT CController_UITool::LoadPage()
 {
-	
+	vector<vector<_wstring>> vecBuffer;
+	if (FAILED(m_pGameInstance->LoadDataByFile("../Bin/DataFiles/UIPageSpec.csv", &vecBuffer)))
+		return E_FAIL;
+
+	m_DataTag_Page.resize(vecBuffer[0].size());
+	m_DataTag_Page = vecBuffer[0];
+
+	for (_int i = 1; i < vecBuffer.size(); ++i)
+	{
+		UPAGE* pNew = new UPAGE;
+
+		pNew->strUIPage_Name = new _char[vecBuffer[i][1].size() + 1];
+		m_ArrPageName[i - 1] = new _char[vecBuffer[i][1].size() + 1];
+		for (_int j = 0; j <= vecBuffer[i][1].size();++j)
+		{
+			pNew->strUIPage_Name[j] = (_char)vecBuffer[i][1][j];
+			m_ArrPageName[i - 1][j] = (_char)vecBuffer[i][1][j];
+		}
+			
+
+		pNew->fPosition.x = stof(vecBuffer[i][2]);
+		pNew->fPosition.y = stof(vecBuffer[i][3]);
+
+		m_vecPageInfo.push_back(pNew);
+	}
+
+
+	return S_OK;
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
@@ -338,6 +387,62 @@ HRESULT CController_UITool::LoadPart()
 	}
 
 
+
+	return S_OK;
+}
+
+HRESULT CController_UITool::SavePart()
+{
+	return S_OK;
+}
+
+HRESULT CController_UITool::LoadPart()
+{
+	vector<vector<_wstring>> vecBuffer;
+	if (FAILED(m_pGameInstance->LoadDataByFile("../Bin/DataFiles/UIPartSpec.csv", &vecBuffer)))
+		return E_FAIL;
+
+	m_DataTag_Part.resize(vecBuffer[0].size());
+	m_DataTag_Part = vecBuffer[0];
+
+	for (_int i = 1; i < vecBuffer.size(); ++i)
+	{
+		UPART* pNew = new UPART;
+
+		pNew->strUIPart_Name = new _char[vecBuffer[i][2].size() + 1];
+		for (_int j = 0; j <= vecBuffer[i][2].size();++j)
+			pNew->strUIPart_Name[j] = (_char)vecBuffer[i][2][j];
+
+		pNew->iParentPart_Index = stoi(vecBuffer[i][3]);
+		pNew->fSize = { stof(vecBuffer[i][4]), stof(vecBuffer[i][5]) };
+		pNew->fPosition = { stof(vecBuffer[i][6]), stof(vecBuffer[i][7]) };
+		pNew->iGroupIndex = stoi(vecBuffer[i][8]);
+		pNew->fAdjust = { stof(vecBuffer[i][9]), stof(vecBuffer[i][10]) };
+		pNew->iMoveType = stoi(vecBuffer[i][11]);
+		pNew->fAdjust_Start = { stof(vecBuffer[i][12]), stof(vecBuffer[i][13]) };
+		pNew->fAdjust_End = { stof(vecBuffer[i][14]), stof(vecBuffer[i][15]) };
+		pNew->fDirec = { stof(vecBuffer[i][16]), stof(vecBuffer[i][17]) };
+		pNew->fRatio = stof(vecBuffer[i][18]);
+		pNew->bBarDirecX = stoi(vecBuffer[i][19]);
+		pNew->iTexture_Index = stoi(vecBuffer[i][20]);
+		pNew->fTextureColor = { stof(vecBuffer[i][21]) , stof(vecBuffer[i][22]) , stof(vecBuffer[i][23]) , stof(vecBuffer[i][24]) };
+		pNew->iFontIndex = stoi(vecBuffer[i][25]);
+		
+		pNew->szText = new _tchar[vecBuffer[i][26].size() + 1];
+		for (_int j = 0; j <= vecBuffer[i][26].size();++j)
+			pNew->szText[j] = vecBuffer[i][26][j];
+
+		pNew->bCenter = stoi(vecBuffer[i][27]);
+		pNew->fTextColor = { stof(vecBuffer[i][28]) , stof(vecBuffer[i][29]) , stof(vecBuffer[i][30]) , stof(vecBuffer[i][31]) };
+
+		pNew->MakeDirec();
+		if (pNew->iParentPart_Index == -1)
+			pNew->MovePart(m_vecPageInfo[stoi(vecBuffer[i][0])]->fPosition);
+		else
+			pNew->MovePart(m_vecPageInfo[stoi(vecBuffer[i][0])]->vecPart[pNew->iParentPart_Index]->fPosition);
+
+		m_vecPageInfo[stoi(vecBuffer[i][0])]->vecPart.push_back(pNew);
+	}
 
 	return S_OK;
 }
@@ -378,10 +483,11 @@ void CController_UITool::Free()
 		Safe_Delete(iter);
 	}
 
-	for (_int i = 0; i < 100; ++i)
+	for (_int i = 0; i < _int(UIPAGE::PAGE_END); ++i)
 		Safe_Delete_Array(m_ArrPageName[i]);
 
 
 	Safe_Release(m_pUIRender);
-	
+	m_DataTag_Page.clear();
+	m_DataTag_Part.clear();
 }
