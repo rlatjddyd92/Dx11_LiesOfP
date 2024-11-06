@@ -20,8 +20,14 @@ public:
 public:
 	virtual HRESULT Initialize_Prototype();
 	virtual HRESULT Initialize(void* pArg);
+
 	virtual HRESULT Bind_Buffers();
 	virtual HRESULT Render();
+
+	ID3D11Buffer* Get_VB() { return m_pVB; }
+	ID3D11Buffer* Get_IB() { return m_pIB; }
+
+	HRESULT Bind_Buffers_Instance(ID3D11Buffer* pVBInstance);
 
 protected:
 	ID3D11Buffer*				m_pVB = { nullptr };

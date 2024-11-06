@@ -24,6 +24,12 @@ CModel::CModel(const CModel & Prototype)
 	, m_Animations { Prototype.m_Animations }
 	, m_CurrentTrackPosition { Prototype.m_CurrentTrackPosition }
 	, m_KeyFrameIndices {Prototype.m_KeyFrameIndices }
+	, m_isInstance{ Prototype.m_isInstance }
+	, m_InstanceInitialData{Prototype.m_InstanceInitialData }
+	, m_InstanceBufferDesc{Prototype. m_InstanceBufferDesc }
+	, m_iInstanceStride { Prototype.m_iInstanceStride }
+	, m_iNumInstance {Prototype.m_iNumInstance }
+	, m_pInstanceVertices{Prototype.m_pInstanceVertices }
 {
 	for (auto& pAnimation : m_Animations)
 		Safe_AddRef(pAnimation);
@@ -109,7 +115,7 @@ HRESULT CModel::Update_Boundary()
 	return S_OK;
 }
 
-HRESULT CModel::Initialize_Prototype(TYPE eType, const _char * pModelFilePath, _fmatrix PreTransformMatrix)
+HRESULT CModel::Initialize_Prototype(TYPE eType, const _char * pModelFilePath, _fmatrix PreTransformMatrix, _bool isInstance)
 {
 	_uint		iFlag = { 0 };	
 	
@@ -118,6 +124,7 @@ HRESULT CModel::Initialize_Prototype(TYPE eType, const _char * pModelFilePath, _
 
 	XMStoreFloat4x4(&m_PreTransformMatrix, PreTransformMatrix);
 	m_eType = eType;
+	m_isInstance = isInstance;
 
 	_tchar szFinalPath[MAX_PATH] = TEXT("");
 	MultiByteToWideChar(CP_ACP, 0, pModelFilePath, (_uint)strlen(pModelFilePath), szFinalPath, MAX_PATH);
@@ -143,8 +150,39 @@ HRESULT CModel::Initialize_Prototype(TYPE eType, const _char * pModelFilePath, _
 	if (FAILED(Ready_Animations(&hFile)))
 		return E_FAIL;
 
-
 	CloseHandle(hFile);
+
+	if (m_isInstance)
+	{
+		m_iInstanceStride = sizeof(VTXMODELINSTANCE);
+		m_iNumInstance = 10;
+
+		ZeroMemory(&m_InstanceBufferDesc, sizeof m_InstanceBufferDesc);
+		m_InstanceBufferDesc.ByteWidth = m_iInstanceStride * m_iNumInstance;
+		m_InstanceBufferDesc.Usage = D3D11_USAGE_DYNAMIC; /* 동적버퍼로 생성한다. */
+		m_InstanceBufferDesc.BindFlags = D3D11_BIND_VERTEX_BUFFER;
+		m_InstanceBufferDesc.CPUAccessFlags = D3D11_CPU_ACCESS_WRITE;
+		m_InstanceBufferDesc.MiscFlags = 0;
+		m_InstanceBufferDesc.StructureByteStride = m_iInstanceStride;
+
+		m_pInstanceVertices = new VTXMODELINSTANCE[m_iNumInstance];
+		ZeroMemory(m_pInstanceVertices, sizeof(VTXMODELINSTANCE) * m_iNumInstance);
+
+		VTXMODELINSTANCE* pInstanceVertices = static_cast<VTXMODELINSTANCE*>(m_pInstanceVertices);
+
+		_float	fScale = 10.f;
+		for (size_t i = 0; i < m_iNumInstance; i++)
+		{
+			pInstanceVertices[i].vRight = _float4(fScale, 0.f, 0.f, 0.f);
+			pInstanceVertices[i].vUp = _float4(0.f, fScale, 0.f, 0.f);
+			pInstanceVertices[i].vLook = _float4(0.f, 0.f, fScale, 0.f);
+			pInstanceVertices[i].vTranslation = _float4(i * i, 1.f, 1.f, 1.f);
+		}
+	}
+
+	ZeroMemory(&m_InstanceInitialData, sizeof m_InstanceInitialData);
+	m_InstanceInitialData.pSysMem = m_pInstanceVertices;
+
 
 	return S_OK;
 }
@@ -156,6 +194,12 @@ HRESULT CModel::Initialize(void * pArg)
 	ZeroMemory(m_isEnd_Animations, m_iNumAnimations * sizeof(_bool));
 	ZeroMemory(m_isEnd_Animations_Boundary, m_iNumAnimations * sizeof(_bool));
 
+	if (m_isInstance)
+	{
+		if (FAILED(m_pDevice->CreateBuffer(&m_InstanceBufferDesc, &m_InstanceInitialData, &m_pVBInstance)))
+			return E_FAIL;
+	}
+
 	return S_OK;
 }
 
@@ -163,6 +207,36 @@ HRESULT CModel::Render(_uint iMeshIndex)
 {
 	m_Meshes[iMeshIndex]->Bind_Buffers();
 	m_Meshes[iMeshIndex]->Render();	
+
+	return S_OK;
+}
+
+
+
+HRESULT CModel::Render_Instance(_uint iMeshIndex)
+{
+	D3D11_MAPPED_SUBRESOURCE	SubResource{};
+
+	m_pContext->Map(m_pVBInstance, 0, D3D11_MAP_WRITE_NO_OVERWRITE, 0, &SubResource);
+
+	VTXMODELINSTANCE* pVertices = static_cast<VTXMODELINSTANCE*>(SubResource.pData);
+
+	memcpy(SubResource.pData, m_InstanceDatas.data(), sizeof(_float4x4) * m_InstanceDatas.size());
+
+	/*_float4x4 v[10];
+	_float4x4* pData = reinterpret_cast<_float4x4*>(SubResource.pData);
+	for (int i = 0; i < 10; ++i) {
+		v[i] = pData[i];
+	}*/
+
+	m_pContext->Unmap(m_pVBInstance, 0);
+
+	m_Meshes[iMeshIndex]->Bind_Buffers_Instance(m_pVBInstance);
+
+	_uint iNumIndices = m_Meshes[iMeshIndex]->Get_NumIndices();
+	m_pContext->DrawIndexedInstanced(m_Meshes[iMeshIndex]->Get_NumIndices(), m_InstanceDatas.size(), 0, 0, 0);
+
+	m_InstanceDatas.clear();
 
 	return S_OK;
 }
@@ -556,11 +630,11 @@ HRESULT CModel::Ready_Animations(HANDLE* pFile)
 }
 
 
-CModel * CModel::Create(ID3D11Device * pDevice, ID3D11DeviceContext * pContext, TYPE eType, const _char * pModelFilePath, _fmatrix PreTransformMatrix)
+CModel * CModel::Create(ID3D11Device * pDevice, ID3D11DeviceContext * pContext, TYPE eType, const _char * pModelFilePath, _fmatrix PreTransformMatrix, _bool isInstance)
 {
 	CModel*		pInstance = new CModel(pDevice, pContext);
 
-	if (FAILED(pInstance->Initialize_Prototype(eType, pModelFilePath, PreTransformMatrix)))
+	if (FAILED(pInstance->Initialize_Prototype(eType, pModelFilePath, PreTransformMatrix, isInstance)))
 	{
 		MSG_BOX(TEXT("Failed to Created : CModel"));
 		Safe_Release(pInstance);
@@ -591,6 +665,16 @@ void CModel::Free()
 	{
 		Safe_Delete_Array(m_isEnd_Animations);
 		Safe_Delete_Array(m_isEnd_Animations_Boundary);
+
+		if (m_isInstance)
+		{
+			Safe_Release(m_pVBInstance);
+		}
+	}
+
+	if (!m_isCloned && m_isInstance)
+	{
+		Safe_Delete_Array(m_pInstanceVertices);
 	}
 
 	for (auto& pAnimation : m_Animations)
