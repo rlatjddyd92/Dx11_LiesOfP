@@ -294,20 +294,20 @@ HRESULT CLoader::Ready_Resources_For_ToolLevel()
 	if (FAILED(m_pGameInstance->Add_Prototype(LEVEL_TOOL, TEXT("Prototype_Component_Texture_TE_Flare"),
 		CTexture::Create(m_pDevice, m_pContext, TEXT("../Bin/Resources/Textures/Effect/T_Flare_01_C_HJS.dds"), 1))))
 		return E_FAIL;
-	CController_EffectTool::Get_Instance()->Add_TE_ProtytypeTag(TEXT("Prototype_Component_Texture_Particle_Flare"));
+	CController_EffectTool::Get_Instance()->Add_TE_ProtytypeTag(TEXT("Prototype_Component_Texture_TE_Flare"));
 
 	/* For. Prototype_Component_Texture_Particle_Ring */
 	if (FAILED(m_pGameInstance->Add_Prototype(LEVEL_TOOL, TEXT("Prototype_Component_Texture_TE_Ring"),
 		CTexture::Create(m_pDevice, m_pContext, TEXT("../Bin/Resources/Textures/Effect/T_Ring_04_C_KMH.dds"), 1))))
 		return E_FAIL;
-	CController_EffectTool::Get_Instance()->Add_TE_ProtytypeTag(TEXT("Prototype_Component_Texture_Particle_Ring"));
+	CController_EffectTool::Get_Instance()->Add_TE_ProtytypeTag(TEXT("Prototype_Component_Texture_TE_Ring"));
 
 	// 테스트용. 나중에 링이랑 합칠거임.
 	/* For. Prototype_Component_Texture_Particle_Spread */
 	if (FAILED(m_pGameInstance->Add_Prototype(LEVEL_TOOL, TEXT("Prototype_Component_Texture_TE_Spread"),
 		CTexture::Create(m_pDevice, m_pContext, TEXT("../Bin/Resources/Textures/Effect/T_Ring_08_C_HJS.dds"), 1))))
 		return E_FAIL;
-	CController_EffectTool::Get_Instance()->Add_TE_ProtytypeTag(TEXT("Prototype_Component_Texture_Particle_Spread"));
+	CController_EffectTool::Get_Instance()->Add_TE_ProtytypeTag(TEXT("Prototype_Component_Texture_TE_Spread"));
 
 	// 테스트용. 나중에 플레어랑 합칠거임.
 /* For. Prototype_Component_Texture_Particle_Spread */
