@@ -344,6 +344,8 @@ HRESULT CVIBuffer_Point_Instance::Initialize(void * pArg)
 	ZeroMemory(&m_InstanceInitialData, sizeof m_InstanceInitialData);
 	m_InstanceInitialData.pSysMem = m_pInstanceVertices;
 
+
+
 #pragma endregion
 #pragma endregion
 

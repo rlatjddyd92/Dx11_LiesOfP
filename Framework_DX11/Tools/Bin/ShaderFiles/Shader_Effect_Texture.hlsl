@@ -22,14 +22,18 @@ texture2D g_MaskTexture;
 texture2D g_MaskTexture2;
 texture2D g_OpacityTexture;
 
+float2  g_vTexDivide;
+int     g_iTexIndex;
+float   g_fRatio;
+
 cbuffer Effect_Desc
 {
     float4 vColor_Add = float4(0.f, 0.f, 0.f, 0.f);         // 더할 색상
     float4 vColor_Discard = float4(0.f, 0.f, 0.f, 0.f);     // 자를 색상
     float4 vColor_Mul = float4(1.f, 1.f, 1.f, 1.f);         // 곱할 색상
     
-    float2 vNumSprite = float2(1.f, 1.f);       // 스프라이트 전체 개수
-    float2 vSpriteIndex = float2(0.f, 0.f);     // 스프라이트 현재 인덱스
+    //float2 vNumSprite = float2(1.f, 1.f);       // 스프라이트 전체 개수
+    //float2 vSpriteIndex = float2(0.f, 0.f);     // 스프라이트 현재 인덱스
     
     bool isMoveDistortion = false;              // 디스토션 움직일거임?            
     float fDistortionSpeed = 1.f;               // 속도 얼마나 움직일거임?
@@ -82,6 +86,20 @@ struct PS_OUT
     vector vColor : SV_TARGET0;
 };
 
+PS_OUT PS_MAIN(PS_IN In)
+{
+    PS_OUT Out = (PS_OUT) 0;
+    vector vDiffuse = g_DiffuseTexture.Sample(LinearClampSampler, In.vTexcoord);
+    
+    Out.vColor = vDiffuse;
+    Out.vColor.a = Out.vColor.r;
+    
+    Out.vColor.rgb *= g_vColor.rgb;
+    Out.vColor.a *= g_fRatio;
+    
+    return Out;
+}
+
 struct PS_OUT_EFFECT
 {
     vector vColor : SV_TARGET0;
@@ -93,50 +111,17 @@ PS_OUT_EFFECT PS_MAIN_EFFECT(PS_IN In, bool isAlphaBlend)
 {
     PS_OUT_EFFECT Out = (PS_OUT_EFFECT) 0;
     
-    
-    
     vector vDiffuse = g_DiffuseTexture.Sample(LinearClampSampler, In.vTexcoord);
     
-    return Out;
     
+    return Out;
 }
 
-PS_OUT PS_MAIN_DISTORTION(PS_IN In)
-{
-    PS_OUT Out = (PS_OUT) 0;
-    vector vDiffuse = g_DiffuseTexture.Sample(LinearClampSampler, In.vTexcoord);
-    
-    Out.vColor = vDiffuse;
-    Out.vColor.b = g_fTime;
-    
-    return Out;
-}
+
 
 technique11 DefaultTechnique
 {
-    //pass Effect
-    //{
-    //    SetRasterizerState(RS_Default);
-    //    SetDepthStencilState(DSS_Default, 0);
-    //    SetBlendState(BS_Default, vector(0.f, 0.f, 0.f, 0.f), 0xffffffff);
-
-    //    VertexShader = compile vs_5_0 VS_MAIN();
-    //    GeometryShader = NULL;
-    //    PixelShader = compile ps_5_0 PS_MAIN_EFFECT(false);
-    //}
-
-    //pass AlphaBlendEffect
-    //{
-    //    SetRasterizerState(RS_Default);
-    //    SetDepthStencilState(DSS_None, 0);
-    //    SetBlendState(BS_AlphaBlend, vector(0.f, 0.f, 0.f, 0.f), 0xffffffff);
-
-    //    VertexShader = compile vs_5_0 VS_MAIN();
-    //    GeometryShader = NULL;
-    //    PixelShader = compile ps_5_0 PS_MAIN_EFFECT(true);
-    //}
-
-    pass Distortion
+    pass Blend_RTOA
     {
         SetRasterizerState(RS_Default);
         SetDepthStencilState(DSS_None, 0);
@@ -144,6 +129,6 @@ technique11 DefaultTechnique
 
         VertexShader = compile vs_5_0 VS_MAIN();
         GeometryShader = NULL;
-        PixelShader = compile ps_5_0 PS_MAIN_DISTORTION();
+        PixelShader = compile ps_5_0 PS_MAIN();
     }
 }

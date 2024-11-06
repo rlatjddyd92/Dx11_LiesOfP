@@ -123,6 +123,11 @@ void CImGui_Manager::Tool_Effect()
 			m_pController_EffectTool->Particle_Check();
 		}
 
+		if (ImGui::CollapsingHeader("Texture Effect"))
+		{
+			m_pController_EffectTool->TE_Check();
+		}
+
 		ImGui::Begin("EffectList");
 
 		m_pController_EffectTool->Select_Particle();
@@ -143,7 +148,25 @@ void CImGui_Manager::Tool_Effect()
 			m_pController_EffectTool->Delete_Particle();
 		}
 
+		m_pController_EffectTool->Select_TE();
+		if (ImGui::Button("Create Texture Effect"))
+		{
+			m_pController_EffectTool->Add_TE();
+		}
+		if (ImGui::Button("Update Texture Effect"))
+		{
+			m_pController_EffectTool->Update_TE();
+		}
+		if (ImGui::Button("Get Texture Effect"))
+		{
+			m_pController_EffectTool->Get_TE();
+		}
+		if (ImGui::Button("Delete Texture Effect"))
+		{
+			m_pController_EffectTool->Delete_TE();
+		}
 		ImGui::End();
+
 
 		ImGui::EndTabItem();
 	}

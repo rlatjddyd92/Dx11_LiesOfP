@@ -1,7 +1,6 @@
 #pragma once
 
-#include "Tools_Defines.h"
-#include "GameObject.h"
+#include "Effect_Base.h"
 
 BEGIN(Engine)
 class CShader;
@@ -10,10 +9,16 @@ class CTexture;
 END
 
 BEGIN(Tools)
-class CParticle_Test final : public CGameObject
+class CParticle_Effect final : public CEffect_Base
 {
 public:
 	enum TYPE { TYPE_SPREAD, TYPE_MOVE, TYPE_CONVERGE, TYPE_SPREAD_INDEPENDENT, TYPE_MOVE_INDEPENDENT, TYPE_CONVERGE_INDEPENDENT, TYPE_END };
+
+	enum RENDER_STATE 
+	{ 
+		RS_BLUR = 0x0001,
+		RS_END = 0x9999
+	};
 
 	typedef struct
 	{
@@ -50,7 +55,7 @@ public:
 		_Vec3		vScale = {};
 	}TRANSFORM_DESC;
 
-	typedef struct : CGameObject::GAMEOBJECT_DESC
+	typedef struct : CEffect_Base::EFFECT_BASE_DESC
 	{
 		_uint		iNumInstance = { 100 };
 		_float3		vCenter = {};
@@ -68,15 +73,17 @@ public:
 		ACCEL_DESC AccelDesc = {};
 		TRANSFORM_DESC TransformDesc = {};
 
-		_wstring strPrototypeTextureTag;
-		_uint iShaderIndex;
+		_wstring strPrototypeTextureTag = L"";
+		_uint iShaderIndex = { 0 };
+		_uint iRenderState = { 0 };
+
 	}PARTICLE_TEST_DESC;
 
 
 private:
-	CParticle_Test(ID3D11Device* pDevice, ID3D11DeviceContext* pContext);
-	CParticle_Test(const CParticle_Test& Prototype);
-	virtual ~CParticle_Test() = default;
+	CParticle_Effect(ID3D11Device* pDevice, ID3D11DeviceContext* pContext);
+	CParticle_Effect(const CParticle_Effect& Prototype);
+	virtual ~CParticle_Effect() = default;
 
 public:
 	void Set_Default(DEFAULT_DESC desc) {
@@ -95,6 +102,10 @@ public:
 		m_iShaderIndex = iShaderIndex;
 	}
 
+	void Set_RenderState(_uint iRenderState) {
+		m_iRenderState = iRenderState;
+	}
+
 	DEFAULT_DESC Get_Default() {
 		return m_DefaultDesc;
 	}
@@ -109,6 +120,10 @@ public:
 
 	ACCEL_DESC Get_Accel() {
 		return m_AccelDesc;
+	}
+
+	_uint Get_RenderState() {
+		return m_iRenderState;
 	}
 
 public:
@@ -134,12 +149,13 @@ private:
 	ACCEL_DESC m_AccelDesc = {};
 
 	_uint m_iShaderIndex = { 0 };
+	_uint m_iRenderState = { 0 };
 
 private:
 	HRESULT Ready_Components(PARTICLE_TEST_DESC* pDesc);
 
 public:
-	static CParticle_Test* Create(ID3D11Device* pDevice, ID3D11DeviceContext* pContext);
+	static CParticle_Effect* Create(ID3D11Device* pDevice, ID3D11DeviceContext* pContext);
 	virtual CGameObject* Clone(void* pArg);
 	virtual void Free() override;
 };

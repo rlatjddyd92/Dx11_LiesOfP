@@ -39,6 +39,7 @@
     <ClInclude Include="..\Public\Controller_EffectTool.h" />
     <ClInclude Include="..\Public\Controller_MapTool.h" />
     <ClInclude Include="..\Public\Controller_UITool.h" />
+    <ClInclude Include="..\public\Effect_Base.h" />
     <ClInclude Include="..\Public\FreeCamera.h" />
     <ClInclude Include="..\Public\ImGui_Manager.h" />
     <ClInclude Include="..\Public\Level_Tool.h" />
@@ -48,8 +49,9 @@
     <ClInclude Include="..\Public\MainApp.h" />
     <ClInclude Include="..\Public\NavigationController.h" />
     <ClInclude Include="..\Public\NonAnimModel.h" />
-    <ClInclude Include="..\public\Particle_Test.h" />
+    <ClInclude Include="..\public\Particle_Effect.h" />
     <ClInclude Include="..\Public\Terrain.h" />
+    <ClInclude Include="..\public\Texture_Effect.h" />
     <ClInclude Include="..\Public\ThreadPool.h" />
     <ClInclude Include="..\Public\Tools_Defines.h" />
     <ClInclude Include="..\Public\UIRender.h" />
@@ -82,6 +84,7 @@
     <ClCompile Include="..\Private\Controller_EffectTool.cpp" />
     <ClCompile Include="..\Private\Controller_MapTool.cpp" />
     <ClCompile Include="..\Private\Controller_UITool.cpp" />
+    <ClCompile Include="..\private\Effect_Base.cpp" />
     <ClCompile Include="..\Private\FreeCamera.cpp" />
     <ClCompile Include="..\Private\ImGui_Manager.cpp" />
     <ClCompile Include="..\Private\Level_Tool.cpp" />
@@ -91,8 +94,9 @@
     <ClCompile Include="..\Private\MainApp.cpp" />
     <ClCompile Include="..\Private\NavigationController.cpp" />
     <ClCompile Include="..\Private\NonAnimModel.cpp" />
-    <ClCompile Include="..\private\Particle_Test.cpp" />
+    <ClCompile Include="..\private\Particle_Effect.cpp" />
     <ClCompile Include="..\Private\Terrain.cpp" />
+    <ClCompile Include="..\private\Texture_Effect.cpp" />
     <ClCompile Include="..\Private\ThreadPool.cpp" />
     <ClCompile Include="..\Private\UIRender.cpp" />
     <ClCompile Include="stdafx.cpp" />
