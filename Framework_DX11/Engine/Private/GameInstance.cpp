@@ -9,6 +9,7 @@
 #include "Target_Manager.h"
 #include "Picking.h"
 #include "Frustum.h"
+#include "Layer.h"
 
 #include "Collider_Manager.h"
 #include "Key_Manager.h"
@@ -292,6 +293,26 @@ CGameObject* CGameInstance::Find_NearObject(CGameObject* pOwner, _uint iLevelInd
 	return m_pObject_Manager->Find_NearObject(pOwner, iLevelIndex, strLayerTag);
 }
 
+_uint CGameInstance::Get_Object_Layer_Count(_uint iLevelIndex)
+{
+	return m_pObject_Manager->Get_Object_Layer_Count(iLevelIndex);
+}
+
+_uint CGameInstance::Get_Layer_ObjectCount(_uint iLevelIndex, const _wstring& strLayerTag)
+{
+	CLayer* pLayer = m_pObject_Manager->Find_Layer(iLevelIndex, strLayerTag);
+
+	if (pLayer != nullptr)
+		return pLayer->Get_ObjectCount();
+
+	return 0;
+}
+
+_wstring CGameInstance::Get_LayerTag(_uint iLevelIndex, _uint index)
+{
+	return m_pObject_Manager->Get_LayerTag(iLevelIndex, index);
+}
+
 #pragma endregion
 
 #pragma region COMPONENT_MANAGER
@@ -382,6 +403,11 @@ HRESULT CGameInstance::Render_Lights(CShader * pShader, CVIBuffer_Rect * pVIBuff
 {
 
 	return m_pLight_Manager->Render(pShader, pVIBuffer);
+}
+
+_int CGameInstance::Get_Total_LightCount()
+{
+	return m_pLight_Manager->Get_Total_Light_Count();
 }
 
 

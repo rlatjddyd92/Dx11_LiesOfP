@@ -4,6 +4,8 @@
 #include "GameInstance.h"
 #include "ImGui_Manager.h"
 
+#include "Controller_EffectTool.h"
+
 CAnimModel::CAnimModel(ID3D11Device* pDevice, ID3D11DeviceContext* pContext)
 	: CGameObject{ pDevice, pContext }
 {
@@ -99,7 +101,8 @@ void CAnimModel::Late_Update(_float fTimeDelta)
 	/* 직교투영을 위한 월드행렬까지 셋팅하게 된다. */
 	__super::Late_Update(fTimeDelta);
 
-	m_pGameInstance->Add_RenderObject(CRenderer::RG_NONBLEND, this);
+	if(false == CController_EffectTool::Get_Instance()->Get_JunhoCamera())
+		m_pGameInstance->Add_RenderObject(CRenderer::RG_NONBLEND, this);
 }
 
 HRESULT CAnimModel::Render()
@@ -122,9 +125,25 @@ HRESULT CAnimModel::Render()
 		if (FAILED(m_pModelCom->Bind_Material(m_pShaderCom, "g_DiffuseTexture", TEXTURE_TYPE::DIFFUSE, (_uint)i)))
 			return E_FAIL;
 
+		if (nullptr != m_pModelCom->Find_Texture((_uint)i, TEXTURE_TYPE::ROUGHNESS))
+		{
+			if (FAILED(m_pModelCom->Bind_Material(m_pShaderCom, "g_ARMTexture", ROUGHNESS, (_uint)i)))
+				return E_FAIL;
+		}
 
-		if (FAILED(m_pShaderCom->Begin(0)))
-			return E_FAIL;
+		if (nullptr != m_pModelCom->Find_Texture((_uint)i, TEXTURE_TYPE::NORMALS))
+		{
+			if (FAILED(m_pModelCom->Bind_Material(m_pShaderCom, "g_NormalTexture", NORMALS, (_uint)i)))
+				return E_FAIL;
+
+			if (FAILED(m_pShaderCom->Begin(2)))
+				return E_FAIL;
+		}
+		else
+		{
+			if (FAILED(m_pShaderCom->Begin(0)))
+				return E_FAIL;
+		}
 
 		if (FAILED(m_pModelCom->Render((_uint)i)))
 			return E_FAIL;
@@ -144,7 +163,7 @@ HRESULT CAnimModel::Ready_Components(ANIMMODEL_DESC* pAnimDesc)
 	MultiByteToWideChar(CP_ACP, MB_PRECOMPOSED, pAnimDesc->szModelTag, MAX_PATH, szModelTag, MAX_PATH);
 
 	/* FOR.Com_Model */
-	if (FAILED(__super::Add_Component(LEVEL_TOOL, szModelTag,
+	if (FAILED(__super::Add_Component(LEVEL_TOOL, TEXT("Prototype_AnimModel_Test"),
 		TEXT("Com_Model"), reinterpret_cast<CComponent**>(&m_pModelCom))))
 		return E_FAIL;
 

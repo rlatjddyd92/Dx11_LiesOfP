@@ -76,7 +76,7 @@ HRESULT CLevel_Tool::Ready_Layer_Camera()
 	Desc.vEye = _float4(0.f, 10.f, -10.f, 1.f);
 	Desc.vAt = _float4(0.f, 0.f, 0.f, 1.f);
 	Desc.fFovy = XMConvertToRadians(60.0f);
-	Desc.fAspect = g_iWinSizeX / g_iWinSizeY;
+	Desc.fAspect = (_float)g_iWinSizeX / (_float)g_iWinSizeY;
 	Desc.fNear = 0.1f;
 	Desc.fFar = 1000.f;
 	Desc.fSpeedPerSec = 30.f;
@@ -90,8 +90,8 @@ HRESULT CLevel_Tool::Ready_Layer_Camera()
 
 HRESULT CLevel_Tool::Ready_Layer_BackGround()
 {
-	if (FAILED(m_pGameInstance->Add_CloneObject_ToLayer(LEVEL_TOOL, TEXT("Layer_BackGround"), TEXT("Prototype_GameObject_Terrain"))))
-		return E_FAIL;
+	//if (FAILED(m_pGameInstance->Add_CloneObject_ToLayer(LEVEL_TOOL, TEXT("Layer_BackGround"), TEXT("Prototype_GameObject_Terrain"))))
+	//	return E_FAIL;
 
 	return S_OK;
 }

@@ -22,6 +22,7 @@ public:
 		_float3		vScale;
 		_float3		vRotation;
 		_bool		isCollision = { true };
+		_bool		isLight = { false };
 		_uint		iRenderGroupID = { true };
 	}NONMODEL_DESC;
 
@@ -44,8 +45,11 @@ public:
 	virtual HRESULT Render_Picking()override;
 
 	virtual _bool Is_Pick(_float3* vPickPos);
+	int Get_HashId() { return m_iHashId; }
+
 	int Get_RenderTargetId() { return m_iRenderGroupId; }
 	void Set_RenderTargetId(int id) { m_iRenderGroupId = id; }
+	void Set_Selected(_bool bSelect) {m_bSelected = bSelect;}
 public:
 	class CShader*	m_pShaderCom = { nullptr };
 	class CModel*	m_pModelCom = { nullptr };
@@ -58,7 +62,8 @@ private:
 	static _int m_iStaticHashId;
 
 	_int		m_iHashId;
-
+	_bool m_bSelected = { false };
+	_bool m_isLight = { false };
 private:
 	HRESULT Ready_Components(NONMODEL_DESC* pNonAnimDesc);
 

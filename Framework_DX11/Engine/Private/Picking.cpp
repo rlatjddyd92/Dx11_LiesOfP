@@ -135,7 +135,7 @@ _bool CPicking::Picking(_float3 * pPickPos)
 
 _bool CPicking::Picking_Object(_uint* pPickID)
 {
-	if (FAILED(m_pGameInstance->Copy_RenderTarget(TEXT("Target_PickDepth"), m_pPickObjectTexture)))
+	if (FAILED(m_pGameInstance->Copy_RenderTarget(TEXT("Target_PickObjectDepth"), m_pPickObjectTexture)))
 		return false;
 
 	POINT			ptMouse{};
@@ -158,7 +158,7 @@ _bool CPicking::Picking_Object(_uint* pPickID)
 	srcBox.back = 1;
 
 	D3D11_MAPPED_SUBRESOURCE msr = {};
-	//ZeroMemory(&msr, sizeof(D3D11_MAPPED_SUBRESOURCE));
+	ZeroMemory(&msr, sizeof(D3D11_MAPPED_SUBRESOURCE));
 
 	m_pContext->CopySubresourceRegion(m_pPickObjectTextureMini, 0, 0, 0, 0, m_pPickObjectTexture, 0, &srcBox);
 
@@ -173,10 +173,12 @@ _bool CPicking::Picking_Object(_uint* pPickID)
 	UINT8 b = static_cast<UINT8>(fcolorValue.z * 255);
 	UINT8 a = static_cast<UINT8>(fcolorValue.w * 255);
 
-	uint32_t hash = (static_cast<uint32_t>(r) << 24) |
-		(static_cast<uint32_t>(g) << 16) |
-		(static_cast<uint32_t>(b) << 8) |
-		static_cast<uint32_t>(a);
+	uint32_t hash = (static_cast<uint32_t>(a) << 24) |
+		(static_cast<uint32_t>(r) << 16) |
+		(static_cast<uint32_t>(g) << 8) |
+		static_cast<uint32_t>(b);
+
+	hash /= 100;
 
 	*pPickID = static_cast<_uint>(hash);
 

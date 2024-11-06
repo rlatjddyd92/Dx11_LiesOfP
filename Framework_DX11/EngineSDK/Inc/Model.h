@@ -40,6 +40,8 @@ public:
 	void					Set_UFBIndices(_uint eCount, _uint iIndex) { m_UFBIndices[eCount] = iIndex; }
 	_uint					Get_UFBIndices(_uint eCount) { return m_UFBIndices[eCount]; }
 
+	class CTexture*			Find_Texture(_uint iMeshNum, TEXTURE_TYPE eMaterialType);
+
 	void					Set_AnimPlay(_bool bCtrAnim) { m_bPlayAnimCtr = bCtrAnim; }
 
 	_bool					Get_IsUseBoundary() { return m_isUseBoundary; }

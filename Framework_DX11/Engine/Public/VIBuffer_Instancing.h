@@ -22,7 +22,7 @@ public:
 
 	enum STATE
 	{
-		STATE_REVOLVE			= 0x0001,
+		STATE_ORBIT			= 0x0001,
 		STATE_RANDOM			= 0x0002,
 		STATE_LOOP				= 0x0004,
 		STATE_ACCEL				= 0x0008,

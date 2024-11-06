@@ -59,7 +59,8 @@ HRESULT CObject_Manager::Add_CloneObject_ToLayer(_uint iLevelIndex, const _wstri
 	{
 		pLayer = CLayer::Create();
 		pLayer->Add_GameObject(pGameObject);
-		m_pLayers[iLevelIndex].emplace(strLayerTag, pLayer);		
+		m_pLayers[iLevelIndex].emplace(strLayerTag, pLayer);	
+		LayerTagList.push_back(strLayerTag);
 	}
 	else /* 내가 추가하려고 하는 레잉어가 만들어져있었어. */
 		pLayer->Add_GameObject(pGameObject);
@@ -238,6 +239,16 @@ CGameObject* CObject_Manager::Find_NearObject(CGameObject* pOwner, _uint iLevelI
 	}
 
 	return pNearObject;
+}
+
+_uint CObject_Manager::Get_Object_Layer_Count(_uint iLevelIndex)
+{
+	return (_uint)m_pLayers[iLevelIndex].size();
+}
+
+_wstring CObject_Manager::Get_LayerTag(_uint iLevelIndex, _uint index)
+{
+	return  LayerTagList[index];
 }
 
 CGameObject* CObject_Manager::Find_Object(_uint iLevelIndex, const _wstring& strLayerTag, _uint iIndex)

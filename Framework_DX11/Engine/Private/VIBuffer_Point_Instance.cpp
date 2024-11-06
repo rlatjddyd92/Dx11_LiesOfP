@@ -344,6 +344,8 @@ HRESULT CVIBuffer_Point_Instance::Initialize(void * pArg)
 	ZeroMemory(&m_InstanceInitialData, sizeof m_InstanceInitialData);
 	m_InstanceInitialData.pSysMem = m_pInstanceVertices;
 
+
+
 #pragma endregion
 #pragma endregion
 
@@ -405,7 +407,7 @@ _bool CVIBuffer_Point_Instance::Spread(_uint iState, _float fRenderRatio, _Vec4 
 		}
 
 		_Vec4 vRotateDir = {};
-		if (true == Contain_State(iState, STATE_REVOLVE))
+		if (true == Contain_State(iState, STATE_ORBIT))
 		{
 			_Vec4 vTargetDir = vPivot - (pVertices[i].vTranslation);
 			vRotateDir = Get_RevolveDir(vTargetDir, vRevolveAxis, fAngle, fTimeDelta);
@@ -431,7 +433,7 @@ _bool CVIBuffer_Point_Instance::Spread(_uint iState, _float fRenderRatio, _Vec4 
 		_Vec4		vMoveDir = vDir * m_pSpeed[i];
 		vMoveDir.y -= fGravity * pVertices[i].vLifeTime.y;
 		pVertices[i].vTranslation = pVertices[i].vTranslation + (vMoveDir * fTimeDelta + vRotateDir) * fAddSpeed;
-		XMStoreFloat4(&pVertices[i].vLook, XMVector3Normalize(vMoveDir + vRotateDir));
+		XMStoreFloat4(&pVertices[i].vLook, XMVector3Normalize(vMoveDir * fTimeDelta + vRotateDir));
 
 		if (true == Contain_State(iState, STATE_LOOP) && pVertices[i].vLifeTime.y >= pVertices[i].vLifeTime.x)
 		{
@@ -488,7 +490,7 @@ _bool CVIBuffer_Point_Instance::Move(_uint iState, _float fRenderRatio, _Vec4 vD
 		}
 
 		_Vec4 vRotateDir = {};
-		if (true == Contain_State(iState, STATE_REVOLVE))
+		if (true == Contain_State(iState, STATE_ORBIT))
 		{
 			_Vec4 vTargetDir = vCenter - (pVertices[i].vTranslation);
 			vRotateDir = Get_RevolveDir(vTargetDir, vRevolveAxis, fAngle, fTimeDelta);
@@ -515,7 +517,7 @@ _bool CVIBuffer_Point_Instance::Move(_uint iState, _float fRenderRatio, _Vec4 vD
 		vMoveDir.y -= fGravity * pVertices[i].vLifeTime.y;
 
 		pVertices[i].vTranslation = pVertices[i].vTranslation + (vMoveDir * fTimeDelta + vRotateDir) * fAddSpeed;
-		XMStoreFloat4(&pVertices[i].vLook, XMVector3Normalize(vMoveDir + vRotateDir));
+		XMStoreFloat4(&pVertices[i].vLook, XMVector3Normalize(vMoveDir * fTimeDelta + vRotateDir));
 
 		if (true == Contain_State(iState, STATE_LOOP) && pVertices[i].vLifeTime.y >= pVertices[i].vLifeTime.x)
 		{
@@ -572,7 +574,7 @@ _bool CVIBuffer_Point_Instance::Converge(_uint iState, _float fRenderRatio, _Vec
 		}
 
 		_Vec4 vRotateDir = {};
-		if (true == Contain_State(iState, STATE_REVOLVE))
+		if (true == Contain_State(iState, STATE_ORBIT))
 		{
 			_Vec4 vTargetDir = vPivot - (pVertices[i].vTranslation);
 			vRotateDir = Get_RevolveDir(vTargetDir, vRevolveAxis, fAngle, fTimeDelta);
@@ -598,7 +600,7 @@ _bool CVIBuffer_Point_Instance::Converge(_uint iState, _float fRenderRatio, _Vec
 		_Vec4		vMoveDir = vDir * m_pSpeed[i];
 
 		pVertices[i].vTranslation = pVertices[i].vTranslation + (vMoveDir * fTimeDelta + vRotateDir) * fAddSpeed;
-		XMStoreFloat4(&pVertices[i].vLook, XMVector3Normalize(vMoveDir + vRotateDir));
+		XMStoreFloat4(&pVertices[i].vLook, XMVector3Normalize(vMoveDir * fTimeDelta + vRotateDir));
 
 		if (true == Contain_State(iState, STATE_LOOP) && pVertices[i].vLifeTime.y >= pVertices[i].vLifeTime.x)
 		{
@@ -664,7 +666,7 @@ _bool CVIBuffer_Point_Instance::Spread_Independent(_uint iState, _Matrix WorldMa
 		}
 
 		_Vec4 vRotateDir = {};
-		if (true == Contain_State(iState, STATE_REVOLVE))
+		if (true == Contain_State(iState, STATE_ORBIT))
 		{
 			_Vec4 vTargetDir = XMLoadFloat4(&pVertices[(_uint)i].vRight) -XMLoadFloat4(&pVertices[(_uint)i].vTranslation);
 			_Vec3 Axis = _Vec3(pVertices[i].vUp.x, pVertices[i].vUp.y, pVertices[i].vUp.z);
@@ -691,7 +693,7 @@ _bool CVIBuffer_Point_Instance::Spread_Independent(_uint iState, _Matrix WorldMa
 		vMoveDir.y -= fGravity * pVertices[i].vLifeTime.y;
 
 		pVertices[i].vTranslation = pVertices[i].vTranslation + (vMoveDir * fTimeDelta + vRotateDir) * fAddSpeed;
-		XMStoreFloat4(&pVertices[i].vLook, XMVector3Normalize(vMoveDir + vRotateDir));
+		XMStoreFloat4(&pVertices[i].vLook, XMVector3Normalize(vMoveDir * fTimeDelta + vRotateDir));
 
 		if (true == Contain_State(iState, STATE_LOOP) && pVertices[i].vLifeTime.y >= pVertices[i].vLifeTime.x)
 		{
@@ -766,7 +768,7 @@ _bool CVIBuffer_Point_Instance::Move_Independent(_uint iState, _Matrix WorldMatr
 		}
 
 		_Vec4 vRotateDir = {};
-		if (true == Contain_State(iState, STATE_REVOLVE))
+		if (true == Contain_State(iState, STATE_ORBIT))
 		{
 			_Vec4 vTargetDir = XMLoadFloat4(&pVertices[(_uint)i].vRight) - XMLoadFloat4(&pVertices[(_uint)i].vTranslation);
 			_Vec3 Axis = _Vec3(pVertices[i].vUp.x, pVertices[i].vUp.y, pVertices[i].vUp.z);
@@ -793,7 +795,7 @@ _bool CVIBuffer_Point_Instance::Move_Independent(_uint iState, _Matrix WorldMatr
 		vMoveDir.y -= fGravity * pVertices[i].vLifeTime.y;
 
 		pVertices[i].vTranslation = pVertices[i].vTranslation + (vMoveDir * fTimeDelta + vRotateDir) * fAddSpeed;
-		XMStoreFloat4(&pVertices[i].vLook, XMVector3Normalize(vMoveDir + vRotateDir));
+		XMStoreFloat4(&pVertices[i].vLook, XMVector3Normalize(vMoveDir * fTimeDelta + vRotateDir));
 
 		if (true == Contain_State(iState, STATE_LOOP) && pVertices[i].vLifeTime.y >= pVertices[i].vLifeTime.x)
 		{
@@ -867,7 +869,7 @@ _bool CVIBuffer_Point_Instance::Converge_Independent(_uint iState, _Matrix World
 		}
 
 		_Vec4 vRotateDir = {};
-		if (true == Contain_State(iState, STATE_REVOLVE))
+		if (true == Contain_State(iState, STATE_ORBIT))
 		{
 			_Vec4 vTargetDir = XMLoadFloat4(&pVertices[(_uint)i].vRight) - XMLoadFloat4(&pVertices[(_uint)i].vTranslation);
 			_Vec3 Axis = _Vec3(pVertices[i].vUp.x, pVertices[i].vUp.y, pVertices[i].vUp.z);
@@ -893,7 +895,7 @@ _bool CVIBuffer_Point_Instance::Converge_Independent(_uint iState, _Matrix World
 		_Vec4		vMoveDir = vDir * m_pSpeed[i];
 
 		pVertices[i].vTranslation = pVertices[i].vTranslation + (vMoveDir * fTimeDelta + vRotateDir) * fAddSpeed;
-		XMStoreFloat4(&pVertices[i].vLook, XMVector3Normalize(vMoveDir + vRotateDir));
+		XMStoreFloat4(&pVertices[i].vLook, XMVector3Normalize(vMoveDir * fTimeDelta + vRotateDir));
 
 		if (true == Contain_State(iState, STATE_LOOP) && pVertices[i].vLifeTime.y >= pVertices[i].vLifeTime.x)
 		{

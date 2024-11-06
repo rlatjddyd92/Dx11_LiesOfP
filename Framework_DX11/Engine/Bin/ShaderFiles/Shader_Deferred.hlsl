@@ -6,7 +6,7 @@ matrix			g_LightViewMatrix, g_LightProjMatrix;
 matrix			g_StaticLightViewMatrix;
 texture2D		g_Texture;
 
-
+Texture2DArray	g_CascadeTextureArr;
 
 vector			g_vLightDir;
 vector			g_vLightPos;
@@ -137,6 +137,8 @@ PS_OUT_LIGHT PS_MAIN_LIGHT_DIRECTIONAL(PS_IN In)
 
 	Out.vSpecular = (g_vLightSpecular * g_vMtrlSpecular) * pow(max(dot(normalize(vReflect) * -1.f, normalize(vLook)), 0.f), 50.f);
 
+    //g_CascadeTextureArr.SampleCmpLevelZero();
+	
 	return Out;
 }
 
@@ -239,12 +241,12 @@ PS_OUT PS_MAIN_DEFERRED(PS_IN In)
 	
     float3 vEyeToCamera = normalize(g_vCamPosition.xyz - vPosition.xyz);
     vector vNormalDesc = g_NormalTexture.Sample(PointSampler, In.vTexcoord);
-    vector vNormal = float4(vNormalDesc.xyz * 2.f - 1.f, 0.f);
-    float fRim = 1.f - saturate(dot(vEyeToCamera, vNormal));
+    float3 vNormal = vNormalDesc.xyz * 2.f - 1.f;
+    //float fRim = 1.f - saturate(dot(vEyeToCamera, vNormal));
 
-    fRim = pow(fRim, 3.f);
-    vRimLightColor *= fRim;
-    Out.vColor.xyz += vRimLightColor.xyz;
+    //fRim = pow(fRim, 5.f);
+    //vRimLightColor *= fRim;
+    //Out.vColor.xyz = saturate(Out.vColor.xyz + vRimLightColor); // 0.5배로 줄임
 	
 	//// Bloom -> 더 나중으로 옮겨야함
  //   float4 vBloom = g_BloomTexture.Sample(LinearSampler, In.vTexcoord);
@@ -255,7 +257,7 @@ PS_OUT PS_MAIN_DEFERRED(PS_IN In)
 	return Out;	
 }
 
-PS_OUT PS_MAIN_FINAL(PS_IN In)
+PS_OUT PS_MAIN_BACKBUFFER(PS_IN In)
 {
 	PS_OUT		Out = (PS_OUT)0;
 
@@ -263,62 +265,6 @@ PS_OUT PS_MAIN_FINAL(PS_IN In)
 
 	return Out;
 }
-
-float		g_fWeights[13] = {
-	0.0561, 0.1353, 0.278, 0.4868, 0.7261, 0.9231, 1.f, 0.9231, 0.7261, 0.4868, 0.278, 0.1353, 0.0561
-};
-float		g_fWeightTotal = 6.21f;
-
-
-PS_OUT PS_MAIN_BLUR_X(PS_IN In)
-{
-	PS_OUT		Out = (PS_OUT)0;
-
-	float2		vBlurUV = (float2)0.f;
-
-	for (int i = -6; i < 7; i++)
-	{
-		vBlurUV = In.vTexcoord + float2(1.f / 1280.f * i, 0.f);
-		Out.vColor += g_fWeights[i + 6] * g_FinalTexture.Sample(LinearSampler, vBlurUV);
-		
-	}
-
-	Out.vColor /= 6.21f;
-
-	return Out;
-}
-
-PS_OUT PS_MAIN_BLUR_Y(PS_IN In)
-{
-	PS_OUT		Out = (PS_OUT)0;
-
-	float2		vBlurUV = (float2)0.f;
-
-	for (int i = -6; i < 7; i++)
-	{
-		vBlurUV = In.vTexcoord + float2(0.f, 1.f / 720.f * i);
-		Out.vColor += g_fWeights[i + 6] * g_BlurXTexture.Sample(LinearSampler, vBlurUV);
-
-	}
-
-	Out.vColor /= 6.21f;
-
-	return Out;
-}
-
-PS_OUT PS_MAIN_BLUR_FINAL(PS_IN In)
-{
-	PS_OUT		Out = (PS_OUT)0;
-
-	vector		vBlur = g_BlurYTexture.Sample(LinearSampler, In.vTexcoord);
-	vector		vFinal = g_FinalTexture.Sample(LinearSampler, In.vTexcoord);
-
-	Out.vColor = vBlur + vFinal * 0.5f;
-
-	return Out;
-}
-
-
 
 
 technique11	DefaultTechnique
@@ -370,7 +316,7 @@ technique11	DefaultTechnique
 		PixelShader = compile ps_5_0 PS_MAIN_DEFERRED();
 	}
 
-	pass Final
+	pass BackBuffer
 	{
 		SetRasterizerState(RS_Default);
 		SetDepthStencilState(DSS_None, 0);
@@ -378,39 +324,6 @@ technique11	DefaultTechnique
 
 		VertexShader = compile vs_5_0 VS_MAIN();
 		GeometryShader = NULL;
-		PixelShader = compile ps_5_0 PS_MAIN_FINAL();
-	}
-
-	pass Blur_X
-	{
-		SetRasterizerState(RS_Default);
-		SetDepthStencilState(DSS_None, 0);
-		SetBlendState(BS_Default, vector(0.f, 0.f, 0.f, 0.f), 0xffffffff);
-
-		VertexShader = compile vs_5_0 VS_MAIN();
-		GeometryShader = NULL;
-		PixelShader = compile ps_5_0 PS_MAIN_BLUR_X();
-	}
-
-	pass Blur_Y
-	{
-		SetRasterizerState(RS_Default);
-		SetDepthStencilState(DSS_None, 0);
-		SetBlendState(BS_Default, vector(0.f, 0.f, 0.f, 0.f), 0xffffffff);
-
-		VertexShader = compile vs_5_0 VS_MAIN();
-		GeometryShader = NULL;
-		PixelShader = compile ps_5_0 PS_MAIN_BLUR_Y();
-	}
-
-	pass BlurFinal
-	{
-		SetRasterizerState(RS_Default);
-		SetDepthStencilState(DSS_None, 0);
-		SetBlendState(BS_Default, vector(0.f, 0.f, 0.f, 0.f), 0xffffffff);
-
-		VertexShader = compile vs_5_0 VS_MAIN();
-		GeometryShader = NULL;
-		PixelShader = compile ps_5_0 PS_MAIN_BLUR_FINAL();
-	}
+        PixelShader = compile ps_5_0 PS_MAIN_BACKBUFFER();
+    }
 }

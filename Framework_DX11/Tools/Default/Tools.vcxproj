@@ -19,6 +19,12 @@
     </ProjectConfiguration>
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="..\..\ImGuizmo\GraphEditor.h" />
+    <ClInclude Include="..\..\ImGuizmo\ImCurveEdit.h" />
+    <ClInclude Include="..\..\ImGuizmo\ImGradient.h" />
+    <ClInclude Include="..\..\ImGuizmo\ImGuizmo.h" />
+    <ClInclude Include="..\..\ImGuizmo\ImSequencer.h" />
+    <ClInclude Include="..\..\ImGuizmo\ImZoomSlider.h" />
     <ClInclude Include="..\..\imgui\imconfig.h" />
     <ClInclude Include="..\..\imgui\imgui.h" />
     <ClInclude Include="..\..\imgui\imgui_impl_dx11.h" />
@@ -33,6 +39,7 @@
     <ClInclude Include="..\Public\Controller_EffectTool.h" />
     <ClInclude Include="..\Public\Controller_MapTool.h" />
     <ClInclude Include="..\Public\Controller_UITool.h" />
+    <ClInclude Include="..\public\Effect_Base.h" />
     <ClInclude Include="..\Public\FreeCamera.h" />
     <ClInclude Include="..\Public\ImGui_Manager.h" />
     <ClInclude Include="..\Public\Level_Tool.h" />
@@ -40,11 +47,14 @@
     <ClInclude Include="..\Public\Level_Logo.h" />
     <ClInclude Include="..\Public\Loader.h" />
     <ClInclude Include="..\Public\MainApp.h" />
+    <ClInclude Include="..\Public\NavigationController.h" />
     <ClInclude Include="..\Public\NonAnimModel.h" />
-    <ClInclude Include="..\public\Particle_Test.h" />
+    <ClInclude Include="..\public\Particle_Effect.h" />
     <ClInclude Include="..\Public\Terrain.h" />
+    <ClInclude Include="..\public\Texture_Effect.h" />
     <ClInclude Include="..\Public\ThreadPool.h" />
     <ClInclude Include="..\Public\Tools_Defines.h" />
+    <ClInclude Include="..\Public\UIRender.h" />
     <ClInclude Include="framework.h" />
     <ClInclude Include="Resource.h" />
     <ClInclude Include="stdafx.h" />
@@ -56,6 +66,11 @@
     <Image Include="Tools.ico" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="..\..\ImGuizmo\GraphEditor.cpp" />
+    <ClCompile Include="..\..\ImGuizmo\ImCurveEdit.cpp" />
+    <ClCompile Include="..\..\ImGuizmo\ImGradient.cpp" />
+    <ClCompile Include="..\..\ImGuizmo\ImGuizmo.cpp" />
+    <ClCompile Include="..\..\ImGuizmo\ImSequencer.cpp" />
     <ClCompile Include="..\..\imgui\imgui.cpp" />
     <ClCompile Include="..\..\imgui\imgui_demo.cpp" />
     <ClCompile Include="..\..\imgui\imgui_draw.cpp" />
@@ -69,6 +84,7 @@
     <ClCompile Include="..\Private\Controller_EffectTool.cpp" />
     <ClCompile Include="..\Private\Controller_MapTool.cpp" />
     <ClCompile Include="..\Private\Controller_UITool.cpp" />
+    <ClCompile Include="..\private\Effect_Base.cpp" />
     <ClCompile Include="..\Private\FreeCamera.cpp" />
     <ClCompile Include="..\Private\ImGui_Manager.cpp" />
     <ClCompile Include="..\Private\Level_Tool.cpp" />
@@ -76,10 +92,13 @@
     <ClCompile Include="..\Private\Level_Logo.cpp" />
     <ClCompile Include="..\Private\Loader.cpp" />
     <ClCompile Include="..\Private\MainApp.cpp" />
+    <ClCompile Include="..\Private\NavigationController.cpp" />
     <ClCompile Include="..\Private\NonAnimModel.cpp" />
-    <ClCompile Include="..\private\Particle_Test.cpp" />
+    <ClCompile Include="..\private\Particle_Effect.cpp" />
     <ClCompile Include="..\Private\Terrain.cpp" />
+    <ClCompile Include="..\private\Texture_Effect.cpp" />
     <ClCompile Include="..\Private\ThreadPool.cpp" />
+    <ClCompile Include="..\Private\UIRender.cpp" />
     <ClCompile Include="stdafx.cpp" />
     <ClCompile Include="Tools.cpp" />
   </ItemGroup>
@@ -91,6 +110,18 @@
     <None Include="Tools.vcxproj.user" />
   </ItemGroup>
   <ItemGroup>
+    <FxCompile Include="..\Bin\ShaderFiles\Shader_Compute.hlsl">
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Effect</ShaderType>
+      <ShaderModel Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">5.0</ShaderModel>
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Effect</ShaderType>
+      <ShaderModel Condition="'$(Configuration)|$(Platform)'=='Release|x64'">5.0</ShaderModel>
+    </FxCompile>
+    <FxCompile Include="..\Bin\ShaderFiles\Shader_Effect_Texture.hlsl">
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Effect</ShaderType>
+      <ShaderModel Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">5.0</ShaderModel>
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Effect</ShaderType>
+      <ShaderModel Condition="'$(Configuration)|$(Platform)'=='Release|x64'">5.0</ShaderModel>
+    </FxCompile>
     <FxCompile Include="..\Bin\ShaderFiles\Shader_VtxAnimModel.hlsl">
       <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Effect</ShaderType>
       <ShaderModel Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">5.0</ShaderModel>
@@ -224,7 +255,7 @@
       <SDLCheck>true</SDLCheck>
       <PreprocessorDefinitions>_DEBUG;_WINDOWS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>Default</ConformanceMode>
-      <AdditionalIncludeDirectories>../../EngineSDK/Inc/;../Default;../Public;../../imgui</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>../../EngineSDK/Inc/;../Default;../Public;../../imgui;../../ImGuizmo</AdditionalIncludeDirectories>
       <LanguageStandard>Default</LanguageStandard>
       <IncludeInUnityFile>true</IncludeInUnityFile>
       <CombineFilesOnlyFromTheSameFolder>true</CombineFilesOnlyFromTheSameFolder>

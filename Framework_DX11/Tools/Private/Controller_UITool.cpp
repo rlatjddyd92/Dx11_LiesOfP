@@ -1,6 +1,8 @@
 #include "stdafx.h"
 #include "Controller_UITool.h"
 #include "GameInstance.h"
+#include <fstream>
+#include <sstream>
 
 IMPLEMENT_SINGLETON(CController_UITool)
 
@@ -12,9 +14,9 @@ void CController_UITool::UITool_Edit()
 HRESULT CController_UITool::UITool_Render()
 {
 	//FontTest();
+	//UIPart_Render();
+	m_pUIRender->Late_Update(0.f);
 
-	UISocket_Render();
-	UIPart_Render();
 
 	return S_OK;
 }
@@ -50,77 +52,23 @@ void CController_UITool::UIPage_Edit()
 			} while (m_InputPageName[iIndex] != '\0');
 		}
 
+		// 사이즈
+		ImGui::PushItemWidth(100.f);
+		ImGui::Text("PageCenter");
+		ImGui::SameLine();
+		ImGui::InputFloat("x", &m_vecPageInfo[m_iNowSelectNum]->fPosition.x);
+		ImGui::SameLine();
+		ImGui::InputFloat("y", &m_vecPageInfo[m_iNowSelectNum]->fPosition.y);
+
 		ImGui::NewLine();
 	}
-
-	if (ImGui::CollapsingHeader("Socket Setting"))
-		UISocket_Edit();
 
 	if (ImGui::CollapsingHeader("Part Setting"))
 		UIPart_Edit();
 }
 
-void CController_UITool::UISocket_Edit()
-{
-	
-
-	ImGui::Text("SocketCount : ");
-	ImGui::SameLine();
-
-	_int iCount = (_int)m_vecPageInfo[m_iNowSelectNum]->vecSocket.size();
-	_tchar* tTemp = new _tchar[5];
-	swprintf(tTemp, 5, L"%d", iCount);
-	_char* szCount = new _char[5];
-	for (_int i = 0; i < 5; ++i)
-		szCount[i] = tTemp[i];
-
-	ImGui::Text(szCount);
-
-	ImGui::PushItemWidth(100.f);
-
-	ImGui::SeparatorText("AddSocket");
-	ImGui::InputText("SocketName", m_InputSocketName, sizeof(m_InputSocketName));
-	if (ImGui::Button("AddSocket"))
-	{
-		_int iIndex = -1;
-
-		USOCKET* pNew = new USOCKET;
-		pNew->strUISocket_Name = new _char[100];
-		do
-		{
-			++iIndex;
-			pNew->strUISocket_Name[iIndex] = m_InputSocketName[iIndex];
-		} while (m_InputSocketName[iIndex] != '\0');
-
-		m_vecPageInfo[m_iNowSelectNum]->vecSocket.push_back(pNew);
-	}
-	ImGui::SeparatorText("Socketlist");
-	
-	ImGui::PushItemWidth(50.f);
-
-	for (auto& iter : m_vecPageInfo[m_iNowSelectNum]->vecSocket)
-	{
-		ImGui::Text(iter->strUISocket_Name);
-		ImGui::SameLine();
-		ImGui::InputFloat("X", &iter->fPosition.x);
-		ImGui::SameLine();
-		ImGui::InputFloat("Y", &iter->fPosition.y);
-
-	}
-
-
-
-
-
-	Safe_Delete_Array(tTemp);
-	Safe_Delete_Array(szCount);
-
-	ImGui::NewLine();
-}
-
 void CController_UITool::UIPart_Edit()
 {
-
 	ImGui::Text("PartCount : ");
 	ImGui::SameLine();
 
@@ -154,36 +102,133 @@ void CController_UITool::UIPart_Edit()
 
 	ImGui::SeparatorText("Partlist");
 
-	for (auto& iter : m_vecPageInfo[m_iNowSelectNum]->vecPart)
+	ImGui::InputInt("SelectPart", &m_vecPageInfo[m_iNowSelectNum]->iNowSelectPart);
+
+	if ((m_vecPageInfo[m_iNowSelectNum]->iNowSelectPart >= 0) && ((m_vecPageInfo[m_iNowSelectNum]->iNowSelectPart < m_vecPageInfo[m_iNowSelectNum]->vecPart.size())))
 	{
-		ImGui::Text(iter->strUIPart_Name);
-		ImGui::SameLine();
-		ImGui::PushItemWidth(50.f);
-		ImGui::InputFloat("X", &iter->fSize.x);
-		ImGui::SameLine();
-		ImGui::InputFloat("Y", &iter->fSize.y);
-		ImGui::SameLine();
-		ImGui::PushItemWidth(70.f);
-		ImGui::InputInt("Soc", &iter->iSocket_Index);
-		ImGui::SameLine();
-		ImGui::InputInt("Tex", &iter->iTexture_Index);
+		UPART* pNow = m_vecPageInfo[m_iNowSelectNum]->vecPart[m_vecPageInfo[m_iNowSelectNum]->iNowSelectPart];
 
+		ImGui::PushItemWidth(100.f);
+		// 부모 파트 정보
 
-		ImGui::SameLine();
-		if ((iter->iSocket_Index < 0) || (iter->iSocket_Index >= m_vecPageInfo[m_iNowSelectNum]->vecSocket.size()))
-			ImGui::Text(" ※InvalidSocket");
-		ImGui::SameLine();
-		if ((iter->iTexture_Index < 0) || (iter->iTexture_Index >= m_vecTextureInfo.size()))
-			ImGui::Text(" ※InvalidTexture");
+		ImGui::SeparatorText("SetInfo");
 
+		ImGui::Text("ParentIndex");
+		ImGui::SameLine();
+		ImGui::InputInt("Parent", &pNow->iParentPart_Index);
+		ImGui::SameLine();
+		if (pNow->iParentPart_Index == -1)
+			ImGui::Text("Page(root Part)");
+		else if ((pNow->iParentPart_Index < 0) || (pNow->iParentPart_Index >= (_int)m_vecPageInfo[m_iNowSelectNum]->vecPart.size()))
+			ImGui::Text("※ WrongNum");
+		else
+			ImGui::Text(m_vecPageInfo[m_iNowSelectNum]->vecPart[pNow->iParentPart_Index]->strUIPart_Name);
+
+		// 사이즈
+		ImGui::Text("Size");
+		ImGui::SameLine();
+		ImGui::InputFloat("SizeX", &pNow->fSize.x);
+		ImGui::SameLine();
+		ImGui::InputFloat("SizeY", &pNow->fSize.y);
+
+		ImGui::SeparatorText("Texture");
+		// 텍스쳐
+		ImGui::Text("Texture");
+		ImGui::SameLine();
+		ImGui::InputInt("Tex: ", &pNow->iTexture_Index);
+		ImGui::SameLine();
+		if (pNow->iTexture_Index == -1)
+			ImGui::Text("none(NoTexture)");
+		else if ((pNow->iTexture_Index < 0) || (pNow->iTexture_Index >= m_pUIRender->GetTextureCount()))
+			ImGui::Text("※ WrongNum");
+		else
+			ImGui::Text(m_pUIRender->GetTextureTag(pNow->iTexture_Index));
+
+		ImGui::SeparatorText("Text");
+		// 텍스트 
+		ImGui::Text("TextFont");
+		ImGui::SameLine();
+		ImGui::InputInt("Font: ", &pNow->iFontIndex);
+		ImGui::SameLine();
+		if (pNow->iFontIndex == _int(CUIRender::UI_FONT::FONT_END))
+			ImGui::Text("none(NoText)");
+		else if ((pNow->iFontIndex < 0) || (pNow->iFontIndex >= (_int)CUIRender::UI_FONT::FONT_END))
+			ImGui::Text("※ WrongNum");
+		else
+			ImGui::Text(m_pUIRender->GetTextFontTag(pNow->iFontIndex));
+		ImGui::InputText("Text", m_InputText, sizeof(m_InputText));
+		if (ImGui::Button("InputText"))
+		{
+			_int iIndex = -1;
+
+			pNow->szText = new _tchar[100];
+			do
+			{
+				++iIndex;
+				pNow->szText[iIndex] = m_InputText[iIndex];
+			} while (m_InputText[iIndex] != '\0');
+		}
+
+		ImGui::SeparatorText("Position");
+		// 위치
+		ImGui::Text("Type");
+		ImGui::SameLine();
+		ImGui::Combo("MoveType", &pNow->iMoveType, m_szPositionType, 3);
+
+		if (pNow->iMoveType == _int(MOVETYPE::TYPE_STATIC))
+		{
+			ImGui::Text("Adjust");
+			ImGui::SameLine();
+			ImGui::InputFloat("Adj.x", &pNow->fAdjust.x);
+			ImGui::SameLine();
+			ImGui::InputFloat("Adj.y", &pNow->fAdjust.y);
+		}
+		else
+		{
+			ImGui::Text("Adjust_Start");
+			ImGui::SameLine();
+			ImGui::InputFloat("Adj_S.x", &pNow->fAdjust_Start.x);
+			ImGui::SameLine();
+			ImGui::InputFloat("Adj_S.y", &pNow->fAdjust_Start.y);
+
+			ImGui::Text("Adjust_End");
+			ImGui::SameLine();
+			ImGui::InputFloat("Adj_E.x", &pNow->fAdjust_End.x);
+			ImGui::SameLine();
+			ImGui::InputFloat("Adj_E.y", &pNow->fAdjust_End.y);
+
+			if (pNow->iMoveType == _int(MOVETYPE::TYPE_BAR))
+				ImGui::Combo("Direc", &pNow->bBarDirecX, m_szBarDirec, 2);
+
+			if (ImGui::Button("InputAdjust"))
+			{
+				pNow->MakeDirec();
+			}
+
+			ImGui::Text("SetPosition");
+			ImGui::SameLine();
+			ImGui::SliderFloat("Slider", &pNow->fRatio, 0.f, 1.f);
+		}
+
+		
 	}
 
 
 
 
+	for (auto& iter : m_vecPageInfo[m_iNowSelectNum]->vecPart)
+	{
+		iter->MakeDirec();
+		
+		if (iter->iParentPart_Index == -1)
+			iter->MovePart(m_vecPageInfo[m_iNowSelectNum]->fPosition);
+		else 
+			iter->MovePart(m_vecPageInfo[m_iNowSelectNum]->vecPart[iter->iParentPart_Index]->fPosition);
+	}
 
 	Safe_Delete_Array(tTemp);
 	Safe_Delete_Array(szCount);
+	
 
 	ImGui::NewLine();
 
@@ -193,21 +238,12 @@ void CController_UITool::AddNewPage()
 {
 }
 
-void CController_UITool::UISocket_Render()
-{
-	// 소켓 위치와 좌표, 이름 표시 필요 
-	// * <- Center_1 (100.4, 302.5)
-
-	for (auto& iter : m_vecPageInfo[m_iNowSelectNum]->vecSocket)
-	{
-		
-	}
-
-
-}
 
 void CController_UITool::UIPart_Render()
 {
+	
+
+
 }
 
 void CController_UITool::FontTest()
@@ -242,8 +278,15 @@ CController_UITool::CController_UITool()
 	Safe_AddRef(m_pGameInstance);
 }
 
-HRESULT CController_UITool::Initialize()
+HRESULT CController_UITool::Initialize(ID3D11Device* pDevice, ID3D11DeviceContext* pContext)
 {
+	m_pDevice = pDevice;
+	m_pContext = pContext;
+
+	m_pUIRender = CUIRender::Create(pDevice, pContext);
+	//m_pUIRender->SetUITool(this);
+	//Safe_AddRef(m_pUIRender);
+
 	InitializeResource();
 
 	return S_OK;
@@ -251,11 +294,7 @@ HRESULT CController_UITool::Initialize()
 
 HRESULT CController_UITool::InitializeResource()
 {
-	if (FAILED(InitializeTexture()))
-		return E_FAIL;
-
-	if (FAILED(InitializeFont()))
-		return E_FAIL;
+	
 
 	if (FAILED(LoadPart()))
 		return E_FAIL;
@@ -265,9 +304,7 @@ HRESULT CController_UITool::InitializeResource()
 
 HRESULT CController_UITool::SavePart()
 {
-
-
-
+	
 
 
 	return S_OK;
@@ -275,6 +312,11 @@ HRESULT CController_UITool::SavePart()
 
 HRESULT CController_UITool::LoadPart()
 {
+	
+
+
+
+
 	// 테스트 코드 
 	m_vecPageInfo.resize(m_iPageNum);
 
@@ -300,30 +342,6 @@ HRESULT CController_UITool::LoadPart()
 	return S_OK;
 }
 
-HRESULT CController_UITool::InitializeTexture()
-{
-	return S_OK;
-}
-
-HRESULT CController_UITool::InitializeFont()
-{
-	m_pGameInstance->Add_Font(TEXT("FONT_INFO_12"), TEXT("../Bin/Resources/Fonts/Font_Info_12.spritefont"));
-	m_pGameInstance->Add_Font(TEXT("FONT_INFO_18"), TEXT("../Bin/Resources/Fonts/Font_Info_18.spritefont"));
-	m_pGameInstance->Add_Font(TEXT("FONT_INFO_24"), TEXT("../Bin/Resources/Fonts/Font_Info_24.spritefont"));
-	m_pGameInstance->Add_Font(TEXT("FONT_INFO_36"), TEXT("../Bin/Resources/Fonts/Font_Info_36.spritefont"));
-	m_pGameInstance->Add_Font(TEXT("FONT_INFO_48"), TEXT("../Bin/Resources/Fonts/Font_Info_48.spritefont"));
-	m_pGameInstance->Add_Font(TEXT("FONT_INFO_60"), TEXT("../Bin/Resources/Fonts/Font_Info_60.spritefont"));
-	m_pGameInstance->Add_Font(TEXT("FONT_INFO_72"), TEXT("../Bin/Resources/Fonts/Font_Info_72.spritefont"));
-	m_pGameInstance->Add_Font(TEXT("FONT_TITLE_12"), TEXT("../Bin/Resources/Fonts/Font_Title_12.spritefont"));
-	m_pGameInstance->Add_Font(TEXT("FONT_TITLE_18"), TEXT("../Bin/Resources/Fonts/Font_Title_18.spritefont"));
-	m_pGameInstance->Add_Font(TEXT("FONT_TITLE_24"), TEXT("../Bin/Resources/Fonts/Font_Title_24.spritefont"));
-	m_pGameInstance->Add_Font(TEXT("FONT_TITLE_36"), TEXT("../Bin/Resources/Fonts/Font_Title_36.spritefont"));
-	m_pGameInstance->Add_Font(TEXT("FONT_TITLE_48"), TEXT("../Bin/Resources/Fonts/Font_Title_48.spritefont"));
-	m_pGameInstance->Add_Font(TEXT("FONT_TITLE_60"), TEXT("../Bin/Resources/Fonts/Font_Title_60.spritefont"));
-	m_pGameInstance->Add_Font(TEXT("FONT_TITLE_72"), TEXT("../Bin/Resources/Fonts/Font_Title_72.spritefont"));
-
-	return S_OK;
-}
 
 HRESULT CController_UITool::InitializeComponent()
 {
@@ -343,15 +361,7 @@ void CController_UITool::Free()
 
 	Safe_Release(m_pGameInstance);
 
-	for (auto& iter : m_vecTextureInfo)
-	{
-		Safe_Release(iter->Texture);
-		Safe_Delete_Array(iter->strTexturePath);
-		Safe_Delete_Array(iter->strTextureTag);
-		Safe_Delete(iter);
-	}
 
-	m_vecTextureInfo.clear();
 
 	for (auto& iter : m_vecPageInfo)
 	{
@@ -365,22 +375,13 @@ void CController_UITool::Free()
 
 		iter->vecPart.clear();
 
-		for (auto& iterSocket : iter->vecSocket)
-		{
-			Safe_Delete_Array(iterSocket->strUISocket_Name);
-			Safe_Delete(iterSocket);
-		}
-
-		iter->vecSocket.clear();
 		Safe_Delete(iter);
 	}
 
 	for (_int i = 0; i < 100; ++i)
 		Safe_Delete_Array(m_ArrPageName[i]);
 
-	//Safe_Delete_Array(m_ArrPageName);
 
-	m_vecTextureInfo.clear();
-
+	Safe_Release(m_pUIRender);
 	
 }

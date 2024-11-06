@@ -1,17 +1,5 @@
 #include "stdafx.h"
-
-#ifdef _DEBUG
-#undef new
-#endif
-
-#include "imgui.h"
-#include "imgui_impl_win32.h"
-#include "imgui_impl_dx11.h"
 #include "ImGui_Manager.h"
-
-#ifdef _DEBUG
-#define new DBG_NEW
-#endif
 
 #include "Controller_MapTool.h"
 #include "Controller_EffectTool.h"
@@ -55,6 +43,13 @@ void CImGui_Manager::Render_ImGui()
 	ImGui_ImplDX11_NewFrame();
 	ImGui_ImplWin32_NewFrame();
 	ImGui::NewFrame();
+
+	ImGuiIO& io = ImGui::GetIO(); (void)io;
+	ImGuizmo::BeginFrame();
+	ImGuizmo::SetRect(0, 0, io.DisplaySize.x, io.DisplaySize.y);
+	ImGuizmo::SetOrthographic(false);
+
+
 
 	// 업데이트 내에서 수치 조정할 것들을 처리해 줄 것임
 	Update_ImGui();
@@ -103,10 +98,8 @@ void CImGui_Manager::Tool_Map()
 {
 	if (ImGui::BeginTabItem("Map Tool"))
 	{
-		m_pController_MapTool->Select_Obj();
-
-		m_pController_MapTool->ShowPickPos();
-		m_pController_MapTool->EditTransform();
+		m_pController_MapTool->PickPos();
+		m_pController_MapTool->Pick_Object();
 
 		m_pController_MapTool->Control_Player();
 		m_pController_MapTool->Create_Map();
@@ -127,7 +120,12 @@ void CImGui_Manager::Tool_Effect()
 
 		if (ImGui::CollapsingHeader("Particle"))
 		{
-			m_pController_EffectTool->Check();
+			m_pController_EffectTool->Particle_Check();
+		}
+
+		if (ImGui::CollapsingHeader("Texture Effect"))
+		{
+			m_pController_EffectTool->TE_Check();
 		}
 
 		ImGui::Begin("EffectList");
@@ -150,7 +148,25 @@ void CImGui_Manager::Tool_Effect()
 			m_pController_EffectTool->Delete_Particle();
 		}
 
+		m_pController_EffectTool->Select_TE();
+		if (ImGui::Button("Create Texture Effect"))
+		{
+			m_pController_EffectTool->Add_TE();
+		}
+		if (ImGui::Button("Update Texture Effect"))
+		{
+			m_pController_EffectTool->Update_TE();
+		}
+		if (ImGui::Button("Get Texture Effect"))
+		{
+			m_pController_EffectTool->Get_TE();
+		}
+		if (ImGui::Button("Delete Texture Effect"))
+		{
+			m_pController_EffectTool->Delete_TE();
+		}
 		ImGui::End();
+
 
 		ImGui::EndTabItem();
 	}
@@ -166,9 +182,7 @@ void CImGui_Manager::Tool_UI()
 
 		ImGui::EndTabItem();
 
-		// 241102 김성용
 		m_pController_UITool->UITool_Render();
-		// 241102 김성용
 	}
 }
 
@@ -202,7 +216,7 @@ HRESULT CImGui_Manager::Ready_Controllers()
 	m_pController_MapTool = CController_MapTool::Get_Instance();
 	if (nullptr == m_pController_MapTool)
 		return E_FAIL;
-	m_pController_MapTool->Initialize();
+	m_pController_MapTool->Initialize(m_pDevice, m_pContext);
 
 	m_pController_EffectTool = CController_EffectTool::Get_Instance();
 	if (nullptr == m_pController_EffectTool)
@@ -212,7 +226,7 @@ HRESULT CImGui_Manager::Ready_Controllers()
 	m_pController_UITool = CController_UITool::Get_Instance();
 	if (nullptr == m_pController_UITool)
 		return E_FAIL;
-	m_pController_UITool->Initialize();
+	m_pController_UITool->Initialize(m_pDevice, m_pContext);
 
 	m_pController_AnimationTool = CController_AnimationTool::Get_Instance();
 	if (nullptr == m_pController_AnimationTool)

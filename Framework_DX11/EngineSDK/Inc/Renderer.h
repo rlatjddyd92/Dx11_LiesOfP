@@ -22,6 +22,7 @@ public:
 public:
 	HRESULT Initialize();
 	HRESULT Add_RenderObject(RENDERGROUP eRenderGroupID, class CGameObject* pRenderObject);
+	HRESULT Add_InstanceRenderObject(RENDERGROUP eRenderGroupID, class CGameObject* pRenderObject, const _wstring strModelName);
 	HRESULT Draw();
 
 #ifdef _DEBUG
@@ -42,12 +43,18 @@ private:
 	ID3D11Device*				m_pDevice = { nullptr };
 	ID3D11DeviceContext*		m_pContext = { nullptr };
 	ID3D11DepthStencilView*		m_pLightDepthStencilView = { nullptr };
-	list<class CGameObject*>	m_RenderObjects[RG_END];
 	class CGameInstance*		m_pGameInstance = { nullptr };
+
+	
+	list<class CGameObject*>	m_RenderObjects[RG_END];
+	map<_wstring, list<class CGameObject*>>	m_InstanceRenderObjects[RG_END];
 
 private:
 	class CShader*				m_pShader = { nullptr };
 	class CShader*				m_pBloomShader = { nullptr };
+	class CShader*				m_pSSAOShader = { nullptr };
+	class CShader*				m_pHDRShader = { nullptr };
+
 	class CVIBuffer_Rect*		m_pVIBuffer = { nullptr };
 
 	_float4x4					m_WorldMatrix{}, m_ViewMatrix{}, m_ProjMatrix{};
@@ -55,11 +62,17 @@ private:
 	/* Bloom */
 	_float						m_fSamplerRatio = { 5.f };
 
-	ID3D11DepthStencilView*		m_pDownSampleDepthStencilView0 = nullptr;
-	ID3D11DepthStencilView*		m_pDownSampleDepthStencilView1 = nullptr;
-	ID3D11DepthStencilView*		m_pDownSampleDepthStencilView2 = nullptr;
+	ID3D11DepthStencilView*		m_pDownSampleDepthStencilView0 = { nullptr };
+	ID3D11DepthStencilView*		m_pDownSampleDepthStencilView1 = { nullptr };
+	ID3D11DepthStencilView*		m_pDownSampleDepthStencilView2 = { nullptr };
 
 	_bool						m_isUseBloom = { true };
+
+	_bool						m_isUseSSAO = { true };
+	class CTexture*				m_pNoiseTexture_SSAO = { nullptr };
+
+	/* Cascade */
+	ID3D11DepthStencilView*		m_pCascadeDSVArr = { nullptr };
 
 #ifdef _DEBUG
 private:
@@ -74,22 +87,27 @@ private:
 	HRESULT Render_NonBlend();
 	HRESULT Render_Lights();
 
-	HRESULT Render_Bloom();
-
 	HRESULT Render_Deferred();
-	HRESULT Render_Final();
-	HRESULT Render_Blur();
-	HRESULT Render_Picking();
 
+	HRESULT Render_SSAO();
+	HRESULT Render_HDR();
+	HRESULT Render_Bloom();
+	HRESULT Render_LDR();
+
+	HRESULT Render_Final();
+
+	HRESULT Render_Picking();
 
 	HRESULT Render_NonLights();
 	HRESULT Render_Blend();
 	HRESULT Render_UI();
 
+	HRESULT Render_CascadeShdow();
+
 private:
 	HRESULT Ready_LightDepthStencilView();
-
-	
+	HRESULT Copy_BackBuffer();
+	HRESULT Ready_Cascade();
 
 #ifdef _DEBUG
 private:

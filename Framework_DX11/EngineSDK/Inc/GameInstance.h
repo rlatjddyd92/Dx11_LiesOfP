@@ -63,6 +63,12 @@ public:
 	class CGameObject*	Find_Player(_uint iLevelIndex = 0);
 	class CCamera*		Find_Camera(_uint iLevelIndex = 0);
 	class CGameObject*	Find_NearObject(class CGameObject* pOwner, _uint iLevelIndex, const _wstring& strLayerTag);
+
+	_uint Get_Object_Layer_Count(_uint iLevelIndex);
+	_uint Get_Layer_ObjectCount(_uint iLevelIndex, const _wstring& strLayerTag);
+	_wstring Get_LayerTag(_uint iLevelIndex, _uint index);
+
+
 #pragma endregion
 
 
@@ -99,7 +105,7 @@ public:
 	HRESULT Add_Light(const LIGHT_DESC& LightDesc);
 	const LIGHT_DESC* Get_LightDesc(_uint iIndex) const;
 	HRESULT Render_Lights(class CShader* pShader, class CVIBuffer_Rect* pVIBuffer);
-
+	_int Get_Total_LightCount();
 #pragma endregion
 
 #pragma region FONT_MANAGER

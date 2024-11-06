@@ -11,7 +11,11 @@
 #include "AnimModel.h"
 #include "NonAnimModel.h"
 #include "FreeCamera.h"
-#include "Particle_Test.h"
+
+#include "Particle_Effect.h"
+#include "Texture_Effect.h"
+
+#include "Controller_EffectTool.h"
 
 #pragma comment(lib, "ole32.lib")	// 지우지 마세요
 
@@ -266,15 +270,63 @@ HRESULT CLoader::Ready_Resources_For_ToolLevel()
 		CTexture::Create(m_pDevice, m_pContext, TEXT("../Bin/Resources/Textures/SkyBox/Sky_%d.dds"), 4))))
 		return E_FAIL;
 
-	/* For. Prototype_Component_Texture_Sky */
+	/* For. Prototype_Component_Texture_Snow */
 	if (FAILED(m_pGameInstance->Add_Prototype(LEVEL_TOOL, TEXT("Prototype_Component_Texture_Snow"),
 		CTexture::Create(m_pDevice, m_pContext, TEXT("../Bin/Resources/Textures/Snow/Snow.png"), 1))))
 		return E_FAIL;
+
+#pragma region PARTICLE
+	/* For. Prototype_Component_Texture_Particle_Spark */
+	if (FAILED(m_pGameInstance->Add_Prototype(LEVEL_TOOL, TEXT("Prototype_Component_Texture_Particle_Spark"),
+		CTexture::Create(m_pDevice, m_pContext, TEXT("../Bin/Resources/Textures/Effect/Particle_Spark.dds"), 1))))
+		return E_FAIL;
+	CController_EffectTool::Get_Instance()->Add_Particle_ProtytypeTag(TEXT("Prototype_Component_Texture_Particle_Spark"));
+
+	/* For. Prototype_Component_Texture_Particle_Circle */
+	if (FAILED(m_pGameInstance->Add_Prototype(LEVEL_TOOL, TEXT("Prototype_Component_Texture_Particle_Circle"),
+		CTexture::Create(m_pDevice, m_pContext, TEXT("../Bin/Resources/Textures/Effect/Particle_Circle.dds"), 1))))
+		return E_FAIL;
+	CController_EffectTool::Get_Instance()->Add_Particle_ProtytypeTag(TEXT("Prototype_Component_Texture_Particle_Circle"));
+#pragma endregion
+
+#pragma region EFFECT
+	/* For. Prototype_Component_Texture_Particle_Flare */
+	if (FAILED(m_pGameInstance->Add_Prototype(LEVEL_TOOL, TEXT("Prototype_Component_Texture_TE_Flare"),
+		CTexture::Create(m_pDevice, m_pContext, TEXT("../Bin/Resources/Textures/Effect/T_Flare_01_C_HJS.dds"), 1))))
+		return E_FAIL;
+	CController_EffectTool::Get_Instance()->Add_TE_ProtytypeTag(TEXT("Prototype_Component_Texture_TE_Flare"));
+
+	/* For. Prototype_Component_Texture_Particle_Ring */
+	if (FAILED(m_pGameInstance->Add_Prototype(LEVEL_TOOL, TEXT("Prototype_Component_Texture_TE_Ring"),
+		CTexture::Create(m_pDevice, m_pContext, TEXT("../Bin/Resources/Textures/Effect/T_Ring_04_C_KMH.dds"), 1))))
+		return E_FAIL;
+	CController_EffectTool::Get_Instance()->Add_TE_ProtytypeTag(TEXT("Prototype_Component_Texture_TE_Ring"));
+
+	// 테스트용. 나중에 링이랑 합칠거임.
+	/* For. Prototype_Component_Texture_Particle_Spread */
+	if (FAILED(m_pGameInstance->Add_Prototype(LEVEL_TOOL, TEXT("Prototype_Component_Texture_TE_Spread"),
+		CTexture::Create(m_pDevice, m_pContext, TEXT("../Bin/Resources/Textures/Effect/T_Ring_08_C_HJS.dds"), 1))))
+		return E_FAIL;
+	CController_EffectTool::Get_Instance()->Add_TE_ProtytypeTag(TEXT("Prototype_Component_Texture_TE_Spread"));
+
+	// 테스트용. 나중에 플레어랑 합칠거임.
+/* For. Prototype_Component_Texture_Particle_Spread */
+	if (FAILED(m_pGameInstance->Add_Prototype(LEVEL_TOOL, TEXT("Prototype_Component_Texture_TE_LensFlare"),
+		CTexture::Create(m_pDevice, m_pContext, TEXT("../Bin/Resources/Textures/Effect/T_LensFlare_01_C_KMH.dds"), 1))))
+		return E_FAIL;
+	CController_EffectTool::Get_Instance()->Add_TE_ProtytypeTag(TEXT("Prototype_Component_Texture_TE_LensFlare"));
+
+#pragma endregion
+
 
 	lstrcpy(m_szLoadingText, TEXT("모델을(를) 로딩중입니다."));
 	/* For. Prototype_Component_VIBuffer_Terrain*/
 	if (FAILED(m_pGameInstance->Add_Prototype(LEVEL_TOOL, TEXT("Prototype_Component_VIBuffer_Terrain"),
 		CVIBuffer_Terrain::Create(m_pDevice, m_pContext, TEXT("../Bin/Resources/Textures/Terrain/Height.bmp")))))
+		return E_FAIL;
+
+	if (FAILED(m_pGameInstance->Add_Prototype(LEVEL_TOOL, TEXT("Prototype_Component_VIBuffer_Rect"),
+		CVIBuffer_Rect::Create(m_pDevice, m_pContext))))
 		return E_FAIL;
 
 	CVIBuffer_Instancing::INSTANCE_DESC ParticleDesc = {};
@@ -288,7 +340,6 @@ HRESULT CLoader::Ready_Resources_For_ToolLevel()
 	if (FAILED(m_pGameInstance->Add_Prototype(LEVEL_TOOL, TEXT("Prototype_Model_Test"),
 		CModel::Create(m_pDevice, m_pContext, CModel::TYPE_NONANIM, "../Bin/ModelData/NonAnim/Map/Structure/SM_Monastery_Deco_01.dat", PreTransformMatrix))))
 		return E_FAIL;
-
 
 	lstrcpy(m_szLoadingText, TEXT("네비게이션을(를) 로딩중입니다."));
 	/* For.Prototype_Component_Navigation */
@@ -317,7 +368,10 @@ HRESULT CLoader::Ready_Resources_For_ToolLevel()
 		CShader::Create(m_pDevice, m_pContext, TEXT("../Bin/ShaderFiles/Shader_VtxPointInstance.hlsl"), VTXPOINTINSTANCE::Elements, VTXPOINTINSTANCE::iNumElements))))
 		return E_FAIL;
 
-
+	/* For. Prototype_Component_Shader_Effect_Texture */
+	if (FAILED(m_pGameInstance->Add_Prototype(LEVEL_TOOL, TEXT("Prototype_Component_Shader_Effect_Texture"),
+		CShader::Create(m_pDevice, m_pContext, TEXT("../Bin/ShaderFiles/Shader_Effect_Texture.hlsl"), VTXPOSTEX::Elements, VTXPOSTEX::iNumElements))))
+		return E_FAIL;
 	lstrcpy(m_szLoadingText, TEXT("사운드을(를) 로딩중입니다."));
 
 
@@ -342,11 +396,17 @@ HRESULT CLoader::Ready_Resources_For_ToolLevel()
 		CFreeCamera::Create(m_pDevice, m_pContext))))
 		return E_FAIL;
 
-	/* For. Prototype_GameObject_Particle_Test */
-	if (FAILED(m_pGameInstance->Add_Prototype(TEXT("Prototype_GameObject_Particle_Test"),
-		CParticle_Test::Create(m_pDevice, m_pContext))))
+#pragma region EFFECT
+	/* For. Prototype_GameObject_Particle_Effect */
+	if (FAILED(m_pGameInstance->Add_Prototype(TEXT("Prototype_GameObject_Particle_Effect"),
+		CParticle_Effect::Create(m_pDevice, m_pContext))))
 		return E_FAIL;
 
+	/* For. Prototype_GameObject_Texture_Effect */
+	if (FAILED(m_pGameInstance->Add_Prototype(TEXT("Prototype_GameObject_Texture_Effect"),
+		CTexture_Effect::Create(m_pDevice, m_pContext))))
+		return E_FAIL;
+#pragma endregion
 	m_isFinished_Main = true;
 
 	return S_OK;
@@ -554,6 +614,11 @@ HRESULT CLoader::Ready_Resources_For_ToolLevel_Map1()
 		//_findnext : <io.h>에서 제공하며 다음 위치의 파일을 찾는 함수, 더이상 없다면 -1을 리턴
 		iResult = _findnext(handle, &fd);
 	}
+
+	PreTransformMatrix = XMMatrixScaling(0.0003f, 0.0003f, 0.0003f);
+	if (FAILED(m_pGameInstance->Add_Prototype(LEVEL_TOOL, TEXT("Light"),
+		CModel::Create(m_pDevice, m_pContext, CModel::TYPE_NONANIM, "../Bin/ModelData/NonAnim/Map/Light.dat", PreTransformMatrix))))
+		return E_FAIL;
 
 	m_isFinished_Map1 = true;
 
