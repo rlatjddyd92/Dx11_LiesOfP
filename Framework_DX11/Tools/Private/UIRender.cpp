@@ -2,6 +2,10 @@
 #include "..\Public\UIRender.h"
 
 #include "GameInstance.h"
+#include "Controller_UITool.h"
+#include <fstream>
+#include <sstream>
+#include <stack>
 
 CUIRender::CUIRender(ID3D11Device* pDevice, ID3D11DeviceContext* pContext)
 	: CUIObject{ pDevice, pContext }
@@ -34,6 +38,9 @@ HRESULT CUIRender::Initialize_Prototype()
 
 	Ready_Font();
 
+	if (FAILED(Ready_Texture()))
+		return E_FAIL;
+
 	return S_OK;
 }
 
@@ -63,16 +70,25 @@ void CUIRender::Late_Update(_float fTimeDelta)
 
 HRESULT CUIRender::Render()
 {
-	while(!m_UIRenderlist.empty())
-	{
-		URCOM* pNow = m_UIRenderlist.front();
+	_int iMax = CController_UITool::Get_Instance()->GetPartCount();
 
-		if (pNow->iTextureIndex != -1)
+	for (_int i = 0; i < iMax; ++i)
+	{
+		CController_UITool::UPART& rNow = CController_UITool::Get_Instance()->Get_PartRenderInfo(i);
+
+		if (rNow.iTexture_Index != -1)
 		{
-			m_pTransformCom->Set_Scaled(pNow->fSize.x, pNow->fSize.y, 1.f);
+			m_pTransformCom->Set_WorldMatrix(XMMatrixIdentity());
+
+			if (rNow.iMoveType == _int(CController_UITool::MOVETYPE::TYPE_BAR))
+				m_pTransformCom->Set_Scaled(rNow.GetBarSize().x, rNow.GetBarSize().y, 1.f);
+			else 
+				m_pTransformCom->Set_Scaled(rNow.fSize.x, rNow.fSize.y, 1.f);
+
+			
 
 			m_pTransformCom->Set_State(CTransform::STATE_POSITION,
-				XMVectorSet(pNow->fPosition.x - m_fViewWidth * 0.5f, -pNow->fPosition.y + m_fViewHeight * 0.5f, 0.f, 1.f));
+				XMVectorSet(rNow.fPosition.x - m_fViewWidth * 0.5f, -rNow.fPosition.y + m_fViewHeight * 0.5f, 0.f, 1.f));
 
 			if (FAILED(m_pTransformCom->Bind_ShaderResource(m_pShaderCom, "g_WorldMatrix")))
 				return E_FAIL;
@@ -83,7 +99,7 @@ HRESULT CUIRender::Render()
 			if (FAILED(m_pShaderCom->Bind_Matrix("g_ProjMatrix", &m_ProjMatrix)))
 				return E_FAIL;
 
-			if (FAILED(m_vecTextureInfo[pNow->iTextureIndex]->Texture->Bind_ShadeResource(m_pShaderCom, "g_Texture", 0)))
+			if (FAILED(m_vecTextureInfo[rNow.iTexture_Index]->Texture->Bind_ShadeResource(m_pShaderCom, "g_Texture", 0)))
 				return E_FAIL;
 
 			if (FAILED(m_pShaderCom->Begin(0)))
@@ -95,33 +111,32 @@ HRESULT CUIRender::Render()
 			if (FAILED(m_pVIBufferCom->Render()))
 				return E_FAIL;
 		}
-		else
+		if ((rNow.iFontIndex >= 0) && (rNow.iFontIndex < _int(UI_FONT::FONT_END)))
 		{
-			_vector vPosition = { pNow->fPosition.x, pNow->fPosition.y, 0.f,0.f };
+			if (rNow.szText == nullptr)
+				continue;
+
+			_vector vPosition = { rNow.fPosition.x, rNow.fPosition.y, 0.f,0.f };
 			_vector vColor = { 1.f,1.f,1.f,1.f };
 
-			if (pNow->fRGB.x > 0.f)
-				vColor.m128_f32[0] = pNow->fRGB.x;
+			if (rNow.fTextColor.x > 0.f)
+				vColor.m128_f32[0] = rNow.fTextColor.x;
 
-			if (pNow->fRGB.y > 0.f)
-				vColor.m128_f32[1] = pNow->fRGB.y;
+			if (rNow.fTextColor.y > 0.f)
+				vColor.m128_f32[1] = rNow.fTextColor.y;
 
-			if (pNow->fRGB.z > 0.f)
-				vColor.m128_f32[2] = pNow->fRGB.z;
+			if (rNow.fTextColor.z > 0.f)
+				vColor.m128_f32[2] = rNow.fTextColor.z;
 
-			if (pNow->fAlpah > 0.f)
-				vColor.m128_f32[3] = pNow->fAlpah;
+			if (rNow.fTextColor.w > 0.f)
+				vColor.m128_f32[3] = rNow.fTextColor.w;
 
 
-			if (pNow->bIsCenter)
-				m_pGameInstance->Render_TextCenter(m_vecFont_tchar[_int(pNow->eType)], pNow->szText, vPosition, vColor);
+			if (rNow.bCenter)
+				m_pGameInstance->Render_TextCenter(m_vecFont_tchar[rNow.iFontIndex], rNow.szText, vPosition, vColor);
 			else
-				m_pGameInstance->Render_Text(m_vecFont_tchar[_int(pNow->eType)], pNow->szText, vPosition, vColor);
+				m_pGameInstance->Render_Text(m_vecFont_tchar[rNow.iFontIndex], rNow.szText, vPosition, vColor);
 		}
-		
-
-		Safe_Delete_Array(pNow->szText);
-		m_UIRenderlist.pop_front();
 	}
 	
 	return S_OK;
@@ -227,6 +242,87 @@ void CUIRender::Ready_Font()
 	m_vecFont_tchar[_int(UI_FONT::FONT_TITLE_72)] = TEXT("FONT_TITLE_72");
 }
 
+HRESULT CUIRender::Ready_Texture()
+{
+	ifstream file("../Bin/Resources/textures/UI/UIList.csv");  // 읽을 CSV 파일 이름
+	string line;
+
+	if (!file.is_open())
+		return E_FAIL;
+
+	stack<_int> stackNum;
+	_int iTextureNum = 0;
+	getline(file, line);
+	for (_int i = 0; i < line.size(); ++i)
+		stackNum.push(line[i] - '0');
+
+	_int iCount = 0;
+	while (!stackNum.empty())
+	{
+		if ((stackNum.top() >= 0) && (stackNum.top() < 10))
+		{
+			iTextureNum += stackNum.top() * pow(10, iCount);
+			++iCount;
+		}
+		stackNum.pop();
+	}
+
+	getline(file, line); // 헤더 넘기기
+
+	m_vecTextureInfo.resize(iTextureNum);
+
+	_int iTextureCount = 0;
+
+	while (getline(file, line))
+	{
+		UTEXTURE* pNew = new UTEXTURE;
+		
+		pNew->strTexturePath = new _char[200];
+		pNew->strTextureTag = new _char[200];
+
+		_int iIndex = 0;
+		_int iNow = 0;
+
+		while (line[iIndex] != ',')
+		{
+			pNew->strTexturePath[iNow] = line[iIndex];
+			++iIndex;
+			++iNow;
+		}
+
+		pNew->strTexturePath[iNow] = '\0';
+
+		iNow = 0;
+		--iIndex;
+
+		do
+		{
+			++iIndex;
+			++iNow;
+			pNew->strTextureTag[iNow] = line[iIndex];
+		} while (line[iIndex] != '\0');
+
+		_tchar tPath[200] = {};
+		_tchar tTag[200] = {};
+
+		MultiByteToWideChar(CP_ACP, MB_PRECOMPOSED, pNew->strTexturePath, strlen(pNew->strTexturePath), tPath, 200);
+		MultiByteToWideChar(CP_ACP, MB_PRECOMPOSED, pNew->strTextureTag, strlen(pNew->strTextureTag), tTag, 200);
+
+		pNew->Texture = CTexture::Create(m_pDevice, m_pContext, tPath, 1);
+
+		if (FAILED(m_pGameInstance->Add_Prototype(LEVEL_TOOL, tTag, pNew->Texture)))
+			return E_FAIL;
+
+		m_vecTextureInfo[iTextureCount] = pNew;
+		++iTextureCount;
+
+	}
+
+	file.close();
+
+	return S_OK;
+}
+
 CUIRender* CUIRender::Create(ID3D11Device* pDevice, ID3D11DeviceContext* pContext)
 {
 	CUIRender* pInstance = new CUIRender(pDevice, pContext);
@@ -264,6 +360,8 @@ void CUIRender::Free()
 	for (auto& iter : m_vecTextureInfo)
 	{
 		Safe_Release(iter->Texture);
+		Safe_Delete_Array(iter->strTexturePath);
+		Safe_Delete_Array(iter->strTextureTag);
 		Safe_Delete(iter);
 	}
 

@@ -38,6 +38,9 @@
 #include "F:\Lies of P\New_1104\Dx11_LiesOfP\Framework_DX11\Tools\Private\MainApp.cpp"
 
 
+#include "F:\Lies of P\New_1104\Dx11_LiesOfP\Framework_DX11\Tools\Private\NavigationController.cpp"
+
+
 #include "F:\Lies of P\New_1104\Dx11_LiesOfP\Framework_DX11\Tools\Private\NonAnimModel.cpp"
 
 
