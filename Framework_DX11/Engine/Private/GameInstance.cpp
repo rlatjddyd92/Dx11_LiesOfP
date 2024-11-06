@@ -405,6 +405,11 @@ HRESULT CGameInstance::Render_Lights(CShader * pShader, CVIBuffer_Rect * pVIBuff
 	return m_pLight_Manager->Render(pShader, pVIBuffer);
 }
 
+_int CGameInstance::Get_Total_LightCount()
+{
+	return m_pLight_Manager->Get_Total_Light_Count();
+}
+
 
 
 #pragma region FONT_MANAGER 

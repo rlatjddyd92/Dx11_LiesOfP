@@ -12,7 +12,7 @@ private:
 
 public:
 	const LIGHT_DESC* Get_LightDesc(_uint iIndex) const;
-
+	_int Get_Total_Light_Count() { return (_int)m_Lights.size(); }
 public:
 	HRESULT Initialize();
 	HRESULT Add_Light(const LIGHT_DESC& LightDesc);

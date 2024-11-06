@@ -8,6 +8,7 @@ texture2D		g_ARMTexture;
 
 float4			g_fHashColor;
 bool			g_bSelect = false;
+bool			g_isLight = false;
 
 struct VS_IN
 {
@@ -95,7 +96,15 @@ PS_OUT PS_MAIN(PS_IN In)
 {
 	PS_OUT			Out = (PS_OUT)0;
 	
-	vector			vDiffuse = g_DiffuseTexture.Sample(LinearSampler, In.vTexcoord);
+    vector vDiffuse ;
+	
+	if(g_isLight == false)
+    {
+        vDiffuse = g_DiffuseTexture.Sample(LinearSampler, In.vTexcoord);
+    }
+	else
+        vDiffuse = (0.6f, 0.6f, 0.4f, 1.f);
+		
 	
 	if (0.3f >= vDiffuse.a)
 		discard;

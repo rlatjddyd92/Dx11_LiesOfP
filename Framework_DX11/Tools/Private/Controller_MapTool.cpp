@@ -83,6 +83,13 @@ void CController_MapTool::Create_Map()
 			ImGui::EndTabItem();
 		}
 
+		if (ImGui::BeginTabItem("Light"))
+		{
+			Light_Menu();
+
+			ImGui::EndTabItem();
+		}
+
 		m_pNavigationController->Render();
 
 		ImGui::EndTabBar();
@@ -214,7 +221,7 @@ void CController_MapTool::Pick_Object()
 
 	ImGui::DragFloat3("Scale(X, Y, Z)", (_float*)&vScale, 0.05f, 0.1f, 100.f);
 	ImGui::DragFloat3("Rotation(X, Y, Z)", (_float*)&vRot, 0.05f, -180.f, 180.f, 0);
-	ImGui::DragFloat3("Position(X, Y, Z)", (_float*)&vPos, 0.05f, -180.f, 180.f, 0);
+	ImGui::DragFloat3("Position(X, Y, Z)", (_float*)&vPos, 0.05f, -5000.f, 5000.f, 0);
 
 	ImGui::InputInt("RenderTarget ID", &iSelectObj_RenderTargetID);
 
@@ -437,9 +444,9 @@ void CController_MapTool::SaveMap()
 
 	//string strUint = {};
 
-	////전체 레이어 수 저장
-	//_uint iLayerCount = m_pGameInstance->Get_Level_ObjectLayer_Count(LEVEL_GAMEPLAY);
-	////fout << iLayerCount - 1 << "\n"; //카메라 레이어 제외
+	//전체 레이어 수 저장
+	_uint iLayerCount = m_pGameInstance->Get_Object_Layer_Count(LEVEL_TOOL);
+	fout << iLayerCount - 1 << "\n"; //카메라 레이어 제외
 	////strUint = to_string(iLayerCount);
 	////fout.write(strUint.c_str(), sizeof(strUint));
 	////fout.write(strUint.c_str(), sizeof(strUint));
@@ -779,6 +786,7 @@ void CController_MapTool::Map_Menu()
 		Desc.vRotation = { 0.f,0.f,0.f };
 		Desc.iRenderGroupID = i0;
 		strcpy_s(Desc.szModelTag, m_FileNames[m_iListSelectNum]);
+
 		if (FAILED(m_pGameInstance->Add_CloneObject_ToLayer(LEVEL_TOOL, wstrLayerName, TEXT("Prototype_GameObject_NonAnim"), &Desc)))
 			return;
 
@@ -789,7 +797,7 @@ void CController_MapTool::Map_Menu()
 
 void CController_MapTool::Nav_Menu()
 {
-	//폴더 선택, 버튼 누를 때 한번만 실행
+	//버튼 누를 때 한번만 실행
 	enum Nav_Mode
 	{
 		Mode_Create_Cell,
@@ -1013,6 +1021,125 @@ void CController_MapTool::Mode_Select_Point_Menu()
 		m_pNavigationController->Set_All_Selected_Vertex_to_this(vSelectVertexPos);
 	}
 
+}
+
+void CController_MapTool::Light_Create()
+{
+	enum Light_Type
+	{
+		Light_Point,
+		Light_Spot,
+		Light_GodRay
+	};
+
+	//구조체 세부 설정
+	static int iLightType = 0;
+
+	if (ImGui::RadioButton("Point", iLightType == Light_Point))
+	{
+		iLightType = Light_Point;
+	} ImGui::SameLine();
+
+	if (ImGui::RadioButton("Spot", iLightType == Light_Spot))
+	{
+		iLightType = Light_Spot;
+	} ImGui::SameLine();
+
+	if (ImGui::RadioButton("GodRay", iLightType == Light_GodRay))
+	{
+		iLightType = Light_GodRay;
+	}
+
+	static _Vec4 vDirection = { 1.f,1.f,1.f,1.f };
+	static _Vec4 vPosition = { 0.f,0.f,0.f,1.f };
+	static _float fRange = { 10.f };
+	static _Vec4 vDiffuse = { 1.f,1.f,1.f,1.f };
+	static _Vec4 vAmbient = { 1.f,1.f,1.f,1.f };
+	static _Vec4 vSpecular = { 1.f,1.f,1.f,1.f };
+
+	vPosition.x = m_vPickPos.x;
+	vPosition.y = m_vPickPos.y;
+	vPosition.z = m_vPickPos.z;
+
+	//방향, 위치, 범위
+	ImGui::DragFloat4("Direction", (_float*)&vDirection, 0.05f, -1.f, 1.f);
+	ImGui::DragFloat4("Position(X, Y, Z)", (_float*)&vPosition, 0.05f, -5000.f, 5000.f);
+	ImGui::DragFloat("Range", (_float*)&fRange, 0.05f, 0.f, 1000.f);
+
+	//색상값
+	static ImVec4 color = ImVec4(255.f / 255.0f, 255.f / 255.0f, 255.f / 255.0f, 255.f / 255.0f);
+	ImGuiColorEditFlags misc_flags = ImGuiColorEditFlags_NoOptions;
+
+	ImGui::ColorEdit3("MyColor##1", (float*)&color, misc_flags);
+	vDiffuse.x = color.x;
+	vDiffuse.y = color.y;
+	vDiffuse.z = color.z;
+
+	ImGui::DragFloat("Ambient", (_float*)&vAmbient, 0.05f, 0.f, 1.f);
+	ImGui::DragFloat("Specular", (_float*)&vSpecular, 0.05f, 0.f, 1.f);
+
+	//렌더타겟 아이디 설정 가능
+	static int i0 = 0;
+	ImGui::InputInt("ID", &i0);
+
+	//오브젝트 생성
+
+	string strLayerName;
+	_wstring wstrLayerName;
+
+	if (ImGui::Button("Create Light") || m_pGameInstance->Get_KeyState(C) == AWAY)
+	{
+		strLayerName = "Layer_InteractObject";
+		wstrLayerName.assign(strLayerName.begin(), strLayerName.end());
+
+		CNonAnimModel::NONMODEL_DESC Desc{};
+		Desc.vPosition = m_vPickPos;
+		Desc.vScale = { 1.f,1.f,1.f };
+		Desc.vRotation = { 0.f,0.f,0.f };
+		Desc.iRenderGroupID = i0;
+		Desc.isLight = true;
+		strcpy_s(Desc.szModelTag, "Light");
+
+		if (FAILED(m_pGameInstance->Add_CloneObject_ToLayer(LEVEL_TOOL, wstrLayerName, TEXT("Prototype_GameObject_NonAnim"), &Desc)))
+			return;
+
+		LIGHT_DESC newLightDesc = {};
+		newLightDesc.eType = (LIGHT_DESC::TYPE)iLightType;
+		vDirection.Normalize();
+		newLightDesc.vDirection = vDirection;
+		newLightDesc.vPosition = vPosition;
+		newLightDesc.fRange = fRange;
+		newLightDesc.vDiffuse = vDiffuse;
+		newLightDesc.vAmbient = vAmbient;
+		newLightDesc.vSpecular = vSpecular;
+
+		//진짜 빛 넣기
+		//방향 노멀라이즈
+
+	}ImGui::SameLine();
+	ImGui::Text("or Press \"C\" to Create");
+}
+
+void CController_MapTool::Light_Menu()
+{
+	ImGui::Text("Total Light Count : %d", m_pGameInstance->Get_Total_LightCount());
+	//ImGui::Text("Select Light Index : %d", )
+
+	
+	ImGuiTabBarFlags tab_bar_flags = ImGuiTabBarFlags_None;
+
+	if (ImGui::BeginTabBar("AboutLIght", tab_bar_flags))
+	{
+		if (ImGui::BeginTabItem("Create"))
+		{
+			Light_Create();
+
+			ImGui::EndTabItem();
+		}
+
+		ImGui::EndTabBar();
+	}
+	
 }
 
 void CController_MapTool::Free()

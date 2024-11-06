@@ -36,6 +36,7 @@ HRESULT CNonAnimModel::Initialize(void* pArg)
 	m_pTransformCom->Rotation(XMConvertToRadians(pDesc->vRotation.x), XMConvertToRadians(pDesc->vRotation.y), XMConvertToRadians(pDesc->vRotation.z));
 	m_pTransformCom->Set_State(CTransform::STATE_POSITION, XMLoadFloat3(&pDesc->vPosition));
 	m_iRenderGroupId = pDesc->iRenderGroupID;
+	m_isLight = pDesc->isLight;
 
 	memcpy(&m_tDesc, pDesc, sizeof(NONMODEL_DESC));
 
@@ -82,6 +83,9 @@ HRESULT CNonAnimModel::Render()
 		return E_FAIL;
 
 	if(FAILED(m_pShaderCom->Bind_RawValue("g_bSelect", &m_bSelected, sizeof(_bool))))
+		return E_FAIL;	
+	
+	if(FAILED(m_pShaderCom->Bind_RawValue("g_isLight", &m_isLight, sizeof(_bool))))
 		return E_FAIL;
 
 	_uint		iNumMeshes = m_pModelCom->Get_NumMeshes();
@@ -90,12 +94,14 @@ HRESULT CNonAnimModel::Render()
 	{
 		m_pModelCom->Bind_MeshBoneMatrices(m_pShaderCom, "g_BoneMatrices", (_uint)i);
 
-		if (FAILED(m_pModelCom->Bind_Material(m_pShaderCom, "g_DiffuseTexture", TEXTURE_TYPE::DIFFUSE, (_uint)i)))
-			return E_FAIL;
-
 		if (nullptr != m_pModelCom->Find_Texture((_uint)i, TEXTURE_TYPE::ROUGHNESS))
 		{
 			if (FAILED(m_pModelCom->Bind_Material(m_pShaderCom, "g_ARMTexture", ROUGHNESS, (_uint)i)))
+				return E_FAIL;
+		}
+		if (m_isLight == false)
+		{
+			if (FAILED(m_pModelCom->Bind_Material(m_pShaderCom, "g_DiffuseTexture", TEXTURE_TYPE::DIFFUSE, (_uint)i)))
 				return E_FAIL;
 		}
 
@@ -120,7 +126,8 @@ HRESULT CNonAnimModel::Render()
 	_bool bFalse = false;
 	if (FAILED(m_pShaderCom->Bind_RawValue("g_bSelect", &bFalse, sizeof(_bool))))
 		return E_FAIL;
-
+	if (FAILED(m_pShaderCom->Bind_RawValue("g_isLight", &bFalse, sizeof(_bool))))
+		return E_FAIL;
 	return S_OK;
 }
 

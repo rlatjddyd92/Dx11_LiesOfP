@@ -22,6 +22,7 @@ public:
 		_float3		vScale;
 		_float3		vRotation;
 		_bool		isCollision = { true };
+		_bool		isLight = { false };
 		_uint		iRenderGroupID = { true };
 	}NONMODEL_DESC;
 
@@ -62,7 +63,7 @@ private:
 
 	_int		m_iHashId;
 	_bool m_bSelected = { false };
-
+	_bool m_isLight = { false };
 private:
 	HRESULT Ready_Components(NONMODEL_DESC* pNonAnimDesc);
 

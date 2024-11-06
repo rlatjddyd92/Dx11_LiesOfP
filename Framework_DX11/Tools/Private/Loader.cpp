@@ -615,6 +615,11 @@ HRESULT CLoader::Ready_Resources_For_ToolLevel_Map1()
 		iResult = _findnext(handle, &fd);
 	}
 
+	PreTransformMatrix = XMMatrixScaling(0.0003f, 0.0003f, 0.0003f);
+	if (FAILED(m_pGameInstance->Add_Prototype(LEVEL_TOOL, TEXT("Light"),
+		CModel::Create(m_pDevice, m_pContext, CModel::TYPE_NONANIM, "../Bin/ModelData/NonAnim/Map/Light.dat", PreTransformMatrix))))
+		return E_FAIL;
+
 	m_isFinished_Map1 = true;
 
 	return S_OK;
