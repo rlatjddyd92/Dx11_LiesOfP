@@ -412,7 +412,7 @@ _vector CModel::Play_Animation(_float fTimeDelta, _bool* pOut)
 		{
 			*pOut = true;
 		}
-		if (m_CurrentTrackPosition_Boundary == 0.f && pOut != nullptr && m_iCurrentAnimIndex != m_iCurrentAnimIndex_Boundary)//애니메이션이 끝났는지에 대한 판단
+		if (m_CurrentTrackPosition_Boundary == 0.f && pOut != nullptr && m_iCurrentAnimIndex != m_iCurrentAnimIndex_Boundary && m_isEnd_Animations_Boundary[m_iCurrentAnimIndex_Boundary])//애니메이션이 끝났는지에 대한 판단
 		{
 			SetUp_NextAnimation_Boundary(m_iCurrentAnimIndex, m_isLoop);
 			m_CurrentTrackPosition_Boundary = 0.f;

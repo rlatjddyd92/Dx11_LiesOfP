@@ -146,7 +146,7 @@ void CController_AnimationTool::ListUp_Anim()
 	
 	if (m_pCopyModelCom != nullptr && BoundaryCheck)
 	{
-		m_iCurSelected_Index_Anim = m_iSelected_Index_Anim;
+		m_iCurSelected_Index_Anim_Boundary = m_iSelected_Index_Anim_Boundary;
 
 		if (!m_bDivide_Boundary)
 		{
@@ -154,9 +154,9 @@ void CController_AnimationTool::ListUp_Anim()
 		}
 
 		//
-
+		//m_pCopyModelCom.
 		_uint iIndexBoundaryAnim = m_pCopyModelCom->Get_CurrentAnimationIndex_Boundary();
-		if (iIndexBoundaryAnim != m_iSelected_Index_Anim_Boundary)
+		if (iIndexBoundaryAnim != m_iSelected_Index_Anim_Boundary && iIndexBoundaryAnim == m_iCurSelected_Index_Anim)
 		{
 			m_iSelected_Index_Anim_Boundary = iIndexBoundaryAnim;
 		}
@@ -235,8 +235,7 @@ void CController_AnimationTool::SetUp_Controller_Anim()
 	ImGui::Text("\n");
 	//정지 재생 관련
 	m_fAnimTrackPosition = (_float)m_pCopyModelCom->Get_CurrentTrackPosition();
-	
-	if (ImGui::SliderFloat("Anim Track", &m_fAnimTrackPosition, 0.f, m_AnimDuration))
+	if (ImGui::SliderFloat("Anim Track", &m_fAnimTrackPosition, 0.f, (_float)m_AnimDuration))
 	{
 		if (!m_bIsAnimStopped)
 		{
@@ -246,7 +245,7 @@ void CController_AnimationTool::SetUp_Controller_Anim()
 
 	if (m_fAnimTrackPosition >= m_AnimDuration)
 	{
-		m_fAnimTrackPosition = m_AnimDuration - 0.1f;
+		m_fAnimTrackPosition = (_float)m_AnimDuration - 0.1f;
 	}
 
 	if (m_bIsAnimStopped)
