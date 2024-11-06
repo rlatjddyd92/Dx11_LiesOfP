@@ -1,4 +1,4 @@
-﻿474,
+﻿473,
 _Path,_Tag
 ../Bin/Resources/Textures/UI/UIT_SubTItleIcon_Bag2.dds,Prototype_Component_Texture_UI_SubTItleIcon_Bag2
 ../Bin/Resources/Textures/UI/UIT_SubTItleIcon_Menu.dds,Prototype_Component_Texture_UI_SubTItleIcon_Menu
@@ -92,7 +92,6 @@ _Path,_Tag
 ../Bin/Resources/Textures/UI/UIT_Deco_BoderSide.dds,Prototype_Component_Texture_UI_Deco_BoderSide
 ../Bin/Resources/Textures/UI/UIT_Deco_CornerLine.dds,Prototype_Component_Texture_UI_Deco_CornerLine
 ../Bin/Resources/Textures/UI/UIT_Deco_CornerTriangle.dds,Prototype_Component_Texture_UI_Deco_CornerTriangle
-../Bin/Resources/Textures/UI/UIT_Deco_DotLine.dds,Prototype_Component_Texture_UI_Deco_DotLine
 ../Bin/Resources/Textures/UI/UIT_Deco_DropErgo.dds,Prototype_Component_Texture_UI_Deco_DropErgo
 ../Bin/Resources/Textures/UI/UIT_Deco_FrameDirt.dds,Prototype_Component_Texture_UI_Deco_FrameDirt
 ../Bin/Resources/Textures/UI/UIT_Deco_QuartzLine_V.dds,Prototype_Component_Texture_UI_Deco_QuartzLine_V

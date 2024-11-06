@@ -1,6 +1,8 @@
 #include "stdafx.h"
 #include "Controller_UITool.h"
 #include "GameInstance.h"
+#include <fstream>
+#include <sstream>
 
 IMPLEMENT_SINGLETON(CController_UITool)
 
@@ -302,22 +304,7 @@ HRESULT CController_UITool::InitializeResource()
 
 HRESULT CController_UITool::SavePart()
 {
-	/*string fileName = pPath;
-	WCHAR* TempName = new WCHAR[fileName.size()];
-	for (_int i = 0; i <= fileName.size(); ++i)
-		TempName[i] = fileName[i];
-
-	HANDLE hFile = CreateFile(TempName, GENERIC_WRITE, NULL, NULL, CREATE_ALWAYS, FILE_ATTRIBUTE_NORMAL, NULL);
-
-	if (INVALID_HANDLE_VALUE == hFile)
-		return;
-
-	DWORD dwByte(0);
-
-
-	WriteFile(hFile, &iSize, sizeof(_int), &dwByte, nullptr);
-
-	CloseHandle(hFile);*/
+	
 
 
 	return S_OK;
@@ -325,28 +312,7 @@ HRESULT CController_UITool::SavePart()
 
 HRESULT CController_UITool::LoadPart()
 {
-	//string fileName = "../Bin/Resources/Textures/UI/UIPage.dat";
-	//WCHAR* TempName = new WCHAR[fileName.size() + 1];
-	//memset(TempName, 0, sizeof(TempName));
-	//for (_int i = 0; i <= fileName.size(); ++i)
-	//	TempName[i] = fileName[i];
-
-	//HANDLE hFile = CreateFile(TempName, GENERIC_READ, NULL, NULL, OPEN_EXISTING, FILE_ATTRIBUTE_NORMAL, NULL);
-	//if (INVALID_HANDLE_VALUE == hFile)
-	//	return;
-	//DWORD dwByte(0); // 예외 처리 변수
-
-
-	//ReadFile(hFile, &tTemp.eCon_Type, sizeof(CONTAINER), &dwByte, nullptr);
-
-
-
-
-	//CloseHandle(hFile);
-
-
-
-
+	
 
 
 

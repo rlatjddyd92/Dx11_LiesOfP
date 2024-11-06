@@ -193,6 +193,9 @@
     <Filter Include="01.Utility\02.GameObjects\01.Pawn\PartObject">
       <UniqueIdentifier>{4a131650-3fd0-4e47-9972-f82adfafc6f6}</UniqueIdentifier>
     </Filter>
+    <Filter Include="01.Utility\97.CSVFileManager">
+      <UniqueIdentifier>{a318eb36-df00-4b66-85dc-c9029b0fbc28}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\Private\Base.cpp">
@@ -374,6 +377,9 @@
     </ClCompile>
     <ClCompile Include="..\Private\Pawn.cpp">
       <Filter>01.Utility\02.GameObjects\01.Pawn</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Private\CSVFileManager.cpp">
+      <Filter>01.Utility\97.CSVFileManager</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -571,6 +577,9 @@
     </ClInclude>
     <ClInclude Include="..\Public\Engine_Enum.h">
       <Filter>99.Defines</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Public\CSVFileManager.h">
+      <Filter>01.Utility\97.CSVFileManager</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

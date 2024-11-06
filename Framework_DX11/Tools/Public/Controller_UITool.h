@@ -96,10 +96,12 @@ public:
 		_float fRatio = 0.5f;  // 지금 Adjust가 Start-End 사이 어느 지점에 있는 지 비율로 표시 (0.f ~ 1.f);
 		_int bBarDirecX = true; // Combo에 맞추느라 int로 사용함, 클라에서는 bool로 사용
 
+		// 텍스쳐 관련
 		_int iTexture_Index = -1;
+		_float4 fTextureColor = { -1.f,-1.f ,-1.f ,-1.f };
 
+		// 텍스트 관련
 		_int iFontIndex = _int(CUIRender::UI_FONT::FONT_END);
-		
 		_tchar* szText = {};
 		_bool bCenter = false;
 		_float4 fTextColor = { 1.f,1.f,1.f,1.f };
