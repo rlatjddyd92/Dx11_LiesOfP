@@ -34,6 +34,7 @@ public:
 	void	Ready_PickModel();
 	void	SetUp_Controller_Vertex();
 
+	void	EndFrame_AnimTool();
 	void	BlockObjCtr() { m_bObjRenderCtr = false; };
 
 private:

@@ -32,6 +32,7 @@ HRESULT CAnimModel::Initialize(void* pArg)
 
 	m_pTransformCom->Set_Scaled(pDesc->vScale.x, pDesc->vScale.y, pDesc->vScale.z);
 	m_pTransformCom->Set_State(CTransform::STATE_POSITION, XMLoadFloat3(&pDesc->vPosition));
+	m_pTransformCom->Rotation(_vector{0, 1, 0, 0}, XMConvertToRadians(180.f));
 
 	//테스트용
 	{

@@ -38,11 +38,13 @@ void CController_AnimationTool::SetUp_AnimTool()
 	if (m_pCopyModelCom == nullptr)
 	{
 		m_pCopyModelCom = pModel;
+		Safe_AddRef(pModel);
 
 	}
 	else if (m_pCopyModelCom != pModel)
 	{
 		m_pCopyModelCom = pModel;
+		Safe_AddRef(pModel);
 
 		m_pCopyAnimVec = nullptr;
 		m_pCopyBoneVec = nullptr;
@@ -95,16 +97,17 @@ void CController_AnimationTool::ListUp_Anim()
 	//이전 선택 저장
 	m_iCurSelected_Index_Anim = m_iSelected_Index_Anim;
 	_bool BoundaryCheck = m_pCopyModelCom->Get_IsUseBoundary();
-	ImGui::Text("Animation");
 	if (m_pCopyModelCom != nullptr && BoundaryCheck)
 	{
-		ImGui::SameLine();
-		ImGui::Text("\t");
-		ImGui::SameLine();
-		ImGui::Text("Anim Boundary");
-
 		ImGui::Checkbox("Divide_Boundary", &m_bDivide_Boundary);
+		ImGui::Text("Anim Lower Body");
+		ImGui::SameLine();
+		ImGui::Text("\t\t");
+		ImGui::SameLine();
+		ImGui::Text("Anim Upper Body");
 	}
+	else
+		ImGui::Text("Animation");
 
 	ImGui::PushItemWidth(200); // 크기조정
 	if (ImGui::BeginListBox(""))
@@ -529,6 +532,11 @@ void CController_AnimationTool::Ready_PickModel()
 
 void CController_AnimationTool::SetUp_Controller_Vertex()
 {
+}
+
+void CController_AnimationTool::EndFrame_AnimTool()
+{
+	Safe_Release(m_pCopyModelCom);
 }
 
 void CController_AnimationTool::Free()
