@@ -35,19 +35,18 @@ void CController_AnimationTool::SetUp_AnimTool()
 {
 	m_bObjRenderCtr = true;
 	CModel* pModel = dynamic_cast<CModel*>(m_pGameInstance->Find_Component(LEVEL_TOOL, TEXT("Layer_AnimationTool_Test"), TEXT("Com_Model")));
-	if (m_pCopyModelCom == nullptr)
-	{
-		m_pCopyModelCom = pModel;
-		Safe_AddRef(pModel);
-
-	}
-	else if (m_pCopyModelCom != pModel)
+	
+	if (m_pCopyModelCom != pModel)
 	{
 		m_pCopyModelCom = pModel;
 		Safe_AddRef(pModel);
 
 		m_pCopyAnimVec = nullptr;
 		m_pCopyBoneVec = nullptr;
+	}
+	else
+	{
+		Safe_AddRef(pModel);
 	}
 
 	if (m_pCopyModelCom != nullptr)
@@ -526,7 +525,7 @@ void CController_AnimationTool::SetUp_Controller_Bone()
 
 }
 
-void CController_AnimationTool::Ready_PickModel()
+void CController_AnimationTool::ListUp_Virtex()
 {
 }
 

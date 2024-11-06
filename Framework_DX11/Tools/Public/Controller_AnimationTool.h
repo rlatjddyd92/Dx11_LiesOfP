@@ -31,7 +31,7 @@ public:
 	void	ListUp_Bone();
 	void	SetUp_Controller_Bone();
 
-	void	Ready_PickModel();
+	void	ListUp_Virtex();
 	void	SetUp_Controller_Vertex();
 
 	void	EndFrame_AnimTool();
