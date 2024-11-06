@@ -78,7 +78,7 @@ _bool CCSVFile_Manager::SaveDataByRow(vector<_wstring>& vecDataBuffer)
 	
 	m_CurrentFile_Write << line << '\n';
 
-	return S_OK;
+	return true;
 }
 
 void CCSVFile_Manager::FileClose()

@@ -8,6 +8,12 @@ IMPLEMENT_SINGLETON(CController_UITool)
 
 void CController_UITool::UITool_Edit()
 {
+	if (ImGui::Button("SaveUIData"))
+	{
+		SavePage();
+		SavePart();
+	}
+
 	UIPage_Edit();
 }
 
@@ -217,9 +223,6 @@ void CController_UITool::UIPart_Edit()
 		
 	}
 
-
-
-
 	for (auto& iter : m_vecPageInfo[m_iNowSelectNum]->vecPart)
 	{
 		iter->MakeDirec();
@@ -311,8 +314,30 @@ HRESULT CController_UITool::InitializeResource()
 
 HRESULT CController_UITool::SavePage()
 {
-	
+	vector<vector<_wstring>> vecBuffer;
 
+	vecBuffer.resize(_int(UIPAGE::PAGE_END) + 1);
+
+	vecBuffer[0].resize(m_DataTag_Page.size());
+	vecBuffer[0] = m_DataTag_Page;
+
+	for (_int i = 1; i < vecBuffer.size(); ++i)
+	{
+		vecBuffer[i].resize(m_DataTag_Page.size());
+		vecBuffer[i][0] = to_wstring(i - 1);
+		_int iIndex = -1;
+		do
+		{
+			++iIndex;
+			vecBuffer[i][1] += (_tchar)(m_vecPageInfo[i - 1]->strUIPage_Name)[iIndex];
+		} while ((_tchar)(m_vecPageInfo[i - 1]->strUIPage_Name)[iIndex] != '\0');
+		
+		vecBuffer[i][2] = to_wstring(m_vecPageInfo[i - 1]->fPosition.x);
+		vecBuffer[i][3] = to_wstring(m_vecPageInfo[i - 1]->fPosition.y);
+	}
+
+	if (FAILED(m_pGameInstance->SaveDataByFile("../Bin/DataFiles/UIPageSpec.csv", vecBuffer)))
+		return E_FAIL;
 
 	return S_OK;
 }
@@ -345,54 +370,82 @@ HRESULT CController_UITool::LoadPage()
 		m_vecPageInfo.push_back(pNew);
 	}
 
-
-	return S_OK;
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-	// 테스트 코드 
-	m_vecPageInfo.resize(m_iPageNum);
-
-	for (_int i = 0; i < m_iPageNum; ++i)
-	{
-		UPAGE* pNew = new UPAGE;
-		pNew->strUIPage_Name = new _char[100];
-		m_ArrPageName[i] = new _char[100];
-
-		_char czTest[10] = "none";
-
-		for (_int j = 0; j <= 9; ++j)
-		{
-			pNew->strUIPage_Name[j] = czTest[j];
-			m_ArrPageName[i][j] = czTest[j];
-		}
-
-		m_vecPageInfo[i] = pNew;
-	}
-
-
-
 	return S_OK;
 }
 
 HRESULT CController_UITool::SavePart()
 {
+	vector<vector<_wstring>> vecBuffer;
+
+	vecBuffer.push_back(m_DataTag_Part);
+
+	for (_int i = 0; i < _int(UIPAGE::PAGE_END); ++i)
+	{
+		for (_int j = 0; j < m_vecPageInfo[i]->vecPart.size(); ++j)
+		{
+			vector<_wstring> vecPart;
+
+			UPART* pNow = m_vecPageInfo[i]->vecPart[j];
+
+			vecPart.push_back(to_wstring(i));
+			vecPart.push_back(to_wstring(j));
+
+			_int iIndex = -1;
+			_wstring strName;
+			do
+			{
+				++iIndex;
+				strName += (_tchar)(pNow->strUIPart_Name)[iIndex];
+			} while ((_tchar)(pNow->strUIPart_Name)[iIndex] != '\0');
+
+			vecPart.push_back(strName);
+			vecPart.push_back(to_wstring(pNow->iParentPart_Index));
+			vecPart.push_back(to_wstring(pNow->fSize.x));
+			vecPart.push_back(to_wstring(pNow->fSize.y));
+			vecPart.push_back(to_wstring(pNow->fPosition.x));
+			vecPart.push_back(to_wstring(pNow->fPosition.y));
+			vecPart.push_back(to_wstring(pNow->iGroupIndex));
+			vecPart.push_back(to_wstring(pNow->fAdjust.x));
+			vecPart.push_back(to_wstring(pNow->fAdjust.y));
+			vecPart.push_back(to_wstring(pNow->iMoveType));
+			vecPart.push_back(to_wstring(pNow->fAdjust_Start.x));
+			vecPart.push_back(to_wstring(pNow->fAdjust_Start.y));
+			vecPart.push_back(to_wstring(pNow->fAdjust_End.x));
+			vecPart.push_back(to_wstring(pNow->fAdjust_End.y));
+			vecPart.push_back(to_wstring(pNow->fDirec.x));
+			vecPart.push_back(to_wstring(pNow->fDirec.y));
+			vecPart.push_back(to_wstring(pNow->fRatio));
+			vecPart.push_back(to_wstring(pNow->bBarDirecX));
+			vecPart.push_back(to_wstring(pNow->iTexture_Index));
+			vecPart.push_back(to_wstring(pNow->fTextureColor.x));
+			vecPart.push_back(to_wstring(pNow->fTextureColor.y));
+			vecPart.push_back(to_wstring(pNow->fTextureColor.z));
+			vecPart.push_back(to_wstring(pNow->fTextureColor.w));
+			vecPart.push_back(to_wstring(pNow->iFontIndex));
+
+			iIndex = -1;
+			_wstring strText;
+			do
+			{
+				++iIndex;
+				strText += (pNow->szText)[iIndex];
+			} while ((pNow->szText)[iIndex] != '\0');
+			vecPart.push_back(strText);
+
+			vecPart.push_back(to_wstring(pNow->bCenter));
+			vecPart.push_back(to_wstring(pNow->fTextColor.x));
+			vecPart.push_back(to_wstring(pNow->fTextColor.y));
+			vecPart.push_back(to_wstring(pNow->fTextColor.z));
+			vecPart.push_back(to_wstring(pNow->fTextColor.w));
+
+			vecBuffer.push_back(vecPart);
+		}
+	}
+
+	if (FAILED(m_pGameInstance->SaveDataByFile("../Bin/DataFiles/UIPartSpec.csv", vecBuffer)))
+		return E_FAIL;
+
+
 	return S_OK;
 }
 
