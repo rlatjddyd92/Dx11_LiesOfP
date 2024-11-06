@@ -416,11 +416,20 @@ HRESULT CLoader::Ready_Resources_For_ToolLevel_Map0()
 {
 	_matrix      PreTransformMatrix = XMMatrixIdentity();
 
-
+	CModel* pModel = { nullptr };
 	PreTransformMatrix = XMMatrixScaling(0.01f, 0.01f, 0.01f) * XMMatrixRotationY(XMConvertToRadians(270.f));
+
+	pModel = CModel::Create(m_pDevice, m_pContext, CModel::TYPE_ANIM, "../Bin/ModelData/Anim/PlayerExample/PlayerExample.dat", PreTransformMatrix);
 	if (FAILED(m_pGameInstance->Add_Prototype(LEVEL_TOOL, TEXT("Prototype_AnimModel_Test"),
-		CModel::Create(m_pDevice, m_pContext, CModel::TYPE_ANIM, "../Bin/ModelData/Anim/PlayerExample/PlayerExample.dat", PreTransformMatrix))))
+		pModel)))
 		return E_FAIL;
+	m_pGameInstance->Add_ModelPrototype(LEVEL_TOOL, ("Prototype_AnimModel_Test"), pModel);
+
+	pModel = CModel::Create(m_pDevice, m_pContext, CModel::TYPE_ANIM, "../Bin/ModelData/Anim/Monster/CarcassTail/CarcassTail.dat", PreTransformMatrix);
+	if (FAILED(m_pGameInstance->Add_Prototype(LEVEL_TOOL, TEXT("Prototype_AnimModel_Test2"),
+		pModel)))
+		return E_FAIL;
+	m_pGameInstance->Add_ModelPrototype(LEVEL_TOOL, ("Prototype_AnimModel_Test2"), pModel);
 
 	//// _finddata_t : <io.h>에서 제공하며 파일 정보를 저장하는 구조체
 	//_finddata_t fd;

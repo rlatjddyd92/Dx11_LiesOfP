@@ -43,12 +43,20 @@ private:
 	ID3D11DeviceContext* m_pContext = { nullptr };
 
 private:
-	vector<CAnimation*>* m_pCopyAnimVec = {nullptr};
-	vector<CBone*>* m_pCopyBoneVec = { nullptr };
+	class CModel*			m_pCopyModelCom = { nullptr };
+	vector<CAnimation*>*	m_pCopyAnimVec = { nullptr };
+	vector<CBone*>*			m_pCopyBoneVec = { nullptr };
+	vector<class CMesh*>*	m_pCopyMeshVec = { nullptr };
+	VTXANIMMESH*			m_pCopyVtxAnimMeshes = { nullptr };
+
+	vector<const _char*>			m_ModelNames;
+	map<const _char*, CModel*>	m_Models;
+
 private:
-	class CModel* m_pCopyModelCom = {nullptr};
 
 	//리스트 순회, 및 번호 확인용
+	_uint m_iSelected_Index_Model{};
+	_uint m_iCurSelected_Index_Model{};
 	_uint m_iSelected_Index_Anim{};
 	_uint m_iCurSelected_Index_Anim{};		//이전 선택지와 비교하는 용도
 	_uint m_iSelected_Index_Anim_Boundary{};
@@ -60,6 +68,13 @@ private:
 	_uint m_iSelected_Index_KeyFrame{};
 	_uint m_iCurSelected_Index_KeyFrame{};
 
+	_uint m_iSelected_Index_Mesh{};
+	_uint m_iCurSelected_Index_Mesh{};
+
+	_uint m_iSelected_Index_Vtx{};
+	_uint m_iCurSelected_Index_Vtx{};
+
+
 	_uint m_iBoneTypeIndex{};
 
 	//입력값 혹은 출력값
@@ -68,6 +83,8 @@ private:
 	_float	m_fAnimTrackPosition{};
 
 	_char	m_szEvKeyFrameText[MAX_PATH] = {""};
+
+	_char	m_szCurrentModelText[MAX_PATH] = { "" };
 
 	//조건 적용용 불변수
 	_bool	m_bDivide_Boundary { false };

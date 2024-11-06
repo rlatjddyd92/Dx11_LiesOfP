@@ -163,11 +163,31 @@ HRESULT CAnimModel::Ready_Components(ANIMMODEL_DESC* pAnimDesc)
 	MultiByteToWideChar(CP_ACP, MB_PRECOMPOSED, pAnimDesc->szModelTag, MAX_PATH, szModelTag, MAX_PATH);
 
 	/* FOR.Com_Model */
-	if (FAILED(__super::Add_Component(LEVEL_TOOL, TEXT("Prototype_AnimModel_Test"),
+   	if (FAILED(__super::Add_Component(LEVEL_TOOL, szModelTag,
 		TEXT("Com_Model"), reinterpret_cast<CComponent**>(&m_pModelCom))))
 		return E_FAIL;
 
 	return S_OK;
+}
+
+CComponent* CAnimModel::Change_Component(const _wstring& strComponentTag, CComponent* pComponent, _uint iPartObjIndex)
+{
+	CComponent* pOut = __super::Find_Component(strComponentTag);
+	if (pOut != nullptr)
+	{
+		Safe_Release(pOut);
+		m_Components.erase(strComponentTag);
+	}
+	m_Components.emplace(strComponentTag, pComponent);
+
+	if (strComponentTag == TEXT("Com_Model"))
+	{
+		m_pModelCom = dynamic_cast<CModel*>(pComponent);
+	}
+
+	Safe_AddRef(pComponent);
+
+	return pOut;
 }
 
 CAnimModel* CAnimModel::Create(ID3D11Device* pDevice, ID3D11DeviceContext* pContext)

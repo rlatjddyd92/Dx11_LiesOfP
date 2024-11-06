@@ -327,6 +327,16 @@ CComponent * CGameInstance::Clone_Component(_uint iLevelIndex, const _wstring & 
 	return m_pComponent_Manager->Clone_Component(iLevelIndex, strPrototypeTag, pArg);
 }
 
+HRESULT CGameInstance::Add_ModelPrototype(_uint iLevelIndex, const _char* strPrototypeTag, CComponent* pPrototype)
+{
+	return m_pComponent_Manager->Add_ModelPrototype(iLevelIndex, strPrototypeTag, pPrototype);
+}
+
+map<const _char*, class CComponent*> CGameInstance::Get_ModelPrototypes(_uint iLevelIndex)
+{
+	return m_pComponent_Manager->Get_ModelPrototypes(iLevelIndex);
+}
+
 #pragma endregion
 
 #pragma region TIMER_MANAGER
