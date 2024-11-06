@@ -39,6 +39,24 @@ void CBone::Setting_ParentBoneName(CModel* pModel)
 	strcpy_s(m_szParentName, Bones[m_iParentBoneIndex]->Get_Name());
 }
 
+void CBone::Update_Boundary(const vector<CBone*>& Bones, _int iCurBoneIndex, _int iBoundaryBoneIndex)
+{
+	if (iBoundaryBoneIndex == iCurBoneIndex)
+	{
+		m_bIsChildOf_Boundary = true;
+		return;
+	}
+
+	if (m_iParentBoneIndex < iBoundaryBoneIndex)
+	{
+		m_bIsChildOf_Boundary = false;
+	}
+	else
+	{
+		m_bIsChildOf_Boundary = Bones[m_iParentBoneIndex]->Get_IsChildOf_Boundary();
+	}
+}
+
 CBone* CBone::Create(HANDLE* pFile, _int iParentBoneIndex)
 {
 	CBone* pInstance = new CBone();

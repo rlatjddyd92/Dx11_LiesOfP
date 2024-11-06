@@ -21,11 +21,17 @@ public:
 	_matrix				Get_TransformationMatrix() { return XMLoadFloat4x4(&m_TransformationMatrix); }
 	void				Set_TransformationMatrix(_fmatrix TransformationMatrix) { XMStoreFloat4x4(&m_TransformationMatrix, TransformationMatrix); }
 
+	_int				Get_ParentBoneIndex() { return m_iParentBoneIndex; }
+
+	_bool				Get_IsChildOf_Boundary() { return m_bIsChildOf_Boundary; }
+
 public:
 	virtual HRESULT Initialize(HANDLE* pFile, _int iParentBoneIndex);
 	void Update_CombinedTransformationMatrix(const vector<CBone*>& Bones, _fmatrix PreTransformMatrix);
 
 	void Setting_ParentBoneName(class CModel* pModel);
+
+	void				Update_Boundary(const vector<CBone*>& Bones, _int iCurBoneIndex, _int iBoundaryBoneIndex);
 
 private:
 	/* 뼈의 이름 */
@@ -40,6 +46,9 @@ private:
 	_float4x4	m_CombinedTransformationMatrix = {};
 
 	_int		m_iParentBoneIndex = { -1 };
+
+	//애니메이션 상하체 분리를 위한 준비
+	_bool		m_bIsChildOf_Boundary = {false};
 
 public:
 	static CBone* Create(HANDLE* pFile, _int iParentBoneIndex);

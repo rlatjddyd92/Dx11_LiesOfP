@@ -28,15 +28,23 @@ public:
 
 	vector<class CAnimation*>& Get_Animations() { return m_Animations; }
 	_uint					Get_CurrentAnimationIndex() { return m_iCurrentAnimIndex; }
+	_uint					Get_CurrentAnimationIndex_Boundary() { return m_iCurrentAnimIndex_Boundary; }
 	_char*					Get_CurrentAnimationName();
 	_bool					Get_IsEnd_Animation(_uint iAnimationIndex);
 
 	_uint					Get_CurrentFrame() { return m_iCurrentFrame; }
 	_double					Get_CurrentTrackPosition() { return m_CurrentTrackPosition; }
 	void					Set_CurrentTrackPosition(_double TrackPos) { m_CurrentTrackPosition = TrackPos; }
+	void					Set_CurrentTrackPosition_Boundary(_double TrackPos) { m_CurrentTrackPosition_Boundary = TrackPos; }
 
 	void					Set_UFBIndices(_uint eCount, _uint iIndex) { m_UFBIndices[eCount] = iIndex; }
 	_uint					Get_UFBIndices(_uint eCount) { return m_UFBIndices[eCount]; }
+
+	void					Set_AnimPlay(_bool bCtrAnim) { m_bPlayAnimCtr = bCtrAnim; }
+
+	_bool					Get_IsUseBoundary() { return m_isUseBoundary; }
+
+	HRESULT					Update_Boundary();
 
 public:
 	virtual HRESULT Initialize_Prototype(TYPE eType, const _char* pModelFilePath, _fmatrix PreTransformMatrix);
@@ -48,6 +56,7 @@ public:
 
 	void		SetUp_Animation(_uint iAnimationIndex, _bool isLoop = false);
 	HRESULT     SetUp_NextAnimation(_uint iNextAnimationIndex, _bool isLoop = false, _float fChangeDuration = 0.2f, _uint iStartFrame = 0);
+	HRESULT     SetUp_NextAnimation_Boundary(_uint iNextAnimationIndex, _bool isLoop = false, _float fChangeDuration = 0.2f, _uint iStartFrame = 0);
 
 	_uint		Setting_Animation(const _char* szAnimationmName, _double SpeedRatio = 1.0) const;
 
@@ -73,7 +82,9 @@ private:
 
 private:
 	_bool							m_isLoop = { false };
+	_bool							m_isLoop_Boundary = { false };		//상하체 분리
 	_uint							m_iCurrentAnimIndex = { 0 };
+	_uint							m_iCurrentAnimIndex_Boundary = { 0 };		//상하체 분리
 	_uint							m_iNumAnimations = { 0 };
 	vector<class CAnimation*>		m_Animations;
 
@@ -81,6 +92,8 @@ private:
 	/* 현재 애니메이션의 재생 위치. */
 	_double							m_CurrentTrackPosition = {};
 	_double							m_ChangeTrackPosition = {};
+	_double							m_CurrentTrackPosition_Boundary = {};	//상하체 분리
+	_double							m_ChangeTrackPosition_Boundary = {};	//상하체 분리
 
 	/* 각 애니메이션당 각 채널들의 현재 키프레임인덱스 */
 	vector<vector<_uint>>			m_KeyFrameIndices;
@@ -88,14 +101,22 @@ private:
 	_float							m_fCurrentAnimationSpeedRadio = { 1.f };
 
 	_int							m_iCurrentFrame = { 0 };
+	_int							m_iCurrentFrame_Boundary = { 0 };		//상하체 분리
 	_bool*							m_isEnd_Animations;
+	_bool*							m_isEnd_Animations_Boundary;			//상하체 분리
 	_bool							m_isChangeAni = { false };	// 바꾸는중?
+	_bool							m_isChangeAni_Boundary = { false };		//상하체 분리
+
+	_bool							m_bPlayAnimCtr = { true };	// 애니메이션 정지, 재생
+
 
 	CHANGEANIMATION_DESC			m_tChaneAnimDesc = {};
+	CHANGEANIMATION_DESC			m_tChaneAnimDesc_Boundary = {};			//상하체 분리
 
 	//이봉준 애니메이션
+	_bool							m_isUseBoundary = { false };	//상하체 분리 여부
 private:
-	vector<_uint>				m_UFBIndices;
+	vector<_uint>					m_UFBIndices;
 
 public:
 	HRESULT	Ready_Meshes(HANDLE* pFile);

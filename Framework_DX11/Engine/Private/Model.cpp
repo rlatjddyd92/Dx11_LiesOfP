@@ -82,6 +82,27 @@ _bool CModel::Get_IsEnd_Animation(_uint iAnimationIndex)
 	return m_isEnd_Animations[iAnimationIndex];
 }
 
+HRESULT CModel::Update_Boundary()
+{
+	_int iBoundaryBoneIndex = m_UFBIndices[UFB_BOUNDARY_UPPER];
+	if (iBoundaryBoneIndex != 1024)
+	{
+		for (_int i = 0; i < m_Bones.size(); ++i)
+		{
+			m_Bones[i]->Update_Boundary(m_Bones, i, iBoundaryBoneIndex);
+		}
+		m_iCurrentAnimIndex_Boundary = m_iCurrentAnimIndex;
+		m_isUseBoundary = true;
+	}
+	else
+	{
+		m_isUseBoundary = false;
+		return E_FAIL;
+	}
+	
+	return S_OK;
+}
+
 HRESULT CModel::Initialize_Prototype(TYPE eType, const _char * pModelFilePath, _fmatrix PreTransformMatrix)
 {
 	_uint		iFlag = { 0 };	
@@ -125,7 +146,9 @@ HRESULT CModel::Initialize_Prototype(TYPE eType, const _char * pModelFilePath, _
 HRESULT CModel::Initialize(void * pArg)
 {
 	m_isEnd_Animations = new _bool[m_iNumAnimations];
+	m_isEnd_Animations_Boundary = new _bool[m_iNumAnimations];
 	ZeroMemory(m_isEnd_Animations, m_iNumAnimations * sizeof(_bool));
+	ZeroMemory(m_isEnd_Animations_Boundary, m_iNumAnimations * sizeof(_bool));
 
 	return S_OK;
 }
@@ -167,6 +190,37 @@ HRESULT CModel::SetUp_NextAnimation(_uint iNextAnimationIndex, _bool isLoop, _fl
 	return S_OK;
 }
 
+HRESULT CModel::SetUp_NextAnimation_Boundary(_uint iNextAnimationIndex, _bool isLoop, _float fChangeDuration, _uint iStartFrame)
+{
+	if (iNextAnimationIndex >= m_iNumAnimations)
+		return E_FAIL;
+
+	// 이미 같은걸로 바꾸고 있어
+	if (m_isChangeAni_Boundary == true && iNextAnimationIndex == m_tChaneAnimDesc_Boundary.iNextAnimIndex)
+		return S_OK;
+
+	m_ChangeTrackPosition_Boundary = 0.0;
+
+	m_tChaneAnimDesc_Boundary.iNextAnimIndex = iNextAnimationIndex;
+	if (iNextAnimationIndex == m_iCurrentAnimIndex)
+	{
+		m_tChaneAnimDesc_Boundary.iStartFrame = m_CurrentTrackPosition;
+	}
+	else
+	{
+		m_tChaneAnimDesc_Boundary.iStartFrame = iStartFrame;
+	}
+
+	m_tChaneAnimDesc_Boundary.fChangeDuration = fChangeDuration;
+	m_tChaneAnimDesc_Boundary.fChangeTime = 0.f;
+
+	m_isEnd_Animations_Boundary[iNextAnimationIndex] = false;
+	m_isLoop_Boundary = isLoop;
+	m_isChangeAni_Boundary = true;
+
+	return S_OK;
+}
+
 _uint CModel::Setting_Animation(const _char* szAnimationmName, _double SpeedRatio) const
 {
 	_uint iAnimationIndex = { 0 };
@@ -188,6 +242,9 @@ _uint CModel::Setting_Animation(const _char* szAnimationmName, _double SpeedRati
 
 _vector CModel::Play_Animation(_float fTimeDelta, _bool* pOut)
 {
+	_float fAddTime = fTimeDelta * m_bPlayAnimCtr;
+
+	//상하체 분리에 영향받지 않는 부분들의 업데이트
 	if (m_isChangeAni)
 	{
 		_bool isChangeEnd = false;
@@ -195,12 +252,12 @@ _vector CModel::Play_Animation(_float fTimeDelta, _bool* pOut)
 		{
 			*pOut = true;
 		}
-		m_tChaneAnimDesc.fChangeTime += fTimeDelta;
+		m_tChaneAnimDesc.fChangeTime += fAddTime;
 
 		vector<CChannel*> CurrentChannels = m_Animations[m_iCurrentAnimIndex]->Get_Channels();
 		vector<CChannel*> NextChannels = m_Animations[m_tChaneAnimDesc.iNextAnimIndex]->Get_Channels();
 
-		m_CurrentTrackPosition += fTimeDelta;
+		m_CurrentTrackPosition += fAddTime;
 		for (_int i = 0; i < CurrentChannels.size(); ++i)
 		{
 
@@ -254,8 +311,96 @@ _vector CModel::Play_Animation(_float fTimeDelta, _bool* pOut)
 	else
 	{
 		/* 뼈를 움직인다.(CBone`s m_TransformationMatrix행렬을 갱신한다.) */
-		m_iCurrentFrame = m_Animations[m_iCurrentAnimIndex]->Update_TransformationMatrices(m_Bones, &m_CurrentTrackPosition, m_KeyFrameIndices[m_iCurrentAnimIndex], m_isLoop, &m_isEnd_Animations[m_iCurrentAnimIndex], fTimeDelta);
+		m_iCurrentFrame = m_Animations[m_iCurrentAnimIndex]->Update_TransformationMatrices(m_Bones, &m_CurrentTrackPosition, m_KeyFrameIndices[m_iCurrentAnimIndex], m_isLoop, &m_isEnd_Animations[m_iCurrentAnimIndex], fAddTime, false);
 	}
+
+
+	//분리된 부분 업데이트
+	if (m_isUseBoundary)
+	{
+		if (m_isChangeAni_Boundary)
+		{
+			_bool isChangeEnd = false;
+			if (m_tChaneAnimDesc_Boundary.fChangeTime == 0.f && pOut != nullptr)
+			{
+				*pOut = true;
+			}
+			m_tChaneAnimDesc_Boundary.fChangeTime += fAddTime;
+
+			vector<CChannel*> CurrentChannels = m_Animations[m_iCurrentAnimIndex_Boundary]->Get_Channels();
+			vector<CChannel*> NextChannels = m_Animations[m_tChaneAnimDesc_Boundary.iNextAnimIndex]->Get_Channels();
+
+			m_CurrentTrackPosition_Boundary += fAddTime;
+			for (_int i = 0; i < CurrentChannels.size(); ++i)
+			{
+
+				KEYFRAME tCurrentKeyFrame = CurrentChannels[i]->Find_KeyFrameIndex(&m_KeyFrameIndices[m_iCurrentAnimIndex_Boundary][i], m_CurrentTrackPosition_Boundary); // 여기서부터
+				KEYFRAME tNextKeyFrame = NextChannels[i]->Find_KeyFrameIndex(&m_KeyFrameIndices[m_tChaneAnimDesc_Boundary.iNextAnimIndex][i], NextChannels[i]->Get_KeyFrame(m_tChaneAnimDesc_Boundary.iStartFrame).TrackPosition); // 여기로 보간
+
+				_vector vScale, vRotation, vTranslation;
+
+				/* 애니메이션 전환 시간이 끝났으면 */
+				if (m_tChaneAnimDesc_Boundary.fChangeTime >= m_tChaneAnimDesc_Boundary.fChangeDuration)
+				{
+					vScale = XMLoadFloat3(&tNextKeyFrame.vScale);
+					vRotation = XMLoadFloat4(&tNextKeyFrame.vRotation);
+					vTranslation = XMVectorSetW(XMLoadFloat3(&tNextKeyFrame.vTranslation), 1.f);
+
+					isChangeEnd = true;
+				}
+				else
+				{
+					_vector		vSourScale = XMLoadFloat3(&tCurrentKeyFrame.vScale);
+					_vector		vDestScale = XMLoadFloat3(&tNextKeyFrame.vScale);
+
+					_vector		vSourRotation = XMLoadFloat4(&tCurrentKeyFrame.vRotation);
+					_vector		vDestRotation = XMLoadFloat4(&tNextKeyFrame.vRotation);
+
+					_vector		vSourTranslation = XMVectorSetW(XMLoadFloat3(&tCurrentKeyFrame.vTranslation), 1.f);
+					_vector		vDestTranslation = XMVectorSetW(XMLoadFloat3(&tNextKeyFrame.vTranslation), 1.f);
+
+					_float		fRatio = m_tChaneAnimDesc_Boundary.fChangeTime / m_tChaneAnimDesc_Boundary.fChangeDuration;
+
+					vScale = XMVectorLerp(vSourScale, vDestScale, (_float)fRatio);
+					vRotation = XMQuaternionSlerp(vSourRotation, vDestRotation, (_float)fRatio);
+					vTranslation = XMVectorLerp(vSourTranslation, vDestTranslation, (_float)fRatio);
+				}
+
+				_matrix	TransformationMatrix = XMMatrixAffineTransformation(vScale, XMVectorSet(0.f, 0.f, 0.f, 1.f), vRotation, vTranslation);
+
+				m_Bones[CurrentChannels[i]->Get_BoneIndex()]->Set_TransformationMatrix(TransformationMatrix);
+			}
+
+			if (isChangeEnd)
+			{
+				if (m_iCurrentAnimIndex == m_tChaneAnimDesc_Boundary.iNextAnimIndex)
+				{
+					m_CurrentTrackPosition_Boundary = m_CurrentTrackPosition;
+				}
+				else
+					m_CurrentTrackPosition_Boundary = 0.0;
+				
+				//m_Animations[m_iCurrentAnimIndex]->Reset();
+				m_iCurrentAnimIndex_Boundary = m_tChaneAnimDesc_Boundary.iNextAnimIndex;
+				ZeroMemory(&m_tChaneAnimDesc, sizeof(CHANGEANIMATION_DESC));
+
+				m_isChangeAni_Boundary = false;
+			}
+		}
+		else
+		{
+			//if 상하체 애니메이션이 같으면 시간누적 없는 업데이트 하체 변수로 호출
+			if (m_iCurrentAnimIndex == m_iCurrentAnimIndex_Boundary)
+			{
+				m_iCurrentFrame = m_Animations[m_iCurrentAnimIndex_Boundary]->Update_TransformationMatrices(m_Bones, &m_CurrentTrackPosition, m_KeyFrameIndices[m_iCurrentAnimIndex_Boundary], m_isLoop, &m_isEnd_Animations_Boundary[m_iCurrentAnimIndex_Boundary], fAddTime, true, true);
+			}
+			else
+			{
+				m_iCurrentFrame = m_Animations[m_iCurrentAnimIndex_Boundary]->Update_TransformationMatrices(m_Bones, &m_CurrentTrackPosition_Boundary, m_KeyFrameIndices[m_iCurrentAnimIndex_Boundary], m_isLoop_Boundary, &m_isEnd_Animations_Boundary[m_iCurrentAnimIndex_Boundary], fAddTime, true);
+			}
+		}
+	}
+
 
 	_vector vRootMove{};
 	/* 모든 뼈가 가지고 있는 m_CombinedTransformationMatrix를 갱신한다. */
@@ -266,6 +411,11 @@ _vector CModel::Play_Animation(_float fTimeDelta, _bool* pOut)
 		if (m_CurrentTrackPosition == 0.f && pOut != nullptr)//애니메이션이 끝났는지에 대한 판단
 		{
 			*pOut = true;
+		}
+		if (m_CurrentTrackPosition_Boundary == 0.f && pOut != nullptr && m_iCurrentAnimIndex != m_iCurrentAnimIndex_Boundary)//애니메이션이 끝났는지에 대한 판단
+		{
+			SetUp_NextAnimation_Boundary(m_iCurrentAnimIndex, m_isLoop);
+			m_CurrentTrackPosition_Boundary = 0.f;
 		}
 		_float4x4 RootMat = {};
 		XMStoreFloat4x4(&RootMat, m_Bones[m_UFBIndices[UFB_ROOT]]->Get_TransformationMatrix());
@@ -432,7 +582,10 @@ void CModel::Free()
 	__super::Free();
 
 	if (m_isCloned)
+	{
 		Safe_Delete_Array(m_isEnd_Animations);
+		Safe_Delete_Array(m_isEnd_Animations_Boundary);
+	}
 
 	for (auto& pAnimation : m_Animations)
 		Safe_Release(pAnimation);

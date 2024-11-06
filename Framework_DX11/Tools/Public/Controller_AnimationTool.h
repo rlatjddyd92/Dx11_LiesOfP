@@ -50,6 +50,8 @@ private:
 	//리스트 순회, 및 번호 확인용
 	_uint m_iSelected_Index_Anim{};
 	_uint m_iCurSelected_Index_Anim{};		//이전 선택지와 비교하는 용도
+	_uint m_iSelected_Index_Anim_Boundary{};
+	_uint m_iCurSelected_Index_Anim_Boundary{};
 
 	_uint m_iSelected_Index_Bone{};
 	_uint m_iCurSelected_Index_Bone{};		//이전 선택지와 비교하는 용도
@@ -62,12 +64,14 @@ private:
 	//입력값 혹은 출력값
 	_double m_AnimSpeedPS{};
 	_double m_AnimDuration{};
-	_float m_fAnimTrackPosition{};
+	_float	m_fAnimTrackPosition{};
+
 	_char	m_szEvKeyFrameText[MAX_PATH] = {""};
 
 	//조건 적용용 불변수
-	_bool	m_bObjRenderCtr{true};
-	_bool	m_bIsAnimStopped{ false };
+	_bool	m_bDivide_Boundary { false };
+	_bool	m_bObjRenderCtr {true};
+	_bool	m_bIsAnimStopped { false };
 
 public:
 	virtual void Free() override;

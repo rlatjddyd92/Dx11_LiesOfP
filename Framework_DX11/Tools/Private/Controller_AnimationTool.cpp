@@ -20,7 +20,7 @@ HRESULT CController_AnimationTool::Initialize(ID3D11Device* pDevice, ID3D11Devic
 	
 	CAnimModel::ANIMMODEL_DESC Desc{};
 	Desc.vPosition = { 0.f,0.f,0.f };
-	Desc.vScale = { 1.f,1.f,1.f };
+	Desc.vScale = { 2.f,2.f,2.f };
 	Desc.vRotation = { 0.f,0.f,0.f };
 	Desc.pUpdateCtr = &m_bObjRenderCtr;
 
@@ -94,9 +94,20 @@ void CController_AnimationTool::ListUp_Anim()
 {
 	//이전 선택 저장
 	m_iCurSelected_Index_Anim = m_iSelected_Index_Anim;
+	_bool BoundaryCheck = m_pCopyModelCom->Get_IsUseBoundary();
+	ImGui::Text("Animation");
+	if (m_pCopyModelCom != nullptr && BoundaryCheck)
+	{
+		ImGui::SameLine();
+		ImGui::Text("\t");
+		ImGui::SameLine();
+		ImGui::Text("Anim Boundary");
 
-	ImGui::PushItemWidth(300); // 크기조정
-	if (ImGui::BeginListBox("Animation List"))
+		ImGui::Checkbox("Divide_Boundary", &m_bDivide_Boundary);
+	}
+
+	ImGui::PushItemWidth(200); // 크기조정
+	if (ImGui::BeginListBox(""))
 	{
 		if (m_pCopyModelCom != nullptr)
 		{
@@ -123,7 +134,6 @@ void CController_AnimationTool::ListUp_Anim()
 		
 		ImGui::EndListBox();
 	}
-	//이전 선택지 비교 후 애니메이션 전환
 	if (m_pCopyModelCom != nullptr)
 	{
 		if (m_iSelected_Index_Anim != m_iCurSelected_Index_Anim)
@@ -133,8 +143,63 @@ void CController_AnimationTool::ListUp_Anim()
 			m_AnimDuration = (*m_pCopyAnimVec)[m_iSelected_Index_Anim]->Get_Duration();
 		}
 	}
+	
+	if (m_pCopyModelCom != nullptr && BoundaryCheck)
+	{
+		m_iCurSelected_Index_Anim = m_iSelected_Index_Anim;
+
+		if (!m_bDivide_Boundary)
+		{
+			m_iSelected_Index_Anim_Boundary = m_iSelected_Index_Anim;
+		}
+
+		//
+
+		_uint iIndexBoundaryAnim = m_pCopyModelCom->Get_CurrentAnimationIndex_Boundary();
+		if (iIndexBoundaryAnim != m_iSelected_Index_Anim_Boundary)
+		{
+			m_iSelected_Index_Anim_Boundary = iIndexBoundaryAnim;
+		}
+
+		ImGui::SameLine();
+		if (ImGui::BeginListBox("Boundary"))
+		{
+			bool is_selected_Boundary{ false };
+
+			for (int i = 0; i < m_pCopyAnimVec->size(); i++)
+			{
+				if (m_iSelected_Index_Anim_Boundary == i)
+				{
+					is_selected_Boundary = true;
+				}
+
+				if (ImGui::Selectable((*m_pCopyAnimVec)[i]->Get_Name(), is_selected_Boundary))
+				{
+					m_iSelected_Index_Anim_Boundary = i;
+				}
+
+				if (!is_selected_Boundary)
+					ImGui::SetItemDefaultFocus();
+				is_selected_Boundary = false;
+				// 반복문으로 리스트박스의 선택된 객체 찾기
+			}
+			
+
+			ImGui::EndListBox();
+		}
+	}
 
 	ImGui::PopItemWidth();
+
+	//이전 선택지 비교 후 애니메이션 전환
+	if (m_pCopyModelCom != nullptr)
+	{
+		if (m_iSelected_Index_Anim_Boundary != m_iCurSelected_Index_Anim_Boundary)
+		{
+			m_pCopyModelCom->SetUp_NextAnimation_Boundary(m_iSelected_Index_Anim_Boundary, true);
+		}
+	}
+
 
 }
 
@@ -187,9 +252,9 @@ void CController_AnimationTool::SetUp_Controller_Anim()
 	if (m_bIsAnimStopped)
 	{
 		m_pCopyModelCom->Set_CurrentTrackPosition(m_fAnimTrackPosition);
+		m_pCopyModelCom->Set_CurrentTrackPosition_Boundary(m_fAnimTrackPosition);
 	}
 
-	ImGui::PushItemWidth(50); // 크기조정
 	ImGui::SameLine();
 	if (m_bIsAnimStopped)
 	{
@@ -197,7 +262,7 @@ void CController_AnimationTool::SetUp_Controller_Anim()
 		{
 			m_bIsAnimStopped = false;
 		}
-		(*m_pCopyAnimVec)[m_iSelected_Index_Anim]->Set_SpeedRatio(0.f);
+		m_pCopyModelCom->Set_AnimPlay(false);
 	}
 	else
 	{
@@ -205,9 +270,8 @@ void CController_AnimationTool::SetUp_Controller_Anim()
 		{
 			m_bIsAnimStopped = true;
 		}
-		(*m_pCopyAnimVec)[m_iSelected_Index_Anim]->Set_SpeedRatio(1.f);
+		m_pCopyModelCom->Set_AnimPlay(true);
 	}
-	ImGui::PopItemWidth();
 
 
 	//저장한 키프레임들 확인
@@ -250,6 +314,7 @@ void CController_AnimationTool::SetUp_Controller_Anim()
 		{
 			//선택한 이벤트 키프레임의 위치로 이동
 			m_pCopyModelCom->Set_CurrentTrackPosition((*EvKeyFramesvec)[m_iSelected_Index_KeyFrame].TrackPosition);
+			m_pCopyModelCom->Set_CurrentTrackPosition_Boundary((*EvKeyFramesvec)[m_iSelected_Index_KeyFrame].TrackPosition);
 		}
 	}
 
@@ -321,27 +386,45 @@ void CController_AnimationTool::ListUp_Bone()
 		}
 		else
 			ImGui::SetItemDefaultFocus();
-		if (ImGui::Selectable("HAND", (m_iBoneTypeIndex == 1)))
+		if (ImGui::Selectable("HAND_LEFT", (m_iBoneTypeIndex == 1)))
 		{
 			m_iBoneTypeIndex = 1;
 		}
 		else
 			ImGui::SetItemDefaultFocus();
-		if (ImGui::Selectable("FOOT", (m_iBoneTypeIndex == 2)))
+		if (ImGui::Selectable("HAND_RIGHT", (m_iBoneTypeIndex == 2)))
 		{
 			m_iBoneTypeIndex = 2;
 		}
 		else
 			ImGui::SetItemDefaultFocus();
-		if (ImGui::Selectable("HEAD", (m_iBoneTypeIndex == 3)))
+		if (ImGui::Selectable("FOOT_LEFT", (m_iBoneTypeIndex == 3)))
 		{
 			m_iBoneTypeIndex = 3;
 		}
 		else
 			ImGui::SetItemDefaultFocus();
-		if (ImGui::Selectable("WEAPON", (m_iBoneTypeIndex == 4)))
+		if (ImGui::Selectable("FOOT_RIGHT", (m_iBoneTypeIndex == 4)))
 		{
 			m_iBoneTypeIndex = 4;
+		}
+		else
+			ImGui::SetItemDefaultFocus();
+		if (ImGui::Selectable("HEAD", (m_iBoneTypeIndex == 5)))
+		{
+			m_iBoneTypeIndex = 5;
+		}
+		else
+			ImGui::SetItemDefaultFocus();
+		if (ImGui::Selectable("WEAPON", (m_iBoneTypeIndex == 6)))
+		{
+			m_iBoneTypeIndex = 6;
+		}
+		else
+			ImGui::SetItemDefaultFocus();
+		if (ImGui::Selectable("BOUNDARY_UPPER", (m_iBoneTypeIndex == 7)))
+		{
+			m_iBoneTypeIndex = 7;
 		}
 		else
 			ImGui::SetItemDefaultFocus();
@@ -399,15 +482,45 @@ void CController_AnimationTool::SetUp_Controller_Bone()
 		{
 			bool is_selected{ false };
 			ImGui::Text("ROOT :: %d", m_pCopyModelCom->Get_UFBIndices(0));
-			ImGui::Text("HAND :: %d", m_pCopyModelCom->Get_UFBIndices(1));
-			ImGui::Text("FOOT :: %d", m_pCopyModelCom->Get_UFBIndices(2));
-			ImGui::Text("HEAD :: %d", m_pCopyModelCom->Get_UFBIndices(3));
-			ImGui::Text("WEAPON :: %d", m_pCopyModelCom->Get_UFBIndices(4));
+			ImGui::Text("HAND_LEFT :: %d", m_pCopyModelCom->Get_UFBIndices(1));
+			ImGui::Text("HAND_RIGHT :: %d", m_pCopyModelCom->Get_UFBIndices(2));
+			ImGui::Text("FOOT_LEFT :: %d", m_pCopyModelCom->Get_UFBIndices(3));
+			ImGui::Text("FOOT_RIGHT :: %d", m_pCopyModelCom->Get_UFBIndices(4));
+			ImGui::Text("HEAD :: %d", m_pCopyModelCom->Get_UFBIndices(5));
+			ImGui::Text("WEAPON :: %d", m_pCopyModelCom->Get_UFBIndices(6));
+			ImGui::Text("BOUNDARY_UPPER :: %d", m_pCopyModelCom->Get_UFBIndices(7));
 		}
 
 		ImGui::EndListBox();
 	}
 	ImGui::PopItemWidth();
+
+	if (ImGui::Button("Update_Boundary"))
+	{
+		if (m_pCopyModelCom != nullptr)
+		{
+			//모델의 특정 컨테이너에 저장.
+			m_pCopyModelCom->Update_Boundary();
+
+		}
+	}
+
+	ImGui::Text("\n");
+	if ((*m_pCopyBoneVec)[m_iSelected_Index_Bone]->Get_ParentBoneIndex() != -1)
+	{
+		ImGui::Text((*m_pCopyBoneVec)[(*m_pCopyBoneVec)[m_iSelected_Index_Bone]->Get_ParentBoneIndex()]->Get_Name());
+	}
+	else
+		ImGui::Text("First_Bone");
+
+	if ((*m_pCopyBoneVec)[m_iSelected_Index_Bone]->Get_IsChildOf_Boundary())
+	{
+		ImGui::Text("Boundary : true");
+	}
+	else
+	{
+		ImGui::Text("Boundary : false");
+	}
 
 }
 
