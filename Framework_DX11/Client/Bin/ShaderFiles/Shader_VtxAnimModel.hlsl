@@ -4,6 +4,9 @@
 
 matrix g_WorldMatrix, g_ViewMatrix, g_ProjMatrix;
 
+matrix g_CascadeViewMatrix[3], g_CascadeProjMatrix[3];
+
+
 texture2D       g_DiffuseTexture;
 texture2D       g_NormalTexture;
 texture2D       g_ARMTexture;
@@ -79,6 +82,61 @@ VS_OUT_NORMAL VS_MAIN_NORMAL(VS_IN_ANIMODEL In)
     return Out;
 }
 
+
+float4 VS_MAIN_CASCADE(VS_IN_ANIMODEL In) : POSITION
+{
+    float fWeightW = 1.f - (In.vBlendWeights.x + In.vBlendWeights.y + In.vBlendWeights.z);
+
+    matrix BoneMatrix = g_BoneMatrices[In.vBlendIndices.x] * In.vBlendWeights.x +
+		g_BoneMatrices[In.vBlendIndices.y] * In.vBlendWeights.y +
+		g_BoneMatrices[In.vBlendIndices.z] * In.vBlendWeights.z +
+		g_BoneMatrices[In.vBlendIndices.w] * fWeightW;
+		
+    vector vPosition = mul(vector(In.vPosition, 1.f), BoneMatrix);
+    
+   vPosition = mul(vPosition, g_WorldMatrix);
+    
+    return vPosition;
+}
+
+struct GS_IN_CASCADE
+{
+	/* SV_ : ShaderValue */
+	/* 내가 해야할 연산은 모두 마쳐놓은 것이므로 이후 dx가 추가적으로 해야할 이릉ㄹ 해라. */
+    float4 vPosition : POSITION;
+};
+
+struct GS_OUT_CASCADE
+{
+    float4 vPosition : SV_POSITION;
+    uint iRTVIndex : SV_RenderTargetArrayIndex;
+};
+
+[maxvertexcount(9)]
+void GS_MAIN(point GS_IN_CASCADE In[3], inout TriangleStream<GS_OUT_CASCADE> Container)
+{
+    GS_OUT_CASCADE Out[3];
+    
+    // 각 렌더타겟 별로 찍어두기
+    for (uint i = 0; i < 3; ++i)
+    {
+        for (uint j = 0; j < 3; ++j)
+        {
+            matrix matVP;
+            
+            matVP = mul(g_ViewMatrix, g_ProjMatrix);
+            
+            // 뷰상의 위치
+            float4 vViewPos = mul(In[j].vPosition, g_CascadeViewMatrix[i]);
+            vViewPos.z += 2.5f; // offset으로 줘서 z겹침 문제 완화
+            Out[j].vPosition = mul(vViewPos, g_CascadeProjMatrix[i]);
+            Out[j].iRTVIndex = i;
+            Container.Append(Out[j]);
+        }
+        Container.RestartStrip();
+    }
+}
+
 PS_OUT_MODEL PS_MAIN(PS_IN_ANIMODEL In)
 {
     PS_OUT_MODEL Out = (PS_OUT_MODEL) 0;
@@ -134,7 +192,15 @@ PS_OUT_LIGHTDEPTH PS_MAIN_LIGHTDEPTH(PS_IN_MODEL In)
     return Out;
 }
 
-
+struct PS_IN_CASCADE
+{
+    float4 vPosition : SV_POSITION;
+    uint iRTVIndex : SV_RenderTargetArrayIndex; // 렌더타겟 배열 중에 어떤 것에 그릴거야?
+};
+float4 PS_MAIN_CASCADE(PS_IN_CASCADE In) : POSITION
+{
+    return float4(In.vPosition.z / In.vPosition.w, 0.f, 0.f, 1.f);
+}
 
 technique11 DefaultTechnique
 {

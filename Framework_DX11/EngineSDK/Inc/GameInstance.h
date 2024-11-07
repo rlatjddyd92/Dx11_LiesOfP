@@ -101,6 +101,12 @@ public:
 
 	const _Vec4& Get_CamPosition_Vec4() const;
 	const _Vec3& Get_CamPosition_Vec3() const;
+
+	const _Matrix* Get_CascadeViewMatirx() const;
+	void Set_CascadeViewMatirx(_Matrix* CascadeViewMatrices);
+
+	const _Matrix* Get_CascadeProjMatirx() const;
+	void Set_CascadeProjMatirx(_Matrix* CascadeProjMatrices);
 #pragma endregion
 
 #pragma region LIGHT_MANAGER

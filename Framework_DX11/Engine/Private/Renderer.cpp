@@ -1172,16 +1172,6 @@ HRESULT CRenderer::Ready_CascadeDepthStencilView()
 
 	Safe_Release(pDepthStencilArrTexture);
 
-	// 각 캐스케이드가 나타낼 깊이 범위 설정.
-	float cascadeSplits[3] = { 0.0f };
-	float nearPlane = 0.1f;
-	float farPlane = 1000.0f;
-	float delta = farPlane - nearPlane;
-
-	for (int i = 0; i < 3; ++i) {
-		float lambda = (i + 1) / 3.f;
-		cascadeSplits[i] = nearPlane + lambda * delta;
-	}
 
 	return S_OK;
 }

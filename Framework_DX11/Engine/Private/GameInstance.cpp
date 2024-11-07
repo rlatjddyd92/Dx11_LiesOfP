@@ -413,6 +413,26 @@ const _Vec3& CGameInstance::Get_CamPosition_Vec3() const
 	return m_pPipeLine->Get_CamPosition_Vec3();
 }
 
+const _Matrix* CGameInstance::Get_CascadeViewMatirx() const
+{
+	return m_pPipeLine->Get_CascadeViewMatirx();;
+}
+
+void CGameInstance::Set_CascadeViewMatirx(_Matrix* CascadeViewMatrices)
+{
+	m_pPipeLine->Set_CascadeViewMatirx(CascadeViewMatrices);
+}
+
+const _Matrix* CGameInstance::Get_CascadeProjMatirx() const
+{
+	return m_pPipeLine->Get_CascadeProjMatirx();
+}
+
+void CGameInstance::Set_CascadeProjMatirx(_Matrix* CascadeProjMatrices)
+{
+	m_pPipeLine->Set_CascadeProjMatirx(CascadeProjMatrices);
+}
+
 #pragma endregion
 
 #pragma region LightManager
