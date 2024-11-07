@@ -979,7 +979,7 @@ void CController_MapTool::Nav_Menu()
 
 	if (iMode == Mode_Create_Cell)
 	{
-		Mode_Create_Cell_Menu();
+		Cell_Create_Menu();
 	}
 	else if (iMode == Mode_Cell_Select)
 	{
@@ -987,22 +987,19 @@ void CController_MapTool::Nav_Menu()
 		if(m_pGameInstance->Get_KeyState(RBUTTON) == AWAY)
 			m_pNavigationController->SelectCell(m_vPickPos,&iSelectedCellNum);
 
-		Mode_Select_Cell_Menu();
+		Cell_Select_Menu();
 	}
 	else
 	{
 		//¼±ÅÃÇÑ Á¡ ÁÂÇ¥ ¶ç¿ì±â
-		Mode_Select_Point_Menu();
+		Cell_Select_Point_Menu();
 	}
 
 	ImGui::EndChild();
 	ImGui::EndGroup();
-
-	//ABC Á¡ ÁÂÇ¥ ¶ç¿ì±â
-	
 }
 
-void CController_MapTool::Mode_Create_Cell_Menu()
+void CController_MapTool::Cell_Create_Menu()
 {
 	ImGui::SeparatorText("Create Cell");
 
@@ -1032,7 +1029,7 @@ void CController_MapTool::Mode_Create_Cell_Menu()
 
 }
 
-void CController_MapTool::Mode_Select_Cell_Menu()
+void CController_MapTool::Cell_Select_Menu()
 {
 	ImGui::SeparatorText("Change Cell Inform");
 
@@ -1061,7 +1058,7 @@ void CController_MapTool::Mode_Select_Cell_Menu()
 	}
 }
 
-void CController_MapTool::Mode_Select_Point_Menu()
+void CController_MapTool::Cell_Select_Point_Menu()
 {
 	ImGui::SeparatorText("Change Vertex Pos");
 
@@ -1267,6 +1264,11 @@ void CController_MapTool::Light_Modify()
 	ImGui::DragFloat4("Specular", (_float*)&vSpecular, 0.05f, 0.f, 1.f);
 }
 
+void CController_MapTool::Decal_Create()
+{
+
+}
+
 void CController_MapTool::Light_Menu()
 {
 	ImGui::Text("Total Light Count : %d", m_pGameInstance->Get_Total_LightCount());
@@ -1441,6 +1443,7 @@ void CController_MapTool::Decal_Menu()
 	}
 #pragma endregion
 
+#pragma region SHOW IMAGES PREVIEW
 	static _bool bShowPreview = false;
 	ImGui::Checkbox("Image Preview", &bShowPreview);
 
@@ -1451,11 +1454,10 @@ void CController_MapTool::Decal_Menu()
 
 		int my_image_width = 0;
 		int my_image_height = 0;
-		static ID3D11ShaderResourceView* my_texture = NULL;
 
-		if (my_texture) {
-			my_texture->Release();
-			my_texture = NULL;
+		if (m_my_texture) {
+			Safe_Release(m_my_texture);
+			m_my_texture = NULL;
 		}
 
 		char szImageReadPath[128] = "";
@@ -1467,13 +1469,20 @@ void CController_MapTool::Decal_Menu()
 			strcat_s(szImageReadPath, "/");
 			strcat_s(szImageReadPath, m_Decal_File_Names[item_selected_Image_idx]);
 
-			bool ret = LoadTextureFromFile(szImageReadPath, &my_texture, &my_image_width, &my_image_height);
+			bool ret = LoadTextureFromFile(szImageReadPath, &m_my_texture, &my_image_width, &my_image_height);
 			IM_ASSERT(ret);
 
-			ImGui::Image((ImTextureID)(intptr_t)my_texture, ImVec2(my_image_width, my_image_height));
+			ImGui::Image((ImTextureID)(intptr_t)m_my_texture, ImVec2(my_image_width, my_image_height));
 		}
 
 		ImGui::End();
+	}
+
+#pragma endregion
+
+	if (ImGui::Button("Create_Decal"))
+	{
+		Decal_Create();
 	}
 }
 
@@ -1517,7 +1526,7 @@ _bool CController_MapTool::LoadTextureFromMemory(const void* data, size_t data_s
 	srvDesc.Texture2D.MipLevels = desc.MipLevels;
 	srvDesc.Texture2D.MostDetailedMip = 0;
 	m_pDevice->CreateShaderResourceView(pTexture, &srvDesc, out_srv);
-	pTexture->Release();
+	Safe_Release(pTexture);
 
 	*out_width = image_width;
 	*out_height = image_height;
@@ -1566,6 +1575,7 @@ void CController_MapTool::Free()
 	}
 	m_Decal_File_Names.clear();
 
+	Safe_Release(m_my_texture);
 	Safe_Release(m_pDevice);
 	Safe_Release(m_pContext);
 	Safe_Release(m_pNavigationController);

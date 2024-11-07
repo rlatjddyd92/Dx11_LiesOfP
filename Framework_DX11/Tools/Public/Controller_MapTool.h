@@ -27,6 +27,7 @@ public:
 	void Pick_Object();
 	void PickPos();
 	void Save_Load();
+
 private:
 	void Select_Map_Model();
 	void Show_List(_uint iFolder);
@@ -39,11 +40,12 @@ private:
 	void Nav_Menu();
 	void Light_Menu();
 	void Decal_Menu();
-	void Mode_Create_Cell_Menu();
-	void Mode_Select_Cell_Menu();
-	void Mode_Select_Point_Menu();
+	void Cell_Create_Menu();
+	void Cell_Select_Menu();
+	void Cell_Select_Point_Menu();
 	void Light_Create();
 	void Light_Modify();
+	void Decal_Create();
 
 	_bool LoadTextureFromMemory(const void* data, size_t data_size, ID3D11ShaderResourceView** out_srv, int* out_width, int* out_height);
 		_bool LoadTextureFromFile(const char* file_name, ID3D11ShaderResourceView** out_srv, int* out_width, int* out_height);
@@ -93,7 +95,7 @@ private:
 
 	GIZMODESC m_tGizmoDesc;
 
-
+	ID3D11ShaderResourceView* m_my_texture = NULL;
 
 public:
 	virtual void Free() override;
