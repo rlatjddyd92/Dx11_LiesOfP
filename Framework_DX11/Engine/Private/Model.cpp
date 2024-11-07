@@ -24,6 +24,7 @@ CModel::CModel(const CModel & Prototype)
 	, m_Animations { Prototype.m_Animations }
 	, m_CurrentTrackPosition { Prototype.m_CurrentTrackPosition }
 	, m_KeyFrameIndices {Prototype.m_KeyFrameIndices }
+	, m_FilePaths { Prototype.m_FilePaths }
 {
 	for (auto& pAnimation : m_Animations)
 		Safe_AddRef(pAnimation);
@@ -109,8 +110,13 @@ HRESULT CModel::Update_Boundary()
 	return S_OK;
 }
 
-HRESULT CModel::Initialize_Prototype(TYPE eType, const _char * pModelFilePath, _fmatrix PreTransformMatrix, vector<string>* pBinaryVector)
+HRESULT CModel::Initialize_Prototype(TYPE eType, const _char * pModelFilePath, _fmatrix PreTransformMatrix, FilePathStructStack* pStructStack)
 {
+	if (pStructStack != nullptr)
+	{
+		m_FilePaths = pStructStack;
+	}
+
 	_uint		iFlag = { 0 };	
 	
 	/* 이전 : 모든 메시가 다 원점을 기준으로 그렺니다. */
@@ -136,10 +142,7 @@ HRESULT CModel::Initialize_Prototype(TYPE eType, const _char * pModelFilePath, _
 
 	if (FAILED(Ready_Meshes(&hFile)))
 		return E_FAIL;
-	if (pBinaryVector != nullptr)
-	{
-		m_FilePaths = pBinaryVector;
-	}
+
 	if (FAILED(Ready_Materials(&hFile, pModelFilePath)))
 		return E_FAIL;
 
@@ -504,9 +507,31 @@ HRESULT CModel::Create_BinaryFile(const _char* ModelTag)
 	}
 
 	if (FAILED(Create_Bin_Bones(&hFile)))
+	{
+		CloseHandle(hFile);
 		return E_FAIL;
+	}
 
+	if (FAILED(Create_Bin_Meshes(&hFile)))
+	{
+		CloseHandle(hFile);
+		return E_FAIL;
+	}
+		
 
+	if (FAILED(Create_Bin_Materials(&hFile)))
+	{
+		CloseHandle(hFile);
+		return E_FAIL;
+	}
+	
+	if (FAILED(Create_Bin_Animations(&hFile)))
+	{
+		CloseHandle(hFile);
+		return E_FAIL;
+	}
+
+	CloseHandle(hFile);
 	return S_OK;
 }
 
@@ -539,15 +564,17 @@ HRESULT CModel::Create_Bin_Meshes(HANDLE* pFile)
 	return S_OK;
 }
 
-HRESULT CModel::Create_Bin_Materials(HANDLE* pFile, const _char* ModelTag)
+HRESULT CModel::Create_Bin_Materials(HANDLE* pFile)
 {
 	_ulong dwByte = 0;
 	//머티리얼 갯수 저장
 	WriteFile(*pFile, &m_iNumMaterials, sizeof(_uint), &dwByte, nullptr);
 
-	_int iTextureNum{};
+	_int iMaterialNum{};
 	for (auto & pMaterialSet : m_Materials)
 	{//머티리얼 저장 수 가 최대 수만큼 반복
+
+		_int iTextureNum{};
 		for (_int i = 0; i < TEXTURE_TYPE_MAX; ++i)
 		{
 			pMaterialSet.pMaterialTextures;
@@ -563,21 +590,19 @@ HRESULT CModel::Create_Bin_Materials(HANDLE* pFile, const _char* ModelTag)
 
 			if (isHaveTexture)
 			{//텍스쳐가 있을 경우에만 저장
-				if (iTextureNum >= (*m_FilePaths).size())
-				{
-					return E_FAIL;
-				}
-				WriteFile(*pFile, (*m_FilePaths)[iTextureNum].c_str(), MAX_PATH, &dwByte, nullptr);
+
+
+				WriteFile(*pFile, m_FilePaths->pStruct[iMaterialNum].m_ModelFilePaths[iTextureNum].c_str(), MAX_PATH, &dwByte, nullptr);
 				++iTextureNum;
 			}
-			
 		}
+		++iMaterialNum;
 	}
 
 	return S_OK;
 }
 
-HRESULT CModel::Create_Bin_Animations(HANDLE* pFile, const _char* ModelTag)
+HRESULT CModel::Create_Bin_Animations(HANDLE* pFile)
 {
 	_ulong dwByte = 0;
 	//애니메이션 수 저장
@@ -628,7 +653,10 @@ HRESULT CModel::Ready_Materials(HANDLE* pFile, const _char* pModelFilePath)
 
 	// 머터리얼의 개수 저장해두기
 	ReadFile(*pFile, &m_iNumMaterials, sizeof(_uint), &dwByte, nullptr);
-
+	if (m_FilePaths != nullptr)
+	{
+		m_FilePaths->pStruct.resize(m_iNumMaterials);
+	}
 	for (size_t i = 0; i < m_iNumMaterials; i++)
 	{
 		MESH_MATERIAL		MeshMaterial{};
@@ -650,7 +678,7 @@ HRESULT CModel::Ready_Materials(HANDLE* pFile, const _char* pModelFilePath)
 			{
 				string strTextureFilePath;
 				strTextureFilePath.assign(szTexturePath);
-				(*m_FilePaths).push_back(strTextureFilePath);
+				m_FilePaths->pStruct[i].m_ModelFilePaths.push_back(strTextureFilePath);
 			}
 			_tchar				szFinalPath[MAX_PATH] = TEXT("");
 
@@ -713,11 +741,11 @@ HRESULT CModel::Ready_Animations(HANDLE* pFile)
 }
 
 
-CModel * CModel::Create(ID3D11Device * pDevice, ID3D11DeviceContext * pContext, TYPE eType, const _char * pModelFilePath, _fmatrix PreTransformMatrix, vector<string>* pBinaryVector)
+CModel * CModel::Create(ID3D11Device * pDevice, ID3D11DeviceContext * pContext, TYPE eType, const _char * pModelFilePath, _fmatrix PreTransformMatrix, FilePathStructStack* pStructStack)
 {
 	CModel*		pInstance = new CModel(pDevice, pContext);
 
-	if (FAILED(pInstance->Initialize_Prototype(eType, pModelFilePath, PreTransformMatrix, pBinaryVector)))
+	if (FAILED(pInstance->Initialize_Prototype(eType, pModelFilePath, PreTransformMatrix, pStructStack)))
 	{
 		MSG_BOX(TEXT("Failed to Created : CModel"));
 		Safe_Release(pInstance);
@@ -773,10 +801,10 @@ void CModel::Free()
 
 	if (m_FilePaths != nullptr)
 	{
-		for (auto& pPath : *m_FilePaths)
+		for (auto& pPathvec : m_FilePaths->pStruct)
 		{
-			pPath.erase();
+			pPathvec.m_ModelFilePaths.clear();
 		}
-		m_FilePaths->clear();
+		m_FilePaths->pStruct.clear();
 	}
 }

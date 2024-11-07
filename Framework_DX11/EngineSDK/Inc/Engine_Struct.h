@@ -53,6 +53,22 @@ namespace Engine
 
 	typedef struct
 	{
+		vector<string>			m_ModelFilePaths;
+	}FilePathStruct;
+
+	typedef struct
+	{
+		vector<FilePathStruct>		pStruct;
+	}FilePathStructStack;
+
+	typedef struct
+	{
+		vector<FilePathStructStack>		pLump;
+	}StructStacklump;
+
+
+	typedef struct
+	{
 		_uint	iNextAnimIndex;
 		_uint	iStartFrame;
 		_float	fChangeTime = 0.f;

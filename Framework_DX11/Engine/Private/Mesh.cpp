@@ -120,9 +120,28 @@ HRESULT CMesh::Create_BinaryFile(HANDLE* pFile)
 	//면 수 저장
 	WriteFile(*pFile, &m_iNumFaces, sizeof(_uint), &dwByte, nullptr);
 
-	for (_int i = 0; i < m_iNumIndices; ++i)
+	//정점 버퍼 저장
+	for (_int i = 0; i < m_iNumVertices; ++i)
+	{
+		WriteFile(*pFile, &m_pVertices[i], sizeof(VTXANIMMESH), &dwByte, nullptr);
+	}
+
+	//영향받는 뼈 갯수 저장
+	WriteFile(*pFile, &m_iNumBones, sizeof(_uint), &dwByte, nullptr);
+
+	for (size_t i = 0; i < m_iNumBones; i++)
+	{//오프셋 매트릭스 저장
+		WriteFile(*pFile, &m_OffsetMatrices[i], sizeof(_float4x4), &dwByte, nullptr);
+
+		WriteFile(*pFile, &m_BoneNaems[i], MAX_PATH, &dwByte, nullptr);
+
+		WriteFile(*pFile, &m_BoneIndices[i], sizeof(_int), &dwByte, nullptr);
+
+	}
+
+	for (_int j = 0; j < m_iNumIndices; ++j)
 	{//인덱스 버퍼 저장
-		WriteFile(*pFile, &m_pIndices[i], sizeof(_uint), &dwByte, nullptr);
+		WriteFile(*pFile, &m_pIndices[j], sizeof(_uint), &dwByte, nullptr);
 	}
 	
 
@@ -282,4 +301,5 @@ void CMesh::Free()
 	Safe_Delete_Array(m_pVertices);
 	Safe_Delete_Array(m_pAnimVertices);
 	Safe_Delete_Array(m_pIndices);
+	Safe_Delete_Array(m_pWeightsCnts);
 }

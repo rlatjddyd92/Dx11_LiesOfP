@@ -23,6 +23,9 @@ public:
 	HRESULT Initialize(ID3D11Device* pDevice, ID3D11DeviceContext* pContext);
 
 public:
+	void				SetUp_Lump(_int iNumAnimModel) { pLumpModelpaths.pLump.resize(iNumAnimModel); };
+	FilePathStructStack* Get_StructStack(_int iModelCnt) { return &pLumpModelpaths.pLump[iModelCnt]; }
+
 	void	SetUp_AnimTool();
 
 	void	ListUp_Anim();
@@ -51,6 +54,9 @@ private:
 
 	vector<const _char*>			m_ModelNames;
 	map<string, CModel*>	m_Models;
+	 
+private:
+	StructStacklump			pLumpModelpaths;
 
 private:
 

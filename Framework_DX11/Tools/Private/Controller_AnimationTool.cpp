@@ -18,8 +18,16 @@ CController_AnimationTool::CController_AnimationTool()
 
 HRESULT CController_AnimationTool::Initialize(ID3D11Device* pDevice, ID3D11DeviceContext* pContext)
 {
-	//애니메이션 툴 피규어(위치나 이런부분 물어보기)
+	//모델 종류, 갯수 등등 가져오기
 	
+	_int iNameNum = m_pGameInstance->Get_ModelPrototypes(LEVEL_TOOL).size();
+	m_ModelNames.reserve(iNameNum);
+	for (auto& Pair : m_pGameInstance->Get_ModelPrototypes(LEVEL_TOOL))
+	{
+		m_ModelNames.push_back(Pair.first);
+	}
+
+	//모델 생성 부분
 	CAnimModel::ANIMMODEL_DESC Desc{};
 	Desc.vPosition = { 0.f,0.f,0.f };
 	Desc.vScale = { 2.f,2.f,2.f };
@@ -31,12 +39,7 @@ HRESULT CController_AnimationTool::Initialize(ID3D11Device* pDevice, ID3D11Devic
 
 	if (FAILED(m_pGameInstance->Add_CloneObject_ToLayer(LEVEL_TOOL, TEXT("Layer_AnimationTool_Test"), TEXT("Prototype_GameObject_Anim"), &Desc)))
 		return E_FAIL;
-
-	m_ModelNames.reserve(m_pGameInstance->Get_ModelPrototypes(LEVEL_TOOL).size());
-	for (auto& Pair : m_pGameInstance->Get_ModelPrototypes(LEVEL_TOOL))
-	{
-		m_ModelNames.push_back(Pair.first);
-	}
+	
 
 	//Prototype_GameObject_TargetBall
 	CTargetBall::TARGETBALL_DESC TB_Desc{};
@@ -166,7 +169,7 @@ void CController_AnimationTool::ListUp_Anim()
 				string strName(m_ModelNames[m_iSelected_Index_Model]);
 				_wstring szName;
 				szName.assign(strName.begin(), strName.end());
-
+				
 				CComponent* pComponent = m_pGameInstance->Clone_Component(LEVEL_TOOL, szName.c_str());
 				pOut = m_pGameInstance->Find_Object(LEVEL_TOOL, TEXT("Layer_AnimationTool_Test"), 0)->Change_Component(TEXT("Com_Model"), pComponent);
 			}

@@ -18,6 +18,7 @@
 #include "Texture_Effect.h"
 
 #include "Controller_EffectTool.h"
+#include "Controller_AnimationTool.h"
 
 #pragma comment(lib, "ole32.lib")	// 지우지 마세요
 
@@ -425,14 +426,16 @@ HRESULT CLoader::Ready_Resources_For_ToolLevel_Map0()
 
 	CModel* pModel = { nullptr };
 	PreTransformMatrix = XMMatrixScaling(0.01f, 0.01f, 0.01f) * XMMatrixRotationY(XMConvertToRadians(270.f));
-	vector<string>	BinaryVector_FilePath;
-	pModel = CModel::Create(m_pDevice, m_pContext, CModel::TYPE_ANIM, "../Bin/ModelData/Anim/PlayerExample/PlayerExample.dat", PreTransformMatrix, &BinaryVector_FilePath);
+	
+	CController_AnimationTool::Get_Instance()->SetUp_Lump(2);
+
+	pModel = CModel::Create(m_pDevice, m_pContext, CModel::TYPE_ANIM, "../Bin/ModelData/Anim/PlayerExample/PlayerExample.dat", PreTransformMatrix, CController_AnimationTool::Get_Instance()->Get_StructStack(0));
 	if (FAILED(m_pGameInstance->Add_Prototype(LEVEL_TOOL, TEXT("Prototype_AnimModel_Test"),
 		pModel)))
 		return E_FAIL;
 	m_pGameInstance->Add_ModelPrototype(LEVEL_TOOL, ("Prototype_AnimModel_Test"), pModel);
 
-	pModel = CModel::Create(m_pDevice, m_pContext, CModel::TYPE_ANIM, "../Bin/ModelData/Anim/Monster/CarcassTail/CarcassTail.dat", PreTransformMatrix, &BinaryVector_FilePath);
+	pModel = CModel::Create(m_pDevice, m_pContext, CModel::TYPE_ANIM, "../Bin/ModelData/Anim/Monster/CarcassTail/CarcassTail.dat", PreTransformMatrix, CController_AnimationTool::Get_Instance()->Get_StructStack(1));
 	if (FAILED(m_pGameInstance->Add_Prototype(LEVEL_TOOL, TEXT("Prototype_AnimModel_Test2"),
 		pModel)))
 		return E_FAIL;

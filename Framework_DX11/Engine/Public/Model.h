@@ -8,6 +8,12 @@ BEGIN(Engine)
 class ENGINE_DLL CModel final : public CComponent
 {
 public:
+	//typedef struct
+	//{
+	//	vector<string>* pMaterialNames;
+	//}MODELANIM_BINARY_DESC;
+
+public:
 	enum TYPE { TYPE_NONANIM, TYPE_ANIM, TYPE_END };
 private:
 	CModel(ID3D11Device* pDevice, ID3D11DeviceContext* pContext);
@@ -52,7 +58,7 @@ public:
 	HRESULT					Update_Boundary();
 
 public:
-	virtual HRESULT Initialize_Prototype(TYPE eType, const _char* pModelFilePath, _fmatrix PreTransformMatrix, vector<string>* pBinaryVector);
+	virtual HRESULT Initialize_Prototype(TYPE eType, const _char* pModelFilePath, _fmatrix PreTransformMatrix, FilePathStructStack* pStructStack);
 	virtual HRESULT Initialize(void* pArg) override;
 	virtual HRESULT Render(_uint iMeshIndex);
 
@@ -73,8 +79,8 @@ public:
 	HRESULT		Create_BinaryFile(const _char* ModelTag);
 	HRESULT		Create_Bin_Bones(HANDLE* pFile);
 	HRESULT		Create_Bin_Meshes(HANDLE* pFile);
-	HRESULT		Create_Bin_Materials(HANDLE* pFile, const _char* ModelTag);
-	HRESULT		Create_Bin_Animations(HANDLE* pFile, const _char* ModelTag);
+	HRESULT		Create_Bin_Materials(HANDLE* pFile);
+	HRESULT		Create_Bin_Animations(HANDLE* pFile);
 
 private:
 	TYPE							m_eType = { TYPE_END };
@@ -130,7 +136,7 @@ private:
 	vector<_uint>					m_UFBIndices;
 	vector<UFVTX>					m_UseFullVtxIndices;
 	//바이너리화 용도
-	vector<string>*					m_FilePaths = { nullptr };
+	FilePathStructStack*			m_FilePaths = { nullptr };
 
 public:
 	HRESULT	Ready_Meshes(HANDLE* pFile);
@@ -139,7 +145,7 @@ public:
 	HRESULT Ready_Animations(HANDLE* pFile);
 
 public:
-	static CModel* Create(ID3D11Device* pDevice, ID3D11DeviceContext* pContext, TYPE eType, const _char* pModelFilePath, _fmatrix PreTransformMatrix = XMMatrixIdentity(), vector<string>* pBinaryVector = nullptr);
+	static CModel* Create(ID3D11Device* pDevice, ID3D11DeviceContext* pContext, TYPE eType, const _char* pModelFilePath, _fmatrix PreTransformMatrix = XMMatrixIdentity(), FilePathStructStack* pStructStack = nullptr);
 	virtual CComponent* Clone(void* pArg) override;
 	virtual void Free() override;
 };

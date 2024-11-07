@@ -52,6 +52,8 @@ private:
 	VTXANIMMESH*		m_pAnimVertices = { nullptr };
 	_uint*				m_pIndices = { nullptr };
 
+	_int*				m_pWeightsCnts = { nullptr };
+
 private:
 	HRESULT	Ready_VertexBuffer_NonAnim(HANDLE* pFile, _fmatrix PreTransformMatrix);
 	HRESULT	Ready_VertexBuffer_Anim(HANDLE* pFile, const CModel* pModel);
