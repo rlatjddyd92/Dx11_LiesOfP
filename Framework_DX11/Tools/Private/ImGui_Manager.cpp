@@ -167,6 +167,16 @@ void CImGui_Manager::Tool_Effect()
 		{
 			m_pController_EffectTool->Delete_TE();
 		}
+
+		ImGui::SeparatorText("Effect Container");
+		if (ImGui::Button("Add Effect Conainer"))
+		{
+			m_pController_EffectTool->Add_EffectContainer();
+		}
+		if (ImGui::Button("Reset Effect Conainer"))
+		{
+			m_pController_EffectTool->Reset_EffectContainer();
+		}
 		ImGui::End();
 
 

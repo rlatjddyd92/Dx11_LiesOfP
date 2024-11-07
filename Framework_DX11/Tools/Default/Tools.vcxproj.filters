@@ -79,11 +79,17 @@
     <Filter Include="02.GameObjects\04.Effect">
       <UniqueIdentifier>{19a36b84-f8e3-470f-8dc4-1394625a3fe4}</UniqueIdentifier>
     </Filter>
-    <Filter Include="02.GameObjects\04.Effect\ParticleEffect">
+    <Filter Include="02.GameObjects\04.Effect\Effect_Base">
+      <UniqueIdentifier>{93d5226b-8220-4e9f-8682-3a049cbcdeea}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.GameObjects\04.Effect\Effect_Base\Particle_Effect">
       <UniqueIdentifier>{fac53200-c293-4b2f-b5db-aed31b94a02c}</UniqueIdentifier>
     </Filter>
-    <Filter Include="02.GameObjects\04.Effect\Texture_Effect">
+    <Filter Include="02.GameObjects\04.Effect\Effect_Base\Texture_Effect">
       <UniqueIdentifier>{e0193f26-6fda-4bf4-8fcd-c94aa5bd43d6}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.GameObjects\04.Effect\Effect_Container">
+      <UniqueIdentifier>{7351ac0c-a5b0-4e63-9704-404b9c8db257}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -178,7 +184,7 @@
       <Filter>01.Levels\Loading\ThreadPool</Filter>
     </ClInclude>
     <ClInclude Include="..\public\Particle_Effect.h">
-      <Filter>02.GameObjects\04.Effect\ParticleEffect</Filter>
+      <Filter>02.GameObjects\04.Effect\Effect_Base\Particle_Effect</Filter>
     </ClInclude>
     <ClInclude Include="..\Public\NavigationController.h">
       <Filter>90.ImGuiManager\Navigation</Filter>
@@ -205,10 +211,13 @@
       <Filter>02.GameObjects\05.UIRender</Filter>
     </ClInclude>
     <ClInclude Include="..\public\Texture_Effect.h">
-      <Filter>02.GameObjects\04.Effect\Texture_Effect</Filter>
+      <Filter>02.GameObjects\04.Effect\Effect_Base\Texture_Effect</Filter>
     </ClInclude>
     <ClInclude Include="..\public\Effect_Base.h">
-      <Filter>02.GameObjects\04.Effect</Filter>
+      <Filter>02.GameObjects\04.Effect\Effect_Base</Filter>
+    </ClInclude>
+    <ClInclude Include="..\public\Effect_Container.h">
+      <Filter>02.GameObjects\04.Effect\Effect_Container</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -296,7 +305,7 @@
       <Filter>01.Levels\Loading\ThreadPool</Filter>
     </ClCompile>
     <ClCompile Include="..\private\Particle_Effect.cpp">
-      <Filter>02.GameObjects\04.Effect\ParticleEffect</Filter>
+      <Filter>02.GameObjects\04.Effect\Effect_Base\Particle_Effect</Filter>
     </ClCompile>
     <ClCompile Include="..\Private\NavigationController.cpp">
       <Filter>90.ImGuiManager\Navigation</Filter>
@@ -320,10 +329,13 @@
       <Filter>02.GameObjects\05.UIRender</Filter>
     </ClCompile>
     <ClCompile Include="..\private\Texture_Effect.cpp">
-      <Filter>02.GameObjects\04.Effect\Texture_Effect</Filter>
+      <Filter>02.GameObjects\04.Effect\Effect_Base\Texture_Effect</Filter>
     </ClCompile>
     <ClCompile Include="..\private\Effect_Base.cpp">
-      <Filter>02.GameObjects\04.Effect</Filter>
+      <Filter>02.GameObjects\04.Effect\Effect_Base</Filter>
+    </ClCompile>
+    <ClCompile Include="..\private\Effect_Container.cpp">
+      <Filter>02.GameObjects\04.Effect\Effect_Container</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

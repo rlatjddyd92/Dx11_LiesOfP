@@ -39,6 +39,8 @@ HRESULT CParticle_Effect::Initialize(void* pArg)
 
     m_eEffectType = EFFECT_TYPE::TYPE_PARTICLE;
 
+    m_SaveDesc = *pDesc;
+
     return S_OK;
 }
 
@@ -52,14 +54,14 @@ void CParticle_Effect::Update(_float fTimeDelta)
     switch (m_DefaultDesc.eType)
     {
     case TYPE_SPREAD:
-        bOver = m_pVIBufferCom->Spread(m_DefaultDesc.iState, m_DefaultDesc.fRenderRatio, m_DefaultDesc.vPivot, m_DefaultDesc.fGravity, fTimeDelta,
+        bOver = m_pVIBufferCom->Spread(m_DefaultDesc.iState, m_pTransformCom->Get_WorldMatrix(), m_DefaultDesc.fRenderRatio, m_DefaultDesc.vPivot, m_DefaultDesc.fGravity, fTimeDelta,
             m_OrbitDesc.vOrbitAxis, XMConvertToRadians(m_OrbitDesc.fAngle),
             m_RandomDesc.fTimeInterval, m_RandomDesc.fRandomRatio,
             m_AccelDesc.fAccelLimit, m_AccelDesc.fAccelSpeed);
         break;
 
     case TYPE_MOVE:
-        bOver = m_pVIBufferCom->Move(m_DefaultDesc.iState, m_DefaultDesc.fRenderRatio, m_DefaultDesc.vMoveDir, m_DefaultDesc.fGravity, fTimeDelta, m_DefaultDesc.vPivot,
+        bOver = m_pVIBufferCom->Move(m_DefaultDesc.iState, m_pTransformCom->Get_WorldMatrix(), m_DefaultDesc.fRenderRatio, m_DefaultDesc.vMoveDir, m_DefaultDesc.fGravity, fTimeDelta, m_DefaultDesc.vPivot,
             m_OrbitDesc.vOrbitAxis, XMConvertToRadians(m_OrbitDesc.fAngle),
             m_RandomDesc.fTimeInterval, m_RandomDesc.fRandomRatio,
             m_AccelDesc.fAccelLimit, m_AccelDesc.fAccelSpeed);
@@ -94,8 +96,8 @@ void CParticle_Effect::Update(_float fTimeDelta)
         break;
     }
 
-    if (true == bOver)
-        m_isDead = true;
+    //if (true == bOver)
+    //    m_isDead = true;
 }
 
 void CParticle_Effect::Late_Update(_float fTimeDelta)
@@ -139,6 +141,20 @@ HRESULT CParticle_Effect::Render()
         return E_FAIL;
 
     return S_OK;
+}
+
+void CParticle_Effect::Reset()
+{
+    m_DefaultDesc = m_SaveDesc.DefaultDesc;
+    m_OrbitDesc = m_SaveDesc.OrbitDesc;
+    m_RandomDesc = m_SaveDesc.RandomDesc;
+    m_AccelDesc = m_SaveDesc.AccelDesc;
+    Set_Transform(m_SaveDesc.TransformDesc);
+
+    m_iShaderIndex = m_SaveDesc.iShaderIndex;
+    m_iRenderState = m_SaveDesc.iRenderState;
+
+    m_pVIBufferCom->Reset();
 }
 
 void CParticle_Effect::Set_Transform(TRANSFORM_DESC& Desc)
