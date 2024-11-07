@@ -470,7 +470,6 @@ void CController_MapTool::Show_List(_uint iFolder)
 		//_findnext : <io.h>에서 제공하며 다음 위치의 파일을 찾는 함수, 더이상 없다면 -1을 리턴
 		iResult = _findnext(handle, &fd);
 	}
-
 }
 
 void CController_MapTool::SaveMap()
@@ -489,92 +488,84 @@ void CController_MapTool::SaveMap()
 
 	//전체 레이어 수 저장
 	_uint iLayerCount = m_pGameInstance->Get_Object_Layer_Count(LEVEL_TOOL);
-	fout << iLayerCount - 1 << "\n"; //카메라 레이어 제외
-	////strUint = to_string(iLayerCount);
-	////fout.write(strUint.c_str(), sizeof(strUint));
-	////fout.write(strUint.c_str(), sizeof(strUint));
-	//iLayerCount -= 2;
-	//fout.write(reinterpret_cast<const char*>(&iLayerCount), sizeof(_uint));
+	iLayerCount -= 2;//카메라 레이어, 애니메이션 Tool용 모델 레이어 제외
+	fout << iLayerCount << "\n"; 
 
-	//_wstring sLayerTag = {};
-	//string strLayerTag = {};
-	//std::string::size_type strSize = {};
-	//_uint ObjectCount = 0;
-	//CGameObject* pGameObject = { nullptr };
-	//_float4x4 ObjectWorldMatrix = {};
-	//string strFloat = {};
-	//string strInt = {};
-	//_float3 vPos = {};
+	//strUint = to_string(iLayerCount);
+	//fout.write(strUint.c_str(), sizeof(strUint));
+	//fout.write(strUint.c_str(), sizeof(strUint));
+	
+	fout.write(reinterpret_cast<const char*>(&iLayerCount), sizeof(_uint));
 
-	//for (_uint i = 0; i < iLayerCount + 2; ++i)
-	//{
-	//	sLayerTag = m_pGameInstance->Get_LayerMap(LEVEL_GAMEPLAY, i);
+	_wstring sLayerTag = {};
+	string strLayerTag = {};
+	std::string::size_type strSize = {};
+	_uint ObjectCount = 0;
+	CGameObject* pGameObject = { nullptr };
+	_float4x4 ObjectWorldMatrix = {};
+	string strFloat = {};
+	string strInt = {};
+	_float3 vfloat3 = {};
 
-	//	if (sLayerTag == TEXT("Layer_Camera") || sLayerTag == TEXT("Layer_Link"))
-	//		continue;
+	for (_uint i = 0; i < iLayerCount + 2; ++i)
+	{
+		if (i < 2)
+			continue;
 
-	//	strLayerTag = std::string().assign(sLayerTag.begin(), sLayerTag.end());
-	//	strSize = strLayerTag.size();
-	//	fout.write(reinterpret_cast<const char*>(&strSize), sizeof(strSize)); //문자열 사이즈 저장
-	//	fout.write(strLayerTag.c_str(), strSize);	//문자열 저장
+		sLayerTag = m_pGameInstance->Get_LayerTag(LEVEL_TOOL, i);
 
-	//	ObjectCount = m_pGameInstance->Get_LayerSize(LEVEL_GAMEPLAY, sLayerTag);
-	//	fout.write(reinterpret_cast<const char*>(&ObjectCount), sizeof(_uint)); //오브젝트 개수 저장
+		//레이어 이름 저장
+		strLayerTag = std::string().assign(sLayerTag.begin(), sLayerTag.end());
+		strSize = strLayerTag.size();
+		fout.write(reinterpret_cast<const char*>(&strSize), sizeof(strSize)); //문자열 사이즈 저장
+		fout.write(strLayerTag.c_str(), strSize);	//문자열 저장
 
-	//	//if (sLayerTag == TEXT("Layer_BackGround"))
-	//	//{
-	//	//	fout.write(reinterpret_cast<const char*>(&m_iFloorSizeX), sizeof(_int));	// Terrain사이즈 저장
-	//	//	fout.write(reinterpret_cast<const char*>(&m_iFloorSizeZ), sizeof(_int));
-	//	//}
+		ObjectCount = m_pGameInstance->Get_Layer_ObjectCount(LEVEL_TOOL, sLayerTag);
+		fout.write(reinterpret_cast<const char*>(&ObjectCount), sizeof(_uint)); //오브젝트 개수 저장
 
-	//	for (_uint i = 0; i < ObjectCount; ++i)
-	//	{
-	//		pGameObject = m_pGameInstance->Find_Object(LEVEL_GAMEPLAY, sLayerTag, i);
+		//// Terrain사이즈 저장
+		//if (sLayerTag == TEXT("Layer_BackGround"))
+		//{
+		//	fout.write(reinterpret_cast<const char*>(&m_iFloorSizeX), sizeof(_int));	
+		//	fout.write(reinterpret_cast<const char*>(&m_iFloorSizeZ), sizeof(_int));
+		//}
 
-	//		if (sLayerTag != TEXT("Layer_BackGround"))
-	//		{
-	//			int iObjectType = pGameObject->Get_ObjType();	//오브젝트 타입
-	//			int iListIndex = pGameObject->Get_ListIndex();	//리스트 번호
+		if(sLayerTag != TEXT("Layer_Light"))
+		{
+			for (_uint j = 0; j < ObjectCount; ++j)
+			{
+				pGameObject = m_pGameInstance->Find_Object(LEVEL_TOOL, sLayerTag, i);
 
-	//			fout.write(reinterpret_cast<const char*>(&iObjectType), sizeof(_int));
-	//			fout.write(reinterpret_cast<const char*>(&iListIndex), sizeof(_int));
-	//		}
+				OBJECT_DEFAULT_DESC pDesc = {};
+				wstring wstrModelTag = static_cast<CNonAnimModel*>(pGameObject)->Get_ModelTag();
+				wcscpy_s(pDesc.szModelTag, wstrModelTag.c_str());
+				XMStoreFloat3(&pDesc.vPosition, pGameObject->Get_Transform()->Get_State(CTransform::STATE_POSITION));
+				pDesc.vScale = pGameObject->Get_Transform()->Get_Scaled();
+				pDesc.vRotation = pGameObject->Get_Transform()->Get_CurrentRotation();
+				pDesc.isInstance = static_cast<CNonAnimModel*>(pGameObject)->Get_isInstance();
+				pDesc.iID = static_cast<CNonAnimModel*>(pGameObject)->Get_RenderTargetId();
 
-	//		//위치 저장
-	//		XMStoreFloat3(&vPos, pGameObject->Get_Transform()->Get_State(CTransform::STATE_POSITION));
-	//		fout.write(reinterpret_cast<const char*>(&vPos.x), sizeof(_float));
-	//		fout.write(reinterpret_cast<const char*>(&vPos.y), sizeof(_float));
-	//		fout.write(reinterpret_cast<const char*>(&vPos.z), sizeof(_float));
+				//현재 위치한 Cell 번호 저장
+				_int iCellnum = m_pNavigationController->Get_WhereCell(pDesc.vPosition);
+				pDesc.iCurrentCellNum = iCellnum;
 
-	//		//크기 저장
-	//		_float3 vScale = pGameObject->Get_Transform()->Get_Scaled();
-	//		fout.write(reinterpret_cast<const char*>(&vScale.x), sizeof(_float));
-	//		fout.write(reinterpret_cast<const char*>(&vScale.y), sizeof(_float));
-	//		fout.write(reinterpret_cast<const char*>(&vScale.z), sizeof(_float));
+				fout.write(reinterpret_cast<const char*>(&pDesc), sizeof(pDesc));
+			}
+		}
+		else
+		{
+			for (_uint j = 0; j < m_pGameInstance->Get_Total_LightCount(); ++j)
+			{
+				if (j == 0)
+					continue;
 
-	//		//회전 저장
-	//		_float3 vRot = pGameObject->Get_Rotation();
-	//		fout.write(reinterpret_cast<const char*>(&vRot.x), sizeof(_float));
-	//		fout.write(reinterpret_cast<const char*>(&vRot.y), sizeof(_float));
-	//		fout.write(reinterpret_cast<const char*>(&vRot.z), sizeof(_float));
+				LIGHT_DESC* pLightDesc = {};
+				pLightDesc = m_pGameInstance->Get_LightDesc(j);
 
-	//		//Cell 번호 저장
-	//		_int iCellnum = m_pNavigationController->Get_WhereCell(vPos);
-	//		fout.write(reinterpret_cast<const char*>(&iCellnum), sizeof(_int));
-
-	//		//Cell 방 번호 저장
-	//		if (iCellnum != -1)
-	//		{
-	//			_uint iCellRoomNum = m_pNavigationController->Get_RoomNum(iCellnum);
-	//			fout.write(reinterpret_cast<const char*>(&iCellRoomNum), sizeof(_uint));
-	//		}
-	//		else
-	//		{
-	//			_uint iCellRoomNum = 0;
-	//			fout.write(reinterpret_cast<const char*>(&iCellRoomNum), sizeof(_uint));
-	//		}
-	//	}
-	//}
+				fout.write(reinterpret_cast<const char*>(pLightDesc), sizeof(*pLightDesc));
+			}
+		}
+	}
 
 	fout.close();
 	MSG_BOX(TEXT("파일 쓰기를 성공"));
@@ -1098,7 +1089,7 @@ void CController_MapTool::Light_Create()
 		iLightType = Light_GodRay;
 	}
 
-	static _Vec4 vDirection = { 1.f,1.f,1.f,1.f };
+	static _Vec4 vDirection = { 1.f,1.f,1.f,0.f };
 	static _Vec4 vPosition = { 0.f,0.f,0.f,1.f };
 	static _float fRange = { 10.f };
 	static _Vec4 vDiffuse = { 1.f,1.f,1.f,1.f };
@@ -1110,7 +1101,7 @@ void CController_MapTool::Light_Create()
 	vPosition.z = m_vPickPos.z;
 
 	//방향, 위치, 범위
-	ImGui::DragFloat4("Direction", (_float*)&vDirection, 0.05f, -1.f, 1.f);
+	ImGui::DragFloat3("Direction", (_float*)&vDirection, 0.05f, -1.f, 1.f);
 	ImGui::DragFloat4("Position(X, Y, Z)", (_float*)&vPosition, 0.05f, -5000.f, 5000.f);
 	ImGui::DragFloat("Range", (_float*)&fRange, 0.05f, 0.f, 1000.f);
 
@@ -1137,7 +1128,7 @@ void CController_MapTool::Light_Create()
 
 	if (ImGui::Button("Create Light") || m_pGameInstance->Get_KeyState(C) == AWAY)
 	{
-		strLayerName = "Layer_InteractObject";
+		strLayerName = "Layer_Light";
 		wstrLayerName.assign(strLayerName.begin(), strLayerName.end());
 
 		CNonAnimModel::NONMODEL_DESC Desc{};
@@ -1180,7 +1171,7 @@ void CController_MapTool::Light_Modify()
 	
 	LIGHT_DESC* pDesc = {};
 	
-	static _Vec4 vDirection = { 1.f,1.f,1.f,1.f };
+	static _Vec4 vDirection = { 1.f,1.f,1.f,0.f };
 	static _Vec4 vPosition = { 0.f,0.f,0.f,1.f };
 	static _float fRange = { 10.f };
 	static _Vec4 vDiffuse = { 1.f,1.f,1.f,1.f };
@@ -1212,7 +1203,7 @@ void CController_MapTool::Light_Modify()
 	}
 
 	//방향, 위치, 범위
-	ImGui::DragFloat4("Direction", (_float*)&vDirection, 0.05f, -1.f, 1.f);
+	ImGui::DragFloat3("Direction", (_float*)&vDirection, 0.05f, -1.f, 1.f);
 	//ImGui::DragFloat4("Position(X, Y, Z)", (_float*)&vPosition, 0.05f, -5000.f, 5000.f);
 	ImGui::DragFloat("Range", (_float*)&fRange, 0.05f, 0.f, 1000.f);
 

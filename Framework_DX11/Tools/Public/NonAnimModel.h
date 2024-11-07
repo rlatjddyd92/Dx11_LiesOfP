@@ -21,7 +21,6 @@ public:
 		_float3		vPosition;
 		_float3		vScale;
 		_float3		vRotation;
-		_bool		isCollision = { true };
 		_bool		isLight = { false };
 		_bool		isInstance = { false };
 		_uint		iRenderGroupID = { true };
@@ -52,7 +51,9 @@ public:
 	void Set_RenderTargetId(int id) { m_iRenderGroupId = id; }
 	void Set_Selected(_bool bSelect) {m_bSelected = bSelect;}
 	_bool Get_isLight() { return m_isLight; }
-	
+	_bool Get_isInstance() { return m_isInstance; }
+	_tchar* Get_ModelTag() { return m_szModelTag; }
+
 public:
 	class CShader*	m_pShaderCom = { nullptr };
 	class CModel*	m_pModelCom = { nullptr };
@@ -67,6 +68,9 @@ private:
 	_int		m_iHashId;
 	_bool m_bSelected = { false };
 	_bool m_isLight = { false };
+	_bool m_isInstance = { false };
+
+	_tchar m_szModelTag[MAX_PATH];
 private:
 	HRESULT Ready_Components(NONMODEL_DESC* pNonAnimDesc);
 

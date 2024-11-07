@@ -37,7 +37,7 @@ HRESULT CNonAnimModel::Initialize(void* pArg)
 	m_pTransformCom->Set_State(CTransform::STATE_POSITION, XMLoadFloat3(&pDesc->vPosition));
 	m_iRenderGroupId = pDesc->iRenderGroupID;
 	m_isLight = pDesc->isLight;
-
+	m_isInstance = pDesc->isInstance;
 	memcpy(&m_tDesc, pDesc, sizeof(NONMODEL_DESC));
 
 	m_iStaticHashId++;
@@ -182,11 +182,10 @@ HRESULT CNonAnimModel::Ready_Components(NONMODEL_DESC* pNonAnimDesc)
 		TEXT("Com_Shader"), reinterpret_cast<CComponent**>(&m_pShaderCom))))
 		return E_FAIL;
 
-	_tchar szModelTag[MAX_PATH];
-	MultiByteToWideChar(CP_ACP, MB_PRECOMPOSED, pNonAnimDesc->szModelTag, MAX_PATH, szModelTag, MAX_PATH);
+	MultiByteToWideChar(CP_ACP, MB_PRECOMPOSED, pNonAnimDesc->szModelTag, MAX_PATH, m_szModelTag, MAX_PATH);
 
 	/* FOR.Com_Model */
-	if (FAILED(__super::Add_Component(LEVEL_TOOL, szModelTag,
+	if (FAILED(__super::Add_Component(LEVEL_TOOL, m_szModelTag,
 		TEXT("Com_Model"), reinterpret_cast<CComponent**>(&m_pModelCom))))
 		return E_FAIL;
 
