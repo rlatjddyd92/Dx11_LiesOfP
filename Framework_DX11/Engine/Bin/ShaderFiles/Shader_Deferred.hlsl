@@ -19,6 +19,7 @@ texture2D		g_NormalTexture;
 
 texture2D		g_PriorityTexture;
 texture2D		g_DiffuseTexture;
+texture2D		g_ARMTexture;
 vector			g_vMtrlAmbient = vector(1.f, 1.f, 1.f, 1.f);
 vector			g_vMtrlSpecular = vector(1.f, 1.f, 1.f, 1.f);
 texture2D		g_ShadeTexture;
@@ -31,6 +32,7 @@ texture2D		g_BlurXTexture;
 texture2D		g_BlurYTexture;
 
 texture2D		g_BloomTexture;
+texture2D		g_CascadeShadowTexture;
 
 
 
@@ -100,19 +102,27 @@ struct PS_OUT_LIGHT
 {
 	vector vShade : SV_TARGET0;
 	vector vSpecular : SV_TARGET1;
+    vector vCascadeShadow : SV_TARGET2;
 };
 
 PS_OUT_LIGHT PS_MAIN_LIGHT_DIRECTIONAL(PS_IN In)
 {
 	PS_OUT_LIGHT			Out = (PS_OUT_LIGHT)0;
 
+	//vector vARM = g_ARMTexture.Sample(LinearSampler, In.vTexcoord);
+    //float fAmbienOcc = vARM.r;
+    //float fRoughness = vARM.g;
+    //float fMetallic = vARM.b;
+	
 	vector		vDepthDesc = g_DepthTexture.Sample(PointSampler, In.vTexcoord);
 	float		fViewZ = vDepthDesc.y * 1000.f;
 
 	vector		vNormalDesc = g_NormalTexture.Sample(PointSampler, In.vTexcoord);
 	vector		vNormal = float4(vNormalDesc.xyz * 2.f - 1.f, 0.f);	
 
-	Out.vShade = g_vLightDiffuse * saturate(max(dot(normalize(g_vLightDir) * -1.f, vNormal), 0.f) + (g_vLightAmbient * g_vMtrlAmbient));
+	// 램버트 적용(하프램버트)
+    float fLambert = saturate(dot(normalize(g_vLightDir) * -1.f, vNormal) * 0.5f + 0.5f);
+    Out.vShade = g_vLightDiffuse * saturate(fLambert + (g_vLightAmbient * g_vMtrlAmbient));
 
 	vector		vReflect = reflect(normalize(g_vLightDir), normalize(vNormal));
 
