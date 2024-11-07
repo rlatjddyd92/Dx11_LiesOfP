@@ -70,8 +70,8 @@ void CCamera::Calculat_CascadeFrustum()
 	_float fTanHalfHFov = fTanHalfVFov * m_fAspect;
 
 	m_fCascadeFarPlanes[0] = m_fNear;
-	m_fCascadeFarPlanes[1] = 30.f;
-	m_fCascadeFarPlanes[2] = 55.f;
+	m_fCascadeFarPlanes[1] = 15.f;
+	m_fCascadeFarPlanes[2] = 30.f;
 	m_fCascadeFarPlanes[3] = 300.f;
 
 	for (_uint i = 0; i < 3; ++i)
@@ -117,12 +117,12 @@ void CCamera::Calculat_CascadeFrustum()
 		_Vec3 vMaxExtents = _Vec3(fRadius, fRadius, fRadius + 60.f);
 		_Vec3 vMinExtents = -vMaxExtents;
 
-		//// 움직였음?
+		// 움직였음?
 		_Vec3 vShadowCamPos = _Vec3(vCenterPos) + (vLightDir * vMinExtents.z);
-		if (fabs((vShadowCamPos - m_vPrevCenterPos[i]).Length()) < 5.f) 
-		{
-			return;
-		}
+		//if (fabs((vShadowCamPos - m_vPrevCenterPos[i]).Length()) < 5.f) 
+		//{
+		//	return;
+		//}
 		m_vPrevCenterPos[i] = vShadowCamPos;
 
 		// 위치, look, up

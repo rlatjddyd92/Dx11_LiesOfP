@@ -131,6 +131,8 @@ HRESULT CRenderer::Initialize()
 		return E_FAIL;
 	if (FAILED(m_pGameInstance->Add_MRT(TEXT("MRT_Lights"), TEXT("Target_Specular"))))
 		return E_FAIL;
+	if (FAILED(m_pGameInstance->Add_MRT(TEXT("MRT_Lights"), TEXT("Target_CascadeShadow"))))
+		return E_FAIL;
 
 	/* MRT_Height */
 	if (FAILED(m_pGameInstance->Add_MRT(TEXT("MRT_Height"), TEXT("Target_Height"))))
@@ -192,6 +194,9 @@ HRESULT CRenderer::Initialize()
 		return E_FAIL;
 #pragma endregion
 
+	// 캐스캐이드 오브젝트 그리기용도
+	if (FAILED(m_pGameInstance->Add_MRT(TEXT("MRT_Cascade"), TEXT("Target_Cascade"))))
+		return E_FAIL;
 
 	/* MRT_Final */
 	if (FAILED(m_pGameInstance->Add_MRT(TEXT("MRT_BackBuffer"), TEXT("Target_BackBuffer"))))
@@ -242,11 +247,11 @@ HRESULT CRenderer::Initialize()
 	//if (FAILED(m_pGameInstance->Ready_RT_Debug(TEXT("Target_Height"), ViewportDesc.Width - 150.f, 150.f, 300.f, 300.f)))
 	//	return E_FAIL;
 
-	if (FAILED(m_pGameInstance->Ready_RT_Debug(TEXT("Target_SSAO_BlurXY"), 100.f, 100.f, 200.f, 200.f)))
+	if (FAILED(m_pGameInstance->Ready_RT_Debug(TEXT("Target_Cascade"), 100.f, 100.f, 200.f, 200.f)))
 		return E_FAIL;
 	if (FAILED(m_pGameInstance->Ready_RT_Debug(TEXT("Target_HDR"), 100.f, 300.f, 200.f, 200.f)))
 		return E_FAIL;
-	if (FAILED(m_pGameInstance->Ready_RT_Debug(TEXT("Target_Bloom_UpSample1"), 100.f, 500.f, 200.f, 200.f)))
+	if (FAILED(m_pGameInstance->Ready_RT_Debug(TEXT("Target_CascadeShadow"), 100.f, 500.f, 200.f, 200.f)))
 		return E_FAIL;
 	// 
 	//if (FAILED(m_pGameInstance->Ready_RT_Debug(TEXT("Target_BackBuffer"), 600.f, 100.f, 200.f, 200.f)))
@@ -290,10 +295,12 @@ HRESULT CRenderer::Draw()
 		return E_FAIL;
 	if (FAILED(Render_NonBlend()))
 		return E_FAIL;
+	if (FAILED(Render_Cascade()))
+		return E_FAIL;
 	if (FAILED(Render_Lights()))
 		return E_FAIL;
-	if (FAILED(Render_ShadowObj()))
-		return E_FAIL;
+	//if (FAILED(Render_ShadowObj()))
+	//	return E_FAIL;
 
 	if (FAILED(Render_Deferred()))
 		return E_FAIL;
@@ -449,12 +456,19 @@ HRESULT CRenderer::Render_Lights()
 	if (FAILED(m_pShader->Bind_Matrix("g_ProjMatrixInv", &m_pGameInstance->Get_Transform_Inverse(CPipeLine::D3DTS_PROJ))))
 		return E_FAIL;
 
+	if (FAILED(m_pShader->Bind_Matrices("g_CascadeViewMatrix", m_pGameInstance->Get_CascadeViewMatirx(), 3)))
+		return E_FAIL;
+	if (FAILED(m_pShader->Bind_Matrices("g_CascadeProjMatrix", m_pGameInstance->Get_CascadeProjMatirx(), 3)))
+		return E_FAIL;
+
 	if (FAILED(m_pShader->Bind_RawValue("g_vCamPosition", &m_pGameInstance->Get_CamPosition_Vec4(), sizeof(_float4))))
 		return E_FAIL;
 	
 	if (FAILED(m_pGameInstance->Bind_RT_ShaderResource(m_pShader, TEXT("Target_Normal"), "g_NormalTexture")))
 		return E_FAIL;
 	if (FAILED(m_pGameInstance->Bind_RT_ShaderResource(m_pShader, TEXT("Target_Depth"), "g_DepthTexture")))
+		return E_FAIL;
+	if (FAILED(m_pGameInstance->Bind_RT_ShaderResource(m_pShader, TEXT("Target_Cascade"), "g_CascadeTextureArr")))
 		return E_FAIL;
 
 	m_pGameInstance->Render_Lights(m_pShader, m_pVIBuffer);
@@ -498,6 +512,8 @@ HRESULT CRenderer::Render_Deferred()
 		return E_FAIL;
 
 	if (FAILED(m_pGameInstance->Bind_RT_ShaderResource(m_pShader, TEXT("Target_Bloom_BlurXY2"), "g_BloomTexture")))
+		return E_FAIL;
+	if (FAILED(m_pGameInstance->Bind_RT_ShaderResource(m_pShader, TEXT("Target_CascadeShadow"), "g_CascadeShadowTexture")))
 		return E_FAIL;
 
 	m_pShader->Begin(3);
@@ -987,8 +1003,27 @@ HRESULT CRenderer::Render_Cascade()
 	if (FAILED(m_pGameInstance->Begin_MRT(TEXT("MRT_Cascade"), m_pCascadeDepthStencilViewArr)))
 		return E_FAIL;
 
+	for (auto& pGameObject : m_RenderObjects[RG_SHADOWOBJ])
+	{
+		if (nullptr != pGameObject)
+			pGameObject->Render_LightDepth();
+
+		Safe_Release(pGameObject);
+	}
+	m_RenderObjects[RG_SHADOWOBJ].clear();
+
 	if (FAILED(m_pGameInstance->End_MRT()))
 		return E_FAIL;
+
+	ZeroMemory(&ViewportDesc, sizeof(D3D11_VIEWPORT));
+	ViewportDesc.TopLeftX = 0;
+	ViewportDesc.TopLeftY = 0;
+	ViewportDesc.Width = (_float)1280.f;
+	ViewportDesc.Height = (_float)720.f;
+	ViewportDesc.MinDepth = 0.f;
+	ViewportDesc.MaxDepth = 1.f;
+
+	m_pContext->RSSetViewports(1, &ViewportDesc);
 
 	return S_OK;
 }
@@ -1188,7 +1223,7 @@ HRESULT CRenderer::Render_Debug()
 		return E_FAIL;
 	
 	m_pGameInstance->Render_MRT_Debug(TEXT("MRT_GameObjects"), m_pShader, m_pVIBuffer);
-	//m_pGameInstance->Render_MRT_Debug(TEXT("MRT_Lights"), m_pShader, m_pVIBuffer); 
+	m_pGameInstance->Render_MRT_Debug(TEXT("MRT_Lights"), m_pShader, m_pVIBuffer); 
 	//m_pGameInstance->Render_MRT_Debug(TEXT("MRT_Bloom_DownSample0"), m_pShader, m_pVIBuffer);
 	//m_pGameInstance->Render_MRT_Debug(TEXT("MRT_Bloom_BlurXY0"), m_pShader, m_pVIBuffer);
 	//m_pGameInstance->Render_MRT_Debug(TEXT("MRT_Bloom_BlurXY1"), m_pShader, m_pVIBuffer);
@@ -1198,7 +1233,7 @@ HRESULT CRenderer::Render_Debug()
 	m_pGameInstance->Render_MRT_Debug(TEXT("MRT_LDR"), m_pShader, m_pVIBuffer);
 	//m_pGameInstance->Render_MRT_Debug(TEXT("MRT_ShadowObj"), m_pShader, m_pVIBuffer);
 	m_pGameInstance->Render_MRT_Debug(TEXT("MRT_Bloom_UpSample1"), m_pShader, m_pVIBuffer);
-	m_pGameInstance->Render_MRT_Debug(TEXT("MRT_BackBuffer"), m_pShader, m_pVIBuffer);
+	m_pGameInstance->Render_MRT_Debug(TEXT("MRT_Cascade"), m_pShader, m_pVIBuffer);
 
 	return S_OK;
 }

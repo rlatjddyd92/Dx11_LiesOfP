@@ -7,6 +7,7 @@ matrix			g_StaticLightViewMatrix;
 texture2D		g_Texture;
 
 Texture2DArray	g_CascadeTextureArr;
+matrix			g_CascadeViewMatrix[3], g_CascadeProjMatrix[3];
 
 vector			g_vLightDir;
 vector			g_vLightPos;
@@ -34,10 +35,52 @@ texture2D		g_BlurYTexture;
 texture2D		g_BloomTexture;
 texture2D		g_CascadeShadowTexture;
 
-
-
 vector			g_vCamPosition;
 
+
+float ComputeShadow(float4 vPosition, int iCascadeIndex, float4 vNormalDesc)
+{
+	//    [unroll] 쓰면 빨리지나??
+	
+    // 변환 행렬 계산
+    float4 vLightProjPos = mul(vPosition, g_CascadeViewMatrix[iCascadeIndex]);
+    vLightProjPos = mul(vLightProjPos, g_CascadeProjMatrix[iCascadeIndex]);
+    vLightProjPos = vLightProjPos / vLightProjPos.w;
+    
+	// 투영된 위치를 텍스쳐 좌표로 변환
+    float2 vTextCoord;
+    vTextCoord.x = vLightProjPos.x * 0.5f + 0.5f;
+    vTextCoord.y = vLightProjPos.y * -0.5f + 0.5f;
+
+    // 그림자 떨림 방지 
+    float fNormalOffset = 0.0001f;
+    float fDot = saturate(dot(normalize(g_vLightDir.xyz) * -1.f, vNormalDesc.xyz));
+    float fBias = max((fNormalOffset * 5.0f) * (1.0f - (fDot * -1.0f)), fNormalOffset);
+    
+	// 이 사이에 있어야함
+    if (vLightProjPos.z > 1.f || vLightProjPos.z < 0.f)
+    {
+        return 1.f;
+    }
+    
+    float fShadowPower = 0.f;
+    for (int x = -1; x <= 1; ++x)
+    {
+        for (int y = -1; y <= 1; ++y)
+        {
+            vector vLightDepth = g_CascadeTextureArr.SampleCmpLevelZero(DepthComparisonSampler, float3(vTextCoord, iCascadeIndex), vLightProjPos.z, int2(x, y));
+            if (vLightProjPos.z - fBias > vLightDepth.x)
+            {
+                fShadowPower += 0.3f;
+            }
+            else
+            {
+                fShadowPower += 1.f;
+            }
+        }
+    }
+    return fShadowPower / 9.0f;
+}
 
 struct VS_IN
 {
@@ -121,6 +164,7 @@ PS_OUT_LIGHT PS_MAIN_LIGHT_DIRECTIONAL(PS_IN In)
 	vector		vNormal = float4(vNormalDesc.xyz * 2.f - 1.f, 0.f);	
 
 	// 램버트 적용(하프램버트)
+	// normalize(g_vLightDir.xyz) * -1.f 계산 최적화 -> 그냥 곱해서 넘겨주기
     float fLambert = saturate(dot(normalize(g_vLightDir) * -1.f, vNormal) * 0.5f + 0.5f);
     Out.vShade = g_vLightDiffuse * saturate(fLambert + (g_vLightAmbient * g_vMtrlAmbient));
 
@@ -147,7 +191,21 @@ PS_OUT_LIGHT PS_MAIN_LIGHT_DIRECTIONAL(PS_IN In)
 
 	Out.vSpecular = (g_vLightSpecular * g_vMtrlSpecular) * pow(max(dot(normalize(vReflect) * -1.f, normalize(vLook)), 0.f), 50.f);
 
-    //g_CascadeTextureArr.SampleCmpLevelZero();
+
+    float fShadowPower = 1.f;
+    if (fViewZ <= 15.f)
+    {
+        fShadowPower = ComputeShadow(vPosition, 0, vNormalDesc);
+    }
+    else if (fViewZ > 15.f && fViewZ <= 30.f)
+    {
+        fShadowPower = ComputeShadow(vPosition, 1, vNormalDesc);
+    }
+    else if (fViewZ > 30.f && fViewZ <= 300.f)
+    {
+        fShadowPower = ComputeShadow(vPosition, 2, vNormalDesc);
+    }
+    Out.vCascadeShadow = fShadowPower;
 	
 	return Out;
 }
@@ -208,61 +266,55 @@ PS_OUT PS_MAIN_DEFERRED(PS_IN In)
 	vector		vShade = g_ShadeTexture.Sample(LinearSampler, In.vTexcoord);
 	vector		vSpecular = g_SpecularTexture.Sample(LinearSampler, In.vTexcoord);
 	
-	Out.vColor = vDiffuse * vShade + vSpecular;
+    Out.vColor = (vDiffuse * vShade + vSpecular) * g_CascadeShadowTexture.Sample(LinearSampler, In.vTexcoord);
 
-	vector		vDepthDesc = g_DepthTexture.Sample(PointSampler, In.vTexcoord);
-	float		fViewZ = vDepthDesc.y * 1000.f;
+	//vector		vDepthDesc = g_DepthTexture.Sample(PointSampler, In.vTexcoord);
+	//float		fViewZ = vDepthDesc.y * 1000.f;
 
-	/* 1. 현재 그려내는 픽셀을 광원기준의 위치로 변환하기위해서 우선 월드로 역치환하여 월드위치를 구한다. */
-	vector		vPosition = (vector)0;
+	///* 1. 현재 그려내는 픽셀을 광원기준의 위치로 변환하기위해서 우선 월드로 역치환하여 월드위치를 구한다. */
+	//vector		vPosition = (vector)0;
 
-	/* 투영공간상의 화면에 그려지는 픽셀의 위치를 구한다. */
-	/* 로컬위치 * 월드행렬 * 뷰행렬 * 투영행렬 / w */
-	vPosition.x = In.vTexcoord.x * 2.f - 1.f;
-	vPosition.y = In.vTexcoord.y * -2.f + 1.f;
-	vPosition.z = vDepthDesc.x;
-	vPosition.w = 1.f;
+	///* 투영공간상의 화면에 그려지는 픽셀의 위치를 구한다. */
+	///* 로컬위치 * 월드행렬 * 뷰행렬 * 투영행렬 / w */
+	//vPosition.x = In.vTexcoord.x * 2.f - 1.f;
+	//vPosition.y = In.vTexcoord.y * -2.f + 1.f;
+	//vPosition.z = vDepthDesc.x;
+	//vPosition.w = 1.f;
 
-	/* 뷰스페이스 상의 화면에 그려지는 픽셀의 위치를 구한다.*/
-	/* 로컬위치 * 월드행렬 * 뷰행렬  */
-	vPosition = vPosition * fViewZ;
-	vPosition = mul(vPosition, g_ProjMatrixInv);
+	///* 뷰스페이스 상의 화면에 그려지는 픽셀의 위치를 구한다.*/
+	///* 로컬위치 * 월드행렬 * 뷰행렬  */
+	//vPosition = vPosition * fViewZ;
+	//vPosition = mul(vPosition, g_ProjMatrixInv);
 
-	/* 월드 상의 화면에 그려지는 픽셀의 위치를 구한다.*/
-	vPosition = mul(vPosition, g_ViewMatrixInv);
+	///* 월드 상의 화면에 그려지는 픽셀의 위치를 구한다.*/
+	//vPosition = mul(vPosition, g_ViewMatrixInv);
 
-	/* 2. 월드상의 픽셀 위치에다가 광원기준으로 만들어진 뷰행렬을 곱하여 광원기준의 스페이스로 변환한다. */
-	vector		vOldPos = mul(vPosition, g_LightViewMatrix);
-	vOldPos = mul(vOldPos, g_LightProjMatrix);
+	///* 2. 월드상의 픽셀 위치에다가 광원기준으로 만들어진 뷰행렬을 곱하여 광원기준의 스페이스로 변환한다. */
+	//vector		vOldPos = mul(vPosition, g_LightViewMatrix);
+	//vOldPos = mul(vOldPos, g_LightProjMatrix);
 	
-	float		fLightDepth = vOldPos.w;
+	//float		fLightDepth = vOldPos.w;
 
-	float2		vTexcoord;
-	vTexcoord.x = (vOldPos.x / vOldPos.w) * 0.5f + 0.5f;
-	vTexcoord.y = (vOldPos.y / vOldPos.w) * -0.5f + 0.5f;	
+	//float2		vTexcoord;
+	//vTexcoord.x = (vOldPos.x / vOldPos.w) * 0.5f + 0.5f;
+	//vTexcoord.y = (vOldPos.y / vOldPos.w) * -0.5f + 0.5f;	
 
-	float		fOldLightDepth = g_LightDepthTexture.Sample(LinearSampler, vTexcoord).r * 1000.f;
+	//float		fOldLightDepth = g_LightDepthTexture.Sample(LinearSampler, vTexcoord).r * 1000.f;
 
-	if (fLightDepth - 0.1f > fOldLightDepth)
-		Out.vColor = vector(Out.vColor.rgb * 0.6f, Out.vColor.a);
+	//if (fLightDepth - 0.1f > fOldLightDepth)
+	//	Out.vColor = vector(Out.vColor.rgb * 0.6f, Out.vColor.a);
 
-	// 림라이트
-    float3 vRimLightColor = float3(0.7f, 0.f, 0.f);
+	//// 림라이트
+ //   float3 vRimLightColor = float3(0.7f, 0.f, 0.f);
 	
-    float3 vEyeToCamera = normalize(g_vCamPosition.xyz - vPosition.xyz);
-    vector vNormalDesc = g_NormalTexture.Sample(PointSampler, In.vTexcoord);
-    float3 vNormal = vNormalDesc.xyz * 2.f - 1.f;
+ //   float3 vEyeToCamera = normalize(g_vCamPosition.xyz - vPosition.xyz);
+ //   vector vNormalDesc = g_NormalTexture.Sample(PointSampler, In.vTexcoord);
+ //   float3 vNormal = vNormalDesc.xyz * 2.f - 1.f;
     //float fRim = 1.f - saturate(dot(vEyeToCamera, vNormal));
 
     //fRim = pow(fRim, 5.f);
     //vRimLightColor *= fRim;
     //Out.vColor.xyz = saturate(Out.vColor.xyz + vRimLightColor); // 0.5배로 줄임
-	
-	//// Bloom -> 더 나중으로 옮겨야함
- //   float4 vBloom = g_BloomTexture.Sample(LinearSampler, In.vTexcoord);
-
- //   Out.vColor.rgb += vBloom.rgb * vBloom.a;
- //   Out.vColor = pow(Out.vColor, 1.f / 2.2f);
 	
 	return Out;	
 }
