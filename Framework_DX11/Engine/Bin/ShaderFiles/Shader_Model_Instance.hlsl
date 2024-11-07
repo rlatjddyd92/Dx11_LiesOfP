@@ -69,10 +69,10 @@ VS_OUT_NORMAL VS_MAIN_NORMAL(VS_IN_MODEL_INSTANCE In)
     matWVP = mul(matWV, g_ProjMatrix);
 
     Out.vPosition = mul(vector(In.vPosition, 1.f), matWVP);
-    Out.vNormal = normalize(mul(vector(In.vNormal, 0.f), g_WorldMatrix)).xyz;
+    Out.vNormal = normalize(mul(vector(In.vNormal, 0.f), WorldMatrix)).xyz;
     Out.vTexcoord = In.vTexcoord;
     Out.vProjPos = Out.vPosition;
-    Out.vTangent = normalize(mul(vector(In.vTangent, 0.f), g_WorldMatrix)).xyz;
+    Out.vTangent = normalize(mul(vector(In.vTangent, 0.f), WorldMatrix)).xyz;
     Out.vBinormal = normalize(cross(Out.vNormal, Out.vTangent));
 
     return Out;

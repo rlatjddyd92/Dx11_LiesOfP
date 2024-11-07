@@ -63,7 +63,6 @@ struct PS_OUT_MODEL
     vector vNormal : SV_TARGET1;
     vector vDepth : SV_TARGET2;
     vector vARM : SV_TARGET3;
-    vector vPickDepth : SV_TARGET4;
 };
 
 struct PS_IN_NORMAL

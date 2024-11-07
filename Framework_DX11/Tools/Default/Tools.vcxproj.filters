@@ -94,6 +94,9 @@
     <Filter Include="02.GameObjects\04.Effect\Effect_Container">
       <UniqueIdentifier>{7351ac0c-a5b0-4e63-9704-404b9c8db257}</UniqueIdentifier>
     </Filter>
+    <Filter Include="02.GameObjects\07.Sky">
+      <UniqueIdentifier>{0fabafc1-98b0-40f7-9ef1-fc081ff1e880}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="framework.h">
@@ -225,6 +228,9 @@
     <ClInclude Include="..\Public\TargetBall.h">
       <Filter>02.GameObjects\06.TargetBall</Filter>
     </ClInclude>
+    <ClInclude Include="..\Public\Sky.h">
+      <Filter>02.GameObjects\07.Sky</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <Image Include="small.ico">
@@ -345,6 +351,9 @@
     </ClCompile>
     <ClCompile Include="..\Private\TargetBall.cpp">
       <Filter>02.GameObjects\06.TargetBall</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Private\Sky.cpp">
+      <Filter>02.GameObjects\07.Sky</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
