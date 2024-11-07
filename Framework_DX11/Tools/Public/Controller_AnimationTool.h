@@ -50,7 +50,7 @@ private:
 	VTXANIMMESH*			m_pCopyVtxAnimMeshes = { nullptr };
 
 	vector<const _char*>			m_ModelNames;
-	map<const _char*, CModel*>	m_Models;
+	map<string, CModel*>	m_Models;
 
 private:
 

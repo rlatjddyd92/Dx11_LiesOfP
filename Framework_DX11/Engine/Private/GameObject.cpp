@@ -89,7 +89,6 @@ CComponent* CGameObject::Change_Component(const _wstring& strComponentTag, CComp
 		m_Components.erase(strComponentTag);
 	}
 	m_Components.emplace(strComponentTag, pComponent);
-
 	Safe_AddRef(pComponent);
 
 	return pOut;

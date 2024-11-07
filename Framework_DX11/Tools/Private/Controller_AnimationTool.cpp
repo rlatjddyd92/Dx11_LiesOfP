@@ -105,6 +105,8 @@ void CController_AnimationTool::SetUp_AnimTool()
 
 void CController_AnimationTool::ListUp_Anim()
 {
+
+	m_iCurSelected_Index_Model = m_iSelected_Index_Model;
 	ImGui::PushItemWidth(200); // 크기조정
 	if (ImGui::BeginListBox("Model List"))
 	{
@@ -136,28 +138,33 @@ void CController_AnimationTool::ListUp_Anim()
 	{
 		if (m_pCopyModelCom != nullptr)
 		{
-			auto	iter = m_Models.find(m_ModelNames[m_iSelected_Index_Model]);
+			CComponent* pOut = nullptr;
+
+			auto	iter = m_Models.find(string(m_ModelNames[m_iSelected_Index_Model]));
+			
 			if (iter == m_Models.end())
 			{
 				string strName(m_ModelNames[m_iSelected_Index_Model]);
 				_wstring szName;
 				szName.assign(strName.begin(), strName.end());
 
-				CComponent* pOut = nullptr;
 				CComponent* pComponent = m_pGameInstance->Clone_Component(LEVEL_TOOL, szName.c_str());
 				pOut = m_pGameInstance->Find_Object(LEVEL_TOOL, TEXT("Layer_AnimationTool_Test"), 0)->Change_Component(TEXT("Com_Model"), pComponent);
-				
-				m_Models.emplace(m_szCurrentModelText, dynamic_cast<CModel*>(pOut));
-				strcpy_s(m_szCurrentModelText, m_ModelNames[m_iSelected_Index_Model]);
 			}
 			else
 			{
-				CComponent* pOut = nullptr;
 				pOut = m_pGameInstance->Find_Object(LEVEL_TOOL, TEXT("Layer_AnimationTool_Test"), 0)->Change_Component(TEXT("Com_Model"), iter->second);
 				
-				m_Models.emplace(m_szCurrentModelText, dynamic_cast<CModel*>(pOut));
-				strcpy_s(m_szCurrentModelText, m_ModelNames[m_iSelected_Index_Model]);
 			}
+			string strCurModelText(m_szCurrentModelText);
+			iter = m_Models.find(strCurModelText);
+			if (iter == m_Models.end())
+			{
+				m_Models.emplace(strCurModelText, dynamic_cast<CModel*>(pOut));
+			}
+
+			strcpy_s(m_szCurrentModelText, m_ModelNames[m_iSelected_Index_Model]);
+
 
 			m_iCurSelected_Index_Anim = 0;
 			m_iCurSelected_Index_Anim_Boundary = 0;
