@@ -85,6 +85,8 @@ public:
 		_float2 fSize = { 0.f,0.f };
 		_float2 fPosition = { 0.f,0.f };
 
+		_int iGroupIndex = 0;
+
 		// 현재 위치
 		_float2 fAdjust = { 0.f,0.f }; // <- 중심점(Page의 포지션)에서 어디로 얼마나 떨어져 있는지
 
@@ -114,7 +116,6 @@ public:
 	typedef struct UIPAGE_INFO
 	{
 		_char* strUIPage_Name = {};
-		_int iPage_Index = -1;
 		_int iNowSelectPart = 0;
 		_float2 fPosition = { g_iWinSizeX * 0.5f,g_iWinSizeY*0.5f }; // 페이지의 포지션
 		vector<UPART*> vecPart;
@@ -162,6 +163,9 @@ private:
 
 private:
 	HRESULT InitializeResource();
+	HRESULT SavePage();
+	HRESULT LoadPage();
+
 	HRESULT SavePart();
 	HRESULT LoadPart();
 	HRESULT InitializeComponent();
@@ -181,7 +185,7 @@ private:
 	_int m_iTextureNum = 0;
 	_int m_iPageNum = 100;
 
-	_char* m_ArrPageName[100];
+	_char* m_ArrPageName[_int(UIPAGE::PAGE_END)];
 
 	_char m_InputPageName[100] = "";
 
@@ -200,7 +204,8 @@ private:
 	_char* m_szPositionType[3] = { "Static", "Move", "Bar" };
 	_char* m_szBarDirec[2] = { "Y", "X" };
 	
-
+	vector<_wstring> m_DataTag_Page;
+	vector<_wstring> m_DataTag_Part;
 
 public:
 	virtual void Free() override;

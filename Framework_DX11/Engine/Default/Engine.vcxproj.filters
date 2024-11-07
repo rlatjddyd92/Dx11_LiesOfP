@@ -381,7 +381,7 @@
     <ClCompile Include="..\Private\Pawn.cpp">
       <Filter>01.Utility\02.GameObjects\01.Pawn</Filter>
     </ClCompile>
-    <ClCompile Include="..\Private\CSVFileManager.cpp">
+    <ClCompile Include="..\Private\CSVFile_Manager.cpp">
       <Filter>01.Utility\97.CSVFileManager</Filter>
     </ClCompile>
     <ClCompile Include="..\Private\Instance_Manager.cpp">
@@ -584,7 +584,7 @@
     <ClInclude Include="..\Public\Engine_Enum.h">
       <Filter>99.Defines</Filter>
     </ClInclude>
-    <ClInclude Include="..\Public\CSVFileManager.h">
+    <ClInclude Include="..\Public\CSVFile_Manager.h">
       <Filter>01.Utility\97.CSVFileManager</Filter>
     </ClInclude>
     <ClInclude Include="..\Public\Instance_Manager.h">

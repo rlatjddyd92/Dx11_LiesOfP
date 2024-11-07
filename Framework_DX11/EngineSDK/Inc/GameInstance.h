@@ -165,6 +165,21 @@ public:
 		_bool   RayCast_PhysX(_vector vRayPos, _vector vRayDir, _vector* vHitPos, _vector* vNormal, _float* fHitDistance);
 #pragma endregion
 
+		// 2024-11-06 김성용 추가 
+#pragma region CSVFileManager
+		HRESULT		FileOpenByRow(const _char* FilePath, _bool bIsRead);// bIsRead가 true면 읽기 false면 쓰기
+		_bool		LoadDataByRow(vector<_wstring>* vecDataBuffer);
+		_bool		SaveDataByRow(vector<_wstring>& vecDataBuffer);
+		void		FileClose();
+
+		HRESULT		LoadDataByFile(const _char* FilePath, vector<vector<_wstring>>* vecDataBuffer);
+		HRESULT		SaveDataByFile(const _char* FilePath, vector<vector<_wstring>>& vecDataBuffer);
+
+		_bool		IsFileRead();
+		_bool		IsFileWrite();
+
+#pragma endregion 
+
 private:
 	class CGraphic_Device*			m_pGraphic_Device = { nullptr };
 	class CInput_Device*			m_pInput_Device = { nullptr };
@@ -184,6 +199,9 @@ private:
 	class CCollider_Manager*		m_pCollider_Manager = { nullptr };
 	class CKey_Manager*				m_pKey_Manager = { nullptr };
 	class CPhysX_Manager*			m_pPhysX_Manager = { nullptr };
+
+	// 2024-11-06 김성용
+	class CCSVFile_Manager*			m_pCSVFile_Manager = { nullptr };
 
 public:	
 	void Release_Engine();
