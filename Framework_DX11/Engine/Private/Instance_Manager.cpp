@@ -120,9 +120,6 @@ void CInstance_Manager::Free()
 	__super::Free();
 
 
-	for (auto& Pair : m_pNonAnimModels)
-		Safe_Release(Pair.second);
-	m_pNonAnimModels.clear();
 
 	Safe_Release(m_pNonAnimInstanceShader);
 	Safe_Release(m_pGameInstance);

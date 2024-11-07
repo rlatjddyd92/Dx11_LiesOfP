@@ -160,7 +160,7 @@ HRESULT CModel::Initialize(void * pArg)
 	if (m_isInstance)
 	{
 		m_iInstanceStride = sizeof(VTXMODELINSTANCE);
-		m_iNumInstance = 10;
+		m_iNumInstance = 100;
 
 		ZeroMemory(&m_InstanceBufferDesc, sizeof m_InstanceBufferDesc);
 		m_InstanceBufferDesc.ByteWidth = m_iInstanceStride * m_iNumInstance;

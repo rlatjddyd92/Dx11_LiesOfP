@@ -170,8 +170,6 @@ HRESULT CGameInstance::Clear(_uint iLevelIndex)
 	/* 컴포넌트 원형들도 레벨별로 관리했었다. */
 	m_pComponent_Manager->Clear(iLevelIndex);
 
-	// 인스턴싱을 할 모델들을 모아둔 매니저 클리어하기
-	m_pInstance_Manager->Clear();
 
 	return S_OK;
 }
@@ -636,6 +634,10 @@ HRESULT CGameInstance::Draw_Instance(_uint iPass)
 {
 	return m_pInstance_Manager->Draw(iPass);
 }
+void CGameInstance::Clear_Instance()
+{
+	m_pInstance_Manager->Clear();
+}
 #pragma endregion
 
 void CGameInstance::Release_Engine()
@@ -653,11 +655,11 @@ void CGameInstance::Release_Engine()
 	Safe_Release(m_pLight_Manager);
 	Safe_Release(m_pPipeLine);
 	Safe_Release(m_pRenderer);
-	Safe_Release(m_pInstance_Manager);
 	Safe_Release(m_pTimer_Manager);
 	Safe_Release(m_pComponent_Manager);
 	Safe_Release(m_pObject_Manager);
 	Safe_Release(m_pLevel_Manager);
+	Safe_Release(m_pInstance_Manager);
 	Safe_Release(m_pInput_Device);
 	Safe_Release(m_pGraphic_Device);
 
