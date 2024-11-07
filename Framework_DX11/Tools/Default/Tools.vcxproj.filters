@@ -94,6 +94,9 @@
     <Filter Include="02.GameObjects\04.Effect\Effect_Container">
       <UniqueIdentifier>{7351ac0c-a5b0-4e63-9704-404b9c8db257}</UniqueIdentifier>
     </Filter>
+    <Filter Include="90.ImGuiManager\Controller_MapTool\stb">
+      <UniqueIdentifier>{74d744e6-20f1-4154-bdd3-4debecd7b3cb}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="framework.h">
@@ -224,6 +227,9 @@
     </ClInclude>
     <ClInclude Include="..\Public\TargetBall.h">
       <Filter>02.GameObjects\06.TargetBall</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Public\stb_image.h">
+      <Filter>90.ImGuiManager\Controller_MapTool\stb</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

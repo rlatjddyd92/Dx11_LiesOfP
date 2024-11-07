@@ -3,6 +3,8 @@
 //#include "ImGuizmo.h"
 #include <io.h>
 #include<fstream>
+#define STB_IMAGE_IMPLEMENTATION
+#include "stb_image.h"
 
 #include "Controller_MapTool.h"
 #include "GameInstance.h"
@@ -723,7 +725,7 @@ void CController_MapTool::LoadNav()
 
 	_float3 vPos = {};
 
-	for (int i = 0; i < iCellCout; ++i)
+	for (_uint i = 0; i < iCellCout; ++i)
 	{
 		_uint iCellAreaNum = { };
 		fin.read(reinterpret_cast<char*>(&iCellAreaNum), sizeof(iCellAreaNum));
@@ -1261,10 +1263,10 @@ void CController_MapTool::Decal_Menu()
 {
 #pragma region SHOW FOLDER LIST
 	//내용물 초기화 (capacity는 그냥 냅둠)
-	for (auto& filename : m_FileNames) {
+	for (auto& filename : m_Decal_Folder_Names) {
 		Safe_Delete_Array(filename);
 	}
-	m_FileNames.clear();
+	m_Decal_Folder_Names.clear();
 
 	char szFolderFindPath[128] = "../Bin/Resources/Textures/Decal/*";    // 상대 경로 -> 모든 파일을 돌겠다
 	char szFolderPathReset[128] = "../Bin/Resources/Textures/Decal/";
@@ -1298,7 +1300,7 @@ void CController_MapTool::Decal_Menu()
 		iFolderCount++;
 
 		//_strup : 문자열 내용을 복사해 그 주소를 저장-> 주소에 따라 문자열이 바뀌는걸 막아 모두 동일해지는걸 막음
-		m_FileNames.push_back(_strdup(szFileName));
+		m_Decal_Folder_Names.push_back(_strdup(szFileName));
 
 		//_findnext : <io.h>에서 제공하며 다음 위치의 파일을 찾는 함수, 더이상 없다면 -1을 리턴
 		iResult = _findnext(handle, &fd);
@@ -1313,7 +1315,7 @@ void CController_MapTool::Decal_Menu()
 		for (int n = 0; n < iFolderCount; n++)
 		{
 			const bool is_selected = (item_selected_idx == n);
-			if (ImGui::Selectable(m_FileNames[n], is_selected))
+			if (ImGui::Selectable(m_Decal_Folder_Names[n], is_selected))
 				item_selected_idx = n;
 
 			if (item_highlight && ImGui::IsItemHovered())
@@ -1331,17 +1333,17 @@ void CController_MapTool::Decal_Menu()
 
 #pragma region SHOW IMAGES LIST
 	//내용물 초기화 (capacity는 그냥 냅둠)
-	for (auto& filename : m_FileNames2) {
+	for (auto& filename : m_Decal_File_Names) {
 		Safe_Delete_Array(filename);
 	}
-	m_FileNames2.clear();
+	m_Decal_File_Names.clear();
 
 	char szImageFindPath[128] = "../Bin/Resources/Textures/Decal/";    // 상대 경로 -> 모든 파일을 돌겠다
 	char szImagePathReset[128] = "../Bin/Resources/Textures/Decal/";
 	char szImagePath[128] = "../Bin/Resources/Textures/Decal/";
 
 	//폴더 리스트에서 선택한 인덱스로 파일 검색 경로 생성
-	strcat_s(szImageFindPath, m_FileNames[m_iListSelectNum]);
+	strcat_s(szImageFindPath, m_Decal_Folder_Names[m_iListSelectNum]);
 	strcat_s(szImageFindPath, "/*.*");
 
 	handle = _findfirst(szImageFindPath, &fd);
@@ -1362,7 +1364,7 @@ void CController_MapTool::Decal_Menu()
 		_char szExt[MAX_PATH] = "";
 		_splitpath_s(szImagePath, nullptr, 0, szDirName, MAX_PATH, szFileName, MAX_PATH, szExt, MAX_PATH);
 
-		if (!strcmp(szExt, ".") || !strcmp(szExt, "..") || strcmp(szExt, ".dds"))
+		if (!strcmp(szExt, ".") || !strcmp(szExt, "..") || strcmp(szExt, ".tga"))
 		{
 			iResult = _findnext(handle, &fd);
 			continue;
@@ -1371,7 +1373,7 @@ void CController_MapTool::Decal_Menu()
 		iImagesCount++;
 
 		//_strup : 문자열 내용을 복사해 그 주소를 저장-> 주소에 따라 문자열이 바뀌는걸 막아 모두 동일해지는걸 막음
-		m_FileNames2.push_back(_strdup(fd.name));
+		m_Decal_File_Names.push_back(_strdup(fd.name));
 
 		//_findnext : <io.h>에서 제공하며 다음 위치의 파일을 찾는 함수, 더이상 없다면 -1을 리턴
 		iResult = _findnext(handle, &fd);
@@ -1386,7 +1388,7 @@ void CController_MapTool::Decal_Menu()
 		for (int n = 0; n < iImagesCount; n++)
 		{
 			const bool is_selected = (item_selected_Image_idx == n);
-			if (ImGui::Selectable(m_FileNames2[n], is_selected))
+			if (ImGui::Selectable(m_Decal_File_Names[n], is_selected))
 				item_selected_Image_idx = n;
 
 			if (item_Image_highlight && ImGui::IsItemHovered())
@@ -1410,8 +1412,102 @@ void CController_MapTool::Decal_Menu()
 		ImGui::Begin("Preview", NULL, ImGuiWindowFlags_MenuBar | ImGuiWindowFlags_HorizontalScrollbar
 			| ImGuiWindowFlags_AlwaysVerticalScrollbar);
 
+		int my_image_width = 0;
+		int my_image_height = 0;
+		static ID3D11ShaderResourceView* my_texture = NULL;
+
+		if (my_texture) {
+			my_texture->Release();
+			my_texture = NULL;
+		}
+
+		char szImageReadPath[128] = "";
+
+		if (item_selected_Image_idx != -1)
+		{
+			strcpy_s(szImageReadPath, szImagePathReset);
+			strcat_s(szImageReadPath, m_Decal_Folder_Names[item_selected_idx]);
+			strcat_s(szImageReadPath, "/");
+			strcat_s(szImageReadPath, m_Decal_File_Names[item_selected_Image_idx]);
+
+			bool ret = LoadTextureFromFile(szImageReadPath, &my_texture, &my_image_width, &my_image_height);
+			IM_ASSERT(ret);
+
+			ImGui::Image((ImTextureID)(intptr_t)my_texture, ImVec2(my_image_width, my_image_height));
+		}
+
 		ImGui::End();
 	}
+}
+
+_bool CController_MapTool::LoadTextureFromMemory(const void* data, size_t data_size, ID3D11ShaderResourceView** out_srv, int* out_width, int* out_height)
+{
+	// Load from disk into a raw RGBA buffer
+	int image_width = 0;
+	int image_height = 0;
+	unsigned char* image_data = stbi_load_from_memory((const unsigned char*)data, (int)data_size, &image_width, &image_height, NULL, 4);
+	if (image_data == NULL)
+		return false;
+
+	// Create texture
+	D3D11_TEXTURE2D_DESC desc;
+	ZeroMemory(&desc, sizeof(desc));
+	desc.Width = image_width;
+	desc.Height = image_height;
+	desc.MipLevels = 1;
+	desc.ArraySize = 1;
+	desc.Format = DXGI_FORMAT_R8G8B8A8_UNORM;
+	desc.SampleDesc.Count = 1;
+	desc.Usage = D3D11_USAGE_DEFAULT;
+	desc.BindFlags = D3D11_BIND_SHADER_RESOURCE;
+	desc.CPUAccessFlags = 0;
+
+	ID3D11Texture2D* pTexture = NULL;
+	D3D11_SUBRESOURCE_DATA subResource;
+	subResource.pSysMem = image_data;
+	subResource.SysMemPitch = desc.Width * 4;
+	subResource.SysMemSlicePitch = 0;
+	m_pDevice->CreateTexture2D(&desc, &subResource, &pTexture);
+
+	// Create texture view
+	if (pTexture == nullptr)
+		return false;
+
+	D3D11_SHADER_RESOURCE_VIEW_DESC srvDesc;
+	ZeroMemory(&srvDesc, sizeof(srvDesc));
+	srvDesc.Format = DXGI_FORMAT_R8G8B8A8_UNORM;
+	srvDesc.ViewDimension = D3D11_SRV_DIMENSION_TEXTURE2D;
+	srvDesc.Texture2D.MipLevels = desc.MipLevels;
+	srvDesc.Texture2D.MostDetailedMip = 0;
+	m_pDevice->CreateShaderResourceView(pTexture, &srvDesc, out_srv);
+	pTexture->Release();
+
+	*out_width = image_width;
+	*out_height = image_height;
+	stbi_image_free(image_data);
+
+	return true;
+}
+
+_bool CController_MapTool::LoadTextureFromFile(const char* file_name, ID3D11ShaderResourceView** out_srv, int* out_width, int* out_height)
+{
+	FILE* f;
+	fopen_s(&f, file_name, "rb");
+	if (f == NULL)
+		return false;
+	fseek(f, 0, SEEK_END);
+	size_t file_size = (size_t)ftell(f);
+	if (file_size == -1)
+		return false;
+	fseek(f, 0, SEEK_SET);
+	void* file_data = IM_ALLOC(file_size);
+	fread(file_data, 1, file_size, f);
+	bool ret = LoadTextureFromMemory(file_data, file_size, out_srv, out_width, out_height);
+	IM_FREE(file_data);
+
+	fclose(f);
+
+	return ret;
 }
 
 void CController_MapTool::Free()
@@ -1422,6 +1518,16 @@ void CController_MapTool::Free()
 		Safe_Delete_Array(filename);
 	}
 	m_FileNames.clear();
+	
+	for (auto& filename : m_Decal_Folder_Names) {
+		Safe_Delete_Array(filename);
+	}
+	m_Decal_Folder_Names.clear();
+	
+	for (auto& filename : m_Decal_File_Names) {
+		Safe_Delete_Array(filename);
+	}
+	m_Decal_File_Names.clear();
 
 	Safe_Release(m_pDevice);
 	Safe_Release(m_pContext);

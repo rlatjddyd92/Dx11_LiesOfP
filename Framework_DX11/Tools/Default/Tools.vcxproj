@@ -51,6 +51,7 @@
     <ClInclude Include="..\Public\NavigationController.h" />
     <ClInclude Include="..\Public\NonAnimModel.h" />
     <ClInclude Include="..\public\Particle_Effect.h" />
+    <ClInclude Include="..\Public\stb_image.h" />
     <ClInclude Include="..\Public\TargetBall.h" />
     <ClInclude Include="..\Public\Terrain.h" />
     <ClInclude Include="..\public\Texture_Effect.h" />

@@ -44,6 +44,9 @@ private:
 	void Mode_Select_Point_Menu();
 	void Light_Create();
 	void Light_Modify();
+
+	_bool LoadTextureFromMemory(const void* data, size_t data_size, ID3D11ShaderResourceView** out_srv, int* out_width, int* out_height);
+		_bool LoadTextureFromFile(const char* file_name, ID3D11ShaderResourceView** out_srv, int* out_width, int* out_height);
 private:
 	class CGameInstance* m_pGameInstance = { nullptr };
 	ID3D11Device* m_pDevice = { nullptr };
@@ -53,13 +56,15 @@ private:
 	class CNavigationController* m_pNavigationController = { nullptr };
 
 	vector<const char*>	m_FileNames;	//ListBox에 띄울 항목들 이름
-	vector<const char*>	m_FileNames2;	//ListBox에 띄울 항목들 이름
+	vector<const char*>	m_Decal_Folder_Names;	//ListBox에 띄울 항목들 이름
+	vector<const char*>	m_Decal_File_Names;	//ListBox에 띄울 항목들 이름
 
 	_int m_iListCount = { 0 };			//ListBox항목 개수
 	_int m_iListSelectNum = { 0 };		//ListBox항목중 선택한 인덱스
 	_int m_iPrePickedCellIndex = { -1 };	//피킹으로 고른 cell index	
 	_int m_iSelectedLightIndex = { -1 };	//피킹으로 고른 조명 index	
-	_int m_iPreSelectedLightIndex = { -1 };	//피킹으로 고른 조명 index	
+	_int m_iPreSelectedLightIndex = { -1 };	//피킹으로 이전 조명 index	
+	_int m_iPreSeletImage = { -1 };
 
 	_uint m_iPickObject_ID = { 0 };
 	_uint m_iPre_Picked_ID={ 0 };
