@@ -433,6 +433,16 @@ void CGameInstance::Set_CascadeProjMatirx(_Matrix* CascadeProjMatrices)
 	m_pPipeLine->Set_CascadeProjMatirx(CascadeProjMatrices);
 }
 
+const _Matrix* CGameInstance::Get_CascadeProjInverseMatirx() const
+{
+	return m_pPipeLine->Get_CascadeProjInverseMatirx();
+}
+
+void CGameInstance::Set_CascadeProjInverseMatirx(_Matrix* CascadeProjInverseMatrices)
+{
+	m_pPipeLine->Set_CascadeProjInverseMatirx(CascadeProjInverseMatrices);
+}
+
 #pragma endregion
 
 #pragma region LightManager
@@ -466,6 +476,11 @@ void CGameInstance::Delete_Light(_int iIndex)
 _int CGameInstance::Find_Light_Index(_Vec4 vPos)
 {
 	return m_pLight_Manager->Find_Light_Index(vPos);
+}
+
+_Vec3 CGameInstance::Get_DirectionLightDir()
+{
+	return m_pLight_Manager->Get_DirectionLightDir();
 }
 
 

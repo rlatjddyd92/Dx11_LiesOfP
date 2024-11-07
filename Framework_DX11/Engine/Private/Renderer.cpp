@@ -275,19 +275,6 @@ HRESULT CRenderer::Add_RenderObject(RENDERGROUP eRenderGroupID, CGameObject * pR
 	return S_OK;
 }
 
-HRESULT CRenderer::Add_InstanceRenderObject(RENDERGROUP eRenderGroupID, CGameObject* pRenderObject, const _wstring strModelName)
-{
-	if (nullptr == pRenderObject ||
-		eRenderGroupID >= RG_END)
-		return E_FAIL;
-
-	/* 실제 오브젝트 매니져에 추가된 객체의 주소를 여기에다가 공유했다. */
-	m_InstanceRenderObjects[eRenderGroupID].emplace_back(pRenderObject);
-	Safe_AddRef(pRenderObject);
-
-	return S_OK;
-}
-
 HRESULT CRenderer::Draw()
 {
 	if (FAILED(Render_Picking()))

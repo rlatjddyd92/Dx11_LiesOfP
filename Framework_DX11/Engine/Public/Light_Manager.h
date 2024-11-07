@@ -11,6 +11,9 @@ private:
 	virtual ~CLight_Manager() = default;
 
 public:
+	_Vec3 Get_DirectionLightDir() { return m_vDirectionLightDir; }
+
+public:
 	HRESULT Initialize();
 	HRESULT Add_Light(const LIGHT_DESC& LightDesc);
 	HRESULT Render(class CShader* pShader, class CVIBuffer_Rect* pVIBuffer); 
@@ -22,7 +25,12 @@ public:
 	_int Find_Light_Index(_Vec4 vPos);
 
 private:
-	vector<class CLight*>				m_Lights;
+	vector<class CLight*>	m_Lights;
+
+	_Vec3					m_vDirectionLightDir = {};
+
+private:
+	_int Find_DirectionLight();
 
 public:
 	static CLight_Manager* Create();

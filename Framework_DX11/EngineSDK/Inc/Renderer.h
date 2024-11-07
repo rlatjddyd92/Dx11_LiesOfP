@@ -22,7 +22,6 @@ public:
 public:
 	HRESULT Initialize();
 	HRESULT Add_RenderObject(RENDERGROUP eRenderGroupID, class CGameObject* pRenderObject);
-	HRESULT Add_InstanceRenderObject(RENDERGROUP eRenderGroupID, class CGameObject* pRenderObject, const _wstring strModelName);
 	HRESULT Draw();
 
 #ifdef _DEBUG

@@ -107,6 +107,9 @@ public:
 
 	const _Matrix* Get_CascadeProjMatirx() const;
 	void Set_CascadeProjMatirx(_Matrix* CascadeProjMatrices);
+
+	const _Matrix* Get_CascadeProjInverseMatirx() const;
+	void Set_CascadeProjInverseMatirx(_Matrix* CascadeProjInverseMatrices);
 #pragma endregion
 
 #pragma region LIGHT_MANAGER
@@ -116,6 +119,7 @@ public:
 	_int Get_Total_LightCount();
 	void Delete_Light(_int iIndex);
 	_int Find_Light_Index(_Vec4 vPos);
+	_Vec3 Get_DirectionLightDir();
 #pragma endregion
 
 #pragma region FONT_MANAGER

@@ -82,9 +82,15 @@ VS_OUT_NORMAL VS_MAIN_NORMAL(VS_IN_ANIMODEL In)
     return Out;
 }
 
-
-float4 VS_MAIN_CASCADE(VS_IN_ANIMODEL In) : POSITION
+struct GS_IN_CASCADE
 {
+    float4 vPosition : SV_POSITION;
+};
+
+GS_IN_CASCADE VS_MAIN_CASCADE(VS_IN_ANIMODEL In)
+{
+    GS_IN_CASCADE Out = (GS_IN_CASCADE) 0;
+    
     float fWeightW = 1.f - (In.vBlendWeights.x + In.vBlendWeights.y + In.vBlendWeights.z);
 
     matrix BoneMatrix = g_BoneMatrices[In.vBlendIndices.x] * In.vBlendWeights.x +
@@ -94,17 +100,11 @@ float4 VS_MAIN_CASCADE(VS_IN_ANIMODEL In) : POSITION
 		
     vector vPosition = mul(vector(In.vPosition, 1.f), BoneMatrix);
     
-   vPosition = mul(vPosition, g_WorldMatrix);
-    
-    return vPosition;
+    Out.vPosition = mul(vPosition, g_WorldMatrix);
+    return Out;
 }
 
-struct GS_IN_CASCADE
-{
-	/* SV_ : ShaderValue */
-	/* 내가 해야할 연산은 모두 마쳐놓은 것이므로 이후 dx가 추가적으로 해야할 이릉ㄹ 해라. */
-    float4 vPosition : POSITION;
-};
+
 
 struct GS_OUT_CASCADE
 {
@@ -113,7 +113,7 @@ struct GS_OUT_CASCADE
 };
 
 [maxvertexcount(9)]
-void GS_MAIN(point GS_IN_CASCADE In[3], inout TriangleStream<GS_OUT_CASCADE> Container)
+void GS_MAIN(triangle GS_IN_CASCADE In[3], inout TriangleStream<GS_OUT_CASCADE> Container)
 {
     GS_OUT_CASCADE Out[3];
     
@@ -122,13 +122,8 @@ void GS_MAIN(point GS_IN_CASCADE In[3], inout TriangleStream<GS_OUT_CASCADE> Con
     {
         for (uint j = 0; j < 3; ++j)
         {
-            matrix matVP;
-            
-            matVP = mul(g_ViewMatrix, g_ProjMatrix);
-            
             // 뷰상의 위치
             float4 vViewPos = mul(In[j].vPosition, g_CascadeViewMatrix[i]);
-            vViewPos.z += 2.5f; // offset으로 줘서 z겹침 문제 완화
             Out[j].vPosition = mul(vViewPos, g_CascadeProjMatrix[i]);
             Out[j].iRTVIndex = i;
             Container.Append(Out[j]);
@@ -197,9 +192,10 @@ struct PS_IN_CASCADE
     float4 vPosition : SV_POSITION;
     uint iRTVIndex : SV_RenderTargetArrayIndex; // 렌더타겟 배열 중에 어떤 것에 그릴거야?
 };
-float4 PS_MAIN_CASCADE(PS_IN_CASCADE In) : POSITION
+
+float4 PS_MAIN_CASCADE(PS_IN_CASCADE In) : SV_Target0
 {
-    return float4(In.vPosition.z / In.vPosition.w, 0.f, 0.f, 1.f);
+    return float4(In.vPosition.z, 0.f, 0.f, 1.f);
 }
 
 technique11 DefaultTechnique
@@ -235,5 +231,16 @@ technique11 DefaultTechnique
         VertexShader = compile vs_5_0 VS_MAIN_NORMAL();
         GeometryShader = NULL;
         PixelShader = compile ps_5_0 PS_MAIN_NORMAL();
+    }
+
+    pass Cascade
+    {
+        SetRasterizerState(RS_Default);
+        SetDepthStencilState(DSS_Default, 0);
+        SetBlendState(BS_Default, vector(0.f, 0.f, 0.f, 0.f), 0xffffffff);
+
+        VertexShader = compile vs_5_0 VS_MAIN_CASCADE();
+        GeometryShader = compile gs_5_0 GS_MAIN();
+        PixelShader = compile ps_5_0 PS_MAIN_CASCADE();
     }
 }

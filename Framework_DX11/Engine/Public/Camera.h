@@ -33,11 +33,18 @@ public:
 	virtual void Late_Update(_float fTimeDelta);
 	virtual HRESULT Render();
 
-private:
+protected:
 	_float				m_fFovy = {};
 	_float				m_fAspect = {};
 	_float				m_fNear = {};
 	_float				m_fFar = {};
+
+	// 캐스캐이드용
+	_float				m_fCascadeFarPlanes[4];
+	_Vec3				m_vPrevCenterPos[3];
+
+protected:
+	void Calculat_CascadeFrustum();
 
 public:
 	virtual CGameObject* Clone(void* pArg) = 0;

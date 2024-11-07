@@ -16,42 +16,24 @@ private:
 	virtual ~CPipeLine() = default;
 
 public:
-	void Set_Transform(D3DTRANSFORMSTATE eState, _fmatrix TransformMatrix) {
-		XMStoreFloat4x4(&m_TransformMatrices[eState], TransformMatrix);
-	}
+	void Set_Transform(D3DTRANSFORMSTATE eState, _fmatrix TransformMatrix) { XMStoreFloat4x4(&m_TransformMatrices[eState], TransformMatrix); }
 
 public:
-	const _Matrix& Get_Transform(D3DTRANSFORMSTATE eState) const {
-		return m_TransformMatrices[eState];
-	}
-	const _Matrix& Get_Transform_Inverse(D3DTRANSFORMSTATE eState) const {
-		return m_TransformInverseMatrices[eState];
-	}
+	const _Matrix& Get_Transform(D3DTRANSFORMSTATE eState) const { return m_TransformMatrices[eState]; }
+	const _Matrix& Get_Transform_Inverse(D3DTRANSFORMSTATE eState) const { return m_TransformInverseMatrices[eState]; }
 
-	const _Vec4& Get_CamPosition_Vec4() const {
-		return m_vCamPosition; }
-	const _Vec3& Get_CamPosition_Vec3() const {
-		return _Vec3(m_vCamPosition);
-	}
+	const _Vec4& Get_CamPosition_Vec4() const { return m_vCamPosition; }
+	const _Vec3& Get_CamPosition_Vec3() const { return _Vec3(m_vCamPosition); }
 
 
-	const _Matrix* Get_CascadeViewMatirx() const {
-		return m_CascadeViewMatrices;
-	}
-	void Set_CascadeViewMatirx(_Matrix* CascadeViewMatrices) {
-		for (int i = 0; i < 3; ++i) {
-			m_CascadeViewMatrices[i] = CascadeViewMatrices[i];
-		}
-	}
+	const _Matrix* Get_CascadeViewMatirx() const { return m_CascadeViewMatrices; }
+	void Set_CascadeViewMatirx(_Matrix* CascadeViewMatrices) { memcpy(m_CascadeViewMatrices, CascadeViewMatrices, sizeof(_Matrix) * 3); }
 
-	const _Matrix* Get_CascadeProjMatirx() const {
-		return m_CascadeProjMatrices;
-	}
-	void Set_CascadeProjMatirx(_Matrix* CascadeProjMatrices) {
-		for (int i = 0; i < 3; ++i) {
-			m_CascadeProjMatrices[i] = CascadeProjMatrices[i];
-		}
-	}
+	const _Matrix* Get_CascadeProjMatirx() const { return m_CascadeProjMatrices; }
+	void Set_CascadeProjMatirx(_Matrix* CascadeProjMatrices) { memcpy(m_CascadeProjMatrices, CascadeProjMatrices, sizeof(_Matrix) * 3); }
+
+	const _Matrix* Get_CascadeProjInverseMatirx() const { return m_CascadeProjInverseMatrices; }
+	void Set_CascadeProjInverseMatirx(_Matrix* CascadeProjInverseMatrices) { memcpy(m_CascadeProjInverseMatrices, CascadeProjInverseMatrices, sizeof(_Matrix) * 3); }
 
 public:
 	HRESULT Initialize();
@@ -64,6 +46,7 @@ private:
 
 	_Matrix			m_CascadeViewMatrices[3];
 	_Matrix			m_CascadeProjMatrices[3];
+	_Matrix			m_CascadeProjInverseMatrices[3];
 
 public:
 	static CPipeLine*	Create();
