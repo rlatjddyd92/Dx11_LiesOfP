@@ -23,6 +23,7 @@ public:
 		_float3		vRotation;
 		_bool		isCollision = { true };
 		_bool		isLight = { false };
+		_bool		isInstance = { false };
 		_uint		iRenderGroupID = { true };
 	}NONMODEL_DESC;
 

@@ -816,16 +816,21 @@ void CController_MapTool::Map_Menu()
 	static int i0 = 0;
 	ImGui::InputInt("RenderTarget ID", &i0);
 
+	static _bool bInstance = false;
+	ImGui::Checkbox("Draw Instance", &bInstance);
+
 	//오브젝트 생성
 	if (ImGui::Button("Create Model") || m_pGameInstance->Get_KeyState(C) == AWAY)
 	{
 		wstrLayerName.assign(strLayerName.begin(), strLayerName.end());
 
+		//통으로 저장
 		CNonAnimModel::NONMODEL_DESC Desc{};
-		Desc.vPosition = m_vPickPos;
-		Desc.vScale = { 1.f,1.f,1.f };
-		Desc.vRotation = { 0.f,0.f,0.f };
-		Desc.iRenderGroupID = i0;
+		Desc.vPosition = m_vPickPos;	
+		Desc.vScale = { 1.f,1.f,1.f };	
+		Desc.vRotation = { 0.f,0.f,0.f };	
+		Desc.iRenderGroupID = i0;	
+		Desc.isInstance = bInstance;	
 		strcpy_s(Desc.szModelTag, m_FileNames[m_iListSelectNum]);
 
 		if (FAILED(m_pGameInstance->Add_CloneObject_ToLayer(LEVEL_TOOL, wstrLayerName, TEXT("Prototype_GameObject_NonAnim"), &Desc)))
@@ -1397,7 +1402,10 @@ void CController_MapTool::Decal_Menu()
 	}
 #pragma endregion
 
-	if (item_selected_Image_idx != -1)
+	static _bool bShowPreview = false;
+	ImGui::Checkbox("Image Preview", &bShowPreview);
+
+	if (bShowPreview)
 	{
 		ImGui::Begin("Preview", NULL, ImGuiWindowFlags_MenuBar | ImGuiWindowFlags_HorizontalScrollbar
 			| ImGuiWindowFlags_AlwaysVerticalScrollbar);
