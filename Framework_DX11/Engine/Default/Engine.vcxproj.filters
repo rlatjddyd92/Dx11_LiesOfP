@@ -196,6 +196,9 @@
     <Filter Include="01.Utility\97.CSVFileManager">
       <UniqueIdentifier>{a318eb36-df00-4b66-85dc-c9029b0fbc28}</UniqueIdentifier>
     </Filter>
+    <Filter Include="01.Utility\02.GameObjects\05.EasyDrawSphere">
+      <UniqueIdentifier>{8f2f867e-f4da-463a-b431-12b966847c46}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\Private\Base.cpp">
@@ -380,6 +383,9 @@
     </ClCompile>
     <ClCompile Include="..\private\Model.cpp">
       <Filter>01.Utility\03.Components\Model</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Private\EasyDrawSphere.cpp">
+      <Filter>01.Utility\02.GameObjects\05.EasyDrawSphere</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -580,6 +586,9 @@
     </ClInclude>
     <ClInclude Include="..\Public\Component_Manager.h">
       <Filter>01.Utility\03.Components\00.Manager</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Public\EasyDrawSphere.h">
+      <Filter>01.Utility\02.GameObjects\05.EasyDrawSphere</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

@@ -64,6 +64,7 @@ public:
 	HRESULT     SetUp_NextAnimation_Boundary(_uint iNextAnimationIndex, _bool isLoop = false, _float fChangeDuration = 0.2f, _uint iStartFrame = 0);
 
 	_uint		Setting_Animation(const _char* szAnimationmName, _double SpeedRatio = 1.0) const;
+	_matrix		CalcMatrix_forVtxAnim(_uint iMeshNum, VTXANIMMESH VtxStruct);
 
 
 public:

@@ -246,6 +246,11 @@ _uint CModel::Setting_Animation(const _char* szAnimationmName, _double SpeedRati
 	return iAnimationIndex;
 }
 
+_matrix CModel::CalcMatrix_forVtxAnim(_uint iMeshNum, VTXANIMMESH VtxStruct)
+{
+	return m_Meshes[iMeshNum]->CalcMatrix_forVtxAnim(m_Bones, VtxStruct);
+}
+
 _vector CModel::Play_Animation(_float fTimeDelta, _bool* pOut)
 {
 	_float fAddTime = fTimeDelta * m_bPlayAnimCtr;

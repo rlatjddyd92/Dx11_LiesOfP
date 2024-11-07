@@ -89,6 +89,19 @@ HRESULT CMesh::Bind_BoneMatrices(const CModel* pModel, CShader * pShader, const 
 	return pShader->Bind_Matrices(pConstantName, m_BoneMatrices, m_iNumBones);	
 }
 
+_matrix CMesh::CalcMatrix_forVtxAnim(vector<class CBone*>& Bones, VTXANIMMESH VtxStruct)
+{
+	_float fWeightW = 1 - (VtxStruct.vBlendWeights.x + VtxStruct.vBlendWeights.y + VtxStruct.vBlendWeights.z);
+
+	_matrix BoneMat =
+		VtxStruct.vBlendWeights.x * (m_BoneMatrices[VtxStruct.vBlendIndices.x]) +
+		VtxStruct.vBlendWeights.y * (m_BoneMatrices[VtxStruct.vBlendIndices.y]) +
+		VtxStruct.vBlendWeights.z * (m_BoneMatrices[VtxStruct.vBlendIndices.z]) +
+		fWeightW * (m_BoneMatrices[VtxStruct.vBlendIndices.w]);
+
+	return BoneMat;
+}
+
 HRESULT CMesh::Ready_VertexBuffer_NonAnim(HANDLE* pFile, _fmatrix PreTransformMatrix)
 {
 	_ulong dwByte = 0;

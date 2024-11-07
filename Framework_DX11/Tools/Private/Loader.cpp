@@ -12,6 +12,8 @@
 #include "NonAnimModel.h"
 #include "FreeCamera.h"
 
+#include "TargetBall.h"
+
 #include "Particle_Effect.h"
 #include "Texture_Effect.h"
 
@@ -394,6 +396,11 @@ HRESULT CLoader::Ready_Resources_For_ToolLevel()
 	/* For. Prototype_GameObject_FreeCamera */
 	if (FAILED(m_pGameInstance->Add_Prototype(TEXT("Prototype_GameObject_FreeCamera"),
 		CFreeCamera::Create(m_pDevice, m_pContext))))
+		return E_FAIL;
+
+	/* For. Prototype_GameObject_TargetBall */
+	if (FAILED(m_pGameInstance->Add_Prototype(TEXT("Prototype_GameObject_TargetBall"),
+		CTargetBall::Create(m_pDevice, m_pContext))))
 		return E_FAIL;
 
 #pragma region EFFECT

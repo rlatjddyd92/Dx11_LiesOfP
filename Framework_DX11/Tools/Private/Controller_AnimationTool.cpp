@@ -5,6 +5,7 @@
 //++
 #include "AnimModel.h"
 #include "Animation.h"
+#include "TargetBall.h"
 #include "Mesh.h"
 
 IMPLEMENT_SINGLETON(CController_AnimationTool)
@@ -25,7 +26,6 @@ HRESULT CController_AnimationTool::Initialize(ID3D11Device* pDevice, ID3D11Devic
 	Desc.vRotation = { 0.f,0.f,0.f };
 	Desc.pUpdateCtr = &m_bObjRenderCtr;
 	
-
 	strcpy_s(m_szCurrentModelText, "Prototype_AnimModel_Test");
 	strcpy_s(Desc.szModelTag, m_szCurrentModelText);
 
@@ -37,6 +37,20 @@ HRESULT CController_AnimationTool::Initialize(ID3D11Device* pDevice, ID3D11Devic
 	{
 		m_ModelNames.push_back(Pair.first);
 	}
+
+	//Prototype_GameObject_TargetBall
+	CTargetBall::TARGETBALL_DESC TB_Desc{};
+	TB_Desc.pPos = &m_vPos;
+	TB_Desc.pRenderCtr = &m_bTargetBallRender;
+	TB_Desc.pUpdateCtr = &m_bObjRenderCtr;
+	TB_Desc.vCenter = _float3{0, 0, 0};
+	TB_Desc.fRadius = 0.2f;
+
+	if (FAILED(m_pGameInstance->Add_CloneObject_ToLayer(LEVEL_TOOL, TEXT("Layer_AnimationTool_Test"), TEXT("Prototype_GameObject_TargetBall"), &TB_Desc)))
+		return E_FAIL;
+
+
+	//지정된 정점 위치 보여주는 방법
 
 	return S_OK;
 }
@@ -94,9 +108,14 @@ void CController_AnimationTool::SetUp_AnimTool()
 		}
 		if (ImGui::BeginTabItem("Vertex"))
 		{
+			m_bTargetBallRender = true;
 			ListUp_Virtex();
 			SetUp_Controller_Vertex();
 			ImGui::EndTabItem();
+		}
+		else
+		{
+			m_bTargetBallRender = false;
 		}
 
 		ImGui::EndTabItem();
@@ -625,6 +644,7 @@ void CController_AnimationTool::ListUp_Virtex()
 	}
 
 
+	m_iCurSelected_Index_Mesh = m_iSelected_Index_Mesh;
 	ImGui::PushItemWidth(300); // 크기조정
 	if (ImGui::BeginListBox("Mesh List"))
 	{
@@ -660,6 +680,13 @@ void CController_AnimationTool::ListUp_Virtex()
 		ImGui::EndListBox();
 	}
 	ImGui::PopItemWidth();
+
+	if (m_iCurSelected_Index_Mesh != m_iSelected_Index_Mesh)
+	{
+		//메쉬 인덱스 변경시의 행동
+		m_iCurSelected_Index_Vtx = m_iSelected_Index_Vtx = 0;
+	}
+
 	ImGui::Text("Now Selected Mesh : \t");
 	ImGui::SameLine();
 	ImGui::Text((*m_pCopyMeshVec)[m_iSelected_Index_Mesh]->Get_Name());
@@ -670,14 +697,14 @@ void CController_AnimationTool::ListUp_Virtex()
 		m_pCopyVtxAnimMeshes = (*m_pCopyMeshVec)[m_iSelected_Index_Mesh]->Get_AnimVertices();
 	}
 
-
+	m_iCurSelected_Index_Vtx = m_iSelected_Index_Vtx;
 	ImGui::PushItemWidth(300); // 크기조정
 	if (ImGui::BeginListBox("Vtx List"))
 	{
 		if (m_pCopyModelCom != nullptr)
 		{
-			bool is_selected{ false };
-			for (_uint i = 0; i < (*m_pCopyMeshVec)[m_iSelected_Index_Mesh]->Get_NumVertices(); i++)
+			bool is_selected{ false };	//인디시즈 불러와서 인디시즈에 사용되는 버티시즈 확인하기
+			for (_uint i = 0; i < (*m_pCopyMeshVec)[m_iSelected_Index_Mesh]->Get_NumIndices(); i++)
 			{
 				if (m_iSelected_Index_Vtx == i)
 				{
@@ -704,17 +731,32 @@ void CController_AnimationTool::ListUp_Virtex()
 	}
 	ImGui::PopItemWidth();
 
-	string strSelecIndex = to_string(m_iSelected_Index_Vtx);
+	if (m_iCurSelected_Index_Vtx != m_iSelected_Index_Vtx)
+	{
+		//정점 인덱스 변경시의 행동
+	}
+
+	_int iTemp = (*m_pCopyMeshVec)[m_iSelected_Index_Mesh]->Get_Indices()[m_iSelected_Index_Vtx];
+
+	string strSelecIndex = to_string(iTemp);
 
 	ImGui::Text("Now Selected Vtx Index : \t");
 	ImGui::SameLine();
 	ImGui::Text(strSelecIndex.c_str());
 	ImGui::Text("\n");
 
-	ImGui::Text("Pos  X : \t %f", m_pCopyVtxAnimMeshes->vPosition.x);
-	ImGui::Text("Pos  Y : \t %f", m_pCopyVtxAnimMeshes->vPosition.y);
-	ImGui::Text("Pos  Z : \t %f", m_pCopyVtxAnimMeshes->vPosition.z);
+
+	ImGui::Text("Pos  X : \t %f", m_pCopyVtxAnimMeshes[iTemp].vPosition.x);
+	ImGui::Text("Pos  Y : \t %f", m_pCopyVtxAnimMeshes[iTemp].vPosition.y);
+	ImGui::Text("Pos  Z : \t %f", m_pCopyVtxAnimMeshes[iTemp].vPosition.z);
 	
+	_matrix matWorld = XMMatrixIdentity();
+	
+	matWorld *= m_pGameInstance->Find_Object(LEVEL_TOOL, TEXT("Layer_AnimationTool_Test"), 0)->Get_Transform()->Get_WorldMatrix();
+	
+	_vector vPos = XMVector3TransformCoord(XMLoadFloat3(&m_pCopyVtxAnimMeshes[iTemp].vPosition), m_pCopyModelCom->CalcMatrix_forVtxAnim(m_iSelected_Index_Mesh, m_pCopyVtxAnimMeshes[iTemp]));
+
+	m_vPos = XMVector3TransformCoord(vPos, matWorld);
 }
 
 void CController_AnimationTool::SetUp_Controller_Vertex()

@@ -92,6 +92,9 @@ private:
 	_bool	m_bDivide_Boundary { false };
 	_bool	m_bObjRenderCtr {true};
 	_bool	m_bIsAnimStopped { false };
+	_bool	m_bTargetBallRender{ false };
+
+	_vector	m_vPos{};
 
 public:
 	virtual void Free() override;
