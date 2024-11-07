@@ -26,7 +26,7 @@ namespace Engine
 
 	typedef struct
 	{
-		class CTexture*	pMaterialTextures[18];
+		class CTexture* pMaterialTextures[18]{ nullptr };
 	}MESH_MATERIAL;
 
 	typedef struct

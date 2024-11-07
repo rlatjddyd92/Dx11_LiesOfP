@@ -102,6 +102,33 @@ _matrix CMesh::CalcMatrix_forVtxAnim(vector<class CBone*>& Bones, VTXANIMMESH Vt
 	return BoneMat;
 }
 
+HRESULT CMesh::Create_BinaryFile(HANDLE* pFile)
+{
+	_ulong dwByte = 0;
+	//이름 저장
+	WriteFile(*pFile, &m_szName, MAX_PATH, &dwByte, nullptr);
+
+	//머티리얼 인덱스 저장
+	WriteFile(*pFile, &m_iMaterialIndex, sizeof(_uint), &dwByte, nullptr);
+
+	//버텍스 갯수 저장
+	WriteFile(*pFile, &m_iNumVertices, sizeof(_uint), &dwByte, nullptr);
+
+	//인덱스 갯수 저장
+	WriteFile(*pFile, &m_iNumIndices, sizeof(_uint), &dwByte, nullptr);
+
+	//면 수 저장
+	WriteFile(*pFile, &m_iNumFaces, sizeof(_uint), &dwByte, nullptr);
+
+	for (_int i = 0; i < m_iNumIndices; ++i)
+	{//인덱스 버퍼 저장
+		WriteFile(*pFile, &m_pIndices[i], sizeof(_uint), &dwByte, nullptr);
+	}
+	
+
+	return S_OK;
+}
+
 HRESULT CMesh::Ready_VertexBuffer_NonAnim(HANDLE* pFile, _fmatrix PreTransformMatrix)
 {
 	_ulong dwByte = 0;

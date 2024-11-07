@@ -109,7 +109,7 @@ HRESULT CModel::Update_Boundary()
 	return S_OK;
 }
 
-HRESULT CModel::Initialize_Prototype(TYPE eType, const _char * pModelFilePath, _fmatrix PreTransformMatrix)
+HRESULT CModel::Initialize_Prototype(TYPE eType, const _char * pModelFilePath, _fmatrix PreTransformMatrix, vector<string>* pBinaryVector)
 {
 	_uint		iFlag = { 0 };	
 	
@@ -136,7 +136,10 @@ HRESULT CModel::Initialize_Prototype(TYPE eType, const _char * pModelFilePath, _
 
 	if (FAILED(Ready_Meshes(&hFile)))
 		return E_FAIL;
-
+	if (pBinaryVector != nullptr)
+	{
+		m_FilePaths = pBinaryVector;
+	}
 	if (FAILED(Ready_Materials(&hFile, pModelFilePath)))
 		return E_FAIL;
 
@@ -444,6 +447,149 @@ _vector CModel::Play_Animation(_float fTimeDelta, _bool* pOut)
 	return vRootMove;
 }
 
+HRESULT CModel::Create_BinaryFile(const _char* ModelTag)
+{
+	_ulong dwByte = 0;
+
+#pragma region 경로 세팅하기
+	// 경로, 이름, 확장자 정하기
+	string strFilePath;
+	strFilePath.assign(ModelTag);
+
+	//"Prototype_AnimModel_Test"  앞부분 제외 뒷부분 이름으로 사용
+
+	strFilePath.erase(0, 10);
+
+	char szCreateFolderPath[MAX_PATH];
+	if (m_eType == TYPE_NONANIM)
+		strcpy_s(szCreateFolderPath, "../Bin/ModelData/NonAnim/CreatedBinFiles/");
+	else
+		strcpy_s(szCreateFolderPath, "../Bin/ModelData/Anim/CreatedBinFiles/");
+
+	string strDat = "";
+	strDat.assign(".Dat");
+
+	strcat_s(szCreateFolderPath, strFilePath.c_str());
+	strcat_s(szCreateFolderPath, strDat.c_str());
+	strFilePath.assign(szCreateFolderPath);
+
+	_tchar szFinalPath[MAX_PATH] = TEXT("");
+	MultiByteToWideChar(CP_ACP, 0, strFilePath.c_str(), (_uint)strlen(strFilePath.c_str()), szFinalPath, MAX_PATH);
+
+#pragma endregion
+
+	HANDLE hFile = CreateFile(szFinalPath, GENERIC_WRITE, 0, nullptr, CREATE_ALWAYS, FILE_ATTRIBUTE_NORMAL, 0);
+	if (0 == hFile)
+	{
+		MSG_BOX(TEXT("Failed to Open Models data"));
+		return E_FAIL;
+	}
+
+	//상하체 분리 여부
+	WriteFile(hFile, &m_isUseBoundary, sizeof(_bool), &dwByte, nullptr);
+
+	//사용하려고 저장한 뼈
+	for (int i = 0; i < UFB_END; ++i)
+	{
+		WriteFile(hFile, &m_UFBIndices[i], sizeof(_uint), &dwByte, nullptr);
+	}
+
+	//아래 정점의 갯수
+	_int iNumUFVtx = m_UseFullVtxIndices.size();
+	WriteFile(hFile, &iNumUFVtx, sizeof(_int), &dwByte, nullptr);
+	//사용하려고 저장한 정점
+	for (int j = 0; j < iNumUFVtx; ++j)
+	{
+		WriteFile(hFile, &m_UseFullVtxIndices[j], sizeof(UFVTX), &dwByte, nullptr);
+	}
+
+	if (FAILED(Create_Bin_Bones(&hFile)))
+		return E_FAIL;
+
+
+	return S_OK;
+}
+
+HRESULT CModel::Create_Bin_Bones(HANDLE* pFile)
+{
+	_ulong dwByte = 0;
+
+	_uint iNumBone = m_Bones.size();
+	//뼈의 갯수
+	WriteFile(*pFile, &iNumBone, sizeof(_uint), &dwByte, nullptr);
+
+	for (auto& pBone : m_Bones)
+	{//뼈의 바이너리화 함수 호출
+		pBone->Create_BinaryFile(pFile, m_isUseBoundary);
+	}
+	return S_OK;
+}
+
+HRESULT CModel::Create_Bin_Meshes(HANDLE* pFile)
+{
+	_ulong dwByte = 0;
+	//메쉬의 갯수
+	WriteFile(*pFile, &m_iNumMeshes, sizeof(_uint), &dwByte, nullptr);
+
+	for (auto& pMesh : m_Meshes)
+	{//뼈의 바이너리화 함수 호출
+		pMesh->Create_BinaryFile(pFile);
+	}
+
+	return S_OK;
+}
+
+HRESULT CModel::Create_Bin_Materials(HANDLE* pFile, const _char* ModelTag)
+{
+	_ulong dwByte = 0;
+	//머티리얼 갯수 저장
+	WriteFile(*pFile, &m_iNumMaterials, sizeof(_uint), &dwByte, nullptr);
+
+	_int iTextureNum{};
+	for (auto & pMaterialSet : m_Materials)
+	{//머티리얼 저장 수 가 최대 수만큼 반복
+		for (_int i = 0; i < TEXTURE_TYPE_MAX; ++i)
+		{
+			pMaterialSet.pMaterialTextures;
+
+			_bool isHaveTexture = true;
+			if (pMaterialSet.pMaterialTextures[i] == nullptr)
+			{//저장 할 것이 없다면 스킵
+				isHaveTexture = false;;
+			}
+			
+			//텍스쳐의 문자열을 저장해 두어야 하는 문제가 발생
+			WriteFile(*pFile, &isHaveTexture, sizeof(_bool), &dwByte, nullptr);
+
+			if (isHaveTexture)
+			{//텍스쳐가 있을 경우에만 저장
+				if (iTextureNum >= (*m_FilePaths).size())
+				{
+					return E_FAIL;
+				}
+				WriteFile(*pFile, (*m_FilePaths)[iTextureNum].c_str(), MAX_PATH, &dwByte, nullptr);
+				++iTextureNum;
+			}
+			
+		}
+	}
+
+	return S_OK;
+}
+
+HRESULT CModel::Create_Bin_Animations(HANDLE* pFile, const _char* ModelTag)
+{
+	_ulong dwByte = 0;
+	//애니메이션 수 저장
+	WriteFile(*pFile, &m_iNumAnimations, sizeof(_uint), &dwByte, nullptr);
+
+	for (auto& pAnimation : m_Animations)
+	{
+		pAnimation->Create_BinaryFile(pFile);
+	}
+	return S_OK;
+}
+
 HRESULT CModel::Bind_Material(CShader* pShader, const _char* pConstantName, TEXTURE_TYPE eMaterialType, _uint iMeshIndex)
 {
 	_uint iMaterialIndex = m_Meshes[iMeshIndex]->Get_MaterialIndex();
@@ -500,6 +646,12 @@ HRESULT CModel::Ready_Materials(HANDLE* pFile, const _char* pModelFilePath)
 
 			ReadFile(*pFile, szTexturePath, MAX_PATH, &dwByte, nullptr);
 
+			if (m_FilePaths != nullptr)
+			{
+				string strTextureFilePath;
+				strTextureFilePath.assign(szTexturePath);
+				(*m_FilePaths).push_back(strTextureFilePath);
+			}
 			_tchar				szFinalPath[MAX_PATH] = TEXT("");
 
 			MultiByteToWideChar(CP_ACP, 0, szTexturePath, (_int)(strlen(szTexturePath)), szFinalPath, MAX_PATH);
@@ -561,11 +713,11 @@ HRESULT CModel::Ready_Animations(HANDLE* pFile)
 }
 
 
-CModel * CModel::Create(ID3D11Device * pDevice, ID3D11DeviceContext * pContext, TYPE eType, const _char * pModelFilePath, _fmatrix PreTransformMatrix)
+CModel * CModel::Create(ID3D11Device * pDevice, ID3D11DeviceContext * pContext, TYPE eType, const _char * pModelFilePath, _fmatrix PreTransformMatrix, vector<string>* pBinaryVector)
 {
 	CModel*		pInstance = new CModel(pDevice, pContext);
 
-	if (FAILED(pInstance->Initialize_Prototype(eType, pModelFilePath, PreTransformMatrix)))
+	if (FAILED(pInstance->Initialize_Prototype(eType, pModelFilePath, PreTransformMatrix, pBinaryVector)))
 	{
 		MSG_BOX(TEXT("Failed to Created : CModel"));
 		Safe_Release(pInstance);
@@ -618,4 +770,13 @@ void CModel::Free()
 		Safe_Release(pMesh);
 	}
 	m_Meshes.clear();
+
+	if (m_FilePaths != nullptr)
+	{
+		for (auto& pPath : *m_FilePaths)
+		{
+			pPath.erase();
+		}
+		m_FilePaths->clear();
+	}
 }

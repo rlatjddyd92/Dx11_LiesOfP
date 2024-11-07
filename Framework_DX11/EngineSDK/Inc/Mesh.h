@@ -33,6 +33,7 @@ public:
 public:
 	HRESULT Bind_BoneMatrices(const CModel* pModel, class CShader * pShader, const _char * pConstantName);
 	_matrix		CalcMatrix_forVtxAnim(vector<class CBone*>&	Bones	,VTXANIMMESH VtxStruct);
+	HRESULT		Create_BinaryFile(HANDLE* pFile);
 
 private:
 	_char				m_szName[MAX_PATH] = {};

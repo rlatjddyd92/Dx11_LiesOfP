@@ -201,6 +201,17 @@ void CController_AnimationTool::ListUp_Anim()
 	}
 
 	ImGui::Text("\n");
+
+	if (ImGui::Button("SaveBinFile"))
+	{
+		if (m_Models.size() > 0)
+		{
+			for (auto& pModelCom : m_Models)
+			{
+				pModelCom.second->Create_BinaryFile(pModelCom.first.c_str());
+			}
+		}
+	}
 	ImGui::Text("\n");
 
 	//이전 선택 저장

@@ -71,6 +71,32 @@ _uint CAnimation::Update_TransformationMatrices(const vector<class CBone*>& Bone
 	return iCurrentFrame;
 }
 
+HRESULT CAnimation::Create_BinaryFile(HANDLE* pFile)
+{
+	_ulong dwByte = 0;
+	//이름 저장
+	WriteFile(*pFile, &m_szName, MAX_PATH, &dwByte, nullptr);
+
+	//길이, 속도 저장
+	WriteFile(*pFile, &m_Duration, sizeof(_double), &dwByte, nullptr);
+	WriteFile(*pFile, &m_SpeedPerSec, sizeof(_double), &dwByte, nullptr);
+
+	//채널 갯수 저장
+	WriteFile(*pFile, &m_iNumChannels, sizeof(_uint), &dwByte, nullptr);
+
+	for (_int i = 0; i < m_EventKeyFrames.size(); ++i)
+	{//이벤트 키프레임 저장
+		WriteFile(*pFile, &m_EventKeyFrames[i], sizeof(EVENT_KEYFRAME), &dwByte, nullptr);
+	}
+
+	for (auto& pChannel : m_Channels)
+	{//채널 저장
+		pChannel->Create_BinaryFile(pFile);
+	}
+
+	return S_OK;
+}
+
 CAnimation* CAnimation::Create(HANDLE* pFile, vector<_uint>& KeyFrameIndices, const CModel* pModel)
 {
 	CAnimation* pInstance = new CAnimation();

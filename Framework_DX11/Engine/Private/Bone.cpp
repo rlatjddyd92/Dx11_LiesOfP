@@ -57,6 +57,25 @@ void CBone::Update_Boundary(const vector<CBone*>& Bones, _int iCurBoneIndex, _in
 	}
 }
 
+HRESULT CBone::Create_BinaryFile(HANDLE* pFile, _bool bUseBoundary)
+{
+	_ulong dwByte = 0;
+	//ºÎ¸ð»À ÀÎµ¦½º
+	WriteFile(*pFile, &m_iParentBoneIndex, sizeof(_int), &dwByte, nullptr);
+
+	//»ÀÀÇ ÀÌ¸§
+	WriteFile(*pFile, &m_szName, MAX_PATH, &dwByte, nullptr);
+
+	//»À Çà·Ä
+	WriteFile(*pFile, &m_TransformationMatrix, sizeof(_float4x4), &dwByte, nullptr);
+
+	if (bUseBoundary)
+	{
+		WriteFile(*pFile, &m_bIsChildOf_Boundary, sizeof(_bool), &dwByte, nullptr);
+	}
+	return S_OK;
+}
+
 CBone* CBone::Create(HANDLE* pFile, _int iParentBoneIndex)
 {
 	CBone* pInstance = new CBone();

@@ -33,12 +33,14 @@ public:
 
 	void				Update_Boundary(const vector<CBone*>& Bones, _int iCurBoneIndex, _int iBoundaryBoneIndex);
 
+	HRESULT				Create_BinaryFile(HANDLE* pFile, _bool bUseBoundary);
+
 private:
 	/* 뼈의 이름 */
 	_char		m_szName[MAX_PATH] = {};
 	_char		m_szParentName[MAX_PATH] = {};
 
-	/* 부모 기주으로 표현된 이 뼈만의 상태행렬. */
+	/* 부모 기준으로 표현된 이 뼈만의 상태행렬. */
 	_float4x4	m_TransformationMatrix = {};
 
 	/* 이 뼈의 최종적인 상태 행렬 ( 내 상태 행렬 * 부모의 최종상태행렬 ) */
