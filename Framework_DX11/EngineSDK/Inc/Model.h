@@ -40,6 +40,9 @@ public:
 	void					Set_UFBIndices(_uint eCount, _uint iIndex) { m_UFBIndices[eCount] = iIndex; }
 	_uint					Get_UFBIndices(_uint eCount) { return m_UFBIndices[eCount]; }
 
+	void					Add_UFVtxIndices(UFVTX UFVtx) { m_UseFullVtxIndices.push_back(UFVtx); }
+	vector<UFVTX>*			Get_UFVtxIndices() { return &m_UseFullVtxIndices; }
+
 	class CTexture*			Find_Texture(_uint iMeshNum, TEXTURE_TYPE eMaterialType);
 
 	void					Set_AnimPlay(_bool bCtrAnim) { m_bPlayAnimCtr = bCtrAnim; }
@@ -119,6 +122,7 @@ private:
 	_bool							m_isUseBoundary = { false };	//상하체 분리 여부
 private:
 	vector<_uint>					m_UFBIndices;
+	vector<UFVTX>					m_UseFullVtxIndices;
 
 public:
 	HRESULT	Ready_Meshes(HANDLE* pFile);

@@ -624,18 +624,19 @@ void CController_AnimationTool::ListUp_Virtex()
 		if (m_pCopyMeshVec != nullptr || m_pCopyModelCom != nullptr)
 		{
 			bool is_selected{ false };
-			for (int i = 0; i < m_pCopyModelCom->Get_NumMeshes(); i++)
+			for (_uint i = 0; i < m_pCopyModelCom->Get_NumMeshes(); i++)
 			{
 				if (m_iSelected_Index_Mesh == i)
 				{
 					is_selected = true;
 				}
-
-				string strnm = "";
-				strnm += i;
+				string strnm;
+				
 				//예외 처리
 				strnm.assign((*m_pCopyMeshVec)[i]->Get_Name());
-
+				
+				strnm = strnm + to_string(i);
+				
 				if (ImGui::Selectable(strnm.c_str(), is_selected))
 				{
 					m_iSelected_Index_Mesh = i;
@@ -669,15 +670,15 @@ void CController_AnimationTool::ListUp_Virtex()
 		if (m_pCopyModelCom != nullptr)
 		{
 			bool is_selected{ false };
-			for (int i = 0; i < (*m_pCopyMeshVec)[m_iSelected_Index_Mesh]->Get_NumVertices(); i++)
+			for (_uint i = 0; i < (*m_pCopyMeshVec)[m_iSelected_Index_Mesh]->Get_NumVertices(); i++)
 			{
 				if (m_iSelected_Index_Vtx == i)
 				{
 					is_selected = true;
 				}
 
-				string strSelecIndex;
-				strSelecIndex.assign("%d", i);
+				string strSelecIndex = to_string(i);
+				
 
 				if (ImGui::Selectable(strSelecIndex.c_str(), is_selected))
 				{
@@ -696,8 +697,7 @@ void CController_AnimationTool::ListUp_Virtex()
 	}
 	ImGui::PopItemWidth();
 
-	string strSelecIndex;
-	strSelecIndex.assign("%d", m_iSelected_Index_Vtx);
+	string strSelecIndex = to_string(m_iSelected_Index_Vtx);
 
 	ImGui::Text("Now Selected Vtx Index : \t");
 	ImGui::SameLine();
@@ -712,6 +712,57 @@ void CController_AnimationTool::ListUp_Virtex()
 
 void CController_AnimationTool::SetUp_Controller_Vertex()
 {
+	if (ImGui::Button("Add_UFVtx"))
+	{
+		UFVTX UFVtx{};
+		UFVtx.iMeshNum = m_iSelected_Index_Mesh;
+		UFVtx.VtxNum = m_iSelected_Index_Vtx;
+
+		m_pCopyModelCom->Add_UFVtxIndices(UFVtx);
+	}
+
+	ImGui::PushItemWidth(300); // 크기조정
+	if (ImGui::BeginListBox("UFVtx List"))
+	{
+		if (m_pCopyMeshVec != nullptr || m_pCopyModelCom != nullptr)
+		{
+			vector<UFVTX>* vtxs = 	m_pCopyModelCom->Get_UFVtxIndices();
+
+			bool is_selected{ false };
+			for (_uint i = 0; i < vtxs->size(); i++)
+			{
+				if (m_iSelected_Index_UFVtx == i)
+				{
+					is_selected = true;
+				}
+
+				string strnm;
+				string strCollon = " : ";
+				string strDash = " Mesh  - ";
+				string strTale = " Vtx";
+
+				//예외 처리
+				
+				strnm = to_string(i) + strCollon + to_string((*vtxs)[i].iMeshNum) + strDash + to_string((*vtxs)[i].VtxNum) + strTale;
+				
+
+				if (ImGui::Selectable(strnm.c_str(), is_selected))
+				{
+					m_iSelected_Index_UFVtx = i;
+				}
+
+
+				if (!is_selected)
+					ImGui::SetItemDefaultFocus();
+				is_selected = false;
+				// 반복문으로 리스트박스의 선택된 객체 찾기
+			}
+		}
+
+		ImGui::EndListBox();
+	}
+	ImGui::PopItemWidth();
+
 }
 
 void CController_AnimationTool::EndFrame_AnimTool()

@@ -85,6 +85,9 @@
     <Filter Include="02.GameObjects\04.Effect\Texture_Effect">
       <UniqueIdentifier>{e0193f26-6fda-4bf4-8fcd-c94aa5bd43d6}</UniqueIdentifier>
     </Filter>
+    <Filter Include="02.GameObjects\06.TargetBall">
+      <UniqueIdentifier>{bf40d83b-a543-4cc9-aed7-c2079cd52f62}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="framework.h">
@@ -210,6 +213,9 @@
     <ClInclude Include="..\public\Effect_Base.h">
       <Filter>02.GameObjects\04.Effect</Filter>
     </ClInclude>
+    <ClInclude Include="..\Public\TargetBall.h">
+      <Filter>02.GameObjects\06.TargetBall</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <Image Include="small.ico">
@@ -324,6 +330,9 @@
     </ClCompile>
     <ClCompile Include="..\private\Effect_Base.cpp">
       <Filter>02.GameObjects\04.Effect</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Private\TargetBall.cpp">
+      <Filter>02.GameObjects\06.TargetBall</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

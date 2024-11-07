@@ -46,6 +46,13 @@ namespace Engine
 
 	typedef struct
 	{
+		_uint			iMeshNum;
+		_uint			VtxNum;
+		_uint			UseWay;//이넘으로 받도록 만들지 문자로 받을지 고민해보기
+	}UFVTX;
+
+	typedef struct
+	{
 		_uint	iNextAnimIndex;
 		_uint	iStartFrame;
 		_float	fChangeTime = 0.f;

@@ -50,6 +50,7 @@
     <ClInclude Include="..\Public\NavigationController.h" />
     <ClInclude Include="..\Public\NonAnimModel.h" />
     <ClInclude Include="..\public\Particle_Effect.h" />
+    <ClInclude Include="..\Public\TargetBall.h" />
     <ClInclude Include="..\Public\Terrain.h" />
     <ClInclude Include="..\public\Texture_Effect.h" />
     <ClInclude Include="..\Public\ThreadPool.h" />
@@ -95,6 +96,7 @@
     <ClCompile Include="..\Private\NavigationController.cpp" />
     <ClCompile Include="..\Private\NonAnimModel.cpp" />
     <ClCompile Include="..\private\Particle_Effect.cpp" />
+    <ClCompile Include="..\Private\TargetBall.cpp" />
     <ClCompile Include="..\Private\Terrain.cpp" />
     <ClCompile Include="..\private\Texture_Effect.cpp" />
     <ClCompile Include="..\Private\ThreadPool.cpp" />

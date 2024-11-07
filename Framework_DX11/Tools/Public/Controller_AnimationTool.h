@@ -74,6 +74,8 @@ private:
 	_uint m_iSelected_Index_Vtx{};
 	_uint m_iCurSelected_Index_Vtx{};
 
+	_uint m_iSelected_Index_UFVtx{};
+	_uint m_iCurSelected_Index_UFVtx{};
 
 	_uint m_iBoneTypeIndex{};
 
