@@ -16,11 +16,11 @@ public:
 	virtual HRESULT Initialize(void* pArg) override;
 
 public:
-	virtual _bool Spread(_uint iState, _float fRenderRatio, _Vec4 vPivot, _float fGravity, _float fTimeDelta, 
+	virtual _bool Spread(_uint iState, _Matrix WorldMatrix, _float fRenderRatio, _Vec4 vPivot, _float fGravity, _float fTimeDelta,
 		_Vec3 vRevolveAxis = {}, _float fAngle = { 0.f }, _float fTimeInterval = { 0.f }, _float fRandomRatio = {1.f}, 
 		_float fAccelLimit = { 0.f }, _float fAccelSpeed = { 1.f });
 
-	virtual _bool Move(_uint iState, _float fRenderRatio, _Vec4 vDir, _float fGravity, _float fTimeDelta, 
+	virtual _bool Move(_uint iState, _Matrix WorldMatrix, _float fRenderRatio, _Vec4 vDir, _float fGravity, _float fTimeDelta,
 		_Vec4 vCenter = {}, _Vec3 vRevolveAxis = {}, _float fAngle = { 0.f }, _float fTimeInterval = { 0.f }, _float fRandomRatio = { 1.f }, 
 		_float fAccelLimit = { 0.f }, _float fAccelSpeed = { 1.f });
 
