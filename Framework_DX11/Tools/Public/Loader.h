@@ -62,6 +62,8 @@ private:
 	HRESULT Ready_Resources_For_ToolLevel_Map1();
 	HRESULT Ready_Resources_For_ToolLevel_Monster();
 
+	HRESULT Ready_Textures_For_Decal();
+
 private:
 	void aaa();
 public:

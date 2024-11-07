@@ -42,7 +42,7 @@ HRESULT CNonAnimModel::Initialize(void* pArg)
 
 	m_iStaticHashId++;
 	m_iHashId = m_iStaticHashId;
-	
+
 	return S_OK;
 }
 

@@ -23,6 +23,7 @@ public:
 		_float3		vRotation;
 		_bool		isCollision = { true };
 		_bool		isLight = { false };
+		_bool		isInstance = { false };
 		_uint		iRenderGroupID = { true };
 	}NONMODEL_DESC;
 
@@ -50,6 +51,8 @@ public:
 	int Get_RenderTargetId() { return m_iRenderGroupId; }
 	void Set_RenderTargetId(int id) { m_iRenderGroupId = id; }
 	void Set_Selected(_bool bSelect) {m_bSelected = bSelect;}
+	_bool Get_isLight() { return m_isLight; }
+	
 public:
 	class CShader*	m_pShaderCom = { nullptr };
 	class CModel*	m_pModelCom = { nullptr };
