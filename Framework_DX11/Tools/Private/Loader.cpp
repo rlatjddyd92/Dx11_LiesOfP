@@ -151,10 +151,10 @@ HRESULT CLoader::LoadingMapModel0()
 		hr = S_OK;
 	}
 
-	//if (hr == E_FAIL)
-	//	MSG_BOX(TEXT("∏  ∑ŒµÂ0 ø°º≠ ≈Õ¡¸"));
+	if (hr == E_FAIL)
+		MSG_BOX(TEXT("∏  ∑ŒµÂ0 ø°º≠ ≈Õ¡¸"));
 
-	//LeaveCriticalSection(&m_CriticalSection_Map0);
+	LeaveCriticalSection(&m_CriticalSection_Map0);
 
 	return hr;
 }
