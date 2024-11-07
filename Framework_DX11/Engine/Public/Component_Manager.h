@@ -34,14 +34,22 @@ private:
 public:
 	HRESULT Initialize(_uint iNumLevels);
 	HRESULT Add_Prototype(_uint iLevelIndex, const _wstring& strPrototypeTag, class CComponent* pPrototype);
+	HRESULT Add_ModelPrototype(_uint iLevelIndex, const _char* strPrototypeTag, class CComponent* pPrototype);
+	map<const _char*, class CComponent*> Get_ModelPrototypes(_uint iLevelIndex) { return m_pModelPrototypes[iLevelIndex]; }
+
 	class CComponent* Clone_Component(_uint iLevelIndex, const _wstring& strPrototypeTag, void* pArg);
 	void Clear(_uint iLevelIndex);
 
 private:
 	map<const _wstring, class CComponent*>*		m_pPrototypes = { nullptr };
 	_uint										m_iNumLevels = { 0 };
+
+	//툴 모델 구분용
+	map<const _char*, class CComponent*>*		m_pModelPrototypes = { nullptr };
+
 private:
 	class CComponent* Find_Prototype(_uint iLevelIndex, const _wstring& strPrototypeTag);
+	class CComponent* Find_ModelPrototype(_uint iLevelIndex, const _char* strPrototypeTag);
 
 public:
 	static CComponent_Manager* Create(_uint iNumLevels);

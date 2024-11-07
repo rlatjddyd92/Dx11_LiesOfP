@@ -40,7 +40,10 @@ public:
 	void					Set_UFBIndices(_uint eCount, _uint iIndex) { m_UFBIndices[eCount] = iIndex; }
 	_uint					Get_UFBIndices(_uint eCount) { return m_UFBIndices[eCount]; }
 
-	class CTexture* Find_Texture(_uint iMeshNum, TEXTURE_TYPE eMaterialType);
+	class CTexture*			Find_Texture(_uint iMeshNum, TEXTURE_TYPE eMaterialType);
+
+	void					Add_UFVtxIndices(UFVTX UFVtx) { m_UseFullVtxIndices.push_back(UFVtx); }
+	vector<UFVTX>*			Get_UFVtxIndices() { return &m_UseFullVtxIndices; }
 
 	void					Set_AnimPlay(_bool bCtrAnim) { m_bPlayAnimCtr = bCtrAnim; }
 
@@ -138,6 +141,7 @@ private:
 
 private:
 	vector<_uint>					m_UFBIndices;
+	vector<UFVTX>					m_UseFullVtxIndices;
 
 public:
 	HRESULT	Ready_Meshes(HANDLE* pFile);

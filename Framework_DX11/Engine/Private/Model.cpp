@@ -284,7 +284,7 @@ HRESULT CModel::SetUp_NextAnimation_Boundary(_uint iNextAnimationIndex, _bool is
 	m_tChaneAnimDesc_Boundary.iNextAnimIndex = iNextAnimationIndex;
 	if (iNextAnimationIndex == m_iCurrentAnimIndex)
 	{
-		m_tChaneAnimDesc_Boundary.iStartFrame = m_CurrentTrackPosition;
+		m_tChaneAnimDesc_Boundary.iStartFrame = (_uint)m_CurrentTrackPosition;
 	}
 	else
 	{

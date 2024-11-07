@@ -80,6 +80,21 @@ CComponent* CGameObject::Find_Component(const COMPONENT_TYPE eType)
 	return nullptr;
 }
 
+CComponent* CGameObject::Change_Component(const _wstring& strComponentTag, CComponent* pComponent, _uint iPartObjIndex)
+{
+	CComponent* pOut = Find_Component(strComponentTag);
+	if (pOut != nullptr)
+	{
+		Safe_Release(pOut);
+		m_Components.erase(strComponentTag);
+	}
+	m_Components.emplace(strComponentTag, pComponent);
+
+	Safe_AddRef(pComponent);
+
+	return pOut;
+}
+
 HRESULT CGameObject::Add_Component(_uint iLevelIndex, const _wstring & strPrototypeTag, const _wstring & strComponentTag, CComponent** ppOut, void * pArg)
 {
 	if (nullptr != Find_Component(strComponentTag))

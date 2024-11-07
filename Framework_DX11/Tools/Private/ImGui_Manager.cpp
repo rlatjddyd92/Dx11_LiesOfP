@@ -194,6 +194,8 @@ void CImGui_Manager::Tool_Animation()
 
 		m_pController_AnimationTool->SetUp_AnimTool();
 
+		m_pController_AnimationTool->EndFrame_AnimTool();
+
 		ImGui::EndTabItem();
 	}
 	else
