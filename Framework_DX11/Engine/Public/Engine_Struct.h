@@ -68,7 +68,7 @@ namespace Engine
 		_float3		vRotation;
 		_bool		isInstance = { false };
 		_uint		iID;
-		_uint		iCurrentCellNum;
+		_int		iCurrentCellNum;
 	}OBJECT_DEFAULT_DESC;
 
 	typedef struct ENGINE_DLL

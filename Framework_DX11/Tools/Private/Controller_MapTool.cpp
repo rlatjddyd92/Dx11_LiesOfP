@@ -489,7 +489,6 @@ void CController_MapTool::SaveMap()
 	//전체 레이어 수 저장
 	_uint iLayerCount = m_pGameInstance->Get_Object_Layer_Count(LEVEL_TOOL);
 	iLayerCount -= 2;//카메라 레이어, 애니메이션 Tool용 모델 레이어 제외
-	fout << iLayerCount << "\n"; 
 
 	//strUint = to_string(iLayerCount);
 	//fout.write(strUint.c_str(), sizeof(strUint));
@@ -534,7 +533,7 @@ void CController_MapTool::SaveMap()
 		{
 			for (_uint j = 0; j < ObjectCount; ++j)
 			{
-				pGameObject = m_pGameInstance->Find_Object(LEVEL_TOOL, sLayerTag, i);
+				pGameObject = m_pGameInstance->Find_Object(LEVEL_TOOL, sLayerTag, j);
 
 				OBJECT_DEFAULT_DESC pDesc = {};
 				wstring wstrModelTag = static_cast<CNonAnimModel*>(pGameObject)->Get_ModelTag();
@@ -583,63 +582,83 @@ void CController_MapTool::LoadMap()
 		return;
 	}
 
-	//string line;
-	//int LayerCout = { 0 };
-	////getline(fin, line);
-	////LayerCout = std::stoi(line);
-	//fin.read(reinterpret_cast<char*>(&LayerCout), sizeof(LayerCout));
+	string line;
+	_uint LayerCount = { 0 };
+	//getline(fin, line);
+	//LayerCout = std::stoi(line);
+	fin.read(reinterpret_cast<char*>(&LayerCount), sizeof(LayerCount));
 
-	//string strLayerTag = {};
-	//std::string::size_type iStrSize = { 0 };
-	//_uint iObjectCount = 0;
-	//int i = 0;
-	//int iObjectType = 0;
-	//int iObjectListIndex = 0;
-	//_float3 fPos = {};
-	//_float3 fScaled = {};
-	//_float3 fRot = {};
-	//_int iCellNum = {};
-	//_uint iCellRoomNum = {};
+	string strLayerTag = {};
+	std::string::size_type iStrSize = { 0 };
+	_uint iObjectCount = 0;
+	int i = 0;
+	int iObjectType = 0;
+	int iObjectListIndex = 0;
+	_float3 fPos = {};
+	_float3 fScaled = {};
+	_float3 fRot = {};
+	_int iCellNum = {};
+	_uint iCellRoomNum = {};
 
-	//while (i < LayerCout)
-	//{
-	//	//getline(fin, strLayerTag);
-	//	//fin >> iObjectCount;
-	//	fin.read(reinterpret_cast<char*>(&iStrSize), sizeof(iStrSize));
-	//	strLayerTag.resize(iStrSize);
-	//	fin.read(&strLayerTag[0], iStrSize);
-	//	fin.read(reinterpret_cast<char*>(&iObjectCount), sizeof(iObjectCount));
+	while (i < LayerCount)
+	{
+		//getline(fin, strLayerTag);
+		//fin >> iObjectCount;
+		fin.read(reinterpret_cast<char*>(&iStrSize), sizeof(iStrSize));
+		strLayerTag.resize(iStrSize);
+		fin.read(&strLayerTag[0], iStrSize);
+		fin.read(reinterpret_cast<char*>(&iObjectCount), sizeof(iObjectCount));
 
-	//	for (int j = 0; j < iObjectCount; ++j)
-	//	{
-	//		fin.read(reinterpret_cast<char*>(&iObjectType), sizeof(iObjectType));
-	//		fin.read(reinterpret_cast<char*>(&iObjectListIndex), sizeof(iObjectListIndex));
+		for (int j = 0; j < iObjectCount; ++j)
+		{
+			if(strLayerTag != "Layer_Light")
+			{
+				OBJECT_DEFAULT_DESC pDesc = {};
 
-	//		fin.read(reinterpret_cast<char*>(&fPos.x), sizeof(_float));
-	//		fin.read(reinterpret_cast<char*>(&fPos.y), sizeof(_float));
-	//		fin.read(reinterpret_cast<char*>(&fPos.z), sizeof(_float));
+				fin.read(reinterpret_cast<char*>(&pDesc), sizeof(pDesc));
 
-	//		fin.read(reinterpret_cast<char*>(&fScaled.x), sizeof(_float));
-	//		fin.read(reinterpret_cast<char*>(&fScaled.y), sizeof(_float));
-	//		fin.read(reinterpret_cast<char*>(&fScaled.z), sizeof(_float));
+				CNonAnimModel::NONMODEL_DESC nonDesc = {};
 
+				int bufferSize = WideCharToMultiByte(CP_ACP, 0, pDesc.szModelTag, -1, NULL, 0, NULL, NULL);
+				WideCharToMultiByte(CP_ACP, 0, pDesc.szModelTag, -1, nonDesc.szModelTag, bufferSize, NULL, NULL);
 
-	//		fin.read(reinterpret_cast<char*>(&fRot.x), sizeof(_float));
-	//		fin.read(reinterpret_cast<char*>(&fRot.y), sizeof(_float));
-	//		fin.read(reinterpret_cast<char*>(&fRot.z), sizeof(_float));
+				nonDesc.vPosition = pDesc.vPosition;
+				nonDesc.vScale = pDesc.vScale;
+				nonDesc.vRotation = pDesc.vRotation;
+				nonDesc.isLight = { false };
+				nonDesc.isInstance = pDesc.isInstance;
+				nonDesc.iRenderGroupID = pDesc.iID;
 
-	//		fin.read(reinterpret_cast<char*>(&iCellNum), sizeof(_int));
-	//		fin.read(reinterpret_cast<char*>(&iCellRoomNum), sizeof(_uint));
+				if (FAILED(m_pGameInstance->Add_CloneObject_ToLayer(LEVEL_TOOL, TEXT("Layer_Map"), TEXT("Prototype_GameObject_NonAnim"), &nonDesc)))
+					return;
+			}
+			else
+			{
+				LIGHT_DESC pDesc = {};
 
-	//		if (strLayerTag == "Layer_Land")
-	//			Read_LandObjects(iObjectType, iObjectListIndex, fPos, fScaled, fRot);
-	//		else
-	//			Read_NonAnim(iObjectType, iObjectListIndex, fPos, fScaled, fRot);
+				fin.read(reinterpret_cast<char*>(&pDesc), sizeof(pDesc));
 
-	//	}
+				if (FAILED(m_pGameInstance->Add_Light(pDesc)))
+					return;
 
-	//	++i;
-	//}
+				CNonAnimModel::NONMODEL_DESC Desc{};
+				Desc.vPosition.x = pDesc.vPosition.x;
+				Desc.vPosition.y = pDesc.vPosition.y;
+				Desc.vPosition.z = pDesc.vPosition.z;
+				Desc.vScale = { 1.f,1.f,1.f };
+				Desc.vRotation = { 0.f,0.f,0.f };
+				Desc.iRenderGroupID = 0;
+				Desc.isLight = true;
+				strcpy_s(Desc.szModelTag, "Light");
+
+				if (FAILED(m_pGameInstance->Add_CloneObject_ToLayer(LEVEL_TOOL, TEXT("Layer_Light"), TEXT("Prototype_GameObject_NonAnim"), &Desc)))
+					return;
+			}
+
+		}
+
+		++i;
+	}
 
 	fin.close();
 	MSG_BOX(TEXT("파일 읽기를 성공했습니다.."));

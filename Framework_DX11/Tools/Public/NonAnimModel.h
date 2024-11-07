@@ -15,8 +15,6 @@ class CNonAnimModel final : public CGameObject
 public:
 	typedef struct : public CGameObject::GAMEOBJECT_DESC
 	{
-		_char		szLayerTag[MAX_PATH];
-		_char		szPrototypeTag[MAX_PATH];
 		_char		szModelTag[MAX_PATH];
 		_float3		vPosition;
 		_float3		vScale;
