@@ -29,14 +29,16 @@ HRESULT CNonAnimModel::Initialize(void* pArg)
 	if (FAILED(__super::Initialize(&pDesc)))
 		return E_FAIL;
 
-	if (FAILED(Ready_Components(pDesc)))
-		return E_FAIL;
-
 	m_pTransformCom->Set_Scaled(pDesc->vScale.x, pDesc->vScale.y, pDesc->vScale.z);
 	m_pTransformCom->Rotation(XMConvertToRadians(pDesc->vRotation.x), XMConvertToRadians(pDesc->vRotation.y), XMConvertToRadians(pDesc->vRotation.z));
 	m_pTransformCom->Set_State(CTransform::STATE_POSITION, XMLoadFloat3(&pDesc->vPosition));
 	m_iRenderGroupId = pDesc->iRenderGroupID;
 	m_isLight = pDesc->isLight;
+	m_isInstance = pDesc->isInstance;
+
+	if (FAILED(Ready_Components(pDesc)))
+		return E_FAIL;
+
 
 	memcpy(&m_tDesc, pDesc, sizeof(NONMODEL_DESC));
 
@@ -74,6 +76,12 @@ void CNonAnimModel::Late_Update(_float fTimeDelta)
 
 HRESULT CNonAnimModel::Render()
 {
+	if (m_isInstance)
+	{
+		m_pModelCom->Add_InstanceData(m_pTransformCom->Get_WorldMatrix());
+		return S_OK;
+	}
+
 	if (FAILED(m_pTransformCom->Bind_ShaderResource(m_pShaderCom, "g_WorldMatrix")))
 		return E_FAIL;
 
@@ -177,18 +185,33 @@ _bool CNonAnimModel::Is_Pick(_float3* vPickPos)
 
 HRESULT CNonAnimModel::Ready_Components(NONMODEL_DESC* pNonAnimDesc)
 {
+	_tchar szModelTag[MAX_PATH];
+	MultiByteToWideChar(CP_ACP, MB_PRECOMPOSED, pNonAnimDesc->szModelTag, MAX_PATH, szModelTag, MAX_PATH);
+
 	/* FOR.Com_Shader */
 	if (FAILED(__super::Add_Component(LEVEL_TOOL, TEXT("Prototype_Component_Shader_Model"),
 		TEXT("Com_Shader"), reinterpret_cast<CComponent**>(&m_pShaderCom))))
 		return E_FAIL;
 
-	_tchar szModelTag[MAX_PATH];
-	MultiByteToWideChar(CP_ACP, MB_PRECOMPOSED, pNonAnimDesc->szModelTag, MAX_PATH, szModelTag, MAX_PATH);
+	if (m_isInstance)
+	{
+		CModel* pInstanceModel = m_pGameInstance->Add_NonAnimModel_Instance(LEVEL_TOOL, szModelTag);
+		if (nullptr == pInstanceModel)
+			return E_FAIL;
 
-	/* FOR.Com_Model */
-	if (FAILED(__super::Add_Component(LEVEL_TOOL, szModelTag,
-		TEXT("Com_Model"), reinterpret_cast<CComponent**>(&m_pModelCom))))
-		return E_FAIL;
+		if (FAILED(__super::Add_Component(TEXT("Com_Model"), pInstanceModel)))
+			return E_FAIL;
+
+		m_pModelCom = pInstanceModel;
+		Safe_AddRef(m_pModelCom);
+	}
+	else
+	{
+		/* FOR.Com_Model */
+		if (FAILED(__super::Add_Component(LEVEL_TOOL, szModelTag,
+			TEXT("Com_Model"), reinterpret_cast<CComponent**>(&m_pModelCom))))
+			return E_FAIL;
+	}
 
 	return S_OK;
 }

@@ -18,6 +18,9 @@
 // 2024-11-06 김성용
 #include "CSVFile_Manager.h"
 
+//정승현
+#include "Instance_Manager.h"
+
 IMPLEMENT_SINGLETON(CGameInstance)
 
 CGameInstance::CGameInstance()
@@ -110,6 +113,12 @@ HRESULT CGameInstance::Initialize_Engine(HINSTANCE hInst, _uint iNumLevels, cons
 	if (nullptr == m_pCSVFile_Manager)
 		return E_FAIL;
 
+	// 정승현
+	m_pInstance_Manager = CInstance_Manager::Create(*ppDevice, *ppContext);
+	if (nullptr == m_pInstance_Manager)
+		return E_FAIL;
+
+
 	return S_OK;
 }
 
@@ -160,6 +169,9 @@ HRESULT CGameInstance::Clear(_uint iLevelIndex)
 
 	/* 컴포넌트 원형들도 레벨별로 관리했었다. */
 	m_pComponent_Manager->Clear(iLevelIndex);
+
+	// 인스턴싱을 할 모델들을 모아둔 매니저 클리어하기
+	m_pInstance_Manager->Clear();
 
 	return S_OK;
 }
@@ -615,6 +627,17 @@ _bool CGameInstance::IsFileWrite()
 }
 #pragma endregion
 
+#pragma region CInstance_Manager
+CModel* CGameInstance::Add_NonAnimModel_Instance(_uint iLevelIndex, const _wstring& strPrototypeTag, void* pArg)
+{
+	return m_pInstance_Manager->Add_NonAnimModel(iLevelIndex, strPrototypeTag, pArg);
+}
+HRESULT CGameInstance::Draw_Instance(_uint iPass)
+{
+	return m_pInstance_Manager->Draw(iPass);
+}
+#pragma endregion
+
 void CGameInstance::Release_Engine()
 {
 	Safe_Release(m_pPhysX_Manager);
@@ -630,6 +653,7 @@ void CGameInstance::Release_Engine()
 	Safe_Release(m_pLight_Manager);
 	Safe_Release(m_pPipeLine);
 	Safe_Release(m_pRenderer);
+	Safe_Release(m_pInstance_Manager);
 	Safe_Release(m_pTimer_Manager);
 	Safe_Release(m_pComponent_Manager);
 	Safe_Release(m_pObject_Manager);

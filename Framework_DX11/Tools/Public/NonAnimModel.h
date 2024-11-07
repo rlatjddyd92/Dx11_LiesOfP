@@ -65,8 +65,11 @@ private:
 	static _int m_iStaticHashId;
 
 	_int		m_iHashId;
-	_bool m_bSelected = { false };
-	_bool m_isLight = { false };
+	_bool		m_bSelected = { false };
+	_bool		m_isLight = { false };
+
+	_bool		m_isInstance = { false };
+
 private:
 	HRESULT Ready_Components(NONMODEL_DESC* pNonAnimDesc);
 

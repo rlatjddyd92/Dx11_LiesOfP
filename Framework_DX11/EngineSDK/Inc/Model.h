@@ -52,7 +52,7 @@ public:
 	HRESULT					Update_Boundary();
 
 public:
-	virtual HRESULT Initialize_Prototype(TYPE eType, const _char* pModelFilePath, _fmatrix PreTransformMatrix, _bool isInstance);
+	virtual HRESULT Initialize_Prototype(TYPE eType, const _char* pModelFilePath, _fmatrix PreTransformMatrix);
 	virtual HRESULT Initialize(void* pArg) override;
 	virtual HRESULT Render(_uint iMeshIndex);
 	HRESULT Render_Instance(_uint iMeshIndex);
@@ -150,7 +150,7 @@ public:
 	HRESULT Ready_Animations(HANDLE* pFile);
 
 public:
-	static CModel* Create(ID3D11Device* pDevice, ID3D11DeviceContext* pContext, TYPE eType, const _char* pModelFilePath, _fmatrix PreTransformMatrix = XMMatrixIdentity(), _bool isInstance = false);
+	static CModel* Create(ID3D11Device* pDevice, ID3D11DeviceContext* pContext, TYPE eType, const _char* pModelFilePath, _fmatrix PreTransformMatrix = XMMatrixIdentity());
 	virtual CComponent* Clone(void* pArg) override;
 	virtual void Free() override;
 };

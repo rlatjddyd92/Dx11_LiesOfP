@@ -54,6 +54,8 @@ public:
 	class CComponent* Find_Component(const COMPONENT_TYPE eType);
 	virtual class CComponent* Change_Component(const _wstring& strComponentTag, CComponent* pComponent, _uint iPartObjIndex = 0);//받아온 컴포넌트로 교체하고 이전의 컴포넌트를 반환
 
+	HRESULT Add_Component(const _wstring& strComponentTag, CComponent* pComponent);
+
 protected:
 	ID3D11Device*				m_pDevice = { nullptr };
 	ID3D11DeviceContext*		m_pContext = { nullptr };

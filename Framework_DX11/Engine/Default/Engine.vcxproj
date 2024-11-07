@@ -157,6 +157,7 @@
     <FxCompile Include="..\Bin\ShaderFiles\Shader_Cell.hlsl" />
     <FxCompile Include="..\Bin\ShaderFiles\Shader_Deferred.hlsl" />
     <FxCompile Include="..\Bin\ShaderFiles\Shader_HDR.hlsl" />
+    <FxCompile Include="..\Bin\ShaderFiles\Shader_Model_Instance.hlsl" />
     <FxCompile Include="..\Bin\ShaderFiles\Shader_SSAO.hlsl" />
   </ItemGroup>
   <ItemGroup>

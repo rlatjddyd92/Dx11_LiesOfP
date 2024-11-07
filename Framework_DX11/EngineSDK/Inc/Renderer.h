@@ -47,7 +47,7 @@ private:
 
 	
 	list<class CGameObject*>	m_RenderObjects[RG_END];
-	map<_wstring, list<class CGameObject*>>	m_InstanceRenderObjects[RG_END];
+	list<CGameObject*>			m_InstanceRenderObjects[RG_END];
 
 private:
 	class CShader*				m_pShader = { nullptr };

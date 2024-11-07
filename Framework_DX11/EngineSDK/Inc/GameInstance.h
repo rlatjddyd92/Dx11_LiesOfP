@@ -182,6 +182,11 @@ public:
 
 #pragma endregion 
 
+#pragma region CInstance_Manager
+		CModel* Add_NonAnimModel_Instance(_uint iLevelIndex, const _wstring& strPrototypeTag, void* pArg = nullptr );
+		HRESULT Draw_Instance(_uint iPass);
+#pragma endregion
+
 private:
 	class CGraphic_Device*			m_pGraphic_Device = { nullptr };
 	class CInput_Device*			m_pInput_Device = { nullptr };
@@ -201,6 +206,7 @@ private:
 	class CCollider_Manager*		m_pCollider_Manager = { nullptr };
 	class CKey_Manager*				m_pKey_Manager = { nullptr };
 	class CPhysX_Manager*			m_pPhysX_Manager = { nullptr };
+	class CInstance_Manager*			m_pInstance_Manager = { nullptr };
 
 	// 2024-11-06 ±è¼º¿ë
 	class CCSVFile_Manager*			m_pCSVFile_Manager = { nullptr };

@@ -281,9 +281,8 @@ HRESULT CRenderer::Add_InstanceRenderObject(RENDERGROUP eRenderGroupID, CGameObj
 		eRenderGroupID >= RG_END)
 		return E_FAIL;
 
-	if(m_InstanceRenderObjects->find(strModelName) == m_InstanceRenderObjects->end())
-		m_InstanceRenderObjects[eRenderGroupID][strModelName].push_back(pRenderObject);
-
+	/* 실제 오브젝트 매니져에 추가된 객체의 주소를 여기에다가 공유했다. */
+	m_InstanceRenderObjects[eRenderGroupID].emplace_back(pRenderObject);
 	Safe_AddRef(pRenderObject);
 
 	return S_OK;
@@ -432,6 +431,9 @@ HRESULT CRenderer::Render_NonBlend()
 		Safe_Release(pGameObject);
 	}
 	m_RenderObjects[RG_NONBLEND].clear();
+
+	m_pGameInstance->Draw_Instance(0);
+	
 
 	if (FAILED(m_pGameInstance->End_MRT()))
 		return E_FAIL;

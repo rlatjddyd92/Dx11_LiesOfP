@@ -24,12 +24,6 @@ CModel::CModel(const CModel & Prototype)
 	, m_Animations { Prototype.m_Animations }
 	, m_CurrentTrackPosition { Prototype.m_CurrentTrackPosition }
 	, m_KeyFrameIndices {Prototype.m_KeyFrameIndices }
-	, m_isInstance{ Prototype.m_isInstance }
-	, m_InstanceInitialData{Prototype.m_InstanceInitialData }
-	, m_InstanceBufferDesc{Prototype. m_InstanceBufferDesc }
-	, m_iInstanceStride { Prototype.m_iInstanceStride }
-	, m_iNumInstance {Prototype.m_iNumInstance }
-	, m_pInstanceVertices{Prototype.m_pInstanceVertices }
 {
 	for (auto& pAnimation : m_Animations)
 		Safe_AddRef(pAnimation);
@@ -115,7 +109,7 @@ HRESULT CModel::Update_Boundary()
 	return S_OK;
 }
 
-HRESULT CModel::Initialize_Prototype(TYPE eType, const _char * pModelFilePath, _fmatrix PreTransformMatrix, _bool isInstance)
+HRESULT CModel::Initialize_Prototype(TYPE eType, const _char * pModelFilePath, _fmatrix PreTransformMatrix)
 {
 	_uint		iFlag = { 0 };	
 	
@@ -124,7 +118,6 @@ HRESULT CModel::Initialize_Prototype(TYPE eType, const _char * pModelFilePath, _
 
 	XMStoreFloat4x4(&m_PreTransformMatrix, PreTransformMatrix);
 	m_eType = eType;
-	m_isInstance = isInstance;
 
 	_tchar szFinalPath[MAX_PATH] = TEXT("");
 	MultiByteToWideChar(CP_ACP, 0, pModelFilePath, (_uint)strlen(pModelFilePath), szFinalPath, MAX_PATH);
@@ -152,6 +145,18 @@ HRESULT CModel::Initialize_Prototype(TYPE eType, const _char * pModelFilePath, _
 
 	CloseHandle(hFile);
 
+	return S_OK;
+}
+
+HRESULT CModel::Initialize(void * pArg)
+{
+	m_isEnd_Animations = new _bool[m_iNumAnimations];
+	m_isEnd_Animations_Boundary = new _bool[m_iNumAnimations];
+	ZeroMemory(m_isEnd_Animations, m_iNumAnimations * sizeof(_bool));
+	ZeroMemory(m_isEnd_Animations_Boundary, m_iNumAnimations * sizeof(_bool));
+
+	m_isInstance = (_bool*)pArg;
+
 	if (m_isInstance)
 	{
 		m_iInstanceStride = sizeof(VTXMODELINSTANCE);
@@ -178,24 +183,10 @@ HRESULT CModel::Initialize_Prototype(TYPE eType, const _char * pModelFilePath, _
 			pInstanceVertices[i].vLook = _float4(0.f, 0.f, fScale, 0.f);
 			pInstanceVertices[i].vTranslation = _float4(i * i, 1.f, 1.f, 1.f);
 		}
-	}
 
-	ZeroMemory(&m_InstanceInitialData, sizeof m_InstanceInitialData);
-	m_InstanceInitialData.pSysMem = m_pInstanceVertices;
+		ZeroMemory(&m_InstanceInitialData, sizeof m_InstanceInitialData);
+		m_InstanceInitialData.pSysMem = m_pInstanceVertices;
 
-
-	return S_OK;
-}
-
-HRESULT CModel::Initialize(void * pArg)
-{
-	m_isEnd_Animations = new _bool[m_iNumAnimations];
-	m_isEnd_Animations_Boundary = new _bool[m_iNumAnimations];
-	ZeroMemory(m_isEnd_Animations, m_iNumAnimations * sizeof(_bool));
-	ZeroMemory(m_isEnd_Animations_Boundary, m_iNumAnimations * sizeof(_bool));
-
-	if (m_isInstance)
-	{
 		if (FAILED(m_pDevice->CreateBuffer(&m_InstanceBufferDesc, &m_InstanceInitialData, &m_pVBInstance)))
 			return E_FAIL;
 	}
@@ -630,11 +621,11 @@ HRESULT CModel::Ready_Animations(HANDLE* pFile)
 }
 
 
-CModel * CModel::Create(ID3D11Device * pDevice, ID3D11DeviceContext * pContext, TYPE eType, const _char * pModelFilePath, _fmatrix PreTransformMatrix, _bool isInstance)
+CModel * CModel::Create(ID3D11Device * pDevice, ID3D11DeviceContext * pContext, TYPE eType, const _char * pModelFilePath, _fmatrix PreTransformMatrix)
 {
 	CModel*		pInstance = new CModel(pDevice, pContext);
 
-	if (FAILED(pInstance->Initialize_Prototype(eType, pModelFilePath, PreTransformMatrix, isInstance)))
+	if (FAILED(pInstance->Initialize_Prototype(eType, pModelFilePath, PreTransformMatrix)))
 	{
 		MSG_BOX(TEXT("Failed to Created : CModel"));
 		Safe_Release(pInstance);
