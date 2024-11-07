@@ -660,12 +660,8 @@ void CModel::Free()
 		if (m_isInstance)
 		{
 			Safe_Release(m_pVBInstance);
+			Safe_Delete_Array(m_pInstanceVertices);
 		}
-	}
-
-	if (!m_isCloned && m_isInstance)
-	{
-		Safe_Delete_Array(m_pInstanceVertices);
 	}
 
 	for (auto& pAnimation : m_Animations)

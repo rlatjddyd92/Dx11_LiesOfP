@@ -38,6 +38,8 @@ CModel* CInstance_Manager::Add_NonAnimModel(_uint iLevelIndex, const _wstring& s
 	pInstanceModel = dynamic_cast<CModel*>(pComponent);
 	m_pNonAnimModels.emplace(strPrototypeTag, pInstanceModel);
 
+	Safe_AddRef(pInstanceModel);
+
 	return pInstanceModel;
 }
 
