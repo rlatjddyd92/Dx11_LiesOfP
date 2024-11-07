@@ -848,6 +848,19 @@ void CController_MapTool::Map_Menu()
 		if (FAILED(m_pGameInstance->Add_CloneObject_ToLayer(LEVEL_TOOL, wstrLayerName, TEXT("Prototype_GameObject_NonAnim"), &Desc)))
 			return;
 
+		//새로 만든 오브젝트 자동 선택
+		if(m_pSelectObject != nullptr)
+		{
+			static_cast<CNonAnimModel*>(m_pSelectObject)->Set_Selected(false);
+			m_pPreSelectObject = m_pSelectObject;
+		}
+		
+		int LayerObjectCount = m_pGameInstance->Get_Layer_ObjectCount(LEVEL_TOOL, wstrLayerName);
+		m_pSelectObject = m_pGameInstance->Find_Object(LEVEL_TOOL, wstrLayerName, LayerObjectCount-1);
+		static_cast<CNonAnimModel*>(m_pSelectObject)->Set_Selected(true);
+		m_iPre_Picked_ID = m_iPickObject_ID;
+		m_iPickObject_ID = static_cast<CNonAnimModel*>(m_pSelectObject)->Get_HashId();
+
 	}ImGui::SameLine();
 	ImGui::Text("or Press \"C\" to Create");
 
@@ -1175,6 +1188,20 @@ void CController_MapTool::Light_Create()
 
 		if (FAILED(m_pGameInstance->Add_Light(newLightDesc)))
 			return ;
+
+		//새로 만든 오브젝트 자동 선택
+		if (m_pSelectObject != nullptr)
+		{
+			static_cast<CNonAnimModel*>(m_pSelectObject)->Set_Selected(false);
+			m_pPreSelectObject = m_pSelectObject;
+		}
+
+		int LayerObjectCount = m_pGameInstance->Get_Layer_ObjectCount(LEVEL_TOOL, wstrLayerName);
+		m_pSelectObject = m_pGameInstance->Find_Object(LEVEL_TOOL, wstrLayerName, LayerObjectCount - 1);
+		static_cast<CNonAnimModel*>(m_pSelectObject)->Set_Selected(true);
+		m_iPre_Picked_ID = m_iPickObject_ID;
+		m_iPickObject_ID = static_cast<CNonAnimModel*>(m_pSelectObject)->Get_HashId();
+
 
 	}ImGui::SameLine();
 	ImGui::Text("or Press \"C\" to Create");
