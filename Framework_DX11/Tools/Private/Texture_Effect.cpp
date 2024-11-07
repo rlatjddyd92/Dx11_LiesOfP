@@ -53,6 +53,7 @@ HRESULT CTexture_Effect::Initialize(void* pArg)
 
     m_pTransformCom->Rotation(m_pTransformCom->Get_State(CTransform::STATE_LOOK), XMConvertToRadians(pDesc->fRotationAngle));
 
+    m_SaveDesc = *pDesc;
 
     return S_OK;
 }
@@ -122,11 +123,16 @@ void CTexture_Effect::Late_Update(_float fTimeDelta)
 
     if (STATE_LOOP != (STATE_LOOP & m_iState))
     {
-        if (m_fDuration < m_fAccumulateTime)
-            m_isDead = true;
+        //if (m_fDuration < m_fAccumulateTime)
+        //    m_isDead = true;
 
-        if (1.f < (m_fCurrenrtIndex / (m_vDivide.x * m_vDivide.y - 1.f)))
-            m_isDead = true;
+        //if (1.f < (m_fCurrenrtIndex / (m_vDivide.x * m_vDivide.y - 1.f)))
+        //    m_isDead = true;
+    }
+    else
+    {
+        if (m_fDuration < m_fAccumulateTime)
+            Reset();
     }
 
     if (STATE_DISTORTION & m_iState)
@@ -164,7 +170,7 @@ HRESULT CTexture_Effect::Render()
         return E_FAIL;
     if (FAILED(m_pShaderCom->Bind_RawValue("g_fRatio", &m_fAlpha, sizeof m_fAlpha)))
         return E_FAIL;
-
+    
     if (FAILED(m_pShaderCom->Begin(m_iShaderIndex)))
         return E_FAIL;
     if (FAILED(m_pVIBufferCom->Bind_Buffers()))
@@ -192,6 +198,10 @@ void CTexture_Effect::Set_Desc(const TEXTURE_EFFECT_DESC& desc)
     m_fScalingSpeed  = desc.fScalingSpeed;
     m_fAlpha         = desc.fAlpha;
     m_fAlphaSpeed    = desc.fAlphaSpeed;
+
+    _wstring strTextureTag = m_SaveDesc.strTexturTag;
+    m_SaveDesc = desc;
+    m_SaveDesc.strTexturTag = strTextureTag;
 }
 
 CTexture_Effect::TEXTURE_EFFECT_DESC CTexture_Effect::Get_Desc()
@@ -216,6 +226,20 @@ void CTexture_Effect::Reset()
 {
     m_fAccumulateTime = { 0.f };
     m_fCurrenrtIndex = { 0.f };
+
+    m_iState            = m_SaveDesc.iState;
+    m_iShaderIndex      = m_SaveDesc.iShaderIndex;
+    m_fDuration         = m_SaveDesc.fDuration;
+    m_vColor            = m_SaveDesc.vColor;
+    m_vDivide           = m_SaveDesc.vDivide;
+    m_fSpriteSpeed      = m_SaveDesc.fSpriteSpeed;
+    m_pTransformCom->Set_State(CTransform::STATE_POSITION, m_SaveDesc.vPos);
+    m_pTransformCom->Rotation(m_pTransformCom->Get_State(CTransform::STATE_LOOK), m_SaveDesc.fRotationAngle);
+    m_fRotationSpeed    = m_SaveDesc.fRotationSpeed;
+    m_pTransformCom->Set_Scaled(m_SaveDesc.vScale.x, m_SaveDesc.vScale.y, m_SaveDesc.vScale.z);
+    m_fScalingSpeed     = m_SaveDesc.fScalingSpeed;
+    m_fAlpha            = m_SaveDesc.fAlpha;
+    m_fAlphaSpeed       = m_SaveDesc.fAlphaSpeed;
 }
 
 HRESULT CTexture_Effect::Ready_Components(const _wstring strTexturTag)

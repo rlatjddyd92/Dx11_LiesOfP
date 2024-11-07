@@ -46,6 +46,13 @@ namespace Engine
 
 	typedef struct
 	{
+		_uint			iMeshNum;
+		_uint			VtxNum;
+		_uint			UseWay;//이넘으로 받도록 만들지 문자로 받을지 고민해보기
+	}UFVTX;
+
+	typedef struct
+	{
 		_uint	iNextAnimIndex;
 		_uint	iStartFrame;
 		_float	fChangeTime = 0.f;
@@ -151,12 +158,12 @@ namespace Engine
 
 	typedef struct ENGINE_DLL
 	{
-		XMFLOAT3		vPosition;
-		XMFLOAT3		vNormal;
-		XMFLOAT2		vTexcoord;
-		XMFLOAT3		vTangent;
+		XMFLOAT4		vRight;
+		XMFLOAT4		vUp;
+		XMFLOAT4		vLook;
+		XMFLOAT4		vTranslation;
 
-		static const unsigned int	iNumElements = 4;
+		static const unsigned int	iNumElements = 8;
 		static const D3D11_INPUT_ELEMENT_DESC	Elements[iNumElements];
-	}VTXMESHINSTANCE;
+	}VTXMODELINSTANCE;
 }

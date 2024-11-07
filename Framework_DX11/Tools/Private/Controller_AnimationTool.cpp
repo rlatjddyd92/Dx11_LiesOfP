@@ -5,6 +5,7 @@
 //++
 #include "AnimModel.h"
 #include "Animation.h"
+#include "Mesh.h"
 
 IMPLEMENT_SINGLETON(CController_AnimationTool)
 
@@ -23,10 +24,19 @@ HRESULT CController_AnimationTool::Initialize(ID3D11Device* pDevice, ID3D11Devic
 	Desc.vScale = { 2.f,2.f,2.f };
 	Desc.vRotation = { 0.f,0.f,0.f };
 	Desc.pUpdateCtr = &m_bObjRenderCtr;
+	
 
-	strcpy_s(Desc.szModelTag, "Prototype_AnimModel_Test");
+	strcpy_s(m_szCurrentModelText, "Prototype_AnimModel_Test");
+	strcpy_s(Desc.szModelTag, m_szCurrentModelText);
+
 	if (FAILED(m_pGameInstance->Add_CloneObject_ToLayer(LEVEL_TOOL, TEXT("Layer_AnimationTool_Test"), TEXT("Prototype_GameObject_Anim"), &Desc)))
 		return E_FAIL;
+
+	m_ModelNames.reserve(m_pGameInstance->Get_ModelPrototypes(LEVEL_TOOL).size());
+	for (auto& Pair : m_pGameInstance->Get_ModelPrototypes(LEVEL_TOOL))
+	{
+		m_ModelNames.push_back(Pair.first);
+	}
 
 	return S_OK;
 }
@@ -35,17 +45,18 @@ void CController_AnimationTool::SetUp_AnimTool()
 {
 	m_bObjRenderCtr = true;
 	CModel* pModel = dynamic_cast<CModel*>(m_pGameInstance->Find_Component(LEVEL_TOOL, TEXT("Layer_AnimationTool_Test"), TEXT("Com_Model")));
-	if (m_pCopyModelCom == nullptr)
+	
+	if (m_pCopyModelCom != pModel)
 	{
 		m_pCopyModelCom = pModel;
-
-	}
-	else if (m_pCopyModelCom != pModel)
-	{
-		m_pCopyModelCom = pModel;
+		Safe_AddRef(pModel);
 
 		m_pCopyAnimVec = nullptr;
 		m_pCopyBoneVec = nullptr;
+	}
+	else
+	{
+		Safe_AddRef(pModel);
 	}
 
 	if (m_pCopyModelCom != nullptr)
@@ -83,6 +94,8 @@ void CController_AnimationTool::SetUp_AnimTool()
 		}
 		if (ImGui::BeginTabItem("Vertex"))
 		{
+			ListUp_Virtex();
+			SetUp_Controller_Vertex();
 			ImGui::EndTabItem();
 		}
 
@@ -92,22 +105,95 @@ void CController_AnimationTool::SetUp_AnimTool()
 
 void CController_AnimationTool::ListUp_Anim()
 {
+	ImGui::PushItemWidth(200); // 크기조정
+	if (ImGui::BeginListBox("Model List"))
+	{
+		bool is_selected{ false };
+		for (int i = 0; i < m_ModelNames.size(); i++)
+		{
+			if (m_iSelected_Index_Model == i)
+			{
+				is_selected = true;
+			}
+
+			if (ImGui::Selectable(m_ModelNames[i], is_selected))
+			{
+				m_iSelected_Index_Model = i;
+			}
+
+
+			if (!is_selected)
+				ImGui::SetItemDefaultFocus();
+			is_selected = false;
+			// 반복문으로 리스트박스의 선택된 객체 찾기
+		}
+		ImGui::EndListBox();
+	}
+	ImGui::PopItemWidth();
+	ImGui::SameLine();
+
+	if (ImGui::Button("ChangeModel"))
+	{
+		if (m_pCopyModelCom != nullptr)
+		{
+			auto	iter = m_Models.find(m_ModelNames[m_iSelected_Index_Model]);
+			if (iter == m_Models.end())
+			{
+				string strName(m_ModelNames[m_iSelected_Index_Model]);
+				_wstring szName;
+				szName.assign(strName.begin(), strName.end());
+
+				CComponent* pOut = nullptr;
+				CComponent* pComponent = m_pGameInstance->Clone_Component(LEVEL_TOOL, szName.c_str());
+				pOut = m_pGameInstance->Find_Object(LEVEL_TOOL, TEXT("Layer_AnimationTool_Test"), 0)->Change_Component(TEXT("Com_Model"), pComponent);
+				
+				m_Models.emplace(m_szCurrentModelText, dynamic_cast<CModel*>(pOut));
+				strcpy_s(m_szCurrentModelText, m_ModelNames[m_iSelected_Index_Model]);
+			}
+			else
+			{
+				CComponent* pOut = nullptr;
+				pOut = m_pGameInstance->Find_Object(LEVEL_TOOL, TEXT("Layer_AnimationTool_Test"), 0)->Change_Component(TEXT("Com_Model"), iter->second);
+				
+				m_Models.emplace(m_szCurrentModelText, dynamic_cast<CModel*>(pOut));
+				strcpy_s(m_szCurrentModelText, m_ModelNames[m_iSelected_Index_Model]);
+			}
+
+			m_iCurSelected_Index_Anim = 0;
+			m_iCurSelected_Index_Anim_Boundary = 0;
+			m_iCurSelected_Index_Bone = 0;
+			m_iCurSelected_Index_KeyFrame = 0;
+
+			m_iSelected_Index_Anim = 0;
+			m_iSelected_Index_Anim_Boundary = 0;
+			m_iSelected_Index_Bone = 0;
+			m_iSelected_Index_KeyFrame = 0;
+
+			m_fAnimTrackPosition = 0.f;
+
+		}
+	}
+
+	ImGui::Text("\n");
+	ImGui::Text("\n");
+
 	//이전 선택 저장
 	m_iCurSelected_Index_Anim = m_iSelected_Index_Anim;
 	_bool BoundaryCheck = m_pCopyModelCom->Get_IsUseBoundary();
-	ImGui::Text("Animation");
 	if (m_pCopyModelCom != nullptr && BoundaryCheck)
 	{
-		ImGui::SameLine();
-		ImGui::Text("\t");
-		ImGui::SameLine();
-		ImGui::Text("Anim Boundary");
-
 		ImGui::Checkbox("Divide_Boundary", &m_bDivide_Boundary);
+		ImGui::Text("Anim Lower Body");
+		ImGui::SameLine();
+		ImGui::Text("\t\t");
+		ImGui::SameLine();
+		ImGui::Text("Anim Upper Body");
 	}
+	else
+		ImGui::Text("Animation");
 
 	ImGui::PushItemWidth(200); // 크기조정
-	if (ImGui::BeginListBox(""))
+	if (ImGui::BeginListBox("##Anim_Lower"))
 	{
 		if (m_pCopyModelCom != nullptr)
 		{
@@ -162,7 +248,7 @@ void CController_AnimationTool::ListUp_Anim()
 		}
 
 		ImGui::SameLine();
-		if (ImGui::BeginListBox("Boundary"))
+		if (ImGui::BeginListBox("##Anim_Upper"))
 		{
 			bool is_selected_Boundary{ false };
 
@@ -523,17 +609,178 @@ void CController_AnimationTool::SetUp_Controller_Bone()
 
 }
 
-void CController_AnimationTool::Ready_PickModel()
+void CController_AnimationTool::ListUp_Virtex()
 {
+	if (m_pCopyModelCom != nullptr)
+	{
+		m_pCopyMeshVec = &(m_pCopyModelCom->Get_Meshes());
+		//m_pCopyVtxAnimMeshes;
+	}
+
+
+	ImGui::PushItemWidth(300); // 크기조정
+	if (ImGui::BeginListBox("Mesh List"))
+	{
+		if (m_pCopyMeshVec != nullptr || m_pCopyModelCom != nullptr)
+		{
+			bool is_selected{ false };
+			for (_uint i = 0; i < m_pCopyModelCom->Get_NumMeshes(); i++)
+			{
+				if (m_iSelected_Index_Mesh == i)
+				{
+					is_selected = true;
+				}
+				string strnm;
+				
+				//예외 처리
+				strnm.assign((*m_pCopyMeshVec)[i]->Get_Name());
+				
+				strnm = strnm + to_string(i);
+				
+				if (ImGui::Selectable(strnm.c_str(), is_selected))
+				{
+					m_iSelected_Index_Mesh = i;
+				}
+
+
+				if (!is_selected)
+					ImGui::SetItemDefaultFocus();
+				is_selected = false;
+				// 반복문으로 리스트박스의 선택된 객체 찾기
+			}
+		}
+
+		ImGui::EndListBox();
+	}
+	ImGui::PopItemWidth();
+	ImGui::Text("Now Selected Mesh : \t");
+	ImGui::SameLine();
+	ImGui::Text((*m_pCopyMeshVec)[m_iSelected_Index_Mesh]->Get_Name());
+
+
+	if (m_pCopyMeshVec != nullptr)
+	{
+		m_pCopyVtxAnimMeshes = (*m_pCopyMeshVec)[m_iSelected_Index_Mesh]->Get_AnimVertices();
+	}
+
+
+	ImGui::PushItemWidth(300); // 크기조정
+	if (ImGui::BeginListBox("Vtx List"))
+	{
+		if (m_pCopyModelCom != nullptr)
+		{
+			bool is_selected{ false };
+			for (_uint i = 0; i < (*m_pCopyMeshVec)[m_iSelected_Index_Mesh]->Get_NumVertices(); i++)
+			{
+				if (m_iSelected_Index_Vtx == i)
+				{
+					is_selected = true;
+				}
+
+				string strSelecIndex = to_string(i);
+				
+
+				if (ImGui::Selectable(strSelecIndex.c_str(), is_selected))
+				{
+					m_iSelected_Index_Vtx = i;
+				}
+
+
+				if (!is_selected)
+					ImGui::SetItemDefaultFocus();
+				is_selected = false;
+				// 반복문으로 리스트박스의 선택된 객체 찾기
+			}
+		}
+
+		ImGui::EndListBox();
+	}
+	ImGui::PopItemWidth();
+
+	string strSelecIndex = to_string(m_iSelected_Index_Vtx);
+
+	ImGui::Text("Now Selected Vtx Index : \t");
+	ImGui::SameLine();
+	ImGui::Text(strSelecIndex.c_str());
+	ImGui::Text("\n");
+
+	ImGui::Text("Pos  X : \t %f", m_pCopyVtxAnimMeshes->vPosition.x);
+	ImGui::Text("Pos  Y : \t %f", m_pCopyVtxAnimMeshes->vPosition.y);
+	ImGui::Text("Pos  Z : \t %f", m_pCopyVtxAnimMeshes->vPosition.z);
+	
 }
 
 void CController_AnimationTool::SetUp_Controller_Vertex()
 {
+	if (ImGui::Button("Add_UFVtx"))
+	{
+		UFVTX UFVtx{};
+		UFVtx.iMeshNum = m_iSelected_Index_Mesh;
+		UFVtx.VtxNum = m_iSelected_Index_Vtx;
+
+		m_pCopyModelCom->Add_UFVtxIndices(UFVtx);
+	}
+
+	ImGui::PushItemWidth(300); // 크기조정
+	if (ImGui::BeginListBox("UFVtx List"))
+	{
+		if (m_pCopyMeshVec != nullptr || m_pCopyModelCom != nullptr)
+		{
+			vector<UFVTX>* vtxs = 	m_pCopyModelCom->Get_UFVtxIndices();
+
+			bool is_selected{ false };
+			for (_uint i = 0; i < vtxs->size(); i++)
+			{
+				if (m_iSelected_Index_UFVtx == i)
+				{
+					is_selected = true;
+				}
+
+				string strnm;
+				string strCollon = " : ";
+				string strDash = " Mesh  - ";
+				string strTale = " Vtx";
+
+				//예외 처리
+				
+				strnm = to_string(i) + strCollon + to_string((*vtxs)[i].iMeshNum) + strDash + to_string((*vtxs)[i].VtxNum) + strTale;
+				
+
+				if (ImGui::Selectable(strnm.c_str(), is_selected))
+				{
+					m_iSelected_Index_UFVtx = i;
+				}
+
+
+				if (!is_selected)
+					ImGui::SetItemDefaultFocus();
+				is_selected = false;
+				// 반복문으로 리스트박스의 선택된 객체 찾기
+			}
+		}
+
+		ImGui::EndListBox();
+	}
+	ImGui::PopItemWidth();
+
+}
+
+void CController_AnimationTool::EndFrame_AnimTool()
+{
+	Safe_Release(m_pCopyModelCom);
+	m_pCopyAnimVec = nullptr;
+	m_pCopyBoneVec = nullptr;
 }
 
 void CController_AnimationTool::Free()
 {
-	__super::Free();
+	for (auto& iter : m_Models)
+	{
+		Safe_Release(iter.second);
+	}
+	m_Models.clear();
+
 
 	Safe_Release(m_pGameInstance);
+	__super::Free();
 }

@@ -77,6 +77,30 @@ HRESULT CVIBuffer::Bind_Buffers()
 	return S_OK;
 }
 
+HRESULT CVIBuffer::Bind_Buffers_Instance(ID3D11Buffer* pVBInstance)
+{
+	ID3D11Buffer* pVertexBuffers[] = {
+	m_pVB,
+	pVBInstance
+	};
+
+	_uint		iVertexStrides[] = {
+		m_iVertexStride,
+		sizeof(VTXMODELINSTANCE) ,
+	};
+
+	_uint		iOffsets[] = {
+		0,
+		0
+	};
+
+	m_pContext->IASetVertexBuffers(0, m_iNumVertexBuffers + 1, pVertexBuffers, iVertexStrides, iOffsets);
+	m_pContext->IASetIndexBuffer(m_pIB, m_eIndexFormat, 0);
+	m_pContext->IASetPrimitiveTopology(m_eTopology);
+
+	return S_OK;
+}
+
 HRESULT CVIBuffer::Render()
 {
 	m_pContext->DrawIndexed(m_iNumIndices, 0, 0);

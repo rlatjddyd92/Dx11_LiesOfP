@@ -75,6 +75,8 @@ public:
 #pragma region COMPONENT_MANAGER
 	HRESULT Add_Prototype(_uint iLevelIndex, const _wstring& strPrototypeTag, class CComponent* pPrototype);
 	class CComponent* Clone_Component(_uint iLevelIndex, const _wstring& strPrototypeTag, void* pArg = nullptr );
+	HRESULT Add_ModelPrototype(_uint iLevelIndex, const _char* strPrototypeTag, class CComponent* pPrototype);
+	map<const _char*, class CComponent*> Get_ModelPrototypes(_uint iLevelIndex);
 #pragma endregion
 
 #pragma region TIMER_MANAGER
@@ -117,7 +119,7 @@ public:
 #pragma endregion
 
 #pragma region TARGET_MANAGER
-	HRESULT Add_RenderTarget(const _wstring& strTargetTag, _uint iWidth, _uint iHeight, DXGI_FORMAT ePixelFormat, const _float4& vClearColor);
+	HRESULT Add_RenderTarget(const _wstring& strTargetTag, _uint iWidth, _uint iHeight, DXGI_FORMAT ePixelFormat, const _float4& vClearColor, _uint iArraySize = 1);
 	HRESULT Add_MRT(const _wstring& strMRTTag, const _wstring& strTargetTag);
 	HRESULT Begin_MRT(const _wstring& strMRTTag, ID3D11DepthStencilView* pDSV = nullptr);
 	HRESULT End_MRT();
@@ -165,6 +167,21 @@ public:
 		_bool   RayCast_PhysX(_vector vRayPos, _vector vRayDir, _vector* vHitPos, _vector* vNormal, _float* fHitDistance);
 #pragma endregion
 
+		// 2024-11-06 김성용 추가 
+#pragma region CSVFileManager
+		HRESULT		FileOpenByRow(const _char* FilePath, _bool bIsRead);// bIsRead가 true면 읽기 false면 쓰기
+		_bool		LoadDataByRow(vector<_wstring>* vecDataBuffer);
+		_bool		SaveDataByRow(vector<_wstring>& vecDataBuffer);
+		void		FileClose();
+
+		HRESULT		LoadDataByFile(const _char* FilePath, vector<vector<_wstring>>* vecDataBuffer);
+		HRESULT		SaveDataByFile(const _char* FilePath, vector<vector<_wstring>>& vecDataBuffer);
+
+		_bool		IsFileRead();
+		_bool		IsFileWrite();
+
+#pragma endregion 
+
 private:
 	class CGraphic_Device*			m_pGraphic_Device = { nullptr };
 	class CInput_Device*			m_pInput_Device = { nullptr };
@@ -184,6 +201,9 @@ private:
 	class CCollider_Manager*		m_pCollider_Manager = { nullptr };
 	class CKey_Manager*				m_pKey_Manager = { nullptr };
 	class CPhysX_Manager*			m_pPhysX_Manager = { nullptr };
+
+	// 2024-11-06 김성용
+	class CCSVFile_Manager*			m_pCSVFile_Manager = { nullptr };
 
 public:	
 	void Release_Engine();

@@ -15,6 +15,8 @@
 #include "Particle_Effect.h"
 #include "Texture_Effect.h"
 
+#include "Effect_Container.h"
+
 #include "Controller_EffectTool.h"
 
 #pragma comment(lib, "ole32.lib")	// 지우지 마세요
@@ -151,10 +153,10 @@ HRESULT CLoader::LoadingMapModel0()
 		hr = S_OK;
 	}
 
-	//if (hr == E_FAIL)
-	//	MSG_BOX(TEXT("맵 로드0 에서 터짐"));
+	if (hr == E_FAIL)
+		MSG_BOX(TEXT("맵 로드0 에서 터짐"));
 
-	//LeaveCriticalSection(&m_CriticalSection_Map0);
+	LeaveCriticalSection(&m_CriticalSection_Map0);
 
 	return hr;
 }
@@ -289,23 +291,30 @@ HRESULT CLoader::Ready_Resources_For_ToolLevel()
 		CTexture::Create(m_pDevice, m_pContext, TEXT("../Bin/Resources/Textures/Effect/Particle_Circle.dds"), 1))))
 		return E_FAIL;
 	CController_EffectTool::Get_Instance()->Add_Particle_ProtytypeTag(TEXT("Prototype_Component_Texture_Particle_Circle"));
+
+	/* For. Prototype_Component_Texture_Particle_Thunder */
+	if (FAILED(m_pGameInstance->Add_Prototype(LEVEL_TOOL, TEXT("Prototype_Component_Texture_Particle_Thunder"),
+		CTexture::Create(m_pDevice, m_pContext, TEXT("../Bin/Resources/Textures/Effect/T_Thunder_02_C_HJS.dds"), 1))))
+		return E_FAIL;
+	CController_EffectTool::Get_Instance()->Add_Particle_ProtytypeTag(TEXT("Prototype_Component_Texture_Particle_Thunder"));
+
 #pragma endregion
 
 #pragma region EFFECT
-	/* For. Prototype_Component_Texture_Particle_Flare */
+	/* For. Prototype_Component_Texture_TE_Flare */
 	if (FAILED(m_pGameInstance->Add_Prototype(LEVEL_TOOL, TEXT("Prototype_Component_Texture_TE_Flare"),
 		CTexture::Create(m_pDevice, m_pContext, TEXT("../Bin/Resources/Textures/Effect/T_Flare_01_C_HJS.dds"), 1))))
 		return E_FAIL;
 	CController_EffectTool::Get_Instance()->Add_TE_ProtytypeTag(TEXT("Prototype_Component_Texture_TE_Flare"));
 
-	/* For. Prototype_Component_Texture_Particle_Ring */
+	/* For. Prototype_Component_Texture_TE_Ring */
 	if (FAILED(m_pGameInstance->Add_Prototype(LEVEL_TOOL, TEXT("Prototype_Component_Texture_TE_Ring"),
 		CTexture::Create(m_pDevice, m_pContext, TEXT("../Bin/Resources/Textures/Effect/T_Ring_04_C_KMH.dds"), 1))))
 		return E_FAIL;
 	CController_EffectTool::Get_Instance()->Add_TE_ProtytypeTag(TEXT("Prototype_Component_Texture_TE_Ring"));
 
 	// 테스트용. 나중에 링이랑 합칠거임.
-	/* For. Prototype_Component_Texture_Particle_Spread */
+	/* For. Prototype_Component_Texture_TE_Spread */
 	if (FAILED(m_pGameInstance->Add_Prototype(LEVEL_TOOL, TEXT("Prototype_Component_Texture_TE_Spread"),
 		CTexture::Create(m_pDevice, m_pContext, TEXT("../Bin/Resources/Textures/Effect/T_Ring_08_C_HJS.dds"), 1))))
 		return E_FAIL;
@@ -318,6 +327,17 @@ HRESULT CLoader::Ready_Resources_For_ToolLevel()
 		return E_FAIL;
 	CController_EffectTool::Get_Instance()->Add_TE_ProtytypeTag(TEXT("Prototype_Component_Texture_TE_LensFlare"));
 
+	// 테스트용. 나중에 플레어랑 합칠거임.
+/* For. Prototype_Component_Texture_Particle_Spread */
+	if (FAILED(m_pGameInstance->Add_Prototype(LEVEL_TOOL, TEXT("Prototype_Component_Texture_TE_Spark"),
+		CTexture::Create(m_pDevice, m_pContext, TEXT("../Bin/Resources/Textures/Effect/T_Tile_Spark_01_C_HJS.dds"), 1))))
+		return E_FAIL;
+	CController_EffectTool::Get_Instance()->Add_TE_ProtytypeTag(TEXT("Prototype_Component_Texture_TE_Spark"));
+
+	if (FAILED(m_pGameInstance->Add_Prototype(LEVEL_TOOL, TEXT("Prototype_Component_Texture_TE_Noise.dds"),
+		CTexture::Create(m_pDevice, m_pContext, TEXT("../Bin/Resources/Textures/Effect/T_Tile_Noise_39_C_RSW.dds"), 1))))
+		return E_FAIL;
+	CController_EffectTool::Get_Instance()->Add_TE_ProtytypeTag(TEXT("Prototype_Component_Texture_TE_Noise"));
 #pragma endregion
 
 
@@ -408,6 +428,11 @@ HRESULT CLoader::Ready_Resources_For_ToolLevel()
 	if (FAILED(m_pGameInstance->Add_Prototype(TEXT("Prototype_GameObject_Texture_Effect"),
 		CTexture_Effect::Create(m_pDevice, m_pContext))))
 		return E_FAIL;
+	
+	/* For. Prototype_GameObject_Effect_Continaer */
+	if (FAILED(m_pGameInstance->Add_Prototype(TEXT("Prototype_GameObject_Effect_Continaer"),
+		CEffect_Container::Create(m_pDevice, m_pContext))))
+		return E_FAIL;
 #pragma endregion
 
 	m_isFinished_Main = true;
@@ -419,11 +444,20 @@ HRESULT CLoader::Ready_Resources_For_ToolLevel_Map0()
 {
 	_matrix      PreTransformMatrix = XMMatrixIdentity();
 
-
+	CModel* pModel = { nullptr };
 	PreTransformMatrix = XMMatrixScaling(0.01f, 0.01f, 0.01f) * XMMatrixRotationY(XMConvertToRadians(270.f));
+
+	pModel = CModel::Create(m_pDevice, m_pContext, CModel::TYPE_ANIM, "../Bin/ModelData/Anim/PlayerExample/PlayerExample.dat", PreTransformMatrix);
 	if (FAILED(m_pGameInstance->Add_Prototype(LEVEL_TOOL, TEXT("Prototype_AnimModel_Test"),
-		CModel::Create(m_pDevice, m_pContext, CModel::TYPE_ANIM, "../Bin/ModelData/Anim/PlayerExample/PlayerExample.dat", PreTransformMatrix))))
+		pModel)))
 		return E_FAIL;
+	m_pGameInstance->Add_ModelPrototype(LEVEL_TOOL, ("Prototype_AnimModel_Test"), pModel);
+
+	pModel = CModel::Create(m_pDevice, m_pContext, CModel::TYPE_ANIM, "../Bin/ModelData/Anim/Monster/CarcassTail/CarcassTail.dat", PreTransformMatrix);
+	if (FAILED(m_pGameInstance->Add_Prototype(LEVEL_TOOL, TEXT("Prototype_AnimModel_Test2"),
+		pModel)))
+		return E_FAIL;
+	m_pGameInstance->Add_ModelPrototype(LEVEL_TOOL, ("Prototype_AnimModel_Test2"), pModel);
 
 	//// _finddata_t : <io.h>에서 제공하며 파일 정보를 저장하는 구조체
 	//_finddata_t fd;

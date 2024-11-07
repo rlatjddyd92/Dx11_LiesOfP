@@ -196,6 +196,9 @@
     <Filter Include="01.Utility\97.CSVFileManager">
       <UniqueIdentifier>{a318eb36-df00-4b66-85dc-c9029b0fbc28}</UniqueIdentifier>
     </Filter>
+    <Filter Include="01.Utility\03.Components\Model\Instance">
+      <UniqueIdentifier>{4f337ae3-4578-49df-8b04-d6616acae1d1}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\Private\Base.cpp">
@@ -269,9 +272,6 @@
     </ClCompile>
     <ClCompile Include="..\Private\Input_Device.cpp">
       <Filter>00.System\01.Device\Input</Filter>
-    </ClCompile>
-    <ClCompile Include="..\private\Model.cpp">
-      <Filter>01.Utility\03.Components\Model</Filter>
     </ClCompile>
     <ClCompile Include="..\private\Mesh.cpp">
       <Filter>01.Utility\03.Components\Model\Mesh</Filter>
@@ -378,8 +378,14 @@
     <ClCompile Include="..\Private\Pawn.cpp">
       <Filter>01.Utility\02.GameObjects\01.Pawn</Filter>
     </ClCompile>
-    <ClCompile Include="..\Private\CSVFileManager.cpp">
+    <ClCompile Include="..\Private\CSVFile_Manager.cpp">
       <Filter>01.Utility\97.CSVFileManager</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Private\Instance_Manager.cpp">
+      <Filter>01.Utility\03.Components\Model\Instance</Filter>
+	</ClCompile>
+    <ClCompile Include="..\private\Model.cpp">
+      <Filter>01.Utility\03.Components\Model</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -427,9 +433,6 @@
     </ClInclude>
     <ClInclude Include="..\Public\Layer.h">
       <Filter>01.Utility\02.GameObjects\00.Manager\Layer</Filter>
-    </ClInclude>
-    <ClInclude Include="..\Public\Component_Manager.h">
-      <Filter>01.Utility\03.Components\00.Manager</Filter>
     </ClInclude>
     <ClInclude Include="..\Public\Graphic_Device.h">
       <Filter>00.System\01.Device\Graphic</Filter>
@@ -578,8 +581,14 @@
     <ClInclude Include="..\Public\Engine_Enum.h">
       <Filter>99.Defines</Filter>
     </ClInclude>
-    <ClInclude Include="..\Public\CSVFileManager.h">
+    <ClInclude Include="..\Public\CSVFile_Manager.h">
       <Filter>01.Utility\97.CSVFileManager</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Public\Instance_Manager.h">
+      <Filter>01.Utility\03.Components\Model\Instance</Filter>
+	</ClInclude>
+    <ClInclude Include="..\Public\Component_Manager.h">
+      <Filter>01.Utility\03.Components\00.Manager</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

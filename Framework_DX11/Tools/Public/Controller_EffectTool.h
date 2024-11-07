@@ -74,6 +74,10 @@ public:
 	void Get_TE();
 	void Delete_TE();
 
+	HRESULT Add_EffectContainer();
+	void Reset_EffectContainer();
+	void Delete_EffectContainer();
+
 private:
 	class CGameInstance* m_pGameInstance = { nullptr };
 

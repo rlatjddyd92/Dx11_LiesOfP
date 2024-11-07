@@ -88,22 +88,28 @@ private:
 public:
 	void Set_Default(DEFAULT_DESC desc) {
 		m_DefaultDesc = desc;
+		m_SaveDesc.DefaultDesc = desc;
 	}
 	void Set_Revolev(REVOLVE_DESC desc) {
 		m_OrbitDesc = desc;
+		m_SaveDesc.OrbitDesc = desc;
 	}
 	void Set_Random(RANDOM_DESC desc) {
 		m_RandomDesc = desc;
+		m_SaveDesc.RandomDesc = desc;
 	}
 	void Set_Accel(ACCEL_DESC desc) {
 		m_AccelDesc = desc;
+		m_SaveDesc.AccelDesc = desc;
 	}
 	void Set_ShaderIndex(_uint iShaderIndex) {
 		m_iShaderIndex = iShaderIndex;
+		m_SaveDesc.iShaderIndex = iShaderIndex;
 	}
 
 	void Set_RenderState(_uint iRenderState) {
 		m_iRenderState = iRenderState;
+		m_SaveDesc.iRenderState = iRenderState;
 	}
 
 	DEFAULT_DESC Get_Default() {
@@ -126,6 +132,10 @@ public:
 		return m_iRenderState;
 	}
 
+	PARTICLE_TEST_DESC* Get_SaveDesc_Ptr() {
+		return &m_SaveDesc;
+	}
+
 public:
 	virtual HRESULT Initialize_Prototype();
 	virtual HRESULT Initialize(void* pArg = nullptr);
@@ -133,6 +143,9 @@ public:
 	virtual void Update(_float fTimeDelta);
 	virtual void Late_Update(_float fTimeDelta);
 	virtual HRESULT Render();
+
+public:
+	virtual void Reset() override;
 
 public:
 	void Set_Transform(TRANSFORM_DESC& Desc);
@@ -150,6 +163,8 @@ private:
 
 	_uint m_iShaderIndex = { 0 };
 	_uint m_iRenderState = { 0 };
+
+	PARTICLE_TEST_DESC m_SaveDesc = {};
 
 private:
 	HRESULT Ready_Components(PARTICLE_TEST_DESC* pDesc);

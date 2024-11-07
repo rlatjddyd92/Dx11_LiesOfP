@@ -9,7 +9,8 @@ class CEffect_Base abstract : public CGameObject
 public:
 	typedef struct : public CGameObject::GAMEOBJECT_DESC
 	{
-		
+		_Matrix* pParentMatrix = { nullptr };
+
 	} EFFECT_BASE_DESC;
 
 	enum EFFECT_TYPE { TYPE_PARTICLE, TYPE_TEXTURE, TYPE_END };
@@ -27,8 +28,15 @@ public:
 	virtual void Late_Update(_float fTimeDelta);
 	virtual HRESULT Render();
 
+public:
+	virtual void Reset();
+
 protected:
 	EFFECT_TYPE m_eEffectType = { TYPE_END };
+
+	_Matrix m_WorldMatrix = XMMatrixIdentity();
+	_Matrix* m_pParentMatrix = { nullptr };
+
 
 public:
 	virtual CGameObject* Clone(void* pArg) = 0;

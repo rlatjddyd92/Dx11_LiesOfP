@@ -363,7 +363,7 @@ HRESULT CVIBuffer_Point_Instance::Initialize(void * pArg)
 	return S_OK;
 }
 
-_bool CVIBuffer_Point_Instance::Spread(_uint iState, _float fRenderRatio, _Vec4 vPivot, _float fGravity, _float fTimeDelta, _Vec3 vRevolveAxis, _float fAngle, _float fTimeInterval, _float fRandomRatio, _float fAccelLimit, _float fAccelSpeed)
+_bool CVIBuffer_Point_Instance::Spread(_uint iState, _Matrix WorldMatrix, _float fRenderRatio, _Vec4 vPivot, _float fGravity, _float fTimeDelta, _Vec3 vRevolveAxis, _float fAngle, _float fTimeInterval, _float fRandomRatio, _float fAccelLimit, _float fAccelSpeed)
 {
 	if (1.f < fRenderRatio)
 		fRenderRatio = 1.f;
@@ -429,9 +429,12 @@ _bool CVIBuffer_Point_Instance::Spread(_uint iState, _float fRenderRatio, _Vec4 
 				fAddSpeed = fAccelLimit;
 		}
 
-
 		_Vec4		vMoveDir = vDir * m_pSpeed[i];
-		vMoveDir.y -= fGravity * pVertices[i].vLifeTime.y;
+
+		_Vec4		vGravityDir = _Vec4(0.f, -1.f, 0.f, 0.f);
+		vGravityDir = XMVector3TransformNormal(vGravityDir, XMMatrixInverse(nullptr, WorldMatrix));
+		vMoveDir += XMVector3Normalize(vGravityDir) * fGravity * pVertices[i].vLifeTime.y;
+
 		pVertices[i].vTranslation = pVertices[i].vTranslation + (vMoveDir * fTimeDelta + vRotateDir) * fAddSpeed;
 		XMStoreFloat4(&pVertices[i].vLook, XMVector3Normalize(vMoveDir * fTimeDelta + vRotateDir));
 
@@ -448,7 +451,7 @@ _bool CVIBuffer_Point_Instance::Spread(_uint iState, _float fRenderRatio, _Vec4 
 	return isOver;
 }
 
-_bool CVIBuffer_Point_Instance::Move(_uint iState, _float fRenderRatio, _Vec4 vDir, _float fGravity, _float fTimeDelta, _Vec4 vCenter, _Vec3 vRevolveAxis, _float fAngle, _float fTimeInterval, _float fRandomRatio, _float fAccelLimit, _float fAccelSpeed)
+_bool CVIBuffer_Point_Instance::Move(_uint iState, _Matrix WorldMatrix, _float fRenderRatio, _Vec4 vDir, _float fGravity, _float fTimeDelta, _Vec4 vCenter, _Vec3 vRevolveAxis, _float fAngle, _float fTimeInterval, _float fRandomRatio, _float fAccelLimit, _float fAccelSpeed)
 {
 	if (1.f < fRenderRatio)
 		fRenderRatio = 1.f;
@@ -514,7 +517,9 @@ _bool CVIBuffer_Point_Instance::Move(_uint iState, _float fRenderRatio, _Vec4 vD
 
 
 		_Vec4		vMoveDir = vStartDir * m_pSpeed[i];
-		vMoveDir.y -= fGravity * pVertices[i].vLifeTime.y;
+		_Vec4		vGravityDir = _Vec4(0.f, -1.f, 0.f, 0.f);
+		vGravityDir = XMVector3TransformNormal(vGravityDir, XMMatrixInverse(nullptr, WorldMatrix));
+		vMoveDir += XMVector3Normalize(vGravityDir) * fGravity * pVertices[i].vLifeTime.y;
 
 		pVertices[i].vTranslation = pVertices[i].vTranslation + (vMoveDir * fTimeDelta + vRotateDir) * fAddSpeed;
 		XMStoreFloat4(&pVertices[i].vLook, XMVector3Normalize(vMoveDir * fTimeDelta + vRotateDir));
