@@ -160,6 +160,7 @@ void CController_MapTool::Pick_Object()
 	ImGui::PushItemWidth(300);
 
 	static int iSelectObj_RenderTargetID = 0;
+	static bool bShadow = false;
 
 	if (m_pPreSelectObject != m_pSelectObject && m_pSelectObject != nullptr)	//새로 피킹할 경우 Obj 정보를 띄우자
 	{
@@ -169,7 +170,10 @@ void CController_MapTool::Pick_Object()
 
 		CNonAnimModel* pSelect = dynamic_cast<CNonAnimModel*>(m_pSelectObject);
 		if (pSelect != nullptr)
+		{
 			iSelectObj_RenderTargetID = pSelect->Get_RenderTargetId();
+			bShadow = pSelect->Get_bShadow();
+		}
 
 		m_pPreSelectObject = m_pSelectObject;
 	}
@@ -185,6 +189,7 @@ void CController_MapTool::Pick_Object()
 		if (pSelect != nullptr)
 		{
 			pSelect->Set_RenderTargetId(iSelectObj_RenderTargetID);
+			pSelect->Set_bShadow(bShadow);
 
 			//선택한게 조명인 경우
 			if (pSelect->Get_isLight())
@@ -258,6 +263,7 @@ void CController_MapTool::Pick_Object()
 	ImGui::DragFloat3("Position(X, Y, Z)", (_float*)&vPos, 0.05f, -5000.f, 5000.f, 0);
 
 	ImGui::InputInt("RenderTarget ID", &iSelectObj_RenderTargetID);
+	ImGui::Checkbox("Render Shadow", &bShadow);
 
 	ImGui::PopItemWidth();
 
@@ -543,6 +549,7 @@ void CController_MapTool::SaveMap()
 				pDesc.vRotation = pGameObject->Get_Transform()->Get_CurrentRotation();
 				pDesc.isInstance = static_cast<CNonAnimModel*>(pGameObject)->Get_isInstance();
 				pDesc.iID = static_cast<CNonAnimModel*>(pGameObject)->Get_RenderTargetId();
+				pDesc.bShadow = static_cast<CNonAnimModel*>(pGameObject)->Get_bShadow();
 
 				//현재 위치한 Cell 번호 저장
 				_int iCellnum = m_pNavigationController->Get_WhereCell(pDesc.vPosition);
@@ -628,7 +635,7 @@ void CController_MapTool::LoadMap()
 				nonDesc.isLight = { false };
 				nonDesc.isInstance = pDesc.isInstance;
 				nonDesc.iRenderGroupID = pDesc.iID;
-
+				nonDesc.bShadow = pDesc.bShadow;
 				if (FAILED(m_pGameInstance->Add_CloneObject_ToLayer(LEVEL_TOOL, TEXT("Layer_Map"), TEXT("Prototype_GameObject_NonAnim"), &nonDesc)))
 					return;
 			}
@@ -831,6 +838,9 @@ void CController_MapTool::Map_Menu()
 	static _bool bInstance = false;
 	ImGui::Checkbox("Draw Instance", &bInstance);
 
+	static _bool bShadow = false;
+	ImGui::Checkbox("Render Shadow", &bShadow);
+
 	//오브젝트 생성
 	if (ImGui::Button("Create Model") || m_pGameInstance->Get_KeyState(C) == AWAY)
 	{
@@ -843,6 +853,8 @@ void CController_MapTool::Map_Menu()
 		Desc.vRotation = { 0.f,0.f,0.f };	
 		Desc.iRenderGroupID = i0;	
 		Desc.isInstance = bInstance;	
+		Desc.bShadow = bShadow;
+
 		strcpy_s(Desc.szModelTag, m_FileNames[m_iListSelectNum]);
 
 		if (FAILED(m_pGameInstance->Add_CloneObject_ToLayer(LEVEL_TOOL, wstrLayerName, TEXT("Prototype_GameObject_NonAnim"), &Desc)))

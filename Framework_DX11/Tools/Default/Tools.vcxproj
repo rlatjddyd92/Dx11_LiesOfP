@@ -39,6 +39,7 @@
     <ClInclude Include="..\Public\Controller_EffectTool.h" />
     <ClInclude Include="..\Public\Controller_MapTool.h" />
     <ClInclude Include="..\Public\Controller_UITool.h" />
+    <ClInclude Include="..\Public\Decal.h" />
     <ClInclude Include="..\public\Effect_Container.h" />
     <ClInclude Include="..\public\Effect_Base.h" />
     <ClInclude Include="..\Public\FreeCamera.h" />
@@ -88,6 +89,7 @@
     <ClCompile Include="..\Private\Controller_EffectTool.cpp" />
     <ClCompile Include="..\Private\Controller_MapTool.cpp" />
     <ClCompile Include="..\Private\Controller_UITool.cpp" />
+    <ClCompile Include="..\Private\Decal.cpp" />
     <ClCompile Include="..\private\Effect_Container.cpp" />
     <ClCompile Include="..\private\Effect_Base.cpp" />
     <ClCompile Include="..\Private\FreeCamera.cpp" />

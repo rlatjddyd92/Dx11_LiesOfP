@@ -67,6 +67,7 @@ namespace Engine
 		_float3		vScale;
 		_float3		vRotation;
 		_bool		isInstance = { false };
+		_bool		bShadow = { false };
 		_uint		iID;
 		_int		iCurrentCellNum;
 	}OBJECT_DEFAULT_DESC;

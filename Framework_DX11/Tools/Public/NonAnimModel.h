@@ -21,6 +21,7 @@ public:
 		_float3		vRotation;
 		_bool		isLight = { false };
 		_bool		isInstance = { false };
+		_bool		bShadow = { false };
 		_uint		iRenderGroupID = { true };
 	}NONMODEL_DESC;
 
@@ -50,6 +51,8 @@ public:
 	void Set_Selected(_bool bSelect) {m_bSelected = bSelect;}
 	_bool Get_isLight() { return m_isLight; }
 	_bool Get_isInstance() { return m_isInstance; }
+	_bool Get_bShadow() { return m_bShadow; }
+	void Set_bShadow(_bool bShadow) { m_bShadow = bShadow; }
 	_tchar* Get_ModelTag() { return m_szModelTag; }
 
 public:
@@ -68,6 +71,7 @@ private:
 	_bool		m_bSelected = { false };
 	_bool		m_isLight = { false };
 	_bool		m_isInstance = { false };
+	_bool		m_bShadow = { false };
 
 	_tchar m_szModelTag[MAX_PATH];
 
