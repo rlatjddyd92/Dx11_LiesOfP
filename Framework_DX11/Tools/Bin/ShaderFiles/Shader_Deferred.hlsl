@@ -63,7 +63,7 @@ float ComputeShadow(float4 vPosition, int iCascadeIndex, float4 vNormalDesc)
         return 1.f;
     }
     
-    float fShadowPower = 0.f;
+    float fShadowPower = 1.f;
     for (int x = -1; x <= 1; ++x)
     {
         for (int y = -1; y <= 1; ++y)
@@ -189,8 +189,9 @@ PS_OUT_LIGHT PS_MAIN_LIGHT_DIRECTIONAL(PS_IN In)
 
 	vector		vLook = vPosition - g_vCamPosition;
 
+	
 	Out.vSpecular = (g_vLightSpecular * g_vMtrlSpecular) * pow(max(dot(normalize(vReflect) * -1.f, normalize(vLook)), 0.f), 50.f);
-
+		
 
     float fShadowPower = 1.f;
     if (fViewZ <= 15.f)
