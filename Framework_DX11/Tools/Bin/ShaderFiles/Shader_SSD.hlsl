@@ -26,6 +26,7 @@ struct VS_OUT
 {
     float4 vPosition : SV_POSITION;
     float2 vTexcoord : TEXCOORD0;
+    float4 vProjPos : TEXCOORD1;
 };
                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                         
 VS_OUT VS_MAIN( /*정점*/VS_IN In)
@@ -39,7 +40,8 @@ VS_OUT VS_MAIN( /*정점*/VS_IN In)
 
     Out.vPosition = vPosition;
     Out.vTexcoord = In.vTexcoord;
-
+    Out.vProjPos = Out.vPosition;
+    
     return Out;
 }
 
@@ -47,6 +49,7 @@ struct PS_IN
 {
     float4 vPosition : SV_POSITION;
     float2 vTexcoord : TEXCOORD0;
+    float4 vProjPos : TEXCOORD1;
 };
 
 struct PS_OUT
@@ -59,8 +62,9 @@ PS_OUT PS_MAIN(PS_IN In)
     PS_OUT Out = (PS_OUT) 0;
     
     float2 vTexUV;
-    vTexUV.x = In.vPosition.x / In.vPosition.w * 0.5f + 0.5f;
-    vTexUV.y = In.vPosition.y / In.vPosition.w * -0.5f + 0.5f;
+    
+    vTexUV.x = In.vProjPos.x / In.vProjPos.w * 0.5f + 0.5f;
+    vTexUV.y = In.vProjPos.y / In.vProjPos.w * -0.5f + 0.5f;
     
     vector vDepthDesc = g_DepthTexture.Sample(PointSampler, vTexUV);
     
@@ -91,7 +95,7 @@ PS_OUT PS_MAIN(PS_IN In)
     float2 vDecalTexCoord = vLocalPos.xz + 0.5f;
     vector vDecalDiffuse = g_Texture.Sample(LinearSampler, vDecalTexCoord);
     
-    Out.vColor = vector(vDecalDiffuse.xyz, 0.1f);
+    Out.vColor = vector(vDecalDiffuse.xyz, 1.f);
     
     return Out;
 }
