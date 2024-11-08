@@ -34,6 +34,7 @@ texture2D		g_BlurYTexture;
 
 texture2D		g_BloomTexture;
 texture2D		g_CascadeShadowTexture;
+texture2D		g_DecalTexture;
 
 vector			g_vCamPosition;
 
@@ -148,6 +149,12 @@ struct PS_OUT_LIGHT
     vector vCascadeShadow : SV_TARGET2;
 };
 
+struct PS_OUT_LIGHT_POINT
+{
+    vector vShade : SV_TARGET0;
+    vector vSpecular : SV_TARGET1;
+};
+
 PS_OUT_LIGHT PS_MAIN_LIGHT_DIRECTIONAL(PS_IN In)
 {
 	PS_OUT_LIGHT			Out = (PS_OUT_LIGHT)0;
@@ -211,9 +218,9 @@ PS_OUT_LIGHT PS_MAIN_LIGHT_DIRECTIONAL(PS_IN In)
 	return Out;
 }
 
-PS_OUT_LIGHT PS_MAIN_LIGHT_POINT(PS_IN In)
+PS_OUT_LIGHT_POINT PS_MAIN_LIGHT_POINT(PS_IN In)
 {
-	PS_OUT_LIGHT			Out = (PS_OUT_LIGHT)0;
+    PS_OUT_LIGHT_POINT Out = (PS_OUT_LIGHT_POINT) 0;
 
 	vector		vDepthDesc = g_DepthTexture.Sample(PointSampler, In.vTexcoord);
 	float		fViewZ = vDepthDesc.y * 1000.f;
@@ -248,7 +255,7 @@ PS_OUT_LIGHT PS_MAIN_LIGHT_POINT(PS_IN In)
 	vector		vLook = vPosition - g_vCamPosition;
 
 	Out.vSpecular = (g_vLightSpecular * g_vMtrlSpecular) * pow(max(dot(normalize(vReflect) * -1.f, normalize(vLook)), 0.f), 50.f) * fAtt;
-
+	
 	return Out;
 }
 
@@ -264,6 +271,9 @@ PS_OUT PS_MAIN_DEFERRED(PS_IN In)
         return Out;
     }
 
+    vector		vDecal = g_DecalTexture.Sample(LinearSampler, In.vTexcoord);
+    vDiffuse += vDecal;
+	
 	vector		vShade = g_ShadeTexture.Sample(LinearSampler, In.vTexcoord);
 	vector		vSpecular = g_SpecularTexture.Sample(LinearSampler, In.vTexcoord);
 	

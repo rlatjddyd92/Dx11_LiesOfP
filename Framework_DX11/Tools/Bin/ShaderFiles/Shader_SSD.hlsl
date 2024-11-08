@@ -61,12 +61,12 @@ PS_OUT PS_MAIN(PS_IN In)
     vector vProjPos = In.vPosition;
     //vProjPos.x /= vProjPos.w;
     //vProjPos.y /= vProjPos.w;
+    //vProjPos.z /= vProjPos.w;
     
     float2 vNewTexCoord = float2(vProjPos.x * 0.5f + 0.5f, vProjPos.y * -0.5f + 0.5f);
     
     vector vDepthDesc = g_DepthTexture.Sample(PointSampler, vNewTexCoord);
     vector vDiffuse = g_DiffuseTexture.Sample(LinearSampler, vNewTexCoord);
-    vector vDecalDiffuse = g_Texture.Sample(LinearSampler, vNewTexCoord);
     
     float fViewZ = vDepthDesc.y * 1000.f;
     
@@ -83,18 +83,18 @@ PS_OUT PS_MAIN(PS_IN In)
 	/* 로컬위치 * 월드행렬 * 뷰행렬  */
     vPosition = vPosition * fViewZ;
     vPosition = mul(vPosition, g_ProjMatrixInv);
-    /* 월드 상의 화면에 그려지는 픽셀의 위치를 구한다.*/
     vPosition = mul(vPosition, g_ViewMatrixInv);
     
     //데칼의 로컬로 이동
     vector vPositionDecalLocal = mul(vPosition, g_vDecalWorldInverse);
     
     float2 vAbsDecalLocal = abs(vPositionDecalLocal);
-    vAbsDecalLocal.y = 0.f;
-    clip(0.5f - vAbsDecalLocal);
+    //vAbsDecalLocal.y = 0.f;
+    //clip(0.5f - vAbsDecalLocal);
     
-    float2 vDecalTexCoord = vPositionDecalLocal.xz + 0.5f;
-
+    float2 vDecalTexCoord = vPositionDecalLocal.xy + 0.5f;
+    
+    vector vDecalDiffuse = g_Texture.Sample(LinearSampler, vDecalTexCoord);
     
     Out.vColor = vDecalDiffuse;
     

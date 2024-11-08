@@ -27,7 +27,7 @@ HRESULT CDecal::Initialize(void* pArg)
 	if (FAILED(Ready_Components()))
 		return E_FAIL;
 
-	m_pTransformCom->Set_State(CTransform::STATE_POSITION, _Vec3(2.f, 0.f, 3.f));
+	m_pTransformCom->Set_State(CTransform::STATE_POSITION, _Vec3(2.f, 3.f, 3.f));
 	m_pTransformCom->Set_Scaled(1.f, 1.f, 1.f);
 	return S_OK;
 }

@@ -311,9 +311,6 @@ HRESULT CRenderer::Draw()
 	//if (FAILED(Render_ShadowObj()))
 	//	return E_FAIL;
 
-
-	Copy_BackBuffer();
-
 	if (FAILED(Render_Decal()))
 		return E_FAIL;
 
@@ -554,6 +551,8 @@ HRESULT CRenderer::Render_Deferred()
 	if (FAILED(m_pGameInstance->Bind_RT_ShaderResource(m_pShader, TEXT("Target_Bloom_BlurXY2"), "g_BloomTexture")))
 		return E_FAIL;
 	if (FAILED(m_pGameInstance->Bind_RT_ShaderResource(m_pShader, TEXT("Target_CascadeShadow"), "g_CascadeShadowTexture")))
+		return E_FAIL;
+	if (FAILED(m_pGameInstance->Bind_RT_ShaderResource(m_pShader, TEXT("Target_Decal"), "g_DecalTexture")))
 		return E_FAIL;
 
 	m_pShader->Begin(3);

@@ -12,7 +12,7 @@ namespace Engine
 
 	typedef struct
 	{
-		enum TYPE { TYPE_DIRECTIONAL, TYPE_POINT, TYPE_END };
+		enum TYPE { TYPE_DIRECTIONAL, TYPE_POINT, TYPE_SPOT, TYPE_GODRAY, TYPE_END };
 
 		TYPE		eType;
 		XMFLOAT4	vDirection;
