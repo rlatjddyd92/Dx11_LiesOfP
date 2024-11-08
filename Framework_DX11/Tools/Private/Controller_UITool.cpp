@@ -219,7 +219,7 @@ void CController_UITool::UIPart_Edit()
 
 			ImGui::Text("Adjust_End");
 			ImGui::SameLine();
-			ImGui::InputFloat("Adj_E.x", &pNow->fAdjust_End.x);
+			ImGui::DragFloat("Adj_E.x", &pNow->fAdjust_End.x);
 			ImGui::SameLine();
 			ImGui::InputFloat("Adj_E.y", &pNow->fAdjust_End.y);
 
