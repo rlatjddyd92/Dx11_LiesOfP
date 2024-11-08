@@ -11,6 +11,7 @@
 #include "NavigationController.h"
 
 #include "NonAnimModel.h"
+#include "Decal.h"
 
 IMPLEMENT_SINGLETON(CController_MapTool)
 
@@ -866,8 +867,14 @@ void CController_MapTool::Map_Menu()
 		//새로 만든 오브젝트 자동 선택
 		if(m_pSelectObject != nullptr)
 		{
+			//이전에 만든거 해제
 			static_cast<CNonAnimModel*>(m_pSelectObject)->Set_Selected(false);
 			m_pPreSelectObject = m_pSelectObject;
+			if(static_cast<CNonAnimModel*>(m_pSelectObject)->Get_isLight())
+			{
+				m_iPreSelectedLightIndex = m_iSelectedLightIndex;
+				m_iSelectedLightIndex = -1;
+			}
 		}
 		
 		int LayerObjectCount = m_pGameInstance->Get_Layer_ObjectCount(LEVEL_TOOL, wstrLayerName);
@@ -875,6 +882,8 @@ void CController_MapTool::Map_Menu()
 		static_cast<CNonAnimModel*>(m_pSelectObject)->Set_Selected(true);
 		m_iPre_Picked_ID = m_iPickObject_ID;
 		m_iPickObject_ID = static_cast<CNonAnimModel*>(m_pSelectObject)->Get_HashId();
+
+
 
 	}ImGui::SameLine();
 	ImGui::Text("or Press \"C\" to Create");
@@ -1206,6 +1215,11 @@ void CController_MapTool::Light_Create()
 		{
 			static_cast<CNonAnimModel*>(m_pSelectObject)->Set_Selected(false);
 			m_pPreSelectObject = m_pSelectObject;
+			if (static_cast<CNonAnimModel*>(m_pSelectObject)->Get_isLight())
+			{
+				m_iPreSelectedLightIndex = m_iSelectedLightIndex;
+				m_iSelectedLightIndex = -1;
+			}
 		}
 
 		int LayerObjectCount = m_pGameInstance->Get_Layer_ObjectCount(LEVEL_TOOL, wstrLayerName);
@@ -1214,6 +1228,7 @@ void CController_MapTool::Light_Create()
 		m_iPre_Picked_ID = m_iPickObject_ID;
 		m_iPickObject_ID = static_cast<CNonAnimModel*>(m_pSelectObject)->Get_HashId();
 
+		m_iSelectedLightIndex = m_pGameInstance->Get_Total_LightCount()-1;
 
 	}ImGui::SameLine();
 	ImGui::Text("or Press \"C\" to Create");
@@ -1281,7 +1296,11 @@ void CController_MapTool::Light_Modify()
 
 void CController_MapTool::Decal_Create()
 {
+	CDecal::DECAL_DESC desc = {};
+	desc.vPosition = m_vPickPos;
 
+	if (FAILED(m_pGameInstance->Add_CloneObject_ToLayer(LEVEL_TOOL, TEXT("Layer_Decal"), TEXT("Prototype_GameObject_Decal"),&desc)))
+		return;
 }
 
 void CController_MapTool::Light_Menu()

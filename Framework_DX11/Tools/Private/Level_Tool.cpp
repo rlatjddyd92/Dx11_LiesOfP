@@ -116,10 +116,6 @@ HRESULT CLevel_Tool::Ready_Layer_BackGround()
 
 HRESULT CLevel_Tool::Ready_Layer_Effect()
 {
-	if (FAILED(m_pGameInstance->Add_CloneObject_ToLayer(LEVEL_TOOL, TEXT("Layer_Decal"), TEXT("Prototype_GameObject_Decal"))))
-		return E_FAIL;
-
-
 	return S_OK;
 }
 

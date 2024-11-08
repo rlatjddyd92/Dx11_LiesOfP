@@ -13,6 +13,13 @@ BEGIN(Tools)
 
 class CDecal final : public CGameObject
 {
+public:
+public:
+	typedef struct : public CGameObject::GAMEOBJECT_DESC
+	{
+		_float3		vPosition;
+	}DECAL_DESC;
+
 private:
 	CDecal(ID3D11Device* pDevice, ID3D11DeviceContext* pContext);
 	CDecal(const CDecal& Prototype);
