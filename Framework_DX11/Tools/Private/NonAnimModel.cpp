@@ -35,6 +35,7 @@ HRESULT CNonAnimModel::Initialize(void* pArg)
 	m_iRenderGroupId = pDesc->iRenderGroupID;
 	m_isLight = pDesc->isLight;
 	m_isInstance = pDesc->isInstance;
+	m_bShadow = pDesc->bShadow;
 
 	if (FAILED(Ready_Components(pDesc)))
 		return E_FAIL;

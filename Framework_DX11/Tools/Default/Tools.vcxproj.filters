@@ -100,6 +100,9 @@
     <Filter Include="90.ImGuiManager\Controller_MapTool\stb">
       <UniqueIdentifier>{74d744e6-20f1-4154-bdd3-4debecd7b3cb}</UniqueIdentifier>
     </Filter>
+    <Filter Include="02.GameObjects\Decal">
+      <UniqueIdentifier>{caef4cbb-fb0c-4dfc-875e-2fc8a569562f}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="framework.h">
@@ -237,6 +240,9 @@
     <ClInclude Include="..\Public\stb_image.h">
       <Filter>90.ImGuiManager\Controller_MapTool\stb</Filter>
     </ClInclude>
+    <ClInclude Include="..\Public\Decal.h">
+      <Filter>02.GameObjects\Decal</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <Image Include="small.ico">
@@ -360,6 +366,9 @@
     </ClCompile>
     <ClCompile Include="..\Private\Sky.cpp">
       <Filter>02.GameObjects\07.Sky</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Private\Decal.cpp">
+      <Filter>02.GameObjects\Decal</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
