@@ -11,7 +11,7 @@ BEGIN(Engine)
 class CRenderer final : public CBase
 {
 public:
-	enum RENDERGROUP { RG_PRIORITY, RG_HEIGHT, RG_SHADOWOBJ, RG_NONBLEND, RG_NONLIGHT, RG_BLEND, RG_PICKING, RG_UI, RG_END };
+	enum RENDERGROUP { RG_PRIORITY, RG_HEIGHT, RG_SHADOWOBJ, RG_NONBLEND, RG_NONLIGHT, RG_BLEND, RG_PICKING, RG_UI, RG_DECAL, RG_END };
 private:
 	CRenderer(ID3D11Device* pDevice, ID3D11DeviceContext* pContext);
 	virtual ~CRenderer() = default;
@@ -84,6 +84,7 @@ private:
 	HRESULT Render_Height();
 	HRESULT Render_ShadowObj();
 	HRESULT Render_NonBlend();
+	HRESULT Render_Decal();
 	HRESULT Render_Lights();
 
 	HRESULT Render_Deferred();
