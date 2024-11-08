@@ -38,8 +38,6 @@ HRESULT CNonAnimModel::Initialize(void* pArg)
 
 	if (FAILED(Ready_Components(pDesc)))
 		return E_FAIL;
-
-
 	memcpy(&m_tDesc, pDesc, sizeof(NONMODEL_DESC));
 
 	m_iStaticHashId++;
@@ -211,6 +209,12 @@ HRESULT CNonAnimModel::Ready_Components(NONMODEL_DESC* pNonAnimDesc)
 			TEXT("Com_Model"), reinterpret_cast<CComponent**>(&m_pModelCom))))
 			return E_FAIL;
 	}
+	MultiByteToWideChar(CP_ACP, MB_PRECOMPOSED, pNonAnimDesc->szModelTag, MAX_PATH, m_szModelTag, MAX_PATH);
+
+	/* FOR.Com_Model */
+	if (FAILED(__super::Add_Component(LEVEL_TOOL, m_szModelTag,
+		TEXT("Com_Model"), reinterpret_cast<CComponent**>(&m_pModelCom))))
+		return E_FAIL;
 
 	return S_OK;
 }
