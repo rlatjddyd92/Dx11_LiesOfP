@@ -1,5 +1,5 @@
 #include "stdafx.h"
-#include "GameInterface_Controller.h"
+#include "..\Public\GameInterface_Controller.h"
 
 #include "GameInstance.h"
 

@@ -188,7 +188,7 @@
     <ClInclude Include="..\Public\UIManager.h" />
     <ClInclude Include="..\Public\UIPage.h" />
     <ClInclude Include="..\Public\UIPage_Play.h" />
-    <ClInclude Include="..\Public\UIRender.h" />
+    <ClInclude Include="..\Public\UIRender_Client.h" />
     <ClInclude Include="..\Public\Weapon.h" />
     <ClInclude Include="Client.h" />
     <ClInclude Include="Item_Defines.h" />
@@ -217,7 +217,7 @@
     <ClCompile Include="..\Private\UIManager.cpp" />
     <ClCompile Include="..\Private\UIPage.cpp" />
     <ClCompile Include="..\Private\UIPage_Play.cpp" />
-    <ClCompile Include="..\Private\UIRender.cpp" />
+    <ClCompile Include="..\Private\UIRender_Client.cpp" />
     <ClCompile Include="..\Private\Weapon.cpp" />
     <ClCompile Include="Client.cpp" />
     <ClCompile Include="stdafx.cpp">

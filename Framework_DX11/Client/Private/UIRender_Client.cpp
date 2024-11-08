@@ -1,21 +1,21 @@
 #include "stdafx.h"
-#include "UIRender.h"
+#include "..\Public\UIRender_Client.h"
 
 #include "GameInstance.h"
-#include "GameInterface_Controller.h"
 
-CUIRender::CUIRender(ID3D11Device* pDevice, ID3D11DeviceContext* pContext, const vector<CUIPage*>* pVecUIPage)
+
+CUIRender_Client::CUIRender_Client(ID3D11Device* pDevice, ID3D11DeviceContext* pContext)
 	: CUIObject{ pDevice, pContext }
 {
-	m_vecUIPage = pVecUIPage;
+	
 }
 
-CUIRender::CUIRender(const CUIRender& Prototype)
+CUIRender_Client::CUIRender_Client(const CUIRender_Client& Prototype)
 	: CUIObject{ Prototype }
 {
 }
 
-HRESULT CUIRender::Initialize_Prototype()
+HRESULT CUIRender_Client::Initialize_Prototype()
 {
 	UI_DESC			Desc{};
 
@@ -42,37 +42,60 @@ HRESULT CUIRender::Initialize_Prototype()
 	return S_OK;
 }
 
-HRESULT CUIRender::Initialize(void* pArg)
+HRESULT CUIRender_Client::Initialize(void* pArg)
 {
 	return S_OK;
 }
 
-void CUIRender::Priority_Update(_float fTimeDelta)
+void CUIRender_Client::Priority_Update(_float fTimeDelta)
 {
 	int a = 10;
 }
 
-void CUIRender::Update(_float fTimeDelta)
+void CUIRender_Client::Update(_float fTimeDelta)
 {
 	int a = 10;
 }
 
-void CUIRender::Late_Update(_float fTimeDelta)
+void CUIRender_Client::Late_Update(_float fTimeDelta)
 {
 	/* 직교투영을 위한 월드행렬까지 셋팅하게 된다. */
 	__super::Late_Update(fTimeDelta);
 
-
-	m_pGameInstance->Add_RenderObject(CRenderer::RG_UI, this);
 }
 
-HRESULT CUIRender::Render()
+HRESULT CUIRender_Client::Render()
 {
 	
 	return S_OK;
 }
 
-HRESULT CUIRender::Ready_Components()
+HRESULT CUIRender_Client::Render_UI(vector<CUIPage*>& rPage)
+{
+	return S_OK;
+}
+
+HRESULT CUIRender_Client::Make_Texture(_int iTextureIndex)
+{
+	if ((iTextureIndex < 0) || (iTextureIndex >= m_vecTextureInfo.size()))
+	{
+		MSG_BOX(TEXT("UIRender : 잘못된 텍스쳐 값"));
+		return E_FAIL;
+	}
+		
+
+	if (m_vecTextureInfo[iTextureIndex]->Texture != nullptr)
+		return E_FAIL;
+
+	m_vecTextureInfo[iTextureIndex]->Texture = CTexture::Create(m_pDevice, m_pContext, m_vecTextureInfo[iTextureIndex]->strTexturePath, 1);
+
+	if (FAILED(m_pGameInstance->Add_Prototype(LEVEL_STATIC, m_vecTextureInfo[iTextureIndex]->strTextureTag, m_vecTextureInfo[iTextureIndex]->Texture)))
+		return E_FAIL;
+
+	return S_OK;
+}
+
+HRESULT CUIRender_Client::Ready_Components()
 {
 	/* FOR.Com_Shader */
 	if (FAILED(__super::Add_Component(LEVEL_STATIC, TEXT("Prototype_Component_Shader_VtxPosTex"),
@@ -80,7 +103,7 @@ HRESULT CUIRender::Ready_Components()
 		return E_FAIL;
 
 	///* FOR.Com_Texture */
-	//if (FAILED(__super::Add_Component(LEVEL_TOOL, TEXT("Prototype_Component_Texture_UIRender"),
+	//if (FAILED(__super::Add_Component(LEVEL_TOOL, TEXT("Prototype_Component_Texture_UIRender_Client"),
 	//	TEXT("Com_Texture"), reinterpret_cast<CComponent**>(&m_pTextureCom))))
 	//	return E_FAIL;
 
@@ -92,9 +115,9 @@ HRESULT CUIRender::Ready_Components()
 	return S_OK;
 }
 
-void CUIRender::Ready_Font()
+void CUIRender_Client::Ready_Font()
 {
-	m_vecFont_char.resize(_int(UI_FONT::FONT_END));
+
 	m_vecFont_tchar.resize(_int(UI_FONT::FONT_END));
 
 
@@ -114,21 +137,6 @@ void CUIRender::Ready_Font()
 	m_pGameInstance->Add_Font(TEXT("FONT_TITLE_60"), TEXT("../Bin/Resources/Fonts/Font_Title_60.spritefont"));
 	m_pGameInstance->Add_Font(TEXT("FONT_TITLE_72"), TEXT("../Bin/Resources/Fonts/Font_Title_72.spritefont"));
 
-	m_vecFont_char[_int(UI_FONT::FONT_INFO_12)] = "FONT_INFO_12";
-	m_vecFont_char[_int(UI_FONT::FONT_INFO_18)] = "FONT_INFO_18";
-	m_vecFont_char[_int(UI_FONT::FONT_INFO_24)] = "FONT_INFO_24";
-	m_vecFont_char[_int(UI_FONT::FONT_INFO_36)] = "FONT_INFO_36";
-	m_vecFont_char[_int(UI_FONT::FONT_INFO_48)] = "FONT_INFO_48";
-	m_vecFont_char[_int(UI_FONT::FONT_INFO_60)] = "FONT_INFO_60";
-	m_vecFont_char[_int(UI_FONT::FONT_INFO_72)] = "FONT_INFO_72";
-	m_vecFont_char[_int(UI_FONT::FONT_TITLE_12)] = "FONT_TITLE_12";
-	m_vecFont_char[_int(UI_FONT::FONT_TITLE_18)] = "FONT_TITLE_18";
-	m_vecFont_char[_int(UI_FONT::FONT_TITLE_24)] = "FONT_TITLE_24";
-	m_vecFont_char[_int(UI_FONT::FONT_TITLE_36)] = "FONT_TITLE_36";
-	m_vecFont_char[_int(UI_FONT::FONT_TITLE_48)] = "FONT_TITLE_48";
-	m_vecFont_char[_int(UI_FONT::FONT_TITLE_60)] = "FONT_TITLE_60";
-	m_vecFont_char[_int(UI_FONT::FONT_TITLE_72)] = "FONT_TITLE_72";
-
 	m_vecFont_tchar[_int(UI_FONT::FONT_INFO_12)] = TEXT("FONT_INFO_12");
 	m_vecFont_tchar[_int(UI_FONT::FONT_INFO_18)] = TEXT("FONT_INFO_18");
 	m_vecFont_tchar[_int(UI_FONT::FONT_INFO_24)] = TEXT("FONT_INFO_24");
@@ -145,7 +153,7 @@ void CUIRender::Ready_Font()
 	m_vecFont_tchar[_int(UI_FONT::FONT_TITLE_72)] = TEXT("FONT_TITLE_72");
 }
 
-HRESULT CUIRender::Ready_Texture()
+HRESULT CUIRender_Client::Ready_Texture()
 {
 	vector<vector<_wstring>> vecBuffer;
 	m_pGameInstance->LoadDataByFile("../Bin/Resources/textures/UI/UIList.csv", &vecBuffer);
@@ -160,15 +168,11 @@ HRESULT CUIRender::Ready_Texture()
 
 		UTEXTURE* pNew = new UTEXTURE;
 
-		pNew->Texture = CTexture::Create(m_pDevice, m_pContext, tPath, 1);
-		pNew->strTexturePath = new _char[vecBuffer[i][0].size() + 1];
-		pNew->strTextureTag = new _char[vecBuffer[i][1].size() + 1];
+		
+		pNew->strTexturePath = new _tchar[vecBuffer[i][0].size() + 1];
+		pNew->strTextureTag = new _tchar[vecBuffer[i][1].size() + 1];
 
-		if (FAILED(m_pGameInstance->Add_Prototype(LEVEL_STATIC, tTag, pNew->Texture)))
-			return E_FAIL;
-
-		WideCharToMultiByte(CP_UTF8, 0, tPath, -1, pNew->strTexturePath, vecBuffer[i][0].size() + 1, nullptr, nullptr);
-		WideCharToMultiByte(CP_UTF8, 0, tTag, -1, pNew->strTextureTag, vecBuffer[i][1].size() + 1, nullptr, nullptr);
+		
 
 		m_vecTextureInfo.push_back(pNew);
 
@@ -179,13 +183,13 @@ HRESULT CUIRender::Ready_Texture()
 	return S_OK;
 }
 
-CUIRender* CUIRender::Create(ID3D11Device* pDevice, ID3D11DeviceContext* pContext, const vector<CUIPage*>* pVecUIPage)
+CUIRender_Client* CUIRender_Client::Create(ID3D11Device* pDevice, ID3D11DeviceContext* pContext)
 {
-	CUIRender* pInstance = new CUIRender(pDevice, pContext, pVecUIPage);
+	CUIRender_Client* pInstance = new CUIRender_Client(pDevice, pContext);
 
 	if (FAILED(pInstance->Initialize_Prototype()))
 	{
-		MSG_BOX(TEXT("Failed to Created : CUIRender"));
+		MSG_BOX(TEXT("Failed to Created : CUIRender_Client"));
 		Safe_Release(pInstance);
 	}
 
@@ -194,20 +198,20 @@ CUIRender* CUIRender::Create(ID3D11Device* pDevice, ID3D11DeviceContext* pContex
 
 
 
-CGameObject* CUIRender::Clone(void* pArg)
+CGameObject* CUIRender_Client::Clone(void* pArg)
 {
-	CUIRender* pInstance = new CUIRender(*this);
+	CUIRender_Client* pInstance = new CUIRender_Client(*this);
 
 	if (FAILED(pInstance->Initialize(pArg)))
 	{
-		MSG_BOX(TEXT("Failed to Cloned : CUIRender"));
+		MSG_BOX(TEXT("Failed to Cloned : CUIRender_Client"));
 		Safe_Release(pInstance);
 	}
 
 	return pInstance;
 }
 
-void CUIRender::Free()
+void CUIRender_Client::Free()
 {
 	__super::Free();
 
@@ -223,12 +227,7 @@ void CUIRender::Free()
 
 	m_vecTextureInfo.clear();
 
-	
-
-	m_vecFont_char.clear();
 	m_vecFont_tchar.clear();
-
-
 
 	Safe_Release(m_pVIBufferCom);
 }

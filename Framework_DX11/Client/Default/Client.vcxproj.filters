@@ -177,7 +177,7 @@
     <ClInclude Include="..\Public\UIPage.h">
       <Filter>03.GameInterface\00.UIManager\00.UIPage</Filter>
     </ClInclude>
-    <ClInclude Include="..\Public\UIRender.h">
+    <ClInclude Include="..\Public\UIRender_Client.h">
       <Filter>03.GameInterface\00.UIManager\01.UIRender</Filter>
     </ClInclude>
     <ClInclude Include="..\Public\GameInterface_Controller.h">
@@ -245,7 +245,7 @@
     <ClCompile Include="..\Private\UIPage.cpp">
       <Filter>03.GameInterface\00.UIManager\00.UIPage</Filter>
     </ClCompile>
-    <ClCompile Include="..\Private\UIRender.cpp">
+    <ClCompile Include="..\Private\UIRender_Client.cpp">
       <Filter>03.GameInterface\00.UIManager\01.UIRender</Filter>
     </ClCompile>
     <ClCompile Include="..\Private\GameInterface_Controller.cpp">

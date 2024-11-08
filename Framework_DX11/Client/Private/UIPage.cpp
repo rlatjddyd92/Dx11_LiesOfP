@@ -1,9 +1,7 @@
 #include "stdafx.h"
-#include "GameInterface_Controller.h"
+#include "..\Public\UIPage.h"
 
 #include "GameInstance.h"
-
-#include "UIPage.h"
 
 CUIPage::CUIPage(ID3D11Device* pDevice, ID3D11DeviceContext* pContext)
     : CUIObject{ pDevice, pContext }
@@ -22,6 +20,10 @@ HRESULT CUIPage::Initialize_Prototype()
 
 HRESULT CUIPage::Initialize(void* pArg)
 {
+	/* 직교퉁여을 위한 데이터들을 모두 셋하낟. */
+	if (FAILED(__super::Initialize(&pArg)))
+		return E_FAIL;
+
     return S_OK;
 }
 
@@ -42,13 +44,18 @@ HRESULT CUIPage::Render()
     return S_OK;
 }
 
+HRESULT CUIPage::Ready_UIPart()
+{
+	return S_OK;
+}
+
 CUIPage* CUIPage::Create(ID3D11Device* pDevice, ID3D11DeviceContext* pContext)
 {
 	CUIPage* pInstance = new CUIPage(pDevice, pContext);
 
 	if (FAILED(pInstance->Initialize_Prototype()))
 	{
-		MSG_BOX(TEXT("Failed to Created : CBacCUIPagekGround"));
+		MSG_BOX(TEXT("Failed to Created : CUIPage"));
 		Safe_Release(pInstance);
 	}
 

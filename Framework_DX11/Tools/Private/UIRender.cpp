@@ -1,3 +1,5 @@
+#include "UIRender.h"
+#include "UIRender.h"
 #include "stdafx.h"
 #include "..\Public\UIRender.h"
 
@@ -171,6 +173,7 @@ void CUIRender::AddRenderText(UI_FONT eFont, _bool bIsCenter, _tchar* szText, _f
 
 	m_UIRenderlist.push_back(pNew);
 }
+
 
 HRESULT CUIRender::Ready_Components()
 {

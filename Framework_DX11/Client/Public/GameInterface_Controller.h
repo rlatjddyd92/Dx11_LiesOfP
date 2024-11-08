@@ -3,10 +3,8 @@
 #include "Client_Defines.h"
 #include "Base.h"
 
+#include "UIManager.h"
 
-#include "GameInstance.h"
-
-#include "UI_Enum.h"
 
 BEGIN(Engine)
 class CGameObject;
@@ -29,7 +27,7 @@ private:
 
 public: // 외부에서 매니저 접근 
 #pragma region UIManager
-
+	
 
 
 
@@ -43,6 +41,11 @@ public: // 외부에서 매니저 접근
 
 #pragma endregion
 
+
+
+
+private:
+	CUIManager* m_pUIManager = { nullptr };
 
 
 
