@@ -136,7 +136,10 @@ void CController_MapTool::Pick_Object()
 					//선택한게 조명인 경우
 					if (pSelect->Get_isLight())
 					{
-						m_iSelectedLightIndex = m_pGameInstance->Find_Light_Index(pSelect->Get_Transform()->Get_State(CTransform::STATE_POSITION));
+						_Vec3 vObjPos = pSelect->Get_Transform()->Get_State(CTransform::STATE_POSITION);
+						_Vec4 vPos = { vObjPos.x,vObjPos.y,vObjPos.z, 1.f };
+						
+						m_iSelectedLightIndex = m_pGameInstance->Find_Light_Index(vPos);
 					}
 				}
 			}
@@ -1186,7 +1189,7 @@ void CController_MapTool::Light_Create()
 		//진짜 빛 넣기
 		//방향 노멀라이즈
 		LIGHT_DESC newLightDesc = {};
-		newLightDesc.eType = (LIGHT_DESC::TYPE)iLightType;
+		newLightDesc.eType = (LIGHT_DESC::TYPE)(iLightType + 1);
 		vDirection.Normalize();
 		newLightDesc.vDirection = vDirection;
 		newLightDesc.vPosition = vPosition;

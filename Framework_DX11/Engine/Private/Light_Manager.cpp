@@ -61,7 +61,7 @@ _int CLight_Manager::Find_Light_Index(_Vec4 vPos)
 	for (auto& pLight : m_Lights)
 	{
 		LIGHT_DESC* pDesc = pLight->Get_LightDesc();
-		if (pDesc->vPosition.x == vPos.x && pDesc->vPosition.y == vPos.y && pDesc->vPosition.z == vPos.z && pDesc->vPosition.w == vPos.w)
+		if (pDesc->vPosition.x == vPos.x && pDesc->vPosition.y == vPos.y && pDesc->vPosition.z == vPos.z && pDesc->eType != LIGHT_DESC::TYPE::TYPE_DIRECTIONAL)
 		{
 			return iIndex;
 		}

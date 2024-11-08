@@ -6,6 +6,7 @@ matrix g_CameraViewMatrix;
 texture2D g_Texture;
 
 texture2D g_BackTexture;
+texture2D g_DecalTexture;
 
 float g_fRadius = 0.02f;
 
@@ -61,6 +62,7 @@ PS_OUT PS_MAIN_HDR(PS_IN In)
     
     vHdrColor *= 2.0f;
     
+    
     Out.vColor = float4(vHdrColor, 1.f);
     
     return Out;
@@ -81,7 +83,6 @@ PS_OUT PS_MAIN_TONEMAPPING_ACES(PS_IN In)
     vLdrColor = saturate((vLdrColor * (a * vLdrColor + b)) / (vLdrColor * (c * vLdrColor + d) + e));
     
     vLdrColor = pow(vLdrColor, 1 / 2.2f);
-
     Out.vColor = float4(vLdrColor, 1.f);
     
     return Out;

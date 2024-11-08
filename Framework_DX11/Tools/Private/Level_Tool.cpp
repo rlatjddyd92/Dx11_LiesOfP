@@ -108,15 +108,17 @@ HRESULT CLevel_Tool::Ready_Layer_BackGround()
 	if (FAILED(m_pGameInstance->Add_CloneObject_ToLayer(LEVEL_TOOL, TEXT("Layer_BackGround"), TEXT("Prototype_GameObject_Sky"))))
 		return E_FAIL;
  
-	//if (FAILED(m_pGameInstance->Add_CloneObject_ToLayer(LEVEL_TOOL, TEXT("Layer_BackGround"), TEXT("Prototype_GameObject_Terrain"))))
-	//	return E_FAIL;
+	if (FAILED(m_pGameInstance->Add_CloneObject_ToLayer(LEVEL_TOOL, TEXT("Layer_BackGround"), TEXT("Prototype_GameObject_Terrain"))))
+		return E_FAIL;
 
 	return S_OK;
 }
 
 HRESULT CLevel_Tool::Ready_Layer_Effect()
 {
-	
+	if (FAILED(m_pGameInstance->Add_CloneObject_ToLayer(LEVEL_TOOL, TEXT("Layer_Decal"), TEXT("Prototype_GameObject_Decal"))))
+		return E_FAIL;
+
 
 	return S_OK;
 }

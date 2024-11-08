@@ -97,7 +97,12 @@ HRESULT CMainApp::Ready_Prototype_Component_Static()
 		CVIBuffer_Rect::Create(m_pDevice, m_pContext))))
 		return E_FAIL;
 
-
+#pragma region SHADER
+	/* For. Prototype_Component_Shader_VtxNorTex*/
+	if (FAILED(m_pGameInstance->Add_Prototype(LEVEL_STATIC, TEXT("Prototype_Component_Shader_SSD"),
+		CShader::Create(m_pDevice, m_pContext, TEXT("../Bin/ShaderFiles/Shader_SSD.hlsl"), VTXPOSTEX::Elements, VTXPOSTEX::iNumElements))))
+		return E_FAIL;
+#pragma endregion
 	return S_OK;
 }
 

@@ -111,6 +111,10 @@ HRESULT CRenderer::Initialize()
 	if (FAILED(m_pGameInstance->Add_RenderTarget(TEXT("Target_Cascade"), (_uint)2560, (_uint)1440, DXGI_FORMAT_R32G32B32A32_FLOAT, _float4(1.f, 1.f, 1.f, 1.f), 3)))
 		return E_FAIL;
 
+	//Decal
+	if (FAILED(m_pGameInstance->Add_RenderTarget(TEXT("Target_Decal"), (_uint)ViewportDesc.Width, (_uint)ViewportDesc.Height, DXGI_FORMAT_B8G8R8A8_UNORM, _float4(0.f, 0.f, 0.f, 0.f))))
+		return E_FAIL;
+
 	/* MRT_Priority */
 	if (FAILED(m_pGameInstance->Add_MRT(TEXT("MRT_Priority"), TEXT("Target_Priority"))))
 		return E_FAIL;
@@ -145,6 +149,10 @@ HRESULT CRenderer::Initialize()
 
 	/* MRT_Picking */
 	if (FAILED(m_pGameInstance->Add_MRT(TEXT("MRT_Picking"), TEXT("Target_PickObjectDepth"))))
+		return E_FAIL;
+	
+	/* MRT_Decal */
+	if (FAILED(m_pGameInstance->Add_MRT(TEXT("MRT_Decal"), TEXT("Target_Decal"))))
 		return E_FAIL;
 
 #pragma region SSAO
@@ -241,18 +249,18 @@ HRESULT CRenderer::Initialize()
 	//if (FAILED(m_pGameInstance->Ready_RT_Debug(TEXT("Target_Bloom_BlurXY1"), 100.f, 300.f, 200.f, 200.f)))
 	//	return E_FAIL;
 
-	if (FAILED(m_pGameInstance->Ready_RT_Debug(TEXT("Target_LDR"), 350.f, 150.f, 300.f, 300.f)))
+	if (FAILED(m_pGameInstance->Ready_RT_Debug(TEXT("Target_Decal"), 350.f, 150.f, 300.f, 300.f)))
 		return E_FAIL;
 	//if (FAILED(m_pGameInstance->Ready_RT_Debug(TEXT("Target_Specular"), 350.f, 450.f, 300.f, 300.f)))
 	//	return E_FAIL;
 	//if (FAILED(m_pGameInstance->Ready_RT_Debug(TEXT("Target_Height"), ViewportDesc.Width - 150.f, 150.f, 300.f, 300.f)))
 	//	return E_FAIL;
 
-	if (FAILED(m_pGameInstance->Ready_RT_Debug(TEXT("Target_Cascade"), 100.f, 100.f, 200.f, 200.f)))
+	if (FAILED(m_pGameInstance->Ready_RT_Debug(TEXT("Target_Diffuse"), 100.f, 100.f, 200.f, 200.f)))
 		return E_FAIL;
-	if (FAILED(m_pGameInstance->Ready_RT_Debug(TEXT("Target_HDR"), 100.f, 300.f, 200.f, 200.f)))
+	if (FAILED(m_pGameInstance->Ready_RT_Debug(TEXT("Target_LDR"), 100.f, 300.f, 200.f, 200.f)))
 		return E_FAIL;
-	if (FAILED(m_pGameInstance->Ready_RT_Debug(TEXT("Target_CascadeShadow"), 100.f, 500.f, 200.f, 200.f)))
+	if (FAILED(m_pGameInstance->Ready_RT_Debug(TEXT("Target_Depth"), 100.f, 500.f, 200.f, 200.f)))
 		return E_FAIL;
 	// 
 	//if (FAILED(m_pGameInstance->Ready_RT_Debug(TEXT("Target_BackBuffer"), 600.f, 100.f, 200.f, 200.f)))
@@ -303,6 +311,12 @@ HRESULT CRenderer::Draw()
 	//if (FAILED(Render_ShadowObj()))
 	//	return E_FAIL;
 
+
+	Copy_BackBuffer();
+
+	if (FAILED(Render_Decal()))
+		return E_FAIL;
+
 	if (FAILED(Render_Deferred()))
 		return E_FAIL;
 
@@ -312,8 +326,10 @@ HRESULT CRenderer::Draw()
 		return E_FAIL;
 	if (FAILED(Render_Bloom()))
 		return E_FAIL;
+
 	if(FAILED(Render_LDR()))
 		return E_FAIL;
+
 
 	if (FAILED(Render_NonLights()))
 		return E_FAIL;
@@ -432,6 +448,29 @@ HRESULT CRenderer::Render_NonBlend()
 
 	m_pGameInstance->Draw_Instance(0);
 	
+
+	if (FAILED(m_pGameInstance->End_MRT()))
+		return E_FAIL;
+
+	return S_OK;
+}
+
+HRESULT CRenderer::Render_Decal()
+{
+	if (FAILED(m_pGameInstance->Begin_MRT(TEXT("MRT_Decal"))))
+		return E_FAIL;
+
+	for (auto& pGameObject : m_RenderObjects[RG_DECAL])
+	{
+		if (nullptr != pGameObject)
+			pGameObject->Render();
+
+		Safe_Release(pGameObject);
+	}
+	m_RenderObjects[RG_DECAL].clear();
+
+	m_pGameInstance->Draw_Instance(0);
+
 
 	if (FAILED(m_pGameInstance->End_MRT()))
 		return E_FAIL;
@@ -1235,6 +1274,7 @@ HRESULT CRenderer::Render_Debug()
 	//m_pGameInstance->Render_MRT_Debug(TEXT("MRT_ShadowObj"), m_pShader, m_pVIBuffer);
 	m_pGameInstance->Render_MRT_Debug(TEXT("MRT_Bloom_UpSample1"), m_pShader, m_pVIBuffer);
 	m_pGameInstance->Render_MRT_Debug(TEXT("MRT_Cascade"), m_pShader, m_pVIBuffer);
+	m_pGameInstance->Render_MRT_Debug(TEXT("MRT_Decal"), m_pShader, m_pVIBuffer);
 
 	return S_OK;
 }
