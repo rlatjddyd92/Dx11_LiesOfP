@@ -272,7 +272,7 @@ PS_OUT PS_MAIN_DEFERRED(PS_IN In)
     }
 
     vector		vDecal = g_DecalTexture.Sample(LinearSampler, In.vTexcoord);
-    vDiffuse += vDecal;
+    vDiffuse = vector(lerp(vDiffuse.rgb, vDecal.rgb, vDecal.a),1.f); // 알파 값에 따라 혼합
 	
 	vector		vShade = g_ShadeTexture.Sample(LinearSampler, In.vTexcoord);
 	vector		vSpecular = g_SpecularTexture.Sample(LinearSampler, In.vTexcoord);

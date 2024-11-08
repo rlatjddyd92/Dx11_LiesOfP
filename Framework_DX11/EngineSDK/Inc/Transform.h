@@ -26,7 +26,7 @@ public:
 	void				Set_WorldMatrix(const _Matrix WorldMatrix) { XMStoreFloat4x4(&m_WorldMatrix, WorldMatrix); }
 	const _Matrix*		Get_WorldMatrix_Ptr() { return &m_WorldMatrix; }	//ÀúÀå¿ë
 
-	_Matrix				Get_WorldMatrix_Inverse() const { return XMMatrixInverse(nullptr, Get_WorldMatrix()); }
+	_Matrix				Get_WorldMatrix_Inverse() const { return m_WorldMatrix.Invert(); }
 
 public:	
 	virtual HRESULT Initialize_Prototype();

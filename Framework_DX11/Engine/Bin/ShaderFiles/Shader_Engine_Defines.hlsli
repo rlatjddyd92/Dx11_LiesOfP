@@ -77,6 +77,12 @@ DepthStencilState DSS_None
 	DepthWriteMask = zero;	
 };
 
+DepthStencilState DSS_Greater
+{
+    DepthEnable = true;
+    DepthWriteMask = all;
+    DepthFunc = greater;
+};
 
 BlendState BS_Default
 {
@@ -90,16 +96,6 @@ BlendState BS_AlphaBlend
 	SrcBlend = Src_Alpha;
 	DestBlend = Inv_Src_Alpha;
 	BlendOp = Add;
-
-	/*
-
-	SrcBlend[0] = Src_Alpha;
-	DestBlend[0] = Inv_Src_Alpha;
-	BlendOp[0] = Add;
-
-	SrcBlend[1] = one;
-	DestBlend[1] = one;
-	BlendOp[1] = Add;*/
 };
 
 BlendState BS_OnebyOne
