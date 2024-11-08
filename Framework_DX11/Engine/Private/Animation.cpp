@@ -32,6 +32,40 @@ HRESULT CAnimation::Initialize(HANDLE* pFile, vector<_uint>& KeyFrameIndices, co
 	return S_OK;
 }
 
+HRESULT CAnimation::Initialize__To_Binary(HANDLE* pFile, vector<_uint>& KeyFrameIndices, const CModel* pModel)
+{
+	_ulong dwByte = 0;
+
+	ReadFile(*pFile, &m_szName, MAX_PATH, &dwByte, nullptr);
+
+	ReadFile(*pFile, &m_Duration, sizeof(_double), &dwByte, nullptr);
+	ReadFile(*pFile, &m_SpeedPerSec, sizeof(_double), &dwByte, nullptr);
+
+	/* 이 애니메이션이 사용하는 뼈의 객수를 저장한다. */
+	ReadFile(*pFile, &m_iNumChannels, sizeof(_uint), &dwByte, nullptr);
+
+	KeyFrameIndices.resize(m_iNumChannels);
+
+	_int iNumEventKeyFrame;
+	ReadFile(*pFile, &iNumEventKeyFrame, sizeof(_uint), &dwByte, nullptr);
+	for (_int i = 0; i < iNumEventKeyFrame; ++i)
+	{
+		EVENT_KEYFRAME EventKeyFrame;
+
+		ReadFile(*pFile, &EventKeyFrame, sizeof(EVENT_KEYFRAME), &dwByte, nullptr);
+
+		m_EventKeyFrames.push_back(EventKeyFrame);
+	}
+
+	for (_int i = 0; i < m_iNumChannels; ++i)
+	{
+		CChannel* pChannel = CChannel::Create(pFile, pModel);
+		m_Channels.push_back(pChannel);
+	}
+
+	return S_OK;
+}
+
 _uint CAnimation::Update_TransformationMatrices(const vector<class CBone*>& Bones, _double* pCurrentTrackPosition, vector<_uint>& CurrentKeyFrameIndices, _bool isLoop, _bool* isEnd, _float fTimeDelta, _bool isChildOfBoundary, _bool BlockStackTime)
 {
 	if (!BlockStackTime)
@@ -84,6 +118,11 @@ HRESULT CAnimation::Create_BinaryFile(HANDLE* pFile)
 	//채널 갯수 저장
 	WriteFile(*pFile, &m_iNumChannels, sizeof(_uint), &dwByte, nullptr);
 
+	int iNumEventKeyFrame{};
+	//이벤트 키프레임 갯수 저장
+	iNumEventKeyFrame = m_EventKeyFrames.size();
+	WriteFile(*pFile, &iNumEventKeyFrame, sizeof(_uint), &dwByte, nullptr);
+
 	for (_int i = 0; i < m_EventKeyFrames.size(); ++i)
 	{//이벤트 키프레임 저장
 		WriteFile(*pFile, &m_EventKeyFrames[i], sizeof(EVENT_KEYFRAME), &dwByte, nullptr);
@@ -102,6 +141,19 @@ CAnimation* CAnimation::Create(HANDLE* pFile, vector<_uint>& KeyFrameIndices, co
 	CAnimation* pInstance = new CAnimation();
 
 	if (FAILED(pInstance->Initialize(pFile, KeyFrameIndices, pModel)))
+	{
+		MSG_BOX(TEXT("Failed to Created : CAnimation"));
+		Safe_Release(pInstance);
+	}
+
+	return pInstance;
+}
+
+CAnimation* CAnimation::Create_To_Binary(HANDLE* pFile, vector<_uint>& KeyFrameIndices, const CModel* pModel)
+{
+	CAnimation* pInstance = new CAnimation();
+
+	if (FAILED(pInstance->Initialize__To_Binary(pFile, KeyFrameIndices, pModel)))
 	{
 		MSG_BOX(TEXT("Failed to Created : CAnimation"));
 		Safe_Release(pInstance);

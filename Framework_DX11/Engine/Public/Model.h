@@ -58,7 +58,7 @@ public:
 	HRESULT					Update_Boundary();
 
 public:
-	virtual HRESULT Initialize_Prototype(TYPE eType, const _char* pModelFilePath, _fmatrix PreTransformMatrix, FilePathStructStack* pStructStack);
+	virtual HRESULT Initialize_Prototype(TYPE eType, const _char* pModelFilePath, _fmatrix PreTransformMatrix, _bool isBinaryAnimModel, FilePathStructStack* pStructStack);
 	virtual HRESULT Initialize(void* pArg) override;
 	virtual HRESULT Render(_uint iMeshIndex);
 
@@ -81,6 +81,8 @@ public:
 	HRESULT		Create_Bin_Meshes(HANDLE* pFile);
 	HRESULT		Create_Bin_Materials(HANDLE* pFile);
 	HRESULT		Create_Bin_Animations(HANDLE* pFile);
+
+	HRESULT		ReadyModel_To_Binary(HANDLE* pFile);
 
 private:
 	TYPE							m_eType = { TYPE_END };
@@ -145,7 +147,7 @@ public:
 	HRESULT Ready_Animations(HANDLE* pFile);
 
 public:
-	static CModel* Create(ID3D11Device* pDevice, ID3D11DeviceContext* pContext, TYPE eType, const _char* pModelFilePath, _fmatrix PreTransformMatrix = XMMatrixIdentity(), FilePathStructStack* pStructStack = nullptr);
+	static CModel* Create(ID3D11Device* pDevice, ID3D11DeviceContext* pContext, TYPE eType, const _char* pModelFilePath, _fmatrix PreTransformMatrix = XMMatrixIdentity(), _bool isBinaryAnimModel = false, FilePathStructStack* pStructStack = nullptr);
 	virtual CComponent* Clone(void* pArg) override;
 	virtual void Free() override;
 };

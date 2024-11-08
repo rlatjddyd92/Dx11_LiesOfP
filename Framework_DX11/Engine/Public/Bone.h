@@ -27,6 +27,7 @@ public:
 
 public:
 	virtual HRESULT Initialize(HANDLE* pFile, _int iParentBoneIndex);
+	HRESULT Initialize_ToBinary(HANDLE* pFile, _bool bUseBoundary);
 	void Update_CombinedTransformationMatrix(const vector<CBone*>& Bones, _fmatrix PreTransformMatrix);
 
 	void Setting_ParentBoneName(class CModel* pModel);
@@ -54,6 +55,7 @@ private:
 
 public:
 	static CBone* Create(HANDLE* pFile, _int iParentBoneIndex);
+	static CBone* Create_To_Binary(HANDLE* pFile, _bool bUseBoundary);
 	CBone* Clone();
 	virtual void Free() override;
 };

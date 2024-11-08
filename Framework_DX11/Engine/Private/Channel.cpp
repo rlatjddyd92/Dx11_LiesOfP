@@ -166,7 +166,6 @@ CChannel* CChannel::Create(HANDLE* pFile, const CModel* pModel)
 	return pInstance;
 }
 
-
 void CChannel::Free()
 {
 }

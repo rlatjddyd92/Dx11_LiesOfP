@@ -28,6 +28,7 @@ public:
 
 public:
 	virtual HRESULT Initialize_Prototype(HANDLE* pFile, const CModel* pModel, _fmatrix PreTransformMatrix);
+	virtual HRESULT Initialize_Prototype_To_Binary(HANDLE* pFile, const CModel* pModel, _fmatrix PreTransformMatrix);
 	virtual HRESULT Initialize(void* pArg) override;
 
 public:
@@ -58,9 +59,11 @@ private:
 	HRESULT	Ready_VertexBuffer_NonAnim(HANDLE* pFile, _fmatrix PreTransformMatrix);
 	HRESULT	Ready_VertexBuffer_Anim(HANDLE* pFile, const CModel* pModel);
 
+	HRESULT	Ready_VertexBuffer_To_Binary(HANDLE* pFile);
 
 public:
 	static CMesh* Create(ID3D11Device* pDevice, ID3D11DeviceContext* pContext, HANDLE* pFile, const CModel* pModel, _fmatrix PreTransformMatrix);
+	static CMesh* Create_To_Binary(ID3D11Device* pDevice, ID3D11DeviceContext* pContext, HANDLE* pFile, const CModel* pModel, _fmatrix PreTransformMatrix);
 	virtual CComponent* Clone(void* pArg);
 	virtual void Free() override;
 };

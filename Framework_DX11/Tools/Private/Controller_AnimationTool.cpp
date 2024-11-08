@@ -225,7 +225,7 @@ void CController_AnimationTool::ListUp_Anim()
 		ImGui::Checkbox("Divide_Boundary", &m_bDivide_Boundary);
 		ImGui::Text("Anim Lower Body");
 		ImGui::SameLine();
-		ImGui::Text("\t\t");
+		ImGui::Text("\t\t\t");
 		ImGui::SameLine();
 		ImGui::Text("Anim Upper Body");
 	}
