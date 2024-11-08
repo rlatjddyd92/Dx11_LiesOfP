@@ -96,7 +96,7 @@
     </Filter>
     <Filter Include="02.GameObjects\07.Sky">
       <UniqueIdentifier>{0fabafc1-98b0-40f7-9ef1-fc081ff1e880}</UniqueIdentifier>
-	</Filter>
+    </Filter>
     <Filter Include="90.ImGuiManager\Controller_MapTool\stb">
       <UniqueIdentifier>{74d744e6-20f1-4154-bdd3-4debecd7b3cb}</UniqueIdentifier>
     </Filter>
@@ -233,7 +233,7 @@
     </ClInclude>
     <ClInclude Include="..\Public\Sky.h">
       <Filter>02.GameObjects\07.Sky</Filter>
-	</ClInclude>
+    </ClInclude>
     <ClInclude Include="..\Public\stb_image.h">
       <Filter>90.ImGuiManager\Controller_MapTool\stb</Filter>
     </ClInclude>

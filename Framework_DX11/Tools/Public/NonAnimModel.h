@@ -69,10 +69,6 @@ private:
 	_bool		m_isLight = { false };
 	_bool		m_isInstance = { false };
 
-	_bool m_bSelected = { false };
-	_bool m_isLight = { false };
-	_bool m_isInstance = { false };
-
 	_tchar m_szModelTag[MAX_PATH];
 
 private:
