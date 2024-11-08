@@ -123,25 +123,25 @@ HRESULT CMesh::Create_BinaryFile(HANDLE* pFile)
 	//정점 버퍼 저장
 	for (_int i = 0; i < m_iNumVertices; ++i)
 	{
-		WriteFile(*pFile, &m_pVertices[i], sizeof(VTXANIMMESH), &dwByte, nullptr);
+		WriteFile(*pFile, &m_pAnimVertices[i], sizeof(VTXANIMMESH), &dwByte, nullptr);
 	}
 
 	//영향받는 뼈 갯수 저장
 	WriteFile(*pFile, &m_iNumBones, sizeof(_uint), &dwByte, nullptr);
 
-	for (size_t i = 0; i < m_iNumBones; i++)
+	for (size_t j = 0; j < m_iNumBones; ++j)
 	{//오프셋 매트릭스 저장
-		WriteFile(*pFile, &m_OffsetMatrices[i], sizeof(_float4x4), &dwByte, nullptr);
+		WriteFile(*pFile, &m_OffsetMatrices[j], sizeof(_float4x4), &dwByte, nullptr);
 
-		WriteFile(*pFile, &m_BoneNaems[i], MAX_PATH, &dwByte, nullptr);
+		WriteFile(*pFile, &m_BoneNaems[j], MAX_PATH, &dwByte, nullptr);
 
-		WriteFile(*pFile, &m_BoneIndices[i], sizeof(_int), &dwByte, nullptr);
+		WriteFile(*pFile, &m_BoneIndices[j], sizeof(_int), &dwByte, nullptr);
 
 	}
 
-	for (_int j = 0; j < m_iNumIndices; ++j)
+	for (_int k = 0; k < m_iNumIndices; ++k)
 	{//인덱스 버퍼 저장
-		WriteFile(*pFile, &m_pIndices[j], sizeof(_uint), &dwByte, nullptr);
+		WriteFile(*pFile, &m_pIndices[k], sizeof(_uint), &dwByte, nullptr);
 	}
 	
 

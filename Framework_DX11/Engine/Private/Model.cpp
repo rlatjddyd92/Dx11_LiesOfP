@@ -461,7 +461,7 @@ HRESULT CModel::Create_BinaryFile(const _char* ModelTag)
 
 	//"Prototype_AnimModel_Test"  앞부분 제외 뒷부분 이름으로 사용
 
-	strFilePath.erase(0, 10);
+	strFilePath.erase(0, 20);
 
 	char szCreateFolderPath[MAX_PATH];
 	if (m_eType == TYPE_NONANIM)
@@ -584,8 +584,7 @@ HRESULT CModel::Create_Bin_Materials(HANDLE* pFile)
 			{//저장 할 것이 없다면 스킵
 				isHaveTexture = false;;
 			}
-			
-			//텍스쳐의 문자열을 저장해 두어야 하는 문제가 발생
+			//텍스쳐 존재 여부를 저장
 			WriteFile(*pFile, &isHaveTexture, sizeof(_bool), &dwByte, nullptr);
 
 			if (isHaveTexture)
