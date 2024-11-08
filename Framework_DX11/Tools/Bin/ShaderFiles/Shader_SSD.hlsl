@@ -67,6 +67,8 @@ PS_OUT PS_MAIN(PS_IN In)
     vTexUV.y = In.vProjPos.y / In.vProjPos.w * -0.5f + 0.5f;
     
     vector vDepthDesc = g_DepthTexture.Sample(PointSampler, vTexUV);
+    vector vNormalDesc = g_NormalTexture.Sample(PointSampler, vTexUV);
+    
     
     float fViewZ = vDepthDesc.y * 1000.f;
     
@@ -89,13 +91,20 @@ PS_OUT PS_MAIN(PS_IN In)
     //데칼의 로컬로 이동
     vector vLocalPos = mul(vPosition, g_vDecalWorldInverse);
     
+    // 월드 노멀을 데칼 공간으로 이동하여 회전
+    float3 vNormal = mul(float4(vNormalDesc.xyz, 0.f), g_vDecalWorldInverse);
+    
     float3 ObjectAbsPos = abs(vLocalPos.xyz);
     clip(0.5f - ObjectAbsPos);
     
-    float2 vDecalTexCoord = vLocalPos.xz + 0.5f;
-    vector vDecalDiffuse = g_Texture.Sample(LinearSampler, vDecalTexCoord);
+    float2 vNewTexUV = vLocalPos.xy;
+    vNewTexUV -= vLocalPos.z * vNormal.xy;
+    vNewTexUV *= 0.5f;
     
-    Out.vColor = vector(vDecalDiffuse.xyz, 1.f);
+    //float2 vDecalTexCoord = vLocalPos.xz + 0.5f;
+    vector vDecalDiffuse = g_Texture.Sample(LinearSampler, vNewTexUV);
+    
+    Out.vColor = vector(vDecalDiffuse.xyz, 0.8f);
     
     return Out;
 }
