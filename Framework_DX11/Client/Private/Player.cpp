@@ -63,7 +63,7 @@ void CPlayer::Update(_float fTimeDelta)
 	if (GetKeyState(VK_RIGHT) & 0x8000)
 		m_pTransformCom->Turn(false, true, false, fTimeDelta);
 
-	if (GetKeyState(VK_UP) & 0x8000)
+	if (m_pGameInstance->Get_KeyState(KEY::UP) == KEY_STATE::HOLD)
 	{
 		m_pTransformCom->Go_Straight(fTimeDelta, m_pNavigationCom);
 
@@ -71,12 +71,19 @@ void CPlayer::Update(_float fTimeDelta)
 			m_iState ^= STATE_IDLE;
 
 		m_iState |= STATE_WALK;
+
+		
 	}
 
 	else
 	{
 		m_iState = STATE_RESET;
 		m_iState |= STATE_IDLE;
+	}
+
+	if (m_pGameInstance->Get_KeyState(KEY::RBUTTON) == KEY_STATE::TAP)
+	{
+		m_iState |= STATE_GRIND;
 	}
 
 	m_pColliderCom->Update(m_pTransformCom->Get_WorldMatrix_Ptr());

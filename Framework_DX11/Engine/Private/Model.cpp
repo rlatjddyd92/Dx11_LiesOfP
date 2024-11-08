@@ -26,6 +26,8 @@ CModel::CModel(const CModel & Prototype)
 	, m_KeyFrameIndices {Prototype.m_KeyFrameIndices }
 	, m_FilePaths { Prototype.m_FilePaths }
 	, m_isUseBoundary { Prototype.m_isUseBoundary }
+	, m_UFBIndices { Prototype.m_UFBIndices }
+	, m_UseFullVtxIndices{ Prototype.m_UseFullVtxIndices }
 {
 	for (auto& pAnimation : m_Animations)
 		Safe_AddRef(pAnimation);
@@ -204,7 +206,10 @@ HRESULT CModel::SetUp_NextAnimation(_uint iNextAnimationIndex, _bool isLoop, _fl
 	m_tChaneAnimDesc.iStartFrame = iStartFrame;
 	m_tChaneAnimDesc.fChangeDuration = fChangeDuration;
 	m_tChaneAnimDesc.fChangeTime = 0.f;
-
+	if (m_iCurrentAnimIndex == m_iCurrentAnimIndex_Boundary)
+	{
+		SetUp_NextAnimation_Boundary(iNextAnimationIndex, isLoop, fChangeDuration, iStartFrame);
+	}
 	m_isEnd_Animations[iNextAnimationIndex] = false;
 	m_isLoop = isLoop;
 	m_isChangeAni = true;
@@ -287,6 +292,10 @@ _vector CModel::Play_Animation(_float fTimeDelta, _bool* pOut)
 		m_CurrentTrackPosition += fAddTime;
 		for (_int i = 0; i < CurrentChannels.size(); ++i)
 		{
+			if (m_isUseBoundary && m_Bones[CurrentChannels[i]->Get_BoneIndex()]->Get_IsChildOf_Boundary() == true)
+			{
+				continue;
+			}
 
 			KEYFRAME tCurrentKeyFrame = CurrentChannels[i]->Find_KeyFrameIndex(&m_KeyFrameIndices[m_iCurrentAnimIndex][i], m_CurrentTrackPosition); // 여기서부터
 			KEYFRAME tNextKeyFrame = NextChannels[i]->Find_KeyFrameIndex(&m_KeyFrameIndices[m_tChaneAnimDesc.iNextAnimIndex][i], NextChannels[i]->Get_KeyFrame(m_tChaneAnimDesc.iStartFrame).TrackPosition); // 여기로 보간
@@ -360,6 +369,10 @@ _vector CModel::Play_Animation(_float fTimeDelta, _bool* pOut)
 			m_CurrentTrackPosition_Boundary += fAddTime;
 			for (_int i = 0; i < CurrentChannels.size(); ++i)
 			{
+				if (m_Bones[CurrentChannels[i]->Get_BoneIndex()]->Get_IsChildOf_Boundary() == false)
+				{
+					continue;
+				}
 
 				KEYFRAME tCurrentKeyFrame = CurrentChannels[i]->Find_KeyFrameIndex(&m_KeyFrameIndices[m_iCurrentAnimIndex_Boundary][i], m_CurrentTrackPosition_Boundary); // 여기서부터
 				KEYFRAME tNextKeyFrame = NextChannels[i]->Find_KeyFrameIndex(&m_KeyFrameIndices[m_tChaneAnimDesc_Boundary.iNextAnimIndex][i], NextChannels[i]->Get_KeyFrame(m_tChaneAnimDesc_Boundary.iStartFrame).TrackPosition); // 여기로 보간
@@ -400,7 +413,7 @@ _vector CModel::Play_Animation(_float fTimeDelta, _bool* pOut)
 
 			if (isChangeEnd)
 			{
-				if (m_iCurrentAnimIndex == m_tChaneAnimDesc_Boundary.iNextAnimIndex)
+				if (m_tChaneAnimDesc_Boundary.iNextAnimIndex == m_iCurrentAnimIndex)
 				{
 					m_CurrentTrackPosition_Boundary = m_CurrentTrackPosition;
 				}
@@ -435,14 +448,17 @@ _vector CModel::Play_Animation(_float fTimeDelta, _bool* pOut)
 	{
 		m_Bones[m_UFBIndices[UFB_ROOT]]->Update_CombinedTransformationMatrix(m_Bones, XMLoadFloat4x4(&m_PreTransformMatrix));
 		vRootMove = m_Bones[m_UFBIndices[UFB_ROOT]]->Get_CombinedTransformationMatrix().r[3];
-		if (m_CurrentTrackPosition == 0.f && pOut != nullptr)//애니메이션이 끝났는지에 대한 판단
+		if (m_isEnd_Animations[m_iCurrentAnimIndex] == true && pOut != nullptr)//애니메이션이 끝났는지에 대한 판단
 		{
+			m_CurrentTrackPosition == 0.f;
 			*pOut = true;
+			m_isEnd_Animations[m_iCurrentAnimIndex] = false;
 		}
-		if (m_CurrentTrackPosition_Boundary == 0.f && pOut != nullptr && m_iCurrentAnimIndex != m_iCurrentAnimIndex_Boundary && m_isEnd_Animations_Boundary[m_iCurrentAnimIndex_Boundary])//애니메이션이 끝났는지에 대한 판단
+		if (m_isEnd_Animations_Boundary[m_iCurrentAnimIndex_Boundary] == true && m_iCurrentAnimIndex != m_iCurrentAnimIndex_Boundary && m_isEnd_Animations_Boundary[m_iCurrentAnimIndex_Boundary])//애니메이션이 끝났는지에 대한 판단
 		{
 			SetUp_NextAnimation_Boundary(m_iCurrentAnimIndex, m_isLoop);
 			m_CurrentTrackPosition_Boundary = 0.f;
+			m_isEnd_Animations_Boundary[m_iCurrentAnimIndex_Boundary] = false;
 		}
 		_float4x4 RootMat = {};
 		XMStoreFloat4x4(&RootMat, m_Bones[m_UFBIndices[UFB_ROOT]]->Get_TransformationMatrix());
