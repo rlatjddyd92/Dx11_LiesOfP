@@ -138,7 +138,7 @@ public:
 		return UPART{};
 	}
 
-	_int GetPartCount() { return m_vecPageInfo[m_iNowSelectNum]->vecPart.size(); }
+	_int GetPartCount() { return (_int)m_vecPageInfo[m_iNowSelectNum]->vecPart.size(); }
 
 
 public: // imgui_UI메뉴 전용
@@ -182,6 +182,11 @@ private:
 	HRESULT SavePart();
 	HRESULT LoadPart();
 	HRESULT InitializeComponent();
+
+	HRESULT EraseUIData();
+
+	HRESULT MakeClientData_Page();
+	HRESULT MakeClientData_Part(HANDLE handle, DWORD* dword, vector<UPART*>* pPart);
 
 
 private:

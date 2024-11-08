@@ -8,6 +8,8 @@ namespace Client
 	const unsigned int			g_iWinSizeY = { 720 };
 
 	enum LEVELID { LEVEL_STATIC, LEVEL_LOADING, LEVEL_LOGO, LEVEL_GAMEPLAY, LEVEL_END };
+
+	#define GET_GAMEINTERFACE	CGameInterface_Controller::Get_Instance()
 }
 
 extern HINSTANCE g_hInst;

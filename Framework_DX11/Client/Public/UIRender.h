@@ -1,7 +1,10 @@
 #pragma once
 
-#include "Tools_Defines.h"
+#include "Client_Defines.h"
+
 #include "UIObject.h"
+#include "UIPage_Defines.h"
+using namespace GameInterface_Controller;
 
 
 BEGIN(Engine)
@@ -10,7 +13,7 @@ class CTexture;
 class CVIBuffer_Rect;
 END
 
-BEGIN(Tools)
+BEGIN(Client)
 
 
 class CUIRender final : public CUIObject
@@ -44,32 +47,12 @@ public:
 
 	typedef struct UIRENDERCOMMAND
 	{
-		UIRENDERCOMMAND()
-		{
-			szText = new _tchar[100];
-		}
-
-		~UIRENDERCOMMAND()
-		{
-			Safe_Delete_Array(szText);
-		}
-
-		_int iTextureIndex = -1;
-		_float2 fPosition = { 0.f,0.f };
-		_float2 fSize = { 0.f,0.f };
-
-		UI_FONT eType = UI_FONT::FONT_END;
-		_tchar* szText = TEXT("none");
-		_bool bIsCenter = false;
-
-		// -1 이면 작동 안함 
-		_float3 fRGB = { -1.f,-1.f,-1.f };
-		_float fAlpah = -1.f;
+		
 	}URCOM;
 
 
 private:
-	CUIRender(ID3D11Device* pDevice, ID3D11DeviceContext* pContext);
+	CUIRender(ID3D11Device* pDevice, ID3D11DeviceContext* pContext, const vector<CUIPage*>* pVecUIPage);
 	CUIRender(const CUIRender& Prototype);
 	virtual ~CUIRender() = default;
 
@@ -88,7 +71,7 @@ public:
 	const _char* GetTextureTag(_int iIndex) { return m_vecTextureInfo[iIndex]->strTextureTag; }
 	const _char* GetTextFontTag(_int iIndex) { return m_vecFont_char[iIndex]; }
 
-	_int GetTextureCount() { return (_int)m_vecTextureInfo.size(); }
+	_int GetTextureCount() { return m_vecTextureInfo.size(); }
 
 public:
 	class CShader* m_pShaderCom = { nullptr };
@@ -101,14 +84,15 @@ private:
 	HRESULT Ready_Texture();
 
 	vector<UTEXTURE*> m_vecTextureInfo;
-	list<URCOM*> m_UIRenderlist;
 	vector<_char*> m_vecFont_char;
 	vector<_tchar*> m_vecFont_tchar;
 
-	
+
+	const vector<CUIPage*>* m_vecUIPage;
+
 
 public:
-	static CUIRender* Create(ID3D11Device* pDevice, ID3D11DeviceContext* pContext);
+	static CUIRender* Create(ID3D11Device* pDevice, ID3D11DeviceContext* pContext, const vector<CUIPage*>* pVecUIPage);
 	virtual CGameObject* Clone(void* pArg);
 	virtual void Free() override;
 

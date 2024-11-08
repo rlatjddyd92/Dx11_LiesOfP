@@ -1,15 +1,13 @@
 #include "stdafx.h"
-#include "..\Public\UIRender.h"
+#include "UIRender.h"
 
 #include "GameInstance.h"
-#include "Controller_UITool.h"
-#include <fstream>
-#include <sstream>
-#include <stack>
+#include "GameInterface_Controller.h"
 
-CUIRender::CUIRender(ID3D11Device* pDevice, ID3D11DeviceContext* pContext)
+CUIRender::CUIRender(ID3D11Device* pDevice, ID3D11DeviceContext* pContext, const vector<CUIPage*>* pVecUIPage)
 	: CUIObject{ pDevice, pContext }
 {
+	m_vecUIPage = pVecUIPage;
 }
 
 CUIRender::CUIRender(const CUIRender& Prototype)
@@ -70,106 +68,8 @@ void CUIRender::Late_Update(_float fTimeDelta)
 
 HRESULT CUIRender::Render()
 {
-	_int iMax = CController_UITool::Get_Instance()->GetPartCount();
-
-	for (_int i = 0; i < iMax; ++i)
-	{
-		CController_UITool::UPART& rNow = CController_UITool::Get_Instance()->Get_PartRenderInfo(i);
-
-		if (rNow.iTexture_Index != -1)
-		{
-			m_pTransformCom->Set_WorldMatrix(XMMatrixIdentity());
-
-			if (rNow.iMoveType == _int(CController_UITool::MOVETYPE::TYPE_BAR))
-				m_pTransformCom->Set_Scaled(rNow.GetBarSize().x, rNow.GetBarSize().y, 1.f);
-			else 
-				m_pTransformCom->Set_Scaled(rNow.fSize.x, rNow.fSize.y, 1.f);
-
-			
-
-			m_pTransformCom->Set_State(CTransform::STATE_POSITION,
-				XMVectorSet(rNow.fPosition.x - m_fViewWidth * 0.5f, -rNow.fPosition.y + m_fViewHeight * 0.5f, 0.f, 1.f));
-
-			if (FAILED(m_pTransformCom->Bind_ShaderResource(m_pShaderCom, "g_WorldMatrix")))
-				return E_FAIL;
-
-			if (FAILED(m_pShaderCom->Bind_Matrix("g_ViewMatrix", &m_ViewMatrix)))
-				return E_FAIL;
-
-			if (FAILED(m_pShaderCom->Bind_Matrix("g_ProjMatrix", &m_ProjMatrix)))
-				return E_FAIL;
-
-			if (FAILED(m_vecTextureInfo[rNow.iTexture_Index]->Texture->Bind_ShadeResource(m_pShaderCom, "g_Texture", 0)))
-				return E_FAIL;
-
-			if (FAILED(m_pShaderCom->Bind_RawValue("g_Color", &rNow.fTextureColor, sizeof(_float4))))
-				return E_FAIL;
-
-			if (FAILED(m_pShaderCom->Begin(0)))
-				return E_FAIL;
-
-			if (FAILED(m_pVIBufferCom->Bind_Buffers()))
-				return E_FAIL;
-
-			if (FAILED(m_pVIBufferCom->Render()))
-				return E_FAIL;
-		}
-		if ((rNow.iFontIndex >= 0) && (rNow.iFontIndex < _int(UI_FONT::FONT_END)))
-		{
-			if (rNow.szText == nullptr)
-				continue;
-
-			_vector vPosition = { rNow.fPosition.x, rNow.fPosition.y, 0.f,0.f };
-			_vector vColor = { 1.f,1.f,1.f,1.f };
-
-			if (rNow.fTextColor.x > 0.f)
-				vColor.m128_f32[0] = rNow.fTextColor.x;
-
-			if (rNow.fTextColor.y > 0.f)
-				vColor.m128_f32[1] = rNow.fTextColor.y;
-
-			if (rNow.fTextColor.z > 0.f)
-				vColor.m128_f32[2] = rNow.fTextColor.z;
-
-			if (rNow.fTextColor.w > 0.f)
-				vColor.m128_f32[3] = rNow.fTextColor.w;
-
-
-			if (rNow.bCenter)
-				m_pGameInstance->Render_TextCenter(m_vecFont_tchar[rNow.iFontIndex], rNow.szText, vPosition, vColor);
-			else
-				m_pGameInstance->Render_Text(m_vecFont_tchar[rNow.iFontIndex], rNow.szText, vPosition, vColor);
-		}
-	}
 	
 	return S_OK;
-}
-
-void CUIRender::AddRenderUIObject(_int iTextureIndex, _float2 fPosition, _float2 fSize, _float3 fRGB, _float fAlpha)
-{
-	URCOM* pNew = new URCOM;
-
-	pNew->iTextureIndex = iTextureIndex;
-	pNew->fPosition = fPosition;
-	pNew->fSize = fSize;
-	pNew->fRGB = fRGB;
-	pNew->fAlpah = fAlpha;
-
-	m_UIRenderlist.push_back(pNew);
-}
-
-void CUIRender::AddRenderText(UI_FONT eFont, _bool bIsCenter, _tchar* szText, _float2 fPosition, _float3 fColor, _float fAlpha)
-{
-	URCOM* pNew = new URCOM;
-
-	pNew->fPosition = fPosition;
-	pNew->fRGB = fColor;
-	pNew->fAlpah = fAlpha;
-	pNew->eType = eFont;
-	pNew->szText = szText;
-	pNew->bIsCenter = bIsCenter;
-
-	m_UIRenderlist.push_back(pNew);
 }
 
 HRESULT CUIRender::Ready_Components()
@@ -196,8 +96,8 @@ void CUIRender::Ready_Font()
 {
 	m_vecFont_char.resize(_int(UI_FONT::FONT_END));
 	m_vecFont_tchar.resize(_int(UI_FONT::FONT_END));
-	
-		
+
+
 
 	m_pGameInstance->Add_Font(TEXT("FONT_INFO_12"), TEXT("../Bin/Resources/Fonts/Font_Info_12.spritefont"));
 	m_pGameInstance->Add_Font(TEXT("FONT_INFO_18"), TEXT("../Bin/Resources/Fonts/Font_Info_18.spritefont"));
@@ -264,11 +164,11 @@ HRESULT CUIRender::Ready_Texture()
 		pNew->strTexturePath = new _char[vecBuffer[i][0].size() + 1];
 		pNew->strTextureTag = new _char[vecBuffer[i][1].size() + 1];
 
-		if (FAILED(m_pGameInstance->Add_Prototype(LEVEL_TOOL, tTag, pNew->Texture)))
+		if (FAILED(m_pGameInstance->Add_Prototype(LEVEL_STATIC, tTag, pNew->Texture)))
 			return E_FAIL;
 
-		WideCharToMultiByte(CP_UTF8, 0, tPath, -1, pNew->strTexturePath, (_int)vecBuffer[i][0].size() + 1, nullptr, nullptr);
-		WideCharToMultiByte(CP_UTF8, 0, tTag, -1, pNew->strTextureTag, (_int)vecBuffer[i][1].size() + 1, nullptr, nullptr);
+		WideCharToMultiByte(CP_UTF8, 0, tPath, -1, pNew->strTexturePath, vecBuffer[i][0].size() + 1, nullptr, nullptr);
+		WideCharToMultiByte(CP_UTF8, 0, tTag, -1, pNew->strTextureTag, vecBuffer[i][1].size() + 1, nullptr, nullptr);
 
 		m_vecTextureInfo.push_back(pNew);
 
@@ -279,9 +179,9 @@ HRESULT CUIRender::Ready_Texture()
 	return S_OK;
 }
 
-CUIRender* CUIRender::Create(ID3D11Device* pDevice, ID3D11DeviceContext* pContext)
+CUIRender* CUIRender::Create(ID3D11Device* pDevice, ID3D11DeviceContext* pContext, const vector<CUIPage*>* pVecUIPage)
 {
-	CUIRender* pInstance = new CUIRender(pDevice, pContext);
+	CUIRender* pInstance = new CUIRender(pDevice, pContext, pVecUIPage);
 
 	if (FAILED(pInstance->Initialize_Prototype()))
 	{
@@ -315,7 +215,7 @@ void CUIRender::Free()
 
 	for (auto& iter : m_vecTextureInfo)
 	{
-//		Safe_Release(iter->Texture);
+		//		Safe_Release(iter->Texture);
 		Safe_Delete_Array(iter->strTexturePath);
 		Safe_Delete_Array(iter->strTextureTag);
 		Safe_Delete(iter);
@@ -323,15 +223,12 @@ void CUIRender::Free()
 
 	m_vecTextureInfo.clear();
 
-	for (auto& iter : m_UIRenderlist)
-		Safe_Delete(iter);
+	
 
 	m_vecFont_char.clear();
 	m_vecFont_tchar.clear();
 
-	
 
-	m_UIRenderlist.clear();
 
 	Safe_Release(m_pVIBufferCom);
 }

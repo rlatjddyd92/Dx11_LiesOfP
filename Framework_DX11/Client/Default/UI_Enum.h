@@ -4,7 +4,7 @@
 // 필요한 클래스는 모두 사용 가능 
 // ★ 추후 Client_Defines에 넣을 지 논의 필요
 
-namespace Data_Instance
+namespace GameInterface_Controller
 {
 	// Part 
 
