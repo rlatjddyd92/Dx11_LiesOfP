@@ -1,4 +1,4 @@
-﻿473,
+473,
 _Path,_Tag
 ../Bin/Resources/Textures/UI/UIT_SubTItleIcon_Bag2.dds,Prototype_Component_Texture_UI_SubTItleIcon_Bag2
 ../Bin/Resources/Textures/UI/UIT_SubTItleIcon_Menu.dds,Prototype_Component_Texture_UI_SubTItleIcon_Menu
@@ -473,3 +473,8 @@ _Path,_Tag
 ../Bin/Resources/Textures/UI/UIT_Slot_Bg_Default.dds,Prototype_Component_Texture_UI_Slot_Bg_Default
 ../Bin/Resources/Textures/UI/UIT_SpecialMaterial.dds,Prototype_Component_Texture_UI_SpecialMaterial
 ../Bin/Resources/Textures/UI/UIT_SubTItleIcon_Bag1.dds,Prototype_Component_Texture_UI_SubTItleIcon_Bag1
+../Bin/Resources/Textures/UI/UIT_GaugeFrame_H0.dds,Prototype_Component_Texture_UI_GaugeFrame_H0
+../Bin/Resources/Textures/UI/UIT_GaugeFrame_H1.dds,Prototype_Component_Texture_UI_GaugeFrame_H1
+../Bin/Resources/Textures/UI/UIT_GaugeFrame_H2.dds,Prototype_Component_Texture_UI_GaugeFrame_H2
+../Bin/Resources/Textures/UI/UIT_GaugeFrame_W0.dds,Prototype_Component_Texture_UI_GaugeFrame_W0
+../Bin/Resources/Textures/UI/UIT_GaugeFrame_W1.dds,Prototype_Component_Texture_UI_GaugeFrame_W1

@@ -102,6 +102,9 @@ HRESULT CUIRender::Render()
 			if (FAILED(m_vecTextureInfo[rNow.iTexture_Index]->Texture->Bind_ShadeResource(m_pShaderCom, "g_Texture", 0)))
 				return E_FAIL;
 
+			if (FAILED(m_pShaderCom->Bind_RawValue("g_Color", &rNow.fTextureColor, sizeof(_float4))))
+				return E_FAIL;
+
 			if (FAILED(m_pShaderCom->Begin(0)))
 				return E_FAIL;
 

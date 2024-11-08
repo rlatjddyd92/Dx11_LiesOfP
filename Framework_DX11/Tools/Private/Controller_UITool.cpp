@@ -27,6 +27,22 @@ HRESULT CController_UITool::UITool_Render()
 	return S_OK;
 }
 
+void CController_UITool::Show_StaticSystemMessage(_wstring Text)
+{
+}
+
+void CController_UITool::Off_StaticSystemMessage()
+{
+}
+
+void CController_UITool::Show_SystemMessage(_wstring Text, _float fTime)
+{
+}
+
+void CController_UITool::Show_MouseInfo(_wstring DataNameA, _float* DataA, _wstring DataNameB, _float* DataB, _wstring DataNameC, _float* DataC, _wstring DataNameD, _float* DataD)
+{
+}
+
 void CController_UITool::UIPage_Edit()
 {
 	if (ImGui::CollapsingHeader("Page Setting"))
@@ -425,11 +441,20 @@ HRESULT CController_UITool::SavePart()
 
 			iIndex = -1;
 			_wstring strText;
-			do
+
+			if (pNow->szText == nullptr)
 			{
-				++iIndex;
-				strText += (pNow->szText)[iIndex];
-			} while ((pNow->szText)[iIndex] != '\0');
+				strText = (_tchar)"\0";
+			}
+			else
+			{
+				do
+				{
+					++iIndex;
+					strText += (pNow->szText)[iIndex];
+				} while ((pNow->szText)[iIndex] != '\0');
+			}
+
 			vecPart.push_back(strText);
 
 			vecPart.push_back(to_wstring(pNow->bCenter));
