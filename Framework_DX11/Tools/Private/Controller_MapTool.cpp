@@ -11,6 +11,7 @@
 #include "NavigationController.h"
 
 #include "NonAnimModel.h"
+#include "Decal.h"
 
 IMPLEMENT_SINGLETON(CController_MapTool)
 
@@ -1295,7 +1296,11 @@ void CController_MapTool::Light_Modify()
 
 void CController_MapTool::Decal_Create()
 {
+	CDecal::DECAL_DESC desc = {};
+	desc.vPosition = m_vPickPos;
 
+	if (FAILED(m_pGameInstance->Add_CloneObject_ToLayer(LEVEL_TOOL, TEXT("Layer_Decal"), TEXT("Prototype_GameObject_Decal"),&desc)))
+		return;
 }
 
 void CController_MapTool::Light_Menu()

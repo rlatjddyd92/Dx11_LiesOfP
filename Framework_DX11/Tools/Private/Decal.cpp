@@ -20,6 +20,8 @@ HRESULT CDecal::Initialize_Prototype()
 
 HRESULT CDecal::Initialize(void* pArg)
 {
+	DECAL_DESC* pDesc = static_cast<DECAL_DESC*>(pArg);
+
 	/* 직교퉁여을 위한 데이터들을 모두 셋하낟. */
 	if (FAILED(__super::Initialize(pArg)))
 		return E_FAIL;
@@ -27,7 +29,7 @@ HRESULT CDecal::Initialize(void* pArg)
 	if (FAILED(Ready_Components()))
 		return E_FAIL;
 
-	m_pTransformCom->Set_State(CTransform::STATE_POSITION, _Vec3(2.f, 0.f, 3.f));
+	m_pTransformCom->Set_State(CTransform::STATE_POSITION, pDesc->vPosition);
 	m_pTransformCom->Set_Scaled(1.f, 1.f, 1.f);
 	return S_OK;
 }
