@@ -73,7 +73,10 @@ void CNonAnimModel::Late_Update(_float fTimeDelta)
 	if(m_isDecal)
 		m_pGameInstance->Add_RenderObject(CRenderer::RG_DECAL, this);
 	else
+	{
 		m_pGameInstance->Add_RenderObject(CRenderer::RG_NONBLEND, this);
+	
+	}
 	m_pGameInstance->Add_RenderObject(CRenderer::RG_PICKING, this);
 }
 
@@ -154,7 +157,7 @@ HRESULT CNonAnimModel::Render()
 		if (FAILED(m_pShaderCom->Bind_Matrix("g_vDecalWorldInverse", &m_pTransformCom->Get_WorldMatrix_Inverse())))
 			return E_FAIL;
 
-		if (FAILED(m_pTextureCom_Diffuse->Bind_ShadeResource(m_pShaderCom, "g_Texture", 0)))
+		if (FAILED(m_pTextureCom_Diffuse->Bind_ShadeResource(m_pShaderCom, "g_DeacalDiffuseTexture", 0)))
 			return E_FAIL;
 
 		if (FAILED(m_pGameInstance->Bind_RT_ShaderResource(m_pShaderCom, TEXT("Target_Depth"), "g_DepthTexture")))
