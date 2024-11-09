@@ -42,9 +42,7 @@ public:
 
 	void					Add_UFVtxIndices(UFVTX UFVtx) { m_UseFullVtxIndices.push_back(UFVtx); }
 	vector<UFVTX>* Get_UFVtxIndices() { return &m_UseFullVtxIndices; }
-
-	class CTexture* Find_Texture(_uint iMeshNum, TEXTURE_TYPE eMaterialType);
-
+	
 	void					Set_AnimPlay(_bool bCtrAnim) { m_bPlayAnimCtr = bCtrAnim; }
 
 	_bool					Get_IsUseBoundary() { return m_isUseBoundary; }
