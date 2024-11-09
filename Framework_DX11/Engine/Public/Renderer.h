@@ -11,7 +11,7 @@ BEGIN(Engine)
 class CRenderer final : public CBase
 {
 public:
-	enum RENDERGROUP { RG_PRIORITY, RG_HEIGHT, RG_SHADOWOBJ, RG_NONBLEND, RG_NONLIGHT, RG_BLEND, RG_PICKING, RG_UI, RG_DECAL, RG_END };
+	enum RENDERGROUP { RG_PRIORITY, RG_HEIGHT, RG_SHADOWOBJ, RG_NONBLEND, RG_NONLIGHT, RG_BLEND, RG_PICKING, RG_UI, RG_DECAL, RG_DISTORTION, RG_END };
 private:
 	CRenderer(ID3D11Device* pDevice, ID3D11DeviceContext* pContext);
 	virtual ~CRenderer() = default;
@@ -53,6 +53,7 @@ private:
 	class CShader*				m_pBloomShader = { nullptr };
 	class CShader*				m_pSSAOShader = { nullptr };
 	class CShader*				m_pHDRShader = { nullptr };
+	class CShader*				m_pDistortionShader = { nullptr };
 
 	class CVIBuffer_Rect*		m_pVIBuffer = { nullptr };
 
@@ -93,6 +94,8 @@ private:
 	HRESULT Render_HDR();
 	HRESULT Render_Bloom();
 	HRESULT Render_LDR();
+
+	HRESULT Render_Distortion();
 
 	HRESULT Render_Final();
 

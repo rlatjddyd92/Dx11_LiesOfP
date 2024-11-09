@@ -16,7 +16,7 @@ CTexture::CTexture(const CTexture & Prototype)
 		Safe_AddRef(pSRV);
 }
 
-HRESULT CTexture::Initialize_Prototype(const _tchar * pTextureFilePath, _uint iNumTextures)
+HRESULT CTexture::Initialize_Prototype(const _tchar* pTextureFilePath, _uint iNumTextures)
 {
 	m_iNumTextures = iNumTextures;
 
@@ -25,8 +25,6 @@ HRESULT CTexture::Initialize_Prototype(const _tchar * pTextureFilePath, _uint iN
 	_tchar			szFullPath[MAX_PATH] = TEXT("");
 	_tchar			szExt[MAX_PATH] = TEXT("");
 
-	/* D:\정의훈\145\3D\Framework\Client\Bin\Resources\Textures\11.dds */
-	/* ..\Bin\Resources\Textures\11.dds */
 	_wsplitpath_s(pTextureFilePath, nullptr, 0, nullptr, 0, nullptr, 0, szExt, MAX_PATH);
 
 	for (size_t i = 0; i < m_iNumTextures; i++)
@@ -45,13 +43,22 @@ HRESULT CTexture::Initialize_Prototype(const _tchar * pTextureFilePath, _uint iN
 
 		/* 쉐이더에 올리고 샘플링하기위한 텍스쳐들!!! */
 
-		if (false == lstrcmp(TEXT(".dds"), szExt))			
+
+		if (false == lstrcmp(TEXT(".tga"), szExt))
+		{
+			size_t len = wcslen(szFullPath);
+			if (len >= 4)
+			{
+				// 마지막 4자리를 .dds로 대체
+				wcsncpy_s(szFullPath + len - 4, 5, L".dds", _TRUNCATE);
+			}
+
+			hr = CreateDDSTextureFromFile(m_pDevice, szFullPath, nullptr, &pSRV);
+		}
+		else if (false == lstrcmp(TEXT(".dds"), szExt))
 		{
 			hr = CreateDDSTextureFromFile(m_pDevice, szFullPath, nullptr, &pSRV);
 		}
-		else if (false == lstrcmp(TEXT(".tga"), szExt))
-			return E_FAIL;
-
 		else
 		{
 			hr = CreateWICTextureFromFile(m_pDevice, szFullPath, nullptr, &pSRV);

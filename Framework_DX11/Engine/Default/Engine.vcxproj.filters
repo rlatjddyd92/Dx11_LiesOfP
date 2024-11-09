@@ -613,6 +613,9 @@
     <FxCompile Include="..\Bin\ShaderFiles\Shader_Model_Instance.hlsl">
       <Filter>01.Utility\98.ShaderFiles</Filter>
     </FxCompile>
+    <FxCompile Include="..\Bin\ShaderFiles\Shader_Distortion.hlsl">
+      <Filter>01.Utility\98.ShaderFiles</Filter>
+    </FxCompile>
   </ItemGroup>
   <ItemGroup>
     <None Include="..\Bin\ShaderFiles\Shader_Engine_Defines.hlsli">

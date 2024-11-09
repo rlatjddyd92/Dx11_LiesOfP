@@ -176,10 +176,12 @@ HRESULT CRenderer::Initialize()
 	/* MRT_HDR*/
 	if (FAILED(m_pGameInstance->Add_MRT(TEXT("MRT_HDR"), TEXT("Target_HDR"))))
 		return E_FAIL;
-	/* MRT_HDR*/
 	if (FAILED(m_pGameInstance->Add_MRT(TEXT("MRT_LDR"), TEXT("Target_LDR"))))
 		return E_FAIL;
 
+	/* MRT_Distortion */
+	if (FAILED(m_pGameInstance->Add_MRT(TEXT("MRT_Distortion"), TEXT("Target_Distortion"))))
+		return E_FAIL;
 #pragma region Bloom
 	if (FAILED(m_pGameInstance->Add_MRT(TEXT("MRT_Bloom_DownSample0"), TEXT("Target_Bloom_DownSample0"))))
 		return E_FAIL;
@@ -232,6 +234,10 @@ HRESULT CRenderer::Initialize()
 	if (nullptr == m_pHDRShader)
 		return E_FAIL;
 	
+	m_pDistortionShader = CShader::Create(m_pDevice, m_pContext, TEXT("../Bin/ShaderFiles/Shader_Distortion.hlsl"), VTXPOSTEX::Elements, VTXPOSTEX::iNumElements);
+	if (nullptr == m_pDistortionShader)
+		return E_FAIL;
+
 	m_pVIBuffer = CVIBuffer_Rect::Create(m_pDevice, m_pContext);
 	if (nullptr == m_pVIBuffer)
 		return E_FAIL;
@@ -264,7 +270,7 @@ HRESULT CRenderer::Initialize()
 		return E_FAIL;
 	if (FAILED(m_pGameInstance->Ready_RT_Debug(TEXT("Target_DecalDiffuse"), 100.f, 300.f, 200.f, 200.f)))
 		return E_FAIL;
-	if (FAILED(m_pGameInstance->Ready_RT_Debug(TEXT("Target_DecalNormal"), 100.f, 500.f, 200.f, 200.f)))
+	if (FAILED(m_pGameInstance->Ready_RT_Debug(TEXT("Target_Bloom_BlurXY2"), 100.f, 500.f, 200.f, 200.f)))
 		return E_FAIL;
 	// 
 	//if (FAILED(m_pGameInstance->Ready_RT_Debug(TEXT("Target_BackBuffer"), 600.f, 100.f, 200.f, 200.f)))
@@ -328,12 +334,15 @@ HRESULT CRenderer::Draw()
 		return E_FAIL;
 	if (FAILED(Render_HDR()))
 		return E_FAIL;
-	if (FAILED(Render_Bloom()))
+
+	if (FAILED(Render_Bloom()))	// 다시 고치기
 		return E_FAIL;
 
 	if(FAILED(Render_LDR()))
 		return E_FAIL;
 
+	if (FAILED(Render_Distortion()))
+		return E_FAIL;
 
 	if (FAILED(Render_NonLights()))
 		return E_FAIL;
@@ -929,8 +938,8 @@ HRESULT CRenderer::Render_Bloom()
 
 HRESULT CRenderer::Render_LDR()
 {
-	if (FAILED(m_pGameInstance->Begin_MRT(TEXT("MRT_LDR"))))
-		return E_FAIL;
+	//if (FAILED(m_pGameInstance->Begin_MRT(TEXT("MRT_LDR"))))
+	//	return E_FAIL;
 
 	if (FAILED(m_pHDRShader->Bind_Matrix("g_WorldMatrix", &m_WorldMatrix)))
 		return E_FAIL;
@@ -941,13 +950,59 @@ HRESULT CRenderer::Render_LDR()
 
 	if (FAILED(m_pGameInstance->Bind_RT_ShaderResource(m_pHDRShader, TEXT("Target_HDR"), "g_BackTexture")))
 		return E_FAIL;
-
+	if (FAILED(m_pGameInstance->Bind_RT_ShaderResource(m_pHDRShader, TEXT("Target_Bloom_BlurX2"), "g_BloomTexture")))
+		return E_FAIL;
+	
 	m_pHDRShader->Begin(1);
 	m_pVIBuffer->Bind_Buffers();
 	m_pVIBuffer->Render();
 
+	//if (FAILED(m_pGameInstance->End_MRT()))
+	//	return E_FAIL;
+
+	return S_OK;
+}
+
+HRESULT CRenderer::Render_Distortion()
+{
+	if (FAILED(Copy_BackBuffer()))
+		return E_FAIL;
+
+	if (FAILED(m_pGameInstance->Begin_MRT(TEXT("MRT_Distortion"))))
+		return E_FAIL;
+
+	if (FAILED(m_pDistortionShader->Bind_Matrix("g_WorldMatrix", &m_WorldMatrix)))
+		return E_FAIL;
+	if (FAILED(m_pDistortionShader->Bind_Matrix("g_ViewMatrix", &m_ViewMatrix)))
+		return E_FAIL;
+	if (FAILED(m_pDistortionShader->Bind_Matrix("g_ProjMatrix", &m_ProjMatrix)))
+		return E_FAIL;
+
+	for (auto& pGameObject : m_RenderObjects[RG_DISTORTION])
+	{
+		if (nullptr != pGameObject)
+			pGameObject->Render();
+
+		Safe_Release(pGameObject);
+	}
+
+	m_RenderObjects[RG_DISTORTION].clear();
+
 	if (FAILED(m_pGameInstance->End_MRT()))
 		return E_FAIL;
+
+
+	if (FAILED(m_pGameInstance->Bind_RT_ShaderResource(m_pDistortionShader, TEXT("Target_BackBuffer"), "g_BackTexture")))
+		return E_FAIL;
+
+	if (FAILED(m_pGameInstance->Bind_RT_ShaderResource(m_pDistortionShader, TEXT("Target_Distortion"), "g_DistortionTexture")))
+		return E_FAIL;
+
+	m_pDistortionShader->Begin(0);
+
+	m_pVIBuffer->Bind_Buffers();
+
+	m_pVIBuffer->Render();
 
 	return S_OK;
 }
@@ -1271,7 +1326,7 @@ HRESULT CRenderer::Render_Debug()
 	
 	m_pGameInstance->Render_MRT_Debug(TEXT("MRT_GameObjects"), m_pShader, m_pVIBuffer);
 	m_pGameInstance->Render_MRT_Debug(TEXT("MRT_Lights"), m_pShader, m_pVIBuffer); 
-	//m_pGameInstance->Render_MRT_Debug(TEXT("MRT_Bloom_DownSample0"), m_pShader, m_pVIBuffer);
+	m_pGameInstance->Render_MRT_Debug(TEXT("MRT_Bloom_DownSample0"), m_pShader, m_pVIBuffer);
 	//m_pGameInstance->Render_MRT_Debug(TEXT("MRT_Bloom_BlurXY0"), m_pShader, m_pVIBuffer);
 	//m_pGameInstance->Render_MRT_Debug(TEXT("MRT_Bloom_BlurXY1"), m_pShader, m_pVIBuffer);
 	//m_pGameInstance->Render_MRT_Debug(TEXT("MRT_Bloom_BlurXY2"), m_pShader, m_pVIBuffer);
@@ -1279,7 +1334,7 @@ HRESULT CRenderer::Render_Debug()
 	m_pGameInstance->Render_MRT_Debug(TEXT("MRT_HDR"), m_pShader, m_pVIBuffer);
 	m_pGameInstance->Render_MRT_Debug(TEXT("MRT_LDR"), m_pShader, m_pVIBuffer);
 	//m_pGameInstance->Render_MRT_Debug(TEXT("MRT_ShadowObj"), m_pShader, m_pVIBuffer);
-	m_pGameInstance->Render_MRT_Debug(TEXT("MRT_Bloom_UpSample1"), m_pShader, m_pVIBuffer);
+	m_pGameInstance->Render_MRT_Debug(TEXT("MRT_Bloom_BlurXY2"), m_pShader, m_pVIBuffer);
 	m_pGameInstance->Render_MRT_Debug(TEXT("MRT_Cascade"), m_pShader, m_pVIBuffer);
 	m_pGameInstance->Render_MRT_Debug(TEXT("MRT_Decal"), m_pShader, m_pVIBuffer);
 
@@ -1324,6 +1379,7 @@ void CRenderer::Free()
 	Safe_Release(m_pHDRShader);
 	Safe_Release(m_pSSAOShader);
 	Safe_Release(m_pNoiseTexture_SSAO);
+	Safe_Release(m_pDistortionShader);
 
 	Safe_Release(m_pBloomShader);
 	Safe_Release(m_pShader);

@@ -71,7 +71,7 @@ void CNonAnimModel::Late_Update(_float fTimeDelta)
 	__super::Late_Update(fTimeDelta);
 
 	if(m_isDecal)
-		m_pGameInstance->Add_RenderObject(CRenderer::RG_DECAL, this);
+		m_pGameInstance->Add_RenderObject(CRenderer::RG_DISTORTION, this);
 	else
 		m_pGameInstance->Add_RenderObject(CRenderer::RG_NONBLEND, this);
 	m_pGameInstance->Add_RenderObject(CRenderer::RG_PICKING, this);

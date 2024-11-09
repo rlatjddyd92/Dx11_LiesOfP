@@ -7,6 +7,7 @@ texture2D g_Texture;
 
 texture2D g_BackTexture;
 texture2D g_DecalTexture;
+texture2D g_BloomTexture;
 
 float g_fRadius = 0.02f;
 
@@ -74,15 +75,18 @@ PS_OUT PS_MAIN_TONEMAPPING_ACES(PS_IN In)
 	
     float3 vLdrColor = g_BackTexture.Sample(LinearSampler, In.vTexcoord).xyz;
 
+    float4 vBloom = g_BloomTexture.Sample(LinearSampler, In.vTexcoord);
+    
     float a = 2.51f;
     float b = 0.03f;
     float c = 2.43f;
     float d = 0.59f;
     float e = 0.14f;
-    
+    vLdrColor += vBloom.rgb * vBloom.a * 0.5f;
     vLdrColor = saturate((vLdrColor * (a * vLdrColor + b)) / (vLdrColor * (c * vLdrColor + d) + e));
+
     
-    vLdrColor = pow(vLdrColor, 1 / 2.2f);
+    vLdrColor = pow(vLdrColor, 1.f / 2.2f);
     Out.vColor = float4(vLdrColor, 1.f);
     
     return Out;

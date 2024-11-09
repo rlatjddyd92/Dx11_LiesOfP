@@ -93,6 +93,8 @@ PS_OUT PS_MAIN_DOWNSAMPLE(PS_IN In)
         for (int x = -2; x <= 2; ++x)
         {
             vector vSampleColor = g_DownSampleTexture.Sample(LinearClampSampler, In.vTexcoord, int2(x, y));
+    
+            
             vColor += vSampleColor;
         }
     }
@@ -101,8 +103,7 @@ PS_OUT PS_MAIN_DOWNSAMPLE(PS_IN In)
 
     if (g_isSelectBright)
     {
-        //0.7 이하의 밝기는 블룸을 배제
-        float fIntensity = max(dot(vColor.rgb, float3(1.2f, 1.2f, 1.2f)) * vColor.a, 0.1f);
+        float fIntensity = max(dot(vColor.rgb, float3(5.f, 5.f, 5.f)) * vColor.a, 0.1f);
     
         float fBloomIntensity = min(Get_BloomCurve(fIntensity), 10.f);
         vColor = vColor * fBloomIntensity / fIntensity;

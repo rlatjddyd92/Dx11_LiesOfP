@@ -270,12 +270,12 @@ PS_OUT PS_MAIN_DEFERRED(PS_IN In)
 	PS_OUT			Out = (PS_OUT)0;
 
 	vector		vDiffuse = g_DiffuseTexture.Sample(LinearSampler, In.vTexcoord);
-    if (vDiffuse.a == 0.f)
-    {
-        vector vPriority = g_PriorityTexture.Sample(LinearSampler, In.vTexcoord);
-        Out.vColor = vPriority;
-        return Out;
-    }
+    //if (vDiffuse.a == 0.f)
+    //{
+    //    vector vPriority = g_PriorityTexture.Sample(LinearSampler, In.vTexcoord);
+    //    Out.vColor = vPriority;
+    //    return Out;
+    //}
 
     vector vDecal = g_DecalDiffuseTexture.Sample(LinearSampler, In.vTexcoord);
     vDiffuse = vector(lerp(vDiffuse.rgb, vDecal.rgb, vDecal.a), 1.f); // 알파 값에 따라 혼합
