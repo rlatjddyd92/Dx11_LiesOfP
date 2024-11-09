@@ -34,7 +34,9 @@ texture2D		g_BlurYTexture;
 
 texture2D		g_BloomTexture;
 texture2D		g_CascadeShadowTexture;
-texture2D		g_DecalTexture;
+
+texture2D		g_DecalDiffuseTexture;
+texture2D		g_DecalNormalTexture;
 
 vector			g_vCamPosition;
 
@@ -169,7 +171,11 @@ PS_OUT_LIGHT PS_MAIN_LIGHT_DIRECTIONAL(PS_IN In)
 
 	vector		vNormalDesc = g_NormalTexture.Sample(PointSampler, In.vTexcoord);
 	vector		vNormal = float4(vNormalDesc.xyz * 2.f - 1.f, 0.f);	
-
+	
+ //   vector		vDecalNormalDesc = g_NormalTexture.Sample(PointSampler, In.vTexcoord);
+ //   vector		vDecalNormal = float4(vNormalDesc.xyz * 2.f - 1.f, 0.f);
+	
+	//vNormal
 	// 램버트 적용(하프램버트)
 	// normalize(g_vLightDir.xyz) * -1.f 계산 최적화 -> 그냥 곱해서 넘겨주기
     float fLambert = saturate(dot(normalize(g_vLightDir) * -1.f, vNormal) * 0.5f + 0.5f);
@@ -271,8 +277,8 @@ PS_OUT PS_MAIN_DEFERRED(PS_IN In)
         return Out;
     }
 
-    vector		vDecal = g_DecalTexture.Sample(LinearSampler, In.vTexcoord);
-    vDiffuse = vector(lerp(vDiffuse.rgb, vDecal.rgb, vDecal.a),1.f); // 알파 값에 따라 혼합
+    vector vDecal = g_DecalDiffuseTexture.Sample(LinearSampler, In.vTexcoord);
+    vDiffuse = vector(lerp(vDiffuse.rgb, vDecal.rgb, vDecal.a), 1.f); // 알파 값에 따라 혼합
 	
 	vector		vShade = g_ShadeTexture.Sample(LinearSampler, In.vTexcoord);
 	vector		vSpecular = g_SpecularTexture.Sample(LinearSampler, In.vTexcoord);

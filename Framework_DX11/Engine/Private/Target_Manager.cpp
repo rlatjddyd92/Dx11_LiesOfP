@@ -51,7 +51,7 @@ HRESULT CTarget_Manager::Add_MRT(const _wstring & strMRTTag, const _wstring & st
 	return S_OK;
 }
 
-HRESULT CTarget_Manager::Begin_MRT(const _wstring& strMRTTag, ID3D11DepthStencilView* pDSV)
+HRESULT CTarget_Manager::Begin_MRT(const _wstring& strMRTTag, ID3D11DepthStencilView* pDSV, _bool isClear)
 {
 	// 초기화해주기
 	//ID3D11ShaderResourceView* pSRV[D3D11_COMMONSHADER_CONSTANT_BUFFER_API_SLOT_COUNT] = { nullptr };
@@ -71,13 +71,15 @@ HRESULT CTarget_Manager::Begin_MRT(const _wstring& strMRTTag, ID3D11DepthStencil
 
 	for (auto& pRenderTarget : *pMRTList)
 	{
-		pRenderTarget->Clear();
+		if(isClear)
+			pRenderTarget->Clear();
 		pRenderTargets[iIndex++] = pRenderTarget->Get_RTV();
 	}
 
 	if (nullptr != pDSV)
 	{
-		m_pContext->ClearDepthStencilView(pDSV, D3D11_CLEAR_DEPTH | D3D11_CLEAR_STENCIL, 1.f, 0);
+
+			m_pContext->ClearDepthStencilView(pDSV, D3D11_CLEAR_DEPTH | D3D11_CLEAR_STENCIL, 1.f, 0);
 		m_pContext->OMSetRenderTargets(iIndex, pRenderTargets, pDSV);
 	}
 	else

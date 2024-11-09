@@ -4,7 +4,9 @@ matrix g_WorldMatrix, g_ViewMatrix, g_ProjMatrix;
 matrix g_ViewMatrixInv, g_ProjMatrixInv;
 //matrix g_CameraViewMatrix;
 
-texture2D g_Texture;
+texture2D g_DeacalDiffuseTexture;
+texture2D g_DeacalARMTexture;
+texture2D g_DeacalNormalTexture;
 
 texture2D g_DepthTexture;
 texture2D g_NormalTexture;
@@ -55,6 +57,7 @@ struct PS_IN
 struct PS_OUT
 {
     vector vColor : SV_TARGET0;
+    vector vNormal : SV_TARGET1;
 };
 
 PS_OUT PS_MAIN(PS_IN In)
@@ -102,9 +105,11 @@ PS_OUT PS_MAIN(PS_IN In)
     vNewTexUV *= 0.5f;
     
     //float2 vDecalTexCoord = vLocalPos.xz + 0.5f;
-    vector vDecalDiffuse = g_Texture.Sample(LinearSampler, vNewTexUV);
+    vector vDecalDiffuse = g_DeacalDiffuseTexture.Sample(LinearSampler, vNewTexUV);
+    vector vDecalNormal = g_DeacalNormalTexture.Sample(LinearSampler, vNewTexUV);
     
     Out.vColor = vector(vDecalDiffuse.xyz, 0.8f);
+    Out.vNormal = 0.f;
     
     return Out;
 }
@@ -113,9 +118,9 @@ technique11 DefaultTechnique
 {
     pass Deacl
     {
-        SetRasterizerState(RS_Cull_CW);
+        SetRasterizerState(RS_Default);
         SetDepthStencilState(DSS_None, 0);
-        SetBlendState(BS_AlphaBlend, vector(0.f, 0.f, 0.f, 0.f), 0xffffffff);
+        SetBlendState(BS_Default, vector(0.f, 0.f, 0.f, 0.f), 0xffffffff);
       
         VertexShader = compile vs_5_0 VS_MAIN();
         GeometryShader = NULL;
