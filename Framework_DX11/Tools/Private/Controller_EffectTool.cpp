@@ -901,6 +901,7 @@ void CController_EffectTool::Set_EffectName()
 	ImGui::InputText("Effect Name", m_szEffectName, IM_ARRAYSIZE(m_szEffectName));
 }
 
+
 void CController_EffectTool::Set_ParticleState()
 {
 	if (true == m_bOrbit)

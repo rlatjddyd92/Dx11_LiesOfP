@@ -199,6 +199,9 @@
     <Filter Include="01.Utility\03.Components\Model\Instance">
       <UniqueIdentifier>{4f337ae3-4578-49df-8b04-d6616acae1d1}</UniqueIdentifier>
     </Filter>
+    <Filter Include="01.Utility\03.Components\Shader\BindStruct">
+      <UniqueIdentifier>{e4f38d5d-e209-48f5-9bda-fc81165b4834}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\Private\Base.cpp">
@@ -383,9 +386,12 @@
     </ClCompile>
     <ClCompile Include="..\Private\Instance_Manager.cpp">
       <Filter>01.Utility\03.Components\Model\Instance</Filter>
-	</ClCompile>
+    </ClCompile>
     <ClCompile Include="..\private\Model.cpp">
       <Filter>01.Utility\03.Components\Model</Filter>
+    </ClCompile>
+    <ClCompile Include="..\private\Shader_BindStruct.cpp">
+      <Filter>01.Utility\03.Components\Shader\BindStruct</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -586,9 +592,12 @@
     </ClInclude>
     <ClInclude Include="..\Public\Instance_Manager.h">
       <Filter>01.Utility\03.Components\Model\Instance</Filter>
-	</ClInclude>
+    </ClInclude>
     <ClInclude Include="..\Public\Component_Manager.h">
       <Filter>01.Utility\03.Components\00.Manager</Filter>
+    </ClInclude>
+    <ClInclude Include="..\public\Shader_BindStruct.h">
+      <Filter>01.Utility\03.Components\Shader\BindStruct</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

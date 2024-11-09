@@ -171,7 +171,7 @@ public:
 	void Set_Transform(TRANSFORM_DESC& Desc);
 
 private:
-	class CShader* m_pShaderCom = { nullptr };
+	class CShader_BindStruct* m_pShaderCom = { nullptr };
 	class CVIBuffer_Point_Instance* m_pVIBufferCom = { nullptr };
 	class CTexture* m_pDiffuseTextureCom = { nullptr };
 	class CTexture* m_pNormalTextureCom = { nullptr };

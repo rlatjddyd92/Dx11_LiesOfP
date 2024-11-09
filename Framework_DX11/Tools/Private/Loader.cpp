@@ -367,7 +367,7 @@ HRESULT CLoader::Ready_Resources_For_ToolLevel()
 	CVIBuffer_Instancing::INSTANCE_DESC ParticleDesc = {};
 	/* For. Prototype_Component_VIBuffer_Point_Instance */
 	if (FAILED(m_pGameInstance->Add_Prototype(LEVEL_TOOL, TEXT("Prototype_Component_VIBuffer_Point_Instance"),
-		CVIBuffer_Point_Instance::Create(m_pDevice, m_pContext, ParticleDesc, false))))
+		CVIBuffer_Point_Instance::Create(m_pDevice, m_pContext, TEXT("../Bin/ShaderFiles/Shader_ParticleCompute.hlsl"), ParticleDesc, false))))
 		return E_FAIL;
 
 	_matrix		PreTransformMatrix = XMMatrixIdentity();
@@ -407,6 +407,12 @@ HRESULT CLoader::Ready_Resources_For_ToolLevel()
 	if (FAILED(m_pGameInstance->Add_Prototype(LEVEL_TOOL, TEXT("Prototype_Component_Shader_Effect_Texture"),
 		CShader::Create(m_pDevice, m_pContext, TEXT("../Bin/ShaderFiles/Shader_Effect_Texture.hlsl"), VTXPOSTEX::Elements, VTXPOSTEX::iNumElements))))
 		return E_FAIL;
+
+	/* For. Prototype_Component_Shader_Particle_Test */
+	if (FAILED(m_pGameInstance->Add_Prototype(LEVEL_TOOL, TEXT("Prototype_Component_Shader_Particle_Test"),
+		CShader_BindStruct::Create(m_pDevice, m_pContext, TEXT("../Bin/ShaderFiles/Shader_VtxPointInstance_Test.hlsl")))))
+		return E_FAIL;
+
 	lstrcpy(m_szLoadingText, TEXT("사운드을(를) 로딩중입니다."));
 
 

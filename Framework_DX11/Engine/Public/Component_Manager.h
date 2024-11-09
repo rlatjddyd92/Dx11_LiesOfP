@@ -10,6 +10,7 @@
 #include "Collider.h"
 #include "Texture.h"
 #include "Shader.h"
+#include "Shader_BindStruct.h"
 #include "Model.h"
 
 #include "Bounding_AABB.h"

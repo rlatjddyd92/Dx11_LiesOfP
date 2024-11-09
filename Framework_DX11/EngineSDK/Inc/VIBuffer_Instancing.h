@@ -72,6 +72,7 @@ protected:
 	_float2						m_vLifeTime = {};
 	_float4						m_vMinColor = {};
 	_float4						m_vMaxColor = {};
+	_float2						m_vSpeed = {};
 	_float*						m_pSpeed = { nullptr };
 
 	_uint						m_iNumRender = { 0 };
