@@ -30,6 +30,7 @@ public:
 		_bool		isDecal = { false };
 		_bool		isNormal = { false };
 		_bool		isARM = { false };
+		_bool		bUseWorldColor = { false };
 	
 		_uint		iRenderGroupID = { true };
 	}NONMODEL_DESC;

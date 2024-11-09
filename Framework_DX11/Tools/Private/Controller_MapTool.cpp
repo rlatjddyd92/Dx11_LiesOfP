@@ -553,6 +553,7 @@ void CController_MapTool::SaveMap()
 
 					pDesc.bNormal = OriDesc.isNormal;
 					pDesc.bARM = OriDesc.isARM;
+					pDesc.bUseWorldColor = OriDesc.bUseWorldColor;
 					wstring wstrDifusseTag = static_cast<CNonAnimModel*>(pGameObject)->Get_DiffuseTag();
 					wcscpy_s(pDesc.szTextureTag_Diffuse, wstrDifusseTag.c_str());
 					
@@ -662,6 +663,7 @@ void CController_MapTool::LoadMap()
 					nonDesc.isDecal = true;
 					nonDesc.isNormal = pDesc.bNormal;
 					nonDesc.isARM = pDesc.bARM;
+					nonDesc.bUseWorldColor = pDesc.bUseWorldColor;
 					int bufferSize = WideCharToMultiByte(CP_ACP, 0, pDesc.szTextureTag_Diffuse, -1, NULL, 0, NULL, NULL);
 					WideCharToMultiByte(CP_ACP, 0, pDesc.szTextureTag_Diffuse, -1, nonDesc.szTextureTag_Diffuse, bufferSize, NULL, NULL);
 
@@ -1465,6 +1467,9 @@ void CController_MapTool::Decal_Menu()
 	//diffuse이미지는 기본으로 사용하고, normal이나 ARMT/ARMH를 사용할지 선택
 	static _bool bUseNormal = false;
 	static _bool bUseARM = false;
+	static _bool bUseWroldColor = false;
+	ImGui::Checkbox("Use WorldColor", &bUseWroldColor);
+	ImGui::SameLine();
 	ImGui::Checkbox("Use Normal", &bUseNormal);
 	ImGui::SameLine();
 	ImGui::Checkbox("Use ARMT/ARMH", &bUseARM);
@@ -1818,6 +1823,7 @@ void CController_MapTool::Decal_Menu()
 		Desc.iRenderGroupID = 0;
 		Desc.isLight = false;
 		Desc.isDecal = true;
+		Desc.bUseWorldColor = bUseWroldColor;
 		size_t length = strlen(m_Decal_File_Names_Diffuse[m_iSelected_Decal_Diffuse_ID]);
 		strncpy_s(Desc.szTextureTag_Diffuse, m_Decal_File_Names_Diffuse[m_iSelected_Decal_Diffuse_ID], length -4); //파일 이름만
 		if (bUseNormal)

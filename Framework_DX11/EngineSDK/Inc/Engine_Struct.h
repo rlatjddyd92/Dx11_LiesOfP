@@ -76,6 +76,7 @@ namespace Engine
 		_bool		bDecal = { false };
 		_bool		bNormal = { false };
 		_bool		bARM = { false };
+		_bool		bUseWorldColor = { false };
 
 	}OBJECT_DEFAULT_DESC;
 
