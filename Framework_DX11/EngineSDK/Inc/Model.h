@@ -23,8 +23,8 @@ public:
 	vector<class CBone*>& Get_Bones() { return m_Bones; }
 	_int					Get_BoneIndex(const _char* pBoneName) const;
 	_matrix					Get_BoneCombindTransformationMatrix(_uint iBoneIndex) const { return m_Bones[iBoneIndex]->Get_CombinedTransformationMatrix(); }
-	const _float4x4* Get_BoneCombindTransformationMatrix_Ptr(const _char* pBoneName) const { return m_Bones[Get_BoneIndex(pBoneName)]->Get_CombinedTransformationMatrix_Ptr(); }
-
+	const _float4x4*		Get_BoneCombindTransformationMatrix_Ptr(const _char* pBoneName) const { return m_Bones[Get_BoneIndex(pBoneName)]->Get_CombinedTransformationMatrix_Ptr(); }
+	const _float4x4*		Get_BoneCombindTransformationMatrix_Ptr(_uint iBoneIndex) const { return m_Bones[iBoneIndex]->Get_CombinedTransformationMatrix_Ptr(); }
 
 	vector<class CAnimation*>& Get_Animations() { return m_Animations; }
 	_uint					Get_CurrentAnimationIndex() { return m_iCurrentAnimIndex; }
@@ -40,9 +40,11 @@ public:
 	void					Set_UFBIndices(_uint eCount, _uint iIndex) { m_UFBIndices[eCount] = iIndex; }
 	_uint					Get_UFBIndices(_uint eCount) { return m_UFBIndices[eCount]; }
 
+	class CTexture*			Find_Texture(_uint iMeshNum, TEXTURE_TYPE eMaterialType);
+
 	void					Add_UFVtxIndices(UFVTX UFVtx) { m_UseFullVtxIndices.push_back(UFVtx); }
-	vector<UFVTX>* Get_UFVtxIndices() { return &m_UseFullVtxIndices; }
-	
+	vector<UFVTX>*			Get_UFVtxIndices() { return &m_UseFullVtxIndices; }
+
 	void					Set_AnimPlay(_bool bCtrAnim) { m_bPlayAnimCtr = bCtrAnim; }
 
 	_bool					Get_IsUseBoundary() { return m_isUseBoundary; }
@@ -53,9 +55,12 @@ public:
 	virtual HRESULT Initialize_Prototype(TYPE eType, const _char* pModelFilePath, _fmatrix PreTransformMatrix, _bool isBinaryAnimModel, FilePathStructStack* pStructStack);
 	virtual HRESULT Initialize(void* pArg) override;
 	virtual HRESULT Render(_uint iMeshIndex);
+	HRESULT Render_Instance(_uint iMeshIndex);
 
-public:
-	_vector Play_Animation(_float fTimeDelta, _bool* pOut = nullptr);
+	void Add_InstanceData(_Matrix WorldMatrix) { m_InstanceDatas.push_back(WorldMatrix); }
+
+public:		//_bool pOut은 메인 애니메이션의 종료를 반환,				
+	_vector Play_Animation(_float fTimeDelta, _bool* pOut = nullptr, OUTPUT_EVKEY* pOutputKey = nullptr, OUTPUT_EVKEY* pOutputKey_Boundary = nullptr);
 
 	void		SetUp_Animation(_uint iAnimationIndex, _bool isLoop = false);
 	HRESULT     SetUp_NextAnimation(_uint iNextAnimationIndex, _bool isLoop = false, _float fChangeDuration = 0.2f, _uint iStartFrame = 0);
@@ -63,6 +68,7 @@ public:
 
 	_uint		Setting_Animation(const _char* szAnimationmName, _double SpeedRatio = 1.0) const;
 	_matrix		CalcMatrix_forVtxAnim(_uint iMeshNum, VTXANIMMESH VtxStruct);
+
 
 public:
 	HRESULT Bind_Material(class CShader* pShader, const _char* pConstantName, TEXTURE_TYPE eMaterialType, _uint iMeshIndex);
@@ -126,11 +132,27 @@ private:
 
 	//이봉준 애니메이션
 	_bool							m_isUseBoundary = { false };	//상하체 분리 여부
+
+
+
+	// 정승현 모델 인스턴스
+	ID3D11Buffer* m_pVBInstance = { nullptr };
+	D3D11_BUFFER_DESC			m_InstanceBufferDesc = {};
+	D3D11_SUBRESOURCE_DATA		m_InstanceInitialData = {};
+
+	_uint						m_iInstanceStride = { 0 };
+	_uint						m_iNumInstance = { 0 };
+
+	_bool						m_isInstance = {};
+
+	vector<_Matrix>				m_InstanceDatas;
+	void* m_pInstanceVertices = { nullptr };
+
 private:
 	vector<_uint>					m_UFBIndices;
 	vector<UFVTX>					m_UseFullVtxIndices;
 	//바이너리화 용도
-	FilePathStructStack*			m_FilePaths = { nullptr };
+	FilePathStructStack* m_FilePaths = { nullptr };
 
 public:
 	HRESULT	Ready_Meshes(HANDLE* pFile);

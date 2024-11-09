@@ -66,7 +66,7 @@ HRESULT CAnimation::Initialize__To_Binary(HANDLE* pFile, vector<_uint>& KeyFrame
 	return S_OK;
 }
 
-_uint CAnimation::Update_TransformationMatrices(const vector<class CBone*>& Bones, _double* pCurrentTrackPosition, vector<_uint>& CurrentKeyFrameIndices, _bool isLoop, _bool* isEnd, _float fTimeDelta, _bool isChildOfBoundary, _bool BlockStackTime)
+_uint CAnimation::Update_TransformationMatrices(const vector<class CBone*>& Bones, _double* pCurrentTrackPosition, vector<_uint>& CurrentKeyFrameIndices, _bool isLoop, _bool* isEnd, _float fTimeDelta, _bool isChildOfBoundary, OUTPUT_EVKEY* pOutputKey, _bool BlockStackTime)
 {
 	if (!BlockStackTime)
 	{
@@ -83,6 +83,35 @@ _uint CAnimation::Update_TransformationMatrices(const vector<class CBone*>& Bone
 				
 
 			*pCurrentTrackPosition = 0.f;
+		}
+	}
+
+	//이벤트 키 프레임 설정
+	if (pOutputKey != nullptr)
+	{
+		_double CurPos = *pCurrentTrackPosition;
+		for (_int i = 0; i < m_EventKeyFrames.size(); ++i)
+		{
+			if (m_EventKeyFrames[i].eEvent_type == EVENT_KEYFRAME::ET_ONCE)
+			{
+				if (CurPos >= m_EventKeyFrames[i].Start_TrackPosition)
+				{
+					pOutputKey->bActiveEffect = true;
+					pOutputKey->eEvent_type = EVENT_KEYFRAME::ET_ONCE;
+					pOutputKey->iBoneIndex = m_EventKeyFrames[i].iBoneIndex;
+					pOutputKey->iEffectNum = m_EventKeyFrames[i].iEffectNum;
+				}
+			}
+			else if (m_EventKeyFrames[i].eEvent_type == EVENT_KEYFRAME::ET_REPET)
+			{
+				if (CurPos >= m_EventKeyFrames[i].Start_TrackPosition && m_EventKeyFrames[i].End_TrackPosition >= CurPos)
+				{
+					pOutputKey->bActiveEffect = true;
+					pOutputKey->eEvent_type = EVENT_KEYFRAME::ET_REPET;
+					pOutputKey->iBoneIndex = m_EventKeyFrames[i].iBoneIndex;
+					pOutputKey->iEffectNum = m_EventKeyFrames[i].iEffectNum;
+				}
+			}
 		}
 	}
 

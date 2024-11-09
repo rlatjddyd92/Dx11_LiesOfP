@@ -337,9 +337,20 @@ _matrix CModel::CalcMatrix_forVtxAnim(_uint iMeshNum, VTXANIMMESH VtxStruct)
 	return m_Meshes[iMeshNum]->CalcMatrix_forVtxAnim(m_Bones, VtxStruct); //m_isUseBoundary
 }
 
-_vector CModel::Play_Animation(_float fTimeDelta, _bool* pOut)
+_vector CModel::Play_Animation(_float fTimeDelta, _bool* pOut, OUTPUT_EVKEY* pOutputKey, OUTPUT_EVKEY* pOutputKey_Boundary)
 {
 	_float fAddTime = fTimeDelta * m_bPlayAnimCtr;
+
+	if (pOutputKey != nullptr)
+	{
+		pOutputKey->bActiveEffect = false;
+	}		
+	//기본적으로 이런 이펙트들의 경우, 보간되는 도중에는 필요치 않음
+	if (pOutputKey_Boundary != nullptr)
+	{
+		pOutputKey_Boundary->bActiveEffect = false;		//이펙트 재생 여부 값 false로 초기화
+	}
+	
 
 	//상하체 분리에 영향받지 않는 부분들의 업데이트
 	if (m_isChangeAni)
@@ -412,7 +423,8 @@ _vector CModel::Play_Animation(_float fTimeDelta, _bool* pOut)
 	else
 	{
 		/* 뼈를 움직인다.(CBone`s m_TransformationMatrix행렬을 갱신한다.) */
-		m_iCurrentFrame = m_Animations[m_iCurrentAnimIndex]->Update_TransformationMatrices(m_Bones, &m_CurrentTrackPosition, m_KeyFrameIndices[m_iCurrentAnimIndex], m_isLoop, &m_isEnd_Animations[m_iCurrentAnimIndex], fAddTime, false);
+		m_iCurrentFrame = m_Animations[m_iCurrentAnimIndex]->Update_TransformationMatrices(m_Bones, &m_CurrentTrackPosition, m_KeyFrameIndices[m_iCurrentAnimIndex], m_isLoop, &m_isEnd_Animations[m_iCurrentAnimIndex], fAddTime, false, pOutputKey);
+	
 	}
 
 
@@ -497,11 +509,11 @@ _vector CModel::Play_Animation(_float fTimeDelta, _bool* pOut)
 			//if 상하체 애니메이션이 같으면 시간누적 없는 업데이트 하체 변수로 호출
 			if (m_iCurrentAnimIndex == m_iCurrentAnimIndex_Boundary)
 			{
-				m_iCurrentFrame = m_Animations[m_iCurrentAnimIndex_Boundary]->Update_TransformationMatrices(m_Bones, &m_CurrentTrackPosition, m_KeyFrameIndices[m_iCurrentAnimIndex_Boundary], m_isLoop, &m_isEnd_Animations_Boundary[m_iCurrentAnimIndex_Boundary], fAddTime, true, true);
+				m_iCurrentFrame = m_Animations[m_iCurrentAnimIndex_Boundary]->Update_TransformationMatrices(m_Bones, &m_CurrentTrackPosition, m_KeyFrameIndices[m_iCurrentAnimIndex_Boundary], m_isLoop, &m_isEnd_Animations_Boundary[m_iCurrentAnimIndex_Boundary], fAddTime, true, pOutputKey_Boundary, true);
 			}
 			else
 			{
-				m_iCurrentFrame = m_Animations[m_iCurrentAnimIndex_Boundary]->Update_TransformationMatrices(m_Bones, &m_CurrentTrackPosition_Boundary, m_KeyFrameIndices[m_iCurrentAnimIndex_Boundary], m_isLoop_Boundary, &m_isEnd_Animations_Boundary[m_iCurrentAnimIndex_Boundary], fAddTime, true);
+				m_iCurrentFrame = m_Animations[m_iCurrentAnimIndex_Boundary]->Update_TransformationMatrices(m_Bones, &m_CurrentTrackPosition_Boundary, m_KeyFrameIndices[m_iCurrentAnimIndex_Boundary], m_isLoop_Boundary, &m_isEnd_Animations_Boundary[m_iCurrentAnimIndex_Boundary], fAddTime, true, pOutputKey_Boundary);
 			}
 		}
 	}

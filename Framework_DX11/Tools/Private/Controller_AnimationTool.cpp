@@ -34,7 +34,7 @@ HRESULT CController_AnimationTool::Initialize(ID3D11Device* pDevice, ID3D11Devic
 	Desc.vRotation = { 0.f,0.f,0.f };
 	Desc.pUpdateCtr = &m_bObjRenderCtr;
 	
-	strcpy_s(m_szCurrentModelText, "Prototype_AnimModel_Test");
+	strcpy_s(m_szCurrentModelText, "Prototype_AnimModel_Player");
 	strcpy_s(Desc.szModelTag, m_szCurrentModelText);
 
 	if (FAILED(m_pGameInstance->Add_CloneObject_ToLayer(LEVEL_TOOL, TEXT("Layer_AnimationTool_Test"), TEXT("Prototype_GameObject_Anim"), &Desc)))
@@ -93,7 +93,7 @@ void CController_AnimationTool::SetUp_AnimTool()
 		}
 	}
 	
-
+	_bool RenderCheck{false};
 
 	if (ImGui::BeginTabBar("AnimTool"))
 	{
@@ -105,18 +105,26 @@ void CController_AnimationTool::SetUp_AnimTool()
 		}
 		if (ImGui::BeginTabItem("Bone"))
 		{
+			m_bTargetBallRender = true;
+			RenderCheck = true;
 			ListUp_Bone();
 			SetUp_Controller_Bone();
 			ImGui::EndTabItem();
 		}
+
 		if (ImGui::BeginTabItem("Vertex"))
 		{
 			m_bTargetBallRender = true;
+			RenderCheck = true;
 			ListUp_Virtex();
 			SetUp_Controller_Vertex();
 			ImGui::EndTabItem();
 		}
-		else
+		
+		NewPage_AnimTool();
+
+
+		if(!RenderCheck)
 		{
 			m_bTargetBallRender = false;
 		}
@@ -201,6 +209,19 @@ void CController_AnimationTool::ListUp_Anim()
 			m_fAnimTrackPosition = 0.f;
 
 		}
+	}
+
+	ImGui::Text("\t X \t Y \t Z");
+	ImGui::PushItemWidth(100); // 크기조정
+	ImGui::InputFloat("##PosXModel", &m_fPosXModel);	ImGui::SameLine();
+	ImGui::InputFloat("##PosYModel", &m_fPosYModel);	ImGui::SameLine();
+	ImGui::InputFloat("##PosZModel", &m_fPosZModel);
+	ImGui::PopItemWidth();
+
+
+	if (ImGui::Button("SetModelPos"))
+	{
+		m_pGameInstance->Find_Object(LEVEL_TOOL, TEXT("Layer_AnimationTool_Test"), 0)->Get_Transform()->Set_State(CTransform::STATE_POSITION, _vector{ m_fPosXModel, m_fPosYModel, m_fPosZModel });
 	}
 
 	ImGui::Text("\n");
@@ -342,21 +363,6 @@ void CController_AnimationTool::SetUp_Controller_Anim()
 			(*m_pCopyAnimVec)[m_iSelected_Index_Anim]->Set_SpeedPerSec(m_AnimSpeedPS);
 		}
 	}
-	EVENT_KEYFRAME EventKeyDesc{};
-
-	ImGui::Text("\n");
-	ImGui::InputText("EventKey Name", m_szEvKeyFrameText, MAX_PATH);
-
-	//이펙트 관련
-	if (ImGui::Button("Add_EventKeyFrame"))
-	{
-		if (m_pCopyModelCom != nullptr && strcmp(m_szEvKeyFrameText, ""))
-		{
-			strcpy_s(EventKeyDesc.szEventName, MAX_PATH, m_szEvKeyFrameText);
-			EventKeyDesc.TrackPosition = m_fAnimTrackPosition;
-			(*m_pCopyAnimVec)[m_iSelected_Index_Anim]->Add_EventKeyFrame(EventKeyDesc);
-		}
-	}
 
 	ImGui::Text("\n");
 	//정지 재생 관련
@@ -398,73 +404,7 @@ void CController_AnimationTool::SetUp_Controller_Anim()
 		m_pCopyModelCom->Set_AnimPlay(true);
 	}
 
-
-	//저장한 키프레임들 확인
-	vector<EVENT_KEYFRAME>*  EvKeyFramesvec = (*m_pCopyAnimVec)[m_iSelected_Index_Anim]->Get_EventKeyFrames_Ptr();
-
-	m_iCurSelected_Index_KeyFrame = m_iSelected_Index_KeyFrame;
-
-	ImGui::Text("\n");
-	ImGui::Text("KeyFrame List");
-	ImGui::PushItemWidth(300); // 크기조정
-	if (ImGui::BeginListBox("##KeyFrame List"))
-	{
-		if (m_pCopyModelCom != nullptr)
-		{
-			bool is_selected{ false };
-			for (int i = 0; i < (*EvKeyFramesvec).size(); i++)
-			{
-				if (m_iSelected_Index_KeyFrame == i)
-				{
-					is_selected = true;
-				}
-
-				if (ImGui::Selectable((*EvKeyFramesvec)[i].szEventName, is_selected))
-				{
-					m_iSelected_Index_KeyFrame = i;
-				}
-
-
-				if (!is_selected)
-					ImGui::SetItemDefaultFocus();
-				is_selected = false;
-				// 반복문으로 리스트박스의 선택된 객체 찾기
-			}
-		}
-
-		ImGui::EndListBox();
-	}
-	if (m_pCopyModelCom != nullptr)
-	{
-		if (m_iSelected_Index_KeyFrame != m_iCurSelected_Index_KeyFrame)
-		{
-			//선택한 이벤트 키프레임의 위치로 이동
-			m_pCopyModelCom->Set_CurrentTrackPosition((*EvKeyFramesvec)[m_iSelected_Index_KeyFrame].TrackPosition);
-			m_pCopyModelCom->Set_CurrentTrackPosition_Boundary((*EvKeyFramesvec)[m_iSelected_Index_KeyFrame].TrackPosition);
-		}
-	}
-
-		//잘못된 키프레임 삭제
-	ImGui::SameLine();
-	if (ImGui::Button("Delete"))
-	{
-		(*EvKeyFramesvec).erase((*EvKeyFramesvec).begin() + m_iSelected_Index_KeyFrame);
-
-	}
-		//키프레임 정보 확인
-	ImGui::Text("\n");
-	if ((*EvKeyFramesvec).size() > m_iSelected_Index_KeyFrame)
-	{
-		ImGui::Text("%f", (*EvKeyFramesvec)[m_iSelected_Index_KeyFrame].TrackPosition);
-	}
-	else
-	{
-		--m_iSelected_Index_KeyFrame;
-	}
-	ImGui::PopItemWidth();
-
 	//콜라이더 관련
-
 
 }
 
@@ -558,6 +498,10 @@ void CController_AnimationTool::ListUp_Bone()
 		ImGui::EndListBox();
 	}
 
+	ImGui::SameLine();
+	ImGui::Text("\tSelected Bone_Index");
+	ImGui::SameLine();
+	ImGui::Text(" : %d", m_iSelected_Index_Bone);
 
 	//이전 선택지 비교 후 애니메이션 전환
 	if (m_pCopyModelCom != nullptr)
@@ -571,6 +515,7 @@ void CController_AnimationTool::ListUp_Bone()
 
 	ImGui::PopItemWidth();
 	
+
 }
 
 void CController_AnimationTool::SetUp_Controller_Bone()
@@ -600,6 +545,11 @@ void CController_AnimationTool::SetUp_Controller_Bone()
 	ImGui::Text("Pos_Y   %f", XMVectorGetY(vPos));
 	ImGui::Text("Pos_Z   %f", XMVectorGetZ(vPos));
 
+	_matrix matWorld = XMMatrixIdentity();
+
+	matWorld *= m_pGameInstance->Find_Object(LEVEL_TOOL, TEXT("Layer_AnimationTool_Test"), 0)->Get_Transform()->Get_WorldMatrix();
+
+	m_vPos = XMVector3TransformCoord(vPos, matWorld);
 
 	ImGui::PushItemWidth(300); // 크기조정
 	if (ImGui::BeginListBox("USEFULLBONE Vec"))
@@ -827,6 +777,180 @@ void CController_AnimationTool::SetUp_Controller_Vertex()
 	}
 	ImGui::PopItemWidth();
 
+}
+
+void CController_AnimationTool::NewPage_AnimTool()
+{
+	ImGui::Begin("ANIMAITION_KEYFRANE", NULL, ImGuiWindowFlags_MenuBar | ImGuiWindowFlags_HorizontalScrollbar
+		| ImGuiWindowFlags_AlwaysVerticalScrollbar);
+
+	// 위젯 안에 있는지 판단함
+	_bool isInUI = false;
+
+	ImVec2 window_pos = ImGui::GetWindowPos();
+	ImVec2 window_size = ImGui::GetWindowSize();
+
+	ImVec2 mouse_pos = ImGui::GetMousePos();
+	if (mouse_pos.x >= window_pos.x && mouse_pos.x <= (window_pos.x + window_size.x) &&
+		mouse_pos.y >= window_pos.y && mouse_pos.y <= (window_pos.y + window_size.y))
+	{
+		isInUI = true;
+	}
+
+	if (ImGui::BeginTabBar("AnimTool_Additional"))
+	{
+		if (ImGui::BeginTabItem("Animation KeyFrame"))
+		{
+
+			EVENT_KEYFRAME EventKeyDesc{};
+
+			ImGui::Text("\n");
+			ImGui::Text("EventKey Name");
+			ImGui::InputText("##EventKey Name", m_szEvKeyFrameText, MAX_PATH);
+
+			ImGui::PushItemWidth(100); // 크기조정
+
+			if (ImGui::BeginListBox("EVENT_Type"))
+			{
+				if (ImGui::Selectable("ONCE", (m_EventTypeIndex == 0)))
+				{
+					m_EventTypeIndex = 0;
+				}
+				else
+					ImGui::SetItemDefaultFocus();
+				if (ImGui::Selectable("REPET", (m_EventTypeIndex == 1)))
+				{
+					m_EventTypeIndex = 1;
+				}
+				else
+					ImGui::SetItemDefaultFocus();
+				ImGui::EndListBox();
+			}
+
+			ImGui::Text("StartTrackPos \t \t EndTrackPos");
+			ImGui::InputDouble("##StartTrackPos", &m_Start_TrackPosition);
+			ImGui::SameLine(); ImGui::Text("\t"); ImGui::SameLine();
+			ImGui::InputDouble("##EndTrackPos", &m_End_TrackPosition);
+
+			if (m_EventTypeIndex == 1)
+			{
+				ImGui::Text("Effect Repet_Duration");
+				ImGui::InputDouble("##Repet_Duration", &m_Repet_Duration);
+			}
+			ImGui::Text("BoneNum");
+			ImGui::InputInt("##BoneNumber", &m_iBoneIndex_forEvKey);
+
+			ImGui::Text("EffectNum");
+			ImGui::InputInt("##EffectNumber", &m_iEffect_Num);
+
+			//이펙트 관련
+			if (ImGui::Button("Add_EventKeyFrame"))
+			{
+				if (m_pCopyModelCom != nullptr && strcmp(m_szEvKeyFrameText, ""))
+				{
+					strcpy_s(EventKeyDesc.szEventName, MAX_PATH, m_szEvKeyFrameText);
+					EventKeyDesc.Start_TrackPosition = m_Start_TrackPosition;
+					EventKeyDesc.End_TrackPosition = m_End_TrackPosition;
+					EventKeyDesc.iBoneIndex = m_iBoneIndex_forEvKey;
+					EventKeyDesc.Repet_Duration = m_Repet_Duration;
+
+					EventKeyDesc.LiveRange = m_End_TrackPosition - m_Start_TrackPosition;
+					switch (m_EventTypeIndex)
+					{
+					case 0:
+						EventKeyDesc.eEvent_type = EVENT_KEYFRAME::ET_ONCE;
+						break;
+
+					case 1:
+						EventKeyDesc.eEvent_type = EVENT_KEYFRAME::ET_REPET;
+						break;
+
+					default:
+						break;
+					}
+					
+					(*m_pCopyAnimVec)[m_iSelected_Index_Anim]->Add_EventKeyFrame(EventKeyDesc);
+				}
+			}
+			//저장한 키프레임들 확인
+			vector<EVENT_KEYFRAME>* EvKeyFramesvec = (*m_pCopyAnimVec)[m_iSelected_Index_Anim]->Get_EventKeyFrames_Ptr();
+
+			m_iCurSelected_Index_KeyFrame = m_iSelected_Index_KeyFrame;
+
+			ImGui::Text("\n");
+			ImGui::Text("KeyFrame List");
+			ImGui::PushItemWidth(300); // 크기조정
+			if (ImGui::BeginListBox("##KeyFrame List"))
+			{
+				if (m_pCopyModelCom != nullptr)
+				{
+					bool is_selected{ false };
+					for (int i = 0; i < (*EvKeyFramesvec).size(); i++)
+					{
+						if (m_iSelected_Index_KeyFrame == i)
+						{
+							is_selected = true;
+						}
+
+						if (ImGui::Selectable((*EvKeyFramesvec)[i].szEventName, is_selected))
+						{
+							m_iSelected_Index_KeyFrame = i;
+						}
+
+
+						if (!is_selected)
+							ImGui::SetItemDefaultFocus();
+						is_selected = false;
+						// 반복문으로 리스트박스의 선택된 객체 찾기
+					}
+				}
+
+				ImGui::EndListBox();
+			}
+			if (m_pCopyModelCom != nullptr)
+			{
+				if (m_iSelected_Index_KeyFrame != m_iCurSelected_Index_KeyFrame)
+				{
+					//설정 창을 저장되어있던 키프레임의 정보로 전부 변경
+					m_Start_TrackPosition = (*EvKeyFramesvec)[m_iSelected_Index_KeyFrame].Start_TrackPosition;
+					m_End_TrackPosition = (*EvKeyFramesvec)[m_iSelected_Index_KeyFrame].End_TrackPosition;
+					m_Repet_Duration = (*EvKeyFramesvec)[m_iSelected_Index_KeyFrame].Repet_Duration;
+					m_iEffect_Num = (*EvKeyFramesvec)[m_iSelected_Index_KeyFrame].iEffectNum;
+					m_iBoneIndex_forEvKey = (*EvKeyFramesvec)[m_iSelected_Index_KeyFrame].iBoneIndex;
+				}
+			}
+
+			//잘못된 키프레임 삭제
+			//ImGui::SameLine();
+			if (ImGui::Button("Save"))
+			{
+				if (EvKeyFramesvec->size() > 0.f && m_iSelected_Index_KeyFrame < EvKeyFramesvec->size())
+				{
+					strcpy_s((*EvKeyFramesvec)[m_iSelected_Index_KeyFrame].szEventName, m_szEvKeyFrameText);
+					(*EvKeyFramesvec)[m_iSelected_Index_KeyFrame].Start_TrackPosition = m_Start_TrackPosition;
+					(*EvKeyFramesvec)[m_iSelected_Index_KeyFrame].End_TrackPosition = m_End_TrackPosition;
+					(*EvKeyFramesvec)[m_iSelected_Index_KeyFrame].Repet_Duration = m_Repet_Duration;
+					(*EvKeyFramesvec)[m_iSelected_Index_KeyFrame].iEffectNum = m_iEffect_Num;
+					(*EvKeyFramesvec)[m_iSelected_Index_KeyFrame].iBoneIndex = m_iBoneIndex_forEvKey;
+				}
+			}
+			ImGui::SameLine();
+
+			if (ImGui::Button("Delete"))
+			{
+				(*EvKeyFramesvec).erase((*EvKeyFramesvec).begin() + m_iSelected_Index_KeyFrame);
+
+			}
+
+			ImGui::PopItemWidth();
+
+
+			ImGui::EndTabItem();
+		}
+		ImGui::EndTabBar();
+	}
+
+	ImGui::End();
 }
 
 void CController_AnimationTool::EndFrame_AnimTool()
