@@ -110,7 +110,7 @@ PS_OUT PS_MAIN(PS_IN In)
     vNewTexUV -= vLocalPos.z * vNormal.xy;
     vNewTexUV *= 0.5f;
     
-    //512사이즈 데칼 이미지
+    //데칼 이미지 텍스 쿠드 조정
     vNewTexUV *= 2.f;
     vNewTexUV += 0.5f;
     
@@ -124,6 +124,16 @@ PS_OUT PS_MAIN(PS_IN In)
     if (vDecalDiffuse.r <= 0.1f)
         discard;
     
+    Out.vColor = vDecalDiffuse;
+    
+    if (bNormal)
+    {
+        vector vDecalNormal = g_DeacalNormalTexture.Sample(LinearSampler, vNewTexUV);
+        Out.vNormal = vDecalNormal;
+    }
+    else   
+        Out.vNormal = vNormalDesc;
+    
     if (bARM)
     {
         vector vDecalARM = g_DeacalARMTexture.Sample(LinearSampler, vNewTexUV);
@@ -134,18 +144,7 @@ PS_OUT PS_MAIN(PS_IN In)
     }
     else
         Out.vARM = float4(0.f, 0.f, 0.f, 0.f);
-    
-    Out.vColor = float4(vDecalDiffuse.xyz, Out.vARM.a);
-    
-    if (bNormal)
-    {
-        vector vDecalNormal = g_DeacalNormalTexture.Sample(LinearSampler, vNewTexUV);
-        Out.vNormal = vDecalNormal;
-    }
-    else   
-        Out.vNormal = vNormalDesc;
-    
-        return Out;
+    return Out;
 }
 
 struct PS_OUT_PICKING
