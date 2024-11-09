@@ -146,7 +146,7 @@ PS_OUT PS_MAIN(PS_IN In)
         Out.vNormal = vNormalDesc;
     
         return Out;
-    }
+}
 
 struct PS_OUT_PICKING
 {
