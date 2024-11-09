@@ -85,14 +85,14 @@
     <Filter Include="02.GameObjects\04.Effect\Effect_Base\Particle_Effect">
       <UniqueIdentifier>{fac53200-c293-4b2f-b5db-aed31b94a02c}</UniqueIdentifier>
     </Filter>
-    <Filter Include="02.GameObjects\04.Effect\Effect_Base\Texture_Effect">
-      <UniqueIdentifier>{e0193f26-6fda-4bf4-8fcd-c94aa5bd43d6}</UniqueIdentifier>
-    </Filter>
     <Filter Include="02.GameObjects\06.TargetBall">
       <UniqueIdentifier>{bf40d83b-a543-4cc9-aed7-c2079cd52f62}</UniqueIdentifier>
     </Filter>
     <Filter Include="02.GameObjects\04.Effect\Effect_Container">
       <UniqueIdentifier>{7351ac0c-a5b0-4e63-9704-404b9c8db257}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.GameObjects\04.Effect\Effect_Base\Texture_Effect">
+      <UniqueIdentifier>{e0193f26-6fda-4bf4-8fcd-c94aa5bd43d6}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -225,6 +225,15 @@
     <ClInclude Include="..\Public\TargetBall.h">
       <Filter>02.GameObjects\06.TargetBall</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\imgui\ImGuiFileDialogConfig.h">
+      <Filter>Imgui</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\imgui\dirent.h">
+      <Filter>Imgui</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\imgui\ImGuiFileDialog.h">
+      <Filter>Imgui</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <Image Include="small.ico">
@@ -345,6 +354,9 @@
     </ClCompile>
     <ClCompile Include="..\Private\TargetBall.cpp">
       <Filter>02.GameObjects\06.TargetBall</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\imgui\ImGuiFileDialog.cpp">
+      <Filter>Imgui</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

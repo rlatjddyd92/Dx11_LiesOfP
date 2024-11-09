@@ -32,8 +32,9 @@ HRESULT CEffect_Container::Initialize(void* pArg)
 	{
 		if (nullptr == elem)
 			continue;
-		CParticle_Effect::PARTICLE_TEST_DESC* pParticleDesc = static_cast<CParticle_Effect::PARTICLE_TEST_DESC*>(elem);
 
+		CParticle_Effect::PARTICLE_EFFECT_DESC* pParticleDesc = static_cast<CParticle_Effect::PARTICLE_EFFECT_DESC*>(elem);
+		pParticleDesc->pParentMatrix = m_pTransformCom->Get_WorldMatrix_Ptr();
 		m_Effects.emplace_back(static_cast<CEffect_Base*>(m_pGameInstance->Clone_GameObject(TEXT("Prototype_GameObject_Particle_Effect"), pParticleDesc)));
 	}
 
@@ -43,7 +44,7 @@ HRESULT CEffect_Container::Initialize(void* pArg)
 			continue;
 
 		CTexture_Effect::TEXTURE_EFFECT_DESC* pTextureDesc = static_cast<CTexture_Effect::TEXTURE_EFFECT_DESC*>(elem);
-
+		pTextureDesc->pParentMatrix = m_pTransformCom->Get_WorldMatrix_Ptr();
 		m_Effects.emplace_back(static_cast<CEffect_Base*>(m_pGameInstance->Clone_GameObject(TEXT("Prototype_GameObject_Texture_Effect"), pTextureDesc)));
 	}
 
@@ -70,6 +71,8 @@ void CEffect_Container::Priority_Update(_float fTimeDelta)
 
 void CEffect_Container::Update(_float fTimeDelta)
 {
+	
+
 	for (auto& Effect : m_Effects)
 	{
 		if (nullptr == Effect)
@@ -92,6 +95,20 @@ void CEffect_Container::Late_Update(_float fTimeDelta)
 
 HRESULT CEffect_Container::Render()
 {
+
+	return S_OK;
+}
+
+HRESULT CEffect_Container::Save_Effects(_wstring strFilePath)
+{
+	for (auto& Effect : m_Effects)
+	{
+		if (nullptr == Effect)
+			continue;
+
+		if(FAILED(Effect->Save(strFilePath)))
+			return E_FAIL;
+	}
 
 	return S_OK;
 }

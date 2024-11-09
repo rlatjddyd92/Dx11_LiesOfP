@@ -117,8 +117,12 @@ void CImGui_Manager::Tool_Effect()
 
 		bool bDemo = true;
 		ImGui::ShowDemoWindow(&bDemo);
-
-		if (ImGui::CollapsingHeader("Particle"))
+		if (ImGui::CollapsingHeader("Texture"))
+		{
+			m_pController_EffectTool->TextureCheck();
+		}
+		
+		if (ImGui::CollapsingHeader("Particle Effect"))
 		{
 			m_pController_EffectTool->Particle_Check();
 		}
@@ -129,6 +133,8 @@ void CImGui_Manager::Tool_Effect()
 		}
 
 		ImGui::Begin("EffectList");
+
+		m_pController_EffectTool->Set_EffectName();
 
 		m_pController_EffectTool->Select_Particle();
 		if (ImGui::Button("Create Particle"))
@@ -175,8 +181,35 @@ void CImGui_Manager::Tool_Effect()
 		{
 			m_pController_EffectTool->Reset_EffectContainer();
 		}
-		ImGui::End();
+		if (ImGui::Button("Delete Effect Container"))
+		{
+			m_pController_EffectTool->Delete_EffectContainer();
+		}
 
+		if (ImGui::Button("Save Effect Conainer"))
+		{
+			ImGuiFileDialog::Instance()->OpenDialog(
+				"SaveFile",           // vKey
+				"Select a File",           // vTitle
+				".bin",                  // vFilters
+				IGFD::FileDialogConfig()   // vConfig (기본 설정)
+			);
+
+		}
+		m_pController_EffectTool->Save_EffectContainer();
+		
+		if (ImGui::Button("Load Effect Conainer"))
+		{
+			ImGuiFileDialog::Instance()->OpenDialog(
+				"LoadFile",           // vKey
+				"Select a File",           // vTitle
+				"Effects{.PE, .TE, .ME}",                  // vFilters
+				IGFD::FileDialogConfig()   // vConfig (기본 설정)
+			);
+		}
+		m_pController_EffectTool->Load_Effect();
+
+		ImGui::End();
 
 		ImGui::EndTabItem();
 	}

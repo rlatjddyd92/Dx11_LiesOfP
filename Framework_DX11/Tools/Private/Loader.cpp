@@ -279,65 +279,78 @@ HRESULT CLoader::Ready_Resources_For_ToolLevel()
 
  	//Ready_Textures_For_Decal();
 
-#pragma region PARTICLE
+#pragma region EFFECT
+#pragma region DIFFUSE
+	/* For. Prototype_Component_Texture_DefaultBlack */
+	if (FAILED(m_pGameInstance->Add_Prototype(LEVEL_TOOL, TEXT("Prototype_Component_Texture_DefaultBlack"),
+		CTexture::Create(m_pDevice, m_pContext, TEXT("../Bin/Resources/Textures/Effect/T_Sample_Black.dds"), 1))))
+		return E_FAIL;
+	CController_EffectTool::Get_Instance()->Add_Diffuse_ProtytypeTag(TEXT("Prototype_Component_Texture_DefaultBlack"));
+
 	/* For. Prototype_Component_Texture_Particle_Spark */
 	if (FAILED(m_pGameInstance->Add_Prototype(LEVEL_TOOL, TEXT("Prototype_Component_Texture_Particle_Spark"),
 		CTexture::Create(m_pDevice, m_pContext, TEXT("../Bin/Resources/Textures/Effect/Particle_Spark.dds"), 1))))
 		return E_FAIL;
-	CController_EffectTool::Get_Instance()->Add_Particle_ProtytypeTag(TEXT("Prototype_Component_Texture_Particle_Spark"));
+	CController_EffectTool::Get_Instance()->Add_Diffuse_ProtytypeTag(TEXT("Prototype_Component_Texture_Particle_Spark"));
 
-	/* For. Prototype_Component_Texture_Particle_Circle */
-	if (FAILED(m_pGameInstance->Add_Prototype(LEVEL_TOOL, TEXT("Prototype_Component_Texture_Particle_Circle"),
-		CTexture::Create(m_pDevice, m_pContext, TEXT("../Bin/Resources/Textures/Effect/Particle_Circle.dds"), 1))))
+	/* For. Prototype_Component_Texture_Glow */
+	if (FAILED(m_pGameInstance->Add_Prototype(LEVEL_TOOL, TEXT("Prototype_Component_Texture_Glow"),
+		CTexture::Create(m_pDevice, m_pContext, TEXT("../Bin/Resources/Textures/Effect/Glow_0.dds"), 1))))
 		return E_FAIL;
-	CController_EffectTool::Get_Instance()->Add_Particle_ProtytypeTag(TEXT("Prototype_Component_Texture_Particle_Circle"));
+	CController_EffectTool::Get_Instance()->Add_Diffuse_ProtytypeTag(TEXT("Prototype_Component_Texture_Glow"));
 
-	/* For. Prototype_Component_Texture_Particle_Thunder */
-	if (FAILED(m_pGameInstance->Add_Prototype(LEVEL_TOOL, TEXT("Prototype_Component_Texture_Particle_Thunder"),
+	/* For. Prototype_Component_Texture_Thunder */
+	if (FAILED(m_pGameInstance->Add_Prototype(LEVEL_TOOL, TEXT("Prototype_Component_Texture_Thunder"),
 		CTexture::Create(m_pDevice, m_pContext, TEXT("../Bin/Resources/Textures/Effect/T_Thunder_02_C_HJS.dds"), 1))))
 		return E_FAIL;
-	CController_EffectTool::Get_Instance()->Add_Particle_ProtytypeTag(TEXT("Prototype_Component_Texture_Particle_Thunder"));
+	CController_EffectTool::Get_Instance()->Add_Diffuse_ProtytypeTag(TEXT("Prototype_Component_Texture_Thunder"));
+
+	/* For. Prototype_Component_Texture_LensFlare */
+	if (FAILED(m_pGameInstance->Add_Prototype(LEVEL_TOOL, TEXT("Prototype_Component_Texture_LensFlare"),
+		CTexture::Create(m_pDevice, m_pContext, TEXT("../Bin/Resources/Textures/Effect/T_LensFlare_01_C_KMH.dds"), 1))))
+		return E_FAIL;
+	CController_EffectTool::Get_Instance()->Add_Diffuse_ProtytypeTag(TEXT("Prototype_Component_Texture_LensFlare"));
+
+	/* For. Prototype_Component_Texture_Ring */
+	if (FAILED(m_pGameInstance->Add_Prototype(LEVEL_TOOL, TEXT("Prototype_Component_Texture_Ring_4"),
+		CTexture::Create(m_pDevice, m_pContext, TEXT("../Bin/Resources/Textures/Effect/T_Ring_04_C_KMH.dds"), 1))))
+		return E_FAIL;
+	CController_EffectTool::Get_Instance()->Add_Diffuse_ProtytypeTag(TEXT("Prototype_Component_Texture_Ring_4"));
+
+	/* For. Prototype_Component_Texture_Ring_2 */
+	if (FAILED(m_pGameInstance->Add_Prototype(LEVEL_TOOL, TEXT("Prototype_Component_Texture_Ring_8"),
+		CTexture::Create(m_pDevice, m_pContext, TEXT("../Bin/Resources/Textures/Effect/T_Ring_08_C_HJS.dds"), 1))))
+		return E_FAIL;
+	CController_EffectTool::Get_Instance()->Add_Diffuse_ProtytypeTag(TEXT("Prototype_Component_Texture_Ring_8"));
+
+	/* For. Prototype_Component_Texture_Stone_8x8 */
+	if (FAILED(m_pGameInstance->Add_Prototype(LEVEL_TOOL, TEXT("Prototype_Component_Texture_Stone_8x8"),
+		CTexture::Create(m_pDevice, m_pContext, TEXT("../Bin/Resources/Textures/Effect/T_SubUV_DebStone_03_8x8_SC_KMH.dds"), 1))))
+		return E_FAIL;
+	CController_EffectTool::Get_Instance()->Add_Diffuse_ProtytypeTag(TEXT("Prototype_Component_Texture_Stone_8x8"));
+
+	/* For. Prototype_Component_Texture_Thunder_4x4 */
+	if (FAILED(m_pGameInstance->Add_Prototype(LEVEL_TOOL, TEXT("Prototype_Component_Texture_Thunder_4x4"),
+		CTexture::Create(m_pDevice, m_pContext, TEXT("../Bin/Resources/Textures/Effect/T_SubUV_Thunder_01_4x4_SC_HJS.dds"), 1))))
+		return E_FAIL;
+	CController_EffectTool::Get_Instance()->Add_Diffuse_ProtytypeTag(TEXT("Prototype_Component_Texture_Thunder_4x4"));
 
 #pragma endregion
 
-#pragma region EFFECT
-	/* For. Prototype_Component_Texture_TE_Flare */
-	if (FAILED(m_pGameInstance->Add_Prototype(LEVEL_TOOL, TEXT("Prototype_Component_Texture_TE_Flare"),
-		CTexture::Create(m_pDevice, m_pContext, TEXT("../Bin/Resources/Textures/Effect/T_Flare_01_C_HJS.dds"), 1))))
+#pragma region
+	/* For. Prototype_Component_Texture_DefaultNormal */
+	if (FAILED(m_pGameInstance->Add_Prototype(LEVEL_TOOL, TEXT("Prototype_Component_Texture_DefaultNormal"),
+		CTexture::Create(m_pDevice, m_pContext, TEXT("../Bin/Resources/Textures/Effect/default_normal.dds"), 1))))
 		return E_FAIL;
-	CController_EffectTool::Get_Instance()->Add_TE_ProtytypeTag(TEXT("Prototype_Component_Texture_TE_Flare"));
+	CController_EffectTool::Get_Instance()->Add_Normal_ProtytypeTag(TEXT("Prototype_Component_Texture_DefaultNormal"));
 
-	/* For. Prototype_Component_Texture_TE_Ring */
-	if (FAILED(m_pGameInstance->Add_Prototype(LEVEL_TOOL, TEXT("Prototype_Component_Texture_TE_Ring"),
-		CTexture::Create(m_pDevice, m_pContext, TEXT("../Bin/Resources/Textures/Effect/T_Ring_04_C_KMH.dds"), 1))))
+	/* For. Prototype_Component_Texture_Stone_8x8_Normal */
+	if (FAILED(m_pGameInstance->Add_Prototype(LEVEL_TOOL, TEXT("Prototype_Component_Texture_Stone_8x8_Normal"),
+		CTexture::Create(m_pDevice, m_pContext, TEXT("../Bin/Resources/Textures/Effect/T_SubUV_DebStone_03_8x8_SN_KMH.dds"), 1))))
 		return E_FAIL;
-	CController_EffectTool::Get_Instance()->Add_TE_ProtytypeTag(TEXT("Prototype_Component_Texture_TE_Ring"));
+	CController_EffectTool::Get_Instance()->Add_Normal_ProtytypeTag(TEXT("Prototype_Component_Texture_Stone_8x8_Normal"));
 
-	// 테스트용. 나중에 링이랑 합칠거임.
-	/* For. Prototype_Component_Texture_TE_Spread */
-	if (FAILED(m_pGameInstance->Add_Prototype(LEVEL_TOOL, TEXT("Prototype_Component_Texture_TE_Spread"),
-		CTexture::Create(m_pDevice, m_pContext, TEXT("../Bin/Resources/Textures/Effect/T_Ring_08_C_HJS.dds"), 1))))
-		return E_FAIL;
-	CController_EffectTool::Get_Instance()->Add_TE_ProtytypeTag(TEXT("Prototype_Component_Texture_TE_Spread"));
-
-	// 테스트용. 나중에 플레어랑 합칠거임.
-/* For. Prototype_Component_Texture_Particle_Spread */
-	if (FAILED(m_pGameInstance->Add_Prototype(LEVEL_TOOL, TEXT("Prototype_Component_Texture_TE_LensFlare"),
-		CTexture::Create(m_pDevice, m_pContext, TEXT("../Bin/Resources/Textures/Effect/T_LensFlare_01_C_KMH.dds"), 1))))
-		return E_FAIL;
-	CController_EffectTool::Get_Instance()->Add_TE_ProtytypeTag(TEXT("Prototype_Component_Texture_TE_LensFlare"));
-
-	// 테스트용. 나중에 플레어랑 합칠거임.
-/* For. Prototype_Component_Texture_Particle_Spread */
-	if (FAILED(m_pGameInstance->Add_Prototype(LEVEL_TOOL, TEXT("Prototype_Component_Texture_TE_Spark"),
-		CTexture::Create(m_pDevice, m_pContext, TEXT("../Bin/Resources/Textures/Effect/T_Tile_Spark_01_C_HJS.dds"), 1))))
-		return E_FAIL;
-	CController_EffectTool::Get_Instance()->Add_TE_ProtytypeTag(TEXT("Prototype_Component_Texture_TE_Spark"));
-
-	if (FAILED(m_pGameInstance->Add_Prototype(LEVEL_TOOL, TEXT("Prototype_Component_Texture_TE_Noise.dds"),
-		CTexture::Create(m_pDevice, m_pContext, TEXT("../Bin/Resources/Textures/Effect/T_Tile_Noise_39_C_RSW.dds"), 1))))
-		return E_FAIL;
-	CController_EffectTool::Get_Instance()->Add_TE_ProtytypeTag(TEXT("Prototype_Component_Texture_TE_Noise"));
+#pragma endregion
 #pragma endregion
 
 
@@ -354,7 +367,7 @@ HRESULT CLoader::Ready_Resources_For_ToolLevel()
 	CVIBuffer_Instancing::INSTANCE_DESC ParticleDesc = {};
 	/* For. Prototype_Component_VIBuffer_Point_Instance */
 	if (FAILED(m_pGameInstance->Add_Prototype(LEVEL_TOOL, TEXT("Prototype_Component_VIBuffer_Point_Instance"),
-		CVIBuffer_Point_Instance::Create(m_pDevice, m_pContext, ParticleDesc))))
+		CVIBuffer_Point_Instance::Create(m_pDevice, m_pContext, ParticleDesc, false))))
 		return E_FAIL;
 
 	_matrix		PreTransformMatrix = XMMatrixIdentity();

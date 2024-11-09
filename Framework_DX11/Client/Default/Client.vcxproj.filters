@@ -52,14 +52,8 @@
     <Filter Include="02.GameObjects\03.Player\Weapon">
       <UniqueIdentifier>{a2e63eda-00f8-4bd2-b6f4-8a17ca24f471}</UniqueIdentifier>
     </Filter>
-    <Filter Include="02.GameObjects\05.Particle">
-      <UniqueIdentifier>{d5192014-9901-427e-b465-6371d3d77239}</UniqueIdentifier>
-    </Filter>
     <Filter Include="02.GameObjects\04.Sky">
       <UniqueIdentifier>{f17d1c89-2983-427e-9a62-7fa4c30d3ae8}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="02.GameObjects\05.Particle\Snow">
-      <UniqueIdentifier>{9392b809-ca85-48c4-b3c0-fb5fcb8e0c90}</UniqueIdentifier>
     </Filter>
     <Filter Include="02.GameObjects\07.ForkLift">
       <UniqueIdentifier>{4f3837c9-f24e-4fd0-b1a8-adf1987df19d}</UniqueIdentifier>
@@ -72,6 +66,21 @@
     </Filter>
     <Filter Include="99.Defines\99.Data_Instance_Defines\01.Enum">
       <UniqueIdentifier>{7076eed2-af7b-4e22-9d79-5077d2fc9470}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.GameObjects\05.Effect">
+      <UniqueIdentifier>{d5192014-9901-427e-b465-6371d3d77239}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.GameObjects\05.Effect\Effect_Base">
+      <UniqueIdentifier>{15275d84-afa5-4b88-b2ca-643142c6e3da}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.GameObjects\05.Effect\Effect_Base\Texture_Effect">
+      <UniqueIdentifier>{5bf69a04-3942-4fd1-925f-d87d83e29ba8}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.GameObjects\05.Effect\Effect_Base\Particle_Effect">
+      <UniqueIdentifier>{133e63df-e370-4ab8-93fc-2fa295699a17}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.GameObjects\05.Effect\Effect_Container">
+      <UniqueIdentifier>{4e8f97f6-ae2a-4c6b-9183-3354c0d500b6}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -129,9 +138,6 @@
     <ClInclude Include="..\Public\Sky.h">
       <Filter>02.GameObjects\04.Sky</Filter>
     </ClInclude>
-    <ClInclude Include="..\Public\Particle_Snow.h">
-      <Filter>02.GameObjects\05.Particle\Snow</Filter>
-    </ClInclude>
     <ClInclude Include="..\Public\ForkLift.h">
       <Filter>02.GameObjects\07.ForkLift</Filter>
     </ClInclude>
@@ -143,6 +149,21 @@
     </ClInclude>
     <ClInclude Include="UI_Enum.h">
       <Filter>99.Defines\99.Data_Instance_Defines\01.Enum</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Public\Effect_Base.h">
+      <Filter>02.GameObjects\05.Effect\Effect_Base</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Public\Texture_Effect.h">
+      <Filter>02.GameObjects\05.Effect\Effect_Base\Texture_Effect</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Public\Particle_Effect.h">
+      <Filter>02.GameObjects\05.Effect\Effect_Base\Particle_Effect</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Public\Effect_Manager.h">
+      <Filter>02.GameObjects\05.Effect</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Public\Effect_Container.h">
+      <Filter>02.GameObjects\05.Effect\Effect_Container</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -191,11 +212,23 @@
     <ClCompile Include="..\Private\Sky.cpp">
       <Filter>02.GameObjects\04.Sky</Filter>
     </ClCompile>
-    <ClCompile Include="..\Private\Particle_Snow.cpp">
-      <Filter>02.GameObjects\05.Particle\Snow</Filter>
-    </ClCompile>
     <ClCompile Include="..\Private\ForkLift.cpp">
       <Filter>02.GameObjects\07.ForkLift</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Private\Effect_Base.cpp">
+      <Filter>02.GameObjects\05.Effect\Effect_Base</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Private\Texture_Effect.cpp">
+      <Filter>02.GameObjects\05.Effect\Effect_Base\Texture_Effect</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Private\Particle_Effect.cpp">
+      <Filter>02.GameObjects\05.Effect\Effect_Base\Particle_Effect</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Private\Effect_Manager.cpp">
+      <Filter>02.GameObjects\05.Effect</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Private\Effect_Container.cpp">
+      <Filter>02.GameObjects\05.Effect\Effect_Container</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

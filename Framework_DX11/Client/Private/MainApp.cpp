@@ -4,6 +4,7 @@
 #include "Level_Loading.h"
 #include "GameInstance.h"
 
+#include "Effect_Manager.h"
 
 CMainApp::CMainApp()
 	: m_pGameInstance { CGameInstance::Get_Instance() }
@@ -251,5 +252,6 @@ void CMainApp::Free()
 
 	Safe_Release(m_pGameInstance);
 	
+	CEffect_Manager::Destroy_Instance();
 }
 

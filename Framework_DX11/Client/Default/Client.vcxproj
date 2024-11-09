@@ -172,6 +172,9 @@
     <ClInclude Include="..\public\BackGround.h" />
     <ClInclude Include="..\Public\Body_Player.h" />
     <ClInclude Include="..\Public\Client_Defines.h" />
+    <ClInclude Include="..\Public\Effect_Base.h" />
+    <ClInclude Include="..\Public\Effect_Container.h" />
+    <ClInclude Include="..\Public\Effect_Manager.h" />
     <ClInclude Include="..\Public\ForkLift.h" />
     <ClInclude Include="..\public\FreeCamera.h" />
     <ClInclude Include="..\Public\Level_GamePlay.h" />
@@ -180,10 +183,11 @@
     <ClInclude Include="..\public\Loader.h" />
     <ClInclude Include="..\Public\MainApp.h" />
     <ClInclude Include="..\Public\Monster.h" />
-    <ClInclude Include="..\Public\Particle_Snow.h" />
+    <ClInclude Include="..\Public\Particle_Effect.h" />
     <ClInclude Include="..\public\Player.h" />
     <ClInclude Include="..\Public\Sky.h" />
     <ClInclude Include="..\Public\Terrain.h" />
+    <ClInclude Include="..\Public\Texture_Effect.h" />
     <ClInclude Include="..\Public\Weapon.h" />
     <ClInclude Include="Client.h" />
     <ClInclude Include="Item_Defines.h" />
@@ -196,6 +200,9 @@
   <ItemGroup>
     <ClCompile Include="..\private\BackGround.cpp" />
     <ClCompile Include="..\Private\Body_Player.cpp" />
+    <ClCompile Include="..\Private\Effect_Base.cpp" />
+    <ClCompile Include="..\Private\Effect_Container.cpp" />
+    <ClCompile Include="..\Private\Effect_Manager.cpp" />
     <ClCompile Include="..\Private\ForkLift.cpp" />
     <ClCompile Include="..\private\FreeCamera.cpp" />
     <ClCompile Include="..\Private\Level_GamePlay.cpp" />
@@ -204,10 +211,11 @@
     <ClCompile Include="..\private\Loader.cpp" />
     <ClCompile Include="..\Private\MainApp.cpp" />
     <ClCompile Include="..\Private\Monster.cpp" />
-    <ClCompile Include="..\Private\Particle_Snow.cpp" />
+    <ClCompile Include="..\Private\Particle_Effect.cpp" />
     <ClCompile Include="..\private\Player.cpp" />
     <ClCompile Include="..\Private\Sky.cpp" />
     <ClCompile Include="..\Private\Terrain.cpp" />
+    <ClCompile Include="..\Private\Texture_Effect.cpp" />
     <ClCompile Include="..\Private\Weapon.cpp" />
     <ClCompile Include="Client.cpp" />
     <ClCompile Include="stdafx.cpp">

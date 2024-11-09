@@ -30,10 +30,10 @@ public:
 
 public:
 	HRESULT Reset_Effects();
+	HRESULT Save_Effects(_wstring strFilePath);
 
 private:
 	vector<class CEffect_Base*> m_Effects;
-
 
 public:
 	static CEffect_Container* Create(ID3D11Device* pDevice, ID3D11DeviceContext* pContext);
