@@ -61,8 +61,12 @@ public:
 	_bool Get_isLight() { return m_isLight; }
 	_bool Get_isInstance() { return m_isInstance; }
 	_bool Get_bShadow() { return m_bShadow; }
+	_bool Get_isDecal() { return m_isDecal; }
 	void Set_bShadow(_bool bShadow) { m_bShadow = bShadow; }
 	_tchar* Get_ModelTag() { return m_szModelTag; }
+	_tchar* Get_DiffuseTag() { return m_szTextureTag_Diffuse; }
+	_tchar* Get_NormalTag() { return m_szTextureTag_Normal; }
+	_tchar* Get_ArmTag() { return m_szTextureTag_ARM; }
 
 public:
 	class CShader*	m_pShaderCom = { nullptr };

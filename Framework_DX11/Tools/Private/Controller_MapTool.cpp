@@ -546,8 +546,30 @@ void CController_MapTool::SaveMap()
 				pGameObject = m_pGameInstance->Find_Object(LEVEL_TOOL, sLayerTag, j);
 
 				OBJECT_DEFAULT_DESC pDesc = {};
-				wstring wstrModelTag = static_cast<CNonAnimModel*>(pGameObject)->Get_ModelTag();
-				wcscpy_s(pDesc.szModelTag, wstrModelTag.c_str());
+				if (static_cast<CNonAnimModel*>(pGameObject)->Get_isDecal())
+				{
+					pDesc.bShadow = true;
+					pDesc.bDecal = true;
+					CNonAnimModel::NONMODEL_DESC OriDesc = static_cast<CNonAnimModel*>(pGameObject)->Get_NonAniModelDesc();
+
+					pDesc.bNormal = OriDesc.isNormal;
+					pDesc.bARM = OriDesc.isARM;
+					wstring wstrDifusseTag = static_cast<CNonAnimModel*>(pGameObject)->Get_DiffuseTag();
+					wcscpy_s(pDesc.szTextureTag_Diffuse, wstrDifusseTag.c_str());
+					
+					wstring wstrNormalTag = static_cast<CNonAnimModel*>(pGameObject)->Get_NormalTag();
+					wcscpy_s(pDesc.szTextureTag_Normal, wstrNormalTag.c_str());
+
+					wstring wstrARMTag = static_cast<CNonAnimModel*>(pGameObject)->Get_ArmTag();
+					wcscpy_s(pDesc.szTextureTag_ARM, wstrARMTag.c_str());
+
+				}
+				else
+				{
+					wstring wstrModelTag = static_cast<CNonAnimModel*>(pGameObject)->Get_ModelTag();
+					wcscpy_s(pDesc.szModelTag, wstrModelTag.c_str());
+				}
+		
 				XMStoreFloat3(&pDesc.vPosition, pGameObject->Get_Transform()->Get_State(CTransform::STATE_POSITION));
 				pDesc.vScale = pGameObject->Get_Transform()->Get_Scaled();
 				pDesc.vRotation = pGameObject->Get_Transform()->Get_CurrentRotation();
@@ -630,8 +652,25 @@ void CController_MapTool::LoadMap()
 
 				CNonAnimModel::NONMODEL_DESC nonDesc = {};
 
-				int bufferSize = WideCharToMultiByte(CP_ACP, 0, pDesc.szModelTag, -1, NULL, 0, NULL, NULL);
-				WideCharToMultiByte(CP_ACP, 0, pDesc.szModelTag, -1, nonDesc.szModelTag, bufferSize, NULL, NULL);
+				if (pDesc.bDecal)
+				{
+					nonDesc.isDecal = true;
+					nonDesc.isNormal = pDesc.bNormal;
+					nonDesc.isARM = pDesc.bARM;
+					int bufferSize = WideCharToMultiByte(CP_ACP, 0, pDesc.szTextureTag_Diffuse, -1, NULL, 0, NULL, NULL);
+					WideCharToMultiByte(CP_ACP, 0, pDesc.szTextureTag_Diffuse, -1, nonDesc.szTextureTag_Diffuse, bufferSize, NULL, NULL);
+
+					bufferSize = WideCharToMultiByte(CP_ACP, 0, pDesc.szTextureTag_Normal, -1, NULL, 0, NULL, NULL);
+					WideCharToMultiByte(CP_ACP, 0, pDesc.szTextureTag_Normal, -1, nonDesc.szTextureTag_Normal, bufferSize, NULL, NULL);
+
+					bufferSize = WideCharToMultiByte(CP_ACP, 0, pDesc.szTextureTag_ARM, -1, NULL, 0, NULL, NULL);
+					WideCharToMultiByte(CP_ACP, 0, pDesc.szTextureTag_ARM, -1, nonDesc.szTextureTag_ARM, bufferSize, NULL, NULL);
+				}
+				else
+				{
+					int bufferSize = WideCharToMultiByte(CP_ACP, 0, pDesc.szModelTag, -1, NULL, 0, NULL, NULL);
+					WideCharToMultiByte(CP_ACP, 0, pDesc.szModelTag, -1, nonDesc.szModelTag, bufferSize, NULL, NULL);
+				}
 
 				nonDesc.vPosition = pDesc.vPosition;
 				nonDesc.vScale = pDesc.vScale;

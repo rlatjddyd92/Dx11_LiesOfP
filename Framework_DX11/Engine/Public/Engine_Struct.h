@@ -63,13 +63,20 @@ namespace Engine
 	typedef struct
 	{
 		_tchar		szModelTag[MAX_PATH];
+		_tchar		szTextureTag_Diffuse[MAX_PATH];
+		_tchar		szTextureTag_Normal[MAX_PATH];
+		_tchar		szTextureTag_ARM[MAX_PATH];
+		_uint		iID;
+		_int		iCurrentCellNum;
 		_float3		vPosition;
 		_float3		vScale;
 		_float3		vRotation;
 		_bool		isInstance = { false };
 		_bool		bShadow = { false };
-		_uint		iID;
-		_int		iCurrentCellNum;
+		_bool		bDecal = { false };
+		_bool		bNormal = { false };
+		_bool		bARM = { false };
+
 	}OBJECT_DEFAULT_DESC;
 
 	typedef struct ENGINE_DLL
