@@ -696,7 +696,6 @@ HRESULT CLoader::Ready_Textures_For_Decal()
 {
 
 #pragma region FX DECAL
-
 	// _finddata_t : <io.h>에서 제공하며 파일 정보를 저장하는 구조체
 	_finddata_t fd;
 
@@ -757,13 +756,121 @@ HRESULT CLoader::Ready_Textures_For_Decal()
 	}
 #pragma endregion
 
-	if (FAILED(m_pGameInstance->Add_Prototype(LEVEL_TOOL, TEXT("Prototype_Component_Texture_DecalTest_Diffuse"),
-	CTexture::Create(m_pDevice, m_pContext, TEXT("../Bin/Resources/Textures/Decal/T_Acid_Decal_C_KJS.dds"), 1))))
-		return E_FAIL;
-	if (FAILED(m_pGameInstance->Add_Prototype(LEVEL_TOOL, TEXT("Prototype_Component_Texture_DecalTest_Normal"),
-		CTexture::Create(m_pDevice, m_pContext, TEXT("../Bin/Resources/Textures/Decal/T_Acid_Decal_N_KMH.dds"), 1))))
+#pragma region BLOOD DECAL
+	// _findfirst : <io.h>에서 제공하며 사용자가 설정한 경로 내에서 가장 첫 번째 파일을 찾는 함수
+ 	handle = _findfirst("../Bin/Resources/Textures/Decal/dds/Blood_Decals/*", &fd);
+
+	if (handle == -1)
 		return E_FAIL;
 
+	iResult = 0;
+
+	char szCurPath_Blood[128] = "../Bin/Resources/Textures/Decal/dds/Blood_Decals/";    // 상대 경로
+	char szFullPath_Blood[128] = "";
+
+	strPrototype = TEXT("");
+    iNum = 0;
+
+	while (iResult != -1)
+	{
+		strcpy_s(szFullPath_Blood, szCurPath_Blood);
+		strcat_s(szFullPath_Blood, fd.name);
+
+		_char szFileName[MAX_PATH] = "";
+		_char szExt[MAX_PATH] = "";
+		_splitpath_s(szFullPath_Blood, nullptr, 0, nullptr, 0, szFileName, MAX_PATH, szExt, MAX_PATH);
+
+		if (!strcmp(fd.name, ".") || !strcmp(fd.name, "..")
+			|| strcmp(szExt, ".dds"))
+		{
+			iResult = _findnext(handle, &fd);
+			continue;
+		}
+
+		string strFileName = szFileName;
+		_wstring strPrototypeName;
+
+		strPrototypeName.assign(strFileName.begin(), strFileName.end());
+		wprintf(strPrototypeName.c_str());
+
+		_tchar tchar_Path[128];
+		int i = 0;
+		while (szFullPath_Blood[i] != '\0')
+		{
+			// 각 char 문자를 wchar_t로 변환하여 복사
+			tchar_Path[i] = static_cast<wchar_t>(szFullPath_Blood[i]);
+			i++;
+		}
+
+		//종료 문자 추가
+		tchar_Path[i] = L'\0';
+
+		if (FAILED(m_pGameInstance->Add_Prototype(LEVEL_TOOL, strPrototypeName,
+			CTexture::Create(m_pDevice, m_pContext, tchar_Path, 1))))
+			return E_FAIL;
+
+		//_findnext : <io.h>에서 제공하며 다음 위치의 파일을 찾는 함수, 더이상 없다면 -1을 리턴
+		iResult = _findnext(handle, &fd);
+	}
+#pragma endregion
+
+#pragma region ENV DECAL
+	// _findfirst : <io.h>에서 제공하며 사용자가 설정한 경로 내에서 가장 첫 번째 파일을 찾는 함수
+	handle = _findfirst("../Bin/Resources/Textures/Decal/dds/ENV_Decals/*", &fd);
+
+	if (handle == -1)
+		return E_FAIL;
+
+	iResult = 0;
+
+	char szCurPath_ENV[128] = "../Bin/Resources/Textures/Decal/dds/ENV_Decals/";    // 상대 경로
+	char szFullPath_ENV[128] = "";
+
+	strPrototype = TEXT("");
+	iNum = 0;
+
+	while (iResult != -1)
+	{
+		strcpy_s(szFullPath_ENV, szCurPath_ENV);
+		strcat_s(szFullPath_ENV, fd.name);
+
+		_char szFileName[MAX_PATH] = "";
+		_char szExt[MAX_PATH] = "";
+		_splitpath_s(szFullPath_ENV, nullptr, 0, nullptr, 0, szFileName, MAX_PATH, szExt, MAX_PATH);
+
+		if (!strcmp(fd.name, ".") || !strcmp(fd.name, "..")
+			|| strcmp(szExt, ".dds"))
+		{
+			iResult = _findnext(handle, &fd);
+			continue;
+		}
+
+		string strFileName = szFileName;
+		_wstring strPrototypeName;
+
+		strPrototypeName.assign(strFileName.begin(), strFileName.end());
+		wprintf(strPrototypeName.c_str());
+
+		_tchar tchar_Path[128];
+		int i = 0;
+		while (szFullPath_ENV[i] != '\0')
+		{
+			// 각 char 문자를 wchar_t로 변환하여 복사
+			tchar_Path[i] = static_cast<wchar_t>(szFullPath_ENV[i]);
+			i++;
+		}
+
+		//종료 문자 추가
+		tchar_Path[i] = L'\0';
+
+		if (FAILED(m_pGameInstance->Add_Prototype(LEVEL_TOOL, strPrototypeName,
+			CTexture::Create(m_pDevice, m_pContext, tchar_Path, 1))))
+			return E_FAIL;
+
+		//_findnext : <io.h>에서 제공하며 다음 위치의 파일을 찾는 함수, 더이상 없다면 -1을 리턴
+		iResult = _findnext(handle, &fd);
+	}
+#pragma endregion
 	return S_OK;
 }
 

@@ -19,13 +19,18 @@ public:
 	{
 		_char		szModelTag[MAX_PATH];
 		_char		szTextureTag_Diffuse[MAX_PATH];
+		_char		szTextureTag_Normal[MAX_PATH];
+		_char		szTextureTag_ARM[MAX_PATH];
 		_float3		vPosition;
 		_float3		vScale;
 		_float3		vRotation;
 		_bool		isLight = { false };
 		_bool		isInstance = { false };
-		_bool		isDecal = { false };
 		_bool		bShadow = { false };
+		_bool		isDecal = { false };
+		_bool		isNormal = { false };
+		_bool		isARM = { false };
+	
 		_uint		iRenderGroupID = { true };
 	}NONMODEL_DESC;
 
@@ -64,6 +69,7 @@ public:
 	class CModel*	m_pModelCom = { nullptr };
 	CTexture* m_pTextureCom_Diffuse = { nullptr };
 	CTexture* m_pTextureCom_Normal = { nullptr };
+	CTexture* m_pTextureCom_ARM = { nullptr };
 	CVIBuffer_Cube* m_pVIBufferCom = { nullptr };
 
 	NONMODEL_DESC	m_tDesc;
@@ -80,9 +86,13 @@ private:
 	_bool		m_isInstance = { false };
 	_bool		m_bShadow = { false };
 	_bool		m_isDecal = { false };
+	_bool		m_isNormal = { false };
+	_bool		m_isARM = { false };
 
 	_tchar m_szModelTag[MAX_PATH];
 	_tchar m_szTextureTag_Diffuse[MAX_PATH];
+	_tchar m_szTextureTag_Normal[MAX_PATH];
+	_tchar m_szTextureTag_ARM[MAX_PATH];
 
 private:
 	HRESULT Ready_Components(NONMODEL_DESC* pNonAnimDesc);
