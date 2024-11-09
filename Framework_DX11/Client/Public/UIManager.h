@@ -30,9 +30,42 @@ public:
 	virtual void Late_Update(_float fTimeDelta) override;
 	virtual HRESULT Render() override;
 
+public:
+	void Update_UIManager(_float fTimeDelta);
 
 private:
-	vector<CUIPage*> m_vecPage;
+	HRESULT Load_UIDataFile();
+	HRESULT Make_UIPage(_int iIndex);
+	HRESULT Load_UIDataFile_Part(HANDLE handle, DWORD* dword, _int iIndex);
+
+
+private:
+	vector<CUIPage*> m_vecPage; // <- 렌더러 참조용
+
+	// 페이지 별 포인터
+	// 캐스팅을 하지 않기 위해 추가
+	// AddRef하지 않고 사용
+
+	// 메인
+	CUIPage_Main* m_pUIPage_Main = { nullptr };
+	// 로딩
+	CUIPage_Loading* m_pUIPage_Loading = { nullptr };
+	// 플레이
+	CUIPage_Play* m_pUIPage_Play = { nullptr };
+	//// 메인
+	//CUIPage_Main* m_pUIPage_Main = { nullptr };
+	//// 메인
+	//CUIPage_Main* m_pUIPage_Main = { nullptr };
+	//// 메인
+	//CUIPage_Main* m_pUIPage_Main = { nullptr };
+	//// 메인
+	//CUIPage_Main* m_pUIPage_Main = { nullptr };
+	//// 메인
+	//CUIPage_Main* m_pUIPage_Main = { nullptr };
+
+
+
+
 	CUIRender_Client* m_pUIRender_Client = { nullptr };
 
 public:

@@ -187,6 +187,8 @@
     <ClInclude Include="..\Public\Terrain.h" />
     <ClInclude Include="..\Public\UIManager.h" />
     <ClInclude Include="..\Public\UIPage.h" />
+    <ClInclude Include="..\Public\UIPage_Loading.h" />
+    <ClInclude Include="..\Public\UIPage_Main.h" />
     <ClInclude Include="..\Public\UIPage_Play.h" />
     <ClInclude Include="..\Public\UIRender_Client.h" />
     <ClInclude Include="..\Public\Weapon.h" />
@@ -216,6 +218,8 @@
     <ClCompile Include="..\Private\Terrain.cpp" />
     <ClCompile Include="..\Private\UIManager.cpp" />
     <ClCompile Include="..\Private\UIPage.cpp" />
+    <ClCompile Include="..\Private\UIPage_Loading.cpp" />
+    <ClCompile Include="..\Private\UIPage_Main.cpp" />
     <ClCompile Include="..\Private\UIPage_Play.cpp" />
     <ClCompile Include="..\Private\UIRender_Client.cpp" />
     <ClCompile Include="..\Private\Weapon.cpp" />

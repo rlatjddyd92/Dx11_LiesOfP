@@ -9,6 +9,7 @@ namespace Client
 
 	enum LEVELID { LEVEL_STATIC, LEVEL_LOADING, LEVEL_LOGO, LEVEL_GAMEPLAY, LEVEL_END };
 
+	// 24-11-09 ±Ëº∫øÎ : GameInterface ΩÃ±€≈Ê ¡¢±Ÿ ∏≈≈©∑Œ 
 	#define GET_GAMEINTERFACE	CGameInterface_Controller::Get_Instance()
 }
 

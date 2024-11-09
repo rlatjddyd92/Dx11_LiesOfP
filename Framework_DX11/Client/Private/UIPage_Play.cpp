@@ -4,13 +4,10 @@
 #include "GameInstance.h"
 
 
-CUIPage_Play::CUIPage_Play(ID3D11Device* pDevice, ID3D11DeviceContext* pContext, vector<UPART*>* pVecPart)
+CUIPage_Play::CUIPage_Play(ID3D11Device* pDevice, ID3D11DeviceContext* pContext)
     : CUIPage{ pDevice, pContext }
 {
-	m_vecPart.resize(pVecPart->size());
-
-	for (_int i = 0; i < m_vecPart.size(); ++i)
-		m_vecPart[i] = (*pVecPart)[i];
+	
 }
 
 CUIPage_Play::CUIPage_Play(const CUIPage_Play& Prototype)
@@ -20,6 +17,8 @@ CUIPage_Play::CUIPage_Play(const CUIPage_Play& Prototype)
 
 HRESULT CUIPage_Play::Initialize_Prototype()
 {
+	// 모든 UIPage는 클론 안 함, 여기서 모든 세팅 끝내기 
+
 	UI_DESC			Desc{};
 
 	Desc.fX = g_iWinSizeX >> 1;
@@ -71,9 +70,9 @@ HRESULT CUIPage_Play::Ready_UIPart()
 	return S_OK;
 }
 
-CUIPage_Play* CUIPage_Play::Create(ID3D11Device* pDevice, ID3D11DeviceContext* pContext, vector<UPART*>* pVecPart)
+CUIPage_Play* CUIPage_Play::Create(ID3D11Device* pDevice, ID3D11DeviceContext* pContext)
 {
-	CUIPage_Play* pInstance = new CUIPage_Play(pDevice, pContext, pVecPart);
+	CUIPage_Play* pInstance = new CUIPage_Play(pDevice, pContext);
 
 	if (FAILED(pInstance->Initialize_Prototype()))
 	{
@@ -103,7 +102,6 @@ void CUIPage_Play::Free()
 
 	for (auto& iter : m_vecPart)
 	{
-		Safe_Delete_Array(iter->strUIPart_Name);
 		Safe_Delete(iter);
 	}
 

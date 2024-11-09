@@ -16,7 +16,6 @@ public:
 	typedef struct UIPART_INFO
 	{
 
-		~UIPART_INFO() { Safe_Delete_Array(szText); }
 
 		void MakeDirec()
 		{
@@ -50,7 +49,7 @@ public:
 			return fPosition;
 		}
 
-		_char* strUIPart_Name = {};
+		_wstring strUIPart_Name = {};
 
 		_int iParentPart_Index = -1; // <- 
 
@@ -76,7 +75,7 @@ public:
 
 		// 텍스트 관련
 		_int iFontIndex = _int(UI_FONT::FONT_END);
-		_tchar* szText = {};
+		_wstring strText = {};
 		_bool bCenter = false;
 		_float4 fTextColor = { 1.f,1.f,1.f,1.f };
 
@@ -107,12 +106,26 @@ public:
 	virtual void Late_Update(_float fTimeDelta) override;
 	virtual HRESULT Render() override;
 
+public:
+	void InputPart(UPART* pPart) { m_vecPart.push_back(pPart); }
+	void SetUIPageName(_wstring strName) { m_UIPageName = strName; }
+	void SetUIPagePosition(_float2 fPosition) { m_fX = fPosition.x; m_fY = fPosition.y; }
+	_bool GetUpdate() { return m_bUpdate; }
+	_bool GetRender() { return m_bRender; }
+	void SetUpdate(_bool bUpdate) { m_bUpdate = bUpdate; }
+	void SetRender(_bool bRender) { m_bRender = bRender; }
+	const vector<UPART*>& GetPartInfo() { return m_vecPart; }
+
 protected:
 	virtual HRESULT Ready_UIPart();
 
 protected:
 	vector<UPART*> m_vecPart;
+	_wstring m_UIPageName = {};
 
+protected: // 제어 변수
+	_bool m_bUpdate = true; // 업데이트 진행 여부 
+	_bool m_bRender = true; // 렌더 진행 여부 
 
 public:
 	static CUIPage* Create(ID3D11Device* pDevice, ID3D11DeviceContext* pContext);

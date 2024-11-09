@@ -17,6 +17,8 @@ CUIRender_Client::CUIRender_Client(const CUIRender_Client& Prototype)
 
 HRESULT CUIRender_Client::Initialize_Prototype()
 {
+	// UI 렌더는 클론 안 함, 여기서 모든 세팅 끝내기 
+
 	UI_DESC			Desc{};
 
 	Desc.fX = g_iWinSizeX >> 1;
@@ -72,6 +74,88 @@ HRESULT CUIRender_Client::Render()
 
 HRESULT CUIRender_Client::Render_UI(vector<CUIPage*>& rPage)
 {
+	for (auto& iter : rPage)
+	{
+		if (!iter->GetRender())
+			return S_OK;
+
+		for (auto& iterPart : iter->GetPartInfo())
+		{
+			if (iterPart->iTexture_Index != -1)
+			{
+				if (m_vecTextureInfo[iterPart->iTexture_Index]->Texture == nullptr)
+					if (FAILED(Make_Texture(iterPart->iTexture_Index)))
+						return E_FAIL;
+
+				m_pTransformCom->Set_WorldMatrix(XMMatrixIdentity());
+
+				if (iterPart->iMoveType == _int(MOVETYPE::TYPE_BAR))
+					m_pTransformCom->Set_Scaled(iterPart->GetBarSize().x, iterPart->GetBarSize().y, 1.f);
+				else
+					m_pTransformCom->Set_Scaled(iterPart->fSize.x, iterPart->fSize.y, 1.f);
+
+				m_pTransformCom->Set_State(CTransform::STATE_POSITION,
+					XMVectorSet(iterPart->fPosition.x - m_fViewWidth * 0.5f, -iterPart->fPosition.y + m_fViewHeight * 0.5f, 0.f, 1.f));
+
+				if (FAILED(m_pTransformCom->Bind_ShaderResource(m_pShaderCom, "g_WorldMatrix")))
+					return E_FAIL;
+
+				if (FAILED(m_pShaderCom->Bind_Matrix("g_ViewMatrix", &m_ViewMatrix)))
+					return E_FAIL;
+
+				if (FAILED(m_pShaderCom->Bind_Matrix("g_ProjMatrix", &m_ProjMatrix)))
+					return E_FAIL;
+
+				if (FAILED(m_vecTextureInfo[iterPart->iTexture_Index]->Texture->Bind_ShadeResource(m_pShaderCom, "g_Texture", 0)))
+					return E_FAIL;
+
+				if (FAILED(m_pShaderCom->Bind_RawValue("g_Color", &iterPart->fTextureColor, sizeof(_float4))))
+					return E_FAIL;
+
+				if (FAILED(m_pShaderCom->Begin(0)))
+					return E_FAIL;
+
+				if (FAILED(m_pVIBufferCom->Bind_Buffers()))
+					return E_FAIL;
+
+				if (FAILED(m_pVIBufferCom->Render()))
+					return E_FAIL;
+			}
+			if ((iterPart->iFontIndex >= 0) && (iterPart->iFontIndex < _int(UI_FONT::FONT_END)))
+			{
+				if (iterPart->strText.size() == 0)
+					continue;
+
+				_vector vPosition = { iterPart->fPosition.x, iterPart->fPosition.y, 0.f,0.f };
+				_vector vColor = { 1.f,1.f,1.f,1.f };
+
+				if (iterPart->fTextColor.x > 0.f)
+					vColor.m128_f32[0] = iterPart->fTextColor.x;
+
+				if (iterPart->fTextColor.y > 0.f)
+					vColor.m128_f32[1] = iterPart->fTextColor.y;
+
+				if (iterPart->fTextColor.z > 0.f)
+					vColor.m128_f32[2] = iterPart->fTextColor.z;
+
+				if (iterPart->fTextColor.w > 0.f)
+					vColor.m128_f32[3] = iterPart->fTextColor.w;
+
+				_tchar* tText = new _tchar[iterPart->strText.size() + 1];
+				memcpy(&tText, &iterPart->strText, sizeof(_tchar) * (iterPart->strText.size() + 1));
+
+				if (iterPart->bCenter)
+					m_pGameInstance->Render_TextCenter(m_vecFont_tchar[iterPart->iFontIndex], tText, vPosition, vColor);
+				else
+					m_pGameInstance->Render_Text(m_vecFont_tchar[iterPart->iFontIndex], tText, vPosition, vColor);
+
+				Safe_Delete_Array(tText);
+			}
+		}
+	}
+
+
+
 	return S_OK;
 }
 

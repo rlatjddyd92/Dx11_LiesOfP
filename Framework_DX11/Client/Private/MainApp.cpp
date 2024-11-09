@@ -3,7 +3,7 @@
 
 #include "Level_Loading.h"
 #include "GameInstance.h"
-
+#include "GameInterface_Controller.h"
 
 CMainApp::CMainApp()
 	: m_pGameInstance { CGameInstance::Get_Instance() }
@@ -47,6 +47,11 @@ HRESULT CMainApp::Initialize()
 	if (FAILED(Ready_Prototype_Component_Static()))
 		return E_FAIL;
 
+	// 24-11-09 김성용
+	// GameInterface 세팅 
+	if (FAILED(GET_GAMEINTERFACE->Initialize_GameInterface(&m_pDevice, &m_pContext, m_pGameInstance)))
+		return E_FAIL;
+
 	if (FAILED(Open_Level(LEVEL_LOGO)))
 		return E_FAIL;
 
@@ -57,6 +62,15 @@ void CMainApp::Update(_float fTimeDelta)
 {
 	m_pGameInstance->Update_Engine(fTimeDelta);
 
+
+	// 24-11-09 김성용
+	// GameInterface 업데이트 
+	// ※ 인터페이스 업데이트를 분리하는 이유 
+	// -> 다른 객체가 업데이트를 모두 진행하면서 해당 프레임의 활동 및 인터페이스 요청을 완료 
+	// -> 이후에 해당 프레임에 기록된 내용을 일괄 처리하여 인터페이스에 반영
+	// -> 다음 프레임에 변경 사항 반영한 인터페이스 제공 
+	//  위 순서로 진행하기 위해 인터페이스 관련 업데이트를 무조건 다른 객체보다 나중에 진행하기 위함 
+	GET_GAMEINTERFACE->Update_GameInterface(fTimeDelta);
 #ifdef _DEBUG
 	m_fTimeAcc += fTimeDelta;
 #endif
@@ -248,6 +262,10 @@ void CMainApp::Free()
 	Safe_Release(m_pContext);
 
 	m_pGameInstance->Release_Engine();
+
+	// 24-11-09 김성용
+	// GameInterface 릴리즈
+	GET_GAMEINTERFACE->Release_GameInterface();
 
 	Safe_Release(m_pGameInstance);
 	

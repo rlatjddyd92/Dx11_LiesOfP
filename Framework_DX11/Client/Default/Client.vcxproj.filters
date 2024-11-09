@@ -186,6 +186,12 @@
     <ClInclude Include="..\Public\UIPage_Play.h">
       <Filter>03.GameInterface\00.UIManager\00.UIPage\02.UIPage_Play</Filter>
     </ClInclude>
+    <ClInclude Include="..\Public\UIPage_Loading.h">
+      <Filter>03.GameInterface\00.UIManager\00.UIPage\01.UIPage_Loading</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Public\UIPage_Main.h">
+      <Filter>03.GameInterface\00.UIManager\00.UIPage\00.UIPage_Main</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Client.cpp">
@@ -253,6 +259,12 @@
     </ClCompile>
     <ClCompile Include="..\Private\UIPage_Play.cpp">
       <Filter>03.GameInterface\00.UIManager\00.UIPage\02.UIPage_Play</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Private\UIPage_Loading.cpp">
+      <Filter>03.GameInterface\00.UIManager\00.UIPage\01.UIPage_Loading</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Private\UIPage_Main.cpp">
+      <Filter>03.GameInterface\00.UIManager\00.UIPage\00.UIPage_Main</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
