@@ -154,7 +154,7 @@ HRESULT CNonAnimModel::Render()
 		if (FAILED(m_pShaderCom->Bind_Matrix("g_vDecalWorldInverse", &m_pTransformCom->Get_WorldMatrix_Inverse())))
 			return E_FAIL;
 
-		if (FAILED(m_pTextureCom->Bind_ShadeResource(m_pShaderCom, "g_Texture", 0)))
+		if (FAILED(m_pTextureCom_Diffuse->Bind_ShadeResource(m_pShaderCom, "g_Texture", 0)))
 			return E_FAIL;
 
 		if (FAILED(m_pGameInstance->Bind_RT_ShaderResource(m_pShaderCom, TEXT("Target_Depth"), "g_DepthTexture")))
@@ -196,17 +196,30 @@ HRESULT CNonAnimModel::Render_Picking()
 	if (FAILED(m_pShaderCom->Bind_RawValue("g_fHashColor", &fColor, sizeof(_float4))))
 		return E_FAIL;
 
-	_uint		iNumMeshes = m_pModelCom->Get_NumMeshes();
-
-	for (size_t i = 0; i < iNumMeshes; i++)
+	if (m_isDecal)
 	{
-		if (FAILED(m_pShaderCom->Begin(2)))
+		if (FAILED(m_pShaderCom->Begin(1)))
 			return E_FAIL;
 
-		if (FAILED(m_pModelCom->Render((_uint)i)))
-			return E_FAIL;
+		m_pVIBufferCom->Bind_Buffers();
+
+		m_pVIBufferCom->Render();
 	}
+	else
+	{
+		_uint		iNumMeshes = m_pModelCom->Get_NumMeshes();
 
+		for (size_t i = 0; i < iNumMeshes; i++)
+		{
+
+			if (FAILED(m_pShaderCom->Begin(2)))
+				return E_FAIL;
+
+			if (FAILED(m_pModelCom->Render((_uint)i)))
+				return E_FAIL;
+		}
+	}
+	
 	return S_OK;
 }
 
@@ -222,14 +235,20 @@ HRESULT CNonAnimModel::Ready_Components(NONMODEL_DESC* pNonAnimDesc)
 {
 	if (m_isDecal)
 	{
+		MultiByteToWideChar(CP_ACP, MB_PRECOMPOSED, pNonAnimDesc->szTextureTag_Diffuse, MAX_PATH, m_szTextureTag_Diffuse, MAX_PATH);
+
 		/* FOR.Com_Shader */
 		if (FAILED(__super::Add_Component(LEVEL_STATIC, TEXT("Prototype_Component_Shader_SSD"),
 			TEXT("Com_Shader"), reinterpret_cast<CComponent**>(&m_pShaderCom))))
 			return E_FAIL;
 
-		if (FAILED(__super::Add_Component(LEVEL_TOOL, TEXT("Prototype_Component_Texture_DecalTest"),
-			TEXT("Com_Texture"), reinterpret_cast<CComponent**>(&m_pTextureCom))))
+		if (FAILED(__super::Add_Component(LEVEL_TOOL, m_szTextureTag_Diffuse,
+			TEXT("Com_Texture"), reinterpret_cast<CComponent**>(&m_pTextureCom_Diffuse))))
 			return E_FAIL;
+
+		/*if (FAILED(__super::Add_Component(LEVEL_TOOL, m_szTextureTag_Diffuse,
+			TEXT("Com_Texture1"), reinterpret_cast<CComponent**>(&m_pTextureCom_Normal))))
+			return E_FAIL;*/
 
 		/* FOR.Com_VIBuffer */
 		if (FAILED(__super::Add_Component(LEVEL_TOOL, TEXT("Prototype_Component_VIBuffer_Cube"),
@@ -303,6 +322,7 @@ void CNonAnimModel::Free()
 
 	Safe_Release(m_pShaderCom);
 	Safe_Release(m_pModelCom);
-	Safe_Release(m_pTextureCom);
+	Safe_Release(m_pTextureCom_Diffuse);
+	Safe_Release(m_pTextureCom_Normal);
 	Safe_Release(m_pVIBufferCom);
 }
