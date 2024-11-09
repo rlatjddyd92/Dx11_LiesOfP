@@ -566,7 +566,7 @@ void CController_MapTool::SaveMap()
 		{
 			for (_uint j = 0; j < m_pGameInstance->Get_Total_LightCount(); ++j)
 			{
-				if (j == 0)
+				if (j == 0)	//방향성 광원 저장 안함
 					continue;
 
 				LIGHT_DESC* pLightDesc = {};

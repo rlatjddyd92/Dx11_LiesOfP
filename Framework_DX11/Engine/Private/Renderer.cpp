@@ -116,6 +116,8 @@ HRESULT CRenderer::Initialize()
 		return E_FAIL;
 	if (FAILED(m_pGameInstance->Add_RenderTarget(TEXT("Target_DecalNormal"), (_uint)ViewportDesc.Width, (_uint)ViewportDesc.Height, DXGI_FORMAT_R16G16B16A16_UNORM, _float4(1.f, 1.f, 1.f, 1.f))))
 		return E_FAIL;
+	if (FAILED(m_pGameInstance->Add_RenderTarget(TEXT("Target_DecalARM"), (_uint)ViewportDesc.Width, (_uint)ViewportDesc.Height, DXGI_FORMAT_B8G8R8A8_UNORM, _float4(0.f, 0.f, 0.f, 0.f))))
+		return E_FAIL;
 
 	/* MRT_Priority */
 	if (FAILED(m_pGameInstance->Add_MRT(TEXT("MRT_Priority"), TEXT("Target_Priority"))))
@@ -157,6 +159,8 @@ HRESULT CRenderer::Initialize()
 	if (FAILED(m_pGameInstance->Add_MRT(TEXT("MRT_Decal"), TEXT("Target_DecalDiffuse"))))
 		return E_FAIL;
 	if (FAILED(m_pGameInstance->Add_MRT(TEXT("MRT_Decal"), TEXT("Target_DecalNormal"))))
+		return E_FAIL;	
+	if (FAILED(m_pGameInstance->Add_MRT(TEXT("MRT_Decal"), TEXT("Target_DecalARM"))))
 		return E_FAIL;
 
 #pragma region SSAO
@@ -264,7 +268,7 @@ HRESULT CRenderer::Initialize()
 		return E_FAIL;
 	if (FAILED(m_pGameInstance->Ready_RT_Debug(TEXT("Target_DecalDiffuse"), 100.f, 300.f, 200.f, 200.f)))
 		return E_FAIL;
-	if (FAILED(m_pGameInstance->Ready_RT_Debug(TEXT("Target_Depth"), 100.f, 500.f, 200.f, 200.f)))
+	if (FAILED(m_pGameInstance->Ready_RT_Debug(TEXT("Target_DecalNormal"), 100.f, 500.f, 200.f, 200.f)))
 		return E_FAIL;
 	// 
 	//if (FAILED(m_pGameInstance->Ready_RT_Debug(TEXT("Target_BackBuffer"), 600.f, 100.f, 200.f, 200.f)))

@@ -5,18 +5,22 @@ matrix g_ViewMatrixInv, g_ProjMatrixInv;
 //matrix g_CameraViewMatrix;
 
 texture2D g_DeacalDiffuseTexture;
-texture2D g_DeacalARMTexture;
 texture2D g_DeacalNormalTexture;
+texture2D g_DeacalARMTexture;
 
 texture2D g_DepthTexture;
 texture2D g_NormalTexture;
 texture2D g_DiffuseTexture;
+texture2D g_ARMTexture;
 
 float4x4 g_vDecalWorld;
 matrix g_vDecalWorldInverse;
 
 float3 vScale = { 10.f, 10.f, 10.f };
 float4 g_fHashColor;
+
+bool bNormal = false;
+bool bARM = false;
 
 struct VS_IN
 {
@@ -58,6 +62,7 @@ struct PS_OUT
 {
     vector vColor : SV_TARGET0;
     vector vNormal : SV_TARGET1;
+    vector vARM : SV_TARGET2;
 };
 
 PS_OUT PS_MAIN(PS_IN In)
@@ -71,6 +76,7 @@ PS_OUT PS_MAIN(PS_IN In)
     
     vector vDepthDesc = g_DepthTexture.Sample(PointSampler, vTexUV);
     vector vNormalDesc = g_NormalTexture.Sample(PointSampler, vTexUV);
+    vector vARMDesc = g_ARMTexture.Sample(PointSampler, vTexUV);
     
     
     float fViewZ = vDepthDesc.y * 1000.f;
@@ -110,13 +116,37 @@ PS_OUT PS_MAIN(PS_IN In)
     
     //float2 vDecalTexCoord = vLocalPos.xz + 0.5f;
     vector vDecalDiffuse = g_DeacalDiffuseTexture.Sample(LinearSampler, vNewTexUV);
-    vector vDecalNormal = g_DeacalNormalTexture.Sample(LinearSampler, vNewTexUV);
+    vDecalDiffuse = vector(vDecalDiffuse.xyz, 0.8f);
     
-    Out.vColor = vector(vDecalDiffuse.xyz, 0.8f);
-    Out.vNormal = 0.f;
+    if (vDecalDiffuse.a <= 0.1f)
+        discard;
     
-    return Out;
-}
+    if (vDecalDiffuse.r <= 0.1f)
+        discard;
+    
+    if (bARM)
+    {
+        vector vDecalARM = g_DeacalARMTexture.Sample(LinearSampler, vNewTexUV);
+        Out.vARM = vDecalARM;
+        
+        if (vDecalARM.a <= 0.1f)
+            discard;
+    }
+    else
+        Out.vARM = float4(0.f, 0.f, 0.f, 0.f);
+    
+    Out.vColor = float4(vDecalDiffuse.xyz, Out.vARM.a);
+    
+    if (bNormal)
+    {
+        vector vDecalNormal = g_DeacalNormalTexture.Sample(LinearSampler, vNewTexUV);
+        Out.vNormal = vDecalNormal;
+    }
+    else   
+        Out.vNormal = vNormalDesc;
+    
+        return Out;
+    }
 
 struct PS_OUT_PICKING
 {
@@ -139,7 +169,7 @@ technique11 DefaultTechnique
     {
         SetRasterizerState(RS_Default);
         SetDepthStencilState(DSS_None, 0);
-        SetBlendState(BS_Default, vector(0.f, 0.f, 0.f, 0.f), 0xffffffff);
+        SetBlendState(BS_AlphaBlend, vector(0.f, 0.f, 0.f, 0.f), 0xffffffff);
       
         VertexShader = compile vs_5_0 VS_MAIN();
         GeometryShader = NULL;
