@@ -262,7 +262,7 @@ HRESULT CRenderer::Initialize()
 
 	if (FAILED(m_pGameInstance->Ready_RT_Debug(TEXT("Target_Diffuse"), 100.f, 100.f, 200.f, 200.f)))
 		return E_FAIL;
-	if (FAILED(m_pGameInstance->Ready_RT_Debug(TEXT("Target_LDR"), 100.f, 300.f, 200.f, 200.f)))
+	if (FAILED(m_pGameInstance->Ready_RT_Debug(TEXT("Target_DecalDiffuse"), 100.f, 300.f, 200.f, 200.f)))
 		return E_FAIL;
 	if (FAILED(m_pGameInstance->Ready_RT_Debug(TEXT("Target_DecalNormal"), 100.f, 500.f, 200.f, 200.f)))
 		return E_FAIL;
@@ -298,8 +298,6 @@ HRESULT CRenderer::Add_RenderObject(RENDERGROUP eRenderGroupID, CGameObject * pR
 
 HRESULT CRenderer::Draw()
 {
-	if (FAILED(Render_Picking()))
-		return E_FAIL;
 
 	if (FAILED(Render_Priority()))
 		return E_FAIL;
@@ -308,6 +306,10 @@ HRESULT CRenderer::Draw()
 		return E_FAIL;
 	if (FAILED(Render_NonBlend()))
 		return E_FAIL;
+
+	if (FAILED(Render_Picking()))
+		return E_FAIL;
+
 	if (FAILED(Render_Decal()))
 		return E_FAIL;
 

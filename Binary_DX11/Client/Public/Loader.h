@@ -42,6 +42,9 @@ private:
 	HRESULT Ready_Resources_For_LogoLevel();
 	HRESULT Ready_Resources_For_GamePlayLevel();
 
+	HRESULT Ready_Resources_For_BossMonster();
+	HRESULT Ready_Resources_For_BasicMonster();
+
 public:
 	static CLoader* Create(ID3D11Device* pDevice, ID3D11DeviceContext* pContext, LEVELID eNextLevelID);
 	virtual void Free() override;

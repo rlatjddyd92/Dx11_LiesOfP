@@ -127,6 +127,8 @@ PS_OUT_PICKING PS_MAIN_PICKING(PS_IN In)
 {
     PS_OUT_PICKING Out = (PS_OUT_PICKING) 0;
 
+    Out.vColor = g_fHashColor;
+    
     return Out;
 }
 
