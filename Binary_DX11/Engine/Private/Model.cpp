@@ -112,7 +112,7 @@ HRESULT CModel::Initialize_Prototype(TYPE eType, const _char* pModelFilePath, co
 #pragma endregion
 
 	HANDLE hFile = CreateFile(szFinalPath, GENERIC_WRITE, 0, nullptr, CREATE_ALWAYS, FILE_ATTRIBUTE_NORMAL, 0);
-	if (0 == hFile)
+	if (INVALID_HANDLE_VALUE == hFile)
 	{
 		MSG_BOX(TEXT("Failed to Open Models data"));
 		return E_FAIL;

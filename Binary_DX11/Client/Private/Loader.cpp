@@ -97,6 +97,10 @@ HRESULT CLoader::Ready_Resources_For_GamePlayLevel()
 	//	CModel::Create(m_pDevice, m_pContext, CModel::TYPE_ANIM, "../Bin/Resources/Models/PlayerExample/PlayerExample.fbx", "../Bin/ModelData/Anim/PlayerExample/", PreTransformMatrix))))
 	//	return E_FAIL;
 
+
+	if (FAILED(Ready_Resources_For_BasicMonster()))
+		return E_FAIL;
+
 	lstrcpy(m_szLoadingText, TEXT("변환 완료"));
 
 	MSG_BOX(TEXT("변환이 완료되었습니다 종료해주세요"));
@@ -109,7 +113,10 @@ HRESULT CLoader::Ready_Resources_For_GamePlayLevel()
 
 HRESULT CLoader::Ready_Resources_For_BossMonster()
 {
-	return E_NOTIMPL;
+#pragma region Raxasia
+
+#pragma endregion
+	return S_OK;
 }
 
 HRESULT CLoader::Ready_Resources_For_BasicMonster()
@@ -126,7 +133,56 @@ HRESULT CLoader::Ready_Resources_For_BasicMonster()
 		CModel::Create(m_pDevice, m_pContext, CModel::TYPE_ANIM, "../Bin/Resources/Models/Monster/CarcassTail/CarcassTail.fbx", "../Bin/ModelData/Anim/Monster/CarcassTail/", PreTransformMatrix))))
 		return E_FAIL;
 
+	/* For. Prototype_Component_Model_Monster_CarcassBigA */
+	if (FAILED(m_pGameInstance->Add_Prototype(LEVEL_GAMEPLAY, TEXT("Prototype_Component_Model_Monster_CarcassBigA"),
+		CModel::Create(m_pDevice, m_pContext, CModel::TYPE_ANIM, "../Bin/Resources/Models/Monster/CarcassBigA/CarcassBigA.fbx", "../Bin/ModelData/Anim/Monster/CarcassBigA/", PreTransformMatrix))))
+		return E_FAIL;
 
+	/* For. Prototype_Component_Model_Monster_Horesman */
+	if (FAILED(m_pGameInstance->Add_Prototype(LEVEL_GAMEPLAY, TEXT("Prototype_Component_Model_Monster_Horesman"),
+		CModel::Create(m_pDevice, m_pContext, CModel::TYPE_ANIM, "../Bin/Resources/Models/Monster/Horesman/Horesman.fbx", "../Bin/ModelData/Anim/Monster/Horesman/", PreTransformMatrix))))
+		return E_FAIL;
+
+	/* For. Prototype_Component_Model_Monster_MissileTurret */
+	if (FAILED(m_pGameInstance->Add_Prototype(LEVEL_GAMEPLAY, TEXT("Prototype_Component_Model_Monster_MissileTurret"),
+		CModel::Create(m_pDevice, m_pContext, CModel::TYPE_ANIM, "../Bin/Resources/Models/Monster/MissileTurret/MissileTurret.fbx", "../Bin/ModelData/Anim/Monster/MissileTurret/", PreTransformMatrix))))
+		return E_FAIL;
+
+	//여기서부터 무기 있는 놈
+#pragma region RebornerBigA
+	/* For. Prototype_Component_Model_Monster_RebornerBigA */
+	if (FAILED(m_pGameInstance->Add_Prototype(LEVEL_GAMEPLAY, TEXT("Prototype_Component_Model_Monster_RebornerBigA"),
+		CModel::Create(m_pDevice, m_pContext, CModel::TYPE_ANIM, "../Bin/Resources/Models/Monster/RebornerBigA/RebornerBigA.fbx", "../Bin/ModelData/Anim/Monster/RebornerBigA/", PreTransformMatrix))))
+		return E_FAIL;
+
+	/* For. Prototype_Component_Model_Monster_RebornerBigA_Hat */
+	if (FAILED(m_pGameInstance->Add_Prototype(LEVEL_GAMEPLAY, TEXT("Prototype_Component_Model_Monster_RebornerBigA_Hat"),
+		CModel::Create(m_pDevice, m_pContext, CModel::TYPE_NONANIM, "../Bin/Resources/Models/Monster/RebornerBigA/RebornerBigA_Hat.fbx", "../Bin/ModelData/Anim/Monster/RebornerBigA/", PreTransformMatrix))))
+		return E_FAIL;
+
+	/* For. Prototype_Component_Model_Monster_RebornerBigA_Tank */
+	if (FAILED(m_pGameInstance->Add_Prototype(LEVEL_GAMEPLAY, TEXT("Prototype_Component_Model_Monster_RebornerBigA_Tank"),
+		CModel::Create(m_pDevice, m_pContext, CModel::TYPE_NONANIM, "../Bin/Resources/Models/Monster/RebornerBigA/RebornerBigA_Tank.fbx", "../Bin/ModelData/Anim/Monster/RebornerBigA/", PreTransformMatrix))))
+		return E_FAIL;
+
+	/* For. Prototype_Component_Model_Monster_RebornerBigA_Weapon */
+	if (FAILED(m_pGameInstance->Add_Prototype(LEVEL_GAMEPLAY, TEXT("Prototype_Component_Model_Monster_RebornerBigA_Weapon"),
+		CModel::Create(m_pDevice, m_pContext, CModel::TYPE_NONANIM, "../Bin/Resources/Models/Monster/RebornerBigA/RebornerBigA_Weapon.fbx", "../Bin/ModelData/Anim/Monster/RebornerBigA/", PreTransformMatrix))))
+		return E_FAIL;
+#pragma endregion
+
+
+#pragma region RebornerMale
+	/* For. Prototype_Component_Model_Monster_RebornerMale */
+	if (FAILED(m_pGameInstance->Add_Prototype(LEVEL_GAMEPLAY, TEXT("Prototype_Component_Model_Monster_RebornerMale"),
+		CModel::Create(m_pDevice, m_pContext, CModel::TYPE_ANIM, "../Bin/Resources/Models/Monster/RebornerMale/RebornerMale.fbx", "../Bin/ModelData/Anim/Monster/RebornerMale/", PreTransformMatrix))))
+		return E_FAIL;
+
+	/* For. Prototype_Component_Model_Monster_RebornerMale_Weapon */
+	if (FAILED(m_pGameInstance->Add_Prototype(LEVEL_GAMEPLAY, TEXT("Prototype_Component_Model_Monster_RebornerMale_Weapon"),
+		CModel::Create(m_pDevice, m_pContext, CModel::TYPE_NONANIM, "../Bin/Resources/Models/Monster/RebornerMale/RebornerMale_Weapon.fbx", "../Bin/ModelData/Anim/Monster/RebornerMale/", PreTransformMatrix))))
+		return E_FAIL;
+#pragma endregion
 
 	return S_OK;
 }
