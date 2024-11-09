@@ -1296,10 +1296,18 @@ void CController_MapTool::Light_Modify()
 
 void CController_MapTool::Decal_Create()
 {
-	CDecal::DECAL_DESC desc = {};
-	desc.vPosition = m_vPickPos;
+	//CDecal::DECAL_DESC desc = {};
+	//desc.vPosition = m_vPickPos;
 
-	if (FAILED(m_pGameInstance->Add_CloneObject_ToLayer(LEVEL_TOOL, TEXT("Layer_Decal"), TEXT("Prototype_GameObject_Decal"),&desc)))
+	CNonAnimModel::NONMODEL_DESC Desc{};
+	Desc.vPosition = m_vPickPos;
+	Desc.vScale = { 1.f,1.f,1.f };
+	Desc.vRotation = { 0.f,0.f,0.f };
+	Desc.iRenderGroupID = 0;
+	Desc.isLight = false;
+	Desc.isDecal = true;
+	
+	if (FAILED(m_pGameInstance->Add_CloneObject_ToLayer(LEVEL_TOOL, TEXT("Layer_Decal"), TEXT("Prototype_GameObject_NonAnim"),&Desc)))
 		return;
 }
 

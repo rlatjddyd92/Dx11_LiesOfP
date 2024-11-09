@@ -6,6 +6,8 @@
 BEGIN(Engine)
 class CShader;
 class CModel;
+class CTexture;
+class CVIBuffer_Cube;
 END
 
 BEGIN(Tools)
@@ -21,6 +23,7 @@ public:
 		_float3		vRotation;
 		_bool		isLight = { false };
 		_bool		isInstance = { false };
+		_bool		isDecal = { false };
 		_bool		bShadow = { false };
 		_uint		iRenderGroupID = { true };
 	}NONMODEL_DESC;
@@ -58,6 +61,8 @@ public:
 public:
 	class CShader*	m_pShaderCom = { nullptr };
 	class CModel*	m_pModelCom = { nullptr };
+	CTexture* m_pTextureCom = { nullptr };
+	CVIBuffer_Cube* m_pVIBufferCom = { nullptr };
 
 	NONMODEL_DESC	m_tDesc;
 
@@ -72,6 +77,7 @@ private:
 	_bool		m_isLight = { false };
 	_bool		m_isInstance = { false };
 	_bool		m_bShadow = { false };
+	_bool		m_isDecal = { false };
 
 	_tchar m_szModelTag[MAX_PATH];
 
