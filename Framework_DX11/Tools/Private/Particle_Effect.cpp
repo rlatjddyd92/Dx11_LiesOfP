@@ -51,6 +51,7 @@ void CParticle_Effect::Update(_float fTimeDelta)
 
     CVIBuffer_Point_Instance::PARTICLE_MOVEMENT Movement = {};
 
+    Movement.iNumInstance = 100;
     Movement.iState = m_DefaultDesc.iState;
     Movement.WorldMatrix = m_pTransformCom->Get_WorldMatrix();
     Movement.vPivot = m_DefaultDesc.vPivot;

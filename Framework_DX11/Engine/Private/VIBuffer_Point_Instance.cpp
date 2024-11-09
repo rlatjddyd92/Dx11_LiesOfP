@@ -27,7 +27,8 @@ HRESULT CVIBuffer_Point_Instance::Initialize_Prototype(const _tchar* pShaderFile
 	if (GetFileAttributes(pShaderFilePath) == INVALID_FILE_ATTRIBUTES)
 		int a = 0;
 
-	if (FAILED(D3DCompileFromFile(pShaderFilePath, nullptr, D3D_COMPILE_STANDARD_FILE_INCLUDE, "CSMain", "cs_5_0", D3DCOMPILE_ENABLE_STRICTNESS, 0, &pCS_Blob, &pErrorBlob)))
+	if (FAILED(D3DCompileFromFile(pShaderFilePath, nullptr, nullptr, "CSMain", "cs_5_0", D3DCOMPILE_ENABLE_STRICTNESS | D3DCOMPILE_DEBUG | D3DCOMPILE_SKIP_OPTIMIZATION,
+		0, &pCS_Blob, &pErrorBlob)))
 	{
 		_char* pChar = static_cast<char*>(pErrorBlob->GetBufferPointer());
 		string str = pChar;
@@ -61,9 +62,10 @@ HRESULT CVIBuffer_Point_Instance::Initialize_Prototype(const _tchar* pShaderFile
 		m_ParticleBuffer_Desc.MiscFlags = D3D11_RESOURCE_MISC_BUFFER_STRUCTURED;
 
 		// Constant Buffer 구성
-		m_MoveBuffer_Desc.Usage = D3D11_USAGE_DEFAULT;
+		m_MoveBuffer_Desc.Usage = D3D11_USAGE_DYNAMIC;
 		m_MoveBuffer_Desc.ByteWidth = sizeof(PARTICLE_MOVEMENT);
 		m_MoveBuffer_Desc.BindFlags = D3D11_BIND_CONSTANT_BUFFER;
+		m_MoveBuffer_Desc.CPUAccessFlags = D3D11_CPU_ACCESS_WRITE;
 		m_MoveBuffer_Desc.CPUAccessFlags = 0;
 
 		// UAV 구성
@@ -108,10 +110,10 @@ HRESULT CVIBuffer_Point_Instance::Initialize(void * pArg)
 		m_ParticleBuffer_Desc.MiscFlags = D3D11_RESOURCE_MISC_BUFFER_STRUCTURED;
 
 		// Constant Buffer 구성
-		m_MoveBuffer_Desc.Usage = D3D11_USAGE_DEFAULT;
+		m_MoveBuffer_Desc.Usage = D3D11_USAGE_DYNAMIC;
 		m_MoveBuffer_Desc.ByteWidth = sizeof(PARTICLE_MOVEMENT);
 		m_MoveBuffer_Desc.BindFlags = D3D11_BIND_CONSTANT_BUFFER;
-		m_MoveBuffer_Desc.CPUAccessFlags = 0;
+		m_MoveBuffer_Desc.CPUAccessFlags = D3D11_CPU_ACCESS_WRITE;
 
 		// UAV 구성
 		m_UAV_Desc.Format = DXGI_FORMAT_UNKNOWN;
@@ -206,26 +208,32 @@ void CVIBuffer_Point_Instance::Spread_Test(const PARTICLE_MOVEMENT& MovementData
 
 	/* 순서 중요 !! */
 	// 상수 버퍼 업데이트 하고
+	D3D11_MAPPED_SUBRESOURCE mappedResource;
+	if (FAILED(m_pContext->Map(m_pMovementBuffer, 0, D3D11_MAP_WRITE_DISCARD, 0, &mappedResource)))
+		return;
+	PARTICLE_MOVEMENT* pMovement = static_cast<PARTICLE_MOVEMENT*>(mappedResource.pData);
+	*pMovement = MovementData;
+
+	m_pContext->Unmap(m_pMovementBuffer, 0);
+
+
 	m_pContext->UpdateSubresource(m_pMovementBuffer, 0, nullptr, &MovementData, 0, 0);
 
 	// 버퍼랑 UAV 설정하고
-	m_pContext->CSSetConstantBuffers(0, 1, &m_pMovementBuffer);
 	m_pContext->CSSetUnorderedAccessViews(0, 1, &m_pParticleUAV, nullptr);
+	m_pContext->CSSetConstantBuffers(0, 1, &m_pMovementBuffer);
 
 	// 셰이더 설정하고
 	m_pContext->CSSetShader(m_pComputeShader, nullptr, 0);
 
-	ID3D11UnorderedAccessView* boundUAV = nullptr;
-	m_pContext->CSGetUnorderedAccessViews(0, 1, &boundUAV);
-
 	// 실행하고
 	m_pContext->Dispatch((m_iNumInstance + 255) / 256, 1, 1);
+	m_pContext->Flush();
 
 	// UAV 해제하고
 	ID3D11UnorderedAccessView* nullUAV[] = { nullptr };
 	m_pContext->CSSetUnorderedAccessViews(0, 1, nullUAV, nullptr);
 
-	m_pContext->Flush();
 
 	// 셰이더까지 해제하면 아마도 끝
 	m_pContext->CSSetShader(nullptr, nullptr, 0);

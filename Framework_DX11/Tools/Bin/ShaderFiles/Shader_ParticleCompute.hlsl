@@ -19,7 +19,7 @@ struct Particle
 RWStructuredBuffer<Particle> particles : register(u0);
 //RWStructuredBuffer<Particle> Initparticles : register(u1);
 
-cbuffer TimeBuffer : register(b0)   // 받아온 걸 상수로 쓰기 위한 버퍼인듯?
+cbuffer MovementBuffer : register(b0)   // 받아온 걸 상수로 쓰기 위한 버퍼인듯?
 {
     uint    iNumInstance;
     uint	iState;
@@ -54,20 +54,14 @@ void CSMain(uint3 DTid : SV_DispatchThreadID)
     if (iIndex >= iNumInstance)
         return;
     
-    particles[iIndex].vLifeTime.y = particles[iIndex].vLifeTime.y + fTimeDelta;
+    float2 vLifeTime = particles[iIndex].vLifeTime;
+
+    vLifeTime.y += 0.001f;
+    
+    particles[iIndex].vLifeTime = vLifeTime;
 }
 
 //float rand(float seed)
 //{
 //    return frac(sin(seed) * 43758.5453123);
 //}
-
-technique11 T0
-{
-    pass P0
-    {
-        SetVertexShader(NULL);
-        SetPixelShader(NULL);
-        SetComputeShader(CompileShader(cs_5_0, CSMain()));
-    }
-};
