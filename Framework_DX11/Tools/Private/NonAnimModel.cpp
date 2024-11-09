@@ -36,6 +36,7 @@ HRESULT CNonAnimModel::Initialize(void* pArg)
 	m_isLight = pDesc->isLight;
 	m_isInstance = pDesc->isInstance;
 	m_bShadow = pDesc->bShadow;
+	m_isDecal = pDesc->isDecal;
 
 	if (FAILED(Ready_Components(pDesc)))
 		return E_FAIL;
@@ -69,18 +70,15 @@ void CNonAnimModel::Late_Update(_float fTimeDelta)
 	/* 직교투영을 위한 월드행렬까지 셋팅하게 된다. */
 	__super::Late_Update(fTimeDelta);
 
-	m_pGameInstance->Add_RenderObject(CRenderer::RG_NONBLEND, this);
+	if(m_isDecal)
+		m_pGameInstance->Add_RenderObject(CRenderer::RG_DECAL, this);
+	else
+		m_pGameInstance->Add_RenderObject(CRenderer::RG_NONBLEND, this);
 	m_pGameInstance->Add_RenderObject(CRenderer::RG_PICKING, this);
 }
 
 HRESULT CNonAnimModel::Render()
 {
-	if (m_isInstance)
-	{
-		m_pModelCom->Add_InstanceData(m_pTransformCom->Get_WorldMatrix());
-		return S_OK;
-	}
-
 	if (FAILED(m_pTransformCom->Bind_ShaderResource(m_pShaderCom, "g_WorldMatrix")))
 		return E_FAIL;
 
@@ -89,52 +87,90 @@ HRESULT CNonAnimModel::Render()
 	if (FAILED(m_pShaderCom->Bind_Matrix("g_ProjMatrix", &m_pGameInstance->Get_Transform(CPipeLine::D3DTS_PROJ))))
 		return E_FAIL;
 
-	if(FAILED(m_pShaderCom->Bind_RawValue("g_bSelect", &m_bSelected, sizeof(_bool))))
-		return E_FAIL;	
-	
-	if(FAILED(m_pShaderCom->Bind_RawValue("g_isLight", &m_isLight, sizeof(_bool))))
-		return E_FAIL;
-
-	_uint		iNumMeshes = m_pModelCom->Get_NumMeshes();
-
-	for (size_t i = 0; i < iNumMeshes; i++)
+	if(m_isDecal == false)
 	{
-		m_pModelCom->Bind_MeshBoneMatrices(m_pShaderCom, "g_BoneMatrices", (_uint)i);
-
-		if (nullptr != m_pModelCom->Find_Texture((_uint)i, TEXTURE_TYPE::ROUGHNESS))
+		if (m_isInstance)
 		{
-			if (FAILED(m_pModelCom->Bind_Material(m_pShaderCom, "g_ARMTexture", ROUGHNESS, (_uint)i)))
-				return E_FAIL;
-		}
-		if (m_isLight == false)
-		{
-			if (FAILED(m_pModelCom->Bind_Material(m_pShaderCom, "g_DiffuseTexture", TEXTURE_TYPE::DIFFUSE, (_uint)i)))
-				return E_FAIL;
+			m_pModelCom->Add_InstanceData(m_pTransformCom->Get_WorldMatrix());
+			return S_OK;
 		}
 
-		if (nullptr != m_pModelCom->Find_Texture((_uint)i, TEXTURE_TYPE::NORMALS))
-		{
-			if (FAILED(m_pModelCom->Bind_Material(m_pShaderCom, "g_NormalTexture", NORMALS, (_uint)i)))
-				return E_FAIL;
+		if (FAILED(m_pShaderCom->Bind_RawValue("g_bSelect", &m_bSelected, sizeof(_bool))))
+			return E_FAIL;
 
-			if (FAILED(m_pShaderCom->Begin(1)))
+		if (FAILED(m_pShaderCom->Bind_RawValue("g_isLight", &m_isLight, sizeof(_bool))))
+			return E_FAIL;
+
+		_uint		iNumMeshes = m_pModelCom->Get_NumMeshes();
+
+		for (size_t i = 0; i < iNumMeshes; i++)
+		{
+			m_pModelCom->Bind_MeshBoneMatrices(m_pShaderCom, "g_BoneMatrices", (_uint)i);
+
+			if (nullptr != m_pModelCom->Find_Texture((_uint)i, TEXTURE_TYPE::ROUGHNESS))
+			{
+				if (FAILED(m_pModelCom->Bind_Material(m_pShaderCom, "g_ARMTexture", ROUGHNESS, (_uint)i)))
+					return E_FAIL;
+			}
+			if (m_isLight == false)
+			{
+				if (FAILED(m_pModelCom->Bind_Material(m_pShaderCom, "g_DiffuseTexture", TEXTURE_TYPE::DIFFUSE, (_uint)i)))
+					return E_FAIL;
+			}
+
+			if (nullptr != m_pModelCom->Find_Texture((_uint)i, TEXTURE_TYPE::NORMALS))
+			{
+				if (FAILED(m_pModelCom->Bind_Material(m_pShaderCom, "g_NormalTexture", NORMALS, (_uint)i)))
+					return E_FAIL;
+
+				if (FAILED(m_pShaderCom->Begin(1)))
+					return E_FAIL;
+			}
+			else
+			{
+				if (FAILED(m_pShaderCom->Begin(0)))
+					return E_FAIL;
+			}
+
+			if (FAILED(m_pModelCom->Render((_uint)i)))
 				return E_FAIL;
 		}
-		else
-		{
-			if (FAILED(m_pShaderCom->Begin(0)))
-				return E_FAIL;
-		}
 
-		if (FAILED(m_pModelCom->Render((_uint)i)))
+		_bool bFalse = false;
+		if (FAILED(m_pShaderCom->Bind_RawValue("g_bSelect", &bFalse, sizeof(_bool))))
+			return E_FAIL;
+		if (FAILED(m_pShaderCom->Bind_RawValue("g_isLight", &bFalse, sizeof(_bool))))
 			return E_FAIL;
 	}
+	else
+	{
 
-	_bool bFalse = false;
-	if (FAILED(m_pShaderCom->Bind_RawValue("g_bSelect", &bFalse, sizeof(_bool))))
-		return E_FAIL;
-	if (FAILED(m_pShaderCom->Bind_RawValue("g_isLight", &bFalse, sizeof(_bool))))
-		return E_FAIL;
+		if (FAILED(m_pShaderCom->Bind_Matrix("g_ViewMatrixInv", &m_pGameInstance->Get_Transform_Inverse(CPipeLine::D3DTS_VIEW))))
+			return E_FAIL;
+		if (FAILED(m_pShaderCom->Bind_Matrix("g_ProjMatrixInv", &m_pGameInstance->Get_Transform_Inverse(CPipeLine::D3DTS_PROJ))))
+			return E_FAIL;
+
+		_Matrix v = m_pTransformCom->Get_WorldMatrix_Inverse();
+		if (FAILED(m_pShaderCom->Bind_Matrix("g_vDecalWorldInverse", &m_pTransformCom->Get_WorldMatrix_Inverse())))
+			return E_FAIL;
+
+		if (FAILED(m_pTextureCom_Diffuse->Bind_ShadeResource(m_pShaderCom, "g_Texture", 0)))
+			return E_FAIL;
+
+		if (FAILED(m_pGameInstance->Bind_RT_ShaderResource(m_pShaderCom, TEXT("Target_Depth"), "g_DepthTexture")))
+			return E_FAIL;
+		if (FAILED(m_pGameInstance->Bind_RT_ShaderResource(m_pShaderCom, TEXT("Target_Diffuse"), "g_DiffuseTexture")))
+			return E_FAIL;
+		if (FAILED(m_pGameInstance->Bind_RT_ShaderResource(m_pShaderCom, TEXT("Target_Normal"), "g_NormalTexture")))
+			return E_FAIL;
+
+		m_pShaderCom->Begin(0);
+
+		m_pVIBufferCom->Bind_Buffers();
+
+		m_pVIBufferCom->Render();
+
+	}
 	return S_OK;
 }
 
@@ -160,17 +196,30 @@ HRESULT CNonAnimModel::Render_Picking()
 	if (FAILED(m_pShaderCom->Bind_RawValue("g_fHashColor", &fColor, sizeof(_float4))))
 		return E_FAIL;
 
-	_uint		iNumMeshes = m_pModelCom->Get_NumMeshes();
-
-	for (size_t i = 0; i < iNumMeshes; i++)
+	if (m_isDecal)
 	{
-		if (FAILED(m_pShaderCom->Begin(2)))
+		if (FAILED(m_pShaderCom->Begin(1)))
 			return E_FAIL;
 
-		if (FAILED(m_pModelCom->Render((_uint)i)))
-			return E_FAIL;
+		m_pVIBufferCom->Bind_Buffers();
+
+		m_pVIBufferCom->Render();
 	}
+	else
+	{
+		_uint		iNumMeshes = m_pModelCom->Get_NumMeshes();
 
+		for (size_t i = 0; i < iNumMeshes; i++)
+		{
+
+			if (FAILED(m_pShaderCom->Begin(2)))
+				return E_FAIL;
+
+			if (FAILED(m_pModelCom->Render((_uint)i)))
+				return E_FAIL;
+		}
+	}
+	
 	return S_OK;
 }
 
@@ -184,30 +233,55 @@ _bool CNonAnimModel::Is_Pick(_float3* vPickPos)
 
 HRESULT CNonAnimModel::Ready_Components(NONMODEL_DESC* pNonAnimDesc)
 {
-	MultiByteToWideChar(CP_ACP, MB_PRECOMPOSED, pNonAnimDesc->szModelTag, MAX_PATH, m_szModelTag, MAX_PATH);
-
-	/* FOR.Com_Shader */
-	if (FAILED(__super::Add_Component(LEVEL_TOOL, TEXT("Prototype_Component_Shader_Model"),
-		TEXT("Com_Shader"), reinterpret_cast<CComponent**>(&m_pShaderCom))))
-		return E_FAIL;
-
-	if (m_isInstance)
+	if (m_isDecal)
 	{
-		CModel* pInstanceModel = m_pGameInstance->Add_NonAnimModel_Instance(LEVEL_TOOL, m_szModelTag);
-		if (nullptr == pInstanceModel)
+		MultiByteToWideChar(CP_ACP, MB_PRECOMPOSED, pNonAnimDesc->szTextureTag_Diffuse, MAX_PATH, m_szTextureTag_Diffuse, MAX_PATH);
+
+		/* FOR.Com_Shader */
+		if (FAILED(__super::Add_Component(LEVEL_STATIC, TEXT("Prototype_Component_Shader_SSD"),
+			TEXT("Com_Shader"), reinterpret_cast<CComponent**>(&m_pShaderCom))))
 			return E_FAIL;
 
-		if (FAILED(__super::Add_Component(TEXT("Com_Model"), pInstanceModel)))
+		if (FAILED(__super::Add_Component(LEVEL_TOOL, m_szTextureTag_Diffuse,
+			TEXT("Com_Texture"), reinterpret_cast<CComponent**>(&m_pTextureCom_Diffuse))))
 			return E_FAIL;
 
-		m_pModelCom = pInstanceModel;
+		/*if (FAILED(__super::Add_Component(LEVEL_TOOL, m_szTextureTag_Diffuse,
+			TEXT("Com_Texture1"), reinterpret_cast<CComponent**>(&m_pTextureCom_Normal))))
+			return E_FAIL;*/
+
+		/* FOR.Com_VIBuffer */
+		if (FAILED(__super::Add_Component(LEVEL_TOOL, TEXT("Prototype_Component_VIBuffer_Cube"),
+			TEXT("Com_VIBuffer"), reinterpret_cast<CComponent**>(&m_pVIBufferCom))))
+			return E_FAIL;
 	}
 	else
 	{
-		/* FOR.Com_Model */
-		if (FAILED(__super::Add_Component(LEVEL_TOOL, m_szModelTag,
-			TEXT("Com_Model"), reinterpret_cast<CComponent**>(&m_pModelCom))))
+		MultiByteToWideChar(CP_ACP, MB_PRECOMPOSED, pNonAnimDesc->szModelTag, MAX_PATH, m_szModelTag, MAX_PATH);
+
+		/* FOR.Com_Shader */
+		if (FAILED(__super::Add_Component(LEVEL_TOOL, TEXT("Prototype_Component_Shader_Model"),
+			TEXT("Com_Shader"), reinterpret_cast<CComponent**>(&m_pShaderCom))))
 			return E_FAIL;
+
+		if (m_isInstance)
+		{
+			CModel* pInstanceModel = m_pGameInstance->Add_NonAnimModel_Instance(LEVEL_TOOL, m_szModelTag);
+			if (nullptr == pInstanceModel)
+				return E_FAIL;
+
+			if (FAILED(__super::Add_Component(TEXT("Com_Model"), pInstanceModel)))
+				return E_FAIL;
+
+			m_pModelCom = pInstanceModel;
+		}
+		else
+		{
+			/* FOR.Com_Model */
+			if (FAILED(__super::Add_Component(LEVEL_TOOL, m_szModelTag,
+				TEXT("Com_Model"), reinterpret_cast<CComponent**>(&m_pModelCom))))
+				return E_FAIL;
+		}
 	}
 	
 
@@ -248,4 +322,7 @@ void CNonAnimModel::Free()
 
 	Safe_Release(m_pShaderCom);
 	Safe_Release(m_pModelCom);
+	Safe_Release(m_pTextureCom_Diffuse);
+	Safe_Release(m_pTextureCom_Normal);
+	Safe_Release(m_pVIBufferCom);
 }

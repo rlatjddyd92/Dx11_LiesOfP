@@ -16,7 +16,7 @@ float4x4 g_vDecalWorld;
 matrix g_vDecalWorldInverse;
 
 float3 vScale = { 10.f, 10.f, 10.f };
-
+float4 g_fHashColor;
 
 struct VS_IN
 {
@@ -104,6 +104,10 @@ PS_OUT PS_MAIN(PS_IN In)
     vNewTexUV -= vLocalPos.z * vNormal.xy;
     vNewTexUV *= 0.5f;
     
+    //512사이즈 데칼 이미지
+    vNewTexUV *= 2.f;
+    vNewTexUV += 0.5f;
+    
     //float2 vDecalTexCoord = vLocalPos.xz + 0.5f;
     vector vDecalDiffuse = g_DeacalDiffuseTexture.Sample(LinearSampler, vNewTexUV);
     vector vDecalNormal = g_DeacalNormalTexture.Sample(LinearSampler, vNewTexUV);
@@ -111,6 +115,18 @@ PS_OUT PS_MAIN(PS_IN In)
     Out.vColor = vector(vDecalDiffuse.xyz, 0.8f);
     Out.vNormal = 0.f;
     
+    return Out;
+}
+
+struct PS_OUT_PICKING
+{
+    vector vColor : SV_TARGET0;
+};
+
+PS_OUT_PICKING PS_MAIN_PICKING(PS_IN In)
+{
+    PS_OUT_PICKING Out = (PS_OUT_PICKING) 0;
+
     return Out;
 }
 
@@ -127,6 +143,16 @@ technique11 DefaultTechnique
         PixelShader = compile ps_5_0 PS_MAIN();
     }
 
+    pass Picking //1
+    {
+        SetRasterizerState(RS_Default);
+        SetDepthStencilState(DSS_Default, 0);
+        SetBlendState(BS_Default, vector(0.f, 0.f, 0.f, 0.f), 0xffffffff);
+
+        VertexShader = compile vs_5_0 VS_MAIN();
+        GeometryShader = NULL;
+        PixelShader = compile ps_5_0 PS_MAIN_PICKING();
+    }
 }
 
     

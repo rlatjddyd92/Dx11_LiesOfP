@@ -695,71 +695,74 @@ HRESULT CLoader::Ready_Resources_For_ToolLevel_Monster()
 HRESULT CLoader::Ready_Textures_For_Decal()
 {
 
-//#pragma region FX DECAL
-//
-//	// _finddata_t : <io.h>에서 제공하며 파일 정보를 저장하는 구조체
-//	_finddata_t fd;
-//
-//	// _findfirst : <io.h>에서 제공하며 사용자가 설정한 경로 내에서 가장 첫 번째 파일을 찾는 함수
-//	intptr_t handle = _findfirst("../Bin/Resources/Textures/Decal/FX_Decals/*", &fd);
-//
-//	if (handle == -1)
-//		return E_FAIL;
-//
-//	int iResult = 0;
-//
-//	char szCurPath[128] = "../Bin/Resources/Textures/Decal/FX_Decals/";    // 상대 경로
-//	char szFullPath[128] = "";
-//
-//	_wstring strPrototype = TEXT("Prototype_Component_Texture_");
-//	_uint iNum = 0;
-//
-//	while (iResult != -1)
-//	{
-//		strcpy_s(szFullPath, szCurPath);
-//		strcat_s(szFullPath, fd.name);
-//
-//		_char szFileName[MAX_PATH] = "";
-//		_char szExt[MAX_PATH] = "";
-//		_splitpath_s(szFullPath, nullptr, 0, nullptr, 0, szFileName, MAX_PATH, szExt, MAX_PATH);
-//
-//		if (!strcmp(fd.name, ".") || !strcmp(fd.name, "..")
-//			|| strcmp(szExt, ".dds"))
-//		{
-//			iResult = _findnext(handle, &fd);
-//			continue;
-//		}
-//
-//		string strFileName = szFileName;
-//		_wstring strPrototypeName;
-//		
-//		strPrototypeName.assign(strFileName.begin(), strFileName.end());
-//		wprintf(strPrototypeName.c_str());
-//
-//		_tchar tchar_Path[128];
-//		int i = 0;
-//		while (szFullPath[i] != '\0')
-//		{
-//			// 각 char 문자를 wchar_t로 변환하여 복사
-//			tchar_Path[i] = static_cast<wchar_t>(szFullPath[i]);
-//			i++;
-//		}
-//
-//		//종료 문자 추가
-//		tchar_Path[i] = L'\0';
-//
-//		if (FAILED(m_pGameInstance->Add_Prototype(LEVEL_TOOL, strPrototypeName,
-//			CTexture::Create(m_pDevice, m_pContext, tchar_Path, 1))))
-//			return E_FAIL;
-//
-//		//_findnext : <io.h>에서 제공하며 다음 위치의 파일을 찾는 함수, 더이상 없다면 -1을 리턴
-//		iResult = _findnext(handle, &fd);
-//	}
-//#pragma endregion
+#pragma region FX DECAL
 
-	if (FAILED(m_pGameInstance->Add_Prototype(LEVEL_TOOL, TEXT("Prototype_Component_Texture_DecalTest"),
-					CTexture::Create(m_pDevice, m_pContext, TEXT("../Bin/Resources/Textures/Decal/UIT_Fx_Frame_002.dds"), 1))))
-					return E_FAIL;
+	// _finddata_t : <io.h>에서 제공하며 파일 정보를 저장하는 구조체
+	_finddata_t fd;
+
+	// _findfirst : <io.h>에서 제공하며 사용자가 설정한 경로 내에서 가장 첫 번째 파일을 찾는 함수
+	intptr_t handle = _findfirst("../Bin/Resources/Textures/Decal/dds/FX_Decals/*", &fd);
+
+	if (handle == -1)
+		return E_FAIL;
+
+	int iResult = 0;
+
+	char szCurPath[128] = "../Bin/Resources/Textures/Decal/dds/FX_Decals/";    // 상대 경로
+	char szFullPath[128] = "";
+
+	_wstring strPrototype = TEXT("");
+	_uint iNum = 0;
+
+	while (iResult != -1)
+	{
+		strcpy_s(szFullPath, szCurPath);
+		strcat_s(szFullPath, fd.name);
+
+		_char szFileName[MAX_PATH] = "";
+		_char szExt[MAX_PATH] = "";
+		_splitpath_s(szFullPath, nullptr, 0, nullptr, 0, szFileName, MAX_PATH, szExt, MAX_PATH);
+
+		if (!strcmp(fd.name, ".") || !strcmp(fd.name, "..")
+			|| strcmp(szExt, ".dds"))
+		{
+			iResult = _findnext(handle, &fd);
+			continue;
+		}
+
+		string strFileName = szFileName;
+		_wstring strPrototypeName;
+		
+		strPrototypeName.assign(strFileName.begin(), strFileName.end());
+		wprintf(strPrototypeName.c_str());
+
+		_tchar tchar_Path[128];
+		int i = 0;
+		while (szFullPath[i] != '\0')
+		{
+			// 각 char 문자를 wchar_t로 변환하여 복사
+			tchar_Path[i] = static_cast<wchar_t>(szFullPath[i]);
+			i++;
+		}
+
+		//종료 문자 추가
+		tchar_Path[i] = L'\0';
+
+		if (FAILED(m_pGameInstance->Add_Prototype(LEVEL_TOOL, strPrototypeName,
+			CTexture::Create(m_pDevice, m_pContext, tchar_Path, 1))))
+			return E_FAIL;
+
+		//_findnext : <io.h>에서 제공하며 다음 위치의 파일을 찾는 함수, 더이상 없다면 -1을 리턴
+		iResult = _findnext(handle, &fd);
+	}
+#pragma endregion
+
+	if (FAILED(m_pGameInstance->Add_Prototype(LEVEL_TOOL, TEXT("Prototype_Component_Texture_DecalTest_Diffuse"),
+	CTexture::Create(m_pDevice, m_pContext, TEXT("../Bin/Resources/Textures/Decal/T_Acid_Decal_C_KJS.dds"), 1))))
+		return E_FAIL;
+	if (FAILED(m_pGameInstance->Add_Prototype(LEVEL_TOOL, TEXT("Prototype_Component_Texture_DecalTest_Normal"),
+		CTexture::Create(m_pDevice, m_pContext, TEXT("../Bin/Resources/Textures/Decal/T_Acid_Decal_N_KMH.dds"), 1))))
+		return E_FAIL;
 
 	return S_OK;
 }

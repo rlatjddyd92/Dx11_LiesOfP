@@ -1296,10 +1296,18 @@ void CController_MapTool::Light_Modify()
 
 void CController_MapTool::Decal_Create()
 {
-	CDecal::DECAL_DESC desc = {};
-	desc.vPosition = m_vPickPos;
+	//CDecal::DECAL_DESC desc = {};
+	//desc.vPosition = m_vPickPos;
 
-	if (FAILED(m_pGameInstance->Add_CloneObject_ToLayer(LEVEL_TOOL, TEXT("Layer_Decal"), TEXT("Prototype_GameObject_Decal"),&desc)))
+	CNonAnimModel::NONMODEL_DESC Desc{};
+	Desc.vPosition = m_vPickPos;
+	Desc.vScale = { 1.f,1.f,1.f };
+	Desc.vRotation = { 0.f,0.f,0.f };
+	Desc.iRenderGroupID = 0;
+	Desc.isLight = false;
+	Desc.isDecal = true;
+	
+	if (FAILED(m_pGameInstance->Add_CloneObject_ToLayer(LEVEL_TOOL, TEXT("Layer_Decal"), TEXT("Prototype_GameObject_NonAnim"),&Desc)))
 		return;
 }
 
@@ -1341,9 +1349,9 @@ void CController_MapTool::Decal_Menu()
 	}
 	m_Decal_Folder_Names.clear();
 
-	char szFolderFindPath[128] = "../Bin/Resources/Textures/Decal/*";    // 상대 경로 -> 모든 파일을 돌겠다
-	char szFolderPathReset[128] = "../Bin/Resources/Textures/Decal/";
-	char szFolderPath[128] = "../Bin/Resources/Textures/Decal/";
+	char szFolderFindPath[128] = "../Bin/Resources/Textures/Decal/tga/*";    // 상대 경로 -> 모든 파일을 돌겠다
+	char szFolderPathReset[128] = "../Bin/Resources/Textures/Decal/tga/";
+	char szFolderPath[128] = "../Bin/Resources/Textures/Decal/tga/";
 
 	_finddata_t fd;
 	intptr_t handle = _findfirst(szFolderFindPath, &fd);
@@ -1411,9 +1419,9 @@ void CController_MapTool::Decal_Menu()
 	}
 	m_Decal_File_Names.clear();
 
-	char szImageFindPath[128] = "../Bin/Resources/Textures/Decal/";    // 상대 경로 -> 모든 파일을 돌겠다
-	char szImagePathReset[128] = "../Bin/Resources/Textures/Decal/";
-	char szImagePath[128] = "../Bin/Resources/Textures/Decal/";
+	char szImageFindPath[128] = "../Bin/Resources/Textures/Decal/tga/";    // 상대 경로 -> 모든 파일을 돌겠다
+	char szImagePathReset[128] = "../Bin/Resources/Textures/Decal/tga/";
+	char szImagePath[128] = "../Bin/Resources/Textures/Decal/tga/";
 
 	//폴더 리스트에서 선택한 인덱스로 파일 검색 경로 생성
 	strcat_s(szImageFindPath, m_Decal_Folder_Names[m_iListSelectNum]);
@@ -1516,7 +1524,20 @@ void CController_MapTool::Decal_Menu()
 
 	if (ImGui::Button("Create_Decal"))
 	{
-		Decal_Create();
+		CNonAnimModel::NONMODEL_DESC Desc{};
+		Desc.vPosition = m_vPickPos;
+		Desc.vScale = { 1.f,1.f,1.f };
+		Desc.vRotation = { 0.f,0.f,0.f };
+		Desc.iRenderGroupID = 0;
+		Desc.isLight = false;
+		Desc.isDecal = true;
+		size_t length = strlen(m_Decal_File_Names[item_selected_Image_idx]);
+		strncpy_s(Desc.szTextureTag_Diffuse, m_Decal_File_Names[item_selected_Image_idx], length -4);
+		//Desc.szTextureTag_Diffuse = '\0';  // 널 종료 문자 추가
+
+		if (FAILED(m_pGameInstance->Add_CloneObject_ToLayer(LEVEL_TOOL, TEXT("Layer_Decal"), TEXT("Prototype_GameObject_NonAnim"), &Desc)))
+			return;
+		//Decal_Create();
 	}
 }
 
