@@ -68,7 +68,7 @@ float Get_BloomCurve(float x)
     result = max(0, x - 1.2f);
     result *= result;
 
-    return result * 0.5f;
+    return result * 0.7f;
 }
 
 /* 1. 픽셀의 최종적인 색상을 결정한다. */

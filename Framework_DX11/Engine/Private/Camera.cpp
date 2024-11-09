@@ -55,6 +55,91 @@ HRESULT CCamera::Render()
 	return S_OK;
 }
 
+void CCamera::Calculat_CascadeFrustum()
+{
+	_Matrix CascadeViewMatrix[3];
+	_Matrix CascadeProjMatrix[3];
+	_Matrix CascadeProjInverseMatrix[3];
+
+	_Matrix WorldMatrix = m_pTransformCom->Get_WorldMatrix();
+	_Matrix ViewMatrix = WorldMatrix.Invert();
+
+	_Vec3 vLightDir = m_pGameInstance->Get_DirectionLightDir();
+
+	_float fTanHalfVFov = tanf(m_fFovy * 0.5f);
+	_float fTanHalfHFov = fTanHalfVFov * m_fAspect;
+
+	m_fCascadeFarPlanes[0] = m_fNear;
+	m_fCascadeFarPlanes[1] = 15.f;
+	m_fCascadeFarPlanes[2] = 30.f;
+	m_fCascadeFarPlanes[3] = 300.f;
+
+	for (_uint i = 0; i < 3; ++i)
+	{
+		float fNearX = m_fCascadeFarPlanes[i] * fTanHalfHFov;
+		float fNearY = m_fCascadeFarPlanes[i] * fTanHalfVFov;
+
+		float fFarX = m_fCascadeFarPlanes[i + 1] * fTanHalfHFov;
+		float fFarY = m_fCascadeFarPlanes[i + 1] * fTanHalfVFov;
+
+		//Near Far 평면 구성
+		_Vec4 vFrustumCorners[8] =
+		{
+			{fNearX, fNearY, m_fCascadeFarPlanes[i], 1.0f},
+			{-fNearX, fNearY, m_fCascadeFarPlanes[i], 1.0f},
+			{fNearX, -fNearY, m_fCascadeFarPlanes[i], 1.0f},
+			{-fNearX, -fNearY, m_fCascadeFarPlanes[i], 1.0f},
+
+			{fFarX, fFarY, m_fCascadeFarPlanes[i + 1], 1.0f},
+			{-fFarX, fFarY, m_fCascadeFarPlanes[i + 1],1.0f},
+			{fFarX, -fFarY, m_fCascadeFarPlanes[i + 1],1.0f},
+			{-fFarX, -fFarY, m_fCascadeFarPlanes[i + 1],1.0f}
+		};
+
+		//절두체 중심점 구하기
+		_Vec4 vCenterPos = {};
+		for (_uint j = 0; j < 8; ++j)
+		{
+			vFrustumCorners[j] = XMVector4Transform(vFrustumCorners[j], WorldMatrix);
+			vCenterPos += vFrustumCorners[j];
+		}
+
+		vCenterPos /= 8.f;
+
+		_float fRadius = 0.f;
+		for (_uint j = 0; j < 8; ++j) 
+		{
+			_float fDistance = (vFrustumCorners[j] - vCenterPos).Length();
+			fRadius = max(fDistance, fRadius);
+		}
+		fRadius = ceil(fRadius * 16.f) / 16.f;
+
+		_Vec3 vMaxExtents = _Vec3(fRadius, fRadius, fRadius + 60.f);
+		_Vec3 vMinExtents = -vMaxExtents;
+
+		// 움직였음?
+		_Vec3 vShadowCamPos = _Vec3(vCenterPos) + (vLightDir * vMinExtents.z);
+		//if (fabs((vShadowCamPos - m_vPrevCenterPos[i]).Length()) < 5.f) 
+		//{
+		//	return;
+		//}
+		m_vPrevCenterPos[i] = vShadowCamPos;
+
+		// 위치, look, up
+		_Matrix LightMatrix = _Matrix::CreateWorld(vShadowCamPos, -vLightDir, _float3(0.0f, 1.0f, 0.0f));
+		CascadeViewMatrix[i] = LightMatrix.Invert();
+
+		_Vec3 vCascadeExtents = vMaxExtents - vMinExtents;
+
+		CascadeProjMatrix[i] = XMMatrixOrthographicLH(vCascadeExtents.x, vCascadeExtents.y, 0.1f, vCascadeExtents.z);
+		CascadeProjInverseMatrix[i] = XMMatrixOrthographicLH(vCascadeExtents.x, vCascadeExtents.y, vCascadeExtents.z, 0.f);
+	}
+
+	m_pGameInstance->Set_CascadeViewMatirx(CascadeViewMatrix);
+	m_pGameInstance->Set_CascadeProjMatirx(CascadeProjMatrix);
+	m_pGameInstance->Set_CascadeProjInverseMatirx(CascadeProjInverseMatrix);
+}
+
 void CCamera::Free()
 {
 	__super::Free();

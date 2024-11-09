@@ -58,31 +58,31 @@ HRESULT CLevel_Tool::Ready_Lights()
 	LightDesc.vAmbient = _float4(0.4f, 0.4f, 0.4f, 1.f);
 	LightDesc.vSpecular = _float4(1.f, 1.f, 1.f, 1.f);
 
-	if (FAILED(m_pGameInstance->Add_Light(LightDesc)))	
-		return E_FAIL;
-
-	ZeroMemory(&LightDesc, sizeof LightDesc);
-	LightDesc.eType = LIGHT_DESC::TYPE_POINT;
-	LightDesc.vPosition = _float4(10.f, 3.f, 10.f, 1.f);
-	LightDesc.fRange = 7.f;	
-	LightDesc.vDiffuse = _float4(1.f, 0.f, 0.f, 1.f);
-	LightDesc.vAmbient = /*_float4(0.4f, 0.2f, 0.2f, 1.f);*/_float4(0.f, 0.f, 0.f, 0.f);
-	LightDesc.vSpecular = LightDesc.vDiffuse;
-
 	if (FAILED(m_pGameInstance->Add_Light(LightDesc)))
 		return E_FAIL;
 
-	ZeroMemory(&LightDesc, sizeof LightDesc);
-	LightDesc.eType = LIGHT_DESC::TYPE_POINT;
-	LightDesc.vPosition = _float4(20.f, 3.f, 10.f, 1.f);
-	LightDesc.fRange = 7.f;
-	LightDesc.vDiffuse = _float4(0.f, 1.f, 0.f, 1.f);
-	LightDesc.vAmbient = /*_float4(0.2f, 0.4f, 0.2f, 1.f);*/_float4(0.f, 0.f, 0.f, 0.f);
-	LightDesc.vSpecular = LightDesc.vDiffuse;
+	//ZeroMemory(&LightDesc, sizeof LightDesc);
+	//LightDesc.eType = LIGHT_DESC::TYPE_POINT;
+	//LightDesc.vPosition = _float4(10.f, 3.f, 10.f, 1.f);
+	//LightDesc.fRange = 7.f;	
+	//LightDesc.vDiffuse = _float4(1.f, 0.f, 0.f, 1.f);
+	//LightDesc.vAmbient = /*_float4(0.4f, 0.2f, 0.2f, 1.f);*/_float4(0.f, 0.f, 0.f, 0.f);
+	//LightDesc.vSpecular = LightDesc.vDiffuse;
 
-	if (FAILED(m_pGameInstance->Add_Light(LightDesc)))
-		return E_FAIL;
-	
+	//if (FAILED(m_pGameInstance->Add_Light(LightDesc)))
+	//	return E_FAIL;
+
+	//ZeroMemory(&LightDesc, sizeof LightDesc);
+	//LightDesc.eType = LIGHT_DESC::TYPE_POINT;
+	//LightDesc.vPosition = _float4(20.f, 3.f, 10.f, 1.f);
+	//LightDesc.fRange = 7.f;
+	//LightDesc.vDiffuse = _float4(0.f, 1.f, 0.f, 1.f);
+	//LightDesc.vAmbient = /*_float4(0.2f, 0.4f, 0.2f, 1.f);*/_float4(0.f, 0.f, 0.f, 0.f);
+	//LightDesc.vSpecular = LightDesc.vDiffuse;
+
+	//if (FAILED(m_pGameInstance->Add_Light(LightDesc)))
+	//	return E_FAIL;
+
 
 	return S_OK;
 }
@@ -92,8 +92,8 @@ HRESULT CLevel_Tool::Ready_Layer_Camera()
 	CFreeCamera::CAMERA_FREE_DESC		Desc{};
 
 	Desc.fSensor = 0.2f;
-	Desc.vEye = _float4(0.f, 10.f, -10.f, 1.f);
-	Desc.vAt = _float4(0.f, 0.f, 0.f, 1.f);
+	Desc.vEye = _float4(0.f, 0.f, 0.f, 1.f);
+	Desc.vAt = _float4(0.f, 0.f, 1.f, 1.f);
 	Desc.fFovy = XMConvertToRadians(60.0f);
 	Desc.fNear = 0.1f;
 	Desc.fFar = 1000.f;
@@ -153,8 +153,11 @@ HRESULT CLevel_Tool::Ready_Layer_Paticle()
 
 HRESULT CLevel_Tool::Ready_Layer_Player()
 {
-	if (FAILED(m_pGameInstance->Add_CloneObject_ToLayer(LEVEL_GAMEPLAY, TEXT("Layer_Player"), TEXT("Prototype_GameObject_Player"))))
-		return E_FAIL;
+	for (_uint i = 0; i < 1; ++i)
+	{
+		CGameObject* p = m_pGameInstance->Get_CloneObject_ToLayer(LEVEL_GAMEPLAY, TEXT("Layer_Player"), TEXT("Prototype_GameObject_Player"));
+		p->Get_Transform()->Set_State(CTransform::STATE_POSITION, _Vec3(i * 5, 0, i * 5));
+	}
 
 	return S_OK;
 }

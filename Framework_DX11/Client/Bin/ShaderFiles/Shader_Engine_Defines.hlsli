@@ -27,6 +27,14 @@ sampler LinearBorderSampler = sampler_state
     AddressV = BORDER;
 };
 
+// 비교 샘플러
+// 깊이 텍스쳐 샘플링
+SamplerComparisonState DepthComparisonSampler = sampler_state
+{
+    Filter = MIN_MAG_LINEAR_MIP_POINT;
+    ComparisonFunc = LESS_EQUAL; // 샘플링 결과보다 작거나 같아야함
+};
+
 RasterizerState RS_Default
 {
 	FillMode = solid;

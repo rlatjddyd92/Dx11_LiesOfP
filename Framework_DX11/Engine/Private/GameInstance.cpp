@@ -15,6 +15,12 @@
 #include "Key_Manager.h"
 #include "PhysX_Manager.h"
 
+// 2024-11-06 ±è¼º¿ë
+#include "CSVFile_Manager.h"
+
+//Á¤½ÂÇö
+#include "Instance_Manager.h"
+
 IMPLEMENT_SINGLETON(CGameInstance)
 
 CGameInstance::CGameInstance()
@@ -102,6 +108,17 @@ HRESULT CGameInstance::Initialize_Engine(HINSTANCE hInst, _uint iNumLevels, cons
 	if (nullptr == m_pPhysX_Manager)
 		return E_FAIL;
 
+	// 2024-11-06 ±è¼º¿ë
+	m_pCSVFile_Manager = CCSVFile_Manager::Create();
+	if (nullptr == m_pCSVFile_Manager)
+		return E_FAIL;
+
+	// Á¤½ÂÇö
+	m_pInstance_Manager = CInstance_Manager::Create(*ppDevice, *ppContext);
+	if (nullptr == m_pInstance_Manager)
+		return E_FAIL;
+
+
 	return S_OK;
 }
 
@@ -152,6 +169,7 @@ HRESULT CGameInstance::Clear(_uint iLevelIndex)
 
 	/* ÄÄÆ÷³ÍÆ® ¿øÇüµéµµ ·¹º§º°·Î °ü¸®Çß¾ú´Ù. */
 	m_pComponent_Manager->Clear(iLevelIndex);
+
 
 	return S_OK;
 }
@@ -395,6 +413,36 @@ const _Vec3& CGameInstance::Get_CamPosition_Vec3() const
 	return m_pPipeLine->Get_CamPosition_Vec3();
 }
 
+const _Matrix* CGameInstance::Get_CascadeViewMatirx() const
+{
+	return m_pPipeLine->Get_CascadeViewMatirx();;
+}
+
+void CGameInstance::Set_CascadeViewMatirx(_Matrix* CascadeViewMatrices)
+{
+	m_pPipeLine->Set_CascadeViewMatirx(CascadeViewMatrices);
+}
+
+const _Matrix* CGameInstance::Get_CascadeProjMatirx() const
+{
+	return m_pPipeLine->Get_CascadeProjMatirx();
+}
+
+void CGameInstance::Set_CascadeProjMatirx(_Matrix* CascadeProjMatrices)
+{
+	m_pPipeLine->Set_CascadeProjMatirx(CascadeProjMatrices);
+}
+
+const _Matrix* CGameInstance::Get_CascadeProjInverseMatirx() const
+{
+	return m_pPipeLine->Get_CascadeProjInverseMatirx();
+}
+
+void CGameInstance::Set_CascadeProjInverseMatirx(_Matrix* CascadeProjInverseMatrices)
+{
+	m_pPipeLine->Set_CascadeProjInverseMatirx(CascadeProjInverseMatrices);
+}
+
 #pragma endregion
 
 #pragma region LightManager
@@ -403,7 +451,7 @@ HRESULT CGameInstance::Add_Light(const LIGHT_DESC & LightDesc)
 {
 	return m_pLight_Manager->Add_Light(LightDesc);
 }
-const LIGHT_DESC * CGameInstance::Get_LightDesc(_uint iIndex) const
+LIGHT_DESC * CGameInstance::Get_LightDesc(_uint iIndex)
 {
 	return m_pLight_Manager->Get_LightDesc(iIndex);
 }
@@ -418,6 +466,21 @@ HRESULT CGameInstance::Render_Lights(CShader * pShader, CVIBuffer_Rect * pVIBuff
 _int CGameInstance::Get_Total_LightCount()
 {
 	return m_pLight_Manager->Get_Total_Light_Count();
+}
+
+void CGameInstance::Delete_Light(_int iIndex)
+{
+	return m_pLight_Manager->Delete_Light(iIndex);
+}
+
+_int CGameInstance::Find_Light_Index(_Vec4 vPos)
+{
+	return m_pLight_Manager->Find_Light_Index(vPos);
+}
+
+_Vec3 CGameInstance::Get_DirectionLightDir()
+{
+	return m_pLight_Manager->Get_DirectionLightDir();
 }
 
 
@@ -440,9 +503,9 @@ HRESULT CGameInstance::Render_TextCenter(const _wstring& strFontTag, const _tcha
 #pragma endregion
 
 #pragma region TARGET_MANAGER
-HRESULT CGameInstance::Add_RenderTarget(const _wstring & strTargetTag, _uint iWidth, _uint iHeight, DXGI_FORMAT ePixelFormat, const _float4 & vClearColor)
+HRESULT CGameInstance::Add_RenderTarget(const _wstring & strTargetTag, _uint iWidth, _uint iHeight, DXGI_FORMAT ePixelFormat, const _float4 & vClearColor, _uint iArraySize)
 {
-	return m_pTarget_Manager->Add_RenderTarget(strTargetTag, iWidth, iHeight, ePixelFormat, vClearColor);	
+	return m_pTarget_Manager->Add_RenderTarget(strTargetTag, iWidth, iHeight, ePixelFormat, vClearColor, iArraySize);
 }
 
 HRESULT CGameInstance::Add_MRT(const _wstring & strMRTTag, const _wstring & strTargetTag)
@@ -561,11 +624,64 @@ _bool CGameInstance::RayCast_PhysX(_vector vRayPos, _vector vRayDir, _vector* vH
 }
 #pragma endregion
 
+// 2024-11-06 ±è¼º¿ë Ãß°¡
+#pragma region CSVFile_Manager
+HRESULT CGameInstance::FileOpenByRow(const _char* FilePath, _bool bIsRead)
+{
+	return m_pCSVFile_Manager->FileOpenByRow(FilePath, bIsRead);
+}
+_bool CGameInstance::LoadDataByRow(vector<_wstring>* vecDataBuffer)
+{
+	return m_pCSVFile_Manager->LoadDataByRow(vecDataBuffer);
+}
+_bool CGameInstance::SaveDataByRow(vector<_wstring>& vecDataBuffer)
+{
+	return m_pCSVFile_Manager->SaveDataByRow(vecDataBuffer);
+}
+void CGameInstance::FileClose()
+{
+	m_pCSVFile_Manager->FileClose();
+}
+HRESULT CGameInstance::LoadDataByFile(const _char* FilePath, vector<vector<_wstring>>* vecDataBuffer)
+{
+	return m_pCSVFile_Manager->LoadDataByFile(FilePath, vecDataBuffer);
+}
+HRESULT CGameInstance::SaveDataByFile(const _char* FilePath, vector<vector<_wstring>>& vecDataBuffer)
+{
+	return m_pCSVFile_Manager->SaveDataByFile(FilePath, vecDataBuffer);
+}
+_bool CGameInstance::IsFileRead()
+{
+	return m_pCSVFile_Manager->IsFileRead();
+}
+_bool CGameInstance::IsFileWrite()
+{
+	return m_pCSVFile_Manager->IsFileWrite();
+}
+#pragma endregion
+
+#pragma region CInstance_Manager
+CModel* CGameInstance::Add_NonAnimModel_Instance(_uint iLevelIndex, const _wstring& strPrototypeTag, void* pArg)
+{
+	return m_pInstance_Manager->Add_NonAnimModel(iLevelIndex, strPrototypeTag, pArg);
+}
+HRESULT CGameInstance::Draw_Instance(_uint iPass)
+{
+	return m_pInstance_Manager->Draw(iPass);
+}
+void CGameInstance::Clear_Instance()
+{
+	m_pInstance_Manager->Clear();
+}
+#pragma endregion
+
 void CGameInstance::Release_Engine()
 {
 	Safe_Release(m_pPhysX_Manager);
 	Safe_Release(m_pKey_Manager);
 	Safe_Release(m_pCollider_Manager);
+	// 2024-11-06 ±è¼º¿ë
+	Safe_Release(m_pCSVFile_Manager);
 
 	Safe_Release(m_pFrustum);
 	Safe_Release(m_pPicking);
@@ -578,6 +694,7 @@ void CGameInstance::Release_Engine()
 	Safe_Release(m_pComponent_Manager);
 	Safe_Release(m_pObject_Manager);
 	Safe_Release(m_pLevel_Manager);
+	Safe_Release(m_pInstance_Manager);
 	Safe_Release(m_pInput_Device);
 	Safe_Release(m_pGraphic_Device);
 

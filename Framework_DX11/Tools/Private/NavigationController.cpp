@@ -46,24 +46,24 @@ _bool CNavigationController::isCell_Picked(_float3 vPickPos)
 
 _int CNavigationController::Get_WhereCell(_float3 vPickPos)
 {
-	//if (Get_CellSize() == 0) //Cell이 없는 경우
-	//{
-	//	return -1;
-	//}
+	if (Get_CellSize() == 0) //Cell이 없는 경우
+	{
+		return -1;
+	}
 
-	//for (_uint i = 0; i < m_Cells.size(); ++i)
-	//{
-	//	CCell* pCell = m_Cells[i];
-	//	if (nullptr == pCell)
-	//		continue;
+	for (_uint i = 0; i < m_Cells.size(); ++i)
+	{
+		CCell* pCell = m_Cells[i];
+		if (nullptr == pCell)
+			continue;
 
-	//	_int			iNeighborIndex = { -1 };
+		_int			iNeighborIndex = { -1 };
 
-	//	if (true == m_Cells[i]->isIn(XMLoadFloat3(&vPickPos), &iNeighborIndex))
-	//	{
-	//		return i;
-	//	}
-	//}
+		if (true == m_Cells[i]->isIn(XMLoadFloat3(&vPickPos), &iNeighborIndex))
+		{
+			return i;
+		}
+	}
 	return -1;
 }
 

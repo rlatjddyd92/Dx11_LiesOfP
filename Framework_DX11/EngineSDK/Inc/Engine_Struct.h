@@ -75,6 +75,18 @@ namespace Engine
 		_float	fChangeDuration = 0.f;
 	}CHANGEANIMATION_DESC;
 
+	//오브젝트 저장 및 불러오기에 사용
+	typedef struct
+	{
+		_tchar		szModelTag[MAX_PATH];
+		_float3		vPosition;
+		_float3		vScale;
+		_float3		vRotation;
+		_bool		isInstance = { false };
+		_uint		iID;
+		_int		iCurrentCellNum;
+	}OBJECT_DEFAULT_DESC;
+
 	typedef struct ENGINE_DLL
 	{
 		XMFLOAT3		vPosition;	
@@ -174,12 +186,12 @@ namespace Engine
 
 	typedef struct ENGINE_DLL
 	{
-		XMFLOAT3		vPosition;
-		XMFLOAT3		vNormal;
-		XMFLOAT2		vTexcoord;
-		XMFLOAT3		vTangent;
+		XMFLOAT4		vRight;
+		XMFLOAT4		vUp;
+		XMFLOAT4		vLook;
+		XMFLOAT4		vTranslation;
 
-		static const unsigned int	iNumElements = 4;
+		static const unsigned int	iNumElements = 8;
 		static const D3D11_INPUT_ELEMENT_DESC	Elements[iNumElements];
-	}VTXMESHINSTANCE;
+	}VTXMODELINSTANCE;
 }

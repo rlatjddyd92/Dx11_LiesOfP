@@ -33,6 +33,21 @@ HRESULT CLevel_Tool::Initialize()
 	if (FAILED(m_pImGui_Manager->Initialize(m_pDevice, m_pContext)))
 		return E_FAIL;
 
+	// 프레임 실험용
+	//for (_uint i = 0; i < 200; ++i)
+	//{
+	//	CNonAnimModel::NONMODEL_DESC Desc{};
+	//	Desc.vPosition = _float3(1.f + i*2, 0.f, 0.f);
+	//	Desc.vScale = { 1.f,1.f,1.f };
+	//	Desc.vRotation = { 0.f,0.f,0.f };
+	//	Desc.iRenderGroupID = 0;
+	//	Desc.isInstance = true;
+	//	strcpy_s(Desc.szModelTag, "SM_Monstery_Machine_01A_Temp");
+
+	//	if (FAILED(m_pGameInstance->Add_CloneObject_ToLayer(LEVEL_TOOL, TEXT("Layer_Map"), TEXT("Prototype_GameObject_NonAnim"), &Desc)))
+	//		return E_FAIL;
+	//}
+
 	return S_OK;
 }
 
@@ -90,6 +105,9 @@ HRESULT CLevel_Tool::Ready_Layer_Camera()
 
 HRESULT CLevel_Tool::Ready_Layer_BackGround()
 {
+	if (FAILED(m_pGameInstance->Add_CloneObject_ToLayer(LEVEL_TOOL, TEXT("Layer_BackGround"), TEXT("Prototype_GameObject_Sky"))))
+		return E_FAIL;
+ 
 	//if (FAILED(m_pGameInstance->Add_CloneObject_ToLayer(LEVEL_TOOL, TEXT("Layer_BackGround"), TEXT("Prototype_GameObject_Terrain"))))
 	//	return E_FAIL;
 
@@ -127,4 +145,7 @@ void CLevel_Tool::Free()
 	__super::Free();
 
 	Safe_Release(m_pImGui_Manager);
+
+	// 인스턴싱을 할 모델들을 모아둔 매니저 클리어하기
+	m_pGameInstance->Clear_Instance();
 }

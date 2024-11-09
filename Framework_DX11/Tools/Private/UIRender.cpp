@@ -102,6 +102,9 @@ HRESULT CUIRender::Render()
 			if (FAILED(m_vecTextureInfo[rNow.iTexture_Index]->Texture->Bind_ShadeResource(m_pShaderCom, "g_Texture", 0)))
 				return E_FAIL;
 
+			if (FAILED(m_pShaderCom->Bind_RawValue("g_Color", &rNow.fTextureColor, sizeof(_float4))))
+				return E_FAIL;
+
 			if (FAILED(m_pShaderCom->Begin(0)))
 				return E_FAIL;
 
@@ -244,81 +247,34 @@ void CUIRender::Ready_Font()
 
 HRESULT CUIRender::Ready_Texture()
 {
-	ifstream file("../Bin/Resources/textures/UI/UIList.csv");  // 읽을 CSV 파일 이름
-	string line;
+	vector<vector<_wstring>> vecBuffer;
+	m_pGameInstance->LoadDataByFile("../Bin/Resources/textures/UI/UIList.csv", &vecBuffer);
 
-	if (!file.is_open())
-		return E_FAIL;
-
-	stack<_int> stackNum;
-	_int iTextureNum = 0;
-	getline(file, line);
-	for (_int i = 0; i < line.size(); ++i)
-		stackNum.push(line[i] - '0');
-
-	_int iCount = 0;
-	while (!stackNum.empty())
+	for (_int i = 2; i < vecBuffer.size(); ++i)
 	{
-		if ((stackNum.top() >= 0) && (stackNum.top() < 10))
-		{
-			iTextureNum += stackNum.top() * pow(10, iCount);
-			++iCount;
-		}
-		stackNum.pop();
-	}
+		_tchar* tPath = new _tchar[vecBuffer[i][0].size() + 1];
+		_tchar* tTag = new _tchar[vecBuffer[i][1].size() + 1];
 
-	getline(file, line); // 헤더 넘기기
+		memcpy(tPath, &vecBuffer[i][0][0], sizeof(_tchar) * (vecBuffer[i][0].size() + 1));
+		memcpy(tTag, &vecBuffer[i][1][0], sizeof(_tchar) * (vecBuffer[i][1].size() + 1));
 
-	m_vecTextureInfo.resize(iTextureNum);
-
-	_int iTextureCount = 0;
-
-	while (getline(file, line))
-	{
 		UTEXTURE* pNew = new UTEXTURE;
-		
-		pNew->strTexturePath = new _char[200];
-		pNew->strTextureTag = new _char[200];
-
-		_int iIndex = 0;
-		_int iNow = 0;
-
-		while (line[iIndex] != ',')
-		{
-			pNew->strTexturePath[iNow] = line[iIndex];
-			++iIndex;
-			++iNow;
-		}
-
-		pNew->strTexturePath[iNow] = '\0';
-
-		iNow = 0;
-		--iIndex;
-
-		do
-		{
-			++iIndex;
-			++iNow;
-			pNew->strTextureTag[iNow] = line[iIndex];
-		} while (line[iIndex] != '\0');
-
-		_tchar tPath[200] = {};
-		_tchar tTag[200] = {};
-
-		MultiByteToWideChar(CP_ACP, MB_PRECOMPOSED, pNew->strTexturePath, strlen(pNew->strTexturePath), tPath, 200);
-		MultiByteToWideChar(CP_ACP, MB_PRECOMPOSED, pNew->strTextureTag, strlen(pNew->strTextureTag), tTag, 200);
 
 		pNew->Texture = CTexture::Create(m_pDevice, m_pContext, tPath, 1);
+		pNew->strTexturePath = new _char[vecBuffer[i][0].size() + 1];
+		pNew->strTextureTag = new _char[vecBuffer[i][1].size() + 1];
 
 		if (FAILED(m_pGameInstance->Add_Prototype(LEVEL_TOOL, tTag, pNew->Texture)))
 			return E_FAIL;
 
-		m_vecTextureInfo[iTextureCount] = pNew;
-		++iTextureCount;
+		WideCharToMultiByte(CP_UTF8, 0, tPath, -1, pNew->strTexturePath, vecBuffer[i][0].size() + 1, nullptr, nullptr);
+		WideCharToMultiByte(CP_UTF8, 0, tTag, -1, pNew->strTextureTag, vecBuffer[i][1].size() + 1, nullptr, nullptr);
 
+		m_vecTextureInfo.push_back(pNew);
+
+		Safe_Delete_Array(tPath);
+		Safe_Delete_Array(tTag);
 	}
-
-	file.close();
 
 	return S_OK;
 }
@@ -359,7 +315,7 @@ void CUIRender::Free()
 
 	for (auto& iter : m_vecTextureInfo)
 	{
-		Safe_Release(iter->Texture);
+//		Safe_Release(iter->Texture);
 		Safe_Delete_Array(iter->strTexturePath);
 		Safe_Delete_Array(iter->strTextureTag);
 		Safe_Delete(iter);

@@ -79,7 +79,13 @@ PS_OUT PS_MAIN_SSAO(PS_IN In)
 	
     vector vDepthDesc = g_DepthTexture.Sample(PointSampler, In.vTexcoord);
     float fViewZ = vDepthDesc.y * 1000.f; // 뷰 스페이스상의 Z
-
+    
+    if (fViewZ >= 1000.f)  // 깊이 값이 거의 0인 경우 스카이박스라고 판단
+    {
+        Out.vColor = float4(1.0f, 1.0f, 1.0f, 1.0f); // 스카이박스를 흰색 또는 원하는 색으로 처리
+        return Out;
+    }
+    
     vector vNormalDesc = g_NormalTexture.Sample(PointSampler, In.vTexcoord);
     float3 vNormal = float3(vNormalDesc.xyz * 2.f - 1.f);
     vNormal = normalize(mul(vNormal, g_CameraViewMatrix).xyz);
@@ -102,13 +108,15 @@ PS_OUT PS_MAIN_SSAO(PS_IN In)
         float fSampleViewZ = g_DepthTexture.Sample(PointSampler, vNewTexCoord).y * 1000.f;
        
         // 깊이 차이를 비교
-        if (fSampleViewZ <= fViewZ + 0.0003f)
+        if (fSampleViewZ <= fViewZ + 0.0005f)
         {
             iOcc += 1;
         }
     }
     
-    Out.vColor = 1.f - saturate((float) iOcc / 16.f);
+    float fOcclusionFactor = saturate((float) iOcc / 16.0f);
+    Out.vColor = lerp(1.0f, 0.0f, fOcclusionFactor);
+    Out.vColor = lerp(Out.vColor, 1.0f, 0.3f); // 밝기 보정
     
     return Out;
 }

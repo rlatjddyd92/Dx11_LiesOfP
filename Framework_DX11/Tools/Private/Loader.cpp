@@ -3,6 +3,7 @@
 #include <functional>
 #include <io.h>
 
+#include "Sky.h"
 #include "Terrain.h"
 #include "BackGround.h"
 #include "GameInstance.h"
@@ -16,6 +17,8 @@
 
 #include "Particle_Effect.h"
 #include "Texture_Effect.h"
+
+#include "Effect_Container.h"
 
 #include "Controller_EffectTool.h"
 #include "Controller_AnimationTool.h"
@@ -154,10 +157,10 @@ HRESULT CLoader::LoadingMapModel0()
 		hr = S_OK;
 	}
 
-	//if (hr == E_FAIL)
-	//	MSG_BOX(TEXT("맵 로드0 에서 터짐"));
+	if (hr == E_FAIL)
+		MSG_BOX(TEXT("맵 로드0 에서 터짐"));
 
-	//LeaveCriticalSection(&m_CriticalSection_Map0);
+	LeaveCriticalSection(&m_CriticalSection_Map0);
 
 	return hr;
 }
@@ -278,6 +281,8 @@ HRESULT CLoader::Ready_Resources_For_ToolLevel()
 		CTexture::Create(m_pDevice, m_pContext, TEXT("../Bin/Resources/Textures/Snow/Snow.png"), 1))))
 		return E_FAIL;
 
+ 	//Ready_Textures_For_Decal();
+
 #pragma region PARTICLE
 	/* For. Prototype_Component_Texture_Particle_Spark */
 	if (FAILED(m_pGameInstance->Add_Prototype(LEVEL_TOOL, TEXT("Prototype_Component_Texture_Particle_Spark"),
@@ -290,23 +295,30 @@ HRESULT CLoader::Ready_Resources_For_ToolLevel()
 		CTexture::Create(m_pDevice, m_pContext, TEXT("../Bin/Resources/Textures/Effect/Particle_Circle.dds"), 1))))
 		return E_FAIL;
 	CController_EffectTool::Get_Instance()->Add_Particle_ProtytypeTag(TEXT("Prototype_Component_Texture_Particle_Circle"));
+
+	/* For. Prototype_Component_Texture_Particle_Thunder */
+	if (FAILED(m_pGameInstance->Add_Prototype(LEVEL_TOOL, TEXT("Prototype_Component_Texture_Particle_Thunder"),
+		CTexture::Create(m_pDevice, m_pContext, TEXT("../Bin/Resources/Textures/Effect/T_Thunder_02_C_HJS.dds"), 1))))
+		return E_FAIL;
+	CController_EffectTool::Get_Instance()->Add_Particle_ProtytypeTag(TEXT("Prototype_Component_Texture_Particle_Thunder"));
+
 #pragma endregion
 
 #pragma region EFFECT
-	/* For. Prototype_Component_Texture_Particle_Flare */
+	/* For. Prototype_Component_Texture_TE_Flare */
 	if (FAILED(m_pGameInstance->Add_Prototype(LEVEL_TOOL, TEXT("Prototype_Component_Texture_TE_Flare"),
 		CTexture::Create(m_pDevice, m_pContext, TEXT("../Bin/Resources/Textures/Effect/T_Flare_01_C_HJS.dds"), 1))))
 		return E_FAIL;
 	CController_EffectTool::Get_Instance()->Add_TE_ProtytypeTag(TEXT("Prototype_Component_Texture_TE_Flare"));
 
-	/* For. Prototype_Component_Texture_Particle_Ring */
+	/* For. Prototype_Component_Texture_TE_Ring */
 	if (FAILED(m_pGameInstance->Add_Prototype(LEVEL_TOOL, TEXT("Prototype_Component_Texture_TE_Ring"),
 		CTexture::Create(m_pDevice, m_pContext, TEXT("../Bin/Resources/Textures/Effect/T_Ring_04_C_KMH.dds"), 1))))
 		return E_FAIL;
 	CController_EffectTool::Get_Instance()->Add_TE_ProtytypeTag(TEXT("Prototype_Component_Texture_TE_Ring"));
 
 	// 테스트용. 나중에 링이랑 합칠거임.
-	/* For. Prototype_Component_Texture_Particle_Spread */
+	/* For. Prototype_Component_Texture_TE_Spread */
 	if (FAILED(m_pGameInstance->Add_Prototype(LEVEL_TOOL, TEXT("Prototype_Component_Texture_TE_Spread"),
 		CTexture::Create(m_pDevice, m_pContext, TEXT("../Bin/Resources/Textures/Effect/T_Ring_08_C_HJS.dds"), 1))))
 		return E_FAIL;
@@ -319,6 +331,17 @@ HRESULT CLoader::Ready_Resources_For_ToolLevel()
 		return E_FAIL;
 	CController_EffectTool::Get_Instance()->Add_TE_ProtytypeTag(TEXT("Prototype_Component_Texture_TE_LensFlare"));
 
+	// 테스트용. 나중에 플레어랑 합칠거임.
+/* For. Prototype_Component_Texture_Particle_Spread */
+	if (FAILED(m_pGameInstance->Add_Prototype(LEVEL_TOOL, TEXT("Prototype_Component_Texture_TE_Spark"),
+		CTexture::Create(m_pDevice, m_pContext, TEXT("../Bin/Resources/Textures/Effect/T_Tile_Spark_01_C_HJS.dds"), 1))))
+		return E_FAIL;
+	CController_EffectTool::Get_Instance()->Add_TE_ProtytypeTag(TEXT("Prototype_Component_Texture_TE_Spark"));
+
+	if (FAILED(m_pGameInstance->Add_Prototype(LEVEL_TOOL, TEXT("Prototype_Component_Texture_TE_Noise.dds"),
+		CTexture::Create(m_pDevice, m_pContext, TEXT("../Bin/Resources/Textures/Effect/T_Tile_Noise_39_C_RSW.dds"), 1))))
+		return E_FAIL;
+	CController_EffectTool::Get_Instance()->Add_TE_ProtytypeTag(TEXT("Prototype_Component_Texture_TE_Noise"));
 #pragma endregion
 
 
@@ -330,6 +353,11 @@ HRESULT CLoader::Ready_Resources_For_ToolLevel()
 
 	if (FAILED(m_pGameInstance->Add_Prototype(LEVEL_TOOL, TEXT("Prototype_Component_VIBuffer_Rect"),
 		CVIBuffer_Rect::Create(m_pDevice, m_pContext))))
+		return E_FAIL;
+
+	/* For. Prototype_Component_VIBuffer_Cube */
+	if (FAILED(m_pGameInstance->Add_Prototype(LEVEL_TOOL, TEXT("Prototype_Component_VIBuffer_Cube"),
+		CVIBuffer_Cube::Create(m_pDevice, m_pContext))))
 		return E_FAIL;
 
 	CVIBuffer_Instancing::INSTANCE_DESC ParticleDesc = {};
@@ -371,6 +399,11 @@ HRESULT CLoader::Ready_Resources_For_ToolLevel()
 		CShader::Create(m_pDevice, m_pContext, TEXT("../Bin/ShaderFiles/Shader_VtxPointInstance.hlsl"), VTXPOINTINSTANCE::Elements, VTXPOINTINSTANCE::iNumElements))))
 		return E_FAIL;
 
+	/* For. Prototype_Component_Shader_VtxCubeTex */
+	if (FAILED(m_pGameInstance->Add_Prototype(LEVEL_TOOL, TEXT("Prototype_Component_Shader_VtxCubeTex"),
+		CShader::Create(m_pDevice, m_pContext, TEXT("../Bin/ShaderFiles/Shader_VtxCubeTex.hlsl"), VTXCUBETEX::Elements, VTXCUBETEX::iNumElements))))
+		return E_FAIL;
+
 	/* For. Prototype_Component_Shader_Effect_Texture */
 	if (FAILED(m_pGameInstance->Add_Prototype(LEVEL_TOOL, TEXT("Prototype_Component_Shader_Effect_Texture"),
 		CShader::Create(m_pDevice, m_pContext, TEXT("../Bin/ShaderFiles/Shader_Effect_Texture.hlsl"), VTXPOSTEX::Elements, VTXPOSTEX::iNumElements))))
@@ -404,6 +437,11 @@ HRESULT CLoader::Ready_Resources_For_ToolLevel()
 		CTargetBall::Create(m_pDevice, m_pContext))))
 		return E_FAIL;
 
+	/* For. Prototype_GameObject_Sky */
+	if (FAILED(m_pGameInstance->Add_Prototype(TEXT("Prototype_GameObject_Sky"),
+		CSky::Create(m_pDevice, m_pContext))))
+		return E_FAIL;
+
 #pragma region EFFECT
 	/* For. Prototype_GameObject_Particle_Effect */
 	if (FAILED(m_pGameInstance->Add_Prototype(TEXT("Prototype_GameObject_Particle_Effect"),
@@ -414,7 +452,13 @@ HRESULT CLoader::Ready_Resources_For_ToolLevel()
 	if (FAILED(m_pGameInstance->Add_Prototype(TEXT("Prototype_GameObject_Texture_Effect"),
 		CTexture_Effect::Create(m_pDevice, m_pContext))))
 		return E_FAIL;
+	
+	/* For. Prototype_GameObject_Effect_Continaer */
+	if (FAILED(m_pGameInstance->Add_Prototype(TEXT("Prototype_GameObject_Effect_Continaer"),
+		CEffect_Container::Create(m_pDevice, m_pContext))))
+		return E_FAIL;
 #pragma endregion
+
 	m_isFinished_Main = true;
 
 	return S_OK;
@@ -662,6 +706,74 @@ HRESULT CLoader::Ready_Resources_For_ToolLevel_Map1()
 HRESULT CLoader::Ready_Resources_For_ToolLevel_Monster()
 {
 	m_isFinished_Monster = true;
+
+	return S_OK;
+}
+
+HRESULT CLoader::Ready_Textures_For_Decal()
+{
+
+#pragma region FX DECAL
+
+	// _finddata_t : <io.h>에서 제공하며 파일 정보를 저장하는 구조체
+	_finddata_t fd;
+
+	// _findfirst : <io.h>에서 제공하며 사용자가 설정한 경로 내에서 가장 첫 번째 파일을 찾는 함수
+	intptr_t handle = _findfirst("../Bin/Resources/Textures/Decal/FX_Decals/*", &fd);
+
+	if (handle == -1)
+		return E_FAIL;
+
+	int iResult = 0;
+
+	char szCurPath[128] = "../Bin/Resources/Textures/Decal/FX_Decals/";    // 상대 경로
+	char szFullPath[128] = "";
+
+	_wstring strPrototype = TEXT("Prototype_Component_Texture_");
+	_uint iNum = 0;
+
+	while (iResult != -1)
+	{
+		strcpy_s(szFullPath, szCurPath);
+		strcat_s(szFullPath, fd.name);
+
+		_char szFileName[MAX_PATH] = "";
+		_char szExt[MAX_PATH] = "";
+		_splitpath_s(szFullPath, nullptr, 0, nullptr, 0, szFileName, MAX_PATH, szExt, MAX_PATH);
+
+		if (!strcmp(fd.name, ".") || !strcmp(fd.name, "..")
+			|| strcmp(szExt, ".dds"))
+		{
+			iResult = _findnext(handle, &fd);
+			continue;
+		}
+
+		string strFileName = szFileName;
+		_wstring strPrototypeName;
+		
+		strPrototypeName.assign(strFileName.begin(), strFileName.end());
+		wprintf(strPrototypeName.c_str());
+
+		_tchar tchar_Path[128];
+		int i = 0;
+		while (szFullPath[i] != '\0')
+		{
+			// 각 char 문자를 wchar_t로 변환하여 복사
+			tchar_Path[i] = static_cast<wchar_t>(szFullPath[i]);
+			i++;
+		}
+
+		//종료 문자 추가
+		tchar_Path[i] = L'\0';
+
+		if (FAILED(m_pGameInstance->Add_Prototype(LEVEL_TOOL, strPrototypeName,
+			CTexture::Create(m_pDevice, m_pContext, tchar_Path, 1))))
+			return E_FAIL;
+
+		//_findnext : <io.h>에서 제공하며 다음 위치의 파일을 찾는 함수, 더이상 없다면 -1을 리턴
+		iResult = _findnext(handle, &fd);
+	}
+#pragma endregion
 
 	return S_OK;
 }

@@ -86,7 +86,7 @@ HRESULT CPicking::Initialize(HWND hWnd)
 
 _bool CPicking::Picking(_float3 * pPickPos)
 {
-	/*m_pContext->CopyResource(m_pPickDepthTexture, );*/
+	//m_pContext->CopyResource(m_pPickDepthTexture, );
 
 	if (FAILED(m_pGameInstance->Copy_RenderTarget(TEXT("Target_PickDepth"), m_pPickDepthTexture)))
 		return false;

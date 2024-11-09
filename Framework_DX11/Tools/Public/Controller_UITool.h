@@ -54,9 +54,9 @@ public:
 		_float2 GetBarSize()
 		{
 			if (bBarDirecX == 1)
-				return { fSize.x * fRatio, fSize.y };
+				return { abs(fAdjust_Start.x - fAdjust_End.x) * fRatio, fSize.y };
 			else
-				return { fSize.x, fSize.y * fRatio };
+				return { fSize.x, abs(fAdjust_Start.y - fAdjust_End.y) * fRatio };
 		}
 
 		_float2 MovePart(_float2 fParentPosition)
@@ -84,6 +84,8 @@ public:
 
 		_float2 fSize = { 0.f,0.f };
 		_float2 fPosition = { 0.f,0.f };
+
+		_int iGroupIndex = 0;
 
 		// 현재 위치
 		_float2 fAdjust = { 0.f,0.f }; // <- 중심점(Page의 포지션)에서 어디로 얼마나 떨어져 있는지
@@ -114,7 +116,6 @@ public:
 	typedef struct UIPAGE_INFO
 	{
 		_char* strUIPage_Name = {};
-		_int iPage_Index = -1;
 		_int iNowSelectPart = 0;
 		_float2 fPosition = { g_iWinSizeX * 0.5f,g_iWinSizeY*0.5f }; // 페이지의 포지션
 		vector<UPART*> vecPart;
@@ -140,9 +141,22 @@ public:
 	_int GetPartCount() { return m_vecPageInfo[m_iNowSelectNum]->vecPart.size(); }
 
 
-public: // imgui 사용
+public: // imgui_UI메뉴 전용
 	void UITool_Edit(); 
 	HRESULT UITool_Render();
+
+public: // 개발 편의 기능
+	// SystemMessage
+	void Show_StaticSystemMessage(_wstring Text); // <- Text에 작성한 내용을 최상단에 고정으로 띄운다, Off 함수 안 쓰면 계속 떠 있음, 이미 StaticMessage가 있는 상황에서 함수 다시 쓰면 내용 바뀜
+	void Off_StaticSystemMessage(); // <- StaticMessage Off 명령
+	void Show_SystemMessage(_wstring Text, _float fTime); // 표시 내용과 노출 시간 설정, 메시지는 한번에 10개까지 노출 가능(Static 포함 10개)
+
+	//MouseInfo
+	void Show_MouseInfo(_wstring DataNameA, _float* DataA,
+		_wstring DataNameB = TEXT("none"), _float* DataB = nullptr,
+		_wstring DataNameC = TEXT("none"), _float* DataC = nullptr,
+		_wstring DataNameD = TEXT("none"), _float* DataD = nullptr); // 설정된 내용에 따라 커서 옆에 정보 노출
+
 
 private:
 	void UIPage_Edit();
@@ -162,6 +176,9 @@ private:
 
 private:
 	HRESULT InitializeResource();
+	HRESULT SavePage();
+	HRESULT LoadPage();
+
 	HRESULT SavePart();
 	HRESULT LoadPart();
 	HRESULT InitializeComponent();
@@ -181,7 +198,7 @@ private:
 	_int m_iTextureNum = 0;
 	_int m_iPageNum = 100;
 
-	_char* m_ArrPageName[100];
+	_char* m_ArrPageName[_int(UIPAGE::PAGE_END)];
 
 	_char m_InputPageName[100] = "";
 
@@ -200,7 +217,8 @@ private:
 	_char* m_szPositionType[3] = { "Static", "Move", "Bar" };
 	_char* m_szBarDirec[2] = { "Y", "X" };
 	
-
+	vector<_wstring> m_DataTag_Page;
+	vector<_wstring> m_DataTag_Part;
 
 public:
 	virtual void Free() override;

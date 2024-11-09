@@ -52,6 +52,10 @@ private:
 	CTexture_Effect(const CTexture_Effect& Prototype);
 	virtual ~CTexture_Effect() = default;
 
+public:
+	TEXTURE_EFFECT_DESC* Get_SaveDesc_Ptr() {
+		return &m_SaveDesc;
+	}
 
 public:
 	virtual HRESULT Initialize_Prototype();
@@ -61,10 +65,13 @@ public:
 	virtual void Late_Update(_float fTimeDelta);
 	virtual HRESULT Render();
 
+
+public:
+	virtual void Reset() override;
+
 public:
 	void Set_Desc(const TEXTURE_EFFECT_DESC& desc);
 	TEXTURE_EFFECT_DESC Get_Desc();
-	void Reset();
 
 private:
 	class CShader* m_pShaderCom = { nullptr };
@@ -90,6 +97,8 @@ private:
 
 	_float	m_fAccumulateTime = { 0.f };
 	_float	m_fCurrenrtIndex = { 0.f };
+
+	TEXTURE_EFFECT_DESC m_SaveDesc = {};
 
 private:
 	HRESULT Ready_Components(const _wstring strTexturTag);

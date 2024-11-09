@@ -8,6 +8,20 @@ struct VS_IN_MODEL
     float3 vTangent : TANGENT;
 };
 
+struct VS_IN_MODEL_INSTANCE
+{
+    float3 vPosition : POSITION;
+    float3 vNormal : NORMAL;
+    float2 vTexcoord : TEXCOORD0;
+    float3 vTangent : TANGENT;
+    
+	/* InputSlot : 1 */
+    float4 vRight : TEXCOORD1;
+    float4 vUp : TEXCOORD2;
+    float4 vLook : TEXCOORD3;
+    float4 vTranslation : TEXCOORD4;
+};
+
 struct VS_OUT_MODEL
 {
     float4 vPosition : SV_POSITION;
@@ -49,7 +63,6 @@ struct PS_OUT_MODEL
     vector vNormal : SV_TARGET1;
     vector vDepth : SV_TARGET2;
     vector vARM : SV_TARGET3;
-    vector vPickDepth : SV_TARGET4;
 };
 
 struct PS_IN_NORMAL

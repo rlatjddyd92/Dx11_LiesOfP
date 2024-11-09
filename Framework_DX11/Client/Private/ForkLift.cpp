@@ -22,6 +22,9 @@ HRESULT CForkLift::Initialize_Prototype()
 HRESULT CForkLift::Initialize(void * pArg)
 {
 	CGameObject::GAMEOBJECT_DESC		Desc{};
+
+	Desc.fSpeedPerSec = 10.0f;
+	Desc.fRotationPerSec = XMConvertToRadians(180.0f);
 	
 	/* 직교퉁여을 위한 데이터들을 모두 셋하낟. */
 	if (FAILED(__super::Initialize(&Desc)))
@@ -44,7 +47,10 @@ void CForkLift::Priority_Update(_float fTimeDelta)
 
 void CForkLift::Update(_float fTimeDelta)
 {
-
+	if (GetKeyState(VK_UP) & 0x8000)
+	{
+		m_pTransformCom->Go_Straight(fTimeDelta, nullptr);
+	}
 
 }
 
@@ -53,6 +59,7 @@ void CForkLift::Late_Update(_float fTimeDelta)
 	/* 직교투영을 위한 월드행렬까지 셋팅하게 된다. */
 	__super::Late_Update(fTimeDelta);
 
+	m_pModelCom->Add_InstanceData(m_pTransformCom->Get_WorldMatrix());
 	m_pGameInstance->Add_RenderObject(CRenderer::RG_NONBLEND, this);
 }
 
@@ -73,10 +80,10 @@ HRESULT CForkLift::Render()
 		if (FAILED(m_pModelCom->Bind_Material(m_pShaderCom, "g_DiffuseTexture", DIFFUSE, (_uint)i)))
 			return E_FAIL;
 		
-		if (FAILED(m_pShaderCom->Begin(1)))
+		if (FAILED(m_pShaderCom->Begin(0)))
 			return E_FAIL;
 
-		if (FAILED(m_pModelCom->Render((_uint)i)))
+		if (FAILED(m_pModelCom->Render_Instance((_uint)i)))
 			return E_FAIL;
 	}	
 
@@ -88,7 +95,7 @@ HRESULT CForkLift::Render()
 HRESULT CForkLift::Ready_Components()
 {
 	/* FOR.Com_Shader */
-	if (FAILED(__super::Add_Component(LEVEL_GAMEPLAY, TEXT("Prototype_Component_Shader_VtxModel"),
+	if (FAILED(__super::Add_Component(LEVEL_STATIC, TEXT("Prototype_Component_Shader_VtxModelInstnace"),
 		TEXT("Com_Shader"), reinterpret_cast<CComponent**>(&m_pShaderCom))))
 		return E_FAIL;
 		

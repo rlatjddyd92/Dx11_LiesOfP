@@ -8,6 +8,8 @@
 #include "Particle_Effect.h"
 #include "Texture_Effect.h"
 
+#include "Effect_Container.h"
+
 IMPLEMENT_SINGLETON(CController_EffectTool)
 
 CController_EffectTool::CController_EffectTool()
@@ -28,6 +30,9 @@ HRESULT CController_EffectTool::Add_Particle()
 	desc.fRotationPerSec = XMConvertToRadians(90.f);
 	desc.fSpeedPerSec = 1.f;
 	desc.iLevelIndex = LEVEL_TOOL;
+
+	desc.pParentMatrix = { nullptr };
+
 	desc.iNumInstance = m_iNumInstance;
 	desc.vCenter = m_vCenter;
 	desc.vExceptRange = m_vExceptRange;
@@ -354,6 +359,8 @@ HRESULT CController_EffectTool::Add_TE()
 	desc.fSpeedPerSec		= 1.f;
 	desc.iLevelIndex		= LEVEL_TOOL;
 	
+	desc.pParentMatrix = { nullptr };
+
 	desc.strTexturTag		= m_TE_PrototypeTags[m_iSelectedTETextureIndex];
 	
 	desc.iState				= m_iTEState;
@@ -582,6 +589,69 @@ void CController_EffectTool::Delete_TE()
 		++iIndex;
 	}
 
+}
+
+HRESULT CController_EffectTool::Add_EffectContainer()
+{
+	Delete_EffectContainer();
+
+	vector<void*> pParticleDescs;
+	vector<void*> pTextureDesc;
+	vector<void*> pMeshDesc;
+
+	CLayer* pPELayer = m_pGameInstance->Find_Layer(LEVEL_TOOL, TEXT("Layer_Particle"));
+	if (nullptr != pPELayer)
+	{
+		for (auto& elem : pPELayer->Get_ObjectList())
+		{
+			pParticleDescs.emplace_back(static_cast<CParticle_Effect*>(elem)->Get_SaveDesc_Ptr());
+		}
+	}
+
+	CLayer* pTELayer = m_pGameInstance->Find_Layer(LEVEL_TOOL, TEXT("Layer_TextureEffect"));
+	if (nullptr != pTELayer)
+	{
+		for (auto& elem : pTELayer->Get_ObjectList())
+		{
+			pTextureDesc.emplace_back(static_cast<CTexture_Effect*>(elem)->Get_SaveDesc_Ptr());
+		}
+	}
+
+
+	CEffect_Container::EFFECT_DESC EffectDesc = {};
+	EffectDesc.fRotationPerSec = XMConvertToRadians(90.f);
+	EffectDesc.fSpeedPerSec = 1.f;
+	EffectDesc.iLevelIndex = LEVEL_TOOL;
+	EffectDesc.pParticleEffect_Descs = pParticleDescs;
+	EffectDesc.pTextureEffect_Descs = pTextureDesc;
+	EffectDesc.pMeshEffect_Descs = pMeshDesc;
+
+	if (FAILED(m_pGameInstance->Add_CloneObject_ToLayer(LEVEL_TOOL, TEXT("Layer_Effect"), TEXT("Prototype_GameObject_Effect_Continaer"), &EffectDesc)))
+		return E_FAIL;
+}
+
+void CController_EffectTool::Reset_EffectContainer()
+{
+	CGameObject* pGameObject = m_pGameInstance->Find_Object(LEVEL_TOOL, TEXT("Layer_Effect"), 0);
+
+	if (nullptr == pGameObject)
+		return;
+
+	CEffect_Container* pContainer = static_cast<CEffect_Container*>(pGameObject);
+	pContainer->Reset_Effects();
+}
+
+void CController_EffectTool::Delete_EffectContainer()
+{
+	CLayer* pLayer = m_pGameInstance->Find_Layer(LEVEL_TOOL, TEXT("Layer_Effect"));
+	if (nullptr == pLayer)
+		return;
+	
+	if (0 == pLayer->Get_ObjectList().size())
+		return;
+
+	Safe_Release(*(pLayer->Get_ObjectList().begin()));
+	pLayer->Get_ObjectList().erase(pLayer->Get_ObjectList().begin());
 }
 
 

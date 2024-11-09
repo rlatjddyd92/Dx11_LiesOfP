@@ -31,12 +31,20 @@ HRESULT CMainApp::Initialize()
 	if (FAILED(Open_Level(LEVEL_TOOL)))
 		return E_FAIL;
 
+	if (FAILED(m_pGameInstance->Add_Font(TEXT("Font_145"), TEXT("../Bin/Resources/Fonts/143ex.spritefont"))))
+		return E_FAIL;
+
 	return S_OK;
 }
 
 void CMainApp::Update(_float fTimeDelta)
 {
 	m_pGameInstance->Update_Engine(fTimeDelta);
+
+#ifdef _DEBUG
+	m_fTimeAcc += fTimeDelta;
+#endif
+
 }
 
 HRESULT CMainApp::Render()
@@ -50,11 +58,23 @@ HRESULT CMainApp::Render()
 
 	m_pGameInstance->Draw_Engine();
 
+#ifdef _DEBUG
+	++m_iNumDraw;
+
+	if (m_fTimeAcc >= 1.f)
+	{
+		wsprintf(m_szFPS, TEXT("FPS : %d"), m_iNumDraw);
+		m_fTimeAcc = 0.f;
+		m_iNumDraw = 0;
+	}
+
+	m_pGameInstance->Render_Text(TEXT("Font_145"), m_szFPS, XMVectorSet(0.f, 0.f, 0.f, 1.f), XMVectorSet(1.f, 0.f, 0.f, 1.f));
+#endif
+
 	m_pGameInstance->Render_End();
 
 	return S_OK;
 }
-
 
 HRESULT CMainApp::Ready_Prototype_Component_Static()
 {

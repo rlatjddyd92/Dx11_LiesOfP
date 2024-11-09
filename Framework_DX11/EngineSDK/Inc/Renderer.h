@@ -22,7 +22,6 @@ public:
 public:
 	HRESULT Initialize();
 	HRESULT Add_RenderObject(RENDERGROUP eRenderGroupID, class CGameObject* pRenderObject);
-	HRESULT Add_InstanceRenderObject(RENDERGROUP eRenderGroupID, class CGameObject* pRenderObject, const _wstring strModelName);
 	HRESULT Draw();
 
 #ifdef _DEBUG
@@ -47,7 +46,7 @@ private:
 
 	
 	list<class CGameObject*>	m_RenderObjects[RG_END];
-	map<_wstring, list<class CGameObject*>>	m_InstanceRenderObjects[RG_END];
+	list<CGameObject*>			m_InstanceRenderObjects[RG_END];
 
 private:
 	class CShader*				m_pShader = { nullptr };
@@ -72,7 +71,7 @@ private:
 	class CTexture*				m_pNoiseTexture_SSAO = { nullptr };
 
 	/* Cascade */
-	ID3D11DepthStencilView*		m_pCascadeDSVArr = { nullptr };
+	ID3D11DepthStencilView*		m_pCascadeDepthStencilViewArr = { nullptr };
 
 #ifdef _DEBUG
 private:
@@ -102,12 +101,12 @@ private:
 	HRESULT Render_Blend();
 	HRESULT Render_UI();
 
-	HRESULT Render_CascadeShdow();
+	HRESULT Render_Cascade();
 
 private:
 	HRESULT Ready_LightDepthStencilView();
 	HRESULT Copy_BackBuffer();
-	HRESULT Ready_Cascade();
+	HRESULT Ready_CascadeDepthStencilView();
 
 #ifdef _DEBUG
 private:

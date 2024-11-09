@@ -56,7 +56,7 @@ void CBackGround::Late_Update(_float fTimeDelta)
 	__super::Late_Update(fTimeDelta);
 	
 
-	m_pGameInstance->Add_RenderObject(CRenderer::RG_PRIORITY, this);
+	m_pGameInstance->Add_RenderObject(CRenderer::RG_UI, this);
 }
 
 HRESULT CBackGround::Render()

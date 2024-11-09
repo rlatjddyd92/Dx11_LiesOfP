@@ -101,13 +101,25 @@ public:
 
 	const _Vec4& Get_CamPosition_Vec4() const;
 	const _Vec3& Get_CamPosition_Vec3() const;
+
+	const _Matrix* Get_CascadeViewMatirx() const;
+	void Set_CascadeViewMatirx(_Matrix* CascadeViewMatrices);
+
+	const _Matrix* Get_CascadeProjMatirx() const;
+	void Set_CascadeProjMatirx(_Matrix* CascadeProjMatrices);
+
+	const _Matrix* Get_CascadeProjInverseMatirx() const;
+	void Set_CascadeProjInverseMatirx(_Matrix* CascadeProjInverseMatrices);
 #pragma endregion
 
 #pragma region LIGHT_MANAGER
 	HRESULT Add_Light(const LIGHT_DESC& LightDesc);
-	const LIGHT_DESC* Get_LightDesc(_uint iIndex) const;
+	LIGHT_DESC* Get_LightDesc(_uint iIndex);
 	HRESULT Render_Lights(class CShader* pShader, class CVIBuffer_Rect* pVIBuffer);
 	_int Get_Total_LightCount();
+	void Delete_Light(_int iIndex);
+	_int Find_Light_Index(_Vec4 vPos);
+	_Vec3 Get_DirectionLightDir();
 #pragma endregion
 
 #pragma region FONT_MANAGER
@@ -117,7 +129,7 @@ public:
 #pragma endregion
 
 #pragma region TARGET_MANAGER
-	HRESULT Add_RenderTarget(const _wstring& strTargetTag, _uint iWidth, _uint iHeight, DXGI_FORMAT ePixelFormat, const _float4& vClearColor);
+	HRESULT Add_RenderTarget(const _wstring& strTargetTag, _uint iWidth, _uint iHeight, DXGI_FORMAT ePixelFormat, const _float4& vClearColor, _uint iArraySize = 1);
 	HRESULT Add_MRT(const _wstring& strMRTTag, const _wstring& strTargetTag);
 	HRESULT Begin_MRT(const _wstring& strMRTTag, ID3D11DepthStencilView* pDSV = nullptr);
 	HRESULT End_MRT();
@@ -165,6 +177,27 @@ public:
 		_bool   RayCast_PhysX(_vector vRayPos, _vector vRayDir, _vector* vHitPos, _vector* vNormal, _float* fHitDistance);
 #pragma endregion
 
+		// 2024-11-06 김성용 추가 
+#pragma region CSVFileManager
+		HRESULT		FileOpenByRow(const _char* FilePath, _bool bIsRead);// bIsRead가 true면 읽기 false면 쓰기
+		_bool		LoadDataByRow(vector<_wstring>* vecDataBuffer);
+		_bool		SaveDataByRow(vector<_wstring>& vecDataBuffer);
+		void		FileClose();
+
+		HRESULT		LoadDataByFile(const _char* FilePath, vector<vector<_wstring>>* vecDataBuffer);
+		HRESULT		SaveDataByFile(const _char* FilePath, vector<vector<_wstring>>& vecDataBuffer);
+
+		_bool		IsFileRead();
+		_bool		IsFileWrite();
+
+#pragma endregion 
+
+#pragma region CInstance_Manager
+		CModel* Add_NonAnimModel_Instance(_uint iLevelIndex, const _wstring& strPrototypeTag, void* pArg = nullptr );
+		HRESULT Draw_Instance(_uint iPass);
+		void Clear_Instance();
+#pragma endregion
+
 private:
 	class CGraphic_Device*			m_pGraphic_Device = { nullptr };
 	class CInput_Device*			m_pInput_Device = { nullptr };
@@ -184,6 +217,10 @@ private:
 	class CCollider_Manager*		m_pCollider_Manager = { nullptr };
 	class CKey_Manager*				m_pKey_Manager = { nullptr };
 	class CPhysX_Manager*			m_pPhysX_Manager = { nullptr };
+	class CInstance_Manager*			m_pInstance_Manager = { nullptr };
+
+	// 2024-11-06 김성용
+	class CCSVFile_Manager*			m_pCSVFile_Manager = { nullptr };
 
 public:	
 	void Release_Engine();

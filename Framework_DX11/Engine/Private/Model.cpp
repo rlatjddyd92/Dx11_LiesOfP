@@ -155,7 +155,6 @@ HRESULT CModel::Initialize_Prototype(TYPE eType, const _char * pModelFilePath, _
 			return E_FAIL;
 	}
 
-
 	CloseHandle(hFile);
 
 	return S_OK;
@@ -168,6 +167,42 @@ HRESULT CModel::Initialize(void * pArg)
 	ZeroMemory(m_isEnd_Animations, m_iNumAnimations * sizeof(_bool));
 	ZeroMemory(m_isEnd_Animations_Boundary, m_iNumAnimations * sizeof(_bool));
 
+	m_isInstance = (_bool*)pArg;
+
+	if (m_isInstance)
+	{
+		m_iInstanceStride = sizeof(VTXMODELINSTANCE);
+		m_iNumInstance = 100;
+
+		ZeroMemory(&m_InstanceBufferDesc, sizeof m_InstanceBufferDesc);
+		m_InstanceBufferDesc.ByteWidth = m_iInstanceStride * m_iNumInstance;
+		m_InstanceBufferDesc.Usage = D3D11_USAGE_DYNAMIC; /* 동적버퍼로 생성한다. */
+		m_InstanceBufferDesc.BindFlags = D3D11_BIND_VERTEX_BUFFER;
+		m_InstanceBufferDesc.CPUAccessFlags = D3D11_CPU_ACCESS_WRITE;
+		m_InstanceBufferDesc.MiscFlags = 0;
+		m_InstanceBufferDesc.StructureByteStride = m_iInstanceStride;
+
+		m_pInstanceVertices = new VTXMODELINSTANCE[m_iNumInstance];
+		ZeroMemory(m_pInstanceVertices, sizeof(VTXMODELINSTANCE) * m_iNumInstance);
+
+		VTXMODELINSTANCE* pInstanceVertices = static_cast<VTXMODELINSTANCE*>(m_pInstanceVertices);
+
+		_float	fScale = 10.f;
+		for (size_t i = 0; i < m_iNumInstance; i++)
+		{
+			pInstanceVertices[i].vRight = _float4(fScale, 0.f, 0.f, 0.f);
+			pInstanceVertices[i].vUp = _float4(0.f, fScale, 0.f, 0.f);
+			pInstanceVertices[i].vLook = _float4(0.f, 0.f, fScale, 0.f);
+			pInstanceVertices[i].vTranslation = _float4(i * i, 1.f, 1.f, 1.f);
+		}
+
+		ZeroMemory(&m_InstanceInitialData, sizeof m_InstanceInitialData);
+		m_InstanceInitialData.pSysMem = m_pInstanceVertices;
+
+		if (FAILED(m_pDevice->CreateBuffer(&m_InstanceBufferDesc, &m_InstanceInitialData, &m_pVBInstance)))
+			return E_FAIL;
+	}
+
 	return S_OK;
 }
 
@@ -175,6 +210,36 @@ HRESULT CModel::Render(_uint iMeshIndex)
 {
 	m_Meshes[iMeshIndex]->Bind_Buffers();
 	m_Meshes[iMeshIndex]->Render();	
+
+	return S_OK;
+}
+
+
+
+HRESULT CModel::Render_Instance(_uint iMeshIndex)
+{
+	D3D11_MAPPED_SUBRESOURCE	SubResource{};
+
+	m_pContext->Map(m_pVBInstance, 0, D3D11_MAP_WRITE_NO_OVERWRITE, 0, &SubResource);
+
+	VTXMODELINSTANCE* pVertices = static_cast<VTXMODELINSTANCE*>(SubResource.pData);
+
+	memcpy(SubResource.pData, m_InstanceDatas.data(), sizeof(_float4x4) * m_InstanceDatas.size());
+
+	/*_float4x4 v[10];
+	_float4x4* pData = reinterpret_cast<_float4x4*>(SubResource.pData);
+	for (int i = 0; i < 10; ++i) {
+		v[i] = pData[i];
+	}*/
+
+	m_pContext->Unmap(m_pVBInstance, 0);
+
+	m_Meshes[iMeshIndex]->Bind_Buffers_Instance(m_pVBInstance);
+
+	_uint iNumIndices = m_Meshes[iMeshIndex]->Get_NumIndices();
+	m_pContext->DrawIndexedInstanced(m_Meshes[iMeshIndex]->Get_NumIndices(), m_InstanceDatas.size(), 0, 0, 0);
+
+	m_InstanceDatas.clear();
 
 	return S_OK;
 }
@@ -897,6 +962,12 @@ void CModel::Free()
 	{
 		Safe_Delete_Array(m_isEnd_Animations);
 		Safe_Delete_Array(m_isEnd_Animations_Boundary);
+
+		if (m_isInstance)
+		{
+			Safe_Release(m_pVBInstance);
+			Safe_Delete_Array(m_pInstanceVertices);
+		}
 	}
 
 	for (auto& pAnimation : m_Animations)
