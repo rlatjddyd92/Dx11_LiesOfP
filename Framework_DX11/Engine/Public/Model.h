@@ -8,12 +8,6 @@ BEGIN(Engine)
 class ENGINE_DLL CModel final : public CComponent
 {
 public:
-	//typedef struct
-	//{
-	//	vector<string>* pMaterialNames;
-	//}MODELANIM_BINARY_DESC;
-
-public:
 	enum TYPE { TYPE_NONANIM, TYPE_ANIM, TYPE_END };
 private:
 	CModel(ID3D11Device* pDevice, ID3D11DeviceContext* pContext);
