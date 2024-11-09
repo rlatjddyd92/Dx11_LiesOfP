@@ -405,8 +405,9 @@ void CController_AnimationTool::SetUp_Controller_Anim()
 	m_iCurSelected_Index_KeyFrame = m_iSelected_Index_KeyFrame;
 
 	ImGui::Text("\n");
+	ImGui::Text("KeyFrame List");
 	ImGui::PushItemWidth(300); // 크기조정
-	if (ImGui::BeginListBox("KeyFrame List"))
+	if (ImGui::BeginListBox("##KeyFrame List"))
 	{
 		if (m_pCopyModelCom != nullptr)
 		{

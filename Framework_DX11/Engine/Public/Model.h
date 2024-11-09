@@ -23,7 +23,8 @@ public:
 	vector<class CBone*>& Get_Bones() { return m_Bones; }
 	_int					Get_BoneIndex(const _char* pBoneName) const;
 	_matrix					Get_BoneCombindTransformationMatrix(_uint iBoneIndex) const { return m_Bones[iBoneIndex]->Get_CombinedTransformationMatrix(); }
-	const _float4x4* Get_BoneCombindTransformationMatrix_Ptr(const _char* pBoneName) const { return m_Bones[Get_BoneIndex(pBoneName)]->Get_CombinedTransformationMatrix_Ptr(); }
+	const _float4x4*		Get_BoneCombindTransformationMatrix_Ptr(const _char* pBoneName) const { return m_Bones[Get_BoneIndex(pBoneName)]->Get_CombinedTransformationMatrix_Ptr(); }
+	const _float4x4*		Get_BoneCombindTransformationMatrix_Ptr(_uint iBoneIndex) const { return m_Bones[iBoneIndex]->Get_CombinedTransformationMatrix_Ptr(); }
 
 
 	vector<class CAnimation*>& Get_Animations() { return m_Animations; }
@@ -41,8 +42,10 @@ public:
 	_uint					Get_UFBIndices(_uint eCount) { return m_UFBIndices[eCount]; }
 
 	void					Add_UFVtxIndices(UFVTX UFVtx) { m_UseFullVtxIndices.push_back(UFVtx); }
-	vector<UFVTX>* Get_UFVtxIndices() { return &m_UseFullVtxIndices; }
+	vector<UFVTX>*			Get_UFVtxIndices() { return &m_UseFullVtxIndices; }
 	
+	class CTexture*			Find_Texture(_uint iMeshNum, TEXTURE_TYPE eMaterialType);
+
 	void					Set_AnimPlay(_bool bCtrAnim) { m_bPlayAnimCtr = bCtrAnim; }
 
 	_bool					Get_IsUseBoundary() { return m_isUseBoundary; }
