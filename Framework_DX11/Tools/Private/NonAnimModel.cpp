@@ -52,7 +52,6 @@ HRESULT CNonAnimModel::Initialize(void* pArg)
 
 void CNonAnimModel::Priority_Update(_float fTimeDelta)
 {
-
 }
 
 void CNonAnimModel::Update(_float fTimeDelta)

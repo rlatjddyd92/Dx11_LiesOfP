@@ -67,7 +67,6 @@ HRESULT CController_MapTool::Control_Player()
 void CController_MapTool::Create_Map()
 {
 	ImGui::SeparatorText("Select Model");
-
 	ImGuiTabBarFlags tab_bar_flags = ImGuiTabBarFlags_None;
 
 	if (ImGui::BeginTabBar("MapToolBar", tab_bar_flags))
@@ -557,11 +556,17 @@ void CController_MapTool::SaveMap()
 					wstring wstrDifusseTag = static_cast<CNonAnimModel*>(pGameObject)->Get_DiffuseTag();
 					wcscpy_s(pDesc.szTextureTag_Diffuse, wstrDifusseTag.c_str());
 					
-					wstring wstrNormalTag = static_cast<CNonAnimModel*>(pGameObject)->Get_NormalTag();
-					wcscpy_s(pDesc.szTextureTag_Normal, wstrNormalTag.c_str());
+					if(pDesc.bNormal)
+					{
+						wstring wstrNormalTag = static_cast<CNonAnimModel*>(pGameObject)->Get_NormalTag();
+						wcscpy_s(pDesc.szTextureTag_Normal, wstrNormalTag.c_str());
+					}
 
-					wstring wstrARMTag = static_cast<CNonAnimModel*>(pGameObject)->Get_ArmTag();
-					wcscpy_s(pDesc.szTextureTag_ARM, wstrARMTag.c_str());
+					if (pDesc.bARM)
+					{
+						wstring wstrARMTag = static_cast<CNonAnimModel*>(pGameObject)->Get_ArmTag();
+						wcscpy_s(pDesc.szTextureTag_ARM, wstrARMTag.c_str());
+					}
 
 				}
 				else
@@ -660,11 +665,17 @@ void CController_MapTool::LoadMap()
 					int bufferSize = WideCharToMultiByte(CP_ACP, 0, pDesc.szTextureTag_Diffuse, -1, NULL, 0, NULL, NULL);
 					WideCharToMultiByte(CP_ACP, 0, pDesc.szTextureTag_Diffuse, -1, nonDesc.szTextureTag_Diffuse, bufferSize, NULL, NULL);
 
-					bufferSize = WideCharToMultiByte(CP_ACP, 0, pDesc.szTextureTag_Normal, -1, NULL, 0, NULL, NULL);
-					WideCharToMultiByte(CP_ACP, 0, pDesc.szTextureTag_Normal, -1, nonDesc.szTextureTag_Normal, bufferSize, NULL, NULL);
+					if(nonDesc.isNormal)
+					{
+						bufferSize = WideCharToMultiByte(CP_ACP, 0, pDesc.szTextureTag_Normal, -1, NULL, 0, NULL, NULL);
+						WideCharToMultiByte(CP_ACP, 0, pDesc.szTextureTag_Normal, -1, nonDesc.szTextureTag_Normal, bufferSize, NULL, NULL);
+					}
 
-					bufferSize = WideCharToMultiByte(CP_ACP, 0, pDesc.szTextureTag_ARM, -1, NULL, 0, NULL, NULL);
-					WideCharToMultiByte(CP_ACP, 0, pDesc.szTextureTag_ARM, -1, nonDesc.szTextureTag_ARM, bufferSize, NULL, NULL);
+					if(nonDesc.isARM)
+					{
+						bufferSize = WideCharToMultiByte(CP_ACP, 0, pDesc.szTextureTag_ARM, -1, NULL, 0, NULL, NULL);
+						WideCharToMultiByte(CP_ACP, 0, pDesc.szTextureTag_ARM, -1, nonDesc.szTextureTag_ARM, bufferSize, NULL, NULL);
+					}
 				}
 				else
 				{
