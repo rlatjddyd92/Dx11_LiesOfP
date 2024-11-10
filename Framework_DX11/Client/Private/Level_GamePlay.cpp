@@ -4,6 +4,9 @@
 #include "FreeCamera.h"
 #include "GameInstance.h"
 
+#include "Effect_Container.h"
+#include "Effect_Manager.h"
+
 CLevel_Tool::CLevel_Tool(ID3D11Device* pDevice, ID3D11DeviceContext* pContext)
 	: CLevel{ pDevice, pContext }
 {
@@ -27,10 +30,6 @@ HRESULT CLevel_Tool::Initialize()
 		return E_FAIL;
 	if (FAILED(Ready_Layer_Paticle()))
 		return E_FAIL;
-
-	
-	
-
 
 	return S_OK;
 }

@@ -11,7 +11,13 @@
 #include "FreeCamera.h"
 #include "BackGround.h"
 #include "Body_Player.h"
-#include "Particle_Snow.h"
+
+#pragma region EFFECT
+#include "Effect_Container.h"
+#include "Particle_Effect.h"
+#include "Texture_Effect.h"
+
+#pragma endregion
 
 #include "GameInstance.h"
 
@@ -254,6 +260,7 @@ HRESULT CLoader::Ready_Resources_For_GamePlayLevel()
 	//	if (textureFuture.get() == E_FAIL)
 	//		return textureFuture.get();
 	//}
+	lstrcpy(m_szLoadingText, TEXT("이펙트 매니저를 로딩중입니다."));
 
 	lstrcpy(m_szLoadingText, TEXT("텍스쳐를 로딩중입니다."));
 
@@ -298,24 +305,6 @@ HRESULT CLoader::Ready_Resources_For_GamePlayLevel()
 	/* For. Prototype_Component_VIBuffer_Cube */
 	if (FAILED(m_pGameInstance->Add_Prototype(LEVEL_GAMEPLAY, TEXT("Prototype_Component_VIBuffer_Cube"),
 		CVIBuffer_Cube::Create(m_pDevice, m_pContext))))
-		return E_FAIL;
-
-	CVIBuffer_Instancing::INSTANCE_DESC			ParticleDesc{};
-	/* For. Prototype_Component_VIBuffer_Particle_Explosion */
-	ZeroMemory(&ParticleDesc, sizeof ParticleDesc);
-	ParticleDesc.iNumInstance = 1000;
-	ParticleDesc.vCenter = _float3(0.f, 0.f, 0.f);
-
-	ParticleDesc.vRange = _float3(5.f, 5.f, 5.f);
-	ParticleDesc.vExceptRange = _float3(0.f, 0.f, 0.f);
-	ParticleDesc.vSize = _float2(0.1f, 0.2f);
-	ParticleDesc.vSpeed = _float2(1.f, 2.f);
-	ParticleDesc.vLifeTime = _float2(5.f, 10.f);
-	ParticleDesc.vMinColor = _float4(1.0f, 0.271f, 0.0f, 1.f);
-	ParticleDesc.vMaxColor = _float4(1.0f, 0.271f, 0.0f, 1.f);
-
-	if (FAILED(m_pGameInstance->Add_Prototype(LEVEL_GAMEPLAY, TEXT("Prototype_Component_VIBuffer_Particle_Snow"),
-		CVIBuffer_Point_Instance::Create(m_pDevice, m_pContext, ParticleDesc))))
 		return E_FAIL;
 
 	lstrcpy(m_szLoadingText, TEXT("네비게이션을(를) 로딩중입니다."));
@@ -420,10 +409,22 @@ HRESULT CLoader::Ready_Resources_For_GamePlayLevel()
 		CForkLift::Create(m_pDevice, m_pContext))))
 		return E_FAIL;
 
-	/* For. Prototype_GameObject_Particle_Snow */
-	if (FAILED(m_pGameInstance->Add_Prototype(TEXT("Prototype_GameObject_Particle_Snow"),
-		CParticle_Snow::Create(m_pDevice, m_pContext))))
+#pragma region EFFECT
+	/* For. Prototype_GameObject_Effect_Container */
+	if (FAILED(m_pGameInstance->Add_Prototype(TEXT("Prototype_GameObject_Effect_Container"),
+		CEffect_Container::Create(m_pDevice, m_pContext))))
 		return E_FAIL;
+
+	/* For. Prototype_GameObject_Effect_Particle */
+	if (FAILED(m_pGameInstance->Add_Prototype(TEXT("Prototype_GameObject_Effect_Particle"),
+		CParticle_Effect::Create(m_pDevice, m_pContext))))
+		return E_FAIL;
+
+	/* For. Prototype_GameObject_Effect_Texture */
+	if (FAILED(m_pGameInstance->Add_Prototype(TEXT("Prototype_GameObject_Effect_Texture"),
+		CTexture_Effect::Create(m_pDevice, m_pContext))))
+		return E_FAIL;
+#pragma endregion
 
 	m_isFinished_Main = true;
 

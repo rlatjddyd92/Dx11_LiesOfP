@@ -258,6 +258,11 @@ HRESULT CGameInstance::Add_CloneObject_ToLayer(_uint iLevelIndex, const _wstring
 	return m_pObject_Manager->Add_CloneObject_ToLayer(iLevelIndex, strLayerTag, strPrototypeTag, pArg);
 }
 
+HRESULT CGameInstance::Add_Object_ToLayer(_uint iLevelIndex, const _wstring& strLayerTag, CGameObject* pGameObject)
+{
+	return 	m_pObject_Manager->Add_Object_ToLayer(iLevelIndex, strLayerTag, pGameObject);
+}
+
 CGameObject* CGameInstance::Get_CloneObject_ToLayer(_uint iLevelIndex, const _wstring& strLayerTag, const _wstring& strPrototypeTag, void* pArg)
 {
 	CGameObject* pGameObject = m_pObject_Manager->Clone_GameObject(strPrototypeTag, pArg);;

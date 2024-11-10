@@ -27,11 +27,10 @@ private:
 
 #ifdef _DEBUG
 private:
-	_tchar					m_szFPS[MAX_PATH] = {};
-	_uint					m_iNumDraw = {};
-	_float					m_fTimeAcc = {};
+	_tchar               m_szFPS[MAX_PATH] = {};
+	_uint                m_iNumDraw = {};
+	_float               m_fTimeAcc = {};
 #endif
-
 
 private:	
 	HRESULT Ready_Prototype_Component_Static();

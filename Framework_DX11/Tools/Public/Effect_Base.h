@@ -9,8 +9,8 @@ class CEffect_Base abstract : public CGameObject
 public:
 	typedef struct : public CGameObject::GAMEOBJECT_DESC
 	{
-		_Matrix* pParentMatrix = { nullptr };
-
+		const _Matrix* pParentMatrix = { nullptr };
+		_tchar		strEffectName[MAX_PATH] = L"";
 	} EFFECT_BASE_DESC;
 
 	enum EFFECT_TYPE { TYPE_PARTICLE, TYPE_TEXTURE, TYPE_END };
@@ -21,6 +21,11 @@ protected:
 	virtual ~CEffect_Base() = default;
 
 public:
+	_wstring Get_EffectName() {
+		return m_strEffectName;
+	}
+
+public:
 	virtual HRESULT Initialize_Prototype();
 	virtual HRESULT Initialize(void* pArg = nullptr);
 	virtual void Priority_Update(_float fTimeDelta);
@@ -28,15 +33,21 @@ public:
 	virtual void Late_Update(_float fTimeDelta);
 	virtual HRESULT Render();
 
+protected:
+	void Set_WorldMatrix();
+	HRESULT Bind_WorldMatrix(class CShader* pShader, const _char* pConstantName);
+
 public:
 	virtual void Reset();
+	virtual HRESULT Save(_wstring strFilePath);
 
 protected:
 	EFFECT_TYPE m_eEffectType = { TYPE_END };
 
 	_Matrix m_WorldMatrix = XMMatrixIdentity();
-	_Matrix* m_pParentMatrix = { nullptr };
+	const _Matrix* m_pParentMatrix = { nullptr };
 
+	_wstring m_strEffectName = TEXT("");
 
 public:
 	virtual CGameObject* Clone(void* pArg) = 0;

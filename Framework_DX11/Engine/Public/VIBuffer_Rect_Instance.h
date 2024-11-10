@@ -12,14 +12,14 @@ private:
 	virtual ~CVIBuffer_Rect_Instance() = default;
 
 public:
-	virtual HRESULT Initialize_Prototype(const CVIBuffer_Instancing::INSTANCE_DESC& Desc) override;
+	virtual HRESULT Initialize_Prototype(const CVIBuffer_Instancing::INSTANCE_DESC& Desc, _bool isClient) override;
 	virtual HRESULT Initialize(void* pArg) override;
 
 public:
 	virtual void Reset() override;
 
 public:
-	static CVIBuffer_Rect_Instance* Create(ID3D11Device* pDevice, ID3D11DeviceContext* pContext, const CVIBuffer_Instancing::INSTANCE_DESC& Desc);
+	static CVIBuffer_Rect_Instance* Create(ID3D11Device* pDevice, ID3D11DeviceContext* pContext, const CVIBuffer_Instancing::INSTANCE_DESC& Desc, _bool isClient);
 	virtual CComponent* Clone(void* pArg) override;
 	virtual void Free() override;
 };

@@ -23,10 +23,11 @@ CVIBuffer_Instancing::CVIBuffer_Instancing(const CVIBuffer_Instancing & Prototyp
 	, m_vMinColor{ Prototype.m_vMinColor }
 	, m_vMaxColor{ Prototype.m_vMaxColor }
 	, m_iNumRender { Prototype.m_iNumInstance }
+	, m_isClient{ Prototype.m_isClient }
 {
 }
 
-HRESULT CVIBuffer_Instancing::Initialize_Prototype(const INSTANCE_DESC& Desc)
+HRESULT CVIBuffer_Instancing::Initialize_Prototype(const INSTANCE_DESC& Desc, _bool isClient)
 {	
 	return S_OK;
 }
@@ -56,6 +57,8 @@ HRESULT CVIBuffer_Instancing::Bind_Buffers()
 		0, 
 	};
 
+	
+
 	m_pContext->IASetVertexBuffers(0, m_iNumVertexBuffers, pVertexBuffers, iVertexStrides, iOffsets);
 	m_pContext->IASetIndexBuffer(m_pIB, m_eIndexFormat, 0);
 	m_pContext->IASetPrimitiveTopology(m_eTopology);
@@ -80,14 +83,11 @@ HRESULT CVIBuffer_Instancing::Initialize_Desc(const CVIBuffer_Instancing::INSTAN
 	m_vLifeTime = Desc.vLifeTime;
 	m_vMinColor = Desc.vMinColor;
 	m_vMaxColor = Desc.vMaxColor;
+	m_vSpeed = Desc.vSpeed;
 
 	if (m_vRange.x == m_vExceptRange.x && m_vRange.y == m_vExceptRange.y && m_vRange.z == m_vExceptRange.z)
 		m_vExceptRange = _float3(0.f, 0.f, 0.f);
 
-	m_pSpeed = new _float[m_iNumInstance];
-
-	for (size_t i = 0; i < m_iNumInstance; i++)
-		m_pSpeed[i] = m_pGameInstance->Get_Random(Desc.vSpeed.x, Desc.vSpeed.y);
 
 	return S_OK;
 }
@@ -104,15 +104,15 @@ void CVIBuffer_Instancing::Free()
 	__super::Free();
 
 #pragma region CLIENT
-	//if (false == m_isCloned)
-	//{
-	//	Safe_Delete_Array(m_pSpeed);
-	//	Safe_Delete_Array(m_pInstanceVertices);
-	//}
+	if (true == m_isClient && false == m_isCloned)
+	{
+		Safe_Delete_Array(m_pSpeed);
+		Safe_Delete_Array(m_pInstanceVertices);
+	}
 #pragma endregion 
 
 #pragma region TOOL
-	if (true == m_isCloned)
+	if (false == m_isClient && true == m_isCloned)
 	{
 		Safe_Delete_Array(m_pSpeed);
 		Safe_Delete_Array(m_pInstanceVertices);

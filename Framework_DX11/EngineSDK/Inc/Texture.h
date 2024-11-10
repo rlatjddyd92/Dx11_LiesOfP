@@ -22,6 +22,7 @@ public:
 	HRESULT Bind_ShadeResource(class CShader* pShader, const _char* pConstantName, _uint iTextureIndex);
 	HRESULT Bind_ShadeResources(class CShader* pShader, const _char* pConstantName);
 
+	HRESULT Bind_ShaderResource_Struct(class CShader_NonVTX* pShader, const _char* pConstantName, _uint iTextureIndex);
 
 private:
 	vector<ID3D11ShaderResourceView*>		m_SRVs;

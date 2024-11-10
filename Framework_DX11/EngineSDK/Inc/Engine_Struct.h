@@ -65,6 +65,22 @@ namespace Engine
 
 	}EVENT_KEYFRAME;
 
+	// 고준호 파티클
+	typedef struct
+	{
+		_float3		vPosition;
+		_float2		vPSize;
+		_float4		vRight;
+		_float4		vUp;
+		_float4		vLook;
+		_float4		vTranslation;
+		_float2		vLifeTime;
+		_float4		vColor;
+		_float		fSpeed;
+		_float4		vCurrenrRandomDir;
+		_float4		vNextRandomDir;
+	}PARTICLE;
+
 	typedef struct
 	{
 		_bool			bActiveEffect{ false };
@@ -239,4 +255,5 @@ namespace Engine
 		static const unsigned int	iNumElements = 8;
 		static const D3D11_INPUT_ELEMENT_DESC	Elements[iNumElements];
 	}VTXMODELINSTANCE;
+
 }

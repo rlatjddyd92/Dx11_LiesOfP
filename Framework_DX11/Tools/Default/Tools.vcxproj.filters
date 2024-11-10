@@ -85,9 +85,6 @@
     <Filter Include="02.GameObjects\04.Effect\Effect_Base\Particle_Effect">
       <UniqueIdentifier>{fac53200-c293-4b2f-b5db-aed31b94a02c}</UniqueIdentifier>
     </Filter>
-    <Filter Include="02.GameObjects\04.Effect\Effect_Base\Texture_Effect">
-      <UniqueIdentifier>{e0193f26-6fda-4bf4-8fcd-c94aa5bd43d6}</UniqueIdentifier>
-    </Filter>
     <Filter Include="02.GameObjects\06.TargetBall">
       <UniqueIdentifier>{dda0d5fa-4325-43d0-97e8-6eb2c19a1b96}</UniqueIdentifier>
     </Filter>
@@ -102,6 +99,9 @@
     </Filter>
     <Filter Include="02.GameObjects\08.Decal">
       <UniqueIdentifier>{caef4cbb-fb0c-4dfc-875e-2fc8a569562f}</UniqueIdentifier>
+	</Filter>
+    <Filter Include="02.GameObjects\04.Effect\Effect_Base\Texture_Effect">
+      <UniqueIdentifier>{e0193f26-6fda-4bf4-8fcd-c94aa5bd43d6}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -242,6 +242,15 @@
     </ClInclude>
     <ClInclude Include="..\Public\Decal.h">
       <Filter>02.GameObjects\08.Decal</Filter>
+	</ClInclude>
+    <ClInclude Include="..\..\imgui\ImGuiFileDialogConfig.h">
+      <Filter>Imgui</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\imgui\dirent.h">
+      <Filter>Imgui</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\imgui\ImGuiFileDialog.h">
+      <Filter>Imgui</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -369,6 +378,9 @@
     </ClCompile>
     <ClCompile Include="..\Private\Decal.cpp">
       <Filter>02.GameObjects\08.Decal</Filter>
+	</ClCompile>
+    <ClCompile Include="..\..\imgui\ImGuiFileDialog.cpp">
+      <Filter>Imgui</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -415,13 +427,15 @@
     <FxCompile Include="..\Bin\ShaderFiles\Shader_VtxRectInstance.hlsl">
       <Filter>97.ShaderFiles</Filter>
     </FxCompile>
-    <FxCompile Include="..\Bin\ShaderFiles\Shader_Compute.hlsl">
+    <FxCompile Include="..\Bin\ShaderFiles\Shader_ParticleCompute.hlsl">
       <Filter>97.ShaderFiles</Filter>
     </FxCompile>
     <FxCompile Include="..\Bin\ShaderFiles\Shader_Effect_Texture.hlsl">
       <Filter>97.ShaderFiles</Filter>
     </FxCompile>
     <FxCompile Include="..\Bin\ShaderFiles\Shader_SSD.hlsl">
+	</FxCompile>
+    <FxCompile Include="..\Bin\ShaderFiles\Shader_VtxPointInstance_Test.hlsl">
       <Filter>97.ShaderFiles</Filter>
     </FxCompile>
   </ItemGroup>

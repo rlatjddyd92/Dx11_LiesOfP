@@ -18,29 +18,29 @@ class CController_EffectTool : public CBase
 
 public:
 #pragma region PARTICLE
-	vector<_wstring>& Get_Particle_PrototypeTags() { 
-		return m_Particle_PrototypeTags; 
+	vector<_wstring>& Get_Diffuse_PrototypeTags() { 
+		return m_Diffuse_PrototypeTags;
 	}
 	
-	_wstring& Get_Particle_PrototypeTags_Index(_uint iIndex) {
-		return m_Particle_PrototypeTags[iIndex]; 
+	_wstring& Get_Diffuse_PrototypeTags_Index(_uint iIndex) {
+		return m_Diffuse_PrototypeTags[iIndex];
 	}
 	
-	void Add_Particle_ProtytypeTag(_wstring strTag) { 
-		m_Particle_PrototypeTags.emplace_back(strTag); 
+	void Add_Diffuse_ProtytypeTag(_wstring strTag) {
+		m_Diffuse_PrototypeTags.emplace_back(strTag);
 	}
 #pragma endregion
 #pragma region TEXTURE
-	vector<_wstring>& Get_TE_PrototypeTags() {
-		return m_TE_PrototypeTags;
+	vector<_wstring>& Get_Normal_PrototypeTags() {
+		return m_Normal_PrototypeTags;
 	}
 
-	_wstring& Get_TE_PrototypeTags_Index(_uint iIndex) {
-		return m_TE_PrototypeTags[iIndex];
+	_wstring& Get_Normal_PrototypeTags_Index(_uint iIndex) {
+		return m_Normal_PrototypeTags[iIndex];
 	}
 
-	void Add_TE_ProtytypeTag(_wstring strTag) {
-		m_TE_PrototypeTags.emplace_back(strTag);
+	void Add_Normal_ProtytypeTag(_wstring strTag) {
+		m_Normal_PrototypeTags.emplace_back(strTag);
 	}
 #pragma endregion
 
@@ -60,6 +60,8 @@ public:
 	HRESULT Initialize();
 
 public:
+	void TextureCheck();
+
 	HRESULT Add_Particle();
 	void Particle_Check();
 	void Update_Particle();
@@ -78,13 +80,27 @@ public:
 	void Reset_EffectContainer();
 	void Delete_EffectContainer();
 
+	HRESULT Save_EffectContainer();
+	HRESULT Load_Effect();
+
+	void Set_EffectName();
+
 private:
 	class CGameInstance* m_pGameInstance = { nullptr };
 
-	vector<_wstring>	m_Particle_PrototypeTags;
-	vector<_wstring>	m_TE_PrototypeTags;
+	vector<_wstring>	m_Diffuse_PrototypeTags;
+	vector<_wstring>	m_Normal_PrototypeTags;
+
+	_char m_szEffectName[MAX_PATH] = "";
 
 	_bool m_bJunHoCamera = { false };
+	
+	_int		m_iTextureSelect = { 0 };
+
+	_int		m_iSelected_DiffuseTextureIndex = { 0 };
+	_int		m_iSelected_NormalTextureIndex = { 0 };
+	_int		m_iSelected_MaskTextureIndex_1 = { 0 };
+	_int		m_iSelected_MaskTextureIndex_2 = { 0 };
 
 private:
 #pragma region PARTICLE
@@ -102,16 +118,25 @@ private:
 	// Particle Action
 	_uint		m_iParticleType = { 0 };	// 퍼지거나 모이거나 단방향이거나
 	
-	_uint		m_iParticleState = { 0 };	// 공전? 랜덤? 반복?
+	_uint		m_iInstanceState = { 0 };	// 공전? 랜덤? 반복?
 	_uint		m_iParticleRenderState = { 0 };
+	_uint		m_iParticleState = { 0 };
 
 	_float		m_fRenderRatio = { 1.f };
 	_Vec4		m_vPivot = { 0.f, 0.f, 0.f, 1.f };
 	_float		m_fGravity = { 0.f };
 
 	_Vec4		m_vMoveDir = {};	// 단방향 이동 방향.
+	_Vec2		m_vTexDevide = {1.f, 1.f};
+	_float		m_fParticle_SpriteSpeed = { 0.f };
+
+	_Vec2		m_vScaling = {1.f, 1.f};
+	_float		m_fStartRotation = { 0.f };
+	_float		m_fParticleAngle = { 0.f };
 
 	_Vec3		m_vOrbitAxis = {0.f, 1.f, 0.f};
+
+	
 	_float		m_fAngle = { 90.f };
 
 	_float		m_fTimeInterval = { 0.5f };
@@ -120,22 +145,29 @@ private:
 	_float		m_fAccelLimit = { 0.f };
 	_float		m_fAccelSpeed = { 1.f };
 
+	_bool		m_bGrow = { false };
+	_bool		m_bShrink = { false };
+	_bool		m_bRotation = { false };
+
 	_bool		m_bOrbit = { false };
 	_bool		m_bRandom = { false };
 	_bool		m_bLoop = { false };
 	_bool		m_bAccel = { false };
 	_bool		m_bDecel = { false };
+
 	_bool		m_bBlur = { false };
+	_bool		m_bNonBlend = { false };
+	_bool		m_bNonLight = { false };
+	
 
 	_Vec3		m_vParticlePos = {};
 	_Vec3		m_vParticleRotation = {};
 	_Vec3		m_vParticleScale = {1.f, 1.f, 1.f};
 
 	_int		m_iSelectedParticleIndex = { 0 };
-	_int		m_iSelectedParticleTextureIndex = { 0 };
 
 	_uint		m_iParticleShaderIndex = { 0 };
-	_uint		m_iMax_ParticleShaderIndex = { 2 };
+	_uint		m_iMax_ParticleShaderIndex = { 10 };
 #pragma endregion
 
 #pragma region TEXTURE
@@ -151,30 +183,29 @@ private:
 	_float	m_fRotationSpeed = { 0.f };
 
 	_Vec3	m_vTEScale = {1.f, 1.f, 1.f};
-	_float	m_fScalingSpeed = { 0.f };
+	_Vec3	m_vScalingSpeed = { };
 
 	_float	m_fAlpha = { 1.f };
 	_float	m_fAlphaSpeed = { 0.f };
 
-	_int	m_iSelectedTETextureIndex = { 0 };
 	_int	m_iSelectedTEIndex = { 0 };
 
 	_uint	m_iTEShaderIndex = { 0 };
-	_uint	m_iMax_TEShaderIndex = { 0 };
+	_uint	m_iMax_TEShaderIndex = { 10 };
 
-	_bool m_bScaling		= { false };
-	_bool m_bTurn			= { false };
-	_bool m_bFadeIn			= { false };
-	_bool m_bFadeOut		= { false };
-	_bool m_isLoop			= { false };
-	_bool m_isDistortion	= { false };
-	_bool m_isBlur			= { false };
+	_bool	m_isDistortion	= { false };
+	_bool	m_isBlur			= { false };
+	_bool	m_isBlend			= { false };
+	_bool	m_isNonBlend		= { false };
 
 #pragma endregion
+
 
 private:
 	void Set_ParticleState();
 	void Set_TEState();
+
+	
 
 public:
 	virtual void Free() override;

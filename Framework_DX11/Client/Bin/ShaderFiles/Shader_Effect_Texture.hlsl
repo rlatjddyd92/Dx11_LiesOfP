@@ -22,24 +22,28 @@ texture2D g_MaskTexture;
 texture2D g_MaskTexture2;
 texture2D g_OpacityTexture;
 
+float2 g_vTexDivide;
+int g_iTexIndex;
+float g_fRatio;
+
 cbuffer Effect_Desc
 {
-    float4 vColor_Add = float4(0.f, 0.f, 0.f, 0.f);         // 더할 색상
-    float4 vColor_Discard = float4(0.f, 0.f, 0.f, 0.f);     // 자를 색상
-    float4 vColor_Mul = float4(1.f, 1.f, 1.f, 1.f);         // 곱할 색상
+    float4 vColor_Add = float4(0.f, 0.f, 0.f, 0.f); // 더할 색상
+    float4 vColor_Discard = float4(0.f, 0.f, 0.f, 0.f); // 자를 색상
+    float4 vColor_Mul = float4(1.f, 1.f, 1.f, 1.f); // 곱할 색상
     
-    float2 vNumSprite = float2(1.f, 1.f);       // 스프라이트 전체 개수
-    float2 vSpriteIndex = float2(0.f, 0.f);     // 스프라이트 현재 인덱스
+    //float2 vNumSprite = float2(1.f, 1.f);       // 스프라이트 전체 개수
+    //float2 vSpriteIndex = float2(0.f, 0.f);     // 스프라이트 현재 인덱스
     
-    bool isMoveDistortion = false;              // 디스토션 움직일거임?            
-    float fDistortionSpeed = 1.f;               // 속도 얼마나 움직일거임?
+    bool isMoveDistortion = false; // 디스토션 움직일거임?            
+    float fDistortionSpeed = 1.f; // 속도 얼마나 움직일거임?
 };
 
 cbuffer Effect_Strength
 {
-    float fBloomIntensity;      // Bloom 강도
-    float fDistortionStrength;  // 왜곡 강도
-    float fDissolveAmount;      // Disslove 진행 양
+    float fBloomIntensity; // Bloom 강도
+    float fDistortionStrength; // 왜곡 강도
+    float fDissolveAmount; // Disslove 진행 양
 };
 
 struct VS_IN
@@ -82,6 +86,38 @@ struct PS_OUT
     vector vColor : SV_TARGET0;
 };
 
+PS_OUT PS_MAIN(PS_IN In)
+{
+    PS_OUT Out = (PS_OUT) 0;
+
+    vector vDiffuse = g_DiffuseTexture.Sample(LinearSampler, In.vTexcoord);
+    
+    Out.vColor = vDiffuse;
+    Out.vColor.a = Out.vColor.r;
+    
+    Out.vColor.rgb *= g_vColor.rgb;
+    Out.vColor.a *= g_fRatio;
+    
+    return Out;
+}
+
+PS_OUT PS_MAIN_MASK_1_2(PS_IN In)
+{
+    PS_OUT Out = (PS_OUT) 0;
+
+    vector vDiffuse = g_DiffuseTexture.Sample(LinearSampler, In.vTexcoord);
+    vector vMask_1 = g_MaskTexture.Sample(LinearSampler, In.vTexcoord);
+    vector vMask_2 = g_MaskTexture2.Sample(LinearSampler, In.vTexcoord);
+    
+    Out.vColor = vDiffuse;
+    Out.vColor += vMask_1 + vMask_2;
+    
+    Out.vColor.rgb *= g_vColor.rgb;
+    Out.vColor.a *= g_fRatio;
+    
+    return Out;
+}
+
 struct PS_OUT_EFFECT
 {
     vector vColor : SV_TARGET0;
@@ -89,40 +125,19 @@ struct PS_OUT_EFFECT
     vector vDistortion : SV_TARGET2;
 };
 
-PS_OUT_EFFECT PS_MAIN_EFFECT(PS_IN In)
+PS_OUT_EFFECT PS_MAIN_EFFECT(PS_IN In, bool isAlphaBlend)
 {
     PS_OUT_EFFECT Out = (PS_OUT_EFFECT) 0;
     
     vector vDiffuse = g_DiffuseTexture.Sample(LinearClampSampler, In.vTexcoord);
     
-    return Out;
-}
-
-PS_OUT PS_MAIN_DISTORTION(PS_IN In)
-{
-    PS_OUT Out = (PS_OUT) 0;
-    vector vDiffuse = g_DiffuseTexture.Sample(LinearClampSampler, In.vTexcoord);
-    
-    Out.vColor = vDiffuse;
-    Out.vColor.b = g_fTime;
     
     return Out;
 }
 
 technique11 DefaultTechnique
 {
-    pass Effect
-    {
-        SetRasterizerState(RS_Default);
-        SetDepthStencilState(DSS_Default, 0);
-        SetBlendState(BS_Default, vector(0.f, 0.f, 0.f, 0.f), 0xffffffff);
-
-        VertexShader = compile vs_5_0 VS_MAIN();
-        GeometryShader = NULL;
-        PixelShader = compile ps_5_0 PS_MAIN_EFFECT();
-    }
-
-    pass AlphaBlendEffect
+    pass Blend_RTOA
     {
         SetRasterizerState(RS_Default);
         SetDepthStencilState(DSS_None, 0);
@@ -130,10 +145,10 @@ technique11 DefaultTechnique
 
         VertexShader = compile vs_5_0 VS_MAIN();
         GeometryShader = NULL;
-        PixelShader = compile ps_5_0 PS_MAIN_EFFECT();
+        PixelShader = compile ps_5_0 PS_MAIN();
     }
 
-    pass Distortion
+    pass Blend_MASK_1_2
     {
         SetRasterizerState(RS_Default);
         SetDepthStencilState(DSS_None, 0);
@@ -141,6 +156,7 @@ technique11 DefaultTechnique
 
         VertexShader = compile vs_5_0 VS_MAIN();
         GeometryShader = NULL;
-        PixelShader = compile ps_5_0 PS_MAIN_DISTORTION();
+        PixelShader = compile ps_5_0 PS_MAIN_MASK_1_2();
     }
+
 }

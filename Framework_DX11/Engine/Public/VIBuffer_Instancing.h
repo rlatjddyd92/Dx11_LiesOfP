@@ -44,7 +44,7 @@ protected:
 	virtual ~CVIBuffer_Instancing() = default;
 
 public:
-	virtual HRESULT Initialize_Prototype(const INSTANCE_DESC& Desc) ;
+	virtual HRESULT Initialize_Prototype(const INSTANCE_DESC& Desc, _bool isClient) ;
 	virtual HRESULT Initialize(void* pArg) override;
 	virtual HRESULT Bind_Buffers() override;
 	virtual HRESULT Render() override;
@@ -72,13 +72,14 @@ protected:
 	_float2						m_vLifeTime = {};
 	_float4						m_vMinColor = {};
 	_float4						m_vMaxColor = {};
+	_float2						m_vSpeed = {};
 	_float*						m_pSpeed = { nullptr };
 
 	_uint						m_iNumRender = { 0 };
 
 	void*						m_pInstanceVertices = { nullptr };
 
-
+	_bool						m_isClient = { false };
 
 public:
 	virtual CComponent* Clone(void* pArg) = 0;

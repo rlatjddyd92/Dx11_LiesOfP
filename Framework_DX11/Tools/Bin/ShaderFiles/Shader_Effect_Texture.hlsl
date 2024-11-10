@@ -101,7 +101,22 @@ PS_OUT PS_MAIN(PS_IN In)
     return Out;
 }
 
+PS_OUT PS_MAIN_MASK_1_2(PS_IN In)
+{
+    PS_OUT Out = (PS_OUT) 0;
 
+    vector vDiffuse = g_DiffuseTexture.Sample(LinearSampler, In.vTexcoord);
+    vector vMask_1 = g_MaskTexture.Sample(LinearSampler, In.vTexcoord);
+    vector vMask_2 = g_MaskTexture2.Sample(LinearSampler, In.vTexcoord);
+    
+    Out.vColor = vDiffuse;
+    Out.vColor += vMask_1 + vMask_2;
+    
+    Out.vColor.rgb *= g_vColor.rgb;
+    Out.vColor.a *= g_fRatio;
+    
+    return Out;
+}
 
 struct PS_OUT_EFFECT
 {
@@ -120,8 +135,6 @@ PS_OUT_EFFECT PS_MAIN_EFFECT(PS_IN In, bool isAlphaBlend)
     return Out;
 }
 
-
-
 technique11 DefaultTechnique
 {
     pass Blend_RTOA
@@ -133,6 +146,17 @@ technique11 DefaultTechnique
         VertexShader = compile vs_5_0 VS_MAIN();
         GeometryShader = NULL;
         PixelShader = compile ps_5_0 PS_MAIN();
+    }
+
+    pass Blend_MASK_1_2
+    {
+        SetRasterizerState(RS_Default);
+        SetDepthStencilState(DSS_None, 0);
+        SetBlendState(BS_AlphaBlend, vector(0.f, 0.f, 0.f, 0.f), 0xffffffff);
+
+        VertexShader = compile vs_5_0 VS_MAIN();
+        GeometryShader = NULL;
+        PixelShader = compile ps_5_0 PS_MAIN_MASK_1_2();
     }
 
 }

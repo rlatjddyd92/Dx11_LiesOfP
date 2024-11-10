@@ -12,9 +12,9 @@ CVIBuffer_Rect_Instance::CVIBuffer_Rect_Instance(const CVIBuffer_Rect_Instance &
 {
 }
 
-HRESULT CVIBuffer_Rect_Instance::Initialize_Prototype(const CVIBuffer_Instancing::INSTANCE_DESC& Desc)
+HRESULT CVIBuffer_Rect_Instance::Initialize_Prototype(const CVIBuffer_Instancing::INSTANCE_DESC& Desc, _bool isClient)
 {
-	if (FAILED(__super::Initialize_Prototype(Desc)))
+	if (FAILED(__super::Initialize_Prototype(Desc, isClient)))
 		return E_FAIL;
 
 	m_iNumVertexBuffers = 2;
@@ -153,11 +153,11 @@ void CVIBuffer_Rect_Instance::Reset()
 }
 
 
-CVIBuffer_Rect_Instance * CVIBuffer_Rect_Instance::Create(ID3D11Device * pDevice, ID3D11DeviceContext * pContext, const CVIBuffer_Instancing::INSTANCE_DESC& Desc)
+CVIBuffer_Rect_Instance * CVIBuffer_Rect_Instance::Create(ID3D11Device * pDevice, ID3D11DeviceContext * pContext, const CVIBuffer_Instancing::INSTANCE_DESC& Desc, _bool isClient)
 {
 	CVIBuffer_Rect_Instance*		pInstance = new CVIBuffer_Rect_Instance(pDevice, pContext);
 
-	if (FAILED(pInstance->Initialize_Prototype(Desc)))
+	if (FAILED(pInstance->Initialize_Prototype(Desc, isClient)))
 	{
 		MSG_BOX(TEXT("Failed to Created : CVIBuffer_Rect_Instance"));
 		Safe_Release(pInstance);

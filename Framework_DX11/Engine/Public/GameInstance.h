@@ -53,6 +53,7 @@ public:
 #pragma region OBJECT_MANAGER
 	HRESULT				Add_Prototype(const _wstring& strPrototypeTag, class CGameObject* pPrototype);
 	HRESULT				Add_CloneObject_ToLayer(_uint iLevelIndex, const _wstring& strLayerTag, const _wstring& strPrototypeTag, void* pArg = nullptr);
+	HRESULT				Add_Object_ToLayer(_uint iLevelIndex, const _wstring& strLayerTag, CGameObject* pGameObject);
 	class CGameObject*	Get_CloneObject_ToLayer(_uint iLevelIndex, const _wstring& strLayerTag, const _wstring& strPrototypeTag, void* pArg = nullptr);
 	class CGameObject*	Clone_GameObject(const _wstring& strPrototypeTag, void* pArg = nullptr);
 	class CComponent*	Find_Component(_uint iLevelIndex, const _wstring& strLayerTag, const _wstring& strComponentTag, _uint iIndex = 0, _uint iPartObjIndex = 0);

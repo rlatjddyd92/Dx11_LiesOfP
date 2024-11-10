@@ -14,9 +14,19 @@ class CParticle_Effect final : public CEffect_Base
 public:
 	enum TYPE { TYPE_SPREAD, TYPE_MOVE, TYPE_CONVERGE, TYPE_SPREAD_INDEPENDENT, TYPE_MOVE_INDEPENDENT, TYPE_CONVERGE_INDEPENDENT, TYPE_END };
 
+	enum PARTICLE_STATE 
+	{ 
+		PS_GROW = 0x0001, 
+		PS_SHRINK = 0x0002,
+		PS_ROTATION = 0x0004,
+		PS_END
+	};
+
 	enum RENDER_STATE 
 	{ 
-		RS_BLUR = 0x0001,
+		RS_NONBLEND = 0x0001,
+		RS_NONLIGHT = 0x0002,
+		RS_BLUR = 0x0004,
 		RS_END = 0x9999
 	};
 
@@ -28,6 +38,18 @@ public:
 		_Vec4		vPivot = {};
 		_float		fGravity = { 0.f };
 		_Vec4		vMoveDir = {};
+
+		_uint		iShaderIndex = { 0 };
+		_uint		iRenderState = { 0 };
+		_uint		iParticleState = { 0 };
+
+		_Vec2		vTexDevide = {};
+		_float		fSpriteSpeed = { 0.f };
+		
+		_Vec2		vScaling = {};
+		
+		_float		fStartRotation = { 0.f };
+		_float		fAngle = { 0.f };
 	}DEFAULT_DESC;
 
 	typedef struct
@@ -55,7 +77,7 @@ public:
 		_Vec3		vScale = {};
 	}TRANSFORM_DESC;
 
-	typedef struct : CEffect_Base::EFFECT_BASE_DESC
+	typedef struct
 	{
 		_uint		iNumInstance = { 100 };
 		_float3		vCenter = {};
@@ -66,19 +88,29 @@ public:
 		_float2		vLifeTime = { 2.f, 4.f };
 		_float4		vMinColor = { 0.f, 0.f, 0.f, 1.f };
 		_float4		vMaxColor = { 0.f, 0.f, 0.f, 1.f };
+	}BUFFER_DESC;
 
-		DEFAULT_DESC DefaultDesc = {};
-		REVOLVE_DESC OrbitDesc = {};
-		RANDOM_DESC RandomDesc = {};
-		ACCEL_DESC AccelDesc = {};
-		TRANSFORM_DESC TransformDesc = {};
+	typedef struct
+	{
+		_tchar		strDiffuseTexturTag[MAX_PATH] = L"";
+		_tchar		strNomralTextureTag[MAX_PATH] = L"";
+	}TEXTURE_DESC;
 
-		_wstring strPrototypeTextureTag = L"";
-		_uint iShaderIndex = { 0 };
-		_uint iRenderState = { 0 };
+	typedef struct
+	{
+		DEFAULT_DESC	DefaultDesc = {};
+		REVOLVE_DESC	OrbitDesc = {};
+		RANDOM_DESC		RandomDesc = {};
+		ACCEL_DESC		AccelDesc = {};
+		TRANSFORM_DESC	TransformDesc = {};
+		TEXTURE_DESC	TextureDesc = {};
+	}INIT_DESC;
 
-	}PARTICLE_TEST_DESC;
-
+	typedef struct : CEffect_Base::EFFECT_BASE_DESC
+	{
+		BUFFER_DESC		BufferDesc = {};
+		INIT_DESC		InitDesc = {};
+	}PARTICLE_EFFECT_DESC;
 
 private:
 	CParticle_Effect(ID3D11Device* pDevice, ID3D11DeviceContext* pContext);
@@ -88,28 +120,19 @@ private:
 public:
 	void Set_Default(DEFAULT_DESC desc) {
 		m_DefaultDesc = desc;
-		m_SaveDesc.DefaultDesc = desc;
+		m_SaveDesc.InitDesc.DefaultDesc = desc;
 	}
 	void Set_Revolev(REVOLVE_DESC desc) {
 		m_OrbitDesc = desc;
-		m_SaveDesc.OrbitDesc = desc;
+		m_SaveDesc.InitDesc.OrbitDesc = desc;
 	}
 	void Set_Random(RANDOM_DESC desc) {
 		m_RandomDesc = desc;
-		m_SaveDesc.RandomDesc = desc;
+		m_SaveDesc.InitDesc.RandomDesc = desc;
 	}
 	void Set_Accel(ACCEL_DESC desc) {
 		m_AccelDesc = desc;
-		m_SaveDesc.AccelDesc = desc;
-	}
-	void Set_ShaderIndex(_uint iShaderIndex) {
-		m_iShaderIndex = iShaderIndex;
-		m_SaveDesc.iShaderIndex = iShaderIndex;
-	}
-
-	void Set_RenderState(_uint iRenderState) {
-		m_iRenderState = iRenderState;
-		m_SaveDesc.iRenderState = iRenderState;
+		m_SaveDesc.InitDesc.AccelDesc = desc;
 	}
 
 	DEFAULT_DESC Get_Default() {
@@ -128,11 +151,7 @@ public:
 		return m_AccelDesc;
 	}
 
-	_uint Get_RenderState() {
-		return m_iRenderState;
-	}
-
-	PARTICLE_TEST_DESC* Get_SaveDesc_Ptr() {
+	PARTICLE_EFFECT_DESC* Get_SaveDesc_Ptr() {
 		return &m_SaveDesc;
 	}
 
@@ -146,14 +165,18 @@ public:
 
 public:
 	virtual void Reset() override;
+	virtual HRESULT Save(_wstring strFilePath) override;
 
 public:
 	void Set_Transform(TRANSFORM_DESC& Desc);
 
 private:
-	class CShader* m_pShaderCom = { nullptr };
+	class CShader_NonVTX* m_pShaderCom = { nullptr };
 	class CVIBuffer_Point_Instance* m_pVIBufferCom = { nullptr };
-	class CTexture* m_pTextureCom = { nullptr };
+	class CTexture* m_pDiffuseTextureCom = { nullptr };
+	class CTexture* m_pNormalTextureCom = { nullptr };
+
+	class CShader_Compute* m_pComputeShader = { nullptr };
 
 private:
 	DEFAULT_DESC m_DefaultDesc = {};
@@ -161,13 +184,11 @@ private:
 	RANDOM_DESC m_RandomDesc = {};
 	ACCEL_DESC m_AccelDesc = {};
 
-	_uint m_iShaderIndex = { 0 };
-	_uint m_iRenderState = { 0 };
-
-	PARTICLE_TEST_DESC m_SaveDesc = {};
+	PARTICLE_EFFECT_DESC m_SaveDesc = {};
+	_uint m_iNumInstance = { 0 };
 
 private:
-	HRESULT Ready_Components(PARTICLE_TEST_DESC* pDesc);
+	HRESULT Ready_Components(PARTICLE_EFFECT_DESC* pDesc);
 
 public:
 	static CParticle_Effect* Create(ID3D11Device* pDevice, ID3D11DeviceContext* pContext);
