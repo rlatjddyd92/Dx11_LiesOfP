@@ -77,7 +77,12 @@ void CAnimModel::Update(_float fTimeDelta)
 		m_pTransformCom->Go_Straight(fTimeDelta);//m_pTransformCom->Set_State(CTransform::STATE_POSITION, XMVectorSetX(vPos, XMVectorGetX(vPos) + 0.1f));
 	
 	_bool	bEndCheck{false};
-	_vector vRootMove = m_pModelCom->Play_Animation(fTimeDelta, &bEndCheck);
+	_vector vRootMove = m_pModelCom->Play_Animation(fTimeDelta, &bEndCheck, &m_EventKey, &m_EventKey_Boundary);
+
+	if (m_EventKey.bActiveEffect)
+	{
+		int a = 0;
+	}
 
 	if (bEndCheck == true)//조건을 애니메이션이 끝났을때 or 변경 되었을때로
 	{

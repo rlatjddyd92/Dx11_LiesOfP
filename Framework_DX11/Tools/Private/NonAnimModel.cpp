@@ -84,6 +84,12 @@ void CNonAnimModel::Late_Update(_float fTimeDelta)
 
 HRESULT CNonAnimModel::Render()
 {
+	//if (m_isInstance)
+	//{
+	//	m_pModelCom->Add_InstanceData(m_pTransformCom->Get_WorldMatrix());
+	//	return S_OK;
+	//}
+
 	if (FAILED(m_pTransformCom->Bind_ShaderResource(m_pShaderCom, "g_WorldMatrix")))
 		return E_FAIL;
 
@@ -92,7 +98,7 @@ HRESULT CNonAnimModel::Render()
 	if (FAILED(m_pShaderCom->Bind_Matrix("g_ProjMatrix", &m_pGameInstance->Get_Transform(CPipeLine::D3DTS_PROJ))))
 		return E_FAIL;
 
-	if(m_isDecal == false)
+	if (m_isDecal == false)
 	{
 		if (m_isInstance)
 		{
@@ -158,7 +164,7 @@ HRESULT CNonAnimModel::Render()
 			return E_FAIL;
 
 		if (FAILED(m_pTextureCom_Diffuse->Bind_ShadeResource(m_pShaderCom, "g_DeacalDiffuseTexture", 0)))
-			return E_FAIL;	
+			return E_FAIL;
 
 		if (FAILED(m_pShaderCom->Bind_RawValue("bNormal", &m_isNormal, sizeof(_bool))))
 			return E_FAIL;
@@ -167,7 +173,7 @@ HRESULT CNonAnimModel::Render()
 		if (FAILED(m_pShaderCom->Bind_RawValue("bUseWorldColor", &m_bUseWorldColor, sizeof(_bool))))
 			return E_FAIL;
 
-		if(m_isNormal)
+		if (m_isNormal)
 		{
 			if (FAILED(m_pTextureCom_Normal->Bind_ShadeResource(m_pShaderCom, "g_DeacalNormalTexture", 0)))
 				return E_FAIL;
@@ -194,6 +200,27 @@ HRESULT CNonAnimModel::Render()
 		m_pVIBufferCom->Render();
 
 	}
+	if (nullptr != m_pModelCom->Find_Texture((_uint)i, TEXTURE_TYPE::NORMALS))
+	{
+		if (FAILED(m_pModelCom->Bind_Material(m_pShaderCom, "g_NormalTexture", NORMALS, (_uint)i)))
+			return E_FAIL;
+
+		if (FAILED(m_pShaderCom->Begin(1)))
+			return E_FAIL;
+	}
+	else
+	{
+		if (FAILED(m_pShaderCom->Begin(0)))
+			return E_FAIL;
+	}
+
+	if (FAILED(m_pModelCom->Render((_uint)i)))
+		return E_FAIL;
+	_bool bFalse = false;
+	if (FAILED(m_pShaderCom->Bind_RawValue("g_bSelect", &bFalse, sizeof(_bool))))
+		return E_FAIL;
+	if (FAILED(m_pShaderCom->Bind_RawValue("g_isLight", &bFalse, sizeof(_bool))))
+		return E_FAIL;
 	return S_OK;
 }
 

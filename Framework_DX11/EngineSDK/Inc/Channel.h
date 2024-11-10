@@ -29,6 +29,8 @@ public:
 	KEYFRAME		Find_KeyFrameIndex(_uint* pCurrentKeyFrameIndex, _double CurrentTrackPosition);
 	KEYFRAME		Get_KeyFrame(_uint iFrame);
 
+	HRESULT						Create_BinaryFile(HANDLE* pFile);
+
 private:
 	_char				m_szName[MAX_PATH] = {};
 

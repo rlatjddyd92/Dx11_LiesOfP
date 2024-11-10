@@ -52,8 +52,17 @@ void CBody_Player::Update(_float fTimeDelta)
 		m_pModelCom->SetUp_Animation(3, true);
 	if (*m_pParentState & CPlayer::STATE_WALK)
 	{
+		if (m_pModelCom->Get_CurrentAnimationIndex() != 8)
+			m_pModelCom->SetUp_NextAnimation(8, true, 0.2f);
+	}
+
+	//m_pModelCom->SetUp_NextAnimation_Boundary(); 함수를 호출하면 상체에만 애니메이션이 적용
+	//Loop를 false로 주게 되면 끝나고 자동으로 하체의 애니메이션을 따라가도록 되어있음.
+	//하체와 상체가 같은 애니메이션을 공유하고 있다면 같은 프레임을 적용받고, 하체에 셋업 넥스트애니메이션을 적용했을때 상체도 같이 변하게됨
+	if (*m_pParentState & CPlayer::STATE_GRIND)
+	{
 		if (m_pModelCom->Get_CurrentAnimationIndex() != 4)
-			m_pModelCom->SetUp_NextAnimation(4, true, 0.2f);
+			m_pModelCom->SetUp_NextAnimation_Boundary(5, false, 0.2f);
 	}
 
 	m_pModelCom->Play_Animation(fTimeDelta);
@@ -160,7 +169,7 @@ HRESULT CBody_Player::Ready_Components()
 		return E_FAIL;
 		
 	/* FOR.Com_Model */
-	if (FAILED(__super::Add_Component(LEVEL_GAMEPLAY, TEXT("Prototype_Component_Model_Fiona"),
+	if (FAILED(__super::Add_Component(LEVEL_GAMEPLAY, TEXT("Prototype_AnimModel_Test"),
 		TEXT("Com_Model"), reinterpret_cast<CComponent**>(&m_pModelCom))))
 		return E_FAIL;
 

@@ -30,7 +30,10 @@ public:
 
 public:
 	HRESULT Initialize(HANDLE* pFile, vector<_uint>& KeyFrameIndices, const class CModel* pModel);
-	_uint Update_TransformationMatrices(const vector<class CBone*>& Bones, _double* pCurrentTrackPosition, vector<_uint>& CurrentKeyFrameIndices, _bool isLoop, _bool* isEnd, _float fTimeDelta, _bool isChildOfBoundary, _bool BlockStackTime = false);
+	HRESULT Initialize__To_Binary(HANDLE* pFile, vector<_uint>& KeyFrameIndices, const class CModel* pModel);
+	_uint Update_TransformationMatrices(const vector<class CBone*>& Bones, _double* pCurrentTrackPosition, vector<_uint>& CurrentKeyFrameIndices, _bool isLoop, _bool* isEnd, _float fTimeDelta, _bool isChildOfBoundary, OUTPUT_EVKEY* pOutputKey, _bool BlockStackTime = false);
+
+	HRESULT						Create_BinaryFile(HANDLE* pFile);
 
 private:
 	_char						m_szName[MAX_PATH] = {};
@@ -41,6 +44,7 @@ private:
 	/* Channel : 뼈 (시간에 따른 이 뼈의 상태 행렬을 보관한다) */
 	vector<class CChannel*>		m_Channels;
 
+	//애니메이션 툴에서 만든 키프레임 정보
 	vector<EVENT_KEYFRAME>		m_EventKeyFrames;
 
 	/* 이 애니메이션을 구동하기위해 거리는 전체 거리. */
@@ -53,6 +57,7 @@ private:
 
 public:
 	static CAnimation* Create(HANDLE* pFile, vector<_uint>& KeyFrameIndices, const class CModel* pModel);
+	static CAnimation* Create_To_Binary(HANDLE* pFile, vector<_uint>& KeyFrameIndices, const class CModel* pModel);
 	CAnimation* Clone();
 	virtual void Free() override;
 };

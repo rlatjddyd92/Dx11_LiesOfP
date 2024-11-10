@@ -64,7 +64,7 @@ void CChannel::Update_TransformationMatrix(const vector<class CBone*>& Bones, _u
 			while (CurrentTrackPosition >= m_KeyFrames[*pCurrentKeyFrameIndex + 1].TrackPosition)
 				++(*pCurrentKeyFrameIndex);
 		}
-		else
+		else//뒤로 재생되었을 경우에도 키프레임의 변경
 		{
 			while (CurrentTrackPosition <= m_KeyFrames[*pCurrentKeyFrameIndex - 1].TrackPosition)
 				--(*pCurrentKeyFrameIndex);
@@ -136,6 +136,23 @@ KEYFRAME CChannel::Get_KeyFrame(_uint iFrame)
 	}
 }
 
+HRESULT CChannel::Create_BinaryFile(HANDLE* pFile)
+{
+	_ulong dwByte = 0;
+	//이름 저장
+	WriteFile(*pFile, &m_szName, MAX_PATH, &dwByte, nullptr);
+
+	//키프레임 갯수 저장
+	WriteFile(*pFile, &m_iNumKeyFrames, sizeof(_uint), &dwByte, nullptr);
+
+	for (auto& KeyFrame : m_KeyFrames)
+	{
+		WriteFile(*pFile, &KeyFrame, sizeof(KEYFRAME), &dwByte, nullptr);
+	}
+
+	return S_OK;
+}
+
 CChannel* CChannel::Create(HANDLE* pFile, const CModel* pModel)
 {
 	CChannel* pInstance = new CChannel();
@@ -148,7 +165,6 @@ CChannel* CChannel::Create(HANDLE* pFile, const CModel* pModel)
 
 	return pInstance;
 }
-
 
 void CChannel::Free()
 {

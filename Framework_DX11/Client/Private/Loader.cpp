@@ -447,6 +447,12 @@ HRESULT CLoader::Ready_Resources_For_GamePlayLevel_Map0()
 		CModel::Create(m_pDevice, m_pContext, CModel::TYPE_NONANIM, "../Bin/ModelData/NonAnim/Example/Example.dat", PreTransformMatrix))))
 		return E_FAIL;
 
+	//
+	PreTransformMatrix = XMMatrixScaling(0.01f, 0.01f, 0.01f) * XMMatrixRotationY(XMConvertToRadians(270.0f));
+	if (FAILED(m_pGameInstance->Add_Prototype(LEVEL_GAMEPLAY, TEXT("Prototype_AnimModel_Test"),
+		CModel::Create(m_pDevice, m_pContext, CModel::TYPE_ANIM, "../Bin/ModelData/Anim/CreatedBinFiles/Test.dat", PreTransformMatrix, true))))
+		return E_FAIL;
+
 	m_isFinished_Map0 = true;
 
 	return S_OK;

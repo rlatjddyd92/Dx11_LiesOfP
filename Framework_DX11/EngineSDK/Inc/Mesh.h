@@ -28,10 +28,13 @@ public:
 
 public:
 	virtual HRESULT Initialize_Prototype(HANDLE* pFile, const CModel* pModel, _fmatrix PreTransformMatrix);
+	virtual HRESULT Initialize_Prototype_To_Binary(HANDLE* pFile, const CModel* pModel, _fmatrix PreTransformMatrix);
 	virtual HRESULT Initialize(void* pArg) override;
 
 public:
 	HRESULT Bind_BoneMatrices(const CModel* pModel, class CShader * pShader, const _char * pConstantName);
+	_matrix		CalcMatrix_forVtxAnim(vector<class CBone*>&	Bones	,VTXANIMMESH VtxStruct);
+	HRESULT		Create_BinaryFile(HANDLE* pFile);
 
 private:
 	_char				m_szName[MAX_PATH] = {};
@@ -50,13 +53,17 @@ private:
 	VTXANIMMESH*		m_pAnimVertices = { nullptr };
 	_uint*				m_pIndices = { nullptr };
 
+	_int*				m_pWeightsCnts = { nullptr };
+
 private:
 	HRESULT	Ready_VertexBuffer_NonAnim(HANDLE* pFile, _fmatrix PreTransformMatrix);
 	HRESULT	Ready_VertexBuffer_Anim(HANDLE* pFile, const CModel* pModel);
 
+	HRESULT	Ready_VertexBuffer_To_Binary(HANDLE* pFile);
 
 public:
 	static CMesh* Create(ID3D11Device* pDevice, ID3D11DeviceContext* pContext, HANDLE* pFile, const CModel* pModel, _fmatrix PreTransformMatrix);
+	static CMesh* Create_To_Binary(ID3D11Device* pDevice, ID3D11DeviceContext* pContext, HANDLE* pFile, const CModel* pModel, _fmatrix PreTransformMatrix);
 	virtual CComponent* Clone(void* pArg);
 	virtual void Free() override;
 };

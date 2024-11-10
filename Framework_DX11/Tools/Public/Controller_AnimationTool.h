@@ -23,6 +23,9 @@ public:
 	HRESULT Initialize(ID3D11Device* pDevice, ID3D11DeviceContext* pContext);
 
 public:
+	void				SetUp_Lump(_int iNumAnimModel) { pLumpModelpaths.pLump.resize(iNumAnimModel); };
+	FilePathStructStack* Get_StructStack(_int iModelCnt) { return &pLumpModelpaths.pLump[iModelCnt]; }
+
 	void	SetUp_AnimTool();
 
 	void	ListUp_Anim();
@@ -33,6 +36,8 @@ public:
 
 	void	ListUp_Virtex();
 	void	SetUp_Controller_Vertex();
+
+	void	NewPage_AnimTool();
 
 	void	EndFrame_AnimTool();
 	void	BlockObjCtr() { m_bObjRenderCtr = false; };
@@ -50,7 +55,10 @@ private:
 	VTXANIMMESH*			m_pCopyVtxAnimMeshes = { nullptr };
 
 	vector<const _char*>			m_ModelNames;
-	map<const _char*, CModel*>	m_Models;
+	map<string, CModel*>	m_Models;
+	 
+private:
+	StructStacklump			pLumpModelpaths;
 
 private:
 
@@ -79,6 +87,8 @@ private:
 
 	_uint m_iBoneTypeIndex{};
 
+	_uint m_EventTypeIndex{};
+
 	//입력값 혹은 출력값
 	_double m_AnimSpeedPS{};
 	_double m_AnimDuration{};
@@ -86,12 +96,23 @@ private:
 
 	_char	m_szEvKeyFrameText[MAX_PATH] = {""};
 
+	_double m_Start_TrackPosition{};
+	_double m_End_TrackPosition{};
+	_double m_Repet_Duration{};
+
+	_int	m_iBoneIndex_forEvKey{};
+	_int	m_iEffect_Num{};
+
 	_char	m_szCurrentModelText[MAX_PATH] = { "" };
 
+	_float	m_fPosXModel{}, m_fPosYModel{}, m_fPosZModel{};
 	//조건 적용용 불변수
 	_bool	m_bDivide_Boundary { false };
 	_bool	m_bObjRenderCtr {true};
 	_bool	m_bIsAnimStopped { false };
+	_bool	m_bTargetBallRender{ false };
+
+	_vector	m_vPos{};
 
 public:
 	virtual void Free() override;

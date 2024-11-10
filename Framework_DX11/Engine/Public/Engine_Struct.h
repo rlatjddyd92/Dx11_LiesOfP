@@ -26,7 +26,7 @@ namespace Engine
 
 	typedef struct
 	{
-		class CTexture*	pMaterialTextures[18];
+		class CTexture* pMaterialTextures[18]{ nullptr };
 	}MESH_MATERIAL;
 
 	typedef struct
@@ -40,9 +40,45 @@ namespace Engine
 	//이봉준 이벤트 키 프레임
 	typedef struct
 	{
-		_char			szEventName[MAX_PATH];
-		_double			TrackPosition;
+		enum EVENT_TYPE
+		{
+			ET_ONCE,
+			ET_REPET,
+			ET_END
+		};
+		enum BODY_TYPE_EV
+		{
+			BT_UPPER,
+			BT_EITHER,
+			BT_LOWER
+		};
+		EVENT_TYPE		eEvent_type{ ET_END };
+		_char			szEventName[MAX_PATH];	//키프레임 이름(안쓸지도)
+		_double			Start_TrackPosition{};	//시작점 위치
+		_double			End_TrackPosition{};	//중단점 위치
+		_double			LiveRange{};			//이벤트의 시간(중단점 - 시작점)
+		_double			Repet_Duration{};		//이벤트의 재생성 시간(중단점 - 시작점)
+
+		_uint			iBoneIndex{};			//이펙트를 생성 혹은 부착시킬 뼈의 인덱스
+
+		_uint			iEffectNum{};			//생성할 이펙트의 번호?
+
 	}EVENT_KEYFRAME;
+
+	typedef struct
+	{
+		_bool			bActiveEffect{ false };
+
+		_uint			iBoneIndex{};			//이펙트를 생성 혹은 부착시킬 뼈의 인덱스
+
+		_uint			iEffectNum{};			//생성할 이펙트의 번호?
+
+		EVENT_KEYFRAME::EVENT_TYPE		eEvent_type{ EVENT_KEYFRAME::ET_END};
+
+		//_double			LiveRange{};			//이벤트의 시간(중단점 - 시작점)
+		//_double			Repet_Duration{};		//이벤트의 재생성 시간(중단점 - 시작점)
+
+	}OUTPUT_EVKEY;
 
 	typedef struct
 	{
@@ -50,6 +86,22 @@ namespace Engine
 		_uint			VtxNum;
 		_uint			UseWay;//이넘으로 받도록 만들지 문자로 받을지 고민해보기
 	}UFVTX;
+
+	typedef struct
+	{
+		vector<string>			m_ModelFilePaths;
+	}FilePathStruct;
+
+	typedef struct
+	{
+		vector<FilePathStruct>		pStruct;
+	}FilePathStructStack;
+
+	typedef struct
+	{
+		vector<FilePathStructStack>		pLump;
+	}StructStacklump;
+
 
 	typedef struct
 	{

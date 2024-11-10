@@ -24,6 +24,10 @@ CModel::CModel(const CModel & Prototype)
 	, m_Animations { Prototype.m_Animations }
 	, m_CurrentTrackPosition { Prototype.m_CurrentTrackPosition }
 	, m_KeyFrameIndices {Prototype.m_KeyFrameIndices }
+	, m_FilePaths { Prototype.m_FilePaths }
+	, m_isUseBoundary { Prototype.m_isUseBoundary }
+	, m_UFBIndices { Prototype.m_UFBIndices }
+	, m_UseFullVtxIndices{ Prototype.m_UseFullVtxIndices }
 {
 	for (auto& pAnimation : m_Animations)
 		Safe_AddRef(pAnimation);
@@ -82,7 +86,7 @@ _bool CModel::Get_IsEnd_Animation(_uint iAnimationIndex)
 	return m_isEnd_Animations[iAnimationIndex];
 }
 
-CTexture * CModel::Find_Texture(_uint iMeshNum, TEXTURE_TYPE eMaterialType)
+CTexture* CModel::Find_Texture(_uint iMeshNum, TEXTURE_TYPE eMaterialType)
 {
 	_uint iMaterialIndex = m_Meshes[iMeshNum]->Get_MaterialIndex();
 	return m_Materials[iMaterialIndex].pMaterialTextures[eMaterialType];
@@ -109,8 +113,13 @@ HRESULT CModel::Update_Boundary()
 	return S_OK;
 }
 
-HRESULT CModel::Initialize_Prototype(TYPE eType, const _char * pModelFilePath, _fmatrix PreTransformMatrix)
+HRESULT CModel::Initialize_Prototype(TYPE eType, const _char * pModelFilePath, _fmatrix PreTransformMatrix, _bool isBinaryAnimModel, FilePathStructStack* pStructStack)
 {
+	if (pStructStack != nullptr)
+	{
+		m_FilePaths = pStructStack;
+	}
+
 	_uint		iFlag = { 0 };	
 	
 	/* 이전 : 모든 메시가 다 원점을 기준으로 그렺니다. */
@@ -129,19 +138,28 @@ HRESULT CModel::Initialize_Prototype(TYPE eType, const _char * pModelFilePath, _
 		return E_FAIL;
 	}
 
-	if (FAILED(Ready_Bones(&hFile, -1)))
-		return E_FAIL;
-	for (auto& Bone : m_Bones)
-		Bone->Setting_ParentBoneName(this);
+	if (isBinaryAnimModel)
+	{//변경된 애니메이션 모델이라는 표시 -> 새로만든 바이너리 파일을 통해서 호출
+		ReadyModel_To_Binary(&hFile);
+		Update_Boundary();
+	}
+	else			//추가되기 전 일반 바이너리 파일로 불러오는
+	{
+		if (FAILED(Ready_Bones(&hFile, -1)))
+			return E_FAIL;
 
-	if (FAILED(Ready_Meshes(&hFile)))
-		return E_FAIL;
+		for (auto& Bone : m_Bones)
+			Bone->Setting_ParentBoneName(this);
 
-	if (FAILED(Ready_Materials(&hFile, pModelFilePath)))
-		return E_FAIL;
+		if (FAILED(Ready_Meshes(&hFile)))
+			return E_FAIL;
 
-	if (FAILED(Ready_Animations(&hFile)))
-		return E_FAIL;
+		if (FAILED(Ready_Materials(&hFile, pModelFilePath)))
+			return E_FAIL;
+
+		if (FAILED(Ready_Animations(&hFile)))
+			return E_FAIL;
+	}
 
 	CloseHandle(hFile);
 
@@ -253,7 +271,10 @@ HRESULT CModel::SetUp_NextAnimation(_uint iNextAnimationIndex, _bool isLoop, _fl
 	m_tChaneAnimDesc.iStartFrame = iStartFrame;
 	m_tChaneAnimDesc.fChangeDuration = fChangeDuration;
 	m_tChaneAnimDesc.fChangeTime = 0.f;
-
+	if (m_iCurrentAnimIndex == m_iCurrentAnimIndex_Boundary)
+	{
+		SetUp_NextAnimation_Boundary(iNextAnimationIndex, isLoop, fChangeDuration, iStartFrame);
+	}
 	m_isEnd_Animations[iNextAnimationIndex] = false;
 	m_isLoop = isLoop;
 	m_isChangeAni = true;
@@ -311,9 +332,25 @@ _uint CModel::Setting_Animation(const _char* szAnimationmName, _double SpeedRati
 	return iAnimationIndex;
 }
 
-_vector CModel::Play_Animation(_float fTimeDelta, _bool* pOut)
+_matrix CModel::CalcMatrix_forVtxAnim(_uint iMeshNum, VTXANIMMESH VtxStruct)
+{
+	return m_Meshes[iMeshNum]->CalcMatrix_forVtxAnim(m_Bones, VtxStruct); //m_isUseBoundary
+}
+
+_vector CModel::Play_Animation(_float fTimeDelta, _bool* pOut, OUTPUT_EVKEY* pOutputKey, OUTPUT_EVKEY* pOutputKey_Boundary)
 {
 	_float fAddTime = fTimeDelta * m_bPlayAnimCtr;
+
+	if (pOutputKey != nullptr)
+	{
+		pOutputKey->bActiveEffect = false;
+	}		
+	//기본적으로 이런 이펙트들의 경우, 보간되는 도중에는 필요치 않음
+	if (pOutputKey_Boundary != nullptr)
+	{
+		pOutputKey_Boundary->bActiveEffect = false;		//이펙트 재생 여부 값 false로 초기화
+	}
+	
 
 	//상하체 분리에 영향받지 않는 부분들의 업데이트
 	if (m_isChangeAni)
@@ -331,6 +368,10 @@ _vector CModel::Play_Animation(_float fTimeDelta, _bool* pOut)
 		m_CurrentTrackPosition += fAddTime;
 		for (_int i = 0; i < CurrentChannels.size(); ++i)
 		{
+			if (m_isUseBoundary && m_Bones[CurrentChannels[i]->Get_BoneIndex()]->Get_IsChildOf_Boundary() == true)
+			{
+				continue;
+			}
 
 			KEYFRAME tCurrentKeyFrame = CurrentChannels[i]->Find_KeyFrameIndex(&m_KeyFrameIndices[m_iCurrentAnimIndex][i], m_CurrentTrackPosition); // 여기서부터
 			KEYFRAME tNextKeyFrame = NextChannels[i]->Find_KeyFrameIndex(&m_KeyFrameIndices[m_tChaneAnimDesc.iNextAnimIndex][i], NextChannels[i]->Get_KeyFrame(m_tChaneAnimDesc.iStartFrame).TrackPosition); // 여기로 보간
@@ -382,7 +423,8 @@ _vector CModel::Play_Animation(_float fTimeDelta, _bool* pOut)
 	else
 	{
 		/* 뼈를 움직인다.(CBone`s m_TransformationMatrix행렬을 갱신한다.) */
-		m_iCurrentFrame = m_Animations[m_iCurrentAnimIndex]->Update_TransformationMatrices(m_Bones, &m_CurrentTrackPosition, m_KeyFrameIndices[m_iCurrentAnimIndex], m_isLoop, &m_isEnd_Animations[m_iCurrentAnimIndex], fAddTime, false);
+		m_iCurrentFrame = m_Animations[m_iCurrentAnimIndex]->Update_TransformationMatrices(m_Bones, &m_CurrentTrackPosition, m_KeyFrameIndices[m_iCurrentAnimIndex], m_isLoop, &m_isEnd_Animations[m_iCurrentAnimIndex], fAddTime, false, pOutputKey);
+	
 	}
 
 
@@ -404,6 +446,10 @@ _vector CModel::Play_Animation(_float fTimeDelta, _bool* pOut)
 			m_CurrentTrackPosition_Boundary += fAddTime;
 			for (_int i = 0; i < CurrentChannels.size(); ++i)
 			{
+				if (m_Bones[CurrentChannels[i]->Get_BoneIndex()]->Get_IsChildOf_Boundary() == false)
+				{
+					continue;
+				}
 
 				KEYFRAME tCurrentKeyFrame = CurrentChannels[i]->Find_KeyFrameIndex(&m_KeyFrameIndices[m_iCurrentAnimIndex_Boundary][i], m_CurrentTrackPosition_Boundary); // 여기서부터
 				KEYFRAME tNextKeyFrame = NextChannels[i]->Find_KeyFrameIndex(&m_KeyFrameIndices[m_tChaneAnimDesc_Boundary.iNextAnimIndex][i], NextChannels[i]->Get_KeyFrame(m_tChaneAnimDesc_Boundary.iStartFrame).TrackPosition); // 여기로 보간
@@ -444,7 +490,7 @@ _vector CModel::Play_Animation(_float fTimeDelta, _bool* pOut)
 
 			if (isChangeEnd)
 			{
-				if (m_iCurrentAnimIndex == m_tChaneAnimDesc_Boundary.iNextAnimIndex)
+				if (m_tChaneAnimDesc_Boundary.iNextAnimIndex == m_iCurrentAnimIndex)
 				{
 					m_CurrentTrackPosition_Boundary = m_CurrentTrackPosition;
 				}
@@ -463,11 +509,11 @@ _vector CModel::Play_Animation(_float fTimeDelta, _bool* pOut)
 			//if 상하체 애니메이션이 같으면 시간누적 없는 업데이트 하체 변수로 호출
 			if (m_iCurrentAnimIndex == m_iCurrentAnimIndex_Boundary)
 			{
-				m_iCurrentFrame = m_Animations[m_iCurrentAnimIndex_Boundary]->Update_TransformationMatrices(m_Bones, &m_CurrentTrackPosition, m_KeyFrameIndices[m_iCurrentAnimIndex_Boundary], m_isLoop, &m_isEnd_Animations_Boundary[m_iCurrentAnimIndex_Boundary], fAddTime, true, true);
+				m_iCurrentFrame = m_Animations[m_iCurrentAnimIndex_Boundary]->Update_TransformationMatrices(m_Bones, &m_CurrentTrackPosition, m_KeyFrameIndices[m_iCurrentAnimIndex_Boundary], m_isLoop, &m_isEnd_Animations_Boundary[m_iCurrentAnimIndex_Boundary], fAddTime, true, pOutputKey_Boundary, true);
 			}
 			else
 			{
-				m_iCurrentFrame = m_Animations[m_iCurrentAnimIndex_Boundary]->Update_TransformationMatrices(m_Bones, &m_CurrentTrackPosition_Boundary, m_KeyFrameIndices[m_iCurrentAnimIndex_Boundary], m_isLoop_Boundary, &m_isEnd_Animations_Boundary[m_iCurrentAnimIndex_Boundary], fAddTime, true);
+				m_iCurrentFrame = m_Animations[m_iCurrentAnimIndex_Boundary]->Update_TransformationMatrices(m_Bones, &m_CurrentTrackPosition_Boundary, m_KeyFrameIndices[m_iCurrentAnimIndex_Boundary], m_isLoop_Boundary, &m_isEnd_Animations_Boundary[m_iCurrentAnimIndex_Boundary], fAddTime, true, pOutputKey_Boundary);
 			}
 		}
 	}
@@ -479,14 +525,17 @@ _vector CModel::Play_Animation(_float fTimeDelta, _bool* pOut)
 	{
 		m_Bones[m_UFBIndices[UFB_ROOT]]->Update_CombinedTransformationMatrix(m_Bones, XMLoadFloat4x4(&m_PreTransformMatrix));
 		vRootMove = m_Bones[m_UFBIndices[UFB_ROOT]]->Get_CombinedTransformationMatrix().r[3];
-		if (m_CurrentTrackPosition == 0.f && pOut != nullptr)//애니메이션이 끝났는지에 대한 판단
+		if (m_isEnd_Animations[m_iCurrentAnimIndex] == true && pOut != nullptr)//애니메이션이 끝났는지에 대한 판단
 		{
+			m_CurrentTrackPosition == 0.f;
 			*pOut = true;
+			m_isEnd_Animations[m_iCurrentAnimIndex] = false;
 		}
-		if (m_CurrentTrackPosition_Boundary == 0.f && pOut != nullptr && m_iCurrentAnimIndex != m_iCurrentAnimIndex_Boundary && m_isEnd_Animations_Boundary[m_iCurrentAnimIndex_Boundary])//애니메이션이 끝났는지에 대한 판단
+		if (m_isEnd_Animations_Boundary[m_iCurrentAnimIndex_Boundary] == true && m_iCurrentAnimIndex != m_iCurrentAnimIndex_Boundary && m_isEnd_Animations_Boundary[m_iCurrentAnimIndex_Boundary])//애니메이션이 끝났는지에 대한 판단
 		{
 			SetUp_NextAnimation_Boundary(m_iCurrentAnimIndex, m_isLoop);
 			m_CurrentTrackPosition_Boundary = 0.f;
+			m_isEnd_Animations_Boundary[m_iCurrentAnimIndex_Boundary] = false;
 		}
 		_float4x4 RootMat = {};
 		XMStoreFloat4x4(&RootMat, m_Bones[m_UFBIndices[UFB_ROOT]]->Get_TransformationMatrix());
@@ -502,6 +551,272 @@ _vector CModel::Play_Animation(_float fTimeDelta, _bool* pOut)
 	}
 
 	return vRootMove;
+}
+
+HRESULT CModel::Create_BinaryFile(const _char* ModelTag)
+{
+	_ulong dwByte = 0;
+
+#pragma region 경로 세팅하기
+	// 경로, 이름, 확장자 정하기
+	string strFilePath;
+	strFilePath.assign(ModelTag);
+
+	//"Prototype_AnimModel_Test"  앞부분 제외 뒷부분 이름으로 사용
+
+	strFilePath.erase(0, 20);
+
+	char szCreateFolderPath[MAX_PATH];
+	if (m_eType == TYPE_NONANIM)
+		strcpy_s(szCreateFolderPath, "../Bin/ModelData/NonAnim/CreatedBinFiles/");
+	else
+		strcpy_s(szCreateFolderPath, "../Bin/ModelData/Anim/CreatedBinFiles/");
+
+	string strDat = "";
+	strDat.assign(".Dat");
+
+	strcat_s(szCreateFolderPath, strFilePath.c_str());
+	strcat_s(szCreateFolderPath, strDat.c_str());
+	strFilePath.assign(szCreateFolderPath);
+
+	_tchar szFinalPath[MAX_PATH] = TEXT("");
+	MultiByteToWideChar(CP_ACP, 0, strFilePath.c_str(), (_uint)strlen(strFilePath.c_str()), szFinalPath, MAX_PATH);
+
+#pragma endregion
+
+	HANDLE hFile = CreateFile(szFinalPath, GENERIC_WRITE, 0, nullptr, CREATE_ALWAYS, FILE_ATTRIBUTE_NORMAL, 0);
+	if (0 == hFile)
+	{
+		MSG_BOX(TEXT("Failed to Open Models data"));
+		return E_FAIL;
+	}
+
+	//상하체 분리 여부
+	WriteFile(hFile, &m_isUseBoundary, sizeof(_bool), &dwByte, nullptr);
+
+	//사용하려고 저장한 뼈
+	for (_int i = 0; i < UFB_END; ++i)
+	{
+		WriteFile(hFile, &m_UFBIndices[i], sizeof(_uint), &dwByte, nullptr);
+	}
+
+	//아래 정점의 갯수
+	_int iNumUFVtx = m_UseFullVtxIndices.size();
+	WriteFile(hFile, &iNumUFVtx, sizeof(_int), &dwByte, nullptr);
+	//사용하려고 저장한 정점
+	for (int j = 0; j < iNumUFVtx; ++j)
+	{
+		WriteFile(hFile, &m_UseFullVtxIndices[j], sizeof(UFVTX), &dwByte, nullptr);
+	}
+
+	if (FAILED(Create_Bin_Bones(&hFile)))
+	{
+		CloseHandle(hFile);
+		return E_FAIL;
+	}
+
+	if (FAILED(Create_Bin_Meshes(&hFile)))
+	{
+		CloseHandle(hFile);
+		return E_FAIL;
+	}
+		
+	if (FAILED(Create_Bin_Materials(&hFile)))
+	{
+		CloseHandle(hFile);
+		return E_FAIL;
+	}
+	
+	if (FAILED(Create_Bin_Animations(&hFile)))
+	{
+		CloseHandle(hFile);
+		return E_FAIL;
+	}
+
+	CloseHandle(hFile);
+	return S_OK;
+}
+
+HRESULT CModel::Create_Bin_Bones(HANDLE* pFile)
+{
+	_ulong dwByte = 0;
+
+	_uint iNumBone = m_Bones.size();
+	//뼈의 갯수
+	WriteFile(*pFile, &iNumBone, sizeof(_uint), &dwByte, nullptr);
+
+	for (auto& pBone : m_Bones)
+	{//뼈의 바이너리화 함수 호출
+		pBone->Create_BinaryFile(pFile, m_isUseBoundary);
+	}
+	return S_OK;
+}
+
+HRESULT CModel::Create_Bin_Meshes(HANDLE* pFile)
+{
+	_ulong dwByte = 0;
+	//메쉬의 갯수
+	WriteFile(*pFile, &m_iNumMeshes, sizeof(_uint), &dwByte, nullptr);
+
+	for (auto& pMesh : m_Meshes)
+	{//뼈의 바이너리화 함수 호출
+		pMesh->Create_BinaryFile(pFile);
+	}
+
+	return S_OK;
+}
+
+HRESULT CModel::Create_Bin_Materials(HANDLE* pFile)
+{
+	_ulong dwByte = 0;
+	//머티리얼 갯수 저장
+	WriteFile(*pFile, &m_iNumMaterials, sizeof(_uint), &dwByte, nullptr);
+
+	_int iMaterialNum{};
+	for (auto & pMaterialSet : m_Materials)
+	{//머티리얼 저장 수 가 최대 수만큼 반복
+
+		_int iTextureNum{};
+		for (_int i = 0; i < TEXTURE_TYPE_MAX; ++i)
+		{
+			pMaterialSet.pMaterialTextures;
+
+			_bool isHaveTexture = true;
+			if (pMaterialSet.pMaterialTextures[i] == nullptr)
+			{//저장 할 것이 없다면 스킵
+				isHaveTexture = false;;
+			}
+			//텍스쳐 존재 여부를 저장
+			WriteFile(*pFile, &isHaveTexture, sizeof(_bool), &dwByte, nullptr);
+
+			if (isHaveTexture)
+			{//텍스쳐가 있을 경우에만 저장
+
+
+				WriteFile(*pFile, m_FilePaths->pStruct[iMaterialNum].m_ModelFilePaths[iTextureNum].c_str(), MAX_PATH, &dwByte, nullptr);
+				++iTextureNum;
+			}
+		}
+		++iMaterialNum;
+	}
+
+	return S_OK;
+}
+
+HRESULT CModel::Create_Bin_Animations(HANDLE* pFile)
+{
+	_ulong dwByte = 0;
+	//애니메이션 수 저장
+	WriteFile(*pFile, &m_iNumAnimations, sizeof(_uint), &dwByte, nullptr);
+
+	for (auto& pAnimation : m_Animations)
+	{
+		pAnimation->Create_BinaryFile(pFile);
+	}
+	return S_OK;
+}
+
+HRESULT CModel::ReadyModel_To_Binary(HANDLE* pFile)
+{
+	_ulong dwByte = 0;
+
+	ReadFile(*pFile, &m_isUseBoundary, sizeof(_bool), &dwByte, nullptr);
+
+	m_UFBIndices.resize(UFB_END);
+
+	for (_int i = 0; i < UFB_END; ++i)
+	{
+		ReadFile(*pFile, &m_UFBIndices[i], sizeof(_uint), &dwByte, nullptr);
+	}
+
+	_int iNumUFVtx = {};
+	ReadFile(*pFile, &iNumUFVtx, sizeof(_int), &dwByte, nullptr);
+
+	for (_int i = 0; i < iNumUFVtx; ++ i)
+	{
+		ReadFile(*pFile, &m_UseFullVtxIndices[i], sizeof(UFVTX), &dwByte, nullptr);
+	}
+	//여기까지 모델.
+	
+
+	_uint iNumBone = {};
+	ReadFile(*pFile, &iNumBone, sizeof(_uint), &dwByte, nullptr);
+
+	for (_uint i = 0; i < iNumBone; ++ i)
+	{
+		CBone* pBone = CBone::Create_To_Binary(pFile, m_isUseBoundary);
+		if (pBone == nullptr)
+			return E_FAIL;
+		
+		m_Bones.emplace_back(pBone);
+	}
+	//여기까지 뼈
+
+
+	ReadFile(*pFile, &m_iNumMeshes, sizeof(_uint), &dwByte, nullptr);
+
+	for (_uint i = 0; i < m_iNumMeshes; ++i)
+	{
+		CMesh* pMesh = CMesh::Create_To_Binary(m_pDevice, m_pContext, pFile, this, XMLoadFloat4x4(&m_PreTransformMatrix));
+		if (nullptr == pMesh)
+			return E_FAIL;
+
+		m_Meshes.emplace_back(pMesh);
+
+	}
+	//여기까지 메쉬
+
+
+	ReadFile(*pFile, &m_iNumMaterials, sizeof(_uint), &dwByte, nullptr);
+	
+	for (_int i = 0; i < m_iNumMaterials; ++i)
+	{
+		MESH_MATERIAL		MeshMaterial{};
+
+		for (_int j = 0; j < TEXTURE_TYPE_MAX; ++j)
+		{
+			_bool	isHaveTextures = true;
+			ReadFile(*pFile, &isHaveTextures, sizeof(_bool), &dwByte, nullptr);
+
+			if (!isHaveTextures)
+				continue;
+
+
+			_char				szTexturePath[MAX_PATH] = "";
+
+			ReadFile(*pFile, szTexturePath, MAX_PATH, &dwByte, nullptr);
+
+			_tchar				szFinalPath[MAX_PATH] = TEXT("");
+
+			MultiByteToWideChar(CP_ACP, 0, szTexturePath, (_int)(strlen(szTexturePath)), szFinalPath, MAX_PATH);
+
+			if (m_pGameInstance)
+
+				MeshMaterial.pMaterialTextures[j] = CTexture::Create(m_pDevice, m_pContext, szFinalPath, 1);
+			if (nullptr == MeshMaterial.pMaterialTextures[j])
+				return E_FAIL;
+		}
+
+		m_Materials.emplace_back(MeshMaterial);
+
+	}
+	//여기까지 머티리얼
+
+
+	ReadFile(*pFile, &m_iNumAnimations, sizeof(_uint), &dwByte, nullptr);
+
+	m_KeyFrameIndices.resize(m_iNumAnimations);
+
+	for (_int i = 0; i < m_iNumAnimations; ++i)
+	{
+		CAnimation* pAnimation = CAnimation::Create_To_Binary(pFile, m_KeyFrameIndices[i], this);
+		if (nullptr == pAnimation)
+			return E_FAIL;
+
+		m_Animations.emplace_back(pAnimation);
+	}
+
+	return S_OK;
 }
 
 HRESULT CModel::Bind_Material(CShader* pShader, const _char* pConstantName, TEXTURE_TYPE eMaterialType, _uint iMeshIndex)
@@ -542,7 +857,10 @@ HRESULT CModel::Ready_Materials(HANDLE* pFile, const _char* pModelFilePath)
 
 	// 머터리얼의 개수 저장해두기
 	ReadFile(*pFile, &m_iNumMaterials, sizeof(_uint), &dwByte, nullptr);
-
+	if (m_FilePaths != nullptr)
+	{
+		m_FilePaths->pStruct.resize(m_iNumMaterials);
+	}
 	for (size_t i = 0; i < m_iNumMaterials; i++)
 	{
 		MESH_MATERIAL		MeshMaterial{};
@@ -560,6 +878,12 @@ HRESULT CModel::Ready_Materials(HANDLE* pFile, const _char* pModelFilePath)
 
 			ReadFile(*pFile, szTexturePath, MAX_PATH, &dwByte, nullptr);
 
+			if (m_FilePaths != nullptr)
+			{
+				string strTextureFilePath;
+				strTextureFilePath.assign(szTexturePath);
+				m_FilePaths->pStruct[i].m_ModelFilePaths.push_back(strTextureFilePath);
+			}
 			_tchar				szFinalPath[MAX_PATH] = TEXT("");
 
 			MultiByteToWideChar(CP_ACP, 0, szTexturePath, (_int)(strlen(szTexturePath)), szFinalPath, MAX_PATH);
@@ -621,11 +945,11 @@ HRESULT CModel::Ready_Animations(HANDLE* pFile)
 }
 
 
-CModel * CModel::Create(ID3D11Device * pDevice, ID3D11DeviceContext * pContext, TYPE eType, const _char * pModelFilePath, _fmatrix PreTransformMatrix)
+CModel * CModel::Create(ID3D11Device * pDevice, ID3D11DeviceContext * pContext, TYPE eType, const _char * pModelFilePath, _fmatrix PreTransformMatrix, _bool isBinaryAnimModel, FilePathStructStack* pStructStack)
 {
 	CModel*		pInstance = new CModel(pDevice, pContext);
 
-	if (FAILED(pInstance->Initialize_Prototype(eType, pModelFilePath, PreTransformMatrix)))
+	if (FAILED(pInstance->Initialize_Prototype(eType, pModelFilePath, PreTransformMatrix, isBinaryAnimModel, pStructStack)))
 	{
 		MSG_BOX(TEXT("Failed to Created : CModel"));
 		Safe_Release(pInstance);
@@ -684,4 +1008,13 @@ void CModel::Free()
 		Safe_Release(pMesh);
 	}
 	m_Meshes.clear();
+
+	if (m_FilePaths != nullptr)
+	{
+		for (auto& pPathvec : m_FilePaths->pStruct)
+		{
+			pPathvec.m_ModelFilePaths.clear();
+		}
+		m_FilePaths->pStruct.clear();
+	}
 }
