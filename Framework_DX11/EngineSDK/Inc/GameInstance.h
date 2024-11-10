@@ -130,7 +130,13 @@ public:
 #pragma endregion
 
 #pragma region TARGET_MANAGER
-	HRESULT Add_RenderTarget(const _wstring& strTargetTag, _uint iWidth, _uint iHeight, DXGI_FORMAT ePixelFormat, const _float4& vClearColor, _uint iArraySize = 1);
+	HRESULT Add_RenderTarget(const _wstring& strTargetTag, _uint iWidth, _uint iHeight, DXGI_FORMAT ePixelFormat, const _float4& vClearColor);
+	HRESULT Add_RenderTarget_Array(const _wstring& strTargetTag, _uint iWidth, _uint iHeight, DXGI_FORMAT ePixelFormat, const _float4& vClearColor, _uint iArraySize);
+	HRESULT Add_RenderTarget_For_Desc(const _wstring& strTargetTag,
+		D3D11_BUFFER_DESC* const& pBufferDesc,
+		D3D11_TEXTURE2D_DESC* const& pTextureDesc,
+		D3D11_SHADER_RESOURCE_VIEW_DESC* const& pSRVDesc,
+		D3D11_UNORDERED_ACCESS_VIEW_DESC* const& pUAVDesc, const _float4& vClearColor);
 	HRESULT Add_MRT(const _wstring& strMRTTag, const _wstring& strTargetTag);
 	HRESULT Begin_MRT(const _wstring& strMRTTag, ID3D11DepthStencilView* pDSV = nullptr, _bool isClear = true);
 	HRESULT End_MRT();

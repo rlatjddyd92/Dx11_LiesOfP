@@ -16,8 +16,17 @@ public:
 	}
 
 public:
-	HRESULT Initialize(_uint iWidth, _uint iHeight, DXGI_FORMAT ePixelFormat, const _float4& vClearColor, _uint iArraySize);
+	HRESULT Initialize(_uint iWidth, _uint iHeight, DXGI_FORMAT ePixelFormat, const _float4& vClearColor);
+	HRESULT Initialize_Array(_uint iWidth, _uint iHeight, DXGI_FORMAT ePixelFormat, const _float4& vClearColor, _uint iArraySize);
+
+	// 직접 desc을 정의해서 넘겨주자
+	HRESULT Initialize_For_Desc(D3D11_BUFFER_DESC* const& pBufferDesc,
+		D3D11_TEXTURE2D_DESC* const& pTextureDesc,
+		D3D11_SHADER_RESOURCE_VIEW_DESC* const& pShaderResourcesViewDesc,
+		D3D11_UNORDERED_ACCESS_VIEW_DESC* const& pUnorderedAccessViewDesc, const _float4& vClearColor);
+
 	HRESULT Bind_ShaderResource(class CShader* pShader, const _char* pConstantName);
+	HRESULT Bind_UnorderedAccess(class CShader* pShader, const _char* pConstantName);
 	void Clear();
 	HRESULT Copy(ID3D11Texture2D* pTexture);
 
@@ -32,9 +41,12 @@ public:
 private:
 	ID3D11Device*				m_pDevice = { nullptr };
 	ID3D11DeviceContext*		m_pContext = { nullptr };
+
+	ID3D11Buffer*				m_pBuffer = nullptr;
 	ID3D11Texture2D*			m_pTexture2D = { nullptr };
 	ID3D11RenderTargetView*		m_pRTV = { nullptr };
 	ID3D11ShaderResourceView*	m_pSRV = { nullptr };
+	ID3D11UnorderedAccessView*	m_pUAV = nullptr;
 	_float4						m_vClearColor = {};
 
 #ifdef _DEBUG
@@ -49,7 +61,14 @@ private:
 
 
 public:
-	static CRenderTarget* Create(ID3D11Device* pDevice, ID3D11DeviceContext* pContext, _uint iWidth, _uint iHeight, DXGI_FORMAT ePixelFormat, const _float4& vClearColor, _uint iArraySize = 1);
+	static CRenderTarget* Create(ID3D11Device* pDevice, ID3D11DeviceContext* pContext, _uint iWidth, _uint iHeight, DXGI_FORMAT ePixelFormat, const _float4& vClearColor);
+	static CRenderTarget* Create_Array(ID3D11Device* pDevice, ID3D11DeviceContext* pContext, _uint iWidth, _uint iHeight, DXGI_FORMAT ePixelFormat, const _float4& vClearColor, _uint iArraySize = 1);
+	static CRenderTarget* Create_For_Desc(ID3D11Device* pDevice, ID3D11DeviceContext* pContext, 
+		D3D11_BUFFER_DESC* const& pBufferDesc,
+		D3D11_TEXTURE2D_DESC* const& pTextureDesc,
+		D3D11_SHADER_RESOURCE_VIEW_DESC* const& pSRVDesc, 
+		D3D11_UNORDERED_ACCESS_VIEW_DESC* const& pUAVDesc, const _float4& vClearColor);
+
 	virtual void Free() override;
 };
 
