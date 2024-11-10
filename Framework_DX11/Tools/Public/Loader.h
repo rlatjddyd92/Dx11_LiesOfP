@@ -64,8 +64,8 @@ private:
 
 	HRESULT Ready_Textures_For_Decal();
 
-private:
-	void aaa();
+	HRESULT Ready_Resources_For_Monster();
+
 public:
 	static CLoader* Create(ID3D11Device* pDevice, ID3D11DeviceContext* pContext, LEVELID eNextLevelID);
 	virtual void Free() override;

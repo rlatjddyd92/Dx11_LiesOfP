@@ -103,6 +103,9 @@ private:
 private:
 	HRESULT Ready_Components(NONMODEL_DESC* pNonAnimDesc);
 
+	HRESULT Render_Decal();
+	HRESULT Render_NonAnim();
+
 public:
 	static CNonAnimModel* Create(ID3D11Device* pDevice, ID3D11DeviceContext* pContext);
 	virtual CGameObject* Clone(void* pArg);

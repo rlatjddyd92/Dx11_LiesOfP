@@ -98,109 +98,15 @@ HRESULT CNonAnimModel::Render()
 	if (FAILED(m_pShaderCom->Bind_Matrix("g_ProjMatrix", &m_pGameInstance->Get_Transform(CPipeLine::D3DTS_PROJ))))
 		return E_FAIL;
 
-	if (m_isDecal == false)
+	if (m_isDecal)
 	{
-		if (m_isInstance)
-		{
-			m_pModelCom->Add_InstanceData(m_pTransformCom->Get_WorldMatrix());
-			return S_OK;
-		}
-
-		if (FAILED(m_pShaderCom->Bind_RawValue("g_bSelect", &m_bSelected, sizeof(_bool))))
+		if(FAILED(Render_Decal()))
 			return E_FAIL;
-
-		if (FAILED(m_pShaderCom->Bind_RawValue("g_isLight", &m_isLight, sizeof(_bool))))
-			return E_FAIL;
-
-		_uint		iNumMeshes = m_pModelCom->Get_NumMeshes();
-
-		for (size_t i = 0; i < iNumMeshes; i++)
-		{
-			m_pModelCom->Bind_MeshBoneMatrices(m_pShaderCom, "g_BoneMatrices", (_uint)i);
-
-			if (nullptr != m_pModelCom->Find_Texture((_uint)i, TEXTURE_TYPE::ROUGHNESS))
-			{
-				if (FAILED(m_pModelCom->Bind_Material(m_pShaderCom, "g_ARMTexture", ROUGHNESS, (_uint)i)))
-					return E_FAIL;
-			}
-			if (m_isLight == false)
-			{
-				if (FAILED(m_pModelCom->Bind_Material(m_pShaderCom, "g_DiffuseTexture", TEXTURE_TYPE::DIFFUSE, (_uint)i)))
-					return E_FAIL;
-			}
-
-			if (nullptr != m_pModelCom->Find_Texture((_uint)i, TEXTURE_TYPE::NORMALS))
-			{
-				if (FAILED(m_pModelCom->Bind_Material(m_pShaderCom, "g_NormalTexture", NORMALS, (_uint)i)))
-					return E_FAIL;
-
-				if (FAILED(m_pShaderCom->Begin(1)))
-					return E_FAIL;
-			}
-			else
-			{
-				if (FAILED(m_pShaderCom->Begin(0)))
-					return E_FAIL;
-			}
-
-			if (FAILED(m_pModelCom->Render((_uint)i)))
-				return E_FAIL;
-
-		}
-
 	}
 	else
 	{
-		_bool bFalse = false;
-		if (FAILED(m_pShaderCom->Bind_RawValue("g_bSelect", &bFalse, sizeof(_bool))))
+		if (FAILED(Render_NonAnim()))
 			return E_FAIL;
-		if (FAILED(m_pShaderCom->Bind_RawValue("g_isLight", &bFalse, sizeof(_bool))))
-			return E_FAIL;
-
-		if (FAILED(m_pShaderCom->Bind_Matrix("g_ViewMatrixInv", &m_pGameInstance->Get_Transform_Inverse(CPipeLine::D3DTS_VIEW))))
-			return E_FAIL;
-		if (FAILED(m_pShaderCom->Bind_Matrix("g_ProjMatrixInv", &m_pGameInstance->Get_Transform_Inverse(CPipeLine::D3DTS_PROJ))))
-			return E_FAIL;
-
-		if (FAILED(m_pShaderCom->Bind_Matrix("g_vDecalWorldInverse", &m_pTransformCom->Get_WorldMatrix_Inverse())))
-			return E_FAIL;
-
-		if (FAILED(m_pTextureCom_Diffuse->Bind_ShadeResource(m_pShaderCom, "g_DeacalDiffuseTexture", 0)))
-			return E_FAIL;
-
-		if (FAILED(m_pShaderCom->Bind_RawValue("bNormal", &m_isNormal, sizeof(_bool))))
-			return E_FAIL;
-		if (FAILED(m_pShaderCom->Bind_RawValue("bARM", &m_isARM, sizeof(_bool))))
-			return E_FAIL;
-		if (FAILED(m_pShaderCom->Bind_RawValue("bUseWorldColor", &m_bUseWorldColor, sizeof(_bool))))
-			return E_FAIL;
-
-		if (m_isNormal)
-		{
-			if (FAILED(m_pTextureCom_Normal->Bind_ShadeResource(m_pShaderCom, "g_DeacalNormalTexture", 0)))
-				return E_FAIL;
-		}
-		if (m_isARM)
-		{
-			if (FAILED(m_pTextureCom_ARM->Bind_ShadeResource(m_pShaderCom, "g_DeacalARMTexture", 0)))
-				return E_FAIL;
-		}
-
-		if (FAILED(m_pGameInstance->Bind_RT_ShaderResource(m_pShaderCom, TEXT("Target_Depth"), "g_DepthTexture")))
-			return E_FAIL;
-		if (FAILED(m_pGameInstance->Bind_RT_ShaderResource(m_pShaderCom, TEXT("Target_Diffuse"), "g_DiffuseTexture")))
-			return E_FAIL;
-		if (FAILED(m_pGameInstance->Bind_RT_ShaderResource(m_pShaderCom, TEXT("Target_Normal"), "g_NormalTexture")))
-			return E_FAIL;
-		if (FAILED(m_pGameInstance->Bind_RT_ShaderResource(m_pShaderCom, TEXT("Target_ARM"), "g_ARMTexture")))
-			return E_FAIL;
-
-		m_pShaderCom->Begin(0);
-
-		m_pVIBufferCom->Bind_Buffers();
-
-		m_pVIBufferCom->Render();
-
 	}
 }
 
@@ -323,6 +229,114 @@ HRESULT CNonAnimModel::Ready_Components(NONMODEL_DESC* pNonAnimDesc)
 		}
 	}
 	
+
+	return S_OK;
+}
+
+HRESULT CNonAnimModel::Render_Decal()
+{
+	if (FAILED(m_pShaderCom->Bind_Matrix("g_ViewMatrixInv", &m_pGameInstance->Get_Transform_Inverse(CPipeLine::D3DTS_VIEW))))
+		return E_FAIL;
+	if (FAILED(m_pShaderCom->Bind_Matrix("g_ProjMatrixInv", &m_pGameInstance->Get_Transform_Inverse(CPipeLine::D3DTS_PROJ))))
+		return E_FAIL;
+
+	if (FAILED(m_pShaderCom->Bind_Matrix("g_vDecalWorldInverse", &m_pTransformCom->Get_WorldMatrix_Inverse())))
+		return E_FAIL;
+
+	if (FAILED(m_pTextureCom_Diffuse->Bind_ShadeResource(m_pShaderCom, "g_DeacalDiffuseTexture", 0)))
+		return E_FAIL;
+
+	if (FAILED(m_pShaderCom->Bind_RawValue("bNormal", &m_isNormal, sizeof(_bool))))
+		return E_FAIL;
+	if (FAILED(m_pShaderCom->Bind_RawValue("bARM", &m_isARM, sizeof(_bool))))
+		return E_FAIL;
+	if (FAILED(m_pShaderCom->Bind_RawValue("bUseWorldColor", &m_bUseWorldColor, sizeof(_bool))))
+		return E_FAIL;
+
+	if (m_isNormal)
+	{
+		if (FAILED(m_pTextureCom_Normal->Bind_ShadeResource(m_pShaderCom, "g_DeacalNormalTexture", 0)))
+			return E_FAIL;
+	}
+	if (m_isARM)
+	{
+		if (FAILED(m_pTextureCom_ARM->Bind_ShadeResource(m_pShaderCom, "g_DeacalARMTexture", 0)))
+			return E_FAIL;
+	}
+
+	if (FAILED(m_pGameInstance->Bind_RT_ShaderResource(m_pShaderCom, TEXT("Target_Depth"), "g_DepthTexture")))
+		return E_FAIL;
+	if (FAILED(m_pGameInstance->Bind_RT_ShaderResource(m_pShaderCom, TEXT("Target_Diffuse"), "g_DiffuseTexture")))
+		return E_FAIL;
+	if (FAILED(m_pGameInstance->Bind_RT_ShaderResource(m_pShaderCom, TEXT("Target_Normal"), "g_NormalTexture")))
+		return E_FAIL;
+	if (FAILED(m_pGameInstance->Bind_RT_ShaderResource(m_pShaderCom, TEXT("Target_ARM"), "g_ARMTexture")))
+		return E_FAIL;
+
+	m_pShaderCom->Begin(0);
+
+	m_pVIBufferCom->Bind_Buffers();
+
+	m_pVIBufferCom->Render();
+	
+	return S_OK;
+}
+
+HRESULT CNonAnimModel::Render_NonAnim()
+{
+	_bool bFalse = false;
+	if (FAILED(m_pShaderCom->Bind_RawValue("g_bSelect", &bFalse, sizeof(_bool))))
+		return E_FAIL;
+	if (FAILED(m_pShaderCom->Bind_RawValue("g_isLight", &bFalse, sizeof(_bool))))
+		return E_FAIL;
+
+	if (m_isInstance)
+	{
+		m_pModelCom->Add_InstanceData(m_pTransformCom->Get_WorldMatrix());
+		return S_OK;
+	}
+
+	if (FAILED(m_pShaderCom->Bind_RawValue("g_bSelect", &m_bSelected, sizeof(_bool))))
+		return E_FAIL;
+
+	if (FAILED(m_pShaderCom->Bind_RawValue("g_isLight", &m_isLight, sizeof(_bool))))
+		return E_FAIL;
+
+	_uint		iNumMeshes = m_pModelCom->Get_NumMeshes();
+
+	for (size_t i = 0; i < iNumMeshes; i++)
+	{
+		m_pModelCom->Bind_MeshBoneMatrices(m_pShaderCom, "g_BoneMatrices", (_uint)i);
+
+		if (nullptr != m_pModelCom->Find_Texture((_uint)i, TEXTURE_TYPE::ROUGHNESS))
+		{
+			if (FAILED(m_pModelCom->Bind_Material(m_pShaderCom, "g_ARMTexture", ROUGHNESS, (_uint)i)))
+				return E_FAIL;
+		}
+		if (m_isLight == false)
+		{
+			if (FAILED(m_pModelCom->Bind_Material(m_pShaderCom, "g_DiffuseTexture", TEXTURE_TYPE::DIFFUSE, (_uint)i)))
+				return E_FAIL;
+		}
+
+		if (nullptr != m_pModelCom->Find_Texture((_uint)i, TEXTURE_TYPE::NORMALS))
+		{
+			if (FAILED(m_pModelCom->Bind_Material(m_pShaderCom, "g_NormalTexture", NORMALS, (_uint)i)))
+				return E_FAIL;
+
+			if (FAILED(m_pShaderCom->Begin(1)))
+				return E_FAIL;
+		}
+		else
+		{
+			if (FAILED(m_pShaderCom->Begin(0)))
+				return E_FAIL;
+		}
+
+		if (FAILED(m_pModelCom->Render((_uint)i)))
+			return E_FAIL;
+
+	}
 
 	return S_OK;
 }

@@ -829,63 +829,63 @@ HRESULT CLoader::Ready_Resources_For_ToolLevel_Map0()
 //#pragma endregion
 
 
-#pragma region Raxasia
-
-	pModel = CModel::Create(m_pDevice, m_pContext, CModel::TYPE_ANIM, "../Bin/ModelData/Anim/Monster/Boss/Raxasia/Raxasia_P1.dat", PreTransformMatrix);
-	if (FAILED(m_pGameInstance->Add_Prototype(LEVEL_TOOL, TEXT("Prototype_AnimModel_Raxasia_P1"),
-		pModel)))
-		return E_FAIL;
-	m_pGameInstance->Add_ModelPrototype(LEVEL_TOOL, ("Prototype_AnimModel_Raxasia_P1"), pModel);
-
-	pModel = CModel::Create(m_pDevice, m_pContext, CModel::TYPE_ANIM, "../Bin/ModelData/Anim/Monster/Boss/Raxasia/Raxasia_P2.dat", PreTransformMatrix);
-	if (FAILED(m_pGameInstance->Add_Prototype(LEVEL_TOOL, TEXT("Prototype_AnimModel_Raxasia_P2"),
-		pModel)))
-		return E_FAIL;
-	m_pGameInstance->Add_ModelPrototype(LEVEL_TOOL, ("Prototype_AnimModel_Raxasia_P2"), pModel);
-
-	pModel = CModel::Create(m_pDevice, m_pContext, CModel::TYPE_NONANIM, "../Bin/ModelData/Anim/Monster/Boss/Raxasia/Raxasia_Shield01.dat", PreTransformMatrix);
-	if (FAILED(m_pGameInstance->Add_Prototype(LEVEL_TOOL, TEXT("Prototype_NoneAnimModel_Raxasia_Shield01"),
-		pModel)))
-		return E_FAIL;
-
-	pModel = CModel::Create(m_pDevice, m_pContext, CModel::TYPE_NONANIM, "../Bin/ModelData/Anim/Monster/Boss/Raxasia/Raxasia_Shield02.dat", PreTransformMatrix);
-	if (FAILED(m_pGameInstance->Add_Prototype(LEVEL_TOOL, TEXT("Prototype_NoneAnimModel_Raxasia_Shield02"),
-		pModel)))
-		return E_FAIL;
-
-	pModel = CModel::Create(m_pDevice, m_pContext, CModel::TYPE_NONANIM, "../Bin/ModelData/Anim/Monster/Boss/Raxasia/Raxasia_Sword01.dat", PreTransformMatrix);
-	if (FAILED(m_pGameInstance->Add_Prototype(LEVEL_TOOL, TEXT("Prototype_NoneAnimModel_Raxasia_Sword01"),
-		pModel)))
-		return E_FAIL;
-
-	pModel = CModel::Create(m_pDevice, m_pContext, CModel::TYPE_NONANIM, "../Bin/ModelData/Anim/Monster/Boss/Raxasia/Raxasia_Sword02.dat", PreTransformMatrix);
-	if (FAILED(m_pGameInstance->Add_Prototype(LEVEL_TOOL, TEXT("Prototype_NoneAnimModel_Raxasia_Sword02"),
-		pModel)))
-		return E_FAIL;
-
-
-#pragma endregion
-
-#pragma region SimonManus
-
-	pModel = CModel::Create(m_pDevice, m_pContext, CModel::TYPE_ANIM, "../Bin/ModelData/Anim/Monster/Boss/SimonManus/SimonManus_P1.dat", PreTransformMatrix);
-	if (FAILED(m_pGameInstance->Add_Prototype(LEVEL_TOOL, TEXT("Prototype_AnimModel_SimonManus_P1"),
-		pModel)))
-		return E_FAIL;
-	m_pGameInstance->Add_ModelPrototype(LEVEL_TOOL, ("Prototype_AnimModel_SimonManus_P1"), pModel);
-
-	pModel = CModel::Create(m_pDevice, m_pContext, CModel::TYPE_ANIM, "../Bin/ModelData/Anim/Monster/Boss/SimonManus/SimonManus_P2.dat", PreTransformMatrix);
-	if (FAILED(m_pGameInstance->Add_Prototype(LEVEL_TOOL, TEXT("Prototype_AnimModel_SimonManus_P2"),
-		pModel)))
-		return E_FAIL;
-	m_pGameInstance->Add_ModelPrototype(LEVEL_TOOL, ("Prototype_AnimModel_SimonManus_P2"), pModel);
-
-	pModel = CModel::Create(m_pDevice, m_pContext, CModel::TYPE_ANIM, "../Bin/ModelData/Anim/Monster/Boss/SimonManus/SimonManus_Weapon.dat", PreTransformMatrix);
-	if (FAILED(m_pGameInstance->Add_Prototype(LEVEL_TOOL, TEXT("Prototype_AnimModel_SimonManus_Weapon"),
-		pModel)))
-		return E_FAIL;
-	m_pGameInstance->Add_ModelPrototype(LEVEL_TOOL, ("Prototype_AnimModel_SimonManus_Weapon"), pModel);
-#pragma endregion
+//#pragma region Raxasia
+//
+//	pModel = CModel::Create(m_pDevice, m_pContext, CModel::TYPE_ANIM, "../Bin/ModelData/Anim/Monster/Boss/Raxasia/Raxasia_P1.dat", PreTransformMatrix);
+//	if (FAILED(m_pGameInstance->Add_Prototype(LEVEL_TOOL, TEXT("Prototype_AnimModel_Raxasia_P1"),
+//		pModel)))
+//		return E_FAIL;
+//	m_pGameInstance->Add_ModelPrototype(LEVEL_TOOL, ("Prototype_AnimModel_Raxasia_P1"), pModel);
+//
+//	pModel = CModel::Create(m_pDevice, m_pContext, CModel::TYPE_ANIM, "../Bin/ModelData/Anim/Monster/Boss/Raxasia/Raxasia_P2.dat", PreTransformMatrix);
+//	if (FAILED(m_pGameInstance->Add_Prototype(LEVEL_TOOL, TEXT("Prototype_AnimModel_Raxasia_P2"),
+//		pModel)))
+//		return E_FAIL;
+//	m_pGameInstance->Add_ModelPrototype(LEVEL_TOOL, ("Prototype_AnimModel_Raxasia_P2"), pModel);
+//
+//	pModel = CModel::Create(m_pDevice, m_pContext, CModel::TYPE_NONANIM, "../Bin/ModelData/Anim/Monster/Boss/Raxasia/Raxasia_Shield01.dat", PreTransformMatrix);
+//	if (FAILED(m_pGameInstance->Add_Prototype(LEVEL_TOOL, TEXT("Prototype_NoneAnimModel_Raxasia_Shield01"),
+//		pModel)))
+//		return E_FAIL;
+//
+//	pModel = CModel::Create(m_pDevice, m_pContext, CModel::TYPE_NONANIM, "../Bin/ModelData/Anim/Monster/Boss/Raxasia/Raxasia_Shield02.dat", PreTransformMatrix);
+//	if (FAILED(m_pGameInstance->Add_Prototype(LEVEL_TOOL, TEXT("Prototype_NoneAnimModel_Raxasia_Shield02"),
+//		pModel)))
+//		return E_FAIL;
+//
+//	pModel = CModel::Create(m_pDevice, m_pContext, CModel::TYPE_NONANIM, "../Bin/ModelData/Anim/Monster/Boss/Raxasia/Raxasia_Sword01.dat", PreTransformMatrix);
+//	if (FAILED(m_pGameInstance->Add_Prototype(LEVEL_TOOL, TEXT("Prototype_NoneAnimModel_Raxasia_Sword01"),
+//		pModel)))
+//		return E_FAIL;
+//
+//	pModel = CModel::Create(m_pDevice, m_pContext, CModel::TYPE_NONANIM, "../Bin/ModelData/Anim/Monster/Boss/Raxasia/Raxasia_Sword02.dat", PreTransformMatrix);
+//	if (FAILED(m_pGameInstance->Add_Prototype(LEVEL_TOOL, TEXT("Prototype_NoneAnimModel_Raxasia_Sword02"),
+//		pModel)))
+//		return E_FAIL;
+//
+//
+//#pragma endregion
+//
+//#pragma region SimonManus
+//
+//	pModel = CModel::Create(m_pDevice, m_pContext, CModel::TYPE_ANIM, "../Bin/ModelData/Anim/Monster/Boss/SimonManus/SimonManus_P1.dat", PreTransformMatrix);
+//	if (FAILED(m_pGameInstance->Add_Prototype(LEVEL_TOOL, TEXT("Prototype_AnimModel_SimonManus_P1"),
+//		pModel)))
+//		return E_FAIL;
+//	m_pGameInstance->Add_ModelPrototype(LEVEL_TOOL, ("Prototype_AnimModel_SimonManus_P1"), pModel);
+//
+//	pModel = CModel::Create(m_pDevice, m_pContext, CModel::TYPE_ANIM, "../Bin/ModelData/Anim/Monster/Boss/SimonManus/SimonManus_P2.dat", PreTransformMatrix);
+//	if (FAILED(m_pGameInstance->Add_Prototype(LEVEL_TOOL, TEXT("Prototype_AnimModel_SimonManus_P2"),
+//		pModel)))
+//		return E_FAIL;
+//	m_pGameInstance->Add_ModelPrototype(LEVEL_TOOL, ("Prototype_AnimModel_SimonManus_P2"), pModel);
+//
+//	pModel = CModel::Create(m_pDevice, m_pContext, CModel::TYPE_ANIM, "../Bin/ModelData/Anim/Monster/Boss/SimonManus/SimonManus_Weapon.dat", PreTransformMatrix);
+//	if (FAILED(m_pGameInstance->Add_Prototype(LEVEL_TOOL, TEXT("Prototype_AnimModel_SimonManus_Weapon"),
+//		pModel)))
+//		return E_FAIL;
+//	m_pGameInstance->Add_ModelPrototype(LEVEL_TOOL, ("Prototype_AnimModel_SimonManus_Weapon"), pModel);
+//#pragma endregion
 
 	m_isFinished_Map0 = true;
 
@@ -1228,9 +1228,9 @@ HRESULT CLoader::Ready_Textures_For_Decal()
 	return S_OK;
 }
 
-void CLoader::aaa()
+HRESULT CLoader::Ready_Resources_For_Monster()
 {
-	int a = 0;
+	return S_OK;
 }
 
 CLoader * CLoader::Create(ID3D11Device * pDevice, ID3D11DeviceContext * pContext, LEVELID eNextLevelID)
