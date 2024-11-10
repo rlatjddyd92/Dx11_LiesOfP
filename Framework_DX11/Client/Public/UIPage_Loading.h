@@ -43,14 +43,10 @@ public:
 
 public:
 	const vector<UPART*>& Get_UIPartInfo() { return m_vecPart; }
+	virtual HRESULT Ready_UIPart_Group_Control() override;
 
 protected:
-	virtual HRESULT Ready_UIPart() override;
-
-
-
-
-
+	
 
 
 

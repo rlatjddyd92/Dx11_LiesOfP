@@ -2,7 +2,7 @@
 #include "..\Public\UIPage_Play.h"
 
 #include "GameInstance.h"
-
+#include "GameInterface_Controller.h"
 
 CUIPage_Play::CUIPage_Play(ID3D11Device* pDevice, ID3D11DeviceContext* pContext)
     : CUIPage{ pDevice, pContext }
@@ -35,8 +35,6 @@ HRESULT CUIPage_Play::Initialize_Prototype()
 	if (FAILED(__super::Initialize(&Desc)))
 		return E_FAIL;
 
-	if (FAILED(Ready_UIPart()))
-		return E_FAIL;
 
     return S_OK;
 }
@@ -55,6 +53,25 @@ void CUIPage_Play::Priority_Update(_float fTimeDelta)
 
 void CUIPage_Play::Update(_float fTimeDelta)
 {
+#ifdef _DEBUG
+	// Check TestData
+	HP_Gauge_Frame->fRatio = GET_GAMEINTERFACE->GetTestData()->fMax_HP_Now / GET_GAMEINTERFACE->GetTestData()->fMax_HP_Limit;
+	HP_Gauge_Fill->fRatio = GET_GAMEINTERFACE->GetTestData()->fHP_Now / GET_GAMEINTERFACE->GetTestData()->fMax_HP_Now;
+
+#endif
+
+
+	__super::UpdatePart_ByControl(HP_Gauge_Frame);
+	__super::UpdatePart_ByControl(HP_Gauge_Fill);
+
+	__super::UpdatePart_ByControl(Stamina_Gauge_Frame);
+	__super::UpdatePart_ByControl(Stamina_Gauge_Fill);
+
+	for (_int i = 0; i < 5; ++i)
+	{
+		__super::UpdatePart_ByControl(vecSpecial_Gauge_Frame[i]);
+		__super::UpdatePart_ByControl(vecSpecial_Gauge_Fill[i]);
+	}
 	__super::Update(fTimeDelta);
 }
 
@@ -86,9 +103,77 @@ void CUIPage_Play::CloseAction()
 	
 }
 
-HRESULT CUIPage_Play::Ready_UIPart()
+HRESULT CUIPage_Play::Ready_UIPart_Group_Control()
 {
-	__super::Ready_UIPart();
+	__super::Ready_UIPart_Group_Control();
+
+	// 체력바 조정
+	HP_Gauge_Frame = new UG_CTRL;
+	HP_Gauge_Fill = new UG_CTRL;
+
+	// 스태미나 조정
+	Stamina_Gauge_Frame = new UG_CTRL;
+	Stamina_Gauge_Fill = new UG_CTRL;
+
+	// 특수 스킬 바 조정
+	for (_int i = 0; i < 5; ++i)
+	{
+		UG_CTRL* pFrame = new UG_CTRL;
+		UG_CTRL* pFill = new UG_CTRL;
+		vecSpecial_Gauge_Frame.push_back(pFrame);
+		vecSpecial_Gauge_Fill.push_back(pFill);
+	}
+	
+	for (_int i = 0; i < m_vecPart.size(); ++i)
+	{
+		switch (m_vecPart[i]->iGroupIndex)
+		{
+		case _int(PART_GROUP::GROUP_HP_FRAME):
+			HP_Gauge_Frame->PartIndexlist.push_back(i);
+			break;
+		case _int(PART_GROUP::GROUP_HP_FILL):
+			HP_Gauge_Fill->PartIndexlist.push_back(i);
+			break;
+		case _int(PART_GROUP::GROUP_ST_FRAME):
+			Stamina_Gauge_Frame->PartIndexlist.push_back(i);
+			break;
+		case _int(PART_GROUP::GROUP_ST_FILL):
+			Stamina_Gauge_Fill->PartIndexlist.push_back(i);
+			break;
+		case _int(PART_GROUP::GROUP_SP0_FRAME):
+			vecSpecial_Gauge_Frame[0]->PartIndexlist.push_back(i);
+			break;
+		case _int(PART_GROUP::GROUP_SP0_FILL):
+			vecSpecial_Gauge_Fill[0]->PartIndexlist.push_back(i);
+			break;
+		case _int(PART_GROUP::GROUP_SP1_FRAME):
+			vecSpecial_Gauge_Frame[1]->PartIndexlist.push_back(i);
+			break;
+		case _int(PART_GROUP::GROUP_SP1_FILL):
+			vecSpecial_Gauge_Fill[1]->PartIndexlist.push_back(i);
+			break;
+		case _int(PART_GROUP::GROUP_SP2_FRAME):
+			vecSpecial_Gauge_Frame[2]->PartIndexlist.push_back(i);
+			break;
+		case _int(PART_GROUP::GROUP_SP2_FILL):
+			vecSpecial_Gauge_Fill[2]->PartIndexlist.push_back(i);
+			break;
+		case _int(PART_GROUP::GROUP_SP3_FRAME):
+			vecSpecial_Gauge_Frame[3]->PartIndexlist.push_back(i);
+			break;
+		case _int(PART_GROUP::GROUP_SP3_FILL):
+			vecSpecial_Gauge_Fill[3]->PartIndexlist.push_back(i);
+			break;
+		case _int(PART_GROUP::GROUP_SP4_FRAME):
+			vecSpecial_Gauge_Frame[4]->PartIndexlist.push_back(i);
+			break;
+		case _int(PART_GROUP::GROUP_SP4_FILL):
+			vecSpecial_Gauge_Fill[4]->PartIndexlist.push_back(i);
+			break;
+		default:
+			break;
+		}
+	}
 
 	return S_OK;
 }
@@ -129,4 +214,19 @@ void CUIPage_Play::Free()
 	}
 
 	m_vecPart.clear();
+
+	__super::Release_Control(HP_Gauge_Frame);
+	__super::Release_Control(HP_Gauge_Fill);
+
+	__super::Release_Control(Stamina_Gauge_Frame);
+	__super::Release_Control(Stamina_Gauge_Fill);
+
+	for (_int i = 0; i < 5; ++i)
+	{
+		__super::Release_Control(vecSpecial_Gauge_Frame[i]);
+		__super::Release_Control(vecSpecial_Gauge_Fill[i]);
+	}
+
+	vecSpecial_Gauge_Frame.clear();
+	vecSpecial_Gauge_Fill.clear();
 }

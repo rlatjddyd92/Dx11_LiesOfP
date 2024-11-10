@@ -29,16 +29,19 @@ HRESULT CUIPage::Initialize(void* pArg)
 
 void CUIPage::Priority_Update(_float fTimeDelta)
 {
+	// 매 프레임 초기화해야 하는 정보를 처리 
 	__super::Priority_Update(fTimeDelta);
 }
 
 void CUIPage::Update(_float fTimeDelta)
 {
+	// 여기까지 각 페이지의 개별 적용 사항을 끝내야 함 
 	__super::Update(fTimeDelta);
 }
 
 void CUIPage::Late_Update(_float fTimeDelta)
 {
+	// 각 페이지 별 조정 사항을 최종 반영하는 단계
 	__super::Late_Update(fTimeDelta);
 
 	
@@ -99,9 +102,25 @@ void CUIPage::CloseAction()
 	m_vecPageAction[_int(PAGEACTION::ACTION_OPENING)] = false;
 }
 
-HRESULT CUIPage::Ready_UIPart()
+HRESULT CUIPage::Ready_UIPart_Group_Control()
 {
 	return S_OK;
+}
+
+void CUIPage::Release_Control(UG_CTRL* pCtrl)
+{
+	pCtrl->PartIndexlist.clear();
+	Safe_Delete(pCtrl);
+}
+
+void CUIPage::UpdatePart_ByControl(UG_CTRL* pCtrl)
+{
+	for (auto& iter : pCtrl->PartIndexlist)
+	{
+		m_vecPart[iter]->fRatio = pCtrl->fRatio;
+		m_vecPart[iter]->bUpdate = pCtrl->bUpdate;
+		m_vecPart[iter]->bRender = pCtrl->bRender;
+	}
 }
 
 CUIPage* CUIPage::Create(ID3D11Device* pDevice, ID3D11DeviceContext* pContext)

@@ -86,6 +86,9 @@ HRESULT CUIRender_Client::Render_UI(vector<CUIPage*>& rPage)
 
 		for (auto& iterPart : iter->GetPartInfo())
 		{
+			if (!iterPart->bRender)
+				continue;
+
 			if (iterPart->iTexture_Index != -1)
 			{
 				if (m_vecTextureInfo[iterPart->iTexture_Index]->Texture == nullptr)

@@ -79,10 +79,21 @@ public:
 		_bool bCenter = false;
 		_float4 fTextColor = { 1.f,1.f,1.f,1.f };
 
+		// 작동 제어
+		_bool bUpdate = true;
+		_bool bRender = true;
 
 	}UPART;
 
+	typedef struct UIPART_GROUP_CONTROL
+	{
+		list<_int> PartIndexlist;
 
+		_float fRatio = 0.f;
+
+		_bool bUpdate = true;
+		_bool bRender = true;
+	}UG_CTRL;
 
 
 protected:
@@ -113,9 +124,12 @@ public:
 	virtual void OpenAction();
 	virtual void CloseAction();
 
-protected:
-	virtual HRESULT Ready_UIPart();
+	virtual HRESULT Ready_UIPart_Group_Control();
 
+protected:
+	void UpdatePart_ByControl(UG_CTRL* pCtrl);
+	void Release_Control(UG_CTRL* pCtrl);
+	
 protected:
 	vector<UPART*> m_vecPart;
 	_wstring m_UIPageName = {};

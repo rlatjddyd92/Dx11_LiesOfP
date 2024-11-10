@@ -3,6 +3,7 @@
 #include "..\Public\UIManager.h"
 
 #include "GameInstance.h"
+#include "GameInterface_Controller.h"
 
 CUIManager::CUIManager(ID3D11Device* pDevice, ID3D11DeviceContext* pContext)
 	: CUIObject{ pDevice, pContext }
@@ -122,10 +123,49 @@ void CUIManager::UIControl_Test(_float fTimeDelta)
 			{
 				m_vecPage[_int(UIPAGE::PAGE_PLAY)]->OpenAction();
 			}
-}
+		}
 		else
 			m_vecPage[_int(UIPAGE::PAGE_PLAY)]->OpenAction();
 	}
+
+	// 상단 바 
+	if (!KEY_HOLD(KEY::LSHIFT))
+	{
+		if (KEY_HOLD(KEY::I))
+		{
+			GET_GAMEINTERFACE->GetTestData()->fMax_HP_Now -= 100.f * fTimeDelta;
+			if (GET_GAMEINTERFACE->GetTestData()->fMax_HP_Now < 0.f)
+				GET_GAMEINTERFACE->GetTestData()->fMax_HP_Now = 0.f;
+			GET_GAMEINTERFACE->GetTestData()->fHP_Now = min(GET_GAMEINTERFACE->GetTestData()->fMax_HP_Now, GET_GAMEINTERFACE->GetTestData()->fHP_Now);
+			// 체력바 최대치 감소
+		}
+		else if (KEY_HOLD(KEY::O))
+		{
+			GET_GAMEINTERFACE->GetTestData()->fMax_HP_Now += 100.f * fTimeDelta;
+			if (GET_GAMEINTERFACE->GetTestData()->fMax_HP_Now > GET_GAMEINTERFACE->GetTestData()->fMax_HP_Limit)
+				GET_GAMEINTERFACE->GetTestData()->fMax_HP_Now = GET_GAMEINTERFACE->GetTestData()->fMax_HP_Limit;
+			// 체력바 최대치 증가
+		}
+	}
+	else
+	{
+		if (KEY_HOLD(KEY::I))
+		{
+			GET_GAMEINTERFACE->GetTestData()->fHP_Now -= 100.f * fTimeDelta;
+			if (GET_GAMEINTERFACE->GetTestData()->fHP_Now < 0.f)
+				GET_GAMEINTERFACE->GetTestData()->fHP_Now = 0.f;
+			// 체력바 표시 수치 감소
+		}
+		else if (KEY_HOLD(KEY::O))
+		{
+			GET_GAMEINTERFACE->GetTestData()->fHP_Now += 100.f * fTimeDelta;
+			if (GET_GAMEINTERFACE->GetTestData()->fHP_Now > GET_GAMEINTERFACE->GetTestData()->fMax_HP_Now)
+				GET_GAMEINTERFACE->GetTestData()->fHP_Now = GET_GAMEINTERFACE->GetTestData()->fMax_HP_Now;
+			// 체력바 표시 수치 증가 
+		}
+	}
+
+
 #endif // DEBUG
 
 	
@@ -232,16 +272,19 @@ HRESULT CUIManager::Make_UIPage(_int iIndex)
 	if (iIndex == _int(UIPAGE::PAGE_MAIN))
 	{
 		m_pUIPage_Main = CUIPage_Main::Create(m_pDevice, m_pContext);
+		m_pUIPage_Main->Ready_UIPart_Group_Control();
 		m_vecPage[iIndex] = static_cast<CUIPage*>(m_pUIPage_Main);
 	}
 	else if (iIndex == _int(UIPAGE::PAGE_LOADING))
 	{
 		m_pUIPage_Loading = CUIPage_Loading::Create(m_pDevice, m_pContext);
+		m_pUIPage_Loading->Ready_UIPart_Group_Control();
 		m_vecPage[iIndex] = static_cast<CUIPage*>(m_pUIPage_Loading);
 	}
 	else if (iIndex == _int(UIPAGE::PAGE_PLAY))
 	{
 		m_pUIPage_Play = CUIPage_Play::Create(m_pDevice, m_pContext);
+		m_pUIPage_Play->Ready_UIPart_Group_Control();
 		m_vecPage[iIndex] = static_cast<CUIPage*>(m_pUIPage_Play);
 	}
 

@@ -35,9 +35,6 @@ HRESULT CUIPage_Main::Initialize_Prototype()
 	if (FAILED(__super::Initialize(&Desc)))
 		return E_FAIL;
 
-	if (FAILED(Ready_UIPart()))
-		return E_FAIL;
-
 	
 
 	return S_OK;
@@ -80,9 +77,9 @@ void CUIPage_Main::CloseAction()
 	__super::CloseAction();
 }
 
-HRESULT CUIPage_Main::Ready_UIPart()
+HRESULT CUIPage_Main::Ready_UIPart_Group_Control()
 {
-	__super::Ready_UIPart();
+	__super::Ready_UIPart_Group_Control();
 
 	return S_OK;
 }
