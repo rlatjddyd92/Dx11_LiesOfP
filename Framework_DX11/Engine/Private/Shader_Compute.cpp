@@ -134,6 +134,10 @@ void CShader_Compute::Execute_ComputeShader(_uint iThreadGroupX, _uint iThreadGr
 	ID3D11UnorderedAccessView* nullUAV[] = { nullptr };
 	m_pContext->CSSetUnorderedAccessViews(0, 1, nullUAV, nullptr);
 
+	// SRV 해제하고
+	ID3D11ShaderResourceView* nullSRV = { nullptr };
+	m_pContext->CSSetShaderResources(0, 1, &nullSRV);
+
 	// 셰이더까지 해제하면 끝
 	m_pContext->CSSetShader(nullptr, nullptr, 0);
 }

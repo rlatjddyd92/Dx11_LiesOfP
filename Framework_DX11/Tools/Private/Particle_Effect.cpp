@@ -51,9 +51,7 @@ void CParticle_Effect::Update(_float fTimeDelta)
 
     CVIBuffer_Point_Instance::PARTICLE_MOVEMENT Movement = {};
 
-    Movement.iNumInstance = m_iNumInstance;
     Movement.iState = m_DefaultDesc.iState;
-    Movement.WorldMatrix = m_pTransformCom->Get_WorldMatrix();
     Movement.vPivot = m_DefaultDesc.vPivot;
     Movement.fGravity = m_DefaultDesc.fGravity;
     Movement.vMoveDir = m_DefaultDesc.vMoveDir;
@@ -65,7 +63,38 @@ void CParticle_Effect::Update(_float fTimeDelta)
     Movement.fAccelLimit = m_AccelDesc.fAccelLimit;
     Movement.fAccelSpeed = m_AccelDesc.fAccelSpeed;
 
-    m_pVIBufferCom->Spread_Test(m_pComputeShader, Movement);
+    switch (m_DefaultDesc.eType)
+    {
+    case TYPE_SPREAD:
+        Movement.WorldMatrix = m_pTransformCom->Get_WorldMatrix_Inverse();
+        m_pVIBufferCom->DispatchCS(m_pSpreadCS, Movement);
+        break;
+
+    case TYPE_MOVE:
+        Movement.WorldMatrix = m_pTransformCom->Get_WorldMatrix_Inverse();
+        m_pVIBufferCom->DispatchCS(m_pMoveCS, Movement);
+        break;
+
+    case TYPE_CONVERGE:
+        Movement.WorldMatrix = m_pTransformCom->Get_WorldMatrix_Inverse();
+        m_pVIBufferCom->DispatchCS(m_pConvergeCS, Movement);
+        break;
+
+    case TYPE_SPREAD_INDEPENDENT:
+        Movement.WorldMatrix = m_pTransformCom->Get_WorldMatrix();
+        m_pVIBufferCom->DispatchCS(m_pSpreadCS_World, Movement);
+        break;
+
+    case TYPE_MOVE_INDEPENDENT:
+        Movement.WorldMatrix = m_pTransformCom->Get_WorldMatrix();
+        m_pVIBufferCom->DispatchCS(m_pMoveCS_World, Movement);
+        break;
+
+    case TYPE_CONVERGE_INDEPENDENT:
+        Movement.WorldMatrix = m_pTransformCom->Get_WorldMatrix();
+        m_pVIBufferCom->DispatchCS(m_pConvergeCS_World, Movement);
+        break;
+    }
 #pragma region KEEP
     //switch (m_DefaultDesc.eType)
     //{
@@ -265,12 +294,35 @@ HRESULT CParticle_Effect::Ready_Components(PARTICLE_EFFECT_DESC* pDesc)
         TEXT("Com_VIBuffer"), reinterpret_cast<CComponent**>(&m_pVIBufferCom), &desc)))
         return E_FAIL;
 
-
-    /* FOR.Com_ComputeShader */
-    if (FAILED(__super::Add_Component(LEVEL_TOOL, TEXT("Prototype_Component_Shader_Compute_Particle"),
-        TEXT("Com_ComputeShader"), reinterpret_cast<CComponent**>(&m_pComputeShader), &desc)))
+    /* FOR.Com_SpreadCS */
+    if (FAILED(__super::Add_Component(LEVEL_TOOL, TEXT("Prototype_Component_Shader_Compute_Particle_Spread"),
+        TEXT("Com_SpreadCS"), reinterpret_cast<CComponent**>(&m_pSpreadCS), &desc)))
         return E_FAIL;
-    
+
+    /* FOR.Com_MoveCS */
+    if (FAILED(__super::Add_Component(LEVEL_TOOL, TEXT("Prototype_Component_Shader_Compute_Particle_Move"),
+        TEXT("Com_MoveCS"), reinterpret_cast<CComponent**>(&m_pMoveCS), &desc)))
+        return E_FAIL;
+
+    /* FOR.Com_ConvergeCS */
+    if (FAILED(__super::Add_Component(LEVEL_TOOL, TEXT("Prototype_Component_Shader_Compute_Particle_Converge"),
+        TEXT("Com_ConvergeCS"), reinterpret_cast<CComponent**>(&m_pConvergeCS), &desc)))
+        return E_FAIL;
+
+    /* FOR.Com_SpreadCS_World */
+    if (FAILED(__super::Add_Component(LEVEL_TOOL, TEXT("Prototype_Component_Shader_Compute_Particle_Spread_World"),
+        TEXT("Com_SpreadCS_World"), reinterpret_cast<CComponent**>(&m_pSpreadCS_World), &desc)))
+        return E_FAIL;
+
+    /* FOR.Com_MoveCS_World */
+    if (FAILED(__super::Add_Component(LEVEL_TOOL, TEXT("Prototype_Component_Shader_Compute_Particle_Move_World"),
+        TEXT("Com_MoveCS_World"), reinterpret_cast<CComponent**>(&m_pMoveCS_World), &desc)))
+        return E_FAIL;
+
+    /* FOR.Com_ConvergeCS_World */
+    if (FAILED(__super::Add_Component(LEVEL_TOOL, TEXT("Prototype_Component_Shader_Compute_Particle_Converge_World"),
+        TEXT("Com_ConvergeCS_World"), reinterpret_cast<CComponent**>(&m_pConvergeCS_World), &desc)))
+        return E_FAIL;
 
     return S_OK;
 }
@@ -311,5 +363,11 @@ void CParticle_Effect::Free()
     Safe_Release(m_pNormalTextureCom);
 
     Safe_Release(m_pVIBufferCom);
-    Safe_Release(m_pComputeShader);
+    
+    Safe_Release(m_pSpreadCS);
+    Safe_Release(m_pMoveCS);
+    Safe_Release(m_pConvergeCS);
+    Safe_Release(m_pSpreadCS_World);
+    Safe_Release(m_pMoveCS_World);
+    Safe_Release(m_pConvergeCS_World);
 }

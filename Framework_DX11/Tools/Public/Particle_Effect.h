@@ -176,7 +176,15 @@ private:
 	class CTexture* m_pDiffuseTextureCom = { nullptr };
 	class CTexture* m_pNormalTextureCom = { nullptr };
 
-	class CShader_Compute* m_pComputeShader = { nullptr };
+	// 이거 3개는 월드의 역행렬
+	class CShader_Compute* m_pSpreadCS = { nullptr };
+	class CShader_Compute* m_pMoveCS = { nullptr };
+	class CShader_Compute* m_pConvergeCS = { nullptr };
+
+	// 이거 3개는 그냥 월드 행렬
+	class CShader_Compute* m_pSpreadCS_World = { nullptr };
+	class CShader_Compute* m_pMoveCS_World = { nullptr };
+	class CShader_Compute* m_pConvergeCS_World = { nullptr };
 
 private:
 	DEFAULT_DESC m_DefaultDesc = {};

@@ -107,6 +107,12 @@ HRESULT CVIBuffer_Point_Instance::Initialize(void * pArg)
 		m_SRV_Desc.ViewDimension = D3D11_SRV_DIMENSION_BUFFER;
 		m_SRV_Desc.Buffer.NumElements = m_iNumInstance;
 		
+		// 파티클 버퍼 구성
+		m_InitParticleBuffer_Desc.Usage = D3D11_USAGE_DEFAULT;
+		m_InitParticleBuffer_Desc.ByteWidth = sizeof(PARTICLE) * m_iNumInstance;
+		m_InitParticleBuffer_Desc.BindFlags = D3D11_BIND_SHADER_RESOURCE;
+		m_InitParticleBuffer_Desc.StructureByteStride = sizeof(PARTICLE);
+		m_InitParticleBuffer_Desc.MiscFlags = D3D11_RESOURCE_MISC_BUFFER_STRUCTURED;
 	}
 	
 	if (FAILED(m_pDevice->CreateBuffer(&m_ParticleBuffer_Desc, &m_InstanceInitialData, &m_pParticleBuffer)))
@@ -119,6 +125,12 @@ HRESULT CVIBuffer_Point_Instance::Initialize(void * pArg)
 		return E_FAIL;
 
 	if (FAILED(m_pDevice->CreateShaderResourceView(m_pParticleBuffer, &m_SRV_Desc, &m_pParticleSRV)))
+		return E_FAIL;
+
+	if (FAILED(m_pDevice->CreateBuffer(&m_InitParticleBuffer_Desc, &m_InstanceInitialData, &m_pInitParticleBuffer)))
+		return E_FAIL;
+
+	if (FAILED(m_pDevice->CreateShaderResourceView(m_pInitParticleBuffer, &m_SRV_Desc, &m_pInitParticleSRV)))
 		return E_FAIL;
 
 	return S_OK;
@@ -140,10 +152,14 @@ HRESULT CVIBuffer_Point_Instance::Render()
 {
 	m_pContext->DrawInstanced(1, m_iNumInstance, 0, 0);
 
+	// UAV 해제하고
+	ID3D11ShaderResourceView* nullSRV = { nullptr };
+	m_pContext->VSSetShaderResources(0, 1, &nullSRV);
+
 	return S_OK;
 }
 
-void CVIBuffer_Point_Instance::Spread_Test(class CShader_Compute* pComputeShader, const PARTICLE_MOVEMENT& MovementData)
+void CVIBuffer_Point_Instance::DispatchCS(class CShader_Compute* pComputeShader, const PARTICLE_MOVEMENT& MovementData)
 {
 	/* 순서 중요 !! */
 	// 상수 버퍼 업데이트 하고
@@ -152,12 +168,12 @@ void CVIBuffer_Point_Instance::Spread_Test(class CShader_Compute* pComputeShader
 		return;
 	PARTICLE_MOVEMENT* pMovement = static_cast<PARTICLE_MOVEMENT*>(mappedResource.pData);
 	*pMovement = MovementData;
-
+	(*pMovement).iNumInstance = m_iNumInstance;
 	m_pContext->Unmap(m_pMovementBuffer, 0);
 
-	// 버퍼랑 UAV 설정하고
-	pComputeShader->Bind_UAV(m_pParticleUAV);
-	pComputeShader->Bind_ConstantBuffer(m_pMovementBuffer);
+	m_pContext->CSSetUnorderedAccessViews(0, 1, &m_pParticleUAV, nullptr);
+	m_pContext->CSSetShaderResources(0, 1, &m_pInitParticleSRV);
+	m_pContext->CSSetConstantBuffers(0, 1, &m_pMovementBuffer);
 
 	pComputeShader->Execute_ComputeShader((m_iNumInstance + 255) / 256, 1, 1);
 }
@@ -869,9 +885,6 @@ _float4 CVIBuffer_Point_Instance::Get_RandomTranslation()
 	return _float4(fX, fY, fZ, 1.f);
 }
 
-
-
-
 CVIBuffer_Point_Instance * CVIBuffer_Point_Instance::Create(ID3D11Device * pDevice, ID3D11DeviceContext * pContext, const CVIBuffer_Instancing::INSTANCE_DESC& Desc, _bool isClient)
 {
 	CVIBuffer_Point_Instance*		pInstance = new CVIBuffer_Point_Instance(pDevice, pContext);
@@ -902,25 +915,14 @@ void CVIBuffer_Point_Instance::Free()
 {
 	__super::Free();
 
-	if (true == m_isClient)
+	if (true == m_isCloned)
 	{
-		if (false == m_isCloned)
-		{
-			Safe_Release(m_pParticleBuffer);
-			Safe_Release(m_pMovementBuffer);
-			Safe_Release(m_pParticleUAV);
-			Safe_Release(m_pParticleSRV);
-		}
-	}
-	else
-	{
-		if (true == m_isCloned)
-		{
-			Safe_Release(m_pParticleBuffer);
-			Safe_Release(m_pMovementBuffer);
-			Safe_Release(m_pParticleUAV);
-			Safe_Release(m_pParticleSRV);
-		}
+		Safe_Release(m_pParticleBuffer);
+		Safe_Release(m_pMovementBuffer);
+		Safe_Release(m_pParticleUAV);
+		Safe_Release(m_pParticleSRV);
+		Safe_Release(m_pInitParticleBuffer);
+		Safe_Release(m_pInitParticleSRV);
 	}
 
 }
