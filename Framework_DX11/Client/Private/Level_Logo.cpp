@@ -5,6 +5,8 @@
 
 #include "GameInstance.h"
 
+#include "GameInterface_Controller.h"
+
 CLevel_Logo::CLevel_Logo(ID3D11Device* pDevice, ID3D11DeviceContext* pContext)
 	: CLevel { pDevice, pContext }
 {
@@ -14,6 +16,10 @@ HRESULT CLevel_Logo::Initialize()
 {
 	if (FAILED(Ready_Layer_BackGround(TEXT("Layer_BackGround"))))
 		return E_FAIL;
+
+	// 2024-11-10 ±è¼º¿ë
+	// ¸ŞÀÎ UI ÆäÀÌÁö ¿ÀÇÂ
+	GET_GAMEINTERFACE->OpenMainPage();
 
 	return S_OK;
 }

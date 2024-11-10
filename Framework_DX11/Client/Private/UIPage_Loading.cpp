@@ -36,6 +36,8 @@ HRESULT CUIPage_Loading::Initialize_Prototype()
 	if (FAILED(Ready_UIPart()))
 		return E_FAIL;
 
+	
+
 	return S_OK;
 }
 
@@ -48,19 +50,30 @@ HRESULT CUIPage_Loading::Initialize(void* pArg)
 
 void CUIPage_Loading::Priority_Update(_float fTimeDelta)
 {
+	__super::Priority_Update(fTimeDelta);
 }
 
 void CUIPage_Loading::Update(_float fTimeDelta)
 {
+	__super::Update(fTimeDelta);
 }
 
 void CUIPage_Loading::Late_Update(_float fTimeDelta)
 {
+	__super::Late_Update(fTimeDelta);
 }
 
 HRESULT CUIPage_Loading::Render()
 {
 	return S_OK;
+}
+
+void CUIPage_Loading::OpenAction()
+{
+}
+
+void CUIPage_Loading::CloseAction()
+{
 }
 
 HRESULT CUIPage_Loading::Ready_UIPart()

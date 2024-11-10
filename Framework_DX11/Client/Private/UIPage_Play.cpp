@@ -48,19 +48,30 @@ HRESULT CUIPage_Play::Initialize(void* pArg)
 
 void CUIPage_Play::Priority_Update(_float fTimeDelta)
 {
+	__super::Priority_Update(fTimeDelta);
 }
 
 void CUIPage_Play::Update(_float fTimeDelta)
 {
+	__super::Update(fTimeDelta);
 }
 
 void CUIPage_Play::Late_Update(_float fTimeDelta)
 {
+	__super::Late_Update(fTimeDelta);
 }
 
 HRESULT CUIPage_Play::Render()
 {
     return S_OK;
+}
+
+void CUIPage_Play::OpenAction()
+{
+}
+
+void CUIPage_Play::CloseAction()
+{
 }
 
 HRESULT CUIPage_Play::Ready_UIPart()

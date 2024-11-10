@@ -77,7 +77,7 @@ HRESULT CUIRender_Client::Render_UI(vector<CUIPage*>& rPage)
 	for (auto& iter : rPage)
 	{
 		if (!iter->GetRender())
-			return S_OK;
+			continue;
 
 		for (auto& iterPart : iter->GetPartInfo())
 		{
@@ -142,7 +142,11 @@ HRESULT CUIRender_Client::Render_UI(vector<CUIPage*>& rPage)
 					vColor.m128_f32[3] = iterPart->fTextColor.w;
 
 				_tchar* tText = new _tchar[iterPart->strText.size() + 1];
-				memcpy(&tText, &iterPart->strText, sizeof(_tchar) * (iterPart->strText.size() + 1));
+				for (_int i = 0; i <= iterPart->strText.size(); ++i)
+					tText[i] = iterPart->strText[i];
+
+
+				//memcpy(tText, &iterPart->strText, sizeof(_tchar) * (iterPart->strText.size() + 1));
 
 				if (iterPart->bCenter)
 					m_pGameInstance->Render_TextCenter(m_vecFont_tchar[iterPart->iFontIndex], tText, vPosition, vColor);
@@ -244,24 +248,15 @@ HRESULT CUIRender_Client::Ready_Texture()
 
 	for (_int i = 2; i < vecBuffer.size(); ++i)
 	{
-		_tchar* tPath = new _tchar[vecBuffer[i][0].size() + 1];
-		_tchar* tTag = new _tchar[vecBuffer[i][1].size() + 1];
-
-		memcpy(tPath, &vecBuffer[i][0][0], sizeof(_tchar) * (vecBuffer[i][0].size() + 1));
-		memcpy(tTag, &vecBuffer[i][1][0], sizeof(_tchar) * (vecBuffer[i][1].size() + 1));
-
 		UTEXTURE* pNew = new UTEXTURE;
 
-		
 		pNew->strTexturePath = new _tchar[vecBuffer[i][0].size() + 1];
 		pNew->strTextureTag = new _tchar[vecBuffer[i][1].size() + 1];
 
-		
+		memcpy(pNew->strTexturePath, &vecBuffer[i][0][0], sizeof(_tchar) * (vecBuffer[i][0].size() + 1));
+		memcpy(pNew->strTextureTag, &vecBuffer[i][1][0], sizeof(_tchar) * (vecBuffer[i][1].size() + 1));
 
 		m_vecTextureInfo.push_back(pNew);
-
-		Safe_Delete_Array(tPath);
-		Safe_Delete_Array(tTag);
 	}
 
 	return S_OK;

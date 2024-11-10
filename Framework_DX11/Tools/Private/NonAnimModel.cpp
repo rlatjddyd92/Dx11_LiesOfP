@@ -200,9 +200,9 @@ HRESULT CNonAnimModel::Render()
 		m_pVIBufferCom->Render();
 
 	}
-	if (nullptr != m_pModelCom->Find_Texture((_uint)i, TEXTURE_TYPE::NORMALS))
+	if (nullptr != m_pModelCom->Find_Texture((_uint)0, TEXTURE_TYPE::NORMALS))
 	{
-		if (FAILED(m_pModelCom->Bind_Material(m_pShaderCom, "g_NormalTexture", NORMALS, (_uint)i)))
+		if (FAILED(m_pModelCom->Bind_Material(m_pShaderCom, "g_NormalTexture", NORMALS, (_uint)0)))
 			return E_FAIL;
 
 		if (FAILED(m_pShaderCom->Begin(1)))
@@ -214,7 +214,7 @@ HRESULT CNonAnimModel::Render()
 			return E_FAIL;
 	}
 
-	if (FAILED(m_pModelCom->Render((_uint)i)))
+	if (FAILED(m_pModelCom->Render((_uint)0)))
 		return E_FAIL;
 	_bool bFalse = false;
 	if (FAILED(m_pShaderCom->Bind_RawValue("g_bSelect", &bFalse, sizeof(_bool))))

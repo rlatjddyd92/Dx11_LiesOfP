@@ -50,8 +50,8 @@ HRESULT CMainApp::Initialize()
 	// 24-11-09 김성용
 	// GameInterface 세팅 
 	// 정상 작동 확인 시 까지 주석처리 
-	/*if (FAILED(GET_GAMEINTERFACE->Initialize_GameInterface(&m_pDevice, &m_pContext, m_pGameInstance)))
-		return E_FAIL;*/
+	if (FAILED(GET_GAMEINTERFACE->Initialize_GameInterface(&m_pDevice, &m_pContext, m_pGameInstance)))
+		return E_FAIL;
 
 	if (FAILED(Open_Level(LEVEL_LOGO)))
 		return E_FAIL;
@@ -72,7 +72,7 @@ void CMainApp::Update(_float fTimeDelta)
 	// -> 다음 프레임에 변경 사항 반영한 인터페이스 제공 
 	//  위 순서로 진행하기 위해 인터페이스 관련 업데이트를 무조건 다른 객체보다 나중에 진행하기 위함 
 	// 정상 작동 확인 시 까지 주석처리 
-	// GET_GAMEINTERFACE->Update_GameInterface(fTimeDelta);
+	GET_GAMEINTERFACE->Update_GameInterface(fTimeDelta);
 #ifdef _DEBUG
 	m_fTimeAcc += fTimeDelta;
 #endif
@@ -268,7 +268,7 @@ void CMainApp::Free()
 	// 24-11-09 김성용
 	// GameInterface 릴리즈
 	// 정상 작동 확인 시 까지 주석처리 
-	//GET_GAMEINTERFACE->Release_GameInterface();
+	GET_GAMEINTERFACE->Release_GameInterface();
 
 	Safe_Release(m_pGameInstance);
 	

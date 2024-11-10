@@ -29,19 +29,40 @@ HRESULT CUIPage::Initialize(void* pArg)
 
 void CUIPage::Priority_Update(_float fTimeDelta)
 {
+	__super::Priority_Update(fTimeDelta);
 }
 
 void CUIPage::Update(_float fTimeDelta)
 {
+	__super::Update(fTimeDelta);
 }
 
 void CUIPage::Late_Update(_float fTimeDelta)
 {
+	__super::Late_Update(fTimeDelta);
+
+	for (auto& iter : m_vecPart)
+	{
+		iter->MakeDirec();
+
+		if (iter->iParentPart_Index == -1)
+			iter->MovePart({ m_fX,m_fY });
+		else
+			iter->MovePart(m_vecPart[iter->iParentPart_Index]->fPosition);
+	}
 }
 
 HRESULT CUIPage::Render()
 {
     return S_OK;
+}
+
+void CUIPage::OpenAction()
+{
+}
+
+void CUIPage::CloseAction()
+{
 }
 
 HRESULT CUIPage::Ready_UIPart()

@@ -33,6 +33,28 @@ public:
 public:
 	void Update_UIManager(_float fTimeDelta);
 
+
+public:
+#pragma region Page_Main
+	void OpenMainPage();
+#pragma endregion
+
+#pragma region Page_Loading
+	void OpenLoadingPage();
+#pragma endregion
+
+#pragma region PlayMode
+	// 플레이 모드 진입
+	_bool GetPlayMode() { return m_bPlayMode; }
+	void SetPlayMode(_bool bIsPlayMode) { m_bPlayMode = bIsPlayMode; }
+
+	// 화면 전환 
+	void SwicthPage(UIPAGE eNextPage);
+
+
+
+#pragma endregion
+
 private:
 	HRESULT Load_UIDataFile();
 	HRESULT Make_UIPage(_int iIndex);
@@ -67,6 +89,11 @@ private:
 
 
 	CUIRender_Client* m_pUIRender_Client = { nullptr };
+
+	// 플레이 모드 진입 
+	_bool m_bPlayMode = false;
+
+	
 
 public:
 	static CUIManager* Create(ID3D11Device* pDevice, ID3D11DeviceContext* pContext);

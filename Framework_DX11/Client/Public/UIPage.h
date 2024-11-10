@@ -116,6 +116,9 @@ public:
 	void SetRender(_bool bRender) { m_bRender = bRender; }
 	const vector<UPART*>& GetPartInfo() { return m_vecPart; }
 
+	virtual void OpenAction();
+	virtual void CloseAction();
+
 protected:
 	virtual HRESULT Ready_UIPart();
 
@@ -125,7 +128,7 @@ protected:
 
 protected: // 제어 변수
 	_bool m_bUpdate = true; // 업데이트 진행 여부 
-	_bool m_bRender = true; // 렌더 진행 여부 
+	_bool m_bRender = false; // 렌더 진행 여부 
 
 public:
 	static CUIPage* Create(ID3D11Device* pDevice, ID3D11DeviceContext* pContext);

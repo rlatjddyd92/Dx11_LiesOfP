@@ -38,6 +38,9 @@ public:
 	virtual void Late_Update(_float fTimeDelta) override;
 	virtual HRESULT Render() override;
 
+	virtual void OpenAction() override;
+	virtual void CloseAction() override;
+
 public:
 	const vector<UPART*>& Get_UIPartInfo() { return m_vecPart; }
 

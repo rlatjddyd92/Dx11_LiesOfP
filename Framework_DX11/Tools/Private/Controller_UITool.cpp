@@ -623,7 +623,7 @@ HRESULT CController_UITool::EraseUIData()
 HRESULT CController_UITool::MakeClientData_Page()
 {
 	wstring fileName = TEXT("../../Client/Bin/DataFiles/UIData.dat");
-	WCHAR* TempName = new WCHAR[fileName.size()];
+	WCHAR* TempName = new WCHAR[fileName.size() + 1];
 	for (_int i = 0; i <= fileName.size(); ++i)
 		TempName[i] = fileName[i];
 
@@ -683,6 +683,7 @@ HRESULT CController_UITool::MakeClientData_Part(HANDLE handle, DWORD* dword, vec
 		WriteFile(handle, &iter->iMoveType, sizeof(_int), dword, nullptr);
 		WriteFile(handle, &iter->iParentPart_Index, sizeof(_int), dword, nullptr);
 		WriteFile(handle, &iter->iTexture_Index, sizeof(_int), dword, nullptr);
+		WriteFile(handle, &iter->fTextureColor, sizeof(_float4), dword, nullptr);
 
 		_int iIndexPartName = -1;
 
@@ -698,7 +699,7 @@ HRESULT CController_UITool::MakeClientData_Part(HANDLE handle, DWORD* dword, vec
 		{
 			++iIndexText;
 			WriteFile(handle, &iter->szText[iIndexText], sizeof(_tchar), dword, nullptr);
-		} while (iter->strUIPart_Name[iIndexText] != '\0');
+		} while (iter->szText[iIndexText] != '\0');
 	}
 
 	return S_OK;

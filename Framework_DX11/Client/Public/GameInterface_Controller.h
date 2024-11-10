@@ -35,9 +35,13 @@ public: // 외부에서 매니저 접근
 
 
 #pragma region UIManager
+	void OpenMainPage() { m_pUIManager->OpenMainPage(); }
+	void OpenLoadingPage() { m_pUIManager->OpenLoadingPage(); }
 
+	_bool GetPlayMode() { return m_pUIManager->GetPlayMode(); }
+	void SetPlayMode(_bool bIsPlayMode) { m_pUIManager->SetPlayMode(bIsPlayMode); }
 
-
+	void SwicthPage(UIPAGE eNextPage) { m_pUIManager->SwicthPage(eNextPage); }
 
 
 #pragma endregion

@@ -52,14 +52,32 @@ HRESULT CUIManager::Initialize(void* pArg)
 
 void CUIManager::Priority_Update(_float fTimeDelta)
 {
+	for (auto& iter : m_vecPage)
+		if (iter->GetUpdate())
+			iter->Priority_Update(fTimeDelta);
 }
 
 void CUIManager::Update(_float fTimeDelta)
 {
+	for (auto& iter : m_vecPage)
+		if (iter->GetUpdate())
+			iter->Update(fTimeDelta);
 }
 
 void CUIManager::Late_Update(_float fTimeDelta)
 {
+	_int iCountOpen = 0;
+
+	for (auto& iter : m_vecPage)
+	{
+		if (iter->GetUpdate())
+			iter->Late_Update(fTimeDelta);
+		if (iter->GetRender())
+			++iCountOpen;
+	}
+		
+	if (iCountOpen > 1)
+		m_vecPage[_int(UIPAGE::PAGE_LOADING)]->SetRender(false);
 
 
 	m_pGameInstance->Add_RenderObject(CRenderer::RG_UI, this);
@@ -75,13 +93,39 @@ HRESULT CUIManager::Render()
 
 void CUIManager::Update_UIManager(_float fTimeDelta)
 {
+	Priority_Update(fTimeDelta);
+	Update(fTimeDelta);
+	Late_Update(fTimeDelta);
+}
+
+void CUIManager::OpenMainPage()
+{
+	// 게임 첫 시작 화면 세팅 
+	m_vecPage[_int(UIPAGE::PAGE_MAIN)]->SetRender(true);
+
+}
+
+void CUIManager::OpenLoadingPage()
+{
+	for (auto& iter : m_vecPage)
+		iter->SetRender(false);
+
+	m_vecPage[_int(UIPAGE::PAGE_LOADING)]->SetRender(true);
+}
+
+void CUIManager::SwicthPage(UIPAGE eNextPage)
+{
+	for (auto& iter : m_vecPage)
+		iter->CloseAction();
+
+	m_vecPage[_int(eNextPage)]->OpenAction();
 }
 
 HRESULT CUIManager::Load_UIDataFile()
 {
 	// 여기부터 
 	wstring fileName = TEXT("../Bin/DataFiles/UIData.dat");
-	WCHAR* TempName = new WCHAR[fileName.size()];
+	WCHAR* TempName = new WCHAR[fileName.size() + 1];
 	for (_int i = 0; i <= fileName.size(); ++i)
 		TempName[i] = fileName[i];
 
@@ -99,6 +143,9 @@ HRESULT CUIManager::Load_UIDataFile()
 
 	for (_int i= 0; i < _int(UIPAGE::PAGE_END); ++i)
 	{
+		if(FAILED(Make_UIPage(i)))
+			return E_FAIL;
+
 		_wstring strName = {};
 		while (true)
 		{
@@ -178,6 +225,7 @@ HRESULT CUIManager::Load_UIDataFile_Part(HANDLE handle, DWORD* dword, _int iInde
 		ReadFile(handle, &pNew->iMoveType, sizeof(_int), dword, nullptr);
 		ReadFile(handle, &pNew->iParentPart_Index, sizeof(_int), dword, nullptr);
 		ReadFile(handle, &pNew->iTexture_Index, sizeof(_int), dword, nullptr);
+		ReadFile(handle, &pNew->fTextureColor, sizeof(_float4), dword, nullptr);
 		m_pUIRender_Client->Make_Texture(pNew->iTexture_Index);
 		_wstring strName = {};
 		while (true)
@@ -193,9 +241,9 @@ HRESULT CUIManager::Load_UIDataFile_Part(HANDLE handle, DWORD* dword, _int iInde
 		_wstring strText = {};
 		while (true)
 		{
-			_char szText = {};
-			ReadFile(handle, &szText, sizeof(_char), dword, nullptr);
-			strText += (_tchar)szText;
+			_tchar szText = {};
+			ReadFile(handle, &szText, sizeof(_tchar), dword, nullptr);
+			strText += szText;
 			if (szText == '\0')
 				break;
 		}
