@@ -33,11 +33,12 @@ cbuffer MovementBuffer : register(b0)   // 받아온 걸 상수로 쓰기 위한 버퍼인듯?
     float2  pad_1;      // 크기를 맞추기 위한 더미 변수 16바이트를 맞춰야함
     
     float4  vPivot;
+    
 	float	fGravity;
     float3  pad_2;
     
     float4  vMoveDir;
-    matrix  WorldMatrix;
+    row_major matrix WorldMatrix;
     
     float3  vOrbitAxis;
 	float	fOrbitAngle;
@@ -113,7 +114,7 @@ void CS_SPREAD_MAIN(uint3 DTid : SV_DispatchThreadID)
     float4 vMoveDir = vDir * particle.fSpeed;
     
     float4 vGravityDir = float4(0.f, -1.f, 0.f, 0.f);
-    vGravityDir = mul(vGravityDir, WorldMatrix);    // 여기에는 역행렬 전달.
+    vGravityDir = mul(vGravityDir, WorldMatrix); // 여기에는 역행렬 전달.
     vMoveDir += normalize(vGravityDir) * fGravity * particle.vLifeTime.y;
     
     particle.vTranslation = particle.vTranslation + (vMoveDir * fTimeDelta + vRotateDir) * fAddSpeed;
@@ -287,7 +288,7 @@ void CS_SPREAD_WORLD_MAIN(uint3 DTid : SV_DispatchThreadID)
     
     float4 vWorldPivot = mul(vPivot, WorldMatrix);
     
-    if(0.f == particle.vLifeTime.y)
+    if (0.f == pad_1.x)
     {
         particle.vTranslation = mul(particle.vTranslation, WorldMatrix);
         particle.vRight = vWorldPivot;
@@ -345,12 +346,12 @@ void CS_SPREAD_WORLD_MAIN(uint3 DTid : SV_DispatchThreadID)
     vMoveDir.y -= fGravity * particle.vLifeTime.y;
     
     particle.vTranslation = particle.vTranslation + (vMoveDir * fTimeDelta + vRotateDir) * fAddSpeed;
-    
+
     if ((iState & STATE_LOOP) && (particle.vLifeTime.y >= particle.vLifeTime.x))
     {
         particle = InitParticles[iIndex];
         particle.vLifeTime.y = 0.f;
-        
+        particle.vTranslation = mul(particle.vTranslation, WorldMatrix);
         particle.vRight = vWorldPivot;
         particle.vUp = float4(vOrbitAxis.x, vOrbitAxis.y, vOrbitAxis.z, 0.f);
     }
@@ -372,7 +373,7 @@ void CS_MOVE_WORLD_MAIN(uint3 DTid : SV_DispatchThreadID)
     
     float4 vWorldPivot = mul(vPivot, WorldMatrix);
     
-    if (0.f == particle.vLifeTime.y)
+    if (0.f == pad_1.x)
     {
         particle.vTranslation = mul(particle.vTranslation, WorldMatrix);
         particle.vRight = vWorldPivot;
@@ -430,12 +431,12 @@ void CS_MOVE_WORLD_MAIN(uint3 DTid : SV_DispatchThreadID)
     vMoveDir.y -= fGravity * particle.vLifeTime.y;
     
     particle.vTranslation = particle.vTranslation + (vMoveDir * fTimeDelta + vRotateDir) * fAddSpeed;
-    
+
     if ((iState & STATE_LOOP) && (particle.vLifeTime.y >= particle.vLifeTime.x))
     {
         particle = InitParticles[iIndex];
         particle.vLifeTime.y = 0.f;
-        
+        particle.vTranslation = mul(particle.vTranslation, WorldMatrix);
         particle.vRight = vWorldPivot;
         particle.vUp = float4(vOrbitAxis.x, vOrbitAxis.y, vOrbitAxis.z, 0.f);
     }
@@ -457,7 +458,7 @@ void CS_CONVERGE_WORLD_MAIN(uint3 DTid : SV_DispatchThreadID)
     
     float4 vWorldPivot = mul(vPivot, WorldMatrix);
     
-    if (0.f == particle.vLifeTime.y)
+    if (0.f == pad_1.x)
     {
         particle.vTranslation = mul(particle.vTranslation, WorldMatrix);
         particle.vRight = vWorldPivot;
@@ -519,7 +520,7 @@ void CS_CONVERGE_WORLD_MAIN(uint3 DTid : SV_DispatchThreadID)
     {
         particle = InitParticles[iIndex];
         particle.vLifeTime.y = 0.f;
-        
+        particle.vTranslation = mul(particle.vTranslation, WorldMatrix);
         particle.vRight = vWorldPivot;
         particle.vUp = float4(vOrbitAxis.x, vOrbitAxis.y, vOrbitAxis.z, 0.f);
     }

@@ -65,7 +65,7 @@ VS_OUT VS_MAIN(uint instanceID : SV_InstanceID)
     Out.vPSize = Particle_SRV[instanceID].vPSize;
     Out.vLifeTime = Particle_SRV[instanceID].vLifeTime;
     Out.vColor = Particle_SRV[instanceID].vColor;
-    Out.vLook = Particle_SRV[instanceID].vLook;
+    Out.vLook = mul(Particle_SRV[instanceID].vLook, g_WorldMatrix);
     
     return Out;
 }
