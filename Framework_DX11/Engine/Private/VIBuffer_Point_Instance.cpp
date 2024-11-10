@@ -157,7 +157,7 @@ void CVIBuffer_Point_Instance::Spread_Test(class CShader_Compute* pComputeShader
 
 	// 버퍼랑 UAV 설정하고
 	pComputeShader->Bind_UAV(m_pParticleUAV);
-	pComputeShader->Bind_ConstantBuffer(m_pMovementBuffer);
+	pComputeShader->Bind_CBuffer(m_pMovementBuffer);
 
 	pComputeShader->Execute_ComputeShader((m_iNumInstance + 255) / 256, 1, 1);
 }

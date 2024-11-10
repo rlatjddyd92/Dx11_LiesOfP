@@ -240,22 +240,7 @@ PS_OUT_LIGHT_POINT PS_MAIN_LIGHT_POINT(PS_IN In)
 	vector		vNormalDesc = g_NormalTexture.Sample(PointSampler, In.vTexcoord);
 	vector		vNormal = float4(vNormalDesc.xyz * 2.f - 1.f, 0.f);
 
-	vector		vPosition = (vector)0;
-
-	/* 투영공간상의 화면에 그려지는 픽셀의 위치를 구한다. */
-	/* 로컬위치 * 월드행렬 * 뷰행렬 * 투영행렬 / w */
-	vPosition.x = In.vTexcoord.x * 2.f - 1.f;
-	vPosition.y = In.vTexcoord.y * -2.f + 1.f;
-	vPosition.z = vDepthDesc.x;
-	vPosition.w = 1.f;
-
-	/* 뷰스페이스 상의 화면에 그려지는 픽셀의 위치를 구한다.*/
-	/* 로컬위치 * 월드행렬 * 뷰행렬  */
-	vPosition = vPosition * fViewZ;
-	vPosition = mul(vPosition, g_ProjMatrixInv);
-
-	/* 월드 상의 화면에 그려지는 픽셀의 위치를 구한다.*/
-	vPosition = mul(vPosition, g_ViewMatrixInv);
+    vector vPosition = Compute_WorldPos(In.vTexcoord, vDepthDesc.x, fViewZ);
 
 	vector		vLightDir = vPosition - g_vLightPos;
 

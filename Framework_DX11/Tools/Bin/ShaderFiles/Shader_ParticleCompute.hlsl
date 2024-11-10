@@ -24,7 +24,7 @@ cbuffer MovementBuffer : register(b0)   // 받아온 걸 상수로 쓰기 위한 버퍼인듯?
 {
     uint    iNumInstance;
     uint	iState;
-    float2  pad_1;
+    float2  pad_1;      // 크기를 맞추기 위한 더미 변수 16바이트를 맞춰야함
     
     float4  vPivot;
 	float	fGravity;

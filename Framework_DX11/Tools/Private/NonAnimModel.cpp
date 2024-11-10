@@ -145,16 +145,18 @@ HRESULT CNonAnimModel::Render()
 
 			if (FAILED(m_pModelCom->Render((_uint)i)))
 				return E_FAIL;
+
 		}
 
+	}
+	else
+	{
 		_bool bFalse = false;
 		if (FAILED(m_pShaderCom->Bind_RawValue("g_bSelect", &bFalse, sizeof(_bool))))
 			return E_FAIL;
 		if (FAILED(m_pShaderCom->Bind_RawValue("g_isLight", &bFalse, sizeof(_bool))))
 			return E_FAIL;
-	}
-	else
-	{
+
 		if (FAILED(m_pShaderCom->Bind_Matrix("g_ViewMatrixInv", &m_pGameInstance->Get_Transform_Inverse(CPipeLine::D3DTS_VIEW))))
 			return E_FAIL;
 		if (FAILED(m_pShaderCom->Bind_Matrix("g_ProjMatrixInv", &m_pGameInstance->Get_Transform_Inverse(CPipeLine::D3DTS_PROJ))))
@@ -200,28 +202,6 @@ HRESULT CNonAnimModel::Render()
 		m_pVIBufferCom->Render();
 
 	}
-	if (nullptr != m_pModelCom->Find_Texture((_uint)i, TEXTURE_TYPE::NORMALS))
-	{
-		if (FAILED(m_pModelCom->Bind_Material(m_pShaderCom, "g_NormalTexture", NORMALS, (_uint)i)))
-			return E_FAIL;
-
-		if (FAILED(m_pShaderCom->Begin(1)))
-			return E_FAIL;
-	}
-	else
-	{
-		if (FAILED(m_pShaderCom->Begin(0)))
-			return E_FAIL;
-	}
-
-	if (FAILED(m_pModelCom->Render((_uint)i)))
-		return E_FAIL;
-	_bool bFalse = false;
-	if (FAILED(m_pShaderCom->Bind_RawValue("g_bSelect", &bFalse, sizeof(_bool))))
-		return E_FAIL;
-	if (FAILED(m_pShaderCom->Bind_RawValue("g_isLight", &bFalse, sizeof(_bool))))
-		return E_FAIL;
-	return S_OK;
 }
 
 HRESULT CNonAnimModel::Render_Picking()

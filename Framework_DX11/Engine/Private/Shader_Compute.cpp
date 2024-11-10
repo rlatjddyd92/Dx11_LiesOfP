@@ -116,7 +116,7 @@ void CShader_Compute::Bind_UAV(ID3D11UnorderedAccessView* pUAV)
 	m_pContext->CSSetUnorderedAccessViews(0, 1, &pUAV, nullptr);
 }
 
-void CShader_Compute::Bind_ConstantBuffer(ID3D11Buffer* pConstantBuffer)
+void CShader_Compute::Bind_CBuffer(ID3D11Buffer* pConstantBuffer)
 {
 	m_pContext->CSSetConstantBuffers(0, 1, &pConstantBuffer);
 }

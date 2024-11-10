@@ -16,7 +16,7 @@ public:
 	virtual HRESULT Initialize(void* pArg) override;
 
 	void Bind_UAV(ID3D11UnorderedAccessView* pUAV);
-	void Bind_ConstantBuffer(ID3D11Buffer* pConstantBuffer);	// 상수 버퍼 만들 때 패딩 해줘야 함!!!!!!!
+	void Bind_CBuffer(ID3D11Buffer* pConstantBuffer);	// 상수 버퍼 만들 때 패딩 해줘야 함!!!!!!!
 	void Execute_ComputeShader(_uint iThreadGroupX, _uint iThreadGroupY, _uint iThreadGroupZ);
 
 private:
