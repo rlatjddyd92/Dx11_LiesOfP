@@ -55,7 +55,7 @@ HRESULT CController_MapTool::Control_Player()
 			Desc.vScale = { 1.f,1.f,1.f };
 			Desc.vRotation = { 0.f,0.f,0.f };
 			Desc.iRenderGroupID = 0;
-			strcpy_s(Desc.szModelTag, "Prototype_Model_Test");
+			strcpy_s(Desc.szModelTag, "Prototype_AnimModel_Player");
 			if (FAILED(m_pGameInstance->Add_CloneObject_ToLayer(LEVEL_TOOL, TEXT("Layer_Player"), TEXT("Prototype_GameObject_NonAnim"), &Desc)))
 				return E_FAIL;
 		}
@@ -138,7 +138,7 @@ void CController_MapTool::Pick_Object()
 					{
 						_Vec3 vObjPos = pSelect->Get_Transform()->Get_State(CTransform::STATE_POSITION);
 						_Vec4 vPos = { vObjPos.x,vObjPos.y,vObjPos.z, 1.f };
-						
+
 						m_iSelectedLightIndex = m_pGameInstance->Find_Light_Index(vPos);
 					}
 				}
@@ -197,7 +197,7 @@ void CController_MapTool::Pick_Object()
 			//선택한게 조명인 경우
 			if (pSelect->Get_isLight())
 			{
-				if(m_iSelectedLightIndex != -1)
+				if (m_iSelectedLightIndex != -1)
 				{
 					LIGHT_DESC* pLightDesc = m_pGameInstance->Get_LightDesc(m_iSelectedLightIndex);
 					pLightDesc->vPosition = _Vec4(vPos.x, vPos.y, vPos.z, 1.f);
@@ -206,7 +206,6 @@ void CController_MapTool::Pick_Object()
 		}
 
 	}
-
 #pragma region ImGuiZimo
 	enum GIZMO
 	{
@@ -253,13 +252,12 @@ void CController_MapTool::Pick_Object()
 			, m_tGizmoDesc.boundSizing ? m_tGizmoDesc.bounds : NULL
 			, m_tGizmoDesc.boundSizingSnap ? m_tGizmoDesc.boundsSnap : NULL))
 		{
-			m_pSelectObject->Get_Transform()->Set_WorldMatrix(GizmoWorldMatrix);
+			ImGuizmo::DecomposeMatrixToComponents((_float*)&GizmoWorldMatrix, &vPos.x, &vRot.x, &vScale.x);
 		}
-
 		// 행렬 요소 분해
-		ImGuizmo::DecomposeMatrixToComponents((_float*)&GizmoWorldMatrix, &vPos.x, &vRot.x, &vScale.x);
 	}
 #pragma endregion
+
 
 	ImGui::DragFloat3("Scale(X, Y, Z)", (_float*)&vScale, 0.05f, 0.1f, 100.f);
 	ImGui::DragFloat3("Rotation(X, Y, Z)", (_float*)&vRot, 0.05f, -180.f, 180.f, 0);
@@ -898,7 +896,7 @@ void CController_MapTool::Map_Menu()
 	ImGui::Checkbox("Render Shadow", &bShadow);
 
 	//오브젝트 생성
-	if (ImGui::Button("Create Model") || m_pGameInstance->Get_KeyState(C) == AWAY)
+	if (ImGui::Button("Create Model") )
 	{
 		wstrLayerName.assign(strLayerName.begin(), strLayerName.end());
 
@@ -937,8 +935,8 @@ void CController_MapTool::Map_Menu()
 
 
 
-	}ImGui::SameLine();
-	ImGui::Text("or Press \"C\" to Create");
+	}
+
 
 }
 
@@ -1095,12 +1093,12 @@ void CController_MapTool::Cell_Create_Menu()
 	ImGui::Text("Save Point Count : %d", iSavePointCount);
 
 	//Cell 생성기능
-	if (ImGui::Button("Add Point") || m_pGameInstance->Get_KeyState(C) == AWAY)
+	if (ImGui::Button("Add Point") || m_pGameInstance->Get_KeyState(Z) == AWAY)
 	{
 		m_pNavigationController->Add_Point(m_vPickPos);
 	}
 	ImGui::SameLine();
-	ImGui::Text("or Press \"C\" to add Point");
+	ImGui::Text("or Press \"Z\" to add Point");
 
 
 }
