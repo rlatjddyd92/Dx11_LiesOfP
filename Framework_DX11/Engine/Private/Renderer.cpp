@@ -338,8 +338,8 @@ HRESULT CRenderer::Draw()
 	if (FAILED(Render_HDR()))
 		return E_FAIL;
 
-	if (FAILED(Render_Bloom()))	// 다시 고치기
-		return E_FAIL;
+	//if (FAILED(Render_Bloom()))	// 다시 고치기
+	//	return E_FAIL;
 
 	if(FAILED(Render_LDR()))
 		return E_FAIL;

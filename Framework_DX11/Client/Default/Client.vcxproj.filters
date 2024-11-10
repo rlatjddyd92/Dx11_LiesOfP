@@ -93,7 +93,7 @@
     </Filter>
     <Filter Include="03.GameInterface\00.UIManager\00.UIPage\02.UIPage_Play">
       <UniqueIdentifier>{0bf63bb1-37d5-4135-837b-20c74ddf9ad5}</UniqueIdentifier>
-	</Filter>
+    </Filter>
     <Filter Include="02.GameObjects\05.Effect">
       <UniqueIdentifier>{d5192014-9901-427e-b465-6371d3d77239}</UniqueIdentifier>
     </Filter>
@@ -108,6 +108,9 @@
     </Filter>
     <Filter Include="02.GameObjects\05.Effect\Effect_Container">
       <UniqueIdentifier>{4e8f97f6-ae2a-4c6b-9183-3354c0d500b6}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.GameObjects\05.Effect\Effect_Manager">
+      <UniqueIdentifier>{1e476235-e2e7-4f5d-a200-9525d40dfc42}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -198,20 +201,21 @@
     <ClInclude Include="..\Public\UIPage_Main.h">
       <Filter>03.GameInterface\00.UIManager\00.UIPage\00.UIPage_Main</Filter>
     </ClInclude>
-    <ClInclude Include="..\Public\Effect_Base.h">
-      <Filter>02.GameObjects\05.Effect\Effect_Base</Filter>
-    </ClInclude>
-    <ClInclude Include="..\Public\Texture_Effect.h">
-      <Filter>02.GameObjects\05.Effect\Effect_Base\Texture_Effect</Filter>
+    <ClInclude Include="..\Public\Particle_Snow.h" />
+    <ClInclude Include="..\Public\Effect_Container.h">
+      <Filter>02.GameObjects\05.Effect\Effect_Container</Filter>
     </ClInclude>
     <ClInclude Include="..\Public\Particle_Effect.h">
       <Filter>02.GameObjects\05.Effect\Effect_Base\Particle_Effect</Filter>
     </ClInclude>
-    <ClInclude Include="..\Public\Effect_Manager.h">
-      <Filter>02.GameObjects\05.Effect</Filter>
+    <ClInclude Include="..\Public\Texture_Effect.h">
+      <Filter>02.GameObjects\05.Effect\Effect_Base\Texture_Effect</Filter>
     </ClInclude>
-    <ClInclude Include="..\Public\Effect_Container.h">
-      <Filter>02.GameObjects\05.Effect\Effect_Container</Filter>
+    <ClInclude Include="..\Public\Effect_Base.h">
+      <Filter>02.GameObjects\05.Effect\Effect_Base</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Public\Effect_Manager.h">
+      <Filter>02.GameObjects\05.Effect\Effect_Manager</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -283,21 +287,22 @@
     </ClCompile>
     <ClCompile Include="..\Private\UIPage_Main.cpp">
       <Filter>03.GameInterface\00.UIManager\00.UIPage\00.UIPage_Main</Filter>
-	</ClCompile>
-    <ClCompile Include="..\Private\Effect_Base.cpp">
-      <Filter>02.GameObjects\05.Effect\Effect_Base</Filter>
     </ClCompile>
-    <ClCompile Include="..\Private\Texture_Effect.cpp">
-      <Filter>02.GameObjects\05.Effect\Effect_Base\Texture_Effect</Filter>
+    <ClCompile Include="..\Private\Particle_Snow.cpp" />
+    <ClCompile Include="..\Private\Effect_Container.cpp">
+      <Filter>02.GameObjects\05.Effect\Effect_Container</Filter>
     </ClCompile>
     <ClCompile Include="..\Private\Particle_Effect.cpp">
       <Filter>02.GameObjects\05.Effect\Effect_Base\Particle_Effect</Filter>
     </ClCompile>
-    <ClCompile Include="..\Private\Effect_Manager.cpp">
-      <Filter>02.GameObjects\05.Effect</Filter>
+    <ClCompile Include="..\Private\Texture_Effect.cpp">
+      <Filter>02.GameObjects\05.Effect\Effect_Base\Texture_Effect</Filter>
     </ClCompile>
-    <ClCompile Include="..\Private\Effect_Container.cpp">
-      <Filter>02.GameObjects\05.Effect\Effect_Container</Filter>
+    <ClCompile Include="..\Private\Effect_Base.cpp">
+      <Filter>02.GameObjects\05.Effect\Effect_Base</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Private\Effect_Manager.cpp">
+      <Filter>02.GameObjects\05.Effect\Effect_Manager</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
