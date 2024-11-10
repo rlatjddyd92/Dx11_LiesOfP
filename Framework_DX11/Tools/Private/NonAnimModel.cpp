@@ -39,6 +39,7 @@ HRESULT CNonAnimModel::Initialize(void* pArg)
 	m_isDecal = pDesc->isDecal;
 	m_isARM = pDesc->isARM;
 	m_isNormal = pDesc->isNormal;
+	m_bUseWorldColor = pDesc->bUseWorldColor;
 
 	if (FAILED(Ready_Components(pDesc)))
 		return E_FAIL;
@@ -162,6 +163,8 @@ HRESULT CNonAnimModel::Render()
 		if (FAILED(m_pShaderCom->Bind_RawValue("bNormal", &m_isNormal, sizeof(_bool))))
 			return E_FAIL;
 		if (FAILED(m_pShaderCom->Bind_RawValue("bARM", &m_isARM, sizeof(_bool))))
+			return E_FAIL;
+		if (FAILED(m_pShaderCom->Bind_RawValue("bUseWorldColor", &m_bUseWorldColor, sizeof(_bool))))
 			return E_FAIL;
 
 		if(m_isNormal)

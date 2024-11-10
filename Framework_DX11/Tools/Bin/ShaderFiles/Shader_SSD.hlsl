@@ -21,6 +21,7 @@ float4 g_fHashColor;
 
 bool bNormal = false;
 bool bARM = false;
+bool bUseWorldColor = false;
 
 struct VS_IN
 {
@@ -121,10 +122,17 @@ PS_OUT PS_MAIN(PS_IN In)
     if (vDecalDiffuse.a <= 0.1f)
         discard;
     
-    if (vDecalDiffuse.r <= 0.1f)
+    if (vDecalDiffuse.r <= 0.3f)
         discard;
     
     Out.vColor = vDecalDiffuse;
+    
+    if(bUseWorldColor)
+    {
+        Out.vColor.a = 0;
+        
+    }
+   
     
     if (bNormal)
     {
@@ -144,6 +152,7 @@ PS_OUT PS_MAIN(PS_IN In)
     }
     else
         Out.vARM = float4(0.f, 0.f, 0.f, 0.f);
+    
     return Out;
 }
 

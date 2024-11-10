@@ -93,6 +93,7 @@ private:
 	_bool		m_isDecal = { false };
 	_bool		m_isNormal = { false };
 	_bool		m_isARM = { false };
+	_bool		m_bUseWorldColor = { false };
 
 	_tchar m_szModelTag[MAX_PATH];
 	_tchar m_szTextureTag_Diffuse[MAX_PATH];
