@@ -67,7 +67,6 @@ HRESULT CController_MapTool::Control_Player()
 void CController_MapTool::Create_Map()
 {
 	ImGui::SeparatorText("Select Model");
-
 	ImGuiTabBarFlags tab_bar_flags = ImGuiTabBarFlags_None;
 
 	if (ImGui::BeginTabBar("MapToolBar", tab_bar_flags))
@@ -546,8 +545,37 @@ void CController_MapTool::SaveMap()
 				pGameObject = m_pGameInstance->Find_Object(LEVEL_TOOL, sLayerTag, j);
 
 				OBJECT_DEFAULT_DESC pDesc = {};
-				wstring wstrModelTag = static_cast<CNonAnimModel*>(pGameObject)->Get_ModelTag();
-				wcscpy_s(pDesc.szModelTag, wstrModelTag.c_str());
+				if (static_cast<CNonAnimModel*>(pGameObject)->Get_isDecal())
+				{
+					pDesc.bShadow = true;
+					pDesc.bDecal = true;
+					CNonAnimModel::NONMODEL_DESC OriDesc = static_cast<CNonAnimModel*>(pGameObject)->Get_NonAniModelDesc();
+
+					pDesc.bNormal = OriDesc.isNormal;
+					pDesc.bARM = OriDesc.isARM;
+					pDesc.bUseWorldColor = OriDesc.bUseWorldColor;
+					wstring wstrDifusseTag = static_cast<CNonAnimModel*>(pGameObject)->Get_DiffuseTag();
+					wcscpy_s(pDesc.szTextureTag_Diffuse, wstrDifusseTag.c_str());
+					
+					if(pDesc.bNormal)
+					{
+						wstring wstrNormalTag = static_cast<CNonAnimModel*>(pGameObject)->Get_NormalTag();
+						wcscpy_s(pDesc.szTextureTag_Normal, wstrNormalTag.c_str());
+					}
+
+					if (pDesc.bARM)
+					{
+						wstring wstrARMTag = static_cast<CNonAnimModel*>(pGameObject)->Get_ArmTag();
+						wcscpy_s(pDesc.szTextureTag_ARM, wstrARMTag.c_str());
+					}
+
+				}
+				else
+				{
+					wstring wstrModelTag = static_cast<CNonAnimModel*>(pGameObject)->Get_ModelTag();
+					wcscpy_s(pDesc.szModelTag, wstrModelTag.c_str());
+				}
+		
 				XMStoreFloat3(&pDesc.vPosition, pGameObject->Get_Transform()->Get_State(CTransform::STATE_POSITION));
 				pDesc.vScale = pGameObject->Get_Transform()->Get_Scaled();
 				pDesc.vRotation = pGameObject->Get_Transform()->Get_CurrentRotation();
@@ -566,7 +594,7 @@ void CController_MapTool::SaveMap()
 		{
 			for (_uint j = 0; j < m_pGameInstance->Get_Total_LightCount(); ++j)
 			{
-				if (j == 0)
+				if (j == 0)	//방향성 광원 저장 안함
 					continue;
 
 				LIGHT_DESC* pLightDesc = {};
@@ -630,8 +658,32 @@ void CController_MapTool::LoadMap()
 
 				CNonAnimModel::NONMODEL_DESC nonDesc = {};
 
-				int bufferSize = WideCharToMultiByte(CP_ACP, 0, pDesc.szModelTag, -1, NULL, 0, NULL, NULL);
-				WideCharToMultiByte(CP_ACP, 0, pDesc.szModelTag, -1, nonDesc.szModelTag, bufferSize, NULL, NULL);
+				if (pDesc.bDecal)
+				{
+					nonDesc.isDecal = true;
+					nonDesc.isNormal = pDesc.bNormal;
+					nonDesc.isARM = pDesc.bARM;
+					nonDesc.bUseWorldColor = pDesc.bUseWorldColor;
+					int bufferSize = WideCharToMultiByte(CP_ACP, 0, pDesc.szTextureTag_Diffuse, -1, NULL, 0, NULL, NULL);
+					WideCharToMultiByte(CP_ACP, 0, pDesc.szTextureTag_Diffuse, -1, nonDesc.szTextureTag_Diffuse, bufferSize, NULL, NULL);
+
+					if(nonDesc.isNormal)
+					{
+						bufferSize = WideCharToMultiByte(CP_ACP, 0, pDesc.szTextureTag_Normal, -1, NULL, 0, NULL, NULL);
+						WideCharToMultiByte(CP_ACP, 0, pDesc.szTextureTag_Normal, -1, nonDesc.szTextureTag_Normal, bufferSize, NULL, NULL);
+					}
+
+					if(nonDesc.isARM)
+					{
+						bufferSize = WideCharToMultiByte(CP_ACP, 0, pDesc.szTextureTag_ARM, -1, NULL, 0, NULL, NULL);
+						WideCharToMultiByte(CP_ACP, 0, pDesc.szTextureTag_ARM, -1, nonDesc.szTextureTag_ARM, bufferSize, NULL, NULL);
+					}
+				}
+				else
+				{
+					int bufferSize = WideCharToMultiByte(CP_ACP, 0, pDesc.szModelTag, -1, NULL, 0, NULL, NULL);
+					WideCharToMultiByte(CP_ACP, 0, pDesc.szModelTag, -1, nonDesc.szModelTag, bufferSize, NULL, NULL);
+				}
 
 				nonDesc.vPosition = pDesc.vPosition;
 				nonDesc.vScale = pDesc.vScale;
@@ -1412,115 +1464,355 @@ void CController_MapTool::Decal_Menu()
 	}
 #pragma endregion
 
-#pragma region SHOW IMAGES LIST
-	//내용물 초기화 (capacity는 그냥 냅둠)
-	for (auto& filename : m_Decal_File_Names) {
-		Safe_Delete_Array(filename);
-	}
-	m_Decal_File_Names.clear();
+	//diffuse이미지는 기본으로 사용하고, normal이나 ARMT/ARMH를 사용할지 선택
+	static _bool bUseNormal = false;
+	static _bool bUseARM = false;
+	static _bool bUseWroldColor = false;
+	ImGui::Checkbox("Use WorldColor", &bUseWroldColor);
+	ImGui::SameLine();
+	ImGui::Checkbox("Use Normal", &bUseNormal);
+	ImGui::SameLine();
+	ImGui::Checkbox("Use ARMT/ARMH", &bUseARM);
 
-	char szImageFindPath[128] = "../Bin/Resources/Textures/Decal/tga/";    // 상대 경로 -> 모든 파일을 돌겠다
-	char szImagePathReset[128] = "../Bin/Resources/Textures/Decal/tga/";
-	char szImagePath[128] = "../Bin/Resources/Textures/Decal/tga/";
+#pragma region SHOW IMAGES LIST_DIFFUSE
 
-	//폴더 리스트에서 선택한 인덱스로 파일 검색 경로 생성
-	strcat_s(szImageFindPath, m_Decal_Folder_Names[m_iListSelectNum]);
-	strcat_s(szImageFindPath, "/*.*");
-
-	handle = _findfirst(szImageFindPath, &fd);
-
-	if (handle == -1)
-		return;
-
-	iResult = 0;
-	int iImagesCount = 0;
-
-	while (iResult != -1)
+	if (ImGui::CollapsingHeader("Diffuse_Images"))
 	{
-		strcpy_s(szImagePath, szImageFindPath);
-		strcat_s(szImagePath, fd.name);
+		//내용물 초기화 (capacity는 그냥 냅둠)
+		for (auto& filename : m_Decal_File_Names_Diffuse) {
+			Safe_Delete_Array(filename);
+		}
+		m_Decal_File_Names_Diffuse.clear();
 
-		_char szDirName[MAX_PATH] = "";
-		_char szFileName[MAX_PATH] = "";
-		_char szExt[MAX_PATH] = "";
-		_splitpath_s(szImagePath, nullptr, 0, szDirName, MAX_PATH, szFileName, MAX_PATH, szExt, MAX_PATH);
+		char szImageFindPath[128] = "../Bin/Resources/Textures/Decal/tga/";    // 상대 경로 -> 모든 파일을 돌겠다
+		char szImagePathReset[128] = "../Bin/Resources/Textures/Decal/tga/";
+		char szImagePath[128] = "../Bin/Resources/Textures/Decal/tga/";
 
-		if (!strcmp(szExt, ".") || !strcmp(szExt, "..") || strcmp(szExt, ".tga"))
+		//폴더 리스트에서 선택한 인덱스로 파일 검색 경로 생성
+		strcat_s(szImageFindPath, m_Decal_Folder_Names[m_iListSelectNum]);
+		strcat_s(szImageFindPath, "/Diffuse/*.*");
+
+		handle = _findfirst(szImageFindPath, &fd);
+
+		if (handle == -1)
+			return;
+
+		iResult = 0;
+		int iImagesCount = 0;
+
+		while (iResult != -1)
 		{
+			strcpy_s(szImagePath, szImageFindPath);
+			strcat_s(szImagePath, fd.name);
+
+			_char szDirName[MAX_PATH] = "";
+			_char szFileName[MAX_PATH] = "";
+			_char szExt[MAX_PATH] = "";
+			_splitpath_s(szImagePath, nullptr, 0, szDirName, MAX_PATH, szFileName, MAX_PATH, szExt, MAX_PATH);
+
+			if (!strcmp(szExt, ".") || !strcmp(szExt, "..") || strcmp(szExt, ".tga"))
+			{
+				iResult = _findnext(handle, &fd);
+				continue;
+			}
+
+			iImagesCount++;
+
+			//_strup : 문자열 내용을 복사해 그 주소를 저장-> 주소에 따라 문자열이 바뀌는걸 막아 모두 동일해지는걸 막음
+			m_Decal_File_Names_Diffuse.push_back(_strdup(fd.name));
+
+			//_findnext : <io.h>에서 제공하며 다음 위치의 파일을 찾는 함수, 더이상 없다면 -1을 리턴
 			iResult = _findnext(handle, &fd);
-			continue;
 		}
 
-		iImagesCount++;
+		static bool item_Image_highlight = false;
+		int item_Image_highlighted_idx = -1; // Here we store our highlighted data as an index.
 
-		//_strup : 문자열 내용을 복사해 그 주소를 저장-> 주소에 따라 문자열이 바뀌는걸 막아 모두 동일해지는걸 막음
-		m_Decal_File_Names.push_back(_strdup(fd.name));
-
-		//_findnext : <io.h>에서 제공하며 다음 위치의 파일을 찾는 함수, 더이상 없다면 -1을 리턴
-		iResult = _findnext(handle, &fd);
-	}
-
-	static int item_selected_Image_idx = -1; // Here we store our selected data as an index.
-	static bool item_Image_highlight = false;
-	int item_Image_highlighted_idx = -1; // Here we store our highlighted data as an index.
-
-	if (ImGui::BeginListBox("Images"))
-	{
-		for (int n = 0; n < iImagesCount; n++)
+		if (ImGui::BeginListBox("Diffuse_Images"))
 		{
-			const bool is_selected = (item_selected_Image_idx == n);
-			if (ImGui::Selectable(m_Decal_File_Names[n], is_selected))
-				item_selected_Image_idx = n;
+			for (int n = 0; n < iImagesCount; n++)
+			{
+				const bool is_selected = (m_iSelected_Decal_Diffuse_ID == n);
+				if (ImGui::Selectable(m_Decal_File_Names_Diffuse[n], is_selected))
+					m_iSelected_Decal_Diffuse_ID = n;
 
-			if (item_Image_highlight && ImGui::IsItemHovered())
-				item_Image_highlighted_idx = n;
+				if (item_Image_highlight && ImGui::IsItemHovered())
+					item_Image_highlighted_idx = n;
 
-			// Set the initial focus when opening the combo (scrolling + keyboard navigation focus)
-			if (is_selected)
-				ImGui::SetItemDefaultFocus();
+				// Set the initial focus when opening the combo (scrolling + keyboard navigation focus)
+				if (is_selected)
+					ImGui::SetItemDefaultFocus();
 
-			 item_selected_Image_idx;
+				m_iSelected_Decal_Diffuse_ID;
+			}
+			ImGui::EndListBox();
 		}
-		ImGui::EndListBox();
+
+	#pragma region SHOW IMAGES PREVIEW_Diffuse
+		static _bool bShowPreview_Diffuse = false;
+		ImGui::Checkbox("Image Preview_Diffuse", &bShowPreview_Diffuse);
+
+		if (bShowPreview_Diffuse)
+		{
+			ImGui::Begin("Preview_Diffuse", NULL, ImGuiWindowFlags_MenuBar | ImGuiWindowFlags_HorizontalScrollbar
+				| ImGuiWindowFlags_AlwaysVerticalScrollbar);
+
+			int my_image_width = 0;
+			int my_image_height = 0;
+
+			if (m_my_texture) {
+				Safe_Release(m_my_texture);
+				m_my_texture = NULL;
+			}
+
+			char szImageReadPath[128] = "";
+
+			if (m_iSelected_Decal_Diffuse_ID != -1)
+			{
+				strcpy_s(szImageReadPath, szImagePathReset);
+				strcat_s(szImageReadPath, m_Decal_Folder_Names[item_selected_idx]);
+				strcat_s(szImageReadPath, "/Diffuse/");
+				strcat_s(szImageReadPath, m_Decal_File_Names_Diffuse[m_iSelected_Decal_Diffuse_ID]);
+
+				bool ret = LoadTextureFromFile(szImageReadPath, &m_my_texture, &my_image_width, &my_image_height);
+				IM_ASSERT(ret);
+
+				ImGui::Image((ImTextureID)(intptr_t)m_my_texture, ImVec2(my_image_width, my_image_height));
+			}
+
+			ImGui::End();
+		}
+
+	#pragma endregion
 	}
 #pragma endregion
 
-#pragma region SHOW IMAGES PREVIEW
-	static _bool bShowPreview = false;
-	ImGui::Checkbox("Image Preview", &bShowPreview);
+#pragma region SHOW IMAGES LIST_NORMAL
 
-	if (bShowPreview)
+	if (ImGui::CollapsingHeader("Normal_Images"))
 	{
-		ImGui::Begin("Preview", NULL, ImGuiWindowFlags_MenuBar | ImGuiWindowFlags_HorizontalScrollbar
-			| ImGuiWindowFlags_AlwaysVerticalScrollbar);
-
-		int my_image_width = 0;
-		int my_image_height = 0;
-
-		if (m_my_texture) {
-			Safe_Release(m_my_texture);
-			m_my_texture = NULL;
+		//내용물 초기화 (capacity는 그냥 냅둠)
+		for (auto& filename : m_Decal_File_Names_Normal) {
+			Safe_Delete_Array(filename);
 		}
+		m_Decal_File_Names_Normal.clear();
 
-		char szImageReadPath[128] = "";
+		char szImageFindPath[128] = "../Bin/Resources/Textures/Decal/tga/";    // 상대 경로 -> 모든 파일을 돌겠다
+		char szImagePathReset[128] = "../Bin/Resources/Textures/Decal/tga/";
+		char szImagePath[128] = "../Bin/Resources/Textures/Decal/tga/";
 
-		if (item_selected_Image_idx != -1)
+		//폴더 리스트에서 선택한 인덱스로 파일 검색 경로 생성
+		strcat_s(szImageFindPath, m_Decal_Folder_Names[m_iListSelectNum]);
+		strcat_s(szImageFindPath, "/Normal/*.*");
+
+		handle = _findfirst(szImageFindPath, &fd);
+
+		if (handle == -1)
+			return;
+
+		iResult = 0;
+		int iImagesCount = 0;
+
+		while (iResult != -1)
 		{
-			strcpy_s(szImageReadPath, szImagePathReset);
-			strcat_s(szImageReadPath, m_Decal_Folder_Names[item_selected_idx]);
-			strcat_s(szImageReadPath, "/");
-			strcat_s(szImageReadPath, m_Decal_File_Names[item_selected_Image_idx]);
+			strcpy_s(szImagePath, szImageFindPath);
+			strcat_s(szImagePath, fd.name);
 
-			bool ret = LoadTextureFromFile(szImageReadPath, &m_my_texture, &my_image_width, &my_image_height);
-			IM_ASSERT(ret);
+			_char szDirName[MAX_PATH] = "";
+			_char szFileName[MAX_PATH] = "";
+			_char szExt[MAX_PATH] = "";
+			_splitpath_s(szImagePath, nullptr, 0, szDirName, MAX_PATH, szFileName, MAX_PATH, szExt, MAX_PATH);
 
-			ImGui::Image((ImTextureID)(intptr_t)m_my_texture, ImVec2(my_image_width, my_image_height));
+			if (!strcmp(szExt, ".") || !strcmp(szExt, "..") || strcmp(szExt, ".tga"))
+			{
+				iResult = _findnext(handle, &fd);
+				continue;
+			}
+
+			iImagesCount++;
+
+			//_strup : 문자열 내용을 복사해 그 주소를 저장-> 주소에 따라 문자열이 바뀌는걸 막아 모두 동일해지는걸 막음
+			m_Decal_File_Names_Normal.push_back(_strdup(fd.name));
+
+			//_findnext : <io.h>에서 제공하며 다음 위치의 파일을 찾는 함수, 더이상 없다면 -1을 리턴
+			iResult = _findnext(handle, &fd);
 		}
 
-		ImGui::End();
-	}
+		static bool item_Image_highlight = false;
+		int item_Image_highlighted_idx = -1; // Here we store our highlighted data as an index.
+
+		if (ImGui::BeginListBox("Normal"))
+		{
+			for (int n = 0; n < iImagesCount; n++)
+			{
+				const bool is_selected = (m_iSelected_Decal_Normal_ID == n);
+				if (ImGui::Selectable(m_Decal_File_Names_Normal[n], is_selected))
+					m_iSelected_Decal_Normal_ID = n;
+
+				if (item_Image_highlight && ImGui::IsItemHovered())
+					item_Image_highlighted_idx = n;
+
+				// Set the initial focus when opening the combo (scrolling + keyboard navigation focus)
+				if (is_selected)
+					ImGui::SetItemDefaultFocus();
+
+				m_iSelected_Decal_Normal_ID;
+			}
+			ImGui::EndListBox();
+		}
+
+#pragma region SHOW IMAGES PREVIEW_Normal
+		static _bool bShowPreview_Normal = false;
+		ImGui::Checkbox("Image Preview_Normal", &bShowPreview_Normal);
+
+		if (bShowPreview_Normal)
+		{
+			ImGui::Begin("Preview_Normal", NULL, ImGuiWindowFlags_MenuBar | ImGuiWindowFlags_HorizontalScrollbar
+				| ImGuiWindowFlags_AlwaysVerticalScrollbar);
+
+			int my_image_width = 0;
+			int my_image_height = 0;
+
+			if (m_my_texture) {
+				Safe_Release(m_my_texture);
+				m_my_texture = NULL;
+			}
+
+			char szImageReadPath[128] = "";
+
+			if (m_iSelected_Decal_Normal_ID != -1)
+			{
+				strcpy_s(szImageReadPath, szImagePathReset);
+				strcat_s(szImageReadPath, m_Decal_Folder_Names[item_selected_idx]);
+				strcat_s(szImageReadPath, "/Normal/");
+				strcat_s(szImageReadPath, m_Decal_File_Names_Normal[m_iSelected_Decal_Normal_ID]);
+
+				bool ret = LoadTextureFromFile(szImageReadPath, &m_my_texture, &my_image_width, &my_image_height);
+				IM_ASSERT(ret);
+
+				ImGui::Image((ImTextureID)(intptr_t)m_my_texture, ImVec2(my_image_width, my_image_height));
+			}
+
+			ImGui::End();
+		}
 
 #pragma endregion
+	}
+#pragma endregion
+
+#pragma region SHOW IMAGES LIST_ARM
+
+	if (ImGui::CollapsingHeader("ARMT/ARMH"))
+	{
+		//내용물 초기화 (capacity는 그냥 냅둠)
+		for (auto& filename : m_Decal_File_Names_Arm) {
+			Safe_Delete_Array(filename);
+		}
+		m_Decal_File_Names_Arm.clear();
+
+		char szImageFindPath[128] = "../Bin/Resources/Textures/Decal/tga/";    // 상대 경로 -> 모든 파일을 돌겠다
+		char szImagePathReset[128] = "../Bin/Resources/Textures/Decal/tga/";
+		char szImagePath[128] = "../Bin/Resources/Textures/Decal/tga/";
+
+		//폴더 리스트에서 선택한 인덱스로 파일 검색 경로 생성
+		strcat_s(szImageFindPath, m_Decal_Folder_Names[m_iListSelectNum]);
+		strcat_s(szImageFindPath, "/ARM/*.*");
+
+		handle = _findfirst(szImageFindPath, &fd);
+
+		if (handle == -1)
+			return;
+
+		iResult = 0;
+		int iImagesCount = 0;
+
+		while (iResult != -1)
+		{
+			strcpy_s(szImagePath, szImageFindPath);
+			strcat_s(szImagePath, fd.name);
+
+			_char szDirName[MAX_PATH] = "";
+			_char szFileName[MAX_PATH] = "";
+			_char szExt[MAX_PATH] = "";
+			_splitpath_s(szImagePath, nullptr, 0, szDirName, MAX_PATH, szFileName, MAX_PATH, szExt, MAX_PATH);
+
+			if (!strcmp(szExt, ".") || !strcmp(szExt, "..") || strcmp(szExt, ".tga"))
+			{
+				iResult = _findnext(handle, &fd);
+				continue;
+			}
+
+			iImagesCount++;
+
+			//_strup : 문자열 내용을 복사해 그 주소를 저장-> 주소에 따라 문자열이 바뀌는걸 막아 모두 동일해지는걸 막음
+			m_Decal_File_Names_Arm.push_back(_strdup(fd.name));
+
+			//_findnext : <io.h>에서 제공하며 다음 위치의 파일을 찾는 함수, 더이상 없다면 -1을 리턴
+			iResult = _findnext(handle, &fd);
+		}
+
+		static bool item_Image_highlight = false;
+		int item_Image_highlighted_idx = -1; // Here we store our highlighted data as an index.
+
+		if (ImGui::BeginListBox("ARM"))
+		{
+			for (int n = 0; n < iImagesCount; n++)
+			{
+				const bool is_selected = (m_iSelected_Decal_ARM_ID == n);
+				if (ImGui::Selectable(m_Decal_File_Names_Arm[n], is_selected))
+					m_iSelected_Decal_ARM_ID = n;
+
+				if (item_Image_highlight && ImGui::IsItemHovered())
+					item_Image_highlighted_idx = n;
+
+				// Set the initial focus when opening the combo (scrolling + keyboard navigation focus)
+				if (is_selected)
+					ImGui::SetItemDefaultFocus();
+
+				m_iSelected_Decal_ARM_ID;
+			}
+			ImGui::EndListBox();
+		}
+
+#pragma region SHOW IMAGES PREVIEW_Normal
+		static _bool bShowPreview_ARM = false;
+		ImGui::Checkbox("Image Preview_ARM", &bShowPreview_ARM);
+
+		if (bShowPreview_ARM)
+		{
+			ImGui::Begin("Preview_ARM", NULL, ImGuiWindowFlags_MenuBar | ImGuiWindowFlags_HorizontalScrollbar
+				| ImGuiWindowFlags_AlwaysVerticalScrollbar);
+
+			int my_image_width = 0;
+			int my_image_height = 0;
+
+			if (m_my_texture) {
+				Safe_Release(m_my_texture);
+				m_my_texture = NULL;
+			}
+
+			char szImageReadPath[128] = "";
+
+			if (m_iSelected_Decal_ARM_ID != -1)
+			{
+				strcpy_s(szImageReadPath, szImagePathReset);
+				strcat_s(szImageReadPath, m_Decal_Folder_Names[item_selected_idx]);
+				strcat_s(szImageReadPath, "/ARM/");
+				strcat_s(szImageReadPath, m_Decal_File_Names_Arm[m_iSelected_Decal_ARM_ID]);
+
+				bool ret = LoadTextureFromFile(szImageReadPath, &m_my_texture, &my_image_width, &my_image_height);
+				IM_ASSERT(ret);
+
+				ImGui::Image((ImTextureID)(intptr_t)m_my_texture, ImVec2(my_image_width, my_image_height));
+			}
+
+			ImGui::End();
+		}
+
+#pragma endregion
+	}
+#pragma endregion
+
 
 	if (ImGui::Button("Create_Decal"))
 	{
@@ -1531,13 +1823,24 @@ void CController_MapTool::Decal_Menu()
 		Desc.iRenderGroupID = 0;
 		Desc.isLight = false;
 		Desc.isDecal = true;
-		size_t length = strlen(m_Decal_File_Names[item_selected_Image_idx]);
-		strncpy_s(Desc.szTextureTag_Diffuse, m_Decal_File_Names[item_selected_Image_idx], length -4);
-		//Desc.szTextureTag_Diffuse = '\0';  // 널 종료 문자 추가
+		Desc.bUseWorldColor = bUseWroldColor;
+		size_t length = strlen(m_Decal_File_Names_Diffuse[m_iSelected_Decal_Diffuse_ID]);
+		strncpy_s(Desc.szTextureTag_Diffuse, m_Decal_File_Names_Diffuse[m_iSelected_Decal_Diffuse_ID], length -4); //파일 이름만
+		if (bUseNormal)
+		{
+			Desc.isNormal = true;
+			size_t length = strlen(m_Decal_File_Names_Normal[m_iSelected_Decal_Normal_ID]);
+			strncpy_s(Desc.szTextureTag_Normal, m_Decal_File_Names_Normal[m_iSelected_Decal_Normal_ID], length - 4); //파일 이름만
+		}
+		if (bUseARM)
+		{
+			Desc.isARM = true;
+			size_t length = strlen(m_Decal_File_Names_Arm[m_iSelected_Decal_ARM_ID]);
+			strncpy_s(Desc.szTextureTag_ARM, m_Decal_File_Names_Arm[m_iSelected_Decal_ARM_ID], length - 4); //파일 이름만
+		}
 
 		if (FAILED(m_pGameInstance->Add_CloneObject_ToLayer(LEVEL_TOOL, TEXT("Layer_Decal"), TEXT("Prototype_GameObject_NonAnim"), &Desc)))
 			return;
-		//Decal_Create();
 	}
 }
 
@@ -1625,10 +1928,20 @@ void CController_MapTool::Free()
 	}
 	m_Decal_Folder_Names.clear();
 	
-	for (auto& filename : m_Decal_File_Names) {
+	for (auto& filename : m_Decal_File_Names_Diffuse) {
 		Safe_Delete_Array(filename);
 	}
-	m_Decal_File_Names.clear();
+	m_Decal_File_Names_Diffuse.clear();	
+
+	for (auto& filename : m_Decal_File_Names_Normal) {
+		Safe_Delete_Array(filename);
+	}
+	m_Decal_File_Names_Normal.clear();
+
+	for (auto& filename : m_Decal_File_Names_Arm) {
+		Safe_Delete_Array(filename);
+	}
+	m_Decal_File_Names_Arm.clear();
 
 	Safe_Release(m_my_texture);
 	Safe_Release(m_pDevice);

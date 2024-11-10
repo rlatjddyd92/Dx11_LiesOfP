@@ -48,7 +48,7 @@ private:
 	void Decal_Create();
 
 	_bool LoadTextureFromMemory(const void* data, size_t data_size, ID3D11ShaderResourceView** out_srv, int* out_width, int* out_height);
-		_bool LoadTextureFromFile(const char* file_name, ID3D11ShaderResourceView** out_srv, int* out_width, int* out_height);
+	_bool LoadTextureFromFile(const char* file_name, ID3D11ShaderResourceView** out_srv, int* out_width, int* out_height);
 private:
 	class CGameInstance* m_pGameInstance = { nullptr };
 	ID3D11Device* m_pDevice = { nullptr };
@@ -59,7 +59,9 @@ private:
 
 	vector<const char*>	m_FileNames;	//ListBox에 띄울 항목들 이름
 	vector<const char*>	m_Decal_Folder_Names;	//ListBox에 띄울 항목들 이름
-	vector<const char*>	m_Decal_File_Names;	//ListBox에 띄울 항목들 이름
+	vector<const char*>	m_Decal_File_Names_Diffuse;	//ListBox에 띄울 항목들 이름
+	vector<const char*>	m_Decal_File_Names_Normal;	//ListBox에 띄울 항목들 이름
+	vector<const char*>	m_Decal_File_Names_Arm;	//ListBox에 띄울 항목들 이름
 
 	_int m_iListCount = { 0 };			//ListBox항목 개수
 	_int m_iListSelectNum = { 0 };		//ListBox항목중 선택한 인덱스
@@ -70,6 +72,10 @@ private:
 
 	_uint m_iPickObject_ID = { 0 };
 	_uint m_iPre_Picked_ID={ 0 };
+
+	_int m_iSelected_Decal_Diffuse_ID = { -1 };
+	_int m_iSelected_Decal_Normal_ID = { -1 };
+	_int m_iSelected_Decal_ARM_ID = { -1 };
 
 	class CGameObject* m_pSelectObject = { nullptr };		//새로 선택한 물체
 	class CGameObject* m_pPreSelectObject = { nullptr };	//전에 선택했던 물체

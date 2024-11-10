@@ -337,7 +337,7 @@ void CTransform::Rotation(_float fX, _float fY, _float fZ)
 
 _Vec3 CTransform::Get_CurrentRotation()
 {
-	_Matrix WorldMatrix; // 이미 정의된 월드 행렬을 사용한다고 가정
+	_Matrix WorldMatrix = m_WorldMatrix; // 이미 정의된 월드 행렬을 사용한다고 가정
 
 	// 각 축 벡터를 정규화하여 직교성 유지
 	WorldMatrix.Right().Normalize();
