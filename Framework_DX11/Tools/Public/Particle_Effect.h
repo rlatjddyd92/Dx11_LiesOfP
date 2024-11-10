@@ -171,10 +171,12 @@ public:
 	void Set_Transform(TRANSFORM_DESC& Desc);
 
 private:
-	class CShader_BindStruct* m_pShaderCom = { nullptr };
+	class CShader_NonVTX* m_pShaderCom = { nullptr };
 	class CVIBuffer_Point_Instance* m_pVIBufferCom = { nullptr };
 	class CTexture* m_pDiffuseTextureCom = { nullptr };
 	class CTexture* m_pNormalTextureCom = { nullptr };
+
+	class CShader_Compute* m_pComputeShader = { nullptr };
 
 private:
 	DEFAULT_DESC m_DefaultDesc = {};
@@ -183,6 +185,7 @@ private:
 	ACCEL_DESC m_AccelDesc = {};
 
 	PARTICLE_EFFECT_DESC m_SaveDesc = {};
+	_uint m_iNumInstance = { 0 };
 
 private:
 	HRESULT Ready_Components(PARTICLE_EFFECT_DESC* pDesc);

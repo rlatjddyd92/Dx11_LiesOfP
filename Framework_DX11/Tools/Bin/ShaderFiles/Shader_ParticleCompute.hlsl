@@ -19,6 +19,7 @@ struct Particle
 RWStructuredBuffer<Particle> particles : register(u0);
 //RWStructuredBuffer<Particle> Initparticles : register(u1);
 
+// 이게 매프레임 넘겨주는 버퍼
 cbuffer MovementBuffer : register(b0)   // 받아온 걸 상수로 쓰기 위한 버퍼인듯?
 {
     uint    iNumInstance;
@@ -55,10 +56,13 @@ void CSMain(uint3 DTid : SV_DispatchThreadID)
         return;
     
     float2 vLifeTime = particles[iIndex].vLifeTime;
-
-    vLifeTime.y += 0.001f;
+    vLifeTime.y += fTimeDelta;
     
     particles[iIndex].vLifeTime = vLifeTime;
+    
+    particles[iIndex].vTranslation.y += 1.f * fTimeDelta;
+    particles[iIndex].vLook = float4(0.f, 1.f, 0.f, 0.f);
+    
 }
 
 //float rand(float seed)

@@ -9,35 +9,16 @@ CVIBuffer_Point_Instance::CVIBuffer_Point_Instance(ID3D11Device * pDevice, ID3D1
 
 CVIBuffer_Point_Instance::CVIBuffer_Point_Instance(const CVIBuffer_Point_Instance & Prototype)
 	: CVIBuffer_Instancing { Prototype }
-	, m_pComputeShader{ Prototype.m_pComputeShader }
 	, m_ParticleBuffer_Desc { Prototype.m_ParticleBuffer_Desc }
 	, m_MoveBuffer_Desc { Prototype.m_MoveBuffer_Desc }
 	, m_UAV_Desc { Prototype.m_UAV_Desc }
 	, m_SRV_Desc { Prototype.m_SRV_Desc }
 {
-	Safe_AddRef(m_pComputeShader);
 }
 
-HRESULT CVIBuffer_Point_Instance::Initialize_Prototype(const _tchar* pShaderFilePath, const CVIBuffer_Instancing::INSTANCE_DESC& Desc, _bool isClient)
+HRESULT CVIBuffer_Point_Instance::Initialize_Prototype(const CVIBuffer_Instancing::INSTANCE_DESC& Desc, _bool isClient)
 {
 	m_isClient = isClient;
-
-	ID3DBlob* pErrorBlob = { nullptr };
-	ID3DBlob* pCS_Blob = { nullptr };
-	if (GetFileAttributes(pShaderFilePath) == INVALID_FILE_ATTRIBUTES)
-		int a = 0;
-
-	if (FAILED(D3DCompileFromFile(pShaderFilePath, nullptr, nullptr, "CSMain", "cs_5_0", D3DCOMPILE_ENABLE_STRICTNESS | D3DCOMPILE_DEBUG | D3DCOMPILE_SKIP_OPTIMIZATION,
-		0, &pCS_Blob, &pErrorBlob)))
-	{
-		_char* pChar = static_cast<char*>(pErrorBlob->GetBufferPointer());
-		string str = pChar;
-		Safe_Release(pErrorBlob);
-		return E_FAIL;
-	}
-
-	m_pDevice->CreateComputeShader(pCS_Blob->GetBufferPointer(), pCS_Blob->GetBufferSize(), nullptr, &m_pComputeShader);
-	Safe_Release(pCS_Blob);
 
 	if(FAILED(Initialize_Desc(Desc)))
 		return E_FAIL;
@@ -54,7 +35,7 @@ HRESULT CVIBuffer_Point_Instance::Initialize_Prototype(const _tchar* pShaderFile
 		ZeroMemory(&m_InstanceInitialData, sizeof m_InstanceInitialData);
 		m_InstanceInitialData.pSysMem = m_pInstanceVertices;
 
-		// 파티클 버퍼 구성
+		// 파티클 버퍼 구성 -> 파티클 하나마다 갖고있어야되는거
 		m_ParticleBuffer_Desc.Usage = D3D11_USAGE_DEFAULT;
 		m_ParticleBuffer_Desc.ByteWidth = sizeof(PARTICLE) * m_iNumInstance;
 		m_ParticleBuffer_Desc.BindFlags = D3D11_BIND_UNORDERED_ACCESS | D3D11_BIND_SHADER_RESOURCE;
@@ -143,7 +124,7 @@ HRESULT CVIBuffer_Point_Instance::Initialize(void * pArg)
 	return S_OK;
 }
 
-HRESULT CVIBuffer_Point_Instance::Bind_Buffer(CShader_BindStruct* pShader, const _char* pConstantName)
+HRESULT CVIBuffer_Point_Instance::Bind_Buffer(CShader_NonVTX* pShader, const _char* pConstantName)
 {
 	//// SRV 바인딩하고
 	if (FAILED(pShader->Bind_SRV(pConstantName, m_pParticleSRV)))
@@ -152,44 +133,6 @@ HRESULT CVIBuffer_Point_Instance::Bind_Buffer(CShader_BindStruct* pShader, const
 	m_pContext->IASetPrimitiveTopology(D3D11_PRIMITIVE_TOPOLOGY_POINTLIST);
 	m_pContext->IASetInputLayout(nullptr);
 
-#pragma region DEBUGING
-		// 1. 스테이징 버퍼를 생성합니다.
-	D3D11_BUFFER_DESC stagingDesc = {};
-	stagingDesc.Usage = D3D11_USAGE_STAGING;
-	stagingDesc.ByteWidth = sizeof(PARTICLE) * m_iNumInstance;
-	stagingDesc.BindFlags = 0;
-	stagingDesc.CPUAccessFlags = D3D11_CPU_ACCESS_READ;
-	stagingDesc.StructureByteStride = sizeof(PARTICLE);
-	stagingDesc.MiscFlags = D3D11_RESOURCE_MISC_BUFFER_STRUCTURED;
-
-	ID3D11Buffer* pStagingBuffer = nullptr;
-	HRESULT hr = m_pDevice->CreateBuffer(&stagingDesc, nullptr, &pStagingBuffer);
-	if (FAILED(hr)) {
-		OutputDebugString(L"Failed to create staging buffer.\n");
-		return E_FAIL;
-	}
-
-	// 2. GPU 버퍼에서 스테이징 버퍼로 데이터 복사
-	m_pContext->CopyResource(pStagingBuffer, m_pParticleBuffer);
-
-	// 3. Map을 사용하여 스테이징 버퍼의 데이터를 읽습니다.
-	D3D11_MAPPED_SUBRESOURCE mappedResource;
-	hr = m_pContext->Map(pStagingBuffer, 0, D3D11_MAP_READ, 0, &mappedResource);
-	if (SUCCEEDED(hr)) {
-		PARTICLE* data = reinterpret_cast<PARTICLE*>(mappedResource.pData);
-		for (size_t i = 0; i < m_iNumInstance; ++i) 
-		{
-			_float fTest = data[i].vLifeTime.y;
-		}
-		m_pContext->Unmap(pStagingBuffer, 0);
-	}
-	else {
-		OutputDebugString(L"Failed to map staging buffer.\n");
-	}
-
-	// 4. 스테이징 버퍼 해제
-	pStagingBuffer->Release();
-#pragma endregion
 	return S_OK;
 }
 
@@ -200,12 +143,8 @@ HRESULT CVIBuffer_Point_Instance::Render()
 	return S_OK;
 }
 
-void CVIBuffer_Point_Instance::Spread_Test(const PARTICLE_MOVEMENT& MovementData)
+void CVIBuffer_Point_Instance::Spread_Test(class CShader_Compute* pComputeShader, const PARTICLE_MOVEMENT& MovementData)
 {
-	ID3D11ShaderResourceView* nullSRV = nullptr;
-	m_pContext->VSSetShaderResources(0, 1, &nullSRV);
-	m_pContext->CSSetShaderResources(0, 1, &nullSRV);
-
 	/* 순서 중요 !! */
 	// 상수 버퍼 업데이트 하고
 	D3D11_MAPPED_SUBRESOURCE mappedResource;
@@ -216,27 +155,11 @@ void CVIBuffer_Point_Instance::Spread_Test(const PARTICLE_MOVEMENT& MovementData
 
 	m_pContext->Unmap(m_pMovementBuffer, 0);
 
-
-	m_pContext->UpdateSubresource(m_pMovementBuffer, 0, nullptr, &MovementData, 0, 0);
-
 	// 버퍼랑 UAV 설정하고
-	m_pContext->CSSetUnorderedAccessViews(0, 1, &m_pParticleUAV, nullptr);
-	m_pContext->CSSetConstantBuffers(0, 1, &m_pMovementBuffer);
+	pComputeShader->Bind_UAV(m_pParticleUAV);
+	pComputeShader->Bind_ConstantBuffer(m_pMovementBuffer);
 
-	// 셰이더 설정하고
-	m_pContext->CSSetShader(m_pComputeShader, nullptr, 0);
-
-	// 실행하고
-	m_pContext->Dispatch((m_iNumInstance + 255) / 256, 1, 1);
-	m_pContext->Flush();
-
-	// UAV 해제하고
-	ID3D11UnorderedAccessView* nullUAV[] = { nullptr };
-	m_pContext->CSSetUnorderedAccessViews(0, 1, nullUAV, nullptr);
-
-
-	// 셰이더까지 해제하면 아마도 끝
-	m_pContext->CSSetShader(nullptr, nullptr, 0);
+	pComputeShader->Execute_ComputeShader((m_iNumInstance + 255) / 256, 1, 1);
 }
 
 
@@ -949,11 +872,11 @@ _float4 CVIBuffer_Point_Instance::Get_RandomTranslation()
 
 
 
-CVIBuffer_Point_Instance * CVIBuffer_Point_Instance::Create(ID3D11Device * pDevice, ID3D11DeviceContext * pContext, const _tchar* pShaderFilePath, const CVIBuffer_Instancing::INSTANCE_DESC& Desc, _bool isClient)
+CVIBuffer_Point_Instance * CVIBuffer_Point_Instance::Create(ID3D11Device * pDevice, ID3D11DeviceContext * pContext, const CVIBuffer_Instancing::INSTANCE_DESC& Desc, _bool isClient)
 {
 	CVIBuffer_Point_Instance*		pInstance = new CVIBuffer_Point_Instance(pDevice, pContext);
 
-	if (FAILED(pInstance->Initialize_Prototype(pShaderFilePath, Desc, isClient)))
+	if (FAILED(pInstance->Initialize_Prototype(Desc, isClient)))
 	{
 		MSG_BOX(TEXT("Failed to Created : CVIBuffer_Point_Instance"));
 		Safe_Release(pInstance);
@@ -961,8 +884,6 @@ CVIBuffer_Point_Instance * CVIBuffer_Point_Instance::Create(ID3D11Device * pDevi
 
 	return pInstance;
 }
-
-
 
 CComponent * CVIBuffer_Point_Instance::Clone(void * pArg)
 {
@@ -980,8 +901,6 @@ CComponent * CVIBuffer_Point_Instance::Clone(void * pArg)
 void CVIBuffer_Point_Instance::Free()
 {
 	__super::Free();
-
-	Safe_Release(m_pComputeShader);
 
 	if (true == m_isClient)
 	{

@@ -42,7 +42,6 @@ CEffect_Container* CEffect_Manager::Clone_Effect(EFFECT eEffect, void* pArg)
         CParticle_Effect* pParticleEffect = Clone_ParticleEffect(TEXT("Particle_Test"));
         pEffectContainer->Add_Effect(pParticleEffect);
 
-
         // 여기까지
 
         return pEffectContainer;

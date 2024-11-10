@@ -34,19 +34,20 @@ public:
 		_float3		vPadding_3;
 	}PARTICLE_MOVEMENT;
 
+
 private:
 	CVIBuffer_Point_Instance(ID3D11Device* pDevice, ID3D11DeviceContext* pContext);
 	CVIBuffer_Point_Instance(const CVIBuffer_Point_Instance& Prototype);
 	virtual ~CVIBuffer_Point_Instance() = default;
 
 public:
-	virtual HRESULT Initialize_Prototype(const _tchar* pShaderFilePath, const CVIBuffer_Instancing::INSTANCE_DESC& Desc, _bool isClient);
+	virtual HRESULT Initialize_Prototype(const CVIBuffer_Instancing::INSTANCE_DESC& Desc, _bool isClient);
 	virtual HRESULT Initialize(void* pArg) override;
-	virtual HRESULT Bind_Buffer(class CShader_BindStruct* pShader, const _char* pConstantName);
+	virtual HRESULT Bind_Buffer(class CShader_NonVTX* pShader, const _char* pConstantName);
 	virtual HRESULT Render();
 
 public:
-	void Spread_Test(const PARTICLE_MOVEMENT& MovementData);
+	void Spread_Test(class CShader_Compute* pComputeShader, const PARTICLE_MOVEMENT& MovementData);
 
 #pragma region KEEP
 	virtual _bool Spread(_uint iState, _Matrix WorldMatrix, _float fRenderRatio, _Vec4 vPivot, _float fGravity, _float fTimeDelta,
@@ -81,8 +82,6 @@ private:
 	vector<_float3> m_CurrentRandomDir;
 	vector<_float3> m_NextRandomDir;
 
-	ID3D11ComputeShader*		m_pComputeShader = { nullptr };
-
 	D3D11_BUFFER_DESC					m_ParticleBuffer_Desc = {};
 	D3D11_BUFFER_DESC					m_MoveBuffer_Desc = {};
 	D3D11_UNORDERED_ACCESS_VIEW_DESC	m_UAV_Desc = {};
@@ -90,7 +89,6 @@ private:
 
 	ID3D11Buffer*				m_pParticleBuffer	= nullptr;
 	ID3D11Buffer*				m_pMovementBuffer	= { nullptr };
-
 	ID3D11UnorderedAccessView*	m_pParticleUAV		= nullptr;
 	ID3D11ShaderResourceView*	m_pParticleSRV		= nullptr;
 
@@ -102,12 +100,9 @@ private:
 	void Init_Particle(PARTICLE* pParticles);
 	_float4 Get_RandomTranslation();
 
-
 public:
-	static CVIBuffer_Point_Instance* Create(ID3D11Device* pDevice, ID3D11DeviceContext* pContext, const _tchar* pShaderFilePath, const CVIBuffer_Instancing::INSTANCE_DESC& Desc, _bool isClient);
+	static CVIBuffer_Point_Instance* Create(ID3D11Device* pDevice, ID3D11DeviceContext* pContext, const CVIBuffer_Instancing::INSTANCE_DESC& Desc, _bool isClient);
 	virtual CComponent* Clone(void* pArg) override;
 	virtual void Free() override;
 };
-
-
 END

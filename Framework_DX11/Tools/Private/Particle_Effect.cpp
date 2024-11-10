@@ -20,7 +20,7 @@ HRESULT CParticle_Effect::Initialize_Prototype()
 HRESULT CParticle_Effect::Initialize(void* pArg)
 {
     PARTICLE_EFFECT_DESC* pDesc = static_cast<PARTICLE_EFFECT_DESC*>(pArg);
-
+    m_iNumInstance = pDesc->BufferDesc.iNumInstance;
     if (FAILED(__super::Initialize(pDesc)))
         return E_FAIL;
     
@@ -51,7 +51,7 @@ void CParticle_Effect::Update(_float fTimeDelta)
 
     CVIBuffer_Point_Instance::PARTICLE_MOVEMENT Movement = {};
 
-    Movement.iNumInstance = 100;
+    Movement.iNumInstance = m_iNumInstance;
     Movement.iState = m_DefaultDesc.iState;
     Movement.WorldMatrix = m_pTransformCom->Get_WorldMatrix();
     Movement.vPivot = m_DefaultDesc.vPivot;
@@ -65,7 +65,7 @@ void CParticle_Effect::Update(_float fTimeDelta)
     Movement.fAccelLimit = m_AccelDesc.fAccelLimit;
     Movement.fAccelSpeed = m_AccelDesc.fAccelSpeed;
 
-    m_pVIBufferCom->Spread_Test(Movement);
+    m_pVIBufferCom->Spread_Test(m_pComputeShader, Movement);
 #pragma region KEEP
     //switch (m_DefaultDesc.eType)
     //{
@@ -265,6 +265,13 @@ HRESULT CParticle_Effect::Ready_Components(PARTICLE_EFFECT_DESC* pDesc)
         TEXT("Com_VIBuffer"), reinterpret_cast<CComponent**>(&m_pVIBufferCom), &desc)))
         return E_FAIL;
 
+
+    /* FOR.Com_ComputeShader */
+    if (FAILED(__super::Add_Component(LEVEL_TOOL, TEXT("Prototype_Component_Shader_Compute_Particle"),
+        TEXT("Com_ComputeShader"), reinterpret_cast<CComponent**>(&m_pComputeShader), &desc)))
+        return E_FAIL;
+    
+
     return S_OK;
 }
 
@@ -304,4 +311,5 @@ void CParticle_Effect::Free()
     Safe_Release(m_pNormalTextureCom);
 
     Safe_Release(m_pVIBufferCom);
+    Safe_Release(m_pComputeShader);
 }

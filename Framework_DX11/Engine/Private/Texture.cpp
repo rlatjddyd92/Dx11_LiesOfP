@@ -1,6 +1,6 @@
 #include "..\Public\Texture.h"
 #include "Shader.h"
-#include "Shader_BindStruct.h"
+#include "Shader_NonVTX.h"
 
 CTexture::CTexture(ID3D11Device * pDevice, ID3D11DeviceContext * pContext)
 	: CComponent { pDevice, pContext }
@@ -85,7 +85,7 @@ HRESULT CTexture::Bind_ShadeResources(CShader * pShader, const _char * pConstant
 	return pShader->Bind_SRVs(pConstantName, &m_SRVs.front(), m_iNumTextures);
 }
 
-HRESULT CTexture::Bind_ShaderResource_Struct(CShader_BindStruct* pShader, const _char* pConstantName, _uint iTextureIndex)
+HRESULT CTexture::Bind_ShaderResource_Struct(CShader_NonVTX* pShader, const _char* pConstantName, _uint iTextureIndex)
 {
 	return pShader->Bind_SRV(pConstantName, m_SRVs[iTextureIndex]);
 }

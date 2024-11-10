@@ -10,7 +10,8 @@
 #include "Collider.h"
 #include "Texture.h"
 #include "Shader.h"
-#include "Shader_BindStruct.h"
+#include "Shader_NonVTX.h"
+#include "Shader_Compute.h"
 #include "Model.h"
 
 #include "Bounding_AABB.h"

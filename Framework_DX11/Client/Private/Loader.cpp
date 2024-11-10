@@ -13,7 +13,6 @@
 #include "Body_Player.h"
 
 #pragma region EFFECT
-#include "Effect_Manager.h"
 #include "Effect_Container.h"
 #include "Particle_Effect.h"
 #include "Texture_Effect.h"
@@ -262,7 +261,6 @@ HRESULT CLoader::Ready_Resources_For_GamePlayLevel()
 	//		return textureFuture.get();
 	//}
 	lstrcpy(m_szLoadingText, TEXT("이펙트 매니저를 로딩중입니다."));
-	CEffect_Manager::Get_Instance()->Initialize(m_pDevice, m_pContext, TEXT("../../Tools/Bin/DataFiles/Effect"));
 
 	lstrcpy(m_szLoadingText, TEXT("텍스쳐를 로딩중입니다."));
 
