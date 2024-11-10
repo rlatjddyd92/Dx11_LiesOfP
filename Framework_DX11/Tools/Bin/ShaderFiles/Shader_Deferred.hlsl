@@ -146,6 +146,25 @@ float GeometrySmith(float3 N, float3 V, float3 L, float roughness)
     return ggx1 * ggx2;
 }
 
+float3 CalculateCookTorranceBRDF(
+        in float3 normal,
+        in float3 pointToCamera,
+        in float3 halfVector,
+        in float3 pointToLight,
+        in float roughness,
+        in float3 F
+    )
+{
+    float NDF = DistributionGGX(normal, halfVector, roughness); //미세면 분포도 NDF계산
+    float G = GeometrySmith(normal, pointToCamera, pointToLight, roughness); //미세면 그림자 계산
+                
+    float3 numerator = NDF * G * F;
+    float denominator = 4.0 * max(dot(normal, pointToCamera), 0.0) * max(dot(normal, pointToLight), 0.0) + 0.0001f;
+    float3 specular = numerator / denominator;
+                
+    return specular;
+}
+
 struct VS_IN
 {
 	float3 vPosition : POSITION;	
@@ -223,7 +242,7 @@ PS_OUT_LIGHT PS_MAIN_LIGHT_DIRECTIONAL(PS_IN In)
 	PS_OUT_LIGHT			Out = (PS_OUT_LIGHT)0;
 
     vector		vARM = g_ARMTexture.Sample(LinearSampler, In.vTexcoord);
-    float		fAmbietnOcc = 1.f;
+    float       fAmbietnOcc = vARM.r;
     float		fRoughness = vARM.g;
     float		fMetallic = vARM.b;
 	
@@ -329,7 +348,8 @@ PS_OUT PS_MAIN_DEFERRED(PS_IN In)
 
     vector vDecal = g_DecalDiffuseTexture.Sample(LinearSampler, In.vTexcoord);
     vDiffuse = vector(lerp(vDiffuse, vDecal, vDecal.a)); // 알파 값에 따라 혼합
-	
+    //vDiffuse = vDiffuse / 3.141592;
+    
 	vector		vShade = g_ShadeTexture.Sample(LinearSampler, In.vTexcoord);
 	vector		vSpecular = g_SpecularTexture.Sample(LinearSampler, In.vTexcoord);
 	
