@@ -90,6 +90,8 @@ HRESULT CInstance_Manager::Draw(_uint iPass)
 				return E_FAIL;
 		}
 	}
+
+	return S_OK;
 }
 
 CModel* CInstance_Manager::Find_NonAnimModel(const _wstring& strPrototypeTag)

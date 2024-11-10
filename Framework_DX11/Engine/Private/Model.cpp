@@ -199,7 +199,7 @@ HRESULT CModel::Initialize(void * pArg)
 			pInstanceVertices[i].vRight = _float4(fScale, 0.f, 0.f, 0.f);
 			pInstanceVertices[i].vUp = _float4(0.f, fScale, 0.f, 0.f);
 			pInstanceVertices[i].vLook = _float4(0.f, 0.f, fScale, 0.f);
-			pInstanceVertices[i].vTranslation = _float4(i * i, 1.f, 1.f, 1.f);
+			pInstanceVertices[i].vTranslation = _float4(_float(i * i), 1.f, 1.f, 1.f);
 		}
 
 		ZeroMemory(&m_InstanceInitialData, sizeof m_InstanceInitialData);
@@ -243,7 +243,7 @@ HRESULT CModel::Render_Instance(_uint iMeshIndex)
 	m_Meshes[iMeshIndex]->Bind_Buffers_Instance(m_pVBInstance);
 
 	_uint iNumIndices = m_Meshes[iMeshIndex]->Get_NumIndices();
-	m_pContext->DrawIndexedInstanced(m_Meshes[iMeshIndex]->Get_NumIndices(), m_InstanceDatas.size(), 0, 0, 0);
+	m_pContext->DrawIndexedInstanced(m_Meshes[iMeshIndex]->Get_NumIndices(), (_uint)m_InstanceDatas.size(), 0, 0, 0);
 
 	m_InstanceDatas.clear();
 
@@ -527,7 +527,7 @@ _vector CModel::Play_Animation(_float fTimeDelta, _bool* pOut, OUTPUT_EVKEY* pOu
 		vRootMove = m_Bones[m_UFBIndices[UFB_ROOT]]->Get_CombinedTransformationMatrix().r[3];
 		if (m_isEnd_Animations[m_iCurrentAnimIndex] == true && pOut != nullptr)//애니메이션이 끝났는지에 대한 판단
 		{
-			m_CurrentTrackPosition == 0.f;
+			m_CurrentTrackPosition == 0.f; /////??
 			*pOut = true;
 			m_isEnd_Animations[m_iCurrentAnimIndex] = false;
 		}
@@ -601,7 +601,7 @@ HRESULT CModel::Create_BinaryFile(const _char* ModelTag)
 	}
 
 	//아래 정점의 갯수
-	_int iNumUFVtx = m_UseFullVtxIndices.size();
+	_int iNumUFVtx = (_int)m_UseFullVtxIndices.size();
 	WriteFile(hFile, &iNumUFVtx, sizeof(_int), &dwByte, nullptr);
 	//사용하려고 저장한 정점
 	for (int j = 0; j < iNumUFVtx; ++j)
@@ -641,7 +641,7 @@ HRESULT CModel::Create_Bin_Bones(HANDLE* pFile)
 {
 	_ulong dwByte = 0;
 
-	_uint iNumBone = m_Bones.size();
+	_uint iNumBone = (_uint)m_Bones.size();
 	//뼈의 갯수
 	WriteFile(*pFile, &iNumBone, sizeof(_uint), &dwByte, nullptr);
 
@@ -769,11 +769,11 @@ HRESULT CModel::ReadyModel_To_Binary(HANDLE* pFile)
 
 	ReadFile(*pFile, &m_iNumMaterials, sizeof(_uint), &dwByte, nullptr);
 	
-	for (_int i = 0; i < m_iNumMaterials; ++i)
+	for (_uint i = 0; i < m_iNumMaterials; ++i)
 	{
 		MESH_MATERIAL		MeshMaterial{};
 
-		for (_int j = 0; j < TEXTURE_TYPE_MAX; ++j)
+		for (_uint j = 0; j < TEXTURE_TYPE_MAX; ++j)
 		{
 			_bool	isHaveTextures = true;
 			ReadFile(*pFile, &isHaveTextures, sizeof(_bool), &dwByte, nullptr);
