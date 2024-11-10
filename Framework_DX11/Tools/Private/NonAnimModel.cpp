@@ -108,6 +108,7 @@ HRESULT CNonAnimModel::Render()
 		if (FAILED(Render_NonAnim()))
 			return E_FAIL;
 	}
+	
 }
 
 HRESULT CNonAnimModel::Render_Picking()
