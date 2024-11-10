@@ -12,6 +12,15 @@
 		TYPE_END
 	};
 
+	enum class PAGEACTION
+	{
+		ACTION_NONE,
+		ACTION_OPENING,
+		ACTION_CLOSING,
+		ACTION_SHAKING,
+		ACTION_END
+	};
+
 	enum class UIPAGE
 	{
 		PAGE_MAIN,

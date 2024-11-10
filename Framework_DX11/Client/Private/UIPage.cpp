@@ -41,14 +41,43 @@ void CUIPage::Late_Update(_float fTimeDelta)
 {
 	__super::Late_Update(fTimeDelta);
 
+	
+
+	if ((m_vecPageAction[_int(PAGEACTION::ACTION_CLOSING)]) && (!m_vecPageAction[_int(PAGEACTION::ACTION_OPENING)]))
+	{
+		m_fTopPartMove -= 2.f * fTimeDelta;
+		if (m_fTopPartMove < 0.f)
+			m_fTopPartMove = 0.f;
+	}
+	else if ((!m_vecPageAction[_int(PAGEACTION::ACTION_CLOSING)]) && (m_vecPageAction[_int(PAGEACTION::ACTION_OPENING)]))
+	{
+		m_fTopPartMove += 2.f * fTimeDelta;
+		if (m_fTopPartMove > 1.f)
+			m_fTopPartMove = 1.f;
+	}
+
 	for (auto& iter : m_vecPart)
 	{
 		iter->MakeDirec();
 
 		if (iter->iParentPart_Index == -1)
+		{
+			if (m_vecPageAction[_int(PAGEACTION::ACTION_CLOSING)] + m_vecPageAction[_int(PAGEACTION::ACTION_OPENING)] == 1)
+				iter->fRatio = m_fTopPartMove;
+
 			iter->MovePart({ m_fX,m_fY });
+		}
 		else
 			iter->MovePart(m_vecPart[iter->iParentPart_Index]->fPosition);
+	}
+
+	if ((m_fTopPartMove == 0.f) || (m_fTopPartMove == -1.f))
+	{
+		if (m_vecPageAction[_int(PAGEACTION::ACTION_CLOSING)])
+			m_bRender = false;
+
+		m_vecPageAction[_int(PAGEACTION::ACTION_CLOSING)] = false;
+		m_vecPageAction[_int(PAGEACTION::ACTION_OPENING)] = false;
 	}
 }
 
@@ -59,10 +88,15 @@ HRESULT CUIPage::Render()
 
 void CUIPage::OpenAction()
 {
+	m_vecPageAction[_int(PAGEACTION::ACTION_CLOSING)] = false;
+	m_vecPageAction[_int(PAGEACTION::ACTION_OPENING)] = true;
+	m_bRender = true;
 }
 
 void CUIPage::CloseAction()
 {
+	m_vecPageAction[_int(PAGEACTION::ACTION_CLOSING)] = true;
+	m_vecPageAction[_int(PAGEACTION::ACTION_OPENING)] = false;
 }
 
 HRESULT CUIPage::Ready_UIPart()
@@ -99,4 +133,6 @@ CGameObject* CUIPage::Clone(void* pArg)
 void CUIPage::Free()
 {
 	__super::Free();
+
+	m_vecPageAction.clear();
 }

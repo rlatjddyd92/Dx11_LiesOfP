@@ -32,7 +32,14 @@ public:
 
 public:
 	void Update_UIManager(_float fTimeDelta);
+	void Update_UIControl(_float fTimeDelta);
 
+private:
+	void UIControl_Test(_float fTimeDelta);
+	void UIControl_Main(_float fTimeDelta);
+	void UIControl_Loading(_float fTimeDelta);
+	void UIControl_Play(_float fTimeDelta);
+	void UIControl_Inven(_float fTimeDelta);
 
 public:
 #pragma region Page_Main
@@ -46,7 +53,11 @@ public:
 #pragma region PlayMode
 	// 플레이 모드 진입
 	_bool GetPlayMode() { return m_bPlayMode; }
-	void SetPlayMode(_bool bIsPlayMode) { m_bPlayMode = bIsPlayMode; }
+	void SetPlayMode(_bool bIsPlayMode) 
+	{ 
+		m_vecPage[_int(UIPAGE::PAGE_LOADING)]->SetRender(false);
+		m_bPlayMode = bIsPlayMode;
+	}
 
 	// 화면 전환 
 	void SwicthPage(UIPAGE eNextPage);

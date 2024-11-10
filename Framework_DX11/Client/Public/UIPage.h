@@ -84,14 +84,6 @@ public:
 
 
 
-	typedef struct UIPAGE_INFO
-	{
-		_char* strUIPage_Name = {};
-		_int iNowSelectPart = 0;
-		_float2 fPosition = { g_iWinSizeX * 0.5f,g_iWinSizeY * 0.5f }; // 페이지의 포지션
-		vector<UPART*> vecPart;
-	}UPAGE;
-
 
 protected:
 	CUIPage(ID3D11Device* pDevice, ID3D11DeviceContext* pContext);
@@ -115,6 +107,8 @@ public:
 	void SetUpdate(_bool bUpdate) { m_bUpdate = bUpdate; }
 	void SetRender(_bool bRender) { m_bRender = bRender; }
 	const vector<UPART*>& GetPartInfo() { return m_vecPart; }
+	_float GetTopPartMove() { return m_fTopPartMove; }
+	_bool GetPageAction(PAGEACTION eAction) { return m_vecPageAction[_int(eAction)]; }
 
 	virtual void OpenAction();
 	virtual void CloseAction();
@@ -129,6 +123,12 @@ protected:
 protected: // 제어 변수
 	_bool m_bUpdate = true; // 업데이트 진행 여부 
 	_bool m_bRender = false; // 렌더 진행 여부 
+
+
+protected: // 열기/닫기 액션
+	vector<_bool> m_vecPageAction;
+	_float m_fTopPartMove = 0.f; // 0.f->닫힘, 1.f->열림
+
 
 public:
 	static CUIPage* Create(ID3D11Device* pDevice, ID3D11DeviceContext* pContext);

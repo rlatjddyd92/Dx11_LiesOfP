@@ -66,19 +66,14 @@ void CUIManager::Update(_float fTimeDelta)
 
 void CUIManager::Late_Update(_float fTimeDelta)
 {
+	// 렌더 최종 결정 
 	_int iCountOpen = 0;
 
 	for (auto& iter : m_vecPage)
 	{
 		if (iter->GetUpdate())
 			iter->Late_Update(fTimeDelta);
-		if (iter->GetRender())
-			++iCountOpen;
 	}
-		
-	if (iCountOpen > 1)
-		m_vecPage[_int(UIPAGE::PAGE_LOADING)]->SetRender(false);
-
 
 	m_pGameInstance->Add_RenderObject(CRenderer::RG_UI, this);
 }
@@ -95,7 +90,64 @@ void CUIManager::Update_UIManager(_float fTimeDelta)
 {
 	Priority_Update(fTimeDelta);
 	Update(fTimeDelta);
+	Update_UIControl(fTimeDelta);
 	Late_Update(fTimeDelta);
+}
+
+void CUIManager::Update_UIControl(_float fTimeDelta)
+{
+	// 조작 관련 모든 것 
+	// 마우스, 키보드를 통한 UI 조작은 모두 여기 작성한다 
+
+	UIControl_Test(fTimeDelta);
+	//UIControl_Main(fTimeDelta);
+	//UIControl_Loading(fTimeDelta);
+	UIControl_Play(fTimeDelta);
+
+
+}
+
+void CUIManager::UIControl_Test(_float fTimeDelta)
+{
+#ifdef _DEBUG
+	if (KEY_TAP(KEY::P))
+	{
+		if (m_vecPage[_int(UIPAGE::PAGE_PLAY)]->GetRender())
+		{
+			if (m_vecPage[_int(UIPAGE::PAGE_PLAY)]->GetPageAction(PAGEACTION::ACTION_OPENING))
+			{
+				m_vecPage[_int(UIPAGE::PAGE_PLAY)]->CloseAction();
+			}
+			else if (m_vecPage[_int(UIPAGE::PAGE_PLAY)]->GetPageAction(PAGEACTION::ACTION_CLOSING))
+			{
+				m_vecPage[_int(UIPAGE::PAGE_PLAY)]->OpenAction();
+			}
+}
+		else
+			m_vecPage[_int(UIPAGE::PAGE_PLAY)]->OpenAction();
+	}
+#endif // DEBUG
+
+	
+	
+
+
+}
+
+void CUIManager::UIControl_Main(_float fTimeDelta)
+{
+}
+
+void CUIManager::UIControl_Loading(_float fTimeDelta)
+{
+}
+
+void CUIManager::UIControl_Play(_float fTimeDelta)
+{
+}
+
+void CUIManager::UIControl_Inven(_float fTimeDelta)
+{
 }
 
 void CUIManager::OpenMainPage()

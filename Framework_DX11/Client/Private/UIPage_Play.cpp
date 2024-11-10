@@ -29,6 +29,8 @@ HRESULT CUIPage_Play::Initialize_Prototype()
 	Desc.fSpeedPerSec = 10.f;
 	Desc.fRotationPerSec = XMConvertToRadians(90.0f);
 
+	m_vecPageAction.resize(_int(PAGEACTION::ACTION_END));
+
 	/* 직교퉁여을 위한 데이터들을 모두 셋하낟. */
 	if (FAILED(__super::Initialize(&Desc)))
 		return E_FAIL;
@@ -58,7 +60,11 @@ void CUIPage_Play::Update(_float fTimeDelta)
 
 void CUIPage_Play::Late_Update(_float fTimeDelta)
 {
+	
+
 	__super::Late_Update(fTimeDelta);
+
+	
 }
 
 HRESULT CUIPage_Play::Render()
@@ -68,10 +74,16 @@ HRESULT CUIPage_Play::Render()
 
 void CUIPage_Play::OpenAction()
 {
+	__super::OpenAction();
+
+	
 }
 
 void CUIPage_Play::CloseAction()
 {
+	__super::CloseAction();
+
+	
 }
 
 HRESULT CUIPage_Play::Ready_UIPart()

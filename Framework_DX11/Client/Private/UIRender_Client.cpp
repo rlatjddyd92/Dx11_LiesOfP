@@ -79,6 +79,11 @@ HRESULT CUIRender_Client::Render_UI(vector<CUIPage*>& rPage)
 		if (!iter->GetRender())
 			continue;
 
+		_bool bTopMove = false;
+
+		if ((iter->GetTopPartMove() > 0.f) && (iter->GetTopPartMove() < 1.f))
+			bTopMove = true;
+
 		for (auto& iterPart : iter->GetPartInfo())
 		{
 			if (iterPart->iTexture_Index != -1)
@@ -109,7 +114,15 @@ HRESULT CUIRender_Client::Render_UI(vector<CUIPage*>& rPage)
 				if (FAILED(m_vecTextureInfo[iterPart->iTexture_Index]->Texture->Bind_ShadeResource(m_pShaderCom, "g_Texture", 0)))
 					return E_FAIL;
 
-				if (FAILED(m_pShaderCom->Bind_RawValue("g_Color", &iterPart->fTextureColor, sizeof(_float4))))
+				if ((bTopMove) && (iterPart->iParentPart_Index == -1))
+				{
+					_float4 fColor = iterPart->fTextureColor;
+					fColor.w = iter->GetTopPartMove();
+
+					if (FAILED(m_pShaderCom->Bind_RawValue("g_Color", &fColor, sizeof(_float4))))
+						return E_FAIL;
+				}
+				else if (FAILED(m_pShaderCom->Bind_RawValue("g_Color", &iterPart->fTextureColor, sizeof(_float4))))
 					return E_FAIL;
 
 				if (FAILED(m_pShaderCom->Begin(0)))
