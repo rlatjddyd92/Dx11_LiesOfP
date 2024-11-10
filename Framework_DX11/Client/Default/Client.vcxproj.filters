@@ -64,14 +64,41 @@
     <Filter Include="02.GameObjects\07.ForkLift">
       <UniqueIdentifier>{4f3837c9-f24e-4fd0-b1a8-adf1987df19d}</UniqueIdentifier>
     </Filter>
-    <Filter Include="99.Defines\99.Data_Instance_Defines">
+    <Filter Include="03.GameInterface">
+      <UniqueIdentifier>{6fc85632-d32f-4d39-aef9-7ff0a6eb5101}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="03.GameInterface\00.UIManager">
+      <UniqueIdentifier>{333d5ca1-5665-4a75-a206-f10aafdfbc34}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="03.GameInterface\00.UIManager\00.UIPage">
+      <UniqueIdentifier>{81ccb389-d881-4ead-929f-0b6342fa2797}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="03.GameInterface\00.UIManager\01.UIRender">
+      <UniqueIdentifier>{3e817f4a-1be1-47ef-9123-0a7797cd83c3}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="03.GameInterface\01.ItemManager">
+      <UniqueIdentifier>{59dc2faf-5600-4a6b-a812-4ffbb44a6f9e}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="03.GameInterface\02.StatManager">
+      <UniqueIdentifier>{a1e3baf8-3478-4ec4-89c1-68e0b1ea6bdf}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="03.GameInterface\03.GameInterface_Defines">
       <UniqueIdentifier>{69da0e3d-8dd2-4ba6-b10b-2c5abeaa73db}</UniqueIdentifier>
     </Filter>
-    <Filter Include="99.Defines\99.Data_Instance_Defines\00.Defines%28Data_Instance 전용%29">
+    <Filter Include="03.GameInterface\03.GameInterface_Defines\00.Defines%28Data_Instance 전용%29">
       <UniqueIdentifier>{576dcecc-2411-4441-a909-38fa0217a6ed}</UniqueIdentifier>
     </Filter>
-    <Filter Include="99.Defines\99.Data_Instance_Defines\01.Enum">
+    <Filter Include="03.GameInterface\03.GameInterface_Defines\01.Enum">
       <UniqueIdentifier>{7076eed2-af7b-4e22-9d79-5077d2fc9470}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="03.GameInterface\00.UIManager\00.UIPage\00.UIPage_Main">
+      <UniqueIdentifier>{00ab63cd-e889-48c6-9ab0-2ba67c8a067b}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="03.GameInterface\00.UIManager\00.UIPage\01.UIPage_Loading">
+      <UniqueIdentifier>{a81ac6e1-e175-4d29-a4ef-8d19959c8b05}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="03.GameInterface\00.UIManager\00.UIPage\02.UIPage_Play">
+      <UniqueIdentifier>{0bf63bb1-37d5-4135-837b-20c74ddf9ad5}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -136,13 +163,34 @@
       <Filter>02.GameObjects\07.ForkLift</Filter>
     </ClInclude>
     <ClInclude Include="Item_Defines.h">
-      <Filter>99.Defines\99.Data_Instance_Defines\00.Defines%28Data_Instance 전용%29</Filter>
+      <Filter>03.GameInterface\03.GameInterface_Defines\00.Defines%28Data_Instance 전용%29</Filter>
     </ClInclude>
-    <ClInclude Include="UI_Defines.h">
-      <Filter>99.Defines\99.Data_Instance_Defines\00.Defines%28Data_Instance 전용%29</Filter>
+    <ClInclude Include="UIPage_Defines.h">
+      <Filter>03.GameInterface\03.GameInterface_Defines\00.Defines%28Data_Instance 전용%29</Filter>
     </ClInclude>
     <ClInclude Include="UI_Enum.h">
-      <Filter>99.Defines\99.Data_Instance_Defines\01.Enum</Filter>
+      <Filter>03.GameInterface\03.GameInterface_Defines\01.Enum</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Public\UIManager.h">
+      <Filter>03.GameInterface\00.UIManager</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Public\UIPage.h">
+      <Filter>03.GameInterface\00.UIManager\00.UIPage</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Public\UIRender_Client.h">
+      <Filter>03.GameInterface\00.UIManager\01.UIRender</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Public\GameInterface_Controller.h">
+      <Filter>03.GameInterface</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Public\UIPage_Play.h">
+      <Filter>03.GameInterface\00.UIManager\00.UIPage\02.UIPage_Play</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Public\UIPage_Loading.h">
+      <Filter>03.GameInterface\00.UIManager\00.UIPage\01.UIPage_Loading</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Public\UIPage_Main.h">
+      <Filter>03.GameInterface\00.UIManager\00.UIPage\00.UIPage_Main</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -196,6 +244,27 @@
     </ClCompile>
     <ClCompile Include="..\Private\ForkLift.cpp">
       <Filter>02.GameObjects\07.ForkLift</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Private\UIManager.cpp">
+      <Filter>03.GameInterface\00.UIManager</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Private\UIPage.cpp">
+      <Filter>03.GameInterface\00.UIManager\00.UIPage</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Private\UIRender_Client.cpp">
+      <Filter>03.GameInterface\00.UIManager\01.UIRender</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Private\GameInterface_Controller.cpp">
+      <Filter>03.GameInterface</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Private\UIPage_Play.cpp">
+      <Filter>03.GameInterface\00.UIManager\00.UIPage\02.UIPage_Play</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Private\UIPage_Loading.cpp">
+      <Filter>03.GameInterface\00.UIManager\00.UIPage\01.UIPage_Loading</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Private\UIPage_Main.cpp">
+      <Filter>03.GameInterface\00.UIManager\00.UIPage\00.UIPage_Main</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

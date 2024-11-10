@@ -113,17 +113,17 @@ PS_OUT PS_MAIN(PS_IN In)
     if (Out.vColor.a < 0.1f)
         discard;
 	
-	if (g_Color.r != -1.f)
+    if (g_Color.r >= 0.f)
         Out.vColor.r = g_Color.r;
 	
-    if (g_Color.g != -1.f)
-        Out.vColor.r = g_Color.g;
+    if (g_Color.g >= 0.f)
+        Out.vColor.g = g_Color.g;
 	
-    if (g_Color.b != -1.f)
-        Out.vColor.r = g_Color.b;
+    if (g_Color.b >= 0.f)
+        Out.vColor.b = g_Color.b;
 	
-    if (g_Color.a != -1.f)
-        Out.vColor.r = g_Color.a;
+    if (g_Color.a >= 0.f)
+        Out.vColor.a = g_Color.a;
 
 	return Out;
 }

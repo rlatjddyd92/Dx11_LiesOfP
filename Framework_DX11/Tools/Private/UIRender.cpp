@@ -1,3 +1,5 @@
+#include "UIRender.h"
+#include "UIRender.h"
 #include "stdafx.h"
 #include "..\Public\UIRender.h"
 
@@ -172,6 +174,7 @@ void CUIRender::AddRenderText(UI_FONT eFont, _bool bIsCenter, _tchar* szText, _f
 	m_UIRenderlist.push_back(pNew);
 }
 
+
 HRESULT CUIRender::Ready_Components()
 {
 	/* FOR.Com_Shader */
@@ -267,8 +270,8 @@ HRESULT CUIRender::Ready_Texture()
 		if (FAILED(m_pGameInstance->Add_Prototype(LEVEL_TOOL, tTag, pNew->Texture)))
 			return E_FAIL;
 
-		WideCharToMultiByte(CP_UTF8, 0, tPath, -1, pNew->strTexturePath, vecBuffer[i][0].size() + 1, nullptr, nullptr);
-		WideCharToMultiByte(CP_UTF8, 0, tTag, -1, pNew->strTextureTag, vecBuffer[i][1].size() + 1, nullptr, nullptr);
+		WideCharToMultiByte(CP_UTF8, 0, tPath, -1, pNew->strTexturePath, (_int)vecBuffer[i][0].size() + 1, nullptr, nullptr);
+		WideCharToMultiByte(CP_UTF8, 0, tTag, -1, pNew->strTextureTag, (_int)vecBuffer[i][1].size() + 1, nullptr, nullptr);
 
 		m_vecTextureInfo.push_back(pNew);
 

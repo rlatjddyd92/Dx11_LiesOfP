@@ -88,7 +88,7 @@ public:
 	const _char* GetTextureTag(_int iIndex) { return m_vecTextureInfo[iIndex]->strTextureTag; }
 	const _char* GetTextFontTag(_int iIndex) { return m_vecFont_char[iIndex]; }
 
-	_int GetTextureCount() { return m_vecTextureInfo.size(); }
+	_int GetTextureCount() { return (_int)m_vecTextureInfo.size(); }
 
 public:
 	class CShader* m_pShaderCom = { nullptr };

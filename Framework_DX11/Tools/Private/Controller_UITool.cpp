@@ -10,8 +10,54 @@ void CController_UITool::UITool_Edit()
 {
 	if (ImGui::Button("SaveUIData"))
 	{
-		SavePage();
-		SavePart();
+		if (FAILED(SavePage()))
+		{
+			MSG_BOX(TEXT("Failed to Save Page"));
+		}
+		else if (FAILED(SavePart()))
+		{
+			MSG_BOX(TEXT("Failed to Save Part"));
+		}
+		else 
+			MSG_BOX(TEXT("UI 파일 저장 완료"));
+	}
+
+	ImGui::SameLine();
+
+	if (ImGui::Button("LoadUIData"))
+	{
+		if (MessageBox(nullptr, L"UI 파일을 불러와 현재 내용에 덮어씁니다.", L"UI 데이터 불러오기", MB_OKCANCEL))
+		{
+			EraseUIData();
+
+			// 불러오기
+
+			if (FAILED(LoadPage()))
+			{
+				MSG_BOX(TEXT("Failed to Load Page"));
+			}
+			else if (FAILED(LoadPart()))
+			{
+				MSG_BOX(TEXT("Failed to Load Part"));
+			}
+			else
+				MSG_BOX(TEXT("UI 파일 불러오기 완료"));
+
+		}
+
+		// 취소
+	}
+
+	ImGui::SameLine();
+
+	if (ImGui::Button("MakeClientDataFile"))
+	{
+		// 클라이언트 쪽으로 dat 파일 만들어 내보내기
+
+		if (FAILED(MakeClientData_Page()))
+			MSG_BOX(TEXT("UI 데이터 생성 실패"));
+		else 
+			MSG_BOX(TEXT("Client 프로젝트에 UI 데이터 생성 완료"));
 	}
 
 	UIPage_Edit();
@@ -99,7 +145,7 @@ void CController_UITool::UIPart_Edit()
 	swprintf(tTemp, 5, L"%d", iCount);
 	_char* szCount = new _char[5];
 	for (_int i = 0; i < 5; ++i)
-		szCount[i] = tTemp[i];
+		szCount[i] = (_char)tTemp[i];
 
 	ImGui::Text(szCount);
 
@@ -169,6 +215,16 @@ void CController_UITool::UIPart_Edit()
 			ImGui::Text("※ WrongNum");
 		else
 			ImGui::Text(m_pUIRender->GetTextureTag(pNow->iTexture_Index));
+
+		ImGui::DragFloat("R", &pNow->fTextureColor.x);
+		ImGui::SameLine();
+		ImGui::DragFloat("G", &pNow->fTextureColor.y);
+		ImGui::SameLine();
+		ImGui::DragFloat("B", &pNow->fTextureColor.z);
+		ImGui::SameLine();
+		ImGui::DragFloat("A", &pNow->fTextureColor.w);
+
+
 
 		ImGui::SeparatorText("Text");
 		// 텍스트 
@@ -444,7 +500,7 @@ HRESULT CController_UITool::SavePart()
 
 			if (pNow->szText == nullptr)
 			{
-				strText = (_tchar)"\0";
+				strText = TEXT("\0");
 			}
 			else
 			{
@@ -538,14 +594,8 @@ HRESULT CController_UITool::InitializeComponent()
 	return S_OK;
 }
 
-void CController_UITool::Free()
+HRESULT CController_UITool::EraseUIData()
 {
-	__super::Free();
-
-	Safe_Release(m_pGameInstance);
-
-
-
 	for (auto& iter : m_vecPageInfo)
 	{
 		Safe_Delete_Array(iter->strUIPage_Name);
@@ -564,8 +614,104 @@ void CController_UITool::Free()
 	for (_int i = 0; i < _int(UIPAGE::PAGE_END); ++i)
 		Safe_Delete_Array(m_ArrPageName[i]);
 
-
-	Safe_Release(m_pUIRender);
 	m_DataTag_Page.clear();
 	m_DataTag_Part.clear();
+
+	return S_OK;
+}
+
+HRESULT CController_UITool::MakeClientData_Page()
+{
+	wstring fileName = TEXT("../../Client/Bin/DataFiles/UIData.dat");
+	WCHAR* TempName = new WCHAR[fileName.size()];
+	for (_int i = 0; i <= fileName.size(); ++i)
+		TempName[i] = fileName[i];
+
+	HANDLE hFile = CreateFile(TempName, GENERIC_WRITE, NULL, NULL, CREATE_ALWAYS, FILE_ATTRIBUTE_NORMAL, NULL);
+
+	if (INVALID_HANDLE_VALUE == hFile)
+		return E_FAIL;
+
+	DWORD dwByte(0);
+
+	// Page의 수 
+	_int iPageCount = (_int)m_vecPageInfo.size();
+	WriteFile(hFile, &iPageCount, sizeof(_int), &dwByte, nullptr);
+
+	for (auto& iter : m_vecPageInfo)
+	{
+		_int iIndexPageName = -1;
+
+		do
+		{
+			++iIndexPageName;
+			WriteFile(hFile, &iter->strUIPage_Name[iIndexPageName], sizeof(_char), &dwByte, nullptr);
+		} while (iter->strUIPage_Name[iIndexPageName] != '\0');
+
+		WriteFile(hFile, &iter->fPosition, sizeof(_float2), &dwByte, nullptr);
+		
+		if (FAILED(MakeClientData_Part(hFile , &dwByte, &iter->vecPart)))
+			MSG_BOX(TEXT("UI 데이터 생성 실패"));
+	}
+
+	CloseHandle(hFile);
+
+	Safe_Delete_Array(TempName);
+
+	return S_OK;
+}
+
+HRESULT CController_UITool::MakeClientData_Part(HANDLE handle, DWORD* dword, vector<UPART*>* pPart)
+{
+	_int iPartCount = (_int)pPart->size();
+	WriteFile(handle, &iPartCount, sizeof(_int), dword, nullptr);
+
+	for (auto& iter : (*pPart))
+	{
+		WriteFile(handle, &iter->bBarDirecX, sizeof(_int), dword, nullptr);
+		WriteFile(handle, &iter->bCenter, sizeof(_bool), dword, nullptr);
+		WriteFile(handle, &iter->fAdjust, sizeof(_float2), dword, nullptr);
+		WriteFile(handle, &iter->fAdjust_End, sizeof(_float2), dword, nullptr);
+		WriteFile(handle, &iter->fAdjust_Start, sizeof(_float2), dword, nullptr);
+		WriteFile(handle, &iter->fDirec, sizeof(_float2), dword, nullptr);
+		WriteFile(handle, &iter->fPosition, sizeof(_float2), dword, nullptr);
+		WriteFile(handle, &iter->fRatio, sizeof(_float), dword, nullptr);
+		WriteFile(handle, &iter->fSize, sizeof(_float2), dword, nullptr);
+		WriteFile(handle, &iter->fTextColor, sizeof(_float4), dword, nullptr);
+		WriteFile(handle, &iter->iFontIndex, sizeof(_int), dword, nullptr);
+		WriteFile(handle, &iter->iGroupIndex, sizeof(_int), dword, nullptr);
+		WriteFile(handle, &iter->iMoveType, sizeof(_int), dword, nullptr);
+		WriteFile(handle, &iter->iParentPart_Index, sizeof(_int), dword, nullptr);
+		WriteFile(handle, &iter->iTexture_Index, sizeof(_int), dword, nullptr);
+
+		_int iIndexPartName = -1;
+
+		do
+		{
+			++iIndexPartName;
+			WriteFile(handle, &iter->strUIPart_Name[iIndexPartName], sizeof(_char), dword, nullptr);
+		} while (iter->strUIPart_Name[iIndexPartName] != '\0');
+
+		_int iIndexText = -1;
+
+		do
+		{
+			++iIndexText;
+			WriteFile(handle, &iter->szText[iIndexText], sizeof(_tchar), dword, nullptr);
+		} while (iter->strUIPart_Name[iIndexText] != '\0');
+	}
+
+	return S_OK;
+}
+
+void CController_UITool::Free()
+{
+	__super::Free();
+
+	Safe_Release(m_pGameInstance);
+
+	EraseUIData();
+
+	Safe_Release(m_pUIRender);
+	
 }

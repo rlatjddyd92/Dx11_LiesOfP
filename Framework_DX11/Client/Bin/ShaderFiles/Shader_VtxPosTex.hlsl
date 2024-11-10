@@ -4,7 +4,7 @@
 matrix			g_WorldMatrix, g_ViewMatrix, g_ProjMatrix;
 texture2D		g_Texture;
 texture2D		g_DepthTexture;
-
+float4			g_Color;
 
 
 struct VS_IN
@@ -108,9 +108,22 @@ PS_OUT PS_MAIN(PS_IN In)
 	// Out.vColor = g_Texture.Sample(LinearSampler, In.vTexcoord);/*vector(1.f, In.vTexcoord.y, 0.f, 1.f);*/	
 	Out.vColor = Sample(In.vTexcoord);
 
-	Out.vColor.gb = Out.vColor.r;
-
-	Out.vColor.a = Out.vColor.a * 0.5f;
+	//Out.vColor.a = Out.vColor.a * 0.5f;
+	
+    if (Out.vColor.a < 0.1f)
+        discard;
+	
+    if (g_Color.r >= 0.f)
+        Out.vColor.r = g_Color.r;
+	
+    if (g_Color.g >= 0.f)
+        Out.vColor.g = g_Color.g;
+	
+    if (g_Color.b >= 0.f)
+        Out.vColor.b = g_Color.b;
+	
+    if (g_Color.a >= 0.f)
+        Out.vColor.a = g_Color.a;
 
 	return Out;
 }
