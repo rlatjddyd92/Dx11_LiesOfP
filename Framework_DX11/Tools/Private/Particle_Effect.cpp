@@ -47,6 +47,8 @@ void CParticle_Effect::Priority_Update(_float fTimeDelta)
 
 void CParticle_Effect::Update(_float fTimeDelta)
 {
+    __super::Set_WorldMatrix();
+
     _bool bOver = { false };
 
     CVIBuffer_Point_Instance::PARTICLE_MOVEMENT Movement = {};
@@ -63,35 +65,43 @@ void CParticle_Effect::Update(_float fTimeDelta)
     Movement.fAccelLimit = m_AccelDesc.fAccelLimit;
     Movement.fAccelSpeed = m_AccelDesc.fAccelSpeed;
 
+    if (false == m_isFirst)
+    {
+        Movement.vPadding_1 = _float2(0.f, 0.f);
+        m_isFirst = true;
+    }
+    else
+        Movement.vPadding_1 = _float2(1.f, 1.f);
+
     switch (m_DefaultDesc.eType)
     {
     case TYPE_SPREAD:
-        Movement.WorldMatrix = m_pTransformCom->Get_WorldMatrix_Inverse();
+        XMStoreFloat4x4(&Movement.WorldMatrix, m_WorldMatrix);
         m_pVIBufferCom->DispatchCS(m_pSpreadCS, Movement);
         break;
 
     case TYPE_MOVE:
-        Movement.WorldMatrix = m_pTransformCom->Get_WorldMatrix_Inverse();
+        XMStoreFloat4x4(&Movement.WorldMatrix, m_WorldMatrix);
         m_pVIBufferCom->DispatchCS(m_pMoveCS, Movement);
         break;
 
     case TYPE_CONVERGE:
-        Movement.WorldMatrix = m_pTransformCom->Get_WorldMatrix_Inverse();
+        XMStoreFloat4x4(&Movement.WorldMatrix, m_WorldMatrix);
         m_pVIBufferCom->DispatchCS(m_pConvergeCS, Movement);
         break;
 
     case TYPE_SPREAD_INDEPENDENT:
-        Movement.WorldMatrix = m_pTransformCom->Get_WorldMatrix();
+        Movement.WorldMatrix = m_WorldMatrix;
         m_pVIBufferCom->DispatchCS(m_pSpreadCS_World, Movement);
         break;
 
     case TYPE_MOVE_INDEPENDENT:
-        Movement.WorldMatrix = m_pTransformCom->Get_WorldMatrix();
+        XMStoreFloat4x4(&Movement.WorldMatrix, m_WorldMatrix);
         m_pVIBufferCom->DispatchCS(m_pMoveCS_World, Movement);
         break;
 
     case TYPE_CONVERGE_INDEPENDENT:
-        Movement.WorldMatrix = m_pTransformCom->Get_WorldMatrix();
+        XMStoreFloat4x4(&Movement.WorldMatrix, m_WorldMatrix);
         m_pVIBufferCom->DispatchCS(m_pConvergeCS_World, Movement);
         break;
     }

@@ -6,6 +6,7 @@ BEGIN(Engine)
 class CShader;
 class CVIBuffer_Point_Instance;
 class CTexture;
+class CShader_Compute;
 END
 
 BEGIN(Tools)
@@ -194,6 +195,8 @@ private:
 
 	PARTICLE_EFFECT_DESC m_SaveDesc = {};
 	_uint m_iNumInstance = { 0 };
+
+	_bool m_isFirst = { false };
 
 private:
 	HRESULT Ready_Components(PARTICLE_EFFECT_DESC* pDesc);

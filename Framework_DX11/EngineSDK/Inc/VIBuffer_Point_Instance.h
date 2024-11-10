@@ -7,7 +7,7 @@ BEGIN(Engine)
 class ENGINE_DLL CVIBuffer_Point_Instance final : public CVIBuffer_Instancing
 {
 public:
-	typedef struct
+	typedef struct alignas(16)
 	{
 		_uint		iNumInstance;
 		_uint		iState;
