@@ -85,6 +85,27 @@ float ComputeShadow(float4 vPosition, int iCascadeIndex, float4 vNormalDesc)
     return fShadowPower / 9.0f;
 }
 
+float4 Compute_WorldPos(float2 vTexcoord, float fDepth, float fViewZ)
+{
+    float4 vWorldPositoin = 0;
+	/* 투영공간상의 화면에 그려지는 픽셀의 위치를 구한다. */
+	/* 로컬위치 * 월드행렬 * 뷰행렬 * 투영행렬 / w */
+    vWorldPositoin.x = vTexcoord.x * 2.f - 1.f;
+    vWorldPositoin.y = vTexcoord.y * -2.f + 1.f;
+    vWorldPositoin.z = fDepth;
+    vWorldPositoin.w = 1.f;
+
+	/* 뷰스페이스 상의 화면에 그려지는 픽셀의 위치를 구한다.*/
+	/* 로컬위치 * 월드행렬 * 뷰행렬  */
+    vWorldPositoin = vWorldPositoin * fViewZ;
+    vWorldPositoin = mul(vWorldPositoin, g_ProjMatrixInv);
+
+	/* 월드 상의 화면에 그려지는 픽셀의 위치를 구한다.*/
+    vWorldPositoin = mul(vWorldPositoin, g_ViewMatrixInv);
+	
+    return vWorldPositoin;
+}
+
 struct VS_IN
 {
 	float3 vPosition : POSITION;	
@@ -161,10 +182,10 @@ PS_OUT_LIGHT PS_MAIN_LIGHT_DIRECTIONAL(PS_IN In)
 {
 	PS_OUT_LIGHT			Out = (PS_OUT_LIGHT)0;
 
-	//vector vARM = g_ARMTexture.Sample(LinearSampler, In.vTexcoord);
-    //float fAmbienOcc = vARM.r;
-    //float fRoughness = vARM.g;
-    //float fMetallic = vARM.b;
+    vector vARM = g_ARMTexture.Sample(LinearSampler, In.vTexcoord);
+    float fAmbietnOcc = vARM.r;
+    float fRoughness = vARM.g;
+    float fMetallic = vARM.b;
 	
 	vector		vDepthDesc = g_DepthTexture.Sample(PointSampler, In.vTexcoord);
 	float		fViewZ = vDepthDesc.y * 1000.f;
@@ -183,23 +204,8 @@ PS_OUT_LIGHT PS_MAIN_LIGHT_DIRECTIONAL(PS_IN In)
 
 	vector		vReflect = reflect(normalize(g_vLightDir), normalize(vNormal));
 
-	vector		vPosition = (vector)0;
-
-	/* 투영공간상의 화면에 그려지는 픽셀의 위치를 구한다. */
-	/* 로컬위치 * 월드행렬 * 뷰행렬 * 투영행렬 / w */
-	vPosition.x = In.vTexcoord.x * 2.f - 1.f;
-	vPosition.y = In.vTexcoord.y * -2.f + 1.f;
-	vPosition.z = vDepthDesc.x;
-	vPosition.w = 1.f;
-
-	/* 뷰스페이스 상의 화면에 그려지는 픽셀의 위치를 구한다.*/
-	/* 로컬위치 * 월드행렬 * 뷰행렬  */
-	vPosition = vPosition * fViewZ;
-	vPosition = mul(vPosition, g_ProjMatrixInv);
-
-	/* 월드 상의 화면에 그려지는 픽셀의 위치를 구한다.*/
-	vPosition = mul(vPosition, g_ViewMatrixInv);	
-
+	// 월드 위치 계산
+    vector		vPosition = Compute_WorldPos(In.vTexcoord, vDepthDesc.x, fViewZ);
 	vector		vLook = vPosition - g_vCamPosition;
 
 	
@@ -285,53 +291,23 @@ PS_OUT PS_MAIN_DEFERRED(PS_IN In)
 	
     Out.vColor = (vDiffuse * vShade + vSpecular) * g_CascadeShadowTexture.Sample(LinearSampler, In.vTexcoord);
 
-	//vector		vDepthDesc = g_DepthTexture.Sample(PointSampler, In.vTexcoord);
-	//float		fViewZ = vDepthDesc.y * 1000.f;
+	vector		vDepthDesc = g_DepthTexture.Sample(PointSampler, In.vTexcoord);
+	float		fViewZ = vDepthDesc.y * 1000.f;
 
-	///* 1. 현재 그려내는 픽셀을 광원기준의 위치로 변환하기위해서 우선 월드로 역치환하여 월드위치를 구한다. */
-	//vector		vPosition = (vector)0;
-
-	///* 투영공간상의 화면에 그려지는 픽셀의 위치를 구한다. */
-	///* 로컬위치 * 월드행렬 * 뷰행렬 * 투영행렬 / w */
-	//vPosition.x = In.vTexcoord.x * 2.f - 1.f;
-	//vPosition.y = In.vTexcoord.y * -2.f + 1.f;
-	//vPosition.z = vDepthDesc.x;
-	//vPosition.w = 1.f;
-
-	///* 뷰스페이스 상의 화면에 그려지는 픽셀의 위치를 구한다.*/
-	///* 로컬위치 * 월드행렬 * 뷰행렬  */
-	//vPosition = vPosition * fViewZ;
-	//vPosition = mul(vPosition, g_ProjMatrixInv);
-
-	///* 월드 상의 화면에 그려지는 픽셀의 위치를 구한다.*/
-	//vPosition = mul(vPosition, g_ViewMatrixInv);
-
-	///* 2. 월드상의 픽셀 위치에다가 광원기준으로 만들어진 뷰행렬을 곱하여 광원기준의 스페이스로 변환한다. */
-	//vector		vOldPos = mul(vPosition, g_LightViewMatrix);
-	//vOldPos = mul(vOldPos, g_LightProjMatrix);
+	/* 1. 현재 그려내는 픽셀을 광원기준의 위치로 변환하기위해서 우선 월드로 역치환하여 월드위치를 구한다. */
+	vector		vPosition = Compute_WorldPos(In.vTexcoord, vDepthDesc.x, fViewZ);
 	
-	//float		fLightDepth = vOldPos.w;
-
-	//float2		vTexcoord;
-	//vTexcoord.x = (vOldPos.x / vOldPos.w) * 0.5f + 0.5f;
-	//vTexcoord.y = (vOldPos.y / vOldPos.w) * -0.5f + 0.5f;	
-
-	//float		fOldLightDepth = g_LightDepthTexture.Sample(LinearSampler, vTexcoord).r * 1000.f;
-
-	//if (fLightDepth - 0.1f > fOldLightDepth)
-	//	Out.vColor = vector(Out.vColor.rgb * 0.6f, Out.vColor.a);
-
-	//// 림라이트
- //   float3 vRimLightColor = float3(0.7f, 0.f, 0.f);
+	// 림라이트
+    //float3 vRimLightColor = float3(0.7f, 0.f, 0.f);
 	
- //   float3 vEyeToCamera = normalize(g_vCamPosition.xyz - vPosition.xyz);
- //   vector vNormalDesc = g_NormalTexture.Sample(PointSampler, In.vTexcoord);
- //   float3 vNormal = vNormalDesc.xyz * 2.f - 1.f;
+    //float3 vEyeToCamera = normalize(g_vCamPosition.xyz - vPosition.xyz);
+    //vector vNormalDesc = g_NormalTexture.Sample(PointSampler, In.vTexcoord);
+    //float3 vNormal = vNormalDesc.xyz * 2.f - 1.f;
     //float fRim = 1.f - saturate(dot(vEyeToCamera, vNormal));
 
     //fRim = pow(fRim, 5.f);
     //vRimLightColor *= fRim;
-    //Out.vColor.xyz = saturate(Out.vColor.xyz + vRimLightColor); // 0.5배로 줄임
+    //Out.vColor.xyz = saturate(Out.vColor.xyz + vRimLightColor);
 	
 	return Out;	
 }
