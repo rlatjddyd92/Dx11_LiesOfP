@@ -28,13 +28,20 @@ public:
 	virtual void OnCollisionExit(CGameObject* pOther) override;
 
 protected:
-	_bool			m_isGravity = { false };
+	class CShader*		m_pShaderCom = { nullptr };
+	class CModel*		m_pModelCom = { nullptr };
+	class CNavigation*	m_pNavigationCom = { nullptr };
+	class CCollider*	m_pColliderCom = { nullptr };
+	class CFsm*			m_pFsmCom = { nullptr };
+
+	_bool				m_isGravity = { false };
 
 
 protected:
 	vector<class CPartObject*>			m_Parts;
 
 	HRESULT Add_PartObject(_uint iPartID, const _wstring& strPrototypeTag, void* pArg = nullptr);
+	HRESULT Bind_WorldViewProj();
 
 public:
 	virtual CPawn* Clone(void* pArg) = 0;

@@ -46,9 +46,6 @@
     <Filter Include="02.GameObjects\03.Player">
       <UniqueIdentifier>{a04ca2a0-1907-4180-8363-482efb3255f2}</UniqueIdentifier>
     </Filter>
-    <Filter Include="02.GameObjects\03.Player\Body">
-      <UniqueIdentifier>{6f35df01-e316-4c40-9da6-717b761d7c83}</UniqueIdentifier>
-    </Filter>
     <Filter Include="02.GameObjects\03.Player\Weapon">
       <UniqueIdentifier>{a2e63eda-00f8-4bd2-b6f4-8a17ca24f471}</UniqueIdentifier>
     </Filter>
@@ -159,9 +156,6 @@
     <ClInclude Include="..\public\Player.h">
       <Filter>02.GameObjects\03.Player</Filter>
     </ClInclude>
-    <ClInclude Include="..\Public\Body_Player.h">
-      <Filter>02.GameObjects\03.Player\Body</Filter>
-    </ClInclude>
     <ClInclude Include="..\Public\Weapon.h">
       <Filter>02.GameObjects\03.Player\Weapon</Filter>
     </ClInclude>
@@ -254,9 +248,6 @@
     </ClCompile>
     <ClCompile Include="..\private\Player.cpp">
       <Filter>02.GameObjects\03.Player</Filter>
-    </ClCompile>
-    <ClCompile Include="..\Private\Body_Player.cpp">
-      <Filter>02.GameObjects\03.Player\Body</Filter>
     </ClCompile>
     <ClCompile Include="..\Private\Weapon.cpp">
       <Filter>02.GameObjects\03.Player\Weapon</Filter>

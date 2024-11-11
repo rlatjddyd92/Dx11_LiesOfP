@@ -57,7 +57,7 @@ HRESULT CAnimation::Initialize__To_Binary(HANDLE* pFile, vector<_uint>& KeyFrame
 		m_EventKeyFrames.push_back(EventKeyFrame);
 	}
 
-	for (_int i = 0; i < m_iNumChannels; ++i)
+	for (_int i = 0; i < (_int)m_iNumChannels; ++i)
 	{
 		CChannel* pChannel = CChannel::Create(pFile, pModel);
 		m_Channels.push_back(pChannel);
@@ -151,9 +151,9 @@ HRESULT CAnimation::Create_BinaryFile(HANDLE* pFile)
 	//채널 갯수 저장
 	WriteFile(*pFile, &m_iNumChannels, sizeof(_uint), &dwByte, nullptr);
 
-	int iNumEventKeyFrame{};
+	_int iNumEventKeyFrame{};
 	//이벤트 키프레임 갯수 저장
-	iNumEventKeyFrame = m_EventKeyFrames.size();
+	iNumEventKeyFrame = (_int)m_EventKeyFrames.size();
 	WriteFile(*pFile, &iNumEventKeyFrame, sizeof(_uint), &dwByte, nullptr);
 
 	for (_int i = 0; i < m_EventKeyFrames.size(); ++i)

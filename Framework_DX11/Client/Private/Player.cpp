@@ -3,7 +3,6 @@
 
 #include "GameInstance.h"
 #include "Particle_Explosion.h"
-#include "Body_Player.h"
 #include "Weapon.h"
 
 CPlayer::CPlayer(ID3D11Device * pDevice, ID3D11DeviceContext * pContext)
@@ -37,19 +36,17 @@ HRESULT CPlayer::Initialize(void * pArg)
 	if (FAILED(Ready_PartObjects()))
 		return E_FAIL;
 
-	m_iState = STATE_IDLE;
 
 	m_pTransformCom->Set_State(CTransform::STATE_POSITION, XMVectorSet(0.1f, 0.f, 0.1f, 1.f));
 
 	//m_pGameInstance->SetUpPhysX_Player(this);
+	m_pModelCom->SetUp_Animation(3, true);
 
 	return S_OK;
 }
 
 void CPlayer::Priority_Update(_float fTimeDelta)
 {
-	for (auto& pPartObject : m_Parts)
-		pPartObject->Priority_Update(fTimeDelta);
 }
 
 void CPlayer::Update(_float fTimeDelta)
@@ -63,40 +60,13 @@ void CPlayer::Update(_float fTimeDelta)
 	if (GetKeyState(VK_RIGHT) & 0x8000)
 		m_pTransformCom->Turn(false, true, false, fTimeDelta);
 
-	if (m_pGameInstance->Get_KeyState(KEY::UP) == KEY_STATE::HOLD)
-	{
-		m_pTransformCom->Go_Straight(fTimeDelta, m_pNavigationCom);
-
-		if (m_iState & STATE_IDLE)
-			m_iState ^= STATE_IDLE;
-
-		m_iState |= STATE_WALK;
-
-		
-	}
-
-	else
-	{
-		m_iState = STATE_RESET;
-		m_iState |= STATE_IDLE;
-	}
-
-	if (m_pGameInstance->Get_KeyState(KEY::RBUTTON) == KEY_STATE::TAP)
-	{
-		m_iState |= STATE_GRIND;
-	}
+	m_pModelCom->Play_Animation(fTimeDelta);
 
 	m_pColliderCom->Update(m_pTransformCom->Get_WorldMatrix_Ptr());
-
-	for (auto& pPartObject : m_Parts)
-		pPartObject->Update(fTimeDelta);
 }
 
 void CPlayer::Late_Update(_float fTimeDelta)
 {
-	for (auto& pPartObject : m_Parts)
-		pPartObject->Late_Update(fTimeDelta);
-
 	if (GetKeyState(VK_LBUTTON) & 0x8000)
 	{
 		_float3		vPickPos;
@@ -104,25 +74,9 @@ void CPlayer::Late_Update(_float fTimeDelta)
 			m_pTransformCom->Set_State(CTransform::STATE_POSITION, XMVectorSetW(XMLoadFloat3(&vPickPos), 1.f));		
 	}
 
-	/*static _float fTimeAcc = { 0.f };
-
-	fTimeAcc += fTimeDelta;
-
-	if (fTimeAcc >= 0.05f)
-	{*/
-		_vector vPosition = m_pTransformCom->Get_State(CTransform::STATE_POSITION);
-
-		_vector vFixPos = m_pGameInstance->Compute_Height(vPosition, XMMatrixLookAtLH(XMVectorSet(64.f, 30.f, 64.0f, 1.f), XMVectorSet(64.f, 0.f, 64.0f, 1.f), XMVectorSet(0.f, 0.f, 1.f, 0.f)),
-			XMMatrixOrthographicLH(200.f, 200.f, 0.f, 50.f));
-
-		m_pTransformCom->Set_State(CTransform::STATE_POSITION, XMVectorSetY(vPosition, XMVectorGetY(vFixPos)));
-
-		/*fTimeAcc = 0.f;
-	}*/
-
-	
-
 	m_pGameInstance->Add_RenderObject(CRenderer::RG_NONBLEND, this);
+	m_pGameInstance->Add_RenderObject(CRenderer::RG_SHADOWOBJ, this);
+
 #ifdef _DEBUG
 	m_pGameInstance->Add_DebugObject(m_pColliderCom);
 	m_pGameInstance->Add_DebugObject(m_pNavigationCom);
@@ -131,19 +85,101 @@ void CPlayer::Late_Update(_float fTimeDelta)
 
 HRESULT CPlayer::Render()
 {
-//#ifdef _DEBUG
-//	m_pColliderCom->Render();
-//	m_pNavigationCom->Render();
-//#endif
+	if (FAILED(Bind_WorldViewProj()))
+		return E_FAIL;
+
+	_uint		iNumMeshes = m_pModelCom->Get_NumMeshes();
+
+	for (size_t i = 0; i < iNumMeshes; i++)
+	{
+		m_pModelCom->Bind_MeshBoneMatrices(m_pShaderCom, "g_BoneMatrices", (_uint)i);
+
+		if (FAILED(m_pModelCom->Bind_Material(m_pShaderCom, "g_DiffuseTexture", DIFFUSE, (_uint)i)))
+			return E_FAIL;
+
+		if (nullptr != m_pModelCom->Find_Texture((_uint)i, TEXTURE_TYPE::ROUGHNESS))
+		{
+			if (FAILED(m_pModelCom->Bind_Material(m_pShaderCom, "g_ARMTexture", ROUGHNESS, (_uint)i)))
+				return E_FAIL;
+		}
+
+		if (nullptr != m_pModelCom->Find_Texture((_uint)i, TEXTURE_TYPE::NORMALS))
+		{
+			if (FAILED(m_pModelCom->Bind_Material(m_pShaderCom, "g_NormalTexture", NORMALS, (_uint)i)))
+				return E_FAIL;
+
+			if (FAILED(m_pShaderCom->Begin(2)))
+				return E_FAIL;
+		}
+		else
+		{
+			if (FAILED(m_pShaderCom->Begin(0)))
+				return E_FAIL;
+		}
+
+		if (FAILED(m_pModelCom->Render((_uint)i)))
+			return E_FAIL;
+	}
+
+	return S_OK;
+
+#ifdef _DEBUG
+	m_pColliderCom->Render();
+	m_pNavigationCom->Render();
+#endif
+
+	return S_OK;
+}
+
+HRESULT CPlayer::Render_LightDepth()
+{
+	if (FAILED(m_pTransformCom->Bind_ShaderResource(m_pShaderCom, "g_WorldMatrix")))
+		return E_FAIL;
+
+	_float4x4		ViewMatrix;
+	XMStoreFloat4x4(&ViewMatrix, XMMatrixLookAtLH(XMVectorSet(0.f, 20.f, -15.f, 1.f), XMVectorSet(0.f, 0.f, 0.f, 1.f), XMVectorSet(0.f, 1.f, 0.f, 0.f)));
+
+	if (FAILED(m_pShaderCom->Bind_Matrix("g_ViewMatrix", &ViewMatrix)))
+		return E_FAIL;
+	if (FAILED(m_pShaderCom->Bind_Matrix("g_ProjMatrix", &m_pGameInstance->Get_Transform(CPipeLine::D3DTS_PROJ))))
+		return E_FAIL;
+
+	if (FAILED(m_pShaderCom->Bind_Matrices("g_CascadeViewMatrix", m_pGameInstance->Get_CascadeViewMatirx(), 3)))
+		return E_FAIL;
+	if (FAILED(m_pShaderCom->Bind_Matrices("g_CascadeProjMatrix", m_pGameInstance->Get_CascadeProjMatirx(), 3)))
+		return E_FAIL;
+
+	_uint		iNumMeshes = m_pModelCom->Get_NumMeshes();
+
+	for (size_t i = 0; i < iNumMeshes; i++)
+	{
+		m_pModelCom->Bind_MeshBoneMatrices(m_pShaderCom, "g_BoneMatrices", (_uint)i);
+
+
+		if (FAILED(m_pShaderCom->Begin(3)))
+			return E_FAIL;
+
+		if (FAILED(m_pModelCom->Render((_uint)i)))
+			return E_FAIL;
+	}
 
 	return S_OK;
 }
 
 HRESULT CPlayer::Ready_Components()
 {
+	/* FOR.Com_Shader */
+	if (FAILED(__super::Add_Component(LEVEL_GAMEPLAY, TEXT("Prototype_Component_Shader_VtxAnimModel"),
+		TEXT("Com_Shader"), reinterpret_cast<CComponent**>(&m_pShaderCom))))
+		return E_FAIL;
+
+	/* FOR.Com_Model */
+	if (FAILED(__super::Add_Component(LEVEL_GAMEPLAY, TEXT("Prototype_AnimModel_Test"),
+		TEXT("Com_Model"), reinterpret_cast<CComponent**>(&m_pModelCom))))
+		return E_FAIL;
+
 	/* For.Com_Navigation */
 	CNavigation::NAVIGATION_DESC			NaviDesc{};
-
 	NaviDesc.iCurrentIndex = 0;
 
 	if (FAILED(__super::Add_Component(LEVEL_GAMEPLAY, TEXT("Prototype_Component_Navigation"),
@@ -168,11 +204,7 @@ HRESULT CPlayer::Ready_PartObjects()
 	/* 실제 추가하고 싶은 파트오브젝트의 갯수만큼 밸류를 셋팅해놓자. */
 	m_Parts.resize(PART_END - 1);
 
-	CBody_Player::BODY_DESC		BodyDesc{};
-	BodyDesc.pParentState = &m_iState;
-	BodyDesc.pParentWorldMatrix = m_pTransformCom->Get_WorldMatrix_Ptr();
-	if (FAILED(__super::Add_PartObject(PART_BODY, TEXT("Prototype_GameObject_Body_Player"), &BodyDesc)))
-		return E_FAIL;
+	
 
 	//CWeapon::WEAPON_DESC		WeaponDesc{};
 	//WeaponDesc.pParentState = &m_iState;
@@ -182,6 +214,11 @@ HRESULT CPlayer::Ready_PartObjects()
 	//if (FAILED(__super::Add_PartObject(PART_WEAPON, TEXT("Prototype_GameObject_Weapon"), &WeaponDesc)))
 	//	return E_FAIL;
 
+	return S_OK;
+}
+
+HRESULT CPlayer::Ready_FSM()
+{
 	return S_OK;
 }
 

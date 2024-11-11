@@ -526,7 +526,6 @@ _vector CModel::Play_Animation(_float fTimeDelta, _bool* pOut, OUTPUT_EVKEY* pOu
 		vRootMove = m_Bones[m_UFBIndices[UFB_ROOT]]->Get_CombinedTransformationMatrix().r[3];
 		if (m_isEnd_Animations[m_iCurrentAnimIndex] == true && pOut != nullptr)//애니메이션이 끝났는지에 대한 판단
 		{
-			m_CurrentTrackPosition == 0.f; /////??
 			*pOut = true;
 			m_isEnd_Animations[m_iCurrentAnimIndex] = false;
 		}
@@ -806,7 +805,7 @@ HRESULT CModel::ReadyModel_To_Binary(HANDLE* pFile)
 
 	m_KeyFrameIndices.resize(m_iNumAnimations);
 
-	for (_int i = 0; i < m_iNumAnimations; ++i)
+	for (_int i = 0; i < (_int)m_iNumAnimations; ++i)
 	{
 		CAnimation* pAnimation = CAnimation::Create_To_Binary(pFile, m_KeyFrameIndices[i], this);
 		if (nullptr == pAnimation)

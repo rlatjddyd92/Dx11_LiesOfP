@@ -464,7 +464,6 @@ LIGHT_DESC * CGameInstance::Get_LightDesc(_uint iIndex)
 
 HRESULT CGameInstance::Render_Lights(CShader * pShader, CVIBuffer_Rect * pVIBuffer)
 {
-
 	return m_pLight_Manager->Render(pShader, pVIBuffer);
 }
 
@@ -541,6 +540,11 @@ HRESULT CGameInstance::End_MRT()
 HRESULT CGameInstance::Bind_RT_ShaderResource(CShader * pShader, const _wstring & strTargetTag, const _char * pConstantName)
 {
 	return m_pTarget_Manager->Bind_ShaderResource(pShader, strTargetTag, pConstantName);
+}
+
+HRESULT CGameInstance::BInd_RT_UnorderedView(CShader* pShader, const _wstring& strTargetTag, const _char* pConstantName)
+{
+	return m_pTarget_Manager->Bind_UnorderedAccess(pShader, strTargetTag, pConstantName);
 }
 
 HRESULT CGameInstance::Copy_RenderTarget(const _wstring & strTargetTag, ID3D11Texture2D * pTexture)

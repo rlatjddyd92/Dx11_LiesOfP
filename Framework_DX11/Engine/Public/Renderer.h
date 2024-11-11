@@ -52,7 +52,7 @@ private:
 	class CShader*				m_pShader = { nullptr };
 	class CShader*				m_pBloomShader = { nullptr };
 	class CShader*				m_pSSAOShader = { nullptr };
-	class CShader*				m_pHDRShader = { nullptr };
+	class CShader_Compute*				m_pHDRShader = { nullptr };
 	class CShader*				m_pDistortionShader = { nullptr };
 
 	class CVIBuffer_Rect*		m_pVIBuffer = { nullptr };

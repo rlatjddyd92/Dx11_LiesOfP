@@ -68,12 +68,30 @@ HRESULT CPawn::Add_PartObject(_uint iPartID, const _wstring& strPrototypeTag, vo
 	return S_OK;
 }
 
+HRESULT CPawn::Bind_WorldViewProj()
+{
+	if (FAILED(m_pTransformCom->Bind_ShaderResource(m_pShaderCom, "g_WorldMatrix")))
+		return E_FAIL;
+	if (FAILED(m_pShaderCom->Bind_Matrix("g_ViewMatrix", &m_pGameInstance->Get_Transform(CPipeLine::D3DTS_VIEW))))
+		return E_FAIL;
+	if (FAILED(m_pShaderCom->Bind_Matrix("g_ProjMatrix", &m_pGameInstance->Get_Transform(CPipeLine::D3DTS_PROJ))))
+		return E_FAIL;
+
+	return S_OK;
+}
+
 void CPawn::Free()
 {
 	__super::Free();
 
 	for (auto& pPartObject : m_Parts)
 		Safe_Release(pPartObject);
-
 	m_Parts.clear();
+
+	Safe_Release(m_pShaderCom);
+	Safe_Release(m_pModelCom);
+	Safe_Release(m_pNavigationCom);
+	Safe_Release(m_pColliderCom);
+	Safe_Release(m_pFsmCom);
+
 }
