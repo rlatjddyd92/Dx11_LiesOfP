@@ -4,8 +4,9 @@
 #include "GameInstance.h"
 #include "GameInterface_Controller.h"
 
-CItem_Manager::CItem_Manager()
+CItem_Manager::CItem_Manager(CGameInstance* pGameInstance)
 {
+	m_pGameInstance = pGameInstance;
 }
 
 HRESULT CItem_Manager::Initialize_Item()
@@ -13,9 +14,9 @@ HRESULT CItem_Manager::Initialize_Item()
 	return S_OK;
 }
 
-CItem_Manager* CItem_Manager::Create()
+CItem_Manager* CItem_Manager::Create(CGameInstance* pGameInstance)
 {
-	CItem_Manager* pInstance = new CItem_Manager();
+	CItem_Manager* pInstance = new CItem_Manager(pGameInstance);
 
 	if (FAILED(pInstance->Initialize_Item()))
 	{
@@ -29,4 +30,6 @@ CItem_Manager* CItem_Manager::Create()
 void CItem_Manager::Free()
 {
 	__super::Free();
+
+	Safe_Release(m_pGameInstance);
 }

@@ -52,16 +52,19 @@ public:
 	}ITEM;
 
 private:
-	CItem_Manager();
+	CItem_Manager(CGameInstance* pGameInstance);
 	virtual ~CItem_Manager() = default;
 
 private:
 	HRESULT Initialize_Item();
 
+private:
+	CGameInstance* m_pGameInstance = { nullptr };
+
 
 
 public:
-	static CItem_Manager* Create();
+	static CItem_Manager* Create(CGameInstance* pGameInstance);
 	virtual void Free() override;
 
 };

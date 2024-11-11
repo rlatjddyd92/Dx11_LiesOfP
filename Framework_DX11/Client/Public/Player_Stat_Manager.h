@@ -40,8 +40,6 @@ public:
 
 		_wstring strStat_Name = TEXT("none");
 		STAT_TYPE eType = STAT_TYPE::STAT_TYPE_END; // 스탯의 형식 
-		_float fStat_Min_Limit = 0.f; // <- 스탯 하한선의 최소값
-		_float fStat_Min = 0.f; // 현재 스탯 하한선 
 		_float fStat_Now = 0.f; // 현재 스탯값
 		_float fStat_Max = 0.f; // 현재 스탯 상한선 
 		_float fStat_Max_Limit = 0.f; // <- 스탯 상한선의 최댓값
@@ -53,17 +51,18 @@ public:
 	}STAT;
 
 private:
-	CPlayer_Stat_Manager();
+	CPlayer_Stat_Manager(CGameInstance* pGameInstance);
 	virtual ~CPlayer_Stat_Manager() = default;
 
 public:
 	// 정보 접근 
-	const _float& Get_Stat(STAT_INDEX eIndex) { return m_vecStat[_int(eIndex)]->fStat_Now; }
-	
-	//const _float& Get_Stat(STAT_INDEX eIndex) { return m_vecStat[_int(eIndex)]->fStat_Now; }
+	const _float& Get_NowStat_Normal(STAT_NORMAL eIndex) { return m_vecStat_Normal[_int(eIndex)]->fStat_Now; }
+	const STAT& Get_StatInfo_Normal(STAT_NORMAL eIndex) { return *m_vecStat_Normal[_int(eIndex)]; }
+
+	const STAT& Get_StatInfo_DEF(STAT_DEF eIndex) { return *m_vecStat_DEF[_int(eIndex)]; }
 
 	// 정보 수정 
-	//void Add_Stat(STAT_INDEX eIndex, _float fValue);
+	void Add_Stat_Normal(STAT_NORMAL eIndex, _float fValue);
 
 private:
 	HRESULT Initialize_Stat();
@@ -71,11 +70,18 @@ private:
 
 
 private:
-	vector<STAT*> m_vecStat; 
+	CGameInstance* m_pGameInstance = { nullptr };
+	vector<STAT*> m_vecStat_Normal; 
+	vector<STAT*> m_vecStat_DEF;
+	_int m_iLevel = 0;
+	_int m_iErgo_NextLevel = 100;
+
+
+
 
 
 public:
-	static CPlayer_Stat_Manager* Create();
+	static CPlayer_Stat_Manager* Create(CGameInstance* pGameInstance);
 	virtual void Free() override;
 
 };

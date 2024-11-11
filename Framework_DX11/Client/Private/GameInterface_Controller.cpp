@@ -21,10 +21,10 @@ HRESULT CGameInterface_Controller::Initialize_GameInterface(ID3D11Device** pDevi
 	m_pUIManager = CUIManager::Create(m_pDevice, m_pContext);
 	
 	// Item_Manager
-	m_pItem_Manager = CItem_Manager::Create();
+	m_pItem_Manager = CItem_Manager::Create(m_pGameInstance);
 
 	// Stat_Manager
-	m_pPlayer_Stat_Manager = CPlayer_Stat_Manager::Create();
+	m_pPlayer_Stat_Manager = CPlayer_Stat_Manager::Create(m_pGameInstance);
 
 
 
