@@ -241,11 +241,6 @@ PS_OUT_LIGHT PS_MAIN_LIGHT_DIRECTIONAL(PS_IN In)
 {
 	PS_OUT_LIGHT			Out = (PS_OUT_LIGHT)0;
 
-    vector		vARM = g_ARMTexture.Sample(LinearSampler, In.vTexcoord);
-    float       fAmbietnOcc = vARM.r;
-    float		fRoughness = vARM.g;
-    float		fMetallic = vARM.b;
-	
 	vector		vDepthDesc = g_DepthTexture.Sample(PointSampler, In.vTexcoord);
 	vector		vNormalDesc = g_NormalTexture.Sample(PointSampler, In.vTexcoord);
 	
@@ -254,40 +249,64 @@ PS_OUT_LIGHT PS_MAIN_LIGHT_DIRECTIONAL(PS_IN In)
 	
     vector		vPosition = Compute_WorldPos(In.vTexcoord, vDepthDesc.x, fViewZ);
 	
-    float3		vViewDir = normalize(g_vCamPosition.xyz - vPosition.xyz);
-    float3		vLightDir = normalize(g_vLightDir.xyz);
-    float3		vReflect = reflect(normalize(g_vLightDir.xyz) * -1.f, normalize(vNormal));
+    
+    
+    vector vDiffuse = g_DiffuseTexture.Sample(LinearSampler, In.vTexcoord);
+    vector vARM = g_ARMTexture.Sample(LinearSampler, In.vTexcoord);
+    
+    float       fAmbietnOcc = vARM.r;
+    float		fRoughness = vARM.g;
+    float		fMetallic = vARM.b;
+	
+    if ((0.f == fAmbietnOcc && 0.f == fRoughness && 0.f == fMetallic))
+    {
+        Out.vSpecular = float4(0.f, 0.f, 0.f, 0.f);
+    }
+    else
+    {
+    
+        float3 fAlbedo = pow(vDiffuse.xyz, 2.2f);
+        float3 vViewDir = normalize(g_vCamPosition.xyz - vPosition.xyz);
+        float3 vLightDir = normalize(g_vLightDir.xyz);
+        float3 vReflect = reflect(normalize(g_vLightDir.xyz) * -1.f, normalize(vNormal));
 	
 	// 금속과 비금속을 구분하기 위한 기본 반사도 (비금속의 경우 F0 = 0.04)
-    float3 F0 = lerp(float3(0.8f, 0.8f, 0.8f), float3(0.9f, 0.9f, 0.9f), fMetallic);
+        float3 F0 = lerp(float3(0.8f, 0.8f, 0.8f), float3(0.9f, 0.9f, 0.9f), fMetallic);
 	
 	// 하프 벡터 계산
-    float3 H = normalize(vViewDir + vLightDir);
+        float3 H = normalize(vViewDir + vLightDir);
 
     // BRDF 반사광 계산
-    float3 F = FresnelSchlick(max(dot(H, vViewDir), 0.0), F0);
-    float NDF = DistributionGGX(vNormal, H, fRoughness);
-    float G = GeometrySmith(vNormal, vViewDir, vLightDir, fRoughness);
+        float3 F = FresnelSchlick(max(dot(H, vViewDir), 0.0), F0);
+        float NDF = DistributionGGX(vNormal, H, fRoughness);
+        float G = GeometrySmith(vNormal, vViewDir, vLightDir, fRoughness);
 
 	// 스펙큘러 계산 (Cook-Torrance BRDF)
-    float3 numerator = NDF * G * F;
-    float3 denominator = 4.0 * max(dot(vNormal, vViewDir), 0.0) * max(dot(vNormal, vLightDir), 0.0) + 0.001;
-    float3 specular = numerator / denominator;
+        float3 numerator = NDF * G * F;
+        float3 denominator = 4.0 * max(dot(vNormal, vViewDir), 0.0) * max(dot(vNormal, vLightDir), 0.0) + 0.001;
+        float3 specular = numerator / denominator;
 	
 	// 확산광 계산 (Lambertian Diffuse)
-    float3 kS = F; // 스펙큘러 계수
-    float3 kD = 1.0 - kS; // 디퓨즈 계수
-    kD *= 1.0 - fMetallic; // 금속성 물질에서는 확산 성분이 적음
-    float3 diffuse = kD * g_vLightDiffuse.rgb * max(dot(vNormal, vLightDir), 0.0);
+        float3 kS = F; // 스펙큘러 계수
+        float3 kD = 1.0 - kS; // 디퓨즈 계수
+        kD *= 1.0 - fMetallic; // 금속성 물질에서는 확산 성분이 적음
+        float3 diffuse = kD * g_vLightDiffuse.rgb * max(dot(vNormal, vLightDir), 0.0);
 	
 	// 최종 색상 계산
-    float3 ambient = g_vLightAmbient.rgb + fAmbietnOcc;
-    float3 finalColor = ambient + (diffuse + specular) * g_vLightDiffuse.rgb;
-
+        float3 ambient = g_vLightAmbient.rgb + fAmbietnOcc;
+        float3 finalColor = ambient + (diffuse + specular) * g_vLightDiffuse.rgb;
+    }
     // 최종 출력
     Out.vShade = float4(finalColor, 1.0);
     Out.vSpecular = float4(specular, 1.0f);
 
+    
+    
+    
+    
+    
+    
+    
     float fShadowPower = 1.f;
     if (fViewZ <= 15.f)
     {

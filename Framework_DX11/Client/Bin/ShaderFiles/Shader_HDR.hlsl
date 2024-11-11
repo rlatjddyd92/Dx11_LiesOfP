@@ -1,4 +1,8 @@
-Texture2D g_InputTexture : register(t0);
+#include "Shader_Engine_Defines.hlsli"
+
+matrix g_WorldMatrix, g_ViewMatrix, g_ProjMatrix;
+
+Texture2D g_BackTexture : register(t0);
 StructuredBuffer<float> g_InputAvgLum : register(t0);
 RWStructuredBuffer<float> g_OutputAvgLum : register(u0);
 groupshared float SharedPositions[1024];
@@ -7,7 +11,23 @@ uint2 g_vRes;
 uint g_iDomain;
 uint g_iGroupSize;
 static const float4 LUM_FACTOR = float4(0.299, 0.587, 0.114, 0);
-//-------------------------------------------------------------------------------------------------
+
+float g_fMiddleGrey = 1.f;
+float g_fLumWhiteSqr = 1.f;
+StructuredBuffer<float> g_Avg : register(t1);
+
+float3 ToneMapping(float3 vHDRColor)
+{
+    // 현재 픽셀에 대한 휘도 스케일 계산
+    float fLScale = dot(vHDRColor, LUM_FACTOR);
+    fLScale *= g_fMiddleGrey / g_Avg[0]; //AvgLum[0];
+    fLScale = (fLScale + fLScale * fLScale / g_fLumWhiteSqr) / (1.f + fLScale);
+
+    // 휘도 스케일을 픽셀 색상에 적용
+    return vHDRColor * fLScale;
+}
+
+
 float DownScale4x4(uint2 vPixel, uint groupThreadId)
 {
     float avgLum = 0.f;
@@ -20,7 +40,7 @@ float DownScale4x4(uint2 vPixel, uint groupThreadId)
     {
 			[unroll]
         for (int j = 0; j < 4; ++j)
-            vDownScaled += g_InputTexture.Load(iFullResPos, int2(j, i));
+            vDownScaled += g_BackTexture.Load(iFullResPos, int2(j, i));
     }
     vDownScaled /= 16;
 
@@ -76,7 +96,7 @@ void CS_FIRST(uint3 groupId : SV_GroupID, uint3 groupThreadId : SV_GroupThreadID
 
 
 #define MAX_GROUPS 64
-// 공유 메모리 그룹에 중간 값 저장
+// 공유 메모리 그룹에 값 저장
 groupshared float SharedAvgFinal[MAX_GROUPS];
 
 [numthreads(MAX_GROUPS, 1, 1)]
@@ -123,7 +143,61 @@ void CS_SECOND(uint3 groupId : SV_GroupID, uint3 groupThreadId : SV_GroupThreadI
         g_OutputAvgLum[0] = max(fFinalLumValue, 0.0001);
     }
 }
-//-------------------------------------------------------------------------------------------------
+
+struct VS_IN
+{
+    float3 vPosition : POSITION;
+    float2 vTexcoord : TEXCOORD0;
+};
+
+struct VS_OUT
+{
+    float4 vPosition : SV_POSITION;
+    float2 vTexcoord : TEXCOORD0;
+};
+
+VS_OUT VS_MAIN( /*정점*/VS_IN In)
+{
+    VS_OUT Out = (VS_OUT) 0;
+
+    vector vPosition = mul(vector(In.vPosition, 1.f), g_WorldMatrix);
+
+    vPosition = mul(vPosition, g_ViewMatrix);
+    vPosition = mul(vPosition, g_ProjMatrix);
+
+    Out.vPosition = vPosition;
+    Out.vTexcoord = In.vTexcoord;
+
+    return Out;
+}
+
+struct PS_IN
+{
+    float4 vPosition : SV_POSITION;
+    float2 vTexcoord : TEXCOORD0;
+	
+};
+
+struct PS_OUT
+{
+    vector vColor : SV_TARGET0;
+};
+
+PS_OUT FinalPassPS(PS_IN In)
+{
+    PS_OUT Out = (PS_OUT) 0;
+    
+    float3 vColor = g_BackTexture.Sample(PointSampler, In.vTexcoord).xyz;
+   
+    // 톤 매핑(HDR 색을 LDR색으로 변환)
+    vColor = ToneMapping(vColor);
+
+    Out.vColor = float4(vColor, 1.f);
+
+    // LDR 값 출력
+    return Out;
+}
+
 technique11 DefaultTechnique
 {
     pass Pass_First
@@ -140,12 +214,17 @@ technique11 DefaultTechnique
         PixelShader = NULL;
         ComputeShader = compile cs_5_0 CS_SECOND();
     }
+    pass Pass_Final
+    {
+        VertexShader = compile vs_5_0 VS_MAIN();
+        GeometryShader = NULL;
+        PixelShader = compile ps_5_0 FinalPassPS();
+        ComputeShader = NULL;
+    }
 }
 
 
-//#include "Shader_Engine_Defines.hlsli"
 
-//matrix g_WorldMatrix, g_ViewMatrix, g_ProjMatrix;
 //matrix g_ViewMatrixInv, g_ProjMatrixInv;
 //matrix g_CameraViewMatrix;
 //texture2D g_Texture;

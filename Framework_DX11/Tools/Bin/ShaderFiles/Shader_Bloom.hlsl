@@ -10,6 +10,23 @@ texture2D		g_BlurTexture;
 float2          g_vScreenSize;
 bool            g_isSelectBright = false;
 
+float g_fMiddleGrey = 1.f;
+float g_fLumWhiteSqr = 1.f;
+StructuredBuffer<float> g_Avg : register(t1);
+
+static const float4 LUM_FACTOR = float4(0.299, 0.587, 0.114, 0);
+
+float3 ToneMapping(float3 vHDRColor)
+{
+    // 현재 픽셀에 대한 휘도 스케일 계산
+    float fLScale = dot(vHDRColor, LUM_FACTOR);
+    fLScale *= g_fMiddleGrey / g_Avg[0]; //AvgLum[0];
+    fLScale = (fLScale + fLScale * fLScale / g_fLumWhiteSqr) / (1.f + fLScale);
+
+    // 휘도 스케일을 픽셀 색상에 적용
+    return vHDRColor * fLScale;
+}
+
 struct VS_IN
 {
 	float3 vPosition : POSITION;	
@@ -68,7 +85,7 @@ float Get_BloomCurve(float x)
     result = max(0, x - 1.2f);
     result *= result;
 
-    return result * 0.7f;
+    return result * 0.8f;
 }
 
 /* 1. 픽셀의 최종적인 색상을 결정한다. */
@@ -76,7 +93,7 @@ PS_OUT PS_MAIN_DEBUG(PS_IN In)
 {
     PS_OUT Out = (PS_OUT) 0;
 	
-    Out.vColor = g_Texture.Sample(LinearSampler, In.vTexcoord);
+    Out.vColor = g_Texture.Sample(LinearSampler, In.vTexcoord) * g_Avg[0];
 
     return Out;
 }
@@ -103,7 +120,7 @@ PS_OUT PS_MAIN_DOWNSAMPLE(PS_IN In)
 
     if (g_isSelectBright)
     {
-        float fIntensity = max(dot(vColor.rgb, float3(5.f, 5.f, 5.f)) * vColor.a, 0.1f);
+        float fIntensity = max(dot(vColor.rgb, float3(1.f, 1.f, 1.f)) * vColor.a, 0.1f);
     
         float fBloomIntensity = min(Get_BloomCurve(fIntensity), 10.f);
         vColor = vColor * fBloomIntensity / fIntensity;

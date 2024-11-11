@@ -557,6 +557,16 @@ HRESULT CGameInstance::Clear_MRT(const _wstring& strTargetTag)
 	return m_pTarget_Manager->Clear_MRT(strTargetTag);
 }
 
+ID3D11Buffer* CGameInstance::Get_Buffer(const _wstring& strTargetTag)
+{
+	return m_pTarget_Manager->Get_Buffer(strTargetTag);
+}
+
+ID3D11UnorderedAccessView* CGameInstance::Get_UAV(const _wstring& strTargetTag)
+{
+	return m_pTarget_Manager->Get_UAV(strTargetTag);
+}
+
 #ifdef _DEBUG
 HRESULT CGameInstance::Ready_RT_Debug(const _wstring & strTargetTag, _float fX, _float fY, _float fSizeX, _float fSizeY)
 {

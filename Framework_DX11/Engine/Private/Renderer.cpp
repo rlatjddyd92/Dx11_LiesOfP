@@ -233,11 +233,12 @@ HRESULT CRenderer::Initialize()
 		return E_FAIL;
 	m_pNoiseTexture_SSAO = CTexture::Create(m_pDevice, m_pContext, TEXT("../Bin/Resources/T_Tile_Noise_01_C_LGS.dds"), 1);
 
-	/*m_pHDRShader = CShader::Create(m_pDevice, m_pContext, TEXT("../Bin/ShaderFiles/Shader_HDR.hlsl"), VTXPOSTEX::Elements, VTXPOSTEX::iNumElements);
+	//m_pHDRShader = CShader::Create(m_pDevice, m_pContext, TEXT("../Bin/ShaderFiles/Shader_HDR.hlsl"), VTXPOSTEX::Elements, VTXPOSTEX::iNumElements, 2);
+	//if (nullptr == m_pHDRShader)
+	//	return E_FAIL;
+	m_pHDRShader = CShader::Create(m_pDevice, m_pContext, TEXT("../Bin/ShaderFiles/Shader_HDR.hlsl"));
 	if (nullptr == m_pHDRShader)
-		return E_FAIL;*/
-	m_pHDRShader = CShader_Compute::Create(m_pDevice, m_pContext, TEXT("../Bin/ShaderFiles/Shader_HDR.hlsl"), "CS_FIRST");
-
+		return E_FAIL;
 
 	m_pDistortionShader = CShader::Create(m_pDevice, m_pContext, TEXT("../Bin/ShaderFiles/Shader_Distortion.hlsl"), VTXPOSTEX::Elements, VTXPOSTEX::iNumElements);
 	if (nullptr == m_pDistortionShader)
@@ -262,7 +263,7 @@ HRESULT CRenderer::Initialize()
 		return E_FAIL;
 	if (FAILED(m_pGameInstance->Ready_RT_Debug(TEXT("Target_SSAO_BlurXY"), 100.f, 300.f, 200.f, 200.f)))
 		return E_FAIL;
-	if (FAILED(m_pGameInstance->Ready_RT_Debug(TEXT("Target_HDR"), 100.f, 500.f, 200.f, 200.f)))
+	if (FAILED(m_pGameInstance->Ready_RT_Debug(TEXT("Target_Bloom_BlurXY2"), 100.f, 500.f, 200.f, 200.f)))
 		return E_FAIL;
 
 	if (FAILED(m_pGameInstance->Ready_RT_Debug(TEXT("Target_Specular"), 300.f, 100.f, 200.f, 200.f)))
@@ -324,11 +325,11 @@ HRESULT CRenderer::Draw()
 	if (FAILED(Render_HDR()))
 		return E_FAIL;
 
-	//if (FAILED(Render_Bloom()))	// 다시 고치기
-	//	return E_FAIL;
-
-	if(FAILED(Render_LDR()))
+	if (FAILED(Render_Bloom()))	// 다시 고치기
 		return E_FAIL;
+
+	//if(FAILED(Render_LDR()))
+	//	return E_FAIL;
 
 	if (FAILED(Render_Distortion()))
 		return E_FAIL;
@@ -648,35 +649,81 @@ HRESULT CRenderer::Render_SSAO()
 
 HRESULT CRenderer::Render_HDR()
 {
+	_uint vRes[2] = { _uint(1280.f / 4), _uint(720.f / 4) };
+
+	m_pHDRShader->Bind_RawValue("g_vRes", vRes, sizeof(_uint) * 2);
+
+	_uint iDomain = vRes[0] * vRes[1];
+	if (FAILED(m_pHDRShader->Bind_RawValue("g_iDomain", &iDomain, sizeof(_uint))))
+	return E_FAIL;
+
 	if (FAILED(m_pGameInstance->Bind_RT_ShaderResource(m_pHDRShader, TEXT("Target_BackBuffer"), "g_BackTexture")))
 		return E_FAIL;
-
-// srv uav 바인드하기
-	if (FAILED(m_pGameInstance->Bind_RT_ShaderResource(m_pHDRShader, TEXT("Target_Test0"), "g_BackTexture")))
-		return E_FAIL;
-
 	if (FAILED(m_pGameInstance->BInd_RT_UnorderedView(m_pHDRShader, TEXT("Target_Test0"), "g_OutputAvgLum")))
 		return E_FAIL;
-	
-	if (FAILED(Copy_BackBuffer()))
-		return E_FAIL;
 
-	if (FAILED(m_pGameInstance->Begin_MRT(TEXT("MRT_HDR"))))
+	if (FAILED(m_pHDRShader->Begin(0)))
 		return E_FAIL;
+	m_pContext->Dispatch((UINT)ceil((_float)(1280.f / 4 * 720.f / 4) / 1024.f), 1, 1);
 
-	if (FAILED(m_pHDRShader->Bind_Matrix("g_WorldMatrix", &m_WorldMatrix)))
-		return E_FAIL;
-	if (FAILED(m_pHDRShader->Bind_Matrix("g_ViewMatrix", &m_ViewMatrix)))
-		return E_FAIL;
-	if (FAILED(m_pHDRShader->Bind_Matrix("g_ProjMatrix", &m_ProjMatrix)))
-		return E_FAIL;
+	// 다음 계산에 영향을 주지 않기 위해 클리어시킴 최대 128개 8개
+	m_pContext->CSSetShaderResources(0, 128, m_pClearSRV);
+	m_pContext->CSSetUnorderedAccessViews(0, 8, m_pClearUAV, nullptr);
 
-	m_pHDRShader->Begin(0);
-	m_pVIBuffer->Bind_Buffers();
-	m_pVIBuffer->Render();
+	_uint iGroupSize = (UINT)ceil((_float)(1280.f / 4.f * 720.f / 4.f) / 1024.f);
+	m_pHDRShader->Bind_RawValue("g_iGroupSize", &iGroupSize, sizeof(_uint));
 
-	if (FAILED(m_pGameInstance->End_MRT()))
+	if (FAILED(m_pGameInstance->Bind_RT_ShaderResource(m_pHDRShader, TEXT("Target_BackBuffer"), "g_BackTexture")))
 		return E_FAIL;
+	if (FAILED(m_pGameInstance->BInd_RT_UnorderedView(m_pHDRShader, TEXT("Target_Test1"), "g_OutputAvgLum")))
+		return E_FAIL;
+	m_pHDRShader->Begin(1);
+	m_pContext->Dispatch(1, 1, 1);	
+
+	m_pContext->CSSetShaderResources(0, 128, m_pClearSRV);
+	m_pContext->CSSetUnorderedAccessViews(0, 8, m_pClearUAV, nullptr);
+
+	//D3D11_BUFFER_DESC bufferDesc = {};
+	//bufferDesc.Usage = D3D11_USAGE_STAGING;          // CPU 접근을 위한 Staging
+	//bufferDesc.BindFlags = 0;                       // Bind flags 없음
+	//bufferDesc.CPUAccessFlags = D3D11_CPU_ACCESS_READ; // 읽기 전용 CPU 접근
+	//bufferDesc.MiscFlags = 0;
+	//bufferDesc.StructureByteStride = sizeof(float);   // 데이터 크기
+
+	//// UAV에 연결된 버퍼와 같은 크기로 Staging Buffer를 생성합니다.
+	//bufferDesc.ByteWidth = sizeof(float); // 예를 들어, UAV에 1개의 float가 저장되어 있다면 그 크기만큼
+
+	//ID3D11Buffer* pStagingBuffer = nullptr;
+	//HRESULT hr = m_pDevice->CreateBuffer(&bufferDesc, nullptr, &pStagingBuffer);
+	//if (FAILED(hr)) {
+	//	return hr; // 버퍼 생성 실패 시 처리
+	//}
+
+	//// 2. GPU에서 Staging Buffer로 데이터 복사
+	//// GPU에서 GPU로 데이터를 복사하기 위해 CopyResource 사용
+	//ID3D11Buffer* pBuffer = m_pGameInstance->Get_Buffer(TEXT("Target_Test1"));
+	//m_pContext->CopyResource(pStagingBuffer, pBuffer); // pHDR0UAV는 UAV 리소스
+
+	//// 3. CPU에서 Staging Buffer 데이터 읽기
+	//D3D11_MAPPED_SUBRESOURCE mappedResource;
+	//hr = m_pContext->Map(pStagingBuffer, 0, D3D11_MAP_READ, 0, &mappedResource);
+	//if (FAILED(hr)) {
+	//	return hr; // Map 실패 시 처리
+	//}
+
+	//// Staging Buffer의 데이터를 읽을 수 있습니다.
+	//float* pData = static_cast<float*>(mappedResource.pData);
+
+	//// pData를 사용하여 CPU에서 데이터를 처리합니다.
+	//// 예를 들어, 첫 번째 값을 읽는다면:
+	//float value = pData[0];
+
+	//// 4. Map 해제
+	//m_pContext->Unmap(pStagingBuffer, 0);
+
+	//// 필요하다면 Staging Buffer를 해제합니다.
+	//pStagingBuffer->Release();
+
 
 	return S_OK;
 }
@@ -689,6 +736,9 @@ HRESULT CRenderer::Render_Bloom()
 
 		return S_OK;
 	}
+
+	if (FAILED(Copy_BackBuffer()))
+		return E_FAIL;
 
 	if (FAILED(m_pBloomShader->Bind_Matrix("g_WorldMatrix", &m_WorldMatrix)))
 		return E_FAIL;
@@ -717,8 +767,10 @@ HRESULT CRenderer::Render_Bloom()
 
 	m_pContext->RSSetViewports(iNumViewports, &ViewportDesc);
 
-	if (FAILED(m_pGameInstance->Bind_RT_ShaderResource(m_pBloomShader, TEXT("Target_HDR"), "g_DownSampleTexture")))
+	if (FAILED(m_pGameInstance->Bind_RT_ShaderResource(m_pBloomShader, TEXT("Target_BackBuffer"), "g_DownSampleTexture")))
 		return E_FAIL;
+	//if (FAILED(m_pGameInstance->Bind_RT_ShaderResource(m_pBloomShader, TEXT("Target_HDR"), "g_DownSampleTexture")))
+	//	return E_FAIL;
 
 	if (FAILED(m_pBloomShader->Bind_RawValue("g_isSelectBright", &isSelectBright, sizeof(_bool))))
 		return E_FAIL;
@@ -919,6 +971,9 @@ HRESULT CRenderer::Render_Bloom()
 	m_pVIBuffer->Bind_Buffers();
 	m_pVIBuffer->Render();
 
+	if (FAILED(m_pGameInstance->BInd_RT_UnorderedView(m_pBloomShader, TEXT("Target_Test1"), "g_Avg")))
+		return E_FAIL;
+
 	if (FAILED(m_pGameInstance->End_MRT()))
 		return E_FAIL;
 #pragma endregion
@@ -937,21 +992,21 @@ HRESULT CRenderer::Render_LDR()
 	//if (FAILED(m_pGameInstance->Begin_MRT(TEXT("MRT_LDR"))))
 	//	return E_FAIL;
 
-	//if (FAILED(m_pHDRShader->Bind_Matrix("g_WorldMatrix", &m_WorldMatrix)))
-	//	return E_FAIL;
-	//if (FAILED(m_pHDRShader->Bind_Matrix("g_ViewMatrix", &m_ViewMatrix)))
-	//	return E_FAIL;
-	//if (FAILED(m_pHDRShader->Bind_Matrix("g_ProjMatrix", &m_ProjMatrix)))
-	//	return E_FAIL;
+	if (FAILED(m_pHDRShader->Bind_Matrix("g_WorldMatrix", &m_WorldMatrix)))
+		return E_FAIL;
+	if (FAILED(m_pHDRShader->Bind_Matrix("g_ViewMatrix", &m_ViewMatrix)))
+		return E_FAIL;
+	if (FAILED(m_pHDRShader->Bind_Matrix("g_ProjMatrix", &m_ProjMatrix)))
+		return E_FAIL;
 
-	//if (FAILED(m_pGameInstance->Bind_RT_ShaderResource(m_pHDRShader, TEXT("Target_HDR"), "g_BackTexture")))
-	//	return E_FAIL;
-	//if (FAILED(m_pGameInstance->Bind_RT_ShaderResource(m_pHDRShader, TEXT("Target_Bloom_BlurX2"), "g_BloomTexture")))
-	//	return E_FAIL;
-	//
-	//m_pHDRShader->Begin(1);
-	//m_pVIBuffer->Bind_Buffers();
-	//m_pVIBuffer->Render();
+	if (FAILED(m_pGameInstance->Bind_RT_ShaderResource(m_pHDRShader, TEXT("Target_HDR"), "g_BackTexture")))
+		return E_FAIL;
+	if (FAILED(m_pGameInstance->Bind_RT_ShaderResource(m_pHDRShader, TEXT("Target_Test1"), "g_Avg")))
+		return E_FAIL;
+	
+	m_pHDRShader->Begin(2);
+	m_pVIBuffer->Bind_Buffers();
+	m_pVIBuffer->Render();
 
 	//if (FAILED(m_pGameInstance->End_MRT()))
 	//	return E_FAIL;

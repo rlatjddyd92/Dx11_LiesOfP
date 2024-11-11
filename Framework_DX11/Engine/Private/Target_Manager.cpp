@@ -169,6 +169,24 @@ HRESULT CTarget_Manager::Clear_MRT(const _wstring& strMRTTag)
 	return S_OK;
 }
 
+ID3D11Buffer* CTarget_Manager::Get_Buffer(const _wstring& strTargetTag)
+{
+	CRenderTarget* pRenderTarget = Find_RenderTarget(strTargetTag);
+	if (nullptr == pRenderTarget)
+		return nullptr;
+
+	return pRenderTarget->Get_Buffer();
+}
+
+ID3D11UnorderedAccessView* CTarget_Manager::Get_UAV(const _wstring& strTargetTag)
+{
+	CRenderTarget* pRenderTarget = Find_RenderTarget(strTargetTag);
+	if (nullptr == pRenderTarget)
+		return nullptr;
+
+	return pRenderTarget->Get_UAV();
+}
+
 #ifdef _DEBUG
 
 HRESULT CTarget_Manager::Ready_Debug(const _wstring & strTargetTag, _float fX, _float fY, _float fSizeX, _float fSizeY)

@@ -12,7 +12,8 @@ private:
 	virtual ~CShader() = default;
 
 public:
-	virtual HRESULT Initialize_Prototype(const _tchar* pShaderFilePath, const D3D11_INPUT_ELEMENT_DESC* pElementDesc, _uint iNumElements);
+	virtual HRESULT Initialize_Prototype(const _tchar* pShaderFilePath, const D3D11_INPUT_ELEMENT_DESC* pElementDesc, _uint iNumElements, _int iPassNum = -1);
+	virtual HRESULT Initialize_Prototype(const _tchar* pShaderFilePath);
 	virtual HRESULT Initialize(void* pArg) override;
 
 public:
@@ -34,7 +35,9 @@ private:
 	vector<ID3D11InputLayout*>	m_InputLayouts;
 
 public:
-	static CShader* Create(ID3D11Device* pDevice, ID3D11DeviceContext* pContext, const _tchar* pShaderFilePath, const D3D11_INPUT_ELEMENT_DESC* pElementDesc, _uint iNumElements);
+	static CShader* Create(ID3D11Device* pDevice, ID3D11DeviceContext* pContext, const _tchar* pShaderFilePath, const D3D11_INPUT_ELEMENT_DESC* pElementDesc, _uint iNumElements, _int iPassNum = -1);
+	static CShader* Create(ID3D11Device* pDevice, ID3D11DeviceContext* pContext, const _tchar* pShaderFilePath);
+
 	virtual CComponent* Clone(void* pArg) override;
 	virtual void Free() override;
 };

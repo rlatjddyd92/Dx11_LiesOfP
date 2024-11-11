@@ -37,6 +37,10 @@ public:
 	} 
 
 #endif
+	// 다음 단계에 영향을 주지 않기 위해 초기화 용도의 SRV와 UAV
+private:
+	ID3D11ShaderResourceView* m_pClearSRV[128] = { nullptr };
+	ID3D11UnorderedAccessView* m_pClearUAV[8] = { nullptr };
 
 private:
 	ID3D11Device*				m_pDevice = { nullptr };
@@ -52,7 +56,7 @@ private:
 	class CShader*				m_pShader = { nullptr };
 	class CShader*				m_pBloomShader = { nullptr };
 	class CShader*				m_pSSAOShader = { nullptr };
-	class CShader_Compute*				m_pHDRShader = { nullptr };
+	class CShader*				m_pHDRShader = { nullptr };
 	class CShader*				m_pDistortionShader = { nullptr };
 
 	class CVIBuffer_Rect*		m_pVIBuffer = { nullptr };

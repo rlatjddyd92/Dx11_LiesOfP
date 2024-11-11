@@ -11,8 +11,16 @@ private:
 	virtual ~CRenderTarget() = default;
 
 public:
+	ID3D11Buffer* Get_Buffer() const {
+		return m_pBuffer;
+	}
+
 	ID3D11RenderTargetView* Get_RTV() const {
 		return m_pRTV;
+	}
+
+	ID3D11UnorderedAccessView* Get_UAV() const {
+		return m_pUAV;
 	}
 
 public:
@@ -42,11 +50,11 @@ private:
 	ID3D11Device*				m_pDevice = { nullptr };
 	ID3D11DeviceContext*		m_pContext = { nullptr };
 
-	ID3D11Buffer*				m_pBuffer = nullptr;
+	ID3D11Buffer*				m_pBuffer = { nullptr };
 	ID3D11Texture2D*			m_pTexture2D = { nullptr };
 	ID3D11RenderTargetView*		m_pRTV = { nullptr };
 	ID3D11ShaderResourceView*	m_pSRV = { nullptr };
-	ID3D11UnorderedAccessView*	m_pUAV = nullptr;
+	ID3D11UnorderedAccessView*	m_pUAV = { nullptr };
 	_float4						m_vClearColor = {};
 
 #ifdef _DEBUG

@@ -145,6 +145,9 @@ public:
 	HRESULT Copy_RenderTarget(const _wstring& strTargetTag, ID3D11Texture2D* pTexture);
 	HRESULT Clear_MRT(const _wstring& strTargetTag);
 
+	ID3D11Buffer* Get_Buffer(const _wstring& strTargetTag);
+	ID3D11UnorderedAccessView* Get_UAV(const _wstring& strTargetTag);
+
 #ifdef _DEBUG
 	HRESULT Ready_RT_Debug(const _wstring& strTargetTag, _float fX, _float fY, _float fSizeX, _float fSizeY);
 	HRESULT Render_MRT_Debug(const _wstring& strMRTTag, class CShader* pShader, class CVIBuffer_Rect* pVIBuffer);

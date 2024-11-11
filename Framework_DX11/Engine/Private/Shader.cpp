@@ -17,7 +17,7 @@ CShader::CShader(const CShader & Prototype)
 		Safe_AddRef(pInputLayout);
 }
 
-HRESULT CShader::Initialize_Prototype(const _tchar * pShaderFilePath, const D3D11_INPUT_ELEMENT_DESC* pElementDesc, _uint iNumElements)
+HRESULT CShader::Initialize_Prototype(const _tchar * pShaderFilePath, const D3D11_INPUT_ELEMENT_DESC* pElementDesc, _uint iNumElements, _int iPassNum)
 {
 	_uint			iHlslFlag = { 0 };
 
@@ -38,7 +38,6 @@ HRESULT CShader::Initialize_Prototype(const _tchar * pShaderFilePath, const D3D1
 		return E_FAIL;
 
 	D3DX11_TECHNIQUE_DESC		TechniqueDesc{};
-
 	pTechnique->GetDesc(&TechniqueDesc);
 
 	m_iNumPasses = TechniqueDesc.Passes;
@@ -73,12 +72,64 @@ HRESULT CShader::Initialize_Prototype(const _tchar * pShaderFilePath, const D3D1
 		//	{ "TEXCOORD", 0, DXGI_FORMAT_R32G32_FLOAT, 0, 12, D3D11_INPUT_PER_VERTEX_DATA, 0 },
 		//};
 		
-		ID3D11InputLayout*			pInputLayout;
+		if (iPassNum == -1 || (i == iPassNum))
+		{
+			ID3D11InputLayout* pInputLayout;
 
-		if (FAILED(m_pDevice->CreateInputLayout(pElementDesc, iNumElements, PassDesc.pIAInputSignature, PassDesc.IAInputSignatureSize, &pInputLayout)))
+			HRESULT hr = m_pDevice->CreateInputLayout(pElementDesc, iNumElements, PassDesc.pIAInputSignature, PassDesc.IAInputSignatureSize, &pInputLayout);
+			if (FAILED(hr)) {
+				// 오류 코드 출력
+				hr;
+				return E_FAIL;
+			}
+
+			m_InputLayouts.emplace_back(pInputLayout);
+		}
+	}
+
+	return S_OK;
+}
+
+HRESULT CShader::Initialize_Prototype(const _tchar* pShaderFilePath)
+{
+	_uint			iHlslFlag = { 0 };
+
+#ifdef _DEBUG
+	iHlslFlag = D3DCOMPILE_DEBUG | D3DCOMPILE_SKIP_OPTIMIZATION;
+#else
+	iHlslFlag = D3DCOMPILE_OPTIMIZATION_LEVEL1;
+#endif
+
+	ID3DBlob* pErrorMsg = { nullptr };
+
+	/* 내가 작성한 쉐이더 파일을 빌드하여 객체화(ID3DX11Effect*) 했다. */
+	if (FAILED(D3DX11CompileEffectFromFile(pShaderFilePath, nullptr, D3D_COMPILE_STANDARD_FILE_INCLUDE, iHlslFlag, 0, m_pDevice, &m_pEffect, nullptr)))
+		return E_FAIL;
+
+	ID3DX11EffectTechnique* pTechnique = m_pEffect->GetTechniqueByIndex(0);
+	if (nullptr == pTechnique)
+		return E_FAIL;
+
+	D3DX11_TECHNIQUE_DESC		TechniqueDesc{};
+	pTechnique->GetDesc(&TechniqueDesc);
+
+	m_iNumPasses = TechniqueDesc.Passes;
+
+	for (size_t i = 0; i < m_iNumPasses; i++)
+	{
+		ID3DX11EffectPass* pPass = pTechnique->GetPassByIndex(0);
+		if (nullptr == pPass)
 			return E_FAIL;
 
-		m_InputLayouts.emplace_back(pInputLayout);
+		D3DX11_PASS_DESC	PassDesc{};
+		pPass->GetDesc(&PassDesc);
+
+		//ID3D11InputLayout* pInputLayout;
+
+		//if (FAILED(m_pDevice->CreateInputLayout(pElementDesc, iNumElements, PassDesc.pIAInputSignature, PassDesc.IAInputSignatureSize, &pInputLayout)))
+		//	return E_FAIL;
+
+		//m_InputLayouts.emplace_back(pInputLayout);
 	}
 
 	return S_OK;
@@ -94,7 +145,8 @@ HRESULT CShader::Begin(_uint iPassIndex)
 	if (iPassIndex >= m_iNumPasses)
 		return E_FAIL;
 
-	m_pContext->IASetInputLayout(m_InputLayouts[iPassIndex]);
+	if (m_InputLayouts.size() > 0 && nullptr != m_InputLayouts[iPassIndex])
+		m_pContext->IASetInputLayout(m_InputLayouts[iPassIndex]);
 
 	ID3DX11EffectPass*	pPass = m_pEffect->GetTechniqueByIndex(0)->GetPassByIndex(iPassIndex);
 	if (nullptr == pPass)
@@ -208,11 +260,24 @@ HRESULT CShader::Bind_CBuffer(const _char* pConstantName, ID3D11Buffer* pBuffer)
 	return S_OK;
 }
 
-CShader * CShader::Create(ID3D11Device * pDevice, ID3D11DeviceContext * pContext, const _tchar * pShaderFilePath, const D3D11_INPUT_ELEMENT_DESC* pElementDesc, _uint iNumElements)
+CShader * CShader::Create(ID3D11Device * pDevice, ID3D11DeviceContext * pContext, const _tchar * pShaderFilePath, const D3D11_INPUT_ELEMENT_DESC* pElementDesc, _uint iNumElements, _int iPassNum)
 {
 	CShader*		pInstance = new CShader(pDevice, pContext);
 
-	if (FAILED(pInstance->Initialize_Prototype(pShaderFilePath, pElementDesc, iNumElements)))
+	if (FAILED(pInstance->Initialize_Prototype(pShaderFilePath, pElementDesc, iNumElements, iPassNum)))
+	{
+		MSG_BOX(TEXT("Failed to Created : CShader"));
+		Safe_Release(pInstance);
+	}
+
+	return pInstance;
+}
+
+CShader* CShader::Create(ID3D11Device* pDevice, ID3D11DeviceContext* pContext, const _tchar* pShaderFilePath)
+{
+	CShader* pInstance = new CShader(pDevice, pContext);
+
+	if (FAILED(pInstance->Initialize_Prototype(pShaderFilePath)))
 	{
 		MSG_BOX(TEXT("Failed to Created : CShader"));
 		Safe_Release(pInstance);
