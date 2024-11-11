@@ -508,9 +508,19 @@ HRESULT CGameInstance::Render_TextCenter(const _wstring& strFontTag, const _tcha
 #pragma endregion
 
 #pragma region TARGET_MANAGER
-HRESULT CGameInstance::Add_RenderTarget(const _wstring & strTargetTag, _uint iWidth, _uint iHeight, DXGI_FORMAT ePixelFormat, const _float4 & vClearColor, _uint iArraySize)
+HRESULT CGameInstance::Add_RenderTarget(const _wstring & strTargetTag, _uint iWidth, _uint iHeight, DXGI_FORMAT ePixelFormat, const _float4 & vClearColor)
 {
-	return m_pTarget_Manager->Add_RenderTarget(strTargetTag, iWidth, iHeight, ePixelFormat, vClearColor, iArraySize);
+	return m_pTarget_Manager->Add_RenderTarget(strTargetTag, iWidth, iHeight, ePixelFormat, vClearColor);
+}
+
+HRESULT CGameInstance::Add_RenderTarget_Array(const _wstring& strTargetTag, _uint iWidth, _uint iHeight, DXGI_FORMAT ePixelFormat, const _float4& vClearColor, _uint iArraySize)
+{
+	return m_pTarget_Manager->Add_RenderTarget_Array(strTargetTag, iWidth, iHeight, ePixelFormat, vClearColor, iArraySize);
+}
+
+HRESULT CGameInstance::Add_RenderTarget_For_Desc(const _wstring& strTargetTag, D3D11_BUFFER_DESC* const& pBufferDesc, D3D11_TEXTURE2D_DESC* const& pTextureDesc, D3D11_SHADER_RESOURCE_VIEW_DESC* const& pSRVDesc, D3D11_UNORDERED_ACCESS_VIEW_DESC* const& pUAVDesc, const _float4& vClearColor)
+{
+	return m_pTarget_Manager->Add_RenderTarget_For_Desc(strTargetTag, pBufferDesc, pTextureDesc, pSRVDesc, pUAVDesc, vClearColor);
 }
 
 HRESULT CGameInstance::Add_MRT(const _wstring & strMRTTag, const _wstring & strTargetTag)

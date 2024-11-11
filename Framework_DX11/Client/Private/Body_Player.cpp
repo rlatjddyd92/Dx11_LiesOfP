@@ -101,7 +101,7 @@ HRESULT CBody_Player::Render()
 
 		if (nullptr != m_pModelCom->Find_Texture((_uint)i, TEXTURE_TYPE::ROUGHNESS))
 		{
-			if (FAILED(m_pModelCom->Bind_Material(m_pShaderCom, "g_ARMTexture", NORMALS, (_uint)i)))
+			if (FAILED(m_pModelCom->Bind_Material(m_pShaderCom, "g_ARMTexture", ROUGHNESS, (_uint)i)))
 				return E_FAIL;
 		}
 

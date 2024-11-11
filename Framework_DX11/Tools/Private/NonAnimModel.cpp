@@ -108,6 +108,7 @@ HRESULT CNonAnimModel::Render()
 		if (FAILED(Render_NonAnim()))
 			return E_FAIL;
 	}
+	
 }
 
 HRESULT CNonAnimModel::Render_Picking()
@@ -219,6 +220,7 @@ HRESULT CNonAnimModel::Ready_Components(NONMODEL_DESC* pNonAnimDesc)
 				return E_FAIL;
 
 			m_pModelCom = pInstanceModel;
+			Safe_AddRef(m_pModelCom);
 		}
 		else
 		{

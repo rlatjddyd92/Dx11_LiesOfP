@@ -14,13 +14,41 @@ HRESULT CTarget_Manager::Initialize()
 	return S_OK;
 }
 
-HRESULT CTarget_Manager::Add_RenderTarget(const _wstring & strTargetTag, _uint iWidth, _uint iHeight, DXGI_FORMAT ePixelFormat, const _float4 & vClearColor, _uint iArraySize)
+HRESULT CTarget_Manager::Add_RenderTarget(const _wstring& strTargetTag, _uint iWidth, _uint iHeight, DXGI_FORMAT ePixelFormat, const _float4& vClearColor)
 {
 	if (nullptr != Find_RenderTarget(strTargetTag))
 		return E_FAIL;
 
-	CRenderTarget*		pRenderTarget = CRenderTarget::Create(m_pDevice, m_pContext, iWidth, iHeight, ePixelFormat, vClearColor, iArraySize);
+	CRenderTarget* pRenderTarget = CRenderTarget::Create(m_pDevice, m_pContext, iWidth, iHeight, ePixelFormat, vClearColor);
+	if (nullptr == pRenderTarget)
+		return E_FAIL;
+
+	m_RenderTargets.emplace(strTargetTag, pRenderTarget);
+
+	return S_OK;
+}
+
+HRESULT CTarget_Manager::Add_RenderTarget_Array(const _wstring & strTargetTag, _uint iWidth, _uint iHeight, DXGI_FORMAT ePixelFormat, const _float4 & vClearColor, _uint iArraySize)
+{
+	if (nullptr != Find_RenderTarget(strTargetTag))
+		return E_FAIL;
+
+	CRenderTarget*		pRenderTarget = CRenderTarget::Create_Array(m_pDevice, m_pContext, iWidth, iHeight, ePixelFormat, vClearColor, iArraySize);
 	if(nullptr == pRenderTarget)
+		return E_FAIL;
+
+	m_RenderTargets.emplace(strTargetTag, pRenderTarget);
+
+	return S_OK;
+}
+
+HRESULT CTarget_Manager::Add_RenderTarget_For_Desc(const _wstring& strTargetTag, D3D11_BUFFER_DESC* const& pBufferDesc, D3D11_TEXTURE2D_DESC* const& pTextureDesc, D3D11_SHADER_RESOURCE_VIEW_DESC* const& pSRVDesc, D3D11_UNORDERED_ACCESS_VIEW_DESC* const& pUAVDesc, const _float4& vClearColor)
+{
+	if (nullptr != Find_RenderTarget(strTargetTag))
+		return E_FAIL;
+
+	CRenderTarget* pRenderTarget = CRenderTarget::Create_For_Desc(m_pDevice, m_pContext, pBufferDesc, pTextureDesc, pSRVDesc, pUAVDesc, vClearColor);
+	if (nullptr == pRenderTarget)
 		return E_FAIL;
 
 	m_RenderTargets.emplace(strTargetTag, pRenderTarget);
@@ -71,15 +99,14 @@ HRESULT CTarget_Manager::Begin_MRT(const _wstring& strMRTTag, ID3D11DepthStencil
 
 	for (auto& pRenderTarget : *pMRTList)
 	{
-		if(isClear)
+		if (isClear)
 			pRenderTarget->Clear();
 		pRenderTargets[iIndex++] = pRenderTarget->Get_RTV();
 	}
 
 	if (nullptr != pDSV)
 	{
-
-			m_pContext->ClearDepthStencilView(pDSV, D3D11_CLEAR_DEPTH | D3D11_CLEAR_STENCIL, 1.f, 0);
+		m_pContext->ClearDepthStencilView(pDSV, D3D11_CLEAR_DEPTH | D3D11_CLEAR_STENCIL, 1.f, 0);
 		m_pContext->OMSetRenderTargets(iIndex, pRenderTargets, pDSV);
 	}
 	else
@@ -105,6 +132,15 @@ HRESULT CTarget_Manager::Bind_ShaderResource(CShader * pShader, const _wstring &
 		return E_FAIL;
 
 	return pRenderTarget->Bind_ShaderResource(pShader, pConstantName);	
+}
+
+HRESULT CTarget_Manager::Bind_UnorderedAccess(CShader* pShader, const _wstring& strTargetTag, const _char* pConstantName)
+{
+	CRenderTarget* pRenderTarget = Find_RenderTarget(strTargetTag);
+	if (nullptr == pRenderTarget)
+		return E_FAIL;
+
+	return pRenderTarget->Bind_UnorderedAccess(pShader, pConstantName);
 }
 
 HRESULT CTarget_Manager::Copy_RenderTarget(const _wstring & strTargetTag, ID3D11Texture2D * pTexture)

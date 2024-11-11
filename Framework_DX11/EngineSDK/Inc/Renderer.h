@@ -111,6 +111,7 @@ private:
 	HRESULT Ready_LightDepthStencilView();
 	HRESULT Copy_BackBuffer();
 	HRESULT Ready_CascadeDepthStencilView();
+	HRESULT Ready_HDR();
 
 #ifdef _DEBUG
 private:

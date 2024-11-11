@@ -6,6 +6,7 @@ BEGIN(Engine)
 class CShader;
 class CVIBuffer_Point_Instance;
 class CTexture;
+class CShader_Compute;
 END
 
 BEGIN(Tools)
@@ -176,7 +177,15 @@ private:
 	class CTexture* m_pDiffuseTextureCom = { nullptr };
 	class CTexture* m_pNormalTextureCom = { nullptr };
 
-	class CShader_Compute* m_pComputeShader = { nullptr };
+	// 이거 3개는 월드의 역행렬
+	class CShader_Compute* m_pSpreadCS = { nullptr };
+	class CShader_Compute* m_pMoveCS = { nullptr };
+	class CShader_Compute* m_pConvergeCS = { nullptr };
+
+	// 이거 3개는 그냥 월드 행렬
+	class CShader_Compute* m_pSpreadCS_World = { nullptr };
+	class CShader_Compute* m_pMoveCS_World = { nullptr };
+	class CShader_Compute* m_pConvergeCS_World = { nullptr };
 
 private:
 	DEFAULT_DESC m_DefaultDesc = {};
@@ -186,6 +195,8 @@ private:
 
 	PARTICLE_EFFECT_DESC m_SaveDesc = {};
 	_uint m_iNumInstance = { 0 };
+
+	_bool m_isFirst = { false };
 
 private:
 	HRESULT Ready_Components(PARTICLE_EFFECT_DESC* pDesc);

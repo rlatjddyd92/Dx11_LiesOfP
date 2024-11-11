@@ -34,7 +34,6 @@ public:
 		_float3		vPadding_3;
 	}PARTICLE_MOVEMENT;
 
-
 private:
 	CVIBuffer_Point_Instance(ID3D11Device* pDevice, ID3D11DeviceContext* pContext);
 	CVIBuffer_Point_Instance(const CVIBuffer_Point_Instance& Prototype);
@@ -47,7 +46,7 @@ public:
 	virtual HRESULT Render();
 
 public:
-	void Spread_Test(class CShader_Compute* pComputeShader, const PARTICLE_MOVEMENT& MovementData);
+	void DispatchCS(class CShader_Compute* pComputeShader, const PARTICLE_MOVEMENT& MovementData);
 
 #pragma region KEEP
 	virtual _bool Spread(_uint iState, _Matrix WorldMatrix, _float fRenderRatio, _Vec4 vPivot, _float fGravity, _float fTimeDelta,
@@ -91,6 +90,12 @@ private:
 	ID3D11Buffer*				m_pMovementBuffer	= { nullptr };
 	ID3D11UnorderedAccessView*	m_pParticleUAV		= nullptr;
 	ID3D11ShaderResourceView*	m_pParticleSRV		= nullptr;
+
+// TRY
+	D3D11_BUFFER_DESC	m_InitParticleBuffer_Desc = {};
+	ID3D11Buffer*		m_pInitParticleBuffer = nullptr;
+	ID3D11ShaderResourceView* m_pInitParticleSRV = nullptr;
+
 
 private:
 	void Set_NextRandomDir();

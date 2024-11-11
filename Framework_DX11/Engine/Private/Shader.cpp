@@ -158,6 +158,19 @@ HRESULT CShader::Bind_SRV(const _char * pConstantName, ID3D11ShaderResourceView 
 	return pSRVariable->SetResource(pSRV);	
 }
 
+HRESULT CShader::Bind_UAV(const _char* pConstantName, ID3D11UnorderedAccessView* pUAV)
+{
+	ID3DX11EffectVariable* pVariable = m_pEffect->GetVariableByName(pConstantName);
+	if (nullptr == pVariable)
+		return E_FAIL;
+
+	ID3DX11EffectUnorderedAccessViewVariable* pUAVariable = pVariable->AsUnorderedAccessView();
+	if (nullptr == pUAVariable)
+		return E_FAIL;
+
+	return pUAVariable->SetUnorderedAccessView(pUAV);
+}
+
 HRESULT CShader::Bind_SRVs(const _char * pConstantName, ID3D11ShaderResourceView ** ppSRVs, _uint iNumSRVs)
 {
 	ID3DX11EffectVariable*		pVariable = m_pEffect->GetVariableByName(pConstantName);

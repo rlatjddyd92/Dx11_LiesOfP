@@ -114,11 +114,11 @@ float3 FresnelSchlick(float LdotH, float3 fSpecularColor)
 }
 
     // Normal Distribution Function (GGX/Trowbridge-Reitz)
-float DistributionGGX(float3 N, float3 H, float roughness)
+float DistributionGGX(float3 vNormal, float3 vHalfVector, float fRoughness)
 {
-    float a = roughness * roughness;
+    float a = fRoughness * fRoughness;
     float a2 = a * a;
-    float NdotH = max(dot(N, H), 0.0);
+    float NdotH = max(dot(vNormal, vHalfVector), 0.0);
     float NdotH2 = NdotH * NdotH;
 
     float num = a2;
@@ -129,21 +129,40 @@ float DistributionGGX(float3 N, float3 H, float roughness)
 }
 
     // Geometry Function (Schlick-GGX)
-float GeometrySchlickGGX(float NdotV, float roughness)
+float GeometrySchlickGGX(float NdotV, float fRoughness)
 {
-    float r = (roughness + 1.0);
+    float r = (fRoughness + 1.0);
     float k = (r * r) / 8.0;
     return NdotV / (NdotV * (1.0 - k) + k);
 }
 
-float GeometrySmith(float3 N, float3 V, float3 L, float roughness)
+float GeometrySmith(float3 N, float3 V, float3 L, float fRoughness)
 {
     float NdotV = max(dot(N, V), 0.0);
     float NdotL = max(dot(N, L), 0.0);
-    float ggx2 = GeometrySchlickGGX(NdotV, roughness);
-    float ggx1 = GeometrySchlickGGX(NdotL, roughness);
+    float ggx2 = GeometrySchlickGGX(NdotV, fRoughness);
+    float ggx1 = GeometrySchlickGGX(NdotL, fRoughness);
 
     return ggx1 * ggx2;
+}
+
+float3 CalculateCookTorranceBRDF(
+        in float3 vNormal,
+        in float3 vPointToCamera,
+        in float3 vHalfVector,
+        in float3 vPointToLight,
+        in float fRoughness,
+        in float3 F
+    )
+{
+    float NDF = DistributionGGX(vNormal, vHalfVector, fRoughness); //미세면 분포도 NDF계산
+    float G = GeometrySmith(vNormal, vPointToCamera, vPointToLight, fRoughness); //미세면 그림자 계산
+                
+    float3 numerator = NDF * G * F;
+    float denominator = 4.0 * max(dot(vNormal, vPointToCamera), 0.0) * max(dot(vNormal, fRoughness), 0.0) + 0.0001f;
+    float3 specular = numerator / denominator;
+                
+    return specular;
 }
 
 struct VS_IN
@@ -223,7 +242,7 @@ PS_OUT_LIGHT PS_MAIN_LIGHT_DIRECTIONAL(PS_IN In)
 	PS_OUT_LIGHT			Out = (PS_OUT_LIGHT)0;
 
     vector		vARM = g_ARMTexture.Sample(LinearSampler, In.vTexcoord);
-    float		fAmbietnOcc = 1.f;
+    float       fAmbietnOcc = vARM.r;
     float		fRoughness = vARM.g;
     float		fMetallic = vARM.b;
 	
@@ -240,7 +259,7 @@ PS_OUT_LIGHT PS_MAIN_LIGHT_DIRECTIONAL(PS_IN In)
     float3		vReflect = reflect(normalize(g_vLightDir.xyz) * -1.f, normalize(vNormal));
 	
 	// 금속과 비금속을 구분하기 위한 기본 반사도 (비금속의 경우 F0 = 0.04)
-    float3 F0 = lerp(float3(0.3f, 0.3f, 0.3f), float3(0.9f, 0.9f, 0.9f), fMetallic);
+    float3 F0 = lerp(float3(0.8f, 0.8f, 0.8f), float3(0.9f, 0.9f, 0.9f), fMetallic);
 	
 	// 하프 벡터 계산
     float3 H = normalize(vViewDir + vLightDir);
@@ -329,11 +348,12 @@ PS_OUT PS_MAIN_DEFERRED(PS_IN In)
 
     vector vDecal = g_DecalDiffuseTexture.Sample(LinearSampler, In.vTexcoord);
     vDiffuse = vector(lerp(vDiffuse, vDecal, vDecal.a)); // 알파 값에 따라 혼합
-	
+    //vDiffuse = vDiffuse / 3.141592;
+    
 	vector		vShade = g_ShadeTexture.Sample(LinearSampler, In.vTexcoord);
 	vector		vSpecular = g_SpecularTexture.Sample(LinearSampler, In.vTexcoord);
 	
-    Out.vColor = (vDiffuse * vShade + vSpecular) * 1.f; //g_CascadeShadowTexture.Sample(LinearSampler, In.vTexcoord);
+    Out.vColor = (vDiffuse * vShade + vSpecular) * g_CascadeShadowTexture.Sample(LinearSampler, In.vTexcoord);
 
 	vector		vDepthDesc = g_DepthTexture.Sample(PointSampler, In.vTexcoord);
 	float		fViewZ = vDepthDesc.y * 1000.f;

@@ -112,7 +112,7 @@ HRESULT CMesh::Initialize_Prototype_To_Binary(HANDLE* pFile, const CModel* pMode
 	m_pIndices = new _uint[m_iNumIndices];
 	ZeroMemory(m_pIndices, sizeof(_uint) * m_iNumIndices);
 
-	for (_int i = 0; i < m_iNumIndices; ++i)
+	for (_uint i = 0; i < m_iNumIndices; ++i)
 	{
 		ReadFile(*pFile, &m_pIndices[i], sizeof(_uint), &dwByte, nullptr);
 	}
@@ -178,7 +178,7 @@ HRESULT CMesh::Create_BinaryFile(HANDLE* pFile)
 	WriteFile(*pFile, &m_iNumFaces, sizeof(_uint), &dwByte, nullptr);
 
 	//정점 버퍼 저장
-	for (_int i = 0; i < m_iNumVertices; ++i)
+	for (_uint i = 0; i < m_iNumVertices; ++i)
 	{
 		WriteFile(*pFile, &m_pAnimVertices[i], sizeof(VTXANIMMESH), &dwByte, nullptr);
 	}
@@ -201,7 +201,7 @@ HRESULT CMesh::Create_BinaryFile(HANDLE* pFile)
 
 	}
 
-	for (_int k = 0; k < m_iNumIndices; ++k)
+	for (_uint k = 0; k < m_iNumIndices; ++k)
 	{//인덱스 버퍼 저장
 		WriteFile(*pFile, &m_pIndices[k], sizeof(_uint), &dwByte, nullptr);
 	}
@@ -343,7 +343,7 @@ HRESULT CMesh::Ready_VertexBuffer_To_Binary(HANDLE* pFile)
 	m_pAnimVertices = new VTXANIMMESH[m_iNumVertices];
 	ZeroMemory(m_pAnimVertices, sizeof(VTXANIMMESH) * m_iNumVertices);
 
-	for (_int i = 0; i < m_iNumVertices; ++i)
+	for (_uint i = 0; i < m_iNumVertices; ++i)
 	{
 		ReadFile(*pFile, &m_pAnimVertices[i], sizeof(VTXANIMMESH), &dwByte, nullptr);
 	}
@@ -354,7 +354,7 @@ HRESULT CMesh::Ready_VertexBuffer_To_Binary(HANDLE* pFile)
 	m_BoneNaems.reserve(m_iNumBones);
 	m_BoneIndices.reserve(m_iNumBones);
 
-	for (_int i = 0; i < m_iNumBones; ++i)
+	for (_uint i = 0; i < m_iNumBones; ++i)
 	{
 		_float4x4 OffsetMat{};
 		ReadFile(*pFile, &OffsetMat, sizeof(_float4x4), &dwByte, nullptr);
