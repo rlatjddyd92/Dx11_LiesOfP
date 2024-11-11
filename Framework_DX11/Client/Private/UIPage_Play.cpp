@@ -53,14 +53,15 @@ void CUIPage_Play::Priority_Update(_float fTimeDelta)
 
 void CUIPage_Play::Update(_float fTimeDelta)
 {
-#ifdef _DEBUG
-	// Check TestData
-	HP_Gauge_Frame->fRatio = GET_GAMEINTERFACE->GetTestData()->fMax_HP_Now / GET_GAMEINTERFACE->GetTestData()->fMax_HP_Limit;
-	HP_Gauge_Fill->fRatio = GET_GAMEINTERFACE->GetTestData()->fHP_Now / GET_GAMEINTERFACE->GetTestData()->fMax_HP_Now;
 
-#endif
+	__super::Update(fTimeDelta);
 
+	
+}
 
+void CUIPage_Play::Late_Update(_float fTimeDelta)
+{
+	
 	__super::UpdatePart_ByControl(HP_Gauge_Frame);
 	__super::UpdatePart_ByControl(HP_Gauge_Fill);
 
@@ -72,11 +73,6 @@ void CUIPage_Play::Update(_float fTimeDelta)
 		__super::UpdatePart_ByControl(vecSpecial_Gauge_Frame[i]);
 		__super::UpdatePart_ByControl(vecSpecial_Gauge_Fill[i]);
 	}
-	__super::Update(fTimeDelta);
-}
-
-void CUIPage_Play::Late_Update(_float fTimeDelta)
-{
 	
 
 	__super::Late_Update(fTimeDelta);

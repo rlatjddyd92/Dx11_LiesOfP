@@ -39,7 +39,9 @@ HRESULT CUIManager::Initialize_Prototype()
 	if (FAILED(Load_UIDataFile()))
 		return E_FAIL;
 
-
+#ifdef _DEBUG
+	m_pTestData = new TESTDATA;
+#endif
 
 	return S_OK;
 }
@@ -129,39 +131,40 @@ void CUIManager::UIControl_Test(_float fTimeDelta)
 	}
 
 	// 상단 바 
-	if (!KEY_HOLD(KEY::LSHIFT))
+	if (KEY_HOLD(KEY::LSHIFT))
 	{
 		if (KEY_HOLD(KEY::I))
 		{
-			GET_GAMEINTERFACE->GetTestData()->fMax_HP_Now -= 100.f * fTimeDelta;
-			if (GET_GAMEINTERFACE->GetTestData()->fMax_HP_Now < 0.f)
-				GET_GAMEINTERFACE->GetTestData()->fMax_HP_Now = 0.f;
-			GET_GAMEINTERFACE->GetTestData()->fHP_Now = min(GET_GAMEINTERFACE->GetTestData()->fMax_HP_Now, GET_GAMEINTERFACE->GetTestData()->fHP_Now);
-			// 체력바 최대치 감소
+			m_pTestData->fHP_Now -= 100.f * fTimeDelta;
+			if (m_pTestData->fHP_Now < 0.f)
+				m_pTestData->fHP_Now = 0.f;
+			// 체력바 표시 수치 감소
 		}
 		else if (KEY_HOLD(KEY::O))
 		{
-			GET_GAMEINTERFACE->GetTestData()->fMax_HP_Now += 100.f * fTimeDelta;
-			if (GET_GAMEINTERFACE->GetTestData()->fMax_HP_Now > GET_GAMEINTERFACE->GetTestData()->fMax_HP_Limit)
-				GET_GAMEINTERFACE->GetTestData()->fMax_HP_Now = GET_GAMEINTERFACE->GetTestData()->fMax_HP_Limit;
-			// 체력바 최대치 증가
+			m_pTestData->fHP_Now += 100.f * fTimeDelta;
+			if (m_pTestData->fHP_Now > m_pTestData->fMax_HP_Now)
+				m_pTestData->fHP_Now = m_pTestData->fMax_HP_Now;
+			// 체력바 표시 수치 증가 
 		}
+		
 	}
 	else
 	{
 		if (KEY_HOLD(KEY::I))
 		{
-			GET_GAMEINTERFACE->GetTestData()->fHP_Now -= 100.f * fTimeDelta;
-			if (GET_GAMEINTERFACE->GetTestData()->fHP_Now < 0.f)
-				GET_GAMEINTERFACE->GetTestData()->fHP_Now = 0.f;
-			// 체력바 표시 수치 감소
+			m_pTestData->fMax_HP_Now -= 100.f * fTimeDelta;
+			if (m_pTestData->fMax_HP_Now < 0.f)
+				m_pTestData->fMax_HP_Now = 0.f;
+			m_pTestData->fHP_Now = min(m_pTestData->fMax_HP_Now, m_pTestData->fHP_Now);
+			// 체력바 최대치 감소
 		}
 		else if (KEY_HOLD(KEY::O))
 		{
-			GET_GAMEINTERFACE->GetTestData()->fHP_Now += 100.f * fTimeDelta;
-			if (GET_GAMEINTERFACE->GetTestData()->fHP_Now > GET_GAMEINTERFACE->GetTestData()->fMax_HP_Now)
-				GET_GAMEINTERFACE->GetTestData()->fHP_Now = GET_GAMEINTERFACE->GetTestData()->fMax_HP_Now;
-			// 체력바 표시 수치 증가 
+			m_pTestData->fMax_HP_Now += 100.f * fTimeDelta;
+			if (m_pTestData->fMax_HP_Now > m_pTestData->fMax_HP_Limit)
+				m_pTestData->fMax_HP_Now = m_pTestData->fMax_HP_Limit;
+			// 체력바 최대치 증가
 		}
 	}
 
@@ -184,6 +187,8 @@ void CUIManager::UIControl_Loading(_float fTimeDelta)
 
 void CUIManager::UIControl_Play(_float fTimeDelta)
 {
+	m_pUIPage_Play->SetRatio_HPBarMax(m_pTestData->fMax_HP_Now / m_pTestData->fMax_HP_Limit);
+	m_pUIPage_Play->SetRatio_HPBarFill(m_pTestData->fHP_Now / m_pTestData->fMax_HP_Limit);
 }
 
 void CUIManager::UIControl_Inven(_float fTimeDelta)
@@ -193,16 +198,16 @@ void CUIManager::UIControl_Inven(_float fTimeDelta)
 void CUIManager::OpenMainPage()
 {
 	// 게임 첫 시작 화면 세팅 
-	m_vecPage[_int(UIPAGE::PAGE_MAIN)]->SetRender(true);
+	//m_vecPage[_int(UIPAGE::PAGE_MAIN)]->SetRender(true);
 
 }
 
 void CUIManager::OpenLoadingPage()
 {
-	for (auto& iter : m_vecPage)
-		iter->SetRender(false);
+	//for (auto& iter : m_vecPage)
+	//	iter->SetRender(false);
 
-	m_vecPage[_int(UIPAGE::PAGE_LOADING)]->SetRender(true);
+	//m_vecPage[_int(UIPAGE::PAGE_LOADING)]->SetRender(true);
 }
 
 void CUIManager::SwicthPage(UIPAGE eNextPage)
@@ -253,9 +258,12 @@ HRESULT CUIManager::Load_UIDataFile()
 		ReadFile(hFile, &fPosition, sizeof(_float2), &dwByte, nullptr);
 
 		m_vecPage[i]->SetUIPagePosition(fPosition);
+		
 
 		if (FAILED(Load_UIDataFile_Part(hFile, &dwByte, i)))
 			MSG_BOX(TEXT("UI 데이터 불러오기 실패"));
+
+		m_vecPage[i]->Ready_UIPart_Group_Control();
 	}
 
 	CloseHandle(hFile);
@@ -272,19 +280,16 @@ HRESULT CUIManager::Make_UIPage(_int iIndex)
 	if (iIndex == _int(UIPAGE::PAGE_MAIN))
 	{
 		m_pUIPage_Main = CUIPage_Main::Create(m_pDevice, m_pContext);
-		m_pUIPage_Main->Ready_UIPart_Group_Control();
 		m_vecPage[iIndex] = static_cast<CUIPage*>(m_pUIPage_Main);
 	}
 	else if (iIndex == _int(UIPAGE::PAGE_LOADING))
 	{
 		m_pUIPage_Loading = CUIPage_Loading::Create(m_pDevice, m_pContext);
-		m_pUIPage_Loading->Ready_UIPart_Group_Control();
 		m_vecPage[iIndex] = static_cast<CUIPage*>(m_pUIPage_Loading);
 	}
 	else if (iIndex == _int(UIPAGE::PAGE_PLAY))
 	{
 		m_pUIPage_Play = CUIPage_Play::Create(m_pDevice, m_pContext);
-		m_pUIPage_Play->Ready_UIPart_Group_Control();
 		m_vecPage[iIndex] = static_cast<CUIPage*>(m_pUIPage_Play);
 	}
 
@@ -387,4 +392,5 @@ void CUIManager::Free()
 	m_vecPage.clear();
 
 	Safe_Release(m_pUIRender_Client);
+	Safe_Delete(m_pTestData);
 }

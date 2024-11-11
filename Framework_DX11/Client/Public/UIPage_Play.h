@@ -53,7 +53,8 @@ public:
 	const vector<UPART*>& Get_UIPartInfo() { return m_vecPart; }
 	virtual HRESULT Ready_UIPart_Group_Control() override;
 
-	
+	void SetRatio_HPBarMax(_float fRatio) { HP_Gauge_Frame->fRatio = fRatio; }
+	void SetRatio_HPBarFill(_float fRatio) { HP_Gauge_Fill->fRatio = fRatio; }
 
 public:
 	

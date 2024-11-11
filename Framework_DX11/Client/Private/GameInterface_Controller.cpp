@@ -15,9 +15,7 @@ HRESULT CGameInterface_Controller::Initialize_GameInterface(ID3D11Device** pDevi
 	m_pDevice = *pDevice;
 	m_pContext = *pContext;
 
-#ifdef _DEBUG
-	m_pTestData = new TESTDATA;
-#endif
+
 
 	// UI 매니저 세팅 
 	m_pUIManager = CUIManager::Create(m_pDevice, m_pContext);
@@ -37,7 +35,7 @@ void CGameInterface_Controller::Update_GameInterface(_float fTimeDelta)
 
 void CGameInterface_Controller::Release_GameInterface()
 {
-	Safe_Delete(m_pTestData);
+	
 	Safe_Release(m_pGameInstance);
 	Safe_Release(m_pUIManager);
 	

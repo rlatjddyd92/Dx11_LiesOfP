@@ -89,7 +89,7 @@ public:
 	{
 		list<_int> PartIndexlist;
 
-		_float fRatio = 0.f;
+		_float fRatio = 1.f;
 
 		_bool bUpdate = true;
 		_bool bRender = true;
