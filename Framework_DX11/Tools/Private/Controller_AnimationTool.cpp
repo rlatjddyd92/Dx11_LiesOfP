@@ -33,6 +33,11 @@ HRESULT CController_AnimationTool::Initialize(ID3D11Device* pDevice, ID3D11Devic
 	Desc.vScale = { 2.f,2.f,2.f };
 	Desc.vRotation = { 0.f,0.f,0.f };
 	Desc.pUpdateCtr = &m_bObjRenderCtr;
+	Desc.fRotationPerSec = 90.f;
+	Desc.fSpeedPerSec = 1.f;
+
+	Desc.pPos_TB = &m_vPos;
+	Desc.pRenderCtr_TB = &m_bTargetBallRender;
 	
 	strcpy_s(m_szCurrentModelText, "Prototype_AnimModel_Player");
 	strcpy_s(Desc.szModelTag, m_szCurrentModelText);
@@ -211,8 +216,8 @@ void CController_AnimationTool::ListUp_Anim()
 		}
 	}
 
-	ImGui::Text("\t X \t Y \t Z");
-	ImGui::PushItemWidth(100); // 크기조정
+	ImGui::Text("\t X \t\t Y \t\t Z");
+	ImGui::PushItemWidth(80); // 크기조정
 	ImGui::InputFloat("##PosXModel", &m_fPosXModel);	ImGui::SameLine();
 	ImGui::InputFloat("##PosYModel", &m_fPosYModel);	ImGui::SameLine();
 	ImGui::InputFloat("##PosZModel", &m_fPosZModel);
@@ -226,7 +231,7 @@ void CController_AnimationTool::ListUp_Anim()
 
 	ImGui::Text("\n");
 
-	if (ImGui::Button("SaveBinFile"))
+	if (ImGui::Button("SaveBinFile_AllModels"))
 	{
 		if (m_Models.size() > 0)
 		{
@@ -235,6 +240,11 @@ void CController_AnimationTool::ListUp_Anim()
 				pModelCom.second->Create_BinaryFile(pModelCom.first.c_str());
 			}
 		}
+	}
+
+	if (ImGui::Button("SaveBinFile_NowModel"))
+	{
+		m_pCopyModelCom->Create_BinaryFile(m_ModelNames[m_iCurSelected_Index_Model]);
 	}
 	ImGui::Text("\n");
 
@@ -335,6 +345,7 @@ void CController_AnimationTool::ListUp_Anim()
 			ImGui::EndListBox();
 		}
 	}
+	ImGui::Text("SelecedAnim _ Main : %d", m_iCurSelected_Index_Anim);
 
 	ImGui::PopItemWidth();
 

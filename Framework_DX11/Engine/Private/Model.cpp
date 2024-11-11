@@ -261,6 +261,10 @@ HRESULT CModel::SetUp_NextAnimation(_uint iNextAnimationIndex, _bool isLoop, _fl
 	if (iNextAnimationIndex >= m_iNumAnimations)
 		return E_FAIL;
 
+	//같은걸로 바꿀순 없어
+	if (m_iCurrentAnimIndex == iNextAnimationIndex)
+		return E_FAIL;
+
 	// 이미 같은걸로 바꾸고 있어
 	if (m_isChangeAni == true && iNextAnimationIndex == m_tChaneAnimDesc.iNextAnimIndex)
 		return S_OK;
@@ -285,6 +289,9 @@ HRESULT CModel::SetUp_NextAnimation(_uint iNextAnimationIndex, _bool isLoop, _fl
 HRESULT CModel::SetUp_NextAnimation_Boundary(_uint iNextAnimationIndex, _bool isLoop, _float fChangeDuration, _uint iStartFrame)
 {
 	if (iNextAnimationIndex >= m_iNumAnimations)
+		return E_FAIL;
+	//같은걸로 바꿀순 없어
+	if (m_iCurrentAnimIndex_Boundary == iNextAnimationIndex)
 		return E_FAIL;
 
 	// 이미 같은걸로 바꾸고 있어
@@ -337,20 +344,9 @@ _matrix CModel::CalcMatrix_forVtxAnim(_uint iMeshNum, VTXANIMMESH VtxStruct)
 	return m_Meshes[iMeshNum]->CalcMatrix_forVtxAnim(m_Bones, VtxStruct); //m_isUseBoundary
 }
 
-_vector CModel::Play_Animation(_float fTimeDelta, _bool* pOut, OUTPUT_EVKEY* pOutputKey, OUTPUT_EVKEY* pOutputKey_Boundary)
+_vector CModel::Play_Animation(_float fTimeDelta, _bool* pOut, list<OUTPUT_EVKEY>* pEvKeyList)
 {
 	_float fAddTime = fTimeDelta * m_bPlayAnimCtr;
-
-	if (pOutputKey != nullptr)
-	{
-		pOutputKey->bActiveEffect = false;
-	}		
-	//기본적으로 이런 이펙트들의 경우, 보간되는 도중에는 필요치 않음
-	if (pOutputKey_Boundary != nullptr)
-	{
-		pOutputKey_Boundary->bActiveEffect = false;		//이펙트 재생 여부 값 false로 초기화
-	}
-	
 
 	//상하체 분리에 영향받지 않는 부분들의 업데이트
 	if (m_isChangeAni)
@@ -423,7 +419,7 @@ _vector CModel::Play_Animation(_float fTimeDelta, _bool* pOut, OUTPUT_EVKEY* pOu
 	else
 	{
 		/* 뼈를 움직인다.(CBone`s m_TransformationMatrix행렬을 갱신한다.) */
-		m_iCurrentFrame = m_Animations[m_iCurrentAnimIndex]->Update_TransformationMatrices(m_Bones, &m_CurrentTrackPosition, m_KeyFrameIndices[m_iCurrentAnimIndex], m_isLoop, &m_isEnd_Animations[m_iCurrentAnimIndex], fAddTime, false, pOutputKey);
+		m_iCurrentFrame = m_Animations[m_iCurrentAnimIndex]->Update_TransformationMatrices(m_Bones, &m_CurrentTrackPosition, m_KeyFrameIndices[m_iCurrentAnimIndex], m_isLoop, &m_isEnd_Animations[m_iCurrentAnimIndex], fAddTime, false, pEvKeyList);
 	
 	}
 
@@ -443,7 +439,16 @@ _vector CModel::Play_Animation(_float fTimeDelta, _bool* pOut, OUTPUT_EVKEY* pOu
 			vector<CChannel*> CurrentChannels = m_Animations[m_iCurrentAnimIndex_Boundary]->Get_Channels();
 			vector<CChannel*> NextChannels = m_Animations[m_tChaneAnimDesc_Boundary.iNextAnimIndex]->Get_Channels();
 
-			m_CurrentTrackPosition_Boundary += fAddTime;
+
+			if (m_isChangeAni_Boundary && m_isChangeAni && (m_tChaneAnimDesc_Boundary.iNextAnimIndex == m_tChaneAnimDesc.iNextAnimIndex))
+			{
+				m_CurrentTrackPosition_Boundary = m_CurrentTrackPosition;
+			}
+			else
+			{
+				m_CurrentTrackPosition_Boundary += fAddTime;
+			}
+
 			for (_int i = 0; i < CurrentChannels.size(); ++i)
 			{
 				if (m_Bones[CurrentChannels[i]->Get_BoneIndex()]->Get_IsChildOf_Boundary() == false)
@@ -509,34 +514,23 @@ _vector CModel::Play_Animation(_float fTimeDelta, _bool* pOut, OUTPUT_EVKEY* pOu
 			//if 상하체 애니메이션이 같으면 시간누적 없는 업데이트 하체 변수로 호출
 			if (m_iCurrentAnimIndex == m_iCurrentAnimIndex_Boundary)
 			{
-				m_iCurrentFrame = m_Animations[m_iCurrentAnimIndex_Boundary]->Update_TransformationMatrices(m_Bones, &m_CurrentTrackPosition, m_KeyFrameIndices[m_iCurrentAnimIndex_Boundary], m_isLoop, &m_isEnd_Animations_Boundary[m_iCurrentAnimIndex_Boundary], fAddTime, true, pOutputKey_Boundary, true);
+				m_iCurrentFrame = m_Animations[m_iCurrentAnimIndex_Boundary]->Update_TransformationMatrices(m_Bones, &m_CurrentTrackPosition, m_KeyFrameIndices[m_iCurrentAnimIndex_Boundary], m_isLoop, &m_isEnd_Animations_Boundary[m_iCurrentAnimIndex_Boundary], fAddTime, true, pEvKeyList, true);
 			}
 			else
 			{
-				m_iCurrentFrame = m_Animations[m_iCurrentAnimIndex_Boundary]->Update_TransformationMatrices(m_Bones, &m_CurrentTrackPosition_Boundary, m_KeyFrameIndices[m_iCurrentAnimIndex_Boundary], m_isLoop_Boundary, &m_isEnd_Animations_Boundary[m_iCurrentAnimIndex_Boundary], fAddTime, true, pOutputKey_Boundary);
+				m_iCurrentFrame = m_Animations[m_iCurrentAnimIndex_Boundary]->Update_TransformationMatrices(m_Bones, &m_CurrentTrackPosition_Boundary, m_KeyFrameIndices[m_iCurrentAnimIndex_Boundary], m_isLoop_Boundary, &m_isEnd_Animations_Boundary[m_iCurrentAnimIndex_Boundary], fAddTime, true, pEvKeyList, false);
 			}
 		}
+
 	}
 
 
+	//루트본에 의한 이동값을 루트본에서 제거하고 이동량만큼 바깥으로 배출
 	_vector vRootMove{};
-	/* 모든 뼈가 가지고 있는 m_CombinedTransformationMatrix를 갱신한다. */
 	if (m_UFBIndices[UFB_ROOT] != 1024)
 	{
 		m_Bones[m_UFBIndices[UFB_ROOT]]->Update_CombinedTransformationMatrix(m_Bones, XMLoadFloat4x4(&m_PreTransformMatrix));
 		vRootMove = m_Bones[m_UFBIndices[UFB_ROOT]]->Get_CombinedTransformationMatrix().r[3];
-		if (m_isEnd_Animations[m_iCurrentAnimIndex] == true && pOut != nullptr)//애니메이션이 끝났는지에 대한 판단
-		{
-			m_CurrentTrackPosition == 0.f; /////??
-			*pOut = true;
-			m_isEnd_Animations[m_iCurrentAnimIndex] = false;
-		}
-		if (m_isEnd_Animations_Boundary[m_iCurrentAnimIndex_Boundary] == true && m_iCurrentAnimIndex != m_iCurrentAnimIndex_Boundary && m_isEnd_Animations_Boundary[m_iCurrentAnimIndex_Boundary])//애니메이션이 끝났는지에 대한 판단
-		{
-			SetUp_NextAnimation_Boundary(m_iCurrentAnimIndex, m_isLoop);
-			m_CurrentTrackPosition_Boundary = 0.f;
-			m_isEnd_Animations_Boundary[m_iCurrentAnimIndex_Boundary] = false;
-		}
 		_float4x4 RootMat = {};
 		XMStoreFloat4x4(&RootMat, m_Bones[m_UFBIndices[UFB_ROOT]]->Get_TransformationMatrix());
 		RootMat._41 = 0; RootMat._42 = 0; RootMat._43 = 0;
@@ -544,6 +538,32 @@ _vector CModel::Play_Animation(_float fTimeDelta, _bool* pOut, OUTPUT_EVKEY* pOu
 		m_Bones[m_UFBIndices[UFB_ROOT]]->Set_TransformationMatrix(XMLoadFloat4x4(&RootMat));
 	}
 
+
+	if (m_isEnd_Animations[m_iCurrentAnimIndex] == true)//
+	{
+		m_CurrentTrackPosition = 0.f;
+		if (pOut != nullptr)
+		{
+
+			*pOut = true;
+
+		}
+		*pOut = true;
+		m_isEnd_Animations[m_iCurrentAnimIndex] = false;
+	}
+	if ((m_CurrentTrackPosition_Boundary == 0.f) || (m_isEnd_Animations_Boundary[m_iCurrentAnimIndex_Boundary] == true))
+	{
+		if (m_iCurrentAnimIndex != m_iCurrentAnimIndex_Boundary)
+		{
+			SetUp_NextAnimation_Boundary(m_iCurrentAnimIndex, m_isLoop);
+			m_CurrentTrackPosition_Boundary = 0.f;
+			m_isEnd_Animations_Boundary[m_iCurrentAnimIndex_Boundary] = false;
+		}
+	}
+
+
+
+	/* 모든 뼈가 가지고 있는 m_CombinedTransformationMatrix를 갱신한다. */
 	for (auto& pBone : m_Bones)
 	{
 		/* 내 뼈의 행렬 * 부모의 컴바인드 */

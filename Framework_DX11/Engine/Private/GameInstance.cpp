@@ -352,6 +352,7 @@ CComponent * CGameInstance::Clone_Component(_uint iLevelIndex, const _wstring & 
 
 HRESULT CGameInstance::Add_ModelPrototype(_uint iLevelIndex, const _char* strPrototypeTag, CComponent* pPrototype)
 {
+	Safe_AddRef(pPrototype);
 	return m_pComponent_Manager->Add_ModelPrototype(iLevelIndex, strPrototypeTag, pPrototype);
 }
 
