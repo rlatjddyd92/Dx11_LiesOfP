@@ -32,6 +32,12 @@ HRESULT CImGui_Manager::Initialize(ID3D11Device* pDevice, ID3D11DeviceContext* p
 
 	Ready_Controllers();
 
+	RECT clientRect;
+	GetClientRect(g_hWnd, &clientRect);
+	ImGuiIO& io = ImGui::GetIO();
+	io.DisplaySize = ImVec2((float)(clientRect.right - clientRect.left),
+		(float)(clientRect.bottom - clientRect.top));
+
 	return S_OK;
 }
 

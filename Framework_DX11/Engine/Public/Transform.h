@@ -70,6 +70,8 @@ private:
 
 	_Matrix			m_WorldMatrix = {};
 
+	_Vec3			m_vCurrentRot = {};
+
 public:
 	static CTransform* Create(ID3D11Device* pDevice, ID3D11DeviceContext* pContext, void* pArg);
 	virtual CComponent* Clone(void* pArg) { return nullptr; }

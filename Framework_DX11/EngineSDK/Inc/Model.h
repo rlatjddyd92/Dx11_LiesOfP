@@ -58,6 +58,7 @@ public:
 	HRESULT Render_Instance(_uint iMeshIndex);
 
 	void Add_InstanceData(_Matrix WorldMatrix) { m_InstanceDatas.push_back(WorldMatrix); }
+	void Clear_InstanceData() { m_InstanceDatas.clear(); }
 
 public:		//_bool pOut은 메인 애니메이션의 종료를 반환,				
 	_vector Play_Animation(_float fTimeDelta, _bool* pOut = nullptr, OUTPUT_EVKEY* pOutputKey = nullptr, OUTPUT_EVKEY* pOutputKey_Boundary = nullptr);
