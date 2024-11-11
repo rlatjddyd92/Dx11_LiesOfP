@@ -12,15 +12,6 @@ BEGIN(Tools)
 class CTexture_Effect final : public CEffect_Base
 {
 public:
-	enum STATE
-	{
-		STATE_DISTORTION	= 0x0001,
-		STATE_BLUR			= 0x0002,
-		STATE_BLEND			= 0x0004,
-		STATE_NONBLEND		= 0x0008,
-		STATE_END			= 0x9999
-	};
-
 	typedef struct
 	{
 		_tchar	strDiffuseTexturTag[MAX_PATH] = L"";

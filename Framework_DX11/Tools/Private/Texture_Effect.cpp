@@ -61,35 +61,41 @@ void CTexture_Effect::Update(_float fTimeDelta)
     vScale += m_ActionDesc.vScalingSpeed * fTimeDelta;
     m_pTransformCom->Set_Scaled(vScale.x, vScale.y, vScale.z);
 
+    m_fCurrenrtIndex += fTimeDelta * m_ActionDesc.fSpriteSpeed;
+
     __super::Set_WorldMatrix();
 }
 
 void CTexture_Effect::Late_Update(_float fTimeDelta)
 {
     m_fAccumulateTime += fTimeDelta;
-    m_fCurrenrtIndex += fTimeDelta * m_ActionDesc.fSpriteSpeed;
 
     if (m_ActionDesc.fDuration < m_fAccumulateTime)
         m_isActive = false;
 
-    if(STATE_BLEND & m_ActionDesc.iState)
+    if(RS_BLEND & m_ActionDesc.iState)
     {
         if (FAILED(m_pGameInstance->Add_RenderObject(CRenderer::RG_BLEND, this)))
             return;
     }
-    if (STATE_NONBLEND & m_ActionDesc.iState)
+    if (RS_NONBLEND & m_ActionDesc.iState)
     {
         if (FAILED(m_pGameInstance->Add_RenderObject(CRenderer::RG_NONLIGHT, this)))
             return;
     }
-    if (STATE_DISTORTION & m_ActionDesc.iState)
+    if (RS_NONLIGHT & m_ActionDesc.iState)
     {
-
+        if (FAILED(m_pGameInstance->Add_RenderObject(CRenderer::RG_NONLIGHT, this)))
+            return;
     }
-
-    if (STATE_BLUR & m_ActionDesc.iState)
+    if (RS_DISTORTION & m_ActionDesc.iState)
     {
-
+        if (FAILED(m_pGameInstance->Add_RenderObject(CRenderer::RG_DISTORTION, this)))
+            return;
+    }
+    if (RS_BLUR & m_ActionDesc.iState)
+    {
+        
     }
 }
 

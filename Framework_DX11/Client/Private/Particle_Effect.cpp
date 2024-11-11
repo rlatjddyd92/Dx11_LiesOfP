@@ -54,8 +54,6 @@ void CParticle_Effect::Update(_float fTimeDelta)
     if (true == m_isDead)
         return;
 
-    _bool bOver = { false };
-
     _Matrix ParentMatrix = XMMatrixIdentity();
     if (nullptr != m_pParentMatrix)
         ParentMatrix = *m_pParentMatrix;
@@ -77,9 +75,7 @@ void CParticle_Effect::Update(_float fTimeDelta)
     Movement.fAccelSpeed = m_AccelDesc.fAccelSpeed;
     Movement.WorldMatrix = m_WorldMatrix;
     
-    bOver = m_pVIBufferCom->DispatchCS(m_pActionCS, Movement);
-
-    if (true == bOver)
+    if(true == m_pVIBufferCom->DispatchCS(m_pActionCS, Movement));
         m_isDead = true;
 }
 

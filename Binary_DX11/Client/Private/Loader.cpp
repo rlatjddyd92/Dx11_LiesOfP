@@ -102,7 +102,10 @@ HRESULT CLoader::Ready_Resources_For_GamePlayLevel()
 	//	return E_FAIL;
 
 	// 보스 몬스터 로드 함수
-	if (FAILED(Ready_Resources_For_BossMonster()))
+	//if (FAILED(Ready_Resources_For_BossMonster()))
+	//	return E_FAIL;
+
+	if (FAILED(Ready_Resources_For_Effect()))
 		return E_FAIL;
 
 	lstrcpy(m_szLoadingText, TEXT("변환 완료"));
@@ -235,6 +238,18 @@ HRESULT CLoader::Ready_Resources_For_BasicMonster()
 		CModel::Create(m_pDevice, m_pContext, CModel::TYPE_NONANIM, "../Bin/Resources/Models/Monster/RebornerMale/RebornerMale_Weapon.fbx", "../Bin/ModelData/Anim/Monster/RebornerMale/", PreTransformMatrix))))
 		return E_FAIL;
 #pragma endregion
+
+	return S_OK;
+}
+
+HRESULT CLoader::Ready_Resources_For_Effect()
+{
+	_matrix		PreTransformMatrix = XMMatrixIdentity();
+
+	/* For. Prototype_Component_Effect_Test */
+	if (FAILED(m_pGameInstance->Add_Prototype(LEVEL_GAMEPLAY, TEXT("Prototype_Component_Effect_Test"),
+		CModel::Create(m_pDevice, m_pContext, CModel::TYPE_NONANIM, "../Bin/Resources/Models/Effect/Test.fbx", "../Bin/ModelData/NonAnim/Effect/", PreTransformMatrix))))
+		return E_FAIL;
 
 	return S_OK;
 }

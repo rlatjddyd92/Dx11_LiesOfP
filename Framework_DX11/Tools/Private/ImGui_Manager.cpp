@@ -132,6 +132,11 @@ void CImGui_Manager::Tool_Effect()
 			m_pController_EffectTool->TE_Check();
 		}
 
+		if (ImGui::CollapsingHeader("Mesh Effect"))
+		{
+			m_pController_EffectTool->Model_Check();
+		}
+
 		ImGui::Begin("EffectList");
 
 		m_pController_EffectTool->Set_EffectName();
@@ -171,6 +176,25 @@ void CImGui_Manager::Tool_Effect()
 		{
 			m_pController_EffectTool->Delete_TE();
 		}
+
+		m_pController_EffectTool->Select_Model();
+		if (ImGui::Button("Create Mesh Effect"))
+		{
+			m_pController_EffectTool->Add_Model();
+		}
+		if (ImGui::Button("Update Mesh Effect"))
+		{
+			m_pController_EffectTool->Update_Model();
+		}
+		if (ImGui::Button("Get Mesh Effect"))
+		{
+			m_pController_EffectTool->Get_Model();
+		}
+		if (ImGui::Button("Delete Mesh Effect"))
+		{
+			m_pController_EffectTool->Delete_Model();
+		}
+
 
 		ImGui::SeparatorText("Effect Container");
 		if (ImGui::Button("Add Effect Conainer"))

@@ -23,14 +23,6 @@ public:
 		PS_END
 	};
 
-	enum RENDER_STATE 
-	{ 
-		RS_NONBLEND = 0x0001,
-		RS_NONLIGHT = 0x0002,
-		RS_BLUR = 0x0004,
-		RS_END = 0x9999
-	};
-
 	typedef struct
 	{
 		TYPE		eType = { TYPE_END };

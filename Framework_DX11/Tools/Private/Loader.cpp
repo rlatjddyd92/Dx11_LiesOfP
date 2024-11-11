@@ -15,12 +15,14 @@
 
 #include "TargetBall.h"
 
+#pragma region EFFECT
 #include "Particle_Effect.h"
 #include "Texture_Effect.h"
-
+#include "Mesh_Effect.h"
 #include "Effect_Container.h"
-
 #include "Controller_EffectTool.h"
+#pragma endregion
+
 #include "Controller_AnimationTool.h"
 
 #include "Decal.h"
@@ -329,6 +331,12 @@ HRESULT CLoader::Ready_Resources_For_ToolLevel()
 		return E_FAIL;
 	CController_EffectTool::Get_Instance()->Add_Diffuse_ProtytypeTag(TEXT("Prototype_Component_Texture_Ring_8"));
 
+	/* For. Prototype_Component_Texture_Tile_Spark */
+	if (FAILED(m_pGameInstance->Add_Prototype(LEVEL_TOOL, TEXT("Prototype_Component_Texture_Tile_Spark"),
+		CTexture::Create(m_pDevice, m_pContext, TEXT("../Bin/Resources/Textures/Effect/T_Tile_Spark_01_C_HJS.dds"), 1))))
+		return E_FAIL;
+	CController_EffectTool::Get_Instance()->Add_Diffuse_ProtytypeTag(TEXT("Prototype_Component_Texture_Tile_Spark"));
+
 	/* For. Prototype_Component_Texture_Stone_8x8 */
 	if (FAILED(m_pGameInstance->Add_Prototype(LEVEL_TOOL, TEXT("Prototype_Component_Texture_Stone_8x8"),
 		CTexture::Create(m_pDevice, m_pContext, TEXT("../Bin/Resources/Textures/Effect/T_SubUV_DebStone_03_8x8_SC_KMH.dds"), 1))))
@@ -340,6 +348,12 @@ HRESULT CLoader::Ready_Resources_For_ToolLevel()
 		CTexture::Create(m_pDevice, m_pContext, TEXT("../Bin/Resources/Textures/Effect/T_SubUV_Thunder_01_4x4_SC_HJS.dds"), 1))))
 		return E_FAIL;
 	CController_EffectTool::Get_Instance()->Add_Diffuse_ProtytypeTag(TEXT("Prototype_Component_Texture_Thunder_4x4"));
+
+	/* For. Prototype_Component_Texture_Thunder_4x1 */
+ 	if (FAILED(m_pGameInstance->Add_Prototype(LEVEL_TOOL, TEXT("Prototype_Component_Texture_Thunder_4x1"),
+		CTexture::Create(m_pDevice, m_pContext, TEXT("../Bin/Resources/Textures/Effect/T_SubUV_Thunder_01_4x1_SC_GDH.dds"), 1))))
+		return E_FAIL;
+	CController_EffectTool::Get_Instance()->Add_Diffuse_ProtytypeTag(TEXT("Prototype_Component_Texture_Thunder_4x1"));
 
 #pragma endregion
 
@@ -387,6 +401,24 @@ HRESULT CLoader::Ready_Resources_For_ToolLevel()
 		CModel::Create(m_pDevice, m_pContext, CModel::TYPE_NONANIM, "../Bin/ModelData/NonAnim/Map/Structure/SM_Monastery_Deco_01.dat", PreTransformMatrix))))
 		return E_FAIL;
 
+
+#pragma region EFFECT_MESH
+	/* For. Prototype_Component_Model_HalfSphere_1 */
+	PreTransformMatrix = XMMatrixScaling(0.005f, 0.005f, 0.005f);
+	if (FAILED(m_pGameInstance->Add_Prototype(LEVEL_TOOL, TEXT("Prototype_Component_Model_HalfSphere_1"),
+		CModel::Create(m_pDevice, m_pContext, CModel::TYPE_NONANIM, "../Bin/ModelData/NonAnim/Effect/SM_HalfSphere_01_GDH.dat", PreTransformMatrix))))
+		return E_FAIL;
+	CController_EffectTool::Get_Instance()->Add_Model_ProtytypeTag(TEXT("Prototype_Component_Model_HalfSphere_1"));
+
+	/* For. Prototype_Component_Model_HalfSphere_2 */
+	PreTransformMatrix = XMMatrixScaling(0.005f, 0.005f, 0.005f);
+	if (FAILED(m_pGameInstance->Add_Prototype(LEVEL_TOOL, TEXT("Prototype_Component_Model_HalfSphere_2"),
+		CModel::Create(m_pDevice, m_pContext, CModel::TYPE_NONANIM, "../Bin/ModelData/NonAnim/Effect/SM_HalfSphere_02_KMH.dat", PreTransformMatrix))))
+		return E_FAIL;
+	CController_EffectTool::Get_Instance()->Add_Model_ProtytypeTag(TEXT("Prototype_Component_Model_HalfSphere_2"));
+
+#pragma endregion
+
 	lstrcpy(m_szLoadingText, TEXT("네비게이션을(를) 로딩중입니다."));
 	/* For.Prototype_Component_Navigation */
 	if (FAILED(m_pGameInstance->Add_Prototype(LEVEL_TOOL, TEXT("Prototype_Component_Navigation"),
@@ -417,6 +449,11 @@ HRESULT CLoader::Ready_Resources_For_ToolLevel()
 	/* For. Prototype_Component_Shader_Effect_Texture */
 	if (FAILED(m_pGameInstance->Add_Prototype(LEVEL_TOOL, TEXT("Prototype_Component_Shader_Effect_Texture"),
 		CShader::Create(m_pDevice, m_pContext, TEXT("../Bin/ShaderFiles/Shader_Effect_Texture.hlsl"), VTXPOSTEX::Elements, VTXPOSTEX::iNumElements))))
+		return E_FAIL;
+
+	/* For. Prototype_Component_Shader_Effect_Mesh */
+	if (FAILED(m_pGameInstance->Add_Prototype(LEVEL_TOOL, TEXT("Prototype_Component_Shader_Effect_Mesh"),
+		CShader::Create(m_pDevice, m_pContext, TEXT("../Bin/ShaderFiles/Shader_Effect_Mesh.hlsl"), VTXPOSTEX::Elements, VTXPOSTEX::iNumElements))))
 		return E_FAIL;
 
 	/* For. Prototype_Component_Shader_VtxPointInstance */
@@ -505,6 +542,11 @@ HRESULT CLoader::Ready_Resources_For_ToolLevel()
 		CTexture_Effect::Create(m_pDevice, m_pContext))))
 		return E_FAIL;
 	
+	/* For. Prototype_GameObject_Mesh_Effect */
+	if (FAILED(m_pGameInstance->Add_Prototype(TEXT("Prototype_GameObject_Mesh_Effect"),
+		CMesh_Effect::Create(m_pDevice, m_pContext))))
+		return E_FAIL;
+
 	/* For. Prototype_GameObject_Effect_Continaer */
 	if (FAILED(m_pGameInstance->Add_Prototype(TEXT("Prototype_GameObject_Effect_Continaer"),
 		CEffect_Container::Create(m_pDevice, m_pContext))))

@@ -4,8 +4,11 @@
 #include "GameInstance.h"
 
 #include "Layer.h"
+
 #include "Particle_Effect.h"
 #include "Texture_Effect.h"
+#include "Mesh_Effect.h"
+
 #include "Effect_Container.h"
 
 IMPLEMENT_SINGLETON(CController_EffectTool)
@@ -88,6 +91,30 @@ void CController_EffectTool::TextureCheck()
 
 		ImGui::TreePop();
 	}
+
+	if (ImGui::TreeNode("Model"))
+	{
+		vector<string> strArray;
+
+		for (const auto& strPrototype : m_Model_PrototypeTags)
+		{
+			int iSize = WideCharToMultiByte(CP_UTF8, 0, &strPrototype[0], (int)strPrototype.size(), nullptr, 0, nullptr, nullptr);
+			string strTo(iSize, 0);
+			WideCharToMultiByte(CP_UTF8, 0, &strPrototype[0], (int)strPrototype.size(), &strTo[0], iSize, nullptr, nullptr);
+			strArray.emplace_back(strTo);
+		}
+
+		vector<const _char*> szItems;
+		for (const auto& str : strArray)
+		{
+			szItems.emplace_back(str.c_str());
+		}
+
+		ImGui::ListBox("Model List", &m_iSelected_ModelIndex, szItems.data(), (_int)szItems.size(), 5);
+
+		ImGui::TreePop();
+	}
+
 }
 
 HRESULT CController_EffectTool::Add_Particle()
@@ -682,22 +709,22 @@ void CController_EffectTool::Get_TE()
 	//m_fRotationAngle = desc.fRotationAngle;
 	
 
-	if (m_iTEState & CTexture_Effect::STATE_DISTORTION)
+	if (m_iTEState & CTexture_Effect::RS_DISTORTION)
 		m_isDistortion = true;
 	else
 		m_isDistortion = false;
 
-	if (m_iTEState & CTexture_Effect::STATE_BLUR)
+	if (m_iTEState & CTexture_Effect::RS_BLUR)
 		m_isBlur = true;
 	else
 		m_isBlur = false;
 
-	if (m_iTEState & CTexture_Effect::STATE_BLEND)
+	if (m_iTEState & CTexture_Effect::RS_BLEND)
 		m_isBlend = true;
 	else
 		m_isBlend = false;
 
-	if (m_iTEState & CTexture_Effect::STATE_NONBLEND)
+	if (m_iTEState & CTexture_Effect::RS_NONBLEND)
 		m_isNonBlend = true;
 	else
 		m_isNonBlend = false;
@@ -728,6 +755,255 @@ void CController_EffectTool::Delete_TE()
 
 }
 
+HRESULT CController_EffectTool::Add_Model()
+{
+	CMesh_Effect::MESH_EFFECT_DESC desc = {};
+
+	desc.fRotationPerSec = XMConvertToRadians(90.f);
+	desc.fSpeedPerSec = 1.f;
+	desc.iLevelIndex = LEVEL_TOOL;
+
+	desc.pParentMatrix = { nullptr };
+	size_t iCharLen = strlen(m_szEffectName);
+	size_t iConvertChars = 0;
+	mbstowcs_s(&iConvertChars, desc.strEffectName, sizeof(desc.strEffectName) / sizeof(_tchar), m_szEffectName, iCharLen);
+
+
+	wcsncpy_s(desc.PrototypeDesc.szModelTag, m_Model_PrototypeTags[m_iSelected_ModelIndex].c_str(), sizeof(desc.PrototypeDesc.szModelTag) / sizeof(_tchar));
+	wcsncpy_s(desc.PrototypeDesc.strDiffuseTexturTag, m_Diffuse_PrototypeTags[m_iSelected_DiffuseTextureIndex].c_str(), sizeof(desc.PrototypeDesc.strDiffuseTexturTag) / sizeof(_tchar));
+	wcsncpy_s(desc.PrototypeDesc.strMaskTextureTag_1, m_Diffuse_PrototypeTags[m_iSelected_MaskTextureIndex_1].c_str(), sizeof(desc.PrototypeDesc.strMaskTextureTag_1) / sizeof(_tchar));
+	wcsncpy_s(desc.PrototypeDesc.strMaskTextureTag_2, m_Diffuse_PrototypeTags[m_iSelected_MaskTextureIndex_2].c_str(), sizeof(desc.PrototypeDesc.strMaskTextureTag_2) / sizeof(_tchar));
+
+	desc.ActionDesc.iState			= m_iMesh_State;
+	desc.ActionDesc.iShaderIndex	= m_iMesh_ShaderIndex;
+	desc.ActionDesc.fDuration		= m_fMesh_Duration;
+	desc.ActionDesc.vColor			= m_vMesh_Color;
+	desc.ActionDesc.vTileRepeat		= m_vMesh_TileRepeat;
+	desc.ActionDesc.vTileMoveDir	= m_vMesh_TileMoveDir;
+	desc.ActionDesc.fTileMoveSpeed	= m_fMesh_TileMoveSpeed;
+	desc.ActionDesc.vPos			= m_vMesh_Pos;
+	desc.ActionDesc.vStartRotation	= m_vMesh_StartRotation;
+	desc.ActionDesc.vRotationAxis	= m_vMesh_RotationAxis;
+	desc.ActionDesc.fRotationSpeed	= m_fMesh_RotationSpeed;
+	desc.ActionDesc.vScale			= m_vMesh_Scale;
+	desc.ActionDesc.vScalingSpeed	= m_vMesh_ScalingSpeed;
+	desc.ActionDesc.fAlpha			= m_fMesh_Alpha;
+	desc.ActionDesc.fAlphaSpeed		= m_fMesh_AlphaSpeed;
+	
+	if (FAILED(m_pGameInstance->Add_CloneObject_ToLayer(LEVEL_TOOL, TEXT("Layer_MeshEffect"), TEXT("Prototype_GameObject_Mesh_Effect"), &desc)))
+		return E_FAIL;
+
+	return S_OK;
+}
+
+void CController_EffectTool::Model_Check()
+{
+	if (ImGui::TreeNode("ME Initialize"))
+	{
+		ImGui::SeparatorText("Initialize");
+
+		_wstring strNormalText = m_Model_PrototypeTags[m_iSelected_ModelIndex];
+		int iSize = WideCharToMultiByte(CP_UTF8, 0, &strNormalText[0], (int)strNormalText.size(), nullptr, 0, nullptr, nullptr);
+		string strNormalTo(iSize, 0);
+		WideCharToMultiByte(CP_UTF8, 0, &strNormalText[0], (int)strNormalText.size(), &strNormalTo[0], iSize, nullptr, nullptr);
+		_char* szNormal = const_cast<_char*>(strNormalTo.data());
+		ImGui::InputText("Model", szNormal, IM_ARRAYSIZE(szNormal));
+
+
+		_wstring strDiffuseText = m_Diffuse_PrototypeTags[m_iSelected_DiffuseTextureIndex];
+		iSize = WideCharToMultiByte(CP_UTF8, 0, &strDiffuseText[0], (int)strDiffuseText.size(), nullptr, 0, nullptr, nullptr);
+		string strDiffuseTo(iSize, 0);
+		WideCharToMultiByte(CP_UTF8, 0, &strDiffuseText[0], (int)strDiffuseText.size(), &strDiffuseTo[0], iSize, nullptr, nullptr);
+		_char* szDiffuse = const_cast<_char*>(strDiffuseTo.data());
+		ImGui::InputText("Diffuse", szDiffuse, IM_ARRAYSIZE(szDiffuse));
+
+
+		_wstring strMaskText_1 = m_Diffuse_PrototypeTags[m_iSelected_MaskTextureIndex_1];
+		iSize = WideCharToMultiByte(CP_UTF8, 0, &strMaskText_1[0], (int)strMaskText_1.size(), nullptr, 0, nullptr, nullptr);
+		string strMaskTo_1(iSize, 0);
+		WideCharToMultiByte(CP_UTF8, 0, &strMaskText_1[0], (int)strMaskText_1.size(), &strMaskTo_1[0], iSize, nullptr, nullptr);
+		_char* szMask_1 = const_cast<_char*>(strMaskTo_1.data());
+		ImGui::InputText("Mask_1", szMask_1, IM_ARRAYSIZE(szMask_1));
+
+		_wstring strMaskText_2 = m_Diffuse_PrototypeTags[m_iSelected_MaskTextureIndex_2];
+		iSize = WideCharToMultiByte(CP_UTF8, 0, &strMaskText_2[0], (int)strMaskText_2.size(), nullptr, 0, nullptr, nullptr);
+		string strMaskTo_2(iSize, 0);
+		WideCharToMultiByte(CP_UTF8, 0, &strMaskText_2[0], (int)strMaskText_2.size(), &strMaskTo_2[0], iSize, nullptr, nullptr);
+		_char* szMask_2 = const_cast<_char*>(strMaskTo_2.data());
+		ImGui::InputText("Mask_2", szMask_2, IM_ARRAYSIZE(szMask_2));
+
+		
+		ImGui::SeparatorText("Transform");																	
+		ImGui::InputFloat("Duration ME", (_float*)&m_fMesh_Duration);
+		ImGui::InputFloat4("Color ME", (_float*)&m_vMesh_Color);
+
+		ImGui::SeparatorText("Tile Move");
+		ImGui::InputFloat2("Tile Repeat", (_float*)&m_vMesh_TileRepeat);
+		ImGui::InputFloat2("Tile Move Dir", (_float*)&m_vMesh_TileMoveDir);
+		ImGui::InputFloat("Tile Move Speed", (_float*)&m_fMesh_TileMoveSpeed);
+
+		ImGui::SeparatorText("Tile Transform");
+		ImGui::InputFloat3("Pos ME", (_float*)&m_vMesh_Pos);
+		ImGui::InputFloat3("Start Rotation ME", (_float*)&m_vMesh_StartRotation);
+		ImGui::InputFloat4("Rotation Axis ME", (_float*)&m_vMesh_RotationAxis);
+		ImGui::InputFloat("Rotation Speed ME", (_float*)&m_fMesh_RotationSpeed);
+		ImGui::InputFloat3("Scale ME", (_float*)&m_vMesh_Scale);
+		ImGui::InputFloat3("Scaling Speed ME", (_float*)&m_vMesh_ScalingSpeed);
+
+		ImGui::SeparatorText("Blending");
+		ImGui::InputFloat("Alpha ME", (_float*)&m_fMesh_Alpha);
+		ImGui::InputFloat("Alpha Speed ME", (_float*)&m_fMesh_AlphaSpeed);
+
+		ImGui::TreePop();
+
+	}
+	if (ImGui::TreeNode("ME Type/State"))
+	{
+		ImGui::SeparatorText("State");
+		ImGui::Checkbox("Distortion ME", &m_isMesh_Distortion);
+		ImGui::SameLine();
+		ImGui::Checkbox("Blur ME", &m_isMesh_Blur);
+		ImGui::SameLine();
+		ImGui::Checkbox("Blend ME", &m_isMesh_Blend);
+		ImGui::SameLine();
+		ImGui::Checkbox("NonLight ME", &m_isMesh_NonLight);
+
+		ImGui::SeparatorText("Shader");
+		ImGui::InputInt("Shader Index", (_int*)&m_iMesh_ShaderIndex);
+
+		Set_MeshState();
+
+		ImGui::TreePop();
+	}
+}
+
+void CController_EffectTool::Update_Model()
+{
+	CMesh_Effect* pME = static_cast<CMesh_Effect*>(m_pGameInstance->Find_Object(LEVEL_TOOL, TEXT("Layer_MeshEffect"), m_iSelectedMEIndex));
+
+	if (nullptr == pME)
+		return;
+
+	CMesh_Effect::ACTION_DESC ActionDesc = {};
+
+	ActionDesc.iState			= m_iMesh_State;
+	ActionDesc.iShaderIndex		= m_iMesh_ShaderIndex;
+	ActionDesc.fDuration		= m_fMesh_Duration;
+	ActionDesc.vColor			= m_vMesh_Color;
+	ActionDesc.vTileRepeat		= m_vMesh_TileRepeat;
+	ActionDesc.vTileMoveDir		= m_vMesh_TileMoveDir;
+	ActionDesc.fTileMoveSpeed	= m_fMesh_TileMoveSpeed;
+	ActionDesc.vPos				= m_vMesh_Pos;
+	ActionDesc.vStartRotation	= m_vMesh_StartRotation;
+	ActionDesc.vRotationAxis	= m_vMesh_RotationAxis;
+	ActionDesc.fRotationSpeed	= m_fMesh_RotationSpeed;
+	ActionDesc.vScale			= m_vMesh_Scale;
+	ActionDesc.vScalingSpeed	= m_vMesh_ScalingSpeed;
+	ActionDesc.fAlpha			= m_fMesh_Alpha;
+	ActionDesc.fAlphaSpeed		= m_fMesh_AlphaSpeed;
+
+	pME->Set_Desc(ActionDesc);
+
+}
+
+void CController_EffectTool::Select_Model()
+{
+	vector<string> IndexLavels;
+	vector<const _char*> Items;
+
+	CLayer* pLayer = m_pGameInstance->Find_Layer(LEVEL_TOOL, TEXT("Layer_MeshEffect"));
+
+	if (nullptr != pLayer)
+	{
+		for (const auto& elem : pLayer->Get_ObjectList())
+		{
+			_wstring strEffectName = static_cast<CEffect_Base*>(elem)->Get_EffectName();
+
+			_int size_needed = WideCharToMultiByte(CP_UTF8, 0, strEffectName.c_str(), -1, nullptr, 0, nullptr, nullptr);
+			std::string str(size_needed, 0);
+			WideCharToMultiByte(CP_UTF8, 0, strEffectName.c_str(), -1, &str[0], size_needed, nullptr, nullptr);
+
+			IndexLavels.emplace_back(str);
+		}
+
+		for (const auto& Label : IndexLavels)
+			Items.emplace_back(Label.c_str());
+	}
+
+	ImGui::ListBox("ME List", &m_iSelectedMEIndex, Items.data(), (_int)Items.size(), 5);
+}
+
+void CController_EffectTool::Get_Model()
+{
+	CMesh_Effect* pTE = static_cast<CMesh_Effect*>(m_pGameInstance->Find_Object(LEVEL_TOOL, TEXT("Layer_MeshEffect"), m_iSelectedTEIndex));
+
+	if (nullptr == pTE)
+		return;
+
+	CMesh_Effect::ACTION_DESC desc = pTE->Get_Desc();
+
+	m_iMesh_State			= desc.iState			;
+	m_iMesh_ShaderIndex		= desc.iShaderIndex	;	
+	m_fMesh_Duration		= desc.fDuration		;
+	m_vMesh_Color			= desc.vColor			;
+	m_vMesh_TileRepeat		= desc.vTileRepeat		;
+	m_vMesh_TileMoveDir		= desc.vTileMoveDir	;	
+	m_fMesh_TileMoveSpeed	= desc.fTileMoveSpeed	;
+	m_vMesh_Pos				= desc.vPos			;	
+	m_vMesh_StartRotation	= desc.vStartRotation	;
+	m_vMesh_RotationAxis	= desc.vRotationAxis	;
+	m_fMesh_RotationSpeed	= desc.fRotationSpeed	;
+	m_vMesh_Scale			= desc.vScale			;
+	m_vMesh_ScalingSpeed	= desc.vScalingSpeed	;
+	m_fMesh_Alpha			= desc.fAlpha			;
+	m_fMesh_AlphaSpeed		= desc.fAlphaSpeed		;
+
+	if (m_iMesh_State & CTexture_Effect::RS_DISTORTION)
+		m_isMesh_Distortion = true;
+	else
+		m_isMesh_Distortion = false;
+
+	if (m_iMesh_State & CTexture_Effect::RS_BLUR)
+		m_isMesh_Blur = true;
+	else
+		m_isMesh_Blur = false;
+
+	if (m_iMesh_State & CTexture_Effect::RS_BLEND)
+		m_isMesh_Blend = true;
+	else
+		m_isMesh_Blend = false;
+
+	if (m_iMesh_State & CTexture_Effect::RS_NONLIGHT)
+		m_isMesh_NonLight = true;
+	else
+		m_isMesh_NonLight = false;
+
+}
+
+void CController_EffectTool::Delete_Model()
+{
+	CLayer* pLayer = m_pGameInstance->Find_Layer(LEVEL_TOOL, TEXT("Layer_MeshEffect"));
+
+	if (nullptr == pLayer)
+		return;
+
+	auto& ObjectList = pLayer->Get_ObjectList();
+	_uint iIndex = { 0 };
+	for (auto& iter = ObjectList.begin(); iter != ObjectList.end();)
+	{
+		if (iIndex == m_iSelectedMEIndex)
+		{
+			Safe_Release(*iter);
+			iter = ObjectList.erase(iter);
+			return;
+		}
+		else
+			++iter;
+
+		++iIndex;
+	}
+}
+
 HRESULT CController_EffectTool::Add_EffectContainer()
 {
 	Delete_EffectContainer();
@@ -754,6 +1030,14 @@ HRESULT CController_EffectTool::Add_EffectContainer()
 		}
 	}
 
+	CLayer* pMELayer = m_pGameInstance->Find_Layer(LEVEL_TOOL, TEXT("Layer_MeshEffect"));
+	if (nullptr != pTELayer)
+	{
+		for (auto& elem : pTELayer->Get_ObjectList())
+		{
+			pTextureDesc.emplace_back(static_cast<CTexture_Effect*>(elem)->Get_SaveDesc_Ptr());
+		}
+	}
 
 	CEffect_Container::EFFECT_DESC EffectDesc = {};
 	EffectDesc.fRotationPerSec = XMConvertToRadians(90.f);
@@ -938,19 +1222,19 @@ void CController_EffectTool::Set_ParticleState()
 		m_iInstanceState &= ~CVIBuffer_Point_Instance::STATE_DECEL;
 
 	if (true == m_bBlur)
-		m_iParticleRenderState |= CParticle_Effect::RS_BLUR;
+		m_iParticleRenderState |= CEffect_Base::RS_BLUR;
 	else
-		m_iParticleRenderState &= ~CParticle_Effect::RS_BLUR;
+		m_iParticleRenderState &= ~CEffect_Base::RS_BLUR;
 
 	if (true == m_bNonBlend)
-		m_iParticleRenderState |= CParticle_Effect::RS_NONBLEND;
+		m_iParticleRenderState |= CEffect_Base::RS_NONBLEND;
 	else
-		m_iParticleRenderState &= ~CParticle_Effect::RS_NONBLEND;
+		m_iParticleRenderState &= ~CEffect_Base::RS_NONBLEND;
 
 	if (true == m_bNonLight)
-		m_iParticleRenderState |= CParticle_Effect::RS_NONLIGHT;
+		m_iParticleRenderState |= CEffect_Base::RS_NONLIGHT;
 	else
-		m_iParticleRenderState &= ~CParticle_Effect::RS_NONLIGHT;
+		m_iParticleRenderState &= ~CEffect_Base::RS_NONLIGHT;
 
 	if (true == m_bGrow)
 		m_iParticleState |= CParticle_Effect::PS_GROW;
@@ -969,24 +1253,48 @@ void CController_EffectTool::Set_ParticleState()
 void CController_EffectTool::Set_TEState()
 {
 	if(true == m_isNonBlend)
-		m_iTEState |= CTexture_Effect::STATE_NONBLEND;
+		m_iTEState |= CEffect_Base::RS_NONBLEND;
 	else
-		m_iTEState &= ~CTexture_Effect::STATE_NONBLEND;
+		m_iTEState &= ~CEffect_Base::RS_NONBLEND;
 
 	if (true == m_isBlend)
-		m_iTEState |= CTexture_Effect::STATE_BLEND;
+		m_iTEState |= CEffect_Base::RS_BLEND;
 	else
-		m_iTEState &= ~CTexture_Effect::STATE_BLEND;
+		m_iTEState &= ~CEffect_Base::RS_BLEND;
 
 	if (true == m_isDistortion)
-		m_iTEState |= CTexture_Effect::STATE_DISTORTION;
+		m_iTEState |= CEffect_Base::RS_DISTORTION;
 	else
-		m_iTEState &= ~CTexture_Effect::STATE_DISTORTION;
+		m_iTEState &= ~CEffect_Base::RS_DISTORTION;
 
 	if (true == m_isBlur)
-		m_iTEState |= CTexture_Effect::STATE_BLUR;
+		m_iTEState |= CEffect_Base::RS_BLUR;
 	else
-		m_iTEState &= ~CTexture_Effect::STATE_BLUR;
+		m_iTEState &= ~CEffect_Base::RS_BLUR;
+
+}
+
+void CController_EffectTool::Set_MeshState()
+{
+	if (true == m_isMesh_NonLight)
+		m_iMesh_State |= CEffect_Base::RS_NONBLEND;
+	else
+		m_iMesh_State &= ~CEffect_Base::RS_NONBLEND;
+
+	if (true == m_isMesh_Blend)
+		m_iMesh_State |= CEffect_Base::RS_BLEND;
+	else
+		m_iMesh_State &= ~CEffect_Base::RS_BLEND;
+
+	if (true == m_isMesh_Blur)
+		m_iMesh_State |= CEffect_Base::RS_DISTORTION;
+	else
+		m_iMesh_State &= ~CEffect_Base::RS_DISTORTION;
+
+	if (true == m_isMesh_Distortion)
+		m_iMesh_State |= CEffect_Base::RS_BLUR;
+	else
+		m_iMesh_State &= ~CEffect_Base::RS_BLUR;
 
 }
 
