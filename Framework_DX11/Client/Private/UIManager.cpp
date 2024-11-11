@@ -169,6 +169,25 @@ void CUIManager::UIControl_Test(_float fTimeDelta)
 	}
 
 
+	// 하단 아이템 
+
+	if (KEY_TAP(KEY::T))
+	{
+		m_pUIPage_Play->Move_SelectCtrl(true);
+	}
+
+	if (KEY_TAP(KEY::G))
+	{
+		m_pUIPage_Play->Move_SelectCtrl(false);
+	}
+
+
+
+
+
+
+
+
 #endif // DEBUG
 
 	

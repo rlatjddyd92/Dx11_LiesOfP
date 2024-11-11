@@ -61,28 +61,44 @@ public:
 	const vector<UPART*>& Get_UIPartInfo() { return m_vecPart; }
 	virtual HRESULT Ready_UIPart_Group_Control() override;
 
-	void SetRatio_HPBarMax(_float fRatio) { HP_Gauge_Frame->fRatio = fRatio; }
-	void SetRatio_HPBarFill(_float fRatio) { HP_Gauge_Fill->fRatio = fRatio; }
+	
+
+	// 체력바 
+	void SetRatio_HPBarMax(_float fRatio) { m_HP_Gauge_Frame->fRatio = fRatio; }
+	void SetRatio_HPBarFill(_float fRatio) { m_HP_Gauge_Fill->fRatio = fRatio; }
+
+	// 스태미나 
+
+	// 특수 스킬 바 
+
+	// 좌하단 포션/도구 
+	void Move_SelectCtrl(_bool bIsUp);
+	void Swich_ToolItem();
 
 public:
 	
 
+
+private:
+	
+
 private:
 	// 체력바 조정
-	UG_CTRL* HP_Gauge_Frame;
-	UG_CTRL* HP_Gauge_Fill;
+	UG_CTRL* m_HP_Gauge_Frame = { nullptr };
+	UG_CTRL* m_HP_Gauge_Fill = { nullptr };
 
 	// 스태미나 조정
-	UG_CTRL* Stamina_Gauge_Frame;
-	UG_CTRL* Stamina_Gauge_Fill;
+	UG_CTRL* m_Stamina_Gauge_Frame = { nullptr };
+	UG_CTRL* m_Stamina_Gauge_Fill = { nullptr };
 
 	// 특수 스킬 바 조정
-	vector<UG_CTRL*> vecSpecial_Gauge_Frame;
-	vector<UG_CTRL*> vecSpecial_Gauge_Fill;
+	vector<UG_CTRL*> m_vecSpecial_Gauge_Frame;
+	vector<UG_CTRL*> m_vecSpecial_Gauge_Fill;
 
-
-
-
+	// 좌하단 포션/도구 조정
+	UG_CTRL* m_PO_Data = { nullptr };
+	UG_CTRL* m_Tool_Data = { nullptr };
+	UG_CTRL* m_Select_Ctrl = { nullptr };
 
 
 
