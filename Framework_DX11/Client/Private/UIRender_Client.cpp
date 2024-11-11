@@ -181,6 +181,9 @@ HRESULT CUIRender_Client::Render_UI(vector<CUIPage*>& rPage)
 
 HRESULT CUIRender_Client::Make_Texture(_int iTextureIndex)
 {
+	if (iTextureIndex == -1)
+		return S_OK;
+
 	if ((iTextureIndex < 0) || (iTextureIndex >= m_vecTextureInfo.size()))
 	{
 		MSG_BOX(TEXT("UIRender : 잘못된 텍스쳐 값"));

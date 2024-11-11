@@ -129,6 +129,17 @@ void CController_UITool::UIPage_Edit()
 		ImGui::InputFloat("y", &m_vecPageInfo[m_iNowSelectNum]->fPosition.y);
 
 		ImGui::NewLine();
+
+		ImGui::Text("Background");
+		ImGui::SameLine();
+		ImGui::InputInt("Back", &m_iBackground);
+		ImGui::SameLine();
+		if (m_iBackground == -1)
+			ImGui::Text("none(NoTexture)");
+		else if ((m_iBackground < 0) || (m_iBackground >= m_pUIRender->GetTextureCount()))
+			ImGui::Text("¡Ø WrongNum");
+		else
+			ImGui::Text(m_pUIRender->GetTextureTag(m_iBackground));
 	}
 
 	if (ImGui::CollapsingHeader("Part Setting"))
@@ -603,6 +614,7 @@ HRESULT CController_UITool::EraseUIData()
 		for (auto& iterPart : iter->vecPart)
 		{
 			Safe_Delete_Array(iterPart->strUIPart_Name);
+			Safe_Delete_Array(iterPart->szText);
 			Safe_Delete(iterPart);
 		}
 
