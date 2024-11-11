@@ -4,11 +4,15 @@
 #include "Base.h"
 #include "GameInstance.h"
 #include "UIManager.h"
-
+#include "Item_Manager.h"
+#include "Player_Stat_Manager.h"
 
 BEGIN(Engine)
 class CGameObject;
 END
+
+
+
 
 BEGIN(Client)
 
@@ -53,19 +57,25 @@ public: // 외부에서 매니저 접근
 #pragma endregion
 
 
-#pragma region ItemManager
+#pragma region Item_Manager
 
 
 
 #pragma endregion
 
 
+#pragma region Player_Stat_Manager
+
+
+
+#pragma endregion
 
 
 private:
 	CGameInstance* m_pGameInstance = { nullptr };
 	CUIManager* m_pUIManager = { nullptr };
-
+	CItem_Manager* m_pItem_Manager = { nullptr };
+	CPlayer_Stat_Manager* m_pPlayer_Stat_Manager = { nullptr };
 
 
 

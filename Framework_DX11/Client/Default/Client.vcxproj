@@ -175,6 +175,7 @@
     <ClInclude Include="..\Public\GameInterface_Controller.h" />
     <ClInclude Include="..\Public\ForkLift.h" />
     <ClInclude Include="..\public\FreeCamera.h" />
+    <ClInclude Include="..\Public\Item_Manager.h" />
     <ClInclude Include="..\Public\Level_GamePlay.h" />
     <ClInclude Include="..\Public\Level_Loading.h" />
     <ClInclude Include="..\Public\Level_Logo.h" />
@@ -183,6 +184,7 @@
     <ClInclude Include="..\Public\Monster.h" />
     <ClInclude Include="..\Public\Particle_Snow.h" />
     <ClInclude Include="..\public\Player.h" />
+    <ClInclude Include="..\Public\Player_Stat_Manager.h" />
     <ClInclude Include="..\Public\Sky.h" />
     <ClInclude Include="..\Public\Terrain.h" />
     <ClInclude Include="..\Public\UIManager.h" />
@@ -194,7 +196,9 @@
     <ClInclude Include="..\Public\Weapon.h" />
     <ClInclude Include="Client.h" />
     <ClInclude Include="Item_Defines.h" />
+    <ClInclude Include="Item_Enum.h" />
     <ClInclude Include="Resource.h" />
+    <ClInclude Include="Stat_Enum.h" />
     <ClInclude Include="stdafx.h" />
     <ClInclude Include="targetver.h" />
     <ClInclude Include="UIPage_Defines.h" />
@@ -206,6 +210,7 @@
     <ClCompile Include="..\Private\GameInterface_Controller.cpp" />
     <ClCompile Include="..\Private\ForkLift.cpp" />
     <ClCompile Include="..\private\FreeCamera.cpp" />
+    <ClCompile Include="..\Private\Item_Manager.cpp" />
     <ClCompile Include="..\Private\Level_GamePlay.cpp" />
     <ClCompile Include="..\Private\Level_Loading.cpp" />
     <ClCompile Include="..\Private\Level_Logo.cpp" />
@@ -214,6 +219,7 @@
     <ClCompile Include="..\Private\Monster.cpp" />
     <ClCompile Include="..\Private\Particle_Snow.cpp" />
     <ClCompile Include="..\private\Player.cpp" />
+    <ClCompile Include="..\Private\Player_Stat_Manager.cpp" />
     <ClCompile Include="..\Private\Sky.cpp" />
     <ClCompile Include="..\Private\Terrain.cpp" />
     <ClCompile Include="..\Private\UIManager.cpp" />
