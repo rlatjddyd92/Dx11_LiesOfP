@@ -34,6 +34,7 @@ HRESULT CComponent_Manager::Add_ModelPrototype(_uint iLevelIndex, const _char* s
 		return E_FAIL;
 
 	m_pModelPrototypes[iLevelIndex].emplace(strPrototypeTag, pPrototype);
+	Safe_AddRef(pPrototype);
 
 	return S_OK;
 }
@@ -105,6 +106,7 @@ void CComponent_Manager::Free()
 		for (auto& Pair : m_pPrototypes[i])
 			Safe_Release(Pair.second);
 		m_pPrototypes[i].clear();
+
 
 		for (auto& Pair : m_pModelPrototypes[i])
 			Safe_Release(Pair.second);

@@ -259,7 +259,7 @@ PS_OUT_LIGHT PS_MAIN_LIGHT_DIRECTIONAL(PS_IN In)
     float3		vReflect = reflect(normalize(g_vLightDir.xyz) * -1.f, normalize(vNormal));
 	
 	// 금속과 비금속을 구분하기 위한 기본 반사도 (비금속의 경우 F0 = 0.04)
-    float3 F0 = lerp(float3(0.3f, 0.3f, 0.3f), float3(0.9f, 0.9f, 0.9f), fMetallic);
+    float3 F0 = lerp(float3(0.8f, 0.8f, 0.8f), float3(0.9f, 0.9f, 0.9f), fMetallic);
 	
 	// 하프 벡터 계산
     float3 H = normalize(vViewDir + vLightDir);
@@ -353,7 +353,7 @@ PS_OUT PS_MAIN_DEFERRED(PS_IN In)
 	vector		vShade = g_ShadeTexture.Sample(LinearSampler, In.vTexcoord);
 	vector		vSpecular = g_SpecularTexture.Sample(LinearSampler, In.vTexcoord);
 	
-    Out.vColor = (vDiffuse * vShade + vSpecular) * 1.f; //g_CascadeShadowTexture.Sample(LinearSampler, In.vTexcoord);
+    Out.vColor = (vDiffuse * vShade + vSpecular) * g_CascadeShadowTexture.Sample(LinearSampler, In.vTexcoord);
 
 	vector		vDepthDesc = g_DepthTexture.Sample(PointSampler, In.vTexcoord);
 	float		fViewZ = vDepthDesc.y * 1000.f;

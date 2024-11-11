@@ -9,6 +9,7 @@
 CModel::CModel(ID3D11Device * pDevice, ID3D11DeviceContext * pContext)
 	: CComponent { pDevice, pContext }
 {
+	m_isCloned = false;
 	m_eComponentType = MODEL;
 }
 

@@ -38,8 +38,6 @@ CModel* CInstance_Manager::Add_NonAnimModel(_uint iLevelIndex, const _wstring& s
 	pInstanceModel = dynamic_cast<CModel*>(pComponent);
 	m_pNonAnimModels.emplace(strPrototypeTag, pInstanceModel);
 
-	Safe_AddRef(pInstanceModel);
-
 	return pInstanceModel;
 }
 
@@ -122,7 +120,6 @@ CInstance_Manager* CInstance_Manager::Create(ID3D11Device* pDevice, ID3D11Device
 void CInstance_Manager::Free()
 {
 	__super::Free();
-
 
 
 	Safe_Release(m_pNonAnimInstanceShader);
