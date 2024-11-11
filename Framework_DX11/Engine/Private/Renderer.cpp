@@ -233,12 +233,12 @@ HRESULT CRenderer::Initialize()
 		return E_FAIL;
 	m_pNoiseTexture_SSAO = CTexture::Create(m_pDevice, m_pContext, TEXT("../Bin/Resources/T_Tile_Noise_01_C_LGS.dds"), 1);
 
-	//m_pHDRShader = CShader::Create(m_pDevice, m_pContext, TEXT("../Bin/ShaderFiles/Shader_HDR.hlsl"), VTXPOSTEX::Elements, VTXPOSTEX::iNumElements, 2);
-	//if (nullptr == m_pHDRShader)
-	//	return E_FAIL;
-	m_pHDRShader = CShader::Create(m_pDevice, m_pContext, TEXT("../Bin/ShaderFiles/Shader_HDR.hlsl"));
+	m_pHDRShader = CShader::Create(m_pDevice, m_pContext, TEXT("../Bin/ShaderFiles/Shader_HDR.hlsl"), VTXPOSTEX::Elements, VTXPOSTEX::iNumElements, 2);
 	if (nullptr == m_pHDRShader)
 		return E_FAIL;
+	//m_pHDRShader = CShader::Create(m_pDevice, m_pContext, TEXT("../Bin/ShaderFiles/Shader_HDR.hlsl"));
+	//if (nullptr == m_pHDRShader)
+	//	return E_FAIL;
 
 	m_pDistortionShader = CShader::Create(m_pDevice, m_pContext, TEXT("../Bin/ShaderFiles/Shader_Distortion.hlsl"), VTXPOSTEX::Elements, VTXPOSTEX::iNumElements);
 	if (nullptr == m_pDistortionShader)
@@ -270,8 +270,10 @@ HRESULT CRenderer::Initialize()
 		return E_FAIL;
 	if (FAILED(m_pGameInstance->Ready_RT_Debug(TEXT("Target_ARM"), 300.f, 300.f, 200.f, 200.f)))
 		return E_FAIL;
-	if (FAILED(m_pGameInstance->Ready_RT_Debug(TEXT("Target_Shade"), 300.f,500.f, 200.f, 200.f)))
+	if (FAILED(m_pGameInstance->Ready_RT_Debug(TEXT("Target_HDR"), 300.f,500.f, 200.f, 200.f)))
 		return E_FAIL;
+	//if (FAILED(m_pGameInstance->Ready_RT_Debug(TEXT("Target_Shade"), 300.f,500.f, 200.f, 200.f)))
+	//	return E_FAIL;
 #endif
 
 	if (FAILED(Ready_HDR()))
@@ -322,14 +324,15 @@ HRESULT CRenderer::Draw()
 
 	if (FAILED(Render_SSAO()))
 		return E_FAIL;
+
 	if (FAILED(Render_HDR()))
 		return E_FAIL;
 
 	if (FAILED(Render_Bloom()))	// 다시 고치기
 		return E_FAIL;
 
-	//if(FAILED(Render_LDR()))
-	//	return E_FAIL;
+	if(FAILED(Render_LDR()))
+		return E_FAIL;
 
 	if (FAILED(Render_Distortion()))
 		return E_FAIL;
@@ -504,7 +507,11 @@ HRESULT CRenderer::Render_Lights()
 
 	if (FAILED(m_pShader->Bind_RawValue("g_vCamPosition", &m_pGameInstance->Get_CamPosition_Vec4(), sizeof(_float4))))
 		return E_FAIL;
-	
+
+	if (FAILED(m_pGameInstance->Bind_RT_ShaderResource(m_pShader, TEXT("Target_Diffuse"), "g_DiffuseTexture")))
+		return E_FAIL;
+	if (FAILED(m_pGameInstance->Bind_RT_ShaderResource(m_pShader, TEXT("Target_ARM"), "g_ARMTexture")))
+		return E_FAIL;
 	if (FAILED(m_pGameInstance->Bind_RT_ShaderResource(m_pShader, TEXT("Target_Normal"), "g_NormalTexture")))
 		return E_FAIL;
 	if (FAILED(m_pGameInstance->Bind_RT_ShaderResource(m_pShader, TEXT("Target_Depth"), "g_DepthTexture")))
@@ -649,39 +656,61 @@ HRESULT CRenderer::Render_SSAO()
 
 HRESULT CRenderer::Render_HDR()
 {
-	_uint vRes[2] = { _uint(1280.f / 4), _uint(720.f / 4) };
+	Copy_BackBuffer();
 
-	m_pHDRShader->Bind_RawValue("g_vRes", vRes, sizeof(_uint) * 2);
+	if (FAILED(m_pGameInstance->Begin_MRT(TEXT("MRT_HDR"))))
+		return E_FAIL;
 
-	_uint iDomain = vRes[0] * vRes[1];
-	if (FAILED(m_pHDRShader->Bind_RawValue("g_iDomain", &iDomain, sizeof(_uint))))
-	return E_FAIL;
+	if (FAILED(m_pHDRShader->Bind_Matrix("g_WorldMatrix", &m_WorldMatrix)))
+		return E_FAIL;
+	if (FAILED(m_pHDRShader->Bind_Matrix("g_ViewMatrix", &m_ViewMatrix)))
+		return E_FAIL;
+	if (FAILED(m_pHDRShader->Bind_Matrix("g_ProjMatrix", &m_ProjMatrix)))
+		return E_FAIL;
 
 	if (FAILED(m_pGameInstance->Bind_RT_ShaderResource(m_pHDRShader, TEXT("Target_BackBuffer"), "g_BackTexture")))
 		return E_FAIL;
-	if (FAILED(m_pGameInstance->BInd_RT_UnorderedView(m_pHDRShader, TEXT("Target_Test0"), "g_OutputAvgLum")))
+
+	m_pHDRShader->Begin(0);
+	m_pVIBuffer->Bind_Buffers();
+	m_pVIBuffer->Render();
+
+	if (FAILED(m_pGameInstance->End_MRT()))
 		return E_FAIL;
 
-	if (FAILED(m_pHDRShader->Begin(0)))
-		return E_FAIL;
-	m_pContext->Dispatch((UINT)ceil((_float)(1280.f / 4 * 720.f / 4) / 1024.f), 1, 1);
+	//_uint vRes[2] = { _uint(1280.f / 4), _uint(720.f / 4) };
 
-	// 다음 계산에 영향을 주지 않기 위해 클리어시킴 최대 128개 8개
-	m_pContext->CSSetShaderResources(0, 128, m_pClearSRV);
-	m_pContext->CSSetUnorderedAccessViews(0, 8, m_pClearUAV, nullptr);
+	//m_pHDRShader->Bind_RawValue("g_vRes", vRes, sizeof(_uint) * 2);
 
-	_uint iGroupSize = (UINT)ceil((_float)(1280.f / 4.f * 720.f / 4.f) / 1024.f);
-	m_pHDRShader->Bind_RawValue("g_iGroupSize", &iGroupSize, sizeof(_uint));
+	//_uint iDomain = vRes[0] * vRes[1];
+	//if (FAILED(m_pHDRShader->Bind_RawValue("g_iDomain", &iDomain, sizeof(_uint))))
+	//return E_FAIL;
 
-	if (FAILED(m_pGameInstance->Bind_RT_ShaderResource(m_pHDRShader, TEXT("Target_BackBuffer"), "g_BackTexture")))
-		return E_FAIL;
-	if (FAILED(m_pGameInstance->BInd_RT_UnorderedView(m_pHDRShader, TEXT("Target_Test1"), "g_OutputAvgLum")))
-		return E_FAIL;
-	m_pHDRShader->Begin(1);
-	m_pContext->Dispatch(1, 1, 1);	
+	//if (FAILED(m_pGameInstance->Bind_RT_ShaderResource(m_pHDRShader, TEXT("Target_BackBuffer"), "g_BackTexture")))
+	//	return E_FAIL;
+	//if (FAILED(m_pGameInstance->BInd_RT_UnorderedView(m_pHDRShader, TEXT("Target_Test0"), "g_OutputAvgLum")))
+	//	return E_FAIL;
 
-	m_pContext->CSSetShaderResources(0, 128, m_pClearSRV);
-	m_pContext->CSSetUnorderedAccessViews(0, 8, m_pClearUAV, nullptr);
+	//if (FAILED(m_pHDRShader->Begin(0)))
+	//	return E_FAIL;
+	//m_pContext->Dispatch((UINT)ceil((_float)(1280.f / 4 * 720.f / 4) / 1024.f), 1, 1);
+
+	//// 다음 계산에 영향을 주지 않기 위해 클리어시킴 최대 128개 8개
+	//m_pContext->CSSetShaderResources(0, 128, m_pClearSRV);
+	//m_pContext->CSSetUnorderedAccessViews(0, 8, m_pClearUAV, nullptr);
+
+	//_uint iGroupSize = (UINT)ceil((_float)(1280.f / 4.f * 720.f / 4.f) / 1024.f);
+	//m_pHDRShader->Bind_RawValue("g_iGroupSize", &iGroupSize, sizeof(_uint));
+
+	//if (FAILED(m_pGameInstance->Bind_RT_ShaderResource(m_pHDRShader, TEXT("Target_BackBuffer"), "g_BackTexture")))
+	//	return E_FAIL;
+	//if (FAILED(m_pGameInstance->BInd_RT_UnorderedView(m_pHDRShader, TEXT("Target_Test1"), "g_OutputAvgLum")))
+	//	return E_FAIL;
+	//m_pHDRShader->Begin(1);
+	//m_pContext->Dispatch(1, 1, 1);	
+
+	//m_pContext->CSSetShaderResources(0, 128, m_pClearSRV);
+	//m_pContext->CSSetUnorderedAccessViews(0, 8, m_pClearUAV, nullptr);
 
 	//D3D11_BUFFER_DESC bufferDesc = {};
 	//bufferDesc.Usage = D3D11_USAGE_STAGING;          // CPU 접근을 위한 Staging
@@ -767,10 +796,8 @@ HRESULT CRenderer::Render_Bloom()
 
 	m_pContext->RSSetViewports(iNumViewports, &ViewportDesc);
 
-	if (FAILED(m_pGameInstance->Bind_RT_ShaderResource(m_pBloomShader, TEXT("Target_BackBuffer"), "g_DownSampleTexture")))
+	if (FAILED(m_pGameInstance->Bind_RT_ShaderResource(m_pBloomShader, TEXT("Target_HDR"), "g_DownSampleTexture")))
 		return E_FAIL;
-	//if (FAILED(m_pGameInstance->Bind_RT_ShaderResource(m_pBloomShader, TEXT("Target_HDR"), "g_DownSampleTexture")))
-	//	return E_FAIL;
 
 	if (FAILED(m_pBloomShader->Bind_RawValue("g_isSelectBright", &isSelectBright, sizeof(_bool))))
 		return E_FAIL;
@@ -971,9 +998,6 @@ HRESULT CRenderer::Render_Bloom()
 	m_pVIBuffer->Bind_Buffers();
 	m_pVIBuffer->Render();
 
-	if (FAILED(m_pGameInstance->BInd_RT_UnorderedView(m_pBloomShader, TEXT("Target_Test1"), "g_Avg")))
-		return E_FAIL;
-
 	if (FAILED(m_pGameInstance->End_MRT()))
 		return E_FAIL;
 #pragma endregion
@@ -1001,10 +1025,10 @@ HRESULT CRenderer::Render_LDR()
 
 	if (FAILED(m_pGameInstance->Bind_RT_ShaderResource(m_pHDRShader, TEXT("Target_HDR"), "g_BackTexture")))
 		return E_FAIL;
-	if (FAILED(m_pGameInstance->Bind_RT_ShaderResource(m_pHDRShader, TEXT("Target_Test1"), "g_Avg")))
-		return E_FAIL;
+	//if (FAILED(m_pGameInstance->Bind_RT_ShaderResource(m_pHDRShader, TEXT("Target_Test1"), "g_Avg")))
+	//	return E_FAIL;
 	
-	m_pHDRShader->Begin(2);
+	m_pHDRShader->Begin(1);
 	m_pVIBuffer->Bind_Buffers();
 	m_pVIBuffer->Render();
 
