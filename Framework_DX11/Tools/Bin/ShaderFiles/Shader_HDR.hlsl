@@ -202,11 +202,10 @@ PS_OUT PS_MAIN_HDR(PS_IN In)
     vector vBack = g_BackTexture.Sample(LinearSampler, In.vTexcoord);
 
     // LDR에서 HDR로 변환
-    // 감마 보정 예시를 사용합니다.
     float exposure = 1.0; // 노출값 조정
-    float3 vHdrColor = pow(vBack.rgb, 2.2f); // 감마 보정 적용
+    float3 vHdrColor = pow(vBack.rgb, 2.2f); // 감마 보정 해제
     
-    vHdrColor *= 2.0f;
+    vHdrColor *= 6.0f;
     
     
     Out.vColor = float4(vHdrColor, 1.f);

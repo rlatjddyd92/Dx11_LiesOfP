@@ -114,11 +114,11 @@ float3 FresnelSchlick(float LdotH, float3 fSpecularColor)
 }
 
     // Normal Distribution Function (GGX/Trowbridge-Reitz)
-float DistributionGGX(float3 N, float3 H, float roughness)
+float DistributionGGX(float3 vNormal, float3 vHalfVector, float fRoughness)
 {
-    float a = roughness * roughness;
+    float a = fRoughness * fRoughness;
     float a2 = a * a;
-    float NdotH = max(dot(N, H), 0.0);
+    float NdotH = max(dot(vNormal, vHalfVector), 0.0);
     float NdotH2 = NdotH * NdotH;
 
     float num = a2;
@@ -129,37 +129,37 @@ float DistributionGGX(float3 N, float3 H, float roughness)
 }
 
     // Geometry Function (Schlick-GGX)
-float GeometrySchlickGGX(float NdotV, float roughness)
+float GeometrySchlickGGX(float NdotV, float fRoughness)
 {
-    float r = (roughness + 1.0);
+    float r = (fRoughness + 1.0);
     float k = (r * r) / 8.0;
     return NdotV / (NdotV * (1.0 - k) + k);
 }
 
-float GeometrySmith(float3 N, float3 V, float3 L, float roughness)
+float GeometrySmith(float3 N, float3 V, float3 L, float fRoughness)
 {
     float NdotV = max(dot(N, V), 0.0);
     float NdotL = max(dot(N, L), 0.0);
-    float ggx2 = GeometrySchlickGGX(NdotV, roughness);
-    float ggx1 = GeometrySchlickGGX(NdotL, roughness);
+    float ggx2 = GeometrySchlickGGX(NdotV, fRoughness);
+    float ggx1 = GeometrySchlickGGX(NdotL, fRoughness);
 
     return ggx1 * ggx2;
 }
 
 float3 CalculateCookTorranceBRDF(
-        in float3 normal,
-        in float3 pointToCamera,
-        in float3 halfVector,
-        in float3 pointToLight,
-        in float roughness,
+        in float3 vNormal,
+        in float3 vPointToCamera,
+        in float3 vHalfVector,
+        in float3 vPointToLight,
+        in float fRoughness,
         in float3 F
     )
 {
-    float NDF = DistributionGGX(normal, halfVector, roughness); //미세면 분포도 NDF계산
-    float G = GeometrySmith(normal, pointToCamera, pointToLight, roughness); //미세면 그림자 계산
+    float NDF = DistributionGGX(vNormal, vHalfVector, fRoughness); //미세면 분포도 NDF계산
+    float G = GeometrySmith(vNormal, vPointToCamera, vPointToLight, fRoughness); //미세면 그림자 계산
                 
     float3 numerator = NDF * G * F;
-    float denominator = 4.0 * max(dot(normal, pointToCamera), 0.0) * max(dot(normal, pointToLight), 0.0) + 0.0001f;
+    float denominator = 4.0 * max(dot(vNormal, vPointToCamera), 0.0) * max(dot(vNormal, fRoughness), 0.0) + 0.0001f;
     float3 specular = numerator / denominator;
                 
     return specular;
