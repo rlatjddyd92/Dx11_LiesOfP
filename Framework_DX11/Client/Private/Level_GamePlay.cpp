@@ -31,6 +31,18 @@ HRESULT CLevel_Tool::Initialize()
 	if (FAILED(Ready_Layer_Paticle()))
 		return E_FAIL;
 
+	CEffect_Container::EFFECT_DESC desc = {};
+	desc.fRotationPerSec = XMConvertToRadians(90.f);
+	desc.fSpeedPerSec = 1.f;
+	desc.iLevelIndex = LEVEL_GAMEPLAY;
+	desc.pParentMatrix = { nullptr };
+	desc.pSocketMatrix = { nullptr };
+	desc.vPos = _float3(0.f, 0.f, 0.f);
+	desc.vRotation = _float3(0.f, 0.f, 0.f);
+	desc.vScale = _float3(1.f, 1.f, 1.f);
+	
+	CEffect_Manager::Get_Instance()->Add_Effect_ToLayer(LEVEL_GAMEPLAY, CEffect_Manager::EFFECT_POWER_HIT, &desc);
+
 	return S_OK;
 }
 

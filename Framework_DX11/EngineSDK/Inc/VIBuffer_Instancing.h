@@ -52,7 +52,7 @@ public:
 	HRESULT Initialize_Desc(const CVIBuffer_Instancing::INSTANCE_DESC& Desc);
 
 public:
-	virtual void Reset() = 0;
+	virtual void Reset();
 
 protected:
 	_bool Contain_State(_uint iCurrentState, _uint iCheckState);

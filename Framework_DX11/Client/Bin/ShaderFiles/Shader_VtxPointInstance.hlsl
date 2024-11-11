@@ -1,29 +1,41 @@
 #include "Shader_Engine_Defines.hlsli"
 
+// 고준호
+struct Particle
+{
+    float3 vPosition;
+    float2 vPSize;
+    float4 vRight;
+    float4 vUp;
+    float4 vLook;
+    float4 vTranslation;
+    float2 vLifeTime;
+    float4 vColor;
+    float fSpeed;
+    float4 vCurrenrRandomDir;
+    float4 vNextRandomDir;
+};
+
 #define STATE_GROW          0x0001
 #define STATE_SHRINK        0x0002
 #define STATE_ROTATION      0x0004
 
-matrix g_WorldMatrix, g_ViewMatrix, g_ProjMatrix;
-texture2D g_DiffuseTexture;
-texture2D g_NormalTexture;
-vector g_vCamPosition;
 
-float2 g_vTexDivide;
-float2 g_vScaling;
-int g_iState = 0;
-float g_fStartRotation = 0.f;
-float g_fAngle = 0.f;
-float g_fSpriteSpeed = 0.f;
+StructuredBuffer<Particle> Particle_SRV : register(t0);
 
-struct VS_IN
-{
-    float3 vPosition : POSITION;
-    float2 vPSize : PSIZE;
-    row_major float4x4 TransformMatrix : WORLD; //row_majo : 행을 기준으로.
-    float2 vLifeTime : COLOR0;
-    float4 vColor : COLOR1;
-};
+matrix			g_WorldMatrix, g_ViewMatrix, g_ProjMatrix;
+texture2D		g_DiffuseTexture;
+texture2D       g_NormalTexture;
+texture2D       g_MaskTexture;
+vector			g_vCamPosition;
+
+float2          g_vTexDivide;
+float2          g_vScaling;
+int             g_iState = 0;
+float           g_fStartRotation = 0.f;
+float           g_fAngle = 0.f;
+float           g_fSpriteSpeed = 0.f;
+
 
 struct VS_OUT
 {
@@ -34,19 +46,27 @@ struct VS_OUT
     float3 vLook : TEXCOORD0;
 };
 
-VS_OUT VS_MAIN(VS_IN In)
+
+VS_OUT VS_MAIN(uint instanceID : SV_InstanceID)
 {
     VS_OUT Out = (VS_OUT) 0;
 	
-    vector vPosition = mul(float4(In.vPosition, 1.f), In.TransformMatrix);
+    row_major float4x4 TransformMatrix = float4x4(
+    float4(Particle_SRV[instanceID].vRight), 
+    float4(Particle_SRV[instanceID].vUp), 
+    float4(Particle_SRV[instanceID].vLook), 
+    float4(Particle_SRV[instanceID].vTranslation)
+    );
+    
+    vector vPosition = mul(float4(Particle_SRV[instanceID].vPosition, 1.f), TransformMatrix);
 
     vPosition = mul(vPosition, g_WorldMatrix);
 	
     Out.vPosition = vPosition;
-    Out.vPSize = In.vPSize;
-    Out.vLifeTime = In.vLifeTime;
-    Out.vColor = In.vColor;
-    Out.vLook = In.TransformMatrix._31_32_33;;
+    Out.vPSize = Particle_SRV[instanceID].vPSize;
+    Out.vLifeTime = Particle_SRV[instanceID].vLifeTime;
+    Out.vColor = Particle_SRV[instanceID].vColor;
+    Out.vLook = mul(Particle_SRV[instanceID].vLook, g_WorldMatrix);
     
     return Out;
 }
@@ -84,11 +104,11 @@ struct GS_OUT
 [maxvertexcount(6)]
 void GS_MAIN(point GS_IN In[1], inout TriangleStream<GS_OUT> Container)
 {
-    GS_OUT Out[4];
+	GS_OUT			Out[4];
 
-    float3 vLook = (g_vCamPosition - In[0].vPosition).xyz;
-    float3 vRight = normalize(cross(float3(0.f, 1.f, 0.f), vLook));
-    float3 vUp = normalize(cross(vLook, vRight));
+	float3		vLook = (g_vCamPosition - In[0].vPosition).xyz;
+	float3		vRight = normalize(cross(float3(0.f, 1.f, 0.f), vLook));
+    float3      vUp = normalize(cross(vLook, vRight));
     
     vRight *= In[0].vPSize.x * 0.5f * g_vScaling.x;
     vUp *= In[0].vPSize.y * 0.5f * g_vScaling.y;
@@ -96,19 +116,19 @@ void GS_MAIN(point GS_IN In[1], inout TriangleStream<GS_OUT> Container)
     vRight = RotateByAxis(vRight, vLook, radians(g_fStartRotation));
     vUp = RotateByAxis(vUp, vLook, radians(g_fStartRotation));
     
-    if (g_iState & STATE_GROW)
+    if(g_iState & STATE_GROW)
     {
         vRight *= In[0].vLifeTime.y / In[0].vLifeTime.x;
         vUp *= In[0].vLifeTime.y / In[0].vLifeTime.x;
 
     }
-    else if (g_iState & STATE_SHRINK)
+    else if(g_iState & STATE_SHRINK)
     {
         vRight *= (1.f - In[0].vLifeTime.y / In[0].vLifeTime.x);
         vUp *= (1.f - In[0].vLifeTime.y / In[0].vLifeTime.x);
     }
     
-    if (g_iState & STATE_ROTATION)
+    if(g_iState & STATE_ROTATION)
     {
         float fAngle = g_fAngle;
         fAngle *= In[0].vColor.a;
@@ -141,22 +161,22 @@ void GS_MAIN(point GS_IN In[1], inout TriangleStream<GS_OUT> Container)
     Out[3].vColor = In[0].vColor;
 
 
-    matrix matVP = mul(g_ViewMatrix, g_ProjMatrix);
+	matrix		matVP = mul(g_ViewMatrix, g_ProjMatrix);
 
-    Out[0].vPosition = mul(Out[0].vPosition, matVP);
-    Out[1].vPosition = mul(Out[1].vPosition, matVP);
-    Out[2].vPosition = mul(Out[2].vPosition, matVP);
-    Out[3].vPosition = mul(Out[3].vPosition, matVP);
+	Out[0].vPosition = mul(Out[0].vPosition, matVP);
+	Out[1].vPosition = mul(Out[1].vPosition, matVP);
+	Out[2].vPosition = mul(Out[2].vPosition, matVP);
+	Out[3].vPosition = mul(Out[3].vPosition, matVP);
 
-    Container.Append(Out[0]);
-    Container.Append(Out[1]);
-    Container.Append(Out[2]);
-    Container.RestartStrip();
+	Container.Append(Out[0]);
+	Container.Append(Out[1]);
+	Container.Append(Out[2]);
+	Container.RestartStrip();
 
-    Container.Append(Out[0]);
-    Container.Append(Out[2]);
-    Container.Append(Out[3]);
-    Container.RestartStrip();
+	Container.Append(Out[0]);
+	Container.Append(Out[2]);
+	Container.Append(Out[3]);
+	Container.RestartStrip();
 }
 
 [maxvertexcount(6)]
@@ -375,18 +395,18 @@ PS_OUT PS_SPRITE_BTOA_MAIN(PS_IN In)
 }
 
 
-technique11 DefaultTechnique
+technique11	DefaultTechnique
 {
-    pass DEFAULT // 0
-    {
-        SetRasterizerState(RS_Default);
-        SetDepthStencilState(DSS_Default, 0);
-        SetBlendState(BS_Default, vector(0.f, 0.f, 0.f, 0.f), 0xffffffff);
+	pass DEFAULT // 0
+	{
+		SetRasterizerState(RS_Default);
+		SetDepthStencilState(DSS_Default, 0);
+		SetBlendState(BS_Default, vector(0.f, 0.f, 0.f, 0.f), 0xffffffff);
 
-        VertexShader = compile vs_5_0 VS_MAIN();
-        GeometryShader = compile gs_5_0 GS_MAIN();
-        PixelShader = compile ps_5_0 PS_MAIN();
-    }
+		VertexShader = compile vs_5_0 VS_MAIN();
+		GeometryShader = compile gs_5_0 GS_MAIN();
+		PixelShader = compile ps_5_0 PS_MAIN();
+	}
 
     pass PARTICLE_RTOA_GLOW // 1
     {

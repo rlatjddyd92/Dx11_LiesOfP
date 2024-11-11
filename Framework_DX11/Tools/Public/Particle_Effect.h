@@ -95,6 +95,7 @@ public:
 	{
 		_tchar		strDiffuseTexturTag[MAX_PATH] = L"";
 		_tchar		strNomralTextureTag[MAX_PATH] = L"";
+		_tchar		strMaskTextureTag[MAX_PATH] = L"";
 	}TEXTURE_DESC;
 
 	typedef struct
@@ -176,6 +177,7 @@ private:
 	class CVIBuffer_Point_Instance* m_pVIBufferCom = { nullptr };
 	class CTexture* m_pDiffuseTextureCom = { nullptr };
 	class CTexture* m_pNormalTextureCom = { nullptr };
+	class CTexture* m_pMaskTextureCom = { nullptr };
 
 	// 이거 3개는 월드의 역행렬
 	class CShader_Compute* m_pSpreadCS = { nullptr };
@@ -186,6 +188,9 @@ private:
 	class CShader_Compute* m_pSpreadCS_World = { nullptr };
 	class CShader_Compute* m_pMoveCS_World = { nullptr };
 	class CShader_Compute* m_pConvergeCS_World = { nullptr };
+
+	// 초기화.
+	class CShader_Compute* m_pResetCS = { nullptr };
 
 private:
 	DEFAULT_DESC m_DefaultDesc = {};

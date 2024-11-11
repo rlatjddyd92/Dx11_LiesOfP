@@ -1,12 +1,32 @@
 #include "Shader_Engine_Defines.hlsli"
 
+// 고준호
+struct Particle
+{
+    float3 vPosition;
+    float2 vPSize;
+    float4 vRight;
+    float4 vUp;
+    float4 vLook;
+    float4 vTranslation;
+    float2 vLifeTime;
+    float4 vColor;
+    float fSpeed;
+    float4 vCurrenrRandomDir;
+    float4 vNextRandomDir;
+};
+
 #define STATE_GROW          0x0001
 #define STATE_SHRINK        0x0002
 #define STATE_ROTATION      0x0004
 
+
+StructuredBuffer<Particle> Particle_SRV : register(t0);
+
 matrix			g_WorldMatrix, g_ViewMatrix, g_ProjMatrix;
 texture2D		g_DiffuseTexture;
 texture2D       g_NormalTexture;
+texture2D       g_MaskTexture;
 vector			g_vCamPosition;
 
 float2          g_vTexDivide;
@@ -16,14 +36,6 @@ float           g_fStartRotation = 0.f;
 float           g_fAngle = 0.f;
 float           g_fSpriteSpeed = 0.f;
 
-struct VS_IN
-{
-    float3 vPosition : POSITION;
-    float2 vPSize : PSIZE;
-    row_major float4x4 TransformMatrix : WORLD; //row_majo : 행을 기준으로.
-    float2 vLifeTime : COLOR0;
-    float4 vColor : COLOR1;
-};
 
 struct VS_OUT
 {
@@ -35,19 +47,26 @@ struct VS_OUT
 };
 
 
-VS_OUT VS_MAIN(VS_IN In)
+VS_OUT VS_MAIN(uint instanceID : SV_InstanceID)
 {
     VS_OUT Out = (VS_OUT) 0;
 	
-    vector vPosition = mul(float4(In.vPosition, 1.f), In.TransformMatrix);
+    row_major float4x4 TransformMatrix = float4x4(
+    float4(Particle_SRV[instanceID].vRight), 
+    float4(Particle_SRV[instanceID].vUp), 
+    float4(Particle_SRV[instanceID].vLook), 
+    float4(Particle_SRV[instanceID].vTranslation)
+    );
+    
+    vector vPosition = mul(float4(Particle_SRV[instanceID].vPosition, 1.f), TransformMatrix);
 
     vPosition = mul(vPosition, g_WorldMatrix);
 	
     Out.vPosition = vPosition;
-    Out.vPSize = In.vPSize;
-    Out.vLifeTime = In.vLifeTime;
-    Out.vColor = In.vColor;
-    Out.vLook = In.TransformMatrix._31_32_33;;
+    Out.vPSize = Particle_SRV[instanceID].vPSize;
+    Out.vLifeTime = Particle_SRV[instanceID].vLifeTime;
+    Out.vColor = Particle_SRV[instanceID].vColor;
+    Out.vLook = mul(Particle_SRV[instanceID].vLook, g_WorldMatrix);
     
     return Out;
 }

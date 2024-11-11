@@ -99,9 +99,12 @@
     </Filter>
     <Filter Include="02.GameObjects\08.Decal">
       <UniqueIdentifier>{caef4cbb-fb0c-4dfc-875e-2fc8a569562f}</UniqueIdentifier>
-	</Filter>
+    </Filter>
     <Filter Include="02.GameObjects\04.Effect\Effect_Base\Texture_Effect">
       <UniqueIdentifier>{e0193f26-6fda-4bf4-8fcd-c94aa5bd43d6}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.GameObjects\04.Effect\Effect_Base\Mesh_Effect">
+      <UniqueIdentifier>{b10a3906-85c6-4dac-b167-b3bb3cb9c3df}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -242,7 +245,7 @@
     </ClInclude>
     <ClInclude Include="..\Public\Decal.h">
       <Filter>02.GameObjects\08.Decal</Filter>
-	</ClInclude>
+    </ClInclude>
     <ClInclude Include="..\..\imgui\ImGuiFileDialogConfig.h">
       <Filter>Imgui</Filter>
     </ClInclude>
@@ -251,6 +254,9 @@
     </ClInclude>
     <ClInclude Include="..\..\imgui\ImGuiFileDialog.h">
       <Filter>Imgui</Filter>
+    </ClInclude>
+    <ClInclude Include="..\public\Mesh_Effect.h">
+      <Filter>02.GameObjects\04.Effect\Effect_Base\Mesh_Effect</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -378,9 +384,12 @@
     </ClCompile>
     <ClCompile Include="..\Private\Decal.cpp">
       <Filter>02.GameObjects\08.Decal</Filter>
-	</ClCompile>
+    </ClCompile>
     <ClCompile Include="..\..\imgui\ImGuiFileDialog.cpp">
       <Filter>Imgui</Filter>
+    </ClCompile>
+    <ClCompile Include="..\private\Mesh_Effect.cpp">
+      <Filter>02.GameObjects\04.Effect\Effect_Base\Mesh_Effect</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -418,9 +427,6 @@
     <FxCompile Include="..\Bin\ShaderFiles\Shader_VtxNorTex.hlsl">
       <Filter>97.ShaderFiles</Filter>
     </FxCompile>
-    <FxCompile Include="..\Bin\ShaderFiles\Shader_VtxPointInstance.hlsl">
-      <Filter>97.ShaderFiles</Filter>
-    </FxCompile>
     <FxCompile Include="..\Bin\ShaderFiles\Shader_VtxPosTex.hlsl">
       <Filter>97.ShaderFiles</Filter>
     </FxCompile>
@@ -434,8 +440,11 @@
       <Filter>97.ShaderFiles</Filter>
     </FxCompile>
     <FxCompile Include="..\Bin\ShaderFiles\Shader_SSD.hlsl">
-	</FxCompile>
-    <FxCompile Include="..\Bin\ShaderFiles\Shader_VtxPointInstance_Test.hlsl">
+    </FxCompile>
+    <FxCompile Include="..\Bin\ShaderFiles\Shader_VtxPointInstance.hlsl">
+      <Filter>97.ShaderFiles</Filter>
+    </FxCompile>
+    <FxCompile Include="..\Bin\ShaderFiles\Shader_Effect_Mesh.hlsl">
       <Filter>97.ShaderFiles</Filter>
     </FxCompile>
   </ItemGroup>

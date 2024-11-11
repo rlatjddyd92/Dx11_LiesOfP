@@ -155,10 +155,11 @@ HRESULT CController_EffectTool::Add_Particle()
 	wcsncpy_s(desc.InitDesc.TextureDesc.strDiffuseTexturTag, m_Diffuse_PrototypeTags[m_iSelected_DiffuseTextureIndex].c_str(), sizeof(desc.InitDesc.TextureDesc.strDiffuseTexturTag) / sizeof(_tchar));
 
 	wcsncpy_s(desc.InitDesc.TextureDesc.strNomralTextureTag, m_Normal_PrototypeTags[m_iSelected_NormalTextureIndex].c_str(), sizeof(desc.InitDesc.TextureDesc.strNomralTextureTag) / sizeof(_tchar));
+	
+	wcsncpy_s(desc.InitDesc.TextureDesc.strMaskTextureTag, m_Diffuse_PrototypeTags[m_iSelected_MaskTextureIndex_1].c_str(), sizeof(desc.InitDesc.TextureDesc.strMaskTextureTag) / sizeof(_tchar));
 
 	if (m_iMax_ParticleShaderIndex < m_iParticleShaderIndex)
 		m_iParticleShaderIndex = m_iMax_ParticleShaderIndex;
-
 
 	if (FAILED(m_pGameInstance->Add_CloneObject_ToLayer(LEVEL_TOOL, TEXT("Layer_Particle"), TEXT("Prototype_GameObject_Particle_Effect"), &desc)))
 		return E_FAIL;
@@ -186,6 +187,13 @@ void CController_EffectTool::Particle_Check()
 		WideCharToMultiByte(CP_UTF8, 0, &strNormalText[0], (int)strNormalText.size(), &strNormalTo[0], iSize, nullptr, nullptr);
 		_char* szNormal = const_cast<_char*>(strNormalTo.data());
 		ImGui::InputText("Normal", szNormal, IM_ARRAYSIZE(szNormal));
+
+		_wstring strMaskText_1 = m_Diffuse_PrototypeTags[m_iSelected_MaskTextureIndex_1];
+		iSize = WideCharToMultiByte(CP_UTF8, 0, &strMaskText_1[0], (int)strMaskText_1.size(), nullptr, 0, nullptr, nullptr);
+		string strMaskTo_1(iSize, 0);
+		WideCharToMultiByte(CP_UTF8, 0, &strMaskText_1[0], (int)strMaskText_1.size(), &strMaskTo_1[0], iSize, nullptr, nullptr);
+		_char* szMask_1 = const_cast<_char*>(strMaskTo_1.data());
+		ImGui::InputText("Mask_1", szMask_1, IM_ARRAYSIZE(szMask_1));
 
 		ImGui::InputInt	("Num Instance", (_int*)&m_iNumInstance);
 		ImGui::InputFloat3("Center Instance", (_float*)&m_vCenter);

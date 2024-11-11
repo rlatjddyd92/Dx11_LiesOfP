@@ -13,7 +13,7 @@ public:
 		_tchar		strEffectName[MAX_PATH] = L"";
 	} EFFECT_BASE_DESC;
 
-	enum EFFECT_TYPE { TYPE_PARTICLE, TYPE_TEXTURE, TYPE_END };
+	enum EFFECT_TYPE { TYPE_PARTICLE, TYPE_TEXTURE, TYPE_MESH, TYPE_END };
 
 protected:
 	CEffect_Base(ID3D11Device* pDevice, ID3D11DeviceContext* pContext);
