@@ -245,8 +245,6 @@ HRESULT CModel::Render_Instance(_uint iMeshIndex)
 	_uint iNumIndices = m_Meshes[iMeshIndex]->Get_NumIndices();
 	m_pContext->DrawIndexedInstanced(m_Meshes[iMeshIndex]->Get_NumIndices(), m_InstanceDatas.size(), 0, 0, 0);
 
-	m_InstanceDatas.clear();
-
 	return S_OK;
 }
 

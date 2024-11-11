@@ -89,7 +89,11 @@ HRESULT CInstance_Manager::Draw(_uint iPass)
 			if (FAILED(Pair.second->Render_Instance((_uint)i)))
 				return E_FAIL;
 		}
+
+		Pair.second->Clear_InstanceData();
 	}
+
+
 }
 
 CModel* CInstance_Manager::Find_NonAnimModel(const _wstring& strPrototypeTag)

@@ -219,11 +219,11 @@ void CController_MapTool::Pick_Object()
 		m_tGizmoDesc.CurrentGizmoOperation = ImGuizmo::TRANSLATE;
 	} ImGui::SameLine();
 
-	if (ImGui::RadioButton("Rot", iGizmoOperation == ROTATION))
-	{
-		iGizmoOperation = ROTATION;
-		m_tGizmoDesc.CurrentGizmoOperation = ImGuizmo::ROTATE;
-	} ImGui::SameLine();
+	//if (ImGui::RadioButton("Rot", iGizmoOperation == ROTATION))
+	//{
+	//	iGizmoOperation = ROTATION;
+	//	m_tGizmoDesc.CurrentGizmoOperation = ImGuizmo::ROTATE;
+	//} ImGui::SameLine();
 
 	if (ImGui::RadioButton("Scale", iGizmoOperation == SCALE))
 	{
@@ -260,7 +260,7 @@ void CController_MapTool::Pick_Object()
 
 
 	ImGui::DragFloat3("Scale(X, Y, Z)", (_float*)&vScale, 0.05f, 0.1f, 100.f);
-	ImGui::DragFloat3("Rotation(X, Y, Z)", (_float*)&vRot, 0.05f, -180.f, 180.f, 0);
+	ImGui::DragFloat3("Rotation(X, Y, Z)", (_float*)&vRot, 0.05f, -360.f, 360.f, 0);
 	ImGui::DragFloat3("Position(X, Y, Z)", (_float*)&vPos, 0.05f, -5000.f, 5000.f, 0);
 
 	ImGui::InputInt("RenderTarget ID", &iSelectObj_RenderTargetID);

@@ -92,6 +92,7 @@ struct PS_OUT_MODEL
     vector vNormal : SV_TARGET1;
     vector vDepth : SV_TARGET2;
     vector vARM : SV_TARGET3;
+    vector vPickDepth : SV_TARGET4;
 };
 
 PS_OUT_MODEL PS_MAIN(PS_IN_MODEL In)
@@ -109,7 +110,8 @@ PS_OUT_MODEL PS_MAIN(PS_IN_MODEL In)
     Out.vNormal = vector(In.vNormal.xyz * 0.5f + 0.5f, 0.f);
     Out.vDepth = vector(In.vProjPos.z / In.vProjPos.w, In.vProjPos.w / 1000.f, 0.f, 0.f);
     Out.vARM = g_ARMTexture.Sample(LinearSampler, In.vTexcoord);
-
+    Out.vPickDepth = vector(In.vProjPos.z / In.vProjPos.w, 0.f, 0.f, 1.f);
+    
     return Out;
 }
 
@@ -147,7 +149,8 @@ PS_OUT_MODEL PS_MAIN_NORMAL(PS_IN_NORMAL In)
     Out.vNormal = vector(vNormal * 0.5f + 0.5f, 0.f);
     Out.vDepth = vector(In.vProjPos.z / In.vProjPos.w, In.vProjPos.w / 1000.f, 0.f, 0.f);
     Out.vARM = g_ARMTexture.Sample(LinearSampler, In.vTexcoord);
-
+    Out.vPickDepth = vector(In.vProjPos.z / In.vProjPos.w, 0.f, 0.f, 1.f);
+    
     return Out;
 }
 
