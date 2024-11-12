@@ -252,7 +252,7 @@ void CImGui_Manager::Tool_Animation()
 	}
 	else
 	{
-		//m_pController_AnimationTool->BlockObjCtr();
+		m_pController_AnimationTool->BlockObjCtr();
 	}
 }
 

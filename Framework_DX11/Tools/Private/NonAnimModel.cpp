@@ -69,7 +69,7 @@ void CNonAnimModel::Update(_float fTimeDelta)
 
 void CNonAnimModel::Late_Update(_float fTimeDelta)
 {
-	if(m_pGameInstance->isIn_Frustum_WorldSpace(m_pTransformCom->Get_State(CTransform::STATE_POSITION), 25.f))
+	if(m_pGameInstance->isIn_Frustum_WorldSpace(m_pTransformCom->Get_State(CTransform::STATE_POSITION), 40.f))
 	{
 		/* 직교투영을 위한 월드행렬까지 셋팅하게 된다. */
 		__super::Late_Update(fTimeDelta);
