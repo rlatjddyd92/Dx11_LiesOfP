@@ -320,7 +320,7 @@ _int CNavigationController::SelectCell(_float3 vPickPos, _int* iSelectNum)
 
 void CNavigationController::Delete_Selected(_uint iIndex)
 {
-	if (m_Cells[iIndex] != nullptr && iIndex < m_Cells.size())
+	if (iIndex < m_Cells.size() && m_Cells[iIndex] != nullptr && iIndex < m_Cells.size())
 		m_Cells.erase(remove(m_Cells.begin(), m_Cells.end(), m_Cells[iIndex]), m_Cells.end());
 	//remove와 erase의 단점을 보완하기 위해 둘 다 사용
 }

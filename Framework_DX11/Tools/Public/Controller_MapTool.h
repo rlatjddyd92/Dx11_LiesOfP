@@ -30,6 +30,7 @@ public:
 
 private:
 	void Select_Map_Model();
+	void Select_Interact_Model();
 	void Show_List(_uint iFolder);
 	void SaveMap();
 	void LoadMap();

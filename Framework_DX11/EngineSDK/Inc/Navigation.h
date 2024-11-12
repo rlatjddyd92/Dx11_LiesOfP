@@ -23,6 +23,7 @@ public:
 public:
 	void Update(_fmatrix TerrainWorldMatrix);
 	_bool isMove(_fvector vPosition);
+	void SetUp_OnCell(class CTransform* pTransform, _float fOffset, _float fTimeDelta);
 
 #ifdef _DEBUG
 public:
