@@ -20,7 +20,6 @@ HRESULT CParticle_Effect::Initialize_Prototype()
 HRESULT CParticle_Effect::Initialize(void* pArg)
 {
     PARTICLE_EFFECT_DESC* pDesc = static_cast<PARTICLE_EFFECT_DESC*>(pArg);
-    m_iNumInstance = pDesc->BufferDesc.iNumInstance;
     if (FAILED(__super::Initialize(pDesc)))
         return E_FAIL;
     
@@ -173,7 +172,6 @@ void CParticle_Effect::Reset()
     m_RandomDesc = m_SaveDesc.InitDesc.RandomDesc;
     m_AccelDesc = m_SaveDesc.InitDesc.AccelDesc;
     Set_Transform(m_SaveDesc.InitDesc.TransformDesc);
-    m_isFirst = false;
 
     CVIBuffer_Point_Instance::PARTICLE_MOVEMENT Movement = {};
 

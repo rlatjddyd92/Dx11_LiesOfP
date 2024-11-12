@@ -225,7 +225,7 @@ void CVIBuffer_Point_Instance::Init_Particle(PARTICLE* pParticles)
 		pParticles[i].vUp = _float4(0.f, 1.f, 0.f, 0.f);
 		pParticles[i].vLook = _float4(0.f, 0.f, 1.f, 0.f);
 
-		pParticles[i].vTranslation = Get_RandomTranslation();
+		pParticles[i].vTranslation = Get_ExceptedTranslation();
 		pParticles[i].vLifeTime = _float2(m_pGameInstance->Get_Random(m_vLifeTime.x, m_vLifeTime.y), 0.0f);
 		pParticles[i].vColor = _float4(m_pGameInstance->Get_Random(m_vMinColor.x, m_vMaxColor.x),
 			m_pGameInstance->Get_Random(m_vMinColor.y, m_vMaxColor.y),
@@ -240,7 +240,7 @@ void CVIBuffer_Point_Instance::Init_Particle(PARTICLE* pParticles)
 	}
 }
 
-_float4 CVIBuffer_Point_Instance::Get_RandomTranslation()
+_float4 CVIBuffer_Point_Instance::Get_ExceptedTranslation()
 {
 	_float fX_Small{}, fX_Big{}, fY_Small{}, fY_Big{}, fZ_Small{}, fZ_Big{};
 

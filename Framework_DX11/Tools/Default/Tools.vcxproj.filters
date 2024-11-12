@@ -106,6 +106,18 @@
     <Filter Include="02.GameObjects\04.Effect\Effect_Base\Mesh_Effect">
       <UniqueIdentifier>{b10a3906-85c6-4dac-b167-b3bb3cb9c3df}</UniqueIdentifier>
     </Filter>
+    <Filter Include="02.GameObjects\04.Effect\Effect_Base\Trail_Effect">
+      <UniqueIdentifier>{bacdaf87-2d38-4246-b28e-9f7f048df1dd}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.GameObjects\04.Effect\Effect_Base\Trail_Effect\One_Point">
+      <UniqueIdentifier>{66bf96fb-db28-4c63-a6c1-7bde23075a5f}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.GameObjects\04.Effect\Effect_Base\Trail_Effect\Two_Point">
+      <UniqueIdentifier>{e27e7870-ef1e-40d5-8cbb-38abb2cccdc2}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.GameObjects\04.Effect\Effect_Base\Trail_Effect\Multi_Point">
+      <UniqueIdentifier>{bd043202-5d95-47a8-9766-4ac80fbb99f8}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="framework.h">
@@ -258,6 +270,15 @@
     <ClInclude Include="..\public\Mesh_Effect.h">
       <Filter>02.GameObjects\04.Effect\Effect_Base\Mesh_Effect</Filter>
     </ClInclude>
+    <ClInclude Include="..\public\Trail_Effect_TP.h">
+      <Filter>02.GameObjects\04.Effect\Effect_Base\Trail_Effect\Two_Point</Filter>
+    </ClInclude>
+    <ClInclude Include="..\public\Trail_Effect_MP.h">
+      <Filter>02.GameObjects\04.Effect\Effect_Base\Trail_Effect\Multi_Point</Filter>
+    </ClInclude>
+    <ClInclude Include="..\public\Trail_Effect_OP.h">
+      <Filter>02.GameObjects\04.Effect\Effect_Base\Trail_Effect\One_Point</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <Image Include="small.ico">
@@ -391,6 +412,15 @@
     <ClCompile Include="..\private\Mesh_Effect.cpp">
       <Filter>02.GameObjects\04.Effect\Effect_Base\Mesh_Effect</Filter>
     </ClCompile>
+    <ClCompile Include="..\private\Trail_Effect_TP.cpp">
+      <Filter>02.GameObjects\04.Effect\Effect_Base\Trail_Effect\Two_Point</Filter>
+    </ClCompile>
+    <ClCompile Include="..\private\Trail_Effect_MP.cpp">
+      <Filter>02.GameObjects\04.Effect\Effect_Base\Trail_Effect\Multi_Point</Filter>
+    </ClCompile>
+    <ClCompile Include="..\private\Trail_Effect_OP.cpp">
+      <Filter>02.GameObjects\04.Effect\Effect_Base\Trail_Effect\One_Point</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="Tools.rc">
@@ -439,12 +469,19 @@
     <FxCompile Include="..\Bin\ShaderFiles\Shader_Effect_Texture.hlsl">
       <Filter>97.ShaderFiles</Filter>
     </FxCompile>
-    <FxCompile Include="..\Bin\ShaderFiles\Shader_SSD.hlsl">
-    </FxCompile>
     <FxCompile Include="..\Bin\ShaderFiles\Shader_VtxPointInstance.hlsl">
       <Filter>97.ShaderFiles</Filter>
     </FxCompile>
     <FxCompile Include="..\Bin\ShaderFiles\Shader_Effect_Mesh.hlsl">
+      <Filter>97.ShaderFiles</Filter>
+    </FxCompile>
+    <FxCompile Include="..\Bin\ShaderFiles\Shader_SSD.hlsl">
+      <Filter>97.ShaderFiles</Filter>
+    </FxCompile>
+    <FxCompile Include="..\Bin\ShaderFiles\Shader_VtxTrail_TwoPoint_Instance.hlsl">
+      <Filter>97.ShaderFiles</Filter>
+    </FxCompile>
+    <FxCompile Include="..\Bin\ShaderFiles\Shader_VtxTrail_OnePoint_Instance.hlsl">
       <Filter>97.ShaderFiles</Filter>
     </FxCompile>
   </ItemGroup>

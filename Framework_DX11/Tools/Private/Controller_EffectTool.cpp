@@ -8,6 +8,7 @@
 #include "Particle_Effect.h"
 #include "Texture_Effect.h"
 #include "Mesh_Effect.h"
+#include "Trail_Effect_OP.h"
 
 #include "Effect_Container.h"
 
@@ -23,6 +24,141 @@ HRESULT CController_EffectTool::Initialize()
 {
 	
 	return S_OK;
+}
+
+void CController_EffectTool::Render()
+{
+	bool bDemo = true;
+	ImGui::ShowDemoWindow(&bDemo);
+	if (ImGui::CollapsingHeader("Texture"))
+	{
+		TextureCheck();
+	}
+
+	if (ImGui::CollapsingHeader("Particle Effect"))
+	{
+		Particle_Check();
+	}
+
+	if (ImGui::CollapsingHeader("Texture Effect"))
+	{
+		TE_Check();
+	}
+
+	if (ImGui::CollapsingHeader("Mesh Effect"))
+	{
+		Model_Check();
+	}
+
+	if (ImGui::CollapsingHeader("Trail Effect"))
+	{
+		Trail_OP_Check();
+	}
+
+	ImGui::Begin("EffectList");
+
+	Set_EffectName();
+
+#pragma region PE
+	Select_Particle();
+	if (ImGui::Button("Create Particle"))
+	{
+		Add_Particle();
+	}
+	if (ImGui::Button("Update Particle"))
+	{
+		Update_Particle();
+	}
+	if (ImGui::Button("Get Particle"))
+	{
+		Get_Particle();
+	}
+	if (ImGui::Button("Delete Particle"))
+	{
+		Delete_Particle();
+	}
+#pragma endregion
+
+#pragma region TE
+	Select_TE();
+	if (ImGui::Button("Create Texture Effect"))
+	{
+		Add_TE();
+	}
+	if (ImGui::Button("Update Texture Effect"))
+	{
+		Update_TE();
+	}
+	if (ImGui::Button("Get Texture Effect"))
+	{
+		Get_TE();
+	}
+	if (ImGui::Button("Delete Texture Effect"))
+	{
+		Delete_TE();
+	}
+#pragma endregion
+
+#pragma region ME
+	Select_Model();
+	if (ImGui::Button("Create Mesh Effect"))
+	{
+		Add_Model();
+	}
+	if (ImGui::Button("Update Mesh Effect"))
+	{
+		Update_Model();
+	}
+	if (ImGui::Button("Get Mesh Effect"))
+	{
+		Get_Model();
+	}
+	if (ImGui::Button("Delete Mesh Effect"))
+	{
+		Delete_Model();
+	}
+#pragma endregion
+
+	ImGui::SeparatorText("Effect Container");
+	if (ImGui::Button("Add Effect Conainer"))
+	{
+		Add_EffectContainer();
+	}
+	if (ImGui::Button("Reset Effect Conainer"))
+	{
+		Reset_EffectContainer();
+	}
+	if (ImGui::Button("Delete Effect Container"))
+	{
+		Delete_EffectContainer();
+	}
+
+	if (ImGui::Button("Save Effect Conainer"))
+	{
+		ImGuiFileDialog::Instance()->OpenDialog(
+			"SaveFile",           // vKey
+			"Select a File",           // vTitle
+			".bin",                  // vFilters
+			IGFD::FileDialogConfig()   // vConfig (기본 설정)
+		);
+
+	}
+	Save_EffectContainer();
+
+	if (ImGui::Button("Load Effect Conainer"))
+	{
+		ImGuiFileDialog::Instance()->OpenDialog(
+			"LoadFile",           // vKey
+			"Select a File",           // vTitle
+			"Effects{.PE, .TE, .ME}",                  // vFilters
+			IGFD::FileDialogConfig()   // vConfig (기본 설정)
+		);
+	}
+	Load_Effect();
+
+	ImGui::End();
+
+	ImGui::EndTabItem();
 }
 
 void CController_EffectTool::TextureCheck()
@@ -1002,6 +1138,33 @@ void CController_EffectTool::Delete_Model()
 
 		++iIndex;
 	}
+}
+
+HRESULT CController_EffectTool::Add_Trail_OP()
+{
+	
+
+	return S_OK;
+}
+
+void CController_EffectTool::Trail_OP_Check()
+{
+}
+
+void CController_EffectTool::Update_Trail_OP()
+{
+}
+
+void CController_EffectTool::Select_Trail_OP()
+{
+}
+
+void CController_EffectTool::Get_Trail_OP()
+{
+}
+
+void CController_EffectTool::Delete_Trail_OP()
+{
 }
 
 HRESULT CController_EffectTool::Add_EffectContainer()

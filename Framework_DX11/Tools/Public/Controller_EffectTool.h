@@ -71,6 +71,7 @@ private:
 
 public:
 	HRESULT Initialize();
+	void Render();
 
 public:
 	void TextureCheck();
@@ -95,6 +96,13 @@ public:
 	void Select_Model();
 	void Get_Model();
 	void Delete_Model();
+
+	HRESULT Add_Trail_OP();
+	void Trail_OP_Check();
+	void Update_Trail_OP();
+	void Select_Trail_OP();
+	void Get_Trail_OP();
+	void Delete_Trail_OP();
 
 	HRESULT Add_EffectContainer();
 	void Reset_EffectContainer();

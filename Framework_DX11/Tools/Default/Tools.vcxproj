@@ -63,6 +63,9 @@
     <ClInclude Include="..\public\Texture_Effect.h" />
     <ClInclude Include="..\Public\ThreadPool.h" />
     <ClInclude Include="..\Public\Tools_Defines.h" />
+    <ClInclude Include="..\public\Trail_Effect_MP.h" />
+    <ClInclude Include="..\public\Trail_Effect_OP.h" />
+    <ClInclude Include="..\public\Trail_Effect_TP.h" />
     <ClInclude Include="..\Public\UIRender.h" />
     <ClInclude Include="framework.h" />
     <ClInclude Include="Resource.h" />
@@ -113,6 +116,9 @@
     <ClCompile Include="..\Private\Terrain.cpp" />
     <ClCompile Include="..\private\Texture_Effect.cpp" />
     <ClCompile Include="..\Private\ThreadPool.cpp" />
+    <ClCompile Include="..\private\Trail_Effect_MP.cpp" />
+    <ClCompile Include="..\private\Trail_Effect_OP.cpp" />
+    <ClCompile Include="..\private\Trail_Effect_TP.cpp" />
     <ClCompile Include="..\Private\UIRender.cpp" />
     <ClCompile Include="stdafx.cpp" />
     <ClCompile Include="Tools.cpp" />
@@ -184,6 +190,18 @@
       <ShaderModel Condition="'$(Configuration)|$(Platform)'=='Release|x64'">5.0</ShaderModel>
     </FxCompile>
     <FxCompile Include="..\Bin\ShaderFiles\Shader_VtxRectInstance.hlsl">
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Effect</ShaderType>
+      <ShaderModel Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">5.0</ShaderModel>
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Effect</ShaderType>
+      <ShaderModel Condition="'$(Configuration)|$(Platform)'=='Release|x64'">5.0</ShaderModel>
+    </FxCompile>
+    <FxCompile Include="..\Bin\ShaderFiles\Shader_VtxTrail_OnePoint_Instance.hlsl">
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Effect</ShaderType>
+      <ShaderModel Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">5.0</ShaderModel>
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Effect</ShaderType>
+      <ShaderModel Condition="'$(Configuration)|$(Platform)'=='Release|x64'">5.0</ShaderModel>
+    </FxCompile>
+    <FxCompile Include="..\Bin\ShaderFiles\Shader_VtxTrail_TwoPoint_Instance.hlsl">
       <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Effect</ShaderType>
       <ShaderModel Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">5.0</ShaderModel>
       <ShaderType Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Effect</ShaderType>

@@ -194,8 +194,6 @@ HRESULT CTexture_Effect::Save(_wstring strFilePath)
 
     outfile.close();
 
-
-
     return S_OK;
 }
 

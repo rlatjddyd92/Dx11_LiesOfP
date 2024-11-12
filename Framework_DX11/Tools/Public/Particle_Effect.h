@@ -191,9 +191,6 @@ private:
 	ACCEL_DESC m_AccelDesc = {};
 
 	PARTICLE_EFFECT_DESC m_SaveDesc = {};
-	_uint m_iNumInstance = { 0 };
-
-	_bool m_isFirst = { false };
 
 private:
 	HRESULT Ready_Components(PARTICLE_EFFECT_DESC* pDesc);
