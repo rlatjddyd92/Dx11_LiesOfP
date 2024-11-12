@@ -3,6 +3,7 @@
 #include "..\Public\UIManager.h"
 
 #include "GameInstance.h"
+#include "GameInterface_Controller.h"
 
 CUIManager::CUIManager(ID3D11Device* pDevice, ID3D11DeviceContext* pContext)
 	: CUIObject{ pDevice, pContext }
@@ -38,7 +39,9 @@ HRESULT CUIManager::Initialize_Prototype()
 	if (FAILED(Load_UIDataFile()))
 		return E_FAIL;
 
-
+#ifdef _DEBUG
+	m_pTestData = new TESTDATA;
+#endif
 
 	return S_OK;
 }
@@ -52,15 +55,28 @@ HRESULT CUIManager::Initialize(void* pArg)
 
 void CUIManager::Priority_Update(_float fTimeDelta)
 {
+	for (auto& iter : m_vecPage)
+		if (iter->GetUpdate())
+			iter->Priority_Update(fTimeDelta);
 }
 
 void CUIManager::Update(_float fTimeDelta)
 {
+	for (auto& iter : m_vecPage)
+		if (iter->GetUpdate())
+			iter->Update(fTimeDelta);
 }
 
 void CUIManager::Late_Update(_float fTimeDelta)
 {
+	// 렌더 최종 결정 
+	_int iCountOpen = 0;
 
+	for (auto& iter : m_vecPage)
+	{
+		if (iter->GetUpdate())
+			iter->Late_Update(fTimeDelta);
+	}
 
 	m_pGameInstance->Add_RenderObject(CRenderer::RG_UI, this);
 }
@@ -75,13 +91,154 @@ HRESULT CUIManager::Render()
 
 void CUIManager::Update_UIManager(_float fTimeDelta)
 {
+	Priority_Update(fTimeDelta);
+	Update(fTimeDelta);
+	Update_UIControl(fTimeDelta);
+	Late_Update(fTimeDelta);
+}
+
+void CUIManager::Update_UIControl(_float fTimeDelta)
+{
+	// 조작 관련 모든 것 
+	// 마우스, 키보드를 통한 UI 조작은 모두 여기 작성한다 
+
+	UIControl_Test(fTimeDelta);
+	//UIControl_Main(fTimeDelta);
+	//UIControl_Loading(fTimeDelta);
+	UIControl_Play(fTimeDelta);
+
+
+}
+
+void CUIManager::UIControl_Test(_float fTimeDelta)
+{
+#ifdef _DEBUG
+	if (KEY_TAP(KEY::P))
+	{
+		if (m_vecPage[_int(UIPAGE::PAGE_PLAY)]->GetRender())
+		{
+			if (m_vecPage[_int(UIPAGE::PAGE_PLAY)]->GetPageAction(PAGEACTION::ACTION_OPENING))
+			{
+				m_vecPage[_int(UIPAGE::PAGE_PLAY)]->CloseAction();
+			}
+			else if (m_vecPage[_int(UIPAGE::PAGE_PLAY)]->GetPageAction(PAGEACTION::ACTION_CLOSING))
+			{
+				m_vecPage[_int(UIPAGE::PAGE_PLAY)]->OpenAction();
+			}
+		}
+		else
+			m_vecPage[_int(UIPAGE::PAGE_PLAY)]->OpenAction();
+	}
+
+	// 상단 바 
+	if (KEY_HOLD(KEY::LSHIFT))
+	{
+		if (KEY_HOLD(KEY::I))
+		{
+			GET_GAMEINTERFACE->Add_Stat_Normal(STAT_NORMAL::STAT_GAUGE_HP, -100.f * fTimeDelta);
+			// 체력바 표시 수치 감소
+		}
+		else if (KEY_HOLD(KEY::O))
+		{
+			GET_GAMEINTERFACE->Add_Stat_Normal(STAT_NORMAL::STAT_GAUGE_HP, +100.f * fTimeDelta);
+			// 체력바 표시 수치 증가 
+		}
+		
+	}
+	else
+	{
+		if (KEY_HOLD(KEY::I))
+		{
+			m_pTestData->fMax_HP_Now -= 100.f * fTimeDelta;
+			if (m_pTestData->fMax_HP_Now < 0.f)
+				m_pTestData->fMax_HP_Now = 0.f;
+			m_pTestData->fHP_Now = min(m_pTestData->fMax_HP_Now, m_pTestData->fHP_Now);
+			// 체력바 최대치 감소
+		}
+		else if (KEY_HOLD(KEY::O))
+		{
+			m_pTestData->fMax_HP_Now += 100.f * fTimeDelta;
+			if (m_pTestData->fMax_HP_Now > m_pTestData->fMax_HP_Limit)
+				m_pTestData->fMax_HP_Now = m_pTestData->fMax_HP_Limit;
+			// 체력바 최대치 증가
+		}
+	}
+
+
+	// 하단 아이템 
+
+	if (KEY_TAP(KEY::T))
+	{
+		m_pUIPage_Play->Move_SelectCtrl(true);
+	}
+
+	if (KEY_TAP(KEY::G))
+	{
+		m_pUIPage_Play->Move_SelectCtrl(false);
+	}
+
+
+
+
+
+
+
+
+#endif // DEBUG
+
+	
+	
+
+
+}
+
+void CUIManager::UIControl_Main(_float fTimeDelta)
+{
+}
+
+void CUIManager::UIControl_Loading(_float fTimeDelta)
+{
+}
+
+void CUIManager::UIControl_Play(_float fTimeDelta)
+{
+	m_pTestData->fHP_Now = GET_GAMEINTERFACE->Get_NowStat_Normal(STAT_NORMAL::STAT_GAUGE_HP);
+	m_pUIPage_Play->SetRatio_HPBarMax(m_pTestData->fMax_HP_Now / m_pTestData->fMax_HP_Limit);
+	m_pUIPage_Play->SetRatio_HPBarFill(m_pTestData->fHP_Now / m_pTestData->fMax_HP_Limit);
+}
+
+void CUIManager::UIControl_Inven(_float fTimeDelta)
+{
+}
+
+void CUIManager::OpenMainPage()
+{
+	// 게임 첫 시작 화면 세팅 
+	//m_vecPage[_int(UIPAGE::PAGE_MAIN)]->SetRender(true);
+
+}
+
+void CUIManager::OpenLoadingPage()
+{
+	//for (auto& iter : m_vecPage)
+	//	iter->SetRender(false);
+
+	//m_vecPage[_int(UIPAGE::PAGE_LOADING)]->SetRender(true);
+}
+
+void CUIManager::SwicthPage(UIPAGE eNextPage)
+{
+	for (auto& iter : m_vecPage)
+		iter->CloseAction();
+
+	m_vecPage[_int(eNextPage)]->OpenAction();
 }
 
 HRESULT CUIManager::Load_UIDataFile()
 {
 	// 여기부터 
 	wstring fileName = TEXT("../Bin/DataFiles/UIData.dat");
-	WCHAR* TempName = new WCHAR[fileName.size()];
+	WCHAR* TempName = new WCHAR[fileName.size() + 1];
 	for (_int i = 0; i <= fileName.size(); ++i)
 		TempName[i] = fileName[i];
 
@@ -99,6 +256,9 @@ HRESULT CUIManager::Load_UIDataFile()
 
 	for (_int i= 0; i < _int(UIPAGE::PAGE_END); ++i)
 	{
+		if(FAILED(Make_UIPage(i)))
+			return E_FAIL;
+
 		_wstring strName = {};
 		while (true)
 		{
@@ -114,9 +274,12 @@ HRESULT CUIManager::Load_UIDataFile()
 		ReadFile(hFile, &fPosition, sizeof(_float2), &dwByte, nullptr);
 
 		m_vecPage[i]->SetUIPagePosition(fPosition);
+		
 
 		if (FAILED(Load_UIDataFile_Part(hFile, &dwByte, i)))
 			MSG_BOX(TEXT("UI 데이터 불러오기 실패"));
+
+		m_vecPage[i]->Ready_UIPart_Group_Control();
 	}
 
 	CloseHandle(hFile);
@@ -178,6 +341,7 @@ HRESULT CUIManager::Load_UIDataFile_Part(HANDLE handle, DWORD* dword, _int iInde
 		ReadFile(handle, &pNew->iMoveType, sizeof(_int), dword, nullptr);
 		ReadFile(handle, &pNew->iParentPart_Index, sizeof(_int), dword, nullptr);
 		ReadFile(handle, &pNew->iTexture_Index, sizeof(_int), dword, nullptr);
+		ReadFile(handle, &pNew->fTextureColor, sizeof(_float4), dword, nullptr);
 		m_pUIRender_Client->Make_Texture(pNew->iTexture_Index);
 		_wstring strName = {};
 		while (true)
@@ -193,9 +357,9 @@ HRESULT CUIManager::Load_UIDataFile_Part(HANDLE handle, DWORD* dword, _int iInde
 		_wstring strText = {};
 		while (true)
 		{
-			_char szText = {};
-			ReadFile(handle, &szText, sizeof(_char), dword, nullptr);
-			strText += (_tchar)szText;
+			_tchar szText = {};
+			ReadFile(handle, &szText, sizeof(_tchar), dword, nullptr);
+			strText += szText;
 			if (szText == '\0')
 				break;
 		}
@@ -244,4 +408,5 @@ void CUIManager::Free()
 	m_vecPage.clear();
 
 	Safe_Release(m_pUIRender_Client);
+	Safe_Delete(m_pTestData);
 }

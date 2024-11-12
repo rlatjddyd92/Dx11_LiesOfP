@@ -77,10 +77,18 @@ HRESULT CUIRender_Client::Render_UI(vector<CUIPage*>& rPage)
 	for (auto& iter : rPage)
 	{
 		if (!iter->GetRender())
-			return S_OK;
+			continue;
+
+		_bool bTopMove = false;
+
+		if ((iter->GetTopPartMove() > 0.f) && (iter->GetTopPartMove() < 1.f))
+			bTopMove = true;
 
 		for (auto& iterPart : iter->GetPartInfo())
 		{
+			if (!iterPart->bRender)
+				continue;
+
 			if (iterPart->iTexture_Index != -1)
 			{
 				if (m_vecTextureInfo[iterPart->iTexture_Index]->Texture == nullptr)
@@ -109,7 +117,15 @@ HRESULT CUIRender_Client::Render_UI(vector<CUIPage*>& rPage)
 				if (FAILED(m_vecTextureInfo[iterPart->iTexture_Index]->Texture->Bind_ShadeResource(m_pShaderCom, "g_Texture", 0)))
 					return E_FAIL;
 
-				if (FAILED(m_pShaderCom->Bind_RawValue("g_Color", &iterPart->fTextureColor, sizeof(_float4))))
+				if ((bTopMove) && (iterPart->iParentPart_Index == -1))
+				{
+					_float4 fColor = iterPart->fTextureColor;
+					fColor.w = iter->GetTopPartMove();
+
+					if (FAILED(m_pShaderCom->Bind_RawValue("g_Color", &fColor, sizeof(_float4))))
+						return E_FAIL;
+				}
+				else if (FAILED(m_pShaderCom->Bind_RawValue("g_Color", &iterPart->fTextureColor, sizeof(_float4))))
 					return E_FAIL;
 
 				if (FAILED(m_pShaderCom->Begin(0)))
@@ -142,7 +158,11 @@ HRESULT CUIRender_Client::Render_UI(vector<CUIPage*>& rPage)
 					vColor.m128_f32[3] = iterPart->fTextColor.w;
 
 				_tchar* tText = new _tchar[iterPart->strText.size() + 1];
-				memcpy(&tText, &iterPart->strText, sizeof(_tchar) * (iterPart->strText.size() + 1));
+				for (_int i = 0; i <= iterPart->strText.size(); ++i)
+					tText[i] = iterPart->strText[i];
+
+
+				//memcpy(tText, &iterPart->strText, sizeof(_tchar) * (iterPart->strText.size() + 1));
 
 				if (iterPart->bCenter)
 					m_pGameInstance->Render_TextCenter(m_vecFont_tchar[iterPart->iFontIndex], tText, vPosition, vColor);
@@ -161,6 +181,9 @@ HRESULT CUIRender_Client::Render_UI(vector<CUIPage*>& rPage)
 
 HRESULT CUIRender_Client::Make_Texture(_int iTextureIndex)
 {
+	if (iTextureIndex == -1)
+		return S_OK;
+
 	if ((iTextureIndex < 0) || (iTextureIndex >= m_vecTextureInfo.size()))
 	{
 		MSG_BOX(TEXT("UIRender : 잘못된 텍스쳐 값"));
@@ -244,24 +267,15 @@ HRESULT CUIRender_Client::Ready_Texture()
 
 	for (_int i = 2; i < vecBuffer.size(); ++i)
 	{
-		_tchar* tPath = new _tchar[vecBuffer[i][0].size() + 1];
-		_tchar* tTag = new _tchar[vecBuffer[i][1].size() + 1];
-
-		memcpy(tPath, &vecBuffer[i][0][0], sizeof(_tchar) * (vecBuffer[i][0].size() + 1));
-		memcpy(tTag, &vecBuffer[i][1][0], sizeof(_tchar) * (vecBuffer[i][1].size() + 1));
-
 		UTEXTURE* pNew = new UTEXTURE;
 
-		
 		pNew->strTexturePath = new _tchar[vecBuffer[i][0].size() + 1];
 		pNew->strTextureTag = new _tchar[vecBuffer[i][1].size() + 1];
 
-		
+		memcpy(pNew->strTexturePath, &vecBuffer[i][0][0], sizeof(_tchar) * (vecBuffer[i][0].size() + 1));
+		memcpy(pNew->strTextureTag, &vecBuffer[i][1][0], sizeof(_tchar) * (vecBuffer[i][1].size() + 1));
 
 		m_vecTextureInfo.push_back(pNew);
-
-		Safe_Delete_Array(tPath);
-		Safe_Delete_Array(tTag);
 	}
 
 	return S_OK;

@@ -154,7 +154,7 @@ BOOL InitInstance(HINSTANCE hInstance, int nCmdShow)
 
     AdjustWindowRect(&rcWindowed, WS_CAPTION | WS_SYSMENU, FALSE);
 
-    HWND hWnd = CreateWindowW(szWindowClass, szTitle, WS_OVERLAPPEDWINDOW,
+    HWND hWnd = CreateWindowW(szWindowClass, szTitle, WS_CAPTION | WS_SYSMENU,
         CW_USEDEFAULT, 0, rcWindowed.right - rcWindowed.left, rcWindowed.bottom - rcWindowed.top, nullptr, nullptr, hInstance, nullptr);
 
     if (!hWnd)

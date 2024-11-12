@@ -6,6 +6,7 @@
 #include "Level_GamePlay.h"
 
 #include "GameInstance.h"
+#include "GameInterface_Controller.h"
 
 CLevel_Loading::CLevel_Loading(ID3D11Device* pDevice, ID3D11DeviceContext* pContext)
 	: CLevel { pDevice, pContext }
@@ -20,6 +21,9 @@ HRESULT CLevel_Loading::Initialize(LEVELID eNextLevelID)
 	if (nullptr == m_pLoader)
 		return E_FAIL;	
 		
+	// 2024-11-10 김성용
+	// 모든 UI 페이지 OFF 후 -> 로딩 UI 페이지 오픈
+	GET_GAMEINTERFACE->OpenLoadingPage();
 
 	if (FAILED(Ready_Layer_BackGround()))
 		return E_FAIL;

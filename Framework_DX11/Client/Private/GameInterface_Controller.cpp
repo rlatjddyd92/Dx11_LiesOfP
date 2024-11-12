@@ -15,9 +15,16 @@ HRESULT CGameInterface_Controller::Initialize_GameInterface(ID3D11Device** pDevi
 	m_pDevice = *pDevice;
 	m_pContext = *pContext;
 
-	// UI 매니저 세팅 
+
+
+	// UIManager
 	m_pUIManager = CUIManager::Create(m_pDevice, m_pContext);
-	//Safe_AddRef(m_pUIManager);
+	
+	// Item_Manager
+	m_pItem_Manager = CItem_Manager::Create(m_pGameInstance);
+
+	// Stat_Manager
+	m_pPlayer_Stat_Manager = CPlayer_Stat_Manager::Create(m_pGameInstance);
 
 
 
@@ -27,20 +34,24 @@ HRESULT CGameInterface_Controller::Initialize_GameInterface(ID3D11Device** pDevi
 
 void CGameInterface_Controller::Update_GameInterface(_float fTimeDelta)
 {
+
 	m_pUIManager->Update_UIManager(fTimeDelta);
 }
 
 void CGameInterface_Controller::Release_GameInterface()
 {
+	
 	Safe_Release(m_pGameInstance);
 	Safe_Release(m_pUIManager);
-
+	Safe_Release(m_pItem_Manager);
+	Safe_Release(m_pPlayer_Stat_Manager);
 
 
 
 
 	GET_GAMEINTERFACE->Destroy_Instance();
 }
+
 
 
 

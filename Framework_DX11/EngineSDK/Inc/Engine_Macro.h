@@ -53,4 +53,5 @@ unsigned int  ClassName::Destroy_Instance()				\
 #define KEY_AWAY(key) CGameInstance::Get_Instance()->Get_KeyState(key) == KEY_STATE::AWAY
 #define KEY_NONE(key) CGameInstance::Get_Instance()->Get_KeyState(key) != KEY_STATE::AWAY && CGameInstance::Get_Instance()->Get_KeyState(key) != KEY_STATE::TAP && CGameInstance::Get_Instance()->Get_KeyState(key) != KEY_STATE::HOLD
 
+
 #define PhysX_RELEASE(x)	if(x != nullptr)	{ x->release(); x = nullptr;}

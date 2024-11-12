@@ -3,6 +3,7 @@
 
 #include "FreeCamera.h"
 #include "GameInstance.h"
+#include "GameInterface_Controller.h"
 
 #include "Effect_Container.h"
 #include "Effect_Manager.h"
@@ -30,6 +31,11 @@ HRESULT CLevel_Tool::Initialize()
 		return E_FAIL;
 	if (FAILED(Ready_Layer_Paticle()))
 		return E_FAIL;
+
+	// 2024-11-10 김성용
+	// 게임 인터페이스를 플레이 모드로 설정 
+	// 게임 플레이에 필요한 인벤, 플레이 화면, 스탯 화면 등을 상황에 따라 보여 주도록 설정 
+	GET_GAMEINTERFACE->SetPlayMode(true);
 
 	return S_OK;
 }

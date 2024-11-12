@@ -72,6 +72,12 @@ void CUIRender::Late_Update(_float fTimeDelta)
 
 HRESULT CUIRender::Render()
 {
+	_int iBack = CController_UITool::Get_Instance()->GetBackNum();
+
+	if ((iBack >= 478) && (iBack <= 507))
+		if(FAILED(BackRender(iBack)))
+			return E_FAIL;
+
 	_int iMax = CController_UITool::Get_Instance()->GetPartCount();
 
 	for (_int i = 0; i < iMax; ++i)
@@ -172,6 +178,45 @@ void CUIRender::AddRenderText(UI_FONT eFont, _bool bIsCenter, _tchar* szText, _f
 	pNew->bIsCenter = bIsCenter;
 
 	m_UIRenderlist.push_back(pNew);
+}
+
+HRESULT CUIRender::BackRender(_int iIndex)
+{
+	m_pTransformCom->Set_WorldMatrix(XMMatrixIdentity());
+
+	m_pTransformCom->Set_Scaled(g_iWinSizeX, g_iWinSizeY, 1.f);
+
+	m_pTransformCom->Set_State(CTransform::STATE_POSITION,
+		XMVectorSet((1280.f * 0.5f) - m_fViewWidth * 0.5f, -(720.f * 0.5f) + m_fViewHeight * 0.5f, 0.f, 1.f));
+
+	if (FAILED(m_pTransformCom->Bind_ShaderResource(m_pShaderCom, "g_WorldMatrix")))
+		return E_FAIL;
+
+	if (FAILED(m_pShaderCom->Bind_Matrix("g_ViewMatrix", &m_ViewMatrix)))
+		return E_FAIL;
+
+	if (FAILED(m_pShaderCom->Bind_Matrix("g_ProjMatrix", &m_ProjMatrix)))
+		return E_FAIL;
+
+	if (FAILED(m_vecTextureInfo[iIndex]->Texture->Bind_ShadeResource(m_pShaderCom, "g_Texture", 0)))
+		return E_FAIL;
+
+	_float4 fColor = { -1,-1,-1,-1 };
+
+	if (FAILED(m_pShaderCom->Bind_RawValue("g_Color", &fColor, sizeof(_float4))))
+		return E_FAIL;
+
+	if (FAILED(m_pShaderCom->Begin(0)))
+		return E_FAIL;
+
+	if (FAILED(m_pVIBufferCom->Bind_Buffers()))
+		return E_FAIL;
+
+	if (FAILED(m_pVIBufferCom->Render()))
+		return E_FAIL;
+
+
+	return S_OK;
 }
 
 

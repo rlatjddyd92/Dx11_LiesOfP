@@ -2,7 +2,7 @@
 
 #include "Client_Defines.h"
 #include "UIObject.h"
-#include "UI_Enum.h"
+#include "Interface_Enums.h"
 
 BEGIN(Engine)
 
@@ -30,7 +30,7 @@ public:
 				return { fSize.x, abs(fAdjust_Start.y - fAdjust_End.y) * fRatio };
 		}
 
-		_float2 MovePart(_float2 fParentPosition)
+		_float2 MovePart(_float2 fParentPosition, _float fTimeDelta)
 		{
 			if (iMoveType == _int(MOVETYPE::TYPE_BAR))
 			{
@@ -46,8 +46,13 @@ public:
 			fPosition.x = fParentPosition.x + fAdjust.x;
 			fPosition.y = fParentPosition.y + fAdjust.y;
 
+			
+
 			return fPosition;
 		}
+
+		_float2 Get_Shaking() { return fShaking_Adjust; }
+
 
 		_wstring strUIPart_Name = {};
 
@@ -79,18 +84,29 @@ public:
 		_bool bCenter = false;
 		_float4 fTextColor = { 1.f,1.f,1.f,1.f };
 
+		// 작동 제어
+		_bool bUpdate = true;
+		_bool bRender = true;
+
+		// 쉐이킹
+		_float2 fShaking_Adjust = { 0.f,0.f };
+		_float2 fShaking_Direc = { 0.f,0.f };
+		_float fShaking_Power = 0.f;
+		_float fShaking_Interval_Now = 0.f;
+		_float fShaking_Interval = 0.f;
+		_float fShaking_Time = 0.f;
 
 	}UPART;
 
-
-
-	typedef struct UIPAGE_INFO
+	typedef struct UIPART_GROUP_CONTROL
 	{
-		_char* strUIPage_Name = {};
-		_int iNowSelectPart = 0;
-		_float2 fPosition = { g_iWinSizeX * 0.5f,g_iWinSizeY * 0.5f }; // 페이지의 포지션
-		vector<UPART*> vecPart;
-	}UPAGE;
+		list<_int> PartIndexlist;
+
+		_float fRatio = 1.f;
+
+		_bool bUpdate = true;
+		_bool bRender = true;
+	}UG_CTRL;
 
 
 protected:
@@ -115,17 +131,31 @@ public:
 	void SetUpdate(_bool bUpdate) { m_bUpdate = bUpdate; }
 	void SetRender(_bool bRender) { m_bRender = bRender; }
 	const vector<UPART*>& GetPartInfo() { return m_vecPart; }
+	_float GetTopPartMove() { return m_fTopPartMove; }
+	_bool GetPageAction(PAGEACTION eAction) { return m_vecPageAction[_int(eAction)]; }
+
+	virtual void OpenAction();
+	virtual void CloseAction();
+
+	virtual HRESULT Ready_UIPart_Group_Control();
 
 protected:
-	virtual HRESULT Ready_UIPart();
-
+	void UpdatePart_ByControl(UG_CTRL* pCtrl);
+	void Release_Control(UG_CTRL* pCtrl);
+	
 protected:
 	vector<UPART*> m_vecPart;
 	_wstring m_UIPageName = {};
 
 protected: // 제어 변수
 	_bool m_bUpdate = true; // 업데이트 진행 여부 
-	_bool m_bRender = true; // 렌더 진행 여부 
+	_bool m_bRender = false; // 렌더 진행 여부 
+
+
+protected: // 열기/닫기 액션
+	vector<_bool> m_vecPageAction;
+	_float m_fTopPartMove = 0.f; // 0.f->닫힘, 1.f->열림
+
 
 public:
 	static CUIPage* Create(ID3D11Device* pDevice, ID3D11DeviceContext* pContext);

@@ -90,6 +90,8 @@ public:
 
 	_int GetTextureCount() { return (_int)m_vecTextureInfo.size(); }
 
+	HRESULT BackRender(_int iIndex);
+
 public:
 	class CShader* m_pShaderCom = { nullptr };
 	class CVIBuffer_Rect* m_pVIBufferCom = { nullptr };

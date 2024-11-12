@@ -1,0 +1,108 @@
+#pragma once
+
+enum class ITEM_SPEC
+{
+
+};
+
+enum class ITEM_TYPE
+{
+	// 인벤토리 들어가는 순서대로 정리 
+	TYPE_USING_BASIC, // 사용 아이템	기본아이템
+	TYPE_USING_EXPENDABLE, // 사용 아이템	소모품
+	TYPE_USING_THROW, // 사용 아이템	투척물
+	TYPE_USING_RARE_ERGO, // 사용 아이템	희귀 에르고
+
+	TYPE_INGRADIENT_GROW, // 소재	성장 소재
+	TYPE_INGRADIENT_SPECIAL, // 소재	특수 소재
+	
+	TYPE_FUNTIONAL_COMMON, // 기능 아이템(기능 확인 필요)
+
+	TYPE_WEAPON_NORMAL_BLADE, // 무기	일반 무기(날)
+	TYPE_WEAPON_NORMAL_HANDLE, // 무기	일반 무기(자루)
+	TYPE_WEAPON_SPECIAL, // 무기	특수 무기
+
+	TYPE_BLADE_HANDEL_PART, // 날 / 손잡이
+
+	TYPE_REASON_ARM, // 리전 암
+
+	TYPE_DEFENCE_FRAME, // 방어 파츠	프레임
+	TYPE_DEFENCE_CONVERTOR, // 방어 파츠	컨버터
+	TYPE_DEFENCE_CARTRIGE, // 방어 파츠	카트리지
+	TYPE_DEFENCE_RAINER, // 방어 파츠	라이너
+
+	TYPE_AMULET_COMMON, // 아뮬렛
+
+	TYPE_COUSTUME_CLOTHES, // 코스튬	의상
+	TYPE_COUSTUME_MASK, // 코스튬	가면
+	TYPE_COUSTUME_ACC, // 코스튬	악세서리
+
+	TYPE_GEUSTURE_COMMON, // 제스쳐
+
+	TYPE_COLLECTION_NEWS, // 수집품	신문
+	TYPE_COLLECTION_BOOK, // 수집품	서적
+	TYPE_COLLECTION_MEMO, // 수집품	쪽지
+
+
+	TYPE_END
+};
+
+enum class EQUIP_SLOT
+{
+	EQUIP_WEAPON_BLADE_0,  // 장비	무기 및 리전 암 0
+	EQUIP_WEAPON_HANDLE_0,
+	EQUIP_WEAPON_SPECIAL_0,
+
+	EQUIP_WEAPON_BLADE_1,  // 장비	무기 및 리전 암 1
+	EQUIP_WEAPON_HANDLE_1,
+	EQUIP_WEAPON_SPECIAL_1,
+
+	EQUIP_RESION_ARM,  // 장비	무기 및 리전 암 2
+
+	EQUIP_AMULET_0, // 장비	아뮬렛 0
+	EQUIP_AMULET_1,// 장비	아뮬렛 1
+
+	EQUIP_DEFENCE_FRAME, // 방어 파츠	프레임
+	EQUIP_DEFENCE_CONVERTOR, // 방어 파츠	컨버터
+	EQUIP_DEFENCE_CARTRIGE, // 방어 파츠	카트리지
+	EQUIP_DEFENCE_RAINER, // 방어 파츠	라이너
+
+	EQUIP_USING_TOP_0, // 사용 아이템	위 벨트
+	EQUIP_USING_TOP_1,
+	EQUIP_USING_TOP_2,
+
+	EQUIP_USING_BOTTOM_0,  // 사용 아이템	아래 벨트
+	EQUIP_USING_BOTTOM_1,
+	EQUIP_USING_BOTTOM_2,
+
+	EQUIP_USING_BAG_0, // 사용 아이템	보조가방
+	EQUIP_USING_BAG_1,
+	EQUIP_USING_BAG_2,
+	EQUIP_USING_BAG_3,
+
+	EQUIP_HEAD_0, // 코스튬	머리
+	EQUIP_HEAD_1,
+	EQUIP_CLOTHES, // 코스튬	의상
+
+	EQUIP_END
+};
+
+
+enum class ITEM_INDEX
+{
+	INDEX_END
+};
+
+enum class ITEM_RESULT
+{
+	RESULT_SUCCESS,
+	RESULT_FULL,
+	RESULT_INVALID,
+	RESULT_END
+};
+
+
+
+
+
+

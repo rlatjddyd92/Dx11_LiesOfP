@@ -140,6 +140,8 @@ public:
 
 	_int GetPartCount() { return (_int)m_vecPageInfo[m_iNowSelectNum]->vecPart.size(); }
 
+	_int GetBackNum() { return m_iBackground; }
+
 
 public: // imgui_UI메뉴 전용
 	void UITool_Edit(); 
@@ -224,6 +226,8 @@ private:
 	
 	vector<_wstring> m_DataTag_Page;
 	vector<_wstring> m_DataTag_Part;
+
+	_int m_iBackground = -1;
 
 public:
 	virtual void Free() override;

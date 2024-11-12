@@ -29,12 +29,13 @@ HRESULT CUIPage_Main::Initialize_Prototype()
 	Desc.fSpeedPerSec = 10.f;
 	Desc.fRotationPerSec = XMConvertToRadians(90.0f);
 
+	m_vecPageAction.resize(_int(PAGEACTION::ACTION_END));
+
 	/* 직교퉁여을 위한 데이터들을 모두 셋하낟. */
 	if (FAILED(__super::Initialize(&Desc)))
 		return E_FAIL;
 
-	if (FAILED(Ready_UIPart()))
-		return E_FAIL;
+	
 
 	return S_OK;
 }
@@ -48,14 +49,17 @@ HRESULT CUIPage_Main::Initialize(void* pArg)
 
 void CUIPage_Main::Priority_Update(_float fTimeDelta)
 {
+	__super::Priority_Update(fTimeDelta);
 }
 
 void CUIPage_Main::Update(_float fTimeDelta)
 {
+	__super::Update(fTimeDelta);
 }
 
 void CUIPage_Main::Late_Update(_float fTimeDelta)
 {
+	__super::Late_Update(fTimeDelta);
 }
 
 HRESULT CUIPage_Main::Render()
@@ -63,9 +67,19 @@ HRESULT CUIPage_Main::Render()
 	return S_OK;
 }
 
-HRESULT CUIPage_Main::Ready_UIPart()
+void CUIPage_Main::OpenAction()
 {
-	__super::Ready_UIPart();
+	__super::OpenAction();
+}
+
+void CUIPage_Main::CloseAction()
+{
+	__super::CloseAction();
+}
+
+HRESULT CUIPage_Main::Ready_UIPart_Group_Control()
+{
+	__super::Ready_UIPart_Group_Control();
 
 	return S_OK;
 }

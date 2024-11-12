@@ -29,14 +29,59 @@ HRESULT CUIPage::Initialize(void* pArg)
 
 void CUIPage::Priority_Update(_float fTimeDelta)
 {
+	// 매 프레임 초기화해야 하는 정보를 처리 
+	__super::Priority_Update(fTimeDelta);
 }
 
 void CUIPage::Update(_float fTimeDelta)
 {
+	// 여기까지 각 페이지의 개별 적용 사항을 끝내야 함 
+	__super::Update(fTimeDelta);
 }
 
 void CUIPage::Late_Update(_float fTimeDelta)
 {
+	// 각 페이지 별 조정 사항을 최종 반영하는 단계
+	__super::Late_Update(fTimeDelta);
+
+	
+
+	if ((m_vecPageAction[_int(PAGEACTION::ACTION_CLOSING)]) && (!m_vecPageAction[_int(PAGEACTION::ACTION_OPENING)]))
+	{
+		m_fTopPartMove -= 2.f * fTimeDelta;
+		if (m_fTopPartMove < 0.f)
+			m_fTopPartMove = 0.f;
+	}
+	else if ((!m_vecPageAction[_int(PAGEACTION::ACTION_CLOSING)]) && (m_vecPageAction[_int(PAGEACTION::ACTION_OPENING)]))
+	{
+		m_fTopPartMove += 2.f * fTimeDelta;
+		if (m_fTopPartMove > 1.f)
+			m_fTopPartMove = 1.f;
+	}
+
+	for (auto& iter : m_vecPart)
+	{
+		iter->MakeDirec();
+
+		if (iter->iParentPart_Index == -1)
+		{
+			if (m_vecPageAction[_int(PAGEACTION::ACTION_CLOSING)] + m_vecPageAction[_int(PAGEACTION::ACTION_OPENING)] == 1)
+				iter->fRatio = m_fTopPartMove;
+
+			iter->MovePart({ m_fX,m_fY }, fTimeDelta);
+		}
+		else
+			iter->MovePart(m_vecPart[iter->iParentPart_Index]->fPosition, fTimeDelta);
+	}
+
+	if ((m_fTopPartMove == 0.f) || (m_fTopPartMove == -1.f))
+	{
+		if (m_vecPageAction[_int(PAGEACTION::ACTION_CLOSING)])
+			m_bRender = false;
+
+		m_vecPageAction[_int(PAGEACTION::ACTION_CLOSING)] = false;
+		m_vecPageAction[_int(PAGEACTION::ACTION_OPENING)] = false;
+	}
 }
 
 HRESULT CUIPage::Render()
@@ -44,9 +89,38 @@ HRESULT CUIPage::Render()
     return S_OK;
 }
 
-HRESULT CUIPage::Ready_UIPart()
+void CUIPage::OpenAction()
+{
+	m_vecPageAction[_int(PAGEACTION::ACTION_CLOSING)] = false;
+	m_vecPageAction[_int(PAGEACTION::ACTION_OPENING)] = true;
+	m_bRender = true;
+}
+
+void CUIPage::CloseAction()
+{
+	m_vecPageAction[_int(PAGEACTION::ACTION_CLOSING)] = true;
+	m_vecPageAction[_int(PAGEACTION::ACTION_OPENING)] = false;
+}
+
+HRESULT CUIPage::Ready_UIPart_Group_Control()
 {
 	return S_OK;
+}
+
+void CUIPage::Release_Control(UG_CTRL* pCtrl)
+{
+	pCtrl->PartIndexlist.clear();
+	Safe_Delete(pCtrl);
+}
+
+void CUIPage::UpdatePart_ByControl(UG_CTRL* pCtrl)
+{
+	for (auto& iter : pCtrl->PartIndexlist)
+	{
+		m_vecPart[iter]->fRatio = pCtrl->fRatio;
+		m_vecPart[iter]->bUpdate = pCtrl->bUpdate;
+		m_vecPart[iter]->bRender = pCtrl->bRender;
+	}
 }
 
 CUIPage* CUIPage::Create(ID3D11Device* pDevice, ID3D11DeviceContext* pContext)
@@ -78,4 +152,6 @@ CGameObject* CUIPage::Clone(void* pArg)
 void CUIPage::Free()
 {
 	__super::Free();
+
+	m_vecPageAction.clear();
 }

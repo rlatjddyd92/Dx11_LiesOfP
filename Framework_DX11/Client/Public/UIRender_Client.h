@@ -4,7 +4,7 @@
 #include "UIObject.h"
 
 #include "UIPage_Defines.h"
-#include "UI_Enum.h"
+#include "Interface_Enums.h"
 
 BEGIN(Engine)
 class CShader;

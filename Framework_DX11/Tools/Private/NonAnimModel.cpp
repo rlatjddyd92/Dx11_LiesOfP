@@ -87,11 +87,11 @@ void CNonAnimModel::Late_Update(_float fTimeDelta)
 
 HRESULT CNonAnimModel::Render()
 {
-	//if (m_isInstance)
-	//{
-	//	m_pModelCom->Add_InstanceData(m_pTransformCom->Get_WorldMatrix());
-	//	return S_OK;
-	//}
+	if (m_isInstance)
+	{
+		m_pModelCom->Add_InstanceData(m_pTransformCom->Get_WorldMatrix());
+		return S_OK;
+	}
 
 	if (FAILED(m_pTransformCom->Bind_ShaderResource(m_pShaderCom, "g_WorldMatrix")))
 		return E_FAIL;
@@ -111,7 +111,8 @@ HRESULT CNonAnimModel::Render()
 		if (FAILED(Render_NonAnim()))
 			return E_FAIL;
 	}
-	
+		
+
 	return S_OK;
 }
 
