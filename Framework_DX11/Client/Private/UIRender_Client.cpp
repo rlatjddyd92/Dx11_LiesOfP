@@ -7,7 +7,7 @@
 CUIRender_Client::CUIRender_Client(ID3D11Device* pDevice, ID3D11DeviceContext* pContext)
 	: CUIObject{ pDevice, pContext }
 {
-	
+
 }
 
 CUIRender_Client::CUIRender_Client(const CUIRender_Client& Prototype)
@@ -38,8 +38,11 @@ HRESULT CUIRender_Client::Initialize_Prototype()
 
 	Ready_Font();
 
-	if (FAILED(Ready_Texture()))
+	if (FAILED(Ready_Texture_UIPart()))
 		return E_FAIL;
+
+	/*if (FAILED(Ready_Texture_ItemIcon()))
+		return E_FAIL;*/
 
 	return S_OK;
 }
@@ -68,7 +71,7 @@ void CUIRender_Client::Late_Update(_float fTimeDelta)
 
 HRESULT CUIRender_Client::Render()
 {
-	
+
 	return S_OK;
 }
 
@@ -91,9 +94,18 @@ HRESULT CUIRender_Client::Render_UI(vector<CUIPage*>& rPage)
 
 			if (iterPart->iTexture_Index != -1)
 			{
-				if (m_vecTextureInfo[iterPart->iTexture_Index]->Texture == nullptr)
-					if (FAILED(Make_Texture(iterPart->iTexture_Index)))
-						return E_FAIL;
+				if (!iterPart->bIsItem)
+				{
+					if (m_vecTextureInfo_UIPart[iterPart->iTexture_Index]->Texture == nullptr)
+						if (FAILED(Make_Texture(iterPart->iTexture_Index)))
+							return E_FAIL;
+				}
+				else
+				{
+					if (m_vecTextureInfo_ItemIcon[iterPart->iTexture_Index]->Texture == nullptr)
+						if (FAILED(Make_Texture(iterPart->iTexture_Index)))
+							return E_FAIL;
+				}
 
 				m_pTransformCom->Set_WorldMatrix(XMMatrixIdentity());
 
@@ -114,7 +126,7 @@ HRESULT CUIRender_Client::Render_UI(vector<CUIPage*>& rPage)
 				if (FAILED(m_pShaderCom->Bind_Matrix("g_ProjMatrix", &m_ProjMatrix)))
 					return E_FAIL;
 
-				if (FAILED(m_vecTextureInfo[iterPart->iTexture_Index]->Texture->Bind_ShadeResource(m_pShaderCom, "g_Texture", 0)))
+				if (FAILED(m_vecTextureInfo_UIPart[iterPart->iTexture_Index]->Texture->Bind_ShadeResource(m_pShaderCom, "g_Texture", 0)))
 					return E_FAIL;
 
 				if ((bTopMove) && (iterPart->iParentPart_Index == -1))
@@ -184,19 +196,19 @@ HRESULT CUIRender_Client::Make_Texture(_int iTextureIndex)
 	if (iTextureIndex == -1)
 		return S_OK;
 
-	if ((iTextureIndex < 0) || (iTextureIndex >= m_vecTextureInfo.size()))
+	if ((iTextureIndex < 0) || (iTextureIndex >= m_vecTextureInfo_UIPart.size()))
 	{
 		MSG_BOX(TEXT("UIRender : 잘못된 텍스쳐 값"));
 		return E_FAIL;
 	}
-		
 
-	if (m_vecTextureInfo[iTextureIndex]->Texture != nullptr)
+
+	if (m_vecTextureInfo_UIPart[iTextureIndex]->Texture != nullptr)
 		return E_FAIL;
 
-	m_vecTextureInfo[iTextureIndex]->Texture = CTexture::Create(m_pDevice, m_pContext, m_vecTextureInfo[iTextureIndex]->strTexturePath, 1);
+	m_vecTextureInfo_UIPart[iTextureIndex]->Texture = CTexture::Create(m_pDevice, m_pContext, m_vecTextureInfo_UIPart[iTextureIndex]->strTexturePath, 1);
 
-	if (FAILED(m_pGameInstance->Add_Prototype(LEVEL_STATIC, m_vecTextureInfo[iTextureIndex]->strTextureTag, m_vecTextureInfo[iTextureIndex]->Texture)))
+	if (FAILED(m_pGameInstance->Add_Prototype(LEVEL_STATIC, m_vecTextureInfo_UIPart[iTextureIndex]->strTextureTag, m_vecTextureInfo_UIPart[iTextureIndex]->Texture)))
 		return E_FAIL;
 
 	return S_OK;
@@ -260,7 +272,7 @@ void CUIRender_Client::Ready_Font()
 	m_vecFont_tchar[_int(UI_FONT::FONT_TITLE_72)] = TEXT("FONT_TITLE_72");
 }
 
-HRESULT CUIRender_Client::Ready_Texture()
+HRESULT CUIRender_Client::Ready_Texture_UIPart()
 {
 	vector<vector<_wstring>> vecBuffer;
 	m_pGameInstance->LoadDataByFile("../Bin/Resources/textures/UI/UIList.csv", &vecBuffer);
@@ -275,7 +287,28 @@ HRESULT CUIRender_Client::Ready_Texture()
 		memcpy(pNew->strTexturePath, &vecBuffer[i][0][0], sizeof(_tchar) * (vecBuffer[i][0].size() + 1));
 		memcpy(pNew->strTextureTag, &vecBuffer[i][1][0], sizeof(_tchar) * (vecBuffer[i][1].size() + 1));
 
-		m_vecTextureInfo.push_back(pNew);
+		m_vecTextureInfo_UIPart.push_back(pNew);
+	}
+
+	return S_OK;
+}
+
+HRESULT CUIRender_Client::Ready_Texture_ItemIcon()
+{
+	vector<vector<_wstring>> vecBuffer;
+	m_pGameInstance->LoadDataByFile("아이템 아이콘 문서 만들기", &vecBuffer);
+
+	for (_int i = 2; i < vecBuffer.size(); ++i)
+	{
+		UTEXTURE* pNew = new UTEXTURE;
+
+		pNew->strTexturePath = new _tchar[vecBuffer[i][0].size() + 1];
+		pNew->strTextureTag = new _tchar[vecBuffer[i][1].size() + 1];
+
+		memcpy(pNew->strTexturePath, &vecBuffer[i][0][0], sizeof(_tchar) * (vecBuffer[i][0].size() + 1));
+		memcpy(pNew->strTextureTag, &vecBuffer[i][1][0], sizeof(_tchar) * (vecBuffer[i][1].size() + 1));
+
+		m_vecTextureInfo_ItemIcon.push_back(pNew);
 	}
 
 	return S_OK;
@@ -315,7 +348,7 @@ void CUIRender_Client::Free()
 
 	Safe_Release(m_pShaderCom);
 
-	for (auto& iter : m_vecTextureInfo)
+	for (auto& iter : m_vecTextureInfo_UIPart)
 	{
 		//		Safe_Release(iter->Texture);
 		Safe_Delete_Array(iter->strTexturePath);
@@ -323,7 +356,17 @@ void CUIRender_Client::Free()
 		Safe_Delete(iter);
 	}
 
-	m_vecTextureInfo.clear();
+	m_vecTextureInfo_UIPart.clear();
+
+	for (auto& iter : m_vecTextureInfo_ItemIcon)
+	{
+		//		Safe_Release(iter->Texture);
+		Safe_Delete_Array(iter->strTexturePath);
+		Safe_Delete_Array(iter->strTextureTag);
+		Safe_Delete(iter);
+	}
+
+	m_vecTextureInfo_ItemIcon.clear();
 
 	m_vecFont_tchar.clear();
 

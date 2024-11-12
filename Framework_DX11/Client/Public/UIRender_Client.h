@@ -25,7 +25,7 @@ public:
 		CTexture* Texture = { nullptr };
 	}UTEXTURE;
 
-	
+
 
 
 private:
@@ -53,9 +53,11 @@ private:
 	HRESULT Ready_Components();
 
 	void Ready_Font();
-	HRESULT Ready_Texture();
+	HRESULT Ready_Texture_UIPart();
+	HRESULT Ready_Texture_ItemIcon();
 
-	vector<UTEXTURE*> m_vecTextureInfo;
+	vector<UTEXTURE*> m_vecTextureInfo_UIPart;
+	vector<UTEXTURE*> m_vecTextureInfo_ItemIcon;
 	vector<_tchar*> m_vecFont_tchar;
 
 public:

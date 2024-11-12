@@ -48,7 +48,7 @@ HRESULT CUIManager::Initialize_Prototype()
 
 HRESULT CUIManager::Initialize(void* pArg)
 {
-	
+
 
 	return S_OK;
 }
@@ -143,7 +143,7 @@ void CUIManager::UIControl_Test(_float fTimeDelta)
 			GET_GAMEINTERFACE->Add_Stat_Normal(STAT_NORMAL::STAT_GAUGE_HP, +100.f * fTimeDelta);
 			// 체력바 표시 수치 증가 
 		}
-		
+
 	}
 	else
 	{
@@ -186,8 +186,8 @@ void CUIManager::UIControl_Test(_float fTimeDelta)
 
 #endif // DEBUG
 
-	
-	
+
+
 
 
 }
@@ -254,9 +254,9 @@ HRESULT CUIManager::Load_UIDataFile()
 	ReadFile(hFile, &iPageCount, sizeof(_int), &dwByte, nullptr);
 	m_vecPage.resize(_int(UIPAGE::PAGE_END));
 
-	for (_int i= 0; i < _int(UIPAGE::PAGE_END); ++i)
+	for (_int i = 0; i < _int(UIPAGE::PAGE_END); ++i)
 	{
-		if(FAILED(Make_UIPage(i)))
+		if (FAILED(Make_UIPage(i)))
 			return E_FAIL;
 
 		_wstring strName = {};
@@ -274,7 +274,7 @@ HRESULT CUIManager::Load_UIDataFile()
 		ReadFile(hFile, &fPosition, sizeof(_float2), &dwByte, nullptr);
 
 		m_vecPage[i]->SetUIPagePosition(fPosition);
-		
+
 
 		if (FAILED(Load_UIDataFile_Part(hFile, &dwByte, i)))
 			MSG_BOX(TEXT("UI 데이터 불러오기 실패"));

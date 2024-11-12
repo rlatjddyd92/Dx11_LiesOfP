@@ -7,6 +7,7 @@
 CPlayer_Stat_Manager::CPlayer_Stat_Manager(CGameInstance* pGameInstance)
 {
 	m_pGameInstance = pGameInstance;
+	Safe_AddRef(m_pGameInstance);
 }
 
 

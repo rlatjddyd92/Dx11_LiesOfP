@@ -11,18 +11,20 @@ enum class ITEM_TYPE
 	TYPE_USING_BASIC, // 사용 아이템	기본아이템
 	TYPE_USING_EXPENDABLE, // 사용 아이템	소모품
 	TYPE_USING_THROW, // 사용 아이템	투척물
+	TYPE_USING_ERGO, // 사용 아이템	에르고
 	TYPE_USING_RARE_ERGO, // 사용 아이템	희귀 에르고
 
 	TYPE_INGRADIENT_GROW, // 소재	성장 소재
 	TYPE_INGRADIENT_SPECIAL, // 소재	특수 소재
-	
+
 	TYPE_FUNTIONAL_COMMON, // 기능 아이템(기능 확인 필요)
 
 	TYPE_WEAPON_NORMAL_BLADE, // 무기	일반 무기(날)
 	TYPE_WEAPON_NORMAL_HANDLE, // 무기	일반 무기(자루)
 	TYPE_WEAPON_SPECIAL, // 무기	특수 무기
 
-	TYPE_BLADE_HANDEL_PART, // 날 / 손잡이
+	TYPE_BLADE_PART, // 날 / 손잡이 날
+	TYPE_HANDEL_PART,// 날 / 손잡이 손잡이
 
 	TYPE_REASON_ARM, // 리전 암
 
@@ -49,6 +51,8 @@ enum class ITEM_TYPE
 
 enum class EQUIP_SLOT
 {
+	// 장비창 순서대로 정리 
+
 	EQUIP_WEAPON_BLADE_0,  // 장비	무기 및 리전 암 0
 	EQUIP_WEAPON_HANDLE_0,
 	EQUIP_WEAPON_SPECIAL_0,

@@ -71,8 +71,8 @@ public:
 #pragma region PlayMode
 	// 플레이 모드 진입
 	_bool GetPlayMode() { return m_bPlayMode; }
-	void SetPlayMode(_bool bIsPlayMode) 
-	{ 
+	void SetPlayMode(_bool bIsPlayMode)
+	{
 		m_vecPage[_int(UIPAGE::PAGE_LOADING)]->SetRender(false);
 		m_bPlayMode = bIsPlayMode;
 	}
@@ -93,7 +93,7 @@ private:
 	HRESULT Load_UIDataFile();
 	HRESULT Make_UIPage(_int iIndex);
 	HRESULT Load_UIDataFile_Part(HANDLE handle, DWORD* dword, _int iIndex);
-	
+
 
 
 private:

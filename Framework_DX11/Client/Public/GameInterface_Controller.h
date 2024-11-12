@@ -41,7 +41,7 @@ public: // 외부에서 매니저 접근
 	HRESULT Initialize_GameInterface(ID3D11Device** pDevice, ID3D11DeviceContext** pContext, CGameInstance* pInstance);
 	void Update_GameInterface(_float fTimeDelta);
 	void Release_GameInterface();
-	
+
 #pragma endregion
 
 

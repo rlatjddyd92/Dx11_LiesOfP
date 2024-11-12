@@ -46,7 +46,7 @@ public:
 			fPosition.x = fParentPosition.x + fAdjust.x;
 			fPosition.y = fParentPosition.y + fAdjust.y;
 
-			
+
 
 			return fPosition;
 		}
@@ -76,6 +76,7 @@ public:
 
 		// 텍스쳐 관련
 		_int iTexture_Index = -1;
+		_bool bIsItem = false; // <- 아이템 아이콘 표시 여부 
 		_float4 fTextureColor = { -1.f,-1.f ,-1.f ,-1.f };
 
 		// 텍스트 관련
@@ -142,7 +143,7 @@ public:
 protected:
 	void UpdatePart_ByControl(UG_CTRL* pCtrl);
 	void Release_Control(UG_CTRL* pCtrl);
-	
+
 protected:
 	vector<UPART*> m_vecPart;
 	_wstring m_UIPageName = {};
