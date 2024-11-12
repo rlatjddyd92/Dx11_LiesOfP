@@ -74,9 +74,9 @@ void CMainApp::Update(_float fTimeDelta)
 	//  위 순서로 진행하기 위해 인터페이스 관련 업데이트를 무조건 다른 객체보다 나중에 진행하기 위함 
 	// 정상 작동 확인 시 까지 주석처리 
 	// GET_GAMEINTERFACE->Update_GameInterface(fTimeDelta);
-#ifdef _DEBUG
+//#ifdef _DEBUG
 	m_fTimeAcc += fTimeDelta;
-#endif
+//#endif
 }
 
 HRESULT CMainApp::Render()
@@ -90,7 +90,7 @@ HRESULT CMainApp::Render()
 
 	/* MakeSpriteFont "넥슨lv1고딕 Bold" /FontSize:10 /FastPack /CharacterRegion:0x0020-0x00FF /CharacterRegion:0x3131-0x3163 /CharacterRegion:0xAC00-0xD800 /DefaultCharacter:0xAC00 145ex.spritefont */
 	
-#ifdef _DEBUG
+//#ifdef _DEBUG
 	++m_iNumDraw;
 
 	if (m_fTimeAcc >= 1.f)
@@ -101,7 +101,7 @@ HRESULT CMainApp::Render()
 	}
 
 	m_pGameInstance->Render_Text(TEXT("Font_145"), m_szFPS, XMVectorSet(0.f, 0.f, 0.f, 1.f), XMVectorSet(1.f, 0.f, 0.f, 1.f));
-#endif
+//#endif
 
 	m_pGameInstance->Render_End();
 
@@ -207,8 +207,6 @@ HRESULT CMainApp::Ready_Gara()
 
 HRESULT CMainApp::Ready_Prototype_Component_Static()
 {
-	
-
 	/* For.Prototype_Component_Shader_VtxPosTex */
 	if (FAILED(m_pGameInstance->Add_Prototype(LEVEL_STATIC, TEXT("Prototype_Component_Shader_VtxPosTex"),
 		CShader::Create(m_pDevice, m_pContext, TEXT("../Bin/ShaderFiles/Shader_VtxPosTex.hlsl"), VTXPOSTEX::Elements, VTXPOSTEX::iNumElements))))

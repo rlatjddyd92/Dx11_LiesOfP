@@ -82,9 +82,11 @@ HRESULT CTarget_Manager::Add_MRT(const _wstring & strMRTTag, const _wstring & st
 HRESULT CTarget_Manager::Begin_MRT(const _wstring& strMRTTag, ID3D11DepthStencilView* pDSV, _bool isClear)
 {
 	// 초기화해주기
-	//ID3D11ShaderResourceView* pSRV[D3D11_COMMONSHADER_CONSTANT_BUFFER_API_SLOT_COUNT] = { nullptr };
+	ID3D11ShaderResourceView* pSRV[D3D11_COMMONSHADER_INPUT_RESOURCE_REGISTER_COUNT] = { nullptr };
+	//ID3D11UnorderedAccessView* pUAV[D3D11_1_UAV_SLOT_COUNT] = { nullptr };
 
 	//m_pContext->PSSetShaderResources(0, D3D11_COMMONSHADER_INPUT_RESOURCE_REGISTER_COUNT, pSRV);
+	//m_pContext->CSSetUnorderedAccessViews(0, D3D11_1_UAV_SLOT_COUNT, pUAV, nullptr);
 
 	list<CRenderTarget*>* pMRTList = Find_MRT(strMRTTag);
 

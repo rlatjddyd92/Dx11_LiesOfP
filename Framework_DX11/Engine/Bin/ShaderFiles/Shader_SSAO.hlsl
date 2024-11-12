@@ -1,7 +1,6 @@
 #include "Shader_Engine_Defines.hlsli"
+#include "Shader_Function.hlsli"
 
-matrix g_WorldMatrix, g_ViewMatrix, g_ProjMatrix;
-matrix g_ViewMatrixInv, g_ProjMatrixInv;
 matrix g_CameraViewMatrix;
 texture2D g_Texture;
 
@@ -11,7 +10,15 @@ texture2D g_NoiseTexture;
 texture2D g_SSAOTexture;
 texture2D g_BackTexture;
 
-float g_fRadius = 0.02f;
+cbuffer SSAO_VALUE
+{
+    int Padding;
+    float g_fRadius = 1.f;
+    float g_fBias = 1.f;
+    float g_fAmount = 1.f;
+};
+
+float2 g_vScreenSize = float2(1280.f, 720.f);
 
 // -1에서 1 사이의 값을 가지며, 화면에서 반구의 형태로 고르게 퍼져있는 벡터
 float3 vSampleKernels[16] =
@@ -33,6 +40,12 @@ float3 vSampleKernels[16] =
     float3(-0.6657394f, 0.6298575f, 0.6342437f),
     float3(-0.0001783f, 0.2834622f, 0.8343929f),
 };
+
+float Random(float2 uv)
+{
+    float hash = dot(uv, float2(127.1, 311.7)); 
+    return frac(sin(hash) * 43758.5453 + cos(hash) * 12345.6789);
+}
 
 struct VS_IN
 {
@@ -80,60 +93,92 @@ PS_OUT PS_MAIN_SSAO(PS_IN In)
     vector vDepthDesc = g_DepthTexture.Sample(PointSampler, In.vTexcoord);
     float fViewZ = vDepthDesc.y * 1000.f;
     
-    float4 vViewPosition = 0;
-	/* 투영공간상의 화면에 그려지는 픽셀의 위치를 구한다. */
-	/* 로컬위치 * 월드행렬 * 뷰행렬 * 투영행렬 / w */
-    vViewPosition.x = In.vTexcoord.x * 2.f - 1.f;
-    vViewPosition.y = In.vTexcoord.y * -2.f + 1.f;
-    vViewPosition.z = fViewZ;
-    vViewPosition.w = 1.f;
-
-	/* 뷰스페이스 상의 화면에 그려지는 픽셀의 위치를 구한다.*/
-	/* 로컬위치 * 월드행렬 * 뷰행렬  */
-    vViewPosition = vViewPosition * fViewZ;
-    vViewPosition = mul(vViewPosition, g_ProjMatrixInv);
-    
-    
-    
-    if (fViewZ >= 1000.f)  // 깊이 값이 거의 0인 경우 스카이박스라고 판단
-    {
-        Out.vColor = float4(1.0f, 1.0f, 1.0f, 1.0f); // 스카이박스를 흰색 또는 원하는 색으로 처리
-        return Out;
-    }
+    vector vSrcWorldPosition = Compute_WorldPos(In.vTexcoord, vDepthDesc.x, fViewZ);
     
     vector vNormalDesc = g_NormalTexture.Sample(PointSampler, In.vTexcoord);
     float3 vNormal = float3(vNormalDesc.xyz * 2.f - 1.f);
-    vNormal = normalize(mul(vNormal, g_CameraViewMatrix).xyz);
     
-    float3 vRandom = g_NoiseTexture.Sample(PointSampler, In.vTexcoord).xyz * 2.f - 1.f;
+    float fAO = 0.f;
     
-    int  iOcc = 0;
-    
-    //주변 깊이를 체크
     for (int i = 0; i < 16; i++)
     {
-        // 노이즈 텍스처를 사용해 샘플 방향에 약간의 무작위성을 추가
-        float3 vRay = normalize(vSampleKernels[i] + vRandom * 0.02f); // 랜덤 Ray값
-        float3 vReflect = reflect(vRay, vNormal.xyz) * g_fRadius;
-        //vReflect.x *= -1.f;
+        float2 vSampleUV = In.vTexcoord + ((float2(Random(In.vTexcoord.xy + i), Random(In.vTexcoord.yx + i)) * 2 - 1) * g_fRadius) / g_vScreenSize.xy;
+
+        if (vSampleUV.x < 0.0f || vSampleUV.y < 0.0f || vSampleUV.x > 1.0f || vSampleUV.y > 1.0f)
+            continue; // 화면 밖의 샘플링을 건너뛰기
         
-        // 투영 공간으로 변환 후 정규화
-        float2 vNewTexCoord;
-        vNewTexCoord.x = In.vTexcoord.x + vReflect.x;
-        vNewTexCoord.y = In.vTexcoord.y + vReflect.y;
+        vector vDestDepthDesc = g_DepthTexture.Sample(PointSampler, vSampleUV);
+        float fDestViewZ = vDepthDesc.y * 1000.f;
         
-        float fSampleViewZ = g_DepthTexture.Sample(PointSampler, vNewTexCoord).y * 1000.f;
-       
-        // 깊이 차이를 비교
-        if (fSampleViewZ <= fViewZ + 0.0005f)
-        {
-            iOcc += 1;
-        }
+        vector vDistance = Compute_WorldPos(vSampleUV, vDestDepthDesc.x, fDestViewZ);
+        float3 vDir = normalize(vDistance);
+        float delta = length(vDistance) * 1.f;
+        
+        fAO += max(0, dot(vNormal, vDir) - g_fBias) * (1 / (1 + delta)) * g_fAmount;
+
     }
+        
+    float fOcclusionFactor = saturate((float) fAO / 16.0f);
     
-    float fOcclusionFactor = saturate((float) iOcc / 16.0f);
     Out.vColor = lerp(1.0f, 0.0f, fOcclusionFactor);
-    Out.vColor = lerp(Out.vColor, 1.0f, 0.3f); // 밝기 보정
+        
+ //   vector vDepthDesc = g_DepthTexture.Sample(PointSampler, In.vTexcoord);
+ //   float fViewZ = vDepthDesc.y * 1000.f;
+    
+ //   float4 vViewPosition = 0;
+	///* 투영공간상의 화면에 그려지는 픽셀의 위치를 구한다. */
+	///* 로컬위치 * 월드행렬 * 뷰행렬 * 투영행렬 / w */
+ //   vViewPosition.x = In.vTexcoord.x * 2.f - 1.f;
+ //   vViewPosition.y = In.vTexcoord.y * -2.f + 1.f;
+ //   vViewPosition.z = fViewZ;
+ //   vViewPosition.w = 1.f;
+
+	///* 뷰스페이스 상의 화면에 그려지는 픽셀의 위치를 구한다.*/
+	///* 로컬위치 * 월드행렬 * 뷰행렬  */
+ //   vViewPosition = vViewPosition * fViewZ;
+ //   vViewPosition = mul(vViewPosition, g_ProjMatrixInv);
+    
+    
+    
+ //   if (fViewZ >= 1000.f)  // 깊이 값이 거의 0인 경우 스카이박스라고 판단
+ //   {
+ //       Out.vColor = float4(1.0f, 1.0f, 1.0f, 1.0f); // 스카이박스를 흰색 또는 원하는 색으로 처리
+ //       return Out;
+ //   }
+    
+ //   vector vNormalDesc = g_NormalTexture.Sample(PointSampler, In.vTexcoord);
+ //   float3 vNormal = float3(vNormalDesc.xyz * 2.f - 1.f);
+ //   vNormal = normalize(mul(vNormal, g_CameraViewMatrix).xyz);
+    
+ //   float3 vRandom = g_NoiseTexture.Sample(PointSampler, In.vTexcoord).xyz * 2.f - 1.f;
+    
+ //   int iOcc = 0;
+    
+ //   //주변 깊이를 체크
+ //   for (int i = 0; i < 16; i++)
+ //   {
+ //       // 노이즈 텍스처를 사용해 샘플 방향에 약간의 무작위성을 추가
+ //       float3 vRay = normalize(vSampleKernels[i] + vRandom * 0.02f); // 랜덤 Ray값
+ //       float3 vReflect = reflect(vRay, vNormal.xyz) * g_fRadius;
+ //       //vReflect.x *= -1.f;
+        
+ //       // 투영 공간으로 변환 후 정규화
+ //       float2 vNewTexCoord;
+ //       vNewTexCoord.x = In.vTexcoord.x + vReflect.x;
+ //       vNewTexCoord.y = In.vTexcoord.y + vReflect.y;
+        
+ //       float fSampleViewZ = g_DepthTexture.Sample(PointSampler, vNewTexCoord).y * 1000.f;
+       
+ //       // 깊이 차이를 비교
+ //       if (fSampleViewZ <= fViewZ + 0.0005f)
+ //       {
+ //           iOcc += 1;
+ //       }
+ //   }
+    
+ //   float fOcclusionFactor = saturate((float) iOcc / 16.0f);
+ //   Out.vColor = lerp(1.0f, 0.0f, fOcclusionFactor);
+ //   Out.vColor = lerp(Out.vColor, 1.0f, 0.3f); // 밝기 보정
     
     return Out;
 }

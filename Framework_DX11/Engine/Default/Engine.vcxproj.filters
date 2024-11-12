@@ -399,6 +399,7 @@
     <ClCompile Include="..\private\Shader_Compute.cpp">
       <Filter>01.Utility\03.Components\Shader\Shader_Compute</Filter>
     </ClCompile>
+    <ClCompile Include="..\Private\EasyDrawSphere.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\Public\Base.h">
@@ -608,6 +609,7 @@
     <ClInclude Include="..\public\Shader_Compute.h">
       <Filter>01.Utility\03.Components\Shader\Shader_Compute</Filter>
     </ClInclude>
+    <ClInclude Include="..\Public\EasyDrawSphere.h" />
   </ItemGroup>
   <ItemGroup>
     <FxCompile Include="..\Bin\ShaderFiles\Shader_Cell.hlsl">
@@ -637,6 +639,9 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="..\Bin\ShaderFiles\Shader_Engine_Defines.hlsli">
+      <Filter>01.Utility\98.ShaderFiles</Filter>
+    </None>
+    <None Include="..\Bin\ShaderFiles\Shader_Function.hlsli">
       <Filter>01.Utility\98.ShaderFiles</Filter>
     </None>
   </ItemGroup>

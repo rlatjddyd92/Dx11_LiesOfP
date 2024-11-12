@@ -151,9 +151,6 @@ void CGameInstance::Update_Engine(_float fTimeDelta)
 
 HRESULT CGameInstance::Draw_Engine()
 {
-	if (KEY_TAP(KEY::F2))
-		m_pRenderer->OnOff_IsRenderBloom();
-
 	m_pRenderer->Draw();
 
 	return m_pLevel_Manager->Render();
@@ -383,9 +380,9 @@ HRESULT CGameInstance::Add_RenderObject(CRenderer::RENDERGROUP eRenderGroupID, C
 {
 	return m_pRenderer->Add_RenderObject(eRenderGroupID, pRenderObject);
 }
-void CGameInstance::OnOff_IsRenderBloom()
+SSAO_DESC* CGameInstance::Get_SSAODesc()
 {
-	m_pRenderer->OnOff_IsRenderBloom();
+	return m_pRenderer->Get_SSAODesc();
 }
 #ifdef _DEBUG
 HRESULT CGameInstance::Add_DebugObject(CComponent * pDebugObject)

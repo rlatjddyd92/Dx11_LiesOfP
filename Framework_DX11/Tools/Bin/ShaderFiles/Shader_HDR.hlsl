@@ -288,7 +288,7 @@ PS_OUT PS_MAIN_HDR(PS_IN In)
     float exposure = 1.0; // 노출값 조정
     float3 vHdrColor = pow(vBack.rgb, 2.2f); // 감마 보정 해제
     
-    vHdrColor *= 2.0f;
+    vHdrColor *= 1.0f;
     
     
     Out.vColor = float4(vHdrColor, 1.f);

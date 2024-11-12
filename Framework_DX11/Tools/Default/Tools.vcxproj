@@ -41,6 +41,7 @@
     <ClInclude Include="..\Public\Controller_AnimationTool.h" />
     <ClInclude Include="..\Public\Controller_EffectTool.h" />
     <ClInclude Include="..\Public\Controller_MapTool.h" />
+    <ClInclude Include="..\Public\Controller_PostProcess.h" />
     <ClInclude Include="..\Public\Controller_UITool.h" />
     <ClInclude Include="..\Public\Decal.h" />
     <ClInclude Include="..\public\Effect_Container.h" />
@@ -92,6 +93,7 @@
     <ClCompile Include="..\Private\Controller_AnimationTool.cpp" />
     <ClCompile Include="..\Private\Controller_EffectTool.cpp" />
     <ClCompile Include="..\Private\Controller_MapTool.cpp" />
+    <ClCompile Include="..\Private\Controller_PostProcess.cpp" />
     <ClCompile Include="..\Private\Controller_UITool.cpp" />
     <ClCompile Include="..\Private\Decal.cpp" />
     <ClCompile Include="..\private\Effect_Container.cpp" />

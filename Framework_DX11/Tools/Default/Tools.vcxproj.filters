@@ -99,9 +99,12 @@
     </Filter>
     <Filter Include="02.GameObjects\08.Decal">
       <UniqueIdentifier>{caef4cbb-fb0c-4dfc-875e-2fc8a569562f}</UniqueIdentifier>
-	</Filter>
+    </Filter>
     <Filter Include="02.GameObjects\04.Effect\Effect_Base\Texture_Effect">
       <UniqueIdentifier>{e0193f26-6fda-4bf4-8fcd-c94aa5bd43d6}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="90.ImGuiManager\Controller_PostProcess">
+      <UniqueIdentifier>{82f939de-c239-4897-bbdf-a8fc84d17e12}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -119,9 +122,6 @@
     </ClInclude>
     <ClInclude Include="stdafx.h">
       <Filter>98.Default</Filter>
-    </ClInclude>
-    <ClInclude Include="..\Public\MainApp.h">
-      <Filter>00.MainApp</Filter>
     </ClInclude>
     <ClInclude Include="..\Public\Level_Tool.h">
       <Filter>01.Levels\GamePlay</Filter>
@@ -242,7 +242,7 @@
     </ClInclude>
     <ClInclude Include="..\Public\Decal.h">
       <Filter>02.GameObjects\08.Decal</Filter>
-	</ClInclude>
+    </ClInclude>
     <ClInclude Include="..\..\imgui\ImGuiFileDialogConfig.h">
       <Filter>Imgui</Filter>
     </ClInclude>
@@ -251,6 +251,12 @@
     </ClInclude>
     <ClInclude Include="..\..\imgui\ImGuiFileDialog.h">
       <Filter>Imgui</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Public\Controller_PostProcess.h">
+      <Filter>90.ImGuiManager\Controller_PostProcess</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Public\MainApp.h">
+      <Filter>01.Levels\Loading\Loader</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -378,9 +384,12 @@
     </ClCompile>
     <ClCompile Include="..\Private\Decal.cpp">
       <Filter>02.GameObjects\08.Decal</Filter>
-	</ClCompile>
+    </ClCompile>
     <ClCompile Include="..\..\imgui\ImGuiFileDialog.cpp">
       <Filter>Imgui</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Private\Controller_PostProcess.cpp">
+      <Filter>90.ImGuiManager\Controller_PostProcess</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -434,7 +443,7 @@
       <Filter>97.ShaderFiles</Filter>
     </FxCompile>
     <FxCompile Include="..\Bin\ShaderFiles\Shader_SSD.hlsl">
-	</FxCompile>
+    </FxCompile>
     <FxCompile Include="..\Bin\ShaderFiles\Shader_VtxPointInstance_Test.hlsl">
       <Filter>97.ShaderFiles</Filter>
     </FxCompile>

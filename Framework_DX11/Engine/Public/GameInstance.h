@@ -87,6 +87,7 @@ public:
 
 #pragma region RENDERER
 	HRESULT Add_RenderObject(CRenderer::RENDERGROUP eRenderGroupID, class CGameObject* pRenderObject);
+	SSAO_DESC* Get_SSAODesc();
 
 	void OnOff_IsRenderBloom();
 

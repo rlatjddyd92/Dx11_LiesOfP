@@ -127,6 +127,16 @@ namespace Engine
 		_float	fChangeDuration = 0.f;
 	}CHANGEANIMATION_DESC;
 
+#pragma region 후처리 관련
+	typedef struct
+	{
+		_int isOnSSAO;
+		_float fRadius;
+		_float fBias;
+		_float fAmount;
+	}SSAO_DESC;
+#pragma endregion
+
 	//오브젝트 저장 및 불러오기에 사용
 	typedef struct
 	{

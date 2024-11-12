@@ -17,7 +17,7 @@ private:
 	virtual ~CRenderer() = default;
 
 public:
-	void OnOff_IsRenderBloom();
+	SSAO_DESC* Get_SSAODesc() { return &m_tSSAO; }
 
 public:
 	HRESULT Initialize();
@@ -37,8 +37,8 @@ public:
 	} 
 
 #endif
-	// 다음 단계에 영향을 주지 않기 위해 초기화 용도의 SRV와 UAV
 private:
+	// 다음 단계에 영향을 주지 않기 위해 초기화 용도의 SRV와 UAV
 	ID3D11ShaderResourceView* m_pClearSRV[128] = { nullptr };
 	ID3D11UnorderedAccessView* m_pClearUAV[8] = { nullptr };
 
@@ -72,7 +72,9 @@ private:
 
 	_bool						m_isUseBloom = { true };
 
-	_bool						m_isUseSSAO = { true };
+	/* SSAO */
+	SSAO_DESC					m_tSSAO = {  };
+	ID3D11Buffer*				m_pBuffer_SSAO = { nullptr };
 	class CTexture*				m_pNoiseTexture_SSAO = { nullptr };
 
 	/* Cascade */
@@ -116,6 +118,8 @@ private:
 	HRESULT Copy_BackBuffer();
 	HRESULT Ready_CascadeDepthStencilView();
 	HRESULT Ready_HDR();
+
+	HRESULT Ready_Desc();
 
 #ifdef _DEBUG
 private:

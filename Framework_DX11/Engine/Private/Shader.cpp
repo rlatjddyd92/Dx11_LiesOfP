@@ -44,7 +44,7 @@ HRESULT CShader::Initialize_Prototype(const _tchar * pShaderFilePath, const D3D1
 
 	for (size_t i = 0; i < m_iNumPasses; i++)
 	{
-		ID3DX11EffectPass*	pPass = pTechnique->GetPassByIndex(0);
+		ID3DX11EffectPass* pPass = pTechnique->GetPassByIndex(0);
 		if (nullptr == pPass)
 			return E_FAIL;
 
@@ -52,7 +52,7 @@ HRESULT CShader::Initialize_Prototype(const _tchar * pShaderFilePath, const D3D1
 
 		pPass->GetDesc(&PassDesc);
 
-		/*  
+		/*
 		LPCSTR SemanticName;
 		UINT SemanticIndex;
 		DXGI_FORMAT Format;
@@ -62,29 +62,26 @@ HRESULT CShader::Initialize_Prototype(const _tchar * pShaderFilePath, const D3D1
 		UINT InstanceDataStepRate;
 		*/
 
-		
+
 
 		/* D3D11_INPUT_ELEMENT_DESC : 정점을 구성하는 멤버변수 하나의 정보를 표현하는 구조체 .*/
-		
+
 		//D3D11_INPUT_ELEMENT_DESC	ElementDesc[] =
 		//{
 		//	{ "POSITION", 0, DXGI_FORMAT_R32G32B32_FLOAT, 0, 0, D3D11_INPUT_PER_VERTEX_DATA, 0 },
 		//	{ "TEXCOORD", 0, DXGI_FORMAT_R32G32_FLOAT, 0, 12, D3D11_INPUT_PER_VERTEX_DATA, 0 },
 		//};
-		
-		if (iPassNum == -1 || (i == iPassNum))
-		{
-			ID3D11InputLayout* pInputLayout;
+		ID3D11InputLayout* pInputLayout;
 
-			HRESULT hr = m_pDevice->CreateInputLayout(pElementDesc, iNumElements, PassDesc.pIAInputSignature, PassDesc.IAInputSignatureSize, &pInputLayout);
-			if (FAILED(hr)) {
-				// 오류 코드 출력
-				hr;
-				return E_FAIL;
-			}
-
-			m_InputLayouts.emplace_back(pInputLayout);
+		HRESULT hr = m_pDevice->CreateInputLayout(pElementDesc, iNumElements, PassDesc.pIAInputSignature, PassDesc.IAInputSignatureSize, &pInputLayout);
+		if (FAILED(hr)) {
+			// 오류 코드 출력
+			hr;
+			return E_FAIL;
 		}
+
+		m_InputLayouts.emplace_back(pInputLayout);
+
 	}
 
 	return S_OK;
@@ -247,7 +244,7 @@ HRESULT CShader::Bind_RawValue(const _char * pConstantName, const void * pData, 
 
 HRESULT CShader::Bind_CBuffer(const _char* pConstantName, ID3D11Buffer* pBuffer)
 {
-	ID3DX11EffectVariable* pVariable = m_pEffect->GetVariableByName(pConstantName);
+	ID3DX11EffectVariable* pVariable = m_pEffect->GetConstantBufferByName(pConstantName);
 	if (nullptr == pVariable)
 		return E_FAIL;
 
@@ -256,7 +253,10 @@ HRESULT CShader::Bind_CBuffer(const _char* pConstantName, ID3D11Buffer* pBuffer)
 	if (nullptr == pConstantBuffer)
 		return E_FAIL;
 
-	pConstantBuffer->SetConstantBuffer(pBuffer);
+	HRESULT hr = pConstantBuffer->SetConstantBuffer(pBuffer);
+	if (FAILED(hr))
+		return hr; // SetConstantBuffer에서 실패한 경우 그 오류 코드 반환
+
 	return S_OK;
 }
 

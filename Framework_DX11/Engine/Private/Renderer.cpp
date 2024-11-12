@@ -19,11 +19,6 @@ CRenderer::CRenderer(ID3D11Device* pDevice, ID3D11DeviceContext* pContext)
 	Safe_AddRef(m_pContext);
 }
 
-void CRenderer::OnOff_IsRenderBloom()
-{
-	m_isUseBloom = !m_isUseBloom;
-}
-
 HRESULT CRenderer::Initialize()
 {
 	_uint			iNumViewports = { 1 };
@@ -263,20 +258,23 @@ HRESULT CRenderer::Initialize()
 		return E_FAIL;
 	if (FAILED(m_pGameInstance->Ready_RT_Debug(TEXT("Target_SSAO_BlurXY"), 100.f, 300.f, 200.f, 200.f)))
 		return E_FAIL;
-	if (FAILED(m_pGameInstance->Ready_RT_Debug(TEXT("Target_Bloom_BlurXY2"), 100.f, 500.f, 200.f, 200.f)))
+	if (FAILED(m_pGameInstance->Ready_RT_Debug(TEXT("Target_Cascade"), 100.f, 500.f, 200.f, 200.f)))
 		return E_FAIL;
 
-	if (FAILED(m_pGameInstance->Ready_RT_Debug(TEXT("Target_Specular"), 300.f, 100.f, 200.f, 200.f)))
-		return E_FAIL;
-	if (FAILED(m_pGameInstance->Ready_RT_Debug(TEXT("Target_ARM"), 300.f, 300.f, 200.f, 200.f)))
-		return E_FAIL;
-	if (FAILED(m_pGameInstance->Ready_RT_Debug(TEXT("Target_HDR"), 300.f,500.f, 200.f, 200.f)))
-		return E_FAIL;
+	//if (FAILED(m_pGameInstance->Ready_RT_Debug(TEXT("Target_Specular"), 300.f, 100.f, 200.f, 200.f)))
+	//	return E_FAIL;
+	//if (FAILED(m_pGameInstance->Ready_RT_Debug(TEXT("Target_ARM"), 300.f, 300.f, 200.f, 200.f)))
+	//	return E_FAIL;
+	//if (FAILED(m_pGameInstance->Ready_RT_Debug(TEXT("Target_HDR"), 300.f,500.f, 200.f, 200.f)))
+	//	return E_FAIL;
 	//if (FAILED(m_pGameInstance->Ready_RT_Debug(TEXT("Target_Shade"), 300.f,500.f, 200.f, 200.f)))
 	//	return E_FAIL;
 #endif
 
 	if (FAILED(Ready_HDR()))
+		return E_FAIL;
+
+	if (FAILED(Ready_Desc()))
 		return E_FAIL;
 
 	return S_OK;
@@ -328,8 +326,8 @@ HRESULT CRenderer::Draw()
 	if (FAILED(Render_HDR()))
 		return E_FAIL;
 
-	if (FAILED(Render_Bloom()))	// 다시 고치기
-		return E_FAIL;
+	//if (FAILED(Render_Bloom()))	// 다시 고치기
+	//	return E_FAIL;
 
 	if(FAILED(Render_LDR()))
 		return E_FAIL;
@@ -580,6 +578,12 @@ HRESULT CRenderer::Render_Deferred()
 
 HRESULT CRenderer::Render_SSAO()
 {
+	if (!m_tSSAO.isOnSSAO)
+	{
+		m_pGameInstance->Clear_MRT(TEXT("MRT_SSAO"));
+		return S_OK;
+	}
+
 	if (FAILED(m_pSSAOShader->Bind_Matrix("g_WorldMatrix", &m_WorldMatrix)))
 		return E_FAIL;
 	if (FAILED(m_pSSAOShader->Bind_Matrix("g_ViewMatrix", &m_ViewMatrix)))
@@ -603,6 +607,14 @@ HRESULT CRenderer::Render_SSAO()
 	if (FAILED(m_pGameInstance->Bind_RT_ShaderResource(m_pSSAOShader, TEXT("Target_Depth"), "g_DepthTexture")))
 		return E_FAIL;
 	if (FAILED(m_pNoiseTexture_SSAO->Bind_ShadeResource(m_pSSAOShader, "g_NoiseTexture", 0)))
+		return E_FAIL;
+
+	D3D11_MAPPED_SUBRESOURCE SubResources;
+	m_pContext->Map(m_pBuffer_SSAO, 0, D3D11_MAP_WRITE_DISCARD, 0, &SubResources);
+	memcpy(SubResources.pData, &m_tSSAO, sizeof(m_tSSAO));
+	m_pContext->Unmap(m_pBuffer_SSAO, 0);
+
+	if (FAILED(m_pSSAOShader->Bind_CBuffer("SSAO_VALUE", m_pBuffer_SSAO)))
 		return E_FAIL;
 
 	m_pSSAOShader->Begin(0);
@@ -642,7 +654,7 @@ HRESULT CRenderer::Render_SSAO()
 	if (FAILED(Copy_BackBuffer()))
 		return E_FAIL;
 
-	if (FAILED(m_pGameInstance->Bind_RT_ShaderResource(m_pSSAOShader, TEXT("Target_SSAO_BlurXY"), "g_SSAOTexture")))
+	if (FAILED(m_pGameInstance->Bind_RT_ShaderResource(m_pSSAOShader, TEXT("Target_SSAO_BlurX"), "g_SSAOTexture")))
 		return E_FAIL;
 	if (FAILED(m_pGameInstance->Bind_RT_ShaderResource(m_pSSAOShader, TEXT("Target_BackBuffer"), "g_BackTexture")))
 		return E_FAIL;
@@ -1429,6 +1441,27 @@ HRESULT CRenderer::Ready_HDR()
 	return S_OK;
 }
 
+HRESULT CRenderer::Ready_Desc()
+{
+	D3D11_BUFFER_DESC BufferDesc;
+	ZeroMemory(&BufferDesc, sizeof(D3D11_BUFFER_DESC));
+
+	//m_tSSAO.isOnSSAO = false;
+	//m_tSSAO.fAmount = 0.5f;
+	//m_tSSAO.fBias = 0.3f;
+	//m_tSSAO.fRadius = 1.f;
+
+	BufferDesc.Usage = D3D11_USAGE_DYNAMIC; // CPU에서 쓰기, GPU에서 읽기 가능
+	BufferDesc.BindFlags = D3D11_BIND_CONSTANT_BUFFER;
+	BufferDesc.ByteWidth = sizeof(m_tSSAO); // 구조체 크기만큼 할당
+	BufferDesc.CPUAccessFlags = D3D11_CPU_ACCESS_WRITE; // CPU 접근 권한 설정
+
+	if (FAILED(m_pDevice->CreateBuffer(&BufferDesc, nullptr, &m_pBuffer_SSAO)))
+		return E_FAIL;
+
+	return S_OK;
+}
+
 #ifdef _DEBUG
 
 HRESULT CRenderer::Render_Debug()
@@ -1456,6 +1489,7 @@ HRESULT CRenderer::Render_Debug()
 	m_pGameInstance->Render_MRT_Debug(TEXT("MRT_Bloom_BlurXY0"), m_pShader, m_pVIBuffer);
 	m_pGameInstance->Render_MRT_Debug(TEXT("MRT_Bloom_BlurXY1"), m_pShader, m_pVIBuffer);
 	m_pGameInstance->Render_MRT_Debug(TEXT("MRT_Bloom_BlurXY2"), m_pShader, m_pVIBuffer);
+	m_pGameInstance->Render_MRT_Debug(TEXT("MRT_SSAO"), m_pShader, m_pVIBuffer);
 	m_pGameInstance->Render_MRT_Debug(TEXT("MRT_SSAO_BlurXY"), m_pShader, m_pVIBuffer);
 	m_pGameInstance->Render_MRT_Debug(TEXT("MRT_HDR"), m_pShader, m_pVIBuffer);
 	m_pGameInstance->Render_MRT_Debug(TEXT("MRT_LDR"), m_pShader, m_pVIBuffer);
@@ -1496,6 +1530,8 @@ void CRenderer::Free()
 
 		RenderObjects.clear();
 	}
+
+	Safe_Release(m_pBuffer_SSAO);
 
 	Safe_Release(m_pDownSampleDepthStencilView2);
 	Safe_Release(m_pDownSampleDepthStencilView1);

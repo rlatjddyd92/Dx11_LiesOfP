@@ -109,6 +109,7 @@ HRESULT CNonAnimModel::Render()
 			return E_FAIL;
 	}
 	
+	return S_OK;
 }
 
 HRESULT CNonAnimModel::Render_Picking()
@@ -308,7 +309,6 @@ HRESULT CNonAnimModel::Render_NonAnim()
 
 	for (size_t i = 0; i < iNumMeshes; i++)
 	{
-		m_pModelCom->Bind_MeshBoneMatrices(m_pShaderCom, "g_BoneMatrices", (_uint)i);
 
 		if (nullptr != m_pModelCom->Find_Texture((_uint)i, TEXTURE_TYPE::ROUGHNESS))
 		{

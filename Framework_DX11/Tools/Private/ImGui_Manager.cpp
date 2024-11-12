@@ -5,6 +5,7 @@
 #include "Controller_EffectTool.h"
 #include "Controller_UITool.h"
 #include "Controller_AnimationTool.h"
+#include "Controller_PostProcess.h"
 
 IMPLEMENT_SINGLETON(CImGui_Manager)
 
@@ -93,6 +94,8 @@ void CImGui_Manager::Update_ImGui()
 		Tool_UI();
 
 		Tool_Animation();
+
+		Tool_PostProcess();
 	}
 
 	ImGui::EndTabBar();
@@ -249,7 +252,17 @@ void CImGui_Manager::Tool_Animation()
 	}
 	else
 	{
-		m_pController_AnimationTool->BlockObjCtr();
+		//m_pController_AnimationTool->BlockObjCtr();
+	}
+}
+
+void CImGui_Manager::Tool_PostProcess()
+{
+	if (ImGui::BeginTabItem("PostProcess Tool"))
+	{
+		m_pController_PostProcess->Update_SSAO();
+
+		ImGui::EndTabItem();
 	}
 }
 
@@ -282,12 +295,19 @@ HRESULT CImGui_Manager::Ready_Controllers()
 		return E_FAIL;
 	m_pController_AnimationTool->Initialize(m_pDevice, m_pContext);
 
+	m_pController_PostProcess = CController_PostProcess::Get_Instance();
+	if (nullptr == m_pController_PostProcess)
+		return E_FAIL;
+	m_pController_PostProcess->Initialize(m_pDevice, m_pContext);
+
+
 	return S_OK;
 }
 void CImGui_Manager::Free()
 {
 	__super::Free();
 
+	m_pController_PostProcess->Destroy_Instance();
 	m_pController_EffectTool->Destroy_Instance();
 	m_pController_UITool->Destroy_Instance();
 	m_pController_AnimationTool->Destroy_Instance();
