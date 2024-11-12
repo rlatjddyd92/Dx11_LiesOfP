@@ -494,3 +494,5 @@ Binary_DX11/Client/Bin/Resources/Models/Monster/CarcassNormal/CarcassNormal.fbx
 Binary_DX11/Client/Bin/ModelData/Anim/CarcassNormal/CarcassNormal.dat
 Framework_DX11/Tools/Bin/ModelData/Anim/Monster/CarcassNormal/CarcassNormal.dat
 *.obj
+/Binary_DX11/.vs
+*.cso
