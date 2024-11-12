@@ -28,34 +28,34 @@ HRESULT CController_AnimationTool::Initialize(ID3D11Device* pDevice, ID3D11Devic
 	}
 
 	//모델 생성 부분
-	CAnimModel::ANIMMODEL_DESC Desc{};
-	Desc.vPosition = { 0.f,0.f,0.f };
-	Desc.vScale = { 2.f, 2.f, 2.f };
-	Desc.vRotation = { 0.f,0.f,0.f };
-	Desc.pUpdateCtr = &m_bObjRenderCtr;
-	Desc.fRotationPerSec = 90.f;
-	Desc.fSpeedPerSec = 1.f;
-
-	Desc.pPos_TB = &m_vPos;
-	Desc.pRenderCtr_TB = &m_bTargetBallRender;
-	
-	strcpy_s(m_szCurrentModelText, "Prototype_AnimModel_Player");
-	strcpy_s(Desc.szModelTag, m_szCurrentModelText);
-
-	if (FAILED(m_pGameInstance->Add_CloneObject_ToLayer(LEVEL_TOOL, TEXT("Layer_AnimationTool_Test"), TEXT("Prototype_GameObject_Anim"), &Desc)))
-		return E_FAIL;
-	
-
-	//Prototype_GameObject_TargetBall
-	CTargetBall::TARGETBALL_DESC TB_Desc{};
-	TB_Desc.pPos = &m_vPos;
-	TB_Desc.pRenderCtr = &m_bTargetBallRender;
-	TB_Desc.pUpdateCtr = &m_bObjRenderCtr;
-	TB_Desc.vCenter = _float3{0, 0, 0};
-	TB_Desc.fRadius = 0.2f;
-
-	if (FAILED(m_pGameInstance->Add_CloneObject_ToLayer(LEVEL_TOOL, TEXT("Layer_AnimationTool_Test"), TEXT("Prototype_GameObject_TargetBall"), &TB_Desc)))
-		return E_FAIL;
+	//CAnimModel::ANIMMODEL_DESC Desc{};
+	//Desc.vPosition = { 0.f,0.f,0.f };
+	//Desc.vScale = { 2.f, 2.f, 2.f };
+	//Desc.vRotation = { 0.f,0.f,0.f };
+	//Desc.pUpdateCtr = &m_bObjRenderCtr;
+	//Desc.fRotationPerSec = 90.f;
+	//Desc.fSpeedPerSec = 1.f;
+	//
+	//Desc.pPos_TB = &m_vPos;
+	//Desc.pRenderCtr_TB = &m_bTargetBallRender;
+	//
+	//strcpy_s(m_szCurrentModelText, "Prototype_AnimModel_Player");
+	//strcpy_s(Desc.szModelTag, m_szCurrentModelText);
+	//
+	//if (FAILED(m_pGameInstance->Add_CloneObject_ToLayer(LEVEL_TOOL, TEXT("Layer_AnimationTool_Test"), TEXT("Prototype_GameObject_Anim"), &Desc)))
+	//	return E_FAIL;
+	//
+	//
+	////Prototype_GameObject_TargetBall
+	//CTargetBall::TARGETBALL_DESC TB_Desc{};
+	//TB_Desc.pPos = &m_vPos;
+	//TB_Desc.pRenderCtr = &m_bTargetBallRender;
+	//TB_Desc.pUpdateCtr = &m_bObjRenderCtr;
+	//TB_Desc.vCenter = _float3{0, 0, 0};
+	//TB_Desc.fRadius = 0.2f;
+	//
+	//if (FAILED(m_pGameInstance->Add_CloneObject_ToLayer(LEVEL_TOOL, TEXT("Layer_AnimationTool_Test"), TEXT("Prototype_GameObject_TargetBall"), &TB_Desc)))
+	//	return E_FAIL;
 
 
 	//지정된 정점 위치 보여주는 방법

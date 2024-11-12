@@ -349,7 +349,6 @@ CComponent * CGameInstance::Clone_Component(_uint iLevelIndex, const _wstring & 
 
 HRESULT CGameInstance::Add_ModelPrototype(_uint iLevelIndex, const _char* strPrototypeTag, CComponent* pPrototype)
 {
-	Safe_AddRef(pPrototype);
 	return m_pComponent_Manager->Add_ModelPrototype(iLevelIndex, strPrototypeTag, pPrototype);
 }
 
@@ -718,8 +717,8 @@ void CGameInstance::Release_Engine()
 	Safe_Release(m_pPipeLine);
 	Safe_Release(m_pRenderer);
 	Safe_Release(m_pTimer_Manager);
-	Safe_Release(m_pComponent_Manager);
 	Safe_Release(m_pObject_Manager);
+	Safe_Release(m_pComponent_Manager);
 	Safe_Release(m_pLevel_Manager);
 	Safe_Release(m_pInstance_Manager);
 	Safe_Release(m_pInput_Device);

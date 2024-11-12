@@ -81,18 +81,12 @@ void CNonAnimModel::Late_Update(_float fTimeDelta)
 			m_pGameInstance->Add_RenderObject(CRenderer::RG_NONBLEND, this);
 
 		}
-		m_pGameInstance->Add_RenderObject(CRenderer::RG_PICKING, this);
+		//m_pGameInstance->Add_RenderObject(CRenderer::RG_PICKING, this);
 	}
 }
 
 HRESULT CNonAnimModel::Render()
 {
-	if (m_isInstance)
-	{
-		m_pModelCom->Add_InstanceData(m_pTransformCom->Get_WorldMatrix());
-		return S_OK;
-	}
-
 	if (FAILED(m_pTransformCom->Bind_ShaderResource(m_pShaderCom, "g_WorldMatrix")))
 		return E_FAIL;
 

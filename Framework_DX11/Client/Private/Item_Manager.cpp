@@ -17,6 +17,7 @@ ITEM_RESULT CItem_Manager::EquipItem_Inven(ITEM_INDEX eIndex)
 CItem_Manager::CItem_Manager(CGameInstance* pGameInstance)
 {
 	m_pGameInstance = pGameInstance;
+	Safe_AddRef(m_pGameInstance);
 }
 
 HRESULT CItem_Manager::Initialize_Item()
