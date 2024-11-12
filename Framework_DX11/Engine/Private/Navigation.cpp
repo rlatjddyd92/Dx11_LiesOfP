@@ -3,6 +3,7 @@
 
 #include "Shader.h"
 #include "GameInstance.h"
+#include "Transform.h"
 
 _float4x4 CNavigation::m_WorldMatrix = {};
 
@@ -126,6 +127,87 @@ _bool CNavigation::isMove(_fvector vPosition)
 			return false;
 	}		
 }
+
+void CNavigation::SetUp_OnCell(CTransform* pTransform, _float fOffset, _float fTimeDelta)
+{
+	if (m_iCurrentCellIndex < 0 || m_iCurrentCellIndex >= m_Cells.size())
+		return;
+
+	_vector      vLocalPos = XMVector3TransformCoord(pTransform->Get_State(CTransform::STATE_POSITION), XMMatrixInverse(nullptr, XMLoadFloat4x4(&m_WorldMatrix)));
+
+	_vector vPointA = m_Cells[m_iCurrentCellIndex]->Get_Point(CCell::POINT_A);
+	_vector vPointB = m_Cells[m_iCurrentCellIndex]->Get_Point(CCell::POINT_B);
+	_vector vPointC = m_Cells[m_iCurrentCellIndex]->Get_Point(CCell::POINT_C);
+
+	// 각각 거리를 구함
+	_float fDistanceA = XMVectorGetX(XMVector3Length(vPointA - vLocalPos));
+	_float fDistanceB = XMVectorGetX(XMVector3Length(vPointB - vLocalPos));
+	_float fDistanceC = XMVectorGetX(XMVector3Length(vPointC - vLocalPos));
+
+	_float fMaxDistance = max(max(fDistanceA, fDistanceB), fDistanceC);
+	_float fMinDistance = min(min(fDistanceA, fDistanceB), fDistanceC);
+	_float fMidDistance = 0.f;
+
+	_float fMaxFarY = 0.f;
+	_float fMidFarY = 0.f;
+	_float fMinFarY = 0.f;
+
+	if (fMaxDistance != fDistanceA && fMinDistance != fDistanceA)
+	{
+		fMidDistance = fDistanceA;
+		fMidFarY = XMVectorGetY(vPointA);
+	}
+	else if (fMaxDistance != fDistanceB && fMinDistance != fDistanceB)
+	{
+		fMidDistance = fDistanceB;
+		fMidFarY = XMVectorGetY(vPointB);
+	}
+	else if (fMaxDistance != fDistanceC && fMinDistance != fDistanceC)
+	{
+		fMidDistance = fDistanceC;
+		fMidFarY = XMVectorGetY(vPointC);
+	}
+
+	if (fMaxDistance == fDistanceA)
+	{
+		fMaxFarY = XMVectorGetY(vPointA);
+	}
+	else if (fMaxDistance == fDistanceB)
+	{
+		fMaxFarY = XMVectorGetY(vPointB);
+	}
+	else if (fMaxDistance == fDistanceC)
+	{
+		fMaxFarY = XMVectorGetY(vPointC);
+	}
+
+	if (fMinDistance == fDistanceA)
+	{
+		fMinFarY = XMVectorGetY(vPointA);
+	}
+	else if (fMinDistance == fDistanceB)
+	{
+		fMinFarY = XMVectorGetY(vPointB);
+	}
+	else if (fMinDistance == fDistanceC)
+	{
+		fMinFarY = XMVectorGetY(vPointC);
+	}
+
+	// 총 거리의 합
+	_float fTotalDistance = fMaxDistance + fMinDistance + fMidDistance;
+
+	_float fNewY = (fMaxDistance * fMinFarY + fMidDistance * fMidFarY + fMinDistance * fMaxFarY) / fTotalDistance;
+
+	_vector vNewLocalPos = XMVectorSetY(vLocalPos, fNewY + fOffset);
+	vLocalPos = XMVectorLerp(vLocalPos, vNewLocalPos, 8.f * fTimeDelta);
+
+	_vector vWorldPos = XMVector3TransformCoord(vLocalPos, XMLoadFloat4x4(&m_WorldMatrix));
+
+	pTransform->Set_State(CTransform::STATE_POSITION, vWorldPos);
+
+}
+
 
 #ifdef _DEBUG
 
