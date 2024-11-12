@@ -16,7 +16,7 @@ public:
     _uint				    Get_State() { return m_iStateNum; }
 
 public:
-    virtual HRESULT Initialize(_uint iStateNum) = 0;
+    virtual HRESULT Initialize(_uint iStateNum, void* pArg) = 0;
     virtual HRESULT Start_State(void* pArg = nullptr) = 0;
     virtual void    Update(_float fTimeDelta) = 0;
     virtual void    End_State() = 0;

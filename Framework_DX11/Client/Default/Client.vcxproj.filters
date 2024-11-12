@@ -109,6 +109,45 @@
     <Filter Include="02.GameObjects\05.Effect\Effect_Manager">
       <UniqueIdentifier>{1e476235-e2e7-4f5d-a200-9525d40dfc42}</UniqueIdentifier>
     </Filter>
+    <Filter Include="02.GameObjects\02.Monster\CarcassBigA">
+      <UniqueIdentifier>{f6168eed-c521-4165-b051-0becd723a0a2}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="05.Fsm">
+      <UniqueIdentifier>{4a0e87ac-4260-4525-a5db-96fc69f89d7f}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="05.Fsm\Monster">
+      <UniqueIdentifier>{8f4502de-4c7f-46e7-b10f-56157e66c9fd}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="05.Fsm\Monster\CarcassBigA">
+      <UniqueIdentifier>{15fa6f93-8453-4f21-9402-009d172ae390}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="05.Fsm\Monster\CarcassBigA\Idle">
+      <UniqueIdentifier>{038e2271-19e3-4a16-8829-285cc54e6336}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="05.Fsm\Monster\CarcassBigA\Die">
+      <UniqueIdentifier>{f843a418-0ba0-4001-b576-f04fd913ffd8}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="05.Fsm\Monster\CarcassBigA\Attack">
+      <UniqueIdentifier>{d16914b3-bb02-4db1-906c-3c6601661207}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="05.Fsm\Monster\CarcassBigA\Paralize">
+      <UniqueIdentifier>{7a808f3d-2504-4269-911e-bb92c1dd6ee0}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="05.Fsm\Monster\CarcassBigA\Impact">
+      <UniqueIdentifier>{4bc0bea3-c446-4d60-9852-a813d7be6342}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="05.Fsm\Monster\CarcassBigA\Walk">
+      <UniqueIdentifier>{8cca3e2d-28bf-401e-afd3-0ec774007eac}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="05.Fsm\Monster\CarcassBigA\Grogy">
+      <UniqueIdentifier>{0075ae76-a3eb-419f-9be1-a9900494ebb6}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="05.Fsm\Monster\CarcassBigA\Run">
+      <UniqueIdentifier>{88fbca0c-fbc5-4331-902b-31f81e9e8c39}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="05.Fsm\Monster\CarcassBigA\Hit_Fatal">
+      <UniqueIdentifier>{3a3180b6-88e0-47d8-a77c-574050019abe}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Client.h">
@@ -211,6 +250,36 @@
     <ClInclude Include="..\Public\Effect_Manager.h">
       <Filter>02.GameObjects\05.Effect\Effect_Manager</Filter>
     </ClInclude>
+    <ClInclude Include="..\Public\CarcassBigA.h">
+      <Filter>02.GameObjects\02.Monster\CarcassBigA</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Public\State_CarcassBigA_Idle.h">
+      <Filter>05.Fsm\Monster\CarcassBigA\Idle</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Public\State_CarcassBigA_Die.h">
+      <Filter>05.Fsm\Monster\CarcassBigA\Die</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Public\State_CarcassBigA_Walk.h">
+      <Filter>05.Fsm\Monster\CarcassBigA\Walk</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Public\State_CarcassBigA_Attack.h">
+      <Filter>05.Fsm\Monster\CarcassBigA\Attack</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Public\State_CarcassBigA_Paralyze.h">
+      <Filter>05.Fsm\Monster\CarcassBigA\Paralize</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Public\State_CarcassBigA_Impact.h">
+      <Filter>05.Fsm\Monster\CarcassBigA\Impact</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Public\State_CarcassBigA_Run.h">
+      <Filter>05.Fsm\Monster\CarcassBigA\Run</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Public\State_CarcassBigA_Grogy.h">
+      <Filter>05.Fsm\Monster\CarcassBigA\Grogy</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Public\State_CarcassBigA_HitFatal.h">
+      <Filter>05.Fsm\Monster\CarcassBigA\Hit_Fatal</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Client.cpp">
@@ -294,6 +363,36 @@
     </ClCompile>
     <ClCompile Include="..\Private\Effect_Manager.cpp">
       <Filter>02.GameObjects\05.Effect\Effect_Manager</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Private\CarcassBigA.cpp">
+      <Filter>02.GameObjects\02.Monster\CarcassBigA</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Private\State_CarcassBigA_Idle.cpp">
+      <Filter>05.Fsm\Monster\CarcassBigA\Idle</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Private\State_CarcassBigA_Die.cpp">
+      <Filter>05.Fsm\Monster\CarcassBigA\Die</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Private\State_CarcassBigA_Walk.cpp">
+      <Filter>05.Fsm\Monster\CarcassBigA\Walk</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Private\State_CarcassBigA_Attack.cpp">
+      <Filter>05.Fsm\Monster\CarcassBigA\Attack</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Private\State_CarcassBigA_Paralyze.cpp">
+      <Filter>05.Fsm\Monster\CarcassBigA\Paralize</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Private\State_CarcassBigA_Impact.cpp">
+      <Filter>05.Fsm\Monster\CarcassBigA\Impact</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Private\State_CarcassBigA_Run.cpp">
+      <Filter>05.Fsm\Monster\CarcassBigA\Run</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Private\State_CarcassBigA_Grogy.cpp">
+      <Filter>05.Fsm\Monster\CarcassBigA\Grogy</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Private\State_CarcassBigA_HitFatal.cpp">
+      <Filter>05.Fsm\Monster\CarcassBigA\Hit_Fatal</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

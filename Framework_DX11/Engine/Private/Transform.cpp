@@ -145,7 +145,7 @@ void CTransform::LookAt_Lerp(_Vec4 vAt, _float fSpeed, _float fTimeDelta)
 	}
 }
 
-void CTransform::LookAt_Lerp_NoHeight(_Vec4 vAt, _float fSpeed, _float fTimeDelta)
+_int CTransform::LookAt_Lerp_NoHeight(_Vec4 vAt, _float fSpeed, _float fTimeDelta)
 {	
 	/* 팀원들에게 보여주시 위한 예시2 */
 	_Vec3 vPlayerLook = Get_State(STATE_LOOK);
@@ -190,6 +190,8 @@ void CTransform::LookAt_Lerp_NoHeight(_Vec4 vAt, _float fSpeed, _float fTimeDelt
 		Set_State(STATE::STATE_RIGHT, vRight);
 		Set_State(STATE::STATE_UP, vUp);
 		Set_State(STATE::STATE_LOOK, vPlayerLook);
+
+		return 0;
 	}
 	else
 	{
@@ -199,10 +201,14 @@ void CTransform::LookAt_Lerp_NoHeight(_Vec4 vAt, _float fSpeed, _float fTimeDelt
 		if (vPlayerUp.Dot(vCrossUp) >= 0)
 		{
 			Turn((_Vec4)vWorldUp, fTimeDelta, fSpeed);
+
+			return 1;
 		}
 		else
 		{
-			Turn((_Vec4)vWorldUp, fTimeDelta, fSpeed);
+			Turn((_Vec4)vWorldUp, fTimeDelta, -fSpeed);
+
+			return -1;
 		}
 	}
 }

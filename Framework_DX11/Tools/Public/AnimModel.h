@@ -24,6 +24,8 @@ public:
 
 		//¿Ã∫¿¡ÿ √ﬂ∞°
 		_bool*		pUpdateCtr;
+		_bool* pRenderCtr_TB;
+		_vector* pPos_TB;
 	}ANIMMODEL_DESC;
 
 private:
@@ -50,8 +52,7 @@ public:
 	ANIMMODEL_DESC	m_tDesc;
 	_vector		m_vRootMoveStack{};
 
-	OUTPUT_EVKEY	m_EventKey{};
-	OUTPUT_EVKEY	m_EventKey_Boundary{};
+	list<OUTPUT_EVKEY>	m_EvKeyList;
 
 private:
 	HRESULT Ready_Components(ANIMMODEL_DESC* pNonAnimDesc);

@@ -68,21 +68,28 @@ void CAnimModel::Update(_float fTimeDelta)
 		return;
 	}
 
-	_vector vPos = m_pTransformCom->Get_State(CTransform::STATE_POSITION);
-	//_vector vRight = m_pTransformCom->Get_State(CTransform::STATE_RIGHT);
-	//_vector vUp = m_pTransformCom->Get_State(CTransform::STATE_UP);
-	//_vector vLook = m_pTransformCom->Get_State(CTransform::STATE_LOOK);
-
 	if (KEY_HOLD(KEY::I))
 		m_pTransformCom->Go_Straight(fTimeDelta);//m_pTransformCom->Set_State(CTransform::STATE_POSITION, XMVectorSetX(vPos, XMVectorGetX(vPos) + 0.1f));
 	
 	_bool	bEndCheck{false};
-	_vector vRootMove = m_pModelCom->Play_Animation(fTimeDelta, &bEndCheck, &m_EventKey, &m_EventKey_Boundary);
-
-	if (m_EventKey.bActiveEffect)
+	_vector vRootMove = m_pModelCom->Play_Animation(fTimeDelta, &bEndCheck, &m_EvKeyList);
+	
+	if (m_EvKeyList.empty() == false)
 	{
-		int a = 0;
+		for (auto& EvKey : m_EvKeyList)
+		{
+			*m_tDesc.pRenderCtr_TB = true;
+		}
 	}
+	else
+	{
+		*m_tDesc.pRenderCtr_TB = false;
+	}
+
+	_vector vPos = m_pTransformCom->Get_State(CTransform::STATE_POSITION);
+	//_vector vRight = m_pTransformCom->Get_State(CTransform::STATE_RIGHT);
+	//_vector vUp = m_pTransformCom->Get_State(CTransform::STATE_UP);
+	//_vector vLook = m_pTransformCom->Get_State(CTransform::STATE_LOOK);
 
 	if (bEndCheck == true)//조건을 애니메이션이 끝났을때 or 변경 되었을때로
 	{
@@ -90,6 +97,8 @@ void CAnimModel::Update(_float fTimeDelta)
 	}
 	else
 	{
+		vRootMove = XMVector3TransformNormal(vRootMove, m_pTransformCom->Get_WorldMatrix());
+		
 		m_pTransformCom->Set_State(CTransform::STATE_POSITION, vPos + vRootMove - m_vRootMoveStack);
 		m_vRootMoveStack = vRootMove;
 	}
