@@ -740,8 +740,9 @@ HRESULT CRenderer::Render_HDR()
 #pragma endregion
 
 	// 톤 매핑 할거임
-	_float fMiddleGrey = 0.1f;
-	_float fWhite = 5.1f;
+	_float fMiddleGrey = 1.f;
+	_float fLumWhiteSqr = 1.f;
+	_float fWhite = fLumWhiteSqr;
 	fWhite *= fMiddleGrey;
 	fWhite *= fWhite;
 
