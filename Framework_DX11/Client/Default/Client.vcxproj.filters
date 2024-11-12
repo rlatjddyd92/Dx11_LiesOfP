@@ -253,17 +253,11 @@
     <ClInclude Include="..\Public\CarcassBigA.h">
       <Filter>02.GameObjects\02.Monster\CarcassBigA</Filter>
     </ClInclude>
-    <ClInclude Include="..\Public\State_CarcassBigA_Idle.h">
-      <Filter>05.Fsm\Monster\CarcassBigA\Idle</Filter>
-    </ClInclude>
-    <ClInclude Include="..\Public\State_CarcassBigA_Die.h">
-      <Filter>05.Fsm\Monster\CarcassBigA\Die</Filter>
-    </ClInclude>
     <ClInclude Include="..\Public\State_CarcassBigA_Walk.h">
       <Filter>05.Fsm\Monster\CarcassBigA\Walk</Filter>
     </ClInclude>
-    <ClInclude Include="..\Public\State_CarcassBigA_Attack.h">
-      <Filter>05.Fsm\Monster\CarcassBigA\Attack</Filter>
+    <ClInclude Include="..\Public\State_CarcassBigA_Run.h">
+      <Filter>05.Fsm\Monster\CarcassBigA\Run</Filter>
     </ClInclude>
     <ClInclude Include="..\Public\State_CarcassBigA_Paralyze.h">
       <Filter>05.Fsm\Monster\CarcassBigA\Paralize</Filter>
@@ -271,14 +265,20 @@
     <ClInclude Include="..\Public\State_CarcassBigA_Impact.h">
       <Filter>05.Fsm\Monster\CarcassBigA\Impact</Filter>
     </ClInclude>
-    <ClInclude Include="..\Public\State_CarcassBigA_Run.h">
-      <Filter>05.Fsm\Monster\CarcassBigA\Run</Filter>
+    <ClInclude Include="..\Public\State_CarcassBigA_Idle.h">
+      <Filter>05.Fsm\Monster\CarcassBigA\Idle</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Public\State_CarcassBigA_HitFatal.h">
+      <Filter>05.Fsm\Monster\CarcassBigA\Hit_Fatal</Filter>
     </ClInclude>
     <ClInclude Include="..\Public\State_CarcassBigA_Grogy.h">
       <Filter>05.Fsm\Monster\CarcassBigA\Grogy</Filter>
     </ClInclude>
-    <ClInclude Include="..\Public\State_CarcassBigA_HitFatal.h">
-      <Filter>05.Fsm\Monster\CarcassBigA\Hit_Fatal</Filter>
+    <ClInclude Include="..\Public\State_CarcassBigA_Die.h">
+      <Filter>05.Fsm\Monster\CarcassBigA\Die</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Public\State_CarcassBigA_Attack.h">
+      <Filter>05.Fsm\Monster\CarcassBigA\Attack</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -367,17 +367,11 @@
     <ClCompile Include="..\Private\CarcassBigA.cpp">
       <Filter>02.GameObjects\02.Monster\CarcassBigA</Filter>
     </ClCompile>
-    <ClCompile Include="..\Private\State_CarcassBigA_Idle.cpp">
-      <Filter>05.Fsm\Monster\CarcassBigA\Idle</Filter>
-    </ClCompile>
-    <ClCompile Include="..\Private\State_CarcassBigA_Die.cpp">
-      <Filter>05.Fsm\Monster\CarcassBigA\Die</Filter>
-    </ClCompile>
     <ClCompile Include="..\Private\State_CarcassBigA_Walk.cpp">
       <Filter>05.Fsm\Monster\CarcassBigA\Walk</Filter>
     </ClCompile>
-    <ClCompile Include="..\Private\State_CarcassBigA_Attack.cpp">
-      <Filter>05.Fsm\Monster\CarcassBigA\Attack</Filter>
+    <ClCompile Include="..\Private\State_CarcassBigA_Run.cpp">
+      <Filter>05.Fsm\Monster\CarcassBigA\Run</Filter>
     </ClCompile>
     <ClCompile Include="..\Private\State_CarcassBigA_Paralyze.cpp">
       <Filter>05.Fsm\Monster\CarcassBigA\Paralize</Filter>
@@ -385,14 +379,20 @@
     <ClCompile Include="..\Private\State_CarcassBigA_Impact.cpp">
       <Filter>05.Fsm\Monster\CarcassBigA\Impact</Filter>
     </ClCompile>
-    <ClCompile Include="..\Private\State_CarcassBigA_Run.cpp">
-      <Filter>05.Fsm\Monster\CarcassBigA\Run</Filter>
+    <ClCompile Include="..\Private\State_CarcassBigA_Idle.cpp">
+      <Filter>05.Fsm\Monster\CarcassBigA\Idle</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Private\State_CarcassBigA_HitFatal.cpp">
+      <Filter>05.Fsm\Monster\CarcassBigA\Hit_Fatal</Filter>
     </ClCompile>
     <ClCompile Include="..\Private\State_CarcassBigA_Grogy.cpp">
       <Filter>05.Fsm\Monster\CarcassBigA\Grogy</Filter>
     </ClCompile>
-    <ClCompile Include="..\Private\State_CarcassBigA_HitFatal.cpp">
-      <Filter>05.Fsm\Monster\CarcassBigA\Hit_Fatal</Filter>
+    <ClCompile Include="..\Private\State_CarcassBigA_Die.cpp">
+      <Filter>05.Fsm\Monster\CarcassBigA\Die</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Private\State_CarcassBigA_Attack.cpp">
+      <Filter>05.Fsm\Monster\CarcassBigA\Attack</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

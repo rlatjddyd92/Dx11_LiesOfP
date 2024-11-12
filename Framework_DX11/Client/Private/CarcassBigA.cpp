@@ -59,7 +59,21 @@ HRESULT CCarcassBigA::Initialize(void* pArg)
 
 void CCarcassBigA::Priority_Update(_float fTimeDelta)
 {
-	int a = 10;
+
+	if (KEY_TAP(KEY::Z))
+	{
+		Change_State(CCarcassBigA::GROGY);
+	}
+
+	if (KEY_TAP(KEY::C))
+	{
+		Change_State(CCarcassBigA::PARALYZE);
+	}
+
+	if (KEY_TAP(KEY::V))
+	{
+		Change_State(CCarcassBigA::DIE);
+	}
 }
 
 void CCarcassBigA::Update(_float fTimeDelta)

@@ -170,6 +170,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\public\BackGround.h" />
+    <ClInclude Include="..\Public\CarcassBigA.h" />
     <ClInclude Include="..\Public\Client_Defines.h" />
     <ClInclude Include="..\Public\Effect_Base.h" />
     <ClInclude Include="..\Public\Effect_Container.h" />
@@ -187,6 +188,15 @@
     <ClInclude Include="..\Public\Particle_Snow.h" />
     <ClInclude Include="..\public\Player.h" />
     <ClInclude Include="..\Public\Sky.h" />
+    <ClInclude Include="..\Public\State_CarcassBigA_Attack.h" />
+    <ClInclude Include="..\Public\State_CarcassBigA_Die.h" />
+    <ClInclude Include="..\Public\State_CarcassBigA_Grogy.h" />
+    <ClInclude Include="..\Public\State_CarcassBigA_HitFatal.h" />
+    <ClInclude Include="..\Public\State_CarcassBigA_Idle.h" />
+    <ClInclude Include="..\Public\State_CarcassBigA_Impact.h" />
+    <ClInclude Include="..\Public\State_CarcassBigA_Paralyze.h" />
+    <ClInclude Include="..\Public\State_CarcassBigA_Run.h" />
+    <ClInclude Include="..\Public\State_CarcassBigA_Walk.h" />
     <ClInclude Include="..\Public\Terrain.h" />
     <ClInclude Include="..\Public\Texture_Effect.h" />
     <ClInclude Include="..\Public\UIManager.h" />
@@ -206,6 +216,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\private\BackGround.cpp" />
+    <ClCompile Include="..\Private\CarcassBigA.cpp" />
     <ClCompile Include="..\Private\Effect_Base.cpp" />
     <ClCompile Include="..\Private\Effect_Container.cpp" />
     <ClCompile Include="..\Private\Effect_Manager.cpp" />
@@ -222,6 +233,15 @@
     <ClCompile Include="..\Private\Particle_Snow.cpp" />
     <ClCompile Include="..\private\Player.cpp" />
     <ClCompile Include="..\Private\Sky.cpp" />
+    <ClCompile Include="..\Private\State_CarcassBigA_Attack.cpp" />
+    <ClCompile Include="..\Private\State_CarcassBigA_Die.cpp" />
+    <ClCompile Include="..\Private\State_CarcassBigA_Grogy.cpp" />
+    <ClCompile Include="..\Private\State_CarcassBigA_HitFatal.cpp" />
+    <ClCompile Include="..\Private\State_CarcassBigA_Idle.cpp" />
+    <ClCompile Include="..\Private\State_CarcassBigA_Impact.cpp" />
+    <ClCompile Include="..\Private\State_CarcassBigA_Paralyze.cpp" />
+    <ClCompile Include="..\Private\State_CarcassBigA_Run.cpp" />
+    <ClCompile Include="..\Private\State_CarcassBigA_Walk.cpp" />
     <ClCompile Include="..\Private\Terrain.cpp" />
     <ClCompile Include="..\Private\Texture_Effect.cpp" />
     <ClCompile Include="..\Private\UIManager.cpp" />

@@ -534,7 +534,8 @@ _vector CModel::Play_Animation(_float fTimeDelta, _bool* pOut, list<OUTPUT_EVKEY
 	{
 		if (m_UFBIndices[UFB_ROOT] != 1024)
 		{
-			*pOut = true;
+			if(nullptr != pOut)
+				*pOut = true;
 			m_isEnd_Animations[m_iCurrentAnimIndex] = false;
 
 			m_Bones[m_UFBIndices[UFB_ROOT]]->Update_CombinedTransformationMatrix(m_Bones, XMLoadFloat4x4(&m_PreTransformMatrix));
