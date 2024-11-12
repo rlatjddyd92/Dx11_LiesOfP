@@ -195,6 +195,7 @@
     <ClInclude Include="..\Public\UIRender_Client.h" />
     <ClInclude Include="..\Public\Weapon.h" />
     <ClInclude Include="Client.h" />
+    <ClInclude Include="Interface_Enums.h" />
     <ClInclude Include="Item_Defines.h" />
     <ClInclude Include="Item_Enum.h" />
     <ClInclude Include="Resource.h" />

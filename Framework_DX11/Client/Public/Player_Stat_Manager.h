@@ -3,7 +3,7 @@
 #include "Client_Defines.h"
 #include "Base.h"
 
-#include "Stat_Enum.h"
+#include "Interface_Enums.h"
 
 BEGIN(Engine)
 class CShader;

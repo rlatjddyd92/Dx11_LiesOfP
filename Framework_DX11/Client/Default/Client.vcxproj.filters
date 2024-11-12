@@ -228,6 +228,9 @@
     <ClInclude Include="Item_Enum.h">
       <Filter>03.GameInterface_Controller\99.GameInterface_Defines\01.Enum</Filter>
     </ClInclude>
+    <ClInclude Include="Interface_Enums.h">
+      <Filter>03.GameInterface_Controller\99.GameInterface_Defines</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Client.cpp">

@@ -3,7 +3,7 @@
 #include "Client_Defines.h"
 #include "Base.h"
 
-#include "Stat_Enum.h"
+#include "Interface_Enums.h"
 
 BEGIN(Engine)
 class CShader;
@@ -37,7 +37,10 @@ BEGIN(Client)
  1) 테스트 아이템을 수시로 바꿀 수 있는 편의 시스템
  2) 다수의 아이템 정보를 엑셀로 관리하도록 구현
 
-
+4. 규칙
+ 1) 신규 아이템 생성 -> 깊은 복사 
+ 2) 아이템 이동 -> 얕은 복사 후 기존 포인터 nullptr 처리 (Delete 절대 하지 않음)
+ 3) 외부 참조 -> 반드시 레퍼런스로 
 
 
 
@@ -51,6 +54,36 @@ public:
 
 	}ITEM;
 
+	typedef struct SLOT_INFO
+	{
+		SLOT_INFO(_int iSlotNum)
+		{
+			vecValidType.resize(_int(ITEM_TYPE::TYPE_END));
+			vecItemInfo.resize(iSlotNum);
+		}
+
+		~SLOT_INFO()
+		{
+			for (auto& iter : vecItemInfo)
+				Safe_Delete(iter);
+
+			vecItemInfo.clear();
+			vecValidType.clear();
+		}
+
+		vector<ITEM*> vecItemInfo; 
+		vector<_bool> vecValidType;
+	}SLOT;
+
+
+public:
+	// 접근, 수정
+	ITEM_RESULT AddItem_Inven(ITEM_INDEX eIndex, _int iCount = 1); // <- 인벤에 아이템을 추가한다 
+	ITEM_RESULT EquipItem_Inven(ITEM_INDEX eIndex); // <- 인벤에 있는 아이템을 사용한다 
+
+
+
+
 private:
 	CItem_Manager(CGameInstance* pGameInstance);
 	virtual ~CItem_Manager() = default;
@@ -60,6 +93,28 @@ private:
 
 private:
 	CGameInstance* m_pGameInstance = { nullptr };
+
+	/*
+	필요한 거
+	[Item Array]
+	0. 아이템 기본 스펙
+	
+	[Slot Array - Slot]
+	0. 인벤토리 
+	 1) 
+
+	1. 장착
+	
+	*/
+
+	vector<ITEM*> m_vecItem_BasicSpec; // 게임 내 존재하는 모든 아이템의 기본 스펙
+	
+	vector<SLOT*> m_vecSlot_Inven; // 인벤토리 정보 모음 
+
+	vector<_int> m_vecEquip_ItemIndex; // 현재 어떤 장비 장착 중인 지 확인 
+
+
+
 
 
 

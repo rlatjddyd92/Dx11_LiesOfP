@@ -68,10 +68,10 @@ void CUIPage::Late_Update(_float fTimeDelta)
 			if (m_vecPageAction[_int(PAGEACTION::ACTION_CLOSING)] + m_vecPageAction[_int(PAGEACTION::ACTION_OPENING)] == 1)
 				iter->fRatio = m_fTopPartMove;
 
-			iter->MovePart({ m_fX,m_fY });
+			iter->MovePart({ m_fX,m_fY }, fTimeDelta);
 		}
 		else
-			iter->MovePart(m_vecPart[iter->iParentPart_Index]->fPosition);
+			iter->MovePart(m_vecPart[iter->iParentPart_Index]->fPosition, fTimeDelta);
 	}
 
 	if ((m_fTopPartMove == 0.f) || (m_fTopPartMove == -1.f))

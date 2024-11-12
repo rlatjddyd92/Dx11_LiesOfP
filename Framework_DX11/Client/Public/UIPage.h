@@ -2,7 +2,7 @@
 
 #include "Client_Defines.h"
 #include "UIObject.h"
-#include "UI_Enum.h"
+#include "Interface_Enums.h"
 
 BEGIN(Engine)
 
@@ -30,7 +30,7 @@ public:
 				return { fSize.x, abs(fAdjust_Start.y - fAdjust_End.y) * fRatio };
 		}
 
-		_float2 MovePart(_float2 fParentPosition)
+		_float2 MovePart(_float2 fParentPosition, _float fTimeDelta)
 		{
 			if (iMoveType == _int(MOVETYPE::TYPE_BAR))
 			{
@@ -46,8 +46,13 @@ public:
 			fPosition.x = fParentPosition.x + fAdjust.x;
 			fPosition.y = fParentPosition.y + fAdjust.y;
 
+			
+
 			return fPosition;
 		}
+
+		_float2 Get_Shaking() { return fShaking_Adjust; }
+
 
 		_wstring strUIPart_Name = {};
 
@@ -82,6 +87,14 @@ public:
 		// 작동 제어
 		_bool bUpdate = true;
 		_bool bRender = true;
+
+		// 쉐이킹
+		_float2 fShaking_Adjust = { 0.f,0.f };
+		_float2 fShaking_Direc = { 0.f,0.f };
+		_float fShaking_Power = 0.f;
+		_float fShaking_Interval_Now = 0.f;
+		_float fShaking_Interval = 0.f;
+		_float fShaking_Time = 0.f;
 
 	}UPART;
 
