@@ -12,7 +12,6 @@ CState_CarcassBigA_Grogy::CState_CarcassBigA_Grogy(CFsm* pFsm, CMonster* pMonste
 
 HRESULT CState_CarcassBigA_Grogy::Initialize(_uint iStateNum, void* pArg)
 {
-   //m_iAnimation_Idle = m_pMonster->Get_Model()->Get_AnimationIndex("Kurama_Idle_Loop");
     m_iStateNum = iStateNum;
     m_fIdleDuration = 3.3f;
     CCarcassBigA::FSMSTATE_DESC* pDesc = static_cast<CCarcassBigA::FSMSTATE_DESC*>(pArg);
@@ -26,7 +25,7 @@ HRESULT CState_CarcassBigA_Grogy::Initialize(_uint iStateNum, void* pArg)
 
 HRESULT CState_CarcassBigA_Grogy::Start_State(void* pArg)
 {
-    if (m_pTrackPos > 0) 
+    if (*m_pTrackPos > 0) 
     {
         ++m_iAnimCnt;
         m_pMonster->Change_Animation(17 - m_iAnimCnt, true, true);
@@ -68,6 +67,7 @@ void CState_CarcassBigA_Grogy::Update(_float fTimeDelta)
         if (*m_pIsEndAnim)
         {
             m_iAnimCnt = 0.f;
+            *m_pTrackPos = 0.f;
             m_pMonster->Change_State(CCarcassBigA::IDLE);
         }
         break;
