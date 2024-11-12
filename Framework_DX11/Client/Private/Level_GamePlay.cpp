@@ -37,6 +37,7 @@ HRESULT CLevel_Tool::Initialize()
 	// 게임 플레이에 필요한 인벤, 플레이 화면, 스탯 화면 등을 상황에 따라 보여 주도록 설정 
 	GET_GAMEINTERFACE->SetPlayMode(true);
 
+
 	return S_OK;
 }
 

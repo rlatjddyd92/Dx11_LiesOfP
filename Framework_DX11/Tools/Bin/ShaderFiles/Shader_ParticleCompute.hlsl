@@ -530,6 +530,17 @@ void CS_CONVERGE_WORLD_MAIN(uint3 DTid : SV_DispatchThreadID)
     particles[iIndex] = particle;
 }
 
+[numthreads(256, 1, 1)]
+void CS_RESET_MAIN(uint3 DTid : SV_DispatchThreadID)
+{
+    uint iIndex = DTid.x;
+    
+    if (iIndex >= iNumInstance)
+        return;
+    
+    particles[iIndex] = InitParticles[iIndex];
+}
+
 float rand(float seed)
 {
     float fRandom = frac(sin(seed) * 43758.5453123);

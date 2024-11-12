@@ -23,14 +23,6 @@ public:
 		PS_END
 	};
 
-	enum RENDER_STATE 
-	{ 
-		RS_NONBLEND = 0x0001,
-		RS_NONLIGHT = 0x0002,
-		RS_BLUR = 0x0004,
-		RS_END = 0x9999
-	};
-
 	typedef struct
 	{
 		TYPE		eType = { TYPE_END };
@@ -95,6 +87,7 @@ public:
 	{
 		_tchar		strDiffuseTexturTag[MAX_PATH] = L"";
 		_tchar		strNomralTextureTag[MAX_PATH] = L"";
+		_tchar		strMaskTextureTag[MAX_PATH] = L"";
 	}TEXTURE_DESC;
 
 	typedef struct
@@ -176,6 +169,7 @@ private:
 	class CVIBuffer_Point_Instance* m_pVIBufferCom = { nullptr };
 	class CTexture* m_pDiffuseTextureCom = { nullptr };
 	class CTexture* m_pNormalTextureCom = { nullptr };
+	class CTexture* m_pMaskTextureCom = { nullptr };
 
 	// 이거 3개는 월드의 역행렬
 	class CShader_Compute* m_pSpreadCS = { nullptr };
@@ -187,6 +181,9 @@ private:
 	class CShader_Compute* m_pMoveCS_World = { nullptr };
 	class CShader_Compute* m_pConvergeCS_World = { nullptr };
 
+	// 초기화.
+	class CShader_Compute* m_pResetCS = { nullptr };
+
 private:
 	DEFAULT_DESC m_DefaultDesc = {};
 	REVOLVE_DESC m_OrbitDesc = {};
@@ -194,9 +191,6 @@ private:
 	ACCEL_DESC m_AccelDesc = {};
 
 	PARTICLE_EFFECT_DESC m_SaveDesc = {};
-	_uint m_iNumInstance = { 0 };
-
-	_bool m_isFirst = { false };
 
 private:
 	HRESULT Ready_Components(PARTICLE_EFFECT_DESC* pDesc);

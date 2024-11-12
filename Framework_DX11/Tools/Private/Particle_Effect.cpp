@@ -20,7 +20,6 @@ HRESULT CParticle_Effect::Initialize_Prototype()
 HRESULT CParticle_Effect::Initialize(void* pArg)
 {
     PARTICLE_EFFECT_DESC* pDesc = static_cast<PARTICLE_EFFECT_DESC*>(pArg);
-    m_iNumInstance = pDesc->BufferDesc.iNumInstance;
     if (FAILED(__super::Initialize(pDesc)))
         return E_FAIL;
     
@@ -64,97 +63,38 @@ void CParticle_Effect::Update(_float fTimeDelta)
     Movement.fRandomRatio = m_RandomDesc.fRandomRatio;
     Movement.fAccelLimit = m_AccelDesc.fAccelLimit;
     Movement.fAccelSpeed = m_AccelDesc.fAccelSpeed;
-
-    if (false == m_isFirst)
-    {
-        Movement.vPadding_1 = _float2(0.f, 0.f);
-        m_isFirst = true;
-    }
-    else
-        Movement.vPadding_1 = _float2(1.f, 1.f);
+    Movement.WorldMatrix = m_WorldMatrix;
 
     switch (m_DefaultDesc.eType)
     {
     case TYPE_SPREAD:
-        XMStoreFloat4x4(&Movement.WorldMatrix, m_WorldMatrix);
         m_pVIBufferCom->DispatchCS(m_pSpreadCS, Movement);
         break;
 
     case TYPE_MOVE:
-        XMStoreFloat4x4(&Movement.WorldMatrix, m_WorldMatrix);
         m_pVIBufferCom->DispatchCS(m_pMoveCS, Movement);
         break;
 
     case TYPE_CONVERGE:
-        XMStoreFloat4x4(&Movement.WorldMatrix, m_WorldMatrix);
         m_pVIBufferCom->DispatchCS(m_pConvergeCS, Movement);
         break;
 
     case TYPE_SPREAD_INDEPENDENT:
-        Movement.WorldMatrix = m_WorldMatrix;
         m_pVIBufferCom->DispatchCS(m_pSpreadCS_World, Movement);
         break;
 
     case TYPE_MOVE_INDEPENDENT:
-        XMStoreFloat4x4(&Movement.WorldMatrix, m_WorldMatrix);
         m_pVIBufferCom->DispatchCS(m_pMoveCS_World, Movement);
         break;
 
     case TYPE_CONVERGE_INDEPENDENT:
-        XMStoreFloat4x4(&Movement.WorldMatrix, m_WorldMatrix);
         m_pVIBufferCom->DispatchCS(m_pConvergeCS_World, Movement);
         break;
     }
-#pragma region KEEP
-    //switch (m_DefaultDesc.eType)
-    //{
-    //case TYPE_SPREAD:
-    //    bOver = m_pVIBufferCom->Spread(m_DefaultDesc.iState, m_pTransformCom->Get_WorldMatrix(), m_DefaultDesc.fRenderRatio, m_DefaultDesc.vPivot, m_DefaultDesc.fGravity, fTimeDelta,
-    //        m_OrbitDesc.vOrbitAxis, XMConvertToRadians(m_OrbitDesc.fAngle),
-    //        m_RandomDesc.fTimeInterval, m_RandomDesc.fRandomRatio,
-    //        m_AccelDesc.fAccelLimit, m_AccelDesc.fAccelSpeed);
-    //    break;
 
-    //case TYPE_MOVE:
-    //    bOver = m_pVIBufferCom->Move(m_DefaultDesc.iState, m_pTransformCom->Get_WorldMatrix(), m_DefaultDesc.fRenderRatio, m_DefaultDesc.vMoveDir, m_DefaultDesc.fGravity, fTimeDelta, m_DefaultDesc.vPivot,
-    //        m_OrbitDesc.vOrbitAxis, XMConvertToRadians(m_OrbitDesc.fAngle),
-    //        m_RandomDesc.fTimeInterval, m_RandomDesc.fRandomRatio,
-    //        m_AccelDesc.fAccelLimit, m_AccelDesc.fAccelSpeed);
-    //    break;
-
-    //case TYPE_CONVERGE:
-    //    bOver = m_pVIBufferCom->Converge(m_DefaultDesc.iState, m_DefaultDesc.fRenderRatio, m_DefaultDesc.vPivot, fTimeDelta,
-    //        m_OrbitDesc.vOrbitAxis, XMConvertToRadians(m_OrbitDesc.fAngle),
-    //        m_RandomDesc.fTimeInterval, m_RandomDesc.fRandomRatio,
-    //        m_AccelDesc.fAccelLimit, m_AccelDesc.fAccelSpeed);
-    //    break;
-
-    //case TYPE_SPREAD_INDEPENDENT:
-    //    bOver = m_pVIBufferCom->Spread_Independent(m_DefaultDesc.iState, m_pTransformCom->Get_WorldMatrix(), m_DefaultDesc.fRenderRatio, m_DefaultDesc.vPivot, m_DefaultDesc.fGravity, fTimeDelta,
-    //        m_OrbitDesc.vOrbitAxis, XMConvertToRadians(m_OrbitDesc.fAngle),
-    //        m_RandomDesc.fTimeInterval, m_RandomDesc.fRandomRatio,
-    //        m_AccelDesc.fAccelLimit, m_AccelDesc.fAccelSpeed);
-    //        break;
-
-    //case TYPE_MOVE_INDEPENDENT:
-    //    bOver = m_pVIBufferCom->Move_Independent(m_DefaultDesc.iState, m_pTransformCom->Get_WorldMatrix(), m_DefaultDesc.fRenderRatio, m_DefaultDesc.vMoveDir, m_DefaultDesc.fGravity, fTimeDelta, m_DefaultDesc.vPivot,
-    //        m_OrbitDesc.vOrbitAxis, XMConvertToRadians(m_OrbitDesc.fAngle),
-    //        m_RandomDesc.fTimeInterval, m_RandomDesc.fRandomRatio,
-    //        m_AccelDesc.fAccelLimit, m_AccelDesc.fAccelSpeed);
-    //    break;
-
-    //case TYPE_CONVERGE_INDEPENDENT:
-    //    bOver = m_pVIBufferCom->Converge_Independent(m_DefaultDesc.iState, m_pTransformCom->Get_WorldMatrix(), m_DefaultDesc.fRenderRatio, m_DefaultDesc.vPivot, fTimeDelta,
-    //        m_OrbitDesc.vOrbitAxis, XMConvertToRadians(m_OrbitDesc.fAngle),
-    //        m_RandomDesc.fTimeInterval, m_RandomDesc.fRandomRatio,
-    //        m_AccelDesc.fAccelLimit, m_AccelDesc.fAccelSpeed);
-    //    break;
-    //}
-#pragma endregion
     //if (true == bOver)
     //    m_isDead = true;
 
-    __super::Set_WorldMatrix();
 }
 
 void CParticle_Effect::Late_Update(_float fTimeDelta)
@@ -196,6 +136,8 @@ HRESULT CParticle_Effect::Render()
         return E_FAIL;
     if (FAILED(m_pNormalTextureCom->Bind_ShaderResource_Struct(m_pShaderCom, "g_NormalTexture", 0)))
         return E_FAIL;
+    if (FAILED(m_pMaskTextureCom->Bind_ShaderResource_Struct(m_pShaderCom, "g_MaskTexture", 0)))
+        return E_FAIL;
 
     if (FAILED(m_pShaderCom->Bind_RawValue("g_vCamPosition", &m_pGameInstance->Get_CamPosition_Vec4(), sizeof(_Vec4))))
         return E_FAIL;
@@ -231,7 +173,9 @@ void CParticle_Effect::Reset()
     m_AccelDesc = m_SaveDesc.InitDesc.AccelDesc;
     Set_Transform(m_SaveDesc.InitDesc.TransformDesc);
 
-    m_pVIBufferCom->Reset();
+    CVIBuffer_Point_Instance::PARTICLE_MOVEMENT Movement = {};
+
+    m_pVIBufferCom->DispatchCS(m_pResetCS, Movement);
 }
 
 HRESULT CParticle_Effect::Save(_wstring strFilePath)
@@ -274,7 +218,7 @@ void CParticle_Effect::Set_Transform(TRANSFORM_DESC& Desc)
 HRESULT CParticle_Effect::Ready_Components(PARTICLE_EFFECT_DESC* pDesc)
 {
     /* FOR.Com_Shader */
-    if (FAILED(__super::Add_Component(LEVEL_TOOL, TEXT("Prototype_Component_Shader_Particle_Test"),
+    if (FAILED(__super::Add_Component(LEVEL_TOOL, TEXT("Prototype_Component_Shader_VtxPointInstance"),
         TEXT("Com_Shader"), reinterpret_cast<CComponent**>(&m_pShaderCom))))
         return E_FAIL;
 
@@ -282,10 +226,15 @@ HRESULT CParticle_Effect::Ready_Components(PARTICLE_EFFECT_DESC* pDesc)
     if (FAILED(__super::Add_Component(LEVEL_TOOL, pDesc->InitDesc.TextureDesc.strDiffuseTexturTag,
         TEXT("Com_DiffuseTexture"), reinterpret_cast<CComponent**>(&m_pDiffuseTextureCom))))
         return E_FAIL;
-
+    
     /* FOR.Com_NormalTexture */
     if (FAILED(__super::Add_Component(LEVEL_TOOL, pDesc->InitDesc.TextureDesc.strNomralTextureTag,
         TEXT("Com_NormalTexture"), reinterpret_cast<CComponent**>(&m_pNormalTextureCom))))
+        return E_FAIL;
+
+    /* FOR.Com_MaskTexture */
+    if (FAILED(__super::Add_Component(LEVEL_TOOL, pDesc->InitDesc.TextureDesc.strMaskTextureTag,
+        TEXT("Com_MaskTexture"), reinterpret_cast<CComponent**>(&m_pMaskTextureCom))))
         return E_FAIL;
 
     CVIBuffer_Point_Instance::INSTANCE_DESC desc = {};
@@ -306,32 +255,37 @@ HRESULT CParticle_Effect::Ready_Components(PARTICLE_EFFECT_DESC* pDesc)
 
     /* FOR.Com_SpreadCS */
     if (FAILED(__super::Add_Component(LEVEL_TOOL, TEXT("Prototype_Component_Shader_Compute_Particle_Spread"),
-        TEXT("Com_SpreadCS"), reinterpret_cast<CComponent**>(&m_pSpreadCS), &desc)))
+        TEXT("Com_SpreadCS"), reinterpret_cast<CComponent**>(&m_pSpreadCS))))
         return E_FAIL;
 
     /* FOR.Com_MoveCS */
     if (FAILED(__super::Add_Component(LEVEL_TOOL, TEXT("Prototype_Component_Shader_Compute_Particle_Move"),
-        TEXT("Com_MoveCS"), reinterpret_cast<CComponent**>(&m_pMoveCS), &desc)))
+        TEXT("Com_MoveCS"), reinterpret_cast<CComponent**>(&m_pMoveCS))))
         return E_FAIL;
 
     /* FOR.Com_ConvergeCS */
     if (FAILED(__super::Add_Component(LEVEL_TOOL, TEXT("Prototype_Component_Shader_Compute_Particle_Converge"),
-        TEXT("Com_ConvergeCS"), reinterpret_cast<CComponent**>(&m_pConvergeCS), &desc)))
+        TEXT("Com_ConvergeCS"), reinterpret_cast<CComponent**>(&m_pConvergeCS))))
         return E_FAIL;
 
     /* FOR.Com_SpreadCS_World */
     if (FAILED(__super::Add_Component(LEVEL_TOOL, TEXT("Prototype_Component_Shader_Compute_Particle_Spread_World"),
-        TEXT("Com_SpreadCS_World"), reinterpret_cast<CComponent**>(&m_pSpreadCS_World), &desc)))
+        TEXT("Com_SpreadCS_World"), reinterpret_cast<CComponent**>(&m_pSpreadCS_World))))
         return E_FAIL;
 
     /* FOR.Com_MoveCS_World */
     if (FAILED(__super::Add_Component(LEVEL_TOOL, TEXT("Prototype_Component_Shader_Compute_Particle_Move_World"),
-        TEXT("Com_MoveCS_World"), reinterpret_cast<CComponent**>(&m_pMoveCS_World), &desc)))
+        TEXT("Com_MoveCS_World"), reinterpret_cast<CComponent**>(&m_pMoveCS_World))))
         return E_FAIL;
 
     /* FOR.Com_ConvergeCS_World */
     if (FAILED(__super::Add_Component(LEVEL_TOOL, TEXT("Prototype_Component_Shader_Compute_Particle_Converge_World"),
-        TEXT("Com_ConvergeCS_World"), reinterpret_cast<CComponent**>(&m_pConvergeCS_World), &desc)))
+        TEXT("Com_ConvergeCS_World"), reinterpret_cast<CComponent**>(&m_pConvergeCS_World))))
+        return E_FAIL;
+
+    /* FOR.Com_ResetCS */
+    if (FAILED(__super::Add_Component(LEVEL_TOOL, TEXT("Prototype_Component_Shader_Compute_Particle_Reset"),
+        TEXT("Com_ResetCS"), reinterpret_cast<CComponent**>(&m_pResetCS))))
         return E_FAIL;
 
     return S_OK;
@@ -371,6 +325,7 @@ void CParticle_Effect::Free()
     
     Safe_Release(m_pDiffuseTextureCom);
     Safe_Release(m_pNormalTextureCom);
+    Safe_Release(m_pMaskTextureCom);
 
     Safe_Release(m_pVIBufferCom);
     
@@ -380,4 +335,5 @@ void CParticle_Effect::Free()
     Safe_Release(m_pSpreadCS_World);
     Safe_Release(m_pMoveCS_World);
     Safe_Release(m_pConvergeCS_World);
+    Safe_Release(m_pResetCS);
 }

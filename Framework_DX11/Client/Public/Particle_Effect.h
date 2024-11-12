@@ -81,6 +81,7 @@ public:
 	{
 		_tchar		strDiffuseTexturTag[MAX_PATH] = L"";
 		_tchar		strNomralTextureTag[MAX_PATH] = L"";
+		_tchar		strMaskTextureTag[MAX_PATH] = L"";
 	}TEXTURE_DESC;
 
 	typedef struct
@@ -119,10 +120,14 @@ public:
 	void Set_Transform(TRANSFORM_DESC& Desc);
 
 private:
-	class CShader* m_pShaderCom = { nullptr };
+	class CShader_NonVTX* m_pShaderCom = { nullptr };
 	class CVIBuffer_Point_Instance* m_pVIBufferCom = { nullptr };
 	class CTexture* m_pDiffuseTextureCom = { nullptr };
 	class CTexture* m_pNormalTextureCom = { nullptr };
+	class CTexture* m_pMaskTextureCom = { nullptr };
+
+	class CShader_Compute* m_pActionCS = { nullptr };
+	class CShader_Compute* m_pResetCS = { nullptr };
 
 private:
 	DEFAULT_DESC m_DefaultDesc = {};

@@ -107,6 +107,8 @@ HRESULT CLoader::Ready_Resources_For_GamePlayLevel()
 
 	// 준호형 전용
 	if (FAILED(Ready_Resources_GoJunHo()))
+
+	if (FAILED(Ready_Resources_For_Effect()))
 		return E_FAIL;
 
 	lstrcpy(m_szLoadingText, TEXT("변환 완료"));
@@ -244,7 +246,7 @@ HRESULT CLoader::Ready_Resources_For_BasicMonster()
 }
 
 HRESULT CLoader::Ready_Resources_GoJunHo()
-{	
+{
 	/* For. Prototype_Component_Model_Effect_HalfSphere01 */
 	if (FAILED(m_pGameInstance->Add_Prototype(LEVEL_GAMEPLAY, TEXT("Prototype_Component_Model_Effect_HalfSphere01"),
 		CModel::Create(m_pDevice, m_pContext, CModel::TYPE_NONANIM, "../Bin/Resources/Models/HalfSphere/SM_HalfSphere_01_GDH.fbx", "../Bin/ModelData/NonAnim/Effect/"))))
@@ -253,6 +255,23 @@ HRESULT CLoader::Ready_Resources_GoJunHo()
 	/* For. Prototype_Component_Model_Effect_HalfSphere02 */
 	if (FAILED(m_pGameInstance->Add_Prototype(LEVEL_GAMEPLAY, TEXT("Prototype_Component_Model_Effect_HalfSphere02"),
 		CModel::Create(m_pDevice, m_pContext, CModel::TYPE_NONANIM, "../Bin/Resources/Models/HalfSphere/SM_HalfSphere_02_KMH.fbx", "../Bin/ModelData/NonAnim/Effect/"))))
+		return E_FAIL;
+
+	return S_OK;
+}
+
+HRESULT CLoader::Ready_Resources_For_Effect()
+{
+	_matrix		PreTransformMatrix = XMMatrixIdentity();
+
+	/* For. Prototype_Component_Effect_HalfSphere_01 */
+	if (FAILED(m_pGameInstance->Add_Prototype(LEVEL_GAMEPLAY, TEXT("Prototype_Component_Effect_HalfSphere_01"),
+		CModel::Create(m_pDevice, m_pContext, CModel::TYPE_NONANIM, "../Bin/Resources/Models/Effect/SM_HalfSphere_01_GDH.fbx", "../Bin/ModelData/NonAnim/Effect/", PreTransformMatrix))))
+		return E_FAIL;
+
+	/* For. Prototype_Component_Effect_HalfSphere_02 */
+	if (FAILED(m_pGameInstance->Add_Prototype(LEVEL_GAMEPLAY, TEXT("Prototype_Component_Effect_HalfSphere_02"),
+		CModel::Create(m_pDevice, m_pContext, CModel::TYPE_NONANIM, "../Bin/Resources/Models/Effect/SM_HalfSphere_02_KMH.fbx", "../Bin/ModelData/NonAnim/Effect/", PreTransformMatrix))))
 		return E_FAIL;
 
 	return S_OK;

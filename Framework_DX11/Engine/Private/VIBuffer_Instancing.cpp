@@ -92,6 +92,10 @@ HRESULT CVIBuffer_Instancing::Initialize_Desc(const CVIBuffer_Instancing::INSTAN
 	return S_OK;
 }
 
+void CVIBuffer_Instancing::Reset()
+{
+}
+
 _bool CVIBuffer_Instancing::Contain_State(_uint iCurrentState, _uint iCheckState)
 {
 	if (0 != (iCurrentState & iCheckState))

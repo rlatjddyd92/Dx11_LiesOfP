@@ -17,7 +17,7 @@ class CController_EffectTool : public CBase
 	DECLARE_SINGLETON(CController_EffectTool)
 
 public:
-#pragma region PARTICLE
+#pragma region DIFFUSE
 	vector<_wstring>& Get_Diffuse_PrototypeTags() { 
 		return m_Diffuse_PrototypeTags;
 	}
@@ -30,7 +30,7 @@ public:
 		m_Diffuse_PrototypeTags.emplace_back(strTag);
 	}
 #pragma endregion
-#pragma region TEXTURE
+#pragma region NORMAL
 	vector<_wstring>& Get_Normal_PrototypeTags() {
 		return m_Normal_PrototypeTags;
 	}
@@ -41,6 +41,19 @@ public:
 
 	void Add_Normal_ProtytypeTag(_wstring strTag) {
 		m_Normal_PrototypeTags.emplace_back(strTag);
+	}
+#pragma endregion
+#pragma region MODEL
+	vector<_wstring>& Get_Model_PrototypeTags() {
+		return m_Model_PrototypeTags;
+	}
+
+	_wstring& Get_Model_PrototypeTags_Index(_uint iIndex) {
+		return m_Model_PrototypeTags[iIndex];
+	}
+
+	void Add_Model_ProtytypeTag(_wstring strTag) {
+		m_Model_PrototypeTags.emplace_back(strTag);
 	}
 #pragma endregion
 
@@ -58,6 +71,7 @@ private:
 
 public:
 	HRESULT Initialize();
+	void Render();
 
 public:
 	void TextureCheck();
@@ -76,6 +90,20 @@ public:
 	void Get_TE();
 	void Delete_TE();
 
+	HRESULT Add_Model();
+	void Model_Check();
+	void Update_Model();
+	void Select_Model();
+	void Get_Model();
+	void Delete_Model();
+
+	HRESULT Add_Trail_OP();
+	void Trail_OP_Check();
+	void Update_Trail_OP();
+	void Select_Trail_OP();
+	void Get_Trail_OP();
+	void Delete_Trail_OP();
+
 	HRESULT Add_EffectContainer();
 	void Reset_EffectContainer();
 	void Delete_EffectContainer();
@@ -90,6 +118,7 @@ private:
 
 	vector<_wstring>	m_Diffuse_PrototypeTags;
 	vector<_wstring>	m_Normal_PrototypeTags;
+	vector<_wstring>	m_Model_PrototypeTags;
 
 	_char m_szEffectName[MAX_PATH] = "";
 
@@ -101,6 +130,7 @@ private:
 	_int		m_iSelected_NormalTextureIndex = { 0 };
 	_int		m_iSelected_MaskTextureIndex_1 = { 0 };
 	_int		m_iSelected_MaskTextureIndex_2 = { 0 };
+	_int		m_iSelected_ModelIndex = { 0 };
 
 private:
 #pragma region PARTICLE
@@ -200,11 +230,36 @@ private:
 
 #pragma endregion
 
+#pragma region
+	_uint		m_iMesh_State = { 0 };
+	_uint		m_iMesh_ShaderIndex = { 0 };
+	_float		m_fMesh_Duration = { 10.f };
+	_Vec4		m_vMesh_Color = {0.f, 0.f, 0.f, 1.f};
+	_Vec2		m_vMesh_TileRepeat = {1.f, 1.f};
+	_Vec2		m_vMesh_TileMoveDir = {};
+	_float		m_fMesh_TileMoveSpeed = { 0.f };
+	_Vec3		m_vMesh_Pos = {};
+	_Vec3		m_vMesh_StartRotation = {0.f, 0.f, 0.f};
+	_Vec4		m_vMesh_RotationAxis = {0.f, 1.f, 0.f, 0.f};
+	_float		m_fMesh_RotationSpeed = { 0.f };
+	_Vec3		m_vMesh_Scale = {1.f, 1.f, 1.f};
+	_Vec3		m_vMesh_ScalingSpeed = {0.f, 0.f, 0.f};
+	_float		m_fMesh_Alpha = { 1.f };
+	_float		m_fMesh_AlphaSpeed = { 0.f };
+
+	_bool		m_isMesh_Distortion		= { false };
+	_bool		m_isMesh_Blur			= { false };
+	_bool		m_isMesh_Blend			= { false };
+	_bool		m_isMesh_NonLight		= { false };
+
+	_int		m_iSelectedMEIndex = { 0 };
+
+#pragma endregion
 
 private:
 	void Set_ParticleState();
 	void Set_TEState();
-
+	void Set_MeshState();
 	
 
 public:

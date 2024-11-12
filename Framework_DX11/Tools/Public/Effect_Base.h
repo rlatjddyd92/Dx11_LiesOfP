@@ -13,7 +13,17 @@ public:
 		_tchar		strEffectName[MAX_PATH] = L"";
 	} EFFECT_BASE_DESC;
 
-	enum EFFECT_TYPE { TYPE_PARTICLE, TYPE_TEXTURE, TYPE_END };
+	enum EFFECT_TYPE { TYPE_PARTICLE, TYPE_TEXTURE, TYPE_MESH, TYPE_END };
+
+	enum RENDER_STATE
+	{
+		RS_NONBLEND		= 0x0001,
+		RS_NONLIGHT		= 0x0002,
+		RS_DISTORTION	= 0x0004,
+		RS_BLUR			= 0x0008,
+		RS_BLEND		= 0x0010,
+		RS_END			= 0x9999
+	};
 
 protected:
 	CEffect_Base(ID3D11Device* pDevice, ID3D11DeviceContext* pContext);

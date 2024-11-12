@@ -69,8 +69,8 @@ HRESULT CModel::Initialize_Prototype(TYPE eType, const _char* pModelFilePath, co
 
 	iFlag = aiProcess_ConvertToLeftHanded | aiProcessPreset_TargetRealtime_Fast;
 
-	if (eType == TYPE_NONANIM)
-		iFlag |= aiProcess_PreTransformVertices;
+	//if (eType == TYPE_NONANIM)
+	//	iFlag |= aiProcess_PreTransformVertices;
 
 	m_pAIScene = m_Importer.ReadFile(pModelFilePath, iFlag);
 	if (nullptr == m_pAIScene)
