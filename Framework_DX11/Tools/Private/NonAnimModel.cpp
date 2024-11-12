@@ -69,17 +69,20 @@ void CNonAnimModel::Update(_float fTimeDelta)
 
 void CNonAnimModel::Late_Update(_float fTimeDelta)
 {
-	/* 직교투영을 위한 월드행렬까지 셋팅하게 된다. */
-	__super::Late_Update(fTimeDelta);
-
-	if(m_isDecal)
-		m_pGameInstance->Add_RenderObject(CRenderer::RG_DECAL, this);
-	else
+	if(m_pGameInstance->isIn_Frustum_WorldSpace(m_pTransformCom->Get_State(CTransform::STATE_POSITION), 25.f))
 	{
-		m_pGameInstance->Add_RenderObject(CRenderer::RG_NONBLEND, this);
-	
+		/* 직교투영을 위한 월드행렬까지 셋팅하게 된다. */
+		__super::Late_Update(fTimeDelta);
+
+		if (m_isDecal)
+			m_pGameInstance->Add_RenderObject(CRenderer::RG_DECAL, this);
+		else
+		{
+			m_pGameInstance->Add_RenderObject(CRenderer::RG_NONBLEND, this);
+
+		}
+		m_pGameInstance->Add_RenderObject(CRenderer::RG_PICKING, this);
 	}
-	m_pGameInstance->Add_RenderObject(CRenderer::RG_PICKING, this);
 }
 
 HRESULT CNonAnimModel::Render()
