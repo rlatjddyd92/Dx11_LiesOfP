@@ -493,3 +493,4 @@ Binary_DX11/.vs/Binary/FileContentIndex/8d6e03db-ce9b-46f0-a29b-ebe4b9df31c9.vsi
 Binary_DX11/Client/Bin/Resources/Models/Monster/CarcassNormal/CarcassNormal.fbx
 Binary_DX11/Client/Bin/ModelData/Anim/CarcassNormal/CarcassNormal.dat
 Framework_DX11/Tools/Bin/ModelData/Anim/Monster/CarcassNormal/CarcassNormal.dat
+*.obj
