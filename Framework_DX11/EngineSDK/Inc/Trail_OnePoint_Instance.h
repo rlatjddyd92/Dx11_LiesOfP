@@ -18,6 +18,9 @@ public:
 	_bool Update_Buffer(_fvector vWorldPos, _float fTimeDelta);
 	void Set_LifeTime(_float fTime);
 
+public:
+	virtual void Reset();
+
 private:
 	list<_Vec3> m_TrailPoses;
 	_bool m_bFirst = { false };
