@@ -15,6 +15,14 @@ BEGIN(Client)
 class CCarcassBigA final : public CMonster
 {
 public:
+	typedef struct
+	{
+		_bool* pIsEndAnim { nullptr };
+		_bool* pIsResetRootMove { nullptr };
+		_double* pGrogyTrackPos { nullptr };
+	}FSMSTATE_DESC;
+
+public:
 	enum COLLIDERTYPE { TYPE_AABB, TYPE_OBB, TYPE_SPHERE, TYPE_END };
 
 public:
@@ -37,7 +45,7 @@ public:
 	virtual void Late_Update(_float fTimeDelta) override;
 	virtual HRESULT Render() override;
 
-private:
+
 
 private:
 	HRESULT Ready_Components();

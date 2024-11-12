@@ -10,11 +10,14 @@ CState_CarcassBigA_Attack::CState_CarcassBigA_Attack(CFsm* pFsm, CMonster* pMons
 {
 }
 
-HRESULT CState_CarcassBigA_Attack::Initialize(_uint iStateNum)
+HRESULT CState_CarcassBigA_Attack::Initialize(_uint iStateNum, void* pArg)
 {
    //m_iAnimation_Idle = m_pMonster->Get_Model()->Get_AnimationIndex("Kurama_Idle_Loop");
     m_iStateNum = iStateNum;
     m_fIdleDuration = 3.3f;
+    CCarcassBigA::FSMSTATE_DESC* pDesc = static_cast<CCarcassBigA::FSMSTATE_DESC*>(pArg);
+    
+    m_pIsEndAnim = pDesc->pIsEndAnim;
 
     return S_OK;
 }
@@ -30,6 +33,7 @@ HRESULT CState_CarcassBigA_Attack::Start_State(void* pArg)
         m_iAttackCnt = 0;
 
         m_pMonster->Change_State(CCarcassBigA::IMPACT);
+        return S_OK;
     }
 
     m_pMonster->Look_Player();
@@ -46,10 +50,8 @@ HRESULT CState_CarcassBigA_Attack::Start_State(void* pArg)
 
 void CState_CarcassBigA_Attack::Update(_float fTimeDelta)
 {
-    m_fCurrentTime += fTimeDelta;
     //콜라이더 조정
-    int a = 0;
-    if (m_fCurrentTime >= 10.f)//애니메이션의 종료 받아오도록 해서 어택이 종료된 시점에
+    if (*m_pIsEndAnim == true)//애니메이션의 종료 받아오도록 해서 어택이 종료된 시점에
     {
         m_pMonster->Change_State(CCarcassBigA::IDLE);
     }
@@ -59,14 +61,13 @@ void CState_CarcassBigA_Attack::Update(_float fTimeDelta)
 
 void CState_CarcassBigA_Attack::End_State()
 {
-    m_fCurrentTime = 0.f;
 }
 
-CState_CarcassBigA_Attack* CState_CarcassBigA_Attack::Create(CFsm* pFsm, CMonster* pMonster, _uint iStateNum)
+CState_CarcassBigA_Attack* CState_CarcassBigA_Attack::Create(CFsm* pFsm, CMonster* pMonster, _uint iStateNum, void* pArg)
 {
     CState_CarcassBigA_Attack* pInstance = new CState_CarcassBigA_Attack(pFsm, pMonster);
 
-    if (FAILED(pInstance->Initialize(iStateNum)))
+    if (FAILED(pInstance->Initialize(iStateNum, pArg)))
     {
         MSG_BOX(TEXT("Failed to Created : CState_CarcassBigA_Attack"));
         Safe_Release(pInstance);

@@ -10,7 +10,7 @@ CState_CarcassBigA_Walk::CState_CarcassBigA_Walk(CFsm* pFsm, CMonster* pMonster)
 {
 }
 
-HRESULT CState_CarcassBigA_Walk::Initialize(_uint iStateNum)
+HRESULT CState_CarcassBigA_Walk::Initialize(_uint iStateNum, void* pArg)
 {
    //m_iAnimation_Idle = m_pMonster->Get_Model()->Get_AnimationIndex("Kurama_Idle_Loop");
     m_iStateNum = iStateNum;
@@ -29,9 +29,33 @@ HRESULT CState_CarcassBigA_Walk::Start_State(void* pArg)
 
 void CState_CarcassBigA_Walk::Update(_float fTimeDelta)
 {
-    m_pMonster->Look_Player();
 
-    //m_pMonster->Get_Transform()->Go_Straight(fTimeDelta);
+    _vector vPos = m_pMonster->Get_Transform()->Get_State(CTransform::STATE_POSITION);
+    _vector vCamPos = m_pGameInstance->Get_CamPosition_Vec4();//임시사용 캠 포지션
+    if (!(XMVectorGetX(vPos) == XMVectorGetX(vCamPos))
+        || !(XMVectorGetZ(vPos) == XMVectorGetZ(vCamPos)))
+    {
+        _int iDir = m_pMonster->Get_Transform()->LookAt_Lerp_NoHeight(vCamPos - vPos, 1, fTimeDelta);
+        switch (iDir)
+        {
+        case -1:
+            m_pMonster->Change_Animation(30, true, true);
+            break;
+
+        case 0:
+            m_pMonster->Change_Animation(33, true, true);
+            break;
+
+        case 1:
+            m_pMonster->Change_Animation(31, true, true);
+            break;
+
+        default:
+            break;
+        }
+        m_pMonster->Get_Transform()->Go_Straight(fTimeDelta);
+    }
+
 
     if (m_pMonster->Calc_Distance_XZ() <= 5.f)
     {
@@ -43,11 +67,11 @@ void CState_CarcassBigA_Walk::End_State()
 {
 }
 
-CState_CarcassBigA_Walk* CState_CarcassBigA_Walk::Create(CFsm* pFsm, CMonster* pMonster, _uint iStateNum)
+CState_CarcassBigA_Walk* CState_CarcassBigA_Walk::Create(CFsm* pFsm, CMonster* pMonster, _uint iStateNum, void* pArg)
 {
     CState_CarcassBigA_Walk* pInstance = new CState_CarcassBigA_Walk(pFsm, pMonster);
 
-    if (FAILED(pInstance->Initialize(iStateNum)))
+    if (FAILED(pInstance->Initialize(iStateNum, pArg)))
     {
         MSG_BOX(TEXT("Failed to Created : CState_CarcassBigA_Walk"));
         Safe_Release(pInstance);

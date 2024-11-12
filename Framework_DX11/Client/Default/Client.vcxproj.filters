@@ -142,6 +142,15 @@
     <Filter Include="05.Fsm\Monster\CarcassBigA\Walk">
       <UniqueIdentifier>{8cca3e2d-28bf-401e-afd3-0ec774007eac}</UniqueIdentifier>
     </Filter>
+    <Filter Include="05.Fsm\Monster\CarcassBigA\Grogy">
+      <UniqueIdentifier>{0075ae76-a3eb-419f-9be1-a9900494ebb6}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="05.Fsm\Monster\CarcassBigA\Run">
+      <UniqueIdentifier>{88fbca0c-fbc5-4331-902b-31f81e9e8c39}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="05.Fsm\Monster\CarcassBigA\Hit_Fatal">
+      <UniqueIdentifier>{3a3180b6-88e0-47d8-a77c-574050019abe}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Client.h">
@@ -268,6 +277,15 @@
     <ClInclude Include="..\Public\State_CarcassBigA_Impact.h">
       <Filter>05.Fsm\Monster\CarcassBigA\Impact</Filter>
     </ClInclude>
+    <ClInclude Include="..\Public\State_CarcassBigA_Run.h">
+      <Filter>05.Fsm\Monster\CarcassBigA\Run</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Public\State_CarcassBigA_Grogy.h">
+      <Filter>05.Fsm\Monster\CarcassBigA\Grogy</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Public\State_CarcassBigA_HitFatal.h">
+      <Filter>05.Fsm\Monster\CarcassBigA\Hit_Fatal</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Client.cpp">
@@ -375,6 +393,15 @@
     </ClCompile>
     <ClCompile Include="..\Private\State_CarcassBigA_Impact.cpp">
       <Filter>05.Fsm\Monster\CarcassBigA\Impact</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Private\State_CarcassBigA_Run.cpp">
+      <Filter>05.Fsm\Monster\CarcassBigA\Run</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Private\State_CarcassBigA_Grogy.cpp">
+      <Filter>05.Fsm\Monster\CarcassBigA\Grogy</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Private\State_CarcassBigA_HitFatal.cpp">
+      <Filter>05.Fsm\Monster\CarcassBigA\Hit_Fatal</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

@@ -18,7 +18,7 @@ public:
 
 public:
 	enum MONSTER_STATE {
-		IDLE, WALK, ATTACK, PARALIZE, DIE,
+		IDLE, WALK, RUN, ATTACK, GROGY, HITFATAL, PARALIZE, DIE,
 
 		MONSTER_STATE_END
 	};
@@ -38,8 +38,7 @@ public:
 
 public:
 	void		Change_State(const _uint iState, void* pArg = nullptr);
-	void		Change_Animation(_uint iAnimIndex, _bool IsLoop);
-
+	void		Change_Animation(_uint iAnimIndex, _bool IsLoop, _bool bSetup = false);//셋업 변수 = 선형보간 할지
 
 	void		Look_Player();
 	_float		Calc_Distance_XZ();
@@ -50,6 +49,14 @@ protected:
 	CShader* m_pShaderCom = { nullptr };
 	CModel* m_pModelCom = { nullptr };
 	CFsm* m_pFSMCom = { nullptr };
+
+protected:
+	_vector		m_vRootMoveStack{};
+	_vector		m_vCurRootMove{};
+	_bool		m_bEndAnim{ false };
+	_bool		m_bResetRootMove{ true };
+
+	_double		m_GrogyTrackPos{};
 
 protected:
 	HRESULT Ready_Components();

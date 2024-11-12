@@ -69,7 +69,7 @@ HRESULT CAnimation::Initialize__To_Binary(HANDLE* pFile, vector<_uint>& KeyFrame
 
 _uint CAnimation::Update_TransformationMatrices(const vector<class CBone*>& Bones
 	, _double* pCurrentTrackPosition, vector<_uint>& CurrentKeyFrameIndices, _bool isLoop, _bool* isEnd
-	, _float fTimeDelta, _bool isChildOfBoundary, list<OUTPUT_EVKEY>* pEvKeyList, _bool BlockStackTime)
+	, _float fTimeDelta, _bool isChildOfBoundary, list<OUTPUT_EVKEY>* pEvKeyList, _bool* bBoneUpdated,_bool BlockStackTime)
 {
 	if (!BlockStackTime)
 	{
@@ -78,12 +78,15 @@ _uint CAnimation::Update_TransformationMatrices(const vector<class CBone*>& Bone
 
 		if (*pCurrentTrackPosition >= m_Duration)
 		{
+			*isEnd = true;
 			if (false == isLoop)
 			{
-				*isEnd = true;
+				if (bBoneUpdated != nullptr)
+				{
+					*bBoneUpdated = false;
+				}
 				return true;
 			}
-				
 
 			*pCurrentTrackPosition = 0.f;
 		}

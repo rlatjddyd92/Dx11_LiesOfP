@@ -14,7 +14,7 @@ public:
     virtual ~CState_CarcassBigA_Idle() = default;
 
 public:
-    virtual HRESULT Initialize(_uint iStateNum) override;
+    virtual HRESULT Initialize(_uint iStateNum, void* pArg) override;
     virtual HRESULT Start_State(void* pArg = nullptr) override;
     virtual void    Update(_float fTimeDelta) override;
     virtual void    End_State() override;
@@ -32,10 +32,10 @@ private:
     _bool               m_isActivatedSpecial = { false };
 
     _float              m_fIdleTime = { 0.f };
-    _float              m_fIdleEndDuration = { 3.f };
+    _float              m_fIdleEndDuration = { 1.5f };
 
 public:
-    static CState_CarcassBigA_Idle* Create(class CFsm* pFsm, class CMonster* pMonster, _uint iStateNum);
+    static CState_CarcassBigA_Idle* Create(class CFsm* pFsm, class CMonster* pMonster, _uint iStateNum, void* pArg = nullptr);
     virtual void Free() override;
 
 };

@@ -32,7 +32,7 @@ public:
 	HRESULT Initialize(HANDLE* pFile, vector<_uint>& KeyFrameIndices, const class CModel* pModel);
 	HRESULT Initialize__To_Binary(HANDLE* pFile, vector<_uint>& KeyFrameIndices, const class CModel* pModel);
 	_uint						Update_TransformationMatrices(const vector<class CBone*>& Bones, _double* pCurrentTrackPosition, vector<_uint>& CurrentKeyFrameIndices
-		, _bool isLoop, _bool* isEnd, _float fTimeDelta, _bool isChildOfBoundary, list<OUTPUT_EVKEY>* pEvKeyList, _bool BlockStackTime = false);
+		, _bool isLoop, _bool* isEnd, _float fTimeDelta, _bool isChildOfBoundary, list<OUTPUT_EVKEY>* pEvKeyList, _bool* bBoneUpdated = nullptr, _bool BlockStackTime = false);
 
 	HRESULT						Create_BinaryFile(HANDLE* pFile);
 

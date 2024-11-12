@@ -132,7 +132,7 @@ private:
 
 	//이봉준 애니메이션
 	_bool							m_isUseBoundary = { false };	//상하체 분리 여부
-
+	_vector							m_vCurRootMove = {};			//이전에 사용한 루트본에의한 움직임
 
 
 	// 정승현 모델 인스턴스

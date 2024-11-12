@@ -254,6 +254,7 @@ void CModel::SetUp_Animation(_uint iAnimationIndex, _bool isLoop)
 {
 	m_iCurrentAnimIndex = iAnimationIndex;
 	m_isLoop = isLoop;
+	m_CurrentTrackPosition = 0.0;
 }
 
 HRESULT CModel::SetUp_NextAnimation(_uint iNextAnimationIndex, _bool isLoop, _float fChangeDuration, _uint iStartFrame)
@@ -347,6 +348,8 @@ _matrix CModel::CalcMatrix_forVtxAnim(_uint iMeshNum, VTXANIMMESH VtxStruct)
 _vector CModel::Play_Animation(_float fTimeDelta, _bool* pOut, list<OUTPUT_EVKEY>* pEvKeyList)
 {
 	_float fAddTime = fTimeDelta * m_bPlayAnimCtr;
+	
+	_bool bBoneUpdated = { true }; //뼈 업데이트 함수 호출시에 실제 업데이트 됐는지, 루프 애니메이션이 아니라서 중단됐는지 확인하기위한 불 변수
 
 	//상하체 분리에 영향받지 않는 부분들의 업데이트
 	if (m_isChangeAni)
@@ -418,8 +421,9 @@ _vector CModel::Play_Animation(_float fTimeDelta, _bool* pOut, list<OUTPUT_EVKEY
 	}
 	else
 	{
+		
 		/* 뼈를 움직인다.(CBone`s m_TransformationMatrix행렬을 갱신한다.) */
-		m_iCurrentFrame = m_Animations[m_iCurrentAnimIndex]->Update_TransformationMatrices(m_Bones, &m_CurrentTrackPosition, m_KeyFrameIndices[m_iCurrentAnimIndex], m_isLoop, &m_isEnd_Animations[m_iCurrentAnimIndex], fAddTime, false, pEvKeyList);
+		m_iCurrentFrame = m_Animations[m_iCurrentAnimIndex]->Update_TransformationMatrices(m_Bones, &m_CurrentTrackPosition, m_KeyFrameIndices[m_iCurrentAnimIndex], m_isLoop, &m_isEnd_Animations[m_iCurrentAnimIndex], fAddTime, false, pEvKeyList, &bBoneUpdated);
 	
 	}
 
@@ -514,11 +518,11 @@ _vector CModel::Play_Animation(_float fTimeDelta, _bool* pOut, list<OUTPUT_EVKEY
 			//if 상하체 애니메이션이 같으면 시간누적 없는 업데이트 하체 변수로 호출
 			if (m_iCurrentAnimIndex == m_iCurrentAnimIndex_Boundary)
 			{
-				m_iCurrentFrame = m_Animations[m_iCurrentAnimIndex_Boundary]->Update_TransformationMatrices(m_Bones, &m_CurrentTrackPosition, m_KeyFrameIndices[m_iCurrentAnimIndex_Boundary], m_isLoop, &m_isEnd_Animations_Boundary[m_iCurrentAnimIndex_Boundary], fAddTime, true, pEvKeyList, true);
+				m_iCurrentFrame = m_Animations[m_iCurrentAnimIndex_Boundary]->Update_TransformationMatrices(m_Bones, &m_CurrentTrackPosition, m_KeyFrameIndices[m_iCurrentAnimIndex_Boundary], m_isLoop, &m_isEnd_Animations_Boundary[m_iCurrentAnimIndex_Boundary], fAddTime, true, pEvKeyList, nullptr, true);
 			}
 			else
 			{
-				m_iCurrentFrame = m_Animations[m_iCurrentAnimIndex_Boundary]->Update_TransformationMatrices(m_Bones, &m_CurrentTrackPosition_Boundary, m_KeyFrameIndices[m_iCurrentAnimIndex_Boundary], m_isLoop_Boundary, &m_isEnd_Animations_Boundary[m_iCurrentAnimIndex_Boundary], fAddTime, true, pEvKeyList, false);
+				m_iCurrentFrame = m_Animations[m_iCurrentAnimIndex_Boundary]->Update_TransformationMatrices(m_Bones, &m_CurrentTrackPosition_Boundary, m_KeyFrameIndices[m_iCurrentAnimIndex_Boundary], m_isLoop_Boundary, &m_isEnd_Animations_Boundary[m_iCurrentAnimIndex_Boundary], fAddTime, true, pEvKeyList, nullptr, false);
 			}
 		}
 
@@ -527,16 +531,26 @@ _vector CModel::Play_Animation(_float fTimeDelta, _bool* pOut, list<OUTPUT_EVKEY
 
 	//루트본에 의한 이동값을 루트본에서 제거하고 이동량만큼 바깥으로 배출
 	_vector vRootMove{};
-	if (m_UFBIndices[UFB_ROOT] != 1024)
+	if (bBoneUpdated)
 	{
-		m_Bones[m_UFBIndices[UFB_ROOT]]->Update_CombinedTransformationMatrix(m_Bones, XMLoadFloat4x4(&m_PreTransformMatrix));
-		vRootMove = m_Bones[m_UFBIndices[UFB_ROOT]]->Get_CombinedTransformationMatrix().r[3];
-		_float4x4 RootMat = {};
-		XMStoreFloat4x4(&RootMat, m_Bones[m_UFBIndices[UFB_ROOT]]->Get_TransformationMatrix());
-		RootMat._41 = 0; RootMat._42 = 0; RootMat._43 = 0;
+		if (m_UFBIndices[UFB_ROOT] != 1024)
+		{
+			m_Bones[m_UFBIndices[UFB_ROOT]]->Update_CombinedTransformationMatrix(m_Bones, XMLoadFloat4x4(&m_PreTransformMatrix));
+			vRootMove = m_Bones[m_UFBIndices[UFB_ROOT]]->Get_CombinedTransformationMatrix().r[3];
+			_float4x4 RootMat = {};
+			XMStoreFloat4x4(&RootMat, m_Bones[m_UFBIndices[UFB_ROOT]]->Get_TransformationMatrix());
+			RootMat._41 = 0; RootMat._42 = 0; RootMat._43 = 0;
 
-		m_Bones[m_UFBIndices[UFB_ROOT]]->Set_TransformationMatrix(XMLoadFloat4x4(&RootMat));
+			m_Bones[m_UFBIndices[UFB_ROOT]]->Set_TransformationMatrix(XMLoadFloat4x4(&RootMat));
+
+			m_vCurRootMove = vRootMove;
+		}
 	}
+	else
+	{
+		vRootMove = m_vCurRootMove;
+	}
+	
 
 
 	if (m_isEnd_Animations[m_iCurrentAnimIndex] == true)//
@@ -548,9 +562,18 @@ _vector CModel::Play_Animation(_float fTimeDelta, _bool* pOut, list<OUTPUT_EVKEY
 			*pOut = true;
 
 		}
-		*pOut = true;
 		m_isEnd_Animations[m_iCurrentAnimIndex] = false;
 	}
+	else
+	{
+		if (pOut != nullptr)
+		{
+
+			*pOut = false;
+
+		}
+	}
+
 	if ((m_CurrentTrackPosition_Boundary == 0.f) || (m_isEnd_Animations_Boundary[m_iCurrentAnimIndex_Boundary] == true))
 	{
 		if (m_iCurrentAnimIndex != m_iCurrentAnimIndex_Boundary)

@@ -10,8 +10,13 @@
 #include "State_CarcassBigA_Die.h"
 #include "State_CarcassBigA_Attack.h"
 #include "State_CarcassBigA_Impact.h"
+
+#include "State_CarcassBigA_Grogy.h"
+#include "State_CarcassBigA_HitFatal.h"
 #include "State_CarcassBigA_Paralize.h"
+
 #include "State_CarcassBigA_Walk.h"
+#include "State_CarcassBigA_RUN.h"
 
 CCarcassBigA::CCarcassBigA(ID3D11Device * pDevice, ID3D11DeviceContext * pContext)
 	: CMonster{ pDevice, pContext }
@@ -31,6 +36,8 @@ HRESULT CCarcassBigA::Initialize_Prototype()
 HRESULT CCarcassBigA::Initialize(void* pArg)
 {
   	CGameObject::GAMEOBJECT_DESC		Desc{};
+	Desc.fSpeedPerSec = 1.5f;
+	Desc.fRotationPerSec = 30.f;
 
 	if (FAILED(__super::Initialize(&Desc)))
 		return E_FAIL;
@@ -58,10 +65,25 @@ void CCarcassBigA::Priority_Update(_float fTimeDelta)
 void CCarcassBigA::Update(_float fTimeDelta)
 {
 
+
+	m_vCurRootMove = m_pModelCom->Play_Animation(fTimeDelta, &m_bEndAnim, nullptr);
+
 	m_pFSMCom->Update(fTimeDelta);
 
-	m_pModelCom->Play_Animation(fTimeDelta);
+	_vector vPos = m_pTransformCom->Get_State(CTransform::STATE_POSITION);
 
+	if (m_bEndAnim == true && m_bResetRootMove)//조건을 애니메이션이 끝났을때 or 변경 되었을때로
+	{
+		m_vCurRootMove = m_vRootMoveStack = XMVectorSet(0, 0, 0, 1);
+	}
+	else
+	{
+		m_vCurRootMove = XMVector3TransformNormal(m_vCurRootMove, m_pTransformCom->Get_WorldMatrix());
+
+		m_pTransformCom->Set_State(CTransform::STATE_POSITION, vPos + m_vCurRootMove - m_vRootMoveStack);
+		m_vRootMoveStack = m_vCurRootMove;
+	}
+	
 #ifdef _DEBUG
 	for (auto& pCollider : m_pColliderCom)
 		pCollider->Update(m_pTransformCom->Get_WorldMatrix_Ptr());
@@ -84,16 +106,14 @@ void CCarcassBigA::Late_Update(_float fTimeDelta)
 	{
 		//m_pColliderCom[i]->Intersect(dynamic_cast<CCollider*>(pTargetCollider));
 	}
-	_vector vRight = m_pTransformCom->Get_State(CTransform::STATE_RIGHT);
-	_vector vUp = m_pTransformCom->Get_State(CTransform::STATE_UP);
-	_vector vLook = m_pTransformCom->Get_State(CTransform::STATE_LOOK);
-	_vector vPosition = m_pTransformCom->Get_State(CTransform::STATE_POSITION);
+	
 
 	//_vector vFixPos = m_pGameInstance->Compute_Height(vPosition, XMMatrixLookAtLH(XMVectorSet(64.f, 30.f, 64.0f, 1.f), XMVectorSet(64.f, 0.f, 64.0f, 1.f), XMVectorSet(0.f, 0.f, 1.f, 0.f)),
 	//	XMMatrixOrthographicLH(200.f, 200.f, 0.f, 50.f));
 
 	//m_pTransformCom->Set_State(CTransform::STATE_POSITION, XMVectorSetY(vPosition, XMVectorGetY(vFixPos)));
 
+	/*
 	if (true == m_pGameInstance->isIn_Frustum_WorldSpace(m_pTransformCom->Get_State(CTransform::STATE_POSITION), 3.f))
 	{
 		m_pGameInstance->Add_RenderObject(CRenderer::RG_NONBLEND, this);
@@ -103,6 +123,7 @@ void CCarcassBigA::Late_Update(_float fTimeDelta)
 			m_pGameInstance->Add_DebugObject(pCollider);
 #endif
 	}
+	*/
 }
 
 HRESULT CCarcassBigA::Render()
@@ -187,14 +208,24 @@ HRESULT CCarcassBigA::Ready_FSM()
 	if (FAILED(__super::Ready_FSM()))
 		return E_FAIL;
 
+	FSMSTATE_DESC Desc{};
+	
+	Desc.pIsEndAnim = &m_bEndAnim;
+	Desc.pIsResetRootMove =&m_bResetRootMove;
+	Desc.pGrogyTrackPos = &m_GrogyTrackPos;
+	//
 
-	m_pFSMCom->Add_State(CState_CarcassBigA_Idle::Create(m_pFSMCom, this, IDLE));
-	m_pFSMCom->Add_State(CState_CarcassBigA_Die::Create(m_pFSMCom, this, DIE));
-	m_pFSMCom->Add_State(CState_CarcassBigA_Walk::Create(m_pFSMCom, this, WALK));
-	m_pFSMCom->Add_State(CState_CarcassBigA_Attack::Create(m_pFSMCom, this, ATTACK));
-	m_pFSMCom->Add_State(CState_CarcassBigA_Paralize::Create(m_pFSMCom, this, PARALIZE));
 
-	m_pFSMCom->Add_State(CState_CarcassBigA_Impact::Create(m_pFSMCom, this, IMPACT));
+	m_pFSMCom->Add_State(CState_CarcassBigA_Idle::Create(m_pFSMCom, this, IDLE, &Desc));
+	m_pFSMCom->Add_State(CState_CarcassBigA_Walk::Create(m_pFSMCom, this, WALK, &Desc));
+	m_pFSMCom->Add_State(CState_CarcassBigA_Run::Create(m_pFSMCom, this, RUN, &Desc));
+	m_pFSMCom->Add_State(CState_CarcassBigA_Attack::Create(m_pFSMCom, this, ATTACK, &Desc));
+	m_pFSMCom->Add_State(CState_CarcassBigA_Grogy::Create(m_pFSMCom, this, GROGY, &Desc));
+	m_pFSMCom->Add_State(CState_CarcassBigA_HitFatal::Create(m_pFSMCom, this, HITFATAL, &Desc));
+	m_pFSMCom->Add_State(CState_CarcassBigA_Paralize::Create(m_pFSMCom, this, PARALIZE, &Desc));
+	m_pFSMCom->Add_State(CState_CarcassBigA_Die::Create(m_pFSMCom, this, DIE, &Desc));
+
+	m_pFSMCom->Add_State(CState_CarcassBigA_Impact::Create(m_pFSMCom, this, IMPACT, &Desc));
 
 
 	m_pFSMCom->Set_State(IDLE);

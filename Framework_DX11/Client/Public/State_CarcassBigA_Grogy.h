@@ -7,11 +7,11 @@ END
 
 BEGIN(Client)
 
-class CState_CarcassBigA_Walk : public CState
+class CState_CarcassBigA_Grogy : public CState
 {
 public:
-    CState_CarcassBigA_Walk(class CFsm* pFsm, class CMonster* pMonster);
-    virtual ~CState_CarcassBigA_Walk() = default;
+    CState_CarcassBigA_Grogy(class CFsm* pFsm, class CMonster* pMonster);
+    virtual ~CState_CarcassBigA_Grogy() = default;
 
 public:
     virtual HRESULT Initialize(_uint iStateNum, void* pArg) override;
@@ -31,8 +31,17 @@ private:
     _bool               m_isPrevChance = { false };
     _bool               m_isActivatedSpecial = { false };
 
+    _float              m_fGrogyTime = { 0.f };
+    _float              m_fGrogyDuration = { 3.f };
+
+    _bool*              m_pIsEndAnim = { nullptr };
+    _bool*              m_pResetRootMove = { nullptr };
+    _double*            m_pTrackPos = { nullptr };
+
+    _uint               m_iAnimCnt = {};
+
 public:
-    static CState_CarcassBigA_Walk* Create(class CFsm* pFsm, class CMonster* pMonster, _uint iStateNum, void* pArg = nullptr);
+    static CState_CarcassBigA_Grogy* Create(class CFsm* pFsm, class CMonster* pMonster, _uint iStateNum, void* pArg = nullptr);
     virtual void Free() override;
 
 };

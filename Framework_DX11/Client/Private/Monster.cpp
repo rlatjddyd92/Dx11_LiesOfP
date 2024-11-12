@@ -22,6 +22,11 @@ HRESULT CMonster::Initialize_Prototype()
 HRESULT CMonster::Initialize(void* pArg)
 {
 	CGameObject::GAMEOBJECT_DESC		Desc{};
+	if (pArg != nullptr)
+	{
+		CGameObject::GAMEOBJECT_DESC* pDesc = static_cast<CGameObject::GAMEOBJECT_DESC*>(pArg);
+		memcpy(&Desc, pDesc, sizeof(CGameObject::GAMEOBJECT_DESC));
+	}
 
 	if (FAILED(__super::Initialize(&Desc)))
 		return E_FAIL;
@@ -111,22 +116,36 @@ void CMonster::Change_State(const _uint iState, void* pArg)
 	m_pFSMCom->Change_State(iState, pArg);
 }
 
-void CMonster::Change_Animation(_uint iAnimIndex, _bool IsLoop)
+void CMonster::Change_Animation(_uint iAnimIndex, _bool IsLoop, _bool bSetup)
 {
-	m_pModelCom->SetUp_NextAnimation(iAnimIndex, IsLoop);
+	if (bSetup)
+	{
+		m_pModelCom->SetUp_Animation(iAnimIndex, IsLoop);
+	}
+	else
+	{
+		m_pModelCom->SetUp_NextAnimation(iAnimIndex, IsLoop);
+	}
 }
 
 void CMonster::Look_Player()
 {
-	m_pTransformCom->LookAt(XMVectorSetY(m_pGameInstance->Get_CamPosition_Vec4(), 0.f));
+	_vector vPos = m_pTransformCom->Get_State(CTransform::STATE_POSITION);
+	_vector vCamPos = m_pGameInstance->Get_CamPosition_Vec4();//임시사용 캠 포지션
+		
+	if (!(XMVectorGetX(vPos) == XMVectorGetX(vCamPos))
+		&& !(XMVectorGetZ(vPos) == XMVectorGetZ(vCamPos)))
+	{
+		m_pTransformCom->LookAt(XMVectorSetY(vCamPos, 0.f));
+
+	}
 }
 
 _float CMonster::Calc_Distance_XZ()
 {
 	_vector vPos = m_pTransformCom->Get_State(CTransform::STATE_POSITION);
 
-	//플레이어 위치 이전 임시 카메라 포지션
-	_vector vPosTarget = m_pGameInstance->Get_CamPosition_Vec4();
+	_vector vPosTarget = m_pGameInstance->Get_CamPosition_Vec4();//임시사용 캠 포지션
 
 	_float fDist = XMVectorGetX(XMVector3Length(XMVectorSetY(vPos, 0) - XMVectorSetY(vPosTarget, 0)));
 

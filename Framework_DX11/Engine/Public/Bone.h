@@ -26,11 +26,11 @@ public:
 	_bool				Get_IsChildOf_Boundary() { return m_bIsChildOf_Boundary; }
 
 public:
-	virtual HRESULT Initialize(HANDLE* pFile, _int iParentBoneIndex);
-	HRESULT Initialize_ToBinary(HANDLE* pFile, _bool bUseBoundary);
-	void Update_CombinedTransformationMatrix(const vector<CBone*>& Bones, _fmatrix PreTransformMatrix);
+	virtual HRESULT		Initialize(HANDLE* pFile, _int iParentBoneIndex);
+	HRESULT				Initialize_ToBinary(HANDLE* pFile, _bool bUseBoundary);
+	void				Update_CombinedTransformationMatrix(const vector<CBone*>& Bones, _fmatrix PreTransformMatrix);
 
-	void Setting_ParentBoneName(class CModel* pModel);
+	void				Setting_ParentBoneName(class CModel* pModel);
 
 	void				Update_Boundary(const vector<CBone*>& Bones, _int iCurBoneIndex, _int iBoundaryBoneIndex);
 

@@ -7,11 +7,17 @@ END
 
 BEGIN(Client)
 
-class CState_CarcassBigA_Walk : public CState
+class CState_CarcassBigA_HitFatal :
+    public CState
 {
+private:
+    typedef enum{
+        DIR_FRONT, DIR_BEHIND
+    }DIR;
+
 public:
-    CState_CarcassBigA_Walk(class CFsm* pFsm, class CMonster* pMonster);
-    virtual ~CState_CarcassBigA_Walk() = default;
+    CState_CarcassBigA_HitFatal(class CFsm* pFsm, class CMonster* pMonster);
+    virtual ~CState_CarcassBigA_HitFatal() = default;
 
 public:
     virtual HRESULT Initialize(_uint iStateNum, void* pArg) override;
@@ -31,8 +37,18 @@ private:
     _bool               m_isPrevChance = { false };
     _bool               m_isActivatedSpecial = { false };
 
+    _float              m_fHitFatalTime = { 0.f };
+    _float              m_fHitFatalDuration = { 3.f };
+
+    _bool*              m_pIsEndAnim = { false };
+    _bool*              m_pResetRootMove = { nullptr };
+
+    _uint               m_iAnimCnt = {};
+
+    _uint               m_iDirCnt = {};
+
 public:
-    static CState_CarcassBigA_Walk* Create(class CFsm* pFsm, class CMonster* pMonster, _uint iStateNum, void* pArg = nullptr);
+    static CState_CarcassBigA_HitFatal* Create(class CFsm* pFsm, class CMonster* pMonster, _uint iStateNum, void* pArg = nullptr);
     virtual void Free() override;
 
 };

@@ -73,7 +73,7 @@ void CAnimModel::Update(_float fTimeDelta)
 	
 	_bool	bEndCheck{false};
 	_vector vRootMove = m_pModelCom->Play_Animation(fTimeDelta, &bEndCheck, &m_EvKeyList);
-
+	
 	if (m_EvKeyList.empty() == false)
 	{
 		for (auto& EvKey : m_EvKeyList)
@@ -97,6 +97,8 @@ void CAnimModel::Update(_float fTimeDelta)
 	}
 	else
 	{
+		vRootMove = XMVector3TransformNormal(vRootMove, m_pTransformCom->Get_WorldMatrix());
+		
 		m_pTransformCom->Set_State(CTransform::STATE_POSITION, vPos + vRootMove - m_vRootMoveStack);
 		m_vRootMoveStack = vRootMove;
 	}
