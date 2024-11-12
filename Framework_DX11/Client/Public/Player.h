@@ -35,6 +35,18 @@ public:
 	virtual HRESULT Render_LightDepth() override;
 
 private:
+	list<OUTPUT_EVKEY>	m_EvKeyList;
+	list<class CEffect_Container*>	m_EffectList;
+	map<_uint, class CEffect_Container*>	m_Effects;
+
+
+
+private:
+	_vector		m_vRootMoveStack{};
+	_vector		m_vCurRootMove{};
+	_bool		m_bEndAnim{ false };
+	_bool		m_bResetRootMove{ true };
+
 
 private:
 	HRESULT Ready_Components();
