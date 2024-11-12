@@ -1,8 +1,8 @@
 
-Texture2D g_InputTexture : register(t0);    // 입력 텍스쳐
+Texture2D g_InputTexture : register(t0); // 입력 텍스쳐
+StructuredBuffer<float> g_InputAvgLum : register(t0);
 RWStructuredBuffer<float> g_OutputAvgLum : register(u0);    //출력 버퍼
 groupshared float SharedPositions[1024];    // 공유 메모리
-StructuredBuffer<float> AverageValues1D : register(t1);
 
 uint2 g_vRes;
 uint g_iDomain;
@@ -105,7 +105,9 @@ void CS_SECOND(uint3 groupId : SV_GroupID, uint3 groupThreadId : SV_GroupThreadI
 
     if (dispatchThreadId.x < g_iGroupSize)
     {
-        favgLum = AverageValues1D[dispatchThreadId.x];
+        // problem
+        favgLum = g_InputAvgLum[dispatchThreadId.x];
+        //1.f;
     }
     SharedAvgFinal[dispatchThreadId.x] = favgLum;
     GroupMemoryBarrierWithGroupSync();

@@ -684,9 +684,10 @@ HRESULT CRenderer::Render_HDR()
 
 	// 평균 휘도 값을 추출해낼거임
 	_uint iGroupSize = (UINT)ceil((_float)(1280.f / 4.f * 720.f / 4.f) / 1024.f);
-	m_pHDRShader->Bind_RawValue("g_iGroupSize", &iGroupSize, sizeof(_uint));
+	if (FAILED(m_pHDRShader->Bind_RawValue("g_iGroupSize", &iGroupSize, sizeof(_uint))))
+		return E_FAIL;
 
-	if (FAILED(m_pGameInstance->Bind_RT_ShaderResource(m_pHDRShader, TEXT("Target_BackBuffer"), "g_InputTexture")))
+	if (FAILED(m_pGameInstance->Bind_RT_ShaderResource(m_pHDRShader, TEXT("Target_HDR0"), "g_InputAvgLum")))
 		return E_FAIL;
 	if (FAILED(m_pGameInstance->BInd_RT_UnorderedView(m_pHDRShader, TEXT("Target_HDR1"), "g_OutputAvgLum")))
 		return E_FAIL;
@@ -740,7 +741,7 @@ HRESULT CRenderer::Render_HDR()
 
 	// 톤 매핑 할거임
 	_float fMiddleGrey = 0.1f;
-	_float fWhite = 0.1f;
+	_float fWhite = 5.1f;
 	fWhite *= fMiddleGrey;
 	fWhite *= fWhite;
 
