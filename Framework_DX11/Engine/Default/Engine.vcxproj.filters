@@ -214,6 +214,9 @@
     <Filter Include="01.Utility\03.Components\VIBuffer\Instancing\Trail\TwoPoint">
       <UniqueIdentifier>{523aadda-e155-4784-9a9b-cd982070af99}</UniqueIdentifier>
     </Filter>
+    <Filter Include="01.Utility\98.ShaderFiles\Compute">
+      <UniqueIdentifier>{a1106976-7960-4715-ae4b-81cbb80200aa}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\Private\Base.cpp">
@@ -414,6 +417,7 @@
     <ClCompile Include="..\private\Trail_TwoPoint_Instance.cpp">
       <Filter>01.Utility\03.Components\VIBuffer\Instancing\Trail\TwoPoint</Filter>
     </ClCompile>
+    <ClCompile Include="..\Private\EasyDrawSphere.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\Public\Base.h">
@@ -629,6 +633,7 @@
     <ClInclude Include="..\public\Trail_TwoPoint_Instance.h">
       <Filter>01.Utility\03.Components\VIBuffer\Instancing\Trail\TwoPoint</Filter>
     </ClInclude>
+    <ClInclude Include="..\Public\EasyDrawSphere.h" />
   </ItemGroup>
   <ItemGroup>
     <FxCompile Include="..\Bin\ShaderFiles\Shader_Cell.hlsl">
@@ -646,14 +651,23 @@
     <FxCompile Include="..\Bin\ShaderFiles\Shader_SSAO.hlsl">
       <Filter>01.Utility\98.ShaderFiles</Filter>
     </FxCompile>
-    <FxCompile Include="..\Bin\ShaderFiles\Shader_HDR.hlsl">
-      <Filter>01.Utility\98.ShaderFiles</Filter>
-    </FxCompile>
     <FxCompile Include="..\Bin\ShaderFiles\Shader_Model_Instance.hlsl">
       <Filter>01.Utility\98.ShaderFiles</Filter>
     </FxCompile>
     <FxCompile Include="..\Bin\ShaderFiles\Shader_Distortion.hlsl">
       <Filter>01.Utility\98.ShaderFiles</Filter>
+    </FxCompile>
+    <FxCompile Include="..\Bin\ShaderFiles\Shader_Compute_HDR.hlsl">
+      <Filter>01.Utility\98.ShaderFiles\Compute</Filter>
+    </FxCompile>
+    <FxCompile Include="..\Bin\ShaderFiles\Shader_Compute_Blur.hlsl">
+      <Filter>01.Utility\98.ShaderFiles\Compute</Filter>
+    </FxCompile>
+    <FxCompile Include="..\Bin\ShaderFiles\Shader_Compute_Back.hlsl">
+      <Filter>01.Utility\98.ShaderFiles\Compute</Filter>
+    </FxCompile>
+    <FxCompile Include="..\Bin\ShaderFiles\Shader_Compute_Bloom.hlsl">
+      <Filter>01.Utility\98.ShaderFiles\Compute</Filter>
     </FxCompile>
   </ItemGroup>
   <ItemGroup>

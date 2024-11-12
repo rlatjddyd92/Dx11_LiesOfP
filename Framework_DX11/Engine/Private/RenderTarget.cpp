@@ -134,17 +134,16 @@ HRESULT CRenderTarget::Initialize_For_Desc(D3D11_BUFFER_DESC* const& pBufferDesc
 				return E_FAIL;
 		}
 
-		if (nullptr != pSRVDesc)
+		if (nullptr != pSRVDesc || pTextureDesc->BindFlags & D3D11_BIND_SHADER_RESOURCE)
 		{
-			if (pTextureDesc->BindFlags & D3D11_BIND_SHADER_RESOURCE)
-				hr |= m_pDevice->CreateShaderResourceView(m_pTexture2D, pSRVDesc, &m_pSRV);
+			hr |= m_pDevice->CreateShaderResourceView(m_pTexture2D, pSRVDesc, &m_pSRV);
 		}
 
-		if (nullptr != pUAVDesc)
+		if (nullptr != pUAVDesc || pTextureDesc->BindFlags & D3D11_BIND_UNORDERED_ACCESS)
 		{
-			if (pTextureDesc->BindFlags & D3D11_BIND_UNORDERED_ACCESS)
-				hr |= m_pDevice->CreateUnorderedAccessView(m_pTexture2D, pUAVDesc, &m_pUAV);
+			hr |= m_pDevice->CreateUnorderedAccessView(m_pTexture2D, pUAVDesc, &m_pUAV);
 		}
+
 	}
 
 	m_vClearColor = vClearColor;
