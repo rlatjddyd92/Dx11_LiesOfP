@@ -306,9 +306,9 @@ void CTrail_OnePoint_Instance::Reset()
 	{
 		pVertices[i] = static_cast<VTXTRAIL_ONEPOINT_INSTANCE*>(m_pInstanceVertices)[i];
 	}
-
 	m_pContext->Unmap(m_pVBInstance, 0);
 
+	m_bFirst = false;
 }
 
 CTrail_OnePoint_Instance* CTrail_OnePoint_Instance::Create(ID3D11Device* pDevice, ID3D11DeviceContext* pContext, const CVIBuffer_Instancing::INSTANCE_DESC& Desc, _bool isClient)

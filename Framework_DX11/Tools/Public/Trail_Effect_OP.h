@@ -88,12 +88,11 @@ private:
 
 	TRAIL_OP_DESC m_SaveDesc = {};
 
-
-	_float m_fDistance = { 0.f };
+	// 테스트용
 	_bool m_bLeft = { false };
 
 private:
-	HRESULT Ready_Components(TRAIL_OP_DESC Desc);
+	HRESULT Ready_Components(const TRAIL_OP_DESC& Desc);
 
 public:
 	static CTrail_Effect_OP* Create(ID3D11Device* pDevice, ID3D11DeviceContext* pContext);

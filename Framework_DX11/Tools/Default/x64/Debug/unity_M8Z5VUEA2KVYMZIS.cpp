@@ -14,6 +14,9 @@
 #include "C:\Users\DESKTOP\Documents\GitHub\Dx11_LiesOfP\Framework_DX11\Tools\Private\Controller_MapTool.cpp"
 
 
+#include "C:\Users\DESKTOP\Documents\GitHub\Dx11_LiesOfP\Framework_DX11\Tools\Private\Controller_PostProcess.cpp"
+
+
 #include "C:\Users\DESKTOP\Documents\GitHub\Dx11_LiesOfP\Framework_DX11\Tools\Private\Controller_UITool.cpp"
 
 
@@ -47,6 +50,9 @@
 #include "C:\Users\DESKTOP\Documents\GitHub\Dx11_LiesOfP\Framework_DX11\Tools\Private\MainApp.cpp"
 
 
+#include "C:\Users\DESKTOP\Documents\GitHub\Dx11_LiesOfP\Framework_DX11\Tools\private\Mesh_Effect.cpp"
+
+
 #include "C:\Users\DESKTOP\Documents\GitHub\Dx11_LiesOfP\Framework_DX11\Tools\Private\NavigationController.cpp"
 
 
@@ -69,6 +75,15 @@
 
 
 #include "C:\Users\DESKTOP\Documents\GitHub\Dx11_LiesOfP\Framework_DX11\Tools\Private\ThreadPool.cpp"
+
+
+#include "C:\Users\DESKTOP\Documents\GitHub\Dx11_LiesOfP\Framework_DX11\Tools\private\Trail_Effect_MP.cpp"
+
+
+#include "C:\Users\DESKTOP\Documents\GitHub\Dx11_LiesOfP\Framework_DX11\Tools\private\Trail_Effect_OP.cpp"
+
+
+#include "C:\Users\DESKTOP\Documents\GitHub\Dx11_LiesOfP\Framework_DX11\Tools\private\Trail_Effect_TP.cpp"
 
 
 #include "C:\Users\DESKTOP\Documents\GitHub\Dx11_LiesOfP\Framework_DX11\Tools\Private\UIRender.cpp"

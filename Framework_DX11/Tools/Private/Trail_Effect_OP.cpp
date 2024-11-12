@@ -28,6 +28,7 @@ HRESULT CTrail_Effect_OP::Initialize(void* pArg)
 		return E_FAIL;
 
 	m_ActionDesc = pDesc->InitDesc.ActionDesc;
+	m_SaveDesc = *pDesc;
 
 	return S_OK;
 }
@@ -167,7 +168,7 @@ CTrail_Effect_OP::TRAIL_OP_DESC CTrail_Effect_OP::Get_Desc()
 	return desc;
 }
 
-HRESULT CTrail_Effect_OP::Ready_Components(TRAIL_OP_DESC Desc)
+HRESULT CTrail_Effect_OP::Ready_Components(const TRAIL_OP_DESC& Desc)
 {
 	/* FOR.Com_Shader */
 	if (FAILED(__super::Add_Component(LEVEL_TOOL, TEXT("Prototype_Component_Shader_Trail_OnePoint_Instance"),

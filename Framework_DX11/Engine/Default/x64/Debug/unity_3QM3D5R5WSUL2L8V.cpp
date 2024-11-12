@@ -164,6 +164,12 @@
 #include "C:\Users\DESKTOP\Documents\GitHub\Dx11_LiesOfP\Framework_DX11\Engine\Private\Timer_Manager.cpp"
 
 
+#include "C:\Users\DESKTOP\Documents\GitHub\Dx11_LiesOfP\Framework_DX11\Engine\private\Trail_OnePoint_Instance.cpp"
+
+
+#include "C:\Users\DESKTOP\Documents\GitHub\Dx11_LiesOfP\Framework_DX11\Engine\private\Trail_TwoPoint_Instance.cpp"
+
+
 #include "C:\Users\DESKTOP\Documents\GitHub\Dx11_LiesOfP\Framework_DX11\Engine\private\Transform.cpp"
 
 
