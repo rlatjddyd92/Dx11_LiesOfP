@@ -13,10 +13,10 @@ CPlayer_Stat_Manager::CPlayer_Stat_Manager(CGameInstance* pGameInstance)
 
 void CPlayer_Stat_Manager::Add_Stat_Normal(STAT_NORMAL eIndex, _float fValue)
 {
-	fValue = max(fValue, 0.f);
-	fValue = min(fValue, m_vecStat_Normal[_int(eIndex)]->fStat_Max);
-
 	m_vecStat_Normal[_int(eIndex)]->fStat_Now += fValue;
+
+	m_vecStat_Normal[_int(eIndex)]->fStat_Now = max(m_vecStat_Normal[_int(eIndex)]->fStat_Now, 0.f);
+	m_vecStat_Normal[_int(eIndex)]->fStat_Now = min(m_vecStat_Normal[_int(eIndex)]->fStat_Now, m_vecStat_Normal[_int(eIndex)]->fStat_Max);
 }
 
 HRESULT CPlayer_Stat_Manager::Initialize_Stat()

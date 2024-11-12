@@ -135,16 +135,12 @@ void CUIManager::UIControl_Test(_float fTimeDelta)
 	{
 		if (KEY_HOLD(KEY::I))
 		{
-			m_pTestData->fHP_Now -= 100.f * fTimeDelta;
-			if (m_pTestData->fHP_Now < 0.f)
-				m_pTestData->fHP_Now = 0.f;
+			GET_GAMEINTERFACE->Add_Stat_Normal(STAT_NORMAL::STAT_GAUGE_HP, -100.f * fTimeDelta);
 			// 체력바 표시 수치 감소
 		}
 		else if (KEY_HOLD(KEY::O))
 		{
-			m_pTestData->fHP_Now += 100.f * fTimeDelta;
-			if (m_pTestData->fHP_Now > m_pTestData->fMax_HP_Now)
-				m_pTestData->fHP_Now = m_pTestData->fMax_HP_Now;
+			GET_GAMEINTERFACE->Add_Stat_Normal(STAT_NORMAL::STAT_GAUGE_HP, +100.f * fTimeDelta);
 			// 체력바 표시 수치 증가 
 		}
 		
@@ -206,6 +202,7 @@ void CUIManager::UIControl_Loading(_float fTimeDelta)
 
 void CUIManager::UIControl_Play(_float fTimeDelta)
 {
+	m_pTestData->fHP_Now = GET_GAMEINTERFACE->Get_NowStat_Normal(STAT_NORMAL::STAT_GAUGE_HP);
 	m_pUIPage_Play->SetRatio_HPBarMax(m_pTestData->fMax_HP_Now / m_pTestData->fMax_HP_Limit);
 	m_pUIPage_Play->SetRatio_HPBarFill(m_pTestData->fHP_Now / m_pTestData->fMax_HP_Limit);
 }
