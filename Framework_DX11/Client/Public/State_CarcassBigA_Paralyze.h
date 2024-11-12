@@ -7,11 +7,11 @@ END
 
 BEGIN(Client)
 
-class CState_CarcassBigA_Paralize : public CState
+class CState_CarcassBigA_Paralyze : public CState
 {
 public:
-    CState_CarcassBigA_Paralize(class CFsm* pFsm, class CMonster* pMonster);
-    virtual ~CState_CarcassBigA_Paralize() = default;
+    CState_CarcassBigA_Paralyze(class CFsm* pFsm, class CMonster* pMonster);
+    virtual ~CState_CarcassBigA_Paralyze() = default;
 
 public:
     virtual HRESULT Initialize(_uint iStateNum, void* pArg) override;
@@ -40,7 +40,7 @@ private:
     _uint               m_iAnimCnt = {};
 
 public:
-    static CState_CarcassBigA_Paralize* Create(class CFsm* pFsm, class CMonster* pMonster, _uint iStateNum, void* pArg = nullptr);
+    static CState_CarcassBigA_Paralyze* Create(class CFsm* pFsm, class CMonster* pMonster, _uint iStateNum, void* pArg = nullptr);
     virtual void Free() override;
 
 };

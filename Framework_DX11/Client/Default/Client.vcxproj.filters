@@ -271,7 +271,7 @@
     <ClInclude Include="..\Public\State_CarcassBigA_Attack.h">
       <Filter>05.Fsm\Monster\CarcassBigA\Attack</Filter>
     </ClInclude>
-    <ClInclude Include="..\Public\State_CarcassBigA_Paralize.h">
+    <ClInclude Include="..\Public\State_CarcassBigA_Paralyze.h">
       <Filter>05.Fsm\Monster\CarcassBigA\Paralize</Filter>
     </ClInclude>
     <ClInclude Include="..\Public\State_CarcassBigA_Impact.h">
@@ -388,7 +388,7 @@
     <ClCompile Include="..\Private\State_CarcassBigA_Attack.cpp">
       <Filter>05.Fsm\Monster\CarcassBigA\Attack</Filter>
     </ClCompile>
-    <ClCompile Include="..\Private\State_CarcassBigA_Paralize.cpp">
+    <ClCompile Include="..\Private\State_CarcassBigA_Paralyze.cpp">
       <Filter>05.Fsm\Monster\CarcassBigA\Paralize</Filter>
     </ClCompile>
     <ClCompile Include="..\Private\State_CarcassBigA_Impact.cpp">

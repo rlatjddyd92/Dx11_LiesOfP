@@ -195,7 +195,7 @@
     <ClInclude Include="..\Public\State_CarcassBigA_HitFatal.h" />
     <ClInclude Include="..\Public\State_CarcassBigA_Idle.h" />
     <ClInclude Include="..\Public\State_CarcassBigA_Impact.h" />
-    <ClInclude Include="..\Public\State_CarcassBigA_Paralize.h" />
+    <ClInclude Include="..\Public\State_CarcassBigA_Paralyze.h" />
     <ClInclude Include="..\Public\State_CarcassBigA_Run.h" />
     <ClInclude Include="..\Public\State_CarcassBigA_Walk.h" />
     <ClInclude Include="..\Public\Terrain.h" />
@@ -241,7 +241,7 @@
     <ClCompile Include="..\Private\State_CarcassBigA_HitFatal.cpp" />
     <ClCompile Include="..\Private\State_CarcassBigA_Idle.cpp" />
     <ClCompile Include="..\Private\State_CarcassBigA_Impact.cpp" />
-    <ClCompile Include="..\Private\State_CarcassBigA_Paralize.cpp" />
+    <ClCompile Include="..\Private\State_CarcassBigA_Paralyze.cpp" />
     <ClCompile Include="..\Private\State_CarcassBigA_Run.cpp" />
     <ClCompile Include="..\Private\State_CarcassBigA_Walk.cpp" />
     <ClCompile Include="..\Private\Terrain.cpp" />

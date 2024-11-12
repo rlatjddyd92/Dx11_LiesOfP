@@ -79,7 +79,7 @@ void CState_CarcassBigA_Idle::Update(_float fTimeDelta)
 
     if (KEY_TAP(KEY::C))
     {
-        m_pMonster->Change_State(CCarcassBigA::PARALIZE);
+        m_pMonster->Change_State(CCarcassBigA::PARALYZE);
     }
 
     if (KEY_TAP(KEY::V))

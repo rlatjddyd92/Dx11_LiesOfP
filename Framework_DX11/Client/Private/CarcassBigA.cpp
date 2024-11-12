@@ -13,7 +13,7 @@
 
 #include "State_CarcassBigA_Grogy.h"
 #include "State_CarcassBigA_HitFatal.h"
-#include "State_CarcassBigA_Paralize.h"
+#include "State_CarcassBigA_Paralyze.h"
 
 #include "State_CarcassBigA_Walk.h"
 #include "State_CarcassBigA_RUN.h"
@@ -222,7 +222,7 @@ HRESULT CCarcassBigA::Ready_FSM()
 	m_pFSMCom->Add_State(CState_CarcassBigA_Attack::Create(m_pFSMCom, this, ATTACK, &Desc));
 	m_pFSMCom->Add_State(CState_CarcassBigA_Grogy::Create(m_pFSMCom, this, GROGY, &Desc));
 	m_pFSMCom->Add_State(CState_CarcassBigA_HitFatal::Create(m_pFSMCom, this, HITFATAL, &Desc));
-	m_pFSMCom->Add_State(CState_CarcassBigA_Paralize::Create(m_pFSMCom, this, PARALIZE, &Desc));
+	m_pFSMCom->Add_State(CState_CarcassBigA_Paralyze::Create(m_pFSMCom, this, PARALYZE, &Desc));
 	m_pFSMCom->Add_State(CState_CarcassBigA_Die::Create(m_pFSMCom, this, DIE, &Desc));
 
 	m_pFSMCom->Add_State(CState_CarcassBigA_Impact::Create(m_pFSMCom, this, IMPACT, &Desc));
