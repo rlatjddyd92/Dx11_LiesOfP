@@ -12,20 +12,9 @@ bool            g_isSelectBright = false;
 
 float g_fMiddleGrey = 1.f;
 float g_fLumWhiteSqr = 1.f;
-StructuredBuffer<float> g_Avg : register(t1);
+float g_fAvgLum;
 
 static const float4 LUM_FACTOR = float4(0.299, 0.587, 0.114, 0);
-
-float3 ToneMapping(float3 vHDRColor)
-{
-    // 현재 픽셀에 대한 휘도 스케일 계산
-    float fLScale = dot(vHDRColor, LUM_FACTOR);
-    fLScale *= g_fMiddleGrey / g_Avg[0]; //AvgLum[0];
-    fLScale = (fLScale + fLScale * fLScale / g_fLumWhiteSqr) / (1.f + fLScale);
-
-    // 휘도 스케일을 픽셀 색상에 적용
-    return vHDRColor * fLScale;
-}
 
 struct VS_IN
 {
@@ -93,7 +82,7 @@ PS_OUT PS_MAIN_DEBUG(PS_IN In)
 {
     PS_OUT Out = (PS_OUT) 0;
 	
-    Out.vColor = g_Texture.Sample(LinearSampler, In.vTexcoord) * g_Avg[0];
+    Out.vColor = g_Texture.Sample(LinearSampler, In.vTexcoord);
 
     return Out;
 }

@@ -1,164 +1,120 @@
+// Bloom Compute Shader
+Texture2D<float4> vHDRDownTexture : register(t0);
+StructuredBuffer<float> AvgLum : register(t1);
 
-Texture2D g_InputTexture : register(t0);    // 입력 텍스쳐
-RWStructuredBuffer<float> g_OutputAvgLum : register(u0);    //출력 버퍼
-groupshared float SharedPositions[1024];    // 공유 메모리
+RWTexture2D<float4> BloomOutput;
 
 uint2 g_vRes;
-uint g_iDomain;
-uint g_iGroupSize;
+float g_fBloomThreshold;
 static const float4 LUM_FACTOR = float4(0.299f, 0.587f, 0.114f, 0);
 
-//float g_fMiddleGrey = 1.f;
-//float g_fLumWhiteSqr = 1.f;
-//StructuredBuffer<float> g_Avg : register(t1);
-
-//float3 ToneMapping(float3 vHDRColor)
-//{
-//    // 현재 픽셀에 대한 휘도 스케일 계산
-//    float fLScale = dot(vHDRColor, LUM_FACTOR);
-//    fLScale *= g_fMiddleGrey / g_Avg[0]; //AvgLum[0];
-//    fLScale = (fLScale + fLScale * fLScale / g_fLumWhiteSqr) / (1.f + fLScale);
-
-//    // 휘도 스케일을 픽셀 색상에 적용
-//    return vHDRColor * fLScale;
-//}
-
-//다운 스케일
-float DownScale4x4(uint2 vPixel, uint groupThreadId)
-{
-    float avgLum = 0.f;
-    
-    int3 iFullResPos = int3(vPixel * 4, 0);
-    float4 vDownScaled = float4(0.f, 0.f, 0.f, 0.f);
-		[unroll]
-    for (int i = 0; i < 4; ++i)
-    {
-			[unroll]
-        for (int j = 0; j < 4; ++j)
-            vDownScaled += g_InputTexture.Load(iFullResPos, int2(j, i));
-    }
-    vDownScaled /= 16;
-
-    avgLum = dot(vDownScaled, LUM_FACTOR);
-    SharedPositions[groupThreadId] = avgLum;
-
-    GroupMemoryBarrierWithGroupSync();
-    return avgLum;
-}
-
-// 1024개의 픽셀을 4개로 축소
-float DownScale1024to4(uint groupThreadId, uint dispachThreadId, float avgLum)
-{
-    for (uint iGroupSize = 4, iStep1 = 1, iStep2 = 2, iStep3 = 3; iGroupSize < 1024; iGroupSize *= 4, iStep1 *= 4, iStep2 *= 4, iStep3 *= 4)
-    {
-        if (groupThreadId % iGroupSize == 0)
-        {
-            float fStepAvgLum = avgLum;
-
-            fStepAvgLum += dispachThreadId + iStep1 < g_iDomain ? SharedPositions[groupThreadId + iStep1] : avgLum;
-            fStepAvgLum += dispachThreadId + iStep2 < g_iDomain ? SharedPositions[groupThreadId + iStep2] : avgLum;
-            fStepAvgLum += dispachThreadId + iStep3 < g_iDomain ? SharedPositions[groupThreadId + iStep3] : avgLum;
-
-            avgLum = fStepAvgLum;
-            SharedPositions[groupThreadId] = fStepAvgLum;
-        }
-        GroupMemoryBarrierWithGroupSync();
-    }
-    return avgLum;
-}
-
-// 4개의 평균을 하나로
-void DownScale4to1(uint groupId, uint groupThreadId, uint dispatchThreadId, float avgLum)
-{
-    if (groupThreadId == 0)
-    {
-        float fFinalAvgLum = avgLum;
-        
-        // 최종 평균 휘도 값을 계산하여 g_OutputAvgLum에 저장
-        fFinalAvgLum += dispatchThreadId + 256 < g_iDomain ? SharedPositions[groupThreadId + 256] : avgLum;
-        fFinalAvgLum += dispatchThreadId + 512 < g_iDomain ? SharedPositions[groupThreadId + 512] : avgLum;
-        fFinalAvgLum += dispatchThreadId + 768 < g_iDomain ? SharedPositions[groupThreadId + 768] : avgLum;
-
-        fFinalAvgLum /= 1024.f;
-        g_OutputAvgLum[groupId] = fFinalAvgLum;
-    }
-}
-
 [numthreads(1024, 1, 1)]
-// 워크 그룹(xyz), 워크그룹내에서의스레드ID, 전체 디스패치에서의 스레드 ID를 나타냄
-void CS_FIRST(uint3 groupId : SV_GroupID, uint3 groupThreadId : SV_GroupThreadID, uint3 dispatchThreadId : SV_DispatchThreadID)
+void CS_Bright(uint3 dispatchThreadID : SV_DispatchThreadID)
 {
-    uint2 vPixel = uint2(dispatchThreadId.x % g_vRes.x, dispatchThreadId.x / g_vRes.x); // 모든 픽셀을 처리함
+    uint2 vCurPixel = uint2(dispatchThreadID.x % g_vRes.x,
+    dispatchThreadID.x / g_vRes.x);
 
-    float favgLum = DownScale4x4(vPixel, groupThreadId.x);
-    favgLum = DownScale1024to4(groupThreadId.x, dispatchThreadId.x, favgLum);
-    DownScale4to1(groupId.x, groupThreadId.x, dispatchThreadId.x, favgLum);
+    if (vCurPixel.y < g_vRes.y)
+    {
+        float4 vColor = vHDRDownTexture.Load(int3(vCurPixel, 0));
+        float fLum = dot(vColor, LUM_FACTOR);
+        float fAvgLum = AvgLum[0];
+
+        float fColorScale = saturate(fLum - fAvgLum * g_fBloomThreshold);
+
+        BloomOutput[vCurPixel.xy] = vColor * fColorScale;
+    }
 }
 
 
-#define MAX_GROUPS 64
-// 공유 메모리 그룹에 값 저장
-groupshared float SharedAvgFinal[MAX_GROUPS];
-
-[numthreads(MAX_GROUPS, 1, 1)]
-void CS_SECOND(uint3 groupId : SV_GroupID, uint3 groupThreadId : SV_GroupThreadID, uint3 dispatchThreadId : SV_DispatchThreadID)
+static const float SampleWeights[13] =
 {
-    float favgLum = 0.f;
+    0.002216,
+    0.008764,
+    0.026995,
+    0.064759,
+    0.120985,
+    0.176033,
+    0.199471,
+    0.176033,
+    0.120985,
+    0.064759,
+    0.026995,
+    0.008764,
+    0.002216,
+};
 
-    if (dispatchThreadId.x < g_iGroupSize)
-    {
-        favgLum = SharedAvgFinal[dispatchThreadId.x];
-    }
-    SharedAvgFinal[dispatchThreadId.x] = favgLum;
+#define kernelhalf 6
+#define groupthreads 128
+    groupshared float4 SharedInput[groupthreads];
+
+[numthreads(groupthreads, 1, 1)]
+void CS_BlurX(uint3 GroupID : SV_GroupID, uint GroupIndex : SV_GroupIndex)
+{
+    int2 vCoord = int2(GroupIndex - kernelhalf + (groupthreads - kernelhalf * 2) * GroupID.x, GroupID.y);
+    vCoord = clamp(vCoord, int2(0, 0), int2(g_vRes.x - 1, g_vRes.y - 1));
+    SharedInput[GroupIndex] = vHDRDownTexture.Load(int3(vCoord, 0));
+
     GroupMemoryBarrierWithGroupSync();
-
-    if (dispatchThreadId.x % 4 == 0)
+    
+    if (GroupIndex >= kernelhalf && GroupIndex < (groupthreads - kernelhalf) &&
+         ((GroupID.x * (groupthreads - 2 * kernelhalf) + GroupIndex - kernelhalf) < g_vRes.x))
     {
-        float fstepAvgLum = favgLum;
-        fstepAvgLum += dispatchThreadId.x + 1 < g_iGroupSize ? SharedAvgFinal[dispatchThreadId.x + 1] : favgLum;
-        fstepAvgLum += dispatchThreadId.x + 2 < g_iGroupSize ? SharedAvgFinal[dispatchThreadId.x + 2] : favgLum;
-        fstepAvgLum += dispatchThreadId.x + 3 < g_iGroupSize ? SharedAvgFinal[dispatchThreadId.x + 3] : favgLum;
-        favgLum = fstepAvgLum;
-        SharedAvgFinal[dispatchThreadId.x] = fstepAvgLum;
+        float4 vOut = 0;
+        
+        [unroll]
+        for (int i = -kernelhalf; i <= kernelhalf; ++i)
+            vOut += SharedInput[GroupIndex + i] * SampleWeights[i + kernelhalf];
+
+        BloomOutput[vCoord] = float4(vOut.rgb, 1.0f);
     }
-    GroupMemoryBarrierWithGroupSync();
+}
 
-    if (dispatchThreadId.x % 16 == 0)
-    {
-        float fstepAvgLum = favgLum;
-        fstepAvgLum += dispatchThreadId.x + 4 < g_iGroupSize ? SharedAvgFinal[dispatchThreadId.x + 4] : favgLum;
-        fstepAvgLum += dispatchThreadId.x + 8 < g_iGroupSize ? SharedAvgFinal[dispatchThreadId.x + 8] : favgLum;
-        fstepAvgLum += dispatchThreadId.x + 12 < g_iGroupSize ? SharedAvgFinal[dispatchThreadId.x + 12] : favgLum;
-        favgLum = fstepAvgLum;
-        SharedAvgFinal[dispatchThreadId.x] = fstepAvgLum;
-    }
-    GroupMemoryBarrierWithGroupSync();
+[numthreads(groupthreads, 1, 1)]
+void CS_BlurY(uint3 GroupID : SV_GroupID, uint GroupIndex : SV_GroupIndex)
+{
+    int2 vCoord = int2(GroupID.x, GroupIndex - kernelhalf + (groupthreads - kernelhalf * 2) * GroupID.y);
+    vCoord = clamp(vCoord, int2(0, 0), int2(g_vRes.x - 1, g_vRes.y - 1));
+    SharedInput[GroupIndex] = vHDRDownTexture.Load(int3(vCoord, 0));
 
-    if (dispatchThreadId.x == 0)
+    GroupMemoryBarrierWithGroupSync();
+    
+    if (GroupIndex >= kernelhalf && GroupIndex < (groupthreads - kernelhalf) &&
+         ((GroupIndex - kernelhalf + (groupthreads - kernelhalf * 2) * GroupID.y) < g_vRes.y))
     {
-        float fFinalLumValue = favgLum;
-        fFinalLumValue += dispatchThreadId.x + 16 < g_iGroupSize ? SharedAvgFinal[dispatchThreadId.x + 16] : favgLum;
-        fFinalLumValue += dispatchThreadId.x + 32 < g_iGroupSize ? SharedAvgFinal[dispatchThreadId.x + 32] : favgLum;
-        fFinalLumValue += dispatchThreadId.x + 48 < g_iGroupSize ? SharedAvgFinal[dispatchThreadId.x + 48] : favgLum;
-        fFinalLumValue /= 64.f;
-        g_OutputAvgLum[0] = max(fFinalLumValue, 0.0001);
+        float4 vOut = 0;
+        
+        [unroll]
+        for (int i = -kernelhalf; i <= kernelhalf; ++i)
+        {
+            vOut += SharedInput[GroupIndex + i] * SampleWeights[i + kernelhalf];
+        }
+
+        BloomOutput[vCoord] = float4(vOut.rgb, 1.0f);
     }
 }
 
 technique11 DefaultTechnique
 {
-    pass Pass_First
+    pass Pass_Bright
     {
         VertexShader = NULL;
         GeometryShader = NULL;
         PixelShader = NULL;
-        ComputeShader = compile cs_5_0 CS_FIRST();
+        ComputeShader = compile cs_5_0 CS_Bright();
     }
-    pass Pass_Second
+    pass Pass_BlurX
     {
         VertexShader = NULL;
         GeometryShader = NULL;
         PixelShader = NULL;
-        ComputeShader = compile cs_5_0 CS_SECOND();
+        ComputeShader = compile cs_5_0 CS_BlurX();
+    }
+    pass Pass_BlurY
+    {
+        VertexShader = NULL;
+        GeometryShader = NULL;
+        PixelShader = NULL;
+        ComputeShader = compile cs_5_0 CS_BlurY();
     }
 }

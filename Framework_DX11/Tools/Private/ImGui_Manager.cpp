@@ -165,7 +165,7 @@ void CImGui_Manager::Tool_PostProcess()
 	{
 		m_pController_PostProcess->Update_SSAO();
 		m_pController_PostProcess->Update_HDR();
-
+		m_pController_PostProcess->Update_BLOOM();
 		ImGui::EndTabItem();
 	}
 }

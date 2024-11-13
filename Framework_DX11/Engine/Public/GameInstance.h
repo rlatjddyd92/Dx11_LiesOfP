@@ -90,6 +90,7 @@ public:
 
 	SSAO_DESC*	Get_SSAODesc();
 	HDR_DESC* Get_HDRDesc();
+	BLOOM_DESC* Get_BloomDesc();
 
 #ifdef _DEBUG
 	HRESULT Add_DebugObject(class CComponent* pDebugObject);

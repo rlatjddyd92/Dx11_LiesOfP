@@ -216,7 +216,7 @@
     </Filter>
     <Filter Include="01.Utility\98.ShaderFiles\Compute">
       <UniqueIdentifier>{a1106976-7960-4715-ae4b-81cbb80200aa}</UniqueIdentifier>
-	</Filter>
+    </Filter>
     <Filter Include="01.Utility\03.Components\Model\ObjectOctree">
       <UniqueIdentifier>{a24fcefc-62b5-4a50-8240-d400693ea04d}</UniqueIdentifier>
     </Filter>
@@ -652,9 +652,6 @@
     <FxCompile Include="..\Bin\ShaderFiles\Shader_Deferred.hlsl">
       <Filter>01.Utility\98.ShaderFiles</Filter>
     </FxCompile>
-    <FxCompile Include="..\Bin\ShaderFiles\Shader_Bloom.hlsl">
-      <Filter>01.Utility\98.ShaderFiles</Filter>
-    </FxCompile>
     <FxCompile Include="..\..\Client\Bin\ShaderFiles\Shader_Effect_Texture.hlsl">
       <Filter>01.Utility\98.ShaderFiles</Filter>
     </FxCompile>
@@ -678,6 +675,9 @@
     </FxCompile>
     <FxCompile Include="..\Bin\ShaderFiles\Shader_Compute_Bloom.hlsl">
       <Filter>01.Utility\98.ShaderFiles\Compute</Filter>
+    </FxCompile>
+    <FxCompile Include="..\Bin\ShaderFiles\Shader_Bloom.hlsl">
+      <Filter>01.Utility\98.ShaderFiles</Filter>
     </FxCompile>
   </ItemGroup>
   <ItemGroup>

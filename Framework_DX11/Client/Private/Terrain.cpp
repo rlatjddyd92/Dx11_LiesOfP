@@ -56,7 +56,7 @@ void CTerrain::Late_Update(_float fTimeDelta)
 
 	m_pGameInstance->Add_DebugObject(m_pNavigationCom);
 #endif
-	m_pGameInstance->Add_RenderObject(CRenderer::RG_HEIGHT, this);
+	//m_pGameInstance->Add_RenderObject(CRenderer::RG_HEIGHT, this);
 	m_pGameInstance->Add_RenderObject(CRenderer::RG_NONBLEND, this);
 }
 

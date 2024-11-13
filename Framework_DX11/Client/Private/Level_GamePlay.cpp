@@ -43,7 +43,7 @@ HRESULT CLevel_Tool::Initialize()
 
 void CLevel_Tool::Update(_float fTimeDelta)
 {
-	
+
 }
 
 HRESULT CLevel_Tool::Render()

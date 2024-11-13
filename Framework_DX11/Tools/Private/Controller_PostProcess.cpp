@@ -65,12 +65,33 @@ void CController_PostProcess::Update_HDR()
 
 	if (tDesc->isOnHDR)
 	{
-		ImGui::DragFloat("Radius", &fMiddleGrey, 0.05f);
-		ImGui::DragFloat("Bias", &fLumWhiteSqr, 0.05f);
+		ImGui::DragFloat("MiddleGrey", &fMiddleGrey, 0.05f);
+		ImGui::DragFloat("LumWhiteSqr", &fLumWhiteSqr, 0.05f);
 	}
 
 	tDesc->fMiddleGrey = fMiddleGrey;
 	tDesc->fLumWhiteSqr = fLumWhiteSqr;
+}
+
+void CController_PostProcess::Update_BLOOM()
+{
+	BLOOM_DESC* tDesc = m_pGameInstance->Get_BloomDesc();
+	if (nullptr == tDesc)
+		return;
+
+	static _bool isOnBloom = false;
+	static _float fBloomThreshold = tDesc->fBloomThreshold;
+
+	ImGui::Checkbox("BLOOM Value", &isOnBloom);
+
+
+	if (tDesc->isOnBloom)
+	{
+		ImGui::DragFloat("BloomThreshold", &fBloomThreshold, 0.05f);
+	}
+
+	tDesc->isOnBloom = isOnBloom;
+	tDesc->fBloomThreshold = fBloomThreshold;
 }
 
 void CController_PostProcess::Free()

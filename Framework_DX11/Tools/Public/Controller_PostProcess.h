@@ -25,6 +25,7 @@ public:
 
 	void Update_SSAO();
 	void Update_HDR();
+	void Update_BLOOM();
 
 private:
 	class CGameInstance* m_pGameInstance = { nullptr };
