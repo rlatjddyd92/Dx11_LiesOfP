@@ -110,6 +110,9 @@
 #include "D:\GitProject\Dx11_LiesOfP\Framework_DX11\Engine\private\Navigation.cpp"
 
 
+#include "D:\GitProject\Dx11_LiesOfP\Framework_DX11\Engine\Private\ObjectOctree.cpp"
+
+
 #include "D:\GitProject\Dx11_LiesOfP\Framework_DX11\Engine\Private\Object_Manager.cpp"
 
 

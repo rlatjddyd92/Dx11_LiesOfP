@@ -56,8 +56,8 @@ void CController_PostProcess::Update_HDR()
 		return;
 
 	static _bool isOnHDR = false;
-	static _float fMiddleGrey;
-	static _float fLumWhiteSqr;
+	static _float fMiddleGrey = tDesc->fMiddleGrey;
+	static _float fLumWhiteSqr = tDesc->fLumWhiteSqr;
 
 	ImGui::Checkbox("HDR Value", &isOnHDR);
 

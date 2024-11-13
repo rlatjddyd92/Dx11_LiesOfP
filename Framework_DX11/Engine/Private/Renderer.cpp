@@ -662,6 +662,8 @@ HRESULT CRenderer::Render_SSAO()
 
 HRESULT CRenderer::Render_HDR()
 {
+	if (!m_tHDR.isOnHDR)
+		return S_OK;
 	Copy_BackBuffer();
 
 	// 화면 해상도의 1/4
@@ -762,7 +764,7 @@ HRESULT CRenderer::Render_HDR()
 	m_pContext->CSSetShaderResources(0, 128, m_pClearSRV);
 	m_pContext->CSSetUnorderedAccessViews(0, 8, m_pClearUAV, nullptr);
 
-	/*if (FAILED(m_pShader->Bind_Matrix("g_WorldMatrix", &m_WorldMatrix)))
+	if (FAILED(m_pShader->Bind_Matrix("g_WorldMatrix", &m_WorldMatrix)))
 		return E_FAIL;
 	if (FAILED(m_pShader->Bind_Matrix("g_ViewMatrix", &m_ViewMatrix)))
 		return E_FAIL;
@@ -776,7 +778,7 @@ HRESULT CRenderer::Render_HDR()
 
 	m_pVIBuffer->Bind_Buffers();
 
-	m_pVIBuffer->Render();*/
+	m_pVIBuffer->Render();
 
 
 	return S_OK;
@@ -1032,33 +1034,6 @@ HRESULT CRenderer::Render_Bloom()
 	ViewportDesc.Height = fInitHeight;
 
 	m_pContext->RSSetViewports(iNumViewports, &ViewportDesc);
-
-	return S_OK;
-}
-
-HRESULT CRenderer::Render_LDR()
-{
-	//if (FAILED(m_pGameInstance->Begin_MRT(TEXT("MRT_LDR"))))
-	//	return E_FAIL;
-
-	//if (FAILED(m_pHDRShader->Bind_Matrix("g_WorldMatrix", &m_WorldMatrix)))
-	//	return E_FAIL;
-	//if (FAILED(m_pHDRShader->Bind_Matrix("g_ViewMatrix", &m_ViewMatrix)))
-	//	return E_FAIL;
-	//if (FAILED(m_pHDRShader->Bind_Matrix("g_ProjMatrix", &m_ProjMatrix)))
-	//	return E_FAIL;
-
-	//if (FAILED(m_pGameInstance->Bind_RT_ShaderResource(m_pHDRShader, TEXT("Target_HDR"), "g_BackTexture")))
-	//	return E_FAIL;
-	////if (FAILED(m_pGameInstance->Bind_RT_ShaderResource(m_pHDRShader, TEXT("Target_Test1"), "g_Avg")))
-	////	return E_FAIL;
-	//
-	//m_pHDRShader->Begin(1);
-	//m_pVIBuffer->Bind_Buffers();
-	//m_pVIBuffer->Render();
-
-	//if (FAILED(m_pGameInstance->End_MRT()))
-	//	return E_FAIL;
 
 	return S_OK;
 }
@@ -1501,7 +1476,8 @@ HRESULT CRenderer::Ready_HDR()
 	if (FAILED(m_pGameInstance->Add_RenderTarget_For_Desc(TEXT("Target_Test1"), &BufferDesc, nullptr, &SRVDesc, &UAVDesc, _float4(0.f, 0.f, 0.f, 0.f))))
 		return E_FAIL;
 
-
+	m_tHDR.fMiddleGrey = 1.4f;
+	m_tHDR.fLumWhiteSqr = 2.3f;
 	return S_OK;
 }
 

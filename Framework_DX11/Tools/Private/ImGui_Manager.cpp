@@ -164,6 +164,7 @@ void CImGui_Manager::Tool_PostProcess()
 	if (ImGui::BeginTabItem("PostProcess Tool"))
 	{
 		m_pController_PostProcess->Update_SSAO();
+		m_pController_PostProcess->Update_HDR();
 
 		ImGui::EndTabItem();
 	}
