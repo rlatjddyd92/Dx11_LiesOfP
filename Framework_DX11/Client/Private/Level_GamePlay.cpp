@@ -1,5 +1,7 @@
 #include "stdafx.h"
 #include "..\Public\Level_GamePlay.h"
+#include <io.h>
+#include<fstream>
 
 #include "FreeCamera.h"
 #include "GameInstance.h"
@@ -7,6 +9,7 @@
 
 #include "Effect_Container.h"
 #include "Effect_Manager.h"
+#include "StaticObj.h"
 
 CLevel_Tool::CLevel_Tool(ID3D11Device* pDevice, ID3D11DeviceContext* pContext)
 	: CLevel{ pDevice, pContext }
@@ -30,7 +33,11 @@ HRESULT CLevel_Tool::Initialize()
 	if (FAILED(Ready_Layer_Player()))
 		return E_FAIL;
 	if (FAILED(Ready_Layer_Paticle()))
-		return E_FAIL;
+		return E_FAIL;	
+	
+	if (FAILED(Read_Map_Data()))
+		return E_FAIL;	
+	
 
 	// 2024-11-10 김성용
 	// 게임 인터페이스를 플레이 모드로 설정 
@@ -122,7 +129,8 @@ HRESULT CLevel_Tool::Ready_Layer_BackGround()
 	if (FAILED(m_pGameInstance->Add_CloneObject_ToLayer(LEVEL_GAMEPLAY, TEXT("Layer_BackGround"), TEXT("Prototype_GameObject_Sky"))))
 		return E_FAIL;
 
-
+	if (FAILED(m_pGameInstance->Add_CloneObject_ToLayer(LEVEL_GAMEPLAY, TEXT("Layer_BackGround"), TEXT("Prototype_GameObject_NavDataObj"))))
+		return E_FAIL;
 	//if (FAILED(m_pGameInstance->Add_CloneObject_ToLayer(LEVEL_GAMEPLAY, TEXT("Layer_BackGround"), TEXT("Prototype_GameObject_ForkLift"))))
 	//	return E_FAIL;
 
@@ -166,6 +174,89 @@ HRESULT CLevel_Tool::Ready_Layer_Player()
 		p->Get_Transform()->Set_State(CTransform::STATE_POSITION, _Vec3(i * 5, 0, i * 5));
 	}
 
+	return S_OK;
+}
+
+HRESULT CLevel_Tool::Read_Map_Data()
+{
+	const char cFile[128] = "../Bin/DataFiles/Map_Data.dat";
+	ifstream fin(cFile, ios::in | ios::binary);
+
+	//	fin.open("../Bin/Map_Data.txt");
+	if (!fin.is_open())    // 파일 열었다면
+	{
+		MSG_BOX(TEXT("파일 읽기를 실패했어요.."));
+		return E_FAIL;
+	}
+
+	string line;
+	_uint LayerCount = { 0 };
+	fin.read(reinterpret_cast<char*>(&LayerCount), sizeof(LayerCount));	//레이어 개수
+
+	string strLayerTag = {};
+	std::string::size_type iStrSize = { 0 };
+	_uint iObjectCount = 0;
+	int i = 0;
+	int iObjectType = 0;
+	int iObjectListIndex = 0;
+	_float3 fPos = {};
+	_float3 fScaled = {};
+	_float3 fRot = {};
+	_int iCellNum = {};
+	_uint iCellRoomNum = {};
+
+	while (i < (_int)LayerCount)
+	{
+		fin.read(reinterpret_cast<char*>(&iStrSize), sizeof(iStrSize));
+		strLayerTag.resize(iStrSize);
+		fin.read(&strLayerTag[0], iStrSize);
+		fin.read(reinterpret_cast<char*>(&iObjectCount), sizeof(iObjectCount));
+
+		for (_int j = 0; j < (_int)iObjectCount; ++j)
+		{
+			if (strLayerTag != "Layer_Light")	//조명 제외 모든 오브젝트 불러오기
+			{
+				OBJECT_DEFAULT_DESC pDesc = {};
+				fin.read(reinterpret_cast<char*>(&pDesc), sizeof(pDesc));
+
+				if (strLayerTag == "Layer_Map")
+				{
+					CStaticObj::STATICOBJ_DESC staticObjDesc = {};
+					int bufferSize = WideCharToMultiByte(CP_ACP, 0, pDesc.szModelTag, -1, NULL, 0, NULL, NULL);
+					WideCharToMultiByte(CP_ACP, 0, pDesc.szModelTag, -1, staticObjDesc.szModelTag, bufferSize, NULL, NULL);
+
+					staticObjDesc.vPosition = pDesc.vPosition;
+					staticObjDesc.vScale = pDesc.vScale;
+					staticObjDesc.vRotation = pDesc.vRotation;
+					staticObjDesc.isInstance = pDesc.isInstance;
+					staticObjDesc.iRenderGroupID = pDesc.iID;
+					staticObjDesc.bShadow = pDesc.bShadow;
+
+					if (FAILED(m_pGameInstance->Add_CloneObject_ToLayer(LEVEL_GAMEPLAY, TEXT("Layer_Map"), TEXT("Prototype_GameObject_StaticObj"), &staticObjDesc)))
+						return E_FAIL;
+				}
+				else if (strLayerTag == "Layer_InteractObject")
+				{
+					 if (wcscmp(pDesc.szModelTag, TEXT("SK_DLV_Stargazer_01")) == 0)
+					 {
+						 if (FAILED(m_pGameInstance->Add_CloneObject_ToLayer(LEVEL_GAMEPLAY, TEXT("Layer_Stargazer"), TEXT("Prototype_GameObject_Stargazer"), &pDesc)))
+							 return E_FAIL;
+					 }
+				}
+
+			}
+			else
+			{
+				LIGHT_DESC pDesc = {};
+
+				fin.read(reinterpret_cast<char*>(&pDesc), sizeof(pDesc));
+				if (FAILED(m_pGameInstance->Add_Light(pDesc)))
+					return E_FAIL;
+			}
+		}
+		++i;
+	}
+	fin.close();
 	return S_OK;
 }
 

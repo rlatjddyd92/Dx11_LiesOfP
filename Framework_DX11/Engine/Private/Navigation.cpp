@@ -1,6 +1,10 @@
 #include "..\Public\Navigation.h"
 #include "Cell.h"
 
+#include<filesystem>
+#include<fstream>
+#include <locale>
+#include <codecvt>
 #include "Shader.h"
 #include "GameInstance.h"
 #include "Transform.h"
@@ -28,36 +32,105 @@ CNavigation::CNavigation(const CNavigation & Prototype)
 #endif
 }
 
+//HRESULT CNavigation::Initialize_Prototype(const _wstring& strNavigationDataFile)
+//{
+//	XMStoreFloat4x4(&m_WorldMatrix, XMMatrixIdentity());
+//
+//	_ulong			dwByte = {};
+//
+//	HANDLE			hFile = CreateFile(strNavigationDataFile.c_str(), GENERIC_READ, 0, nullptr, OPEN_EXISTING, FILE_ATTRIBUTE_NORMAL, 0);
+//	if (0 == hFile)
+//		return E_FAIL;
+//
+//	_float3			vPoints[3];
+//
+//	while (true)
+//	{
+//		ReadFile(hFile, vPoints, sizeof(_float3) * 3, &dwByte, nullptr);
+//
+//		if (0 == dwByte)
+//			break;
+//
+//		CCell::CELL_DESC desc = {};
+//		desc.iIndex = (_int)m_Cells.size();
+//
+//		CCell*		pCell = CCell::Create(m_pDevice, m_pContext, vPoints, &desc);
+//		if (nullptr == pCell)
+//			return E_FAIL;
+//
+//		m_Cells.emplace_back(pCell);
+//	}	
+//	
+//	CloseHandle(hFile);
+//
+//	if (FAILED(SetUp_Neighbors()))
+//		return E_FAIL;
+//
+//#ifdef _DEBUG
+//
+//	m_pShader = CShader::Create(m_pDevice, m_pContext, TEXT("../Bin/ShaderFiles/Shader_Cell.hlsl"), VTXPOS::Elements, VTXPOS::iNumElements);
+//	if (nullptr == m_pShader)
+//		return E_FAIL;
+//
+//#endif
+//
+//	return S_OK;
+//}
 HRESULT CNavigation::Initialize_Prototype(const _wstring& strNavigationDataFile)
 {
 	XMStoreFloat4x4(&m_WorldMatrix, XMMatrixIdentity());
 
-	_ulong			dwByte = {};
+	// wstring을 string으로 변환
+	std::wstring_convert<std::codecvt_utf8<wchar_t>> converter;
+	std::string narrowStr = converter.to_bytes(strNavigationDataFile);
 
-	HANDLE			hFile = CreateFile(strNavigationDataFile.c_str(), GENERIC_READ, 0, nullptr, OPEN_EXISTING, FILE_ATTRIBUTE_NORMAL, 0);
-	if (0 == hFile)
-		return E_FAIL;
+	// 변환된 narrow string을 const char 배열로 복사
+	const char* cFile = narrowStr.c_str();
 
-	_float3			vPoints[3];
+	ifstream fin(cFile, ios::in | ios::binary);
 
-	while (true)
+
+	//	fin.open("../Bin/Map_Data.txt");
+	if (!fin.is_open())    // 파일 열었다면
 	{
-		ReadFile(hFile, vPoints, sizeof(_float3) * 3, &dwByte, nullptr);
+		return E_FAIL;
+	}
 
-		if (0 == dwByte)
-			break;
+	_uint iCellCout = { 0 };
+	//getline(fin, line);
+	//LayerCout = std::stoi(line);
+	fin.read(reinterpret_cast<char*>(&iCellCout), sizeof(iCellCout));
 
-		CCell::CELL_DESC desc = {};
-		desc.iIndex = (_int)m_Cells.size();
+	_float3 vPos[3] = {};
 
-		CCell*		pCell = CCell::Create(m_pDevice, m_pContext, vPoints, &desc);
+	for (int i = 0; i < iCellCout; ++i)
+	{
+		_uint iCellType = { };
+		fin.read(reinterpret_cast<char*>(&iCellType), sizeof(iCellType));
+
+		_uint iRoomNum = { };
+		fin.read(reinterpret_cast<char*>(&iRoomNum), sizeof(iRoomNum));
+
+		for (int j = 0; j < 3; ++j)
+		{
+			fin.read(reinterpret_cast<char*>(&vPos[j].x), sizeof(_float));
+			fin.read(reinterpret_cast<char*>(&vPos[j].y), sizeof(_float));
+			fin.read(reinterpret_cast<char*>(&vPos[j].z), sizeof(_float));
+		}
+
+		CCell::CELL_DESC pDesc = {};
+		pDesc.iIndex = (_int)m_Cells.size();
+		pDesc.iAreaNum = iRoomNum;
+		pDesc.iCellTypeNum = iCellType;
+
+		CCell* pCell = CCell::Create(m_pDevice, m_pContext, vPos, &pDesc);
 		if (nullptr == pCell)
 			return E_FAIL;
 
 		m_Cells.emplace_back(pCell);
-	}	
-	
-	CloseHandle(hFile);
+	}
+
+	fin.close();
 
 	if (FAILED(SetUp_Neighbors()))
 		return E_FAIL;
