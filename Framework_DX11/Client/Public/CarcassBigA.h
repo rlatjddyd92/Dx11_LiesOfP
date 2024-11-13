@@ -20,6 +20,8 @@ public:
 	{
 		_bool* pIsEndAnim { nullptr };
 		_bool* pIsResetRootMove { nullptr };
+		_bool* pColliderCtrs{ nullptr };
+		
 		_double* pGrogyTrackPos { nullptr };
 	}FSMSTATE_DESC;
 
@@ -48,6 +50,7 @@ public:
 
 private:
 	CGameObject*			m_pColliderObject[TYPE_END] = { nullptr, nullptr };
+	_bool					m_bColliderCtrs[TYPE_END] = {true,  true};
 	vector<CGameObject*>	CollObjRenderP{};
 
 private:

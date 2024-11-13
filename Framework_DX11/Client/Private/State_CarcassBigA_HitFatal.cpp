@@ -59,7 +59,7 @@ void CState_CarcassBigA_HitFatal::Update(_float fTimeDelta)
         }
         else
         {
-            m_iAnimCnt = 0.f;
+            m_iAnimCnt = 0;
             m_pMonster->Change_State(CCarcassBigA::GROGY);
         }
     }

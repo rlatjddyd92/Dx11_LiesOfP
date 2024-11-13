@@ -42,17 +42,18 @@ HRESULT CCarcassBigA::Initialize(void* pArg)
 	if (FAILED(__super::Initialize(&Desc)))
 		return E_FAIL;
 
-	if (FAILED(Ready_Components()))
-		return E_FAIL;
+	m_pTransformCom->Set_State(CTransform::STATE_POSITION,
+		XMVectorSet(0.f, 0.f, 0.f, 1.f));
+	m_pTransformCom->LookAt(_vector{ 0, 0, -1, 0 });
 
-	if (FAILED(Ready_FSM()))
+	if (FAILED(Ready_Components()))
 		return E_FAIL;
 
 	m_pModelCom->SetUp_Animation(rand() % 20, true);
 
-	m_pTransformCom->Set_State(CTransform::STATE_POSITION,
-		XMVectorSet(0.f, 0.f, 0.f, 1.f));
-	m_pTransformCom->LookAt(_vector{ 0, 0, -1, 0 });
+	if (FAILED(Ready_FSM()))
+		return E_FAIL;
+
 
 	return S_OK;
 }
@@ -60,20 +61,7 @@ HRESULT CCarcassBigA::Initialize(void* pArg)
 void CCarcassBigA::Priority_Update(_float fTimeDelta)
 {
 
-	if (KEY_TAP(KEY::Z))
-	{
-		Change_State(CCarcassBigA::GROGY);
-	}
-
-	if (KEY_TAP(KEY::C))
-	{
-		Change_State(CCarcassBigA::PARALYZE);
-	}
-
-	if (KEY_TAP(KEY::V))
-	{
-		Change_State(CCarcassBigA::DIE);
-	}
+	
 }
 
 void CCarcassBigA::Update(_float fTimeDelta)
@@ -101,11 +89,9 @@ void CCarcassBigA::Update(_float fTimeDelta)
 
 	for (auto& pColliderObj : m_pColliderObject)
 		pColliderObj->Update(fTimeDelta);
-	
-#ifdef _DEBUG
+
 	for (auto& pCollider : m_pColliderCom)
 		pCollider->Update(m_pTransformCom->Get_WorldMatrix_Ptr());
-#endif
 }
 
 void CCarcassBigA::Late_Update(_float fTimeDelta)
@@ -142,8 +128,16 @@ void CCarcassBigA::Late_Update(_float fTimeDelta)
 #endif
 	}
 	*/
-	for (auto& pColliderObj : m_pColliderObject)
-		pColliderObj->Late_Update(fTimeDelta);
+	m_pGameInstance->Add_RenderObject(CRenderer::RG_NONBLEND, this);
+
+	for (_uint i = 0; i < TYPE_END; ++i)
+	{
+		if (m_bColliderCtrs[i] == true)
+		{
+			continue;
+		}
+		m_pColliderObject[i]->Late_Update(fTimeDelta);
+	}
 
 }
 
@@ -175,7 +169,11 @@ HRESULT CCarcassBigA::Render()
 	}
 
 
-
+#ifdef _DEBUG
+	m_pColliderCom[1]->Render();
+	//for (auto& pColliderObj : m_pColliderObject)
+	//	pColliderObj->Render();
+#endif
 	return S_OK;
 }
 
@@ -222,31 +220,34 @@ HRESULT CCarcassBigA::Ready_Components()
 
 	/* FOR.Com_Collider_OBB */
 	CBounding_OBB::BOUNDING_OBB_DESC			ColliderOBBDesc_Obj{};
-	ColliderOBBDesc.vExtents = _float3(0.7f, 0.7f, 0.9f);
-	ColliderOBBDesc.vCenter = _float3(0.f, ColliderOBBDesc.vExtents.y, 0.f);
-	ColliderOBBDesc.vAngles = _float3(0.f, m_pGameInstance->Get_Random(XMConvertToRadians(0.f), XMConvertToRadians(360.f)), 0.f);
+
+	//ColliderAABBDesc_Obj.vExtents = _float3(0.5f, 1.0f, 0.5f);
+	//ColliderAABBDesc_Obj.vCenter = _float3(0.f, ColliderAABBDesc.vExtents.y, 0.f);
+
+	ColliderOBBDesc_Obj.vAngles = _float3(0.0f, 0.0f, 0.0f);
+	ColliderOBBDesc_Obj.vCenter = _float3(0.2f, 0.f, 0.f);
+	ColliderOBBDesc_Obj.vExtents = _float3(0.7f, 0.35f, 0.35f);
 
 	CColliderObject::COLIDEROBJECT_DESC Desc{};
 
 	Desc.pBoundingDesc = &ColliderOBBDesc_Obj;
 	Desc.eType = CCollider::TYPE_OBB;
-	Desc.pCombinedTransform = m_pModelCom->Get_BoneCombindTransformationMatrix_Ptr(m_pModelCom->Get_UFBIndices(UFB_HAND_LEFT));
-	Desc.pParentTransformCom = m_pTransformCom;
-
+	Desc.pCombinedBoneTransformMatrix = m_pModelCom->Get_BoneCombindTransformationMatrix_Ptr(m_pModelCom->Get_UFBIndices(UFB_HAND_LEFT));
+	Desc.pParentTransformComMatrix = m_pTransformCom->Get_WorldMatrix_Ptr();
+	;
 	m_pColliderObject[COLLIDERTYPE::TYPE_LEFTHAND] = m_pGameInstance->Clone_GameObject(TEXT("Prototype_GameObject_ColliderObj"), &Desc);
 
 
 	/* FOR.Com_Collider_OBB */
+	ColliderOBBDesc_Obj.vAngles = _float3(0.0f, 0.0f, 0.0f);
+	ColliderOBBDesc_Obj.vCenter = _float3(0.2f, 0.f, 0.f);
+	ColliderOBBDesc_Obj.vExtents = _float3(0.5f, 0.3f, 0.3f);
 	
-	ColliderOBBDesc.vExtents = _float3(0.7f, 0.7f, 0.9f);
-	ColliderOBBDesc.vCenter = _float3(0.f, ColliderOBBDesc.vExtents.y, 0.f);
-	ColliderOBBDesc.vAngles = _float3(0.f, m_pGameInstance->Get_Random(XMConvertToRadians(0.f), XMConvertToRadians(360.f)), 0.f);
-
 	Desc.pBoundingDesc = &ColliderOBBDesc_Obj;
 	Desc.eType = CCollider::TYPE_OBB;
-	Desc.pCombinedTransform = m_pModelCom->Get_BoneCombindTransformationMatrix_Ptr(m_pModelCom->Get_UFBIndices(UFB_HAND_RIGHT));
-	Desc.pParentTransformCom = m_pTransformCom;
-
+	Desc.pCombinedBoneTransformMatrix = (_Matrix*)m_pModelCom->Get_BoneCombindTransformationMatrix_Ptr(m_pModelCom->Get_UFBIndices(UFB_HAND_RIGHT));
+	Desc.pParentTransformComMatrix = m_pTransformCom->Get_WorldMatrix_Ptr();
+	
 	m_pColliderObject[COLLIDERTYPE::TYPE_RIGHTHAND] = m_pGameInstance->Clone_GameObject(TEXT("Prototype_GameObject_ColliderObj"), &Desc);
 
 
@@ -264,6 +265,7 @@ HRESULT CCarcassBigA::Ready_FSM()
 	Desc.pIsEndAnim = &m_bEndAnim;
 	Desc.pIsResetRootMove =&m_bResetRootMove;
 	Desc.pGrogyTrackPos = &m_GrogyTrackPos;
+	Desc.pColliderCtrs = m_bColliderCtrs;
 	//
 
 
@@ -317,6 +319,11 @@ CGameObject* CCarcassBigA::Clone(void* pArg)
 
 void CCarcassBigA::Free()
 {
+	for (_uint i = 0; i < TYPE_END; ++i)
+	{
+		Safe_Release(m_pColliderObject[i]);
+	}
+
 	__super::Free();
 
 }

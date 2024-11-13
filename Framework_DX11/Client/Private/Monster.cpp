@@ -59,22 +59,22 @@ void CMonster::Late_Update(_float fTimeDelta)
 	if (nullptr == pTargetCollider)
 		return;*/
 
-	CComponent* pTargetCollider = m_pGameInstance->Find_Component(LEVEL_GAMEPLAY, TEXT("Layer_Player"), TEXT("Com_Collider"), 0, CPlayer::PART_WEAPON);
-	if (nullptr == pTargetCollider)
-		return;
+	//CComponent* pTargetCollider = m_pGameInstance->Find_Component(LEVEL_GAMEPLAY, TEXT("Layer_Player"), TEXT("Com_Collider"), 0, CPlayer::PART_WEAPON);
+	//if (nullptr == pTargetCollider)
+	//	return;
+	//
+	//for (size_t i = 0; i < TYPE_END; i++)
+	//{
+	//	m_pColliderCom[i]->Intersect(dynamic_cast<CCollider*>(pTargetCollider));
+	//}
 
-	for (size_t i = 0; i < TYPE_END; i++)
+		//if (true == m_pGameInstance->isIn_Frustum_WorldSpace(m_pTransformCom->Get_State(CTransform::STATE_POSITION), 3.f))
 	{
-		m_pColliderCom[i]->Intersect(dynamic_cast<CCollider*>(pTargetCollider));
-	}
-
-	if (true == m_pGameInstance->isIn_Frustum_WorldSpace(m_pTransformCom->Get_State(CTransform::STATE_POSITION), 3.f))
-	{
-		m_pGameInstance->Add_RenderObject(CRenderer::RG_NONBLEND, this);
+		//m_pGameInstance->Add_RenderObject(CRenderer::RG_NONBLEND, this);
 
 #ifdef _DEBUG
-		for (auto& pCollider : m_pColliderCom)
-			m_pGameInstance->Add_DebugObject(pCollider);
+		//for (auto& pCollider : m_pColliderCom)
+		//	m_pGameInstance->Add_DebugObject(pCollider);
 #endif
 	}
 }

@@ -28,10 +28,9 @@ HRESULT CColliderObject::Initialize(void* pArg)
 
 	COLIDEROBJECT_DESC* pDesc = static_cast<COLIDEROBJECT_DESC*>(pArg);
 	m_eType = pDesc->eType;
-	m_pParentTransformCom = pDesc->pParentTransformCom;
-	Safe_AddRef(m_pParentTransformCom);
+	m_pParentTransformComMatrix = pDesc->pParentTransformComMatrix;
 	
-	m_pCombinedTransform = pDesc->pCombinedTransform;
+	m_pCombinedBoneTransformMatrix = pDesc->pCombinedBoneTransformMatrix;
 	
 	
 	if(FAILED(Ready_Components(pDesc->pBoundingDesc, pDesc->eType)))
@@ -46,27 +45,27 @@ void CColliderObject::Priority_Update(_float fTimeDelta)
 
 void CColliderObject::Update(_float fTimeDelta)
 {
-	_float4x4 WorldMatrix;
-	XMStoreFloat4x4(&WorldMatrix, m_pParentTransformCom->Get_WorldMatrix() * XMLoadFloat4x4(m_pCombinedTransform));
-
-#ifdef _DEBUG
-	m_pColliderCom->Update(&WorldMatrix);
-#endif
+	
 }
 
 void CColliderObject::Late_Update(_float fTimeDelta)
 {
 	__super::Late_Update(fTimeDelta);
+	_float4x4 WorldMatrix;
+	// 
+	XMStoreFloat4x4(&WorldMatrix, XMLoadFloat4x4(m_pCombinedBoneTransformMatrix) * XMLoadFloat4x4(m_pParentTransformComMatrix));
+
+	m_pColliderCom->Update(&WorldMatrix);
 
 #ifdef _DEBUG
-	m_pGameInstance->Add_RenderObject(CRenderer::RG_NONBLEND, this);
 	m_pGameInstance->Add_DebugObject(m_pColliderCom);
+	m_pGameInstance->Add_RenderObject(CRenderer::RG_NONBLEND, this);
 #endif
 }
 
 HRESULT CColliderObject::Render()
 {
-
+	
 #ifdef _DEBUG
 	m_pColliderCom->Render();
 #endif
@@ -137,5 +136,4 @@ void CColliderObject::Free()
 	__super::Free();
 
 	Safe_Release(m_pColliderCom);
-	Safe_Release(m_pParentTransformCom);
 }

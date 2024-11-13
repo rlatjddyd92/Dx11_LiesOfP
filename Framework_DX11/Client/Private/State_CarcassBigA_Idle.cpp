@@ -71,7 +71,20 @@ void CState_CarcassBigA_Idle::Update(_float fTimeDelta)
         }
 
     }
+    if (KEY_TAP(KEY::Z))
+    {
+        m_pMonster->Change_State(CCarcassBigA::GROGY);
+    }
 
+    if (KEY_TAP(KEY::C))
+    {
+        m_pMonster->Change_State(CCarcassBigA::PARALYZE);
+    }
+
+    if (KEY_TAP(KEY::V))
+    {
+        m_pMonster->Change_State(CCarcassBigA::DIE);
+    }
 
 }
 

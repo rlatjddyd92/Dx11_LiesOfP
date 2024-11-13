@@ -8,8 +8,8 @@ class CColliderObject	final : public CGameObject
 public:
 	typedef struct
 	{
-		const _float4x4*	pCombinedTransform;
-		CTransform*			pParentTransformCom;
+		const _float4x4*	pCombinedBoneTransformMatrix;
+		const _float4x4*	pParentTransformComMatrix;
 		CBounding::BOUNDING_DESC* pBoundingDesc;
 		CCollider::TYPE		eType;
 
@@ -30,12 +30,12 @@ public:
 
 private:
 	CCollider*			m_pColliderCom = { nullptr };
-	CTransform*			m_pParentTransformCom = { nullptr };
 
 private:
 	CCollider::TYPE		m_eType{ CCollider::TYPE::TYPE_END};
 
-	const _float4x4*	m_pCombinedTransform = { nullptr };
+	const _float4x4*	m_pCombinedBoneTransformMatrix = { nullptr };
+	const _float4x4*	m_pParentTransformComMatrix = { nullptr };
 
 private:
 	HRESULT Ready_Components(CBounding::BOUNDING_DESC* pBoundingDesc, CCollider::TYPE eType);
