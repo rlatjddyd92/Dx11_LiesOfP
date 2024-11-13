@@ -108,6 +108,7 @@ private:
 
 	HRESULT Render_SSAO();
 	HRESULT Render_HDR();
+	HRESULT Render_Bloom_Compute();
 	HRESULT Render_Bloom();
 
 	HRESULT Render_Distortion();
