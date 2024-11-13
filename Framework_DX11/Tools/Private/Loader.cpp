@@ -922,6 +922,12 @@ HRESULT CLoader::Ready_Resources_For_ToolLevel_Map0()
 //	m_pGameInstance->Add_ModelPrototype(LEVEL_TOOL, ("Prototype_AnimModel_SimonManus_Weapon"), pModel);
 //#pragma endregion
 
+#pragma region AnimObject
+	pModel = CModel::Create(m_pDevice, m_pContext, CModel::TYPE_ANIM, "../Bin/ModelData/NonAnim/InteractObj/SK_DLV_Stargazer_01.dat", PreTransformMatrix, false, CController_AnimationTool::Get_Instance()->Get_StructStack(iModelCnt++));
+	if (FAILED(m_pGameInstance->Add_Prototype(LEVEL_TOOL, TEXT("SK_DLV_Stargazer_01"), pModel)))
+	return E_FAIL;
+	m_pGameInstance->Add_ModelPrototype(LEVEL_TOOL, ("SK_DLV_Stargazer_01"), pModel);
+#pragma endregion
 	m_isFinished_Map0 = true;
 
 	return S_OK;

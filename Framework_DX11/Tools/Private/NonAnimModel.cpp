@@ -81,7 +81,7 @@ void CNonAnimModel::Late_Update(_float fTimeDelta)
 			m_pGameInstance->Add_RenderObject(CRenderer::RG_NONBLEND, this);
 
 		}
-		//m_pGameInstance->Add_RenderObject(CRenderer::RG_PICKING, this);
+		m_pGameInstance->Add_RenderObject(CRenderer::RG_PICKING, this);
 	}
 }
 
