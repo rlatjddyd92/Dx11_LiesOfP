@@ -137,37 +137,39 @@ void CUIManager::UIControl_Test(_float fTimeDelta)
 	}
 
 	// 상단 바 
-	if (KEY_HOLD(KEY::LSHIFT))
+	if (KEY_HOLD(KEY::LSHIFT)) // 최대치 조정 
 	{
-		if (KEY_HOLD(KEY::I))
-		{
-			GET_GAMEINTERFACE->Add_Stat_Normal(STAT_NORMAL::STAT_GAUGE_HP, -100.f * fTimeDelta);
-			// 체력바 표시 수치 감소
-		}
-		else if (KEY_HOLD(KEY::O))
-		{
-			GET_GAMEINTERFACE->Add_Stat_Normal(STAT_NORMAL::STAT_GAUGE_HP, +100.f * fTimeDelta);
-			// 체력바 표시 수치 증가 
-		}
+		if (KEY_HOLD(KEY::I)) // 체력바 표시 수치 감소
+			GET_GAMEINTERFACE->Add_StatMax_Normal(STAT_NORMAL::STAT_GAUGE_HP, -100.f * fTimeDelta);
+		else if (KEY_HOLD(KEY::O)) // 체력바 표시 수치 감소
+			GET_GAMEINTERFACE->Add_StatMax_Normal(STAT_NORMAL::STAT_GAUGE_HP, +100.f * fTimeDelta);
 
+		if (KEY_HOLD(KEY::K)) // 체력바 표시 수치 감소
+			GET_GAMEINTERFACE->Add_StatMax_Normal(STAT_NORMAL::STAT_GAUGE_STAMINA, -100.f * fTimeDelta);
+		else if (KEY_HOLD(KEY::L)) // 체력바 표시 수치 감소
+			GET_GAMEINTERFACE->Add_StatMax_Normal(STAT_NORMAL::STAT_GAUGE_STAMINA, +100.f * fTimeDelta);
+
+		if (KEY_HOLD(KEY::N)) // 체력바 표시 수치 감소
+			GET_GAMEINTERFACE->Add_StatMax_Normal(STAT_NORMAL::STAT_GAUGE_REGION, -100.f * fTimeDelta);
+		else if (KEY_HOLD(KEY::M)) // 체력바 표시 수치 감소
+			GET_GAMEINTERFACE->Add_StatMax_Normal(STAT_NORMAL::STAT_GAUGE_REGION, +100.f * fTimeDelta);
 	}
-	else
+	else // 스탯 조정 
 	{
-		if (KEY_HOLD(KEY::I))
-		{
-			m_pTestData->fMax_HP_Now -= 100.f * fTimeDelta;
-			if (m_pTestData->fMax_HP_Now < 0.f)
-				m_pTestData->fMax_HP_Now = 0.f;
-			m_pTestData->fHP_Now = min(m_pTestData->fMax_HP_Now, m_pTestData->fHP_Now);
-			// 체력바 최대치 감소
-		}
-		else if (KEY_HOLD(KEY::O))
-		{
-			m_pTestData->fMax_HP_Now += 100.f * fTimeDelta;
-			if (m_pTestData->fMax_HP_Now > m_pTestData->fMax_HP_Limit)
-				m_pTestData->fMax_HP_Now = m_pTestData->fMax_HP_Limit;
-			// 체력바 최대치 증가
-		}
+		if (KEY_HOLD(KEY::I)) // 체력바 표시 수치 감소
+			GET_GAMEINTERFACE->Add_Stat_Normal(STAT_NORMAL::STAT_GAUGE_HP, -100.f * fTimeDelta);
+		else if (KEY_HOLD(KEY::O)) // 체력바 표시 수치 증가 
+			GET_GAMEINTERFACE->Add_Stat_Normal(STAT_NORMAL::STAT_GAUGE_HP, +100.f * fTimeDelta);
+
+		if (KEY_HOLD(KEY::K)) // 체력바 표시 수치 감소
+			GET_GAMEINTERFACE->Add_Stat_Normal(STAT_NORMAL::STAT_GAUGE_STAMINA, -100.f * fTimeDelta);
+		else if (KEY_HOLD(KEY::L)) // 체력바 표시 수치 증가 
+			GET_GAMEINTERFACE->Add_Stat_Normal(STAT_NORMAL::STAT_GAUGE_STAMINA, +100.f * fTimeDelta);
+
+		if (KEY_HOLD(KEY::N)) // 체력바 표시 수치 감소
+			GET_GAMEINTERFACE->Add_Stat_Normal(STAT_NORMAL::STAT_GAUGE_REGION, -100.f * fTimeDelta);
+		else if (KEY_HOLD(KEY::M)) // 체력바 표시 수치 증가 
+			GET_GAMEINTERFACE->Add_Stat_Normal(STAT_NORMAL::STAT_GAUGE_REGION, +100.f * fTimeDelta);
 	}
 
 
@@ -368,9 +370,7 @@ void CUIManager::UIControl_Loading(_float fTimeDelta)
 
 void CUIManager::UIControl_Play(_float fTimeDelta)
 {
-	m_pTestData->fHP_Now = GET_GAMEINTERFACE->Get_NowStat_Normal(STAT_NORMAL::STAT_GAUGE_HP);
-	m_pUIPage_Play->SetRatio_HPBarMax(m_pTestData->fMax_HP_Now / m_pTestData->fMax_HP_Limit);
-	m_pUIPage_Play->SetRatio_HPBarFill(m_pTestData->fHP_Now / m_pTestData->fMax_HP_Limit);
+	
 }
 
 void CUIManager::UIControl_Inven(_float fTimeDelta)

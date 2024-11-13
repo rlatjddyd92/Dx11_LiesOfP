@@ -20,6 +20,16 @@ void CPlayer_Stat_Manager::Add_Stat_Normal(STAT_NORMAL eIndex, _float fValue)
 	m_vecStat_Normal[_int(eIndex)]->fStat_Now = min(m_vecStat_Normal[_int(eIndex)]->fStat_Now, m_vecStat_Normal[_int(eIndex)]->fStat_Max);
 }
 
+void CPlayer_Stat_Manager::Add_StatMax_Normal(STAT_NORMAL eIndex, _float fValue)
+{
+	m_vecStat_Normal[_int(eIndex)]->fStat_Max += fValue;
+
+	m_vecStat_Normal[_int(eIndex)]->fStat_Max = max(m_vecStat_Normal[_int(eIndex)]->fStat_Max, 0.f);
+	m_vecStat_Normal[_int(eIndex)]->fStat_Max = min(m_vecStat_Normal[_int(eIndex)]->fStat_Max, m_vecStat_Normal[_int(eIndex)]->fStat_Max_Limit);
+
+	m_vecStat_Normal[_int(eIndex)]->fStat_Now = min(m_vecStat_Normal[_int(eIndex)]->fStat_Max, m_vecStat_Normal[_int(eIndex)]->fStat_Now);
+}
+
 HRESULT CPlayer_Stat_Manager::Initialize_Stat()
 {
 	vector<vector<_wstring>> vecBuffer;

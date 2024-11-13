@@ -92,7 +92,7 @@ public: // 외부에서 매니저 접근
 
 	// 정보 수정 
 	void Add_Stat_Normal(STAT_NORMAL eIndex, _float fValue) { return m_pPlayer_Stat_Manager->Add_Stat_Normal(eIndex, fValue); }
-
+	void Add_StatMax_Normal(STAT_NORMAL eIndex, _float fValue) { return m_pPlayer_Stat_Manager->Add_StatMax_Normal(eIndex, fValue); }
 
 #pragma endregion
 

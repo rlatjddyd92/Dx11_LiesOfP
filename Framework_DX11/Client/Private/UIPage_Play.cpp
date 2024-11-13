@@ -61,7 +61,48 @@ void CUIPage_Play::Update(_float fTimeDelta)
 
 void CUIPage_Play::Late_Update(_float fTimeDelta)
 {
+	const CPlayer_Stat_Manager::STAT& tHP = GET_GAMEINTERFACE->Get_StatInfo_Normal(STAT_NORMAL::STAT_GAUGE_HP);
+	const CPlayer_Stat_Manager::STAT& tStamina = GET_GAMEINTERFACE->Get_StatInfo_Normal(STAT_NORMAL::STAT_GAUGE_STAMINA);
+	const CPlayer_Stat_Manager::STAT& tRegion = GET_GAMEINTERFACE->Get_StatInfo_Normal(STAT_NORMAL::STAT_GAUGE_REGION);
+
+	m_HP_Gauge_Frame->fRatio = (_float)tHP.fStat_Max / (_float)tHP.fStat_Max_Limit;
+	m_HP_Gauge_Fill->fRatio = (_float)tHP.fStat_Now / (_float)tHP.fStat_Max_Limit;
+
+	m_Stamina_Gauge_Frame->fRatio = (_float)tStamina.fStat_Max / (_float)tStamina.fStat_Max_Limit;
+	m_Stamina_Gauge_Fill->fRatio = (_float)tStamina.fStat_Now / (_float)tStamina.fStat_Max_Limit;
+
+	_int iSP_Cell_Num = (_int)((_float)tRegion.fStat_Max / (_float)tRegion.fStat_Interval);
+	_int iSP_Cell_Filled = (_int)((_float)tRegion.fStat_Now / (_float)tRegion.fStat_Interval);
+	_float fSP_Ratio = (tRegion.fStat_Now - ((_float)iSP_Cell_Filled * tRegion.fStat_Interval)) / (_float)tRegion.fStat_Interval;
+
+	for (_int i = 0; i < 5; ++i)
+	{
+		if (i < iSP_Cell_Num)
+		{
+			m_vecSpecial_Gauge_Frame[i]->fRatio = 1.f;
+			m_vecSpecial_Gauge_Frame[i]->bRender = true;
+		}
+		else
+		{
+			m_vecSpecial_Gauge_Frame[i]->fRatio = 0.f;
+			m_vecSpecial_Gauge_Frame[i]->bRender = false;
+		}
+	}
+		
+
+	for (_int i = 0; i < 5; ++i)
+	{
+		if (i < iSP_Cell_Filled)
+			m_vecSpecial_Gauge_Fill[i]->fRatio = 1.f;
+		else if (i == iSP_Cell_Filled)
+			m_vecSpecial_Gauge_Fill[i]->fRatio = fSP_Ratio;
+		else
+			m_vecSpecial_Gauge_Fill[i]->fRatio = 0.f;
+	}
 	
+
+
+
 	__super::UpdatePart_ByControl(m_HP_Gauge_Frame);
 	__super::UpdatePart_ByControl(m_HP_Gauge_Fill);
 
