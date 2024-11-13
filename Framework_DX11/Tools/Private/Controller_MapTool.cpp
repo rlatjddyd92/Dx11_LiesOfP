@@ -411,6 +411,88 @@ void CController_MapTool::Select_Map_Model()
 	}
 }
 
+void CController_MapTool::Select_Interact_Model()
+{
+	//내용물 초기화 (capacity는 그냥 냅둠)
+	for (auto& filename : m_FileNames) {
+		Safe_Delete_Array(filename);
+	}
+	m_FileNames.clear();
+
+	char szFolderFolderFullPath[128] = "../Bin/ModelData/NonAnim/InteractObj/";    // 상대 경로
+	char szFolderPathReset[128] = "../Bin/ModelData/NonAnim/InteractObj/";
+	char szFolderPath[128] = "../Bin/ModelData/NonAnim/InteractObj/";
+	char szFolderHandlePath[128] = "";
+	char szFolderName[128] = "";
+	char szDat[128] = "*.dat";
+
+	strcat_s(szFolderFolderFullPath, szFolderName);
+	strcat_s(szFolderPathReset, szFolderName);
+
+	//dat파일 구분용 
+	strcpy_s(szFolderHandlePath, szFolderFolderFullPath);
+	strcat_s(szFolderHandlePath, szDat); //경로에서 .dat만 검색
+
+	_finddata_t fd;
+	intptr_t handle = _findfirst(szFolderHandlePath, &fd);
+
+	if (handle == -1)
+		return;
+
+
+	int iResult = 0;
+	m_iListCount = 0;
+	while (iResult != -1)
+	{
+		m_iListCount++;
+
+		strcpy_s(szFolderPath, szFolderPathReset);
+		strcat_s(szFolderPath, fd.name);
+
+		_char szFileName[MAX_PATH] = "";
+		_char szExt[MAX_PATH] = "";
+		_splitpath_s(szFolderPath, nullptr, 0, nullptr, 0, szFileName, MAX_PATH, szExt, MAX_PATH);
+
+		if (strcmp(szExt, ".dat"))
+		{
+			iResult = _findnext(handle, &fd);
+			continue;
+		}
+
+		//_strup : 문자열 내용을 복사해 그 주소를 저장-> 주소에 따라 문자열이 바뀌는걸 막아 모두 동일해지는걸 막음
+		m_FileNames.push_back(_strdup(szFileName));
+
+		//_findnext : <io.h>에서 제공하며 다음 위치의 파일을 찾는 함수, 더이상 없다면 -1을 리턴
+		iResult = _findnext(handle, &fd);
+	}
+
+	static int item_selected_idx = 0; // Here we store our selected data as an index.
+	static bool item_highlight = false;
+	int item_highlighted_idx = -1; // Here we store our highlighted data as an index.
+
+	////////////////////////
+
+	if (ImGui::BeginListBox("Interacts"))
+	{
+		for (int n = 0; n < m_iListCount; n++)
+		{
+			const bool is_selected = (item_selected_idx == n);
+			if (ImGui::Selectable(m_FileNames[n], is_selected))
+				item_selected_idx = n;
+
+			if (item_highlight && ImGui::IsItemHovered())
+				item_highlighted_idx = n;
+
+			// Set the initial focus when opening the combo (scrolling + keyboard navigation focus)
+			if (is_selected)
+				ImGui::SetItemDefaultFocus();
+
+			m_iListSelectNum = item_selected_idx;
+		}
+		ImGui::EndListBox();
+	}
+}
+
 void CController_MapTool::Show_List(_uint iFolder)
 {
 	//내용물 초기화 (capacity는 그냥 냅둠)
@@ -694,8 +776,17 @@ void CController_MapTool::LoadMap()
 				nonDesc.isInstance = pDesc.isInstance;
 				nonDesc.iRenderGroupID = pDesc.iID;
 				nonDesc.bShadow = pDesc.bShadow;
-				if (FAILED(m_pGameInstance->Add_CloneObject_ToLayer(LEVEL_TOOL, TEXT("Layer_Map"), TEXT("Prototype_GameObject_NonAnim"), &nonDesc)))
-					return;
+
+				if (strLayerTag == "Layer_InteractObject")
+				{
+					if (FAILED(m_pGameInstance->Add_CloneObject_ToLayer(LEVEL_TOOL, TEXT("Layer_InteractObject"), TEXT("Prototype_GameObject_NonAnim"), &nonDesc)))
+						return;
+				}
+				else
+				{
+					if (FAILED(m_pGameInstance->Add_CloneObject_ToLayer(LEVEL_TOOL, TEXT("Layer_Map"), TEXT("Prototype_GameObject_NonAnim"), &nonDesc)))
+						return;
+				}
 			}
 			else
 			{
@@ -883,6 +974,7 @@ void CController_MapTool::Map_Menu()
 		if (ImGui::BeginTabItem("Object"))
 		{
 			strLayerName = "Layer_InteractObject";
+			Select_Interact_Model();
 			ImGui::EndTabItem();
 		}
 
