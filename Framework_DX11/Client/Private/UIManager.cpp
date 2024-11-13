@@ -204,7 +204,10 @@ void CUIManager::UIControl_Test(_float fTimeDelta)
 
 	if (m_bTestPageOpen)
 	{
-		_float3 fHP = { GET_GAMEINTERFACE->Get_StatInfo_Normal(STAT_NORMAL::STAT_GAUGE_HP).fStat_Now , GET_GAMEINTERFACE->Get_StatInfo_Normal(STAT_NORMAL::STAT_GAUGE_HP).fStat_Max, GET_GAMEINTERFACE->Get_StatInfo_Normal(STAT_NORMAL::STAT_GAUGE_HP).fStat_Max_Limit };
+		
+
+
+		/*_float3 fHP = { GET_GAMEINTERFACE->Get_StatInfo_Normal(STAT_NORMAL::STAT_GAUGE_HP).fStat_Now , GET_GAMEINTERFACE->Get_StatInfo_Normal(STAT_NORMAL::STAT_GAUGE_HP).fStat_Max, GET_GAMEINTERFACE->Get_StatInfo_Normal(STAT_NORMAL::STAT_GAUGE_HP).fStat_Max_Limit };
 		_float3 fST = { GET_GAMEINTERFACE->Get_StatInfo_Normal(STAT_NORMAL::STAT_GAUGE_STAMINA).fStat_Now , GET_GAMEINTERFACE->Get_StatInfo_Normal(STAT_NORMAL::STAT_GAUGE_STAMINA).fStat_Max, GET_GAMEINTERFACE->Get_StatInfo_Normal(STAT_NORMAL::STAT_GAUGE_STAMINA).fStat_Max_Limit };
 		_float3 fRE = { GET_GAMEINTERFACE->Get_StatInfo_Normal(STAT_NORMAL::STAT_GAUGE_REGION).fStat_Now , GET_GAMEINTERFACE->Get_StatInfo_Normal(STAT_NORMAL::STAT_GAUGE_REGION).fStat_Max, GET_GAMEINTERFACE->Get_StatInfo_Normal(STAT_NORMAL::STAT_GAUGE_REGION).fStat_Max_Limit };
 		_float3 fWE = { GET_GAMEINTERFACE->Get_StatInfo_Normal(STAT_NORMAL::STAT_GAUGE_WEIGHT).fStat_Now , GET_GAMEINTERFACE->Get_StatInfo_Normal(STAT_NORMAL::STAT_GAUGE_WEIGHT).fStat_Max, GET_GAMEINTERFACE->Get_StatInfo_Normal(STAT_NORMAL::STAT_GAUGE_WEIGHT).fStat_Max_Limit };
@@ -219,15 +222,15 @@ void CUIManager::UIControl_Test(_float fTimeDelta)
 		ShowTestPage(
 			TEXT("HP(현재/제한/최대치)"), TEST_PAGE_VALUE_TYPE::TYPE_FLOAT3, &fHP,
 			TEXT("스태미나(현재/제한/최대치)"), TEST_PAGE_VALUE_TYPE::TYPE_FLOAT3, &fST,
-			TEXT("HP(현재/제한/최대치)"), TEST_PAGE_VALUE_TYPE::TYPE_FLOAT3, &fRE,
-			TEXT("HP(현재/제한/최대치)"), TEST_PAGE_VALUE_TYPE::TYPE_FLOAT3, &fWE,
-			TEXT("HP(현재/제한/최대치)"), TEST_PAGE_VALUE_TYPE::TYPE_FLOAT3, &fGA,
-			TEXT("HP(현재/제한/최대치)"), TEST_PAGE_VALUE_TYPE::TYPE_INT, &iHP,
-			TEXT("HP(현재/제한/최대치)"), TEST_PAGE_VALUE_TYPE::TYPE_INT, &iST,
-			TEXT("HP(현재/제한/최대치)"), TEST_PAGE_VALUE_TYPE::TYPE_INT, &iWE,
-			TEXT("HP(현재/제한/최대치)"), TEST_PAGE_VALUE_TYPE::TYPE_INT, &iPO,
-			TEXT("HP(현재/제한/최대치)"), TEST_PAGE_VALUE_TYPE::TYPE_INT, &iSK
-		);
+			TEXT("리전(현재/제한/최대치)"), TEST_PAGE_VALUE_TYPE::TYPE_FLOAT3, &fRE,
+			TEXT("무게(현재/제한/최대치)"), TEST_PAGE_VALUE_TYPE::TYPE_FLOAT3, &fWE,
+			TEXT("가드리게인(현재/제한/최대치)"), TEST_PAGE_VALUE_TYPE::TYPE_FLOAT3, &fGA,
+			TEXT("신체 스탯"), TEST_PAGE_VALUE_TYPE::TYPE_INT, &iHP,
+			TEXT("지구력 스탯"), TEST_PAGE_VALUE_TYPE::TYPE_INT, &iST,
+			TEXT("무게 스탯"), TEST_PAGE_VALUE_TYPE::TYPE_INT, &iWE,
+			TEXT("힘 스탯"), TEST_PAGE_VALUE_TYPE::TYPE_INT, &iPO,
+			TEXT("기술 스탯"), TEST_PAGE_VALUE_TYPE::TYPE_INT, &iSK
+		);*/
 
 		if ((KEY_TAP(KEY::LBUTTON)) && (!m_bTestPageMove))
 		{
@@ -323,7 +326,8 @@ void CUIManager::SwicthPage(UIPAGE eNextPage)
 
 void CUIManager::ShowTestPage(_wstring DataNameA, TEST_PAGE_VALUE_TYPE eTypeA, const void* ValueA, _wstring DataNameB, TEST_PAGE_VALUE_TYPE eTypeB, const void* ValueB, _wstring DataNameC, TEST_PAGE_VALUE_TYPE eTypeC, const void* ValueC, _wstring DataNameD, TEST_PAGE_VALUE_TYPE eTypeD, const void* ValueD, _wstring DataNameE, TEST_PAGE_VALUE_TYPE eTypeE, const void* ValueE, _wstring DataNameF, TEST_PAGE_VALUE_TYPE eTypeF, const void* ValueF, _wstring DataNameG, TEST_PAGE_VALUE_TYPE eTypeG, const void* ValueG, _wstring DataNameH, TEST_PAGE_VALUE_TYPE eTypeH, const void* ValueH, _wstring DataNameI, TEST_PAGE_VALUE_TYPE eTypeI, const void* ValueI, _wstring DataNameJ, TEST_PAGE_VALUE_TYPE eTypeJ, const void* ValueJ)
 {
-	m_bTestPageOpen = true;
+	if (!m_bTestPageOpen)
+		return;
 
 	vector<_wstring> vecName;
 	vector<_wstring> vecValue;

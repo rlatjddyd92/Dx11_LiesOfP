@@ -75,6 +75,14 @@ void CMainApp::Update(_float fTimeDelta)
 	// 정상 작동 확인 시 까지 주석처리 
 	// GET_GAMEINTERFACE->Update_GameInterface(fTimeDelta);
 	GET_GAMEINTERFACE->Update_GameInterface(fTimeDelta);
+
+	m_fTime_After_SystemStart += fTimeDelta;
+
+	
+	GET_GAMEINTERFACE->ShowTestPage(
+		TEXT("[테스트] 게임 시작 후 경과시간"), TEST_PAGE_VALUE_TYPE::TYPE_FLOAT, &m_fTime_After_SystemStart,
+		TEXT("[테스트] fTimeDelta"), TEST_PAGE_VALUE_TYPE::TYPE_FLOAT, &fTimeDelta);
+
 //#ifdef _DEBUG
 	m_fTimeAcc += fTimeDelta;
 //#endif
