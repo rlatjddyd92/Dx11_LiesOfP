@@ -44,6 +44,10 @@ HRESULT CUIRender_Client::Initialize_Prototype()
 	/*if (FAILED(Ready_Texture_ItemIcon()))
 		return E_FAIL;*/
 
+	m_vecTestPageInfo.resize(_int(TEST_PAGE_FUNCTION::FUNCTION_END));;
+	m_vecTestPage_Pos.resize(_int(TEST_PAGE_FUNCTION::FUNCTION_END));;
+	m_vecTestPage_Size.resize(_int(TEST_PAGE_FUNCTION::FUNCTION_END));;
+
 	return S_OK;
 }
 
@@ -186,8 +190,8 @@ HRESULT CUIRender_Client::Render_UI(vector<CUIPage*>& rPage)
 		}
 	}
 
-	if (!m_vecTestPageInfo.empty())
-		Render_TestPage_Info();
+
+	Render_TestPage_Info();
 
 	return S_OK;
 }
@@ -232,13 +236,16 @@ HRESULT CUIRender_Client::Render_TestFont(_bool bIsKorean)
 }
 
 void CUIRender_Client::Input_TestPageInfo(
+	TEST_PAGE_FUNCTION eFunction,
 	_float2 fPosition,
 	_float2 fSize,
 	vector<_wstring>& vecName,
 	vector<_wstring>& vecValue)
 {
-	m_fTestPage_Pos = fPosition;
-	m_fTestPage_Size = fSize;
+	_int iFunc = _int(eFunction);
+
+	m_vecTestPage_Pos[iFunc] = fPosition;
+	m_vecTestPage_Size[iFunc] = fSize;
 
 	for (_int i = 0; i < vecName.size(); ++i)
 	{
@@ -249,7 +256,7 @@ void CUIRender_Client::Input_TestPageInfo(
 		memcpy(pValue, vecValue[i].c_str(), sizeof(_tchar) * (vecValue[i].size() + 1));
 		
 		
-		m_vecTestPageInfo.push_back({ pName, pValue });
+		m_vecTestPageInfo[iFunc].push_back({ pName, pValue });
 	}
 }
 
@@ -359,66 +366,101 @@ HRESULT CUIRender_Client::Ready_Texture_ItemIcon()
 
 HRESULT CUIRender_Client::Render_TestPage_Info()
 {
-	_float fX = m_fTestPage_Pos.x - (m_fTestPage_Size.x * 0.5f) + 10.f;
-	_float fY = m_fTestPage_Pos.y - (m_fTestPage_Size.y * 0.5f) + 10.f;
-	_float fCol_Interval = 200.f;
-	_float fRow_Interval = 25.f;
+	for (_int i = 0; i < _int(TEST_PAGE_FUNCTION::FUNCTION_END); ++i)
+	{
+		if (m_vecTestPageInfo[i].empty())
+			continue;
 
-	if (m_vecTextureInfo_UIPart[69]->Texture == nullptr)
-		if (FAILED(Make_Texture(69)))
+		_float fX = m_vecTestPage_Pos[i].x - (m_vecTestPage_Size[i].x * 0.5f) + 10.f;
+		_float fY = m_vecTestPage_Pos[i].y - (m_vecTestPage_Size[i].y * 0.5f) + 10.f;
+		_float fCol_Interval = 200.f;
+		_float fRow_Interval = 25.f;
+
+		if (m_vecTextureInfo_UIPart[69]->Texture == nullptr)
+			if (FAILED(Make_Texture(69)))
+				return E_FAIL;
+
+		m_pTransformCom->Set_WorldMatrix(XMMatrixIdentity());
+
+		m_pTransformCom->Set_Scaled(m_vecTestPage_Size[i].x, m_vecTestPage_Size[i].y, 1.f);
+
+		m_pTransformCom->Set_State(CTransform::STATE_POSITION,
+			XMVectorSet(m_vecTestPage_Pos[i].x - m_fViewWidth * 0.5f, -m_vecTestPage_Pos[i].y + m_fViewHeight * 0.5f, 0.f, 1.f));
+
+		if (FAILED(m_pTransformCom->Bind_ShaderResource(m_pShaderCom, "g_WorldMatrix")))
 			return E_FAIL;
 
-	m_pTransformCom->Set_WorldMatrix(XMMatrixIdentity());
+		if (FAILED(m_pShaderCom->Bind_Matrix("g_ViewMatrix", &m_ViewMatrix)))
+			return E_FAIL;
 
-	m_pTransformCom->Set_Scaled(m_fTestPage_Size.x, m_fTestPage_Size.y, 1.f);
+		if (FAILED(m_pShaderCom->Bind_Matrix("g_ProjMatrix", &m_ProjMatrix)))
+			return E_FAIL;
 
-	m_pTransformCom->Set_State(CTransform::STATE_POSITION,
-		XMVectorSet(m_fTestPage_Pos.x - m_fViewWidth * 0.5f, -m_fTestPage_Pos.y + m_fViewHeight * 0.5f, 0.f, 1.f));
+		if (FAILED(m_vecTextureInfo_UIPart[69]->Texture->Bind_ShadeResource(m_pShaderCom, "g_Texture", 0)))
+			return E_FAIL;
 
-	if (FAILED(m_pTransformCom->Bind_ShaderResource(m_pShaderCom, "g_WorldMatrix")))
-		return E_FAIL;
+		_float4 fColor = { -1.f,-1.f,-1.f,-1.f };
 
-	if (FAILED(m_pShaderCom->Bind_Matrix("g_ViewMatrix", &m_ViewMatrix)))
-		return E_FAIL;
+		if (FAILED(m_pShaderCom->Bind_RawValue("g_Color", &fColor, sizeof(_float4))))
+			return E_FAIL;
 
-	if (FAILED(m_pShaderCom->Bind_Matrix("g_ProjMatrix", &m_ProjMatrix)))
-		return E_FAIL;
+		if (FAILED(m_pShaderCom->Begin(0)))
+			return E_FAIL;
 
-	if (FAILED(m_vecTextureInfo_UIPart[69]->Texture->Bind_ShadeResource(m_pShaderCom, "g_Texture", 0)))
-		return E_FAIL;
+		if (FAILED(m_pVIBufferCom->Bind_Buffers()))
+			return E_FAIL;
 
-	_float4 fColor = { -1.f,-1.f,-1.f,-1.f };
+		if (FAILED(m_pVIBufferCom->Render()))
+			return E_FAIL;
 
-	if (FAILED(m_pShaderCom->Bind_RawValue("g_Color", &fColor, sizeof(_float4))))
-		return E_FAIL;
+		switch (i)
+		{
+		case _int(TEST_PAGE_FUNCTION::FUNCTION_TEAMJANG):
+			m_pGameInstance->Render_Text(m_vecFont_tchar[7], TEXT("[팀장용 페이지] 열기/닫기 : LShift + F3, 창의 아무데나 눌러서 드래그하면 창 이동"), { fX,fY,0.f,0.f }, { 1.f,1.f,1.f,1.f });
+			break;
+		case _int(TEST_PAGE_FUNCTION::FUNCTION_ANIM):
+			m_pGameInstance->Render_Text(m_vecFont_tchar[7], TEXT("[애니메이션 페이지] 열기/닫기 : LShift + F4, 창의 아무데나 눌러서 드래그하면 창 이동"), { fX,fY,0.f,0.f }, { 1.f,1.f,1.f,1.f });
+			break;
+		case _int(TEST_PAGE_FUNCTION::FUNCTION_EFFECT):
+			m_pGameInstance->Render_Text(m_vecFont_tchar[7], TEXT("[이펙트 페이지] 열기/닫기 : LShift + F5, 창의 아무데나 눌러서 드래그하면 창 이동"), { fX,fY,0.f,0.f }, { 1.f,1.f,1.f,1.f });
+			break;
+		case _int(TEST_PAGE_FUNCTION::FUNCTION_MAP):
+			m_pGameInstance->Render_Text(m_vecFont_tchar[7], TEXT("[맵 페이지] 열기/닫기 : LShift + F6, 창의 아무데나 눌러서 드래그하면 창 이동"), { fX,fY,0.f,0.f }, { 1.f,1.f,1.f,1.f });
+			break;
+		case _int(TEST_PAGE_FUNCTION::FUNCTION_PLAYER_STAT):
+			m_pGameInstance->Render_Text(m_vecFont_tchar[7], TEXT("[스탯 페이지] 열기/닫기 : LShift + F7, 창의 아무데나 눌러서 드래그하면 창 이동"), { fX,fY,0.f,0.f }, { 1.f,1.f,1.f,1.f });
+			break;
+		case _int(TEST_PAGE_FUNCTION::FUNCTION_ITEM):
+			m_pGameInstance->Render_Text(m_vecFont_tchar[7], TEXT("[아이템 페이지] 열기/닫기 : LShift + F8, 창의 아무데나 눌러서 드래그하면 창 이동"), { fX,fY,0.f,0.f }, { 1.f,1.f,1.f,1.f });
+			break;
+		default:
+			break;
+		}
 
-	if (FAILED(m_pShaderCom->Begin(0)))
-		return E_FAIL;
 
-	if (FAILED(m_pVIBufferCom->Bind_Buffers()))
-		return E_FAIL;
 
-	if (FAILED(m_pVIBufferCom->Render()))
-		return E_FAIL;
 
-	m_pGameInstance->Render_Text(m_vecFont_tchar[7], TEXT("열기/닫기 : F3, 창의 아무데나 눌러서 드래그하면 창 이동"), {fX,fY,0.f,0.f}, {1.f,1.f,1.f,1.f});
-	fY += fRow_Interval;
-
-	for (auto& iter : m_vecTestPageInfo)
-	{
-		m_pGameInstance->Render_Text(m_vecFont_tchar[0], iter[0], {fX,fY,0.f,0.f}, {1.f,1.f,1.f,1.f});
-		m_pGameInstance->Render_Text(m_vecFont_tchar[0], iter[1], {fX + fCol_Interval,fY,0.f,0.f}, {1.f,1.f,1.f,1.f});
+		
 		fY += fRow_Interval;
+
+		for (auto& iter : m_vecTestPageInfo[i])
+		{
+			m_pGameInstance->Render_Text(m_vecFont_tchar[0], iter[0], { fX,fY,0.f,0.f }, { 1.f,1.f,1.f,1.f });
+			m_pGameInstance->Render_Text(m_vecFont_tchar[0], iter[1], { fX + fCol_Interval,fY,0.f,0.f }, { 1.f,1.f,1.f,1.f });
+			fY += fRow_Interval;
+		}
+
+		RemoveTestPageInfo(TEST_PAGE_FUNCTION(i));
 	}
 
-	RemoveTestPageInfo();
+	
 
 	return S_OK;
 }
 
-void CUIRender_Client::RemoveTestPageInfo()
+void CUIRender_Client::RemoveTestPageInfo(TEST_PAGE_FUNCTION eFunction)
 {
-	for (auto& iter : m_vecTestPageInfo)
+	for (auto& iter : m_vecTestPageInfo[_int(eFunction)])
 	{
 		for (auto& iterText : iter)
 			Safe_Delete_Array(iterText);
@@ -426,7 +468,7 @@ void CUIRender_Client::RemoveTestPageInfo()
 		iter.clear();
 	}
 
-	m_vecTestPageInfo.clear();
+	m_vecTestPageInfo[_int(eFunction)].clear();
 }
 
 CUIRender_Client* CUIRender_Client::Create(ID3D11Device* pDevice, ID3D11DeviceContext* pContext)
@@ -485,7 +527,11 @@ void CUIRender_Client::Free()
 
 	m_vecFont_tchar.clear();
 
-	RemoveTestPageInfo();
+	for (_int i = 0; i < _int(TEST_PAGE_FUNCTION::FUNCTION_END); ++i)
+		RemoveTestPageInfo(TEST_PAGE_FUNCTION(i));
 
+	m_vecTestPageInfo.clear();
+	m_vecTestPage_Pos.clear();
+	m_vecTestPage_Size.clear();
 	Safe_Release(m_pVIBufferCom);
 }

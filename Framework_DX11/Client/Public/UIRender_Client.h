@@ -48,6 +48,7 @@ public:
 	HRESULT Render_TestFont(_bool bIsKorean);
 
 	void Input_TestPageInfo(
+		TEST_PAGE_FUNCTION eFunction,
 		_float2 fPosition,
 		_float2 fSize,
 		vector<_wstring>& vecName,
@@ -67,15 +68,15 @@ private:
 	HRESULT Ready_Texture_ItemIcon();
 
 	HRESULT Render_TestPage_Info();
-	void RemoveTestPageInfo();
+	void RemoveTestPageInfo(TEST_PAGE_FUNCTION eFunction);
 
 	vector<UTEXTURE*> m_vecTextureInfo_UIPart;
 	vector<UTEXTURE*> m_vecTextureInfo_ItemIcon;
 	vector<_tchar*> m_vecFont_tchar;
 
-	vector<vector<_tchar*>> m_vecTestPageInfo;
-	_float2 m_fTestPage_Pos = { 500.f,500.f };
-	_float2 m_fTestPage_Size = { 100.f,100.f };
+	vector<vector<vector<_tchar*>>> m_vecTestPageInfo;
+	vector<_float2> m_vecTestPage_Pos;
+	vector<_float2> m_vecTestPage_Size;
 
 public:
 	static CUIRender_Client* Create(ID3D11Device* pDevice, ID3D11DeviceContext* pContext);

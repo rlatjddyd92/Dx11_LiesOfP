@@ -92,7 +92,7 @@ public:
 	// 위 함수와 관련된 것은 테스트용 임시 내용을 다루므로 편의성을 중시한 구조로 만들 것임 따라서 정식 내용은 넣으면 안됨 
 
 	// TestPage 
-	void ShowTestPage(
+	void ShowTestPage(TEST_PAGE_FUNCTION eFunction,
 		_wstring DataNameA, TEST_PAGE_VALUE_TYPE eTypeA, const void* ValueA,
 		_wstring DataNameB = {}, TEST_PAGE_VALUE_TYPE eTypeB = TEST_PAGE_VALUE_TYPE::TYPE_END, const void* ValueB = nullptr,
 		_wstring DataNameC = {}, TEST_PAGE_VALUE_TYPE eTypeC = TEST_PAGE_VALUE_TYPE::TYPE_END, const void* ValueC = nullptr,
@@ -113,6 +113,8 @@ private:
 	HRESULT Load_UIDataFile();
 	HRESULT Make_UIPage(_int iIndex);
 	HRESULT Load_UIDataFile_Part(HANDLE handle, DWORD* dword, _int iIndex);
+
+	void Setting_TestPage();
 
 	void InputTestPageInfo(vector<_wstring>* pName, vector<_wstring>* pValue, _wstring DataNameA, TEST_PAGE_VALUE_TYPE eTypeA, const void* ValueA);
 
@@ -158,12 +160,12 @@ private:
 	// GameInterface 싱글톤으로 아무나 접근 및 수정이 가능함 
 	// 정식 데이터는 이렇게 접근/수정 불가능하도록 만들 예정
 
-	_float2 m_fTestPage_Pos = { 500.f,500.f };
-	_float2 m_fTestPage_Size = { 500.f,300.f };
-	_float2 m_fTestPage_ClickPos = { 0.f,0.f };
+	vector<_float2> m_vecTestPage_Pos;
+	vector<_float2> m_vecTestPage_Size;
+	vector<_float2> m_vecTestPage_ClickPos;
 
-	_bool m_bTestPageOpen = false;
-	_bool m_bTestPageMove = false;
+	vector<_bool> m_vecTestPageOpen;
+	vector<_bool> m_vecTestPageMove;
 
 
 
