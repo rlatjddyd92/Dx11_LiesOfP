@@ -111,6 +111,10 @@ void CController_MapTool::Pick_Object()
 	if (!ImGui::CollapsingHeader("Object Inform"))
 		return;
 
+	static _bool isPicking = false;
+	ImGui::Checkbox("Picking", &isPicking);
+	m_pGameInstance->Set_Is_Picking(isPicking);
+
 	//오브젝트 피킹 작동
 	if (m_pGameInstance->Get_KeyState(RBUTTON) == AWAY)
 	{
