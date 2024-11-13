@@ -53,6 +53,14 @@ void CPlayer::Priority_Update(_float fTimeDelta)
 	{
 		pEffect->Priority_Update(fTimeDelta);
 	}
+	//업데이트에서 생성하니 업데이트 이전에 비우기
+	for (auto& pEffect : m_EffectList)
+	{
+		pEffect->Late_Update(fTimeDelta);
+	}
+
+	m_EffectList.clear();
+	m_EvKeyList.clear();
 }
 
 void CPlayer::Update(_float fTimeDelta)
@@ -85,6 +93,7 @@ void CPlayer::Update(_float fTimeDelta)
 
 	for (auto& EvKey : m_EvKeyList)
 	{
+		CEffect_Container* pEffectCon;
 		if (EvKey.eEvent_type == EVENT_KEYFRAME::ET_ONCE)
 		{
 			auto Effect = m_Effects.find(EvKey.iEffectNum);
@@ -94,15 +103,23 @@ void CPlayer::Update(_float fTimeDelta)
 				EffectDesc.fRotationPerSec = XMConvertToRadians(90.f);
 				EffectDesc.fSpeedPerSec = 1.f;
 				EffectDesc.iLevelIndex = LEVEL_GAMEPLAY;
+				EffectDesc.vScale = _Vec3{ 0.5f, 0.5f, 0.5f };
+				EffectDesc.vPos = _Vec3{ 0, 0, 0 };
+				EffectDesc.vRotation = _Vec3{ 0, 0, 0 };
 				EffectDesc.pParentMatrix = m_pTransformCom->Get_WorldMatrix_Ptr();
 				EffectDesc.pSocketMatrix = (_Matrix*)m_pModelCom->Get_BoneCombindTransformationMatrix_Ptr(EvKey.iBoneIndex);
 
 				CEffect_Manager::Get_Instance()->Clone_Effect(CEffect_Manager::EFFECT_POWER_HIT, &EffectDesc);
+				m_Effects.emplace(EvKey.iEffectNum, pEffectCon);
 			}
+			else
+			{
+				pEffectCon = Effect->second;
+			}
+			m_EffectList.push_back(pEffectCon);
 		}
 		else if (EvKey.eEvent_type == EVENT_KEYFRAME::ET_REPET)
 		{
-			CEffect_Container* pEffectCon;
 			auto Effect = m_Effects.find(EvKey.iEffectNum);
 			if (Effect == m_Effects.end())
 			{
@@ -110,7 +127,7 @@ void CPlayer::Update(_float fTimeDelta)
 				EffectDesc.fRotationPerSec = XMConvertToRadians(90.f);
 				EffectDesc.fSpeedPerSec = 1.f;
 				EffectDesc.iLevelIndex = LEVEL_GAMEPLAY;
-				EffectDesc.vScale = _Vec3{1, 1, 1};
+				EffectDesc.vScale = _Vec3{0.5f, 0.5f, 0.5f};
 				EffectDesc.vPos = _Vec3{ 0, 0, 0 };
 				EffectDesc.vRotation = _Vec3{ 0, 0, 0 };
 				EffectDesc.pParentMatrix = m_pTransformCom->Get_WorldMatrix_Ptr();
@@ -151,13 +168,6 @@ void CPlayer::Late_Update(_float fTimeDelta)
 	m_pGameInstance->Add_DebugObject(m_pNavigationCom);
 #endif
 
-	for (auto& pEffect : m_EffectList)
-	{
-		pEffect->Late_Update(fTimeDelta);
-	}
-
-	m_EffectList.clear();
-	m_EvKeyList.clear();
 }
 
 HRESULT CPlayer::Render()
