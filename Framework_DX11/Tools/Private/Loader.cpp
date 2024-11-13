@@ -20,6 +20,7 @@
 #include "Texture_Effect.h"
 #include "Mesh_Effect.h"
 #include "Trail_Effect_OP.h"
+#include "Trail_Effect_TP.h"
 
 #include "Effect_Container.h"
 #include "Controller_EffectTool.h"
@@ -258,6 +259,8 @@ HRESULT CLoader::Ready_Resources_For_LogoLevel()
 	return S_OK;
 }
 
+
+
 HRESULT CLoader::Ready_Resources_For_ToolLevel()
 {
 	lstrcpy(m_szLoadingText, TEXT("텍스쳐를 로딩중입니다."));
@@ -356,9 +359,14 @@ HRESULT CLoader::Ready_Resources_For_ToolLevel()
 		CTexture::Create(m_pDevice, m_pContext, TEXT("../Bin/Resources/Textures/Effect/T_SubUV_Thunder_01_4x1_SC_GDH.dds"), 1))))
 		return E_FAIL;
 	CController_EffectTool::Get_Instance()->Add_Diffuse_ProtytypeTag(TEXT("Prototype_Component_Texture_Thunder_4x1"));
+	
+	/* For. Prototype_Component_Texture_Test_Trail */
+	if (FAILED(m_pGameInstance->Add_Prototype(LEVEL_TOOL, TEXT("Prototype_Component_Texture_Test_Trail"),
+		CTexture::Create(m_pDevice, m_pContext, TEXT("../Bin/Resources/Textures/Effect/T_TrailGrad_01_C_RSW.dds"), 1))))
+		return E_FAIL;
+	CController_EffectTool::Get_Instance()->Add_Diffuse_ProtytypeTag(TEXT("Prototype_Component_Texture_Test_Trail"));
 
 #pragma endregion
-
 #pragma region
 	/* For. Prototype_Component_Texture_DefaultNormal */
 	if (FAILED(m_pGameInstance->Add_Prototype(LEVEL_TOOL, TEXT("Prototype_Component_Texture_DefaultNormal"),
@@ -391,23 +399,29 @@ HRESULT CLoader::Ready_Resources_For_ToolLevel()
 		CVIBuffer_Cube::Create(m_pDevice, m_pContext))))
 		return E_FAIL;
 
+
 	CVIBuffer_Instancing::INSTANCE_DESC ParticleDesc = {};
+	/* For. Prototype_Component_VIBuffer_Point_Instance */
+	if (FAILED(m_pGameInstance->Add_Prototype(LEVEL_TOOL, TEXT("Prototype_Component_VIBuffer_Point_Instance"),
+		CVIBuffer_Point_Instance::Create(m_pDevice, m_pContext, ParticleDesc, false))))
+		return E_FAIL;
+
 	/* For. Prototype_Component_VIBuffer_Trail_OnePoint_Instance */
 	if (FAILED(m_pGameInstance->Add_Prototype(LEVEL_TOOL, TEXT("Prototype_Component_VIBuffer_Trail_OnePoint_Instance"),
 		CTrail_OnePoint_Instance::Create(m_pDevice, m_pContext, ParticleDesc, false))))
 		return E_FAIL;
 
-	/* For. Prototype_Component_VIBuffer_Point_Instance */
-	if (FAILED(m_pGameInstance->Add_Prototype(LEVEL_TOOL, TEXT("Prototype_Component_VIBuffer_Point_Instance"),
-		CVIBuffer_Point_Instance::Create(m_pDevice, m_pContext, ParticleDesc, false))))
+	/* For. Prototype_Component_VIBuffer_Trail_TwoPoint_Instance */
+	if (FAILED(m_pGameInstance->Add_Prototype(LEVEL_TOOL, TEXT("Prototype_Component_VIBuffer_Trail_TwoPoint_Instance"),
+		CTrail_TwoPoint_Instance::Create(m_pDevice, m_pContext, ParticleDesc, false))))
 		return E_FAIL;
+
 
 	_matrix		PreTransformMatrix = XMMatrixIdentity();
 	PreTransformMatrix = XMMatrixScaling(0.005f, 0.005f, 0.005f) * XMMatrixRotationX(XMConvertToRadians(90.0f));
 	if (FAILED(m_pGameInstance->Add_Prototype(LEVEL_TOOL, TEXT("Prototype_Model_Test"),
 		CModel::Create(m_pDevice, m_pContext, CModel::TYPE_NONANIM, "../Bin/ModelData/NonAnim/Map/Structure/SM_Monastery_Deco_01.dat", PreTransformMatrix))))
 		return E_FAIL;
-
 
 #pragma region EFFECT
 	/* For. Prototype_Component_Model_HalfSphere_1 */
@@ -563,13 +577,16 @@ HRESULT CLoader::Ready_Resources_For_ToolLevel()
 	if (FAILED(m_pGameInstance->Add_Prototype(TEXT("Prototype_GameObject_Trail_Effect_OP"),
 		CTrail_Effect_OP::Create(m_pDevice, m_pContext))))
 		return E_FAIL;
+	
+	/* For. Prototype_GameObject_Trail_Effect_TP */
+	if (FAILED(m_pGameInstance->Add_Prototype(TEXT("Prototype_GameObject_Trail_Effect_TP"),
+		CTrail_Effect_TP::Create(m_pDevice, m_pContext))))
+		return E_FAIL;
 
 	/* For. Prototype_GameObject_Effect_Continaer */
 	if (FAILED(m_pGameInstance->Add_Prototype(TEXT("Prototype_GameObject_Effect_Continaer"),
 		CEffect_Container::Create(m_pDevice, m_pContext))))
 		return E_FAIL;
-
-
 #pragma endregion
 
 	/* For. Prototype_GameObject_Decal */

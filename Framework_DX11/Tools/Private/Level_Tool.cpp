@@ -8,6 +8,7 @@
 #include "ImGui_Manager.h"
 
 #include "NonAnimModel.h"
+#include "Trail_Effect_TP.h"
 
 CLevel_Tool::CLevel_Tool(ID3D11Device* pDevice, ID3D11DeviceContext* pContext)
 	: CLevel{ pDevice, pContext }
@@ -47,6 +48,9 @@ HRESULT CLevel_Tool::Initialize()
 	//	if (FAILED(m_pGameInstance->Add_CloneObject_ToLayer(LEVEL_TOOL, TEXT("Layer_Map"), TEXT("Prototype_GameObject_NonAnim"), &Desc)))
 	//		return E_FAIL;
 	//}
+	CTrail_Effect_TP::TRAIL_TP_DESC TestDesc = {};
+	// 트레일 테스트용
+	m_pGameInstance->Add_CloneObject_ToLayer(LEVEL_TOOL, TEXT("Layer_Test"), TEXT("Prototype_GameObject_Trail_Effect_TP"), &TestDesc);
 
 	return S_OK;
 }

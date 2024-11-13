@@ -282,8 +282,8 @@ namespace Engine
 		XMFLOAT3 vForthTopPos;
 		XMFLOAT3 vForthBottomPos;
 
-		_float2 vLifeTime;
-		_uint iIndex;
+		XMFLOAT2 vLifeTime;
+		_float	fIndex;
 
 		static const unsigned int	iNumElements = 11;
 		static const D3D11_INPUT_ELEMENT_DESC	Elements[iNumElements];

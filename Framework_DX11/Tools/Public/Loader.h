@@ -5,6 +5,8 @@
 
 BEGIN(Engine)
 class CGameInstance;
+class CTexture;
+class CShader;
 END
 
 BEGIN(Tools)

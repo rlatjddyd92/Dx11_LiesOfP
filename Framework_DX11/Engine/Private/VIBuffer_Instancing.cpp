@@ -68,7 +68,7 @@ HRESULT CVIBuffer_Instancing::Bind_Buffers()
 
 HRESULT CVIBuffer_Instancing::Render()
 {
-	m_pContext->DrawIndexedInstanced(m_iIndexCountPerInstance, m_iNumRender, 0, 0, 0);
+	m_pContext->DrawIndexedInstanced(m_iIndexCountPerInstance, m_iNumInstance, 0, 0, 0);
 
 	return S_OK;
 }

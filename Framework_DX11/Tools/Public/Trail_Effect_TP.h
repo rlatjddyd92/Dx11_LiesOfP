@@ -79,7 +79,8 @@ private:
 
 	TRAIL_TP_DESC m_SaveDesc = {};
 
-	_bool m_bLeft = { false };
+	_float3 m_vTestTop = {};
+	_float3 m_vTestBottom = {};
 
 private:
 	HRESULT Ready_Components(const TRAIL_TP_DESC& Desc);

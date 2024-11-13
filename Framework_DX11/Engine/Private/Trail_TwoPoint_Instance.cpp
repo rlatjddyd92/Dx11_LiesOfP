@@ -32,7 +32,7 @@ HRESULT CTrail_TwoPoint_Instance::Initialize_Prototype(const CVIBuffer_Instancin
 		m_iInstanceStride = sizeof(VTXTRAIL_TWOPOINT_INSTANCE);
 		m_iIndexCountPerInstance = 1;
 
-		m_TrailPoses.resize(m_iNumInstance);
+		m_TrailPoses.resize(m_iNumInstance * 3 + 1);
 
 #pragma region VERTEX_BUFFER
 		ZeroMemory(&m_BufferDesc, sizeof m_BufferDesc);
@@ -118,7 +118,7 @@ HRESULT CTrail_TwoPoint_Instance::Initialize_Prototype(const CVIBuffer_Instancin
 
 			pInstanceVertices[i].vLifeTime = _float2(m_pGameInstance->Get_Random(m_vLifeTime.x, m_vLifeTime.y), 0.f);
 
-			pInstanceVertices[i].iIndex = i;
+			pInstanceVertices[i].fIndex = (_float)i;
 
 			iter->vTop = {};
 			iter->vBottom = {};
@@ -154,7 +154,7 @@ HRESULT CTrail_TwoPoint_Instance::Initialize(void* pArg)
 		m_iInstanceStride = sizeof(VTXTRAIL_TWOPOINT_INSTANCE);
 		m_iIndexCountPerInstance = 1;
 
-		m_TrailPoses.resize(m_iNumInstance);
+		m_TrailPoses.resize(m_iNumInstance * 4);
 
 #pragma region VERTEX_BUFFER
 		ZeroMemory(&m_BufferDesc, sizeof m_BufferDesc);
@@ -240,7 +240,7 @@ HRESULT CTrail_TwoPoint_Instance::Initialize(void* pArg)
 
 			pInstanceVertices[i].vLifeTime = _float2(m_pGameInstance->Get_Random(m_vLifeTime.x, m_vLifeTime.y), 0.f);
 
-			pInstanceVertices[i].iIndex = i;
+			pInstanceVertices[i].fIndex = (_float)i;
 
 			iter->vTop = {};
 			iter->vBottom = {};
@@ -277,14 +277,15 @@ _bool CTrail_TwoPoint_Instance::Update_Buffer(_fvector vWorldTopPos, _fvector vW
 		m_bFirst = true;
 	}
 
-
 	TWOPOINT Point = {};
 	XMStoreFloat3(&Point.vTop, vWorldTopPos);
 	XMStoreFloat3(&Point.vBottom, vWorldBottomPos);
 	m_TrailPoses.emplace_front(Point);
 
 	if (m_TrailPoses.size() > m_iNumInstance)
+	{
 		m_TrailPoses.pop_back();
+	}
 
 	D3D11_MAPPED_SUBRESOURCE	SubResource{};
 
@@ -297,55 +298,37 @@ _bool CTrail_TwoPoint_Instance::Update_Buffer(_fvector vWorldTopPos, _fvector vW
 	_bool m_bOver = { true };
 	for (size_t i = 0; i < m_iNumInstance; ++i)
 	{
-		pVertices[i].vFirstTopPos = iter->vTop;
-		pVertices[i].vFirstBottomPos = iter->vBottom;
-		if (0 == i)
+		for (size_t j = 0; j < 4; ++j)
 		{
-			pVertices[i].vSecondTopPos = pVertices[i].vFirstTopPos;
-			pVertices[i].vSecondBottomPos = pVertices[i].vFirstBottomPos;
-
-			pVertices[i].vThirdTopPos = pVertices[i].vFirstTopPos;
-			pVertices[i].vThirdBottomPos = pVertices[i].vFirstBottomPos;
-
-			pVertices[i].vForthTopPos = pVertices[i].vFirstTopPos;
-			pVertices[i].vForthBottomPos = pVertices[i].vFirstBottomPos;
-		}
-		else if(1 == i)
-		{
-			pVertices[i].vSecondTopPos = pVertices[i-1].vFirstTopPos;
-			pVertices[i].vSecondBottomPos = pVertices[i-1].vFirstBottomPos;
-
-			pVertices[i].vThirdTopPos = pVertices[i].vFirstTopPos;
-			pVertices[i].vThirdBottomPos = pVertices[i].vFirstBottomPos;
-
-			pVertices[i].vForthTopPos = pVertices[i].vFirstTopPos;
-			pVertices[i].vForthBottomPos = pVertices[i].vFirstBottomPos;
-		}
-		else if (2 == i)
-		{
-			pVertices[i].vSecondTopPos = pVertices[i-1].vFirstTopPos;
-			pVertices[i].vSecondBottomPos = pVertices[i-1].vFirstBottomPos;
-
-			pVertices[i].vThirdTopPos = pVertices[i-2].vFirstTopPos;
-			pVertices[i].vThirdBottomPos = pVertices[i-2].vFirstBottomPos;
-
-			pVertices[i].vForthTopPos = pVertices[i].vFirstTopPos;
-			pVertices[i].vForthBottomPos = pVertices[i].vFirstBottomPos;
-		}
-		else
-		{
-			pVertices[i].vSecondTopPos = pVertices[i - 1].vFirstTopPos;
-			pVertices[i].vSecondBottomPos = pVertices[i - 1].vFirstBottomPos;
-
-			pVertices[i].vThirdTopPos = pVertices[i - 2].vFirstTopPos;
-			pVertices[i].vThirdBottomPos = pVertices[i - 2].vFirstBottomPos;
-
-			pVertices[i].vForthTopPos = pVertices[i - 3].vFirstTopPos;
-			pVertices[i].vForthBottomPos = pVertices[i - 3].vFirstBottomPos;
+			switch (j)
+			{
+			case 0:
+				pVertices[i].vFirstTopPos = iter->vTop;
+				pVertices[i].vFirstBottomPos = iter->vBottom;
+				++iter;
+				break;
+			case 1:
+				pVertices[i].vSecondTopPos = iter->vTop;
+				pVertices[i].vSecondBottomPos = iter->vBottom;
+				++iter;
+				break;
+			case 2:
+				pVertices[i].vThirdTopPos = iter->vTop;
+				pVertices[i].vThirdBottomPos = iter->vBottom;
+				++iter;
+				break;
+			case 3:
+				pVertices[i].vForthTopPos = iter->vTop;
+				pVertices[i].vForthBottomPos = iter->vBottom;
+				break;
+			}
 		}
 
-		++iter;
 		pVertices[i].vLifeTime.y += fTimeDelta;
+		pVertices[i].fIndex = (_float)i;
+		
+		
+
 
 		if (pVertices[i].vLifeTime.y < pVertices[i].vLifeTime.x)
 			m_bOver = false;

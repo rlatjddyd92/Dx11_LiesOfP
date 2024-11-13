@@ -1449,12 +1449,12 @@ void CController_EffectTool::Set_MeshState()
 	else
 		m_iMesh_State &= ~CEffect_Base::RS_BLEND;
 
-	if (true == m_isMesh_Blur)
+	if (true == m_isMesh_Distortion)
 		m_iMesh_State |= CEffect_Base::RS_DISTORTION;
 	else
 		m_iMesh_State &= ~CEffect_Base::RS_DISTORTION;
 
-	if (true == m_isMesh_Distortion)
+	if (true == m_isMesh_Blur)
 		m_iMesh_State |= CEffect_Base::RS_BLUR;
 	else
 		m_iMesh_State &= ~CEffect_Base::RS_BLUR;
