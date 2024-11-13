@@ -132,6 +132,7 @@ void CPlayer::Update(_float fTimeDelta)
 				EffectDesc.vRotation = _Vec3{ 0, 0, 0 };
 				EffectDesc.pParentMatrix = m_pTransformCom->Get_WorldMatrix_Ptr();
 				EffectDesc.pSocketMatrix = (_Matrix*)m_pModelCom->Get_BoneCombindTransformationMatrix_Ptr(EvKey.iBoneIndex);
+				
 				pEffectCon =	CEffect_Manager::Get_Instance()->Clone_Effect(CEffect_Manager::EFFECT_POWER_HIT, &EffectDesc);
 				m_Effects.emplace(EvKey.iEffectNum, pEffectCon);
 			}

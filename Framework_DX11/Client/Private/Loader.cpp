@@ -2,6 +2,8 @@
 #include "..\Public\Loader.h"
 #include "ThreadPool.h"
 
+#include "ColliderObject.h"
+
 #include "Sky.h"
 #include "Player.h"
 #include "Weapon.h"
@@ -464,6 +466,13 @@ HRESULT CLoader::Ready_Resources_For_GamePlayLevel()
 	/* For. Prototype_GameObject_Effect_Texture */
 	if (FAILED(m_pGameInstance->Add_Prototype(TEXT("Prototype_GameObject_Effect_Texture"),
 		CTexture_Effect::Create(m_pDevice, m_pContext))))
+		return E_FAIL;
+#pragma endregion
+
+#pragma region Collider
+	/* For. Prototype_GameObject_Terrain */
+	if (FAILED(m_pGameInstance->Add_Prototype(TEXT("Prototype_GameObject_ColliderObj"),
+		CColliderObject::Create(m_pDevice, m_pContext))))
 		return E_FAIL;
 #pragma endregion
 

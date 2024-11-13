@@ -1,0 +1,48 @@
+#pragma once
+#include "GameObject.h"
+#include "Collider.h"
+#include "Bounding.h"
+
+class CColliderObject	final : public CGameObject
+{
+public:
+	typedef struct
+	{
+		const _float4x4*	pCombinedTransform;
+		CTransform*			pParentTransformCom;
+		CBounding::BOUNDING_DESC* pBoundingDesc;
+		CCollider::TYPE		eType;
+
+	}COLIDEROBJECT_DESC;
+
+private:
+	CColliderObject(ID3D11Device* pDevice, ID3D11DeviceContext* pContext);
+	CColliderObject(const CColliderObject& Prototype);
+	virtual ~CColliderObject() = default;
+
+public:
+	virtual HRESULT Initialize_Prototype() override;
+	virtual HRESULT Initialize(void* pArg) override;
+	virtual void Priority_Update(_float fTimeDelta) override;
+	virtual void Update(_float fTimeDelta) override;
+	virtual void Late_Update(_float fTimeDelta) override;
+	virtual HRESULT Render() override;
+
+private:
+	CCollider*			m_pColliderCom = { nullptr };
+	CTransform*			m_pParentTransformCom = { nullptr };
+
+private:
+	CCollider::TYPE		m_eType{ CCollider::TYPE::TYPE_END};
+
+	const _float4x4*	m_pCombinedTransform = { nullptr };
+
+private:
+	HRESULT Ready_Components(CBounding::BOUNDING_DESC* pBoundingDesc, CCollider::TYPE eType);
+
+public:
+	static CColliderObject* Create(ID3D11Device* pDevice, ID3D11DeviceContext* pContext);
+	virtual CGameObject* Clone(void* pArg);
+	virtual void Free() override;
+};
+

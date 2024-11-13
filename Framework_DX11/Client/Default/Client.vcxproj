@@ -172,6 +172,7 @@
     <ClInclude Include="..\public\BackGround.h" />
     <ClInclude Include="..\Public\CarcassBigA.h" />
     <ClInclude Include="..\Public\Client_Defines.h" />
+    <ClInclude Include="..\Public\ColliderObject.h" />
     <ClInclude Include="..\Public\Effect_Base.h" />
     <ClInclude Include="..\Public\Effect_Container.h" />
     <ClInclude Include="..\Public\Effect_Manager.h" />
@@ -222,6 +223,7 @@
   <ItemGroup>
     <ClCompile Include="..\private\BackGround.cpp" />
     <ClCompile Include="..\Private\CarcassBigA.cpp" />
+    <ClCompile Include="..\Private\ColliderObject.cpp" />
     <ClCompile Include="..\Private\Effect_Base.cpp" />
     <ClCompile Include="..\Private\Effect_Container.cpp" />
     <ClCompile Include="..\Private\Effect_Manager.cpp" />

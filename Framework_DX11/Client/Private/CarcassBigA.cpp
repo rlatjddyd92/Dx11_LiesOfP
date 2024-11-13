@@ -97,6 +97,10 @@ void CCarcassBigA::Update(_float fTimeDelta)
 		m_pTransformCom->Set_State(CTransform::STATE_POSITION, vPos + m_vCurRootMove - m_vRootMoveStack);
 		m_vRootMoveStack = m_vCurRootMove;
 	}
+
+
+	for (auto& pColliderObj : m_pColliderObject)
+		pColliderObj->Update(fTimeDelta);
 	
 #ifdef _DEBUG
 	for (auto& pCollider : m_pColliderCom)
@@ -138,6 +142,9 @@ void CCarcassBigA::Late_Update(_float fTimeDelta)
 #endif
 	}
 	*/
+	for (auto& pColliderObj : m_pColliderObject)
+		pColliderObj->Late_Update(fTimeDelta);
+
 }
 
 HRESULT CCarcassBigA::Render()
@@ -211,6 +218,36 @@ HRESULT CCarcassBigA::Ready_Components()
 	if (FAILED(__super::Add_Component(LEVEL_GAMEPLAY, TEXT("Prototype_Component_Collider_Sphere"),
 		TEXT("Com_Collider_Sphere"), reinterpret_cast<CComponent**>(&m_pColliderCom[TYPE_SPHERE]), &ColliderSphereDesc)))
 		return E_FAIL;
+
+
+	/* FOR.Com_Collider_OBB */
+	CBounding_OBB::BOUNDING_OBB_DESC			ColliderOBBDesc_Obj{};
+	ColliderOBBDesc.vExtents = _float3(0.7f, 0.7f, 0.9f);
+	ColliderOBBDesc.vCenter = _float3(0.f, ColliderOBBDesc.vExtents.y, 0.f);
+	ColliderOBBDesc.vAngles = _float3(0.f, m_pGameInstance->Get_Random(XMConvertToRadians(0.f), XMConvertToRadians(360.f)), 0.f);
+
+	CColliderObject::COLIDEROBJECT_DESC Desc{};
+
+	Desc.pBoundingDesc = &ColliderOBBDesc_Obj;
+	Desc.eType = CCollider::TYPE_OBB;
+	Desc.pCombinedTransform = m_pModelCom->Get_BoneCombindTransformationMatrix_Ptr(m_pModelCom->Get_UFBIndices(UFB_HAND_LEFT));
+	Desc.pParentTransformCom = m_pTransformCom;
+
+	m_pColliderObject[COLLIDERTYPE::TYPE_LEFTHAND] = m_pGameInstance->Clone_GameObject(TEXT("Prototype_GameObject_ColliderObj"), &Desc);
+
+
+	/* FOR.Com_Collider_OBB */
+	
+	ColliderOBBDesc.vExtents = _float3(0.7f, 0.7f, 0.9f);
+	ColliderOBBDesc.vCenter = _float3(0.f, ColliderOBBDesc.vExtents.y, 0.f);
+	ColliderOBBDesc.vAngles = _float3(0.f, m_pGameInstance->Get_Random(XMConvertToRadians(0.f), XMConvertToRadians(360.f)), 0.f);
+
+	Desc.pBoundingDesc = &ColliderOBBDesc_Obj;
+	Desc.eType = CCollider::TYPE_OBB;
+	Desc.pCombinedTransform = m_pModelCom->Get_BoneCombindTransformationMatrix_Ptr(m_pModelCom->Get_UFBIndices(UFB_HAND_RIGHT));
+	Desc.pParentTransformCom = m_pTransformCom;
+
+	m_pColliderObject[COLLIDERTYPE::TYPE_RIGHTHAND] = m_pGameInstance->Clone_GameObject(TEXT("Prototype_GameObject_ColliderObj"), &Desc);
 
 
 
