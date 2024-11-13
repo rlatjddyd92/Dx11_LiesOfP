@@ -175,6 +175,9 @@
     <Filter Include="02.GameObjects\08.StaticObj">
       <UniqueIdentifier>{506c3b68-1793-4917-8eeb-d814379aca7e}</UniqueIdentifier>
     </Filter>
+    <Filter Include="02.GameObjects\09.NavDataObj">
+      <UniqueIdentifier>{10f4a515-95de-41fc-9f6e-fae8782b0344}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Client.h">
@@ -325,6 +328,9 @@
     <ClInclude Include="..\Public\StaticObj.h">
       <Filter>02.GameObjects\08.StaticObj</Filter>
     </ClInclude>
+    <ClInclude Include="..\Public\NavDataObj.h">
+      <Filter>02.GameObjects\09.NavDataObj</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Client.cpp">
@@ -447,6 +453,9 @@
     </ClCompile>
     <ClCompile Include="..\Private\StaticObj.cpp">
       <Filter>02.GameObjects\08.StaticObj</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Private\NavDataObj.cpp">
+      <Filter>02.GameObjects\09.NavDataObj</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

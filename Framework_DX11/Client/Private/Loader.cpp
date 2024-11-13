@@ -11,6 +11,7 @@
 #include "FreeCamera.h"
 #include "BackGround.h"
 #include "StaticObj.h"
+#include "NavDataObj.h"
 
 #pragma region EFFECT
 #include "Monster.h"
@@ -317,7 +318,7 @@ HRESULT CLoader::Ready_Resources_For_GamePlayLevel()
 	lstrcpy(m_szLoadingText, TEXT("네비게이션을(를) 로딩중입니다."));
 	/* For.Prototype_Component_Navigation */
 	if (FAILED(m_pGameInstance->Add_Prototype(LEVEL_GAMEPLAY, TEXT("Prototype_Component_Navigation"),
-		CNavigation::Create(m_pDevice, m_pContext, TEXT("../Bin/DataFiles/Navigation.dat")))))
+		CNavigation::Create(m_pDevice, m_pContext, TEXT("../Bin/DataFiles/Nav_Data.dat")))))
 		return E_FAIL;
 
 
@@ -455,6 +456,11 @@ HRESULT CLoader::Ready_Resources_For_GamePlayLevel()
 	/* For. Prototype_GameObject_StaticObj */
 	if (FAILED(m_pGameInstance->Add_Prototype(TEXT("Prototype_GameObject_StaticObj"),
 		CStaticObj::Create(m_pDevice, m_pContext))))
+		return E_FAIL;
+	
+	/* For. Prototype_GameObject_StaticObj */
+	if (FAILED(m_pGameInstance->Add_Prototype(TEXT("Prototype_GameObject_NavDataObj"),
+		CNavDataObj::Create(m_pDevice, m_pContext))))
 		return E_FAIL;
 
 #pragma region EFFECT

@@ -36,7 +36,8 @@ HRESULT CLevel_Tool::Initialize()
 		return E_FAIL;	
 	
 	if (FAILED(Read_Map_Data()))
-		return E_FAIL;
+		return E_FAIL;	
+	
 
 	// 2024-11-10 김성용
 	// 게임 인터페이스를 플레이 모드로 설정 
@@ -128,7 +129,8 @@ HRESULT CLevel_Tool::Ready_Layer_BackGround()
 	if (FAILED(m_pGameInstance->Add_CloneObject_ToLayer(LEVEL_GAMEPLAY, TEXT("Layer_BackGround"), TEXT("Prototype_GameObject_Sky"))))
 		return E_FAIL;
 
-
+	if (FAILED(m_pGameInstance->Add_CloneObject_ToLayer(LEVEL_GAMEPLAY, TEXT("Layer_BackGround"), TEXT("Prototype_GameObject_NavDataObj"))))
+		return E_FAIL;
 	//if (FAILED(m_pGameInstance->Add_CloneObject_ToLayer(LEVEL_GAMEPLAY, TEXT("Layer_BackGround"), TEXT("Prototype_GameObject_ForkLift"))))
 	//	return E_FAIL;
 
