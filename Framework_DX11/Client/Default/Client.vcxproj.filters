@@ -129,7 +129,7 @@
     </Filter>
     <Filter Include="05.Fsm\Monster\CarcassBigA\Hit_Fatal">
       <UniqueIdentifier>{3a3180b6-88e0-47d8-a77c-574050019abe}</UniqueIdentifier>
-	</Filter>
+    </Filter>
     <Filter Include="03.GameInterface_Controller\00.UIManager\00.UIPage\03.UIPage_Menu">
       <UniqueIdentifier>{b26954b1-cb30-4587-aded-033de3ff1679}</UniqueIdentifier>
     </Filter>
@@ -171,6 +171,9 @@
     </Filter>
     <Filter Include="03.GameInterface_Controller\04.Empty">
       <UniqueIdentifier>{10bfef8a-2262-4570-957b-02a9624e5eff}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="03.GameInterface_Controller\00.UIManager\00.UIPage\09.UIPage_Test">
+      <UniqueIdentifier>{d6f0816f-b248-400f-ae9c-070eac27ca42}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>

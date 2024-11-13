@@ -86,6 +86,10 @@ HRESULT CUIManager::Render()
 	if (FAILED(m_pUIRender_Client->Render_UI(m_vecPage)))
 		return E_FAIL;
 
+	if (m_iFonttest != 0)
+		if (FAILED(m_pUIRender_Client->Render_TestFont(m_iFonttest == 1)))
+			return E_FAIL;
+
 	return S_OK;
 }
 
@@ -178,9 +182,92 @@ void CUIManager::UIControl_Test(_float fTimeDelta)
 	}
 
 
+	// 폰트 테스트
+
+	if (KEY_TAP(KEY::F2))
+	{
+		++m_iFonttest;
+		if (m_iFonttest > 1)
+			m_iFonttest = -1;
+	}
+
+	// TestPage 조작 
+	if (KEY_TAP(KEY::F3))
+	{
+		if (m_bTestPageOpen)
+			m_bTestPageOpen = false;
+		else
+			m_bTestPageOpen = true;
+	}
 
 
 
+	if (m_bTestPageOpen)
+	{
+		_float3 fHP = { GET_GAMEINTERFACE->Get_StatInfo_Normal(STAT_NORMAL::STAT_GAUGE_HP).fStat_Now , GET_GAMEINTERFACE->Get_StatInfo_Normal(STAT_NORMAL::STAT_GAUGE_HP).fStat_Max, GET_GAMEINTERFACE->Get_StatInfo_Normal(STAT_NORMAL::STAT_GAUGE_HP).fStat_Max_Limit };
+		_float3 fST = { GET_GAMEINTERFACE->Get_StatInfo_Normal(STAT_NORMAL::STAT_GAUGE_STAMINA).fStat_Now , GET_GAMEINTERFACE->Get_StatInfo_Normal(STAT_NORMAL::STAT_GAUGE_STAMINA).fStat_Max, GET_GAMEINTERFACE->Get_StatInfo_Normal(STAT_NORMAL::STAT_GAUGE_STAMINA).fStat_Max_Limit };
+		_float3 fRE = { GET_GAMEINTERFACE->Get_StatInfo_Normal(STAT_NORMAL::STAT_GAUGE_REGION).fStat_Now , GET_GAMEINTERFACE->Get_StatInfo_Normal(STAT_NORMAL::STAT_GAUGE_REGION).fStat_Max, GET_GAMEINTERFACE->Get_StatInfo_Normal(STAT_NORMAL::STAT_GAUGE_REGION).fStat_Max_Limit };
+		_float3 fWE = { GET_GAMEINTERFACE->Get_StatInfo_Normal(STAT_NORMAL::STAT_GAUGE_WEIGHT).fStat_Now , GET_GAMEINTERFACE->Get_StatInfo_Normal(STAT_NORMAL::STAT_GAUGE_WEIGHT).fStat_Max, GET_GAMEINTERFACE->Get_StatInfo_Normal(STAT_NORMAL::STAT_GAUGE_WEIGHT).fStat_Max_Limit };
+		_float3 fGA = { GET_GAMEINTERFACE->Get_StatInfo_Normal(STAT_NORMAL::STAT_GADRIGAIN).fStat_Now , GET_GAMEINTERFACE->Get_StatInfo_Normal(STAT_NORMAL::STAT_GADRIGAIN).fStat_Max, GET_GAMEINTERFACE->Get_StatInfo_Normal(STAT_NORMAL::STAT_GADRIGAIN).fStat_Max_Limit };
+		_int iHP = GET_GAMEINTERFACE->Get_NowStat_Normal(STAT_NORMAL::STAT_POINT_BODY);
+		_int iST = GET_GAMEINTERFACE->Get_NowStat_Normal(STAT_NORMAL::STAT_POINT_STAMINA);
+		_int iWE = GET_GAMEINTERFACE->Get_NowStat_Normal(STAT_NORMAL::STAT_POINT_WEIGHT);
+		_int iPO = GET_GAMEINTERFACE->Get_NowStat_Normal(STAT_NORMAL::STAT_POINT_POWER);
+		_int iSK = GET_GAMEINTERFACE->Get_NowStat_Normal(STAT_NORMAL::STAT_POINT_SKILL);
+		_int iEV = GET_GAMEINTERFACE->Get_NowStat_Normal(STAT_NORMAL::STAT_POINT_EVOLUTION);
+
+		ShowTestPage(
+			TEXT("HP(현재/제한/최대치)"), TEST_PAGE_VALUE_TYPE::TYPE_FLOAT3, &fHP,
+			TEXT("스태미나(현재/제한/최대치)"), TEST_PAGE_VALUE_TYPE::TYPE_FLOAT3, &fST,
+			TEXT("HP(현재/제한/최대치)"), TEST_PAGE_VALUE_TYPE::TYPE_FLOAT3, &fRE,
+			TEXT("HP(현재/제한/최대치)"), TEST_PAGE_VALUE_TYPE::TYPE_FLOAT3, &fWE,
+			TEXT("HP(현재/제한/최대치)"), TEST_PAGE_VALUE_TYPE::TYPE_FLOAT3, &fGA,
+			TEXT("HP(현재/제한/최대치)"), TEST_PAGE_VALUE_TYPE::TYPE_INT, &iHP,
+			TEXT("HP(현재/제한/최대치)"), TEST_PAGE_VALUE_TYPE::TYPE_INT, &iST,
+			TEXT("HP(현재/제한/최대치)"), TEST_PAGE_VALUE_TYPE::TYPE_INT, &iWE,
+			TEXT("HP(현재/제한/최대치)"), TEST_PAGE_VALUE_TYPE::TYPE_INT, &iPO,
+			TEXT("HP(현재/제한/최대치)"), TEST_PAGE_VALUE_TYPE::TYPE_INT, &iSK
+		);
+
+		if ((KEY_TAP(KEY::LBUTTON)) && (!m_bTestPageMove))
+		{
+			POINT			ptMouse{};
+			GetCursorPos(&ptMouse);
+			ScreenToClient(g_hWnd, &ptMouse);
+
+			if (ptMouse.x > m_fTestPage_Pos.x - (m_fTestPage_Size.x* 0.5f))
+				if (ptMouse.x < m_fTestPage_Pos.x + (m_fTestPage_Size.x * 0.5f))
+					if (ptMouse.y > m_fTestPage_Pos.y - (m_fTestPage_Size.y * 0.5f))
+						if (ptMouse.y < m_fTestPage_Pos.y + (m_fTestPage_Size.y * 0.5f))
+						{
+							m_bTestPageMove = true;
+							m_fTestPage_ClickPos = { (_float)ptMouse.x, (_float)ptMouse.y };
+						}
+		}
+		else if (m_bTestPageMove)
+		{
+			if(KEY_HOLD(KEY::LBUTTON))
+			{
+				POINT			ptMouse{};
+				GetCursorPos(&ptMouse);
+				ScreenToClient(g_hWnd, &ptMouse);
+
+				_float2 fMove = { 0.f,0.f };
+
+				fMove.x = ptMouse.x - m_fTestPage_ClickPos.x;
+				fMove.y = ptMouse.y - m_fTestPage_ClickPos.y;
+
+				m_fTestPage_Pos.x += fMove.x;
+				m_fTestPage_Pos.y += fMove.y;
+
+				m_fTestPage_ClickPos = { (_float)ptMouse.x, (_float)ptMouse.y };
+			}
+			else
+				m_bTestPageMove = false;
+		}
+	}
+	else 
+		m_bTestPageMove = false;
 
 
 
@@ -232,6 +319,37 @@ void CUIManager::SwicthPage(UIPAGE eNextPage)
 		iter->CloseAction();
 
 	m_vecPage[_int(eNextPage)]->OpenAction();
+}
+
+void CUIManager::ShowTestPage(_wstring DataNameA, TEST_PAGE_VALUE_TYPE eTypeA, const void* ValueA, _wstring DataNameB, TEST_PAGE_VALUE_TYPE eTypeB, const void* ValueB, _wstring DataNameC, TEST_PAGE_VALUE_TYPE eTypeC, const void* ValueC, _wstring DataNameD, TEST_PAGE_VALUE_TYPE eTypeD, const void* ValueD, _wstring DataNameE, TEST_PAGE_VALUE_TYPE eTypeE, const void* ValueE, _wstring DataNameF, TEST_PAGE_VALUE_TYPE eTypeF, const void* ValueF, _wstring DataNameG, TEST_PAGE_VALUE_TYPE eTypeG, const void* ValueG, _wstring DataNameH, TEST_PAGE_VALUE_TYPE eTypeH, const void* ValueH, _wstring DataNameI, TEST_PAGE_VALUE_TYPE eTypeI, const void* ValueI, _wstring DataNameJ, TEST_PAGE_VALUE_TYPE eTypeJ, const void* ValueJ)
+{
+	m_bTestPageOpen = true;
+
+	vector<_wstring> vecName;
+	vector<_wstring> vecValue;
+
+	if (ValueA)
+		InputTestPageInfo(&vecName, &vecValue, DataNameA, eTypeA, ValueA);
+	if (ValueB)
+		InputTestPageInfo(&vecName, &vecValue, DataNameB, eTypeB, ValueB);
+	if (ValueC)
+		InputTestPageInfo(&vecName, &vecValue, DataNameC, eTypeC, ValueC);
+	if (ValueD)
+		InputTestPageInfo(&vecName, &vecValue, DataNameD, eTypeD, ValueD);
+	if (ValueE)
+		InputTestPageInfo(&vecName, &vecValue, DataNameE, eTypeE, ValueE);
+	if (ValueF)
+		InputTestPageInfo(&vecName, &vecValue, DataNameF, eTypeF, ValueF);
+	if (ValueG)
+		InputTestPageInfo(&vecName, &vecValue, DataNameG, eTypeG, ValueG);
+	if (ValueH)
+		InputTestPageInfo(&vecName, &vecValue, DataNameH, eTypeH, ValueH);
+	if (ValueI)
+		InputTestPageInfo(&vecName, &vecValue, DataNameI, eTypeI, ValueI);
+	if (ValueJ)
+		InputTestPageInfo(&vecName, &vecValue, DataNameJ, eTypeJ, ValueJ);
+
+	m_pUIRender_Client->Input_TestPageInfo(m_fTestPage_Pos, m_fTestPage_Size, vecName, vecValue);
 }
 
 HRESULT CUIManager::Load_UIDataFile()
@@ -369,6 +487,68 @@ HRESULT CUIManager::Load_UIDataFile_Part(HANDLE handle, DWORD* dword, _int iInde
 	}
 
 	return S_OK;
+}
+
+void CUIManager::InputTestPageInfo(vector<_wstring>* pName, vector<_wstring>* pValue, _wstring DataNameA, TEST_PAGE_VALUE_TYPE eTypeA, const void* ValueA)
+{
+	pName->push_back(DataNameA);
+
+	if (eTypeA == TEST_PAGE_VALUE_TYPE::TYPE_FLOAT)
+	{
+		_float fValue = 0.f;
+		memcpy(&fValue, ValueA, sizeof(_float));
+		_wstring strValue = to_wstring(fValue);
+		pValue->push_back(strValue);
+	}
+	else if (eTypeA == TEST_PAGE_VALUE_TYPE::TYPE_INT)
+	{
+		_float fValue = 0.f;
+		memcpy(&fValue, ValueA, sizeof(_float));
+		_wstring strValue = to_wstring(fValue);
+		pValue->push_back(strValue);
+	}
+	else if (eTypeA == TEST_PAGE_VALUE_TYPE::TYPE_FLOAT2)
+	{
+		_float2 fValue = { 0.f , 0.f };
+		memcpy(&fValue, ValueA, sizeof(_float2));
+		_wstring strTemp = to_wstring(fValue.x);
+		_wstring strValue = strTemp;
+		strValue += TEXT(" | ");
+		strTemp = to_wstring(fValue.y);
+		strValue += strTemp;
+		pValue->push_back(strValue);
+	}
+	else if (eTypeA == TEST_PAGE_VALUE_TYPE::TYPE_FLOAT3)
+	{
+		_float3 fValue = { 0.f , 0.f , 0.f };
+		memcpy(&fValue, ValueA, sizeof(_float3));
+		_wstring strTemp = to_wstring(fValue.x);
+		_wstring strValue = strTemp;
+		strValue += TEXT(" | ");
+		strTemp = to_wstring(fValue.y);
+		strValue += strTemp;
+		strValue += TEXT(" | ");
+		strTemp = to_wstring(fValue.z);
+		strValue += strTemp;
+		pValue->push_back(strValue);
+	}
+	else if (eTypeA == TEST_PAGE_VALUE_TYPE::TYPE_FLOAT4)
+	{
+		_float4 fValue = { 0.f , 0.f, 0.f, 0.f };
+		memcpy(&fValue, ValueA, sizeof(_float4));
+		_wstring strTemp = to_wstring(fValue.x);
+		_wstring strValue = strTemp;
+		strValue += TEXT(" | ");
+		strTemp = to_wstring(fValue.y);
+		strValue += strTemp;
+		strValue += TEXT(" | ");
+		strTemp = to_wstring(fValue.z);
+		strValue += strTemp;
+		strValue += TEXT(" | ");
+		strTemp = to_wstring(fValue.w);
+		strValue += strTemp;
+		pValue->push_back(strValue);
+	}
 }
 
 CUIManager* CUIManager::Create(ID3D11Device* pDevice, ID3D11DeviceContext* pContext)

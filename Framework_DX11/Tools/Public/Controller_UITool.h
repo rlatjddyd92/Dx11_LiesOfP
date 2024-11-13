@@ -121,6 +121,8 @@ public:
 		vector<UPART*> vecPart;
 	}UPAGE;
 
+
+
 public:
 	HRESULT Initialize(ID3D11Device* pDevice, ID3D11DeviceContext* pContext);
 
@@ -153,6 +155,7 @@ public: // 개발 편의 기능
 	void Off_StaticSystemMessage(); // <- StaticMessage Off 명령
 	void Show_SystemMessage(_wstring Text, _float fTime); // 표시 내용과 노출 시간 설정, 메시지는 한번에 10개까지 노출 가능(Static 포함 10개)
 
+	
 	//MouseInfo
 	void Show_MouseInfo(_wstring DataNameA, _float* DataA,
 		_wstring DataNameB = TEXT("none"), _float* DataB = nullptr,
