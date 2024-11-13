@@ -26,6 +26,10 @@
 
 #pragma endregion
 
+#pragma region OBJECT
+#include "Stargazer.h"
+#pragma endregion
+
 #include "GameInstance.h"
 
 CLoader::CLoader(ID3D11Device * pDevice, ID3D11DeviceContext * pContext)
@@ -463,6 +467,11 @@ HRESULT CLoader::Ready_Resources_For_GamePlayLevel()
 		CNavDataObj::Create(m_pDevice, m_pContext))))
 		return E_FAIL;
 
+	/* For. Prototype_GameObject_Stargazer */
+	if (FAILED(m_pGameInstance->Add_Prototype(TEXT("Prototype_GameObject_Stargazer"),
+		CStargazer::Create(m_pDevice, m_pContext))))
+		return E_FAIL;
+
 #pragma region EFFECT
 	/* For. Prototype_GameObject_Effect_Container */
 	if (FAILED(m_pGameInstance->Add_Prototype(TEXT("Prototype_GameObject_Effect_Container"),
@@ -513,6 +522,13 @@ HRESULT CLoader::Ready_Resources_For_GamePlayLevel_Map0()
 	if (FAILED(m_pGameInstance->Add_Prototype(LEVEL_GAMEPLAY, TEXT("Prototype_Component_Model_CarcassBigA"),
 		CModel::Create(m_pDevice, m_pContext, CModel::TYPE_ANIM, "../Bin/ModelData/Anim/CreatedBinFiles/CarcassBigA.dat", PreTransformMatrix, true))))
 		return E_FAIL;
+
+	/* For. Prototype_Component_Model_Stargazer*/
+	PreTransformMatrix = XMMatrixScaling(0.01f, 0.01f, 0.01f) * XMMatrixRotationY(XMConvertToRadians(270.0f));
+	if (FAILED(m_pGameInstance->Add_Prototype(LEVEL_GAMEPLAY, TEXT("Prototype_Component_Model_Stargazer"),
+		CModel::Create(m_pDevice, m_pContext, CModel::TYPE_ANIM, "../Bin/ModelData/NonAnim/InteractObj/SK_DLV_Stargazer_01.dat", PreTransformMatrix))))
+		return E_FAIL;
+
 	m_isFinished_Map0 = true;
 
 	return S_OK;
