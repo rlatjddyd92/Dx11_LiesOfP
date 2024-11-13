@@ -205,6 +205,9 @@
     <Filter Include="01.Utility\03.Components\Shader\Shader_Compute">
       <UniqueIdentifier>{ead5ee5d-76a7-4e2a-99bc-0aa975019673}</UniqueIdentifier>
     </Filter>
+    <Filter Include="01.Utility\03.Components\Model\ObjectOctree">
+      <UniqueIdentifier>{a24fcefc-62b5-4a50-8240-d400693ea04d}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\Private\Base.cpp">
@@ -398,6 +401,10 @@
     </ClCompile>
     <ClCompile Include="..\private\Shader_Compute.cpp">
       <Filter>01.Utility\03.Components\Shader\Shader_Compute</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Private\EasyDrawSphere.cpp" />
+    <ClCompile Include="..\Private\ObjectOctree.cpp">
+      <Filter>01.Utility\03.Components\Model\ObjectOctree</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -607,6 +614,10 @@
     </ClInclude>
     <ClInclude Include="..\public\Shader_Compute.h">
       <Filter>01.Utility\03.Components\Shader\Shader_Compute</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Public\EasyDrawSphere.h" />
+    <ClInclude Include="..\Public\ObjectOctree.h">
+      <Filter>01.Utility\03.Components\Model\ObjectOctree</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

@@ -323,8 +323,11 @@ HRESULT CRenderer::Draw()
 	if (FAILED(Render_NonBlend()))
 		return E_FAIL;
 
-	if (FAILED(Render_Picking()))
-		return E_FAIL;
+	if(m_pGameInstance->Get_Is_Picking())
+	{
+		if (FAILED(Render_Picking()))
+			return E_FAIL;
+	}
 
 	if (FAILED(Render_Decal()))
 		return E_FAIL;
