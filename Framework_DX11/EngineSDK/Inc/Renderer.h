@@ -17,7 +17,8 @@ private:
 	virtual ~CRenderer() = default;
 
 public:
-	SSAO_DESC* Get_SSAODesc() { return &m_tSSAO; }
+	SSAO_DESC*	Get_SSAODesc() { return &m_tSSAO; }
+	HDR_DESC*	Get_HDRDesc() { return &m_tHDR; }
 
 public:
 	HRESULT Initialize();
@@ -56,8 +57,11 @@ private:
 	class CShader*				m_pShader = { nullptr };
 	class CShader*				m_pBloomShader = { nullptr };
 	class CShader*				m_pSSAOShader = { nullptr };
-	class CShader*				m_pHDRShader = { nullptr };
 	class CShader*				m_pDistortionShader = { nullptr };
+
+	// ÄÄÇ»Æ®
+	class CShader*				m_pBackShader = { nullptr };
+	class CShader*				m_pHDRShader = { nullptr };
 
 	class CVIBuffer_Rect*		m_pVIBuffer = { nullptr };
 
@@ -80,6 +84,9 @@ private:
 	/* Cascade */
 	ID3D11DepthStencilView*		m_pCascadeDepthStencilViewArr = { nullptr };
 
+	/* HDR */
+	HDR_DESC					m_tHDR = {};
+
 #ifdef _DEBUG
 private:
 	list<class CComponent*>		m_DebugObjects;
@@ -99,7 +106,6 @@ private:
 	HRESULT Render_SSAO();
 	HRESULT Render_HDR();
 	HRESULT Render_Bloom();
-	HRESULT Render_LDR();
 
 	HRESULT Render_Distortion();
 

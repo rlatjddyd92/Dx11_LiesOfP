@@ -97,11 +97,6 @@ HRESULT CRenderer::Initialize()
 	if (FAILED(m_pGameInstance->Add_RenderTarget(TEXT("Target_SSAO_BlurXY"), (_uint)ViewportDesc.Width, (_uint)ViewportDesc.Height, DXGI_FORMAT_R16G16B16A16_UNORM, _float4(1.f, 1.f, 1.f, 1.f))))
 		return E_FAIL;
 
-	if (FAILED(m_pGameInstance->Add_RenderTarget(TEXT("Target_HDR"), (_uint)ViewportDesc.Width, (_uint)ViewportDesc.Height, DXGI_FORMAT_B8G8R8A8_UNORM, _float4(0.f, 0.f, 0.f, 0.f))))
-		return E_FAIL;
-	if (FAILED(m_pGameInstance->Add_RenderTarget(TEXT("Target_LDR"), (_uint)ViewportDesc.Width, (_uint)ViewportDesc.Height, DXGI_FORMAT_B8G8R8A8_UNORM, _float4(0.f, 0.f, 0.f, 0.f))))
-		return E_FAIL;
-
 	if (FAILED(m_pGameInstance->Add_RenderTarget_Array(TEXT("Target_Cascade"), (_uint)2560, (_uint)1440, DXGI_FORMAT_R32G32B32A32_FLOAT, _float4(1.f, 1.f, 1.f, 1.f), 3)))
 		return E_FAIL;
 
@@ -171,12 +166,6 @@ HRESULT CRenderer::Initialize()
 		return E_FAIL;
 #pragma endregion 
 
-	/* MRT_HDR*/
-	if (FAILED(m_pGameInstance->Add_MRT(TEXT("MRT_HDR"), TEXT("Target_HDR"))))
-		return E_FAIL;
-	if (FAILED(m_pGameInstance->Add_MRT(TEXT("MRT_LDR"), TEXT("Target_LDR"))))
-		return E_FAIL;
-
 	/* MRT_Distortion */
 	if (FAILED(m_pGameInstance->Add_MRT(TEXT("MRT_Distortion"), TEXT("Target_Distortion"))))
 		return E_FAIL;
@@ -228,15 +217,16 @@ HRESULT CRenderer::Initialize()
 		return E_FAIL;
 	m_pNoiseTexture_SSAO = CTexture::Create(m_pDevice, m_pContext, TEXT("../Bin/Resources/T_Tile_Noise_01_C_LGS.dds"), 1);
 
-	m_pHDRShader = CShader::Create(m_pDevice, m_pContext, TEXT("../Bin/ShaderFiles/Shader_HDR.hlsl"), VTXPOSTEX::Elements, VTXPOSTEX::iNumElements, 2);
-	if (nullptr == m_pHDRShader)
-		return E_FAIL;
-	//m_pHDRShader = CShader::Create(m_pDevice, m_pContext, TEXT("../Bin/ShaderFiles/Shader_HDR.hlsl"));
-	//if (nullptr == m_pHDRShader)
-	//	return E_FAIL;
-
 	m_pDistortionShader = CShader::Create(m_pDevice, m_pContext, TEXT("../Bin/ShaderFiles/Shader_Distortion.hlsl"), VTXPOSTEX::Elements, VTXPOSTEX::iNumElements);
 	if (nullptr == m_pDistortionShader)
+		return E_FAIL;
+
+	m_pBackShader = CShader::Create(m_pDevice, m_pContext, TEXT("../Bin/ShaderFiles/Shader_Compute_Back.hlsl"));
+	if (nullptr == m_pBackShader)
+		return E_FAIL;
+
+	m_pHDRShader = CShader::Create(m_pDevice, m_pContext, TEXT("../Bin/ShaderFiles/Shader_Compute_HDR.hlsl"));
+	if (nullptr == m_pHDRShader)
 		return E_FAIL;
 
 	m_pVIBuffer = CVIBuffer_Rect::Create(m_pDevice, m_pContext);
@@ -253,14 +243,19 @@ HRESULT CRenderer::Initialize()
 	if (FAILED(Ready_CascadeDepthStencilView()))
 		return E_FAIL;
 
+
+	if (FAILED(Ready_HDR()))
+		return E_FAIL;
+
+	if (FAILED(Ready_Desc()))
+		return E_FAIL;
+
 #ifdef _DEBUG
 	if (FAILED(m_pGameInstance->Ready_RT_Debug(TEXT("Target_Diffuse"), 100.f, 100.f, 200.f, 200.f)))
 		return E_FAIL;
 	if (FAILED(m_pGameInstance->Ready_RT_Debug(TEXT("Target_SSAO_BlurXY"), 100.f, 300.f, 200.f, 200.f)))
 		return E_FAIL;
-	if (FAILED(m_pGameInstance->Ready_RT_Debug(TEXT("Target_Cascade"), 100.f, 500.f, 200.f, 200.f)))
-		return E_FAIL;
-	if (FAILED(m_pGameInstance->Ready_RT_Debug(TEXT("Target_HDR"), 100.f, 500.f, 200.f, 200.f)))
+	if (FAILED(m_pGameInstance->Ready_RT_Debug(TEXT("Target_LDR"), 100.f, 500.f, 200.f, 200.f)))
 		return E_FAIL;
 
 	//if (FAILED(m_pGameInstance->Ready_RT_Debug(TEXT("Target_Specular"), 300.f, 100.f, 200.f, 200.f)))
@@ -273,11 +268,6 @@ HRESULT CRenderer::Initialize()
 	//	return E_FAIL;
 #endif
 
-	if (FAILED(Ready_HDR()))
-		return E_FAIL;
-
-	if (FAILED(Ready_Desc()))
-		return E_FAIL;
 
 	return S_OK;
 }
@@ -305,8 +295,11 @@ HRESULT CRenderer::Draw()
 	if (FAILED(Render_NonBlend()))
 		return E_FAIL;
 
-	if (FAILED(Render_Picking()))
-		return E_FAIL;
+	if(m_pGameInstance->Get_Is_Picking())
+	{
+		if (FAILED(Render_Picking()))
+			return E_FAIL;
+	}
 
 	if (FAILED(Render_Decal()))
 		return E_FAIL;
@@ -317,7 +310,6 @@ HRESULT CRenderer::Draw()
 		return E_FAIL;
 	//if (FAILED(Render_ShadowObj()))
 	//	return E_FAIL;
-
 
 	if (FAILED(Render_Deferred()))
 		return E_FAIL;
@@ -331,10 +323,10 @@ HRESULT CRenderer::Draw()
 	//if (FAILED(Render_Bloom()))	// 다시 고치기
 	//	return E_FAIL;
 
-	if(FAILED(Render_LDR()))
-		return E_FAIL;
+	/*if(FAILED(Render_LDR()))
+		return E_FAIL;*/
 
-	if (FAILED(Render_Distortion()))
+	/*if (FAILED(Render_Distortion()))
 		return E_FAIL;
 
 	if (FAILED(Render_NonLights()))
@@ -342,7 +334,7 @@ HRESULT CRenderer::Draw()
 	if (FAILED(Render_Blend()))
 		return E_FAIL;
 	if (FAILED(Render_UI()))
-		return E_FAIL;
+		return E_FAIL;*/
 
 #ifdef _DEBUG
 	if (KEY_TAP(KEY::F1))
@@ -670,102 +662,123 @@ HRESULT CRenderer::Render_SSAO()
 
 HRESULT CRenderer::Render_HDR()
 {
+	if (!m_tHDR.isOnHDR)
+		return S_OK;
 	Copy_BackBuffer();
 
-	if (FAILED(m_pGameInstance->Begin_MRT(TEXT("MRT_HDR"))))
+	// 화면 해상도의 1/4
+	_uint vRes[2] = { _uint(1280.f / 4), _uint(720.f / 4) };
+	m_pHDRShader->Bind_RawValue("g_vRes", vRes, sizeof(_uint) * 2);
+
+	_uint iDomain = vRes[0] * vRes[1];
+	if (FAILED(m_pHDRShader->Bind_RawValue("g_iDomain", &iDomain, sizeof(_uint))))
 		return E_FAIL;
 
-	if (FAILED(m_pHDRShader->Bind_Matrix("g_WorldMatrix", &m_WorldMatrix)))
+	if (FAILED(m_pGameInstance->Bind_RT_ShaderResource(m_pHDRShader, TEXT("Target_BackBuffer"), "g_InputTexture")))
 		return E_FAIL;
-	if (FAILED(m_pHDRShader->Bind_Matrix("g_ViewMatrix", &m_ViewMatrix)))
-		return E_FAIL;
-	if (FAILED(m_pHDRShader->Bind_Matrix("g_ProjMatrix", &m_ProjMatrix)))
+	if (FAILED(m_pGameInstance->BInd_RT_UnorderedView(m_pHDRShader, TEXT("Target_HDR0"), "g_OutputAvgLum")))
 		return E_FAIL;
 
-	if (FAILED(m_pGameInstance->Bind_RT_ShaderResource(m_pHDRShader, TEXT("Target_BackBuffer"), "g_BackTexture")))
+	if (FAILED(m_pHDRShader->Begin(0)))
+		return E_FAIL;
+	m_pContext->Dispatch((UINT)ceil((1280.f / 4 * 720.f / 4) / 1024.f), 1, 1);
+
+	// 다음 계산에 영향을 주지 않기 위해 클리어시킴 최대 128개 8개
+	m_pContext->CSSetShaderResources(0, 128, m_pClearSRV);
+	m_pContext->CSSetUnorderedAccessViews(0, 8, m_pClearUAV, nullptr);
+
+	// 평균 휘도 값을 추출해낼거임
+	_uint iGroupSize = (UINT)ceil((_float)(1280.f / 4.f * 720.f / 4.f) / 1024.f);
+	if (FAILED(m_pHDRShader->Bind_RawValue("g_iGroupSize", &iGroupSize, sizeof(_uint))))
 		return E_FAIL;
 
-	m_pHDRShader->Begin(0);
+	if (FAILED(m_pGameInstance->Bind_RT_ShaderResource(m_pHDRShader, TEXT("Target_HDR0"), "g_InputAvgLum")))
+		return E_FAIL;
+	if (FAILED(m_pGameInstance->BInd_RT_UnorderedView(m_pHDRShader, TEXT("Target_HDR1"), "g_OutputAvgLum")))
+		return E_FAIL;
+	m_pHDRShader->Begin(1);
+	m_pContext->Flush();
+	m_pContext->Dispatch(1, 1, 1);	
+
+
+	m_pContext->CSSetShaderResources(0, 128, m_pClearSRV);
+	m_pContext->CSSetUnorderedAccessViews(0, 8, m_pClearUAV, nullptr);
+
+#pragma region Stagind 버퍼로 값 꺼내오기
+	D3D11_BUFFER_DESC bufferDesc = {};
+	bufferDesc.Usage = D3D11_USAGE_STAGING;          // Staging 버퍼 용도로 설정
+	bufferDesc.BindFlags = 0;                         // 바인드 플래그 없음
+	bufferDesc.CPUAccessFlags = D3D11_CPU_ACCESS_READ; // CPU 읽기 접근 허용
+	bufferDesc.MiscFlags = 0;
+	bufferDesc.StructureByteStride = sizeof(float);   // 구조체 크기
+
+	// 복사할 데이터 크기 설정 (예: UAV에 저장된 float 개수만큼)
+	bufferDesc.ByteWidth = sizeof(float);
+
+	ID3D11Buffer* pStagingBuffer = nullptr;
+	HRESULT hr = m_pDevice->CreateBuffer(&bufferDesc, nullptr, &pStagingBuffer);
+	if (FAILED(hr)) {
+		return hr; // 버퍼 생성 실패 시 처리
+	}
+
+	// GPU에서 Staging 버퍼로 데이터 복사
+	ID3D11Buffer* pBuffer = m_pGameInstance->Get_Buffer(TEXT("Target_HDR1"));
+	m_pContext->CopyResource(pStagingBuffer, pBuffer); // pBuffer는 UAV 리소스
+
+	// CPU에서 Staging 버퍼 데이터 읽기
+	D3D11_MAPPED_SUBRESOURCE mappedResource;
+	hr = m_pContext->Map(pStagingBuffer, 0, D3D11_MAP_READ, 0, &mappedResource);
+	if (FAILED(hr)) {
+		pStagingBuffer->Release();
+		return hr; // Map 실패 시 처리
+	}
+
+	float* pData = static_cast<float*>(mappedResource.pData);
+	// CPU에서 데이터를 처리 (예: 첫 번째 값 읽기)
+	float value = pData[0]; // 편균 휘도값
+
+	// Map 해제
+	m_pContext->Unmap(pStagingBuffer, 0);
+
+	// Staging 버퍼 해제
+	pStagingBuffer->Release();
+#pragma endregion
+
+	// 톤 매핑 할거임
+	if (FAILED(m_pBackShader->Bind_RawValue("fMiddleGrey", &m_tHDR.fMiddleGrey, sizeof(_float))))
+		return E_FAIL;
+	if (FAILED(m_pBackShader->Bind_RawValue("fLumWhiteSqr", &m_tHDR.fLumWhiteSqr, sizeof(_float))))
+		return E_FAIL;
+
+	if (FAILED(m_pGameInstance->Bind_RT_ShaderResource(m_pBackShader, TEXT("Target_HDR1"), "g_HDR"))) // 휘도값
+		return E_FAIL;
+	if (FAILED(m_pGameInstance->Bind_RT_ShaderResource(m_pBackShader, TEXT("Target_BackBuffer"), "g_InputBackTexture")))	// 백버퍼
+		return E_FAIL;
+	if (FAILED(m_pGameInstance->BInd_RT_UnorderedView(m_pBackShader, TEXT("Target_LDR"), "g_OutputBackTexture"))) // 톤 매핑 출력
+		return E_FAIL;
+
+	m_pBackShader->Begin(0);
+	m_pContext->Flush(); 
+	m_pContext->Dispatch(static_cast<_uint>(ceil(1280.f / 32.f)), static_cast<_uint>(ceil(720.f / 32.f)), 1);
+
+	m_pContext->CSSetShaderResources(0, 128, m_pClearSRV);
+	m_pContext->CSSetUnorderedAccessViews(0, 8, m_pClearUAV, nullptr);
+
+	if (FAILED(m_pShader->Bind_Matrix("g_WorldMatrix", &m_WorldMatrix)))
+		return E_FAIL;
+	if (FAILED(m_pShader->Bind_Matrix("g_ViewMatrix", &m_ViewMatrix)))
+		return E_FAIL;
+	if (FAILED(m_pShader->Bind_Matrix("g_ProjMatrix", &m_ProjMatrix)))
+		return E_FAIL;
+
+	if (FAILED(m_pGameInstance->Bind_RT_ShaderResource(m_pShader, TEXT("Target_LDR"), "g_BackTexture")))
+		return E_FAIL;
+
+	m_pShader->Begin(4);
+
 	m_pVIBuffer->Bind_Buffers();
+
 	m_pVIBuffer->Render();
-
-	if (FAILED(m_pGameInstance->End_MRT()))
-		return E_FAIL;
-
-	//_uint vRes[2] = { _uint(1280.f / 4), _uint(720.f / 4) };
-
-	//m_pHDRShader->Bind_RawValue("g_vRes", vRes, sizeof(_uint) * 2);
-
-	//_uint iDomain = vRes[0] * vRes[1];
-	//if (FAILED(m_pHDRShader->Bind_RawValue("g_iDomain", &iDomain, sizeof(_uint))))
-	//return E_FAIL;
-
-	//if (FAILED(m_pGameInstance->Bind_RT_ShaderResource(m_pHDRShader, TEXT("Target_BackBuffer"), "g_BackTexture")))
-	//	return E_FAIL;
-	//if (FAILED(m_pGameInstance->BInd_RT_UnorderedView(m_pHDRShader, TEXT("Target_Test0"), "g_OutputAvgLum")))
-	//	return E_FAIL;
-
-	//if (FAILED(m_pHDRShader->Begin(0)))
-	//	return E_FAIL;
-	//m_pContext->Dispatch((UINT)ceil((_float)(1280.f / 4 * 720.f / 4) / 1024.f), 1, 1);
-
-	//// 다음 계산에 영향을 주지 않기 위해 클리어시킴 최대 128개 8개
-	//m_pContext->CSSetShaderResources(0, 128, m_pClearSRV);
-	//m_pContext->CSSetUnorderedAccessViews(0, 8, m_pClearUAV, nullptr);
-
-	//_uint iGroupSize = (UINT)ceil((_float)(1280.f / 4.f * 720.f / 4.f) / 1024.f);
-	//m_pHDRShader->Bind_RawValue("g_iGroupSize", &iGroupSize, sizeof(_uint));
-
-	//if (FAILED(m_pGameInstance->Bind_RT_ShaderResource(m_pHDRShader, TEXT("Target_BackBuffer"), "g_BackTexture")))
-	//	return E_FAIL;
-	//if (FAILED(m_pGameInstance->BInd_RT_UnorderedView(m_pHDRShader, TEXT("Target_Test1"), "g_OutputAvgLum")))
-	//	return E_FAIL;
-	//m_pHDRShader->Begin(1);
-	//m_pContext->Dispatch(1, 1, 1);	
-
-	//m_pContext->CSSetShaderResources(0, 128, m_pClearSRV);
-	//m_pContext->CSSetUnorderedAccessViews(0, 8, m_pClearUAV, nullptr);
-
-	//D3D11_BUFFER_DESC bufferDesc = {};
-	//bufferDesc.Usage = D3D11_USAGE_STAGING;          // CPU 접근을 위한 Staging
-	//bufferDesc.BindFlags = 0;                       // Bind flags 없음
-	//bufferDesc.CPUAccessFlags = D3D11_CPU_ACCESS_READ; // 읽기 전용 CPU 접근
-	//bufferDesc.MiscFlags = 0;
-	//bufferDesc.StructureByteStride = sizeof(float);   // 데이터 크기
-
-	//// UAV에 연결된 버퍼와 같은 크기로 Staging Buffer를 생성합니다.
-	//bufferDesc.ByteWidth = sizeof(float); // 예를 들어, UAV에 1개의 float가 저장되어 있다면 그 크기만큼
-
-	//ID3D11Buffer* pStagingBuffer = nullptr;
-	//HRESULT hr = m_pDevice->CreateBuffer(&bufferDesc, nullptr, &pStagingBuffer);
-	//if (FAILED(hr)) {
-	//	return hr; // 버퍼 생성 실패 시 처리
-	//}
-
-	//// 2. GPU에서 Staging Buffer로 데이터 복사
-	//// GPU에서 GPU로 데이터를 복사하기 위해 CopyResource 사용
-	//ID3D11Buffer* pBuffer = m_pGameInstance->Get_Buffer(TEXT("Target_Test1"));
-	//m_pContext->CopyResource(pStagingBuffer, pBuffer); // pHDR0UAV는 UAV 리소스
-
-	//// 3. CPU에서 Staging Buffer 데이터 읽기
-	//D3D11_MAPPED_SUBRESOURCE mappedResource;
-	//hr = m_pContext->Map(pStagingBuffer, 0, D3D11_MAP_READ, 0, &mappedResource);
-	//if (FAILED(hr)) {
-	//	return hr; // Map 실패 시 처리
-	//}
-
-	//// Staging Buffer의 데이터를 읽을 수 있습니다.
-	//float* pData = static_cast<float*>(mappedResource.pData);
-
-	//// pData를 사용하여 CPU에서 데이터를 처리합니다.
-	//// 예를 들어, 첫 번째 값을 읽는다면:
-	//float value = pData[0];
-
-	//// 4. Map 해제
-	//m_pContext->Unmap(pStagingBuffer, 0);
-
-	//// 필요하다면 Staging Buffer를 해제합니다.
-	//pStagingBuffer->Release();
 
 
 	return S_OK;
@@ -1021,33 +1034,6 @@ HRESULT CRenderer::Render_Bloom()
 	ViewportDesc.Height = fInitHeight;
 
 	m_pContext->RSSetViewports(iNumViewports, &ViewportDesc);
-
-	return S_OK;
-}
-
-HRESULT CRenderer::Render_LDR()
-{
-	//if (FAILED(m_pGameInstance->Begin_MRT(TEXT("MRT_LDR"))))
-	//	return E_FAIL;
-
-	if (FAILED(m_pHDRShader->Bind_Matrix("g_WorldMatrix", &m_WorldMatrix)))
-		return E_FAIL;
-	if (FAILED(m_pHDRShader->Bind_Matrix("g_ViewMatrix", &m_ViewMatrix)))
-		return E_FAIL;
-	if (FAILED(m_pHDRShader->Bind_Matrix("g_ProjMatrix", &m_ProjMatrix)))
-		return E_FAIL;
-
-	if (FAILED(m_pGameInstance->Bind_RT_ShaderResource(m_pHDRShader, TEXT("Target_HDR"), "g_BackTexture")))
-		return E_FAIL;
-	//if (FAILED(m_pGameInstance->Bind_RT_ShaderResource(m_pHDRShader, TEXT("Target_Test1"), "g_Avg")))
-	//	return E_FAIL;
-	
-	m_pHDRShader->Begin(1);
-	m_pVIBuffer->Bind_Buffers();
-	m_pVIBuffer->Render();
-
-	//if (FAILED(m_pGameInstance->End_MRT()))
-	//	return E_FAIL;
 
 	return S_OK;
 }
@@ -1418,7 +1404,7 @@ HRESULT CRenderer::Ready_HDR()
 	UAVDesc.ViewDimension = D3D11_UAV_DIMENSION_BUFFER;
 	UAVDesc.Buffer.NumElements = iWidth;
 
-	if (FAILED(m_pGameInstance->Add_RenderTarget_For_Desc(TEXT("Target_Test0"), &BufferDesc, nullptr, &SRVDesc, &UAVDesc, _float4(0.f, 0.f, 0.f, 0.f))))
+	if (FAILED(m_pGameInstance->Add_RenderTarget_For_Desc(TEXT("Target_HDR0"), &BufferDesc, nullptr, &SRVDesc, &UAVDesc, _float4(0.f, 0.f, 0.f, 0.f))))
 		return E_FAIL;
 
 	ZeroMemory(&BufferDesc, sizeof(D3D11_BUFFER_DESC));
@@ -1437,9 +1423,61 @@ HRESULT CRenderer::Ready_HDR()
 	UAVDesc.ViewDimension = D3D11_UAV_DIMENSION_BUFFER;
 	UAVDesc.Buffer.NumElements = 1;
 
+	if (FAILED(m_pGameInstance->Add_RenderTarget_For_Desc(TEXT("Target_HDR1"), &BufferDesc, nullptr, &SRVDesc, &UAVDesc, _float4(0.f, 0.f, 0.f, 0.f))))
+		return E_FAIL;
+
+
+	D3D11_TEXTURE2D_DESC TextureDesc{};
+	ZeroMemory(&TextureDesc, sizeof(D3D11_TEXTURE2D_DESC));
+	TextureDesc.Width = (_uint)ViewportDesc.Width;
+	TextureDesc.Height = (_uint)ViewportDesc.Height;
+	TextureDesc.MipLevels = 1; 
+	TextureDesc.ArraySize = 1; 
+	TextureDesc.Format = DXGI_FORMAT_R8G8B8A8_UNORM;
+	TextureDesc.SampleDesc.Count = 1; 
+	TextureDesc.SampleDesc.Quality = 0;
+	TextureDesc.Usage = D3D11_USAGE_DEFAULT;
+	TextureDesc.BindFlags = D3D11_BIND_RENDER_TARGET | D3D11_BIND_SHADER_RESOURCE | D3D11_BIND_UNORDERED_ACCESS;	// 제일 중요함
+	TextureDesc.CPUAccessFlags = 0; 
+	TextureDesc.MiscFlags = 0;
+
+	if (FAILED(m_pGameInstance->Add_RenderTarget_For_Desc(TEXT("Target_LDR"), nullptr, &TextureDesc, nullptr, nullptr, _float4(0.f, 0.f, 0.f, 0.f))))
+		return E_FAIL;
+	if (FAILED(m_pGameInstance->Add_MRT(TEXT("MRT_LDR"), TEXT("Target_LDR"))))
+		return E_FAIL;
+
+	//if (FAILED(m_pGameInstance->Add_RenderTarget(TEXT("Target_HDR"), (_uint)ViewportDesc.Width, (_uint)ViewportDesc.Height, DXGI_FORMAT_B8G8R8A8_UNORM, _float4(0.f, 0.f, 0.f, 0.f))))
+	//	return E_FAIL;
+	//if (FAILED(m_pGameInstance->Add_RenderTarget(TEXT("Target_LDR"), (_uint)ViewportDesc.Width, (_uint)ViewportDesc.Height, DXGI_FORMAT_B8G8R8A8_UNORM, _float4(0.f, 0.f, 0.f, 0.f))))
+	//	return E_FAIL;
+
+
+
+
+
+
+
+	ZeroMemory(&BufferDesc, sizeof(D3D11_BUFFER_DESC));
+	BufferDesc.BindFlags = D3D11_BIND_UNORDERED_ACCESS | D3D11_BIND_SHADER_RESOURCE;
+	BufferDesc.StructureByteStride = sizeof(_float);
+	BufferDesc.ByteWidth = iWidth * BufferDesc.StructureByteStride;
+	BufferDesc.MiscFlags = D3D11_RESOURCE_MISC_BUFFER_STRUCTURED;
+
+	ZeroMemory(&SRVDesc, sizeof(D3D11_SHADER_RESOURCE_VIEW_DESC));
+	SRVDesc.Format = DXGI_FORMAT_UNKNOWN;
+	SRVDesc.ViewDimension = D3D11_SRV_DIMENSION_BUFFER;
+	SRVDesc.Buffer.NumElements = iWidth;
+
+	ZeroMemory(&UAVDesc, sizeof(D3D11_UNORDERED_ACCESS_VIEW_DESC));
+	UAVDesc.Format = DXGI_FORMAT_UNKNOWN;
+	UAVDesc.ViewDimension = D3D11_UAV_DIMENSION_BUFFER;
+	UAVDesc.Buffer.NumElements = iWidth;
+
 	if (FAILED(m_pGameInstance->Add_RenderTarget_For_Desc(TEXT("Target_Test1"), &BufferDesc, nullptr, &SRVDesc, &UAVDesc, _float4(0.f, 0.f, 0.f, 0.f))))
 		return E_FAIL;
 
+	m_tHDR.fMiddleGrey = 1.4f;
+	m_tHDR.fLumWhiteSqr = 2.3f;
 	return S_OK;
 }
 
@@ -1542,6 +1580,7 @@ void CRenderer::Free()
 	Safe_Release(m_pLightDepthStencilView);
 	Safe_Release(m_pCascadeDepthStencilViewArr);
 
+	Safe_Release(m_pBackShader);
 	Safe_Release(m_pHDRShader);
 	Safe_Release(m_pSSAOShader);
 	Safe_Release(m_pNoiseTexture_SSAO);

@@ -2,8 +2,10 @@
 #include "..\Public\Player.h"
 
 #include "GameInstance.h"
-#include "Particle_Explosion.h"
 #include "Weapon.h"
+
+#include "Effect_Manager.h"
+#include "Effect_Container.h"
 
 CPlayer::CPlayer(ID3D11Device * pDevice, ID3D11DeviceContext * pContext)
 	: CPawn{ pDevice, pContext }
@@ -40,13 +42,17 @@ HRESULT CPlayer::Initialize(void * pArg)
 	m_pTransformCom->Set_State(CTransform::STATE_POSITION, XMVectorSet(0.1f, 0.f, 0.1f, 1.f));
 
 	//m_pGameInstance->SetUpPhysX_Player(this);
-	m_pModelCom->SetUp_Animation(3, true);
+	m_pModelCom->SetUp_Animation(0, true);
 
 	return S_OK;
 }
 
 void CPlayer::Priority_Update(_float fTimeDelta)
 {
+	for (auto& pEffect : m_EffectList)
+	{
+		pEffect->Priority_Update(fTimeDelta);
+	}
 }
 
 void CPlayer::Update(_float fTimeDelta)
@@ -60,7 +66,70 @@ void CPlayer::Update(_float fTimeDelta)
 	if (GetKeyState(VK_RIGHT) & 0x8000)
 		m_pTransformCom->Turn(false, true, false, fTimeDelta);
 
-	m_pModelCom->Play_Animation(fTimeDelta);
+
+	m_vCurRootMove = m_pModelCom->Play_Animation(fTimeDelta , &m_bEndAnim, &m_EvKeyList);
+
+	_vector vPos = m_pTransformCom->Get_State(CTransform::STATE_POSITION);
+
+	if (m_bEndAnim == true && m_bResetRootMove)//조건을 애니메이션이 끝났을때 or 변경 되었을때로
+	{
+		m_vCurRootMove = m_vRootMoveStack = XMVectorSet(0, 0, 0, 1);
+	}
+	else
+	{
+		m_vCurRootMove = XMVector3TransformNormal(m_vCurRootMove, m_pTransformCom->Get_WorldMatrix());
+
+		m_pTransformCom->Set_State(CTransform::STATE_POSITION, vPos + m_vCurRootMove - m_vRootMoveStack);
+		m_vRootMoveStack = m_vCurRootMove;
+	}
+
+	for (auto& EvKey : m_EvKeyList)
+	{
+		if (EvKey.eEvent_type == EVENT_KEYFRAME::ET_ONCE)
+		{
+			auto Effect = m_Effects.find(EvKey.iEffectNum);
+			if (Effect == m_Effects.end())
+			{
+				CEffect_Container::EFFECT_DESC EffectDesc = {};
+				EffectDesc.fRotationPerSec = XMConvertToRadians(90.f);
+				EffectDesc.fSpeedPerSec = 1.f;
+				EffectDesc.iLevelIndex = LEVEL_GAMEPLAY;
+				EffectDesc.pParentMatrix = m_pTransformCom->Get_WorldMatrix_Ptr();
+				EffectDesc.pSocketMatrix = (_Matrix*)m_pModelCom->Get_BoneCombindTransformationMatrix_Ptr(EvKey.iBoneIndex);
+
+				CEffect_Manager::Get_Instance()->Clone_Effect(CEffect_Manager::EFFECT_POWER_HIT, &EffectDesc);
+			}
+		}
+		else if (EvKey.eEvent_type == EVENT_KEYFRAME::ET_REPET)
+		{
+			CEffect_Container* pEffectCon;
+			auto Effect = m_Effects.find(EvKey.iEffectNum);
+			if (Effect == m_Effects.end())
+			{
+				CEffect_Container::EFFECT_DESC EffectDesc = {};
+				EffectDesc.fRotationPerSec = XMConvertToRadians(90.f);
+				EffectDesc.fSpeedPerSec = 1.f;
+				EffectDesc.iLevelIndex = LEVEL_GAMEPLAY;
+				EffectDesc.vScale = _Vec3{1, 1, 1};
+				EffectDesc.vPos = _Vec3{ 0, 0, 0 };
+				EffectDesc.vRotation = _Vec3{ 0, 0, 0 };
+				EffectDesc.pParentMatrix = m_pTransformCom->Get_WorldMatrix_Ptr();
+				EffectDesc.pSocketMatrix = (_Matrix*)m_pModelCom->Get_BoneCombindTransformationMatrix_Ptr(EvKey.iBoneIndex);
+				pEffectCon =	CEffect_Manager::Get_Instance()->Clone_Effect(CEffect_Manager::EFFECT_POWER_HIT, &EffectDesc);
+				m_Effects.emplace(EvKey.iEffectNum, pEffectCon);
+			}
+			else
+			{
+				pEffectCon = Effect->second;
+			}
+			m_EffectList.push_back(pEffectCon);
+		}
+	}
+
+	for (auto& pEffect : m_EffectList)
+	{
+		pEffect->Update(fTimeDelta);
+	}
 
 	m_pColliderCom->Update(m_pTransformCom->Get_WorldMatrix_Ptr());
 }
@@ -81,6 +150,14 @@ void CPlayer::Late_Update(_float fTimeDelta)
 	m_pGameInstance->Add_DebugObject(m_pColliderCom);
 	m_pGameInstance->Add_DebugObject(m_pNavigationCom);
 #endif
+
+	for (auto& pEffect : m_EffectList)
+	{
+		pEffect->Late_Update(fTimeDelta);
+	}
+
+	m_EffectList.clear();
+	m_EvKeyList.clear();
 }
 
 HRESULT CPlayer::Render()
@@ -253,6 +330,12 @@ CPawn* CPlayer::Clone(void * pArg)
 void CPlayer::Free()
 {
 	__super::Free();
+
+	for (auto & Pair : m_Effects)
+	{
+		Safe_Release(Pair.second);
+	}
+	m_Effects.clear();
 
 	Safe_Release(m_pColliderCom);
 	Safe_Release(m_pNavigationCom);

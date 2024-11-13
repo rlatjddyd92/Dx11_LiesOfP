@@ -73,24 +73,6 @@
     <Filter Include="03.GameInterface_Controller\00.UIManager\00.UIPage\02.UIPage_Play">
       <UniqueIdentifier>{0bf63bb1-37d5-4135-837b-20c74ddf9ad5}</UniqueIdentifier>
     </Filter>
-    <Filter Include="02.GameObjects\05.Effect">
-      <UniqueIdentifier>{d5192014-9901-427e-b465-6371d3d77239}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="02.GameObjects\05.Effect\Effect_Base">
-      <UniqueIdentifier>{15275d84-afa5-4b88-b2ca-643142c6e3da}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="02.GameObjects\05.Effect\Effect_Base\Texture_Effect">
-      <UniqueIdentifier>{5bf69a04-3942-4fd1-925f-d87d83e29ba8}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="02.GameObjects\05.Effect\Effect_Base\Particle_Effect">
-      <UniqueIdentifier>{133e63df-e370-4ab8-93fc-2fa295699a17}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="02.GameObjects\05.Effect\Effect_Container">
-      <UniqueIdentifier>{4e8f97f6-ae2a-4c6b-9183-3354c0d500b6}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="02.GameObjects\05.Effect\Effect_Manager">
-      <UniqueIdentifier>{1e476235-e2e7-4f5d-a200-9525d40dfc42}</UniqueIdentifier>
-    </Filter>
     <Filter Include="02.GameObjects\02.Monster\CarcassBigA">
       <UniqueIdentifier>{f6168eed-c521-4165-b051-0becd723a0a2}</UniqueIdentifier>
     </Filter>
@@ -129,7 +111,7 @@
     </Filter>
     <Filter Include="05.Fsm\Monster\CarcassBigA\Hit_Fatal">
       <UniqueIdentifier>{3a3180b6-88e0-47d8-a77c-574050019abe}</UniqueIdentifier>
-	</Filter>
+    </Filter>
     <Filter Include="03.GameInterface_Controller\00.UIManager\00.UIPage\03.UIPage_Menu">
       <UniqueIdentifier>{b26954b1-cb30-4587-aded-033de3ff1679}</UniqueIdentifier>
     </Filter>
@@ -171,6 +153,24 @@
     </Filter>
     <Filter Include="03.GameInterface_Controller\04.Empty">
       <UniqueIdentifier>{10bfef8a-2262-4570-957b-02a9624e5eff}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.GameObjects\05.Effect">
+      <UniqueIdentifier>{d5192014-9901-427e-b465-6371d3d77239}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.GameObjects\05.Effect\Effect_Base">
+      <UniqueIdentifier>{15275d84-afa5-4b88-b2ca-643142c6e3da}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.GameObjects\05.Effect\Effect_Base\Texture_Effect">
+      <UniqueIdentifier>{5bf69a04-3942-4fd1-925f-d87d83e29ba8}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.GameObjects\05.Effect\Effect_Base\Particle_Effect">
+      <UniqueIdentifier>{133e63df-e370-4ab8-93fc-2fa295699a17}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.GameObjects\05.Effect\Effect_Container">
+      <UniqueIdentifier>{4e8f97f6-ae2a-4c6b-9183-3354c0d500b6}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.GameObjects\05.Effect\Effect_Manager">
+      <UniqueIdentifier>{1e476235-e2e7-4f5d-a200-9525d40dfc42}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>

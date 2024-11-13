@@ -75,7 +75,7 @@ void CParticle_Effect::Update(_float fTimeDelta)
     Movement.fAccelSpeed = m_AccelDesc.fAccelSpeed;
     Movement.WorldMatrix = m_WorldMatrix;
     
-    if(true == m_pVIBufferCom->DispatchCS(m_pActionCS, Movement));
+    if(true == m_pVIBufferCom->DispatchCS(m_pActionCS, Movement))
         m_isDead = true;
 }
 

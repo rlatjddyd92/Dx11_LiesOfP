@@ -119,6 +119,7 @@ HRESULT CShader::Initialize_Prototype(const _tchar* pShaderFilePath)
 			return E_FAIL;
 
 		D3DX11_PASS_DESC	PassDesc{};
+		ZeroMemory(&PassDesc, sizeof(D3DX11_PASS_DESC));
 		pPass->GetDesc(&PassDesc);
 
 		//ID3D11InputLayout* pInputLayout;

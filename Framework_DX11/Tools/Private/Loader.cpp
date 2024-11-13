@@ -592,24 +592,24 @@ HRESULT CLoader::Ready_Resources_For_ToolLevel_Map0()
 	CController_AnimationTool::Get_Instance()->SetUp_Lump(13);
 
 	int iModelCnt = { 0 };
-	//if (false)
-	//{
-	//	//"../Bin/ModelData/Anim/PlayerExample/PlayerExample.dat"	일반 바이너리
-	//	pModel = CModel::Create(m_pDevice, m_pContext, CModel::TYPE_ANIM, "../Bin/ModelData/Anim/PlayerExample/PlayerExample.dat", PreTransformMatrix, false, CController_AnimationTool::Get_Instance()->Get_StructStack(iModelCnt++));
-	//	if (FAILED(m_pGameInstance->Add_Prototype(LEVEL_TOOL, TEXT("Prototype_AnimModel_Player"), pModel)))
-	//		return E_FAIL;
-	//	m_pGameInstance->Add_ModelPrototype(LEVEL_TOOL, ("Prototype_AnimModel_Player"), pModel);
-	//}
-	//else
-	//{
-	//	//스택 스트럭트도 넣어주어야 새로 만든것에서 다시 저장할 수 있음.
-	//	//"../Bin/ModelData/Anim/CreatedBinFiles/Test.dat"			추가 조정 바이너리
-	//	//맨 뒤에 넣는 int 값 지역 변수 선언해서 0으로 만든 값을  i++로 넣어서 알아서 1씩 추가되도록 만들기.
-	//	pModel = CModel::Create(m_pDevice, m_pContext, CModel::TYPE_ANIM, "../Bin/ModelData/Anim/CreatedBinFiles/Player.dat", PreTransformMatrix, true, CController_AnimationTool::Get_Instance()->Get_StructStack(iModelCnt++));
-	//	if (FAILED(m_pGameInstance->Add_Prototype(LEVEL_TOOL, TEXT("Prototype_AnimModel_Player"), pModel)))
-	//		return E_FAIL;
-	//	m_pGameInstance->Add_ModelPrototype(LEVEL_TOOL, ("Prototype_AnimModel_Player"), pModel);
-	//}
+	if (false)
+	{
+		//"../Bin/ModelData/Anim/PlayerExample/PlayerExample.dat"	일반 바이너리
+		pModel = CModel::Create(m_pDevice, m_pContext, CModel::TYPE_ANIM, "../Bin/ModelData/Anim/PlayerExample/PlayerExample.dat", PreTransformMatrix, false, CController_AnimationTool::Get_Instance()->Get_StructStack(iModelCnt++));
+		if (FAILED(m_pGameInstance->Add_Prototype(LEVEL_TOOL, TEXT("Prototype_AnimModel_Player"), pModel)))
+			return E_FAIL;
+		m_pGameInstance->Add_ModelPrototype(LEVEL_TOOL, ("Prototype_AnimModel_Player"), pModel);
+	}
+	else
+	{
+		//스택 스트럭트도 넣어주어야 새로 만든것에서 다시 저장할 수 있음.
+		//"../Bin/ModelData/Anim/CreatedBinFiles/Test.dat"			추가 조정 바이너리
+		//맨 뒤에 넣는 int 값 지역 변수 선언해서 0으로 만든 값을  i++로 넣어서 알아서 1씩 추가되도록 만들기.
+		pModel = CModel::Create(m_pDevice, m_pContext, CModel::TYPE_ANIM, "../Bin/ModelData/Anim/CreatedBinFiles/Player.dat", PreTransformMatrix, true, CController_AnimationTool::Get_Instance()->Get_StructStack(iModelCnt++));
+		if (FAILED(m_pGameInstance->Add_Prototype(LEVEL_TOOL, TEXT("Prototype_AnimModel_Player"), pModel)))
+			return E_FAIL;
+		m_pGameInstance->Add_ModelPrototype(LEVEL_TOOL, ("Prototype_AnimModel_Player"), pModel);
+	}
 
 	//pModel = CModel::Create(m_pDevice, m_pContext, CModel::TYPE_ANIM, "../Bin/ModelData/Anim/Monster/CarcassNormal/CarcassNormal.dat", PreTransformMatrix, false, CController_AnimationTool::Get_Instance()->Get_StructStack(iModelCnt++));
 	//if (pModel != nullptr)
@@ -619,15 +619,15 @@ HRESULT CLoader::Ready_Resources_For_ToolLevel_Map0()
 	//	m_pGameInstance->Add_ModelPrototype(LEVEL_TOOL, ("Prototype_AnimModel_CracassNormal"), pModel);
 	//}
 
-	pModel = CModel::Create(m_pDevice, m_pContext, CModel::TYPE_ANIM, "../Bin/ModelData/Anim/Monster/CarcassTail/CarcassTail.dat", PreTransformMatrix, false, CController_AnimationTool::Get_Instance()->Get_StructStack(iModelCnt++));
-	if (pModel != nullptr)
-	{
-		if (FAILED(m_pGameInstance->Add_Prototype(LEVEL_TOOL, TEXT("Prototype_AnimModel_CarcassTail"), pModel)))
-			return E_FAIL;
-		m_pGameInstance->Add_ModelPrototype(LEVEL_TOOL, ("Prototype_AnimModel_CarcassTail"), pModel);
-	}
+	//pModel = CModel::Create(m_pDevice, m_pContext, CModel::TYPE_ANIM, "../Bin/ModelData/Anim/Monster/CarcassTail/CarcassTail.dat", PreTransformMatrix, false, CController_AnimationTool::Get_Instance()->Get_StructStack(iModelCnt++));
+	//if (pModel != nullptr)
+	//{
+	//	if (FAILED(m_pGameInstance->Add_Prototype(LEVEL_TOOL, TEXT("Prototype_AnimModel_CarcassTail"), pModel)))
+	//		return E_FAIL;
+	//	m_pGameInstance->Add_ModelPrototype(LEVEL_TOOL, ("Prototype_AnimModel_CarcassTail"), pModel);
+	//}
 
-	PreTransformMatrix = XMMatrixScaling(0.01f, 0.01f, 0.01f) * XMMatrixRotationY(XMConvertToRadians(270.f));
+	//PreTransformMatrix = XMMatrixScaling(0.01f, 0.01f, 0.01f) * XMMatrixRotationY(XMConvertToRadians(270.f));
 
 	//pModel = CModel::Create(m_pDevice, m_pContext, CModel::TYPE_ANIM, "../Bin/ModelData/Anim/CreatedBinFiles/CarcassBigA.dat", PreTransformMatrix, true, CController_AnimationTool::Get_Instance()->Get_StructStack(iModelCnt++));
 	////pModel = CModel::Create(m_pDevice, m_pContext, CModel::TYPE_ANIM, "../Bin/ModelData/Anim/Monster/CarcassBigA/CarcassBigA.dat", PreTransformMatrix, false, CController_AnimationTool::Get_Instance()->Get_StructStack(iModelCnt++));

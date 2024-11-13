@@ -104,7 +104,7 @@ HRESULT CEffect_Container::Render()
 
 HRESULT CEffect_Container::Add_Effect(class CEffect_Base* pEffectBase)
 {
-	pEffectBase->Set_ParentMatrix_Ptr(m_pTransformCom->Get_WorldMatrix_Ptr());
+	pEffectBase->Set_ParentMatrix_Ptr(&m_WorldMatrix);
 	m_Effects.emplace_back(pEffectBase);
 
 	return S_OK;

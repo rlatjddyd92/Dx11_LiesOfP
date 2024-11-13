@@ -24,6 +24,7 @@ public:
 	HRESULT Initialize(ID3D11Device* pDevice, ID3D11DeviceContext* pContext);
 
 	void Update_SSAO();
+	void Update_HDR();
 
 private:
 	class CGameInstance* m_pGameInstance = { nullptr };
