@@ -20,7 +20,7 @@ HRESULT CController_AnimationTool::Initialize(ID3D11Device* pDevice, ID3D11Devic
 {
 	//모델 종류, 갯수 등등 가져오기
 	
-	_int iNameNum = m_pGameInstance->Get_ModelPrototypes(LEVEL_TOOL).size();
+	_int iNameNum = (_int)m_pGameInstance->Get_ModelPrototypes(LEVEL_TOOL).size();
 	m_ModelNames.reserve(iNameNum);
 	for (auto& Pair : m_pGameInstance->Get_ModelPrototypes(LEVEL_TOOL))
 	{
