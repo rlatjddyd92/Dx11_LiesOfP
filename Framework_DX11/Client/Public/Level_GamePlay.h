@@ -29,6 +29,7 @@ public:
 
 	
 	HRESULT Ready_Layer_Player();
+	HRESULT Read_Map_Data();
 	//HRESULT Ready_Layer_Monster(CLandObject::LANDOBJECT_DESC& LandObjectDesc);
 	
 public:

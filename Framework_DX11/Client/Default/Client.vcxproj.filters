@@ -172,6 +172,9 @@
     <Filter Include="02.GameObjects\05.Effect\Effect_Manager">
       <UniqueIdentifier>{1e476235-e2e7-4f5d-a200-9525d40dfc42}</UniqueIdentifier>
     </Filter>
+    <Filter Include="02.GameObjects\08.StaticObj">
+      <UniqueIdentifier>{506c3b68-1793-4917-8eeb-d814379aca7e}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Client.h">
@@ -319,6 +322,9 @@
     <ClInclude Include="..\Public\State_CarcassBigA_Attack.h">
       <Filter>05.Fsm\Monster\CarcassBigA\Attack</Filter>
     </ClInclude>
+    <ClInclude Include="..\Public\StaticObj.h">
+      <Filter>02.GameObjects\08.StaticObj</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Client.cpp">
@@ -438,6 +444,9 @@
     </ClCompile>
     <ClCompile Include="..\Private\State_CarcassBigA_Attack.cpp">
       <Filter>05.Fsm\Monster\CarcassBigA\Attack</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Private\StaticObj.cpp">
+      <Filter>02.GameObjects\08.StaticObj</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

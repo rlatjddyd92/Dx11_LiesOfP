@@ -199,6 +199,7 @@
     <ClInclude Include="..\Public\State_CarcassBigA_Paralyze.h" />
     <ClInclude Include="..\Public\State_CarcassBigA_Run.h" />
     <ClInclude Include="..\Public\State_CarcassBigA_Walk.h" />
+    <ClInclude Include="..\Public\StaticObj.h" />
     <ClInclude Include="..\Public\Terrain.h" />
     <ClInclude Include="..\Public\Texture_Effect.h" />
     <ClInclude Include="..\Public\UIManager.h" />
@@ -249,6 +250,7 @@
     <ClCompile Include="..\Private\State_CarcassBigA_Paralyze.cpp" />
     <ClCompile Include="..\Private\State_CarcassBigA_Run.cpp" />
     <ClCompile Include="..\Private\State_CarcassBigA_Walk.cpp" />
+    <ClCompile Include="..\Private\StaticObj.cpp" />
     <ClCompile Include="..\Private\Terrain.cpp" />
     <ClCompile Include="..\Private\Texture_Effect.cpp" />
     <ClCompile Include="..\Private\UIManager.cpp" />

@@ -1,6 +1,7 @@
 #include "stdafx.h"
 #include "..\Public\Loader.h"
 #include "ThreadPool.h"
+#include <io.h>
 
 #include "Sky.h"
 #include "Player.h"
@@ -9,6 +10,7 @@
 #include "ForkLift.h"
 #include "FreeCamera.h"
 #include "BackGround.h"
+#include "StaticObj.h"
 
 #pragma region EFFECT
 #include "Monster.h"
@@ -450,6 +452,11 @@ HRESULT CLoader::Ready_Resources_For_GamePlayLevel()
 		CForkLift::Create(m_pDevice, m_pContext))))
 		return E_FAIL;
 
+	/* For. Prototype_GameObject_StaticObj */
+	if (FAILED(m_pGameInstance->Add_Prototype(TEXT("Prototype_GameObject_StaticObj"),
+		CStaticObj::Create(m_pDevice, m_pContext))))
+		return E_FAIL;
+
 #pragma region EFFECT
 	/* For. Prototype_GameObject_Effect_Container */
 	if (FAILED(m_pGameInstance->Add_Prototype(TEXT("Prototype_GameObject_Effect_Container"),
@@ -507,6 +514,112 @@ HRESULT CLoader::Ready_Resources_For_GamePlayLevel_Map0()
 
 HRESULT CLoader::Ready_Resources_For_GamePlayLevel_Map1()
 {
+	_matrix      PreTransformMatrix = XMMatrixIdentity();
+	PreTransformMatrix = XMMatrixScaling(0.005f, 0.005f, 0.005f);
+
+	// _finddata_t : <io.h>에서 제공하며 파일 정보를 저장하는 구조체
+	_finddata_t fd;
+
+	// _findfirst : <io.h>에서 제공하며 사용자가 설정한 경로 내에서 가장 첫 번째 파일을 찾는 함수
+	intptr_t handle = _findfirst("../Bin/ModelData/NonAnim/Map/Interior/*", &fd);
+
+	//if (handle == -1)
+	//	return E_FAIL;
+
+	int iResult = 0;
+
+	char szCurPath[128] = "../Bin/ModelData/NonAnim/Map/Interior/";    // 상대 경로
+	char szFullPath[128] = "";
+
+	_wstring strPrototype = TEXT("");
+
+	handle = _findfirst("../Bin/ModelData/NonAnim/Map/Temp/*", &fd);
+
+	if (handle == -1)
+		return E_FAIL;
+
+	char szCurPath3[128] = "../Bin/ModelData/NonAnim/Map/Temp/";    // 상대 경로
+	char szFullPath3[128] = "";
+
+	iResult = 0;
+
+	while (iResult != -1)
+	{
+		strcpy_s(szFullPath3, szCurPath3);
+		strcat_s(szFullPath3, fd.name);
+
+		_char szFileName[MAX_PATH] = "";
+		_char szExt[MAX_PATH] = "";
+		_splitpath_s(szFullPath3, nullptr, 0, nullptr, 0, szFileName, MAX_PATH, szExt, MAX_PATH);
+
+		if (!strcmp(fd.name, ".") || !strcmp(fd.name, "..")
+			|| strcmp(szExt, ".dat"))
+		{
+			iResult = _findnext(handle, &fd);
+			continue;
+		}
+
+		string strFileName = szFileName;
+		_wstring strPrototypeName;
+
+		strPrototypeName.assign(strFileName.begin(), strFileName.end());
+		wprintf(strPrototypeName.c_str());
+
+		PreTransformMatrix = XMMatrixIdentity();
+		PreTransformMatrix = XMMatrixScaling(0.005f, 0.005f, 0.005f);
+
+		if (FAILED(m_pGameInstance->Add_Prototype(LEVEL_GAMEPLAY, strPrototypeName,
+			CModel::Create(m_pDevice, m_pContext, CModel::TYPE_NONANIM, szFullPath3, PreTransformMatrix))))
+			return E_FAIL;
+
+		//_findnext : <io.h>에서 제공하며 다음 위치의 파일을 찾는 함수, 더이상 없다면 -1을 리턴
+		iResult = _findnext(handle, &fd);
+	}
+
+	handle = _findfirst("../Bin/ModelData/NonAnim/Map/Structure/*", &fd);
+
+	if (handle == -1)
+		return E_FAIL;
+
+	iResult = 0;
+
+	char szCurPath4[128] = "../Bin/ModelData/NonAnim/Map/Structure/";    // 상대 경로
+	char szFullPath4[128] = "";
+
+
+	while (iResult != -1)
+	{
+		strcpy_s(szFullPath4, szCurPath4);
+		strcat_s(szFullPath4, fd.name);
+
+		_char szFileName[MAX_PATH] = "";
+		_char szExt[MAX_PATH] = "";
+		_splitpath_s(szFullPath4, nullptr, 0, nullptr, 0, szFileName, MAX_PATH, szExt, MAX_PATH);
+
+		if (!strcmp(fd.name, ".") || !strcmp(fd.name, "..")
+			|| strcmp(szExt, ".dat"))
+		{
+			iResult = _findnext(handle, &fd);
+			continue;
+		}
+
+		string strFileName = szFileName;
+		_wstring strPrototypeName;
+
+		strPrototypeName.assign(strFileName.begin(), strFileName.end());
+		wprintf(strPrototypeName.c_str());
+
+		PreTransformMatrix = XMMatrixScaling(0.005f, 0.005f, 0.005f);
+
+		if (strPrototypeName == TEXT("SM_Monstery_Machine_01A"))
+			int a = 0;
+		if (FAILED(m_pGameInstance->Add_Prototype(LEVEL_GAMEPLAY, strPrototypeName,
+			CModel::Create(m_pDevice, m_pContext, CModel::TYPE_NONANIM, szFullPath4, PreTransformMatrix))))
+			return E_FAIL;
+
+		//_findnext : <io.h>에서 제공하며 다음 위치의 파일을 찾는 함수, 더이상 없다면 -1을 리턴
+		iResult = _findnext(handle, &fd);
+	}
 
 	m_isFinished_Map1 = true;
 
