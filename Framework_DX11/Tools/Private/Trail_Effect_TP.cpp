@@ -78,7 +78,7 @@ HRESULT CTrail_Effect_TP::Render()
 	if (FAILED(m_pMaskTextureCom_2->Bind_ShadeResource(m_pShaderCom, "g_MaskTexture_2", 0)))
 		return E_FAIL;
 
-	_int iNumInstance = { 5 };
+	_int iNumInstance = { 15 };
 	
 	if (FAILED(m_pShaderCom->Bind_RawValue("g_iNumInstance", &iNumInstance, sizeof(iNumInstance))))
 		return E_FAIL;
@@ -136,7 +136,7 @@ HRESULT CTrail_Effect_TP::Ready_Components(const TRAIL_TP_DESC& Desc)
 
 	//InstDesc.iNumInstance = Desc.BufferDesc.iNumInstance;
 	//InstDesc.vLifeTime = Desc.BufferDesc.vLifeTime;
-	InstDesc.iNumInstance = 5;
+	InstDesc.iNumInstance = 15;
 	InstDesc.vLifeTime = _float2(1.f, 1.f);
 
 	/* FOR.Com_VIBuffer */

@@ -32,7 +32,7 @@ HRESULT CTrail_TwoPoint_Instance::Initialize_Prototype(const CVIBuffer_Instancin
 		m_iInstanceStride = sizeof(VTXTRAIL_TWOPOINT_INSTANCE);
 		m_iIndexCountPerInstance = 1;
 
-		m_TrailPoses.resize(m_iNumInstance * 3 + 1);
+		m_TrailPoses.resize(m_iNumInstance + 3);
 
 #pragma region VERTEX_BUFFER
 		ZeroMemory(&m_BufferDesc, sizeof m_BufferDesc);
@@ -154,7 +154,7 @@ HRESULT CTrail_TwoPoint_Instance::Initialize(void* pArg)
 		m_iInstanceStride = sizeof(VTXTRAIL_TWOPOINT_INSTANCE);
 		m_iIndexCountPerInstance = 1;
 
-		m_TrailPoses.resize(m_iNumInstance * 4);
+		m_TrailPoses.resize(m_iNumInstance + 3);
 
 #pragma region VERTEX_BUFFER
 		ZeroMemory(&m_BufferDesc, sizeof m_BufferDesc);
@@ -298,38 +298,32 @@ _bool CTrail_TwoPoint_Instance::Update_Buffer(_fvector vWorldTopPos, _fvector vW
 	_bool m_bOver = { true };
 	for (size_t i = 0; i < m_iNumInstance; ++i)
 	{
-		for (size_t j = 0; j < 4; ++j)
-		{
-			switch (j)
-			{
-			case 0:
-				pVertices[i].vFirstTopPos = iter->vTop;
-				pVertices[i].vFirstBottomPos = iter->vBottom;
-				++iter;
-				break;
-			case 1:
-				pVertices[i].vSecondTopPos = iter->vTop;
-				pVertices[i].vSecondBottomPos = iter->vBottom;
-				++iter;
-				break;
-			case 2:
-				pVertices[i].vThirdTopPos = iter->vTop;
-				pVertices[i].vThirdBottomPos = iter->vBottom;
-				++iter;
-				break;
-			case 3:
-				pVertices[i].vForthTopPos = iter->vTop;
-				pVertices[i].vForthBottomPos = iter->vBottom;
-				break;
-			}
-		}
+		if (0 == i)
+			++iter;
 
-		pVertices[i].vLifeTime.y += fTimeDelta;
-		pVertices[i].fIndex = (_float)i;
-		
-		
+		// FirstPos
+		--iter;
+		pVertices[i].vFirstTopPos = iter->vTop;
+		pVertices[i].vFirstBottomPos = iter->vBottom;
+		++iter;
 
+		// SecondPos
+		pVertices[i].vSecondTopPos = iter->vTop;
+		pVertices[i].vSecondBottomPos = iter->vBottom;
+		++iter;
 
+		// ThirdPos
+		pVertices[i].vThirdTopPos = iter->vTop;
+		pVertices[i].vThirdBottomPos = iter->vBottom;
+		++iter;
+
+		// ForthPos
+		pVertices[i].vForthTopPos = iter->vTop;
+		pVertices[i].vForthBottomPos = iter->vBottom;
+		--iter;
+		--iter;
+
+		++iter;
 		if (pVertices[i].vLifeTime.y < pVertices[i].vLifeTime.x)
 			m_bOver = false;
 	}

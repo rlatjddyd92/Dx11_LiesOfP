@@ -106,20 +106,18 @@ struct GS_OUT
     float2 vLifeTime : TEXCOORD1;
 };
 
-float3 BezierCurve(float3 fTop0, float3 fTop1, float3 fTop2, float3 fTop3, float t)
+float3 CatmullRom(float3 p0, float3 p1, float3 p2, float3 p3, float t)
 {
-    float u = 1.0f - t;
-    float u2 = u * u;
     float t2 = t * t;
+    float t3 = t2 * t;
     
-    float3 vPoint = u * u2 * fTop0 +
-                   3.0f * u2 * t * fTop1 +
-                   3.0f * u * t2 * fTop2 +
-                   t * t2 * fTop3;
-                   
-    return vPoint;
+    return 0.5 * (
+        (2.0 * p1) +
+        (-p0 + p2) * t +
+        (2.0 * p0 - 5.0 * p1 + 4.0 * p2 - p3) * t2 +
+        (-p0 + 3.0 * p1 - 3.0 * p2 + p3) * t3
+    );
 }
-
 [maxvertexcount(128)] // 꼭 해줘야 함. 점을 몇 번 찍을 건지.(인덱스 갯수) : 사각형 최대 16개
 void GS_MAIN(point GS_IN In[1], inout TriangleStream<GS_OUT> Container)
 {
@@ -148,8 +146,8 @@ void GS_MAIN(point GS_IN In[1], inout TriangleStream<GS_OUT> Container)
         float3 vPreBottomPos = (float3) 0;
         
         // Catmull-Rom 스플라인 보간 공식
-        vCurTopPos = BezierCurve(fTop0, fTop1, fTop2, fTop3, t);
-        vCurBottomPos = BezierCurve(fBottom0, fBottom1, fBottom2, fBottom3, t);
+        vCurTopPos = CatmullRom(fTop0, fTop1, fTop2, fTop3, t);
+        vCurBottomPos = CatmullRom(fBottom0, fBottom1, fBottom2, fBottom3, t);
         
         if(0 == i)
         {
@@ -230,6 +228,8 @@ PS_OUT PS_MAIN(PS_IN In)
 
     Out.vColor = g_DiffuseTexture.Sample(LinearSampler, In.vTexcoord);
     
+    if(Out.vColor.g < 0.1f)
+        discard;
     
     Out.vColor.rb = Out.vColor.g;
     
