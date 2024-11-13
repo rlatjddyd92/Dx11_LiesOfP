@@ -88,10 +88,14 @@ HRESULT CUIManager::Render()
 	if (FAILED(m_pUIRender_Client->Render_UI(m_vecPage)))
 		return E_FAIL;
 
+#ifdef _DEBUG
 	if (m_iFonttest != 0)
 		if (FAILED(m_pUIRender_Client->Render_TestFont(m_iFonttest == 1)))
 			return E_FAIL;
 
+#endif // _DEBUG
+
+	
 	return S_OK;
 }
 
@@ -119,7 +123,7 @@ void CUIManager::Update_UIControl(_float fTimeDelta)
 void CUIManager::UIControl_Test(_float fTimeDelta)
 {
 #ifdef _DEBUG
-	if (KEY_TAP(KEY::P))
+	if (KEY_TAP(KEY::P)) // Page_Play(기본 플레이 화면) 띄우기/닫기 -> 정식 기능에서는 사용하지 않음 
 	{
 		if (m_vecPage[_int(UIPAGE::PAGE_PLAY)]->GetRender())
 		{
@@ -194,6 +198,13 @@ void CUIManager::UIControl_Test(_float fTimeDelta)
 		if (m_iFonttest > 1)
 			m_iFonttest = -1;
 	}
+
+#endif // DEBUG
+
+	// 아래 내용은 테스트용 변수 확인 페이지를 위한 코드
+	// 릴리즈에서도 사용할 수 있도록 설정
+	// TestPage 이외의 내용은 아래에 넣지 않기 
+
 
 	// TestPage 조작 
 	if (KEY_HOLD(KEY::LSHIFT))
@@ -270,12 +281,12 @@ void CUIManager::UIControl_Test(_float fTimeDelta)
 		_float3 fRE = { GET_GAMEINTERFACE->Get_StatInfo_Normal(STAT_NORMAL::STAT_GAUGE_REGION).fStat_Now , GET_GAMEINTERFACE->Get_StatInfo_Normal(STAT_NORMAL::STAT_GAUGE_REGION).fStat_Max, GET_GAMEINTERFACE->Get_StatInfo_Normal(STAT_NORMAL::STAT_GAUGE_REGION).fStat_Max_Limit };
 		_float3 fWE = { GET_GAMEINTERFACE->Get_StatInfo_Normal(STAT_NORMAL::STAT_GAUGE_WEIGHT).fStat_Now , GET_GAMEINTERFACE->Get_StatInfo_Normal(STAT_NORMAL::STAT_GAUGE_WEIGHT).fStat_Max, GET_GAMEINTERFACE->Get_StatInfo_Normal(STAT_NORMAL::STAT_GAUGE_WEIGHT).fStat_Max_Limit };
 		_float3 fGA = { GET_GAMEINTERFACE->Get_StatInfo_Normal(STAT_NORMAL::STAT_GADRIGAIN).fStat_Now , GET_GAMEINTERFACE->Get_StatInfo_Normal(STAT_NORMAL::STAT_GADRIGAIN).fStat_Max, GET_GAMEINTERFACE->Get_StatInfo_Normal(STAT_NORMAL::STAT_GADRIGAIN).fStat_Max_Limit };
-		_int iHP = GET_GAMEINTERFACE->Get_NowStat_Normal(STAT_NORMAL::STAT_POINT_BODY);
-		_int iST = GET_GAMEINTERFACE->Get_NowStat_Normal(STAT_NORMAL::STAT_POINT_STAMINA);
-		_int iWE = GET_GAMEINTERFACE->Get_NowStat_Normal(STAT_NORMAL::STAT_POINT_WEIGHT);
-		_int iPO = GET_GAMEINTERFACE->Get_NowStat_Normal(STAT_NORMAL::STAT_POINT_POWER);
-		_int iSK = GET_GAMEINTERFACE->Get_NowStat_Normal(STAT_NORMAL::STAT_POINT_SKILL);
-		_int iEV = GET_GAMEINTERFACE->Get_NowStat_Normal(STAT_NORMAL::STAT_POINT_EVOLUTION);
+		_int iHP = (_int)GET_GAMEINTERFACE->Get_NowStat_Normal(STAT_NORMAL::STAT_POINT_BODY);
+		_int iST = (_int)GET_GAMEINTERFACE->Get_NowStat_Normal(STAT_NORMAL::STAT_POINT_STAMINA);
+		_int iWE = (_int)GET_GAMEINTERFACE->Get_NowStat_Normal(STAT_NORMAL::STAT_POINT_WEIGHT);
+		_int iPO = (_int)GET_GAMEINTERFACE->Get_NowStat_Normal(STAT_NORMAL::STAT_POINT_POWER);
+		_int iSK = (_int)GET_GAMEINTERFACE->Get_NowStat_Normal(STAT_NORMAL::STAT_POINT_SKILL);
+		_int iEV = (_int)GET_GAMEINTERFACE->Get_NowStat_Normal(STAT_NORMAL::STAT_POINT_EVOLUTION);
 
 		ShowTestPage(TEST_PAGE_FUNCTION::FUNCTION_PLAYER_STAT,
 			TEXT("HP(현재/제한/최대치)"), TEST_PAGE_VALUE_TYPE::TYPE_FLOAT3, &fHP,
@@ -352,7 +363,7 @@ void CUIManager::UIControl_Test(_float fTimeDelta)
 
 
 
-#endif // DEBUG
+
 
 
 
@@ -601,9 +612,9 @@ void CUIManager::InputTestPageInfo(vector<_wstring>* pName, vector<_wstring>* pV
 	}
 	else if (eTypeA == TEST_PAGE_VALUE_TYPE::TYPE_INT)
 	{
-		_float fValue = 0.f;
-		memcpy(&fValue, ValueA, sizeof(_float));
-		_wstring strValue = to_wstring(fValue);
+		_int iValue = 0;
+		memcpy(&iValue, ValueA, sizeof(_int));
+		_wstring strValue = to_wstring(iValue);
 		pValue->push_back(strValue);
 	}
 	else if (eTypeA == TEST_PAGE_VALUE_TYPE::TYPE_FLOAT2)
