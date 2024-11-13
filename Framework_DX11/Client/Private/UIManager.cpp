@@ -202,9 +202,9 @@ void CUIManager::UIControl_Loading(_float fTimeDelta)
 
 void CUIManager::UIControl_Play(_float fTimeDelta)
 {
-	m_pTestData->fHP_Now = GET_GAMEINTERFACE->Get_NowStat_Normal(STAT_NORMAL::STAT_GAUGE_HP);
+	/*m_pTestData->fHP_Now = GET_GAMEINTERFACE->Get_NowStat_Normal(STAT_NORMAL::STAT_GAUGE_HP);
 	m_pUIPage_Play->SetRatio_HPBarMax(m_pTestData->fMax_HP_Now / m_pTestData->fMax_HP_Limit);
-	m_pUIPage_Play->SetRatio_HPBarFill(m_pTestData->fHP_Now / m_pTestData->fMax_HP_Limit);
+	m_pUIPage_Play->SetRatio_HPBarFill(m_pTestData->fHP_Now / m_pTestData->fMax_HP_Limit);*/
 }
 
 void CUIManager::UIControl_Inven(_float fTimeDelta)

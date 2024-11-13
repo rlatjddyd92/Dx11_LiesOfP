@@ -165,6 +165,7 @@
   </ItemGroup>
   <ItemGroup>
     <FxCompile Include="..\..\Client\Bin\ShaderFiles\Shader_Effect_Texture.hlsl" />
+    <FxCompile Include="..\..\Client\Bin\ShaderFiles\Shader_PostProcess.hlsl" />
     <FxCompile Include="..\Bin\ShaderFiles\Shader_Bloom.hlsl" />
     <FxCompile Include="..\Bin\ShaderFiles\Shader_Cell.hlsl" />
     <FxCompile Include="..\Bin\ShaderFiles\Shader_Compute_Back.hlsl" />

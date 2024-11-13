@@ -703,6 +703,10 @@ HRESULT CGameInstance::Draw_Instance(_uint iPass)
 {
 	return m_pInstance_Manager->Draw(iPass);
 }
+HRESULT CGameInstance::Draw_Shadow_Instance()
+{
+	return m_pInstance_Manager->Draw_Shadow();
+}
 void CGameInstance::Clear_Instance()
 {
 	m_pInstance_Manager->Clear();

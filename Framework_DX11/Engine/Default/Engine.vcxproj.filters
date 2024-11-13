@@ -679,6 +679,9 @@
     <FxCompile Include="..\Bin\ShaderFiles\Shader_Bloom.hlsl">
       <Filter>01.Utility\98.ShaderFiles</Filter>
     </FxCompile>
+    <FxCompile Include="..\..\Client\Bin\ShaderFiles\Shader_PostProcess.hlsl">
+      <Filter>01.Utility\98.ShaderFiles</Filter>
+    </FxCompile>
   </ItemGroup>
   <ItemGroup>
     <None Include="..\Bin\ShaderFiles\Shader_Engine_Defines.hlsli">

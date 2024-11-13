@@ -44,7 +44,9 @@ CModel* CInstance_Manager::Add_NonAnimModel(_uint iLevelIndex, const _wstring& s
 void CInstance_Manager::Clear()
 {
 	for (auto& Pair : m_pNonAnimModels)
+	{
 		Safe_Release(Pair.second);
+	}
 	m_pNonAnimModels.clear();
 }
 
@@ -83,6 +85,37 @@ HRESULT CInstance_Manager::Draw(_uint iPass)
 				if (FAILED(m_pNonAnimInstanceShader->Begin(0)))
 					return E_FAIL;
 			}
+
+			if (FAILED(Pair.second->Render_Instance((_uint)i)))
+				return E_FAIL;
+		}
+
+		Pair.second->Clear_InstanceData();
+	}
+
+	return S_OK;
+}
+
+HRESULT CInstance_Manager::Draw_Shadow()
+{
+	if (FAILED(m_pNonAnimInstanceShader->Bind_Matrix("g_ViewMatrix", &m_pGameInstance->Get_Transform(CPipeLine::D3DTS_VIEW))))
+		return E_FAIL;
+	if (FAILED(m_pNonAnimInstanceShader->Bind_Matrix("g_ProjMatrix", &m_pGameInstance->Get_Transform(CPipeLine::D3DTS_PROJ))))
+		return E_FAIL;
+
+	if (FAILED(m_pNonAnimInstanceShader->Bind_Matrices("g_CascadeViewMatrix", m_pGameInstance->Get_CascadeViewMatirx(), 3)))
+		return E_FAIL;
+	if (FAILED(m_pNonAnimInstanceShader->Bind_Matrices("g_CascadeProjMatrix", m_pGameInstance->Get_CascadeProjMatirx(), 3)))
+		return E_FAIL;
+
+	for (auto& Pair : m_pNonAnimModels)
+	{
+		_uint		iNumMeshes = Pair.second->Get_NumMeshes();
+
+		for (size_t i = 0; i < iNumMeshes; i++)
+		{
+			if (FAILED(m_pNonAnimInstanceShader->Begin(2)))
+				return E_FAIL;
 
 			if (FAILED(Pair.second->Render_Instance((_uint)i)))
 				return E_FAIL;

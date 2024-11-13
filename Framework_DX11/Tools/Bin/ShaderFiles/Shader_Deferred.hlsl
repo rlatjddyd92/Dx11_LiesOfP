@@ -28,14 +28,17 @@ texture2D		g_SpecularTexture;
 texture2D		g_LightDepthTexture;
 texture2D		g_BackTexture;
 texture2D		g_FinalTexture;
-texture2D		g_BlurXTexture;
-texture2D		g_BlurYTexture;
 
 texture2D		g_BloomTexture;
 texture2D		g_CascadeShadowTexture;
 
 texture2D		g_DecalDiffuseTexture;
 texture2D		g_DecalNormalTexture;
+
+/* DOF */
+texture2D       g_DofBlurTexture;
+float           g_fFocus;   // √ ¡°
+float           g_fFocusRatio;
 
 vector			g_vCamPosition;
 
@@ -329,6 +332,7 @@ PS_OUT PS_MAIN_BACKBUFFER(PS_IN In)
 
 	return Out;
 }
+
 
 
 technique11	DefaultTechnique

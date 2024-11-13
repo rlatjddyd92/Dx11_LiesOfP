@@ -55,6 +55,9 @@ void CStaticObj::Late_Update(_float fTimeDelta)
 		__super::Late_Update(fTimeDelta);
 
 		m_pGameInstance->Add_RenderObject(CRenderer::RG_NONBLEND, this);	
+		//if(m_bShadow)
+			m_pGameInstance->Add_RenderObject(CRenderer::RG_SHADOWOBJ, this);
+
 	}
 }
 
@@ -106,6 +109,44 @@ HRESULT CStaticObj::Render()
 			return E_FAIL;
 
 	}
+	return S_OK;
+}
+
+HRESULT CStaticObj::Render_LightDepth()
+{
+	if (m_isInstance)
+	{
+		m_pModelCom->Add_InstanceData(m_pTransformCom->Get_WorldMatrix());
+		return S_OK;
+	}
+
+	if (FAILED(m_pTransformCom->Bind_ShaderResource(m_pShaderCom, "g_WorldMatrix")))
+		return E_FAIL;
+
+	_float4x4		ViewMatrix;
+	XMStoreFloat4x4(&ViewMatrix, XMMatrixLookAtLH(XMVectorSet(0.f, 20.f, -15.f, 1.f), XMVectorSet(0.f, 0.f, 0.f, 1.f), XMVectorSet(0.f, 1.f, 0.f, 0.f)));
+
+	if (FAILED(m_pShaderCom->Bind_Matrix("g_ViewMatrix", &ViewMatrix)))
+		return E_FAIL;
+	if (FAILED(m_pShaderCom->Bind_Matrix("g_ProjMatrix", &m_pGameInstance->Get_Transform(CPipeLine::D3DTS_PROJ))))
+		return E_FAIL;
+
+	if (FAILED(m_pShaderCom->Bind_Matrices("g_CascadeViewMatrix", m_pGameInstance->Get_CascadeViewMatirx(), 3)))
+		return E_FAIL;
+	if (FAILED(m_pShaderCom->Bind_Matrices("g_CascadeProjMatrix", m_pGameInstance->Get_CascadeProjMatirx(), 3)))
+		return E_FAIL;
+
+	_uint		iNumMeshes = m_pModelCom->Get_NumMeshes();
+
+	for (size_t i = 0; i < iNumMeshes; i++)
+	{
+		if (FAILED(m_pShaderCom->Begin(2)))
+			return E_FAIL;
+
+		if (FAILED(m_pModelCom->Render((_uint)i)))
+			return E_FAIL;
+	}
+
 	return S_OK;
 }
 

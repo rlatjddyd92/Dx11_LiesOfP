@@ -210,6 +210,7 @@ public:
 #pragma region CInstance_Manager
 		CModel* Add_NonAnimModel_Instance(_uint iLevelIndex, const _wstring& strPrototypeTag, void* pArg = nullptr );
 		HRESULT Draw_Instance(_uint iPass);
+		HRESULT Draw_Shadow_Instance();
 		void Clear_Instance();
 #pragma endregion
 

@@ -20,6 +20,7 @@ public:
 	void Clear();
 
 	HRESULT Draw(_uint iPass);
+	HRESULT Draw_Shadow();
 
 private:
 	ID3D11Device* m_pDevice = { nullptr };

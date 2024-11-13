@@ -123,8 +123,8 @@ HRESULT CLevel_Tool::Ready_Layer_Camera()
 
 HRESULT CLevel_Tool::Ready_Layer_BackGround()
 {
-	if (FAILED(m_pGameInstance->Add_CloneObject_ToLayer(LEVEL_GAMEPLAY, TEXT("Layer_BackGround"), TEXT("Prototype_GameObject_Terrain"))))
-		return E_FAIL;
+	//if (FAILED(m_pGameInstance->Add_CloneObject_ToLayer(LEVEL_GAMEPLAY, TEXT("Layer_BackGround"), TEXT("Prototype_GameObject_Terrain"))))
+	//	return E_FAIL;
 
 	if (FAILED(m_pGameInstance->Add_CloneObject_ToLayer(LEVEL_GAMEPLAY, TEXT("Layer_BackGround"), TEXT("Prototype_GameObject_Sky"))))
 		return E_FAIL;
@@ -276,5 +276,6 @@ CLevel_Tool * CLevel_Tool::Create(ID3D11Device* pDevice, ID3D11DeviceContext* pC
 void CLevel_Tool::Free()
 {
 	__super::Free();
-
+	// 인스턴싱을 할 모델들을 모아둔 매니저 클리어하기
+	m_pGameInstance->Clear_Instance();
 }

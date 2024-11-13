@@ -260,7 +260,7 @@ HRESULT CRenderer::Initialize()
 #ifdef _DEBUG
 	if (FAILED(m_pGameInstance->Ready_RT_Debug(TEXT("Target_Diffuse"), 100.f, 100.f, 200.f, 200.f)))
 		return E_FAIL;
-	if (FAILED(m_pGameInstance->Ready_RT_Debug(TEXT("Target_SSAO_BlurXY"), 100.f, 300.f, 200.f, 200.f)))
+	if (FAILED(m_pGameInstance->Ready_RT_Debug(TEXT("Target_Cascade"), 100.f, 300.f, 200.f, 200.f)))
 		return E_FAIL;
 	if (FAILED(m_pGameInstance->Ready_RT_Debug(TEXT("Target_Bloom_UpSample1"), 100.f, 500.f, 200.f, 200.f)))
 		return E_FAIL;
@@ -414,6 +414,8 @@ HRESULT CRenderer::Render_ShadowObj()
 		Safe_Release(pGameObject);
 	}
 	m_RenderObjects[RG_SHADOWOBJ].clear();
+
+	m_pGameInstance->Draw_Shadow_Instance();
 
 	if (FAILED(m_pGameInstance->End_MRT()))
 		return E_FAIL;

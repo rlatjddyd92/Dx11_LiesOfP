@@ -510,9 +510,6 @@
     <FxCompile Include="..\Bin\ShaderFiles\Shader_Effect_Texture.hlsl">
       <Filter>97.ShaderFiles</Filter>
     </FxCompile>
-    <FxCompile Include="..\Bin\ShaderFiles\Shader_VtxModel_Instance.hlsl">
-      <Filter>97.ShaderFiles</Filter>
-    </FxCompile>
     <FxCompile Include="..\Bin\ShaderFiles\Shader_ParticleCompute.hlsl">
       <Filter>97.ShaderFiles</Filter>
     </FxCompile>
