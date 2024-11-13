@@ -25,9 +25,6 @@ HRESULT CController_PostProcess::Initialize(ID3D11Device* pDevice, ID3D11DeviceC
 
 void CController_PostProcess::Update_SSAO()
 {
-	if (!ImGui::CollapsingHeader("Picking Inform"))
-		return;
-
 	SSAO_DESC* tDesc = m_pGameInstance->Get_SSAODesc();
 	if (nullptr == tDesc)
 		return;
@@ -50,6 +47,30 @@ void CController_PostProcess::Update_SSAO()
 	tDesc->fRadius = fRadius;
 	tDesc->fBias = fBias;
 	tDesc->fAmount = fAmount;
+}
+
+void CController_PostProcess::Update_HDR()
+{
+	HDR_DESC* tDesc = m_pGameInstance->Get_HDRDesc();
+	if (nullptr == tDesc)
+		return;
+
+	static _bool isOnHDR = false;
+	static _float fMiddleGrey;
+	static _float fLumWhiteSqr;
+
+	ImGui::Checkbox("HDR Value", &isOnHDR);
+
+	tDesc->isOnHDR = isOnHDR;
+
+	if (tDesc->isOnHDR)
+	{
+		ImGui::DragFloat("Radius", &fMiddleGrey, 0.05f);
+		ImGui::DragFloat("Bias", &fLumWhiteSqr, 0.05f);
+	}
+
+	tDesc->fMiddleGrey = fMiddleGrey;
+	tDesc->fLumWhiteSqr = fLumWhiteSqr;
 }
 
 void CController_PostProcess::Free()

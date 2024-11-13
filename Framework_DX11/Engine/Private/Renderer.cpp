@@ -740,15 +740,9 @@ HRESULT CRenderer::Render_HDR()
 #pragma endregion
 
 	// Åæ ¸ÅÇÎ ÇÒ°ÅÀÓ
-	_float fMiddleGrey = 1.f;
-	_float fLumWhiteSqr = 1.f;
-	_float fWhite = fLumWhiteSqr;
-	fWhite *= fMiddleGrey;
-	fWhite *= fWhite;
-
-	if (FAILED(m_pBackShader->Bind_RawValue("fMiddleGrey", &fMiddleGrey, sizeof(_float))))
+	if (FAILED(m_pBackShader->Bind_RawValue("fMiddleGrey", &m_tHDR.fMiddleGrey, sizeof(_float))))
 		return E_FAIL;
-	if (FAILED(m_pBackShader->Bind_RawValue("fLumWhiteSqr", &fWhite, sizeof(_float))))
+	if (FAILED(m_pBackShader->Bind_RawValue("fLumWhiteSqr", &m_tHDR.fLumWhiteSqr, sizeof(_float))))
 		return E_FAIL;
 
 	if (FAILED(m_pGameInstance->Bind_RT_ShaderResource(m_pBackShader, TEXT("Target_HDR1"), "g_HDR"))) // ÈÖµµ°ª
@@ -780,8 +774,6 @@ HRESULT CRenderer::Render_HDR()
 	m_pVIBuffer->Bind_Buffers();
 
 	m_pVIBuffer->Render();*/
-
-
 
 
 	return S_OK;

@@ -17,7 +17,8 @@ private:
 	virtual ~CRenderer() = default;
 
 public:
-	SSAO_DESC* Get_SSAODesc() { return &m_tSSAO; }
+	SSAO_DESC*	Get_SSAODesc() { return &m_tSSAO; }
+	HDR_DESC*	Get_HDRDesc() { return &m_tHDR; }
 
 public:
 	HRESULT Initialize();
@@ -82,6 +83,9 @@ private:
 
 	/* Cascade */
 	ID3D11DepthStencilView*		m_pCascadeDepthStencilViewArr = { nullptr };
+
+	/* HDR */
+	HDR_DESC					m_tHDR = {};
 
 #ifdef _DEBUG
 private:

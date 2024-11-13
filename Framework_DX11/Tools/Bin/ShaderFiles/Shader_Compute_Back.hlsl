@@ -9,23 +9,20 @@ sampler Sampler_Default = sampler_state
     Filter = min_mag_mip_linear;
 };
 
-//// Åæ ¸ÅÇÎ¿ë
-//cbuffer FinalPassConstants : register(b0)
-//{
-   
-//}
-
-float fMiddleGrey;
-float fLumWhiteSqr;
+cbuffer ToneMapping
+{
+    float fMiddleGrey;
+    float fLumWhiteSqr;
+};
 
 static const float3 LUM_FACTOR = float3(0.2126, 0.7152, 0.0722);
 
 float3 ToneMapping(float3 vHDRColor)
 {
-    float LScale = dot(vHDRColor, LUM_FACTOR);
-    LScale *= fMiddleGrey / g_HDR[0];
-    LScale = (LScale + LScale * LScale / fLumWhiteSqr) / (1.f + LScale);
-    return vHDRColor * LScale;
+    float fLScale = dot(vHDRColor, LUM_FACTOR);
+    fLScale *= fMiddleGrey / g_HDR[0];
+    fLScale = (fLScale + fLScale * fLScale / fLumWhiteSqr) / (1.f + fLScale);
+    return vHDRColor * fLScale;
 }
 
 [numthreads(32, 32, 1)]

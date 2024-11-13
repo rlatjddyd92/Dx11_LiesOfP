@@ -137,6 +137,13 @@ namespace Engine
 		_float fBias;
 		_float fAmount;
 	}SSAO_DESC;
+
+	typedef struct
+	{
+		_bool isOnHDR;
+		_float fMiddleGrey;
+		_float fLumWhiteSqr;
+	}HDR_DESC;
 #pragma endregion
 
 	//오브젝트 저장 및 불러오기에 사용
