@@ -82,6 +82,8 @@ public:
 		GROUP_WEAPON_SPECIAL_FRAME_5,
 		GROUP_WEAPON_SPECIAL_FILL_5,
 
+		// E키 주머니 
+
 		GROUP_END
 	};
 

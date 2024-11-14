@@ -37,6 +37,8 @@ public:
 		PAGE_STAT,
 		PAGE_LEVELUP,
 		PAGE_SKILL,
+		PAGE_TEST,
+		PAGE_ORTHO,
 		PAGE_END
 	};
 

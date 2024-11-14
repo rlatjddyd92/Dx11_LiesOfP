@@ -58,6 +58,9 @@ public:
 		ITEM_TYPE eType = ITEM_TYPE::TYPE_END; // <- 아이템의 타입 
 		_bool bStack = false; // 스택 가능 여부
 		_int iCount = 1; // 수량 (비 스택 아이템은 무조건 1)
+
+
+
 	}ITEM;
 
 	typedef struct ARRAY_INFO // 인벤에 존재하는 배열의 정보 
