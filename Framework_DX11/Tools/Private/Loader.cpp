@@ -21,6 +21,7 @@
 #include "Mesh_Effect.h"
 #include "Trail_Effect_OP.h"
 #include "Trail_Effect_TP.h"
+#include "Trail_Effect_MP.h"
 
 #include "Effect_Container.h"
 #include "Controller_EffectTool.h"
@@ -416,6 +417,11 @@ HRESULT CLoader::Ready_Resources_For_ToolLevel()
 		CTrail_TwoPoint_Instance::Create(m_pDevice, m_pContext, ParticleDesc, false))))
 		return E_FAIL;
 
+	CTrail_MultiPoint_Instance::TRAIL_MP_INSTANCE_DESC TrailDesc = {};
+	/* For. Prototype_Component_VIBuffer_Trail_MultiPoint_Instance */
+	if (FAILED(m_pGameInstance->Add_Prototype(LEVEL_TOOL, TEXT("Prototype_Component_VIBuffer_Trail_MultiPoint_Instance"),
+		CTrail_MultiPoint_Instance::Create(m_pDevice, m_pContext, TrailDesc, false))))
+		return E_FAIL;
 
 	_matrix		PreTransformMatrix = XMMatrixIdentity();
 	PreTransformMatrix = XMMatrixScaling(0.005f, 0.005f, 0.005f) * XMMatrixRotationX(XMConvertToRadians(90.0f));
@@ -521,6 +527,19 @@ HRESULT CLoader::Ready_Resources_For_ToolLevel()
 		CShader_Compute::Create(m_pDevice, m_pContext, TEXT("../Bin/ShaderFiles/Shader_ParticleCompute.hlsl"), "CS_RESET_MAIN"))))
 		return E_FAIL;
 #pragma endregion
+
+#pragma region CS_TRAILPARTICLE_TEST
+	/* For. Prototype_Component_Shader_TrailTail_PointInstance */
+	if (FAILED(m_pGameInstance->Add_Prototype(LEVEL_TOOL, TEXT("Prototype_Component_Shader_TrailTail_PointInstance"),
+		CShader_NonVTX::Create(m_pDevice, m_pContext, TEXT("../Bin/ShaderFiles/Shader_TrailTail_PointInstance.hlsl")))))
+		return E_FAIL;
+
+	/* For. Prototype_Component_Shader_Compute_Particle_Please */
+	if (FAILED(m_pGameInstance->Add_Prototype(LEVEL_TOOL, TEXT("Prototype_Component_Shader_Compute_Particle_Please"),
+		CShader_Compute::Create(m_pDevice, m_pContext, TEXT("../Bin/ShaderFiles/Shader_Trail_MultiPoint_Compute.hlsl"), "CS_SPREAD_MAIN"))))
+		return E_FAIL;
+#pragma endregion
+
 #pragma endregion
 
 	lstrcpy(m_szLoadingText, TEXT("사운드을(를) 로딩중입니다."));
@@ -581,6 +600,11 @@ HRESULT CLoader::Ready_Resources_For_ToolLevel()
 	/* For. Prototype_GameObject_Trail_Effect_TP */
 	if (FAILED(m_pGameInstance->Add_Prototype(TEXT("Prototype_GameObject_Trail_Effect_TP"),
 		CTrail_Effect_TP::Create(m_pDevice, m_pContext))))
+		return E_FAIL;
+
+	/* For. Prototype_GameObject_Trail_Effect_MP */
+	if (FAILED(m_pGameInstance->Add_Prototype(TEXT("Prototype_GameObject_Trail_Effect_MP"),
+		CTrail_Effect_MP::Create(m_pDevice, m_pContext))))
 		return E_FAIL;
 
 	/* For. Prototype_GameObject_Effect_Continaer */

@@ -23,7 +23,6 @@ public:
 
 public:
 	_bool DispatchCS(class CShader_Compute* pComputeShader, const PARTICLE_MOVEMENT& MovementData);
-	
 
 private:
 	_bool m_bFirst = { false };

@@ -105,7 +105,7 @@
     </Filter>
     <Filter Include="90.ImGuiManager\Controller_PostProcess">
       <UniqueIdentifier>{82f939de-c239-4897-bbdf-a8fc84d17e12}</UniqueIdentifier>
-	</Filter>
+    </Filter>
     <Filter Include="02.GameObjects\04.Effect\Effect_Base\Mesh_Effect">
       <UniqueIdentifier>{b10a3906-85c6-4dac-b167-b3bb3cb9c3df}</UniqueIdentifier>
     </Filter>
@@ -270,9 +270,6 @@
     <ClInclude Include="..\Public\Controller_PostProcess.h">
       <Filter>90.ImGuiManager\Controller_PostProcess</Filter>
     </ClInclude>
-    <ClInclude Include="..\Public\MainApp.h">
-      <Filter>01.Levels\Loading\Loader</Filter>
-	</ClInclude>
     <ClInclude Include="..\public\Mesh_Effect.h">
       <Filter>02.GameObjects\04.Effect\Effect_Base\Mesh_Effect</Filter>
     </ClInclude>
@@ -284,6 +281,9 @@
     </ClInclude>
     <ClInclude Include="..\public\Trail_Effect_OP.h">
       <Filter>02.GameObjects\04.Effect\Effect_Base\Trail_Effect\One_Point</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Public\MainApp.h">
+      <Filter>00.MainApp</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -417,7 +417,7 @@
     </ClCompile>
     <ClCompile Include="..\Private\Controller_PostProcess.cpp">
       <Filter>90.ImGuiManager\Controller_PostProcess</Filter>
-	</ClCompile>
+    </ClCompile>
     <ClCompile Include="..\private\Mesh_Effect.cpp">
       <Filter>02.GameObjects\04.Effect\Effect_Base\Mesh_Effect</Filter>
     </ClCompile>
@@ -486,13 +486,19 @@
     </FxCompile>
     <FxCompile Include="..\Bin\ShaderFiles\Shader_SSD.hlsl">
     </FxCompile>
-    <FxCompile Include="..\Bin\ShaderFiles\Shader_VtxPointInstance_Test.hlsl">
-      <Filter>97.ShaderFiles</Filter>
-    </FxCompile>
     <FxCompile Include="..\Bin\ShaderFiles\Shader_VtxTrail_TwoPoint_Instance.hlsl">
       <Filter>97.ShaderFiles</Filter>
     </FxCompile>
     <FxCompile Include="..\Bin\ShaderFiles\Shader_VtxTrail_OnePoint_Instance.hlsl">
+      <Filter>97.ShaderFiles</Filter>
+    </FxCompile>
+    <FxCompile Include="..\Bin\ShaderFiles\Shader_Trail_MultiPoint_Compute.hlsl">
+      <Filter>97.ShaderFiles</Filter>
+    </FxCompile>
+    <FxCompile Include="..\Bin\ShaderFiles\Shader_TrailHead_PointInstance.hlsl">
+      <Filter>97.ShaderFiles</Filter>
+    </FxCompile>
+    <FxCompile Include="..\Bin\ShaderFiles\Shader_TrailTail_PointInstance.hlsl">
       <Filter>97.ShaderFiles</Filter>
     </FxCompile>
   </ItemGroup>

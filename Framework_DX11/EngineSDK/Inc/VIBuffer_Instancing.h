@@ -20,6 +20,33 @@ public:
 		_float4		vMaxColor;
 	}INSTANCE_DESC;
 
+	typedef struct
+	{
+		_uint		iNumInstance;
+		_uint		iState;
+		_float2		vPadding_1;
+
+		_float4		vPivot;
+
+		_float		fGravity;
+		_float3		vPadding_2;
+
+		_float4		vMoveDir;
+
+		_float4x4	WorldMatrix;
+
+		_float3		vOrbitAxis;
+		_float		fOrbitAngle;
+
+		_float		fTimeInterval;
+		_float		fRandomRatio;
+		_float		fAccelSpeed;
+		_float		fAccelLimit;
+
+		_float		fTimeDelta;
+		_float3		vPadding_3;
+	}PARTICLE_MOVEMENT;
+
 	enum STATE
 	{
 		STATE_ORBIT			= 0x0001,
@@ -58,6 +85,8 @@ protected:
 	_bool Contain_State(_uint iCurrentState, _uint iCheckState);
 	void Init_Particle(PARTICLE* pParticles);
 	_float4 Get_ExceptedTranslation();
+
+	HRESULT Ready_Buffers(const INSTANCE_DESC& Desc);
 
 protected:
 	ID3D11Buffer*				m_pVBInstance = { nullptr };

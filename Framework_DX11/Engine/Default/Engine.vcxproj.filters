@@ -621,9 +621,6 @@
     <ClInclude Include="..\Public\Instance_Manager.h">
       <Filter>01.Utility\03.Components\Model\Instance</Filter>
     </ClInclude>
-    <ClInclude Include="..\Public\Component_Manager.h">
-      <Filter>01.Utility\03.Components\00.Manager</Filter>
-    </ClInclude>
     <ClInclude Include="..\public\Shader_NonVTX.h">
       <Filter>01.Utility\03.Components\Shader\Shader_NonVTX</Filter>
     </ClInclude>
@@ -639,6 +636,9 @@
     <ClInclude Include="..\Public\EasyDrawSphere.h" />
     <ClInclude Include="..\public\Trail_MultiPoint_Instance.h">
       <Filter>01.Utility\03.Components\VIBuffer\Instancing\Trail\MultiPoint</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Public\Component_Manager.h">
+      <Filter>01.Utility\03.Components\00.Manager</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

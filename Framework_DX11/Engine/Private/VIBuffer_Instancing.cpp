@@ -129,7 +129,6 @@ void CVIBuffer_Instancing::Init_Particle(PARTICLE* pParticles)
 		pParticles[i].vNextRandomDir = _float4(m_pGameInstance->Get_Random(-1.f, 1.f), m_pGameInstance->Get_Random(-1.f, 1.f), m_pGameInstance->Get_Random(-1.f, 1.f), 0.f);
 
 	}
-
 }
 
 _float4 CVIBuffer_Instancing::Get_ExceptedTranslation()
