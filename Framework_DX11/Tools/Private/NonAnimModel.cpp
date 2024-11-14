@@ -69,7 +69,13 @@ void CNonAnimModel::Update(_float fTimeDelta)
 
 void CNonAnimModel::Late_Update(_float fTimeDelta)
 {
-	if(m_pGameInstance->isIn_Frustum_WorldSpace(m_pTransformCom->Get_State(CTransform::STATE_POSITION), 40.f))
+	_float fCullDistance = 0.f;
+	if (wcscmp(m_szModelTag, TEXT("SM_Monastery_Floor_06")) == 0)
+		fCullDistance = 150.f;
+	else
+		fCullDistance = 40.f;
+
+	if(m_pGameInstance->isIn_Frustum_WorldSpace(m_pTransformCom->Get_State(CTransform::STATE_POSITION), fCullDistance))
 	{
 		/* 직교투영을 위한 월드행렬까지 셋팅하게 된다. */
 		__super::Late_Update(fTimeDelta);

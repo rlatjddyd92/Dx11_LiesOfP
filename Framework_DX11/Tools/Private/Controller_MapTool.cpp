@@ -272,7 +272,7 @@ void CController_MapTool::Pick_Object()
 
 	ImGui::PopItemWidth();
 
-	if (ImGui::Button("Delete"))
+	if (ImGui::Button("Delete") && m_pSelectObject != nullptr)
 	{
 		m_iPre_Picked_ID = m_iPickObject_ID;
 		m_iPickObject_ID = 0;
@@ -924,6 +924,11 @@ void CController_MapTool::LoadMap()
 				if (strLayerTag == "Layer_InteractObject")
 				{
 					if (FAILED(m_pGameInstance->Add_CloneObject_ToLayer(LEVEL_TOOL, TEXT("Layer_InteractObject"), TEXT("Prototype_GameObject_NonAnim"), &nonDesc)))
+						return;
+				}
+				else if(strLayerTag == "Layer_Etc")
+				{
+					if (FAILED(m_pGameInstance->Add_CloneObject_ToLayer(LEVEL_TOOL, TEXT("Layer_Etc"), TEXT("Prototype_GameObject_NonAnim"), &nonDesc)))
 						return;
 				}
 				else
