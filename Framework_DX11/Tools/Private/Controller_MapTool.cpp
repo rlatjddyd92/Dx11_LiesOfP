@@ -493,6 +493,150 @@ void CController_MapTool::Select_Interact_Model()
 	}
 }
 
+void CController_MapTool::Select_Etc_Model()
+{
+#pragma region SHOW ETC FOLDER LIST
+	//내용물 초기화 (capacity는 그냥 냅둠)
+	for (auto& filename : m_Etc_Folder_Names) {
+		Safe_Delete_Array(filename);
+	}
+	m_Etc_Folder_Names.clear();
+
+	char szFolderFindPath[128] = "../Bin/ModelData/NonAnim/Map/Etc/*";    // 상대 경로 -> 모든 파일을 돌겠다
+	char szFolderPathReset[128] = "../Bin/ModelData/NonAnim/Map/Etc/";
+	char szFolderPath[128] = "../Bin/ModelData/NonAnim/Map/Etc/";
+
+	_finddata_t fd;
+	intptr_t handle = _findfirst(szFolderFindPath, &fd);
+
+	if (handle == -1)
+		return;
+
+	int iResult = 0;
+	int iFolderCount = 0;
+
+	while (iResult != -1)
+	{
+		strcpy_s(szFolderPath, szFolderPathReset);
+		strcat_s(szFolderPath, fd.name);
+
+		_char szDirName[MAX_PATH] = "";
+		_char szFileName[MAX_PATH] = "";
+		_char szExt[MAX_PATH] = "";
+		_splitpath_s(szFolderPath, nullptr, 0, szDirName, MAX_PATH, szFileName, MAX_PATH, szExt, MAX_PATH);
+
+		if (!strcmp(szFileName, ".") || !strcmp(szFileName, "..") || !strcmp(szFileName, ""))
+		{
+			iResult = _findnext(handle, &fd);
+			continue;
+		}
+
+		iFolderCount++;
+
+		//_strup : 문자열 내용을 복사해 그 주소를 저장-> 주소에 따라 문자열이 바뀌는걸 막아 모두 동일해지는걸 막음
+		m_Etc_Folder_Names.push_back(_strdup(szFileName));
+
+		//_findnext : <io.h>에서 제공하며 다음 위치의 파일을 찾는 함수, 더이상 없다면 -1을 리턴
+		iResult = _findnext(handle, &fd);
+	}
+
+	static int item_selected_idx = 0; // Here we store our selected data as an index.
+	static bool item_highlight = false;
+	int item_highlighted_idx = -1; // Here we store our highlighted data as an index.
+
+	if (ImGui::BeginListBox("Etc Folders"))
+	{
+		for (int n = 0; n < iFolderCount; n++)
+		{
+			const bool is_selected = (item_selected_idx == n);
+			if (ImGui::Selectable(m_Etc_Folder_Names[n], is_selected))
+				item_selected_idx = n;
+
+			if (item_highlight && ImGui::IsItemHovered())
+				item_highlighted_idx = n;
+
+			// Set the initial focus when opening the combo (scrolling + keyboard navigation focus)
+			if (is_selected)
+				ImGui::SetItemDefaultFocus();
+		}
+		ImGui::EndListBox();
+	}
+#pragma endregion
+
+#pragma region SHOW ETC SELECTED FOLDER FILES
+
+	//내용물 초기화 (capacity는 그냥 냅둠)
+	for (auto& filename : m_Etc_File_Names) {
+		Safe_Delete_Array(filename);
+	}
+	m_Etc_File_Names.clear();
+
+	char szImageFindPath[128] = "../Bin/ModelData/NonAnim/Map/Etc/";    // 상대 경로 -> 모든 파일을 돌겠다
+	char szImagePathReset[128] = "../Bin/ModelData/NonAnim/Map/Etc/";
+	char szImagePath[128] = "../Bin/ModelData/NonAnim/Map/Etc/";
+
+	//폴더 리스트에서 선택한 인덱스로 파일 검색 경로 생성
+	strcat_s(szImageFindPath, m_Etc_Folder_Names[item_selected_idx]);
+	strcat_s(szImageFindPath, "/*");
+	handle = _findfirst(szImageFindPath, &fd);
+
+	if (handle == -1)
+		return;
+
+	iResult = 0;
+	int iImagesCount = 0;
+
+	while (iResult != -1)
+	{
+		strcpy_s(szImagePath, szImagePathReset);
+		strcat_s(szImagePath, fd.name);
+
+		_char szDirName[MAX_PATH] = "";
+		_char szFileName[MAX_PATH] = "";
+		_char szExt[MAX_PATH] = "";
+		_splitpath_s(szImagePath, nullptr, 0, szDirName, MAX_PATH, szFileName, MAX_PATH, szExt, MAX_PATH);
+
+		if (!strcmp(szExt, ".") || !strcmp(szExt, "..") || strcmp(szExt, ".dat"))
+		{
+			iResult = _findnext(handle, &fd);
+			continue;
+		}
+
+		iImagesCount++;
+
+		//_strup : 문자열 내용을 복사해 그 주소를 저장-> 주소에 따라 문자열이 바뀌는걸 막아 모두 동일해지는걸 막음
+	//	m_FileNames.push_back(_strdup(fd.name));
+		m_Etc_File_Names.push_back(_strdup(szFileName));
+
+		//_findnext : <io.h>에서 제공하며 다음 위치의 파일을 찾는 함수, 더이상 없다면 -1을 리턴
+		iResult = _findnext(handle, &fd);
+	}
+
+	static bool item_Image_highlight = false;
+	int item_Image_highlighted_idx = -1; // Here we store our highlighted data as an index.
+
+	if (ImGui::BeginListBox("ETC_Obj"))
+	{
+		for (int n = 0; n < iImagesCount; n++)
+		{
+			const bool is_selected = (m_iSelected_ETC_ID == n);
+			if (ImGui::Selectable(m_Etc_File_Names[n], is_selected))
+				m_iSelected_ETC_ID = n;
+
+			if (item_Image_highlight && ImGui::IsItemHovered())
+				item_Image_highlighted_idx = n;
+
+			// Set the initial focus when opening the combo (scrolling + keyboard navigation focus)
+			if (is_selected)
+				ImGui::SetItemDefaultFocus();
+
+			m_iListSelectNum = m_iSelected_ETC_ID;
+		}
+		ImGui::EndListBox();
+	}
+
+}
+
 void CController_MapTool::Show_List(_uint iFolder)
 {
 	//내용물 초기화 (capacity는 그냥 냅둠)
@@ -977,7 +1121,12 @@ void CController_MapTool::Map_Menu()
 			Select_Interact_Model();
 			ImGui::EndTabItem();
 		}
-
+		if (ImGui::BeginTabItem("Etc"))
+		{
+			strLayerName = "Layer_Etc";
+			Select_Etc_Model();
+			ImGui::EndTabItem();
+		}
 		ImGui::EndTabBar();
 	}
 
@@ -1005,7 +1154,10 @@ void CController_MapTool::Map_Menu()
 		Desc.isInstance = bInstance;	
 		Desc.bShadow = bShadow;
 
-		strcpy_s(Desc.szModelTag, m_FileNames[m_iListSelectNum]);
+		if(strLayerName == "Layer_Etc")
+			strcpy_s(Desc.szModelTag, m_Etc_File_Names[m_iListSelectNum]);
+		else
+			strcpy_s(Desc.szModelTag, m_FileNames[m_iListSelectNum]);
 
 		if (FAILED(m_pGameInstance->Add_CloneObject_ToLayer(LEVEL_TOOL, wstrLayerName, TEXT("Prototype_GameObject_NonAnim"), &Desc)))
 			return;
@@ -2020,7 +2172,12 @@ void CController_MapTool::Free()
 	for (auto& filename : m_Decal_Folder_Names) {
 		Safe_Delete_Array(filename);
 	}
-	m_Decal_Folder_Names.clear();
+	m_Decal_Folder_Names.clear();	
+	
+	for (auto& filename : m_Etc_Folder_Names) {
+		Safe_Delete_Array(filename);
+	}
+	m_Etc_Folder_Names.clear();
 	
 	for (auto& filename : m_Decal_File_Names_Diffuse) {
 		Safe_Delete_Array(filename);
@@ -2035,7 +2192,12 @@ void CController_MapTool::Free()
 	for (auto& filename : m_Decal_File_Names_Arm) {
 		Safe_Delete_Array(filename);
 	}
-	m_Decal_File_Names_Arm.clear();
+	m_Decal_File_Names_Arm.clear();	
+	
+	for (auto& filename : m_Etc_File_Names) {
+		Safe_Delete_Array(filename);
+	}
+	m_Etc_File_Names.clear();
 
 	Safe_Release(m_my_texture);
 	Safe_Release(m_pDevice);
