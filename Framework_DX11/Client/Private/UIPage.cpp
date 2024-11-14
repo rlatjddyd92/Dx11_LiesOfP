@@ -154,4 +154,9 @@ void CUIPage::Free()
 	__super::Free();
 
 	m_vecPageAction.clear();
+
+	for (auto& iter : m_Ctrllist)
+		Safe_Delete(iter);
+
+	m_Ctrllist.clear();
 }
