@@ -58,32 +58,61 @@ void CTrail_Effect_MP::Update(_float fTimeDelta)
 
 void CTrail_Effect_MP::Late_Update(_float fTimeDelta)
 {
-	//m_pGameInstance->Add_RenderObject(CRenderer::RG_NONLIGHT, this);
+	m_pGameInstance->Add_RenderObject(CRenderer::RG_NONLIGHT, this);
 }
 
 HRESULT CTrail_Effect_MP::Render()
 {
+	// ´ë°¡¸®
 	_Matrix WorldMatrix = XMMatrixIdentity();
-	if (FAILED(m_pShaderCom->Bind_Matrix("g_WorldMatrix", &WorldMatrix)))
+	if (FAILED(m_pHeadShaderCom->Bind_Matrix("g_WorldMatrix", &WorldMatrix)))
 		return E_FAIL;
 
-	if (FAILED(m_pShaderCom->Bind_Matrix("g_ViewMatrix", &m_pGameInstance->Get_Transform(CPipeLine::D3DTS_VIEW))))
+	if (FAILED(m_pHeadShaderCom->Bind_Matrix("g_ViewMatrix", &m_pGameInstance->Get_Transform(CPipeLine::D3DTS_VIEW))))
 		return E_FAIL;
-	if (FAILED(m_pShaderCom->Bind_Matrix("g_ProjMatrix", &m_pGameInstance->Get_Transform(CPipeLine::D3DTS_PROJ))))
+	if (FAILED(m_pHeadShaderCom->Bind_Matrix("g_ProjMatrix", &m_pGameInstance->Get_Transform(CPipeLine::D3DTS_PROJ))))
 		return E_FAIL;
 
-	if (FAILED(m_pShaderCom->Bind_RawValue("g_vCamPosition", &m_pGameInstance->Get_CamPosition_Vec4(), sizeof(_Vec4))))
+	if (FAILED(m_pHeadShaderCom->Bind_RawValue("g_vCamPosition", &m_pGameInstance->Get_CamPosition_Vec4(), sizeof(_Vec4))))
 		return E_FAIL;
-	if (FAILED(m_pShaderCom->Bind_RawValue("g_vScaling", &m_vScaling, sizeof(_Vec2))))
+	if (FAILED(m_pHeadShaderCom->Bind_RawValue("g_vScaling", &m_vScaling, sizeof(_Vec2))))
 		return E_FAIL;
 
 	_uint iParticleState = 0;
-	if (FAILED(m_pShaderCom->Bind_RawValue("g_iState", &iParticleState, sizeof(_uint))))
+	if (FAILED(m_pHeadShaderCom->Bind_RawValue("g_iState", &iParticleState, sizeof(_uint))))
 		return E_FAIL;
 
-	if (FAILED(m_pVIBufferCom->Bind_TailBuffer(m_pShaderCom, "Particle_SRV")))
+	if (FAILED(m_pVIBufferCom->Bind_HeadBuffer(m_pHeadShaderCom, "Particle_SRV")))
 		return E_FAIL;
-	if (FAILED(m_pShaderCom->Begin(6)))
+	if (FAILED(m_pHeadShaderCom->Begin(6)))
+		return E_FAIL;
+	if (FAILED(m_pVIBufferCom->Render_Head()))
+		return E_FAIL;
+
+
+
+	// ²¿¸®
+
+	WorldMatrix = XMMatrixIdentity();
+	if (FAILED(m_pTailShaderCom->Bind_Matrix("g_WorldMatrix", &WorldMatrix)))
+		return E_FAIL;
+
+	if (FAILED(m_pTailShaderCom->Bind_Matrix("g_ViewMatrix", &m_pGameInstance->Get_Transform(CPipeLine::D3DTS_VIEW))))
+		return E_FAIL;
+	if (FAILED(m_pTailShaderCom->Bind_Matrix("g_ProjMatrix", &m_pGameInstance->Get_Transform(CPipeLine::D3DTS_PROJ))))
+		return E_FAIL;
+
+	if (FAILED(m_pTailShaderCom->Bind_RawValue("g_vCamPosition", &m_pGameInstance->Get_CamPosition_Vec4(), sizeof(_Vec4))))
+		return E_FAIL;
+	if (FAILED(m_pTailShaderCom->Bind_RawValue("g_vScaling", &m_vScaling, sizeof(_Vec2))))
+		return E_FAIL;
+
+	if (FAILED(m_pTailShaderCom->Bind_RawValue("g_iState", &iParticleState, sizeof(_uint))))
+		return E_FAIL;
+
+	if (FAILED(m_pVIBufferCom->Bind_TailBuffer(m_pTailShaderCom, "Particle_SRV")))
+		return E_FAIL;
+	if (FAILED(m_pTailShaderCom->Begin(6)))
 		return E_FAIL;
 	if (FAILED(m_pVIBufferCom->Render_Tail()))
 		return E_FAIL;
@@ -102,10 +131,17 @@ HRESULT CTrail_Effect_MP::Save(_wstring strFilePath)
 
 HRESULT CTrail_Effect_MP::Ready_Components()
 {
-	/* FOR.Com_Shader */
-	if (FAILED(__super::Add_Component(LEVEL_TOOL, TEXT("Prototype_Component_Shader_TrailTail_PointInstance"),
-		TEXT("Com_Shader"), reinterpret_cast<CComponent**>(&m_pShaderCom))))
+	/* FOR.Com_HeadShader */
+	if (FAILED(__super::Add_Component(LEVEL_TOOL, TEXT("Prototype_Component_Shader_TrailHead_PointInstance"),
+		TEXT("Com_HeadShader"), reinterpret_cast<CComponent**>(&m_pHeadShaderCom))))
 		return E_FAIL;
+
+
+	/* FOR.Com_TailShader */
+	if (FAILED(__super::Add_Component(LEVEL_TOOL, TEXT("Prototype_Component_Shader_TrailTail_PointInstance"),
+		TEXT("Com_TailShader"), reinterpret_cast<CComponent**>(&m_pTailShaderCom))))
+		return E_FAIL;
+
 	/* FOR.Com_SpreadCS */
 	if (FAILED(__super::Add_Component(LEVEL_TOOL, TEXT("Prototype_Component_Shader_Compute_Particle_Please"),
 		TEXT("Com_SpreadCS"), reinterpret_cast<CComponent**>(&m_pSpreadCS))))
@@ -121,11 +157,11 @@ HRESULT CTrail_Effect_MP::Ready_Components()
 	desc.vMinColor			= { 1.f, 1.f, 1.f, 1.f};
 	desc.vRange				= { 2.f, 2.f, 2.f};
 	desc.vSize				= {0.2f, 0.4f};
-	desc.vSpeed				= {2.f, 4.f};
+	desc.vSpeed				= {5.f, 10.f};
 	desc.iTail_NumInstance	= 100;
 	desc.vTail_Speed		= {1.f, 2.f};
-	desc.vTail_Size			= {0.2f, 0.4f};
-	desc.vTail_LifeTime		= {1.f, 2.f};
+	desc.vTail_Size			= {0.05f, 0.1f};
+	desc.vTail_LifeTime		= {0.5f, 1.f};
 	desc.vTail_MinColor		= {0.f, 0.f, 0.f, 1.f};
 	desc.vTail_MaxColor		= {1.f, 1.f, 1.f, 1.f};
 
@@ -169,7 +205,9 @@ void CTrail_Effect_MP::Free()
 {
 	__super::Free();
 
-	Safe_Release(m_pShaderCom);
+	Safe_Release(m_pHeadShaderCom);
+	Safe_Release(m_pTailShaderCom);
+
 	Safe_Release(m_pVIBufferCom);
 	Safe_Release(m_pDiffuseTextureCom);
 	Safe_Release(m_pNormalTextureCom);

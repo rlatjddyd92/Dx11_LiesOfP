@@ -91,6 +91,44 @@ HRESULT CTrail_MultiPoint_Instance::Bind_HeadBuffer(CShader_NonVTX* pShader, con
 
 HRESULT CTrail_MultiPoint_Instance::Bind_TailBuffer(CShader_NonVTX* pShader, const _char* pConstantName)
 {
+    // 1. Staging Buffer 생성 (CPU 접근 가능)
+    ID3D11Buffer* pStagingBuffer = nullptr;
+    D3D11_BUFFER_DESC stagingDesc = {};
+    stagingDesc.Usage = D3D11_USAGE_STAGING;
+    stagingDesc.ByteWidth = sizeof(TAIL_PARTICLE) * m_iNumInstance * m_iNumTailInstance; // 데이터 크기 설정
+    stagingDesc.BindFlags = 0;
+    stagingDesc.CPUAccessFlags = D3D11_CPU_ACCESS_READ;
+    stagingDesc.MiscFlags = 0;
+    stagingDesc.StructureByteStride = sizeof(TAIL_PARTICLE);
+
+    HRESULT hr = m_pDevice->CreateBuffer(&stagingDesc, nullptr, &pStagingBuffer);
+    if (FAILED(hr)) {
+        MessageBox(0, L"Staging Buffer 생성 실패", L"Error", MB_OK);
+        return hr;
+    }
+
+    // 2. UAV에서 Staging Buffer로 데이터 복사
+    m_pContext->CopyResource(pStagingBuffer, m_pTailBuffer);
+
+    // 3. Map을 통해 CPU에서 데이터 접근
+    D3D11_MAPPED_SUBRESOURCE mappedResource;
+    hr = m_pContext->Map(pStagingBuffer, 0, D3D11_MAP_READ, 0, &mappedResource);
+    if (SUCCEEDED(hr)) {
+        TAIL_PARTICLE* pParticles = reinterpret_cast<TAIL_PARTICLE*>(mappedResource.pData);
+
+        // 데이터 접근 및 출력 예제
+        for (int i = 0; i < m_iNumInstance * m_iNumTailInstance; ++i) {
+            pParticles[i];
+            _int a = 0;
+        }
+        m_pContext->Unmap(pStagingBuffer, 0);
+    }
+
+    // 4. 사용이 끝난 후 Staging Buffer 해제
+    if (pStagingBuffer) {
+        pStagingBuffer->Release();
+    }
+
     //// SRV 바인딩하고
     if (FAILED(pShader->Bind_SRV(pConstantName, m_pTailSRV)))
         return E_FAIL;
@@ -114,7 +152,7 @@ HRESULT CTrail_MultiPoint_Instance::Render_Head()
 
 HRESULT CTrail_MultiPoint_Instance::Render_Tail()
 {
-    m_pContext->DrawInstanced(1, m_iNumTailInstance, 0, 0);
+    m_pContext->DrawInstanced(1, m_iNumInstance * m_iNumTailInstance, 0, 0);
 
     // UAV 해제하고
     ID3D11ShaderResourceView* nullSRV = { nullptr };
@@ -124,7 +162,8 @@ HRESULT CTrail_MultiPoint_Instance::Render_Tail()
 }
 
 _bool CTrail_MultiPoint_Instance::DispatchCS(CShader_Compute* pComputeShader, const TRAIL_MP_MOVEMENT& MovementData)
-{	/* 순서 중요 !! */
+{	
+    /* 순서 중요 !! */
     // 상수 버퍼 업데이트 하고
     D3D11_MAPPED_SUBRESOURCE mappedResource;
 
@@ -150,7 +189,7 @@ _bool CTrail_MultiPoint_Instance::DispatchCS(CShader_Compute* pComputeShader, co
     m_pContext->CSSetShaderResources(0, 1, &m_pInitHeadSRV);
     m_pContext->CSSetConstantBuffers(0, 1, &m_pMoveBuffer);
 
-    pComputeShader->Execute_ComputeShader((m_iNumTailInstance + 255) / 256, 1, 1);
+    pComputeShader->Execute_ComputeShader((m_iNumInstance * m_iNumTailInstance + 255) / 256, 1, 1);
 
     // UAV 해제
     ID3D11UnorderedAccessView* nullUAV[2] = { nullptr, nullptr };
@@ -281,7 +320,7 @@ HRESULT CTrail_MultiPoint_Instance::Init_HeadParticle(HEAD_PARTICLE* pParticles)
         pParticles[i].vPreTranslation = {};
         pParticles[i].vCurrentRandomPos = _float4(m_pGameInstance->Get_Random(-1.f, 1.f), m_pGameInstance->Get_Random(-1.f, 1.f), m_pGameInstance->Get_Random(-1.f, 1.f), 0.f);
         pParticles[i].vNextRandomPos = _float4(m_pGameInstance->Get_Random(-1.f, 1.f), m_pGameInstance->Get_Random(-1.f, 1.f), m_pGameInstance->Get_Random(-1.f, 1.f), 0.f);
-        pParticles[i].iTailInitIndex = 0;
+        pParticles[i].iTailInitIndex = i * m_iNumTailInstance;
     }
 
     return S_OK;
@@ -293,22 +332,23 @@ HRESULT CTrail_MultiPoint_Instance::Init_TailParticle(TAIL_PARTICLE* pParticles)
     {
         pParticles[i].Particle.vPosition = _float3(0.f, 0.f, 0.f);
 
-        _float fScale = m_pGameInstance->Get_Random(m_vSize.x, m_vSize.y);
+        _float fScale = m_pGameInstance->Get_Random(m_vTail_Size.x, m_vTail_Size.y);
         pParticles[i].Particle.vPSize = _float2(fScale, fScale);
 
         pParticles[i].Particle.vRight = _float4(1.f, 0.f, 0.f, 0.f);
         pParticles[i].Particle.vUp = _float4(0.f, 1.f, 0.f, 0.f);
         pParticles[i].Particle.vLook = _float4(0.f, 0.f, 1.f, 0.f);
         pParticles[i].Particle.vTranslation = _float4(0.f, 0.f, 0.f, 1.f);
-        pParticles[i].Particle.vLifeTime = _float2(m_pGameInstance->Get_Random(m_vLifeTime.x, m_vLifeTime.y), 0.0f);
+        pParticles[i].Particle.vLifeTime = _float2(m_pGameInstance->Get_Random(m_vTail_LifeTime.x, m_vTail_LifeTime.y), 0.0f);
         pParticles[i].Particle.vColor = _float4(m_pGameInstance->Get_Random(m_vMinColor.x, m_vMaxColor.x),
-            m_pGameInstance->Get_Random(m_vMinColor.y, m_vMaxColor.y),
-            m_pGameInstance->Get_Random(m_vMinColor.z, m_vMaxColor.z),
-            m_pGameInstance->Get_Random(m_vMinColor.w, m_vMaxColor.w));
+            m_pGameInstance->Get_Random(m_vTail_MinColor.y, m_vTail_MaxColor.y),
+            m_pGameInstance->Get_Random(m_vTail_MinColor.z, m_vTail_MaxColor.z),
+            m_pGameInstance->Get_Random(m_vTail_MinColor.w, m_vTail_MaxColor.w));
         pParticles[i].Particle.fSpeed = m_pGameInstance->Get_Random(m_vTailSpeed.x, m_vTailSpeed.y);
         pParticles[i].Particle.vCurrenrRandomDir = _float4(m_pGameInstance->Get_Random(-1.f, 1.f), m_pGameInstance->Get_Random(-1.f, 1.f), m_pGameInstance->Get_Random(-1.f, 1.f), 0.f);
         pParticles[i].Particle.vNextRandomDir = _float4(m_pGameInstance->Get_Random(-1.f, 1.f), m_pGameInstance->Get_Random(-1.f, 1.f), m_pGameInstance->Get_Random(-1.f, 1.f), 0.f);
         pParticles[i].vMoveDir = _float4(0.f, 0.f, 0.f, 0.f);
+
     }
     return S_OK;
 }

@@ -533,6 +533,10 @@ HRESULT CLoader::Ready_Resources_For_ToolLevel()
 	if (FAILED(m_pGameInstance->Add_Prototype(LEVEL_TOOL, TEXT("Prototype_Component_Shader_TrailTail_PointInstance"),
 		CShader_NonVTX::Create(m_pDevice, m_pContext, TEXT("../Bin/ShaderFiles/Shader_TrailTail_PointInstance.hlsl")))))
 		return E_FAIL;
+	/* For. Prototype_Component_Shader_TrailHead_PointInstance */
+	if (FAILED(m_pGameInstance->Add_Prototype(LEVEL_TOOL, TEXT("Prototype_Component_Shader_TrailHead_PointInstance"),
+		CShader_NonVTX::Create(m_pDevice, m_pContext, TEXT("../Bin/ShaderFiles/Shader_TrailHead_PointInstance.hlsl")))))
+		return E_FAIL;
 
 	/* For. Prototype_Component_Shader_Compute_Particle_Please */
 	if (FAILED(m_pGameInstance->Add_Prototype(LEVEL_TOOL, TEXT("Prototype_Component_Shader_Compute_Particle_Please"),

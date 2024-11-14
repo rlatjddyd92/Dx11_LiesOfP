@@ -30,7 +30,8 @@ public:
 	virtual HRESULT Save(_wstring strFilePath) override;
 
 private:
-	class CShader_NonVTX* m_pShaderCom = { nullptr };					// 테일만.
+	class CShader_NonVTX* m_pHeadShaderCom = { nullptr };					// 테일만.
+	class CShader_NonVTX* m_pTailShaderCom = { nullptr };					// 테일만.
 	class CTrail_MultiPoint_Instance* m_pVIBufferCom = { nullptr };		// 
 	class CTexture* m_pDiffuseTextureCom = { nullptr };
 	class CTexture* m_pNormalTextureCom = { nullptr };
