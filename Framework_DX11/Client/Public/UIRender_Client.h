@@ -48,7 +48,7 @@ public:
 	HRESULT Render_TestFont(_bool bIsKorean);
 
 	void Input_TestPageInfo(
-		TEST_PAGE_FUNCTION eFunction,
+		TEST_PAGE_NAME eName,
 		_float2 fPosition,
 		_float2 fSize,
 		vector<_wstring>& vecName,
@@ -68,7 +68,7 @@ private:
 	HRESULT Ready_Texture_ItemIcon();
 
 	HRESULT Render_TestPage_Info();
-	void RemoveTestPageInfo(TEST_PAGE_FUNCTION eFunction);
+	void RemoveTestPageInfo(TEST_PAGE_NAME eFunction);
 
 	vector<UTEXTURE*> m_vecTextureInfo_UIPart;
 	vector<UTEXTURE*> m_vecTextureInfo_ItemIcon;

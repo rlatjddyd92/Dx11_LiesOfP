@@ -92,7 +92,7 @@ public:
 	// 위 함수와 관련된 것은 테스트용 임시 내용을 다루므로 편의성을 중시한 구조로 만들 것임 따라서 정식 내용은 넣으면 안됨 
 
 	// TestPage 
-	void ShowTestPage(TEST_PAGE_FUNCTION eFunction,
+	void ShowTestPage(TEST_PAGE_NAME eName,
 		_wstring DataNameA, TEST_PAGE_VALUE_TYPE eTypeA, const void* ValueA,
 		_wstring DataNameB = {}, TEST_PAGE_VALUE_TYPE eTypeB = TEST_PAGE_VALUE_TYPE::TYPE_END, const void* ValueB = nullptr,
 		_wstring DataNameC = {}, TEST_PAGE_VALUE_TYPE eTypeC = TEST_PAGE_VALUE_TYPE::TYPE_END, const void* ValueC = nullptr,

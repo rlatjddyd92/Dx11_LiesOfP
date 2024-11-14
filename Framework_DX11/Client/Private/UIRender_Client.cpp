@@ -44,9 +44,9 @@ HRESULT CUIRender_Client::Initialize_Prototype()
 	/*if (FAILED(Ready_Texture_ItemIcon()))
 		return E_FAIL;*/
 
-	m_vecTestPageInfo.resize(_int(TEST_PAGE_FUNCTION::FUNCTION_END));;
-	m_vecTestPage_Pos.resize(_int(TEST_PAGE_FUNCTION::FUNCTION_END));;
-	m_vecTestPage_Size.resize(_int(TEST_PAGE_FUNCTION::FUNCTION_END));;
+	m_vecTestPageInfo.resize(_int(TEST_PAGE_NAME::NAME_END));;
+	m_vecTestPage_Pos.resize(_int(TEST_PAGE_NAME::NAME_END));;
+	m_vecTestPage_Size.resize(_int(TEST_PAGE_NAME::NAME_END));;
 
 	return S_OK;
 }
@@ -236,13 +236,13 @@ HRESULT CUIRender_Client::Render_TestFont(_bool bIsKorean)
 }
 
 void CUIRender_Client::Input_TestPageInfo(
-	TEST_PAGE_FUNCTION eFunction,
+	TEST_PAGE_NAME eName,
 	_float2 fPosition,
 	_float2 fSize,
 	vector<_wstring>& vecName,
 	vector<_wstring>& vecValue)
 {
-	_int iFunc = _int(eFunction);
+	_int iFunc = _int(eName);
 
 	m_vecTestPage_Pos[iFunc] = fPosition;
 	m_vecTestPage_Size[iFunc] = fSize;
@@ -366,7 +366,7 @@ HRESULT CUIRender_Client::Ready_Texture_ItemIcon()
 
 HRESULT CUIRender_Client::Render_TestPage_Info()
 {
-	for (_int i = 0; i < _int(TEST_PAGE_FUNCTION::FUNCTION_END); ++i)
+	for (_int i = 0; i < _int(TEST_PAGE_NAME::NAME_END); ++i)
 	{
 		if (m_vecTestPageInfo[i].empty())
 			continue;
@@ -415,22 +415,22 @@ HRESULT CUIRender_Client::Render_TestPage_Info()
 
 		switch (i)
 		{
-		case _int(TEST_PAGE_FUNCTION::FUNCTION_TEAMJANG):
+		case _int(TEST_PAGE_NAME::NAME_TEAMJANG):
 			m_pGameInstance->Render_Text(m_vecFont_tchar[7], TEXT("[팀장용 페이지] 열기/닫기 : LShift + F3, 창의 아무데나 눌러서 드래그하면 창 이동"), { fX,fY,0.f,0.f }, { 1.f,1.f,1.f,1.f });
 			break;
-		case _int(TEST_PAGE_FUNCTION::FUNCTION_ANIM):
+		case _int(TEST_PAGE_NAME::NAME_ANIM):
 			m_pGameInstance->Render_Text(m_vecFont_tchar[7], TEXT("[애니메이션 페이지] 열기/닫기 : LShift + F4, 창의 아무데나 눌러서 드래그하면 창 이동"), { fX,fY,0.f,0.f }, { 1.f,1.f,1.f,1.f });
 			break;
-		case _int(TEST_PAGE_FUNCTION::FUNCTION_EFFECT):
+		case _int(TEST_PAGE_NAME::NAME_EFFECT):
 			m_pGameInstance->Render_Text(m_vecFont_tchar[7], TEXT("[이펙트 페이지] 열기/닫기 : LShift + F5, 창의 아무데나 눌러서 드래그하면 창 이동"), { fX,fY,0.f,0.f }, { 1.f,1.f,1.f,1.f });
 			break;
-		case _int(TEST_PAGE_FUNCTION::FUNCTION_MAP):
+		case _int(TEST_PAGE_NAME::NAME_MAP):
 			m_pGameInstance->Render_Text(m_vecFont_tchar[7], TEXT("[맵 페이지] 열기/닫기 : LShift + F6, 창의 아무데나 눌러서 드래그하면 창 이동"), { fX,fY,0.f,0.f }, { 1.f,1.f,1.f,1.f });
 			break;
-		case _int(TEST_PAGE_FUNCTION::FUNCTION_PLAYER_STAT):
+		case _int(TEST_PAGE_NAME::NAME_PLAYER_STAT):
 			m_pGameInstance->Render_Text(m_vecFont_tchar[7], TEXT("[스탯 페이지] 열기/닫기 : LShift + F7, 창의 아무데나 눌러서 드래그하면 창 이동"), { fX,fY,0.f,0.f }, { 1.f,1.f,1.f,1.f });
 			break;
-		case _int(TEST_PAGE_FUNCTION::FUNCTION_ITEM):
+		case _int(TEST_PAGE_NAME::NAME_ITEM):
 			m_pGameInstance->Render_Text(m_vecFont_tchar[7], TEXT("[아이템 페이지] 열기/닫기 : LShift + F8, 창의 아무데나 눌러서 드래그하면 창 이동"), { fX,fY,0.f,0.f }, { 1.f,1.f,1.f,1.f });
 			break;
 		default:
@@ -450,7 +450,7 @@ HRESULT CUIRender_Client::Render_TestPage_Info()
 			fY += fRow_Interval;
 		}
 
-		RemoveTestPageInfo(TEST_PAGE_FUNCTION(i));
+		RemoveTestPageInfo(TEST_PAGE_NAME(i));
 	}
 
 	
@@ -458,7 +458,7 @@ HRESULT CUIRender_Client::Render_TestPage_Info()
 	return S_OK;
 }
 
-void CUIRender_Client::RemoveTestPageInfo(TEST_PAGE_FUNCTION eFunction)
+void CUIRender_Client::RemoveTestPageInfo(TEST_PAGE_NAME eFunction)
 {
 	for (auto& iter : m_vecTestPageInfo[_int(eFunction)])
 	{
@@ -527,8 +527,8 @@ void CUIRender_Client::Free()
 
 	m_vecFont_tchar.clear();
 
-	for (_int i = 0; i < _int(TEST_PAGE_FUNCTION::FUNCTION_END); ++i)
-		RemoveTestPageInfo(TEST_PAGE_FUNCTION(i));
+	for (_int i = 0; i < _int(TEST_PAGE_NAME::NAME_END); ++i)
+		RemoveTestPageInfo(TEST_PAGE_NAME(i));
 
 	m_vecTestPageInfo.clear();
 	m_vecTestPage_Pos.clear();

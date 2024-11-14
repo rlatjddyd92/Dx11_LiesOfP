@@ -81,6 +81,11 @@ public:
 		list<_int> ValidEquipIndexlist;
 	}ARRAY;
 
+	typedef struct EQUIP_INFO
+	{
+		ITEM_TYPE eType = ITEM_TYPE::TYPE_END; // <- 장착 중인 아이템의 타입, 게임 인벤 구조 상 타입이 곧 인벤 내 어떤 Array에 있는 지를 의미한다 
+		_int iIndex = 0; // <- 아이템이 위치한 인덱스 
+	}EQUIP;
 
 
 private:
@@ -95,10 +100,31 @@ public:
 	ITEM_RESULT UseItem_Equip(EQUIP_SLOT eSlot, _uint iCount = 1); // <- 장비된 아이템을 사용한다
 	ITEM_RESULT UseItem_Inven(ITEM_INDEX eIndex, _uint iCount = 1); // <- 인벤에 있는 아이템을 직접 사용 (
 
-	const ITEM_INDEX& Get_Equip_Item_Index(EQUIP_SLOT eSlot) { return m_vecEquip_ItemInfo[_int(eSlot)]->eIndex; } // 현재 장비창에 장착된 아이템 확인
-	const ITEM& Get_Equip_Item_Info(EQUIP_SLOT eSlot) { return *m_vecEquip_ItemInfo[_int(eSlot)]; }
+	const ITEM_INDEX& Get_Equip_Item_Index(EQUIP_SLOT eSlot) // 현재 장비창에 장착된 아이템의 인덱스만 확인
+	{
+		return m_vecArray_Inven[_int(m_vecEquip_ItemInfo[_int(eSlot)]->eType)]->vecItemInfo[_int(m_vecEquip_ItemInfo[_int(eSlot)]->iIndex)]->eIndex;
+	} 
+	const ITEM& Get_Equip_Item_Info(EQUIP_SLOT eSlot) // 현재 장비창에 장착된 아이템의 정보 레퍼런스 획득
+	{ 
+		return *m_vecArray_Inven[_int(m_vecEquip_ItemInfo[_int(eSlot)]->eType)]->vecItemInfo[_int(m_vecEquip_ItemInfo[_int(eSlot)]->iIndex)];
+	}
 
-
+	
+	// 외부에서 아이템 매니저에 필요한 것이 뭐가 있나? 
+	/*
+	0. 새로운 아이템을 만들어 유저 인벤에 넣는다 
+	  -> 아이템 스펙 Array에서 복사해서 인벤에 넣는 기능 필요 + 수량도 설정할 수 있어야 한다 (스택 아이템) 
+	  -> 만일 스택 아이템이고 이미 인벤에 있다면 숫자만 늘려야 한다 
+	1. 인벤에 있는 아이템의 저장 위치를 변경한다 
+	  -> 게임 특성상 쓸 일이 많아보이지 않는다 -> 후순위로 미룬다 
+	2. 장착 정보를 변경한다 
+	  -> 어느 Array의 몇 번째 아이템을 사용하는 지만 등록하여 간편하게 구성하자 
+	  -> 장착 가능한 칸만 구분하여야 한다 
+	  -> 
+	
+	
+	
+	*/
 
 
 
@@ -118,7 +144,7 @@ private:
 
 	vector<ARRAY*> m_vecArray_Inven; // 인벤토리 정보 모음 
 
-	vector<ITEM*> m_vecEquip_ItemInfo; // 현재 어떤 장비 장착 중인 지 확인 
+	vector<EQUIP*> m_vecEquip_ItemInfo; // 현재 어떤 장비 장착 중인 지 확인 
 
 
 

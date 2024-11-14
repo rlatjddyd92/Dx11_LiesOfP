@@ -37,10 +37,12 @@ public:
 		GROUP_POTION_RKEY, // <- R키 (사용 가능할 때 표시)
 		GROUP_POTION_FILL, // <- 포션 게이지 (사용 가능 포션이 0일 때 표시)
 		GROUP_POTION_QUEUE, // <- 포션 대기열
+		GROUP_POTION_COUNT, // <- 포션 카운트
 
 		GROUP_TOOL_ITEM, // <- 아이템 텍스쳐
 		GROUP_TOOL_RKEY, // <- R키 (사용 가능할 때 표시)
 		GROUP_TOOL_QUEUE, // <- 툴 대기열
+		GROUP_TOOL_COUNT, // <- 툴 카운트
 
 		GROUP_SELECT_CELL, // 선택 표시
 
@@ -141,11 +143,14 @@ private:
 	vector<UG_CTRL*> m_vecSpecial_Gauge_Fill;
 
 	// 좌하단 포션/도구 조정
-	UG_CTRL* m_Potion_Tool_Tex = { nullptr };
+	UG_CTRL* m_Potion_Tex = { nullptr };
 	UG_CTRL* m_Potion_Tool_RKey = { nullptr };
 	UG_CTRL* m_Potion_Queue = { nullptr };
 	UG_CTRL* m_Potion_Gauge = { nullptr };
+	UG_CTRL* m_Potion_Count = { nullptr };
+	UG_CTRL* m_Tool_Tex = { nullptr };
 	UG_CTRL* m_Tool_Queue = { nullptr };
+	UG_CTRL* m_Tool_Count = { nullptr };
 	UG_CTRL* m_Portion_Tool_Select = { nullptr };
 
 	// 좌하단 암 

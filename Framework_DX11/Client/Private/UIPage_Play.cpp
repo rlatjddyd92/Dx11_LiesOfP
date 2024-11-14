@@ -126,19 +126,25 @@ HRESULT CUIPage_Play::Ready_UIPart_Group_Control()
 	}
 
 	// 좌하단 포션/도구 조정
-	m_Potion_Tool_Tex =  new UG_CTRL;
+	m_Potion_Tex =  new UG_CTRL;
 	m_Potion_Tool_RKey =  new UG_CTRL;
 	m_Potion_Queue =  new UG_CTRL;
 	m_Potion_Gauge =  new UG_CTRL;
+	m_Tool_Tex = new UG_CTRL;
 	m_Tool_Queue =  new UG_CTRL;
 	m_Portion_Tool_Select =  new UG_CTRL;
+	m_Potion_Count = new UG_CTRL;
+	m_Tool_Count = new UG_CTRL;
 
-	m_Ctrllist.push_back(m_Potion_Tool_Tex);
+	m_Ctrllist.push_back(m_Potion_Tex);
 	m_Ctrllist.push_back(m_Potion_Tool_RKey);
 	m_Ctrllist.push_back(m_Potion_Queue);
 	m_Ctrllist.push_back(m_Potion_Gauge);
+	m_Ctrllist.push_back(m_Tool_Tex);
 	m_Ctrllist.push_back(m_Tool_Queue);
 	m_Ctrllist.push_back(m_Portion_Tool_Select);
+	m_Ctrllist.push_back(m_Potion_Count);
+	m_Ctrllist.push_back(m_Tool_Count);
 
 	// 좌하단 암 
 	m_Arm_Tex =  new UG_CTRL;
@@ -233,7 +239,7 @@ HRESULT CUIPage_Play::Ready_UIPart_Group_Control()
 			m_vecSpecial_Gauge_Fill[4]->PartIndexlist.push_back(i);
 			break;
 		case _int(PART_GROUP::GROUP_POTION_ITEM):
-			m_Potion_Tool_Tex->PartIndexlist.push_back(i);
+			m_Potion_Tex->PartIndexlist.push_back(i);
 			break;
 		case _int(PART_GROUP::GROUP_POTION_RKEY):
 			m_Potion_Tool_RKey->PartIndexlist.push_back(i);
@@ -244,14 +250,20 @@ HRESULT CUIPage_Play::Ready_UIPart_Group_Control()
 		case _int(PART_GROUP::GROUP_POTION_QUEUE):
 			m_Potion_Queue->PartIndexlist.push_back(i);
 			break;
+		case _int(PART_GROUP::GROUP_POTION_COUNT):
+			m_Potion_Count->PartIndexlist.push_back(i);
+			break;
 		case _int(PART_GROUP::GROUP_TOOL_ITEM):
-			m_Potion_Tool_Tex->PartIndexlist.push_back(i);
+			m_Tool_Tex->PartIndexlist.push_back(i);
 			break;
 		case _int(PART_GROUP::GROUP_TOOL_RKEY):
 			m_Potion_Tool_RKey->PartIndexlist.push_back(i);
 			break;
 		case _int(PART_GROUP::GROUP_TOOL_QUEUE):
 			m_Tool_Queue->PartIndexlist.push_back(i);
+			break;
+		case _int(PART_GROUP::GROUP_TOOL_COUNT):
+			m_Tool_Count->PartIndexlist.push_back(i);
 			break;
 		case _int(PART_GROUP::GROUP_SELECT_CELL):
 			m_Portion_Tool_Select->PartIndexlist.push_back(i);
