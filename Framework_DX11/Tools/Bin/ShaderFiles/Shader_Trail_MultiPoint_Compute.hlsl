@@ -176,6 +176,7 @@ void CS_SPREAD_MAIN(uint3 DTid : SV_DispatchThreadID)
         if ((iState & STATE_LOOP) && (HeadParticle.particle.vLifeTime.y >= HeadParticle.particle.vLifeTime.x))
         {
             HeadParticle.particle.vTranslation = InitParticles[iHeadIndex].particle.vTranslation;
+            HeadParticle.vPreTranslation = InitParticles[iHeadIndex].particle.vTranslation;
             HeadParticle.particle.vLifeTime.y = 0.f;
             HeadParticle.particle.vTranslation = mul(HeadParticle.particle.vTranslation, WorldMatrix);
             HeadParticle.particle.vRight = vWorldPivot;
