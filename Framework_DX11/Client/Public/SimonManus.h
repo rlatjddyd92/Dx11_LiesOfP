@@ -13,7 +13,7 @@ END
 
 BEGIN(Client)
 
-class CCarcassBigA final : public CMonster
+class CSimonManus final : public CMonster
 {
 public:
 	typedef struct
@@ -29,16 +29,16 @@ public:
 	enum COLLIDERTYPE { TYPE_LEFTHAND, TYPE_RIGHTHAND, TYPE_END };
 
 public:
-	enum CARCASS_BIGA_STATE {
-		SWING = MONSTER_STATE_END,
-		IMPACT,
-
+	enum SIMONMANUS_STATE {
+		ATK_SWING = MONSTER_STATE_END, ATK_MOVEVASH, ATK_AVOIDSWING, ATK_CHASINGSWING
+		, ATK_STAMP, ATK_JUMPTOSWING, ATK_STING, ATK_UPPER
+		, ATK_STOP,
 	};
 
 private:
-	CCarcassBigA(ID3D11Device* pDevice, ID3D11DeviceContext* pContext);
-	CCarcassBigA(const CCarcassBigA& Prototype);
-	virtual ~CCarcassBigA() = default;
+	CSimonManus(ID3D11Device* pDevice, ID3D11DeviceContext* pContext);
+	CSimonManus(const CSimonManus& Prototype);
+	virtual ~CSimonManus() = default;
 
 public:
 	virtual HRESULT Initialize_Prototype() override;
@@ -51,6 +51,7 @@ public:
 private:
 	CGameObject*			m_pColliderObject[TYPE_END] = { nullptr, nullptr };
 	_bool					m_bColliderCtrs[TYPE_END] = {true,  true};
+	vector<CGameObject*>	CollObjRenderP{};
 
 private:
 	HRESULT Ready_Components();
@@ -58,7 +59,7 @@ private:
 
 
 public:
-	static CCarcassBigA* Create(ID3D11Device* pDevice, ID3D11DeviceContext* pContext);
+	static CSimonManus* Create(ID3D11Device* pDevice, ID3D11DeviceContext* pContext);
 	virtual CGameObject* Clone(void* pArg);
 	virtual void Free() override;
 

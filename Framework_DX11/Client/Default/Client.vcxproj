@@ -190,6 +190,7 @@
     <ClInclude Include="..\Public\Particle_Snow.h" />
     <ClInclude Include="..\public\Player.h" />
     <ClInclude Include="..\Public\Player_Stat_Manager.h" />
+    <ClInclude Include="..\Public\SimonManus.h" />
     <ClInclude Include="..\Public\Sky.h" />
     <ClInclude Include="..\Public\State_CarcassBigA_Attack.h" />
     <ClInclude Include="..\Public\State_CarcassBigA_Die.h" />
@@ -200,6 +201,14 @@
     <ClInclude Include="..\Public\State_CarcassBigA_Paralyze.h" />
     <ClInclude Include="..\Public\State_CarcassBigA_Run.h" />
     <ClInclude Include="..\Public\State_CarcassBigA_Walk.h" />
+    <ClInclude Include="..\Public\State_SimonManus_Attack.h" />
+    <ClInclude Include="..\Public\State_SimonManus_Die.h" />
+    <ClInclude Include="..\Public\State_SimonManus_Grogy.h" />
+    <ClInclude Include="..\Public\State_SimonManus_HitFatal.h" />
+    <ClInclude Include="..\Public\State_SimonManus_Idle.h" />
+    <ClInclude Include="..\Public\State_SimonManus_Paralyze.h" />
+    <ClInclude Include="..\Public\State_SimonManus_Run.h" />
+    <ClInclude Include="..\Public\State_SimonManus_Walk.h" />
     <ClInclude Include="..\Public\Terrain.h" />
     <ClInclude Include="..\Public\Texture_Effect.h" />
     <ClInclude Include="..\Public\UIManager.h" />
@@ -241,6 +250,7 @@
     <ClCompile Include="..\Private\Particle_Snow.cpp" />
     <ClCompile Include="..\private\Player.cpp" />
     <ClCompile Include="..\Private\Player_Stat_Manager.cpp" />
+    <ClCompile Include="..\Private\SimonManus.cpp" />
     <ClCompile Include="..\Private\Sky.cpp" />
     <ClCompile Include="..\Private\State_CarcassBigA_Attack.cpp" />
     <ClCompile Include="..\Private\State_CarcassBigA_Die.cpp" />
@@ -251,6 +261,14 @@
     <ClCompile Include="..\Private\State_CarcassBigA_Paralyze.cpp" />
     <ClCompile Include="..\Private\State_CarcassBigA_Run.cpp" />
     <ClCompile Include="..\Private\State_CarcassBigA_Walk.cpp" />
+    <ClCompile Include="..\Private\State_SimonManus_Attack.cpp" />
+    <ClCompile Include="..\Private\State_SimonManus_Die.cpp" />
+    <ClCompile Include="..\Private\State_SimonManus_Grogy.cpp" />
+    <ClCompile Include="..\Private\State_SimonManus_HitFatal.cpp" />
+    <ClCompile Include="..\Private\State_SimonManus_Idle.cpp" />
+    <ClCompile Include="..\Private\State_SimonManus_Paralyze.cpp" />
+    <ClCompile Include="..\Private\State_SimonManus_Run.cpp" />
+    <ClCompile Include="..\Private\State_SimonManus_Walk.cpp" />
     <ClCompile Include="..\Private\Terrain.cpp" />
     <ClCompile Include="..\Private\Texture_Effect.cpp" />
     <ClCompile Include="..\Private\UIManager.cpp" />

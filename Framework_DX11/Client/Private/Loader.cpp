@@ -15,6 +15,7 @@
 #pragma region EFFECT
 #include "Monster.h"
 #include "CarcassBigA.h"
+#include "SimonManus.h"
 #pragma endregion
 
 #pragma region EFFECT
@@ -426,11 +427,6 @@ HRESULT CLoader::Ready_Resources_For_GamePlayLevel()
 		CPlayer::Create(m_pDevice, m_pContext))))
 		return E_FAIL;
 
-	/* For. Prototype_GameObject_CarcassBigA */
-	if (FAILED(m_pGameInstance->Add_Prototype(TEXT("Prototype_GameObject_CarcassBigA"),
-		CCarcassBigA::Create(m_pDevice, m_pContext))))
-		return E_FAIL;
-
 	/* For. Prototype_GameObject_Weapon */
 	if (FAILED(m_pGameInstance->Add_Prototype(TEXT("Prototype_GameObject_Weapon"),
 		CWeapon::Create(m_pDevice, m_pContext))))
@@ -441,6 +437,18 @@ HRESULT CLoader::Ready_Resources_For_GamePlayLevel()
 		CFreeCamera::Create(m_pDevice, m_pContext))))
 		return E_FAIL;
 
+#pragma region MONSTER
+	/* For. Prototype_GameObject_CarcassBigA */
+	if (FAILED(m_pGameInstance->Add_Prototype(TEXT("Prototype_GameObject_CarcassBigA"),
+		CCarcassBigA::Create(m_pDevice, m_pContext))))
+		return E_FAIL;
+	
+	/* For. Prototype_GameObject_SimonManus */
+	if (FAILED(m_pGameInstance->Add_Prototype(TEXT("Prototype_GameObject_SimonManus"),
+		CSimonManus::Create(m_pDevice, m_pContext))))
+		return E_FAIL;
+
+#pragma endregion
 
 	/* For. Prototype_GameObject_Sky */
 	if (FAILED(m_pGameInstance->Add_Prototype(TEXT("Prototype_GameObject_Sky"),
@@ -504,11 +512,15 @@ HRESULT CLoader::Ready_Resources_For_GamePlayLevel_Map0()
 		CModel::Create(m_pDevice, m_pContext, CModel::TYPE_ANIM, "../Bin/ModelData/Anim/CreatedBinFiles/Player.dat", PreTransformMatrix, true))))
 		return E_FAIL;
 
-	//
+	//Prototype_Component_Model_CarcassBigA
 	PreTransformMatrix = XMMatrixScaling(0.01f, 0.01f, 0.01f) * XMMatrixRotationY(XMConvertToRadians(270.0f));
 	if (FAILED(m_pGameInstance->Add_Prototype(LEVEL_GAMEPLAY, TEXT("Prototype_Component_Model_CarcassBigA"),
 		CModel::Create(m_pDevice, m_pContext, CModel::TYPE_ANIM, "../Bin/ModelData/Anim/CreatedBinFiles/CarcassBigA.dat", PreTransformMatrix, true))))
 		return E_FAIL;
+
+	//Prototype_Component_Model_SimonManus
+
+
 	m_isFinished_Map0 = true;
 
 	return S_OK;

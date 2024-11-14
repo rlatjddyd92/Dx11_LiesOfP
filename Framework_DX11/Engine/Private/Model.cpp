@@ -566,13 +566,16 @@ _vector CModel::Play_Animation(_float fTimeDelta, _bool* pOut, list<OUTPUT_EVKEY
 			*pOut = false;
 	}
 
-	if ((m_CurrentTrackPosition_Boundary == 0.f) || (m_isEnd_Animations_Boundary[m_iCurrentAnimIndex_Boundary] == true))
+	if (!m_isLoop_Boundary)
 	{
-		if (m_iCurrentAnimIndex != m_iCurrentAnimIndex_Boundary)
+		if ((m_CurrentTrackPosition_Boundary == 0.f) || (m_isEnd_Animations_Boundary[m_iCurrentAnimIndex_Boundary] == true))
 		{
-			SetUp_NextAnimation_Boundary(m_iCurrentAnimIndex, m_isLoop);
-			m_CurrentTrackPosition_Boundary = 0.f;
-			m_isEnd_Animations_Boundary[m_iCurrentAnimIndex_Boundary] = false;
+			if (m_iCurrentAnimIndex != m_iCurrentAnimIndex_Boundary)
+			{
+				SetUp_NextAnimation_Boundary(m_iCurrentAnimIndex, m_isLoop);
+				m_CurrentTrackPosition_Boundary = 0.f;
+				m_isEnd_Animations_Boundary[m_iCurrentAnimIndex_Boundary] = false;
+			}
 		}
 	}
 

@@ -259,11 +259,15 @@ void CController_AnimationTool::ListUp_Anim()
 		ImGui::Text("\t\t\t");
 		ImGui::SameLine();
 		ImGui::Text("Anim Upper Body");
+		ImGui::PushItemWidth(200);
 	}
 	else
+	{
 		ImGui::Text("Animation");
-
-	ImGui::PushItemWidth(200); // 크기조정
+		ImGui::PushItemWidth(400);
+		// 크기조정
+	}
+		
 	if (ImGui::BeginListBox("##Anim_Lower"))
 	{
 		if (m_pCopyModelCom != nullptr)

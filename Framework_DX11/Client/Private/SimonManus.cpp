@@ -1,39 +1,37 @@
 #include "stdafx.h"
-#include "..\Public\CarcassBigA.h"
+#include "..\Public\SimonManus.h"
 
 #include "GameInstance.h"
 #include "Player.h"
 #include "Fsm.h"
 
+//전부 수정하기
+#include "State_SimonManus_Idle.h"
+#include "State_SimonManus_Die.h"
+#include "State_SimonManus_Attack.h"
 
-#include "State_CarcassBigA_Idle.h"
-#include "State_CarcassBigA_Die.h"
-#include "State_CarcassBigA_Attack.h"
-#include "State_CarcassBigA_Impact.h"
+#include "State_SimonManus_Grogy.h"
+#include "State_SimonManus_HitFatal.h"
 
-#include "State_CarcassBigA_Grogy.h"
-#include "State_CarcassBigA_HitFatal.h"
-#include "State_CarcassBigA_Paralyze.h"
+#include "State_SimonManus_Walk.h"
+#include "State_SimonManus_RUN.h"
 
-#include "State_CarcassBigA_Walk.h"
-#include "State_CarcassBigA_RUN.h"
-
-CCarcassBigA::CCarcassBigA(ID3D11Device * pDevice, ID3D11DeviceContext * pContext)
+CSimonManus::CSimonManus(ID3D11Device * pDevice, ID3D11DeviceContext * pContext)
 	: CMonster{ pDevice, pContext }
 {
 }
 
-CCarcassBigA::CCarcassBigA(const CCarcassBigA& Prototype)
+CSimonManus::CSimonManus(const CSimonManus& Prototype)
 	: CMonster{ Prototype }
 {
 }
 
-HRESULT CCarcassBigA::Initialize_Prototype()
+HRESULT CSimonManus::Initialize_Prototype()
 {
 	return S_OK;
 }
 
-HRESULT CCarcassBigA::Initialize(void* pArg)
+HRESULT CSimonManus::Initialize(void* pArg)
 {
   	CGameObject::GAMEOBJECT_DESC		Desc{};
 	Desc.fSpeedPerSec = 1.5f;
@@ -58,34 +56,37 @@ HRESULT CCarcassBigA::Initialize(void* pArg)
 	return S_OK;
 }
 
-void CCarcassBigA::Priority_Update(_float fTimeDelta)
+void CSimonManus::Priority_Update(_float fTimeDelta)
 {
 
 	
 }
 
-void CCarcassBigA::Update(_float fTimeDelta)
+void CSimonManus::Update(_float fTimeDelta)
 {
 
 
-	m_vCurRootMove = m_pModelCom->Play_Animation(fTimeDelta, &m_bEndAnim, nullptr);
-
-	m_pFSMCom->Update(fTimeDelta);
-
-	_vector vPos = m_pTransformCom->Get_State(CTransform::STATE_POSITION);
-
-	if (m_bEndAnim == true && m_bResetRootMove)//조건을 애니메이션이 끝났을때 or 변경 되었을때로
 	{
-		m_vCurRootMove = m_vRootMoveStack = XMVectorSet(0, 0, 0, 1);
-	}
-	else
-	{
-		m_vCurRootMove = XMVector3TransformNormal(m_vCurRootMove, m_pTransformCom->Get_WorldMatrix());
+		//애니메이션 재생 및 루트 본 움직임 제어
+		m_vCurRootMove = m_pModelCom->Play_Animation(fTimeDelta, &m_bEndAnim, nullptr);
 
-		m_pTransformCom->Set_State(CTransform::STATE_POSITION, vPos + m_vCurRootMove - m_vRootMoveStack);
-		m_vRootMoveStack = m_vCurRootMove;
-	}
+		//진행한 애니메이션 정도를 통해서 상태 제어(애니메이션이 끝나면 넘어가도록)
+		m_pFSMCom->Update(fTimeDelta);
 
+		_vector vPos = m_pTransformCom->Get_State(CTransform::STATE_POSITION);
+
+		if (m_bEndAnim == true && m_bResetRootMove)//조건을 애니메이션이 끝났을때 or 변경 되었을때로
+		{
+			m_vCurRootMove = m_vRootMoveStack = XMVectorSet(0, 0, 0, 1);
+		}
+		else
+		{
+			m_vCurRootMove = XMVector3TransformNormal(m_vCurRootMove, m_pTransformCom->Get_WorldMatrix());
+
+			m_pTransformCom->Set_State(CTransform::STATE_POSITION, vPos + m_vCurRootMove - m_vRootMoveStack);
+			m_vRootMoveStack = m_vCurRootMove;
+		}
+	}
 
 	for (auto& pColliderObj : m_pColliderObject)
 		pColliderObj->Update(fTimeDelta);
@@ -94,26 +95,23 @@ void CCarcassBigA::Update(_float fTimeDelta)
 		pCollider->Update(m_pTransformCom->Get_WorldMatrix_Ptr());
 }
 
-void CCarcassBigA::Late_Update(_float fTimeDelta)
+void CSimonManus::Late_Update(_float fTimeDelta)
 {
 	__super::Late_Update(fTimeDelta);
-
-
 
 	m_pGameInstance->Add_RenderObject(CRenderer::RG_NONBLEND, this);
 
 	for (_uint i = 0; i < TYPE_END; ++i)
 	{
-		if (m_bColliderCtrs[i] == true)
+		if (m_bColliderCtrs[i] != true)
 		{
-			continue;
+			m_pColliderObject[i]->Late_Update(fTimeDelta);
 		}
-		m_pColliderObject[i]->Late_Update(fTimeDelta);
 	}
 
 }
 
-HRESULT CCarcassBigA::Render()
+HRESULT CSimonManus::Render()
 {
 	if (FAILED(m_pTransformCom->Bind_ShaderResource(m_pShaderCom, "g_WorldMatrix")))
 		return E_FAIL;
@@ -149,7 +147,7 @@ HRESULT CCarcassBigA::Render()
 	return S_OK;
 }
 
-HRESULT CCarcassBigA::Ready_Components()
+HRESULT CSimonManus::Ready_Components()
 {
 	if (FAILED(__super::Ready_Components()))
 		return E_FAIL;
@@ -227,7 +225,7 @@ HRESULT CCarcassBigA::Ready_Components()
 	return S_OK;
 }
 
-HRESULT CCarcassBigA::Ready_FSM()
+HRESULT CSimonManus::Ready_FSM()
 {
 	if (FAILED(__super::Ready_FSM()))
 		return E_FAIL;
@@ -241,16 +239,14 @@ HRESULT CCarcassBigA::Ready_FSM()
 	//
 
 
-	m_pFSMCom->Add_State(CState_CarcassBigA_Idle::Create(m_pFSMCom, this, IDLE, &Desc));
-	m_pFSMCom->Add_State(CState_CarcassBigA_Walk::Create(m_pFSMCom, this, WALK, &Desc));
-	m_pFSMCom->Add_State(CState_CarcassBigA_Run::Create(m_pFSMCom, this, RUN, &Desc));
-	m_pFSMCom->Add_State(CState_CarcassBigA_Attack::Create(m_pFSMCom, this, ATTACK, &Desc));
-	m_pFSMCom->Add_State(CState_CarcassBigA_Grogy::Create(m_pFSMCom, this, GROGY, &Desc));
-	m_pFSMCom->Add_State(CState_CarcassBigA_HitFatal::Create(m_pFSMCom, this, HITFATAL, &Desc));
-	m_pFSMCom->Add_State(CState_CarcassBigA_Paralyze::Create(m_pFSMCom, this, PARALYZE, &Desc));
-	m_pFSMCom->Add_State(CState_CarcassBigA_Die::Create(m_pFSMCom, this, DIE, &Desc));
+	m_pFSMCom->Add_State(CState_SimonManus_Idle::Create(m_pFSMCom, this, IDLE, &Desc));
+	m_pFSMCom->Add_State(CState_SimonManus_Walk::Create(m_pFSMCom, this, WALK, &Desc));
+	m_pFSMCom->Add_State(CState_SimonManus_Run::Create(m_pFSMCom, this, RUN, &Desc));
+	m_pFSMCom->Add_State(CState_SimonManus_Attack::Create(m_pFSMCom, this, ATTACK, &Desc));
+	m_pFSMCom->Add_State(CState_SimonManus_Grogy::Create(m_pFSMCom, this, GROGY, &Desc));
+	m_pFSMCom->Add_State(CState_SimonManus_HitFatal::Create(m_pFSMCom, this, HITFATAL, &Desc));
+	m_pFSMCom->Add_State(CState_SimonManus_Die::Create(m_pFSMCom, this, DIE, &Desc));
 
-	m_pFSMCom->Add_State(CState_CarcassBigA_Impact::Create(m_pFSMCom, this, IMPACT, &Desc));
 
 
 	m_pFSMCom->Set_State(IDLE);
@@ -261,9 +257,9 @@ HRESULT CCarcassBigA::Ready_FSM()
 
 }
 
-CCarcassBigA* CCarcassBigA::Create(ID3D11Device* pDevice, ID3D11DeviceContext* pContext)
+CSimonManus* CSimonManus::Create(ID3D11Device* pDevice, ID3D11DeviceContext* pContext)
 {
-	CCarcassBigA* pInstance = new CCarcassBigA(pDevice, pContext);
+	CSimonManus* pInstance = new CSimonManus(pDevice, pContext);
 
 	if (FAILED(pInstance->Initialize_Prototype()))
 	{
@@ -276,9 +272,9 @@ CCarcassBigA* CCarcassBigA::Create(ID3D11Device* pDevice, ID3D11DeviceContext* p
 
 
 
-CGameObject* CCarcassBigA::Clone(void* pArg)
+CGameObject* CSimonManus::Clone(void* pArg)
 {
-	CCarcassBigA* pInstance = new CCarcassBigA(*this);
+	CSimonManus* pInstance = new CSimonManus(*this);
 
 	if (FAILED(pInstance->Initialize(pArg)))
 	{
@@ -289,7 +285,7 @@ CGameObject* CCarcassBigA::Clone(void* pArg)
 	return pInstance;
 }
 
-void CCarcassBigA::Free()
+void CSimonManus::Free()
 {
 	for (_uint i = 0; i < TYPE_END; ++i)
 	{
