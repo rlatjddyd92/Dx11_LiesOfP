@@ -43,6 +43,9 @@ HRESULT CUIRender::Initialize_Prototype()
 	if (FAILED(Ready_Texture()))
 		return E_FAIL;
 
+	if (FAILED(Ready_Texture_ItemIcon()))
+		return E_FAIL;
+
 	return S_OK;
 }
 
@@ -107,8 +110,16 @@ HRESULT CUIRender::Render()
 			if (FAILED(m_pShaderCom->Bind_Matrix("g_ProjMatrix", &m_ProjMatrix)))
 				return E_FAIL;
 
-			if (FAILED(m_vecTextureInfo[rNow.iTexture_Index]->Texture->Bind_ShadeResource(m_pShaderCom, "g_Texture", 0)))
-				return E_FAIL;
+			if (!rNow.bIsItem)
+			{
+				if (FAILED(m_vecTextureInfo[rNow.iTexture_Index]->Texture->Bind_ShadeResource(m_pShaderCom, "g_Texture", 0)))
+					return E_FAIL;
+			}
+			else
+			{
+				if (FAILED(m_vecTextureInfo_ItemIcon[rNow.iTexture_Index]->Texture->Bind_ShadeResource(m_pShaderCom, "g_Texture", 0)))
+					return E_FAIL;
+			}
 
 			if (FAILED(m_pShaderCom->Bind_RawValue("g_Color", &rNow.fTextureColor, sizeof(_float4))))
 				return E_FAIL;
@@ -325,6 +336,40 @@ HRESULT CUIRender::Ready_Texture()
 	return S_OK;
 }
 
+HRESULT CUIRender::Ready_Texture_ItemIcon()
+{
+	vector<vector<_wstring>> vecBuffer;
+	m_pGameInstance->LoadDataByFile("../Bin/Resources/textures/Item/ItemList.csv", &vecBuffer);
+
+	for (_int i = 2; i < vecBuffer.size(); ++i)
+	{
+		_tchar* tPath = new _tchar[vecBuffer[i][0].size() + 1];
+		_tchar* tTag = new _tchar[vecBuffer[i][1].size() + 1];
+
+		memcpy(tPath, &vecBuffer[i][0][0], sizeof(_tchar) * (vecBuffer[i][0].size() + 1));
+		memcpy(tTag, &vecBuffer[i][1][0], sizeof(_tchar) * (vecBuffer[i][1].size() + 1));
+
+		UTEXTURE* pNew = new UTEXTURE;
+
+		pNew->Texture = CTexture::Create(m_pDevice, m_pContext, tPath, 1);
+		pNew->strTexturePath = new _char[vecBuffer[i][0].size() + 1];
+		pNew->strTextureTag = new _char[vecBuffer[i][1].size() + 1];
+
+		if (FAILED(m_pGameInstance->Add_Prototype(LEVEL_TOOL, tTag, pNew->Texture)))
+			return E_FAIL;
+
+		WideCharToMultiByte(CP_UTF8, 0, tPath, -1, pNew->strTexturePath, (_int)vecBuffer[i][0].size() + 1, nullptr, nullptr);
+		WideCharToMultiByte(CP_UTF8, 0, tTag, -1, pNew->strTextureTag, (_int)vecBuffer[i][1].size() + 1, nullptr, nullptr);
+
+		m_vecTextureInfo_ItemIcon.push_back(pNew);
+
+		Safe_Delete_Array(tPath);
+		Safe_Delete_Array(tTag);
+	}
+
+	return S_OK;
+}
+
 CUIRender* CUIRender::Create(ID3D11Device* pDevice, ID3D11DeviceContext* pContext)
 {
 	CUIRender* pInstance = new CUIRender(pDevice, pContext);
@@ -368,6 +413,16 @@ void CUIRender::Free()
 	}
 
 	m_vecTextureInfo.clear();
+
+	for (auto& iter : m_vecTextureInfo_ItemIcon)
+	{
+		//		Safe_Release(iter->Texture);
+		Safe_Delete_Array(iter->strTexturePath);
+		Safe_Delete_Array(iter->strTextureTag);
+		Safe_Delete(iter);
+	}
+
+	m_vecTextureInfo_ItemIcon.clear();
 
 	for (auto& iter : m_UIRenderlist)
 		Safe_Delete(iter);

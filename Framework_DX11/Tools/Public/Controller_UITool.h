@@ -100,6 +100,7 @@ public:
 
 		// 텍스쳐 관련
 		_int iTexture_Index = -1;
+		_bool bIsItem = false; // <- 아이템 아이콘 표시 여부 
 		_float4 fTextureColor = { -1.f,-1.f ,-1.f ,-1.f };
 
 		// 텍스트 관련
@@ -107,6 +108,18 @@ public:
 		_tchar* szText = {};
 		_bool bCenter = false;
 		_float4 fTextColor = { 1.f,1.f,1.f,1.f };
+
+		// 작동 제어
+		_bool bUpdate = true;
+		_bool bRender = true;
+
+		// 쉐이킹
+		_float2 fShaking_Adjust = { 0.f,0.f };
+		_float2 fShaking_Direc = { 0.f,0.f };
+		_float fShaking_Power = 0.f;
+		_float fShaking_Interval_Now = 0.f;
+		_float fShaking_Interval = 0.f;
+		_float fShaking_Time = 0.f;
 
 		
 	}UPART;

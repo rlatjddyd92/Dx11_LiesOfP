@@ -218,14 +218,32 @@ void CController_UITool::UIPart_Edit()
 		// ÅØ½ºÃÄ
 		ImGui::Text("Texture");
 		ImGui::SameLine();
-		ImGui::InputInt("Tex: ", &pNow->iTexture_Index);
+		ImGui::Checkbox("IsItem", &pNow->bIsItem);
 		ImGui::SameLine();
-		if (pNow->iTexture_Index == -1)
-			ImGui::Text("none(NoTexture)");
-		else if ((pNow->iTexture_Index < 0) || (pNow->iTexture_Index >= m_pUIRender->GetTextureCount()))
-			ImGui::Text("¡Ø WrongNum");
+
+		if (pNow->bIsItem)
+		{
+			ImGui::InputInt("Tex: ", &pNow->iTexture_Index);
+			ImGui::SameLine();
+			if (pNow->iTexture_Index == -1)
+				ImGui::Text("none(NoTexture)");
+			else if ((pNow->iTexture_Index < 0) || (pNow->iTexture_Index >= m_pUIRender->GetTextureCount_Item()))
+				ImGui::Text("¡Ø WrongNum");
+			else
+				ImGui::Text(m_pUIRender->GetTextureTag_Item(pNow->iTexture_Index));
+		}
 		else
-			ImGui::Text(m_pUIRender->GetTextureTag(pNow->iTexture_Index));
+		{
+			ImGui::InputInt("Tex: ", &pNow->iTexture_Index);
+			ImGui::SameLine();
+			if (pNow->iTexture_Index == -1)
+				ImGui::Text("none(NoTexture)");
+			else if ((pNow->iTexture_Index < 0) || (pNow->iTexture_Index >= m_pUIRender->GetTextureCount()))
+				ImGui::Text("¡Ø WrongNum");
+			else
+				ImGui::Text(m_pUIRender->GetTextureTag(pNow->iTexture_Index));
+		}
+		
 
 		ImGui::DragFloat("R", &pNow->fTextureColor.x);
 		ImGui::SameLine();
@@ -509,6 +527,7 @@ HRESULT CController_UITool::SavePart()
 			vecPart.push_back(to_wstring(pNow->fTextColor.y));
 			vecPart.push_back(to_wstring(pNow->fTextColor.z));
 			vecPart.push_back(to_wstring(pNow->fTextColor.w));
+			vecPart.push_back(to_wstring(pNow->bIsItem));
 
 			vecBuffer.push_back(vecPart);
 		}
@@ -559,6 +578,8 @@ HRESULT CController_UITool::LoadPart()
 
 		pNew->bCenter = stoi(vecBuffer[i][27]);
 		pNew->fTextColor = { stof(vecBuffer[i][28]) , stof(vecBuffer[i][29]) , stof(vecBuffer[i][30]) , stof(vecBuffer[i][31]) };
+
+		pNew->bIsItem = stoi(vecBuffer[i][32]);
 
 		pNew->MakeDirec();
 		if (pNew->iParentPart_Index == -1)
@@ -676,6 +697,7 @@ HRESULT CController_UITool::MakeClientData_Part(HANDLE handle, DWORD* dword, vec
 		WriteFile(handle, &iter->iParentPart_Index, sizeof(_int), dword, nullptr);
 		WriteFile(handle, &iter->iTexture_Index, sizeof(_int), dword, nullptr);
 		WriteFile(handle, &iter->fTextureColor, sizeof(_float4), dword, nullptr);
+		WriteFile(handle, &iter->bIsItem, sizeof(_bool), dword, nullptr);
 
 		_int iIndexPartName = -1;
 
