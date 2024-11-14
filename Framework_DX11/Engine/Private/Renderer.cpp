@@ -313,8 +313,6 @@ HRESULT CRenderer::Draw()
 		return E_FAIL;
 	if (FAILED(Render_Lights()))
 		return E_FAIL;
-	//if (FAILED(Render_ShadowObj()))
-	//	return E_FAIL;
 
 	if (FAILED(Render_Deferred()))
 		return E_FAIL;
@@ -328,15 +326,15 @@ HRESULT CRenderer::Draw()
 	if (FAILED(Render_Bloom()))	// 다시 고치기
 		return E_FAIL;
 
-	//if (FAILED(Render_Distortion()))
-	//	return E_FAIL;
+	if (FAILED(Render_Distortion()))
+		return E_FAIL;
 
-	//if (FAILED(Render_NonLights()))
-	//	return E_FAIL;
-	//if (FAILED(Render_Blend()))
-	//	return E_FAIL;
-	//if (FAILED(Render_UI()))
-	//	return E_FAIL;
+	if (FAILED(Render_NonLights()))
+		return E_FAIL;
+	if (FAILED(Render_Blend()))
+		return E_FAIL;
+	if (FAILED(Render_UI()))
+		return E_FAIL;
 
 #ifdef _DEBUG
 	if (KEY_TAP(KEY::F1))
@@ -1293,6 +1291,9 @@ HRESULT CRenderer::Render_Cascade()
 
 		Safe_Release(pGameObject);
 	}
+
+	m_pGameInstance->Draw_Shadow_Instance();
+
 	m_RenderObjects[RG_SHADOWOBJ].clear();
 
 	if (FAILED(m_pGameInstance->End_MRT()))

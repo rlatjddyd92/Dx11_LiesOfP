@@ -24,9 +24,8 @@ public:
 protected:
     CFsm*                   m_pFsm = { nullptr };
 
+    _float                  m_fCurrentTime = { 0.f };
     _uint 			        m_iStateNum;
-    _float                  m_fStateTimer = { 0.f };
-    _float2                 m_vMoveVec = { 0.f,0.f };
 
     class CGameInstance* m_pGameInstance = { nullptr };
 

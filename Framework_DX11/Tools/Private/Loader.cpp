@@ -592,10 +592,10 @@ HRESULT CLoader::Ready_Resources_For_ToolLevel_Map0()
 	CController_AnimationTool::Get_Instance()->SetUp_Lump(13);
 
 	int iModelCnt = { 0 };
-	if (false)
+	if (true)
 	{
 		//"../Bin/ModelData/Anim/PlayerExample/PlayerExample.dat"	일반 바이너리
-		pModel = CModel::Create(m_pDevice, m_pContext, CModel::TYPE_ANIM, "../Bin/ModelData/Anim/PlayerExample/PlayerExample.dat", PreTransformMatrix, false, CController_AnimationTool::Get_Instance()->Get_StructStack(iModelCnt++));
+		pModel = CModel::Create(m_pDevice, m_pContext, CModel::TYPE_ANIM, "../Bin/ModelData/Anim/Player/Player.dat", PreTransformMatrix, false, CController_AnimationTool::Get_Instance()->Get_StructStack(iModelCnt++));
 		if (FAILED(m_pGameInstance->Add_Prototype(LEVEL_TOOL, TEXT("Prototype_AnimModel_Player"), pModel)))
 			return E_FAIL;
 		m_pGameInstance->Add_ModelPrototype(LEVEL_TOOL, ("Prototype_AnimModel_Player"), pModel);

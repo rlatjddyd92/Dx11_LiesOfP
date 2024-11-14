@@ -249,6 +249,25 @@ HRESULT CModel::Render_Instance(_uint iMeshIndex)
 	return S_OK;
 }
 
+_uint CModel::Find_AnimationIndex(const _char* pAnimationmName, _float fSpeedRatio)
+{
+	_uint iAnimationIndex = { 0 };
+	auto iter = find_if(m_Animations.begin(), m_Animations.end(), [&](CAnimation* pAnimation)-> _bool
+		{
+			if (0 == strcmp(pAnimationmName, pAnimation->Get_Name()))
+				return true;
+			++iAnimationIndex;
+			return false;
+		});
+
+	if (iter == m_Animations.end())
+		MSG_BOX(TEXT("없는데?"));
+
+	m_Animations[iAnimationIndex]->Set_SpeedRatio(fSpeedRatio);
+
+	return iAnimationIndex;
+}
+
 void CModel::SetUp_Animation(_uint iAnimationIndex, _bool isLoop)
 {
 	m_iCurrentAnimIndex = iAnimationIndex;
@@ -262,7 +281,7 @@ HRESULT CModel::SetUp_NextAnimation(_uint iNextAnimationIndex, _bool isLoop, _fl
 		return E_FAIL;
 
 	//같은걸로 바꿀순 없어
-	if (m_iCurrentAnimIndex == iNextAnimationIndex)
+	if (m_iCurrentAnimIndex == iNextAnimationIndex && !m_isChangeAni)
 		return E_FAIL;
 
 	// 이미 같은걸로 바꾸고 있어
@@ -410,7 +429,11 @@ _vector CModel::Play_Animation(_float fTimeDelta, _bool* pOut, list<OUTPUT_EVKEY
 
 		if (isChangeEnd)
 		{
-			m_CurrentTrackPosition = 0.0;
+			if (m_iCurrentAnimIndex != m_tChaneAnimDesc.iNextAnimIndex)
+			{
+
+				m_CurrentTrackPosition = 0.0;
+			}
 			//m_Animations[m_iCurrentAnimIndex]->Reset();
 			m_iCurrentAnimIndex = m_tChaneAnimDesc.iNextAnimIndex;
 			ZeroMemory(&m_tChaneAnimDesc, sizeof(CHANGEANIMATION_DESC));

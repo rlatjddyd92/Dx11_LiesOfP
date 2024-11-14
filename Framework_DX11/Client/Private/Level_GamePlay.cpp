@@ -10,6 +10,7 @@
 #include "Effect_Container.h"
 #include "Effect_Manager.h"
 #include "StaticObj.h"
+#include "Player.h"
 
 CLevel_Tool::CLevel_Tool(ID3D11Device* pDevice, ID3D11DeviceContext* pContext)
 	: CLevel{ pDevice, pContext }
@@ -168,11 +169,7 @@ HRESULT CLevel_Tool::Ready_Layer_Paticle()
 
 HRESULT CLevel_Tool::Ready_Layer_Player()
 {
-	for (_uint i = 0; i < 1; ++i)
-	{
-		CGameObject* p = m_pGameInstance->Get_CloneObject_ToLayer(LEVEL_GAMEPLAY, TEXT("Layer_Player"), TEXT("Prototype_GameObject_Player"));
-		p->Get_Transform()->Set_State(CTransform::STATE_POSITION, _Vec3(i * 5, 0, i * 5));
-	}
+	CPlayer* pPlayer = dynamic_cast<CPlayer*>(m_pGameInstance->Get_CloneObject_ToLayer(LEVEL_GAMEPLAY, TEXT("Layer_Player"), TEXT("Prototype_GameObject_Player")));
 
 	return S_OK;
 }

@@ -82,9 +82,9 @@ void CCarcassBigA::Update(_float fTimeDelta)
 
 	m_vCurRootMove = m_pModelCom->Play_Animation(fTimeDelta, &m_bEndAnim, nullptr);
 
-	m_pFSMCom->Update(fTimeDelta);
+	m_pFsmCom->Update(fTimeDelta);
 
-	_vector vPos = m_pTransformCom->Get_State(CTransform::STATE_POSITION);
+	_Vec3 vPos = m_pTransformCom->Get_State(CTransform::STATE_POSITION);
 
 	if (m_bEndAnim == true && m_bResetRootMove)//조건을 애니메이션이 끝났을때 or 변경 되었을때로
 	{
@@ -94,13 +94,12 @@ void CCarcassBigA::Update(_float fTimeDelta)
 	{
 		m_vCurRootMove = XMVector3TransformNormal(m_vCurRootMove, m_pTransformCom->Get_WorldMatrix());
 
-		m_pTransformCom->Set_State(CTransform::STATE_POSITION, vPos + m_vCurRootMove - m_vRootMoveStack);
+		m_pTransformCom->Set_State(CTransform::STATE_POSITION, vPos + (_Vec3)m_vCurRootMove - (_Vec3)m_vRootMoveStack);
 		m_vRootMoveStack = m_vCurRootMove;
 	}
 	
 #ifdef _DEBUG
-	for (auto& pCollider : m_pColliderCom)
-		pCollider->Update(m_pTransformCom->Get_WorldMatrix_Ptr());
+	m_pColliderCom->Update(m_pTransformCom->Get_WorldMatrix_Ptr());
 #endif
 }
 
@@ -230,19 +229,19 @@ HRESULT CCarcassBigA::Ready_FSM()
 	//
 
 
-	m_pFSMCom->Add_State(CState_CarcassBigA_Idle::Create(m_pFSMCom, this, IDLE, &Desc));
-	m_pFSMCom->Add_State(CState_CarcassBigA_Walk::Create(m_pFSMCom, this, WALK, &Desc));
-	m_pFSMCom->Add_State(CState_CarcassBigA_Run::Create(m_pFSMCom, this, RUN, &Desc));
-	m_pFSMCom->Add_State(CState_CarcassBigA_Attack::Create(m_pFSMCom, this, ATTACK, &Desc));
-	m_pFSMCom->Add_State(CState_CarcassBigA_Grogy::Create(m_pFSMCom, this, GROGY, &Desc));
-	m_pFSMCom->Add_State(CState_CarcassBigA_HitFatal::Create(m_pFSMCom, this, HITFATAL, &Desc));
-	m_pFSMCom->Add_State(CState_CarcassBigA_Paralyze::Create(m_pFSMCom, this, PARALYZE, &Desc));
-	m_pFSMCom->Add_State(CState_CarcassBigA_Die::Create(m_pFSMCom, this, DIE, &Desc));
+	m_pFsmCom->Add_State(CState_CarcassBigA_Idle::Create(m_pFsmCom, this, IDLE, &Desc));
+	m_pFsmCom->Add_State(CState_CarcassBigA_Walk::Create(m_pFsmCom, this, WALK, &Desc));
+	m_pFsmCom->Add_State(CState_CarcassBigA_Run::Create(m_pFsmCom, this, RUN, &Desc));
+	m_pFsmCom->Add_State(CState_CarcassBigA_Attack::Create(m_pFsmCom, this, ATTACK, &Desc));
+	m_pFsmCom->Add_State(CState_CarcassBigA_Grogy::Create(m_pFsmCom, this, GROGY, &Desc));
+	m_pFsmCom->Add_State(CState_CarcassBigA_HitFatal::Create(m_pFsmCom, this, HITFATAL, &Desc));
+	m_pFsmCom->Add_State(CState_CarcassBigA_Paralyze::Create(m_pFsmCom, this, PARALYZE, &Desc));
+	m_pFsmCom->Add_State(CState_CarcassBigA_Die::Create(m_pFsmCom, this, DIE, &Desc));
 
-	m_pFSMCom->Add_State(CState_CarcassBigA_Impact::Create(m_pFSMCom, this, IMPACT, &Desc));
+	m_pFsmCom->Add_State(CState_CarcassBigA_Impact::Create(m_pFsmCom, this, IMPACT, &Desc));
 
 
-	m_pFSMCom->Set_State(IDLE);
+	m_pFsmCom->Set_State(IDLE);
 
 	return S_OK;
 
@@ -265,7 +264,7 @@ CCarcassBigA* CCarcassBigA::Create(ID3D11Device* pDevice, ID3D11DeviceContext* p
 
 
 
-CGameObject* CCarcassBigA::Clone(void* pArg)
+CPawn* CCarcassBigA::Clone(void* pArg)
 {
 	CCarcassBigA* pInstance = new CCarcassBigA(*this);
 

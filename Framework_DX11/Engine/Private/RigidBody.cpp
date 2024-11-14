@@ -2,6 +2,7 @@
 
 #include "GameObject.h"
 #include "Transform.h"
+#include "Navigation.h"
 
 CRigidBody::CRigidBody(ID3D11Device* pDevice, ID3D11DeviceContext* pContext)
 	: CComponent{ pDevice,  pContext }
@@ -43,17 +44,16 @@ void CRigidBody::Update(_float fTimeDelta)
 	if (!m_isActive)
 		return;
 
-	_vector vForce = XMLoadFloat3(&m_vForce);
-	_vector vVelocity = XMLoadFloat3(&m_vVelocity);
-	_vector vAccel = XMLoadFloat3(&m_vAccel);
+	_Vec3 vForce = m_vForce;
+	_Vec3 vVelocity = m_vVelocity;
+	_Vec3 vAccel = m_vAccel;
 
 	//가해지는 힘이 있을 때만 실행
 	//힘을 가해 속도를 더함
-	if (XMVector3Length(vForce).m128_f32[0] != 0.f)
+	if (vForce.Length() != 0.f)
 	{
 		//가속도를 이용해서 속도를 증가시킨다.
-		vVelocity += vAccel;
-		XMStoreFloat3(&m_vVelocity, vVelocity);
+		m_vVelocity += vAccel;
 	}
 
 	Calculate_Tranform(fTimeDelta);
@@ -72,11 +72,12 @@ void CRigidBody::Calculate_Tranform(_float fTimeDelta)
 		Calculate_Gravity(fTimeDelta);
 	}
 
-	_vector vCurrentPosition = m_pOwner->Get_Transform()->Get_State(CTransform::STATE_POSITION);
+	_Vec3 vCurrentPosition = m_pOwner->Get_Transform()->Get_State(CTransform::STATE_POSITION);
 
 	//속도 제한
 	if (fabsf(m_vMaxVelocity.x) < fabsf(m_vVelocity.x))
 	{
+		
 		m_vVelocity.x = (m_vVelocity.x / fabsf(m_vVelocity.x)) * fabsf(m_vMaxVelocity.x);
 	}
 
@@ -86,9 +87,10 @@ void CRigidBody::Calculate_Tranform(_float fTimeDelta)
 		m_vVelocity.y = (m_vVelocity.y / fabsf(m_vVelocity.y)) * fabsf(m_vMaxVelocity.y);
 	}
 
-	_vector vNewPosition = vCurrentPosition + (XMLoadFloat3(&m_vVelocity) * fTimeDelta);
+	_Vec3 vNewPosition = vCurrentPosition + (m_vVelocity * fTimeDelta);
 
-	m_pOwner->Get_Transform()->Set_State(CTransform::STATE_POSITION, vNewPosition);
+	if(nullptr == m_pNavigation || m_pNavigation->isMove(vNewPosition))
+		m_pOwner->Get_Transform()->Set_State(CTransform::STATE_POSITION, vNewPosition);
 }
 
 void CRigidBody::Calculate_Gravity(_float fTimeDelta)

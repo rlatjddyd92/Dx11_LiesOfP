@@ -1,7 +1,7 @@
 #pragma once
 
 #include "Client_Defines.h"
-#include "GameObject.h"
+#include "Pawn.h"
 
 BEGIN(Engine)
 class CCollider;
@@ -11,11 +11,8 @@ END
 
 BEGIN(Client)
 
-class CMonster : public CGameObject
+class CMonster : public CPawn
 {
-public:
-	enum COLLIDERTYPE { TYPE_AABB, TYPE_OBB, TYPE_SPHERE, TYPE_END };
-
 public:
 	enum MONSTER_STATE {
 		IDLE, WALK, RUN, ATTACK, GROGY, HITFATAL, PARALYZE, DIE,
@@ -37,22 +34,13 @@ public:
 	virtual HRESULT Render() override;
 
 public:
-	void		Change_State(const _uint iState, void* pArg = nullptr);
-	void		Change_Animation(_uint iAnimIndex, _bool IsLoop, _bool bSetup = false);//셋업 변수 = 선형보간 할지
-
 	void		Look_Player();
 	_float		Calc_Distance_XZ();
 
 
 protected:
-	CCollider* m_pColliderCom[TYPE_END] = { nullptr, nullptr, nullptr };
-	CShader* m_pShaderCom = { nullptr };
-	CModel* m_pModelCom = { nullptr };
-	CFsm* m_pFSMCom = { nullptr };
-
-protected:
-	_vector		m_vRootMoveStack{};
-	_vector		m_vCurRootMove{};
+	_Vec4		m_vRootMoveStack{};
+	_Vec4		m_vCurRootMove{};
 	_bool		m_bEndAnim{ false };
 	_bool		m_bResetRootMove{ true };
 
@@ -64,7 +52,7 @@ protected:
 
 public:
 	static CMonster* Create(ID3D11Device* pDevice, ID3D11DeviceContext* pContext);
-	virtual CGameObject* Clone(void* pArg);
+	virtual CPawn* Clone(void* pArg);
 	virtual void Free() override;
 
 };

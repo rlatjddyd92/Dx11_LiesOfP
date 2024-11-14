@@ -13,6 +13,10 @@ protected:
 	virtual ~CPawn() = default;
 
 public:
+	class CModel*		Get_Model() { return m_pModelCom; }
+	class CRigidBody*	Get_RigidBody() { return m_pRigidBodyCom; }
+
+public:
 	virtual HRESULT Initialize_Prototype();
 	virtual HRESULT Initialize(void* pArg = nullptr);
 	virtual void Priority_Update(_float fTimeDelta);
@@ -27,12 +31,17 @@ public:
 	virtual void OnCollisionStay(CGameObject* pOther) override;
 	virtual void OnCollisionExit(CGameObject* pOther) override;
 
+public:
+	void		Change_State(const _uint iState, void* pArg = nullptr);
+	void		Change_Animation(_uint iAnimIndex, _bool IsLoop, _bool bSetup = false);//셋업 변수 = 선형보간 할지
+
 protected:
 	class CShader*		m_pShaderCom = { nullptr };
 	class CModel*		m_pModelCom = { nullptr };
 	class CNavigation*	m_pNavigationCom = { nullptr };
 	class CCollider*	m_pColliderCom = { nullptr };
 	class CFsm*			m_pFsmCom = { nullptr };
+	class CRigidBody*	m_pRigidBodyCom = { nullptr };
 
 	_bool				m_isGravity = { false };
 

@@ -47,10 +47,6 @@ void CForkLift::Priority_Update(_float fTimeDelta)
 
 void CForkLift::Update(_float fTimeDelta)
 {
-	if (GetKeyState(VK_UP) & 0x8000)
-	{
-		m_pTransformCom->Go_Straight(fTimeDelta, nullptr);
-	}
 
 }
 

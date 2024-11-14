@@ -9,7 +9,7 @@
 #include "GameInstance.h"
 #include "Transform.h"
 
-_float4x4 CNavigation::m_WorldMatrix = {};
+_Matrix CNavigation::m_WorldMatrix = {};
 
 CNavigation::CNavigation(ID3D11Device * pDevice, ID3D11DeviceContext * pContext)
 	: CComponent { pDevice, pContext }
@@ -103,7 +103,7 @@ HRESULT CNavigation::Initialize_Prototype(const _wstring& strNavigationDataFile)
 
 	_float3 vPos[3] = {};
 
-	for (int i = 0; i < iCellCout; ++i)
+	for (_int i = 0; i < iCellCout; ++i)
 	{
 		_uint iCellType = { };
 		fin.read(reinterpret_cast<char*>(&iCellType), sizeof(iCellType));
@@ -163,9 +163,9 @@ void CNavigation::Update(_fmatrix TerrainWorldMatrix)
 	XMStoreFloat4x4(&m_WorldMatrix, TerrainWorldMatrix);
 }
 
-_bool CNavigation::isMove(_fvector vPosition)
+_bool CNavigation::isMove(_Vec3 vPosition)
 {
-	_vector		vLocalPos = XMVector3TransformCoord(vPosition, XMMatrixInverse(nullptr, XMLoadFloat4x4(&m_WorldMatrix)));
+	_Vec3		vLocalPos = XMVector3TransformCoord(vPosition, XMMatrixInverse(nullptr, XMLoadFloat4x4(&m_WorldMatrix)));
 
 	_int			iNeighborIndex = { -1 };
 
@@ -292,8 +292,8 @@ HRESULT CNavigation::Render()
 	if (FAILED(m_pShader->Bind_Matrix("g_ProjMatrix", &m_pGameInstance->Get_Transform(CPipeLine::D3DTS_PROJ))))
 		return E_FAIL;
 
-	_float4		vColor = -1 == m_iCurrentCellIndex ? _float4(0.f, 1.f, 0.f, 1.f) : _float4(1.f, 0.f, 0.f, 1.f);
-	_float4x4	WorldMatrix = m_WorldMatrix;
+	_Vec4		vColor = -1 == m_iCurrentCellIndex ? _float4(0.f, 1.f, 0.f, 1.f) : _float4(1.f, 0.f, 0.f, 1.f);
+	_Matrix		WorldMatrix = m_WorldMatrix;
 	
 	if (-1 != m_iCurrentCellIndex)
 		WorldMatrix._42 += 0.1f;	

@@ -184,6 +184,24 @@
     <Filter Include="02.GameObjects\10.InteractObj\00.Stargazer">
       <UniqueIdentifier>{eb7fe278-8f63-4c37-bd1e-af98a5ca1a5e}</UniqueIdentifier>
     </Filter>
+    <Filter Include="05.Fsm\Player">
+      <UniqueIdentifier>{720bc44b-de33-49d7-8bc6-83c06d66d2b5}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="05.Fsm\Player\OneHand">
+      <UniqueIdentifier>{26cc42dd-90bd-4724-8c7e-f396c36f1f2f}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="05.Fsm\Player\OneHand\Idle">
+      <UniqueIdentifier>{9718fa83-978b-4b88-9e49-c9b2ea513efe}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="05.Fsm\Player\OneHand\Walk">
+      <UniqueIdentifier>{1215856d-0c56-4228-975e-055cbf55f4e3}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="05.Fsm\Player\OneHand\Run">
+      <UniqueIdentifier>{5d648734-4993-4c07-beb0-c0c60a489760}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="05.Fsm\Player\OneHand\Guard">
+      <UniqueIdentifier>{f37a500e-cc18-4f8c-885f-54a69887a659}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Client.h">
@@ -340,6 +358,18 @@
     <ClInclude Include="..\Public\Stargazer.h">
       <Filter>02.GameObjects\10.InteractObj\00.Stargazer</Filter>
     </ClInclude>
+    <ClInclude Include="..\Public\State_Player_OH_Idle.h">
+      <Filter>05.Fsm\Player\OneHand\Idle</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Public\State_Player_OH_Walk.h">
+      <Filter>05.Fsm\Player\OneHand\Walk</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Public\State_Player_OH_Run.h">
+      <Filter>05.Fsm\Player\OneHand\Run</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Public\State_Player_OH_Guard.h">
+      <Filter>05.Fsm\Player\OneHand\Guard</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Client.cpp">
@@ -468,6 +498,18 @@
     </ClCompile>
     <ClCompile Include="..\Private\Stargazer.cpp">
       <Filter>02.GameObjects\10.InteractObj\00.Stargazer</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Private\State_Player_OH_Idle.cpp">
+      <Filter>05.Fsm\Player\OneHand\Idle</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Private\State_Player_OH_Walk.cpp">
+      <Filter>05.Fsm\Player\OneHand\Walk</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Private\State_Player_OH_Run.cpp">
+      <Filter>05.Fsm\Player\OneHand\Run</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Private\State_Player_OH_Guard.cpp">
+      <Filter>05.Fsm\Player\OneHand\Guard</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

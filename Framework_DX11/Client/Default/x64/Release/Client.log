@@ -1,19 +1,66 @@
-﻿  unity_B0F4S2WJJLT7N73T.cpp
-D:\GitHubProjects\Dx11_LiesOfP\Framework_DX11\Client\Private\Level_GamePlay.cpp(174,79): warning C4244: '인수': 'Engine::_uint'에서 'float'(으)로 변환하면서 데이터가 손실될 수 있습니다.
-D:\GitHubProjects\Dx11_LiesOfP\Framework_DX11\Client\Private\Level_GamePlay.cpp(174,69): warning C4244: '인수': 'Engine::_uint'에서 'float'(으)로 변환하면서 데이터가 손실될 수 있습니다.
-D:\GitHubProjects\Dx11_LiesOfP\Framework_DX11\Client\Private\State_CarcassBigA_Grogy.cpp(32,24): warning C4244: '=': 'Engine::_double'에서 'Engine::_float'(으)로 변환하면서 데이터가 손실될 수 있습니다.
-D:\GitHubProjects\Dx11_LiesOfP\Framework_DX11\Client\Private\State_CarcassBigA_Grogy.cpp(69,26): warning C4244: '=': 'float'에서 'Engine::_uint'(으)로 변환하면서 데이터가 손실될 수 있습니다.
-D:\GitHubProjects\Dx11_LiesOfP\Framework_DX11\Client\Private\State_CarcassBigA_Grogy.cpp(90,18): warning C4244: '=': 'float'에서 'Engine::_uint'(으)로 변환하면서 데이터가 손실될 수 있습니다.
-D:\GitHubProjects\Dx11_LiesOfP\Framework_DX11\Client\Private\State_CarcassBigA_HitFatal.cpp(62,26): warning C4244: '=': 'float'에서 'Engine::_uint'(으)로 변환하면서 데이터가 손실될 수 있습니다.
-D:\GitHubProjects\Dx11_LiesOfP\Framework_DX11\Client\Private\State_CarcassBigA_Paralyze.cpp(30,18): warning C4244: '=': 'float'에서 'Engine::_uint'(으)로 변환하면서 데이터가 손실될 수 있습니다.
-D:\GitHubProjects\Dx11_LiesOfP\Framework_DX11\Client\Private\State_CarcassBigA_Paralyze.cpp(60,26): warning C4244: '=': 'float'에서 'Engine::_uint'(으)로 변환하면서 데이터가 손실될 수 있습니다.
-D:\GitHubProjects\Dx11_LiesOfP\Framework_DX11\Client\Private\State_CarcassBigA_Paralyze.cpp(74,18): warning C4244: '=': 'float'에서 'Engine::_uint'(으)로 변환하면서 데이터가 손실될 수 있습니다.
+﻿FXC : warning X4717: Effects deprecated for D3DCompiler_47
+  
+  compilation object save succeeded; see D:\GitProject\Dx11_LiesOfP\Framework_DX11\Client\Bin\Shader_Effect_Texture.cso
+FXC : warning X4717: Effects deprecated for D3DCompiler_47
+  
+  compilation object save succeeded; see D:\GitProject\Dx11_LiesOfP\Framework_DX11\Client\Bin\Shader_ParticleCompute.cso
+FXC : warning X4717: Effects deprecated for D3DCompiler_47
+  
+  compilation object save succeeded; see D:\GitProject\Dx11_LiesOfP\Framework_DX11\Client\Bin\Shader_VtxAnimModel.cso
+FXC : warning X4717: Effects deprecated for D3DCompiler_47
+  
+  compilation object save succeeded; see D:\GitProject\Dx11_LiesOfP\Framework_DX11\Client\Bin\Shader_VtxCubeTex.cso
+FXC : warning X4717: Effects deprecated for D3DCompiler_47
+  
+  compilation object save succeeded; see D:\GitProject\Dx11_LiesOfP\Framework_DX11\Client\Bin\Shader_VtxModel.cso
+FXC : warning X4717: Effects deprecated for D3DCompiler_47
+  
+  compilation object save succeeded; see D:\GitProject\Dx11_LiesOfP\Framework_DX11\Client\Bin\Shader_VtxNorTex.cso
+FXC : warning X4717: Effects deprecated for D3DCompiler_47
+D:\GitProject\Dx11_LiesOfP\Framework_DX11\Client\Bin\ShaderFiles\Shader_VtxPointInstance.hlsl(69,5-66): warning X3206: implicit truncation of vector type
+  
+  compilation object save succeeded; see D:\GitProject\Dx11_LiesOfP\Framework_DX11\Client\Bin\Shader_VtxPointInstance.cso
+FXC : warning X4717: Effects deprecated for D3DCompiler_47
+  
+  compilation object save succeeded; see D:\GitProject\Dx11_LiesOfP\Framework_DX11\Client\Bin\Shader_VtxPosTex.cso
+FXC : warning X4717: Effects deprecated for D3DCompiler_47
+  
+  compilation object save succeeded; see D:\GitProject\Dx11_LiesOfP\Framework_DX11\Client\Bin\Shader_VtxRectInstance.cso
+C:\Program Files\Microsoft Visual Studio\2022\Community\MSBuild\Microsoft\VC\v170\Microsoft.Cpp.Unity.targets(190,5): warning : 'D:\GitHubProjects\Dx11_LiesOfP\Framework_DX11\Client\Default\x64\Release\unity_B0F4S2WJJLT7N73T.cpp' 경로의 일부를 찾을 수 없습니다.
+  stdafx.cpp
+  unity_KQSNVO6NTMON01PR.cpp
+D:\GitProject\Dx11_LiesOfP\Framework_DX11\Client\Private\Level_GamePlay.cpp(174,79): warning C4244: '인수': 'Engine::_uint'에서 'float'(으)로 변환하면서 데이터가 손실될 수 있습니다.
+  (소스 파일 '/x64/Release/unity_KQSNVO6NTMON01PR.cpp'을(를) 컴파일하는 중)
+  
+D:\GitProject\Dx11_LiesOfP\Framework_DX11\Client\Private\Level_GamePlay.cpp(174,69): warning C4244: '인수': 'Engine::_uint'에서 'float'(으)로 변환하면서 데이터가 손실될 수 있습니다.
+  (소스 파일 '/x64/Release/unity_KQSNVO6NTMON01PR.cpp'을(를) 컴파일하는 중)
+  
+D:\GitProject\Dx11_LiesOfP\Framework_DX11\Client\Private\State_CarcassBigA_Grogy.cpp(32,24): warning C4244: '=': 'Engine::_double'에서 'Engine::_float'(으)로 변환하면서 데이터가 손실될 수 있습니다.
+  (소스 파일 '/x64/Release/unity_KQSNVO6NTMON01PR.cpp'을(를) 컴파일하는 중)
+  
+D:\GitProject\Dx11_LiesOfP\Framework_DX11\Client\Private\State_CarcassBigA_Grogy.cpp(69,26): warning C4244: '=': 'float'에서 'Engine::_uint'(으)로 변환하면서 데이터가 손실될 수 있습니다.
+  (소스 파일 '/x64/Release/unity_KQSNVO6NTMON01PR.cpp'을(를) 컴파일하는 중)
+  
+D:\GitProject\Dx11_LiesOfP\Framework_DX11\Client\Private\State_CarcassBigA_Grogy.cpp(90,18): warning C4244: '=': 'float'에서 'Engine::_uint'(으)로 변환하면서 데이터가 손실될 수 있습니다.
+  (소스 파일 '/x64/Release/unity_KQSNVO6NTMON01PR.cpp'을(를) 컴파일하는 중)
+  
+D:\GitProject\Dx11_LiesOfP\Framework_DX11\Client\Private\State_CarcassBigA_HitFatal.cpp(62,26): warning C4244: '=': 'float'에서 'Engine::_uint'(으)로 변환하면서 데이터가 손실될 수 있습니다.
+  (소스 파일 '/x64/Release/unity_KQSNVO6NTMON01PR.cpp'을(를) 컴파일하는 중)
+  
+D:\GitProject\Dx11_LiesOfP\Framework_DX11\Client\Private\State_CarcassBigA_Paralyze.cpp(30,18): warning C4244: '=': 'float'에서 'Engine::_uint'(으)로 변환하면서 데이터가 손실될 수 있습니다.
+  (소스 파일 '/x64/Release/unity_KQSNVO6NTMON01PR.cpp'을(를) 컴파일하는 중)
+  
+D:\GitProject\Dx11_LiesOfP\Framework_DX11\Client\Private\State_CarcassBigA_Paralyze.cpp(60,26): warning C4244: '=': 'float'에서 'Engine::_uint'(으)로 변환하면서 데이터가 손실될 수 있습니다.
+  (소스 파일 '/x64/Release/unity_KQSNVO6NTMON01PR.cpp'을(를) 컴파일하는 중)
+  
+D:\GitProject\Dx11_LiesOfP\Framework_DX11\Client\Private\State_CarcassBigA_Paralyze.cpp(74,18): warning C4244: '=': 'float'에서 'Engine::_uint'(으)로 변환하면서 데이터가 손실될 수 있습니다.
+  (소스 파일 '/x64/Release/unity_KQSNVO6NTMON01PR.cpp'을(를) 컴파일하는 중)
+  
   코드를 생성하고 있습니다.
-  23 of 2041 functions ( 1.1%) were compiled, the rest were copied from previous compilation.
-    0 functions were new in current compilation
-    2 functions had inline decision re-evaluated but remain unchanged
+  Previous IPDB was built with incompatible compiler, fall back to full compilation.
+  All 2033 functions were compiled because no usable IPDB/IOBJ from previous compilation was found.
   코드를 생성했습니다.
 DirectXTK.lib(ScreenGrab.obj) : warning LNK4099: '' PDB를 'DirectXTK.lib(ScreenGrab.obj)' 또는 ''에서 찾을 수 없습니다. 디버그 정보가 없는 것처럼 개체를 링크합니다.
 DirectXTK.lib(WICTextureLoader.obj) : warning LNK4099: '' PDB를 'DirectXTK.lib(WICTextureLoader.obj)' 또는 ''에서 찾을 수 없습니다. 디버그 정보가 없는 것처럼 개체를 링크합니다.
 DirectXTK.lib(pch.obj) : warning LNK4099: '' PDB를 'DirectXTK.lib(pch.obj)' 또는 ''에서 찾을 수 없습니다. 디버그 정보가 없는 것처럼 개체를 링크합니다.
-  Client.vcxproj -> D:\GitHubProjects\Dx11_LiesOfP\Framework_DX11\Client\Bin\Client.exe
+  Client.vcxproj -> D:\GitProject\Dx11_LiesOfP\Framework_DX11\Client\Bin\Client.exe

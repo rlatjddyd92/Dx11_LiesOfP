@@ -25,7 +25,6 @@ private:
     _uint               m_iAnimation_Idle = {};
     _uint               m_iIdleCount = {};
 
-    _float              m_fCurrentTime = { 0.f };
     _float              m_fIdleDuration = { 2.6f };
 
     _bool               m_isPrevChance = { false };

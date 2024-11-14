@@ -5,12 +5,12 @@
 #include "Player.h"
 
 CMonster::CMonster(ID3D11Device* pDevice, ID3D11DeviceContext* pContext)
-	: CGameObject{ pDevice, pContext }
+	: CPawn{ pDevice, pContext }
 {
 }
 
 CMonster::CMonster(const CMonster& Prototype)
-	: CGameObject{ Prototype }
+	: CPawn{ Prototype }
 {
 }
 
@@ -46,8 +46,7 @@ void CMonster::Update(_float fTimeDelta)
 	m_pModelCom->Play_Animation(fTimeDelta);
 
 #ifdef _DEBUG
-	for (auto& pCollider : m_pColliderCom)
-		pCollider->Update(m_pTransformCom->Get_WorldMatrix_Ptr());
+	m_pColliderCom->Update(m_pTransformCom->Get_WorldMatrix_Ptr());
 #endif
 }
 
@@ -63,18 +62,15 @@ void CMonster::Late_Update(_float fTimeDelta)
 	if (nullptr == pTargetCollider)
 		return;
 
-	for (size_t i = 0; i < TYPE_END; i++)
-	{
-		m_pColliderCom[i]->Intersect(dynamic_cast<CCollider*>(pTargetCollider));
-	}
+
+	m_pColliderCom->Intersect(dynamic_cast<CCollider*>(pTargetCollider));
 
 	if (true == m_pGameInstance->isIn_Frustum_WorldSpace(m_pTransformCom->Get_State(CTransform::STATE_POSITION), 3.f))
 	{
 		m_pGameInstance->Add_RenderObject(CRenderer::RG_NONBLEND, this);
 
 #ifdef _DEBUG
-		for (auto& pCollider : m_pColliderCom)
-			m_pGameInstance->Add_DebugObject(pCollider);
+		m_pGameInstance->Add_DebugObject(m_pColliderCom);
 #endif
 	}
 }
@@ -111,22 +107,6 @@ HRESULT CMonster::Render()
 	return S_OK;
 }
 
-void CMonster::Change_State(const _uint iState, void* pArg)
-{
-	m_pFSMCom->Change_State(iState, pArg);
-}
-
-void CMonster::Change_Animation(_uint iAnimIndex, _bool IsLoop, _bool bSetup)
-{
-	if (bSetup)
-	{
-		m_pModelCom->SetUp_Animation(iAnimIndex, IsLoop);
-	}
-	else
-	{
-		m_pModelCom->SetUp_NextAnimation(iAnimIndex, IsLoop);
-	}
-}
 
 void CMonster::Look_Player()
 {
@@ -167,7 +147,7 @@ HRESULT CMonster::Ready_FSM()
 {
 	/* FOR.Com_FSM */
 	if (FAILED(__super::Add_Component(LEVEL_STATIC, TEXT("Prototype_Component_FSM"),
-		TEXT("Com_FSM"), reinterpret_cast<CComponent**>(&m_pFSMCom))))
+		TEXT("Com_FSM"), reinterpret_cast<CComponent**>(&m_pFsmCom))))
 		return E_FAIL;
 
 
@@ -190,7 +170,7 @@ CMonster* CMonster::Create(ID3D11Device* pDevice, ID3D11DeviceContext* pContext)
 
 
 
-CGameObject* CMonster::Clone(void* pArg)
+CPawn* CMonster::Clone(void* pArg)
 {
 	CMonster* pInstance = new CMonster(*this);
 
@@ -206,14 +186,4 @@ CGameObject* CMonster::Clone(void* pArg)
 void CMonster::Free()
 {
 	__super::Free();
-
-	for (auto& pCollider : m_pColliderCom)
-		Safe_Release(pCollider);
-	if (m_pFSMCom != nullptr)
-	{
-		m_pFSMCom->Release_States();
-	}
-	Safe_Release(m_pFSMCom);
-	Safe_Release(m_pShaderCom);
-	Safe_Release(m_pModelCom);
 }

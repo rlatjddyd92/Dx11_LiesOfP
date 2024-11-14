@@ -38,17 +38,18 @@ public:
 
 	void		LookAt(_Vec4 vAt);
 	void		LookAt_NoHeight(_Vec4 vAt);
-	void		LookAt_Lerp(_Vec4 vAt, _float fSpeed, _float fTimeDelta);
-	_int		LookAt_Lerp_NoHeight(_Vec4 vAt, _float fSpeed, _float fTimeDelta);
+	void		LookAt_Lerp(_Vec4 vLook, _float fSpeed, _float fTimeDelta);
+	_int		LookAt_Lerp_NoHeight(_Vec4 vLook, _float fSpeed, _float fTimeDelta);
 	void		LookAt_Dir(_Vec4 vDir);
 
-	void		Go_Straight(_float fTimeDelta, class CNavigation* pNavigation = nullptr);
-	void		Go_Backward(_float fTimeDelta);
-	void		Go_Left(_float fTimeDelta);
-	void		Go_Right(_float fTimeDelta);
+	void		Go_Straight(_float fTimeDelta, _float fSpeed = 0.f, class CNavigation* pNavigation = nullptr);
+	void		Go_Backward(_float fTimeDelta, _float fSpeed = 0.f, class CNavigation* pNavigation = nullptr);
+	void		Go_Right(_float fTimeDelta, _float fSpeed = 0.f, class CNavigation* pNavigation = nullptr);
+	void		Go_Left(_float fTimeDelta, _float fSpeed = 0.f, class CNavigation* pNavigation = nullptr);
 
 	void		Turn(_Vec4 vAxis, _float fTimeDelta, _float fSpeed = 0.f);
 	void		Turn(_bool isRotationX, _bool isRotationY, _bool isRotationZ, _float fTimeDelta, _float fSpeed = 0.f);
+	void		Turn_Lerp(_fvector vDir, _float fTurnSpeed, _float fTimeDelta);
 
 	void		Rotation(const _Vec4& vAxis, _float fRadian);
 	void		Rotation(_float fX, _float fY, _float fZ);

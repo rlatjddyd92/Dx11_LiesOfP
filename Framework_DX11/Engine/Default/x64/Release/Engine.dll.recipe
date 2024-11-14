@@ -2,42 +2,45 @@
 <Project>
   <ProjectOutputs>
     <ProjectOutput>
-      <FullPath>D:\GitHubProjects\Dx11_LiesOfP\Framework_DX11\Engine\Bin\Engine.dll</FullPath>
+      <FullPath>D:\GitProject\Dx11_LiesOfP\Framework_DX11\Engine\Bin\Engine.dll</FullPath>
     </ProjectOutput>
   </ProjectOutputs>
   <ContentFiles>
     <ContentFile>
-      <FullPath>D:\GitHubProjects\Dx11_LiesOfP\Framework_DX11\Engine\Bin\Shader_Effect_Texture.cso</FullPath>
+      <FullPath>D:\GitProject\Dx11_LiesOfP\Framework_DX11\Engine\Bin\Shader_Effect_Texture.cso</FullPath>
     </ContentFile>
     <ContentFile>
-      <FullPath>D:\GitHubProjects\Dx11_LiesOfP\Framework_DX11\Engine\Bin\Shader_Bloom.cso</FullPath>
+      <FullPath>D:\GitProject\Dx11_LiesOfP\Framework_DX11\Engine\Bin\Shader_PostProcess.cso</FullPath>
     </ContentFile>
     <ContentFile>
-      <FullPath>D:\GitHubProjects\Dx11_LiesOfP\Framework_DX11\Engine\Bin\Shader_Cell.cso</FullPath>
+      <FullPath>D:\GitProject\Dx11_LiesOfP\Framework_DX11\Engine\Bin\Shader_Bloom.cso</FullPath>
     </ContentFile>
     <ContentFile>
-      <FullPath>D:\GitHubProjects\Dx11_LiesOfP\Framework_DX11\Engine\Bin\Shader_Compute_Back.cso</FullPath>
+      <FullPath>D:\GitProject\Dx11_LiesOfP\Framework_DX11\Engine\Bin\Shader_Cell.cso</FullPath>
     </ContentFile>
     <ContentFile>
-      <FullPath>D:\GitHubProjects\Dx11_LiesOfP\Framework_DX11\Engine\Bin\Shader_Compute_Bloom.cso</FullPath>
+      <FullPath>D:\GitProject\Dx11_LiesOfP\Framework_DX11\Engine\Bin\Shader_Compute_Back.cso</FullPath>
     </ContentFile>
     <ContentFile>
-      <FullPath>D:\GitHubProjects\Dx11_LiesOfP\Framework_DX11\Engine\Bin\Shader_Compute_Blur.cso</FullPath>
+      <FullPath>D:\GitProject\Dx11_LiesOfP\Framework_DX11\Engine\Bin\Shader_Compute_Bloom.cso</FullPath>
     </ContentFile>
     <ContentFile>
-      <FullPath>D:\GitHubProjects\Dx11_LiesOfP\Framework_DX11\Engine\Bin\Shader_Deferred.cso</FullPath>
+      <FullPath>D:\GitProject\Dx11_LiesOfP\Framework_DX11\Engine\Bin\Shader_Compute_Blur.cso</FullPath>
     </ContentFile>
     <ContentFile>
-      <FullPath>D:\GitHubProjects\Dx11_LiesOfP\Framework_DX11\Engine\Bin\Shader_Distortion.cso</FullPath>
+      <FullPath>D:\GitProject\Dx11_LiesOfP\Framework_DX11\Engine\Bin\Shader_Deferred.cso</FullPath>
     </ContentFile>
     <ContentFile>
-      <FullPath>D:\GitHubProjects\Dx11_LiesOfP\Framework_DX11\Engine\Bin\Shader_Compute_HDR.cso</FullPath>
+      <FullPath>D:\GitProject\Dx11_LiesOfP\Framework_DX11\Engine\Bin\Shader_Distortion.cso</FullPath>
     </ContentFile>
     <ContentFile>
-      <FullPath>D:\GitHubProjects\Dx11_LiesOfP\Framework_DX11\Engine\Bin\Shader_Model_Instance.cso</FullPath>
+      <FullPath>D:\GitProject\Dx11_LiesOfP\Framework_DX11\Engine\Bin\Shader_Compute_HDR.cso</FullPath>
     </ContentFile>
     <ContentFile>
-      <FullPath>D:\GitHubProjects\Dx11_LiesOfP\Framework_DX11\Engine\Bin\Shader_SSAO.cso</FullPath>
+      <FullPath>D:\GitProject\Dx11_LiesOfP\Framework_DX11\Engine\Bin\Shader_Model_Instance.cso</FullPath>
+    </ContentFile>
+    <ContentFile>
+      <FullPath>D:\GitProject\Dx11_LiesOfP\Framework_DX11\Engine\Bin\Shader_SSAO.cso</FullPath>
     </ContentFile>
   </ContentFiles>
   <SatelliteDlls />

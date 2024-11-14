@@ -56,9 +56,9 @@ void CStaticObj::Late_Update(_float fTimeDelta)
 
 		m_pGameInstance->Add_RenderObject(CRenderer::RG_NONBLEND, this);	
 		//if(m_bShadow)
-			m_pGameInstance->Add_RenderObject(CRenderer::RG_SHADOWOBJ, this);
 
 	}
+	//m_pGameInstance->Add_RenderObject(CRenderer::RG_SHADOWOBJ, this);
 }
 
 HRESULT CStaticObj::Render()

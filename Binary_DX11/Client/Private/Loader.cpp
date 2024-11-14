@@ -91,17 +91,17 @@ HRESULT CLoader::Ready_Resources_For_GamePlayLevel()
 	//	CModel::Create(m_pDevice, m_pContext, CModel::TYPE_ANIM, "../Bin/Resources/Models/Fiona/Fiona.fbx", "../Bin/ModelData/Anim/Fiona/", PreTransformMatrix))))
 	//	return E_FAIL;
 
-	///* For. Prototype_Component_Model_PlayerExample*/
-	//PreTransformMatrix = XMMatrixRotationY(XMConvertToRadians(180.0f));
-	//if (FAILED(m_pGameInstance->Add_Prototype(LEVEL_GAMEPLAY, TEXT("Prototype_Component_Model_PlayerExample"),
-	//	CModel::Create(m_pDevice, m_pContext, CModel::TYPE_ANIM, "../Bin/Resources/Models/PlayerExample/PlayerExample.fbx", "../Bin/ModelData/Anim/PlayerExample/", PreTransformMatrix))))
-	//	return E_FAIL;
-
-	/* For. Prototype_Component_Model_Stargazer*/
+	/* For. Prototype_Component_Model_PlayerExample*/
 	PreTransformMatrix = XMMatrixRotationY(XMConvertToRadians(180.0f));
-	if (FAILED(m_pGameInstance->Add_Prototype(LEVEL_GAMEPLAY, TEXT("Prototype_Component_Model_Stargazer"),
-		CModel::Create(m_pDevice, m_pContext, CModel::TYPE_ANIM, "../Bin/Resources/Models/Stargazer/SK_DLV_Stargazer_01.fbx", "../Bin/ModelData/NonAnim/InteractObj/Tex/", PreTransformMatrix))))
+	if (FAILED(m_pGameInstance->Add_Prototype(LEVEL_GAMEPLAY, TEXT("Prototype_Component_Model_Player"),
+		CModel::Create(m_pDevice, m_pContext, CModel::TYPE_ANIM, "../Bin/Resources/Models/Player/Player.fbx", "../Bin/ModelData/Anim/Player/", PreTransformMatrix))))
 		return E_FAIL;
+
+	///* For. Prototype_Component_Model_Stargazer*/
+	//PreTransformMatrix = XMMatrixRotationY(XMConvertToRadians(180.0f));
+	//if (FAILED(m_pGameInstance->Add_Prototype(LEVEL_GAMEPLAY, TEXT("Prototype_Component_Model_Stargazer"),
+	//	CModel::Create(m_pDevice, m_pContext, CModel::TYPE_ANIM, "../Bin/Resources/Models/Stargazer/SK_DLV_Stargazer_01.fbx", "../Bin/ModelData/NonAnim/InteractObj/Tex/", PreTransformMatrix))))
+	//	return E_FAIL;
 	
 	// 일반 몬스터 로드 함수
 	//if (FAILED(Ready_Resources_For_BasicMonster()))
@@ -112,10 +112,10 @@ HRESULT CLoader::Ready_Resources_For_GamePlayLevel()
 	//	return E_FAIL;
 
 	// 준호형 전용
-	if (FAILED(Ready_Resources_GoJunHo()))
+	//if (FAILED(Ready_Resources_GoJunHo()))
 
-	if (FAILED(Ready_Resources_For_Effect()))
-		return E_FAIL;
+	//if (FAILED(Ready_Resources_For_Effect()))
+	//	return E_FAIL;
 
 	lstrcpy(m_szLoadingText, TEXT("변환 완료"));
 

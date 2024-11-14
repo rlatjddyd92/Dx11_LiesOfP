@@ -86,13 +86,13 @@ void CTransform::LookAt_NoHeight(_Vec4 vAt)
 	Set_State(STATE_LOOK, XMVector3Normalize(vLook) * vScale.z);
 }
 
-void CTransform::LookAt_Lerp(_Vec4 vAt, _float fSpeed, _float fTimeDelta)
+void CTransform::LookAt_Lerp(_Vec4 vLook, _float fSpeed, _float fTimeDelta)
 {
 	/* 팀원들에게 보여주시 위한 예시 */
 	_Vec3 vPlayerLook = Get_State(STATE_LOOK);
 	vPlayerLook.Normalize();
 
-	_Vec3 vTargetLook = vAt;
+	_Vec3 vTargetLook = vLook;
 	vTargetLook.Normalize();
 
 	_Vec3 vUp = Get_State(STATE_UP);
@@ -145,14 +145,14 @@ void CTransform::LookAt_Lerp(_Vec4 vAt, _float fSpeed, _float fTimeDelta)
 	}
 }
 
-_int CTransform::LookAt_Lerp_NoHeight(_Vec4 vAt, _float fSpeed, _float fTimeDelta)
+_int CTransform::LookAt_Lerp_NoHeight(_Vec4 vLook, _float fSpeed, _float fTimeDelta)
 {	
 	/* 팀원들에게 보여주시 위한 예시2 */
 	_Vec3 vPlayerLook = Get_State(STATE_LOOK);
 	vPlayerLook.y = 0.f;
 	vPlayerLook.Normalize();
 
-	_Vec3 vTargetLook = vAt;
+	_Vec3 vTargetLook = vLook;
 	vTargetLook.y = 0.f;
 	vTargetLook.Normalize();
 
@@ -232,45 +232,60 @@ void CTransform::LookAt_Dir(_Vec4 vDir)
 	Set_State(STATE_LOOK, vLook * vScale.z);
 }
 
-void CTransform::Go_Straight(_float fTimeDelta, class CNavigation* pNavigation)
+void CTransform::Go_Straight(_float fTimeDelta, _float fSpeed, CNavigation* pNavigation)
 {
 	_Vec3		vPosition = Get_State(STATE_POSITION);
 	_Vec3		vLook = Get_State(STATE_LOOK);
 
-	vPosition += XMVector3Normalize(vLook) * m_fSpeedPerSec * fTimeDelta;
+	if (fSpeed <= 0.f)
+		fSpeed = m_fSpeedPerSec;
 
-	if(nullptr == pNavigation || true == pNavigation->isMove(vPosition))
+	vPosition += XMVector3Normalize(vLook) * fSpeed * fTimeDelta;
+
+	if (nullptr == pNavigation || true == pNavigation->isMove(vPosition))
 		Set_State(STATE_POSITION, vPosition);
 }
 
-void CTransform::Go_Backward(_float fTimeDelta)
+void CTransform::Go_Backward(_float fTimeDelta, _float fSpeed, CNavigation* pNavigation)
 {
-	_Vec3		vPosition = Get_State(STATE_POSITION);
-	_Vec3		vLook = Get_State(STATE_LOOK);
+	_vector		vPosition = Get_State(STATE_POSITION);
+	_vector		vLook = Get_State(STATE_LOOK);
 
-	vPosition -= XMVector3Normalize(vLook) * m_fSpeedPerSec * fTimeDelta;
+	if (fSpeed <= 0.f)
+		fSpeed = m_fSpeedPerSec;
 
-	Set_State(STATE_POSITION, vPosition);
+	vPosition -= XMVector3Normalize(vLook) * fSpeed * fTimeDelta;
+
+	if (nullptr == pNavigation || true == pNavigation->isMove(vPosition))
+		Set_State(STATE_POSITION, vPosition);
 }
 
-void CTransform::Go_Left(_float fTimeDelta)
+void CTransform::Go_Right(_float fTimeDelta, _float fSpeed, CNavigation* pNavigation)
 {
-	_Vec3		vPosition = Get_State(STATE_POSITION);
-	_Vec3		vRight = Get_State(STATE_RIGHT);
+	_vector		vPosition = Get_State(STATE_POSITION);
+	_vector		vRight = Get_State(STATE_RIGHT);
 
-	vPosition -= XMVector3Normalize(vRight) * m_fSpeedPerSec * fTimeDelta;
+	if (fSpeed <= 0.f)
+		fSpeed = m_fSpeedPerSec;
 
-	Set_State(STATE_POSITION, vPosition);
+	vPosition += XMVector3Normalize(vRight) * fSpeed * fTimeDelta;
+
+	if (nullptr == pNavigation || true == pNavigation->isMove(vPosition))
+		Set_State(STATE_POSITION, vPosition);
 }
 
-void CTransform::Go_Right(_float fTimeDelta)
+void CTransform::Go_Left(_float fTimeDelta, _float fSpeed, CNavigation* pNavigation)
 {
-	_Vec3		vPosition = Get_State(STATE_POSITION);
-	_Vec3		vRight = Get_State(STATE_RIGHT);
+	_vector		vPosition = Get_State(STATE_POSITION);
+	_vector		vRight = Get_State(STATE_RIGHT);
 
-	vPosition += XMVector3Normalize(vRight) * m_fSpeedPerSec * fTimeDelta;
+	if (fSpeed <= 0.f)
+		fSpeed = m_fSpeedPerSec;
 
-	Set_State(STATE_POSITION, vPosition);
+	vPosition -= XMVector3Normalize(vRight) * fSpeed * fTimeDelta;
+
+	if (nullptr == pNavigation || true == pNavigation->isMove(vPosition))
+		Set_State(STATE_POSITION, vPosition);
 }
 
 void CTransform::Turn(_Vec4 vAxis, _float fTimeDelta, _float fSpeed)
@@ -306,6 +321,86 @@ void CTransform::Turn(_bool isRotationX, _bool isRotationY, _bool isRotationZ, _
 	Set_State(STATE_RIGHT, XMVector3TransformNormal(vRight, RotationMatrix));
 	Set_State(STATE_UP, XMVector3TransformNormal(vUp, RotationMatrix));
 	Set_State(STATE_LOOK, XMVector3TransformNormal(vLook, RotationMatrix));
+}
+
+void CTransform::Turn_Lerp(_fvector vDir, _float fTurnSpeed, _float fTimeDelta)
+{
+	if (XMVectorGetY(vDir) == -1.f)
+		return;
+
+	_vector vCurrentLook = Get_State(STATE::STATE_LOOK);
+	vCurrentLook = XMVector3Normalize(vCurrentLook);
+
+	if (XMVectorGetX(XMVector3Length(vCurrentLook - vDir)) < 0.1f)
+		return;
+
+	_vector vCurrentUp = Get_State(STATE::STATE_UP);
+	vCurrentUp = XMVector3Normalize(vCurrentUp);
+
+	_vector vTargetLook = vDir;
+	vTargetLook = XMVector3Normalize(vTargetLook);
+
+	// 새로운 right 벡터 구함
+	_vector vTargetRight = XMVector3Cross(vCurrentUp, vTargetLook);
+
+	// 새로운 right 벡터로 새로운 look 벡터를 구함
+	vTargetLook = XMVector3Cross(vTargetRight, vCurrentUp);
+	vTargetLook = XMVector3Normalize(vTargetLook);
+
+	_vector vRadian = XMVector3Dot(vTargetLook, vCurrentLook);
+	_float fRadian = {};
+
+	XMStoreFloat(&fRadian, vRadian);
+	fRadian = acosf(fRadian);;
+
+	if (fRadian > 1.0f)
+	{
+		fRadian = 1.0f;
+	}
+	else if (fRadian < -1.0f)
+	{
+		fRadian = -1.0f;
+	}
+
+	if (fRadian <= fTurnSpeed * fTimeDelta)
+	{
+		vCurrentLook = vTargetLook;
+
+		_vector vCurrentRight = XMVector3Cross(vCurrentUp, vCurrentLook);
+		vCurrentLook = XMVector3Cross(vCurrentRight, vCurrentUp);
+		vCurrentUp = XMVector3Cross(vCurrentLook, vCurrentRight);
+
+		_float3 vScale = Get_Scaled();
+
+		Set_State(STATE_RIGHT, XMVector3Normalize(vCurrentRight) * vScale.x);
+		Set_State(STATE_UP, XMVector3Normalize(vCurrentUp) * vScale.y);
+		Set_State(STATE_LOOK, XMVector3Normalize(vCurrentLook) * vScale.z);
+
+		return;
+	}
+
+	_vector vCrossUp = XMVector3Cross(vCurrentLook, vTargetLook);
+
+	_float fDot;
+	XMStoreFloat(&fDot, XMVector3Dot(vCurrentUp, vCrossUp));
+
+	if (fDot < 0)
+		fTurnSpeed *= -1;
+
+	// 쿼터니언 생성
+	XMVECTOR vRotQuaternion = XMQuaternionRotationAxis(vCurrentUp, fTurnSpeed * fTimeDelta);
+
+	// 회전 행렬 생성
+	XMMATRIX RotationMatrix = XMMatrixRotationQuaternion(vRotQuaternion);
+
+	XMMATRIX WorldMatirx = XMLoadFloat4x4(&m_WorldMatrix) * RotationMatrix;
+	_float4x4 World4x4;
+	XMStoreFloat4x4(&World4x4, WorldMatirx);
+
+	// 상태 업데이트
+	Set_State(STATE_RIGHT, XMLoadFloat4((_float4*)&World4x4.m[0]));
+	Set_State(STATE_UP, XMLoadFloat4((_float4*)&World4x4.m[1]));
+	Set_State(STATE_LOOK, XMLoadFloat4((_float4*)&World4x4.m[2]));
 }
 
 void CTransform::Rotation(const _Vec4& vAxis, _float fRadian)

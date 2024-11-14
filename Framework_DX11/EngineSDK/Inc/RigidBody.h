@@ -15,18 +15,19 @@ private:
     virtual ~CRigidBody() = default;
 
 public:
-    class CGameObject* GetOwner() { return m_pOwner; }
-    void                SetOwner(class CGameObject* pOwner) { m_pOwner = pOwner; }
+    class CGameObject*  Get_Owner() { return m_pOwner; }
+    void                Set_Owner(class CGameObject* pOwner) { m_pOwner = pOwner; }
+    void                Set_Navigation(class CNavigation* pNavigation) { m_pNavigation = pNavigation; }
 
     _float              Get_Mass() { return m_fMass; }
     void                Set_Mass(_float fMass) { m_fMass = fMass; }
 
-    _float3             Get_Force() { return m_vForce; }
+    _Vec3               Get_Force() { return m_vForce; }
 
-    _float3             Get_Velocity() { return m_vVelocity; }
-    void                Set_Velocity(_float3 vVelocity) { m_vVelocity = vVelocity; }
+    _Vec3               Get_Velocity() { return m_vVelocity; }
+    void                Set_Velocity(_Vec3 vVelocity) { m_vVelocity = vVelocity; }
 
-    void                AddVelocity(_vector vAddV) { XMStoreFloat3(&m_vVelocity, XMLoadFloat3(&m_vVelocity) + vAddV); }
+    void                Add_Velocity(_Vec3 vAdd) { m_vVelocity += vAdd;}
 
     _bool               Get_IsGravity() { return m_isGravity; }
     void                Set_IsGravity(bool isGravity) {
@@ -44,17 +45,17 @@ public:
     _bool               Get_IsFriction() { return m_isFriction; }
     void                Set_IsFriction(_bool isFriction) { m_isFriction = isFriction; }
 
-    void                Set_VelocityLimit(_float3 vMaxVelocity) { m_vMaxVelocity = vMaxVelocity; }
+    void                Set_VelocityLimit(_Vec3 vMaxVelocity) { m_vMaxVelocity = vMaxVelocity; }
 
-    void                Set_Friction(_float3 vFriction) { m_vFriction = vFriction; }
+    void                Set_Friction(_Vec3 vFriction) { m_vFriction = vFriction; }
 
     void                Set_GravityLimit(_float fGravityLimit) { m_fGravityLimit = fGravityLimit; }
 
     void                Set_GravityDir(_vector vDir);
 
-    void                Clear_Force() { m_vForce = _float3(0.f, 0.f, 0.f); }
-    void                Clear_Accel() { m_vAccel = _float3(0.f, 0.f, 0.f); }
-    void                Clear_Velocity() { m_vVelocity = _float3(0.f, 0.f, 0.f); }
+    void                Clear_Force() { m_vForce = _Vec3(0.f, 0.f, 0.f); }
+    void                Clear_Accel() { m_vAccel = _Vec3(0.f, 0.f, 0.f); }
+    void                Clear_Velocity() { m_vVelocity = _Vec3(0.f, 0.f, 0.f); }
     void                Clear_All() { Clear_Force(); Clear_Accel(); Clear_Velocity(); }
 
 public:
@@ -70,17 +71,18 @@ public:
 
 private:
     class CGameObject* m_pOwner = { nullptr };
+    class CNavigation* m_pNavigation = { nullptr };
 
     _float                  m_fMass = { 1.f };             // 질량
     _float                  m_fGravityScale = { 2.f };     // 중력 크기
     _float                  m_fGravityLimit = { 10.f };     // 중력 최대 값
 
-    _float3                 m_vFriction = { 1.f,1.f,1.f };         // 마찰력
-    _float3                 m_vForce = { 0.f,0.f,0.f };           // 가해지는 힘
-    _float3                 m_vAccel = { 0.f,0.f,0.f };           // 가속도
-    _float3                 m_vVelocity = { 0.f,0.f,0.f };        // 속도
-    _float3                 m_vMaxVelocity = { 20.f,15.f,20.f };     // 최고 속도
-    _float3                 m_vGraivtyDirection = { 0.f,1.f,0.f };
+    _Vec3                   m_vFriction = { 1.f,1.f,1.f };         // 마찰력
+    _Vec3                   m_vForce = { 0.f,0.f,0.f };           // 가해지는 힘
+    _Vec3                   m_vAccel = { 0.f,0.f,0.f };           // 가속도
+    _Vec3                   m_vVelocity = { 0.f,0.f,0.f };        // 속도
+    _Vec3                   m_vMaxVelocity = { 20.f,15.f,20.f };     // 최고 속도
+    _Vec3                   m_vGraivtyDirection = { 0.f,1.f,0.f };
 
     _bool                   m_isActive = { true };  // 활성화 되있어?
     _bool                   m_isGravity = { true }; // 중력 적용할거야?

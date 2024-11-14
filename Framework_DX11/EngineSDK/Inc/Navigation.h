@@ -22,7 +22,7 @@ public:
 
 public:
 	void Update(_fmatrix TerrainWorldMatrix);
-	_bool isMove(_fvector vPosition);
+	_bool isMove(_Vec3 vPosition);
 	void SetUp_OnCell(class CTransform* pTransform, _float fOffset, _float fTimeDelta);
 
 #ifdef _DEBUG
@@ -33,7 +33,7 @@ public:
 private:
 	vector<class CCell*>				m_Cells;
 	_int								m_iCurrentCellIndex = { -1 };
-	static _float4x4					m_WorldMatrix;
+	static _Matrix						m_WorldMatrix;
 
 #ifdef _DEBUG
 private:

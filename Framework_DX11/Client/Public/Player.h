@@ -17,8 +17,12 @@ public:
 
 	enum PLAYER_STATE
 	{
-		IDLE, WALK, RUN, STATE_END
+		IDLE, WALK, RUN, GUARD, JUMP, STATE_END
 	};
+
+public:
+	class CCamera* Get_Camera() { return m_pPlayerCamera; }
+	void Set_Camera(class CCamera* pCamera) { m_pPlayerCamera = pCamera; }
 
 private:
 	CPlayer(ID3D11Device* pDevice, ID3D11DeviceContext* pContext);
@@ -34,18 +38,24 @@ public:
 	virtual HRESULT Render() override;
 	virtual HRESULT Render_LightDepth() override;
 
+public:
+	void		Move_Dir(_Vec4 vDir, _float fSpeed, _float fTimeDelta, _bool isTurn = true);
+	_Vec4		Calculate_Direction_Straight();
+	_Vec4		Calculate_Direction_Right();
+
 private:
 	list<OUTPUT_EVKEY>	m_EvKeyList;
 	list<class CEffect_Container*>	m_EffectList;
 	map<_uint, class CEffect_Container*>	m_Effects;
 
-
+private:
+	class CCamera*		m_pPlayerCamera = { nullptr };
 
 private:
-	_vector		m_vRootMoveStack{};
-	_vector		m_vCurRootMove{};
-	_bool		m_bEndAnim{ false };
-	_bool		m_bResetRootMove{ true };
+	_vector		m_vRootMoveStack = {};
+	_vector		m_vCurRootMove = {};
+	_bool		m_bEndAnim = { false };
+	_bool		m_bResetRootMove = { true };
 
 
 private:

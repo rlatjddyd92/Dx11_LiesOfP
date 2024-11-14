@@ -56,6 +56,24 @@ void CPawn::OnCollisionExit(CGameObject* pOther)
 {
 }
 
+
+void CPawn::Change_State(const _uint iState, void* pArg)
+{
+	m_pFsmCom->Change_State(iState, pArg);
+}
+
+void CPawn::Change_Animation(_uint iAnimIndex, _bool IsLoop, _bool bSetup)
+{
+	if (bSetup)
+	{
+		m_pModelCom->SetUp_Animation(iAnimIndex, IsLoop);
+	}
+	else
+	{
+		m_pModelCom->SetUp_NextAnimation(iAnimIndex, IsLoop);
+	}
+}
+
 HRESULT CPawn::Add_PartObject(_uint iPartID, const _wstring& strPrototypeTag, void* pArg)
 {
 	CGameObject* pPartObject = m_pGameInstance->Clone_GameObject(strPrototypeTag, pArg);
@@ -92,6 +110,11 @@ void CPawn::Free()
 	Safe_Release(m_pModelCom);
 	Safe_Release(m_pNavigationCom);
 	Safe_Release(m_pColliderCom);
+
+	if (m_pFsmCom != nullptr)
+	{
+		m_pFsmCom->Release_States();
+	}
 	Safe_Release(m_pFsmCom);
 
 }

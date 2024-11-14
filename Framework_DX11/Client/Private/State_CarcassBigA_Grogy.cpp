@@ -29,7 +29,7 @@ HRESULT CState_CarcassBigA_Grogy::Start_State(void* pArg)
     {
         ++m_iAnimCnt;
         m_pMonster->Change_Animation(17 - m_iAnimCnt, true, true);
-        m_fGrogyTime = *m_pTrackPos;
+        m_fGrogyTime = (_float)*m_pTrackPos;
     }
     else
     {
@@ -66,7 +66,7 @@ void CState_CarcassBigA_Grogy::Update(_float fTimeDelta)
     case 2:
         if (*m_pIsEndAnim)
         {
-            m_iAnimCnt = 0.f;
+            m_iAnimCnt = 0;
             *m_pTrackPos = 0.f;
             m_pMonster->Change_State(CCarcassBigA::IDLE);
         }
@@ -87,8 +87,8 @@ void CState_CarcassBigA_Grogy::Update(_float fTimeDelta)
 
 void CState_CarcassBigA_Grogy::End_State()
 {
-    m_iAnimCnt = 0.f;//혹시 완료되지 않고 변하는 경우에 대비
-    m_fGrogyTime = 0.f;
+    m_iAnimCnt = 0;//혹시 완료되지 않고 변하는 경우에 대비
+    m_fGrogyTime = 0;
     *m_pResetRootMove = true;
 }
 

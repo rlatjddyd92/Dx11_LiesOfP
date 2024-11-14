@@ -2,10 +2,15 @@
 #include "..\Public\Player.h"
 
 #include "GameInstance.h"
+#include "Camera.h"
 #include "Weapon.h"
 
 #include "Effect_Manager.h"
 #include "Effect_Container.h"
+
+#include "State_Player_OH_Idle.h"
+#include "State_Player_OH_Walk.h"
+#include "State_Player_OH_Run.h"
 
 CPlayer::CPlayer(ID3D11Device * pDevice, ID3D11DeviceContext * pContext)
 	: CPawn{ pDevice, pContext }
@@ -38,11 +43,12 @@ HRESULT CPlayer::Initialize(void * pArg)
 	if (FAILED(Ready_PartObjects()))
 		return E_FAIL;
 
+	if (FAILED(Ready_FSM()))
+		return E_FAIL;
 
 	m_pTransformCom->Set_State(CTransform::STATE_POSITION, XMVectorSet(0.1f, 0.f, 0.1f, 1.f));
 
-	//m_pGameInstance->SetUpPhysX_Player(this);
-	m_pModelCom->SetUp_Animation(0, true);
+	m_pPlayerCamera = m_pGameInstance->Find_Camera(LEVEL_GAMEPLAY);
 
 	return S_OK;
 }
@@ -57,15 +63,8 @@ void CPlayer::Priority_Update(_float fTimeDelta)
 
 void CPlayer::Update(_float fTimeDelta)
 {
-	if (GetKeyState(VK_DOWN) & 0x8000)
-		m_pTransformCom->Go_Backward(fTimeDelta);
 
-	if (GetKeyState(VK_LEFT) & 0x8000)
-		m_pTransformCom->Turn(false, true, false, fTimeDelta * -1.f);
-
-	if (GetKeyState(VK_RIGHT) & 0x8000)
-		m_pTransformCom->Turn(false, true, false, fTimeDelta);
-
+	m_pFsmCom->Update(fTimeDelta);
 
 	m_vCurRootMove = m_pModelCom->Play_Animation(fTimeDelta , &m_bEndAnim, &m_EvKeyList);
 
@@ -142,6 +141,9 @@ void CPlayer::Late_Update(_float fTimeDelta)
 		if (true == m_pGameInstance->Picking(&vPickPos))
 			m_pTransformCom->Set_State(CTransform::STATE_POSITION, XMVectorSetW(XMLoadFloat3(&vPickPos), 1.f));		
 	}
+
+
+	m_pRigidBodyCom->Update(fTimeDelta);
 
 	m_pGameInstance->Add_RenderObject(CRenderer::RG_NONBLEND, this);
 	m_pGameInstance->Add_RenderObject(CRenderer::RG_SHADOWOBJ, this);
@@ -243,6 +245,34 @@ HRESULT CPlayer::Render_LightDepth()
 	return S_OK;
 }
 
+void CPlayer::Move_Dir(_Vec4 vDir, _float fSpeed, _float fTimeDelta, _bool isTurn)
+{
+	if(isTurn)
+		m_pTransformCom->LookAt_Lerp_NoHeight(vDir, 30.0f, fTimeDelta);
+	m_pRigidBodyCom->Set_Velocity((_Vec3(vDir * fSpeed)));
+}
+
+_Vec4 CPlayer::Calculate_Direction_Straight()
+{
+	_vector vCameraLook = m_pPlayerCamera->Get_Transform()->Get_State(CTransform::STATE::STATE_LOOK);
+	_vector vUp = XMVector3Normalize(m_pTransformCom->Get_State(CTransform::STATE::STATE_UP));
+	_vector vRight = XMVector3Normalize(XMVector3Cross(vUp, vCameraLook));
+
+	_vector vDir = XMVector3Normalize(XMVector3Cross(vRight, vUp));
+
+	return vDir;
+}
+
+_Vec4 CPlayer::Calculate_Direction_Right()
+{
+	_vector vCameraLook = XMVector3Normalize(m_pPlayerCamera->Get_Transform()->Get_State(CTransform::STATE::STATE_LOOK));
+	_vector vUp = XMVector3Normalize(m_pTransformCom->Get_State(CTransform::STATE::STATE_UP));
+
+	_vector vRight = XMVector3Normalize(XMVector3Cross(vUp, vCameraLook));
+
+	return vRight;
+}
+
 HRESULT CPlayer::Ready_Components()
 {
 	/* FOR.Com_Shader */
@@ -273,6 +303,18 @@ HRESULT CPlayer::Ready_Components()
 		return E_FAIL;
 	
 
+	/* FOR.Com_RigidBody */
+	if (FAILED(__super::Add_Component(LEVEL_STATIC, TEXT("Prototype_Component_RigidBody"),
+		TEXT("Com_RigidBody"), reinterpret_cast<CComponent**>(&m_pRigidBodyCom))))
+		return E_FAIL;
+	m_pRigidBodyCom->Set_Owner(this);
+	m_pRigidBodyCom->Set_IsFriction(true);
+	m_pRigidBodyCom->Set_Friction(_float3(1.f, 0.f, 1.f));
+	m_pRigidBodyCom->Set_IsGravity(false);
+	m_pRigidBodyCom->Set_GravityScale(15.f);
+	m_pRigidBodyCom->Set_VelocityLimit(_float3(25.f, 30.f, 25.f));
+	m_pRigidBodyCom->Set_Navigation(m_pNavigationCom);
+
 	return S_OK;
 }
 
@@ -296,6 +338,17 @@ HRESULT CPlayer::Ready_PartObjects()
 
 HRESULT CPlayer::Ready_FSM()
 {
+	/* FOR.Com_FSM */
+	if (FAILED(__super::Add_Component(LEVEL_STATIC, TEXT("Prototype_Component_FSM"),
+		TEXT("Com_FSM"), reinterpret_cast<CComponent**>(&m_pFsmCom))))
+		return E_FAIL;
+
+	m_pFsmCom->Add_State(CState_Player_OH_Idle::Create(m_pFsmCom, this, IDLE));
+	m_pFsmCom->Add_State(CState_Player_OH_Walk::Create(m_pFsmCom, this, WALK));
+	m_pFsmCom->Add_State(CState_Player_OH_Run::Create(m_pFsmCom, this, RUN));
+
+	m_pFsmCom->Set_State(IDLE);
+
 	return S_OK;
 }
 
