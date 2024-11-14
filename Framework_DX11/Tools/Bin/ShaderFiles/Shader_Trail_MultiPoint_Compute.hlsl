@@ -171,7 +171,7 @@ void CS_SPREAD_MAIN(uint3 DTid : SV_DispatchThreadID)
         float4 vMoveDir = vDir * HeadParticle.particle.fSpeed;
         vMoveDir.y -= fGravity * HeadParticle.particle.vLifeTime.y;
     
-        HeadParticle.particle.vTranslation = HeadParticle.particle.vTranslation + (vMoveDir * fTimeDelta + vRotateDir) * fAddSpeed;
+        HeadParticle.particle.vTranslation += (vMoveDir * fTimeDelta + vRotateDir) * fAddSpeed;
 
         if ((iState & STATE_LOOP) && (HeadParticle.particle.vLifeTime.y >= HeadParticle.particle.vLifeTime.x))
         {
@@ -182,7 +182,6 @@ void CS_SPREAD_MAIN(uint3 DTid : SV_DispatchThreadID)
             HeadParticle.particle.vRight = vWorldPivot;
             HeadParticle.particle.vUp = float4(vOrbitAxis.x, vOrbitAxis.y, vOrbitAxis.z, 0.f);
         }
-        
         
         float4 vPrePos = HeadParticle.vPreTranslation;
         while (true)
@@ -202,6 +201,7 @@ void CS_SPREAD_MAIN(uint3 DTid : SV_DispatchThreadID)
             if (HeadParticle.iTailInitIndex > InitParticles[iHeadIndex].iTailInitIndex + iNumTailInstance)
                 HeadParticle.iTailInitIndex = InitParticles[iHeadIndex].iTailInitIndex;
         }
+        
         HeadParticle.particle.vLook = normalize(vMoveDir * fTimeDelta + vRotateDir);
         HeadParticle.vPreTranslation = HeadParticle.particle.vTranslation;
 
@@ -219,6 +219,9 @@ float3 RotateByAxis(float3 vVector, float3 vAxis, float fAngle)
 {
     float fCosAngle = cos(fAngle);
     float fSinAngle = sin(fAngle);
+    
+    if (vAxis = float3(0.f, 0.f, 0.f))
+        vAxis = float3(0.f, 1.f, 0.f);
     
     vAxis = normalize(vAxis);
     

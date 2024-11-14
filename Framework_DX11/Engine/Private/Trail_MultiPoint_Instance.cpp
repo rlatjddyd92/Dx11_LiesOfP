@@ -91,43 +91,7 @@ HRESULT CTrail_MultiPoint_Instance::Bind_HeadBuffer(CShader_NonVTX* pShader, con
 
 HRESULT CTrail_MultiPoint_Instance::Bind_TailBuffer(CShader_NonVTX* pShader, const _char* pConstantName)
 {
-    // 1. Staging Buffer 생성 (CPU 접근 가능)
-    ID3D11Buffer* pStagingBuffer = nullptr;
-    D3D11_BUFFER_DESC stagingDesc = {};
-    stagingDesc.Usage = D3D11_USAGE_STAGING;
-    stagingDesc.ByteWidth = sizeof(TAIL_PARTICLE) * m_iNumInstance * m_iNumTailInstance; // 데이터 크기 설정
-    stagingDesc.BindFlags = 0;
-    stagingDesc.CPUAccessFlags = D3D11_CPU_ACCESS_READ;
-    stagingDesc.MiscFlags = 0;
-    stagingDesc.StructureByteStride = sizeof(TAIL_PARTICLE);
 
-    HRESULT hr = m_pDevice->CreateBuffer(&stagingDesc, nullptr, &pStagingBuffer);
-    if (FAILED(hr)) {
-        MessageBox(0, L"Staging Buffer 생성 실패", L"Error", MB_OK);
-        return hr;
-    }
-
-    // 2. UAV에서 Staging Buffer로 데이터 복사
-    m_pContext->CopyResource(pStagingBuffer, m_pTailBuffer);
-
-    // 3. Map을 통해 CPU에서 데이터 접근
-    D3D11_MAPPED_SUBRESOURCE mappedResource;
-    hr = m_pContext->Map(pStagingBuffer, 0, D3D11_MAP_READ, 0, &mappedResource);
-    if (SUCCEEDED(hr)) {
-        TAIL_PARTICLE* pParticles = reinterpret_cast<TAIL_PARTICLE*>(mappedResource.pData);
-
-        // 데이터 접근 및 출력 예제
-        for (int i = 0; i < m_iNumInstance * m_iNumTailInstance; ++i) {
-            pParticles[i];
-            _int a = 0;
-        }
-        m_pContext->Unmap(pStagingBuffer, 0);
-    }
-
-    // 4. 사용이 끝난 후 Staging Buffer 해제
-    if (pStagingBuffer) {
-        pStagingBuffer->Release();
-    }
 
     //// SRV 바인딩하고
     if (FAILED(pShader->Bind_SRV(pConstantName, m_pTailSRV)))

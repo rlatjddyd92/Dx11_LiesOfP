@@ -36,14 +36,15 @@ void CTrail_Effect_MP::Priority_Update(_float fTimeDelta)
 
 void CTrail_Effect_MP::Update(_float fTimeDelta)
 {
+	// 값 제대로 안채우면 컴퓨트셰이더에서 무한루프 돌아감.
 	CTrail_MultiPoint_Instance::TRAIL_MP_MOVEMENT Movement = {};
-	Movement.iState = CVIBuffer_Instancing::STATE_LOOP;
+	Movement.iState = CVIBuffer_Instancing::STATE_LOOP | CVIBuffer_Instancing::STATE_ORBIT;
 	Movement.vPivot = { 0.f, 0.f, 0.f, 1.f };
 	Movement.fGravity = 0.f;
 	Movement.vMoveDir = { 0.f, 0.f, 0.f, 0.f };
 	Movement.fTimeDelta = fTimeDelta;
-	Movement.vOrbitAxis = {};
-	Movement.fOrbitAngle = 0.f;
+	Movement.vOrbitAxis = {0.f, 1.f, 0.f};
+	Movement.fOrbitAngle = 90.f;
 	Movement.fTimeInterval = { 1.f };
 	Movement.fRandomRatio = 0.f;
 	Movement.fAccelLimit = 0.f;
