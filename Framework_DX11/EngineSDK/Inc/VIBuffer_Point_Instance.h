@@ -69,8 +69,6 @@ private:
 	ID3D11Buffer*		m_pInitParticleBuffer = nullptr;
 	ID3D11ShaderResourceView* m_pInitParticleSRV = nullptr;
 
-	void Init_Particle(PARTICLE* pParticles);
-	_float4 Get_ExceptedTranslation();
 
 public:
 	static CVIBuffer_Point_Instance* Create(ID3D11Device* pDevice, ID3D11DeviceContext* pContext, const CVIBuffer_Instancing::INSTANCE_DESC& Desc, _bool isClient);

@@ -56,6 +56,8 @@ public:
 
 protected:
 	_bool Contain_State(_uint iCurrentState, _uint iCheckState);
+	void Init_Particle(PARTICLE* pParticles);
+	_float4 Get_ExceptedTranslation();
 
 protected:
 	ID3D11Buffer*				m_pVBInstance = { nullptr };

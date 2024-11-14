@@ -59,7 +59,7 @@ void CTrail_Effect_TP::Update(_float fTimeDelta)
 
 void CTrail_Effect_TP::Late_Update(_float fTimeDelta)
 {
-	m_pGameInstance->Add_RenderObject(CRenderer::RG_NONLIGHT, this);
+	m_pGameInstance->Add_RenderObject(CRenderer::RG_DISTORTION, this);
 }
 
 HRESULT CTrail_Effect_TP::Render()

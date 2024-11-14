@@ -103,6 +103,103 @@ _bool CVIBuffer_Instancing::Contain_State(_uint iCurrentState, _uint iCheckState
 	return false;
 }
 
+void CVIBuffer_Instancing::Init_Particle(PARTICLE* pParticles)
+{
+	for (_uint i = 0; i < m_iNumInstance; ++i)
+	{
+		pParticles[i].vPosition = _float3(0.f, 0.f, 0.f);
+
+		_float fScale = m_pGameInstance->Get_Random(m_vSize.x, m_vSize.y);
+		pParticles[i].vPSize = _float2(fScale, fScale);
+
+		pParticles[i].vRight = _float4(1.f, 0.f, 0.f, 0.f);
+		pParticles[i].vUp = _float4(0.f, 1.f, 0.f, 0.f);
+		pParticles[i].vLook = _float4(0.f, 0.f, 1.f, 0.f);
+
+		pParticles[i].vTranslation = Get_ExceptedTranslation();
+		pParticles[i].vLifeTime = _float2(m_pGameInstance->Get_Random(m_vLifeTime.x, m_vLifeTime.y), 0.0f);
+		pParticles[i].vColor = _float4(m_pGameInstance->Get_Random(m_vMinColor.x, m_vMaxColor.x),
+			m_pGameInstance->Get_Random(m_vMinColor.y, m_vMaxColor.y),
+			m_pGameInstance->Get_Random(m_vMinColor.z, m_vMaxColor.z),
+			m_pGameInstance->Get_Random(m_vMinColor.w, m_vMaxColor.w));
+
+		pParticles[i].fSpeed = m_pGameInstance->Get_Random(m_vSpeed.x, m_vSpeed.y);
+
+		pParticles[i].vCurrenrRandomDir = _float4(m_pGameInstance->Get_Random(-1.f, 1.f), m_pGameInstance->Get_Random(-1.f, 1.f), m_pGameInstance->Get_Random(-1.f, 1.f), 0.f);
+		pParticles[i].vNextRandomDir = _float4(m_pGameInstance->Get_Random(-1.f, 1.f), m_pGameInstance->Get_Random(-1.f, 1.f), m_pGameInstance->Get_Random(-1.f, 1.f), 0.f);
+
+	}
+
+}
+
+_float4 CVIBuffer_Instancing::Get_ExceptedTranslation()
+{
+	_float fX_Small{}, fX_Big{}, fY_Small{}, fY_Big{}, fZ_Small{}, fZ_Big{};
+
+	_float fX{}, fY{}, fZ{};
+
+	while (true)
+	{
+		_float fRandomNum = m_pGameInstance->Get_Random_Normal();
+		if (fRandomNum < 0.333f)
+		{
+			if (m_vRange.x == m_vExceptRange.x)
+				continue;
+
+			fX_Small = m_pGameInstance->Get_Random(m_vCenterPos.x - m_vRange.x * 0.5f, m_vCenterPos.x - m_vExceptRange.x * 0.5f);
+			fX_Big = m_pGameInstance->Get_Random(m_vCenterPos.x + m_vExceptRange.x * 0.5f, m_vCenterPos.x + m_vRange.x * 0.5f);
+
+			if (0.5f < m_pGameInstance->Get_Random_Normal())
+				fX = fX_Small;
+			else
+				fX = fX_Big;
+			fY = m_pGameInstance->Get_Random(m_vCenterPos.y - m_vRange.y * 0.5f, m_vCenterPos.y + m_vRange.y * 0.5f);
+			fZ = m_pGameInstance->Get_Random(m_vCenterPos.z - m_vRange.z * 0.5f, m_vCenterPos.z + m_vRange.z * 0.5f);
+		}
+		else if (0.333f <= fRandomNum && fRandomNum < 0.666f)
+		{
+			if (m_vRange.y == m_vExceptRange.y)
+				continue;
+
+			fY_Small = m_pGameInstance->Get_Random(m_vCenterPos.y - m_vRange.y * 0.5f, m_vCenterPos.y - m_vExceptRange.y * 0.5f);
+			fY_Big = m_pGameInstance->Get_Random(m_vCenterPos.y + m_vExceptRange.y * 0.5f, m_vCenterPos.y + m_vRange.y * 0.5f);
+
+			if (0.5f < m_pGameInstance->Get_Random_Normal())
+				fY = fY_Small;
+			else
+				fY = fY_Big;
+
+			fX = m_pGameInstance->Get_Random(m_vCenterPos.x - m_vRange.x * 0.5f, m_vCenterPos.x + m_vRange.x * 0.5f);
+			fZ = m_pGameInstance->Get_Random(m_vCenterPos.z - m_vRange.z * 0.5f, m_vCenterPos.z + m_vRange.z * 0.5f);
+		}
+		else
+		{
+			if (m_vRange.z == m_vExceptRange.z)
+				continue;
+
+			fZ_Small = m_pGameInstance->Get_Random(m_vCenterPos.z - m_vRange.z * 0.5f, m_vCenterPos.z - m_vExceptRange.z * 0.5f);
+			fZ_Big = m_pGameInstance->Get_Random(m_vCenterPos.z + m_vExceptRange.z * 0.5f, m_vCenterPos.z + m_vRange.z * 0.5f);
+
+			if (0.5f < m_pGameInstance->Get_Random_Normal())
+				fZ = fZ_Small;
+			else
+				fZ = fZ_Big;
+
+			fX = m_pGameInstance->Get_Random(m_vCenterPos.x - m_vRange.x * 0.5f, m_vCenterPos.x + m_vRange.x * 0.5f);
+			fY = m_pGameInstance->Get_Random(m_vCenterPos.y - m_vRange.y * 0.5f, m_vCenterPos.y + m_vRange.y * 0.5f);
+		}
+
+		break;
+	}
+
+	return _float4(fX, fY, fZ, 1.f);
+}
+
+HRESULT CVIBuffer_Instancing::Ready_Buffers(const CVIBuffer_Instancing::INSTANCE_DESC& Desc)
+{
+	return S_OK;
+}
+
 void CVIBuffer_Instancing::Free()
 {
 	__super::Free();

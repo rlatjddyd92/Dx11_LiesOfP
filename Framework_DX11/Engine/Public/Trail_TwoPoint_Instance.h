@@ -29,6 +29,9 @@ private:
 	list<TWOPOINT> m_TrailPoses;
 	_bool m_bFirst = { false };
 
+private:
+	HRESULT Ready_Buffers(const CVIBuffer_Instancing::INSTANCE_DESC& Desc);
+
 public:
 	static CTrail_TwoPoint_Instance* Create(ID3D11Device* pDevice, ID3D11DeviceContext* pContext, const CVIBuffer_Instancing::INSTANCE_DESC& Desc, _bool isClient);
 	virtual CComponent* Clone(void* pArg) override;

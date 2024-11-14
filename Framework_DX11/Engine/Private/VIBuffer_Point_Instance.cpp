@@ -21,52 +21,10 @@ HRESULT CVIBuffer_Point_Instance::Initialize_Prototype(const CVIBuffer_Instancin
 {
 	m_isClient = isClient;
 
-	if(FAILED(Initialize_Desc(Desc)))
-		return E_FAIL;
-
 	if(true == m_isClient)
 	{
-		m_pInstanceVertices = new PARTICLE[m_iNumInstance];
-		ZeroMemory(m_pInstanceVertices, sizeof(PARTICLE) * m_iNumInstance);
-
-		PARTICLE* pParticle = static_cast<PARTICLE*>(m_pInstanceVertices);
-
-		Init_Particle(pParticle);
-		
-		ZeroMemory(&m_InstanceInitialData, sizeof m_InstanceInitialData);
-		m_InstanceInitialData.pSysMem = m_pInstanceVertices;
-
-		// 파티클 버퍼 구성 -> 파티클 하나마다 갖고있어야되는거
-		m_ParticleBuffer_Desc.Usage = D3D11_USAGE_DEFAULT;
-		m_ParticleBuffer_Desc.ByteWidth = sizeof(PARTICLE) * m_iNumInstance;
-		m_ParticleBuffer_Desc.BindFlags = D3D11_BIND_UNORDERED_ACCESS | D3D11_BIND_SHADER_RESOURCE;
-		m_ParticleBuffer_Desc.StructureByteStride = sizeof(PARTICLE);
-		m_ParticleBuffer_Desc.MiscFlags = D3D11_RESOURCE_MISC_BUFFER_STRUCTURED;
-
-		// Constant Buffer 구성
-		m_MoveBuffer_Desc.Usage = D3D11_USAGE_DYNAMIC;
-		m_MoveBuffer_Desc.ByteWidth = sizeof(PARTICLE_MOVEMENT);
-		m_MoveBuffer_Desc.BindFlags = D3D11_BIND_CONSTANT_BUFFER;
-		m_MoveBuffer_Desc.CPUAccessFlags = D3D11_CPU_ACCESS_WRITE;
-
-		// UAV 구성
-		m_UAV_Desc.Format = DXGI_FORMAT_UNKNOWN;
-		m_UAV_Desc.ViewDimension = D3D11_UAV_DIMENSION_BUFFER;
-		m_UAV_Desc.Buffer.NumElements = m_iNumInstance;
-
-
-		// SRV 구성
-		m_SRV_Desc.Format = DXGI_FORMAT_UNKNOWN;
-		m_SRV_Desc.ViewDimension = D3D11_SRV_DIMENSION_BUFFER;
-		m_SRV_Desc.Buffer.NumElements = m_iNumInstance;
-
-
-		// 파티클 버퍼 구성
-		m_InitParticleBuffer_Desc.Usage = D3D11_USAGE_DEFAULT;
-		m_InitParticleBuffer_Desc.ByteWidth = sizeof(PARTICLE) * m_iNumInstance;
-		m_InitParticleBuffer_Desc.BindFlags = D3D11_BIND_SHADER_RESOURCE;
-		m_InitParticleBuffer_Desc.StructureByteStride = sizeof(PARTICLE);
-		m_InitParticleBuffer_Desc.MiscFlags = D3D11_RESOURCE_MISC_BUFFER_STRUCTURED;
+		if(FAILED(Ready_Buffers(Desc)))
+			return E_FAIL;
 	}
 
 	return S_OK;
@@ -77,50 +35,9 @@ HRESULT CVIBuffer_Point_Instance::Initialize(void * pArg)
 	if(false == m_isClient)
 	{
 		INSTANCE_DESC* pDesc = static_cast<INSTANCE_DESC*>(pArg);
-		if (FAILED(Initialize_Desc(*pDesc)))
+
+		if(FAILED(Ready_Buffers(*pDesc)))
 			return E_FAIL;
-
-
-		m_pInstanceVertices = new PARTICLE[m_iNumInstance];
-		ZeroMemory(m_pInstanceVertices, sizeof(PARTICLE) * m_iNumInstance);
-
-		PARTICLE* pParticle = static_cast<PARTICLE*>(m_pInstanceVertices);
-
-		Init_Particle(pParticle);
-
-		ZeroMemory(&m_InstanceInitialData, sizeof m_InstanceInitialData);
-		m_InstanceInitialData.pSysMem = m_pInstanceVertices;
-
-		// 파티클 버퍼 구성
-		m_ParticleBuffer_Desc.Usage = D3D11_USAGE_DEFAULT;
-		m_ParticleBuffer_Desc.ByteWidth = sizeof(PARTICLE) * m_iNumInstance;
-		m_ParticleBuffer_Desc.BindFlags = D3D11_BIND_UNORDERED_ACCESS | D3D11_BIND_SHADER_RESOURCE;
-		m_ParticleBuffer_Desc.StructureByteStride = sizeof(PARTICLE);
-		m_ParticleBuffer_Desc.MiscFlags = D3D11_RESOURCE_MISC_BUFFER_STRUCTURED;
-
-		// Constant Buffer 구성
-		m_MoveBuffer_Desc.Usage = D3D11_USAGE_DYNAMIC;
-		m_MoveBuffer_Desc.ByteWidth = sizeof(PARTICLE_MOVEMENT);
-		m_MoveBuffer_Desc.BindFlags = D3D11_BIND_CONSTANT_BUFFER;
-		m_MoveBuffer_Desc.CPUAccessFlags = D3D11_CPU_ACCESS_WRITE;
-
-		// UAV 구성
-		m_UAV_Desc.Format = DXGI_FORMAT_UNKNOWN;
-		m_UAV_Desc.ViewDimension = D3D11_UAV_DIMENSION_BUFFER;
-		m_UAV_Desc.Buffer.NumElements = m_iNumInstance;
-		
-
-		// SRV 구성
-		m_SRV_Desc.Format = DXGI_FORMAT_UNKNOWN;
-		m_SRV_Desc.ViewDimension = D3D11_SRV_DIMENSION_BUFFER;
-		m_SRV_Desc.Buffer.NumElements = m_iNumInstance;
-		
-		// 파티클 버퍼 구성
-		m_InitParticleBuffer_Desc.Usage = D3D11_USAGE_DEFAULT;
-		m_InitParticleBuffer_Desc.ByteWidth = sizeof(PARTICLE) * m_iNumInstance;
-		m_InitParticleBuffer_Desc.BindFlags = D3D11_BIND_SHADER_RESOURCE;
-		m_InitParticleBuffer_Desc.StructureByteStride = sizeof(PARTICLE);
-		m_InitParticleBuffer_Desc.MiscFlags = D3D11_RESOURCE_MISC_BUFFER_STRUCTURED;
 	}
 	
 	if (FAILED(m_pDevice->CreateBuffer(&m_ParticleBuffer_Desc, &m_InstanceInitialData, &m_pParticleBuffer)))
@@ -212,95 +129,53 @@ _bool CVIBuffer_Point_Instance::DispatchCS(class CShader_Compute* pComputeShader
 	return false;
 }
 
-void CVIBuffer_Point_Instance::Init_Particle(PARTICLE* pParticles)
+
+HRESULT CVIBuffer_Point_Instance::Ready_Buffers(const CVIBuffer_Instancing::INSTANCE_DESC& Desc)
 {
-	for (_uint i = 0; i < m_iNumInstance; ++i)
-	{
-		pParticles[i].vPosition = _float3(0.f, 0.f, 0.f);
+	if (FAILED(Initialize_Desc(Desc)))
+		return E_FAIL;
 
-		_float fScale = m_pGameInstance->Get_Random(m_vSize.x, m_vSize.y);
-		pParticles[i].vPSize = _float2(fScale, fScale);
+	m_pInstanceVertices = new PARTICLE[m_iNumInstance];
+	ZeroMemory(m_pInstanceVertices, sizeof(PARTICLE) * m_iNumInstance);
 
-		pParticles[i].vRight = _float4(1.f, 0.f, 0.f, 0.f);
-		pParticles[i].vUp = _float4(0.f, 1.f, 0.f, 0.f);
-		pParticles[i].vLook = _float4(0.f, 0.f, 1.f, 0.f);
+	PARTICLE* pParticle = static_cast<PARTICLE*>(m_pInstanceVertices);
 
-		pParticles[i].vTranslation = Get_ExceptedTranslation();
-		pParticles[i].vLifeTime = _float2(m_pGameInstance->Get_Random(m_vLifeTime.x, m_vLifeTime.y), 0.0f);
-		pParticles[i].vColor = _float4(m_pGameInstance->Get_Random(m_vMinColor.x, m_vMaxColor.x),
-			m_pGameInstance->Get_Random(m_vMinColor.y, m_vMaxColor.y),
-			m_pGameInstance->Get_Random(m_vMinColor.z, m_vMaxColor.z),
-			m_pGameInstance->Get_Random(m_vMinColor.w, m_vMaxColor.w));
+	Init_Particle(pParticle);
 
-		pParticles[i].fSpeed = m_pGameInstance->Get_Random(m_vSpeed.x, m_vSpeed.y);
+	ZeroMemory(&m_InstanceInitialData, sizeof m_InstanceInitialData);
+	m_InstanceInitialData.pSysMem = m_pInstanceVertices;
 
-		pParticles[i].vCurrenrRandomDir = _float4(m_pGameInstance->Get_Random(-1.f, 1.f), m_pGameInstance->Get_Random(-1.f, 1.f), m_pGameInstance->Get_Random(-1.f, 1.f), 0.f);
-		pParticles[i].vNextRandomDir = _float4(m_pGameInstance->Get_Random(-1.f, 1.f), m_pGameInstance->Get_Random(-1.f, 1.f), m_pGameInstance->Get_Random(-1.f, 1.f), 0.f);
-		
-	}
-}
+	// 파티클 버퍼 구성 -> 파티클 하나마다 갖고있어야되는거
+	m_ParticleBuffer_Desc.Usage = D3D11_USAGE_DEFAULT;
+	m_ParticleBuffer_Desc.ByteWidth = sizeof(PARTICLE) * m_iNumInstance;
+	m_ParticleBuffer_Desc.BindFlags = D3D11_BIND_UNORDERED_ACCESS | D3D11_BIND_SHADER_RESOURCE;
+	m_ParticleBuffer_Desc.StructureByteStride = sizeof(PARTICLE);
+	m_ParticleBuffer_Desc.MiscFlags = D3D11_RESOURCE_MISC_BUFFER_STRUCTURED;
 
-_float4 CVIBuffer_Point_Instance::Get_ExceptedTranslation()
-{
-	_float fX_Small{}, fX_Big{}, fY_Small{}, fY_Big{}, fZ_Small{}, fZ_Big{};
+	// Constant Buffer 구성
+	m_MoveBuffer_Desc.Usage = D3D11_USAGE_DYNAMIC;
+	m_MoveBuffer_Desc.ByteWidth = sizeof(PARTICLE_MOVEMENT);
+	m_MoveBuffer_Desc.BindFlags = D3D11_BIND_CONSTANT_BUFFER;
+	m_MoveBuffer_Desc.CPUAccessFlags = D3D11_CPU_ACCESS_WRITE;
 
-	_float fX{}, fY{}, fZ{};
+	// UAV 구성
+	m_UAV_Desc.Format = DXGI_FORMAT_UNKNOWN;
+	m_UAV_Desc.ViewDimension = D3D11_UAV_DIMENSION_BUFFER;
+	m_UAV_Desc.Buffer.NumElements = m_iNumInstance;
 
-	while (true)
-	{
-		_float fRandomNum = m_pGameInstance->Get_Random_Normal();
-		if (fRandomNum < 0.333f)
-		{
-			if (m_vRange.x == m_vExceptRange.x)
-				continue;
+	// SRV 구성
+	m_SRV_Desc.Format = DXGI_FORMAT_UNKNOWN;
+	m_SRV_Desc.ViewDimension = D3D11_SRV_DIMENSION_BUFFER;
+	m_SRV_Desc.Buffer.NumElements = m_iNumInstance;
 
-			fX_Small = m_pGameInstance->Get_Random(m_vCenterPos.x - m_vRange.x * 0.5f, m_vCenterPos.x - m_vExceptRange.x * 0.5f);
-			fX_Big = m_pGameInstance->Get_Random(m_vCenterPos.x + m_vExceptRange.x * 0.5f, m_vCenterPos.x + m_vRange.x * 0.5f);
+	// 파티클 버퍼 구성
+	m_InitParticleBuffer_Desc.Usage = D3D11_USAGE_DEFAULT;
+	m_InitParticleBuffer_Desc.ByteWidth = sizeof(PARTICLE) * m_iNumInstance;
+	m_InitParticleBuffer_Desc.BindFlags = D3D11_BIND_SHADER_RESOURCE;
+	m_InitParticleBuffer_Desc.StructureByteStride = sizeof(PARTICLE);
+	m_InitParticleBuffer_Desc.MiscFlags = D3D11_RESOURCE_MISC_BUFFER_STRUCTURED;
 
-			if (0.5f < m_pGameInstance->Get_Random_Normal())
-				fX = fX_Small;
-			else
-				fX = fX_Big;
-			fY = m_pGameInstance->Get_Random(m_vCenterPos.y - m_vRange.y * 0.5f, m_vCenterPos.y + m_vRange.y * 0.5f);
-			fZ = m_pGameInstance->Get_Random(m_vCenterPos.z - m_vRange.z * 0.5f, m_vCenterPos.z + m_vRange.z * 0.5f);
-		}
-		else if (0.333f <= fRandomNum && fRandomNum < 0.666f)
-		{
-			if (m_vRange.y == m_vExceptRange.y)
-				continue;
-
-			fY_Small = m_pGameInstance->Get_Random(m_vCenterPos.y - m_vRange.y * 0.5f, m_vCenterPos.y - m_vExceptRange.y * 0.5f);
-			fY_Big = m_pGameInstance->Get_Random(m_vCenterPos.y + m_vExceptRange.y * 0.5f, m_vCenterPos.y + m_vRange.y * 0.5f);
-
-			if (0.5f < m_pGameInstance->Get_Random_Normal())
-				fY = fY_Small;
-			else
-				fY = fY_Big;
-
-			fX = m_pGameInstance->Get_Random(m_vCenterPos.x - m_vRange.x * 0.5f, m_vCenterPos.x + m_vRange.x * 0.5f);
-			fZ = m_pGameInstance->Get_Random(m_vCenterPos.z - m_vRange.z * 0.5f, m_vCenterPos.z + m_vRange.z * 0.5f);
-		}
-		else
-		{
-			if (m_vRange.z == m_vExceptRange.z)
-				continue;
-
-			fZ_Small = m_pGameInstance->Get_Random(m_vCenterPos.z - m_vRange.z * 0.5f, m_vCenterPos.z - m_vExceptRange.z * 0.5f);
-			fZ_Big = m_pGameInstance->Get_Random(m_vCenterPos.z + m_vExceptRange.z * 0.5f, m_vCenterPos.z + m_vRange.z * 0.5f);
-
-			if (0.5f < m_pGameInstance->Get_Random_Normal())
-				fZ = fZ_Small;
-			else
-				fZ = fZ_Big;
-
-			fX = m_pGameInstance->Get_Random(m_vCenterPos.x - m_vRange.x * 0.5f, m_vCenterPos.x + m_vRange.x * 0.5f);
-			fY = m_pGameInstance->Get_Random(m_vCenterPos.y - m_vRange.y * 0.5f, m_vCenterPos.y + m_vRange.y * 0.5f);
-		}
-
-		break;
-	}
-
-	return _float4(fX, fY, fZ, 1.f);
+	return S_OK;
 }
 
 CVIBuffer_Point_Instance * CVIBuffer_Point_Instance::Create(ID3D11Device * pDevice, ID3D11DeviceContext * pContext, const CVIBuffer_Instancing::INSTANCE_DESC& Desc, _bool isClient)

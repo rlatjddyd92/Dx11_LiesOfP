@@ -5,7 +5,6 @@
 #define STATE_ACCEL 0x0008
 #define STATE_DECEL 0x0010
 
-// 고준호
 struct Particle
 {
     float3 vPosition;
@@ -28,28 +27,28 @@ StructuredBuffer<Particle> InitParticles : register(t0);
 // 이게 매프레임 넘겨주는 버퍼
 cbuffer MovementBuffer : register(b0)   // 받아온 걸 상수로 쓰기 위한 버퍼인듯?
 {
-    uint    iNumInstance;
-    uint	iState;
-    float2  pad_1;      // 크기를 맞추기 위한 더미 변수 16바이트를 맞춰야함
+    uint                iNumInstance;
+    uint	            iState;
+    float2              pad_1;      // 크기를 맞추기 위한 더미 변수 16바이트를 맞춰야함
     
-    float4  vPivot;
+    float4              vPivot;
     
-	float	fGravity;
-    float3  pad_2;
+	float	            fGravity;
+    float3              pad_2;
     
-    float4  vMoveDir;
-    row_major matrix WorldMatrix;
+    float4              vMoveDir;
+    row_major matrix    WorldMatrix;
     
-    float3  vOrbitAxis;
-	float	fOrbitAngle;
+    float3              vOrbitAxis;
+	float	            fOrbitAngle;
     
-	float	fTimeInterval;
-	float	fRandomRatio;
-    float	fAccelSpeed;
-	float	fAccelLimit;
+	float	            fTimeInterval;
+	float	            fRandomRatio;
+    float	            fAccelSpeed;
+	float	            fAccelLimit;
     
-	float	fTimeDelta;
-    float3  pad_3;
+	float	            fTimeDelta;
+    float3              pad_3;
 }
 
 float rand(float seed);

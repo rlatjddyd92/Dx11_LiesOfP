@@ -173,19 +173,19 @@ void GS_MAIN(point GS_IN In[1], inout TriangleStream<GS_OUT> Container)
             fPreTexPosX = min(fPreTexPosX, 1.f);
         
             Out[0].vPosition = float4(vCurTopPos, 1.f);
-            Out[0].vTexcoord = float2(fPreTexPosX, 0.f);
+            Out[0].vTexcoord = float2(fPreTexPosX, 1.f);
             Out[0].vLifeTime = In[0].vLifeTime;
 
             Out[1].vPosition = float4(vPreTopPos, 1.f);
-            Out[1].vTexcoord = float2(fTexPosX, 0.f);
+            Out[1].vTexcoord = float2(fTexPosX, 1.f);
             Out[1].vLifeTime = In[0].vLifeTime;
 
             Out[2].vPosition = float4(vPreBottomPos, 1.f);
-            Out[2].vTexcoord = float2(fTexPosX, 1.f);
+            Out[2].vTexcoord = float2(fTexPosX, 0.f);
             Out[2].vLifeTime = In[0].vLifeTime;
     
             Out[3].vPosition = float4(vCurBottomPos, 1.f);
-            Out[3].vTexcoord = float2(fPreTexPosX, 1.f);
+            Out[3].vTexcoord = float2(fPreTexPosX, 0.f);
             Out[3].vLifeTime = In[0].vLifeTime;
 
             matrix matVP = mul(g_ViewMatrix, g_ProjMatrix);
@@ -228,11 +228,10 @@ PS_OUT PS_MAIN(PS_IN In)
 
     Out.vColor = g_DiffuseTexture.Sample(LinearSampler, In.vTexcoord);
     
-    if(Out.vColor.g < 0.1f)
+    if(Out.vColor.r < 0.1f)
         discard;
     
-    Out.vColor.rb = Out.vColor.g;
-    
+    Out.vColor.gb = Out.vColor.r;
     
     return Out;
 }
