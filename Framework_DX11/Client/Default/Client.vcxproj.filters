@@ -325,6 +325,12 @@
     <ClInclude Include="..\Public\State_CarcassBigA_Attack.h">
       <Filter>05.Fsm\Monster\CarcassBigA\Attack</Filter>
     </ClInclude>
+    <ClInclude Include="..\Public\UIPage_Ortho.h">
+      <Filter>03.GameInterface_Controller\00.UIManager\00.UIPage\10.UIPage_Ortho</Filter>
+    </ClInclude>
+    <ClInclude Include="UIPage_Ortho_Include.h">
+      <Filter>03.GameInterface_Controller\99.GameInterface_Defines\00.Defines%28Data_Instance 전용%29</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Client.cpp">
@@ -444,6 +450,9 @@
     </ClCompile>
     <ClCompile Include="..\Private\State_CarcassBigA_Attack.cpp">
       <Filter>05.Fsm\Monster\CarcassBigA\Attack</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Private\UIPage_Ortho.cpp">
+      <Filter>03.GameInterface_Controller\00.UIManager\00.UIPage\10.UIPage_Ortho</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

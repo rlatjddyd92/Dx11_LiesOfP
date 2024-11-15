@@ -87,6 +87,13 @@ public:
 
 #pragma endregion
 
+
+#pragma region Page_Ortho
+	void Register_Pointer_Into_OrthoUIPage(UI_ORTHO_TYPE eType, const void* pObj) { m_pUIPage_Ortho->Register_Pointer_Into_OrthoUIPage(eType, pObj); }
+
+
+#pragma endregion
+
 	TDATA* GetTestData() { return m_pTestData; } // 테스트용 조작을 위한 모든 것을 넣어 두는 함수
 	// 추후 신속한 정리를 위해 테스트용 조작은 모두 여기에 넣고 추후 한번에 제거하기 
 	// 위 함수와 관련된 것은 테스트용 임시 내용을 다루므로 편의성을 중시한 구조로 만들 것임 따라서 정식 내용은 넣으면 안됨 
@@ -141,7 +148,8 @@ private:
 	//CUIPage_Main* m_pUIPage_Main = { nullptr };
 	//// 메인
 	//CUIPage_Main* m_pUIPage_Main = { nullptr };
-
+	// 직교
+	CUIPage_Ortho* m_pUIPage_Ortho = { nullptr };
 
 
 

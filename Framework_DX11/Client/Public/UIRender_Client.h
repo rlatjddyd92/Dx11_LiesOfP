@@ -42,8 +42,10 @@ public:
 	virtual HRESULT Render() override;
 
 public:
+	HRESULT Render_Ortho( CUIPage_Ortho* pPage_Ortho);
 	HRESULT Render_UI(vector<CUIPage*>& rPage);
 	HRESULT Make_Texture(_int iTextureIndex);
+	HRESULT Make_Texture_Item(_int iTextureIndex);
 
 	HRESULT Render_TestFont(_bool bIsKorean);
 
@@ -55,13 +57,14 @@ public:
 		vector<_wstring>& vecValue
 	);
 
-
 public:
 	class CShader* m_pShaderCom = { nullptr };
 	class CVIBuffer_Rect* m_pVIBufferCom = { nullptr };
 
 private:
 	HRESULT Ready_Components();
+
+	HRESULT Render_Part( CUIPage::UPART& pPart,  CUIPage& pPage, _bool bTopMove);
 
 	void Ready_Font();
 	HRESULT Ready_Texture_UIPart();

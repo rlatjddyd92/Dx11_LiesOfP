@@ -2,7 +2,7 @@
 #include "..\Public\UIRender_Client.h"
 
 #include "GameInstance.h"
-
+#include "UIPage_Ortho.h"
 
 CUIRender_Client::CUIRender_Client(ID3D11Device* pDevice, ID3D11DeviceContext* pContext)
 	: CUIObject{ pDevice, pContext }
@@ -41,12 +41,12 @@ HRESULT CUIRender_Client::Initialize_Prototype()
 	if (FAILED(Ready_Texture_UIPart()))
 		return E_FAIL;
 
-	/*if (FAILED(Ready_Texture_ItemIcon()))
-		return E_FAIL;*/
+	if (FAILED(Ready_Texture_ItemIcon()))
+		return E_FAIL;
 
-	m_vecTestPageInfo.resize(_int(TEST_PAGE_NAME::NAME_END));;
-	m_vecTestPage_Pos.resize(_int(TEST_PAGE_NAME::NAME_END));;
-	m_vecTestPage_Size.resize(_int(TEST_PAGE_NAME::NAME_END));;
+	m_vecTestPageInfo.resize(_int(TEST_PAGE_NAME::NAME_END));
+	m_vecTestPage_Pos.resize(_int(TEST_PAGE_NAME::NAME_END));
+	m_vecTestPage_Size.resize(_int(TEST_PAGE_NAME::NAME_END));
 
 	return S_OK;
 }
@@ -79,6 +79,22 @@ HRESULT CUIRender_Client::Render()
 	return S_OK;
 }
 
+HRESULT CUIRender_Client::Render_Ortho( CUIPage_Ortho* pPage_Ortho)
+{
+	priority_queue<CUIPage_Ortho::OR_RENDER*>* pQueue = pPage_Ortho->Get_Ortho_Render_Ctrl();
+
+	while (!pQueue->empty())
+	{
+		CUIPage::UPART* pNow = pQueue->top()->pPartInfo;
+		pQueue->pop();
+
+		if (FAILED(Render_Part(*pNow, *pPage_Ortho, true)))
+			return E_FAIL;
+	}
+
+	return S_OK;
+}
+
 HRESULT CUIRender_Client::Render_UI(vector<CUIPage*>& rPage)
 {
 	for (auto& iter : rPage)
@@ -96,97 +112,8 @@ HRESULT CUIRender_Client::Render_UI(vector<CUIPage*>& rPage)
 			if (!iterPart->bRender)
 				continue;
 
-			if (iterPart->iTexture_Index != -1)
-			{
-				if (!iterPart->bIsItem)
-				{
-					if (m_vecTextureInfo_UIPart[iterPart->iTexture_Index]->Texture == nullptr)
-						if (FAILED(Make_Texture(iterPart->iTexture_Index)))
-							return E_FAIL;
-				}
-				else
-				{
-					if (m_vecTextureInfo_ItemIcon[iterPart->iTexture_Index]->Texture == nullptr)
-						if (FAILED(Make_Texture(iterPart->iTexture_Index)))
-							return E_FAIL;
-				}
-
-				m_pTransformCom->Set_WorldMatrix(XMMatrixIdentity());
-
-				if (iterPart->iMoveType == _int(MOVETYPE::TYPE_BAR))
-					m_pTransformCom->Set_Scaled(iterPart->GetBarSize().x, iterPart->GetBarSize().y, 1.f);
-				else
-					m_pTransformCom->Set_Scaled(iterPart->fSize.x, iterPart->fSize.y, 1.f);
-
-				m_pTransformCom->Set_State(CTransform::STATE_POSITION,
-					XMVectorSet(iterPart->fPosition.x - m_fViewWidth * 0.5f, -iterPart->fPosition.y + m_fViewHeight * 0.5f, 0.f, 1.f));
-
-				if (FAILED(m_pTransformCom->Bind_ShaderResource(m_pShaderCom, "g_WorldMatrix")))
-					return E_FAIL;
-
-				if (FAILED(m_pShaderCom->Bind_Matrix("g_ViewMatrix", &m_ViewMatrix)))
-					return E_FAIL;
-
-				if (FAILED(m_pShaderCom->Bind_Matrix("g_ProjMatrix", &m_ProjMatrix)))
-					return E_FAIL;
-
-				if (FAILED(m_vecTextureInfo_UIPart[iterPart->iTexture_Index]->Texture->Bind_ShadeResource(m_pShaderCom, "g_Texture", 0)))
-					return E_FAIL;
-
-				if ((bTopMove) && (iterPart->iParentPart_Index == -1))
-				{
-					_float4 fColor = iterPart->fTextureColor;
-					fColor.w = iter->GetTopPartMove();
-
-					if (FAILED(m_pShaderCom->Bind_RawValue("g_Color", &fColor, sizeof(_float4))))
-						return E_FAIL;
-				}
-				else if (FAILED(m_pShaderCom->Bind_RawValue("g_Color", &iterPart->fTextureColor, sizeof(_float4))))
-					return E_FAIL;
-
-				if (FAILED(m_pShaderCom->Begin(0)))
-					return E_FAIL;
-
-				if (FAILED(m_pVIBufferCom->Bind_Buffers()))
-					return E_FAIL;
-
-				if (FAILED(m_pVIBufferCom->Render()))
-					return E_FAIL;
-			}
-			if ((iterPart->iFontIndex >= 0) && (iterPart->iFontIndex < _int(UI_FONT::FONT_END)))
-			{
-				if (iterPart->strText.size() == 0)
-					continue;
-
-				_vector vPosition = { iterPart->fPosition.x, iterPart->fPosition.y, 0.f,0.f };
-				_vector vColor = { 1.f,1.f,1.f,1.f };
-
-				if (iterPart->fTextColor.x > 0.f)
-					vColor.m128_f32[0] = iterPart->fTextColor.x;
-
-				if (iterPart->fTextColor.y > 0.f)
-					vColor.m128_f32[1] = iterPart->fTextColor.y;
-
-				if (iterPart->fTextColor.z > 0.f)
-					vColor.m128_f32[2] = iterPart->fTextColor.z;
-
-				if (iterPart->fTextColor.w > 0.f)
-					vColor.m128_f32[3] = iterPart->fTextColor.w;
-
-				_tchar* tText = new _tchar[iterPart->strText.size() + 1];
-				for (_int i = 0; i <= iterPart->strText.size(); ++i)
-					tText[i] = iterPart->strText[i];
-
-
-				//memcpy(tText, &iterPart->strText, sizeof(_tchar) * (iterPart->strText.size() + 1));
-
-				if (iterPart->bCenter)
-					m_pGameInstance->Render_TextCenter(m_vecFont_tchar[iterPart->iFontIndex], tText, vPosition, vColor);
-				else
-					m_pGameInstance->Render_Text(m_vecFont_tchar[iterPart->iFontIndex], tText, vPosition, vColor);
-
-				Safe_Delete_Array(tText);
-			}
+			if (FAILED(Render_Part(*iterPart, *iter, bTopMove)))
+				return E_FAIL;
 		}
 	}
 
@@ -214,6 +141,29 @@ HRESULT CUIRender_Client::Make_Texture(_int iTextureIndex)
 	m_vecTextureInfo_UIPart[iTextureIndex]->Texture = CTexture::Create(m_pDevice, m_pContext, m_vecTextureInfo_UIPart[iTextureIndex]->strTexturePath, 1);
 
 	if (FAILED(m_pGameInstance->Add_Prototype(LEVEL_STATIC, m_vecTextureInfo_UIPart[iTextureIndex]->strTextureTag, m_vecTextureInfo_UIPart[iTextureIndex]->Texture)))
+		return E_FAIL;
+
+	return S_OK;
+}
+
+HRESULT CUIRender_Client::Make_Texture_Item(_int iTextureIndex)
+{
+	if (iTextureIndex == -1)
+		return S_OK;
+
+	if ((iTextureIndex < 0) || (iTextureIndex >= m_vecTextureInfo_ItemIcon.size()))
+	{
+		MSG_BOX(TEXT("UIRender : 잘못된 텍스쳐 값"));
+		return E_FAIL;
+	}
+
+
+	if (m_vecTextureInfo_ItemIcon[iTextureIndex]->Texture != nullptr)
+		return E_FAIL;
+
+	m_vecTextureInfo_ItemIcon[iTextureIndex]->Texture = CTexture::Create(m_pDevice, m_pContext, m_vecTextureInfo_ItemIcon[iTextureIndex]->strTexturePath, 1);
+
+	if (FAILED(m_pGameInstance->Add_Prototype(LEVEL_STATIC, m_vecTextureInfo_ItemIcon[iTextureIndex]->strTextureTag, m_vecTextureInfo_ItemIcon[iTextureIndex]->Texture)))
 		return E_FAIL;
 
 	return S_OK;
@@ -276,6 +226,111 @@ HRESULT CUIRender_Client::Ready_Components()
 	if (FAILED(__super::Add_Component(LEVEL_STATIC, TEXT("Prototype_Component_VIBuffer_Rect"),
 		TEXT("Com_VIBuffer"), reinterpret_cast<CComponent**>(&m_pVIBufferCom))))
 		return E_FAIL;
+
+	return S_OK;
+}
+
+HRESULT CUIRender_Client::Render_Part(CUIPage::UPART& pPart, CUIPage& pPage, _bool bTopMove)
+{
+	if (pPart.iTexture_Index != -1)
+	{
+		if (!pPart.bIsItem)
+		{
+			if (m_vecTextureInfo_UIPart[pPart.iTexture_Index]->Texture == nullptr)
+				if (FAILED(Make_Texture(pPart.iTexture_Index)))
+					return E_FAIL;
+		}
+		else
+		{
+			if (m_vecTextureInfo_ItemIcon[pPart.iTexture_Index]->Texture == nullptr)
+				if (FAILED(Make_Texture_Item(pPart.iTexture_Index)))
+					return E_FAIL;
+		}
+
+		m_pTransformCom->Set_WorldMatrix(XMMatrixIdentity());
+
+		if (pPart.iMoveType == _int(MOVETYPE::TYPE_BAR))
+			m_pTransformCom->Set_Scaled(pPart.GetBarSize().x, pPart.GetBarSize().y, 1.f);
+		else
+			m_pTransformCom->Set_Scaled(pPart.fSize.x, pPart.fSize.y, 1.f);
+
+		m_pTransformCom->Set_State(CTransform::STATE_POSITION,
+			XMVectorSet(pPart.fPosition.x - m_fViewWidth * 0.5f, -pPart.fPosition.y + m_fViewHeight * 0.5f, 0.f, 1.f));
+
+		if (FAILED(m_pTransformCom->Bind_ShaderResource(m_pShaderCom, "g_WorldMatrix")))
+			return E_FAIL;
+
+		if (FAILED(m_pShaderCom->Bind_Matrix("g_ViewMatrix", &m_ViewMatrix)))
+			return E_FAIL;
+
+		if (FAILED(m_pShaderCom->Bind_Matrix("g_ProjMatrix", &m_ProjMatrix)))
+			return E_FAIL;
+
+		if (!pPart.bIsItem)
+		{
+			if (FAILED(m_vecTextureInfo_UIPart[pPart.iTexture_Index]->Texture->Bind_ShadeResource(m_pShaderCom, "g_Texture", 0)))
+				return E_FAIL;
+		}
+		else
+		{
+			if (FAILED(m_vecTextureInfo_ItemIcon[pPart.iTexture_Index]->Texture->Bind_ShadeResource(m_pShaderCom, "g_Texture", 0)))
+				return E_FAIL;
+		}
+
+		if ((bTopMove) && (pPart.iParentPart_Index == -1))
+		{
+			_float4 fColor = pPart.fTextureColor;
+			fColor.w = pPage.GetTopPartMove();
+
+			if (FAILED(m_pShaderCom->Bind_RawValue("g_Color", &fColor, sizeof(_float4))))
+				return E_FAIL;
+		}
+		else if (FAILED(m_pShaderCom->Bind_RawValue("g_Color", &pPart.fTextureColor, sizeof(_float4))))
+			return E_FAIL;
+
+		if (FAILED(m_pShaderCom->Begin(0)))
+			return E_FAIL;
+
+		if (FAILED(m_pVIBufferCom->Bind_Buffers()))
+			return E_FAIL;
+
+		if (FAILED(m_pVIBufferCom->Render()))
+			return E_FAIL;
+	}
+	if ((pPart.iFontIndex >= 0) && (pPart.iFontIndex < _int(UI_FONT::FONT_END)))
+	{
+		if (pPart.strText.size() == 0)
+			return S_OK;
+
+		_vector vPosition = { pPart.fPosition.x, pPart.fPosition.y, 0.f,0.f };
+		_vector vColor = { 1.f,1.f,1.f,1.f };
+
+		if (pPart.fTextColor.x > 0.f)
+			vColor.m128_f32[0] = pPart.fTextColor.x;
+
+		if (pPart.fTextColor.y > 0.f)
+			vColor.m128_f32[1] = pPart.fTextColor.y;
+
+		if (pPart.fTextColor.z > 0.f)
+			vColor.m128_f32[2] = pPart.fTextColor.z;
+
+		if (pPart.fTextColor.w > 0.f)
+			vColor.m128_f32[3] = pPart.fTextColor.w;
+
+		_tchar* tText = new _tchar[pPart.strText.size() + 1];
+		for (_int i = 0; i <= pPart.strText.size(); ++i)
+			tText[i] = pPart.strText[i];
+
+
+		//memcpy(tText, &pPage.strText, sizeof(_tchar) * (pPage.strText.size() + 1));
+
+		if (pPart.bCenter)
+			m_pGameInstance->Render_TextCenter(m_vecFont_tchar[pPart.iFontIndex], tText, vPosition, vColor);
+		else
+			m_pGameInstance->Render_Text(m_vecFont_tchar[pPart.iFontIndex], tText, vPosition, vColor);
+
+		Safe_Delete_Array(tText);
+	}
 
 	return S_OK;
 }
@@ -346,7 +401,7 @@ HRESULT CUIRender_Client::Ready_Texture_UIPart()
 HRESULT CUIRender_Client::Ready_Texture_ItemIcon()
 {
 	vector<vector<_wstring>> vecBuffer;
-	m_pGameInstance->LoadDataByFile("아이템 아이콘 문서 만들기", &vecBuffer);
+	m_pGameInstance->LoadDataByFile("../Bin/Resources/textures/Item/ItemList.csv", &vecBuffer);
 
 	for (_int i = 2; i < vecBuffer.size(); ++i)
 	{

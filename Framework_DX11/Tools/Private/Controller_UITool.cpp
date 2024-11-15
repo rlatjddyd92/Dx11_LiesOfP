@@ -124,9 +124,9 @@ void CController_UITool::UIPage_Edit()
 		ImGui::PushItemWidth(100.f);
 		ImGui::Text("PageCenter");
 		ImGui::SameLine();
-		ImGui::InputFloat("x", &m_vecPageInfo[m_iNowSelectNum]->fPosition.x);
+		ImGui::DragFloat("x", &m_vecPageInfo[m_iNowSelectNum]->fPosition.x);
 		ImGui::SameLine();
-		ImGui::InputFloat("y", &m_vecPageInfo[m_iNowSelectNum]->fPosition.y);
+		ImGui::DragFloat("y", &m_vecPageInfo[m_iNowSelectNum]->fPosition.y);
 
 		ImGui::NewLine();
 
@@ -210,9 +210,9 @@ void CController_UITool::UIPart_Edit()
 		// 사이즈
 		ImGui::Text("Size");
 		ImGui::SameLine();
-		ImGui::InputFloat("SizeX", &pNow->fSize.x);
+		ImGui::DragFloat("SizeX", &pNow->fSize.x);
 		ImGui::SameLine();
-		ImGui::InputFloat("SizeY", &pNow->fSize.y);
+		ImGui::DragFloat("SizeY", &pNow->fSize.y);
 
 		ImGui::SeparatorText("Texture");
 		// 텍스쳐
@@ -290,23 +290,23 @@ void CController_UITool::UIPart_Edit()
 		{
 			ImGui::Text("Adjust");
 			ImGui::SameLine();
-			ImGui::InputFloat("Adj.x", &pNow->fAdjust.x);
+			ImGui::DragFloat("Adj.x", &pNow->fAdjust.x);
 			ImGui::SameLine();
-			ImGui::InputFloat("Adj.y", &pNow->fAdjust.y);
+			ImGui::DragFloat("Adj.y", &pNow->fAdjust.y);
 		}
 		else
 		{
 			ImGui::Text("Adjust_Start");
 			ImGui::SameLine();
-			ImGui::InputFloat("Adj_S.x", &pNow->fAdjust_Start.x);
+			ImGui::DragFloat("Adj_S.x", &pNow->fAdjust_Start.x);
 			ImGui::SameLine();
-			ImGui::InputFloat("Adj_S.y", &pNow->fAdjust_Start.y);
+			ImGui::DragFloat("Adj_S.y", &pNow->fAdjust_Start.y);
 
 			ImGui::Text("Adjust_End");
 			ImGui::SameLine();
 			ImGui::DragFloat("Adj_E.x", &pNow->fAdjust_End.x);
 			ImGui::SameLine();
-			ImGui::InputFloat("Adj_E.y", &pNow->fAdjust_End.y);
+			ImGui::DragFloat("Adj_E.y", &pNow->fAdjust_End.y);
 
 			if (pNow->iMoveType == _int(MOVETYPE::TYPE_BAR))
 				ImGui::Combo("Direc", &pNow->bBarDirecX, m_szBarDirec, 2);

@@ -71,7 +71,8 @@ public: // 외부에서 매니저 접근
 		DataNameF, eTypeF, ValueF, DataNameG, eTypeG, ValueG, DataNameH, eTypeH, ValueH, DataNameI, eTypeI, ValueI, DataNameJ, eTypeJ, ValueJ); }// 함수 사용하면 입력 내용 대로 해당 프레임에 창을 띄워 준다, DataNameA: 데이터의 이름, TEST_PAGE_VALUE_TYPE: 자료형(float,int,tchar), ValueA: 값을 받아올 포인터 <- 이렇게 한줄
 	// 매 프레임 마다 함수를 사용해줘야 작동함 (Gameinterface가 외부 정보를 저장/관리하지 않도록 하기 위함)
 
-
+	// 직교 UI 요청 
+	void Register_Pointer_Into_OrthoUIPage(UI_ORTHO_TYPE eType, const void* pObj) { m_pUIManager->Register_Pointer_Into_OrthoUIPage(eType, pObj); }
 
 #pragma endregion
 

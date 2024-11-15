@@ -85,6 +85,9 @@ void CUIManager::Late_Update(_float fTimeDelta)
 
 HRESULT CUIManager::Render()
 {
+	/*if (FAILED(m_pUIRender_Client->Render_Ortho(m_pUIPage_Ortho)))
+		return E_FAIL;*/
+	
 	if (FAILED(m_pUIRender_Client->Render_UI(m_vecPage)))
 		return E_FAIL;
 
@@ -520,6 +523,14 @@ HRESULT CUIManager::Make_UIPage(_int iIndex)
 		m_vecPage[iIndex] = static_cast<CUIPage*>(m_pUIPage_Play);
 	}
 
+	// 다른 페이지 완성되면 넣기 
+
+	else if (iIndex == _int(UIPAGE::PAGE_ORTHO))
+	{
+		m_pUIPage_Ortho = CUIPage_Ortho::Create(m_pDevice, m_pContext);
+		m_vecPage[iIndex] = static_cast<CUIPage*>(m_pUIPage_Ortho);
+	}
+
 	if (m_vecPage[iIndex] == nullptr)
 		return E_FAIL;
 
@@ -553,6 +564,7 @@ HRESULT CUIManager::Load_UIDataFile_Part(HANDLE handle, DWORD* dword, _int iInde
 		ReadFile(handle, &pNew->iParentPart_Index, sizeof(_int), dword, nullptr);
 		ReadFile(handle, &pNew->iTexture_Index, sizeof(_int), dword, nullptr);
 		ReadFile(handle, &pNew->fTextureColor, sizeof(_float4), dword, nullptr);
+		ReadFile(handle, &pNew->bIsItem, sizeof(_bool), dword, nullptr);
 		m_pUIRender_Client->Make_Texture(pNew->iTexture_Index);
 		_wstring strName = {};
 		while (true)
