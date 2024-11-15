@@ -16,7 +16,7 @@ HRESULT CState_CarcassBigA_Die::Initialize(_uint iStateNum, void* pArg)
     m_iStateNum = iStateNum;
     m_fIdleDuration = 3.3f;
 
-    CCarcassBigA::FSMSTATE_DESC* pDesc = static_cast<CCarcassBigA::FSMSTATE_DESC*>(pArg);
+    FSM_INIT_DESC* pDesc = static_cast<FSM_INIT_DESC*>(pArg);
 
     m_pIsEndAnim = pDesc->pIsEndAnim;
     return S_OK;

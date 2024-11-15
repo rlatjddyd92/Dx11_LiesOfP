@@ -33,7 +33,9 @@ public:
 
 public:
 	void		Change_State(const _uint iState, void* pArg = nullptr);
-	void		Change_Animation(_uint iAnimIndex, _bool IsLoop, _bool bSetup = false);//셋업 변수 = 선형보간 할지
+	void		Set_Animation(_uint iAnimIndex, _bool IsLoop = false);
+	void		Change_Animation(_uint iAnimIndex, _bool IsLoop = false, _float fDuration = 0.2f, _uint iStartFrame = 0);
+	void		Change_Animation_Boundry(_uint iAnimIndex, _bool IsLoop = false, _float fDuration = 0.2f, _uint iStartFrame = 0);
 
 protected:
 	class CShader*		m_pShaderCom = { nullptr };

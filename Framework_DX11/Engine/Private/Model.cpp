@@ -79,14 +79,6 @@ _char* CModel::Get_CurrentAnimationName()
 	return m_Animations[m_iCurrentAnimIndex]->Get_Name();
 }
 
-_bool CModel::Get_IsEnd_Animation(_uint iAnimationIndex)
-{
-	if (iAnimationIndex != m_iCurrentAnimIndex)
-		return false;
-
-	return m_isEnd_Animations[iAnimationIndex];
-}
-
 CTexture* CModel::Find_Texture(_uint iMeshNum, TEXTURE_TYPE eMaterialType)
 {
 	_uint iMaterialIndex = m_Meshes[iMeshNum]->Get_MaterialIndex();
@@ -291,7 +283,14 @@ HRESULT CModel::SetUp_NextAnimation(_uint iNextAnimationIndex, _bool isLoop, _fl
 	m_ChangeTrackPosition = 0.0;
 
 	m_tChaneAnimDesc.iNextAnimIndex = iNextAnimationIndex;
-	m_tChaneAnimDesc.iStartFrame = iStartFrame;
+	if (iNextAnimationIndex == m_iCurrentAnimIndex_Boundary)
+	{
+		m_tChaneAnimDesc.iStartFrame = (_uint)m_CurrentTrackPosition_Boundary;
+	}
+	else
+	{
+		m_tChaneAnimDesc.iStartFrame = iStartFrame;
+	}
 	m_tChaneAnimDesc.fChangeDuration = fChangeDuration;
 	m_tChaneAnimDesc.fChangeTime = 0.f;
 	if (m_iCurrentAnimIndex == m_iCurrentAnimIndex_Boundary)
@@ -309,8 +308,9 @@ HRESULT CModel::SetUp_NextAnimation_Boundary(_uint iNextAnimationIndex, _bool is
 {
 	if (iNextAnimationIndex >= m_iNumAnimations)
 		return E_FAIL;
+
 	//같은걸로 바꿀순 없어
-	if (m_iCurrentAnimIndex_Boundary == iNextAnimationIndex)
+	if (m_iCurrentAnimIndex_Boundary == iNextAnimationIndex && !m_isChangeAni_Boundary)
 		return E_FAIL;
 
 	// 이미 같은걸로 바꾸고 있어
@@ -431,8 +431,12 @@ _vector CModel::Play_Animation(_float fTimeDelta, _bool* pOut, list<OUTPUT_EVKEY
 		{
 			if (m_iCurrentAnimIndex != m_tChaneAnimDesc.iNextAnimIndex)
 			{
-
-				m_CurrentTrackPosition = 0.0;
+				if (m_tChaneAnimDesc.iNextAnimIndex == m_iCurrentAnimIndex_Boundary)
+				{
+					m_CurrentTrackPosition = m_CurrentTrackPosition_Boundary;
+				}
+				else
+					m_CurrentTrackPosition = 0.0;
 			}
 			//m_Animations[m_iCurrentAnimIndex]->Reset();
 			m_iCurrentAnimIndex = m_tChaneAnimDesc.iNextAnimIndex;

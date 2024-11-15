@@ -44,7 +44,7 @@ protected:
 	_bool		m_bEndAnim{ false };
 	_bool		m_bResetRootMove{ true };
 
-	_double		m_GrogyTrackPos{};
+	_float		m_fPrevTrackPos{};
 
 protected:
 	HRESULT Ready_Components();

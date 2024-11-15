@@ -221,11 +221,11 @@ HRESULT CCarcassBigA::Ready_FSM()
 	if (FAILED(__super::Ready_FSM()))
 		return E_FAIL;
 
-	FSMSTATE_DESC Desc{};
+	FSM_INIT_DESC Desc{};
 	
 	Desc.pIsEndAnim = &m_bEndAnim;
 	Desc.pIsResetRootMove =&m_bResetRootMove;
-	Desc.pGrogyTrackPos = &m_GrogyTrackPos;
+	Desc.pPrevTrackPos = &m_fPrevTrackPos;
 	//
 
 

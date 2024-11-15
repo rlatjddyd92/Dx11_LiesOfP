@@ -17,12 +17,25 @@ public:
 
 	enum PLAYER_STATE
 	{
-		IDLE, WALK, RUN, GUARD, JUMP, STATE_END
+		IDLE, WALK, RUN, GUARD, JUMP, DASH, STATE_END
 	};
 
 public:
-	class CCamera* Get_Camera() { return m_pPlayerCamera; }
-	void Set_Camera(class CCamera* pCamera) { m_pPlayerCamera = pCamera; }
+	class CCamera*			Get_Camera() { return m_pPlayerCamera; }
+	void					Set_Camera(class CCamera* pCamera) { m_pPlayerCamera = pCamera; }
+
+	_bool					Get_IsJump() { return m_isJump; }
+	void					Set_IsJump(_bool isJump) { m_isJump = isJump; }
+
+	_bool					Get_IsLockOn() { return m_isLockOn; }
+	void					Set_IsLockOn(_bool isLockOn) { m_isLockOn = isLockOn; }
+
+	_bool					Get_IsGuard() { return m_isGuard; }
+	void					Set_IsGuard(_bool isGuard) {
+		m_isGuard = isGuard;
+		if (m_isGuard)
+			m_fGuardTime = 0.f;
+	}
 
 private:
 	CPlayer(ID3D11Device* pDevice, ID3D11DeviceContext* pContext);
@@ -51,9 +64,16 @@ private:
 private:
 	class CCamera*		m_pPlayerCamera = { nullptr };
 
+	_bool				m_isJump = { false };
+	_bool				m_isGuard = { false };
+	_bool				m_isLockOn = { false };
+
+	_float				m_fGuardTime = {};
+
 private:
 	_vector		m_vRootMoveStack = {};
 	_vector		m_vCurRootMove = {};
+	_float		m_fPrevTrackPos = {};
 	_bool		m_bEndAnim = { false };
 	_bool		m_bResetRootMove = { true };
 

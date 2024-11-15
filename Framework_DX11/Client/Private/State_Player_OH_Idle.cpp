@@ -20,19 +20,22 @@ HRESULT CState_Player_OH_Idle::Initialize(_uint iStateNum, void* pArg)
 
 HRESULT CState_Player_OH_Idle::Start_State(void* pArg)
 {
-    m_pPlayer->Change_Animation(m_iAnimation_Idle, true, false);
+    m_pPlayer->Change_Animation(m_iAnimation_Idle, true);
 
     return S_OK;
 }
 
 void CState_Player_OH_Idle::Update(_float fTimeDelta)
 {
-    // ÀÌµ¿
-    if (KEY_HOLD(KEY::W) || KEY_HOLD(KEY::S) || KEY_HOLD(KEY::D) || KEY_HOLD(KEY::A))
+    if (KEY_HOLD(KEY::LSHIFT))
+    {
+        m_pPlayer->Change_State(CPlayer::GUARD);
+    }
+    else if (KEY_HOLD(KEY::W) || KEY_HOLD(KEY::S) || KEY_HOLD(KEY::D) || KEY_HOLD(KEY::A))
     {
         if (KEY_HOLD(KEY::SPACE))
         {
-            m_pPlayer->Change_State(CPlayer::WALK);
+            m_pPlayer->Change_State(CPlayer::RUN);
         }
         else
         {
@@ -40,7 +43,10 @@ void CState_Player_OH_Idle::Update(_float fTimeDelta)
         }
         return;
     }
-
+    else if (KEY_TAP(KEY::SPACE))
+    {
+        m_pPlayer->Change_State(CPlayer::DASH);
+    }
 }
 
 void CState_Player_OH_Idle::End_State()

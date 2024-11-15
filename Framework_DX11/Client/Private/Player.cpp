@@ -11,6 +11,8 @@
 #include "State_Player_OH_Idle.h"
 #include "State_Player_OH_Walk.h"
 #include "State_Player_OH_Run.h"
+#include "State_Player_OH_Guard.h"
+#include "State_Player_OH_Dash.h"
 
 CPlayer::CPlayer(ID3D11Device * pDevice, ID3D11DeviceContext * pContext)
 	: CPawn{ pDevice, pContext }
@@ -50,11 +52,21 @@ HRESULT CPlayer::Initialize(void * pArg)
 
 	m_pPlayerCamera = m_pGameInstance->Find_Camera(LEVEL_GAMEPLAY);
 
+	// 임시 루트본 설정
+	m_pModelCom->Set_UFBIndices(UFB_ROOT, 2);
+	m_pModelCom->Set_UFBIndices(UFB_BOUNDARY_UPPER, 8);
+	m_pModelCom->Update_Boundary();
 	return S_OK;
 }
 
 void CPlayer::Priority_Update(_float fTimeDelta)
 {
+	m_pModelCom->Set_UFBIndices(UFB_ROOT, 2);
+	if (m_isGuard)
+	{
+		m_fGuardTime = fTimeDelta;
+	}
+
 	for (auto& pEffect : m_EffectList)
 	{
 		pEffect->Priority_Update(fTimeDelta);
@@ -66,7 +78,9 @@ void CPlayer::Update(_float fTimeDelta)
 
 	m_pFsmCom->Update(fTimeDelta);
 
+
 	m_vCurRootMove = m_pModelCom->Play_Animation(fTimeDelta , &m_bEndAnim, &m_EvKeyList);
+
 
 	_vector vPos = m_pTransformCom->Get_State(CTransform::STATE_POSITION);
 
@@ -144,6 +158,7 @@ void CPlayer::Late_Update(_float fTimeDelta)
 
 
 	m_pRigidBodyCom->Update(fTimeDelta);
+	m_pNavigationCom->SetUp_OnCell(m_pTransformCom, 0.1f, fTimeDelta);
 
 	m_pGameInstance->Add_RenderObject(CRenderer::RG_NONBLEND, this);
 	m_pGameInstance->Add_RenderObject(CRenderer::RG_SHADOWOBJ, this);
@@ -343,9 +358,17 @@ HRESULT CPlayer::Ready_FSM()
 		TEXT("Com_FSM"), reinterpret_cast<CComponent**>(&m_pFsmCom))))
 		return E_FAIL;
 
-	m_pFsmCom->Add_State(CState_Player_OH_Idle::Create(m_pFsmCom, this, IDLE));
-	m_pFsmCom->Add_State(CState_Player_OH_Walk::Create(m_pFsmCom, this, WALK));
-	m_pFsmCom->Add_State(CState_Player_OH_Run::Create(m_pFsmCom, this, RUN));
+	FSM_INIT_DESC Desc{};
+
+	Desc.pIsEndAnim = &m_bEndAnim;
+	Desc.pIsResetRootMove = &m_bResetRootMove;
+	Desc.pPrevTrackPos = &m_fPrevTrackPos;
+
+	m_pFsmCom->Add_State(CState_Player_OH_Idle::Create(m_pFsmCom, this, IDLE, &Desc));
+	m_pFsmCom->Add_State(CState_Player_OH_Walk::Create(m_pFsmCom, this, WALK, &Desc));
+	m_pFsmCom->Add_State(CState_Player_OH_Run::Create(m_pFsmCom, this, RUN, &Desc));
+	m_pFsmCom->Add_State(CState_Player_OH_Guard::Create(m_pFsmCom, this, GUARD, &Desc));
+	m_pFsmCom->Add_State(CState_Player_OH_Dash::Create(m_pFsmCom, this, DASH, &Desc));
 
 	m_pFsmCom->Set_State(IDLE);
 

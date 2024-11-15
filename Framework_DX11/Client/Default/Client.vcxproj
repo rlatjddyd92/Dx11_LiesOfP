@@ -201,8 +201,10 @@
     <ClInclude Include="..\Public\State_CarcassBigA_Paralyze.h" />
     <ClInclude Include="..\Public\State_CarcassBigA_Run.h" />
     <ClInclude Include="..\Public\State_CarcassBigA_Walk.h" />
+    <ClInclude Include="..\Public\State_Player_OH_Dash.h" />
     <ClInclude Include="..\Public\State_Player_OH_Guard.h" />
     <ClInclude Include="..\Public\State_Player_OH_Idle.h" />
+    <ClInclude Include="..\Public\State_Player_OH_Jump.h" />
     <ClInclude Include="..\Public\State_Player_OH_Run.h" />
     <ClInclude Include="..\Public\State_Player_OH_Walk.h" />
     <ClInclude Include="..\Public\StaticObj.h" />
@@ -258,8 +260,10 @@
     <ClCompile Include="..\Private\State_CarcassBigA_Paralyze.cpp" />
     <ClCompile Include="..\Private\State_CarcassBigA_Run.cpp" />
     <ClCompile Include="..\Private\State_CarcassBigA_Walk.cpp" />
+    <ClCompile Include="..\Private\State_Player_OH_Dash.cpp" />
     <ClCompile Include="..\Private\State_Player_OH_Guard.cpp" />
     <ClCompile Include="..\Private\State_Player_OH_Idle.cpp" />
+    <ClCompile Include="..\Private\State_Player_OH_Jump.cpp" />
     <ClCompile Include="..\Private\State_Player_OH_Run.cpp" />
     <ClCompile Include="..\Private\State_Player_OH_Walk.cpp" />
     <ClCompile Include="..\Private\StaticObj.cpp" />

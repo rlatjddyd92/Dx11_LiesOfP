@@ -14,11 +14,11 @@ HRESULT CState_CarcassBigA_Grogy::Initialize(_uint iStateNum, void* pArg)
 {
     m_iStateNum = iStateNum;
     m_fIdleDuration = 3.3f;
-    CCarcassBigA::FSMSTATE_DESC* pDesc = static_cast<CCarcassBigA::FSMSTATE_DESC*>(pArg);
+    FSM_INIT_DESC* pDesc = static_cast<FSM_INIT_DESC*>(pArg);
 
     m_pIsEndAnim = pDesc->pIsEndAnim;
     m_pResetRootMove = pDesc->pIsResetRootMove;
-    m_pTrackPos = pDesc->pGrogyTrackPos;
+    m_pTrackPos = pDesc->pPrevTrackPos;
 
     return S_OK;
 }

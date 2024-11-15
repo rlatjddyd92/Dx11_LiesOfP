@@ -30,7 +30,7 @@ HRESULT CState_Player_OH_Walk::Initialize(_uint iStateNum, void* pArg)
 
 HRESULT CState_Player_OH_Walk::Start_State(void* pArg)
 {
-    m_pPlayer->Change_Animation(m_iAnimation_Walk[WALK_F], true, false);
+    m_pPlayer->Change_Animation(m_iAnimation_Walk[WALK_F], true);
 
     m_pPlayer->Get_RigidBody()->Set_Friction(_float3(10.f, 0.f, 10.f));
     return S_OK;

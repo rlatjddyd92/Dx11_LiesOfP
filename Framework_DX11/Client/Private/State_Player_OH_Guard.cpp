@@ -13,12 +13,18 @@ CState_Player_OH_Guard::CState_Player_OH_Guard(CFsm* pFsm, CPlayer* pPlayer)
 
 HRESULT CState_Player_OH_Guard::Initialize(_uint iStateNum, void* pArg)
 {
-    m_iAnimation_Guard[GUARD_N] = m_pPlayer->Get_Model()->Find_AnimationIndex("AS_Pino_O_Guard_Idle", 2.5f);
-    m_iAnimation_Guard[GUARD_B] = m_pPlayer->Get_Model()->Find_AnimationIndex("AS_Pino_O_Guard_Walk_B", 2.5f);
-    m_iAnimation_Guard[GUARD_F] = m_pPlayer->Get_Model()->Find_AnimationIndex("AS_Pino_O_Guard_Walk_F", 2.5f);
-    m_iAnimation_Guard[GUARD_L] = m_pPlayer->Get_Model()->Find_AnimationIndex("AS_Pino_O_Guard_Walk_L", 2.5f);
-    m_iAnimation_Guard[GUARD_R] = m_pPlayer->Get_Model()->Find_AnimationIndex("AS_Pino_O_Guard_Walk_R", 2.5f);
+    m_iAnimation_Walk[WALK_B] = m_pPlayer->Get_Model()->Find_AnimationIndex("AS_Pino_O_Walk_B", 2.5f);
+    m_iAnimation_Walk[WALK_BL] = m_pPlayer->Get_Model()->Find_AnimationIndex("AS_Pino_O_Walk_BL", 2.5f);
+    m_iAnimation_Walk[WALK_BR] = m_pPlayer->Get_Model()->Find_AnimationIndex("AS_Pino_O_Walk_BR", 2.5f);
+    m_iAnimation_Walk[WALK_F] = m_pPlayer->Get_Model()->Find_AnimationIndex("AS_Pino_O_Walk_F", 2.5f);
+    m_iAnimation_Walk[WALK_FL] = m_pPlayer->Get_Model()->Find_AnimationIndex("AS_Pino_O_Walk_FL", 2.5f);
+    m_iAnimation_Walk[WALK_FR] = m_pPlayer->Get_Model()->Find_AnimationIndex("AS_Pino_O_Walk_FR", 2.5f);
+    m_iAnimation_Walk[WALK_L] = m_pPlayer->Get_Model()->Find_AnimationIndex("AS_Pino_O_Walk_L", 2.5f);
+    m_iAnimation_Walk[WALK_R] = m_pPlayer->Get_Model()->Find_AnimationIndex("AS_Pino_O_Walk_R", 2.5f);
 
+    m_iAnimation_Guard = m_pPlayer->Get_Model()->Find_AnimationIndex("AS_Pino_O_Guard_Idle", 2.5f);
+
+    m_fMoveSpeed = 1.5f;
     m_iStateNum = iStateNum;
 
     return S_OK;
@@ -26,13 +32,22 @@ HRESULT CState_Player_OH_Guard::Initialize(_uint iStateNum, void* pArg)
 
 HRESULT CState_Player_OH_Guard::Start_State(void* pArg)
 {
-    m_pPlayer->Change_Animation(m_iAnimation_Guard[GUARD_N], true, false);
+    m_pPlayer->Change_Animation(m_iAnimation_Guard, true);
+    m_pPlayer->Set_IsGuard(true);
 
     return S_OK;
 }
 
 void CState_Player_OH_Guard::Update(_float fTimeDelta)
 {
+    if (KEY_HOLD(KEY::LSHIFT))
+    {
+        if (!Move(fTimeDelta))
+        {
+            m_pPlayer->Change_Animation(m_iAnimation_Guard, true);
+        }
+    }
+
     if (KEY_NONE(KEY::LSHIFT))
     {
         m_pPlayer->Change_State(CPlayer::IDLE);
@@ -41,10 +56,13 @@ void CState_Player_OH_Guard::Update(_float fTimeDelta)
 
 void CState_Player_OH_Guard::End_State()
 {
+    m_pPlayer->Set_IsGuard(false);
 }
 
 _bool CState_Player_OH_Guard::Move(_float fTimeDelta)
 {
+    // 움직임은 카메라 방향 그대로 
+    // 애니메이션은 플레이어 기준
     _bool isMoving = false;
     m_vMoveDir = _Vec4(0.f, 0.f, 0.f, 0.f);
 
@@ -56,68 +74,70 @@ _bool CState_Player_OH_Guard::Move(_float fTimeDelta)
     vCameraLook.Normalize();
     vCameraRight.Normalize();
 
-    if (KEY_HOLD(KEY::W))
+    _bool isForward = KEY_HOLD(KEY::W);
+    _bool isBackward = KEY_HOLD(KEY::S);
+    _bool isRight = KEY_HOLD(KEY::D);
+    _bool isLeft = KEY_HOLD(KEY::A);
+
+    if (isForward)
     {
         m_vMoveDir += vCameraLook;
-        isMoving = true;
     }
-    else if (KEY_HOLD(KEY::S))
+    
+    if (isBackward)
     {
         m_vMoveDir -= vCameraLook;
-        isMoving = true;
     }
 
-    if (KEY_HOLD(KEY::D))
+    if (isRight)
     {
         m_vMoveDir += vCameraRight;
-
-        isMoving = true;
     }
 
-    if (KEY_HOLD(KEY::A))
+    if (isLeft)
     {
         m_vMoveDir -= vCameraRight;
-
-        isMoving = true;
     }
-
-    m_vMoveDir.Normalize();
-
-    _Vec4 vLocalMoveDir = { m_vMoveDir.Dot(vCameraRight), 0.f, m_vMoveDir.Dot(vCameraLook), 0.f };
-    vLocalMoveDir.Normalize();
-
-    //// 방향을 기반으로 애니메이션 선정
-    //if (vLocalMoveDir.z > 0.5f)
-    //{
-    //    if (vLocalMoveDir.x > 0.5f)
-    //        m_pPlayer->Change_Animation(m_iAnimation_RUN[RUN_FR], true, false);
-    //    else if (vLocalMoveDir.x < 0)
-    //        m_pPlayer->Change_Animation(m_iAnimation_RUN[RUN_FL], true, false);
-    //    else
-    //        m_pPlayer->Change_Animation(m_iAnimation_RUN[RUN_F], true, false);
-    //}
-    //else if (vLocalMoveDir.z < 0.5f)
-    //{
-    //    if (vLocalMoveDir.x > 0.5f)
-    //        m_pPlayer->Change_Animation(m_iAnimation_RUN[RUN_BR], true, false);
-    //    else if (vLocalMoveDir.x < 0)
-    //        m_pPlayer->Change_Animation(m_iAnimation_RUN[RUN_BL], true, false);
-    //    else
-    //        m_pPlayer->Change_Animation(m_iAnimation_RUN[RUN_B], true, false);
-    //}
-    //else
-    //{
-    //    if (vLocalMoveDir.x > 0.5f)
-    //        m_pPlayer->Change_Animation(m_iAnimation_RUN[RUN_R], true, false);
-    //    else if (vLocalMoveDir.x < 0.5f)
-    //        m_pPlayer->Change_Animation(m_iAnimation_RUN[RUN_L], true, false);
-    //}
-
 
     if (m_vMoveDir.Length() > 0.f)
     {
-        m_pPlayer->Move_Dir(m_vMoveDir, m_fMoveSpeed, fTimeDelta);
+        m_pPlayer->Change_Animation_Boundry(m_iAnimation_Guard, true);
+
+        if (isForward)
+        {
+            if(isLeft)
+                m_pPlayer->Change_Animation(m_iAnimation_Walk[WALK_FL], true, false);
+            else if(isRight)
+                m_pPlayer->Change_Animation(m_iAnimation_Walk[WALK_FR], true, false);
+            else
+                m_pPlayer->Change_Animation(m_iAnimation_Walk[WALK_F], true, false);
+        }
+        else if (isBackward)
+        {
+            if (isLeft)
+                m_pPlayer->Change_Animation(m_iAnimation_Walk[WALK_BL], true, false);
+            else if (isRight)
+                m_pPlayer->Change_Animation(m_iAnimation_Walk[WALK_BR], true, false);
+            else
+                m_pPlayer->Change_Animation(m_iAnimation_Walk[WALK_B], true, false);
+        }
+        else
+        {
+            if (isLeft)
+                m_pPlayer->Change_Animation(m_iAnimation_Walk[WALK_L], true, false);
+            else if (isRight)
+                m_pPlayer->Change_Animation(m_iAnimation_Walk[WALK_R], true, false);
+        }
+
+
+        if (m_vMoveDir.Length() > 0.f)
+        {
+            // 가드 상태에서는 회전 안 함
+            m_pPlayer->Move_Dir(m_vMoveDir, m_fMoveSpeed, fTimeDelta, false);
+        }
+        isMoving = true;
     }
+
 
     return isMoving;
 }

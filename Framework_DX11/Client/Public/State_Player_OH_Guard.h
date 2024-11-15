@@ -9,9 +9,9 @@ BEGIN(Client)
 
 class CState_Player_OH_Guard : public CState
 {
-    enum RUN
+    enum WALK
     {
-        GUARD_N, GUARD_B, GUARD_F, GUARD_L, GUARD_R, GUARD_END
+        WALK_B, WALK_BL, WALK_BR, WALK_F, WALK_FL, WALK_FR, WALK_L, WALK_R, WALK_END
     };
 
 public:
@@ -27,7 +27,8 @@ public:
 private:
     class CPlayer*      m_pPlayer = { nullptr };
 
-    _uint               m_iAnimation_Guard[GUARD_END] = {};
+    _uint               m_iAnimation_Walk[WALK_END] = {};
+    _uint               m_iAnimation_Guard = {};
 
     _Vec4               m_vMoveDir = {};
 

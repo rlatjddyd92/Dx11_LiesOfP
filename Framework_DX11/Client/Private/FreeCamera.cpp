@@ -39,7 +39,7 @@ void CFreeCamera::Priority_Update(_float fTimeDelta)
 
 	_long	MouseMove = {};
 
-	if (KEY_HOLD(KEY::LSHIFT))
+	if (KEY_HOLD(KEY::CTRL))
 	{
 		/* 기본적인 제어*/
 		if (KEY_HOLD(KEY::W))

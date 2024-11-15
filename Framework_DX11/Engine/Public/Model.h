@@ -30,7 +30,6 @@ public:
 	_uint					Get_CurrentAnimationIndex() { return m_iCurrentAnimIndex; }
 	_uint					Get_CurrentAnimationIndex_Boundary() { return m_iCurrentAnimIndex_Boundary; }
 	_char*					Get_CurrentAnimationName();
-	_bool					Get_IsEnd_Animation(_uint iAnimationIndex);
 
 	_uint					Get_CurrentFrame() { return m_iCurrentFrame; }
 	_double					Get_CurrentTrackPosition() { return m_CurrentTrackPosition; }
@@ -73,8 +72,8 @@ public:		//_bool pOut은 메인 애니메이션의 종료를 반환,
 
 
 public:
-	HRESULT Bind_Material(class CShader* pShader, const _char* pConstantName, TEXTURE_TYPE eMaterialType, _uint iMeshIndex);
-	HRESULT Bind_MeshBoneMatrices(class CShader* pShader, const _char* pConstantName, _uint iMeshIndex);
+	HRESULT		Bind_Material(class CShader* pShader, const _char* pConstantName, TEXTURE_TYPE eMaterialType, _uint iMeshIndex);
+	HRESULT		Bind_MeshBoneMatrices(class CShader* pShader, const _char* pConstantName, _uint iMeshIndex);
 
 	HRESULT		Create_BinaryFile(const _char* ModelTag);
 	HRESULT		Create_Bin_Bones(HANDLE* pFile);
@@ -138,7 +137,7 @@ private:
 
 
 	// 정승현 모델 인스턴스
-	ID3D11Buffer* m_pVBInstance = { nullptr };
+	ID3D11Buffer*				m_pVBInstance = { nullptr };
 	D3D11_BUFFER_DESC			m_InstanceBufferDesc = {};
 	D3D11_SUBRESOURCE_DATA		m_InstanceInitialData = {};
 
@@ -148,7 +147,7 @@ private:
 	_bool						m_isInstance = {};
 
 	vector<_Matrix>				m_InstanceDatas;
-	void* m_pInstanceVertices = { nullptr };
+	void*						m_pInstanceVertices = { nullptr };
 
 private:
 	vector<_uint>					m_UFBIndices;

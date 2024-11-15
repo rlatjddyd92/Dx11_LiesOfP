@@ -30,22 +30,40 @@ HRESULT CState_Player_OH_Run::Initialize(_uint iStateNum, void* pArg)
 
 HRESULT CState_Player_OH_Run::Start_State(void* pArg)
 {
-    m_pPlayer->Change_Animation(m_iAnimation_Run[RUN_F], true, false);
+    m_pPlayer->Change_Animation(m_iAnimation_Run[RUN_F], true);
+
+    m_isRunEnd = false;
+    m_fRunEndTime = 0.f;
 
     return S_OK;
 }
-
+/*        if (KEY_TAP(KEY::SPACE))
+        {
+            m_pPlayer->Change_State(CPlayer::JUMP);
+        }
+        else */
 void CState_Player_OH_Run::Update(_float fTimeDelta)
 {
-    if (false == Move(fTimeDelta))
+    if (m_isRunEnd)
+        m_fRunEndTime += fTimeDelta;
+
+
+    if (false == Move(fTimeDelta) && m_fRunEndTime > 0.1f)
     {
         m_pPlayer->Change_State(CPlayer::IDLE);
-        return;
     }
-
-    if (KEY_NONE(KEY::SPACE))
+    else if(m_fRunEndTime > 0.1f)
     {
         m_pPlayer->Change_State(CPlayer::WALK);
+    }
+   /* else if (KEY_TAP(KEY::SPACE))
+    {
+        m_pPlayer->Change_State(CPlayer::JUMP);
+    }*/
+
+    if (!m_isRunEnd && KEY_NONE(KEY::SPACE))
+    {
+        m_isRunEnd = true;
     }
 
 }

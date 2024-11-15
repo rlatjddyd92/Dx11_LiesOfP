@@ -32,6 +32,9 @@ private:
     _Vec4               m_vMoveDir = {};
     
     _float              m_fMoveSpeed = {};
+    _float              m_fRunEndTime = {};
+
+    _bool               m_isRunEnd = {};
 
 private:
     _bool               Move(_float fTimeDelta);

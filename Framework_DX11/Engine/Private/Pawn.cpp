@@ -62,16 +62,20 @@ void CPawn::Change_State(const _uint iState, void* pArg)
 	m_pFsmCom->Change_State(iState, pArg);
 }
 
-void CPawn::Change_Animation(_uint iAnimIndex, _bool IsLoop, _bool bSetup)
+void CPawn::Set_Animation(_uint iAnimIndex, _bool IsLoop)
 {
-	if (bSetup)
-	{
-		m_pModelCom->SetUp_Animation(iAnimIndex, IsLoop);
-	}
-	else
-	{
-		m_pModelCom->SetUp_NextAnimation(iAnimIndex, IsLoop);
-	}
+	m_pModelCom->SetUp_Animation(iAnimIndex, IsLoop);
+}
+
+void CPawn::Change_Animation(_uint iAnimIndex, _bool IsLoop, _float fDuration, _uint iStartFrame)
+{
+	m_pModelCom->SetUp_NextAnimation(iAnimIndex, IsLoop, fDuration, iStartFrame);
+}
+
+void CPawn::Change_Animation_Boundry(_uint iAnimIndex, _bool IsLoop, _float fDuration, _uint iStartFrame)
+{
+	// 바꿀 상체 애니메이션(하체가 주 애니메이션)
+	m_pModelCom->SetUp_NextAnimation_Boundary(iAnimIndex, IsLoop, fDuration, iStartFrame);
 }
 
 HRESULT CPawn::Add_PartObject(_uint iPartID, const _wstring& strPrototypeTag, void* pArg)
@@ -106,6 +110,7 @@ void CPawn::Free()
 		Safe_Release(pPartObject);
 	m_Parts.clear();
 
+	Safe_Release(m_pRigidBodyCom);
 	Safe_Release(m_pShaderCom);
 	Safe_Release(m_pModelCom);
 	Safe_Release(m_pNavigationCom);

@@ -202,6 +202,39 @@
     <Filter Include="05.Fsm\Player\OneHand\Guard">
       <UniqueIdentifier>{f37a500e-cc18-4f8c-885f-54a69887a659}</UniqueIdentifier>
     </Filter>
+    <Filter Include="05.Fsm\Player\OneHand\Jump">
+      <UniqueIdentifier>{af57f400-71a8-4fe5-afe2-58f8a47cd93a}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="05.Fsm\Player\OneHand\Dash">
+      <UniqueIdentifier>{cfb8bd19-9cd4-4314-9f05-f97a593299ec}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="05.Fsm\Player\OneHand\00.Attack">
+      <UniqueIdentifier>{41bf1b34-a55b-403f-93f2-cf413f595075}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="05.Fsm\Player\OneHand\00.Attack\Rapier">
+      <UniqueIdentifier>{ed1f5465-6653-410e-9e08-79c2e8fe998c}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="05.Fsm\Player\OneHand\00.Attack\Scissor">
+      <UniqueIdentifier>{f37f4081-2382-4504-88a9-aef53e8fbf35}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="05.Fsm\Player\TwoHand">
+      <UniqueIdentifier>{cd7302ea-8432-40bf-af91-9cd19f874b53}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="05.Fsm\Player\Common">
+      <UniqueIdentifier>{7e6b40a1-4b89-45b6-81f2-6e54b4c861b2}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="05.Fsm\Player\Common\Ladder">
+      <UniqueIdentifier>{871c5e9d-956e-4372-903f-937a97e29ccb}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="05.Fsm\Player\Common\Hit">
+      <UniqueIdentifier>{6fe21237-ed2f-4577-82d9-d063e362a9a9}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="05.Fsm\Player\Common\Groggy">
+      <UniqueIdentifier>{52055d8d-e516-4646-8fde-a42a1c9f1453}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="05.Fsm\Player\Common\Dead">
+      <UniqueIdentifier>{bd30e2d5-25fb-4905-bacd-c5625c31e943}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Client.h">
@@ -370,6 +403,12 @@
     <ClInclude Include="..\Public\State_Player_OH_Guard.h">
       <Filter>05.Fsm\Player\OneHand\Guard</Filter>
     </ClInclude>
+    <ClInclude Include="..\Public\State_Player_OH_Jump.h">
+      <Filter>05.Fsm\Player\OneHand\Jump</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Public\State_Player_OH_Dash.h">
+      <Filter>05.Fsm\Player\OneHand\Dash</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Client.cpp">
@@ -510,6 +549,12 @@
     </ClCompile>
     <ClCompile Include="..\Private\State_Player_OH_Guard.cpp">
       <Filter>05.Fsm\Player\OneHand\Guard</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Private\State_Player_OH_Jump.cpp">
+      <Filter>05.Fsm\Player\OneHand\Jump</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Private\State_Player_OH_Dash.cpp">
+      <Filter>05.Fsm\Player\OneHand\Dash</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

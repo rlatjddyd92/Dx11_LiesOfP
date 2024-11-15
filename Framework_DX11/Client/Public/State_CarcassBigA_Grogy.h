@@ -35,7 +35,7 @@ private:
 
     _bool*              m_pIsEndAnim = { nullptr };
     _bool*              m_pResetRootMove = { nullptr };
-    _double*            m_pTrackPos = { nullptr };
+    _float*             m_pTrackPos = { nullptr };
 
     _uint               m_iAnimCnt = {};
 
