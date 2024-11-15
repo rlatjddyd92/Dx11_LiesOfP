@@ -927,6 +927,17 @@ HRESULT CLoader::Ready_Resources_For_ToolLevel_Map0()
 	if (FAILED(m_pGameInstance->Add_Prototype(LEVEL_TOOL, TEXT("SK_DLV_Stargazer_01"), pModel)))
 	return E_FAIL;
 	m_pGameInstance->Add_ModelPrototype(LEVEL_TOOL, ("SK_DLV_Stargazer_01"), pModel);
+
+	pModel = CModel::Create(m_pDevice, m_pContext, CModel::TYPE_ANIM, "../Bin/ModelData/NonAnim/InteractObj/SK_FO_Monastery_TheLastDoor_01.dat", PreTransformMatrix, false, CController_AnimationTool::Get_Instance()->Get_StructStack(iModelCnt++));
+	if (FAILED(m_pGameInstance->Add_Prototype(LEVEL_TOOL, TEXT("SK_FO_Monastery_TheLastDoor_01"), pModel)))
+		return E_FAIL;
+	m_pGameInstance->Add_ModelPrototype(LEVEL_TOOL, ("SK_FO_Monastery_TheLastDoor_01"), pModel);
+
+	pModel = CModel::Create(m_pDevice, m_pContext, CModel::TYPE_ANIM, "../Bin/ModelData/NonAnim/InteractObj/SK_FO_Monastery_TowerDoor_01.dat", PreTransformMatrix, false, CController_AnimationTool::Get_Instance()->Get_StructStack(iModelCnt++));
+	if (FAILED(m_pGameInstance->Add_Prototype(LEVEL_TOOL, TEXT("SK_FO_Monastery_TowerDoor_01"), pModel)))
+		return E_FAIL;
+	m_pGameInstance->Add_ModelPrototype(LEVEL_TOOL, ("SK_FO_Monastery_TowerDoor_01"), pModel);
+
 #pragma endregion
 	m_isFinished_Map0 = true;
 

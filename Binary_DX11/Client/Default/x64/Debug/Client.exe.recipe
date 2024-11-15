@@ -2,18 +2,18 @@
 <Project>
   <ProjectOutputs>
     <ProjectOutput>
-      <FullPath>C:\Users\wnsgh\GitHub\3D\Dx11_LiesOfP\Binary_DX11\Client\Bin\Client.exe</FullPath>
+      <FullPath>C:\Users\olivi\GitHub\Dx11_LiesOfP\Binary_DX11\Client\Bin\Client.exe</FullPath>
     </ProjectOutput>
   </ProjectOutputs>
   <ContentFiles>
     <ContentFile>
-      <FullPath>C:\Users\wnsgh\GitHub\3D\Dx11_LiesOfP\Binary_DX11\Client\Bin\Shader_VtxModel.cso</FullPath>
+      <FullPath>C:\Users\olivi\GitHub\Dx11_LiesOfP\Binary_DX11\Client\Bin\Shader_VtxModel.cso</FullPath>
     </ContentFile>
     <ContentFile>
-      <FullPath>C:\Users\wnsgh\GitHub\3D\Dx11_LiesOfP\Binary_DX11\Client\Bin\Shader_VtxNorTex.cso</FullPath>
+      <FullPath>C:\Users\olivi\GitHub\Dx11_LiesOfP\Binary_DX11\Client\Bin\Shader_VtxNorTex.cso</FullPath>
     </ContentFile>
     <ContentFile>
-      <FullPath>C:\Users\wnsgh\GitHub\3D\Dx11_LiesOfP\Binary_DX11\Client\Bin\Shader_VtxPosTex.cso</FullPath>
+      <FullPath>C:\Users\olivi\GitHub\Dx11_LiesOfP\Binary_DX11\Client\Bin\Shader_VtxPosTex.cso</FullPath>
     </ContentFile>
   </ContentFiles>
   <SatelliteDlls />

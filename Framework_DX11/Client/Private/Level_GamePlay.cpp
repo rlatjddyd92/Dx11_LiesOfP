@@ -123,8 +123,8 @@ HRESULT CLevel_Tool::Ready_Layer_Camera()
 
 HRESULT CLevel_Tool::Ready_Layer_BackGround()
 {
-	if (FAILED(m_pGameInstance->Add_CloneObject_ToLayer(LEVEL_GAMEPLAY, TEXT("Layer_BackGround"), TEXT("Prototype_GameObject_Terrain"))))
-		return E_FAIL;
+//	if (FAILED(m_pGameInstance->Add_CloneObject_ToLayer(LEVEL_GAMEPLAY, TEXT("Layer_BackGround"), TEXT("Prototype_GameObject_Terrain"))))
+	//	return E_FAIL;
 
 	if (FAILED(m_pGameInstance->Add_CloneObject_ToLayer(LEVEL_GAMEPLAY, TEXT("Layer_BackGround"), TEXT("Prototype_GameObject_Sky"))))
 		return E_FAIL;

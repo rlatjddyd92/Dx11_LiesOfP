@@ -99,10 +99,14 @@ HRESULT CLoader::Ready_Resources_For_GamePlayLevel()
 
 	/* For. Prototype_Component_Model_Stargazer*/
 	PreTransformMatrix = XMMatrixRotationY(XMConvertToRadians(180.0f));
-	if (FAILED(m_pGameInstance->Add_Prototype(LEVEL_GAMEPLAY, TEXT("Prototype_Component_Model_Stargazer"),
-		CModel::Create(m_pDevice, m_pContext, CModel::TYPE_ANIM, "../Bin/Resources/Models/Stargazer/SK_DLV_Stargazer_01.fbx", "../Bin/ModelData/NonAnim/InteractObj/Tex/", PreTransformMatrix))))
+	if (FAILED(m_pGameInstance->Add_Prototype(LEVEL_GAMEPLAY, TEXT("Prototype_Component_Model_Monastery_TowerDoor"),
+		CModel::Create(m_pDevice, m_pContext, CModel::TYPE_ANIM, "../Bin/Resources/Models/Monastery_TowerDoor/SK_FO_Monastery_TowerDoor_01.fbx", "../Bin/ModelData/NonAnim/InteractObj/Tex/", PreTransformMatrix))))
 		return E_FAIL;
 	
+	if (FAILED(m_pGameInstance->Add_Prototype(LEVEL_GAMEPLAY, TEXT("Prototype_Component_Model_Monastery_TheLastDoor"),
+		CModel::Create(m_pDevice, m_pContext, CModel::TYPE_ANIM, "../Bin/Resources/Models/Monastery_TheLastDoor/SK_FO_Monastery_TheLastDoor_01.fbx", "../Bin/ModelData/NonAnim/InteractObj/Tex/", PreTransformMatrix))))
+		return E_FAIL;
+
 	// 일반 몬스터 로드 함수
 	//if (FAILED(Ready_Resources_For_BasicMonster()))
 	//	return E_FAIL;
