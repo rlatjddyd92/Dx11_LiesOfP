@@ -15,7 +15,7 @@
 #pragma region EFFECT
 #include "Monster.h"
 #include "CarcassBigA.h"
-#include "SimonManus.h"
+#include "SimonManusP1.h"
 #pragma endregion
 
 #pragma region EFFECT
@@ -443,9 +443,9 @@ HRESULT CLoader::Ready_Resources_For_GamePlayLevel()
 		CCarcassBigA::Create(m_pDevice, m_pContext))))
 		return E_FAIL;
 	
-	/* For. Prototype_GameObject_SimonManus */
-	if (FAILED(m_pGameInstance->Add_Prototype(TEXT("Prototype_GameObject_SimonManus"),
-		CSimonManus::Create(m_pDevice, m_pContext))))
+	/* For. Prototype_GameObject_SimonManusP1 */
+	if (FAILED(m_pGameInstance->Add_Prototype(TEXT("Prototype_GameObject_SimonManusP1"),
+		CSimonManusP1::Create(m_pDevice, m_pContext))))
 		return E_FAIL;
 
 #pragma endregion
@@ -518,8 +518,11 @@ HRESULT CLoader::Ready_Resources_For_GamePlayLevel_Map0()
 		CModel::Create(m_pDevice, m_pContext, CModel::TYPE_ANIM, "../Bin/ModelData/Anim/CreatedBinFiles/CarcassBigA.dat", PreTransformMatrix, true))))
 		return E_FAIL;
 
-	//Prototype_Component_Model_SimonManus
-
+	//Prototype_Component_Model_SimonManusP1
+	PreTransformMatrix = XMMatrixScaling(0.01f, 0.01f, 0.01f) * XMMatrixRotationY(XMConvertToRadians(270.0f));
+	if (FAILED(m_pGameInstance->Add_Prototype(LEVEL_GAMEPLAY, TEXT("Prototype_Component_Model_SimonManusP1"),
+		CModel::Create(m_pDevice, m_pContext, CModel::TYPE_ANIM, "../Bin/ModelData/Anim/CreatedBinFiles/SimonManusP1.dat", PreTransformMatrix, true))))
+		return E_FAIL;
 
 	m_isFinished_Map0 = true;
 

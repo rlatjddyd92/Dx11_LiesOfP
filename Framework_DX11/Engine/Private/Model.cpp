@@ -272,7 +272,15 @@ HRESULT CModel::SetUp_NextAnimation(_uint iNextAnimationIndex, _bool isLoop, _fl
 	m_ChangeTrackPosition = 0.0;
 
 	m_tChaneAnimDesc.iNextAnimIndex = iNextAnimationIndex;
-	m_tChaneAnimDesc.iStartFrame = iStartFrame;
+	if (iNextAnimationIndex == m_iCurrentAnimIndex_Boundary)
+	{
+		m_tChaneAnimDesc.iStartFrame = (_uint)m_CurrentTrackPosition_Boundary;
+	}
+	else
+	{
+		m_tChaneAnimDesc.iStartFrame = iStartFrame;
+	}
+
 	m_tChaneAnimDesc.fChangeDuration = fChangeDuration;
 	m_tChaneAnimDesc.fChangeTime = 0.f;
 	if (m_iCurrentAnimIndex == m_iCurrentAnimIndex_Boundary)
@@ -410,7 +418,13 @@ _vector CModel::Play_Animation(_float fTimeDelta, _bool* pOut, list<OUTPUT_EVKEY
 
 		if (isChangeEnd)
 		{
-			m_CurrentTrackPosition = 0.0;
+			if (m_tChaneAnimDesc.iNextAnimIndex == m_iCurrentAnimIndex_Boundary)
+			{
+				m_CurrentTrackPosition = m_CurrentTrackPosition_Boundary;
+			}
+			else
+				m_CurrentTrackPosition = 0.0;
+
 			//m_Animations[m_iCurrentAnimIndex]->Reset();
 			m_iCurrentAnimIndex = m_tChaneAnimDesc.iNextAnimIndex;
 			ZeroMemory(&m_tChaneAnimDesc, sizeof(CHANGEANIMATION_DESC));
