@@ -58,9 +58,14 @@ void CMonster::Late_Update(_float fTimeDelta)
 	if (nullptr == pTargetCollider)
 		return;*/
 
-	CComponent* pTargetCollider = m_pGameInstance->Find_Component(LEVEL_GAMEPLAY, TEXT("Layer_Player"), TEXT("Com_Collider"), 0, CPlayer::PART_WEAPON);
-	if (nullptr == pTargetCollider)
-		return;
+	//CComponent* pTargetCollider = m_pGameInstance->Find_Component(LEVEL_GAMEPLAY, TEXT("Layer_Player"), TEXT("Com_Collider"), 0, CPlayer::PART_WEAPON);
+	//if (nullptr == pTargetCollider)
+	//	return;
+	//
+	//for (size_t i = 0; i < TYPE_END; i++)
+	//{
+	//	m_pColliderCom[i]->Intersect(dynamic_cast<CCollider*>(pTargetCollider));
+	//}
 
 
 	m_pColliderCom->Intersect(dynamic_cast<CCollider*>(pTargetCollider));
@@ -71,7 +76,6 @@ void CMonster::Late_Update(_float fTimeDelta)
 
 #ifdef _DEBUG
 		m_pGameInstance->Add_DebugObject(m_pColliderCom);
-#endif
 	}
 }
 

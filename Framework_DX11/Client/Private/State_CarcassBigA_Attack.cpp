@@ -12,13 +12,13 @@ CState_CarcassBigA_Attack::CState_CarcassBigA_Attack(CFsm* pFsm, CMonster* pMons
 
 HRESULT CState_CarcassBigA_Attack::Initialize(_uint iStateNum, void* pArg)
 {
-   //m_iAnimation_Idle = m_pMonster->Get_Model()->Get_AnimationIndex("Kurama_Idle_Loop");
     m_iStateNum = iStateNum;
     m_fIdleDuration = 3.3f;
 
    FSM_INIT_DESC* pDesc = static_cast<FSM_INIT_DESC*>(pArg);
     
-   m_pIsEndAnim = pDesc->pIsEndAnim;
+    m_pIsEndAnim = pDesc->pIsEndAnim;
+    m_pColliderCtrs = pDesc->pColliderCtrs;
 
     return S_OK;
 }
@@ -45,6 +45,27 @@ HRESULT CState_CarcassBigA_Attack::Start_State(void* pArg)
     if (m_iAtkAnimNum >= 5)
         ++m_iAtkAnimNum;
 
+    if (m_iAtkAnimNum == 5)
+    {
+        m_pColliderCtrs[CCarcassBigA::TYPE_LEFTHAND] = true;
+        m_pColliderCtrs[CCarcassBigA::TYPE_RIGHTHAND] = true;
+    }
+    else    if (m_iAtkAnimNum <= 6)
+    {
+        m_pColliderCtrs[CCarcassBigA::TYPE_LEFTHAND] = true;
+        m_pColliderCtrs[CCarcassBigA::TYPE_RIGHTHAND] = false;
+        //어깨 돌진용 콜라이더의 추가 필요
+    }
+    else    if (m_iAtkAnimNum == 7)
+    {
+        m_pColliderCtrs[CCarcassBigA::TYPE_LEFTHAND] = false;
+        m_pColliderCtrs[CCarcassBigA::TYPE_RIGHTHAND] = true;
+    }
+    else    if (m_iAtkAnimNum <= 8)
+    {
+        m_pColliderCtrs[CCarcassBigA::TYPE_LEFTHAND] = false;
+        m_pColliderCtrs[CCarcassBigA::TYPE_RIGHTHAND] = false;;
+    }
     m_pMonster->Change_Animation(m_iAtkAnimNum, true);;
     return S_OK;
 }
@@ -62,6 +83,8 @@ void CState_CarcassBigA_Attack::Update(_float fTimeDelta)
 
 void CState_CarcassBigA_Attack::End_State()
 {
+    m_pColliderCtrs[CCarcassBigA::TYPE_LEFTHAND] = true;
+    m_pColliderCtrs[CCarcassBigA::TYPE_RIGHTHAND] = true;
 }
 
 CState_CarcassBigA_Attack* CState_CarcassBigA_Attack::Create(CFsm* pFsm, CMonster* pMonster, _uint iStateNum, void* pArg)

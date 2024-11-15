@@ -31,8 +31,8 @@ private:
     _bool               m_isActivatedSpecial = { false };
 
     //
-    _bool*               m_pIsEndAnim = { false };
-
+    _bool*              m_pIsEndAnim = { false };
+    _bool*              m_pColliderCtrs = { nullptr };
     _vector             m_vAttackDir = {};
 
     _int              m_iAtkAnimNum = {};

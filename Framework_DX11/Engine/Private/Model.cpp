@@ -291,6 +291,7 @@ HRESULT CModel::SetUp_NextAnimation(_uint iNextAnimationIndex, _bool isLoop, _fl
 	{
 		m_tChaneAnimDesc.iStartFrame = iStartFrame;
 	}
+
 	m_tChaneAnimDesc.fChangeDuration = fChangeDuration;
 	m_tChaneAnimDesc.fChangeTime = 0.f;
 	if (m_iCurrentAnimIndex == m_iCurrentAnimIndex_Boundary)
@@ -561,10 +562,6 @@ _vector CModel::Play_Animation(_float fTimeDelta, _bool* pOut, list<OUTPUT_EVKEY
 	{
 		if (m_UFBIndices[UFB_ROOT] != 1024)
 		{
-			if(nullptr != pOut)
-				*pOut = true;
-			m_isEnd_Animations[m_iCurrentAnimIndex] = false;
-
 			m_Bones[m_UFBIndices[UFB_ROOT]]->Update_CombinedTransformationMatrix(m_Bones, XMLoadFloat4x4(&m_PreTransformMatrix));
 			vRootMove = m_Bones[m_UFBIndices[UFB_ROOT]]->Get_CombinedTransformationMatrix().r[3];
 			_float4x4 RootMat = {};
@@ -586,31 +583,27 @@ _vector CModel::Play_Animation(_float fTimeDelta, _bool* pOut, list<OUTPUT_EVKEY
 	if (m_isEnd_Animations[m_iCurrentAnimIndex] == true)//
 	{
 		m_CurrentTrackPosition = 0.f;
-		if (pOut != nullptr)
-		{
-
+		if (nullptr != pOut)
 			*pOut = true;
 
-		}
 		m_isEnd_Animations[m_iCurrentAnimIndex] = false;
 	}
 	else
 	{
-		if (pOut != nullptr)
-		{
-
+		if (nullptr != pOut)
 			*pOut = false;
-
-		}
 	}
 
-	if ((m_CurrentTrackPosition_Boundary == 0.f) || (m_isEnd_Animations_Boundary[m_iCurrentAnimIndex_Boundary] == true))
+	if (!m_isLoop_Boundary)
 	{
-		if (m_iCurrentAnimIndex != m_iCurrentAnimIndex_Boundary)
+		if ((m_CurrentTrackPosition_Boundary == 0.f) || (m_isEnd_Animations_Boundary[m_iCurrentAnimIndex_Boundary] == true))
 		{
-			SetUp_NextAnimation_Boundary(m_iCurrentAnimIndex, m_isLoop);
-			m_CurrentTrackPosition_Boundary = 0.f;
-			m_isEnd_Animations_Boundary[m_iCurrentAnimIndex_Boundary] = false;
+			if (m_iCurrentAnimIndex != m_iCurrentAnimIndex_Boundary)
+			{
+				SetUp_NextAnimation_Boundary(m_iCurrentAnimIndex, m_isLoop);
+				m_CurrentTrackPosition_Boundary = 0.f;
+				m_isEnd_Animations_Boundary[m_iCurrentAnimIndex_Boundary] = false;
+			}
 		}
 	}
 

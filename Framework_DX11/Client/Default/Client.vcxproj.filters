@@ -234,6 +234,60 @@
     </Filter>
     <Filter Include="05.Fsm\Player\Common\Dead">
       <UniqueIdentifier>{bd30e2d5-25fb-4905-bacd-c5625c31e943}</UniqueIdentifier>
+	</Filter>
+    <Filter Include="02.GameObjects\ColiderObject">
+      <UniqueIdentifier>{3f8ea392-82e9-488f-b871-07a2d20ce4cf}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.GameObjects\02.Monster\SimonManus">
+      <UniqueIdentifier>{57195b03-ed04-4599-966f-cd38e86fb16d}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="05.Fsm\Monster\SimonManus">
+      <UniqueIdentifier>{52ec9403-e7cc-4dda-857e-4376e9606cb8}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="05.Fsm\Monster\SimonManus\Idle">
+      <UniqueIdentifier>{25ad1422-a156-4c4e-a523-177d6bc141d5}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="05.Fsm\Monster\SimonManus\Attck">
+      <UniqueIdentifier>{3b6b4621-a5c8-4d90-b412-56d73fffa644}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="05.Fsm\Monster\SimonManus\Die">
+      <UniqueIdentifier>{1ca82e15-8b8c-4a48-9c88-a5f24fc38858}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="05.Fsm\Monster\SimonManus\Grogy">
+      <UniqueIdentifier>{a74852b7-6ec6-4435-8b00-ac5ff4e6935b}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="05.Fsm\Monster\SimonManus\HitFatal">
+      <UniqueIdentifier>{cebe0b82-9fc4-4388-b4fb-be9fcda771b7}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="05.Fsm\Monster\SimonManus\Run">
+      <UniqueIdentifier>{f083c0cc-f7b0-4013-adf6-27165c3074a4}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="05.Fsm\Monster\SimonManus\Walk">
+      <UniqueIdentifier>{fe395b30-26dd-4e7d-9184-bb5c5d694b6b}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="05.Fsm\Monster\SimonManus\Attck\Sting">
+      <UniqueIdentifier>{6237cc31-566e-4238-9cc0-842b6d5a1659}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="05.Fsm\Monster\SimonManus\Attck\AttackStop">
+      <UniqueIdentifier>{07cad430-2c04-4221-a6b4-1369ebe30bea}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="05.Fsm\Monster\SimonManus\Attck\Stamp">
+      <UniqueIdentifier>{29d16570-4bed-4aa6-b8ef-4624cab0bdf3}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="05.Fsm\Monster\SimonManus\Attck\Upper">
+      <UniqueIdentifier>{ecb2f7b1-5a47-4d76-a3e5-88a2329729cf}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="05.Fsm\Monster\SimonManus\Attck\MoveVash">
+      <UniqueIdentifier>{243bb537-a7df-4cf0-b39a-9c6e36722a74}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="05.Fsm\Monster\SimonManus\Attck\ChasingSwing">
+      <UniqueIdentifier>{8d36650d-2580-4ce0-8926-bb9c616f1bdc}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="05.Fsm\Monster\SimonManus\Attck\JumpToSwing">
+      <UniqueIdentifier>{2def39bb-8155-4fb6-8739-272b8c5b856c}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="05.Fsm\Monster\SimonManus\Attck\AvoidSwing">
+      <UniqueIdentifier>{5020c6ac-0497-4710-95db-fa739b2c22b6}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -408,6 +462,39 @@
     </ClInclude>
     <ClInclude Include="..\Public\State_Player_OH_Dash.h">
       <Filter>05.Fsm\Player\OneHand\Dash</Filter>
+	</ClInclude>
+    <ClInclude Include="..\Public\ColliderObject.h">
+      <Filter>02.GameObjects\ColiderObject</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Public\SimonManusP1.h">
+      <Filter>02.GameObjects\02.Monster\SimonManus</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Public\State_SimonManusP1_Walk.h">
+      <Filter>05.Fsm\Monster\SimonManus\Walk</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Public\State_SimonManusP1_Run.h">
+      <Filter>05.Fsm\Monster\SimonManus\Run</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Public\State_SimonManusP1_HitFatal.h">
+      <Filter>05.Fsm\Monster\SimonManus\HitFatal</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Public\State_SimonManusP1_Grogy.h">
+      <Filter>05.Fsm\Monster\SimonManus\Grogy</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Public\State_SimonManusP1_Idle.h">
+      <Filter>05.Fsm\Monster\SimonManus\Idle</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Public\State_SimonManusP1_Die.h">
+      <Filter>05.Fsm\Monster\SimonManus\Die</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Public\State_SimonManusP1_StingAttack.h">
+      <Filter>05.Fsm\Monster\SimonManus\Attck\Sting</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Public\State_SimonManusP1_UpperAttack.h">
+      <Filter>05.Fsm\Monster\SimonManus\Attck\Upper</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Public\State_SimonManusP1_AttackStop.h">
+      <Filter>05.Fsm\Monster\SimonManus\Attck\AttackStop</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -555,6 +642,39 @@
     </ClCompile>
     <ClCompile Include="..\Private\State_Player_OH_Dash.cpp">
       <Filter>05.Fsm\Player\OneHand\Dash</Filter>
+	</ClCompile>
+    <ClCompile Include="..\Private\ColliderObject.cpp">
+      <Filter>02.GameObjects\ColiderObject</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Private\SimonManusP1.cpp">
+      <Filter>02.GameObjects\02.Monster\SimonManus</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Private\State_SimonManusP1_Walk.cpp">
+      <Filter>05.Fsm\Monster\SimonManus\Walk</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Private\State_SimonManusP1_Run.cpp">
+      <Filter>05.Fsm\Monster\SimonManus\Run</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Private\State_SimonManusP1_HitFatal.cpp">
+      <Filter>05.Fsm\Monster\SimonManus\HitFatal</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Private\State_SimonManusP1_Grogy.cpp">
+      <Filter>05.Fsm\Monster\SimonManus\Grogy</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Private\State_SimonManusP1_Idle.cpp">
+      <Filter>05.Fsm\Monster\SimonManus\Idle</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Private\State_SimonManusP1_Die.cpp">
+      <Filter>05.Fsm\Monster\SimonManus\Die</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Private\State_SimonManusP1_StingAttack.cpp">
+      <Filter>05.Fsm\Monster\SimonManus\Attck\Sting</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Private\State_SimonManusP1_UpperAttack.cpp">
+      <Filter>05.Fsm\Monster\SimonManus\Attck\Upper</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Private\State_SimonManusP1_AttackStop.cpp">
+      <Filter>05.Fsm\Monster\SimonManus\Attck\AttackStop</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

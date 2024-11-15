@@ -2,6 +2,7 @@
 
 #include "Client_Defines.h"
 #include "Monster.h"
+#include"ColliderObject.h"
 
 BEGIN(Engine)
 class CCollider;
@@ -14,11 +15,9 @@ BEGIN(Client)
 
 class CCarcassBigA final : public CMonster
 {
-public:
-
 
 public:
-	enum COLLIDERTYPE { TYPE_AABB, TYPE_OBB, TYPE_SPHERE, TYPE_END };
+	enum COLLIDERTYPE { TYPE_LEFTHAND, TYPE_RIGHTHAND, TYPE_END };
 
 public:
 	enum CARCASS_BIGA_STATE {
@@ -40,7 +39,9 @@ public:
 	virtual void Late_Update(_float fTimeDelta) override;
 	virtual HRESULT Render() override;
 
-
+private:
+	CGameObject*			m_pColliderObject[TYPE_END] = { nullptr, nullptr };
+	_bool					m_bColliderCtrs[TYPE_END] = {true,  true};
 
 private:
 	HRESULT Ready_Components();
