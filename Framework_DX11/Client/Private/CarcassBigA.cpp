@@ -86,7 +86,7 @@ void CCarcassBigA::Update(_float fTimeDelta)
 		m_vRootMoveStack = m_vCurRootMove;
 	}
 
-	m_pColliderCom->Update(m_pTransformCom->Get_WorldMatrix_Ptr());
+	//m_pColliderCom->Update(m_pTransformCom->Get_WorldMatrix_Ptr());
 }
 
 void CCarcassBigA::Late_Update(_float fTimeDelta)
@@ -137,7 +137,7 @@ HRESULT CCarcassBigA::Render()
 
 
 #ifdef _DEBUG
-	m_pColliderCom[1]->Render();
+	//m_pColliderCom->Render();
 	//for (auto& pColliderObj : m_pColliderObject)
 	//	pColliderObj->Render();
 #endif
@@ -156,33 +156,33 @@ HRESULT CCarcassBigA::Ready_Components()
 
 
 	/* For.Com_Collider_AABB */
-	CBounding_AABB::BOUNDING_AABB_DESC			ColliderAABBDesc{};
-	ColliderAABBDesc.vExtents = _float3(0.5f, 1.0f, 0.5f);
-	ColliderAABBDesc.vCenter = _float3(0.f, ColliderAABBDesc.vExtents.y, 0.f);
-
-	if (FAILED(__super::Add_Component(LEVEL_GAMEPLAY, TEXT("Prototype_Component_Collider_AABB"),
-		TEXT("Com_Collider_AABB"), reinterpret_cast<CComponent**>(&m_pColliderCom[TYPE_AABB]), &ColliderAABBDesc)))
-		return E_FAIL;
-
-	/* FOR.Com_Collider_OBB */
-	CBounding_OBB::BOUNDING_OBB_DESC			ColliderOBBDesc{};
-	ColliderOBBDesc.vExtents = _float3(0.7f, 0.7f, 0.7f);
-	ColliderOBBDesc.vCenter = _float3(0.f, ColliderOBBDesc.vExtents.y, 0.f);
-	ColliderOBBDesc.vAngles = _float3(0.f, m_pGameInstance->Get_Random(XMConvertToRadians(0.f), XMConvertToRadians(360.f)), 0.f);
-
-	if (FAILED(__super::Add_Component(LEVEL_GAMEPLAY, TEXT("Prototype_Component_Collider_OBB"),
-		TEXT("Com_Collider_OBB"), reinterpret_cast<CComponent**>(&m_pColliderCom[TYPE_OBB]), &ColliderOBBDesc)))
-		return E_FAIL;
-
-	/* FOR.Com_Collider_Sphere */
-	CBounding_Sphere::BOUNDING_SPHERE_DESC			ColliderSphereDesc{};
-	ColliderSphereDesc.fRadius = 1.2f;
-	ColliderSphereDesc.vCenter = _float3(0.f, ColliderSphereDesc.fRadius, 0.f);
-
-
-	if (FAILED(__super::Add_Component(LEVEL_GAMEPLAY, TEXT("Prototype_Component_Collider_Sphere"),
-		TEXT("Com_Collider_Sphere"), reinterpret_cast<CComponent**>(&m_pColliderCom[TYPE_SPHERE]), &ColliderSphereDesc)))
-		return E_FAIL;
+	//CBounding_AABB::BOUNDING_AABB_DESC			ColliderAABBDesc{};
+	//ColliderAABBDesc.vExtents = _float3(0.5f, 1.0f, 0.5f);
+	//ColliderAABBDesc.vCenter = _float3(0.f, ColliderAABBDesc.vExtents.y, 0.f);
+	//
+	//if (FAILED(__super::Add_Component(LEVEL_GAMEPLAY, TEXT("Prototype_Component_Collider_AABB"),
+	//	TEXT("Com_Collider_AABB"), reinterpret_cast<CComponent**>(&m_pColliderCom[CCollider::TYPE_AABB]), &ColliderAABBDesc)))
+	//	return E_FAIL;
+	//
+	///* FOR.Com_Collider_OBB */
+	//CBounding_OBB::BOUNDING_OBB_DESC			ColliderOBBDesc{};
+	//ColliderOBBDesc.vExtents = _float3(0.7f, 0.7f, 0.7f);
+	//ColliderOBBDesc.vCenter = _float3(0.f, ColliderOBBDesc.vExtents.y, 0.f);
+	//ColliderOBBDesc.vAngles = _float3(0.f, m_pGameInstance->Get_Random(XMConvertToRadians(0.f), XMConvertToRadians(360.f)), 0.f);
+	//
+	//if (FAILED(__super::Add_Component(LEVEL_GAMEPLAY, TEXT("Prototype_Component_Collider_OBB"),
+	//	TEXT("Com_Collider_OBB"), reinterpret_cast<CComponent**>(&m_pColliderCom[CCollider::TYPE_OBB]), &ColliderOBBDesc)))
+	//	return E_FAIL;
+	//
+	///* FOR.Com_Collider_Sphere */
+	//CBounding_Sphere::BOUNDING_SPHERE_DESC			ColliderSphereDesc{};
+	//ColliderSphereDesc.fRadius = 1.2f;
+	//ColliderSphereDesc.vCenter = _float3(0.f, ColliderSphereDesc.fRadius, 0.f);
+	//
+	//
+	//if (FAILED(__super::Add_Component(LEVEL_GAMEPLAY, TEXT("Prototype_Component_Collider_Sphere"),
+	//	TEXT("Com_Collider_Sphere"), reinterpret_cast<CComponent**>(&m_pColliderCom[CCollider::TYPE_SPHERE]), &ColliderSphereDesc)))
+	//	return E_FAIL;
 
 
 	/* FOR.Com_Collider_OBB */
@@ -232,7 +232,7 @@ HRESULT CCarcassBigA::Ready_FSM()
 	Desc.pIsEndAnim = &m_bEndAnim;
 	Desc.pIsResetRootMove =&m_bResetRootMove;
 	Desc.pPrevTrackPos = &m_fPrevTrackPos;
-	Desc.pColliderCtrs = m_bColliderCtrs;
+	//Desc.pColliderCtrs = m_bColliderCtrs;
 	//
 
 

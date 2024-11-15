@@ -52,7 +52,7 @@ protected:
 
 public:
 	static CMonster* Create(ID3D11Device* pDevice, ID3D11DeviceContext* pContext);
-	virtual CPawn* Clone(void* pArg);
+	virtual CGameObject* Clone(void* pArg);
 	virtual void Free() override;
 
 };

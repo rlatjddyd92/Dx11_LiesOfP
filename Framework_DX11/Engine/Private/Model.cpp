@@ -582,7 +582,9 @@ _vector CModel::Play_Animation(_float fTimeDelta, _bool* pOut, list<OUTPUT_EVKEY
 
 	if (m_isEnd_Animations[m_iCurrentAnimIndex] == true)//
 	{
-		m_CurrentTrackPosition = 0.f;
+		if (m_isLoop)
+			m_CurrentTrackPosition = 0.f;
+
 		if (nullptr != pOut)
 			*pOut = true;
 

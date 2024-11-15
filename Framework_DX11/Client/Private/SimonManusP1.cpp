@@ -75,7 +75,7 @@ void CSimonManusP1::Update(_float fTimeDelta)
 		m_vCurRootMove = m_pModelCom->Play_Animation(fTimeDelta, &m_bEndAnim, nullptr);
 
 		//진행한 애니메이션 정도를 통해서 상태 제어(애니메이션이 끝나면 넘어가도록)
-		m_pFSMCom->Update(fTimeDelta);
+		//m_pFSMCom->Update(fTimeDelta);
 
 		_vector vPos = m_pTransformCom->Get_State(CTransform::STATE_POSITION);
 
@@ -87,7 +87,7 @@ void CSimonManusP1::Update(_float fTimeDelta)
 		{
 			m_vCurRootMove = XMVector3TransformNormal(m_vCurRootMove, m_pTransformCom->Get_WorldMatrix());
 
-			m_pTransformCom->Set_State(CTransform::STATE_POSITION, vPos + m_vCurRootMove - m_vRootMoveStack);
+			//m_pTransformCom->Set_State(CTransform::STATE_POSITION, vPos + m_vCurRootMove - m_vRootMoveStack);
 			m_vRootMoveStack = m_vCurRootMove;
 		}
 	}
@@ -95,8 +95,8 @@ void CSimonManusP1::Update(_float fTimeDelta)
 	for (auto& pColliderObj : m_pColliderObject)
 		pColliderObj->Update(fTimeDelta);
 
-	for (auto& pCollider : m_pColliderCom)
-		pCollider->Update(m_pTransformCom->Get_WorldMatrix_Ptr());
+	//for (auto& pCollider : m_pColliderCom)
+	//	pCollider->Update(m_pTransformCom->Get_WorldMatrix_Ptr());
 }
 
 void CSimonManusP1::Late_Update(_float fTimeDelta)
@@ -144,7 +144,7 @@ HRESULT CSimonManusP1::Render()
 
 
 #ifdef _DEBUG
-	m_pColliderCom[1]->Render();
+	//m_pColliderCom[1]->Render();
 	//for (auto& pColliderObj : m_pColliderObject)
 	//	pColliderObj->Render();
 #endif
@@ -168,7 +168,7 @@ HRESULT CSimonManusP1::Ready_Components()
 	ColliderAABBDesc.vCenter = _float3(0.f, ColliderAABBDesc.vExtents.y, 0.f);
 
 	if (FAILED(__super::Add_Component(LEVEL_GAMEPLAY, TEXT("Prototype_Component_Collider_AABB"),
-		TEXT("Com_Collider_AABB"), reinterpret_cast<CComponent**>(&m_pColliderCom[TYPE_AABB]), &ColliderAABBDesc)))
+		TEXT("Com_Collider_AABB"), reinterpret_cast<CComponent**>(&m_pColliderCom[CCollider::TYPE_AABB]), &ColliderAABBDesc)))
 		return E_FAIL;
 
 	/* FOR.Com_Collider_OBB */
@@ -178,7 +178,7 @@ HRESULT CSimonManusP1::Ready_Components()
 	ColliderOBBDesc.vAngles = _float3(0.f, m_pGameInstance->Get_Random(XMConvertToRadians(0.f), XMConvertToRadians(360.f)), 0.f);
 
 	if (FAILED(__super::Add_Component(LEVEL_GAMEPLAY, TEXT("Prototype_Component_Collider_OBB"),
-		TEXT("Com_Collider_OBB"), reinterpret_cast<CComponent**>(&m_pColliderCom[TYPE_OBB]), &ColliderOBBDesc)))
+		TEXT("Com_Collider_OBB"), reinterpret_cast<CComponent**>(&m_pColliderCom[CCollider::TYPE_OBB]), &ColliderOBBDesc)))
 		return E_FAIL;
 
 	/* FOR.Com_Collider_Sphere */
@@ -188,7 +188,7 @@ HRESULT CSimonManusP1::Ready_Components()
 
 
 	if (FAILED(__super::Add_Component(LEVEL_GAMEPLAY, TEXT("Prototype_Component_Collider_Sphere"),
-		TEXT("Com_Collider_Sphere"), reinterpret_cast<CComponent**>(&m_pColliderCom[TYPE_SPHERE]), &ColliderSphereDesc)))
+		TEXT("Com_Collider_Sphere"), reinterpret_cast<CComponent**>(&m_pColliderCom[CCollider::TYPE_SPHERE]), &ColliderSphereDesc)))
 		return E_FAIL;
 
 
@@ -238,23 +238,22 @@ HRESULT CSimonManusP1::Ready_FSM()
 	
 	Desc.pIsEndAnim = &m_bEndAnim;
 	Desc.pIsResetRootMove =&m_bResetRootMove;
-	Desc.pGrogyTrackPos = &m_GrogyTrackPos;
 	Desc.pColliderCtrs = m_bColliderCtrs;
 	//
 
 
-	m_pFSMCom->Add_State(CState_SimonManusP1_Idle::Create(m_pFSMCom, this, IDLE, &Desc));
-	m_pFSMCom->Add_State(CState_SimonManusP1_Walk::Create(m_pFSMCom, this, WALK, &Desc));
-	m_pFSMCom->Add_State(CState_SimonManusP1_Run::Create(m_pFSMCom, this, RUN, &Desc));
-	m_pFSMCom->Add_State(CState_SimonManusP1_Grogy::Create(m_pFSMCom, this, GROGY, &Desc));
-	m_pFSMCom->Add_State(CState_SimonManusP1_HitFatal::Create(m_pFSMCom, this, HITFATAL, &Desc));
-	m_pFSMCom->Add_State(CState_SimonManusP1_Die::Create(m_pFSMCom, this, DIE, &Desc));
+	//m_pFSMCom->Add_State(CState_SimonManusP1_Idle::Create(m_pFSMCom, this, IDLE, &Desc));
+	//m_pFSMCom->Add_State(CState_SimonManusP1_Walk::Create(m_pFSMCom, this, WALK, &Desc));
+	//m_pFSMCom->Add_State(CState_SimonManusP1_Run::Create(m_pFSMCom, this, RUN, &Desc));
+	//m_pFSMCom->Add_State(CState_SimonManusP1_Grogy::Create(m_pFSMCom, this, GROGY, &Desc));
+	//m_pFSMCom->Add_State(CState_SimonManusP1_HitFatal::Create(m_pFSMCom, this, HITFATAL, &Desc));
+	//m_pFSMCom->Add_State(CState_SimonManusP1_Die::Create(m_pFSMCom, this, DIE, &Desc));
+	//
+	//m_pFSMCom->Add_State(CState_SimonManusP1_StingAttack::Create(m_pFSMCom, this, ATK_STING, &Desc));
+	//m_pFSMCom->Add_State(CState_SimonManusP1_UpperAttack::Create(m_pFSMCom, this, ATK_UPPER, &Desc));
 
-	m_pFSMCom->Add_State(CState_SimonManusP1_StingAttack::Create(m_pFSMCom, this, ATK_STING, &Desc));
-	m_pFSMCom->Add_State(CState_SimonManusP1_UpperAttack::Create(m_pFSMCom, this, ATK_UPPER, &Desc));
 
-
-	m_pFSMCom->Set_State(IDLE);
+	//m_pFSMCom->Set_State(IDLE);
 
 	return S_OK;
 

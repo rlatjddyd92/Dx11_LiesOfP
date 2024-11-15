@@ -172,6 +172,7 @@
     <ClInclude Include="..\public\BackGround.h" />
     <ClInclude Include="..\Public\CarcassBigA.h" />
     <ClInclude Include="..\Public\Client_Defines.h" />
+    <ClInclude Include="..\Public\ColliderObject.h" />
     <ClInclude Include="..\Public\Effect_Base.h" />
     <ClInclude Include="..\Public\Effect_Container.h" />
     <ClInclude Include="..\Public\Effect_Manager.h" />
@@ -190,6 +191,7 @@
     <ClInclude Include="..\Public\Particle_Snow.h" />
     <ClInclude Include="..\public\Player.h" />
     <ClInclude Include="..\Public\Player_Stat_Manager.h" />
+    <ClInclude Include="..\Public\SimonManusP1.h" />
     <ClInclude Include="..\Public\Sky.h" />
     <ClInclude Include="..\Public\Stargazer.h" />
     <ClInclude Include="..\Public\State_CarcassBigA_Attack.h" />
@@ -231,6 +233,7 @@
   <ItemGroup>
     <ClCompile Include="..\private\BackGround.cpp" />
     <ClCompile Include="..\Private\CarcassBigA.cpp" />
+    <ClCompile Include="..\Private\ColliderObject.cpp" />
     <ClCompile Include="..\Private\Effect_Base.cpp" />
     <ClCompile Include="..\Private\Effect_Container.cpp" />
     <ClCompile Include="..\Private\Effect_Manager.cpp" />
@@ -249,6 +252,7 @@
     <ClCompile Include="..\Private\Particle_Snow.cpp" />
     <ClCompile Include="..\private\Player.cpp" />
     <ClCompile Include="..\Private\Player_Stat_Manager.cpp" />
+    <ClCompile Include="..\Private\SimonManusP1.cpp" />
     <ClCompile Include="..\Private\Sky.cpp" />
     <ClCompile Include="..\Private\Stargazer.cpp" />
     <ClCompile Include="..\Private\State_CarcassBigA_Attack.cpp" />

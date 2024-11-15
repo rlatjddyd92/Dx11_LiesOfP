@@ -20,6 +20,7 @@ HRESULT CState_Player_OH_Idle::Initialize(_uint iStateNum, void* pArg)
 
 HRESULT CState_Player_OH_Idle::Start_State(void* pArg)
 {
+    m_pPlayer->Change_Animation_Boundry(m_iAnimation_Idle, true);
     m_pPlayer->Change_Animation(m_iAnimation_Idle, true);
 
     return S_OK;

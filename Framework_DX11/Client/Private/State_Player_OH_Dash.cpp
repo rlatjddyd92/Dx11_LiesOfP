@@ -36,15 +36,17 @@ HRESULT CState_Player_OH_Dash::Start_State(void* pArg)
 {
     Select_DashAnimation();
     //m_pPlayer->Get_RigidBody()->Set_Friction(_float3(10.f, 0.f, 10.f));
+    *m_pResetRootMove = true;
+
     return S_OK;
 }
 
 void CState_Player_OH_Dash::Update(_float fTimeDelta)
 {
-    //if (*m_pIsEndAnim)
-    //{
-    //    m_pPlayer->Change_State(CPlayer::WALK);
-    //}
+    if (*m_pIsEndAnim)
+    {
+        m_pPlayer->Change_State(CPlayer::WALK);
+    }
 }
 
 

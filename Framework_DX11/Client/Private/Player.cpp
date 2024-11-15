@@ -54,14 +54,16 @@ HRESULT CPlayer::Initialize(void * pArg)
 
 	// 임시 루트본 설정
 	m_pModelCom->Set_UFBIndices(UFB_ROOT, 2);
-	m_pModelCom->Set_UFBIndices(UFB_BOUNDARY_UPPER, 8);
+	m_pModelCom->Set_UFBIndices(UFB_BOUNDARY_UPPER, 5);
 	m_pModelCom->Update_Boundary();
 	return S_OK;
 }
 
 void CPlayer::Priority_Update(_float fTimeDelta)
 {
-	m_pModelCom->Set_UFBIndices(UFB_ROOT, 2);
+	m_pModelCom->Set_UFBIndices(UFB_BOUNDARY_UPPER, 6);
+
+	m_pModelCom->Update_Boundary();
 	if (m_isGuard)
 	{
 		m_fGuardTime = fTimeDelta;

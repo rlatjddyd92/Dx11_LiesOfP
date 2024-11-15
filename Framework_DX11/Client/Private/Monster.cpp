@@ -62,20 +62,16 @@ void CMonster::Late_Update(_float fTimeDelta)
 	//if (nullptr == pTargetCollider)
 	//	return;
 	//
-	//for (size_t i = 0; i < TYPE_END; i++)
-	//{
-	//	m_pColliderCom[i]->Intersect(dynamic_cast<CCollider*>(pTargetCollider));
-	//}
-
-
-	m_pColliderCom->Intersect(dynamic_cast<CCollider*>(pTargetCollider));
-
+	//
+	//m_pColliderCom->Intersect(dynamic_cast<CCollider*>(pTargetCollider));
+	//
 	if (true == m_pGameInstance->isIn_Frustum_WorldSpace(m_pTransformCom->Get_State(CTransform::STATE_POSITION), 3.f))
 	{
 		m_pGameInstance->Add_RenderObject(CRenderer::RG_NONBLEND, this);
 
 #ifdef _DEBUG
-		m_pGameInstance->Add_DebugObject(m_pColliderCom);
+		//m_pGameInstance->Add_DebugObject(m_pColliderCom);
+#endif
 	}
 }
 
@@ -174,7 +170,7 @@ CMonster* CMonster::Create(ID3D11Device* pDevice, ID3D11DeviceContext* pContext)
 
 
 
-CPawn* CMonster::Clone(void* pArg)
+CGameObject* CMonster::Clone(void* pArg)
 {
 	CMonster* pInstance = new CMonster(*this);
 
