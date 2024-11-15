@@ -113,6 +113,21 @@ void CUIPage::Release_Control(UG_CTRL* pCtrl)
 	Safe_Delete(pCtrl);
 }
 
+void CUIPage::UpdatePart_ByIndex(_int Index, _float fTimeDelta)
+{
+	m_vecPart[Index]->MakeDirec();
+
+	if (m_vecPart[Index]->iParentPart_Index == -1)
+	{
+		if (m_vecPageAction[_int(PAGEACTION::ACTION_CLOSING)] + m_vecPageAction[_int(PAGEACTION::ACTION_OPENING)] == 1)
+			m_vecPart[Index]->fRatio = m_fTopPartMove;
+
+		m_vecPart[Index]->MovePart({ m_fX,m_fY }, fTimeDelta);
+	}
+	else
+		m_vecPart[Index]->MovePart(m_vecPart[m_vecPart[Index]->iParentPart_Index]->fPosition, fTimeDelta);
+}
+
 void CUIPage::UpdatePart_ByControl(UG_CTRL* pCtrl)
 {
 	for (auto& iter : pCtrl->PartIndexlist)

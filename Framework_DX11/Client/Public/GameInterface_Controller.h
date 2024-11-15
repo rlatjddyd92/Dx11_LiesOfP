@@ -72,7 +72,7 @@ public: // 외부에서 매니저 접근
 	// 매 프레임 마다 함수를 사용해줘야 작동함 (Gameinterface가 외부 정보를 저장/관리하지 않도록 하기 위함)
 
 	// 직교 UI 요청 
-	void Register_Pointer_Into_OrthoUIPage(UI_ORTHO_TYPE eType, const void* pObj) { m_pUIManager->Register_Pointer_Into_OrthoUIPage(eType, pObj); }
+	void Register_Pointer_Into_OrthoUIPage(UI_ORTHO_OBJ_TYPE eType, void* pObj) { m_pUIManager->Register_Pointer_Into_OrthoUIPage(eType, pObj); }
 
 #pragma endregion
 

@@ -24,12 +24,23 @@ public:
 
 	typedef struct ORTHO_HOST
 	{
-		UI_ORTHO_TYPE eType = UI_ORTHO_TYPE::ORTHO_END;
-		const CGameObject* pHost = { nullptr };
+		UI_ORTHO_OBJ_TYPE eType = UI_ORTHO_OBJ_TYPE::ORTHO_END;
+		CGameObject* pHost = { nullptr };
 	}OR_HOST;
 
 	typedef struct ORTHO_RENDER_CTRL
 	{
+		ORTHO_RENDER_CTRL(_float& fDistance, UPART* Part)
+		{
+			fDistance_From_Cam = fDistance;
+			pPartInfo = new UPART;
+			memcpy(pPartInfo, Part, sizeof(Part));
+		}
+		~ORTHO_RENDER_CTRL()
+		{
+			Safe_Delete(pPartInfo);
+		}
+
 		_float fDistance_From_Cam = 0.f;
 		UPART* pPartInfo = { nullptr };
 
@@ -79,11 +90,16 @@ public:
 
 	priority_queue<OR_RENDER*>* Get_Ortho_Render_Ctrl() { return &m_queue_Ortho_Render_Ctrl; } // <- Render_Client에서 정보 이용 후 pop이 가능해야 함 (안 그러면 다음 것을 못 사용함)
 
-	void Register_Pointer_Into_OrthoUIPage(UI_ORTHO_TYPE eType, const void* pObj); 
+	void Register_Pointer_Into_OrthoUIPage(UI_ORTHO_OBJ_TYPE eType, void* pObj);
 
 private:
 	void Initialize_Ortho_Info(); // <- 직교 UI 사용을 위한 기본 세팅을 진행한다 
-	void Make_OrthoGraphy_Position(const CGameObject* pHost, PART_GROUP eGroup, _float2* fPosition); // <- 직교 좌표를 뽑는다, 직교 UI 타입 별 보정치도 적용한다 
+
+	void CheckHost(_float fTimeDelta); // <- 모든 객체를 돌면서 그려야 하는 것이 있는 지 체크 
+	void CheckHost_By_ObjType(CGameObject* pHost, UI_ORTHO_OBJ_TYPE eType, _float fTimeDelta); // <- 객체 그룹 별로 정해진 논리에 따라 그려야 하는 것이 있는 지 체크 
+	void Make_Ortho_UI(CGameObject* pHost, PART_GROUP eGroup, _float fTimeDelta, _float fRatio = -1.f); // 특정 UIPart 그룹을 사용해야 할 때 관련된 것을 진행하고 큐에 넣는다 
+	_bool Make_OrthoGraphy_Position(CGameObject* pHost, PART_GROUP eGroup, _float2* fPosition, _float* fDistance_Cam); // <- 직교 좌표를 뽑는다, 직교 UI 타입 별 보정치도 적용한다 
+
 
 protected:
 	list<OR_HOST*> m_Ortho_Host_list; // <- 직교 UI 가 필요한 대상 목록

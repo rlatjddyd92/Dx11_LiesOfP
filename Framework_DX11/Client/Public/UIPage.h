@@ -144,6 +144,8 @@ protected:
 	void UpdatePart_ByControl(UG_CTRL* pCtrl);
 	void Release_Control(UG_CTRL* pCtrl);
 
+	void UpdatePart_ByIndex(_int Index, _float fTimeDelta);
+
 protected:
 	vector<UPART*> m_vecPart;
 	_wstring m_UIPageName = {};

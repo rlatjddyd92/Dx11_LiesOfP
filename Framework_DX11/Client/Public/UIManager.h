@@ -89,7 +89,7 @@ public:
 
 
 #pragma region Page_Ortho
-	void Register_Pointer_Into_OrthoUIPage(UI_ORTHO_TYPE eType, const void* pObj) { m_pUIPage_Ortho->Register_Pointer_Into_OrthoUIPage(eType, pObj); }
+	void Register_Pointer_Into_OrthoUIPage(UI_ORTHO_OBJ_TYPE eType, void* pObj) { m_pUIPage_Ortho->Register_Pointer_Into_OrthoUIPage(eType, pObj); }
 
 
 #pragma endregion

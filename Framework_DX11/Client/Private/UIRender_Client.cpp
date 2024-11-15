@@ -79,18 +79,33 @@ HRESULT CUIRender_Client::Render()
 	return S_OK;
 }
 
-HRESULT CUIRender_Client::Render_Ortho( CUIPage_Ortho* pPage_Ortho)
+HRESULT CUIRender_Client::Render_Ortho(CUIPage_Ortho* pPage_Ortho)
 {
+	// 임시 코드 
+	// 직교 UI가 아직 안전하지 않음 
+	// 비활성화 상태로 git에 올려 두기 
+	return S_OK;
+
 	priority_queue<CUIPage_Ortho::OR_RENDER*>* pQueue = pPage_Ortho->Get_Ortho_Render_Ctrl();
 
 	while (!pQueue->empty())
 	{
-		CUIPage::UPART* pNow = pQueue->top()->pPartInfo;
-		pQueue->pop();
+		CUIPage_Ortho::OR_RENDER* pRender = pQueue->top();
+		CUIPage::UPART* pNow = pRender->pPartInfo;
+		_bool bFail = false;
+		
 
 		if (FAILED(Render_Part(*pNow, *pPage_Ortho, true)))
+			bFail = true;
+
+
+		Safe_Delete(pNow);
+		pQueue->pop();
+
+		if (bFail)
 			return E_FAIL;
 	}
+	
 
 	return S_OK;
 }

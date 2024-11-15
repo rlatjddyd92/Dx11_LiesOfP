@@ -79,7 +79,7 @@
 		NAME_END
 	};
 
-	enum class UI_ORTHO_TYPE
+	enum class UI_ORTHO_OBJ_TYPE
 	{
 		ORTHO_NORMAL_MONSTER,
 		ORTHO_ELITE_MONSTER,
