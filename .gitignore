@@ -496,3 +496,13 @@ Framework_DX11/Tools/Bin/ModelData/Anim/Monster/CarcassNormal/CarcassNormal.dat
 *.obj
 /Binary_DX11/.vs
 *.cso
+Binary_DX11/Client/Bin/ModelData/Anim/Player/Player.dat
+Binary_DX11/Client/Bin/Resources/Models/Player_FBX/Player.fbx
+Framework_DX11/Client/Bin/ModelData/Anim/CreatedBinFiles/Player.Dat
+Framework_DX11/Client/Bin/ModelData/Anim/Player/Player.dat
+Framework_DX11/Tools/Bin/ModelData/Anim/CreatedBinFiles/Player.Dat
+Framework_DX11/Tools/Bin/ModelData/Anim/Player/Player.dat
+Framework_DX11/Tools/Bin/ModelData/Anim/PlayerExample/PlayerExample.dat
+Framework_DX11/Client/Bin/ModelData/Anim/CreatedBinFiles/Player.Dat
+Framework_DX11/Tools/Bin/ModelData/Anim/CreatedBinFiles/Player.Dat
+Framework_DX11/Tools/Bin/ModelData/Anim/PlayerExample/PlayerExample.dat
