@@ -292,6 +292,54 @@
     <Filter Include="02.GameObjects\10.ColliderIbject">
       <UniqueIdentifier>{e0ad8f06-a0d8-4d14-8a84-d74eacc4032c}</UniqueIdentifier>
     </Filter>
+    <Filter Include="05.Fsm\Player\OneHand\00.Attack\Rapier\SA1">
+      <UniqueIdentifier>{c45a6618-f69d-43d6-a2f9-edd908511d3c}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="05.Fsm\Player\OneHand\00.Attack\Rapier\NA1">
+      <UniqueIdentifier>{2d32d55d-f91c-470b-abd2-462b897ad152}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="05.Fsm\Player\OneHand\00.Attack\Rapier\NA2">
+      <UniqueIdentifier>{ed048a41-07c1-46ea-8ff3-b3c25282200f}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="05.Fsm\Player\OneHand\00.Attack\Rapier\00.FableArts">
+      <UniqueIdentifier>{1f5b0ce1-9e6a-4bff-9f5e-183471e7c135}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="05.Fsm\Player\OneHand\00.Attack\Rapier\00.FableArts\Parry">
+      <UniqueIdentifier>{6f478c04-42e3-4487-8f42-ce122fd61b3d}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="05.Fsm\Player\OneHand\00.Attack\Rapier\00.FableArts\ParryAttack">
+      <UniqueIdentifier>{80eb0dfe-35b3-4ed2-905b-9da585b9da6a}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="05.Fsm\Player\OneHand\00.Attack\Rapier\01.Fatal">
+      <UniqueIdentifier>{2e09a965-6398-40b0-b8b5-a30da0923e63}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="05.Fsm\Player\OneHand\00.Attack\Rapier\02.ChargeAttack">
+      <UniqueIdentifier>{da07eebc-8583-4bcc-9fb3-22ea92aad7a8}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="05.Fsm\Player\TwoHand\00.Attack">
+      <UniqueIdentifier>{4dd86f00-dc2d-4774-9b2b-52fa164b942c}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="05.Fsm\Player\TwoHand\00.Attack\FlameSword">
+      <UniqueIdentifier>{a927d621-aeae-4a65-b50b-58b6186e38d5}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="05.Fsm\Player\TwoHand\Dash">
+      <UniqueIdentifier>{6d51f311-bc28-4eb0-8773-86c72d78f3d9}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="05.Fsm\Player\TwoHand\Guard">
+      <UniqueIdentifier>{b774ff71-4c6a-48b0-bf02-ec836d7791e7}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="05.Fsm\Player\TwoHand\Idle">
+      <UniqueIdentifier>{20c7ed81-8b8b-4d24-9b87-e9de78ce4273}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="05.Fsm\Player\TwoHand\Run">
+      <UniqueIdentifier>{8326ef6d-1381-4f94-8c1b-de33d5972cd1}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="05.Fsm\Player\TwoHand\Walk">
+      <UniqueIdentifier>{b02a41b8-7218-44da-b2b8-37c9c3e8087a}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="05.Fsm\Player\TwoHand\Jump">
+      <UniqueIdentifier>{e1cf3f66-98a7-4608-8663-96ab290a2554}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Client.h">
@@ -472,6 +520,18 @@
     <ClInclude Include="..\Public\SimonManusP1.h">
       <Filter>02.GameObjects\02.Monster\SimonManus</Filter>
     </ClInclude>
+    <ClInclude Include="..\Public\State_Player_Hit.h">
+      <Filter>05.Fsm\Player\Common\Hit</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Public\State_Player_Rapier_SA1.h">
+      <Filter>05.Fsm\Player\OneHand\00.Attack\Rapier\SA1</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Public\State_Player_Rapier_NA1.h">
+      <Filter>05.Fsm\Player\OneHand\00.Attack\Rapier\NA1</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Public\State_Player_Rapier_NA2.h">
+      <Filter>05.Fsm\Player\OneHand\00.Attack\Rapier\NA2</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Client.cpp">
@@ -624,6 +684,18 @@
     </ClCompile>
     <ClCompile Include="..\Private\SimonManusP1.cpp">
       <Filter>02.GameObjects\02.Monster\SimonManus</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Private\State_Player_Hit.cpp">
+      <Filter>05.Fsm\Player\Common\Hit</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Private\State_Player_Rapier_SA1.cpp">
+      <Filter>05.Fsm\Player\OneHand\00.Attack\Rapier\SA1</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Private\State_Player_Rapier_NA1.cpp">
+      <Filter>05.Fsm\Player\OneHand\00.Attack\Rapier\NA1</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Private\State_Player_Rapier_NA2.cpp">
+      <Filter>05.Fsm\Player\OneHand\00.Attack\Rapier\NA2</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

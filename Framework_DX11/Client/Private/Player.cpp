@@ -8,11 +8,16 @@
 #include "Effect_Manager.h"
 #include "Effect_Container.h"
 
+#include "State_Player_Hit.h"
 #include "State_Player_OH_Idle.h"
 #include "State_Player_OH_Walk.h"
 #include "State_Player_OH_Run.h"
 #include "State_Player_OH_Guard.h"
 #include "State_Player_OH_Dash.h"
+
+#include "State_Player_Rapier_NA1.h"
+#include "State_Player_Rapier_NA2.h"
+#include "State_Player_Rapier_SA1.h"
 
 CPlayer::CPlayer(ID3D11Device * pDevice, ID3D11DeviceContext * pContext)
 	: CPawn{ pDevice, pContext }
@@ -85,7 +90,11 @@ void CPlayer::Priority_Update(_float fTimeDelta)
 
 void CPlayer::Update(_float fTimeDelta)
 {
-
+	if (KEY_TAP(KEY::H))
+	{
+		int a = 0;
+		Change_State(RAPIER_NA1, &a);
+	}
 	m_pFsmCom->Update(fTimeDelta);
 
 
@@ -178,7 +187,7 @@ void CPlayer::Late_Update(_float fTimeDelta)
 
 
 	m_pRigidBodyCom->Update(fTimeDelta);
-	m_pNavigationCom->SetUp_OnCell(m_pTransformCom, 0.1f, fTimeDelta);
+	m_pNavigationCom->SetUp_OnCell(m_pTransformCom, 0.f, fTimeDelta);
 
 	m_pGameInstance->Add_RenderObject(CRenderer::RG_NONBLEND, this);
 	m_pGameInstance->Add_RenderObject(CRenderer::RG_SHADOWOBJ, this);
@@ -377,13 +386,23 @@ HRESULT CPlayer::Ready_FSM()
 	Desc.pIsResetRootMove = &m_bResetRootMove;
 	Desc.pPrevTrackPos = &m_fPrevTrackPos;
 
-	m_pFsmCom->Add_State(CState_Player_OH_Idle::Create(m_pFsmCom, this, IDLE, &Desc));
-	m_pFsmCom->Add_State(CState_Player_OH_Walk::Create(m_pFsmCom, this, WALK, &Desc));
-	m_pFsmCom->Add_State(CState_Player_OH_Run::Create(m_pFsmCom, this, RUN, &Desc));
-	m_pFsmCom->Add_State(CState_Player_OH_Guard::Create(m_pFsmCom, this, GUARD, &Desc));
-	m_pFsmCom->Add_State(CState_Player_OH_Dash::Create(m_pFsmCom, this, DASH, &Desc));
 
-	m_pFsmCom->Set_State(IDLE);
+	m_pFsmCom->Add_State(CState_Player_Hit::Create(m_pFsmCom, this, HIT, &Desc));
+
+	m_pFsmCom->Add_State(CState_Player_OH_Idle::Create(m_pFsmCom, this, OH_IDLE, &Desc));
+	m_pFsmCom->Add_State(CState_Player_OH_Walk::Create(m_pFsmCom, this, OH_WALK, &Desc));
+	m_pFsmCom->Add_State(CState_Player_OH_Run::Create(m_pFsmCom, this, OH_RUN, &Desc));
+	m_pFsmCom->Add_State(CState_Player_OH_Guard::Create(m_pFsmCom, this, OH_GUARD, &Desc));
+	m_pFsmCom->Add_State(CState_Player_OH_Dash::Create(m_pFsmCom, this, OH_DASH, &Desc));
+
+
+	m_pFsmCom->Add_State(CState_Player_Rapier_NA1::Create(m_pFsmCom, this, RAPIER_NA1, &Desc));	// 좌클릭 공격
+	m_pFsmCom->Add_State(CState_Player_Rapier_NA2::Create(m_pFsmCom, this, RAPIER_NA2, &Desc));	// 좌클릭 공격
+	m_pFsmCom->Add_State(CState_Player_Rapier_SA1::Create(m_pFsmCom, this, RAPIER_SA1, &Desc));	// 우클릭 공격
+	//FCA  - 페이탈 아츠
+	// CA1 - 모으기 공격
+
+	m_pFsmCom->Set_State(OH_IDLE);
 
 	return S_OK;
 }

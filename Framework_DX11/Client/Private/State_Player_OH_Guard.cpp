@@ -52,7 +52,7 @@ void CState_Player_OH_Guard::Update(_float fTimeDelta)
 
     if (KEY_NONE(KEY::LSHIFT))
     {
-        m_pPlayer->Change_State(CPlayer::IDLE);
+        m_pPlayer->Change_State(CPlayer::OH_IDLE);
     }
 }
 

@@ -35,6 +35,9 @@ HRESULT CState_Player_OH_Dash::Initialize(_uint iStateNum, void* pArg)
 HRESULT CState_Player_OH_Dash::Start_State(void* pArg)
 {
     Select_DashAnimation();
+
+    m_pPlayer->Set_IsInvicible(true);
+
     //m_pPlayer->Get_RigidBody()->Set_Friction(_float3(10.f, 0.f, 10.f));
     *m_pResetRootMove = true;
 
@@ -45,7 +48,8 @@ void CState_Player_OH_Dash::Update(_float fTimeDelta)
 {
     if (*m_pIsEndAnim)
     {
-        m_pPlayer->Change_State(CPlayer::WALK);
+        m_pPlayer->Reset_Root();
+        m_pPlayer->Change_State(CPlayer::OH_IDLE);
     }
 }
 
@@ -53,6 +57,7 @@ void CState_Player_OH_Dash::Update(_float fTimeDelta)
 
 void CState_Player_OH_Dash::End_State()
 {
+    m_pPlayer->Set_IsInvicible(false);
 }
 
 void CState_Player_OH_Dash::Select_DashAnimation()

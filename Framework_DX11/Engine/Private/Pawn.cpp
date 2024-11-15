@@ -78,6 +78,11 @@ void CPawn::Change_Animation_Boundry(_uint iAnimIndex, _bool IsLoop, _float fDur
 	m_pModelCom->SetUp_NextAnimation_Boundary(iAnimIndex, IsLoop, fDuration, iStartFrame);
 }
 
+_int CPawn::Get_Frame()
+{
+	return m_pModelCom->Get_CurrentFrame();
+}
+
 HRESULT CPawn::Add_PartObject(_uint iPartID, const _wstring& strPrototypeTag, void* pArg)
 {
 	CGameObject* pPartObject = m_pGameInstance->Clone_GameObject(strPrototypeTag, pArg);

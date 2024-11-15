@@ -50,11 +50,11 @@ void CState_Player_OH_Run::Update(_float fTimeDelta)
 
     if (false == Move(fTimeDelta) && m_fRunEndTime > 0.1f)
     {
-        m_pPlayer->Change_State(CPlayer::IDLE);
+        m_pPlayer->Change_State(CPlayer::OH_IDLE);
     }
     else if(m_fRunEndTime > 0.1f)
     {
-        m_pPlayer->Change_State(CPlayer::WALK);
+        m_pPlayer->Change_State(CPlayer::OH_WALK);
     }
    /* else if (KEY_TAP(KEY::SPACE))
     {

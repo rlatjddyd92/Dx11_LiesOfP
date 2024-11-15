@@ -15,9 +15,14 @@ class CPlayer final : public CPawn
 public:
 	enum PARTID { PART_BODY, PART_WEAPON, PART_END };
 
+	enum WEAPON_TYPE { WEP_RAPIER, WEP_SCISSOR, WEP_FLAME, WEP_END };
+
 	enum PLAYER_STATE
 	{
-		IDLE, WALK, RUN, GUARD, JUMP, DASH, STATE_END
+		HIT,
+		OH_IDLE, OH_WALK, OH_RUN, OH_GUARD, OH_JUMP, OH_DASH, 
+		RAPIER_NA1, RAPIER_NA2, RAPIER_SA1,
+		STATE_END
 	};
 
 public:
@@ -27,15 +32,25 @@ public:
 	_bool					Get_IsJump() { return m_isJump; }
 	void					Set_IsJump(_bool isJump) { m_isJump = isJump; }
 
-	_bool					Get_IsLockOn() { return m_isLockOn; }
-	void					Set_IsLockOn(_bool isLockOn) { m_isLockOn = isLockOn; }
-
 	_bool					Get_IsGuard() { return m_isGuard; }
 	void					Set_IsGuard(_bool isGuard) {
 		m_isGuard = isGuard;
 		if (m_isGuard)
 			m_fGuardTime = 0.f;
 	}
+
+	_bool					Get_IsLockOn() { return m_isLockOn; }
+	void					Set_IsLockOn(_bool isLockOn) { m_isLockOn = isLockOn; }
+
+	_bool					Get_IsInvicible() { return m_isInvicible; }
+	void					Set_IsInvicible(_bool isInvicible) { m_isInvicible = isInvicible; }
+
+	WEAPON_TYPE				Get_WeaponType() { return m_eWeaponType; }
+	void					Set_WeaponType(WEAPON_TYPE eType) { m_eWeaponType = eType; }
+
+	void					Reset_Root() { m_vCurRootMove = m_vRootMoveStack = _vector{0,0,0,0}; }
+
+
 
 private:
 	CPlayer(ID3D11Device* pDevice, ID3D11DeviceContext* pContext);
@@ -67,8 +82,11 @@ private:
 	_bool				m_isJump = { false };
 	_bool				m_isGuard = { false };
 	_bool				m_isLockOn = { false };
+	_bool				m_isInvicible = { false };
 
 	_float				m_fGuardTime = {};
+
+	WEAPON_TYPE			m_eWeaponType = { WEP_RAPIER };
 
 private:
 	_vector		m_vRootMoveStack = {};

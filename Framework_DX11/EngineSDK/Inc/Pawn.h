@@ -36,6 +36,7 @@ public:
 	void		Set_Animation(_uint iAnimIndex, _bool IsLoop = false);
 	void		Change_Animation(_uint iAnimIndex, _bool IsLoop = false, _float fDuration = 0.2f, _uint iStartFrame = 0);
 	void		Change_Animation_Boundry(_uint iAnimIndex, _bool IsLoop = false, _float fDuration = 0.2f, _uint iStartFrame = 0);
+	_int		Get_Frame();
 
 protected:
 	class CShader*		m_pShaderCom = { nullptr };

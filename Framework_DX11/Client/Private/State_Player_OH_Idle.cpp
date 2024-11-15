@@ -30,23 +30,23 @@ void CState_Player_OH_Idle::Update(_float fTimeDelta)
 {
     if (KEY_HOLD(KEY::LSHIFT))
     {
-        m_pPlayer->Change_State(CPlayer::GUARD);
+        m_pPlayer->Change_State(CPlayer::OH_GUARD);
     }
     else if (KEY_HOLD(KEY::W) || KEY_HOLD(KEY::S) || KEY_HOLD(KEY::D) || KEY_HOLD(KEY::A))
     {
         if (KEY_HOLD(KEY::SPACE))
         {
-            m_pPlayer->Change_State(CPlayer::RUN);
+            m_pPlayer->Change_State(CPlayer::OH_RUN);
         }
         else
         {
-            m_pPlayer->Change_State(CPlayer::WALK);
+            m_pPlayer->Change_State(CPlayer::OH_WALK);
         }
         return;
     }
     else if (KEY_TAP(KEY::SPACE))
     {
-        m_pPlayer->Change_State(CPlayer::DASH);
+        m_pPlayer->Change_State(CPlayer::OH_DASH);
     }
 }
 

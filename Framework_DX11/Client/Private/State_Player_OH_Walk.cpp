@@ -40,13 +40,13 @@ void CState_Player_OH_Walk::Update(_float fTimeDelta)
 {
     if (false == Move(fTimeDelta))
     {
-        m_pPlayer->Change_State(CPlayer::IDLE);
+        m_pPlayer->Change_State(CPlayer::OH_IDLE);
         return;
     }
 
     if (KEY_HOLD(KEY::SPACE))
     {
-        m_pPlayer->Change_State(CPlayer::RUN);
+        m_pPlayer->Change_State(CPlayer::OH_RUN);
     }
 }
 
