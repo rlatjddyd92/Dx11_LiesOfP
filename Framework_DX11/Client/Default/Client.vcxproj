@@ -169,6 +169,7 @@
     <Text Include="ReadMe.txt" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="..\Public\State_SimonManusP1_AvoidSwing.h" />
     <ClInclude Include="..\public\BackGround.h" />
     <ClInclude Include="..\Public\CarcassBigA.h" />
     <ClInclude Include="..\Public\Client_Defines.h" />
@@ -209,6 +210,18 @@
     <ClInclude Include="..\Public\State_Player_OH_Jump.h" />
     <ClInclude Include="..\Public\State_Player_OH_Run.h" />
     <ClInclude Include="..\Public\State_Player_OH_Walk.h" />
+    <ClInclude Include="..\Public\State_SimonManusP1_AttackStop.h" />
+    <ClInclude Include="..\Public\State_SimonManusP1_ChasingSwing.h" />
+    <ClInclude Include="..\Public\State_SimonManusP1_Die.h" />
+    <ClInclude Include="..\Public\State_SimonManusP1_Grogy.h" />
+    <ClInclude Include="..\Public\State_SimonManusP1_HitFatal.h" />
+    <ClInclude Include="..\Public\State_SimonManusP1_Idle.h" />
+    <ClInclude Include="..\Public\State_SimonManusP1_JumpToSwing.h" />
+    <ClInclude Include="..\Public\State_SimonManusP1_Run.h" />
+    <ClInclude Include="..\Public\State_SimonManusP1_Stamp.h" />
+    <ClInclude Include="..\Public\State_SimonManusP1_StingAttack.h" />
+    <ClInclude Include="..\Public\State_SimonManusP1_UpperAttack.h" />
+    <ClInclude Include="..\Public\State_SimonManusP1_Walk.h" />
     <ClInclude Include="..\Public\StaticObj.h" />
     <ClInclude Include="..\Public\Terrain.h" />
     <ClInclude Include="..\Public\Texture_Effect.h" />
@@ -231,6 +244,7 @@
     <ClInclude Include="UI_Enum.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="..\Private\State_SimonManusP1_AvoidSwing.cpp" />
     <ClCompile Include="..\private\BackGround.cpp" />
     <ClCompile Include="..\Private\CarcassBigA.cpp" />
     <ClCompile Include="..\Private\ColliderObject.cpp" />
@@ -270,6 +284,18 @@
     <ClCompile Include="..\Private\State_Player_OH_Jump.cpp" />
     <ClCompile Include="..\Private\State_Player_OH_Run.cpp" />
     <ClCompile Include="..\Private\State_Player_OH_Walk.cpp" />
+    <ClCompile Include="..\Private\State_SimonManusP1_AttackStop.cpp" />
+    <ClCompile Include="..\Private\State_SimonManusP1_ChasingSwing.cpp" />
+    <ClCompile Include="..\Private\State_SimonManusP1_Die.cpp" />
+    <ClCompile Include="..\Private\State_SimonManusP1_Grogy.cpp" />
+    <ClCompile Include="..\Private\State_SimonManusP1_HitFatal.cpp" />
+    <ClCompile Include="..\Private\State_SimonManusP1_Idle.cpp" />
+    <ClCompile Include="..\Private\State_SimonManusP1_JumpToSwing.cpp" />
+    <ClCompile Include="..\Private\State_SimonManusP1_Run.cpp" />
+    <ClCompile Include="..\Private\State_SimonManusP1_Stamp.cpp" />
+    <ClCompile Include="..\Private\State_SimonManusP1_StingAttack.cpp" />
+    <ClCompile Include="..\Private\State_SimonManusP1_UpperAttack.cpp" />
+    <ClCompile Include="..\Private\State_SimonManusP1_Walk.cpp" />
     <ClCompile Include="..\Private\StaticObj.cpp" />
     <ClCompile Include="..\Private\Terrain.cpp" />
     <ClCompile Include="..\Private\Texture_Effect.cpp" />

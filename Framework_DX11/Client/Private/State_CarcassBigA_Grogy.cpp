@@ -25,17 +25,18 @@ HRESULT CState_CarcassBigA_Grogy::Initialize(_uint iStateNum, void* pArg)
 
 HRESULT CState_CarcassBigA_Grogy::Start_State(void* pArg)
 {
+    *m_pResetRootMove = true;
+
     if (*m_pTrackPos > 0) 
     {
         ++m_iAnimCnt;
-        m_pMonster->Change_Animation(17 - m_iAnimCnt, true, true);
+        m_pMonster->Change_Animation(17 - m_iAnimCnt, false, 0);
         m_fGrogyTime = (_float)*m_pTrackPos;
     }
     else
     {
         m_pMonster->Change_Animation(17, false);
-    }
-    *m_pResetRootMove = false;  //애니메이션의 시작부터 끝의 루트본의 이동값이 달라지면 안됨.
+    }  //애니메이션의 시작부터 끝의 루트본의 이동값이 달라지면 안됨.
 
     return S_OK;
 }
@@ -49,7 +50,7 @@ void CState_CarcassBigA_Grogy::Update(_float fTimeDelta)
         if (*m_pIsEndAnim)
         {
             ++m_iAnimCnt;
-            m_pMonster->Change_Animation(17 - m_iAnimCnt, true, true);
+            m_pMonster->Change_Animation(17 - m_iAnimCnt, true, 0);
         }
         break;
 
@@ -57,7 +58,7 @@ void CState_CarcassBigA_Grogy::Update(_float fTimeDelta)
         if (m_fGrogyTime >= m_fGrogyDuration)
         {
             ++m_iAnimCnt;
-            m_pMonster->Change_Animation(17 - m_iAnimCnt, false, true);
+            m_pMonster->Change_Animation(17 - m_iAnimCnt, true, 0);
         }
         else
             m_fGrogyTime += fTimeDelta;
@@ -88,8 +89,7 @@ void CState_CarcassBigA_Grogy::Update(_float fTimeDelta)
 void CState_CarcassBigA_Grogy::End_State()
 {
     m_iAnimCnt = 0;//혹시 완료되지 않고 변하는 경우에 대비
-    m_fGrogyTime = 0;
-    *m_pResetRootMove = true;
+    *m_pResetRootMove = false;
 }
 
 CState_CarcassBigA_Grogy* CState_CarcassBigA_Grogy::Create(CFsm* pFsm, CMonster* pMonster, _uint iStateNum, void* pArg)
