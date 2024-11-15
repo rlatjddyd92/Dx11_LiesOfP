@@ -26,6 +26,8 @@ HRESULT CEffect_Base::Initialize(void* pArg)
 
     m_pParentMatrix = pDesc->pParentMatrix;
     m_strEffectName = pDesc->strEffectName;
+    m_iRenderGroup = pDesc->iRenderGroup;
+    m_iPpState = pDesc->iPpState;
 
     return S_OK;
 }

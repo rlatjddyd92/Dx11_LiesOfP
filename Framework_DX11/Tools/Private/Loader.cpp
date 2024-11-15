@@ -265,7 +265,7 @@ HRESULT CLoader::Ready_Resources_For_LogoLevel()
 HRESULT CLoader::Ready_Resources_For_ToolLevel()
 {
 	lstrcpy(m_szLoadingText, TEXT("텍스쳐를 로딩중입니다."));
-
+	
 	/* For. Prototype_Component_Texture_Terrain*/
 	if (FAILED(m_pGameInstance->Add_Prototype(LEVEL_TOOL, TEXT("Prototype_Component_Texture_Terrain"),
 		CTexture::Create(m_pDevice, m_pContext, TEXT("../Bin/Resources/Textures/Terrain/Grass_%d.dds"), 2))))
@@ -295,77 +295,78 @@ HRESULT CLoader::Ready_Resources_For_ToolLevel()
 
 #pragma region EFFECT
 #pragma region DIFFUSE
+	CController_EffectTool::Get_Instance()->Add_Texture_ProtytypeTag(NONE_TEXT);
 	/* For. Prototype_Component_Texture_DefaultBlack */
 	if (FAILED(m_pGameInstance->Add_Prototype(LEVEL_TOOL, TEXT("Prototype_Component_Texture_DefaultBlack"),
 		CTexture::Create(m_pDevice, m_pContext, TEXT("../Bin/Resources/Textures/Effect/T_Sample_Black.dds"), 1))))
 		return E_FAIL;
-	CController_EffectTool::Get_Instance()->Add_Diffuse_ProtytypeTag(TEXT("Prototype_Component_Texture_DefaultBlack"));
+	CController_EffectTool::Get_Instance()->Add_Texture_ProtytypeTag(TEXT("Prototype_Component_Texture_DefaultBlack"));
 
 	/* For. Prototype_Component_Texture_Particle_Spark */
 	if (FAILED(m_pGameInstance->Add_Prototype(LEVEL_TOOL, TEXT("Prototype_Component_Texture_Particle_Spark"),
 		CTexture::Create(m_pDevice, m_pContext, TEXT("../Bin/Resources/Textures/Effect/Particle_Spark.dds"), 1))))
 		return E_FAIL;
-	CController_EffectTool::Get_Instance()->Add_Diffuse_ProtytypeTag(TEXT("Prototype_Component_Texture_Particle_Spark"));
+	CController_EffectTool::Get_Instance()->Add_Texture_ProtytypeTag(TEXT("Prototype_Component_Texture_Particle_Spark"));
 
 	/* For. Prototype_Component_Texture_Glow */
 	if (FAILED(m_pGameInstance->Add_Prototype(LEVEL_TOOL, TEXT("Prototype_Component_Texture_Glow"),
 		CTexture::Create(m_pDevice, m_pContext, TEXT("../Bin/Resources/Textures/Effect/Glow_0.dds"), 1))))
 		return E_FAIL;
-	CController_EffectTool::Get_Instance()->Add_Diffuse_ProtytypeTag(TEXT("Prototype_Component_Texture_Glow"));
+	CController_EffectTool::Get_Instance()->Add_Texture_ProtytypeTag(TEXT("Prototype_Component_Texture_Glow"));
 
 	/* For. Prototype_Component_Texture_Thunder */
 	if (FAILED(m_pGameInstance->Add_Prototype(LEVEL_TOOL, TEXT("Prototype_Component_Texture_Thunder"),
 		CTexture::Create(m_pDevice, m_pContext, TEXT("../Bin/Resources/Textures/Effect/T_Thunder_02_C_HJS.dds"), 1))))
 		return E_FAIL;
-	CController_EffectTool::Get_Instance()->Add_Diffuse_ProtytypeTag(TEXT("Prototype_Component_Texture_Thunder"));
+	CController_EffectTool::Get_Instance()->Add_Texture_ProtytypeTag(TEXT("Prototype_Component_Texture_Thunder"));
 
 	/* For. Prototype_Component_Texture_LensFlare */
 	if (FAILED(m_pGameInstance->Add_Prototype(LEVEL_TOOL, TEXT("Prototype_Component_Texture_LensFlare"),
 		CTexture::Create(m_pDevice, m_pContext, TEXT("../Bin/Resources/Textures/Effect/T_LensFlare_01_C_KMH.dds"), 1))))
 		return E_FAIL;
-	CController_EffectTool::Get_Instance()->Add_Diffuse_ProtytypeTag(TEXT("Prototype_Component_Texture_LensFlare"));
+	CController_EffectTool::Get_Instance()->Add_Texture_ProtytypeTag(TEXT("Prototype_Component_Texture_LensFlare"));
 
 	/* For. Prototype_Component_Texture_Ring */
 	if (FAILED(m_pGameInstance->Add_Prototype(LEVEL_TOOL, TEXT("Prototype_Component_Texture_Ring_4"),
 		CTexture::Create(m_pDevice, m_pContext, TEXT("../Bin/Resources/Textures/Effect/T_Ring_04_C_KMH.dds"), 1))))
 		return E_FAIL;
-	CController_EffectTool::Get_Instance()->Add_Diffuse_ProtytypeTag(TEXT("Prototype_Component_Texture_Ring_4"));
+	CController_EffectTool::Get_Instance()->Add_Texture_ProtytypeTag(TEXT("Prototype_Component_Texture_Ring_4"));
 
 	/* For. Prototype_Component_Texture_Ring_2 */
 	if (FAILED(m_pGameInstance->Add_Prototype(LEVEL_TOOL, TEXT("Prototype_Component_Texture_Ring_8"),
 		CTexture::Create(m_pDevice, m_pContext, TEXT("../Bin/Resources/Textures/Effect/T_Ring_08_C_HJS.dds"), 1))))
 		return E_FAIL;
-	CController_EffectTool::Get_Instance()->Add_Diffuse_ProtytypeTag(TEXT("Prototype_Component_Texture_Ring_8"));
+	CController_EffectTool::Get_Instance()->Add_Texture_ProtytypeTag(TEXT("Prototype_Component_Texture_Ring_8"));
 
 	/* For. Prototype_Component_Texture_Tile_Spark */
 	if (FAILED(m_pGameInstance->Add_Prototype(LEVEL_TOOL, TEXT("Prototype_Component_Texture_Tile_Spark"),
 		CTexture::Create(m_pDevice, m_pContext, TEXT("../Bin/Resources/Textures/Effect/T_Tile_Spark_01_C_HJS.dds"), 1))))
 		return E_FAIL;
-	CController_EffectTool::Get_Instance()->Add_Diffuse_ProtytypeTag(TEXT("Prototype_Component_Texture_Tile_Spark"));
+	CController_EffectTool::Get_Instance()->Add_Texture_ProtytypeTag(TEXT("Prototype_Component_Texture_Tile_Spark"));
 
 	/* For. Prototype_Component_Texture_Stone_8x8 */
 	if (FAILED(m_pGameInstance->Add_Prototype(LEVEL_TOOL, TEXT("Prototype_Component_Texture_Stone_8x8"),
 		CTexture::Create(m_pDevice, m_pContext, TEXT("../Bin/Resources/Textures/Effect/T_SubUV_DebStone_03_8x8_SC_KMH.dds"), 1))))
 		return E_FAIL;
-	CController_EffectTool::Get_Instance()->Add_Diffuse_ProtytypeTag(TEXT("Prototype_Component_Texture_Stone_8x8"));
+	CController_EffectTool::Get_Instance()->Add_Texture_ProtytypeTag(TEXT("Prototype_Component_Texture_Stone_8x8"));
 
 	/* For. Prototype_Component_Texture_Thunder_4x4 */
 	if (FAILED(m_pGameInstance->Add_Prototype(LEVEL_TOOL, TEXT("Prototype_Component_Texture_Thunder_4x4"),
 		CTexture::Create(m_pDevice, m_pContext, TEXT("../Bin/Resources/Textures/Effect/T_SubUV_Thunder_01_4x4_SC_HJS.dds"), 1))))
 		return E_FAIL;
-	CController_EffectTool::Get_Instance()->Add_Diffuse_ProtytypeTag(TEXT("Prototype_Component_Texture_Thunder_4x4"));
+	CController_EffectTool::Get_Instance()->Add_Texture_ProtytypeTag(TEXT("Prototype_Component_Texture_Thunder_4x4"));
 
 	/* For. Prototype_Component_Texture_Thunder_4x1 */
  	if (FAILED(m_pGameInstance->Add_Prototype(LEVEL_TOOL, TEXT("Prototype_Component_Texture_Thunder_4x1"),
 		CTexture::Create(m_pDevice, m_pContext, TEXT("../Bin/Resources/Textures/Effect/T_SubUV_Thunder_01_4x1_SC_GDH.dds"), 1))))
 		return E_FAIL;
-	CController_EffectTool::Get_Instance()->Add_Diffuse_ProtytypeTag(TEXT("Prototype_Component_Texture_Thunder_4x1"));
+	CController_EffectTool::Get_Instance()->Add_Texture_ProtytypeTag(TEXT("Prototype_Component_Texture_Thunder_4x1"));
 	
 	/* For. Prototype_Component_Texture_Test_Trail */
 	if (FAILED(m_pGameInstance->Add_Prototype(LEVEL_TOOL, TEXT("Prototype_Component_Texture_Test_Trail"),
 		CTexture::Create(m_pDevice, m_pContext, TEXT("../Bin/Resources/Textures/Effect/T_TrailGrad_01_C_RSW.dds"), 1))))
 		return E_FAIL;
-	CController_EffectTool::Get_Instance()->Add_Diffuse_ProtytypeTag(TEXT("Prototype_Component_Texture_Test_Trail"));
+	CController_EffectTool::Get_Instance()->Add_Texture_ProtytypeTag(TEXT("Prototype_Component_Texture_Test_Trail"));
 
 #pragma endregion
 #pragma region
@@ -373,13 +374,13 @@ HRESULT CLoader::Ready_Resources_For_ToolLevel()
 	if (FAILED(m_pGameInstance->Add_Prototype(LEVEL_TOOL, TEXT("Prototype_Component_Texture_DefaultNormal"),
 		CTexture::Create(m_pDevice, m_pContext, TEXT("../Bin/Resources/Textures/Effect/default_normal.dds"), 1))))
 		return E_FAIL;
-	CController_EffectTool::Get_Instance()->Add_Normal_ProtytypeTag(TEXT("Prototype_Component_Texture_DefaultNormal"));
+	CController_EffectTool::Get_Instance()->Add_Texture_ProtytypeTag(TEXT("Prototype_Component_Texture_DefaultNormal"));
 
 	/* For. Prototype_Component_Texture_Stone_8x8_Normal */
 	if (FAILED(m_pGameInstance->Add_Prototype(LEVEL_TOOL, TEXT("Prototype_Component_Texture_Stone_8x8_Normal"),
 		CTexture::Create(m_pDevice, m_pContext, TEXT("../Bin/Resources/Textures/Effect/T_SubUV_DebStone_03_8x8_SN_KMH.dds"), 1))))
 		return E_FAIL;
-	CController_EffectTool::Get_Instance()->Add_Normal_ProtytypeTag(TEXT("Prototype_Component_Texture_Stone_8x8_Normal"));
+	CController_EffectTool::Get_Instance()->Add_Texture_ProtytypeTag(TEXT("Prototype_Component_Texture_Stone_8x8_Normal"));
 
 #pragma endregion
 #pragma endregion
@@ -507,21 +508,6 @@ HRESULT CLoader::Ready_Resources_For_ToolLevel()
 		CShader_Compute::Create(m_pDevice, m_pContext, TEXT("../Bin/ShaderFiles/Shader_ParticleCompute.hlsl"), "CS_CONVERGE_MAIN"))))
 		return E_FAIL;
 
-	/* For. Prototype_Component_Shader_Compute_Particle_Spread_World */
-	if (FAILED(m_pGameInstance->Add_Prototype(LEVEL_TOOL, TEXT("Prototype_Component_Shader_Compute_Particle_Spread_World"),
-		CShader_Compute::Create(m_pDevice, m_pContext, TEXT("../Bin/ShaderFiles/Shader_ParticleCompute.hlsl"), "CS_SPREAD_WORLD_MAIN"))))
-		return E_FAIL;
-
-	/* For. Prototype_Component_Shader_Compute_Particle_Move_World */
-	if (FAILED(m_pGameInstance->Add_Prototype(LEVEL_TOOL, TEXT("Prototype_Component_Shader_Compute_Particle_Move_World"),
-		CShader_Compute::Create(m_pDevice, m_pContext, TEXT("../Bin/ShaderFiles/Shader_ParticleCompute.hlsl"), "CS_MOVE_WORLD_MAIN"))))
-		return E_FAIL;
-
-	/* For. Prototype_Component_Shader_Compute_Particle_Converge_World */
-	if (FAILED(m_pGameInstance->Add_Prototype(LEVEL_TOOL, TEXT("Prototype_Component_Shader_Compute_Particle_Converge_World"),
-		CShader_Compute::Create(m_pDevice, m_pContext, TEXT("../Bin/ShaderFiles/Shader_ParticleCompute.hlsl"), "CS_CONVERGE_WORLD_MAIN"))))
-		return E_FAIL;
-
 	/* For. Prototype_Component_Shader_Compute_Particle_Reset */
 	if (FAILED(m_pGameInstance->Add_Prototype(LEVEL_TOOL, TEXT("Prototype_Component_Shader_Compute_Particle_Reset"),
 		CShader_Compute::Create(m_pDevice, m_pContext, TEXT("../Bin/ShaderFiles/Shader_ParticleCompute.hlsl"), "CS_RESET_MAIN"))))
@@ -538,10 +524,21 @@ HRESULT CLoader::Ready_Resources_For_ToolLevel()
 		CShader_NonVTX::Create(m_pDevice, m_pContext, TEXT("../Bin/ShaderFiles/Shader_TrailHead_PointInstance.hlsl")))))
 		return E_FAIL;
 
-	/* For. Prototype_Component_Shader_Compute_Particle_Please */
-	if (FAILED(m_pGameInstance->Add_Prototype(LEVEL_TOOL, TEXT("Prototype_Component_Shader_Compute_Particle_Please"),
+	/* For. Prototype_Component_Shader_Compute_Trail_Spread */
+	if (FAILED(m_pGameInstance->Add_Prototype(LEVEL_TOOL, TEXT("Prototype_Component_Shader_Compute_Trail_Spread"),
 		CShader_Compute::Create(m_pDevice, m_pContext, TEXT("../Bin/ShaderFiles/Shader_Trail_MultiPoint_Compute.hlsl"), "CS_SPREAD_MAIN"))))
 		return E_FAIL;
+
+	/* For. Prototype_Component_Shader_Compute_Trail_Move */
+	if (FAILED(m_pGameInstance->Add_Prototype(LEVEL_TOOL, TEXT("Prototype_Component_Shader_Compute_Trail_Move"),
+		CShader_Compute::Create(m_pDevice, m_pContext, TEXT("../Bin/ShaderFiles/Shader_Trail_MultiPoint_Compute.hlsl"), "CS_MOVE_MAIN"))))
+		return E_FAIL;
+
+	/* For. Prototype_Component_Shader_Compute_Trail_Converge */
+	if (FAILED(m_pGameInstance->Add_Prototype(LEVEL_TOOL, TEXT("Prototype_Component_Shader_Compute_Trail_Converge"),
+		CShader_Compute::Create(m_pDevice, m_pContext, TEXT("../Bin/ShaderFiles/Shader_Trail_MultiPoint_Compute.hlsl"), "CS_CONVERGE_MAIN"))))
+		return E_FAIL;
+
 #pragma endregion
 
 #pragma endregion

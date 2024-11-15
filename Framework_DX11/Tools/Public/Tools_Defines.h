@@ -16,6 +16,7 @@ extern HWND g_hWnd;
 using namespace Tools;
 using namespace std;
 
+#define NONE_TEXT TEXT("None")
 
 
 #ifdef _DEBUG

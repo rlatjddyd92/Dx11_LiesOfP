@@ -304,6 +304,7 @@ HRESULT CTrail_MultiPoint_Instance::Init_TailParticle(TAIL_PARTICLE* pParticles)
         pParticles[i].Particle.vLook = _float4(0.f, 0.f, 1.f, 0.f);
         pParticles[i].Particle.vTranslation = _float4(0.f, 0.f, 0.f, 1.f);
         pParticles[i].Particle.vLifeTime = _float2(m_pGameInstance->Get_Random(m_vTail_LifeTime.x, m_vTail_LifeTime.y), 0.0f);
+        pParticles[i].Particle.vLifeTime.y = pParticles[i].Particle.vLifeTime.x;
         pParticles[i].Particle.vColor = _float4(m_pGameInstance->Get_Random(m_vMinColor.x, m_vMaxColor.x),
             m_pGameInstance->Get_Random(m_vTail_MinColor.y, m_vTail_MaxColor.y),
             m_pGameInstance->Get_Random(m_vTail_MinColor.z, m_vTail_MaxColor.z),

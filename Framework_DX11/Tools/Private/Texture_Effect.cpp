@@ -25,22 +25,22 @@ HRESULT CTexture_Effect::Initialize(void* pArg)
     if (FAILED(__super::Initialize(pArg)))
         return E_FAIL;
 
-    if (FAILED(Ready_Components(pDesc->TextureDesc)))
+    if (FAILED(Ready_Components(pDesc->TextDesc)))
         return E_FAIL;
 
-    m_ActionDesc = pDesc->ActionDesc;
+    m_DefaultDesc = pDesc->DefaultDesc;
 
     m_eEffectType   = TYPE_TEXTURE;
 
-    m_pTransformCom->Set_State(CTransform::STATE_POSITION, m_ActionDesc.vPos);
+    m_pTransformCom->Set_State(CTransform::STATE_POSITION, m_DefaultDesc.vPos);
 
-    m_pTransformCom->Set_Scaled(m_ActionDesc.vScale.x, m_ActionDesc.vScale.y, m_ActionDesc.vScale.z);
+    m_pTransformCom->Set_Scaled(m_DefaultDesc.vScale.x, m_DefaultDesc.vScale.y, m_DefaultDesc.vScale.z);
 
     m_pTransformCom->BillBoard();
 
-    m_pTransformCom->Rotation(m_pTransformCom->Get_State(CTransform::STATE_LOOK), XMConvertToRadians(m_ActionDesc.fRotationAngle));
+    m_pTransformCom->Rotation(m_pTransformCom->Get_State(CTransform::STATE_LOOK), XMConvertToRadians(m_DefaultDesc.fRotationAngle));
 
-    m_SaveDesc = *pDesc;
+    m_InitDesc = *pDesc;
 
     return S_OK;
 }
@@ -53,15 +53,15 @@ void CTexture_Effect::Update(_float fTimeDelta)
 {
     m_pTransformCom->BillBoard();
 
-    m_ActionDesc.fAlpha += fTimeDelta * m_ActionDesc.fAlphaSpeed;
+    m_DefaultDesc.fAlpha += fTimeDelta * m_DefaultDesc.fAlphaSpeed;
 
-    m_pTransformCom->Turn(m_pTransformCom->Get_State(CTransform::STATE_LOOK), fTimeDelta * m_ActionDesc.fRotationSpeed);
+    m_pTransformCom->Turn(m_pTransformCom->Get_State(CTransform::STATE_LOOK), fTimeDelta * m_DefaultDesc.fRotationSpeed);
 
     _Vec3 vScale = m_pTransformCom->Get_Scaled();
-    vScale += m_ActionDesc.vScalingSpeed * fTimeDelta;
+    vScale += m_DefaultDesc.vScalingSpeed * fTimeDelta;
     m_pTransformCom->Set_Scaled(vScale.x, vScale.y, vScale.z);
 
-    m_fCurrenrtIndex += fTimeDelta * m_ActionDesc.fSpriteSpeed;
+    m_fCurrenrtIndex += fTimeDelta * m_DefaultDesc.fSpriteSpeed;
 
     __super::Set_WorldMatrix();
 }
@@ -70,33 +70,10 @@ void CTexture_Effect::Late_Update(_float fTimeDelta)
 {
     m_fAccumulateTime += fTimeDelta;
 
-    if (m_ActionDesc.fDuration < m_fAccumulateTime)
+    if (m_DefaultDesc.fDuration < m_fAccumulateTime)
         m_isActive = false;
 
-    if(RS_BLEND & m_ActionDesc.iState)
-    {
-        if (FAILED(m_pGameInstance->Add_RenderObject(CRenderer::RG_BLEND, this)))
-            return;
-    }
-    if (RS_NONBLEND & m_ActionDesc.iState)
-    {
-        if (FAILED(m_pGameInstance->Add_RenderObject(CRenderer::RG_NONLIGHT, this)))
-            return;
-    }
-    if (RS_NONLIGHT & m_ActionDesc.iState)
-    {
-        if (FAILED(m_pGameInstance->Add_RenderObject(CRenderer::RG_NONLIGHT, this)))
-            return;
-    }
-    if (RS_DISTORTION & m_ActionDesc.iState)
-    {
-        if (FAILED(m_pGameInstance->Add_RenderObject(CRenderer::RG_DISTORTION, this)))
-            return;
-    }
-    if (RS_BLUR & m_ActionDesc.iState)
-    {
-        
-    }
+    m_pGameInstance->Add_RenderObject((CRenderer::RENDERGROUP)m_iRenderGroup, this);
 }
 
 HRESULT CTexture_Effect::Render()
@@ -108,28 +85,43 @@ HRESULT CTexture_Effect::Render()
     if (FAILED(m_pShaderCom->Bind_Matrix("g_ProjMatrix", &m_pGameInstance->Get_Transform(CPipeLine::D3DTS_PROJ))))
         return E_FAIL;
 
-    if (FAILED(m_pDiffuseTextureCom->Bind_ShadeResource(m_pShaderCom, "g_DiffuseTexture", 0)))
-        return E_FAIL;
-    if (FAILED(m_pNormalTextureCom->Bind_ShadeResource(m_pShaderCom, "g_NormalTexture", 0)))
-        return E_FAIL;
-    if (FAILED(m_pMaskTextureCom[0]->Bind_ShadeResource(m_pShaderCom, "g_MaskTexture", 0)))
-        return E_FAIL;
-    if (FAILED(m_pMaskTextureCom[1]->Bind_ShadeResource(m_pShaderCom, "g_MaskTexture2", 0)))
-        return E_FAIL;
+    if (nullptr != m_pTextureCom[TEXTURE_DIFFUSE])
+    {
+        if (FAILED(m_pTextureCom[TEXTURE_DIFFUSE]->Bind_ShadeResource(m_pShaderCom, "g_DiffuseTexture", 0)))
+            return E_FAIL;
+    }
+
+    if (nullptr != m_pTextureCom[TEXTURE_MASK_1])
+    {
+        if (FAILED(m_pTextureCom[TEXTURE_MASK_1]->Bind_ShadeResource(m_pShaderCom, "g_MaskTexture_1", 0)))
+            return E_FAIL;
+    }
+
+    if (nullptr != m_pTextureCom[TEXTURE_MASK_2])
+    {
+        if (FAILED(m_pTextureCom[TEXTURE_MASK_2]->Bind_ShadeResource(m_pShaderCom, "g_MaskTexture_2", 0)))
+            return E_FAIL;
+    }
+
+    if (nullptr != m_pTextureCom[TEXTURE_NORMAL])
+    {
+        if (FAILED(m_pTextureCom[TEXTURE_NORMAL]->Bind_ShadeResource(m_pShaderCom, "g_NormalTexture", 0)))
+            return E_FAIL;
+    }
 
 
-    if (FAILED(m_pShaderCom->Bind_RawValue("g_vColor", &m_ActionDesc.vColor, sizeof m_ActionDesc.vColor)))
+    if (FAILED(m_pShaderCom->Bind_RawValue("g_vColor", &m_DefaultDesc.vColor, sizeof m_DefaultDesc.vColor)))
         return E_FAIL;
-    if (FAILED(m_pShaderCom->Bind_RawValue("g_vTexDivide", &m_ActionDesc.vDivide, sizeof m_ActionDesc.vDivide)))
+    if (FAILED(m_pShaderCom->Bind_RawValue("g_vTexDivide", &m_DefaultDesc.vDivide, sizeof m_DefaultDesc.vDivide)))
         return E_FAIL;
 
     _int iTexIndex = (_int)m_fCurrenrtIndex;
     if (FAILED(m_pShaderCom->Bind_RawValue("g_iTexIndex", &iTexIndex, sizeof iTexIndex)))
         return E_FAIL;
-    if (FAILED(m_pShaderCom->Bind_RawValue("g_fRatio", &m_ActionDesc.fAlpha, sizeof m_ActionDesc.fAlpha)))
+    if (FAILED(m_pShaderCom->Bind_RawValue("g_fRatio", &m_DefaultDesc.fAlpha, sizeof m_DefaultDesc.fAlpha)))
         return E_FAIL;
     
-    if (FAILED(m_pShaderCom->Begin(m_ActionDesc.iShaderIndex)))
+    if (FAILED(m_pShaderCom->Begin(m_DefaultDesc.iShaderIndex)))
         return E_FAIL;
     if (FAILED(m_pVIBufferCom->Bind_Buffers()))
         return E_FAIL;
@@ -139,22 +131,14 @@ HRESULT CTexture_Effect::Render()
     return S_OK;
 }
 
-void CTexture_Effect::Set_Desc(const ACTION_DESC& desc)
+void CTexture_Effect::Set_Desc(const TEXTURE_EFFECT_DESC& desc)
 {
-    m_ActionDesc = desc;
+    m_DefaultDesc = desc.DefaultDesc;
+    m_InitDesc.DefaultDesc = desc.DefaultDesc;
 
-    m_pTransformCom->Set_State(CTransform::STATE_POSITION, m_ActionDesc.vPos);
-    m_pTransformCom->Set_Scaled(m_ActionDesc.vScale.x, m_ActionDesc.vScale.y, m_ActionDesc.vScale.z);
-    m_pTransformCom->Rotation(m_pTransformCom->Get_State(CTransform::STATE_LOOK), m_ActionDesc.fRotationAngle);
-}
-
-CTexture_Effect::TEXTURE_EFFECT_DESC CTexture_Effect::Get_Desc()
-{
-    TEXTURE_EFFECT_DESC desc = {};
-
-    desc.ActionDesc = m_ActionDesc;
-
-    return desc;
+    m_pTransformCom->Set_State(CTransform::STATE_POSITION, m_DefaultDesc.vPos);
+    m_pTransformCom->Set_Scaled(m_DefaultDesc.vScale.x, m_DefaultDesc.vScale.y, m_DefaultDesc.vScale.z);
+    m_pTransformCom->Rotation(m_pTransformCom->Get_State(CTransform::STATE_LOOK), m_DefaultDesc.fRotationAngle);
 }
 
 void CTexture_Effect::Reset()
@@ -162,60 +146,72 @@ void CTexture_Effect::Reset()
     m_fAccumulateTime = { 0.f };
     m_fCurrenrtIndex = { 0.f };
 
-    m_ActionDesc = m_SaveDesc.ActionDesc;
+    m_DefaultDesc = m_InitDesc.DefaultDesc;
 
-    m_pTransformCom->Set_State(CTransform::STATE_POSITION, m_ActionDesc.vPos);
-    m_pTransformCom->Set_Scaled(m_ActionDesc.vScale.x, m_ActionDesc.vScale.y, m_ActionDesc.vScale.z);
-    m_pTransformCom->Rotation(m_pTransformCom->Get_State(CTransform::STATE_LOOK), m_ActionDesc.fRotationAngle);
+    m_pTransformCom->Set_State(CTransform::STATE_POSITION, m_DefaultDesc.vPos);
+    m_pTransformCom->Set_Scaled(m_DefaultDesc.vScale.x, m_DefaultDesc.vScale.y, m_DefaultDesc.vScale.z);
+    m_pTransformCom->Rotation(m_pTransformCom->Get_State(CTransform::STATE_LOOK), m_DefaultDesc.fRotationAngle);
 }
 
 HRESULT CTexture_Effect::Save(_wstring strFilePath)
 {
-    if (strFilePath.back() == L'\0')
-        strFilePath.resize(strFilePath.size() - 1);
+    //if (strFilePath.back() == L'\0')
+    //    strFilePath.resize(strFilePath.size() - 1);
 
-    _wstring strResultPath = strFilePath + TEXT("\\") + m_strEffectName + TEXT(".TE");
+    //_wstring strResultPath = strFilePath + TEXT("\\") + m_strEffectName + TEXT(".TE");
 
-    _char FilePath[MAX_PATH] = {};
-    int sizeNeeded = WideCharToMultiByte(CP_ACP, 0, strResultPath.c_str(), -1, nullptr, 0, nullptr, nullptr);
-    if (sizeNeeded > 0 && sizeNeeded <= MAX_PATH)
-    {
-        WideCharToMultiByte(CP_ACP, 0, strResultPath.c_str(), -1, FilePath, MAX_PATH, nullptr, nullptr);
-    }
+    //_char FilePath[MAX_PATH] = {};
+    //int sizeNeeded = WideCharToMultiByte(CP_ACP, 0, strResultPath.c_str(), -1, nullptr, 0, nullptr, nullptr);
+    //if (sizeNeeded > 0 && sizeNeeded <= MAX_PATH)
+    //{
+    //    WideCharToMultiByte(CP_ACP, 0, strResultPath.c_str(), -1, FilePath, MAX_PATH, nullptr, nullptr);
+    //}
 
-    ofstream outfile(FilePath, ios::binary);
+    //ofstream outfile(FilePath, ios::binary);
 
-    if (!outfile.is_open())
-        return E_FAIL;
+    //if (!outfile.is_open())
+    //    return E_FAIL;
 
-    outfile.write(reinterpret_cast<const _char*>(m_SaveDesc.strEffectName), sizeof(m_SaveDesc.strEffectName));
-    outfile.write(reinterpret_cast<const _char*>(&m_SaveDesc.TextureDesc), sizeof(m_SaveDesc.TextureDesc));
-    outfile.write(reinterpret_cast<const _char*>(&m_SaveDesc.ActionDesc), sizeof(m_SaveDesc.ActionDesc));
+    //outfile.write(reinterpret_cast<const _char*>(m_SaveDesc.strEffectName), sizeof(m_SaveDesc.strEffectName));
+    //outfile.write(reinterpret_cast<const _char*>(&m_SaveDesc.TextureDesc), sizeof(m_SaveDesc.TextureDesc));
+    //outfile.write(reinterpret_cast<const _char*>(&m_SaveDesc.ActionDesc), sizeof(m_SaveDesc.ActionDesc));
 
-    outfile.close();
+    //outfile.close();
 
     return S_OK;
 }
 
-HRESULT CTexture_Effect::Ready_Components(TEXTURE_DESC Desc)
+HRESULT CTexture_Effect::Ready_Components(const TEXT_DESC& Desc)
 {
     if(FAILED(__super::Add_Component(LEVEL_TOOL, TEXT("Prototype_Component_Shader_Effect_Texture"), TEXT("Com_Shader"), reinterpret_cast<CComponent**>(&m_pShaderCom))))
         return E_FAIL;
 
-    if (FAILED(__super::Add_Component(LEVEL_TOOL, Desc.strDiffuseTexturTag, TEXT("Com_DiffuseTexture"), reinterpret_cast<CComponent**>(&m_pDiffuseTextureCom))))
-        return E_FAIL;
-
-    if (FAILED(__super::Add_Component(LEVEL_TOOL, Desc.strNomralTextureTag, TEXT("Com_NormalTexture"), reinterpret_cast<CComponent**>(&m_pNormalTextureCom))))
-        return E_FAIL;
-
-    if (FAILED(__super::Add_Component(LEVEL_TOOL, Desc.strMaskTextureTag_1, TEXT("Com_MaskTexture_1"), reinterpret_cast<CComponent**>(&m_pMaskTextureCom[0]))))
-        return E_FAIL;
-
-    if (FAILED(__super::Add_Component(LEVEL_TOOL, Desc.strMaskTextureTag_2, TEXT("Com_MaskTexture_2"), reinterpret_cast<CComponent**>(&m_pMaskTextureCom[1]))))
-        return E_FAIL;
-
     if (FAILED(__super::Add_Component(LEVEL_TOOL, TEXT("Prototype_Component_VIBuffer_Rect"), TEXT("Com_VIBuffer"), reinterpret_cast<CComponent**>(&m_pVIBufferCom))))
         return E_FAIL;
+
+    if (0 != wcscmp(NONE_TEXT, Desc.szDiffuseTexturTag))
+    {
+        if (FAILED(__super::Add_Component(LEVEL_TOOL, Desc.szDiffuseTexturTag, TEXT("Com_DiffuseTexture"), reinterpret_cast<CComponent**>(&m_pTextureCom[TEXTURE_DIFFUSE]))))
+            return E_FAIL;
+    }
+
+    if (0 != wcscmp(NONE_TEXT, Desc.szNormalTextureTag))
+    {
+        if (FAILED(__super::Add_Component(LEVEL_TOOL, Desc.szNormalTextureTag, TEXT("Com_NormalTexture"), reinterpret_cast<CComponent**>(&m_pTextureCom[TEXTURE_NORMAL]))))
+            return E_FAIL;
+    }
+
+    if (0 != wcscmp(NONE_TEXT, Desc.szMaskTextureTag_1))
+    {
+        if (FAILED(__super::Add_Component(LEVEL_TOOL, Desc.szMaskTextureTag_1, TEXT("Com_MaskTexture_1"), reinterpret_cast<CComponent**>(&m_pTextureCom[TEXTURE_MASK_1]))))
+            return E_FAIL;
+    }
+
+    if (0 != wcscmp(NONE_TEXT, Desc.szMaskTextureTag_2))
+    {
+        if (FAILED(__super::Add_Component(LEVEL_TOOL, Desc.szMaskTextureTag_2, TEXT("Com_MaskTexture_2"), reinterpret_cast<CComponent**>(&m_pTextureCom[TEXTURE_MASK_2]))))
+            return E_FAIL;
+    }
 
     return S_OK;
 }
@@ -251,9 +247,10 @@ void CTexture_Effect::Free()
     __super::Free();
 
     Safe_Release(m_pVIBufferCom);
-    Safe_Release(m_pDiffuseTextureCom);
-    Safe_Release(m_pNormalTextureCom);
-    Safe_Release(m_pMaskTextureCom[0]);
-    Safe_Release(m_pMaskTextureCom[1]);
     Safe_Release(m_pShaderCom);
+
+    for (size_t i = 0; i < TEXTURE_END; ++i)
+    {
+        Safe_Release(m_pTextureCom[i]);
+    }
 }

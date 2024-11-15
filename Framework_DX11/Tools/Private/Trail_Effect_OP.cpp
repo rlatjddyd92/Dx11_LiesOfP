@@ -57,29 +57,8 @@ void CTrail_Effect_OP::Update(_float fTimeDelta)
 
 void CTrail_Effect_OP::Late_Update(_float fTimeDelta)
 {
-	if(RS_NONBLEND & m_ActionDesc.iRenderState)
-	{
-		if (FAILED(m_pGameInstance->Add_RenderObject(CRenderer::RG_NONBLEND, this)))
-			return;
-	}
-	if (RS_DISTORTION & m_ActionDesc.iRenderState)
-	{
-		if (FAILED(m_pGameInstance->Add_RenderObject(CRenderer::RG_DISTORTION, this)))
-			return;
-	}
-	if (RS_BLUR & m_ActionDesc.iRenderState)
-	{
-	}
-	if (RS_NONLIGHT & m_ActionDesc.iRenderState)
-	{
-		if (FAILED(m_pGameInstance->Add_RenderObject(CRenderer::RG_NONLIGHT, this)))
-			return;
-	}
-	if (RS_BLEND & m_ActionDesc.iRenderState)
-	{
-		if (FAILED(m_pGameInstance->Add_RenderObject(CRenderer::RG_BLEND, this)))
-			return;
-	}
+	if (FAILED(m_pGameInstance->Add_RenderObject(CRenderer::RG_BLEND, this)))
+		return;
 }
 
 HRESULT CTrail_Effect_OP::Render()

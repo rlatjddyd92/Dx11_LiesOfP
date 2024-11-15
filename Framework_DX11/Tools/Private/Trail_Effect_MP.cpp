@@ -38,20 +38,20 @@ void CTrail_Effect_MP::Update(_float fTimeDelta)
 {
 	// 값 제대로 안채우면 컴퓨트셰이더에서 무한루프 돌아감.
 	CTrail_MultiPoint_Instance::TRAIL_MP_MOVEMENT Movement = {};
-	Movement.iState = CVIBuffer_Instancing::STATE_LOOP | CVIBuffer_Instancing::STATE_ORBIT;
+	Movement.iState = CVIBuffer_Instancing::STATE_LOOP;
 	Movement.vPivot = { 0.f, 0.f, 0.f, 1.f };
-	Movement.fGravity = 0.f;
-	Movement.vMoveDir = { 0.f, 0.f, 0.f, 0.f };
+	Movement.fGravity = 4.f;
+	Movement.vMoveDir = { 0.f, 1.f, 0.f, 0.f };
 	Movement.fTimeDelta = fTimeDelta;
-	Movement.vOrbitAxis = {0.f, 1.f, 0.f};
-	Movement.fOrbitAngle = 90.f;
-	Movement.fTimeInterval = { 1.f };
+	Movement.vOrbitAxis = {0.f, 0.f, 0.f};
+	Movement.fOrbitAngle = 0.f;
+	Movement.fTimeInterval = { 0.25f };
 	Movement.fRandomRatio = 0.f;
 	Movement.fAccelLimit = 0.f;
 	Movement.fAccelSpeed = 0.f;
 	Movement.WorldMatrix = m_pTransformCom->Get_WorldMatrix();
 	Movement.fTailInterval = 0.1f;
-	Movement.fTailDistance = 0.5f;
+	Movement.fTailDistance = 0.25f;
 	Movement.vTailMoveDir = _float4(0.f, 1.f, 0.f, 0.f);
 
 	m_pVIBufferCom->DispatchCS(m_pSpreadCS, Movement);
@@ -64,31 +64,32 @@ void CTrail_Effect_MP::Late_Update(_float fTimeDelta)
 
 HRESULT CTrail_Effect_MP::Render()
 {
-	// 대가리
 	_Matrix WorldMatrix = XMMatrixIdentity();
-	if (FAILED(m_pHeadShaderCom->Bind_Matrix("g_WorldMatrix", &WorldMatrix)))
-		return E_FAIL;
-
-	if (FAILED(m_pHeadShaderCom->Bind_Matrix("g_ViewMatrix", &m_pGameInstance->Get_Transform(CPipeLine::D3DTS_VIEW))))
-		return E_FAIL;
-	if (FAILED(m_pHeadShaderCom->Bind_Matrix("g_ProjMatrix", &m_pGameInstance->Get_Transform(CPipeLine::D3DTS_PROJ))))
-		return E_FAIL;
-
-	if (FAILED(m_pHeadShaderCom->Bind_RawValue("g_vCamPosition", &m_pGameInstance->Get_CamPosition_Vec4(), sizeof(_Vec4))))
-		return E_FAIL;
-	if (FAILED(m_pHeadShaderCom->Bind_RawValue("g_vScaling", &m_vScaling, sizeof(_Vec2))))
-		return E_FAIL;
-
 	_uint iParticleState = 0;
-	if (FAILED(m_pHeadShaderCom->Bind_RawValue("g_iState", &iParticleState, sizeof(_uint))))
-		return E_FAIL;
 
-	if (FAILED(m_pVIBufferCom->Bind_HeadBuffer(m_pHeadShaderCom, "Particle_SRV")))
-		return E_FAIL;
-	if (FAILED(m_pHeadShaderCom->Begin(6)))
-		return E_FAIL;
-	if (FAILED(m_pVIBufferCom->Render_Head()))
-		return E_FAIL;
+	//// 대가리
+	//if (FAILED(m_pHeadShaderCom->Bind_Matrix("g_WorldMatrix", &WorldMatrix)))
+	//	return E_FAIL;
+
+	//if (FAILED(m_pHeadShaderCom->Bind_Matrix("g_ViewMatrix", &m_pGameInstance->Get_Transform(CPipeLine::D3DTS_VIEW))))
+	//	return E_FAIL;
+	//if (FAILED(m_pHeadShaderCom->Bind_Matrix("g_ProjMatrix", &m_pGameInstance->Get_Transform(CPipeLine::D3DTS_PROJ))))
+	//	return E_FAIL;
+
+	//if (FAILED(m_pHeadShaderCom->Bind_RawValue("g_vCamPosition", &m_pGameInstance->Get_CamPosition_Vec4(), sizeof(_Vec4))))
+	//	return E_FAIL;
+	//if (FAILED(m_pHeadShaderCom->Bind_RawValue("g_vScaling", &m_vScaling, sizeof(_Vec2))))
+	//	return E_FAIL;
+
+	//if (FAILED(m_pHeadShaderCom->Bind_RawValue("g_iState", &iParticleState, sizeof(_uint))))
+	//	return E_FAIL;
+
+	//if (FAILED(m_pVIBufferCom->Bind_HeadBuffer(m_pHeadShaderCom, "Particle_SRV")))
+	//	return E_FAIL;
+	//if (FAILED(m_pHeadShaderCom->Begin(6)))
+	//	return E_FAIL;
+	//if (FAILED(m_pVIBufferCom->Render_Head()))
+	//	return E_FAIL;
 
 
 
@@ -144,28 +145,27 @@ HRESULT CTrail_Effect_MP::Ready_Components()
 		return E_FAIL;
 
 	/* FOR.Com_SpreadCS */
-	if (FAILED(__super::Add_Component(LEVEL_TOOL, TEXT("Prototype_Component_Shader_Compute_Particle_Please"),
+	if (FAILED(__super::Add_Component(LEVEL_TOOL, TEXT("Prototype_Component_Shader_Compute_Trail_Converge"),
 		TEXT("Com_SpreadCS"), reinterpret_cast<CComponent**>(&m_pSpreadCS))))
 		return E_FAIL;
 
 	CTrail_MultiPoint_Instance::TRAIL_MP_INSTANCE_DESC desc = {};
 
 	desc.iNumInstance		= 100;
-	desc.vCenter			= {0.f, 0.f, 0.f};
+	desc.vCenter			= {0.f, 5.f, 0.f};
+	desc.vRange				= { 5.f, 2.f, 5.f };
 	desc.vExceptRange		= {0.f, 0.f, 0.f};
-	desc.vLifeTime			= {3.f, 6.f};
+	desc.vLifeTime			= {1.f, 2.f};
 	desc.vMaxColor			= { 0.f, 0.f, 0.f, 1.f };
 	desc.vMinColor			= { 1.f, 1.f, 1.f, 1.f};
-	desc.vRange				= { 2.f, 2.f, 2.f};
 	desc.vSize				= {0.2f, 0.4f};
-	desc.vSpeed				= {5.f, 10.f};
+	desc.vSpeed				= {2.f, 4.f};
 	desc.iTail_NumInstance	= 100;
-	desc.vTail_Speed		= {1.f, 2.f};
-	desc.vTail_Size			= {0.05f, 0.1f};
+	desc.vTail_Speed		= {0.25f, 0.5f};
+	desc.vTail_Size			= {0.02f, 0.04f};
 	desc.vTail_LifeTime		= {0.5f, 1.f};
 	desc.vTail_MinColor		= {0.f, 0.f, 0.f, 1.f};
 	desc.vTail_MaxColor		= {1.f, 1.f, 1.f, 1.f};
-
 
 	/* FOR.Com_VIBuffer */
 	if (FAILED(__super::Add_Component(LEVEL_TOOL, TEXT("Prototype_Component_VIBuffer_Trail_MultiPoint_Instance"),
