@@ -7,13 +7,19 @@ BEGIN(Tools)
 class CEffect_Base abstract : public CGameObject
 {
 public:
+	typedef struct
+	{
+		_int			iRenderGroup = { 0 };
+		_int			iPpState = { PP_END };
+	}RENDER_DESC;
+
 	typedef struct : public CGameObject::GAMEOBJECT_DESC
 	{
 		const _Matrix*	pParentMatrix = { nullptr };
-		_tchar			strEffectName[MAX_PATH] = L"";
-		_uint			iRenderGroup = { 0 };
-		_uint			iPpState = { PP_END };
+		_tchar			szEffectName[MAX_PATH] = L"";
+		RENDER_DESC		RenderDesc = {};
 	} EFFECT_BASE_DESC;
+
 
 	enum EFFECT_TYPE { TYPE_PARTICLE, TYPE_TEXTURE, TYPE_MESH, TYPE_END };
 	enum EFFECT_POSTPROCESSING
@@ -58,9 +64,8 @@ public:
 	virtual HRESULT Save(_wstring strFilePath);
 
 protected:
-	EFFECT_TYPE m_eEffectType = { TYPE_END };
-	_uint m_iRenderGroup = { 0 };
-	_uint m_iPpState = { PP_END };
+	EFFECT_TYPE		m_eEffectType = { TYPE_END };
+	RENDER_DESC		m_RenderDesc = {};
 
 	_Matrix m_WorldMatrix = XMMatrixIdentity();
 	const _Matrix* m_pParentMatrix = { nullptr };

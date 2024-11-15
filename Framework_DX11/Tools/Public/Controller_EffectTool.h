@@ -138,13 +138,13 @@ private:
 	CTexture_Effect::TEXTURE_EFFECT_DESC	m_TextureDesc = {};
 	CMesh_Effect::MESH_EFFECT_DESC			m_MeshDesc = {};
 
+	CEffect_Base::RENDER_DESC				m_RenderDesc = {};
+
 	_int m_iParticleIndex = { 0 };
 	_int m_iTextureIndex = { CEffect_Base::TEXTURE_END };
 	_int m_iMeshIndex = { 0 };
 
-	_int m_iRenderGroupIndex = { 0 };
 	_int m_iTextureSelect = { 0 };
-	_uint m_iPpState = { 0 };
 
 #pragma region CHECKBOX
 	_bool m_ParticleStates[BOOL_END] = {};

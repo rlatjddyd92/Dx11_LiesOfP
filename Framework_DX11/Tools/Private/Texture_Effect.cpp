@@ -34,7 +34,7 @@ HRESULT CTexture_Effect::Initialize(void* pArg)
 
     m_pTransformCom->Set_State(CTransform::STATE_POSITION, m_DefaultDesc.vPos);
 
-    m_pTransformCom->Set_Scaled(m_DefaultDesc.vScale.x, m_DefaultDesc.vScale.y, m_DefaultDesc.vScale.z);
+    m_pTransformCom->Set_Scaled(m_DefaultDesc.vStartScale.x, m_DefaultDesc.vStartScale.y, m_DefaultDesc.vStartScale.z);
 
     m_pTransformCom->BillBoard();
 
@@ -73,7 +73,11 @@ void CTexture_Effect::Late_Update(_float fTimeDelta)
     if (m_DefaultDesc.fDuration < m_fAccumulateTime)
         m_isActive = false;
 
-    m_pGameInstance->Add_RenderObject((CRenderer::RENDERGROUP)m_iRenderGroup, this);
+    if(CRenderer::RG_EFFECT == m_RenderDesc.iRenderGroup)
+        m_pGameInstance->Add_RenderObject(CRenderer::RG_NONLIGHT, this);
+    else
+        m_pGameInstance->Add_RenderObject((CRenderer::RENDERGROUP)m_RenderDesc.iRenderGroup, this);
+    
 }
 
 HRESULT CTexture_Effect::Render()
@@ -137,7 +141,7 @@ void CTexture_Effect::Set_Desc(const TEXTURE_EFFECT_DESC& desc)
     m_InitDesc.DefaultDesc = desc.DefaultDesc;
 
     m_pTransformCom->Set_State(CTransform::STATE_POSITION, m_DefaultDesc.vPos);
-    m_pTransformCom->Set_Scaled(m_DefaultDesc.vScale.x, m_DefaultDesc.vScale.y, m_DefaultDesc.vScale.z);
+    m_pTransformCom->Set_Scaled(m_DefaultDesc.vStartScale.x, m_DefaultDesc.vStartScale.y, m_DefaultDesc.vStartScale.z);
     m_pTransformCom->Rotation(m_pTransformCom->Get_State(CTransform::STATE_LOOK), m_DefaultDesc.fRotationAngle);
 }
 
@@ -149,34 +153,35 @@ void CTexture_Effect::Reset()
     m_DefaultDesc = m_InitDesc.DefaultDesc;
 
     m_pTransformCom->Set_State(CTransform::STATE_POSITION, m_DefaultDesc.vPos);
-    m_pTransformCom->Set_Scaled(m_DefaultDesc.vScale.x, m_DefaultDesc.vScale.y, m_DefaultDesc.vScale.z);
+    m_pTransformCom->Set_Scaled(m_DefaultDesc.vStartScale.x, m_DefaultDesc.vStartScale.y, m_DefaultDesc.vStartScale.z);
     m_pTransformCom->Rotation(m_pTransformCom->Get_State(CTransform::STATE_LOOK), m_DefaultDesc.fRotationAngle);
 }
 
 HRESULT CTexture_Effect::Save(_wstring strFilePath)
 {
-    //if (strFilePath.back() == L'\0')
-    //    strFilePath.resize(strFilePath.size() - 1);
+    if (strFilePath.back() == L'\0')
+        strFilePath.resize(strFilePath.size() - 1);
 
-    //_wstring strResultPath = strFilePath + TEXT("\\") + m_strEffectName + TEXT(".TE");
+    _wstring strResultPath = strFilePath + TEXT("\\") + m_strEffectName + TEXT(".TE");
 
-    //_char FilePath[MAX_PATH] = {};
-    //int sizeNeeded = WideCharToMultiByte(CP_ACP, 0, strResultPath.c_str(), -1, nullptr, 0, nullptr, nullptr);
-    //if (sizeNeeded > 0 && sizeNeeded <= MAX_PATH)
-    //{
-    //    WideCharToMultiByte(CP_ACP, 0, strResultPath.c_str(), -1, FilePath, MAX_PATH, nullptr, nullptr);
-    //}
+    _char FilePath[MAX_PATH] = {};
+    int sizeNeeded = WideCharToMultiByte(CP_ACP, 0, strResultPath.c_str(), -1, nullptr, 0, nullptr, nullptr);
+    if (sizeNeeded > 0 && sizeNeeded <= MAX_PATH)
+    {
+        WideCharToMultiByte(CP_ACP, 0, strResultPath.c_str(), -1, FilePath, MAX_PATH, nullptr, nullptr);
+    }
 
-    //ofstream outfile(FilePath, ios::binary);
+    ofstream outfile(FilePath, ios::binary);
 
-    //if (!outfile.is_open())
-    //    return E_FAIL;
+    if (!outfile.is_open())
+        return E_FAIL;
 
-    //outfile.write(reinterpret_cast<const _char*>(m_SaveDesc.strEffectName), sizeof(m_SaveDesc.strEffectName));
-    //outfile.write(reinterpret_cast<const _char*>(&m_SaveDesc.TextureDesc), sizeof(m_SaveDesc.TextureDesc));
-    //outfile.write(reinterpret_cast<const _char*>(&m_SaveDesc.ActionDesc), sizeof(m_SaveDesc.ActionDesc));
+    outfile.write(reinterpret_cast<const _char*>(m_InitDesc.szEffectName), sizeof(m_InitDesc.szEffectName));
+    outfile.write(reinterpret_cast<const _char*>(&m_InitDesc.RenderDesc), sizeof(m_InitDesc.RenderDesc));
+    outfile.write(reinterpret_cast<const _char*>(&m_InitDesc.DefaultDesc), sizeof(m_InitDesc.DefaultDesc));
+    outfile.write(reinterpret_cast<const _char*>(&m_InitDesc.TextDesc), sizeof(m_InitDesc.TextDesc));
 
-    //outfile.close();
+    outfile.close();
 
     return S_OK;
 }

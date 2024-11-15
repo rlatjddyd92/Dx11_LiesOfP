@@ -2,9 +2,10 @@
 
 matrix			g_WorldMatrix, g_ViewMatrix, g_ProjMatrix;
 
-texture2D		g_DiffuseTexture;
-texture2D		g_MaskTexture_1;
-texture2D		g_MaskTexture_2;
+texture2D g_DiffuseTexture;
+texture2D g_NormalTexture;
+texture2D g_MaskTexture_1;
+texture2D g_MaskTexture_2;
 
 float4 g_vColor;
 float g_fAlpha;
@@ -66,7 +67,7 @@ PS_OUT PS_TEST_MAIN_1(PS_IN In)
 	
     
 	
-    Out.vColor.rgb = g_vColor.rgb;
+    // Out.vColor.rgb = g_vColor.rgb;
     Out.vColor.a *= g_fAlpha;
 	
 	return Out;

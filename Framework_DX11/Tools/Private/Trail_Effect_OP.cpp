@@ -124,7 +124,7 @@ HRESULT CTrail_Effect_OP::Save(_wstring strFilePath)
 	if (!outfile.is_open())
 		return E_FAIL;
 	
-	outfile.write(reinterpret_cast<const _char*>(m_SaveDesc.strEffectName), sizeof(m_SaveDesc.strEffectName));
+	outfile.write(reinterpret_cast<const _char*>(m_SaveDesc.szEffectName), sizeof(m_SaveDesc.szEffectName));
 	outfile.write(reinterpret_cast<const _char*>(&m_SaveDesc.BufferDesc), sizeof(m_SaveDesc.BufferDesc));
 	outfile.write(reinterpret_cast<const _char*>(&m_SaveDesc.InitDesc), sizeof(m_SaveDesc.InitDesc));
 

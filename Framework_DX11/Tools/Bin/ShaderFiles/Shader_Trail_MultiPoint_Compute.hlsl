@@ -54,7 +54,7 @@ cbuffer MovementBuffer : register(b0) // 받아온 걸 상수로 쓰기 위한 버퍼인듯?
 
     float4 vMoveDir;
 
-    float4x4 WorldMatrix;
+    row_major float4x4 WorldMatrix;
 
     float3 vOrbitAxis;
     float fOrbitAngle;
@@ -107,6 +107,7 @@ void CS_SPREAD_MAIN(uint3 DTid : SV_DispatchThreadID)
         if (0.f == fPadding)
         {
             HeadParticle.particle.vTranslation = mul(HeadParticle.particle.vTranslation, WorldMatrix);
+            HeadParticle.vPreTranslation = HeadParticle.particle.vTranslation;
             HeadParticle.particle.vRight = vWorldPivot;
             HeadParticle.particle.vUp = float4(vOrbitAxis.x, vOrbitAxis.y, vOrbitAxis.z, 0.f);
         }
@@ -173,8 +174,8 @@ void CS_SPREAD_MAIN(uint3 DTid : SV_DispatchThreadID)
 
         if ((iState & STATE_LOOP) && (HeadParticle.particle.vLifeTime.y >= HeadParticle.particle.vLifeTime.x))
         {
-            HeadParticle.particle.vTranslation = InitParticles[iHeadIndex].particle.vTranslation;
-            HeadParticle.vPreTranslation = InitParticles[iHeadIndex].particle.vTranslation;
+            HeadParticle.particle.vTranslation = mul(InitParticles[iHeadIndex].particle.vTranslation, WorldMatrix);
+            HeadParticle.vPreTranslation = HeadParticle.particle.vTranslation;
             HeadParticle.particle.vLifeTime.y = 0.f;
             HeadParticle.particle.vTranslation = mul(HeadParticle.particle.vTranslation, WorldMatrix);
             HeadParticle.particle.vRight = vWorldPivot;
@@ -239,6 +240,7 @@ void CS_MOVE_MAIN(uint3 DTid : SV_DispatchThreadID)
         if (0.f == fPadding)
         {
             HeadParticle.particle.vTranslation = mul(HeadParticle.particle.vTranslation, WorldMatrix);
+            HeadParticle.vPreTranslation = HeadParticle.particle.vTranslation;
             HeadParticle.particle.vRight = vWorldPivot;
             HeadParticle.particle.vUp = float4(vOrbitAxis.x, vOrbitAxis.y, vOrbitAxis.z, 0.f);
         }
@@ -305,8 +307,8 @@ void CS_MOVE_MAIN(uint3 DTid : SV_DispatchThreadID)
 
         if ((iState & STATE_LOOP) && (HeadParticle.particle.vLifeTime.y >= HeadParticle.particle.vLifeTime.x))
         {
-            HeadParticle.particle.vTranslation = InitParticles[iHeadIndex].particle.vTranslation;
-            HeadParticle.vPreTranslation = InitParticles[iHeadIndex].particle.vTranslation;
+            HeadParticle.particle.vTranslation = mul(InitParticles[iHeadIndex].particle.vTranslation, WorldMatrix);
+            HeadParticle.vPreTranslation = HeadParticle.particle.vTranslation;
             HeadParticle.particle.vLifeTime.y = 0.f;
             HeadParticle.particle.vTranslation = mul(HeadParticle.particle.vTranslation, WorldMatrix);
             HeadParticle.particle.vRight = vWorldPivot;
@@ -371,6 +373,7 @@ void CS_CONVERGE_MAIN(uint3 DTid : SV_DispatchThreadID)
         if (0.f == fPadding)
         {
             HeadParticle.particle.vTranslation = mul(HeadParticle.particle.vTranslation, WorldMatrix);
+            HeadParticle.vPreTranslation = HeadParticle.particle.vTranslation;
             HeadParticle.particle.vRight = vWorldPivot;
             HeadParticle.particle.vUp = float4(vOrbitAxis.x, vOrbitAxis.y, vOrbitAxis.z, 0.f);
         }
@@ -436,8 +439,8 @@ void CS_CONVERGE_MAIN(uint3 DTid : SV_DispatchThreadID)
 
         if ((iState & STATE_LOOP) && (HeadParticle.particle.vLifeTime.y >= HeadParticle.particle.vLifeTime.x))
         {
-            HeadParticle.particle.vTranslation = InitParticles[iHeadIndex].particle.vTranslation;
-            HeadParticle.vPreTranslation = InitParticles[iHeadIndex].particle.vTranslation;
+            HeadParticle.particle.vTranslation = mul(InitParticles[iHeadIndex].particle.vTranslation, WorldMatrix);
+            HeadParticle.vPreTranslation = HeadParticle.particle.vTranslation;
             HeadParticle.particle.vLifeTime.y = 0.f;
             HeadParticle.particle.vTranslation = mul(HeadParticle.particle.vTranslation, WorldMatrix);
             HeadParticle.particle.vRight = vWorldPivot;

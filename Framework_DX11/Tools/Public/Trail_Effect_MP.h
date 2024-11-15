@@ -45,6 +45,8 @@ private:
 
 	_Vec2 m_vScaling = _Vec2(1.f, 1.f);
 
+	_float m_fTime = { 0.f };
+
 private:
 	HRESULT Ready_Components();
 

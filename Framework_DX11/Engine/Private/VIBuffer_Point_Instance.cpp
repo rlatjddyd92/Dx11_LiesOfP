@@ -133,7 +133,7 @@ _bool CVIBuffer_Point_Instance::DispatchCS(class CShader_Compute* pComputeShader
 	if (false == (STATE_LOOP & MovementData.iState))
 	{
 		m_fTime += MovementData.fTimeDelta;
-		if (m_vLifeTime.y > m_fTime)
+		if (m_vLifeTime.y < m_fTime)
 			return true;
 	}
 

@@ -49,17 +49,12 @@ HRESULT CLevel_Tool::Initialize()
 	//	if (FAILED(m_pGameInstance->Add_CloneObject_ToLayer(LEVEL_TOOL, TEXT("Layer_Map"), TEXT("Prototype_GameObject_NonAnim"), &Desc)))
 	//		return E_FAIL;
 	//}
-	CTrail_Effect_TP::TRAIL_TP_DESC TestDesc = {};
-	// 트레일 테스트용
-	m_pGameInstance->Add_CloneObject_ToLayer(LEVEL_TOOL, TEXT("Layer_Test"), TEXT("Prototype_GameObject_Trail_Effect_TP"), &TestDesc);
 
-	CTrail_Effect_MP::EFFECT_BASE_DESC BaseDesc = {};
-	BaseDesc.fRotationPerSec = 0.f;
-	BaseDesc.fSpeedPerSec = 0.f;
-	BaseDesc.iLevelIndex = LEVEL_TOOL;
-	BaseDesc.pParentMatrix = nullptr;
 
-	m_pGameInstance->Add_CloneObject_ToLayer(LEVEL_TOOL, TEXT("Layer_Test_2"), TEXT("Prototype_GameObject_Trail_Effect_MP"), &BaseDesc);
+	//CTrail_Effect_TP::TRAIL_TP_DESC TestDesc = {};
+	//// 트레일 테스트용
+	//m_pGameInstance->Add_CloneObject_ToLayer(LEVEL_TOOL, TEXT("Layer_Test"), TEXT("Prototype_GameObject_Trail_Effect_TP"), &TestDesc);
+
 
 	return S_OK;
 }

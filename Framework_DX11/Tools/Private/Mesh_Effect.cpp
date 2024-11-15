@@ -66,7 +66,10 @@ void CMesh_Effect::Late_Update(_float fTimeDelta)
 	if (m_DefaultDesc.fDuration < m_fAccumulateTime)
 		m_isActive = false;
 
-	 m_pGameInstance->Add_RenderObject((CRenderer::RENDERGROUP)m_iRenderGroup, this);
+	if (CRenderer::RG_EFFECT == m_RenderDesc.iRenderGroup)
+		m_pGameInstance->Add_RenderObject(CRenderer::RG_NONLIGHT, this);
+	else
+		m_pGameInstance->Add_RenderObject((CRenderer::RENDERGROUP)m_RenderDesc.iRenderGroup, this);
 }
 
 HRESULT CMesh_Effect::Render()
@@ -128,6 +131,8 @@ HRESULT CMesh_Effect::Render()
 void CMesh_Effect::Set_Desc(const MESH_EFFECT_DESC& desc)
 {
 	m_DefaultDesc = desc.DefaultDesc;
+	m_RenderDesc = desc.RenderDesc;
+
 	m_InitDesc.DefaultDesc = desc.DefaultDesc;
 
 	m_pTransformCom->Set_State(CTransform::STATE_POSITION, desc.DefaultDesc.vPos);
@@ -141,6 +146,31 @@ void CMesh_Effect::Reset()
 
 HRESULT CMesh_Effect::Save(_wstring strFilePath)
 {
+	if (strFilePath.back() == L'\0')
+		strFilePath.resize(strFilePath.size() - 1);
+
+	_wstring strResultPath = strFilePath + TEXT("\\") + m_strEffectName + TEXT(".ME");
+
+	_char FilePath[MAX_PATH] = {};
+	int sizeNeeded = WideCharToMultiByte(CP_ACP, 0, strResultPath.c_str(), -1, nullptr, 0, nullptr, nullptr);
+	if (sizeNeeded > 0 && sizeNeeded <= MAX_PATH)
+	{
+		WideCharToMultiByte(CP_ACP, 0, strResultPath.c_str(), -1, FilePath, MAX_PATH, nullptr, nullptr);
+	}
+
+	ofstream outfile(FilePath, ios::binary);
+
+	if (!outfile.is_open())
+		return E_FAIL;
+
+	outfile.write(reinterpret_cast<const _char*>(m_InitDesc.szEffectName), sizeof(m_InitDesc.szEffectName));
+	outfile.write(reinterpret_cast<const _char*>(&m_InitDesc.RenderDesc), sizeof(m_InitDesc.RenderDesc));
+	outfile.write(reinterpret_cast<const _char*>(&m_InitDesc.DefaultDesc), sizeof(m_InitDesc.DefaultDesc));
+	outfile.write(reinterpret_cast<const _char*>(&m_InitDesc.TextDesc), sizeof(m_InitDesc.TextDesc));
+
+	outfile.close();
+
+
 	return S_OK;
 }
 

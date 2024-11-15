@@ -28,11 +28,11 @@ public:
 		// 컴퓨트 셰이더에 전달
 		TYPE		eType = { TYPE_END };
 		_uint		iComputeState = { 0 };
-		_Vec4		vPivot = {};
+		_Vec4		vPivot = { 0.f, 0.f, 0.f, 1.f };
 		_float		fGravity = { 0.f };
-		_Vec4		vMoveDir = {};
-		_Vec3		vOrbitAxis = {};
-		_float		fOrbitAngle = { 0.f };
+		_Vec4		vMoveDir = { 0.f, -1.f, 0.f, 0.f };
+		_Vec3		vOrbitAxis = { 0.f, 1.f, 0.f};
+		_float		fOrbitAngle = { 90.f };
 		_float		fRandomTimeInterval = { 0.f };
 		_float		fRandomMoveRatio = { 0.f };
 		_float		fAccelSpeed = { 0.f };
@@ -41,14 +41,14 @@ public:
 		// 위치 초기화
 		_Vec3		vPos = {};
 		_Vec3		vRotation = {};
-		_Vec3		vScale = {};
+		_Vec3		vScale = {1.f, 1.f, 1.f};
 
 		// 렌더 셰이더에 전달
 		_uint		iShaderIndex = { 0 };
 		_uint		iGeomState = { 0 };
-		_Vec2		vTexDevide = {};
+		_Vec2		vTexDevide = {1.f ,1.f};
 		_float		fSpriteSpeed = { 0.f };
-		_Vec2		vScaling = {};
+		_Vec2		vScaling = {1.f, 1.f};
 		_float		fStartRotation = { 0.f };
 		_float		fRotationPerSecond = { 0.f };
 	}DEFAULT_DESC;
@@ -59,7 +59,6 @@ public:
 		_tchar		szMaskTextureTag_1[MAX_PATH] = L"";
 		_tchar		szMaskTextureTag_2[MAX_PATH] = L"";
 		_tchar		szNormalTextureTag[MAX_PATH] = L"";
-		_tchar		szDistortionTextureTag[MAX_PATH] = L"";
 	}TEXT_DESC;
 
 	typedef struct
@@ -72,7 +71,7 @@ public:
 		_float2		vSpeed = { 1.f, 2.f };
 		_float2		vLifeTime = { 2.f, 4.f };
 		_float4		vMinColor = { 0.f, 0.f, 0.f, 1.f };
-		_float4		vMaxColor = { 0.f, 0.f, 0.f, 1.f };
+		_float4		vMaxColor = { 1.f, 1.f, 1.f, 1.f };
 	}BUFFER_DESC;
 
 	typedef struct : CEffect_Base::EFFECT_BASE_DESC

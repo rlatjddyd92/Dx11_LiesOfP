@@ -64,41 +64,37 @@ void CParticle_Effect::Update(_float fTimeDelta)
     switch (m_DefaultDesc.eType)
     {
     case TYPE_SPREAD:
-        m_pVIBufferCom->DispatchCS(m_pSpreadCS, Movement);
+        bOver = m_pVIBufferCom->DispatchCS(m_pSpreadCS, Movement);
         break;
 
     case TYPE_MOVE:
-        m_pVIBufferCom->DispatchCS(m_pMoveCS, Movement);
+        bOver = m_pVIBufferCom->DispatchCS(m_pMoveCS, Movement);
         break;
 
     case TYPE_CONVERGE:
-        m_pVIBufferCom->DispatchCS(m_pConvergeCS, Movement);
+        bOver = m_pVIBufferCom->DispatchCS(m_pConvergeCS, Movement);
         break;
 
     }
 
-    //if (true == bOver)
-    //    m_isDead = true;
+    if (true == bOver)
+        m_isDead = true;
 
 }
 
 void CParticle_Effect::Late_Update(_float fTimeDelta)
 {
-    m_pGameInstance->Add_RenderObject((CRenderer::RENDERGROUP)m_iRenderGroup, this);
+    if (CRenderer::RG_EFFECT == m_RenderDesc.iRenderGroup)
+        m_pGameInstance->Add_RenderObject(CRenderer::RG_NONLIGHT, this);
+    else
+        m_pGameInstance->Add_RenderObject((CRenderer::RENDERGROUP)m_RenderDesc.iRenderGroup, this);
 }
 
 HRESULT CParticle_Effect::Render()
 {
-    if(TYPE_CONVERGE == m_DefaultDesc.eType || TYPE_SPREAD == m_DefaultDesc.eType || TYPE_MOVE == m_DefaultDesc.eType)
-    {
-        m_pShaderCom->Bind_Matrix("g_WorldMatrix", &m_WorldMatrix);
-    }
-    else
-    {
-        _Matrix WorldMatrix = XMMatrixIdentity();
-        if (FAILED(m_pShaderCom->Bind_Matrix("g_WorldMatrix", &WorldMatrix)))
-            return E_FAIL;
-    }
+    _Matrix WorldMatrix = XMMatrixIdentity();
+    if (FAILED(m_pShaderCom->Bind_Matrix("g_WorldMatrix", &WorldMatrix)))
+        return E_FAIL;
     if (FAILED(m_pShaderCom->Bind_Matrix("g_ViewMatrix", &m_pGameInstance->Get_Transform(CPipeLine::D3DTS_VIEW))))
         return E_FAIL;
     if (FAILED(m_pShaderCom->Bind_Matrix("g_ProjMatrix", &m_pGameInstance->Get_Transform(CPipeLine::D3DTS_PROJ))))
@@ -169,29 +165,30 @@ void CParticle_Effect::Reset()
 
 HRESULT CParticle_Effect::Save(_wstring strFilePath)
 {
-    //if (strFilePath.back() == L'\0')
-    //    strFilePath.resize(strFilePath.size() - 1);
+    if (strFilePath.back() == L'\0')
+        strFilePath.resize(strFilePath.size() - 1);
 
-    //_wstring strResultPath = strFilePath + TEXT("\\") + m_strEffectName + TEXT(".PE");
+    _wstring strResultPath = strFilePath + TEXT("\\") + m_strEffectName + TEXT(".PE");
 
-    //_char FilePath[MAX_PATH] = {};
-    //int sizeNeeded = WideCharToMultiByte(CP_ACP, 0, strResultPath.c_str(), -1, nullptr, 0, nullptr, nullptr);
-    //if (sizeNeeded > 0 && sizeNeeded <= MAX_PATH)
-    //{
-    //    WideCharToMultiByte(CP_ACP, 0, strResultPath.c_str(), -1, FilePath, MAX_PATH, nullptr, nullptr);
-    //}
+    _char FilePath[MAX_PATH] = {};
+    int sizeNeeded = WideCharToMultiByte(CP_ACP, 0, strResultPath.c_str(), -1, nullptr, 0, nullptr, nullptr);
+    if (sizeNeeded > 0 && sizeNeeded <= MAX_PATH)
+    {
+        WideCharToMultiByte(CP_ACP, 0, strResultPath.c_str(), -1, FilePath, MAX_PATH, nullptr, nullptr);
+    }
 
-    //ofstream outfile(FilePath, ios::binary);
+    ofstream outfile(FilePath, ios::binary);
 
-    //if (!outfile.is_open())
-    //    return E_FAIL;
-    //
-    //outfile.write(reinterpret_cast<const _char*>(m_SaveDesc.strEffectName), sizeof(m_SaveDesc.strEffectName));
-    //outfile.write(reinterpret_cast<const _char*>(&m_SaveDesc.BufferDesc), sizeof(m_SaveDesc.BufferDesc));
-    //outfile.write(reinterpret_cast<const _char*>(&m_SaveDesc.InitDesc), sizeof(m_SaveDesc.InitDesc));
-    //
-    //outfile.close();
+    if (!outfile.is_open())
+        return E_FAIL;
 
+    outfile.write(reinterpret_cast<const _char*>(m_InitDesc.szEffectName), sizeof(m_InitDesc.szEffectName));
+    outfile.write(reinterpret_cast<const _char*>(&m_InitDesc.RenderDesc), sizeof(m_InitDesc.RenderDesc));
+    outfile.write(reinterpret_cast<const _char*>(&m_InitDesc.DefaultDesc), sizeof(m_InitDesc.DefaultDesc));
+    outfile.write(reinterpret_cast<const _char*>(&m_InitDesc.TextDesc), sizeof(m_InitDesc.TextDesc));
+    outfile.write(reinterpret_cast<const _char*>(&m_InitDesc.BufferDesc), sizeof(m_InitDesc.BufferDesc));
+    
+    outfile.close();
 
     return S_OK;
 }

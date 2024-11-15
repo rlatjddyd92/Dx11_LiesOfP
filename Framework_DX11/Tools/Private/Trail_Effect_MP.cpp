@@ -25,7 +25,7 @@ HRESULT CTrail_Effect_MP::Initialize(void* pArg)
 	if (FAILED(Ready_Components()))
 		return E_FAIL;
 
-	m_pTransformCom->Set_State(CTransform::STATE_POSITION, _Vec3(0.f, 0.f, 0.f));
+	m_pTransformCom->Set_State(CTransform::STATE_POSITION, _Vec3(10.f, 0.f, 10.f));
 
 	return S_OK;
 }
@@ -38,7 +38,7 @@ void CTrail_Effect_MP::Update(_float fTimeDelta)
 {
 	// 값 제대로 안채우면 컴퓨트셰이더에서 무한루프 돌아감.
 	CTrail_MultiPoint_Instance::TRAIL_MP_MOVEMENT Movement = {};
-	Movement.iState = CVIBuffer_Instancing::STATE_LOOP;
+	Movement.iState = 0;// CVIBuffer_Instancing::STATE_LOOP;
 	Movement.vPivot = { 0.f, 0.f, 0.f, 1.f };
 	Movement.fGravity = 4.f;
 	Movement.vMoveDir = { 0.f, 1.f, 0.f, 0.f };
@@ -59,6 +59,11 @@ void CTrail_Effect_MP::Update(_float fTimeDelta)
 
 void CTrail_Effect_MP::Late_Update(_float fTimeDelta)
 {
+	m_fTime += fTimeDelta;
+	
+	if (5.f < m_fTime)
+		m_isDead = true;
+
 	m_pGameInstance->Add_RenderObject(CRenderer::RG_NONLIGHT, this);
 }
 
@@ -155,7 +160,7 @@ HRESULT CTrail_Effect_MP::Ready_Components()
 	desc.vCenter			= {0.f, 5.f, 0.f};
 	desc.vRange				= { 5.f, 2.f, 5.f };
 	desc.vExceptRange		= {0.f, 0.f, 0.f};
-	desc.vLifeTime			= {1.f, 2.f};
+	desc.vLifeTime			= {0.5f, 1.f};
 	desc.vMaxColor			= { 0.f, 0.f, 0.f, 1.f };
 	desc.vMinColor			= { 1.f, 1.f, 1.f, 1.f};
 	desc.vSize				= {0.2f, 0.4f};

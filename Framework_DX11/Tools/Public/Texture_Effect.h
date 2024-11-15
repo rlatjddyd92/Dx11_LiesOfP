@@ -15,20 +15,20 @@ public:
 	typedef struct
 	{
 		_uint		iShaderIndex = { 0 };
-		_float		fDuration = { 0.f };
-		_Vec4		vColor = {};
-		_Vec2		vDivide = {};
+		_float		fDuration = { 10.f };
+		_Vec4		vColor = { 0.f, 0.f, 0.f, 1.f };
+		_Vec2		vDivide = { 1.f, 1.f };
 		_float		fSpriteSpeed = { 0.f };
 
-		_Vec3		vPos = {};
+		_Vec3		vPos = { 0.f, 0.f, 0.f };
 
 		_float		fRotationAngle = {};
 		_float		fRotationSpeed = { 0.f };
 
-		_Vec3		vScale = {};
+		_Vec3		vStartScale = { 1.f, 1.f, 1.f };
 		_Vec3		vScalingSpeed = {};
 
-		_float		fAlpha = { 0.f };
+		_float		fAlpha = { 1.f };
 		_float		fAlphaSpeed = { 0.f };
 	}DEFAULT_DESC;
 
@@ -38,7 +38,6 @@ public:
 		_tchar		szMaskTextureTag_1[MAX_PATH] = L"";
 		_tchar		szMaskTextureTag_2[MAX_PATH] = L"";
 		_tchar		szNormalTextureTag[MAX_PATH] = L"";
-		_tchar		szDistortionTextureTag[MAX_PATH] = L"";
 	}TEXT_DESC;
 
 	typedef struct : public CEffect_Base::EFFECT_BASE_DESC

@@ -166,16 +166,16 @@ void CController_EffectTool::RenderGroup_Selection()
 	Texture_Selection();
 
 	ImGui::SeparatorText("Render Group");
-	ImGui::RadioButton("RG_Nonblend", &m_iRenderGroupIndex, CRenderer::RG_NONBLEND);
+	ImGui::RadioButton("RG_Nonblend", &m_RenderDesc.iRenderGroup, CRenderer::RG_NONBLEND);
 	ImGui::SameLine();
-	ImGui::RadioButton("RG_Effect", &m_iRenderGroupIndex, CRenderer::RG_EFFECT);
+	ImGui::RadioButton("RG_Effect", &m_RenderDesc.iRenderGroup, CRenderer::RG_EFFECT);
 	ImGui::SameLine();
-	ImGui::RadioButton("RG_Blend", &m_iRenderGroupIndex, CRenderer::RG_BLEND);
+	ImGui::RadioButton("RG_Blend", &m_RenderDesc.iRenderGroup, CRenderer::RG_BLEND);
 
-	switch (m_iRenderGroupIndex)
+	switch (m_RenderDesc.iRenderGroup)
 	{
 	case CRenderer::RG_NONBLEND:
-		m_iPpState = CEffect_Base::PP_END;
+		m_RenderDesc.iPpState = 0;		
 		break;
 
 	case CRenderer::RG_EFFECT:
@@ -187,23 +187,23 @@ void CController_EffectTool::RenderGroup_Selection()
 		ImGui::Checkbox("PP_Distortion", &m_EffectPP[PP_DISTORTION]);
 		
 		if (true == m_EffectPP[PP_NONE])
-			m_iPpState |= CEffect_Base::PP_NONE;
+			m_RenderDesc.iPpState |= CEffect_Base::PP_NONE;
 		else
-			m_iPpState &= ~CEffect_Base::PP_NONE;
+			m_RenderDesc.iPpState &= ~CEffect_Base::PP_NONE;
 
 		if (true == m_EffectPP[PP_BLUR])
-			m_iPpState |= CEffect_Base::PP_BLUR;
+			m_RenderDesc.iPpState |= CEffect_Base::PP_BLUR;
 		else
-			m_iPpState &= ~CEffect_Base::PP_BLUR;
+			m_RenderDesc.iPpState &= ~CEffect_Base::PP_BLUR;
 
 		if (true == m_EffectPP[PP_DISTORTION])
-			m_iPpState |= CEffect_Base::PP_DISTORTION;
+			m_RenderDesc.iPpState |= CEffect_Base::PP_DISTORTION;
 		else
-			m_iPpState &= ~CEffect_Base::PP_DISTORTION;
+			m_RenderDesc.iPpState &= ~CEffect_Base::PP_DISTORTION;
 		break;
 
 	case CRenderer::RG_BLEND:
-		m_iPpState = CEffect_Base::PP_END;
+		m_RenderDesc.iPpState = 0;
 		break;
 	}
 
@@ -215,12 +215,11 @@ HRESULT CController_EffectTool::Add_Particle()
 	m_ParticleDesc.fSpeedPerSec = 1.f;
 	m_ParticleDesc.iLevelIndex = LEVEL_TOOL;
 	m_ParticleDesc.pParentMatrix = { nullptr };
-	m_ParticleDesc.iRenderGroup = m_iRenderGroupIndex;
-	m_ParticleDesc.iPpState = m_iPpState;
+	m_ParticleDesc.RenderDesc = m_RenderDesc;
 
 	size_t iCharLen = strlen(m_szEffectName);
 	size_t iConvertChars = 0;
-	mbstowcs_s(&iConvertChars, m_ParticleDesc.strEffectName, sizeof(m_ParticleDesc.strEffectName) / sizeof(_tchar), m_szEffectName, iCharLen);
+	mbstowcs_s(&iConvertChars, m_ParticleDesc.szEffectName, sizeof(m_ParticleDesc.szEffectName) / sizeof(_tchar), m_szEffectName, iCharLen);
 
 	wcsncpy_s(m_ParticleDesc.TextDesc.szDiffuseTexturTag, m_Texture_PrototypeTags[m_iSelected_DiffuseTextureIndex].c_str(),
 		sizeof(m_ParticleDesc.TextDesc.szDiffuseTexturTag) / sizeof(_tchar));
@@ -242,7 +241,6 @@ HRESULT CController_EffectTool::Add_Particle()
 
 void CController_EffectTool::Particle_Check()
 {
-
 	if (ImGui::TreeNode("Particle Initialize"))
 	{
 		ImGui::SeparatorText("Initialize");
@@ -374,8 +372,8 @@ void CController_EffectTool::Get_Particle()
 		return;
 
 	m_ParticleDesc = pParticle->Get_Desc();
-	m_iPpState = m_TextureDesc.iPpState;
-	m_iRenderGroupIndex = m_TextureDesc.iRenderGroup;
+	m_RenderDesc = m_ParticleDesc.RenderDesc;
+
 	Set_PpState();
 
 #pragma region BOOL
@@ -451,14 +449,12 @@ HRESULT CController_EffectTool::Add_TE()
 	m_TextureDesc.fRotationPerSec	= XMConvertToRadians(90.f);
 	m_TextureDesc.fSpeedPerSec		= 1.f;
 	m_TextureDesc.iLevelIndex		= LEVEL_TOOL;
-	m_TextureDesc.iRenderGroup = m_iRenderGroupIndex;
-	m_TextureDesc.iPpState = m_iPpState;
-
+	m_TextureDesc.RenderDesc		= m_RenderDesc;
 	
 	m_TextureDesc.pParentMatrix = { nullptr };
 	size_t iCharLen = strlen(m_szEffectName);
 	size_t iConvertChars = 0;
-	mbstowcs_s(&iConvertChars, m_TextureDesc.strEffectName, sizeof(m_TextureDesc.strEffectName) / sizeof(_tchar), m_szEffectName, iCharLen);
+	mbstowcs_s(&iConvertChars, m_TextureDesc.szEffectName, sizeof(m_TextureDesc.szEffectName) / sizeof(_tchar), m_szEffectName, iCharLen);
 
 	wcsncpy_s(m_TextureDesc.TextDesc.szDiffuseTexturTag, m_Texture_PrototypeTags[m_iSelected_DiffuseTextureIndex].c_str(),
 		sizeof(m_TextureDesc.TextDesc.szDiffuseTexturTag) / sizeof(_tchar));
@@ -494,23 +490,14 @@ void CController_EffectTool::TE_Check()
 		ImGui::InputFloat3("Pos TE", (_float*)&m_TextureDesc.DefaultDesc.vPos);
 		ImGui::InputFloat("Rotation Angle TE", (_float*)&m_TextureDesc.DefaultDesc.fRotationAngle);
 		ImGui::InputFloat("Rotation Speed TE", (_float*)&m_TextureDesc.DefaultDesc.fRotationSpeed);
-		ImGui::InputFloat3("Scale TE", (_float*)&m_TextureDesc.DefaultDesc.vScale);
+		ImGui::InputFloat3("Start Scale TE", (_float*)&m_TextureDesc.DefaultDesc.vStartScale);
 		ImGui::InputFloat3("Scaling Speed TE", (_float*)&m_TextureDesc.DefaultDesc.vScalingSpeed);
 
 		ImGui::SeparatorText("Blending");
-		ImGui::InputFloat("Alpha TE", (_float*)&m_TextureDesc.DefaultDesc.fAlpha);
+		ImGui::InputFloat("Start Alpha TE", (_float*)&m_TextureDesc.DefaultDesc.fAlpha);
 		ImGui::InputFloat("Alpha Speed TE", (_float*)&m_TextureDesc.DefaultDesc.fAlphaSpeed);
-
-		ImGui::TreePop();
-	}
-	if (ImGui::TreeNode("TE Type/State"))
-	{
-
-		
-
 		ImGui::SeparatorText("Shader");
 		ImGui::InputInt("Shader Index", (_int*)&m_TextureDesc.DefaultDesc.iShaderIndex);
-
 
 		ImGui::TreePop();
 	}
@@ -562,11 +549,9 @@ void CController_EffectTool::Get_TE()
 		return;
 
 	m_TextureDesc = pTextureEffect->Get_Desc();
+	m_RenderDesc = m_TextureDesc.RenderDesc;
 
-	m_iPpState = m_TextureDesc.iPpState;
-	m_iRenderGroupIndex = m_TextureDesc.iRenderGroup;
 	Set_PpState();
-
 }
 
 void CController_EffectTool::Delete_TE()
@@ -599,12 +584,12 @@ HRESULT CController_EffectTool::Add_Mesh()
 	m_MeshDesc.fRotationPerSec = XMConvertToRadians(90.f);
 	m_MeshDesc.fSpeedPerSec = 1.f;
 	m_MeshDesc.iLevelIndex = LEVEL_TOOL;
-	m_MeshDesc.iRenderGroup = m_iRenderGroupIndex;
 	m_MeshDesc.pParentMatrix = { nullptr };
-	m_MeshDesc.iPpState = m_iPpState;
+	m_MeshDesc.RenderDesc = m_RenderDesc;
+
 	size_t iCharLen = strlen(m_szEffectName);
 	size_t iConvertChars = 0;
-	mbstowcs_s(&iConvertChars, m_MeshDesc.strEffectName, sizeof(m_MeshDesc.strEffectName) / sizeof(_tchar), m_szEffectName, iCharLen);
+	mbstowcs_s(&iConvertChars, m_MeshDesc.szEffectName, sizeof(m_MeshDesc.szEffectName) / sizeof(_tchar), m_szEffectName, iCharLen);
 
 
 	wcsncpy_s(m_MeshDesc.TextDesc.szModelTag, m_Model_PrototypeTags[m_iSelected_ModelIndex].c_str(),
@@ -685,17 +670,9 @@ void CController_EffectTool::Mesh_Check()
 		ImGui::SeparatorText("Blending");
 		ImGui::InputFloat("Start Alpha ME", (_float*)&m_MeshDesc.DefaultDesc.fAlpha);
 		ImGui::InputFloat("Alpha Speed ME", (_float*)&m_MeshDesc.DefaultDesc.fAlphaSpeed);
-
-		ImGui::TreePop();
-
-	}
-	if (ImGui::TreeNode("ME Type/State"))
-	{
-
-
+		
 		ImGui::SeparatorText("Shader");
 		ImGui::InputInt("Shader Index", (_int*)&m_MeshDesc.DefaultDesc.iShaderIndex);
-
 
 		ImGui::TreePop();
 	}
@@ -747,9 +724,7 @@ void CController_EffectTool::Get_Mesh()
 		return;
 
 	m_MeshDesc = pMeshEffect->Get_Desc();
-
-	m_iPpState = m_MeshDesc.iPpState;
-	m_iRenderGroupIndex = m_MeshDesc.iRenderGroup;
+	m_RenderDesc = m_MeshDesc.RenderDesc;
 	Set_PpState();
 }
 
@@ -918,7 +893,8 @@ HRESULT CController_EffectTool::Load_Effect()
 				TestDesc.fSpeedPerSec = 1.f;
 				TestDesc.iLevelIndex = LEVEL_TOOL;
 
-				infile.read(reinterpret_cast<_char*>(TestDesc.strEffectName), sizeof(TestDesc.strEffectName));	// 이거 키로 쓰고
+				infile.read(reinterpret_cast<_char*>(TestDesc.szEffectName), sizeof(TestDesc.szEffectName));	// 이거 키로 쓰고
+				infile.read(reinterpret_cast<_char*>(&TestDesc.RenderDesc), sizeof(TestDesc.RenderDesc));		// 이거 버퍼 초기화에 쓰고
 				infile.read(reinterpret_cast<_char*>(&TestDesc.DefaultDesc), sizeof(TestDesc.DefaultDesc));		// 이거 버퍼 초기화에 쓰고
 				infile.read(reinterpret_cast<_char*>(&TestDesc.TextDesc), sizeof(TestDesc.TextDesc));			// 이게 실제로 적용되는 거.
 				infile.read(reinterpret_cast<_char*>(&TestDesc.BufferDesc), sizeof(TestDesc.BufferDesc));			// 이게 실제로 적용되는 거.
@@ -943,7 +919,8 @@ HRESULT CController_EffectTool::Load_Effect()
 				TestDesc.fSpeedPerSec = 1.f;
 				TestDesc.iLevelIndex = LEVEL_TOOL;
 
-				infile.read(reinterpret_cast<_char*>(TestDesc.strEffectName), sizeof(TestDesc.strEffectName));	// 이거 키로 쓰고
+				infile.read(reinterpret_cast<_char*>(TestDesc.szEffectName), sizeof(TestDesc.szEffectName));	// 이거 키로 쓰고
+				infile.read(reinterpret_cast<_char*>(&TestDesc.RenderDesc), sizeof(TestDesc.RenderDesc));		// 이거 버퍼 초기화에 쓰고
 				infile.read(reinterpret_cast<_char*>(&TestDesc.DefaultDesc), sizeof(TestDesc.DefaultDesc));		// 이거 텍스처 초기화에 쓰고
 				infile.read(reinterpret_cast<_char*>(&TestDesc.TextDesc), sizeof(TestDesc.TextDesc));		// 이거는 그대로 가져다 쓰고
 
@@ -954,7 +931,27 @@ HRESULT CController_EffectTool::Load_Effect()
 			}
 			else if (TEXT("ME") == strExtention)
 			{
-				
+				CMesh_Effect::MESH_EFFECT_DESC TestDesc = {};
+
+				ifstream infile(wFilePath, ios::binary);
+
+				if (!infile.is_open())
+					return E_FAIL;
+
+				TestDesc.pParentMatrix = { nullptr };
+				TestDesc.fRotationPerSec = XMConvertToRadians(90.f);
+				TestDesc.fSpeedPerSec = 1.f;
+				TestDesc.iLevelIndex = LEVEL_TOOL;
+
+				infile.read(reinterpret_cast<_char*>(TestDesc.szEffectName), sizeof(TestDesc.szEffectName));	// 이거 키로 쓰고
+				infile.read(reinterpret_cast<_char*>(&TestDesc.RenderDesc), sizeof(TestDesc.RenderDesc));		// 이거 버퍼 초기화에 쓰고
+				infile.read(reinterpret_cast<_char*>(&TestDesc.DefaultDesc), sizeof(TestDesc.DefaultDesc));		// 이거 텍스처 초기화에 쓰고
+				infile.read(reinterpret_cast<_char*>(&TestDesc.TextDesc), sizeof(TestDesc.TextDesc));		// 이거는 그대로 가져다 쓰고
+
+				infile.close();
+
+				if (FAILED(m_pGameInstance->Add_CloneObject_ToLayer(LEVEL_TOOL, TEXT("Layer_MeshEffect"), TEXT("Prototype_GameObject_Texture_Effect"), &TestDesc)))
+					return E_FAIL;
 			}
 
 		}
@@ -1090,17 +1087,17 @@ void CController_EffectTool::Texture_Selection()
 
 void CController_EffectTool::Set_PpState()
 {
-	if (PP_NONE & m_iPpState)
+	if (PP_NONE & m_RenderDesc.iPpState)
 		m_EffectPP[PP_NONE] = true;
 	else
 		m_EffectPP[PP_NONE] = false;
 
-	if (PP_BLUR & m_iPpState)
+	if (PP_BLUR & m_RenderDesc.iPpState)
 		m_EffectPP[PP_BLUR] = true;
 	else
 		m_EffectPP[PP_BLUR] = false;
 
-	if (PP_DISTORTION & m_iPpState)
+	if (PP_DISTORTION & m_RenderDesc.iPpState)
 		m_EffectPP[PP_DISTORTION] = true;
 	else
 		m_EffectPP[PP_DISTORTION] = false;
