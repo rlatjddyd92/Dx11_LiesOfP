@@ -234,7 +234,8 @@ HRESULT CLevel_Tool::Read_Map_Data()
 
 					if (FAILED(m_pGameInstance->Add_CloneObject_ToLayer(LEVEL_GAMEPLAY, TEXT("Layer_Map"), TEXT("Prototype_GameObject_StaticObj"), &staticObjDesc)))
 						return E_FAIL;
-				}
+				} 
+
 				else if (strLayerTag == "Layer_InteractObject")
 				{
 					 if (wcscmp(pDesc.szModelTag, TEXT("SK_DLV_Stargazer_01")) == 0)
