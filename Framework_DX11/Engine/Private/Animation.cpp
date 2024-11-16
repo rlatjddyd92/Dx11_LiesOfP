@@ -71,6 +71,8 @@ _uint CAnimation::Update_TransformationMatrices(const vector<class CBone*>& Bone
 	, _double* pCurrentTrackPosition, vector<_uint>& CurrentKeyFrameIndices, _bool isLoop, _bool* isEnd
 	, _float fTimeDelta, _bool isChildOfBoundary, list<OUTPUT_EVKEY>* pEvKeyList, _bool* bBoneUpdated,_bool BlockStackTime)
 {
+	_uint iCurrentFrame = 0;
+
 	if (!BlockStackTime)
 	{
 		/* 현재 재생위치를 계산하낟. */
@@ -85,7 +87,7 @@ _uint CAnimation::Update_TransformationMatrices(const vector<class CBone*>& Bone
 				{
 					*bBoneUpdated = false;
 				}
-				return true;
+				return iCurrentFrame;
 			}
 
 			*pCurrentTrackPosition = 0.f;
@@ -141,7 +143,6 @@ _uint CAnimation::Update_TransformationMatrices(const vector<class CBone*>& Bone
 		}
 	}
 
-	_uint iCurrentFrame = 0;
 
 	/* 현재 재생위치에 맞게 현재 애니메이션이 컨트롤해야 할 뼈의 상태들을 갱신해준다. */
 	_uint		iChannelIndex = { 0 };

@@ -132,7 +132,7 @@ KEYFRAME CChannel::Get_KeyFrame(_uint iFrame)
 	}
 	else
 	{
-		return m_KeyFrames[m_KeyFrames.size() - 1];
+		return m_KeyFrames[0];
 	}
 }
 

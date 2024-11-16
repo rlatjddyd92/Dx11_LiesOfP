@@ -280,8 +280,6 @@ HRESULT CModel::SetUp_NextAnimation(_uint iNextAnimationIndex, _bool isLoop, _fl
 	if (m_isChangeAni == true && iNextAnimationIndex == m_tChaneAnimDesc.iNextAnimIndex)
 		return S_OK;
 
-	m_ChangeTrackPosition = 0.0;
-
 	m_tChaneAnimDesc.iNextAnimIndex = iNextAnimationIndex;
 	if (iNextAnimationIndex == m_iCurrentAnimIndex_Boundary && !m_isChangeAni_Boundary)
 	{
@@ -291,6 +289,18 @@ HRESULT CModel::SetUp_NextAnimation(_uint iNextAnimationIndex, _bool isLoop, _fl
 	{
 		m_tChaneAnimDesc.iStartFrame = iStartFrame;
 	}
+	vector<CChannel*> NextChannels = m_Animations[m_tChaneAnimDesc.iNextAnimIndex]->Get_Channels();
+
+	m_ChangeTrackPosition = 0.0;
+
+	for (_uint i = 0; i < NextChannels.size(); ++i)
+	{
+		KEYFRAME tNextKeyFrame = NextChannels[i]->Find_KeyFrameIndex(&m_KeyFrameIndices[m_tChaneAnimDesc.iNextAnimIndex][i], NextChannels[i]->Get_KeyFrame(m_tChaneAnimDesc.iStartFrame).TrackPosition); // 여기로 보간
+
+		if (m_ChangeTrackPosition < NextChannels[i]->Get_KeyFrame(m_tChaneAnimDesc.iStartFrame).TrackPosition)
+			m_ChangeTrackPosition = NextChannels[i]->Get_KeyFrame(m_tChaneAnimDesc.iStartFrame).TrackPosition;
+	}
+
 
 	m_tChaneAnimDesc.fChangeDuration = fChangeDuration;
 	m_tChaneAnimDesc.fChangeTime = 0.f;
@@ -380,10 +390,10 @@ _vector CModel::Play_Animation(_float fTimeDelta, _bool* pOut, list<OUTPUT_EVKEY
 	{
 
 		_bool isChangeEnd = false;
-		if (m_tChaneAnimDesc.fChangeTime == 0.f && pOut != nullptr)
+		/*if (m_tChaneAnimDesc.fChangeTime == 0.f && pOut != nullptr)
 		{
 			*pOut = true;
-		}
+		}*/
 		m_tChaneAnimDesc.fChangeTime += fAddTime;
 
 		bBoneUpdated = true;
@@ -400,7 +410,8 @@ _vector CModel::Play_Animation(_float fTimeDelta, _bool* pOut, list<OUTPUT_EVKEY
 			}
 
 			KEYFRAME tCurrentKeyFrame = CurrentChannels[i]->Find_KeyFrameIndex(&m_KeyFrameIndices[m_iCurrentAnimIndex][i], m_CurrentTrackPosition); // 여기서부터
-			KEYFRAME tNextKeyFrame = NextChannels[i]->Find_KeyFrameIndex(&m_KeyFrameIndices[m_tChaneAnimDesc.iNextAnimIndex][i], NextChannels[i]->Get_KeyFrame(m_tChaneAnimDesc.iStartFrame).TrackPosition); // 여기로 보간
+			KEYFRAME tNextKeyFrame = NextChannels[i]->Find_KeyFrameIndex(&m_KeyFrameIndices[m_tChaneAnimDesc.iNextAnimIndex][i], m_ChangeTrackPosition); // 여기로 보간
+
 
 			_vector vScale, vRotation, vTranslation;
 
@@ -453,7 +464,7 @@ _vector CModel::Play_Animation(_float fTimeDelta, _bool* pOut, list<OUTPUT_EVKEY
 					m_CurrentTrackPosition = m_CurrentTrackPosition_Boundary;
 				}
 				else
-					m_CurrentTrackPosition = 0.0;
+					m_CurrentTrackPosition = m_ChangeTrackPosition;
 			}
 			//m_Animations[m_iCurrentAnimIndex]->Reset();
 			m_iCurrentAnimIndex = m_tChaneAnimDesc.iNextAnimIndex;
@@ -477,10 +488,10 @@ _vector CModel::Play_Animation(_float fTimeDelta, _bool* pOut, list<OUTPUT_EVKEY
 		if (m_isChangeAni_Boundary)
 		{
 			_bool isChangeEnd = false;
-			if (m_tChaneAnimDesc_Boundary.fChangeTime == 0.f && pOut != nullptr)
+			/*if (m_tChaneAnimDesc_Boundary.fChangeTime == 0.f && pOut != nullptr)
 			{
 				*pOut = true;
-			}
+			}*/
 			m_tChaneAnimDesc_Boundary.fChangeTime += fAddTime;
 
 			bBoneUpdated = true;
@@ -506,7 +517,7 @@ _vector CModel::Play_Animation(_float fTimeDelta, _bool* pOut, list<OUTPUT_EVKEY
 				}
 
 				KEYFRAME tCurrentKeyFrame = CurrentChannels[i]->Find_KeyFrameIndex(&m_KeyFrameIndices[m_iCurrentAnimIndex_Boundary][i], m_CurrentTrackPosition_Boundary); // 여기서부터
-				KEYFRAME tNextKeyFrame = NextChannels[i]->Find_KeyFrameIndex(&m_KeyFrameIndices[m_tChaneAnimDesc_Boundary.iNextAnimIndex][i], NextChannels[i]->Get_KeyFrame(m_tChaneAnimDesc_Boundary.iStartFrame).TrackPosition); // 여기로 보간
+				KEYFRAME tNextKeyFrame = NextChannels[i]->Find_KeyFrameIndex(&m_KeyFrameIndices[m_tChaneAnimDesc_Boundary.iNextAnimIndex][i], m_ChangeTrackPosition); // 여기로 보간
 
 				_vector vScale, vRotation, vTranslation;
 
@@ -557,7 +568,7 @@ _vector CModel::Play_Animation(_float fTimeDelta, _bool* pOut, list<OUTPUT_EVKEY
 					m_CurrentTrackPosition_Boundary = m_CurrentTrackPosition;
 				}
 				else
-					m_CurrentTrackPosition_Boundary = 0.0;
+					m_CurrentTrackPosition_Boundary = m_ChangeTrackPosition;
 				
 				//m_Animations[m_iCurrentAnimIndex]->Reset();
 				m_iCurrentAnimIndex_Boundary = m_tChaneAnimDesc_Boundary.iNextAnimIndex;

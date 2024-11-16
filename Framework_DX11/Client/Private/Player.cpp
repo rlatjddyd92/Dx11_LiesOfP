@@ -178,12 +178,12 @@ void CPlayer::Update(_float fTimeDelta)
 
 void CPlayer::Late_Update(_float fTimeDelta)
 {
-	if (GetKeyState(VK_LBUTTON) & 0x8000)
-	{
-		_float3		vPickPos;
-		if (true == m_pGameInstance->Picking(&vPickPos))
-			m_pTransformCom->Set_State(CTransform::STATE_POSITION, XMVectorSetW(XMLoadFloat3(&vPickPos), 1.f));		
-	}
+	//if (GetKeyState(VK_LBUTTON) & 0x8000)
+	//{
+	//	_float3		vPickPos;
+	//	if (true == m_pGameInstance->Picking(&vPickPos))
+	//		m_pTransformCom->Set_State(CTransform::STATE_POSITION, XMVectorSetW(XMLoadFloat3(&vPickPos), 1.f));		
+	//}
 
 
 	m_pRigidBodyCom->Update(fTimeDelta);

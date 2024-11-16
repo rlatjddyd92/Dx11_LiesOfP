@@ -29,7 +29,7 @@ HRESULT CState_Player_Rapier_NA2::Initialize(_uint iStateNum, void* pArg)
 
 HRESULT CState_Player_Rapier_NA2::Start_State(void* pArg)
 {
-    m_pPlayer->Change_Animation(m_iAnimation_RapierNA2, false , 0.1f, 14);
+    m_pPlayer->Change_Animation(m_iAnimation_RapierNA2, false , 0.5f, 14);
 
     return S_OK;
 }
@@ -45,7 +45,7 @@ void CState_Player_Rapier_NA2::Update(_float fTimeDelta)
         else if (KEY_TAP(KEY::RBUTTON))
             m_pPlayer->Change_State(CPlayer::RAPIER_SA1);
     }
-    else if (*m_pIsEndAnim)
+    else if (iFrame > 55)
     {
         m_pPlayer->Change_State(CPlayer::OH_IDLE);
     }
