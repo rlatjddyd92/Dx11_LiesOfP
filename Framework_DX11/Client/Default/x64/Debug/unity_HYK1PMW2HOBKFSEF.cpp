@@ -162,6 +162,9 @@
 #include "D:\GitProject\Dx11_LiesOfP\Framework_DX11\Client\Private\UIPage_Main.cpp"
 
 
+#include "D:\GitProject\Dx11_LiesOfP\Framework_DX11\Client\Private\UIPage_Ortho.cpp"
+
+
 #include "D:\GitProject\Dx11_LiesOfP\Framework_DX11\Client\Private\UIPage_Play.cpp"
 
 

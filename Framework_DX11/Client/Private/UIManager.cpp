@@ -622,7 +622,7 @@ void CUIManager::InputTestPageInfo(vector<_wstring>* pName, vector<_wstring>* pV
 		_float fValue = 0.f;
 		memcpy(&fValue, ValueA, sizeof(_float));
 		_wstring strValue = to_wstring(fValue);
-		pValue->push_back(strValue);m_iAnimation_Heal
+		pValue->push_back(strValue);
 	}
 	else if (eTypeA == TEST_PAGE_VALUE_TYPE::TYPE_INT)
 	{
