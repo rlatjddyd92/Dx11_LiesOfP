@@ -167,6 +167,9 @@
 #include "C:\Users\Administrator\Documents\GitHub\Dx11_LiesOfP\Framework_DX11\Engine\Private\Timer_Manager.cpp"
 
 
+#include "C:\Users\Administrator\Documents\GitHub\Dx11_LiesOfP\Framework_DX11\Engine\private\Trail_MultiPoint_Instance.cpp"
+
+
 #include "C:\Users\Administrator\Documents\GitHub\Dx11_LiesOfP\Framework_DX11\Engine\private\Trail_OnePoint_Instance.cpp"
 
 

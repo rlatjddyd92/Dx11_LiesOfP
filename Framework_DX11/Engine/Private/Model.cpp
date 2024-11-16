@@ -297,9 +297,9 @@ HRESULT CModel::SetUp_NextAnimation(_uint iNextAnimationIndex, _bool isLoop, _fl
 	{
 		KEYFRAME tNextKeyFrame = NextChannels[i]->Find_KeyFrameIndex(&m_KeyFrameIndices[iNextAnimationIndex][i], NextChannels[i]->Get_KeyFrame(iStartFrame).TrackPosition); // 여기로 보간
 		
-		if (m_ChangeTrackPosition < NextChannels[i]->Get_KeyFrame(iStartFrame).TrackPosition)
+		if (m_ChangeTrackPosition < tNextKeyFrame.TrackPosition)
 		{
-			m_ChangeTrackPosition = NextChannels[i]->Get_KeyFrame(iStartFrame).TrackPosition;
+			m_ChangeTrackPosition = tNextKeyFrame.TrackPosition;
 			
 		}
 	}
@@ -356,9 +356,9 @@ HRESULT CModel::SetUp_NextAnimation_Boundary(_uint iNextAnimationIndex, _bool is
 	{
 		KEYFRAME tNextKeyFrame = NextChannels[i]->Find_KeyFrameIndex(&m_KeyFrameIndices[iNextAnimationIndex][i], NextChannels[i]->Get_KeyFrame(iStartFrame).TrackPosition); // 여기로 보간
 
-		if (m_ChangeTrackPosition < NextChannels[i]->Get_KeyFrame(iStartFrame).TrackPosition)
+		if (m_ChangeTrackPosition < tNextKeyFrame.TrackPosition)
 		{
-			m_ChangeTrackPosition = NextChannels[i]->Get_KeyFrame(iStartFrame).TrackPosition;
+			m_ChangeTrackPosition = tNextKeyFrame.TrackPosition;
 
 		}
 	}
