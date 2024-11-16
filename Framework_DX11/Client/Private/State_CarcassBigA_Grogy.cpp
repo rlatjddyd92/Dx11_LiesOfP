@@ -50,7 +50,7 @@ void CState_CarcassBigA_Grogy::Update(_float fTimeDelta)
         if (*m_pIsEndAnim)
         {
             ++m_iAnimCnt;
-            m_pMonster->Change_Animation(17 - m_iAnimCnt, true, 0);
+            m_pMonster->Change_Animation(17 - m_iAnimCnt, false, 0);
         }
         break;
 
@@ -58,7 +58,7 @@ void CState_CarcassBigA_Grogy::Update(_float fTimeDelta)
         if (m_fGrogyTime >= m_fGrogyDuration)
         {
             ++m_iAnimCnt;
-            m_pMonster->Change_Animation(17 - m_iAnimCnt, true, 0);
+            m_pMonster->Change_Animation(17 - m_iAnimCnt, false, 0);
         }
         else
             m_fGrogyTime += fTimeDelta;
@@ -69,6 +69,7 @@ void CState_CarcassBigA_Grogy::Update(_float fTimeDelta)
         {
             m_iAnimCnt = 0;
             *m_pTrackPos = 0.f;
+            m_fGrogyTime = 0.f;
             m_pMonster->Change_State(CCarcassBigA::IDLE);
         }
         break;

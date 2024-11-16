@@ -87,10 +87,9 @@ _uint CAnimation::Update_TransformationMatrices(const vector<class CBone*>& Bone
 				{
 					*bBoneUpdated = false;
 				}
-				return iCurrentFrame;
 			}
-
 			*pCurrentTrackPosition = 0.f;
+
 		}
 	}
 

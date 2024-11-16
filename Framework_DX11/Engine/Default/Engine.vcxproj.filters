@@ -508,9 +508,6 @@
     <ClInclude Include="..\Public\Input_Device.h">
       <Filter>00.System\01.Device\Input</Filter>
     </ClInclude>
-    <ClInclude Include="..\public\Model.h">
-      <Filter>01.Utility\03.Components\Model</Filter>
-    </ClInclude>
     <ClInclude Include="..\public\Mesh.h">
       <Filter>01.Utility\03.Components\Model\Mesh</Filter>
     </ClInclude>
@@ -643,6 +640,9 @@
     <ClInclude Include="..\Public\EasyDrawSphere.h" />
     <ClInclude Include="..\Public\ObjectOctree.h">
       <Filter>01.Utility\03.Components\Model\ObjectOctree</Filter>
+    </ClInclude>
+    <ClInclude Include="..\public\Model.h">
+      <Filter>01.Utility\03.Components\Model</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

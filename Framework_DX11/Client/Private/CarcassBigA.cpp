@@ -74,16 +74,11 @@ void CCarcassBigA::Update(_float fTimeDelta)
 
 	_Vec3 vPos = m_pTransformCom->Get_State(CTransform::STATE_POSITION);
 	
-	if (m_bEndAnim == true && m_bResetRootMove)//조건을 애니메이션이 끝났을때 or 변경 되었을때로
-	{
-		m_vCurRootMove = m_vRootMoveStack = XMVectorSet(0, 0, 0, 1);
-	}
-	else
+	if (true)//조건을 애니메이션이 끝났을때 or 변경 되었을때로
 	{
 		m_vCurRootMove = XMVector3TransformNormal(m_vCurRootMove, m_pTransformCom->Get_WorldMatrix());
 
-		m_pTransformCom->Set_State(CTransform::STATE_POSITION, vPos + (_Vec3)m_vCurRootMove - (_Vec3)m_vRootMoveStack);
-		m_vRootMoveStack = m_vCurRootMove;
+		m_pTransformCom->Set_State(CTransform::STATE_POSITION, vPos + m_vCurRootMove);
 	}
 
 	//m_pColliderCom->Update(m_pTransformCom->Get_WorldMatrix_Ptr());

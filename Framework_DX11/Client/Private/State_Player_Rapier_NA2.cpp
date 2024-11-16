@@ -29,7 +29,7 @@ HRESULT CState_Player_Rapier_NA2::Initialize(_uint iStateNum, void* pArg)
 
 HRESULT CState_Player_Rapier_NA2::Start_State(void* pArg)
 {
-    m_pPlayer->Change_Animation(m_iAnimation_RapierNA2, false , 0.5f, 14);
+    m_pPlayer->Change_Animation(m_iAnimation_RapierNA2, false , 0.2f, 14);
 
     return S_OK;
 }
