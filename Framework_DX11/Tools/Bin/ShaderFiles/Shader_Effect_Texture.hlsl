@@ -18,8 +18,8 @@ bool g_isChange = false;
 
 texture2D g_DiffuseTexture;
 texture2D g_NormalTexture;
-texture2D g_MaskTexture;
-texture2D g_MaskTexture2;
+texture2D g_MaskTexture_1;
+texture2D g_MaskTexture_2;
 texture2D g_OpacityTexture;
 
 float2  g_vTexDivide;
@@ -106,8 +106,8 @@ PS_OUT PS_MAIN_MASK_1_2(PS_IN In)
     PS_OUT Out = (PS_OUT) 0;
 
     vector vDiffuse = g_DiffuseTexture.Sample(LinearSampler, In.vTexcoord);
-    vector vMask_1 = g_MaskTexture.Sample(LinearSampler, In.vTexcoord);
-    vector vMask_2 = g_MaskTexture2.Sample(LinearSampler, In.vTexcoord);
+    vector vMask_1 = g_MaskTexture_1.Sample(LinearSampler, In.vTexcoord);
+    vector vMask_2 = g_MaskTexture_2.Sample(LinearSampler, In.vTexcoord);
     
     Out.vColor = vDiffuse;
     Out.vColor += vMask_1 + vMask_2;

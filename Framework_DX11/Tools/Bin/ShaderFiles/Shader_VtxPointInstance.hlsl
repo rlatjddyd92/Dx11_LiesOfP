@@ -26,7 +26,8 @@ StructuredBuffer<Particle> Particle_SRV : register(t0);
 matrix			g_WorldMatrix, g_ViewMatrix, g_ProjMatrix;
 texture2D		g_DiffuseTexture;
 texture2D       g_NormalTexture;
-texture2D       g_MaskTexture;
+texture2D       g_MaskTexture_1;
+texture2D       g_MaskTexture_2;
 vector			g_vCamPosition;
 
 float2          g_vTexDivide;

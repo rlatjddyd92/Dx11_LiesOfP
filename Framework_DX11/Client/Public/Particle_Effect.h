@@ -34,7 +34,6 @@ public:
 	{
 		TYPE		eType = { TYPE_END };
 		_uint		iState = { 0 };
-		_float		fRenderRatio = { 0.f };
 		_Vec4		vPivot = {};
 		_float		fGravity = { 0.f };
 		_Vec4		vMoveDir = {};

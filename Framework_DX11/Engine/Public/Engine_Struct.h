@@ -283,15 +283,22 @@ namespace Engine
 
 	typedef struct ENGINE_DLL
 	{
-		XMFLOAT3 vCurTopPos;
-		XMFLOAT3 vCurBottomPos;
+		XMFLOAT3 vFirstTopPos;
+		XMFLOAT3 vFirstBottomPos;
 
-		XMFLOAT3 vPreTopPos;
-		XMFLOAT3 vPreBottomPos;
+		XMFLOAT3 vSecondTopPos;
+		XMFLOAT3 vSecondBottomPos;
 
-		_float2 vLifeTime;
+		XMFLOAT3 vThirdTopPos;
+		XMFLOAT3 vThirdBottomPos;
 
-		static const unsigned int	iNumElements = 6;
+		XMFLOAT3 vForthTopPos;
+		XMFLOAT3 vForthBottomPos;
+
+		XMFLOAT2 vLifeTime;
+		_float	fIndex;
+
+		static const unsigned int	iNumElements = 11;
 		static const D3D11_INPUT_ELEMENT_DESC	Elements[iNumElements];
 	}VTXTRAIL_TWOPOINT_INSTANCE;
 

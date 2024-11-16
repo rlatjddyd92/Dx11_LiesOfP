@@ -28,6 +28,7 @@ HRESULT CTrail_Effect_OP::Initialize(void* pArg)
 		return E_FAIL;
 
 	m_ActionDesc = pDesc->InitDesc.ActionDesc;
+	m_SaveDesc = *pDesc;
 
 	return S_OK;
 }
@@ -56,29 +57,8 @@ void CTrail_Effect_OP::Update(_float fTimeDelta)
 
 void CTrail_Effect_OP::Late_Update(_float fTimeDelta)
 {
-	if(RS_NONBLEND & m_ActionDesc.iRenderState)
-	{
-		if (FAILED(m_pGameInstance->Add_RenderObject(CRenderer::RG_NONBLEND, this)))
-			return;
-	}
-	if (RS_DISTORTION & m_ActionDesc.iRenderState)
-	{
-		if (FAILED(m_pGameInstance->Add_RenderObject(CRenderer::RG_DISTORTION, this)))
-			return;
-	}
-	if (RS_BLUR & m_ActionDesc.iRenderState)
-	{
-	}
-	if (RS_NONLIGHT & m_ActionDesc.iRenderState)
-	{
-		if (FAILED(m_pGameInstance->Add_RenderObject(CRenderer::RG_NONLIGHT, this)))
-			return;
-	}
-	if (RS_BLEND & m_ActionDesc.iRenderState)
-	{
-		if (FAILED(m_pGameInstance->Add_RenderObject(CRenderer::RG_BLEND, this)))
-			return;
-	}
+	if (FAILED(m_pGameInstance->Add_RenderObject(CRenderer::RG_BLEND, this)))
+		return;
 }
 
 HRESULT CTrail_Effect_OP::Render()
@@ -144,7 +124,7 @@ HRESULT CTrail_Effect_OP::Save(_wstring strFilePath)
 	if (!outfile.is_open())
 		return E_FAIL;
 	
-	outfile.write(reinterpret_cast<const _char*>(m_SaveDesc.strEffectName), sizeof(m_SaveDesc.strEffectName));
+	outfile.write(reinterpret_cast<const _char*>(m_SaveDesc.szEffectName), sizeof(m_SaveDesc.szEffectName));
 	outfile.write(reinterpret_cast<const _char*>(&m_SaveDesc.BufferDesc), sizeof(m_SaveDesc.BufferDesc));
 	outfile.write(reinterpret_cast<const _char*>(&m_SaveDesc.InitDesc), sizeof(m_SaveDesc.InitDesc));
 
@@ -167,7 +147,7 @@ CTrail_Effect_OP::TRAIL_OP_DESC CTrail_Effect_OP::Get_Desc()
 	return desc;
 }
 
-HRESULT CTrail_Effect_OP::Ready_Components(TRAIL_OP_DESC Desc)
+HRESULT CTrail_Effect_OP::Ready_Components(const TRAIL_OP_DESC& Desc)
 {
 	/* FOR.Com_Shader */
 	if (FAILED(__super::Add_Component(LEVEL_TOOL, TEXT("Prototype_Component_Shader_Trail_OnePoint_Instance"),

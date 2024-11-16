@@ -13,12 +13,19 @@ public:
 		vector<void*> pParticleEffect_Descs;
 		vector<void*> pTextureEffect_Descs;
 		vector<void*> pMeshEffect_Descs;
+
+		_tchar szEffectContainerName[MAX_PATH] = TEXT("");
 	} EFFECT_DESC;
 
 private:
 	CEffect_Container(ID3D11Device* pDevice, ID3D11DeviceContext* pContext);
 	CEffect_Container(const CEffect_Container& Prototype);
 	virtual ~CEffect_Container() = default;
+
+public:
+	_wstring Get_ContainerName() {
+		return m_strContainerName;
+	}
 
 public:
 	virtual HRESULT Initialize_Prototype();
@@ -32,8 +39,19 @@ public:
 	HRESULT Reset_Effects();
 	HRESULT Save_Effects(_wstring strFilePath);
 
+	HRESULT Add_Effects_To_Layer();
+
+	HRESULT Save_EffectContainer(_wstring strFolderPath);
+	HRESULT Load_EffectContainer(_wstring strFilePath);
+
 private:
 	vector<class CEffect_Base*> m_Effects;
+	vector<_wstring> m_EffectNames;
+	_wstring m_strContainerName = TEXT("");
+
+private:
+	HRESULT Load_Effect_By_Path(const _wstring& strFilePath);
+	_wstring getPreviousFolderPath(const _wstring& path);
 
 public:
 	static CEffect_Container* Create(ID3D11Device* pDevice, ID3D11DeviceContext* pContext);

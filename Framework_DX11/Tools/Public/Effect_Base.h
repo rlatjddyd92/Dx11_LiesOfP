@@ -7,24 +7,36 @@ BEGIN(Tools)
 class CEffect_Base abstract : public CGameObject
 {
 public:
+	typedef struct
+	{
+		_int			iRenderGroup = { 0 };
+		_int			iPpState = { PP_END };
+	}RENDER_DESC;
+
 	typedef struct : public CGameObject::GAMEOBJECT_DESC
 	{
-		const _Matrix* pParentMatrix = { nullptr };
-		_tchar		strEffectName[MAX_PATH] = L"";
+		const _Matrix*	pParentMatrix = { nullptr };
+		_tchar			szEffectName[MAX_PATH] = L"";
+		RENDER_DESC		RenderDesc = {};
 	} EFFECT_BASE_DESC;
 
+
 	enum EFFECT_TYPE { TYPE_PARTICLE, TYPE_TEXTURE, TYPE_MESH, TYPE_END };
-
-	enum RENDER_STATE
+	enum EFFECT_POSTPROCESSING
 	{
-		RS_NONBLEND		= 0x0001,
-		RS_NONLIGHT		= 0x0002,
-		RS_DISTORTION	= 0x0004,
-		RS_BLUR			= 0x0008,
-		RS_BLEND		= 0x0010,
-		RS_END			= 0x9999
+		PP_NONE = 0x0001,
+		PP_DISTORTION = 0x0002,
+		PP_BLUR = 0x0004,
+		PP_END = 0xFFFF
 	};
-
+	enum EFFECT_TEXTURE
+	{
+		TEXTURE_DIFFUSE,
+		TEXTURE_MASK_1,
+		TEXTURE_MASK_2,
+		TEXTURE_NORMAL,
+		TEXTURE_END
+	};
 protected:
 	CEffect_Base(ID3D11Device* pDevice, ID3D11DeviceContext* pContext);
 	CEffect_Base(const CEffect_Base& Prototype);
@@ -33,6 +45,14 @@ protected:
 public:
 	_wstring Get_EffectName() {
 		return m_strEffectName;
+	}
+
+	EFFECT_TYPE Get_EffectType() {
+		return m_eEffectType;
+	}
+
+	void Set_ParentMartix(_Matrix* pParentMatrix) {
+		m_pParentMatrix = pParentMatrix;
 	}
 
 public:
@@ -52,7 +72,8 @@ public:
 	virtual HRESULT Save(_wstring strFilePath);
 
 protected:
-	EFFECT_TYPE m_eEffectType = { TYPE_END };
+	EFFECT_TYPE		m_eEffectType = { TYPE_END };
+	RENDER_DESC		m_RenderDesc = {};
 
 	_Matrix m_WorldMatrix = XMMatrixIdentity();
 	const _Matrix* m_pParentMatrix = { nullptr };

@@ -75,6 +75,7 @@
     <ClCompile Include="..\private\Texture.cpp" />
     <ClCompile Include="..\Private\Timer.cpp" />
     <ClCompile Include="..\Private\Timer_Manager.cpp" />
+    <ClCompile Include="..\private\Trail_MultiPoint_Instance.cpp" />
     <ClCompile Include="..\private\Trail_OnePoint_Instance.cpp" />
     <ClCompile Include="..\private\Trail_TwoPoint_Instance.cpp" />
     <ClCompile Include="..\private\Transform.cpp" />
@@ -150,6 +151,7 @@
     <ClInclude Include="..\public\Texture.h" />
     <ClInclude Include="..\Public\Timer.h" />
     <ClInclude Include="..\Public\Timer_Manager.h" />
+    <ClInclude Include="..\public\Trail_MultiPoint_Instance.h" />
     <ClInclude Include="..\public\Trail_OnePoint_Instance.h" />
     <ClInclude Include="..\public\Trail_TwoPoint_Instance.h" />
     <ClInclude Include="..\public\Transform.h" />
