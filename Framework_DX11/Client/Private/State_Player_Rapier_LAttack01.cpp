@@ -29,7 +29,7 @@ HRESULT CState_Player_Rapier_LAttack01::Initialize(_uint iStateNum, void* pArg)
 
 HRESULT CState_Player_Rapier_LAttack01::Start_State(void* pArg)
 {
-    m_pPlayer->Change_Animation(m_iAnimation_RapierNA2, false , 8.f, 14);
+    m_pPlayer->Change_Animation(m_iAnimation_RapierNA2, false , 0.1f, 14);
 
     m_isInputLButton = false;
     m_isInputRButton = false;
