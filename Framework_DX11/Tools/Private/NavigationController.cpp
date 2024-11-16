@@ -308,9 +308,26 @@ _int CNavigationController::SelectCell(_float3 vPickPos, _int* iSelectNum)
 
 		if (true == m_Cells[i]->isIn(XMLoadFloat3(&vPickPos), &iNeighborIndex))
 		{
-			m_iSelectCellIndex = i;
-			*iSelectNum = m_iSelectCellIndex;
-			return i;
+			//y축 비교
+			_Vec3 vPointA =m_Cells[i]->Get_Point(CCell::POINT_A);
+			_Vec3 vPointB = m_Cells[i]->Get_Point(CCell::POINT_B);
+			_Vec3 vPointC = m_Cells[i]->Get_Point(CCell::POINT_C);
+
+			_float fCellBigY = max(vPointA.y, vPointB.y);
+			fCellBigY = max(fCellBigY, vPointC.y);
+
+			_float fCellSmallY = min(vPointA.y, vPointB.y);
+			fCellSmallY = min(fCellSmallY, vPointC.y);
+
+			//약간 느슨하게 검사
+			if (vPickPos.y <= fCellBigY + 1.f && vPickPos.y >= fCellSmallY - 1.f)
+			{
+				m_iSelectCellIndex = i;
+				*iSelectNum = m_iSelectCellIndex;
+				return i;
+			}
+			else
+				continue;
 		}
 	}
 	m_iSelectCellIndex = -1;

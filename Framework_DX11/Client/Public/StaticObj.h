@@ -45,6 +45,7 @@ public:
 	_bool		m_isInstance = { false };
 	_bool		m_bShadow = { false };
 
+	_float		m_fCullDistance = {40.f};
 private:
 	HRESULT Ready_Components(STATICOBJ_DESC* pNonAnimDesc);
 

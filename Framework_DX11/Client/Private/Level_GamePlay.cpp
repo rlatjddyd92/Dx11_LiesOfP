@@ -124,7 +124,8 @@ HRESULT CLevel_Tool::Ready_Layer_Camera()
 
 HRESULT CLevel_Tool::Ready_Layer_BackGround()
 {
-	//if (FAILED(m_pGameInstance->Add_CloneObject_ToLayer(LEVEL_GAMEPLAY, TEXT("Layer_BackGround"), TEXT("Prototype_GameObject_Terrain"))))
+
+//	if (FAILED(m_pGameInstance->Add_CloneObject_ToLayer(LEVEL_GAMEPLAY, TEXT("Layer_BackGround"), TEXT("Prototype_GameObject_Terrain"))))
 	//	return E_FAIL;
 
 	if (FAILED(m_pGameInstance->Add_CloneObject_ToLayer(LEVEL_GAMEPLAY, TEXT("Layer_BackGround"), TEXT("Prototype_GameObject_Sky"))))
@@ -231,7 +232,8 @@ HRESULT CLevel_Tool::Read_Map_Data()
 
 					if (FAILED(m_pGameInstance->Add_CloneObject_ToLayer(LEVEL_GAMEPLAY, TEXT("Layer_Map"), TEXT("Prototype_GameObject_StaticObj"), &staticObjDesc)))
 						return E_FAIL;
-				}
+				} 
+
 				else if (strLayerTag == "Layer_InteractObject")
 				{
 					 if (wcscmp(pDesc.szModelTag, TEXT("SK_DLV_Stargazer_01")) == 0)

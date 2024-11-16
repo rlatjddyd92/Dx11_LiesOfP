@@ -31,6 +31,7 @@ public:
 private:
 	void Select_Map_Model();
 	void Select_Interact_Model();
+	void Select_Etc_Model();
 	void Show_List(_uint iFolder);
 	void SaveMap();
 	void LoadMap();
@@ -60,9 +61,11 @@ private:
 
 	vector<const char*>	m_FileNames;	//ListBox에 띄울 항목들 이름
 	vector<const char*>	m_Decal_Folder_Names;	//ListBox에 띄울 항목들 이름
+	vector<const char*>	m_Etc_Folder_Names;	//ListBox에 띄울 항목들 이름
 	vector<const char*>	m_Decal_File_Names_Diffuse;	//ListBox에 띄울 항목들 이름
 	vector<const char*>	m_Decal_File_Names_Normal;	//ListBox에 띄울 항목들 이름
 	vector<const char*>	m_Decal_File_Names_Arm;	//ListBox에 띄울 항목들 이름
+	vector<const char*>	m_Etc_File_Names;	//ListBox에 띄울 항목들 이름
 
 	_int m_iListCount = { 0 };			//ListBox항목 개수
 	_int m_iListSelectNum = { 0 };		//ListBox항목중 선택한 인덱스
@@ -77,6 +80,8 @@ private:
 	_int m_iSelected_Decal_Diffuse_ID = { -1 };
 	_int m_iSelected_Decal_Normal_ID = { -1 };
 	_int m_iSelected_Decal_ARM_ID = { -1 };
+
+	_int m_iSelected_ETC_ID = { -1 };
 
 	class CGameObject* m_pSelectObject = { nullptr };		//새로 선택한 물체
 	class CGameObject* m_pPreSelectObject = { nullptr };	//전에 선택했던 물체

@@ -49,7 +49,7 @@ void CStaticObj::Update(_float fTimeDelta)
 
 void CStaticObj::Late_Update(_float fTimeDelta)
 {
-	if (m_pGameInstance->isIn_Frustum_WorldSpace(m_pTransformCom->Get_State(CTransform::STATE_POSITION), 40.f))
+	if (m_pGameInstance->isIn_Frustum_WorldSpace(m_pTransformCom->Get_State(CTransform::STATE_POSITION), m_fCullDistance))
 	{
 		/* 직교투영을 위한 월드행렬까지 셋팅하게 된다. */
 		__super::Late_Update(fTimeDelta);
@@ -154,6 +154,10 @@ HRESULT CStaticObj::Ready_Components(STATICOBJ_DESC* pNonAnimDesc)
 {
 	_tchar szModelTag[MAX_PATH];
 	MultiByteToWideChar(CP_ACP, MB_PRECOMPOSED, pNonAnimDesc->szModelTag, MAX_PATH, szModelTag, MAX_PATH);
+
+	//유독 큰 물체 컬링 예외처리
+	if (wcscmp(szModelTag, TEXT("SM_Monastery_Floor_06")) == 0)
+		m_fCullDistance = 150.f;
 
 	/* FOR.Com_Shader */
 	if (FAILED(__super::Add_Component(LEVEL_GAMEPLAY, TEXT("Prototype_Component_Shader_VtxModel"),
