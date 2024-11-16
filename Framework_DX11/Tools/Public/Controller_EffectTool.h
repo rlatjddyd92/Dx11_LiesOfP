@@ -93,6 +93,7 @@ public:
 	void Select_Particle();
 	void Get_Particle();
 	void Delete_Particle();
+	void Clear_Particle();
 
 	HRESULT Add_TE();
 	void TE_Check();
@@ -100,6 +101,7 @@ public:
 	void Select_TE();
 	void Get_TE();
 	void Delete_TE();
+	void Clear_TE();
 
 	HRESULT Add_Mesh();
 	void Mesh_Check();
@@ -107,14 +109,16 @@ public:
 	void Select_Mesh();
 	void Get_Mesh();
 	void Delete_Mesh();
+	void Clear_ME();
 
+	HRESULT Check_EffectContainer();
 	HRESULT Add_EffectContainer();
+	HRESULT Back_EffectContainer();
 	void Reset_EffectContainer();
 	void Delete_EffectContainer();
 	HRESULT Save_EffectContainer();
 	HRESULT Load_Effect();
-
-	void Set_EffectName();
+	HRESULT Load_EffectContainer();
 
 private:
 	class CGameInstance* m_pGameInstance = { nullptr };
@@ -122,7 +126,10 @@ private:
 	vector<_wstring>	m_Texture_PrototypeTags;
 	vector<_wstring>	m_Model_PrototypeTags;
 
-	_char m_szEffectName[MAX_PATH] = "";
+	_char m_szParticleName[MAX_PATH] = "";
+	_char m_szTextureName[MAX_PATH] = "";
+	_char m_szMeshName[MAX_PATH] = "";
+	_char m_szEffectContainerName[MAX_PATH] = "";
 
 	_bool m_bJunHoCamera = { false };
 	
@@ -153,10 +160,9 @@ private:
 
 private:
 	void Set_ParticleState();
-
 	void Texture_Selection();
-
 	void Set_PpState();
+
 public:
 	virtual void Free() override;
 };

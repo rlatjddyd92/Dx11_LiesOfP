@@ -47,6 +47,14 @@ public:
 		return m_strEffectName;
 	}
 
+	EFFECT_TYPE Get_EffectType() {
+		return m_eEffectType;
+	}
+
+	void Set_ParentMartix(_Matrix* pParentMatrix) {
+		m_pParentMatrix = pParentMatrix;
+	}
+
 public:
 	virtual HRESULT Initialize_Prototype();
 	virtual HRESULT Initialize(void* pArg = nullptr);

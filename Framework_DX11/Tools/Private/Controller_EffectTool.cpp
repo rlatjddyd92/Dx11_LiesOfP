@@ -56,10 +56,20 @@ void CController_EffectTool::Render()
 	}
 
 	ImGui::Begin("EffectList");
-
-	Set_EffectName();
+	if (ImGui::Button("Load Effect"))
+	{
+		ImGuiFileDialog::Instance()->OpenDialog(
+			"LoadFile",					// vKey
+			"Select a File",			// vTitle
+			"Effects{.PE, .TE, .ME}",   // vFilters
+			IGFD::FileDialogConfig()	// vConfig (기본 설정)
+		);
+	}
+	Load_Effect();
 
 #pragma region PE
+	ImGui::InputText("Particle Name", m_szParticleName, IM_ARRAYSIZE(m_szParticleName));
+
 	Select_Particle();
 	if (ImGui::Button("Create Particle"))
 	{
@@ -77,9 +87,15 @@ void CController_EffectTool::Render()
 	{
 		Delete_Particle();
 	}
+	if (ImGui::Button("Clear Particle"))
+	{
+		Clear_Particle();
+	}
 #pragma endregion
 
 #pragma region TE
+	ImGui::InputText("Texture Name", m_szTextureName, IM_ARRAYSIZE(m_szTextureName));
+
 	Select_TE();
 	if (ImGui::Button("Create Texture Effect"))
 	{
@@ -97,9 +113,15 @@ void CController_EffectTool::Render()
 	{
 		Delete_TE();
 	}
+	if (ImGui::Button("Clear Texture Effect"))
+	{
+		Clear_TE();
+	}
 #pragma endregion
 
 #pragma region ME
+	ImGui::InputText("Mesh Name", m_szMeshName, IM_ARRAYSIZE(m_szMeshName));
+
 	Select_Mesh();
 	if (ImGui::Button("Create Mesh Effect"))
 	{
@@ -117,12 +139,24 @@ void CController_EffectTool::Render()
 	{
 		Delete_Mesh();
 	}
+	if (ImGui::Button("Clear Mesh Effect"))
+	{
+		Clear_ME();
+	}
 #pragma endregion
+	ImGui::End();
 
+	ImGui::Begin("Effect_Container");
 	ImGui::SeparatorText("Effect Container");
+	ImGui::InputText("Effect Container Name", m_szEffectContainerName, IM_ARRAYSIZE(m_szEffectContainerName));
+	Check_EffectContainer();
 	if (ImGui::Button("Add Effect Conainer"))
 	{
 		Add_EffectContainer();
+	}
+	if (ImGui::Button("Back Effect Conainer"))
+	{
+		Back_EffectContainer();
 	}
 	if (ImGui::Button("Reset Effect Conainer"))
 	{
@@ -141,20 +175,19 @@ void CController_EffectTool::Render()
 			".bin",                  // vFilters
 			IGFD::FileDialogConfig()   // vConfig (기본 설정)
 		);
-
 	}
 	Save_EffectContainer();
 
 	if (ImGui::Button("Load Effect Conainer"))
 	{
 		ImGuiFileDialog::Instance()->OpenDialog(
-			"LoadFile",           // vKey
+			"LoadContainer",           // vKey
 			"Select a File",           // vTitle
-			"Effects{.PE, .TE, .ME}",                  // vFilters
+			"Effects{.EC}",                  // vFilters
 			IGFD::FileDialogConfig()   // vConfig (기본 설정)
 		);
 	}
-	Load_Effect();
+	Load_EffectContainer();
 
 	ImGui::End();
 
@@ -217,9 +250,9 @@ HRESULT CController_EffectTool::Add_Particle()
 	m_ParticleDesc.pParentMatrix = { nullptr };
 	m_ParticleDesc.RenderDesc = m_RenderDesc;
 
-	size_t iCharLen = strlen(m_szEffectName);
+	size_t iCharLen = strlen(m_szParticleName);
 	size_t iConvertChars = 0;
-	mbstowcs_s(&iConvertChars, m_ParticleDesc.szEffectName, sizeof(m_ParticleDesc.szEffectName) / sizeof(_tchar), m_szEffectName, iCharLen);
+	mbstowcs_s(&iConvertChars, m_ParticleDesc.szEffectName, sizeof(m_ParticleDesc.szEffectName) / sizeof(_tchar), m_szParticleName, iCharLen);
 
 	wcsncpy_s(m_ParticleDesc.TextDesc.szDiffuseTexturTag, m_Texture_PrototypeTags[m_iSelected_DiffuseTextureIndex].c_str(),
 		sizeof(m_ParticleDesc.TextDesc.szDiffuseTexturTag) / sizeof(_tchar));
@@ -444,6 +477,22 @@ void CController_EffectTool::Delete_Particle()
 	}
 }
 
+void CController_EffectTool::Clear_Particle()
+{
+	CLayer* pLayer = m_pGameInstance->Find_Layer(LEVEL_TOOL, TEXT("Layer_Particle"));
+
+	if (nullptr == pLayer)
+		return;
+
+	auto& ObjectList = pLayer->Get_ObjectList();
+
+	for (auto& Object : ObjectList)
+	{
+		Safe_Release(Object);
+	}
+	ObjectList.clear();
+}
+
 HRESULT CController_EffectTool::Add_TE()
 {
 	m_TextureDesc.fRotationPerSec	= XMConvertToRadians(90.f);
@@ -452,9 +501,9 @@ HRESULT CController_EffectTool::Add_TE()
 	m_TextureDesc.RenderDesc		= m_RenderDesc;
 	
 	m_TextureDesc.pParentMatrix = { nullptr };
-	size_t iCharLen = strlen(m_szEffectName);
+	size_t iCharLen = strlen(m_szTextureName);
 	size_t iConvertChars = 0;
-	mbstowcs_s(&iConvertChars, m_TextureDesc.szEffectName, sizeof(m_TextureDesc.szEffectName) / sizeof(_tchar), m_szEffectName, iCharLen);
+	mbstowcs_s(&iConvertChars, m_TextureDesc.szEffectName, sizeof(m_TextureDesc.szEffectName) / sizeof(_tchar), m_szTextureName, iCharLen);
 
 	wcsncpy_s(m_TextureDesc.TextDesc.szDiffuseTexturTag, m_Texture_PrototypeTags[m_iSelected_DiffuseTextureIndex].c_str(),
 		sizeof(m_TextureDesc.TextDesc.szDiffuseTexturTag) / sizeof(_tchar));
@@ -576,7 +625,22 @@ void CController_EffectTool::Delete_TE()
 
 		++iIndex;
 	}
+}
 
+void CController_EffectTool::Clear_TE()
+{
+	CLayer* pLayer = m_pGameInstance->Find_Layer(LEVEL_TOOL, TEXT("Layer_TextureEffect"));
+
+	if (nullptr == pLayer)
+		return;
+
+	auto& ObjectList = pLayer->Get_ObjectList();
+
+	for (auto& Object : ObjectList)
+	{
+		Safe_Release(Object);
+	}
+	ObjectList.clear();
 }
 
 HRESULT CController_EffectTool::Add_Mesh()
@@ -587,9 +651,9 @@ HRESULT CController_EffectTool::Add_Mesh()
 	m_MeshDesc.pParentMatrix = { nullptr };
 	m_MeshDesc.RenderDesc = m_RenderDesc;
 
-	size_t iCharLen = strlen(m_szEffectName);
+	size_t iCharLen = strlen(m_szMeshName);
 	size_t iConvertChars = 0;
-	mbstowcs_s(&iConvertChars, m_MeshDesc.szEffectName, sizeof(m_MeshDesc.szEffectName) / sizeof(_tchar), m_szEffectName, iCharLen);
+	mbstowcs_s(&iConvertChars, m_MeshDesc.szEffectName, sizeof(m_MeshDesc.szEffectName) / sizeof(_tchar), m_szMeshName, iCharLen);
 
 
 	wcsncpy_s(m_MeshDesc.TextDesc.szModelTag, m_Model_PrototypeTags[m_iSelected_ModelIndex].c_str(),
@@ -752,6 +816,41 @@ void CController_EffectTool::Delete_Mesh()
 	}
 }
 
+void CController_EffectTool::Clear_ME()
+{
+	CLayer* pLayer = m_pGameInstance->Find_Layer(LEVEL_TOOL, TEXT("Layer_MeshEffect"));
+
+	if (nullptr == pLayer)
+		return;
+
+	auto& ObjectList = pLayer->Get_ObjectList();
+
+	for (auto& Object : ObjectList)
+	{
+		Safe_Release(Object);
+	}
+	ObjectList.clear();
+}
+
+HRESULT CController_EffectTool::Check_EffectContainer()
+{
+	CGameObject* pGameObject = m_pGameInstance->Find_Object(LEVEL_TOOL, TEXT("Layer_Effect"), 0);
+
+	if (nullptr == pGameObject)
+		return E_FAIL;
+
+	CEffect_Container* pContainer = static_cast<CEffect_Container*>(pGameObject);
+	_wstring strNameTag = pContainer->Get_ContainerName();
+	int iSize = WideCharToMultiByte(CP_UTF8, 0, strNameTag.c_str(), (int)strNameTag.size(), nullptr, 0, nullptr, nullptr);
+	string strTo(iSize, 0);
+	WideCharToMultiByte(CP_UTF8, 0, strNameTag.c_str(), (int)strNameTag.size(), &strTo[0], iSize, nullptr, nullptr);
+
+	ImGui::Text(strTo.c_str());
+	ImGui::Text("Is Existing!!!");
+
+	return S_OK;
+}
+
 HRESULT CController_EffectTool::Add_EffectContainer()
 {
 	Delete_EffectContainer();
@@ -794,10 +893,30 @@ HRESULT CController_EffectTool::Add_EffectContainer()
 	EffectDesc.pParticleEffect_Descs = pParticleDescs;
 	EffectDesc.pTextureEffect_Descs = pTextureDesc;
 	EffectDesc.pMeshEffect_Descs = pMeshDesc;
+	size_t iCharLen = strlen(m_szEffectContainerName);
+	size_t iConvertChars = 0;
+	mbstowcs_s(&iConvertChars, EffectDesc.szEffectContainerName, sizeof(EffectDesc.szEffectContainerName) / sizeof(_tchar), m_szEffectContainerName, iCharLen);
 
 	if (FAILED(m_pGameInstance->Add_CloneObject_ToLayer(LEVEL_TOOL, TEXT("Layer_Effect"), TEXT("Prototype_GameObject_Effect_Continaer"), &EffectDesc)))
 		return E_FAIL;
 
+	Clear_Particle();
+	Clear_ME();
+	Clear_TE();
+
+	return S_OK;
+}
+
+HRESULT CController_EffectTool::Back_EffectContainer()
+{
+	CEffect_Container* pEffectContainer = static_cast<CEffect_Container*>(m_pGameInstance->Find_Object(LEVEL_TOOL, TEXT("Layer_Effect"), 0));
+
+	if (nullptr == pEffectContainer)
+		return E_FAIL;
+
+	if(FAILED(pEffectContainer->Add_Effects_To_Layer()))
+		return E_FAIL;
+	Delete_EffectContainer();
 	return S_OK;
 }
 
@@ -963,11 +1082,48 @@ HRESULT CController_EffectTool::Load_Effect()
 	return S_OK;
 }
 
-void CController_EffectTool::Set_EffectName()
+HRESULT CController_EffectTool::Load_EffectContainer()
 {
-	ImGui::InputText("Effect Name", m_szEffectName, IM_ARRAYSIZE(m_szEffectName));
-}
+	if (ImGuiFileDialog::Instance()->Display("LoadContainer"))
+	{
+		// 사용자가 파일을 선택한 경우
+		if (ImGuiFileDialog::Instance()->IsOk())
+		{
+			CEffect_Container::EFFECT_DESC desc = {};
+			desc.fRotationPerSec = XMConvertToRadians(90.f);
+			desc.fSpeedPerSec = 1.f;
+			desc.iLevelIndex = LEVEL_TOOL;
 
+			string FileName = ImGuiFileDialog::Instance()->GetCurrentFileName();
+			strcpy_s(m_szEffectContainerName, FileName.c_str());
+			
+			size_t iCharLen = strlen(m_szEffectContainerName);
+			size_t iConvertChars = 0;
+			mbstowcs_s(&iConvertChars, desc.szEffectContainerName, sizeof(desc.szEffectContainerName) / sizeof(_tchar), m_szEffectContainerName, iCharLen);
+
+			CEffect_Container* pEffectContainer = static_cast<CEffect_Container*>(m_pGameInstance->Clone_GameObject(TEXT("Prototype_GameObject_Effect_Continaer"), &desc));
+			if (nullptr == pEffectContainer)
+				return E_FAIL;
+
+
+			// 선택된 파일 경로 가져오기
+			string filePath = ImGuiFileDialog::Instance()->GetFilePathName();
+
+			int size_needed = MultiByteToWideChar(CP_UTF8, 0, filePath.c_str(), -1, nullptr, 0);
+			_wstring wFilePath(size_needed, 0);
+			MultiByteToWideChar(CP_UTF8, 0, filePath.c_str(), -1, &wFilePath[0], size_needed);
+	
+			pEffectContainer->Load_EffectContainer(wFilePath);
+
+			m_pGameInstance->Add_Object_ToLayer(LEVEL_TOOL, TEXT("Layer_Effect"), pEffectContainer);
+		}
+
+		// 대화 상자 닫기
+		ImGuiFileDialog::Instance()->Close();
+	}
+
+	return S_OK;
+}
 
 void CController_EffectTool::Set_ParticleState()
 {
@@ -1022,7 +1178,6 @@ void CController_EffectTool::Texture_Selection()
 	ImGui::RadioButton("Mask_2", &m_iTextureSelect, CEffect_Base::TEXTURE_MASK_2);
 	ImGui::SameLine();
 	ImGui::RadioButton("Normal", &m_iTextureSelect, CEffect_Base::TEXTURE_NORMAL);
-
 
 	vector<string> strTextureArray;
 	for (const auto& strPrototype : m_Texture_PrototypeTags)
@@ -1102,6 +1257,9 @@ void CController_EffectTool::Set_PpState()
 	else
 		m_EffectPP[PP_DISTORTION] = false;
 }
+
+
+
 
 void CController_EffectTool::Free()
 {

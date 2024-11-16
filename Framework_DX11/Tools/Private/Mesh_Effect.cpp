@@ -33,6 +33,8 @@ HRESULT CMesh_Effect::Initialize(void* pArg)
 	m_pTransformCom->Set_Scaled(m_DefaultDesc.vStartScale.x, m_DefaultDesc.vStartScale.y, m_DefaultDesc.vStartScale.z);
 	m_pTransformCom->Rotation(m_DefaultDesc.vStartRotation.x, m_DefaultDesc.vStartRotation.y, m_DefaultDesc.vStartRotation.z);
 
+	m_eEffectType = TYPE_MESH;
+
 	m_InitDesc = *pDesc;
 	
 	return S_OK;
@@ -56,7 +58,6 @@ void CMesh_Effect::Update(_float fTimeDelta)
 	m_vCurrentTileMove += m_DefaultDesc.vTileMoveDir * m_DefaultDesc.fTileMoveSpeed * fTimeDelta;
 
 	__super::Set_WorldMatrix();
-
 }
 
 void CMesh_Effect::Late_Update(_float fTimeDelta)
@@ -142,6 +143,12 @@ void CMesh_Effect::Set_Desc(const MESH_EFFECT_DESC& desc)
 
 void CMesh_Effect::Reset()
 {
+	m_DefaultDesc = m_InitDesc.DefaultDesc;
+	m_RenderDesc = m_InitDesc.RenderDesc;
+
+	m_pTransformCom->Set_State(CTransform::STATE_POSITION, m_DefaultDesc.vPos);
+	m_pTransformCom->Rotation(m_DefaultDesc.vStartRotation.x, m_DefaultDesc.vStartRotation.y, m_DefaultDesc.vStartRotation.z);
+	m_pTransformCom->Set_Scaled(m_DefaultDesc.vStartScale.x, m_DefaultDesc.vStartScale.y, m_DefaultDesc.vStartScale.z);
 }
 
 HRESULT CMesh_Effect::Save(_wstring strFilePath)
