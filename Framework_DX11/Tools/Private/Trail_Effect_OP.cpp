@@ -30,34 +30,39 @@ HRESULT CTrail_Effect_OP::Initialize(void* pArg)
 	m_ActionDesc = pDesc->InitDesc.ActionDesc;
 	m_SaveDesc = *pDesc;
 
+
+	m_vTestTop = _float3(5.f, 0.f, 0.f);
+	m_ActionDesc.iShaderIndex = 1;
+	m_ActionDesc.fScale = 0.1f;
+	
 	return S_OK;
 }
 
 void CTrail_Effect_OP::Priority_Update(_float fTimeDelta)
 {
+	if (KEY_TAP(KEY::G))
+		m_bLoop = !m_bLoop;
+	
 }
 
 void CTrail_Effect_OP::Update(_float fTimeDelta)
 {
-	_Vec4 vPos = m_pTransformCom->Get_State(CTransform::STATE_POSITION);
+	_vector vTopDir = XMLoadFloat3(&m_vTestTop) - XMVectorSet(0.f, 0.f, 0.f, 1.f);
+	_matrix RotationMatrix = XMMatrixRotationAxis(XMVectorSet(0.f, 1.f, 0.f, 0.f), 15.f * fTimeDelta);
+	vTopDir = XMVector3TransformNormal(vTopDir, RotationMatrix);
 
-	if (true == m_bLeft)
-		vPos.x += 1.f * fTimeDelta;
-	else
-		vPos.x -= 1.f * fTimeDelta;
-
-	if (vPos.x > 3.f || vPos.x < -3.f)
-		m_bLeft = !m_bLeft;
-
-	m_pTransformCom->Set_State(CTransform::STATE_POSITION, _Vec3(vPos));
+	XMStoreFloat3(&m_vTestTop, vTopDir);
 
 	__super::Set_WorldMatrix();
-	m_pVIBufferCom->Update_Buffer(XMLoadFloat4x4(&m_WorldMatrix).r[3], fTimeDelta);
+	//if(true == m_pVIBufferCom->Update_Buffer(XMLoadFloat3(&m_vTestTop), 0.5f, m_bLoop, fTimeDelta))
+	//	int a = 0;
+	if (true == m_pVIBufferCom->Spread_Buffer(XMLoadFloat3(&m_vTestTop), 10.f, 0.25f, m_bLoop, fTimeDelta))
+		int a = 0;;
 }
 
 void CTrail_Effect_OP::Late_Update(_float fTimeDelta)
 {
-	if (FAILED(m_pGameInstance->Add_RenderObject(CRenderer::RG_BLEND, this)))
+	if (FAILED(m_pGameInstance->Add_RenderObject(CRenderer::RG_NONLIGHT, this)))
 		return;
 }
 
@@ -68,13 +73,6 @@ HRESULT CTrail_Effect_OP::Render()
 	if (FAILED(m_pShaderCom->Bind_Matrix("g_ViewMatrix", &m_pGameInstance->Get_Transform(CPipeLine::D3DTS_VIEW))))
 		return E_FAIL;
 	if (FAILED(m_pShaderCom->Bind_Matrix("g_ProjMatrix", &m_pGameInstance->Get_Transform(CPipeLine::D3DTS_PROJ))))
-		return E_FAIL;
-
-	if (FAILED(m_pDiffuseTextureCom->Bind_ShadeResource(m_pShaderCom, "g_DiffuseTexture", 0)))
-		return E_FAIL;
-	if (FAILED(m_pMaskTextureCom_1->Bind_ShadeResource(m_pShaderCom, "g_MaskTexture_1", 0)))
-		return E_FAIL;
-	if (FAILED(m_pMaskTextureCom_2->Bind_ShadeResource(m_pShaderCom, "g_MaskTexture_2", 0)))
 		return E_FAIL;
 
 	if (FAILED(m_pShaderCom->Bind_RawValue("g_vCamPosition", &m_pGameInstance->Get_CamPosition_Vec4(), sizeof(_Vec4))))
@@ -162,24 +160,12 @@ HRESULT CTrail_Effect_OP::Ready_Components(const TRAIL_OP_DESC& Desc)
 	InstDesc.iNumInstance = Desc.BufferDesc.iNumInstance;
 	InstDesc.vLifeTime = Desc.BufferDesc.vLifeTime;
 
+	InstDesc.iNumInstance = 50;
+	InstDesc.vLifeTime = _float2(2.f, 2.f);
+
 	/* FOR.Com_VIBuffer */
 	if (FAILED(__super::Add_Component(LEVEL_TOOL, TEXT("Prototype_Component_VIBuffer_Trail_OnePoint_Instance"),
 		TEXT("Com_VIBuffer"), reinterpret_cast<CComponent**>(&m_pVIBufferCom), &InstDesc)))
-		return E_FAIL;
-
-	/* FOR.Com_DiffuseTexture */
-	if (FAILED(__super::Add_Component(LEVEL_TOOL, Desc.InitDesc.TextureDesc.strDiffuseTextureTag,
-		TEXT("Com_DiffuseTexture"), reinterpret_cast<CComponent**>(&m_pDiffuseTextureCom))))
-		return E_FAIL;
-
-	/* FOR.Com_MaskTexture_1 */
-	if (FAILED(__super::Add_Component(LEVEL_TOOL, Desc.InitDesc.TextureDesc.strMaskTextureTag_1,
-		TEXT("Com_MaskTexture_1"), reinterpret_cast<CComponent**>(&m_pMaskTextureCom_1))))
-		return E_FAIL;
-
-	/* FOR.Com_MaskTexture_2 */
-	if (FAILED(__super::Add_Component(LEVEL_TOOL, Desc.InitDesc.TextureDesc.strMaskTextureTag_2,
-		TEXT("Com_MaskTexture_2"), reinterpret_cast<CComponent**>(&m_pMaskTextureCom_2))))
 		return E_FAIL;
 
 	return S_OK;
@@ -215,10 +201,10 @@ void CTrail_Effect_OP::Free()
 {
 	__super::Free();
 
-	Safe_AddRef(m_pShaderCom);
-	Safe_AddRef(m_pVIBufferCom);
+	Safe_Release(m_pShaderCom);
+	Safe_Release(m_pVIBufferCom);
 
-	Safe_AddRef(m_pDiffuseTextureCom);
-	Safe_AddRef(m_pMaskTextureCom_1);
-	Safe_AddRef(m_pMaskTextureCom_2);
+	Safe_Release(m_pDiffuseTextureCom);
+	Safe_Release(m_pMaskTextureCom_1);
+	Safe_Release(m_pMaskTextureCom_2);
 }

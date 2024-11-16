@@ -103,9 +103,6 @@ _bool CTrail_TwoPoint_Instance::Update_Buffer(_fvector vWorldTopPos, _fvector vW
 		--iter;
 		--iter;
 
-		if (pVertices[i].vLifeTime.y < pVertices[i].vLifeTime.x)
-			m_bOver = false;
-
 		++iter;
 	}
 

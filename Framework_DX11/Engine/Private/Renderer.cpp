@@ -328,13 +328,13 @@ HRESULT CRenderer::Draw()
 	if (FAILED(Render_Bloom()))	// 다시 고치기
 		return E_FAIL;
 
-	//if (FAILED(Render_Distortion()))
-	//	return E_FAIL;
+	if (FAILED(Render_Distortion()))
+		return E_FAIL;
 
-	//if (FAILED(Render_NonLights()))
-	//	return E_FAIL;
-	//if (FAILED(Render_Blend()))
-	//	return E_FAIL;
+	if (FAILED(Render_NonLights()))
+		return E_FAIL;
+	if (FAILED(Render_Blend()))
+		return E_FAIL;
 	//if (FAILED(Render_UI()))
 	//	return E_FAIL;
 

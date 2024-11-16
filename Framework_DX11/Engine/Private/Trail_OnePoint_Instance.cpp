@@ -9,7 +9,7 @@ CTrail_OnePoint_Instance::CTrail_OnePoint_Instance(ID3D11Device* pDevice, ID3D11
 
 CTrail_OnePoint_Instance::CTrail_OnePoint_Instance(const CTrail_OnePoint_Instance& Prototype)
 	: CVIBuffer_Instancing( Prototype )
-	, m_TrailPoses( Prototype.m_TrailPoses )
+	, m_iNumCurrentIndex(Prototype.m_iNumCurrentIndex)
 {
 }
 
@@ -46,55 +46,141 @@ HRESULT CTrail_OnePoint_Instance::Initialize(void* pArg)
 	return S_OK;
 }
 
-_bool CTrail_OnePoint_Instance::Update_Buffer(_fvector vWorldPos, _float fTimeDelta)
+_bool CTrail_OnePoint_Instance::Update_Buffer(_Vec3 vWorldPos, _float fTrailInterval, _bool bLoop, _float fTimeDelta)
 {
 	if (false == m_bFirst)
 	{
-		for (auto& vPos : m_TrailPoses)
-			XMStoreFloat3(&vPos, vWorldPos);
-
-		m_bFirst = true;
+		m_vPrePos = vWorldPos;
 	}
-
-	_float3 vPos = {};
-	XMStoreFloat3(&vPos, vWorldPos);
-	m_TrailPoses.emplace_back(vPos);
-
-	if (m_TrailPoses.size() > m_iNumInstance)
-		m_TrailPoses.pop_front();
 
 	D3D11_MAPPED_SUBRESOURCE	SubResource{};
 	m_pContext->Map(m_pVBInstance, 0, D3D11_MAP_WRITE_NO_OVERWRITE, 0, &SubResource);
 	VTXTRAIL_ONEPOINT_INSTANCE* pVertices = static_cast<VTXTRAIL_ONEPOINT_INSTANCE*>(SubResource.pData);
 
-	auto& iter = m_TrailPoses.begin();
 	_bool m_bOver = { true };
 	for (size_t i = 0; i < m_iNumInstance; ++i)
 	{
-		pVertices[i].vCurPos = *iter;
-		if (iter == m_TrailPoses.begin())
+		if (false == m_bFirst)
 		{
-			pVertices[i].vPrePos = pVertices[i].vCurPos;
+			pVertices[i].vCurPos = vWorldPos;
+			pVertices[i].vPrePos = vWorldPos;
+			continue;
 		}
-		else
-		{
-			pVertices[i].vPrePos = pVertices[i - 1].vCurPos;
-		}
-		++iter;
 
 		pVertices[i].vLifeTime.y += fTimeDelta;
-
 		if (pVertices[i].vLifeTime.y < pVertices[i].vLifeTime.x)
 			m_bOver = false;
 	}
 
+	while(bLoop)
+	{
+		if (m_iNumCurrentIndex < 0)
+			m_iNumCurrentIndex = m_iNumInstance - 1;
+
+		_Vec3 vDir = vWorldPos - m_vPrePos;
+
+		if (vDir.Length() < fTrailInterval)
+		{
+			m_vPrePos = vWorldPos;
+			pVertices[m_iNumCurrentIndex].vCurPos = m_vPrePos;
+			pVertices[m_iNumCurrentIndex].vLifeTime.y = 0.f;
+
+			if (m_iNumInstance == m_iNumCurrentIndex + 1)
+				pVertices[m_iNumCurrentIndex].vPrePos = m_vPrePos;
+			else
+				pVertices[m_iNumCurrentIndex].vPrePos = pVertices[m_iNumCurrentIndex].vCurPos;
+
+			--m_iNumCurrentIndex;
+			break;
+		}
+
+		vDir.Normalize();
+		m_vPrePos += vDir * fTrailInterval;
+		pVertices[m_iNumCurrentIndex].vCurPos = m_vPrePos;
+		pVertices[m_iNumCurrentIndex].vLifeTime.y = 0.f;
+
+		if (m_iNumInstance == m_iNumCurrentIndex + 1)
+			pVertices[m_iNumCurrentIndex].vPrePos = pVertices[0].vPrePos;
+		else
+			pVertices[m_iNumCurrentIndex].vPrePos = pVertices[m_iNumCurrentIndex].vCurPos;
+
+		--m_iNumCurrentIndex;
+	}
+
 	m_pContext->Unmap(m_pVBInstance, 0);
+
+	m_bFirst = true;
 	return m_bOver;
 }
 
-_bool CTrail_OnePoint_Instance::Spread_Buffer(_fvector vWorldPos, _float fTimeDelta)
+_bool CTrail_OnePoint_Instance::Spread_Buffer(_Vec3 vWorldPos, _float fTrailInterval, _float fSpeed, _bool bLoop, _float fTimeDelta)
 {
-	return _bool();
+	if (false == m_bFirst)
+	{
+		m_vPrePos = vWorldPos;
+	}
+
+	D3D11_MAPPED_SUBRESOURCE	SubResource{};
+	m_pContext->Map(m_pVBInstance, 0, D3D11_MAP_WRITE_NO_OVERWRITE, 0, &SubResource);
+	VTXTRAIL_ONEPOINT_INSTANCE* pVertices = static_cast<VTXTRAIL_ONEPOINT_INSTANCE*>(SubResource.pData);
+
+	_bool m_bOver = { true };
+	for (size_t i = 0; i < m_iNumInstance; ++i)
+	{
+		if (false == m_bFirst)
+		{
+			pVertices[i].vCurPos = vWorldPos;
+			pVertices[i].vPrePos = vWorldPos;
+			continue;
+		}
+
+		_Vec3 vMovePos = pVertices[i].vCurPos + m_TrailDir[i] * fSpeed;
+		pVertices[i].vCurPos = vMovePos;
+		pVertices[i].vLifeTime.y += fTimeDelta;
+		if (pVertices[i].vLifeTime.y < pVertices[i].vLifeTime.x)
+			m_bOver = false;
+	}
+
+	while (bLoop)
+	{
+		if (m_iNumCurrentIndex < 0)
+			m_iNumCurrentIndex = m_iNumInstance - 1;
+
+		_Vec3 vDir = vWorldPos - m_vPrePos;
+		m_TrailDir[m_iNumCurrentIndex] = XMVector3Normalize(vDir);
+
+		if (vDir.Length() < fTrailInterval)
+		{
+			m_vPrePos = vWorldPos;
+			pVertices[m_iNumCurrentIndex].vCurPos = m_vPrePos;
+			pVertices[m_iNumCurrentIndex].vLifeTime.y = 0.f;
+
+			if (m_iNumInstance == m_iNumCurrentIndex + 1)
+				pVertices[m_iNumCurrentIndex].vPrePos = m_vPrePos;
+			else
+				pVertices[m_iNumCurrentIndex].vPrePos = pVertices[m_iNumCurrentIndex].vCurPos;
+
+			--m_iNumCurrentIndex;
+			break;
+		}
+
+		vDir.Normalize();
+		m_vPrePos += vDir * fTrailInterval;
+		pVertices[m_iNumCurrentIndex].vCurPos = m_vPrePos;
+		pVertices[m_iNumCurrentIndex].vLifeTime.y = 0.f;
+
+		if (m_iNumInstance == m_iNumCurrentIndex + 1)
+			pVertices[m_iNumCurrentIndex].vPrePos = pVertices[0].vPrePos;
+		else
+			pVertices[m_iNumCurrentIndex].vPrePos = pVertices[m_iNumCurrentIndex].vCurPos;
+
+		--m_iNumCurrentIndex;
+	}
+
+	m_pContext->Unmap(m_pVBInstance, 0);
+
+	m_bFirst = true;
+	return m_bOver;
 }
 
 void CTrail_OnePoint_Instance::Set_LifeTime(_float fTime)
@@ -141,7 +227,8 @@ HRESULT CTrail_OnePoint_Instance::Ready_Buffers(const CVIBuffer_Instancing::INST
 	m_iInstanceStride = sizeof(VTXTRAIL_ONEPOINT_INSTANCE);
 	m_iIndexCountPerInstance = 1;
 
-	m_TrailPoses.resize(m_iNumInstance);
+	m_TrailDir.resize(m_iNumInstance);
+	m_iNumCurrentIndex = m_iNumInstance - 1;
 
 #pragma region VERTEX_BUFFER
 	ZeroMemory(&m_BufferDesc, sizeof m_BufferDesc);
@@ -209,14 +296,11 @@ HRESULT CTrail_OnePoint_Instance::Ready_Buffers(const CVIBuffer_Instancing::INST
 
 	VTXTRAIL_ONEPOINT_INSTANCE* pInstanceVertices = static_cast<VTXTRAIL_ONEPOINT_INSTANCE*>(m_pInstanceVertices);
 
-	auto& iter = m_TrailPoses.begin();
 	for (size_t i = 0; i < m_iNumInstance; i++)
 	{
 		pInstanceVertices[i].vCurPos = {};
 		pInstanceVertices[i].vPrePos = {};
 		pInstanceVertices[i].vLifeTime = _float2(m_pGameInstance->Get_Random(Desc.vLifeTime.x, Desc.vLifeTime.y), 0.f);
-		*iter = {};
-		++iter;
 	}
 
 	ZeroMemory(&m_InstanceInitialData, sizeof m_InstanceInitialData);

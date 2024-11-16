@@ -89,7 +89,6 @@ void GS_MAIN(point GS_IN In[1], inout TriangleStream<GS_OUT> Container)
         vUp *= (1.f - In[0].vLifeTime.y / In[0].vLifeTime.x);
     }
     
-    
     Out[0].vPosition = float4(In[0].vPosition.xyz + vRight + vUp, 1.f);
     Out[0].vTexcoord = float2(0.f, 0.f);
     Out[0].vLifeTime = In[0].vLifeTime;
@@ -168,7 +167,23 @@ PS_OUT PS_MAIN(PS_IN In)
     return Out;
 }
 
+PS_OUT PS_TEST_MAIN(PS_IN In)
+{
+    PS_OUT Out = (PS_OUT) 0;
 
+    Out.vColor = float4(1.f, 0.f, 0.f, 1.f);
+    
+    if (Out.vColor.a < 0.1f)
+        discard;
+    
+    if (In.vLifeTime.x < In.vLifeTime.y)
+        discard;
+    
+    //vector vColor = Out.vColor;
+    //Out.vColor.rgb = 1.f - (1 - g_vColor.rgb) * (1 - vColor.a * 0.85f);
+    
+    return Out;
+}
 
 technique11 DefaultTechnique
 {
@@ -182,6 +197,18 @@ technique11 DefaultTechnique
         VertexShader = compile vs_5_0 VS_MAIN();
         GeometryShader = compile gs_5_0 GS_MAIN();
         PixelShader = compile ps_5_0 PS_MAIN();
+    }
+
+    pass TEST
+    {
+        SetRasterizerState(RS_Cull_None);
+        SetDepthStencilState(DSS_Default, 0);
+        SetBlendState(BS_Default, vector(0.f, 0.f, 0.f, 0.f), 0xffffffff);
+
+        VertexShader = compile vs_5_0 VS_MAIN();
+        GeometryShader = compile gs_5_0 GS_MAIN();
+        PixelShader = compile ps_5_0 PS_TEST_MAIN();
+
     }
 
 }
