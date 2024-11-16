@@ -111,6 +111,10 @@ void CController_MapTool::Pick_Object()
 	if (!ImGui::CollapsingHeader("Object Inform"))
 		return;
 
+	static _bool isPicking = false;
+	ImGui::Checkbox("Picking", &isPicking);
+	m_pGameInstance->Set_Is_Picking(isPicking);
+
 	//오브젝트 피킹 작동
 	if (m_pGameInstance->Get_KeyState(RBUTTON) == AWAY)
 	{
@@ -590,7 +594,7 @@ void CController_MapTool::SaveMap()
 		}
 		else
 		{
-			for (_uint j = 0; j < m_pGameInstance->Get_Total_LightCount(); ++j)
+			for (_uint j = 0; j < (_int)m_pGameInstance->Get_Total_LightCount(); ++j)
 			{
 				if (j == 0)	//방향성 광원 저장 안함
 					continue;
@@ -637,7 +641,7 @@ void CController_MapTool::LoadMap()
 	_int iCellNum = {};
 	_uint iCellRoomNum = {};
 
-	while (i < LayerCount)
+	while (i < (_int)LayerCount)
 	{
 		//getline(fin, strLayerTag);
 		//fin >> iObjectCount;
@@ -646,7 +650,7 @@ void CController_MapTool::LoadMap()
 		fin.read(&strLayerTag[0], iStrSize);
 		fin.read(reinterpret_cast<char*>(&iObjectCount), sizeof(iObjectCount));
 
-		for (int j = 0; j < iObjectCount; ++j)
+		for (_int j = 0; j < (_int)iObjectCount; ++j)
 		{
 			if(strLayerTag != "Layer_Light")
 			{
@@ -1575,7 +1579,7 @@ void CController_MapTool::Decal_Menu()
 				bool ret = LoadTextureFromFile(szImageReadPath, &m_my_texture, &my_image_width, &my_image_height);
 				IM_ASSERT(ret);
 
-				ImGui::Image((ImTextureID)(intptr_t)m_my_texture, ImVec2(my_image_width, my_image_height));
+				ImGui::Image((ImTextureID)(intptr_t)m_my_texture, ImVec2((_float)my_image_width, (_float)my_image_height));
 			}
 
 			ImGui::End();
@@ -1688,7 +1692,7 @@ void CController_MapTool::Decal_Menu()
 				bool ret = LoadTextureFromFile(szImageReadPath, &m_my_texture, &my_image_width, &my_image_height);
 				IM_ASSERT(ret);
 
-				ImGui::Image((ImTextureID)(intptr_t)m_my_texture, ImVec2(my_image_width, my_image_height));
+				ImGui::Image((ImTextureID)(intptr_t)m_my_texture, ImVec2((_float)my_image_width, (_float)my_image_height));
 			}
 
 			ImGui::End();
@@ -1801,7 +1805,7 @@ void CController_MapTool::Decal_Menu()
 				bool ret = LoadTextureFromFile(szImageReadPath, &m_my_texture, &my_image_width, &my_image_height);
 				IM_ASSERT(ret);
 
-				ImGui::Image((ImTextureID)(intptr_t)m_my_texture, ImVec2(my_image_width, my_image_height));
+				ImGui::Image((ImTextureID)(intptr_t)m_my_texture, ImVec2((_float)my_image_width, (_float)my_image_height));
 			}
 
 			ImGui::End();

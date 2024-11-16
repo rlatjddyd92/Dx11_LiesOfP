@@ -87,9 +87,10 @@ public:
 
 #pragma region RENDERER
 	HRESULT Add_RenderObject(CRenderer::RENDERGROUP eRenderGroupID, class CGameObject* pRenderObject);
-	SSAO_DESC* Get_SSAODesc();
 
-	void OnOff_IsRenderBloom();
+	SSAO_DESC*	Get_SSAODesc();
+	HDR_DESC* Get_HDRDesc();
+	BLOOM_DESC* Get_BloomDesc();
 
 #ifdef _DEBUG
 	HRESULT Add_DebugObject(class CComponent* pDebugObject);
@@ -161,6 +162,8 @@ public:
 	_bool Picking(_float3* pPickPos); 
 	_bool Picking_Object(_uint* pPickID);
 	_vector Compute_Height(_fvector vWorldPos, _fmatrix ViewMatrix, _fmatrix ProjMatrix);
+	_bool Get_Is_Picking() { return m_isPicking; }
+	void Set_Is_Picking(_bool bPicking) {m_isPicking = bPicking; }
 #pragma endregion
 
 #pragma region FRUSTUM
@@ -233,6 +236,9 @@ private:
 
 	// 2024-11-06 ±è¼º¿ë
 	class CCSVFile_Manager*			m_pCSVFile_Manager = { nullptr };
+
+private:
+	_bool m_isPicking = { false };
 
 public:	
 	void Release_Engine();

@@ -17,7 +17,9 @@ private:
 	virtual ~CRenderer() = default;
 
 public:
-	SSAO_DESC* Get_SSAODesc() { return &m_tSSAO; }
+	SSAO_DESC*	Get_SSAODesc() { return &m_tSSAO; }
+	HDR_DESC*	Get_HDRDesc() { return &m_tHDR; }
+	BLOOM_DESC*	Get_BloomDesc() { return &m_tBloom; }
 
 public:
 	HRESULT Initialize();
@@ -54,10 +56,14 @@ private:
 
 private:
 	class CShader*				m_pShader = { nullptr };
-	class CShader*				m_pBloomShader = { nullptr };
 	class CShader*				m_pSSAOShader = { nullptr };
-	class CShader*				m_pHDRShader = { nullptr };
 	class CShader*				m_pDistortionShader = { nullptr };
+
+	// ÄÄÇ»Æ®
+	class CShader*				m_pBackShader = { nullptr };
+	class CShader*				m_pHDRShader = { nullptr };
+	class CShader*				m_pBloomShader = { nullptr };
+	class CShader*				m_pBlurShader = { nullptr };
 
 	class CVIBuffer_Rect*		m_pVIBuffer = { nullptr };
 
@@ -65,6 +71,7 @@ private:
 
 	/* Bloom */
 	_float						m_fSamplerRatio = { 5.f };
+	BLOOM_DESC					m_tBloom;
 
 	ID3D11DepthStencilView*		m_pDownSampleDepthStencilView0 = { nullptr };
 	ID3D11DepthStencilView*		m_pDownSampleDepthStencilView1 = { nullptr };
@@ -79,6 +86,9 @@ private:
 
 	/* Cascade */
 	ID3D11DepthStencilView*		m_pCascadeDepthStencilViewArr = { nullptr };
+
+	/* HDR */
+	HDR_DESC					m_tHDR = {};
 
 #ifdef _DEBUG
 private:
@@ -99,7 +109,6 @@ private:
 	HRESULT Render_SSAO();
 	HRESULT Render_HDR();
 	HRESULT Render_Bloom();
-	HRESULT Render_LDR();
 
 	HRESULT Render_Distortion();
 
@@ -118,6 +127,7 @@ private:
 	HRESULT Copy_BackBuffer();
 	HRESULT Ready_CascadeDepthStencilView();
 	HRESULT Ready_HDR();
+	HRESULT Ready_Bloom();
 
 	HRESULT Ready_Desc();
 

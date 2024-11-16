@@ -214,8 +214,11 @@
     <Filter Include="01.Utility\03.Components\VIBuffer\Instancing\Trail\TwoPoint">
       <UniqueIdentifier>{523aadda-e155-4784-9a9b-cd982070af99}</UniqueIdentifier>
     </Filter>
-    <Filter Include="01.Utility\03.Components\VIBuffer\Instancing\Trail\MultiPoint">
-      <UniqueIdentifier>{c5a9687c-ed44-49d1-ae87-959bb47dbd00}</UniqueIdentifier>
+    <Filter Include="01.Utility\98.ShaderFiles\Compute">
+      <UniqueIdentifier>{a1106976-7960-4715-ae4b-81cbb80200aa}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="01.Utility\03.Components\Model\ObjectOctree">
+      <UniqueIdentifier>{a24fcefc-62b5-4a50-8240-d400693ea04d}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -418,8 +421,9 @@
       <Filter>01.Utility\03.Components\VIBuffer\Instancing\Trail\TwoPoint</Filter>
     </ClCompile>
     <ClCompile Include="..\Private\EasyDrawSphere.cpp" />
-    <ClCompile Include="..\private\Trail_MultiPoint_Instance.cpp">
-      <Filter>01.Utility\03.Components\VIBuffer\Instancing\Trail\MultiPoint</Filter>
+    <ClCompile Include="..\Private\EasyDrawSphere.cpp" />
+    <ClCompile Include="..\Private\ObjectOctree.cpp">
+      <Filter>01.Utility\03.Components\Model\ObjectOctree</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -621,6 +625,9 @@
     <ClInclude Include="..\Public\Instance_Manager.h">
       <Filter>01.Utility\03.Components\Model\Instance</Filter>
     </ClInclude>
+    <ClInclude Include="..\Public\Component_Manager.h">
+      <Filter>01.Utility\03.Components\00.Manager</Filter>
+    </ClInclude>
     <ClInclude Include="..\public\Shader_NonVTX.h">
       <Filter>01.Utility\03.Components\Shader\Shader_NonVTX</Filter>
     </ClInclude>
@@ -634,11 +641,8 @@
       <Filter>01.Utility\03.Components\VIBuffer\Instancing\Trail\TwoPoint</Filter>
     </ClInclude>
     <ClInclude Include="..\Public\EasyDrawSphere.h" />
-    <ClInclude Include="..\public\Trail_MultiPoint_Instance.h">
-      <Filter>01.Utility\03.Components\VIBuffer\Instancing\Trail\MultiPoint</Filter>
-    </ClInclude>
-    <ClInclude Include="..\Public\Component_Manager.h">
-      <Filter>01.Utility\03.Components\00.Manager</Filter>
+    <ClInclude Include="..\Public\ObjectOctree.h">
+      <Filter>01.Utility\03.Components\Model\ObjectOctree</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -648,22 +652,31 @@
     <FxCompile Include="..\Bin\ShaderFiles\Shader_Deferred.hlsl">
       <Filter>01.Utility\98.ShaderFiles</Filter>
     </FxCompile>
-    <FxCompile Include="..\Bin\ShaderFiles\Shader_Bloom.hlsl">
-      <Filter>01.Utility\98.ShaderFiles</Filter>
-    </FxCompile>
     <FxCompile Include="..\..\Client\Bin\ShaderFiles\Shader_Effect_Texture.hlsl">
       <Filter>01.Utility\98.ShaderFiles</Filter>
     </FxCompile>
     <FxCompile Include="..\Bin\ShaderFiles\Shader_SSAO.hlsl">
       <Filter>01.Utility\98.ShaderFiles</Filter>
     </FxCompile>
-    <FxCompile Include="..\Bin\ShaderFiles\Shader_HDR.hlsl">
-      <Filter>01.Utility\98.ShaderFiles</Filter>
-    </FxCompile>
     <FxCompile Include="..\Bin\ShaderFiles\Shader_Model_Instance.hlsl">
       <Filter>01.Utility\98.ShaderFiles</Filter>
     </FxCompile>
     <FxCompile Include="..\Bin\ShaderFiles\Shader_Distortion.hlsl">
+      <Filter>01.Utility\98.ShaderFiles</Filter>
+    </FxCompile>
+    <FxCompile Include="..\Bin\ShaderFiles\Shader_Compute_HDR.hlsl">
+      <Filter>01.Utility\98.ShaderFiles\Compute</Filter>
+    </FxCompile>
+    <FxCompile Include="..\Bin\ShaderFiles\Shader_Compute_Blur.hlsl">
+      <Filter>01.Utility\98.ShaderFiles\Compute</Filter>
+    </FxCompile>
+    <FxCompile Include="..\Bin\ShaderFiles\Shader_Compute_Back.hlsl">
+      <Filter>01.Utility\98.ShaderFiles\Compute</Filter>
+    </FxCompile>
+    <FxCompile Include="..\Bin\ShaderFiles\Shader_Compute_Bloom.hlsl">
+      <Filter>01.Utility\98.ShaderFiles\Compute</Filter>
+    </FxCompile>
+    <FxCompile Include="..\Bin\ShaderFiles\Shader_Bloom.hlsl">
       <Filter>01.Utility\98.ShaderFiles</Filter>
     </FxCompile>
   </ItemGroup>

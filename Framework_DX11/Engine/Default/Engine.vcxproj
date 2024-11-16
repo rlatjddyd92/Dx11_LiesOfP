@@ -56,6 +56,7 @@
     <ClCompile Include="..\private\Mesh.cpp" />
     <ClCompile Include="..\private\Model.cpp" />
     <ClCompile Include="..\private\Navigation.cpp" />
+    <ClCompile Include="..\Private\ObjectOctree.cpp" />
     <ClCompile Include="..\Private\Object_Manager.cpp" />
     <ClCompile Include="..\private\PartObject.cpp" />
     <ClCompile Include="..\Private\Pawn.cpp" />
@@ -131,6 +132,7 @@
     <ClInclude Include="..\public\Mesh.h" />
     <ClInclude Include="..\public\Model.h" />
     <ClInclude Include="..\public\Navigation.h" />
+    <ClInclude Include="..\Public\ObjectOctree.h" />
     <ClInclude Include="..\Public\Object_Manager.h" />
     <ClInclude Include="..\public\PartObject.h" />
     <ClInclude Include="..\Public\Pawn.h" />
@@ -167,9 +169,12 @@
     <FxCompile Include="..\..\Client\Bin\ShaderFiles\Shader_Effect_Texture.hlsl" />
     <FxCompile Include="..\Bin\ShaderFiles\Shader_Bloom.hlsl" />
     <FxCompile Include="..\Bin\ShaderFiles\Shader_Cell.hlsl" />
+    <FxCompile Include="..\Bin\ShaderFiles\Shader_Compute_Back.hlsl" />
+    <FxCompile Include="..\Bin\ShaderFiles\Shader_Compute_Bloom.hlsl" />
+    <FxCompile Include="..\Bin\ShaderFiles\Shader_Compute_Blur.hlsl" />
     <FxCompile Include="..\Bin\ShaderFiles\Shader_Deferred.hlsl" />
     <FxCompile Include="..\Bin\ShaderFiles\Shader_Distortion.hlsl" />
-    <FxCompile Include="..\Bin\ShaderFiles\Shader_HDR.hlsl" />
+    <FxCompile Include="..\Bin\ShaderFiles\Shader_Compute_HDR.hlsl" />
     <FxCompile Include="..\Bin\ShaderFiles\Shader_Model_Instance.hlsl" />
     <FxCompile Include="..\Bin\ShaderFiles\Shader_SSAO.hlsl" />
   </ItemGroup>
