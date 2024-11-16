@@ -31,8 +31,6 @@ private:
 
     _Vec4               m_vMoveDir = {};
 
-    _float              m_fMoveSpeed = {};
-
 
     //юс╫ц
     _bool* m_pIsEndAnim = { nullptr };

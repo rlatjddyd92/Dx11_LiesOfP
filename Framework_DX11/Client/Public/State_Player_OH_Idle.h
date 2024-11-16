@@ -24,6 +24,8 @@ private:
 
     _uint               m_iAnimation_Idle = {};
 
+    _float               m_fRButtonTime = {};
+
 public:
     static CState_Player_OH_Idle* Create(class CFsm* pFsm, class CPlayer* pPlayer, _uint iStateNum, void* pArg = nullptr);
     virtual void Free() override;

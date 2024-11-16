@@ -16,6 +16,9 @@ public:
 	class CModel*		Get_Model() { return m_pModelCom; }
 	class CRigidBody*	Get_RigidBody() { return m_pRigidBodyCom; }
 
+	_float				Get_MoveSpeed() { return m_fMoveSpeed; }
+	void				Set_MoveSpeed(_float fSpeed) { m_fMoveSpeed; }
+
 public:
 	virtual HRESULT Initialize_Prototype();
 	virtual HRESULT Initialize(void* pArg = nullptr);
@@ -47,7 +50,8 @@ protected:
 	class CRigidBody*	m_pRigidBodyCom = { nullptr };
 
 	_bool				m_isGravity = { false };
-
+	
+	_float				m_fMoveSpeed = {};
 
 protected:
 	vector<class CPartObject*>			m_Parts;

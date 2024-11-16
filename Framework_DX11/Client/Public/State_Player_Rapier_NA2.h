@@ -24,7 +24,11 @@ private:
 
     _uint               m_iAnimation_RapierNA2 = {};
 
-    _uint               m_iChangeFrame = {};
+    _int               m_iChangeFrame = {};
+
+    _bool               m_isInputLButton = {};
+    _bool               m_isInputRButton = {};
+    _float              m_fRButtonTime = {};
 
     _bool* m_pIsEndAnim = { nullptr };
     _bool* m_pResetRootMove = { nullptr };

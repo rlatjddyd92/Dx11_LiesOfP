@@ -23,7 +23,6 @@ HRESULT CState_Player_OH_Run::Initialize(_uint iStateNum, void* pArg)
     m_iAnimation_Run[RUN_R] = m_pPlayer->Get_Model()->Find_AnimationIndex("AS_Pino_O_Run_R", 2.5f);
 
     m_iStateNum = iStateNum;
-    m_fMoveSpeed = 3.f;
 
     return S_OK;
 }
@@ -145,7 +144,7 @@ _bool CState_Player_OH_Run::Move(_float fTimeDelta)
 
     if (m_vMoveDir.Length() > 0.f)
     {
-        m_pPlayer->Move_Dir(m_vMoveDir, m_fMoveSpeed, fTimeDelta);
+        m_pPlayer->Move_Dir(m_vMoveDir, fTimeDelta);
     }
 
     return isMoving;

@@ -19,9 +19,10 @@ public:
 
 	enum PLAYER_STATE
 	{
-		HIT,
-		OH_IDLE, OH_WALK, OH_RUN, OH_GUARD, OH_JUMP, OH_DASH, 
-		RAPIER_NA1, RAPIER_NA2, RAPIER_SA1,
+		HIT, PARRY,
+		OH_IDLE, OH_WALK, OH_RUN, OH_GUARD, OH_JUMP, OH_DASH,
+		TH_IDLE, TH_WALK, TH_RUN, TH_GUARD, TH_JUMP, TH_DASH,
+		RAPIER_NA1, RAPIER_NA2, RAPIER_SA1, RAPIER_CHARGE, RAPIER_FATAL, RAPIER_PARRYATTACK,
 		STATE_END
 	};
 
@@ -38,6 +39,9 @@ public:
 		if (m_isGuard)
 			m_fGuardTime = 0.f;
 	}
+
+	_bool					Get_IsParry() { return m_isParry; }
+	void					Set_IsParry(_bool isParry) { m_isParry = isParry; }
 
 	_bool					Get_IsLockOn() { return m_isLockOn; }
 	void					Set_IsLockOn(_bool isLockOn) { m_isLockOn = isLockOn; }
@@ -67,7 +71,7 @@ public:
 	virtual HRESULT Render_LightDepth() override;
 
 public:
-	void		Move_Dir(_Vec4 vDir, _float fSpeed, _float fTimeDelta, _bool isTurn = true);
+	void		Move_Dir(_Vec4 vDir, _float fTimeDelta, _bool isTurn = true);
 	_Vec4		Calculate_Direction_Straight();
 	_Vec4		Calculate_Direction_Right();
 
@@ -81,6 +85,7 @@ private:
 
 	_bool				m_isJump = { false };
 	_bool				m_isGuard = { false };
+	_bool				m_isParry = { false };
 	_bool				m_isLockOn = { false };
 	_bool				m_isInvicible = { false };
 

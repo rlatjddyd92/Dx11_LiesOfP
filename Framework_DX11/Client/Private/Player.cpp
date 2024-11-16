@@ -18,6 +18,9 @@
 #include "State_Player_Rapier_NA1.h"
 #include "State_Player_Rapier_NA2.h"
 #include "State_Player_Rapier_SA1.h"
+#include "State_Player_Rapier_Charge.h"
+#include "State_Player_Rapier_Fatal.h"
+#include "State_Player_Parry.h"
 
 CPlayer::CPlayer(ID3D11Device * pDevice, ID3D11DeviceContext * pContext)
 	: CPawn{ pDevice, pContext }
@@ -282,11 +285,11 @@ HRESULT CPlayer::Render_LightDepth()
 	return S_OK;
 }
 
-void CPlayer::Move_Dir(_Vec4 vDir, _float fSpeed, _float fTimeDelta, _bool isTurn)
+void CPlayer::Move_Dir(_Vec4 vDir, _float fTimeDelta, _bool isTurn)
 {
 	if(isTurn)
 		m_pTransformCom->LookAt_Lerp_NoHeight(vDir, 30.0f, fTimeDelta);
-	m_pRigidBodyCom->Set_Velocity((_Vec3(vDir * fSpeed)));
+	m_pRigidBodyCom->Set_Velocity((_Vec3(vDir * m_fMoveSpeed)));
 }
 
 _Vec4 CPlayer::Calculate_Direction_Straight()
@@ -388,6 +391,7 @@ HRESULT CPlayer::Ready_FSM()
 
 
 	m_pFsmCom->Add_State(CState_Player_Hit::Create(m_pFsmCom, this, HIT, &Desc));
+	m_pFsmCom->Add_State(CState_Player_Parry::Create(m_pFsmCom, this, PARRY, &Desc));
 
 	m_pFsmCom->Add_State(CState_Player_OH_Idle::Create(m_pFsmCom, this, OH_IDLE, &Desc));
 	m_pFsmCom->Add_State(CState_Player_OH_Walk::Create(m_pFsmCom, this, OH_WALK, &Desc));
@@ -396,11 +400,11 @@ HRESULT CPlayer::Ready_FSM()
 	m_pFsmCom->Add_State(CState_Player_OH_Dash::Create(m_pFsmCom, this, OH_DASH, &Desc));
 
 
-	m_pFsmCom->Add_State(CState_Player_Rapier_NA1::Create(m_pFsmCom, this, RAPIER_NA1, &Desc));	// 좌클릭 공격
-	m_pFsmCom->Add_State(CState_Player_Rapier_NA2::Create(m_pFsmCom, this, RAPIER_NA2, &Desc));	// 좌클릭 공격
+	m_pFsmCom->Add_State(CState_Player_Rapier_NA1::Create(m_pFsmCom, this, RAPIER_NA1, &Desc));	// 좌클릭 공격1
+	m_pFsmCom->Add_State(CState_Player_Rapier_NA2::Create(m_pFsmCom, this, RAPIER_NA2, &Desc));	// 좌클릭 공격2
 	m_pFsmCom->Add_State(CState_Player_Rapier_SA1::Create(m_pFsmCom, this, RAPIER_SA1, &Desc));	// 우클릭 공격
-	//FCA  - 페이탈 아츠
-	// CA1 - 모으기 공격
+	m_pFsmCom->Add_State(CState_Player_Rapier_Charge::Create(m_pFsmCom, this, RAPIER_CHARGE, &Desc));	// 우클릭 차지공격
+	m_pFsmCom->Add_State(CState_Player_Rapier_Fatal::Create(m_pFsmCom, this, RAPIER_FATAL, &Desc));	// F 페이탈아츠
 
 	m_pFsmCom->Set_State(OH_IDLE);
 

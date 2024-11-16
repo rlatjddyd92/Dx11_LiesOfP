@@ -23,6 +23,8 @@ HRESULT CState_Player_OH_Idle::Start_State(void* pArg)
     m_pPlayer->Change_Animation_Boundry(m_iAnimation_Idle, true);
     m_pPlayer->Change_Animation(m_iAnimation_Idle, true);
 
+    m_fRButtonTime = 0.f;
+
     return S_OK;
 }
 
@@ -34,19 +36,31 @@ void CState_Player_OH_Idle::Update(_float fTimeDelta)
     }
     else if (KEY_HOLD(KEY::W) || KEY_HOLD(KEY::S) || KEY_HOLD(KEY::D) || KEY_HOLD(KEY::A))
     {
-        if (KEY_HOLD(KEY::SPACE))
-        {
-            m_pPlayer->Change_State(CPlayer::OH_RUN);
-        }
-        else
-        {
-            m_pPlayer->Change_State(CPlayer::OH_WALK);
-        }
-        return;
+        m_pPlayer->Change_State(CPlayer::OH_WALK);
     }
     else if (KEY_TAP(KEY::SPACE))
     {
         m_pPlayer->Change_State(CPlayer::OH_DASH);
+    }
+    else if (KEY_TAP(KEY::LBUTTON))
+    {
+        m_pPlayer->Change_State(CPlayer::RAPIER_NA1);
+    }
+    else if (KEY_HOLD(KEY::RBUTTON))
+    {
+        m_fRButtonTime += fTimeDelta;
+        if(m_fRButtonTime > 0.15f)
+            m_pPlayer->Change_State(CPlayer::RAPIER_CHARGE);
+    }
+    else if (KEY_TAP(KEY::F))
+    {
+        m_pPlayer->Change_State(CPlayer::RAPIER_FATAL);
+    }
+    
+    if (KEY_AWAY(KEY::RBUTTON))
+    {
+        m_fRButtonTime = 0.f;
+        m_pPlayer->Change_State(CPlayer::RAPIER_SA1);
     }
 }
 

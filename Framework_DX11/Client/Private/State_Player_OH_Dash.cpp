@@ -13,12 +13,12 @@ CState_Player_OH_Dash::CState_Player_OH_Dash(CFsm* pFsm, CPlayer* pPlayer)
 
 HRESULT CState_Player_OH_Dash::Initialize(_uint iStateNum, void* pArg)
 {
-    m_iAnimation_Dash[DASH_F] = m_pPlayer->Get_Model()->Find_AnimationIndex("AS_Pino_O_Dash_Normal_F", 2.f);
-    m_iAnimation_Dash[DASH_B] = m_pPlayer->Get_Model()->Find_AnimationIndex("AS_Pino_O_Dash_Normal_B", 2.f);
-    m_iAnimation_Dash[DASH_FOCUS_F] = m_pPlayer->Get_Model()->Find_AnimationIndex("AS_Pino_O_Dash_FocusHurt_F", 2.f);
-    m_iAnimation_Dash[DASH_FOCUS_B] = m_pPlayer->Get_Model()->Find_AnimationIndex("AS_Pino_O_Dash_FocusHurt_B", 2.f);
-    m_iAnimation_Dash[DASH_FOCUS_L] = m_pPlayer->Get_Model()->Find_AnimationIndex("AS_Pino_O_Dash_FocusHurt_L", 2.f);
-    m_iAnimation_Dash[DASH_FOCUS_R] = m_pPlayer->Get_Model()->Find_AnimationIndex("AS_Pino_O_Dash_FocusHurt_R", 2.f);
+    m_iAnimation_Dash[DASH_F] = m_pPlayer->Get_Model()->Find_AnimationIndex("AS_Pino_O_Dash_Normal_F", 2.5f);
+    m_iAnimation_Dash[DASH_B] = m_pPlayer->Get_Model()->Find_AnimationIndex("AS_Pino_O_Dash_Normal_B", 2.5f);
+    m_iAnimation_Dash[DASH_FOCUS_F] = m_pPlayer->Get_Model()->Find_AnimationIndex("AS_Pino_O_Dash_FocusHurt_F", 2.5f);
+    m_iAnimation_Dash[DASH_FOCUS_B] = m_pPlayer->Get_Model()->Find_AnimationIndex("AS_Pino_O_Dash_FocusHurt_B", 2.5f);
+    m_iAnimation_Dash[DASH_FOCUS_L] = m_pPlayer->Get_Model()->Find_AnimationIndex("AS_Pino_O_Dash_FocusHurt_L", 2.5f);
+    m_iAnimation_Dash[DASH_FOCUS_R] = m_pPlayer->Get_Model()->Find_AnimationIndex("AS_Pino_O_Dash_FocusHurt_R", 2.5f);
 
     FSM_INIT_DESC* pDesc = static_cast<FSM_INIT_DESC*>(pArg);
 
@@ -27,7 +27,6 @@ HRESULT CState_Player_OH_Dash::Initialize(_uint iStateNum, void* pArg)
     m_pTrackPos = pDesc->pPrevTrackPos;
 
     m_iStateNum = iStateNum;
-    m_fMoveSpeed = 2.f;
 
     return S_OK;
 }
@@ -37,6 +36,7 @@ HRESULT CState_Player_OH_Dash::Start_State(void* pArg)
     Select_DashAnimation();
 
     m_pPlayer->Set_IsInvicible(true);
+    m_pPlayer->Set_MoveSpeed(5.f);
 
     //m_pPlayer->Get_RigidBody()->Set_Friction(_float3(10.f, 0.f, 10.f));
     *m_pResetRootMove = true;
@@ -48,7 +48,6 @@ void CState_Player_OH_Dash::Update(_float fTimeDelta)
 {
     if (*m_pIsEndAnim)
     {
-        m_pPlayer->Reset_Root();
         m_pPlayer->Change_State(CPlayer::OH_IDLE);
     }
 }
@@ -83,7 +82,7 @@ void CState_Player_OH_Dash::Select_DashAnimation()
     }
     else
     {
-        if (KEY_HOLD(KEY::W))
+        if (m_pFsm->Get_PrevState() == CPlayer::OH_WALK)
         {
             m_pPlayer->Change_Animation(m_iAnimation_Dash[DASH_F], false);
             return;

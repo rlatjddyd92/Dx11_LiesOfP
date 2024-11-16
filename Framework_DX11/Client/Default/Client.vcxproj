@@ -203,6 +203,7 @@
     <ClInclude Include="..\Public\State_CarcassBigA_Paralyze.h" />
     <ClInclude Include="..\Public\State_CarcassBigA_Run.h" />
     <ClInclude Include="..\Public\State_CarcassBigA_Walk.h" />
+    <ClInclude Include="..\Public\State_Player_Heal.h" />
     <ClInclude Include="..\Public\State_Player_OH_Dash.h" />
     <ClInclude Include="..\Public\State_Player_OH_Guard.h" />
     <ClInclude Include="..\Public\State_Player_Hit.h" />
@@ -210,8 +211,11 @@
     <ClInclude Include="..\Public\State_Player_OH_Jump.h" />
     <ClInclude Include="..\Public\State_Player_OH_Run.h" />
     <ClInclude Include="..\Public\State_Player_OH_Walk.h" />
+    <ClInclude Include="..\Public\State_Player_Rapier_Charge.h" />
+    <ClInclude Include="..\Public\State_Player_Rapier_Fatal.h" />
     <ClInclude Include="..\Public\State_Player_Rapier_NA1.h" />
     <ClInclude Include="..\Public\State_Player_Rapier_NA2.h" />
+    <ClInclude Include="..\Public\State_Player_Parry.h" />
     <ClInclude Include="..\Public\State_Player_Rapier_SA1.h" />
     <ClInclude Include="..\Public\StaticObj.h" />
     <ClInclude Include="..\Public\Terrain.h" />
@@ -268,6 +272,7 @@
     <ClCompile Include="..\Private\State_CarcassBigA_Paralyze.cpp" />
     <ClCompile Include="..\Private\State_CarcassBigA_Run.cpp" />
     <ClCompile Include="..\Private\State_CarcassBigA_Walk.cpp" />
+    <ClCompile Include="..\Private\State_Player_Heal.cpp" />
     <ClCompile Include="..\Private\State_Player_OH_Dash.cpp" />
     <ClCompile Include="..\Private\State_Player_OH_Guard.cpp" />
     <ClCompile Include="..\Private\State_Player_Hit.cpp" />
@@ -275,8 +280,11 @@
     <ClCompile Include="..\Private\State_Player_OH_Jump.cpp" />
     <ClCompile Include="..\Private\State_Player_OH_Run.cpp" />
     <ClCompile Include="..\Private\State_Player_OH_Walk.cpp" />
+    <ClCompile Include="..\Private\State_Player_Rapier_Charge.cpp" />
+    <ClCompile Include="..\Private\State_Player_Rapier_Fatal.cpp" />
     <ClCompile Include="..\Private\State_Player_Rapier_NA1.cpp" />
     <ClCompile Include="..\Private\State_Player_Rapier_NA2.cpp" />
+    <ClCompile Include="..\Private\State_Player_Parry.cpp" />
     <ClCompile Include="..\Private\State_Player_Rapier_SA1.cpp" />
     <ClCompile Include="..\Private\StaticObj.cpp" />
     <ClCompile Include="..\Private\Terrain.cpp" />

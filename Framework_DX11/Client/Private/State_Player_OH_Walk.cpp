@@ -22,8 +22,10 @@ HRESULT CState_Player_OH_Walk::Initialize(_uint iStateNum, void* pArg)
     m_iAnimation_Walk[WALK_L] = m_pPlayer->Get_Model()->Find_AnimationIndex("AS_Pino_O_Walk_L", 2.5f);
     m_iAnimation_Walk[WALK_R] = m_pPlayer->Get_Model()->Find_AnimationIndex("AS_Pino_O_Walk_R", 2.5f);
 
+    m_isInputSpace = false;
+    m_fSpaceTime = 0.f;
+
     m_iStateNum = iStateNum;
-    m_fMoveSpeed = 2.f;
 
     return S_OK;
 }
@@ -33,20 +35,43 @@ HRESULT CState_Player_OH_Walk::Start_State(void* pArg)
     m_pPlayer->Change_Animation(m_iAnimation_Walk[WALK_F], true);
 
     m_pPlayer->Get_RigidBody()->Set_Friction(_float3(10.f, 0.f, 10.f));
+
+    m_pPlayer->Set_MoveSpeed(4.f);
+
+    m_fSpaceTime = 0.f;
+    m_isInputSpace = false;
+
     return S_OK;
 }
 
 void CState_Player_OH_Walk::Update(_float fTimeDelta)
 {
+    if (m_isInputSpace)
+    {
+        m_fSpaceTime += fTimeDelta;
+    }
+
     if (false == Move(fTimeDelta))
     {
         m_pPlayer->Change_State(CPlayer::OH_IDLE);
         return;
     }
 
-    if (KEY_HOLD(KEY::SPACE))
+    if (m_fSpaceTime > 0.1f)
     {
-        m_pPlayer->Change_State(CPlayer::OH_RUN);
+        if (KEY_NONE(KEY::SPACE))
+        {
+            m_pPlayer->Change_State(CPlayer::OH_DASH);
+        }
+
+        if (KEY_HOLD(KEY::SPACE))
+        {
+            m_pPlayer->Change_State(CPlayer::OH_RUN);
+        }
+    }
+    else if (KEY_HOLD(KEY::LSHIFT))
+    {
+        m_pPlayer->Change_State(CPlayer::OH_GUARD);
     }
 }
 
@@ -135,7 +160,7 @@ _bool CState_Player_OH_Walk::Move(_float fTimeDelta)
 
     if (m_vMoveDir.Length() > 0.f)
     {
-        m_pPlayer->Move_Dir(m_vMoveDir, m_fMoveSpeed, fTimeDelta);
+        m_pPlayer->Move_Dir(m_vMoveDir, fTimeDelta);
     }
 
     return isMoving;

@@ -29,7 +29,11 @@ HRESULT CState_Player_Rapier_NA2::Initialize(_uint iStateNum, void* pArg)
 
 HRESULT CState_Player_Rapier_NA2::Start_State(void* pArg)
 {
-    m_pPlayer->Change_Animation(m_iAnimation_RapierNA2, false , 0.5f, 14);
+    m_pPlayer->Change_Animation(m_iAnimation_RapierNA2, false , 0.1f, 14);
+
+    m_isInputLButton = false;
+    m_isInputRButton = false;
+    m_fRButtonTime = 0.f;
 
     return S_OK;
 }
@@ -38,14 +42,38 @@ void CState_Player_Rapier_NA2::Update(_float fTimeDelta)
 {
     _int iFrame = m_pPlayer->Get_Frame();
 
-    if (m_iChangeFrame < iFrame && iFrame < m_iChangeFrame + 15)
+    if (iFrame < m_iChangeFrame)
     {
         if (KEY_TAP(KEY::LBUTTON))
-            m_pPlayer->Change_State(CPlayer::RAPIER_NA1);
+        {
+            m_isInputLButton = true;
+            m_isInputRButton = false;
+        }
         else if (KEY_TAP(KEY::RBUTTON))
-            m_pPlayer->Change_State(CPlayer::RAPIER_SA1);
+        {
+            m_isInputRButton = true;
+            m_isInputLButton = false;
+            m_fRButtonTime = 0.f;
+        }
+        else if (KEY_HOLD(KEY::RBUTTON))
+        {
+            m_fRButtonTime += fTimeDelta;
+        }
     }
-    else if (iFrame > 55)
+
+    if (m_iChangeFrame < iFrame && iFrame < m_iChangeFrame + 15)
+    {
+        if (m_isInputLButton)
+            m_pPlayer->Change_State(CPlayer::RAPIER_NA1);
+        else if (m_isInputRButton)
+        {
+            if (m_fRButtonTime > 0.15f)
+                m_pPlayer->Change_State(CPlayer::RAPIER_CHARGE);
+            else
+                m_pPlayer->Change_State(CPlayer::RAPIER_SA1);
+        }
+    }
+    else if (*m_pIsEndAnim)
     {
         m_pPlayer->Change_State(CPlayer::OH_IDLE);
     }

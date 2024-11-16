@@ -31,7 +31,9 @@ private:
 
     _Vec4               m_vMoveDir = {};
 
-    _float              m_fMoveSpeed = {};
+    _float              m_fSpaceTime = {};
+
+    _bool               m_isInputSpace = {};
 
 private:
     void                Select_WalkAnimation();
