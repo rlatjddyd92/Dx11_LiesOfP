@@ -60,13 +60,13 @@ void CState_Player_Rapier_Fatal::Update(_float fTimeDelta)
     if (m_iChangeFrame < iFrame && iFrame < m_iChangeFrame + 15)
     {
         if (m_isInputLButton)
-            m_pPlayer->Change_State(CPlayer::RAPIER_NA1);
+            m_pPlayer->Change_State(CPlayer::RAPIER_LATTACK0);
         else if (m_isInputRButton)
         {
             if (m_fRButtonTime > 0.15f)
                 m_pPlayer->Change_State(CPlayer::RAPIER_CHARGE);
             else
-                m_pPlayer->Change_State(CPlayer::RAPIER_SA1);
+                m_pPlayer->Change_State(CPlayer::RAPIER_RATTACK0);
         }
     }
     else if (*m_pIsEndAnim)

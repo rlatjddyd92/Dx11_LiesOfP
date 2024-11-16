@@ -342,12 +342,30 @@
     </Filter>
     <Filter Include="05.Fsm\Player\Common\Heal">
       <UniqueIdentifier>{01bca6de-05e8-46a3-89e2-a924a96ef387}</UniqueIdentifier>
-	</Filter>
+    </Filter>
     <Filter Include="03.GameInterface_Controller\00.UIManager\00.UIPage\09.UIPage_Test">
       <UniqueIdentifier>{d6f0816f-b248-400f-ae9c-070eac27ca42}</UniqueIdentifier>
     </Filter>
     <Filter Include="03.GameInterface_Controller\00.UIManager\00.UIPage\10.UIPage_Ortho">
       <UniqueIdentifier>{552aab2a-e554-4f80-96c8-2caa20267ba5}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="05.Fsm\Player\Common\Change_Weapon">
+      <UniqueIdentifier>{ca6f18a0-495c-4980-9a84-1c366e748484}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="05.Fsm\Player\OneHand\Sprint">
+      <UniqueIdentifier>{f12a6c40-0a17-4283-8554-ff531875a91a}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="05.Fsm\Player\TwoHand\Sprint">
+      <UniqueIdentifier>{99b3c7b5-3bdc-4f92-8936-234c92524826}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="05.Fsm\Player\TwoHand\00.Attack\FlameSword\RAttack00">
+      <UniqueIdentifier>{ec50ef6f-ac18-4d70-ba52-0f3d52aa0abc}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="05.Fsm\Player\TwoHand\00.Attack\FlameSword\LAttack00">
+      <UniqueIdentifier>{436fd4d0-9dce-4745-9f18-52d28f3a81a6}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="05.Fsm\Player\TwoHand\00.Attack\FlameSword\LAttack01">
+      <UniqueIdentifier>{c30bff56-87a8-45e5-b8d7-68f00bdaba62}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -532,13 +550,13 @@
     <ClInclude Include="..\Public\State_Player_Hit.h">
       <Filter>05.Fsm\Player\Common\Hit</Filter>
     </ClInclude>
-    <ClInclude Include="..\Public\State_Player_Rapier_SA1.h">
+    <ClInclude Include="..\Public\State_Player_Rapier_RAttack00.h">
       <Filter>05.Fsm\Player\OneHand\00.Attack\Rapier\SA1</Filter>
     </ClInclude>
-    <ClInclude Include="..\Public\State_Player_Rapier_NA1.h">
+    <ClInclude Include="..\Public\State_Player_Rapier_LAttack00.h">
       <Filter>05.Fsm\Player\OneHand\00.Attack\Rapier\NA1</Filter>
     </ClInclude>
-    <ClInclude Include="..\Public\State_Player_Rapier_NA2.h">
+    <ClInclude Include="..\Public\State_Player_Rapier_LAttack01.h">
       <Filter>05.Fsm\Player\OneHand\00.Attack\Rapier\NA2</Filter>
     </ClInclude>
     <ClInclude Include="..\Public\State_Player_Rapier_Charge.h">
@@ -552,12 +570,48 @@
     </ClInclude>
     <ClInclude Include="..\Public\State_Player_Heal.h">
       <Filter>05.Fsm\Player\Common\Heal</Filter>
-	</ClInclude>
+    </ClInclude>
     <ClInclude Include="..\Public\UIPage_Ortho.h">
       <Filter>03.GameInterface_Controller\00.UIManager\00.UIPage\10.UIPage_Ortho</Filter>
     </ClInclude>
     <ClInclude Include="UIPage_Ortho_Include.h">
       <Filter>03.GameInterface_Controller\99.GameInterface_Defines\00.Defines%28Data_Instance 전용%29</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Public\State_Player_OH_Sprint.h">
+      <Filter>05.Fsm\Player\OneHand\Sprint</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Public\State_Player_ChangeWeapon.h">
+      <Filter>05.Fsm\Player\Common\Change_Weapon</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Public\State_Player_TH_Dash.h">
+      <Filter>05.Fsm\Player\TwoHand\Dash</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Public\State_Player_TH_Guard.h">
+      <Filter>05.Fsm\Player\TwoHand\Guard</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Public\State_Player_TH_Idle.h">
+      <Filter>05.Fsm\Player\TwoHand\Idle</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Public\State_Player_TH_Jump.h">
+      <Filter>05.Fsm\Player\TwoHand\Jump</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Public\State_Player_TH_Run.h">
+      <Filter>05.Fsm\Player\TwoHand\Run</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Public\State_Player_TH_Sprint.h">
+      <Filter>05.Fsm\Player\TwoHand\Sprint</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Public\State_Player_TH_Walk.h">
+      <Filter>05.Fsm\Player\TwoHand\Walk</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Public\State_Player_Flame_RAttack00.h">
+      <Filter>05.Fsm\Player\TwoHand\00.Attack\FlameSword\RAttack00</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Public\State_Player_Flame_LAttack00.h">
+      <Filter>05.Fsm\Player\TwoHand\00.Attack\FlameSword\LAttack00</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Public\State_Player_Flame_LAttack01.h">
+      <Filter>05.Fsm\Player\TwoHand\00.Attack\FlameSword\LAttack01</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -715,13 +769,13 @@
     <ClCompile Include="..\Private\State_Player_Hit.cpp">
       <Filter>05.Fsm\Player\Common\Hit</Filter>
     </ClCompile>
-    <ClCompile Include="..\Private\State_Player_Rapier_SA1.cpp">
+    <ClCompile Include="..\Private\State_Player_Rapier_RAttack00.cpp">
       <Filter>05.Fsm\Player\OneHand\00.Attack\Rapier\SA1</Filter>
     </ClCompile>
-    <ClCompile Include="..\Private\State_Player_Rapier_NA1.cpp">
+    <ClCompile Include="..\Private\State_Player_Rapier_LAttack00.cpp">
       <Filter>05.Fsm\Player\OneHand\00.Attack\Rapier\NA1</Filter>
     </ClCompile>
-    <ClCompile Include="..\Private\State_Player_Rapier_NA2.cpp">
+    <ClCompile Include="..\Private\State_Player_Rapier_LAttack01.cpp">
       <Filter>05.Fsm\Player\OneHand\00.Attack\Rapier\NA2</Filter>
     </ClCompile>
     <ClCompile Include="..\Private\State_Player_Rapier_Charge.cpp">
@@ -735,9 +789,45 @@
     </ClCompile>
     <ClCompile Include="..\Private\State_Player_Heal.cpp">
       <Filter>05.Fsm\Player\Common\Heal</Filter>
-	</ClCompile>
+    </ClCompile>
     <ClCompile Include="..\Private\UIPage_Ortho.cpp">
       <Filter>03.GameInterface_Controller\00.UIManager\00.UIPage\10.UIPage_Ortho</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Private\State_Player_OH_Sprint.cpp">
+      <Filter>05.Fsm\Player\OneHand\Sprint</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Private\State_Player_ChangeWeapon.cpp">
+      <Filter>05.Fsm\Player\Common\Change_Weapon</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Private\State_Player_TH_Dash.cpp">
+      <Filter>05.Fsm\Player\TwoHand\Dash</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Private\State_Player_TH_Guard.cpp">
+      <Filter>05.Fsm\Player\TwoHand\Guard</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Private\State_Player_TH_Idle.cpp">
+      <Filter>05.Fsm\Player\TwoHand\Idle</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Private\State_Player_TH_Jump.cpp">
+      <Filter>05.Fsm\Player\TwoHand\Jump</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Private\State_Player_TH_Run.cpp">
+      <Filter>05.Fsm\Player\TwoHand\Run</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Private\State_Player_TH_Sprint.cpp">
+      <Filter>05.Fsm\Player\TwoHand\Sprint</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Private\State_Player_TH_Walk.cpp">
+      <Filter>05.Fsm\Player\TwoHand\Walk</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Private\State_Player_Flame_RAttack00.cpp">
+      <Filter>05.Fsm\Player\TwoHand\00.Attack\FlameSword\RAttack00</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Private\State_Player_Flame_LAttack00.cpp">
+      <Filter>05.Fsm\Player\TwoHand\00.Attack\FlameSword\LAttack00</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Private\State_Player_Flame_LAttack01.cpp">
+      <Filter>05.Fsm\Player\TwoHand\00.Attack\FlameSword\LAttack01</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

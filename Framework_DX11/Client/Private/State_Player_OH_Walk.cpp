@@ -34,8 +34,6 @@ HRESULT CState_Player_OH_Walk::Start_State(void* pArg)
 {
     m_pPlayer->Change_Animation(m_iAnimation_Walk[WALK_F], true);
 
-    m_pPlayer->Get_RigidBody()->Set_Friction(_float3(10.f, 0.f, 10.f));
-
     m_pPlayer->Set_MoveSpeed(4.f);
 
     m_fSpaceTime = 0.f;
@@ -73,6 +71,9 @@ void CState_Player_OH_Walk::Update(_float fTimeDelta)
     {
         m_pPlayer->Change_State(CPlayer::OH_GUARD);
     }
+
+    if (KEY_TAP(KEY::SPACE))
+        m_isInputSpace = true;
 }
 
 

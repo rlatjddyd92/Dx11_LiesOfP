@@ -41,9 +41,9 @@ void CState_Player_Rapier_Charge::Update(_float fTimeDelta)
     if (m_iChangeFrame < iFrame && iFrame < m_iChangeFrame + 15)
     {
         if (KEY_TAP(KEY::LBUTTON))
-            m_pPlayer->Change_State(CPlayer::RAPIER_NA1);
+            m_pPlayer->Change_State(CPlayer::RAPIER_LATTACK0);
         else if (KEY_TAP(KEY::RBUTTON))
-            m_pPlayer->Change_State(CPlayer::RAPIER_SA1);
+            m_pPlayer->Change_State(CPlayer::RAPIER_RATTACK0);
     }
     else if (*m_pIsEndAnim)
     {
@@ -61,7 +61,7 @@ CState_Player_Rapier_Charge* CState_Player_Rapier_Charge::Create(CFsm* pFsm, CPl
 
     if (FAILED(pInstance->Initialize(iStateNum, pArg)))
     {
-        MSG_BOX(TEXT("Failed to Created : CState_Player_Rapier_SA1"));
+        MSG_BOX(TEXT("Failed to Created : CState_Player_Rapier_RAttack00"));
         Safe_Release(pInstance);
     }
 

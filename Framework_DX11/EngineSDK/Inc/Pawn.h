@@ -17,7 +17,7 @@ public:
 	class CRigidBody*	Get_RigidBody() { return m_pRigidBodyCom; }
 
 	_float				Get_MoveSpeed() { return m_fMoveSpeed; }
-	void				Set_MoveSpeed(_float fSpeed) { m_fMoveSpeed; }
+	void				Set_MoveSpeed(_float fSpeed) { m_fMoveSpeed = fSpeed; }
 
 public:
 	virtual HRESULT Initialize_Prototype();

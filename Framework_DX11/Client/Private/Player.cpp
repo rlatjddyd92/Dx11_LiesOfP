@@ -9,18 +9,33 @@
 #include "Effect_Container.h"
 
 #include "State_Player_Hit.h"
+#include "State_Player_Parry.h"
+#include "State_Player_Heal.h"
+#include "State_Player_ChangeWeapon.h"
+
 #include "State_Player_OH_Idle.h"
 #include "State_Player_OH_Walk.h"
 #include "State_Player_OH_Run.h"
+#include "State_Player_OH_Sprint.h"
 #include "State_Player_OH_Guard.h"
 #include "State_Player_OH_Dash.h"
 
-#include "State_Player_Rapier_NA1.h"
-#include "State_Player_Rapier_NA2.h"
-#include "State_Player_Rapier_SA1.h"
+#include "State_Player_TH_Idle.h"
+#include "State_Player_TH_Walk.h"
+#include "State_Player_TH_Run.h"
+#include "State_Player_TH_Sprint.h"
+#include "State_Player_TH_Guard.h"
+#include "State_Player_TH_Dash.h"
+
+#include "State_Player_Rapier_LAttack00.h"
+#include "State_Player_Rapier_LAttack01.h"
+#include "State_Player_Rapier_RAttack00.h"
 #include "State_Player_Rapier_Charge.h"
 #include "State_Player_Rapier_Fatal.h"
-#include "State_Player_Parry.h"
+
+#include "State_Player_Flame_LAttack00.h"
+#include "State_Player_Flame_LAttack01.h"
+#include "State_Player_Flame_RAttack00.h"
 
 CPlayer::CPlayer(ID3D11Device * pDevice, ID3D11DeviceContext * pContext)
 	: CPawn{ pDevice, pContext }
@@ -96,7 +111,7 @@ void CPlayer::Update(_float fTimeDelta)
 	if (KEY_TAP(KEY::H))
 	{
 		int a = 0;
-		Change_State(RAPIER_NA1, &a);
+		Change_State(RAPIER_LATTACK0, &a);
 	}
 	m_pFsmCom->Update(fTimeDelta);
 
@@ -313,6 +328,12 @@ _Vec4 CPlayer::Calculate_Direction_Right()
 	return vRight;
 }
 
+_uint CPlayer::Change_WeaponType()
+{
+	m_eWeaponType = WEAPON_TYPE((m_eWeaponType + 1) % WEP_END);
+	return m_eWeaponType;
+}
+
 HRESULT CPlayer::Ready_Components()
 {
 	/* FOR.Com_Shader */
@@ -349,7 +370,7 @@ HRESULT CPlayer::Ready_Components()
 		return E_FAIL;
 	m_pRigidBodyCom->Set_Owner(this);
 	m_pRigidBodyCom->Set_IsFriction(true);
-	m_pRigidBodyCom->Set_Friction(_float3(1.f, 0.f, 1.f));
+	m_pRigidBodyCom->Set_Friction(_float3(10.f, 0.f, 10.f));
 	m_pRigidBodyCom->Set_IsGravity(false);
 	m_pRigidBodyCom->Set_GravityScale(15.f);
 	m_pRigidBodyCom->Set_VelocityLimit(_float3(25.f, 30.f, 25.f));
@@ -392,19 +413,33 @@ HRESULT CPlayer::Ready_FSM()
 
 	m_pFsmCom->Add_State(CState_Player_Hit::Create(m_pFsmCom, this, HIT, &Desc));
 	m_pFsmCom->Add_State(CState_Player_Parry::Create(m_pFsmCom, this, PARRY, &Desc));
+	m_pFsmCom->Add_State(CState_Player_Heal::Create(m_pFsmCom, this, HEAL, &Desc));
+	m_pFsmCom->Add_State(CState_Player_ChangeWeapon::Create(m_pFsmCom, this, CHANGEWEP, &Desc));
 
 	m_pFsmCom->Add_State(CState_Player_OH_Idle::Create(m_pFsmCom, this, OH_IDLE, &Desc));
 	m_pFsmCom->Add_State(CState_Player_OH_Walk::Create(m_pFsmCom, this, OH_WALK, &Desc));
 	m_pFsmCom->Add_State(CState_Player_OH_Run::Create(m_pFsmCom, this, OH_RUN, &Desc));
+	m_pFsmCom->Add_State(CState_Player_OH_Sprint::Create(m_pFsmCom, this, OH_SPRINT, &Desc));
 	m_pFsmCom->Add_State(CState_Player_OH_Guard::Create(m_pFsmCom, this, OH_GUARD, &Desc));
 	m_pFsmCom->Add_State(CState_Player_OH_Dash::Create(m_pFsmCom, this, OH_DASH, &Desc));
 
+	m_pFsmCom->Add_State(CState_Player_TH_Idle::Create(m_pFsmCom, this, TH_IDLE, &Desc));
+	m_pFsmCom->Add_State(CState_Player_TH_Walk::Create(m_pFsmCom, this, TH_WALK, &Desc));
+	m_pFsmCom->Add_State(CState_Player_TH_Run::Create(m_pFsmCom, this, TH_RUN, &Desc));
+	m_pFsmCom->Add_State(CState_Player_TH_Sprint::Create(m_pFsmCom, this, TH_SPRINT, &Desc));
+	m_pFsmCom->Add_State(CState_Player_TH_Guard::Create(m_pFsmCom, this, TH_GUARD, &Desc));
+	m_pFsmCom->Add_State(CState_Player_TH_Dash::Create(m_pFsmCom, this, TH_DASH, &Desc));
 
-	m_pFsmCom->Add_State(CState_Player_Rapier_NA1::Create(m_pFsmCom, this, RAPIER_NA1, &Desc));	// 좌클릭 공격1
-	m_pFsmCom->Add_State(CState_Player_Rapier_NA2::Create(m_pFsmCom, this, RAPIER_NA2, &Desc));	// 좌클릭 공격2
-	m_pFsmCom->Add_State(CState_Player_Rapier_SA1::Create(m_pFsmCom, this, RAPIER_SA1, &Desc));	// 우클릭 공격
+	m_pFsmCom->Add_State(CState_Player_Rapier_LAttack00::Create(m_pFsmCom, this, RAPIER_LATTACK0, &Desc));	// 좌클릭 공격1
+	m_pFsmCom->Add_State(CState_Player_Rapier_LAttack01::Create(m_pFsmCom, this, RAPIER_LATTACK1, &Desc));	// 좌클릭 공격2
+	m_pFsmCom->Add_State(CState_Player_Rapier_RAttack00::Create(m_pFsmCom, this, RAPIER_RATTACK0, &Desc));	// 우클릭 공격
 	m_pFsmCom->Add_State(CState_Player_Rapier_Charge::Create(m_pFsmCom, this, RAPIER_CHARGE, &Desc));	// 우클릭 차지공격
 	m_pFsmCom->Add_State(CState_Player_Rapier_Fatal::Create(m_pFsmCom, this, RAPIER_FATAL, &Desc));	// F 페이탈아츠
+
+
+	m_pFsmCom->Add_State(CState_Player_Flame_LAttack00::Create(m_pFsmCom, this, FLAME_LATTACK0, &Desc));	// 좌클릭 공격1
+	m_pFsmCom->Add_State(CState_Player_Flame_LAttack01::Create(m_pFsmCom, this, FLAME_LATTACK1, &Desc));	// 좌클릭 공격1
+	m_pFsmCom->Add_State(CState_Player_Flame_RAttack00::Create(m_pFsmCom, this, FLAME_RATTACK0, &Desc));	// 좌클릭 공격2
 
 	m_pFsmCom->Set_State(OH_IDLE);
 

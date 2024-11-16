@@ -36,7 +36,7 @@ void CState_Player_OH_Idle::Update(_float fTimeDelta)
     }
     else if (KEY_HOLD(KEY::W) || KEY_HOLD(KEY::S) || KEY_HOLD(KEY::D) || KEY_HOLD(KEY::A))
     {
-        m_pPlayer->Change_State(CPlayer::OH_WALK);
+        m_pPlayer->Change_State(CPlayer::OH_RUN);
     }
     else if (KEY_TAP(KEY::SPACE))
     {
@@ -44,7 +44,7 @@ void CState_Player_OH_Idle::Update(_float fTimeDelta)
     }
     else if (KEY_TAP(KEY::LBUTTON))
     {
-        m_pPlayer->Change_State(CPlayer::RAPIER_NA1);
+        m_pPlayer->Change_State(CPlayer::RAPIER_LATTACK0);
     }
     else if (KEY_HOLD(KEY::RBUTTON))
     {
@@ -56,11 +56,19 @@ void CState_Player_OH_Idle::Update(_float fTimeDelta)
     {
         m_pPlayer->Change_State(CPlayer::RAPIER_FATAL);
     }
+    else if (KEY_TAP(KEY::R))
+    {
+        m_pPlayer->Change_State(CPlayer::HEAL);
+    }
+    else if (KEY_TAP(KEY::TAPKEY))
+    {
+        m_pPlayer->Change_State(CPlayer::CHANGEWEP);
+    }
     
     if (KEY_AWAY(KEY::RBUTTON))
     {
         m_fRButtonTime = 0.f;
-        m_pPlayer->Change_State(CPlayer::RAPIER_SA1);
+        m_pPlayer->Change_State(CPlayer::RAPIER_RATTACK0);
     }
 }
 
@@ -74,7 +82,7 @@ CState_Player_OH_Idle* CState_Player_OH_Idle::Create(CFsm* pFsm, CPlayer* pPlaye
 
     if (FAILED(pInstance->Initialize(iStateNum, pArg)))
     {
-        MSG_BOX(TEXT("Failed to Created : CState_Player_OH_Idle"));
+        MSG_BOX(TEXT("Failed to Created : CState_Player_TH_Idle"));
         Safe_Release(pInstance);
     }
 

@@ -19,10 +19,11 @@ public:
 
 	enum PLAYER_STATE
 	{
-		HIT, PARRY,
-		OH_IDLE, OH_WALK, OH_RUN, OH_GUARD, OH_JUMP, OH_DASH,
-		TH_IDLE, TH_WALK, TH_RUN, TH_GUARD, TH_JUMP, TH_DASH,
-		RAPIER_NA1, RAPIER_NA2, RAPIER_SA1, RAPIER_CHARGE, RAPIER_FATAL, RAPIER_PARRYATTACK,
+		HIT, PARRY, HEAL, CHANGEWEP,
+		OH_IDLE, OH_WALK, OH_RUN, OH_SPRINT, OH_GUARD, OH_JUMP, OH_DASH,
+		TH_IDLE, TH_WALK, TH_RUN, TH_SPRINT, TH_GUARD, TH_JUMP, TH_DASH,
+		RAPIER_LATTACK0, RAPIER_LATTACK1, RAPIER_RATTACK0, RAPIER_CHARGE, RAPIER_FATAL, RAPIER_PARRYATTACK,
+		FLAME_LATTACK0, FLAME_LATTACK1, FLAME_RATTACK0, FLAME_RATTACK1, FLAME_FATAL, FLAME_PARRYATTACK,
 		STATE_END
 	};
 
@@ -71,10 +72,12 @@ public:
 	virtual HRESULT Render_LightDepth() override;
 
 public:
-	void		Move_Dir(_Vec4 vDir, _float fTimeDelta, _bool isTurn = true);
-	_Vec4		Calculate_Direction_Straight();
-	_Vec4		Calculate_Direction_Right();
+	void			Move_Dir(_Vec4 vDir, _float fTimeDelta, _bool isTurn = true);
+	_Vec4			Calculate_Direction_Straight();
+	_Vec4			Calculate_Direction_Right();
 
+	_uint			Change_WeaponType();
+	
 private:
 	list<OUTPUT_EVKEY>	m_EvKeyList;
 	list<class CEffect_Container*>	m_EffectList;

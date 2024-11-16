@@ -9,6 +9,7 @@ BEGIN(Client)
 
 class CState_Player_Heal : public CState
 {
+    enum WEAPONTYPE { WEP_OH, WEP_TH, WEP_END };
     enum WALK
     {
         WALK_B, WALK_BL, WALK_BR, WALK_F, WALK_FL, WALK_FR, WALK_L, WALK_R, WALK_END
@@ -27,12 +28,16 @@ public:
 private:
     class CPlayer* m_pPlayer = { nullptr };
 
-    _uint               m_iAnimation_Walk[WALK_END] = {};
+    _uint               m_iAnimation_Walk[2][WALK_END] = {};
     _uint               m_iAnimation_Heal = {};
 
     _Vec4               m_vMoveDir = {};
 
     _float              m_fMoveSpeed = {};
+
+    _bool*              m_pIsEndAnim = { nullptr };
+    _bool*              m_pResetRootMove = { nullptr };
+    _float*             m_pTrackPos = { nullptr };
 
 private:
     _bool               Move(_float fTimeDelta);

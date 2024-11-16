@@ -13,16 +13,31 @@ CState_Player_Heal::CState_Player_Heal(CFsm* pFsm, CPlayer* pPlayer)
 
 HRESULT CState_Player_Heal::Initialize(_uint iStateNum, void* pArg)
 {
-    m_iAnimation_Walk[WALK_B] = m_pPlayer->Get_Model()->Find_AnimationIndex("AS_Pino_O_Walk_B", 2.5f);
-    m_iAnimation_Walk[WALK_BL] = m_pPlayer->Get_Model()->Find_AnimationIndex("AS_Pino_O_Walk_BL", 2.5f);
-    m_iAnimation_Walk[WALK_BR] = m_pPlayer->Get_Model()->Find_AnimationIndex("AS_Pino_O_Walk_BR", 2.5f);
-    m_iAnimation_Walk[WALK_F] = m_pPlayer->Get_Model()->Find_AnimationIndex("AS_Pino_O_Walk_F", 2.5f);
-    m_iAnimation_Walk[WALK_FL] = m_pPlayer->Get_Model()->Find_AnimationIndex("AS_Pino_O_Walk_FL", 2.5f);
-    m_iAnimation_Walk[WALK_FR] = m_pPlayer->Get_Model()->Find_AnimationIndex("AS_Pino_O_Walk_FR", 2.5f);
-    m_iAnimation_Walk[WALK_L] = m_pPlayer->Get_Model()->Find_AnimationIndex("AS_Pino_O_Walk_L", 2.5f);
-    m_iAnimation_Walk[WALK_R] = m_pPlayer->Get_Model()->Find_AnimationIndex("AS_Pino_O_Walk_R", 2.5f);
+    FSM_INIT_DESC* pDesc = static_cast<FSM_INIT_DESC*>(pArg);
 
-    m_iAnimation_Heal = m_pPlayer->Get_Model()->Find_AnimationIndex("AS_Pino_O_Guard_Idle", 2.5f);
+    m_pIsEndAnim = pDesc->pIsEndAnim;
+    m_pResetRootMove = pDesc->pIsResetRootMove;
+    m_pTrackPos = pDesc->pPrevTrackPos;
+
+    m_iAnimation_Walk[0][WALK_B] = m_pPlayer->Get_Model()->Find_AnimationIndex("AS_Pino_O_Walk_B", 2.5f);
+    m_iAnimation_Walk[0][WALK_BL] = m_pPlayer->Get_Model()->Find_AnimationIndex("AS_Pino_O_Walk_BL", 2.5f);
+    m_iAnimation_Walk[0][WALK_BR] = m_pPlayer->Get_Model()->Find_AnimationIndex("AS_Pino_O_Walk_BR", 2.5f);
+    m_iAnimation_Walk[0][WALK_F] = m_pPlayer->Get_Model()->Find_AnimationIndex("AS_Pino_O_Walk_F", 2.5f);
+    m_iAnimation_Walk[0][WALK_FL] = m_pPlayer->Get_Model()->Find_AnimationIndex("AS_Pino_O_Walk_FL", 2.5f);
+    m_iAnimation_Walk[0][WALK_FR] = m_pPlayer->Get_Model()->Find_AnimationIndex("AS_Pino_O_Walk_FR", 2.5f);
+    m_iAnimation_Walk[0][WALK_L] = m_pPlayer->Get_Model()->Find_AnimationIndex("AS_Pino_O_Walk_L", 2.5f);
+    m_iAnimation_Walk[0][WALK_R] = m_pPlayer->Get_Model()->Find_AnimationIndex("AS_Pino_O_Walk_R", 2.5f);
+
+    m_iAnimation_Walk[1][WALK_B] = m_pPlayer->Get_Model()->Find_AnimationIndex("AS_Pino_T_Walk_B", 2.5f);
+    m_iAnimation_Walk[1][WALK_BL] = m_pPlayer->Get_Model()->Find_AnimationIndex("AS_Pino_T_Walk_BL", 2.5f);
+    m_iAnimation_Walk[1][WALK_BR] = m_pPlayer->Get_Model()->Find_AnimationIndex("AS_Pino_T_Walk_BR", 2.5f);
+    m_iAnimation_Walk[1][WALK_F] = m_pPlayer->Get_Model()->Find_AnimationIndex("AS_Pino_T_Walk_F", 2.5f);
+    m_iAnimation_Walk[1][WALK_FL] = m_pPlayer->Get_Model()->Find_AnimationIndex("AS_Pino_T_Walk_FL", 2.5f);
+    m_iAnimation_Walk[1][WALK_FR] = m_pPlayer->Get_Model()->Find_AnimationIndex("AS_Pino_T_Walk_FR", 2.5f);
+    m_iAnimation_Walk[1][WALK_L] = m_pPlayer->Get_Model()->Find_AnimationIndex("AS_Pino_T_Walk_L", 2.5f);
+    m_iAnimation_Walk[1][WALK_R] = m_pPlayer->Get_Model()->Find_AnimationIndex("AS_Pino_T_Walk_R", 2.5f);
+
+    m_iAnimation_Heal = m_pPlayer->Get_Model()->Find_AnimationIndex("AS_Pino_Item_Ergo", 2.5f);
 
     m_fMoveSpeed = 1.5f;
     m_iStateNum = iStateNum;
@@ -32,31 +47,25 @@ HRESULT CState_Player_Heal::Initialize(_uint iStateNum, void* pArg)
 
 HRESULT CState_Player_Heal::Start_State(void* pArg)
 {
-    if (m_pFsm->Get_PrevState() != CPlayer::OH_WALK && m_pFsm->Get_PrevState() != CPlayer::TH_WALK)
-        m_pPlayer->Change_Animation(m_iAnimation_Heal, true);
-    m_pPlayer->Change_Animation_Boundry(m_iAnimation_Heal, true);
-    m_pPlayer->Set_IsGuard(true);
+    //if (m_pFsm->Get_PrevState() != CPlayer::OH_RUN && m_pFsm->Get_PrevState() != CPlayer::TH_WALK)
+    //    m_pPlayer->Change_Animation(m_iAnimation_Heal, false);
+
+    //m_pPlayer->Change_Animation_Boundry(m_iAnimation_Heal, false);
 
     return S_OK;
 }
 
 void CState_Player_Heal::Update(_float fTimeDelta)
 {
-    if (KEY_HOLD(KEY::LSHIFT))
-    {
-        if (KEY_TAP(KEY::F))
-        {
-            m_pPlayer->Change_State(CPlayer::PARRY);
-            return;
-        }
-        if (!Move(fTimeDelta))
-        {
-            m_pPlayer->Change_Animation(m_iAnimation_Heal, true);
-        }
-        m_pPlayer->Change_Animation_Boundry(m_iAnimation_Heal, true, 0.f);
-    }
 
-    if (KEY_NONE(KEY::LSHIFT))
+    if (!Move(fTimeDelta))
+    {
+        m_pPlayer->Change_Animation(m_iAnimation_Heal, false);
+    }
+    m_pPlayer->Change_Animation_Boundry(m_iAnimation_Heal, false, 0.f);
+
+
+    if (*m_pIsEndAnim)
     {
         m_pPlayer->Change_State(CPlayer::OH_IDLE);
     }
@@ -87,6 +96,12 @@ _bool CState_Player_Heal::Move(_float fTimeDelta)
     _bool isRight = KEY_HOLD(KEY::D);
     _bool isLeft = KEY_HOLD(KEY::A);
 
+    _uint iWalkType = m_pPlayer->Get_WeaponType();
+    if (iWalkType <= 1)
+        iWalkType = 0;
+    else
+        iWalkType = 1;
+
     if (isForward)
     {
         m_vMoveDir += vCameraLook;
@@ -112,34 +127,34 @@ _bool CState_Player_Heal::Move(_float fTimeDelta)
         if (isForward)
         {
             if (isLeft)
-                m_pPlayer->Change_Animation(m_iAnimation_Walk[WALK_FL], true, 0.2f);
+                m_pPlayer->Change_Animation(m_iAnimation_Walk[iWalkType][WALK_FL], true, 0.2f);
             else if (isRight)
-                m_pPlayer->Change_Animation(m_iAnimation_Walk[WALK_FR], true, 0.2f);
+                m_pPlayer->Change_Animation(m_iAnimation_Walk[iWalkType][WALK_FR], true, 0.2f);
             else
-                m_pPlayer->Change_Animation(m_iAnimation_Walk[WALK_F], true, 0.2f);
+                m_pPlayer->Change_Animation(m_iAnimation_Walk[iWalkType][WALK_F], true, 0.2f);
         }
         else if (isBackward)
         {
             if (isLeft)
-                m_pPlayer->Change_Animation(m_iAnimation_Walk[WALK_BL], true, 0.2f);
+                m_pPlayer->Change_Animation(m_iAnimation_Walk[iWalkType][WALK_BL], true, 0.2f);
             else if (isRight)
-                m_pPlayer->Change_Animation(m_iAnimation_Walk[WALK_BR], true, 0.2f);
+                m_pPlayer->Change_Animation(m_iAnimation_Walk[iWalkType][WALK_BR], true, 0.2f);
             else
-                m_pPlayer->Change_Animation(m_iAnimation_Walk[WALK_B], true, 0.2f);
+                m_pPlayer->Change_Animation(m_iAnimation_Walk[iWalkType][WALK_B], true, 0.2f);
         }
         else
         {
             if (isLeft)
-                m_pPlayer->Change_Animation(m_iAnimation_Walk[WALK_L], true, 0.2f);
+                m_pPlayer->Change_Animation(m_iAnimation_Walk[iWalkType][WALK_L], true, 0.2f);
             else if (isRight)
-                m_pPlayer->Change_Animation(m_iAnimation_Walk[WALK_R], true, 0.2f);
+                m_pPlayer->Change_Animation(m_iAnimation_Walk[iWalkType][WALK_R], true, 0.2f);
         }
 
 
         if (m_vMoveDir.Length() > 0.f)
         {
             // 가드 상태에서는 회전 안 함
-            m_pPlayer->Move_Dir(m_vMoveDir, fTimeDelta, false);
+            m_pPlayer->Move_Dir(m_vMoveDir , fTimeDelta, false);
         }
         isMoving = true;
     }
