@@ -85,7 +85,7 @@ void CUIManager::Late_Update(_float fTimeDelta)
 
 HRESULT CUIManager::Render()
 {
-	if (FAILED(m_pUIRender_Client->Render_Ortho(m_pUIPage_Ortho)))
+	if (FAILED(m_pUIPage_Ortho->Render_Ortho_UI(m_pUIRender_Client)))
 		return E_FAIL;
 	
 	if (FAILED(m_pUIRender_Client->Render_UI(m_vecPage)))
@@ -177,6 +177,34 @@ void CUIManager::UIControl_Test(_float fTimeDelta)
 			GET_GAMEINTERFACE->Add_Stat_Normal(STAT_NORMAL::STAT_GAUGE_REGION, -100.f * fTimeDelta);
 		else if (KEY_HOLD(KEY::M)) // 체력바 표시 수치 증가 
 			GET_GAMEINTERFACE->Add_Stat_Normal(STAT_NORMAL::STAT_GAUGE_REGION, +100.f * fTimeDelta);
+	}
+
+	// 몬스터 체력바 확인 
+	if (KEY_HOLD(KEY::ALT))
+	{
+		if (KEY_HOLD(KEY::I))
+			m_pTestData->fHP_Now -= 100.f * fTimeDelta;
+		else if (KEY_HOLD(KEY::O))
+			m_pTestData->fHP_Now += 100.f * fTimeDelta;
+
+		m_pTestData->fHP_Now = max(0, m_pTestData->fHP_Now);
+		m_pTestData->fHP_Now = min(m_pTestData->fHP_Now, m_pTestData->fHP_Max);
+
+		if (KEY_HOLD(KEY::K))
+		{
+			if (m_pTestData->bFocus)
+				m_pTestData->bFocus = false;
+			else
+				m_pTestData->bFocus = true;
+		}
+
+		if (KEY_HOLD(KEY::M))
+		{
+			if (m_pTestData->bSpecial_Attack)
+				m_pTestData->bSpecial_Attack = false;
+			else
+				m_pTestData->bSpecial_Attack = true;
+		}
 	}
 
 

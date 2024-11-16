@@ -26,8 +26,8 @@ public:
 
 		_float fHP_Damege = 100.f;
 
-		_bool bFocus = false;
-		_bool bSpecial_Attack = false;
+		_bool bFocus = true;
+		_bool bSpecial_Attack = true;
 
 	}TDATA;
 
