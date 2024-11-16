@@ -342,7 +342,7 @@
     </Filter>
     <Filter Include="05.Fsm\Player\Common\Heal">
       <UniqueIdentifier>{01bca6de-05e8-46a3-89e2-a924a96ef387}</UniqueIdentifier>
-	</Filter>
+    </Filter>
     <Filter Include="03.GameInterface_Controller\00.UIManager\00.UIPage\09.UIPage_Test">
       <UniqueIdentifier>{d6f0816f-b248-400f-ae9c-070eac27ca42}</UniqueIdentifier>
     </Filter>
@@ -552,12 +552,33 @@
     </ClInclude>
     <ClInclude Include="..\Public\State_Player_Heal.h">
       <Filter>05.Fsm\Player\Common\Heal</Filter>
-	</ClInclude>
+    </ClInclude>
     <ClInclude Include="..\Public\UIPage_Ortho.h">
       <Filter>03.GameInterface_Controller\00.UIManager\00.UIPage\10.UIPage_Ortho</Filter>
     </ClInclude>
     <ClInclude Include="UIPage_Ortho_Include.h">
       <Filter>03.GameInterface_Controller\99.GameInterface_Defines\00.Defines%28Data_Instance 전용%29</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Public\UIPage_Menu.h">
+      <Filter>03.GameInterface_Controller\00.UIManager\00.UIPage\03.UIPage_Menu</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Public\UIPage_Equip.h">
+      <Filter>03.GameInterface_Controller\00.UIManager\00.UIPage\05.UIPage_Equip</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Public\UIPage_Inven.h">
+      <Filter>03.GameInterface_Controller\00.UIManager\00.UIPage\04.UIPage_Inven</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Public\UIPage_LevelUp.h">
+      <Filter>03.GameInterface_Controller\00.UIManager\00.UIPage\07.UIPage_LevelUp</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Public\UIPage_Skill.h">
+      <Filter>03.GameInterface_Controller\00.UIManager\00.UIPage\08.UIPage_Skill</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Public\UIPage_Stat.h">
+      <Filter>03.GameInterface_Controller\00.UIManager\00.UIPage\06.UIPage_Stat</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Public\UIPage_Test.h">
+      <Filter>03.GameInterface_Controller\00.UIManager\00.UIPage\09.UIPage_Test</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -735,9 +756,30 @@
     </ClCompile>
     <ClCompile Include="..\Private\State_Player_Heal.cpp">
       <Filter>05.Fsm\Player\Common\Heal</Filter>
-	</ClCompile>
+    </ClCompile>
     <ClCompile Include="..\Private\UIPage_Ortho.cpp">
       <Filter>03.GameInterface_Controller\00.UIManager\00.UIPage\10.UIPage_Ortho</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Private\UIPage_Menu.cpp">
+      <Filter>03.GameInterface_Controller\00.UIManager\00.UIPage\03.UIPage_Menu</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Private\UIPage_Equip.cpp">
+      <Filter>03.GameInterface_Controller\00.UIManager\00.UIPage\05.UIPage_Equip</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Private\UIPage_Inven.cpp">
+      <Filter>03.GameInterface_Controller\00.UIManager\00.UIPage\04.UIPage_Inven</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Private\UIPage_LevelUp.cpp">
+      <Filter>03.GameInterface_Controller\00.UIManager\00.UIPage\07.UIPage_LevelUp</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Private\UIPage_Skill.cpp">
+      <Filter>03.GameInterface_Controller\00.UIManager\00.UIPage\08.UIPage_Skill</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Private\UIPage_Stat.cpp">
+      <Filter>03.GameInterface_Controller\00.UIManager\00.UIPage\06.UIPage_Stat</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Private\UIPage_Test.cpp">
+      <Filter>03.GameInterface_Controller\00.UIManager\00.UIPage\09.UIPage_Test</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

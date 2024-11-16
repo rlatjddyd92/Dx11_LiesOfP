@@ -2,6 +2,7 @@
 #include "..\Public\UIPage_Ortho.h"
 
 #include "GameInstance.h"
+#include "GameInterface_Controller.h"
 #include "UIPage_Ortho_Include.h"
 
 CUIPage_Ortho::CUIPage_Ortho(ID3D11Device* pDevice, ID3D11DeviceContext* pContext)
@@ -54,7 +55,7 @@ void CUIPage_Ortho::Priority_Update(_float fTimeDelta)
 	// 임시 코드 
 	// 직교 UI가 아직 안전하지 않음 
 	// 비활성화 상태로 git에 올려 두기 
-	return;
+	//return;
 
 	__super::Priority_Update(fTimeDelta);
 }
@@ -64,7 +65,7 @@ void CUIPage_Ortho::Update(_float fTimeDelta)
 	// 임시 코드 
 	// 직교 UI가 아직 안전하지 않음 
 	// 비활성화 상태로 git에 올려 두기 
-	return;
+	//return;
 
 	__super::Update(fTimeDelta);
 }
@@ -74,7 +75,7 @@ void CUIPage_Ortho::Late_Update(_float fTimeDelta)
 	// 임시 코드 
 	// 직교 UI가 아직 안전하지 않음 
 	// 비활성화 상태로 git에 올려 두기 
-	return;
+	//return;
 
 
 	CheckHost(fTimeDelta);
@@ -107,6 +108,14 @@ HRESULT CUIPage_Ortho::Ready_UIPart_Group_Control()
 		m_vecOrtho_Group_Ctrl.push_back(pNew);
 	}
 
+	for (_int i = 0; i < m_vecPart.size(); ++i)
+	{
+		_int iGroup = m_vecPart[i]->iGroupIndex;
+
+		if ((iGroup >= 0) && (iGroup < _int(PART_GROUP::GROUP_END)))
+			m_vecOrtho_Group_Ctrl[iGroup]->PartIndexlist.push_back(i);
+	}
+
 	return S_OK;
 }
 
@@ -116,6 +125,21 @@ void CUIPage_Ortho::Register_Pointer_Into_OrthoUIPage(UI_ORTHO_OBJ_TYPE eType, v
 	pNew->eType = eType;
 	pNew->pHost = static_cast<CGameObject*>(pObj);
 	m_Ortho_Host_list.push_back(pNew);
+}
+
+HRESULT CUIPage_Ortho::Render_Ortho_UI(CUIRender_Client* pRender)
+{
+	// 여기서 렌더 해야 함
+
+
+
+
+	//pRender->Render_Part()
+
+
+
+
+	return S_OK;
 }
 
 void CUIPage_Ortho::Initialize_Ortho_Info()
@@ -147,58 +171,78 @@ void CUIPage_Ortho::CheckHost(_float fTimeDelta)
 		}
 		else
 		{
-			CheckHost_By_ObjType((*iter)->pHost, (*iter)->eType, fTimeDelta);
+			_float fDistnace = Check_Distance_From_Cam((*iter)->pHost);
+
+			Make_Monster_HP_Bar((*iter)->pHost, fTimeDelta, fDistnace);
+			Make_Monster_Focusing((*iter)->pHost, fTimeDelta, fDistnace);
+			Make_Monster_SpecialHit((*iter)->pHost, fTimeDelta, fDistnace);
 			++iter;
 		}
 	}
 }
 
-void CUIPage_Ortho::CheckHost_By_ObjType(CGameObject* pHost, UI_ORTHO_OBJ_TYPE eType, _float fTimeDelta)
+void CUIPage_Ortho::Make_Monster_HP_Bar(CGameObject* pHost, _float fTimeDelta, _float fDistance)
 {
-	// 일반 몬스터
-	if (eType == UI_ORTHO_OBJ_TYPE::ORTHO_NORMAL_MONSTER)
-	{
-		// 직교 UI를 ON/OFF 하는 논리 
-		// 각 직교 UI 별 운영 논리 
+	// 여기에 HP 바를 띄우는 논리가 필요함 
 
+	// 테스트 수치 
+	_float fRatio = GET_GAMEINTERFACE->GetTestData()->fHP_Now / GET_GAMEINTERFACE->GetTestData()->fHP_Max;
+	_float fDamege = GET_GAMEINTERFACE->GetTestData()->fHP_Damege;
 
-		// HP 바
-		_float fHP_Ratio = 0.5f; // <- 테스트 수치임 추후 연결 필요
-
-		Make_Ortho_UI(pHost, PART_GROUP::GROUP_HP_FRAME, fTimeDelta, fHP_Ratio);
-
-		// 포커싱
-		Make_Ortho_UI(pHost, PART_GROUP::GROUP_FOCUS, fTimeDelta);
-
-		// 특수공격
-		Make_Ortho_UI(pHost, PART_GROUP::GROUP_SPECIAL_HIT, fTimeDelta);
-	}
-}
-
-void CUIPage_Ortho::Make_Ortho_UI(CGameObject* pHost, PART_GROUP eGroup, _float fTimeDelta, _float fRatio)
-{
-	_float2 fPos = { 0.f,0.f };
-	_float fDistance = 0.f;
-	if (!Make_OrthoGraphy_Position(pHost, eGroup, &fPos, &fDistance))
+	_float2 fPosition = { 0.f,0.f };
+	if (!Make_OrthoGraphy_Position(pHost, PART_GROUP::GROUP_HP_FRAME, &fPosition))
 		return;
 
-	m_vecPart[m_vecOrtho_Group_Ctrl[_int(eGroup)]->PartIndexlist.front()]->fAdjust = fPos;
+	OR_RENDER* pRender_HP_Frame = new OR_RENDER;
+	*pRender_HP_Frame = { fDistance ,fPosition,  PART_GROUP::GROUP_HP_FRAME, fRatio, {}, -1 };
+	OR_RENDER* pRender_HP_Fill = new OR_RENDER;
+	*pRender_HP_Fill = { fDistance ,fPosition,  PART_GROUP::GROUP_HP_FILL, fRatio, {}, -1 };
+	OR_RENDER* pRender_HP_Demege = new OR_RENDER;
+	*pRender_HP_Demege = { fDistance ,fPosition,  PART_GROUP::GROUP_HP_COUNT, fRatio, to_wstring(fDamege), -1};
 
-	if (eGroup == PART_GROUP::GROUP_HP_FRAME)
-	{
-		m_vecPart[m_vecOrtho_Group_Ctrl[_int(PART_GROUP::GROUP_HP_FILL)]->PartIndexlist.front()]->fRatio = fRatio;
-		__super::UpdatePart_ByIndex(m_vecOrtho_Group_Ctrl[_int(PART_GROUP::GROUP_HP_FILL)]->PartIndexlist.front(), fTimeDelta);
-		OR_RENDER* pNew = new OR_RENDER(fDistance, m_vecPart[m_vecOrtho_Group_Ctrl[_int(PART_GROUP::GROUP_HP_FILL)]->PartIndexlist.front()]);
-	}
-
-	for (auto& iter : m_vecOrtho_Group_Ctrl[_int(eGroup)]->PartIndexlist)
-	{
-		__super::UpdatePart_ByIndex(iter, fTimeDelta);
-		OR_RENDER* pNew = new OR_RENDER(fDistance, m_vecPart[iter]);
-	}
+	m_queue_Ortho_Render_Ctrl.push(pRender_HP_Frame);
+	m_queue_Ortho_Render_Ctrl.push(pRender_HP_Fill);
+	m_queue_Ortho_Render_Ctrl.push(pRender_HP_Demege);
 }
 
-_bool CUIPage_Ortho::Make_OrthoGraphy_Position(CGameObject* pHost, PART_GROUP eGroup, _float2* fPosition, _float* fDistance_Cam)
+void CUIPage_Ortho::Make_Monster_Focusing(CGameObject* pHost, _float fTimeDelta, _float fDistance)
+{
+	// 여기에 고정 대상 띄우는 논리가 필요함 
+
+		// 테스트 수치 
+	if (!GET_GAMEINTERFACE->GetTestData()->bFocus)
+		return;
+
+	_float2 fPosition = { 0.f,0.f };
+	if (!Make_OrthoGraphy_Position(pHost, PART_GROUP::GROUP_FOCUS, &fPosition))
+		return;
+
+	OR_RENDER* pRender_Focusing = new OR_RENDER;
+	*pRender_Focusing = { fDistance ,fPosition,  PART_GROUP::GROUP_FOCUS,1.f, {}, -1 };
+
+	m_queue_Ortho_Render_Ctrl.push(pRender_Focusing);
+}
+
+void CUIPage_Ortho::Make_Monster_SpecialHit(CGameObject* pHost, _float fTimeDelta, _float fDistance)
+{
+	// 여기에 특수 공격 가능 상태 띄우는 논리가 필요함 
+
+	// 테스트 수치 
+	if (!GET_GAMEINTERFACE->GetTestData()->bSpecial_Attack)
+		return;
+
+	_float2 fPosition = { 0.f,0.f };
+	if (!Make_OrthoGraphy_Position(pHost, PART_GROUP::GROUP_SPECIAL_HIT, &fPosition))
+		return;
+
+	OR_RENDER* pRender_Special = new OR_RENDER;
+	*pRender_Special = { fDistance ,fPosition,  PART_GROUP::GROUP_SPECIAL_HIT,1.f, {}, -1 };
+
+	m_queue_Ortho_Render_Ctrl.push(pRender_Special);
+}
+
+
+_bool CUIPage_Ortho::Make_OrthoGraphy_Position(CGameObject* pHost, PART_GROUP eGroup, _float2* fPosition)
 {
 	const _matrix mMat = pHost->Get_Transform()->Get_WorldMatrix();
 	const _matrix mProj = m_pGameInstance->Get_Transform(CPipeLine::D3DTS_PROJ);
@@ -218,14 +262,16 @@ _bool CUIPage_Ortho::Make_OrthoGraphy_Position(CGameObject* pHost, PART_GROUP eG
 	if (fResult.w < 0.f)
 		return false;
 
-	
-	_vector vDistance = pHost->Get_Transform()->Get_State(CTransform::STATE_POSITION) - m_pGameInstance->Get_CamPosition_Vec4();
-
-	*fDistance_Cam = sqrt(pow(vDistance.m128_f32[0], 2) + pow(vDistance.m128_f32[1], 2) + pow(vDistance.m128_f32[2], 2));
 	fPosition->x = fResult.x / fResult.w;
 	fPosition->y = fResult.y / fResult.w;
 
 	return true;
+}
+
+_float CUIPage_Ortho::Check_Distance_From_Cam(CGameObject* pHost)
+{
+	_vector vDistance = pHost->Get_Transform()->Get_State(CTransform::STATE_POSITION) - m_pGameInstance->Get_CamPosition_Vec4();
+	return sqrt(pow(vDistance.m128_f32[0], 2) + pow(vDistance.m128_f32[1], 2) + pow(vDistance.m128_f32[2], 2));
 }
 
 
@@ -271,4 +317,10 @@ void CUIPage_Ortho::Free()
 
 	m_vecPart.clear();
 	m_vecOrtho_Adjust.clear();
+
+	while (!m_queue_Ortho_Render_Ctrl.empty())
+	{
+		m_queue_Ortho_Render_Ctrl.pop();
+	}
+	
 }

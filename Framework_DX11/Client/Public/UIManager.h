@@ -20,18 +20,14 @@ class CUIManager : public CUIObject
 public:
 	typedef struct TESTDATA
 	{
-		_float fHP_Now = 500.f; // 현재 체력값 
-		_float fMax_HP_Now = 1000.f; // 체력 최대치의 현재값
-		_float fMax_HP_Limit = 1000.f; // 체력 최대치의 최대 증가값
+		// 직교 UI 테스트용 
+		_float fHP_Now = 500.f;
+		_float fHP_Max = 1000.f;
 
-		_float fST_Now = 500.f; // 현재 스태미나값 
-		_float fMax_ST_Now = 1000.f; // 스태미나 최대치의 현재값
-		_float fMax_ST_Limit = 1000.f; // 스태미나 최대치의 최대 증가값
+		_float fHP_Damege = 100.f;
 
-		_float fSP_Now = 100.f; // 현재 특수능력치
-		_float fSP_Single_Max = 100.f; // 특수능력치 게이지 한 칸의 최대치 
-		_int iSP_Gauge_Count = 5; // 현재 특수능력치 게이지 칸 
-		_int iSP_Gauge_Count_Max = 5; // 특수능력치 게이지 최대치 
+		_bool bFocus = false;
+		_bool bSpecial_Attack = false;
 
 	}TDATA;
 
@@ -138,16 +134,20 @@ private:
 	CUIPage_Loading* m_pUIPage_Loading = { nullptr };
 	// 플레이
 	CUIPage_Play* m_pUIPage_Play = { nullptr };
-	//// 메인
-	//CUIPage_Main* m_pUIPage_Main = { nullptr };
-	//// 메인
-	//CUIPage_Main* m_pUIPage_Main = { nullptr };
-	//// 메인
-	//CUIPage_Main* m_pUIPage_Main = { nullptr };
-	//// 메인
-	//CUIPage_Main* m_pUIPage_Main = { nullptr };
-	//// 메인
-	//CUIPage_Main* m_pUIPage_Main = { nullptr };
+	// 메뉴
+	CUIPage_Menu* m_pUIPage_Menu = { nullptr };
+	// 인벤
+	CUIPage_Inven* m_pUIPage_Inven = { nullptr };
+	// 장비
+	CUIPage_Equip* m_pUIPage_Equip = { nullptr };
+	// 스탯
+	CUIPage_Stat* m_pUIPage_Stat = { nullptr };
+	// 레벨업
+	CUIPage_LevelUp* m_pUIPage_LevelUp = { nullptr };
+	// 스킬트리
+	CUIPage_Skill* m_pUIPage_Skill = { nullptr };
+	// 테스트
+	CUIPage_Test* m_pUIPage_Test = { nullptr };
 	// 직교
 	CUIPage_Ortho* m_pUIPage_Ortho = { nullptr };
 

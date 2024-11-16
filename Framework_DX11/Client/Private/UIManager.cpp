@@ -85,8 +85,8 @@ void CUIManager::Late_Update(_float fTimeDelta)
 
 HRESULT CUIManager::Render()
 {
-	/*if (FAILED(m_pUIRender_Client->Render_Ortho(m_pUIPage_Ortho)))
-		return E_FAIL;*/
+	if (FAILED(m_pUIRender_Client->Render_Ortho(m_pUIPage_Ortho)))
+		return E_FAIL;
 	
 	if (FAILED(m_pUIRender_Client->Render_UI(m_vecPage)))
 		return E_FAIL;
@@ -472,30 +472,33 @@ HRESULT CUIManager::Load_UIDataFile()
 
 	for (_int i = 0; i < _int(UIPAGE::PAGE_END); ++i)
 	{
-		if (FAILED(Make_UIPage(i)))
-			return E_FAIL;
-
-		_wstring strName = {};
-		while (true)
+		if (!FAILED(Make_UIPage(i)))
 		{
-			_char szText = {};
-			ReadFile(hFile, &szText, sizeof(_char), &dwByte, nullptr);
-			strName += (_tchar)szText;
-			if (szText == '\0')
-				break;
+			_wstring strName = {};
+			while (true)
+			{
+				_char szText = {};
+				ReadFile(hFile, &szText, sizeof(_char), &dwByte, nullptr);
+				strName += (_tchar)szText;
+				if (szText == '\0')
+					break;
+			}
+			m_vecPage[i]->SetUIPageName(strName);
+
+			_float2 fPosition = { 0.f,0.f };
+			ReadFile(hFile, &fPosition, sizeof(_float2), &dwByte, nullptr);
+
+			m_vecPage[i]->SetUIPagePosition(fPosition);
+
+
+			if (FAILED(Load_UIDataFile_Part(hFile, &dwByte, i)))
+				MSG_BOX(TEXT("UI 데이터 불러오기 실패"));
+
+			m_vecPage[i]->Ready_UIPart_Group_Control();
 		}
-		m_vecPage[i]->SetUIPageName(strName);
-
-		_float2 fPosition = { 0.f,0.f };
-		ReadFile(hFile, &fPosition, sizeof(_float2), &dwByte, nullptr);
-
-		m_vecPage[i]->SetUIPagePosition(fPosition);
-
-
-		if (FAILED(Load_UIDataFile_Part(hFile, &dwByte, i)))
-			MSG_BOX(TEXT("UI 데이터 불러오기 실패"));
-
-		m_vecPage[i]->Ready_UIPart_Group_Control();
+		else 
+			MSG_BOX(TEXT("UIPage 제작 필요"));
+		
 	}
 
 	CloseHandle(hFile);
@@ -524,9 +527,41 @@ HRESULT CUIManager::Make_UIPage(_int iIndex)
 		m_pUIPage_Play = CUIPage_Play::Create(m_pDevice, m_pContext);
 		m_vecPage[iIndex] = static_cast<CUIPage*>(m_pUIPage_Play);
 	}
-
-	// 다른 페이지 완성되면 넣기 
-
+	else if (iIndex == _int(UIPAGE::PAGE_MENU))
+	{
+		m_pUIPage_Menu = CUIPage_Menu::Create(m_pDevice, m_pContext);
+		m_vecPage[iIndex] = static_cast<CUIPage*>(m_pUIPage_Menu);
+	}
+	else if (iIndex == _int(UIPAGE::PAGE_INVEN))
+	{
+		m_pUIPage_Inven = CUIPage_Inven::Create(m_pDevice, m_pContext);
+		m_vecPage[iIndex] = static_cast<CUIPage*>(m_pUIPage_Inven);
+	}
+	else if (iIndex == _int(UIPAGE::PAGE_EQUIP))
+	{
+		m_pUIPage_Equip = CUIPage_Equip::Create(m_pDevice, m_pContext);
+		m_vecPage[iIndex] = static_cast<CUIPage*>(m_pUIPage_Equip);
+	}
+	else if (iIndex == _int(UIPAGE::PAGE_STAT))
+	{
+		m_pUIPage_Stat = CUIPage_Stat::Create(m_pDevice, m_pContext);
+		m_vecPage[iIndex] = static_cast<CUIPage*>(m_pUIPage_Stat);
+	}
+	else if (iIndex == _int(UIPAGE::PAGE_LEVELUP))
+	{
+		m_pUIPage_LevelUp = CUIPage_LevelUp::Create(m_pDevice, m_pContext);
+		m_vecPage[iIndex] = static_cast<CUIPage*>(m_pUIPage_LevelUp);
+	}
+	else if (iIndex == _int(UIPAGE::PAGE_SKILL))
+	{
+		m_pUIPage_Skill = CUIPage_Skill::Create(m_pDevice, m_pContext);
+		m_vecPage[iIndex] = static_cast<CUIPage*>(m_pUIPage_Skill);
+	}
+	else if (iIndex == _int(UIPAGE::PAGE_TEST))
+	{
+		m_pUIPage_Test = CUIPage_Test::Create(m_pDevice, m_pContext);
+		m_vecPage[iIndex] = static_cast<CUIPage*>(m_pUIPage_Test);
+	}
 	else if (iIndex == _int(UIPAGE::PAGE_ORTHO))
 	{
 		m_pUIPage_Ortho = CUIPage_Ortho::Create(m_pDevice, m_pContext);
