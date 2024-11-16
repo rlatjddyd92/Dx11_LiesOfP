@@ -283,7 +283,7 @@ HRESULT CModel::SetUp_NextAnimation(_uint iNextAnimationIndex, _bool isLoop, _fl
 	m_ChangeTrackPosition = 0.0;
 
 	m_tChaneAnimDesc.iNextAnimIndex = iNextAnimationIndex;
-	if (iNextAnimationIndex == m_iCurrentAnimIndex_Boundary)
+	if (iNextAnimationIndex == m_iCurrentAnimIndex_Boundary && !m_isChangeAni_Boundary)
 	{
 		m_tChaneAnimDesc.iStartFrame = (_uint)m_CurrentTrackPosition_Boundary;
 	}
@@ -321,7 +321,7 @@ HRESULT CModel::SetUp_NextAnimation_Boundary(_uint iNextAnimationIndex, _bool is
 	m_ChangeTrackPosition_Boundary = 0.0;
 
 	m_tChaneAnimDesc_Boundary.iNextAnimIndex = iNextAnimationIndex;
-	if (iNextAnimationIndex == m_iCurrentAnimIndex)
+	if (iNextAnimationIndex == m_iCurrentAnimIndex && !m_isChangeAni)
 	{
 		m_tChaneAnimDesc_Boundary.iStartFrame = (_uint)m_CurrentTrackPosition;
 	}
@@ -366,6 +366,11 @@ _matrix CModel::CalcMatrix_forVtxAnim(_uint iMeshNum, VTXANIMMESH VtxStruct)
 
 _vector CModel::Play_Animation(_float fTimeDelta, _bool* pOut, list<OUTPUT_EVKEY>* pEvKeyList)
 {
+	_bool	bRootCheck{false};
+	if (m_UFBIndices[UFB_ROOT] != 1024)
+	{
+		bRootCheck = true;
+	}
 	_float fAddTime = fTimeDelta * m_bPlayAnimCtr;
 	
 	_bool bBoneUpdated = { true }; //뼈 업데이트 함수 호출시에 실제 업데이트 됐는지, 루프 애니메이션이 아니라서 중단됐는지 확인하기위한 불 변수
@@ -373,12 +378,15 @@ _vector CModel::Play_Animation(_float fTimeDelta, _bool* pOut, list<OUTPUT_EVKEY
 	//상하체 분리에 영향받지 않는 부분들의 업데이트
 	if (m_isChangeAni)
 	{
+
 		_bool isChangeEnd = false;
 		if (m_tChaneAnimDesc.fChangeTime == 0.f && pOut != nullptr)
 		{
 			*pOut = true;
 		}
 		m_tChaneAnimDesc.fChangeTime += fAddTime;
+
+		bBoneUpdated = true;
 
 		vector<CChannel*> CurrentChannels = m_Animations[m_iCurrentAnimIndex]->Get_Channels();
 		vector<CChannel*> NextChannels = m_Animations[m_tChaneAnimDesc.iNextAnimIndex]->Get_Channels();
@@ -415,6 +423,14 @@ _vector CModel::Play_Animation(_float fTimeDelta, _bool* pOut, list<OUTPUT_EVKEY
 
 				_vector		vSourTranslation = XMVectorSetW(XMLoadFloat3(&tCurrentKeyFrame.vTranslation), 1.f);
 				_vector		vDestTranslation = XMVectorSetW(XMLoadFloat3(&tNextKeyFrame.vTranslation), 1.f);
+				
+				if (bRootCheck)
+				{
+					if (m_UFBIndices[UFB_ROOT] == CurrentChannels[i]->Get_BoneIndex())
+					{
+						vSourTranslation = _vector{ 0, 0, 0, 1 };
+					}
+				}
 
 				_float		fRatio = m_tChaneAnimDesc.fChangeTime / m_tChaneAnimDesc.fChangeDuration;
 
@@ -424,7 +440,7 @@ _vector CModel::Play_Animation(_float fTimeDelta, _bool* pOut, list<OUTPUT_EVKEY
 			}
 
 			_matrix	TransformationMatrix = XMMatrixAffineTransformation(vScale, XMVectorSet(0.f, 0.f, 0.f, 1.f), vRotation, vTranslation);
-
+			
 			m_Bones[CurrentChannels[i]->Get_BoneIndex()]->Set_TransformationMatrix(TransformationMatrix);
 		}
 
@@ -466,6 +482,8 @@ _vector CModel::Play_Animation(_float fTimeDelta, _bool* pOut, list<OUTPUT_EVKEY
 				*pOut = true;
 			}
 			m_tChaneAnimDesc_Boundary.fChangeTime += fAddTime;
+
+			bBoneUpdated = true;
 
 			vector<CChannel*> CurrentChannels = m_Animations[m_iCurrentAnimIndex_Boundary]->Get_Channels();
 			vector<CChannel*> NextChannels = m_Animations[m_tChaneAnimDesc_Boundary.iNextAnimIndex]->Get_Channels();
@@ -514,6 +532,14 @@ _vector CModel::Play_Animation(_float fTimeDelta, _bool* pOut, list<OUTPUT_EVKEY
 
 					_float		fRatio = m_tChaneAnimDesc_Boundary.fChangeTime / m_tChaneAnimDesc_Boundary.fChangeDuration;
 
+					if (bRootCheck)
+					{
+						if (m_UFBIndices[UFB_ROOT] == CurrentChannels[i]->Get_BoneIndex())
+						{
+							vSourTranslation = _vector{ 0, 0, 0, 1 };
+						}
+					}
+
 					vScale = XMVectorLerp(vSourScale, vDestScale, (_float)fRatio);
 					vRotation = XMQuaternionSlerp(vSourRotation, vDestRotation, (_float)fRatio);
 					vTranslation = XMVectorLerp(vSourTranslation, vDestTranslation, (_float)fRatio);
@@ -560,7 +586,7 @@ _vector CModel::Play_Animation(_float fTimeDelta, _bool* pOut, list<OUTPUT_EVKEY
 	_vector vRootMove{};
 	if (bBoneUpdated)
 	{
-		if (m_UFBIndices[UFB_ROOT] != 1024)
+		if (bRootCheck)
 		{
 			m_Bones[m_UFBIndices[UFB_ROOT]]->Update_CombinedTransformationMatrix(m_Bones, XMLoadFloat4x4(&m_PreTransformMatrix));
 			vRootMove = m_Bones[m_UFBIndices[UFB_ROOT]]->Get_CombinedTransformationMatrix().r[3];

@@ -21,7 +21,7 @@ HRESULT CState_CarcassBigA_Idle::Initialize(_uint iStateNum, void* pArg)
 
 HRESULT CState_CarcassBigA_Idle::Start_State(void* pArg)
 {
-    m_pMonster->Change_Animation(20, true, true);
+    m_pMonster->Change_Animation(20, true, 0);
     
     return S_OK;
 }
@@ -55,15 +55,15 @@ void CState_CarcassBigA_Idle::Update(_float fTimeDelta)
         switch (iDir)
         {
         case -1:
-            m_pMonster->Change_Animation(30, true, true);
+            m_pMonster->Change_Animation(30, true);
             break;
 
         case 0:
-            m_pMonster->Change_Animation(20, true, true);
+            m_pMonster->Change_Animation(20, true);
             break;
 
         case 1:
-            m_pMonster->Change_Animation(31, true, true);
+            m_pMonster->Change_Animation(31, true);
             break;
 
         default:

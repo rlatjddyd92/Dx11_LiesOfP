@@ -109,10 +109,11 @@ HRESULT CLoader::Initialize(LEVELID eNextLevelID)
 	if (0 == m_hThread_Main)
 		return E_FAIL;
 
-	InitializeCriticalSection(&m_CriticalSection_Map0);
-	m_hThread_Map0 = (HANDLE)_beginthreadex(nullptr, 0, LoadingMap0, this, 0, nullptr);
-	if (0 == m_hThread_Map0)
-		return E_FAIL;
+	//InitializeCriticalSection(&m_CriticalSection_Map0);
+	//m_hThread_Map0 = (HANDLE)_beginthreadex(nullptr, 0, LoadingMap0, this, 0, nullptr);
+	//if (0 == m_hThread_Map0)
+	//	return E_FAIL;
+	m_isFinished_Map0 = true;
 
 	InitializeCriticalSection(&m_CriticalSection_Map1);
 	m_hThread_Map1 = (HANDLE)_beginthreadex(nullptr, 0, LoadingMap1, this, 0, nullptr);
@@ -507,13 +508,6 @@ HRESULT CLoader::Ready_Resources_For_GamePlayLevel()
 #pragma endregion
 
 	m_isFinished_Main = true;
-
-	return S_OK;
-}
-
-
-HRESULT CLoader::Ready_Resources_For_GamePlayLevel_Map0()
-{
 	_matrix		PreTransformMatrix = XMMatrixIdentity();
 
 	/* For. Prototype_Component_Model_Fiona*/
@@ -531,7 +525,7 @@ HRESULT CLoader::Ready_Resources_For_GamePlayLevel_Map0()
 	//
 	PreTransformMatrix = XMMatrixScaling(0.01f, 0.01f, 0.01f) * XMMatrixRotationY(XMConvertToRadians(270.0f));
 	if (FAILED(m_pGameInstance->Add_Prototype(LEVEL_GAMEPLAY, TEXT("Prototype_AnimModel_Test"),
-		CModel::Create(m_pDevice, m_pContext, CModel::TYPE_ANIM, "../Bin/ModelData/Anim/CreatedBinFiles/Player.dat", PreTransformMatrix, true))))
+		CModel::Create(m_pDevice, m_pContext, CModel::TYPE_ANIM, "../Bin/ModelData/Anim/Player/Player.dat", PreTransformMatrix, false))))
 		return E_FAIL;
 
 	//Prototype_Component_Model_CarcassBigA
@@ -553,6 +547,13 @@ HRESULT CLoader::Ready_Resources_For_GamePlayLevel_Map0()
 	//	return E_FAIL;
 
 	m_isFinished_Map0 = true;
+
+	return S_OK;
+}
+
+
+HRESULT CLoader::Ready_Resources_For_GamePlayLevel_Map0()
+{
 
 	return S_OK;
 }

@@ -28,7 +28,7 @@ HRESULT CState_SimonManusP1_HitFatal::Start_State(void* pArg)
     *m_pResetRootMove = false;
 
 
-    m_pMonster->Change_Animation(AN_FATAL_START - (2 * m_iAnimCnt), false, true);
+    m_pMonster->Change_Animation(AN_FATAL_START - (m_iAnimCnt), false, true);
 
     return S_OK;
 }
@@ -40,7 +40,7 @@ void CState_SimonManusP1_HitFatal::Update(_float fTimeDelta)
         if (m_iAnimCnt < 2)
         {
             ++m_iAnimCnt;
-            m_pMonster->Change_Animation(AN_FATAL_START - (2 * m_iAnimCnt), false, true);
+            m_pMonster->Change_Animation(AN_FATAL_START - (m_iAnimCnt), false, true);
         }
         else
         {
