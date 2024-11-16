@@ -47,6 +47,7 @@ private:
 	HRESULT Ready_Resources_For_Effect();
 
 	HRESULT Ready_Resources_GoJunHo();
+	HRESULT Ready_Resources_Object();
 
 public:
 	static CLoader* Create(ID3D11Device* pDevice, ID3D11DeviceContext* pContext, LEVELID eNextLevelID);

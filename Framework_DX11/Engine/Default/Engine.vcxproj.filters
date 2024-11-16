@@ -220,6 +220,9 @@
     <Filter Include="01.Utility\03.Components\Model\ObjectOctree">
       <UniqueIdentifier>{a24fcefc-62b5-4a50-8240-d400693ea04d}</UniqueIdentifier>
     </Filter>
+    <Filter Include="01.Utility\13.Occludee">
+      <UniqueIdentifier>{70fc1e80-1456-4179-843f-5d3bf3038f65}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\Private\Base.cpp">
@@ -424,6 +427,9 @@
     <ClCompile Include="..\Private\EasyDrawSphere.cpp" />
     <ClCompile Include="..\Private\ObjectOctree.cpp">
       <Filter>01.Utility\03.Components\Model\ObjectOctree</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Private\Occludee.cpp">
+      <Filter>01.Utility\13.Occludee</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -643,6 +649,9 @@
     <ClInclude Include="..\Public\EasyDrawSphere.h" />
     <ClInclude Include="..\Public\ObjectOctree.h">
       <Filter>01.Utility\03.Components\Model\ObjectOctree</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Public\Occludee.h">
+      <Filter>01.Utility\13.Occludee</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
