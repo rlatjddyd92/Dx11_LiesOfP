@@ -116,21 +116,16 @@ void CPlayer::Update(_float fTimeDelta)
 	m_pFsmCom->Update(fTimeDelta);
 
 
-	m_vCurRootMove = m_pModelCom->Play_Animation(fTimeDelta, &m_bEndAnim, &m_EvKeyList);
+	m_vCurRootMove = m_pModelCom->Play_Animation(fTimeDelta * 0.2f, &m_bEndAnim, &m_EvKeyList);
 
 
 	_vector vPos = m_pTransformCom->Get_State(CTransform::STATE_POSITION);
 
-	if (m_bEndAnim == true && m_bResetRootMove)//조건을 애니메이션이 끝났을때 or 변경 되었을때로
-	{
-		m_vCurRootMove = m_vRootMoveStack = XMVectorSet(0, 0, 0, 1);
-	}
-	else
+	if (true)//조건을 애니메이션이 끝났을때 or 변경 되었을때로
 	{
 		m_vCurRootMove = XMVector3TransformNormal(m_vCurRootMove, m_pTransformCom->Get_WorldMatrix());
 
-		m_pTransformCom->Set_State(CTransform::STATE_POSITION, vPos + m_vCurRootMove - m_vRootMoveStack);
-		m_vRootMoveStack = m_vCurRootMove;
+		m_pTransformCom->Set_State(CTransform::STATE_POSITION, vPos + m_vCurRootMove);
 	}
 
 	for (auto& EvKey : m_EvKeyList)

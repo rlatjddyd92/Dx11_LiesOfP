@@ -295,15 +295,25 @@ HRESULT CModel::SetUp_NextAnimation(_uint iNextAnimationIndex, _bool isLoop, _fl
 
 	for (_uint i = 0; i < NextChannels.size(); ++i)
 	{
-		KEYFRAME tNextKeyFrame = NextChannels[i]->Find_KeyFrameIndex(&m_KeyFrameIndices[m_tChaneAnimDesc.iNextAnimIndex][i], NextChannels[i]->Get_KeyFrame(m_tChaneAnimDesc.iStartFrame).TrackPosition); // 여기로 보간
-
-		if (m_ChangeTrackPosition < NextChannels[i]->Get_KeyFrame(m_tChaneAnimDesc.iStartFrame).TrackPosition)
-			m_ChangeTrackPosition = NextChannels[i]->Get_KeyFrame(m_tChaneAnimDesc.iStartFrame).TrackPosition;
+		KEYFRAME tNextKeyFrame = NextChannels[i]->Find_KeyFrameIndex(&m_KeyFrameIndices[iNextAnimationIndex][i], NextChannels[i]->Get_KeyFrame(iStartFrame).TrackPosition); // 여기로 보간
+		
+		if (m_ChangeTrackPosition < NextChannels[i]->Get_KeyFrame(iStartFrame).TrackPosition)
+		{
+			m_ChangeTrackPosition = NextChannels[i]->Get_KeyFrame(iStartFrame).TrackPosition;
+			
+		}
 	}
 
+	m_vRootMoveStack = m_vCurRootMove = _vector{ 0, 0, 0, 1 };
 
 	m_tChaneAnimDesc.fChangeDuration = fChangeDuration;
 	m_tChaneAnimDesc.fChangeTime = 0.f;
+
+	//if (!m_isLoop)
+	//{
+	//	m_CurrentTrackPosition = m_Animations[m_iCurrentAnimIndex]->Get_Duration();
+	//}
+
 	if (m_iCurrentAnimIndex == m_iCurrentAnimIndex_Boundary)
 	{
 		SetUp_NextAnimation_Boundary(iNextAnimationIndex, isLoop, fChangeDuration, iStartFrame);
@@ -340,8 +350,28 @@ HRESULT CModel::SetUp_NextAnimation_Boundary(_uint iNextAnimationIndex, _bool is
 		m_tChaneAnimDesc_Boundary.iStartFrame = iStartFrame;
 	}
 
+	vector<CChannel*> NextChannels = m_Animations[iNextAnimationIndex]->Get_Channels();
+
+	for (_uint i = 0; i < NextChannels.size(); ++i)
+	{
+		KEYFRAME tNextKeyFrame = NextChannels[i]->Find_KeyFrameIndex(&m_KeyFrameIndices[iNextAnimationIndex][i], NextChannels[i]->Get_KeyFrame(iStartFrame).TrackPosition); // 여기로 보간
+
+		if (m_ChangeTrackPosition < NextChannels[i]->Get_KeyFrame(iStartFrame).TrackPosition)
+		{
+			m_ChangeTrackPosition = NextChannels[i]->Get_KeyFrame(iStartFrame).TrackPosition;
+
+		}
+	}
+
+	m_vRootMoveStack = m_vCurRootMove = _vector{ 0, 0, 0, 1 };
+
 	m_tChaneAnimDesc_Boundary.fChangeDuration = fChangeDuration;
 	m_tChaneAnimDesc_Boundary.fChangeTime = 0.f;
+
+	//if (!m_isLoop)
+	//{
+	//	m_CurrentTrackPosition_Boundary = m_Animations[m_iCurrentAnimIndex_Boundary]->Get_Duration();
+	//}
 
 	m_isEnd_Animations_Boundary[iNextAnimationIndex] = false;
 	m_isLoop_Boundary = isLoop;
@@ -380,28 +410,42 @@ _vector CModel::Play_Animation(_float fTimeDelta, _bool* pOut, list<OUTPUT_EVKEY
 	if (m_UFBIndices[UFB_ROOT] != 1024)
 	{
 		bRootCheck = true;
+		m_isUseRootBone = true;
 	}
+
+	// ==m_isUseBoundary 로 변경
 	_float fAddTime = fTimeDelta * m_bPlayAnimCtr;
-	
+	m_isBoneUpdated = true;
 	_bool bBoneUpdated = { true }; //뼈 업데이트 함수 호출시에 실제 업데이트 됐는지, 루프 애니메이션이 아니라서 중단됐는지 확인하기위한 불 변수
 
 	//상하체 분리에 영향받지 않는 부분들의 업데이트
+	Update_Animation(fAddTime, pOut, pEvKeyList);
+
+
+	//분리된 부분 업데이트
+	Update_Animation_Boundary(fAddTime, pOut, pEvKeyList);
+
+
+	//루트본에 의한 이동값을 루트본에서 제거하고 이동량만큼 바깥으로 배출
+	_vector vRootMove = Finish_Update_Anim(pOut);
+	
+	return vRootMove;
+}
+
+void CModel::Update_Animation(_float fTimeDelta, _bool* pOut, list<OUTPUT_EVKEY>* pEvKeyList)
+{
 	if (m_isChangeAni)
 	{
-
 		_bool isChangeEnd = false;
-		/*if (m_tChaneAnimDesc.fChangeTime == 0.f && pOut != nullptr)
-		{
-			*pOut = true;
-		}*/
-		m_tChaneAnimDesc.fChangeTime += fAddTime;
 
-		bBoneUpdated = true;
+		m_tChaneAnimDesc.fChangeTime += fTimeDelta;
+
+		m_isBoneUpdated = true;
 
 		vector<CChannel*> CurrentChannels = m_Animations[m_iCurrentAnimIndex]->Get_Channels();
 		vector<CChannel*> NextChannels = m_Animations[m_tChaneAnimDesc.iNextAnimIndex]->Get_Channels();
 
-		m_CurrentTrackPosition += fAddTime;
+		//m_CurrentTrackPosition += fTimeDelta;
 		for (_int i = 0; i < CurrentChannels.size(); ++i)
 		{
 			if (m_isUseBoundary && m_Bones[CurrentChannels[i]->Get_BoneIndex()]->Get_IsChildOf_Boundary() == true)
@@ -420,7 +464,12 @@ _vector CModel::Play_Animation(_float fTimeDelta, _bool* pOut, list<OUTPUT_EVKEY
 			{
 				vScale = XMLoadFloat3(&tNextKeyFrame.vScale);
 				vRotation = XMLoadFloat4(&tNextKeyFrame.vRotation);
-				vTranslation = XMVectorSetW(XMLoadFloat3(&tNextKeyFrame.vTranslation), 1.f);
+				if (m_UFBIndices[UFB_ROOT] == CurrentChannels[i]->Get_BoneIndex())
+				{
+					vTranslation = _vector{ 0, 0, 0, 1 };
+				}
+				else
+					vTranslation = XMVectorSetW(XMLoadFloat3(&tNextKeyFrame.vTranslation), 1.f);
 
 				isChangeEnd = true;
 			}
@@ -432,15 +481,25 @@ _vector CModel::Play_Animation(_float fTimeDelta, _bool* pOut, list<OUTPUT_EVKEY
 				_vector		vSourRotation = XMLoadFloat4(&tCurrentKeyFrame.vRotation);
 				_vector		vDestRotation = XMLoadFloat4(&tNextKeyFrame.vRotation);
 
-				_vector		vSourTranslation = XMVectorSetW(XMLoadFloat3(&tCurrentKeyFrame.vTranslation), 1.f);
-				_vector		vDestTranslation = XMVectorSetW(XMLoadFloat3(&tNextKeyFrame.vTranslation), 1.f);
-				
-				if (bRootCheck)
+				_vector		vSourTranslation{};
+				_vector		vDestTranslation{};
+
+				if (m_isUseRootBone)
 				{
 					if (m_UFBIndices[UFB_ROOT] == CurrentChannels[i]->Get_BoneIndex())
 					{
-						vSourTranslation = _vector{ 0, 0, 0, 1 };
+						vDestTranslation = vSourTranslation = _vector{ 0, 0, 0, 1 };
 					}
+					else
+					{
+						vSourTranslation = XMVectorSetW(XMLoadFloat3(&tCurrentKeyFrame.vTranslation), 1.f);
+						vDestTranslation = XMVectorSetW(XMLoadFloat3(&tNextKeyFrame.vTranslation), 1.f);
+					}
+				}
+				else
+				{
+					vSourTranslation = XMVectorSetW(XMLoadFloat3(&tCurrentKeyFrame.vTranslation), 1.f);
+					vDestTranslation = XMVectorSetW(XMLoadFloat3(&tNextKeyFrame.vTranslation), 1.f);
 				}
 
 				_float		fRatio = m_tChaneAnimDesc.fChangeTime / m_tChaneAnimDesc.fChangeDuration;
@@ -451,7 +510,7 @@ _vector CModel::Play_Animation(_float fTimeDelta, _bool* pOut, list<OUTPUT_EVKEY
 			}
 
 			_matrix	TransformationMatrix = XMMatrixAffineTransformation(vScale, XMVectorSet(0.f, 0.f, 0.f, 1.f), vRotation, vTranslation);
-			
+
 			m_Bones[CurrentChannels[i]->Get_BoneIndex()]->Set_TransformationMatrix(TransformationMatrix);
 		}
 
@@ -475,26 +534,24 @@ _vector CModel::Play_Animation(_float fTimeDelta, _bool* pOut, list<OUTPUT_EVKEY
 	}
 	else
 	{
-		
+
 		/* 뼈를 움직인다.(CBone`s m_TransformationMatrix행렬을 갱신한다.) */
-		m_iCurrentFrame = m_Animations[m_iCurrentAnimIndex]->Update_TransformationMatrices(m_Bones, &m_CurrentTrackPosition, m_KeyFrameIndices[m_iCurrentAnimIndex], m_isLoop, &m_isEnd_Animations[m_iCurrentAnimIndex], fAddTime, false, pEvKeyList, &bBoneUpdated);
-	
+		m_iCurrentFrame = m_Animations[m_iCurrentAnimIndex]->Update_TransformationMatrices(m_Bones, &m_CurrentTrackPosition, m_KeyFrameIndices[m_iCurrentAnimIndex], m_isLoop, &m_isEnd_Animations[m_iCurrentAnimIndex], fTimeDelta, false, pEvKeyList, &m_isBoneUpdated);
+
 	}
+}
 
-
-	//분리된 부분 업데이트
+void CModel::Update_Animation_Boundary(_float fTimeDelta, _bool* pOut, list<OUTPUT_EVKEY>* pEvKeyList)
+{
 	if (m_isUseBoundary)
 	{
 		if (m_isChangeAni_Boundary)
 		{
 			_bool isChangeEnd = false;
-			/*if (m_tChaneAnimDesc_Boundary.fChangeTime == 0.f && pOut != nullptr)
-			{
-				*pOut = true;
-			}*/
-			m_tChaneAnimDesc_Boundary.fChangeTime += fAddTime;
 
-			bBoneUpdated = true;
+			m_tChaneAnimDesc_Boundary.fChangeTime += fTimeDelta;
+
+			m_isBoneUpdated = true;
 
 			vector<CChannel*> CurrentChannels = m_Animations[m_iCurrentAnimIndex_Boundary]->Get_Channels();
 			vector<CChannel*> NextChannels = m_Animations[m_tChaneAnimDesc_Boundary.iNextAnimIndex]->Get_Channels();
@@ -503,10 +560,6 @@ _vector CModel::Play_Animation(_float fTimeDelta, _bool* pOut, list<OUTPUT_EVKEY
 			if (m_isChangeAni_Boundary && m_isChangeAni && (m_tChaneAnimDesc_Boundary.iNextAnimIndex == m_tChaneAnimDesc.iNextAnimIndex))
 			{
 				m_CurrentTrackPosition_Boundary = m_CurrentTrackPosition;
-			}
-			else
-			{
-				m_CurrentTrackPosition_Boundary += fAddTime;
 			}
 
 			for (_int i = 0; i < CurrentChannels.size(); ++i)
@@ -517,7 +570,7 @@ _vector CModel::Play_Animation(_float fTimeDelta, _bool* pOut, list<OUTPUT_EVKEY
 				}
 
 				KEYFRAME tCurrentKeyFrame = CurrentChannels[i]->Find_KeyFrameIndex(&m_KeyFrameIndices[m_iCurrentAnimIndex_Boundary][i], m_CurrentTrackPosition_Boundary); // 여기서부터
-				KEYFRAME tNextKeyFrame = NextChannels[i]->Find_KeyFrameIndex(&m_KeyFrameIndices[m_tChaneAnimDesc_Boundary.iNextAnimIndex][i], m_ChangeTrackPosition); // 여기로 보간
+				KEYFRAME tNextKeyFrame = NextChannels[i]->Find_KeyFrameIndex(&m_KeyFrameIndices[m_tChaneAnimDesc_Boundary.iNextAnimIndex][i], m_ChangeTrackPosition_Boundary); // 여기로 보간
 
 				_vector vScale, vRotation, vTranslation;
 
@@ -526,7 +579,13 @@ _vector CModel::Play_Animation(_float fTimeDelta, _bool* pOut, list<OUTPUT_EVKEY
 				{
 					vScale = XMLoadFloat3(&tNextKeyFrame.vScale);
 					vRotation = XMLoadFloat4(&tNextKeyFrame.vRotation);
-					vTranslation = XMVectorSetW(XMLoadFloat3(&tNextKeyFrame.vTranslation), 1.f);
+
+					if (m_UFBIndices[UFB_ROOT] == CurrentChannels[i]->Get_BoneIndex())
+					{
+						vTranslation = _vector{ 0, 0, 0, 1 };
+					}
+					else
+						vTranslation = XMVectorSetW(XMLoadFloat3(&tNextKeyFrame.vTranslation), 1.f);
 
 					isChangeEnd = true;
 				}
@@ -538,18 +597,28 @@ _vector CModel::Play_Animation(_float fTimeDelta, _bool* pOut, list<OUTPUT_EVKEY
 					_vector		vSourRotation = XMLoadFloat4(&tCurrentKeyFrame.vRotation);
 					_vector		vDestRotation = XMLoadFloat4(&tNextKeyFrame.vRotation);
 
-					_vector		vSourTranslation = XMVectorSetW(XMLoadFloat3(&tCurrentKeyFrame.vTranslation), 1.f);
-					_vector		vDestTranslation = XMVectorSetW(XMLoadFloat3(&tNextKeyFrame.vTranslation), 1.f);
+					_vector		vSourTranslation{};
+					_vector		vDestTranslation{};
 
-					_float		fRatio = m_tChaneAnimDesc_Boundary.fChangeTime / m_tChaneAnimDesc_Boundary.fChangeDuration;
-
-					if (bRootCheck)
+					if (m_isUseRootBone)
 					{
 						if (m_UFBIndices[UFB_ROOT] == CurrentChannels[i]->Get_BoneIndex())
 						{
-							vSourTranslation = _vector{ 0, 0, 0, 1 };
+							vDestTranslation = vSourTranslation = _vector{ 0, 0, 0, 1 };
+						}
+						else
+						{
+							vSourTranslation = XMVectorSetW(XMLoadFloat3(&tCurrentKeyFrame.vTranslation), 1.f);
+							vDestTranslation = XMVectorSetW(XMLoadFloat3(&tNextKeyFrame.vTranslation), 1.f);
 						}
 					}
+					else
+					{
+						vSourTranslation = XMVectorSetW(XMLoadFloat3(&tCurrentKeyFrame.vTranslation), 1.f);
+						vDestTranslation = XMVectorSetW(XMLoadFloat3(&tNextKeyFrame.vTranslation), 1.f);
+					}
+					_float		fRatio = m_tChaneAnimDesc_Boundary.fChangeTime / m_tChaneAnimDesc_Boundary.fChangeDuration;
+
 
 					vScale = XMVectorLerp(vSourScale, vDestScale, (_float)fRatio);
 					vRotation = XMQuaternionSlerp(vSourRotation, vDestRotation, (_float)fRatio);
@@ -569,7 +638,7 @@ _vector CModel::Play_Animation(_float fTimeDelta, _bool* pOut, list<OUTPUT_EVKEY
 				}
 				else
 					m_CurrentTrackPosition_Boundary = m_ChangeTrackPosition;
-				
+
 				//m_Animations[m_iCurrentAnimIndex]->Reset();
 				m_iCurrentAnimIndex_Boundary = m_tChaneAnimDesc_Boundary.iNextAnimIndex;
 				ZeroMemory(&m_tChaneAnimDesc, sizeof(CHANGEANIMATION_DESC));
@@ -582,45 +651,56 @@ _vector CModel::Play_Animation(_float fTimeDelta, _bool* pOut, list<OUTPUT_EVKEY
 			//if 상하체 애니메이션이 같으면 시간누적 없는 업데이트 하체 변수로 호출
 			if (m_iCurrentAnimIndex == m_iCurrentAnimIndex_Boundary)
 			{
-				m_iCurrentFrame = m_Animations[m_iCurrentAnimIndex_Boundary]->Update_TransformationMatrices(m_Bones, &m_CurrentTrackPosition, m_KeyFrameIndices[m_iCurrentAnimIndex_Boundary], m_isLoop, &m_isEnd_Animations_Boundary[m_iCurrentAnimIndex_Boundary], fAddTime, true, pEvKeyList, nullptr, true);
+				m_iCurrentFrame = m_Animations[m_iCurrentAnimIndex_Boundary]->Update_TransformationMatrices(m_Bones, &m_CurrentTrackPosition, m_KeyFrameIndices[m_iCurrentAnimIndex_Boundary], m_isLoop, &m_isEnd_Animations_Boundary[m_iCurrentAnimIndex_Boundary], fTimeDelta, true, pEvKeyList, nullptr, true);
 			}
 			else
 			{
-				m_iCurrentFrame = m_Animations[m_iCurrentAnimIndex_Boundary]->Update_TransformationMatrices(m_Bones, &m_CurrentTrackPosition_Boundary, m_KeyFrameIndices[m_iCurrentAnimIndex_Boundary], m_isLoop_Boundary, &m_isEnd_Animations_Boundary[m_iCurrentAnimIndex_Boundary], fAddTime, true, pEvKeyList, nullptr, false);
+				m_iCurrentFrame = m_Animations[m_iCurrentAnimIndex_Boundary]->Update_TransformationMatrices(m_Bones, &m_CurrentTrackPosition_Boundary, m_KeyFrameIndices[m_iCurrentAnimIndex_Boundary], m_isLoop_Boundary, &m_isEnd_Animations_Boundary[m_iCurrentAnimIndex_Boundary], fTimeDelta, true, pEvKeyList, nullptr, false);
 			}
 		}
 
 	}
+}
 
-
-	//루트본에 의한 이동값을 루트본에서 제거하고 이동량만큼 바깥으로 배출
+_vector CModel::Finish_Update_Anim(_bool* pOut)
+{
 	_vector vRootMove{};
-	if (bBoneUpdated)
+
+	if (m_isBoneUpdated)
 	{
-		if (bRootCheck)
+		if (m_isUseRootBone)
 		{
 			m_Bones[m_UFBIndices[UFB_ROOT]]->Update_CombinedTransformationMatrix(m_Bones, XMLoadFloat4x4(&m_PreTransformMatrix));
-			vRootMove = m_Bones[m_UFBIndices[UFB_ROOT]]->Get_CombinedTransformationMatrix().r[3];
+			m_vCurRootMove = m_Bones[m_UFBIndices[UFB_ROOT]]->Get_CombinedTransformationMatrix().r[3];
 			_float4x4 RootMat = {};
 			XMStoreFloat4x4(&RootMat, m_Bones[m_UFBIndices[UFB_ROOT]]->Get_TransformationMatrix());
 			RootMat._41 = 0; RootMat._42 = 0; RootMat._43 = 0;
 
 			m_Bones[m_UFBIndices[UFB_ROOT]]->Set_TransformationMatrix(XMLoadFloat4x4(&RootMat));
 
-			m_vCurRootMove = vRootMove;
 		}
+	}
+
+
+	if (XMVectorGetX(XMVector3Length(m_vRootMoveStack)) == 0)
+	{
+		vRootMove = _vector{ 0, 0, 0, 1 };
+		m_vRootMoveStack = m_vCurRootMove;
 	}
 	else
 	{
-		vRootMove = m_vCurRootMove;
+		vRootMove = m_vCurRootMove - m_vRootMoveStack;
+		m_vRootMoveStack = m_vCurRootMove;
 	}
-	
+
 
 
 	if (m_isEnd_Animations[m_iCurrentAnimIndex] == true)//
 	{
 		if (m_isLoop)
 			m_CurrentTrackPosition = 0.f;
+
+		vRootMove = m_vRootMoveStack = m_vCurRootMove = _vector{ 0, 0, 0, 1 };
 
 		if (nullptr != pOut)
 			*pOut = true;
@@ -657,6 +737,7 @@ _vector CModel::Play_Animation(_float fTimeDelta, _bool* pOut, list<OUTPUT_EVKEY
 
 	return vRootMove;
 }
+
 
 HRESULT CModel::Create_BinaryFile(const _char* ModelTag)
 {
