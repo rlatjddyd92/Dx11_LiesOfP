@@ -342,6 +342,12 @@
     </Filter>
     <Filter Include="05.Fsm\Player\Common\Heal">
       <UniqueIdentifier>{01bca6de-05e8-46a3-89e2-a924a96ef387}</UniqueIdentifier>
+	</Filter>
+    <Filter Include="03.GameInterface_Controller\00.UIManager\00.UIPage\09.UIPage_Test">
+      <UniqueIdentifier>{d6f0816f-b248-400f-ae9c-070eac27ca42}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="03.GameInterface_Controller\00.UIManager\00.UIPage\10.UIPage_Ortho">
+      <UniqueIdentifier>{552aab2a-e554-4f80-96c8-2caa20267ba5}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -546,6 +552,12 @@
     </ClInclude>
     <ClInclude Include="..\Public\State_Player_Heal.h">
       <Filter>05.Fsm\Player\Common\Heal</Filter>
+	</ClInclude>
+    <ClInclude Include="..\Public\UIPage_Ortho.h">
+      <Filter>03.GameInterface_Controller\00.UIManager\00.UIPage\10.UIPage_Ortho</Filter>
+    </ClInclude>
+    <ClInclude Include="UIPage_Ortho_Include.h">
+      <Filter>03.GameInterface_Controller\99.GameInterface_Defines\00.Defines%28Data_Instance 전용%29</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -723,6 +735,9 @@
     </ClCompile>
     <ClCompile Include="..\Private\State_Player_Heal.cpp">
       <Filter>05.Fsm\Player\Common\Heal</Filter>
+	</ClCompile>
+    <ClCompile Include="..\Private\UIPage_Ortho.cpp">
+      <Filter>03.GameInterface_Controller\00.UIManager\00.UIPage\10.UIPage_Ortho</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

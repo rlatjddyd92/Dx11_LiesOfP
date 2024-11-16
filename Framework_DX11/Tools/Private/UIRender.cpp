@@ -43,6 +43,9 @@ HRESULT CUIRender::Initialize_Prototype()
 	if (FAILED(Ready_Texture()))
 		return E_FAIL;
 
+	if (FAILED(Ready_Texture_ItemIcon()))
+		return E_FAIL;
+
 	return S_OK;
 }
 
@@ -107,8 +110,16 @@ HRESULT CUIRender::Render()
 			if (FAILED(m_pShaderCom->Bind_Matrix("g_ProjMatrix", &m_ProjMatrix)))
 				return E_FAIL;
 
-			if (FAILED(m_vecTextureInfo[rNow.iTexture_Index]->Texture->Bind_ShadeResource(m_pShaderCom, "g_Texture", 0)))
-				return E_FAIL;
+			if (!rNow.bIsItem)
+			{
+				if (FAILED(m_vecTextureInfo[rNow.iTexture_Index]->Texture->Bind_ShadeResource(m_pShaderCom, "g_Texture", 0)))
+					return E_FAIL;
+			}
+			else
+			{
+				if (FAILED(m_vecTextureInfo_ItemIcon[rNow.iTexture_Index]->Texture->Bind_ShadeResource(m_pShaderCom, "g_Texture", 0)))
+					return E_FAIL;
+			}
 
 			if (FAILED(m_pShaderCom->Bind_RawValue("g_Color", &rNow.fTextureColor, sizeof(_float4))))
 				return E_FAIL;
@@ -245,52 +256,50 @@ void CUIRender::Ready_Font()
 	m_vecFont_char.resize(_int(UI_FONT::FONT_END));
 	m_vecFont_tchar.resize(_int(UI_FONT::FONT_END));
 	
-		
+	m_pGameInstance->Add_Font(TEXT("Font_Normal_8"), TEXT("../Bin/Resources/Fonts/Font_Normal_8.spritefont"));
+	m_pGameInstance->Add_Font(TEXT("Font_Normal_12"), TEXT("../Bin/Resources/Fonts/Font_Normal_12.spritefont"));
+	m_pGameInstance->Add_Font(TEXT("Font_Normal_16"), TEXT("../Bin/Resources/Fonts/Font_Normal_16.spritefont"));
+	m_pGameInstance->Add_Font(TEXT("Font_Normal_24"), TEXT("../Bin/Resources/Fonts/Font_Normal_24.spritefont"));
+	m_pGameInstance->Add_Font(TEXT("Font_Normal_32"), TEXT("../Bin/Resources/Fonts/Font_Normal_32.spritefont"));
+	m_pGameInstance->Add_Font(TEXT("Font_Normal_40"), TEXT("../Bin/Resources/Fonts/Font_Normal_40.spritefont"));
+	m_pGameInstance->Add_Font(TEXT("Font_Normal_48"), TEXT("../Bin/Resources/Fonts/Font_Normal_48.spritefont"));
+	m_pGameInstance->Add_Font(TEXT("Font_Bold_8"), TEXT("../Bin/Resources/Fonts/Font_Bold_8.spritefont"));
+	m_pGameInstance->Add_Font(TEXT("Font_Bold_12"), TEXT("../Bin/Resources/Fonts/Font_Bold_12.spritefont"));
+	m_pGameInstance->Add_Font(TEXT("Font_Bold_16"), TEXT("../Bin/Resources/Fonts/Font_Bold_16.spritefont"));
+	m_pGameInstance->Add_Font(TEXT("Font_Bold_24"), TEXT("../Bin/Resources/Fonts/Font_Bold_24.spritefont"));
+	m_pGameInstance->Add_Font(TEXT("Font_Bold_32"), TEXT("../Bin/Resources/Fonts/Font_Bold_32.spritefont"));
+	m_pGameInstance->Add_Font(TEXT("Font_Bold_40"), TEXT("../Bin/Resources/Fonts/Font_Bold_40.spritefont"));
+	m_pGameInstance->Add_Font(TEXT("Font_Bold_48"), TEXT("../Bin/Resources/Fonts/Font_Bold_48.spritefont"));
 
-	m_pGameInstance->Add_Font(TEXT("FONT_INFO_12"), TEXT("../Bin/Resources/Fonts/Font_Info_12.spritefont"));
-	m_pGameInstance->Add_Font(TEXT("FONT_INFO_18"), TEXT("../Bin/Resources/Fonts/Font_Info_18.spritefont"));
-	m_pGameInstance->Add_Font(TEXT("FONT_INFO_24"), TEXT("../Bin/Resources/Fonts/Font_Info_24.spritefont"));
-	m_pGameInstance->Add_Font(TEXT("FONT_INFO_36"), TEXT("../Bin/Resources/Fonts/Font_Info_36.spritefont"));
-	m_pGameInstance->Add_Font(TEXT("FONT_INFO_48"), TEXT("../Bin/Resources/Fonts/Font_Info_48.spritefont"));
-	m_pGameInstance->Add_Font(TEXT("FONT_INFO_60"), TEXT("../Bin/Resources/Fonts/Font_Info_60.spritefont"));
-	m_pGameInstance->Add_Font(TEXT("FONT_INFO_72"), TEXT("../Bin/Resources/Fonts/Font_Info_72.spritefont"));
-	m_pGameInstance->Add_Font(TEXT("FONT_TITLE_12"), TEXT("../Bin/Resources/Fonts/Font_Title_12.spritefont"));
-	m_pGameInstance->Add_Font(TEXT("FONT_TITLE_18"), TEXT("../Bin/Resources/Fonts/Font_Title_18.spritefont"));
-	m_pGameInstance->Add_Font(TEXT("FONT_TITLE_24"), TEXT("../Bin/Resources/Fonts/Font_Title_24.spritefont"));
-	m_pGameInstance->Add_Font(TEXT("FONT_TITLE_36"), TEXT("../Bin/Resources/Fonts/Font_Title_36.spritefont"));
-	m_pGameInstance->Add_Font(TEXT("FONT_TITLE_48"), TEXT("../Bin/Resources/Fonts/Font_Title_48.spritefont"));
-	m_pGameInstance->Add_Font(TEXT("FONT_TITLE_60"), TEXT("../Bin/Resources/Fonts/Font_Title_60.spritefont"));
-	m_pGameInstance->Add_Font(TEXT("FONT_TITLE_72"), TEXT("../Bin/Resources/Fonts/Font_Title_72.spritefont"));
+	m_vecFont_char[_int(UI_FONT::FONT_NORMAL_8)] ="Font_Normal_8";
+	m_vecFont_char[_int(UI_FONT::FONT_NORMAL_12)] = "Font_Normal_12";
+	m_vecFont_char[_int(UI_FONT::FONT_NORMAL_16)] = "Font_Normal_16";
+	m_vecFont_char[_int(UI_FONT::FONT_NORMAL_24)] = "Font_Normal_24";
+	m_vecFont_char[_int(UI_FONT::FONT_NORMAL_32)] = "Font_Normal_32";
+	m_vecFont_char[_int(UI_FONT::FONT_NORMAL_40)] = "Font_Normal_40";
+	m_vecFont_char[_int(UI_FONT::FONT_NORMAL_48)] = "Font_Normal_48";
+	m_vecFont_char[_int(UI_FONT::FONT_BOLD_8)] = "Font_Bold_8";
+	m_vecFont_char[_int(UI_FONT::FONT_BOLD_12)] = "Font_Bold_12";
+	m_vecFont_char[_int(UI_FONT::FONT_BOLD_16)] = "Font_Bold_16";
+	m_vecFont_char[_int(UI_FONT::FONT_BOLD_24)] = "Font_Bold_24";
+	m_vecFont_char[_int(UI_FONT::FONT_BOLD_32)] = "Font_Bold_32";
+	m_vecFont_char[_int(UI_FONT::FONT_BOLD_40)] = "Font_Bold_40";
+	m_vecFont_char[_int(UI_FONT::FONT_BOLD_48)] = "Font_Bold_48";
 
-	m_vecFont_char[_int(UI_FONT::FONT_INFO_12)] = "FONT_INFO_12";
-	m_vecFont_char[_int(UI_FONT::FONT_INFO_18)] = "FONT_INFO_18";
-	m_vecFont_char[_int(UI_FONT::FONT_INFO_24)] = "FONT_INFO_24";
-	m_vecFont_char[_int(UI_FONT::FONT_INFO_36)] = "FONT_INFO_36";
-	m_vecFont_char[_int(UI_FONT::FONT_INFO_48)] = "FONT_INFO_48";
-	m_vecFont_char[_int(UI_FONT::FONT_INFO_60)] = "FONT_INFO_60";
-	m_vecFont_char[_int(UI_FONT::FONT_INFO_72)] = "FONT_INFO_72";
-	m_vecFont_char[_int(UI_FONT::FONT_TITLE_12)] = "FONT_TITLE_12";
-	m_vecFont_char[_int(UI_FONT::FONT_TITLE_18)] = "FONT_TITLE_18";
-	m_vecFont_char[_int(UI_FONT::FONT_TITLE_24)] = "FONT_TITLE_24";
-	m_vecFont_char[_int(UI_FONT::FONT_TITLE_36)] = "FONT_TITLE_36";
-	m_vecFont_char[_int(UI_FONT::FONT_TITLE_48)] = "FONT_TITLE_48";
-	m_vecFont_char[_int(UI_FONT::FONT_TITLE_60)] = "FONT_TITLE_60";
-	m_vecFont_char[_int(UI_FONT::FONT_TITLE_72)] = "FONT_TITLE_72";
-
-	m_vecFont_tchar[_int(UI_FONT::FONT_INFO_12)] = TEXT("FONT_INFO_12");
-	m_vecFont_tchar[_int(UI_FONT::FONT_INFO_18)] = TEXT("FONT_INFO_18");
-	m_vecFont_tchar[_int(UI_FONT::FONT_INFO_24)] = TEXT("FONT_INFO_24");
-	m_vecFont_tchar[_int(UI_FONT::FONT_INFO_36)] = TEXT("FONT_INFO_36");
-	m_vecFont_tchar[_int(UI_FONT::FONT_INFO_48)] = TEXT("FONT_INFO_48");
-	m_vecFont_tchar[_int(UI_FONT::FONT_INFO_60)] = TEXT("FONT_INFO_60");
-	m_vecFont_tchar[_int(UI_FONT::FONT_INFO_72)] = TEXT("FONT_INFO_72");
-	m_vecFont_tchar[_int(UI_FONT::FONT_TITLE_12)] = TEXT("FONT_TITLE_12");
-	m_vecFont_tchar[_int(UI_FONT::FONT_TITLE_18)] = TEXT("FONT_TITLE_18");
-	m_vecFont_tchar[_int(UI_FONT::FONT_TITLE_24)] = TEXT("FONT_TITLE_24");
-	m_vecFont_tchar[_int(UI_FONT::FONT_TITLE_36)] = TEXT("FONT_TITLE_36");
-	m_vecFont_tchar[_int(UI_FONT::FONT_TITLE_48)] = TEXT("FONT_TITLE_48");
-	m_vecFont_tchar[_int(UI_FONT::FONT_TITLE_60)] = TEXT("FONT_TITLE_60");
-	m_vecFont_tchar[_int(UI_FONT::FONT_TITLE_72)] = TEXT("FONT_TITLE_72");
+	m_vecFont_tchar[_int(UI_FONT::FONT_NORMAL_8)] = TEXT("Font_Normal_8");
+	m_vecFont_tchar[_int(UI_FONT::FONT_NORMAL_12)] = TEXT("Font_Normal_12");
+	m_vecFont_tchar[_int(UI_FONT::FONT_NORMAL_16)] = TEXT("Font_Normal_16");
+	m_vecFont_tchar[_int(UI_FONT::FONT_NORMAL_24)] = TEXT("Font_Normal_24");
+	m_vecFont_tchar[_int(UI_FONT::FONT_NORMAL_32)] = TEXT("Font_Normal_32");
+	m_vecFont_tchar[_int(UI_FONT::FONT_NORMAL_40)] = TEXT("Font_Normal_40");
+	m_vecFont_tchar[_int(UI_FONT::FONT_NORMAL_48)] = TEXT("Font_Normal_48");
+	m_vecFont_tchar[_int(UI_FONT::FONT_BOLD_8)] = TEXT("Font_Bold_8");
+	m_vecFont_tchar[_int(UI_FONT::FONT_BOLD_12)] = TEXT("Font_Bold_12");
+	m_vecFont_tchar[_int(UI_FONT::FONT_BOLD_16)] = TEXT("Font_Bold_16");
+	m_vecFont_tchar[_int(UI_FONT::FONT_BOLD_24)] = TEXT("Font_Bold_24");
+	m_vecFont_tchar[_int(UI_FONT::FONT_BOLD_32)] = TEXT("Font_Bold_32");
+	m_vecFont_tchar[_int(UI_FONT::FONT_BOLD_40)] = TEXT("Font_Bold_40");
+	m_vecFont_tchar[_int(UI_FONT::FONT_BOLD_48)] = TEXT("Font_Bold_48");
 }
 
 HRESULT CUIRender::Ready_Texture()
@@ -319,6 +328,40 @@ HRESULT CUIRender::Ready_Texture()
 		WideCharToMultiByte(CP_UTF8, 0, tTag, -1, pNew->strTextureTag, (_int)vecBuffer[i][1].size() + 1, nullptr, nullptr);
 
 		m_vecTextureInfo.push_back(pNew);
+
+		Safe_Delete_Array(tPath);
+		Safe_Delete_Array(tTag);
+	}
+
+	return S_OK;
+}
+
+HRESULT CUIRender::Ready_Texture_ItemIcon()
+{
+	vector<vector<_wstring>> vecBuffer;
+	m_pGameInstance->LoadDataByFile("../Bin/Resources/textures/Item/ItemList.csv", &vecBuffer);
+
+	for (_int i = 2; i < vecBuffer.size(); ++i)
+	{
+		_tchar* tPath = new _tchar[vecBuffer[i][0].size() + 1];
+		_tchar* tTag = new _tchar[vecBuffer[i][1].size() + 1];
+
+		memcpy(tPath, &vecBuffer[i][0][0], sizeof(_tchar) * (vecBuffer[i][0].size() + 1));
+		memcpy(tTag, &vecBuffer[i][1][0], sizeof(_tchar) * (vecBuffer[i][1].size() + 1));
+
+		UTEXTURE* pNew = new UTEXTURE;
+
+		pNew->Texture = CTexture::Create(m_pDevice, m_pContext, tPath, 1);
+		pNew->strTexturePath = new _char[vecBuffer[i][0].size() + 1];
+		pNew->strTextureTag = new _char[vecBuffer[i][1].size() + 1];
+
+		if (FAILED(m_pGameInstance->Add_Prototype(LEVEL_TOOL, tTag, pNew->Texture)))
+			return E_FAIL;
+
+		WideCharToMultiByte(CP_UTF8, 0, tPath, -1, pNew->strTexturePath, (_int)vecBuffer[i][0].size() + 1, nullptr, nullptr);
+		WideCharToMultiByte(CP_UTF8, 0, tTag, -1, pNew->strTextureTag, (_int)vecBuffer[i][1].size() + 1, nullptr, nullptr);
+
+		m_vecTextureInfo_ItemIcon.push_back(pNew);
 
 		Safe_Delete_Array(tPath);
 		Safe_Delete_Array(tTag);
@@ -370,6 +413,16 @@ void CUIRender::Free()
 	}
 
 	m_vecTextureInfo.clear();
+
+	for (auto& iter : m_vecTextureInfo_ItemIcon)
+	{
+		//		Safe_Release(iter->Texture);
+		Safe_Delete_Array(iter->strTexturePath);
+		Safe_Delete_Array(iter->strTextureTag);
+		Safe_Delete(iter);
+	}
+
+	m_vecTextureInfo_ItemIcon.clear();
 
 	for (auto& iter : m_UIRenderlist)
 		Safe_Delete(iter);

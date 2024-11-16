@@ -11,7 +11,7 @@
 #include "UIPage_Loading.h"
 #include "UIPage_Play.h"
 
-
+#include "UIPage_Ortho.h"
 
 
 

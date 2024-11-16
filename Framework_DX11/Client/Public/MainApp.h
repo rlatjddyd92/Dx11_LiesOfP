@@ -31,6 +31,9 @@ private:
 	_uint					m_iNumDraw = {};
 	_float					m_fTimeAcc = {};
 
+
+	_bool					m_bShow_TestInfoPage = false;
+	_float					m_fTime_After_SystemStart = 0.f;
 //#endif
 
 private:	

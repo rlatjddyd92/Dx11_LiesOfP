@@ -7,6 +7,7 @@
 CPlayer_Stat_Manager::CPlayer_Stat_Manager(CGameInstance* pGameInstance)
 {
 	m_pGameInstance = pGameInstance;
+	Safe_AddRef(m_pGameInstance);
 }
 
 
@@ -16,7 +17,30 @@ void CPlayer_Stat_Manager::Add_Stat_Normal(STAT_NORMAL eIndex, _float fValue)
 	m_vecStat_Normal[_int(eIndex)]->fStat_Now += fValue;
 
 	m_vecStat_Normal[_int(eIndex)]->fStat_Now = max(m_vecStat_Normal[_int(eIndex)]->fStat_Now, 0.f);
-	m_vecStat_Normal[_int(eIndex)]->fStat_Now = min(m_vecStat_Normal[_int(eIndex)]->fStat_Now, m_vecStat_Normal[_int(eIndex)]->fStat_Max);
+
+	if (m_vecStat_Normal[_int(eIndex)]->eType == STAT_TYPE::STAT_TYPE_CELL)
+	{
+		_int iValidCell = (_int)(m_vecStat_Normal[_int(eIndex)]->fStat_Max / m_vecStat_Normal[_int(eIndex)]->fStat_Interval);
+		m_vecStat_Normal[_int(eIndex)]->fStat_Now = min(m_vecStat_Normal[_int(eIndex)]->fStat_Now, m_vecStat_Normal[_int(eIndex)]->fStat_Interval * iValidCell);
+	}
+	else
+		m_vecStat_Normal[_int(eIndex)]->fStat_Now = min(m_vecStat_Normal[_int(eIndex)]->fStat_Now, m_vecStat_Normal[_int(eIndex)]->fStat_Max);
+}
+
+void CPlayer_Stat_Manager::Add_StatMax_Normal(STAT_NORMAL eIndex, _float fValue)
+{
+	m_vecStat_Normal[_int(eIndex)]->fStat_Max += fValue;
+
+	m_vecStat_Normal[_int(eIndex)]->fStat_Max = max(m_vecStat_Normal[_int(eIndex)]->fStat_Max, 0.f);
+	m_vecStat_Normal[_int(eIndex)]->fStat_Max = min(m_vecStat_Normal[_int(eIndex)]->fStat_Max, m_vecStat_Normal[_int(eIndex)]->fStat_Max_Limit);
+
+	if (m_vecStat_Normal[_int(eIndex)]->eType == STAT_TYPE::STAT_TYPE_CELL)
+	{
+		_int iValidCell = (_int)(m_vecStat_Normal[_int(eIndex)]->fStat_Max / m_vecStat_Normal[_int(eIndex)]->fStat_Interval);
+		m_vecStat_Normal[_int(eIndex)]->fStat_Now = min(m_vecStat_Normal[_int(eIndex)]->fStat_Now, m_vecStat_Normal[_int(eIndex)]->fStat_Interval * iValidCell);
+	}
+	else
+		m_vecStat_Normal[_int(eIndex)]->fStat_Now = min(m_vecStat_Normal[_int(eIndex)]->fStat_Now, m_vecStat_Normal[_int(eIndex)]->fStat_Max);
 }
 
 HRESULT CPlayer_Stat_Manager::Initialize_Stat()

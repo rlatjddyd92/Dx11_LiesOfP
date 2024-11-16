@@ -46,7 +46,7 @@ public:
 			fPosition.x = fParentPosition.x + fAdjust.x;
 			fPosition.y = fParentPosition.y + fAdjust.y;
 
-			
+
 
 			return fPosition;
 		}
@@ -76,6 +76,7 @@ public:
 
 		// 텍스쳐 관련
 		_int iTexture_Index = -1;
+		_bool bIsItem = false; // <- 아이템 아이콘 표시 여부 
 		_float4 fTextureColor = { -1.f,-1.f ,-1.f ,-1.f };
 
 		// 텍스트 관련
@@ -142,7 +143,9 @@ public:
 protected:
 	void UpdatePart_ByControl(UG_CTRL* pCtrl);
 	void Release_Control(UG_CTRL* pCtrl);
-	
+
+	void UpdatePart_ByIndex(_int Index, _float fTimeDelta);
+
 protected:
 	vector<UPART*> m_vecPart;
 	_wstring m_UIPageName = {};
@@ -155,6 +158,9 @@ protected: // 제어 변수
 protected: // 열기/닫기 액션
 	vector<_bool> m_vecPageAction;
 	_float m_fTopPartMove = 0.f; // 0.f->닫힘, 1.f->열림
+
+protected: // 그룹 컨트롤 모음 -> 여기 있는 건 전체 업데이트 + 전체 릴리즈 용도로만 사용, 구체적인 사용은 각 Paage에 얕은 복사로 따로 포인터를 마련해 진행 
+	list<UG_CTRL*> m_Ctrllist;
 
 
 public:

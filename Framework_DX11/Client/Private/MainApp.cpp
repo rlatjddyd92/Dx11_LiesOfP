@@ -75,6 +75,8 @@ void CMainApp::Update(_float fTimeDelta)
 	// 정상 작동 확인 시 까지 주석처리 
 	// GET_GAMEINTERFACE->Update_GameInterface(fTimeDelta);
 	GET_GAMEINTERFACE->Update_GameInterface(fTimeDelta);
+
+	
 //#ifdef _DEBUG
 	m_fTimeAcc += fTimeDelta;
 //#endif
