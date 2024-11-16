@@ -92,6 +92,11 @@ _bool CTrail_OnePoint_Instance::Update_Buffer(_fvector vWorldPos, _float fTimeDe
 	return m_bOver;
 }
 
+_bool CTrail_OnePoint_Instance::Spread_Buffer(_fvector vWorldPos, _float fTimeDelta)
+{
+	return _bool();
+}
+
 void CTrail_OnePoint_Instance::Set_LifeTime(_float fTime)
 {
 	D3D11_MAPPED_SUBRESOURCE	SubResource{};

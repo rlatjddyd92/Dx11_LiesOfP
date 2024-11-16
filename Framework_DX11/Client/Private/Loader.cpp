@@ -17,10 +17,6 @@
 
 #pragma region EFFECT
 #include "Effect_Manager.h"
-#include "Effect_Container.h"
-#include "Particle_Effect.h"
-#include "Texture_Effect.h"
-
 #pragma endregion
 
 #include "GameInstance.h"
@@ -265,7 +261,8 @@ HRESULT CLoader::Ready_Resources_For_GamePlayLevel()
 	//		return textureFuture.get();
 	//}
 	lstrcpy(m_szLoadingText, TEXT("이펙트 매니저를 로딩중입니다."));
-	CEffect_Manager::Get_Instance()->Initialize(m_pDevice, m_pContext, TEXT("../../Tools/Bin/DataFiles/Effect"));
+	if(FAILED(CEffect_Manager::Get_Instance()->Initialize(m_pDevice, m_pContext, TEXT("../../Tools/Bin/DataFiles/Effect"))))
+		return E_FAIL;
 
 	lstrcpy(m_szLoadingText, TEXT("텍스쳐를 로딩중입니다."));
 
@@ -312,6 +309,12 @@ HRESULT CLoader::Ready_Resources_For_GamePlayLevel()
 		CVIBuffer_Cube::Create(m_pDevice, m_pContext))))
 		return E_FAIL;
 
+	/* For. Prototype_Component_VIBuffer_Rect */
+	if (FAILED(m_pGameInstance->Add_Prototype(LEVEL_GAMEPLAY, TEXT("Prototype_Component_VIBuffer_Rect"),
+		CVIBuffer_Rect::Create(m_pDevice, m_pContext))))
+		return E_FAIL;
+
+
 	lstrcpy(m_szLoadingText, TEXT("네비게이션을(를) 로딩중입니다."));
 	/* For.Prototype_Component_Navigation */
 	if (FAILED(m_pGameInstance->Add_Prototype(LEVEL_GAMEPLAY, TEXT("Prototype_Component_Navigation"),
@@ -339,54 +342,6 @@ HRESULT CLoader::Ready_Resources_For_GamePlayLevel()
 	if (FAILED(m_pGameInstance->Add_Prototype(LEVEL_GAMEPLAY, TEXT("Prototype_Component_Shader_VtxCubeTex"),
 		CShader::Create(m_pDevice, m_pContext, TEXT("../Bin/ShaderFiles/Shader_VtxCubeTex.hlsl"), VTXCUBETEX::Elements, VTXCUBETEX::iNumElements))))
 		return E_FAIL;
-
-	/* For. Prototype_Component_Shader_VtxRectInstance */
-	if (FAILED(m_pGameInstance->Add_Prototype(LEVEL_GAMEPLAY, TEXT("Prototype_Component_Shader_VtxRectInstance"),
-		CShader::Create(m_pDevice, m_pContext, TEXT("../Bin/ShaderFiles/Shader_VtxRectInstance.hlsl"), VTXRECTINSTANCE::Elements, VTXRECTINSTANCE::iNumElements))))
-		return E_FAIL;
-
-	/* For. Prototype_Component_Shader_VtxPointInstance */
-	if (FAILED(m_pGameInstance->Add_Prototype(LEVEL_GAMEPLAY, TEXT("Prototype_Component_Shader_VtxPointInstance"),
-		CShader_NonVTX::Create(m_pDevice, m_pContext, TEXT("../Bin/ShaderFiles/Shader_VtxPointInstance.hlsl")))))
-		return E_FAIL;
-
-#pragma region CS_PARTICLE
-	/* For. Prototype_Component_Shader_Compute_Particle_Spread */
-	if (FAILED(m_pGameInstance->Add_Prototype(LEVEL_GAMEPLAY, TEXT("Prototype_Component_Shader_Compute_Particle_Spread"),
-		CShader_Compute::Create(m_pDevice, m_pContext, TEXT("../Bin/ShaderFiles/Shader_ParticleCompute.hlsl"), "CS_SPREAD_MAIN"))))
-		return E_FAIL;
-
-	/* For. Prototype_Component_Shader_Compute_Particle_Move */
-	if (FAILED(m_pGameInstance->Add_Prototype(LEVEL_GAMEPLAY, TEXT("Prototype_Component_Shader_Compute_Particle_Move"),
-		CShader_Compute::Create(m_pDevice, m_pContext, TEXT("../Bin/ShaderFiles/Shader_ParticleCompute.hlsl"), "CS_MOVE_MAIN"))))
-		return E_FAIL;
-
-	/* For. Prototype_Component_Shader_Compute_Particle_Converge */
-	if (FAILED(m_pGameInstance->Add_Prototype(LEVEL_GAMEPLAY, TEXT("Prototype_Component_Shader_Compute_Particle_Converge"),
-		CShader_Compute::Create(m_pDevice, m_pContext, TEXT("../Bin/ShaderFiles/Shader_ParticleCompute.hlsl"), "CS_CONVERGE_MAIN"))))
-		return E_FAIL;
-
-	/* For. Prototype_Component_Shader_Compute_Particle_Spread_World */
-	if (FAILED(m_pGameInstance->Add_Prototype(LEVEL_GAMEPLAY, TEXT("Prototype_Component_Shader_Compute_Particle_Spread_World"),
-		CShader_Compute::Create(m_pDevice, m_pContext, TEXT("../Bin/ShaderFiles/Shader_ParticleCompute.hlsl"), "CS_SPREAD_WORLD_MAIN"))))
-		return E_FAIL;
-
-	/* For. Prototype_Component_Shader_Compute_Particle_Move_World */
-	if (FAILED(m_pGameInstance->Add_Prototype(LEVEL_GAMEPLAY, TEXT("Prototype_Component_Shader_Compute_Particle_Move_World"),
-		CShader_Compute::Create(m_pDevice, m_pContext, TEXT("../Bin/ShaderFiles/Shader_ParticleCompute.hlsl"), "CS_MOVE_WORLD_MAIN"))))
-		return E_FAIL;
-
-	/* For. Prototype_Component_Shader_Compute_Particle_Converge_World */
-	if (FAILED(m_pGameInstance->Add_Prototype(LEVEL_GAMEPLAY, TEXT("Prototype_Component_Shader_Compute_Particle_Converge_World"),
-		CShader_Compute::Create(m_pDevice, m_pContext, TEXT("../Bin/ShaderFiles/Shader_ParticleCompute.hlsl"), "CS_CONVERGE_WORLD_MAIN"))))
-		return E_FAIL;
-
-	/* For. Prototype_Component_Shader_Compute_Particle_Reset */
-	if (FAILED(m_pGameInstance->Add_Prototype(LEVEL_GAMEPLAY, TEXT("Prototype_Component_Shader_Compute_Particle_Reset"),
-		CShader_Compute::Create(m_pDevice, m_pContext, TEXT("../Bin/ShaderFiles/Shader_ParticleCompute.hlsl"), "CS_RESET_MAIN"))))
-		return E_FAIL;
-#pragma endregion
-
 
 	lstrcpy(m_szLoadingText, TEXT("콜라이더을(를) 로딩중입니다."));
 
@@ -450,22 +405,6 @@ HRESULT CLoader::Ready_Resources_For_GamePlayLevel()
 		CForkLift::Create(m_pDevice, m_pContext))))
 		return E_FAIL;
 
-#pragma region EFFECT
-	/* For. Prototype_GameObject_Effect_Container */
-	if (FAILED(m_pGameInstance->Add_Prototype(TEXT("Prototype_GameObject_Effect_Container"),
-		CEffect_Container::Create(m_pDevice, m_pContext))))
-		return E_FAIL;
-
-	/* For. Prototype_GameObject_Effect_Particle */
-	if (FAILED(m_pGameInstance->Add_Prototype(TEXT("Prototype_GameObject_Effect_Particle"),
-		CParticle_Effect::Create(m_pDevice, m_pContext))))
-		return E_FAIL;
-
-	/* For. Prototype_GameObject_Effect_Texture */
-	if (FAILED(m_pGameInstance->Add_Prototype(TEXT("Prototype_GameObject_Effect_Texture"),
-		CTexture_Effect::Create(m_pDevice, m_pContext))))
-		return E_FAIL;
-#pragma endregion
 
 	m_isFinished_Main = true;
 

@@ -11,6 +11,9 @@ namespace Client
 
 	// 24-11-09 ±Ëº∫øÎ : GameInterface ΩÃ±€≈Ê ¡¢±Ÿ ∏≈≈©∑Œ 
 	#define GET_GAMEINTERFACE	CGameInterface_Controller::Get_Instance()
+
+	#define NONE_TEXT TEXT("None")
+
 }
 
 extern HINSTANCE g_hInst;

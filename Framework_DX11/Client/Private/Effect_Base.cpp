@@ -25,6 +25,7 @@ HRESULT CEffect_Base::Initialize(void* pArg)
         return E_FAIL;
 
     m_pParentMatrix = pDesc->pParentMatrix;
+    m_RenderDesc = pDesc->RenderDesc;
 
     return S_OK;
 }
@@ -50,6 +51,16 @@ void CEffect_Base::Reset()
 {
 }
 
+void CEffect_Base::Set_WorldMatrix()
+{
+    _Matrix ParentMatrix = {};
+    if (m_pParentMatrix == nullptr)
+        ParentMatrix = XMMatrixIdentity();
+    else
+        ParentMatrix = *m_pParentMatrix;
+
+    m_WorldMatrix = m_pTransformCom->Get_WorldMatrix() * ParentMatrix;
+}
 
 HRESULT CEffect_Base::Bind_WorldMatrix(CShader* pShader, const _char* pConstantName)
 {

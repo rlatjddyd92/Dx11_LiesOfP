@@ -3,16 +3,17 @@
 #include "Effect_Base.h"
 
 BEGIN(Engine)
-class CShader;
+class CShader_NonVtx;
 class CVIBuffer_Point_Instance;
 class CTexture;
+class CShader_Compute;
 END
 
 BEGIN(Client)
 class CParticle_Effect final : public CEffect_Base
 {
 public:
-	enum TYPE { TYPE_SPREAD, TYPE_MOVE, TYPE_CONVERGE, TYPE_SPREAD_INDEPENDENT, TYPE_MOVE_INDEPENDENT, TYPE_CONVERGE_INDEPENDENT, TYPE_END };
+	enum TYPE { TYPE_SPREAD, TYPE_MOVE, TYPE_CONVERGE, TYPE_END };
 
 	enum PARTICLE_STATE 
 	{ 
@@ -32,70 +33,46 @@ public:
 
 	typedef struct
 	{
+		// 컴퓨트 셰이더에 전달
 		TYPE		eType = { TYPE_END };
-		_uint		iState = { 0 };
-		_Vec4		vPivot = {};
+		_uint		iComputeState = { 0 };
+		_Vec4		vPivot = { 0.f, 0.f, 0.f, 1.f };
 		_float		fGravity = { 0.f };
-		_Vec4		vMoveDir = {};
+		_Vec4		vMoveDir = { 0.f, -1.f, 0.f, 0.f };
+		_Vec3		vOrbitAxis = { 0.f, 1.f, 0.f };
+		_float		fOrbitAngle = { 90.f };
+		_float		fRandomTimeInterval = { 0.f };
+		_float		fRandomMoveRatio = { 0.f };
+		_float		fAccelSpeed = { 0.f };
+		_float		fAccelLimit = { 0.f };
 
+		// 위치 초기화
+		_Vec3		vPos = {};
+		_Vec3		vRotation = {};
+		_Vec3		vScale = { 1.f, 1.f, 1.f };
+
+		// 렌더 셰이더에 전달
 		_uint		iShaderIndex = { 0 };
-		_uint		iRenderState = { 0 };
-		_uint		iParticleState = { 0 };
-
-		_Vec2		vTexDevide = {};
+		_uint		iGeomState = { 0 };
+		_Vec2		vTexDevide = { 1.f ,1.f };
 		_float		fSpriteSpeed = { 0.f };
-
-		_Vec2		vScaling = {};
-
+		_Vec2		vScaling = { 1.f, 1.f };
 		_float		fStartRotation = { 0.f };
-		_float		fAngle = { 0.f };
+		_float		fRotationPerSecond = { 0.f };
 	}DEFAULT_DESC;
 
 	typedef struct
 	{
-		_Vec3		vOrbitAxis = {};
-		_float		fAngle = { 0.f };
-	}REVOLVE_DESC;
-
-	typedef struct
-	{
-		_float		fTimeInterval = { 0.f };
-		_float		fRandomRatio = { 0.f };
-	}RANDOM_DESC;
-
-	typedef struct
-	{
-		_float		fAccelSpeed = { 0.f };
-		_float		fAccelLimit = { 0.f };
-	}ACCEL_DESC;
-
-	typedef struct
-	{
-		_Vec3		vPos = {};
-		_Vec3		vRotation = {};
-		_Vec3		vScale = {};
-	}TRANSFORM_DESC;
-
-	typedef struct
-	{
-		_tchar		strDiffuseTexturTag[MAX_PATH] = L"";
-		_tchar		strNomralTextureTag[MAX_PATH] = L"";
-		_tchar		strMaskTextureTag[MAX_PATH] = L"";
-	}TEXTURE_DESC;
-
-	typedef struct
-	{
-		DEFAULT_DESC	DefaultDesc = {};
-		REVOLVE_DESC	OrbitDesc = {};
-		RANDOM_DESC		RandomDesc = {};
-		ACCEL_DESC		AccelDesc = {};
-		TRANSFORM_DESC	TransformDesc = {};
-		TEXTURE_DESC	TextureDesc = {};
-	}INIT_DESC;
+		_tchar		szDiffuseTexturTag[MAX_PATH] = L"";
+		_tchar		szMaskTextureTag_1[MAX_PATH] = L"";
+		_tchar		szMaskTextureTag_2[MAX_PATH] = L"";
+		_tchar		szNormalTextureTag[MAX_PATH] = L"";
+	}TEXT_DESC;
 
 	typedef struct : CEffect_Base::EFFECT_BASE_DESC
 	{
-		INIT_DESC		InitDesc = {};
+		DEFAULT_DESC	DefaultDesc = {};
+		TEXT_DESC		TextDesc = {};
 		_wstring		strVIBufferTag = TEXT("");
 	}PARTICLE_EFFECT_DESC;
 
@@ -115,29 +92,21 @@ public:
 public:
 	virtual void Reset() override;
 
-public:
-	void Set_Transform(TRANSFORM_DESC& Desc);
-
 private:
 	class CShader_NonVTX* m_pShaderCom = { nullptr };
 	class CVIBuffer_Point_Instance* m_pVIBufferCom = { nullptr };
-	class CTexture* m_pDiffuseTextureCom = { nullptr };
-	class CTexture* m_pNormalTextureCom = { nullptr };
-	class CTexture* m_pMaskTextureCom = { nullptr };
+	class CTexture* m_pTextureCom[TEXTURE_END] = { nullptr, nullptr, nullptr, nullptr };
 
 	class CShader_Compute* m_pActionCS = { nullptr };
 	class CShader_Compute* m_pResetCS = { nullptr };
 
 private:
 	DEFAULT_DESC m_DefaultDesc = {};
-	REVOLVE_DESC m_OrbitDesc = {};
-	RANDOM_DESC m_RandomDesc = {};
-	ACCEL_DESC m_AccelDesc = {};
+	DEFAULT_DESC m_InitDesc = {};
 
-	PARTICLE_EFFECT_DESC m_SaveDesc = {};
 
 private:
-	HRESULT Ready_Components(PARTICLE_EFFECT_DESC* pDesc);
+	HRESULT Ready_Components(const PARTICLE_EFFECT_DESC& Desc);
 
 public:
 	static CParticle_Effect* Create(ID3D11Device* pDevice, ID3D11DeviceContext* pContext);

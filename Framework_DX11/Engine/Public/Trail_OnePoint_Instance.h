@@ -16,6 +16,7 @@ public:
 	virtual HRESULT Initialize(void* pArg) override;
 
 	_bool Update_Buffer(_fvector vWorldPos, _float fTimeDelta);
+	_bool Spread_Buffer(_fvector vWorldPos, _float fTimeDelta);
 	void Set_LifeTime(_float fTime);
 
 public:

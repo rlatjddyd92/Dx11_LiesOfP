@@ -367,8 +367,15 @@ void CTransform::BillBoard()
 
 	_Vec3		vPosition = Get_State(STATE_POSITION);
 
-	_Vec3		vCameraPos = m_pGameInstance->Find_Camera(m_pGameInstance->Get_CurLevelIndex())->Get_Transform()->Get_State(CTransform::STATE_POSITION);
+	CGameObject* pCamera = m_pGameInstance->Find_Camera(m_pGameInstance->Get_CurLevelIndex());
+	if (nullptr == pCamera)
+		return;
+
+	_Vec3		vCameraPos = pCamera->Get_Transform()->Get_State(CTransform::STATE_POSITION);
 	_Vec3		vLook = vPosition - vCameraPos;
+
+	if (vLook == _Vec3(0.f, 0.f, 0.f))
+		return;
 
 	// Up 벡터와 Look 벡터를 외적하여 Right 벡터를 구함
 	_Vec3		vRight = XMVector3Cross(XMVectorSet(0.f, 1.f, 0.f, 0.f), vLook);

@@ -55,8 +55,7 @@ void CTexture_Effect::Update(_float fTimeDelta)
 
     m_DefaultDesc.fAlpha += fTimeDelta * m_DefaultDesc.fAlphaSpeed;
 
-    m_pTransformCom->Turn(m_pTransformCom->Get_State(CTransform::STATE_LOOK), fTimeDelta * m_DefaultDesc.fRotationSpeed);
-
+    m_pTransformCom->Rotation(m_pTransformCom->Get_State(CTransform::STATE_LOOK), m_fAccumulateTime * XMConvertToRadians(m_DefaultDesc.fRotationSpeed));
     _Vec3 vScale = m_pTransformCom->Get_Scaled();
     vScale += m_DefaultDesc.vScalingSpeed * fTimeDelta;
     m_pTransformCom->Set_Scaled(vScale.x, vScale.y, vScale.z);

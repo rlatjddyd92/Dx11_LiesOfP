@@ -3,7 +3,7 @@
 #include "C:\Users\wnsgh\GitHub\3D\Dx11_LiesOfP\Framework_DX11\Client\private\BackGround.cpp"
 
 
-#include "C:\Users\wnsgh\GitHub\3D\Dx11_LiesOfP\Framework_DX11\Client\Private\Body_Player.cpp"
+#include "C:\Users\wnsgh\GitHub\3D\Dx11_LiesOfP\Framework_DX11\Client\Private\CarcassBigA.cpp"
 
 
 #include "C:\Users\wnsgh\GitHub\3D\Dx11_LiesOfP\Framework_DX11\Client\Private\Effect_Base.cpp"
@@ -24,6 +24,9 @@
 #include "C:\Users\wnsgh\GitHub\3D\Dx11_LiesOfP\Framework_DX11\Client\private\FreeCamera.cpp"
 
 
+#include "C:\Users\wnsgh\GitHub\3D\Dx11_LiesOfP\Framework_DX11\Client\Private\Item_Manager.cpp"
+
+
 #include "C:\Users\wnsgh\GitHub\3D\Dx11_LiesOfP\Framework_DX11\Client\Private\Level_GamePlay.cpp"
 
 
@@ -39,19 +42,49 @@
 #include "C:\Users\wnsgh\GitHub\3D\Dx11_LiesOfP\Framework_DX11\Client\Private\MainApp.cpp"
 
 
+#include "C:\Users\wnsgh\GitHub\3D\Dx11_LiesOfP\Framework_DX11\Client\private\Mesh_Effect.cpp"
+
+
 #include "C:\Users\wnsgh\GitHub\3D\Dx11_LiesOfP\Framework_DX11\Client\Private\Monster.cpp"
 
 
 #include "C:\Users\wnsgh\GitHub\3D\Dx11_LiesOfP\Framework_DX11\Client\Private\Particle_Effect.cpp"
 
 
-#include "C:\Users\wnsgh\GitHub\3D\Dx11_LiesOfP\Framework_DX11\Client\Private\Particle_Snow.cpp"
-
-
 #include "C:\Users\wnsgh\GitHub\3D\Dx11_LiesOfP\Framework_DX11\Client\private\Player.cpp"
 
 
+#include "C:\Users\wnsgh\GitHub\3D\Dx11_LiesOfP\Framework_DX11\Client\Private\Player_Stat_Manager.cpp"
+
+
 #include "C:\Users\wnsgh\GitHub\3D\Dx11_LiesOfP\Framework_DX11\Client\Private\Sky.cpp"
+
+
+#include "C:\Users\wnsgh\GitHub\3D\Dx11_LiesOfP\Framework_DX11\Client\Private\State_CarcassBigA_Attack.cpp"
+
+
+#include "C:\Users\wnsgh\GitHub\3D\Dx11_LiesOfP\Framework_DX11\Client\Private\State_CarcassBigA_Die.cpp"
+
+
+#include "C:\Users\wnsgh\GitHub\3D\Dx11_LiesOfP\Framework_DX11\Client\Private\State_CarcassBigA_Grogy.cpp"
+
+
+#include "C:\Users\wnsgh\GitHub\3D\Dx11_LiesOfP\Framework_DX11\Client\Private\State_CarcassBigA_HitFatal.cpp"
+
+
+#include "C:\Users\wnsgh\GitHub\3D\Dx11_LiesOfP\Framework_DX11\Client\Private\State_CarcassBigA_Idle.cpp"
+
+
+#include "C:\Users\wnsgh\GitHub\3D\Dx11_LiesOfP\Framework_DX11\Client\Private\State_CarcassBigA_Impact.cpp"
+
+
+#include "C:\Users\wnsgh\GitHub\3D\Dx11_LiesOfP\Framework_DX11\Client\Private\State_CarcassBigA_Paralyze.cpp"
+
+
+#include "C:\Users\wnsgh\GitHub\3D\Dx11_LiesOfP\Framework_DX11\Client\Private\State_CarcassBigA_Run.cpp"
+
+
+#include "C:\Users\wnsgh\GitHub\3D\Dx11_LiesOfP\Framework_DX11\Client\Private\State_CarcassBigA_Walk.cpp"
 
 
 #include "C:\Users\wnsgh\GitHub\3D\Dx11_LiesOfP\Framework_DX11\Client\Private\Terrain.cpp"

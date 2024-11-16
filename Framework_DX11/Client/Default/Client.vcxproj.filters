@@ -172,6 +172,9 @@
     <Filter Include="02.GameObjects\05.Effect\Effect_Manager">
       <UniqueIdentifier>{1e476235-e2e7-4f5d-a200-9525d40dfc42}</UniqueIdentifier>
     </Filter>
+    <Filter Include="02.GameObjects\05.Effect\Effect_Base\Mesh_Effect">
+      <UniqueIdentifier>{6950edf6-b86b-4f5f-bcf2-800c147433d6}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Client.h">
@@ -273,7 +276,6 @@
     <ClInclude Include="Interface_Enums.h">
       <Filter>03.GameInterface_Controller\99.GameInterface_Defines</Filter>
     </ClInclude>
-    <ClInclude Include="..\Public\Particle_Snow.h" />
     <ClInclude Include="..\Public\Effect_Container.h">
       <Filter>02.GameObjects\05.Effect\Effect_Container</Filter>
     </ClInclude>
@@ -318,6 +320,9 @@
     </ClInclude>
     <ClInclude Include="..\Public\State_CarcassBigA_Attack.h">
       <Filter>05.Fsm\Monster\CarcassBigA\Attack</Filter>
+    </ClInclude>
+    <ClInclude Include="..\public\Mesh_Effect.h">
+      <Filter>02.GameObjects\05.Effect\Effect_Base\Mesh_Effect</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -393,7 +398,6 @@
     <ClCompile Include="..\Private\Player_Stat_Manager.cpp">
       <Filter>03.GameInterface_Controller\02.Player_Stat_Manager</Filter>
     </ClCompile>
-    <ClCompile Include="..\Private\Particle_Snow.cpp" />
     <ClCompile Include="..\Private\Effect_Container.cpp">
       <Filter>02.GameObjects\05.Effect\Effect_Container</Filter>
     </ClCompile>
@@ -439,6 +443,9 @@
     <ClCompile Include="..\Private\State_CarcassBigA_Attack.cpp">
       <Filter>05.Fsm\Monster\CarcassBigA\Attack</Filter>
     </ClCompile>
+    <ClCompile Include="..\private\Mesh_Effect.cpp">
+      <Filter>02.GameObjects\05.Effect\Effect_Base\Mesh_Effect</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <Image Include="Client.ico">
@@ -477,10 +484,28 @@
     <FxCompile Include="..\Bin\ShaderFiles\Shader_VtxRectInstance.hlsl">
       <Filter>97.ShaderFiles</Filter>
     </FxCompile>
-    <FxCompile Include="..\Bin\ShaderFiles\Shader_Effect_Texture.hlsl">
+    <FxCompile Include="..\Bin\ShaderFiles\Shader_VtxModel_Instance.hlsl">
       <Filter>97.ShaderFiles</Filter>
     </FxCompile>
-    <FxCompile Include="..\Bin\ShaderFiles\Shader_VtxModel_Instance.hlsl">
+    <FxCompile Include="..\Bin\ShaderFiles\Shader_Effect_Mesh.hlsl">
+      <Filter>97.ShaderFiles</Filter>
+    </FxCompile>
+    <FxCompile Include="..\Bin\ShaderFiles\Shader_Trail_MultiPoint_Compute.hlsl">
+      <Filter>97.ShaderFiles</Filter>
+    </FxCompile>
+    <FxCompile Include="..\Bin\ShaderFiles\Shader_TrailHead_PointInstance.hlsl">
+      <Filter>97.ShaderFiles</Filter>
+    </FxCompile>
+    <FxCompile Include="..\Bin\ShaderFiles\Shader_TrailTail_PointInstance.hlsl">
+      <Filter>97.ShaderFiles</Filter>
+    </FxCompile>
+    <FxCompile Include="..\Bin\ShaderFiles\Shader_VtxTrail_OnePoint_Instance.hlsl">
+      <Filter>97.ShaderFiles</Filter>
+    </FxCompile>
+    <FxCompile Include="..\Bin\ShaderFiles\Shader_VtxTrail_TwoPoint_Instance.hlsl">
+      <Filter>97.ShaderFiles</Filter>
+    </FxCompile>
+    <FxCompile Include="..\Bin\ShaderFiles\Shader_Effect_Texture.hlsl">
       <Filter>97.ShaderFiles</Filter>
     </FxCompile>
     <FxCompile Include="..\Bin\ShaderFiles\Shader_ParticleCompute.hlsl">
