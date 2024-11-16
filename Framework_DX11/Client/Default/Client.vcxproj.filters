@@ -289,15 +289,6 @@
     <Filter Include="02.GameObjects\10.ColliderIbject">
       <UniqueIdentifier>{e0ad8f06-a0d8-4d14-8a84-d74eacc4032c}</UniqueIdentifier>
     </Filter>
-    <Filter Include="05.Fsm\Player\OneHand\00.Attack\Rapier\SA1">
-      <UniqueIdentifier>{c45a6618-f69d-43d6-a2f9-edd908511d3c}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="05.Fsm\Player\OneHand\00.Attack\Rapier\NA1">
-      <UniqueIdentifier>{2d32d55d-f91c-470b-abd2-462b897ad152}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="05.Fsm\Player\OneHand\00.Attack\Rapier\NA2">
-      <UniqueIdentifier>{ed048a41-07c1-46ea-8ff3-b3c25282200f}</UniqueIdentifier>
-    </Filter>
     <Filter Include="05.Fsm\Player\OneHand\00.Attack\Rapier\00.FableArts">
       <UniqueIdentifier>{1f5b0ce1-9e6a-4bff-9f5e-183471e7c135}</UniqueIdentifier>
     </Filter>
@@ -366,6 +357,15 @@
     </Filter>
     <Filter Include="05.Fsm\Player\TwoHand\00.Attack\FlameSword\LAttack01">
       <UniqueIdentifier>{c30bff56-87a8-45e5-b8d7-68f00bdaba62}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="05.Fsm\Player\OneHand\00.Attack\Rapier\LAttack00">
+      <UniqueIdentifier>{2d32d55d-f91c-470b-abd2-462b897ad152}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="05.Fsm\Player\OneHand\00.Attack\Rapier\LAttack01">
+      <UniqueIdentifier>{ed048a41-07c1-46ea-8ff3-b3c25282200f}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="05.Fsm\Player\OneHand\00.Attack\Rapier\RAttack00">
+      <UniqueIdentifier>{c45a6618-f69d-43d6-a2f9-edd908511d3c}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -551,13 +551,13 @@
       <Filter>05.Fsm\Player\Common\Hit</Filter>
     </ClInclude>
     <ClInclude Include="..\Public\State_Player_Rapier_RAttack00.h">
-      <Filter>05.Fsm\Player\OneHand\00.Attack\Rapier\SA1</Filter>
+      <Filter>05.Fsm\Player\OneHand\00.Attack\Rapier\RAttack00</Filter>
     </ClInclude>
     <ClInclude Include="..\Public\State_Player_Rapier_LAttack00.h">
-      <Filter>05.Fsm\Player\OneHand\00.Attack\Rapier\NA1</Filter>
+      <Filter>05.Fsm\Player\OneHand\00.Attack\Rapier\LAttack00</Filter>
     </ClInclude>
     <ClInclude Include="..\Public\State_Player_Rapier_LAttack01.h">
-      <Filter>05.Fsm\Player\OneHand\00.Attack\Rapier\NA2</Filter>
+      <Filter>05.Fsm\Player\OneHand\00.Attack\Rapier\LAttack01</Filter>
     </ClInclude>
     <ClInclude Include="..\Public\State_Player_Rapier_Charge.h">
       <Filter>05.Fsm\Player\OneHand\00.Attack\Rapier\02.ChargeAttack</Filter>
@@ -770,13 +770,13 @@
       <Filter>05.Fsm\Player\Common\Hit</Filter>
     </ClCompile>
     <ClCompile Include="..\Private\State_Player_Rapier_RAttack00.cpp">
-      <Filter>05.Fsm\Player\OneHand\00.Attack\Rapier\SA1</Filter>
+      <Filter>05.Fsm\Player\OneHand\00.Attack\Rapier\RAttack00</Filter>
     </ClCompile>
     <ClCompile Include="..\Private\State_Player_Rapier_LAttack00.cpp">
-      <Filter>05.Fsm\Player\OneHand\00.Attack\Rapier\NA1</Filter>
+      <Filter>05.Fsm\Player\OneHand\00.Attack\Rapier\LAttack00</Filter>
     </ClCompile>
     <ClCompile Include="..\Private\State_Player_Rapier_LAttack01.cpp">
-      <Filter>05.Fsm\Player\OneHand\00.Attack\Rapier\NA2</Filter>
+      <Filter>05.Fsm\Player\OneHand\00.Attack\Rapier\LAttack01</Filter>
     </ClCompile>
     <ClCompile Include="..\Private\State_Player_Rapier_Charge.cpp">
       <Filter>05.Fsm\Player\OneHand\00.Attack\Rapier\02.ChargeAttack</Filter>

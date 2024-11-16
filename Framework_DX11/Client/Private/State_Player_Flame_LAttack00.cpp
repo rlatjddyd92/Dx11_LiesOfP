@@ -21,6 +21,8 @@ HRESULT CState_Player_Flame_LAttack00::Initialize(_uint iStateNum, void* pArg)
     m_pResetRootMove = pDesc->pIsResetRootMove;
     m_pTrackPos = pDesc->pPrevTrackPos;
 
+    // 여기 프레임 확인학
+
     m_iChangeFrame = 35;
     m_iStateNum = iStateNum;
 

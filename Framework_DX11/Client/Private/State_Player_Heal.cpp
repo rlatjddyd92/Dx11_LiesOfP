@@ -67,7 +67,12 @@ void CState_Player_Heal::Update(_float fTimeDelta)
 
     if (*m_pIsEndAnim)
     {
-        m_pPlayer->Change_State(CPlayer::OH_IDLE);
+        _uint iWeponType = m_pPlayer->Get_WeaponType();
+
+        if(iWeponType < 2)
+            m_pPlayer->Change_State(CPlayer::OH_IDLE);
+        else
+            m_pPlayer->Change_State(CPlayer::TH_IDLE);
     }
 }
 

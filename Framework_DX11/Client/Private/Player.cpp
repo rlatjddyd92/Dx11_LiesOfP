@@ -108,15 +108,9 @@ void CPlayer::Priority_Update(_float fTimeDelta)
 
 void CPlayer::Update(_float fTimeDelta)
 {
-	if (KEY_TAP(KEY::H))
-	{
-		int a = 0;
-		Change_State(RAPIER_LATTACK0, &a);
-	}
 	m_pFsmCom->Update(fTimeDelta);
 
-
-	m_vCurRootMove = m_pModelCom->Play_Animation(fTimeDelta * 0.2f, &m_bEndAnim, &m_EvKeyList);
+	m_vCurRootMove = m_pModelCom->Play_Animation(fTimeDelta, &m_bEndAnim, &m_EvKeyList);
 
 
 	_vector vPos = m_pTransformCom->Get_State(CTransform::STATE_POSITION);

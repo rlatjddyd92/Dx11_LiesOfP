@@ -82,7 +82,7 @@ void CState_Player_OH_Dash::Select_DashAnimation()
     }
     else
     {
-        if (m_pFsm->Get_PrevState() == CPlayer::OH_WALK)
+        if (m_pFsm->Get_PrevState() == CPlayer::TH_RUN || m_pFsm->Get_PrevState() == CPlayer::TH_SPRINT)
         {
             m_pPlayer->Change_Animation(m_iAnimation_Dash[DASH_F], false);
             return;
