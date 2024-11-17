@@ -50,6 +50,11 @@ void CState_Player_TH_Dash::Update(_float fTimeDelta)
     {
         m_pPlayer->Change_State(CPlayer::TH_IDLE);
     }
+
+    if (End_Check())
+    {
+        m_pPlayer->Change_State(CPlayer::TH_IDLE);
+    }
 }
 
 
@@ -90,6 +95,42 @@ void CState_Player_TH_Dash::Select_DashAnimation()
 
         m_pPlayer->Change_Animation(m_iAnimation_Dash[DASH_B], false);
     }
+
+}
+
+_bool CState_Player_TH_Dash::End_Check()
+{
+    _uint iCurAnim = m_pPlayer->Get_CurrentAnimIndex();
+    _bool bEndCheck{false};
+    if ((m_iAnimation_Dash[DASH_FOCUS_F]) == iCurAnim)
+    {
+        bEndCheck = m_pPlayer->Get_EndAnim(m_iAnimation_Dash[DASH_FOCUS_F]);
+    }
+    else if ((m_iAnimation_Dash[DASH_FOCUS_B]) == iCurAnim)
+    {
+        bEndCheck = m_pPlayer->Get_EndAnim(m_iAnimation_Dash[DASH_FOCUS_B]);
+    }
+    else if ((m_iAnimation_Dash[DASH_FOCUS_L]) == iCurAnim)
+    {
+        bEndCheck = m_pPlayer->Get_EndAnim(m_iAnimation_Dash[DASH_FOCUS_L]);
+    }
+    else if ((m_iAnimation_Dash[DASH_FOCUS_R]) == iCurAnim)
+    {
+        bEndCheck = m_pPlayer->Get_EndAnim(m_iAnimation_Dash[DASH_FOCUS_R]);
+    }
+    else if ((m_iAnimation_Dash[DASH_F]) == iCurAnim)
+    {
+        bEndCheck = m_pPlayer->Get_EndAnim(m_iAnimation_Dash[DASH_F]);
+    }
+    else if ((m_iAnimation_Dash[DASH_B]) == iCurAnim)
+    {
+        bEndCheck = m_pPlayer->Get_EndAnim(m_iAnimation_Dash[DASH_B]);
+    }
+    else
+        //애니메이션 번호와 일치하지 않는?다
+
+
+    return bEndCheck;
 
 }
 

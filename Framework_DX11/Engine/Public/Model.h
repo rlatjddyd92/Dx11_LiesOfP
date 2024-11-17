@@ -66,11 +66,11 @@ public:
 	void Clear_InstanceData() { m_InstanceDatas.clear(); }
 
 public:		//_bool pOut은 메인 애니메이션의 종료를 반환,				
-	_vector		Play_Animation(_float fTimeDelta, _bool* pOut = nullptr, list<OUTPUT_EVKEY>* pEvKeyList = nullptr);
+	_vector		Play_Animation(_float fTimeDelta, list<OUTPUT_EVKEY>* pEvKeyList = nullptr);
 	//플레이 애니메이션 하위
-	void		Update_Animation(_float fTimeDelta, _bool* pOut = nullptr, list<OUTPUT_EVKEY>* pEvKeyList = nullptr);
-	void		Update_Animation_Boundary(_float fTimeDelta, _bool* pOut = nullptr, list<OUTPUT_EVKEY>* pEvKeyList = nullptr);
-	_vector		Finish_Update_Anim(_bool* pOut = nullptr);
+	void		Update_Animation(_float fTimeDelta, list<OUTPUT_EVKEY>* pEvKeyList = nullptr);
+	void		Update_Animation_Boundary(_float fTimeDelta, list<OUTPUT_EVKEY>* pEvKeyList = nullptr);
+	_vector		Finish_Update_Anim();
 
 	_uint		Find_AnimationIndex(const _char* pAnimationmName, _float fSpeedRatio = 1.f);
 	void		SetUp_Animation(_uint iAnimationIndex, _bool isLoop = false);

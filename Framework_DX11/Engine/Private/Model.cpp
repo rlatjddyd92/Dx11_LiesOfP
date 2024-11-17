@@ -9,6 +9,8 @@
 
 CModel::CModel(ID3D11Device * pDevice, ID3D11DeviceContext * pContext)
 	: CComponent { pDevice, pContext }
+	, m_isEnd_Animations	{ nullptr }
+	, m_isEnd_Animations_Boundary { nullptr }
 {
 	m_isCloned = false;
 	m_eComponentType = MODEL;
@@ -30,6 +32,8 @@ CModel::CModel(const CModel & Prototype)
 	, m_isUseBoundary { Prototype.m_isUseBoundary }
 	, m_UFBIndices { Prototype.m_UFBIndices }
 	, m_UseFullVtxIndices{ Prototype.m_UseFullVtxIndices }
+	, m_isEnd_Animations{ nullptr }
+	, m_isEnd_Animations_Boundary{ nullptr }
 {
 	for (auto& pAnimation : m_Animations)
 		Safe_AddRef(pAnimation);
@@ -156,6 +160,11 @@ HRESULT CModel::Initialize_Prototype(TYPE eType, const _char * pModelFilePath, _
 	}
 
 	CloseHandle(hFile);
+
+	for (auto pAnimation : m_Animations)
+	{
+		pAnimation->Find_ChannelWide();
+	}
 
 	return S_OK;
 }
@@ -294,16 +303,8 @@ HRESULT CModel::SetUp_NextAnimation(_uint iNextAnimationIndex, _bool isLoop, _fl
 
 	m_ChangeTrackPosition = 0.0;
 
-	for (_uint i = 0; i < NextChannels.size(); ++i)
-	{
-		KEYFRAME tNextKeyFrame = NextChannels[i]->Find_KeyFrameIndex(&m_KeyFrameIndices[iNextAnimationIndex][i], NextChannels[i]->Get_KeyFrame(iStartFrame).TrackPosition); // 여기로 보간
-		
-		if (m_ChangeTrackPosition < tNextKeyFrame.TrackPosition)
-		{
-			m_ChangeTrackPosition = tNextKeyFrame.TrackPosition;
-			
-		}
-	}
+
+	m_ChangeTrackPosition = m_Animations[m_tChaneAnimDesc.iNextAnimIndex]->Get_WideChannel()->Get_KeyFrame(iStartFrame).TrackPosition;
 
 	m_vRootMoveStack = m_vCurRootMove = _vector{ 0, 0, 0, 1 };
 
@@ -413,7 +414,7 @@ void CModel::Update_Bone()
 
 }
 
-_vector CModel::Play_Animation(_float fTimeDelta, _bool* pOut, list<OUTPUT_EVKEY>* pEvKeyList)
+_vector CModel::Play_Animation(_float fTimeDelta, list<OUTPUT_EVKEY>* pEvKeyList)
 {
 	_bool	bRootCheck{false};
 	if (m_UFBIndices[UFB_ROOT] != 1024)
@@ -427,20 +428,20 @@ _vector CModel::Play_Animation(_float fTimeDelta, _bool* pOut, list<OUTPUT_EVKEY
 	m_isBoneUpdated = false; //뼈 업데이트 함수 호출시에 실제 업데이트 됐는지, 루프 애니메이션이 아니라서 중단됐는지 확인하기위한 불 변수
 
 	//상하체 분리에 영향받지 않는 부분들의 업데이트
-	Update_Animation(fAddTime, pOut, pEvKeyList);
+	Update_Animation(fAddTime, pEvKeyList);
 
 
 	//분리된 부분 업데이트
-	Update_Animation_Boundary(fAddTime, pOut, pEvKeyList);
+	Update_Animation_Boundary(fAddTime, pEvKeyList);
 
 
 	//루트본에 의한 이동값을 루트본에서 제거하고 이동량만큼 바깥으로 배출
-	_vector vRootMove = Finish_Update_Anim(pOut);
+	_vector vRootMove = Finish_Update_Anim();
 	
 	return vRootMove;
 }
 
-void CModel::Update_Animation(_float fTimeDelta, _bool* pOut, list<OUTPUT_EVKEY>* pEvKeyList)
+void CModel::Update_Animation(_float fTimeDelta, list<OUTPUT_EVKEY>* pEvKeyList)
 {
 	if (m_isChangeAni)
 	{
@@ -540,7 +541,7 @@ void CModel::Update_Animation(_float fTimeDelta, _bool* pOut, list<OUTPUT_EVKEY>
 	}
 }
 
-void CModel::Update_Animation_Boundary(_float fTimeDelta, _bool* pOut, list<OUTPUT_EVKEY>* pEvKeyList)
+void CModel::Update_Animation_Boundary(_float fTimeDelta, list<OUTPUT_EVKEY>* pEvKeyList)
 {
 	if (m_isUseBoundary)
 	{
@@ -653,7 +654,7 @@ void CModel::Update_Animation_Boundary(_float fTimeDelta, _bool* pOut, list<OUTP
 	}
 }
 
-_vector CModel::Finish_Update_Anim(_bool* pOut)
+_vector CModel::Finish_Update_Anim()
 {
 	_vector vRootMove{};
 

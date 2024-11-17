@@ -76,7 +76,7 @@ void CState_Player_Rapier_LAttack00::Update(_float fTimeDelta)
                 m_pPlayer->Change_State(CPlayer::RAPIER_RATTACK0);
         }
     }
-    else if (*m_pIsEndAnim)
+    else if (End_Check())
     {
         m_pPlayer->Change_State(CPlayer::OH_IDLE);
     }
@@ -84,6 +84,11 @@ void CState_Player_Rapier_LAttack00::Update(_float fTimeDelta)
 
 void CState_Player_Rapier_LAttack00::End_State()
 {
+}
+
+_bool CState_Player_Rapier_LAttack00::End_Check()
+{
+    return m_pPlayer->Get_EndAnim(m_iAnimation_RapierNA1);
 }
 
 CState_Player_Rapier_LAttack00* CState_Player_Rapier_LAttack00::Create(CFsm* pFsm, CPlayer* pPlayer, _uint iStateNum, void* pArg)

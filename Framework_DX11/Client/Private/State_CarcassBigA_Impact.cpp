@@ -41,6 +41,11 @@ void CState_CarcassBigA_Impact::End_State()
 
 }
 
+_bool CState_CarcassBigA_Impact::End_Check()
+{
+    return _bool();
+}
+
 CState_CarcassBigA_Impact* CState_CarcassBigA_Impact::Create(CFsm* pFsm, CMonster* pMonster, _uint iStateNum, void* pArg)
 {
     CState_CarcassBigA_Impact* pInstance = new CState_CarcassBigA_Impact(pFsm, pMonster);

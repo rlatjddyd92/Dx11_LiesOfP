@@ -35,6 +35,7 @@ private:
     _float* m_pTrackPos = { nullptr };
 
 private:
+    _bool               End_Check();
 
 public:
     static CState_Player_Rapier_LAttack01* Create(class CFsm* pFsm, class CPlayer* pPlayer, _uint iStateNum, void* pArg = nullptr);

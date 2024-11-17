@@ -86,6 +86,19 @@ _int CPawn::Get_Frame()
 	return m_pModelCom->Get_CurrentFrame();
 }
 
+_bool CPawn::Get_EndAnim(_int iAnimIndex, _bool bIsBoundary)
+{
+	if (bIsBoundary)
+	{
+		return m_pModelCom->Get_IsEndAnimArray_Boundary()[iAnimIndex];
+	}
+	else
+	{
+		return m_pModelCom->Get_IsEndAnimArray()[iAnimIndex];
+	}
+
+}
+
 HRESULT CPawn::Bind_WorldViewProj()
 {
 	if (FAILED(m_pTransformCom->Bind_ShaderResource(m_pShaderCom, "g_WorldMatrix")))
