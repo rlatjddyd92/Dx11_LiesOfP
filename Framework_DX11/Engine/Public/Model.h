@@ -46,7 +46,11 @@ public:
 
 	void					Set_AnimPlay(_bool bCtrAnim) { m_bPlayAnimCtr = bCtrAnim; }
 
-	_bool					Get_IsUseBoundary() { return m_isUseBoundary; }
+	_bool					Get_IsUseBoundary()				{ return m_isUseBoundary; }
+
+	_bool*					Get_IsEndAnimArray()			{ return m_isEnd_Animations; }
+	_bool*					Get_IsEndAnimArray_Boundary()	{ return m_isEnd_Animations_Boundary; }
+
 
 	HRESULT					Update_Boundary();
 

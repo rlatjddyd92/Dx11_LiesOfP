@@ -311,15 +311,16 @@ HRESULT CModel::SetUp_NextAnimation(_uint iNextAnimationIndex, _bool isLoop, _fl
 	m_tChaneAnimDesc.fChangeTime = 0.f;
 
 
-	//if (bEitherBoundary)
-	//{
-	//	if (m_iCurrentAnimIndex == m_iCurrentAnimIndex_Boundary)
-	//	{
-	//		SetUp_NextAnimation_Boundary(iNextAnimationIndex, isLoop, fChangeDuration, iStartFrame);
-	//	}
-	//}
+	if (bEitherBoundary)
+	{
+		if (m_iCurrentAnimIndex == m_iCurrentAnimIndex_Boundary)
+		{
+			SetUp_NextAnimation_Boundary(iNextAnimationIndex, isLoop, fChangeDuration, iStartFrame);
+		}
+	}
 
 	m_isEnd_Animations[iNextAnimationIndex] = false;
+	m_isEnd_Animations[m_iCurrentAnimIndex] = false;
 	m_isLoop = isLoop;
 	m_isChangeAni = true;
 
@@ -371,6 +372,7 @@ HRESULT CModel::SetUp_NextAnimation_Boundary(_uint iNextAnimationIndex, _bool is
 	
 
 	m_isEnd_Animations_Boundary[iNextAnimationIndex] = false;
+	m_isEnd_Animations_Boundary[m_iCurrentAnimIndex_Boundary] = false;
 	m_isLoop_Boundary = isLoop;
 	m_isChangeAni_Boundary = true;
 
@@ -671,36 +673,6 @@ _vector CModel::Finish_Update_Anim(_bool* pOut)
 	{
 		vRootMove = m_vCurRootMove - m_vRootMoveStack;
 		m_vRootMoveStack = m_vCurRootMove;
-	}
-
-
-
-	if (m_isEnd_Animations[m_iCurrentAnimIndex] == true)//
-	{
-
-		vRootMove = m_vRootMoveStack = m_vCurRootMove = _vector{ 0, 0, 0, 1 };
-
-		if (nullptr != pOut)
-			*pOut = true;
-
-		m_isEnd_Animations[m_iCurrentAnimIndex] = false;
-	}
-	else
-	{
-		if (nullptr != pOut)
-			*pOut = false;
-	}
-
-	if (!m_isLoop_Boundary)
-	{
-		if ((m_isEnd_Animations_Boundary[m_iCurrentAnimIndex_Boundary] == true))
-		{
-			if (m_iCurrentAnimIndex != m_iCurrentAnimIndex_Boundary)
-			{
-				//SetUp_NextAnimation_Boundary(m_iCurrentAnimIndex, m_isLoop);
-				m_isEnd_Animations_Boundary[m_iCurrentAnimIndex_Boundary] = false;
-			}
-		}
 	}
 
 
