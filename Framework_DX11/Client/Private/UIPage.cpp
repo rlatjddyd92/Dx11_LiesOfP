@@ -174,4 +174,9 @@ void CUIPage::Free()
 		Safe_Delete(iter);
 
 	m_Ctrllist.clear();
+
+	for (auto& iter : m_vec_Group_Ctrl)
+		Safe_Delete(iter);
+
+	m_vec_Group_Ctrl.clear();
 }

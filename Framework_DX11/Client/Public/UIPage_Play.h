@@ -141,6 +141,7 @@ public:
 private:
 	void LU_Gauge_Update(_float fTimeDelta);
 	void LD_Potion_Tool_Update(_float fTimeDelta);
+	void LD_Bag_Update(_float fTimeDelta);
 	void LD_Arm_Update(_float fTimeDelta);
 	void RU_Coin_Update(_float fTimeDelta);
 	void RD_Weapon_Update(_float fTimeDelta);
@@ -149,58 +150,6 @@ private:
 	
 
 private:
-	
-
-	// 아래 있는 내용은 Page에 있는 UG_CTRL 리스트의 내용을 얕은 복사하여 사용한다 
-	// 따라서 아래 내용 이외에 절대 추가 복사를 진행하면 안되며 릴리즈 시에도 따로 Delete 처리하지 않는다 
-
-	// 체력바 조정
-	UG_CTRL* m_HP_Gauge_Frame = { nullptr };
-	UG_CTRL* m_HP_Gauge_Fill = { nullptr };
-
-	// 스태미나 조정
-	UG_CTRL* m_Stamina_Gauge_Frame = { nullptr };
-	UG_CTRL* m_Stamina_Gauge_Fill = { nullptr };
-
-	// 특수 스킬 바 조정
-	vector<UG_CTRL*> m_vecSpecial_Gauge_Frame;
-	vector<UG_CTRL*> m_vecSpecial_Gauge_Fill;
-
-	// 좌하단 포션/도구 조정
-	UG_CTRL* m_Potion_Tex = { nullptr };
-	UG_CTRL* m_Potion_Tool_RKey = { nullptr };
-	UG_CTRL* m_Potion_Queue = { nullptr };
-	UG_CTRL* m_Potion_Gauge = { nullptr };
-	UG_CTRL* m_Potion_Count = { nullptr };
-	UG_CTRL* m_Tool_Tex = { nullptr };
-	UG_CTRL* m_Tool_Queue = { nullptr };
-	UG_CTRL* m_Tool_Count = { nullptr };
-	UG_CTRL* m_Portion_Tool_Select = { nullptr };
-
-	// 좌하단 암 
-	UG_CTRL* m_Arm_Tex = { nullptr };
-	UG_CTRL* m_Arm_Name = { nullptr };
-	UG_CTRL* m_Arm_Frame = { nullptr };
-	UG_CTRL* m_Arm_Fill = { nullptr };
-
-	// 우상단 코인 
-	UG_CTRL* m_Coin_Count = { nullptr };
-
-	// 우하단 무기 
-	UG_CTRL* m_Weapon_Durable_Frame = { nullptr };
-	UG_CTRL* m_Weapon_Durable_Fill = { nullptr };
-
-	UG_CTRL* m_Weapon_Normal_Back = { nullptr };
-	UG_CTRL* m_Weapon_Normal_Tex = { nullptr };
-	UG_CTRL* m_Weapon_Special_Back = { nullptr };
-	UG_CTRL* m_Weapon_Special_Tex = { nullptr };
-
-	UG_CTRL* m_Weapon_Equip_Num = { nullptr };
-
-	vector<UG_CTRL*> m_vecWeapon_Special_Frame;
-	vector<UG_CTRL*> m_vecWeapon_Special_Fill;
-
-	vector<UG_CTRL*> m_vecPage_Play_Ctrl;
 
 
 public:

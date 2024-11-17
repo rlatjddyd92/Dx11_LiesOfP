@@ -212,13 +212,27 @@ void CUIManager::UIControl_Test(_float fTimeDelta)
 
 	if (KEY_TAP(KEY::T))
 	{
-		m_pUIPage_Play->Move_SelectCtrl(true);
+		m_pTestData->bIsPotion = true;
 	}
 
 	if (KEY_TAP(KEY::G))
 	{
-		m_pUIPage_Play->Move_SelectCtrl(false);
+		m_pTestData->bIsPotion = false;
 	}
+
+	if (KEY_TAP(KEY::R))
+	{
+		if (!m_pTestData->bIsPotion)
+			m_pTestData->Add_Durable(100.f * fTimeDelta);
+	}
+
+	if (KEY_TAP(KEY::TAPKEY))
+	{
+		m_pTestData->Swich_Weapon();
+	}
+
+
+
 
 
 	// 폰트 테스트
@@ -412,9 +426,8 @@ void CUIManager::UIControl_Loading(_float fTimeDelta)
 
 void CUIManager::UIControl_Play(_float fTimeDelta)
 {
-	/*m_pTestData->fHP_Now = GET_GAMEINTERFACE->Get_NowStat_Normal(STAT_NORMAL::STAT_GAUGE_HP);
-	m_pUIPage_Play->SetRatio_HPBarMax(m_pTestData->fMax_HP_Now / m_pTestData->fMax_HP_Limit);
-	m_pUIPage_Play->SetRatio_HPBarFill(m_pTestData->fHP_Now / m_pTestData->fMax_HP_Limit);*/
+	
+
 }
 
 void CUIManager::UIControl_Inven(_float fTimeDelta)

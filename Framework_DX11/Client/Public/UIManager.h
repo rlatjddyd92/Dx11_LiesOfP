@@ -29,6 +29,64 @@ public:
 		_bool bFocus = true;
 		_bool bSpecial_Attack = true;
 
+
+		// 메인 플레이 화면 테스트용
+		// 아래 내용은 추후 논의를 통해 플레이어 클래스와 나눌 것 
+
+		_int Next_Potion() {++iSelect_Potion; if (iSelect_Potion >= 3) iSelect_Potion = 0; return iSelect_Potion;}
+		_int Next_Tool() { ++iSelect_Tool; if (iSelect_Tool >= 3) iSelect_Tool = 0; return iSelect_Tool; }
+
+		_float Add_Arm_Max(_float fAdd) { fArm_Max += fAdd; fArm_Max = min(fArm_Max, fArm_Max_Limit); return fArm_Max;}
+		_float Add_Arm(_float fAdd) { fArm_Now += fAdd; fArm_Now = min(fArm_Now, fArm_Max); return fArm_Now;}
+		_float Add_Durable(_float fAdd) { fDurable_Now += fAdd; fDurable_Now = min(fDurable_Now, fDurable_Max); return fDurable_Now;}
+
+		_int Add_Coin(_int iAdd) { iCoin += iAdd; if (iCoin < 0) iCoin = 0; return iCoin;}
+
+		void Swich_Weapon() 
+		{
+			if (bIsFirstWeapon) bIsFirstWeapon = false;
+			else bIsFirstWeapon = true;
+
+			if (bIsFirstWeapon)
+			{
+				bCell_Frame[0] = bCell_Frame[2] = true;
+				bCell_Frame[3] = bCell_Frame[5] = false;
+			}
+			else 
+			{
+				bCell_Frame[0] = bCell_Frame[2] = false;
+				bCell_Frame[3] = bCell_Frame[5] = true;
+			}
+
+			for (_int i = 0; i < 6; ++i)
+				bCell_Fill[i] = true;
+		}
+
+		void Use_Blade() { bCell_Fill[0] = bCell_Fill[1] = bCell_Fill[2] = false; }
+		void Use_Handle() { bCell_Fill[3] = bCell_Fill[4] = bCell_Fill[5] = false; }
+
+		_int iSelect_Potion = 0;
+		_int iPotion[3] = { 11,22,33 };
+
+		_int iSelect_Tool = 0;
+		_int iTool[3] = { 44,55,66 };
+
+		_bool bIsPotion = true;
+
+		_float fArm_Max_Limit = 1000.f;
+		_float fArm_Max = 1000.f;
+		_float fArm_Now = 500.f;
+
+		_int iCoin = 12345;
+
+		_float fDurable_Max = 1000.f;
+		_float fDurable_Now = 500.f;
+
+		_bool bIsFirstWeapon = true;
+
+		_bool bCell_Frame[6] = { true,true ,true ,false,true ,false };
+		_bool bCell_Fill[6] = { true,true ,true ,true,true ,true };
+
 	}TDATA;
 
 
