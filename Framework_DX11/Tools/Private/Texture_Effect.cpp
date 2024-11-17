@@ -70,7 +70,13 @@ void CTexture_Effect::Late_Update(_float fTimeDelta)
     m_fAccumulateTime += fTimeDelta;
 
     if (m_DefaultDesc.fDuration < m_fAccumulateTime)
-        m_isActive = false;
+    {
+        if (true == m_DefaultDesc.bLoop)
+            Reset();
+        else
+            m_isActive = false;
+
+    }
 
     if(CRenderer::RG_EFFECT == m_RenderDesc.iRenderGroup)
         m_pGameInstance->Add_RenderObject(CRenderer::RG_NONLIGHT, this);
@@ -112,7 +118,6 @@ HRESULT CTexture_Effect::Render()
             return E_FAIL;
     }
 
-
     if (FAILED(m_pShaderCom->Bind_RawValue("g_vColor", &m_DefaultDesc.vColor, sizeof m_DefaultDesc.vColor)))
         return E_FAIL;
     if (FAILED(m_pShaderCom->Bind_RawValue("g_vTexDivide", &m_DefaultDesc.vDivide, sizeof m_DefaultDesc.vDivide)))
@@ -137,6 +142,7 @@ HRESULT CTexture_Effect::Render()
 void CTexture_Effect::Set_Desc(const TEXTURE_EFFECT_DESC& desc)
 {
     m_DefaultDesc = desc.DefaultDesc;
+    m_RenderDesc = desc.RenderDesc;
     m_InitDesc.DefaultDesc = desc.DefaultDesc;
 
     m_pTransformCom->Set_State(CTransform::STATE_POSITION, m_DefaultDesc.vPos);

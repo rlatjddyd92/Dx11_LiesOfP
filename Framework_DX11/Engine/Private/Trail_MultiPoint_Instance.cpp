@@ -144,7 +144,11 @@ _bool CTrail_MultiPoint_Instance::DispatchCS(CShader_Compute* pComputeShader, co
         m_bFirst = true;
     }
     else
+    {
         pMovement->fPadding = { 1.f };
+    }
+
+    
 
     m_pContext->Unmap(m_pMoveBuffer, 0);
 
@@ -166,12 +170,20 @@ _bool CTrail_MultiPoint_Instance::DispatchCS(CShader_Compute* pComputeShader, co
     // Compute Shader ÇØÁ¦
     m_pContext->CSSetShader(nullptr, nullptr, 0);
 
-    return S_OK;
+    if (false == (STATE_LOOP & MovementData.iState))
+    {
+        m_fTime += MovementData.fTimeDelta;
+        if (m_vTail_LifeTime.y < m_fTime)
+            return true;
+    }
+
+    return false;
 }
 
 void CTrail_MultiPoint_Instance::Reset()
 {
-    
+    m_bFirst = false;
+    m_fTime = 0.f;
 }
 
 HRESULT CTrail_MultiPoint_Instance::Ready_Buffers(const TRAIL_MP_INSTANCE_DESC& Desc)

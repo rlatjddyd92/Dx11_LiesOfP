@@ -28,7 +28,7 @@ public:
 		_Vec3		vScalingSpeed = {};
 		_float		fAlpha = { 1.f };
 		_float		fAlphaSpeed = { 0.f };
-
+		_bool		bLoop = { false };
 	}DEFAULT_DESC;
 
 	typedef struct
@@ -69,6 +69,10 @@ public:
 		return &m_InitDesc;
 	}
 
+	virtual void Set_Loop(_bool bLoop) override {
+		m_DefaultDesc.bLoop = bLoop;
+	}
+
 public:
 	virtual void Reset();
 	virtual HRESULT Save(_wstring strFilePath);
@@ -80,11 +84,11 @@ private:
 
 private:
 	DEFAULT_DESC m_DefaultDesc = {};
+	MESH_EFFECT_DESC m_InitDesc = {};
 
 	_Vec2	m_vCurrentTileMove = {};
 	_float	m_fAccumulateTime = { 0.f };
 
-	MESH_EFFECT_DESC m_InitDesc = {};
 private:
 	HRESULT Ready_Components(const TEXT_DESC& Desc);
 

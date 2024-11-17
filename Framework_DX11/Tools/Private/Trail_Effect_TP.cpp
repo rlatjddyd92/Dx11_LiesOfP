@@ -27,11 +27,9 @@ HRESULT CTrail_Effect_TP::Initialize(void* pArg)
 	if (FAILED(Ready_Components(*pDesc)))
 		return E_FAIL;
 
-	m_ActionDesc = pDesc->InitDesc.ActionDesc;
-	m_SaveDesc = *pDesc;
-
-	m_vTestTop = _float3(5.f, 0.f, 0.f);
-	m_vTestBottom = _float3(1.f, 0.f, 0.f);
+	m_DefaultDesc = pDesc->DefaultDesc;
+	m_InitDesc = *pDesc;
+	m_eEffectType = TYPE_TRAIL_TP;
 
 	return S_OK;
 }
@@ -42,24 +40,29 @@ void CTrail_Effect_TP::Priority_Update(_float fTimeDelta)
 
 void CTrail_Effect_TP::Update(_float fTimeDelta)
 {
-	_vector vTopDir = XMLoadFloat3(&m_vTestTop) - XMVectorSet(0.f, 0.f, 0.f, 1.f);
-	_matrix RotationMatrix = XMMatrixRotationAxis(XMVectorSet(0.f, 1.f, 0.f, 0.f), 15.f * fTimeDelta);
-	vTopDir = XMVector3TransformNormal(vTopDir, RotationMatrix);
+	__super::Set_WorldMatrix();
 
-	XMStoreFloat3(&m_vTestTop, vTopDir);
+	if(true== m_DefaultDesc.bLoop)
+	{
+		m_pVIBufferCom->Update_Buffer(
+			XMLoadFloat4x4(&m_WorldMatrix).r[3] + XMLoadFloat3(&m_DefaultDesc.vTopOffset),
+			XMLoadFloat4x4(&m_WorldMatrix).r[3] + XMLoadFloat3(&m_DefaultDesc.vBottomOffset),
+			fTimeDelta);
+	}
 
-	_vector vBottomDir = XMLoadFloat3(&m_vTestBottom) - XMVectorSet(0.f, 0.f, 0.f, 1.f);
-	RotationMatrix = XMMatrixRotationAxis(XMVectorSet(0.f, 1.f, 0.f, 0.f), 15.f * fTimeDelta);
-	vBottomDir = XMVector3TransformNormal(vBottomDir, RotationMatrix);
-
-	XMStoreFloat3(&m_vTestBottom, vBottomDir);
-
-	m_pVIBufferCom->Update_Buffer(XMLoadFloat3(&m_vTestTop), XMLoadFloat3(&m_vTestBottom), fTimeDelta);
+	if (false == m_DefaultDesc.bLoop)
+		m_fAlpha += fTimeDelta * m_DefaultDesc.fAlphaSpeed;
 }
 
 void CTrail_Effect_TP::Late_Update(_float fTimeDelta)
 {
-	m_pGameInstance->Add_RenderObject(CRenderer::RG_DISTORTION, this);
+	if (false == m_DefaultDesc.bLoop && 1.f < m_fAlpha)
+		m_isActive = false;
+
+	if (CRenderer::RG_EFFECT == m_RenderDesc.iRenderGroup)
+		m_pGameInstance->Add_RenderObject(CRenderer::RG_NONLIGHT, this);
+	else
+		m_pGameInstance->Add_RenderObject((CRenderer::RENDERGROUP)m_RenderDesc.iRenderGroup, this);
 }
 
 HRESULT CTrail_Effect_TP::Render()
@@ -71,21 +74,39 @@ HRESULT CTrail_Effect_TP::Render()
 	if (FAILED(m_pShaderCom->Bind_Matrix("g_ProjMatrix", &m_pGameInstance->Get_Transform(CPipeLine::D3DTS_PROJ))))
 		return E_FAIL;
 
-	if (FAILED(m_pDiffuseTextureCom->Bind_ShadeResource(m_pShaderCom, "g_DiffuseTexture", 0)))
-		return E_FAIL;
-	if (FAILED(m_pMaskTextureCom_1->Bind_ShadeResource(m_pShaderCom, "g_MaskTexture_1", 0)))
-		return E_FAIL;
-	if (FAILED(m_pMaskTextureCom_2->Bind_ShadeResource(m_pShaderCom, "g_MaskTexture_2", 0)))
+	if (nullptr != m_pTextureCom[TEXTURE_DIFFUSE])
+	{
+		if (FAILED(m_pTextureCom[TEXTURE_DIFFUSE]->Bind_ShadeResource(m_pShaderCom, "g_DiffuseTexture", 0)))
+			return E_FAIL;
+	}
+
+	if (nullptr != m_pTextureCom[TEXTURE_MASK_1])
+	{
+		if (FAILED(m_pTextureCom[TEXTURE_MASK_1]->Bind_ShadeResource(m_pShaderCom, "g_MaskTexture_1", 0)))
+			return E_FAIL;
+	}
+
+	if (nullptr != m_pTextureCom[TEXTURE_MASK_2])
+	{
+		if (FAILED(m_pTextureCom[TEXTURE_MASK_2]->Bind_ShadeResource(m_pShaderCom, "g_MaskTexture_2", 0)))
+			return E_FAIL;
+	}
+
+	if (nullptr != m_pTextureCom[TEXTURE_NORMAL])
+	{
+		if (FAILED(m_pTextureCom[TEXTURE_NORMAL]->Bind_ShadeResource(m_pShaderCom, "g_NormalTexture", 0)))
+			return E_FAIL;
+	}
+
+	if (FAILED(m_pShaderCom->Bind_RawValue("g_iNumInstance", &m_DefaultDesc.iNumInstance, sizeof(m_DefaultDesc.iNumInstance))))
 		return E_FAIL;
 
-	_int iNumInstance = { 15 };
-	
-	if (FAILED(m_pShaderCom->Bind_RawValue("g_iNumInstance", &iNumInstance, sizeof(iNumInstance))))
+	if (FAILED(m_pShaderCom->Bind_RawValue("g_vColor", &m_DefaultDesc.vColor, sizeof(m_DefaultDesc.vColor))))
+		return E_FAIL;
+	if (FAILED(m_pShaderCom->Bind_RawValue("g_fRatio", &m_fAlpha, sizeof(m_fAlpha))))
 		return E_FAIL;
 
-	/*if (FAILED(m_pShaderCom->Begin(m_ActionDesc.iShaderIndex)))
-		return E_FAIL;*/
-	if (FAILED(m_pShaderCom->Begin(0)))
+	if (FAILED(m_pShaderCom->Begin(m_DefaultDesc.iShaderIndex)))
 		return E_FAIL;
 	if (FAILED(m_pVIBufferCom->Bind_Buffers()))
 		return E_FAIL;
@@ -93,13 +114,12 @@ HRESULT CTrail_Effect_TP::Render()
 		return E_FAIL;
 
 	return S_OK;
-
-	return S_OK;
 }
 
 void CTrail_Effect_TP::Reset()
 {
 	m_pVIBufferCom->Reset();
+	m_DefaultDesc = m_InitDesc.DefaultDesc;
 }
 
 HRESULT CTrail_Effect_TP::Save(_wstring strFilePath)
@@ -107,19 +127,11 @@ HRESULT CTrail_Effect_TP::Save(_wstring strFilePath)
 	return S_OK;
 }
 
-void CTrail_Effect_TP::Set_Desc(const ACTION_DESC& desc)
+void CTrail_Effect_TP::Set_Desc(const TRAIL_TP_DESC& desc)
 {
-	m_ActionDesc = desc;
-	m_SaveDesc.InitDesc.ActionDesc = desc;
-}
-
-CTrail_Effect_TP::TRAIL_TP_DESC CTrail_Effect_TP::Get_Desc()
-{
-	TRAIL_TP_DESC desc = {};
-	desc.BufferDesc = m_SaveDesc.BufferDesc;
-	desc.InitDesc.ActionDesc = m_ActionDesc;
-	return desc;
-
+	m_DefaultDesc = desc.DefaultDesc;
+	m_RenderDesc = desc.RenderDesc;
+	m_InitDesc.DefaultDesc = desc.DefaultDesc;
 }
 
 HRESULT CTrail_Effect_TP::Ready_Components(const TRAIL_TP_DESC& Desc)
@@ -129,40 +141,39 @@ HRESULT CTrail_Effect_TP::Ready_Components(const TRAIL_TP_DESC& Desc)
 		TEXT("Com_Shader"), reinterpret_cast<CComponent**>(&m_pShaderCom))))
 		return E_FAIL;
 
-	Desc.BufferDesc.iNumInstance;
-	Desc.BufferDesc.vLifeTime;
-
 	CVIBuffer_Instancing::INSTANCE_DESC InstDesc = {};
 
-	//InstDesc.iNumInstance = Desc.BufferDesc.iNumInstance;
-	//InstDesc.vLifeTime = Desc.BufferDesc.vLifeTime;
-	InstDesc.iNumInstance = 15;
-	InstDesc.vLifeTime = _float2(1.f, 1.f);
-
+	InstDesc.iNumInstance = Desc.BufferDesc.iNumInstance;
+	InstDesc.vLifeTime = Desc.BufferDesc.vLifeTime;
+	
 	/* FOR.Com_VIBuffer */
 	if (FAILED(__super::Add_Component(LEVEL_TOOL, TEXT("Prototype_Component_VIBuffer_Trail_TwoPoint_Instance"),
 		TEXT("Com_VIBuffer"), reinterpret_cast<CComponent**>(&m_pVIBufferCom), &InstDesc)))
 		return E_FAIL;
 	
+	if (0 != wcscmp(NONE_TEXT, Desc.TextDesc.szDiffuseTexturTag))
+	{
+		if (FAILED(__super::Add_Component(LEVEL_TOOL, Desc.TextDesc.szDiffuseTexturTag, TEXT("Com_DiffuseTexture"), reinterpret_cast<CComponent**>(&m_pTextureCom[TEXTURE_DIFFUSE]))))
+			return E_FAIL;
+	}
 
-	//Desc.InitDesc.TextureDesc.strDiffuseTextureTag;
-	// Prototype_Component_Texture_Thunder
-	// Prototype_Component_Texture_Test_Trail
-	// Prototype_Component_Texture_Tile_Spark
-	/* FOR.Com_DiffuseTexture */
-	if (FAILED(__super::Add_Component(LEVEL_TOOL, TEXT("Prototype_Component_Texture_Test_Trail"),
-		TEXT("Com_DiffuseTexture"), reinterpret_cast<CComponent**>(&m_pDiffuseTextureCom))))
-		return E_FAIL;
-	
-	/* FOR.Com_MaskTexture_1 */
-	if (FAILED(__super::Add_Component(LEVEL_TOOL, TEXT("Prototype_Component_Texture_DefaultBlack"),
-		TEXT("Com_MaskTexture_1"), reinterpret_cast<CComponent**>(&m_pMaskTextureCom_1))))
-		return E_FAIL;
+	if (0 != wcscmp(NONE_TEXT, Desc.TextDesc.szNormalTextureTag))
+	{
+		if (FAILED(__super::Add_Component(LEVEL_TOOL, Desc.TextDesc.szNormalTextureTag, TEXT("Com_NormalTexture"), reinterpret_cast<CComponent**>(&m_pTextureCom[TEXTURE_NORMAL]))))
+			return E_FAIL;
+	}
 
-	/* FOR.Com_MaskTexture_2 */
-	if (FAILED(__super::Add_Component(LEVEL_TOOL, TEXT("Prototype_Component_Texture_DefaultBlack"),
-		TEXT("Com_MaskTexture_2"), reinterpret_cast<CComponent**>(&m_pMaskTextureCom_2))))
-		return E_FAIL;
+	if (0 != wcscmp(NONE_TEXT, Desc.TextDesc.szMaskTextureTag_1))
+	{
+		if (FAILED(__super::Add_Component(LEVEL_TOOL, Desc.TextDesc.szMaskTextureTag_1, TEXT("Com_MaskTexture_1"), reinterpret_cast<CComponent**>(&m_pTextureCom[TEXTURE_MASK_1]))))
+			return E_FAIL;
+	}
+
+	if (0 != wcscmp(NONE_TEXT, Desc.TextDesc.szMaskTextureTag_2))
+	{
+		if (FAILED(__super::Add_Component(LEVEL_TOOL, Desc.TextDesc.szMaskTextureTag_2, TEXT("Com_MaskTexture_2"), reinterpret_cast<CComponent**>(&m_pTextureCom[TEXTURE_MASK_2]))))
+			return E_FAIL;
+	}
 
 	return S_OK;
 }
@@ -197,10 +208,12 @@ void CTrail_Effect_TP::Free()
 {
 	__super::Free();
 
-	Safe_Release(m_pDiffuseTextureCom);
-	Safe_Release(m_pMaskTextureCom_1);
-	Safe_Release(m_pMaskTextureCom_2);
-
 	Safe_Release(m_pShaderCom);
 	Safe_Release(m_pVIBufferCom);
+
+	for (size_t i = 0; i < TEXTURE_END; ++i)
+	{
+		Safe_Release(m_pTextureCom[i]);
+	}
+
 }

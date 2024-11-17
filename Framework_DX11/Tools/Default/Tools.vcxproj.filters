@@ -121,6 +121,30 @@
     <Filter Include="02.GameObjects\04.Effect\Effect_Base\Trail_Effect\Multi_Point">
       <UniqueIdentifier>{bd043202-5d95-47a8-9766-4ac80fbb99f8}</UniqueIdentifier>
     </Filter>
+    <Filter Include="97.ShaderFiles\Effect">
+      <UniqueIdentifier>{f81dbfcd-ecda-403c-9324-638c5f34b230}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="97.ShaderFiles\Effect\Particle">
+      <UniqueIdentifier>{5391e62c-4c62-49aa-b4f6-b1e5eba67469}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="97.ShaderFiles\Effect\Mesh">
+      <UniqueIdentifier>{a8a3c4e3-738b-4554-9691-605ee10ff82d}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="97.ShaderFiles\Effect\Texture">
+      <UniqueIdentifier>{185159c7-4f13-4d8a-b0d0-3c386b5aa303}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="97.ShaderFiles\Effect\Trail">
+      <UniqueIdentifier>{7f41a8c2-7ff8-4847-b7e8-64d8040664a9}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="97.ShaderFiles\Effect\Trail\MP">
+      <UniqueIdentifier>{65cce95c-245d-4aae-ad99-a4db809ac358}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="97.ShaderFiles\Effect\Trail\OP">
+      <UniqueIdentifier>{b537c078-cbe2-4d25-8aa2-3ca25fd3f2e6}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="97.ShaderFiles\Effect\Trail\TP">
+      <UniqueIdentifier>{fd7f53da-4e14-47c6-9694-6fcc28cf58a9}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="framework.h">
@@ -472,34 +496,34 @@
     <FxCompile Include="..\Bin\ShaderFiles\Shader_VtxRectInstance.hlsl">
       <Filter>97.ShaderFiles</Filter>
     </FxCompile>
-    <FxCompile Include="..\Bin\ShaderFiles\Shader_ParticleCompute.hlsl">
-      <Filter>97.ShaderFiles</Filter>
-    </FxCompile>
-    <FxCompile Include="..\Bin\ShaderFiles\Shader_Effect_Texture.hlsl">
-      <Filter>97.ShaderFiles</Filter>
-    </FxCompile>
-    <FxCompile Include="..\Bin\ShaderFiles\Shader_VtxPointInstance.hlsl">
-      <Filter>97.ShaderFiles</Filter>
-    </FxCompile>
-    <FxCompile Include="..\Bin\ShaderFiles\Shader_Effect_Mesh.hlsl">
-      <Filter>97.ShaderFiles</Filter>
-    </FxCompile>
     <FxCompile Include="..\Bin\ShaderFiles\Shader_SSD.hlsl">
     </FxCompile>
-    <FxCompile Include="..\Bin\ShaderFiles\Shader_VtxTrail_TwoPoint_Instance.hlsl">
-      <Filter>97.ShaderFiles</Filter>
+    <FxCompile Include="..\Bin\ShaderFiles\Shader_Effect_Mesh.hlsl">
+      <Filter>97.ShaderFiles\Effect\Mesh</Filter>
     </FxCompile>
-    <FxCompile Include="..\Bin\ShaderFiles\Shader_VtxTrail_OnePoint_Instance.hlsl">
-      <Filter>97.ShaderFiles</Filter>
+    <FxCompile Include="..\Bin\ShaderFiles\Shader_Effect_Texture.hlsl">
+      <Filter>97.ShaderFiles\Effect\Texture</Filter>
     </FxCompile>
-    <FxCompile Include="..\Bin\ShaderFiles\Shader_Trail_MultiPoint_Compute.hlsl">
-      <Filter>97.ShaderFiles</Filter>
+    <FxCompile Include="..\Bin\ShaderFiles\Shader_ParticleCompute.hlsl">
+      <Filter>97.ShaderFiles\Effect\Particle</Filter>
     </FxCompile>
-    <FxCompile Include="..\Bin\ShaderFiles\Shader_TrailHead_PointInstance.hlsl">
-      <Filter>97.ShaderFiles</Filter>
+    <FxCompile Include="..\Bin\ShaderFiles\Shader_VtxPointInstance.hlsl">
+      <Filter>97.ShaderFiles\Effect\Particle</Filter>
     </FxCompile>
     <FxCompile Include="..\Bin\ShaderFiles\Shader_TrailTail_PointInstance.hlsl">
-      <Filter>97.ShaderFiles</Filter>
+      <Filter>97.ShaderFiles\Effect\Trail\MP</Filter>
+    </FxCompile>
+    <FxCompile Include="..\Bin\ShaderFiles\Shader_Trail_MultiPoint_Compute.hlsl">
+      <Filter>97.ShaderFiles\Effect\Trail\MP</Filter>
+    </FxCompile>
+    <FxCompile Include="..\Bin\ShaderFiles\Shader_TrailHead_PointInstance.hlsl">
+      <Filter>97.ShaderFiles\Effect\Trail\MP</Filter>
+    </FxCompile>
+    <FxCompile Include="..\Bin\ShaderFiles\Shader_VtxTrail_OnePoint_Instance.hlsl">
+      <Filter>97.ShaderFiles\Effect\Trail\OP</Filter>
+    </FxCompile>
+    <FxCompile Include="..\Bin\ShaderFiles\Shader_VtxTrail_TwoPoint_Instance.hlsl">
+      <Filter>97.ShaderFiles\Effect\Trail\TP</Filter>
     </FxCompile>
   </ItemGroup>
 </Project>

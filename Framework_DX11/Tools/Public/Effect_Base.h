@@ -15,13 +15,23 @@ public:
 
 	typedef struct : public CGameObject::GAMEOBJECT_DESC
 	{
-		const _Matrix*	pParentMatrix = { nullptr };
+		const _Matrix* pParentMatrix = { nullptr };
 		_tchar			szEffectName[MAX_PATH] = L"";
 		RENDER_DESC		RenderDesc = {};
 	} EFFECT_BASE_DESC;
 
 
-	enum EFFECT_TYPE { TYPE_PARTICLE, TYPE_TEXTURE, TYPE_MESH, TYPE_END };
+	enum EFFECT_TYPE { TYPE_PARTICLE, TYPE_TEXTURE, TYPE_MESH, TYPE_TRAIL_OP, TYPE_TRAIL_TP, TYPE_TRAIL_MP, TYPE_END };
+	enum PARTICLE_TYPE { PT_SPREAD, PT_MOVE, PT_CONVERGE, PT_END };
+
+	enum GEOM_STATE
+	{
+		PS_GROW = 0x0001,
+		PS_SHRINK = 0x0002,
+		PS_ROTATION = 0x0004,
+		PS_END
+	};
+
 	enum EFFECT_POSTPROCESSING
 	{
 		PP_NONE = 0x0001,
@@ -29,6 +39,7 @@ public:
 		PP_BLUR = 0x0004,
 		PP_END = 0xFFFF
 	};
+
 	enum EFFECT_TEXTURE
 	{
 		TEXTURE_DIFFUSE,
@@ -37,6 +48,7 @@ public:
 		TEXTURE_NORMAL,
 		TEXTURE_END
 	};
+
 protected:
 	CEffect_Base(ID3D11Device* pDevice, ID3D11DeviceContext* pContext);
 	CEffect_Base(const CEffect_Base& Prototype);
@@ -54,6 +66,8 @@ public:
 	void Set_ParentMartix(_Matrix* pParentMatrix) {
 		m_pParentMatrix = pParentMatrix;
 	}
+
+	virtual void Set_Loop(_bool bLoop) = 0;
 
 public:
 	virtual HRESULT Initialize_Prototype();

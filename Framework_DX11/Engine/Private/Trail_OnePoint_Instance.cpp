@@ -136,7 +136,7 @@ _bool CTrail_OnePoint_Instance::Spread_Buffer(_Vec3 vWorldPos, _float fTrailInte
 			continue;
 		}
 
-		_Vec3 vMovePos = pVertices[i].vCurPos + pVertices[i].vMoveDir * fSpeed;
+		_Vec3 vMovePos = pVertices[i].vCurPos + pVertices[i].vMoveDir * fSpeed * fTimeDelta;
 		pVertices[i].vCurPos = vMovePos;
 		pVertices[i].vLifeTime.y += fTimeDelta;
 		if (pVertices[i].vLifeTime.y < pVertices[i].vLifeTime.x)

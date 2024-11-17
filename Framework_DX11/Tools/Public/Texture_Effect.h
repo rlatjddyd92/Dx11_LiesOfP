@@ -30,6 +30,8 @@ public:
 
 		_float		fAlpha = { 1.f };
 		_float		fAlphaSpeed = { 0.f };
+
+		_bool		bLoop = { false };
 	}DEFAULT_DESC;
 
 	typedef struct
@@ -52,8 +54,8 @@ private:
 	virtual ~CTexture_Effect() = default;
 
 public:
-	TEXTURE_EFFECT_DESC* Get_InitDesc_Ptr() {
-		return &m_InitDesc;
+	virtual void Set_Loop(_bool bLoop) override {
+		m_DefaultDesc.bLoop = bLoop;
 	}
 
 public:
@@ -72,6 +74,9 @@ public:
 	void Set_Desc(const TEXTURE_EFFECT_DESC& desc);
 	TEXTURE_EFFECT_DESC Get_Desc() {
 		return m_InitDesc;
+	}
+	TEXTURE_EFFECT_DESC* Get_InitDesc_Ptr() {
+		return &m_InitDesc;
 	}
 
 private:

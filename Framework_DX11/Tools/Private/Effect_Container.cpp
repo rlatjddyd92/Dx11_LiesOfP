@@ -5,7 +5,9 @@
 #include "Particle_Effect.h"
 #include "Texture_Effect.h"
 #include "Mesh_Effect.h"
-
+#include "Trail_Effect_OP.h"
+#include "Trail_Effect_TP.h"
+#include "Trail_Effect_MP.h"
 
 CEffect_Container::CEffect_Container(ID3D11Device* pDevice, ID3D11DeviceContext* pContext)
 	: CGameObject(pDevice, pContext)
@@ -74,6 +76,51 @@ HRESULT CEffect_Container::Initialize(void* pArg)
 		m_EffectNames.emplace_back(szEffectName);
 	}
 
+	for (auto& elem : pDesc->pTrail_OPDesc)
+	{
+		if (nullptr == elem)
+			continue;
+
+		CTrail_Effect_OP::TRAIL_OP_DESC* pTrailOP = static_cast<CTrail_Effect_OP::TRAIL_OP_DESC*>(elem);
+		pTrailOP->pParentMatrix = m_pTransformCom->Get_WorldMatrix_Ptr();
+		m_Effects.emplace_back(static_cast<CEffect_Base*>(m_pGameInstance->Clone_GameObject(TEXT("Prototype_GameObject_Trail_Effect_OP"), pTrailOP)));
+
+		_tchar szEffectName[MAX_PATH] = TEXT("");
+		wcscpy_s(szEffectName, pTrailOP->szEffectName);
+		wcscat_s(szEffectName, TEXT(".OP"));
+		m_EffectNames.emplace_back(szEffectName);
+	}
+
+	for (auto& elem : pDesc->pTrail_TPDesc)
+	{
+		if (nullptr == elem)
+			continue;
+
+		CTrail_Effect_TP::TRAIL_TP_DESC* pTrailTP = static_cast<CTrail_Effect_TP::TRAIL_TP_DESC*>(elem);
+		pTrailTP->pParentMatrix = m_pTransformCom->Get_WorldMatrix_Ptr();
+		m_Effects.emplace_back(static_cast<CEffect_Base*>(m_pGameInstance->Clone_GameObject(TEXT("Prototype_GameObject_Trail_Effect_TP"), pTrailTP)));
+
+		_tchar szEffectName[MAX_PATH] = TEXT("");
+		wcscpy_s(szEffectName, pTrailTP->szEffectName);
+		wcscat_s(szEffectName, TEXT(".TP"));
+		m_EffectNames.emplace_back(szEffectName);
+	}
+
+	for (auto& elem : pDesc->pTrail_MPDesc)
+	{
+		if (nullptr == elem)
+			continue;
+
+		CTrail_Effect_MP::TRAIL_MP_DESC* pTrailMP = static_cast<CTrail_Effect_MP::TRAIL_MP_DESC*>(elem);
+		pTrailMP->pParentMatrix = m_pTransformCom->Get_WorldMatrix_Ptr();
+		m_Effects.emplace_back(static_cast<CEffect_Base*>(m_pGameInstance->Clone_GameObject(TEXT("Prototype_GameObject_Trail_Effect_MP"), pTrailMP)));
+
+		_tchar szEffectName[MAX_PATH] = TEXT("");
+		wcscpy_s(szEffectName, pTrailMP->szEffectName);
+		wcscat_s(szEffectName, TEXT(".MP"));
+		m_EffectNames.emplace_back(szEffectName);
+	}
+
 	m_strContainerName = pDesc->szEffectContainerName;
 
 	return S_OK;
@@ -92,6 +139,15 @@ void CEffect_Container::Priority_Update(_float fTimeDelta)
 
 void CEffect_Container::Update(_float fTimeDelta)
 {
+	if (KEY_TAP(KEY::G))
+		m_bOrbit = !m_bOrbit;
+
+	if (true == m_bOrbit)
+	{
+
+	}
+
+
 	for (auto& Effect : m_Effects)
 	{
 		if (nullptr == Effect)
@@ -144,30 +200,38 @@ HRESULT CEffect_Container::Add_Effects_To_Layer()
 	for (auto& Effect : m_Effects)
 	{
 		CEffect_Base::EFFECT_TYPE EffectType = Effect->Get_EffectType();
+		Effect->Set_ParentMartix(nullptr);
 
 		switch (EffectType)
 		{
 		case CEffect_Base::TYPE_PARTICLE:
 			// 여기서 고대로 레이어에 추가하고
-			Effect->Set_ParentMartix(nullptr);
 			if(FAILED(m_pGameInstance->Add_Object_ToLayer(LEVEL_TOOL, TEXT("Layer_Particle"), Effect)))
 				return E_FAIL;
-			Safe_AddRef(Effect);
 			break;
 		case CEffect_Base::TYPE_TEXTURE:
-			Effect->Set_ParentMartix(nullptr);
 			if(FAILED(m_pGameInstance->Add_Object_ToLayer(LEVEL_TOOL, TEXT("Layer_TextureEffect"), Effect)))
 				return E_FAIL;
-			Safe_AddRef(Effect);
 			break;
 		case CEffect_Base::TYPE_MESH:
-			Effect->Set_ParentMartix(nullptr);
 			if(FAILED(m_pGameInstance->Add_Object_ToLayer(LEVEL_TOOL, TEXT("Layer_MeshEffect"), Effect)))
 				return E_FAIL;
-			Safe_AddRef(Effect);
+			break;
+		case CEffect_Base::TYPE_TRAIL_OP:
+			if (FAILED(m_pGameInstance->Add_Object_ToLayer(LEVEL_TOOL, TEXT("Layer_TrailOP"), Effect)))
+				return E_FAIL;
+			break;
+
+		case CEffect_Base::TYPE_TRAIL_TP:
+			if (FAILED(m_pGameInstance->Add_Object_ToLayer(LEVEL_TOOL, TEXT("Layer_TrailTP"), Effect)))
+				return E_FAIL;
+			break;
+
+		case CEffect_Base::TYPE_TRAIL_MP:
+			if (FAILED(m_pGameInstance->Add_Object_ToLayer(LEVEL_TOOL, TEXT("Layer_TrailMP"), Effect)))
+				return E_FAIL;
 			break;
 		}
-		Safe_Release(Effect);
 	}
 	// 다했으면 싹 지우고
 
