@@ -163,16 +163,17 @@
   </ItemGroup>
   <ItemGroup>
     <FxCompile Include="..\..\Client\Bin\ShaderFiles\Shader_Effect_Texture.hlsl" />
-    <FxCompile Include="..\..\Client\Bin\ShaderFiles\Shader_PostProcess.hlsl" />
     <FxCompile Include="..\Bin\ShaderFiles\Shader_Bloom.hlsl" />
     <FxCompile Include="..\Bin\ShaderFiles\Shader_Cell.hlsl" />
     <FxCompile Include="..\Bin\ShaderFiles\Shader_Compute_Back.hlsl" />
     <FxCompile Include="..\Bin\ShaderFiles\Shader_Compute_Bloom.hlsl" />
     <FxCompile Include="..\Bin\ShaderFiles\Shader_Compute_Blur.hlsl" />
+    <FxCompile Include="..\Bin\ShaderFiles\Shader_Compute_DOF.hlsl" />
     <FxCompile Include="..\Bin\ShaderFiles\Shader_Deferred.hlsl" />
     <FxCompile Include="..\Bin\ShaderFiles\Shader_Distortion.hlsl" />
     <FxCompile Include="..\Bin\ShaderFiles\Shader_Compute_HDR.hlsl" />
     <FxCompile Include="..\Bin\ShaderFiles\Shader_Model_Instance.hlsl" />
+    <FxCompile Include="..\Bin\ShaderFiles\Shader_PostProcess.hlsl" />
     <FxCompile Include="..\Bin\ShaderFiles\Shader_SSAO.hlsl" />
   </ItemGroup>
   <ItemGroup>

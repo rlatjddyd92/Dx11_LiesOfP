@@ -94,6 +94,27 @@ void CController_PostProcess::Update_BLOOM()
 	tDesc->fBloomThreshold = fBloomThreshold;
 }
 
+void CController_PostProcess::Update_DOF()
+{
+	DOF_DESC* tDesc = m_pGameInstance->Get_DOFDesc();
+	if (nullptr == tDesc)
+		return;
+
+	static _bool isOnDof = false;
+	static _float fDOF = tDesc->fDOF;
+
+	ImGui::Checkbox("DOF Value", &isOnDof);
+
+
+	if (tDesc->isOnDOF)
+	{
+		ImGui::DragFloat("DOF", &fDOF, 0.02f, 0.f, 1.f);
+	}
+
+	tDesc->isOnDOF = isOnDof;
+	tDesc->fDOF = fDOF;
+}
+
 void CController_PostProcess::Free()
 {
 	__super::Free();

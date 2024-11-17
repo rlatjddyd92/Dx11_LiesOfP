@@ -169,6 +169,7 @@ HRESULT CRenderer::Initialize()
 	/* MRT_Distortion */
 	if (FAILED(m_pGameInstance->Add_MRT(TEXT("MRT_Distortion"), TEXT("Target_Distortion"))))
 		return E_FAIL;
+
 #pragma region Bloom
 	if (FAILED(m_pGameInstance->Add_MRT(TEXT("MRT_Bloom_DownSample0"), TEXT("Target_Bloom_DownSample0"))))
 		return E_FAIL;
@@ -233,6 +234,14 @@ HRESULT CRenderer::Initialize()
 	if (nullptr == m_pBlurShader)
 		return E_FAIL;
 
+	m_pDOFShader = CShader::Create(m_pDevice, m_pContext, TEXT("../Bin/ShaderFiles/Shader_Compute_DOF.hlsl"));
+	if (nullptr == m_pDOFShader)
+		return E_FAIL;
+
+	m_pPostProcessShader = CShader::Create(m_pDevice, m_pContext, TEXT("../Bin/ShaderFiles/Shader_PostProcess.hlsl"));
+	if (nullptr == m_pPostProcessShader)
+		return E_FAIL;
+
 	m_pVIBuffer = CVIBuffer_Rect::Create(m_pDevice, m_pContext);
 	if (nullptr == m_pVIBuffer)
 		return E_FAIL;
@@ -254,13 +263,16 @@ HRESULT CRenderer::Initialize()
 	if(FAILED(Ready_Bloom()))
 		return E_FAIL;
 
+	if (FAILED(Ready_DOF()))
+		return E_FAIL;
+
 	if (FAILED(Ready_Desc()))
 		return E_FAIL;
 
 #ifdef _DEBUG
-	if (FAILED(m_pGameInstance->Ready_RT_Debug(TEXT("Target_Diffuse"), 100.f, 100.f, 200.f, 200.f)))
+	if (FAILED(m_pGameInstance->Ready_RT_Debug(TEXT("Target_DOF_Final"), 100.f, 100.f, 200.f, 200.f)))
 		return E_FAIL;
-	if (FAILED(m_pGameInstance->Ready_RT_Debug(TEXT("Target_Cascade"), 100.f, 300.f, 200.f, 200.f)))
+	if (FAILED(m_pGameInstance->Ready_RT_Debug(TEXT("Target_Depth"), 100.f, 300.f, 200.f, 200.f)))
 		return E_FAIL;
 	if (FAILED(m_pGameInstance->Ready_RT_Debug(TEXT("Target_Bloom_UpSample1"), 100.f, 500.f, 200.f, 200.f)))
 		return E_FAIL;
@@ -326,16 +338,19 @@ HRESULT CRenderer::Draw()
 	if (FAILED(Render_Bloom()))	// 다시 고치기
 		return E_FAIL;
 
-	if (FAILED(Render_Distortion()))
+	if (FAILED(Render_DOF())) // DOF 추가
 		return E_FAIL;
 
-	if (FAILED(Render_NonLights()))
-		return E_FAIL;
-	if (FAILED(Render_Blend()))
-		return E_FAIL;
+	//if (FAILED(Render_Distortion()))
+	//	return E_FAIL;
 
-	if (FAILED(Render_UI()))
-		return E_FAIL;
+	//if (FAILED(Render_NonLights()))
+	//	return E_FAIL;
+	//if (FAILED(Render_Blend()))
+	//	return E_FAIL;
+
+	//if (FAILED(Render_UI()))
+	//	return E_FAIL;
 
 #ifdef _DEBUG
 	if (KEY_TAP(KEY::F1))
@@ -842,9 +857,9 @@ HRESULT CRenderer::Render_Bloom_Compute()
 	m_pContext-> CSSetUnorderedAccessViews(0, 8, m_pClearUAV, nullptr);
 
 	//세로 블러
-	if (FAILED(m_pGameInstance->Bind_RT_ShaderResource(m_pBlurShader, TEXT("Target_Bloom2"), "g_InputTexture"))) // 휘도값
+	if (FAILED(m_pGameInstance->Bind_RT_ShaderResource(m_pBlurShader, TEXT("Target_Bloom2"), "g_InputTexture")))
 		return E_FAIL;
-	if (FAILED(m_pGameInstance->BInd_RT_UnorderedView(m_pBlurShader, TEXT("Target_Bloom1"), "g_OutputTexture"))) // 휘도값
+	if (FAILED(m_pGameInstance->BInd_RT_UnorderedView(m_pBlurShader, TEXT("Target_Bloom1"), "g_OutputTexture")))
 		return E_FAIL;
 	m_pBlurShader->Begin(2);
 	m_pContext->Dispatch(static_cast <_uint> (ceil(1280.f / 4.f)), static_cast <_uint> (ceil(720.f / 4.f / (128.f - 12.f))), 1);
@@ -1140,6 +1155,91 @@ HRESULT CRenderer::Render_Bloom()
 
 	m_pContext->RSSetViewports(iNumViewports, &ViewportDesc);
 
+	return S_OK;
+}
+
+HRESULT CRenderer::Render_DOF()
+{	
+	if (!m_tDOF.isOnDOF)
+		return S_OK;
+	
+	if (FAILED(Copy_BackBuffer()))
+		return E_FAIL;
+
+	// 다운 샘플
+	if (FAILED(m_pGameInstance->Bind_RT_ShaderResource(m_pBlurShader, TEXT("Target_BackBuffer"), "g_InputTexture")))
+		return E_FAIL;
+	if (FAILED(m_pGameInstance->BInd_RT_UnorderedView(m_pBlurShader, TEXT("Target_DOF0"), "g_OutputTexture")))
+		return E_FAIL;
+
+	m_pBlurShader->Begin(0);
+	m_pContext->Dispatch(static_cast<_uint>(ceil(1280.f / 4.f / 32.f)), static_cast<_uint>(ceil(720.f / 4.f / 32.f)), 1);
+	m_pContext->CSSetShaderResources(0, 128, m_pClearSRV);
+	m_pContext->CSSetUnorderedAccessViews(0, 8, m_pClearUAV, nullptr);
+
+	// 가로 블러
+	if (FAILED(m_pGameInstance->Bind_RT_ShaderResource(m_pBlurShader, TEXT("Target_DOF0"), "g_InputTexture")))
+		return E_FAIL;
+	if (FAILED(m_pGameInstance->BInd_RT_UnorderedView(m_pBlurShader, TEXT("Target_DOF1"), "g_OutputTexture")))
+		return E_FAIL;
+	m_pBlurShader->Begin(1);
+	m_pContext->Dispatch(static_cast <_uint> (ceil(1280.f / 4.f / (128.f - 12.f))), static_cast <_uint> (ceil(720.f / 4.f)), 1);
+	m_pContext->CSSetShaderResources(0, 128, m_pClearSRV);
+	m_pContext->CSSetUnorderedAccessViews(0, 8, m_pClearUAV, nullptr);
+
+	//세로 블러
+	if (FAILED(m_pGameInstance->Bind_RT_ShaderResource(m_pBlurShader, TEXT("Target_DOF1"), "g_InputTexture")))
+		return E_FAIL;
+	if (FAILED(m_pGameInstance->BInd_RT_UnorderedView(m_pBlurShader, TEXT("Target_DOF2"), "g_OutputTexture")))
+		return E_FAIL;
+	m_pBlurShader->Begin(2);
+	m_pContext->Dispatch(static_cast <_uint> (ceil(1280.f / 4.f)), static_cast <_uint> (ceil(720.f / 4.f / (128.f - 12.f))), 1);
+	m_pContext->CSSetShaderResources(0, 128, m_pClearSRV);
+	m_pContext->CSSetUnorderedAccessViews(0, 8, m_pClearUAV, nullptr);
+
+	if (FAILED(m_pGameInstance->Begin_MRT(TEXT("MRT_DOF_Final"))))
+		return E_FAIL;
+
+	if (FAILED(m_pPostProcessShader->Bind_Matrix("g_WorldMatrix", &m_WorldMatrix)))
+		return E_FAIL;
+	if (FAILED(m_pPostProcessShader->Bind_Matrix("g_ViewMatrix", &m_ViewMatrix)))
+		return E_FAIL;
+	if (FAILED(m_pPostProcessShader->Bind_Matrix("g_ProjMatrix", &m_ProjMatrix)))
+		return E_FAIL;
+
+	if (FAILED(m_pGameInstance->Bind_RT_ShaderResource(m_pPostProcessShader, TEXT("Target_Depth"), "g_DepthTexture")))
+		return E_FAIL;
+	if (FAILED(m_pGameInstance->Bind_RT_ShaderResource(m_pPostProcessShader, TEXT("Target_BackBuffer"), "g_BackTexture")))
+		return E_FAIL;
+	if (FAILED(m_pGameInstance->Bind_RT_ShaderResource(m_pPostProcessShader, TEXT("Target_DOF2"), "g_DofBlurTexture")))
+		return E_FAIL;
+
+	m_pPostProcessShader->Bind_RawValue("g_fFocus", &m_tDOF.fDOF, sizeof(_float));
+
+	m_pPostProcessShader->Begin(0);
+	m_pVIBuffer->Bind_Buffers();
+	m_pVIBuffer->Render();
+
+	if (FAILED(m_pGameInstance->End_MRT()))
+		return E_FAIL;
+
+	if (FAILED(m_pShader->Bind_Matrix("g_WorldMatrix", &m_WorldMatrix)))
+		return E_FAIL;
+	if (FAILED(m_pShader->Bind_Matrix("g_ViewMatrix", &m_ViewMatrix)))
+		return E_FAIL;
+	if (FAILED(m_pShader->Bind_Matrix("g_ProjMatrix", &m_ProjMatrix)))
+		return E_FAIL;
+
+	if (FAILED(m_pGameInstance->Bind_RT_ShaderResource(m_pShader, TEXT("Target_DOF_Final"), "g_BackTexture")))
+		return E_FAIL;
+
+	m_pShader->Begin(4);
+
+	m_pVIBuffer->Bind_Buffers();
+
+	m_pVIBuffer->Render();
+
+	// 합치기
 	return S_OK;
 }
 
@@ -1626,6 +1726,59 @@ HRESULT CRenderer::Ready_Bloom()
 	return S_OK;
 }
 
+HRESULT CRenderer::Ready_DOF()
+{
+	D3D11_VIEWPORT		ViewportDesc;
+
+	_uint				iNumViewports = 1;
+	m_pContext->RSGetViewports(&iNumViewports, &ViewportDesc);
+
+	_uint iWidth = (_uint)ViewportDesc.Width;
+
+	D3D11_TEXTURE2D_DESC TextureDesc{};
+	ZeroMemory(&TextureDesc, sizeof(D3D11_TEXTURE2D_DESC));
+	TextureDesc.Width = (_uint)(ViewportDesc.Width);
+	TextureDesc.Height = (_uint)(ViewportDesc.Height);
+	TextureDesc.MipLevels = 1;
+	TextureDesc.ArraySize = 1;
+	TextureDesc.Format = DXGI_FORMAT_R8G8B8A8_UNORM;
+	TextureDesc.SampleDesc.Count = 1;
+	TextureDesc.SampleDesc.Quality = 0;
+	TextureDesc.Usage = D3D11_USAGE_DEFAULT;
+	TextureDesc.BindFlags = D3D11_BIND_RENDER_TARGET | D3D11_BIND_SHADER_RESOURCE | D3D11_BIND_UNORDERED_ACCESS;	// 제일 중요함
+	TextureDesc.CPUAccessFlags = 0;
+	TextureDesc.MiscFlags = 0;
+
+	if (FAILED(m_pGameInstance->Add_RenderTarget_For_Desc(TEXT("Target_DOF0"), nullptr, &TextureDesc, nullptr, nullptr, _float4(0.f, 0.f, 0.f, 0.f))))
+		return E_FAIL;
+
+	TextureDesc.Width = (_uint)(ViewportDesc.Width / 4);
+	TextureDesc.Height = (_uint)(ViewportDesc.Height / 4);
+	if (FAILED(m_pGameInstance->Add_RenderTarget_For_Desc(TEXT("Target_DOF1"), nullptr, &TextureDesc, nullptr, nullptr, _float4(0.f, 0.f, 0.f, 0.f))))
+		return E_FAIL;
+
+	TextureDesc.Width = (_uint)(ViewportDesc.Width / 4);
+	TextureDesc.Height = (_uint)(ViewportDesc.Height / 4);
+	if (FAILED(m_pGameInstance->Add_RenderTarget_For_Desc(TEXT("Target_DOF2"), nullptr, &TextureDesc, nullptr, nullptr, _float4(0.f, 0.f, 0.f, 0.f))))
+		return E_FAIL;
+
+	TextureDesc.Width = (_uint)(ViewportDesc.Width);
+	TextureDesc.Height = (_uint)(ViewportDesc.Height);
+	if (FAILED(m_pGameInstance->Add_RenderTarget_For_Desc(TEXT("Target_DOF_Final"), nullptr, &TextureDesc, nullptr, nullptr, _float4(0.f, 0.f, 0.f, 0.f))))
+		return E_FAIL;
+
+	if (FAILED(m_pGameInstance->Add_MRT(TEXT("MRT_DOF0"), TEXT("Target_DOF0"))))
+		return E_FAIL;
+	if (FAILED(m_pGameInstance->Add_MRT(TEXT("MRT_DOF1"), TEXT("Target_DOF1"))))
+		return E_FAIL;
+	if (FAILED(m_pGameInstance->Add_MRT(TEXT("MRT_DOF2"), TEXT("Target_DOF2"))))
+		return E_FAIL;
+	if (FAILED(m_pGameInstance->Add_MRT(TEXT("MRT_DOF_Final"), TEXT("Target_DOF_Final"))))
+		return E_FAIL;
+
+	return S_OK;
+}
+
 HRESULT CRenderer::Ready_Desc()
 {
 	D3D11_BUFFER_DESC BufferDesc;
@@ -1685,6 +1838,7 @@ HRESULT CRenderer::Render_Debug()
 	m_pGameInstance->Render_MRT_Debug(TEXT("MRT_Decal"), m_pShader, m_pVIBuffer);
 	m_pGameInstance->Render_MRT_Debug(TEXT("MRT_Picking"), m_pShader, m_pVIBuffer);
 	m_pGameInstance->Render_MRT_Debug(TEXT("MRT_Bloom0"), m_pShader, m_pVIBuffer);
+	m_pGameInstance->Render_MRT_Debug(TEXT("MRT_DOF_Final"), m_pShader, m_pVIBuffer);
 	
 	return S_OK;
 }
@@ -1726,6 +1880,8 @@ void CRenderer::Free()
 	Safe_Release(m_pLightDepthStencilView);
 	Safe_Release(m_pCascadeDepthStencilViewArr);
 
+	Safe_Release(m_pDOFShader);
+	Safe_Release(m_pPostProcessShader);
 	Safe_Release(m_pBlurShader);
 	Safe_Release(m_pBackShader);
 	Safe_Release(m_pHDRShader);

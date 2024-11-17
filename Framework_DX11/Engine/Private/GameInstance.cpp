@@ -392,6 +392,10 @@ BLOOM_DESC* CGameInstance::Get_BloomDesc()
 {
 	return m_pRenderer->Get_BloomDesc();
 }
+DOF_DESC* CGameInstance::Get_DOFDesc()
+{
+	return m_pRenderer->Get_DOFDesc();
+}
 #ifdef _DEBUG
 HRESULT CGameInstance::Add_DebugObject(CComponent * pDebugObject)
 {

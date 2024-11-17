@@ -69,19 +69,18 @@ PS_OUT PS_MAIN_DOF(PS_IN In)
 
     vector vColor = 0;
     
-    float vDepth = g_DepthTexture.Sample(PointSampler, In.vTexcoord).y * 1000.f;
+    float fDepth = g_DepthTexture.Sample(PointSampler, In.vTexcoord).x;
     vector vBack = g_BackTexture.Sample(LinearSampler, In.vTexcoord);
     vector vBlur = g_DofBlurTexture.Sample(LinearSampler, In.vTexcoord);
     
-    vColor = vBack;
-    
     // 깊이가 클수록 더 블러를 먹음
-    float fFocusRatio = saturate(abs(vDepth - g_fFocus) / g_fFocus);
+    float fFocusRatio = saturate(abs(fDepth - g_fFocus) / g_fFocus);
     
     fFocusRatio = saturate(fFocusRatio);
-    
     vColor = lerp(vBack, vBlur, fFocusRatio);
     
+   
+   
     Out.vColor = vColor;
     
     //vColor = vBack;
@@ -147,7 +146,7 @@ technique11	DefaultTechnique
     {
         SetRasterizerState(RS_Default);
         SetDepthStencilState(DSS_None, 0);
-        SetBlendState(BS_OnebyOne, vector(0.f, 0.f, 0.f, 0.f), 0xffffffff);
+        SetBlendState(BS_Default, vector(0.f, 0.f, 0.f, 0.f), 0xffffffff);
 
         VertexShader = compile vs_5_0 VS_MAIN();
         GeometryShader = NULL;
@@ -159,10 +158,12 @@ technique11	DefaultTechnique
     {
         SetRasterizerState(RS_Default);
         SetDepthStencilState(DSS_None, 0);
-        SetBlendState(BS_OnebyOne, vector(0.f, 0.f, 0.f, 0.f), 0xffffffff);
+        SetBlendState(BS_Default, vector(0.f, 0.f, 0.f, 0.f), 0xffffffff);
 
         VertexShader = compile vs_5_0 VS_MAIN();
         GeometryShader = NULL;
         PixelShader = compile ps_5_0 PS_MAIN_MOTION_BLUR();
     }
+
+    
 }
