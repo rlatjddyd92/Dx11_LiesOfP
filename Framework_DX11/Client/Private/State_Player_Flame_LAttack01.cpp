@@ -21,7 +21,7 @@ HRESULT CState_Player_Flame_LAttack01::Initialize(_uint iStateNum, void* pArg)
     m_pResetRootMove = pDesc->pIsResetRootMove;
     m_pTrackPos = pDesc->pPrevTrackPos;
 
-    m_iChangeFrame = 35;
+    m_iChangeFrame = 55;
     m_iStateNum = iStateNum;
 
     return S_OK;
@@ -66,15 +66,15 @@ void CState_Player_Flame_LAttack01::Update(_float fTimeDelta)
 
      if (m_iChangeFrame < iFrame && iFrame < m_iChangeFrame + 15)
      {
-         m_pPlayer->Change_State(CPlayer::FLAME_LATTACK0);
-        /* if (m_isInputLButton)
+         if (m_isInputLButton)
+             m_pPlayer->Change_State(CPlayer::FLAME_LATTACK0);
          else if (m_isInputRButton)
          {
              if (m_fRButtonTime > 0.15f)
-                 m_pPlayer->Change_State(CPlayer::RAPIER_CHARGE);
+                 m_pPlayer->Change_State(CPlayer::FLAME_RATTACK0);
              else
-                 m_pPlayer->Change_State(CPlayer::RAPIER_SA1);
-         }*/
+                 m_pPlayer->Change_State(CPlayer::FLAME_CHARGE0);
+         }
      }
      else if (*m_pIsEndAnim)
      {

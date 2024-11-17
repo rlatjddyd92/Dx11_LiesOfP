@@ -1,0 +1,143 @@
+#include "stdafx.h"
+#include "Weapon_Rapier.h"
+
+#include "Player.h"
+
+#include "GameInstance.h"
+
+CWeapon_Rapier::CWeapon_Rapier(ID3D11Device* pDevice, ID3D11DeviceContext* pContext)
+	: CWeapon{ pDevice, pContext }
+{
+}
+
+CWeapon_Rapier::CWeapon_Rapier(const CWeapon_Rapier& Prototype)
+	: CWeapon{ Prototype }
+{
+}
+
+HRESULT CWeapon_Rapier::Initialize_Prototype()
+{
+	return S_OK;
+}
+
+HRESULT CWeapon_Rapier::Initialize(void* pArg)
+{
+	/* 직교퉁여을 위한 데이터들을 모두 셋하낟. */
+	if (FAILED(__super::Initialize(pArg)))
+		return E_FAIL;
+
+	if (FAILED(Ready_Components()))
+		return E_FAIL;
+
+	//m_pTransformCom->Set_Scaled(1.f, 1.f, 1.f);
+	////m_pTransformCom->Rotation(0.0f, XMConvertToRadians(90.0f), 0.1f);
+	//m_pTransformCom->Set_State(CTransform::STATE_POSITION, XMVectorSet(3.f, 0.f, 3.f, 1.f));
+
+	return S_OK;
+}
+
+void CWeapon_Rapier::Priority_Update(_float fTimeDelta)
+{
+	if (!m_isActive)
+		return;
+
+}
+
+void CWeapon_Rapier::Update(_float fTimeDelta)
+{
+	if (!m_isActive)
+		return;
+
+	__super::Update(fTimeDelta);
+
+	m_pColliderCom->Update(&m_WorldMatrix);
+}
+
+void CWeapon_Rapier::Late_Update(_float fTimeDelta)
+{
+	if (!m_isActive)
+		return;
+
+	/* 직교투영을 위한 월드행렬까지 셋팅하게 된다. */
+	__super::Late_Update(fTimeDelta);
+
+
+	m_pGameInstance->Add_RenderObject(CRenderer::RG_NONBLEND, this);
+	m_pGameInstance->Add_RenderObject(CRenderer::RG_SHADOWOBJ, this);
+}
+
+HRESULT CWeapon_Rapier::Render()
+{
+	if (FAILED(__super::Render()))
+		return E_FAIL;
+
+	return S_OK;
+}
+
+HRESULT CWeapon_Rapier::Render_LightDepth()
+{
+	if (FAILED(__super::Render_LightDepth()))
+		return E_FAIL;
+
+	return S_OK;
+}
+
+HRESULT CWeapon_Rapier::Ready_Components()
+{
+	if (FAILED(__super::Ready_Components()))
+		return E_FAIL;
+
+	/* FOR.Com_Model */
+	if (FAILED(__super::Add_Component(LEVEL_GAMEPLAY, TEXT("Prototype_Component_Model_Rapier"),
+		TEXT("Com_Model"), reinterpret_cast<CComponent**>(&m_pModelCom))))
+		return E_FAIL;
+
+	/* FOR.Com_Collider */
+	CBounding_OBB::BOUNDING_OBB_DESC			ColliderDesc{};
+	ColliderDesc.vExtents = _float3(0.1f, 0.1f, 0.53f);
+	ColliderDesc.vCenter = _float3(0.f, 0.f, -0.5f);
+	ColliderDesc.vAngles = _float3(0.f, 0.f, 0.f);
+
+	if (FAILED(__super::Add_Component(LEVEL_STATIC, TEXT("Prototype_Component_Collider_OBB"),
+		TEXT("Com_Collider"), reinterpret_cast<CComponent**>(&m_pColliderCom), &ColliderDesc)))
+		return E_FAIL;
+
+	return S_OK;
+}
+
+CWeapon_Rapier* CWeapon_Rapier::Create(ID3D11Device* pDevice, ID3D11DeviceContext* pContext)
+{
+	CWeapon_Rapier* pInstance = new CWeapon_Rapier(pDevice, pContext);
+
+	if (FAILED(pInstance->Initialize_Prototype()))
+	{
+		MSG_BOX(TEXT("Failed to Created : CWeapon_Rapier"));
+		Safe_Release(pInstance);
+	}
+
+	return pInstance;
+}
+
+
+
+CGameObject* CWeapon_Rapier::Clone(void* pArg)
+{
+	CWeapon_Rapier* pInstance = new CWeapon_Rapier(*this);
+
+	if (FAILED(pInstance->Initialize(pArg)))
+	{
+		MSG_BOX(TEXT("Failed to Cloned : CWeapon_Rapier"));
+		Safe_Release(pInstance);
+	}
+
+	return pInstance;
+}
+
+void CWeapon_Rapier::Free()
+{
+	__super::Free();
+
+	Safe_Release(m_pColliderCom);
+	Safe_Release(m_pShaderCom);
+	Safe_Release(m_pModelCom);
+}

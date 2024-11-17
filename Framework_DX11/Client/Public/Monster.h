@@ -11,7 +11,7 @@ END
 
 BEGIN(Client)
 
-class CMonster : public CPawn
+class CMonster abstract : public CPawn
 {
 public:
 	enum MONSTER_STATE {
@@ -51,8 +51,7 @@ protected:
 	HRESULT Ready_FSM();
 
 public:
-	static CMonster* Create(ID3D11Device* pDevice, ID3D11DeviceContext* pContext);
-	virtual CGameObject* Clone(void* pArg);
+	virtual CGameObject* Clone(void* pArg) = 0;
 	virtual void Free() override;
 
 };

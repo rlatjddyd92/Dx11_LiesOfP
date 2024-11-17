@@ -65,7 +65,7 @@ HRESULT CPlayer::Initialize(void * pArg)
 	if (FAILED(Ready_Components()))
 		return E_FAIL;
 
-	if (FAILED(Ready_PartObjects()))
+	if (FAILED(Ready_Weapon()))
 		return E_FAIL;
 
 	if (FAILED(Ready_FSM()))
@@ -79,6 +79,7 @@ HRESULT CPlayer::Initialize(void * pArg)
 	m_pModelCom->Set_UFBIndices(UFB_ROOT, 2);
 	m_pModelCom->Set_UFBIndices(UFB_BOUNDARY_UPPER, 6);
 	m_pModelCom->Update_Boundary();
+
 	return S_OK;
 }
 
@@ -101,6 +102,8 @@ void CPlayer::Priority_Update(_float fTimeDelta)
 
 	m_EffectList.clear();
 	m_EvKeyList.clear();
+
+	m_pWeapon[m_eWeaponType]->Priority_Update(fTimeDelta);
 }
 
 void CPlayer::Update(_float fTimeDelta)
@@ -169,6 +172,8 @@ void CPlayer::Update(_float fTimeDelta)
 	}
 
 	m_pColliderCom->Update(m_pTransformCom->Get_WorldMatrix_Ptr());
+
+	m_pWeapon[m_eWeaponType]->Update(fTimeDelta);
 }
 
 void CPlayer::Late_Update(_float fTimeDelta)
@@ -192,6 +197,7 @@ void CPlayer::Late_Update(_float fTimeDelta)
 	m_pGameInstance->Add_DebugObject(m_pNavigationCom);
 #endif
 
+	m_pWeapon[m_eWeaponType]->Late_Update(fTimeDelta);
 }
 
 HRESULT CPlayer::Render()
@@ -239,20 +245,16 @@ HRESULT CPlayer::Render()
 	m_pNavigationCom->Render();
 #endif
 
+
+	if (FAILED(m_pWeapon[m_eWeaponType]->Render()))
+		return E_FAIL;
+
 	return S_OK;
 }
 
 HRESULT CPlayer::Render_LightDepth()
 {
 	if (FAILED(m_pTransformCom->Bind_ShaderResource(m_pShaderCom, "g_WorldMatrix")))
-		return E_FAIL;
-
-	_float4x4		ViewMatrix;
-	XMStoreFloat4x4(&ViewMatrix, XMMatrixLookAtLH(XMVectorSet(0.f, 20.f, -15.f, 1.f), XMVectorSet(0.f, 0.f, 0.f, 1.f), XMVectorSet(0.f, 1.f, 0.f, 0.f)));
-
-	if (FAILED(m_pShaderCom->Bind_Matrix("g_ViewMatrix", &ViewMatrix)))
-		return E_FAIL;
-	if (FAILED(m_pShaderCom->Bind_Matrix("g_ProjMatrix", &m_pGameInstance->Get_Transform(CPipeLine::D3DTS_PROJ))))
 		return E_FAIL;
 
 	if (FAILED(m_pShaderCom->Bind_Matrices("g_CascadeViewMatrix", m_pGameInstance->Get_CascadeViewMatirx(), 3)))
@@ -305,10 +307,39 @@ _Vec4 CPlayer::Calculate_Direction_Right()
 	return vRight;
 }
 
+void CPlayer::Change_Weapon()
+{
+	m_pWeapon[m_eWeaponType]->Appear();
+}
+
 _uint CPlayer::Change_WeaponType()
 {
+	m_pWeapon[m_eWeaponType]->Disappear();
 	m_eWeaponType = WEAPON_TYPE((m_eWeaponType + 1) % WEP_END);
 	return m_eWeaponType;
+}
+
+HRESULT CPlayer::Ready_Weapon()
+{
+	CWeapon::WEAPON_DESC		WeaponDesc{};
+	WeaponDesc.pParentWorldMatrix = m_pTransformCom->Get_WorldMatrix_Ptr();
+	WeaponDesc.pSocketBoneMatrix = m_pModelCom->Get_BoneCombindTransformationMatrix_Ptr("BN_Weapon_R");
+
+	m_pWeapon[WEP_RAPIER] = dynamic_cast<CWeapon*>(m_pGameInstance->Clone_GameObject(TEXT("Prototype_GameObject_Weapon_Rapier"), &WeaponDesc));
+	if (nullptr == m_pWeapon)
+		return E_FAIL;
+
+	m_pWeapon[WEP_FLAME] = dynamic_cast<CWeapon*>(m_pGameInstance->Clone_GameObject(TEXT("Prototype_GameObject_Weapon_FlameSword"), &WeaponDesc));
+	if (nullptr == m_pWeapon)
+		return E_FAIL;
+
+	m_pWeapon[WEP_SCISSOR] = dynamic_cast<CWeapon*>(m_pGameInstance->Clone_GameObject(TEXT("Prototype_GameObject_Weapon_Scissor"), &WeaponDesc));
+	if (nullptr == m_pWeapon)
+		return E_FAIL;
+
+	Change_Weapon();
+
+	return S_OK;
 }
 
 HRESULT CPlayer::Ready_Components()
@@ -331,15 +362,15 @@ HRESULT CPlayer::Ready_Components()
 		TEXT("Com_Navigation"), reinterpret_cast<CComponent**>(&m_pNavigationCom), &NaviDesc)))
 		return E_FAIL;
 
-	/* For.Com_Collider */
-	CBounding_AABB::BOUNDING_AABB_DESC			ColliderDesc{};
-	ColliderDesc.vExtents = _float3(0.5f, 1.0f, 0.5f);
+	/* FOR.Com_Collider */
+	CBounding_OBB::BOUNDING_OBB_DESC			ColliderDesc{};
+	ColliderDesc.vExtents = _float3(0.5f, 0.8f, 0.5f);
 	ColliderDesc.vCenter = _float3(0.f, ColliderDesc.vExtents.y, 0.f);
+	ColliderDesc.vAngles = _float3(0.f, 0.f, 0.f);
 
-	if (FAILED(__super::Add_Component(LEVEL_STATIC, TEXT("Prototype_Component_Collider_AABB"),
+	if (FAILED(__super::Add_Component(LEVEL_STATIC, TEXT("Prototype_Component_Collider_OBB"),
 		TEXT("Com_Collider"), reinterpret_cast<CComponent**>(&m_pColliderCom), &ColliderDesc)))
 		return E_FAIL;
-	
 
 	/* FOR.Com_RigidBody */
 	if (FAILED(__super::Add_Component(LEVEL_STATIC, TEXT("Prototype_Component_RigidBody"),
@@ -352,24 +383,6 @@ HRESULT CPlayer::Ready_Components()
 	m_pRigidBodyCom->Set_GravityScale(15.f);
 	m_pRigidBodyCom->Set_VelocityLimit(_float3(25.f, 30.f, 25.f));
 	m_pRigidBodyCom->Set_Navigation(m_pNavigationCom);
-
-	return S_OK;
-}
-
-HRESULT CPlayer::Ready_PartObjects()
-{
-	/* 실제 추가하고 싶은 파트오브젝트의 갯수만큼 밸류를 셋팅해놓자. */
-	m_Parts.resize(PART_END - 1);
-
-	
-
-	//CWeapon::WEAPON_DESC		WeaponDesc{};
-	//WeaponDesc.pParentState = &m_iState;
-	//WeaponDesc.pParentWorldMatrix = m_pTransformCom->Get_WorldMatrix_Ptr();
-	//WeaponDesc.pSocketBoneMatrix = dynamic_cast<CBody_Player*>(m_Parts[PART_BODY])->Get_BoneMatrix_Ptr("SWORD");
-
-	//if (FAILED(__super::Add_PartObject(PART_WEAPON, TEXT("Prototype_GameObject_Weapon"), &WeaponDesc)))
-	//	return E_FAIL;
 
 	return S_OK;
 }
@@ -460,6 +473,11 @@ void CPlayer::Free()
 		Safe_Release(Pair.second);
 	}
 	m_Effects.clear();
+
+	for (_uint i = 0; i < WEP_END; ++i)
+	{
+		Safe_Release(m_pWeapon[i]);
+	}
 
 	Safe_Release(m_pColliderCom);
 	Safe_Release(m_pNavigationCom);

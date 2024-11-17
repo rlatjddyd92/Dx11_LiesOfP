@@ -37,8 +37,9 @@ public:
 public:
 	void		Change_State(const _uint iState, void* pArg = nullptr);
 	void		Set_Animation(_uint iAnimIndex, _bool IsLoop = false);
-	void		Change_Animation(_uint iAnimIndex, _bool IsLoop = false, _float fDuration = 0.2f, _uint iStartFrame = 0, _bool bEitherBoundary = false);
+	void		Change_Animation(_uint iAnimIndex, _bool IsLoop = false, _float fDuration = 0.2f, _uint iStartFrame = 0, _bool bEitherBoundary = true);
 	void		Change_Animation_Boundry(_uint iAnimIndex, _bool IsLoop = false, _float fDuration = 0.2f, _uint iStartFrame = 0);
+	_uint		Get_CurrentAnimIndex();
 	_int		Get_Frame();
 
 protected:
@@ -54,9 +55,6 @@ protected:
 	_float				m_fMoveSpeed = {};
 
 protected:
-	vector<class CPartObject*>			m_Parts;
-
-	HRESULT Add_PartObject(_uint iPartID, const _wstring& strPrototypeTag, void* pArg = nullptr);
 	HRESULT Bind_WorldViewProj();
 
 public:

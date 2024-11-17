@@ -26,6 +26,8 @@ private:
 
     _uint               m_iChangeWeaponType = {};
 
+    _bool               m_isChangeWeapon = { false };
+
     _bool* m_pIsEndAnim = { nullptr };
     _bool* m_pResetRootMove = { nullptr };
     _float* m_pTrackPos = { nullptr };

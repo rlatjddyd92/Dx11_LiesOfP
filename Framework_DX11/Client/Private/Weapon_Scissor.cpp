@@ -1,0 +1,153 @@
+#include "stdafx.h"
+#include "Weapon_FlameSword.h"
+
+#include "Player.h"
+
+#include "GameInstance.h"
+#include "Weapon_Scissor.h"
+
+CWeapon_Scissor::CWeapon_Scissor(ID3D11Device* pDevice, ID3D11DeviceContext* pContext)
+	: CWeapon{ pDevice, pContext }
+{
+}
+
+CWeapon_Scissor::CWeapon_Scissor(const CWeapon_Scissor& Prototype)
+	: CWeapon{ Prototype }
+{
+}
+
+HRESULT CWeapon_Scissor::Initialize_Prototype()
+{
+	return S_OK;
+}
+
+HRESULT CWeapon_Scissor::Initialize(void* pArg)
+{
+	/* 직교퉁여을 위한 데이터들을 모두 셋하낟. */
+	if (FAILED(__super::Initialize(pArg)))
+		return E_FAIL;
+
+	if (FAILED(Ready_Components()))
+		return E_FAIL;
+
+	m_isActive = false;
+
+	return S_OK;
+}
+
+void CWeapon_Scissor::Priority_Update(_float fTimeDelta)
+{
+	if (!m_isActive)
+		return;
+}
+
+void CWeapon_Scissor::Update(_float fTimeDelta)
+{
+	if (!m_isActive)
+		return;
+
+	__super::Update(fTimeDelta);
+
+	m_pColliderCom->Update(&m_WorldMatrix);
+}
+
+void CWeapon_Scissor::Late_Update(_float fTimeDelta)
+{
+	if (!m_isActive)
+		return;
+
+	/* 직교투영을 위한 월드행렬까지 셋팅하게 된다. */
+	__super::Late_Update(fTimeDelta);
+
+#ifdef _DEBUG
+	m_pGameInstance->Add_DebugObject(m_pColliderCom);
+
+#endif
+	m_pGameInstance->Add_RenderObject(CRenderer::RG_NONBLEND, this);
+	m_pGameInstance->Add_RenderObject(CRenderer::RG_SHADOWOBJ, this);
+}
+
+HRESULT CWeapon_Scissor::Render()
+{
+	if (FAILED(__super::Render()))
+		return E_FAIL;
+
+	return S_OK;
+}
+
+HRESULT CWeapon_Scissor::Render_LightDepth()
+{
+	if (FAILED(__super::Render_LightDepth()))
+		return E_FAIL;
+
+	return S_OK;
+}
+
+void CWeapon_Scissor::Change_SeperateMode()
+{
+}
+
+void CWeapon_Scissor::Change_CombineMode()
+{
+}
+
+HRESULT CWeapon_Scissor::Ready_Components()
+{
+	if (FAILED(__super::Ready_Components()))
+		return E_FAIL;
+
+	/* FOR.Com_Model */
+	if (FAILED(__super::Add_Component(LEVEL_GAMEPLAY, TEXT("Prototype_Component_Model_Scissor_Combine"),
+		TEXT("Com_Model"), reinterpret_cast<CComponent**>(&m_pModelCom))))
+		return E_FAIL;
+
+	/* FOR.Com_Collider */
+	CBounding_OBB::BOUNDING_OBB_DESC			ColliderDesc{};
+	ColliderDesc.vExtents = _float3(0.1f, 0.1f, 0.75f);
+	ColliderDesc.vCenter = _float3(0.f, 0.f, -0.6f);
+	ColliderDesc.vAngles = _float3(0.f, 0.f, 0.f);
+
+	if (FAILED(__super::Add_Component(LEVEL_STATIC, TEXT("Prototype_Component_Collider_OBB"),
+		TEXT("Com_Collider"), reinterpret_cast<CComponent**>(&m_pColliderCom), &ColliderDesc)))
+		return E_FAIL;
+
+
+	return S_OK;
+}
+
+CWeapon_Scissor* CWeapon_Scissor::Create(ID3D11Device* pDevice, ID3D11DeviceContext* pContext)
+{
+	CWeapon_Scissor* pInstance = new CWeapon_Scissor(pDevice, pContext);
+
+	if (FAILED(pInstance->Initialize_Prototype()))
+	{
+		MSG_BOX(TEXT("Failed to Created : CWeapon_Scissor"));
+		Safe_Release(pInstance);
+	}
+
+	return pInstance;
+}
+
+
+
+CGameObject* CWeapon_Scissor::Clone(void* pArg)
+{
+	CWeapon_Scissor* pInstance = new CWeapon_Scissor(*this);
+
+	if (FAILED(pInstance->Initialize(pArg)))
+	{
+		MSG_BOX(TEXT("Failed to Cloned : CWeapon_Scissor"));
+		Safe_Release(pInstance);
+	}
+
+	return pInstance;
+}
+
+void CWeapon_Scissor::Free()
+{
+	__super::Free();
+
+	Safe_Release(m_pColliderCom);
+	Safe_Release(m_pShaderCom);
+	Safe_Release(m_pModelCom);
+}

@@ -23,7 +23,7 @@ HRESULT CState_Player_Flame_LAttack00::Initialize(_uint iStateNum, void* pArg)
 
     // 여기 프레임 확인학
 
-    m_iChangeFrame = 35;
+    m_iChangeFrame = 55;
     m_iStateNum = iStateNum;
 
     return S_OK;

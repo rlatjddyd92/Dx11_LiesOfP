@@ -30,15 +30,38 @@ HRESULT CState_Player_ChangeWeapon::Start_State(void* pArg)
 {
     m_iChangeWeaponType = m_pPlayer->Change_WeaponType();
     if(m_iChangeWeaponType < 2)
-        m_pPlayer->Change_Animation(m_iAnimation_ChangeWeapon[0], true, 0.2f);
+        m_pPlayer->Change_Animation(m_iAnimation_ChangeWeapon[0], false, 0.2f);
     else
-        m_pPlayer->Change_Animation(m_iAnimation_ChangeWeapon[1], true, 0.2f);
+        m_pPlayer->Change_Animation(m_iAnimation_ChangeWeapon[1], false, 0.2f);
+
+    m_isChangeWeapon = false;
 
     return S_OK;
 }
 
 void CState_Player_ChangeWeapon::Update(_float fTimeDelta)
 {
+    _int iFrame = m_pPlayer->Get_Frame();
+
+    if (!m_isChangeWeapon)
+    {
+        if (m_iAnimation_ChangeWeapon[0] == m_pPlayer->Get_CurrentAnimIndex())
+        {
+            if (iFrame == 10)
+            {
+                m_pPlayer->Change_Weapon();
+                m_isChangeWeapon = true;
+            }
+        }
+        else if (m_iAnimation_ChangeWeapon[1] == m_pPlayer->Get_CurrentAnimIndex())
+        {
+            if (iFrame == 20)
+            {
+                m_pPlayer->Change_Weapon();
+                m_isChangeWeapon = true;
+            }
+        }
+    }
 
     if (*m_pIsEndAnim)
     {
