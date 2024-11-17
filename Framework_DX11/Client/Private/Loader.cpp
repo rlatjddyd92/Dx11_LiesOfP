@@ -510,22 +510,10 @@ HRESULT CLoader::Ready_Resources_For_GamePlayLevel()
 	m_isFinished_Main = true;
 	_matrix		PreTransformMatrix = XMMatrixIdentity();
 
-	/* For. Prototype_Component_Model_Fiona*/
-	PreTransformMatrix = XMMatrixScaling(0.01f, 0.01f, 0.01f) * XMMatrixRotationY(XMConvertToRadians(180.0f));
-	if (FAILED(m_pGameInstance->Add_Prototype(LEVEL_GAMEPLAY, TEXT("Prototype_Component_Model_Fiona"),
-		CModel::Create(m_pDevice, m_pContext, CModel::TYPE_ANIM, "../Bin/ModelData/Anim/PlayerExample/PlayerExample.dat", PreTransformMatrix))))
-		return E_FAIL;
-
 	/* For. Prototype_Component_Model_ForkLift*/
 	PreTransformMatrix = XMMatrixScaling(0.001f, 0.001f, 0.001f) * XMMatrixRotationY(XMConvertToRadians(180.0f));
 	if (FAILED(m_pGameInstance->Add_Prototype(LEVEL_GAMEPLAY, TEXT("Prototype_Component_Model_ForkLift"),
 		CModel::Create(m_pDevice, m_pContext, CModel::TYPE_NONANIM, "../Bin/ModelData/NonAnim/Example/Example.dat", PreTransformMatrix))))
-		return E_FAIL;
-
-	//
-	PreTransformMatrix = XMMatrixScaling(0.01f, 0.01f, 0.01f) * XMMatrixRotationY(XMConvertToRadians(270.0f));
-	if (FAILED(m_pGameInstance->Add_Prototype(LEVEL_GAMEPLAY, TEXT("Prototype_AnimModel_Test"),
-		CModel::Create(m_pDevice, m_pContext, CModel::TYPE_ANIM, "../Bin/ModelData/Anim/Player/Player.dat", PreTransformMatrix, false))))
 		return E_FAIL;
 
 	//Prototype_Component_Model_CarcassBigA
@@ -718,6 +706,49 @@ HRESULT CLoader::Ready_Resources_For_GamePlayLevel_Monster()
 	_matrix		PreTransformMatrix = XMMatrixIdentity();
 
 	m_isFinished_Monster = true;
+
+	return S_OK;
+}
+
+HRESULT CLoader::Ready_Resources_For_Player()
+{
+	_matrix		PreTransformMatrix = XMMatrixIdentity();
+
+	/* Prototype_Component_Model_Player */
+	PreTransformMatrix = XMMatrixScaling(0.01f, 0.01f, 0.01f) * XMMatrixRotationY(XMConvertToRadians(270.0f));
+	if (FAILED(m_pGameInstance->Add_Prototype(LEVEL_GAMEPLAY, TEXT("Prototype_Component_Model_Player"),
+		CModel::Create(m_pDevice, m_pContext, CModel::TYPE_ANIM, "../Bin/ModelData/Anim/Player/Player.dat", PreTransformMatrix, false))))
+		return E_FAIL;
+
+	/* Prototype_Component_Model_FlameSword */
+	PreTransformMatrix = XMMatrixScaling(0.01f, 0.01f, 0.01f);
+	if (FAILED(m_pGameInstance->Add_Prototype(LEVEL_GAMEPLAY, TEXT("Prototype_Component_Model_FlameSword"),
+		CModel::Create(m_pDevice, m_pContext, CModel::TYPE_ANIM, "../Bin/ModelData/NonAnim/Weapon/FlameSword.dat", PreTransformMatrix, false))))
+		return E_FAIL;
+
+	/* Prototype_Component_Model_Rapier */
+	PreTransformMatrix = XMMatrixScaling(0.01f, 0.01f, 0.01f);
+	if (FAILED(m_pGameInstance->Add_Prototype(LEVEL_GAMEPLAY, TEXT("Prototype_Component_Model_Rapier"),
+		CModel::Create(m_pDevice, m_pContext, CModel::TYPE_ANIM, "../Bin/ModelData/NonAnim/Weapon/Rapier.dat", PreTransformMatrix, false))))
+		return E_FAIL;
+
+	/* Prototype_Component_Model_Scissor_Combine */
+	PreTransformMatrix = XMMatrixScaling(0.01f, 0.01f, 0.01f);
+	if (FAILED(m_pGameInstance->Add_Prototype(LEVEL_GAMEPLAY, TEXT("Prototype_Component_Model_Scissor_Combine"),
+		CModel::Create(m_pDevice, m_pContext, CModel::TYPE_ANIM, "../Bin/ModelData/NonAnim/Weapon/Scissor_Combine.dat", PreTransformMatrix, false))))
+		return E_FAIL;
+
+	/* Prototype_Component_Model_Scissor_Left */
+	PreTransformMatrix = XMMatrixScaling(0.01f, 0.01f, 0.01f);
+	if (FAILED(m_pGameInstance->Add_Prototype(LEVEL_GAMEPLAY, TEXT("Prototype_Component_Model_Scissor_Left"),
+		CModel::Create(m_pDevice, m_pContext, CModel::TYPE_ANIM, "../Bin/ModelData/NonAnim/Weapon/Scissor_Left.dat", PreTransformMatrix, false))))
+		return E_FAIL;
+
+	/* Prototype_Component_Model_Scissor_Right */
+	PreTransformMatrix = XMMatrixScaling(0.01f, 0.01f, 0.01f);
+	if (FAILED(m_pGameInstance->Add_Prototype(LEVEL_GAMEPLAY, TEXT("Prototype_Component_Model_Scissor_Right"),
+		CModel::Create(m_pDevice, m_pContext, CModel::TYPE_ANIM, "../Bin/ModelData/NonAnim/Weapon/Scissor_Right.dat", PreTransformMatrix, false))))
+		return E_FAIL;
 
 	return S_OK;
 }
