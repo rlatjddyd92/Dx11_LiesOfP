@@ -65,7 +65,7 @@ void CState_Player_Heal::Update(_float fTimeDelta)
     m_pPlayer->Change_Animation_Boundry(m_iAnimation_Heal, false, 0.1f);
     
 
-    if (*m_pIsEndAnim)
+    if (End_Check())
     {
         _uint iWeponType = m_pPlayer->Get_WeaponType();
 
@@ -150,9 +150,9 @@ _bool CState_Player_Heal::Move(_float fTimeDelta)
         else
         {
             if (isLeft)
-                m_pPlayer->Change_Animation(m_iAnimation_Walk[iWalkType][WALK_L], true, 0.2f, 0.f, false);
+                m_pPlayer->Change_Animation(m_iAnimation_Walk[iWalkType][WALK_L], true, 0.2f, 0, false);
             else if (isRight)
-                m_pPlayer->Change_Animation(m_iAnimation_Walk[iWalkType][WALK_R], true, 0.2f, 0.f, false);
+                m_pPlayer->Change_Animation(m_iAnimation_Walk[iWalkType][WALK_R], true, 0.2f, 0, false);
         }
 
 
@@ -166,6 +166,11 @@ _bool CState_Player_Heal::Move(_float fTimeDelta)
 
 
     return isMoving;
+}
+
+_bool CState_Player_Heal::End_Check()
+{
+    return m_pPlayer->Get_EndAnim(m_iAnimation_Heal);
 }
 
 CState_Player_Heal* CState_Player_Heal::Create(CFsm* pFsm, CPlayer* pPlayer, _uint iStateNum, void* pArg)

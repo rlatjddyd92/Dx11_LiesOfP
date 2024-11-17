@@ -127,10 +127,12 @@ _bool CState_Player_OH_Dash::End_Check()
         bEndCheck = m_pPlayer->Get_EndAnim(m_iAnimation_Dash[DASH_B]);
     }
     else
+    {
+
+    }
         //애니메이션 번호와 일치하지 않는?다
 
-
-        return bEndCheck;
+    return bEndCheck;
 }
 
 CState_Player_OH_Dash* CState_Player_OH_Dash::Create(CFsm* pFsm, CPlayer* pPlayer, _uint iStateNum, void* pArg)

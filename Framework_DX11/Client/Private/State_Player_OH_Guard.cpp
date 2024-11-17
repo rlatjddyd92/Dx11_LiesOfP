@@ -33,7 +33,7 @@ HRESULT CState_Player_OH_Guard::Initialize(_uint iStateNum, void* pArg)
 HRESULT CState_Player_OH_Guard::Start_State(void* pArg)
 {
     if(m_pFsm->Get_PrevState() != CPlayer::OH_WALK)
-        m_pPlayer->Change_Animation(m_iAnimation_Guard, true, 0.2f, 0.f, true);
+        m_pPlayer->Change_Animation(m_iAnimation_Guard, true, 0.2f, 0, true);
 
     m_pPlayer->Change_Animation_Boundry(m_iAnimation_Guard, true);
 

@@ -102,6 +102,11 @@ void CState_Player_Flame_Charge00::End_State()
 {
 }
 
+_bool CState_Player_Flame_Charge00::End_Check()
+{
+    return m_pPlayer->Get_EndAnim(m_iAnimation_FlameCA1);
+}
+
 CState_Player_Flame_Charge00* CState_Player_Flame_Charge00::Create(CFsm* pFsm, CPlayer* pPlayer, _uint iStateNum, void* pArg)
 {
     CState_Player_Flame_Charge00* pInstance = new CState_Player_Flame_Charge00(pFsm, pPlayer);

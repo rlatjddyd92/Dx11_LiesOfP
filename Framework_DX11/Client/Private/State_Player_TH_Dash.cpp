@@ -46,11 +46,6 @@ HRESULT CState_Player_TH_Dash::Start_State(void* pArg)
 
 void CState_Player_TH_Dash::Update(_float fTimeDelta)
 {
-    if (*m_pIsEndAnim)
-    {
-        m_pPlayer->Change_State(CPlayer::TH_IDLE);
-    }
-
     if (End_Check())
     {
         m_pPlayer->Change_State(CPlayer::TH_IDLE);
@@ -127,11 +122,13 @@ _bool CState_Player_TH_Dash::End_Check()
         bEndCheck = m_pPlayer->Get_EndAnim(m_iAnimation_Dash[DASH_B]);
     }
     else
+    {
+
+    }
         //애니메이션 번호와 일치하지 않는?다
 
 
     return bEndCheck;
-
 }
 
 CState_Player_TH_Dash* CState_Player_TH_Dash::Create(CFsm* pFsm, CPlayer* pPlayer, _uint iStateNum, void* pArg)

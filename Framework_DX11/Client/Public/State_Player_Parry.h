@@ -29,6 +29,7 @@ private:
     _float* m_pTrackPos = { nullptr };
 
 private:
+    _bool               End_Check();
 
 public:
     static CState_Player_Parry* Create(class CFsm* pFsm, class CPlayer* pPlayer, _uint iStateNum, void* pArg = nullptr);

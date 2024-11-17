@@ -55,6 +55,11 @@ void CState_Player_Rapier_Charge::End_State()
 {
 }
 
+_bool CState_Player_Rapier_Charge::End_Check()
+{
+    return m_pPlayer->Get_EndAnim(m_iAnimation_RapierCA1);
+}
+
 CState_Player_Rapier_Charge* CState_Player_Rapier_Charge::Create(CFsm* pFsm, CPlayer* pPlayer, _uint iStateNum, void* pArg)
 {
     CState_Player_Rapier_Charge* pInstance = new CState_Player_Rapier_Charge(pFsm, pPlayer);
