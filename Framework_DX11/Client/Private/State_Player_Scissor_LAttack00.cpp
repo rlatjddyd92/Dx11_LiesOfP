@@ -21,7 +21,7 @@ HRESULT CState_Player_Scissor_LAttack00::Initialize(_uint iStateNum, void* pArg)
     m_pResetRootMove = pDesc->pIsResetRootMove;
     m_pTrackPos = pDesc->pPrevTrackPos;
 
-    m_iChangeFrame = 35;
+    m_iChangeFrame = 45;
     m_iStateNum = iStateNum;
 
     return S_OK;
@@ -32,7 +32,7 @@ HRESULT CState_Player_Scissor_LAttack00::Start_State(void* pArg)
     if (m_pFsm->Get_PrevState() == CPlayer::OH_IDLE)
         m_pPlayer->Change_Animation(m_iAnimation_ScissorNA1, false, 0.1f);
     else
-        m_pPlayer->Change_Animation(m_iAnimation_ScissorNA1, false, 0.1f, 15);
+        m_pPlayer->Change_Animation(m_iAnimation_ScissorNA1, false, 0.1f, 12);
 
     m_isInputLButton = false;
     m_isInputRButton = false;
@@ -67,16 +67,16 @@ void CState_Player_Scissor_LAttack00::Update(_float fTimeDelta)
     if (m_iChangeFrame < iFrame && iFrame < m_iChangeFrame + 15)
     {
         if (m_isInputLButton)
-            m_pPlayer->Change_State(CPlayer::RAPIER_LATTACK1);
-        else if (m_isInputRButton)
-        {
-            if (m_fRButtonTime > 0.15f)
-                m_pPlayer->Change_State(CPlayer::RAPIER_CHARGE);
-            else
-                m_pPlayer->Change_State(CPlayer::RAPIER_RATTACK0);
-        }
+            m_pPlayer->Change_State(CPlayer::SCISSOR_LATTACK1);
+        //else if (m_isInputRButton)
+        //{
+        //    if (m_fRButtonTime > 0.15f)
+        //        m_pPlayer->Change_State(CPlayer::RAPIER_CHARGE);
+        //    else
+        //        m_pPlayer->Change_State(CPlayer::RAPIER_RATTACK0);
+        //}
     }
-    else if (*m_pIsEndAnim)
+    else if (End_Check())
     {
         m_pPlayer->Change_State(CPlayer::OH_IDLE);
     }
@@ -84,6 +84,11 @@ void CState_Player_Scissor_LAttack00::Update(_float fTimeDelta)
 
 void CState_Player_Scissor_LAttack00::End_State()
 {
+}
+
+_bool CState_Player_Scissor_LAttack00::End_Check()
+{
+    return m_pPlayer->Get_EndAnim(m_iAnimation_ScissorNA1);
 }
 
 CState_Player_Scissor_LAttack00* CState_Player_Scissor_LAttack00::Create(CFsm* pFsm, CPlayer* pPlayer, _uint iStateNum, void* pArg)

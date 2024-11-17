@@ -4,6 +4,7 @@
 #include "GameInstance.h"
 #include "Camera.h"
 #include "Weapon.h"
+#include "Weapon_Scissor.h"
 
 #include "Effect_Manager.h"
 #include "Effect_Container.h"
@@ -39,6 +40,10 @@
 #include "State_Player_Flame_RAttack01.h"
 #include "State_Player_Flame_Charge00.h"
 #include "State_Player_Flame_Charge01.h"
+
+#include "State_Player_Scissor_LAttack00.h"
+#include "State_Player_Scissor_LAttack01.h"
+#include "State_Player_Scissor_RAttack00.h"
 
 CPlayer::CPlayer(ID3D11Device * pDevice, ID3D11DeviceContext * pContext)
 	: CPawn{ pDevice, pContext }
@@ -322,6 +327,22 @@ _uint CPlayer::Change_WeaponType()
 	return m_eWeaponType;
 }
 
+void CPlayer::Seperate_Scissor()
+{
+	if (WEP_SCISSOR != m_eWeaponType)
+		return;
+
+	dynamic_cast<CWeapon_Scissor*>(m_pWeapon[WEP_SCISSOR])->Change_SeperateMode();
+}
+
+void CPlayer::Combine_Scissor()
+{
+	if (WEP_SCISSOR != m_eWeaponType)
+		return;
+
+	dynamic_cast<CWeapon_Scissor*>(m_pWeapon[WEP_SCISSOR])->Change_CombineMode();
+}
+
 HRESULT CPlayer::Ready_Weapon()
 {
 	CWeapon::WEAPON_DESC		WeaponDesc{};
@@ -439,11 +460,11 @@ HRESULT CPlayer::Ready_FSM()
 	//페이탈 아츠
 		// Shift + F 패리 어택
 
-	m_pFsmCom->Add_State(CState_Player_Rapier_LAttack00::Create(m_pFsmCom, this, RAPIER_LATTACK0, &Desc));	// 좌클릭 공격1
-	m_pFsmCom->Add_State(CState_Player_Rapier_LAttack01::Create(m_pFsmCom, this, RAPIER_LATTACK1, &Desc));	// 좌클릭 공격2
-	m_pFsmCom->Add_State(CState_Player_Rapier_RAttack00::Create(m_pFsmCom, this, RAPIER_RATTACK0, &Desc));	// 우클릭 공격
-	m_pFsmCom->Add_State(CState_Player_Rapier_Charge::Create(m_pFsmCom, this, RAPIER_CHARGE, &Desc));	// 우클릭 차지공격
-	m_pFsmCom->Add_State(CState_Player_Rapier_Fatal::Create(m_pFsmCom, this, RAPIER_FATAL, &Desc));	// F 페이탈아츠
+	m_pFsmCom->Add_State(CState_Player_Scissor_LAttack00::Create(m_pFsmCom, this, SCISSOR_LATTACK0, &Desc));	// 좌클릭 공격1
+	m_pFsmCom->Add_State(CState_Player_Scissor_LAttack01::Create(m_pFsmCom, this, SCISSOR_LATTACK1, &Desc));	// 좌클릭 공격2
+	m_pFsmCom->Add_State(CState_Player_Scissor_RAttack00::Create(m_pFsmCom, this, SCISSOR_RATTACK0, &Desc));	// 우클릭 공격
+	//m_pFsmCom->Add_State(CState_Player_Rapier_Charge::Create(m_pFsmCom, this, RAPIER_CHARGE, &Desc));	// 우클릭 차지공격
+	//m_pFsmCom->Add_State(CState_Player_Rapier_Fatal::Create(m_pFsmCom, this, RAPIER_FATAL, &Desc));	// F 페이탈아츠
 	// Shift + F 패리 어택
 
 	m_pFsmCom->Set_State(OH_IDLE);

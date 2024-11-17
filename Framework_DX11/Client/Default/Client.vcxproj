@@ -225,6 +225,8 @@
     <ClInclude Include="..\Public\State_Player_Parry.h" />
     <ClInclude Include="..\Public\State_Player_Rapier_RAttack00.h" />
     <ClInclude Include="..\Public\State_Player_Scissor_LAttack00.h" />
+    <ClInclude Include="..\Public\State_Player_Scissor_LAttack01.h" />
+    <ClInclude Include="..\Public\State_Player_Scissor_RAttack00.h" />
     <ClInclude Include="..\Public\State_Player_TH_Dash.h" />
     <ClInclude Include="..\Public\State_Player_TH_Guard.h" />
     <ClInclude Include="..\Public\State_Player_TH_Idle.h" />
@@ -321,6 +323,8 @@
     <ClCompile Include="..\Private\State_Player_Parry.cpp" />
     <ClCompile Include="..\Private\State_Player_Rapier_RAttack00.cpp" />
     <ClCompile Include="..\Private\State_Player_Scissor_LAttack00.cpp" />
+    <ClCompile Include="..\Private\State_Player_Scissor_LAttack01.cpp" />
+    <ClCompile Include="..\Private\State_Player_Scissor_RAttack00.cpp" />
     <ClCompile Include="..\Private\State_Player_TH_Dash.cpp" />
     <ClCompile Include="..\Private\State_Player_TH_Guard.cpp" />
     <ClCompile Include="..\Private\State_Player_TH_Idle.cpp" />

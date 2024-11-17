@@ -7,11 +7,11 @@ END
 
 BEGIN(Client)
 
-class CState_Player_Scissor_LAttack00 : public CState
+class CState_Player_Scissor_LAttack01 : public CState
 {
 public:
-    CState_Player_Scissor_LAttack00(class CFsm* pFsm, class CPlayer* pPlayer);
-    virtual ~CState_Player_Scissor_LAttack00() = default;
+    CState_Player_Scissor_LAttack01(class CFsm* pFsm, class CPlayer* pPlayer);
+    virtual ~CState_Player_Scissor_LAttack01() = default;
 
 public:
     virtual HRESULT Initialize(_uint iStateNum, void* pArg) override;
@@ -22,7 +22,7 @@ public:
 private:
     class CPlayer* m_pPlayer = { nullptr };
 
-    _uint               m_iAnimation_ScissorNA1 = {};
+    _uint               m_iAnimation_ScissorNA2 = {};
 
     _int               m_iChangeFrame = {};
 
@@ -38,7 +38,7 @@ private:
     _bool               End_Check();
 
 public:
-    static CState_Player_Scissor_LAttack00* Create(class CFsm* pFsm, class CPlayer* pPlayer, _uint iStateNum, void* pArg = nullptr);
+    static CState_Player_Scissor_LAttack01* Create(class CFsm* pFsm, class CPlayer* pPlayer, _uint iStateNum, void* pArg = nullptr);
     virtual void Free() override;
 
 };

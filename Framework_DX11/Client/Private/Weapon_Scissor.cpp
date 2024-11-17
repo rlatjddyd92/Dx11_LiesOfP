@@ -46,9 +46,16 @@ void CWeapon_Scissor::Update(_float fTimeDelta)
 	if (!m_isActive)
 		return;
 
-	__super::Update(fTimeDelta);
+	if (!m_isSeperate)
+	{
+		__super::Update(fTimeDelta);
 
-	m_pColliderCom->Update(&m_WorldMatrix);
+		m_pColliderCom->Update(&m_WorldMatrix);
+	}
+	else if (m_isSeperate)
+	{
+
+	}
 }
 
 void CWeapon_Scissor::Late_Update(_float fTimeDelta)
@@ -56,15 +63,21 @@ void CWeapon_Scissor::Late_Update(_float fTimeDelta)
 	if (!m_isActive)
 		return;
 
-	/* 직교투영을 위한 월드행렬까지 셋팅하게 된다. */
-	__super::Late_Update(fTimeDelta);
+	if (!m_isSeperate)
+	{
+		__super::Late_Update(fTimeDelta);
 
 #ifdef _DEBUG
-	m_pGameInstance->Add_DebugObject(m_pColliderCom);
+		m_pGameInstance->Add_DebugObject(m_pColliderCom);
 
 #endif
-	m_pGameInstance->Add_RenderObject(CRenderer::RG_NONBLEND, this);
-	m_pGameInstance->Add_RenderObject(CRenderer::RG_SHADOWOBJ, this);
+		m_pGameInstance->Add_RenderObject(CRenderer::RG_NONBLEND, this);
+		m_pGameInstance->Add_RenderObject(CRenderer::RG_SHADOWOBJ, this);
+	}
+	else if (m_isSeperate)
+	{
+
+	}
 }
 
 HRESULT CWeapon_Scissor::Render()
@@ -85,10 +98,18 @@ HRESULT CWeapon_Scissor::Render_LightDepth()
 
 void CWeapon_Scissor::Change_SeperateMode()
 {
+	if (m_isSeperate)
+		return;
+
+	m_isSeperate = true;
 }
 
 void CWeapon_Scissor::Change_CombineMode()
 {
+	if (!m_isSeperate)
+		return;
+
+	m_isSeperate = false;
 }
 
 HRESULT CWeapon_Scissor::Ready_Components()
@@ -97,7 +118,7 @@ HRESULT CWeapon_Scissor::Ready_Components()
 		return E_FAIL;
 
 	/* FOR.Com_Model */
-	if (FAILED(__super::Add_Component(LEVEL_GAMEPLAY, TEXT("Prototype_Component_Model_Scissor_Combine"),
+	if (FAILED(__super::Add_Component(LEVEL_GAMEPLAY, TEXT("Prototype_Component_Model_Scissor_Left"),
 		TEXT("Com_Model"), reinterpret_cast<CComponent**>(&m_pModelCom))))
 		return E_FAIL;
 

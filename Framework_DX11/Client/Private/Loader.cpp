@@ -538,11 +538,11 @@ HRESULT CLoader::Ready_Resources_For_Player()
 		CModel::Create(m_pDevice, m_pContext, CModel::TYPE_ANIM, "../Bin/ModelData/NonAnim/Weapon/Scissor_Combine.dat", PreTransformMatrix, false))))
 		return E_FAIL;
 
-	///* Prototype_Component_Model_Scissor_Left */
-	//PreTransformMatrix = XMMatrixScaling(0.01f, 0.01f, 0.01f);
-	//if (FAILED(m_pGameInstance->Add_Prototype(LEVEL_GAMEPLAY, TEXT("Prototype_Component_Model_Scissor_Left"),
-	//	CModel::Create(m_pDevice, m_pContext, CModel::TYPE_ANIM, "../Bin/ModelData/NonAnim/Weapon/Scissor_Left.dat", PreTransformMatrix, false))))
-	//	return E_FAIL;
+	/* Prototype_Component_Model_Scissor_Left */
+	PreTransformMatrix = XMMatrixScaling(0.01f, 0.01f, 0.01f);
+	if (FAILED(m_pGameInstance->Add_Prototype(LEVEL_GAMEPLAY, TEXT("Prototype_Component_Model_Scissor_Left"),
+		CModel::Create(m_pDevice, m_pContext, CModel::TYPE_ANIM, "../Bin/ModelData/NonAnim/Weapon/Scissor_Left.dat", PreTransformMatrix, false))))
+		return E_FAIL;
 
 	///* Prototype_Component_Model_Scissor_Right */
 	//PreTransformMatrix = XMMatrixScaling(0.01f, 0.01f, 0.01f);

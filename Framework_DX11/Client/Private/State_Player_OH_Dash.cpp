@@ -46,14 +46,9 @@ HRESULT CState_Player_OH_Dash::Start_State(void* pArg)
 
 void CState_Player_OH_Dash::Update(_float fTimeDelta)
 {
-    if (*m_pIsEndAnim)
-    {
-        m_pPlayer->Change_State(CPlayer::OH_IDLE);
-    }
-
     if (End_Check())
     {
-        m_pPlayer->Change_State(CPlayer::TH_IDLE);
+        m_pPlayer->Change_State(CPlayer::OH_IDLE);
     }
 }
 

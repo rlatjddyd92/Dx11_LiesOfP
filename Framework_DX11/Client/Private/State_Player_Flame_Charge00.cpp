@@ -92,7 +92,7 @@ void CState_Player_Flame_Charge00::Update(_float fTimeDelta)
                 m_pPlayer->Change_State(CPlayer::FLAME_RATTACK1);
         }
     }
-    else if (*m_pIsEndAnim)
+    else if (End_Check())
     {
         m_pPlayer->Change_State(CPlayer::TH_IDLE);
     }
