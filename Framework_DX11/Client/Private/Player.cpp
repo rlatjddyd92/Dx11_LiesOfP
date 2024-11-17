@@ -77,7 +77,7 @@ HRESULT CPlayer::Initialize(void * pArg)
 
 	// 임시 루트본 설정
 	m_pModelCom->Set_UFBIndices(UFB_ROOT, 2);
-	m_pModelCom->Set_UFBIndices(UFB_BOUNDARY_UPPER, 5);
+	m_pModelCom->Set_UFBIndices(UFB_BOUNDARY_UPPER, 6);
 	m_pModelCom->Update_Boundary();
 
 	return S_OK;

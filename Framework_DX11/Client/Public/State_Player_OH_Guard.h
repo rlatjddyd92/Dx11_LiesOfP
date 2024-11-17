@@ -34,6 +34,7 @@ private:
 
     _float              m_fMoveSpeed = {};
 
+    _bool               m_bTempTest = {false};
 private:
     _bool               Move(_float fTimeDelta);
 

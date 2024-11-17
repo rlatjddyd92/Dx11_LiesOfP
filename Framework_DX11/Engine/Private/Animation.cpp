@@ -80,18 +80,12 @@ _uint CAnimation::Update_TransformationMatrices(const vector<class CBone*>& Bone
 
 		if (*pCurrentTrackPosition >= m_Duration)
 		{
-			*isEnd = true;
-			if (false == isLoop)
+			if (true == isLoop)
 			{
-				if (bBoneUpdated != nullptr)
-				{
-					*bBoneUpdated = false;
-				}
-				
+				*pCurrentTrackPosition = 0.f;
 			}
 			else
-				*pCurrentTrackPosition = 0.f;
-
+				*isEnd = true;
 		}
 	}
 
@@ -161,6 +155,11 @@ _uint CAnimation::Update_TransformationMatrices(const vector<class CBone*>& Bone
 		}
 
 		++iChannelIndex;
+	}
+	
+	if (bBoneUpdated != nullptr)
+	{
+		*bBoneUpdated = true;
 	}
 
 	return iCurrentFrame;
