@@ -38,6 +38,9 @@ private:
 
     _uint               m_iAnimCnt = {};
 
+private:
+    _bool               End_Check();
+
 public:
     static CState_CarcassBigA_Paralyze* Create(class CFsm* pFsm, class CMonster* pMonster, _uint iStateNum, void* pArg = nullptr);
     virtual void Free() override;

@@ -72,7 +72,7 @@ void CSimonManusP1::Update(_float fTimeDelta)
 
 	{
 		//애니메이션 재생 및 루트 본 움직임 제어
-		m_vCurRootMove = m_pModelCom->Play_Animation(fTimeDelta, &m_bEndAnim, nullptr);
+		m_vCurRootMove = m_pModelCom->Play_Animation(fTimeDelta, nullptr);
 
 		//진행한 애니메이션 정도를 통해서 상태 제어(애니메이션이 끝나면 넘어가도록)
 		//m_pFSMCom->Update(fTimeDelta);

@@ -95,9 +95,7 @@ void CCarcassBigA::Priority_Update(_float fTimeDelta)
 
 void CCarcassBigA::Update(_float fTimeDelta)
 {
-
-
-	m_vCurRootMove = m_pModelCom->Play_Animation(fTimeDelta, &m_bEndAnim, nullptr);
+	m_vCurRootMove = m_pModelCom->Play_Animation(fTimeDelta, nullptr);
 
 	m_pFsmCom->Update(fTimeDelta);
 

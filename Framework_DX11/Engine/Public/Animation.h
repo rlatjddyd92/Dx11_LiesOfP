@@ -36,11 +36,15 @@ public:
 
 	HRESULT						Create_BinaryFile(HANDLE* pFile);
 
+	void						Find_ChannelWide();
+	class CChannel*				Get_WideChannel();
+
 private:
 	_char						m_szName[MAX_PATH] = {};
 
 	/* 이 애니메이션이 사용하는 뼈의 갯수 */
 	_uint						m_iNumChannels = { 0 };
+	_uint						m_iWideChannelIndex = { 0 };
 	/* 실제 뼈들의 정보*/
 	/* Channel : 뼈 (시간에 따른 이 뼈의 상태 행렬을 보관한다) */
 	vector<class CChannel*>		m_Channels;

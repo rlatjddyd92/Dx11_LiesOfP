@@ -112,7 +112,7 @@ KEYFRAME CChannel::Find_KeyFrameIndex(_uint* pCurrentKeyFrameIndex, _double Curr
 		vScale = XMLoadFloat3(&LastKeyFrame.vScale);
 		vRotation = XMLoadFloat4(&LastKeyFrame.vRotation);
 		vTranslation = XMVectorSetW(XMLoadFloat3(&LastKeyFrame.vTranslation), 1.f);
-		//return m_KeyFrames.back();
+		return m_KeyFrames.back();
 	}
 
 	/* 보간이 필요한 대부분 경우 */

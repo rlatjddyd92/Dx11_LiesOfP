@@ -86,6 +86,12 @@ _uint CAnimation::Update_TransformationMatrices(const vector<class CBone*>& Bone
 			}
 			else
 				*isEnd = true;
+
+			for (auto& pKeyFrameIndex : CurrentKeyFrameIndices)
+			{
+				pKeyFrameIndex = 0;
+			}
+
 		}
 	}
 
@@ -192,6 +198,27 @@ HRESULT CAnimation::Create_BinaryFile(HANDLE* pFile)
 	}
 
 	return S_OK;
+}
+
+void	 CAnimation::Find_ChannelWide()
+{
+	_int iSize{};
+	_int iChannelIndex{};
+
+	for (_int i = 0; i < m_Channels.size(); ++i)
+	{
+		if (m_Channels[i]->Get_KeyFrames().size() > iSize)
+		{
+			iChannelIndex = i;
+			iSize = m_Channels[i]->Get_KeyFrames().size();
+		}
+	}
+	m_iWideChannelIndex = iChannelIndex;
+}
+
+CChannel* CAnimation::Get_WideChannel()
+{
+	return m_Channels[m_iWideChannelIndex];
 }
 
 CAnimation* CAnimation::Create(HANDLE* pFile, vector<_uint>& KeyFrameIndices, const CModel* pModel)
