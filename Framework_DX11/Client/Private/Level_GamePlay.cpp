@@ -170,7 +170,7 @@ HRESULT CLevel_Tool::Ready_Layer_Monster()
 	// 24-11-15 김성용
 	// 직교 UI 테스트용 코드 
 	// 테스트 후에 for문만 제거하기 
-
+	//for(_int i = 0; i < 3; ++i)
 	if (FAILED(m_pGameInstance->Add_CloneObject_ToLayer(LEVEL_GAMEPLAY, TEXT("Layer_Monster"), TEXT("Prototype_GameObject_CarcassBigA"))))
 		return E_FAIL;
 

@@ -88,6 +88,8 @@ public:
 		// 작동 제어
 		_bool bUpdate = true;
 		_bool bRender = true;
+		_bool bTurn = false;
+		_float fTurn_Degree = 0.f;
 
 		// 쉐이킹
 		_float2 fShaking_Adjust = { 0.f,0.f };

@@ -40,6 +40,8 @@ public:
 		_wstring strText = {};
 		_int iTexture = -1;
 
+
+
 	}OR_RENDER;
 
 	struct Order_Ortho_UI_Render {
@@ -47,7 +49,7 @@ public:
 		{
 			if (First->fDistance_From_Cam < Second->fDistance_From_Cam)
 				return true;
-			else if (_int(First->eType) > _int(First->eType))
+			else if ((First->fDistance_From_Cam == Second->fDistance_From_Cam)&&(_int(First->eType) > _int(Second->eType)))
 				return true;
 
 			return false; // 카메라와 거리가 더 먼 것이 먼저 그려지도록

@@ -190,7 +190,7 @@ void CUIManager::UIControl_Test(_float fTimeDelta)
 		m_pTestData->fHP_Now = max(0, m_pTestData->fHP_Now);
 		m_pTestData->fHP_Now = min(m_pTestData->fHP_Now, m_pTestData->fHP_Max);
 
-		if (KEY_HOLD(KEY::K))
+		if (KEY_TAP(KEY::K))
 		{
 			if (m_pTestData->bFocus)
 				m_pTestData->bFocus = false;
@@ -198,7 +198,7 @@ void CUIManager::UIControl_Test(_float fTimeDelta)
 				m_pTestData->bFocus = true;
 		}
 
-		if (KEY_HOLD(KEY::M))
+		if (KEY_TAP(KEY::M))
 		{
 			if (m_pTestData->bSpecial_Attack)
 				m_pTestData->bSpecial_Attack = false;
@@ -630,6 +630,8 @@ HRESULT CUIManager::Load_UIDataFile_Part(HANDLE handle, DWORD* dword, _int iInde
 		ReadFile(handle, &pNew->iTexture_Index, sizeof(_int), dword, nullptr);
 		ReadFile(handle, &pNew->fTextureColor, sizeof(_float4), dword, nullptr);
 		ReadFile(handle, &pNew->bIsItem, sizeof(_bool), dword, nullptr);
+		ReadFile(handle, &pNew->bTurn, sizeof(_bool), dword, nullptr);
+		ReadFile(handle, &pNew->fTurn_Degree, sizeof(_float), dword, nullptr);
 		m_pUIRender_Client->Make_Texture(pNew->iTexture_Index);
 		_wstring strName = {};
 		while (true)

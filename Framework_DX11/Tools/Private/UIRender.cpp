@@ -101,6 +101,9 @@ HRESULT CUIRender::Render()
 			m_pTransformCom->Set_State(CTransform::STATE_POSITION,
 				XMVectorSet(rNow.fPosition.x - m_fViewWidth * 0.5f, -rNow.fPosition.y + m_fViewHeight * 0.5f, 0.f, 1.f));
 
+			if (rNow.bTurn)
+				m_pTransformCom->Rotation({ 0.f,0.f,1.f,0.f }, XMConvertToRadians(rNow.fTurn_Degree));
+
 			if (FAILED(m_pTransformCom->Bind_ShaderResource(m_pShaderCom, "g_WorldMatrix")))
 				return E_FAIL;
 
@@ -112,11 +115,17 @@ HRESULT CUIRender::Render()
 
 			if (!rNow.bIsItem)
 			{
+				if (rNow.iTexture_Index >= m_vecTextureInfo.size())
+					return S_OK;
+
 				if (FAILED(m_vecTextureInfo[rNow.iTexture_Index]->Texture->Bind_ShadeResource(m_pShaderCom, "g_Texture", 0)))
 					return E_FAIL;
 			}
 			else
 			{
+				if (rNow.iTexture_Index >= m_vecTextureInfo_ItemIcon.size())
+					return S_OK;
+
 				if (FAILED(m_vecTextureInfo_ItemIcon[rNow.iTexture_Index]->Texture->Bind_ShadeResource(m_pShaderCom, "g_Texture", 0)))
 					return E_FAIL;
 			}

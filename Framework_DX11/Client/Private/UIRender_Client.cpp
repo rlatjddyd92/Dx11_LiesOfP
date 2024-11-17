@@ -248,6 +248,9 @@ HRESULT CUIRender_Client::Render_Part(CUIPage::UPART& pPart, CUIPage& pPage, _bo
 		m_pTransformCom->Set_State(CTransform::STATE_POSITION,
 			XMVectorSet(pPart.fPosition.x - m_fViewWidth * 0.5f, -pPart.fPosition.y + m_fViewHeight * 0.5f, 0.f, 1.f));
 
+		if (pPart.bTurn)
+			m_pTransformCom->Rotation({ 0.f,0.f,1.f,0.f }, XMConvertToRadians(pPart.fTurn_Degree));
+
 		if (FAILED(m_pTransformCom->Bind_ShaderResource(m_pShaderCom, "g_WorldMatrix")))
 			return E_FAIL;
 

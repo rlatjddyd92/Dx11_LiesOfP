@@ -22,29 +22,37 @@ public:
 		GROUP_ST_FRAME,
 		GROUP_ST_FILL,
 		GROUP_SP0_FRAME,
-		GROUP_SP0_FILL,
 		GROUP_SP1_FRAME,
-		GROUP_SP1_FILL,
 		GROUP_SP2_FRAME,
-		GROUP_SP2_FILL,
 		GROUP_SP3_FRAME,
-		GROUP_SP3_FILL,
 		GROUP_SP4_FRAME,
+		GROUP_SP0_FILL,
+		GROUP_SP1_FILL,
+		GROUP_SP2_FILL,
+		GROUP_SP3_FILL,
 		GROUP_SP4_FILL,
 
 		// 좌하단 아이템
 		GROUP_POTION_ITEM, // <- 아이템 텍스쳐
-		GROUP_POTION_RKEY, // <- R키 (사용 가능할 때 표시)
+		GROUP_POTION_TOOL_RKEY, // <- R키 (사용 가능할 때 표시)
 		GROUP_POTION_FILL, // <- 포션 게이지 (사용 가능 포션이 0일 때 표시)
-		GROUP_POTION_QUEUE, // <- 포션 대기열
-		GROUP_POTION_COUNT, // <- 포션 카운트
-
-		GROUP_TOOL_ITEM, // <- 아이템 텍스쳐
-		GROUP_TOOL_RKEY, // <- R키 (사용 가능할 때 표시)
-		GROUP_TOOL_QUEUE, // <- 툴 대기열
-		GROUP_TOOL_COUNT, // <- 툴 카운트
+		GROUP_POTION_COUNT,
+		GROUP_POTION_QUEUE_BACK,
+		GROUP_POTION_QUEUE_ITEM,
+		
+		GROUP_TOOL_ITEM,
+		GROUP_TOOL_COUNT,
+		GROUP_TOOL_QUEUE_BACK,
+		GROUP_TOOL_QUEUE_ITEM,
 
 		GROUP_SELECT_CELL, // 선택 표시
+
+		// 좌하단 보조가방
+		GROUP_BAG_FRAMELINE,
+		GROUP_BAG_BACK,
+		GROUP_BAG_ITEM,
+		GROUP_BAG_COUNT,
+		GROUP_BAG_NUM,
 
 		// 좌하단 암
 		GROUP_ARM_BACK,
@@ -59,30 +67,44 @@ public:
 		GROUP_COIN_COUNT,
 
 		// 우하단 무기
+		GROUP_WEAPON_CENTER, // 무기창 전체의 중심
 		GROUP_WEAPON_DURABLE_FRAME,
 		GROUP_WEAPON_DURABLE_FILL,
-		GROUP_WEAPON_BACK,
 		GROUP_WEAPON_NORMAL_BACK, // 일반 무기 (날 + 자루) 표시
+		GROUP_WEAPON_NORMAL_BACK_FX, // 일반 무기 (날 + 자루) 표시 (특수효과)
 		GROUP_WEAPON_NORMAL_BLADE,
 		GROUP_WEAPON_NORMAL_HANDLE,
 		GROUP_WEAPON_SPECIAL_BACK, // 스페셜 무기 표시
 		GROUP_WEAPON_SPECIAL_TEX,
 		GROUP_WEAPON_EQUIP_NUM, // 1,2번 장착 표시
 
-		GROUP_WEAPON_SPECIAL_FRAME_0,  // 날 + 자루의 특수행동 표시 
-		GROUP_WEAPON_SPECIAL_FILL_0,  // 0~2 : 날 담당, 3~5 : 자루 담당 
-		GROUP_WEAPON_SPECIAL_FRAME_1,  // 특수행동칸이 1개만 필요할 경우 1,4번이 진행
-		GROUP_WEAPON_SPECIAL_FILL_1,
-		GROUP_WEAPON_SPECIAL_FRAME_2,
-		GROUP_WEAPON_SPECIAL_FILL_2,
-		GROUP_WEAPON_SPECIAL_FRAME_3,
-		GROUP_WEAPON_SPECIAL_FILL_3,
-		GROUP_WEAPON_SPECIAL_FRAME_4,
-		GROUP_WEAPON_SPECIAL_FILL_4,
-		GROUP_WEAPON_SPECIAL_FRAME_5,
-		GROUP_WEAPON_SPECIAL_FILL_5,
 
-		// E키 주머니 
+		// 특수 공격 게이지 
+		// 사이드는 3칸짜리만 사용한다 
+		GROUP_WEAPON_GAUGE_LEFT_SYMBOL, // 날 특수공격 아이콘
+		GROUP_WEAPON_GAUGE_RIGHT_SYMBOL, // 자루 특수공격 아이콘
+
+		GROUP_WEAPON_GAUGE_LEFT_SIDE_FRAME, // 날 특수 공격 게이지 프레임 (사이드) 
+		GROUP_WEAPON_GAUGE_LEFT_SIDE_WHITE, // 날 특수 공격 게이지 바탕 (사이드)
+		GROUP_WEAPON_GAUGE_LEFT_SIDE_FILL, // 날 특수 공격 게이지 활성화 표시 (사이드)
+
+		GROUP_WEAPON_GAUGE_LEFT_CENTER_FRAME, // 날 특수 공격 게이지 표시 (중심)
+		GROUP_WEAPON_GAUGE_LEFT_CENTER_WHITE, // 날 특수 공격 게이지 바탕 (중심)
+		GROUP_WEAPON_GAUGE_LEFT_CENTER_FILL,  // 날 특수 공격 게이지 활성화 표시 (중심)
+
+		GROUP_WEAPON_GAUGE_RIGHT_SIDE_FRAME, // 자루 특수 공격 게이지 프레임 (사이드) 
+		GROUP_WEAPON_GAUGE_RIGHT_SIDE_WHITE, // 자루 특수 공격 게이지 바탕 (사이드)
+		GROUP_WEAPON_GAUGE_RIGHT_SIDE_FILL, // 자루 특수 공격 게이지 활성화 표시 (사이드)
+
+		GROUP_WEAPON_GAUGE_RIGHT_CENTER_FRAME, // 자루 특수 공격 게이지 표시 (중심)
+		GROUP_WEAPON_GAUGE_RIGHT_CENTER_WHITE, // 자루 특수 공격 게이지 바탕 (중심)
+		GROUP_WEAPON_GAUGE_RIGHT_CENTER_FILL, // 자루 특수 공격 게이지 활성화 표시 (중심)
+
+		GROUP_WEAPON_GAUGE_LEFT_KEYSET_A, // 날 특수 공격 키 (F)
+		GROUP_WEAPON_GAUGE_LEFT_KEYSET_B, // 날 특수 공격 키 (Shift+F)
+
+		GROUP_WEAPON_GAUGE_RIGHT_KEYSET_A, // 자루 특수 공격 키 (F)
+		GROUP_WEAPON_GAUGE_RIGHT_KEYSET_B, // 자루 특수 공격 키 (Shift+F)
 
 		GROUP_END
 	};
@@ -178,7 +200,7 @@ private:
 	vector<UG_CTRL*> m_vecWeapon_Special_Frame;
 	vector<UG_CTRL*> m_vecWeapon_Special_Fill;
 
-	
+	vector<UG_CTRL*> m_vecPage_Play_Ctrl;
 
 
 public:

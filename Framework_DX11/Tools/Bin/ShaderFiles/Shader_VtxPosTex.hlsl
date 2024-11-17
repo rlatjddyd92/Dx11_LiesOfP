@@ -122,8 +122,8 @@ PS_OUT PS_MAIN(PS_IN In)
     if (g_Color.b >= 0.f)
         Out.vColor.b = g_Color.b;
 	
-    if (g_Color.a >= 0.f)
-        Out.vColor.a = g_Color.a;
+    if (g_Color.w >= 0.f)
+        Out.vColor.a = g_Color.w;
 
 	return Out;
 }
