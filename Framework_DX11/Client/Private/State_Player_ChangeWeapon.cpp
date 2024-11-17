@@ -30,9 +30,9 @@ HRESULT CState_Player_ChangeWeapon::Start_State(void* pArg)
 {
     m_iChangeWeaponType = m_pPlayer->Change_WeaponType();
     if(m_iChangeWeaponType < 2)
-        m_pPlayer->Change_Animation(m_iAnimation_ChangeWeapon[0], true, 0.2f);
+        m_pPlayer->Change_Animation(m_iAnimation_ChangeWeapon[0], false, 0.2f);
     else
-        m_pPlayer->Change_Animation(m_iAnimation_ChangeWeapon[1], true, 0.2f);
+        m_pPlayer->Change_Animation(m_iAnimation_ChangeWeapon[1], false, 0.2f);
 
     m_isChangeWeapon = false;
 

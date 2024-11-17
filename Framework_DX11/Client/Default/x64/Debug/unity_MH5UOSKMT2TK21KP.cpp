@@ -99,6 +99,9 @@
 #include "D:\GitProject\Dx11_LiesOfP\Framework_DX11\Client\Private\State_Player_ChangeWeapon.cpp"
 
 
+#include "D:\GitProject\Dx11_LiesOfP\Framework_DX11\Client\Private\State_Player_Flame_Charge00.cpp"
+
+
 #include "D:\GitProject\Dx11_LiesOfP\Framework_DX11\Client\Private\State_Player_Flame_LAttack00.cpp"
 
 

@@ -52,7 +52,7 @@ void CState_Player_OH_Guard::Update(_float fTimeDelta)
     if (m_bTempTest)
     {
 
-        m_pPlayer->Change_Animation(m_iAnimation_Walk[WALK_F], true, 0.2f);
+        m_pPlayer->Change_Animation(m_iAnimation_Walk[WALK_F], true, 0.2f, 0, false);
         m_pPlayer->Change_Animation_Boundry(m_iAnimation_Guard, true, 0.2f);
     }
     else
