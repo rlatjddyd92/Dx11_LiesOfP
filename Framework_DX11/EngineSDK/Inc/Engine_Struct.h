@@ -274,10 +274,11 @@ namespace Engine
 	{
 		XMFLOAT3 vCurPos;
 		XMFLOAT3 vPrePos;
+		XMFLOAT3 vMoveDir;
 
 		_float2 vLifeTime;
 
-		static const unsigned int	iNumElements = 4;
+		static const unsigned int	iNumElements = 5;
 		static const D3D11_INPUT_ELEMENT_DESC	Elements[iNumElements];
 	}VTXTRAIL_ONEPOINT_INSTANCE;
 

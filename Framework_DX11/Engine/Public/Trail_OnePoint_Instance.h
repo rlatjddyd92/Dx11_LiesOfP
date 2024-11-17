@@ -28,7 +28,6 @@ private:
 
 	_int m_iNumCurrentIndex = { 0 };
 
-	vector<_Vec3> m_TrailDir;
 
 	_uint m_iNumTurnCount = { 0 };
 

@@ -22,7 +22,8 @@ struct VS_IN
 	/* InputSlot : 1 */ 
     float3 vCurPos : TEXCOORD0;
     float3 vPrePos : TEXCOORD1;
-    float2 vLifeTime : TEXCOORD2;
+    float3 vMoveDir : TEXCOORD2;
+    float2 vLifeTime : TEXCOORD3;
 };
 
 struct VS_OUT
@@ -30,7 +31,8 @@ struct VS_OUT
     float4 vPosition : POSITION;
     float3 vCurPos : TEXCOORD0;
     float3 vPrePos : TEXCOORD1;
-    float2 vLifeTime : TEXCOORD2;
+    float3 vMoveDir : TEXCOORD2;
+    float2 vLifeTime : TEXCOORD3;
 };
 
 /* 1. 정점의 변환과정을 수행한다. */
@@ -42,6 +44,7 @@ VS_OUT VS_MAIN( /*정점*/VS_IN In)
     Out.vPosition = float4(In.vCurPos, 1.f);
     Out.vCurPos = In.vCurPos;
     Out.vPrePos = In.vPrePos;
+    Out.vMoveDir = In.vMoveDir;
     Out.vLifeTime = In.vLifeTime;
     
     return Out;
@@ -54,7 +57,8 @@ struct GS_IN
     float4 vPosition : POSITION;
     float3 vCurPos : TEXCOORD0;
     float3 vPrePos : TEXCOORD1;
-    float2 vLifeTime : TEXCOORD2;
+    float3 vMoveDir : TEXCOORD2;
+    float2 vLifeTime : TEXCOORD3;
 };
 
 struct GS_OUT

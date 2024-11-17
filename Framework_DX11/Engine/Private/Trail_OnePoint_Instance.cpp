@@ -64,6 +64,7 @@ _bool CTrail_OnePoint_Instance::Update_Buffer(_Vec3 vWorldPos, _float fTrailInte
 		{
 			pVertices[i].vCurPos = vWorldPos;
 			pVertices[i].vPrePos = vWorldPos;
+			pVertices[i].vMoveDir = _float3(0.f, 0.f, 0.f);
 			continue;
 		}
 
@@ -131,10 +132,11 @@ _bool CTrail_OnePoint_Instance::Spread_Buffer(_Vec3 vWorldPos, _float fTrailInte
 		{
 			pVertices[i].vCurPos = vWorldPos;
 			pVertices[i].vPrePos = vWorldPos;
+			pVertices[i].vMoveDir = _float3(0.f, 0.f, 0.f);
 			continue;
 		}
 
-		_Vec3 vMovePos = pVertices[i].vCurPos + m_TrailDir[i] * fSpeed;
+		_Vec3 vMovePos = pVertices[i].vCurPos + pVertices[i].vMoveDir * fSpeed;
 		pVertices[i].vCurPos = vMovePos;
 		pVertices[i].vLifeTime.y += fTimeDelta;
 		if (pVertices[i].vLifeTime.y < pVertices[i].vLifeTime.x)
@@ -147,7 +149,7 @@ _bool CTrail_OnePoint_Instance::Spread_Buffer(_Vec3 vWorldPos, _float fTrailInte
 			m_iNumCurrentIndex = m_iNumInstance - 1;
 
 		_Vec3 vDir = vWorldPos - m_vPrePos;
-		m_TrailDir[m_iNumCurrentIndex] = XMVector3Normalize(vDir);
+		XMStoreFloat3(&pVertices[m_iNumCurrentIndex].vMoveDir, XMVector3Normalize(vDir));
 
 		if (vDir.Length() < fTrailInterval)
 		{
@@ -227,7 +229,6 @@ HRESULT CTrail_OnePoint_Instance::Ready_Buffers(const CVIBuffer_Instancing::INST
 	m_iInstanceStride = sizeof(VTXTRAIL_ONEPOINT_INSTANCE);
 	m_iIndexCountPerInstance = 1;
 
-	m_TrailDir.resize(m_iNumInstance);
 	m_iNumCurrentIndex = m_iNumInstance - 1;
 
 #pragma region VERTEX_BUFFER
@@ -300,6 +301,7 @@ HRESULT CTrail_OnePoint_Instance::Ready_Buffers(const CVIBuffer_Instancing::INST
 	{
 		pInstanceVertices[i].vCurPos = {};
 		pInstanceVertices[i].vPrePos = {};
+		pInstanceVertices[i].vMoveDir = {};
 		pInstanceVertices[i].vLifeTime = _float2(m_pGameInstance->Get_Random(Desc.vLifeTime.x, Desc.vLifeTime.y), 0.f);
 	}
 
