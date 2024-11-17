@@ -223,6 +223,9 @@
     <Filter Include="01.Utility\03.Components\VIBuffer\Instancing\Trail\MultiPoint">
       <UniqueIdentifier>{c5a9687c-ed44-49d1-ae87-959bb47dbd00}</UniqueIdentifier>
     </Filter>
+    <Filter Include="01.Utility\03.Components\VIBuffer\Instancing\Trail\MultiPoint">
+      <UniqueIdentifier>{a1734479-4275-46a1-8e81-571e451eea75}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\Private\Base.cpp">
@@ -426,6 +429,9 @@
     <ClCompile Include="..\Private\ObjectOctree.cpp">
       <Filter>01.Utility\03.Components\Model\ObjectOctree</Filter>
 	</ClCompile>
+    <ClCompile Include="..\Private\ObjectOctree.cpp">
+      <Filter>01.Utility\03.Components\Model\ObjectOctree</Filter>
+    </ClCompile>
     <ClCompile Include="..\private\Trail_MultiPoint_Instance.cpp">
       <Filter>01.Utility\03.Components\VIBuffer\Instancing\Trail\MultiPoint</Filter>
     </ClCompile>
@@ -626,6 +632,9 @@
     <ClInclude Include="..\Public\Instance_Manager.h">
       <Filter>01.Utility\03.Components\Model\Instance</Filter>
     </ClInclude>
+    <ClInclude Include="..\Public\Component_Manager.h">
+      <Filter>01.Utility\03.Components\00.Manager</Filter>
+    </ClInclude>
     <ClInclude Include="..\public\Shader_NonVTX.h">
       <Filter>01.Utility\03.Components\Shader\Shader_NonVTX</Filter>
     </ClInclude>
@@ -649,6 +658,12 @@
     </ClInclude>
     <ClInclude Include="..\public\Model.h">
       <Filter>01.Utility\03.Components\Model</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Public\ObjectOctree.h">
+      <Filter>01.Utility\03.Components\Model\ObjectOctree</Filter>
+    </ClInclude>
+    <ClInclude Include="..\public\Trail_MultiPoint_Instance.h">
+      <Filter>01.Utility\03.Components\VIBuffer\Instancing\Trail\MultiPoint</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

@@ -231,11 +231,6 @@ PS_OUT PS_MAIN(PS_IN In)
     if(Out.vColor.r < 0.1f)
         discard;
     
-    // 알파 = 1.f - ((텍스처 x좌표 + 현재 인덱스 / iNumInstance) + g_fRatio);
-    // 끝부분일수록 연해짐
-    // g_fRatio가 디폴트로는 0. 
-    // 끝내라는 오더 나오면 저거를 스르륵 올려서 점점 없어지게.
-    
     Out.vColor.gb = Out.vColor.r;
     
     return Out;

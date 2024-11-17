@@ -185,10 +185,10 @@
     <ClInclude Include="..\Public\Level_Logo.h" />
     <ClInclude Include="..\public\Loader.h" />
     <ClInclude Include="..\Public\MainApp.h" />
+    <ClInclude Include="..\public\Mesh_Effect.h" />
     <ClInclude Include="..\Public\Monster.h" />
     <ClInclude Include="..\Public\NavDataObj.h" />
     <ClInclude Include="..\Public\Particle_Effect.h" />
-    <ClInclude Include="..\Public\Particle_Snow.h" />
     <ClInclude Include="..\public\Player.h" />
     <ClInclude Include="..\Public\Player_Stat_Manager.h" />
     <ClInclude Include="..\Public\SimonManusP1.h" />
@@ -275,10 +275,10 @@
     <ClCompile Include="..\Private\Level_Logo.cpp" />
     <ClCompile Include="..\private\Loader.cpp" />
     <ClCompile Include="..\Private\MainApp.cpp" />
+    <ClCompile Include="..\private\Mesh_Effect.cpp" />
     <ClCompile Include="..\Private\Monster.cpp" />
     <ClCompile Include="..\Private\NavDataObj.cpp" />
     <ClCompile Include="..\Private\Particle_Effect.cpp" />
-    <ClCompile Include="..\Private\Particle_Snow.cpp" />
     <ClCompile Include="..\private\Player.cpp" />
     <ClCompile Include="..\Private\Player_Stat_Manager.cpp" />
     <ClCompile Include="..\Private\SimonManusP1.cpp" />
@@ -353,8 +353,12 @@
     <Image Include="small.ico" />
   </ItemGroup>
   <ItemGroup>
+    <FxCompile Include="..\Bin\ShaderFiles\Shader_Effect_Mesh.hlsl" />
     <FxCompile Include="..\Bin\ShaderFiles\Shader_Effect_Texture.hlsl" />
     <FxCompile Include="..\Bin\ShaderFiles\Shader_ParticleCompute.hlsl" />
+    <FxCompile Include="..\Bin\ShaderFiles\Shader_TrailHead_PointInstance.hlsl" />
+    <FxCompile Include="..\Bin\ShaderFiles\Shader_TrailTail_PointInstance.hlsl" />
+    <FxCompile Include="..\Bin\ShaderFiles\Shader_Trail_MultiPoint_Compute.hlsl" />
     <FxCompile Include="..\Bin\ShaderFiles\Shader_VtxAnimModel.hlsl" />
     <FxCompile Include="..\Bin\ShaderFiles\Shader_VtxCubeTex.hlsl" />
     <FxCompile Include="..\Bin\ShaderFiles\Shader_VtxModel.hlsl" />
@@ -362,6 +366,8 @@
     <FxCompile Include="..\Bin\ShaderFiles\Shader_VtxPointInstance.hlsl" />
     <FxCompile Include="..\Bin\ShaderFiles\Shader_VtxPosTex.hlsl" />
     <FxCompile Include="..\Bin\ShaderFiles\Shader_VtxRectInstance.hlsl" />
+    <FxCompile Include="..\Bin\ShaderFiles\Shader_VtxTrail_OnePoint_Instance.hlsl" />
+    <FxCompile Include="..\Bin\ShaderFiles\Shader_VtxTrail_TwoPoint_Instance.hlsl" />
   </ItemGroup>
   <ItemGroup>
     <None Include="..\Bin\ShaderFiles\Shader_Client_InOut.hlsli" />

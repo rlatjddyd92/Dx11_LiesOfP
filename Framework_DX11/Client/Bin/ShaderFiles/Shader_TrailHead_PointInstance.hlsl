@@ -1,5 +1,9 @@
 #include "Shader_Engine_Defines.hlsli"
 
+#define STATE_GROW          0x0001
+#define STATE_SHRINK        0x0002
+#define STATE_ROTATION      0x0004
+
 // ∞Ì¡ÿ»£
 struct Particle
 {
@@ -16,18 +20,21 @@ struct Particle
     float4 vNextRandomDir;
 };
 
-#define STATE_GROW          0x0001
-#define STATE_SHRINK        0x0002
-#define STATE_ROTATION      0x0004
+struct HeadParticle
+{
+    Particle particle;
+    float4 vPreTranslation;
+    float4 vCurrentRandomPos;
+    float4 vNextRandomPos;
+    uint iTailInitIndex;
+};
 
-
-StructuredBuffer<Particle> Particle_SRV : register(t0);
+StructuredBuffer<HeadParticle> Particle_SRV : register(t0);
 
 matrix			g_WorldMatrix, g_ViewMatrix, g_ProjMatrix;
 texture2D		g_DiffuseTexture;
 texture2D       g_NormalTexture;
-texture2D       g_MaskTexture_1;
-texture2D       g_MaskTexture_2;
+texture2D       g_MaskTexture;
 vector			g_vCamPosition;
 
 float2          g_vTexDivide;
@@ -53,21 +60,21 @@ VS_OUT VS_MAIN(uint instanceID : SV_InstanceID)
     VS_OUT Out = (VS_OUT) 0;
 	
     row_major float4x4 TransformMatrix = float4x4(
-    float4(Particle_SRV[instanceID].vRight), 
-    float4(Particle_SRV[instanceID].vUp), 
-    float4(Particle_SRV[instanceID].vLook), 
-    float4(Particle_SRV[instanceID].vTranslation)
+    float4(Particle_SRV[instanceID].particle.vRight), 
+    float4(Particle_SRV[instanceID].particle.vUp),
+    float4(Particle_SRV[instanceID].particle.vLook),
+    float4(Particle_SRV[instanceID].particle.vTranslation)
     );
     
-    vector vPosition = mul(float4(Particle_SRV[instanceID].vPosition, 1.f), TransformMatrix);
+    vector vPosition = mul(float4(Particle_SRV[instanceID].particle.vPosition, 1.f), TransformMatrix);
 
     vPosition = mul(vPosition, g_WorldMatrix);
 	
     Out.vPosition = vPosition;
-    Out.vPSize = Particle_SRV[instanceID].vPSize;
-    Out.vLifeTime = Particle_SRV[instanceID].vLifeTime;
-    Out.vColor = Particle_SRV[instanceID].vColor;
-    Out.vLook = mul(Particle_SRV[instanceID].vLook, g_WorldMatrix);
+    Out.vPSize = Particle_SRV[instanceID].particle.vPSize;
+    Out.vLifeTime = Particle_SRV[instanceID].particle.vLifeTime;
+    Out.vColor = Particle_SRV[instanceID].particle.vColor;
+    Out.vLook = mul(Particle_SRV[instanceID].particle.vLook, g_WorldMatrix);
     
     return Out;
 }
@@ -278,6 +285,18 @@ PS_OUT PS_MAIN(PS_IN In)
     return Out;
 }
 
+PS_OUT PS_MAIN_TEST(PS_IN In)
+{
+    PS_OUT Out = (PS_OUT) 0;
+	
+    Out.vColor = float4(1.f, 0.f, 0.f, 1.f);
+    
+    if (In.vLifeTime.y >= In.vLifeTime.x)
+        discard;
+
+    return Out;
+}
+
 PS_OUT PS_MAIN_RTOA_GLOW(PS_IN In)
 {
     PS_OUT Out = (PS_OUT) 0;
@@ -462,5 +481,16 @@ technique11	DefaultTechnique
         VertexShader = compile vs_5_0 VS_MAIN();
         GeometryShader = compile gs_5_0 GS_DIR_MAIN();
         PixelShader = compile ps_5_0 PS_SPRITE_BTOA_MAIN();
+    }
+
+    pass PARTICLE_TEST  // 6
+    {
+        SetRasterizerState(RS_Default);
+        SetDepthStencilState(DSS_Default, 0);
+        SetBlendState(BS_Default, vector(0.f, 0.f, 0.f, 0.f), 0xffffffff);
+
+        VertexShader = compile vs_5_0 VS_MAIN();
+        GeometryShader = compile gs_5_0 GS_MAIN();
+        PixelShader = compile ps_5_0 PS_MAIN_TEST();
     }
 }
