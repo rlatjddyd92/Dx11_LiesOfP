@@ -45,6 +45,18 @@ HRESULT CLevel_Tool::Initialize()
 	// 게임 플레이에 필요한 인벤, 플레이 화면, 스탯 화면 등을 상황에 따라 보여 주도록 설정 
 	GET_GAMEINTERFACE->SetPlayMode(true);
 
+	CEffect_Container::EFFECT_DESC desc = {};
+
+	desc.fRotationPerSec = XMConvertToRadians(90.f);
+	desc.fSpeedPerSec = 1.f;
+	desc.iLevelIndex = LEVEL_GAMEPLAY;
+	desc.pParentMatrix = nullptr;
+	desc.pSocketMatrix = nullptr;
+	desc.vPos = { 0.f, 0.f, 0.f };
+	desc.vRotation = { 0.f, 0.f, 0.f };
+	desc.vScale = { 1.f, 1.f, 1.f };
+
+	CEffect_Manager::Get_Instance()->Add_Effect_ToLayer(LEVEL_GAMEPLAY, TEXT("TEST_Effect"), &desc);
 
 	return S_OK;
 }
@@ -158,9 +170,10 @@ HRESULT CLevel_Tool::Ready_Layer_Monster()
 	// 24-11-15 김성용
 	// 직교 UI 테스트용 코드 
 	// 테스트 후에 for문만 제거하기 
-	/*for(_int i =0; i < 3; ++i)*/
-	//if (FAILED(m_pGameInstance->Add_CloneObject_ToLayer(LEVEL_GAMEPLAY, TEXT("Layer_Monster"), TEXT("Prototype_GameObject_CarcassBigA"))))
-	//	return E_FAIL;
+
+	if (FAILED(m_pGameInstance->Add_CloneObject_ToLayer(LEVEL_GAMEPLAY, TEXT("Layer_Monster"), TEXT("Prototype_GameObject_CarcassBigA"))))
+		return E_FAIL;
+
 	return S_OK;
 }
 

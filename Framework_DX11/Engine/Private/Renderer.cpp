@@ -333,6 +333,7 @@ HRESULT CRenderer::Draw()
 		return E_FAIL;
 	if (FAILED(Render_Blend()))
 		return E_FAIL;
+
 	if (FAILED(Render_UI()))
 		return E_FAIL;
 

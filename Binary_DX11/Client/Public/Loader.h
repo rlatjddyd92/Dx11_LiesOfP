@@ -45,6 +45,7 @@ private:
 	HRESULT Ready_Resources_For_BossMonster();
 	HRESULT Ready_Resources_For_BasicMonster();
 	HRESULT Ready_Resources_For_Effect();
+	HRESULT Ready_Resources_For_Weapon();
 
 	HRESULT Ready_Resources_GoJunHo();
 

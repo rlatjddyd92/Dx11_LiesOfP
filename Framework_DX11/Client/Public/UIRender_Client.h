@@ -49,6 +49,8 @@ public:
 
 	HRESULT Render_TestFont(_bool bIsKorean);
 
+	HRESULT Render_Part(CUIPage::UPART& pPart, CUIPage& pPage, _bool bTopMove);
+
 	void Input_TestPageInfo(
 		TEST_PAGE_NAME eName,
 		_float2 fPosition,
@@ -64,7 +66,7 @@ public:
 private:
 	HRESULT Ready_Components();
 
-	HRESULT Render_Part( CUIPage::UPART& pPart,  CUIPage& pPage, _bool bTopMove);
+	
 
 	void Ready_Font();
 	HRESULT Ready_Texture_UIPart();

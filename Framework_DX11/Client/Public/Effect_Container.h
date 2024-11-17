@@ -16,9 +16,9 @@ public:
 		const _Matrix* pParentMatrix = { nullptr };
 		const _Matrix* pSocketMatrix = { nullptr };
 
-		_Vec3 vPos;
-		_Vec3 vScale;
-		_Vec3 vRotation;
+		_Vec3 vPos = {};
+		_Vec3 vScale = { 1.f, 1.f, 1.f };
+		_Vec3 vRotation = {};
 	} EFFECT_DESC;
 
 private:

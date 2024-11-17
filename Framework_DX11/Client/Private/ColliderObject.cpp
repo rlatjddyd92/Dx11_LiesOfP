@@ -80,7 +80,7 @@ HRESULT CColliderObject::Ready_Components(CBounding::BOUNDING_DESC* pBoundingDes
 	{
 		CBounding_AABB::BOUNDING_AABB_DESC* pColliderAABBDesc = static_cast<CBounding_AABB::BOUNDING_AABB_DESC*>(pBoundingDesc);
 
-		if (FAILED(__super::Add_Component(LEVEL_GAMEPLAY, TEXT("Prototype_Component_Collider_AABB"),
+		if (FAILED(__super::Add_Component(LEVEL_STATIC, TEXT("Prototype_Component_Collider_AABB"),
 			TEXT("Com_Collider_AABB"), reinterpret_cast<CComponent**>(&m_pColliderCom), pColliderAABBDesc)))
 			return E_FAIL;
 	}
@@ -88,7 +88,7 @@ HRESULT CColliderObject::Ready_Components(CBounding::BOUNDING_DESC* pBoundingDes
 	{
 		CBounding_OBB::BOUNDING_OBB_DESC* pColliderOBBDesc = static_cast<CBounding_OBB::BOUNDING_OBB_DESC*>(pBoundingDesc);
 
-		if (FAILED(__super::Add_Component(LEVEL_GAMEPLAY, TEXT("Prototype_Component_Collider_OBB"),
+		if (FAILED(__super::Add_Component(LEVEL_STATIC, TEXT("Prototype_Component_Collider_OBB"),
 			TEXT("Com_Collider_OBB"), reinterpret_cast<CComponent**>(&m_pColliderCom), pColliderOBBDesc)))
 			return E_FAIL;
 	}
@@ -96,7 +96,7 @@ HRESULT CColliderObject::Ready_Components(CBounding::BOUNDING_DESC* pBoundingDes
 	{
 		CBounding_Sphere::BOUNDING_SPHERE_DESC* pColliderSphereDesc = static_cast<CBounding_Sphere::BOUNDING_SPHERE_DESC*>(pBoundingDesc);
 
-		if (FAILED(__super::Add_Component(LEVEL_GAMEPLAY, TEXT("Prototype_Component_Collider_Sphere"),
+		if (FAILED(__super::Add_Component(LEVEL_STATIC, TEXT("Prototype_Component_Collider_Sphere"),
 			TEXT("Com_Collider_Sphere"), reinterpret_cast<CComponent**>(&m_pColliderCom), pColliderSphereDesc)))
 			return E_FAIL;
 	}

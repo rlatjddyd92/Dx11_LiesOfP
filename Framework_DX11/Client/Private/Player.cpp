@@ -121,55 +121,46 @@ void CPlayer::Update(_float fTimeDelta)
 
 	for (auto& EvKey : m_EvKeyList)
 	{
-		CEffect_Container* pEffectCon;
-		if (EvKey.eEvent_type == EVENT_KEYFRAME::ET_ONCE)
-		{
-			auto Effect = m_Effects.find(EvKey.iEffectNum);
-			if (Effect == m_Effects.end())
-			{
-				CEffect_Container::EFFECT_DESC EffectDesc = {};
-				EffectDesc.fRotationPerSec = XMConvertToRadians(90.f);
-				EffectDesc.fSpeedPerSec = 1.f;
-				EffectDesc.iLevelIndex = LEVEL_GAMEPLAY;
-				EffectDesc.vScale = _Vec3{ 0.5f, 0.5f, 0.5f };
-				EffectDesc.vPos = _Vec3{ 0, 0, 0 };
-				EffectDesc.vRotation = _Vec3{ 0, 0, 0 };
-				EffectDesc.pParentMatrix = m_pTransformCom->Get_WorldMatrix_Ptr();
-				EffectDesc.pSocketMatrix = (_Matrix*)m_pModelCom->Get_BoneCombindTransformationMatrix_Ptr(EvKey.iBoneIndex);
 
-				CEffect_Manager::Get_Instance()->Clone_Effect(CEffect_Manager::EFFECT_POWER_HIT, &EffectDesc);
-				m_Effects.emplace(EvKey.iEffectNum, pEffectCon);
-			}
-			else
-			{
-				pEffectCon = Effect->second;
-			}
-			m_EffectList.push_back(pEffectCon);
-		}
-		else if (EvKey.eEvent_type == EVENT_KEYFRAME::ET_REPET)
-		{
-			auto Effect = m_Effects.find(EvKey.iEffectNum);
-			if (Effect == m_Effects.end())
-			{
-				CEffect_Container::EFFECT_DESC EffectDesc = {};
-				EffectDesc.fRotationPerSec = XMConvertToRadians(90.f);
-				EffectDesc.fSpeedPerSec = 1.f;
-				EffectDesc.iLevelIndex = LEVEL_GAMEPLAY;
-				EffectDesc.vScale = _Vec3{0.5f, 0.5f, 0.5f};
-				EffectDesc.vPos = _Vec3{ 0, 0, 0 };
-				EffectDesc.vRotation = _Vec3{ 0, 0, 0 };
-				EffectDesc.pParentMatrix = m_pTransformCom->Get_WorldMatrix_Ptr();
-				EffectDesc.pSocketMatrix = (_Matrix*)m_pModelCom->Get_BoneCombindTransformationMatrix_Ptr(EvKey.iBoneIndex);
-				
-				pEffectCon =	CEffect_Manager::Get_Instance()->Clone_Effect(CEffect_Manager::EFFECT_POWER_HIT, &EffectDesc);
-				m_Effects.emplace(EvKey.iEffectNum, pEffectCon);
-			}
-			else
-			{
-				pEffectCon = Effect->second;
-			}
-			m_EffectList.push_back(pEffectCon);
-		}
+		//if (EvKey.eEvent_type == EVENT_KEYFRAME::ET_ONCE)
+		//{
+		//	auto Effect = m_Effects.find(EvKey.iEffectNum);
+		//	if (Effect == m_Effects.end())
+		//	{
+		//		CEffect_Container::EFFECT_DESC EffectDesc = {};
+		//		EffectDesc.fRotationPerSec = XMConvertToRadians(90.f);
+		//		EffectDesc.fSpeedPerSec = 1.f;
+		//		EffectDesc.iLevelIndex = LEVEL_GAMEPLAY;
+		//		EffectDesc.pParentMatrix = m_pTransformCom->Get_WorldMatrix_Ptr();
+		//		EffectDesc.pSocketMatrix = (_Matrix*)m_pModelCom->Get_BoneCombindTransformationMatrix_Ptr(EvKey.iBoneIndex);
+		//		
+		//		CEffect_Manager::Get_Instance()->Clone_Effect(CEffect_Manager::EFFECT_POWER_HIT, &EffectDesc);
+		//	}
+		//}
+		//else if (EvKey.eEvent_type == EVENT_KEYFRAME::ET_REPET)
+		//{
+		//	CEffect_Container* pEffectCon;
+		//	auto Effect = m_Effects.find(EvKey.iEffectNum);
+		//	if (Effect == m_Effects.end())
+		//	{
+		//		CEffect_Container::EFFECT_DESC EffectDesc = {};
+		//		EffectDesc.fRotationPerSec = XMConvertToRadians(90.f);
+		//		EffectDesc.fSpeedPerSec = 1.f;
+		//		EffectDesc.iLevelIndex = LEVEL_GAMEPLAY;
+		//		EffectDesc.vScale = _Vec3{1, 1, 1};
+		//		EffectDesc.vPos = _Vec3{ 0, 0, 0 };
+		//		EffectDesc.vRotation = _Vec3{ 0, 0, 0 };
+		//		EffectDesc.pParentMatrix = m_pTransformCom->Get_WorldMatrix_Ptr();
+		//		EffectDesc.pSocketMatrix = (_Matrix*)m_pModelCom->Get_BoneCombindTransformationMatrix_Ptr(EvKey.iBoneIndex);
+		//		pEffectCon =	CEffect_Manager::Get_Instance()->Clone_Effect(CEffect_Manager::EFFECT_POWER_HIT, &EffectDesc);
+		//		m_Effects.emplace(EvKey.iEffectNum, pEffectCon);
+		//	}
+		//	else
+		//	{
+		//		pEffectCon = Effect->second;
+		//	}
+		//	m_EffectList.push_back(pEffectCon);
+		//}
 	}
 
 	for (auto& pEffect : m_EffectList)
@@ -323,12 +314,12 @@ _uint CPlayer::Change_WeaponType()
 HRESULT CPlayer::Ready_Components()
 {
 	/* FOR.Com_Shader */
-	if (FAILED(__super::Add_Component(LEVEL_GAMEPLAY, TEXT("Prototype_Component_Shader_VtxAnimModel"),
+	if (FAILED(__super::Add_Component(LEVEL_STATIC, TEXT("Prototype_Component_Shader_VtxAnimModel"),
 		TEXT("Com_Shader"), reinterpret_cast<CComponent**>(&m_pShaderCom))))
 		return E_FAIL;
 
 	/* FOR.Com_Model */
-	if (FAILED(__super::Add_Component(LEVEL_GAMEPLAY, TEXT("Prototype_AnimModel_Test"),
+	if (FAILED(__super::Add_Component(LEVEL_GAMEPLAY, TEXT("Prototype_Component_Model_Player"),
 		TEXT("Com_Model"), reinterpret_cast<CComponent**>(&m_pModelCom))))
 		return E_FAIL;
 
@@ -345,7 +336,7 @@ HRESULT CPlayer::Ready_Components()
 	ColliderDesc.vExtents = _float3(0.5f, 1.0f, 0.5f);
 	ColliderDesc.vCenter = _float3(0.f, ColliderDesc.vExtents.y, 0.f);
 
-	if (FAILED(__super::Add_Component(LEVEL_GAMEPLAY, TEXT("Prototype_Component_Collider_AABB"),
+	if (FAILED(__super::Add_Component(LEVEL_STATIC, TEXT("Prototype_Component_Collider_AABB"),
 		TEXT("Com_Collider"), reinterpret_cast<CComponent**>(&m_pColliderCom), &ColliderDesc)))
 		return E_FAIL;
 	

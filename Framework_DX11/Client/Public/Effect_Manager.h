@@ -5,6 +5,7 @@
 
 #include "Particle_Effect.h"
 #include "Texture_Effect.h"
+#include "Mesh_Effect.h"
 
 BEGIN(Engine)
 class CGameInstance;
@@ -30,8 +31,8 @@ public:
 	HRESULT Initialize(ID3D11Device* pDevice, ID3D11DeviceContext* pContext, const _wstring& strEffectPath);
 
 public:
-	class CEffect_Container* Clone_Effect(EFFECT eEffect, void* pArg);
-	HRESULT Add_Effect_ToLayer(_uint iLevelID, EFFECT eEffect, void* pArg);
+	class CEffect_Container* Clone_Effect(const _wstring& strECTag, void* pArg);
+	HRESULT Add_Effect_ToLayer(_uint iLevelID, const _wstring& strECTag, void* pArg);
 
 private:
 	class CGameInstance* m_pGameInstance = { nullptr };
@@ -40,11 +41,18 @@ private:
 	
 	map<const _wstring, CParticle_Effect::PARTICLE_EFFECT_DESC> m_PEDescs;
 	map<const _wstring, CTexture_Effect::TEXTURE_EFFECT_DESC> m_TEDescs;
+	map<const _wstring, CMesh_Effect::MESH_EFFECT_DESC> m_MEDescs;
+
+	map<const _wstring, vector<_wstring>> m_EffectContainers;
 
 private:
 	HRESULT Load_Effects(const _wstring& strEffectPath);
+	HRESULT Load_EffectContainers(const _wstring& strEffectPath);
+
 	HRESULT Load_Textures();
-	_wstring Get_FileExtentin(const _wstring& strFileName);
+	HRESULT Load_Models();
+	HRESULT Load_Shaders();
+	HRESULT Load_Objects();
 
 	HRESULT Load_Particle_Effect(const _wstring& strResultPath);
 	HRESULT Load_Texture_Effect(const _wstring& strResultPath);
@@ -52,6 +60,11 @@ private:
 
 	CParticle_Effect* Clone_ParticleEffect(const _wstring& strEffectTag);
 	CTexture_Effect* Clone_TextureEffect(const _wstring& strEffectTag);
+	CMesh_Effect* Clone_MeshEffect(const _wstring& strEffectTag);
+
+	_wstring Get_FileName(const _wstring& strFileTag);
+	_wstring Get_FileExtentin(const _wstring& strFileTag);
+
 
 public:
 	virtual void Free() override;

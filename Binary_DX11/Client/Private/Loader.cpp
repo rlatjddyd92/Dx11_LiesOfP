@@ -91,12 +91,11 @@ HRESULT CLoader::Ready_Resources_For_GamePlayLevel()
 	//	CModel::Create(m_pDevice, m_pContext, CModel::TYPE_ANIM, "../Bin/Resources/Models/Fiona/Fiona.fbx", "../Bin/ModelData/Anim/Fiona/", PreTransformMatrix))))
 	//	return E_FAIL;
 
-	/* For. Prototype_Component_Model_PlayerExample*/
-	PreTransformMatrix = XMMatrixRotationY(XMConvertToRadians(180.0f));
-
-	if (FAILED(m_pGameInstance->Add_Prototype(LEVEL_GAMEPLAY, TEXT("Prototype_Component_Model_Player"),
-		CModel::Create(m_pDevice, m_pContext, CModel::TYPE_ANIM, "../Bin/Resources/Models/Player/Player.fbx", "../Bin/ModelData/Anim/Player/", PreTransformMatrix))))
-		return E_FAIL;
+	///* For. Prototype_Component_Model_PlayerExample*/
+	//PreTransformMatrix = XMMatrixRotationY(XMConvertToRadians(180.0f));
+	//if (FAILED(m_pGameInstance->Add_Prototype(LEVEL_GAMEPLAY, TEXT("Prototype_Component_Model_Player"),
+	//	CModel::Create(m_pDevice, m_pContext, CModel::TYPE_ANIM, "../Bin/Resources/Models/Player/Player.fbx", "../Bin/ModelData/Anim/Player/", PreTransformMatrix))))
+	//	return E_FAIL;
 
 	//if (FAILED(m_pGameInstance->Add_Prototype(LEVEL_GAMEPLAY, TEXT("Prototype_Component_Model_Monastery_TowerDoor"),
 	//	CModel::Create(m_pDevice, m_pContext, CModel::TYPE_ANIM, "../Bin/Resources/Models/Monastery_TowerDoor/SK_FO_Monastery_TowerDoor_01.fbx", "../Bin/ModelData/NonAnim/InteractObj/Tex/", PreTransformMatrix))))
@@ -126,6 +125,9 @@ HRESULT CLoader::Ready_Resources_For_GamePlayLevel()
 
 	//if (FAILED(Ready_Resources_For_Effect()))
 	//	return E_FAIL;
+
+	if (FAILED(Ready_Resources_For_Weapon()))
+		return E_FAIL;
 
 	lstrcpy(m_szLoadingText, TEXT("변환 완료"));
 
@@ -288,6 +290,38 @@ HRESULT CLoader::Ready_Resources_For_Effect()
 	/* For. Prototype_Component_Effect_HalfSphere_02 */
 	if (FAILED(m_pGameInstance->Add_Prototype(LEVEL_GAMEPLAY, TEXT("Prototype_Component_Effect_HalfSphere_02"),
 		CModel::Create(m_pDevice, m_pContext, CModel::TYPE_NONANIM, "../Bin/Resources/Models/Effect/SM_HalfSphere_02_KMH.fbx", "../Bin/ModelData/NonAnim/Effect/", PreTransformMatrix))))
+		return E_FAIL;
+
+	return S_OK;
+}
+
+HRESULT CLoader::Ready_Resources_For_Weapon()
+{
+	_matrix		PreTransformMatrix = XMMatrixIdentity();
+
+	/* For. Prototype_Component_Model_Weapon_FlameSword */
+	if (FAILED(m_pGameInstance->Add_Prototype(LEVEL_GAMEPLAY, TEXT("Prototype_Component_Model_Weapon_FlameSword"),
+		CModel::Create(m_pDevice, m_pContext, CModel::TYPE_ANIM, "../Bin/Resources/Models/Weapon/FlameSword.fbx", "../Bin/ModelData/NonAnim/Weapon/", PreTransformMatrix))))
+		return E_FAIL;
+
+	/* For. Prototype_Component_Model_Weapon_Rapier */
+	if (FAILED(m_pGameInstance->Add_Prototype(LEVEL_GAMEPLAY, TEXT("Prototype_Component_Model_Weapon_Rapier"),
+		CModel::Create(m_pDevice, m_pContext, CModel::TYPE_ANIM, "../Bin/Resources/Models/Weapon/Rapier.fbx", "../Bin/ModelData/NonAnim/Weapon/", PreTransformMatrix))))
+		return E_FAIL;
+
+	/* For. Prototype_Component_Model_Weapon_Scissor_Combine */
+	if (FAILED(m_pGameInstance->Add_Prototype(LEVEL_GAMEPLAY, TEXT("Prototype_Component_Model_Weapon_Scissor_Combine"),
+		CModel::Create(m_pDevice, m_pContext, CModel::TYPE_ANIM, "../Bin/Resources/Models/Weapon/Scissor_Combine.fbx", "../Bin/ModelData/NonAnim/Weapon/", PreTransformMatrix))))
+		return E_FAIL;
+
+	/* For. Prototype_Component_Model_Weapon_Scissor_Left */
+	if (FAILED(m_pGameInstance->Add_Prototype(LEVEL_GAMEPLAY, TEXT("Prototype_Component_Model_Weapon_Scissor_Left"),
+		CModel::Create(m_pDevice, m_pContext, CModel::TYPE_ANIM, "../Bin/Resources/Models/Weapon/Scissor_Left.fbx", "../Bin/ModelData/NonAnim/Weapon/", PreTransformMatrix))))
+		return E_FAIL;
+
+	/* For. Prototype_Component_Model_Weapon_Scissor_Right */
+	if (FAILED(m_pGameInstance->Add_Prototype(LEVEL_GAMEPLAY, TEXT("Prototype_Component_Model_Weapon_Scissor_Right"),
+		CModel::Create(m_pDevice, m_pContext, CModel::TYPE_ANIM, "../Bin/Resources/Models/Weapon/Scissor_Right.fbx", "../Bin/ModelData/NonAnim/Weapon/", PreTransformMatrix))))
 		return E_FAIL;
 
 	return S_OK;

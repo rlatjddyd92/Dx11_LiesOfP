@@ -89,7 +89,8 @@ private:
 	TRAIL_OP_DESC m_SaveDesc = {};
 
 	// 테스트용
-	_bool m_bLeft = { false };
+	_float3 m_vTestTop = {};
+	_bool m_bLoop = { false };
 
 private:
 	HRESULT Ready_Components(const TRAIL_OP_DESC& Desc);

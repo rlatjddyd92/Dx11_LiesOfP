@@ -5,7 +5,6 @@
 #define STATE_ACCEL 0x0008
 #define STATE_DECEL 0x0010
 
-// 고준호
 struct Particle
 {
     float3 vPosition;
@@ -28,28 +27,28 @@ StructuredBuffer<Particle> InitParticles : register(t0);
 // 이게 매프레임 넘겨주는 버퍼
 cbuffer MovementBuffer : register(b0)   // 받아온 걸 상수로 쓰기 위한 버퍼인듯?
 {
-    uint    iNumInstance;
-    uint	iState;
-    float2  pad_1;      // 크기를 맞추기 위한 더미 변수 16바이트를 맞춰야함
+    uint                iNumInstance;
+    uint	            iState;
+    float2              pad_1;      // 크기를 맞추기 위한 더미 변수 16바이트를 맞춰야함
     
-    float4  vPivot;
+    float4              vPivot;
     
-	float	fGravity;
-    float3  pad_2;
+	float	            fGravity;
+    float3              pad_2;
     
-    float4  vMoveDir;
-    row_major matrix WorldMatrix;
+    float4              vMoveDir;
+    row_major matrix    WorldMatrix;
     
-    float3  vOrbitAxis;
-	float	fOrbitAngle;
+    float3              vOrbitAxis;
+	float	            fOrbitAngle;
     
-	float	fTimeInterval;
-	float	fRandomRatio;
-    float	fAccelSpeed;
-	float	fAccelLimit;
+	float	            fTimeInterval;
+	float	            fRandomRatio;
+    float	            fAccelSpeed;
+	float	            fAccelLimit;
     
-	float	fTimeDelta;
-    float3  pad_3;
+	float	            fTimeDelta;
+    float3              pad_3;
 }
 
 float rand(float seed);
@@ -57,227 +56,6 @@ float3 RotateByAxis(float3 vVector, float3 vAxis, float fAngle);
 
 [numthreads(256, 1, 1)]
 void CS_SPREAD_MAIN(uint3 DTid : SV_DispatchThreadID)
-{
-    uint iIndex = DTid.x;
-    
-    if (iIndex >= iNumInstance)
-        return;
-    
-    Particle particle = particles[iIndex];
-    
-    float4 vDir = particle.vTranslation - vPivot;
-    
-    vDir = normalize(vDir);
-    particle.vLifeTime.y += fTimeDelta;
-    
-    if(iState & STATE_RANDOM)
-    {
-        float fTime = fmod(particle.vLifeTime.y, fTimeInterval);
-        if(fTime < fTimeDelta)
-        {
-            particle.vCurrenrRandomDir = particle.vNextRandomDir;
-            
-            particle.vNextRandomDir.x = rand(particle.vTranslation.x);
-            particle.vNextRandomDir.y = rand(particle.vTranslation.y);
-            particle.vNextRandomDir.z = rand(particle.vTranslation.z);
-            
-            particle.vNextRandomDir = normalize(particle.vNextRandomDir);
-        }
-        vDir += float4(lerp(particle.vCurrenrRandomDir.xyz, particle.vNextRandomDir.xyz, fTime/fTimeInterval) * fRandomRatio, 0.f);
-        vDir = normalize(vDir);
-    }
-    
-    float4 vRotateDir = (float4) 0;
-    if (iState & STATE_ORBIT)
-    {
-        float4 vTargetDir = vPivot - particle.vTranslation;
-        vRotateDir = float4(RotateByAxis(vTargetDir.xyz, vOrbitAxis, radians(fOrbitAngle) * fTimeDelta), 0.f);
-        vRotateDir = vTargetDir - vRotateDir;
-    }
-    
-    float fAddSpeed = 1.f;
-    if (iState & STATE_ACCEL)
-    {
-        fAddSpeed *= particle.vLifeTime.y / particle.vLifeTime.x * fAccelSpeed;
-        if(fAddSpeed < fAccelLimit)
-            fAddSpeed = fAccelLimit;
-    }
-    else if (iState & STATE_DECEL)
-    {
-        fAddSpeed *= 1.f - (particle.vLifeTime.y / particle.vLifeTime.x) * fAccelSpeed;
-        if(fAddSpeed < 0.f)
-            fAddSpeed = 0.f;
-        if (fAddSpeed < fAccelLimit)
-            fAddSpeed = fAccelLimit;
-    }
-    
-    float4 vMoveDir = vDir * particle.fSpeed;
-    
-    float4 vGravityDir = float4(0.f, -1.f, 0.f, 0.f);
-    vGravityDir = mul(vGravityDir, WorldMatrix); // 여기에는 역행렬 전달.
-    vMoveDir += normalize(vGravityDir) * fGravity * particle.vLifeTime.y;
-    
-    particle.vTranslation = particle.vTranslation + (vMoveDir * fTimeDelta + vRotateDir) * fAddSpeed;
-    
-    if ((iState & STATE_LOOP) && (particle.vLifeTime.y >= particle.vLifeTime.x))
-    {
-        particle = InitParticles[iIndex];
-        particle.vLifeTime.y = 0.f;
-    }
-    
-    particle.vLook = normalize(vMoveDir * fTimeDelta + vRotateDir);
-    
-    particles[iIndex] = particle;
-}
-
-[numthreads(256, 1, 1)]
-void CS_MOVE_MAIN(uint3 DTid : SV_DispatchThreadID)
-{
-    uint iIndex = DTid.x;
-    
-    if (iIndex >= iNumInstance)
-        return;
-    
-    Particle particle = particles[iIndex];
-    
-    float4 vDir = vMoveDir;
-    
-    vDir = normalize(vDir);
-    particle.vLifeTime.y += fTimeDelta;
-    
-    if (iState & STATE_RANDOM)
-    {
-        float fTime = fmod(particle.vLifeTime.y, fTimeInterval);
-        if (fTime < fTimeDelta)
-        {
-            particle.vCurrenrRandomDir = particle.vNextRandomDir;
-            
-            particle.vNextRandomDir.x = rand(particle.vTranslation.x);
-            particle.vNextRandomDir.y = rand(particle.vTranslation.y);
-            particle.vNextRandomDir.z = rand(particle.vTranslation.z);
-            
-            particle.vNextRandomDir = normalize(particle.vNextRandomDir);
-        }
-        vDir += float4(lerp(particle.vCurrenrRandomDir.xyz, particle.vNextRandomDir.xyz, fTime / fTimeInterval) * fRandomRatio, 0.f);
-        vDir = normalize(vDir);
-    }
-    
-    float4 vRotateDir = (float4) 0;
-    if (iState & STATE_ORBIT)
-    {
-        float4 vTargetDir = vPivot - particle.vTranslation;
-        vRotateDir = float4(RotateByAxis(vTargetDir.xyz, vOrbitAxis, radians(fOrbitAngle) * fTimeDelta), 0.f);
-        vRotateDir = vTargetDir - vRotateDir;
-    }
-    
-    float fAddSpeed = 1.f;
-    if (iState & STATE_ACCEL)
-    {
-        fAddSpeed *= particle.vLifeTime.y / particle.vLifeTime.x * fAccelSpeed;
-        if (fAddSpeed < fAccelLimit)
-            fAddSpeed = fAccelLimit;
-    }
-    else if (iState & STATE_DECEL)
-    {
-        fAddSpeed *= 1.f - (particle.vLifeTime.y / particle.vLifeTime.x) * fAccelSpeed;
-        if (fAddSpeed < 0.f)
-            fAddSpeed = 0.f;
-        if (fAddSpeed < fAccelLimit)
-            fAddSpeed = fAccelLimit;
-    }
-    
-    float4 vMoveDir = vDir * particle.fSpeed;
-    
-    float4 vGravityDir = float4(0.f, -1.f, 0.f, 0.f);
-    vGravityDir = mul(vGravityDir, WorldMatrix); // 여기에는 역행렬 전달.
-    vMoveDir += normalize(vGravityDir) * fGravity * particle.vLifeTime.y;
-    
-    particle.vTranslation = particle.vTranslation + (vMoveDir * fTimeDelta + vRotateDir) * fAddSpeed;
-    
-    if ((iState & STATE_LOOP) && (particle.vLifeTime.y >= particle.vLifeTime.x))
-    {
-        particle = InitParticles[iIndex];
-        particle.vLifeTime.y = 0.f;
-    }
-    
-    particle.vLook = normalize(vMoveDir * fTimeDelta + vRotateDir);
-    
-    particles[iIndex] = particle;
-}
-
-[numthreads(256, 1, 1)]
-void CS_CONVERGE_MAIN(uint3 DTid : SV_DispatchThreadID)
-{
-    uint iIndex = DTid.x;
-    
-    if (iIndex >= iNumInstance)
-        return;
-    
-    Particle particle = particles[iIndex];
-    
-    float4 vDir = vPivot - particle.vTranslation;
-    
-    vDir = normalize(vDir);
-    particle.vLifeTime.y += fTimeDelta;
-    
-    if (iState & STATE_RANDOM)
-    {
-        float fTime = fmod(particle.vLifeTime.y, fTimeInterval);
-        if (fTime < fTimeDelta)
-        {
-            particle.vCurrenrRandomDir = particle.vNextRandomDir;
-            
-            particle.vNextRandomDir.x = rand(particle.vTranslation.x);
-            particle.vNextRandomDir.y = rand(particle.vTranslation.y);
-            particle.vNextRandomDir.z = rand(particle.vTranslation.z);
-            
-            particle.vNextRandomDir = normalize(particle.vNextRandomDir);
-        }
-        vDir += float4(lerp(particle.vCurrenrRandomDir.xyz, particle.vNextRandomDir.xyz, fTime / fTimeInterval) * fRandomRatio, 0.f);
-        vDir = normalize(vDir);
-    }
-    
-    float4 vRotateDir = (float4) 0;
-    if (iState & STATE_ORBIT)
-    {
-        float4 vTargetDir = vPivot - particle.vTranslation;
-        vRotateDir = float4(RotateByAxis(vTargetDir.xyz, vOrbitAxis, radians(fOrbitAngle) * fTimeDelta), 0.f);
-        vRotateDir = vTargetDir - vRotateDir;
-    }
-    
-    float fAddSpeed = 1.f;
-    if (iState & STATE_ACCEL)
-    {
-        fAddSpeed *= particle.vLifeTime.y / particle.vLifeTime.x * fAccelSpeed;
-        if (fAddSpeed < fAccelLimit)
-            fAddSpeed = fAccelLimit;
-    }
-    else if (iState & STATE_DECEL)
-    {
-        fAddSpeed *= 1.f - (particle.vLifeTime.y / particle.vLifeTime.x) * fAccelSpeed;
-        if (fAddSpeed < 0.f)
-            fAddSpeed = 0.f;
-        if (fAddSpeed < fAccelLimit)
-            fAddSpeed = fAccelLimit;
-    }
-    
-    float4 vMoveDir = vDir * particle.fSpeed;
-    
-    particle.vTranslation = particle.vTranslation + (vMoveDir * fTimeDelta + vRotateDir) * fAddSpeed;
-    
-    if ((iState & STATE_LOOP) && (particle.vLifeTime.y >= particle.vLifeTime.x))
-    {
-        particle = InitParticles[iIndex];
-        particle.vLifeTime.y = 0.f;
-    }
-    
-    particle.vLook = normalize(vMoveDir * fTimeDelta + vRotateDir);
-    
-    particles[iIndex] = particle;
-}
-
-[numthreads(256, 1, 1)]
-void CS_SPREAD_WORLD_MAIN(uint3 DTid : SV_DispatchThreadID)
 {
     uint iIndex = DTid.x;
     
@@ -346,23 +124,24 @@ void CS_SPREAD_WORLD_MAIN(uint3 DTid : SV_DispatchThreadID)
     vMoveDir.y -= fGravity * particle.vLifeTime.y;
     
     particle.vTranslation = particle.vTranslation + (vMoveDir * fTimeDelta + vRotateDir) * fAddSpeed;
+    particle.vLook = normalize(vMoveDir * fTimeDelta + vRotateDir);
 
     if ((iState & STATE_LOOP) && (particle.vLifeTime.y >= particle.vLifeTime.x))
     {
         particle = InitParticles[iIndex];
+        particle.vLook = normalize(vDir * particle.fSpeed * fTimeDelta + vRotateDir);
         particle.vLifeTime.y = 0.f;
         particle.vTranslation = mul(particle.vTranslation, WorldMatrix);
         particle.vRight = vWorldPivot;
         particle.vUp = float4(vOrbitAxis.x, vOrbitAxis.y, vOrbitAxis.z, 0.f);
     }
     
-    particle.vLook = normalize(vMoveDir * fTimeDelta + vRotateDir);
     
     particles[iIndex] = particle;
 }
 
 [numthreads(256, 1, 1)]
-void CS_MOVE_WORLD_MAIN(uint3 DTid : SV_DispatchThreadID)
+void CS_MOVE_MAIN(uint3 DTid : SV_DispatchThreadID)
 {
     uint iIndex = DTid.x;
     
@@ -431,23 +210,24 @@ void CS_MOVE_WORLD_MAIN(uint3 DTid : SV_DispatchThreadID)
     vMoveDir.y -= fGravity * particle.vLifeTime.y;
     
     particle.vTranslation = particle.vTranslation + (vMoveDir * fTimeDelta + vRotateDir) * fAddSpeed;
-
+    
+    particle.vLook = normalize(vMoveDir * fTimeDelta + vRotateDir);
     if ((iState & STATE_LOOP) && (particle.vLifeTime.y >= particle.vLifeTime.x))
     {
         particle = InitParticles[iIndex];
+        particle.vLook = normalize(vDir * particle.fSpeed * fTimeDelta + vRotateDir);
         particle.vLifeTime.y = 0.f;
         particle.vTranslation = mul(particle.vTranslation, WorldMatrix);
         particle.vRight = vWorldPivot;
         particle.vUp = float4(vOrbitAxis.x, vOrbitAxis.y, vOrbitAxis.z, 0.f);
     }
     
-    particle.vLook = normalize(vMoveDir * fTimeDelta + vRotateDir);
     
     particles[iIndex] = particle;
 }
 
 [numthreads(256, 1, 1)]
-void CS_CONVERGE_WORLD_MAIN(uint3 DTid : SV_DispatchThreadID)
+void CS_CONVERGE_MAIN(uint3 DTid : SV_DispatchThreadID)
 {
     uint iIndex = DTid.x;
     
@@ -515,17 +295,18 @@ void CS_CONVERGE_WORLD_MAIN(uint3 DTid : SV_DispatchThreadID)
     float4 vMoveDir = vDir * particle.fSpeed;
     
     particle.vTranslation = particle.vTranslation + (vMoveDir * fTimeDelta + vRotateDir) * fAddSpeed;
-    
+    particle.vLook = normalize(vMoveDir * fTimeDelta + vRotateDir);
+
     if ((iState & STATE_LOOP) && (particle.vLifeTime.y >= particle.vLifeTime.x))
     {
         particle = InitParticles[iIndex];
+        particle.vLook = normalize(vDir * particle.fSpeed * fTimeDelta + vRotateDir);
         particle.vLifeTime.y = 0.f;
         particle.vTranslation = mul(particle.vTranslation, WorldMatrix);
         particle.vRight = vWorldPivot;
         particle.vUp = float4(vOrbitAxis.x, vOrbitAxis.y, vOrbitAxis.z, 0.f);
     }
     
-    particle.vLook = normalize(vMoveDir * fTimeDelta + vRotateDir);
     
     particles[iIndex] = particle;
 }

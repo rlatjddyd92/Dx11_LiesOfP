@@ -9,7 +9,6 @@
 #include "Player.h"
 #include "Weapon.h"
 #include "Terrain.h"
-#include "ForkLift.h"
 #include "FreeCamera.h"
 #include "BackGround.h"
 #include "StaticObj.h"
@@ -23,10 +22,6 @@
 
 #pragma region EFFECT
 #include "Effect_Manager.h"
-#include "Effect_Container.h"
-#include "Particle_Effect.h"
-#include "Texture_Effect.h"
-
 #pragma endregion
 
 #pragma region OBJECT
@@ -236,6 +231,9 @@ void CLoader::Draw_LoadingText()
 
 HRESULT CLoader::Ready_Resources_For_LogoLevel()
 {
+	if (FAILED(Ready_Prototype()))
+		return E_FAIL;
+
 	lstrcpy(m_szLoadingText, TEXT("텍스쳐를 로딩중입니다."));
 	/* For. Prototype_Component_Texture_BackGround */
 	if (FAILED(m_pGameInstance->Add_Prototype(LEVEL_LOGO, TEXT("Prototype_Component_Texture_BackGround"),
@@ -275,8 +273,10 @@ HRESULT CLoader::Ready_Resources_For_GamePlayLevel()
 	//	if (textureFuture.get() == E_FAIL)
 	//		return textureFuture.get();
 	//}
+
 	lstrcpy(m_szLoadingText, TEXT("이펙트 매니저를 로딩중입니다."));
-	CEffect_Manager::Get_Instance()->Initialize(m_pDevice, m_pContext, TEXT("../../Tools/Bin/DataFiles/Effect"));
+	if(FAILED(CEffect_Manager::Get_Instance()->Initialize(m_pDevice, m_pContext, TEXT("../../Tools/Bin/DataFiles/Effect"))))
+		return E_FAIL;
 
 	lstrcpy(m_szLoadingText, TEXT("텍스쳐를 로딩중입니다."));
 
@@ -313,15 +313,14 @@ HRESULT CLoader::Ready_Resources_For_GamePlayLevel()
 
 
 	lstrcpy(m_szLoadingText, TEXT("모델을(를) 로딩중입니다."));
-	/* For. Prototype_Component_VIBuffer_Terrain*/
-	if (FAILED(m_pGameInstance->Add_Prototype(LEVEL_GAMEPLAY, TEXT("Prototype_Component_VIBuffer_Terrain"),
-		CVIBuffer_Terrain::Create(m_pDevice, m_pContext, TEXT("../Bin/Resources/Textures/Terrain/Height.bmp")))))
+
+
+	if (FAILED(Ready_Resources_For_Player()))
 		return E_FAIL;
 
-	/* For. Prototype_Component_VIBuffer_Cube */
-	if (FAILED(m_pGameInstance->Add_Prototype(LEVEL_GAMEPLAY, TEXT("Prototype_Component_VIBuffer_Cube"),
-		CVIBuffer_Cube::Create(m_pDevice, m_pContext))))
+	if (FAILED(Ready_Resources_For_Monster()))
 		return E_FAIL;
+
 
 	lstrcpy(m_szLoadingText, TEXT("네비게이션을(를) 로딩중입니다."));
 	/* For.Prototype_Component_Navigation */
@@ -329,224 +328,9 @@ HRESULT CLoader::Ready_Resources_For_GamePlayLevel()
 		CNavigation::Create(m_pDevice, m_pContext, TEXT("../Bin/DataFiles/Nav_Data.dat")))))
 		return E_FAIL;
 
-
-	lstrcpy(m_szLoadingText, TEXT("셰이더을(를) 로딩중입니다."));
-	/* For. Prototype_Component_Shader_VtxNorTex*/
-	if (FAILED(m_pGameInstance->Add_Prototype(LEVEL_GAMEPLAY, TEXT("Prototype_Component_Shader_VtxNorTex"),
-		CShader::Create(m_pDevice, m_pContext, TEXT("../Bin/ShaderFiles/Shader_VtxNorTex.hlsl"), VTXNORTEX::Elements, VTXNORTEX::iNumElements))))
-		return E_FAIL;
-
-	/* For. Prototype_Component_Shader_VtxModel */
-	if (FAILED(m_pGameInstance->Add_Prototype(LEVEL_GAMEPLAY, TEXT("Prototype_Component_Shader_VtxModel"),
-		CShader::Create(m_pDevice, m_pContext, TEXT("../Bin/ShaderFiles/Shader_VtxModel.hlsl"), VTXMESH::Elements, VTXMESH::iNumElements))))
-		return E_FAIL;
-
-	/* For. Prototype_Component_Shader_VtxAnimModel */
-	if (FAILED(m_pGameInstance->Add_Prototype(LEVEL_GAMEPLAY, TEXT("Prototype_Component_Shader_VtxAnimModel"),
-		CShader::Create(m_pDevice, m_pContext, TEXT("../Bin/ShaderFiles/Shader_VtxAnimModel.hlsl"), VTXANIMMESH::Elements, VTXANIMMESH::iNumElements))))
-		return E_FAIL;
-
-	/* For. Prototype_Component_Shader_VtxCubeTex */
-	if (FAILED(m_pGameInstance->Add_Prototype(LEVEL_GAMEPLAY, TEXT("Prototype_Component_Shader_VtxCubeTex"),
-		CShader::Create(m_pDevice, m_pContext, TEXT("../Bin/ShaderFiles/Shader_VtxCubeTex.hlsl"), VTXCUBETEX::Elements, VTXCUBETEX::iNumElements))))
-		return E_FAIL;
-
-	/* For. Prototype_Component_Shader_VtxRectInstance */
-	if (FAILED(m_pGameInstance->Add_Prototype(LEVEL_GAMEPLAY, TEXT("Prototype_Component_Shader_VtxRectInstance"),
-		CShader::Create(m_pDevice, m_pContext, TEXT("../Bin/ShaderFiles/Shader_VtxRectInstance.hlsl"), VTXRECTINSTANCE::Elements, VTXRECTINSTANCE::iNumElements))))
-		return E_FAIL;
-
-	/* For. Prototype_Component_Shader_VtxPointInstance */
-	if (FAILED(m_pGameInstance->Add_Prototype(LEVEL_GAMEPLAY, TEXT("Prototype_Component_Shader_VtxPointInstance"),
-		CShader_NonVTX::Create(m_pDevice, m_pContext, TEXT("../Bin/ShaderFiles/Shader_VtxPointInstance.hlsl")))))
-		return E_FAIL;
-
-#pragma region CS_PARTICLE
-	/* For. Prototype_Component_Shader_Compute_Particle_Spread */
-	if (FAILED(m_pGameInstance->Add_Prototype(LEVEL_GAMEPLAY, TEXT("Prototype_Component_Shader_Compute_Particle_Spread"),
-		CShader_Compute::Create(m_pDevice, m_pContext, TEXT("../Bin/ShaderFiles/Shader_ParticleCompute.hlsl"), "CS_SPREAD_MAIN"))))
-		return E_FAIL;
-
-	/* For. Prototype_Component_Shader_Compute_Particle_Move */
-	if (FAILED(m_pGameInstance->Add_Prototype(LEVEL_GAMEPLAY, TEXT("Prototype_Component_Shader_Compute_Particle_Move"),
-		CShader_Compute::Create(m_pDevice, m_pContext, TEXT("../Bin/ShaderFiles/Shader_ParticleCompute.hlsl"), "CS_MOVE_MAIN"))))
-		return E_FAIL;
-
-	/* For. Prototype_Component_Shader_Compute_Particle_Converge */
-	if (FAILED(m_pGameInstance->Add_Prototype(LEVEL_GAMEPLAY, TEXT("Prototype_Component_Shader_Compute_Particle_Converge"),
-		CShader_Compute::Create(m_pDevice, m_pContext, TEXT("../Bin/ShaderFiles/Shader_ParticleCompute.hlsl"), "CS_CONVERGE_MAIN"))))
-		return E_FAIL;
-
-	/* For. Prototype_Component_Shader_Compute_Particle_Spread_World */
-	if (FAILED(m_pGameInstance->Add_Prototype(LEVEL_GAMEPLAY, TEXT("Prototype_Component_Shader_Compute_Particle_Spread_World"),
-		CShader_Compute::Create(m_pDevice, m_pContext, TEXT("../Bin/ShaderFiles/Shader_ParticleCompute.hlsl"), "CS_SPREAD_WORLD_MAIN"))))
-		return E_FAIL;
-
-	/* For. Prototype_Component_Shader_Compute_Particle_Move_World */
-	if (FAILED(m_pGameInstance->Add_Prototype(LEVEL_GAMEPLAY, TEXT("Prototype_Component_Shader_Compute_Particle_Move_World"),
-		CShader_Compute::Create(m_pDevice, m_pContext, TEXT("../Bin/ShaderFiles/Shader_ParticleCompute.hlsl"), "CS_MOVE_WORLD_MAIN"))))
-		return E_FAIL;
-
-	/* For. Prototype_Component_Shader_Compute_Particle_Converge_World */
-	if (FAILED(m_pGameInstance->Add_Prototype(LEVEL_GAMEPLAY, TEXT("Prototype_Component_Shader_Compute_Particle_Converge_World"),
-		CShader_Compute::Create(m_pDevice, m_pContext, TEXT("../Bin/ShaderFiles/Shader_ParticleCompute.hlsl"), "CS_CONVERGE_WORLD_MAIN"))))
-		return E_FAIL;
-
-	/* For. Prototype_Component_Shader_Compute_Particle_Reset */
-	if (FAILED(m_pGameInstance->Add_Prototype(LEVEL_GAMEPLAY, TEXT("Prototype_Component_Shader_Compute_Particle_Reset"),
-		CShader_Compute::Create(m_pDevice, m_pContext, TEXT("../Bin/ShaderFiles/Shader_ParticleCompute.hlsl"), "CS_RESET_MAIN"))))
-		return E_FAIL;
-#pragma endregion
-
-
-	lstrcpy(m_szLoadingText, TEXT("콜라이더을(를) 로딩중입니다."));
-
-	/* For.Prototype_Component_Collider_AABB */
-	if (FAILED(m_pGameInstance->Add_Prototype(LEVEL_GAMEPLAY, TEXT("Prototype_Component_Collider_AABB"),
-		CCollider::Create(m_pDevice, m_pContext, CCollider::TYPE_AABB))))
-		return E_FAIL;
-
-	/* For.Prototype_Component_Collider_OBB */
-	if (FAILED(m_pGameInstance->Add_Prototype(LEVEL_GAMEPLAY, TEXT("Prototype_Component_Collider_OBB"),
-		CCollider::Create(m_pDevice, m_pContext, CCollider::TYPE_OBB))))
-		return E_FAIL;
-
-	/* For.Prototype_Component_Collider_Sphere */
-	if (FAILED(m_pGameInstance->Add_Prototype(LEVEL_GAMEPLAY, TEXT("Prototype_Component_Collider_Sphere"),
-		CCollider::Create(m_pDevice, m_pContext, CCollider::TYPE_SPHERE))))
-		return E_FAIL;
-
 	lstrcpy(m_szLoadingText, TEXT("사운드을(를) 로딩중입니다."));
-
-
-	lstrcpy(m_szLoadingText, TEXT("객체원형을(를) 로딩중입니다."));
-	/* For. Prototype_GameObject_Terrain */
-	if (FAILED(m_pGameInstance->Add_Prototype(TEXT("Prototype_GameObject_Terrain"),
-		CTerrain::Create(m_pDevice, m_pContext))))
-		return E_FAIL;
-
-	/* For. Prototype_GameObject_Monster */
-	if (FAILED(m_pGameInstance->Add_Prototype(TEXT("Prototype_GameObject_Monster"),
-		CMonster::Create(m_pDevice, m_pContext))))
-		return E_FAIL;
-
-	/* For. Prototype_GameObject_Player */
-	if (FAILED(m_pGameInstance->Add_Prototype(TEXT("Prototype_GameObject_Player"),
-		CPlayer::Create(m_pDevice, m_pContext))))
-		return E_FAIL;
-
-	/* For. Prototype_GameObject_Weapon */
-	if (FAILED(m_pGameInstance->Add_Prototype(TEXT("Prototype_GameObject_Weapon"),
-		CWeapon::Create(m_pDevice, m_pContext))))
-		return E_FAIL;
-
-	/* For. Prototype_GameObject_FreeCamera */
-	if (FAILED(m_pGameInstance->Add_Prototype(TEXT("Prototype_GameObject_FreeCamera"),
-		CFreeCamera::Create(m_pDevice, m_pContext))))
-		return E_FAIL;
-
-#pragma region MONSTER
-	/* For. Prototype_GameObject_CarcassBigA */
-	if (FAILED(m_pGameInstance->Add_Prototype(TEXT("Prototype_GameObject_CarcassBigA"),
-		CCarcassBigA::Create(m_pDevice, m_pContext))))
-		return E_FAIL;
 	
-	/* For. Prototype_GameObject_SimonManusP1 */
-	if (FAILED(m_pGameInstance->Add_Prototype(TEXT("Prototype_GameObject_SimonManusP1"),
-		CSimonManusP1::Create(m_pDevice, m_pContext))))
-		return E_FAIL;
-
-#pragma endregion
-
-	/* For. Prototype_GameObject_Sky */
-	if (FAILED(m_pGameInstance->Add_Prototype(TEXT("Prototype_GameObject_Sky"),
-		CSky::Create(m_pDevice, m_pContext))))
-		return E_FAIL;
-
-	/* For. Prototype_GameObject_ForkLift */
-	if (FAILED(m_pGameInstance->Add_Prototype(TEXT("Prototype_GameObject_ForkLift"),
-		CForkLift::Create(m_pDevice, m_pContext))))
-		return E_FAIL;
-
-	/* For. Prototype_GameObject_StaticObj */
-	if (FAILED(m_pGameInstance->Add_Prototype(TEXT("Prototype_GameObject_StaticObj"),
-		CStaticObj::Create(m_pDevice, m_pContext))))
-		return E_FAIL;
-	
-	/* For. Prototype_GameObject_StaticObj */
-	if (FAILED(m_pGameInstance->Add_Prototype(TEXT("Prototype_GameObject_NavDataObj"),
-		CNavDataObj::Create(m_pDevice, m_pContext))))
-		return E_FAIL;
-
-	/* For. Prototype_GameObject_Stargazer */
-	if (FAILED(m_pGameInstance->Add_Prototype(TEXT("Prototype_GameObject_Stargazer"),
-		CStargazer::Create(m_pDevice, m_pContext))))
-		return E_FAIL;
-
-#pragma region EFFECT
-	/* For. Prototype_GameObject_Effect_Container */
-	if (FAILED(m_pGameInstance->Add_Prototype(TEXT("Prototype_GameObject_Effect_Container"),
-		CEffect_Container::Create(m_pDevice, m_pContext))))
-		return E_FAIL;
-
-	/* For. Prototype_GameObject_Effect_Particle */
-	if (FAILED(m_pGameInstance->Add_Prototype(TEXT("Prototype_GameObject_Effect_Particle"),
-		CParticle_Effect::Create(m_pDevice, m_pContext))))
-		return E_FAIL;
-
-	/* For. Prototype_GameObject_Effect_Texture */
-	if (FAILED(m_pGameInstance->Add_Prototype(TEXT("Prototype_GameObject_Effect_Texture"),
-		CTexture_Effect::Create(m_pDevice, m_pContext))))
-		return E_FAIL;
-#pragma endregion
-
-#pragma region Collider
-	/* For. Prototype_GameObject_Terrain */
-	if (FAILED(m_pGameInstance->Add_Prototype(TEXT("Prototype_GameObject_ColliderObj"),
-		CColliderObject::Create(m_pDevice, m_pContext))))
-		return E_FAIL;
-#pragma endregion
-
 	m_isFinished_Main = true;
-	_matrix		PreTransformMatrix = XMMatrixIdentity();
-
-	/* For. Prototype_Component_Model_Fiona*/
-	PreTransformMatrix = XMMatrixScaling(0.01f, 0.01f, 0.01f) * XMMatrixRotationY(XMConvertToRadians(180.0f));
-	if (FAILED(m_pGameInstance->Add_Prototype(LEVEL_GAMEPLAY, TEXT("Prototype_Component_Model_Fiona"),
-		CModel::Create(m_pDevice, m_pContext, CModel::TYPE_ANIM, "../Bin/ModelData/Anim/PlayerExample/PlayerExample.dat", PreTransformMatrix))))
-		return E_FAIL;
-
-	/* For. Prototype_Component_Model_ForkLift*/
-	PreTransformMatrix = XMMatrixScaling(0.001f, 0.001f, 0.001f) * XMMatrixRotationY(XMConvertToRadians(180.0f));
-	if (FAILED(m_pGameInstance->Add_Prototype(LEVEL_GAMEPLAY, TEXT("Prototype_Component_Model_ForkLift"),
-		CModel::Create(m_pDevice, m_pContext, CModel::TYPE_NONANIM, "../Bin/ModelData/NonAnim/Example/Example.dat", PreTransformMatrix))))
-		return E_FAIL;
-
-	//
-	PreTransformMatrix = XMMatrixScaling(0.01f, 0.01f, 0.01f) * XMMatrixRotationY(XMConvertToRadians(270.0f));
-	if (FAILED(m_pGameInstance->Add_Prototype(LEVEL_GAMEPLAY, TEXT("Prototype_AnimModel_Test"),
-		CModel::Create(m_pDevice, m_pContext, CModel::TYPE_ANIM, "../Bin/ModelData/Anim/Player/Player.dat", PreTransformMatrix, false))))
-		return E_FAIL;
-
-	//Prototype_Component_Model_CarcassBigA
-	PreTransformMatrix = XMMatrixScaling(0.01f, 0.01f, 0.01f) * XMMatrixRotationY(XMConvertToRadians(270.0f));
-	if (FAILED(m_pGameInstance->Add_Prototype(LEVEL_GAMEPLAY, TEXT("Prototype_Component_Model_CarcassBigA"),
-		CModel::Create(m_pDevice, m_pContext, CModel::TYPE_ANIM, "../Bin/ModelData/Anim/CreatedBinFiles/CarcassBigA.dat", PreTransformMatrix, true))))
-		return E_FAIL;
-
-	/* For. Prototype_Component_Model_Stargazer*/
-	PreTransformMatrix = XMMatrixScaling(0.01f, 0.01f, 0.01f) * XMMatrixRotationY(XMConvertToRadians(270.0f));
-	if (FAILED(m_pGameInstance->Add_Prototype(LEVEL_GAMEPLAY, TEXT("Prototype_Component_Model_Stargazer"),
-		CModel::Create(m_pDevice, m_pContext, CModel::TYPE_ANIM, "../Bin/ModelData/NonAnim/InteractObj/SK_DLV_Stargazer_01.dat", PreTransformMatrix))))
-		return E_FAIL;
-
-	//Prototype_Component_Model_SimonManusP1
-	//PreTransformMatrix = XMMatrixScaling(0.01f, 0.01f, 0.01f) * XMMatrixRotationY(XMConvertToRadians(270.0f));
-	//if (FAILED(m_pGameInstance->Add_Prototype(LEVEL_GAMEPLAY, TEXT("Prototype_Component_Model_SimonManusP1"),
-	//	CModel::Create(m_pDevice, m_pContext, CModel::TYPE_ANIM, "../Bin/ModelData/Anim/CreatedBinFiles/SimonManusP1.dat", PreTransformMatrix, true))))
-	//	return E_FAIL;
-
-	m_isFinished_Map0 = true;
 
 	return S_OK;
 }
@@ -554,6 +338,8 @@ HRESULT CLoader::Ready_Resources_For_GamePlayLevel()
 
 HRESULT CLoader::Ready_Resources_For_GamePlayLevel_Map0()
 {
+
+	m_isFinished_Map0 = true;
 
 	return S_OK;
 }
@@ -718,6 +504,141 @@ HRESULT CLoader::Ready_Resources_For_GamePlayLevel_Monster()
 	_matrix		PreTransformMatrix = XMMatrixIdentity();
 
 	m_isFinished_Monster = true;
+
+	return S_OK;
+}
+
+HRESULT CLoader::Ready_Resources_For_Player()
+{
+	_matrix		PreTransformMatrix = XMMatrixIdentity();
+
+	/* Prototype_Component_Model_Player */
+	PreTransformMatrix = XMMatrixScaling(0.01f, 0.01f, 0.01f) * XMMatrixRotationY(XMConvertToRadians(270.0f));
+	if (FAILED(m_pGameInstance->Add_Prototype(LEVEL_GAMEPLAY, TEXT("Prototype_Component_Model_Player"),
+		CModel::Create(m_pDevice, m_pContext, CModel::TYPE_ANIM, "../Bin/ModelData/Anim/Player/Player.dat", PreTransformMatrix, false))))
+		return E_FAIL;
+
+	/* Prototype_Component_Model_FlameSword */
+	PreTransformMatrix = XMMatrixScaling(0.01f, 0.01f, 0.01f);
+	if (FAILED(m_pGameInstance->Add_Prototype(LEVEL_GAMEPLAY, TEXT("Prototype_Component_Model_FlameSword"),
+		CModel::Create(m_pDevice, m_pContext, CModel::TYPE_ANIM, "../Bin/ModelData/NonAnim/Weapon/FlameSword.dat", PreTransformMatrix, false))))
+		return E_FAIL;
+
+	/* Prototype_Component_Model_Rapier */
+	PreTransformMatrix = XMMatrixScaling(0.01f, 0.01f, 0.01f);
+	if (FAILED(m_pGameInstance->Add_Prototype(LEVEL_GAMEPLAY, TEXT("Prototype_Component_Model_Rapier"),
+		CModel::Create(m_pDevice, m_pContext, CModel::TYPE_ANIM, "../Bin/ModelData/NonAnim/Weapon/Rapier.dat", PreTransformMatrix, false))))
+		return E_FAIL;
+
+	///* Prototype_Component_Model_Scissor_Combine */
+	//PreTransformMatrix = XMMatrixScaling(0.01f, 0.01f, 0.01f);
+	//if (FAILED(m_pGameInstance->Add_Prototype(LEVEL_GAMEPLAY, TEXT("Prototype_Component_Model_Scissor_Combine"),
+	//	CModel::Create(m_pDevice, m_pContext, CModel::TYPE_ANIM, "../Bin/ModelData/NonAnim/Weapon/Scissor_Combine.dat", PreTransformMatrix, false))))
+	//	return E_FAIL;
+
+	///* Prototype_Component_Model_Scissor_Left */
+	//PreTransformMatrix = XMMatrixScaling(0.01f, 0.01f, 0.01f);
+	//if (FAILED(m_pGameInstance->Add_Prototype(LEVEL_GAMEPLAY, TEXT("Prototype_Component_Model_Scissor_Left"),
+	//	CModel::Create(m_pDevice, m_pContext, CModel::TYPE_ANIM, "../Bin/ModelData/NonAnim/Weapon/Scissor_Left.dat", PreTransformMatrix, false))))
+	//	return E_FAIL;
+
+	///* Prototype_Component_Model_Scissor_Right */
+	//PreTransformMatrix = XMMatrixScaling(0.01f, 0.01f, 0.01f);
+	//if (FAILED(m_pGameInstance->Add_Prototype(LEVEL_GAMEPLAY, TEXT("Prototype_Component_Model_Scissor_Right"),
+	//	CModel::Create(m_pDevice, m_pContext, CModel::TYPE_ANIM, "../Bin/ModelData/NonAnim/Weapon/Scissor_Right.dat", PreTransformMatrix, false))))
+	//	return E_FAIL;
+
+	return S_OK;
+}
+
+HRESULT CLoader::Ready_Resources_For_Monster()
+{
+	_matrix		PreTransformMatrix = XMMatrixIdentity();
+
+	//Prototype_Component_Model_CarcassBigA
+	PreTransformMatrix = XMMatrixScaling(0.01f, 0.01f, 0.01f) * XMMatrixRotationY(XMConvertToRadians(270.0f));
+	if (FAILED(m_pGameInstance->Add_Prototype(LEVEL_GAMEPLAY, TEXT("Prototype_Component_Model_CarcassBigA"),
+		CModel::Create(m_pDevice, m_pContext, CModel::TYPE_ANIM, "../Bin/ModelData/Anim/CreatedBinFiles/CarcassBigA.dat", PreTransformMatrix, true))))
+		return E_FAIL;
+
+	/* For. Prototype_Component_Model_Stargazer*/
+	PreTransformMatrix = XMMatrixScaling(0.01f, 0.01f, 0.01f) * XMMatrixRotationY(XMConvertToRadians(270.0f));
+	if (FAILED(m_pGameInstance->Add_Prototype(LEVEL_GAMEPLAY, TEXT("Prototype_Component_Model_Stargazer"),
+		CModel::Create(m_pDevice, m_pContext, CModel::TYPE_ANIM, "../Bin/ModelData/NonAnim/InteractObj/SK_DLV_Stargazer_01.dat", PreTransformMatrix))))
+		return E_FAIL;
+
+	return S_OK;
+}
+
+HRESULT CLoader::Ready_Prototype()
+{
+	/* For. Prototype_GameObject_Terrain */
+	if (FAILED(m_pGameInstance->Add_Prototype(TEXT("Prototype_GameObject_Terrain"),
+		CTerrain::Create(m_pDevice, m_pContext))))
+		return E_FAIL;
+
+	/* For. Prototype_GameObject_Player */
+	if (FAILED(m_pGameInstance->Add_Prototype(TEXT("Prototype_GameObject_Player"),
+		CPlayer::Create(m_pDevice, m_pContext))))
+		return E_FAIL;
+
+	/* For. Prototype_GameObject_Weapon */
+	if (FAILED(m_pGameInstance->Add_Prototype(TEXT("Prototype_GameObject_Weapon"),
+		CWeapon::Create(m_pDevice, m_pContext))))
+		return E_FAIL;
+
+	/* For. Prototype_GameObject_FreeCamera */
+	if (FAILED(m_pGameInstance->Add_Prototype(TEXT("Prototype_GameObject_FreeCamera"),
+		CFreeCamera::Create(m_pDevice, m_pContext))))
+		return E_FAIL;
+
+#pragma region MONSTER
+	/* For. Prototype_GameObject_Monster */
+	if (FAILED(m_pGameInstance->Add_Prototype(TEXT("Prototype_GameObject_Monster"),
+		CMonster::Create(m_pDevice, m_pContext))))
+		return E_FAIL;
+
+	/* For. Prototype_GameObject_CarcassBigA */
+	if (FAILED(m_pGameInstance->Add_Prototype(TEXT("Prototype_GameObject_CarcassBigA"),
+		CCarcassBigA::Create(m_pDevice, m_pContext))))
+		return E_FAIL;
+
+	/* For. Prototype_GameObject_SimonManusP1 */
+	if (FAILED(m_pGameInstance->Add_Prototype(TEXT("Prototype_GameObject_SimonManusP1"),
+		CSimonManusP1::Create(m_pDevice, m_pContext))))
+		return E_FAIL;
+
+#pragma endregion
+
+#pragma region Collider
+	/* For. Prototype_GameObject_Terrain */
+	if (FAILED(m_pGameInstance->Add_Prototype(TEXT("Prototype_GameObject_ColliderObj"),
+		CColliderObject::Create(m_pDevice, m_pContext))))
+		return E_FAIL;
+#pragma endregion
+
+	/* For. Prototype_GameObject_Sky */
+	if (FAILED(m_pGameInstance->Add_Prototype(TEXT("Prototype_GameObject_Sky"),
+		CSky::Create(m_pDevice, m_pContext))))
+		return E_FAIL;
+
+	/* For. Prototype_GameObject_StaticObj */
+	if (FAILED(m_pGameInstance->Add_Prototype(TEXT("Prototype_GameObject_StaticObj"),
+		CStaticObj::Create(m_pDevice, m_pContext))))
+		return E_FAIL;
+
+	/* For. Prototype_GameObject_StaticObj */
+	if (FAILED(m_pGameInstance->Add_Prototype(TEXT("Prototype_GameObject_NavDataObj"),
+		CNavDataObj::Create(m_pDevice, m_pContext))))
+		return E_FAIL;
+
+	/* For. Prototype_GameObject_Stargazer */
+	if (FAILED(m_pGameInstance->Add_Prototype(TEXT("Prototype_GameObject_Stargazer"),
+		CStargazer::Create(m_pDevice, m_pContext))))
+		return E_FAIL;
+
+
+
 
 	return S_OK;
 }

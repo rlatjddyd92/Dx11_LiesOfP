@@ -52,9 +52,6 @@
     <Filter Include="02.GameObjects\04.Sky">
       <UniqueIdentifier>{f17d1c89-2983-427e-9a62-7fa4c30d3ae8}</UniqueIdentifier>
     </Filter>
-    <Filter Include="02.GameObjects\07.ForkLift">
-      <UniqueIdentifier>{4f3837c9-f24e-4fd0-b1a8-adf1987df19d}</UniqueIdentifier>
-    </Filter>
     <Filter Include="03.GameInterface_Controller">
       <UniqueIdentifier>{6fc85632-d32f-4d39-aef9-7ff0a6eb5101}</UniqueIdentifier>
     </Filter>
@@ -367,6 +364,9 @@
     <Filter Include="05.Fsm\Player\OneHand\00.Attack\Rapier\RAttack00">
       <UniqueIdentifier>{c45a6618-f69d-43d6-a2f9-edd908511d3c}</UniqueIdentifier>
     </Filter>
+    <Filter Include="02.GameObjects\05.Effect\Effect_Base\Mesh_Effect">
+      <UniqueIdentifier>{6950edf6-b86b-4f5f-bcf2-800c147433d6}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Client.h">
@@ -420,9 +420,6 @@
     <ClInclude Include="..\Public\Sky.h">
       <Filter>02.GameObjects\04.Sky</Filter>
     </ClInclude>
-    <ClInclude Include="..\Public\ForkLift.h">
-      <Filter>02.GameObjects\07.ForkLift</Filter>
-    </ClInclude>
     <ClInclude Include="Item_Defines.h">
       <Filter>03.GameInterface_Controller\99.GameInterface_Defines\00.Defines%28Data_Instance 전용%29</Filter>
     </ClInclude>
@@ -468,7 +465,6 @@
     <ClInclude Include="Interface_Enums.h">
       <Filter>03.GameInterface_Controller\99.GameInterface_Defines</Filter>
     </ClInclude>
-    <ClInclude Include="..\Public\Particle_Snow.h" />
     <ClInclude Include="..\Public\Effect_Container.h">
       <Filter>02.GameObjects\05.Effect\Effect_Container</Filter>
     </ClInclude>
@@ -613,6 +609,30 @@
     <ClInclude Include="..\Public\State_Player_Flame_LAttack01.h">
       <Filter>05.Fsm\Player\TwoHand\00.Attack\FlameSword\LAttack01</Filter>
     </ClInclude>
+    <ClInclude Include="..\Public\UIPage_Menu.h">
+      <Filter>03.GameInterface_Controller\00.UIManager\00.UIPage\03.UIPage_Menu</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Public\UIPage_Equip.h">
+      <Filter>03.GameInterface_Controller\00.UIManager\00.UIPage\05.UIPage_Equip</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Public\UIPage_Inven.h">
+      <Filter>03.GameInterface_Controller\00.UIManager\00.UIPage\04.UIPage_Inven</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Public\UIPage_LevelUp.h">
+      <Filter>03.GameInterface_Controller\00.UIManager\00.UIPage\07.UIPage_LevelUp</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Public\UIPage_Skill.h">
+      <Filter>03.GameInterface_Controller\00.UIManager\00.UIPage\08.UIPage_Skill</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Public\UIPage_Stat.h">
+      <Filter>03.GameInterface_Controller\00.UIManager\00.UIPage\06.UIPage_Stat</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Public\UIPage_Test.h">
+      <Filter>03.GameInterface_Controller\00.UIManager\00.UIPage\09.UIPage_Test</Filter>
+    </ClInclude>
+    <ClInclude Include="..\public\Mesh_Effect.h">
+      <Filter>02.GameObjects\05.Effect\Effect_Base\Mesh_Effect</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Client.cpp">
@@ -657,9 +677,6 @@
     <ClCompile Include="..\Private\Sky.cpp">
       <Filter>02.GameObjects\04.Sky</Filter>
     </ClCompile>
-    <ClCompile Include="..\Private\ForkLift.cpp">
-      <Filter>02.GameObjects\07.ForkLift</Filter>
-    </ClCompile>
     <ClCompile Include="..\Private\UIManager.cpp">
       <Filter>03.GameInterface_Controller\00.UIManager</Filter>
     </ClCompile>
@@ -687,7 +704,6 @@
     <ClCompile Include="..\Private\Player_Stat_Manager.cpp">
       <Filter>03.GameInterface_Controller\02.Player_Stat_Manager</Filter>
     </ClCompile>
-    <ClCompile Include="..\Private\Particle_Snow.cpp" />
     <ClCompile Include="..\Private\Effect_Container.cpp">
       <Filter>02.GameObjects\05.Effect\Effect_Container</Filter>
     </ClCompile>
@@ -829,6 +845,30 @@
     <ClCompile Include="..\Private\State_Player_Flame_LAttack01.cpp">
       <Filter>05.Fsm\Player\TwoHand\00.Attack\FlameSword\LAttack01</Filter>
     </ClCompile>
+    <ClCompile Include="..\Private\UIPage_Menu.cpp">
+      <Filter>03.GameInterface_Controller\00.UIManager\00.UIPage\03.UIPage_Menu</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Private\UIPage_Equip.cpp">
+      <Filter>03.GameInterface_Controller\00.UIManager\00.UIPage\05.UIPage_Equip</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Private\UIPage_Inven.cpp">
+      <Filter>03.GameInterface_Controller\00.UIManager\00.UIPage\04.UIPage_Inven</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Private\UIPage_LevelUp.cpp">
+      <Filter>03.GameInterface_Controller\00.UIManager\00.UIPage\07.UIPage_LevelUp</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Private\UIPage_Skill.cpp">
+      <Filter>03.GameInterface_Controller\00.UIManager\00.UIPage\08.UIPage_Skill</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Private\UIPage_Stat.cpp">
+      <Filter>03.GameInterface_Controller\00.UIManager\00.UIPage\06.UIPage_Stat</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Private\UIPage_Test.cpp">
+      <Filter>03.GameInterface_Controller\00.UIManager\00.UIPage\09.UIPage_Test</Filter>
+    </ClCompile>
+    <ClCompile Include="..\private\Mesh_Effect.cpp">
+      <Filter>02.GameObjects\05.Effect\Effect_Base\Mesh_Effect</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <Image Include="Client.ico">
@@ -865,6 +905,24 @@
       <Filter>97.ShaderFiles</Filter>
     </FxCompile>
     <FxCompile Include="..\Bin\ShaderFiles\Shader_VtxRectInstance.hlsl">
+      <Filter>97.ShaderFiles</Filter>
+    </FxCompile>
+    <FxCompile Include="..\Bin\ShaderFiles\Shader_Effect_Mesh.hlsl">
+      <Filter>97.ShaderFiles</Filter>
+    </FxCompile>
+    <FxCompile Include="..\Bin\ShaderFiles\Shader_Trail_MultiPoint_Compute.hlsl">
+      <Filter>97.ShaderFiles</Filter>
+    </FxCompile>
+    <FxCompile Include="..\Bin\ShaderFiles\Shader_TrailHead_PointInstance.hlsl">
+      <Filter>97.ShaderFiles</Filter>
+    </FxCompile>
+    <FxCompile Include="..\Bin\ShaderFiles\Shader_TrailTail_PointInstance.hlsl">
+      <Filter>97.ShaderFiles</Filter>
+    </FxCompile>
+    <FxCompile Include="..\Bin\ShaderFiles\Shader_VtxTrail_OnePoint_Instance.hlsl">
+      <Filter>97.ShaderFiles</Filter>
+    </FxCompile>
+    <FxCompile Include="..\Bin\ShaderFiles\Shader_VtxTrail_TwoPoint_Instance.hlsl">
       <Filter>97.ShaderFiles</Filter>
     </FxCompile>
     <FxCompile Include="..\Bin\ShaderFiles\Shader_Effect_Texture.hlsl">

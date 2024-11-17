@@ -1460,11 +1460,6 @@ HRESULT CLoader::Ready_Textures_For_Decal()
 	return S_OK;
 }
 
-HRESULT CLoader::Ready_Resources_For_Monster()
-{
-	return S_OK;
-}
-
 CLoader * CLoader::Create(ID3D11Device * pDevice, ID3D11DeviceContext * pContext, LEVELID eNextLevelID)
 {
 	CLoader*		pInstance = new CLoader(pDevice, pContext);

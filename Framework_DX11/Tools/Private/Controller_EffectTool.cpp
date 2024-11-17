@@ -993,7 +993,7 @@ HRESULT CController_EffectTool::Load_Effect()
 
 			// 마지막 점 이후부터 끝까지의 문자열을 반환합니다.
 			_wstring strExtention = wFilePath.substr(dotPosition + 1);
-			strExtention;
+			
 			size_t nullPos = strExtention.find(TEXT('\0'));
 			if (nullPos != _wstring::npos)
 				strExtention.erase(nullPos);
