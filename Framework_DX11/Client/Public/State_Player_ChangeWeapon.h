@@ -32,6 +32,9 @@ private:
     _bool* m_pResetRootMove = { nullptr };
     _float* m_pTrackPos = { nullptr };
 
+private:
+    _bool               End_Check();
+
 public:
     static CState_Player_ChangeWeapon* Create(class CFsm* pFsm, class CPlayer* pPlayer, _uint iStateNum, void* pArg = nullptr);
     virtual void Free() override;

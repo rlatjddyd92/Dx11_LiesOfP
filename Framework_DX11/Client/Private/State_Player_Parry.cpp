@@ -43,7 +43,7 @@ void CState_Player_Parry::Update(_float fTimeDelta)
     {
         m_pPlayer->Set_IsParry(false);
     }
-    else if (*m_pIsEndAnim)
+    else if (End_Check())
     {
         m_pPlayer->Change_State(CPlayer::OH_IDLE);
     }
@@ -52,6 +52,11 @@ void CState_Player_Parry::Update(_float fTimeDelta)
 void CState_Player_Parry::End_State()
 {
     m_pPlayer->Set_IsParry(false);
+}
+
+_bool CState_Player_Parry::End_Check()
+{
+    return m_pPlayer->Get_EndAnim(m_iAnimation_Parry);
 }
 
 CState_Player_Parry* CState_Player_Parry::Create(CFsm* pFsm, CPlayer* pPlayer, _uint iStateNum, void* pArg)

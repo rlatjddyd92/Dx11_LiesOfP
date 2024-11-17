@@ -79,6 +79,11 @@ void CState_Player_Rapier_Fatal::End_State()
 {
 }
 
+_bool CState_Player_Rapier_Fatal::End_Check()
+{
+    return m_pPlayer->Get_EndAnim(m_iAnimation_RapierFCA);
+}
+
 CState_Player_Rapier_Fatal* CState_Player_Rapier_Fatal::Create(CFsm* pFsm, CPlayer* pPlayer, _uint iStateNum, void* pArg)
 {
     CState_Player_Rapier_Fatal* pInstance = new CState_Player_Rapier_Fatal(pFsm, pPlayer);
