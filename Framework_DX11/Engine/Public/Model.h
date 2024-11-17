@@ -23,8 +23,8 @@ public:
 	vector<class CBone*>&	Get_Bones() { return m_Bones; }
 	_int					Get_BoneIndex(const _char* pBoneName) const;
 	_matrix					Get_BoneCombindTransformationMatrix(_uint iBoneIndex) const { return m_Bones[iBoneIndex]->Get_CombinedTransformationMatrix(); }
-	const _float4x4*		Get_BoneCombindTransformationMatrix_Ptr(const _char* pBoneName) const { return m_Bones[Get_BoneIndex(pBoneName)]->Get_CombinedTransformationMatrix_Ptr(); }
-	const _float4x4*		Get_BoneCombindTransformationMatrix_Ptr(_uint iBoneIndex) const { return m_Bones[iBoneIndex]->Get_CombinedTransformationMatrix_Ptr(); }
+	const _Matrix*			Get_BoneCombindTransformationMatrix_Ptr(const _char* pBoneName) const { return m_Bones[Get_BoneIndex(pBoneName)]->Get_CombinedTransformationMatrix_Ptr(); }
+	const _Matrix*			Get_BoneCombindTransformationMatrix_Ptr(_uint iBoneIndex) const { return m_Bones[iBoneIndex]->Get_CombinedTransformationMatrix_Ptr(); }
 
 	vector<class CAnimation*>& Get_Animations() { return m_Animations; }
 	_uint					Get_CurrentAnimationIndex() { return m_iCurrentAnimIndex; }
@@ -50,6 +50,8 @@ public:
 
 	HRESULT					Update_Boundary();
 
+	void					Set_PreTranformMatrix(_matrix PreTranfromMatrix) { XMStoreFloat4x4(&m_PreTransformMatrix, PreTranfromMatrix); }
+
 public:
 	virtual HRESULT Initialize_Prototype(TYPE eType, const _char* pModelFilePath, _fmatrix PreTransformMatrix, _bool isBinaryAnimModel, FilePathStructStack* pStructStack);
 	virtual HRESULT Initialize(void* pArg) override;
@@ -74,6 +76,7 @@ public:		//_bool pOut은 메인 애니메이션의 종료를 반환,
 	_uint		Setting_Animation(const _char* szAnimationmName, _double SpeedRatio = 1.0) const;
 	_matrix		CalcMatrix_forVtxAnim(_uint iMeshNum, VTXANIMMESH VtxStruct);
 
+	void		Update_Bone();
 
 public:
 	HRESULT		Bind_Material(class CShader* pShader, const _char* pConstantName, TEXTURE_TYPE eMaterialType, _uint iMeshIndex);

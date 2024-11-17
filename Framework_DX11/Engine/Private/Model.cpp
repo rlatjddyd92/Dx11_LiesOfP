@@ -404,6 +404,16 @@ _matrix CModel::CalcMatrix_forVtxAnim(_uint iMeshNum, VTXANIMMESH VtxStruct)
 	return m_Meshes[iMeshNum]->CalcMatrix_forVtxAnim(m_Bones, VtxStruct); //m_isUseBoundary
 }
 
+void CModel::Update_Bone()
+{
+	for (auto& pBone : m_Bones)
+	{
+		/* 내 뼈의 행렬 * 부모의 컴바인드 */
+		pBone->Update_CombinedTransformationMatrix(m_Bones, XMLoadFloat4x4(&m_PreTransformMatrix));
+	}
+
+}
+
 _vector CModel::Play_Animation(_float fTimeDelta, _bool* pOut, list<OUTPUT_EVKEY>* pEvKeyList)
 {
 	_bool	bRootCheck{false};
@@ -671,7 +681,7 @@ _vector CModel::Finish_Update_Anim(_bool* pOut)
 		if (m_isUseRootBone)
 		{
 			m_Bones[m_UFBIndices[UFB_ROOT]]->Update_CombinedTransformationMatrix(m_Bones, XMLoadFloat4x4(&m_PreTransformMatrix));
-			m_vCurRootMove = m_Bones[m_UFBIndices[UFB_ROOT]]->Get_CombinedTransformationMatrix().r[3];
+			m_vCurRootMove = m_Bones[m_UFBIndices[UFB_ROOT]]->Get_CombinedTransformationMatrix().Translation();
 			_float4x4 RootMat = {};
 			XMStoreFloat4x4(&RootMat, m_Bones[m_UFBIndices[UFB_ROOT]]->Get_TransformationMatrix());
 			RootMat._41 = 0; RootMat._42 = 0; RootMat._43 = 0;

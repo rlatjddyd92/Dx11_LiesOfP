@@ -43,9 +43,9 @@ HRESULT CBone::Initialize_ToBinary(HANDLE* pFile, _bool bUseBoundary)
 void CBone::Update_CombinedTransformationMatrix(const vector<CBone*>& Bones, _fmatrix PreTransformMatrix)
 {
 	if(-1 == m_iParentBoneIndex)
-		XMStoreFloat4x4(&m_CombinedTransformationMatrix, XMLoadFloat4x4(&m_TransformationMatrix) * PreTransformMatrix);
+		XMStoreFloat4x4(&m_CombinedTransformationMatrix, m_TransformationMatrix * PreTransformMatrix);
 	else
-		XMStoreFloat4x4(&m_CombinedTransformationMatrix, XMLoadFloat4x4(&m_TransformationMatrix) * Bones[m_iParentBoneIndex]->Get_CombinedTransformationMatrix());
+		XMStoreFloat4x4(&m_CombinedTransformationMatrix, m_TransformationMatrix * Bones[m_iParentBoneIndex]->Get_CombinedTransformationMatrix());
 }
 
 void CBone::Setting_ParentBoneName(CModel* pModel)

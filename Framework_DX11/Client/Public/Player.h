@@ -13,8 +13,6 @@ BEGIN(Client)
 class CPlayer final : public CPawn
 {
 public:
-	enum PARTID { PART_BODY, PART_WEAPON, PART_END };
-
 	enum WEAPON_TYPE { WEP_RAPIER, WEP_SCISSOR, WEP_FLAME, WEP_END };
 
 	enum PLAYER_STATE
@@ -23,7 +21,7 @@ public:
 		OH_IDLE, OH_WALK, OH_RUN, OH_SPRINT, OH_GUARD, OH_JUMP, OH_DASH,
 		TH_IDLE, TH_WALK, TH_RUN, TH_SPRINT, TH_GUARD, TH_JUMP, TH_DASH,
 		RAPIER_LATTACK0, RAPIER_LATTACK1, RAPIER_RATTACK0, RAPIER_CHARGE, RAPIER_FATAL, RAPIER_PARRYATTACK,
-		FLAME_LATTACK0, FLAME_LATTACK1, FLAME_RATTACK0, FLAME_RATTACK1, FLAME_FATAL, FLAME_PARRYATTACK,
+		FLAME_LATTACK0, FLAME_LATTACK1, FLAME_RATTACK0, FLAME_RATTACK1, FLAME_CHARGE0, FLAME_CHARGE1, FLAME_FATAL, FLAME_PARRYATTACK,
 		STATE_END
 	};
 
@@ -76,6 +74,7 @@ public:
 	_Vec4			Calculate_Direction_Straight();
 	_Vec4			Calculate_Direction_Right();
 
+	void			Change_Weapon();
 	_uint			Change_WeaponType();
 	
 private:
@@ -94,6 +93,7 @@ private:
 
 	_float				m_fGuardTime = {};
 
+	class CWeapon*		m_pWeapon[WEP_END] = { nullptr, };
 	WEAPON_TYPE			m_eWeaponType = { WEP_RAPIER };
 
 private:
@@ -103,10 +103,9 @@ private:
 	_bool		m_bEndAnim = { false };
 	_bool		m_bResetRootMove = { true };
 
-
 private:
 	HRESULT Ready_Components();
-	HRESULT Ready_PartObjects();
+	HRESULT Ready_Weapon();
 	HRESULT Ready_FSM();
 
 public:

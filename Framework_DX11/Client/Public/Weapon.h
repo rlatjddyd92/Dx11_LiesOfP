@@ -1,7 +1,7 @@
 #pragma once
 
 #include "Client_Defines.h"
-#include "PartObject.h"
+#include "GameObject.h"
 
 BEGIN(Engine)
 class CCollider;
@@ -11,16 +11,16 @@ END
 
 BEGIN(Client)
 
-class CWeapon final : public CPartObject
+class CWeapon abstract : public CGameObject
 {
 public:
-	typedef struct : public CPartObject::PARTOBJ_DESC
+	typedef struct
 	{
-		const _uint* pParentState = { nullptr };
-		const _float4x4* pSocketBoneMatrix = { nullptr };
+		const _Matrix*	pParentWorldMatrix = { nullptr };
+		const _Matrix*	pSocketBoneMatrix = { nullptr };
 	}WEAPON_DESC;
 
-private:
+protected:
 	CWeapon(ID3D11Device* pDevice, ID3D11DeviceContext* pContext);
 	CWeapon(const CWeapon& Prototype);
 	virtual ~CWeapon() = default;
@@ -32,22 +32,29 @@ public:
 	virtual void Update(_float fTimeDelta) override;
 	virtual void Late_Update(_float fTimeDelta) override;
 	virtual HRESULT Render() override;
+	virtual HRESULT Render_LightDepth() override;
 
-private:
+public:
+	void Appear();
+	void Disappear();
+
+protected:
 	CShader*			m_pShaderCom = { nullptr };	
 	CModel*				m_pModelCom = { nullptr };
 	CCollider*			m_pColliderCom = { nullptr };
 
-private:
-	const _float4x4*			m_pSocketMatrix = { nullptr };
-	const _uint*				m_pParentState = { nullptr };
+protected:
+	const _Matrix*			m_pParentMatrix = { nullptr };
+	const _Matrix*			m_pSocketMatrix = { nullptr };
+	_Matrix					m_WorldMatrix = {};
 
-private:
+protected:
 	HRESULT Ready_Components();
 
+	HRESULT Bind_WorldMatrix(class CShader* pShader, const _char* pContantName);
+
 public:
-	static CWeapon* Create(ID3D11Device* pDevice, ID3D11DeviceContext* pContext);
-	virtual CGameObject* Clone(void* pArg);
+	virtual CGameObject* Clone(void* pArg) = 0;
 	virtual void Free() override;
 
 };

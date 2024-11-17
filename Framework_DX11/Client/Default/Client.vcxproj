@@ -203,6 +203,7 @@
     <ClInclude Include="..\Public\State_CarcassBigA_Run.h" />
     <ClInclude Include="..\Public\State_CarcassBigA_Walk.h" />
     <ClInclude Include="..\Public\State_Player_ChangeWeapon.h" />
+    <ClInclude Include="..\Public\State_Player_Flame_Charge00.h" />
     <ClInclude Include="..\Public\State_Player_Flame_LAttack00.h" />
     <ClInclude Include="..\Public\State_Player_Flame_LAttack01.h" />
     <ClInclude Include="..\Public\State_Player_Flame_RAttack00.h" />
@@ -246,6 +247,9 @@
     <ClInclude Include="..\Public\UIPage_Test.h" />
     <ClInclude Include="..\Public\UIRender_Client.h" />
     <ClInclude Include="..\Public\Weapon.h" />
+    <ClInclude Include="..\Public\Weapon_FlameSword.h" />
+    <ClInclude Include="..\Public\Weapon_Rapier.h" />
+    <ClInclude Include="..\Public\Weapon_Scissor.h" />
     <ClInclude Include="Client.h" />
     <ClInclude Include="Interface_Enums.h" />
     <ClInclude Include="Item_Defines.h" />
@@ -292,6 +296,7 @@
     <ClCompile Include="..\Private\State_CarcassBigA_Run.cpp" />
     <ClCompile Include="..\Private\State_CarcassBigA_Walk.cpp" />
     <ClCompile Include="..\Private\State_Player_ChangeWeapon.cpp" />
+    <ClCompile Include="..\Private\State_Player_Flame_Charge00.cpp" />
     <ClCompile Include="..\Private\State_Player_Flame_LAttack00.cpp" />
     <ClCompile Include="..\Private\State_Player_Flame_LAttack01.cpp" />
     <ClCompile Include="..\Private\State_Player_Flame_RAttack00.cpp" />
@@ -335,6 +340,9 @@
     <ClCompile Include="..\Private\UIPage_Test.cpp" />
     <ClCompile Include="..\Private\UIRender_Client.cpp" />
     <ClCompile Include="..\Private\Weapon.cpp" />
+    <ClCompile Include="..\Private\Weapon_FlameSword.cpp" />
+    <ClCompile Include="..\Private\Weapon_Rapier.cpp" />
+    <ClCompile Include="..\Private\Weapon_Scissor.cpp" />
     <ClCompile Include="Client.cpp" />
     <ClCompile Include="stdafx.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Create</PrecompiledHeader>

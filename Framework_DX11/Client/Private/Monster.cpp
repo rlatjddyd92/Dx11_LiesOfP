@@ -155,34 +155,6 @@ HRESULT CMonster::Ready_FSM()
 	return S_OK;
 }
 
-CMonster* CMonster::Create(ID3D11Device* pDevice, ID3D11DeviceContext* pContext)
-{
-	CMonster* pInstance = new CMonster(pDevice, pContext);
-
-	if (FAILED(pInstance->Initialize_Prototype()))
-	{
-		MSG_BOX(TEXT("Failed to Created : CMonster"));
-		Safe_Release(pInstance);
-	}
-
-	return pInstance;
-}
-
-
-
-CGameObject* CMonster::Clone(void* pArg)
-{
-	CMonster* pInstance = new CMonster(*this);
-
-	if (FAILED(pInstance->Initialize(pArg)))
-	{
-		MSG_BOX(TEXT("Failed to Cloned : CMonster"));
-		Safe_Release(pInstance);
-	}
-
-	return pInstance;
-}
-
 void CMonster::Free()
 {
 	__super::Free();

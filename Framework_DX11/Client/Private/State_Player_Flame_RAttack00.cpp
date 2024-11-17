@@ -21,7 +21,7 @@ HRESULT CState_Player_Flame_RAttack00::Initialize(_uint iStateNum, void* pArg)
     m_pResetRootMove = pDesc->pIsResetRootMove;
     m_pTrackPos = pDesc->pPrevTrackPos;
 
-    m_iChangeFrame = 130;
+    m_iChangeFrame = 100;
     m_iStateNum = iStateNum;
 
     return S_OK;
