@@ -157,7 +157,7 @@ void CParticle_Effect::Reset()
 HRESULT CParticle_Effect::Ready_Components(const PARTICLE_EFFECT_DESC& Desc)
 {
     /* FOR.Com_Shader */
-    if (FAILED(__super::Add_Component(LEVEL_GAMEPLAY, TEXT("Prototype_Component_Shader_VtxPointInstance"),
+    if (FAILED(__super::Add_Component(LEVEL_STATIC, TEXT("Prototype_Component_Shader_VtxPointInstance"),
         TEXT("Com_Shader"), reinterpret_cast<CComponent**>(&m_pShaderCom))))
         return E_FAIL;
 
@@ -186,7 +186,7 @@ HRESULT CParticle_Effect::Ready_Components(const PARTICLE_EFFECT_DESC& Desc)
     }
 
     /* FOR.Com_VIBuffer */
-    if (FAILED(__super::Add_Component(LEVEL_GAMEPLAY, Desc.strVIBufferTag,
+    if (FAILED(__super::Add_Component(LEVEL_STATIC, Desc.strVIBufferTag,
         TEXT("Com_VIBuffer"), reinterpret_cast<CComponent**>(&m_pVIBufferCom))))
         return E_FAIL;
 
@@ -204,15 +204,15 @@ HRESULT CParticle_Effect::Ready_Components(const PARTICLE_EFFECT_DESC& Desc)
     case TYPE_CONVERGE:
         strCSPrototypeTag = TEXT("Prototype_Component_Shader_Compute_Particle_Converge");
         break;
-    }
+    } 
 
     /* FOR.Com_ActionCS */
-    if (FAILED(__super::Add_Component(LEVEL_GAMEPLAY, strCSPrototypeTag,
+    if (FAILED(__super::Add_Component(LEVEL_STATIC, strCSPrototypeTag,
         TEXT("Com_ActionCS"), reinterpret_cast<CComponent**>(&m_pActionCS))))
         return E_FAIL;
 
     /* FOR.Com_ResetCS */
-    if (FAILED(__super::Add_Component(LEVEL_GAMEPLAY, TEXT("Prototype_Component_Shader_Compute_Particle_Reset"),
+    if (FAILED(__super::Add_Component(LEVEL_STATIC, TEXT("Prototype_Component_Shader_Compute_Particle_Reset"),
         TEXT("Com_ResetCS"), reinterpret_cast<CComponent**>(&m_pResetCS))))
         return E_FAIL;
 

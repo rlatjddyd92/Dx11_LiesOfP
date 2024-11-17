@@ -240,77 +240,77 @@ HRESULT CEffect_Manager::Load_Models()
 HRESULT CEffect_Manager::Load_Shaders()
 {
     /* For. Prototype_Component_Shader_Effect_Texture */
-    if (FAILED(m_pGameInstance->Add_Prototype(LEVEL_GAMEPLAY, TEXT("Prototype_Component_Shader_Effect_Texture"),
+    if (FAILED(m_pGameInstance->Add_Prototype(LEVEL_STATIC, TEXT("Prototype_Component_Shader_Effect_Texture"),
         CShader::Create(m_pDevice, m_pContext, TEXT("../Bin/ShaderFiles/Shader_Effect_Texture.hlsl"), VTXPOSTEX::Elements, VTXPOSTEX::iNumElements))))
         return E_FAIL;
 
     /* For. Prototype_Component_Shader_Effect_Mesh */
-    if (FAILED(m_pGameInstance->Add_Prototype(LEVEL_GAMEPLAY, TEXT("Prototype_Component_Shader_Effect_Mesh"),
+    if (FAILED(m_pGameInstance->Add_Prototype(LEVEL_STATIC, TEXT("Prototype_Component_Shader_Effect_Mesh"),
         CShader::Create(m_pDevice, m_pContext, TEXT("../Bin/ShaderFiles/Shader_Effect_Mesh.hlsl"), VTXPOSTEX::Elements, VTXPOSTEX::iNumElements))))
         return E_FAIL;
 
     /* For. Prototype_Component_Shader_VtxPointInstance */
-    if (FAILED(m_pGameInstance->Add_Prototype(LEVEL_GAMEPLAY, TEXT("Prototype_Component_Shader_VtxPointInstance"),
+    if (FAILED(m_pGameInstance->Add_Prototype(LEVEL_STATIC, TEXT("Prototype_Component_Shader_VtxPointInstance"),
         CShader_NonVTX::Create(m_pDevice, m_pContext, TEXT("../Bin/ShaderFiles/Shader_VtxPointInstance.hlsl")))))
         return E_FAIL;
 
     /* For. Prototype_Component_Shader_Trail_OnePoint_Instance */
-    if (FAILED(m_pGameInstance->Add_Prototype(LEVEL_GAMEPLAY, TEXT("Prototype_Component_Shader_Trail_OnePoint_Instance"),
+    if (FAILED(m_pGameInstance->Add_Prototype(LEVEL_STATIC, TEXT("Prototype_Component_Shader_Trail_OnePoint_Instance"),
         CShader::Create(m_pDevice, m_pContext, TEXT("../Bin/ShaderFiles/Shader_VtxTrail_OnePoint_Instance.hlsl"), VTXTRAIL_ONEPOINT_INSTANCE::Elements, VTXTRAIL_ONEPOINT_INSTANCE::iNumElements))))
         return E_FAIL;
 
     /* For. Prototype_Component_Shader_Trail_TwoPoint_Instance */
-    if (FAILED(m_pGameInstance->Add_Prototype(LEVEL_GAMEPLAY, TEXT("Prototype_Component_Shader_Trail_TwoPoint_Instance"),
+    if (FAILED(m_pGameInstance->Add_Prototype(LEVEL_STATIC, TEXT("Prototype_Component_Shader_Trail_TwoPoint_Instance"),
         CShader::Create(m_pDevice, m_pContext, TEXT("../Bin/ShaderFiles/Shader_VtxTrail_TwoPoint_Instance.hlsl"), VTXTRAIL_TWOPOINT_INSTANCE::Elements, VTXTRAIL_TWOPOINT_INSTANCE::iNumElements))))
         return E_FAIL;
 
     /* For. Prototype_Component_Shader_TrailTail_PointInstance */
-    if (FAILED(m_pGameInstance->Add_Prototype(LEVEL_GAMEPLAY, TEXT("Prototype_Component_Shader_TrailTail_PointInstance"),
+    if (FAILED(m_pGameInstance->Add_Prototype(LEVEL_STATIC, TEXT("Prototype_Component_Shader_TrailTail_PointInstance"),
         CShader_NonVTX::Create(m_pDevice, m_pContext, TEXT("../Bin/ShaderFiles/Shader_TrailTail_PointInstance.hlsl")))))
         return E_FAIL;
 
     /* For. Prototype_Component_Shader_TrailHead_PointInstance */
-    if (FAILED(m_pGameInstance->Add_Prototype(LEVEL_GAMEPLAY, TEXT("Prototype_Component_Shader_TrailHead_PointInstance"),
+    if (FAILED(m_pGameInstance->Add_Prototype(LEVEL_STATIC, TEXT("Prototype_Component_Shader_TrailHead_PointInstance"),
         CShader_NonVTX::Create(m_pDevice, m_pContext, TEXT("../Bin/ShaderFiles/Shader_TrailHead_PointInstance.hlsl")))))
         return E_FAIL;
 
     /* For. Prototype_Component_Shader_Compute_Particle_Spread */
-    if (FAILED(m_pGameInstance->Add_Prototype(LEVEL_GAMEPLAY, TEXT("Prototype_Component_Shader_Compute_Particle_Spread"),
+    if (FAILED(m_pGameInstance->Add_Prototype(LEVEL_STATIC, TEXT("Prototype_Component_Shader_Compute_Particle_Spread"),
         CShader_Compute::Create(m_pDevice, m_pContext, TEXT("../Bin/ShaderFiles/Shader_ParticleCompute.hlsl"), "CS_SPREAD_MAIN"))))
         return E_FAIL;
 
     /* For. Prototype_Component_Shader_Compute_Particle_Move */
-    if (FAILED(m_pGameInstance->Add_Prototype(LEVEL_GAMEPLAY, TEXT("Prototype_Component_Shader_Compute_Particle_Move"),
+    if (FAILED(m_pGameInstance->Add_Prototype(LEVEL_STATIC, TEXT("Prototype_Component_Shader_Compute_Particle_Move"),
         CShader_Compute::Create(m_pDevice, m_pContext, TEXT("../Bin/ShaderFiles/Shader_ParticleCompute.hlsl"), "CS_MOVE_MAIN"))))
         return E_FAIL;
 
     /* For. Prototype_Component_Shader_Compute_Particle_Converge */
-    if (FAILED(m_pGameInstance->Add_Prototype(LEVEL_GAMEPLAY, TEXT("Prototype_Component_Shader_Compute_Particle_Converge"),
+    if (FAILED(m_pGameInstance->Add_Prototype(LEVEL_STATIC, TEXT("Prototype_Component_Shader_Compute_Particle_Converge"),
         CShader_Compute::Create(m_pDevice, m_pContext, TEXT("../Bin/ShaderFiles/Shader_ParticleCompute.hlsl"), "CS_CONVERGE_MAIN"))))
         return E_FAIL;
 
     /* For. Prototype_Component_Shader_Compute_Particle_Reset */
-    if (FAILED(m_pGameInstance->Add_Prototype(LEVEL_GAMEPLAY, TEXT("Prototype_Component_Shader_Compute_Particle_Reset"),
+    if (FAILED(m_pGameInstance->Add_Prototype(LEVEL_STATIC, TEXT("Prototype_Component_Shader_Compute_Particle_Reset"),
         CShader_Compute::Create(m_pDevice, m_pContext, TEXT("../Bin/ShaderFiles/Shader_ParticleCompute.hlsl"), "CS_RESET_MAIN"))))
         return E_FAIL;
 
     /* For. Prototype_Component_Shader_Compute_Trail_Spread */
-    if (FAILED(m_pGameInstance->Add_Prototype(LEVEL_GAMEPLAY, TEXT("Prototype_Component_Shader_Compute_Trail_Spread"),
+    if (FAILED(m_pGameInstance->Add_Prototype(LEVEL_STATIC, TEXT("Prototype_Component_Shader_Compute_Trail_Spread"),
         CShader_Compute::Create(m_pDevice, m_pContext, TEXT("../Bin/ShaderFiles/Shader_Trail_MultiPoint_Compute.hlsl"), "CS_SPREAD_MAIN"))))
         return E_FAIL;
 
     /* For. Prototype_Component_Shader_Compute_Trail_Move */
-    if (FAILED(m_pGameInstance->Add_Prototype(LEVEL_GAMEPLAY, TEXT("Prototype_Component_Shader_Compute_Trail_Move"),
+    if (FAILED(m_pGameInstance->Add_Prototype(LEVEL_STATIC, TEXT("Prototype_Component_Shader_Compute_Trail_Move"),
         CShader_Compute::Create(m_pDevice, m_pContext, TEXT("../Bin/ShaderFiles/Shader_Trail_MultiPoint_Compute.hlsl"), "CS_MOVE_MAIN"))))
         return E_FAIL;
 
     /* For. Prototype_Component_Shader_Compute_Trail_Converge */
-    if (FAILED(m_pGameInstance->Add_Prototype(LEVEL_GAMEPLAY, TEXT("Prototype_Component_Shader_Compute_Trail_Converge"),
+    if (FAILED(m_pGameInstance->Add_Prototype(LEVEL_STATIC, TEXT("Prototype_Component_Shader_Compute_Trail_Converge"),
         CShader_Compute::Create(m_pDevice, m_pContext, TEXT("../Bin/ShaderFiles/Shader_Trail_MultiPoint_Compute.hlsl"), "CS_CONVERGE_MAIN"))))
         return E_FAIL;
 
     /* For. Prototype_Component_Shader_Compute_Trail_Reset */
-    if (FAILED(m_pGameInstance->Add_Prototype(LEVEL_GAMEPLAY, TEXT("Prototype_Component_Shader_Compute_Trail_Reset"),
+    if (FAILED(m_pGameInstance->Add_Prototype(LEVEL_STATIC, TEXT("Prototype_Component_Shader_Compute_Trail_Reset"),
         CShader_Compute::Create(m_pDevice, m_pContext, TEXT("../Bin/ShaderFiles/Shader_Trail_MultiPoint_Compute.hlsl"), "CS_RESET_MAIN"))))
         return E_FAIL;
 
@@ -429,7 +429,7 @@ HRESULT CEffect_Manager::Load_Particle_Effect(const _wstring& strResultPath)
     _wstring strVIBufferTag = TEXT("Prototype_Component_VIBuffer_Point_Instance_");
     strVIBufferTag += strEffectName;
     
-    if (FAILED(m_pGameInstance->Add_Prototype(LEVEL_GAMEPLAY, strVIBufferTag,CVIBuffer_Point_Instance::Create(m_pDevice, m_pContext, InstanceDesc, true))))
+    if (FAILED(m_pGameInstance->Add_Prototype(LEVEL_STATIC, strVIBufferTag,CVIBuffer_Point_Instance::Create(m_pDevice, m_pContext, InstanceDesc, true))))
         return E_FAIL;
 
     TestDesc.strVIBufferTag = strVIBufferTag;

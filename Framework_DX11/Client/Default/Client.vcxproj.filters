@@ -52,9 +52,6 @@
     <Filter Include="02.GameObjects\04.Sky">
       <UniqueIdentifier>{f17d1c89-2983-427e-9a62-7fa4c30d3ae8}</UniqueIdentifier>
     </Filter>
-    <Filter Include="02.GameObjects\07.ForkLift">
-      <UniqueIdentifier>{4f3837c9-f24e-4fd0-b1a8-adf1987df19d}</UniqueIdentifier>
-    </Filter>
     <Filter Include="03.GameInterface_Controller">
       <UniqueIdentifier>{6fc85632-d32f-4d39-aef9-7ff0a6eb5101}</UniqueIdentifier>
     </Filter>
@@ -366,7 +363,7 @@
     </Filter>
     <Filter Include="05.Fsm\Player\OneHand\00.Attack\Rapier\RAttack00">
       <UniqueIdentifier>{c45a6618-f69d-43d6-a2f9-edd908511d3c}</UniqueIdentifier>
-	</Filter>
+    </Filter>
     <Filter Include="02.GameObjects\05.Effect\Effect_Base\Mesh_Effect">
       <UniqueIdentifier>{6950edf6-b86b-4f5f-bcf2-800c147433d6}</UniqueIdentifier>
     </Filter>
@@ -422,9 +419,6 @@
     </ClInclude>
     <ClInclude Include="..\Public\Sky.h">
       <Filter>02.GameObjects\04.Sky</Filter>
-    </ClInclude>
-    <ClInclude Include="..\Public\ForkLift.h">
-      <Filter>02.GameObjects\07.ForkLift</Filter>
     </ClInclude>
     <ClInclude Include="Item_Defines.h">
       <Filter>03.GameInterface_Controller\99.GameInterface_Defines\00.Defines%28Data_Instance 전용%29</Filter>
@@ -635,7 +629,7 @@
     </ClInclude>
     <ClInclude Include="..\Public\UIPage_Test.h">
       <Filter>03.GameInterface_Controller\00.UIManager\00.UIPage\09.UIPage_Test</Filter>
-	</ClInclude>
+    </ClInclude>
     <ClInclude Include="..\public\Mesh_Effect.h">
       <Filter>02.GameObjects\05.Effect\Effect_Base\Mesh_Effect</Filter>
     </ClInclude>
@@ -682,9 +676,6 @@
     </ClCompile>
     <ClCompile Include="..\Private\Sky.cpp">
       <Filter>02.GameObjects\04.Sky</Filter>
-    </ClCompile>
-    <ClCompile Include="..\Private\ForkLift.cpp">
-      <Filter>02.GameObjects\07.ForkLift</Filter>
     </ClCompile>
     <ClCompile Include="..\Private\UIManager.cpp">
       <Filter>03.GameInterface_Controller\00.UIManager</Filter>
@@ -874,7 +865,7 @@
     </ClCompile>
     <ClCompile Include="..\Private\UIPage_Test.cpp">
       <Filter>03.GameInterface_Controller\00.UIManager\00.UIPage\09.UIPage_Test</Filter>
-	</ClCompile>
+    </ClCompile>
     <ClCompile Include="..\private\Mesh_Effect.cpp">
       <Filter>02.GameObjects\05.Effect\Effect_Base\Mesh_Effect</Filter>
     </ClCompile>
@@ -914,9 +905,6 @@
       <Filter>97.ShaderFiles</Filter>
     </FxCompile>
     <FxCompile Include="..\Bin\ShaderFiles\Shader_VtxRectInstance.hlsl">
-      <Filter>97.ShaderFiles</Filter>
-    </FxCompile>
-    <FxCompile Include="..\Bin\ShaderFiles\Shader_VtxModel_Instance.hlsl">
       <Filter>97.ShaderFiles</Filter>
     </FxCompile>
     <FxCompile Include="..\Bin\ShaderFiles\Shader_Effect_Mesh.hlsl">
