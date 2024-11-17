@@ -40,15 +40,6 @@ public:
 		_wstring strText = {};
 		_int iTexture = -1;
 
-		bool operator<(const ORTHO_RENDER_CTRL& other) const 
-		{
-			if (fDistance_From_Cam < other.fDistance_From_Cam)
-				return true;
-			else if (_int(eType) > _int(other.eType))
-				return true;
-
-			return false; // 카메라와 거리가 더 먼 것이 먼저 그려지도록
-		}
 	}OR_RENDER;
 
 	struct Order_Ortho_UI_Render {

@@ -61,21 +61,21 @@ HRESULT CCarcassBigA::Initialize(void* pArg)
 	// 24-11-15 김성용
 	// 직교 투영 UI 테스트를 위한 코드 
 	// 메인 올릴 때는 제거 필요 
-	_vector vPos = { 0.f,0.f,0.f,0.f };
+	/*_vector vPos = { 0.f,0.f,0.f,0.f };
 	vPos.m128_f32[0] = m_pGameInstance->Get_Random(0.f, 10.f);
 	vPos.m128_f32[1] = m_pGameInstance->Get_Random(0.f, 10.f);
 	vPos.m128_f32[2] = m_pGameInstance->Get_Random(0.f, 10.f);
 	vPos.m128_f32[3] = m_pGameInstance->Get_Random(0.f, 10.f);
 	m_pTransformCom->Set_State(CTransform::STATE_POSITION,
 		vPos);
-	m_pTransformCom->LookAt(_vector{ 0, 0, -1, 0 });
+	m_pTransformCom->LookAt(_vector{ 0, 0, -1, 0 });*/
 
 	// 24-11-15 김성용
 	// 직교 UI 체크용 코드 
 	// 테스트 후 삭제할 것 
-	GET_GAMEINTERFACE->Register_Pointer_Into_OrthoUIPage(UI_ORTHO_OBJ_TYPE::ORTHO_NORMAL_MONSTER, this);
+	/*GET_GAMEINTERFACE->Register_Pointer_Into_OrthoUIPage(UI_ORTHO_OBJ_TYPE::ORTHO_NORMAL_MONSTER, this);
 
-	return S_OK;
+	return S_OK;*/
 
 	// 원래 코드 (원복해야 함)
 	m_pTransformCom->Set_State(CTransform::STATE_POSITION,
