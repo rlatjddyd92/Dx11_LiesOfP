@@ -53,7 +53,7 @@ public: // 외부에서 매니저 접근
 	void SetPlayMode(_bool bIsPlayMode) { m_pUIManager->SetPlayMode(bIsPlayMode); }
 
 	void SwicthPage(UIPAGE eNextPage) { m_pUIManager->SwicthPage(eNextPage); }
-
+	CUIManager::TDATA* GetTestData() { return m_pUIManager->GetTestData(); }
 	// TestPage 
 	void ShowTestPage(TEST_PAGE_NAME eName,
 		_wstring DataNameA, TEST_PAGE_VALUE_TYPE eTypeA, const void* ValueA,

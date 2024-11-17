@@ -85,8 +85,8 @@ void CUIManager::Late_Update(_float fTimeDelta)
 
 HRESULT CUIManager::Render()
 {
-	/*if (FAILED(m_pUIRender_Client->Render_Ortho(m_pUIPage_Ortho)))
-		return E_FAIL;*/
+	if (FAILED(m_pUIPage_Ortho->Render_Ortho_UI(m_pUIRender_Client)))
+		return E_FAIL;
 	
 	if (FAILED(m_pUIRender_Client->Render_UI(m_vecPage)))
 		return E_FAIL;
@@ -177,6 +177,34 @@ void CUIManager::UIControl_Test(_float fTimeDelta)
 			GET_GAMEINTERFACE->Add_Stat_Normal(STAT_NORMAL::STAT_GAUGE_REGION, -100.f * fTimeDelta);
 		else if (KEY_HOLD(KEY::M)) // 체력바 표시 수치 증가 
 			GET_GAMEINTERFACE->Add_Stat_Normal(STAT_NORMAL::STAT_GAUGE_REGION, +100.f * fTimeDelta);
+	}
+
+	// 몬스터 체력바 확인 
+	if (KEY_HOLD(KEY::ALT))
+	{
+		if (KEY_HOLD(KEY::I))
+			m_pTestData->fHP_Now -= 100.f * fTimeDelta;
+		else if (KEY_HOLD(KEY::O))
+			m_pTestData->fHP_Now += 100.f * fTimeDelta;
+
+		m_pTestData->fHP_Now = max(0, m_pTestData->fHP_Now);
+		m_pTestData->fHP_Now = min(m_pTestData->fHP_Now, m_pTestData->fHP_Max);
+
+		if (KEY_HOLD(KEY::K))
+		{
+			if (m_pTestData->bFocus)
+				m_pTestData->bFocus = false;
+			else
+				m_pTestData->bFocus = true;
+		}
+
+		if (KEY_HOLD(KEY::M))
+		{
+			if (m_pTestData->bSpecial_Attack)
+				m_pTestData->bSpecial_Attack = false;
+			else
+				m_pTestData->bSpecial_Attack = true;
+		}
 	}
 
 
@@ -472,30 +500,33 @@ HRESULT CUIManager::Load_UIDataFile()
 
 	for (_int i = 0; i < _int(UIPAGE::PAGE_END); ++i)
 	{
-		if (FAILED(Make_UIPage(i)))
-			return E_FAIL;
-
-		_wstring strName = {};
-		while (true)
+		if (!FAILED(Make_UIPage(i)))
 		{
-			_char szText = {};
-			ReadFile(hFile, &szText, sizeof(_char), &dwByte, nullptr);
-			strName += (_tchar)szText;
-			if (szText == '\0')
-				break;
+			_wstring strName = {};
+			while (true)
+			{
+				_char szText = {};
+				ReadFile(hFile, &szText, sizeof(_char), &dwByte, nullptr);
+				strName += (_tchar)szText;
+				if (szText == '\0')
+					break;
+			}
+			m_vecPage[i]->SetUIPageName(strName);
+
+			_float2 fPosition = { 0.f,0.f };
+			ReadFile(hFile, &fPosition, sizeof(_float2), &dwByte, nullptr);
+
+			m_vecPage[i]->SetUIPagePosition(fPosition);
+
+
+			if (FAILED(Load_UIDataFile_Part(hFile, &dwByte, i)))
+				MSG_BOX(TEXT("UI 데이터 불러오기 실패"));
+
+			m_vecPage[i]->Ready_UIPart_Group_Control();
 		}
-		m_vecPage[i]->SetUIPageName(strName);
-
-		_float2 fPosition = { 0.f,0.f };
-		ReadFile(hFile, &fPosition, sizeof(_float2), &dwByte, nullptr);
-
-		m_vecPage[i]->SetUIPagePosition(fPosition);
-
-
-		if (FAILED(Load_UIDataFile_Part(hFile, &dwByte, i)))
-			MSG_BOX(TEXT("UI 데이터 불러오기 실패"));
-
-		m_vecPage[i]->Ready_UIPart_Group_Control();
+		else 
+			MSG_BOX(TEXT("UIPage 제작 필요"));
+		
 	}
 
 	CloseHandle(hFile);
@@ -524,9 +555,41 @@ HRESULT CUIManager::Make_UIPage(_int iIndex)
 		m_pUIPage_Play = CUIPage_Play::Create(m_pDevice, m_pContext);
 		m_vecPage[iIndex] = static_cast<CUIPage*>(m_pUIPage_Play);
 	}
-
-	// 다른 페이지 완성되면 넣기 
-
+	else if (iIndex == _int(UIPAGE::PAGE_MENU))
+	{
+		m_pUIPage_Menu = CUIPage_Menu::Create(m_pDevice, m_pContext);
+		m_vecPage[iIndex] = static_cast<CUIPage*>(m_pUIPage_Menu);
+	}
+	else if (iIndex == _int(UIPAGE::PAGE_INVEN))
+	{
+		m_pUIPage_Inven = CUIPage_Inven::Create(m_pDevice, m_pContext);
+		m_vecPage[iIndex] = static_cast<CUIPage*>(m_pUIPage_Inven);
+	}
+	else if (iIndex == _int(UIPAGE::PAGE_EQUIP))
+	{
+		m_pUIPage_Equip = CUIPage_Equip::Create(m_pDevice, m_pContext);
+		m_vecPage[iIndex] = static_cast<CUIPage*>(m_pUIPage_Equip);
+	}
+	else if (iIndex == _int(UIPAGE::PAGE_STAT))
+	{
+		m_pUIPage_Stat = CUIPage_Stat::Create(m_pDevice, m_pContext);
+		m_vecPage[iIndex] = static_cast<CUIPage*>(m_pUIPage_Stat);
+	}
+	else if (iIndex == _int(UIPAGE::PAGE_LEVELUP))
+	{
+		m_pUIPage_LevelUp = CUIPage_LevelUp::Create(m_pDevice, m_pContext);
+		m_vecPage[iIndex] = static_cast<CUIPage*>(m_pUIPage_LevelUp);
+	}
+	else if (iIndex == _int(UIPAGE::PAGE_SKILL))
+	{
+		m_pUIPage_Skill = CUIPage_Skill::Create(m_pDevice, m_pContext);
+		m_vecPage[iIndex] = static_cast<CUIPage*>(m_pUIPage_Skill);
+	}
+	else if (iIndex == _int(UIPAGE::PAGE_TEST))
+	{
+		m_pUIPage_Test = CUIPage_Test::Create(m_pDevice, m_pContext);
+		m_vecPage[iIndex] = static_cast<CUIPage*>(m_pUIPage_Test);
+	}
 	else if (iIndex == _int(UIPAGE::PAGE_ORTHO))
 	{
 		m_pUIPage_Ortho = CUIPage_Ortho::Create(m_pDevice, m_pContext);
