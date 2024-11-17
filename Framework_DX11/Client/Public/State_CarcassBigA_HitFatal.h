@@ -11,6 +11,13 @@ class CState_CarcassBigA_HitFatal :
     public CState
 {
 private:
+    typedef enum {
+        AN_FATAL_START_F = 14, AN_FATAL_START_B = 13,
+        AN_FATAL_LOOP_F = 12, AN_FATAL_LOOP_B = 11,
+        AN_FATAL_END_F = 10, AN_FATAL_END_B = 9
+    }ANIMNUM;
+
+private:
     typedef enum{
         DIR_FRONT, DIR_BEHIND
     }DIR;
@@ -45,6 +52,9 @@ private:
     _uint               m_iAnimCnt = {};
 
     _uint               m_iDirCnt = {};
+
+private:
+    _bool               End_Check();
 
 public:
     static CState_CarcassBigA_HitFatal* Create(class CFsm* pFsm, class CMonster* pMonster, _uint iStateNum, void* pArg = nullptr);

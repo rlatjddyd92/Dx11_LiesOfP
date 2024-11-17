@@ -115,12 +115,11 @@ void CPlayer::Update(_float fTimeDelta)
 
 	_vector vPos = m_pTransformCom->Get_State(CTransform::STATE_POSITION);
 
-	if (true)//조건을 애니메이션이 끝났을때 or 변경 되었을때로
-	{
-		m_vCurRootMove = XMVector3TransformNormal(m_vCurRootMove, m_pTransformCom->Get_WorldMatrix());
+	
+	m_vCurRootMove = XMVector3TransformNormal(m_vCurRootMove, m_pTransformCom->Get_WorldMatrix());
 
-		m_pTransformCom->Set_State(CTransform::STATE_POSITION, vPos + m_vCurRootMove);
-	}
+	m_pTransformCom->Set_State(CTransform::STATE_POSITION, vPos + m_vCurRootMove);
+	
 
 	for (auto& EvKey : m_EvKeyList)
 	{

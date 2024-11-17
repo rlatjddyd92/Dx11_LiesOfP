@@ -77,19 +77,12 @@ void CSimonManusP1::Update(_float fTimeDelta)
 		//진행한 애니메이션 정도를 통해서 상태 제어(애니메이션이 끝나면 넘어가도록)
 		//m_pFSMCom->Update(fTimeDelta);
 
-		_vector vPos = m_pTransformCom->Get_State(CTransform::STATE_POSITION);
+		_Vec3 vPos = m_pTransformCom->Get_State(CTransform::STATE_POSITION);
 
-		if (m_bEndAnim == true && m_bResetRootMove)//조건을 애니메이션이 끝났을때 or 변경 되었을때로
-		{
-			m_vCurRootMove = m_vRootMoveStack = XMVectorSet(0, 0, 0, 1);
-		}
-		else
-		{
-			m_vCurRootMove = XMVector3TransformNormal(m_vCurRootMove, m_pTransformCom->Get_WorldMatrix());
+		m_vCurRootMove = XMVector3TransformNormal(m_vCurRootMove, m_pTransformCom->Get_WorldMatrix());
 
-			//m_pTransformCom->Set_State(CTransform::STATE_POSITION, vPos + m_vCurRootMove - m_vRootMoveStack);
-			m_vRootMoveStack = m_vCurRootMove;
-		}
+		m_pTransformCom->Set_State(CTransform::STATE_POSITION, vPos + m_vCurRootMove);
+
 	}
 
 	for (auto& pColliderObj : m_pColliderObject)

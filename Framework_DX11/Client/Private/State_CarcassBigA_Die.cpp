@@ -61,6 +61,43 @@ void CState_CarcassBigA_Die::End_State()
 {
 }
 
+_bool CState_CarcassBigA_Die::End_Check()
+{
+    _uint iCurAnim = m_pMonster->Get_CurrentAnimIndex();
+    _bool bEndCheck{ false };
+    if ((AN_DIE_START_F) == iCurAnim)
+    {
+        bEndCheck = m_pMonster->Get_EndAnim(AN_DIE_START_F);
+    }
+    else if ((AN_DIE_START_B) == iCurAnim)
+    {
+        bEndCheck = m_pMonster->Get_EndAnim(AN_DIE_START_B);
+    }
+    else if ((AN_DIE_LOOP_F) == iCurAnim)
+    {
+        bEndCheck = m_pMonster->Get_EndAnim(AN_DIE_LOOP_F);
+    }
+    else if ((AN_DIE_LOOP_B) == iCurAnim)
+    {
+        bEndCheck = m_pMonster->Get_EndAnim(AN_DIE_LOOP_B);
+    }
+    else if ((AN_DIE_END_F) == iCurAnim)
+    {
+        bEndCheck = m_pMonster->Get_EndAnim(AN_DIE_LOOP_F);
+    }
+    else if ((AN_DIE_LOOP_B) == iCurAnim)
+    {
+        bEndCheck = m_pMonster->Get_EndAnim(AN_DIE_LOOP_B);
+    }
+    else
+    {
+
+    }
+    //애니메이션 번호와 일치하지 않는?다
+
+    return bEndCheck;
+}
+
 CState_CarcassBigA_Die* CState_CarcassBigA_Die::Create(CFsm* pFsm, CMonster* pMonster, _uint iStateNum, void* pArg)
 {
     CState_CarcassBigA_Die* pInstance = new CState_CarcassBigA_Die(pFsm, pMonster);

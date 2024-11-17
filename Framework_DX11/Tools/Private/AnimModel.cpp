@@ -72,7 +72,7 @@ void CAnimModel::Update(_float fTimeDelta)
 		m_pTransformCom->Go_Straight(fTimeDelta);//m_pTransformCom->Set_State(CTransform::STATE_POSITION, XMVectorSetX(vPos, XMVectorGetX(vPos) + 0.1f));
 	
 	_bool	bEndCheck{false};
-	_vector vRootMove = m_pModelCom->Play_Animation(fTimeDelta, &bEndCheck, &m_EvKeyList);
+	_vector vRootMove = m_pModelCom->Play_Animation(fTimeDelta, &m_EvKeyList);
 	
 	if (m_EvKeyList.empty() == false)
 	{

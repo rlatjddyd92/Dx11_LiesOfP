@@ -29,6 +29,7 @@ HRESULT CState_CarcassBigA_Run::Start_State(void* pArg)
 
 void CState_CarcassBigA_Run::Update(_float fTimeDelta)
 {
+    m_pMonster->Look_Player();
     m_pMonster->Get_Transform()->Go_Straight(fTimeDelta * m_fRunSpeed);
 
 

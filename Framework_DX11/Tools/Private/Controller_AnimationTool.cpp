@@ -548,12 +548,15 @@ void CController_AnimationTool::SetUp_Controller_Bone()
 		}
 	}
 	ImGui::Text("\n");
-	_vector vPos{};
+	_Vec3 vPos{};
 	_float3 vTemp{};
 	if (m_pCopyModelCom != nullptr)
 	{
 		//vPos = ((*m_pCopyBoneVec)[m_iSelected_Index_Bone])->Get_TransformationMatrix().r[CTransform::STATE_POSITION];
-		vPos = ((*m_pCopyBoneVec)[m_iSelected_Index_Bone])->Get_CombinedTransformationMatrix().r[CTransform::STATE_POSITION];
+		Matrix WorldMat = ((*m_pCopyBoneVec)[m_iSelected_Index_Bone])->Get_CombinedTransformationMatrix();
+		vPos.x = WorldMat._41;
+		vPos.y = WorldMat._42;
+		vPos.z = WorldMat._43;
 	}
 
 	ImGui::Text("Pos_X   %f", XMVectorGetX(vPos));

@@ -44,7 +44,8 @@ HRESULT CState_CarcassBigA_Attack::Start_State(void* pArg)
     m_iAtkAnimNum = rand() % 7;
     if (m_iAtkAnimNum >= 5)
         ++m_iAtkAnimNum;
-
+    //0~8;
+    // 
     //if (m_iAtkAnimNum == 5)
     //{
     //    m_pColliderCtrs[CCarcassBigA::TYPE_LEFTHAND] = true;
@@ -85,6 +86,11 @@ void CState_CarcassBigA_Attack::End_State()
 {
     //m_pColliderCtrs[CCarcassBigA::TYPE_LEFTHAND] = true;
     //m_pColliderCtrs[CCarcassBigA::TYPE_RIGHTHAND] = true;
+}
+
+_bool CState_CarcassBigA_Attack::End_Check()
+{
+    return _bool();
 }
 
 CState_CarcassBigA_Attack* CState_CarcassBigA_Attack::Create(CFsm* pFsm, CMonster* pMonster, _uint iStateNum, void* pArg)
