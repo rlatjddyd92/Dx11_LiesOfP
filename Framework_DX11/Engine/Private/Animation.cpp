@@ -80,11 +80,12 @@ _uint CAnimation::Update_TransformationMatrices(const vector<class CBone*>& Bone
 
 		if (*pCurrentTrackPosition >= m_Duration)
 		{
-			*isEnd = true;
 			if (true == isLoop)
 			{
 				*pCurrentTrackPosition = 0.f;
 			}
+			else
+				*isEnd = true;
 		}
 	}
 

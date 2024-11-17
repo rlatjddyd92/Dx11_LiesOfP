@@ -57,13 +57,13 @@ HRESULT CState_Player_Heal::Start_State(void* pArg)
 
 void CState_Player_Heal::Update(_float fTimeDelta)
 {
-
+    
     if (!Move(fTimeDelta))
     {
         m_pPlayer->Change_Animation(m_iAnimation_Heal, false);
     }
-    m_pPlayer->Change_Animation_Boundry(m_iAnimation_Heal, false, 0.f);
-
+    m_pPlayer->Change_Animation_Boundry(m_iAnimation_Heal, false, 0.1f);
+    
 
     if (*m_pIsEndAnim)
     {
@@ -132,27 +132,27 @@ _bool CState_Player_Heal::Move(_float fTimeDelta)
         if (isForward)
         {
             if (isLeft)
-                m_pPlayer->Change_Animation(m_iAnimation_Walk[iWalkType][WALK_FL], true, 0.2f);
+                m_pPlayer->Change_Animation(m_iAnimation_Walk[iWalkType][WALK_FL], true, 0.2f, 0.f, false);
             else if (isRight)
-                m_pPlayer->Change_Animation(m_iAnimation_Walk[iWalkType][WALK_FR], true, 0.2f);
+                m_pPlayer->Change_Animation(m_iAnimation_Walk[iWalkType][WALK_FR], true, 0.2f, 0.f, false);
             else
-                m_pPlayer->Change_Animation(m_iAnimation_Walk[iWalkType][WALK_F], true, 0.2f);
+                m_pPlayer->Change_Animation(m_iAnimation_Walk[iWalkType][WALK_F], true, 0.2f, 0.f, false);
         }
         else if (isBackward)
         {
             if (isLeft)
-                m_pPlayer->Change_Animation(m_iAnimation_Walk[iWalkType][WALK_BL], true, 0.2f);
+                m_pPlayer->Change_Animation(m_iAnimation_Walk[iWalkType][WALK_BL], true, 0.2f, 0.f, false);
             else if (isRight)
-                m_pPlayer->Change_Animation(m_iAnimation_Walk[iWalkType][WALK_BR], true, 0.2f);
+                m_pPlayer->Change_Animation(m_iAnimation_Walk[iWalkType][WALK_BR], true, 0.2f, 0.f, false);
             else
-                m_pPlayer->Change_Animation(m_iAnimation_Walk[iWalkType][WALK_B], true, 0.2f);
+                m_pPlayer->Change_Animation(m_iAnimation_Walk[iWalkType][WALK_B], true, 0.2f, 0.f, false);
         }
         else
         {
             if (isLeft)
-                m_pPlayer->Change_Animation(m_iAnimation_Walk[iWalkType][WALK_L], true, 0.2f);
+                m_pPlayer->Change_Animation(m_iAnimation_Walk[iWalkType][WALK_L], true, 0.2f, 0.f, false);
             else if (isRight)
-                m_pPlayer->Change_Animation(m_iAnimation_Walk[iWalkType][WALK_R], true, 0.2f);
+                m_pPlayer->Change_Animation(m_iAnimation_Walk[iWalkType][WALK_R], true, 0.2f, 0.f, false);
         }
 
 
