@@ -41,12 +41,12 @@ void CTrail_Effect_TP::Priority_Update(_float fTimeDelta)
 void CTrail_Effect_TP::Update(_float fTimeDelta)
 {
 	__super::Set_WorldMatrix();
-
+		
 	if(true== m_DefaultDesc.bLoop)
 	{
 		m_pVIBufferCom->Update_Buffer(
-			XMLoadFloat4x4(&m_WorldMatrix).r[3] + XMLoadFloat3(&m_DefaultDesc.vTopOffset),
-			XMLoadFloat4x4(&m_WorldMatrix).r[3] + XMLoadFloat3(&m_DefaultDesc.vBottomOffset),
+			XMLoadFloat4x4(&m_WorldMatrix).r[3] + XMVector3TransformNormal(m_DefaultDesc.vTopOffset, m_WorldMatrix),
+			XMLoadFloat4x4(&m_WorldMatrix).r[3] + XMVector3TransformNormal(m_DefaultDesc.vBottomOffset, m_WorldMatrix),
 			fTimeDelta);
 	}
 
@@ -57,7 +57,9 @@ void CTrail_Effect_TP::Update(_float fTimeDelta)
 void CTrail_Effect_TP::Late_Update(_float fTimeDelta)
 {
 	if (false == m_DefaultDesc.bLoop && 1.f < m_fAlpha)
-		m_isActive = false;
+	{
+		//m_isActive = false;
+	}
 
 	if (CRenderer::RG_EFFECT == m_RenderDesc.iRenderGroup)
 		m_pGameInstance->Add_RenderObject(CRenderer::RG_NONLIGHT, this);
@@ -124,6 +126,31 @@ void CTrail_Effect_TP::Reset()
 
 HRESULT CTrail_Effect_TP::Save(_wstring strFilePath)
 {
+	if (strFilePath.back() == L'\0')
+		strFilePath.resize(strFilePath.size() - 1);
+
+	_wstring strResultPath = strFilePath + TEXT("\\") + m_strEffectName + TEXT(".TTP");
+
+	_char FilePath[MAX_PATH] = {};
+	int sizeNeeded = WideCharToMultiByte(CP_ACP, 0, strResultPath.c_str(), -1, nullptr, 0, nullptr, nullptr);
+	if (sizeNeeded > 0 && sizeNeeded <= MAX_PATH)
+	{
+		WideCharToMultiByte(CP_ACP, 0, strResultPath.c_str(), -1, FilePath, MAX_PATH, nullptr, nullptr);
+	}
+
+	ofstream outfile(FilePath, ios::binary);
+
+	if (!outfile.is_open())
+		return E_FAIL;
+
+	outfile.write(reinterpret_cast<const _char*>(m_InitDesc.szEffectName), sizeof(m_InitDesc.szEffectName));
+	outfile.write(reinterpret_cast<const _char*>(&m_InitDesc.RenderDesc), sizeof(m_InitDesc.RenderDesc));
+	outfile.write(reinterpret_cast<const _char*>(&m_InitDesc.DefaultDesc), sizeof(m_InitDesc.DefaultDesc));
+	outfile.write(reinterpret_cast<const _char*>(&m_InitDesc.TextDesc), sizeof(m_InitDesc.TextDesc));
+	outfile.write(reinterpret_cast<const _char*>(&m_InitDesc.BufferDesc), sizeof(m_InitDesc.BufferDesc));
+
+	outfile.close();
+
 	return S_OK;
 }
 

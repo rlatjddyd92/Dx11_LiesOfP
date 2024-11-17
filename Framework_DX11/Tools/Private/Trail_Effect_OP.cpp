@@ -47,12 +47,16 @@ void CTrail_Effect_OP::Update(_float fTimeDelta)
 	if(TYPE_UPDATE == m_DefaultDesc.eType)
 	{
 		if (true == m_pVIBufferCom->Update_Buffer(XMLoadFloat4x4(&m_WorldMatrix).r[3], m_DefaultDesc.fTrailInterval, m_DefaultDesc.bLoop, fTimeDelta))
-			m_isActive = false;
+		{
+			//m_isActive = false;
+		}
 	}
 	else if (TYPE_SPREAD == m_DefaultDesc.eType)
 	{
 		if (true == m_pVIBufferCom->Spread_Buffer(XMLoadFloat4x4(&m_WorldMatrix).r[3], m_DefaultDesc.fTrailInterval, m_DefaultDesc.fSpreadSpeed, m_DefaultDesc.bLoop, fTimeDelta))
-			m_isActive = false;
+		{
+			//m_isActive = false;
+		}
 	}
 }
 
@@ -128,6 +132,32 @@ void CTrail_Effect_OP::Reset()
 
 HRESULT CTrail_Effect_OP::Save(_wstring strFilePath)
 {
+	if (strFilePath.back() == L'\0')
+		strFilePath.resize(strFilePath.size() - 1);
+
+	_wstring strResultPath = strFilePath + TEXT("\\") + m_strEffectName + TEXT(".TOP");
+
+	_char FilePath[MAX_PATH] = {};
+	int sizeNeeded = WideCharToMultiByte(CP_ACP, 0, strResultPath.c_str(), -1, nullptr, 0, nullptr, nullptr);
+	if (sizeNeeded > 0 && sizeNeeded <= MAX_PATH)
+	{
+		WideCharToMultiByte(CP_ACP, 0, strResultPath.c_str(), -1, FilePath, MAX_PATH, nullptr, nullptr);
+	}
+
+	ofstream outfile(FilePath, ios::binary);
+
+	if (!outfile.is_open())
+		return E_FAIL;
+
+	outfile.write(reinterpret_cast<const _char*>(m_InitDesc.szEffectName), sizeof(m_InitDesc.szEffectName));
+	outfile.write(reinterpret_cast<const _char*>(&m_InitDesc.RenderDesc), sizeof(m_InitDesc.RenderDesc));
+	outfile.write(reinterpret_cast<const _char*>(&m_InitDesc.DefaultDesc), sizeof(m_InitDesc.DefaultDesc));
+	outfile.write(reinterpret_cast<const _char*>(&m_InitDesc.TextDesc), sizeof(m_InitDesc.TextDesc));
+	outfile.write(reinterpret_cast<const _char*>(&m_InitDesc.BufferDesc), sizeof(m_InitDesc.BufferDesc));
+
+	outfile.close();
+
+	return S_OK;
 
 	return S_OK;
 }

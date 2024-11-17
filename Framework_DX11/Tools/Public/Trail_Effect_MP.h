@@ -25,7 +25,7 @@ public:
 		_Vec3				vOrbitAxis = { 0.f, 1.f, 0.f };
 		_float				fOrbitAngle = { 90.f };
 
-		_float				fRandomTimeInterval = { 0.f };
+		_float				fRandomTimeInterval = { 0.25f };
 		_float				fRandomMoveRatio = { 0.f };
 
 		_float				fAccelSpeed = { 0.f };
@@ -110,8 +110,7 @@ public:
 	}
 
 private:
-	class CShader_NonVTX* m_pHeadShaderCom = { nullptr };				// 테일만.
-	class CShader_NonVTX* m_pTailShaderCom = { nullptr };				// 테일만.
+	class CShader_NonVTX* m_pShaderCom = { nullptr };				// 테일만.
 	class CTrail_MultiPoint_Instance* m_pVIBufferCom = { nullptr };		
 	class CTexture* m_pTextureCom[TEXTURE_END] = { nullptr, nullptr, nullptr, nullptr };
 
@@ -126,8 +125,6 @@ private:
 	DEFAULT_DESC m_DefaultDesc = {};
 	TRAIL_MP_DESC m_InitDesc = {};
 
-
-	_uint m_iTest = { 0 };
 private:
 	HRESULT Ready_Components(const TRAIL_MP_DESC& Desc);
 

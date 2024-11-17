@@ -60,6 +60,10 @@ _bool CTrail_OnePoint_Instance::Update_Buffer(_Vec3 vWorldPos, _float fTrailInte
 	_bool m_bOver = { true };
 	for (size_t i = 0; i < m_iNumInstance; ++i)
 	{
+		pVertices[i].vLifeTime.y += fTimeDelta;
+		if (pVertices[i].vLifeTime.y < pVertices[i].vLifeTime.x)
+			m_bOver = false;
+
 		if (false == m_bFirst)
 		{
 			pVertices[i].vCurPos = vWorldPos;
@@ -67,10 +71,6 @@ _bool CTrail_OnePoint_Instance::Update_Buffer(_Vec3 vWorldPos, _float fTrailInte
 			pVertices[i].vMoveDir = _float3(0.f, 0.f, 0.f);
 			continue;
 		}
-
-		pVertices[i].vLifeTime.y += fTimeDelta;
-		if (pVertices[i].vLifeTime.y < pVertices[i].vLifeTime.x)
-			m_bOver = false;
 	}
 
 	while(bLoop)
@@ -128,6 +128,12 @@ _bool CTrail_OnePoint_Instance::Spread_Buffer(_Vec3 vWorldPos, _float fTrailInte
 	_bool m_bOver = { true };
 	for (size_t i = 0; i < m_iNumInstance; ++i)
 	{
+		_Vec3 vMovePos = pVertices[i].vCurPos + XMVector3Normalize(XMLoadFloat3(&pVertices[i].vMoveDir)) * fSpeed * fTimeDelta;
+		pVertices[i].vCurPos = vMovePos;
+		pVertices[i].vLifeTime.y += fTimeDelta;
+		if (pVertices[i].vLifeTime.y < pVertices[i].vLifeTime.x)
+			m_bOver = false;
+
 		if (false == m_bFirst)
 		{
 			pVertices[i].vCurPos = vWorldPos;
@@ -135,12 +141,6 @@ _bool CTrail_OnePoint_Instance::Spread_Buffer(_Vec3 vWorldPos, _float fTrailInte
 			pVertices[i].vMoveDir = _float3(0.f, 0.f, 0.f);
 			continue;
 		}
-
-		_Vec3 vMovePos = pVertices[i].vCurPos + pVertices[i].vMoveDir * fSpeed * fTimeDelta;
-		pVertices[i].vCurPos = vMovePos;
-		pVertices[i].vLifeTime.y += fTimeDelta;
-		if (pVertices[i].vLifeTime.y < pVertices[i].vLifeTime.x)
-			m_bOver = false;
 	}
 
 	while (bLoop)
@@ -153,16 +153,16 @@ _bool CTrail_OnePoint_Instance::Spread_Buffer(_Vec3 vWorldPos, _float fTrailInte
 
 		if (vDir.Length() < fTrailInterval)
 		{
-			m_vPrePos = vWorldPos;
-			pVertices[m_iNumCurrentIndex].vCurPos = m_vPrePos;
-			pVertices[m_iNumCurrentIndex].vLifeTime.y = 0.f;
+			//m_vPrePos = vWorldPos;
+			//pVertices[m_iNumCurrentIndex].vCurPos = m_vPrePos;
+			//pVertices[m_iNumCurrentIndex].vLifeTime.y = 0.f;
 
-			if (m_iNumInstance == m_iNumCurrentIndex + 1)
-				pVertices[m_iNumCurrentIndex].vPrePos = m_vPrePos;
-			else
-				pVertices[m_iNumCurrentIndex].vPrePos = pVertices[m_iNumCurrentIndex].vCurPos;
+			//if (m_iNumInstance == m_iNumCurrentIndex + 1)
+			//	pVertices[m_iNumCurrentIndex].vPrePos = m_vPrePos;
+			//else
+			//	pVertices[m_iNumCurrentIndex].vPrePos = pVertices[m_iNumCurrentIndex].vCurPos;
 
-			--m_iNumCurrentIndex;
+			// --m_iNumCurrentIndex;
 			break;
 		}
 

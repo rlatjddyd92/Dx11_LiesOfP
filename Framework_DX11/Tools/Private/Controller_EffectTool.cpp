@@ -965,8 +965,8 @@ void CController_EffectTool::Trail_OP_Check()
 	if (ImGui::TreeNode("Trail OP Default"))
 	{
 		ImGui::SeparatorText("Trail OP Move");
-		ImGui::InputFloat2("Trail OP Interval", (_float*)&m_Trail_OPDesc.DefaultDesc.fTrailInterval);
-		ImGui::InputFloat2("Trail OP Spread Speed", (_float*)&m_Trail_OPDesc.DefaultDesc.fSpreadSpeed);
+		ImGui::InputFloat("Trail OP Interval", (_float*)&m_Trail_OPDesc.DefaultDesc.fTrailInterval);
+		ImGui::InputFloat("Trail OP Spread Speed", (_float*)&m_Trail_OPDesc.DefaultDesc.fSpreadSpeed);
 
 		ImGui::SeparatorText("Trail OP Shader");
 		ImGui::InputInt("Shader Index", (_int*)&m_Trail_OPDesc.DefaultDesc.iShaderIndex);
@@ -1611,6 +1611,9 @@ HRESULT CController_EffectTool::Add_EffectContainer()
 	Clear_Particle();
 	Clear_ME();
 	Clear_TE();
+	Clear_Trail_OP();
+	Clear_Trail_TP();
+	Clear_Trail_MP();
 
 	return S_OK;
 }
@@ -1780,9 +1783,83 @@ HRESULT CController_EffectTool::Load_Effect()
 				if (FAILED(m_pGameInstance->Add_CloneObject_ToLayer(LEVEL_TOOL, TEXT("Layer_MeshEffect"), TEXT("Prototype_GameObject_Texture_Effect"), &TestDesc)))
 					return E_FAIL;
 			}
+			else if (TEXT("TOP") == strExtention)
+			{
+				CTrail_Effect_OP::TRAIL_OP_DESC TestDesc = {};
 
+				ifstream infile(wFilePath, ios::binary);
+
+				if (!infile.is_open())
+					return E_FAIL;
+
+				TestDesc.pParentMatrix = { nullptr };
+				TestDesc.fRotationPerSec = XMConvertToRadians(90.f);
+				TestDesc.fSpeedPerSec = 1.f;
+				TestDesc.iLevelIndex = LEVEL_TOOL;
+
+				infile.read(reinterpret_cast<_char*>(TestDesc.szEffectName), sizeof(TestDesc.szEffectName));	// 이거 키로 쓰고
+				infile.read(reinterpret_cast<_char*>(&TestDesc.RenderDesc), sizeof(TestDesc.RenderDesc));		// 이거 버퍼 초기화에 쓰고
+				infile.read(reinterpret_cast<_char*>(&TestDesc.DefaultDesc), sizeof(TestDesc.DefaultDesc));		// 이거 버퍼 초기화에 쓰고
+				infile.read(reinterpret_cast<_char*>(&TestDesc.TextDesc), sizeof(TestDesc.TextDesc));			// 이게 실제로 적용되는 거.
+				infile.read(reinterpret_cast<_char*>(&TestDesc.BufferDesc), sizeof(TestDesc.BufferDesc));			// 이게 실제로 적용되는 거.
+
+				infile.close();
+
+				if (FAILED(m_pGameInstance->Add_CloneObject_ToLayer(LEVEL_TOOL, TEXT("Layer_TrailOP"), TEXT("Prototype_GameObject_Trail_Effect_OP"), &TestDesc)))
+					return E_FAIL;
+			}
+			else if (TEXT("TTP") == strExtention)
+			{
+				CTrail_Effect_TP::TRAIL_TP_DESC TestDesc = {};
+
+				ifstream infile(wFilePath, ios::binary);
+
+				if (!infile.is_open())
+					return E_FAIL;
+
+				TestDesc.pParentMatrix = { nullptr };
+				TestDesc.fRotationPerSec = XMConvertToRadians(90.f);
+				TestDesc.fSpeedPerSec = 1.f;
+				TestDesc.iLevelIndex = LEVEL_TOOL;
+
+				infile.read(reinterpret_cast<_char*>(TestDesc.szEffectName), sizeof(TestDesc.szEffectName));	// 이거 키로 쓰고
+				infile.read(reinterpret_cast<_char*>(&TestDesc.RenderDesc), sizeof(TestDesc.RenderDesc));		// 이거 버퍼 초기화에 쓰고
+				infile.read(reinterpret_cast<_char*>(&TestDesc.DefaultDesc), sizeof(TestDesc.DefaultDesc));		// 이거 버퍼 초기화에 쓰고
+				infile.read(reinterpret_cast<_char*>(&TestDesc.TextDesc), sizeof(TestDesc.TextDesc));			// 이게 실제로 적용되는 거.
+				infile.read(reinterpret_cast<_char*>(&TestDesc.BufferDesc), sizeof(TestDesc.BufferDesc));			// 이게 실제로 적용되는 거.
+
+				infile.close();
+
+				if (FAILED(m_pGameInstance->Add_CloneObject_ToLayer(LEVEL_TOOL, TEXT("Layer_TrailTP"), TEXT("Prototype_GameObject_Trail_Effect_TP"), &TestDesc)))
+					return E_FAIL;
+
+			}
+			else if (TEXT("TMP") == strExtention)
+			{
+				CTrail_Effect_MP::TRAIL_MP_DESC TestDesc = {};
+
+				ifstream infile(wFilePath, ios::binary);
+
+				if (!infile.is_open())
+					return E_FAIL;
+
+				TestDesc.pParentMatrix = { nullptr };
+				TestDesc.fRotationPerSec = XMConvertToRadians(90.f);
+				TestDesc.fSpeedPerSec = 1.f;
+				TestDesc.iLevelIndex = LEVEL_TOOL;
+
+				infile.read(reinterpret_cast<_char*>(TestDesc.szEffectName), sizeof(TestDesc.szEffectName));	// 이거 키로 쓰고
+				infile.read(reinterpret_cast<_char*>(&TestDesc.RenderDesc), sizeof(TestDesc.RenderDesc));		// 이거 버퍼 초기화에 쓰고
+				infile.read(reinterpret_cast<_char*>(&TestDesc.DefaultDesc), sizeof(TestDesc.DefaultDesc));		// 이거 버퍼 초기화에 쓰고
+				infile.read(reinterpret_cast<_char*>(&TestDesc.TextDesc), sizeof(TestDesc.TextDesc));			// 이게 실제로 적용되는 거.
+				infile.read(reinterpret_cast<_char*>(&TestDesc.BufferDesc), sizeof(TestDesc.BufferDesc));			// 이게 실제로 적용되는 거.
+
+				infile.close();
+
+				if (FAILED(m_pGameInstance->Add_CloneObject_ToLayer(LEVEL_TOOL, TEXT("Layer_TrailMP"), TEXT("Prototype_GameObject_Trail_Effect_MP"), &TestDesc)))
+					return E_FAIL;
+			}
 		}
-
 		// 대화 상자 닫기
 		ImGuiFileDialog::Instance()->Close();
 	}

@@ -26,7 +26,7 @@ public:
 
 	typedef struct
 	{
-		_uint		iNumInstance = { 100 };
+		_uint		iNumInstance = { 20 };
 		_float2		vLifeTime = { 2.f, 2.f };
 	}BUFFER_DESC;
 
@@ -34,7 +34,7 @@ public:
 	{
 		// 움직임 제어용
 		TRAIL_OP_TYPE	eType = TYPE_END;
-		_float			fTrailInterval = { 0.f };
+		_float			fTrailInterval = { 0.1f };
 		_float			fSpreadSpeed = { 0.f };
 		// 셰이더 전달용
 		_uint		iGeomState = { 0 };

@@ -66,32 +66,8 @@ void CTrail_Effect_MP::Update(_float fTimeDelta)
 	Movement.fTimeDelta = fTimeDelta;
 	Movement.WorldMatrix = m_WorldMatrix;
 
-#pragma region TEST
-	Movement.iState = m_iTest;
-	Movement.vPivot = { 0.f, 0.f, 0.f, 1.f };
-	Movement.fGravity = 4.f;
-	Movement.vMoveDir = { 0.f, 1.f, 0.f, 0.f };
-	Movement.vOrbitAxis = { 0.f, 0.f, 0.f };
-	Movement.fOrbitAngle = 0.f;
-	Movement.fTimeInterval = { 0.25f };
-	Movement.fRandomRatio = 0.f;
-	Movement.fAccelLimit = 0.f;
-	Movement.fAccelSpeed = 0.f;
-	Movement.WorldMatrix = m_pTransformCom->Get_WorldMatrix();
-	Movement.fTailInterval = 0.1f;
-	Movement.fTailDistance = 0.1f;
-	Movement.vTailMoveDir = _float4(0.f, 1.f, 0.f, 0.f);
-#pragma endregion
 
 	_bool bOver = { false };
-
-	if (KEY_TAP(KEY::C))
-	{
-		if (0 == m_iTest)
-			m_iTest = CVIBuffer_Instancing::STATE_LOOP;
-		else
-			m_iTest = 0;
-	}
 
 	switch (m_DefaultDesc.eType)
 	{
@@ -108,9 +84,8 @@ void CTrail_Effect_MP::Update(_float fTimeDelta)
 		break;
 	}
 
-	if (true == bOver)
-		m_isActive = false;
-
+	//if (true == bOver)
+	//	m_isActive = false;
 }
 
 void CTrail_Effect_MP::Late_Update(_float fTimeDelta)
@@ -127,31 +102,56 @@ HRESULT CTrail_Effect_MP::Render()
 
 	// ²¿¸®
 	WorldMatrix = XMMatrixIdentity();
-	if (FAILED(m_pTailShaderCom->Bind_Matrix("g_WorldMatrix", &WorldMatrix)))
+
+	if (FAILED(m_pShaderCom->Bind_Matrix("g_WorldMatrix", &WorldMatrix)))
 		return E_FAIL;
 
-	if (FAILED(m_pTailShaderCom->Bind_Matrix("g_ViewMatrix", &m_pGameInstance->Get_Transform(CPipeLine::D3DTS_VIEW))))
+	if (FAILED(m_pShaderCom->Bind_Matrix("g_ViewMatrix", &m_pGameInstance->Get_Transform(CPipeLine::D3DTS_VIEW))))
 		return E_FAIL;
-	if (FAILED(m_pTailShaderCom->Bind_Matrix("g_ProjMatrix", &m_pGameInstance->Get_Transform(CPipeLine::D3DTS_PROJ))))
+	if (FAILED(m_pShaderCom->Bind_Matrix("g_ProjMatrix", &m_pGameInstance->Get_Transform(CPipeLine::D3DTS_PROJ))))
 		return E_FAIL;
 	
-	if (FAILED(m_pTailShaderCom->Bind_RawValue("g_vCamPosition", &m_pGameInstance->Get_CamPosition_Vec4(), sizeof(_Vec4))))
+	if (nullptr != m_pTextureCom[TEXTURE_DIFFUSE])
+	{
+		if (FAILED(m_pTextureCom[TEXTURE_DIFFUSE]->Bind_ShaderResource_Struct(m_pShaderCom, "g_DiffuseTexture", 0)))
+			return E_FAIL;
+	}
+
+	if (nullptr != m_pTextureCom[TEXTURE_MASK_1])
+	{
+		if (FAILED(m_pTextureCom[TEXTURE_MASK_1]->Bind_ShaderResource_Struct(m_pShaderCom, "g_MaskTexture_1", 0)))
+			return E_FAIL;
+	}
+
+	if (nullptr != m_pTextureCom[TEXTURE_MASK_2])
+	{
+		if (FAILED(m_pTextureCom[TEXTURE_MASK_2]->Bind_ShaderResource_Struct(m_pShaderCom, "g_MaskTexture_2", 0)))
+			return E_FAIL;
+	}
+
+	if (nullptr != m_pTextureCom[TEXTURE_NORMAL])
+	{
+		if (FAILED(m_pTextureCom[TEXTURE_NORMAL]->Bind_ShaderResource_Struct(m_pShaderCom, "g_NormalTexture", 0)))
+			return E_FAIL;
+	}
+
+	if (FAILED(m_pShaderCom->Bind_RawValue("g_vCamPosition", &m_pGameInstance->Get_CamPosition_Vec4(), sizeof(_Vec4))))
 		return E_FAIL;
-	if (FAILED(m_pTailShaderCom->Bind_RawValue("g_vTexDivide", &m_DefaultDesc.vTexDevide, sizeof(_Vec2))))
+	if (FAILED(m_pShaderCom->Bind_RawValue("g_vTexDivide", &m_DefaultDesc.vTexDevide, sizeof(_Vec2))))
 		return E_FAIL;
-	if (FAILED(m_pTailShaderCom->Bind_RawValue("g_vScaling", &m_DefaultDesc.vScaling, sizeof(_Vec2))))
+	if (FAILED(m_pShaderCom->Bind_RawValue("g_vScaling", &m_DefaultDesc.vScaling, sizeof(_Vec2))))
 		return E_FAIL;
-	if (FAILED(m_pTailShaderCom->Bind_RawValue("g_iState", &m_DefaultDesc.iGeomState, sizeof(_uint))))
+	if (FAILED(m_pShaderCom->Bind_RawValue("g_iState", &m_DefaultDesc.iGeomState, sizeof(_uint))))
 		return E_FAIL;
-	if (FAILED(m_pTailShaderCom->Bind_RawValue("g_fAngle", &m_DefaultDesc.fRotationPerSecond, sizeof(_float))))
+	if (FAILED(m_pShaderCom->Bind_RawValue("g_fAngle", &m_DefaultDesc.fRotationPerSecond, sizeof(_float))))
 		return E_FAIL;
-	if (FAILED(m_pTailShaderCom->Bind_RawValue("g_fStartRotation", &m_DefaultDesc.fStartRotation, sizeof(_float))))
+	if (FAILED(m_pShaderCom->Bind_RawValue("g_fStartRotation", &m_DefaultDesc.fStartRotation, sizeof(_float))))
 		return E_FAIL;
-	if (FAILED(m_pTailShaderCom->Bind_RawValue("g_fSpriteSpeed", &m_DefaultDesc.fSpriteSpeed, sizeof(_float))))
+	if (FAILED(m_pShaderCom->Bind_RawValue("g_fSpriteSpeed", &m_DefaultDesc.fSpriteSpeed, sizeof(_float))))
 		return E_FAIL;
-	if (FAILED(m_pVIBufferCom->Bind_TailBuffer(m_pTailShaderCom, "Particle_SRV")))
+	if (FAILED(m_pVIBufferCom->Bind_TailBuffer(m_pShaderCom, "Particle_SRV")))
 		return E_FAIL;
-	if (FAILED(m_pTailShaderCom->Begin(m_DefaultDesc.iShaderIndex)))
+	if (FAILED(m_pShaderCom->Begin(m_DefaultDesc.iShaderIndex)))
 		return E_FAIL;
 	if (FAILED(m_pVIBufferCom->Render_Tail()))
 		return E_FAIL;
@@ -176,6 +176,33 @@ void CTrail_Effect_MP::Reset()
 
 HRESULT CTrail_Effect_MP::Save(_wstring strFilePath)
 {
+	if (strFilePath.back() == L'\0')
+		strFilePath.resize(strFilePath.size() - 1);
+
+	_wstring strResultPath = strFilePath + TEXT("\\") + m_strEffectName + TEXT(".TMP");
+
+	_char FilePath[MAX_PATH] = {};
+	int sizeNeeded = WideCharToMultiByte(CP_ACP, 0, strResultPath.c_str(), -1, nullptr, 0, nullptr, nullptr);
+	if (sizeNeeded > 0 && sizeNeeded <= MAX_PATH)
+	{
+		WideCharToMultiByte(CP_ACP, 0, strResultPath.c_str(), -1, FilePath, MAX_PATH, nullptr, nullptr);
+	}
+
+	ofstream outfile(FilePath, ios::binary);
+
+	if (!outfile.is_open())
+		return E_FAIL;
+
+	outfile.write(reinterpret_cast<const _char*>(m_InitDesc.szEffectName), sizeof(m_InitDesc.szEffectName));
+	outfile.write(reinterpret_cast<const _char*>(&m_InitDesc.RenderDesc), sizeof(m_InitDesc.RenderDesc));
+	outfile.write(reinterpret_cast<const _char*>(&m_InitDesc.DefaultDesc), sizeof(m_InitDesc.DefaultDesc));
+	outfile.write(reinterpret_cast<const _char*>(&m_InitDesc.TextDesc), sizeof(m_InitDesc.TextDesc));
+	outfile.write(reinterpret_cast<const _char*>(&m_InitDesc.BufferDesc), sizeof(m_InitDesc.BufferDesc));
+
+	outfile.close();
+
+	return S_OK;
+
 	return S_OK;
 }
 
@@ -201,15 +228,9 @@ void CTrail_Effect_MP::Set_Desc(TRAIL_MP_DESC Desc)
 
 HRESULT CTrail_Effect_MP::Ready_Components(const TRAIL_MP_DESC& Desc)
 {
-	/* FOR.Com_HeadShader */
-	if (FAILED(__super::Add_Component(LEVEL_TOOL, TEXT("Prototype_Component_Shader_TrailHead_PointInstance"),
-		TEXT("Com_HeadShader"), reinterpret_cast<CComponent**>(&m_pHeadShaderCom))))
-		return E_FAIL;
-
-
 	/* FOR.Com_TailShader */
 	if (FAILED(__super::Add_Component(LEVEL_TOOL, TEXT("Prototype_Component_Shader_TrailTail_PointInstance"),
-		TEXT("Com_TailShader"), reinterpret_cast<CComponent**>(&m_pTailShaderCom))))
+		TEXT("Com_TailShader"), reinterpret_cast<CComponent**>(&m_pShaderCom))))
 		return E_FAIL;
 
 	CTrail_MultiPoint_Instance::TRAIL_MP_INSTANCE_DESC desc = {};
@@ -230,23 +251,6 @@ HRESULT CTrail_Effect_MP::Ready_Components(const TRAIL_MP_DESC& Desc)
 	desc.vTail_MinColor = Desc.BufferDesc.vTail_MinColor;
 	desc.vTail_MaxColor = Desc.BufferDesc.vTail_MaxColor;
 
-#pragma region TEST
-	desc.iNumInstance = 100;
-	desc.vCenter = { 0.f, 5.f, 0.f };
-	desc.vRange = { 5.f, 2.f, 5.f };
-	desc.vExceptRange = { 0.f, 0.f, 0.f };
-	desc.vLifeTime = { 1.f, 2.f };
-	desc.vMaxColor = { 0.f, 0.f, 0.f, 1.f };
-	desc.vMinColor = { 1.f, 1.f, 1.f, 1.f };
-	desc.vSize = { 0.2f, 0.4f };
-	desc.vSpeed = { 2.f, 4.f };
-	desc.iTail_NumInstance = 100;
-	desc.vTail_Speed = { 0.25f, 0.5f };
-	desc.vTail_Size = { 0.02f, 0.04f };
-	desc.vTail_LifeTime = { 0.5f, 1.f };
-	desc.vTail_MinColor = { 0.f, 0.f, 0.f, 1.f };
-	desc.vTail_MaxColor = { 1.f, 1.f, 1.f, 1.f };
-#pragma endregion
 
 	/* FOR.Com_VIBuffer */
 	if (FAILED(__super::Add_Component(LEVEL_TOOL, TEXT("Prototype_Component_VIBuffer_Trail_MultiPoint_Instance"),
@@ -332,8 +336,7 @@ void CTrail_Effect_MP::Free()
 {
 	__super::Free();
 
-	Safe_Release(m_pHeadShaderCom);
-	Safe_Release(m_pTailShaderCom);
+	Safe_Release(m_pShaderCom);
 
 	Safe_Release(m_pVIBufferCom);
 

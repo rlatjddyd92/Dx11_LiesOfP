@@ -73,9 +73,8 @@ void CTexture_Effect::Late_Update(_float fTimeDelta)
     {
         if (true == m_DefaultDesc.bLoop)
             Reset();
-        else
-            m_isActive = false;
-
+        //else
+        //    m_isActive = false;
     }
 
     if(CRenderer::RG_EFFECT == m_RenderDesc.iRenderGroup)

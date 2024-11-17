@@ -87,7 +87,7 @@ HRESULT CEffect_Container::Initialize(void* pArg)
 
 		_tchar szEffectName[MAX_PATH] = TEXT("");
 		wcscpy_s(szEffectName, pTrailOP->szEffectName);
-		wcscat_s(szEffectName, TEXT(".OP"));
+		wcscat_s(szEffectName, TEXT(".TOP"));
 		m_EffectNames.emplace_back(szEffectName);
 	}
 
@@ -140,13 +140,43 @@ void CEffect_Container::Priority_Update(_float fTimeDelta)
 void CEffect_Container::Update(_float fTimeDelta)
 {
 	if (KEY_TAP(KEY::G))
-		m_bOrbit = !m_bOrbit;
+	{
+		if (false == m_bOrbit)
+		{
+			m_pTransformCom->Set_State(CTransform::STATE_POSITION, _Vec3(5.f, 0.f, 0.f));
+			m_bOrbit = true;
+			m_bTurn = false;
+		}
+		else
+		{
+			m_pTransformCom->Set_State(CTransform::STATE_POSITION, _Vec3(0.f, 0.f, 0.f));
+			m_bOrbit = false;
+			m_bTurn = false;
+		}
+	}
+
+	if (KEY_TAP(KEY::H))
+	{
+		m_pTransformCom->Set_State(CTransform::STATE_POSITION, _Vec3(0.f, 0.f, 0.f));
+		m_bTurn = !m_bTurn;
+		m_bOrbit = false;
+	}
 
 	if (true == m_bOrbit)
 	{
+		_Vec3 vPos = m_pTransformCom->Get_State(CTransform::STATE_POSITION);
 
+		_Vec4		vRotation = XMQuaternionRotationRollPitchYaw(0.f, fTimeDelta * XMConvertToRadians(180.f), 0.f);
+		_Matrix		RotationMatrix = XMMatrixRotationQuaternion(vRotation);
+		
+		vPos = XMVector3TransformCoord(vPos, RotationMatrix);
+		m_pTransformCom->Set_State(CTransform::STATE_POSITION, vPos);
 	}
 
+	if(true == m_bTurn)
+	{ 
+		m_pTransformCom->Turn(_Vec4(0.f, 1.f, 0.f, 0.f), fTimeDelta, 10.f);
+	}
 
 	for (auto& Effect : m_Effects)
 	{
@@ -391,7 +421,82 @@ HRESULT CEffect_Container::Load_Effect_By_Path(const _wstring& strFilePath)
 		if (FAILED(m_pGameInstance->Add_CloneObject_ToLayer(LEVEL_TOOL, TEXT("Layer_MeshEffect"), TEXT("Prototype_GameObject_Mesh_Effect"), &TestDesc)))
 			return E_FAIL;
 	}
+	else if (TEXT("TOP") == strExtention)
+	{
+		CTrail_Effect_OP::TRAIL_OP_DESC TestDesc = {};
 
+		ifstream infile(strFilePath, ios::binary);
+
+		if (!infile.is_open())
+			return E_FAIL;
+
+		TestDesc.pParentMatrix = { nullptr };
+		TestDesc.fRotationPerSec = XMConvertToRadians(90.f);
+		TestDesc.fSpeedPerSec = 1.f;
+		TestDesc.iLevelIndex = LEVEL_TOOL;
+
+		infile.read(reinterpret_cast<_char*>(TestDesc.szEffectName), sizeof(TestDesc.szEffectName));	// 이거 키로 쓰고
+		infile.read(reinterpret_cast<_char*>(&TestDesc.RenderDesc), sizeof(TestDesc.RenderDesc));		// 이거 버퍼 초기화에 쓰고
+		infile.read(reinterpret_cast<_char*>(&TestDesc.DefaultDesc), sizeof(TestDesc.DefaultDesc));		// 이거 버퍼 초기화에 쓰고
+		infile.read(reinterpret_cast<_char*>(&TestDesc.TextDesc), sizeof(TestDesc.TextDesc));			// 이게 실제로 적용되는 거.
+		infile.read(reinterpret_cast<_char*>(&TestDesc.BufferDesc), sizeof(TestDesc.BufferDesc));			// 이게 실제로 적용되는 거.
+
+		infile.close();
+
+		if (FAILED(m_pGameInstance->Add_CloneObject_ToLayer(LEVEL_TOOL, TEXT("Layer_TrailOP"), TEXT("Prototype_GameObject_Trail_Effect_OP"), &TestDesc)))
+			return E_FAIL;
+	}
+	else if (TEXT("TTP") == strExtention)
+	{
+		CTrail_Effect_TP::TRAIL_TP_DESC TestDesc = {};
+
+		ifstream infile(strFilePath, ios::binary);
+
+		if (!infile.is_open())
+			return E_FAIL;
+
+		TestDesc.pParentMatrix = { nullptr };
+		TestDesc.fRotationPerSec = XMConvertToRadians(90.f);
+		TestDesc.fSpeedPerSec = 1.f;
+		TestDesc.iLevelIndex = LEVEL_TOOL;
+
+		infile.read(reinterpret_cast<_char*>(TestDesc.szEffectName), sizeof(TestDesc.szEffectName));	// 이거 키로 쓰고
+		infile.read(reinterpret_cast<_char*>(&TestDesc.RenderDesc), sizeof(TestDesc.RenderDesc));		// 이거 버퍼 초기화에 쓰고
+		infile.read(reinterpret_cast<_char*>(&TestDesc.DefaultDesc), sizeof(TestDesc.DefaultDesc));		// 이거 버퍼 초기화에 쓰고
+		infile.read(reinterpret_cast<_char*>(&TestDesc.TextDesc), sizeof(TestDesc.TextDesc));			// 이게 실제로 적용되는 거.
+		infile.read(reinterpret_cast<_char*>(&TestDesc.BufferDesc), sizeof(TestDesc.BufferDesc));			// 이게 실제로 적용되는 거.
+
+		infile.close();
+
+		if (FAILED(m_pGameInstance->Add_CloneObject_ToLayer(LEVEL_TOOL, TEXT("Layer_TrailTP"), TEXT("Prototype_GameObject_Trail_Effect_TP"), &TestDesc)))
+			return E_FAIL;
+
+	}
+	else if (TEXT("TMP") == strExtention)
+	{
+		CTrail_Effect_MP::TRAIL_MP_DESC TestDesc = {};
+
+		ifstream infile(strFilePath, ios::binary);
+
+		if (!infile.is_open())
+			return E_FAIL;
+
+		TestDesc.pParentMatrix = { nullptr };
+		TestDesc.fRotationPerSec = XMConvertToRadians(90.f);
+		TestDesc.fSpeedPerSec = 1.f;
+		TestDesc.iLevelIndex = LEVEL_TOOL;
+
+		infile.read(reinterpret_cast<_char*>(TestDesc.szEffectName), sizeof(TestDesc.szEffectName));	// 이거 키로 쓰고
+		infile.read(reinterpret_cast<_char*>(&TestDesc.RenderDesc), sizeof(TestDesc.RenderDesc));		// 이거 버퍼 초기화에 쓰고
+		infile.read(reinterpret_cast<_char*>(&TestDesc.DefaultDesc), sizeof(TestDesc.DefaultDesc));		// 이거 버퍼 초기화에 쓰고
+		infile.read(reinterpret_cast<_char*>(&TestDesc.TextDesc), sizeof(TestDesc.TextDesc));			// 이게 실제로 적용되는 거.
+		infile.read(reinterpret_cast<_char*>(&TestDesc.BufferDesc), sizeof(TestDesc.BufferDesc));			// 이게 실제로 적용되는 거.
+
+		infile.close();
+
+		if (FAILED(m_pGameInstance->Add_CloneObject_ToLayer(LEVEL_TOOL, TEXT("Layer_TrailMP"), TEXT("Prototype_GameObject_Trail_Effect_MP"), &TestDesc)))
+			return E_FAIL;
+	}
 	return S_OK;
 }
 

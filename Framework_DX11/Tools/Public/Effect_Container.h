@@ -55,6 +55,7 @@ private:
 
 	//Å×½ºÆ®
 	_bool m_bOrbit = { false };
+	_bool m_bTurn = { false };
 
 private:
 	HRESULT Load_Effect_By_Path(const _wstring& strFilePath);

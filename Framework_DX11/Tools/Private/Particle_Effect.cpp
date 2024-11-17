@@ -82,7 +82,9 @@ void CParticle_Effect::Update(_float fTimeDelta)
     }
 
     if (true == bOver)
-        m_isActive = false;
+    {
+        // m_isActive = false;
+    }
 
 }
 
@@ -152,7 +154,6 @@ HRESULT CParticle_Effect::Render()
 
     return S_OK;
 }
-
 
 void CParticle_Effect::Reset()
 {
