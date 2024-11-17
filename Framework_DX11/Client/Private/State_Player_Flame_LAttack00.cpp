@@ -72,10 +72,10 @@ void CState_Player_Flame_LAttack00::Update(_float fTimeDelta)
             m_pPlayer->Change_State(CPlayer::FLAME_LATTACK1);
         else if (m_isInputRButton)
         {
-           /* if (m_fRButtonTime > 0.15f)
-                m_pPlayer->Change_State(CPlayer::RAPIER_CHARGE);
-            else*/
-                m_pPlayer->Change_State(CPlayer::FLAME_RATTACK0);
+            if (m_fRButtonTime > 0.15f)
+                m_pPlayer->Change_State(CPlayer::FLAME_CHARGE1);
+            else
+                m_pPlayer->Change_State(CPlayer::FLAME_RATTACK1);
         }
     }
     else if (*m_pIsEndAnim)

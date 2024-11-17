@@ -204,9 +204,11 @@
     <ClInclude Include="..\Public\State_CarcassBigA_Walk.h" />
     <ClInclude Include="..\Public\State_Player_ChangeWeapon.h" />
     <ClInclude Include="..\Public\State_Player_Flame_Charge00.h" />
+    <ClInclude Include="..\Public\State_Player_Flame_Charge01.h" />
     <ClInclude Include="..\Public\State_Player_Flame_LAttack00.h" />
     <ClInclude Include="..\Public\State_Player_Flame_LAttack01.h" />
     <ClInclude Include="..\Public\State_Player_Flame_RAttack00.h" />
+    <ClInclude Include="..\Public\State_Player_Flame_RAttack01.h" />
     <ClInclude Include="..\Public\State_Player_Heal.h" />
     <ClInclude Include="..\Public\State_Player_OH_Dash.h" />
     <ClInclude Include="..\Public\State_Player_OH_Guard.h" />
@@ -222,6 +224,7 @@
     <ClInclude Include="..\Public\State_Player_Rapier_LAttack01.h" />
     <ClInclude Include="..\Public\State_Player_Parry.h" />
     <ClInclude Include="..\Public\State_Player_Rapier_RAttack00.h" />
+    <ClInclude Include="..\Public\State_Player_Scissor_LAttack00.h" />
     <ClInclude Include="..\Public\State_Player_TH_Dash.h" />
     <ClInclude Include="..\Public\State_Player_TH_Guard.h" />
     <ClInclude Include="..\Public\State_Player_TH_Idle.h" />
@@ -297,9 +300,11 @@
     <ClCompile Include="..\Private\State_CarcassBigA_Walk.cpp" />
     <ClCompile Include="..\Private\State_Player_ChangeWeapon.cpp" />
     <ClCompile Include="..\Private\State_Player_Flame_Charge00.cpp" />
+    <ClCompile Include="..\Private\State_Player_Flame_Charge01.cpp" />
     <ClCompile Include="..\Private\State_Player_Flame_LAttack00.cpp" />
     <ClCompile Include="..\Private\State_Player_Flame_LAttack01.cpp" />
     <ClCompile Include="..\Private\State_Player_Flame_RAttack00.cpp" />
+    <ClCompile Include="..\Private\State_Player_Flame_RAttack01.cpp" />
     <ClCompile Include="..\Private\State_Player_Heal.cpp" />
     <ClCompile Include="..\Private\State_Player_OH_Dash.cpp" />
     <ClCompile Include="..\Private\State_Player_OH_Guard.cpp" />
@@ -315,6 +320,7 @@
     <ClCompile Include="..\Private\State_Player_Rapier_LAttack01.cpp" />
     <ClCompile Include="..\Private\State_Player_Parry.cpp" />
     <ClCompile Include="..\Private\State_Player_Rapier_RAttack00.cpp" />
+    <ClCompile Include="..\Private\State_Player_Scissor_LAttack00.cpp" />
     <ClCompile Include="..\Private\State_Player_TH_Dash.cpp" />
     <ClCompile Include="..\Private\State_Player_TH_Guard.cpp" />
     <ClCompile Include="..\Private\State_Player_TH_Idle.cpp" />

@@ -13,7 +13,7 @@ CState_Player_Parry::CState_Player_Parry(CFsm* pFsm, CPlayer* pPlayer)
 
 HRESULT CState_Player_Parry::Initialize(_uint iStateNum, void* pArg)
 {
-    m_iAnimation_Parry = m_pPlayer->Get_Model()->Find_AnimationIndex("AS_Pino_P_Parry_Guard", 3.f);
+    m_iAnimation_Parry = m_pPlayer->Get_Model()->Find_AnimationIndex("AS_Pino_P_Parry_Guard", 2.7f);
 
     FSM_INIT_DESC* pDesc = static_cast<FSM_INIT_DESC*>(pArg);
 

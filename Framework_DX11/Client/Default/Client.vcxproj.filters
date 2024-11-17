@@ -391,8 +391,29 @@
     <Filter Include="05.Fsm\Player\TwoHand\00.Attack\FlameSword\ChargeAttack01">
       <UniqueIdentifier>{0fc306b7-20da-4fb7-b4bf-b8f12b366e40}</UniqueIdentifier>
     </Filter>
-    <Filter Include="05.Fsm\Player\TwoHand\00.Attack\FlameSword\RAttack_Charge">
-      <UniqueIdentifier>{2e7c81d7-bc79-49a7-b525-d8fd9889eb74}</UniqueIdentifier>
+    <Filter Include="05.Fsm\Player\TwoHand\00.Attack\FlameSword\RAttack01">
+      <UniqueIdentifier>{23dd7535-7c21-41bc-817c-6591ffb6801a}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="05.Fsm\Player\TwoHand\00.Attack\FlameSword\00.FableArts">
+      <UniqueIdentifier>{a4384797-e19d-4fd9-954f-92b259e0d346}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="05.Fsm\Player\TwoHand\00.Attack\FlameSword\00.FableArts\ParryAttack">
+      <UniqueIdentifier>{c9f490cf-084c-40ee-b614-183c9081cadc}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="05.Fsm\Player\TwoHand\00.Attack\FlameSword\01.Fatal">
+      <UniqueIdentifier>{cd5300e1-30e0-46d8-bbee-a4590107ed4b}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="05.Fsm\Player\OneHand\00.Attack\Scissor\00.FableArts">
+      <UniqueIdentifier>{4cb18c50-57be-4e3f-9310-34d67c8bf07b}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="05.Fsm\Player\OneHand\00.Attack\Scissor\01.Fatal">
+      <UniqueIdentifier>{25ff8a5b-627c-4047-bfa6-45ca227b1a5f}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="05.Fsm\Player\OneHand\00.Attack\Scissor\LAttack00">
+      <UniqueIdentifier>{ece837e8-efe3-4ef7-a45a-4319bd162b0c}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="05.Fsm\Player\OneHand\00.Attack\Scissor\LAttack01">
+      <UniqueIdentifier>{9c6322bb-0102-4966-a54e-2954f3e8b2d8}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -672,6 +693,15 @@
     <ClInclude Include="..\Public\State_Player_Flame_Charge00.h">
       <Filter>05.Fsm\Player\TwoHand\00.Attack\FlameSword\ChargeAttack00</Filter>
     </ClInclude>
+    <ClInclude Include="..\Public\State_Player_Flame_RAttack01.h">
+      <Filter>05.Fsm\Player\TwoHand\00.Attack\FlameSword\RAttack01</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Public\State_Player_Flame_Charge01.h">
+      <Filter>05.Fsm\Player\TwoHand\00.Attack\FlameSword\ChargeAttack01</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Public\State_Player_Scissor_LAttack00.h">
+      <Filter>05.Fsm\Player\OneHand\00.Attack\Scissor\LAttack00</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Client.cpp">
@@ -919,6 +949,15 @@
     </ClCompile>
     <ClCompile Include="..\Private\State_Player_Flame_Charge00.cpp">
       <Filter>05.Fsm\Player\TwoHand\00.Attack\FlameSword\ChargeAttack00</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Private\State_Player_Flame_RAttack01.cpp">
+      <Filter>05.Fsm\Player\TwoHand\00.Attack\FlameSword\RAttack01</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Private\State_Player_Flame_Charge01.cpp">
+      <Filter>05.Fsm\Player\TwoHand\00.Attack\FlameSword\ChargeAttack01</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Private\State_Player_Scissor_LAttack00.cpp">
+      <Filter>05.Fsm\Player\OneHand\00.Attack\Scissor\LAttack00</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

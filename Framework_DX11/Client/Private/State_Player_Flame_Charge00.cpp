@@ -31,6 +31,10 @@ HRESULT CState_Player_Flame_Charge00::Start_State(void* pArg)
 {
     m_pPlayer->Change_Animation(m_iAnimation_FlameCA1, false);
 
+    m_isInputLButton = false;
+    m_isInputRButton = false;
+    m_fRButtonTime = 0.f;
+
     return S_OK;
 }
 
@@ -38,16 +42,59 @@ void CState_Player_Flame_Charge00::Update(_float fTimeDelta)
 {
     _int iFrame = m_pPlayer->Get_Frame();
 
-    if (m_iChangeFrame < iFrame && iFrame < m_iChangeFrame + 15)
+    if (iFrame < m_iChangeFrame)
     {
         if (KEY_TAP(KEY::LBUTTON))
-            m_pPlayer->Change_State(CPlayer::RAPIER_LATTACK0);
+        {
+            m_isInputLButton = true;
+            m_isInputRButton = false;
+        }
         else if (KEY_TAP(KEY::RBUTTON))
-            m_pPlayer->Change_State(CPlayer::RAPIER_RATTACK0);
+        {
+            m_isInputRButton = true;
+            m_isInputLButton = false;
+            m_fRButtonTime = 0.f;
+        }
+        else if (KEY_HOLD(KEY::RBUTTON))
+        {
+            m_fRButtonTime += fTimeDelta;
+        }
+    }
+
+    if (iFrame < m_iChangeFrame)
+    {
+        if (KEY_TAP(KEY::LBUTTON))
+        {
+            m_isInputLButton = true;
+            m_isInputRButton = false;
+        }
+        else if (KEY_TAP(KEY::RBUTTON))
+        {
+            m_isInputRButton = true;
+            m_isInputLButton = false;
+            m_fRButtonTime = 0.f;
+        }
+        else if (KEY_HOLD(KEY::RBUTTON))
+        {
+            m_fRButtonTime += fTimeDelta;
+        }
+    }
+
+    if (m_iChangeFrame < iFrame && iFrame < m_iChangeFrame + 15)
+    {
+        if (m_isInputLButton)
+            m_pPlayer->Change_State(CPlayer::FLAME_LATTACK0);
+        else if (m_isInputRButton)
+        {
+            if (m_fRButtonTime > 0.15f)
+                m_pPlayer->Change_State(CPlayer::FLAME_CHARGE1);
+            else
+                m_pPlayer->Change_State(CPlayer::FLAME_RATTACK1);
+        }
     }
     else if (*m_pIsEndAnim)
     {
-        m_pPlayer->Change_State(CPlayer::OH_IDLE);
+        m_pPlayer->Change_State(CPlayer::TH_IDLE);
     }
 }
 

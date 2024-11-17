@@ -36,6 +36,9 @@
 #include "State_Player_Flame_LAttack00.h"
 #include "State_Player_Flame_LAttack01.h"
 #include "State_Player_Flame_RAttack00.h"
+#include "State_Player_Flame_RAttack01.h"
+#include "State_Player_Flame_Charge00.h"
+#include "State_Player_Flame_Charge01.h"
 
 CPlayer::CPlayer(ID3D11Device * pDevice, ID3D11DeviceContext * pContext)
 	: CPawn{ pDevice, pContext }
@@ -429,7 +432,10 @@ HRESULT CPlayer::Ready_FSM()
 
 	m_pFsmCom->Add_State(CState_Player_Flame_LAttack00::Create(m_pFsmCom, this, FLAME_LATTACK0, &Desc));	// 좌클릭 공격1
 	m_pFsmCom->Add_State(CState_Player_Flame_LAttack01::Create(m_pFsmCom, this, FLAME_LATTACK1, &Desc));	// 좌클릭 공격1
-	m_pFsmCom->Add_State(CState_Player_Flame_RAttack00::Create(m_pFsmCom, this, FLAME_RATTACK0, &Desc));	// 좌클릭 공격2
+	m_pFsmCom->Add_State(CState_Player_Flame_RAttack00::Create(m_pFsmCom, this, FLAME_RATTACK0, &Desc));	// 우클릭 공격1
+	m_pFsmCom->Add_State(CState_Player_Flame_RAttack01::Create(m_pFsmCom, this, FLAME_RATTACK1, &Desc));	// 우클릭 공격2
+	m_pFsmCom->Add_State(CState_Player_Flame_Charge00::Create(m_pFsmCom, this, FLAME_CHARGE0, &Desc));	// 우클릭 차지 공격1
+	m_pFsmCom->Add_State(CState_Player_Flame_Charge01::Create(m_pFsmCom, this, FLAME_CHARGE1, &Desc));	// 우클릭 차지 공격2
 
 	m_pFsmCom->Set_State(OH_IDLE);
 
