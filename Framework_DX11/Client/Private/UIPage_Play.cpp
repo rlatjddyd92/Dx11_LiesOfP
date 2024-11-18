@@ -68,7 +68,7 @@ void CUIPage_Play::Late_Update(_float fTimeDelta)
 	RD_Weapon_Update(fTimeDelta);
 
 	
-	for(auto& iter : m_Ctrllist)
+	for(auto& iter : m_vec_Group_Ctrl)
 		__super::UpdatePart_ByControl(iter);
 
 	__super::Late_Update(fTimeDelta);
@@ -109,7 +109,38 @@ HRESULT CUIPage_Play::Ready_UIPart_Group_Control()
 		if (m_vecPart[i]->iGroupIndex != -1)
 			m_vec_Group_Ctrl[m_vecPart[i]->iGroupIndex]->PartIndexlist.push_back(i);
 	}
+
+	for (_int i = _int(PART_GROUP::GROUP_POTION_FRAME); i <= _int(PART_GROUP::GROUP_SELECT_CELL); ++i)
+		m_vec_Group_Ctrl[i]->bRender = true;
+	for (_int i = _int(PART_GROUP::GROUP_BAG_FRAMELINE); i <= _int(PART_GROUP::GROUP_BAG_NUM); ++i)
+		m_vec_Group_Ctrl[i]->bRender = false;
 		
+	
+	m_bWeapon_Top = true;
+	m_vec_Group_Ctrl[_int(PART_GROUP::GROUP_WEAPON_NORMAL_BACK)]->bRender = true;
+	m_vec_Group_Ctrl[_int(PART_GROUP::GROUP_WEAPON_NORMAL_BACK_FX)]->bRender = true;
+	m_vec_Group_Ctrl[_int(PART_GROUP::GROUP_WEAPON_NORMAL_BLADE)]->bRender = true;
+	m_vec_Group_Ctrl[_int(PART_GROUP::GROUP_WEAPON_NORMAL_HANDLE)]->bRender = true;
+	m_vec_Group_Ctrl[_int(PART_GROUP::GROUP_WEAPON_SPECIAL_BACK)]->bRender = false;
+	m_vec_Group_Ctrl[_int(PART_GROUP::GROUP_WEAPON_SPECIAL_TEX)]->bRender = false;
+	--m_vecPart[m_vec_Group_Ctrl[_int(PART_GROUP::GROUP_WEAPON_EQUIP_NUM)]->PartIndexlist.front()]->iTexture_Index;
+
+	m_vec_Group_Ctrl[_int(PART_GROUP::GROUP_WEAPON_GAUGE_LEFT_SIDE_FRAME)]->bRender = false;
+	m_vec_Group_Ctrl[_int(PART_GROUP::GROUP_WEAPON_GAUGE_LEFT_SIDE_WHITE)]->bRender = false;
+	m_vec_Group_Ctrl[_int(PART_GROUP::GROUP_WEAPON_GAUGE_LEFT_SIDE_FILL)]->bRender = false;
+	m_vec_Group_Ctrl[_int(PART_GROUP::GROUP_WEAPON_GAUGE_LEFT_CENTER_FRAME)]->bRender = true;
+	m_vec_Group_Ctrl[_int(PART_GROUP::GROUP_WEAPON_GAUGE_LEFT_CENTER_WHITE)]->bRender = true;
+	m_vec_Group_Ctrl[_int(PART_GROUP::GROUP_WEAPON_GAUGE_LEFT_CENTER_FILL)]->bRender = true;
+	m_vec_Group_Ctrl[_int(PART_GROUP::GROUP_WEAPON_GAUGE_RIGHT_SIDE_FRAME)]->bRender = true;
+	m_vec_Group_Ctrl[_int(PART_GROUP::GROUP_WEAPON_GAUGE_RIGHT_SIDE_WHITE)]->bRender = true;
+	m_vec_Group_Ctrl[_int(PART_GROUP::GROUP_WEAPON_GAUGE_RIGHT_SIDE_FILL)]->bRender = true;
+	m_vec_Group_Ctrl[_int(PART_GROUP::GROUP_WEAPON_GAUGE_RIGHT_CENTER_FRAME)]->bRender = true;
+	m_vec_Group_Ctrl[_int(PART_GROUP::GROUP_WEAPON_GAUGE_RIGHT_CENTER_WHITE)]->bRender = true;
+	m_vec_Group_Ctrl[_int(PART_GROUP::GROUP_WEAPON_GAUGE_RIGHT_CENTER_FILL)]->bRender = true;
+	m_vec_Group_Ctrl[_int(PART_GROUP::GROUP_WEAPON_GAUGE_LEFT_KEYSET_A)]->bRender = false;
+	m_vec_Group_Ctrl[_int(PART_GROUP::GROUP_WEAPON_GAUGE_LEFT_KEYSET_B)]->bRender = true;
+	m_vec_Group_Ctrl[_int(PART_GROUP::GROUP_WEAPON_GAUGE_RIGHT_KEYSET_A)]->bRender = true;
+	m_vec_Group_Ctrl[_int(PART_GROUP::GROUP_WEAPON_GAUGE_RIGHT_KEYSET_B)]->bRender = false;
 
 	return S_OK;
 }
@@ -167,7 +198,71 @@ void CUIPage_Play::LU_Gauge_Update(_float fTimeDelta)
 
 void CUIPage_Play::LD_Potion_Tool_Update(_float fTimeDelta)
 {
+	if (KEY_TAP(KEY::T))
+	{
+		if (m_vec_Group_Ctrl[_int(PART_GROUP::GROUP_SELECT_CELL)]->fRatio != 0.f)
+			m_vec_Group_Ctrl[_int(PART_GROUP::GROUP_SELECT_CELL)]->fRatio = 0.f;
+		else
+		{
+			_int iSelect = m_vec_Group_Ctrl[_int(PART_GROUP::GROUP_POTION_ITEM)]->PartIndexlist.front();
+			_int iQueueA = m_vec_Group_Ctrl[_int(PART_GROUP::GROUP_POTION_QUEUE_ITEM)]->PartIndexlist.front();
+			_int iQueueB = m_vec_Group_Ctrl[_int(PART_GROUP::GROUP_POTION_QUEUE_ITEM)]->PartIndexlist.back();
 
+			_int iItem = m_vecPart[iSelect]->iTexture_Index;
+
+			m_vecPart[iSelect]->iTexture_Index = m_vecPart[iQueueA]->iTexture_Index;
+			m_vecPart[iQueueA]->iTexture_Index = m_vecPart[iQueueB]->iTexture_Index;
+			m_vecPart[iQueueB]->iTexture_Index = iItem;
+		}
+	}
+	else if (KEY_TAP(KEY::G))
+	{
+		if (m_vec_Group_Ctrl[_int(PART_GROUP::GROUP_SELECT_CELL)]->fRatio != 1.f)
+			m_vec_Group_Ctrl[_int(PART_GROUP::GROUP_SELECT_CELL)]->fRatio = 1.f;
+		else
+		{
+			_int iSelect = m_vec_Group_Ctrl[_int(PART_GROUP::GROUP_TOOL_ITEM)]->PartIndexlist.front();
+			_int iQueueA = m_vec_Group_Ctrl[_int(PART_GROUP::GROUP_TOOL_QUEUE_ITEM)]->PartIndexlist.front();
+			_int iQueueB = m_vec_Group_Ctrl[_int(PART_GROUP::GROUP_TOOL_QUEUE_ITEM)]->PartIndexlist.back();
+
+			_int iItem = m_vecPart[iSelect]->iTexture_Index;
+
+			m_vecPart[iSelect]->iTexture_Index = m_vecPart[iQueueA]->iTexture_Index;
+			m_vecPart[iQueueA]->iTexture_Index = m_vecPart[iQueueB]->iTexture_Index;
+			m_vecPart[iQueueB]->iTexture_Index = iItem;
+		}
+	}
+
+	if (m_vec_Group_Ctrl[_int(PART_GROUP::GROUP_SELECT_CELL)]->fRatio == 1.f)
+		if (KEY_HOLD(KEY::R))
+		{
+			m_vec_Group_Ctrl[_int(PART_GROUP::GROUP_WEAPON_DURABLE_FILL)]->fRatio += fTimeDelta;
+			if (m_vec_Group_Ctrl[_int(PART_GROUP::GROUP_WEAPON_DURABLE_FILL)]->fRatio > 1.f)
+				m_vec_Group_Ctrl[_int(PART_GROUP::GROUP_WEAPON_DURABLE_FILL)]->fRatio = 0.f;
+		}
+		
+	if (KEY_HOLD(KEY::E))
+	{
+		m_fBag_Open_Waiting_Now += fTimeDelta;
+		if (m_fBag_Open_Waiting_Now >= m_fBag_Open_Waiting_Limit)
+		{
+			m_fBag_Open_Waiting_Now = 0.f;
+			if (m_vec_Group_Ctrl[_int(PART_GROUP::GROUP_POTION_FRAME)]->bRender)
+			{
+				for (_int i = _int(PART_GROUP::GROUP_POTION_FRAME); i <= _int(PART_GROUP::GROUP_SELECT_CELL); ++i)
+					m_vec_Group_Ctrl[i]->bRender = false;
+				for (_int i = _int(PART_GROUP::GROUP_BAG_FRAMELINE); i <= _int(PART_GROUP::GROUP_BAG_NUM); ++i)
+					m_vec_Group_Ctrl[i]->bRender = true;
+			}
+			else 
+			{
+				for (_int i = _int(PART_GROUP::GROUP_POTION_FRAME); i <= _int(PART_GROUP::GROUP_SELECT_CELL); ++i)
+					m_vec_Group_Ctrl[i]->bRender = true;
+				for (_int i = _int(PART_GROUP::GROUP_BAG_FRAMELINE); i <= _int(PART_GROUP::GROUP_BAG_NUM); ++i)
+					m_vec_Group_Ctrl[i]->bRender = false;
+			}
+		}
+	}
 }
 
 void CUIPage_Play::LD_Bag_Update(_float fTimeDelta)
@@ -185,6 +280,70 @@ void CUIPage_Play::RU_Coin_Update(_float fTimeDelta)
 
 void CUIPage_Play::RD_Weapon_Update(_float fTimeDelta)
 {
+	// 테스트 코드 
+	if (KEY_TAP(KEY::TAPKEY))
+	{
+		if (!m_bWeapon_Top)
+		{
+			m_bWeapon_Top = true;
+			m_vec_Group_Ctrl[_int(PART_GROUP::GROUP_WEAPON_NORMAL_BACK)]->bRender = true;
+			m_vec_Group_Ctrl[_int(PART_GROUP::GROUP_WEAPON_NORMAL_BACK_FX)]->bRender = true;
+			m_vec_Group_Ctrl[_int(PART_GROUP::GROUP_WEAPON_NORMAL_BLADE)]->bRender = true;
+			m_vec_Group_Ctrl[_int(PART_GROUP::GROUP_WEAPON_NORMAL_HANDLE)]->bRender = true;
+			m_vec_Group_Ctrl[_int(PART_GROUP::GROUP_WEAPON_SPECIAL_BACK)]->bRender = false;
+			m_vec_Group_Ctrl[_int(PART_GROUP::GROUP_WEAPON_SPECIAL_TEX)]->bRender = false;
+			--m_vecPart[m_vec_Group_Ctrl[_int(PART_GROUP::GROUP_WEAPON_EQUIP_NUM)]->PartIndexlist.front()]->iTexture_Index;
+			
+			m_vec_Group_Ctrl[_int(PART_GROUP::GROUP_WEAPON_GAUGE_LEFT_SIDE_FRAME)]->bRender = false;
+			m_vec_Group_Ctrl[_int(PART_GROUP::GROUP_WEAPON_GAUGE_LEFT_SIDE_WHITE)]->bRender = false;
+			m_vec_Group_Ctrl[_int(PART_GROUP::GROUP_WEAPON_GAUGE_LEFT_SIDE_FILL)]->bRender = false;
+			m_vec_Group_Ctrl[_int(PART_GROUP::GROUP_WEAPON_GAUGE_LEFT_CENTER_FRAME)]->bRender = true;
+			m_vec_Group_Ctrl[_int(PART_GROUP::GROUP_WEAPON_GAUGE_LEFT_CENTER_WHITE)]->bRender = true;
+			m_vec_Group_Ctrl[_int(PART_GROUP::GROUP_WEAPON_GAUGE_LEFT_CENTER_FILL)]->bRender = true;
+			m_vec_Group_Ctrl[_int(PART_GROUP::GROUP_WEAPON_GAUGE_RIGHT_SIDE_FRAME)]->bRender = true;
+			m_vec_Group_Ctrl[_int(PART_GROUP::GROUP_WEAPON_GAUGE_RIGHT_SIDE_WHITE)]->bRender = true;
+			m_vec_Group_Ctrl[_int(PART_GROUP::GROUP_WEAPON_GAUGE_RIGHT_SIDE_FILL)]->bRender = true;
+			m_vec_Group_Ctrl[_int(PART_GROUP::GROUP_WEAPON_GAUGE_RIGHT_CENTER_FRAME)]->bRender = true;
+			m_vec_Group_Ctrl[_int(PART_GROUP::GROUP_WEAPON_GAUGE_RIGHT_CENTER_WHITE)]->bRender = true;
+			m_vec_Group_Ctrl[_int(PART_GROUP::GROUP_WEAPON_GAUGE_RIGHT_CENTER_FILL)]->bRender = true;
+			m_vec_Group_Ctrl[_int(PART_GROUP::GROUP_WEAPON_GAUGE_LEFT_KEYSET_A)]->bRender = false;
+			m_vec_Group_Ctrl[_int(PART_GROUP::GROUP_WEAPON_GAUGE_LEFT_KEYSET_B)]->bRender = true;
+			m_vec_Group_Ctrl[_int(PART_GROUP::GROUP_WEAPON_GAUGE_RIGHT_KEYSET_A)]->bRender = true;
+			m_vec_Group_Ctrl[_int(PART_GROUP::GROUP_WEAPON_GAUGE_RIGHT_KEYSET_B)]->bRender = false;
+		}
+		else
+		{
+			m_bWeapon_Top = false;
+			m_vec_Group_Ctrl[_int(PART_GROUP::GROUP_WEAPON_NORMAL_BACK)]->bRender = false;
+			m_vec_Group_Ctrl[_int(PART_GROUP::GROUP_WEAPON_NORMAL_BACK_FX)]->bRender = false;
+			m_vec_Group_Ctrl[_int(PART_GROUP::GROUP_WEAPON_NORMAL_BLADE)]->bRender = false;
+			m_vec_Group_Ctrl[_int(PART_GROUP::GROUP_WEAPON_NORMAL_HANDLE)]->bRender = false;
+			m_vec_Group_Ctrl[_int(PART_GROUP::GROUP_WEAPON_SPECIAL_BACK)]->bRender = true;
+			m_vec_Group_Ctrl[_int(PART_GROUP::GROUP_WEAPON_SPECIAL_TEX)]->bRender = true;
+			++m_vecPart[m_vec_Group_Ctrl[_int(PART_GROUP::GROUP_WEAPON_EQUIP_NUM)]->PartIndexlist.front()]->iTexture_Index;
+
+			m_vec_Group_Ctrl[_int(PART_GROUP::GROUP_WEAPON_GAUGE_LEFT_SIDE_FRAME)]->bRender = true;
+			m_vec_Group_Ctrl[_int(PART_GROUP::GROUP_WEAPON_GAUGE_LEFT_SIDE_WHITE)]->bRender = true;
+			m_vec_Group_Ctrl[_int(PART_GROUP::GROUP_WEAPON_GAUGE_LEFT_SIDE_FILL)]->bRender = true;
+			m_vec_Group_Ctrl[_int(PART_GROUP::GROUP_WEAPON_GAUGE_LEFT_CENTER_FRAME)]->bRender = true;
+			m_vec_Group_Ctrl[_int(PART_GROUP::GROUP_WEAPON_GAUGE_LEFT_CENTER_WHITE)]->bRender = true;
+			m_vec_Group_Ctrl[_int(PART_GROUP::GROUP_WEAPON_GAUGE_LEFT_CENTER_FILL)]->bRender = true;
+			m_vec_Group_Ctrl[_int(PART_GROUP::GROUP_WEAPON_GAUGE_RIGHT_SIDE_FRAME)]->bRender = false;
+			m_vec_Group_Ctrl[_int(PART_GROUP::GROUP_WEAPON_GAUGE_RIGHT_SIDE_WHITE)]->bRender = false;
+			m_vec_Group_Ctrl[_int(PART_GROUP::GROUP_WEAPON_GAUGE_RIGHT_SIDE_FILL)]->bRender = false;
+			m_vec_Group_Ctrl[_int(PART_GROUP::GROUP_WEAPON_GAUGE_RIGHT_CENTER_FRAME)]->bRender = true;
+			m_vec_Group_Ctrl[_int(PART_GROUP::GROUP_WEAPON_GAUGE_RIGHT_CENTER_WHITE)]->bRender = true;
+			m_vec_Group_Ctrl[_int(PART_GROUP::GROUP_WEAPON_GAUGE_RIGHT_CENTER_FILL)]->bRender = true;
+			m_vec_Group_Ctrl[_int(PART_GROUP::GROUP_WEAPON_GAUGE_LEFT_KEYSET_A)]->bRender = true;
+			m_vec_Group_Ctrl[_int(PART_GROUP::GROUP_WEAPON_GAUGE_LEFT_KEYSET_B)]->bRender = false;
+			m_vec_Group_Ctrl[_int(PART_GROUP::GROUP_WEAPON_GAUGE_RIGHT_KEYSET_A)]->bRender = false;
+			m_vec_Group_Ctrl[_int(PART_GROUP::GROUP_WEAPON_GAUGE_RIGHT_KEYSET_B)]->bRender = true;
+		}
+	}
+
+
+
+
 }
 
 CUIPage_Play* CUIPage_Play::Create(ID3D11Device* pDevice, ID3D11DeviceContext* pContext)

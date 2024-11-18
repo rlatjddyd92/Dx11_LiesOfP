@@ -103,7 +103,6 @@ private:
 protected:
 	list<OR_HOST*> m_Ortho_Host_list; // <- 직교 UI 가 필요한 대상 목록
 	priority_queue<OR_RENDER*, vector<OR_RENDER*>, Order_Ortho_UI_Render> m_queue_Ortho_Render_Ctrl; // <- 이번 프레임에 실제 렌더 해야 하는 내용
-	vector<UG_CTRL*> m_vecOrtho_Group_Ctrl; // <- 직교 UI 조정을 위한 콘트롤 구조체 원본
 	vector<_float3> m_vecOrtho_Adjust; // <- 직교 좌표 뽑을 때 대상 객체 Pos에서 어디로 얼마나 떨어진 위치에 그릴 것인지 정해놓는다 
 
 	_float m_fTimeDelta = 0.f;

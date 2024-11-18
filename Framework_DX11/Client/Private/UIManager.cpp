@@ -208,41 +208,10 @@ void CUIManager::UIControl_Test(_float fTimeDelta)
 	}
 
 
-	// 하단 아이템 
-
-	if (KEY_TAP(KEY::T))
-	{
-		m_pTestData->bIsPotion = true;
-	}
-
-	if (KEY_TAP(KEY::G))
-	{
-		m_pTestData->bIsPotion = false;
-	}
-
-	if (KEY_TAP(KEY::R))
-	{
-		if (!m_pTestData->bIsPotion)
-			m_pTestData->Add_Durable(100.f * fTimeDelta);
-	}
-
-	if (KEY_TAP(KEY::TAPKEY))
-	{
-		m_pTestData->Swich_Weapon();
-	}
+	
 
 
 
-
-
-	// 폰트 테스트
-
-	if (KEY_TAP(KEY::F2))
-	{
-		++m_iFonttest;
-		if (m_iFonttest > 1)
-			m_iFonttest = -1;
-	}
 
 #endif // DEBUG
 

@@ -104,8 +104,7 @@ HRESULT CUIPage_Ortho::Ready_UIPart_Group_Control()
 	for (_int i = 0; i < _int(PART_GROUP::GROUP_END); ++i)
 	{
 		UG_CTRL* pNew = new UG_CTRL;
-		m_Ctrllist.push_back(pNew);
-		m_vecOrtho_Group_Ctrl.push_back(pNew);
+		m_vec_Group_Ctrl.push_back(pNew);
 	}
 
 	for (_int i = 0; i < m_vecPart.size(); ++i)
@@ -113,7 +112,7 @@ HRESULT CUIPage_Ortho::Ready_UIPart_Group_Control()
 		_int iGroup = m_vecPart[i]->iGroupIndex;
 
 		if ((iGroup >= 0) && (iGroup < _int(PART_GROUP::GROUP_END)))
-			m_vecOrtho_Group_Ctrl[iGroup]->PartIndexlist.push_back(i);
+			m_vec_Group_Ctrl[iGroup]->PartIndexlist.push_back(i);
 	}
 
 	return S_OK;
@@ -136,17 +135,17 @@ HRESULT CUIPage_Ortho::Render_Ortho_UI(CUIRender_Client* pRender_Client)
 		OR_RENDER* pRender = m_queue_Ortho_Render_Ctrl.top();
 		m_queue_Ortho_Render_Ctrl.pop();
 		PART_GROUP eType = pRender->eType;
-		m_vecOrtho_Group_Ctrl[_int(eType)]->fRatio = pRender->fRatio;
+		m_vec_Group_Ctrl[_int(eType)]->fRatio = pRender->fRatio;
 		m_fX = pRender->fPosition.x;
 		m_fY = pRender->fPosition.y;
 
 		if (eType == PART_GROUP::GROUP_HP_COUNT)
-			m_vecPart[m_vecOrtho_Group_Ctrl[_int(eType)]->PartIndexlist.front()]->strText = pRender->strText;
+			m_vecPart[m_vec_Group_Ctrl[_int(eType)]->PartIndexlist.front()]->strText = pRender->strText;
 
 		if (eType == PART_GROUP::GROUP_HP_FILL)
-			m_vecPart[m_vecOrtho_Group_Ctrl[_int(eType)]->PartIndexlist.front()]->fRatio = pRender->fRatio;
+			m_vecPart[m_vec_Group_Ctrl[_int(eType)]->PartIndexlist.front()]->fRatio = pRender->fRatio;
 
-		for (auto& iter : m_vecOrtho_Group_Ctrl[_int(eType)]->PartIndexlist)
+		for (auto& iter : m_vec_Group_Ctrl[_int(eType)]->PartIndexlist)
 		{
 			if ((eType == PART_GROUP::GROUP_HP_COUNT) || (eType == PART_GROUP::GROUP_HP_FILL))
 				m_vecPart[0]->fPosition = { m_fX, m_fY };

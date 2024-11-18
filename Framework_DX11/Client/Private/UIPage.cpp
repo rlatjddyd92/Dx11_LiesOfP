@@ -71,7 +71,10 @@ void CUIPage::Late_Update(_float fTimeDelta)
 			iter->MovePart({ m_fX,m_fY }, fTimeDelta);
 		}
 		else
+		{
 			iter->MovePart(m_vecPart[iter->iParentPart_Index]->fPosition, fTimeDelta);
+		}
+			
 	}
 
 	if ((m_fTopPartMove == 0.f) || (m_fTopPartMove == -1.f))
@@ -169,11 +172,6 @@ void CUIPage::Free()
 	__super::Free();
 
 	m_vecPageAction.clear();
-
-	for (auto& iter : m_Ctrllist)
-		Safe_Delete(iter);
-
-	m_Ctrllist.clear();
 
 	for (auto& iter : m_vec_Group_Ctrl)
 		Safe_Delete(iter);
