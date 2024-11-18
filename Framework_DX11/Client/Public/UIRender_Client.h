@@ -25,7 +25,7 @@ public:
 		CTexture* Texture = { nullptr };
 	}UTEXTURE;
 
-	
+
 
 
 private:
@@ -42,8 +42,22 @@ public:
 	virtual HRESULT Render() override;
 
 public:
+	HRESULT Render_Ortho( CUIPage_Ortho* pPage_Ortho);
 	HRESULT Render_UI(vector<CUIPage*>& rPage);
 	HRESULT Make_Texture(_int iTextureIndex);
+	HRESULT Make_Texture_Item(_int iTextureIndex);
+
+	HRESULT Render_TestFont(_bool bIsKorean);
+
+	HRESULT Render_Part(CUIPage::UPART& pPart, CUIPage& pPage, _bool bTopMove);
+
+	void Input_TestPageInfo(
+		TEST_PAGE_NAME eName,
+		_float2 fPosition,
+		_float2 fSize,
+		vector<_wstring>& vecName,
+		vector<_wstring>& vecValue
+	);
 
 public:
 	class CShader* m_pShaderCom = { nullptr };
@@ -52,11 +66,22 @@ public:
 private:
 	HRESULT Ready_Components();
 
-	void Ready_Font();
-	HRESULT Ready_Texture();
+	
 
-	vector<UTEXTURE*> m_vecTextureInfo;
+	void Ready_Font();
+	HRESULT Ready_Texture_UIPart();
+	HRESULT Ready_Texture_ItemIcon();
+
+	HRESULT Render_TestPage_Info();
+	void RemoveTestPageInfo(TEST_PAGE_NAME eFunction);
+
+	vector<UTEXTURE*> m_vecTextureInfo_UIPart;
+	vector<UTEXTURE*> m_vecTextureInfo_ItemIcon;
 	vector<_tchar*> m_vecFont_tchar;
+
+	vector<vector<vector<_tchar*>>> m_vecTestPageInfo;
+	vector<_float2> m_vecTestPage_Pos;
+	vector<_float2> m_vecTestPage_Size;
 
 public:
 	static CUIRender_Client* Create(ID3D11Device* pDevice, ID3D11DeviceContext* pContext);

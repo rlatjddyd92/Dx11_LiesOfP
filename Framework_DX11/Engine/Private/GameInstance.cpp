@@ -392,6 +392,10 @@ BLOOM_DESC* CGameInstance::Get_BloomDesc()
 {
 	return m_pRenderer->Get_BloomDesc();
 }
+DOF_DESC* CGameInstance::Get_DOFDesc()
+{
+	return m_pRenderer->Get_DOFDesc();
+}
 #ifdef _DEBUG
 HRESULT CGameInstance::Add_DebugObject(CComponent * pDebugObject)
 {
@@ -404,6 +408,10 @@ HRESULT CGameInstance::Add_DebugObject(CComponent * pDebugObject)
 void CGameInstance::Set_Transform(CPipeLine::D3DTRANSFORMSTATE eState, _fmatrix TransformMatrix)
 {
 	return m_pPipeLine->Set_Transform(eState, TransformMatrix);
+}
+void CGameInstance::Set_NearFar(_float fNear, _float fFar)
+{
+	return m_pPipeLine->Set_NearFar(fNear, fFar);
 }
 const _Matrix& CGameInstance::Get_Transform(CPipeLine::D3DTRANSFORMSTATE eState) const
 {
@@ -421,6 +429,16 @@ const _Vec4& CGameInstance::Get_CamPosition_Vec4() const
 const _Vec3& CGameInstance::Get_CamPosition_Vec3() const
 {
 	return m_pPipeLine->Get_CamPosition_Vec3();
+}
+
+const _float& CGameInstance::Get_Near()
+{
+	return m_pPipeLine->Get_Near();
+}
+
+const _float& CGameInstance::Get_Far()
+{
+	return m_pPipeLine->Get_Far();
 }
 
 const _Matrix* CGameInstance::Get_CascadeViewMatirx() const

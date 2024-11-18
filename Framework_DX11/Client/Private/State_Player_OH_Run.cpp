@@ -23,17 +23,18 @@ HRESULT CState_Player_OH_Run::Initialize(_uint iStateNum, void* pArg)
     m_iAnimation_Run[RUN_R] = m_pPlayer->Get_Model()->Find_AnimationIndex("AS_Pino_O_Run_R", 2.5f);
 
     m_iStateNum = iStateNum;
-    m_fMoveSpeed = 3.f;
 
     return S_OK;
 }
 
 HRESULT CState_Player_OH_Run::Start_State(void* pArg)
 {
-    m_pPlayer->Change_Animation(m_iAnimation_Run[RUN_F], true);
+    m_pPlayer->Change_Animation(m_iAnimation_Run[RUN_F], true, 0.1f);
 
-    m_isRunEnd = false;
-    m_fRunEndTime = 0.f;
+    m_pPlayer->Set_MoveSpeed(3.f);
+
+    m_isInputSpace = false;
+    m_fSpaceTime = 0.f;
 
     return S_OK;
 }
@@ -44,27 +45,40 @@ HRESULT CState_Player_OH_Run::Start_State(void* pArg)
         else */
 void CState_Player_OH_Run::Update(_float fTimeDelta)
 {
-    if (m_isRunEnd)
-        m_fRunEndTime += fTimeDelta;
+    if (m_isInputSpace)
+    {
+        m_fSpaceTime += fTimeDelta;
+    }
 
-
-    if (false == Move(fTimeDelta) && m_fRunEndTime > 0.1f)
+    if (false == Move(fTimeDelta))
     {
         m_pPlayer->Change_State(CPlayer::OH_IDLE);
+        return;
     }
-    else if(m_fRunEndTime > 0.1f)
-    {
-        m_pPlayer->Change_State(CPlayer::OH_WALK);
-    }
-   /* else if (KEY_TAP(KEY::SPACE))
-    {
-        m_pPlayer->Change_State(CPlayer::JUMP);
-    }*/
 
-    if (!m_isRunEnd && KEY_NONE(KEY::SPACE))
+    if (m_fSpaceTime > 0.1f)
     {
-        m_isRunEnd = true;
+        if (KEY_NONE(KEY::SPACE))
+        {
+            m_pPlayer->Change_State(CPlayer::OH_DASH);
+        }
+
+        if (KEY_HOLD(KEY::SPACE))
+        {
+            m_pPlayer->Change_State(CPlayer::OH_SPRINT);
+        }
     }
+    else if (KEY_HOLD(KEY::LSHIFT))
+    {
+        m_pPlayer->Change_State(CPlayer::OH_GUARD);
+    }
+    else if (KEY_TAP(KEY::R))
+    {
+        m_pPlayer->Change_State(CPlayer::HEAL);
+    }
+
+    if (KEY_TAP(KEY::SPACE))
+        m_isInputSpace = true;
 
 }
 
@@ -145,7 +159,7 @@ _bool CState_Player_OH_Run::Move(_float fTimeDelta)
 
     if (m_vMoveDir.Length() > 0.f)
     {
-        m_pPlayer->Move_Dir(m_vMoveDir, m_fMoveSpeed, fTimeDelta);
+        m_pPlayer->Move_Dir(m_vMoveDir, fTimeDelta);
     }
 
     return isMoving;

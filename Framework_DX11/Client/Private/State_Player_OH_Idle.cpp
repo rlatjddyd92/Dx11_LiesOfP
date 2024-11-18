@@ -23,6 +23,8 @@ HRESULT CState_Player_OH_Idle::Start_State(void* pArg)
     m_pPlayer->Change_Animation_Boundry(m_iAnimation_Idle, true);
     m_pPlayer->Change_Animation(m_iAnimation_Idle, true);
 
+    m_fRButtonTime = 0.f;
+
     return S_OK;
 }
 
@@ -34,19 +36,45 @@ void CState_Player_OH_Idle::Update(_float fTimeDelta)
     }
     else if (KEY_HOLD(KEY::W) || KEY_HOLD(KEY::S) || KEY_HOLD(KEY::D) || KEY_HOLD(KEY::A))
     {
-        if (KEY_HOLD(KEY::SPACE))
-        {
-            m_pPlayer->Change_State(CPlayer::OH_RUN);
-        }
-        else
-        {
-            m_pPlayer->Change_State(CPlayer::OH_WALK);
-        }
-        return;
+        m_pPlayer->Change_State(CPlayer::OH_RUN);
     }
     else if (KEY_TAP(KEY::SPACE))
     {
         m_pPlayer->Change_State(CPlayer::OH_DASH);
+    }
+    else if (KEY_TAP(KEY::LBUTTON))
+    {
+        if(m_pPlayer->Get_WeaponType() == CPlayer::WEP_RAPIER)
+            m_pPlayer->Change_State(CPlayer::RAPIER_LATTACK0);
+        else if (m_pPlayer->Get_WeaponType() == CPlayer::WEP_SCISSOR)
+            m_pPlayer->Change_State(CPlayer::SCISSOR_LATTACK0);
+    }
+    else if (KEY_HOLD(KEY::RBUTTON))
+    {
+        m_fRButtonTime += fTimeDelta;
+        if(m_fRButtonTime > 0.15f)
+            m_pPlayer->Change_State(CPlayer::RAPIER_CHARGE);
+    }
+    else if (KEY_TAP(KEY::F))
+    {
+        m_pPlayer->Change_State(CPlayer::RAPIER_FATAL);
+    }
+    else if (KEY_TAP(KEY::R))
+    {
+        m_pPlayer->Change_State(CPlayer::HEAL);
+    }
+    else if (KEY_TAP(KEY::TAPKEY))
+    {
+        m_pPlayer->Change_State(CPlayer::CHANGEWEP);
+    }
+    
+    if (KEY_AWAY(KEY::RBUTTON))
+    {
+        m_fRButtonTime = 0.f;
+        if (m_pPlayer->Get_WeaponType() == CPlayer::WEP_RAPIER)
+            m_pPlayer->Change_State(CPlayer::RAPIER_RATTACK0);
+        else if (m_pPlayer->Get_WeaponType() == CPlayer::WEP_SCISSOR)
+            m_pPlayer->Change_State(CPlayer::SCISSOR_RATTACK0);
     }
 }
 
@@ -60,7 +88,7 @@ CState_Player_OH_Idle* CState_Player_OH_Idle::Create(CFsm* pFsm, CPlayer* pPlaye
 
     if (FAILED(pInstance->Initialize(iStateNum, pArg)))
     {
-        MSG_BOX(TEXT("Failed to Created : CState_Player_OH_Idle"));
+        MSG_BOX(TEXT("Failed to Created : CState_Player_TH_Idle"));
         Safe_Release(pInstance);
     }
 

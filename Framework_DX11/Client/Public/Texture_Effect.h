@@ -12,48 +12,38 @@ BEGIN(Client)
 class CTexture_Effect final : public CEffect_Base
 {
 public:
-	enum STATE
-	{
-		STATE_DISTORTION	= 0x0001,
-		STATE_BLUR			= 0x0002,
-		STATE_BLEND			= 0x0004,
-		STATE_NONBLEND		= 0x0008,
-		STATE_END			= 0x9999
-	};
-
 	typedef struct
 	{
-		_tchar	strDiffuseTexturTag[MAX_PATH] = L"";
-		_tchar	strNomralTextureTag[MAX_PATH] = L"";
-		_tchar	strMaskTextureTag_1[MAX_PATH] = L"";
-		_tchar	strMaskTextureTag_2[MAX_PATH] = L"";
-	}TEXTURE_DESC;
-
-	typedef struct
-	{
-		_uint		iState = { 0 };
 		_uint		iShaderIndex = { 0 };
-		_float		fDuration = { 0.f };
-		_Vec4		vColor = {};
-		_Vec2		vDivide = {};
+		_float		fDuration = { 10.f };
+		_Vec4		vColor = { 0.f, 0.f, 0.f, 1.f };
+		_Vec2		vDivide = { 1.f, 1.f };
 		_float		fSpriteSpeed = { 0.f };
 
-		_Vec3		vPos = {};
+		_Vec3		vPos = { 0.f, 0.f, 0.f };
 
 		_float		fRotationAngle = {};
 		_float		fRotationSpeed = { 0.f };
 
-		_Vec3		vScale = {};
+		_Vec3		vStartScale = { 1.f, 1.f, 1.f };
 		_Vec3		vScalingSpeed = {};
 
-		_float		fAlpha = { 0.f };
+		_float		fAlpha = { 1.f };
 		_float		fAlphaSpeed = { 0.f };
-	}ACTION_DESC;
+	}DEFAULT_DESC;
+
+	typedef struct
+	{
+		_tchar		szDiffuseTexturTag[MAX_PATH] = L"";
+		_tchar		szMaskTextureTag_1[MAX_PATH] = L"";
+		_tchar		szMaskTextureTag_2[MAX_PATH] = L"";
+		_tchar		szNormalTextureTag[MAX_PATH] = L"";
+	}TEXT_DESC;
 
 	typedef struct : public CEffect_Base::EFFECT_BASE_DESC
 	{
-		TEXTURE_DESC TextureDesc = {};
-		ACTION_DESC ActionDesc = {};
+		DEFAULT_DESC DefaultDesc = {};
+		TEXT_DESC TextDesc = {};
 	} TEXTURE_EFFECT_DESC;
 
 private:
@@ -74,23 +64,18 @@ public:
 
 private:
 	class CShader* m_pShaderCom = { nullptr };
-
-	class CTexture* m_pDiffuseTextureCom = { nullptr };
-	class CTexture* m_pNormalTextureCom = { nullptr };
-	class CTexture* m_pMaskTextureCom[2] = { nullptr, nullptr };
-
+	class CTexture* m_pTextureCom[TEXTURE_END] = { nullptr, nullptr, nullptr, nullptr };
 	class CVIBuffer_Rect* m_pVIBufferCom = { nullptr };
 
 private:
-	ACTION_DESC m_ActionDesc = {};
+	DEFAULT_DESC m_DefaultDesc = {};
+	DEFAULT_DESC m_InitDesc = {};
 
 	_float	m_fAccumulateTime = { 0.f };
 	_float	m_fCurrenrtIndex = { 0.f };
 
-	TEXTURE_EFFECT_DESC m_SaveDesc = {};
-
 private:
-	HRESULT Ready_Components(TEXTURE_DESC Desc);
+	HRESULT Ready_Components(const TEXT_DESC& Desc);
 
 public:
 	static CTexture_Effect* Create(ID3D11Device* pDevice, ID3D11DeviceContext* pContext);

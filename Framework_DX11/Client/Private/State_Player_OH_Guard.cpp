@@ -32,28 +32,51 @@ HRESULT CState_Player_OH_Guard::Initialize(_uint iStateNum, void* pArg)
 
 HRESULT CState_Player_OH_Guard::Start_State(void* pArg)
 {
-    m_pPlayer->Change_Animation(m_iAnimation_Guard, true);
+    if(m_pFsm->Get_PrevState() != CPlayer::OH_WALK)
+        m_pPlayer->Change_Animation(m_iAnimation_Guard, true, 0.2f, 0, true);
+
     m_pPlayer->Change_Animation_Boundry(m_iAnimation_Guard, true);
+
     m_pPlayer->Set_IsGuard(true);
+    m_pPlayer->Set_MoveSpeed(3.f);
 
     return S_OK;
 }
 
 void CState_Player_OH_Guard::Update(_float fTimeDelta)
 {
-    if (KEY_HOLD(KEY::LSHIFT))
+    if (KEY_HOLD(KEY::ALT))
     {
-        if (!Move(fTimeDelta))
-        {
-            m_pPlayer->Change_Animation(m_iAnimation_Guard, true);
-        }
-        m_pPlayer->Change_Animation_Boundry(m_iAnimation_Guard, true, 0.f);
+        m_bTempTest = true;
     }
+    if (m_bTempTest)
+    {
 
-    if (KEY_NONE(KEY::LSHIFT))
-    {
-        m_pPlayer->Change_State(CPlayer::OH_IDLE);
+        m_pPlayer->Change_Animation(m_iAnimation_Walk[WALK_F], true, 0.2f, 0, false);
+        m_pPlayer->Change_Animation_Boundry(m_iAnimation_Guard, true, 0.2f);
     }
+    else
+    {
+        if (KEY_HOLD(KEY::LSHIFT))
+        {
+            if (KEY_TAP(KEY::F))
+            {
+                m_pPlayer->Change_State(CPlayer::PARRY);
+                return;
+            }
+            if (!Move(fTimeDelta))
+            {
+                m_pPlayer->Change_Animation(m_iAnimation_Guard, true);
+            }
+            m_pPlayer->Change_Animation_Boundry(m_iAnimation_Guard, true, 0.2f);
+        }
+
+        if (KEY_NONE(KEY::LSHIFT))
+        {
+            m_pPlayer->Change_State(CPlayer::OH_IDLE);
+        }
+    }
+    
 }
 
 void CState_Player_OH_Guard::End_State()
@@ -103,7 +126,6 @@ _bool CState_Player_OH_Guard::Move(_float fTimeDelta)
 
     if (m_vMoveDir.Length() > 0.f)
     {
-
         if (isForward)
         {
             if(isLeft)
@@ -134,7 +156,7 @@ _bool CState_Player_OH_Guard::Move(_float fTimeDelta)
         if (m_vMoveDir.Length() > 0.f)
         {
             // 가드 상태에서는 회전 안 함
-            m_pPlayer->Move_Dir(m_vMoveDir, m_fMoveSpeed, fTimeDelta, false);
+            m_pPlayer->Move_Dir(m_vMoveDir, fTimeDelta, false);
         }
         isMoving = true;
     }
@@ -149,7 +171,7 @@ CState_Player_OH_Guard* CState_Player_OH_Guard::Create(CFsm* pFsm, CPlayer* pPla
 
     if (FAILED(pInstance->Initialize(iStateNum, pArg)))
     {
-        MSG_BOX(TEXT("Failed to Created : CState_Player_OH_Guard"));
+        MSG_BOX(TEXT("Failed to Created : CState_Player_Heal"));
         Safe_Release(pInstance);
     }
 

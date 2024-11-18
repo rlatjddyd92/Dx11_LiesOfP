@@ -63,6 +63,7 @@ public:
 
 	// 정보 수정 
 	void Add_Stat_Normal(STAT_NORMAL eIndex, _float fValue);
+	void Add_StatMax_Normal(STAT_NORMAL eIndex, _float fValue);
 
 private:
 	HRESULT Initialize_Stat();

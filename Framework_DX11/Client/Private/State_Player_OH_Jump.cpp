@@ -59,7 +59,7 @@ CState_Player_OH_Jump* CState_Player_OH_Jump::Create(CFsm* pFsm, CPlayer* pPlaye
 
     if (FAILED(pInstance->Initialize(iStateNum, pArg)))
     {
-        MSG_BOX(TEXT("Failed to Created : CState_Player_OH_Jump"));
+        MSG_BOX(TEXT("Failed to Created : CState_Player_TH_Jump"));
         Safe_Release(pInstance);
     }
 

@@ -9,6 +9,10 @@
 
 #include "NonAnimModel.h"
 
+#include "Trail_Effect_TP.h"
+#include "Trail_Effect_MP.h"
+#include "Trail_Effect_OP.h"
+
 CLevel_Tool::CLevel_Tool(ID3D11Device* pDevice, ID3D11DeviceContext* pContext)
 	: CLevel{ pDevice, pContext }
 {
@@ -47,6 +51,21 @@ HRESULT CLevel_Tool::Initialize()
 	//	if (FAILED(m_pGameInstance->Add_CloneObject_ToLayer(LEVEL_TOOL, TEXT("Layer_Map"), TEXT("Prototype_GameObject_NonAnim"), &Desc)))
 	//		return E_FAIL;
 	//}
+
+
+	// 트레일 테스트용
+	CTrail_Effect_TP::TRAIL_TP_DESC TestDesc = {};
+	TestDesc.fRotationPerSec = XMConvertToRadians(90.f);
+	TestDesc.fSpeedPerSec = 1.f;
+	TestDesc.iLevelIndex = LEVEL_TOOL;
+	m_pGameInstance->Add_CloneObject_ToLayer(LEVEL_TOOL, TEXT("Layer_Test"), TEXT("Prototype_GameObject_Trail_Effect_TP"), &TestDesc);
+
+	CTrail_Effect_OP::TRAIL_OP_DESC OPDesc = {};
+	OPDesc.fRotationPerSec = XMConvertToRadians(90.f);
+	OPDesc.fSpeedPerSec = 1.f;
+	OPDesc.iLevelIndex = LEVEL_TOOL;
+	OPDesc.pParentMatrix = { nullptr };
+	m_pGameInstance->Add_CloneObject_ToLayer(LEVEL_TOOL, TEXT("Layer_Test"), TEXT("Prototype_GameObject_Trail_Effect_OP"), &OPDesc);
 
 	return S_OK;
 }
@@ -93,7 +112,7 @@ HRESULT CLevel_Tool::Ready_Layer_Camera()
 	Desc.fFovy = XMConvertToRadians(60.0f);
 	Desc.fAspect = (_float)g_iWinSizeX / (_float)g_iWinSizeY;
 	Desc.fNear = 0.1f;
-	Desc.fFar = 1000.f;
+	Desc.fFar = 300.f;
 	Desc.fSpeedPerSec = 30.f;
 	Desc.fRotationPerSec = XMConvertToRadians(90.0f);
 

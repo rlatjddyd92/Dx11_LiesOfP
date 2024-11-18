@@ -18,20 +18,20 @@ class CUIRender final : public CUIObject
 public:
 	enum class UI_FONT
 	{
-		FONT_INFO_12,
-		FONT_INFO_18,
-		FONT_INFO_24,
-		FONT_INFO_36,
-		FONT_INFO_48,
-		FONT_INFO_60,
-		FONT_INFO_72,
-		FONT_TITLE_12,
-		FONT_TITLE_18,
-		FONT_TITLE_24,
-		FONT_TITLE_36,
-		FONT_TITLE_48,
-		FONT_TITLE_60,
-		FONT_TITLE_72,
+		FONT_NORMAL_8,
+		FONT_NORMAL_12,
+		FONT_NORMAL_16,
+		FONT_NORMAL_24,
+		FONT_NORMAL_32,
+		FONT_NORMAL_40,
+		FONT_NORMAL_48,
+		FONT_BOLD_8,
+		FONT_BOLD_12,
+		FONT_BOLD_16,
+		FONT_BOLD_24,
+		FONT_BOLD_32,
+		FONT_BOLD_40,
+		FONT_BOLD_48,
 		FONT_END
 	};
 
@@ -86,9 +86,11 @@ public:
 	void AddRenderText(UI_FONT eFont, _bool bIsCenter, _tchar* szText, _float2 fPosition, _float3 fColor = { -1.f,-1.f,-1.f }, _float fAlpha = -1.f);
 
 	const _char* GetTextureTag(_int iIndex) { return m_vecTextureInfo[iIndex]->strTextureTag; }
+	const _char* GetTextureTag_Item(_int iIndex) { return m_vecTextureInfo_ItemIcon[iIndex]->strTextureTag; }
 	const _char* GetTextFontTag(_int iIndex) { return m_vecFont_char[iIndex]; }
 
 	_int GetTextureCount() { return (_int)m_vecTextureInfo.size(); }
+	_int GetTextureCount_Item() { return (_int)m_vecTextureInfo_ItemIcon.size(); }
 
 	HRESULT BackRender(_int iIndex);
 
@@ -101,8 +103,10 @@ private:
 
 	void Ready_Font();
 	HRESULT Ready_Texture();
+	HRESULT Ready_Texture_ItemIcon();
 
 	vector<UTEXTURE*> m_vecTextureInfo;
+	vector<UTEXTURE*> m_vecTextureInfo_ItemIcon;
 	list<URCOM*> m_UIRenderlist;
 	vector<_char*> m_vecFont_char;
 	vector<_tchar*> m_vecFont_tchar;

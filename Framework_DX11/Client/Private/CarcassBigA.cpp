@@ -18,6 +18,11 @@
 #include "State_CarcassBigA_Walk.h"
 #include "State_CarcassBigA_RUN.h"
 
+// 24-11-15 김성용
+// 직교 UI 체크용 코드 
+// 테스트 후 삭제할 것 
+#include "GameInterface_Controller.h"
+
 CCarcassBigA::CCarcassBigA(ID3D11Device * pDevice, ID3D11DeviceContext * pContext)
 	: CMonster{ pDevice, pContext }
 {
@@ -53,7 +58,31 @@ HRESULT CCarcassBigA::Initialize(void* pArg)
 
 	if (FAILED(Ready_FSM()))
 		return E_FAIL;
+	// 24-11-15 김성용
+	// 직교 투영 UI 테스트를 위한 코드 
+	// 메인 올릴 때는 제거 필요 
+	/*_vector vPos = { 0.f,0.f,0.f,0.f };
+	vPos.m128_f32[0] = m_pGameInstance->Get_Random(0.f, 10.f);
+	vPos.m128_f32[1] = m_pGameInstance->Get_Random(0.f, 10.f);
+	vPos.m128_f32[2] = m_pGameInstance->Get_Random(0.f, 10.f);
+	vPos.m128_f32[3] = m_pGameInstance->Get_Random(0.f, 10.f);
+	m_pTransformCom->Set_State(CTransform::STATE_POSITION,
+		vPos);
+	m_pTransformCom->LookAt(_vector{ 0, 0, -1, 0 });*/
 
+	// 24-11-15 김성용
+	// 직교 UI 체크용 코드 
+	// 테스트 후 삭제할 것 
+	/*GET_GAMEINTERFACE->Register_Pointer_Into_OrthoUIPage(UI_ORTHO_OBJ_TYPE::ORTHO_NORMAL_MONSTER, this);
+
+	return S_OK;*/
+
+	// 원래 코드 (원복해야 함)
+	m_pTransformCom->Set_State(CTransform::STATE_POSITION,
+		XMVectorSet(0.f, 0.f, 0.f, 1.f));
+	m_pTransformCom->LookAt(_vector{ 0, 0, -1, 0 });
+
+	
 
 	return S_OK;
 }
@@ -66,24 +95,17 @@ void CCarcassBigA::Priority_Update(_float fTimeDelta)
 
 void CCarcassBigA::Update(_float fTimeDelta)
 {
-
-
-	m_vCurRootMove = m_pModelCom->Play_Animation(fTimeDelta, &m_bEndAnim, nullptr);
+	m_vCurRootMove = m_pModelCom->Play_Animation(fTimeDelta, nullptr);
 
 	m_pFsmCom->Update(fTimeDelta);
 
 	_Vec3 vPos = m_pTransformCom->Get_State(CTransform::STATE_POSITION);
 	
-	if (m_bEndAnim == true && m_bResetRootMove)//조건을 애니메이션이 끝났을때 or 변경 되었을때로
-	{
-		m_vCurRootMove = m_vRootMoveStack = XMVectorSet(0, 0, 0, 1);
-	}
-	else
+	if (true)//조건을 애니메이션이 끝났을때 or 변경 되었을때로
 	{
 		m_vCurRootMove = XMVector3TransformNormal(m_vCurRootMove, m_pTransformCom->Get_WorldMatrix());
 
-		m_pTransformCom->Set_State(CTransform::STATE_POSITION, vPos + (_Vec3)m_vCurRootMove - (_Vec3)m_vRootMoveStack);
-		m_vRootMoveStack = m_vCurRootMove;
+		m_pTransformCom->Set_State(CTransform::STATE_POSITION, vPos + m_vCurRootMove);
 	}
 
 	//m_pColliderCom->Update(m_pTransformCom->Get_WorldMatrix_Ptr());

@@ -4,20 +4,46 @@
 #include "GameInstance.h"
 #include "Camera.h"
 #include "Weapon.h"
+#include "Weapon_Scissor.h"
 
 #include "Effect_Manager.h"
 #include "Effect_Container.h"
 
 #include "State_Player_Hit.h"
+#include "State_Player_Parry.h"
+#include "State_Player_Heal.h"
+#include "State_Player_ChangeWeapon.h"
+
 #include "State_Player_OH_Idle.h"
 #include "State_Player_OH_Walk.h"
 #include "State_Player_OH_Run.h"
+#include "State_Player_OH_Sprint.h"
 #include "State_Player_OH_Guard.h"
 #include "State_Player_OH_Dash.h"
 
-#include "State_Player_Rapier_NA1.h"
-#include "State_Player_Rapier_NA2.h"
-#include "State_Player_Rapier_SA1.h"
+#include "State_Player_TH_Idle.h"
+#include "State_Player_TH_Walk.h"
+#include "State_Player_TH_Run.h"
+#include "State_Player_TH_Sprint.h"
+#include "State_Player_TH_Guard.h"
+#include "State_Player_TH_Dash.h"
+
+#include "State_Player_Rapier_LAttack00.h"
+#include "State_Player_Rapier_LAttack01.h"
+#include "State_Player_Rapier_RAttack00.h"
+#include "State_Player_Rapier_Charge.h"
+#include "State_Player_Rapier_Fatal.h"
+
+#include "State_Player_Flame_LAttack00.h"
+#include "State_Player_Flame_LAttack01.h"
+#include "State_Player_Flame_RAttack00.h"
+#include "State_Player_Flame_RAttack01.h"
+#include "State_Player_Flame_Charge00.h"
+#include "State_Player_Flame_Charge01.h"
+
+#include "State_Player_Scissor_LAttack00.h"
+#include "State_Player_Scissor_LAttack01.h"
+#include "State_Player_Scissor_RAttack00.h"
 
 CPlayer::CPlayer(ID3D11Device * pDevice, ID3D11DeviceContext * pContext)
 	: CPawn{ pDevice, pContext }
@@ -47,7 +73,7 @@ HRESULT CPlayer::Initialize(void * pArg)
 	if (FAILED(Ready_Components()))
 		return E_FAIL;
 
-	if (FAILED(Ready_PartObjects()))
+	if (FAILED(Ready_Weapon()))
 		return E_FAIL;
 
 	if (FAILED(Ready_FSM()))
@@ -59,16 +85,14 @@ HRESULT CPlayer::Initialize(void * pArg)
 
 	// 임시 루트본 설정
 	m_pModelCom->Set_UFBIndices(UFB_ROOT, 2);
-	m_pModelCom->Set_UFBIndices(UFB_BOUNDARY_UPPER, 5);
+	m_pModelCom->Set_UFBIndices(UFB_BOUNDARY_UPPER, 6);
 	m_pModelCom->Update_Boundary();
+
 	return S_OK;
 }
 
 void CPlayer::Priority_Update(_float fTimeDelta)
 {
-	m_pModelCom->Set_UFBIndices(UFB_BOUNDARY_UPPER, 6);
-
-	m_pModelCom->Update_Boundary();
 	if (m_isGuard)
 	{
 		m_fGuardTime = fTimeDelta;
@@ -86,86 +110,68 @@ void CPlayer::Priority_Update(_float fTimeDelta)
 
 	m_EffectList.clear();
 	m_EvKeyList.clear();
+
+	m_pWeapon[m_eWeaponType]->Priority_Update(fTimeDelta);
 }
 
 void CPlayer::Update(_float fTimeDelta)
 {
-	if (KEY_TAP(KEY::H))
-	{
-		int a = 0;
-		Change_State(RAPIER_NA1, &a);
-	}
 	m_pFsmCom->Update(fTimeDelta);
 
-
-	m_vCurRootMove = m_pModelCom->Play_Animation(fTimeDelta, &m_bEndAnim, &m_EvKeyList);
+	m_vCurRootMove = m_pModelCom->Play_Animation(fTimeDelta, &m_EvKeyList);
 
 
 	_vector vPos = m_pTransformCom->Get_State(CTransform::STATE_POSITION);
 
-	if (m_bEndAnim == true && m_bResetRootMove)//조건을 애니메이션이 끝났을때 or 변경 되었을때로
-	{
-		m_vCurRootMove = m_vRootMoveStack = XMVectorSet(0, 0, 0, 1);
-	}
-	else
+	if (true)//조건을 애니메이션이 끝났을때 or 변경 되었을때로
 	{
 		m_vCurRootMove = XMVector3TransformNormal(m_vCurRootMove, m_pTransformCom->Get_WorldMatrix());
 
-		m_pTransformCom->Set_State(CTransform::STATE_POSITION, vPos + m_vCurRootMove - m_vRootMoveStack);
-		m_vRootMoveStack = m_vCurRootMove;
+		m_pTransformCom->Set_State(CTransform::STATE_POSITION, vPos + m_vCurRootMove);
 	}
 
 	for (auto& EvKey : m_EvKeyList)
 	{
-		CEffect_Container* pEffectCon;
-		if (EvKey.eEvent_type == EVENT_KEYFRAME::ET_ONCE)
-		{
-			auto Effect = m_Effects.find(EvKey.iEffectNum);
-			if (Effect == m_Effects.end())
-			{
-				CEffect_Container::EFFECT_DESC EffectDesc = {};
-				EffectDesc.fRotationPerSec = XMConvertToRadians(90.f);
-				EffectDesc.fSpeedPerSec = 1.f;
-				EffectDesc.iLevelIndex = LEVEL_GAMEPLAY;
-				EffectDesc.vScale = _Vec3{ 0.5f, 0.5f, 0.5f };
-				EffectDesc.vPos = _Vec3{ 0, 0, 0 };
-				EffectDesc.vRotation = _Vec3{ 0, 0, 0 };
-				EffectDesc.pParentMatrix = m_pTransformCom->Get_WorldMatrix_Ptr();
-				EffectDesc.pSocketMatrix = (_Matrix*)m_pModelCom->Get_BoneCombindTransformationMatrix_Ptr(EvKey.iBoneIndex);
 
-				CEffect_Manager::Get_Instance()->Clone_Effect(CEffect_Manager::EFFECT_POWER_HIT, &EffectDesc);
-				m_Effects.emplace(EvKey.iEffectNum, pEffectCon);
-			}
-			else
-			{
-				pEffectCon = Effect->second;
-			}
-			m_EffectList.push_back(pEffectCon);
-		}
-		else if (EvKey.eEvent_type == EVENT_KEYFRAME::ET_REPET)
-		{
-			auto Effect = m_Effects.find(EvKey.iEffectNum);
-			if (Effect == m_Effects.end())
-			{
-				CEffect_Container::EFFECT_DESC EffectDesc = {};
-				EffectDesc.fRotationPerSec = XMConvertToRadians(90.f);
-				EffectDesc.fSpeedPerSec = 1.f;
-				EffectDesc.iLevelIndex = LEVEL_GAMEPLAY;
-				EffectDesc.vScale = _Vec3{0.5f, 0.5f, 0.5f};
-				EffectDesc.vPos = _Vec3{ 0, 0, 0 };
-				EffectDesc.vRotation = _Vec3{ 0, 0, 0 };
-				EffectDesc.pParentMatrix = m_pTransformCom->Get_WorldMatrix_Ptr();
-				EffectDesc.pSocketMatrix = (_Matrix*)m_pModelCom->Get_BoneCombindTransformationMatrix_Ptr(EvKey.iBoneIndex);
-				
-				pEffectCon =	CEffect_Manager::Get_Instance()->Clone_Effect(CEffect_Manager::EFFECT_POWER_HIT, &EffectDesc);
-				m_Effects.emplace(EvKey.iEffectNum, pEffectCon);
-			}
-			else
-			{
-				pEffectCon = Effect->second;
-			}
-			m_EffectList.push_back(pEffectCon);
-		}
+		//if (EvKey.eEvent_type == EVENT_KEYFRAME::ET_ONCE)
+		//{
+		//	auto Effect = m_Effects.find(EvKey.iEffectNum);
+		//	if (Effect == m_Effects.end())
+		//	{
+		//		CEffect_Container::EFFECT_DESC EffectDesc = {};
+		//		EffectDesc.fRotationPerSec = XMConvertToRadians(90.f);
+		//		EffectDesc.fSpeedPerSec = 1.f;
+		//		EffectDesc.iLevelIndex = LEVEL_GAMEPLAY;
+		//		EffectDesc.pParentMatrix = m_pTransformCom->Get_WorldMatrix_Ptr();
+		//		EffectDesc.pSocketMatrix = (_Matrix*)m_pModelCom->Get_BoneCombindTransformationMatrix_Ptr(EvKey.iBoneIndex);
+		//		
+		//		CEffect_Manager::Get_Instance()->Clone_Effect(CEffect_Manager::EFFECT_POWER_HIT, &EffectDesc);
+		//	}
+		//}
+		//else if (EvKey.eEvent_type == EVENT_KEYFRAME::ET_REPET)
+		//{
+		//	CEffect_Container* pEffectCon;
+		//	auto Effect = m_Effects.find(EvKey.iEffectNum);
+		//	if (Effect == m_Effects.end())
+		//	{
+		//		CEffect_Container::EFFECT_DESC EffectDesc = {};
+		//		EffectDesc.fRotationPerSec = XMConvertToRadians(90.f);
+		//		EffectDesc.fSpeedPerSec = 1.f;
+		//		EffectDesc.iLevelIndex = LEVEL_GAMEPLAY;
+		//		EffectDesc.vScale = _Vec3{1, 1, 1};
+		//		EffectDesc.vPos = _Vec3{ 0, 0, 0 };
+		//		EffectDesc.vRotation = _Vec3{ 0, 0, 0 };
+		//		EffectDesc.pParentMatrix = m_pTransformCom->Get_WorldMatrix_Ptr();
+		//		EffectDesc.pSocketMatrix = (_Matrix*)m_pModelCom->Get_BoneCombindTransformationMatrix_Ptr(EvKey.iBoneIndex);
+		//		pEffectCon =	CEffect_Manager::Get_Instance()->Clone_Effect(CEffect_Manager::EFFECT_POWER_HIT, &EffectDesc);
+		//		m_Effects.emplace(EvKey.iEffectNum, pEffectCon);
+		//	}
+		//	else
+		//	{
+		//		pEffectCon = Effect->second;
+		//	}
+		//	m_EffectList.push_back(pEffectCon);
+		//}
 	}
 
 	for (auto& pEffect : m_EffectList)
@@ -174,16 +180,18 @@ void CPlayer::Update(_float fTimeDelta)
 	}
 
 	m_pColliderCom->Update(m_pTransformCom->Get_WorldMatrix_Ptr());
+
+	m_pWeapon[m_eWeaponType]->Update(fTimeDelta);
 }
 
 void CPlayer::Late_Update(_float fTimeDelta)
 {
-	if (GetKeyState(VK_LBUTTON) & 0x8000)
-	{
-		_float3		vPickPos;
-		if (true == m_pGameInstance->Picking(&vPickPos))
-			m_pTransformCom->Set_State(CTransform::STATE_POSITION, XMVectorSetW(XMLoadFloat3(&vPickPos), 1.f));		
-	}
+	//if (GetKeyState(VK_LBUTTON) & 0x8000)
+	//{
+	//	_float3		vPickPos;
+	//	if (true == m_pGameInstance->Picking(&vPickPos))
+	//		m_pTransformCom->Set_State(CTransform::STATE_POSITION, XMVectorSetW(XMLoadFloat3(&vPickPos), 1.f));		
+	//}
 
 
 	m_pRigidBodyCom->Update(fTimeDelta);
@@ -197,6 +205,7 @@ void CPlayer::Late_Update(_float fTimeDelta)
 	m_pGameInstance->Add_DebugObject(m_pNavigationCom);
 #endif
 
+	m_pWeapon[m_eWeaponType]->Late_Update(fTimeDelta);
 }
 
 HRESULT CPlayer::Render()
@@ -244,20 +253,16 @@ HRESULT CPlayer::Render()
 	m_pNavigationCom->Render();
 #endif
 
+
+	if (FAILED(m_pWeapon[m_eWeaponType]->Render()))
+		return E_FAIL;
+
 	return S_OK;
 }
 
 HRESULT CPlayer::Render_LightDepth()
 {
 	if (FAILED(m_pTransformCom->Bind_ShaderResource(m_pShaderCom, "g_WorldMatrix")))
-		return E_FAIL;
-
-	_float4x4		ViewMatrix;
-	XMStoreFloat4x4(&ViewMatrix, XMMatrixLookAtLH(XMVectorSet(0.f, 20.f, -15.f, 1.f), XMVectorSet(0.f, 0.f, 0.f, 1.f), XMVectorSet(0.f, 1.f, 0.f, 0.f)));
-
-	if (FAILED(m_pShaderCom->Bind_Matrix("g_ViewMatrix", &ViewMatrix)))
-		return E_FAIL;
-	if (FAILED(m_pShaderCom->Bind_Matrix("g_ProjMatrix", &m_pGameInstance->Get_Transform(CPipeLine::D3DTS_PROJ))))
 		return E_FAIL;
 
 	if (FAILED(m_pShaderCom->Bind_Matrices("g_CascadeViewMatrix", m_pGameInstance->Get_CascadeViewMatirx(), 3)))
@@ -282,11 +287,11 @@ HRESULT CPlayer::Render_LightDepth()
 	return S_OK;
 }
 
-void CPlayer::Move_Dir(_Vec4 vDir, _float fSpeed, _float fTimeDelta, _bool isTurn)
+void CPlayer::Move_Dir(_Vec4 vDir, _float fTimeDelta, _bool isTurn)
 {
 	if(isTurn)
 		m_pTransformCom->LookAt_Lerp_NoHeight(vDir, 30.0f, fTimeDelta);
-	m_pRigidBodyCom->Set_Velocity((_Vec3(vDir * fSpeed)));
+	m_pRigidBodyCom->Set_Velocity((_Vec3(vDir * m_fMoveSpeed)));
 }
 
 _Vec4 CPlayer::Calculate_Direction_Straight()
@@ -310,15 +315,68 @@ _Vec4 CPlayer::Calculate_Direction_Right()
 	return vRight;
 }
 
+void CPlayer::Change_Weapon()
+{
+	m_pWeapon[m_eWeaponType]->Appear();
+}
+
+_uint CPlayer::Change_WeaponType()
+{
+	m_pWeapon[m_eWeaponType]->Disappear();
+	m_eWeaponType = WEAPON_TYPE((m_eWeaponType + 1) % WEP_END);
+	return m_eWeaponType;
+}
+
+void CPlayer::Seperate_Scissor()
+{
+	if (WEP_SCISSOR != m_eWeaponType)
+		return;
+
+	dynamic_cast<CWeapon_Scissor*>(m_pWeapon[WEP_SCISSOR])->Change_SeperateMode();
+}
+
+void CPlayer::Combine_Scissor()
+{
+	if (WEP_SCISSOR != m_eWeaponType)
+		return;
+
+	dynamic_cast<CWeapon_Scissor*>(m_pWeapon[WEP_SCISSOR])->Change_CombineMode();
+}
+
+HRESULT CPlayer::Ready_Weapon()
+{
+	CWeapon::WEAPON_DESC		WeaponDesc{};
+	WeaponDesc.pParentWorldMatrix = m_pTransformCom->Get_WorldMatrix_Ptr();
+	WeaponDesc.pSocketBoneMatrix = m_pModelCom->Get_BoneCombindTransformationMatrix_Ptr("BN_Weapon_R");
+
+	m_pWeapon[WEP_RAPIER] = dynamic_cast<CWeapon*>(m_pGameInstance->Clone_GameObject(TEXT("Prototype_GameObject_Weapon_Rapier"), &WeaponDesc));
+	if (nullptr == m_pWeapon)
+		return E_FAIL;
+
+	m_pWeapon[WEP_FLAME] = dynamic_cast<CWeapon*>(m_pGameInstance->Clone_GameObject(TEXT("Prototype_GameObject_Weapon_FlameSword"), &WeaponDesc));
+	if (nullptr == m_pWeapon)
+		return E_FAIL;
+
+
+	WeaponDesc.pSocketBoneMatrix2 = m_pModelCom->Get_BoneCombindTransformationMatrix_Ptr("BN_Weapon_L");
+	m_pWeapon[WEP_SCISSOR] = dynamic_cast<CWeapon*>(m_pGameInstance->Clone_GameObject(TEXT("Prototype_GameObject_Weapon_Scissor"), &WeaponDesc));
+	if (nullptr == m_pWeapon)
+		return E_FAIL;
+
+	Change_Weapon();
+
+	return S_OK;
+}
+
 HRESULT CPlayer::Ready_Components()
 {
 	/* FOR.Com_Shader */
-	if (FAILED(__super::Add_Component(LEVEL_GAMEPLAY, TEXT("Prototype_Component_Shader_VtxAnimModel"),
+	if (FAILED(__super::Add_Component(LEVEL_STATIC, TEXT("Prototype_Component_Shader_VtxAnimModel"),
 		TEXT("Com_Shader"), reinterpret_cast<CComponent**>(&m_pShaderCom))))
 		return E_FAIL;
 
 	/* FOR.Com_Model */
-	if (FAILED(__super::Add_Component(LEVEL_GAMEPLAY, TEXT("Prototype_AnimModel_Test"),
+	if (FAILED(__super::Add_Component(LEVEL_GAMEPLAY, TEXT("Prototype_Component_Model_Player"),
 		TEXT("Com_Model"), reinterpret_cast<CComponent**>(&m_pModelCom))))
 		return E_FAIL;
 
@@ -330,15 +388,15 @@ HRESULT CPlayer::Ready_Components()
 		TEXT("Com_Navigation"), reinterpret_cast<CComponent**>(&m_pNavigationCom), &NaviDesc)))
 		return E_FAIL;
 
-	/* For.Com_Collider */
-	CBounding_AABB::BOUNDING_AABB_DESC			ColliderDesc{};
-	ColliderDesc.vExtents = _float3(0.5f, 1.0f, 0.5f);
+	/* FOR.Com_Collider */
+	CBounding_OBB::BOUNDING_OBB_DESC			ColliderDesc{};
+	ColliderDesc.vExtents = _float3(0.5f, 0.8f, 0.5f);
 	ColliderDesc.vCenter = _float3(0.f, ColliderDesc.vExtents.y, 0.f);
+	ColliderDesc.vAngles = _float3(0.f, 0.f, 0.f);
 
-	if (FAILED(__super::Add_Component(LEVEL_GAMEPLAY, TEXT("Prototype_Component_Collider_AABB"),
+	if (FAILED(__super::Add_Component(LEVEL_STATIC, TEXT("Prototype_Component_Collider_OBB"),
 		TEXT("Com_Collider"), reinterpret_cast<CComponent**>(&m_pColliderCom), &ColliderDesc)))
 		return E_FAIL;
-	
 
 	/* FOR.Com_RigidBody */
 	if (FAILED(__super::Add_Component(LEVEL_STATIC, TEXT("Prototype_Component_RigidBody"),
@@ -346,29 +404,11 @@ HRESULT CPlayer::Ready_Components()
 		return E_FAIL;
 	m_pRigidBodyCom->Set_Owner(this);
 	m_pRigidBodyCom->Set_IsFriction(true);
-	m_pRigidBodyCom->Set_Friction(_float3(1.f, 0.f, 1.f));
+	m_pRigidBodyCom->Set_Friction(_float3(10.f, 0.f, 10.f));
 	m_pRigidBodyCom->Set_IsGravity(false);
 	m_pRigidBodyCom->Set_GravityScale(15.f);
 	m_pRigidBodyCom->Set_VelocityLimit(_float3(25.f, 30.f, 25.f));
 	m_pRigidBodyCom->Set_Navigation(m_pNavigationCom);
-
-	return S_OK;
-}
-
-HRESULT CPlayer::Ready_PartObjects()
-{
-	/* 실제 추가하고 싶은 파트오브젝트의 갯수만큼 밸류를 셋팅해놓자. */
-	m_Parts.resize(PART_END - 1);
-
-	
-
-	//CWeapon::WEAPON_DESC		WeaponDesc{};
-	//WeaponDesc.pParentState = &m_iState;
-	//WeaponDesc.pParentWorldMatrix = m_pTransformCom->Get_WorldMatrix_Ptr();
-	//WeaponDesc.pSocketBoneMatrix = dynamic_cast<CBody_Player*>(m_Parts[PART_BODY])->Get_BoneMatrix_Ptr("SWORD");
-
-	//if (FAILED(__super::Add_PartObject(PART_WEAPON, TEXT("Prototype_GameObject_Weapon"), &WeaponDesc)))
-	//	return E_FAIL;
 
 	return S_OK;
 }
@@ -388,19 +428,46 @@ HRESULT CPlayer::Ready_FSM()
 
 
 	m_pFsmCom->Add_State(CState_Player_Hit::Create(m_pFsmCom, this, HIT, &Desc));
+	m_pFsmCom->Add_State(CState_Player_Parry::Create(m_pFsmCom, this, PARRY, &Desc));
+	m_pFsmCom->Add_State(CState_Player_Heal::Create(m_pFsmCom, this, HEAL, &Desc));
+	m_pFsmCom->Add_State(CState_Player_ChangeWeapon::Create(m_pFsmCom, this, CHANGEWEP, &Desc));
 
 	m_pFsmCom->Add_State(CState_Player_OH_Idle::Create(m_pFsmCom, this, OH_IDLE, &Desc));
 	m_pFsmCom->Add_State(CState_Player_OH_Walk::Create(m_pFsmCom, this, OH_WALK, &Desc));
 	m_pFsmCom->Add_State(CState_Player_OH_Run::Create(m_pFsmCom, this, OH_RUN, &Desc));
+	m_pFsmCom->Add_State(CState_Player_OH_Sprint::Create(m_pFsmCom, this, OH_SPRINT, &Desc));
 	m_pFsmCom->Add_State(CState_Player_OH_Guard::Create(m_pFsmCom, this, OH_GUARD, &Desc));
 	m_pFsmCom->Add_State(CState_Player_OH_Dash::Create(m_pFsmCom, this, OH_DASH, &Desc));
 
+	m_pFsmCom->Add_State(CState_Player_TH_Idle::Create(m_pFsmCom, this, TH_IDLE, &Desc));
+	m_pFsmCom->Add_State(CState_Player_TH_Walk::Create(m_pFsmCom, this, TH_WALK, &Desc));
+	m_pFsmCom->Add_State(CState_Player_TH_Run::Create(m_pFsmCom, this, TH_RUN, &Desc));
+	m_pFsmCom->Add_State(CState_Player_TH_Sprint::Create(m_pFsmCom, this, TH_SPRINT, &Desc));
+	m_pFsmCom->Add_State(CState_Player_TH_Guard::Create(m_pFsmCom, this, TH_GUARD, &Desc));
+	m_pFsmCom->Add_State(CState_Player_TH_Dash::Create(m_pFsmCom, this, TH_DASH, &Desc));
 
-	m_pFsmCom->Add_State(CState_Player_Rapier_NA1::Create(m_pFsmCom, this, RAPIER_NA1, &Desc));	// 좌클릭 공격
-	m_pFsmCom->Add_State(CState_Player_Rapier_NA2::Create(m_pFsmCom, this, RAPIER_NA2, &Desc));	// 좌클릭 공격
-	m_pFsmCom->Add_State(CState_Player_Rapier_SA1::Create(m_pFsmCom, this, RAPIER_SA1, &Desc));	// 우클릭 공격
-	//FCA  - 페이탈 아츠
-	// CA1 - 모으기 공격
+	m_pFsmCom->Add_State(CState_Player_Rapier_LAttack00::Create(m_pFsmCom, this, RAPIER_LATTACK0, &Desc));	// 좌클릭 공격1
+	m_pFsmCom->Add_State(CState_Player_Rapier_LAttack01::Create(m_pFsmCom, this, RAPIER_LATTACK1, &Desc));	// 좌클릭 공격2
+	m_pFsmCom->Add_State(CState_Player_Rapier_RAttack00::Create(m_pFsmCom, this, RAPIER_RATTACK0, &Desc));	// 우클릭 공격
+	m_pFsmCom->Add_State(CState_Player_Rapier_Charge::Create(m_pFsmCom, this, RAPIER_CHARGE, &Desc));	// 우클릭 차지공격
+	m_pFsmCom->Add_State(CState_Player_Rapier_Fatal::Create(m_pFsmCom, this, RAPIER_FATAL, &Desc));	// F 페이탈아츠
+	// Shift + F 패리 어택
+
+	m_pFsmCom->Add_State(CState_Player_Flame_LAttack00::Create(m_pFsmCom, this, FLAME_LATTACK0, &Desc));	// 좌클릭 공격1
+	m_pFsmCom->Add_State(CState_Player_Flame_LAttack01::Create(m_pFsmCom, this, FLAME_LATTACK1, &Desc));	// 좌클릭 공격1
+	m_pFsmCom->Add_State(CState_Player_Flame_RAttack00::Create(m_pFsmCom, this, FLAME_RATTACK0, &Desc));	// 우클릭 공격1
+	m_pFsmCom->Add_State(CState_Player_Flame_RAttack01::Create(m_pFsmCom, this, FLAME_RATTACK1, &Desc));	// 우클릭 공격2
+	m_pFsmCom->Add_State(CState_Player_Flame_Charge00::Create(m_pFsmCom, this, FLAME_CHARGE0, &Desc));	// 우클릭 차지 공격1
+	m_pFsmCom->Add_State(CState_Player_Flame_Charge01::Create(m_pFsmCom, this, FLAME_CHARGE1, &Desc));	// 우클릭 차지 공격2
+	//페이탈 아츠
+		// Shift + F 패리 어택
+
+	m_pFsmCom->Add_State(CState_Player_Scissor_LAttack00::Create(m_pFsmCom, this, SCISSOR_LATTACK0, &Desc));	// 좌클릭 공격1
+	m_pFsmCom->Add_State(CState_Player_Scissor_LAttack01::Create(m_pFsmCom, this, SCISSOR_LATTACK1, &Desc));	// 좌클릭 공격2
+	m_pFsmCom->Add_State(CState_Player_Scissor_RAttack00::Create(m_pFsmCom, this, SCISSOR_RATTACK0, &Desc));	// 우클릭 공격
+	//m_pFsmCom->Add_State(CState_Player_Rapier_Charge::Create(m_pFsmCom, this, RAPIER_CHARGE, &Desc));	// 우클릭 차지공격
+	//m_pFsmCom->Add_State(CState_Player_Rapier_Fatal::Create(m_pFsmCom, this, RAPIER_FATAL, &Desc));	// F 페이탈아츠
+	// Shift + F 패리 어택
 
 	m_pFsmCom->Set_State(OH_IDLE);
 
@@ -444,6 +511,11 @@ void CPlayer::Free()
 		Safe_Release(Pair.second);
 	}
 	m_Effects.clear();
+
+	for (_uint i = 0; i < WEP_END; ++i)
+	{
+		Safe_Release(m_pWeapon[i]);
+	}
 
 	Safe_Release(m_pColliderCom);
 	Safe_Release(m_pNavigationCom);

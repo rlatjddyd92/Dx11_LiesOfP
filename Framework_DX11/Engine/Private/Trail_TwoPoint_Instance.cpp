@@ -2,18 +2,131 @@
 
 #include "GameInstance.h"
 
-Trail_TwoPoint_Instance::Trail_TwoPoint_Instance(ID3D11Device* pDevice, ID3D11DeviceContext* pContext)
+CTrail_TwoPoint_Instance::CTrail_TwoPoint_Instance(ID3D11Device* pDevice, ID3D11DeviceContext* pContext)
 	: CVIBuffer_Instancing{ pDevice, pContext }
 {
 }
 
-Trail_TwoPoint_Instance::Trail_TwoPoint_Instance(const Trail_TwoPoint_Instance& Prototype)
+CTrail_TwoPoint_Instance::CTrail_TwoPoint_Instance(const CTrail_TwoPoint_Instance& Prototype)
 	: CVIBuffer_Instancing{ Prototype }
 	, m_TrailPoses(Prototype.m_TrailPoses)
 {
 }
 
-HRESULT Trail_TwoPoint_Instance::Initialize_Prototype(const CVIBuffer_Instancing::INSTANCE_DESC& Desc)
+HRESULT CTrail_TwoPoint_Instance::Initialize_Prototype(const CVIBuffer_Instancing::INSTANCE_DESC& Desc, _bool isClient)
+{
+	m_isClient = isClient;
+
+	if(true == m_isClient)
+	{
+		if(FAILED(Ready_Buffers(Desc)))
+			return E_FAIL;
+	}
+
+	return S_OK;
+}
+
+HRESULT CTrail_TwoPoint_Instance::Initialize(void* pArg)
+{
+	if (false == m_isClient)
+	{
+		INSTANCE_DESC* pDesc = static_cast<INSTANCE_DESC*>(pArg);
+
+		if (FAILED(Ready_Buffers(*pDesc)))
+			return E_FAIL;
+	}
+
+#pragma region INSTANCE_BUFFER
+	if (FAILED(__super::Initialize(pArg)))
+		return E_FAIL;
+#pragma endregion
+
+	return S_OK;
+}
+
+_bool CTrail_TwoPoint_Instance::Update_Buffer(_fvector vWorldTopPos, _fvector vWorldBottomPos, _float fTimeDelta)
+{
+	if (false == m_bFirst)
+	{
+		for (auto& TwoPoints : m_TrailPoses)
+		{
+			XMStoreFloat3(&TwoPoints.vTop, vWorldTopPos);
+			XMStoreFloat3(&TwoPoints.vBottom, vWorldBottomPos);
+		}
+
+		m_bFirst = true;
+	}
+
+	TWOPOINT Point = {};
+	XMStoreFloat3(&Point.vTop, vWorldTopPos);
+	XMStoreFloat3(&Point.vBottom, vWorldBottomPos);
+	m_TrailPoses.emplace_front(Point);
+
+	if (m_TrailPoses.size() > m_iNumInstance + 3)
+	{
+		m_TrailPoses.pop_back();
+	}
+
+	D3D11_MAPPED_SUBRESOURCE	SubResource{};
+
+	m_pContext->Map(m_pVBInstance, 0, D3D11_MAP_WRITE_NO_OVERWRITE, 0, &SubResource);
+
+	VTXTRAIL_TWOPOINT_INSTANCE* pVertices = static_cast<VTXTRAIL_TWOPOINT_INSTANCE*>(SubResource.pData);
+
+	auto& iter = m_TrailPoses.begin();
+
+	_bool m_bOver = { true };
+	for (size_t i = 0; i < m_iNumInstance; ++i)
+	{
+		if (0 == i)
+			++iter;
+
+		// FirstPos
+		--iter;
+		pVertices[i].vFirstTopPos = iter->vTop;
+		pVertices[i].vFirstBottomPos = iter->vBottom;
+		++iter;
+
+		// SecondPos
+		pVertices[i].vSecondTopPos = iter->vTop;
+		pVertices[i].vSecondBottomPos = iter->vBottom;
+		++iter;
+
+		// ThirdPos
+		pVertices[i].vThirdTopPos = iter->vTop;
+		pVertices[i].vThirdBottomPos = iter->vBottom;
+		++iter;
+
+		// ForthPos
+		pVertices[i].vForthTopPos = iter->vTop;
+		pVertices[i].vForthBottomPos = iter->vBottom;
+		--iter;
+		--iter;
+
+		++iter;
+	}
+
+	m_pContext->Unmap(m_pVBInstance, 0);
+	return m_bOver;
+}
+
+void CTrail_TwoPoint_Instance::Reset()
+{
+	D3D11_MAPPED_SUBRESOURCE	SubResource{};
+	m_pContext->Map(m_pVBInstance, 0, D3D11_MAP_WRITE_NO_OVERWRITE, 0, &SubResource);
+	VTXTRAIL_ONEPOINT_INSTANCE* pVertices = static_cast<VTXTRAIL_ONEPOINT_INSTANCE*>(SubResource.pData);
+
+	for (size_t i = 0; i < m_iNumInstance; ++i)
+	{
+		pVertices[i] = static_cast<VTXTRAIL_ONEPOINT_INSTANCE*>(m_pInstanceVertices)[i];
+	}
+	m_pContext->Unmap(m_pVBInstance, 0);
+
+	m_bFirst = false;
+}
+
+
+HRESULT CTrail_TwoPoint_Instance::Ready_Buffers(const CVIBuffer_Instancing::INSTANCE_DESC& Desc)
 {
 	if (FAILED(__super::Initialize_Desc(Desc)))
 		return E_FAIL;
@@ -28,7 +141,7 @@ HRESULT Trail_TwoPoint_Instance::Initialize_Prototype(const CVIBuffer_Instancing
 	m_iInstanceStride = sizeof(VTXTRAIL_TWOPOINT_INSTANCE);
 	m_iIndexCountPerInstance = 1;
 
-	m_TrailPoses.resize(m_iNumInstance);
+	m_TrailPoses.resize(m_iNumInstance + 3);
 
 #pragma region VERTEX_BUFFER
 	ZeroMemory(&m_BufferDesc, sizeof m_BufferDesc);
@@ -100,12 +213,22 @@ HRESULT Trail_TwoPoint_Instance::Initialize_Prototype(const CVIBuffer_Instancing
 
 	for (size_t i = 0; i < m_iNumInstance; i++)
 	{
-		pInstanceVertices[i].vCurTopPos = {};
-		pInstanceVertices[i].vCurBottomPos = {};
+		pInstanceVertices[i].vFirstTopPos = {};
+		pInstanceVertices[i].vFirstBottomPos = {};
 
-		pInstanceVertices[i].vPreTopPos = {};
-		pInstanceVertices[i].vPreBottomPos = {};
-		pInstanceVertices[i].vLifeTime = _float2(m_pGameInstance->Get_Random(Desc.vLifeTime.x, Desc.vLifeTime.y), 0.f);
+		pInstanceVertices[i].vSecondTopPos = {};
+		pInstanceVertices[i].vSecondBottomPos = {};
+
+		pInstanceVertices[i].vThirdTopPos = {};
+		pInstanceVertices[i].vThirdBottomPos = {};
+
+		pInstanceVertices[i].vForthTopPos = {};
+		pInstanceVertices[i].vForthBottomPos = {};
+
+		pInstanceVertices[i].vLifeTime = _float2(m_pGameInstance->Get_Random(m_vLifeTime.x, m_vLifeTime.y), 0.f);
+
+		pInstanceVertices[i].fIndex = (_float)i;
+
 		iter->vTop = {};
 		iter->vBottom = {};
 		++iter;
@@ -116,75 +239,16 @@ HRESULT Trail_TwoPoint_Instance::Initialize_Prototype(const CVIBuffer_Instancing
 
 #pragma endregion
 
-
-
 	return S_OK;
 }
 
-HRESULT Trail_TwoPoint_Instance::Initialize(void* pArg)
+CTrail_TwoPoint_Instance* CTrail_TwoPoint_Instance::Create(ID3D11Device* pDevice, ID3D11DeviceContext* pContext, const CVIBuffer_Instancing::INSTANCE_DESC& Desc, _bool isClient)
 {
-#pragma region INSTANCE_BUFFER
+	CTrail_TwoPoint_Instance* pInstance = new CTrail_TwoPoint_Instance(pDevice, pContext);
 
-	if (FAILED(__super::Initialize(pArg)))
-		return E_FAIL;
-
-#pragma endregion
-
-	return S_OK;
-}
-
-_bool Trail_TwoPoint_Instance::Update_Buffer(_fvector vWorldTopPos, _fvector vWorldBottomPos, _float fTimeDelta)
-{
-	TWOPOINT Point = {};
-	XMStoreFloat3(&Point.vTop, vWorldTopPos);
-	XMStoreFloat3(&Point.vBottom, vWorldBottomPos);
-	m_TrailPoses.emplace_back(Point);
-
-	if (m_TrailPoses.size() > m_iNumInstance)
-		m_TrailPoses.pop_front();
-
-	D3D11_MAPPED_SUBRESOURCE	SubResource{};
-
-	m_pContext->Map(m_pVBInstance, 0, D3D11_MAP_WRITE_NO_OVERWRITE, 0, &SubResource);
-
-	VTXTRAIL_TWOPOINT_INSTANCE* pVertices = static_cast<VTXTRAIL_TWOPOINT_INSTANCE*>(SubResource.pData);
-
-	auto& iter = m_TrailPoses.begin();
-
-	_bool m_bOver = { true };
-	for (size_t i = 0; i < m_iNumInstance; ++i)
+	if (FAILED(pInstance->Initialize_Prototype(Desc, isClient)))
 	{
-		pVertices[i].vCurTopPos = iter->vTop;
-		pVertices[i].vCurBottomPos = iter->vBottom;
-		if (0 == i)
-		{
-			pVertices[i].vPreTopPos = pVertices[i].vCurTopPos;
-			pVertices[i].vPreBottomPos = pVertices[i].vCurBottomPos;
-		}
-		else
-		{
-			pVertices[i].vPreTopPos = pVertices[i - 1].vCurTopPos;
-			pVertices[i].vPreBottomPos = pVertices[i - 1].vCurBottomPos;
-		}
-		++iter;
-		pVertices[i].vLifeTime.y += fTimeDelta;
-
-		if (pVertices[i].vLifeTime.y < pVertices[i].vLifeTime.x)
-			m_bOver = false;
-	}
-
-	m_pContext->Unmap(m_pVBInstance, 0);
-	return m_bOver;
-}
-
-
-Trail_TwoPoint_Instance* Trail_TwoPoint_Instance::Create(ID3D11Device* pDevice, ID3D11DeviceContext* pContext, const CVIBuffer_Instancing::INSTANCE_DESC& Desc)
-{
-	Trail_TwoPoint_Instance* pInstance = new Trail_TwoPoint_Instance(pDevice, pContext);
-
-	if (FAILED(pInstance->Initialize_Prototype(Desc)))
-	{
-		MSG_BOX(TEXT("Failed to Created : Trail_TwoPoint_Instance"));
+		MSG_BOX(TEXT("Failed to Created : CTrail_TwoPoint_Instance"));
 		Safe_Release(pInstance);
 	}
 
@@ -192,20 +256,20 @@ Trail_TwoPoint_Instance* Trail_TwoPoint_Instance::Create(ID3D11Device* pDevice, 
 }
 
 
-CComponent* Trail_TwoPoint_Instance::Clone(void* pArg)
+CComponent* CTrail_TwoPoint_Instance::Clone(void* pArg)
 {
-	Trail_TwoPoint_Instance* pInstance = new Trail_TwoPoint_Instance(*this);
+	CTrail_TwoPoint_Instance* pInstance = new CTrail_TwoPoint_Instance(*this);
 
 	if (FAILED(pInstance->Initialize(pArg)))
 	{
-		MSG_BOX(TEXT("Failed to Cloned : Trail_TwoPoint_Instance"));
+		MSG_BOX(TEXT("Failed to Cloned : CTrail_TwoPoint_Instance"));
 		Safe_Release(pInstance);
 	}
 
 	return pInstance;
 }
 
-void Trail_TwoPoint_Instance::Free()
+void CTrail_TwoPoint_Instance::Free()
 {
 	__super::Free();
 

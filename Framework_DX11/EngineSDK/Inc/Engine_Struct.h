@@ -150,6 +150,12 @@ namespace Engine
 		_bool isOnBloom;
 		_float fBloomThreshold;
 	}BLOOM_DESC;
+
+	typedef struct
+	{
+		_bool isOnDOF = false;
+		_float fDOF = 0.f;;
+	}DOF_DESC;
 #pragma endregion
 
 	//오브젝트 저장 및 불러오기에 사용
@@ -274,24 +280,32 @@ namespace Engine
 	{
 		XMFLOAT3 vCurPos;
 		XMFLOAT3 vPrePos;
+		XMFLOAT3 vMoveDir;
 
 		_float2 vLifeTime;
 
-		static const unsigned int	iNumElements = 4;
+		static const unsigned int	iNumElements = 5;
 		static const D3D11_INPUT_ELEMENT_DESC	Elements[iNumElements];
 	}VTXTRAIL_ONEPOINT_INSTANCE;
 
 	typedef struct ENGINE_DLL
 	{
-		XMFLOAT3 vCurTopPos;
-		XMFLOAT3 vCurBottomPos;
+		XMFLOAT3 vFirstTopPos;
+		XMFLOAT3 vFirstBottomPos;
 
-		XMFLOAT3 vPreTopPos;
-		XMFLOAT3 vPreBottomPos;
+		XMFLOAT3 vSecondTopPos;
+		XMFLOAT3 vSecondBottomPos;
 
-		_float2 vLifeTime;
+		XMFLOAT3 vThirdTopPos;
+		XMFLOAT3 vThirdBottomPos;
 
-		static const unsigned int	iNumElements = 6;
+		XMFLOAT3 vForthTopPos;
+		XMFLOAT3 vForthBottomPos;
+
+		XMFLOAT2 vLifeTime;
+		_float	fIndex;
+
+		static const unsigned int	iNumElements = 11;
 		static const D3D11_INPUT_ELEMENT_DESC	Elements[iNumElements];
 	}VTXTRAIL_TWOPOINT_INSTANCE;
 

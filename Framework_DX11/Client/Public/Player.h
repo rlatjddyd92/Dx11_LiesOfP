@@ -13,15 +13,22 @@ BEGIN(Client)
 class CPlayer final : public CPawn
 {
 public:
-	enum PARTID { PART_BODY, PART_WEAPON, PART_END };
-
 	enum WEAPON_TYPE { WEP_RAPIER, WEP_SCISSOR, WEP_FLAME, WEP_END };
 
 	enum PLAYER_STATE
 	{
-		HIT,
-		OH_IDLE, OH_WALK, OH_RUN, OH_GUARD, OH_JUMP, OH_DASH, 
-		RAPIER_NA1, RAPIER_NA2, RAPIER_SA1,
+		HIT, PARRY, HEAL, CHANGEWEP,
+
+		OH_IDLE, OH_WALK, OH_RUN, OH_SPRINT, OH_GUARD, OH_JUMP, OH_DASH,
+
+		TH_IDLE, TH_WALK, TH_RUN, TH_SPRINT, TH_GUARD, TH_JUMP, TH_DASH,
+
+		RAPIER_LATTACK0, RAPIER_LATTACK1, RAPIER_RATTACK0, RAPIER_CHARGE, RAPIER_FATAL, RAPIER_PARRYATTACK,
+
+		FLAME_LATTACK0, FLAME_LATTACK1, FLAME_RATTACK0, FLAME_RATTACK1, FLAME_CHARGE0, FLAME_CHARGE1, FLAME_FATAL, FLAME_PARRYATTACK,
+
+		SCISSOR_LATTACK0, SCISSOR_LATTACK1, SCISSOR_RATTACK0, SCISSOR_CHARGE, SCISSOR_FATAL, SCISSOR_BUFF,
+
 		STATE_END
 	};
 
@@ -38,6 +45,9 @@ public:
 		if (m_isGuard)
 			m_fGuardTime = 0.f;
 	}
+
+	_bool					Get_IsParry() { return m_isParry; }
+	void					Set_IsParry(_bool isParry) { m_isParry = isParry; }
 
 	_bool					Get_IsLockOn() { return m_isLockOn; }
 	void					Set_IsLockOn(_bool isLockOn) { m_isLockOn = isLockOn; }
@@ -67,9 +77,15 @@ public:
 	virtual HRESULT Render_LightDepth() override;
 
 public:
-	void		Move_Dir(_Vec4 vDir, _float fSpeed, _float fTimeDelta, _bool isTurn = true);
-	_Vec4		Calculate_Direction_Straight();
-	_Vec4		Calculate_Direction_Right();
+	void			Move_Dir(_Vec4 vDir, _float fTimeDelta, _bool isTurn = true);
+	_Vec4			Calculate_Direction_Straight();
+	_Vec4			Calculate_Direction_Right();
+
+	void			Change_Weapon();
+	_uint			Change_WeaponType();
+	
+	void			Seperate_Scissor();
+	void			Combine_Scissor();
 
 private:
 	list<OUTPUT_EVKEY>	m_EvKeyList;
@@ -81,11 +97,13 @@ private:
 
 	_bool				m_isJump = { false };
 	_bool				m_isGuard = { false };
+	_bool				m_isParry = { false };
 	_bool				m_isLockOn = { false };
 	_bool				m_isInvicible = { false };
 
 	_float				m_fGuardTime = {};
 
+	class CWeapon*		m_pWeapon[WEP_END] = { nullptr, };
 	WEAPON_TYPE			m_eWeaponType = { WEP_RAPIER };
 
 private:
@@ -95,10 +113,9 @@ private:
 	_bool		m_bEndAnim = { false };
 	_bool		m_bResetRootMove = { true };
 
-
 private:
 	HRESULT Ready_Components();
-	HRESULT Ready_PartObjects();
+	HRESULT Ready_Weapon();
 	HRESULT Ready_FSM();
 
 public:

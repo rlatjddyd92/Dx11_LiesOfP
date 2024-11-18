@@ -44,7 +44,7 @@ HRESULT CState_Player_Hit::Start_State(void* pArg)
 
 void CState_Player_Hit::Update(_float fTimeDelta)
 {
-    if (*m_pIsEndAnim)
+    if (End_Check())
     {
         m_pPlayer->Change_State(CPlayer::OH_IDLE);
     }
@@ -53,6 +53,43 @@ void CState_Player_Hit::Update(_float fTimeDelta)
 void CState_Player_Hit::End_State()
 {
     m_pPlayer->Set_IsGuard(false);
+}
+
+_bool CState_Player_Hit::End_Check()
+{
+    _uint iCurAnim = m_pPlayer->Get_CurrentAnimIndex();
+    _bool bEndCheck{ false };
+    if ((m_iAnimation_Hit[HIT_B]) == iCurAnim)
+    {
+        bEndCheck = m_pPlayer->Get_EndAnim(m_iAnimation_Hit[HIT_B]);
+    }
+    else if ((m_iAnimation_Hit[HIT_L]) == iCurAnim)
+    {
+        bEndCheck = m_pPlayer->Get_EndAnim(m_iAnimation_Hit[HIT_L]);
+    }
+    else if ((m_iAnimation_Hit[HIT_R]) == iCurAnim)
+    {
+        bEndCheck = m_pPlayer->Get_EndAnim(m_iAnimation_Hit[HIT_R]);
+    }
+    else if ((m_iAnimation_Hit[HIT_FB]) == iCurAnim)
+    {
+        bEndCheck = m_pPlayer->Get_EndAnim(m_iAnimation_Hit[HIT_FB]);
+    }
+    else if ((m_iAnimation_Hit[HIT_LR]) == iCurAnim)
+    {
+        bEndCheck = m_pPlayer->Get_EndAnim(m_iAnimation_Hit[HIT_LR]);
+    }
+    else if ((m_iAnimation_Hit[HIT_RL]) == iCurAnim)
+    {
+        bEndCheck = m_pPlayer->Get_EndAnim(m_iAnimation_Hit[HIT_RL]);
+    }
+    else
+    {
+
+    }
+    //애니메이션 번호와 일치하지 않는?다
+
+    return bEndCheck;
 }
 
 CState_Player_Hit* CState_Player_Hit::Create(CFsm* pFsm, CPlayer* pPlayer, _uint iStateNum, void* pArg)

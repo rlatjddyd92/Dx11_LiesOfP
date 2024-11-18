@@ -13,12 +13,12 @@ CState_Player_OH_Dash::CState_Player_OH_Dash(CFsm* pFsm, CPlayer* pPlayer)
 
 HRESULT CState_Player_OH_Dash::Initialize(_uint iStateNum, void* pArg)
 {
-    m_iAnimation_Dash[DASH_F] = m_pPlayer->Get_Model()->Find_AnimationIndex("AS_Pino_O_Dash_Normal_F", 2.f);
-    m_iAnimation_Dash[DASH_B] = m_pPlayer->Get_Model()->Find_AnimationIndex("AS_Pino_O_Dash_Normal_B", 2.f);
-    m_iAnimation_Dash[DASH_FOCUS_F] = m_pPlayer->Get_Model()->Find_AnimationIndex("AS_Pino_O_Dash_FocusHurt_F", 2.f);
-    m_iAnimation_Dash[DASH_FOCUS_B] = m_pPlayer->Get_Model()->Find_AnimationIndex("AS_Pino_O_Dash_FocusHurt_B", 2.f);
-    m_iAnimation_Dash[DASH_FOCUS_L] = m_pPlayer->Get_Model()->Find_AnimationIndex("AS_Pino_O_Dash_FocusHurt_L", 2.f);
-    m_iAnimation_Dash[DASH_FOCUS_R] = m_pPlayer->Get_Model()->Find_AnimationIndex("AS_Pino_O_Dash_FocusHurt_R", 2.f);
+    m_iAnimation_Dash[DASH_F] = m_pPlayer->Get_Model()->Find_AnimationIndex("AS_Pino_O_Dash_Normal_F", 3.5f);
+    m_iAnimation_Dash[DASH_B] = m_pPlayer->Get_Model()->Find_AnimationIndex("AS_Pino_O_Dash_Normal_B", 3.5f);
+    m_iAnimation_Dash[DASH_FOCUS_F] = m_pPlayer->Get_Model()->Find_AnimationIndex("AS_Pino_O_Dash_FocusHurt_F", 3.5f);
+    m_iAnimation_Dash[DASH_FOCUS_B] = m_pPlayer->Get_Model()->Find_AnimationIndex("AS_Pino_O_Dash_FocusHurt_B", 3.5f);
+    m_iAnimation_Dash[DASH_FOCUS_L] = m_pPlayer->Get_Model()->Find_AnimationIndex("AS_Pino_O_Dash_FocusHurt_L", 3.5f);
+    m_iAnimation_Dash[DASH_FOCUS_R] = m_pPlayer->Get_Model()->Find_AnimationIndex("AS_Pino_O_Dash_FocusHurt_R", 3.5f);
 
     FSM_INIT_DESC* pDesc = static_cast<FSM_INIT_DESC*>(pArg);
 
@@ -27,7 +27,6 @@ HRESULT CState_Player_OH_Dash::Initialize(_uint iStateNum, void* pArg)
     m_pTrackPos = pDesc->pPrevTrackPos;
 
     m_iStateNum = iStateNum;
-    m_fMoveSpeed = 2.f;
 
     return S_OK;
 }
@@ -37,6 +36,7 @@ HRESULT CState_Player_OH_Dash::Start_State(void* pArg)
     Select_DashAnimation();
 
     m_pPlayer->Set_IsInvicible(true);
+    m_pPlayer->Set_MoveSpeed(5.f);
 
     //m_pPlayer->Get_RigidBody()->Set_Friction(_float3(10.f, 0.f, 10.f));
     *m_pResetRootMove = true;
@@ -46,9 +46,8 @@ HRESULT CState_Player_OH_Dash::Start_State(void* pArg)
 
 void CState_Player_OH_Dash::Update(_float fTimeDelta)
 {
-    if (*m_pIsEndAnim)
+    if (End_Check())
     {
-        m_pPlayer->Reset_Root();
         m_pPlayer->Change_State(CPlayer::OH_IDLE);
     }
 }
@@ -83,7 +82,7 @@ void CState_Player_OH_Dash::Select_DashAnimation()
     }
     else
     {
-        if (KEY_HOLD(KEY::W))
+        if (m_pFsm->Get_PrevState() == CPlayer::TH_RUN || m_pFsm->Get_PrevState() == CPlayer::TH_SPRINT)
         {
             m_pPlayer->Change_Animation(m_iAnimation_Dash[DASH_F], false);
             return;
@@ -92,6 +91,43 @@ void CState_Player_OH_Dash::Select_DashAnimation()
         m_pPlayer->Change_Animation(m_iAnimation_Dash[DASH_B], false);
     }
 
+}
+
+_bool CState_Player_OH_Dash::End_Check()
+{
+    _uint iCurAnim = m_pPlayer->Get_CurrentAnimIndex();
+    _bool bEndCheck{ false };
+    if ((m_iAnimation_Dash[DASH_FOCUS_F]) == iCurAnim)
+    {
+        bEndCheck = m_pPlayer->Get_EndAnim(m_iAnimation_Dash[DASH_FOCUS_F]);
+    }
+    else if ((m_iAnimation_Dash[DASH_FOCUS_B]) == iCurAnim)
+    {
+        bEndCheck = m_pPlayer->Get_EndAnim(m_iAnimation_Dash[DASH_FOCUS_B]);
+    }
+    else if ((m_iAnimation_Dash[DASH_FOCUS_L]) == iCurAnim)
+    {
+        bEndCheck = m_pPlayer->Get_EndAnim(m_iAnimation_Dash[DASH_FOCUS_L]);
+    }
+    else if ((m_iAnimation_Dash[DASH_FOCUS_R]) == iCurAnim)
+    {
+        bEndCheck = m_pPlayer->Get_EndAnim(m_iAnimation_Dash[DASH_FOCUS_R]);
+    }
+    else if ((m_iAnimation_Dash[DASH_F]) == iCurAnim)
+    {
+        bEndCheck = m_pPlayer->Get_EndAnim(m_iAnimation_Dash[DASH_F]);
+    }
+    else if ((m_iAnimation_Dash[DASH_B]) == iCurAnim)
+    {
+        bEndCheck = m_pPlayer->Get_EndAnim(m_iAnimation_Dash[DASH_B]);
+    }
+    else
+    {
+
+    }
+        //애니메이션 번호와 일치하지 않는?다
+
+    return bEndCheck;
 }
 
 CState_Player_OH_Dash* CState_Player_OH_Dash::Create(CFsm* pFsm, CPlayer* pPlayer, _uint iStateNum, void* pArg)

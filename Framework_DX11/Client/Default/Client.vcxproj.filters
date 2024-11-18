@@ -46,14 +46,8 @@
     <Filter Include="02.GameObjects\03.Player">
       <UniqueIdentifier>{a04ca2a0-1907-4180-8363-482efb3255f2}</UniqueIdentifier>
     </Filter>
-    <Filter Include="02.GameObjects\03.Player\Weapon">
-      <UniqueIdentifier>{a2e63eda-00f8-4bd2-b6f4-8a17ca24f471}</UniqueIdentifier>
-    </Filter>
     <Filter Include="02.GameObjects\04.Sky">
       <UniqueIdentifier>{f17d1c89-2983-427e-9a62-7fa4c30d3ae8}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="02.GameObjects\07.ForkLift">
-      <UniqueIdentifier>{4f3837c9-f24e-4fd0-b1a8-adf1987df19d}</UniqueIdentifier>
     </Filter>
     <Filter Include="03.GameInterface_Controller">
       <UniqueIdentifier>{6fc85632-d32f-4d39-aef9-7ff0a6eb5101}</UniqueIdentifier>
@@ -289,29 +283,14 @@
     <Filter Include="02.GameObjects\10.ColliderIbject">
       <UniqueIdentifier>{e0ad8f06-a0d8-4d14-8a84-d74eacc4032c}</UniqueIdentifier>
     </Filter>
-    <Filter Include="05.Fsm\Player\OneHand\00.Attack\Rapier\SA1">
-      <UniqueIdentifier>{c45a6618-f69d-43d6-a2f9-edd908511d3c}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="05.Fsm\Player\OneHand\00.Attack\Rapier\NA1">
-      <UniqueIdentifier>{2d32d55d-f91c-470b-abd2-462b897ad152}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="05.Fsm\Player\OneHand\00.Attack\Rapier\NA2">
-      <UniqueIdentifier>{ed048a41-07c1-46ea-8ff3-b3c25282200f}</UniqueIdentifier>
-    </Filter>
     <Filter Include="05.Fsm\Player\OneHand\00.Attack\Rapier\00.FableArts">
       <UniqueIdentifier>{1f5b0ce1-9e6a-4bff-9f5e-183471e7c135}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="05.Fsm\Player\OneHand\00.Attack\Rapier\00.FableArts\Parry">
-      <UniqueIdentifier>{6f478c04-42e3-4487-8f42-ce122fd61b3d}</UniqueIdentifier>
     </Filter>
     <Filter Include="05.Fsm\Player\OneHand\00.Attack\Rapier\00.FableArts\ParryAttack">
       <UniqueIdentifier>{80eb0dfe-35b3-4ed2-905b-9da585b9da6a}</UniqueIdentifier>
     </Filter>
     <Filter Include="05.Fsm\Player\OneHand\00.Attack\Rapier\01.Fatal">
       <UniqueIdentifier>{2e09a965-6398-40b0-b8b5-a30da0923e63}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="05.Fsm\Player\OneHand\00.Attack\Rapier\02.ChargeAttack">
-      <UniqueIdentifier>{da07eebc-8583-4bcc-9fb3-22ea92aad7a8}</UniqueIdentifier>
     </Filter>
     <Filter Include="05.Fsm\Player\TwoHand\00.Attack">
       <UniqueIdentifier>{4dd86f00-dc2d-4774-9b2b-52fa164b942c}</UniqueIdentifier>
@@ -336,9 +315,108 @@
     </Filter>
     <Filter Include="05.Fsm\Player\TwoHand\Jump">
       <UniqueIdentifier>{e1cf3f66-98a7-4608-8663-96ab290a2554}</UniqueIdentifier>
-	</Filter>
+    </Filter>
     <Filter Include="05.Fsm\Monster\SimonManus\Attck\VashSwing">
       <UniqueIdentifier>{be8843e0-8da3-4bd1-8d0c-80c46017423f}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="05.Fsm\Player\Common\Parry">
+      <UniqueIdentifier>{6f478c04-42e3-4487-8f42-ce122fd61b3d}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="05.Fsm\Player\Common\Heal">
+      <UniqueIdentifier>{01bca6de-05e8-46a3-89e2-a924a96ef387}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="03.GameInterface_Controller\00.UIManager\00.UIPage\09.UIPage_Test">
+      <UniqueIdentifier>{d6f0816f-b248-400f-ae9c-070eac27ca42}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="03.GameInterface_Controller\00.UIManager\00.UIPage\10.UIPage_Ortho">
+      <UniqueIdentifier>{552aab2a-e554-4f80-96c8-2caa20267ba5}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="05.Fsm\Player\Common\Change_Weapon">
+      <UniqueIdentifier>{ca6f18a0-495c-4980-9a84-1c366e748484}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="05.Fsm\Player\OneHand\Sprint">
+      <UniqueIdentifier>{f12a6c40-0a17-4283-8554-ff531875a91a}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="05.Fsm\Player\TwoHand\Sprint">
+      <UniqueIdentifier>{99b3c7b5-3bdc-4f92-8936-234c92524826}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="05.Fsm\Player\TwoHand\00.Attack\FlameSword\RAttack00">
+      <UniqueIdentifier>{ec50ef6f-ac18-4d70-ba52-0f3d52aa0abc}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="05.Fsm\Player\TwoHand\00.Attack\FlameSword\LAttack00">
+      <UniqueIdentifier>{436fd4d0-9dce-4745-9f18-52d28f3a81a6}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="05.Fsm\Player\TwoHand\00.Attack\FlameSword\LAttack01">
+      <UniqueIdentifier>{c30bff56-87a8-45e5-b8d7-68f00bdaba62}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="05.Fsm\Player\OneHand\00.Attack\Rapier\LAttack00">
+      <UniqueIdentifier>{2d32d55d-f91c-470b-abd2-462b897ad152}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="05.Fsm\Player\OneHand\00.Attack\Rapier\LAttack01">
+      <UniqueIdentifier>{ed048a41-07c1-46ea-8ff3-b3c25282200f}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="05.Fsm\Player\OneHand\00.Attack\Rapier\RAttack00">
+      <UniqueIdentifier>{c45a6618-f69d-43d6-a2f9-edd908511d3c}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.GameObjects\05.Effect\Effect_Base\Mesh_Effect">
+      <UniqueIdentifier>{6950edf6-b86b-4f5f-bcf2-800c147433d6}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.GameObjects\06.Weapon">
+      <UniqueIdentifier>{a2e63eda-00f8-4bd2-b6f4-8a17ca24f471}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.GameObjects\06.Weapon\00.PlayerWeapon">
+      <UniqueIdentifier>{3087ee5d-9f6b-454a-b46f-ccc7f9fc03c2}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.GameObjects\06.Weapon\00.PlayerWeapon\00.Rapier">
+      <UniqueIdentifier>{2a0ca82a-4142-45d6-ad1f-fe01b396fe1b}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.GameObjects\06.Weapon\00.PlayerWeapon\01.FlameSword">
+      <UniqueIdentifier>{8ecb9e56-d419-40c3-8a37-542b0523eab1}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.GameObjects\06.Weapon\00.PlayerWeapon\02.Scissor">
+      <UniqueIdentifier>{ac08be87-0bfa-4f42-b7d1-2208db11d953}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="05.Fsm\Player\OneHand\00.Attack\Rapier\ChargeAttack">
+      <UniqueIdentifier>{da07eebc-8583-4bcc-9fb3-22ea92aad7a8}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="05.Fsm\Player\TwoHand\00.Attack\FlameSword\ChargeAttack00">
+      <UniqueIdentifier>{28d4472f-f0dc-45ad-b435-be85d446c75b}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="05.Fsm\Player\TwoHand\00.Attack\FlameSword\ChargeAttack01">
+      <UniqueIdentifier>{0fc306b7-20da-4fb7-b4bf-b8f12b366e40}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="05.Fsm\Player\TwoHand\00.Attack\FlameSword\RAttack01">
+      <UniqueIdentifier>{23dd7535-7c21-41bc-817c-6591ffb6801a}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="05.Fsm\Player\TwoHand\00.Attack\FlameSword\00.FableArts">
+      <UniqueIdentifier>{a4384797-e19d-4fd9-954f-92b259e0d346}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="05.Fsm\Player\TwoHand\00.Attack\FlameSword\00.FableArts\ParryAttack">
+      <UniqueIdentifier>{c9f490cf-084c-40ee-b614-183c9081cadc}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="05.Fsm\Player\TwoHand\00.Attack\FlameSword\01.Fatal">
+      <UniqueIdentifier>{cd5300e1-30e0-46d8-bbee-a4590107ed4b}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="05.Fsm\Player\OneHand\00.Attack\Scissor\00.FableArts">
+      <UniqueIdentifier>{4cb18c50-57be-4e3f-9310-34d67c8bf07b}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="05.Fsm\Player\OneHand\00.Attack\Scissor\01.Fatal">
+      <UniqueIdentifier>{25ff8a5b-627c-4047-bfa6-45ca227b1a5f}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="05.Fsm\Player\OneHand\00.Attack\Scissor\LAttack00">
+      <UniqueIdentifier>{ece837e8-efe3-4ef7-a45a-4319bd162b0c}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="05.Fsm\Player\OneHand\00.Attack\Scissor\LAttack01">
+      <UniqueIdentifier>{9c6322bb-0102-4966-a54e-2954f3e8b2d8}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="05.Fsm\Player\OneHand\00.Attack\Scissor\RAttack00">
+      <UniqueIdentifier>{ee0ee3c3-b4e1-4f20-8607-b6b8ae6c61c0}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.GameObjects\06.Weapon\00.PlayerWeapon\02.Scissor\Blade">
+      <UniqueIdentifier>{60b617f6-edb9-4e0a-8161-849d96c22f80}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.GameObjects\06.Weapon\00.PlayerWeapon\02.Scissor\Handle">
+      <UniqueIdentifier>{9f7e1067-c599-4797-8af4-5a3f8617b1f7}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -388,13 +466,10 @@
       <Filter>02.GameObjects\03.Player</Filter>
     </ClInclude>
     <ClInclude Include="..\Public\Weapon.h">
-      <Filter>02.GameObjects\03.Player\Weapon</Filter>
+      <Filter>02.GameObjects\06.Weapon</Filter>
     </ClInclude>
     <ClInclude Include="..\Public\Sky.h">
       <Filter>02.GameObjects\04.Sky</Filter>
-    </ClInclude>
-    <ClInclude Include="..\Public\ForkLift.h">
-      <Filter>02.GameObjects\07.ForkLift</Filter>
     </ClInclude>
     <ClInclude Include="Item_Defines.h">
       <Filter>03.GameInterface_Controller\99.GameInterface_Defines\00.Defines%28Data_Instance 전용%29</Filter>
@@ -441,7 +516,6 @@
     <ClInclude Include="Interface_Enums.h">
       <Filter>03.GameInterface_Controller\99.GameInterface_Defines</Filter>
     </ClInclude>
-    <ClInclude Include="..\Public\Particle_Snow.h" />
     <ClInclude Include="..\Public\Effect_Container.h">
       <Filter>02.GameObjects\05.Effect\Effect_Container</Filter>
     </ClInclude>
@@ -523,53 +597,122 @@
     <ClInclude Include="..\Public\State_Player_Hit.h">
       <Filter>05.Fsm\Player\Common\Hit</Filter>
     </ClInclude>
-    <ClInclude Include="..\Public\State_Player_Rapier_SA1.h">
-      <Filter>05.Fsm\Player\OneHand\00.Attack\Rapier\SA1</Filter>
+    <ClInclude Include="..\Public\State_Player_Rapier_RAttack00.h">
+      <Filter>05.Fsm\Player\OneHand\00.Attack\Rapier\RAttack00</Filter>
     </ClInclude>
-    <ClInclude Include="..\Public\State_Player_Rapier_NA1.h">
-      <Filter>05.Fsm\Player\OneHand\00.Attack\Rapier\NA1</Filter>
+    <ClInclude Include="..\Public\State_Player_Rapier_LAttack00.h">
+      <Filter>05.Fsm\Player\OneHand\00.Attack\Rapier\LAttack00</Filter>
     </ClInclude>
-    <ClInclude Include="..\Public\State_Player_Rapier_NA2.h">
-      <Filter>05.Fsm\Player\OneHand\00.Attack\Rapier\NA2</Filter>
-	</ClInclude>
-    <ClInclude Include="..\Public\State_SimonManusP1_AttackStop.h">
-      <Filter>05.Fsm\Monster\SimonManus\Attck\AttackStop</Filter>
+    <ClInclude Include="..\Public\State_Player_Rapier_LAttack01.h">
+      <Filter>05.Fsm\Player\OneHand\00.Attack\Rapier\LAttack01</Filter>
     </ClInclude>
-    <ClInclude Include="..\Public\State_SimonManusP1_Die.h">
-      <Filter>05.Fsm\Monster\SimonManus\Die</Filter>
+    <ClInclude Include="..\Public\State_Player_Rapier_Charge.h">
+      <Filter>05.Fsm\Player\OneHand\00.Attack\Rapier\ChargeAttack</Filter>
     </ClInclude>
-    <ClInclude Include="..\Public\State_SimonManusP1_Grogy.h">
-      <Filter>05.Fsm\Monster\SimonManus\Grogy</Filter>
+    <ClInclude Include="..\Public\State_Player_Rapier_Fatal.h">
+      <Filter>05.Fsm\Player\OneHand\00.Attack\Rapier\01.Fatal</Filter>
     </ClInclude>
-    <ClInclude Include="..\Public\State_SimonManusP1_HitFatal.h">
-      <Filter>05.Fsm\Monster\SimonManus\HitFatal</Filter>
+    <ClInclude Include="..\Public\State_Player_Parry.h">
+      <Filter>05.Fsm\Player\Common\Parry</Filter>
     </ClInclude>
-    <ClInclude Include="..\Public\State_SimonManusP1_Idle.h">
-      <Filter>05.Fsm\Monster\SimonManus\Idle</Filter>
+    <ClInclude Include="..\Public\State_Player_Heal.h">
+      <Filter>05.Fsm\Player\Common\Heal</Filter>
     </ClInclude>
-    <ClInclude Include="..\Public\State_SimonManusP1_Run.h">
-      <Filter>05.Fsm\Monster\SimonManus\Run</Filter>
+    <ClInclude Include="..\Public\UIPage_Ortho.h">
+      <Filter>03.GameInterface_Controller\00.UIManager\00.UIPage\10.UIPage_Ortho</Filter>
     </ClInclude>
-    <ClInclude Include="..\Public\State_SimonManusP1_StingAttack.h">
-      <Filter>05.Fsm\Monster\SimonManus\Attck\Sting</Filter>
+    <ClInclude Include="UIPage_Ortho_Include.h">
+      <Filter>03.GameInterface_Controller\99.GameInterface_Defines\00.Defines%28Data_Instance 전용%29</Filter>
     </ClInclude>
-    <ClInclude Include="..\Public\State_SimonManusP1_UpperAttack.h">
-      <Filter>05.Fsm\Monster\SimonManus\Attck\Upper</Filter>
+    <ClInclude Include="..\Public\State_Player_OH_Sprint.h">
+      <Filter>05.Fsm\Player\OneHand\Sprint</Filter>
     </ClInclude>
-    <ClInclude Include="..\Public\State_SimonManusP1_Walk.h">
-      <Filter>05.Fsm\Monster\SimonManus\Walk</Filter>
+    <ClInclude Include="..\Public\State_Player_ChangeWeapon.h">
+      <Filter>05.Fsm\Player\Common\Change_Weapon</Filter>
     </ClInclude>
-    <ClInclude Include="..\Public\State_SimonManusP1_AvoidSwing.h">
-      <Filter>05.Fsm\Monster\SimonManus\Attck\AvoidSwing</Filter>
+    <ClInclude Include="..\Public\State_Player_TH_Dash.h">
+      <Filter>05.Fsm\Player\TwoHand\Dash</Filter>
     </ClInclude>
-    <ClInclude Include="..\Public\State_SimonManusP1_ChasingSwing.h">
-      <Filter>05.Fsm\Monster\SimonManus\Attck\ChasingSwing</Filter>
+    <ClInclude Include="..\Public\State_Player_TH_Guard.h">
+      <Filter>05.Fsm\Player\TwoHand\Guard</Filter>
     </ClInclude>
-    <ClInclude Include="..\Public\State_SimonManusP1_JumpToSwing.h">
-      <Filter>05.Fsm\Monster\SimonManus\Attck\JumpToSwing</Filter>
+    <ClInclude Include="..\Public\State_Player_TH_Idle.h">
+      <Filter>05.Fsm\Player\TwoHand\Idle</Filter>
     </ClInclude>
-    <ClInclude Include="..\Public\State_SimonManusP1_Stamp.h">
-      <Filter>05.Fsm\Monster\SimonManus\Attck\Stamp</Filter>
+    <ClInclude Include="..\Public\State_Player_TH_Jump.h">
+      <Filter>05.Fsm\Player\TwoHand\Jump</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Public\State_Player_TH_Run.h">
+      <Filter>05.Fsm\Player\TwoHand\Run</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Public\State_Player_TH_Sprint.h">
+      <Filter>05.Fsm\Player\TwoHand\Sprint</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Public\State_Player_TH_Walk.h">
+      <Filter>05.Fsm\Player\TwoHand\Walk</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Public\State_Player_Flame_RAttack00.h">
+      <Filter>05.Fsm\Player\TwoHand\00.Attack\FlameSword\RAttack00</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Public\State_Player_Flame_LAttack00.h">
+      <Filter>05.Fsm\Player\TwoHand\00.Attack\FlameSword\LAttack00</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Public\State_Player_Flame_LAttack01.h">
+      <Filter>05.Fsm\Player\TwoHand\00.Attack\FlameSword\LAttack01</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Public\UIPage_Menu.h">
+      <Filter>03.GameInterface_Controller\00.UIManager\00.UIPage\03.UIPage_Menu</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Public\UIPage_Equip.h">
+      <Filter>03.GameInterface_Controller\00.UIManager\00.UIPage\05.UIPage_Equip</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Public\UIPage_Inven.h">
+      <Filter>03.GameInterface_Controller\00.UIManager\00.UIPage\04.UIPage_Inven</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Public\UIPage_LevelUp.h">
+      <Filter>03.GameInterface_Controller\00.UIManager\00.UIPage\07.UIPage_LevelUp</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Public\UIPage_Skill.h">
+      <Filter>03.GameInterface_Controller\00.UIManager\00.UIPage\08.UIPage_Skill</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Public\UIPage_Stat.h">
+      <Filter>03.GameInterface_Controller\00.UIManager\00.UIPage\06.UIPage_Stat</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Public\UIPage_Test.h">
+      <Filter>03.GameInterface_Controller\00.UIManager\00.UIPage\09.UIPage_Test</Filter>
+    </ClInclude>
+    <ClInclude Include="..\public\Mesh_Effect.h">
+      <Filter>02.GameObjects\05.Effect\Effect_Base\Mesh_Effect</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Public\Weapon_Rapier.h">
+      <Filter>02.GameObjects\06.Weapon\00.PlayerWeapon\00.Rapier</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Public\Weapon_FlameSword.h">
+      <Filter>02.GameObjects\06.Weapon\00.PlayerWeapon\01.FlameSword</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Public\Weapon_Scissor.h">
+      <Filter>02.GameObjects\06.Weapon\00.PlayerWeapon\02.Scissor</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Public\State_Player_Flame_Charge00.h">
+      <Filter>05.Fsm\Player\TwoHand\00.Attack\FlameSword\ChargeAttack00</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Public\State_Player_Flame_RAttack01.h">
+      <Filter>05.Fsm\Player\TwoHand\00.Attack\FlameSword\RAttack01</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Public\State_Player_Flame_Charge01.h">
+      <Filter>05.Fsm\Player\TwoHand\00.Attack\FlameSword\ChargeAttack01</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Public\State_Player_Scissor_LAttack00.h">
+      <Filter>05.Fsm\Player\OneHand\00.Attack\Scissor\LAttack00</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Public\State_Player_Scissor_LAttack01.h">
+      <Filter>05.Fsm\Player\OneHand\00.Attack\Scissor\LAttack01</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Public\State_Player_Scissor_RAttack00.h">
+      <Filter>05.Fsm\Player\OneHand\00.Attack\Scissor\RAttack00</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Public\Weapon_Scissor_Handle.h">
+      <Filter>02.GameObjects\06.Weapon\00.PlayerWeapon\02.Scissor\Handle</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -610,13 +753,10 @@
       <Filter>02.GameObjects\03.Player</Filter>
     </ClCompile>
     <ClCompile Include="..\Private\Weapon.cpp">
-      <Filter>02.GameObjects\03.Player\Weapon</Filter>
+      <Filter>02.GameObjects\06.Weapon</Filter>
     </ClCompile>
     <ClCompile Include="..\Private\Sky.cpp">
       <Filter>02.GameObjects\04.Sky</Filter>
-    </ClCompile>
-    <ClCompile Include="..\Private\ForkLift.cpp">
-      <Filter>02.GameObjects\07.ForkLift</Filter>
     </ClCompile>
     <ClCompile Include="..\Private\UIManager.cpp">
       <Filter>03.GameInterface_Controller\00.UIManager</Filter>
@@ -645,7 +785,6 @@
     <ClCompile Include="..\Private\Player_Stat_Manager.cpp">
       <Filter>03.GameInterface_Controller\02.Player_Stat_Manager</Filter>
     </ClCompile>
-    <ClCompile Include="..\Private\Particle_Snow.cpp" />
     <ClCompile Include="..\Private\Effect_Container.cpp">
       <Filter>02.GameObjects\05.Effect\Effect_Container</Filter>
     </ClCompile>
@@ -727,53 +866,119 @@
     <ClCompile Include="..\Private\State_Player_Hit.cpp">
       <Filter>05.Fsm\Player\Common\Hit</Filter>
     </ClCompile>
-    <ClCompile Include="..\Private\State_Player_Rapier_SA1.cpp">
-      <Filter>05.Fsm\Player\OneHand\00.Attack\Rapier\SA1</Filter>
+    <ClCompile Include="..\Private\State_Player_Rapier_RAttack00.cpp">
+      <Filter>05.Fsm\Player\OneHand\00.Attack\Rapier\RAttack00</Filter>
     </ClCompile>
-    <ClCompile Include="..\Private\State_Player_Rapier_NA1.cpp">
-      <Filter>05.Fsm\Player\OneHand\00.Attack\Rapier\NA1</Filter>
+    <ClCompile Include="..\Private\State_Player_Rapier_LAttack00.cpp">
+      <Filter>05.Fsm\Player\OneHand\00.Attack\Rapier\LAttack00</Filter>
     </ClCompile>
-    <ClCompile Include="..\Private\State_Player_Rapier_NA2.cpp">
-      <Filter>05.Fsm\Player\OneHand\00.Attack\Rapier\NA2</Filter>
-	</ClCompile>
-    <ClCompile Include="..\Private\State_SimonManusP1_AttackStop.cpp">
-      <Filter>05.Fsm\Monster\SimonManus\Attck\AttackStop</Filter>
+    <ClCompile Include="..\Private\State_Player_Rapier_LAttack01.cpp">
+      <Filter>05.Fsm\Player\OneHand\00.Attack\Rapier\LAttack01</Filter>
     </ClCompile>
-    <ClCompile Include="..\Private\State_SimonManusP1_Die.cpp">
-      <Filter>05.Fsm\Monster\SimonManus\Die</Filter>
+    <ClCompile Include="..\Private\State_Player_Rapier_Charge.cpp">
+      <Filter>05.Fsm\Player\OneHand\00.Attack\Rapier\ChargeAttack</Filter>
     </ClCompile>
-    <ClCompile Include="..\Private\State_SimonManusP1_Grogy.cpp">
-      <Filter>05.Fsm\Monster\SimonManus\Grogy</Filter>
+    <ClCompile Include="..\Private\State_Player_Rapier_Fatal.cpp">
+      <Filter>05.Fsm\Player\OneHand\00.Attack\Rapier\01.Fatal</Filter>
     </ClCompile>
-    <ClCompile Include="..\Private\State_SimonManusP1_HitFatal.cpp">
-      <Filter>05.Fsm\Monster\SimonManus\HitFatal</Filter>
+    <ClCompile Include="..\Private\State_Player_Parry.cpp">
+      <Filter>05.Fsm\Player\Common\Parry</Filter>
     </ClCompile>
-    <ClCompile Include="..\Private\State_SimonManusP1_Idle.cpp">
-      <Filter>05.Fsm\Monster\SimonManus\Idle</Filter>
+    <ClCompile Include="..\Private\State_Player_Heal.cpp">
+      <Filter>05.Fsm\Player\Common\Heal</Filter>
     </ClCompile>
-    <ClCompile Include="..\Private\State_SimonManusP1_Run.cpp">
-      <Filter>05.Fsm\Monster\SimonManus\Run</Filter>
+    <ClCompile Include="..\Private\UIPage_Ortho.cpp">
+      <Filter>03.GameInterface_Controller\00.UIManager\00.UIPage\10.UIPage_Ortho</Filter>
     </ClCompile>
-    <ClCompile Include="..\Private\State_SimonManusP1_StingAttack.cpp">
-      <Filter>05.Fsm\Monster\SimonManus\Attck\Sting</Filter>
+    <ClCompile Include="..\Private\State_Player_OH_Sprint.cpp">
+      <Filter>05.Fsm\Player\OneHand\Sprint</Filter>
     </ClCompile>
-    <ClCompile Include="..\Private\State_SimonManusP1_UpperAttack.cpp">
-      <Filter>05.Fsm\Monster\SimonManus\Attck\Upper</Filter>
+    <ClCompile Include="..\Private\State_Player_ChangeWeapon.cpp">
+      <Filter>05.Fsm\Player\Common\Change_Weapon</Filter>
     </ClCompile>
-    <ClCompile Include="..\Private\State_SimonManusP1_Walk.cpp">
-      <Filter>05.Fsm\Monster\SimonManus\Walk</Filter>
+    <ClCompile Include="..\Private\State_Player_TH_Dash.cpp">
+      <Filter>05.Fsm\Player\TwoHand\Dash</Filter>
     </ClCompile>
-    <ClCompile Include="..\Private\State_SimonManusP1_AvoidSwing.cpp">
-      <Filter>05.Fsm\Monster\SimonManus\Attck\AvoidSwing</Filter>
+    <ClCompile Include="..\Private\State_Player_TH_Guard.cpp">
+      <Filter>05.Fsm\Player\TwoHand\Guard</Filter>
     </ClCompile>
-    <ClCompile Include="..\Private\State_SimonManusP1_ChasingSwing.cpp">
-      <Filter>05.Fsm\Monster\SimonManus\Attck\ChasingSwing</Filter>
+    <ClCompile Include="..\Private\State_Player_TH_Idle.cpp">
+      <Filter>05.Fsm\Player\TwoHand\Idle</Filter>
     </ClCompile>
-    <ClCompile Include="..\Private\State_SimonManusP1_JumpToSwing.cpp">
-      <Filter>05.Fsm\Monster\SimonManus\Attck\JumpToSwing</Filter>
+    <ClCompile Include="..\Private\State_Player_TH_Jump.cpp">
+      <Filter>05.Fsm\Player\TwoHand\Jump</Filter>
     </ClCompile>
-    <ClCompile Include="..\Private\State_SimonManusP1_Stamp.cpp">
-      <Filter>05.Fsm\Monster\SimonManus\Attck\Stamp</Filter>
+    <ClCompile Include="..\Private\State_Player_TH_Run.cpp">
+      <Filter>05.Fsm\Player\TwoHand\Run</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Private\State_Player_TH_Sprint.cpp">
+      <Filter>05.Fsm\Player\TwoHand\Sprint</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Private\State_Player_TH_Walk.cpp">
+      <Filter>05.Fsm\Player\TwoHand\Walk</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Private\State_Player_Flame_RAttack00.cpp">
+      <Filter>05.Fsm\Player\TwoHand\00.Attack\FlameSword\RAttack00</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Private\State_Player_Flame_LAttack00.cpp">
+      <Filter>05.Fsm\Player\TwoHand\00.Attack\FlameSword\LAttack00</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Private\State_Player_Flame_LAttack01.cpp">
+      <Filter>05.Fsm\Player\TwoHand\00.Attack\FlameSword\LAttack01</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Private\UIPage_Menu.cpp">
+      <Filter>03.GameInterface_Controller\00.UIManager\00.UIPage\03.UIPage_Menu</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Private\UIPage_Equip.cpp">
+      <Filter>03.GameInterface_Controller\00.UIManager\00.UIPage\05.UIPage_Equip</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Private\UIPage_Inven.cpp">
+      <Filter>03.GameInterface_Controller\00.UIManager\00.UIPage\04.UIPage_Inven</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Private\UIPage_LevelUp.cpp">
+      <Filter>03.GameInterface_Controller\00.UIManager\00.UIPage\07.UIPage_LevelUp</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Private\UIPage_Skill.cpp">
+      <Filter>03.GameInterface_Controller\00.UIManager\00.UIPage\08.UIPage_Skill</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Private\UIPage_Stat.cpp">
+      <Filter>03.GameInterface_Controller\00.UIManager\00.UIPage\06.UIPage_Stat</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Private\UIPage_Test.cpp">
+      <Filter>03.GameInterface_Controller\00.UIManager\00.UIPage\09.UIPage_Test</Filter>
+    </ClCompile>
+    <ClCompile Include="..\private\Mesh_Effect.cpp">
+      <Filter>02.GameObjects\05.Effect\Effect_Base\Mesh_Effect</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Private\Weapon_Rapier.cpp">
+      <Filter>02.GameObjects\06.Weapon\00.PlayerWeapon\00.Rapier</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Private\Weapon_FlameSword.cpp">
+      <Filter>02.GameObjects\06.Weapon\00.PlayerWeapon\01.FlameSword</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Private\Weapon_Scissor.cpp">
+      <Filter>02.GameObjects\06.Weapon\00.PlayerWeapon\02.Scissor</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Private\State_Player_Flame_Charge00.cpp">
+      <Filter>05.Fsm\Player\TwoHand\00.Attack\FlameSword\ChargeAttack00</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Private\State_Player_Flame_RAttack01.cpp">
+      <Filter>05.Fsm\Player\TwoHand\00.Attack\FlameSword\RAttack01</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Private\State_Player_Flame_Charge01.cpp">
+      <Filter>05.Fsm\Player\TwoHand\00.Attack\FlameSword\ChargeAttack01</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Private\State_Player_Scissor_LAttack00.cpp">
+      <Filter>05.Fsm\Player\OneHand\00.Attack\Scissor\LAttack00</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Private\State_Player_Scissor_LAttack01.cpp">
+      <Filter>05.Fsm\Player\OneHand\00.Attack\Scissor\LAttack01</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Private\State_Player_Scissor_RAttack00.cpp">
+      <Filter>05.Fsm\Player\OneHand\00.Attack\Scissor\RAttack00</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Private\Weapon_Scissor_Handle.cpp">
+      <Filter>02.GameObjects\06.Weapon\00.PlayerWeapon\02.Scissor\Handle</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -811,6 +1016,24 @@
       <Filter>97.ShaderFiles</Filter>
     </FxCompile>
     <FxCompile Include="..\Bin\ShaderFiles\Shader_VtxRectInstance.hlsl">
+      <Filter>97.ShaderFiles</Filter>
+    </FxCompile>
+    <FxCompile Include="..\Bin\ShaderFiles\Shader_Effect_Mesh.hlsl">
+      <Filter>97.ShaderFiles</Filter>
+    </FxCompile>
+    <FxCompile Include="..\Bin\ShaderFiles\Shader_Trail_MultiPoint_Compute.hlsl">
+      <Filter>97.ShaderFiles</Filter>
+    </FxCompile>
+    <FxCompile Include="..\Bin\ShaderFiles\Shader_TrailHead_PointInstance.hlsl">
+      <Filter>97.ShaderFiles</Filter>
+    </FxCompile>
+    <FxCompile Include="..\Bin\ShaderFiles\Shader_TrailTail_PointInstance.hlsl">
+      <Filter>97.ShaderFiles</Filter>
+    </FxCompile>
+    <FxCompile Include="..\Bin\ShaderFiles\Shader_VtxTrail_OnePoint_Instance.hlsl">
+      <Filter>97.ShaderFiles</Filter>
+    </FxCompile>
+    <FxCompile Include="..\Bin\ShaderFiles\Shader_VtxTrail_TwoPoint_Instance.hlsl">
       <Filter>97.ShaderFiles</Filter>
     </FxCompile>
     <FxCompile Include="..\Bin\ShaderFiles\Shader_Effect_Texture.hlsl">

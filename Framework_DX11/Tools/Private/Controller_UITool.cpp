@@ -124,9 +124,9 @@ void CController_UITool::UIPage_Edit()
 		ImGui::PushItemWidth(100.f);
 		ImGui::Text("PageCenter");
 		ImGui::SameLine();
-		ImGui::InputFloat("x", &m_vecPageInfo[m_iNowSelectNum]->fPosition.x);
+		ImGui::DragFloat("x", &m_vecPageInfo[m_iNowSelectNum]->fPosition.x);
 		ImGui::SameLine();
-		ImGui::InputFloat("y", &m_vecPageInfo[m_iNowSelectNum]->fPosition.y);
+		ImGui::DragFloat("y", &m_vecPageInfo[m_iNowSelectNum]->fPosition.y);
 
 		ImGui::NewLine();
 
@@ -210,22 +210,40 @@ void CController_UITool::UIPart_Edit()
 		// 사이즈
 		ImGui::Text("Size");
 		ImGui::SameLine();
-		ImGui::InputFloat("SizeX", &pNow->fSize.x);
+		ImGui::DragFloat("SizeX", &pNow->fSize.x);
 		ImGui::SameLine();
-		ImGui::InputFloat("SizeY", &pNow->fSize.y);
+		ImGui::DragFloat("SizeY", &pNow->fSize.y);
 
 		ImGui::SeparatorText("Texture");
 		// 텍스쳐
 		ImGui::Text("Texture");
 		ImGui::SameLine();
-		ImGui::InputInt("Tex: ", &pNow->iTexture_Index);
+		ImGui::Checkbox("IsItem", &pNow->bIsItem);
 		ImGui::SameLine();
-		if (pNow->iTexture_Index == -1)
-			ImGui::Text("none(NoTexture)");
-		else if ((pNow->iTexture_Index < 0) || (pNow->iTexture_Index >= m_pUIRender->GetTextureCount()))
-			ImGui::Text("※ WrongNum");
+
+		if (pNow->bIsItem)
+		{
+			ImGui::InputInt("Tex: ", &pNow->iTexture_Index);
+			ImGui::SameLine();
+			if (pNow->iTexture_Index == -1)
+				ImGui::Text("none(NoTexture)");
+			else if ((pNow->iTexture_Index < 0) || (pNow->iTexture_Index >= m_pUIRender->GetTextureCount_Item()))
+				ImGui::Text("※ WrongNum");
+			else
+				ImGui::Text(m_pUIRender->GetTextureTag_Item(pNow->iTexture_Index));
+		}
 		else
-			ImGui::Text(m_pUIRender->GetTextureTag(pNow->iTexture_Index));
+		{
+			ImGui::InputInt("Tex: ", &pNow->iTexture_Index);
+			ImGui::SameLine();
+			if (pNow->iTexture_Index == -1)
+				ImGui::Text("none(NoTexture)");
+			else if ((pNow->iTexture_Index < 0) || (pNow->iTexture_Index >= m_pUIRender->GetTextureCount()))
+				ImGui::Text("※ WrongNum");
+			else
+				ImGui::Text(m_pUIRender->GetTextureTag(pNow->iTexture_Index));
+		}
+		
 
 		ImGui::DragFloat("R", &pNow->fTextureColor.x);
 		ImGui::SameLine();
@@ -272,23 +290,23 @@ void CController_UITool::UIPart_Edit()
 		{
 			ImGui::Text("Adjust");
 			ImGui::SameLine();
-			ImGui::InputFloat("Adj.x", &pNow->fAdjust.x);
+			ImGui::DragFloat("Adj.x", &pNow->fAdjust.x);
 			ImGui::SameLine();
-			ImGui::InputFloat("Adj.y", &pNow->fAdjust.y);
+			ImGui::DragFloat("Adj.y", &pNow->fAdjust.y);
 		}
 		else
 		{
 			ImGui::Text("Adjust_Start");
 			ImGui::SameLine();
-			ImGui::InputFloat("Adj_S.x", &pNow->fAdjust_Start.x);
+			ImGui::DragFloat("Adj_S.x", &pNow->fAdjust_Start.x);
 			ImGui::SameLine();
-			ImGui::InputFloat("Adj_S.y", &pNow->fAdjust_Start.y);
+			ImGui::DragFloat("Adj_S.y", &pNow->fAdjust_Start.y);
 
 			ImGui::Text("Adjust_End");
 			ImGui::SameLine();
 			ImGui::DragFloat("Adj_E.x", &pNow->fAdjust_End.x);
 			ImGui::SameLine();
-			ImGui::InputFloat("Adj_E.y", &pNow->fAdjust_End.y);
+			ImGui::DragFloat("Adj_E.y", &pNow->fAdjust_End.y);
 
 			if (pNow->iMoveType == _int(MOVETYPE::TYPE_BAR))
 				ImGui::Combo("Direc", &pNow->bBarDirecX, m_szBarDirec, 2);
@@ -338,27 +356,7 @@ void CController_UITool::UIPart_Render()
 
 void CController_UITool::FontTest()
 {
-	// 폰트 테스트 
-
-	_float fX = 700.f;
-	_float fY = 50.f;
-	_float fGap = 1.f;
-
-	m_pGameInstance->Render_Text(TEXT("FONT_INFO_12"), TEXT("r : INFO_12"), { fX,fY + (fGap * 0),0.f,0.f });
-	m_pGameInstance->Render_Text(TEXT("FONT_INFO_18"), TEXT("r : INFO_18"), { fX,fY + (fGap * 12),0.f,0.f });
-	m_pGameInstance->Render_Text(TEXT("FONT_INFO_24"), TEXT("r : INFO_24"), { fX,fY + (fGap * 30),0.f,0.f });
-	m_pGameInstance->Render_Text(TEXT("FONT_INFO_36"), TEXT("r : INFO_36"), { fX,fY + (fGap * 54),0.f,0.f });
-	m_pGameInstance->Render_Text(TEXT("FONT_INFO_48"), TEXT("r : INFO_48"), { fX,fY + (fGap * 90),0.f,0.f });
-	m_pGameInstance->Render_Text(TEXT("FONT_INFO_60"), TEXT("r : INFO_60"), { fX,fY + (fGap * 138),0.f,0.f });
-	m_pGameInstance->Render_Text(TEXT("FONT_INFO_72"), TEXT("r : INFO_72"), { fX,fY + (fGap * 198),0.f,0.f });
-	m_pGameInstance->Render_Text(TEXT("FONT_TITLE_12"), TEXT("r : TITLE_12"), { fX,fY + (fGap * 270),0.f,0.f });
-	m_pGameInstance->Render_Text(TEXT("FONT_TITLE_18"), TEXT("r : TITLE_18"), { fX,fY + (fGap * 282),0.f,0.f });
-	m_pGameInstance->Render_Text(TEXT("FONT_TITLE_24"), TEXT("r : TITLE_24"), { fX,fY + (fGap * 300),0.f,0.f });
-	m_pGameInstance->Render_Text(TEXT("FONT_TITLE_36"), TEXT("r : TITLE_36"), { fX,fY + (fGap * 324),0.f,0.f });
-	m_pGameInstance->Render_Text(TEXT("FONT_TITLE_48"), TEXT("r : TITLE_48"), { fX,fY + (fGap * 360),0.f,0.f });
-	m_pGameInstance->Render_Text(TEXT("FONT_TITLE_60"), TEXT("r : TITLE_60"), { fX,fY + (fGap * 408),0.f,0.f });
-	m_pGameInstance->Render_Text(TEXT("FONT_TITLE_72"), TEXT("r : TITLE_72"), { fX,fY + (fGap * 468),0.f,0.f });
-
+	
 
 }
 
@@ -529,6 +527,7 @@ HRESULT CController_UITool::SavePart()
 			vecPart.push_back(to_wstring(pNow->fTextColor.y));
 			vecPart.push_back(to_wstring(pNow->fTextColor.z));
 			vecPart.push_back(to_wstring(pNow->fTextColor.w));
+			vecPart.push_back(to_wstring(pNow->bIsItem));
 
 			vecBuffer.push_back(vecPart);
 		}
@@ -579,6 +578,8 @@ HRESULT CController_UITool::LoadPart()
 
 		pNew->bCenter = stoi(vecBuffer[i][27]);
 		pNew->fTextColor = { stof(vecBuffer[i][28]) , stof(vecBuffer[i][29]) , stof(vecBuffer[i][30]) , stof(vecBuffer[i][31]) };
+
+		pNew->bIsItem = stoi(vecBuffer[i][32]);
 
 		pNew->MakeDirec();
 		if (pNew->iParentPart_Index == -1)
@@ -696,6 +697,7 @@ HRESULT CController_UITool::MakeClientData_Part(HANDLE handle, DWORD* dword, vec
 		WriteFile(handle, &iter->iParentPart_Index, sizeof(_int), dword, nullptr);
 		WriteFile(handle, &iter->iTexture_Index, sizeof(_int), dword, nullptr);
 		WriteFile(handle, &iter->fTextureColor, sizeof(_float4), dword, nullptr);
+		WriteFile(handle, &iter->bIsItem, sizeof(_bool), dword, nullptr);
 
 		_int iIndexPartName = -1;
 

@@ -91,9 +91,6 @@
     <Filter Include="01.Utility\03.Components\Model\Animation\Channel">
       <UniqueIdentifier>{cf225920-0c12-46d0-8759-8c28da2d016d}</UniqueIdentifier>
     </Filter>
-    <Filter Include="01.Utility\02.GameObjects\04.ContainerObject">
-      <UniqueIdentifier>{ae0472c9-0c86-4be4-a77d-c28a69aa7f0c}</UniqueIdentifier>
-    </Filter>
     <Filter Include="01.Utility\03.Components\Navigation">
       <UniqueIdentifier>{21431b58-a1df-401f-b188-25f66090e950}</UniqueIdentifier>
     </Filter>
@@ -190,9 +187,6 @@
     <Filter Include="01.Utility\02.GameObjects\01.Pawn">
       <UniqueIdentifier>{797f81b3-b812-4a52-80a6-373a88f8797a}</UniqueIdentifier>
     </Filter>
-    <Filter Include="01.Utility\02.GameObjects\01.Pawn\PartObject">
-      <UniqueIdentifier>{4a131650-3fd0-4e47-9972-f82adfafc6f6}</UniqueIdentifier>
-    </Filter>
     <Filter Include="01.Utility\97.CSVFileManager">
       <UniqueIdentifier>{a318eb36-df00-4b66-85dc-c9029b0fbc28}</UniqueIdentifier>
     </Filter>
@@ -219,6 +213,9 @@
     </Filter>
     <Filter Include="01.Utility\03.Components\Model\ObjectOctree">
       <UniqueIdentifier>{a24fcefc-62b5-4a50-8240-d400693ea04d}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="01.Utility\03.Components\VIBuffer\Instancing\Trail\MultiPoint">
+      <UniqueIdentifier>{c5a9687c-ed44-49d1-ae87-959bb47dbd00}</UniqueIdentifier>
     </Filter>
     <Filter Include="01.Utility\13.Occludee">
       <UniqueIdentifier>{70fc1e80-1456-4179-843f-5d3bf3038f65}</UniqueIdentifier>
@@ -308,12 +305,6 @@
     </ClCompile>
     <ClCompile Include="..\private\Channel.cpp">
       <Filter>01.Utility\03.Components\Model\Animation\Channel</Filter>
-    </ClCompile>
-    <ClCompile Include="..\private\PartObject.cpp">
-      <Filter>01.Utility\02.GameObjects\01.Pawn\PartObject</Filter>
-    </ClCompile>
-    <ClCompile Include="..\private\ContainerObject.cpp">
-      <Filter>01.Utility\02.GameObjects\04.ContainerObject</Filter>
     </ClCompile>
     <ClCompile Include="..\private\Navigation.cpp">
       <Filter>01.Utility\03.Components\Navigation</Filter>
@@ -423,10 +414,11 @@
     <ClCompile Include="..\private\Trail_TwoPoint_Instance.cpp">
       <Filter>01.Utility\03.Components\VIBuffer\Instancing\Trail\TwoPoint</Filter>
     </ClCompile>
-    <ClCompile Include="..\Private\EasyDrawSphere.cpp" />
-    <ClCompile Include="..\Private\EasyDrawSphere.cpp" />
     <ClCompile Include="..\Private\ObjectOctree.cpp">
       <Filter>01.Utility\03.Components\Model\ObjectOctree</Filter>
+    </ClCompile>
+    <ClCompile Include="..\private\Trail_MultiPoint_Instance.cpp">
+      <Filter>01.Utility\03.Components\VIBuffer\Instancing\Trail\MultiPoint</Filter>
     </ClCompile>
     <ClCompile Include="..\Private\Occludee.cpp">
       <Filter>01.Utility\13.Occludee</Filter>
@@ -514,9 +506,6 @@
     <ClInclude Include="..\Public\Input_Device.h">
       <Filter>00.System\01.Device\Input</Filter>
     </ClInclude>
-    <ClInclude Include="..\public\Model.h">
-      <Filter>01.Utility\03.Components\Model</Filter>
-    </ClInclude>
     <ClInclude Include="..\public\Mesh.h">
       <Filter>01.Utility\03.Components\Model\Mesh</Filter>
     </ClInclude>
@@ -528,12 +517,6 @@
     </ClInclude>
     <ClInclude Include="..\public\Channel.h">
       <Filter>01.Utility\03.Components\Model\Animation\Channel</Filter>
-    </ClInclude>
-    <ClInclude Include="..\public\PartObject.h">
-      <Filter>01.Utility\02.GameObjects\01.Pawn\PartObject</Filter>
-    </ClInclude>
-    <ClInclude Include="..\public\ContainerObject.h">
-      <Filter>01.Utility\02.GameObjects\04.ContainerObject</Filter>
     </ClInclude>
     <ClInclude Include="..\public\Navigation.h">
       <Filter>01.Utility\03.Components\Navigation</Filter>
@@ -646,9 +629,23 @@
     <ClInclude Include="..\public\Trail_TwoPoint_Instance.h">
       <Filter>01.Utility\03.Components\VIBuffer\Instancing\Trail\TwoPoint</Filter>
     </ClInclude>
-    <ClInclude Include="..\Public\EasyDrawSphere.h" />
     <ClInclude Include="..\Public\ObjectOctree.h">
       <Filter>01.Utility\03.Components\Model\ObjectOctree</Filter>
+    </ClInclude>
+    <ClInclude Include="..\public\Trail_MultiPoint_Instance.h">
+      <Filter>01.Utility\03.Components\VIBuffer\Instancing\Trail\MultiPoint</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Public\Component_Manager.h">
+      <Filter>01.Utility\03.Components\00.Manager</Filter>
+    </ClInclude>
+    <ClInclude Include="..\public\Model.h">
+      <Filter>01.Utility\03.Components\Model</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Public\ObjectOctree.h">
+      <Filter>01.Utility\03.Components\Model\ObjectOctree</Filter>
+    </ClInclude>
+    <ClInclude Include="..\public\Trail_MultiPoint_Instance.h">
+      <Filter>01.Utility\03.Components\VIBuffer\Instancing\Trail\MultiPoint</Filter>
     </ClInclude>
     <ClInclude Include="..\Public\Occludee.h">
       <Filter>01.Utility\13.Occludee</Filter>
@@ -688,7 +685,10 @@
     <FxCompile Include="..\Bin\ShaderFiles\Shader_Bloom.hlsl">
       <Filter>01.Utility\98.ShaderFiles</Filter>
     </FxCompile>
-    <FxCompile Include="..\..\Client\Bin\ShaderFiles\Shader_PostProcess.hlsl">
+    <FxCompile Include="..\Bin\ShaderFiles\Shader_Compute_DOF.hlsl">
+      <Filter>01.Utility\98.ShaderFiles\Compute</Filter>
+    </FxCompile>
+    <FxCompile Include="..\Bin\ShaderFiles\Shader_PostProcess.hlsl">
       <Filter>01.Utility\98.ShaderFiles</Filter>
     </FxCompile>
   </ItemGroup>

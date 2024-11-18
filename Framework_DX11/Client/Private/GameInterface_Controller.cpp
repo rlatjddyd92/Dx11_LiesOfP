@@ -12,6 +12,8 @@ CGameInterface_Controller::CGameInterface_Controller()
 HRESULT CGameInterface_Controller::Initialize_GameInterface(ID3D11Device** pDevice, ID3D11DeviceContext** pContext, CGameInstance* pInstance)
 {
 	m_pGameInstance = pInstance;
+	Safe_AddRef(m_pGameInstance);
+
 	m_pDevice = *pDevice;
 	m_pContext = *pContext;
 
@@ -19,7 +21,7 @@ HRESULT CGameInterface_Controller::Initialize_GameInterface(ID3D11Device** pDevi
 
 	// UIManager
 	m_pUIManager = CUIManager::Create(m_pDevice, m_pContext);
-	
+
 	// Item_Manager
 	m_pItem_Manager = CItem_Manager::Create(m_pGameInstance);
 
@@ -40,7 +42,7 @@ void CGameInterface_Controller::Update_GameInterface(_float fTimeDelta)
 
 void CGameInterface_Controller::Release_GameInterface()
 {
-	
+
 	Safe_Release(m_pGameInstance);
 	Safe_Release(m_pUIManager);
 	Safe_Release(m_pItem_Manager);

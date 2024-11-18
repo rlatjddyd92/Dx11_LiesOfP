@@ -31,8 +31,6 @@ private:
 
     _Vec4               m_vMoveDir = {};
 
-    _float              m_fMoveSpeed = {};
-
 
     //юс╫ц
     _bool* m_pIsEndAnim = { nullptr };
@@ -41,6 +39,7 @@ private:
 
 private:
     void                Select_DashAnimation();
+    _bool               End_Check();
 
 public:
     static CState_Player_OH_Dash* Create(class CFsm* pFsm, class CPlayer* pPlayer, _uint iStateNum, void* pArg = nullptr);

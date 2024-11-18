@@ -1,0 +1,204 @@
+#include "stdafx.h"
+#include "Weapon_Scissor.h"
+#include "Player.h"
+
+#include "GameInstance.h"
+
+CWeapon_Scissor::CWeapon_Scissor(ID3D11Device* pDevice, ID3D11DeviceContext* pContext)
+	: CWeapon{ pDevice, pContext }
+{
+}
+
+CWeapon_Scissor::CWeapon_Scissor(const CWeapon_Scissor& Prototype)
+	: CWeapon{ Prototype }
+{
+}
+
+HRESULT CWeapon_Scissor::Initialize_Prototype()
+{
+	return S_OK;
+}
+
+HRESULT CWeapon_Scissor::Initialize(void* pArg)
+{
+	/* 직교퉁여을 위한 데이터들을 모두 셋하낟. */
+	if (FAILED(__super::Initialize(pArg)))
+		return E_FAIL;
+
+	if (FAILED(Ready_Components()))
+		return E_FAIL;
+
+	if (FAILED(Ready_Seperate()))
+		return E_FAIL;
+
+	m_isActive = false;
+
+	return S_OK;
+}
+
+void CWeapon_Scissor::Priority_Update(_float fTimeDelta)
+{
+	if (!m_isActive)
+		return;
+}
+
+void CWeapon_Scissor::Update(_float fTimeDelta)
+{
+	if (!m_isActive)
+		return;
+
+	if (!m_isSeperate)
+	{
+		__super::Update(fTimeDelta);
+
+		m_pColliderCom->Update(&m_WorldMatrix);
+	}
+	else if (m_isSeperate)
+	{
+		m_pScissor_Sperate[0]->Update(fTimeDelta);
+		m_pScissor_Sperate[1]->Update(fTimeDelta);
+	}
+}
+
+void CWeapon_Scissor::Late_Update(_float fTimeDelta)
+{
+	if (!m_isActive)
+		return;
+
+	if (!m_isSeperate)
+	{
+		__super::Late_Update(fTimeDelta);
+
+#ifdef _DEBUG
+		m_pGameInstance->Add_DebugObject(m_pColliderCom);
+
+#endif
+		m_pGameInstance->Add_RenderObject(CRenderer::RG_NONBLEND, this);
+		m_pGameInstance->Add_RenderObject(CRenderer::RG_SHADOWOBJ, this);
+	}
+	else if (m_isSeperate)
+	{
+		m_pScissor_Sperate[0]->Late_Update(fTimeDelta);
+		m_pScissor_Sperate[1]->Late_Update(fTimeDelta);
+	}
+}
+
+HRESULT CWeapon_Scissor::Render()
+{
+	if (FAILED(__super::Render()))
+		return E_FAIL;
+
+	return S_OK;
+}
+
+HRESULT CWeapon_Scissor::Render_LightDepth()
+{
+	if (FAILED(__super::Render_LightDepth()))
+		return E_FAIL;
+
+	return S_OK;
+}
+
+void CWeapon_Scissor::Change_SeperateMode()
+{
+	if (m_isSeperate)
+		return;
+
+	m_pScissor_Sperate[0]->IsActive(true);
+	m_pScissor_Sperate[1]->IsActive(true);
+
+	m_isSeperate = true;
+}
+
+void CWeapon_Scissor::Change_CombineMode()
+{
+	if (!m_isSeperate)
+		return;
+
+	m_isSeperate = false;
+}
+
+HRESULT CWeapon_Scissor::Ready_Components()
+{
+	if (FAILED(__super::Ready_Components()))
+		return E_FAIL;
+
+	/* FOR.Com_Model */
+	if (FAILED(__super::Add_Component(LEVEL_GAMEPLAY, TEXT("Prototype_Component_Model_Scissor_Combine"),
+		TEXT("Com_Model"), reinterpret_cast<CComponent**>(&m_pModelCom))))
+		return E_FAIL;
+
+	/* FOR.Com_Collider */
+	CBounding_OBB::BOUNDING_OBB_DESC			ColliderDesc{};
+	ColliderDesc.vExtents = _float3(0.1f, 0.1f, 0.75f);
+	ColliderDesc.vCenter = _float3(0.f, 0.f, -0.6f);
+	ColliderDesc.vAngles = _float3(0.f, 0.f, 0.f);
+
+	if (FAILED(__super::Add_Component(LEVEL_STATIC, TEXT("Prototype_Component_Collider_OBB"),
+		TEXT("Com_Collider"), reinterpret_cast<CComponent**>(&m_pColliderCom), &ColliderDesc)))
+		return E_FAIL;
+
+
+	return S_OK;
+}
+
+HRESULT CWeapon_Scissor::Ready_Seperate()
+{
+	CWeapon_Scissor_Handle::SCISSOR_DESC ScissorDesc;
+	ZeroMemory(&ScissorDesc, sizeof(CWeapon_Scissor_Handle::SCISSOR_DESC));
+
+	ScissorDesc.eScissorType = CWeapon_Scissor_Handle::SCISSOR_LEFT; 
+	ScissorDesc.pParentWorldMatrix = m_pParentMatrix;
+	ScissorDesc.pSocketBoneMatrix = m_pSocketMatrix; //m_pModelCom->Get_BoneCombindTransformationMatrix_Ptr("BN_Blade");BN_Weapon_R
+
+	m_pScissor_Sperate[0] = dynamic_cast<CWeapon_Scissor_Handle*>(m_pGameInstance->Clone_GameObject(TEXT("Prototype_GameObject_Weapon_Scissor_Handle"), &ScissorDesc));
+
+	ScissorDesc.eScissorType = CWeapon_Scissor_Handle::SCISSOR_RIGHT;
+	ScissorDesc.pSocketBoneMatrix = m_pSocketMatrix2;
+	m_pScissor_Sperate[1] = dynamic_cast<CWeapon_Scissor_Handle*>(m_pGameInstance->Clone_GameObject(TEXT("Prototype_GameObject_Weapon_Scissor_Handle"), &ScissorDesc));
+
+	return S_OK;
+}
+
+CWeapon_Scissor* CWeapon_Scissor::Create(ID3D11Device* pDevice, ID3D11DeviceContext* pContext)
+{
+	CWeapon_Scissor* pInstance = new CWeapon_Scissor(pDevice, pContext);
+
+	if (FAILED(pInstance->Initialize_Prototype()))
+	{
+		MSG_BOX(TEXT("Failed to Created : CWeapon_Scissor"));
+		Safe_Release(pInstance);
+	}
+
+	return pInstance;
+}
+
+
+
+CGameObject* CWeapon_Scissor::Clone(void* pArg)
+{
+	CWeapon_Scissor* pInstance = new CWeapon_Scissor(*this);
+
+	if (FAILED(pInstance->Initialize(pArg)))
+	{
+		MSG_BOX(TEXT("Failed to Cloned : CWeapon_Scissor"));
+		Safe_Release(pInstance);
+	}
+
+	return pInstance;
+}
+
+void CWeapon_Scissor::Free()
+{
+	__super::Free();
+
+	//for (_uint i = 0; i < 2; ++i)
+	//{
+	//	if(nullptr != m_pScissor_Sperate[i])
+	//		Safe_Release(m_pScissor_Sperate[i]);
+	//}
+
+	Safe_Release(m_pColliderCom);
+	Safe_Release(m_pShaderCom);
+	Safe_Release(m_pModelCom);
+}

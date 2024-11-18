@@ -1,7 +1,5 @@
 #include "Pawn.h"
 #include "GameInstance.h"
-#include "PartObject.h"
-
 CPawn::CPawn(ID3D11Device* pDevice, ID3D11DeviceContext* pContext)
 	: CGameObject{ pDevice, pContext }
 {
@@ -67,9 +65,9 @@ void CPawn::Set_Animation(_uint iAnimIndex, _bool IsLoop)
 	m_pModelCom->SetUp_Animation(iAnimIndex, IsLoop);
 }
 
-void CPawn::Change_Animation(_uint iAnimIndex, _bool IsLoop, _float fDuration, _uint iStartFrame)
+void CPawn::Change_Animation(_uint iAnimIndex, _bool IsLoop, _float fDuration, _uint iStartFrame, _bool bEitherBoundary)
 {
-	m_pModelCom->SetUp_NextAnimation(iAnimIndex, IsLoop, fDuration, iStartFrame);
+	m_pModelCom->SetUp_NextAnimation(iAnimIndex, IsLoop, fDuration, iStartFrame, bEitherBoundary);
 }
 
 void CPawn::Change_Animation_Boundry(_uint iAnimIndex, _bool IsLoop, _float fDuration, _uint iStartFrame)
@@ -78,21 +76,27 @@ void CPawn::Change_Animation_Boundry(_uint iAnimIndex, _bool IsLoop, _float fDur
 	m_pModelCom->SetUp_NextAnimation_Boundary(iAnimIndex, IsLoop, fDuration, iStartFrame);
 }
 
+_uint CPawn::Get_CurrentAnimIndex()
+{
+	return m_pModelCom->Get_CurrentAnimationIndex();
+}
+
 _int CPawn::Get_Frame()
 {
 	return m_pModelCom->Get_CurrentFrame();
 }
 
-HRESULT CPawn::Add_PartObject(_uint iPartID, const _wstring& strPrototypeTag, void* pArg)
+_bool CPawn::Get_EndAnim(_int iAnimIndex, _bool bIsBoundary)
 {
-	CGameObject* pPartObject = m_pGameInstance->Clone_GameObject(strPrototypeTag, pArg);
+	if (bIsBoundary)
+	{
+		return m_pModelCom->Get_IsEndAnimArray_Boundary()[iAnimIndex];
+	}
+	else
+	{
+		return m_pModelCom->Get_IsEndAnimArray()[iAnimIndex];
+	}
 
-	if (nullptr == pPartObject)
-		return E_FAIL;
-
-	m_Parts[iPartID] = dynamic_cast<CPartObject*>(pPartObject);
-
-	return S_OK;
 }
 
 HRESULT CPawn::Bind_WorldViewProj()
@@ -110,10 +114,6 @@ HRESULT CPawn::Bind_WorldViewProj()
 void CPawn::Free()
 {
 	__super::Free();
-
-	for (auto& pPartObject : m_Parts)
-		Safe_Release(pPartObject);
-	m_Parts.clear();
 
 	Safe_Release(m_pRigidBodyCom);
 	Safe_Release(m_pShaderCom);

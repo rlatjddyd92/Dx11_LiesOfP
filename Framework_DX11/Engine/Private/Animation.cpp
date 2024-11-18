@@ -71,6 +71,8 @@ _uint CAnimation::Update_TransformationMatrices(const vector<class CBone*>& Bone
 	, _double* pCurrentTrackPosition, vector<_uint>& CurrentKeyFrameIndices, _bool isLoop, _bool* isEnd
 	, _float fTimeDelta, _bool isChildOfBoundary, list<OUTPUT_EVKEY>* pEvKeyList, _bool* bBoneUpdated,_bool BlockStackTime)
 {
+	_uint iCurrentFrame = 0;
+
 	if (!BlockStackTime)
 	{
 		/* 현재 재생위치를 계산하낟. */
@@ -78,17 +80,18 @@ _uint CAnimation::Update_TransformationMatrices(const vector<class CBone*>& Bone
 
 		if (*pCurrentTrackPosition >= m_Duration)
 		{
-			*isEnd = true;
-			if (false == isLoop)
+			if (true == isLoop)
 			{
-				if (bBoneUpdated != nullptr)
-				{
-					*bBoneUpdated = false;
-				}
-				return true;
+				*pCurrentTrackPosition = 0.f;
+			}
+			else
+				*isEnd = true;
+
+			for (auto& pKeyFrameIndex : CurrentKeyFrameIndices)
+			{
+				pKeyFrameIndex = 0;
 			}
 
-			*pCurrentTrackPosition = 0.f;
 		}
 	}
 
@@ -141,7 +144,6 @@ _uint CAnimation::Update_TransformationMatrices(const vector<class CBone*>& Bone
 		}
 	}
 
-	_uint iCurrentFrame = 0;
 
 	/* 현재 재생위치에 맞게 현재 애니메이션이 컨트롤해야 할 뼈의 상태들을 갱신해준다. */
 	_uint		iChannelIndex = { 0 };
@@ -152,13 +154,16 @@ _uint CAnimation::Update_TransformationMatrices(const vector<class CBone*>& Bone
 			pChannel->Update_TransformationMatrix(Bones, &CurrentKeyFrameIndices[iChannelIndex], *pCurrentTrackPosition);
 			if (iCurrentFrame < CurrentKeyFrameIndices[iChannelIndex])
 			{
-				//// 혹시모를 예외 처리 갑자기 프레임이 이상하게 증가하는 오류 방지
-				//if (CurrentKeyFrameIndices[iChannelIndex] - iCurrentFrame < 3)
 					iCurrentFrame = CurrentKeyFrameIndices[iChannelIndex];
 			}
 		}
 
 		++iChannelIndex;
+	}
+	
+	if (bBoneUpdated != nullptr)
+	{
+		*bBoneUpdated = true;
 	}
 
 	return iCurrentFrame;
@@ -193,6 +198,27 @@ HRESULT CAnimation::Create_BinaryFile(HANDLE* pFile)
 	}
 
 	return S_OK;
+}
+
+void	 CAnimation::Find_ChannelWide()
+{
+	_int iSize{};
+	_int iChannelIndex{};
+
+	for (_int i = 0; i < m_Channels.size(); ++i)
+	{
+		if (m_Channels[i]->Get_KeyFrames().size() > iSize)
+		{
+			iChannelIndex = i;
+			iSize = m_Channels[i]->Get_KeyFrames().size();
+		}
+	}
+	m_iWideChannelIndex = iChannelIndex;
+}
+
+CChannel* CAnimation::Get_WideChannel()
+{
+	return m_Channels[m_iWideChannelIndex];
 }
 
 CAnimation* CAnimation::Create(HANDLE* pFile, vector<_uint>& KeyFrameIndices, const CModel* pModel)

@@ -65,6 +65,9 @@ HRESULT CDecal::Render()
 	if (FAILED(m_pShaderCom->Bind_Matrix("g_ProjMatrixInv", &m_pGameInstance->Get_Transform_Inverse(CPipeLine::D3DTS_PROJ))))
 		return E_FAIL;
 
+	if (FAILED(m_pShaderCom->Bind_RawValue("g_fFar", &m_pGameInstance->Get_Far(), sizeof(_float))))
+		return E_FAIL;
+
 	_Matrix v = m_pTransformCom->Get_WorldMatrix_Inverse();
 	if (FAILED(m_pShaderCom->Bind_Matrix("g_vDecalWorldInverse", &m_pTransformCom->Get_WorldMatrix_Inverse())))
 		return E_FAIL;

@@ -136,7 +136,7 @@ _float CMonster::Calc_Distance_XZ()
 HRESULT CMonster::Ready_Components()
 {
 	/* FOR.Com_Shader */
-	if (FAILED(__super::Add_Component(LEVEL_GAMEPLAY, TEXT("Prototype_Component_Shader_VtxAnimModel"),
+	if (FAILED(__super::Add_Component(LEVEL_STATIC, TEXT("Prototype_Component_Shader_VtxAnimModel"),
 		TEXT("Com_Shader"), reinterpret_cast<CComponent**>(&m_pShaderCom))))
 		return E_FAIL;
 
@@ -153,34 +153,6 @@ HRESULT CMonster::Ready_FSM()
 
 
 	return S_OK;
-}
-
-CMonster* CMonster::Create(ID3D11Device* pDevice, ID3D11DeviceContext* pContext)
-{
-	CMonster* pInstance = new CMonster(pDevice, pContext);
-
-	if (FAILED(pInstance->Initialize_Prototype()))
-	{
-		MSG_BOX(TEXT("Failed to Created : CMonster"));
-		Safe_Release(pInstance);
-	}
-
-	return pInstance;
-}
-
-
-
-CGameObject* CMonster::Clone(void* pArg)
-{
-	CMonster* pInstance = new CMonster(*this);
-
-	if (FAILED(pInstance->Initialize(pArg)))
-	{
-		MSG_BOX(TEXT("Failed to Cloned : CMonster"));
-		Safe_Release(pInstance);
-	}
-
-	return pInstance;
 }
 
 void CMonster::Free()

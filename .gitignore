@@ -506,3 +506,6 @@ Framework_DX11/Tools/Bin/ModelData/Anim/PlayerExample/PlayerExample.dat
 Framework_DX11/Client/Bin/ModelData/Anim/CreatedBinFiles/Player.Dat
 Framework_DX11/Tools/Bin/ModelData/Anim/CreatedBinFiles/Player.Dat
 Framework_DX11/Tools/Bin/ModelData/Anim/PlayerExample/PlayerExample.dat
+Binary_DX11/Client/Bin/Resources/Models/Player/Player.fbx
+Framework_DX11/Tools/Bin/ModelData/NonAnim/InteractObj/Tex/T_Monastery_Lift_01_BC.dds
+Framework_DX11/Tools/Bin/ModelData/NonAnim/InteractObj/Tex/T_Monastery_Lift_01_N.dds

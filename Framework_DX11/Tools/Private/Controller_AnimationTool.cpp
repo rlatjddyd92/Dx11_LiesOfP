@@ -553,7 +553,7 @@ void CController_AnimationTool::SetUp_Controller_Bone()
 	if (m_pCopyModelCom != nullptr)
 	{
 		//vPos = ((*m_pCopyBoneVec)[m_iSelected_Index_Bone])->Get_TransformationMatrix().r[CTransform::STATE_POSITION];
-		vPos = ((*m_pCopyBoneVec)[m_iSelected_Index_Bone])->Get_CombinedTransformationMatrix().r[CTransform::STATE_POSITION];
+		vPos = ((*m_pCopyBoneVec)[m_iSelected_Index_Bone])->Get_CombinedTransformationMatrix().Translation();
 	}
 
 	ImGui::Text("Pos_X   %f", XMVectorGetX(vPos));

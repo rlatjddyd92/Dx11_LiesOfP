@@ -16,6 +16,9 @@ public:
 	class CModel*		Get_Model() { return m_pModelCom; }
 	class CRigidBody*	Get_RigidBody() { return m_pRigidBodyCom; }
 
+	_float				Get_MoveSpeed() { return m_fMoveSpeed; }
+	void				Set_MoveSpeed(_float fSpeed) { m_fMoveSpeed = fSpeed; }
+
 public:
 	virtual HRESULT Initialize_Prototype();
 	virtual HRESULT Initialize(void* pArg = nullptr);
@@ -34,9 +37,11 @@ public:
 public:
 	void		Change_State(const _uint iState, void* pArg = nullptr);
 	void		Set_Animation(_uint iAnimIndex, _bool IsLoop = false);
-	void		Change_Animation(_uint iAnimIndex, _bool IsLoop = false, _float fDuration = 0.2f, _uint iStartFrame = 0);
+	void		Change_Animation(_uint iAnimIndex, _bool IsLoop = false, _float fDuration = 0.2f, _uint iStartFrame = 0, _bool bEitherBoundary = true);
 	void		Change_Animation_Boundry(_uint iAnimIndex, _bool IsLoop = false, _float fDuration = 0.2f, _uint iStartFrame = 0);
+	_uint		Get_CurrentAnimIndex();
 	_int		Get_Frame();
+	_bool		Get_EndAnim(_int iAnimIndex, _bool bIsBoundary = false);
 
 protected:
 	class CShader*		m_pShaderCom = { nullptr };
@@ -47,12 +52,10 @@ protected:
 	class CRigidBody*	m_pRigidBodyCom = { nullptr };
 
 	_bool				m_isGravity = { false };
-
+	
+	_float				m_fMoveSpeed = {};
 
 protected:
-	vector<class CPartObject*>			m_Parts;
-
-	HRESULT Add_PartObject(_uint iPartID, const _wstring& strPrototypeTag, void* pArg = nullptr);
 	HRESULT Bind_WorldViewProj();
 
 public:

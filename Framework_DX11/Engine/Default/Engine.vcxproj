@@ -33,7 +33,6 @@
     <ClCompile Include="..\Private\Collider_Manager.cpp" />
     <ClCompile Include="..\Private\Component.cpp" />
     <ClCompile Include="..\Private\Component_Manager.cpp" />
-    <ClCompile Include="..\private\ContainerObject.cpp" />
     <ClCompile Include="..\Private\CSVFile_Manager.cpp" />
     <ClCompile Include="..\private\CustomFont.cpp" />
     <ClCompile Include="..\Private\DebugDraw.cpp" />
@@ -58,8 +57,6 @@
     <ClCompile Include="..\private\Navigation.cpp" />
     <ClCompile Include="..\Private\ObjectOctree.cpp" />
     <ClCompile Include="..\Private\Object_Manager.cpp" />
-    <ClCompile Include="..\Private\Occludee.cpp" />
-    <ClCompile Include="..\private\PartObject.cpp" />
     <ClCompile Include="..\Private\Pawn.cpp" />
     <ClCompile Include="..\Private\PhysX_Manager.cpp" />
     <ClCompile Include="..\private\Picking.cpp" />
@@ -76,6 +73,7 @@
     <ClCompile Include="..\private\Texture.cpp" />
     <ClCompile Include="..\Private\Timer.cpp" />
     <ClCompile Include="..\Private\Timer_Manager.cpp" />
+    <ClCompile Include="..\private\Trail_MultiPoint_Instance.cpp" />
     <ClCompile Include="..\private\Trail_OnePoint_Instance.cpp" />
     <ClCompile Include="..\private\Trail_TwoPoint_Instance.cpp" />
     <ClCompile Include="..\private\Transform.cpp" />
@@ -104,7 +102,6 @@
     <ClInclude Include="..\Public\Collider_Manager.h" />
     <ClInclude Include="..\Public\Component.h" />
     <ClInclude Include="..\Public\Component_Manager.h" />
-    <ClInclude Include="..\public\ContainerObject.h" />
     <ClInclude Include="..\Public\CSVFile_Manager.h" />
     <ClInclude Include="..\public\CustomFont.h" />
     <ClInclude Include="..\Public\DebugDraw.h" />
@@ -134,8 +131,6 @@
     <ClInclude Include="..\public\Navigation.h" />
     <ClInclude Include="..\Public\ObjectOctree.h" />
     <ClInclude Include="..\Public\Object_Manager.h" />
-    <ClInclude Include="..\Public\Occludee.h" />
-    <ClInclude Include="..\public\PartObject.h" />
     <ClInclude Include="..\Public\Pawn.h" />
     <ClInclude Include="..\Public\PhysX_Manager.h" />
     <ClInclude Include="..\public\Picking.h" />
@@ -152,6 +147,7 @@
     <ClInclude Include="..\public\Texture.h" />
     <ClInclude Include="..\Public\Timer.h" />
     <ClInclude Include="..\Public\Timer_Manager.h" />
+    <ClInclude Include="..\public\Trail_MultiPoint_Instance.h" />
     <ClInclude Include="..\public\Trail_OnePoint_Instance.h" />
     <ClInclude Include="..\public\Trail_TwoPoint_Instance.h" />
     <ClInclude Include="..\public\Transform.h" />
@@ -167,16 +163,17 @@
   </ItemGroup>
   <ItemGroup>
     <FxCompile Include="..\..\Client\Bin\ShaderFiles\Shader_Effect_Texture.hlsl" />
-    <FxCompile Include="..\..\Client\Bin\ShaderFiles\Shader_PostProcess.hlsl" />
     <FxCompile Include="..\Bin\ShaderFiles\Shader_Bloom.hlsl" />
     <FxCompile Include="..\Bin\ShaderFiles\Shader_Cell.hlsl" />
     <FxCompile Include="..\Bin\ShaderFiles\Shader_Compute_Back.hlsl" />
     <FxCompile Include="..\Bin\ShaderFiles\Shader_Compute_Bloom.hlsl" />
     <FxCompile Include="..\Bin\ShaderFiles\Shader_Compute_Blur.hlsl" />
+    <FxCompile Include="..\Bin\ShaderFiles\Shader_Compute_DOF.hlsl" />
     <FxCompile Include="..\Bin\ShaderFiles\Shader_Deferred.hlsl" />
     <FxCompile Include="..\Bin\ShaderFiles\Shader_Distortion.hlsl" />
     <FxCompile Include="..\Bin\ShaderFiles\Shader_Compute_HDR.hlsl" />
     <FxCompile Include="..\Bin\ShaderFiles\Shader_Model_Instance.hlsl" />
+    <FxCompile Include="..\Bin\ShaderFiles\Shader_PostProcess.hlsl" />
     <FxCompile Include="..\Bin\ShaderFiles\Shader_SSAO.hlsl" />
   </ItemGroup>
   <ItemGroup>

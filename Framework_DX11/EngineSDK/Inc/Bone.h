@@ -13,13 +13,13 @@ private:
 public:
 	const _char* Get_Name() const { return m_szName; }
 
-	_matrix				Get_CombinedTransformationMatrix() const { return XMLoadFloat4x4(&m_CombinedTransformationMatrix); }
-	void				Set_CombinedTransformationMatrix(_matrix CombinedMatrix) { XMStoreFloat4x4(&m_CombinedTransformationMatrix, CombinedMatrix); }
+	_Matrix				Get_CombinedTransformationMatrix() const { return m_CombinedTransformationMatrix; }
+	void				Set_CombinedTransformationMatrix(_matrix CombinedMatrix) { m_CombinedTransformationMatrix, CombinedMatrix; }
 
-	const _float4x4*	Get_CombinedTransformationMatrix_Ptr() const { return &m_CombinedTransformationMatrix; }
+	const _Matrix*		Get_CombinedTransformationMatrix_Ptr() const { return &m_CombinedTransformationMatrix; }
 
-	_matrix				Get_TransformationMatrix() { return XMLoadFloat4x4(&m_TransformationMatrix); }
-	void				Set_TransformationMatrix(_fmatrix TransformationMatrix) { XMStoreFloat4x4(&m_TransformationMatrix, TransformationMatrix); }
+	_Matrix				Get_TransformationMatrix() { return XMLoadFloat4x4(&m_TransformationMatrix); }
+	void				Set_TransformationMatrix(_Matrix TransformationMatrix) { m_TransformationMatrix = TransformationMatrix; }
 
 	_int				Get_ParentBoneIndex() { return m_iParentBoneIndex; }
 
@@ -42,11 +42,11 @@ private:
 	_char		m_szParentName[MAX_PATH] = {};
 
 	/* 부모 기준으로 표현된 이 뼈만의 상태행렬. */
-	_float4x4	m_TransformationMatrix = {};
+	_Matrix		m_TransformationMatrix = {};
 
 	/* 이 뼈의 최종적인 상태 행렬 ( 내 상태 행렬 * 부모의 최종상태행렬 ) */
 	/* m_TransformationMatrix * Parent's m_CombinedTransformationMatrix */
-	_float4x4	m_CombinedTransformationMatrix = {};
+	_Matrix		m_CombinedTransformationMatrix = {};
 
 	_int		m_iParentBoneIndex = { -1 };
 

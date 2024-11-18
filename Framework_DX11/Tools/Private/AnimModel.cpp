@@ -72,7 +72,7 @@ void CAnimModel::Update(_float fTimeDelta)
 		m_pTransformCom->Go_Straight(fTimeDelta);//m_pTransformCom->Set_State(CTransform::STATE_POSITION, XMVectorSetX(vPos, XMVectorGetX(vPos) + 0.1f));
 	
 	_bool	bEndCheck{false};
-	_vector vRootMove = m_pModelCom->Play_Animation(fTimeDelta, &bEndCheck, &m_EvKeyList);
+	//_vector vRootMove = m_pModelCom->Play_Animation(fTimeDelta, &bEndCheck, &m_EvKeyList);
 	
 	if (m_EvKeyList.empty() == false)
 	{
@@ -91,17 +91,17 @@ void CAnimModel::Update(_float fTimeDelta)
 	//_vector vUp = m_pTransformCom->Get_State(CTransform::STATE_UP);
 	//_vector vLook = m_pTransformCom->Get_State(CTransform::STATE_LOOK);
 
-	if (bEndCheck == true)//조건을 애니메이션이 끝났을때 or 변경 되었을때로
-	{
-		vRootMove = m_vRootMoveStack = XMVectorSet(0, 0, 0, 1);
-	}
-	else
-	{
-		vRootMove = XMVector3TransformNormal(vRootMove, m_pTransformCom->Get_WorldMatrix());
-		
-		m_pTransformCom->Set_State(CTransform::STATE_POSITION, vPos + vRootMove - m_vRootMoveStack);
-		m_vRootMoveStack = vRootMove;
-	}
+	//if (bEndCheck == true)//조건을 애니메이션이 끝났을때 or 변경 되었을때로
+	//{
+	//	vRootMove = m_vRootMoveStack = XMVectorSet(0, 0, 0, 1);
+	//}
+	//else
+	//{
+	//	vRootMove = XMVector3TransformNormal(vRootMove, m_pTransformCom->Get_WorldMatrix());
+	//	
+	//	m_pTransformCom->Set_State(CTransform::STATE_POSITION, vPos + vRootMove - m_vRootMoveStack);
+	//	m_vRootMoveStack = vRootMove;
+	//}
 
 }
 
@@ -129,6 +129,8 @@ HRESULT CAnimModel::Render()
 	if (FAILED(m_pShaderCom->Bind_Matrix("g_ProjMatrix", &m_pGameInstance->Get_Transform(CPipeLine::D3DTS_PROJ))))
 		return E_FAIL;
 
+	if (FAILED(m_pShaderCom->Bind_RawValue("g_fFar", &m_pGameInstance->Get_Far(), sizeof(_float))))
+		return E_FAIL;
 
 	_uint		iNumMeshes = m_pModelCom->Get_NumMeshes();
 

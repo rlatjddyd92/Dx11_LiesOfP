@@ -34,10 +34,12 @@ HRESULT CState_CarcassBigA_Paralyze::Start_State(void* pArg)
 
 void CState_CarcassBigA_Paralyze::Update(_float fTimeDelta)
 {
+    _bool bCheck = End_Check();
+
     switch (m_iAnimCnt)
     {
     case 0:
-        if (*m_pIsEndAnim)
+        if (bCheck)
         {
             ++m_iAnimCnt;
             m_pMonster->Change_Animation(28 - m_iAnimCnt, true, true);
@@ -55,7 +57,7 @@ void CState_CarcassBigA_Paralyze::Update(_float fTimeDelta)
         break;
 
     case 2:
-        if (*m_pIsEndAnim)
+        if (bCheck)
         {
             m_iAnimCnt = 0;
             m_pMonster->Change_State(CCarcassBigA::IDLE);
@@ -74,6 +76,43 @@ void CState_CarcassBigA_Paralyze::End_State()
     m_iAnimCnt = 0;//혹시 완료되지 않고 변하는 경우에 대비
     m_fParalizeTime = 0.f;
     *m_pResetRootMove = true;
+}
+
+_bool CState_CarcassBigA_Paralyze::End_Check()
+{
+    //_uint iCurAnim = m_pMonster->Get_CurrentAnimIndex();
+    //_bool bEndCheck{ false };
+    //if ((m_iAnimation_Dash[DASH_FOCUS_F]) == iCurAnim)
+    //{
+    //    bEndCheck = m_pPlayer->Get_EndAnim(m_iAnimation_Dash[DASH_FOCUS_F]);
+    //}
+    //else if ((m_iAnimation_Dash[DASH_FOCUS_B]) == iCurAnim)
+    //{
+    //    bEndCheck = m_pPlayer->Get_EndAnim(m_iAnimation_Dash[DASH_FOCUS_B]);
+    //}
+    //else if ((m_iAnimation_Dash[DASH_FOCUS_L]) == iCurAnim)
+    //{
+    //    bEndCheck = m_pPlayer->Get_EndAnim(m_iAnimation_Dash[DASH_FOCUS_L]);
+    //}
+    //else if ((m_iAnimation_Dash[DASH_FOCUS_R]) == iCurAnim)
+    //{
+    //    bEndCheck = m_pPlayer->Get_EndAnim(m_iAnimation_Dash[DASH_FOCUS_R]);
+    //}
+    //else if ((m_iAnimation_Dash[DASH_F]) == iCurAnim)
+    //{
+    //    bEndCheck = m_pPlayer->Get_EndAnim(m_iAnimation_Dash[DASH_F]);
+    //}
+    //else if ((m_iAnimation_Dash[DASH_B]) == iCurAnim)
+    //{
+    //    bEndCheck = m_pPlayer->Get_EndAnim(m_iAnimation_Dash[DASH_B]);
+    //}
+    //else
+    //    //애니메이션 번호와 일치하지 않는?다
+    //
+
+        //return bEndCheck;
+    return false;
+
 }
 
 CState_CarcassBigA_Paralyze* CState_CarcassBigA_Paralyze::Create(CFsm* pFsm, CMonster* pMonster, _uint iStateNum, void* pArg)

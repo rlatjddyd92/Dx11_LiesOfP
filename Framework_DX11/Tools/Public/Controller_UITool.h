@@ -37,6 +37,8 @@ public:
 		PAGE_STAT,
 		PAGE_LEVELUP,
 		PAGE_SKILL,
+		PAGE_TEST,
+		PAGE_ORTHO,
 		PAGE_END
 	};
 
@@ -100,6 +102,7 @@ public:
 
 		// 텍스쳐 관련
 		_int iTexture_Index = -1;
+		_bool bIsItem = false; // <- 아이템 아이콘 표시 여부 
 		_float4 fTextureColor = { -1.f,-1.f ,-1.f ,-1.f };
 
 		// 텍스트 관련
@@ -107,6 +110,18 @@ public:
 		_tchar* szText = {};
 		_bool bCenter = false;
 		_float4 fTextColor = { 1.f,1.f,1.f,1.f };
+
+		// 작동 제어
+		_bool bUpdate = true;
+		_bool bRender = true;
+
+		// 쉐이킹
+		_float2 fShaking_Adjust = { 0.f,0.f };
+		_float2 fShaking_Direc = { 0.f,0.f };
+		_float fShaking_Power = 0.f;
+		_float fShaking_Interval_Now = 0.f;
+		_float fShaking_Interval = 0.f;
+		_float fShaking_Time = 0.f;
 
 		
 	}UPART;
@@ -120,6 +135,8 @@ public:
 		_float2 fPosition = { g_iWinSizeX * 0.5f,g_iWinSizeY*0.5f }; // 페이지의 포지션
 		vector<UPART*> vecPart;
 	}UPAGE;
+
+
 
 public:
 	HRESULT Initialize(ID3D11Device* pDevice, ID3D11DeviceContext* pContext);
@@ -153,6 +170,7 @@ public: // 개발 편의 기능
 	void Off_StaticSystemMessage(); // <- StaticMessage Off 명령
 	void Show_SystemMessage(_wstring Text, _float fTime); // 표시 내용과 노출 시간 설정, 메시지는 한번에 10개까지 노출 가능(Static 포함 10개)
 
+	
 	//MouseInfo
 	void Show_MouseInfo(_wstring DataNameA, _float* DataA,
 		_wstring DataNameB = TEXT("none"), _float* DataB = nullptr,

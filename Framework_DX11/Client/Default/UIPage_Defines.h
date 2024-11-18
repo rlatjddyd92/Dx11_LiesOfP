@@ -10,8 +10,14 @@
 #include "UIPage_Main.h"
 #include "UIPage_Loading.h"
 #include "UIPage_Play.h"
-
-
+#include "UIPage_Menu.h"
+#include "UIPage_Inven.h"
+#include "UIPage_Equip.h"
+#include "UIPage_Stat.h"
+#include "UIPage_LevelUp.h"
+#include "UIPage_Skill.h"
+#include "UIPage_Test.h"
+#include "UIPage_Ortho.h"
 
 
 

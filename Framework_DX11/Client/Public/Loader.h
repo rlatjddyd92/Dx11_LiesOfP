@@ -5,6 +5,7 @@
 
 BEGIN(Engine)
 class CGameInstance;
+class Cte;
 END
 
 BEGIN(Client)
@@ -62,6 +63,12 @@ private:
 	HRESULT Ready_Resources_For_GamePlayLevel_Map0();
 	HRESULT Ready_Resources_For_GamePlayLevel_Map1();
 	HRESULT Ready_Resources_For_GamePlayLevel_Monster();
+
+private:
+	HRESULT Ready_Resources_For_Player();
+	HRESULT Ready_Resources_For_Monster();
+
+	HRESULT Ready_Prototype();
 
 public:
 	static CLoader* Create(ID3D11Device* pDevice, ID3D11DeviceContext* pContext, LEVELID eNextLevelID);

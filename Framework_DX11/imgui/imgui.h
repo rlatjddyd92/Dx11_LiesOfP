@@ -2583,7 +2583,8 @@ struct ImGuiStorage
 //  scale using lists with tens of thousands of items without a problem)
 // Usage:
 //   ImGuiListClipper clipper;
-//   clipper.Begin(1000);         // We have 1000 elements, evenly spaced.
+//   clipper.Begin(
+// );         // We have 1000 elements, evenly spaced.
 //   while (clipper.Step())
 //       for (int i = clipper.DisplayStart; i < clipper.DisplayEnd; i++)
 //           ImGui::Text("line number %d", i);
