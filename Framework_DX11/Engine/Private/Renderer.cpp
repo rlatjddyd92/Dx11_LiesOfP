@@ -274,7 +274,7 @@ HRESULT CRenderer::Initialize()
 		return E_FAIL;
 	if (FAILED(m_pGameInstance->Ready_RT_Debug(TEXT("Target_Depth"), 100.f, 300.f, 200.f, 200.f)))
 		return E_FAIL;
-	if (FAILED(m_pGameInstance->Ready_RT_Debug(TEXT("Target_Bloom_UpSample1"), 100.f, 500.f, 200.f, 200.f)))
+	if (FAILED(m_pGameInstance->Ready_RT_Debug(TEXT("Target_Normal"), 100.f, 500.f, 200.f, 200.f)))
 		return E_FAIL;
 
 	//if (FAILED(m_pGameInstance->Ready_RT_Debug(TEXT("Target_ARM"), 300.f, 300.f, 200.f, 200.f)))
