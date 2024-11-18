@@ -45,7 +45,7 @@ void CState_Player_Rapier_Charge::Update(_float fTimeDelta)
         else if (KEY_TAP(KEY::RBUTTON))
             m_pPlayer->Change_State(CPlayer::RAPIER_RATTACK0);
     }
-    else if (*m_pIsEndAnim)
+    else if (End_Check())
     {
         m_pPlayer->Change_State(CPlayer::OH_IDLE);
     }

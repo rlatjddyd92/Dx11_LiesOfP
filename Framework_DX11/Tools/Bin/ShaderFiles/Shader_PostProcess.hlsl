@@ -66,20 +66,21 @@ struct PS_OUT
 PS_OUT PS_MAIN_DOF(PS_IN In)
 {
     PS_OUT Out = (PS_OUT) 0;
-
-    vector vColor = 0;
     
-    float fDepth = g_DepthTexture.Sample(PointSampler, In.vTexcoord).x;
+    float fDepth = g_DepthTexture.Sample(PointSampler, In.vTexcoord).y * 1000.f;
     vector vBack = g_BackTexture.Sample(LinearSampler, In.vTexcoord);
     vector vBlur = g_DofBlurTexture.Sample(LinearSampler, In.vTexcoord);
     
+    vector vColor = vBack;
+    
     // 깊이가 클수록 더 블러를 먹음
-    float fFocusRatio = saturate(abs(fDepth - g_fFocus) / g_fFocus);
+    if(fDepth >= g_fFocus)
+    {
+        float fFocusRatio = saturate(abs(fDepth - g_fFocus) / g_fFocus);
     
-    fFocusRatio = saturate(fFocusRatio);
-    vColor = lerp(vBack, vBlur, fFocusRatio);
-    
-   
+        fFocusRatio = saturate(fFocusRatio);
+        vColor = lerp(vBack, vBlur, fFocusRatio);
+    }
    
     Out.vColor = vColor;
     

@@ -108,7 +108,7 @@ void CController_PostProcess::Update_DOF()
 
 	if (tDesc->isOnDOF)
 	{
-		ImGui::DragFloat("DOF", &fDOF, 0.02f, 0.f, 1.f);
+		ImGui::DragFloat("DOF", &fDOF, 0.02f);
 	}
 
 	tDesc->isOnDOF = isOnDof;

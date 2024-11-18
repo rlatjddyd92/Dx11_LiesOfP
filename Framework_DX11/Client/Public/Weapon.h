@@ -18,6 +18,7 @@ public:
 	{
 		const _Matrix*	pParentWorldMatrix = { nullptr };
 		const _Matrix*	pSocketBoneMatrix = { nullptr };
+		const _Matrix*	pSocketBoneMatrix2 = { nullptr };
 	}WEAPON_DESC;
 
 protected:
@@ -46,6 +47,7 @@ protected:
 protected:
 	const _Matrix*			m_pParentMatrix = { nullptr };
 	const _Matrix*			m_pSocketMatrix = { nullptr };
+	const _Matrix*			m_pSocketMatrix2 = { nullptr };
 	_Matrix					m_WorldMatrix = {};
 
 protected:

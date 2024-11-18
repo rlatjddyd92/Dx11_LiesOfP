@@ -1,10 +1,8 @@
 #include "stdafx.h"
-#include "Weapon_FlameSword.h"
-
+#include "Weapon_Scissor.h"
 #include "Player.h"
 
 #include "GameInstance.h"
-#include "Weapon_Scissor.h"
 
 CWeapon_Scissor::CWeapon_Scissor(ID3D11Device* pDevice, ID3D11DeviceContext* pContext)
 	: CWeapon{ pDevice, pContext }
@@ -28,6 +26,9 @@ HRESULT CWeapon_Scissor::Initialize(void* pArg)
 		return E_FAIL;
 
 	if (FAILED(Ready_Components()))
+		return E_FAIL;
+
+	if (FAILED(Ready_Seperate()))
 		return E_FAIL;
 
 	m_isActive = false;
@@ -54,7 +55,8 @@ void CWeapon_Scissor::Update(_float fTimeDelta)
 	}
 	else if (m_isSeperate)
 	{
-
+		m_pScissor_Sperate[0]->Update(fTimeDelta);
+		m_pScissor_Sperate[1]->Update(fTimeDelta);
 	}
 }
 
@@ -76,7 +78,8 @@ void CWeapon_Scissor::Late_Update(_float fTimeDelta)
 	}
 	else if (m_isSeperate)
 	{
-
+		m_pScissor_Sperate[0]->Late_Update(fTimeDelta);
+		m_pScissor_Sperate[1]->Late_Update(fTimeDelta);
 	}
 }
 
@@ -101,6 +104,9 @@ void CWeapon_Scissor::Change_SeperateMode()
 	if (m_isSeperate)
 		return;
 
+	m_pScissor_Sperate[0]->IsActive(true);
+	m_pScissor_Sperate[1]->IsActive(true);
+
 	m_isSeperate = true;
 }
 
@@ -118,7 +124,7 @@ HRESULT CWeapon_Scissor::Ready_Components()
 		return E_FAIL;
 
 	/* FOR.Com_Model */
-	if (FAILED(__super::Add_Component(LEVEL_GAMEPLAY, TEXT("Prototype_Component_Model_Scissor_Left"),
+	if (FAILED(__super::Add_Component(LEVEL_GAMEPLAY, TEXT("Prototype_Component_Model_Scissor_Combine"),
 		TEXT("Com_Model"), reinterpret_cast<CComponent**>(&m_pModelCom))))
 		return E_FAIL;
 
@@ -132,6 +138,24 @@ HRESULT CWeapon_Scissor::Ready_Components()
 		TEXT("Com_Collider"), reinterpret_cast<CComponent**>(&m_pColliderCom), &ColliderDesc)))
 		return E_FAIL;
 
+
+	return S_OK;
+}
+
+HRESULT CWeapon_Scissor::Ready_Seperate()
+{
+	CWeapon_Scissor_Handle::SCISSOR_DESC ScissorDesc;
+	ZeroMemory(&ScissorDesc, sizeof(CWeapon_Scissor_Handle::SCISSOR_DESC));
+
+	ScissorDesc.eScissorType = CWeapon_Scissor_Handle::SCISSOR_LEFT; 
+	ScissorDesc.pParentWorldMatrix = m_pParentMatrix;
+	ScissorDesc.pSocketBoneMatrix = m_pSocketMatrix; //m_pModelCom->Get_BoneCombindTransformationMatrix_Ptr("BN_Blade");BN_Weapon_R
+
+	m_pScissor_Sperate[0] = dynamic_cast<CWeapon_Scissor_Handle*>(m_pGameInstance->Clone_GameObject(TEXT("Prototype_GameObject_Weapon_Scissor_Handle"), &ScissorDesc));
+
+	ScissorDesc.eScissorType = CWeapon_Scissor_Handle::SCISSOR_RIGHT;
+	ScissorDesc.pSocketBoneMatrix = m_pSocketMatrix2;
+	m_pScissor_Sperate[1] = dynamic_cast<CWeapon_Scissor_Handle*>(m_pGameInstance->Clone_GameObject(TEXT("Prototype_GameObject_Weapon_Scissor_Handle"), &ScissorDesc));
 
 	return S_OK;
 }
@@ -167,6 +191,12 @@ CGameObject* CWeapon_Scissor::Clone(void* pArg)
 void CWeapon_Scissor::Free()
 {
 	__super::Free();
+
+	//for (_uint i = 0; i < 2; ++i)
+	//{
+	//	if(nullptr != m_pScissor_Sperate[i])
+	//		Safe_Release(m_pScissor_Sperate[i]);
+	//}
 
 	Safe_Release(m_pColliderCom);
 	Safe_Release(m_pShaderCom);

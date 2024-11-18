@@ -255,6 +255,7 @@
     <ClInclude Include="..\Public\Weapon_FlameSword.h" />
     <ClInclude Include="..\Public\Weapon_Rapier.h" />
     <ClInclude Include="..\Public\Weapon_Scissor.h" />
+    <ClInclude Include="..\Public\Weapon_Scissor_Handle.h" />
     <ClInclude Include="Client.h" />
     <ClInclude Include="Interface_Enums.h" />
     <ClInclude Include="Item_Defines.h" />
@@ -353,6 +354,7 @@
     <ClCompile Include="..\Private\Weapon_FlameSword.cpp" />
     <ClCompile Include="..\Private\Weapon_Rapier.cpp" />
     <ClCompile Include="..\Private\Weapon_Scissor.cpp" />
+    <ClCompile Include="..\Private\Weapon_Scissor_Handle.cpp" />
     <ClCompile Include="Client.cpp" />
     <ClCompile Include="stdafx.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Create</PrecompiledHeader>

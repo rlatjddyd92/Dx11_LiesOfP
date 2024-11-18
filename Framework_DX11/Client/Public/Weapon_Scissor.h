@@ -2,6 +2,7 @@
 
 #include "Client_Defines.h"
 #include "Weapon.h"
+#include "Weapon_Scissor_Handle.h"
 
 BEGIN(Engine)
 class CCollider;
@@ -34,8 +35,11 @@ public:
 private:
 	_bool		m_isSeperate;
 
+	CWeapon_Scissor_Handle*	m_pScissor_Sperate[CWeapon_Scissor_Handle::SCISSOR_END];
+
 private:
 	HRESULT Ready_Components();
+	HRESULT Ready_Seperate();
 
 public:
 	static CWeapon_Scissor* Create(ID3D11Device* pDevice, ID3D11DeviceContext* pContext);

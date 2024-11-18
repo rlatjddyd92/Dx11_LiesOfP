@@ -314,14 +314,24 @@ HRESULT CLoader::Ready_Resources_For_Weapon()
 	//	CModel::Create(m_pDevice, m_pContext, CModel::TYPE_ANIM, "../Bin/Resources/Models/Weapon/Scissor_Combine.fbx", "../Bin/ModelData/NonAnim/Weapon/", PreTransformMatrix))))
 	//	return E_FAIL;
 
-	/* For. Prototype_Component_Model_Weapon_Scissor_Left */
-	if (FAILED(m_pGameInstance->Add_Prototype(LEVEL_GAMEPLAY, TEXT("Prototype_Component_Model_Weapon_Scissor_Left"),
-		CModel::Create(m_pDevice, m_pContext, CModel::TYPE_ANIM, "../Bin/Resources/Models/Weapon/Scissor_Left.fbx", "../Bin/ModelData/NonAnim/Weapon/", PreTransformMatrix))))
+	/* For. Prototype_Component_Model_Weapon_Scissor_Left_Bld */
+	if (FAILED(m_pGameInstance->Add_Prototype(LEVEL_GAMEPLAY, TEXT("Prototype_Component_Model_Weapon_Scissor_Left_Bld"),
+		CModel::Create(m_pDevice, m_pContext, CModel::TYPE_ANIM, "../Bin/Resources/Models/Weapon/Scissor_Left_Blade.fbx", "../Bin/ModelData/NonAnim/Weapon/", PreTransformMatrix))))
 		return E_FAIL;
 
-	/* For. Prototype_Component_Model_Weapon_Scissor_Right */
-	if (FAILED(m_pGameInstance->Add_Prototype(LEVEL_GAMEPLAY, TEXT("Prototype_Component_Model_Weapon_Scissor_Right"),
-		CModel::Create(m_pDevice, m_pContext, CModel::TYPE_ANIM, "../Bin/Resources/Models/Weapon/Scissor_Right.fbx", "../Bin/ModelData/NonAnim/Weapon/", PreTransformMatrix))))
+	/* For. Prototype_Component_Model_Weapon_Scissor_Left_Hnd */
+	if (FAILED(m_pGameInstance->Add_Prototype(LEVEL_GAMEPLAY, TEXT("Prototype_Component_Model_Weapon_Scissor_Left_Hnd"),
+		CModel::Create(m_pDevice, m_pContext, CModel::TYPE_ANIM, "../Bin/Resources/Models/Weapon/Scissor_Left_Handle.fbx", "../Bin/ModelData/NonAnim/Weapon/", PreTransformMatrix))))
+		return E_FAIL;
+
+	/* For. Prototype_Component_Model_Weapon_Scissor_Right_Bld */
+	if (FAILED(m_pGameInstance->Add_Prototype(LEVEL_GAMEPLAY, TEXT("Prototype_Component_Model_Weapon_Scissor_Right_Bld"),
+		CModel::Create(m_pDevice, m_pContext, CModel::TYPE_ANIM, "../Bin/Resources/Models/Weapon/Scissor_Right_Blade.fbx", "../Bin/ModelData/NonAnim/Weapon/", PreTransformMatrix))))
+		return E_FAIL;
+
+	/* For. Prototype_Component_Model_Weapon_Scissor_Right_Hnd */
+	if (FAILED(m_pGameInstance->Add_Prototype(LEVEL_GAMEPLAY, TEXT("Prototype_Component_Model_Weapon_Scissor_Right_Hnd"),
+		CModel::Create(m_pDevice, m_pContext, CModel::TYPE_ANIM, "../Bin/Resources/Models/Weapon/Scissor_Right_Handle.fbx", "../Bin/ModelData/NonAnim/Weapon/", PreTransformMatrix))))
 		return E_FAIL;
 
 	return S_OK;

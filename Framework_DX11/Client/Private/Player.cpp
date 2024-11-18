@@ -357,6 +357,8 @@ HRESULT CPlayer::Ready_Weapon()
 	if (nullptr == m_pWeapon)
 		return E_FAIL;
 
+
+	WeaponDesc.pSocketBoneMatrix2 = m_pModelCom->Get_BoneCombindTransformationMatrix_Ptr("BN_Weapon_L");
 	m_pWeapon[WEP_SCISSOR] = dynamic_cast<CWeapon*>(m_pGameInstance->Clone_GameObject(TEXT("Prototype_GameObject_Weapon_Scissor"), &WeaponDesc));
 	if (nullptr == m_pWeapon)
 		return E_FAIL;

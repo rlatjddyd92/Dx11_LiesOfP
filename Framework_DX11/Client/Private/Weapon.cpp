@@ -25,6 +25,7 @@ HRESULT CWeapon::Initialize(void * pArg)
 	WEAPON_DESC* pDesc = static_cast<WEAPON_DESC*>(pArg);
 
 	m_pSocketMatrix = pDesc->pSocketBoneMatrix;
+	m_pSocketMatrix2 = pDesc->pSocketBoneMatrix2;
 	m_pParentMatrix = pDesc->pParentWorldMatrix;
 
 	if (FAILED(__super::Initialize(pDesc)))

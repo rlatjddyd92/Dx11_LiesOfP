@@ -376,12 +376,6 @@
     <Filter Include="02.GameObjects\06.Weapon\00.PlayerWeapon\02.Scissor">
       <UniqueIdentifier>{ac08be87-0bfa-4f42-b7d1-2208db11d953}</UniqueIdentifier>
     </Filter>
-    <Filter Include="02.GameObjects\06.Weapon\00.PlayerWeapon\02.Scissor\Left">
-      <UniqueIdentifier>{72f22b80-da89-4f2b-a60f-32a139f644fd}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="02.GameObjects\06.Weapon\00.PlayerWeapon\02.Scissor\Right">
-      <UniqueIdentifier>{66f20fd5-bbd3-4de8-8973-67602f920d84}</UniqueIdentifier>
-    </Filter>
     <Filter Include="05.Fsm\Player\OneHand\00.Attack\Rapier\ChargeAttack">
       <UniqueIdentifier>{da07eebc-8583-4bcc-9fb3-22ea92aad7a8}</UniqueIdentifier>
     </Filter>
@@ -417,6 +411,12 @@
     </Filter>
     <Filter Include="05.Fsm\Player\OneHand\00.Attack\Scissor\RAttack00">
       <UniqueIdentifier>{ee0ee3c3-b4e1-4f20-8607-b6b8ae6c61c0}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.GameObjects\06.Weapon\00.PlayerWeapon\02.Scissor\Blade">
+      <UniqueIdentifier>{60b617f6-edb9-4e0a-8161-849d96c22f80}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.GameObjects\06.Weapon\00.PlayerWeapon\02.Scissor\Handle">
+      <UniqueIdentifier>{9f7e1067-c599-4797-8af4-5a3f8617b1f7}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -711,6 +711,9 @@
     <ClInclude Include="..\Public\State_Player_Scissor_RAttack00.h">
       <Filter>05.Fsm\Player\OneHand\00.Attack\Scissor\RAttack00</Filter>
     </ClInclude>
+    <ClInclude Include="..\Public\Weapon_Scissor_Handle.h">
+      <Filter>02.GameObjects\06.Weapon\00.PlayerWeapon\02.Scissor\Handle</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Client.cpp">
@@ -973,6 +976,9 @@
     </ClCompile>
     <ClCompile Include="..\Private\State_Player_Scissor_RAttack00.cpp">
       <Filter>05.Fsm\Player\OneHand\00.Attack\Scissor\RAttack00</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Private\Weapon_Scissor_Handle.cpp">
+      <Filter>02.GameObjects\06.Weapon\00.PlayerWeapon\02.Scissor\Handle</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
