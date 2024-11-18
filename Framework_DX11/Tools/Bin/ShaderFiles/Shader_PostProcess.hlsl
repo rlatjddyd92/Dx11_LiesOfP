@@ -16,6 +16,15 @@ float g_fFocus; // 초점
 /* Motion Blur */
 float g_fMotionBlurPower;
 
+/* Radial Blur */
+float4 g_vRadialPos;
+
+/* Effect */
+texture2D g_EffectTexture;
+texture2D g_DistortionTexture;
+texture2D g_BlurTexture;
+
+
 struct VS_IN
 {
 	float3 vPosition : POSITION;	
@@ -135,6 +144,55 @@ PS_OUT PS_MAIN_MOTION_BLUR(PS_IN In)
     return Out;
 }
 
+PS_OUT PS_MAIN_RADIALBLUR(PS_IN In)
+{
+    PS_OUT Out = (PS_OUT) 0;
+    
+    float fBlurStart = 1.f;
+    
+    // 화면 공간으로 전환하기
+    float4 vCenterPos = mul(float4(g_vRadialPos.xyz, 1.f), g_CameraViewMatrix);
+    vCenterPos = mul(float4(g_vRadialPos.xyz, 1.f), g_CameraProjMatrix);
+    vCenterPos /= vCenterPos.w;
+	
+    // 텍스쳐 좌표로 바꿔야함
+    float2 vBlurCenter = float2(vCenterPos.x * 0.5f + 0.5f, vCenterPos.y * -0.5f + 0.5f);
+    
+    // 중심에서부터의 거리 구하기
+    float2 vDistance = In.vTexcoord.xy - vBlurCenter;
+    float fIntensity = 10.f * (1.0f / 19.f);    // 임시로 강도 10 주기
+   
+    // 블러된 텍스쳐 가져와서 
+    // 거리가 멀수록 블러 텍스쳐를더 많이 섞어주기
+   
+    Out.vColor = 1.f;
+    
+    return Out;
+
+}
+
+PS_OUT PS_MAIN_EFFECT(PS_IN In)
+{
+    PS_OUT Out = (PS_OUT) 0;
+    
+    float fDistortion = g_DistortionTexture.Sample(LinearClampSampler, In.vTexcoord).x;
+    float4 vColor = g_BackTexture.Sample(LinearSampler, In.vTexcoord + float2(fDistortion, fDistortion));
+   
+    float4 vEffect = g_EffectTexture.Sample(LinearSampler, In.vTexcoord);
+    
+    //논블렌드?
+    //vColor = float4(vEffect.rgb + vColor.rgb, 1.f);
+    
+    //블렌드?
+    //vColor = float4(vEffect.rgb * vEffect.a + vColor.rgb * (1.f - vEffect.a), 1.f);
+    
+    Out.vColor = vColor;
+    
+    return Out;
+
+}
+
+
 technique11	DefaultTechnique
 {	
     // 0 
@@ -161,5 +219,27 @@ technique11	DefaultTechnique
         PixelShader = compile ps_5_0 PS_MAIN_MOTION_BLUR();
     }
 
-    
+    // 2
+    pass RadialBlur
+    {
+        SetRasterizerState(RS_Default);
+        SetDepthStencilState(DSS_None, 0);
+        SetBlendState(BS_Default, vector(0.f, 0.f, 0.f, 0.f), 0xffffffff);
+
+        VertexShader = compile vs_5_0 VS_MAIN();
+        GeometryShader = NULL;
+        PixelShader = compile ps_5_0 PS_MAIN_RADIALBLUR();
+    }
+
+    // 3
+    pass Effeft
+    {
+        SetRasterizerState(RS_Default);
+        SetDepthStencilState(DSS_None, 0);
+        SetBlendState(BS_Default, vector(0.f, 0.f, 0.f, 0.f), 0xffffffff);
+
+        VertexShader = compile vs_5_0 VS_MAIN();
+        GeometryShader = NULL;
+        PixelShader = compile ps_5_0 PS_MAIN_RADIALBLUR();
+    }
 }
