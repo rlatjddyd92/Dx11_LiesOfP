@@ -22,7 +22,7 @@ HRESULT CBone::Initialize(HANDLE* pFile, _int iParentBoneIndex)
 	return S_OK;
 }
 
-HRESULT CBone::Initialize_ToBinary(HANDLE* pFile, _bool bUseBoundary)
+HRESULT CBone::Initialize_ToBinary(HANDLE* pFile, _bool bUseBoundary, _uint eType)
 {
 	_ulong dwByte = 0;
 
@@ -35,6 +35,16 @@ HRESULT CBone::Initialize_ToBinary(HANDLE* pFile, _bool bUseBoundary)
 	if (bUseBoundary)
 	{
 		ReadFile(*pFile, &m_bIsChildOf_Boundary, sizeof(_bool), &dwByte, nullptr);
+	}
+
+	if (eType == CModel::TYPE_ANIM)
+	{
+		//ReadFile(*pFile, &m_isNeedTuning, sizeof(_bool), &dwByte, nullptr);
+		//
+		//if (m_isNeedTuning)
+		//{
+		//	ReadFile(*pFile, &m_TuningMatrix, sizeof(_float4x4), &dwByte, nullptr);
+		//}
 	}
 
 	return S_OK;
@@ -75,7 +85,7 @@ void CBone::Update_Boundary(const vector<CBone*>& Bones, _int iCurBoneIndex, _in
 	}
 }
 
-HRESULT CBone::Create_BinaryFile(HANDLE* pFile, _bool bUseBoundary)
+HRESULT CBone::Create_BinaryFile(HANDLE* pFile, _bool bUseBoundary, _uint eType)
 {
 	_ulong dwByte = 0;
 	//부모뼈 인덱스
@@ -84,14 +94,38 @@ HRESULT CBone::Create_BinaryFile(HANDLE* pFile, _bool bUseBoundary)
 	//뼈의 이름
 	WriteFile(*pFile, &m_szName, MAX_PATH, &dwByte, nullptr);
 
+	
 	//뼈 행렬
 	WriteFile(*pFile, &m_TransformationMatrix, sizeof(_float4x4), &dwByte, nullptr);
 
+	if (eType == CModel::TYPE_ANIM)
+	{
+		//조정 여부
+		WriteFile(*pFile, &m_isNeedTuning, sizeof(_bool), &dwByte, nullptr);
+
+		//조정 행렬
+		if (m_isNeedTuning)
+		{
+			WriteFile(*pFile, &m_TuningMatrix, sizeof(_float4x4), &dwByte, nullptr);
+		}
+	}
+	
 	if (bUseBoundary)
 	{
 		WriteFile(*pFile, &m_bIsChildOf_Boundary, sizeof(_bool), &dwByte, nullptr);
 	}
 	return S_OK;
+}
+
+void CBone::SetUp_isNeedTuning(_bool bState)
+{
+	if (bState)
+	{
+		//현재 상태를 저장
+		m_TuningMatrix = m_TransformationMatrix;
+	}
+	//뼈의 조정이 필요한지를 저장
+	m_isNeedTuning = bState;
 }
 
 CBone* CBone::Create(HANDLE* pFile, _int iParentBoneIndex)
@@ -107,11 +141,11 @@ CBone* CBone::Create(HANDLE* pFile, _int iParentBoneIndex)
 	return pInstance;
 }
 
-CBone* CBone::Create_To_Binary(HANDLE* pFile, _bool bUseBoundary)
+CBone* CBone::Create_To_Binary(HANDLE* pFile, _bool bUseBoundary, _uint eType)
 {
 	CBone* pInstance = new CBone();
 
-	if (FAILED(pInstance->Initialize_ToBinary(pFile, bUseBoundary)))
+	if (FAILED(pInstance->Initialize_ToBinary(pFile, bUseBoundary, eType)))
 	{
 		MSG_BOX(TEXT("Failed to Created : CBone"));
 		Safe_Release(pInstance);

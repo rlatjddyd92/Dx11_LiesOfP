@@ -43,19 +43,19 @@ HRESULT CState_CarcassBigA_HitFatal::Start_State(void* pArg)
     {
         m_iDirCnt = DIR::DIR_BEHIND;
     }
-    m_pMonster->Change_Animation(14 - m_iDirCnt - (2 * m_iAnimCnt), false, true);
+    m_pMonster->Change_Animation(AN_FATAL_START_F - m_iDirCnt - (2 * m_iAnimCnt), false, true);
 
     return S_OK;
 }
 
 void CState_CarcassBigA_HitFatal::Update(_float fTimeDelta)
 {
-    if (*m_pIsEndAnim)
+    if (End_Check())
     {
         if (m_iAnimCnt < 2)
         {
             ++m_iAnimCnt;
-            m_pMonster->Change_Animation(14 - m_iDirCnt - (2 * m_iAnimCnt), false, true);
+            m_pMonster->Change_Animation(AN_FATAL_START_F - m_iDirCnt - (2 * m_iAnimCnt), false, true);
         }
         else
         {

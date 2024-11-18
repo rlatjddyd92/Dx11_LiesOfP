@@ -24,7 +24,7 @@ HRESULT CState_CarcassBigA_Impact::Initialize(_uint iStateNum, void* pArg)
 
 HRESULT CState_CarcassBigA_Impact::Start_State(void* pArg)
 {
-    m_pMonster->Change_Animation(AN_IMPACT, true);;
+    m_pMonster->Change_Animation(AN_IMPACT, false, 0.1f, 0, true);
 
     return S_OK;
 }

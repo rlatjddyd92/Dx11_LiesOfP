@@ -66,6 +66,7 @@ HRESULT CController_AnimationTool::Initialize(ID3D11Device* pDevice, ID3D11Devic
 void CController_AnimationTool::SetUp_AnimTool()
 {
 	m_bObjRenderCtr = true;
+	m_bTargetBallRender = true;
 	CModel* pModel = dynamic_cast<CModel*>(m_pGameInstance->Find_Component(LEVEL_TOOL, TEXT("Layer_AnimationTool_Test"), TEXT("Com_Model")));
 	
 	if (m_pCopyModelCom != pModel)
@@ -102,6 +103,7 @@ void CController_AnimationTool::SetUp_AnimTool()
 
 	if (ImGui::BeginTabBar("AnimTool"))
 	{
+		m_bTargetBallRender = true;
 		if (ImGui::BeginTabItem("Anim"))
 		{
 			ListUp_Anim();
@@ -131,7 +133,7 @@ void CController_AnimationTool::SetUp_AnimTool()
 
 		if(!RenderCheck)
 		{
-			m_bTargetBallRender = false;
+			//m_bTargetBallRender = false;
 		}
 
 		ImGui::EndTabItem();
@@ -518,6 +520,7 @@ void CController_AnimationTool::ListUp_Bone()
 	ImGui::SameLine();
 	ImGui::Text(" : %d", m_iSelected_Index_Bone);
 
+
 	//이전 선택지 비교 후 애니메이션 전환
 	if (m_pCopyModelCom != nullptr)
 	{
@@ -557,6 +560,27 @@ void CController_AnimationTool::SetUp_Controller_Bone()
 		vPos.x = WorldMat._41;
 		vPos.y = WorldMat._42;
 		vPos.z = WorldMat._43;
+	}
+
+
+	ImGui::Text("\tBone_Needs_Tuning ? : ");
+	ImGui::SameLine();
+	if ((*m_pCopyBoneVec)[m_iSelected_Index_Bone]->Get_isNeedTuning())
+	{
+		ImGui::Text("True");
+	}
+	else
+		ImGui::Text("False");
+
+
+	if (ImGui::Button("SetUpTuning"))
+	{
+		m_pCopyModelCom->SetUp_isNeedTuning(m_iSelected_Index_Bone, true);
+	}
+	ImGui::SameLine();
+	if (ImGui::Button("DiscardTuning"))
+	{
+		m_pCopyModelCom->SetUp_isNeedTuning(m_iSelected_Index_Bone, false);
 	}
 
 	ImGui::Text("Pos_X   %f", XMVectorGetX(vPos));

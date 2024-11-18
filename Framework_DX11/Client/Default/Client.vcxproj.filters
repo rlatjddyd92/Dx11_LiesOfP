@@ -391,14 +391,53 @@
     <Filter Include="05.Fsm\Player\TwoHand\00.Attack\FlameSword\RAttack_Charge">
       <UniqueIdentifier>{2e7c81d7-bc79-49a7-b525-d8fd9889eb74}</UniqueIdentifier>
     </Filter>
-    <Filter Include="05.Fsm\Monster\CarcassBigA\Attack\SwingRight">
-      <UniqueIdentifier>{d1279b7d-f396-48ea-a774-e273941072cf}</UniqueIdentifier>
-    </Filter>
     <Filter Include="05.Fsm\Monster\CarcassBigA\Attack\Impact">
       <UniqueIdentifier>{4bc0bea3-c446-4d60-9852-a813d7be6342}</UniqueIdentifier>
     </Filter>
-    <Filter Include="05.Fsm\Monster\CarcassBigA\Attack\NewFilter1">
+    <Filter Include="05.Fsm\Monster\CarcassBigA\Attack\SwingRight">
       <UniqueIdentifier>{f747fd4a-2d42-4f72-973e-a4c3bbe430ac}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="05.Fsm\Monster\CarcassBigA\Attack\SwingDownUpperMoveF">
+      <UniqueIdentifier>{f4801b51-efa2-4362-98cd-f9c05071439b}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="05.Fsm\Monster\CarcassBigA\Attack\SwingDownUpper">
+      <UniqueIdentifier>{d1279b7d-f396-48ea-a774-e273941072cf}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="05.Fsm\Monster\CarcassBigA\Attack\SwingRightMoveF">
+      <UniqueIdentifier>{2b57140a-1dff-4fa7-97d4-98878e0d5115}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="05.Fsm\Monster\CarcassBigA\Attack\Route">
+      <UniqueIdentifier>{defc5ddf-41fa-4d35-a731-88c238c47ef0}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="05.Fsm\Monster\CarcassBigA\Attack\Single">
+      <UniqueIdentifier>{7b8bc9ae-1ba3-40d2-8817-267320289cb3}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="05.Fsm\Monster\CarcassBigA\Attack\Single\WheelWind">
+      <UniqueIdentifier>{097b35f4-fd5a-4d44-854f-d76fd17f4a9b}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="05.Fsm\Monster\CarcassBigA\Attack\Single\RageAttack">
+      <UniqueIdentifier>{f1ee5c3e-d827-4577-bba8-eef840b6dbae}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="05.Fsm\Monster\CarcassBigA\Attack\Single\LTSwingRight">
+      <UniqueIdentifier>{9f86f057-9d7b-4a09-857e-95c619e902fe}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="05.Fsm\Monster\CarcassBigA\Attack\Single\LOSwingRight">
+      <UniqueIdentifier>{fd51b5e4-23a9-4085-9f7e-9abbe6de9f02}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="05.Fsm\Monster\CarcassBigA\Attack\Route\AttackRoute_0">
+      <UniqueIdentifier>{3aa6a256-937b-4f1c-8b46-1888ac52205c}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="05.Fsm\Monster\CarcassBigA\Attack\Route\AttackRoute_1">
+      <UniqueIdentifier>{11326689-9b56-489f-aabe-90494d95ebfc}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="05.Fsm\Monster\CarcassBigA\Attack\Route\AttackRoute_2">
+      <UniqueIdentifier>{c04fac58-2352-4546-b506-3b3a84479df1}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="05.Fsm\Monster\CarcassBigA\Attack\Route\AttackRoute_3">
+      <UniqueIdentifier>{de0f89ed-e0cc-4a00-8120-a518ea964014}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="05.Fsm\Monster\CarcassBigA\Attack\Route\AttackToute_4">
+      <UniqueIdentifier>{12670bf0-76fd-432d-9278-b73ac8212e84}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -539,9 +578,6 @@
     </ClInclude>
     <ClInclude Include="..\Public\State_CarcassBigA_Die.h">
       <Filter>05.Fsm\Monster\CarcassBigA\Die</Filter>
-    </ClInclude>
-    <ClInclude Include="..\Public\State_CarcassBigA_Attack.h">
-      <Filter>05.Fsm\Monster\CarcassBigA\Attack</Filter>
     </ClInclude>
     <ClInclude Include="..\Public\StaticObj.h">
       <Filter>02.GameObjects\08.StaticObj</Filter>
@@ -717,6 +753,39 @@
     <ClInclude Include="..\Public\State_SimonManusP1_ChasingSwing.h">
       <Filter>05.Fsm\Monster\SimonManus\Attck\ChasingSwing</Filter>
     </ClInclude>
+    <ClInclude Include="..\Public\State_CarcassBigA_SwingDownUpper.h">
+      <Filter>05.Fsm\Monster\CarcassBigA\Attack\SwingDownUpper</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Public\State_CarcassBigA_SwingRight.h">
+      <Filter>05.Fsm\Monster\CarcassBigA\Attack\SwingRight</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Public\State_CarcassBigA_WheelWind.h">
+      <Filter>05.Fsm\Monster\CarcassBigA\Attack\Single\WheelWind</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Public\State_CarcassBigA_SwingRightMoveF.h">
+      <Filter>05.Fsm\Monster\CarcassBigA\Attack\SwingRightMoveF</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Public\State_CarcassBigA_SwingDownUpperMoveF.h">
+      <Filter>05.Fsm\Monster\CarcassBigA\Attack\SwingDownUpperMoveF</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Public\State_CarcassBigA_RageAttack.h">
+      <Filter>05.Fsm\Monster\CarcassBigA\Attack\Single\RageAttack</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Public\State_CarcassBigA_LTSwingRight.h">
+      <Filter>05.Fsm\Monster\CarcassBigA\Attack\Single\LTSwingRight</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Public\State_CarcassBigA_LOSwingRight.h">
+      <Filter>05.Fsm\Monster\CarcassBigA\Attack\Single\LOSwingRight</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Public\State_CarcassBigA_AttackRoute_0.h">
+      <Filter>05.Fsm\Monster\CarcassBigA\Attack\Route\AttackRoute_0</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Public\State_CarcassBigA_AttackRoute_1.h">
+      <Filter>05.Fsm\Monster\CarcassBigA\Attack\Route\AttackRoute_1</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Public\State_CarcassBigA_AttackRoute_2.h">
+      <Filter>05.Fsm\Monster\CarcassBigA\Attack\Route\AttackRoute_2</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Client.cpp">
@@ -829,9 +898,6 @@
     </ClCompile>
     <ClCompile Include="..\Private\State_CarcassBigA_Die.cpp">
       <Filter>05.Fsm\Monster\CarcassBigA\Die</Filter>
-    </ClCompile>
-    <ClCompile Include="..\Private\State_CarcassBigA_Attack.cpp">
-      <Filter>05.Fsm\Monster\CarcassBigA\Attack</Filter>
     </ClCompile>
     <ClCompile Include="..\Private\StaticObj.cpp">
       <Filter>02.GameObjects\08.StaticObj</Filter>
@@ -1003,6 +1069,39 @@
     </ClCompile>
     <ClCompile Include="..\Private\State_SimonManusP1_UpperAttack.cpp">
       <Filter>05.Fsm\Monster\SimonManus\Attck\Upper</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Private\State_CarcassBigA_SwingDownUpper.cpp">
+      <Filter>05.Fsm\Monster\CarcassBigA\Attack\SwingDownUpper</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Private\State_CarcassBigA_SwingRight.cpp">
+      <Filter>05.Fsm\Monster\CarcassBigA\Attack\SwingRight</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Private\State_CarcassBigA_WheelWind.cpp">
+      <Filter>05.Fsm\Monster\CarcassBigA\Attack\Single\WheelWind</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Private\State_CarcassBigA_SwingRightMoveF.cpp">
+      <Filter>05.Fsm\Monster\CarcassBigA\Attack\SwingRightMoveF</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Private\State_CarcassBigA_SwingDownUpperMoveF.cpp">
+      <Filter>05.Fsm\Monster\CarcassBigA\Attack\SwingDownUpperMoveF</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Private\State_CarcassBigA_RageAttack.cpp">
+      <Filter>05.Fsm\Monster\CarcassBigA\Attack\Single\RageAttack</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Private\State_CarcassBigA_LTSwingRight.cpp">
+      <Filter>05.Fsm\Monster\CarcassBigA\Attack\Single\LTSwingRight</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Private\State_CarcassBigA_LOSwingRight.cpp">
+      <Filter>05.Fsm\Monster\CarcassBigA\Attack\Single\LOSwingRight</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Private\State_CarcassBigA_AttackRoute_0.cpp">
+      <Filter>05.Fsm\Monster\CarcassBigA\Attack\Route\AttackRoute_0</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Private\State_CarcassBigA_AttackRoute_1.cpp">
+      <Filter>05.Fsm\Monster\CarcassBigA\Attack\Route\AttackRoute_1</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Private\State_CarcassBigA_AttackRoute_2.cpp">
+      <Filter>05.Fsm\Monster\CarcassBigA\Attack\Route\AttackRoute_2</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

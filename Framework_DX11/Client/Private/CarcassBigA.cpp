@@ -8,7 +8,15 @@
 
 #include "State_CarcassBigA_Idle.h"
 #include "State_CarcassBigA_Die.h"
-#include "State_CarcassBigA_Attack.h"
+
+#include "State_CarcassBigA_SwingRight.h"
+#include "State_CarcassBigA_SwingRightMoveF.h"
+#include "State_CarcassBigA_SwingDownUpper.h"
+#include "State_CarcassBigA_SwingDownUpperMoveF.h"
+#include "State_CarcassBigA_LTSwingRight.h"
+#include "State_CarcassBigA_LOSwingRight.h"
+#include "State_CarcassBigA_RageAttack.h"
+#include "State_CarcassBigA_WheelWind.h"
 #include "State_CarcassBigA_Impact.h"
 
 #include "State_CarcassBigA_Grogy.h"
@@ -89,7 +97,8 @@ HRESULT CCarcassBigA::Initialize(void* pArg)
 
 void CCarcassBigA::Priority_Update(_float fTimeDelta)
 {
-
+	m_vDirTarget = m_pGameInstance->Find_Player(0)->Get_Transform()->Get_State(CTransform::STATE_POSITION)
+		- m_pTransformCom->Get_State(CTransform::STATE_POSITION);
 	
 }
 
@@ -259,13 +268,20 @@ HRESULT CCarcassBigA::Ready_FSM()
 	m_pFsmCom->Add_State(CState_CarcassBigA_Idle::Create(m_pFsmCom, this, IDLE, &Desc));
 	m_pFsmCom->Add_State(CState_CarcassBigA_Walk::Create(m_pFsmCom, this, WALK, &Desc));
 	m_pFsmCom->Add_State(CState_CarcassBigA_Run::Create(m_pFsmCom, this, RUN, &Desc));
-	m_pFsmCom->Add_State(CState_CarcassBigA_Attack::Create(m_pFsmCom, this, ATTACK, &Desc));
 	m_pFsmCom->Add_State(CState_CarcassBigA_Grogy::Create(m_pFsmCom, this, GROGY, &Desc));
 	m_pFsmCom->Add_State(CState_CarcassBigA_HitFatal::Create(m_pFsmCom, this, HITFATAL, &Desc));
 	m_pFsmCom->Add_State(CState_CarcassBigA_Paralyze::Create(m_pFsmCom, this, PARALYZE, &Desc));
 	m_pFsmCom->Add_State(CState_CarcassBigA_Die::Create(m_pFsmCom, this, DIE, &Desc));
 
 	m_pFsmCom->Add_State(CState_CarcassBigA_Impact::Create(m_pFsmCom, this, IMPACT, &Desc));
+	m_pFsmCom->Add_State(CState_CarcassBigA_SwingRight::Create(m_pFsmCom, this, SWINGRIGHT, &Desc));
+	m_pFsmCom->Add_State(CState_CarcassBigA_SwingRightMoveF::Create(m_pFsmCom, this, SWINGRIGHT_MOVE_F, &Desc));
+	m_pFsmCom->Add_State(CState_CarcassBigA_WheelWind::Create(m_pFsmCom, this, WHEELWIND, &Desc));
+	m_pFsmCom->Add_State(CState_CarcassBigA_SwingDownUpper::Create(m_pFsmCom, this, IMPACT, &Desc));
+	m_pFsmCom->Add_State(CState_CarcassBigA_SwingDownUpperMoveF::Create(m_pFsmCom, this, IMPACT, &Desc));
+	m_pFsmCom->Add_State(CState_CarcassBigA_RageAttack::Create(m_pFsmCom, this, RAGE_ATTACK, &Desc));
+	m_pFsmCom->Add_State(CState_CarcassBigA_LOSwingRight::Create(m_pFsmCom, this, LO_SWINGRIGHT, &Desc));
+	m_pFsmCom->Add_State(CState_CarcassBigA_LTSwingRight::Create(m_pFsmCom, this, LT_SWINGRIGHT, &Desc));
 
 
 	m_pFsmCom->Set_State(IDLE);

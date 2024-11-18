@@ -27,14 +27,19 @@ public:
 
 public:
 	virtual HRESULT		Initialize(HANDLE* pFile, _int iParentBoneIndex);
-	HRESULT				Initialize_ToBinary(HANDLE* pFile, _bool bUseBoundary);
+	HRESULT				Initialize_ToBinary(HANDLE* pFile, _bool bUseBoundary, _uint eType);
 	void				Update_CombinedTransformationMatrix(const vector<CBone*>& Bones, _fmatrix PreTransformMatrix);
 
 	void				Setting_ParentBoneName(class CModel* pModel);
 
 	void				Update_Boundary(const vector<CBone*>& Bones, _int iCurBoneIndex, _int iBoundaryBoneIndex);
 
-	HRESULT				Create_BinaryFile(HANDLE* pFile, _bool bUseBoundary);
+	HRESULT				Create_BinaryFile(HANDLE* pFile, _bool bUseBoundary, _uint eType);
+
+	_bool				Get_isNeedTuning() { return m_isNeedTuning; }
+	void				SetUp_isNeedTuning(_bool bState);
+
+	void				Apply_Tuning() { m_TransformationMatrix = m_TuningMatrix; }
 
 private:
 	/* 뼈의 이름 */
@@ -48,14 +53,19 @@ private:
 	/* m_TransformationMatrix * Parent's m_CombinedTransformationMatrix */
 	_Matrix		m_CombinedTransformationMatrix = {};
 
+
+	//튜닝 매트릭스
+	_Matrix		m_TuningMatrix = {};
+
 	_int		m_iParentBoneIndex = { -1 };
 
 	//애니메이션 상하체 분리를 위한 준비
 	_bool		m_bIsChildOf_Boundary = {false};
+	_bool		m_isNeedTuning = { false };
 
 public:
 	static CBone* Create(HANDLE* pFile, _int iParentBoneIndex);
-	static CBone* Create_To_Binary(HANDLE* pFile, _bool bUseBoundary);
+	static CBone* Create_To_Binary(HANDLE* pFile, _bool bUseBoundary, _uint eType);
 	CBone* Clone();
 	virtual void Free() override;
 };

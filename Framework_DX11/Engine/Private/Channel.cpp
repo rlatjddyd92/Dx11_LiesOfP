@@ -43,10 +43,16 @@ void CChannel::Update_TransformationMatrix(const vector<class CBone*>& Bones, _u
 {
 	if (0.0 == CurrentTrackPosition)
 		*pCurrentKeyFrameIndex  = 0;
+	
+	if (Bones[m_iBoneIndex]->Get_isNeedTuning())
+	{
+		Bones[m_iBoneIndex]->Apply_Tuning();
+		return;
+	}
 
 	KEYFRAME	LastKeyFrame = m_KeyFrames.back();
 
-	_vector		vScale, vRotation, vTranslation;
+	_vector		vScale{}, vRotation{}, vTranslation{};
 
 	/* 보간이 필요없는 경우 */
 	if (CurrentTrackPosition >= LastKeyFrame.TrackPosition)
@@ -91,8 +97,11 @@ void CChannel::Update_TransformationMatrix(const vector<class CBone*>& Bones, _u
 	/* 이 뼈만의 상태행렬 = 회전기준은 당연히 부모기준.(자식뼈만의 상태를 만들때 원점기준으로 정의해야한다.) */
 
 	_matrix			TransformationMatrix = XMMatrixAffineTransformation(vScale, XMVectorSet(0.f, 0.f, 0.f, 1.f), vRotation, vTranslation);
-
+	
+	
 	Bones[m_iBoneIndex]->Set_TransformationMatrix(TransformationMatrix);
+	
+	
 }
 
 KEYFRAME CChannel::Find_KeyFrameIndex(_uint* pCurrentKeyFrameIndex, _double CurrentTrackPosition)

@@ -38,6 +38,9 @@ private:
 	_uint				m_iNumKeyFrames = {};
 	vector<KEYFRAME>	m_KeyFrames;
 
+
+	_bool		m_bSaves{ false };
+
 public:
 	static CChannel* Create(HANDLE* pFile, const class CModel* pModel);
 	virtual void Free() override;

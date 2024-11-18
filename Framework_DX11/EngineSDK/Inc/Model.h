@@ -51,10 +51,13 @@ public:
 	_bool*					Get_IsEndAnimArray()			{ return m_isEnd_Animations; }
 	_bool*					Get_IsEndAnimArray_Boundary()	{ return m_isEnd_Animations_Boundary; }
 
+	_bool					Get_isChangeAni() { return m_isChangeAni; }
+	_bool					Get_isChangeAni_Boundary() { return m_isChangeAni_Boundary; }
 
 	HRESULT					Update_Boundary();
 
 	void					Set_PreTranformMatrix(_matrix PreTranfromMatrix) { XMStoreFloat4x4(&m_PreTransformMatrix, PreTranfromMatrix); }
+	void					SetUp_isNeedTuning(_int iBoneIndex, _bool bState);
 
 public:
 	virtual HRESULT Initialize_Prototype(TYPE eType, const _char* pModelFilePath, _fmatrix PreTransformMatrix, _bool isBinaryAnimModel, FilePathStructStack* pStructStack);

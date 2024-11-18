@@ -29,19 +29,23 @@ HRESULT CState_CarcassBigA_Idle::Start_State(void* pArg)
 void CState_CarcassBigA_Idle::Update(_float fTimeDelta)
 {
     m_fIdleTime += fTimeDelta;
-    if (m_fIdleEndDuration <= m_fIdleTime)
+    _int iDist = m_pMonster->Calc_Distance_XZ();
+    if (iDist <= m_fIdleTime)
     {
         if (m_pMonster->Calc_Distance_XZ() <= 5.f)
         {
-            m_pMonster->Change_State(CCarcassBigA::ATTACK);
+            m_pMonster->Change_State(CCarcassBigA::SWINGRIGHT);
+            return;
         }
-        else if (m_pMonster->Calc_Distance_XZ() > 8.f)
+        else if (iDist > 8.f)
         {
             m_pMonster->Change_State(CCarcassBigA::RUN);
+            return;
         }
-        else if (m_pMonster->Calc_Distance_XZ() > 5.f)
+        else if (iDist > 5.f)
         {
             m_pMonster->Change_State(CCarcassBigA::WALK);
+            return;
         }
 
     }
@@ -91,6 +95,46 @@ void CState_CarcassBigA_Idle::Update(_float fTimeDelta)
 void CState_CarcassBigA_Idle::End_State()
 {
     m_fIdleTime = 0.f;
+}
+
+void CState_CarcassBigA_Idle::Calc_Act_Attack(_int iDistance)
+{
+    if (iDistance < 3.f)
+    {
+        //짧은 기술
+        m_pMonster->Change_State(CCarcassBigA::SWINGRIGHT);
+        return;
+
+        m_pMonster->Change_State(CCarcassBigA::SWINGDOWN_UPPER);
+        return;
+
+        m_pMonster->Change_State(CCarcassBigA::LO_SWINGRIGHT);
+        return;
+
+        m_pMonster->Change_State(CCarcassBigA::LT_SWINGRIGHT);
+        return;
+
+    }
+    else
+    {
+        //긴 기술
+        m_pMonster->Change_State(CCarcassBigA::SWINGRIGHT_MOVE_F);
+        return;
+
+        m_pMonster->Change_State(CCarcassBigA::SWINGDOWN_UPPER_MOVE_F);
+        return;
+
+        m_pMonster->Change_State(CCarcassBigA::IMPACT);
+        return;
+
+    }
+
+    {
+
+        m_pMonster->Change_State(CCarcassBigA::RAGE_ATTACK);
+        return;
+
+    }
 }
 
 CState_CarcassBigA_Idle* CState_CarcassBigA_Idle::Create(CFsm* pFsm, CMonster* pMonster, _uint iStateNum, void* pArg)
