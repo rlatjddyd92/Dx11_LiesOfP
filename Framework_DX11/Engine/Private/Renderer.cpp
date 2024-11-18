@@ -906,7 +906,7 @@ HRESULT CRenderer::Render_Bloom_Compute()
 
 HRESULT CRenderer::Render_Bloom()
 {
-	if (!m_isUseBloom)
+	if (!m_tBloom.isOnBloom)
 	{
 		m_pGameInstance->Clear_MRT(TEXT("MRT_Bloom_BlurXY2"));
 
