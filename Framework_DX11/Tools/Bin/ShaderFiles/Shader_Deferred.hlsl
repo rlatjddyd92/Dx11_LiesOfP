@@ -12,6 +12,8 @@ vector			g_vLightDir;
 vector			g_vLightPos;
 float			g_fLightRange;
 
+float           g_fFar;
+
 vector			g_vLightDiffuse;
 vector			g_vLightAmbient;
 vector			g_vLightSpecular;
@@ -34,11 +36,6 @@ texture2D		g_CascadeShadowTexture;
 
 texture2D		g_DecalDiffuseTexture;
 texture2D		g_DecalNormalTexture;
-
-/* DOF */
-texture2D       g_DofBlurTexture;
-float           g_fFocus;   // 초점
-float           g_fFocusRatio;
 
 vector			g_vCamPosition;
 
@@ -167,7 +164,7 @@ PS_OUT_LIGHT PS_MAIN_LIGHT_DIRECTIONAL(PS_IN In)
 	vector		vDepthDesc = g_DepthTexture.Sample(PointSampler, In.vTexcoord);
 	vector		vNormalDesc = g_NormalTexture.Sample(PointSampler, In.vTexcoord);
 	
-    float		fViewZ = vDepthDesc.y * 1000.f;
+    float		fViewZ = vDepthDesc.y * g_fFar;
     float3		vNormal = float3(vNormalDesc.xyz * 2.f - 1.f);
 	
     vector		vPosition = Compute_WorldPos(In.vTexcoord, vDepthDesc.x, fViewZ);
@@ -248,7 +245,7 @@ PS_OUT_LIGHT_POINT PS_MAIN_LIGHT_POINT(PS_IN In)
     PS_OUT_LIGHT_POINT Out = (PS_OUT_LIGHT_POINT) 0;
 
 	vector		vDepthDesc = g_DepthTexture.Sample(PointSampler, In.vTexcoord);
-	float		fViewZ = vDepthDesc.y * 1000.f;
+	float		fViewZ = vDepthDesc.y * g_fFar;
 
 	vector		vNormalDesc = g_NormalTexture.Sample(PointSampler, In.vTexcoord);
 	vector		vNormal = float4(vNormalDesc.xyz * 2.f - 1.f, 0.f);
@@ -293,7 +290,7 @@ PS_OUT PS_MAIN_DEFERRED(PS_IN In)
     Out.vColor = (vDiffuse * vShade + vSpecular) * g_CascadeShadowTexture.Sample(LinearSampler, In.vTexcoord);
 
 	vector		vDepthDesc = g_DepthTexture.Sample(PointSampler, In.vTexcoord);
-	float		fViewZ = vDepthDesc.y * 1000.f;
+	float		fViewZ = vDepthDesc.y * g_fFar;
 
 	/* 1. 현재 그려내는 픽셀을 광원기준의 위치로 변환하기위해서 우선 월드로 역치환하여 월드위치를 구한다. */
 	vector		vPosition = Compute_WorldPos(In.vTexcoord, vDepthDesc.x, fViewZ);

@@ -2,6 +2,7 @@
 
 matrix g_WorldMatrix, g_ViewMatrix, g_ProjMatrix;
 matrix g_ViewMatrixInv, g_ProjMatrixInv;
+float g_fFar;
 //matrix g_CameraViewMatrix;
 
 texture2D g_DeacalDiffuseTexture;
@@ -80,7 +81,7 @@ PS_OUT PS_MAIN(PS_IN In)
     vector vARMDesc = g_ARMTexture.Sample(PointSampler, vTexUV);
     
     
-    float fViewZ = vDepthDesc.y * 1000.f;
+    float fViewZ = vDepthDesc.y * g_fFar;
     
     vector vPosition = (vector) 0;
     

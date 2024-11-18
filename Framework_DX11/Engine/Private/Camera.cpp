@@ -38,8 +38,12 @@ HRESULT CCamera::Initialize(void * pArg)
 
 void CCamera::Priority_Update(_float fTimeDelta)
 {
+	if (!m_isActive)
+		return;
+
 	m_pGameInstance->Set_Transform(CPipeLine::D3DTS_VIEW, m_pTransformCom->Get_WorldMatrix_Inverse());
 	m_pGameInstance->Set_Transform(CPipeLine::D3DTS_PROJ, XMMatrixPerspectiveFovLH(m_fFovy, m_fAspect, m_fNear, m_fFar));
+	m_pGameInstance->Set_NearFar(m_fNear, m_fFar);
 }
 
 void CCamera::Update(_float fTimeDelta)

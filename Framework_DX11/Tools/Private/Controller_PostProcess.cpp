@@ -4,6 +4,7 @@
 #include <io.h>
 
 #include "Controller_PostProcess.h"
+#include "Camera.h"
 
 IMPLEMENT_SINGLETON(CController_PostProcess)
 
@@ -21,6 +22,15 @@ HRESULT CController_PostProcess::Initialize(ID3D11Device* pDevice, ID3D11DeviceC
 	Safe_AddRef(m_pContext);
 
 	return S_OK;
+}
+
+void CController_PostProcess::Update_CameraSetting()
+{
+	static _float fCameraFar = m_pGameInstance->Get_Far();
+
+	ImGui::DragFloat("Far", &fCameraFar, 5.f, 1.f, 1000.f);
+
+	m_pGameInstance->Find_Camera(LEVEL_TOOL)->Set_Far(fCameraFar);
 }
 
 void CController_PostProcess::Update_SSAO()

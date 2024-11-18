@@ -57,6 +57,9 @@ HRESULT CInstance_Manager::Draw(_uint iPass)
 	if (FAILED(m_pNonAnimInstanceShader->Bind_Matrix("g_ProjMatrix", &m_pGameInstance->Get_Transform(CPipeLine::D3DTS_PROJ))))
 		return E_FAIL;
 
+	if (FAILED(m_pNonAnimInstanceShader->Bind_RawValue("g_fFar", &m_pGameInstance->Get_Far(), sizeof(_float))))
+		return E_FAIL;
+
 	for (auto& Pair : m_pNonAnimModels)
 	{
 		_uint		iNumMeshes = Pair.second->Get_NumMeshes();

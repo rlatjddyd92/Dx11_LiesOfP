@@ -4,6 +4,8 @@
 matrix g_CameraViewMatrix;
 texture2D g_Texture;
 
+float g_fFar;
+
 texture2D g_DepthTexture;
 texture2D g_NormalTexture;
 texture2D g_NoiseTexture;
@@ -91,7 +93,7 @@ PS_OUT PS_MAIN_SSAO(PS_IN In)
     PS_OUT Out = (PS_OUT) 0;
 	
     vector vDepthDesc = g_DepthTexture.Sample(PointSampler, In.vTexcoord);
-    float fViewZ = vDepthDesc.y * 1000.f;
+    float fViewZ = vDepthDesc.y * g_fFar;
     
     vector vSrcWorldPosition = Compute_WorldPos(In.vTexcoord, vDepthDesc.x, fViewZ);
     
@@ -108,7 +110,7 @@ PS_OUT PS_MAIN_SSAO(PS_IN In)
             continue; // 화면 밖의 샘플링을 건너뛰기
         
         vector vDestDepthDesc = g_DepthTexture.Sample(PointSampler, vSampleUV);
-        float fDestViewZ = vDepthDesc.y * 1000.f;
+        float fDestViewZ = vDepthDesc.y * g_fFar;
         
         vector vDistance = Compute_WorldPos(vSampleUV, vDestDepthDesc.x, fDestViewZ);
         float3 vDir = normalize(vDistance);

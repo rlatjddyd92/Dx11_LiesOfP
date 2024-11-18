@@ -19,11 +19,16 @@ public:
 		_float		fAspect = {};
 		_float		fNear = {};
 		_float		fFar = {};
+
+		_wstring	strCameraTag = {};
 	}CAMERA_DESC;
 protected:
 	CCamera(ID3D11Device* pDevice, ID3D11DeviceContext* pContext);
 	CCamera(const CCamera& Prototype);
 	virtual ~CCamera() = default;
+
+public:
+	void Set_Far(_float fFar) { m_fFar = fFar; }
 
 public:
 	virtual HRESULT Initialize_Prototype();
@@ -42,6 +47,8 @@ protected:
 	// 캐스캐이드용
 	_float				m_fCascadeFarPlanes[4];
 	_Vec3				m_vPrevCenterPos[3];
+
+	_wstring			m_strCameraTag = {};
 
 protected:
 	void Calculat_CascadeFrustum();

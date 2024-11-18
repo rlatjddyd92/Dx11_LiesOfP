@@ -4,6 +4,8 @@
 matrix g_CameraViewMatrix, g_CameraProjMatrix;
 matrix g_PrevCameraViewMatrix, g_PrevCameraProjMatrix;
 
+float g_fFar;
+
 texture2D g_BackTexture;
 texture2D g_DepthTexture;
 
@@ -67,7 +69,7 @@ PS_OUT PS_MAIN_DOF(PS_IN In)
 {
     PS_OUT Out = (PS_OUT) 0;
     
-    float fDepth = g_DepthTexture.Sample(PointSampler, In.vTexcoord).y * 1000.f;
+    float fDepth = g_DepthTexture.Sample(PointSampler, In.vTexcoord).y * g_fFar;
     vector vBack = g_BackTexture.Sample(LinearSampler, In.vTexcoord);
     vector vBlur = g_DofBlurTexture.Sample(LinearSampler, In.vTexcoord);
     
@@ -84,13 +86,6 @@ PS_OUT PS_MAIN_DOF(PS_IN In)
    
     Out.vColor = vColor;
     
-    //vColor = vBack;
-    //if (vDepth >= g_fFocus)
-    //{
-    //    float fDepthDiff = (vDepth - g_fFocus) / (1000.f - g_fFocus);
-    //    Out.vColor = lerp(vBack, vBlur, saturate(10.f * fDepthDiff));
-    //}
-    
     return Out;
 
 }
@@ -100,7 +95,7 @@ PS_OUT PS_MAIN_MOTION_BLUR(PS_IN In)
     PS_OUT Out = (PS_OUT) 0;
 
     vector vDepthDesc = g_DepthTexture.Sample(PointSampler, In.vTexcoord);
-    float fViewZ = vDepthDesc.y * 1000.f;
+    float fViewZ = vDepthDesc.y * g_fFar;
 		    
     vector vCurrentlWorldPos;
 

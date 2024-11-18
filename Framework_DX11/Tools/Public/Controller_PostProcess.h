@@ -23,6 +23,7 @@ private:
 public:
 	HRESULT Initialize(ID3D11Device* pDevice, ID3D11DeviceContext* pContext);
 
+	void Update_CameraSetting();
 	void Update_SSAO();
 	void Update_HDR();
 	void Update_BLOOM();

@@ -17,6 +17,7 @@ private:
 
 public:
 	void Set_Transform(D3DTRANSFORMSTATE eState, _fmatrix TransformMatrix) { XMStoreFloat4x4(&m_TransformMatrices[eState], TransformMatrix); }
+	void Set_NearFar(_float fNear, _float fFar) { m_fNear = fNear; m_fFar = fFar; }
 
 public:
 	const _Matrix& Get_Transform(D3DTRANSFORMSTATE eState) const { return m_TransformMatrices[eState]; }
@@ -25,6 +26,8 @@ public:
 	const _Vec4& Get_CamPosition_Vec4() const { return m_vCamPosition; }
 	const _Vec3& Get_CamPosition_Vec3() const { return _Vec3(m_vCamPosition); }
 
+	const _float& Get_Near() { return m_fNear; }
+	const _float& Get_Far() { return m_fFar; }
 
 	const _Matrix* Get_CascadeViewMatirx() const { return m_CascadeViewMatrices; }
 	void Set_CascadeViewMatirx(_Matrix* CascadeViewMatrices) { memcpy(m_CascadeViewMatrices, CascadeViewMatrices, sizeof(_Matrix) * 3); }
@@ -43,6 +46,9 @@ private:
 	_Matrix			m_TransformMatrices[D3DTS_END];
 	_Matrix			m_TransformInverseMatrices[D3DTS_END];
 	_Vec4			m_vCamPosition = {};
+
+	_float			m_fNear = {};
+	_float			m_fFar = {};
 
 	_Matrix			m_CascadeViewMatrices[3];
 	_Matrix			m_CascadeProjMatrices[3];

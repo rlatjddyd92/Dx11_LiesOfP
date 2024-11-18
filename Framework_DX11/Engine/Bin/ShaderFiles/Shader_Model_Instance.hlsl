@@ -3,6 +3,8 @@
 matrix g_WorldMatrix, g_ViewMatrix, g_ProjMatrix;
 matrix g_CascadeViewMatrix[3], g_CascadeProjMatrix[3];
 
+float g_fFar;
+
 texture2D g_DiffuseTexture;
 texture2D g_NormalTexture;
 texture2D g_ARMTexture;
@@ -150,7 +152,7 @@ PS_OUT_MODEL PS_MAIN(PS_IN_MODEL In)
 
 	/* -1.f ~ 1.f -> 0.f ~ 1.f */
     Out.vNormal = vector(In.vNormal.xyz * 0.5f + 0.5f, 0.f);
-    Out.vDepth = vector(In.vProjPos.z / In.vProjPos.w, In.vProjPos.w / 1000.f, 0.f, 0.f);
+    Out.vDepth = vector(In.vProjPos.z / In.vProjPos.w, In.vProjPos.w / g_fFar, 0.f, 0.f);
     Out.vARM = g_ARMTexture.Sample(LinearSampler, In.vTexcoord);
     Out.vPickDepth = vector(In.vProjPos.z / In.vProjPos.w, 0.f, 0.f, 1.f);
     
@@ -189,7 +191,7 @@ PS_OUT_MODEL PS_MAIN_NORMAL(PS_IN_NORMAL In)
 
 	/* -1.f ~ 1.f -> 0.f ~ 1.f */
     Out.vNormal = vector(vNormal * 0.5f + 0.5f, 0.f);
-    Out.vDepth = vector(In.vProjPos.z / In.vProjPos.w, In.vProjPos.w / 1000.f, 0.f, 0.f);
+    Out.vDepth = vector(In.vProjPos.z / In.vProjPos.w, In.vProjPos.w / g_fFar, 0.f, 0.f);
     Out.vARM = g_ARMTexture.Sample(LinearSampler, In.vTexcoord);
     Out.vPickDepth = vector(In.vProjPos.z / In.vProjPos.w, 0.f, 0.f, 1.f);
     

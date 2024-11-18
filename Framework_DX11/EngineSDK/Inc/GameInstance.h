@@ -99,12 +99,16 @@ public:
 #pragma endregion
 
 #pragma region PIPELINE
-	void Set_Transform(CPipeLine::D3DTRANSFORMSTATE eState, _fmatrix TransformMatrix);
-	const _Matrix& Get_Transform(CPipeLine::D3DTRANSFORMSTATE eState) const;
-	const _Matrix& Get_Transform_Inverse(CPipeLine::D3DTRANSFORMSTATE eState) const;
+	void			Set_Transform(CPipeLine::D3DTRANSFORMSTATE eState, _fmatrix TransformMatrix);
+	void			Set_NearFar(_float fNear, _float fFar);
+	const _Matrix&	Get_Transform(CPipeLine::D3DTRANSFORMSTATE eState) const;
+	const _Matrix&	Get_Transform_Inverse(CPipeLine::D3DTRANSFORMSTATE eState) const;
 
 	const _Vec4& Get_CamPosition_Vec4() const;
 	const _Vec3& Get_CamPosition_Vec3() const;
+
+	const _float& Get_Near();
+	const _float& Get_Far();
 
 	const _Matrix* Get_CascadeViewMatirx() const;
 	void Set_CascadeViewMatirx(_Matrix* CascadeViewMatrices);
