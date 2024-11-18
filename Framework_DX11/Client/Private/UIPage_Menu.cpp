@@ -81,6 +81,20 @@ HRESULT CUIPage_Menu::Ready_UIPart_Group_Control()
 {
 	__super::Ready_UIPart_Group_Control();
 
+	m_vec_Group_Ctrl.resize(_int(PART_GROUP::GROUP_END));
+
+	for (auto& iter : m_vec_Group_Ctrl)
+		iter = new UG_CTRL;
+
+	for (_int i = 0; i < m_vecPart.size(); ++i)
+	{
+		if (m_vecPart[i]->iGroupIndex != -1)
+			m_vec_Group_Ctrl[m_vecPart[i]->iGroupIndex]->PartIndexlist.push_back(i);
+	}
+
+	m_bRender = false;
+
+
 	return S_OK;
 }
 

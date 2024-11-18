@@ -387,6 +387,7 @@ void CUIManager::UIControl_Test(_float fTimeDelta)
 
 void CUIManager::UIControl_Main(_float fTimeDelta)
 {
+	
 }
 
 void CUIManager::UIControl_Loading(_float fTimeDelta)
@@ -395,7 +396,23 @@ void CUIManager::UIControl_Loading(_float fTimeDelta)
 
 void CUIManager::UIControl_Play(_float fTimeDelta)
 {
-	
+	// 메인 페이지 조정 (실제 구현 기능)
+	if (KEY_TAP(KEY::ESC)) // Play_Menu 띄우기/닫기 
+	{
+		if (m_vecPage[_int(UIPAGE::PAGE_MENU)]->GetRender())
+		{
+			if (m_vecPage[_int(UIPAGE::PAGE_MENU)]->GetPageAction(PAGEACTION::ACTION_OPENING))
+			{
+				m_vecPage[_int(UIPAGE::PAGE_MENU)]->CloseAction();
+			}
+			else if (m_vecPage[_int(UIPAGE::PAGE_MENU)]->GetPageAction(PAGEACTION::ACTION_CLOSING))
+			{
+				m_vecPage[_int(UIPAGE::PAGE_MENU)]->OpenAction();
+			}
+		}
+		else
+			m_vecPage[_int(UIPAGE::PAGE_MENU)]->OpenAction();
+	}
 
 }
 
