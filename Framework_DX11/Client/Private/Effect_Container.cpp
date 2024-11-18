@@ -29,7 +29,6 @@ HRESULT CEffect_Container::Initialize(void* pArg)
 		return E_FAIL;
 
 	// 위치 회전이랑 크기 받아올수 잇게
-
 	m_WorldMatrix = XMMatrixIdentity();
 	m_pParentMatrix = pDesc->pParentMatrix;
 	m_pSocketMatrix = pDesc->pSocketMatrix;
@@ -94,6 +93,9 @@ void CEffect_Container::Late_Update(_float fTimeDelta)
 		if(false == Effect->Get_Dead())
 			m_isDead = false;
 	}
+
+	if (true == m_isDead)
+		_int a = 0;
 }
 
 HRESULT CEffect_Container::Render()
@@ -119,6 +121,17 @@ HRESULT CEffect_Container::Reset_Effects()
 	}
 
 	return S_OK;
+}
+
+void CEffect_Container::Set_Loop(_bool bLoop)
+{
+	if (true == bLoop)
+		m_isDead = false;
+
+	for (auto& Effect : m_Effects)
+	{
+		Effect->Set_Loop(bLoop);
+	}
 }
 
 CEffect_Container* CEffect_Container::Create(ID3D11Device* pDevice, ID3D11DeviceContext* pContext)

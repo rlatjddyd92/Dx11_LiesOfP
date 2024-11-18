@@ -4,32 +4,35 @@
 
 BEGIN(Engine)
 class CShader;
+class CTrail_TwoPoint_Instance;
 class CTexture;
-class CVIBuffer_Rect;
 END
 
 BEGIN(Client)
-class CTexture_Effect final : public CEffect_Base
+class CTrail_Effect_TP final :public CEffect_Base
 {
 public:
 	typedef struct
 	{
-		_uint		iShaderIndex = { 0 };
-		_float		fDuration = { 10.f };
+		_uint		iNumInstance = { 10 };
+		_float2		vLifeTime = { 2.f, 2.f };
+	}BUFFER_DESC;
+
+	typedef struct
+	{
+		// 움직임
+		_Vec3		vTopOffset = {};
+		_Vec3		vBottomOffset = {};
+		
+		// 셰이더
+		_uint		iNumInstance = { 10 };
 		_Vec4		vColor = { 0.f, 0.f, 0.f, 1.f };
-		_Vec2		vDivide = { 1.f, 1.f };
-		_float		fSpriteSpeed = { 0.f };
-
-		_Vec3		vPos = { 0.f, 0.f, 0.f };
-
-		_Vec3		vStartScale = { 1.f, 1.f, 1.f };
-		_Vec3		vScalingSpeed = {};
-
-		_float		fAlpha = { 1.f };
 		_float		fAlphaSpeed = { 0.f };
 
+		// 기타
+		_uint		iShaderIndex = { 0 };
 		_bool		bLoop = { false };
-	}DEFAULT_DESC;
+	} DEFAULT_DESC;
 
 	typedef struct
 	{
@@ -41,14 +44,16 @@ public:
 
 	typedef struct : public CEffect_Base::EFFECT_BASE_DESC
 	{
-		DEFAULT_DESC DefaultDesc = {};
-		TEXT_DESC TextDesc = {};
-	} TEXTURE_EFFECT_DESC;
+		DEFAULT_DESC	DefaultDesc = {};
+		TEXT_DESC		TextDesc = {};
+		_wstring		strVIBufferTag = TEXT("");
+	}TRAIL_TP_DESC;
+
 
 private:
-	CTexture_Effect(ID3D11Device* pDevice, ID3D11DeviceContext* pContext);
-	CTexture_Effect(const CTexture_Effect& Prototype);
-	virtual ~CTexture_Effect() = default;
+	CTrail_Effect_TP(ID3D11Device* pDevice, ID3D11DeviceContext* pContext);
+	CTrail_Effect_TP(const CTrail_Effect_TP& Prototype);
+	virtual ~CTrail_Effect_TP() = default;
 
 public:
 	virtual HRESULT Initialize_Prototype();
@@ -60,29 +65,27 @@ public:
 
 public:
 	virtual void Reset() override;
-	virtual void Set_Loop(_bool bLoop) override {
+	void Set_Loop(_bool bLoop) override {
 		m_DefaultDesc.bLoop = bLoop;
-		if(true == bLoop)
+		if (true == bLoop)
 			Reset();
 	}
 
 private:
 	class CShader* m_pShaderCom = { nullptr };
+	class CTrail_TwoPoint_Instance* m_pVIBufferCom = { nullptr };
 	class CTexture* m_pTextureCom[TEXTURE_END] = { nullptr, nullptr, nullptr, nullptr };
-	class CVIBuffer_Rect* m_pVIBufferCom = { nullptr };
 
-private:
 	DEFAULT_DESC m_DefaultDesc = {};
 	DEFAULT_DESC m_InitDesc = {};
 
-	_float	m_fAccumulateTime = { 0.f };
-	_float	m_fCurrenrtIndex = { 0.f };
+	_float m_fAlpha = 0.f;
 
 private:
-	HRESULT Ready_Components(const TEXT_DESC& Desc);
+	HRESULT Ready_Components(const TRAIL_TP_DESC& Desc);
 
 public:
-	static CTexture_Effect* Create(ID3D11Device* pDevice, ID3D11DeviceContext* pContext);
+	static CTrail_Effect_TP* Create(ID3D11Device* pDevice, ID3D11DeviceContext* pContext);
 	virtual CGameObject* Clone(void* pArg);
 	virtual void Free() override;
 };

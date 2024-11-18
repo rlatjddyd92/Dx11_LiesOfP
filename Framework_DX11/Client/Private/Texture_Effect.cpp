@@ -39,8 +39,6 @@ HRESULT CTexture_Effect::Initialize(void* pArg)
 
     m_pTransformCom->BillBoard();
 
-    m_pTransformCom->Rotation(m_pTransformCom->Get_State(CTransform::STATE_LOOK), XMConvertToRadians(m_DefaultDesc.fRotationAngle));
-
     return S_OK;
 }
 
@@ -60,9 +58,6 @@ void CTexture_Effect::Update(_float fTimeDelta)
 
     m_DefaultDesc.fAlpha += fTimeDelta * m_DefaultDesc.fAlphaSpeed;
 
-    m_pTransformCom->Rotation(m_pTransformCom->Get_State(CTransform::STATE_LOOK), 
-        XMConvertToRadians(m_DefaultDesc.fRotationAngle) + m_fAccumulateTime * XMConvertToRadians(m_DefaultDesc.fRotationSpeed));
-
     _Vec3 vScale = m_pTransformCom->Get_Scaled();
     vScale += m_DefaultDesc.vScalingSpeed * fTimeDelta;
     m_pTransformCom->Set_Scaled(vScale.x, vScale.y, vScale.z);
@@ -70,6 +65,16 @@ void CTexture_Effect::Update(_float fTimeDelta)
     m_fCurrenrtIndex += fTimeDelta * m_DefaultDesc.fSpriteSpeed;
 
     __super::Set_WorldMatrix();
+
+    _Vec3 vCurrentScale = _float3(m_WorldMatrix.Right().Length(), m_WorldMatrix.Up().Length(), m_WorldMatrix.Forward().Length());
+
+    _Vec4 vLook = XMLoadFloat4x4(&m_pGameInstance->Get_Transform_Inverse(CPipeLine::D3DTS_VIEW)).r[2];
+    _Vec4 vRight = XMVector3Cross(XMVectorSet(0.f, 1.f, 0.f, 0.f), vLook);
+    _Vec4 vUp = XMVector3Cross(vLook, vRight);
+
+    XMStoreFloat3((_float3*)&m_WorldMatrix.m[0][0], vRight * vCurrentScale.x);
+    XMStoreFloat3((_float3*)&m_WorldMatrix.m[1][0], vUp * vCurrentScale.y);
+    XMStoreFloat3((_float3*)&m_WorldMatrix.m[2][0], vLook * vCurrentScale.z);
 }
 
 void CTexture_Effect::Late_Update(_float fTimeDelta)
@@ -80,7 +85,12 @@ void CTexture_Effect::Late_Update(_float fTimeDelta)
     m_fAccumulateTime += fTimeDelta;
 
     if (m_DefaultDesc.fDuration < m_fAccumulateTime)
-        m_isActive = false;
+    {
+        if (true == m_DefaultDesc.bLoop)
+            Reset();
+        else
+            m_isDead = true;
+    }
 
     if (CRenderer::RG_EFFECT == m_RenderDesc.iRenderGroup)
         m_pGameInstance->Add_RenderObject(CRenderer::RG_NONLIGHT, this);
@@ -149,11 +159,10 @@ void CTexture_Effect::Reset()
     m_fCurrenrtIndex = { 0.f };
 
     m_DefaultDesc = m_InitDesc;
+    m_isDead = false;
 
     m_pTransformCom->Set_State(CTransform::STATE_POSITION, m_DefaultDesc.vPos);
     m_pTransformCom->Set_Scaled(m_DefaultDesc.vStartScale.x, m_DefaultDesc.vStartScale.y, m_DefaultDesc.vStartScale.z);
-    m_pTransformCom->Rotation(m_pTransformCom->Get_State(CTransform::STATE_LOOK), m_DefaultDesc.fRotationAngle);
-
 }
 
 HRESULT CTexture_Effect::Ready_Components(const TEXT_DESC& Desc)

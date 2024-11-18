@@ -27,7 +27,7 @@ public:
 		// ºŒ¿Ã¥ı
 		_uint		iNumInstance = { 10 };
 		_Vec4		vColor = { 0.f, 0.f, 0.f, 1.f };
-		_float		fAlphaSpeed = { 0.f };
+		_float		fAlphaSpeed = { 1.f };
 
 		// ±‚≈∏
 		_uint		iShaderIndex = { 0 };

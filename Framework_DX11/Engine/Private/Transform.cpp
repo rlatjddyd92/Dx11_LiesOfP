@@ -232,6 +232,24 @@ void CTransform::LookAt_Dir(_Vec4 vDir)
 	Set_State(STATE_LOOK, vLook * vScale.z);
 }
 
+void CTransform::Look_Dir(_Vec4 vDir)
+{
+	_Vec3		vScale = Get_Scaled();
+
+	_Vec4		vPosition = Get_State(STATE_POSITION);
+
+	_Vec4		vLook = vDir;
+
+	_Vec4		vRight = XMVector3Cross(XMVectorSet(0.f, 1.f, 0.f, 0.f), vLook);
+
+	_Vec4		vUp = XMVector3Cross(vLook, vRight);
+
+	Set_State(STATE_RIGHT, XMVector3Normalize(vRight) * vScale.x);
+	Set_State(STATE_UP, XMVector3Normalize(vUp) * vScale.y);
+	Set_State(STATE_LOOK, XMVector3Normalize(vLook) * vScale.z);
+
+}
+
 void CTransform::Go_Straight(_float fTimeDelta, class CNavigation* pNavigation)
 {
 	_Vec3		vPosition = Get_State(STATE_POSITION);
@@ -374,7 +392,7 @@ void CTransform::BillBoard()
 	_Vec3		vCameraPos = pCamera->Get_Transform()->Get_State(CTransform::STATE_POSITION);
 	_Vec3		vLook = vPosition - vCameraPos;
 
-	if (vLook == _Vec3(0.f, 0.f, 0.f))
+	if (0.f == vLook.Length())
 		return;
 
 	// Up 벡터와 Look 벡터를 외적하여 Right 벡터를 구함

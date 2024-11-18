@@ -51,6 +51,10 @@ void CEffect_Base::Reset()
 {
 }
 
+void CEffect_Base::Set_Loop(_bool bLoop)
+{
+}
+
 void CEffect_Base::Set_WorldMatrix()
 {
     _Matrix ParentMatrix = {};

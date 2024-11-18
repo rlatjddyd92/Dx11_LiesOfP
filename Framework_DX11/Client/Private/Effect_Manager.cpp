@@ -46,6 +46,22 @@ HRESULT CEffect_Manager::Initialize(ID3D11Device* pDevice, ID3D11DeviceContext* 
     return S_OK;
 }
 
+CEffect_Container* CEffect_Manager::Clone_Effect(const _wstring& strECTag, _Matrix* pParentMatrix, _Matrix* pSocketMatrix, _Vec3 vPos, _Vec3 vRotation, _Vec3 vScale)
+{
+    CEffect_Container::EFFECT_DESC desc = {};
+
+    desc.fRotationPerSec = XMConvertToRadians(90.f);
+    desc.fSpeedPerSec = 1.f;
+    desc.iLevelIndex = LEVEL_GAMEPLAY;
+    desc.pParentMatrix = pParentMatrix;
+    desc.pSocketMatrix = pSocketMatrix;
+    desc.vPos = vPos;
+    desc.vRotation = vRotation;
+    desc.vScale = vScale;
+
+    return Clone_Effect(strECTag, &desc);
+}
+
 CEffect_Container* CEffect_Manager::Clone_Effect(const _wstring& strECTag, void* pArg)
 {
     CEffect_Container* pEffectContainer = CREATE_CONTAINER(pArg);
@@ -69,9 +85,37 @@ CEffect_Container* CEffect_Manager::Clone_Effect(const _wstring& strECTag, void*
         {
             pEffectContainer->Add_Effect(Clone_MeshEffect(strEffectName));
         }
+        else if (TEXT("TOP") == strFileExtention)
+        {
+            pEffectContainer->Add_Effect(Clone_TrailOP_Effect(strEffectName));
+        }
+        else if (TEXT("TTP") == strFileExtention)
+        {
+            pEffectContainer->Add_Effect(Clone_TrailTP_Effect(strEffectName));
+        }
+        else if (TEXT("TMP") == strFileExtention)
+        {
+            pEffectContainer->Add_Effect(Clone_TrailMP_Effect(strEffectName));
+        }
     }
 
     return pEffectContainer;
+}
+
+HRESULT CEffect_Manager::Add_Effect_ToLayer(_uint iLevelID, const _wstring& strECTag, _Vec3 vPos, _Vec3 vRotation, _Vec3 vScale)
+{
+    CEffect_Container::EFFECT_DESC desc = {};
+
+    desc.fRotationPerSec = XMConvertToRadians(90.f);
+    desc.fSpeedPerSec = 1.f;
+    desc.iLevelIndex = iLevelID;
+    desc.pParentMatrix = nullptr;
+    desc.pSocketMatrix = nullptr;
+    desc.vPos = vPos;
+    desc.vRotation = vRotation;
+    desc.vScale = vScale;
+
+    return Add_Effect_ToLayer(iLevelID, strECTag, &desc);
 }
 
 HRESULT CEffect_Manager::Add_Effect_ToLayer(_uint iLevelID, const _wstring& strECTag, void* pArg)
@@ -96,6 +140,18 @@ HRESULT CEffect_Manager::Add_Effect_ToLayer(_uint iLevelID, const _wstring& strE
         else if (TEXT("ME") == strFileExtention)
         {
             pEffectContainer->Add_Effect(Clone_MeshEffect(strEffectName));
+        }
+        else if (TEXT("TOP") == strFileExtention)
+        {
+            pEffectContainer->Add_Effect(Clone_TrailOP_Effect(strEffectName));
+        }
+        else if (TEXT("TTP") == strFileExtention)
+        {
+            pEffectContainer->Add_Effect(Clone_TrailTP_Effect(strEffectName));
+        }
+        else if (TEXT("TMP") == strFileExtention)
+        {
+            pEffectContainer->Add_Effect(Clone_TrailMP_Effect(strEffectName));
         }
     }
 
@@ -140,7 +196,21 @@ HRESULT CEffect_Manager::Load_Effects(const _wstring& strEffectPath)
                 if (FAILED(Load_Mesh_Effect(strResultPath)))
                     return E_FAIL;
             }
-
+            else if (TEXT("TOP") == strFileExtention)
+            {
+                if (FAILED(Load_TrailOP_Effect(strResultPath)))
+                    return E_FAIL;
+            }
+            else if (TEXT("TTP") == strFileExtention)
+            {
+                if (FAILED(Load_TrailTP_Effect(strResultPath)))
+                    return E_FAIL;
+            }
+            else if (TEXT("TMP") == strFileExtention)
+            {
+                if (FAILED(Load_TrailMP_Effect(strResultPath)))
+                    return E_FAIL;
+            }
         }
     }
     // 핸들 닫기
@@ -339,6 +409,20 @@ HRESULT CEffect_Manager::Load_Objects()
         CMesh_Effect::Create(m_pDevice, m_pContext))))
         return E_FAIL;
 
+    /* For. Prototype_GameObject_Effect_Trail_OP */
+    if (FAILED(m_pGameInstance->Add_Prototype(TEXT("Prototype_GameObject_Effect_Trail_OP"),
+        CTrail_Effect_OP::Create(m_pDevice, m_pContext))))
+        return E_FAIL;
+
+    /* For. Prototype_GameObject_Effect_Trail_TP */
+    if (FAILED(m_pGameInstance->Add_Prototype(TEXT("Prototype_GameObject_Effect_Trail_TP"),
+        CTrail_Effect_TP::Create(m_pDevice, m_pContext))))
+        return E_FAIL;
+
+    /* For. Prototype_GameObject_Effect_Trail_MP */
+    if (FAILED(m_pGameInstance->Add_Prototype(TEXT("Prototype_GameObject_Effect_Trail_MP"),
+        CTrail_Effect_MP::Create(m_pDevice, m_pContext))))
+        return E_FAIL;
     return S_OK;
 }
 
@@ -495,6 +579,148 @@ HRESULT CEffect_Manager::Load_Mesh_Effect(const _wstring& strResultPath)
     return S_OK;
 }
 
+HRESULT CEffect_Manager::Load_TrailOP_Effect(const _wstring strResultPath)
+{
+    CTrail_Effect_OP::TRAIL_OP_DESC TestDesc = {};
+
+    std::ifstream infile(strResultPath, ios::binary);
+
+    if (!infile.is_open())
+        return E_FAIL;
+
+    TestDesc.pParentMatrix = { nullptr };
+    TestDesc.fRotationPerSec = XMConvertToRadians(90.f);
+    TestDesc.fSpeedPerSec = 1.f;
+    TestDesc.iLevelIndex = LEVEL_GAMEPLAY;
+    
+    _tchar strEffectName[MAX_PATH] = TEXT("");
+    CTrail_Effect_OP::BUFFER_DESC BufferDesc = {};
+
+    infile.read(reinterpret_cast<_char*>(strEffectName), sizeof(strEffectName));	// 이거 키로 쓰고
+    infile.read(reinterpret_cast<_char*>(&TestDesc.RenderDesc), sizeof(TestDesc.RenderDesc));		// 이거 버퍼 초기화에 쓰고
+    infile.read(reinterpret_cast<_char*>(&TestDesc.DefaultDesc), sizeof(TestDesc.DefaultDesc));		// 이거 버퍼 초기화에 쓰고
+    infile.read(reinterpret_cast<_char*>(&TestDesc.TextDesc), sizeof(TestDesc.TextDesc));			// 이게 실제로 적용되는 거.
+    infile.read(reinterpret_cast<_char*>(&BufferDesc), sizeof(BufferDesc));		// 이거 버퍼 초기화에 쓰고
+
+    infile.close();
+
+    _wstring strVIBufferTag = TEXT("Prototype_Component_Trail_OnePoint_Instance_");
+    strVIBufferTag += strEffectName;
+
+    CVIBuffer_Instancing::INSTANCE_DESC InstanceDesc = {};
+
+    InstanceDesc.iNumInstance = BufferDesc.iNumInstance;
+    InstanceDesc.vLifeTime = BufferDesc.vLifeTime;
+    
+    if (FAILED(m_pGameInstance->Add_Prototype(LEVEL_GAMEPLAY, strVIBufferTag, CTrail_OnePoint_Instance::Create(m_pDevice, m_pContext, InstanceDesc, true))))
+        return E_FAIL;
+
+    TestDesc.strVIBufferTag = strVIBufferTag;
+
+    m_TOPDescs.emplace(strEffectName, TestDesc);
+
+    return S_OK;
+}
+
+HRESULT CEffect_Manager::Load_TrailTP_Effect(const _wstring strResultPath)
+{
+    CTrail_Effect_TP::TRAIL_TP_DESC TestDesc = {};
+
+    std::ifstream infile(strResultPath, ios::binary);
+
+    if (!infile.is_open())
+        return E_FAIL;
+
+    TestDesc.pParentMatrix = { nullptr };
+    TestDesc.fRotationPerSec = XMConvertToRadians(90.f);
+    TestDesc.fSpeedPerSec = 1.f;
+    TestDesc.iLevelIndex = LEVEL_GAMEPLAY;
+
+    _tchar strEffectName[MAX_PATH] = TEXT("");
+    CTrail_Effect_TP::BUFFER_DESC BufferDesc = {};
+
+    infile.read(reinterpret_cast<_char*>(strEffectName), sizeof(strEffectName));	// 이거 키로 쓰고
+    infile.read(reinterpret_cast<_char*>(&TestDesc.RenderDesc), sizeof(TestDesc.RenderDesc));		// 이거 버퍼 초기화에 쓰고
+    infile.read(reinterpret_cast<_char*>(&TestDesc.DefaultDesc), sizeof(TestDesc.DefaultDesc));		// 이거 버퍼 초기화에 쓰고
+    infile.read(reinterpret_cast<_char*>(&TestDesc.TextDesc), sizeof(TestDesc.TextDesc));			// 이게 실제로 적용되는 거.
+    infile.read(reinterpret_cast<_char*>(&BufferDesc), sizeof(BufferDesc));		// 이거 버퍼 초기화에 쓰고
+
+    infile.close();
+
+    _wstring strVIBufferTag = TEXT("Prototype_Component_Trail_TwoPoint_Instance_");
+    strVIBufferTag += strEffectName;
+
+    CVIBuffer_Instancing::INSTANCE_DESC InstanceDesc = {};
+
+    InstanceDesc.iNumInstance = BufferDesc.iNumInstance;
+    InstanceDesc.vLifeTime = BufferDesc.vLifeTime;
+
+    if (FAILED(m_pGameInstance->Add_Prototype(LEVEL_GAMEPLAY, strVIBufferTag, CTrail_TwoPoint_Instance::Create(m_pDevice, m_pContext, InstanceDesc, true))))
+        return E_FAIL;
+
+    TestDesc.strVIBufferTag = strVIBufferTag;
+
+    m_TTPDescs.emplace(strEffectName, TestDesc);
+
+    return S_OK;
+}
+
+HRESULT CEffect_Manager::Load_TrailMP_Effect(const _wstring strResultPath)
+{
+    CTrail_Effect_MP::TRAIL_MP_DESC TestDesc = {};
+
+    std::ifstream infile(strResultPath, ios::binary);
+
+    if (!infile.is_open())
+        return E_FAIL;
+
+    TestDesc.pParentMatrix = { nullptr };
+    TestDesc.fRotationPerSec = XMConvertToRadians(90.f);
+    TestDesc.fSpeedPerSec = 1.f;
+    TestDesc.iLevelIndex = LEVEL_GAMEPLAY;
+
+    _tchar strEffectName[MAX_PATH] = TEXT("");
+    CTrail_Effect_MP::BUFFER_DESC BufferDesc = {};
+
+    infile.read(reinterpret_cast<_char*>(strEffectName), sizeof(strEffectName));	// 이거 키로 쓰고
+    infile.read(reinterpret_cast<_char*>(&TestDesc.RenderDesc), sizeof(TestDesc.RenderDesc));		// 이거 버퍼 초기화에 쓰고
+    infile.read(reinterpret_cast<_char*>(&TestDesc.DefaultDesc), sizeof(TestDesc.DefaultDesc));		// 이거 버퍼 초기화에 쓰고
+    infile.read(reinterpret_cast<_char*>(&TestDesc.TextDesc), sizeof(TestDesc.TextDesc));			// 이게 실제로 적용되는 거.
+    infile.read(reinterpret_cast<_char*>(&BufferDesc), sizeof(BufferDesc));		// 이거 버퍼 초기화에 쓰고
+
+    infile.close();
+
+    _wstring strVIBufferTag = TEXT("Prototype_Component_Trail_MultiPoint_Instance_");
+    strVIBufferTag += strEffectName;
+
+    CTrail_MultiPoint_Instance::TRAIL_MP_INSTANCE_DESC InstanceDesc = {};
+
+    InstanceDesc.iNumInstance = BufferDesc.iNumInstance;
+    InstanceDesc.vCenter = BufferDesc.vCenter;
+    InstanceDesc.vRange = BufferDesc.vRange;
+    InstanceDesc.vExceptRange = BufferDesc.vExceptRange;
+    InstanceDesc.vSize = BufferDesc.vSize;
+    InstanceDesc.vSpeed = BufferDesc.vSpeed;
+    InstanceDesc.vLifeTime = BufferDesc.vLifeTime;
+    InstanceDesc.vMinColor = BufferDesc.vMinColor;
+    InstanceDesc.vMaxColor = BufferDesc.vMaxColor;
+    InstanceDesc.iTail_NumInstance = BufferDesc.iTail_NumInstance;
+    InstanceDesc.vTail_Speed = BufferDesc.vTail_Speed;
+    InstanceDesc.vTail_Size = BufferDesc.vTail_Size;
+    InstanceDesc.vTail_LifeTime = BufferDesc.vTail_LifeTime;
+    InstanceDesc.vTail_MinColor = BufferDesc.vTail_MinColor;
+    InstanceDesc.vTail_MaxColor = BufferDesc.vTail_MaxColor;
+
+    if (FAILED(m_pGameInstance->Add_Prototype(LEVEL_GAMEPLAY, strVIBufferTag, CTrail_MultiPoint_Instance::Create(m_pDevice, m_pContext, InstanceDesc, true))))
+        return E_FAIL;
+
+    TestDesc.strVIBufferTag = strVIBufferTag;
+
+    m_TMPDescs.emplace(strEffectName, TestDesc);
+
+    return S_OK;
+}
+
 CParticle_Effect* CEffect_Manager::Clone_ParticleEffect(const _wstring& strEffectTag)
 {
     CParticle_Effect::PARTICLE_EFFECT_DESC ParticleDesc = {};
@@ -538,6 +764,51 @@ CMesh_Effect* CEffect_Manager::Clone_MeshEffect(const _wstring& strEffectTag)
     CMesh_Effect* pMeshEffect = static_cast<CMesh_Effect*>(m_pGameInstance->Clone_GameObject(TEXT("Prototype_GameObject_Effect_Mesh"), &MeshDesc));
 
     return pMeshEffect;
+}
+
+CTrail_Effect_OP* CEffect_Manager::Clone_TrailOP_Effect(const _wstring strEffectTag)
+{
+    CTrail_Effect_OP::TRAIL_OP_DESC TrailOP_Desc = {};
+
+    auto& iter = m_TOPDescs.find(strEffectTag);
+
+    if (m_TOPDescs.end() == iter)
+        return nullptr;
+
+    TrailOP_Desc = iter->second;
+    CTrail_Effect_OP* pTrailOP_Effect = static_cast<CTrail_Effect_OP*>(m_pGameInstance->Clone_GameObject(TEXT("Prototype_GameObject_Effect_Trail_OP"), &TrailOP_Desc));
+
+    return pTrailOP_Effect;
+}
+
+CTrail_Effect_TP* CEffect_Manager::Clone_TrailTP_Effect(const _wstring strEffectTag)
+{
+    CTrail_Effect_TP::TRAIL_TP_DESC TrailTP_Desc = {};
+
+    auto& iter = m_TTPDescs.find(strEffectTag);
+
+    if (m_TTPDescs.end() == iter)
+        return nullptr;
+
+    TrailTP_Desc = iter->second;
+    CTrail_Effect_TP* pTrailTP_Effect = static_cast<CTrail_Effect_TP*>(m_pGameInstance->Clone_GameObject(TEXT("Prototype_GameObject_Effect_Trail_TP"), &TrailTP_Desc));
+
+    return pTrailTP_Effect;
+}
+
+CTrail_Effect_MP* CEffect_Manager::Clone_TrailMP_Effect(const _wstring strEffectTag)
+{
+    CTrail_Effect_MP::TRAIL_MP_DESC TrailMP_Desc = {};
+
+    auto& iter = m_TMPDescs.find(strEffectTag);
+
+    if (m_TMPDescs.end() == iter)
+        return nullptr;
+
+    TrailMP_Desc = iter->second;
+    CTrail_Effect_MP* pTrailMP_Effect = static_cast<CTrail_Effect_MP*>(m_pGameInstance->Clone_GameObject(TEXT("Prototype_GameObject_Effect_Trail_MP"), &TrailMP_Desc));
+
+    return pTrailMP_Effect;
 }
 
 _wstring CEffect_Manager::Get_FileName(const _wstring& strFileTag)

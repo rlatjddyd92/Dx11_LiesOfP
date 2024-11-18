@@ -84,7 +84,7 @@ void CS_SPREAD_MAIN(uint3 DTid : SV_DispatchThreadID)
     if (iIndex >= iNumInstance * iNumTailInstance)
         return;
     
-    uint iHeadIndex = iIndex / iNumInstance;
+    uint iHeadIndex = iIndex / iNumTailInstance;
     TailParticle TailParticle = TailParticles[iIndex];
     if (0.f == fPadding)
     {
@@ -92,14 +92,16 @@ void CS_SPREAD_MAIN(uint3 DTid : SV_DispatchThreadID)
     }
     
     float4 vResultTailDir = vTailMoveDir + TailParticle.vMoveDir;
-    if (0.f < vResultTailDir.x || 0.f < vResultTailDir.y || 0.f < vResultTailDir.z)
+    if (0.f < length(vResultTailDir))
         TailParticle.particle.vTranslation += normalize(vResultTailDir) * TailParticle.particle.fSpeed * fTimeDelta;
-
+    else
+        vResultTailDir = float4(0.f, 1.f, 0.f, 0.f);
+    
     TailParticle.particle.vLifeTime.y += fTimeDelta;
     TailParticle.particle.vLook = normalize(vResultTailDir);
     TailParticles[iIndex] = TailParticle;
     
-    if(iHeadIndex == iIndex / iNumTailInstance)
+    if (0 == iIndex % iNumTailInstance)
     {
         HeadParticle HeadParticle = HeadParticles[iHeadIndex];
     
@@ -112,8 +114,8 @@ void CS_SPREAD_MAIN(uint3 DTid : SV_DispatchThreadID)
             HeadParticle.particle.vRight = vWorldPivot;
             HeadParticle.particle.vUp = float4(vOrbitAxis.x, vOrbitAxis.y, vOrbitAxis.z, 0.f);
         }
-    
-        float4 vDir = HeadParticle.particle.vTranslation - vWorldPivot;
+        
+        float4 vDir = HeadParticle.particle.vTranslation - HeadParticle.particle.vRight;
         vDir = normalize(vDir);
     
         HeadParticle.particle.vLifeTime.y += fTimeDelta;
@@ -173,12 +175,11 @@ void CS_SPREAD_MAIN(uint3 DTid : SV_DispatchThreadID)
     
         HeadParticle.particle.vTranslation += (vMoveDir * fTimeDelta + vRotateDir) * fAddSpeed;
 
-        if (iState & STATE_LOOP && HeadParticle.particle.vLifeTime.y >= HeadParticle.particle.vLifeTime.x)
+        if ((iState & STATE_LOOP) && HeadParticle.particle.vLifeTime.y >= HeadParticle.particle.vLifeTime.x)
         {
             HeadParticle.particle.vTranslation = mul(InitParticles[iHeadIndex].particle.vTranslation, WorldMatrix);
             HeadParticle.vPreTranslation = HeadParticle.particle.vTranslation;
             HeadParticle.particle.vLifeTime.y = 0.f;
-            HeadParticle.particle.vTranslation = mul(HeadParticle.particle.vTranslation, WorldMatrix);
             HeadParticle.particle.vRight = vWorldPivot;
             HeadParticle.particle.vUp = float4(vOrbitAxis.x, vOrbitAxis.y, vOrbitAxis.z, 0.f);
         }
@@ -220,7 +221,7 @@ void CS_MOVE_MAIN(uint3 DTid : SV_DispatchThreadID)
     if (iIndex >= iNumInstance * iNumTailInstance)
         return;
     
-    uint iHeadIndex = iIndex / iNumInstance;
+    uint iHeadIndex = iIndex / iNumTailInstance;
     TailParticle TailParticle = TailParticles[iIndex];
     if (0.f == fPadding)
     {
@@ -228,14 +229,18 @@ void CS_MOVE_MAIN(uint3 DTid : SV_DispatchThreadID)
     }
     
     float4 vResultTailDir = vTailMoveDir + TailParticle.vMoveDir;
-    if (0.f < vResultTailDir.x || 0.f < vResultTailDir.y || 0.f < vResultTailDir.z)
+    
+    if (0.f < length(vResultTailDir))
         TailParticle.particle.vTranslation += normalize(vResultTailDir) * TailParticle.particle.fSpeed * fTimeDelta;
+    else
+        vResultTailDir = float4(0.f, 1.f, 0.f, 0.f);
+    
     TailParticle.particle.vLifeTime.y += fTimeDelta;
     TailParticle.particle.vLook = normalize(vResultTailDir);
 
     TailParticles[iIndex] = TailParticle;
     
-    if (iHeadIndex == iIndex / iNumTailInstance)
+    if (0 == iIndex % iNumTailInstance)
     {
         HeadParticle HeadParticle = HeadParticles[iHeadIndex];
     
@@ -356,7 +361,7 @@ void CS_CONVERGE_MAIN(uint3 DTid : SV_DispatchThreadID)
     if (iIndex >= iNumInstance * iNumTailInstance)
         return;
     
-    uint iHeadIndex = iIndex / iNumInstance;
+    uint iHeadIndex = iIndex / iNumTailInstance;
     TailParticle TailParticle = TailParticles[iIndex];
     if (0.f == fPadding)
     {
@@ -364,14 +369,18 @@ void CS_CONVERGE_MAIN(uint3 DTid : SV_DispatchThreadID)
     }
     
     float4 vResultTailDir = vTailMoveDir + TailParticle.vMoveDir;
-    if (0.f < vResultTailDir.x || 0.f < vResultTailDir.y || 0.f < vResultTailDir.z)
+    
+    if (0.f < length(vResultTailDir))
         TailParticle.particle.vTranslation += normalize(vResultTailDir) * TailParticle.particle.fSpeed * fTimeDelta;
+    else
+        vResultTailDir = float4(0.f, 1.f, 0.f, 0.f);
+    
     TailParticle.particle.vLifeTime.y += fTimeDelta;
     TailParticle.particle.vLook = normalize(vResultTailDir);
 
     TailParticles[iIndex] = TailParticle;
     
-    if (iHeadIndex == iIndex / iNumTailInstance)
+    if (0 == iIndex % iNumTailInstance)
     {
         HeadParticle HeadParticle = HeadParticles[iHeadIndex];
     
@@ -446,12 +455,12 @@ void CS_CONVERGE_MAIN(uint3 DTid : SV_DispatchThreadID)
 
         if (iState & STATE_LOOP && HeadParticle.particle.vLifeTime.y >= HeadParticle.particle.vLifeTime.x)
         {
-                HeadParticle.particle.vTranslation = mul(InitParticles[iHeadIndex].particle.vTranslation, WorldMatrix);
-                HeadParticle.vPreTranslation = HeadParticle.particle.vTranslation;
-                HeadParticle.particle.vLifeTime.y = 0.f;
-                HeadParticle.particle.vTranslation = mul(HeadParticle.particle.vTranslation, WorldMatrix);
-                HeadParticle.particle.vRight = vWorldPivot;
-                HeadParticle.particle.vUp = float4(vOrbitAxis.x, vOrbitAxis.y, vOrbitAxis.z, 0.f);
+            HeadParticle.particle.vTranslation = mul(InitParticles[iHeadIndex].particle.vTranslation, WorldMatrix);
+            HeadParticle.vPreTranslation = HeadParticle.particle.vTranslation;
+            HeadParticle.particle.vLifeTime.y = 0.f;
+            HeadParticle.particle.vTranslation = mul(HeadParticle.particle.vTranslation, WorldMatrix);
+            HeadParticle.particle.vRight = vWorldPivot;
+            HeadParticle.particle.vUp = float4(vOrbitAxis.x, vOrbitAxis.y, vOrbitAxis.z, 0.f);
         }
         else if (HeadParticle.particle.vLifeTime.y < HeadParticle.particle.vLifeTime.x)
         {

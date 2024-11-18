@@ -91,8 +91,6 @@ HRESULT CTrail_MultiPoint_Instance::Bind_HeadBuffer(CShader_NonVTX* pShader, con
 
 HRESULT CTrail_MultiPoint_Instance::Bind_TailBuffer(CShader_NonVTX* pShader, const _char* pConstantName)
 {
-
-
     //// SRV 바인딩하고
     if (FAILED(pShader->Bind_SRV(pConstantName, m_pTailSRV)))
         return E_FAIL;
@@ -317,7 +315,7 @@ HRESULT CTrail_MultiPoint_Instance::Init_TailParticle(TAIL_PARTICLE* pParticles)
         pParticles[i].Particle.vTranslation = _float4(0.f, 0.f, 0.f, 1.f);
         pParticles[i].Particle.vLifeTime = _float2(m_pGameInstance->Get_Random(m_vTail_LifeTime.x, m_vTail_LifeTime.y), 0.0f);
         pParticles[i].Particle.vLifeTime.y = pParticles[i].Particle.vLifeTime.x;
-        pParticles[i].Particle.vColor = _float4(m_pGameInstance->Get_Random(m_vMinColor.x, m_vMaxColor.x),
+        pParticles[i].Particle.vColor = _float4(m_pGameInstance->Get_Random(m_vTail_MinColor.x, m_vTail_MaxColor.x),
             m_pGameInstance->Get_Random(m_vTail_MinColor.y, m_vTail_MaxColor.y),
             m_pGameInstance->Get_Random(m_vTail_MinColor.z, m_vTail_MaxColor.z),
             m_pGameInstance->Get_Random(m_vTail_MinColor.w, m_vTail_MaxColor.w));

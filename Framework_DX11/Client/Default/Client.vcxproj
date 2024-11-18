@@ -201,6 +201,9 @@
     <ClInclude Include="..\Public\State_CarcassBigA_Walk.h" />
     <ClInclude Include="..\Public\Terrain.h" />
     <ClInclude Include="..\Public\Texture_Effect.h" />
+    <ClInclude Include="..\Public\Trail_Effect_MP.h" />
+    <ClInclude Include="..\Public\Trail_Effect_OP.h" />
+    <ClInclude Include="..\Public\Trail_Effect_TP.h" />
     <ClInclude Include="..\Public\UIManager.h" />
     <ClInclude Include="..\Public\UIPage.h" />
     <ClInclude Include="..\Public\UIPage_Loading.h" />
@@ -251,6 +254,9 @@
     <ClCompile Include="..\Private\State_CarcassBigA_Walk.cpp" />
     <ClCompile Include="..\Private\Terrain.cpp" />
     <ClCompile Include="..\Private\Texture_Effect.cpp" />
+    <ClCompile Include="..\Private\Trail_Effect_MP.cpp" />
+    <ClCompile Include="..\Private\Trail_Effect_OP.cpp" />
+    <ClCompile Include="..\Private\Trail_Effect_TP.cpp" />
     <ClCompile Include="..\Private\UIManager.cpp" />
     <ClCompile Include="..\Private\UIPage.cpp" />
     <ClCompile Include="..\Private\UIPage_Loading.cpp" />

@@ -65,7 +65,7 @@ void CController_EffectTool::Render()
 		ImGuiFileDialog::Instance()->OpenDialog(
 			"LoadFile",					// vKey
 			"Select a File",			// vTitle
-			"Effects{.PE, .TE, .ME}",   // vFilters
+			"Effects{.PE, .TE, .ME, .TOP, .TTP, .TMP}",   // vFilters
 			IGFD::FileDialogConfig()	// vConfig (기본 설정)
 		);
 	}
@@ -157,29 +157,28 @@ void CController_EffectTool::Render()
 	if (ImGui::CollapsingHeader("Trail OP Effect"))
 	{
 #pragma region TRAIL_OP
-	ImGui::InputText("Trail OP Name", m_szTrail_OPName, IM_ARRAYSIZE(m_szTrail_OPName));
-	Select_Trail_OP();
-	if (ImGui::Button("Create Trail_OP"))
-	{
-		Add_Trail_OP();
-	}
-	if (ImGui::Button("Update Trail_OP"))
-	{
-		Update_Trail_OP();
-	}
-	if (ImGui::Button("Get Trail_OP"))
-	{
-		Get_Trail_OP();
-	}
-	if (ImGui::Button("Delete Trail_OP"))
-	{
-		Delete_Trail_OP();
-	}
-	if (ImGui::Button("Clear Trail_OP"))
-	{
-		Clear_Trail_OP();
-	}
-
+		ImGui::InputText("Trail OP Name", m_szTrail_OPName, IM_ARRAYSIZE(m_szTrail_OPName));
+		Select_Trail_OP();
+		if (ImGui::Button("Create Trail_OP"))
+		{
+			Add_Trail_OP();
+		}
+		if (ImGui::Button("Update Trail_OP"))
+		{
+			Update_Trail_OP();
+		}
+		if (ImGui::Button("Get Trail_OP"))
+		{
+			Get_Trail_OP();
+		}
+		if (ImGui::Button("Delete Trail_OP"))
+		{
+			Delete_Trail_OP();
+		}
+		if (ImGui::Button("Clear Trail_OP"))
+		{
+			Clear_Trail_OP();
+		}
 #pragma endregion
 	}
 	if (ImGui::CollapsingHeader("Trail TP Effect"))
@@ -630,8 +629,6 @@ void CController_EffectTool::TE_Check()
 
 		ImGui::SeparatorText("Transform");
 		ImGui::InputFloat3("Pos TE", (_float*)&m_TextureDesc.DefaultDesc.vPos);
-		ImGui::InputFloat("Rotation Angle TE", (_float*)&m_TextureDesc.DefaultDesc.fRotationAngle);
-		ImGui::InputFloat("Rotation Speed TE", (_float*)&m_TextureDesc.DefaultDesc.fRotationSpeed);
 		ImGui::InputFloat3("Start Scale TE", (_float*)&m_TextureDesc.DefaultDesc.vStartScale);
 		ImGui::InputFloat3("Scaling Speed TE", (_float*)&m_TextureDesc.DefaultDesc.vScalingSpeed);
 
@@ -640,7 +637,8 @@ void CController_EffectTool::TE_Check()
 		ImGui::InputFloat("Alpha Speed TE", (_float*)&m_TextureDesc.DefaultDesc.fAlphaSpeed);
 		ImGui::SeparatorText("Shader");
 		ImGui::InputInt("Shader Index", (_int*)&m_TextureDesc.DefaultDesc.iShaderIndex);
-
+		ImGui::SeparatorText("Loop");
+		ImGui::Checkbox("Texture Loop", &m_TextureDesc.DefaultDesc.bLoop);
 		ImGui::TreePop();
 	}
 }
@@ -830,6 +828,9 @@ void CController_EffectTool::Mesh_Check()
 		ImGui::SeparatorText("Shader");
 		ImGui::InputInt("Shader Index", (_int*)&m_MeshDesc.DefaultDesc.iShaderIndex);
 
+		ImGui::SeparatorText("Loop");
+		ImGui::Checkbox("Mesh Loop", &m_MeshDesc.DefaultDesc.bLoop);
+
 		ImGui::TreePop();
 	}
 }
@@ -934,7 +935,7 @@ HRESULT CController_EffectTool::Add_Trail_OP()
 
 	size_t iCharLen = strlen(m_szTrail_OPName);
 	size_t iConvertChars = 0;
-	mbstowcs_s(&iConvertChars, m_Trail_OPDesc.szEffectName, sizeof(m_Trail_OPDesc.szEffectName) / sizeof(_tchar), m_szMeshName, iCharLen);
+	mbstowcs_s(&iConvertChars, m_Trail_OPDesc.szEffectName, sizeof(m_Trail_OPDesc.szEffectName) / sizeof(_tchar), m_szTrail_OPName, iCharLen);
 	
 	wcsncpy_s(m_Trail_OPDesc.TextDesc.szDiffuseTexturTag, m_Texture_PrototypeTags[m_iSelected_DiffuseTextureIndex].c_str(),
 		sizeof(m_Trail_OPDesc.TextDesc.szDiffuseTexturTag) / sizeof(_tchar));
@@ -967,6 +968,7 @@ void CController_EffectTool::Trail_OP_Check()
 		ImGui::SeparatorText("Trail OP Move");
 		ImGui::InputFloat("Trail OP Interval", (_float*)&m_Trail_OPDesc.DefaultDesc.fTrailInterval);
 		ImGui::InputFloat("Trail OP Spread Speed", (_float*)&m_Trail_OPDesc.DefaultDesc.fSpreadSpeed);
+		ImGui::InputFloat3("Trail OP Pos", (_float*)&m_Trail_OPDesc.DefaultDesc.vPos);
 
 		ImGui::SeparatorText("Trail OP Shader");
 		ImGui::InputInt("Shader Index", (_int*)&m_Trail_OPDesc.DefaultDesc.iShaderIndex);
@@ -1103,7 +1105,7 @@ HRESULT CController_EffectTool::Add_Trail_TP()
 
 	size_t iCharLen = strlen(m_szTrail_TPName);
 	size_t iConvertChars = 0;
-	mbstowcs_s(&iConvertChars, m_Trail_TPDesc.szEffectName, sizeof(m_Trail_TPDesc.szEffectName) / sizeof(_tchar), m_szMeshName, iCharLen);
+	mbstowcs_s(&iConvertChars, m_Trail_TPDesc.szEffectName, sizeof(m_Trail_TPDesc.szEffectName) / sizeof(_tchar), m_szTrail_TPName, iCharLen);
 
 	wcsncpy_s(m_Trail_TPDesc.TextDesc.szDiffuseTexturTag, m_Texture_PrototypeTags[m_iSelected_DiffuseTextureIndex].c_str(),
 		sizeof(m_Trail_TPDesc.TextDesc.szDiffuseTexturTag) / sizeof(_tchar));
@@ -1252,7 +1254,7 @@ HRESULT CController_EffectTool::Add_Trail_MP()
 
 	size_t iCharLen = strlen(m_szTrail_MPName);
 	size_t iConvertChars = 0;
-	mbstowcs_s(&iConvertChars, m_Trail_MPDesc.szEffectName, sizeof(m_Trail_MPDesc.szEffectName) / sizeof(_tchar), m_szMeshName, iCharLen);
+	mbstowcs_s(&iConvertChars, m_Trail_MPDesc.szEffectName, sizeof(m_Trail_MPDesc.szEffectName) / sizeof(_tchar), m_szTrail_MPName, iCharLen);
 
 	wcsncpy_s(m_Trail_MPDesc.TextDesc.szDiffuseTexturTag, m_Texture_PrototypeTags[m_iSelected_DiffuseTextureIndex].c_str(),
 		sizeof(m_Trail_MPDesc.TextDesc.szDiffuseTexturTag) / sizeof(_tchar));
@@ -1290,11 +1292,11 @@ void CController_EffectTool::Trail_MP_Check()
 
 		ImGui::SeparatorText("Tail"); 
 		ImGui::InputInt("Num Tail Instance", (_int*)&m_Trail_MPDesc.BufferDesc.iTail_NumInstance);
-		ImGui::InputFloat2("Speed Tail Instance", (_float*)&m_Trail_MPDesc.BufferDesc.vSpeed);
-		ImGui::InputFloat2("Size Tail Instance", (_float*)&m_Trail_MPDesc.BufferDesc.vSize);
-		ImGui::InputFloat2("LifeTime Tail Instance", (_float*)&m_Trail_MPDesc.BufferDesc.vLifeTime);
-		ImGui::InputFloat4("MinColor Tail Instance", (_float*)&m_Trail_MPDesc.BufferDesc.vMinColor);
-		ImGui::InputFloat4("MaxColor Tail Instance", (_float*)&m_Trail_MPDesc.BufferDesc.vMaxColor);
+		ImGui::InputFloat2("Speed Tail Instance", (_float*)&m_Trail_MPDesc.BufferDesc.vTail_Speed);
+		ImGui::InputFloat2("Size Tail Instance", (_float*)&m_Trail_MPDesc.BufferDesc.vTail_Size);
+		ImGui::InputFloat2("LifeTime Tail Instance", (_float*)&m_Trail_MPDesc.BufferDesc.vTail_LifeTime);
+		ImGui::InputFloat4("MinColor Tail Instance", (_float*)&m_Trail_MPDesc.BufferDesc.vTail_MinColor);
+		ImGui::InputFloat4("MaxColor Tail Instance", (_float*)&m_Trail_MPDesc.BufferDesc.vTail_MaxColor);
 
 		ImGui::TreePop();
 	}
@@ -1343,8 +1345,6 @@ void CController_EffectTool::Trail_MP_Check()
 		ImGui::InputFloat4("Pivot", (_float*)&m_Trail_MPDesc.DefaultDesc.vPivot);
 		ImGui::InputFloat("Gravity", (_float*)&m_Trail_MPDesc.DefaultDesc.fGravity);
 		ImGui::InputFloat4("Move Dir", (_float*)&m_Trail_MPDesc.DefaultDesc.vMoveDir);
-		ImGui::InputFloat("Start Rotation", &m_Trail_MPDesc.DefaultDesc.fStartRotation);
-		ImGui::InputFloat("Rotation Per Second", (_float*)&m_Trail_MPDesc.DefaultDesc.fRotationPerSecond);
 
 		ImGui::SeparatorText("TrailMP Orbit");
 		ImGui::InputFloat3("Orbit Axis", (_float*)&m_Trail_MPDesc.DefaultDesc.vOrbitAxis);
@@ -1780,7 +1780,7 @@ HRESULT CController_EffectTool::Load_Effect()
 
 				infile.close();
 
-				if (FAILED(m_pGameInstance->Add_CloneObject_ToLayer(LEVEL_TOOL, TEXT("Layer_MeshEffect"), TEXT("Prototype_GameObject_Texture_Effect"), &TestDesc)))
+				if (FAILED(m_pGameInstance->Add_CloneObject_ToLayer(LEVEL_TOOL, TEXT("Layer_MeshEffect"), TEXT("Prototype_GameObject_Mesh_Effect"), &TestDesc)))
 					return E_FAIL;
 			}
 			else if (TEXT("TOP") == strExtention)
@@ -1832,7 +1832,6 @@ HRESULT CController_EffectTool::Load_Effect()
 
 				if (FAILED(m_pGameInstance->Add_CloneObject_ToLayer(LEVEL_TOOL, TEXT("Layer_TrailTP"), TEXT("Prototype_GameObject_Trail_Effect_TP"), &TestDesc)))
 					return E_FAIL;
-
 			}
 			else if (TEXT("TMP") == strExtention)
 			{

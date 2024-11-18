@@ -28,6 +28,7 @@ public:
 		_Vec3		vScalingSpeed = {};
 		_float		fAlpha = { 1.f };
 		_float		fAlphaSpeed = { 0.f };
+		_bool		bLoop = { false };
 
 	}DEFAULT_DESC;
 
@@ -62,6 +63,11 @@ public:
 
 public:
 	virtual void Reset();
+	virtual void Set_Loop(_bool bLoop) override {
+		m_DefaultDesc.bLoop = bLoop;
+		if (true == bLoop)
+			Reset();
+	}
 
 private:
 	class CShader* m_pShaderCom = { nullptr };

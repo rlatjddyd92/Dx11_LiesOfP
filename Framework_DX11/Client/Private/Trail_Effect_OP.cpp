@@ -30,7 +30,7 @@ HRESULT CTrail_Effect_OP::Initialize(void* pArg)
 	m_eEffectType = EFFECT_TYPE::TYPE_TRAIL_OP;
 
 	m_DefaultDesc = pDesc->DefaultDesc;
-	m_InitDesc = *pDesc;
+	m_InitDesc = m_DefaultDesc;
 		
 	m_pTransformCom->Set_State(CTransform::STATE_POSITION, m_DefaultDesc.vPos);
 
@@ -50,14 +50,14 @@ void CTrail_Effect_OP::Update(_float fTimeDelta)
 	{
 		if (true == m_pVIBufferCom->Update_Buffer(XMLoadFloat4x4(&m_WorldMatrix).r[3], m_DefaultDesc.fTrailInterval, m_DefaultDesc.bLoop, fTimeDelta))
 		{
-			//m_isActive = false;
+			m_isDead = true;
 		}
 	}
 	else if (TYPE_SPREAD == m_DefaultDesc.eType)
 	{
 		if (true == m_pVIBufferCom->Spread_Buffer(XMLoadFloat4x4(&m_WorldMatrix).r[3], m_DefaultDesc.fTrailInterval, m_DefaultDesc.fSpreadSpeed, m_DefaultDesc.bLoop, fTimeDelta))
 		{
-			//m_isActive = false;
+			m_isDead = true;
 		}
 	}
 }
@@ -129,86 +129,46 @@ HRESULT CTrail_Effect_OP::Render()
 void CTrail_Effect_OP::Reset()
 {
 	m_pVIBufferCom->Reset();
-	m_DefaultDesc = m_InitDesc.DefaultDesc;
+	m_DefaultDesc = m_InitDesc;
+	m_isDead = false;
+
+	m_pTransformCom->Set_State(CTransform::STATE_POSITION, m_DefaultDesc.vPos);
 }
 
-HRESULT CTrail_Effect_OP::Save(_wstring strFilePath)
-{
-	if (strFilePath.back() == L'\0')
-		strFilePath.resize(strFilePath.size() - 1);
-
-	_wstring strResultPath = strFilePath + TEXT("\\") + m_strEffectName + TEXT(".TOP");
-
-	_char FilePath[MAX_PATH] = {};
-	int sizeNeeded = WideCharToMultiByte(CP_ACP, 0, strResultPath.c_str(), -1, nullptr, 0, nullptr, nullptr);
-	if (sizeNeeded > 0 && sizeNeeded <= MAX_PATH)
-	{
-		WideCharToMultiByte(CP_ACP, 0, strResultPath.c_str(), -1, FilePath, MAX_PATH, nullptr, nullptr);
-	}
-
-	ofstream outfile(FilePath, ios::binary);
-
-	if (!outfile.is_open())
-		return E_FAIL;
-
-	outfile.write(reinterpret_cast<const _char*>(m_InitDesc.szEffectName), sizeof(m_InitDesc.szEffectName));
-	outfile.write(reinterpret_cast<const _char*>(&m_InitDesc.RenderDesc), sizeof(m_InitDesc.RenderDesc));
-	outfile.write(reinterpret_cast<const _char*>(&m_InitDesc.DefaultDesc), sizeof(m_InitDesc.DefaultDesc));
-	outfile.write(reinterpret_cast<const _char*>(&m_InitDesc.TextDesc), sizeof(m_InitDesc.TextDesc));
-	outfile.write(reinterpret_cast<const _char*>(&m_InitDesc.BufferDesc), sizeof(m_InitDesc.BufferDesc));
-
-	outfile.close();
-
-	return S_OK;
-
-	return S_OK;
-}
-
-void CTrail_Effect_OP::Set_Desc(const TRAIL_OP_DESC& TrailDesc)
-{
-	m_DefaultDesc = TrailDesc.DefaultDesc;
-	m_RenderDesc = TrailDesc.RenderDesc;
-	m_InitDesc.DefaultDesc = TrailDesc.DefaultDesc;
-}
 
 HRESULT CTrail_Effect_OP::Ready_Components(const TRAIL_OP_DESC& Desc)
 {
 	/* FOR.Com_Shader */
-	if (FAILED(__super::Add_Component(LEVEL_TOOL, TEXT("Prototype_Component_Shader_Trail_OnePoint_Instance"),
+	if (FAILED(__super::Add_Component(LEVEL_GAMEPLAY, TEXT("Prototype_Component_Shader_Trail_OnePoint_Instance"),
 		TEXT("Com_Shader"), reinterpret_cast<CComponent**>(&m_pShaderCom))))
 		return E_FAIL;
 
-	CVIBuffer_Instancing::INSTANCE_DESC InstDesc = {};
-
-	InstDesc.iNumInstance = Desc.BufferDesc.iNumInstance;
-	InstDesc.vLifeTime = Desc.BufferDesc.vLifeTime;
-
 	/* FOR.Com_VIBuffer */
-	if (FAILED(__super::Add_Component(LEVEL_TOOL, TEXT("Prototype_Component_VIBuffer_Trail_OnePoint_Instance"),
-		TEXT("Com_VIBuffer"), reinterpret_cast<CComponent**>(&m_pVIBufferCom), &InstDesc)))
+	if (FAILED(__super::Add_Component(LEVEL_GAMEPLAY, Desc.strVIBufferTag,
+		TEXT("Com_VIBuffer"), reinterpret_cast<CComponent**>(&m_pVIBufferCom))))
 		return E_FAIL;
 
 	if (0 != wcscmp(NONE_TEXT, Desc.TextDesc.szDiffuseTexturTag))
 	{
-		if (FAILED(__super::Add_Component(LEVEL_TOOL, Desc.TextDesc.szDiffuseTexturTag, TEXT("Com_DiffuseTexture"), reinterpret_cast<CComponent**>(&m_pTextureCom[TEXTURE_DIFFUSE]))))
+		if (FAILED(__super::Add_Component(LEVEL_GAMEPLAY, Desc.TextDesc.szDiffuseTexturTag, TEXT("Com_DiffuseTexture"), reinterpret_cast<CComponent**>(&m_pTextureCom[TEXTURE_DIFFUSE]))))
 			return E_FAIL;
 	}
 
 	if (0 != wcscmp(NONE_TEXT, Desc.TextDesc.szNormalTextureTag))
 	{
-		if (FAILED(__super::Add_Component(LEVEL_TOOL, Desc.TextDesc.szNormalTextureTag, TEXT("Com_NormalTexture"), reinterpret_cast<CComponent**>(&m_pTextureCom[TEXTURE_NORMAL]))))
+		if (FAILED(__super::Add_Component(LEVEL_GAMEPLAY, Desc.TextDesc.szNormalTextureTag, TEXT("Com_NormalTexture"), reinterpret_cast<CComponent**>(&m_pTextureCom[TEXTURE_NORMAL]))))
 			return E_FAIL;
 	}
 
 	if (0 != wcscmp(NONE_TEXT, Desc.TextDesc.szMaskTextureTag_1))
 	{
-		if (FAILED(__super::Add_Component(LEVEL_TOOL, Desc.TextDesc.szMaskTextureTag_1, TEXT("Com_MaskTexture_1"), reinterpret_cast<CComponent**>(&m_pTextureCom[TEXTURE_MASK_1]))))
+		if (FAILED(__super::Add_Component(LEVEL_GAMEPLAY, Desc.TextDesc.szMaskTextureTag_1, TEXT("Com_MaskTexture_1"), reinterpret_cast<CComponent**>(&m_pTextureCom[TEXTURE_MASK_1]))))
 			return E_FAIL;
 	}
 
 	if (0 != wcscmp(NONE_TEXT, Desc.TextDesc.szMaskTextureTag_2))
 	{
-		if (FAILED(__super::Add_Component(LEVEL_TOOL, Desc.TextDesc.szMaskTextureTag_2, TEXT("Com_MaskTexture_2"), reinterpret_cast<CComponent**>(&m_pTextureCom[TEXTURE_MASK_2]))))
+		if (FAILED(__super::Add_Component(LEVEL_GAMEPLAY, Desc.TextDesc.szMaskTextureTag_2, TEXT("Com_MaskTexture_2"), reinterpret_cast<CComponent**>(&m_pTextureCom[TEXTURE_MASK_2]))))
 			return E_FAIL;
 	}
 

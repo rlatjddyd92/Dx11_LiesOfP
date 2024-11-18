@@ -41,6 +41,7 @@ public:
 	void		LookAt_Lerp(_Vec4 vAt, _float fSpeed, _float fTimeDelta);
 	_int		LookAt_Lerp_NoHeight(_Vec4 vAt, _float fSpeed, _float fTimeDelta);
 	void		LookAt_Dir(_Vec4 vDir);
+	void		Look_Dir(_Vec4 vDir);
 
 	void		Go_Straight(_float fTimeDelta, class CNavigation* pNavigation = nullptr);
 	void		Go_Backward(_float fTimeDelta);

@@ -36,9 +36,11 @@ public:
 		TRAIL_OP_TYPE	eType = TYPE_END;
 		_float			fTrailInterval = { 0.1f };
 		_float			fSpreadSpeed = { 0.f };
+		_Vec3			vPos = { 0.f, 0.f, 0.f };
 		// 셰이더 전달용
 		_uint		iGeomState = { 0 };
 		_Vec4		vColor = { 0.f, 0.f, 0.f, 1.f };
+
 		_float		fScaling = { 1.f };
 		_Vec2		vDivide = { 1.f, 1.f };
 		_float		fSpriteSpeed = { 0.f };

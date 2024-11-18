@@ -144,6 +144,7 @@ HRESULT CParticle_Effect::Render()
 void CParticle_Effect::Reset()
 {
     m_DefaultDesc = m_InitDesc;
+    m_isDead = false;
 
     m_pTransformCom->Set_State(CTransform::STATE_POSITION, m_DefaultDesc.vPos);
     m_pTransformCom->Rotation(m_DefaultDesc.vRotation.x, m_DefaultDesc.vRotation.y, m_DefaultDesc.vRotation.z);
@@ -153,6 +154,18 @@ void CParticle_Effect::Reset()
 
     m_pVIBufferCom->DispatchCS(m_pResetCS, Movement);
 }
+
+void CParticle_Effect::Set_Loop(_bool bLoop)
+{
+    if (true == bLoop)
+    {
+        m_DefaultDesc.iComputeState |= CVIBuffer_Instancing::STATE_LOOP;
+        Reset();
+    }
+    else
+        m_DefaultDesc.iComputeState &= ~CVIBuffer_Instancing::STATE_LOOP;
+}
+
 
 HRESULT CParticle_Effect::Ready_Components(const PARTICLE_EFFECT_DESC& Desc)
 {
@@ -193,15 +206,15 @@ HRESULT CParticle_Effect::Ready_Components(const PARTICLE_EFFECT_DESC& Desc)
     _wstring strCSPrototypeTag = TEXT("");
     switch (Desc.DefaultDesc.eType)
     {
-    case TYPE_SPREAD:
+    case PT_SPREAD:
         strCSPrototypeTag = TEXT("Prototype_Component_Shader_Compute_Particle_Spread");
         break;
 
-    case TYPE_MOVE:
+    case PT_MOVE:
         strCSPrototypeTag = TEXT("Prototype_Component_Shader_Compute_Particle_Move");
         break;
 
-    case TYPE_CONVERGE:
+    case PT_CONVERGE:
         strCSPrototypeTag = TEXT("Prototype_Component_Shader_Compute_Particle_Converge");
         break;
     }

@@ -102,7 +102,7 @@ HRESULT CEffect_Container::Initialize(void* pArg)
 
 		_tchar szEffectName[MAX_PATH] = TEXT("");
 		wcscpy_s(szEffectName, pTrailTP->szEffectName);
-		wcscat_s(szEffectName, TEXT(".TP"));
+		wcscat_s(szEffectName, TEXT(".TTP"));
 		m_EffectNames.emplace_back(szEffectName);
 	}
 
@@ -117,7 +117,7 @@ HRESULT CEffect_Container::Initialize(void* pArg)
 
 		_tchar szEffectName[MAX_PATH] = TEXT("");
 		wcscpy_s(szEffectName, pTrailMP->szEffectName);
-		wcscat_s(szEffectName, TEXT(".MP"));
+		wcscat_s(szEffectName, TEXT(".TMP"));
 		m_EffectNames.emplace_back(szEffectName);
 	}
 

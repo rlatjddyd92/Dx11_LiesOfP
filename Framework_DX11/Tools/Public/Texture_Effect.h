@@ -22,9 +22,6 @@ public:
 
 		_Vec3		vPos = { 0.f, 0.f, 0.f };
 
-		_float		fRotationAngle = {};
-		_float		fRotationSpeed = { 0.f };
-
 		_Vec3		vStartScale = { 1.f, 1.f, 1.f };
 		_Vec3		vScalingSpeed = {};
 

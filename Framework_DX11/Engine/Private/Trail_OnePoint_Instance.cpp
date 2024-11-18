@@ -61,7 +61,7 @@ _bool CTrail_OnePoint_Instance::Update_Buffer(_Vec3 vWorldPos, _float fTrailInte
 	for (size_t i = 0; i < m_iNumInstance; ++i)
 	{
 		pVertices[i].vLifeTime.y += fTimeDelta;
-		if (pVertices[i].vLifeTime.y < pVertices[i].vLifeTime.x)
+		if (false == bLoop && pVertices[i].vLifeTime.y < pVertices[i].vLifeTime.x)
 			m_bOver = false;
 
 		if (false == m_bFirst)
@@ -134,7 +134,7 @@ _bool CTrail_OnePoint_Instance::Spread_Buffer(_Vec3 vWorldPos, _float fTrailInte
 		if (pVertices[i].vLifeTime.y < pVertices[i].vLifeTime.x)
 			m_bOver = false;
 
-		if (false == m_bFirst)
+		if (false == bLoop && false == m_bFirst)
 		{
 			pVertices[i].vCurPos = vWorldPos;
 			pVertices[i].vPrePos = vWorldPos;
