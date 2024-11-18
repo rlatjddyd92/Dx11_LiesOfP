@@ -13,6 +13,16 @@ BEGIN(Client)
 class CUIPage : public CUIObject
 {
 public:
+	enum class CTRL_COMMAND
+	{
+		COM_RENDER,
+		COM_UPDATE,
+		COM_RATIO,
+	};
+
+
+
+
 	typedef struct UIPART_INFO
 	{
 
@@ -144,9 +154,43 @@ public:
 
 	virtual HRESULT Ready_UIPart_Group_Control();
 
+	virtual CHECK_MOUSE Check_Mouse_By_Part_In_Page();
+
 protected:
 	void UpdatePart_ByControl(UG_CTRL* pCtrl);
 	void Release_Control(UG_CTRL* pCtrl);
+
+	UPART* Get_Front_Part_In_Control(_int Ctrl_Index)
+	{
+		if (!m_vec_Group_Ctrl[Ctrl_Index]->PartIndexlist.empty())
+			return m_vecPart[m_vec_Group_Ctrl[Ctrl_Index]->PartIndexlist.front()];
+		else
+			return nullptr;
+	}
+
+	void Array_Control(_int iStart, _int iEnd, CTRL_COMMAND eCom, _float fInput)
+	{
+		switch (eCom)
+		{
+		case Client::CUIPage::CTRL_COMMAND::COM_RENDER:
+			for (_int i = iStart; i <= iEnd; ++i)
+				m_vec_Group_Ctrl[i]->bRender = (_bool)fInput;
+			break;
+		case Client::CUIPage::CTRL_COMMAND::COM_UPDATE:
+			for (_int i = iStart; i <= iEnd; ++i)
+				m_vec_Group_Ctrl[i]->bUpdate = (_bool)fInput;
+			break;
+		case Client::CUIPage::CTRL_COMMAND::COM_RATIO:
+			for (_int i = iStart; i <= iEnd; ++i)
+				m_vec_Group_Ctrl[i]->fRatio = fInput;
+			break;
+		default:
+			break;
+		}
+	}
+
+
+
 
 	void UpdatePart_ByIndex(_int Index, _float fTimeDelta);
 

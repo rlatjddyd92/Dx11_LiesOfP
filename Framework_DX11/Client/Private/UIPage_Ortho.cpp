@@ -97,6 +97,13 @@ void CUIPage_Ortho::CloseAction()
 	__super::CloseAction();
 }
 
+CHECK_MOUSE CUIPage_Ortho::Check_Mouse_By_Part_In_Page()
+{
+	__super::Check_Mouse_By_Part_In_Page();
+
+	return CHECK_MOUSE::MOUSE_NONE;
+}
+
 HRESULT CUIPage_Ortho::Ready_UIPart_Group_Control()
 {
 	__super::Ready_UIPart_Group_Control();

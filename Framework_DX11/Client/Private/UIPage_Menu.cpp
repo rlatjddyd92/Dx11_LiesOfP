@@ -59,6 +59,28 @@ void CUIPage_Menu::Update(_float fTimeDelta)
 
 void CUIPage_Menu::Late_Update(_float fTimeDelta)
 {
+
+
+
+
+
+
+
+
+
+
+	if (m_eFocus_Group != PART_GROUP::GROUP_END)
+	{
+		UPART* pSelect = __super::Get_Front_Part_In_Control((_int)PART_GROUP::GROUP_SELECT_MARK);
+		UPART* pGroup = __super::Get_Front_Part_In_Control((_int)m_eFocus_Group);
+
+		pSelect->iParentPart_Index = (_int)m_eFocus_Group;
+		pSelect->fSize = pGroup->fSize;
+	}
+
+	for (auto& iter : m_vec_Group_Ctrl)
+		__super::UpdatePart_ByControl(iter);
+
 	__super::Late_Update(fTimeDelta);
 }
 
@@ -70,11 +92,26 @@ HRESULT CUIPage_Menu::Render()
 void CUIPage_Menu::OpenAction()
 {
 	__super::OpenAction();
+
+	__super::Array_Control(_int(PART_GROUP::GROUP_DESC_BACK), _int(PART_GROUP::GROUP_DESC_MOUSE), CTRL_COMMAND::COM_RENDER, false);
+	__super::Array_Control(_int(PART_GROUP::GROUP_ITEM_DESC_MOUSE_0), _int(PART_GROUP::GROUP_ITEM_DESC_FUNC_1), CTRL_COMMAND::COM_RENDER, false);
+	m_vec_Group_Ctrl[_int(PART_GROUP::GROUP_SELECT_MARK)]->bRender = false;
 }
 
 void CUIPage_Menu::CloseAction()
 {
 	__super::CloseAction();
+
+	__super::Array_Control(_int(PART_GROUP::GROUP_DESC_BACK), _int(PART_GROUP::GROUP_DESC_MOUSE), CTRL_COMMAND::COM_RENDER, false);
+	__super::Array_Control(_int(PART_GROUP::GROUP_ITEM_DESC_MOUSE_0), _int(PART_GROUP::GROUP_ITEM_DESC_FUNC_1), CTRL_COMMAND::COM_RENDER, false);
+	m_vec_Group_Ctrl[_int(PART_GROUP::GROUP_SELECT_MARK)]->bRender = false;
+}
+
+CHECK_MOUSE CUIPage_Menu::Check_Mouse_By_Part_In_Page()
+{
+	__super::Check_Mouse_By_Part_In_Page();
+
+	return CHECK_MOUSE::MOUSE_NONE;
 }
 
 HRESULT CUIPage_Menu::Ready_UIPart_Group_Control()

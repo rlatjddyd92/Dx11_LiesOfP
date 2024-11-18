@@ -38,12 +38,6 @@ HRESULT CLevel_Tool::Initialize()
 	
 	if (FAILED(Read_Map_Data()))
 		return E_FAIL;	
-	
-
-	// 2024-11-10 김성용
-	// 게임 인터페이스를 플레이 모드로 설정 
-	// 게임 플레이에 필요한 인벤, 플레이 화면, 스탯 화면 등을 상황에 따라 보여 주도록 설정 
-	GET_GAMEINTERFACE->SetPlayMode(true);
 
 	CEffect_Container::EFFECT_DESC desc = {};
 
@@ -167,10 +161,6 @@ HRESULT CLevel_Tool::Ready_Layer_Monster()
 	//if (FAILED(m_pGameInstance->Add_CloneObject_ToLayer(LEVEL_GAMEPLAY, TEXT("Layer_Monster"), TEXT("Prototype_GameObject_CarcassBigA"))))
 	//	return E_FAIL;
 
-	// 24-11-15 김성용
-	// 직교 UI 테스트용 코드 
-	// 테스트 후에 for문만 제거하기 
-	//for(_int i = 0; i < 3; ++i)
 	if (FAILED(m_pGameInstance->Add_CloneObject_ToLayer(LEVEL_GAMEPLAY, TEXT("Layer_Monster"), TEXT("Prototype_GameObject_CarcassBigA"))))
 		return E_FAIL;
 

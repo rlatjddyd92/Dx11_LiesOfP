@@ -50,13 +50,21 @@ void CUIPage::Late_Update(_float fTimeDelta)
 	{
 		m_fTopPartMove -= 2.f * fTimeDelta;
 		if (m_fTopPartMove < 0.f)
+		{
 			m_fTopPartMove = 0.f;
+			m_vecPageAction[_int(PAGEACTION::ACTION_CLOSING)] = false;
+			m_vecPageAction[_int(PAGEACTION::ACTION_INACTIVE)] = true;
+		}
 	}
 	else if ((!m_vecPageAction[_int(PAGEACTION::ACTION_CLOSING)]) && (m_vecPageAction[_int(PAGEACTION::ACTION_OPENING)]))
 	{
 		m_fTopPartMove += 2.f * fTimeDelta;
 		if (m_fTopPartMove > 1.f)
+		{
 			m_fTopPartMove = 1.f;
+			m_vecPageAction[_int(PAGEACTION::ACTION_OPENING)] = false;
+			m_vecPageAction[_int(PAGEACTION::ACTION_ACTIVE)] = true;
+		}
 	}
 
 	for (auto& iter : m_vecPart)
@@ -96,6 +104,8 @@ void CUIPage::OpenAction()
 {
 	m_vecPageAction[_int(PAGEACTION::ACTION_CLOSING)] = false;
 	m_vecPageAction[_int(PAGEACTION::ACTION_OPENING)] = true;
+	m_vecPageAction[_int(PAGEACTION::ACTION_INACTIVE)] = false;
+	m_vecPageAction[_int(PAGEACTION::ACTION_ACTIVE)] = false;
 	m_bRender = true;
 }
 
@@ -103,11 +113,18 @@ void CUIPage::CloseAction()
 {
 	m_vecPageAction[_int(PAGEACTION::ACTION_CLOSING)] = true;
 	m_vecPageAction[_int(PAGEACTION::ACTION_OPENING)] = false;
+	m_vecPageAction[_int(PAGEACTION::ACTION_INACTIVE)] = false;
+	m_vecPageAction[_int(PAGEACTION::ACTION_ACTIVE)] = false;
 }
 
 HRESULT CUIPage::Ready_UIPart_Group_Control()
 {
 	return S_OK;
+}
+
+CHECK_MOUSE CUIPage::Check_Mouse_By_Part_In_Page()
+{
+	return CHECK_MOUSE::MOUSE_NONE;
 }
 
 void CUIPage::Release_Control(UG_CTRL* pCtrl)

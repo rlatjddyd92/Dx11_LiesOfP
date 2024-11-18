@@ -14,7 +14,8 @@
 
 	enum class PAGEACTION
 	{
-		ACTION_NONE,
+		ACTION_INACTIVE,
+		ACTION_ACTIVE,
 		ACTION_OPENING,
 		ACTION_CLOSING,
 		ACTION_SHAKING,
@@ -94,4 +95,14 @@
 		ORTHO_OBJ_1,
 		ORTHO_OBJ_2,
 		ORTHO_END
+	};
+
+	enum class CHECK_MOUSE
+	{
+		// 아래 내용은 파트 단위로 확인 (특히 Tap, Hold)
+		MOUSE_CURSOR, // 커서만 겹침
+		MOUSE_TAP, // 이번 프레임에 클릭됨
+		MOUSE_HOLD, // 이전 프레임 + 이번 프레임 모두 클릭됨
+		MOUSE_NONE, // 마우스 동작 없음 
+		MOUSE_END
 	};

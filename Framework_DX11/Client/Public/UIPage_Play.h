@@ -128,6 +128,8 @@ public:
 	virtual void OpenAction() override;
 	virtual void CloseAction() override;
 
+	virtual CHECK_MOUSE Check_Mouse_By_Part_In_Page() override;
+
 public:
 	const vector<UPART*>& Get_UIPartInfo() { return m_vecPart; }
 	virtual HRESULT Ready_UIPart_Group_Control() override;

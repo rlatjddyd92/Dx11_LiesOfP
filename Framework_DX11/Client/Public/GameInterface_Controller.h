@@ -49,10 +49,9 @@ public: // 외부에서 매니저 접근
 	void OpenMainPage() { m_pUIManager->OpenMainPage(); }
 	void OpenLoadingPage() { m_pUIManager->OpenLoadingPage(); }
 
-	_bool GetPlayMode() { return m_pUIManager->GetPlayMode(); }
-	void SetPlayMode(_bool bIsPlayMode) { m_pUIManager->SetPlayMode(bIsPlayMode); }
+	_float2 CheckMouse(_float2 fPos, _float2 fSize) { return m_pUIManager->CheckMouse(fPos, fSize); }
 
-	void SwicthPage(UIPAGE eNextPage) { m_pUIManager->SwicthPage(eNextPage); }
+	void SwicthPage(UIPAGE ePageA, UIPAGE ePageB) { m_pUIManager->SwicthPage(ePageA, ePageB); }
 	CUIManager::TDATA* GetTestData() { return m_pUIManager->GetTestData(); }
 	// TestPage 
 	void ShowTestPage(TEST_PAGE_NAME eName,
@@ -88,6 +87,10 @@ public: // 외부에서 매니저 접근
 	// 정보 접근 
 	const _float& Get_NowStat_Normal(STAT_NORMAL eIndex) { return m_pPlayer_Stat_Manager->Get_NowStat_Normal(eIndex); }
 	const CPlayer_Stat_Manager::STAT& Get_StatInfo_Normal(STAT_NORMAL eIndex) { return m_pPlayer_Stat_Manager->Get_StatInfo_Normal(eIndex); }
+
+	const _float Get_Now_Max_Ratio(STAT_NORMAL eIndex) { return  m_pPlayer_Stat_Manager->Get_Now_Max_Ratio(eIndex);}
+	const _float Get_Max_Limit_Ratio(STAT_NORMAL eIndex) { return  m_pPlayer_Stat_Manager->Get_Max_Limit_Ratio(eIndex);}
+	const _float Get_Now_Limit_Ratio(STAT_NORMAL eIndex) { return m_pPlayer_Stat_Manager->Get_Now_Limit_Ratio(eIndex); }
 
 	const CPlayer_Stat_Manager::STAT& Get_StatInfo_DEF(STAT_DEF eIndex) { return m_pPlayer_Stat_Manager->Get_StatInfo_DEF(eIndex); }
 

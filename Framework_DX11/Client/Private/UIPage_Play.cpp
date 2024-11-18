@@ -95,6 +95,13 @@ void CUIPage_Play::CloseAction()
 	
 }
 
+CHECK_MOUSE CUIPage_Play::Check_Mouse_By_Part_In_Page()
+{
+	__super::Check_Mouse_By_Part_In_Page();
+
+	return CHECK_MOUSE::MOUSE_NONE;
+}
+
 HRESULT CUIPage_Play::Ready_UIPart_Group_Control()
 {
 	__super::Ready_UIPart_Group_Control();
@@ -110,10 +117,8 @@ HRESULT CUIPage_Play::Ready_UIPart_Group_Control()
 			m_vec_Group_Ctrl[m_vecPart[i]->iGroupIndex]->PartIndexlist.push_back(i);
 	}
 
-	for (_int i = _int(PART_GROUP::GROUP_POTION_FRAME); i <= _int(PART_GROUP::GROUP_SELECT_CELL); ++i)
-		m_vec_Group_Ctrl[i]->bRender = true;
-	for (_int i = _int(PART_GROUP::GROUP_BAG_FRAMELINE); i <= _int(PART_GROUP::GROUP_BAG_NUM); ++i)
-		m_vec_Group_Ctrl[i]->bRender = false;
+	__super::Array_Control(_int(PART_GROUP::GROUP_POTION_FRAME), _int(PART_GROUP::GROUP_SELECT_CELL), CTRL_COMMAND::COM_RENDER, true);
+	__super::Array_Control(_int(PART_GROUP::GROUP_BAG_FRAMELINE), _int(PART_GROUP::GROUP_BAG_NUM), CTRL_COMMAND::COM_RENDER, false);
 		
 	
 	m_bWeapon_Top = true;
@@ -123,7 +128,8 @@ HRESULT CUIPage_Play::Ready_UIPart_Group_Control()
 	m_vec_Group_Ctrl[_int(PART_GROUP::GROUP_WEAPON_NORMAL_HANDLE)]->bRender = true;
 	m_vec_Group_Ctrl[_int(PART_GROUP::GROUP_WEAPON_SPECIAL_BACK)]->bRender = false;
 	m_vec_Group_Ctrl[_int(PART_GROUP::GROUP_WEAPON_SPECIAL_TEX)]->bRender = false;
-	--m_vecPart[m_vec_Group_Ctrl[_int(PART_GROUP::GROUP_WEAPON_EQUIP_NUM)]->PartIndexlist.front()]->iTexture_Index;
+
+	--__super::Get_Front_Part_In_Control(_int(PART_GROUP::GROUP_WEAPON_EQUIP_NUM))->iTexture_Index;
 
 	m_vec_Group_Ctrl[_int(PART_GROUP::GROUP_WEAPON_GAUGE_LEFT_SIDE_FRAME)]->bRender = false;
 	m_vec_Group_Ctrl[_int(PART_GROUP::GROUP_WEAPON_GAUGE_LEFT_SIDE_WHITE)]->bRender = false;
@@ -157,15 +163,13 @@ void CUIPage_Play::Swich_ToolItem()
 
 void CUIPage_Play::LU_Gauge_Update(_float fTimeDelta)
 {
-	const CPlayer_Stat_Manager::STAT& tHP = GET_GAMEINTERFACE->Get_StatInfo_Normal(STAT_NORMAL::STAT_GAUGE_HP);
-	const CPlayer_Stat_Manager::STAT& tStamina = GET_GAMEINTERFACE->Get_StatInfo_Normal(STAT_NORMAL::STAT_GAUGE_STAMINA);
 	const CPlayer_Stat_Manager::STAT& tRegion = GET_GAMEINTERFACE->Get_StatInfo_Normal(STAT_NORMAL::STAT_GAUGE_REGION);
 
-	m_vec_Group_Ctrl[_int(PART_GROUP::GROUP_HP_FRAME)]->fRatio = (_float)tHP.fStat_Max / (_float)tHP.fStat_Max_Limit;
-	m_vec_Group_Ctrl[_int(PART_GROUP::GROUP_HP_FILL)]->fRatio = (_float)tHP.fStat_Now / (_float)tHP.fStat_Max_Limit;
+	m_vec_Group_Ctrl[_int(PART_GROUP::GROUP_HP_FRAME)]->fRatio = GET_GAMEINTERFACE->Get_Max_Limit_Ratio(STAT_NORMAL::STAT_GAUGE_HP);
+	m_vec_Group_Ctrl[_int(PART_GROUP::GROUP_HP_FILL)]->fRatio = GET_GAMEINTERFACE->Get_Now_Limit_Ratio(STAT_NORMAL::STAT_GAUGE_HP);
 
-	m_vec_Group_Ctrl[_int(PART_GROUP::GROUP_ST_FRAME)]->fRatio = (_float)tStamina.fStat_Max / (_float)tStamina.fStat_Max_Limit;
-	m_vec_Group_Ctrl[_int(PART_GROUP::GROUP_ST_FILL)]->fRatio = (_float)tStamina.fStat_Now / (_float)tStamina.fStat_Max_Limit;
+	m_vec_Group_Ctrl[_int(PART_GROUP::GROUP_ST_FRAME)]->fRatio = GET_GAMEINTERFACE->Get_Max_Limit_Ratio(STAT_NORMAL::STAT_GAUGE_STAMINA);
+	m_vec_Group_Ctrl[_int(PART_GROUP::GROUP_ST_FILL)]->fRatio = GET_GAMEINTERFACE->Get_Now_Limit_Ratio(STAT_NORMAL::STAT_GAUGE_STAMINA);
 
 	_int iSP_Cell_Num = (_int)((_float)tRegion.fStat_Max / (_float)tRegion.fStat_Interval);
 	_int iSP_Cell_Filled = (_int)((_float)tRegion.fStat_Now / (_float)tRegion.fStat_Interval);
@@ -255,17 +259,13 @@ void CUIPage_Play::LD_Potion_Tool_Update(_float fTimeDelta)
 			m_fBag_Open_Waiting_Now = 0.f;
 			if (m_vec_Group_Ctrl[_int(PART_GROUP::GROUP_POTION_FRAME)]->bRender)
 			{
-				for (_int i = _int(PART_GROUP::GROUP_POTION_FRAME); i <= _int(PART_GROUP::GROUP_SELECT_CELL); ++i)
-					m_vec_Group_Ctrl[i]->bRender = false;
-				for (_int i = _int(PART_GROUP::GROUP_BAG_FRAMELINE); i <= _int(PART_GROUP::GROUP_BAG_NUM); ++i)
-					m_vec_Group_Ctrl[i]->bRender = true;
+				__super::Array_Control(_int(PART_GROUP::GROUP_POTION_FRAME), _int(PART_GROUP::GROUP_SELECT_CELL), CTRL_COMMAND::COM_RENDER, false);
+				__super::Array_Control(_int(PART_GROUP::GROUP_BAG_FRAMELINE), _int(PART_GROUP::GROUP_BAG_NUM), CTRL_COMMAND::COM_RENDER, true);
 			}
 			else 
 			{
-				for (_int i = _int(PART_GROUP::GROUP_POTION_FRAME); i <= _int(PART_GROUP::GROUP_SELECT_CELL); ++i)
-					m_vec_Group_Ctrl[i]->bRender = true;
-				for (_int i = _int(PART_GROUP::GROUP_BAG_FRAMELINE); i <= _int(PART_GROUP::GROUP_BAG_NUM); ++i)
-					m_vec_Group_Ctrl[i]->bRender = false;
+				__super::Array_Control(_int(PART_GROUP::GROUP_POTION_FRAME), _int(PART_GROUP::GROUP_SELECT_CELL), CTRL_COMMAND::COM_RENDER, true);
+				__super::Array_Control(_int(PART_GROUP::GROUP_BAG_FRAMELINE), _int(PART_GROUP::GROUP_BAG_NUM), CTRL_COMMAND::COM_RENDER, false);
 			}
 		}
 	}

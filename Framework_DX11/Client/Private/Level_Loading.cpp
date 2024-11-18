@@ -20,10 +20,6 @@ HRESULT CLevel_Loading::Initialize(LEVELID eNextLevelID)
 	m_pLoader = CLoader::Create(m_pDevice, m_pContext, m_eNextLevelID);
 	if (nullptr == m_pLoader)
 		return E_FAIL;	
-		
-	// 2024-11-10 김성용
-	// 모든 UI 페이지 OFF 후 -> 로딩 UI 페이지 오픈
-	GET_GAMEINTERFACE->OpenLoadingPage();
 
 	if (FAILED(Ready_Layer_BackGround()))
 		return E_FAIL;

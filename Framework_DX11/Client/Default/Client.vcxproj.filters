@@ -121,9 +121,6 @@
     <Filter Include="03.GameInterface_Controller\00.UIManager\00.UIPage\06.UIPage_Stat">
       <UniqueIdentifier>{f815fc82-3802-4a2a-8c10-2a59b6325fce}</UniqueIdentifier>
     </Filter>
-    <Filter Include="03.GameInterface_Controller\00.UIManager\00.UIPage\07.UIPage_LevelUp">
-      <UniqueIdentifier>{49687bb1-cd51-47be-b319-ccccb8021b98}</UniqueIdentifier>
-    </Filter>
     <Filter Include="03.GameInterface_Controller\00.UIManager\00.UIPage\08.UIPage_Skill">
       <UniqueIdentifier>{101ea800-761b-49e9-ae2b-58825aebc3f3}</UniqueIdentifier>
     </Filter>
@@ -366,6 +363,9 @@
     </Filter>
     <Filter Include="02.GameObjects\05.Effect\Effect_Base\Mesh_Effect">
       <UniqueIdentifier>{6950edf6-b86b-4f5f-bcf2-800c147433d6}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="03.GameInterface_Controller\00.UIManager\00.UIPage\07.UIPage_LevelUp%28미사용%29">
+      <UniqueIdentifier>{49687bb1-cd51-47be-b319-ccccb8021b98}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -619,7 +619,7 @@
       <Filter>03.GameInterface_Controller\00.UIManager\00.UIPage\04.UIPage_Inven</Filter>
     </ClInclude>
     <ClInclude Include="..\Public\UIPage_LevelUp.h">
-      <Filter>03.GameInterface_Controller\00.UIManager\00.UIPage\07.UIPage_LevelUp</Filter>
+      <Filter>03.GameInterface_Controller\00.UIManager\00.UIPage\07.UIPage_LevelUp%28미사용%29</Filter>
     </ClInclude>
     <ClInclude Include="..\Public\UIPage_Skill.h">
       <Filter>03.GameInterface_Controller\00.UIManager\00.UIPage\08.UIPage_Skill</Filter>
@@ -855,7 +855,7 @@
       <Filter>03.GameInterface_Controller\00.UIManager\00.UIPage\04.UIPage_Inven</Filter>
     </ClCompile>
     <ClCompile Include="..\Private\UIPage_LevelUp.cpp">
-      <Filter>03.GameInterface_Controller\00.UIManager\00.UIPage\07.UIPage_LevelUp</Filter>
+      <Filter>03.GameInterface_Controller\00.UIManager\00.UIPage\07.UIPage_LevelUp%28미사용%29</Filter>
     </ClCompile>
     <ClCompile Include="..\Private\UIPage_Skill.cpp">
       <Filter>03.GameInterface_Controller\00.UIManager\00.UIPage\08.UIPage_Skill</Filter>

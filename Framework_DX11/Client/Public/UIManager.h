@@ -53,12 +53,18 @@ public:
 	void Update_UIManager(_float fTimeDelta);
 	void Update_UIControl(_float fTimeDelta);
 
+	_float2 CheckMouse(_float2 fPos, _float2 fSize);
+
 private:
 	void UIControl_Test(_float fTimeDelta);
 	void UIControl_Main(_float fTimeDelta);
 	void UIControl_Loading(_float fTimeDelta);
 	void UIControl_Play(_float fTimeDelta);
 	void UIControl_Inven(_float fTimeDelta);
+	void UIControl_Equip(_float fTimeDelta);
+	void UIControl_Stat(_float fTimeDelta);
+	void UIControl_LevelUp(_float fTimeDelta);
+	void UIControl_Skill(_float fTimeDelta);
 
 public:
 #pragma region Page_Main
@@ -70,16 +76,8 @@ public:
 #pragma endregion
 
 #pragma region PlayMode
-	// 플레이 모드 진입
-	_bool GetPlayMode() { return m_bPlayMode; }
-	void SetPlayMode(_bool bIsPlayMode)
-	{
-		m_vecPage[_int(UIPAGE::PAGE_LOADING)]->SetRender(false);
-		m_bPlayMode = bIsPlayMode;
-	}
-
 	// 화면 전환 
-	void SwicthPage(UIPAGE eNextPage);
+	void SwicthPage(UIPAGE ePageA, UIPAGE ePageB);
 
 
 
@@ -123,6 +121,12 @@ private:
 
 	void InputTestPageInfo(vector<_wstring>* pName, vector<_wstring>* pValue, _wstring DataNameA, TEST_PAGE_VALUE_TYPE eTypeA, const void* ValueA);
 
+	void Open_Close_Page(UIPAGE ePage); // 열려 있거나 열리는 중이면 닫고, 닫혀 있거나 닫히는 중이면 연다 
+	void OpenPage(UIPAGE ePage); // 열렸거나 열리는 중이면 무시하고 아니면 연다 
+	void ClosePage(UIPAGE ePage); // 닫혔거나 닫히는 중이면 무시하고 아니면 닫는다 
+
+	
+
 private:
 	vector<CUIPage*> m_vecPage; // <- 렌더러 참조용
 
@@ -157,8 +161,9 @@ private:
 
 	CUIRender_Client* m_pUIRender_Client = { nullptr };
 
+
 	// 플레이 모드 진입 
-	_bool m_bPlayMode = false;
+	//_bool m_bPlayMode = false;
 
 	// test code
 #ifdef _DEBUG

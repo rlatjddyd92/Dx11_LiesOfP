@@ -119,8 +119,6 @@ void CUIManager::Update_UIControl(_float fTimeDelta)
 	//UIControl_Main(fTimeDelta);
 	//UIControl_Loading(fTimeDelta);
 	UIControl_Play(fTimeDelta);
-
-
 }
 
 void CUIManager::UIControl_Test(_float fTimeDelta)
@@ -128,19 +126,7 @@ void CUIManager::UIControl_Test(_float fTimeDelta)
 #ifdef _DEBUG
 	if (KEY_TAP(KEY::P)) // Page_Play(기본 플레이 화면) 띄우기/닫기 -> 정식 기능에서는 사용하지 않음 
 	{
-		if (m_vecPage[_int(UIPAGE::PAGE_PLAY)]->GetRender())
-		{
-			if (m_vecPage[_int(UIPAGE::PAGE_PLAY)]->GetPageAction(PAGEACTION::ACTION_OPENING))
-			{
-				m_vecPage[_int(UIPAGE::PAGE_PLAY)]->CloseAction();
-			}
-			else if (m_vecPage[_int(UIPAGE::PAGE_PLAY)]->GetPageAction(PAGEACTION::ACTION_CLOSING))
-			{
-				m_vecPage[_int(UIPAGE::PAGE_PLAY)]->OpenAction();
-			}
-		}
-		else
-			m_vecPage[_int(UIPAGE::PAGE_PLAY)]->OpenAction();
+		Open_Close_Page(UIPAGE::PAGE_PLAY);
 	}
 
 	// 상단 바 
@@ -325,23 +311,16 @@ void CUIManager::UIControl_Test(_float fTimeDelta)
 
 		if (m_vecTestPageOpen[i])
 		{
-			
-
 			if ((KEY_TAP(KEY::LBUTTON)) && (!m_vecTestPageMove[i]))
 			{
-				POINT			ptMouse{};
-				GetCursorPos(&ptMouse);
-				ScreenToClient(g_hWnd, &ptMouse);
+				_float2 fPoint = CheckMouse(m_vecTestPage_Pos[i], m_vecTestPage_Size[i]);
 
-				if (ptMouse.x > m_vecTestPage_Pos[i].x - (m_vecTestPage_Size[i].x * 0.5f))
-					if (ptMouse.x < m_vecTestPage_Pos[i].x + (m_vecTestPage_Size[i].x * 0.5f))
-						if (ptMouse.y > m_vecTestPage_Pos[i].y - (m_vecTestPage_Size[i].y * 0.5f))
-							if (ptMouse.y < m_vecTestPage_Pos[i].y + (m_vecTestPage_Size[i].y * 0.5f))
-							{
-								m_vecTestPageMove[i] = true;
-								m_vecTestPage_ClickPos[i] = { (_float)ptMouse.x, (_float)ptMouse.y };
-								bMoving = true;
-							}
+				if (fPoint.x != -1)
+				{
+					m_vecTestPageMove[i] = true;
+					m_vecTestPage_ClickPos[i] = { fPoint.x, fPoint.y };
+					bMoving = true;
+				}
 			}
 			else if (m_vecTestPageMove[i])
 			{
@@ -396,27 +375,57 @@ void CUIManager::UIControl_Loading(_float fTimeDelta)
 
 void CUIManager::UIControl_Play(_float fTimeDelta)
 {
-	// 메인 페이지 조정 (실제 구현 기능)
-	if (KEY_TAP(KEY::ESC)) // Play_Menu 띄우기/닫기 
-	{
-		if (m_vecPage[_int(UIPAGE::PAGE_MENU)]->GetRender())
-		{
-			if (m_vecPage[_int(UIPAGE::PAGE_MENU)]->GetPageAction(PAGEACTION::ACTION_OPENING))
-			{
-				m_vecPage[_int(UIPAGE::PAGE_MENU)]->CloseAction();
-			}
-			else if (m_vecPage[_int(UIPAGE::PAGE_MENU)]->GetPageAction(PAGEACTION::ACTION_CLOSING))
-			{
-				m_vecPage[_int(UIPAGE::PAGE_MENU)]->OpenAction();
-			}
-		}
-		else
-			m_vecPage[_int(UIPAGE::PAGE_MENU)]->OpenAction();
-	}
+	// 기본 플레이 화면에서의 조정
+	/*
+	1. Page_Play <-> Page_Menu 전환
+	2. Page_Menu에서 다른 페이지로 넘어가기
+	3. 플레이 중 발생하는 상호작용 관련 조작 
+	*/
 
+	if ((m_pUIPage_Menu->GetPageAction(PAGEACTION::ACTION_ACTIVE)) || (m_pUIPage_Play->GetPageAction(PAGEACTION::ACTION_ACTIVE)))
+	{
+		if (KEY_TAP(KEY::ESC)) // 1. Page_Play <-> Page_Menu 전환
+		{
+			SwicthPage(UIPAGE::PAGE_MENU, UIPAGE::PAGE_PLAY);
+		}
+		else if (m_pUIPage_Menu->GetPageAction(PAGEACTION::ACTION_ACTIVE))
+		{
+			// 2. Page_Menu에서 다른 페이지로 넘어가기
+			CHECK_MOUSE eResult = m_pUIPage_Menu->Check_Mouse_By_Part_In_Page();
+		}
+		else if (m_pUIPage_Play->GetPageAction(PAGEACTION::ACTION_ACTIVE))
+		{
+			// 3. 플레이 중 발생하는 상호작용 관련 조작
+			CHECK_MOUSE eResult = m_pUIPage_Play->Check_Mouse_By_Part_In_Page();
+		}
+	}
+	else if (m_pUIPage_Inven->GetPageAction(PAGEACTION::ACTION_ACTIVE))
+		UIControl_Inven(fTimeDelta);
+	else if (m_pUIPage_Equip->GetPageAction(PAGEACTION::ACTION_ACTIVE))
+		UIControl_Equip(fTimeDelta);
+	else if (m_pUIPage_Stat->GetPageAction(PAGEACTION::ACTION_ACTIVE))
+		UIControl_Stat(fTimeDelta);
+	else if (m_pUIPage_Skill->GetPageAction(PAGEACTION::ACTION_ACTIVE))
+		UIControl_Skill(fTimeDelta);
 }
 
 void CUIManager::UIControl_Inven(_float fTimeDelta)
+{
+}
+
+void CUIManager::UIControl_Equip(_float fTimeDelta)
+{
+}
+
+void CUIManager::UIControl_Stat(_float fTimeDelta)
+{
+}
+
+void CUIManager::UIControl_LevelUp(_float fTimeDelta)
+{
+}
+
+void CUIManager::UIControl_Skill(_float fTimeDelta)
 {
 }
 
@@ -435,12 +444,10 @@ void CUIManager::OpenLoadingPage()
 	//m_vecPage[_int(UIPAGE::PAGE_LOADING)]->SetRender(true);
 }
 
-void CUIManager::SwicthPage(UIPAGE eNextPage)
+void CUIManager::SwicthPage(UIPAGE ePageA, UIPAGE ePageB)
 {
-	for (auto& iter : m_vecPage)
-		iter->CloseAction();
-
-	m_vecPage[_int(eNextPage)]->OpenAction();
+	Open_Close_Page(ePageA);
+	Open_Close_Page(ePageB);
 }
 
 void CUIManager::ShowTestPage(TEST_PAGE_NAME eName, _wstring DataNameA, TEST_PAGE_VALUE_TYPE eTypeA, const void* ValueA, _wstring DataNameB, TEST_PAGE_VALUE_TYPE eTypeB, const void* ValueB, _wstring DataNameC, TEST_PAGE_VALUE_TYPE eTypeC, const void* ValueC, _wstring DataNameD, TEST_PAGE_VALUE_TYPE eTypeD, const void* ValueD, _wstring DataNameE, TEST_PAGE_VALUE_TYPE eTypeE, const void* ValueE, _wstring DataNameF, TEST_PAGE_VALUE_TYPE eTypeF, const void* ValueF, _wstring DataNameG, TEST_PAGE_VALUE_TYPE eTypeG, const void* ValueG, _wstring DataNameH, TEST_PAGE_VALUE_TYPE eTypeH, const void* ValueH, _wstring DataNameI, TEST_PAGE_VALUE_TYPE eTypeI, const void* ValueI, _wstring DataNameJ, TEST_PAGE_VALUE_TYPE eTypeJ, const void* ValueJ)
@@ -737,6 +744,44 @@ void CUIManager::InputTestPageInfo(vector<_wstring>* pName, vector<_wstring>* pV
 		strValue += strTemp;
 		pValue->push_back(strValue);
 	}
+}
+
+void CUIManager::Open_Close_Page(UIPAGE ePage)
+{
+	if (m_vecPage[_int(ePage)]->GetRender())
+	{
+		if ((m_vecPage[_int(ePage)]->GetPageAction(PAGEACTION::ACTION_OPENING)) || (m_vecPage[_int(ePage)]->GetPageAction(PAGEACTION::ACTION_ACTIVE)))
+			ClosePage(ePage);
+		else if ((m_vecPage[_int(ePage)]->GetPageAction(PAGEACTION::ACTION_CLOSING)) || (m_vecPage[_int(ePage)]->GetPageAction(PAGEACTION::ACTION_INACTIVE)))
+			OpenPage(ePage);
+	}
+	else
+		OpenPage(ePage);
+}
+
+void CUIManager::OpenPage(UIPAGE ePage)
+{
+	m_vecPage[_int(ePage)]->OpenAction();
+}
+
+void CUIManager::ClosePage(UIPAGE ePage)
+{
+	m_vecPage[_int(ePage)]->CloseAction();
+}
+
+_float2 CUIManager::CheckMouse(_float2 fPos, _float2 fSize)
+{
+	POINT			ptMouse{};
+	GetCursorPos(&ptMouse);
+	ScreenToClient(g_hWnd, &ptMouse);
+
+	if (ptMouse.x > fPos.x - (fSize.x * 0.5f))
+		if (ptMouse.x < fPos.x + (fSize.x * 0.5f))
+			if (ptMouse.y > fPos.y - (fSize.y * 0.5f))
+				if (ptMouse.y < fPos.y + (fSize.y * 0.5f))
+					return { (_float)ptMouse.x, (_float)ptMouse.y};
+
+	return { -1.f,-1.f };
 }
 
 CUIManager* CUIManager::Create(ID3D11Device* pDevice, ID3D11DeviceContext* pContext)

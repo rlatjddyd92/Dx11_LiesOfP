@@ -17,10 +17,6 @@ HRESULT CLevel_Logo::Initialize()
 	if (FAILED(Ready_Layer_BackGround(TEXT("Layer_BackGround"))))
 		return E_FAIL;
 
-	// 2024-11-10 ±è¼º¿ë
-	// ¸ŞÀÎ UI ÆäÀÌÁö ¿ÀÇÂ
-	GET_GAMEINTERFACE->OpenMainPage();
-
 	return S_OK;
 }
 

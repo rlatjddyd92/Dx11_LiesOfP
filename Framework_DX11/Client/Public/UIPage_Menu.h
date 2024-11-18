@@ -84,11 +84,18 @@ public:
 	virtual void OpenAction() override;
 	virtual void CloseAction() override;
 
+	virtual CHECK_MOUSE Check_Mouse_By_Part_In_Page() override;
+
 public:
 	const vector<UPART*>& Get_UIPartInfo() { return m_vecPart; }
 	virtual HRESULT Ready_UIPart_Group_Control() override;
 
+private:
+	void Focus_Update(); // 메뉴 화면에서 현재 하이라이트 된 
+
+
 protected:
+	PART_GROUP m_eFocus_Group = PART_GROUP::GROUP_END;
 
 
 
