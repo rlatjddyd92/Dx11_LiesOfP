@@ -58,24 +58,21 @@ void CWeapon::Late_Update(_float fTimeDelta)
 	/* 직교투영을 위한 월드행렬까지 셋팅하게 된다. */
 	__super::Late_Update(fTimeDelta);
 
-#ifdef _DEBUG
-	m_pGameInstance->Add_DebugObject(m_pColliderCom);
-
-#endif
-	m_pGameInstance->Add_ColliderList(m_pColliderCom);
+	if (nullptr != m_pColliderCom)
+		m_pGameInstance->Add_ColliderList(m_pColliderCom);
 }
 
 HRESULT CWeapon::Render()
 {
-	if (!m_isActive)
-		return S_OK;
-
 	if (FAILED(Bind_WorldMatrix(m_pShaderCom, "g_WorldMatrix")))
 		return E_FAIL;
 
 	if (FAILED(m_pShaderCom->Bind_Matrix("g_ViewMatrix", &m_pGameInstance->Get_Transform(CPipeLine::D3DTS_VIEW))))
 		return E_FAIL;
 	if (FAILED(m_pShaderCom->Bind_Matrix("g_ProjMatrix", &m_pGameInstance->Get_Transform(CPipeLine::D3DTS_PROJ))))
+		return E_FAIL;
+
+	if (FAILED(m_pShaderCom->Bind_RawValue("g_fFar", &m_pGameInstance->Get_Far(), sizeof(_float))))
 		return E_FAIL;
 
 	_uint		iNumMeshes = m_pModelCom->Get_NumMeshes();

@@ -418,6 +418,15 @@
     <Filter Include="02.GameObjects\06.Weapon\00.PlayerWeapon\02.Scissor\Handle">
       <UniqueIdentifier>{9f7e1067-c599-4797-8af4-5a3f8617b1f7}</UniqueIdentifier>
     </Filter>
+    <Filter Include="05.Fsm\Player\OneHand\00.Attack\Scissor\RAttack01">
+      <UniqueIdentifier>{e2b74cb5-cbdd-48a0-a352-5fa47ae83956}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="05.Fsm\Player\OneHand\00.Attack\Scissor\ChargeAttack00">
+      <UniqueIdentifier>{deaebf7b-aa0c-4ecd-a860-ae3a92ca8929}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="05.Fsm\Player\OneHand\00.Attack\Scissor\ChargeAttack01">
+      <UniqueIdentifier>{b20bc638-0a11-4e42-9d52-3e774b51d960}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Client.h">
@@ -714,6 +723,24 @@
     <ClInclude Include="..\Public\Weapon_Scissor_Handle.h">
       <Filter>02.GameObjects\06.Weapon\00.PlayerWeapon\02.Scissor\Handle</Filter>
     </ClInclude>
+    <ClInclude Include="..\Public\Weapon_Scissor_Blade.h">
+      <Filter>02.GameObjects\06.Weapon\00.PlayerWeapon\02.Scissor\Blade</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Public\State_Player_Scissor_RAttack01.h">
+      <Filter>05.Fsm\Player\OneHand\00.Attack\Scissor\RAttack01</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Public\State_Player_Scissor_Charge00.h">
+      <Filter>05.Fsm\Player\OneHand\00.Attack\Scissor\ChargeAttack00</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Public\State_Player_Scissor_Charge01.h">
+      <Filter>05.Fsm\Player\OneHand\00.Attack\Scissor\ChargeAttack01</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Public\State_Player_Scissor_Buff.h">
+      <Filter>05.Fsm\Player\OneHand\00.Attack\Scissor\00.FableArts</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Public\State_Player_Scissor_Fatal.h">
+      <Filter>05.Fsm\Player\OneHand\00.Attack\Scissor\01.Fatal</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Client.cpp">
@@ -979,6 +1006,24 @@
     </ClCompile>
     <ClCompile Include="..\Private\Weapon_Scissor_Handle.cpp">
       <Filter>02.GameObjects\06.Weapon\00.PlayerWeapon\02.Scissor\Handle</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Private\Weapon_Scissor_Blade.cpp">
+      <Filter>02.GameObjects\06.Weapon\00.PlayerWeapon\02.Scissor\Blade</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Private\State_Player_Scissor_RAttack01.cpp">
+      <Filter>05.Fsm\Player\OneHand\00.Attack\Scissor\RAttack01</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Private\State_Player_Scissor_Charge00.cpp">
+      <Filter>05.Fsm\Player\OneHand\00.Attack\Scissor\ChargeAttack00</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Private\State_Player_Scissor_Charge01.cpp">
+      <Filter>05.Fsm\Player\OneHand\00.Attack\Scissor\ChargeAttack01</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Private\State_Player_Scissor_Buff.cpp">
+      <Filter>05.Fsm\Player\OneHand\00.Attack\Scissor\00.FableArts</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Private\State_Player_Scissor_Fatal.cpp">
+      <Filter>05.Fsm\Player\OneHand\00.Attack\Scissor\01.Fatal</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

@@ -69,7 +69,7 @@ void CState_Player_Rapier_Fatal::Update(_float fTimeDelta)
                 m_pPlayer->Change_State(CPlayer::RAPIER_RATTACK0);
         }
     }
-    else if (*m_pIsEndAnim)
+    else if (End_Check())
     {
         m_pPlayer->Change_State(CPlayer::OH_IDLE);
     }

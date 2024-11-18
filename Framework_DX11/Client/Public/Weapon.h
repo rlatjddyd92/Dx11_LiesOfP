@@ -27,6 +27,9 @@ protected:
 	virtual ~CWeapon() = default;
 
 public:
+	class CCollider* Get_Collider() { return m_pColliderCom; }
+
+public:
 	virtual HRESULT Initialize_Prototype() override;
 	virtual HRESULT Initialize(void* pArg) override;
 	virtual void Priority_Update(_float fTimeDelta) override;
@@ -34,6 +37,10 @@ public:
 	virtual void Late_Update(_float fTimeDelta) override;
 	virtual HRESULT Render() override;
 	virtual HRESULT Render_LightDepth() override;
+
+public:
+	virtual void Active_Collider() {};
+	virtual void DeActive_Collider() {};
 
 public:
 	void Appear();

@@ -15,6 +15,7 @@ protected:
 public:
 	class CModel*		Get_Model() { return m_pModelCom; }
 	class CRigidBody*	Get_RigidBody() { return m_pRigidBodyCom; }
+	class CCollider*	Get_Collider() { return m_pColliderCom; }
 
 	_float				Get_MoveSpeed() { return m_fMoveSpeed; }
 	void				Set_MoveSpeed(_float fSpeed) { m_fMoveSpeed = fSpeed; }
@@ -37,8 +38,8 @@ public:
 public:
 	void		Change_State(const _uint iState, void* pArg = nullptr);
 	void		Set_Animation(_uint iAnimIndex, _bool IsLoop = false);
-	void		Change_Animation(_uint iAnimIndex, _bool IsLoop = false, _float fDuration = 0.2f, _uint iStartFrame = 0, _bool bEitherBoundary = true);
-	void		Change_Animation_Boundry(_uint iAnimIndex, _bool IsLoop = false, _float fDuration = 0.2f, _uint iStartFrame = 0);
+	void		Change_Animation(_uint iAnimIndex, _bool IsLoop = false, _float fDuration = 0.3f, _uint iStartFrame = 0, _bool bEitherBoundary = true);
+	void		Change_Animation_Boundry(_uint iAnimIndex, _bool IsLoop = false, _float fDuration = 0.3f, _uint iStartFrame = 0);
 	_uint		Get_CurrentAnimIndex();
 	_int		Get_Frame();
 	_bool		Get_EndAnim(_int iAnimIndex, _bool bIsBoundary = false);

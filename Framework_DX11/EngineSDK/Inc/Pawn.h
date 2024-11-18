@@ -15,6 +15,7 @@ protected:
 public:
 	class CModel*		Get_Model() { return m_pModelCom; }
 	class CRigidBody*	Get_RigidBody() { return m_pRigidBodyCom; }
+	class CCollider*	Get_Collider() { return m_pColliderCom; }
 
 	_float				Get_MoveSpeed() { return m_fMoveSpeed; }
 	void				Set_MoveSpeed(_float fSpeed) { m_fMoveSpeed = fSpeed; }

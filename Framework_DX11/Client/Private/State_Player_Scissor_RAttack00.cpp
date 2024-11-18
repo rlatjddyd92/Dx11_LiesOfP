@@ -13,7 +13,7 @@ CState_Player_Scissor_RAttack00::CState_Player_Scissor_RAttack00(CFsm* pFsm, CPl
 
 HRESULT CState_Player_Scissor_RAttack00::Initialize(_uint iStateNum, void* pArg)
 {
-    m_iAnimation_ScissorSA1 = m_pPlayer->Get_Model()->Find_AnimationIndex("AS_Pino_O_ScissorSword_SA1", 2.f);
+    m_iAnimation_ScissorSA1 = m_pPlayer->Get_Model()->Find_AnimationIndex("AS_Pino_O_ScissorSword_SA1", 1.7f);
 
     FSM_INIT_DESC* pDesc = static_cast<FSM_INIT_DESC*>(pArg);
 
@@ -23,7 +23,7 @@ HRESULT CState_Player_Scissor_RAttack00::Initialize(_uint iStateNum, void* pArg)
 
     m_iChangeFrame = 55;
     m_iSeperateFrame = 10;
-    m_iCombineFrame = 45;
+    m_iCombineFrame = 43;
 
     m_iStateNum = iStateNum;
 
@@ -72,19 +72,19 @@ void CState_Player_Scissor_RAttack00::Update(_float fTimeDelta)
     {
         m_pPlayer->Combine_Scissor();
     }
-   /* if (m_iChangeFrame < iFrame && iFrame < m_iChangeFrame + 15)
+    if (m_iChangeFrame < iFrame && iFrame < m_iChangeFrame + 15)
     {
         if (m_isInputLButton)
-            m_pPlayer->Change_State(CPlayer::FLAME_LATTACK0);
+            m_pPlayer->Change_State(CPlayer::SCISSOR_LATTACK1);
         else if (m_isInputRButton)
         {
-            if (m_fRButtonTime > 0.15f)
-                m_pPlayer->Change_State(CPlayer::FLAME_LATTACK1);
-            else
-                m_pPlayer->Change_State(CPlayer::FLAME_RATTACK1);
+            //if (m_fRButtonTime > 0.15f)
+            //    m_pPlayer->Change_State(CPlayer::FLAME_LATTACK1);
+            //else
+                m_pPlayer->Change_State(CPlayer::SCISSOR_RATTACK1);
         }
     }
-    else */if (End_Check())
+    else if (End_Check())
     {
         m_pPlayer->Change_State(CPlayer::OH_IDLE);
     }

@@ -224,9 +224,14 @@
     <ClInclude Include="..\Public\State_Player_Rapier_LAttack01.h" />
     <ClInclude Include="..\Public\State_Player_Parry.h" />
     <ClInclude Include="..\Public\State_Player_Rapier_RAttack00.h" />
+    <ClInclude Include="..\Public\State_Player_Scissor_Buff.h" />
+    <ClInclude Include="..\Public\State_Player_Scissor_Charge00.h" />
+    <ClInclude Include="..\Public\State_Player_Scissor_Charge01.h" />
+    <ClInclude Include="..\Public\State_Player_Scissor_Fatal.h" />
     <ClInclude Include="..\Public\State_Player_Scissor_LAttack00.h" />
     <ClInclude Include="..\Public\State_Player_Scissor_LAttack01.h" />
     <ClInclude Include="..\Public\State_Player_Scissor_RAttack00.h" />
+    <ClInclude Include="..\Public\State_Player_Scissor_RAttack01.h" />
     <ClInclude Include="..\Public\State_Player_TH_Dash.h" />
     <ClInclude Include="..\Public\State_Player_TH_Guard.h" />
     <ClInclude Include="..\Public\State_Player_TH_Idle.h" />
@@ -255,6 +260,7 @@
     <ClInclude Include="..\Public\Weapon_FlameSword.h" />
     <ClInclude Include="..\Public\Weapon_Rapier.h" />
     <ClInclude Include="..\Public\Weapon_Scissor.h" />
+    <ClInclude Include="..\Public\Weapon_Scissor_Blade.h" />
     <ClInclude Include="..\Public\Weapon_Scissor_Handle.h" />
     <ClInclude Include="Client.h" />
     <ClInclude Include="Interface_Enums.h" />
@@ -323,9 +329,14 @@
     <ClCompile Include="..\Private\State_Player_Rapier_LAttack01.cpp" />
     <ClCompile Include="..\Private\State_Player_Parry.cpp" />
     <ClCompile Include="..\Private\State_Player_Rapier_RAttack00.cpp" />
+    <ClCompile Include="..\Private\State_Player_Scissor_Buff.cpp" />
+    <ClCompile Include="..\Private\State_Player_Scissor_Charge00.cpp" />
+    <ClCompile Include="..\Private\State_Player_Scissor_Charge01.cpp" />
+    <ClCompile Include="..\Private\State_Player_Scissor_Fatal.cpp" />
     <ClCompile Include="..\Private\State_Player_Scissor_LAttack00.cpp" />
     <ClCompile Include="..\Private\State_Player_Scissor_LAttack01.cpp" />
     <ClCompile Include="..\Private\State_Player_Scissor_RAttack00.cpp" />
+    <ClCompile Include="..\Private\State_Player_Scissor_RAttack01.cpp" />
     <ClCompile Include="..\Private\State_Player_TH_Dash.cpp" />
     <ClCompile Include="..\Private\State_Player_TH_Guard.cpp" />
     <ClCompile Include="..\Private\State_Player_TH_Idle.cpp" />
@@ -354,6 +365,7 @@
     <ClCompile Include="..\Private\Weapon_FlameSword.cpp" />
     <ClCompile Include="..\Private\Weapon_Rapier.cpp" />
     <ClCompile Include="..\Private\Weapon_Scissor.cpp" />
+    <ClCompile Include="..\Private\Weapon_Scissor_Blade.cpp" />
     <ClCompile Include="..\Private\Weapon_Scissor_Handle.cpp" />
     <ClCompile Include="Client.cpp" />
     <ClCompile Include="stdafx.cpp">

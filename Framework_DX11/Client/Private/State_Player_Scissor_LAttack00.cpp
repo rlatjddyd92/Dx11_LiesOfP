@@ -13,7 +13,7 @@ CState_Player_Scissor_LAttack00::CState_Player_Scissor_LAttack00(CFsm* pFsm, CPl
 
 HRESULT CState_Player_Scissor_LAttack00::Initialize(_uint iStateNum, void* pArg)
 {
-    m_iAnimation_ScissorNA1 = m_pPlayer->Get_Model()->Find_AnimationIndex("AS_Pino_O_ScissorSword_NA1", 2.5f);
+    m_iAnimation_ScissorNA1 = m_pPlayer->Get_Model()->Find_AnimationIndex("AS_Pino_O_ScissorSword_NA1", 2.3f);
 
     FSM_INIT_DESC* pDesc = static_cast<FSM_INIT_DESC*>(pArg);
 
@@ -68,13 +68,13 @@ void CState_Player_Scissor_LAttack00::Update(_float fTimeDelta)
     {
         if (m_isInputLButton)
             m_pPlayer->Change_State(CPlayer::SCISSOR_LATTACK1);
-        //else if (m_isInputRButton)
-        //{
-        //    if (m_fRButtonTime > 0.15f)
-        //        m_pPlayer->Change_State(CPlayer::RAPIER_CHARGE);
-        //    else
-        //        m_pPlayer->Change_State(CPlayer::RAPIER_RATTACK0);
-        //}
+        else if (m_isInputRButton)
+        {
+            if (m_fRButtonTime > 0.15f)
+                m_pPlayer->Change_State(CPlayer::SCISSOR_CHARGE1);
+            else
+                m_pPlayer->Change_State(CPlayer::SCISSOR_RATTACK1);
+        }
     }
     else if (End_Check())
     {

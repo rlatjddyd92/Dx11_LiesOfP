@@ -1,7 +1,7 @@
 #include "stdafx.h"
 #include "Weapon_Scissor_Handle.h"
-
 #include "Player.h"
+#include "Weapon_Scissor_Blade.h"
 
 #include "GameInstance.h"
 
@@ -32,6 +32,9 @@ HRESULT CWeapon_Scissor_Handle::Initialize(void* pArg)
 	if (FAILED(Ready_Components()))
 		return E_FAIL;
 
+	if (FAILED(Ready_Blade()))
+		return E_FAIL;
+
 	m_isActive = false;
 
 	return S_OK;
@@ -48,7 +51,10 @@ void CWeapon_Scissor_Handle::Update(_float fTimeDelta)
 	if (!m_isActive)
 		return;
 
+
 	__super::Update(fTimeDelta);
+
+	m_pBlade->Update(fTimeDelta);
 
 	m_pColliderCom->Update(&m_WorldMatrix);
 }
@@ -57,6 +63,10 @@ void CWeapon_Scissor_Handle::Late_Update(_float fTimeDelta)
 {
 	if (!m_isActive)
 		return;
+
+
+	m_pBlade->Late_Update(fTimeDelta);
+
 
 #ifdef _DEBUG
 	m_pGameInstance->Add_DebugObject(m_pColliderCom);
@@ -117,6 +127,31 @@ HRESULT CWeapon_Scissor_Handle::Ready_Components()
 	return S_OK;
 }
 
+HRESULT CWeapon_Scissor_Handle::Ready_Blade()
+{
+	CWeapon_Scissor_Handle::SCISSOR_DESC ScissorDesc;
+	ScissorDesc.pParentWorldMatrix = &m_WorldMatrix;
+	ScissorDesc.pSocketBoneMatrix = m_pModelCom->Get_BoneCombindTransformationMatrix_Ptr("BN_Blade");
+
+	if (m_eType == SCISSOR_LEFT)
+	{
+		ScissorDesc.eScissorType = SCISSOR_LEFT;
+		m_pBlade = dynamic_cast<CWeapon_Scissor_Blade*>(m_pGameInstance->Clone_GameObject(TEXT("Prototype_GameObject_Weapon_Scissor_Blade"), &ScissorDesc));
+	}
+	else if (m_eType == SCISSOR_RIGHT)
+	{
+		ScissorDesc.eScissorType = SCISSOR_RIGHT;
+		m_pBlade = dynamic_cast<CWeapon_Scissor_Blade*>(m_pGameInstance->Clone_GameObject(TEXT("Prototype_GameObject_Weapon_Scissor_Blade"), &ScissorDesc));
+		if (nullptr == m_pBlade)
+			return E_FAIL;
+	}
+
+	if (nullptr == m_pBlade)
+		return E_FAIL;
+
+	return S_OK;
+}
+
 CWeapon_Scissor_Handle* CWeapon_Scissor_Handle::Create(ID3D11Device* pDevice, ID3D11DeviceContext* pContext)
 {
 	CWeapon_Scissor_Handle* pInstance = new CWeapon_Scissor_Handle(pDevice, pContext);
@@ -149,6 +184,7 @@ void CWeapon_Scissor_Handle::Free()
 {
 	__super::Free();
 
+	Safe_Release(m_pBlade);
 	Safe_Release(m_pColliderCom);
 	Safe_Release(m_pShaderCom);
 	Safe_Release(m_pModelCom);

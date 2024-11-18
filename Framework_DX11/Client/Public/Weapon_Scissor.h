@@ -29,13 +29,18 @@ public:
 	virtual HRESULT Render_LightDepth() override;
 
 public:
+	virtual void Active_Collider();
+	virtual void DeActive_Collider();
+
+public:
 	void		Change_SeperateMode();
 	void		Change_CombineMode();
 
 private:
-	_bool		m_isSeperate;
+	_bool		m_isSeperate = {};
 
-	CWeapon_Scissor_Handle*	m_pScissor_Sperate[CWeapon_Scissor_Handle::SCISSOR_END];
+	CWeapon_Scissor_Handle*		m_pScissor_Sperate[CWeapon_Scissor_Handle::SCISSOR_END] = { nullptr, };
+	CCollider*					m_pCollider_Scissor_Sperate[CWeapon_Scissor_Handle::SCISSOR_END] = { nullptr, };
 
 private:
 	HRESULT Ready_Components();

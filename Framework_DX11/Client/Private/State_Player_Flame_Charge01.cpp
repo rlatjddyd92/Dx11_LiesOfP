@@ -73,7 +73,7 @@ void CState_Player_Flame_Charge01::Update(_float fTimeDelta)
                 m_pPlayer->Change_State(CPlayer::FLAME_RATTACK0);
         }
     }
-    else if (*m_pIsEndAnim)
+    else if (End_Check())
     {
         m_pPlayer->Change_State(CPlayer::TH_IDLE);
     }
@@ -81,6 +81,11 @@ void CState_Player_Flame_Charge01::Update(_float fTimeDelta)
 
 void CState_Player_Flame_Charge01::End_State()
 {
+}
+
+_bool CState_Player_Flame_Charge01::End_Check()
+{
+    return m_pPlayer->Get_EndAnim(m_iAnimation_FlameCA2);
 }
 
 CState_Player_Flame_Charge01* CState_Player_Flame_Charge01::Create(CFsm* pFsm, CPlayer* pPlayer, _uint iStateNum, void* pArg)

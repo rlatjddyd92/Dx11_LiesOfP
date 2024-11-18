@@ -122,7 +122,7 @@ HRESULT CLevel_Tool::Ready_Layer_Camera()
 	Desc.vAt = _float4(0.f, 0.f, 1.f, 1.f);
 	Desc.fFovy = XMConvertToRadians(60.0f);
 	Desc.fNear = 0.1f;
-	Desc.fFar = 1000.f;
+	Desc.fFar = 500.f;
 	Desc.fSpeedPerSec = 30.f;
 	Desc.fRotationPerSec = XMConvertToRadians(90.0f);
 	Desc.fAspect = (_float)g_iWinSizeX / g_iWinSizeY;

@@ -61,7 +61,10 @@ void CState_Player_OH_Guard::Update(_float fTimeDelta)
         {
             if (KEY_TAP(KEY::F))
             {
-                m_pPlayer->Change_State(CPlayer::PARRY);
+                if (m_pPlayer->Get_WeaponType() == CPlayer::WEP_RAPIER)
+                    m_pPlayer->Change_State(CPlayer::PARRY);
+                else if (m_pPlayer->Get_WeaponType() == CPlayer::WEP_SCISSOR)
+                    m_pPlayer->Change_State(CPlayer::SCISSOR_BUFF);
                 return;
             }
             if (!Move(fTimeDelta))
