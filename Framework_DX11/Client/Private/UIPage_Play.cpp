@@ -201,7 +201,10 @@ void CUIPage_Play::LD_Potion_Tool_Update(_float fTimeDelta)
 	if (KEY_TAP(KEY::T))
 	{
 		if (m_vec_Group_Ctrl[_int(PART_GROUP::GROUP_SELECT_CELL)]->fRatio != 0.f)
+		{
 			m_vec_Group_Ctrl[_int(PART_GROUP::GROUP_SELECT_CELL)]->fRatio = 0.f;
+			m_vec_Group_Ctrl[_int(PART_GROUP::GROUP_POTION_TOOL_RKEY)]->fRatio = 0.f;
+		}
 		else
 		{
 			_int iSelect = m_vec_Group_Ctrl[_int(PART_GROUP::GROUP_POTION_ITEM)]->PartIndexlist.front();
@@ -218,7 +221,10 @@ void CUIPage_Play::LD_Potion_Tool_Update(_float fTimeDelta)
 	else if (KEY_TAP(KEY::G))
 	{
 		if (m_vec_Group_Ctrl[_int(PART_GROUP::GROUP_SELECT_CELL)]->fRatio != 1.f)
+		{
 			m_vec_Group_Ctrl[_int(PART_GROUP::GROUP_SELECT_CELL)]->fRatio = 1.f;
+			m_vec_Group_Ctrl[_int(PART_GROUP::GROUP_POTION_TOOL_RKEY)]->fRatio = 1.f;
+		}
 		else
 		{
 			_int iSelect = m_vec_Group_Ctrl[_int(PART_GROUP::GROUP_TOOL_ITEM)]->PartIndexlist.front();

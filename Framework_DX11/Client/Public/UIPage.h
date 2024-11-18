@@ -53,6 +53,8 @@ public:
 
 		_float2 Get_Shaking() { return fShaking_Adjust; }
 
+		void Set_RedText() { fTextColor = { 1.f,0.f,0.f,1.f }; }
+
 
 		_wstring strUIPart_Name = {};
 

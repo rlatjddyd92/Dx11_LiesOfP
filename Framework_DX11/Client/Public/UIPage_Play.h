@@ -34,6 +34,8 @@ public:
 
 		// 좌하단 아이템
 		GROUP_POTION_FRAME,
+		GROUP_TOOL_FRAME,
+
 		GROUP_POTION_ITEM, // <- 아이템 텍스쳐
 		GROUP_POTION_TOOL_RKEY, // <- R키 (사용 가능할 때 표시)
 		GROUP_POTION_FILL, // <- 포션 게이지 (사용 가능 포션이 0일 때 표시)
@@ -41,7 +43,6 @@ public:
 		GROUP_POTION_QUEUE_BACK,
 		GROUP_POTION_QUEUE_ITEM,
 		
-		GROUP_TOOL_FRAME,
 		GROUP_TOOL_ITEM,
 		GROUP_TOOL_COUNT,
 		GROUP_TOOL_QUEUE_BACK,

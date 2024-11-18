@@ -110,7 +110,7 @@ PS_OUT PS_MAIN(PS_IN In)
 
 	//Out.vColor.a = Out.vColor.a * 0.5f;
 	
-    if (Out.vColor.a < 0.1f)
+    if (Out.vColor.a < 0.4f)
         discard;
 	
     if (g_Color.r >= 0.f)
