@@ -77,9 +77,9 @@ void CUIPage_LevelUp::CloseAction()
 	__super::CloseAction();
 }
 
-CHECK_MOUSE CUIPage_LevelUp::Check_Mouse_By_Part_In_Page()
+CHECK_MOUSE CUIPage_LevelUp::Check_Page_Action(_float fTimeDelta)
 {
-	__super::Check_Mouse_By_Part_In_Page();
+	__super::Check_Page_Action(fTimeDelta);
 
 	return CHECK_MOUSE::MOUSE_NONE;
 }

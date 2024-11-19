@@ -2,6 +2,7 @@
 #include "..\Public\UIPage.h"
 
 #include "GameInstance.h"
+#include "GameInterface_Controller.h"
 
 CUIPage::CUIPage(ID3D11Device* pDevice, ID3D11DeviceContext* pContext)
     : CUIObject{ pDevice, pContext }
@@ -122,7 +123,7 @@ HRESULT CUIPage::Ready_UIPart_Group_Control()
 	return S_OK;
 }
 
-CHECK_MOUSE CUIPage::Check_Mouse_By_Part_In_Page()
+CHECK_MOUSE CUIPage::Check_Page_Action(_float fTimeDelta)
 {
 	return CHECK_MOUSE::MOUSE_NONE;
 }
@@ -131,6 +132,13 @@ void CUIPage::Release_Control(UG_CTRL* pCtrl)
 {
 	pCtrl->PartIndexlist.clear();
 	Safe_Delete(pCtrl);
+}
+
+_float2 CUIPage::Check_Mouse_By_Part(UPART& Part)
+{
+	_float2 fPos = Part.fPosition;
+	_float2 fSize = Part.fSize;
+	return GET_GAMEINTERFACE->CheckMouse(fPos, fSize);
 }
 
 void CUIPage::UpdatePart_ByIndex(_int Index, _float fTimeDelta)

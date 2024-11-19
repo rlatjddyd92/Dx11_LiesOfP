@@ -52,6 +52,10 @@ HRESULT CLevel_Tool::Initialize()
 
 	CEffect_Manager::Get_Instance()->Add_Effect_ToLayer(LEVEL_GAMEPLAY, TEXT("TEST_Effect"), &desc);
 
+	// 24-11-19 김성용
+	// 게임 인터페이스를 인게임 모드로 전환
+	GET_GAMEINTERFACE->SetIngame(true);
+
 	return S_OK;
 }
 

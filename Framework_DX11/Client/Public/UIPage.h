@@ -154,7 +154,9 @@ public:
 
 	virtual HRESULT Ready_UIPart_Group_Control();
 
-	virtual CHECK_MOUSE Check_Mouse_By_Part_In_Page();
+	virtual CHECK_MOUSE Check_Page_Action(_float fTimeDelta);
+
+	
 
 protected:
 	void UpdatePart_ByControl(UG_CTRL* pCtrl);
@@ -189,7 +191,7 @@ protected:
 		}
 	}
 
-
+	_float2 Check_Mouse_By_Part(UPART& Part);
 
 
 	void UpdatePart_ByIndex(_int Index, _float fTimeDelta);

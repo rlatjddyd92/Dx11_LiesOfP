@@ -55,11 +55,16 @@ public:
 
 	_float2 CheckMouse(_float2 fPos, _float2 fSize);
 
+	void SetIngame(_bool bTrue) { m_bIsIngame = bTrue; } // 매니저에 게임 입장 / 나가기 상태 알림
+
 private:
 	void UIControl_Test(_float fTimeDelta);
+
+	void UIControl_Common(_float fTimeDelta);
 	void UIControl_Main(_float fTimeDelta);
 	void UIControl_Loading(_float fTimeDelta);
 	void UIControl_Play(_float fTimeDelta);
+	void UIControl_Menu(_float fTimeDelta);
 	void UIControl_Inven(_float fTimeDelta);
 	void UIControl_Equip(_float fTimeDelta);
 	void UIControl_Stat(_float fTimeDelta);
@@ -160,6 +165,8 @@ private:
 
 
 	CUIRender_Client* m_pUIRender_Client = { nullptr };
+
+	_bool m_bIsIngame = false;
 
 
 	// 플레이 모드 진입 

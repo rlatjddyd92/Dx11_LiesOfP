@@ -84,7 +84,7 @@ HRESULT CUIPage_Play::Render()
 void CUIPage_Play::OpenAction()
 {
 	__super::OpenAction();
-
+	GET_GAMEINTERFACE->SetIngame(true);
 	
 }
 
@@ -95,9 +95,77 @@ void CUIPage_Play::CloseAction()
 	
 }
 
-CHECK_MOUSE CUIPage_Play::Check_Mouse_By_Part_In_Page()
+CHECK_MOUSE CUIPage_Play::Check_Page_Action(_float fTimeDelta)
 {
-	__super::Check_Mouse_By_Part_In_Page();
+	__super::Check_Page_Action(fTimeDelta);
+
+	if (KEY_TAP(KEY::T))
+	{
+		if (m_vec_Group_Ctrl[_int(PART_GROUP::GROUP_SELECT_CELL)]->fRatio != 0.f)
+		{
+			m_vec_Group_Ctrl[_int(PART_GROUP::GROUP_SELECT_CELL)]->fRatio = 0.f;
+			m_vec_Group_Ctrl[_int(PART_GROUP::GROUP_POTION_TOOL_RKEY)]->fRatio = 0.f;
+		}
+		else
+		{
+			_int iSelect = m_vec_Group_Ctrl[_int(PART_GROUP::GROUP_POTION_ITEM)]->PartIndexlist.front();
+			_int iQueueA = m_vec_Group_Ctrl[_int(PART_GROUP::GROUP_POTION_QUEUE_ITEM)]->PartIndexlist.front();
+			_int iQueueB = m_vec_Group_Ctrl[_int(PART_GROUP::GROUP_POTION_QUEUE_ITEM)]->PartIndexlist.back();
+
+			_int iItem = m_vecPart[iSelect]->iTexture_Index;
+
+			m_vecPart[iSelect]->iTexture_Index = m_vecPart[iQueueA]->iTexture_Index;
+			m_vecPart[iQueueA]->iTexture_Index = m_vecPart[iQueueB]->iTexture_Index;
+			m_vecPart[iQueueB]->iTexture_Index = iItem;
+		}
+	}
+	else if (KEY_TAP(KEY::G))
+	{
+		if (m_vec_Group_Ctrl[_int(PART_GROUP::GROUP_SELECT_CELL)]->fRatio != 1.f)
+		{
+			m_vec_Group_Ctrl[_int(PART_GROUP::GROUP_SELECT_CELL)]->fRatio = 1.f;
+			m_vec_Group_Ctrl[_int(PART_GROUP::GROUP_POTION_TOOL_RKEY)]->fRatio = 1.f;
+		}
+		else
+		{
+			_int iSelect = m_vec_Group_Ctrl[_int(PART_GROUP::GROUP_TOOL_ITEM)]->PartIndexlist.front();
+			_int iQueueA = m_vec_Group_Ctrl[_int(PART_GROUP::GROUP_TOOL_QUEUE_ITEM)]->PartIndexlist.front();
+			_int iQueueB = m_vec_Group_Ctrl[_int(PART_GROUP::GROUP_TOOL_QUEUE_ITEM)]->PartIndexlist.back();
+
+			_int iItem = m_vecPart[iSelect]->iTexture_Index;
+
+			m_vecPart[iSelect]->iTexture_Index = m_vecPart[iQueueA]->iTexture_Index;
+			m_vecPart[iQueueA]->iTexture_Index = m_vecPart[iQueueB]->iTexture_Index;
+			m_vecPart[iQueueB]->iTexture_Index = iItem;
+		}
+	}
+
+	if (m_vec_Group_Ctrl[_int(PART_GROUP::GROUP_SELECT_CELL)]->fRatio == 1.f)
+		if (KEY_HOLD(KEY::R))
+		{
+			m_vec_Group_Ctrl[_int(PART_GROUP::GROUP_WEAPON_DURABLE_FILL)]->fRatio += fTimeDelta;
+			if (m_vec_Group_Ctrl[_int(PART_GROUP::GROUP_WEAPON_DURABLE_FILL)]->fRatio > 1.f)
+				m_vec_Group_Ctrl[_int(PART_GROUP::GROUP_WEAPON_DURABLE_FILL)]->fRatio = 0.f;
+		}
+
+	if (KEY_HOLD(KEY::E))
+	{
+		m_fBag_Open_Waiting_Now += fTimeDelta;
+		if (m_fBag_Open_Waiting_Now >= m_fBag_Open_Waiting_Limit)
+		{
+			m_fBag_Open_Waiting_Now = 0.f;
+			if (m_vec_Group_Ctrl[_int(PART_GROUP::GROUP_POTION_FRAME)]->bRender)
+			{
+				__super::Array_Control(_int(PART_GROUP::GROUP_POTION_FRAME), _int(PART_GROUP::GROUP_SELECT_CELL), CTRL_COMMAND::COM_RENDER, false);
+				__super::Array_Control(_int(PART_GROUP::GROUP_BAG_FRAMELINE), _int(PART_GROUP::GROUP_BAG_NUM), CTRL_COMMAND::COM_RENDER, true);
+			}
+			else
+			{
+				__super::Array_Control(_int(PART_GROUP::GROUP_POTION_FRAME), _int(PART_GROUP::GROUP_SELECT_CELL), CTRL_COMMAND::COM_RENDER, true);
+				__super::Array_Control(_int(PART_GROUP::GROUP_BAG_FRAMELINE), _int(PART_GROUP::GROUP_BAG_NUM), CTRL_COMMAND::COM_RENDER, false);
+			}
+		}
+	}
 
 	return CHECK_MOUSE::MOUSE_NONE;
 }
@@ -202,73 +270,7 @@ void CUIPage_Play::LU_Gauge_Update(_float fTimeDelta)
 
 void CUIPage_Play::LD_Potion_Tool_Update(_float fTimeDelta)
 {
-	if (KEY_TAP(KEY::T))
-	{
-		if (m_vec_Group_Ctrl[_int(PART_GROUP::GROUP_SELECT_CELL)]->fRatio != 0.f)
-		{
-			m_vec_Group_Ctrl[_int(PART_GROUP::GROUP_SELECT_CELL)]->fRatio = 0.f;
-			m_vec_Group_Ctrl[_int(PART_GROUP::GROUP_POTION_TOOL_RKEY)]->fRatio = 0.f;
-		}
-		else
-		{
-			_int iSelect = m_vec_Group_Ctrl[_int(PART_GROUP::GROUP_POTION_ITEM)]->PartIndexlist.front();
-			_int iQueueA = m_vec_Group_Ctrl[_int(PART_GROUP::GROUP_POTION_QUEUE_ITEM)]->PartIndexlist.front();
-			_int iQueueB = m_vec_Group_Ctrl[_int(PART_GROUP::GROUP_POTION_QUEUE_ITEM)]->PartIndexlist.back();
-
-			_int iItem = m_vecPart[iSelect]->iTexture_Index;
-
-			m_vecPart[iSelect]->iTexture_Index = m_vecPart[iQueueA]->iTexture_Index;
-			m_vecPart[iQueueA]->iTexture_Index = m_vecPart[iQueueB]->iTexture_Index;
-			m_vecPart[iQueueB]->iTexture_Index = iItem;
-		}
-	}
-	else if (KEY_TAP(KEY::G))
-	{
-		if (m_vec_Group_Ctrl[_int(PART_GROUP::GROUP_SELECT_CELL)]->fRatio != 1.f)
-		{
-			m_vec_Group_Ctrl[_int(PART_GROUP::GROUP_SELECT_CELL)]->fRatio = 1.f;
-			m_vec_Group_Ctrl[_int(PART_GROUP::GROUP_POTION_TOOL_RKEY)]->fRatio = 1.f;
-		}
-		else
-		{
-			_int iSelect = m_vec_Group_Ctrl[_int(PART_GROUP::GROUP_TOOL_ITEM)]->PartIndexlist.front();
-			_int iQueueA = m_vec_Group_Ctrl[_int(PART_GROUP::GROUP_TOOL_QUEUE_ITEM)]->PartIndexlist.front();
-			_int iQueueB = m_vec_Group_Ctrl[_int(PART_GROUP::GROUP_TOOL_QUEUE_ITEM)]->PartIndexlist.back();
-
-			_int iItem = m_vecPart[iSelect]->iTexture_Index;
-
-			m_vecPart[iSelect]->iTexture_Index = m_vecPart[iQueueA]->iTexture_Index;
-			m_vecPart[iQueueA]->iTexture_Index = m_vecPart[iQueueB]->iTexture_Index;
-			m_vecPart[iQueueB]->iTexture_Index = iItem;
-		}
-	}
-
-	if (m_vec_Group_Ctrl[_int(PART_GROUP::GROUP_SELECT_CELL)]->fRatio == 1.f)
-		if (KEY_HOLD(KEY::R))
-		{
-			m_vec_Group_Ctrl[_int(PART_GROUP::GROUP_WEAPON_DURABLE_FILL)]->fRatio += fTimeDelta;
-			if (m_vec_Group_Ctrl[_int(PART_GROUP::GROUP_WEAPON_DURABLE_FILL)]->fRatio > 1.f)
-				m_vec_Group_Ctrl[_int(PART_GROUP::GROUP_WEAPON_DURABLE_FILL)]->fRatio = 0.f;
-		}
-		
-	if (KEY_HOLD(KEY::E))
-	{
-		m_fBag_Open_Waiting_Now += fTimeDelta;
-		if (m_fBag_Open_Waiting_Now >= m_fBag_Open_Waiting_Limit)
-		{
-			m_fBag_Open_Waiting_Now = 0.f;
-			if (m_vec_Group_Ctrl[_int(PART_GROUP::GROUP_POTION_FRAME)]->bRender)
-			{
-				__super::Array_Control(_int(PART_GROUP::GROUP_POTION_FRAME), _int(PART_GROUP::GROUP_SELECT_CELL), CTRL_COMMAND::COM_RENDER, false);
-				__super::Array_Control(_int(PART_GROUP::GROUP_BAG_FRAMELINE), _int(PART_GROUP::GROUP_BAG_NUM), CTRL_COMMAND::COM_RENDER, true);
-			}
-			else 
-			{
-				__super::Array_Control(_int(PART_GROUP::GROUP_POTION_FRAME), _int(PART_GROUP::GROUP_SELECT_CELL), CTRL_COMMAND::COM_RENDER, true);
-				__super::Array_Control(_int(PART_GROUP::GROUP_BAG_FRAMELINE), _int(PART_GROUP::GROUP_BAG_NUM), CTRL_COMMAND::COM_RENDER, false);
-			}
-		}
-	}
+	
 }
 
 void CUIPage_Play::LD_Bag_Update(_float fTimeDelta)

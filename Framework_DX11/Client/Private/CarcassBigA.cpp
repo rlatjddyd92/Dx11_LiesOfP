@@ -65,7 +65,6 @@ HRESULT CCarcassBigA::Initialize(void* pArg)
 
 void CCarcassBigA::Priority_Update(_float fTimeDelta)
 {
-
 	
 }
 

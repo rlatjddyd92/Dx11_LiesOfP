@@ -2,7 +2,7 @@
 #include "..\Public\UIPage_Inven.h"
 
 #include "GameInstance.h"
-
+#include "GameInterface_Controller.h"
 
 CUIPage_Inven::CUIPage_Inven(ID3D11Device* pDevice, ID3D11DeviceContext* pContext)
 	: CUIPage{ pDevice, pContext }
@@ -70,16 +70,18 @@ HRESULT CUIPage_Inven::Render()
 void CUIPage_Inven::OpenAction()
 {
 	__super::OpenAction();
+	GET_GAMEINTERFACE->SetIngame(false);
 }
 
 void CUIPage_Inven::CloseAction()
 {
 	__super::CloseAction();
+	
 }
 
-CHECK_MOUSE CUIPage_Inven::Check_Mouse_By_Part_In_Page()
+CHECK_MOUSE CUIPage_Inven::Check_Page_Action(_float fTimeDelta)
 {
-	__super::Check_Mouse_By_Part_In_Page();
+	__super::Check_Page_Action(fTimeDelta);
 
 	return CHECK_MOUSE::MOUSE_NONE;
 }

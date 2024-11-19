@@ -2,7 +2,7 @@
 #include "..\Public\UIPage_Skill.h"
 
 #include "GameInstance.h"
-
+#include "GameInterface_Controller.h"
 
 CUIPage_Skill::CUIPage_Skill(ID3D11Device* pDevice, ID3D11DeviceContext* pContext)
 	: CUIPage{ pDevice, pContext }
@@ -70,6 +70,7 @@ HRESULT CUIPage_Skill::Render()
 void CUIPage_Skill::OpenAction()
 {
 	__super::OpenAction();
+	GET_GAMEINTERFACE->SetIngame(false);
 }
 
 void CUIPage_Skill::CloseAction()
@@ -77,9 +78,9 @@ void CUIPage_Skill::CloseAction()
 	__super::CloseAction();
 }
 
-CHECK_MOUSE CUIPage_Skill::Check_Mouse_By_Part_In_Page()
+CHECK_MOUSE CUIPage_Skill::Check_Page_Action(_float fTimeDelta)
 {
-	__super::Check_Mouse_By_Part_In_Page();
+	__super::Check_Page_Action(fTimeDelta);
 
 	return CHECK_MOUSE::MOUSE_NONE;
 }

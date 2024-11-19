@@ -116,9 +116,7 @@ void CUIManager::Update_UIControl(_float fTimeDelta)
 	// 마우스, 키보드를 통한 UI 조작은 모두 여기 작성한다 
 
 	UIControl_Test(fTimeDelta);
-	//UIControl_Main(fTimeDelta);
-	//UIControl_Loading(fTimeDelta);
-	UIControl_Play(fTimeDelta);
+	UIControl_Common(fTimeDelta);
 }
 
 void CUIManager::UIControl_Test(_float fTimeDelta)
@@ -364,41 +362,16 @@ void CUIManager::UIControl_Test(_float fTimeDelta)
 
 }
 
-void CUIManager::UIControl_Main(_float fTimeDelta)
+void CUIManager::UIControl_Common(_float fTimeDelta)
 {
-	
-}
-
-void CUIManager::UIControl_Loading(_float fTimeDelta)
-{
-}
-
-void CUIManager::UIControl_Play(_float fTimeDelta)
-{
-	// 기본 플레이 화면에서의 조정
-	/*
-	1. Page_Play <-> Page_Menu 전환
-	2. Page_Menu에서 다른 페이지로 넘어가기
-	3. 플레이 중 발생하는 상호작용 관련 조작 
-	*/
-
-	if ((m_pUIPage_Menu->GetPageAction(PAGEACTION::ACTION_ACTIVE)) || (m_pUIPage_Play->GetPageAction(PAGEACTION::ACTION_ACTIVE)))
-	{
-		if (KEY_TAP(KEY::ESC)) // 1. Page_Play <-> Page_Menu 전환
-		{
-			SwicthPage(UIPAGE::PAGE_MENU, UIPAGE::PAGE_PLAY);
-		}
-		else if (m_pUIPage_Menu->GetPageAction(PAGEACTION::ACTION_ACTIVE))
-		{
-			// 2. Page_Menu에서 다른 페이지로 넘어가기
-			CHECK_MOUSE eResult = m_pUIPage_Menu->Check_Mouse_By_Part_In_Page();
-		}
-		else if (m_pUIPage_Play->GetPageAction(PAGEACTION::ACTION_ACTIVE))
-		{
-			// 3. 플레이 중 발생하는 상호작용 관련 조작
-			CHECK_MOUSE eResult = m_pUIPage_Play->Check_Mouse_By_Part_In_Page();
-		}
-	}
+	if (m_pUIPage_Main->GetPageAction(PAGEACTION::ACTION_ACTIVE))
+		UIControl_Main(fTimeDelta);
+	else if (m_pUIPage_Loading->GetPageAction(PAGEACTION::ACTION_ACTIVE))
+		UIControl_Loading(fTimeDelta);
+	else if (m_pUIPage_Play->GetPageAction(PAGEACTION::ACTION_ACTIVE))
+		UIControl_Play(fTimeDelta);
+	else if (m_pUIPage_Menu->GetPageAction(PAGEACTION::ACTION_ACTIVE))
+		UIControl_Menu(fTimeDelta);
 	else if (m_pUIPage_Inven->GetPageAction(PAGEACTION::ACTION_ACTIVE))
 		UIControl_Inven(fTimeDelta);
 	else if (m_pUIPage_Equip->GetPageAction(PAGEACTION::ACTION_ACTIVE))
@@ -407,18 +380,73 @@ void CUIManager::UIControl_Play(_float fTimeDelta)
 		UIControl_Stat(fTimeDelta);
 	else if (m_pUIPage_Skill->GetPageAction(PAGEACTION::ACTION_ACTIVE))
 		UIControl_Skill(fTimeDelta);
+	else if (m_bIsIngame)
+	{
+		if (KEY_TAP(KEY::ESC))
+			SwicthPage(UIPAGE::PAGE_MENU, UIPAGE::PAGE_PLAY);
+		else if ((!m_pUIPage_Play->GetPageAction(PAGEACTION::ACTION_OPENING)) && (!m_pUIPage_Menu->GetPageAction(PAGEACTION::ACTION_OPENING)))
+			OpenPage(UIPAGE::PAGE_PLAY);
+	}
+}
+
+void CUIManager::UIControl_Main(_float fTimeDelta)
+{
+	// 메인 페이지 필요
+}
+
+void CUIManager::UIControl_Loading(_float fTimeDelta)
+{
+	// 로딩 페이지 필요
+}
+
+void CUIManager::UIControl_Play(_float fTimeDelta)
+{
+	if (KEY_TAP(KEY::ESC))
+		SwicthPage(UIPAGE::PAGE_MENU, UIPAGE::PAGE_PLAY);
+	else
+	{
+		m_pUIPage_Play->Check_Page_Action(fTimeDelta);
+	}
+}
+
+void CUIManager::UIControl_Menu(_float fTimeDelta)
+{
+	if (KEY_TAP(KEY::ESC))
+		SwicthPage(UIPAGE::PAGE_MENU, UIPAGE::PAGE_PLAY);
+	else
+	{
+		m_pUIPage_Menu->Check_Page_Action(fTimeDelta);
+	}
 }
 
 void CUIManager::UIControl_Inven(_float fTimeDelta)
 {
+	if (KEY_TAP(KEY::ESC))
+		SwicthPage(UIPAGE::PAGE_INVEN, UIPAGE::PAGE_PLAY);
+	else
+	{
+		m_pUIPage_Menu->Check_Page_Action(fTimeDelta);
+	}
 }
 
 void CUIManager::UIControl_Equip(_float fTimeDelta)
 {
+	if (KEY_TAP(KEY::ESC))
+		SwicthPage(UIPAGE::PAGE_EQUIP, UIPAGE::PAGE_PLAY);
+	else
+	{
+		m_pUIPage_Menu->Check_Page_Action(fTimeDelta);
+	}
 }
 
 void CUIManager::UIControl_Stat(_float fTimeDelta)
 {
+	if (KEY_TAP(KEY::ESC))
+		SwicthPage(UIPAGE::PAGE_STAT, UIPAGE::PAGE_PLAY);
+	else
+	{
+		m_pUIPage_Menu->Check_Page_Action(fTimeDelta);
+	}
 }
 
 void CUIManager::UIControl_LevelUp(_float fTimeDelta)
@@ -427,6 +455,12 @@ void CUIManager::UIControl_LevelUp(_float fTimeDelta)
 
 void CUIManager::UIControl_Skill(_float fTimeDelta)
 {
+	if (KEY_TAP(KEY::ESC))
+		SwicthPage(UIPAGE::PAGE_SKILL, UIPAGE::PAGE_PLAY);
+	else
+	{
+		m_pUIPage_Menu->Check_Page_Action(fTimeDelta);
+	}
 }
 
 void CUIManager::OpenMainPage()

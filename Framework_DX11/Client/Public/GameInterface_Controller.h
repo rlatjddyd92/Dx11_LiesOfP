@@ -51,6 +51,8 @@ public: // 외부에서 매니저 접근
 
 	_float2 CheckMouse(_float2 fPos, _float2 fSize) { return m_pUIManager->CheckMouse(fPos, fSize); }
 
+	void SetIngame(_bool bTrue) { m_pUIManager->SetIngame(bTrue); }
+
 	void SwicthPage(UIPAGE ePageA, UIPAGE ePageB) { m_pUIManager->SwicthPage(ePageA, ePageB); }
 	CUIManager::TDATA* GetTestData() { return m_pUIManager->GetTestData(); }
 	// TestPage 

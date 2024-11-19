@@ -84,19 +84,19 @@ public:
 	virtual void OpenAction() override;
 	virtual void CloseAction() override;
 
-	virtual CHECK_MOUSE Check_Mouse_By_Part_In_Page() override;
+	virtual CHECK_MOUSE Check_Page_Action(_float fTimeDelta) override;
 
 public:
 	const vector<UPART*>& Get_UIPartInfo() { return m_vecPart; }
 	virtual HRESULT Ready_UIPart_Group_Control() override;
 
 private:
-	void Focus_Update(); // 메뉴 화면에서 현재 하이라이트 된 
-
+	void Focus_Update(_float fTimeDelta); // 메뉴 화면에서 현재 하이라이트 된 
+	void Select_Update(_float fTimeDelta);
+	void Desc_Update(_float fTimeDelta);
 
 protected:
-	PART_GROUP m_eFocus_Group = PART_GROUP::GROUP_END;
-
+	PART_GROUP m_eFocus_Group = PART_GROUP::GROUP_END; // 현재 하이라이트 된 셀 표시
 
 
 
