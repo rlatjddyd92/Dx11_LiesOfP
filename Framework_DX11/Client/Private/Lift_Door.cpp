@@ -25,7 +25,7 @@ HRESULT CLift_Door::Initialize(void* pArg)
 		return E_FAIL;
 
 	m_pTransformCom->Set_Scaled(pDesc->vScale.x, pDesc->vScale.y, pDesc->vScale.z);
-	m_pTransformCom->Rotation(0.f, -25.f, pDesc->vRotation.z);
+	m_pTransformCom->Rotation(0.f, -25.f,0.f);
 	m_pTransformCom->Set_State(CTransform::STATE_POSITION, XMLoadFloat3(&pDesc->vPosition));
 	m_bShadow = pDesc->bShadow;
 
