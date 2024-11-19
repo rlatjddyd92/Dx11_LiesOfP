@@ -226,8 +226,15 @@ HRESULT CLevel_Tool::Read_Map_Data()
 				OBJECT_DEFAULT_DESC pDesc = {};
 				fin.read(reinterpret_cast<char*>(&pDesc), sizeof(pDesc));
 
-				if (strLayerTag == "Layer_Map")
+				if (strLayerTag == "Layer_Map" || strLayerTag == "Layer_Etc")
 				{
+					/*if (wcscmp(pDesc.szModelTag, TEXT("SM_Monastery_Lift_01_Bottom")) == 0)
+					{
+						if (FAILED(m_pGameInstance->Add_CloneObject_ToLayer(LEVEL_GAMEPLAY, TEXT("Layer_InteractObj"), TEXT("Prototype_GameObject_Lift_Floor"), &pDesc)))
+							return E_FAIL;
+						continue;
+					}*/
+
 					CStaticObj::STATICOBJ_DESC staticObjDesc = {};
 					int bufferSize = WideCharToMultiByte(CP_ACP, 0, pDesc.szModelTag, -1, NULL, 0, NULL, NULL);
 					WideCharToMultiByte(CP_ACP, 0, pDesc.szModelTag, -1, staticObjDesc.szModelTag, bufferSize, NULL, NULL);
@@ -247,7 +254,17 @@ HRESULT CLevel_Tool::Read_Map_Data()
 				{
 					 if (wcscmp(pDesc.szModelTag, TEXT("SK_DLV_Stargazer_01")) == 0)
 					 {
-						 if (FAILED(m_pGameInstance->Add_CloneObject_ToLayer(LEVEL_GAMEPLAY, TEXT("Layer_Stargazer"), TEXT("Prototype_GameObject_Stargazer"), &pDesc)))
+						 if (FAILED(m_pGameInstance->Add_CloneObject_ToLayer(LEVEL_GAMEPLAY, TEXT("Layer_InteractObj"), TEXT("Prototype_GameObject_Stargazer"), &pDesc)))
+							 return E_FAIL;
+					 }
+					 else if (wcscmp(pDesc.szModelTag, TEXT("SK_FO_Monastery_Lift_01_Controller")) == 0)
+					 {
+						 if (FAILED(m_pGameInstance->Add_CloneObject_ToLayer(LEVEL_GAMEPLAY, TEXT("Layer_InteractObj"), TEXT("Prototype_GameObject_Lift_Controller"), &pDesc)))
+							 return E_FAIL;
+					 }
+					 else if (wcscmp(pDesc.szModelTag, TEXT("SK_NewTown_Lift_01_Door")) == 0)
+					 {
+						 if (FAILED(m_pGameInstance->Add_CloneObject_ToLayer(LEVEL_GAMEPLAY, TEXT("Layer_InteractObj"), TEXT("Prototype_GameObject_Lift_Door"), &pDesc)))
 							 return E_FAIL;
 					 }
 				}

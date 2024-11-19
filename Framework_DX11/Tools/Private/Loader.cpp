@@ -1229,7 +1229,7 @@ HRESULT CLoader::Ready_Resources_For_ToolLevel_Map1()
 	}
 
 
-#pragma region ETX Cathedral
+#pragma region ETC Cathedral
 	handle = _findfirst("../Bin/ModelData/NonAnim/Map/Etc/Cathedral/*", &fd);
 
 	if (handle == -1)

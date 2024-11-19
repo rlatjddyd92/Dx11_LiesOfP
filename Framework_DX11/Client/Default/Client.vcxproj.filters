@@ -441,6 +441,30 @@
     </Filter>
     <Filter Include="97.ShaderFiles\Effect">
       <UniqueIdentifier>{d8ef4e91-7c16-4dfd-848d-d1187ed851d1}</UniqueIdentifier>
+	</Filter>
+    <Filter Include="02.GameObjects\10.InteractObj\02.TowerDoor">
+      <UniqueIdentifier>{6a4c1bfe-f554-4c72-afe7-d738b5f5b17d}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.GameObjects\10.InteractObj\03.WallDeco">
+      <UniqueIdentifier>{2357c91a-00b1-43ca-a995-b5b7786cca00}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.GameObjects\10.InteractObj\04.TreasureBox">
+      <UniqueIdentifier>{10feda96-2bd2-4b3f-b93b-a7f41fa6a6a0}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.GameObjects\10.InteractObj\05.Ladder">
+      <UniqueIdentifier>{e8519a58-814e-4542-a269-73a3f6a8b500}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.GameObjects\10.InteractObj\01.Lift">
+      <UniqueIdentifier>{eedb6a56-cfff-4c91-be75-a434d7f66169}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.GameObjects\10.InteractObj\01.Lift\Lift_Door">
+      <UniqueIdentifier>{e5181690-86ed-43fc-9e24-583e915d9f03}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.GameObjects\10.InteractObj\01.Lift\Lift_Controller">
+      <UniqueIdentifier>{7e6674de-29fd-41f9-9f96-c34e1ba9bbb6}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.GameObjects\10.InteractObj\01.Lift\Lift_Floor">
+      <UniqueIdentifier>{d4ddd60e-a386-46e3-a60e-8bdf3759786c}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -764,6 +788,15 @@
     </ClInclude>
     <ClInclude Include="..\Public\Trail_Effect_OP.h">
       <Filter>02.GameObjects\05.Effect\Effect_Base\Trail_Effect\Trail_Effect_OP</Filter>
+	</ClInclude>
+    <ClInclude Include="..\Public\Lift_Controller.h">
+      <Filter>02.GameObjects\10.InteractObj\01.Lift\Lift_Controller</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Public\Lift_Floor.h">
+      <Filter>02.GameObjects\10.InteractObj\01.Lift\Lift_Floor</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Public\Lift_Door.h">
+      <Filter>02.GameObjects\10.InteractObj\01.Lift\Lift_Door</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -1057,6 +1090,15 @@
     </ClCompile>
     <ClCompile Include="..\Private\Trail_Effect_OP.cpp">
       <Filter>02.GameObjects\05.Effect\Effect_Base\Trail_Effect\Trail_Effect_OP</Filter>
+	</ClCompile>
+    <ClCompile Include="..\Private\Lift_Door.cpp">
+      <Filter>02.GameObjects\10.InteractObj\01.Lift\Lift_Door</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Private\Lift_Controller.cpp">
+      <Filter>02.GameObjects\10.InteractObj\01.Lift\Lift_Controller</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Private\Lift_Floor.cpp">
+      <Filter>02.GameObjects\10.InteractObj\01.Lift\Lift_Floor</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
