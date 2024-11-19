@@ -286,6 +286,24 @@ void CController_EffectTool::Render()
 
 	ImGui::End();
 #pragma endregion
+
+#pragma region TEST_CONSOLE
+	// ImGui 창 시작
+	ImGui::Begin("Console");
+
+	// 로그 출력
+	ImGui::BeginChild("ScrollingRegion", ImVec2(0, -ImGui::GetFrameHeightWithSpacing()), true);
+	for (const auto& log : logs) {
+		ImGui::TextUnformatted(log.c_str());
+	}
+	ImGui::EndChild();
+
+	while (10 < logs.size())
+		logs.pop_front();
+
+	ImGui::End();
+#pragma endregion
+
 	ImGui::EndTabItem();
 }
 
@@ -635,6 +653,8 @@ void CController_EffectTool::TE_Check()
 		ImGui::InputFloat3("Pos TE", (_float*)&m_TextureDesc.DefaultDesc.vPos);
 		ImGui::InputFloat3("Start Scale TE", (_float*)&m_TextureDesc.DefaultDesc.vStartScale);
 		ImGui::InputFloat3("Scaling Speed TE", (_float*)&m_TextureDesc.DefaultDesc.vScalingSpeed);
+		ImGui::InputFloat("Start Rotation TE", &m_TextureDesc.DefaultDesc.fStarRotation);
+		ImGui::InputFloat("Rotation Per Second TE", &m_TextureDesc.DefaultDesc.fRotationPerSecond);
 
 		ImGui::SeparatorText("Blending");
 		ImGui::InputFloat("Start Alpha TE", (_float*)&m_TextureDesc.DefaultDesc.fAlpha);

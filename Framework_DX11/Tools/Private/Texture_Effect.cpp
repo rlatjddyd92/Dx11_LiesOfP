@@ -2,6 +2,8 @@
 #include "Texture_Effect.h"
 #include "GameInstance.h"
 
+#include "Controller_EffectTool.h"
+
 CTexture_Effect::CTexture_Effect(ID3D11Device* pDevice, ID3D11DeviceContext* pContext)
     : CEffect_Base(pDevice, pContext)
 {
@@ -36,8 +38,6 @@ HRESULT CTexture_Effect::Initialize(void* pArg)
 
     m_pTransformCom->Set_Scaled(m_DefaultDesc.vStartScale.x, m_DefaultDesc.vStartScale.y, m_DefaultDesc.vStartScale.z);
 
-    m_pTransformCom->BillBoard();
-
     m_InitDesc = *pDesc;
 
     return S_OK;
@@ -49,26 +49,47 @@ void CTexture_Effect::Priority_Update(_float fTimeDelta)
 
 void CTexture_Effect::Update(_float fTimeDelta)
 {
-
     m_DefaultDesc.fAlpha += fTimeDelta * m_DefaultDesc.fAlphaSpeed;
 
     _Vec3 vScale = m_pTransformCom->Get_Scaled();
     vScale += m_DefaultDesc.vScalingSpeed * fTimeDelta;
-    m_pTransformCom->Set_Scaled(vScale.x, vScale.y, vScale.z);
+
+    if(0.f < vScale.x && 0.f < vScale.y && 0.f < vScale.z)
+        m_pTransformCom->Set_Scaled(vScale.x, vScale.y, vScale.z);
 
     m_fCurrenrtIndex += fTimeDelta * m_DefaultDesc.fSpriteSpeed;
 
     __super::Set_WorldMatrix();
 
     _Vec3 vCurrentScale = _float3(m_WorldMatrix.Right().Length(), m_WorldMatrix.Up().Length(), m_WorldMatrix.Forward().Length());
+
+    _Vec3 vPos = XMLoadFloat4x4(&m_WorldMatrix).r[3];
+    _Vec3 vCamPos = m_pGameInstance->Get_CamPosition_Vec3();
+
+    _Vec3 vDir = vPos - vCamPos;
+
+    _Vec3 vBeforeLook = XMVector3Normalize(XMLoadFloat4x4(&m_WorldMatrix).r[2]);
+    _Vec3 vLook = XMVector3Normalize(vDir);
+
+    _Vec3 vAxis = XMVector3Normalize(XMVector3Cross(vBeforeLook, vLook));
+    _float fRadian = acos(XMVectorGetX(XMVector3Dot(vBeforeLook, vLook)));
+    _Matrix RotationMatrix = XMMatrixRotationAxis(vAxis, fRadian);
     
-    _Vec4 vLook = XMLoadFloat4x4(&m_pGameInstance->Get_Transform_Inverse(CPipeLine::D3DTS_VIEW)).r[2];
-    _Vec4 vRight = XMVector3Cross(XMVectorSet(0.f, 1.f, 0.f, 0.f), vLook);
-    _Vec4 vUp = XMVector3Cross(vLook, vRight);
+    _Vec4 vRight = XMVector3TransformNormal(m_WorldMatrix.Right(), RotationMatrix);
+    _Vec4 vUp = XMVector3TransformNormal(m_WorldMatrix.Up(), RotationMatrix);
+
+    _Matrix LocalRotationMatrix = XMMatrixRotationAxis(vLook, 
+        XMConvertToRadians(m_DefaultDesc.fStarRotation + m_DefaultDesc.fRotationPerSecond * m_fAccumulateTime));
+
+    vRight = XMVector3TransformNormal(vRight, LocalRotationMatrix);
+    vUp = XMVector3TransformNormal(vUp, LocalRotationMatrix);
 
     XMStoreFloat3((_float3*)&m_WorldMatrix.m[0][0], vRight * vCurrentScale.x);
     XMStoreFloat3((_float3*)&m_WorldMatrix.m[1][0], vUp * vCurrentScale.y);
     XMStoreFloat3((_float3*)&m_WorldMatrix.m[2][0], vLook * vCurrentScale.z);
+
+    vCurrentScale = _float3(m_WorldMatrix.Right().Length(), m_WorldMatrix.Up().Length(), m_WorldMatrix.Forward().Length());
+
 }
 
 void CTexture_Effect::Late_Update(_float fTimeDelta)
@@ -80,7 +101,9 @@ void CTexture_Effect::Late_Update(_float fTimeDelta)
         if (true == m_DefaultDesc.bLoop)
             Reset();
         else
-            m_isActive = false;
+        {
+            //m_isActive = false;
+        }
     }
 
     if (CRenderer::RG_END == m_RenderDesc.iRenderGroup)
@@ -94,6 +117,7 @@ void CTexture_Effect::Late_Update(_float fTimeDelta)
 
 HRESULT CTexture_Effect::Render()
 {
+
     if (FAILED(__super::Bind_WorldMatrix(m_pShaderCom, "g_WorldMatrix")))
         return E_FAIL;
     if (FAILED(m_pShaderCom->Bind_Matrix("g_ViewMatrix", &m_pGameInstance->Get_Transform(CPipeLine::D3DTS_VIEW))))
@@ -160,6 +184,7 @@ void CTexture_Effect::Reset()
 {
     m_fAccumulateTime = { 0.f };
     m_fCurrenrtIndex = { 0.f };
+    m_isActive = true;
 
     m_DefaultDesc = m_InitDesc.DefaultDesc;
 

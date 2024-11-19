@@ -162,6 +162,20 @@ void CEffect_Container::Update(_float fTimeDelta)
 		m_bOrbit = false;
 	}
 
+	if (KEY_TAP(KEY::RIGHT))
+	{
+		m_fCurrentAngle += 10.f;
+	}
+	
+
+	if (KEY_TAP(KEY::LEFT))
+	{
+		m_fCurrentAngle -= 10.f;
+	}
+
+
+	m_pTransformCom->Rotation(_Vec4(0.f, 0.f, 1.f, 0.f), XMConvertToRadians(m_fCurrentAngle));
+
 	if (true == m_bOrbit)
 	{
 		_Vec3 vPos = m_pTransformCom->Get_State(CTransform::STATE_POSITION);
@@ -175,7 +189,8 @@ void CEffect_Container::Update(_float fTimeDelta)
 
 	if(true == m_bTurn)
 	{ 
-		m_pTransformCom->Turn(_Vec4(0.f, 1.f, 0.f, 0.f), fTimeDelta, 10.f);
+		// m_pTransformCom->Turn(_Vec4(0.f, 1.f, 0.f, 0.f), fTimeDelta, 10.f);
+		m_pTransformCom->Turn(true, true, true, fTimeDelta, 5.f);
 	}
 
 	for (auto& Effect : m_Effects)
@@ -369,9 +384,12 @@ HRESULT CEffect_Container::Load_Effect_By_Path(const _wstring& strFilePath)
 
 		infile.close();
 
-		if (FAILED(m_pGameInstance->Add_CloneObject_ToLayer(LEVEL_TOOL, TEXT("Layer_Particle"), TEXT("Prototype_GameObject_Particle_Effect"), &TestDesc)))
+		CGameObject* pEffect = m_pGameInstance->Clone_GameObject(TEXT("Prototype_GameObject_Particle_Effect"), &TestDesc);
+
+		if (nullptr == pEffect)
 			return E_FAIL;
 
+		m_Effects.emplace_back(static_cast<CEffect_Base*>(pEffect));
 	}
 	else if (TEXT("TE") == strExtention)
 	{
@@ -394,8 +412,12 @@ HRESULT CEffect_Container::Load_Effect_By_Path(const _wstring& strFilePath)
 
 		infile.close();
 
-		if (FAILED(m_pGameInstance->Add_CloneObject_ToLayer(LEVEL_TOOL, TEXT("Layer_TextureEffect"), TEXT("Prototype_GameObject_Texture_Effect"), &TestDesc)))
+		CGameObject* pEffect = m_pGameInstance->Clone_GameObject(TEXT("Prototype_GameObject_Texture_Effect"), &TestDesc);
+
+		if (nullptr == pEffect)
 			return E_FAIL;
+
+		m_Effects.emplace_back(static_cast<CEffect_Base*>(pEffect));
 	}
 	else if (TEXT("ME") == strExtention)
 	{
@@ -418,8 +440,12 @@ HRESULT CEffect_Container::Load_Effect_By_Path(const _wstring& strFilePath)
 
 		infile.close();
 
-		if (FAILED(m_pGameInstance->Add_CloneObject_ToLayer(LEVEL_TOOL, TEXT("Layer_MeshEffect"), TEXT("Prototype_GameObject_Mesh_Effect"), &TestDesc)))
+		CGameObject* pEffect = m_pGameInstance->Clone_GameObject(TEXT("Prototype_GameObject_Mesh_Effect"), &TestDesc);
+
+		if (nullptr == pEffect)
 			return E_FAIL;
+
+		m_Effects.emplace_back(static_cast<CEffect_Base*>(pEffect)); 
 	}
 	else if (TEXT("TOP") == strExtention)
 	{
@@ -443,8 +469,12 @@ HRESULT CEffect_Container::Load_Effect_By_Path(const _wstring& strFilePath)
 
 		infile.close();
 
-		if (FAILED(m_pGameInstance->Add_CloneObject_ToLayer(LEVEL_TOOL, TEXT("Layer_TrailOP"), TEXT("Prototype_GameObject_Trail_Effect_OP"), &TestDesc)))
+		CGameObject* pEffect = m_pGameInstance->Clone_GameObject(TEXT("Prototype_GameObject_Trail_Effect_OP"), &TestDesc);
+
+		if (nullptr == pEffect)
 			return E_FAIL;
+
+		m_Effects.emplace_back(static_cast<CEffect_Base*>(pEffect));
 	}
 	else if (TEXT("TTP") == strExtention)
 	{
@@ -468,9 +498,12 @@ HRESULT CEffect_Container::Load_Effect_By_Path(const _wstring& strFilePath)
 
 		infile.close();
 
-		if (FAILED(m_pGameInstance->Add_CloneObject_ToLayer(LEVEL_TOOL, TEXT("Layer_TrailTP"), TEXT("Prototype_GameObject_Trail_Effect_TP"), &TestDesc)))
+		CGameObject* pEffect = m_pGameInstance->Clone_GameObject(TEXT("Prototype_GameObject_Trail_Effect_TP"), &TestDesc);
+
+		if (nullptr == pEffect)
 			return E_FAIL;
 
+		m_Effects.emplace_back(static_cast<CEffect_Base*>(pEffect));
 	}
 	else if (TEXT("TMP") == strExtention)
 	{
@@ -493,9 +526,12 @@ HRESULT CEffect_Container::Load_Effect_By_Path(const _wstring& strFilePath)
 		infile.read(reinterpret_cast<_char*>(&TestDesc.BufferDesc), sizeof(TestDesc.BufferDesc));			// 이게 실제로 적용되는 거.
 
 		infile.close();
+		CGameObject* pEffect = m_pGameInstance->Clone_GameObject(TEXT("Prototype_GameObject_Trail_Effect_MP"), &TestDesc);
 
-		if (FAILED(m_pGameInstance->Add_CloneObject_ToLayer(LEVEL_TOOL, TEXT("Layer_TrailMP"), TEXT("Prototype_GameObject_Trail_Effect_MP"), &TestDesc)))
+		if (nullptr == pEffect)
 			return E_FAIL;
+
+		m_Effects.emplace_back(static_cast<CEffect_Base*>(pEffect));
 	}
 	return S_OK;
 }

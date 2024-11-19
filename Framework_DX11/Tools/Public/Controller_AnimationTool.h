@@ -40,7 +40,7 @@ public:
 	void	NewPage_AnimTool();
 
 	void	EndFrame_AnimTool();
-	void	BlockObjCtr() { m_bObjRenderCtr = false; };
+	void	Set_BlockObjCtr(_bool bState) { m_bObjRenderCtr = bState; };
 
 private:
 	class CGameInstance* m_pGameInstance = { nullptr };

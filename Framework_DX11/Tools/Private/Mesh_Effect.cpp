@@ -69,7 +69,9 @@ void CMesh_Effect::Late_Update(_float fTimeDelta)
 		if (true == m_DefaultDesc.bLoop)
 			Reset();
 		else
-			m_isActive = false;
+		{
+			//m_isActive = false;
+		}
 	}
 	if (CRenderer::RG_END == m_RenderDesc.iRenderGroup)
 		return;

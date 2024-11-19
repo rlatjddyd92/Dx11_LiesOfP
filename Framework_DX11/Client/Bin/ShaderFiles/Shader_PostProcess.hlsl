@@ -162,10 +162,9 @@ PS_OUT PS_MAIN_RADIALBLUR(PS_IN In)
     vector vColor = vBack;
     
     float fDistance = length(vDistance);
-    // 거리가 클 수록 더 블러에 가까워짐
     if (fDistance >= g_fRadius)
     {
-        vColor = lerp(vBack, vBlur, g_RadialPower * fDistance);
+        vColor = lerp(vBack, vBlur, saturate(g_RadialPower * fDistance));
     }
     
     Out.vColor = vColor;

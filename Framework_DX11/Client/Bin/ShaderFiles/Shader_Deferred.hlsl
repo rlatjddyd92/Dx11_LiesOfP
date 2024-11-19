@@ -186,7 +186,7 @@ PS_OUT_LIGHT PS_MAIN_LIGHT_DIRECTIONAL(PS_IN In)
     
     if ((0.f == fAmbietnOcc && 0.f == fRoughness && 0.f == fMetallic))
     {
-        Out.vSpecular = float4(1.f, 0.f, 0.f, 0.f);
+        Out.vSpecular = float4(0.f, 0.f, 0.f, 0.f);
     }
     else
     {

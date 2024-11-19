@@ -51,6 +51,8 @@ private:
 private:
 	void Tool_Animation();
 
+	_bool	bAnimCtr{false};
+
 private:
 	void Tool_PostProcess();
 

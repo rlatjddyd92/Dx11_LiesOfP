@@ -26,6 +26,9 @@ public:
 		_Vec3		vStartScale = { 1.f, 1.f, 1.f };
 		_Vec3		vScalingSpeed = {};
 
+		_float		fStarRotation = { 0.f };
+		_float		fRotationPerSecond = { 0.f };
+
 		_float		fAlpha = { 1.f };
 		_float		fAlphaSpeed = { 0.f };
 
