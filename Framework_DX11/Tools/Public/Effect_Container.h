@@ -13,6 +13,9 @@ public:
 		vector<void*> pParticleEffect_Descs;
 		vector<void*> pTextureEffect_Descs;
 		vector<void*> pMeshEffect_Descs;
+		vector<void*> pTrail_OPDesc;
+		vector<void*> pTrail_TPDesc;
+		vector<void*> pTrail_MPDesc;
 
 		_tchar szEffectContainerName[MAX_PATH] = TEXT("");
 	} EFFECT_DESC;
@@ -48,6 +51,11 @@ private:
 	vector<class CEffect_Base*> m_Effects;
 	vector<_wstring> m_EffectNames;
 	_wstring m_strContainerName = TEXT("");
+
+
+	//Å×½ºÆ®
+	_bool m_bOrbit = { false };
+	_bool m_bTurn = { false };
 
 private:
 	HRESULT Load_Effect_By_Path(const _wstring& strFilePath);

@@ -331,6 +331,9 @@ struct PS_NORMAL_OUT
 {
     vector vDiffuse : SV_TARGET0;
     vector vNormal : SV_TARGET1;
+    vector vDepth : SV_TARGET2;
+    vector vARM : SV_TARGET3;
+    vector vPickDepth : SV_TARGET4;
 };
 
 
@@ -361,7 +364,11 @@ PS_NORMAL_OUT PS_SPRITE_NORMAL_MAIN(PS_IN In)
     
     vector vNomral = g_NormalTexture.Sample(LinearSampler, vTexcoord);
     Out.vNormal = vNomral * 2.f - 1.f;
-
+    
+    Out.vDepth = float4(0.f, 0.f, 0.f, 0.f);
+    Out.vARM = float4(0.f, 0.f, 0.f, 0.f);
+    Out.vPickDepth = float4(0.f, 0.f, 0.f, 0.f);
+    
     return Out;
 }
 

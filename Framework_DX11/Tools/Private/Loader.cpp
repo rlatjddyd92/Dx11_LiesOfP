@@ -540,6 +540,10 @@ HRESULT CLoader::Ready_Resources_For_ToolLevel()
 		CShader_Compute::Create(m_pDevice, m_pContext, TEXT("../Bin/ShaderFiles/Shader_Trail_MultiPoint_Compute.hlsl"), "CS_CONVERGE_MAIN"))))
 		return E_FAIL;
 
+	/* For. Prototype_Component_Shader_Compute_Trail_Reset */
+	if (FAILED(m_pGameInstance->Add_Prototype(LEVEL_TOOL, TEXT("Prototype_Component_Shader_Compute_Trail_Reset"),
+		CShader_Compute::Create(m_pDevice, m_pContext, TEXT("../Bin/ShaderFiles/Shader_Trail_MultiPoint_Compute.hlsl"), "CS_RESET_MAIN"))))
+		return E_FAIL;
 #pragma endregion
 
 #pragma endregion

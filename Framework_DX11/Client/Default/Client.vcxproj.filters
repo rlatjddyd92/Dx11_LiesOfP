@@ -426,6 +426,21 @@
     </Filter>
     <Filter Include="05.Fsm\Player\OneHand\00.Attack\Scissor\ChargeAttack01">
       <UniqueIdentifier>{b20bc638-0a11-4e42-9d52-3e774b51d960}</UniqueIdentifier>
+	</Filter>
+    <Filter Include="02.GameObjects\05.Effect\Effect_Base\Trail_Effect">
+      <UniqueIdentifier>{c39bba8f-a580-41a3-85a9-6a605b39a77c}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.GameObjects\05.Effect\Effect_Base\Trail_Effect\Trail_Effect_OP">
+      <UniqueIdentifier>{61d48cf5-b0bd-4268-a786-abb20218f6a4}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.GameObjects\05.Effect\Effect_Base\Trail_Effect\Trail_Effect_TP">
+      <UniqueIdentifier>{224f654c-33c2-471d-a7a2-a5f934ee51f1}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.GameObjects\05.Effect\Effect_Base\Trail_Effect\Trail_Effect_MP">
+      <UniqueIdentifier>{28dc5ca5-001b-4966-90de-8f5628f505f2}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="97.ShaderFiles\Effect">
+      <UniqueIdentifier>{d8ef4e91-7c16-4dfd-848d-d1187ed851d1}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -740,6 +755,15 @@
     </ClInclude>
     <ClInclude Include="..\Public\State_Player_Scissor_Fatal.h">
       <Filter>05.Fsm\Player\OneHand\00.Attack\Scissor\01.Fatal</Filter>
+	</ClInclude>
+    <ClInclude Include="..\Public\Trail_Effect_MP.h">
+      <Filter>02.GameObjects\05.Effect\Effect_Base\Trail_Effect\Trail_Effect_MP</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Public\Trail_Effect_TP.h">
+      <Filter>02.GameObjects\05.Effect\Effect_Base\Trail_Effect\Trail_Effect_TP</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Public\Trail_Effect_OP.h">
+      <Filter>02.GameObjects\05.Effect\Effect_Base\Trail_Effect\Trail_Effect_OP</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -1024,6 +1048,15 @@
     </ClCompile>
     <ClCompile Include="..\Private\State_Player_Scissor_Fatal.cpp">
       <Filter>05.Fsm\Player\OneHand\00.Attack\Scissor\01.Fatal</Filter>
+	</ClCompile>
+    <ClCompile Include="..\Private\Trail_Effect_MP.cpp">
+      <Filter>02.GameObjects\05.Effect\Effect_Base\Trail_Effect\Trail_Effect_MP</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Private\Trail_Effect_TP.cpp">
+      <Filter>02.GameObjects\05.Effect\Effect_Base\Trail_Effect\Trail_Effect_TP</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Private\Trail_Effect_OP.cpp">
+      <Filter>02.GameObjects\05.Effect\Effect_Base\Trail_Effect\Trail_Effect_OP</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -1064,31 +1097,31 @@
       <Filter>97.ShaderFiles</Filter>
     </FxCompile>
     <FxCompile Include="..\Bin\ShaderFiles\Shader_Effect_Mesh.hlsl">
-      <Filter>97.ShaderFiles</Filter>
-    </FxCompile>
-    <FxCompile Include="..\Bin\ShaderFiles\Shader_Trail_MultiPoint_Compute.hlsl">
-      <Filter>97.ShaderFiles</Filter>
-    </FxCompile>
-    <FxCompile Include="..\Bin\ShaderFiles\Shader_TrailHead_PointInstance.hlsl">
-      <Filter>97.ShaderFiles</Filter>
-    </FxCompile>
-    <FxCompile Include="..\Bin\ShaderFiles\Shader_TrailTail_PointInstance.hlsl">
-      <Filter>97.ShaderFiles</Filter>
-    </FxCompile>
-    <FxCompile Include="..\Bin\ShaderFiles\Shader_VtxTrail_OnePoint_Instance.hlsl">
-      <Filter>97.ShaderFiles</Filter>
-    </FxCompile>
-    <FxCompile Include="..\Bin\ShaderFiles\Shader_VtxTrail_TwoPoint_Instance.hlsl">
-      <Filter>97.ShaderFiles</Filter>
+      <Filter>97.ShaderFiles\Effect</Filter>
     </FxCompile>
     <FxCompile Include="..\Bin\ShaderFiles\Shader_Effect_Texture.hlsl">
-      <Filter>97.ShaderFiles</Filter>
+      <Filter>97.ShaderFiles\Effect</Filter>
     </FxCompile>
     <FxCompile Include="..\Bin\ShaderFiles\Shader_ParticleCompute.hlsl">
-      <Filter>97.ShaderFiles</Filter>
+      <Filter>97.ShaderFiles\Effect</Filter>
+    </FxCompile>
+    <FxCompile Include="..\Bin\ShaderFiles\Shader_Trail_MultiPoint_Compute.hlsl">
+      <Filter>97.ShaderFiles\Effect</Filter>
+    </FxCompile>
+    <FxCompile Include="..\Bin\ShaderFiles\Shader_TrailHead_PointInstance.hlsl">
+      <Filter>97.ShaderFiles\Effect</Filter>
+    </FxCompile>
+    <FxCompile Include="..\Bin\ShaderFiles\Shader_TrailTail_PointInstance.hlsl">
+      <Filter>97.ShaderFiles\Effect</Filter>
     </FxCompile>
     <FxCompile Include="..\Bin\ShaderFiles\Shader_VtxPointInstance.hlsl">
-      <Filter>97.ShaderFiles</Filter>
+      <Filter>97.ShaderFiles\Effect</Filter>
+    </FxCompile>
+    <FxCompile Include="..\Bin\ShaderFiles\Shader_VtxTrail_OnePoint_Instance.hlsl">
+      <Filter>97.ShaderFiles\Effect</Filter>
+    </FxCompile>
+    <FxCompile Include="..\Bin\ShaderFiles\Shader_VtxTrail_TwoPoint_Instance.hlsl">
+      <Filter>97.ShaderFiles\Effect</Filter>
     </FxCompile>
   </ItemGroup>
   <ItemGroup>

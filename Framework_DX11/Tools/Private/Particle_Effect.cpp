@@ -33,6 +33,10 @@ HRESULT CParticle_Effect::Initialize(void* pArg)
 
     m_InitDesc = *pDesc;
 
+    m_pTransformCom->Set_State(CTransform::STATE_POSITION, m_DefaultDesc.vPos);
+    m_pTransformCom->Set_Scaled(m_DefaultDesc.vScale.x, m_DefaultDesc.vScale.y, m_DefaultDesc.vScale.z);
+    m_pTransformCom->Rotation(m_DefaultDesc.vRotation.x, m_DefaultDesc.vRotation.y, m_DefaultDesc.vRotation.z);
+
     return S_OK;
 }
 
@@ -63,22 +67,24 @@ void CParticle_Effect::Update(_float fTimeDelta)
 
     switch (m_DefaultDesc.eType)
     {
-    case TYPE_SPREAD:
+    case PT_SPREAD:
         bOver = m_pVIBufferCom->DispatchCS(m_pSpreadCS, Movement);
         break;
 
-    case TYPE_MOVE:
+    case PT_MOVE:
         bOver = m_pVIBufferCom->DispatchCS(m_pMoveCS, Movement);
         break;
 
-    case TYPE_CONVERGE:
+    case PT_CONVERGE:
         bOver = m_pVIBufferCom->DispatchCS(m_pConvergeCS, Movement);
         break;
 
     }
 
     if (true == bOver)
-        m_isDead = true;
+    {
+        // m_isActive = false;
+    }
 
 }
 
@@ -149,7 +155,6 @@ HRESULT CParticle_Effect::Render()
     return S_OK;
 }
 
-
 void CParticle_Effect::Reset()
 {
     m_DefaultDesc = m_InitDesc.DefaultDesc;
@@ -161,6 +166,7 @@ void CParticle_Effect::Reset()
     CVIBuffer_Point_Instance::PARTICLE_MOVEMENT Movement = {};
 
     m_pVIBufferCom->DispatchCS(m_pResetCS, Movement);
+    m_pVIBufferCom->Reset();
 }
 
 HRESULT CParticle_Effect::Save(_wstring strFilePath)
@@ -196,11 +202,20 @@ HRESULT CParticle_Effect::Save(_wstring strFilePath)
 void CParticle_Effect::Set_Desc(const PARTICLE_EFFECT_DESC& ParticleDesc)
 {
     m_DefaultDesc = ParticleDesc.DefaultDesc;
+    m_RenderDesc = ParticleDesc.RenderDesc;
     m_InitDesc.DefaultDesc = ParticleDesc.DefaultDesc;
 
     m_pTransformCom->Set_State(CTransform::STATE_POSITION, m_DefaultDesc.vPos);
     m_pTransformCom->Rotation(m_DefaultDesc.vRotation.x, m_DefaultDesc.vRotation.y, m_DefaultDesc.vRotation.z);
     m_pTransformCom->Set_Scaled(m_DefaultDesc.vScale.x, m_DefaultDesc.vScale.y, m_DefaultDesc.vScale.z);
+}
+
+void CParticle_Effect::Set_Loop(_bool bLoop)
+{
+    if (true == bLoop)
+        m_DefaultDesc.iComputeState |= CVIBuffer_Instancing::STATE_LOOP;
+    else
+        m_DefaultDesc.iComputeState &= ~CVIBuffer_Instancing::STATE_LOOP;
 }
 
 

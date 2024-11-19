@@ -104,6 +104,7 @@ struct GS_OUT
     float4 vPosition : SV_POSITION;
     float2 vTexcoord : TEXCOORD0;
     float2 vLifeTime : TEXCOORD1;
+    float fIndex : TEXCOORD2;
 };
 
 float3 CatmullRom(float3 p0, float3 p1, float3 p2, float3 p3, float t)
@@ -118,7 +119,7 @@ float3 CatmullRom(float3 p0, float3 p1, float3 p2, float3 p3, float t)
         (-p0 + 3.0 * p1 - 3.0 * p2 + p3) * t3
     );
 }
-[maxvertexcount(128)] // 꼭 해줘야 함. 점을 몇 번 찍을 건지.(인덱스 갯수) : 사각형 최대 16개
+[maxvertexcount(96)] // 꼭 해줘야 함. 점을 몇 번 찍을 건지.(인덱스 갯수) : 사각형 최대 16개
 void GS_MAIN(point GS_IN In[1], inout TriangleStream<GS_OUT> Container)
 {
     GS_OUT Out[4];
@@ -136,9 +137,9 @@ void GS_MAIN(point GS_IN In[1], inout TriangleStream<GS_OUT> Container)
     float3 vSaveTopPos = (float3) 0;
     float3 vSaveBottomPos = (float3) 0;
     
-    for (int i = 0; i <= 20; ++i)
+    for (int i = 0; i <= 16; ++i)
     {
-        float t = i / 20.f;
+        float t = i / 16.f;
 
         float3 vCurTopPos = (float3) 0;
         float3 vCurBottomPos = (float3) 0;
@@ -167,7 +168,7 @@ void GS_MAIN(point GS_IN In[1], inout TriangleStream<GS_OUT> Container)
         if(0 != i)
         { // 인덱스를 기준으로 텍스처 좌표를 계산합니다.
             float fTexPosX = (In[0].fIndex + t) / (float) (g_iNumInstance);
-            float fPreTexPosX = (In[0].fIndex + t + (1.f / 20.f)) / (float) (g_iNumInstance);
+            float fPreTexPosX = (In[0].fIndex + t + (1.f / 16.f)) / (float) (g_iNumInstance);
         
             fTexPosX = max(fTexPosX, 0.f);
             fPreTexPosX = min(fPreTexPosX, 1.f);
@@ -175,19 +176,23 @@ void GS_MAIN(point GS_IN In[1], inout TriangleStream<GS_OUT> Container)
             Out[0].vPosition = float4(vCurTopPos, 1.f);
             Out[0].vTexcoord = float2(fPreTexPosX, 1.f);
             Out[0].vLifeTime = In[0].vLifeTime;
+            Out[0].fIndex = In[0].fIndex;
 
             Out[1].vPosition = float4(vPreTopPos, 1.f);
             Out[1].vTexcoord = float2(fTexPosX, 1.f);
             Out[1].vLifeTime = In[0].vLifeTime;
-
+            Out[1].fIndex = In[0].fIndex;
+            
             Out[2].vPosition = float4(vPreBottomPos, 1.f);
             Out[2].vTexcoord = float2(fTexPosX, 0.f);
             Out[2].vLifeTime = In[0].vLifeTime;
-    
+            Out[2].fIndex = In[0].fIndex;
+            
             Out[3].vPosition = float4(vCurBottomPos, 1.f);
             Out[3].vTexcoord = float2(fPreTexPosX, 0.f);
             Out[3].vLifeTime = In[0].vLifeTime;
-
+            Out[3].fIndex = In[0].fIndex;
+            
             matrix matVP = mul(g_ViewMatrix, g_ProjMatrix);
 
             Out[0].vPosition = mul(Out[0].vPosition, matVP);
@@ -213,6 +218,7 @@ struct PS_IN
     float4 vPosition : SV_POSITION;
     float2 vTexcoord : TEXCOORD0;
     float2 vLifeTime : TEXCOORD1;
+    float fIndex : TEXCOORD2;
 };
 
 struct PS_OUT
@@ -228,13 +234,11 @@ PS_OUT PS_MAIN(PS_IN In)
 
     Out.vColor = g_DiffuseTexture.Sample(LinearSampler, In.vTexcoord);
     
+
+    Out.vColor.a = 1.f - ((In.vTexcoord.x + In.fIndex) / (float) g_iNumInstance + g_fRatio);
+    
     if(Out.vColor.r < 0.1f)
         discard;
-    
-    // 알파 = 1.f - ((텍스처 x좌표 + 현재 인덱스 / iNumInstance) + g_fRatio);
-    // 끝부분일수록 연해짐
-    // g_fRatio가 디폴트로는 0. 
-    // 끝내라는 오더 나오면 저거를 스르륵 올려서 점점 없어지게.
     
     Out.vColor.gb = Out.vColor.r;
     

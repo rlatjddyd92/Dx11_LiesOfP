@@ -91,8 +91,6 @@ HRESULT CTrail_MultiPoint_Instance::Bind_HeadBuffer(CShader_NonVTX* pShader, con
 
 HRESULT CTrail_MultiPoint_Instance::Bind_TailBuffer(CShader_NonVTX* pShader, const _char* pConstantName)
 {
-
-
     //// SRV 바인딩하고
     if (FAILED(pShader->Bind_SRV(pConstantName, m_pTailSRV)))
         return E_FAIL;
@@ -144,7 +142,11 @@ _bool CTrail_MultiPoint_Instance::DispatchCS(CShader_Compute* pComputeShader, co
         m_bFirst = true;
     }
     else
+    {
         pMovement->fPadding = { 1.f };
+    }
+
+    
 
     m_pContext->Unmap(m_pMoveBuffer, 0);
 
@@ -166,12 +168,20 @@ _bool CTrail_MultiPoint_Instance::DispatchCS(CShader_Compute* pComputeShader, co
     // Compute Shader 해제
     m_pContext->CSSetShader(nullptr, nullptr, 0);
 
-    return S_OK;
+    if (false == (STATE_LOOP & MovementData.iState))
+    {
+        m_fTime += MovementData.fTimeDelta;
+        if (m_vTail_LifeTime.y + m_vLifeTime.y < m_fTime)
+            return true;
+    }
+
+    return false;
 }
 
 void CTrail_MultiPoint_Instance::Reset()
 {
-    
+    m_bFirst = false;
+    m_fTime = 0.f;
 }
 
 HRESULT CTrail_MultiPoint_Instance::Ready_Buffers(const TRAIL_MP_INSTANCE_DESC& Desc)
@@ -282,8 +292,8 @@ HRESULT CTrail_MultiPoint_Instance::Init_HeadParticle(HEAD_PARTICLE* pParticles)
         pParticles[i].Particle.vNextRandomDir = _float4(m_pGameInstance->Get_Random(-1.f, 1.f), m_pGameInstance->Get_Random(-1.f, 1.f), m_pGameInstance->Get_Random(-1.f, 1.f), 0.f);
 
         pParticles[i].vPreTranslation = {};
-        pParticles[i].vCurrentRandomPos = _float4(m_pGameInstance->Get_Random(-1.f, 1.f), m_pGameInstance->Get_Random(-1.f, 1.f), m_pGameInstance->Get_Random(-1.f, 1.f), 0.f);
-        pParticles[i].vNextRandomPos = _float4(m_pGameInstance->Get_Random(-1.f, 1.f), m_pGameInstance->Get_Random(-1.f, 1.f), m_pGameInstance->Get_Random(-1.f, 1.f), 0.f);
+        pParticles[i].vCurrentRandomPos = _float4(0.f, 0.f, 0.f, 0.f);
+        pParticles[i].vNextRandomPos = _float4(0.f, 0.f, 0.f, 0.f);
         pParticles[i].iTailInitIndex = i * m_iNumTailInstance;
     }
 
@@ -305,7 +315,7 @@ HRESULT CTrail_MultiPoint_Instance::Init_TailParticle(TAIL_PARTICLE* pParticles)
         pParticles[i].Particle.vTranslation = _float4(0.f, 0.f, 0.f, 1.f);
         pParticles[i].Particle.vLifeTime = _float2(m_pGameInstance->Get_Random(m_vTail_LifeTime.x, m_vTail_LifeTime.y), 0.0f);
         pParticles[i].Particle.vLifeTime.y = pParticles[i].Particle.vLifeTime.x;
-        pParticles[i].Particle.vColor = _float4(m_pGameInstance->Get_Random(m_vMinColor.x, m_vMaxColor.x),
+        pParticles[i].Particle.vColor = _float4(m_pGameInstance->Get_Random(m_vTail_MinColor.x, m_vTail_MaxColor.x),
             m_pGameInstance->Get_Random(m_vTail_MinColor.y, m_vTail_MaxColor.y),
             m_pGameInstance->Get_Random(m_vTail_MinColor.z, m_vTail_MaxColor.z),
             m_pGameInstance->Get_Random(m_vTail_MinColor.w, m_vTail_MaxColor.w));
