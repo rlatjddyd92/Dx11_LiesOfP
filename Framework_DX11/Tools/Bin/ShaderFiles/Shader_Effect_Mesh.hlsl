@@ -69,6 +69,20 @@ PS_OUT PS_MAIN(PS_IN In)
 	return Out;
 }
 
+PS_EFFECT_OUT PS_TEST_MAIN(PS_IN In)
+{
+    PS_EFFECT_OUT Out = (PS_EFFECT_OUT) 0;
+	
+    float2 vTexcoord = In.vTexcoord * g_vTileRepeat + g_vTileMove;
+    float fDistortion = g_MaskTexture_1.Sample(LinearSampler, vTexcoord).x * 0.3f;
+	
+    Out.vDiffuse = g_DiffuseTexture.Sample(LinearSampler, In.vTexcoord + float2(fDistortion, fDistortion));
+    Out.vDistortion = 0;
+    Out.vBlur = g_DiffuseTexture.Sample(LinearSampler, In.vTexcoord);
+	
+    return Out;
+}
+
 technique11	DefaultTechnique
 {
 	pass Default //0
@@ -82,4 +96,14 @@ technique11	DefaultTechnique
         PixelShader = compile ps_5_0 PS_MAIN();
     }
 
+    pass Test //1
+    {
+        SetRasterizerState(RS_Default);
+        SetDepthStencilState(DSS_Default, 0);
+        SetBlendState(BS_Default, vector(0.f, 0.f, 0.f, 0.f), 0xffffffff);
+
+        VertexShader = compile vs_5_0 VS_MAIN();
+        GeometryShader = NULL;
+        PixelShader = compile ps_5_0 PS_TEST_MAIN();
+    }
 }

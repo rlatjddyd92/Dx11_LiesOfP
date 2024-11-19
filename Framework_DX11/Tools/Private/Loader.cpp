@@ -381,6 +381,12 @@ HRESULT CLoader::Ready_Resources_For_ToolLevel()
 		return E_FAIL;
 	CController_EffectTool::Get_Instance()->Add_Texture_ProtytypeTag(TEXT("Prototype_Component_Texture_T_SubUV_DebStone_03_8x8_SN_KMH"));
 
+	/* For. Prototype_Component_Texture_T_Tile_Noise_39_C_RSW */
+	if (FAILED(m_pGameInstance->Add_Prototype(LEVEL_TOOL, TEXT("Prototype_Component_Texture_T_Tile_Noise_39_C_RSW"),
+		CTexture::Create(m_pDevice, m_pContext, TEXT("../Bin/Resources/Textures/Effect/T_Tile_Noise_39_C_RSW.dds"), 1))))
+		return E_FAIL;
+	CController_EffectTool::Get_Instance()->Add_Texture_ProtytypeTag(TEXT("Prototype_Component_Texture_T_Tile_Noise_39_C_RSW"));
+
 #pragma endregion
 #pragma endregion
 

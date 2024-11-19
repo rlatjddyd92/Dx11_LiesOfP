@@ -52,6 +52,7 @@ private:
 	ID3D11DepthStencilView*		m_pLightDepthStencilView = { nullptr };
 	class CGameInstance*		m_pGameInstance = { nullptr };
 
+	_float2						m_vWinSize = { 1280.f, 720.f };
 	
 	list<class CGameObject*>	m_RenderObjects[RG_END];
 	list<CGameObject*>			m_InstanceRenderObjects[RG_END];
@@ -115,8 +116,6 @@ private:
 
 	HRESULT Render_Deferred();
 
-	HRESULT Render_Effect();
-
 	HRESULT Render_SSAO();
 	HRESULT Render_HDR();
 	HRESULT Render_Bloom_Compute();
@@ -124,6 +123,7 @@ private:
 	HRESULT Render_DOF();
 	HRESULT Render_Radial();
 
+	HRESULT Render_Effect();
 	HRESULT Render_Distortion();
 
 	HRESULT Render_Final();
@@ -143,8 +143,12 @@ private:
 	HRESULT Ready_HDR();
 	HRESULT Ready_Bloom();
 	HRESULT Ready_DOF();
+	HRESULT Ready_Effect();
 
 	HRESULT Ready_Desc();
+
+
+	HRESULT Ready_Shader();
 
 #ifdef _DEBUG
 private:

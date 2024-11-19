@@ -186,7 +186,7 @@ PS_OUT_LIGHT PS_MAIN_LIGHT_DIRECTIONAL(PS_IN In)
     
     if ((0.f == fAmbietnOcc && 0.f == fRoughness && 0.f == fMetallic))
     {
-        Out.vSpecular = float4(1.f, 0.f, 0.f, 0.f);
+        Out.vSpecular = float4(0.f, 0.f, 0.f, 0.f);
     }
     else
     {
@@ -272,12 +272,12 @@ PS_OUT PS_MAIN_DEFERRED(PS_IN In)
     
     vector vDiffuse = g_DiffuseTexture.Sample(LinearSampler, In.vTexcoord);
     
-    if (vDiffuse.a == 0.f)
-    {
-        vector vPriority = g_PriorityTexture.Sample(LinearSampler, In.vTexcoord);
-        Out.vColor = vPriority;
-        return Out;
-    }
+    //if (vDiffuse.a == 0.f)
+    //{
+    //    vector vPriority = g_PriorityTexture.Sample(LinearSampler, In.vTexcoord);
+    //    Out.vColor = vPriority;
+    //    return Out;
+    //}
 
 
     vector vDecal = g_DecalDiffuseTexture.Sample(LinearSampler, In.vTexcoord);

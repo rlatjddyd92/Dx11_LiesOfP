@@ -210,7 +210,7 @@ void	 CAnimation::Find_ChannelWide()
 		if (m_Channels[i]->Get_KeyFrames().size() > iSize)
 		{
 			iChannelIndex = i;
-			iSize = m_Channels[i]->Get_KeyFrames().size();
+			iSize = (_int)m_Channels[i]->Get_KeyFrames().size();
 		}
 	}
 	m_iWideChannelIndex = iChannelIndex;

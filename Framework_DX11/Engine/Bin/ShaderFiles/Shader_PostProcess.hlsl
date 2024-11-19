@@ -9,6 +9,9 @@ float g_fFar;
 texture2D g_BackTexture;
 texture2D g_DepthTexture;
 
+/* Bloom */
+texture2D g_BloomTexture;
+
 /* DOF */
 texture2D g_DofBlurTexture;
 float g_fFocus; // √ ¡°
@@ -23,8 +26,8 @@ float g_RadialPower;
 
 /* Effect */
 texture2D g_EffectTexture;
-texture2D g_DistortionTexture;
-texture2D g_BlurTexture;
+texture2D g_EffectNonDownTexture;
+texture2D g_EffectDownTexture;
 
 
 struct VS_IN
@@ -177,24 +180,36 @@ PS_OUT PS_MAIN_EFFECT(PS_IN In)
 {
     PS_OUT Out = (PS_OUT) 0;
     
-    float fDistortion = g_DistortionTexture.Sample(LinearClampSampler, In.vTexcoord).x;
-    float4 vColor = g_EffectTexture.Sample(LinearSampler, In.vTexcoord + float2(fDistortion, fDistortion));
-   
-    float4 vEffect = g_EffectTexture.Sample(LinearSampler, In.vTexcoord);
+    vector vEffect = g_EffectTexture.Sample(LinearSampler, In.vTexcoord);
+    vector vNonDownEffect = g_EffectNonDownTexture.Sample(LinearSampler, In.vTexcoord);;
+    vector vDownEffect = g_EffectDownTexture.Sample(LinearSampler, In.vTexcoord);
     
+    vector vBack = g_BackTexture.Sample(LinearSampler, In.vTexcoord);
     
     //≥Ì∫Ì∑ªµÂ?
     //vColor = float4(vEffect.rgb + vColor.rgb, 1.f);
     
-    //∫Ì∑ªµÂ?
-    //vColor = float4(vEffect.rgb * vEffect.a + vColor.rgb * (1.f - vEffect.a), 1.f);
-    
-    Out.vColor = vColor;
+    //Out.vColor = float4(vEffect.rgb * vEffect.a + vColor.rgb * (1.f - vEffect.a), 1.f);
+    Out.vColor = vBack + vEffect + vNonDownEffect + vDownEffect;
     
     return Out;
-
 }
 
+PS_OUT PS_MAIN_BLOOM(PS_IN In)
+{
+    PS_OUT Out = (PS_OUT) 0;
+    
+    vector vBloom = g_BloomTexture.Sample(LinearSampler, In.vTexcoord);
+    vector vBack = g_BackTexture.Sample(LinearSampler, In.vTexcoord);
+    
+    //≥Ì∫Ì∑ªµÂ?
+    //vColor = float4(vEffect.rgb + vColor.rgb, 1.f);
+    
+    //Out.vColor = float4(vEffect.rgb * vEffect.a + vColor.rgb * (1.f - vEffect.a), 1.f);
+    Out.vColor = vBack + vBloom;
+    
+    return Out;
+}
 
 technique11	DefaultTechnique
 {	
@@ -243,6 +258,18 @@ technique11	DefaultTechnique
 
         VertexShader = compile vs_5_0 VS_MAIN();
         GeometryShader = NULL;
-        PixelShader = compile ps_5_0 PS_MAIN_RADIALBLUR();
+        PixelShader = compile ps_5_0 PS_MAIN_EFFECT();
+    }
+
+    // 4
+    pass Bloom
+    {
+        SetRasterizerState(RS_Default);
+        SetDepthStencilState(DSS_None, 0);
+        SetBlendState(BS_Default, vector(0.f, 0.f, 0.f, 0.f), 0xffffffff);
+
+        VertexShader = compile vs_5_0 VS_MAIN();
+        GeometryShader = NULL;
+        PixelShader = compile ps_5_0 PS_MAIN_BLOOM();
     }
 }
