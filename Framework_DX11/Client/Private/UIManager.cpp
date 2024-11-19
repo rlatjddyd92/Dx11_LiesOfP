@@ -274,11 +274,11 @@ void CUIManager::UIControl_Test(_float fTimeDelta)
 
 	if (m_vecTestPageOpen[_int(TEST_PAGE_NAME::NAME_PLAYER_STAT)])
 	{
-		_float3 fHP = { GET_GAMEINTERFACE->Get_StatInfo_Normal(STAT_NORMAL::STAT_GAUGE_HP).fStat_Now , GET_GAMEINTERFACE->Get_StatInfo_Normal(STAT_NORMAL::STAT_GAUGE_HP).fStat_Max, GET_GAMEINTERFACE->Get_StatInfo_Normal(STAT_NORMAL::STAT_GAUGE_HP).fStat_Max_Limit };
-		_float3 fST = { GET_GAMEINTERFACE->Get_StatInfo_Normal(STAT_NORMAL::STAT_GAUGE_STAMINA).fStat_Now , GET_GAMEINTERFACE->Get_StatInfo_Normal(STAT_NORMAL::STAT_GAUGE_STAMINA).fStat_Max, GET_GAMEINTERFACE->Get_StatInfo_Normal(STAT_NORMAL::STAT_GAUGE_STAMINA).fStat_Max_Limit };
-		_float3 fRE = { GET_GAMEINTERFACE->Get_StatInfo_Normal(STAT_NORMAL::STAT_GAUGE_REGION).fStat_Now , GET_GAMEINTERFACE->Get_StatInfo_Normal(STAT_NORMAL::STAT_GAUGE_REGION).fStat_Max, GET_GAMEINTERFACE->Get_StatInfo_Normal(STAT_NORMAL::STAT_GAUGE_REGION).fStat_Max_Limit };
-		_float3 fWE = { GET_GAMEINTERFACE->Get_StatInfo_Normal(STAT_NORMAL::STAT_GAUGE_WEIGHT).fStat_Now , GET_GAMEINTERFACE->Get_StatInfo_Normal(STAT_NORMAL::STAT_GAUGE_WEIGHT).fStat_Max, GET_GAMEINTERFACE->Get_StatInfo_Normal(STAT_NORMAL::STAT_GAUGE_WEIGHT).fStat_Max_Limit };
-		_float3 fGA = { GET_GAMEINTERFACE->Get_StatInfo_Normal(STAT_NORMAL::STAT_GADRIGAIN).fStat_Now , GET_GAMEINTERFACE->Get_StatInfo_Normal(STAT_NORMAL::STAT_GADRIGAIN).fStat_Max, GET_GAMEINTERFACE->Get_StatInfo_Normal(STAT_NORMAL::STAT_GADRIGAIN).fStat_Max_Limit };
+		_Vec3 fHP = { GET_GAMEINTERFACE->Get_StatInfo_Normal(STAT_NORMAL::STAT_GAUGE_HP).fStat_Now , GET_GAMEINTERFACE->Get_StatInfo_Normal(STAT_NORMAL::STAT_GAUGE_HP).fStat_Max, GET_GAMEINTERFACE->Get_StatInfo_Normal(STAT_NORMAL::STAT_GAUGE_HP).fStat_Max_Limit };
+		_Vec3 fST = { GET_GAMEINTERFACE->Get_StatInfo_Normal(STAT_NORMAL::STAT_GAUGE_STAMINA).fStat_Now , GET_GAMEINTERFACE->Get_StatInfo_Normal(STAT_NORMAL::STAT_GAUGE_STAMINA).fStat_Max, GET_GAMEINTERFACE->Get_StatInfo_Normal(STAT_NORMAL::STAT_GAUGE_STAMINA).fStat_Max_Limit };
+		_Vec3 fRE = { GET_GAMEINTERFACE->Get_StatInfo_Normal(STAT_NORMAL::STAT_GAUGE_REGION).fStat_Now , GET_GAMEINTERFACE->Get_StatInfo_Normal(STAT_NORMAL::STAT_GAUGE_REGION).fStat_Max, GET_GAMEINTERFACE->Get_StatInfo_Normal(STAT_NORMAL::STAT_GAUGE_REGION).fStat_Max_Limit };
+		_Vec3 fWE = { GET_GAMEINTERFACE->Get_StatInfo_Normal(STAT_NORMAL::STAT_GAUGE_WEIGHT).fStat_Now , GET_GAMEINTERFACE->Get_StatInfo_Normal(STAT_NORMAL::STAT_GAUGE_WEIGHT).fStat_Max, GET_GAMEINTERFACE->Get_StatInfo_Normal(STAT_NORMAL::STAT_GAUGE_WEIGHT).fStat_Max_Limit };
+		_Vec3 fGA = { GET_GAMEINTERFACE->Get_StatInfo_Normal(STAT_NORMAL::STAT_GADRIGAIN).fStat_Now , GET_GAMEINTERFACE->Get_StatInfo_Normal(STAT_NORMAL::STAT_GADRIGAIN).fStat_Max, GET_GAMEINTERFACE->Get_StatInfo_Normal(STAT_NORMAL::STAT_GADRIGAIN).fStat_Max_Limit };
 		_int iHP = (_int)GET_GAMEINTERFACE->Get_NowStat_Normal(STAT_NORMAL::STAT_POINT_BODY);
 		_int iST = (_int)GET_GAMEINTERFACE->Get_NowStat_Normal(STAT_NORMAL::STAT_POINT_STAMINA);
 		_int iWE = (_int)GET_GAMEINTERFACE->Get_NowStat_Normal(STAT_NORMAL::STAT_POINT_WEIGHT);
@@ -287,11 +287,11 @@ void CUIManager::UIControl_Test(_float fTimeDelta)
 		_int iEV = (_int)GET_GAMEINTERFACE->Get_NowStat_Normal(STAT_NORMAL::STAT_POINT_EVOLUTION);
 
 		ShowTestPage(TEST_PAGE_NAME::NAME_PLAYER_STAT,
-			TEXT("HP(현재/제한/최대치)"), TEST_PAGE_VALUE_TYPE::TYPE_FLOAT3, &fHP,
-			TEXT("스태미나(현재/제한/최대치)"), TEST_PAGE_VALUE_TYPE::TYPE_FLOAT3, &fST,
-			TEXT("리전(현재/제한/최대치)"), TEST_PAGE_VALUE_TYPE::TYPE_FLOAT3, &fRE,
-			TEXT("무게(현재/제한/최대치)"), TEST_PAGE_VALUE_TYPE::TYPE_FLOAT3, &fWE,
-			TEXT("가드리게인(현재/제한/최대치)"), TEST_PAGE_VALUE_TYPE::TYPE_FLOAT3, &fGA,
+			TEXT("HP(현재/제한/최대치)"), TEST_PAGE_VALUE_TYPE::TYPE_VEC3, &fHP,
+			TEXT("스태미나(현재/제한/최대치)"), TEST_PAGE_VALUE_TYPE::TYPE_VEC3, &fST,
+			TEXT("리전(현재/제한/최대치)"), TEST_PAGE_VALUE_TYPE::TYPE_VEC3, &fRE,
+			TEXT("무게(현재/제한/최대치)"), TEST_PAGE_VALUE_TYPE::TYPE_VEC3, &fWE,
+			TEXT("가드리게인(현재/제한/최대치)"), TEST_PAGE_VALUE_TYPE::TYPE_VEC3, &fGA,
 			TEXT("신체 스탯"), TEST_PAGE_VALUE_TYPE::TYPE_INT, &iHP,
 			TEXT("지구력 스탯"), TEST_PAGE_VALUE_TYPE::TYPE_INT, &iST,
 			TEXT("무게 스탯"), TEST_PAGE_VALUE_TYPE::TYPE_INT, &iWE,
@@ -311,7 +311,7 @@ void CUIManager::UIControl_Test(_float fTimeDelta)
 		{
 			if ((KEY_TAP(KEY::LBUTTON)) && (!m_vecTestPageMove[i]))
 			{
-				_float2 fPoint = CheckMouse(m_vecTestPage_Pos[i], m_vecTestPage_Size[i]);
+				_Vec2 fPoint = CheckMouse(m_vecTestPage_Pos[i], m_vecTestPage_Size[i]);
 
 				if (fPoint.x != -1)
 				{
@@ -328,7 +328,7 @@ void CUIManager::UIControl_Test(_float fTimeDelta)
 					GetCursorPos(&ptMouse);
 					ScreenToClient(g_hWnd, &ptMouse);
 
-					_float2 fMove = { 0.f,0.f };
+					_Vec2 fMove = { 0.f,0.f };
 
 					fMove.x = ptMouse.x - m_vecTestPage_ClickPos[i].x;
 					fMove.y = ptMouse.y - m_vecTestPage_ClickPos[i].y;
@@ -385,7 +385,8 @@ void CUIManager::UIControl_Common(_float fTimeDelta)
 		if (KEY_TAP(KEY::ESC))
 			SwicthPage(UIPAGE::PAGE_MENU, UIPAGE::PAGE_PLAY);
 		else if ((!m_pUIPage_Play->GetPageAction(PAGEACTION::ACTION_OPENING)) && (!m_pUIPage_Menu->GetPageAction(PAGEACTION::ACTION_OPENING)))
-			OpenPage(UIPAGE::PAGE_PLAY);
+			if ((!m_pUIPage_Play->GetPageAction(PAGEACTION::ACTION_ACTIVE)) && (!m_pUIPage_Menu->GetPageAction(PAGEACTION::ACTION_ACTIVE)))
+				OpenPage(UIPAGE::PAGE_PLAY);
 	}
 }
 
@@ -553,8 +554,8 @@ HRESULT CUIManager::Load_UIDataFile()
 			}
 			m_vecPage[i]->SetUIPageName(strName);
 
-			_float2 fPosition = { 0.f,0.f };
-			ReadFile(hFile, &fPosition, sizeof(_float2), &dwByte, nullptr);
+			_Vec2 fPosition = { 0.f,0.f };
+			ReadFile(hFile, &fPosition, sizeof(_Vec2), &dwByte, nullptr);
 
 			m_vecPage[i]->SetUIPagePosition(fPosition);
 
@@ -655,20 +656,20 @@ HRESULT CUIManager::Load_UIDataFile_Part(HANDLE handle, DWORD* dword, _int iInde
 
 		ReadFile(handle, &pNew->bBarDirecX, sizeof(_int), dword, nullptr);
 		ReadFile(handle, &pNew->bCenter, sizeof(_bool), dword, nullptr);
-		ReadFile(handle, &pNew->fAdjust, sizeof(_float2), dword, nullptr);
-		ReadFile(handle, &pNew->fAdjust_End, sizeof(_float2), dword, nullptr);
-		ReadFile(handle, &pNew->fAdjust_Start, sizeof(_float2), dword, nullptr);
-		ReadFile(handle, &pNew->fDirec, sizeof(_float2), dword, nullptr);
-		ReadFile(handle, &pNew->fPosition, sizeof(_float2), dword, nullptr);
+		ReadFile(handle, &pNew->fAdjust, sizeof(_Vec2), dword, nullptr);
+		ReadFile(handle, &pNew->fAdjust_End, sizeof(_Vec2), dword, nullptr);
+		ReadFile(handle, &pNew->fAdjust_Start, sizeof(_Vec2), dword, nullptr);
+		ReadFile(handle, &pNew->fDirec, sizeof(_Vec2), dword, nullptr);
+		ReadFile(handle, &pNew->fPosition, sizeof(_Vec2), dword, nullptr);
 		ReadFile(handle, &pNew->fRatio, sizeof(_float), dword, nullptr);
-		ReadFile(handle, &pNew->fSize, sizeof(_float2), dword, nullptr);
-		ReadFile(handle, &pNew->fTextColor, sizeof(_float4), dword, nullptr);
+		ReadFile(handle, &pNew->fSize, sizeof(_Vec2), dword, nullptr);
+		ReadFile(handle, &pNew->fTextColor, sizeof(_Vec4), dword, nullptr);
 		ReadFile(handle, &pNew->iFontIndex, sizeof(_int), dword, nullptr);
 		ReadFile(handle, &pNew->iGroupIndex, sizeof(_int), dword, nullptr);
 		ReadFile(handle, &pNew->iMoveType, sizeof(_int), dword, nullptr);
 		ReadFile(handle, &pNew->iParentPart_Index, sizeof(_int), dword, nullptr);
 		ReadFile(handle, &pNew->iTexture_Index, sizeof(_int), dword, nullptr);
-		ReadFile(handle, &pNew->fTextureColor, sizeof(_float4), dword, nullptr);
+		ReadFile(handle, &pNew->fTextureColor, sizeof(_Vec4), dword, nullptr);
 		ReadFile(handle, &pNew->bIsItem, sizeof(_bool), dword, nullptr);
 		ReadFile(handle, &pNew->bTurn, sizeof(_bool), dword, nullptr);
 		ReadFile(handle, &pNew->fTurn_Degree, sizeof(_float), dword, nullptr);
@@ -736,10 +737,10 @@ void CUIManager::InputTestPageInfo(vector<_wstring>* pName, vector<_wstring>* pV
 		_wstring strValue = to_wstring(iValue);
 		pValue->push_back(strValue);
 	}
-	else if (eTypeA == TEST_PAGE_VALUE_TYPE::TYPE_FLOAT2)
+	else if (eTypeA == TEST_PAGE_VALUE_TYPE::TYPE_VEC2)
 	{
-		_float2 fValue = { 0.f , 0.f };
-		memcpy(&fValue, ValueA, sizeof(_float2));
+		_Vec2 fValue = { 0.f , 0.f };
+		memcpy(&fValue, ValueA, sizeof(_Vec2));
 		_wstring strTemp = to_wstring(fValue.x);
 		_wstring strValue = strTemp;
 		strValue += TEXT(" | ");
@@ -747,10 +748,10 @@ void CUIManager::InputTestPageInfo(vector<_wstring>* pName, vector<_wstring>* pV
 		strValue += strTemp;
 		pValue->push_back(strValue);
 	}
-	else if (eTypeA == TEST_PAGE_VALUE_TYPE::TYPE_FLOAT3)
+	else if (eTypeA == TEST_PAGE_VALUE_TYPE::TYPE_VEC3)
 	{
-		_float3 fValue = { 0.f , 0.f , 0.f };
-		memcpy(&fValue, ValueA, sizeof(_float3));
+		_Vec3 fValue = { 0.f , 0.f , 0.f };
+		memcpy(&fValue, ValueA, sizeof(_Vec3));
 		_wstring strTemp = to_wstring(fValue.x);
 		_wstring strValue = strTemp;
 		strValue += TEXT(" | ");
@@ -761,10 +762,10 @@ void CUIManager::InputTestPageInfo(vector<_wstring>* pName, vector<_wstring>* pV
 		strValue += strTemp;
 		pValue->push_back(strValue);
 	}
-	else if (eTypeA == TEST_PAGE_VALUE_TYPE::TYPE_FLOAT4)
+	else if (eTypeA == TEST_PAGE_VALUE_TYPE::TYPE_VEC4)
 	{
-		_float4 fValue = { 0.f , 0.f, 0.f, 0.f };
-		memcpy(&fValue, ValueA, sizeof(_float4));
+		_Vec4 fValue = { 0.f , 0.f, 0.f, 0.f };
+		memcpy(&fValue, ValueA, sizeof(_Vec4));
 		_wstring strTemp = to_wstring(fValue.x);
 		_wstring strValue = strTemp;
 		strValue += TEXT(" | ");
@@ -803,7 +804,7 @@ void CUIManager::ClosePage(UIPAGE ePage)
 	m_vecPage[_int(ePage)]->CloseAction();
 }
 
-_float2 CUIManager::CheckMouse(_float2 fPos, _float2 fSize)
+_Vec2 CUIManager::CheckMouse(_Vec2 fPos, _Vec2 fSize)
 {
 	POINT			ptMouse{};
 	GetCursorPos(&ptMouse);

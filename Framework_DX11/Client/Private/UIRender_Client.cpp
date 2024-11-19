@@ -178,8 +178,8 @@ HRESULT CUIRender_Client::Render_TestFont(_bool bIsKorean)
 
 void CUIRender_Client::Input_TestPageInfo(
 	TEST_PAGE_NAME eName,
-	_float2 fPosition,
-	_float2 fSize,
+	_Vec2 fPosition,
+	_Vec2 fSize,
 	vector<_wstring>& vecName,
 	vector<_wstring>& vecValue)
 {

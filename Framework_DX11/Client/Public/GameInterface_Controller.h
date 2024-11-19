@@ -49,7 +49,7 @@ public: // 외부에서 매니저 접근
 	void OpenMainPage() { m_pUIManager->OpenMainPage(); }
 	void OpenLoadingPage() { m_pUIManager->OpenLoadingPage(); }
 
-	_float2 CheckMouse(_float2 fPos, _float2 fSize) { return m_pUIManager->CheckMouse(fPos, fSize); }
+	_Vec2 CheckMouse(_Vec2 fPos, _Vec2 fSize) { return m_pUIManager->CheckMouse(fPos, fSize); }
 
 	void SetIngame(_bool bTrue) { m_pUIManager->SetIngame(bTrue); }
 

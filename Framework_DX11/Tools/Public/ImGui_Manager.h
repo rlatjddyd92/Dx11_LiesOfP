@@ -59,6 +59,9 @@ private:
 
 	HRESULT Ready_Controllers();
 
+	//Å×½ºÆ® 
+	_float m_fTest = 0.f;
+
 public:
 	virtual void Free() override;
 };

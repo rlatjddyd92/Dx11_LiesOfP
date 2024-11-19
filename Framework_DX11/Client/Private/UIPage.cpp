@@ -116,6 +116,7 @@ void CUIPage::CloseAction()
 	m_vecPageAction[_int(PAGEACTION::ACTION_OPENING)] = false;
 	m_vecPageAction[_int(PAGEACTION::ACTION_INACTIVE)] = false;
 	m_vecPageAction[_int(PAGEACTION::ACTION_ACTIVE)] = false;
+	m_bRender = false;
 }
 
 HRESULT CUIPage::Ready_UIPart_Group_Control()
@@ -134,10 +135,10 @@ void CUIPage::Release_Control(UG_CTRL* pCtrl)
 	Safe_Delete(pCtrl);
 }
 
-_float2 CUIPage::Check_Mouse_By_Part(UPART& Part)
+_Vec2 CUIPage::Check_Mouse_By_Part(UPART& Part)
 {
-	_float2 fPos = Part.fPosition;
-	_float2 fSize = Part.fSize;
+	_Vec2 fPos = Part.fPosition;
+	_Vec2 fSize = Part.fSize;
 	return GET_GAMEINTERFACE->CheckMouse(fPos, fSize);
 }
 

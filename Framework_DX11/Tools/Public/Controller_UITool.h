@@ -180,6 +180,10 @@ public: // 개발 편의 기능
 		_wstring DataNameD = TEXT("none"), _float* DataD = nullptr); // 설정된 내용에 따라 커서 옆에 정보 노출
 
 
+	//imgui 콘솔 
+	void Show_console();
+
+
 private:
 	void UIPage_Edit();
 	void UIPart_Edit();
@@ -231,8 +235,7 @@ private:
 
 	_float2 m_InputPageCenter = { 0.f,0.f };
 
-
-
+	list<string> logs;
 
 	_char m_InputText[100] = "";
 	_char m_InputPartName[100] = "";

@@ -53,7 +53,7 @@ public:
 	void Update_UIManager(_float fTimeDelta);
 	void Update_UIControl(_float fTimeDelta);
 
-	_float2 CheckMouse(_float2 fPos, _float2 fSize);
+	_Vec2 CheckMouse(_Vec2 fPos, _Vec2 fSize);
 
 	void SetIngame(_bool bTrue) { m_bIsIngame = bTrue; } // 매니저에 게임 입장 / 나가기 상태 알림
 
@@ -182,9 +182,9 @@ private:
 	// GameInterface 싱글톤으로 아무나 접근 및 수정이 가능함 
 	// 정식 데이터는 이렇게 접근/수정 불가능하도록 만들 예정
 
-	vector<_float2> m_vecTestPage_Pos;
-	vector<_float2> m_vecTestPage_Size;
-	vector<_float2> m_vecTestPage_ClickPos;
+	vector<_Vec2> m_vecTestPage_Pos;
+	vector<_Vec2> m_vecTestPage_Size;
+	vector<_Vec2> m_vecTestPage_ClickPos;
 
 	vector<_bool> m_vecTestPageOpen;
 	vector<_bool> m_vecTestPageMove;

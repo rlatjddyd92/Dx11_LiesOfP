@@ -7,7 +7,11 @@
 #include "Controller_AnimationTool.h"
 #include "Controller_PostProcess.h"
 
+#include <iostream>
+using namespace std;
+
 IMPLEMENT_SINGLETON(CImGui_Manager)
+
 
 
 CImGui_Manager::CImGui_Manager()
@@ -101,6 +105,8 @@ void CImGui_Manager::Update_ImGui()
 	ImGui::EndTabBar();
 
 	ImGui::End();
+
+	
 }
 
 void CImGui_Manager::Tool_Map()

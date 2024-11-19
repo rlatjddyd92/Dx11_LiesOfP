@@ -60,10 +60,6 @@ void CUIPage_Menu::Update(_float fTimeDelta)
 void CUIPage_Menu::Late_Update(_float fTimeDelta)
 {
 
-	Focus_Update(fTimeDelta);
-
-	
-
 	for (auto& iter : m_vec_Group_Ctrl)
 		__super::UpdatePart_ByControl(iter);
 
@@ -105,8 +101,8 @@ CHECK_MOUSE CUIPage_Menu::Check_Page_Action(_float fTimeDelta)
 	__super::Check_Page_Action(fTimeDelta);
 
 	Focus_Update(fTimeDelta);
-	if (m_eFocus_Group != PART_GROUP::GROUP_END)
-		Desc_Update(fTimeDelta);
+	Select_Update(fTimeDelta);
+	Desc_Update(fTimeDelta);
 
 	return CHECK_MOUSE::MOUSE_NONE;
 }
@@ -136,10 +132,14 @@ void CUIPage_Menu::Focus_Update(_float fTimeDelta)
 {
 	for (_int i = _int(PART_GROUP::GROUP_MENU_EQUIP); i <= _int(PART_GROUP::GROUP_BAG_CELL_3); ++i)
 	{
-		_float2 fMouse = __super::Check_Mouse_By_Part(*__super::Get_Front_Part_In_Control(i));
+		_Vec2 fMouse = __super::Check_Mouse_By_Part(*__super::Get_Front_Part_In_Control(i));
 		if (fMouse.x != -1.f)
 		{
 			m_eFocus_Group = PART_GROUP(i);
+			m_vec_Group_Ctrl[_int(PART_GROUP::GROUP_SELECT_MARK)]->bRender = true;
+
+			// 여기에 마우스 액션 넣기
+
 			break;
 		}
 	}
@@ -151,8 +151,9 @@ void CUIPage_Menu::Select_Update(_float fTimeDelta)
 	{
 		UPART* pSelect = __super::Get_Front_Part_In_Control((_int)PART_GROUP::GROUP_SELECT_MARK);
 		UPART* pGroup = __super::Get_Front_Part_In_Control((_int)m_eFocus_Group);
-
-		pSelect->iParentPart_Index = (_int)m_eFocus_Group;
+		_int iParent = __super::Get_Front_PartIndex_In_Control((_int)m_eFocus_Group);
+		
+		pSelect->iParentPart_Index = iParent;
 		pSelect->fSize = pGroup->fSize;
 	}
 
@@ -164,10 +165,15 @@ void CUIPage_Menu::Desc_Update(_float fTimeDelta)
 	__super::Array_Control(_int(PART_GROUP::GROUP_DESC_BACK), _int(PART_GROUP::GROUP_DESC_MOUSE), CTRL_COMMAND::COM_RENDER, false);
 	__super::Array_Control(_int(PART_GROUP::GROUP_ITEM_DESC_MOUSE_0), _int(PART_GROUP::GROUP_ITEM_DESC_FUNC_1), CTRL_COMMAND::COM_RENDER, false);
 
+	if (m_eFocus_Group == PART_GROUP::GROUP_END)
+		return;
+
+
+
 	if ((m_eFocus_Group >= PART_GROUP::GROUP_MENU_EQUIP) && (m_eFocus_Group <= PART_GROUP::GROUP_MENU_OPTION))
 	{
 		__super::Array_Control(_int(PART_GROUP::GROUP_DESC_BACK), _int(PART_GROUP::GROUP_DESC_MOUSE), CTRL_COMMAND::COM_RENDER, true);
-		_float2 fMouse = __super::Check_Mouse_By_Part(*__super::Get_Front_Part_In_Control(_int(PART_GROUP::GROUP_DESC_MOUSE)));
+		_Vec2 fMouse = __super::Check_Mouse_By_Part(*__super::Get_Front_Part_In_Control(_int(PART_GROUP::GROUP_DESC_MOUSE)));
 		if (fMouse.x != -1.f)
 			m_vec_Group_Ctrl[_int(PART_GROUP::GROUP_DESC_FX)]->bRender = true;
 		else
@@ -179,11 +185,11 @@ void CUIPage_Menu::Desc_Update(_float fTimeDelta)
 
 		for (_int i = _int(PART_GROUP::GROUP_ITEM_DESC_MOUSE_0); i <= _int(PART_GROUP::GROUP_ITEM_DESC_MOUSE_1); ++i)
 		{
-			_float2 fMouse = __super::Check_Mouse_By_Part(*__super::Get_Front_Part_In_Control(i));
+			_Vec2 fMouse = __super::Check_Mouse_By_Part(*__super::Get_Front_Part_In_Control(i));
 			if (fMouse.x != -1.f)
-				m_vec_Group_Ctrl[_int(PART_GROUP::GROUP_ITEM_DESC_MOUSE_0) + i]->bRender = true;
+				m_vec_Group_Ctrl[i]->bRender = true;
 			else
-				m_vec_Group_Ctrl[_int(PART_GROUP::GROUP_ITEM_DESC_MOUSE_0) + i]->bRender = false;
+				m_vec_Group_Ctrl[i]->bRender = false;
 		}
 	}
 

@@ -52,31 +52,19 @@ HRESULT CUIPage_Ortho::Initialize(void* pArg)
 
 void CUIPage_Ortho::Priority_Update(_float fTimeDelta)
 {
-	// 임시 코드 
-	// 직교 UI가 아직 안전하지 않음 
-	// 비활성화 상태로 git에 올려 두기 
-	//return;
-
+	
 	__super::Priority_Update(fTimeDelta);
 }
 
 void CUIPage_Ortho::Update(_float fTimeDelta)
 {
-	// 임시 코드 
-	// 직교 UI가 아직 안전하지 않음 
-	// 비활성화 상태로 git에 올려 두기 
-	//return;
-
+	
 	__super::Update(fTimeDelta);
 }
 
 void CUIPage_Ortho::Late_Update(_float fTimeDelta)
 {
-	// 임시 코드 
-	// 직교 UI가 아직 안전하지 않음 
-	// 비활성화 상태로 git에 올려 두기 
-	//return;
-
+	
 	m_fTimeDelta = fTimeDelta;
 	CheckHost(fTimeDelta);
 	__super::Late_Update(fTimeDelta);
@@ -219,7 +207,7 @@ void CUIPage_Ortho::Make_Monster_HP_Bar(CGameObject* pHost, _float fTimeDelta, _
 	_float fRatio = GET_GAMEINTERFACE->GetTestData()->fHP_Now / GET_GAMEINTERFACE->GetTestData()->fHP_Max;
 	_float fDamege = GET_GAMEINTERFACE->GetTestData()->fHP_Damege;
 
-	_float2 fPosition = { 0.f,0.f };
+	_Vec2 fPosition = { 0.f,0.f };
 	if (!Make_OrthoGraphy_Position(pHost, PART_GROUP::GROUP_HP_FRAME, &fPosition))
 		return;
 
@@ -243,7 +231,7 @@ void CUIPage_Ortho::Make_Monster_Focusing(CGameObject* pHost, _float fTimeDelta,
 	if (!GET_GAMEINTERFACE->GetTestData()->bFocus)
 		return;
 
-	_float2 fPosition = { 0.f,0.f };
+	_Vec2 fPosition = { 0.f,0.f };
 	if (!Make_OrthoGraphy_Position(pHost, PART_GROUP::GROUP_FOCUS, &fPosition))
 		return;
 
@@ -261,7 +249,7 @@ void CUIPage_Ortho::Make_Monster_SpecialHit(CGameObject* pHost, _float fTimeDelt
 	if (!GET_GAMEINTERFACE->GetTestData()->bSpecial_Attack)
 		return;
 
-	_float2 fPosition = { 0.f,0.f };
+	_Vec2 fPosition = { 0.f,0.f };
 	if (!Make_OrthoGraphy_Position(pHost, PART_GROUP::GROUP_SPECIAL_HIT, &fPosition))
 		return;
 
@@ -272,19 +260,19 @@ void CUIPage_Ortho::Make_Monster_SpecialHit(CGameObject* pHost, _float fTimeDelt
 }
 
 
-_bool CUIPage_Ortho::Make_OrthoGraphy_Position(CGameObject* pHost, PART_GROUP eGroup, _float2* fPosition)
+_bool CUIPage_Ortho::Make_OrthoGraphy_Position(CGameObject* pHost, PART_GROUP eGroup, _Vec2* fPosition)
 {
-	const _matrix mMat = pHost->Get_Transform()->Get_WorldMatrix();
-	const _matrix mProj = m_pGameInstance->Get_Transform(CPipeLine::D3DTS_PROJ);
-	const _matrix mView = m_pGameInstance->Get_Transform(CPipeLine::D3DTS_VIEW);
-	const _vector vSize = pHost->Get_Transform()->Get_Scaled();
+	const _Matrix mMat = pHost->Get_Transform()->Get_WorldMatrix();
+	const _Matrix mProj = m_pGameInstance->Get_Transform(CPipeLine::D3DTS_PROJ);
+	const _Matrix mView = m_pGameInstance->Get_Transform(CPipeLine::D3DTS_VIEW);
+	const _Vec4 vSize = pHost->Get_Transform()->Get_Scaled();
 
-	_float3 fAdj = m_vecOrtho_Adjust[_int(eGroup)];
-	fAdj.x *= vSize.m128_f32[0];
-	fAdj.y *= vSize.m128_f32[1];
-	fAdj.z *= vSize.m128_f32[2];
+	_Vec3 fAdj = m_vecOrtho_Adjust[_int(eGroup)];
+	fAdj.x *= vSize.x;
+	fAdj.y *= vSize.y;
+	fAdj.z *= vSize.z;
 
-	_vector vResult = { fAdj.x, fAdj.y, fAdj.z, 0.f };
+	_Vec4 vResult = { fAdj.x, fAdj.y, fAdj.z, 0.f };
 
 	// 투영 좌표 계산
 	vResult = XMVector3Transform(vResult, mMat);
@@ -292,7 +280,7 @@ _bool CUIPage_Ortho::Make_OrthoGraphy_Position(CGameObject* pHost, PART_GROUP eG
 	vResult = XMVector3Transform(vResult, mProj);
 
 	// W나누기
-	_float4 fResult{};
+	_Vec4 fResult{};
 	XMStoreFloat4(&fResult, vResult);
 
 	if (fResult.w < 0.f)
@@ -310,8 +298,8 @@ _bool CUIPage_Ortho::Make_OrthoGraphy_Position(CGameObject* pHost, PART_GROUP eG
 
 _float CUIPage_Ortho::Check_Distance_From_Cam(CGameObject* pHost)
 {
-	_vector vDistance = pHost->Get_Transform()->Get_State(CTransform::STATE_POSITION) - m_pGameInstance->Get_CamPosition_Vec4();
-	return sqrt(pow(vDistance.m128_f32[0], 2) + pow(vDistance.m128_f32[1], 2) + pow(vDistance.m128_f32[2], 2));
+	_Vec4 vDistance = pHost->Get_Transform()->Get_State(CTransform::STATE_POSITION) - m_pGameInstance->Get_CamPosition_Vec4();
+	return sqrt(pow(vDistance.x, 2) + pow(vDistance.y, 2) + pow(vDistance.z, 2));
 }
 
 

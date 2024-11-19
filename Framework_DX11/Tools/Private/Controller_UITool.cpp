@@ -8,6 +8,8 @@ IMPLEMENT_SINGLETON(CController_UITool)
 
 void CController_UITool::UITool_Edit()
 {
+	//Show_console();
+
 	if (ImGui::Button("SaveUIData"))
 	{
 		if (FAILED(SavePage()))
@@ -87,6 +89,32 @@ void CController_UITool::Show_SystemMessage(_wstring Text, _float fTime)
 
 void CController_UITool::Show_MouseInfo(_wstring DataNameA, _float* DataA, _wstring DataNameB, _float* DataB, _wstring DataNameC, _float* DataC, _wstring DataNameD, _float* DataD)
 {
+}
+
+void CController_UITool::Show_console()
+{
+	// ImGui 창 시작
+	ImGui::Begin("Console");
+
+	// 로그 출력
+	ImGui::BeginChild("ScrollingRegion", ImVec2(0, -ImGui::GetFrameHeightWithSpacing()), true);
+	for (const auto& log : logs) {
+		ImGui::TextUnformatted(log.c_str());
+	}
+	ImGui::EndChild();
+
+	// 사용자 입력 처리
+	string strCenter;
+
+	strCenter += to_string(m_InputPageCenter.x);
+	strCenter += " | ";
+	strCenter += to_string(m_InputPageCenter.y);
+	//
+
+
+	logs.push_back(strCenter); // 입력을 로그에 추가
+
+	ImGui::End();
 }
 
 void CController_UITool::UIPage_Edit()
@@ -740,5 +768,7 @@ void CController_UITool::Free()
 	EraseUIData();
 
 	Safe_Release(m_pUIRender);
+
+	logs.clear();
 	
 }
