@@ -1263,7 +1263,7 @@ void CController_MapTool::Nav_Menu()
 	ImGui::Text("Total Cell Count : %d", iCellCount);
 	ImGui::Text("Select Cell Index : %d", iSelectedCellNum);
 	ImGui::SameLine(); ImGui::Text("    "); 	ImGui::SameLine();
-	if (ImGui::Button("Delete Cell"))
+	if (ImGui::Button("Delete Cell") && iSelectedCellNum != -1)
 	{
 		m_pNavigationController->Delete_Selected(iSelectedCellNum);
 		iSelectedCellNum = -1;

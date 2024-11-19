@@ -25,6 +25,11 @@
 
 #pragma region OBJECT
 #include "Stargazer.h"
+#include "Lift_Controller.h"
+#include "Lift_Door.h"
+#include "Lift_Floor.h"
+#include "Stargazer.h"
+#include "Stargazer.h"
 #include "Weapon_Rapier.h"
 #include "Weapon_FlameSword.h"
 #include "Weapon_Scissor.h"
@@ -300,7 +305,7 @@ HRESULT CLoader::Ready_Resources_For_GamePlayLevel()
 
 	/* For. Prototype_Component_Texture_Sky */
 	if (FAILED(m_pGameInstance->Add_Prototype(LEVEL_GAMEPLAY, TEXT("Prototype_Component_Texture_Sky"),
-		CTexture::Create(m_pDevice, m_pContext, TEXT("../Bin/Resources/Textures/SkyBox/Sky_%d.dds"), 4))))
+		CTexture::Create(m_pDevice, m_pContext, TEXT("../Bin/Resources/Textures/SkyBox/Sky_%d.dds"), 6))))
 		return E_FAIL;
 
 
@@ -322,6 +327,9 @@ HRESULT CLoader::Ready_Resources_For_GamePlayLevel()
 		return E_FAIL;
 
 	if (FAILED(Ready_Resources_For_Monster()))
+		return E_FAIL;
+	
+	if (FAILED(Ready_Resources_For_Obj()))
 		return E_FAIL;
 
 
@@ -368,6 +376,7 @@ HRESULT CLoader::Ready_Resources_For_GamePlayLevel_Map1()
 	if (handle == -1)
 		return E_FAIL;
 
+#pragma region Temp
 	char szCurPath3[128] = "../Bin/ModelData/NonAnim/Map/Temp/";    // 상대 경로
 	char szFullPath3[128] = "";
 
@@ -405,7 +414,9 @@ HRESULT CLoader::Ready_Resources_For_GamePlayLevel_Map1()
 		//_findnext : <io.h>에서 제공하며 다음 위치의 파일을 찾는 함수, 더이상 없다면 -1을 리턴
 		iResult = _findnext(handle, &fd);
 	}
+#pragma endregion
 
+#pragma region Structure
 	handle = _findfirst("../Bin/ModelData/NonAnim/Map/Structure/*", &fd);
 
 	if (handle == -1)
@@ -450,7 +461,9 @@ HRESULT CLoader::Ready_Resources_For_GamePlayLevel_Map1()
 		//_findnext : <io.h>에서 제공하며 다음 위치의 파일을 찾는 함수, 더이상 없다면 -1을 리턴
 		iResult = _findnext(handle, &fd);
 	}
+#pragma endregion
 
+#pragma region Interior
 	handle = _findfirst("../Bin/ModelData/NonAnim/Map/Interior/*", &fd);
 
 	if (handle == -1)
@@ -495,7 +508,52 @@ HRESULT CLoader::Ready_Resources_For_GamePlayLevel_Map1()
 		//_findnext : <io.h>에서 제공하며 다음 위치의 파일을 찾는 함수, 더이상 없다면 -1을 리턴
 		iResult = _findnext(handle, &fd);
 	}
+#pragma endregion
 
+#pragma region ETC Cathedral
+	handle = _findfirst("../Bin/ModelData/NonAnim/Map/Etc/Cathedral/*", &fd);
+
+	if (handle == -1)
+		return E_FAIL;
+
+	char szCurPath5[128] = "../Bin/ModelData/NonAnim/Map/Etc/Cathedral/";    // 상대 경로
+	char szFullPath5[128] = "";
+
+	iResult = 0;
+
+	while (iResult != -1)
+	{
+		strcpy_s(szFullPath5, szCurPath5);
+		strcat_s(szFullPath5, fd.name);
+
+		_char szFileName[MAX_PATH] = "";
+		_char szExt[MAX_PATH] = "";
+		_splitpath_s(szFullPath5, nullptr, 0, nullptr, 0, szFileName, MAX_PATH, szExt, MAX_PATH);
+
+		if (!strcmp(fd.name, ".") || !strcmp(fd.name, "..")
+			|| strcmp(szExt, ".dat"))
+		{
+			iResult = _findnext(handle, &fd);
+			continue;
+		}
+
+		string strFileName = szFileName;
+		_wstring strPrototypeName;
+
+		strPrototypeName.assign(strFileName.begin(), strFileName.end());
+		wprintf(strPrototypeName.c_str());
+
+		PreTransformMatrix = XMMatrixIdentity();
+		PreTransformMatrix = XMMatrixScaling(0.005f, 0.005f, 0.005f);
+
+		if (FAILED(m_pGameInstance->Add_Prototype(LEVEL_GAMEPLAY, strPrototypeName,
+			CModel::Create(m_pDevice, m_pContext, CModel::TYPE_NONANIM, szFullPath5, PreTransformMatrix))))
+			return E_FAIL;
+
+		//_findnext : <io.h>에서 제공하며 다음 위치의 파일을 찾는 함수, 더이상 없다면 -1을 리턴
+		iResult = _findnext(handle, &fd);
+	}
+#pragma endregion
 
 	m_isFinished_Map1 = true;
 
@@ -576,11 +634,48 @@ HRESULT CLoader::Ready_Resources_For_Monster()
 		CModel::Create(m_pDevice, m_pContext, CModel::TYPE_ANIM, "../Bin/ModelData/Anim/CreatedBinFiles/CarcassBigA.dat", PreTransformMatrix, true))))
 		return E_FAIL;
 
+
+
+	return S_OK;
+}
+
+HRESULT CLoader::Ready_Resources_For_Obj()
+{
+	_matrix		PreTransformMatrix = XMMatrixIdentity();
+
 	/* For. Prototype_Component_Model_Stargazer*/
 	PreTransformMatrix = XMMatrixScaling(0.01f, 0.01f, 0.01f) * XMMatrixRotationY(XMConvertToRadians(270.0f));
 	if (FAILED(m_pGameInstance->Add_Prototype(LEVEL_GAMEPLAY, TEXT("Prototype_Component_Model_Stargazer"),
 		CModel::Create(m_pDevice, m_pContext, CModel::TYPE_ANIM, "../Bin/ModelData/NonAnim/InteractObj/SK_DLV_Stargazer_01.dat", PreTransformMatrix))))
 		return E_FAIL;
+
+	if (FAILED(m_pGameInstance->Add_Prototype(LEVEL_GAMEPLAY, TEXT("Prototype_Component_Model_Lift_Controller"),
+		CModel::Create(m_pDevice, m_pContext, CModel::TYPE_ANIM, "../Bin/ModelData/NonAnim/InteractObj/SK_FO_Monastery_Lift_01_Controller.dat", PreTransformMatrix))))
+		return E_FAIL;
+
+	if (FAILED(m_pGameInstance->Add_Prototype(LEVEL_GAMEPLAY, TEXT("Prototype_Component_Model_Lift_Door"),
+		CModel::Create(m_pDevice, m_pContext, CModel::TYPE_ANIM, "../Bin/ModelData/NonAnim/InteractObj/SK_NewTown_Lift_01_Door.dat", PreTransformMatrix))))
+		return E_FAIL;
+
+	if (FAILED(m_pGameInstance->Add_Prototype(LEVEL_GAMEPLAY, TEXT("Prototype_Component_Model_Tower_Door"),
+		CModel::Create(m_pDevice, m_pContext, CModel::TYPE_ANIM, "../Bin/ModelData/NonAnim/InteractObj/SK_FO_Monastery_TowerDoor_01.dat", PreTransformMatrix))))
+		return E_FAIL;
+
+	if (FAILED(m_pGameInstance->Add_Prototype(LEVEL_GAMEPLAY, TEXT("Prototype_Component_Model_WallDeco"),
+		CModel::Create(m_pDevice, m_pContext, CModel::TYPE_ANIM, "../Bin/ModelData/NonAnim/InteractObj/SK_FO_Monastery_WallDeco_01_Scupture04.dat", PreTransformMatrix))))
+		return E_FAIL;
+
+	if (FAILED(m_pGameInstance->Add_Prototype(LEVEL_GAMEPLAY, TEXT("Prototype_Component_Model_TreasureBox"),
+		CModel::Create(m_pDevice, m_pContext, CModel::TYPE_ANIM, "../Bin/ModelData/NonAnim/InteractObj/SK_FO_TreasureChest_02_Red.dat", PreTransformMatrix))))
+		return E_FAIL;
+
+	//if (FAILED(m_pGameInstance->Add_Prototype(LEVEL_GAMEPLAY, TEXT("Prototype_Component_Model_Ladder_"),
+	//	CModel::Create(m_pDevice, m_pContext, CModel::TYPE_ANIM, "../Bin/ModelData/NonAnim/InteractObj/SK_LV_Ladder_MetalWood_01_KSJ.dat", PreTransformMatrix))))
+	//	return E_FAIL;
+
+	//if (FAILED(m_pGameInstance->Add_Prototype(LEVEL_GAMEPLAY, TEXT("Prototype_Component_Model_Ladder_"),
+	//	CModel::Create(m_pDevice, m_pContext, CModel::TYPE_ANIM, "../Bin/ModelData/NonAnim/InteractObj/SK_LV_Ladder_MetalWood_Slide6m_SM_KSJ.dat", PreTransformMatrix))))
+	//	return E_FAIL;
 
 	return S_OK;
 }
@@ -646,25 +741,45 @@ HRESULT CLoader::Ready_Prototype()
 		return E_FAIL;
 #pragma endregion
 
+#pragma region Obj
+	/* For. Prototype_GameObject_StaticObj */
+	if (FAILED(m_pGameInstance->Add_Prototype(TEXT("Prototype_GameObject_StaticObj"),
+		CStaticObj::Create(m_pDevice, m_pContext))))
+		return E_FAIL;
+
+
+	/* For. Prototype_GameObject_Stargazer */
+	if (FAILED(m_pGameInstance->Add_Prototype(TEXT("Prototype_GameObject_Stargazer"),
+		CStargazer::Create(m_pDevice, m_pContext))))
+		return E_FAIL;
+	
+	/* For. Prototype_GameObject_Stargazer */
+	if (FAILED(m_pGameInstance->Add_Prototype(TEXT("Prototype_GameObject_Lift_Controller"),
+		CLift_Controller::Create(m_pDevice, m_pContext))))
+		return E_FAIL;
+
+	/* For. Prototype_GameObject_Stargazer */
+	if (FAILED(m_pGameInstance->Add_Prototype(TEXT("Prototype_GameObject_Lift_Door"),
+		CLift_Door::Create(m_pDevice, m_pContext))))
+		return E_FAIL;
+
+	/* For. Prototype_GameObject_Stargazer */
+	if (FAILED(m_pGameInstance->Add_Prototype(TEXT("Prototype_GameObject_Lift_Floor"),
+		CLift_Floor::Create(m_pDevice, m_pContext))))
+		return E_FAIL;
+#pragma endregion
+
 	/* For. Prototype_GameObject_Sky */
 	if (FAILED(m_pGameInstance->Add_Prototype(TEXT("Prototype_GameObject_Sky"),
 		CSky::Create(m_pDevice, m_pContext))))
 		return E_FAIL;
 
-	/* For. Prototype_GameObject_StaticObj */
-	if (FAILED(m_pGameInstance->Add_Prototype(TEXT("Prototype_GameObject_StaticObj"),
-		CStaticObj::Create(m_pDevice, m_pContext))))
-		return E_FAIL;
 
 	/* For. Prototype_GameObject_StaticObj */
 	if (FAILED(m_pGameInstance->Add_Prototype(TEXT("Prototype_GameObject_NavDataObj"),
 		CNavDataObj::Create(m_pDevice, m_pContext))))
 		return E_FAIL;
 
-	/* For. Prototype_GameObject_Stargazer */
-	if (FAILED(m_pGameInstance->Add_Prototype(TEXT("Prototype_GameObject_Stargazer"),
-		CStargazer::Create(m_pDevice, m_pContext))))
-		return E_FAIL;
 
 
 
