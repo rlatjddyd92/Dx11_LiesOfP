@@ -14,7 +14,6 @@ HRESULT CState_CarcassBigA_AttackRoute_1::Initialize(_uint iStateNum, void* pArg
 {
     //m_iAnimation_Idle = m_pMonster->Get_Model()->Get_AnimationIndex("Kurama_Idle_Loop");
     m_iStateNum = iStateNum;
-    m_fIdleDuration = 1.f;
     FSM_INIT_DESC* pDesc = static_cast<FSM_INIT_DESC*>(pArg);
 
     m_pIsEndAnim = pDesc->pIsEndAnim;
@@ -25,37 +24,64 @@ HRESULT CState_CarcassBigA_AttackRoute_1::Initialize(_uint iStateNum, void* pArg
 
 HRESULT CState_CarcassBigA_AttackRoute_1::Start_State(void* pArg)
 {
-    m_pMonster->Change_Animation(AN_ROUTE_FIRST, false, true);
+    m_pMonster->Change_Animation(AN_ROUTE_FIRST, false, 0.2f, 0, true);
 
     m_fIdleTime = m_fIdleDuration;
+    m_iRouteTrack = 0;
+    m_isDelayed = false;
+
     return S_OK;
 }
 
 void CState_CarcassBigA_AttackRoute_1::Update(_float fTimeDelta)
 {
-    if (m_fIdleTime >= m_fIdleDuration)
+
+    if (!m_isDelayed)
     {
-        if (m_iRouteTrack = 1)
+        if (m_iRouteTrack == 1)
         {
-            m_pMonster->Change_Animation(AN_ROUTE_LAST, false, 0.2, 0, true);
+            m_pMonster->Change_Animation(AN_ROUTE_LAST, false, 0.2f, 0, true);
         }
 
         if (End_Check())
         {
-            m_fIdleTime = 0.f;
             ++m_iRouteTrack;
 
             if (m_iRouteTrack >= 2)
             {
                 m_pMonster->Change_State(CCarcassBigA::IDLE);
+                return;
             }
+            m_fIdleTime = 0.f;
+            m_isDelayed = true;
         }
     }
     else
     {
         m_fIdleTime += fTimeDelta;
 
-        m_pMonster->Get_Transform()->LookAt_Lerp_NoHeight(m_pMonster->Get_TargetDir(), 3, fTimeDelta);
+        if (m_fIdleTime >= m_fIdleDuration)
+        {
+            m_isDelayed = false;
+        }
+        _int iDir = m_pMonster->Get_Transform()->LookAt_Lerp_NoHeight(m_pMonster->Get_TargetDir(), 3, fTimeDelta);
+        switch (iDir)
+        {
+        case -1:
+            m_pMonster->Change_Animation(30, true);
+            break;
+
+        case 0:
+            m_pMonster->Change_Animation(20, true);
+            break;
+
+        case 1:
+            m_pMonster->Change_Animation(31, true);
+            break;
+                
+        default:
+            break;
+        }
     }
 
 
@@ -63,7 +89,9 @@ void CState_CarcassBigA_AttackRoute_1::Update(_float fTimeDelta)
 
 void CState_CarcassBigA_AttackRoute_1::End_State()
 {
-    m_iRouteTrack = 0.f;
+
+    m_iRouteTrack = 0;
+    m_fIdleTime = 0.f;
     *m_pResetRootMove = true;
 }
 
@@ -83,7 +111,7 @@ _bool CState_CarcassBigA_AttackRoute_1::End_Check()
     case 1:
         if ((AN_ROUTE_LAST) == iCurAnim)
         {
-            bEndCheck = m_pMonster->Get_EndAnim(AN_ROUTE_FIRST);
+            bEndCheck = m_pMonster->Get_EndAnim(AN_ROUTE_LAST);
         }
         break;
 

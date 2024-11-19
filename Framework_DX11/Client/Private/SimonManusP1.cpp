@@ -8,17 +8,22 @@
 //전부 수정하기
 #include "State_SimonManusP1_Idle.h"
 #include "State_SimonManusP1_Die.h"
-#include "State_SimonManusP1_StingAttack.h"
-#include "State_SimonManusP1_UpperAttack.h"
-//#include "State_SimonManus_UpperAttack.h"
-//#include "State_SimonManus_UpperAttack.h"
-//#include "State_SimonManus_UpperAttack.h"
-
 #include "State_SimonManusP1_Grogy.h"
 #include "State_SimonManusP1_HitFatal.h"
-
 #include "State_SimonManusP1_Walk.h"
-#include "State_SimonManusP1_RUN.h"
+#include "State_SimonManusP1_Run.h"
+
+#include "State_SimonManusP1_StingAttack.h"
+#include "State_SimonManusP1_Stamp.h"
+#include "State_SimonManusP1_AvoidSwing.h"
+#include "State_SimonManusP1_ChasingSwing.h"
+#include "State_SimonManusP1_JumpToSwing.h"
+#include "State_SimonManusP1_HighJumpFall.h"
+#include "State_SimonManusP1_SwingMultiple.h"
+#include "State_SimonManusP1_SwipMultiple_R.h"
+#include "State_SimonManusP1_SwipMultiple_L.h"
+#include "State_SimonManusP1_SwingDown_Swing_R.h"
+#include "State_SimonManusP1_SwingDown_Swing_L.h"
 
 CSimonManusP1::CSimonManusP1(ID3D11Device * pDevice, ID3D11DeviceContext * pContext)
 	: CMonster{ pDevice, pContext }
@@ -69,24 +74,20 @@ void CSimonManusP1::Priority_Update(_float fTimeDelta)
 void CSimonManusP1::Update(_float fTimeDelta)
 {
 
+	m_pFsmCom->Update(fTimeDelta);
+	 
+	m_vCurRootMove = m_pModelCom->Play_Animation(fTimeDelta, nullptr);
 
-	{
-		//애니메이션 재생 및 루트 본 움직임 제어
-		m_vCurRootMove = m_pModelCom->Play_Animation(fTimeDelta, nullptr);
 
-		//진행한 애니메이션 정도를 통해서 상태 제어(애니메이션이 끝나면 넘어가도록)
-		//m_pFSMCom->Update(fTimeDelta);
+	_Vec3 vPos = m_pTransformCom->Get_State(CTransform::STATE_POSITION);
 
-		_Vec3 vPos = m_pTransformCom->Get_State(CTransform::STATE_POSITION);
+	m_vCurRootMove = XMVector3TransformNormal(m_vCurRootMove, m_pTransformCom->Get_WorldMatrix());
 
-		m_vCurRootMove = XMVector3TransformNormal(m_vCurRootMove, m_pTransformCom->Get_WorldMatrix());
+	m_pTransformCom->Set_State(CTransform::STATE_POSITION, vPos + m_vCurRootMove);
 
-		m_pTransformCom->Set_State(CTransform::STATE_POSITION, vPos + m_vCurRootMove);
 
-	}
-
-	for (auto& pColliderObj : m_pColliderObject)
-		pColliderObj->Update(fTimeDelta);
+	//for (auto& pColliderObj : m_pColliderObject)
+	//	pColliderObj->Update(fTimeDelta);
 
 	//for (auto& pCollider : m_pColliderCom)
 	//	pCollider->Update(m_pTransformCom->Get_WorldMatrix_Ptr());
@@ -100,10 +101,10 @@ void CSimonManusP1::Late_Update(_float fTimeDelta)
 
 	for (_uint i = 0; i < TYPE_END; ++i)
 	{
-		if (m_bColliderCtrs[i] != true)
-		{
-			m_pColliderObject[i]->Late_Update(fTimeDelta);
-		}
+		//if (m_bColliderCtrs[i] != true)
+		//{
+		//	m_pColliderObject[i]->Late_Update(fTimeDelta);
+		//}
 	}
 
 }
@@ -150,73 +151,9 @@ HRESULT CSimonManusP1::Ready_Components()
 		return E_FAIL;
 
 	/* FOR.Com_Model */
-	if (FAILED(__super::Add_Component(LEVEL_GAMEPLAY, TEXT("Prototype_Component_Model_CarcassBigA"),
+	if (FAILED(__super::Add_Component(LEVEL_GAMEPLAY, TEXT("Prototype_Component_Model_SimonManusP1"),
 		TEXT("Com_Model"), reinterpret_cast<CComponent**>(&m_pModelCom))))
 		return E_FAIL;
-
-
-	/* For.Com_Collider_AABB */
-	CBounding_AABB::BOUNDING_AABB_DESC			ColliderAABBDesc{};
-	ColliderAABBDesc.vExtents = _float3(0.5f, 1.0f, 0.5f);
-	ColliderAABBDesc.vCenter = _float3(0.f, ColliderAABBDesc.vExtents.y, 0.f);
-
-	if (FAILED(__super::Add_Component(LEVEL_GAMEPLAY, TEXT("Prototype_Component_Collider_AABB"),
-		TEXT("Com_Collider_AABB"), reinterpret_cast<CComponent**>(&m_pColliderCom[CCollider::TYPE_AABB]), &ColliderAABBDesc)))
-		return E_FAIL;
-
-	/* FOR.Com_Collider_OBB */
-	CBounding_OBB::BOUNDING_OBB_DESC			ColliderOBBDesc{};
-	ColliderOBBDesc.vExtents = _float3(0.7f, 0.7f, 0.7f);
-	ColliderOBBDesc.vCenter = _float3(0.f, ColliderOBBDesc.vExtents.y, 0.f);
-	ColliderOBBDesc.vAngles = _float3(0.f, m_pGameInstance->Get_Random(XMConvertToRadians(0.f), XMConvertToRadians(360.f)), 0.f);
-
-	if (FAILED(__super::Add_Component(LEVEL_GAMEPLAY, TEXT("Prototype_Component_Collider_OBB"),
-		TEXT("Com_Collider_OBB"), reinterpret_cast<CComponent**>(&m_pColliderCom[CCollider::TYPE_OBB]), &ColliderOBBDesc)))
-		return E_FAIL;
-
-	/* FOR.Com_Collider_Sphere */
-	CBounding_Sphere::BOUNDING_SPHERE_DESC			ColliderSphereDesc{};
-	ColliderSphereDesc.fRadius = 1.2f;
-	ColliderSphereDesc.vCenter = _float3(0.f, ColliderSphereDesc.fRadius, 0.f);
-
-
-	if (FAILED(__super::Add_Component(LEVEL_GAMEPLAY, TEXT("Prototype_Component_Collider_Sphere"),
-		TEXT("Com_Collider_Sphere"), reinterpret_cast<CComponent**>(&m_pColliderCom[CCollider::TYPE_SPHERE]), &ColliderSphereDesc)))
-		return E_FAIL;
-
-
-	/* FOR.Com_Collider_OBB */
-	CBounding_OBB::BOUNDING_OBB_DESC			ColliderOBBDesc_Obj{};
-
-	//ColliderAABBDesc_Obj.vExtents = _float3(0.5f, 1.0f, 0.5f);
-	//ColliderAABBDesc_Obj.vCenter = _float3(0.f, ColliderAABBDesc.vExtents.y, 0.f);
-
-	ColliderOBBDesc_Obj.vAngles = _float3(0.0f, 0.0f, 0.0f);
-	ColliderOBBDesc_Obj.vCenter = _float3(0.2f, 0.f, 0.f);
-	ColliderOBBDesc_Obj.vExtents = _float3(0.7f, 0.35f, 0.35f);
-
-	CColliderObject::COLIDEROBJECT_DESC Desc{};
-
-	Desc.pBoundingDesc = &ColliderOBBDesc_Obj;
-	Desc.eType = CCollider::TYPE_OBB;
-	Desc.pCombinedBoneTransformMatrix = m_pModelCom->Get_BoneCombindTransformationMatrix_Ptr(m_pModelCom->Get_UFBIndices(UFB_HAND_LEFT));
-	Desc.pParentTransformComMatrix = m_pTransformCom->Get_WorldMatrix_Ptr();
-	;
-	m_pColliderObject[COLLIDERTYPE::TYPE_LEFTHAND] = m_pGameInstance->Clone_GameObject(TEXT("Prototype_GameObject_ColliderObj"), &Desc);
-
-
-	/* FOR.Com_Collider_OBB */
-	ColliderOBBDesc_Obj.vAngles = _float3(0.0f, 0.0f, 0.0f);
-	ColliderOBBDesc_Obj.vCenter = _float3(0.2f, 0.f, 0.f);
-	ColliderOBBDesc_Obj.vExtents = _float3(0.5f, 0.3f, 0.3f);
-	
-	Desc.pBoundingDesc = &ColliderOBBDesc_Obj;
-	Desc.eType = CCollider::TYPE_OBB;
-	Desc.pCombinedBoneTransformMatrix = (_Matrix*)m_pModelCom->Get_BoneCombindTransformationMatrix_Ptr(m_pModelCom->Get_UFBIndices(UFB_HAND_RIGHT));
-	Desc.pParentTransformComMatrix = m_pTransformCom->Get_WorldMatrix_Ptr();
-	
-	m_pColliderObject[COLLIDERTYPE::TYPE_RIGHTHAND] = m_pGameInstance->Clone_GameObject(TEXT("Prototype_GameObject_ColliderObj"), &Desc);
-
 
 
 	return S_OK;
@@ -235,18 +172,27 @@ HRESULT CSimonManusP1::Ready_FSM()
 	//
 
 
-	//m_pFSMCom->Add_State(CState_SimonManusP1_Idle::Create(m_pFSMCom, this, IDLE, &Desc));
-	//m_pFSMCom->Add_State(CState_SimonManusP1_Walk::Create(m_pFSMCom, this, WALK, &Desc));
-	//m_pFSMCom->Add_State(CState_SimonManusP1_Run::Create(m_pFSMCom, this, RUN, &Desc));
-	//m_pFSMCom->Add_State(CState_SimonManusP1_Grogy::Create(m_pFSMCom, this, GROGY, &Desc));
-	//m_pFSMCom->Add_State(CState_SimonManusP1_HitFatal::Create(m_pFSMCom, this, HITFATAL, &Desc));
-	//m_pFSMCom->Add_State(CState_SimonManusP1_Die::Create(m_pFSMCom, this, DIE, &Desc));
-	//
-	//m_pFSMCom->Add_State(CState_SimonManusP1_StingAttack::Create(m_pFSMCom, this, ATK_STING, &Desc));
-	//m_pFSMCom->Add_State(CState_SimonManusP1_UpperAttack::Create(m_pFSMCom, this, ATK_UPPER, &Desc));
+	m_pFsmCom->Add_State(CState_SimonManusP1_Idle::Create(m_pFsmCom, this, IDLE, &Desc));
+	m_pFsmCom->Add_State(CState_SimonManusP1_Walk::Create(m_pFsmCom, this, WALK, &Desc));
+	m_pFsmCom->Add_State(CState_SimonManusP1_Run::Create(m_pFsmCom, this, RUN, &Desc));
+	m_pFsmCom->Add_State(CState_SimonManusP1_Grogy::Create(m_pFsmCom, this, GROGY, &Desc));
+	m_pFsmCom->Add_State(CState_SimonManusP1_HitFatal::Create(m_pFsmCom, this, HITFATAL, &Desc));
+	m_pFsmCom->Add_State(CState_SimonManusP1_Die::Create(m_pFsmCom, this, DIE, &Desc));
+
+	m_pFsmCom->Add_State(CState_SimonManusP1_AvoidSwing::Create(m_pFsmCom, this, ATK_AVOIDSWING, &Desc));
+	m_pFsmCom->Add_State(CState_SimonManusP1_StingAttack::Create(m_pFsmCom, this, ATK_STING, &Desc));
+	m_pFsmCom->Add_State(CState_SimonManusP1_Stamp::Create(m_pFsmCom, this, ATK_STAMP, &Desc));
+	m_pFsmCom->Add_State(CState_SimonManusP1_SwingMultiple::Create(m_pFsmCom, this, ATK_SWINGMULTIPLE, &Desc));
+	m_pFsmCom->Add_State(CState_SimonManusP1_ChasingSwing::Create(m_pFsmCom, this, ATK_CHASINGSWING, &Desc));
+	m_pFsmCom->Add_State(CState_SimonManusP1_SwipMultiple_R::Create(m_pFsmCom, this, ATK_SWIPMULT_R, &Desc));
+	m_pFsmCom->Add_State(CState_SimonManusP1_SwipMultiple_L::Create(m_pFsmCom, this, ATK_SWIPMULT_L, &Desc));
+	m_pFsmCom->Add_State(CState_SimonManusP1_SwingDown_Swing_R::Create(m_pFsmCom, this, ATK_SWINGDOWN_R, &Desc));
+	m_pFsmCom->Add_State(CState_SimonManusP1_SwingDown_Swing_L::Create(m_pFsmCom, this, ATK_SWINGDOWN_L, &Desc));
+	m_pFsmCom->Add_State(CState_SimonManusP1_JumpToSwing::Create(m_pFsmCom, this, ATK_JUMPTOSWING, &Desc));
+	m_pFsmCom->Add_State(CState_SimonManusP1_HighJumpFall::Create(m_pFsmCom, this, ATK_HIGHJUMPFALL, &Desc));
 
 
-	//m_pFSMCom->Set_State(IDLE);
+	m_pFsmCom->Set_State(IDLE);
 
 	return S_OK;
 
@@ -284,10 +230,10 @@ CGameObject* CSimonManusP1::Clone(void* pArg)
 
 void CSimonManusP1::Free()
 {
-	for (_uint i = 0; i < TYPE_END; ++i)
-	{
-		Safe_Release(m_pColliderObject[i]);
-	}
+	//for (_uint i = 0; i < TYPE_END; ++i)
+	//{
+	//	Safe_Release(m_pColliderObject[i]);
+	//}
 
 	__super::Free();
 

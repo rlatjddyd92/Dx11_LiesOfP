@@ -29,52 +29,47 @@ HRESULT CState_CarcassBigA_Idle::Start_State(void* pArg)
 void CState_CarcassBigA_Idle::Update(_float fTimeDelta)
 {
     m_fIdleTime += fTimeDelta;
-    _int iDist = m_pMonster->Calc_Distance_XZ();
-    if (iDist <= m_fIdleTime)
+    _float fDist = m_pMonster->Calc_Distance_XZ();
+    if (fDist <= m_fIdleTime)
     {
         if (m_pMonster->Calc_Distance_XZ() <= 5.f)
         {
-            m_pMonster->Change_State(CCarcassBigA::SWINGRIGHT);
+            Calc_Act_Attack();
             return;
         }
-        else if (iDist > 8.f)
+        else if (fDist > 8.f)
         {
             m_pMonster->Change_State(CCarcassBigA::RUN);
             return;
         }
-        else if (iDist > 5.f)
+        else if (fDist > 5.f)
         {
             m_pMonster->Change_State(CCarcassBigA::WALK);
             return;
         }
 
     }
-    _vector vPos = m_pMonster->Get_Transform()->Get_State(CTransform::STATE_POSITION);
-    _vector vCamPos = m_pGameInstance->Get_CamPosition_Vec4();//임시사용 캠 포지션
 
-    if (!(XMVectorGetX(vPos) == XMVectorGetX(vCamPos)) 
-        || !(XMVectorGetZ(vPos) == XMVectorGetZ(vCamPos)))
+
+    _int iDir = m_pMonster->Get_Transform()->LookAt_Lerp_NoHeight(m_pMonster->Get_TargetDir(), 1, fTimeDelta);
+    switch (iDir)
     {
-        _int iDir = m_pMonster->Get_Transform()->LookAt_Lerp_NoHeight(vCamPos - vPos, 1, fTimeDelta);
-        switch (iDir)
-        {
-        case -1:
-            m_pMonster->Change_Animation(30, true);
-            break;
+    case -1:
+        m_pMonster->Change_Animation(30, true);
+        break;
 
-        case 0:
-            m_pMonster->Change_Animation(20, true);
-            break;
+    case 0:
+        m_pMonster->Change_Animation(20, true);
+        break;
 
-        case 1:
-            m_pMonster->Change_Animation(31, true);
-            break;
+    case 1:
+        m_pMonster->Change_Animation(31, true);
+        break;
 
-        default:
-            break;
-        }
-
+    default:
+        break;
     }
+
     if (KEY_TAP(KEY::Z))
     {
         m_pMonster->Change_State(CCarcassBigA::GROGY);
@@ -97,42 +92,63 @@ void CState_CarcassBigA_Idle::End_State()
     m_fIdleTime = 0.f;
 }
 
-void CState_CarcassBigA_Idle::Calc_Act_Attack(_int iDistance)
+void CState_CarcassBigA_Idle::Calc_Act_Attack()
 {
-    if (iDistance < 3.f)
+    if (false)//이후 체력이 일정 이하일때 어택카운트 제서 나오도록
     {
-        //짧은 기술
-        m_pMonster->Change_State(CCarcassBigA::SWINGRIGHT);
+        m_pMonster->Change_State(CCarcassBigA::RAGE_ATTACK);
         return;
+    }
+    if (m_iAtkCnt < 3.f)
+    {
+        _int iAtkNum = rand() % 6;
+        switch (iAtkNum)
+        {
+        case 0:
+            m_pMonster->Change_State(CCarcassBigA::ATK_ROUTE_0);
+            break;
 
-        m_pMonster->Change_State(CCarcassBigA::SWINGDOWN_UPPER);
-        return;
+        case 1:
+            m_pMonster->Change_State(CCarcassBigA::ATK_ROUTE_1);
+            break;
 
-        m_pMonster->Change_State(CCarcassBigA::LO_SWINGRIGHT);
-        return;
+        case 2:
+            m_pMonster->Change_State(CCarcassBigA::ATK_ROUTE_2);
+            break;
 
-        m_pMonster->Change_State(CCarcassBigA::LT_SWINGRIGHT);
-        return;
+        case 3:
+            m_pMonster->Change_State(CCarcassBigA::ATK_ROUTE_3);
+            break;
+
+        case 4:
+            m_pMonster->Change_State(CCarcassBigA::ATK_ROUTE_4);
+            break;
+
+        case 5:
+            m_pMonster->Change_State(CCarcassBigA::WHEELWIND);
+            break;
+
+        default:
+            break;
+        }
+        ++m_iAtkCnt;
 
     }
     else
     {
-        //긴 기술
-        m_pMonster->Change_State(CCarcassBigA::SWINGRIGHT_MOVE_F);
-        return;
+        //신체가 붉게 변하며 나오는 기술
 
-        m_pMonster->Change_State(CCarcassBigA::SWINGDOWN_UPPER_MOVE_F);
-        return;
+        _int iAtkNum = rand() % 2;
 
-        m_pMonster->Change_State(CCarcassBigA::IMPACT);
-        return;
-
-    }
-
-    {
-
-        m_pMonster->Change_State(CCarcassBigA::RAGE_ATTACK);
-        return;
+        if (iAtkNum)
+        {
+            m_pMonster->Change_State(CCarcassBigA::LO_SWINGRIGHT);
+        }
+        else
+        {
+            m_pMonster->Change_State(CCarcassBigA::LT_SWINGRIGHT);
+        }
+        m_iAtkCnt = 0;
 
     }
 }

@@ -29,7 +29,7 @@ HRESULT CState_SimonManusP1_Stamp::Start_State(void* pArg)
 
 
     //방향 정하기 - 랜덤? 뒤 왼 오 니까 나머지 3 해서 더하기
-    m_pMonster->Change_Animation(AN_STAMP, false, true);
+    m_pMonster->Change_Animation(AN_STAMP, false, 0.1f, 0);
 
     m_bStamp = false;
     return S_OK;
@@ -55,6 +55,11 @@ void CState_SimonManusP1_Stamp::End_State()
 {
     m_bStamp = false;
     *m_pResetRootMove = true;
+}
+
+_bool CState_SimonManusP1_Stamp::End_Check()
+{
+    return _bool();
 }
 
 CState_SimonManusP1_Stamp* CState_SimonManusP1_Stamp::Create(CFsm* pFsm, CMonster* pMonster, _uint iStateNum, void* pArg)

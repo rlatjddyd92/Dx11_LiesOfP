@@ -7,6 +7,7 @@ END
 
 BEGIN(Client)
 
+//수정 필요
 class CState_SimonManusP1_Stamp : public CState
 {
 private:
@@ -40,6 +41,9 @@ private:
     _bool*              m_pResetRootMove = { nullptr };
 
     _bool               m_bStamp = { false };
+
+private:
+    _bool               End_Check();
 
 public:
     static CState_SimonManusP1_Stamp* Create(class CFsm* pFsm, class CMonster* pMonster, _uint iStateNum, void* pArg = nullptr);

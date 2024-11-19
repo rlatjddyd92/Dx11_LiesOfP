@@ -26,7 +26,7 @@ HRESULT CState_SimonManusP1_ChasingSwing::Start_State(void* pArg)
 {
     *m_pResetRootMove = false;
 
-    m_pMonster->Change_Animation(AN_CHASINGSWING_START - (m_iAnimCnt), true);
+    m_pMonster->Change_Animation(AN_CHASINGSWING_START - (m_iAnimCnt), 0.f, 0);
 
     return S_OK;
 }
@@ -38,7 +38,7 @@ void CState_SimonManusP1_ChasingSwing::Update(_float fTimeDelta)
         if (m_iAnimCnt < 2)
         {
             ++m_iAnimCnt;
-            m_pMonster->Change_Animation(AN_CHASINGSWING_START - (m_iAnimCnt), true);
+            m_pMonster->Change_Animation(AN_CHASINGSWING_START - (m_iAnimCnt), 0.f, 0);
         }
         else
         {
@@ -51,7 +51,7 @@ void CState_SimonManusP1_ChasingSwing::Update(_float fTimeDelta)
 
 void CState_SimonManusP1_ChasingSwing::End_State()
 {
-    m_iAnimCnt = 0.f;
+    m_iAnimCnt = 0;
     *m_pResetRootMove = true;
 }
 

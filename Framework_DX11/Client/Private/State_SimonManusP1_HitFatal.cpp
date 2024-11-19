@@ -28,19 +28,19 @@ HRESULT CState_SimonManusP1_HitFatal::Start_State(void* pArg)
     *m_pResetRootMove = false;
 
 
-    m_pMonster->Change_Animation(AN_FATAL_START - (m_iAnimCnt), false, true);
+    m_pMonster->Change_Animation(AN_FATAL_START - (m_iAnimCnt), false, 0.1f, 0);
 
     return S_OK;
 }
 
 void CState_SimonManusP1_HitFatal::Update(_float fTimeDelta)
 {
-    if (*m_pIsEndAnim)
+    if (End_Check())
     {
         if (m_iAnimCnt < 2)
         {
             ++m_iAnimCnt;
-            m_pMonster->Change_Animation(AN_FATAL_START - (m_iAnimCnt), false, true);
+            m_pMonster->Change_Animation(AN_FATAL_START - (m_iAnimCnt), false, 0.1f, 0);
         }
         else
         {
@@ -54,8 +54,45 @@ void CState_SimonManusP1_HitFatal::Update(_float fTimeDelta)
 void CState_SimonManusP1_HitFatal::End_State()
 {
     m_fHitFatalTime = 0.f;
-    m_iAnimCnt = 0.f;
+    m_iAnimCnt = 0;
     *m_pResetRootMove = true;
+}
+
+_bool CState_SimonManusP1_HitFatal::End_Check()
+{
+    _uint iCurAnim = m_pMonster->Get_CurrentAnimIndex();
+    _bool bEndCheck{ false };
+
+    switch (m_iAnimCnt)
+    {
+    case 0: 
+        if ((AN_FATAL_START) == iCurAnim)
+    {
+        bEndCheck = m_pMonster->Get_EndAnim(AN_FATAL_START);
+    }
+        break;
+
+    case 1:
+        if ((AN_FATAL_LOOP) == iCurAnim)
+        {
+            bEndCheck = m_pMonster->Get_EndAnim(AN_FATAL_LOOP);
+        }
+        break;
+
+    case 2:
+        if ((AN_FATAL_END) == iCurAnim)
+        {
+            bEndCheck = m_pMonster->Get_EndAnim(AN_FATAL_END);
+        }
+        break;
+
+    default:
+        break;
+    }
+   
+    //애니메이션 번호와 일치하지 않는?다
+
+    return bEndCheck;
 }
 
 CState_SimonManusP1_HitFatal* CState_SimonManusP1_HitFatal::Create(CFsm* pFsm, CMonster* pMonster, _uint iStateNum, void* pArg)

@@ -43,7 +43,7 @@ void CState_CarcassBigA_Impact::End_State()
 
 _bool CState_CarcassBigA_Impact::End_Check()
 {
-    return _bool();
+    return m_pMonster->Get_EndAnim(AN_IMPACT);
 }
 
 CState_CarcassBigA_Impact* CState_CarcassBigA_Impact::Create(CFsm* pFsm, CMonster* pMonster, _uint iStateNum, void* pArg)

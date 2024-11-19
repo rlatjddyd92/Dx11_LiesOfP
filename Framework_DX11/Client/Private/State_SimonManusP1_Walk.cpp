@@ -21,7 +21,7 @@ HRESULT CState_SimonManusP1_Walk::Initialize(_uint iStateNum, void* pArg)
 
 HRESULT CState_SimonManusP1_Walk::Start_State(void* pArg)
 {
-    m_pMonster->Change_Animation(33, true);;
+    m_pMonster->Change_Animation(33, true, 0.1f, 0);;
 
 
     return S_OK;
@@ -30,31 +30,25 @@ HRESULT CState_SimonManusP1_Walk::Start_State(void* pArg)
 void CState_SimonManusP1_Walk::Update(_float fTimeDelta)
 {
 
-    _vector vPos = m_pMonster->Get_Transform()->Get_State(CTransform::STATE_POSITION);
-    _vector vCamPos = m_pGameInstance->Get_CamPosition_Vec4();//임시사용 캠 포지션
-    if (!(XMVectorGetX(vPos) == XMVectorGetX(vCamPos))
-        || !(XMVectorGetZ(vPos) == XMVectorGetZ(vCamPos)))
+    _int iDir = m_pMonster->Get_Transform()->LookAt_Lerp_NoHeight(m_pMonster->Get_TargetDir(), 1, fTimeDelta);
+    switch (iDir)
     {
-        _int iDir = m_pMonster->Get_Transform()->LookAt_Lerp_NoHeight(vCamPos - vPos, 1, fTimeDelta);
-        switch (iDir)
-        {
-        case -1:
-            m_pMonster->Change_Animation(30, true, true);
-            break;
+    case -1:
+        m_pMonster->Change_Animation(30, true, 0.1f, 0);
+        break;
 
-        case 0:
-            m_pMonster->Change_Animation(33, true, true);
-            break;
+    case 0:
+        m_pMonster->Change_Animation(33, true, 0.1f, 0);
+        break;
 
-        case 1:
-            m_pMonster->Change_Animation(31, true, true);
-            break;
+    case 1:
+        m_pMonster->Change_Animation(31, true, 0.1f, 0);
+        break;
 
-        default:
-            break;
-        }
-        m_pMonster->Get_Transform()->Go_Straight(fTimeDelta);
+    default:
+        break;
     }
+    m_pMonster->Get_Transform()->Go_Straight(fTimeDelta);
 
 
     if (m_pMonster->Calc_Distance_XZ() <= 5.f)

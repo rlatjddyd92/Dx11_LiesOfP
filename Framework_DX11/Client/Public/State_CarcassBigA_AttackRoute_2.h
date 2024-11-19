@@ -12,16 +12,11 @@ class CState_CarcassBigA_AttackRoute_2 :
 {
 private:
     typedef enum {
-        AN_ROUTE_FIRST = 4,    //SwingDown_Upper_Move
+        AN_ROUTE_FIRST = 4,    //SwingRight_Move
         AN_ROUTE_MIDDLE = 1,    //SwingRight
         AN_ROUTE_LAST = 0      //SwingDown_Upper
 
     }ANIMNUM;
-
-private:
-    typedef enum {
-        DIR_FRONT, DIR_BEHIND
-    }DIR;
 
 public:
     CState_CarcassBigA_AttackRoute_2(class CFsm* pFsm, class CMonster* pMonster);
@@ -40,10 +35,11 @@ private:
     _uint               m_iIdleCount = {};
 
     _float              m_fIdleTime = {};
-    _float              m_fIdleDuration = { 2.6f };
+    _float              m_fIdleDuration = { 0.2f };
 
     _bool               m_isPrevChance = { false };
     _bool               m_isActivatedSpecial = { false };
+    _bool               m_isDelayed = { false };
 
     _bool* m_pIsEndAnim = { false };
     _bool* m_pResetRootMove = { nullptr };

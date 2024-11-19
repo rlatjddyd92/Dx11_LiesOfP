@@ -28,12 +28,12 @@ HRESULT CState_SimonManusP1_Grogy::Start_State(void* pArg)
     if (*m_pTrackPos > 0) 
     {
         ++m_iAnimCnt;
-        m_pMonster->Change_Animation(AN_GROGY_START - m_iAnimCnt, true, true);
+        m_pMonster->Change_Animation(AN_GROGY_START - m_iAnimCnt, true, 0.1f, 0);
         m_fGrogyTime = (_float)*m_pTrackPos;
     }
     else
     {
-        m_pMonster->Change_Animation(AN_GROGY_START, false);
+        m_pMonster->Change_Animation(AN_GROGY_START, false, 0.1f, 0);
     }
     *m_pResetRootMove = false;  //애니메이션의 시작부터 끝의 루트본의 이동값이 달라지면 안됨.
 
@@ -49,7 +49,7 @@ void CState_SimonManusP1_Grogy::Update(_float fTimeDelta)
         if (*m_pIsEndAnim)
         {
             ++m_iAnimCnt;
-            m_pMonster->Change_Animation(AN_GROGY_START - m_iAnimCnt, true, true);
+            m_pMonster->Change_Animation(AN_GROGY_START - m_iAnimCnt, true, 0.1f, 0);
         }
         break;
 
@@ -57,7 +57,7 @@ void CState_SimonManusP1_Grogy::Update(_float fTimeDelta)
         if (m_fGrogyTime >= m_fGrogyDuration)
         {
             ++m_iAnimCnt;
-            m_pMonster->Change_Animation(AN_GROGY_START - m_iAnimCnt, false, true);
+            m_pMonster->Change_Animation(AN_GROGY_START - m_iAnimCnt, false, 0.1f, 0);
         }
         else
             m_fGrogyTime += fTimeDelta;
@@ -90,6 +90,43 @@ void CState_SimonManusP1_Grogy::End_State()
     m_iAnimCnt = 0;//혹시 완료되지 않고 변하는 경우에 대비
     m_fGrogyTime = 0;
     *m_pResetRootMove = true;
+}
+
+_bool CState_SimonManusP1_Grogy::End_Check()
+{
+    _uint iCurAnim = m_pMonster->Get_CurrentAnimIndex();
+    _bool bEndCheck{ false };
+
+    switch (m_iAnimCnt)
+    {
+    case 0:
+        if ((AN_GROGY_START) == iCurAnim)
+        {
+            bEndCheck = m_pMonster->Get_EndAnim(AN_GROGY_START);
+        }
+        break;
+
+    case 1:
+        if ((AN_GROGY_LOOP) == iCurAnim)
+        {
+            bEndCheck = m_pMonster->Get_EndAnim(AN_GROGY_LOOP);
+        }
+        break;
+
+    case 2:
+        if ((AN_GROGY_END) == iCurAnim)
+        {
+            bEndCheck = m_pMonster->Get_EndAnim(AN_GROGY_END);
+        }
+        break;
+
+    default:
+        break;
+    }
+
+    //애니메이션 번호와 일치하지 않는?다
+
+    return bEndCheck;
 }
 
 CState_SimonManusP1_Grogy* CState_SimonManusP1_Grogy::Create(CFsm* pFsm, CMonster* pMonster, _uint iStateNum, void* pArg)

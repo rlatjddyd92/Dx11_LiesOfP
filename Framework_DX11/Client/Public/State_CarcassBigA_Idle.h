@@ -33,8 +33,10 @@ private:
     _float              m_fIdleTime = { 0.f };
     _float              m_fIdleEndDuration = { 1.5f };
 
+    _uint               m_iAtkCnt{};
+
 private:
-    void                Calc_Act_Attack(_int iDistance);
+    void                Calc_Act_Attack();
 
 public:
     static CState_CarcassBigA_Idle* Create(class CFsm* pFsm, class CMonster* pMonster, _uint iStateNum, void* pArg = nullptr);

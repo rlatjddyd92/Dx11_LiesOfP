@@ -655,7 +655,7 @@ void CController_AnimationTool::ListUp_Virtex()
 	ImGui::PushItemWidth(300); // 크기조정
 	if (ImGui::BeginListBox("Mesh List"))
 	{
-		if (m_pCopyMeshVec != nullptr || m_pCopyModelCom != nullptr)
+		if (m_pCopyMeshVec != nullptr && m_pCopyModelCom != nullptr)
 		{
 			bool is_selected{ false };
 			for (_uint i = 0; i < m_pCopyModelCom->Get_NumMeshes(); i++)
@@ -998,8 +998,6 @@ void CController_AnimationTool::NewPage_AnimTool()
 void CController_AnimationTool::EndFrame_AnimTool()
 {
 	Safe_Release(m_pCopyModelCom);
-	m_pCopyAnimVec = nullptr;
-	m_pCopyBoneVec = nullptr;
 }
 
 void CController_AnimationTool::Free()

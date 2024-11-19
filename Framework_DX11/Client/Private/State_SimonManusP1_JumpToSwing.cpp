@@ -29,7 +29,7 @@ HRESULT CState_SimonManusP1_JumpToSwing::Start_State(void* pArg)
 
 
     //방향 정하기 - 랜덤? 뒤 왼 오 니까 나머지 3 해서 더하기
-    m_pMonster->Change_Animation(AN_JUMPTO_BACK, false, true);
+    m_pMonster->Change_Animation(AN_JUMPTO_BACK, false, 0.1f, 0);
 
     m_bJump = false;
     return S_OK;
@@ -42,7 +42,7 @@ void CState_SimonManusP1_JumpToSwing::Update(_float fTimeDelta)
         if (!m_bJump)
         {
             m_bJump = true;
-            m_pMonster->Change_Animation(AN_SWING, false, true);
+            m_pMonster->Change_Animation(AN_SWING, false, 0.1f, 0);
         }
         else
         {
