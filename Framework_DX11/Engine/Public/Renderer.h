@@ -111,6 +111,8 @@ private:
 
 	HRESULT Render_Deferred();
 
+	HRESULT Render_Effect();
+
 	HRESULT Render_SSAO();
 	HRESULT Render_HDR();
 	HRESULT Render_Bloom_Compute();

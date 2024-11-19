@@ -13,10 +13,13 @@ BEGIN(Tools)
 class CTrail_Effect_MP final : public CEffect_Base
 {
 public:
+	enum SHADER_TYPE { SHADER_DEFAULT, SHADER_END };
+	enum TRAIL_MP_TYPE{ MT_SPREAD, MT_MOVE, MT_CONVERGE, MT_FOLLOW, MT_END };
+
 	typedef struct
 	{
 		// 움직임
-		PARTICLE_TYPE		eType = { PT_END };
+		TRAIL_MP_TYPE		eType = { MT_END };
 		_uint				iComputeState = { 0 };
 		_float				fGravity = { 0.f };
 		_Vec4				vPivot = { 0.f, 0.f, 0.f, 1.f };
@@ -117,7 +120,8 @@ private:
 	class CShader_Compute* m_pSpreadCS = { nullptr };
 	class CShader_Compute* m_pConvergeCS = { nullptr };
 	class CShader_Compute* m_pMoveCS = { nullptr };
-
+	class CShader_Compute* m_pFollowCS = { nullptr };
+	
 	// 초기화.
 	class CShader_Compute* m_pResetCS = { nullptr };
 

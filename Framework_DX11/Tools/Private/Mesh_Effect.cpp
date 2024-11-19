@@ -68,9 +68,11 @@ void CMesh_Effect::Late_Update(_float fTimeDelta)
 	{
 		if (true == m_DefaultDesc.bLoop)
 			Reset();
-		/*else
-			m_isActive = false;*/
+		else
+			m_isActive = false;
 	}
+	if (CRenderer::RG_END == m_RenderDesc.iRenderGroup)
+		return;
 
 	if (CRenderer::RG_EFFECT == m_RenderDesc.iRenderGroup)
 		m_pGameInstance->Add_RenderObject(CRenderer::RG_NONLIGHT, this);

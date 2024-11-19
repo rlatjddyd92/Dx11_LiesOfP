@@ -83,13 +83,16 @@ void CParticle_Effect::Update(_float fTimeDelta)
 
     if (true == bOver)
     {
-        // m_isActive = false;
+        m_isActive = false;
     }
 
 }
 
 void CParticle_Effect::Late_Update(_float fTimeDelta)
 {
+    if (CRenderer::RG_END == m_RenderDesc.iRenderGroup)
+        return;
+
     if (CRenderer::RG_EFFECT == m_RenderDesc.iRenderGroup)
         m_pGameInstance->Add_RenderObject(CRenderer::RG_NONLIGHT, this);
     else

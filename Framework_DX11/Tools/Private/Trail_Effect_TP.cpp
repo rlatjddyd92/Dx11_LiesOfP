@@ -58,8 +58,11 @@ void CTrail_Effect_TP::Late_Update(_float fTimeDelta)
 {
 	if (false == m_DefaultDesc.bLoop && 1.f < m_fAlpha)
 	{
-		//m_isActive = false;
+		m_isActive = false;
 	}
+
+	if (CRenderer::RG_END == m_RenderDesc.iRenderGroup)
+		return;
 
 	if (CRenderer::RG_EFFECT == m_RenderDesc.iRenderGroup)
 		m_pGameInstance->Add_RenderObject(CRenderer::RG_NONLIGHT, this);
