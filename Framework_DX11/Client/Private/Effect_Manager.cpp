@@ -612,7 +612,7 @@ HRESULT CEffect_Manager::Load_TrailOP_Effect(const _wstring strResultPath)
     InstanceDesc.iNumInstance = BufferDesc.iNumInstance;
     InstanceDesc.vLifeTime = BufferDesc.vLifeTime;
     
-    if (FAILED(m_pGameInstance->Add_Prototype(LEVEL_GAMEPLAY, strVIBufferTag, CTrail_OnePoint_Instance::Create(m_pDevice, m_pContext, InstanceDesc, true))))
+    if (FAILED(m_pGameInstance->Add_Prototype(LEVEL_STATIC, strVIBufferTag, CTrail_OnePoint_Instance::Create(m_pDevice, m_pContext, InstanceDesc, true))))
         return E_FAIL;
 
     TestDesc.strVIBufferTag = strVIBufferTag;
@@ -655,7 +655,7 @@ HRESULT CEffect_Manager::Load_TrailTP_Effect(const _wstring strResultPath)
     InstanceDesc.iNumInstance = BufferDesc.iNumInstance;
     InstanceDesc.vLifeTime = BufferDesc.vLifeTime;
 
-    if (FAILED(m_pGameInstance->Add_Prototype(LEVEL_GAMEPLAY, strVIBufferTag, CTrail_TwoPoint_Instance::Create(m_pDevice, m_pContext, InstanceDesc, true))))
+    if (FAILED(m_pGameInstance->Add_Prototype(LEVEL_STATIC, strVIBufferTag, CTrail_TwoPoint_Instance::Create(m_pDevice, m_pContext, InstanceDesc, true))))
         return E_FAIL;
 
     TestDesc.strVIBufferTag = strVIBufferTag;
@@ -711,7 +711,7 @@ HRESULT CEffect_Manager::Load_TrailMP_Effect(const _wstring strResultPath)
     InstanceDesc.vTail_MinColor = BufferDesc.vTail_MinColor;
     InstanceDesc.vTail_MaxColor = BufferDesc.vTail_MaxColor;
 
-    if (FAILED(m_pGameInstance->Add_Prototype(LEVEL_GAMEPLAY, strVIBufferTag, CTrail_MultiPoint_Instance::Create(m_pDevice, m_pContext, InstanceDesc, true))))
+    if (FAILED(m_pGameInstance->Add_Prototype(LEVEL_STATIC, strVIBufferTag, CTrail_MultiPoint_Instance::Create(m_pDevice, m_pContext, InstanceDesc, true))))
         return E_FAIL;
 
     TestDesc.strVIBufferTag = strVIBufferTag;

@@ -176,7 +176,7 @@ PS_OUT PS_MAIN_EFFECT(PS_IN In)
     PS_OUT Out = (PS_OUT) 0;
     
     float fDistortion = g_DistortionTexture.Sample(LinearClampSampler, In.vTexcoord).x;
-    float4 vColor = g_BackTexture.Sample(LinearSampler, In.vTexcoord + float2(fDistortion, fDistortion));
+    float4 vColor = g_EffectTexture.Sample(LinearSampler, In.vTexcoord + float2(fDistortion, fDistortion));
    
     float4 vEffect = g_EffectTexture.Sample(LinearSampler, In.vTexcoord);
     

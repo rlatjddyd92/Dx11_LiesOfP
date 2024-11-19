@@ -139,12 +139,12 @@ void CTrail_Effect_OP::Reset()
 HRESULT CTrail_Effect_OP::Ready_Components(const TRAIL_OP_DESC& Desc)
 {
 	/* FOR.Com_Shader */
-	if (FAILED(__super::Add_Component(LEVEL_GAMEPLAY, TEXT("Prototype_Component_Shader_Trail_OnePoint_Instance"),
+	if (FAILED(__super::Add_Component(LEVEL_STATIC, TEXT("Prototype_Component_Shader_Trail_OnePoint_Instance"),
 		TEXT("Com_Shader"), reinterpret_cast<CComponent**>(&m_pShaderCom))))
 		return E_FAIL;
 
 	/* FOR.Com_VIBuffer */
-	if (FAILED(__super::Add_Component(LEVEL_GAMEPLAY, Desc.strVIBufferTag,
+	if (FAILED(__super::Add_Component(LEVEL_STATIC, Desc.strVIBufferTag,
 		TEXT("Com_VIBuffer"), reinterpret_cast<CComponent**>(&m_pVIBufferCom))))
 		return E_FAIL;
 

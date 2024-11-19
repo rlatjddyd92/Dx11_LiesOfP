@@ -172,12 +172,12 @@ void CTrail_Effect_MP::Set_Loop(_bool bLoop)
 HRESULT CTrail_Effect_MP::Ready_Components(const TRAIL_MP_DESC& Desc)
 {
 	/* FOR.Com_TailShader */
-	if (FAILED(__super::Add_Component(LEVEL_GAMEPLAY, TEXT("Prototype_Component_Shader_TrailTail_PointInstance"),
+	if (FAILED(__super::Add_Component(LEVEL_STATIC, TEXT("Prototype_Component_Shader_TrailTail_PointInstance"),
 		TEXT("Com_TailShader"), reinterpret_cast<CComponent**>(&m_pShaderCom))))
 		return E_FAIL;
 
 	/* FOR.Com_VIBuffer */
-	if (FAILED(__super::Add_Component(LEVEL_GAMEPLAY, Desc.strVIBufferTag,
+	if (FAILED(__super::Add_Component(LEVEL_STATIC, Desc.strVIBufferTag,
 		TEXT("Com_VIBuffer"), reinterpret_cast<CComponent**>(&m_pVIBufferCom))))
 		return E_FAIL;
 
@@ -200,12 +200,12 @@ HRESULT CTrail_Effect_MP::Ready_Components(const TRAIL_MP_DESC& Desc)
 		return E_FAIL;
 	}
 	/* FOR.Com_ActionCS */
-	if (FAILED(__super::Add_Component(LEVEL_GAMEPLAY, strComputeShaderTag,
+	if (FAILED(__super::Add_Component(LEVEL_STATIC, strComputeShaderTag,
 		TEXT("Com_ActionCS"), reinterpret_cast<CComponent**>(&m_pActionCS))))
 		return E_FAIL;
 
 	/* FOR.Com_ResetCS */
-	if (FAILED(__super::Add_Component(LEVEL_GAMEPLAY, TEXT("Prototype_Component_Shader_Compute_Trail_Reset"),
+	if (FAILED(__super::Add_Component(LEVEL_STATIC, TEXT("Prototype_Component_Shader_Compute_Trail_Reset"),
 		TEXT("Com_ResetCS"), reinterpret_cast<CComponent**>(&m_pResetCS))))
 		return E_FAIL;
 

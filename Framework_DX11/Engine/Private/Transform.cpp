@@ -250,7 +250,7 @@ void CTransform::Look_Dir(_Vec4 vDir)
 
 }
 
-void CTransform::Go_Straight(_float fTimeDelta, class CNavigation* pNavigation)
+void CTransform::Go_Straight(_float fTimeDelta, _float fSpeed, class CNavigation* pNavigation)
 {
 	_Vec3		vPosition = Get_State(STATE_POSITION);
 	_Vec3		vLook = Get_State(STATE_LOOK);

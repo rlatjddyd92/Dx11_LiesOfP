@@ -44,8 +44,7 @@ public:
 		_float		fAccelLimit;
 
 		_float		fTimeDelta;
-		_float		fMoveInterval;
-		_float2		vPadding_3;
+		_float3		vPadding_3;
 	}PARTICLE_MOVEMENT;
 
 	enum STATE
