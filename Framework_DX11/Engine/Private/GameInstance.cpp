@@ -396,6 +396,10 @@ DOF_DESC* CGameInstance::Get_DOFDesc()
 {
 	return m_pRenderer->Get_DOFDesc();
 }
+RADIAL_DESC* CGameInstance::Get_RadialDesc()
+{
+	return m_pRenderer->Get_RadialDesc();
+}
 #ifdef _DEBUG
 HRESULT CGameInstance::Add_DebugObject(CComponent * pDebugObject)
 {

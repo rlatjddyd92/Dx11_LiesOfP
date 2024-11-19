@@ -2,7 +2,7 @@ Texture2D g_InputTexture;
 RWTexture2D<float4> g_OutputTexture;
 
 [numthreads(32, 32, 1)]
-void CS_DOWNSCALE(uint3 groupID : SV_GroupID, uint3 groupThreadID : SV_GroupThreadID, uint3 dispatchThreadID : SV_DispatchThreadID)
+void CS_DOWNSCALE4X4(uint3 groupID : SV_GroupID, uint3 groupThreadID : SV_GroupThreadID, uint3 dispatchThreadID : SV_DispatchThreadID)
 {
     uint2 vPixel = uint2(dispatchThreadID.x, dispatchThreadID.y);
 
@@ -34,6 +34,9 @@ static const float SampleWeights[13] =
 void CS_BLURX(uint3 groupID : SV_GroupID, uint groupIndex : SV_GroupIndex)
 {
     int2 coord = int2(groupIndex - kernelhalf + (groupthreads - kernelhalf * 2) * groupID.x, groupID.y);
+    coord.x = clamp(coord.x, 0, 319);
+    coord.y = clamp(coord.y, 0, 179);
+
     SharedInput[groupIndex] = g_InputTexture.Load(int3(coord, 0));
 
     GroupMemoryBarrierWithGroupSync();
@@ -53,7 +56,10 @@ void CS_BLURX(uint3 groupID : SV_GroupID, uint groupIndex : SV_GroupIndex)
 [numthreads(groupthreads, 1, 1)]
 void CS_BLURY(uint3 groupID : SV_GroupID, uint groupIndex : SV_GroupIndex)
 {
+    
     int2 coord = int2(groupID.x, groupIndex - kernelhalf + (groupthreads - kernelhalf * 2) * groupID.y);
+    coord.x = clamp(coord.x, 0, 319);
+    coord.y = clamp(coord.y, 0, 179);
     SharedInput[groupIndex] = g_InputTexture.Load(int3(coord, 0));
 
     GroupMemoryBarrierWithGroupSync();
@@ -77,7 +83,7 @@ technique11 Technique_Blur
         VertexShader = NULL;
         GeometryShader = NULL;
         PixelShader = NULL;
-        ComputeShader = compile cs_5_0 CS_DOWNSCALE();
+        ComputeShader = compile cs_5_0 CS_DOWNSCALE4X4();
     }
     pass Pass_Horizon
     {

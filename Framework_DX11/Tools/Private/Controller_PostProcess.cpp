@@ -125,6 +125,34 @@ void CController_PostProcess::Update_DOF()
 	tDesc->fDOF = fDOF;
 }
 
+void CController_PostProcess::Update_Radial()
+{
+	RADIAL_DESC* tDesc = m_pGameInstance->Get_RadialDesc();
+	if (nullptr == tDesc)
+		return;
+
+	static _bool isOnRadial = tDesc->isOnRadial;
+	static _Vec2 vCenterPos = tDesc->vRadialCenterPos;
+	static _float fRadialPower = tDesc->fRadialPower;
+	static _float fRadius = tDesc->fRadius;
+
+	ImGui::Checkbox("Radial Value", &isOnRadial);
+
+
+	if (tDesc->isOnRadial)
+	{
+		ImGui::DragFloat("CenterX", &vCenterPos.x, 0.02f);
+		ImGui::DragFloat("CenterY", &vCenterPos.y, 0.02f);
+		ImGui::DragFloat("Radius", &fRadius, 0.02f);
+		ImGui::DragFloat("RadialPower", &fRadialPower, 0.02f);
+	}
+
+	tDesc->isOnRadial = isOnRadial;
+	tDesc->vRadialCenterPos = vCenterPos;
+	tDesc->fRadialPower = fRadialPower;
+	tDesc->fRadius = fRadius;
+}
+
 void CController_PostProcess::Free()
 {
 	__super::Free();

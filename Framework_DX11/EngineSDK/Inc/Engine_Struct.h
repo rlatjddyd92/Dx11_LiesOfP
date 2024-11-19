@@ -132,7 +132,7 @@ namespace Engine
 #pragma region 후처리 관련
 	typedef struct
 	{
-		_int isOnSSAO;
+		_int isOnSSAO = false;
 		_float fRadius;
 		_float fBias;
 		_float fAmount;
@@ -140,22 +140,30 @@ namespace Engine
 
 	typedef struct
 	{
-		_bool isOnHDR;
+		_bool isOnHDR = false;
 		_float fMiddleGrey;
 		_float fLumWhiteSqr;
 	}HDR_DESC;
 
 	typedef struct
 	{
-		_bool isOnBloom;
+		_bool isOnBloom = false;
 		_float fBloomThreshold;
 	}BLOOM_DESC;
 
 	typedef struct
 	{
 		_bool isOnDOF = false;
-		_float fDOF = 0.f;;
+		_float fDOF = 30.f;
 	}DOF_DESC;
+
+	typedef struct
+	{
+		_bool isOnRadial = false;
+		_Vec2	vRadialCenterPos = { 0.5f,0.5f };
+		_float	fRadius = 0.1f;
+		_float	fRadialPower = 0.f;
+	}RADIAL_DESC;
 #pragma endregion
 
 	//오브젝트 저장 및 불러오기에 사용

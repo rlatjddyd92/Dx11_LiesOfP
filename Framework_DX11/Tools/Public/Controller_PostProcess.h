@@ -28,6 +28,7 @@ public:
 	void Update_HDR();
 	void Update_BLOOM();
 	void Update_DOF();
+	void Update_Radial();
 
 private:
 	class CGameInstance* m_pGameInstance = { nullptr };
