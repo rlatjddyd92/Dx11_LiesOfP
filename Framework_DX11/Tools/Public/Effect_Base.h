@@ -9,8 +9,8 @@ class CEffect_Base abstract : public CGameObject
 public:
 	typedef struct
 	{
-		_int			iRenderGroup = { 0 };
-		_int			iPpState = { PP_END };
+		_int			iRenderGroup = { };
+		_int			iPpState = { 0 };
 	}RENDER_DESC;
 
 	typedef struct : public CGameObject::GAMEOBJECT_DESC
@@ -22,7 +22,6 @@ public:
 
 
 	enum EFFECT_TYPE { TYPE_PARTICLE, TYPE_TEXTURE, TYPE_MESH, TYPE_TRAIL_OP, TYPE_TRAIL_TP, TYPE_TRAIL_MP, TYPE_END };
-	enum PARTICLE_TYPE { PT_SPREAD, PT_MOVE, PT_CONVERGE, PT_END };
 
 	enum GEOM_STATE
 	{

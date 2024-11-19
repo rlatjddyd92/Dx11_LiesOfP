@@ -50,20 +50,23 @@ void CTrail_Effect_OP::Update(_float fTimeDelta)
 	{
 		if (true == m_pVIBufferCom->Update_Buffer(XMLoadFloat4x4(&m_WorldMatrix).r[3], m_DefaultDesc.fTrailInterval, m_DefaultDesc.bLoop, fTimeDelta))
 		{
-			//m_isActive = false;
+			m_isActive = false;
 		}
 	}
 	else if (TYPE_SPREAD == m_DefaultDesc.eType)
 	{
 		if (true == m_pVIBufferCom->Spread_Buffer(XMLoadFloat4x4(&m_WorldMatrix).r[3], m_DefaultDesc.fTrailInterval, m_DefaultDesc.fSpreadSpeed, m_DefaultDesc.bLoop, fTimeDelta))
 		{
-			//m_isActive = false;
+			m_isActive = false;
 		}
 	}
 }
 
 void CTrail_Effect_OP::Late_Update(_float fTimeDelta)
 {
+	if (CRenderer::RG_END == m_RenderDesc.iRenderGroup)
+		return;
+
 	if (CRenderer::RG_EFFECT == m_RenderDesc.iRenderGroup)
 		m_pGameInstance->Add_RenderObject(CRenderer::RG_NONLIGHT, this);
 	else

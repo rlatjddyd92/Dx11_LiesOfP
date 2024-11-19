@@ -355,6 +355,9 @@ HRESULT CRenderer::Draw()
 	if (FAILED(Render_Radial()))
 		return E_FAIL;
 
+	if (FAILED(Render_Effect()))
+		return E_FAIL;
+
 	if (FAILED(Render_Distortion()))
 		return E_FAIL;
 
@@ -603,6 +606,26 @@ HRESULT CRenderer::Render_Deferred()
 	m_pVIBuffer->Bind_Buffers();
 
 	m_pVIBuffer->Render();
+
+	return S_OK;
+}
+
+HRESULT CRenderer::Render_Effect()
+{
+	if (FAILED(m_pGameInstance->Begin_MRT(TEXT("MRT_Effect"))))
+		return E_FAIL;
+
+	for (auto& pGameObject : m_RenderObjects[RG_EFFECT])
+	{
+		if (nullptr != pGameObject)
+			pGameObject->Render();
+
+		Safe_Release(pGameObject);
+	}
+	m_RenderObjects[RG_EFFECT].clear();
+
+	if (FAILED(m_pGameInstance->End_MRT()))
+		return E_FAIL;
 
 	return S_OK;
 }

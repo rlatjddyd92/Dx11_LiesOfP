@@ -71,25 +71,32 @@ void CTrail_Effect_MP::Update(_float fTimeDelta)
 
 	switch (m_DefaultDesc.eType)
 	{
-	case PT_SPREAD:
+	case MT_SPREAD:
 		bOver = m_pVIBufferCom->DispatchCS(m_pSpreadCS, Movement);
 		break;
 
-	case PT_MOVE:
+	case MT_MOVE:
 		bOver = m_pVIBufferCom->DispatchCS(m_pMoveCS, Movement);
 		break;
 
-	case PT_CONVERGE:
+	case MT_CONVERGE:
 		bOver = m_pVIBufferCom->DispatchCS(m_pConvergeCS, Movement);
+		break;
+
+	case MT_FOLLOW:
+		bOver = m_pVIBufferCom->DispatchCS(m_pFollowCS, Movement);
 		break;
 	}
 
-	//if (true == bOver)
-	//	m_isActive = false;
+	if (true == bOver)
+		m_isActive = false;
 }
 
 void CTrail_Effect_MP::Late_Update(_float fTimeDelta)
 {
+	if (CRenderer::RG_END == m_RenderDesc.iRenderGroup)
+		return;
+
 	if (CRenderer::RG_EFFECT == m_RenderDesc.iRenderGroup)
 		m_pGameInstance->Add_RenderObject(CRenderer::RG_NONLIGHT, this);
 	else
@@ -272,6 +279,12 @@ HRESULT CTrail_Effect_MP::Ready_Components(const TRAIL_MP_DESC& Desc)
 		TEXT("Com_ConvergeCS"), reinterpret_cast<CComponent**>(&m_pConvergeCS))))
 		return E_FAIL;
 
+
+	/* FOR.Com_ConvergeCS */
+	if (FAILED(__super::Add_Component(LEVEL_TOOL, TEXT("Prototype_Component_Shader_Compute_Trail_Follow"),
+		TEXT("Com_FollowCS"), reinterpret_cast<CComponent**>(&m_pFollowCS))))
+		return E_FAIL;
+	
 	/* FOR.Com_ResetCS */
 	if (FAILED(__super::Add_Component(LEVEL_TOOL, TEXT("Prototype_Component_Shader_Compute_Trail_Reset"),
 		TEXT("Com_ResetCS"), reinterpret_cast<CComponent**>(&m_pResetCS))))
@@ -343,6 +356,7 @@ void CTrail_Effect_MP::Free()
 	Safe_Release(m_pSpreadCS);
 	Safe_Release(m_pMoveCS);
 	Safe_Release(m_pConvergeCS);
+	Safe_Release(m_pFollowCS);
 	Safe_Release(m_pResetCS);
 
 	for (size_t i = 0; i < TEXTURE_END; ++i)
