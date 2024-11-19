@@ -17,10 +17,12 @@ private:
 	virtual ~CRenderer() = default;
 
 public:
-	SSAO_DESC*	Get_SSAODesc() { return &m_tSSAO; }
-	HDR_DESC*	Get_HDRDesc() { return &m_tHDR; }
-	BLOOM_DESC*	Get_BloomDesc() { return &m_tBloom; }
-	DOF_DESC* Get_DOFDesc() { return &m_tDOF; }
+	SSAO_DESC*		Get_SSAODesc() { return &m_tSSAO; }
+	HDR_DESC*		Get_HDRDesc() { return &m_tHDR; }
+	BLOOM_DESC*		Get_BloomDesc() { return &m_tBloom; }
+	DOF_DESC*		Get_DOFDesc() { return &m_tDOF; }
+	RADIAL_DESC*	Get_RadialDesc() { return &m_tRadial; }
+
 public:
 	HRESULT Initialize();
 	HRESULT Add_RenderObject(RENDERGROUP eRenderGroupID, class CGameObject* pRenderObject);
@@ -65,7 +67,6 @@ private:
 	class CShader*				m_pHDRShader = { nullptr };
 	class CShader*				m_pBloomShader = { nullptr };
 	class CShader*				m_pBlurShader = { nullptr };
-	class CShader*				m_pDOFShader = { nullptr };
 
 	class CVIBuffer_Rect*		m_pVIBuffer = { nullptr };
 
@@ -95,6 +96,9 @@ private:
 	/* DOF */
 	DOF_DESC					m_tDOF = {};
 
+	/* Radial Blur*/
+	RADIAL_DESC					m_tRadial = {};
+
 #ifdef _DEBUG
 private:
 	list<class CComponent*>		m_DebugObjects;
@@ -118,6 +122,7 @@ private:
 	HRESULT Render_Bloom_Compute();
 	HRESULT Render_Bloom();
 	HRESULT Render_DOF();
+	HRESULT Render_Radial();
 
 	HRESULT Render_Distortion();
 

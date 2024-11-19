@@ -88,10 +88,11 @@ public:
 #pragma region RENDERER
 	HRESULT Add_RenderObject(CRenderer::RENDERGROUP eRenderGroupID, class CGameObject* pRenderObject);
 
-	SSAO_DESC*	Get_SSAODesc();
-	HDR_DESC* Get_HDRDesc();
-	BLOOM_DESC* Get_BloomDesc();
-	DOF_DESC* Get_DOFDesc();
+	SSAO_DESC*		Get_SSAODesc();
+	HDR_DESC*		Get_HDRDesc();
+	BLOOM_DESC*		Get_BloomDesc();
+	DOF_DESC*		Get_DOFDesc();
+	RADIAL_DESC* Get_RadialDesc();
 
 #ifdef _DEBUG
 	HRESULT Add_DebugObject(class CComponent* pDebugObject);

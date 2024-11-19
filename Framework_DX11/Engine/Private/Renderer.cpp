@@ -250,10 +250,6 @@ HRESULT CRenderer::Initialize()
 	if (nullptr == m_pBlurShader)
 		return E_FAIL;
 
-	m_pDOFShader = CShader::Create(m_pDevice, m_pContext, TEXT("../Bin/ShaderFiles/Shader_Compute_DOF.hlsl"));
-	if (nullptr == m_pDOFShader)
-		return E_FAIL;
-
 	m_pPostProcessShader = CShader::Create(m_pDevice, m_pContext, TEXT("../Bin/ShaderFiles/Shader_PostProcess.hlsl"));
 	if (nullptr == m_pPostProcessShader)
 		return E_FAIL;
@@ -322,7 +318,6 @@ HRESULT CRenderer::Draw()
 {
 	if (FAILED(Render_Priority()))
 		return E_FAIL;
-
 	if (FAILED(Render_Height()))
 		return E_FAIL;
 	if (FAILED(Render_NonBlend()))
@@ -360,11 +355,15 @@ HRESULT CRenderer::Draw()
 	if (FAILED(Render_Effect()))
 		return E_FAIL;
 
+	if (FAILED(Render_Radial()))
+		return E_FAIL;
+
 	if (FAILED(Render_Distortion()))
 		return E_FAIL;
 
 	if (FAILED(Render_NonLights()))
 		return E_FAIL;
+
 	if (FAILED(Render_Blend()))
 		return E_FAIL;
 
@@ -1207,45 +1206,48 @@ HRESULT CRenderer::Render_Bloom()
 
 HRESULT CRenderer::Render_DOF()
 {	
+	if (m_tDOF.isOnDOF || m_tRadial.isOnRadial)
+	{
+		if (FAILED(Copy_BackBuffer()))
+			return E_FAIL;
+
+		// 다운 샘플
+		if (FAILED(m_pGameInstance->Bind_RT_ShaderResource(m_pBlurShader, TEXT("Target_BackBuffer"), "g_InputTexture")))
+			return E_FAIL;
+		if (FAILED(m_pGameInstance->BInd_RT_UnorderedView(m_pBlurShader, TEXT("Target_DOF0"), "g_OutputTexture")))
+			return E_FAIL;
+
+		m_pBlurShader->Begin(0);
+		m_pContext->Dispatch(static_cast<_uint>(ceil(1280.f / 4.f / 32.f)), static_cast<_uint>(ceil(720.f / 4.f / 32.f)), 1);
+		m_pContext->CSSetShaderResources(0, 128, m_pClearSRV);
+		m_pContext->CSSetUnorderedAccessViews(0, 8, m_pClearUAV, nullptr);
+
+		// 가로 블러
+		if (FAILED(m_pGameInstance->Bind_RT_ShaderResource(m_pBlurShader, TEXT("Target_DOF0"), "g_InputTexture")))
+			return E_FAIL;
+		if (FAILED(m_pGameInstance->BInd_RT_UnorderedView(m_pBlurShader, TEXT("Target_DOF1"), "g_OutputTexture")))
+			return E_FAIL;
+		m_pBlurShader->Begin(1);
+		m_pContext->Dispatch(static_cast <_uint> (ceil(1280.f / 4.f / (128.f - 12.f))), static_cast <_uint> (ceil(720.f / 4.f)), 1);
+		m_pContext->CSSetShaderResources(0, 128, m_pClearSRV);
+		m_pContext->CSSetUnorderedAccessViews(0, 8, m_pClearUAV, nullptr);
+
+		//세로 블러
+		if (FAILED(m_pGameInstance->Bind_RT_ShaderResource(m_pBlurShader, TEXT("Target_DOF1"), "g_InputTexture")))
+			return E_FAIL;
+		if (FAILED(m_pGameInstance->BInd_RT_UnorderedView(m_pBlurShader, TEXT("Target_DOF2"), "g_OutputTexture")))
+			return E_FAIL;
+		m_pBlurShader->Begin(2);
+		m_pContext->Dispatch(static_cast <_uint> (ceil(1280.f / 4.f)), static_cast <_uint> (ceil(720.f / 4.f / (128.f - 12.f))), 1);
+		m_pContext->CSSetShaderResources(0, 128, m_pClearSRV);
+		m_pContext->CSSetUnorderedAccessViews(0, 8, m_pClearUAV, nullptr);
+	}
+
 	if (!m_tDOF.isOnDOF)
 		return S_OK;
-	
-	if (FAILED(Copy_BackBuffer()))
-		return E_FAIL;
 
-	// 다운 샘플
-	if (FAILED(m_pGameInstance->Bind_RT_ShaderResource(m_pBlurShader, TEXT("Target_BackBuffer"), "g_InputTexture")))
-		return E_FAIL;
-	if (FAILED(m_pGameInstance->BInd_RT_UnorderedView(m_pBlurShader, TEXT("Target_DOF0"), "g_OutputTexture")))
-		return E_FAIL;
-
-	m_pBlurShader->Begin(0);
-	m_pContext->Dispatch(static_cast<_uint>(ceil(1280.f / 4.f / 32.f)), static_cast<_uint>(ceil(720.f / 4.f / 32.f)), 1);
-	m_pContext->CSSetShaderResources(0, 128, m_pClearSRV);
-	m_pContext->CSSetUnorderedAccessViews(0, 8, m_pClearUAV, nullptr);
-
-	// 가로 블러
-	if (FAILED(m_pGameInstance->Bind_RT_ShaderResource(m_pBlurShader, TEXT("Target_DOF0"), "g_InputTexture")))
-		return E_FAIL;
-	if (FAILED(m_pGameInstance->BInd_RT_UnorderedView(m_pBlurShader, TEXT("Target_DOF1"), "g_OutputTexture")))
-		return E_FAIL;
-	m_pBlurShader->Begin(1);
-	m_pContext->Dispatch(static_cast <_uint> (ceil(1280.f / 4.f / (128.f - 12.f))), static_cast <_uint> (ceil(720.f / 4.f)), 1);
-	m_pContext->CSSetShaderResources(0, 128, m_pClearSRV);
-	m_pContext->CSSetUnorderedAccessViews(0, 8, m_pClearUAV, nullptr);
-
-	//세로 블러
-	if (FAILED(m_pGameInstance->Bind_RT_ShaderResource(m_pBlurShader, TEXT("Target_DOF1"), "g_InputTexture")))
-		return E_FAIL;
-	if (FAILED(m_pGameInstance->BInd_RT_UnorderedView(m_pBlurShader, TEXT("Target_DOF2"), "g_OutputTexture")))
-		return E_FAIL;
-	m_pBlurShader->Begin(2);
-	m_pContext->Dispatch(static_cast <_uint> (ceil(1280.f / 4.f)), static_cast <_uint> (ceil(720.f / 4.f / (128.f - 12.f))), 1);
-	m_pContext->CSSetShaderResources(0, 128, m_pClearSRV);
-	m_pContext->CSSetUnorderedAccessViews(0, 8, m_pClearUAV, nullptr);
-
-	if (FAILED(m_pGameInstance->Begin_MRT(TEXT("MRT_DOF_Final"))))
-		return E_FAIL;
+	//if (FAILED(m_pGameInstance->Begin_MRT(TEXT("MRT_DOF_Final"))))
+	//	return E_FAIL;
 
 	if (FAILED(m_pPostProcessShader->Bind_Matrix("g_WorldMatrix", &m_WorldMatrix)))
 		return E_FAIL;
@@ -1270,26 +1272,40 @@ HRESULT CRenderer::Render_DOF()
 	m_pVIBuffer->Bind_Buffers();
 	m_pVIBuffer->Render();
 
-	if (FAILED(m_pGameInstance->End_MRT()))
+	return S_OK;
+}
+
+HRESULT CRenderer::Render_Radial()
+{
+	if (!m_tRadial.isOnRadial)
+		return S_OK;
+
+	if (FAILED(m_pPostProcessShader->Bind_Matrix("g_WorldMatrix", &m_WorldMatrix)))
+		return E_FAIL;
+	if (FAILED(m_pPostProcessShader->Bind_Matrix("g_ViewMatrix", &m_ViewMatrix)))
+		return E_FAIL;
+	if (FAILED(m_pPostProcessShader->Bind_Matrix("g_ProjMatrix", &m_ProjMatrix)))
 		return E_FAIL;
 
-	if (FAILED(m_pShader->Bind_Matrix("g_WorldMatrix", &m_WorldMatrix)))
+	if (FAILED(m_pPostProcessShader->Bind_RawValue("g_vRadialCenterPos", &m_tRadial.vRadialCenterPos, sizeof(_float2))))
 		return E_FAIL;
-	if (FAILED(m_pShader->Bind_Matrix("g_ViewMatrix", &m_ViewMatrix)))
+	if (FAILED(m_pPostProcessShader->Bind_RawValue("g_fRadius", &m_tRadial.fRadius, sizeof(_float))))
 		return E_FAIL;
-	if (FAILED(m_pShader->Bind_Matrix("g_ProjMatrix", &m_ProjMatrix)))
-		return E_FAIL;
-
-	if (FAILED(m_pGameInstance->Bind_RT_ShaderResource(m_pShader, TEXT("Target_DOF_Final"), "g_BackTexture")))
+	if (FAILED(m_pPostProcessShader->Bind_RawValue("g_RadialPower", &m_tRadial.fRadialPower, sizeof(_float))))
 		return E_FAIL;
 
-	m_pShader->Begin(4);
+	if (FAILED(m_pGameInstance->Bind_RT_ShaderResource(m_pPostProcessShader, TEXT("Target_Depth"), "g_DepthTexture")))
+		return E_FAIL;
+	if (FAILED(m_pGameInstance->Bind_RT_ShaderResource(m_pPostProcessShader, TEXT("Target_BackBuffer"), "g_BackTexture")))
+		return E_FAIL;
+	if (FAILED(m_pGameInstance->Bind_RT_ShaderResource(m_pPostProcessShader, TEXT("Target_DOF2"), "g_DofBlurTexture")))
+		return E_FAIL;
 
+	m_pPostProcessShader->Begin(2);
 	m_pVIBuffer->Bind_Buffers();
-
 	m_pVIBuffer->Render();
 
-	// 합치기
+	
 	return S_OK;
 }
 
@@ -1930,7 +1946,6 @@ void CRenderer::Free()
 	Safe_Release(m_pLightDepthStencilView);
 	Safe_Release(m_pCascadeDepthStencilViewArr);
 
-	Safe_Release(m_pDOFShader);
 	Safe_Release(m_pPostProcessShader);
 	Safe_Release(m_pBlurShader);
 	Safe_Release(m_pBackShader);

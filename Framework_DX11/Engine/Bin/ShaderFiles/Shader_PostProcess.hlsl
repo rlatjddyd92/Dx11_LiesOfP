@@ -17,7 +17,9 @@ float g_fFocus; // 초점
 float g_fMotionBlurPower;
 
 /* Radial Blur */
-float4 g_vRadialPos;
+float2 g_vRadialCenterPos;
+float g_fRadius;
+float g_RadialPower;
 
 /* Effect */
 texture2D g_EffectTexture;
@@ -89,7 +91,6 @@ PS_OUT PS_MAIN_DOF(PS_IN In)
     {
         float fFocusRatio = saturate(abs(fDepth - g_fFocus) / g_fFocus);
     
-        fFocusRatio = saturate(fFocusRatio);
         vColor = lerp(vBack, vBlur, fFocusRatio);
     }
    
@@ -147,25 +148,26 @@ PS_OUT PS_MAIN_MOTION_BLUR(PS_IN In)
 PS_OUT PS_MAIN_RADIALBLUR(PS_IN In)
 {
     PS_OUT Out = (PS_OUT) 0;
+   
+    vector vBack = g_BackTexture.Sample(LinearSampler, In.vTexcoord);
+    vector vBlur = g_DofBlurTexture.Sample(LinearSampler, In.vTexcoord);
     
     float fBlurStart = 1.f;
     
-    // 화면 공간으로 전환하기
-    float4 vCenterPos = mul(float4(g_vRadialPos.xyz, 1.f), g_CameraViewMatrix);
-    vCenterPos = mul(float4(g_vRadialPos.xyz, 1.f), g_CameraProjMatrix);
-    vCenterPos /= vCenterPos.w;
-	
-    // 텍스쳐 좌표로 바꿔야함
-    float2 vBlurCenter = float2(vCenterPos.x * 0.5f + 0.5f, vCenterPos.y * -0.5f + 0.5f);
+    float2 vBlurCenter = g_vRadialCenterPos;
     
     // 중심에서부터의 거리 구하기
     float2 vDistance = In.vTexcoord.xy - vBlurCenter;
-    float fIntensity = 10.f * (1.0f / 19.f);    // 임시로 강도 10 주기
-   
-    // 블러된 텍스쳐 가져와서 
-    // 거리가 멀수록 블러 텍스쳐를더 많이 섞어주기
-   
-    Out.vColor = 1.f;
+    
+    vector vColor = vBack;
+    
+    float fDistance = length(vDistance);
+    if (fDistance >= g_fRadius)
+    {
+        vColor = lerp(vBack, vBlur, saturate(g_RadialPower * fDistance));
+    }
+    
+    Out.vColor = vColor;
     
     return Out;
 
@@ -179,6 +181,7 @@ PS_OUT PS_MAIN_EFFECT(PS_IN In)
     float4 vColor = g_EffectTexture.Sample(LinearSampler, In.vTexcoord + float2(fDistortion, fDistortion));
    
     float4 vEffect = g_EffectTexture.Sample(LinearSampler, In.vTexcoord);
+    
     
     //논블렌드?
     //vColor = float4(vEffect.rgb + vColor.rgb, 1.f);

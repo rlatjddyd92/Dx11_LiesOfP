@@ -168,7 +168,6 @@
     <FxCompile Include="..\Bin\ShaderFiles\Shader_Compute_Back.hlsl" />
     <FxCompile Include="..\Bin\ShaderFiles\Shader_Compute_Bloom.hlsl" />
     <FxCompile Include="..\Bin\ShaderFiles\Shader_Compute_Blur.hlsl" />
-    <FxCompile Include="..\Bin\ShaderFiles\Shader_Compute_DOF.hlsl" />
     <FxCompile Include="..\Bin\ShaderFiles\Shader_Deferred.hlsl" />
     <FxCompile Include="..\Bin\ShaderFiles\Shader_Distortion.hlsl" />
     <FxCompile Include="..\Bin\ShaderFiles\Shader_Compute_HDR.hlsl" />
