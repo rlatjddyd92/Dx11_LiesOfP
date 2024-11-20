@@ -26,8 +26,7 @@ float g_RadialPower;
 
 /* Effect */
 texture2D g_EffectTexture;
-texture2D g_EffectNonDownTexture;
-texture2D g_EffectDownTexture;
+texture2D g_EffectBlur;
 
 
 struct VS_IN
@@ -181,8 +180,7 @@ PS_OUT PS_MAIN_EFFECT(PS_IN In)
     PS_OUT Out = (PS_OUT) 0;
     
     vector vEffect = g_EffectTexture.Sample(LinearSampler, In.vTexcoord);
-    vector vNonDownEffect = g_EffectNonDownTexture.Sample(LinearSampler, In.vTexcoord);;
-    vector vDownEffect = g_EffectDownTexture.Sample(LinearSampler, In.vTexcoord);
+    vector vEffectBlur = g_EffectBlur.Sample(LinearSampler, In.vTexcoord);
     
     vector vBack = g_BackTexture.Sample(LinearSampler, In.vTexcoord);
     
@@ -190,7 +188,7 @@ PS_OUT PS_MAIN_EFFECT(PS_IN In)
     //vColor = float4(vEffect.rgb + vColor.rgb, 1.f);
     
     //Out.vColor = float4(vEffect.rgb * vEffect.a + vColor.rgb * (1.f - vEffect.a), 1.f);
-    Out.vColor = vBack + vEffect + vNonDownEffect + vDownEffect;
+    Out.vColor = vBack + vEffect + vEffectBlur;
     
     return Out;
 }

@@ -54,8 +54,7 @@ struct PS_OUT
 struct PS_EFFECT_OUT
 {
     vector vDiffuse : SV_TARGET0;
-    vector vDistortion : SV_TARGET1;
-    vector vBlur : SV_TARGET2;
+    vector vBlur : SV_TARGET1;
 };
 
 PS_OUT PS_MAIN(PS_IN In)
@@ -77,7 +76,6 @@ PS_EFFECT_OUT PS_TEST_MAIN(PS_IN In)
     float fDistortion = g_MaskTexture_1.Sample(LinearSampler, vTexcoord).x * 0.3f;
 	
     Out.vDiffuse = g_DiffuseTexture.Sample(LinearSampler, In.vTexcoord + float2(fDistortion, fDistortion));
-    Out.vDistortion = 0;
     Out.vBlur = g_DiffuseTexture.Sample(LinearSampler, In.vTexcoord);
 	
     return Out;

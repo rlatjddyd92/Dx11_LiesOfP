@@ -36,6 +36,7 @@ texture2D		g_CascadeShadowTexture;
 
 texture2D		g_DecalDiffuseTexture;
 texture2D		g_DecalNormalTexture;
+texture2D		g_DecalARMTexture;
 
 vector			g_vCamPosition;
 
@@ -163,20 +164,29 @@ PS_OUT_LIGHT PS_MAIN_LIGHT_DIRECTIONAL(PS_IN In)
 
 	vector		vDepthDesc = g_DepthTexture.Sample(PointSampler, In.vTexcoord);
 	vector		vNormalDesc = g_NormalTexture.Sample(PointSampler, In.vTexcoord);
+    
+    vector      vDecalDiffuse = g_DecalDiffuseTexture.Sample(LinearSampler, In.vTexcoord);
+    vector      vDecalNormalDesc = g_DecalNormalTexture.Sample(PointSampler, In.vTexcoord);
 	
     float		fViewZ = vDepthDesc.y * g_fFar;
-    float3		vNormal = float3(vNormalDesc.xyz * 2.f - 1.f);
+    float3      vNormal = float3(vNormalDesc.xyz * 2.f - 1.f);
+    float3      vDecalNormal = float3(vDecalNormalDesc.xyz * 2.f - 1.f);
 	
+    vNormal = vector(lerp(vNormal, vDecalNormal, vDecalDiffuse.a), 0.f); // 알파 값에 따라 혼합
+    
     vector		vPosition = Compute_WorldPos(In.vTexcoord, vDepthDesc.x, fViewZ);
 	
     
     float fHalfLambert = saturate(dot(normalize(g_vLightDir) * -1.f, vNormal) * 0.5f + 0.5f);
     Out.vShade = g_vLightDiffuse * saturate(fHalfLambert + (g_vLightAmbient * g_vMtrlAmbient));
     
-    
     // PBR
-    vector vDiffuse = g_DiffuseTexture.Sample(LinearSampler, In.vTexcoord);
-    vector vARM = g_ARMTexture.Sample(LinearSampler, In.vTexcoord);
+    vector      vDiffuse = g_DiffuseTexture.Sample(LinearSampler, In.vTexcoord);
+    
+    vector      vARM = g_ARMTexture.Sample(LinearSampler, In.vTexcoord);
+    vector      vDecalARM = g_DecalARMTexture.Sample(LinearSampler, In.vTexcoord);
+    
+    vARM = vector(lerp(vARM, vDecalARM, vDecalDiffuse.a)); // 알파 값에 따라 혼합
     
     float       fAmbietnOcc = vARM.r;
     float		fRoughness = vARM.g;
