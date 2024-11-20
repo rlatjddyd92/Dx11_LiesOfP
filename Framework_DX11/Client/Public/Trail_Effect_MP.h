@@ -13,10 +13,12 @@ BEGIN(Client)
 class CTrail_Effect_MP final : public CEffect_Base
 {
 public:
+	enum TRAIL_MP_TYPE { MT_SPREAD, MT_MOVE, MT_CONVERGE, MT_FOLLOW, MT_END };
+
 	typedef struct
 	{
 		// ¿òÁ÷ÀÓ
-		PARTICLE_TYPE		eType = { PT_END };
+		TRAIL_MP_TYPE		eType = { MT_END };
 		_uint				iComputeState = { 0 };
 		_float				fGravity = { 0.f };
 		_Vec4				vPivot = { 0.f, 0.f, 0.f, 1.f };

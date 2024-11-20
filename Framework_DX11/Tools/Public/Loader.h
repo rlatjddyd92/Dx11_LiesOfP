@@ -5,7 +5,7 @@
 
 BEGIN(Engine)
 class CGameInstance;
-class casdf;
+class csda;
 END
 
 BEGIN(Tools)

@@ -286,6 +286,24 @@ void CController_EffectTool::Render()
 
 	ImGui::End();
 #pragma endregion
+
+#pragma region TEST_CONSOLE
+	// ImGui 창 시작
+	ImGui::Begin("Console");
+
+	// 로그 출력
+	ImGui::BeginChild("ScrollingRegion", ImVec2(0, -ImGui::GetFrameHeightWithSpacing()), true);
+	for (const auto& log : logs) {
+		ImGui::TextUnformatted(log.c_str());
+	}
+	ImGui::EndChild();
+
+	while (10 < logs.size())
+		logs.pop_front();
+
+	ImGui::End();
+#pragma endregion
+
 	ImGui::EndTabItem();
 }
 
@@ -635,19 +653,22 @@ void CController_EffectTool::TE_Check()
 		ImGui::InputFloat3("Pos TE", (_float*)&m_TextureDesc.DefaultDesc.vPos);
 		ImGui::InputFloat3("Start Scale TE", (_float*)&m_TextureDesc.DefaultDesc.vStartScale);
 		ImGui::InputFloat3("Scaling Speed TE", (_float*)&m_TextureDesc.DefaultDesc.vScalingSpeed);
+		ImGui::InputFloat("Start Rotation TE", &m_TextureDesc.DefaultDesc.fStarRotation);
+		ImGui::InputFloat("Rotation Per Second TE", &m_TextureDesc.DefaultDesc.fRotationPerSecond);
 
 		ImGui::SeparatorText("Blending");
 		ImGui::InputFloat("Start Alpha TE", (_float*)&m_TextureDesc.DefaultDesc.fAlpha);
 		ImGui::InputFloat("Alpha Speed TE", (_float*)&m_TextureDesc.DefaultDesc.fAlphaSpeed);
 		ImGui::SeparatorText("Shader");
 		ImGui::InputInt("Shader Index", (_int*)&m_TextureDesc.DefaultDesc.iShaderIndex);
+		ImGui::SeparatorText("Billboard");
+		ImGui::Checkbox("Preserve Rotation", &m_TextureDesc.DefaultDesc.bPreserveRotation);
 		ImGui::SeparatorText("Loop");
 		ImGui::Checkbox("Texture Loop", &m_TextureDesc.DefaultDesc.bLoop);
 		ImGui::TreePop();
 
 		if (CTexture_Effect::SHADER_END <= m_TextureDesc.DefaultDesc.iShaderIndex)
 			m_TextureDesc.DefaultDesc.iShaderIndex = CTexture_Effect::SHADER_DEFAULT;
-
 	}
 }
 
@@ -1547,14 +1568,16 @@ HRESULT CController_EffectTool::Check_EffectContainer()
 
 HRESULT CController_EffectTool::Add_EffectContainer()
 {
-	Delete_EffectContainer();
-
 	vector<void*> pParticleDescs;
 	vector<void*> pTextureDesc;
 	vector<void*> pMeshDesc;
 	vector<void*> pTrail_OPDesc;
 	vector<void*> pTrail_TPDesc;
 	vector<void*> pTrail_MPDesc;
+
+	CLayer* pECLayer = m_pGameInstance->Find_Layer(LEVEL_TOOL, TEXT("Layer_Effect"));
+	if (nullptr != pECLayer && 0 < pECLayer->Get_ObjectList().size())
+		return E_FAIL;
 
 	CLayer* pPELayer = m_pGameInstance->Find_Layer(LEVEL_TOOL, TEXT("Layer_Particle"));
 	if (nullptr != pPELayer)

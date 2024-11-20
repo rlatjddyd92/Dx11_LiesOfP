@@ -93,9 +93,6 @@ void CEffect_Container::Late_Update(_float fTimeDelta)
 		if(false == Effect->Get_Dead())
 			m_isDead = false;
 	}
-
-	if (true == m_isDead)
-		_int a = 0;
 }
 
 HRESULT CEffect_Container::Render()

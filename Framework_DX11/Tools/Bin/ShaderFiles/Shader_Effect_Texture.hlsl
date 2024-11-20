@@ -88,9 +88,9 @@ struct PS_OUT
 
 struct PS_EFFECT_OUT
 {
-    vector vColor : SV_TARGET0;
-    vector vDistortion : SV_TARGET1;
-    vector vBlur : SV_TARGET2;
+    vector vDiffuse : SV_TARGET0;
+    vector vNonDownSample : SV_TARGET1;
+    vector vDownSample : SV_TARGET2;
 };
 
 PS_OUT PS_MAIN(PS_IN In)
@@ -113,6 +113,22 @@ PS_OUT PS_MAIN(PS_IN In)
     return Out;
 }
 
+PS_EFFECT_OUT PS_ATTACK_NORMAL_LIGHT_MAIN(PS_IN In)
+{
+    PS_EFFECT_OUT Out = (PS_EFFECT_OUT) 0;
+    
+    vector vColor = g_DiffuseTexture.Sample(LinearSampler, In.vTexcoord);
+    
+    vColor.r = 1.f - (1 - g_vColor.r) * (1 - vColor.a);
+    vColor.g = 1.f - (1 - g_vColor.g) * (1 - vColor.a);
+    vColor.b = 1.f - (1 - g_vColor.b) * (1 - vColor.a);
+
+    Out.vDiffuse = vColor;
+    Out.vNonDownSample = (vector) 0.f;
+    Out.vDownSample = vColor;
+    
+    return Out;
+}
 
 technique11 DefaultTechnique
 {
@@ -127,4 +143,14 @@ technique11 DefaultTechnique
         PixelShader = compile ps_5_0 PS_MAIN();
     }
 
+    pass Attack_Normal_Light
+    {
+        SetRasterizerState(RS_Default);
+        SetDepthStencilState(DSS_None, 0);
+        SetBlendState(BS_AlphaBlend, vector(0.f, 0.f, 0.f, 0.f), 0xffffffff);
+
+        VertexShader = compile vs_5_0 VS_MAIN();
+        GeometryShader = NULL;
+        PixelShader = compile ps_5_0 PS_ATTACK_NORMAL_LIGHT_MAIN();
+    }
 }

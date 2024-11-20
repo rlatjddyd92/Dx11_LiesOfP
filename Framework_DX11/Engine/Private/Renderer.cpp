@@ -336,6 +336,9 @@ HRESULT CRenderer::Draw()
 	if (FAILED(Render_DOF())) // DOF Ãß°¡
 		return E_FAIL;
 
+	if (FAILED(Render_Effect()))
+		return E_FAIL;
+
 	if (FAILED(Render_Radial()))
 		return E_FAIL;
 

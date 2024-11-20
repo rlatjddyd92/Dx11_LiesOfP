@@ -33,7 +33,7 @@ HRESULT CAnimModel::Initialize(void* pArg)
 		return E_FAIL;
 
 	m_pTransformCom->Set_Scaled(pDesc->vScale.x, pDesc->vScale.y, pDesc->vScale.z);
-	m_pTransformCom->Set_State(CTransform::STATE_POSITION, _Vec3(5.f,1.f,5.f));
+	m_pTransformCom->Set_State(CTransform::STATE_POSITION, _Vec3(0.f,0.f,0.f));
 	m_pTransformCom->Rotation(_vector{0, 1, 0, 0}, XMConvertToRadians(180.f));
 
 	//테스트용
@@ -72,7 +72,7 @@ void CAnimModel::Update(_float fTimeDelta)
 		m_pTransformCom->Go_Straight(fTimeDelta);//m_pTransformCom->Set_State(CTransform::STATE_POSITION, XMVectorSetX(vPos, XMVectorGetX(vPos) + 0.1f));
 	
 	_bool	bEndCheck{false};
-	//_vector vRootMove = m_pModelCom->Play_Animation(fTimeDelta, &bEndCheck, &m_EvKeyList);
+	_vector vRootMove = m_pModelCom->Play_Animation(fTimeDelta, &m_EvKeyList);
 	
 	if (m_EvKeyList.empty() == false)
 	{
@@ -87,21 +87,10 @@ void CAnimModel::Update(_float fTimeDelta)
 	}
 
 	_vector vPos = m_pTransformCom->Get_State(CTransform::STATE_POSITION);
-	//_vector vRight = m_pTransformCom->Get_State(CTransform::STATE_RIGHT);
-	//_vector vUp = m_pTransformCom->Get_State(CTransform::STATE_UP);
-	//_vector vLook = m_pTransformCom->Get_State(CTransform::STATE_LOOK);
 
-	//if (bEndCheck == true)//조건을 애니메이션이 끝났을때 or 변경 되었을때로
-	//{
-	//	vRootMove = m_vRootMoveStack = XMVectorSet(0, 0, 0, 1);
-	//}
-	//else
-	//{
-	//	vRootMove = XMVector3TransformNormal(vRootMove, m_pTransformCom->Get_WorldMatrix());
-	//	
-	//	m_pTransformCom->Set_State(CTransform::STATE_POSITION, vPos + vRootMove - m_vRootMoveStack);
-	//	m_vRootMoveStack = vRootMove;
-	//}
+	vRootMove = XMVector3TransformNormal(vRootMove, m_pTransformCom->Get_WorldMatrix());
+	
+	m_pTransformCom->Set_State(CTransform::STATE_POSITION, vPos + vRootMove - m_vRootMoveStack);
 
 }
 
@@ -115,7 +104,6 @@ void CAnimModel::Late_Update(_float fTimeDelta)
 	/* 직교투영을 위한 월드행렬까지 셋팅하게 된다. */
 	__super::Late_Update(fTimeDelta);
 
-	if(false == CController_EffectTool::Get_Instance()->Get_JunhoCamera())
 		m_pGameInstance->Add_RenderObject(CRenderer::RG_NONBLEND, this);
 }
 

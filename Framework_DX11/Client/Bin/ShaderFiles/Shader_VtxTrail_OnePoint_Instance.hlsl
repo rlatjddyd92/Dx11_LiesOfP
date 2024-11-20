@@ -127,7 +127,6 @@ void GS_MAIN(point GS_IN In[1], inout TriangleStream<GS_OUT> Container)
     Container.RestartStrip();
 }
 
-
 struct PS_IN
 {
     float4 vPosition : SV_POSITION;
@@ -140,6 +139,12 @@ struct PS_OUT
     vector vColor : SV_TARGET0;
 };
 
+struct PS_EFFECT_OUT
+{
+    vector vColor : SV_TARGET0;
+    vector vDistortion : SV_TARGET1;
+    vector vBlur : SV_TARGET2;
+};
 
 /* 1. 픽셀의 최종적인 색상을 결정한다. */
 PS_OUT PS_MAIN(PS_IN In)
@@ -157,42 +162,22 @@ PS_OUT PS_MAIN(PS_IN In)
     over.x = start.x + (1 / g_vTexDivide.x);
     over.y = start.y + (1 / g_vTexDivide.y);
     
-    Out.vColor = g_DiffuseTexture.Sample(LinearSampler, In.vTexcoord);
+    float2 vTexcoord = start + (over - start) * In.vTexcoord;
+
+    Out.vColor = g_DiffuseTexture.Sample(LinearSampler, vTexcoord);
     
     if (Out.vColor.a < 0.1f)
         discard;
     
     if (In.vLifeTime.x < In.vLifeTime.y)
         discard;
-    
-    //vector vColor = Out.vColor;
-    //Out.vColor.rgb = 1.f - (1 - g_vColor.rgb) * (1 - vColor.a * 0.85f);
-    
-    return Out;
-}
-
-PS_OUT PS_TEST_MAIN(PS_IN In)
-{
-    PS_OUT Out = (PS_OUT) 0;
-
-    Out.vColor = float4(1.f, 0.f, 0.f, 1.f);
-    
-    if (Out.vColor.a < 0.1f)
-        discard;
-    
-    if (In.vLifeTime.x < In.vLifeTime.y)
-        discard;
-    
-    //vector vColor = Out.vColor;
-    //Out.vColor.rgb = 1.f - (1 - g_vColor.rgb) * (1 - vColor.a * 0.85f);
     
     return Out;
 }
 
 technique11 DefaultTechnique
 {
-	/* 빛연산 + 림라이트 + ssao + 노멀맵핑 + pbr*/
-    pass UI
+    pass DEFAULT
     {
         SetRasterizerState(RS_Cull_None);
         SetDepthStencilState(DSS_Default, 0);
@@ -202,17 +187,4 @@ technique11 DefaultTechnique
         GeometryShader = compile gs_5_0 GS_MAIN();
         PixelShader = compile ps_5_0 PS_MAIN();
     }
-
-    pass TEST
-    {
-        SetRasterizerState(RS_Cull_None);
-        SetDepthStencilState(DSS_Default, 0);
-        SetBlendState(BS_Default, vector(0.f, 0.f, 0.f, 0.f), 0xffffffff);
-
-        VertexShader = compile vs_5_0 VS_MAIN();
-        GeometryShader = compile gs_5_0 GS_MAIN();
-        PixelShader = compile ps_5_0 PS_TEST_MAIN();
-
-    }
-
 }

@@ -2,6 +2,8 @@
 #include "Effect_Base.h"
 #include "GameInstance.h"
 
+#include "Controller_EffectTool.h"
+
 CEffect_Base::CEffect_Base(ID3D11Device* pDevice, ID3D11DeviceContext* pContext)
     : CGameObject(pDevice, pContext)
 {

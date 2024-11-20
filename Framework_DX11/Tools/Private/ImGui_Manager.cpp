@@ -87,6 +87,8 @@ void CImGui_Manager::Update_ImGui()
 	ImGuiTabBarFlags tab_bar_flags = ImGuiTabBarFlags_None;
 	if (ImGui::BeginTabBar("MyTabBar", tab_bar_flags))
 	{
+		//이펙트 툴에서 플레이어 보이게 하기 위한 변수
+		bAnimCtr = false;
 		Tool_Map();
 
 		Tool_Effect();
@@ -124,6 +126,7 @@ void CImGui_Manager::Tool_Effect()
 	{
 		m_pController_EffectTool->Set_JumhoCamera(true);
 		m_pController_EffectTool->Render();
+		bAnimCtr = true;
 	}
 	else
 		m_pController_EffectTool->Set_JumhoCamera(false);
@@ -155,7 +158,12 @@ void CImGui_Manager::Tool_Animation()
 	}
 	else
 	{
-		m_pController_AnimationTool->BlockObjCtr();
+		if (!bAnimCtr)
+		{
+			m_pController_AnimationTool->Set_BlockObjCtr(false);
+		}
+		else
+			m_pController_AnimationTool->Set_BlockObjCtr(true);
 	}
 }
 

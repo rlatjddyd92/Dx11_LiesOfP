@@ -14,6 +14,7 @@
 
 BEGIN(Engine)
 class CGameObject;
+class casdf;
 END
 
 BEGIN(Tools)
@@ -202,6 +203,10 @@ private:
 
 	_bool m_EffectPP[PP_END] = {};
 #pragma endregion
+
+
+public:
+	list<string> logs;
 
 private:
 	void Set_ParticleState();

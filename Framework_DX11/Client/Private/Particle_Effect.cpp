@@ -76,10 +76,7 @@ void CParticle_Effect::Late_Update(_float fTimeDelta)
     if (true == m_isDead)
         return;
 
-    if (CRenderer::RG_EFFECT == m_RenderDesc.iRenderGroup)
-        m_pGameInstance->Add_RenderObject(CRenderer::RG_NONLIGHT, this);
-    else
-        m_pGameInstance->Add_RenderObject((CRenderer::RENDERGROUP)m_RenderDesc.iRenderGroup, this);
+    m_pGameInstance->Add_RenderObject((CRenderer::RENDERGROUP)m_RenderDesc.iRenderGroup, this);
 }
 
 HRESULT CParticle_Effect::Render()

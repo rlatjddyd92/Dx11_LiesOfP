@@ -20,7 +20,6 @@ public:
 	} EFFECT_BASE_DESC;
 
 	enum EFFECT_TYPE { TYPE_PARTICLE, TYPE_TEXTURE, TYPE_MESH, TYPE_TRAIL_OP, TYPE_TRAIL_TP, TYPE_TRAIL_MP, TYPE_END };
-	enum PARTICLE_TYPE { PT_SPREAD, PT_MOVE, PT_CONVERGE, PT_END };
 
 	enum GEOM_STATE
 	{
@@ -74,11 +73,11 @@ protected:
 	void Set_WorldMatrix();
 
 protected:
-	EFFECT_TYPE m_eEffectType = { TYPE_END };
+	EFFECT_TYPE		m_eEffectType = { TYPE_END };
 	RENDER_DESC		m_RenderDesc = {};
 
-	_Matrix m_WorldMatrix = XMMatrixIdentity();
-	const _Matrix* m_pParentMatrix = { nullptr };
+	_Matrix			m_WorldMatrix = XMMatrixIdentity();
+	const _Matrix*	m_pParentMatrix = { nullptr };
 
 public:
 	virtual CGameObject* Clone(void* pArg) = 0;

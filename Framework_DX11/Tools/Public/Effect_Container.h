@@ -57,6 +57,8 @@ private:
 	_bool m_bOrbit = { false };
 	_bool m_bTurn = { false };
 
+	_float m_fCurrentAngle = { 0.f };
+
 private:
 	HRESULT Load_Effect_By_Path(const _wstring& strFilePath);
 	_wstring getPreviousFolderPath(const _wstring& path);

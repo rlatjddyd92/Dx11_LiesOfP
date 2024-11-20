@@ -89,7 +89,9 @@ void CTrail_Effect_MP::Update(_float fTimeDelta)
 	}
 
 	if (true == bOver)
-		m_isActive = false;
+	{
+		//m_isActive = false;
+	}
 }
 
 void CTrail_Effect_MP::Late_Update(_float fTimeDelta)

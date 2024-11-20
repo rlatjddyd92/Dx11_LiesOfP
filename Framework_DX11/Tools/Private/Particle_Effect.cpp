@@ -83,7 +83,7 @@ void CParticle_Effect::Update(_float fTimeDelta)
 
     if (true == bOver)
     {
-        m_isActive = false;
+        // m_isActive = false;
     }
 
 }
