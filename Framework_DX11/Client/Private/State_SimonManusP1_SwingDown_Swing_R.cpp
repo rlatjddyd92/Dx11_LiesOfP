@@ -2,7 +2,7 @@
 #include "State_SimonManusP1_SwingDown_Swing_R.h"
 #include "GameInstance.h"
 #include "Model.h"
-#include "CarcassBigA.h"
+#include "SimonManus.h"
 
 CState_SimonManusP1_SwingDown_Swing_R::CState_SimonManusP1_SwingDown_Swing_R(CFsm* pFsm, CMonster* pMonster)
     :CState{ pFsm }
@@ -47,7 +47,7 @@ void CState_SimonManusP1_SwingDown_Swing_R::Update(_float fTimeDelta)
 
             if (m_iRouteTrack >= 2)
             {
-                m_pMonster->Change_State(CCarcassBigA::IDLE);
+                m_pMonster->Change_State(CSimonManus::IDLE);
                 return;
             }
             m_fIdleTime = 0.f;

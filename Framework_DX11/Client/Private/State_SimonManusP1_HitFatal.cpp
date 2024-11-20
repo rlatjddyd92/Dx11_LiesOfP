@@ -2,7 +2,7 @@
 #include "State_SimonManusP1_HitFatal.h"
 #include "GameInstance.h"
 #include "Model.h"
-#include "SimonManusP1.h"
+#include "SimonManus.h"
 
 CState_SimonManusP1_HitFatal::CState_SimonManusP1_HitFatal(CFsm* pFsm, CMonster* pMonster)
     :CState{ pFsm }
@@ -15,7 +15,7 @@ HRESULT CState_SimonManusP1_HitFatal::Initialize(_uint iStateNum, void* pArg)
    //m_iAnimation_Idle = m_pMonster->Get_Model()->Get_AnimationIndex("Kurama_Idle_Loop");
     m_iStateNum = iStateNum;
     m_fIdleDuration = 3.3f;
-    CSimonManusP1::FSMSTATE_DESC* pDesc = static_cast<CSimonManusP1::FSMSTATE_DESC*>(pArg);
+    CSimonManus::FSMSTATE_DESC* pDesc = static_cast<CSimonManus::FSMSTATE_DESC*>(pArg);
 
     m_pIsEndAnim = pDesc->pIsEndAnim;
     m_pResetRootMove = pDesc->pIsResetRootMove;
@@ -45,7 +45,7 @@ void CState_SimonManusP1_HitFatal::Update(_float fTimeDelta)
         else
         {
             m_iAnimCnt = 0;
-            m_pMonster->Change_State(CSimonManusP1::GROGY);
+            m_pMonster->Change_State(CSimonManus::GROGY);
         }
     }
 

@@ -190,7 +190,7 @@
     <ClInclude Include="..\Public\Particle_Effect.h" />
     <ClInclude Include="..\public\Player.h" />
     <ClInclude Include="..\Public\Player_Stat_Manager.h" />
-    <ClInclude Include="..\Public\SimonManusP1.h" />
+    <ClInclude Include="..\Public\SimonManus.h" />
     <ClInclude Include="..\Public\Sky.h" />
     <ClInclude Include="..\Public\Stargazer.h" />
     <ClInclude Include="..\Public\State_CarcassBigA_AttackRoute_0.h" />
@@ -275,6 +275,7 @@
     <ClInclude Include="..\Public\Weapon_FlameSword.h" />
     <ClInclude Include="..\Public\Weapon_Rapier.h" />
     <ClInclude Include="..\Public\Weapon_Scissor.h" />
+    <ClInclude Include="..\Public\Weapon_SimonManus_Hammer.h" />
     <ClInclude Include="Client.h" />
     <ClInclude Include="Interface_Enums.h" />
     <ClInclude Include="Item_Defines.h" />
@@ -308,7 +309,7 @@
     <ClCompile Include="..\Private\Particle_Effect.cpp" />
     <ClCompile Include="..\private\Player.cpp" />
     <ClCompile Include="..\Private\Player_Stat_Manager.cpp" />
-    <ClCompile Include="..\Private\SimonManusP1.cpp" />
+    <ClCompile Include="..\Private\SimonManus.cpp" />
     <ClCompile Include="..\Private\Sky.cpp" />
     <ClCompile Include="..\Private\Stargazer.cpp" />
     <ClCompile Include="..\Private\State_CarcassBigA_AttackRoute_0.cpp" />
@@ -393,6 +394,7 @@
     <ClCompile Include="..\Private\Weapon_FlameSword.cpp" />
     <ClCompile Include="..\Private\Weapon_Rapier.cpp" />
     <ClCompile Include="..\Private\Weapon_Scissor.cpp" />
+    <ClCompile Include="..\Private\Weapon_SimonManus_Hammer.cpp" />
     <ClCompile Include="Client.cpp" />
     <ClCompile Include="stdafx.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Create</PrecompiledHeader>

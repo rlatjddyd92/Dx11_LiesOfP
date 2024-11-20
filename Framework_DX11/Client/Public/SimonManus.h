@@ -13,7 +13,7 @@ END
 
 BEGIN(Client)
 
-class CSimonManusP1 final : public CMonster
+class CSimonManus final : public CMonster
 {
 public:
 	typedef struct
@@ -36,9 +36,9 @@ public:
 	};
 
 private:
-	CSimonManusP1(ID3D11Device* pDevice, ID3D11DeviceContext* pContext);
-	CSimonManusP1(const CSimonManusP1& Prototype);
-	virtual ~CSimonManusP1() = default;
+	CSimonManus(ID3D11Device* pDevice, ID3D11DeviceContext* pContext);
+	CSimonManus(const CSimonManus& Prototype);
+	virtual ~CSimonManus() = default;
 
 public:
 	virtual HRESULT Initialize_Prototype() override;
@@ -53,13 +53,16 @@ private:
 	_bool					m_bColliderCtrs[TYPE_END] = {true,  true};
 	vector<CGameObject*>	CollObjRenderP{};
 
+	class CWeapon* m_pWeapon = { nullptr };
+
 private:
 	HRESULT Ready_Components();
 	HRESULT Ready_FSM();
+	HRESULT Ready_Weapon();
 
 
 public:
-	static CSimonManusP1* Create(ID3D11Device* pDevice, ID3D11DeviceContext* pContext);
+	static CSimonManus* Create(ID3D11Device* pDevice, ID3D11DeviceContext* pContext);
 	virtual CGameObject* Clone(void* pArg);
 	virtual void Free() override;
 

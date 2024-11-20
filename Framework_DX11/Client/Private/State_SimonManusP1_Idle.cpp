@@ -2,7 +2,7 @@
 #include "State_SimonManusP1_Idle.h"
 #include "GameInstance.h"
 #include "Model.h"
-#include "SimonManusP1.h"
+#include "SimonManus.h"
 
 CState_SimonManusP1_Idle::CState_SimonManusP1_Idle(CFsm* pFsm, CMonster* pMonster)
     :CState{ pFsm }
@@ -44,12 +44,12 @@ void CState_SimonManusP1_Idle::Update(_float fTimeDelta)
         }
         else if (fDist > 9.f)
         {
-            m_pMonster->Change_State(CSimonManusP1::RUN);
+            m_pMonster->Change_State(CSimonManus::RUN);
             return;
         }
         else if (fDist > 6.f)
         {
-            m_pMonster->Change_State(CSimonManusP1::WALK);
+            m_pMonster->Change_State(CSimonManus::WALK);
             return;
         }
 
@@ -77,19 +77,19 @@ void CState_SimonManusP1_Idle::Update(_float fTimeDelta)
 
     if (KEY_TAP(KEY::Z))
     {
-        m_pMonster->Change_State(CSimonManusP1::GROGY);
+        m_pMonster->Change_State(CSimonManus::GROGY);
         return;
     }
 
     if (KEY_TAP(KEY::C))
     {
-        m_pMonster->Change_State(CSimonManusP1::PARALYZE);
+        m_pMonster->Change_State(CSimonManus::PARALYZE);
         return;
     }
 
     if (KEY_TAP(KEY::V))
     {
-        m_pMonster->Change_State(CSimonManusP1::DIE);
+        m_pMonster->Change_State(CSimonManus::DIE);
         return;
     }
 
@@ -113,19 +113,19 @@ void CState_SimonManusP1_Idle::Calc_Act_Attack(_float fDist)
             break;
 
         case 1:
-            m_pMonster->Change_State(CSimonManusP1::ATK_SWINGDOWN_L);
+            m_pMonster->Change_State(CSimonManus::ATK_SWINGDOWN_L);
             break;
 
         case 2:
-            m_pMonster->Change_State(CSimonManusP1::ATK_SWINGDOWN_R);
+            m_pMonster->Change_State(CSimonManus::ATK_SWINGDOWN_R);
             break;
 
         case 3:
-            m_pMonster->Change_State(CSimonManusP1::ATK_STAMP);
+            m_pMonster->Change_State(CSimonManus::ATK_STAMP);
             break;
 
         case 4:
-            m_pMonster->Change_State(CSimonManusP1::ATK_JUMPTOSWING);
+            m_pMonster->Change_State(CSimonManus::ATK_JUMPTOSWING);
             break;
 
         default:
@@ -142,19 +142,19 @@ void CState_SimonManusP1_Idle::Calc_Act_Attack(_float fDist)
         switch (iAtkNum)
         {
         case 0:
-            m_pMonster->Change_State(CSimonManusP1::ATK_STING);
+            m_pMonster->Change_State(CSimonManus::ATK_STING);
             break;
 
         case 1:
-            m_pMonster->Change_State(CSimonManusP1::ATK_CHASINGSWING);
+            m_pMonster->Change_State(CSimonManus::ATK_CHASINGSWING);
             break;
 
         case 2:
-            m_pMonster->Change_State(CSimonManusP1::ATK_SWIPMULT_L);
+            m_pMonster->Change_State(CSimonManus::ATK_SWIPMULT_L);
             break;
 
         case 3:
-            m_pMonster->Change_State(CSimonManusP1::ATK_SWIPMULT_R);
+            m_pMonster->Change_State(CSimonManus::ATK_SWIPMULT_R);
             break;
 
         default:

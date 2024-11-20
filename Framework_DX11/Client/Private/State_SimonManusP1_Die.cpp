@@ -2,7 +2,7 @@
 #include "State_SimonManusP1_Die.h"
 #include "GameInstance.h"
 #include "Model.h"
-#include "SimonManusP1.h"
+#include "SimonManus.h"
 
 CState_SimonManusP1_Die::CState_SimonManusP1_Die(CFsm* pFsm, CMonster* pMonster)
     :CState{ pFsm }
@@ -15,7 +15,7 @@ HRESULT CState_SimonManusP1_Die::Initialize(_uint iStateNum, void* pArg)
     m_iStateNum = iStateNum;
     m_fIdleDuration = 3.3f;
 
-    CSimonManusP1::FSMSTATE_DESC* pDesc = static_cast<CSimonManusP1::FSMSTATE_DESC*>(pArg);
+    CSimonManus::FSMSTATE_DESC* pDesc = static_cast<CSimonManus::FSMSTATE_DESC*>(pArg);
 
     m_pIsEndAnim = pDesc->pIsEndAnim;
     return S_OK;
@@ -33,7 +33,7 @@ void CState_SimonManusP1_Die::Update(_float fTimeDelta)
     if (End_Check())
     {
         //¸ó½ºÅÍ »ç¸Á
-        m_pMonster->Change_State(CSimonManusP1::IDLE);
+        m_pMonster->Change_State(CSimonManus::IDLE);
     }
 
 }

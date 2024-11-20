@@ -11,7 +11,7 @@ class CState_SimonManusP1_AvoidSwing : public CState
 {
 private:
     typedef enum {
-        AN_AVOIDSWING_START = 44
+        AN_AVOIDSWING = 44
     }ANIMNUM;
 
 public:

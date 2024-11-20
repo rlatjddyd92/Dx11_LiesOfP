@@ -170,7 +170,7 @@ _bool CState_Player_Heal::Move(_float fTimeDelta)
 
 _bool CState_Player_Heal::End_Check()
 {
-    return m_pPlayer->Get_EndAnim(m_iAnimation_Heal);
+    return m_pPlayer->Get_EndAnim(m_iAnimation_Heal, true);
 }
 
 CState_Player_Heal* CState_Player_Heal::Create(CFsm* pFsm, CPlayer* pPlayer, _uint iStateNum, void* pArg)

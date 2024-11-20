@@ -2,7 +2,7 @@
 #include "State_SimonManusP1_Grogy.h"
 #include "GameInstance.h"
 #include "Model.h"
-#include "SimonManusP1.h"
+#include "SimonManus.h"
 
 CState_SimonManusP1_Grogy::CState_SimonManusP1_Grogy(CFsm* pFsm, CMonster* pMonster)
     :CState{ pFsm }
@@ -14,7 +14,7 @@ HRESULT CState_SimonManusP1_Grogy::Initialize(_uint iStateNum, void* pArg)
 {
     m_iStateNum = iStateNum;
     m_fIdleDuration = 3.3f;
-    CSimonManusP1::FSMSTATE_DESC* pDesc = static_cast<CSimonManusP1::FSMSTATE_DESC*>(pArg);
+    CSimonManus::FSMSTATE_DESC* pDesc = static_cast<CSimonManus::FSMSTATE_DESC*>(pArg);
 
     m_pIsEndAnim = pDesc->pIsEndAnim;
     m_pResetRootMove = pDesc->pIsResetRootMove;
@@ -46,7 +46,7 @@ void CState_SimonManusP1_Grogy::Update(_float fTimeDelta)
     switch (m_iAnimCnt)
     {
     case 0:
-        if (*m_pIsEndAnim)
+        if (End_Check())
         {
             ++m_iAnimCnt;
             m_pMonster->Change_Animation(AN_GROGY_START - m_iAnimCnt, true, 0.1f, 0);
@@ -64,11 +64,12 @@ void CState_SimonManusP1_Grogy::Update(_float fTimeDelta)
         break;
 
     case 2:
-        if (*m_pIsEndAnim)
+        if (End_Check())
         {
             m_iAnimCnt = 0;
             *m_pTrackPos = 0.f;
-            m_pMonster->Change_State(CSimonManusP1::IDLE);
+            m_pMonster->Change_State(CSimonManus::IDLE);
+            return;
         }
         break;
 
@@ -79,7 +80,7 @@ void CState_SimonManusP1_Grogy::Update(_float fTimeDelta)
 
     if (KEY_TAP(KEY::X))
     {
-        m_pMonster->Change_State(CSimonManusP1::HITFATAL);
+        m_pMonster->Change_State(CSimonManus::HITFATAL);
     }
 
     *m_pTrackPos = m_fGrogyTime;

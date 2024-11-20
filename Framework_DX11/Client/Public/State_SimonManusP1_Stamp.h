@@ -12,7 +12,7 @@ class CState_SimonManusP1_Stamp : public CState
 {
 private:
     typedef enum {
-        AN_STAMP = 23, AN_SPINBLAST = 25
+        AN_STAMP = 23, AN_STAMP_MOVE = 24, AN_SPINBLAST = 25
     }ANIMNUM;
 
 public:
@@ -31,16 +31,19 @@ private:
     _uint               m_iAnimation_Idle = {};
     _uint               m_iIdleCount = {};
 
+    _uint               m_iCurStartAnim = {};
+
     _float              m_fCurrentTime = { 0.f };
-    _float              m_fIdleDuration = { 2.6f };
+    _float              m_fStampTime = { 2.6f };
 
     _bool               m_isPrevChance = { false };
     _bool               m_isActivatedSpecial = { false };
 
-    _bool*              m_pIsEndAnim = { false };
     _bool*              m_pResetRootMove = { nullptr };
 
     _bool               m_bStamp = { false };
+
+    _uint               m_iRouteTrack = {};
 
 private:
     _bool               End_Check();

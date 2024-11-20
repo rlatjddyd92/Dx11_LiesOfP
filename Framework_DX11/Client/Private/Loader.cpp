@@ -13,10 +13,10 @@
 #include "StaticObj.h"
 #include "NavDataObj.h"
 
-#pragma region EFFECT
+#pragma region MONSTER
 #include "Monster.h"
 #include "CarcassBigA.h"
-#include "SimonManusP1.h"
+#include "SimonManus.h"
 #pragma endregion
 
 #pragma region EFFECT
@@ -28,6 +28,8 @@
 #include "Weapon_Rapier.h"
 #include "Weapon_FlameSword.h"
 #include "Weapon_Scissor.h"
+
+#include "Weapon_SimonManus_Hammer.h"
 #pragma endregion
 
 #include "GameInstance.h"
@@ -563,11 +565,18 @@ HRESULT CLoader::Ready_Resources_For_Monster()
 		CModel::Create(m_pDevice, m_pContext, CModel::TYPE_ANIM, "../Bin/ModelData/Anim/CreatedBinFiles/CarcassBigA.dat", PreTransformMatrix, true))))
 		return E_FAIL;
 
-	//Prototype_Component_Model_Simon
+	//Prototype_Component_Model_SimonMauns
 	PreTransformMatrix = XMMatrixScaling(0.01f, 0.01f, 0.01f) * XMMatrixRotationY(XMConvertToRadians(270.0f));
 	if (FAILED(m_pGameInstance->Add_Prototype(LEVEL_GAMEPLAY, TEXT("Prototype_Component_Model_SimonManusP1"),
 		CModel::Create(m_pDevice, m_pContext, CModel::TYPE_ANIM, "../Bin/ModelData/Anim/Monster/Boss/SimonManus/SimonManus_P1.dat", PreTransformMatrix, false))))
 		return E_FAIL;
+
+	//Prototype_Component_Model_Weapon_SimonManus_Hammer
+	PreTransformMatrix = XMMatrixScaling(0.01f, 0.01f, 0.01f) * XMMatrixRotationX(XMConvertToRadians(270.0f));
+	if (FAILED(m_pGameInstance->Add_Prototype(LEVEL_GAMEPLAY, TEXT("Prototype_Component_Model_Weapon_SimonManus_Hammer"),
+		CModel::Create(m_pDevice, m_pContext, CModel::TYPE_ANIM, "../Bin/ModelData/Anim/Monster/Boss/SimonManus/SimonManus_Weapon.dat", PreTransformMatrix, false))))
+		return E_FAIL;
+
 
 	/* For. Prototype_Component_Model_Stargazer*/
 	PreTransformMatrix = XMMatrixScaling(0.01f, 0.01f, 0.01f) * XMMatrixRotationY(XMConvertToRadians(270.0f));
@@ -621,9 +630,13 @@ HRESULT CLoader::Ready_Prototype()
 
 	/* For. Prototype_GameObject_SimonManusP1 */
 	if (FAILED(m_pGameInstance->Add_Prototype(TEXT("Prototype_GameObject_SimonManusP1"),
-		CSimonManusP1::Create(m_pDevice, m_pContext))))
+		CSimonManus::Create(m_pDevice, m_pContext))))
 		return E_FAIL;
 
+	/* For. Prototype_GameObject_Weapon_SimonManus_Hammer */
+	if (FAILED(m_pGameInstance->Add_Prototype(TEXT("Prototype_GameObject_Weapon_SimonManus_Hammer"),
+		CWeapon_SimonManus_Hammer::Create(m_pDevice, m_pContext))))
+		return E_FAIL;
 #pragma endregion
 
 #pragma region Collider

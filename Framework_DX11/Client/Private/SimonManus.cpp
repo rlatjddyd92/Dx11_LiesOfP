@@ -1,5 +1,5 @@
 #include "stdafx.h"
-#include "..\Public\SimonManusP1.h"
+#include "..\Public\SimonManus.h"
 
 #include "GameInstance.h"
 #include "Player.h"
@@ -25,22 +25,24 @@
 #include "State_SimonManusP1_SwingDown_Swing_R.h"
 #include "State_SimonManusP1_SwingDown_Swing_L.h"
 
-CSimonManusP1::CSimonManusP1(ID3D11Device * pDevice, ID3D11DeviceContext * pContext)
+#include "Weapon.h"
+
+CSimonManus::CSimonManus(ID3D11Device * pDevice, ID3D11DeviceContext * pContext)
 	: CMonster{ pDevice, pContext }
 {
 }
 
-CSimonManusP1::CSimonManusP1(const CSimonManusP1& Prototype)
+CSimonManus::CSimonManus(const CSimonManus& Prototype)
 	: CMonster{ Prototype }
 {
 }
 
-HRESULT CSimonManusP1::Initialize_Prototype()
+HRESULT CSimonManus::Initialize_Prototype()
 {
 	return S_OK;
 }
 
-HRESULT CSimonManusP1::Initialize(void* pArg)
+HRESULT CSimonManus::Initialize(void* pArg)
 {
   	CGameObject::GAMEOBJECT_DESC		Desc{};
 	Desc.fSpeedPerSec = 1.5f;
@@ -61,17 +63,20 @@ HRESULT CSimonManusP1::Initialize(void* pArg)
 	if (FAILED(Ready_FSM()))
 		return E_FAIL;
 
+	if (FAILED(Ready_Weapon()))
+		return E_FAIL;
 
 	return S_OK;
 }
 
-void CSimonManusP1::Priority_Update(_float fTimeDelta)
+void CSimonManus::Priority_Update(_float fTimeDelta)
 {
 
-	
+	__super::Set_UpTargetPos();
+	m_pWeapon->Priority_Update(fTimeDelta);
 }
 
-void CSimonManusP1::Update(_float fTimeDelta)
+void CSimonManus::Update(_float fTimeDelta)
 {
 
 	m_pFsmCom->Update(fTimeDelta);
@@ -91,9 +96,11 @@ void CSimonManusP1::Update(_float fTimeDelta)
 
 	//for (auto& pCollider : m_pColliderCom)
 	//	pCollider->Update(m_pTransformCom->Get_WorldMatrix_Ptr());
+
+	m_pWeapon->Update(fTimeDelta);
 }
 
-void CSimonManusP1::Late_Update(_float fTimeDelta)
+void CSimonManus::Late_Update(_float fTimeDelta)
 {
 	__super::Late_Update(fTimeDelta);
 
@@ -106,10 +113,11 @@ void CSimonManusP1::Late_Update(_float fTimeDelta)
 		//	m_pColliderObject[i]->Late_Update(fTimeDelta);
 		//}
 	}
+	m_pWeapon->Late_Update(fTimeDelta);
 
 }
 
-HRESULT CSimonManusP1::Render()
+HRESULT CSimonManus::Render()
 {
 	if (FAILED(m_pTransformCom->Bind_ShaderResource(m_pShaderCom, "g_WorldMatrix")))
 		return E_FAIL;
@@ -142,10 +150,14 @@ HRESULT CSimonManusP1::Render()
 	//for (auto& pColliderObj : m_pColliderObject)
 	//	pColliderObj->Render();
 #endif
+
+	if (FAILED(m_pWeapon->Render()))
+		return E_FAIL;
+
 	return S_OK;
 }
 
-HRESULT CSimonManusP1::Ready_Components()
+HRESULT CSimonManus::Ready_Components()
 {
 	if (FAILED(__super::Ready_Components()))
 		return E_FAIL;
@@ -159,7 +171,7 @@ HRESULT CSimonManusP1::Ready_Components()
 	return S_OK;
 }
 
-HRESULT CSimonManusP1::Ready_FSM()
+HRESULT CSimonManus::Ready_FSM()
 {
 	if (FAILED(__super::Ready_FSM()))
 		return E_FAIL;
@@ -200,13 +212,27 @@ HRESULT CSimonManusP1::Ready_FSM()
 
 }
 
-CSimonManusP1* CSimonManusP1::Create(ID3D11Device* pDevice, ID3D11DeviceContext* pContext)
+HRESULT CSimonManus::Ready_Weapon()
 {
-	CSimonManusP1* pInstance = new CSimonManusP1(pDevice, pContext);
+	CWeapon::WEAPON_DESC		WeaponDesc{};
+	WeaponDesc.pParentWorldMatrix = m_pTransformCom->Get_WorldMatrix_Ptr();
+	WeaponDesc.pSocketBoneMatrix = m_pModelCom->Get_BoneCombindTransformationMatrix_Ptr(66);	//Weapon_R
+
+
+	m_pWeapon = dynamic_cast<CWeapon*>(m_pGameInstance->Clone_GameObject(TEXT("Prototype_GameObject_Weapon_SimonManus_Hammer"), &WeaponDesc));
+	if (nullptr == m_pWeapon)
+		return E_FAIL;
+
+	m_pWeapon->Appear();
+}
+
+CSimonManus* CSimonManus::Create(ID3D11Device* pDevice, ID3D11DeviceContext* pContext)
+{
+	CSimonManus* pInstance = new CSimonManus(pDevice, pContext);
 
 	if (FAILED(pInstance->Initialize_Prototype()))
 	{
-		MSG_BOX(TEXT("Failed to Created : CSimonManusP1"));
+		MSG_BOX(TEXT("Failed to Created : CSimonManus"));
 		Safe_Release(pInstance);
 	}
 
@@ -215,26 +241,26 @@ CSimonManusP1* CSimonManusP1::Create(ID3D11Device* pDevice, ID3D11DeviceContext*
 
 
 
-CGameObject* CSimonManusP1::Clone(void* pArg)
+CGameObject* CSimonManus::Clone(void* pArg)
 {
-	CSimonManusP1* pInstance = new CSimonManusP1(*this);
+	CSimonManus* pInstance = new CSimonManus(*this);
 
 	if (FAILED(pInstance->Initialize(pArg)))
 	{
-		MSG_BOX(TEXT("Failed to Cloned : CSimonManusP1"));
+		MSG_BOX(TEXT("Failed to Cloned : CSimonManus"));
 		Safe_Release(pInstance);
 	}
 
 	return pInstance;
 }
 
-void CSimonManusP1::Free()
+void CSimonManus::Free()
 {
 	//for (_uint i = 0; i < TYPE_END; ++i)
 	//{
 	//	Safe_Release(m_pColliderObject[i]);
 	//}
-
+	Safe_Release(m_pWeapon);
 	__super::Free();
 
 }

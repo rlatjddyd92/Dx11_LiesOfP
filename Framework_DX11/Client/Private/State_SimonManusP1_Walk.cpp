@@ -2,7 +2,7 @@
 #include "State_SimonManusP1_Walk.h"
 #include "GameInstance.h"
 #include "Model.h"
-#include "SimonManusP1.h"
+#include "SimonManus.h"
 
 CState_SimonManusP1_Walk::CState_SimonManusP1_Walk(CFsm* pFsm, CMonster* pMonster)
     :CState{ pFsm }
@@ -53,7 +53,7 @@ void CState_SimonManusP1_Walk::Update(_float fTimeDelta)
 
     if (m_pMonster->Calc_Distance_XZ() <= 5.f)
     {
-        m_pMonster->Change_State(CSimonManusP1::IDLE);
+        m_pMonster->Change_State(CSimonManus::IDLE);
     }
 }
 

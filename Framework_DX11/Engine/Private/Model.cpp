@@ -320,10 +320,7 @@ HRESULT CModel::SetUp_NextAnimation(_uint iNextAnimationIndex, _bool isLoop, _fl
 
 	if (bEitherBoundary)
 	{
-		if (m_iCurrentAnimIndex == m_iCurrentAnimIndex_Boundary)
-		{
-			SetUp_NextAnimation_Boundary(iNextAnimationIndex, isLoop, fChangeDuration, iStartFrame);
-		}
+		SetUp_NextAnimation_Boundary(iNextAnimationIndex, isLoop, fChangeDuration, iStartFrame);
 	}
 
 	m_isEnd_Animations[iNextAnimationIndex] = false;
@@ -687,6 +684,10 @@ _vector CModel::Finish_Update_Anim()
 		}
 	}
 
+	if (m_isEnd_Animations[m_iCurrentAnimIndex])
+	{
+		m_vRootMoveStack = m_vCurRootMove = _vector{0, 0, 0, 1};
+	}
 
 	if (XMVectorGetX(XMVector3Length(m_vRootMoveStack)) == 0
 		 || XMVectorGetX(XMVector3Length(m_vCurRootMove)) == 0)

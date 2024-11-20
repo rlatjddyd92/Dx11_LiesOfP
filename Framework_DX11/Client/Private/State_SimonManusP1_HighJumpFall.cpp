@@ -2,7 +2,7 @@
 #include "State_SimonManusP1_HighJumpFall.h"
 #include "GameInstance.h"
 #include "Model.h"
-#include "SimonManusP1.h"
+#include "SimonManus.h"
 
 CState_SimonManusP1_HighJumpFall::CState_SimonManusP1_HighJumpFall(CFsm* pFsm, CMonster* pMonster)
     :CState{ pFsm }
@@ -14,7 +14,7 @@ HRESULT CState_SimonManusP1_HighJumpFall::Initialize(_uint iStateNum, void* pArg
 {
     m_iStateNum = iStateNum;
     m_fIdleDuration = 3.3f;
-    CSimonManusP1::FSMSTATE_DESC* pDesc = static_cast<CSimonManusP1::FSMSTATE_DESC*>(pArg);
+    CSimonManus::FSMSTATE_DESC* pDesc = static_cast<CSimonManus::FSMSTATE_DESC*>(pArg);
 
     return S_OK;
 }
@@ -32,7 +32,8 @@ void CState_SimonManusP1_HighJumpFall::Update(_float fTimeDelta)
 {
     if (End_Check())//애니메이션의 종료 받아오도록 해서 어택이 종료된 시점에
     {
-        m_pMonster->Change_State(CSimonManusP1::IDLE);
+        m_pMonster->Change_State(CSimonManus::IDLE);
+        return;
     }
 
 }
