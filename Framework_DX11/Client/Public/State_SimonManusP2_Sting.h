@@ -7,18 +7,15 @@ END
 
 BEGIN(Client)
 
-class CState_SimonManusP1_SwingDown_Swing_L :
-    public CState
+class CState_SimonManusP2_Sting : public CState
 {
 private:
     typedef enum {
-        AN_ROUTE_FIRST = 28,        //SwingDown
-        AN_ROUTE_LAST = 26,       //SwingRight
+        AN_STINGATTACK = 21
     }ANIMNUM;
-
 public:
-    CState_SimonManusP1_SwingDown_Swing_L(class CFsm* pFsm, class CMonster* pMonster);
-    virtual ~CState_SimonManusP1_SwingDown_Swing_L() = default;
+    CState_SimonManusP2_Sting(class CFsm* pFsm, class CMonster* pMonster);
+    virtual ~CState_SimonManusP2_Sting() = default;
 
 public:
     virtual HRESULT Initialize(_uint iStateNum, void* pArg) override;
@@ -32,22 +29,19 @@ private:
     _uint               m_iAnimation_Idle = {};
     _uint               m_iIdleCount = {};
 
-    _float              m_fIdleTime = {};
-    _float              m_fSwingTime = { 3.f };
+    _float              m_fCurrentTime = { 0.f };
+    _float              m_fIdleDuration = { 2.6f };
 
     _bool               m_isPrevChance = { false };
     _bool               m_isActivatedSpecial = { false };
-    _bool               m_isSwing= { false };
 
-    _bool*              m_pResetRootMove = { nullptr };
-
-    _uint               m_iRouteTrack = {};
+    _bool* m_pResetRootMove = { nullptr };
 
 private:
     _bool               End_Check();
 
 public:
-    static CState_SimonManusP1_SwingDown_Swing_L* Create(class CFsm* pFsm, class CMonster* pMonster, _uint iStateNum, void* pArg = nullptr);
+    static CState_SimonManusP2_Sting* Create(class CFsm* pFsm, class CMonster* pMonster, _uint iStateNum, void* pArg = nullptr);
     virtual void Free() override;
 
 };

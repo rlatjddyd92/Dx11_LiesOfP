@@ -1,32 +1,32 @@
 #include "stdafx.h"
-#include "State_SimonManusP1_Idle.h"
+#include "State_SimonManusP2_Idle.h"
 #include "GameInstance.h"
 #include "Model.h"
 #include "SimonManus.h"
 
-CState_SimonManusP1_Idle::CState_SimonManusP1_Idle(CFsm* pFsm, CMonster* pMonster)
+CState_SimonManusP2_Idle::CState_SimonManusP2_Idle(CFsm* pFsm, CMonster* pMonster)
     :CState{ pFsm }
     , m_pMonster{ pMonster }
 {
 }
 
-HRESULT CState_SimonManusP1_Idle::Initialize(_uint iStateNum, void* pArg)
+HRESULT CState_SimonManusP2_Idle::Initialize(_uint iStateNum, void* pArg)
 {
-   //m_iAnimation_Idle = m_pMonster->Get_Model()->Get_AnimationIndex("Kurama_Idle_Loop");
+    //m_iAnimation_Idle = m_pMonster->Get_Model()->Get_AnimationIndex("Kurama_Idle_Loop");
     m_iStateNum = iStateNum;
     m_fIdleDuration = 3.3f;
 
     return S_OK;
 }
 
-HRESULT CState_SimonManusP1_Idle::Start_State(void* pArg)
+HRESULT CState_SimonManusP2_Idle::Start_State(void* pArg)
 {
     m_pMonster->Change_Animation(AN_IDLE, true, 0.1f, 0);
-    
+
     return S_OK;
 }
 
-void CState_SimonManusP1_Idle::Update(_float fTimeDelta)
+void CState_SimonManusP2_Idle::Update(_float fTimeDelta)
 {
     m_fIdleTime += fTimeDelta;
     _float fDist = m_pMonster->Calc_Distance_XZ();
@@ -95,22 +95,21 @@ void CState_SimonManusP1_Idle::Update(_float fTimeDelta)
 
 }
 
-void CState_SimonManusP1_Idle::End_State()
+void CState_SimonManusP2_Idle::End_State()
 {
     m_fIdleTime = 0.f;
 }
 
-void CState_SimonManusP1_Idle::Calc_Act_Attack(_float fDist)
+void CState_SimonManusP2_Idle::Calc_Act_Attack(_float fDist)
 {
     if (fDist <= 4.f)
     {
         //어보이드, 점프, 스다 엘알  스탬프 까지
-        _int iAtkNum = rand() % 5;
-        iAtkNum = 1;
+        _int iAtkNum = rand() % 4;
         switch (iAtkNum)
         {
         case 0:
-            m_pMonster->Change_State(CSimonManus::ATK_AVOIDSWING);
+            //m_pMonster->Change_State(CSimonManusP1::ATK_AVOIDSWING);
             break;
 
         case 1:
@@ -169,20 +168,20 @@ void CState_SimonManusP1_Idle::Calc_Act_Attack(_float fDist)
 
 }
 
-CState_SimonManusP1_Idle* CState_SimonManusP1_Idle::Create(CFsm* pFsm, CMonster* pMonster, _uint iStateNum, void* pArg)
+CState_SimonManusP2_Idle* CState_SimonManusP2_Idle::Create(CFsm* pFsm, CMonster* pMonster, _uint iStateNum, void* pArg)
 {
-    CState_SimonManusP1_Idle* pInstance = new CState_SimonManusP1_Idle(pFsm, pMonster);
+    CState_SimonManusP2_Idle* pInstance = new CState_SimonManusP2_Idle(pFsm, pMonster);
 
     if (FAILED(pInstance->Initialize(iStateNum, pArg)))
     {
-        MSG_BOX(TEXT("Failed to Created : CState_SimonManusP1_Idle"));
+        MSG_BOX(TEXT("Failed to Created : CState_SimonManusP2_Idle"));
         Safe_Release(pInstance);
     }
 
     return pInstance;
 }
 
-void CState_SimonManusP1_Idle::Free()
+void CState_SimonManusP2_Idle::Free()
 {
     __super::Free();
 }

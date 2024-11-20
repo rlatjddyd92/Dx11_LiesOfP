@@ -39,7 +39,7 @@ private:
     _bool               m_isActivatedSpecial = { false };
     _bool               m_isDelayed = { false };
 
-    _bool* m_pResetRootMove = { nullptr };
+    _bool*              m_pResetRootMove = { nullptr };
 
     _uint               m_iRouteTrack = {};
 

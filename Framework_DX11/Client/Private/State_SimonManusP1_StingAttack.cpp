@@ -21,8 +21,6 @@ HRESULT CState_SimonManusP1_StingAttack::Initialize(_uint iStateNum, void* pArg)
 
 HRESULT CState_SimonManusP1_StingAttack::Start_State(void* pArg)
 {
-    m_pMonster->Look_Player();
-
     m_pMonster->Change_Animation(AN_STINGATTACK, false, 0.1f, 0);
 
     return S_OK;
@@ -40,8 +38,7 @@ void CState_SimonManusP1_StingAttack::Update(_float fTimeDelta)
 
 void CState_SimonManusP1_StingAttack::End_State()
 {
-    m_iAnimCnt = 0;//혹시 완료되지 않고 변하는 경우에 대비
-    m_fParalizeTime = 0.f;
+
 }
 
 _bool CState_SimonManusP1_StingAttack::End_Check()

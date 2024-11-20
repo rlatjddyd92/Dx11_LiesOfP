@@ -167,6 +167,10 @@ HRESULT CSimonManus::Ready_Components()
 		TEXT("Com_Model"), reinterpret_cast<CComponent**>(&m_pModelCom))))
 		return E_FAIL;
 
+	/* FOR.Com_ExtraModel */
+	//if (FAILED(__super::Add_Component(LEVEL_GAMEPLAY, TEXT("Prototype_Component_Model_SimonManusP2"),
+	//	TEXT("Com_ExtraModel"), reinterpret_cast<CComponent**>(&m_pExtraModelCom))))
+	//	return E_FAIL;
 
 	return S_OK;
 }
@@ -206,10 +210,16 @@ HRESULT CSimonManus::Ready_FSM()
 
 	m_pFsmCom->Set_State(IDLE);
 
+
+	//2페이즈용 FSM
+
+	/* FOR.Com_FSM */
+	//if (FAILED(__super::Add_Component(LEVEL_STATIC, TEXT("Prototype_Component_FSM"),
+	//	TEXT("Com_ExtraFSM"), reinterpret_cast<CComponent**>(&m_pExtraFsmCom))))
+	//	return E_FAIL;
+
+
 	return S_OK;
-
-
-
 }
 
 HRESULT CSimonManus::Ready_Weapon()

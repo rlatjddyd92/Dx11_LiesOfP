@@ -448,6 +448,63 @@
     <Filter Include="05.Fsm\Monster\SimonManus\P2">
       <UniqueIdentifier>{2679afad-ec99-46ef-bfc7-e4ea23aaad12}</UniqueIdentifier>
     </Filter>
+    <Filter Include="05.Fsm\Monster\SimonManus\P2\Idle">
+      <UniqueIdentifier>{668c14b0-8cf5-45c9-8190-6da55179d975}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="05.Fsm\Monster\SimonManus\P2\Walk">
+      <UniqueIdentifier>{ca124187-bf32-47b1-80f7-98f9d7fdfb2a}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="05.Fsm\Monster\SimonManus\P2\Die">
+      <UniqueIdentifier>{2aaf1b2f-69fc-469f-b4c2-753a79e5e2c9}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="05.Fsm\Monster\SimonManus\P2\Grogy">
+      <UniqueIdentifier>{a5413b70-31ca-4e29-a6d4-3452229d0e7c}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="05.Fsm\Monster\SimonManus\P2\Run">
+      <UniqueIdentifier>{a48d1fcb-7534-41f5-ba75-dab05be2f373}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="05.Fsm\Monster\SimonManus\P2\Attack">
+      <UniqueIdentifier>{948752c6-1189-49a5-a229-89ef31810e34}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="05.Fsm\Monster\SimonManus\P2\Attack\Route">
+      <UniqueIdentifier>{54c4c60d-1494-4770-bf1a-ebfdfdc8ecef}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="05.Fsm\Monster\SimonManus\P2\Attack\Single">
+      <UniqueIdentifier>{7e832bcc-ebc5-4987-8be1-dbc62a76a58e}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="05.Fsm\Monster\SimonManus\P2\Attack\Single\Sting">
+      <UniqueIdentifier>{bc69c929-ae81-402e-8a05-46e3481d4988}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="05.Fsm\Monster\SimonManus\P2\Attack\Single\HighJumpFall">
+      <UniqueIdentifier>{9d26d286-bc68-46cd-9a2a-003813a3bd73}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="05.Fsm\Monster\SimonManus\P2\Attack\Single\AvoidSwing">
+      <UniqueIdentifier>{2187779e-4c75-4ac3-801e-6b4b401bde9d}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="05.Fsm\Monster\SimonManus\P2\Attack\Single\ThunderBall">
+      <UniqueIdentifier>{8b883092-bbab-4d18-b414-4009f8cdd9f3}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="05.Fsm\Monster\SimonManus\P2\Attack\Single\SummonHand">
+      <UniqueIdentifier>{5228a653-e17a-44d8-a6f1-66c8fb344bef}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="05.Fsm\Monster\SimonManus\P2\Attack\Single\Wave">
+      <UniqueIdentifier>{4a6b8ef2-d3b5-46d3-a1d3-971403ccfe29}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="05.Fsm\Monster\SimonManus\P2\Attack\Single\SpreadMagic">
+      <UniqueIdentifier>{927e6e2d-8506-48a0-8258-0c917447cec5}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="05.Fsm\Monster\SimonManus\P2\Attack\Route\Route1">
+      <UniqueIdentifier>{57e7b286-635d-48c5-bffc-666a38b621a5}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="05.Fsm\Monster\SimonManus\P2\HitFatal">
+      <UniqueIdentifier>{cfa0a51c-d72a-4dc8-ba57-c8476da79ca9}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="05.Fsm\Monster\SimonManus\P2\Attack\Single\BrutalAttack">
+      <UniqueIdentifier>{793dc7b9-6844-491b-8321-61c2537132c5}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="05.Fsm\Monster\SimonManus\P2\Attack\Single\ThunderCalling">
+      <UniqueIdentifier>{c534f025-5164-46b2-bd30-4e813cb4bed1}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Client.h">
@@ -804,6 +861,48 @@
     <ClInclude Include="..\Public\Weapon_SimonManus_Hammer.h">
       <Filter>02.GameObjects\06.Weapon\01.SimonManusWeapon</Filter>
     </ClInclude>
+    <ClInclude Include="..\Public\State_SimonManusP2_Idle.h">
+      <Filter>05.Fsm\Monster\SimonManus\P2\Idle</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Public\State_SimonManusP2_Walk.h">
+      <Filter>05.Fsm\Monster\SimonManus\P2\Walk</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Public\State_SimonManusP2_Run.h">
+      <Filter>05.Fsm\Monster\SimonManus\P2\Run</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Public\State_SimonManusP2_Grogy.h">
+      <Filter>05.Fsm\Monster\SimonManus\P2\Grogy</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Public\State_SimonManusP2_HitFatal.h">
+      <Filter>05.Fsm\Monster\SimonManus\P2\HitFatal</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Public\State_SimonMansuP2_Die.h">
+      <Filter>05.Fsm\Monster\SimonManus\P2\Die</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Public\State_SimonManusP2_Sting.h">
+      <Filter>05.Fsm\Monster\SimonManus\P2\Attack\Single\Sting</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Public\State_SimonManusP2_Wave.h">
+      <Filter>05.Fsm\Monster\SimonManus\P2\Attack\Single\Wave</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Public\State_SimonManusP2_AvoidSwing.h">
+      <Filter>05.Fsm\Monster\SimonManus\P2\Attack\Single\AvoidSwing</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Public\State_SimonManusP2_SummonHand.h">
+      <Filter>05.Fsm\Monster\SimonManus\P2\Attack\Single\SummonHand</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Public\State_SimonManusP2_ThunderBall.h">
+      <Filter>05.Fsm\Monster\SimonManus\P2\Attack\Single\ThunderBall</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Public\State_SimonManusP2_HighJumpFall.h">
+      <Filter>05.Fsm\Monster\SimonManus\P2\Attack\Single\HighJumpFall</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Public\State_SimonManusP2_BrutalAttack.h">
+      <Filter>05.Fsm\Monster\SimonManus\P2\Attack\Single\BrutalAttack</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Public\State_SimonManusP2_ThunderCalling.h">
+      <Filter>05.Fsm\Monster\SimonManus\P2\Attack\Single\ThunderCalling</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Client.cpp">
@@ -1129,6 +1228,48 @@
     </ClCompile>
     <ClCompile Include="..\Private\Weapon.cpp">
       <Filter>02.GameObjects\06.Weapon</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Private\State_SimonManusP2_Idle.cpp">
+      <Filter>05.Fsm\Monster\SimonManus\P2\Idle</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Private\State_SimonManusP2_Walk.cpp">
+      <Filter>05.Fsm\Monster\SimonManus\P2\Walk</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Private\State_SimonManusP2_Run.cpp">
+      <Filter>05.Fsm\Monster\SimonManus\P2\Run</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Private\State_SimonManusP2_Grogy.cpp">
+      <Filter>05.Fsm\Monster\SimonManus\P2\Grogy</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Private\State_SimonManusP2_HitFatal.cpp">
+      <Filter>05.Fsm\Monster\SimonManus\P2\HitFatal</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Private\State_SimonMansuP2_Die.cpp">
+      <Filter>05.Fsm\Monster\SimonManus\P2\Die</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Private\State_SimonManusP2_Sting.cpp">
+      <Filter>05.Fsm\Monster\SimonManus\P2\Attack\Single\Sting</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Private\State_SimonManusP2_Wave.cpp">
+      <Filter>05.Fsm\Monster\SimonManus\P2\Attack\Single\Wave</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Private\State_SimonManusP2_AvoidSwing.cpp">
+      <Filter>05.Fsm\Monster\SimonManus\P2\Attack\Single\AvoidSwing</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Private\State_SimonManusP2_SummonHand.cpp">
+      <Filter>05.Fsm\Monster\SimonManus\P2\Attack\Single\SummonHand</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Private\State_SimonManusP2_ThunderBall.cpp">
+      <Filter>05.Fsm\Monster\SimonManus\P2\Attack\Single\ThunderBall</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Private\State_SimonManusP2_HighJumpFall.cpp">
+      <Filter>05.Fsm\Monster\SimonManus\P2\Attack\Single\HighJumpFall</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Private\State_SimonManusP2_BrutalAttack.cpp">
+      <Filter>05.Fsm\Monster\SimonManus\P2\Attack\Single\BrutalAttack</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Private\State_SimonManusP2_ThunderCalling.cpp">
+      <Filter>05.Fsm\Monster\SimonManus\P2\Attack\Single\ThunderCalling</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

@@ -7,15 +7,15 @@ END
 
 BEGIN(Client)
 
-class CState_SimonManusP1_StingAttack : public CState
+class CState_SimonManusP2_Idle : public CState
 {
 private:
     typedef enum {
-        AN_STINGATTACK = 20
+        AN_IDLE = 8, AN_TURNLEFT = 56, AN_TURNRIGHT = 57
     }ANIMNUM;
 public:
-    CState_SimonManusP1_StingAttack(class CFsm* pFsm, class CMonster* pMonster);
-    virtual ~CState_SimonManusP1_StingAttack() = default;
+    CState_SimonManusP2_Idle(class CFsm* pFsm, class CMonster* pMonster);
+    virtual ~CState_SimonManusP2_Idle() = default;
 
 public:
     virtual HRESULT Initialize(_uint iStateNum, void* pArg) override;
@@ -35,14 +35,16 @@ private:
     _bool               m_isPrevChance = { false };
     _bool               m_isActivatedSpecial = { false };
 
-    _bool*              m_pResetRootMove = { nullptr };
+    _float              m_fIdleTime = { 0.f };
+    _float              m_fIdleEndDuration = { 1.5f };
 
+    _uint               m_iAtkCnt{};
 
 private:
-    _bool               End_Check();
+    void                Calc_Act_Attack(_float fDist);
 
 public:
-    static CState_SimonManusP1_StingAttack* Create(class CFsm* pFsm, class CMonster* pMonster, _uint iStateNum, void* pArg = nullptr);
+    static CState_SimonManusP2_Idle* Create(class CFsm* pFsm, class CMonster* pMonster, _uint iStateNum, void* pArg = nullptr);
     virtual void Free() override;
 
 };
