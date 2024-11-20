@@ -729,43 +729,43 @@ HRESULT CRenderer::Render_HDR()
 	m_pContext->CSSetUnorderedAccessViews(0, 8, m_pClearUAV, nullptr);
 
 #pragma region Stagind 버퍼로 값 꺼내오기
-	D3D11_BUFFER_DESC bufferDesc = {};
-	bufferDesc.Usage = D3D11_USAGE_STAGING;          // Staging 버퍼 용도로 설정
-	bufferDesc.BindFlags = 0;                         // 바인드 플래그 없음
-	bufferDesc.CPUAccessFlags = D3D11_CPU_ACCESS_READ; // CPU 읽기 접근 허용
-	bufferDesc.MiscFlags = 0;
-	bufferDesc.StructureByteStride = sizeof(float);   // 구조체 크기
+	//D3D11_BUFFER_DESC bufferDesc = {};
+	//bufferDesc.Usage = D3D11_USAGE_STAGING;          // Staging 버퍼 용도로 설정
+	//bufferDesc.BindFlags = 0;                         // 바인드 플래그 없음
+	//bufferDesc.CPUAccessFlags = D3D11_CPU_ACCESS_READ; // CPU 읽기 접근 허용
+	//bufferDesc.MiscFlags = 0;
+	//bufferDesc.StructureByteStride = sizeof(float);   // 구조체 크기
 
-	// 복사할 데이터 크기 설정 (예: UAV에 저장된 float 개수만큼)
-	bufferDesc.ByteWidth = sizeof(float);
+	//// 복사할 데이터 크기 설정 (예: UAV에 저장된 float 개수만큼)
+	//bufferDesc.ByteWidth = sizeof(float);
 
-	ID3D11Buffer* pStagingBuffer = nullptr;
-	HRESULT hr = m_pDevice->CreateBuffer(&bufferDesc, nullptr, &pStagingBuffer);
-	if (FAILED(hr)) {
-		return hr; // 버퍼 생성 실패 시 처리
-	}
+	//ID3D11Buffer* pStagingBuffer = nullptr;
+	//HRESULT hr = m_pDevice->CreateBuffer(&bufferDesc, nullptr, &pStagingBuffer);
+	//if (FAILED(hr)) {
+	//	return hr; // 버퍼 생성 실패 시 처리
+	//}
 
-	// GPU에서 Staging 버퍼로 데이터 복사
-	ID3D11Buffer* pBuffer = m_pGameInstance->Get_Buffer(TEXT("Target_HDR1"));
-	m_pContext->CopyResource(pStagingBuffer, pBuffer); // pBuffer는 UAV 리소스
+	//// GPU에서 Staging 버퍼로 데이터 복사
+	//ID3D11Buffer* pBuffer = m_pGameInstance->Get_Buffer(TEXT("Target_HDR1"));
+	//m_pContext->CopyResource(pStagingBuffer, pBuffer); // pBuffer는 UAV 리소스
 
-	// CPU에서 Staging 버퍼 데이터 읽기
-	D3D11_MAPPED_SUBRESOURCE mappedResource;
-	hr = m_pContext->Map(pStagingBuffer, 0, D3D11_MAP_READ, 0, &mappedResource);
-	if (FAILED(hr)) {
-		pStagingBuffer->Release();
-		return hr; // Map 실패 시 처리
-	}
+	//// CPU에서 Staging 버퍼 데이터 읽기
+	//D3D11_MAPPED_SUBRESOURCE mappedResource;
+	//hr = m_pContext->Map(pStagingBuffer, 0, D3D11_MAP_READ, 0, &mappedResource);
+	//if (FAILED(hr)) {
+	//	pStagingBuffer->Release();
+	//	return hr; // Map 실패 시 처리
+	//}
 
-	float* pData = static_cast<float*>(mappedResource.pData);
-	// CPU에서 데이터를 처리 (예: 첫 번째 값 읽기)
-	float value = pData[0]; // 편균 휘도값
+	//float* pData = static_cast<float*>(mappedResource.pData);
+	//// CPU에서 데이터를 처리 (예: 첫 번째 값 읽기)
+	//float value = pData[0]; // 편균 휘도값
 
-	// Map 해제
-	m_pContext->Unmap(pStagingBuffer, 0);
+	//// Map 해제
+	//m_pContext->Unmap(pStagingBuffer, 0);
 
-	// Staging 버퍼 해제
-	pStagingBuffer->Release();
+	//// Staging 버퍼 해제
+	//pStagingBuffer->Release();
 #pragma endregion
 
 	// 톤 매핑 할거임
@@ -1316,70 +1316,70 @@ HRESULT CRenderer::Render_Effect()
 	if (FAILED(m_pGameInstance->End_MRT()))
 		return E_FAIL;
 
-#pragma region 다운샘플블러
-	// 다운 샘플
-	if (FAILED(m_pGameInstance->Bind_RT_ShaderResource(m_pBlurShader, TEXT("Target_Effect_DownSample"), "g_InputTexture")))
-		return E_FAIL;
-	if (FAILED(m_pGameInstance->BInd_RT_UnorderedView(m_pBlurShader, TEXT("Target_Effect_FinalDownSample"), "g_OutputTexture")))
-		return E_FAIL;
-
-	m_pBlurShader->Begin(3);
-	m_pContext->Dispatch(static_cast<_uint>(ceil(1280.f / 16.f / 32.f)), static_cast<_uint>(ceil(720.f / 16.f / 32.f)), 1);
-	m_pContext->CSSetShaderResources(0, 128, m_pClearSRV);
-	m_pContext->CSSetUnorderedAccessViews(0, 8, m_pClearUAV, nullptr);
-
-	// 가로 블러
-	if (FAILED(m_pGameInstance->Bind_RT_ShaderResource(m_pBlurShader, TEXT("Target_Effect_FinalDownSample"), "g_InputTexture")))
-		return E_FAIL;
-	if (FAILED(m_pGameInstance->BInd_RT_UnorderedView(m_pBlurShader, TEXT("Target_Effect_DownBlurX"), "g_OutputTexture")))
-		return E_FAIL;
-
-	_float2 vWinSize = { m_vWinSize.x / 16, m_vWinSize.y / 16 };
-	if (FAILED(m_pBlurShader->Bind_RawValue("g_vWinSize", &vWinSize, sizeof(_float2))))
-		return E_FAIL;
-
-	m_pBlurShader->Begin(1);
-	m_pContext->Dispatch(static_cast <_uint> (ceil(1280.f / 16.f / (128.f - 12.f))), static_cast <_uint> (ceil(720.f / 16.f)), 1);
-	m_pContext->CSSetShaderResources(0, 128, m_pClearSRV);
-	m_pContext->CSSetUnorderedAccessViews(0, 8, m_pClearUAV, nullptr);
-
-	//세로 블러
-	if (FAILED(m_pGameInstance->Bind_RT_ShaderResource(m_pBlurShader, TEXT("Target_Effect_DownBlurX"), "g_InputTexture")))
-		return E_FAIL;
-	if (FAILED(m_pGameInstance->BInd_RT_UnorderedView(m_pBlurShader, TEXT("Target_Effect_DownBlurY"), "g_OutputTexture")))
-		return E_FAIL;
-	m_pBlurShader->Begin(2);
-	m_pContext->Dispatch(static_cast <_uint> (ceil(1280.f / 16.f)), static_cast <_uint> (ceil(720.f / 16.f / (128.f - 12.f))), 1);
-	m_pContext->CSSetShaderResources(0, 128, m_pClearSRV);
-	m_pContext->CSSetUnorderedAccessViews(0, 8, m_pClearUAV, nullptr);
-
-#pragma endregion
-
-#pragma region 그냥블러
-	// 가로 블러
-	if (FAILED(m_pGameInstance->Bind_RT_ShaderResource(m_pBlurShader, TEXT("Target_Effect_NonDownSample"), "g_InputTexture")))
-		return E_FAIL;
-	if (FAILED(m_pGameInstance->BInd_RT_UnorderedView(m_pBlurShader, TEXT("Target_Effect_BlurX"), "g_OutputTexture")))
-		return E_FAIL;
-
-	if (FAILED(m_pBlurShader->Bind_RawValue("g_vWinSize", &m_vWinSize, sizeof(_float2))))
-		return E_FAIL;
-
-	m_pBlurShader->Begin(1);
-	m_pContext->Dispatch(static_cast <_uint> (ceil(1280.f)), static_cast <_uint> (ceil(720.f)), 1);
-	m_pContext->CSSetShaderResources(0, 128, m_pClearSRV);
-	m_pContext->CSSetUnorderedAccessViews(0, 8, m_pClearUAV, nullptr);
-
-	//세로 블러
-	if (FAILED(m_pGameInstance->Bind_RT_ShaderResource(m_pBlurShader, TEXT("Target_Effect_BlurX"), "g_InputTexture")))
-		return E_FAIL;
-	if (FAILED(m_pGameInstance->BInd_RT_UnorderedView(m_pBlurShader, TEXT("Target_Effect_BlurY"), "g_OutputTexture")))
-		return E_FAIL;
-	m_pBlurShader->Begin(2);
-	m_pContext->Dispatch(static_cast <_uint> (ceil(1280.f)), static_cast <_uint> (ceil(720.f)), 1);
-	m_pContext->CSSetShaderResources(0, 128, m_pClearSRV);
-	m_pContext->CSSetUnorderedAccessViews(0, 8, m_pClearUAV, nullptr);
-#pragma endregion
+//#pragma region 다운샘플블러
+//	// 다운 샘플
+//	if (FAILED(m_pGameInstance->Bind_RT_ShaderResource(m_pBlurShader, TEXT("Target_Effect_DownSample"), "g_InputTexture")))
+//		return E_FAIL;
+//	if (FAILED(m_pGameInstance->BInd_RT_UnorderedView(m_pBlurShader, TEXT("Target_Effect_FinalDownSample"), "g_OutputTexture")))
+//		return E_FAIL;
+//
+//	m_pBlurShader->Begin(3);
+//	m_pContext->Dispatch(static_cast<_uint>(ceil(1280.f / 16.f / 32.f)), static_cast<_uint>(ceil(720.f / 16.f / 32.f)), 1);
+//	m_pContext->CSSetShaderResources(0, 128, m_pClearSRV);
+//	m_pContext->CSSetUnorderedAccessViews(0, 8, m_pClearUAV, nullptr);
+//
+//	// 가로 블러
+//	if (FAILED(m_pGameInstance->Bind_RT_ShaderResource(m_pBlurShader, TEXT("Target_Effect_FinalDownSample"), "g_InputTexture")))
+//		return E_FAIL;
+//	if (FAILED(m_pGameInstance->BInd_RT_UnorderedView(m_pBlurShader, TEXT("Target_Effect_DownBlurX"), "g_OutputTexture")))
+//		return E_FAIL;
+//
+//	_float2 vWinSize = { m_vWinSize.x / 16, m_vWinSize.y / 16 };
+//	if (FAILED(m_pBlurShader->Bind_RawValue("g_vWinSize", &vWinSize, sizeof(_float2))))
+//		return E_FAIL;
+//
+//	m_pBlurShader->Begin(1);
+//	m_pContext->Dispatch(static_cast <_uint> (ceil(1280.f / 16.f / (128.f - 12.f))), static_cast <_uint> (ceil(720.f / 16.f)), 1);
+//	m_pContext->CSSetShaderResources(0, 128, m_pClearSRV);
+//	m_pContext->CSSetUnorderedAccessViews(0, 8, m_pClearUAV, nullptr);
+//
+//	//세로 블러
+//	if (FAILED(m_pGameInstance->Bind_RT_ShaderResource(m_pBlurShader, TEXT("Target_Effect_DownBlurX"), "g_InputTexture")))
+//		return E_FAIL;
+//	if (FAILED(m_pGameInstance->BInd_RT_UnorderedView(m_pBlurShader, TEXT("Target_Effect_DownBlurY"), "g_OutputTexture")))
+//		return E_FAIL;
+//	m_pBlurShader->Begin(2);
+//	m_pContext->Dispatch(static_cast <_uint> (ceil(1280.f / 16.f)), static_cast <_uint> (ceil(720.f / 16.f / (128.f - 12.f))), 1);
+//	m_pContext->CSSetShaderResources(0, 128, m_pClearSRV);
+//	m_pContext->CSSetUnorderedAccessViews(0, 8, m_pClearUAV, nullptr);
+//
+//#pragma endregion
+//
+//#pragma region 그냥블러
+//	// 가로 블러
+//	if (FAILED(m_pGameInstance->Bind_RT_ShaderResource(m_pBlurShader, TEXT("Target_Effect_NonDownSample"), "g_InputTexture")))
+//		return E_FAIL;
+//	if (FAILED(m_pGameInstance->BInd_RT_UnorderedView(m_pBlurShader, TEXT("Target_Effect_BlurX"), "g_OutputTexture")))
+//		return E_FAIL;
+//
+//	if (FAILED(m_pBlurShader->Bind_RawValue("g_vWinSize", &m_vWinSize, sizeof(_float2))))
+//		return E_FAIL;
+//
+//	m_pBlurShader->Begin(1);
+//	m_pContext->Dispatch(static_cast <_uint> (ceil(1280.f)), static_cast <_uint> (ceil(720.f)), 1);
+//	m_pContext->CSSetShaderResources(0, 128, m_pClearSRV);
+//	m_pContext->CSSetUnorderedAccessViews(0, 8, m_pClearUAV, nullptr);
+//
+//	//세로 블러
+//	if (FAILED(m_pGameInstance->Bind_RT_ShaderResource(m_pBlurShader, TEXT("Target_Effect_BlurX"), "g_InputTexture")))
+//		return E_FAIL;
+//	if (FAILED(m_pGameInstance->BInd_RT_UnorderedView(m_pBlurShader, TEXT("Target_Effect_BlurY"), "g_OutputTexture")))
+//		return E_FAIL;
+//	m_pBlurShader->Begin(2);
+//	m_pContext->Dispatch(static_cast <_uint> (ceil(1280.f)), static_cast <_uint> (ceil(720.f)), 1);
+//	m_pContext->CSSetShaderResources(0, 128, m_pClearSRV);
+//	m_pContext->CSSetUnorderedAccessViews(0, 8, m_pClearUAV, nullptr);
+//#pragma endregion
 
 
 	if (FAILED(m_pPostProcessShader->Bind_Matrix("g_WorldMatrix", &m_WorldMatrix)))
@@ -1842,9 +1842,10 @@ HRESULT CRenderer::Ready_HDR()
 
 	if (FAILED(m_pGameInstance->Add_RenderTarget_For_Desc(TEXT("Target_Test1"), &BufferDesc, nullptr, &SRVDesc, &UAVDesc, _float4(0.f, 0.f, 0.f, 0.f))))
 		return E_FAIL;
+
 	m_tHDR.isOnHDR = true;
-	m_tHDR.fMiddleGrey = 1.4f;
-	m_tHDR.fLumWhiteSqr = 2.3f;
+	m_tHDR.fMiddleGrey = 0.85f;
+	m_tHDR.fLumWhiteSqr = 1.8f;
 
 	return S_OK;
 }

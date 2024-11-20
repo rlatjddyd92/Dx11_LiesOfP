@@ -272,12 +272,12 @@ PS_OUT PS_MAIN_DEFERRED(PS_IN In)
     
     vector vDiffuse = g_DiffuseTexture.Sample(LinearSampler, In.vTexcoord);
     
-    //if (vDiffuse.a == 0.f)
-    //{
-    //    vector vPriority = g_PriorityTexture.Sample(LinearSampler, In.vTexcoord);
-    //    Out.vColor = vPriority;
-    //    return Out;
-    //}
+    if (vDiffuse.a == 0.f)
+    {
+        vector vPriority = g_PriorityTexture.Sample(LinearSampler, In.vTexcoord);
+        Out.vColor = vPriority;
+        return Out;
+    }
 
 
     vector vDecal = g_DecalDiffuseTexture.Sample(LinearSampler, In.vTexcoord);

@@ -45,7 +45,7 @@ HRESULT CLevel_Tool::Initialize()
 	// 게임 플레이에 필요한 인벤, 플레이 화면, 스탯 화면 등을 상황에 따라 보여 주도록 설정 
 	GET_GAMEINTERFACE->SetPlayMode(true);
 
-	CEffect_Manager::Get_Instance()->Add_Effect_ToLayer(LEVEL_GAMEPLAY, TEXT("TEST"), _Vec3(0.f, 0.f, 0.f), _Vec3(0.f, 0.f, 0.f), _Vec3(1.f, 1.f, 1.f));
+	//CEffect_Manager::Get_Instance()->Add_Effect_ToLayer(LEVEL_GAMEPLAY, TEXT("TEST"), _Vec3(0.f, 0.f, 0.f), _Vec3(0.f, 0.f, 0.f), _Vec3(1.f, 1.f, 1.f));
 
 	return S_OK;
 }
@@ -160,8 +160,8 @@ HRESULT CLevel_Tool::Ready_Layer_Monster()
 	// 직교 UI 테스트용 코드 
 	// 테스트 후에 for문만 제거하기 
 
-	if (FAILED(m_pGameInstance->Add_CloneObject_ToLayer(LEVEL_GAMEPLAY, TEXT("Layer_Monster"), TEXT("Prototype_GameObject_CarcassBigA"))))
-		return E_FAIL;
+	//if (FAILED(m_pGameInstance->Add_CloneObject_ToLayer(LEVEL_GAMEPLAY, TEXT("Layer_Monster"), TEXT("Prototype_GameObject_CarcassBigA"))))
+	//	return E_FAIL;
 
 	return S_OK;
 }
