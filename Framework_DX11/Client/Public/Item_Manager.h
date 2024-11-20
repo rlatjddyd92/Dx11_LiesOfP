@@ -5,6 +5,8 @@
 
 #include "Interface_Enums.h"
 
+#include "Player.h"
+
 BEGIN(Engine)
 class CShader;
 class CTexture;
@@ -56,9 +58,9 @@ public:
 	{
 		ITEM_INFO()
 		{
-			vecDamege.resize(_int(DAMEGE_TYPE::DAMEGE_END));
-			vecDefence.resize(_int(DEFENCE_TYPE::DEFENCE_END));
-			vecAblity_Grade.resize(_int(ABLITY_TYPE::ABLITY_END));
+			vecDamege.resize(_uint(DAMEGE_TYPE::DAMEGE_END));
+			vecDefence.resize(_uint(DEFENCE_TYPE::DEFENCE_END));
+			vecAblity_Grade.resize(_uint(ABLITY_TYPE::ABLITY_END));
 		}
 
 		~ITEM_INFO()
@@ -68,16 +70,17 @@ public:
 			vecAblity_Grade.clear();
 		}
 
+		_uint iItem_Index = -1;
 		_wstring strName = {};
-		_int iTexture_Index = -1;
+		_uint iTexture_Index = -1;
 		ITEM_TYPE eType_Index = ITEM_TYPE::ITEMTYPE_END; // <- 어떤 아이템인지 인덱스로 기록
 		_bool bStack = false; // 스택 가능 여부
-		_int iCount = 1; // 수량 (비 스택 아이템은 무조건 1)
+		_uint iCount = 1; // 수량 (비 스택 아이템은 무조건 1)
 
 		// 날/자루 관련
 		_bool bModule_Weapon = false; // <- 날/자루 분리하는 무기인지 
 		_bool bIsHandele = false; // <- 자루 종류인 경우, false면 날임 
-		_int iOtherPart_Index = -1; // <- 날/자루의 경우 다른 쪽 파츠의 스펙 인덱스
+		_uint iOtherPart_Index = -1; // <- 날/자루의 경우 다른 쪽 파츠의 스펙 인덱스
 		const ITEM_INFO* pOtherPart = { nullptr }; // <- 날 자루 연결된 경우 다른편 파츠의 포인터 
 
 		// 내구도
@@ -98,9 +101,16 @@ public:
 		_float fType_Damege = 0.f;
 		_float fType_Damege_Fatal_Ratio = 0.f;
 
+		// 충전
+		_float fPable_Charge = 0.f;
+		_float fPulse_Charge = 0.f;
+
+		// 가드 시 피해감소 
+		_float fGuard_Damege_Reduce = 0.f;
+
 		//페이블 아츠 
 		_wstring strFable_Art_Name = {};
-		_int iFable_Art_Cost = {};
+		_uint iFable_Art_Cost = {};
 
 		// 능력(?) <- 아마 안 쓸 것 같은데 일단 데이터만 가지고 있기 
 		vector<_wstring> vecAblity_Grade;
@@ -135,25 +145,80 @@ public:
 
 		void Add_Array()
 		{
-			for (_int i = 0; i < 5; ++i)
+			for (_uint i = 0; i < 5; ++i)
 			{
 				ITEM* pNew = new ITEM;
 				vecItemInfo.push_back(pNew);
 			}
 		}
 
-		_int Get_Array_Size() { return vecItemInfo.size(); }
-			
-		_int iRow = 1; // 
+		_uint Get_Array_Size() { return vecItemInfo.size(); }
+		ITEM* Get_Item_Info(_uint iIndex) 
+		{
+			if ((iIndex < 0) || (iIndex >= Get_Array_Size()))
+				return nullptr;
+			return vecItemInfo[iIndex];
+		}
+		ITEM_RESULT Input_Item(ITEM* pNew, _uint iCount)
+		{
+			if (pNew->bStack)
+				for (auto& iter : vecItemInfo)
+					if (iter->iItem_Index == pNew->iItem_Index)
+					{
+						iter->iCount += iCount;
+						return ITEM_RESULT::RESULT_SUCCESS;
+					}
+
+			if (iNextIndex >=Get_Array_Size())
+				Add_Array();
+
+			*vecItemInfo[iNextIndex] = *pNew;
+
+			//memcpy(&vecItemInfo[iNextIndex], pNew, sizeof(ITEM));
+
+			++iNextIndex;
+
+			return ITEM_RESULT::RESULT_SUCCESS;
+		}
+		ITEM_RESULT Use_Item(_uint iIndex, _uint iCount)
+		{
+			if ((iIndex < 0) || (iIndex >= Get_Array_Size()))
+				return ITEM_RESULT::RESULT_INVALID;
+			if (vecItemInfo[iIndex]->eType_Index == ITEM_TYPE::ITEMTYPE_END)
+				return ITEM_RESULT::RESULT_INVALID;
+
+			if(!vecItemInfo[iIndex]->bStack)
+				return ITEM_RESULT::RESULT_SUCCESS;
+			else if (vecItemInfo[iIndex]->iCount >= iCount)
+			{
+				vecItemInfo[iIndex]->iCount -= iCount;
+				return ITEM_RESULT::RESULT_SUCCESS;
+			}
+			else
+				return ITEM_RESULT::RESULT_INVALID;
+		}
+		ITEM_RESULT Remove_Item(_uint iIndex)
+		{
+			if ((iIndex < 0) || (iIndex >= Get_Array_Size()))
+				return ITEM_RESULT::RESULT_INVALID;
+			if (vecItemInfo[iIndex]->eType_Index == ITEM_TYPE::ITEMTYPE_END)
+				return ITEM_RESULT::RESULT_INVALID;
+
+			Safe_Delete(vecItemInfo[iIndex]);
+			vecItemInfo[iIndex] = new ITEM;
+		}
+
+		_wstring strInven_Array_Name = {};
+		_uint iNextIndex = 0; // 
 		vector<ITEM*> vecItemInfo;  // 배열에 들어간 아이템 정보
-		list<_int> ValidEquipIndexlist;
+		list<_uint> ValidEquipIndexlist;
 	}ARRAY;
 
 	typedef struct EQUIP_INFO
 	{
 		EQUIP_INFO()
 		{
-			vecValid_InvenArray.resize(_int(INVEN_ARRAY_TYPE::TYPE_END));
+			vecValid_InvenArray.resize(_uint(INVEN_ARRAY_TYPE::TYPE_END));
 		}
 		~EQUIP_INFO()
 		{
@@ -161,7 +226,7 @@ public:
 		}
 
 		INVEN_ARRAY_TYPE eType = INVEN_ARRAY_TYPE::TYPE_END; // <- 장착 중인 아이템이 어떤 Array에 있는 지를 의미한다 
-		_int iIndex = 0; // <- 아이템이 위치한 인덱스 
+		_uint iIndex = 0; // <- 아이템이 위치한 인덱스 
 		vector<_bool> vecValid_InvenArray; // 해당 장착슬롯에 연결될 수 있는 인벤 Array의 목록
 	}EQUIP;
 
@@ -173,18 +238,17 @@ private:
 
 public:
 	// 접근, 수정
-	ITEM_RESULT AddNewItem_Inven(INVEN_ARRAY_TYPE eIndex, _uint iCount = 1); // <- 새롭게 아이템을 만들어 인벤에 넣는다 
-	ITEM_RESULT EquipItem_Inven(INVEN_ARRAY_TYPE eIndex); // <- 인벤에 있는 아이템을 장비한다 
+	ITEM_RESULT AddNewItem_Inven(_uint iItemIndex, _uint iCount = 1); // <- 새롭게 아이템을 만들어 인벤에 넣는다 
+	ITEM_RESULT EquipItem_Inven(INVEN_ARRAY_TYPE eIndex, EQUIP_SLOT eSlot, _uint iIndex); // <- 인벤에 있는 아이템을 장비한다 
 	ITEM_RESULT UseItem_Equip(EQUIP_SLOT eSlot, _uint iCount = 1); // <- 장비된 아이템을 사용한다
-	ITEM_RESULT UseItem_Inven(INVEN_ARRAY_TYPE eIndex, _uint iCount = 1); // <- 인벤에 있는 아이템을 직접 사용 (
+	ITEM_RESULT UseItem_Inven(INVEN_ARRAY_TYPE eIndex, _uint iIndex, _uint iCount = 1); // <- 인벤에 있는 아이템을 직접 사용 
+	ITEM_RESULT Remove_Item_Inven(INVEN_ARRAY_TYPE eIndex, _uint iIndex); // <- 인벤의 아이템 제거
 
-	const INVEN_ARRAY_TYPE& Get_Equip_ITEM_TYPE(EQUIP_SLOT eSlot) // 현재 장비창에 장착된 아이템의 인덱스만 확인
-	{
-		//return m_vecArray_Inven[_int(m_vecEquip_ItemInfo[_int(eSlot)]->eType)]->vecItemInfo[_int(m_vecEquip_ItemInfo[_int(eSlot)]->iIndex)]->eIndex;
-	} 
+	CPlayer::WEAPON_TYPE Get_Weapon_Model_Index(); // 현재 사용 중인 무기의 모델 번호 리턴
+
 	const ITEM& Get_Equip_Item_Info(EQUIP_SLOT eSlot) // 현재 장비창에 장착된 아이템의 정보 레퍼런스 획득
 	{ 
-		return *m_vecArray_Inven[_int(m_vecEquip_ItemInfo[_int(eSlot)]->eType)]->vecItemInfo[_int(m_vecEquip_ItemInfo[_int(eSlot)]->iIndex)];
+		return *m_vecArray_Inven[_uint(m_vecEquip_ItemInfo[_uint(eSlot)]->eType)]->vecItemInfo[_uint(m_vecEquip_ItemInfo[_uint(eSlot)]->iIndex)];
 	}
 
 	
@@ -220,7 +284,11 @@ private:
 
 	vector<ITEM*> m_vecItem_BasicSpec; // 게임 내 존재하는 모든 아이템의 기본 스펙
 
-	vector<_int> m_vecItem_InvenSlotIndex; // 아이템 타입 별로 들어갈 수 있는 인벤 슬롯 정보 
+	vector<_uint> m_vecItem_InvenSlotIndex; // 아이템 타입 별로 들어갈 수 있는 인벤 슬롯 정보 
+
+	_uint m_iAdd_Handle = 1;
+	_uint m_iAdd_Heroic = 2;
+	_uint m_iAdd_Separate = 4;
 	/*
 	날/자루의 경우 
 	0. 일반 합체 날 +0;
@@ -234,7 +302,7 @@ private:
 	vector<ARRAY*> m_vecArray_Inven; // 인벤토리 정보 모음 (행 단위)
 	vector<EQUIP*> m_vecEquip_ItemInfo; // 현재 어떤 장비 장착 중인 지 확인 
 
-	_int m_iInven_Array_Col_Count = 5; // <- 인벤 한 줄에 몇 개의 셀이 들어가는 지
+	_uint m_iInven_Array_Col_Count = 5; // <- 인벤 한 줄에 몇 개의 셀이 들어가는 지
 
 
 

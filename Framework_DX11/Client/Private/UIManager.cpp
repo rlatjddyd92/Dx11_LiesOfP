@@ -673,7 +673,11 @@ HRESULT CUIManager::Load_UIDataFile_Part(HANDLE handle, DWORD* dword, _int iInde
 		ReadFile(handle, &pNew->bIsItem, sizeof(_bool), dword, nullptr);
 		ReadFile(handle, &pNew->bTurn, sizeof(_bool), dword, nullptr);
 		ReadFile(handle, &pNew->fTurn_Degree, sizeof(_float), dword, nullptr);
-		m_pUIRender_Client->Make_Texture(pNew->iTexture_Index);
+
+		if (!pNew->bIsItem)
+			m_pUIRender_Client->Make_Texture(pNew->iTexture_Index);
+		else 
+			m_pUIRender_Client->Make_Texture_Item(pNew->iTexture_Index);
 		_wstring strName = {};
 		while (true)
 		{
