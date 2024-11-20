@@ -532,6 +532,28 @@ void CController_EffectTool::Get_Particle()
 	m_ParticleDesc = pParticle->Get_Desc();
 	m_RenderDesc = m_ParticleDesc.RenderDesc;
 
+	_uint iIndex = 0;
+	for (auto& Tag : m_Texture_PrototypeTags)
+	{
+		if (0 == wcscmp(Tag.c_str(), m_ParticleDesc.TextDesc.szDiffuseTexturTag))
+		{
+			m_iSelected_DiffuseTextureIndex = iIndex;
+		}
+		if (0 == wcscmp(Tag.c_str(), m_ParticleDesc.TextDesc.szMaskTextureTag_1))
+		{
+			m_iSelected_MaskTextureIndex_1 = iIndex;
+		}
+		if (0 == wcscmp(Tag.c_str(), m_ParticleDesc.TextDesc.szMaskTextureTag_2))
+		{
+			m_iSelected_MaskTextureIndex_2 = iIndex;
+		}
+		if (0 == wcscmp(Tag.c_str(), m_ParticleDesc.TextDesc.szNormalTextureTag))
+		{
+			m_iSelected_NormalTextureIndex = iIndex;
+		}
+		++iIndex;
+	}
+
 	Set_PpState();
 
 #pragma region PB
@@ -727,6 +749,28 @@ void CController_EffectTool::Get_TE()
 	m_TextureDesc = pTextureEffect->Get_Desc();
 	m_RenderDesc = m_TextureDesc.RenderDesc;
 
+	_uint iIndex = 0;
+	for (auto& Tag : m_Texture_PrototypeTags)
+	{
+		if (0 == wcscmp(Tag.c_str(), m_TextureDesc.TextDesc.szDiffuseTexturTag))
+		{
+			m_iSelected_DiffuseTextureIndex = iIndex;
+		}
+		if (0 == wcscmp(Tag.c_str(), m_TextureDesc.TextDesc.szMaskTextureTag_1))
+		{
+			m_iSelected_MaskTextureIndex_1 = iIndex;
+		}
+		if (0 == wcscmp(Tag.c_str(), m_TextureDesc.TextDesc.szMaskTextureTag_2))
+		{
+			m_iSelected_MaskTextureIndex_2 = iIndex;
+		}
+		if (0 == wcscmp(Tag.c_str(), m_TextureDesc.TextDesc.szNormalTextureTag))
+		{
+			m_iSelected_NormalTextureIndex = iIndex;
+		}
+		++iIndex;
+	}
+
 	Set_PpState();
 }
 
@@ -917,6 +961,40 @@ void CController_EffectTool::Get_Mesh()
 
 	m_MeshDesc = pMeshEffect->Get_Desc();
 	m_RenderDesc = m_MeshDesc.RenderDesc;
+
+	_uint iIndex = 0;
+	for (auto& Tag : m_Texture_PrototypeTags)
+	{
+		if (0 == wcscmp(Tag.c_str(), m_MeshDesc.TextDesc.szDiffuseTexturTag))
+		{
+			m_iSelected_DiffuseTextureIndex = iIndex;
+		}
+		if (0 == wcscmp(Tag.c_str(), m_MeshDesc.TextDesc.szMaskTextureTag_1))
+		{
+			m_iSelected_MaskTextureIndex_1 = iIndex;
+		}
+		if (0 == wcscmp(Tag.c_str(), m_MeshDesc.TextDesc.szMaskTextureTag_2))
+		{
+			m_iSelected_MaskTextureIndex_2 = iIndex;
+		}
+		if (0 == wcscmp(Tag.c_str(), m_MeshDesc.TextDesc.szNormalTextureTag))
+		{
+			m_iSelected_NormalTextureIndex = iIndex;
+		}
+		++iIndex;
+	}
+
+	_uint iModelIndex = 0;
+	for (auto& Tag : m_Model_PrototypeTags)
+	{
+		if (0 == wcscmp(Tag.c_str(), m_MeshDesc.TextDesc.szModelTag))
+		{
+			m_iSelected_ModelIndex = iModelIndex;
+		}
+		++iModelIndex;
+	}
+
+
 	Set_PpState();
 }
 
@@ -1025,7 +1103,7 @@ void CController_EffectTool::Trail_OP_Check()
 		ImGui::SeparatorText("Geom State");
 		ImGui::Checkbox("OP_Grow", &m_Trail_OPState[TOP_GROW]);
 		ImGui::SameLine();
-		ImGui::Checkbox("OP_Shrink", &m_EffectPP[TOP_SHRINK]);
+		ImGui::Checkbox("OP_Shrink", &m_Trail_OPState[TOP_SHRINK]);
 
 		Set_TrailOP_State();
 		ImGui::TreePop();
@@ -1077,6 +1155,30 @@ void CController_EffectTool::Get_Trail_OP()
 		return;
 
 	m_Trail_OPDesc = pTOP->Get_Desc();
+	m_RenderDesc = m_Trail_OPDesc.RenderDesc;
+
+	_uint iIndex = 0;
+
+	for (auto& Tag : m_Texture_PrototypeTags)
+	{
+		if (0 == wcscmp(Tag.c_str(), m_Trail_OPDesc.TextDesc.szDiffuseTexturTag))
+		{
+			m_iSelected_DiffuseTextureIndex = iIndex;
+		}
+		if (0 == wcscmp(Tag.c_str(), m_Trail_OPDesc.TextDesc.szMaskTextureTag_1))
+		{
+			m_iSelected_MaskTextureIndex_1 = iIndex;
+		}
+		if (0 == wcscmp(Tag.c_str(), m_Trail_OPDesc.TextDesc.szMaskTextureTag_2))
+		{
+			m_iSelected_MaskTextureIndex_2 = iIndex;
+		}
+		if (0 == wcscmp(Tag.c_str(), m_Trail_OPDesc.TextDesc.szNormalTextureTag))
+		{
+			m_iSelected_NormalTextureIndex = iIndex;
+		}
+		++iIndex;
+	}
 
 	if (CParticle_Effect::PS_GROW == (m_Trail_OPDesc.DefaultDesc.iGeomState & CTrail_Effect_OP::TOP_GROW))
 		m_Trail_OPState[TOP_GROW] = true;
@@ -1087,6 +1189,8 @@ void CController_EffectTool::Get_Trail_OP()
 		m_Trail_OPState[TOP_SHRINK] = true;
 	else
 		m_Trail_OPState[TOP_SHRINK] = false;
+
+	Set_PpState();
 }
 
 void CController_EffectTool::Delete_Trail_OP()
@@ -1233,7 +1337,32 @@ void CController_EffectTool::Get_Trail_TP()
 		return;
 
 	m_Trail_TPDesc = pTP->Get_Desc();
+	m_RenderDesc = m_Trail_TPDesc.RenderDesc();
 
+	_uint iIndex = 0;
+
+	for (auto& Tag : m_Texture_PrototypeTags)
+	{
+		if (0 == wcscmp(Tag.c_str(), m_Trail_OPDesc.TextDesc.szDiffuseTexturTag))
+		{
+			m_iSelected_DiffuseTextureIndex = iIndex;
+		}
+		if (0 == wcscmp(Tag.c_str(), m_Trail_OPDesc.TextDesc.szMaskTextureTag_1))
+		{
+			m_iSelected_MaskTextureIndex_1 = iIndex;
+		}
+		if (0 == wcscmp(Tag.c_str(), m_Trail_OPDesc.TextDesc.szMaskTextureTag_2))
+		{
+			m_iSelected_MaskTextureIndex_2 = iIndex;
+		}
+		if (0 == wcscmp(Tag.c_str(), m_Trail_OPDesc.TextDesc.szNormalTextureTag))
+		{
+			m_iSelected_NormalTextureIndex = iIndex;
+		}
+		++iIndex;
+	}
+
+	Set_PpState();
 }
 
 void CController_EffectTool::Delete_Trail_TP()
@@ -1456,6 +1585,30 @@ void CController_EffectTool::Get_Trail_MP()
 		return;
 
 	m_Trail_MPDesc = pMP->Get_Desc();
+	m_RenderDesc = m_Trail_MPDesc.RenderDesc;
+
+	_uint iIndex = 0;
+
+	for (auto& Tag : m_Texture_PrototypeTags)
+	{
+		if (0 == wcscmp(Tag.c_str(), m_Trail_OPDesc.TextDesc.szDiffuseTexturTag))
+		{
+			m_iSelected_DiffuseTextureIndex = iIndex;
+		}
+		if (0 == wcscmp(Tag.c_str(), m_Trail_OPDesc.TextDesc.szMaskTextureTag_1))
+		{
+			m_iSelected_MaskTextureIndex_1 = iIndex;
+		}
+		if (0 == wcscmp(Tag.c_str(), m_Trail_OPDesc.TextDesc.szMaskTextureTag_2))
+		{
+			m_iSelected_MaskTextureIndex_2 = iIndex;
+		}
+		if (0 == wcscmp(Tag.c_str(), m_Trail_OPDesc.TextDesc.szNormalTextureTag))
+		{
+			m_iSelected_NormalTextureIndex = iIndex;
+		}
+		++iIndex;
+	}
 
 #pragma region TRAIL_MP
 	if (CVIBuffer_Point_Instance::STATE_ORBIT == (m_Trail_MPDesc.DefaultDesc.iComputeState & CVIBuffer_Point_Instance::STATE_ORBIT))
@@ -1498,6 +1651,8 @@ void CController_EffectTool::Get_Trail_MP()
 	else
 		m_Trail_MPState[PB_ROTATION] = false;
 #pragma endregion
+
+	Set_PpState();
 }
 
 void CController_EffectTool::Delete_Trail_MP()
