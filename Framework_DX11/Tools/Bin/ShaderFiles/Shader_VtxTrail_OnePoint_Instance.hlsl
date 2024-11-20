@@ -183,7 +183,7 @@ PS_OUT PS_BLEND_MAIN(PS_IN In)
     if (In.vLifeTime.x < In.vLifeTime.y)
         discard;
     
-    Out.vColor.rgb = g_vColor.rgb;
+    Out.vColor.rgb *= g_vColor.rgb;
     
     return Out;
 }

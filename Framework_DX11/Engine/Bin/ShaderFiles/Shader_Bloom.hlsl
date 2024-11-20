@@ -108,6 +108,9 @@ PS_OUT PS_MAIN_DOWNSAMPLE(PS_IN In)
 
     if (g_isSelectBright)
     {
+        if(vColor.a < 0.2f)
+            discard;
+        
         float fIntensity = max(dot(vColor.rgb, float3(1.f, 1.f, 1.f)) * vColor.a, 0.1f);
     
         float fBloomIntensity = min(Get_BloomCurve(fIntensity), 10.f);

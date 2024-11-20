@@ -100,7 +100,6 @@ void CTexture_Effect::Late_Update(_float fTimeDelta)
 
 HRESULT CTexture_Effect::Render()
 {
-
     if (FAILED(__super::Bind_WorldMatrix(m_pShaderCom, "g_WorldMatrix")))
         return E_FAIL;
     if (FAILED(m_pShaderCom->Bind_Matrix("g_ViewMatrix", &m_pGameInstance->Get_Transform(CPipeLine::D3DTS_VIEW))))
@@ -265,6 +264,12 @@ void CTexture_Effect::Billboard(_Vec3 vCurrentScale, _Vec3 vLook)
 {
     _Vec4 vRight = XMVector3Cross(XMVectorSet(0.f, 1.f, 0.f, 0.f), vLook);
     _Vec4 vUp = XMVector3Cross(vLook, vRight);
+
+    _Matrix LocalRotationMatrix = XMMatrixRotationAxis(vLook,
+        XMConvertToRadians(m_DefaultDesc.fStarRotation + m_DefaultDesc.fRotationPerSecond * m_fAccumulateTime));
+
+    vRight = XMVector3TransformNormal(vRight, LocalRotationMatrix);
+    vUp = XMVector3TransformNormal(vUp, LocalRotationMatrix);
 
     XMStoreFloat3((_float3*)&m_WorldMatrix.m[0][0], vRight * vCurrentScale.x);
     XMStoreFloat3((_float3*)&m_WorldMatrix.m[1][0], vUp * vCurrentScale.y);
