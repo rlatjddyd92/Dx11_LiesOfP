@@ -627,7 +627,7 @@
     <ClInclude Include="..\Public\UIPage_Stat.h">
       <Filter>03.GameInterface_Controller\00.UIManager\00.UIPage\06.UIPage_Stat</Filter>
     </ClInclude>
-    <ClInclude Include="..\Public\UIPage_Test.h">
+    <ClInclude Include="..\Public\UIPage_ToolTip.h">
       <Filter>03.GameInterface_Controller\00.UIManager\00.UIPage\09.UIPage_Test</Filter>
     </ClInclude>
     <ClInclude Include="..\public\Mesh_Effect.h">
@@ -863,7 +863,7 @@
     <ClCompile Include="..\Private\UIPage_Stat.cpp">
       <Filter>03.GameInterface_Controller\00.UIManager\00.UIPage\06.UIPage_Stat</Filter>
     </ClCompile>
-    <ClCompile Include="..\Private\UIPage_Test.cpp">
+    <ClCompile Include="..\Private\UIPage_ToolTip.cpp">
       <Filter>03.GameInterface_Controller\00.UIManager\00.UIPage\09.UIPage_Test</Filter>
     </ClCompile>
     <ClCompile Include="..\private\Mesh_Effect.cpp">

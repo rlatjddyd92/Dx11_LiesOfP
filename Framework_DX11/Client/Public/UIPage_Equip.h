@@ -14,7 +14,9 @@ class CUIPage_Equip : public CUIPage
 public:
 	enum class PART_GROUP
 	{
-
+		GROUP_FRAME,
+		GROUP_MODEL,
+		
 
 
 

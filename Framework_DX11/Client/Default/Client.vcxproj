@@ -243,7 +243,7 @@
     <ClInclude Include="..\Public\UIPage_Play.h" />
     <ClInclude Include="..\Public\UIPage_Skill.h" />
     <ClInclude Include="..\Public\UIPage_Stat.h" />
-    <ClInclude Include="..\Public\UIPage_Test.h" />
+    <ClInclude Include="..\Public\UIPage_ToolTip.h" />
     <ClInclude Include="..\Public\UIRender_Client.h" />
     <ClInclude Include="..\Public\Weapon.h" />
     <ClInclude Include="Client.h" />
@@ -332,7 +332,7 @@
     <ClCompile Include="..\Private\UIPage_Play.cpp" />
     <ClCompile Include="..\Private\UIPage_Skill.cpp" />
     <ClCompile Include="..\Private\UIPage_Stat.cpp" />
-    <ClCompile Include="..\Private\UIPage_Test.cpp" />
+    <ClCompile Include="..\Private\UIPage_ToolTip.cpp" />
     <ClCompile Include="..\Private\UIRender_Client.cpp" />
     <ClCompile Include="..\Private\Weapon.cpp" />
     <ClCompile Include="Client.cpp" />

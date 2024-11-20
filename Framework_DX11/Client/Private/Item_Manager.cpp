@@ -84,7 +84,21 @@ ITEM_RESULT CItem_Manager::Remove_Item_Inven(INVEN_ARRAY_TYPE eIndex, _uint iInd
 
 CPlayer::WEAPON_TYPE CItem_Manager::Get_Weapon_Model_Index()
 {
-	return CPlayer::WEAPON_TYPE();
+	INVEN_ARRAY_TYPE eArray = m_vecEquip_ItemInfo[_int(EQUIP_SLOT::EQUIP_WEAPON_BLADE_0) + (m_iWeapon_Select * 2)]->eType;
+	_int iIndex = m_vecEquip_ItemInfo[_int(EQUIP_SLOT::EQUIP_WEAPON_BLADE_0) + (m_iWeapon_Select * 2)]->iIndex;
+	
+	const ITEM* pItem = m_vecArray_Inven[_int(eArray)]->Get_Item_Info(iIndex);
+
+	if (pItem == nullptr)
+		return CPlayer::WEAPON_TYPE::WEP_END;
+	else if (pItem->strName == TEXT("겨울의 레이피어 날"))
+		return CPlayer::WEAPON_TYPE::WEP_RAPIER;
+	else if (pItem->strName == TEXT("흑철 절삭기 날"))
+		return CPlayer::WEAPON_TYPE::WEP_FLAME;
+	else if (pItem->strName == TEXT("인간성의 증거"))
+		return CPlayer::WEAPON_TYPE::WEP_SCISSOR;
+	
+	return CPlayer::WEAPON_TYPE::WEP_END;
 }
 
 

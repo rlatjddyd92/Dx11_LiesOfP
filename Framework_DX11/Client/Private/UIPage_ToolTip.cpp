@@ -1,21 +1,21 @@
 #include "stdafx.h"
-#include "..\Public\UIPage_Test.h"
+#include "..\Public\UIPage_ToolTip.h"
 
 #include "GameInstance.h"
 
 
-CUIPage_Test::CUIPage_Test(ID3D11Device* pDevice, ID3D11DeviceContext* pContext)
+CUIPage_ToolTip::CUIPage_ToolTip(ID3D11Device* pDevice, ID3D11DeviceContext* pContext)
 	: CUIPage{ pDevice, pContext }
 {
 
 }
 
-CUIPage_Test::CUIPage_Test(const CUIPage_Test& Prototype)
+CUIPage_ToolTip::CUIPage_ToolTip(const CUIPage_ToolTip& Prototype)
 	: CUIPage{ Prototype }
 {
 }
 
-HRESULT CUIPage_Test::Initialize_Prototype()
+HRESULT CUIPage_ToolTip::Initialize_Prototype()
 {
 	// 모든 UIPage는 클론 안 함, 여기서 모든 세팅 끝내기 
 
@@ -40,84 +40,84 @@ HRESULT CUIPage_Test::Initialize_Prototype()
 	return S_OK;
 }
 
-HRESULT CUIPage_Test::Initialize(void* pArg)
+HRESULT CUIPage_ToolTip::Initialize(void* pArg)
 {
 
 
 	return S_OK;
 }
 
-void CUIPage_Test::Priority_Update(_float fTimeDelta)
+void CUIPage_ToolTip::Priority_Update(_float fTimeDelta)
 {
 	__super::Priority_Update(fTimeDelta);
 }
 
-void CUIPage_Test::Update(_float fTimeDelta)
+void CUIPage_ToolTip::Update(_float fTimeDelta)
 {
 	__super::Update(fTimeDelta);
 }
 
-void CUIPage_Test::Late_Update(_float fTimeDelta)
+void CUIPage_ToolTip::Late_Update(_float fTimeDelta)
 {
 	__super::Late_Update(fTimeDelta);
 }
 
-HRESULT CUIPage_Test::Render()
+HRESULT CUIPage_ToolTip::Render()
 {
 	return S_OK;
 }
 
-void CUIPage_Test::OpenAction()
+void CUIPage_ToolTip::OpenAction()
 {
 	__super::OpenAction();
 }
 
-void CUIPage_Test::CloseAction()
+void CUIPage_ToolTip::CloseAction()
 {
 	__super::CloseAction();
 }
 
-CHECK_MOUSE CUIPage_Test::Check_Page_Action(_float fTimeDelta)
+CHECK_MOUSE CUIPage_ToolTip::Check_Page_Action(_float fTimeDelta)
 {
 	__super::Check_Page_Action(fTimeDelta);
 
 	return CHECK_MOUSE::MOUSE_NONE;
 }
 
-HRESULT CUIPage_Test::Ready_UIPart_Group_Control()
+HRESULT CUIPage_ToolTip::Ready_UIPart_Group_Control()
 {
 	__super::Ready_UIPart_Group_Control();
 
 	return S_OK;
 }
 
-CUIPage_Test* CUIPage_Test::Create(ID3D11Device* pDevice, ID3D11DeviceContext* pContext)
+CUIPage_ToolTip* CUIPage_ToolTip::Create(ID3D11Device* pDevice, ID3D11DeviceContext* pContext)
 {
-	CUIPage_Test* pInstance = new CUIPage_Test(pDevice, pContext);
+	CUIPage_ToolTip* pInstance = new CUIPage_ToolTip(pDevice, pContext);
 
 	if (FAILED(pInstance->Initialize_Prototype()))
 	{
-		MSG_BOX(TEXT("Failed to Created : CUIPage_Test"));
+		MSG_BOX(TEXT("Failed to Created : CUIPage_ToolTip"));
 		Safe_Release(pInstance);
 	}
 
 	return pInstance;
 }
 
-CGameObject* CUIPage_Test::Clone(void* pArg)
+CGameObject* CUIPage_ToolTip::Clone(void* pArg)
 {
-	CUIPage_Test* pInstance = new CUIPage_Test(*this);
+	CUIPage_ToolTip* pInstance = new CUIPage_ToolTip(*this);
 
 	if (FAILED(pInstance->Initialize(pArg)))
 	{
-		MSG_BOX(TEXT("Failed to Cloned : CUIPage_Test"));
+		MSG_BOX(TEXT("Failed to Cloned : CUIPage_ToolTip"));
 		Safe_Release(pInstance);
 	}
 
 	return pInstance;
 }
 
-void CUIPage_Test::Free()
+void CUIPage_ToolTip::Free()
 {
 	__super::Free();
 

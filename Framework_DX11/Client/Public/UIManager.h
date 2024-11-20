@@ -195,7 +195,7 @@ private:
 	// 스킬트리
 	CUIPage_Skill* m_pUIPage_Skill = { nullptr };
 	// 테스트
-	CUIPage_Test* m_pUIPage_Test = { nullptr };
+	CUIPage_ToolTip* m_pUIPage_ToolTip = { nullptr };
 	// 직교
 	CUIPage_Ortho* m_pUIPage_Ortho = { nullptr };
 

@@ -613,10 +613,10 @@ HRESULT CUIManager::Make_UIPage(_int iIndex)
 		m_pUIPage_Skill = CUIPage_Skill::Create(m_pDevice, m_pContext);
 		m_vecPage[iIndex] = static_cast<CUIPage*>(m_pUIPage_Skill);
 	}
-	else if (iIndex == _int(UIPAGE::PAGE_TEST))
+	else if (iIndex == _int(UIPAGE::PAGE_TOOLTIP))
 	{
-		m_pUIPage_Test = CUIPage_Test::Create(m_pDevice, m_pContext);
-		m_vecPage[iIndex] = static_cast<CUIPage*>(m_pUIPage_Test);
+		m_pUIPage_ToolTip = CUIPage_ToolTip::Create(m_pDevice, m_pContext);
+		m_vecPage[iIndex] = static_cast<CUIPage*>(m_pUIPage_ToolTip);
 	}
 	else if (iIndex == _int(UIPAGE::PAGE_ORTHO))
 	{
