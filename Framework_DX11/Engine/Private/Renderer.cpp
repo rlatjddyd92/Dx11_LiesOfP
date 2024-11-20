@@ -263,9 +263,9 @@ HRESULT CRenderer::Initialize()
 		return E_FAIL;
 
 #ifdef _DEBUG
-	if (FAILED(m_pGameInstance->Ready_RT_Debug(TEXT("Target_Effect_Diffuse"), 100.f, 100.f, 200.f, 200.f)))
+	if (FAILED(m_pGameInstance->Ready_RT_Debug(TEXT("Target_Diffuse"), 100.f, 100.f, 200.f, 200.f)))
 		return E_FAIL;
-	if (FAILED(m_pGameInstance->Ready_RT_Debug(TEXT("Target_Effect_NonDownSample"), 100.f, 300.f, 200.f, 200.f)))
+	if (FAILED(m_pGameInstance->Ready_RT_Debug(TEXT("Target_Effect_Diffuse"), 100.f, 300.f, 200.f, 200.f)))
 		return E_FAIL;
 	if (FAILED(m_pGameInstance->Ready_RT_Debug(TEXT("Target_Effect_DownSample"), 100.f, 500.f, 200.f, 200.f)))
 		return E_FAIL;
@@ -1844,8 +1844,8 @@ HRESULT CRenderer::Ready_HDR()
 		return E_FAIL;
 
 	m_tHDR.isOnHDR = true;
-	m_tHDR.fMiddleGrey = 0.85f;
-	m_tHDR.fLumWhiteSqr = 1.8f;
+	m_tHDR.fMiddleGrey = 0.95f;
+	m_tHDR.fLumWhiteSqr = 0.8f;
 
 	return S_OK;
 }

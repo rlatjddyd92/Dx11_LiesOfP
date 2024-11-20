@@ -182,7 +182,7 @@ PS_OUT_LIGHTDEPTH PS_MAIN_LIGHTDEPTH(PS_IN_MODEL In)
 {
     PS_OUT_LIGHTDEPTH Out = (PS_OUT_LIGHTDEPTH) 0;
 
-    Out.vLightDepth = vector(In.vProjPos.w / 1000.f, 0.f, 0.f, 0.f);
+    Out.vLightDepth = vector(In.vProjPos.w / g_fFar, 0.f, 0.f, 0.f);
 
 
     return Out;

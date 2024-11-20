@@ -130,7 +130,7 @@ PS_OUT_MODEL PS_MAIN_NORMAL(PS_IN_NORMAL In)
 	/* -1.f ~ 1.f -> 0.f ~ 1.f */
 	Out.vNormal = vector(vNormal * 0.5f + 0.5f, 0.f);
 	Out.vDepth = vector(In.vProjPos.z / In.vProjPos.w, In.vProjPos.w / g_fFar, 0.f, 0.f);
-    Out.vARM = g_ARMTexture.Sample(LinearSampler, In.vTexcoord);\
+    Out.vARM = g_ARMTexture.Sample(LinearSampler, In.vTexcoord);
 
 	return Out;
 }

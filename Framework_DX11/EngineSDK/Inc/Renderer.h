@@ -74,7 +74,7 @@ private:
 	_float4x4					m_WorldMatrix{}, m_ViewMatrix{}, m_ProjMatrix{};
 
 	/* Bloom */
-	_float						m_fSamplerRatio = { 5.f };
+	_float						m_fSamplerRatio = { 6.f };
 	BLOOM_DESC					m_tBloom;
 
 	ID3D11DepthStencilView*		m_pDownSampleDepthStencilView0 = { nullptr };

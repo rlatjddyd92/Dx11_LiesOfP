@@ -129,7 +129,8 @@ PS_OUT PS_MAIN_UPSAMPLE(PS_IN In)
     float3 vBlur = g_BlurTexture.Sample(LinearClampSampler, In.vTexcoord).rgb;
     float3 vDown = g_DownSampleTexture.Sample(LinearClampSampler, In.vTexcoord).rgb;
     
-    vColor = pow(pow(abs(vBlur), 2.2f) + pow(abs(vDown), 2.2f), 1.f / 2.2f);    // 감마보정
+    vColor = vBlur + vDown;
+    //pow(pow(abs(vBlur), 2.2f) + pow(abs(vDown), 2.2f), 1.f / 2.2f); // 감마보정
     Out.vColor = vector(vColor, 1.f);
     
     return Out;
