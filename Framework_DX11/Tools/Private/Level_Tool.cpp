@@ -72,8 +72,8 @@ HRESULT CLevel_Tool::Initialize()
 	desc.DefaultDesc.iShaderIndex = CMesh_Effect::SHADER_TEST;
 	desc.DefaultDesc.fTileMoveSpeed = 0.f;
 	desc.DefaultDesc.vTileMoveDir = _Vec2(1.f, 1.f);
-	if (FAILED(m_pGameInstance->Add_CloneObject_ToLayer(LEVEL_TOOL, TEXT("Layer_MeshEffect"), TEXT("Prototype_GameObject_Mesh_Effect"), &desc)))
-		return E_FAIL;
+	/*if (FAILED(m_pGameInstance->Add_CloneObject_ToLayer(LEVEL_TOOL, TEXT("Layer_MeshEffect"), TEXT("Prototype_GameObject_Mesh_Effect"), &desc)))
+		return E_FAIL;*/
 
 	return S_OK;
 }

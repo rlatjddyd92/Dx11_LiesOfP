@@ -725,7 +725,7 @@ void CController_MapTool::SaveMap()
 
 	//전체 레이어 수 저장
 	_uint iLayerCount = m_pGameInstance->Get_Object_Layer_Count(LEVEL_TOOL);
-	iLayerCount -= 4;//카메라 레이어, 애니메이션 Tool용 모델 레이어, Background 제외
+	iLayerCount -= 3;//카메라 레이어, 애니메이션 Tool용 모델 레이어, Background 제외
 
 	//strUint = to_string(iLayerCount);
 	//fout.write(strUint.c_str(), sizeof(strUint));
