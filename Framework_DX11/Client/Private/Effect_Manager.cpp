@@ -222,7 +222,7 @@ HRESULT CEffect_Manager::Load_Effects(const _wstring& strEffectPath)
 HRESULT CEffect_Manager::Load_Textures()
 {
     /* For. Prototype_Component_Texture_DefaultBlack */
-    if (FAILED(m_pGameInstance->Add_Prototype(LEVEL_GAMEPLAY, TEXT("Prototype_Component_Texture_DefaultBlack"),
+    if (FAILED(m_pGameInstance->Add_Prototype(LEVEL_GAMEPLAY, TEXT("Prototype_Component_Texture_T_Sample_Black"),
         CTexture::Create(m_pDevice, m_pContext, TEXT("../Bin/Resources/Textures/Effect/T_Sample_Black.dds"), 1))))
         return E_FAIL;
 
@@ -231,64 +231,69 @@ HRESULT CEffect_Manager::Load_Textures()
         CTexture::Create(m_pDevice, m_pContext, TEXT("../Bin/Resources/Textures/Effect/Particle_Spark.dds"), 1))))
         return E_FAIL;
 
-    /* For. Prototype_Component_Texture_Glow */
-    if (FAILED(m_pGameInstance->Add_Prototype(LEVEL_GAMEPLAY, TEXT("Prototype_Component_Texture_Glow"),
+    /* For. Prototype_Component_Texture_Glow_0 */
+    if (FAILED(m_pGameInstance->Add_Prototype(LEVEL_GAMEPLAY, TEXT("Prototype_Component_Texture_Glow_0"),
         CTexture::Create(m_pDevice, m_pContext, TEXT("../Bin/Resources/Textures/Effect/Glow_0.dds"), 1))))
         return E_FAIL;
 
-    /* For. Prototype_Component_Texture_Thunder */
-    if (FAILED(m_pGameInstance->Add_Prototype(LEVEL_GAMEPLAY, TEXT("Prototype_Component_Texture_Thunder"),
+    /* For. Prototype_Component_Texture_T_Thunder_02_C_HJS */
+    if (FAILED(m_pGameInstance->Add_Prototype(LEVEL_GAMEPLAY, TEXT("Prototype_Component_Texture_T_Thunder_02_C_HJS"),
         CTexture::Create(m_pDevice, m_pContext, TEXT("../Bin/Resources/Textures/Effect/T_Thunder_02_C_HJS.dds"), 1))))
         return E_FAIL;
 
-    /* For. Prototype_Component_Texture_LensFlare */
-    if (FAILED(m_pGameInstance->Add_Prototype(LEVEL_GAMEPLAY, TEXT("Prototype_Component_Texture_LensFlare"),
+    /* For. Prototype_Component_Texture_T_LensFlare_01_C_KMH */
+    if (FAILED(m_pGameInstance->Add_Prototype(LEVEL_GAMEPLAY, TEXT("Prototype_Component_Texture_T_LensFlare_01_C_KMH"),
         CTexture::Create(m_pDevice, m_pContext, TEXT("../Bin/Resources/Textures/Effect/T_LensFlare_01_C_KMH.dds"), 1))))
         return E_FAIL;
 
-    /* For. Prototype_Component_Texture_Ring */
-    if (FAILED(m_pGameInstance->Add_Prototype(LEVEL_GAMEPLAY, TEXT("Prototype_Component_Texture_Ring_4"),
+    /* For. Prototype_Component_Texture_T_Ring_04_C_KMH */
+    if (FAILED(m_pGameInstance->Add_Prototype(LEVEL_GAMEPLAY, TEXT("Prototype_Component_Texture_T_Ring_04_C_KMH"),
         CTexture::Create(m_pDevice, m_pContext, TEXT("../Bin/Resources/Textures/Effect/T_Ring_04_C_KMH.dds"), 1))))
         return E_FAIL;
 
-    /* For. Prototype_Component_Texture_Ring_2 */
-    if (FAILED(m_pGameInstance->Add_Prototype(LEVEL_GAMEPLAY, TEXT("Prototype_Component_Texture_Ring_8"),
+    /* For. Prototype_Component_Texture_T_Ring_08_C_HJS */
+    if (FAILED(m_pGameInstance->Add_Prototype(LEVEL_GAMEPLAY, TEXT("Prototype_Component_Texture_T_Ring_08_C_HJS"),
         CTexture::Create(m_pDevice, m_pContext, TEXT("../Bin/Resources/Textures/Effect/T_Ring_08_C_HJS.dds"), 1))))
         return E_FAIL;
 
-    /* For. Prototype_Component_Texture_Tile_Spark */
-    if (FAILED(m_pGameInstance->Add_Prototype(LEVEL_GAMEPLAY, TEXT("Prototype_Component_Texture_Tile_Spark"),
+    /* For. Prototype_Component_Texture_T_Tile_Spark_01_C_HJS */
+    if (FAILED(m_pGameInstance->Add_Prototype(LEVEL_GAMEPLAY, TEXT("Prototype_Component_Texture_T_Tile_Spark_01_C_HJS"),
         CTexture::Create(m_pDevice, m_pContext, TEXT("../Bin/Resources/Textures/Effect/T_Tile_Spark_01_C_HJS.dds"), 1))))
         return E_FAIL;
 
-    /* For. Prototype_Component_Texture_Stone_8x8 */
-    if (FAILED(m_pGameInstance->Add_Prototype(LEVEL_GAMEPLAY, TEXT("Prototype_Component_Texture_Stone_8x8"),
+    /* For. Prototype_Component_Texture_T_SubUV_DebStone_03_8x8_SC_KMH */
+    if (FAILED(m_pGameInstance->Add_Prototype(LEVEL_GAMEPLAY, TEXT("Prototype_Component_Texture_T_SubUV_DebStone_03_8x8_SC_KMH"),
         CTexture::Create(m_pDevice, m_pContext, TEXT("../Bin/Resources/Textures/Effect/T_SubUV_DebStone_03_8x8_SC_KMH.dds"), 1))))
         return E_FAIL;
 
-    /* For. Prototype_Component_Texture_Thunder_4x4 */
-    if (FAILED(m_pGameInstance->Add_Prototype(LEVEL_GAMEPLAY, TEXT("Prototype_Component_Texture_Thunder_4x4"),
+    /* For. Prototype_Component_Texture_T_SubUV_Thunder_01_4x4_SC_HJS */
+    if (FAILED(m_pGameInstance->Add_Prototype(LEVEL_GAMEPLAY, TEXT("Prototype_Component_Texture_T_SubUV_Thunder_01_4x4_SC_HJS"),
         CTexture::Create(m_pDevice, m_pContext, TEXT("../Bin/Resources/Textures/Effect/T_SubUV_Thunder_01_4x4_SC_HJS.dds"), 1))))
         return E_FAIL;
 
-    /* For. Prototype_Component_Texture_Thunder_4x1 */
-    if (FAILED(m_pGameInstance->Add_Prototype(LEVEL_GAMEPLAY, TEXT("Prototype_Component_Texture_Thunder_4x1"),
+    /* For. Prototype_Component_Texture_T_SubUV_Thunder_01_4x1_SC_GDH */
+    if (FAILED(m_pGameInstance->Add_Prototype(LEVEL_GAMEPLAY, TEXT("Prototype_Component_Texture_T_SubUV_Thunder_01_4x1_SC_GDH"),
         CTexture::Create(m_pDevice, m_pContext, TEXT("../Bin/Resources/Textures/Effect/T_SubUV_Thunder_01_4x1_SC_GDH.dds"), 1))))
         return E_FAIL;
 
-    /* For. Prototype_Component_Texture_Test_Trail */
-    if (FAILED(m_pGameInstance->Add_Prototype(LEVEL_GAMEPLAY, TEXT("Prototype_Component_Texture_Test_Trail"),
+    /* For. Prototype_Component_Texture_T_TrailGrad_01_C_RSW */
+    if (FAILED(m_pGameInstance->Add_Prototype(LEVEL_GAMEPLAY, TEXT("Prototype_Component_Texture_T_TrailGrad_01_C_RSW"),
         CTexture::Create(m_pDevice, m_pContext, TEXT("../Bin/Resources/Textures/Effect/T_TrailGrad_01_C_RSW.dds"), 1))))
         return E_FAIL;
 
-    /* For. Prototype_Component_Texture_DefaultNormal */
-    if (FAILED(m_pGameInstance->Add_Prototype(LEVEL_GAMEPLAY, TEXT("Prototype_Component_Texture_DefaultNormal"),
+    /* For. Prototype_Component_Texture_default_normal */
+    if (FAILED(m_pGameInstance->Add_Prototype(LEVEL_GAMEPLAY, TEXT("Prototype_Component_Texture_default_normal"),
         CTexture::Create(m_pDevice, m_pContext, TEXT("../Bin/Resources/Textures/Effect/default_normal.dds"), 1))))
         return E_FAIL;
 
-    /* For. Prototype_Component_Texture_Stone_8x8_Normal */
-    if (FAILED(m_pGameInstance->Add_Prototype(LEVEL_GAMEPLAY, TEXT("Prototype_Component_Texture_Stone_8x8_Normal"),
+    /* For. Prototype_Component_Texture_T_SubUV_DebStone_03_8x8_SN_KMH */
+    if (FAILED(m_pGameInstance->Add_Prototype(LEVEL_GAMEPLAY, TEXT("Prototype_Component_Texture_T_SubUV_DebStone_03_8x8_SN_KMH"),
         CTexture::Create(m_pDevice, m_pContext, TEXT("../Bin/Resources/Textures/Effect/T_SubUV_DebStone_03_8x8_SN_KMH.dds"), 1))))
+        return E_FAIL;
+
+    /* For. Prototype_Component_Texture_T_Tile_Noise_39_C_RSW */
+    if (FAILED(m_pGameInstance->Add_Prototype(LEVEL_GAMEPLAY, TEXT("Prototype_Component_Texture_T_Tile_Noise_39_C_RSW"),
+        CTexture::Create(m_pDevice, m_pContext, TEXT("../Bin/Resources/Textures/Effect/T_Tile_Noise_39_C_RSW.dds"), 1))))
         return E_FAIL;
 
     return S_OK;

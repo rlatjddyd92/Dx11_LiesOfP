@@ -87,6 +87,8 @@ public:
 	void			Seperate_Scissor();
 	void			Combine_Scissor();
 
+	class CWeapon*	Get_CurrentWeapon() { return m_pWeapon[m_eWeaponType]; }
+
 private:
 	list<OUTPUT_EVKEY>	m_EvKeyList;
 	list<class CEffect_Container*>	m_EffectList;
