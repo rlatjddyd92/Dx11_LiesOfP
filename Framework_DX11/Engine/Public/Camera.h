@@ -38,11 +38,34 @@ public:
 	virtual void Late_Update(_float fTimeDelta);
 	virtual HRESULT Render();
 
+public:
+	virtual void Start_PosShake(_float fPower, _float fDuration);
+
+	void ZoomIn(_float fFovy, _float fDuration = 1.f);
+	void ZoomOut(_float fDuration = 1.f);
+
 protected:
 	_float				m_fFovy = {};
 	_float				m_fAspect = {};
 	_float				m_fNear = {};
 	_float				m_fFar = {};
+
+	// 카메라 쉐이킹
+	_float				m_fShakeTime = {};
+	_float				m_fShakeDuration = {};
+	_float				m_fShakePower = {};
+	_bool				m_isShake = { false };
+	_float3				m_vOriginLook = {};
+
+	// 줌 인 아웃
+	_float				m_fInitFovy = {};
+	_float				m_fZoomInFovy = {};
+	_float				m_fTargetFovy = {};
+	_float				m_fZoomTime = {};
+	_float				m_fZoomDuration = {};
+
+	_bool				m_isZoomIn = { false };
+	_bool				m_isZoomOut = { false };
 
 	// 캐스캐이드용
 	_float				m_fCascadeFarPlanes[4];

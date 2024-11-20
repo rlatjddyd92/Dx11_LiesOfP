@@ -4,6 +4,7 @@
 #include<fstream>
 
 #include "FreeCamera.h"
+#include "PlayerCamera.h"
 #include "GameInstance.h"
 #include "GameInterface_Controller.h"
 
@@ -22,17 +23,18 @@ HRESULT CLevel_Tool::Initialize()
 	if (FAILED(Ready_Lights()))
 		return E_FAIL;
 
+	if (FAILED(Ready_Layer_Player()))
+		return E_FAIL;
 	if (FAILED(Ready_Layer_Camera()))
 		return E_FAIL;
 	if (FAILED(Ready_Layer_BackGround()))
 		return E_FAIL;
 	if (FAILED(Ready_Layer_Effect()))
 		return E_FAIL;
+
 	if (FAILED(Ready_Layer_Monster()))
 		return E_FAIL;
 
-	if (FAILED(Ready_Layer_Player()))
-		return E_FAIL;
 	if (FAILED(Ready_Layer_Paticle()))
 		return E_FAIL;	
 	
@@ -44,7 +46,6 @@ HRESULT CLevel_Tool::Initialize()
 	// 게임 인터페이스를 플레이 모드로 설정 
 	// 게임 플레이에 필요한 인벤, 플레이 화면, 스탯 화면 등을 상황에 따라 보여 주도록 설정 
 	GET_GAMEINTERFACE->SetPlayMode(true);
-
 
 	return S_OK;
 }
@@ -103,7 +104,25 @@ HRESULT CLevel_Tool::Ready_Lights()
 
 HRESULT CLevel_Tool::Ready_Layer_Camera()
 {
-	CFreeCamera::CAMERA_FREE_DESC		Desc{};
+	CPlayerCamera::CAMERA_PLAYER_DESC PlayerCameraDesc{};
+	PlayerCameraDesc.vEye = _float4(0.f, 0.f, 0.f, 1.f);
+	PlayerCameraDesc.vAt = _float4(0.f, 0.f, 1.f, 1.f);
+	PlayerCameraDesc.fFovy = XMConvertToRadians(60.0f);
+	PlayerCameraDesc.fNear = 0.1f;
+	PlayerCameraDesc.fFar = 500.f;
+	PlayerCameraDesc.fSpeedPerSec = 30.f;
+	PlayerCameraDesc.fRotationPerSec = XMConvertToRadians(90.0f);
+	PlayerCameraDesc.fAspect = (_float)g_iWinSizeX / g_iWinSizeY;
+	PlayerCameraDesc.pPlayer = m_pPlayer;
+	PlayerCameraDesc.fSpeed = 5.f;
+
+	CCamera* pCamera = dynamic_cast<CCamera*>(m_pGameInstance->Get_CloneObject_ToLayer(LEVEL_GAMEPLAY, TEXT("Layer_Camera"), TEXT("Prototype_GameObject_PlayerCamera"), &PlayerCameraDesc));
+	if(nullptr == pCamera)
+		return E_FAIL;
+
+	m_pPlayer->Set_Camera(pCamera);
+
+	/*CFreeCamera::CAMERA_FREE_DESC		Desc{};
 
 	Desc.fSensor = 0.2f;
 	Desc.vEye = _float4(0.f, 0.f, 0.f, 1.f);
@@ -116,7 +135,7 @@ HRESULT CLevel_Tool::Ready_Layer_Camera()
 	Desc.fAspect = (_float)g_iWinSizeX / g_iWinSizeY;
 
 	if (FAILED(m_pGameInstance->Add_CloneObject_ToLayer(LEVEL_GAMEPLAY, TEXT("Layer_Camera"), TEXT("Prototype_GameObject_FreeCamera"), &Desc)))
-		return E_FAIL;
+		return E_FAIL;*/
 
 	return S_OK;
 }
@@ -178,7 +197,8 @@ HRESULT CLevel_Tool::Ready_Layer_Paticle()
 
 HRESULT CLevel_Tool::Ready_Layer_Player()
 {
-	CPlayer* pPlayer = dynamic_cast<CPlayer*>(m_pGameInstance->Get_CloneObject_ToLayer(LEVEL_GAMEPLAY, TEXT("Layer_Player"), TEXT("Prototype_GameObject_Player")));
+	m_pPlayer = dynamic_cast<CPlayer*>(m_pGameInstance->Get_CloneObject_ToLayer(LEVEL_GAMEPLAY, TEXT("Layer_Player"), TEXT("Prototype_GameObject_Player")));
+	Safe_AddRef(m_pPlayer);
 
 	return S_OK;
 }
@@ -301,5 +321,6 @@ void CLevel_Tool::Free()
 {
 	__super::Free();
 	// 인스턴싱을 할 모델들을 모아둔 매니저 클리어하기
+	Safe_Release(m_pPlayer);
 	m_pGameInstance->Clear_Instance();
 }

@@ -192,6 +192,7 @@
     <ClInclude Include="..\Public\NavDataObj.h" />
     <ClInclude Include="..\Public\Particle_Effect.h" />
     <ClInclude Include="..\public\Player.h" />
+    <ClInclude Include="..\Public\PlayerCamera.h" />
     <ClInclude Include="..\Public\Player_Stat_Manager.h" />
     <ClInclude Include="..\Public\SimonManusP1.h" />
     <ClInclude Include="..\Public\Sky.h" />
@@ -303,6 +304,7 @@
     <ClCompile Include="..\Private\NavDataObj.cpp" />
     <ClCompile Include="..\Private\Particle_Effect.cpp" />
     <ClCompile Include="..\private\Player.cpp" />
+    <ClCompile Include="..\Private\PlayerCamera.cpp" />
     <ClCompile Include="..\Private\Player_Stat_Manager.cpp" />
     <ClCompile Include="..\Private\SimonManusP1.cpp" />
     <ClCompile Include="..\Private\Sky.cpp" />

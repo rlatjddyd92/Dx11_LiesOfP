@@ -463,6 +463,12 @@
     <Filter Include="02.GameObjects\10.InteractObj\01.Lift\Lift_Floor">
       <UniqueIdentifier>{d4ddd60e-a386-46e3-a60e-8bdf3759786c}</UniqueIdentifier>
     </Filter>
+    <Filter Include="02.GameObjects\99.Camera\FreeCamera">
+      <UniqueIdentifier>{ee85d7d1-ce2e-4a78-b654-5d3a87c7a472}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.GameObjects\99.Camera\PlayerCamera">
+      <UniqueIdentifier>{c0a56ddd-ef20-4590-9ba7-7d79e86e6ae0}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Client.h">
@@ -500,9 +506,6 @@
     </ClInclude>
     <ClInclude Include="..\Public\Terrain.h">
       <Filter>02.GameObjects\01.Terrain</Filter>
-    </ClInclude>
-    <ClInclude Include="..\public\FreeCamera.h">
-      <Filter>02.GameObjects\99.Camera</Filter>
     </ClInclude>
     <ClInclude Include="..\Public\Monster.h">
       <Filter>02.GameObjects\02.Monster</Filter>
@@ -795,6 +798,12 @@
     <ClInclude Include="..\Public\ColliderObject.h">
       <Filter>02.GameObjects\ColiderObject</Filter>
     </ClInclude>
+    <ClInclude Include="..\public\FreeCamera.h">
+      <Filter>02.GameObjects\99.Camera\FreeCamera</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Public\PlayerCamera.h">
+      <Filter>02.GameObjects\99.Camera\PlayerCamera</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Client.cpp">
@@ -823,9 +832,6 @@
     </ClCompile>
     <ClCompile Include="..\Private\Terrain.cpp">
       <Filter>02.GameObjects\01.Terrain</Filter>
-    </ClCompile>
-    <ClCompile Include="..\private\FreeCamera.cpp">
-      <Filter>02.GameObjects\99.Camera</Filter>
     </ClCompile>
     <ClCompile Include="..\Private\Monster.cpp">
       <Filter>02.GameObjects\02.Monster</Filter>
@@ -1096,6 +1102,12 @@
     </ClCompile>
     <ClCompile Include="..\Private\ColliderObject.cpp">
       <Filter>02.GameObjects\ColiderObject</Filter>
+    </ClCompile>
+    <ClCompile Include="..\private\FreeCamera.cpp">
+      <Filter>02.GameObjects\99.Camera\FreeCamera</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Private\PlayerCamera.cpp">
+      <Filter>02.GameObjects\99.Camera\PlayerCamera</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

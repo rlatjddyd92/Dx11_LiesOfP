@@ -27,6 +27,9 @@ public:
 	virtual HRESULT Initialize(void* pArg) override;
 	virtual void Update(const _float4x4* pWorldMatrix);
 
+	void	Change_BoundingDesc(void* pBoundingDesc);
+	void	Reset_Bounding();
+
 #ifdef _DEBUG
 	virtual HRESULT Render() override; 
 #endif

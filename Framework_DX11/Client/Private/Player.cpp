@@ -86,8 +86,6 @@ HRESULT CPlayer::Initialize(void * pArg)
 
 	m_pTransformCom->Set_State(CTransform::STATE_POSITION, XMVectorSet(2.f, 0.f, 0.f, 1.f));
 
-	m_pPlayerCamera = m_pGameInstance->Find_Camera(LEVEL_GAMEPLAY);
-
 	// 임시 루트본 설정
 	m_pModelCom->Set_UFBIndices(UFB_ROOT, 2);
 	m_pModelCom->Set_UFBIndices(UFB_BOUNDARY_UPPER, 6);

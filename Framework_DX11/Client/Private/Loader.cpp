@@ -9,6 +9,7 @@
 #include "Player.h"
 #include "Terrain.h"
 #include "FreeCamera.h"
+#include "PlayerCamera.h"
 #include "BackGround.h"
 #include "StaticObj.h"
 #include "NavDataObj.h"
@@ -688,10 +689,17 @@ HRESULT CLoader::Ready_Prototype()
 		CTerrain::Create(m_pDevice, m_pContext))))
 		return E_FAIL;
 
+#pragma region CAMERA
 	/* For. Prototype_GameObject_FreeCamera */
 	if (FAILED(m_pGameInstance->Add_Prototype(TEXT("Prototype_GameObject_FreeCamera"),
 		CFreeCamera::Create(m_pDevice, m_pContext))))
 		return E_FAIL;
+
+	/* For. Prototype_GameObject_PlayerCamera */
+	if (FAILED(m_pGameInstance->Add_Prototype(TEXT("Prototype_GameObject_PlayerCamera"),
+		CPlayerCamera::Create(m_pDevice, m_pContext))))
+		return E_FAIL;
+#pragma endregion
 
 #pragma region PLAYER
 	/* For. Prototype_GameObject_Player */

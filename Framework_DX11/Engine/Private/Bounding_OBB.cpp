@@ -58,6 +58,28 @@ _bool CBounding_OBB::Intersect(CCollider::TYPE eColliderType, CBounding * pBound
 	return m_isColl;
 }
 
+void CBounding_OBB::Change_BoundingDesc(CBounding::BOUNDING_DESC* pBoundingDesc)
+{
+	if (nullptr == pBoundingDesc)
+		return;
+
+	BOUNDING_OBB_DESC* pDesc = static_cast<BOUNDING_OBB_DESC*>(pBoundingDesc);
+
+	_float4			vQuaternion = {};
+	XMStoreFloat4(&vQuaternion, XMQuaternionRotationRollPitchYaw(pDesc->vAngles.x, pDesc->vAngles.y, pDesc->vAngles.z));
+
+	m_pBoundingDesc->Center = pDesc->vCenter;
+	m_pBoundingDesc->Orientation = vQuaternion;
+	m_pBoundingDesc->Extents = pDesc->vExtents;
+}
+
+void CBounding_OBB::Reset_Bounding()
+{
+	m_pBoundingDesc->Center = m_pOriginalBoundingDesc->Center;
+	m_pBoundingDesc->Orientation = m_pOriginalBoundingDesc->Orientation;
+	m_pBoundingDesc->Extents = m_pOriginalBoundingDesc->Extents;
+}
+
 CBounding_OBB * CBounding_OBB::Create(ID3D11Device * pDevice, ID3D11DeviceContext * pContext, CBounding::BOUNDING_DESC * pBoundingDesc)
 {
 	CBounding_OBB*		pInstance = new CBounding_OBB(pDevice, pContext);

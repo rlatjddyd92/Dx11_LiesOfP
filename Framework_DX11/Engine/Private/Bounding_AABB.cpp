@@ -61,6 +61,23 @@ _bool CBounding_AABB::Intersect(CCollider::TYPE eColliderType, CBounding * pBoun
 	return m_isColl;
 }
 
+void CBounding_AABB::Change_BoundingDesc(CBounding::BOUNDING_DESC* pBoundingDesc)
+{
+	if (nullptr == pBoundingDesc)
+		return;
+
+	BOUNDING_AABB_DESC* pDesc = static_cast<BOUNDING_AABB_DESC*>(pBoundingDesc);
+
+	m_pBoundingDesc->Center = pDesc->vCenter;
+	m_pBoundingDesc->Extents = pDesc->vExtents;
+}
+
+void CBounding_AABB::Reset_Bounding()
+{
+	m_pBoundingDesc->Center = m_pOriginalBoundingDesc->Center;
+	m_pBoundingDesc->Extents = m_pOriginalBoundingDesc->Extents;
+}
+
 CBounding_AABB * CBounding_AABB::Create(ID3D11Device * pDevice, ID3D11DeviceContext * pContext, CBounding::BOUNDING_DESC * pBoundingDesc)
 {
 	CBounding_AABB*		pInstance = new CBounding_AABB(pDevice, pContext);

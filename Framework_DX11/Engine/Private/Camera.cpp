@@ -59,6 +59,40 @@ HRESULT CCamera::Render()
 	return S_OK;
 }
 
+void CCamera::Start_PosShake(_float fPower, _float fDuration)
+{
+	m_fShakePower = fPower;
+	m_fShakeDuration = fDuration;
+	m_fShakeTime = 0.f;
+	m_vOriginLook = _float3(0.f, 0.f, 0.f);
+
+	m_isShake = true;
+}
+
+void CCamera::ZoomIn(_float fFovyOffset, _float fDuration)
+{
+	if (m_isZoomIn)
+		return;
+
+	m_fTargetFovy = m_fInitFovy + fFovyOffset;
+	m_fZoomDuration = fDuration;
+	m_fZoomTime = 0.f;
+
+	m_isZoomIn = true;
+	m_isZoomOut = false;
+}
+
+void CCamera::ZoomOut(_float fDuration)
+{
+	m_fZoomInFovy = m_fFovy;
+	m_fTargetFovy = m_fInitFovy;
+	m_fZoomDuration = fDuration;
+	m_fZoomTime = 0.f;
+
+	m_isZoomIn = false;
+	m_isZoomOut = true;
+}
+
 void CCamera::Calculat_CascadeFrustum()
 {
 	_Matrix CascadeViewMatrix[3];
