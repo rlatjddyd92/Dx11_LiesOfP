@@ -12,8 +12,6 @@ BEGIN(Tools)
 class CMesh_Effect final : public CEffect_Base
 {
 public:
-	enum SHADER_TYPE { SHADER_DEFAULT,SHADER_TEST, SHADER_END };
-
 	typedef struct
 	{
 		_uint		iShaderIndex = { 0 };

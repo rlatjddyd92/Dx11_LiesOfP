@@ -12,7 +12,6 @@ BEGIN(Tools)
 class CTrail_Effect_OP final : public CEffect_Base
 {
 public:
-	enum SHADER_TYPE { SHADER_DEFAULT, SHADER_END };
 	enum TRAIL_OP_TYPE{TYPE_UPDATE, TYPE_SPREAD, TYPE_END};
 
 	enum TRAIL_OP_STATE

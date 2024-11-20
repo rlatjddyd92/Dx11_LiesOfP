@@ -83,49 +83,60 @@ struct PS_IN
 
 struct PS_OUT
 {
-    vector vColor : SV_TARGET0;
+    vector vColor : SV_Target0;
 };
 
 struct PS_EFFECT_OUT
 {
     vector vDiffuse : SV_TARGET0;
-    vector vNonDownSample : SV_TARGET1;
-    vector vDownSample : SV_TARGET2;
+    vector vBlur : SV_TARGET1;
 };
 
-PS_OUT PS_MAIN(PS_IN In)
+float2 Get_SpriteTexcoord(float2 vTexcoord);
+
+PS_EFFECT_OUT PS_MAIN(PS_IN In)
 {
-    PS_OUT Out = (PS_OUT) 0;
+    PS_EFFECT_OUT Out = (PS_EFFECT_OUT) 0;
     
-    float2 start = (float2) 0;
-    float2 over = (float2) 0;
-
-    start.x = (1 / g_vTexDivide.x) * g_iTexIndex;
-    start.y = (1 / g_vTexDivide.y) * (int) (g_iTexIndex / g_vTexDivide.x);
-	
-    over.x = start.x + (1 / g_vTexDivide.x);
-    over.y = start.y + (1 / g_vTexDivide.y);
-	
-    float2 vTexcoord = start + (over - start) * In.vTexcoord;
-
-    Out.vColor = g_DiffuseTexture.Sample(LinearSampler, vTexcoord);
+    vector vColor = g_DiffuseTexture.Sample(LinearSampler, Get_SpriteTexcoord(In.vTexcoord));
+    
+    if (vColor.a <= 0.3f)
+        discard;
+    
+    vColor *= g_vColor;
+    
+    Out.vDiffuse = vColor;
+    Out.vBlur = vColor;
     
     return Out;
 }
 
-PS_EFFECT_OUT PS_ATTACK_NORMAL_LIGHT_MAIN(PS_IN In)
+PS_OUT PS_BLEND_MAIN(PS_IN In)
+{
+    PS_OUT Out = (PS_OUT) 0;
+    
+    Out.vColor = g_DiffuseTexture.Sample(LinearSampler, Get_SpriteTexcoord(In.vTexcoord));
+    
+    Out.vColor *= g_vColor;
+    
+    return Out;
+}
+
+PS_EFFECT_OUT PS_GLOW_MAIN(PS_IN In)
 {
     PS_EFFECT_OUT Out = (PS_EFFECT_OUT) 0;
     
-    vector vColor = g_DiffuseTexture.Sample(LinearSampler, In.vTexcoord);
+    vector vColor = g_DiffuseTexture.Sample(LinearSampler, Get_SpriteTexcoord(In.vTexcoord));
+    
+    if (vColor.a <= 0.3f)
+        discard;
     
     vColor.r = 1.f - (1 - g_vColor.r) * (1 - vColor.a);
     vColor.g = 1.f - (1 - g_vColor.g) * (1 - vColor.a);
     vColor.b = 1.f - (1 - g_vColor.b) * (1 - vColor.a);
 
     Out.vDiffuse = vColor;
-    Out.vNonDownSample = (vector) 0.f;
-    Out.vDownSample = vColor;
+    Out.vBlur = vColor;
     
     return Out;
 }
@@ -136,21 +147,48 @@ technique11 DefaultTechnique
     {
         SetRasterizerState(RS_Default);
         SetDepthStencilState(DSS_None, 0);
-        SetBlendState(BS_AlphaBlend, vector(0.f, 0.f, 0.f, 0.f), 0xffffffff);
+        SetBlendState(BS_Default, vector(0.f, 0.f, 0.f, 0.f), 0xffffffff);
 
         VertexShader = compile vs_5_0 VS_MAIN();
         GeometryShader = NULL;
         PixelShader = compile ps_5_0 PS_MAIN();
     }
 
-    pass Attack_Normal_Light
+    pass Blend
     {
         SetRasterizerState(RS_Default);
-        SetDepthStencilState(DSS_None, 0);
+        SetDepthStencilState(DSS_NonWrite, 0);
         SetBlendState(BS_AlphaBlend, vector(0.f, 0.f, 0.f, 0.f), 0xffffffff);
 
         VertexShader = compile vs_5_0 VS_MAIN();
         GeometryShader = NULL;
-        PixelShader = compile ps_5_0 PS_ATTACK_NORMAL_LIGHT_MAIN();
+        PixelShader = compile ps_5_0 PS_BLEND_MAIN();
     }
+
+    pass Glow
+    {
+        SetRasterizerState(RS_Default);
+        SetDepthStencilState(DSS_None, 0);
+        SetBlendState(BS_Default, vector(0.f, 0.f, 0.f, 0.f), 0xffffffff);
+
+        VertexShader = compile vs_5_0 VS_MAIN();
+        GeometryShader = NULL;
+        PixelShader = compile ps_5_0 PS_GLOW_MAIN();
+    }
+}
+
+
+float2 Get_SpriteTexcoord(float2 vTexcoord)
+{
+        
+    float2 start = (float2) 0;
+    float2 over = (float2) 0;
+
+    start.x = (1 / g_vTexDivide.x) * g_iTexIndex;
+    start.y = (1 / g_vTexDivide.y) * (int) (g_iTexIndex / g_vTexDivide.x);
+	
+    over.x = start.x + (1 / g_vTexDivide.x);
+    over.y = start.y + (1 / g_vTexDivide.y);
+	
+    return start + (over - start) * vTexcoord;
 }

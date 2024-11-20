@@ -13,7 +13,6 @@ BEGIN(Tools)
 class CTrail_Effect_MP final : public CEffect_Base
 {
 public:
-	enum SHADER_TYPE { SHADER_DEFAULT, SHADER_END };
 	enum TRAIL_MP_TYPE{ MT_SPREAD, MT_MOVE, MT_CONVERGE, MT_FOLLOW, MT_END };
 
 	typedef struct

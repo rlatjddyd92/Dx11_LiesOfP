@@ -328,6 +328,8 @@ void CController_EffectTool::RenderGroup_Selection()
 	ImGui::RadioButton("RG_Effect", &m_RenderDesc.iRenderGroup, CRenderer::RG_EFFECT);
 	ImGui::SameLine();
 	ImGui::RadioButton("RG_Blend", &m_RenderDesc.iRenderGroup, CRenderer::RG_BLEND);
+	ImGui::SameLine();
+	ImGui::RadioButton("RG_Distortion", &m_RenderDesc.iRenderGroup, CRenderer::RG_DISTORTION);
 
 	switch (m_RenderDesc.iRenderGroup)
 	{
@@ -442,9 +444,6 @@ void CController_EffectTool::Particle_Check()
 
 		ImGui::SeparatorText("Shader");
 		ImGui::InputInt("Shader Index", (_int*)&m_ParticleDesc.DefaultDesc.iShaderIndex);
-
-		if (CParticle_Effect::SHADER_END <= m_ParticleDesc.DefaultDesc.iShaderIndex)
-			m_ParticleDesc.DefaultDesc.iShaderIndex = CParticle_Effect::SHADER_DEFAULT;
 
 		Set_ParticleState();
 		
@@ -677,9 +676,6 @@ void CController_EffectTool::TE_Check()
 		ImGui::SeparatorText("Loop");
 		ImGui::Checkbox("Texture Loop", &m_TextureDesc.DefaultDesc.bLoop);
 		ImGui::TreePop();
-
-		if (CTexture_Effect::SHADER_END <= m_TextureDesc.DefaultDesc.iShaderIndex)
-			m_TextureDesc.DefaultDesc.iShaderIndex = CTexture_Effect::SHADER_DEFAULT;
 	}
 }
 
@@ -870,10 +866,6 @@ void CController_EffectTool::Mesh_Check()
 
 		ImGui::SeparatorText("Loop");
 		ImGui::Checkbox("Mesh Loop", &m_MeshDesc.DefaultDesc.bLoop);
-
-		if (CMesh_Effect::SHADER_END <= m_MeshDesc.DefaultDesc.iShaderIndex)
-			m_MeshDesc.DefaultDesc.iShaderIndex = CMesh_Effect::SHADER_DEFAULT;
-
 		ImGui::TreePop();
 	}
 }
@@ -1019,10 +1011,6 @@ void CController_EffectTool::Trail_OP_Check()
 		ImGui::InputFloat("Trail OP SCale", (_float*)&m_Trail_OPDesc.DefaultDesc.fScaling);
 		ImGui::InputFloat2("Trail OP Divide", (_float*)&m_Trail_OPDesc.DefaultDesc.vDivide);
 		ImGui::InputFloat("Trail OP Sprite Speed", (_float*)&m_Trail_OPDesc.DefaultDesc.fSpriteSpeed);
-		
-		if (CTrail_Effect_OP::SHADER_END <= m_Trail_OPDesc.DefaultDesc.iShaderIndex)
-			m_Trail_OPDesc.DefaultDesc.iShaderIndex = CTrail_Effect_OP::SHADER_DEFAULT;
-
 		ImGui::SeparatorText("Else");
 		ImGui::Checkbox("Loop", &m_Trail_OPDesc.DefaultDesc.bLoop);
 		ImGui::TreePop();
@@ -1191,9 +1179,6 @@ void CController_EffectTool::Trail_TP_Check()
 		ImGui::InputInt("Trail TP SaveNumInstance", (_int*)&m_Trail_TPDesc.DefaultDesc.iNumInstance);
 		ImGui::InputFloat4("Trail TP Color", (_float*)&m_Trail_TPDesc.DefaultDesc.vColor);
 		ImGui::InputFloat("Trail TP Alpha Speed", (_float*)&m_Trail_TPDesc.DefaultDesc.fAlphaSpeed);
-
-		if (CTrail_Effect_TP::SHADER_END <= m_Trail_TPDesc.DefaultDesc.iShaderIndex)
-			m_Trail_TPDesc.DefaultDesc.iShaderIndex = CTrail_Effect_TP::SHADER_DEFAULT;
 
 		// ±âÅ¸
 		ImGui::Checkbox("TP Loop", &m_Trail_TPDesc.DefaultDesc.bLoop);
@@ -1379,9 +1364,6 @@ void CController_EffectTool::Trail_MP_Check()
 
 		ImGui::SeparatorText("Shader");
 		ImGui::InputInt("Shader Index", (_int*)&m_Trail_MPDesc.DefaultDesc.iShaderIndex);
-
-		if (CTrail_Effect_MP::SHADER_END <= m_Trail_MPDesc.DefaultDesc.iShaderIndex)
-			m_Trail_MPDesc.DefaultDesc.iShaderIndex = CTrail_Effect_MP::SHADER_DEFAULT;
 
 		Set_TrailMP_State();
 

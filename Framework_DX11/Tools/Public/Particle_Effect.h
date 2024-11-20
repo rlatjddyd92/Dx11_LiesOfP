@@ -13,7 +13,6 @@ BEGIN(Tools)
 class CParticle_Effect final : public CEffect_Base
 {
 public:
-	enum SHADER_TYPE { SHADER_DEFAULT, SHADER_GLOW, SHADER_SPARK, SHADER_END };
 	enum PARTICLE_TYPE { PT_SPREAD, PT_MOVE, PT_CONVERGE, PT_END };
 
 	typedef struct

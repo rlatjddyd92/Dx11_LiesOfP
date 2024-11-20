@@ -73,10 +73,9 @@ void CMesh_Effect::Late_Update(_float fTimeDelta)
 			//m_isActive = false;
 		}
 	}
-	if (CRenderer::RG_END == m_RenderDesc.iRenderGroup)
+
+	if (CRenderer::RG_END <= m_RenderDesc.iRenderGroup)
 		return;
-
-
 	m_pGameInstance->Add_RenderObject((CRenderer::RENDERGROUP)m_RenderDesc.iRenderGroup, this);
 }
 

@@ -12,7 +12,6 @@ BEGIN(Tools)
 class CTrail_Effect_TP final :public CEffect_Base
 {
 public:
-	enum SHADER_TYPE { SHADER_DEFAULT, SHADER_END };
 	typedef struct
 	{
 		_uint		iNumInstance = { 10 };

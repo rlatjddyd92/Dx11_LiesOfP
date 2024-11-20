@@ -257,16 +257,10 @@ struct PS_IN
     float4 vColor : COLOR1;
 };
 
-struct PS_OUT
-{
-    vector vColor : SV_TARGET0;
-};
-
 struct PS_EFFECT_OUT
 {
-    vector vColor : SV_TARGET0;
-    vector vDistortion : SV_TARGET1;
-    vector vBlur : SV_TARGET2;
+    vector vDiffuse : SV_TARGET0;
+    vector vBlur : SV_TARGET1;
 };
 
 struct PS_NORMAL_OUT
@@ -278,38 +272,42 @@ struct PS_NORMAL_OUT
     vector vPickDepth : SV_TARGET4;
 };
 
-PS_OUT PS_MAIN(PS_IN In)
+PS_EFFECT_OUT PS_MAIN(PS_IN In)
 {
-    PS_OUT Out = (PS_OUT) 0;
+    PS_EFFECT_OUT Out = (PS_EFFECT_OUT) 0;
 	
-    Out.vColor = g_DiffuseTexture.Sample(LinearSampler, In.vTexcoord);
+    vector vColor = g_DiffuseTexture.Sample(LinearSampler, In.vTexcoord);
 
-    if (Out.vColor.a <= 0.3f)
+    if (vColor.a <= 0.3f)
         discard;
 
     if (In.vLifeTime.y >= In.vLifeTime.x)
         discard;
 
+    Out.vDiffuse = vColor;
+    Out.vBlur = vColor;
+    
     return Out;
 }
 
-PS_OUT PS_GLOW_MAIN(PS_IN In)
+PS_EFFECT_OUT PS_GLOW_MAIN(PS_IN In)
 {
-    PS_OUT Out = (PS_OUT) 0;
+    PS_EFFECT_OUT Out = (PS_EFFECT_OUT) 0;
 	
-    Out.vColor = g_DiffuseTexture.Sample(LinearSampler, In.vTexcoord);
+    vector vColor = g_DiffuseTexture.Sample(LinearSampler, In.vTexcoord);
 
-    Out.vColor.a = Out.vColor.r;
-
-    if (Out.vColor.a <= 0.1f)
+    if (vColor.a <= 0.1f)
         discard;
 
     if (In.vLifeTime.y >= In.vLifeTime.x)
         discard;
 
-    Out.vColor.r = 1.f - (1 - In.vColor.r) * (1 - Out.vColor.a);
-    Out.vColor.g = 1.f - (1 - In.vColor.g) * (1 - Out.vColor.a);
-    Out.vColor.b = 1.f - (1 - In.vColor.b) * (1 - Out.vColor.a);
+    vColor.r = 1.f - (1 - In.vColor.r) * (1 - vColor.a);
+    vColor.g = 1.f - (1 - In.vColor.g) * (1 - vColor.a);
+    vColor.b = 1.f - (1 - In.vColor.b) * (1 - vColor.a);
+
+    Out.vDiffuse = vColor;
+    Out.vBlur = vColor;
 
     return Out;
 }
@@ -349,6 +347,29 @@ PS_NORMAL_OUT PS_SPRITE_NORMAL_MAIN(PS_IN In)
     return Out;
 }
 
+PS_EFFECT_OUT PS_GLOW_RGBTOA_MAIN(PS_IN In)
+{
+    PS_EFFECT_OUT Out = (PS_EFFECT_OUT) 0;
+	
+    vector vColor = g_DiffuseTexture.Sample(LinearSampler, In.vTexcoord);
+
+    vColor.a = max(vColor.r, max(vColor.g, vColor.b));
+    
+    if (vColor.a <= 0.1f)
+        discard;
+
+    if (In.vLifeTime.y >= In.vLifeTime.x)
+        discard;
+
+    vColor.r = 1.f - (1 - In.vColor.r) * (1 - vColor.a);
+    vColor.g = 1.f - (1 - In.vColor.g) * (1 - vColor.a);
+    vColor.b = 1.f - (1 - In.vColor.b) * (1 - vColor.a);
+
+    Out.vDiffuse = vColor;
+    Out.vBlur = vColor;
+
+    return Out;
+}
 
 technique11	DefaultTechnique
 {
@@ -382,7 +403,7 @@ technique11	DefaultTechnique
 
         VertexShader = compile vs_5_0 VS_MAIN();
         GeometryShader = compile gs_5_0 GS_DIR_MAIN();
-        PixelShader = compile ps_5_0 PS_GLOW_MAIN();
+        PixelShader = compile ps_5_0 PS_GLOW_RGBTOA_MAIN();
     }
 
     pass PARTICLE_SPRITE_STONE // 3

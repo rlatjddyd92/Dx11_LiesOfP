@@ -92,13 +92,10 @@ void CTexture_Effect::Late_Update(_float fTimeDelta)
         }
     }
 
-    if (CRenderer::RG_END == m_RenderDesc.iRenderGroup)
+    if (CRenderer::RG_END <= m_RenderDesc.iRenderGroup)
         return;
-    if(CRenderer::RG_EFFECT == m_RenderDesc.iRenderGroup)
-        m_pGameInstance->Add_RenderObject(CRenderer::RG_NONLIGHT, this);
-    else
-        m_pGameInstance->Add_RenderObject((CRenderer::RENDERGROUP)m_RenderDesc.iRenderGroup, this);
-    
+    m_pGameInstance->Add_RenderObject((CRenderer::RENDERGROUP)m_RenderDesc.iRenderGroup, this);
+
 }
 
 HRESULT CTexture_Effect::Render()
