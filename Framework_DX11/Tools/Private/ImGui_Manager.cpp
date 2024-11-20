@@ -16,6 +16,8 @@ CImGui_Manager::CImGui_Manager()
 	Safe_AddRef(m_pGameInstance);
 }
 
+
+
 HRESULT CImGui_Manager::Initialize(ID3D11Device* pDevice, ID3D11DeviceContext* pContext)
 {
 	m_pDevice = pDevice;
@@ -199,7 +201,7 @@ HRESULT CImGui_Manager::Ready_Controllers()
 	m_pController_EffectTool = CController_EffectTool::Get_Instance();
 	if (nullptr == m_pController_EffectTool)
 		return E_FAIL;
-	m_pController_EffectTool->Initialize();
+	//m_pController_EffectTool->Initialize();
 
 	m_pController_UITool = CController_UITool::Get_Instance();
 	if (nullptr == m_pController_UITool)

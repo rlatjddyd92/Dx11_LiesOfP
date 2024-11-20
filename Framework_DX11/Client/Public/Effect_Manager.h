@@ -13,6 +13,7 @@
 BEGIN(Engine)
 class CGameInstance;
 class CGameObject;
+class dafs;
 END
 
 BEGIN(Client)

@@ -14,7 +14,6 @@
 
 BEGIN(Engine)
 class CGameObject;
-class casdf;
 END
 
 BEGIN(Tools)
@@ -87,7 +86,7 @@ private:
 	virtual ~CController_EffectTool() = default;
 
 public:
-	HRESULT Initialize();
+	HRESULT Initialize(ID3D11Device* pDevice,  ID3D11DeviceContext* pContext, const _wstring& strEffectPath);
 	void Render();
 
 public:
@@ -151,7 +150,13 @@ public:
 	HRESULT Save_EffectContainer();
 	HRESULT Load_EffectContainer();
 
+	HRESULT Load_Texture(const _wstring& strEffectPath);
+	HRESULT Load_Model();
+	HRESULT Load_Shader();
+
 private:
+	ID3D11Device* m_pDevice = { nullptr };
+	ID3D11DeviceContext* m_pContext = { nullptr };
 	class CGameInstance* m_pGameInstance = { nullptr };
 
 	vector<_wstring>	m_Texture_PrototypeTags;
@@ -215,9 +220,11 @@ private:
 	void Texture_Selection();
 	void Set_PpState();
 
+	_wstring Get_FileExtentin(const _wstring& strFileTag);
+	_wstring Remove_FileExtentin(const _wstring& strFileTag);
+
 public:
 	virtual void Free() override;
 };
 
 END
-

@@ -212,6 +212,13 @@ void CTexture_Effect::Preserve_Rotation_Billboard(_Vec3 vCurrentScale, _Vec3 vLo
     _Vec3 vBeforeLook = XMVector3Normalize(XMLoadFloat4x4(&m_WorldMatrix).r[2]);
 
     _Vec3 vAxis = XMVector3Normalize(XMVector3Cross(vBeforeLook, vLook));
+
+    if (0.f == vAxis.x && 0.f == vAxis.y && 0.f == vAxis.z)
+    {
+        Billboard(vCurrentScale, vLook);
+        return;
+    }
+
     _float fRadian = acos(XMVectorGetX(XMVector3Dot(vBeforeLook, vLook)));
     _Matrix RotationMatrix = XMMatrixRotationAxis(vAxis, fRadian);
 

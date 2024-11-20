@@ -20,10 +20,21 @@ CController_EffectTool::CController_EffectTool()
 	Safe_AddRef(m_pGameInstance);
 }
 
-HRESULT CController_EffectTool::Initialize()
+HRESULT CController_EffectTool::Initialize(ID3D11Device* pDevice, ID3D11DeviceContext* pContext, const _wstring& strEffectPath)
 {
+	m_pDevice = pDevice;
+	Safe_AddRef(m_pDevice);
+
+	m_pContext = pContext;
+	Safe_AddRef(m_pContext);
+
 	m_RenderDesc.iRenderGroup = CRenderer::RG_END;
 	m_RenderDesc.iPpState = 0;
+
+	Load_Texture(strEffectPath);
+	Load_Model();
+	Load_Shader();
+
 	return S_OK;
 }
 
@@ -1953,6 +1964,142 @@ HRESULT CController_EffectTool::Load_EffectContainer()
 	return S_OK;
 }
 
+HRESULT CController_EffectTool::Load_Texture(const _wstring& strEffectPath)
+{
+	Add_Texture_ProtytypeTag(NONE_TEXT);
+
+	_wstring searchPath = strEffectPath + L"\\*.*";
+	WIN32_FIND_DATAW findFileData;
+	HANDLE hFind = FindFirstFileW(searchPath.c_str(), &findFileData);
+
+	if (hFind == INVALID_HANDLE_VALUE) {
+		MSG_BOX(TEXT("Folder Open Failed"));
+		return E_FAIL;
+	}
+
+	while (FindNextFileW(hFind, &findFileData))
+	{
+		if (!(findFileData.dwFileAttributes & FILE_ATTRIBUTE_DIRECTORY))
+		{
+			_wstring strFileName = findFileData.cFileName;   // 파일 이름 + 확장자
+			_wstring strFileExtention = Get_FileExtentin(strFileName);   // 확장자
+			_wstring strFileBaseName = Remove_FileExtentin(strFileName);
+
+			_wstring strResultPath = strEffectPath + TEXT('/') + strFileName;
+
+			_wstring strPrototypeTag = TEXT("Prototype_Component_Texture_") + strFileBaseName;
+
+			if (FAILED(m_pGameInstance->Add_Prototype(LEVEL_TOOL, strPrototypeTag, 
+				CTexture::Create(m_pDevice, m_pContext, strResultPath.c_str(), 1))))
+				return E_FAIL;
+			Add_Texture_ProtytypeTag(strPrototypeTag);
+		}
+	}
+	// 핸들 닫기
+	FindClose(hFind);
+
+	return S_OK;
+}
+
+HRESULT CController_EffectTool::Load_Model()
+{
+	_matrix		PreTransformMatrix = XMMatrixIdentity();
+
+	/* For. Prototype_Component_Model_HalfSphere_1 */
+	PreTransformMatrix = XMMatrixScaling(0.005f, 0.005f, 0.005f) * XMMatrixRotationX(XMConvertToRadians(90.0f));
+	if (FAILED(m_pGameInstance->Add_Prototype(LEVEL_TOOL, TEXT("Prototype_Component_Model_HalfSphere_1"),
+		CModel::Create(m_pDevice, m_pContext, CModel::TYPE_NONANIM, "../Bin/ModelData/NonAnim/Effect/SM_HalfSphere_01_GDH.dat", PreTransformMatrix))))
+		return E_FAIL;
+
+	Add_Model_ProtytypeTag(TEXT("Prototype_Component_Model_HalfSphere_1"));
+
+	return S_OK;
+}
+
+HRESULT CController_EffectTool::Load_Shader()
+{
+	/* For. Prototype_Component_Shader_Effect_Texture */
+	if (FAILED(m_pGameInstance->Add_Prototype(LEVEL_TOOL, TEXT("Prototype_Component_Shader_Effect_Texture"),
+		CShader::Create(m_pDevice, m_pContext, TEXT("../Bin/ShaderFiles/Shader_Effect_Texture.hlsl"), VTXPOSTEX::Elements, VTXPOSTEX::iNumElements))))
+		return E_FAIL;
+
+	/* For. Prototype_Component_Shader_Effect_Mesh */
+	if (FAILED(m_pGameInstance->Add_Prototype(LEVEL_TOOL, TEXT("Prototype_Component_Shader_Effect_Mesh"),
+		CShader::Create(m_pDevice, m_pContext, TEXT("../Bin/ShaderFiles/Shader_Effect_Mesh.hlsl"), VTXPOSTEX::Elements, VTXPOSTEX::iNumElements))))
+		return E_FAIL;
+
+	/* For. Prototype_Component_Shader_Trail_OnePoint_Instance */
+	if (FAILED(m_pGameInstance->Add_Prototype(LEVEL_TOOL, TEXT("Prototype_Component_Shader_Trail_OnePoint_Instance"),
+		CShader::Create(m_pDevice, m_pContext, TEXT("../Bin/ShaderFiles/Shader_VtxTrail_OnePoint_Instance.hlsl"), VTXTRAIL_ONEPOINT_INSTANCE::Elements, VTXTRAIL_ONEPOINT_INSTANCE::iNumElements))))
+		return E_FAIL;
+
+	/* For. Prototype_Component_Shader_Trail_TwoPoint_Instance */
+	if (FAILED(m_pGameInstance->Add_Prototype(LEVEL_TOOL, TEXT("Prototype_Component_Shader_Trail_TwoPoint_Instance"),
+		CShader::Create(m_pDevice, m_pContext, TEXT("../Bin/ShaderFiles/Shader_VtxTrail_TwoPoint_Instance.hlsl"), VTXTRAIL_TWOPOINT_INSTANCE::Elements, VTXTRAIL_TWOPOINT_INSTANCE::iNumElements))))
+		return E_FAIL;
+
+	/* For. Prototype_Component_Shader_VtxPointInstance */
+	if (FAILED(m_pGameInstance->Add_Prototype(LEVEL_TOOL, TEXT("Prototype_Component_Shader_VtxPointInstance"),
+		CShader_NonVTX::Create(m_pDevice, m_pContext, TEXT("../Bin/ShaderFiles/Shader_VtxPointInstance.hlsl")))))
+		return E_FAIL;
+
+	/* For. Prototype_Component_Shader_Compute_Particle_Spread */
+	if (FAILED(m_pGameInstance->Add_Prototype(LEVEL_TOOL, TEXT("Prototype_Component_Shader_Compute_Particle_Spread"),
+		CShader_Compute::Create(m_pDevice, m_pContext, TEXT("../Bin/ShaderFiles/Shader_ParticleCompute.hlsl"), "CS_SPREAD_MAIN"))))
+		return E_FAIL;
+
+	/* For. Prototype_Component_Shader_Compute_Particle_Move */
+	if (FAILED(m_pGameInstance->Add_Prototype(LEVEL_TOOL, TEXT("Prototype_Component_Shader_Compute_Particle_Move"),
+		CShader_Compute::Create(m_pDevice, m_pContext, TEXT("../Bin/ShaderFiles/Shader_ParticleCompute.hlsl"), "CS_MOVE_MAIN"))))
+		return E_FAIL;
+
+	/* For. Prototype_Component_Shader_Compute_Particle_Converge */
+	if (FAILED(m_pGameInstance->Add_Prototype(LEVEL_TOOL, TEXT("Prototype_Component_Shader_Compute_Particle_Converge"),
+		CShader_Compute::Create(m_pDevice, m_pContext, TEXT("../Bin/ShaderFiles/Shader_ParticleCompute.hlsl"), "CS_CONVERGE_MAIN"))))
+		return E_FAIL;
+
+	/* For. Prototype_Component_Shader_Compute_Particle_Reset */
+	if (FAILED(m_pGameInstance->Add_Prototype(LEVEL_TOOL, TEXT("Prototype_Component_Shader_Compute_Particle_Reset"),
+		CShader_Compute::Create(m_pDevice, m_pContext, TEXT("../Bin/ShaderFiles/Shader_ParticleCompute.hlsl"), "CS_RESET_MAIN"))))
+		return E_FAIL;
+
+	/* For. Prototype_Component_Shader_TrailTail_PointInstance */
+	if (FAILED(m_pGameInstance->Add_Prototype(LEVEL_TOOL, TEXT("Prototype_Component_Shader_TrailTail_PointInstance"),
+		CShader_NonVTX::Create(m_pDevice, m_pContext, TEXT("../Bin/ShaderFiles/Shader_TrailTail_PointInstance.hlsl")))))
+		return E_FAIL;
+	/* For. Prototype_Component_Shader_TrailHead_PointInstance */
+	if (FAILED(m_pGameInstance->Add_Prototype(LEVEL_TOOL, TEXT("Prototype_Component_Shader_TrailHead_PointInstance"),
+		CShader_NonVTX::Create(m_pDevice, m_pContext, TEXT("../Bin/ShaderFiles/Shader_TrailHead_PointInstance.hlsl")))))
+		return E_FAIL;
+
+	/* For. Prototype_Component_Shader_Compute_Trail_Spread */
+	if (FAILED(m_pGameInstance->Add_Prototype(LEVEL_TOOL, TEXT("Prototype_Component_Shader_Compute_Trail_Spread"),
+		CShader_Compute::Create(m_pDevice, m_pContext, TEXT("../Bin/ShaderFiles/Shader_Trail_MultiPoint_Compute.hlsl"), "CS_SPREAD_MAIN"))))
+		return E_FAIL;
+
+	/* For. Prototype_Component_Shader_Compute_Trail_Move */
+	if (FAILED(m_pGameInstance->Add_Prototype(LEVEL_TOOL, TEXT("Prototype_Component_Shader_Compute_Trail_Move"),
+		CShader_Compute::Create(m_pDevice, m_pContext, TEXT("../Bin/ShaderFiles/Shader_Trail_MultiPoint_Compute.hlsl"), "CS_MOVE_MAIN"))))
+		return E_FAIL;
+
+	/* For. Prototype_Component_Shader_Compute_Trail_Converge */
+	if (FAILED(m_pGameInstance->Add_Prototype(LEVEL_TOOL, TEXT("Prototype_Component_Shader_Compute_Trail_Converge"),
+		CShader_Compute::Create(m_pDevice, m_pContext, TEXT("../Bin/ShaderFiles/Shader_Trail_MultiPoint_Compute.hlsl"), "CS_CONVERGE_MAIN"))))
+		return E_FAIL;
+
+	/* For. Prototype_Component_Shader_Compute_Trail_Follow */
+	if (FAILED(m_pGameInstance->Add_Prototype(LEVEL_TOOL, TEXT("Prototype_Component_Shader_Compute_Trail_Follow"),
+		CShader_Compute::Create(m_pDevice, m_pContext, TEXT("../Bin/ShaderFiles/Shader_Trail_MultiPoint_Compute.hlsl"), "CS_FOLLOW_MAIN"))))
+		return E_FAIL;
+
+	/* For. Prototype_Component_Shader_Compute_Trail_Reset */
+	if (FAILED(m_pGameInstance->Add_Prototype(LEVEL_TOOL, TEXT("Prototype_Component_Shader_Compute_Trail_Reset"),
+		CShader_Compute::Create(m_pDevice, m_pContext, TEXT("../Bin/ShaderFiles/Shader_Trail_MultiPoint_Compute.hlsl"), "CS_RESET_MAIN"))))
+		return E_FAIL;
+
+	return S_OK;
+}
+
 void CController_EffectTool::Set_ParticleState()
 {
 	if (true == m_ParticleStates[PB_ORBIT])
@@ -2081,19 +2228,21 @@ void CController_EffectTool::Texture_Selection()
 		szTextureArray.emplace_back(str.c_str());
 	}
 
+
+	_int iHeightInItem = { 10 };
 	switch (m_iTextureSelect)
 	{
 	case 0:
-		ImGui::ListBox("Diffuse Texture List", &m_iSelected_DiffuseTextureIndex, szTextureArray.data(), (_int)szTextureArray.size(), 5);
+		ImGui::ListBox("Diffuse Texture List", &m_iSelected_DiffuseTextureIndex, szTextureArray.data(), (_int)szTextureArray.size(), iHeightInItem);
 		break;
 	case 1:
-		ImGui::ListBox("Mask Texture List_1", &m_iSelected_MaskTextureIndex_1, szTextureArray.data(), (_int)szTextureArray.size(), 5);
+		ImGui::ListBox("Mask Texture List_1", &m_iSelected_MaskTextureIndex_1, szTextureArray.data(), (_int)szTextureArray.size(), iHeightInItem);
 		break;
 	case 2:
-		ImGui::ListBox("Mask Texture List_2", &m_iSelected_MaskTextureIndex_2, szTextureArray.data(), (_int)szTextureArray.size(), 5);
+		ImGui::ListBox("Mask Texture List_2", &m_iSelected_MaskTextureIndex_2, szTextureArray.data(), (_int)szTextureArray.size(), iHeightInItem);
 		break;
 	case 3:
-		ImGui::ListBox("Normal Texture List", &m_iSelected_NormalTextureIndex, szTextureArray.data(), (_int)szTextureArray.size(), 5);
+		ImGui::ListBox("Normal Texture List", &m_iSelected_NormalTextureIndex, szTextureArray.data(), (_int)szTextureArray.size(), iHeightInItem);
 		break;
 	}
 	
@@ -2145,9 +2294,37 @@ void CController_EffectTool::Set_PpState()
 		m_EffectPP[PP_DISTORTION] = false;
 }
 
+_wstring CController_EffectTool::Get_FileExtentin(const _wstring& strFileTag)
+{
+	size_t dotPos = strFileTag.find_last_of(L'.');
+	if (dotPos == _wstring::npos) {
+		return L""; // 확장자가 없으면 빈 문자열 반환
+	}
+
+	_wstring strExtention = strFileTag.substr(dotPos + 1);
+
+	size_t nullPos = strExtention.find(L'\0');
+	if (nullPos != _wstring::npos) {
+		strExtention.erase(nullPos);
+	}
+
+	return strExtention;
+}
+
+_wstring CController_EffectTool::Remove_FileExtentin(const _wstring& strFileTag)
+{
+	size_t dotPosition = strFileTag.find_last_of('.');
+	if (dotPosition != std::string::npos) {
+		return strFileTag.substr(0, dotPosition); // 확장자 제거
+	}
+	return strFileTag; // 확장자가 없으면 그대로 반환
+}
+
 void CController_EffectTool::Free()
 {
 	__super::Free();
 
 	Safe_Release(m_pGameInstance);
+	Safe_Release(m_pDevice);
+	Safe_Release(m_pContext);
 }

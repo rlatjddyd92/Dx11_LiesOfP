@@ -54,26 +54,26 @@ HRESULT CLevel_Tool::Initialize()
 	//		return E_FAIL;
 	//}
 
-	CMesh_Effect::MESH_EFFECT_DESC desc = {};
+	//CMesh_Effect::MESH_EFFECT_DESC desc = {};
 
-	desc.fRotationPerSec = XMConvertToRadians(90.f);
-	desc.fSpeedPerSec = 1.f;
-	desc.iLevelIndex = LEVEL_TOOL;
-	desc.pParentMatrix = { nullptr };
-	desc.RenderDesc.iRenderGroup = CRenderer::RG_EFFECT;
-	wcscpy_s(desc.TextDesc.szModelTag, TEXT("Prototype_Component_Model_HalfSphere_1"));
-	wcscpy_s(desc.TextDesc.szDiffuseTexturTag, TEXT("Prototype_Component_Texture_T_Tile_Spark_01_C_HJS"));
-	wcscpy_s(desc.TextDesc.szMaskTextureTag_1, TEXT("Prototype_Component_Texture_T_Tile_Noise_39_C_RSW"));
-	wcscpy_s(desc.TextDesc.szMaskTextureTag_2, NONE_TEXT);
-	wcscpy_s(desc.TextDesc.szNormalTextureTag, NONE_TEXT);
+	//desc.fRotationPerSec = XMConvertToRadians(90.f);
+	//desc.fSpeedPerSec = 1.f;
+	//desc.iLevelIndex = LEVEL_TOOL;
+	//desc.pParentMatrix = { nullptr };
+	//desc.RenderDesc.iRenderGroup = CRenderer::RG_EFFECT;
+	//wcscpy_s(desc.TextDesc.szModelTag, TEXT("Prototype_Component_Model_HalfSphere_1"));
+	//wcscpy_s(desc.TextDesc.szDiffuseTexturTag, TEXT("Prototype_Component_Texture_T_Tile_Spark_01_C_HJS"));
+	//wcscpy_s(desc.TextDesc.szMaskTextureTag_1, TEXT("Prototype_Component_Texture_T_Tile_Noise_39_C_RSW"));
+	//wcscpy_s(desc.TextDesc.szMaskTextureTag_2, NONE_TEXT);
+	//wcscpy_s(desc.TextDesc.szNormalTextureTag, NONE_TEXT);
 
-	desc.DefaultDesc.vStartScale = _float3(10.f, 10.f, 10.f);
-	desc.DefaultDesc.bLoop = true;
-	desc.DefaultDesc.iShaderIndex = CMesh_Effect::SHADER_TEST;
-	desc.DefaultDesc.fTileMoveSpeed = 0.f;
-	desc.DefaultDesc.vTileMoveDir = _Vec2(1.f, 1.f);
-	if (FAILED(m_pGameInstance->Add_CloneObject_ToLayer(LEVEL_TOOL, TEXT("Layer_MeshEffect"), TEXT("Prototype_GameObject_Mesh_Effect"), &desc)))
-		return E_FAIL;
+	//desc.DefaultDesc.vStartScale = _float3(10.f, 10.f, 10.f);
+	//desc.DefaultDesc.bLoop = true;
+	//desc.DefaultDesc.iShaderIndex = CMesh_Effect::SHADER_TEST;
+	//desc.DefaultDesc.fTileMoveSpeed = 0.f;
+	//desc.DefaultDesc.vTileMoveDir = _Vec2(1.f, 1.f);
+	//if (FAILED(m_pGameInstance->Add_CloneObject_ToLayer(LEVEL_TOOL, TEXT("Layer_MeshEffect"), TEXT("Prototype_GameObject_Mesh_Effect"), &desc)))
+	//	return E_FAIL;
 
 	return S_OK;
 }
