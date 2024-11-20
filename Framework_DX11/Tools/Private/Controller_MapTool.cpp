@@ -743,9 +743,9 @@ void CController_MapTool::SaveMap()
 	string strInt = {};
 	_float3 vfloat3 = {};
 
-	for (_uint i = 0; i < iLayerCount + 4; ++i)
+	for (_uint i = 0; i < iLayerCount + 3; ++i)
 	{
-		if (i < 4)
+		if (i < 3)
 			continue;
 
 		sLayerTag = m_pGameInstance->Get_LayerTag(LEVEL_TOOL, i);

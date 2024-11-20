@@ -426,7 +426,7 @@
     </Filter>
     <Filter Include="05.Fsm\Player\OneHand\00.Attack\Scissor\ChargeAttack01">
       <UniqueIdentifier>{b20bc638-0a11-4e42-9d52-3e774b51d960}</UniqueIdentifier>
-	</Filter>
+    </Filter>
     <Filter Include="02.GameObjects\05.Effect\Effect_Base\Trail_Effect">
       <UniqueIdentifier>{c39bba8f-a580-41a3-85a9-6a605b39a77c}</UniqueIdentifier>
     </Filter>
@@ -441,7 +441,7 @@
     </Filter>
     <Filter Include="97.ShaderFiles\Effect">
       <UniqueIdentifier>{d8ef4e91-7c16-4dfd-848d-d1187ed851d1}</UniqueIdentifier>
-	</Filter>
+    </Filter>
     <Filter Include="02.GameObjects\10.InteractObj\02.TowerDoor">
       <UniqueIdentifier>{6a4c1bfe-f554-4c72-afe7-d738b5f5b17d}</UniqueIdentifier>
     </Filter>
@@ -779,7 +779,7 @@
     </ClInclude>
     <ClInclude Include="..\Public\State_Player_Scissor_Fatal.h">
       <Filter>05.Fsm\Player\OneHand\00.Attack\Scissor\01.Fatal</Filter>
-	</ClInclude>
+    </ClInclude>
     <ClInclude Include="..\Public\Trail_Effect_MP.h">
       <Filter>02.GameObjects\05.Effect\Effect_Base\Trail_Effect\Trail_Effect_MP</Filter>
     </ClInclude>
@@ -788,7 +788,7 @@
     </ClInclude>
     <ClInclude Include="..\Public\Trail_Effect_OP.h">
       <Filter>02.GameObjects\05.Effect\Effect_Base\Trail_Effect\Trail_Effect_OP</Filter>
-	</ClInclude>
+    </ClInclude>
     <ClInclude Include="..\Public\Lift_Controller.h">
       <Filter>02.GameObjects\10.InteractObj\01.Lift\Lift_Controller</Filter>
     </ClInclude>
@@ -797,6 +797,18 @@
     </ClInclude>
     <ClInclude Include="..\Public\Lift_Door.h">
       <Filter>02.GameObjects\10.InteractObj\01.Lift\Lift_Door</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Public\TowerDoor.h">
+      <Filter>02.GameObjects\10.InteractObj\02.TowerDoor</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Public\WallDeco.h">
+      <Filter>02.GameObjects\10.InteractObj\03.WallDeco</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Public\TreasureBox.h">
+      <Filter>02.GameObjects\10.InteractObj\04.TreasureBox</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Public\Ladder.h">
+      <Filter>02.GameObjects\10.InteractObj\05.Ladder</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -1081,7 +1093,7 @@
     </ClCompile>
     <ClCompile Include="..\Private\State_Player_Scissor_Fatal.cpp">
       <Filter>05.Fsm\Player\OneHand\00.Attack\Scissor\01.Fatal</Filter>
-	</ClCompile>
+    </ClCompile>
     <ClCompile Include="..\Private\Trail_Effect_MP.cpp">
       <Filter>02.GameObjects\05.Effect\Effect_Base\Trail_Effect\Trail_Effect_MP</Filter>
     </ClCompile>
@@ -1090,7 +1102,7 @@
     </ClCompile>
     <ClCompile Include="..\Private\Trail_Effect_OP.cpp">
       <Filter>02.GameObjects\05.Effect\Effect_Base\Trail_Effect\Trail_Effect_OP</Filter>
-	</ClCompile>
+    </ClCompile>
     <ClCompile Include="..\Private\Lift_Door.cpp">
       <Filter>02.GameObjects\10.InteractObj\01.Lift\Lift_Door</Filter>
     </ClCompile>
@@ -1099,6 +1111,18 @@
     </ClCompile>
     <ClCompile Include="..\Private\Lift_Floor.cpp">
       <Filter>02.GameObjects\10.InteractObj\01.Lift\Lift_Floor</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Private\TowerDoor.cpp">
+      <Filter>02.GameObjects\10.InteractObj\02.TowerDoor</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Private\WallDeco.cpp">
+      <Filter>02.GameObjects\10.InteractObj\03.WallDeco</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Private\TreasureBox.cpp">
+      <Filter>02.GameObjects\10.InteractObj\04.TreasureBox</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Private\Ladder.cpp">
+      <Filter>02.GameObjects\10.InteractObj\05.Ladder</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

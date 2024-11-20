@@ -179,6 +179,7 @@
     <ClInclude Include="..\Public\GameInterface_Controller.h" />
     <ClInclude Include="..\public\FreeCamera.h" />
     <ClInclude Include="..\Public\Item_Manager.h" />
+    <ClInclude Include="..\Public\Ladder.h" />
     <ClInclude Include="..\Public\Level_GamePlay.h" />
     <ClInclude Include="..\Public\Level_Loading.h" />
     <ClInclude Include="..\Public\Level_Logo.h" />
@@ -245,9 +246,11 @@
     <ClInclude Include="..\Public\StaticObj.h" />
     <ClInclude Include="..\Public\Terrain.h" />
     <ClInclude Include="..\Public\Texture_Effect.h" />
+    <ClInclude Include="..\Public\TowerDoor.h" />
     <ClInclude Include="..\Public\Trail_Effect_MP.h" />
     <ClInclude Include="..\Public\Trail_Effect_OP.h" />
     <ClInclude Include="..\Public\Trail_Effect_TP.h" />
+    <ClInclude Include="..\Public\TreasureBox.h" />
     <ClInclude Include="..\Public\UIManager.h" />
     <ClInclude Include="..\Public\UIPage.h" />
     <ClInclude Include="..\Public\UIPage_Equip.h" />
@@ -262,6 +265,7 @@
     <ClInclude Include="..\Public\UIPage_Stat.h" />
     <ClInclude Include="..\Public\UIPage_Test.h" />
     <ClInclude Include="..\Public\UIRender_Client.h" />
+    <ClInclude Include="..\Public\WallDeco.h" />
     <ClInclude Include="..\Public\Weapon.h" />
     <ClInclude Include="..\Public\Weapon_FlameSword.h" />
     <ClInclude Include="..\Public\Weapon_Rapier.h" />
@@ -290,6 +294,7 @@
     <ClCompile Include="..\Private\GameInterface_Controller.cpp" />
     <ClCompile Include="..\private\FreeCamera.cpp" />
     <ClCompile Include="..\Private\Item_Manager.cpp" />
+    <ClCompile Include="..\Private\Ladder.cpp" />
     <ClCompile Include="..\Private\Level_GamePlay.cpp" />
     <ClCompile Include="..\Private\Level_Loading.cpp" />
     <ClCompile Include="..\Private\Level_Logo.cpp" />
@@ -356,9 +361,11 @@
     <ClCompile Include="..\Private\StaticObj.cpp" />
     <ClCompile Include="..\Private\Terrain.cpp" />
     <ClCompile Include="..\Private\Texture_Effect.cpp" />
+    <ClCompile Include="..\Private\TowerDoor.cpp" />
     <ClCompile Include="..\Private\Trail_Effect_MP.cpp" />
     <ClCompile Include="..\Private\Trail_Effect_OP.cpp" />
     <ClCompile Include="..\Private\Trail_Effect_TP.cpp" />
+    <ClCompile Include="..\Private\TreasureBox.cpp" />
     <ClCompile Include="..\Private\UIManager.cpp" />
     <ClCompile Include="..\Private\UIPage.cpp" />
     <ClCompile Include="..\Private\UIPage_Equip.cpp" />
@@ -373,6 +380,7 @@
     <ClCompile Include="..\Private\UIPage_Stat.cpp" />
     <ClCompile Include="..\Private\UIPage_Test.cpp" />
     <ClCompile Include="..\Private\UIRender_Client.cpp" />
+    <ClCompile Include="..\Private\WallDeco.cpp" />
     <ClCompile Include="..\Private\Weapon.cpp" />
     <ClCompile Include="..\Private\Weapon_FlameSword.cpp" />
     <ClCompile Include="..\Private\Weapon_Rapier.cpp" />
