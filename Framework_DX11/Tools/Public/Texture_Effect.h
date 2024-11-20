@@ -32,6 +32,7 @@ public:
 		_float		fAlpha = { 1.f };
 		_float		fAlphaSpeed = { 0.f };
 
+		_bool		bPreserveRotation = { false };
 		_bool		bLoop = { false };
 	}DEFAULT_DESC;
 
@@ -95,6 +96,8 @@ private:
 
 private:
 	HRESULT Ready_Components(const TEXT_DESC& Desc);
+	void Preserve_Rotation_Billboard(_Vec3 vCurrentScale, _Vec3 vLook);
+	void Billboard(_Vec3 vCurrentScale, _Vec3 vLook);
 
 public:
 	static CTexture_Effect* Create(ID3D11Device* pDevice, ID3D11DeviceContext* pContext);

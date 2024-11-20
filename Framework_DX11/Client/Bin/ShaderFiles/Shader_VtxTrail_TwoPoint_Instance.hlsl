@@ -226,6 +226,12 @@ struct PS_OUT
     vector vColor : SV_TARGET0;
 };
 
+struct PS_EFFECT_OUT
+{
+    vector vColor : SV_TARGET0;
+    vector vDistortion : SV_TARGET1;
+    vector vBlur : SV_TARGET2;
+};
 
 /* 1. 픽셀의 최종적인 색상을 결정한다. */
 PS_OUT PS_MAIN(PS_IN In)
@@ -234,23 +240,15 @@ PS_OUT PS_MAIN(PS_IN In)
 
     Out.vColor = g_DiffuseTexture.Sample(LinearSampler, In.vTexcoord);
     
-
     Out.vColor.a = 1.f - ((In.vTexcoord.x + In.fIndex) / (float) g_iNumInstance + g_fRatio);
-    
-    if(Out.vColor.r < 0.1f)
-        discard;
-    
-    Out.vColor.gb = Out.vColor.r;
-    
+        
     return Out;
 }
-
-
 
 technique11 DefaultTechnique
 {
 	/* 빛연산 + 림라이트 + ssao + 노멀맵핑 + pbr*/
-    pass UI
+    pass Default
     {
         SetRasterizerState(RS_Cull_None);
         SetDepthStencilState(DSS_Default, 0);
@@ -260,6 +258,4 @@ technique11 DefaultTechnique
         GeometryShader = compile gs_5_0 GS_MAIN();
         PixelShader = compile ps_5_0 PS_MAIN();
     }
-
-
 }

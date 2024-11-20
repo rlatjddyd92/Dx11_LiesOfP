@@ -71,10 +71,7 @@ void CTrail_Effect_MP::Update(_float fTimeDelta)
 
 void CTrail_Effect_MP::Late_Update(_float fTimeDelta)
 {
-	if (CRenderer::RG_EFFECT == m_RenderDesc.iRenderGroup)
-		m_pGameInstance->Add_RenderObject(CRenderer::RG_NONLIGHT, this);
-	else
-		m_pGameInstance->Add_RenderObject((CRenderer::RENDERGROUP)m_RenderDesc.iRenderGroup, this);
+	m_pGameInstance->Add_RenderObject((CRenderer::RENDERGROUP)m_RenderDesc.iRenderGroup, this);
 }
 
 HRESULT CTrail_Effect_MP::Render()
@@ -184,16 +181,20 @@ HRESULT CTrail_Effect_MP::Ready_Components(const TRAIL_MP_DESC& Desc)
 	_wstring strComputeShaderTag = TEXT("");
 	switch (Desc.DefaultDesc.eType)
 	{
-	case PT_SPREAD :
+	case MT_SPREAD:
 		strComputeShaderTag = TEXT("Prototype_Component_Shader_Compute_Trail_Spread");
 		break;
 
-	case PT_MOVE:
+	case MT_MOVE:
 		strComputeShaderTag = TEXT("Prototype_Component_Shader_Compute_Trail_Move");
 		break;
 
-	case PT_CONVERGE :
+	case MT_CONVERGE:
 		strComputeShaderTag = TEXT("Prototype_Component_Shader_Compute_Trail_Converge");
+		break;
+
+	case MT_FOLLOW:
+		strComputeShaderTag = TEXT("Prototype_Component_Shader_Compute_Trail_Follow");
 		break;
 
 	default:

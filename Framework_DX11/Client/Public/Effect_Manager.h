@@ -80,7 +80,6 @@ private:
 	_wstring Get_FileName(const _wstring& strFileTag);
 	_wstring Get_FileExtentin(const _wstring& strFileTag);
 
-
 public:
 	virtual void Free() override;
 };

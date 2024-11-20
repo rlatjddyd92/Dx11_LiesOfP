@@ -13,6 +13,8 @@ BEGIN(Client)
 class CParticle_Effect final : public CEffect_Base
 {
 public:
+	enum PARTICLE_TYPE { PT_SPREAD, PT_MOVE, PT_CONVERGE, PT_END };
+
 	typedef struct
 	{
 		// 컴퓨트 셰이더에 전달

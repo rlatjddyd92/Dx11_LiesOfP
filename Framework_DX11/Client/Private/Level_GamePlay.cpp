@@ -45,7 +45,9 @@ HRESULT CLevel_Tool::Initialize()
 	// 게임 플레이에 필요한 인벤, 플레이 화면, 스탯 화면 등을 상황에 따라 보여 주도록 설정 
 	GET_GAMEINTERFACE->SetPlayMode(true);
 
-	CEffect_Manager::Get_Instance()->Add_Effect_ToLayer(LEVEL_GAMEPLAY, TEXT("TEST"), _Vec3(0.f, 0.f, 0.f), _Vec3(0.f, 0.f, 0.f), _Vec3(1.f, 1.f, 1.f));
+	CEffect_Container* pContainer = CEffect_Manager::Get_Instance()->Clone_Effect(TEXT("Player_Attack_Rapier_Normal"), nullptr, nullptr, _Vec3(0.f, 0.f, 0.f), _Vec3(0.f, 0.f, 0.f), _Vec3(1.f, 1.f, 1.f));
+	pContainer->Set_Loop(true);
+	m_pGameInstance->Add_Object_ToLayer(LEVEL_GAMEPLAY, TEXT("Layer_Effect"), pContainer);
 
 	return S_OK;
 }
