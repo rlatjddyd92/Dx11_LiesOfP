@@ -90,7 +90,7 @@ void CController_PostProcess::Update_BLOOM()
 		return;
 
 	static _bool isOnBloom = false;
-	static _float fBloomThreshold = tDesc->fBloomThreshold;
+	static _float fBloomThreshold = tDesc->fThreshold;
 
 	ImGui::Checkbox("BLOOM Value", &isOnBloom);
 
@@ -101,7 +101,7 @@ void CController_PostProcess::Update_BLOOM()
 	}
 
 	tDesc->isOnBloom = isOnBloom;
-	tDesc->fBloomThreshold = fBloomThreshold;
+	tDesc->fThreshold = fBloomThreshold;
 }
 
 void CController_PostProcess::Update_DOF()

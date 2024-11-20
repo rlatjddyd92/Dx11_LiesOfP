@@ -143,7 +143,6 @@ private:
 	HRESULT Ready_HDR();
 	HRESULT Ready_Bloom();
 	HRESULT Ready_DOF();
-	HRESULT Ready_Effect();
 
 	HRESULT Ready_Desc();
 

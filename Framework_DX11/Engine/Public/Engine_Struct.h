@@ -148,7 +148,7 @@ namespace Engine
 	typedef struct
 	{
 		_bool isOnBloom = false;
-		_float fBloomThreshold;
+		_float fThreshold = 1.f;
 	}BLOOM_DESC;
 
 	typedef struct
