@@ -52,7 +52,7 @@ ITEM_RESULT CItem_Manager::EquipItem_Inven(INVEN_ARRAY_TYPE eIndex, EQUIP_SLOT e
 	if (NewItem.eType_Index == ITEM_TYPE::ITEMTYPE_END)
 		return ITEM_RESULT::RESULT_INVALID;
 
-	if (m_vecEquip_ItemInfo[_uint(eSlot)]->vecValid_InvenArray[_uint(NewItem.eType_Index)])
+	if (m_vecEquip_ItemInfo[_uint(eSlot)]->vecValid_InvenArray[_uint(eIndex)])
 	{
 		m_vecEquip_ItemInfo[_uint(eSlot)]->eType = eIndex;
 		m_vecEquip_ItemInfo[_uint(eSlot)]->iIndex = iIndex;

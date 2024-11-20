@@ -59,9 +59,12 @@ void CUIPage_Menu::Update(_float fTimeDelta)
 
 void CUIPage_Menu::Late_Update(_float fTimeDelta)
 {
-
+	
+	Desc_Update(fTimeDelta);
 	for (auto& iter : m_vec_Group_Ctrl)
 		__super::UpdatePart_ByControl(iter);
+	Item_Icon_Update(fTimeDelta);
+	
 
 	__super::Late_Update(fTimeDelta);
 }
@@ -102,7 +105,6 @@ CHECK_MOUSE CUIPage_Menu::Check_Page_Action(_float fTimeDelta)
 
 	Focus_Update(fTimeDelta);
 	Select_Update(fTimeDelta);
-	Desc_Update(fTimeDelta);
 
 	return CHECK_MOUSE::MOUSE_NONE;
 }
@@ -160,6 +162,47 @@ void CUIPage_Menu::Select_Update(_float fTimeDelta)
 
 }
 
+void CUIPage_Menu::Item_Icon_Update(_float fTimeDelta)
+{
+	for (_int i = _int(PART_GROUP::GROUP_TOP_CELL_0); i <= _int(PART_GROUP::GROUP_BAG_CELL_3); ++i)
+	{
+		list<_int>::iterator iter = m_vec_Group_Ctrl[i]->PartIndexlist.begin();
+		++iter;
+		if (i == (_int)m_eFocus_Group)
+			m_vecPart[*iter]->bRender = true;
+		else
+			m_vecPart[*iter]->bRender = false;
+
+		const CItem_Manager::ITEM* pItem = GET_GAMEINTERFACE->Get_Equip_Item_Info(EQUIP_SLOT(i - _int(PART_GROUP::GROUP_TOP_CELL_0) + _int(EQUIP_SLOT::EQUIP_USING_TOP_0)));
+
+		if ((pItem == nullptr)||(pItem->iTexture_Index == -1))
+		{
+			++iter;
+			m_vecPart[*iter]->bRender = true;
+			++iter;
+			m_vecPart[*iter]->bRender = false;
+			m_vecPart[*iter]->iTexture_Index = -1;
+			++iter;
+			m_vecPart[*iter]->bRender = false;
+		}
+		else
+		{
+			++iter;
+			m_vecPart[*iter]->bRender = false;
+			++iter;
+			m_vecPart[*iter]->bRender = true;
+			m_vecPart[*iter]->iTexture_Index = pItem->iTexture_Index;
+			if (pItem->bStack)
+			{
+				++iter;
+				m_vecPart[*iter]->bRender = true;
+				m_vecPart[*iter]->strText = to_wstring(pItem->iCount);
+			}
+				
+		}
+	}
+}
+
 void CUIPage_Menu::Desc_Update(_float fTimeDelta)
 {
 	__super::Array_Control(_int(PART_GROUP::GROUP_DESC_BACK), _int(PART_GROUP::GROUP_DESC_MOUSE), CTRL_COMMAND::COM_RENDER, false);
@@ -181,16 +224,23 @@ void CUIPage_Menu::Desc_Update(_float fTimeDelta)
 	}
 	else
 	{
-		__super::Array_Control(_int(PART_GROUP::GROUP_ITEM_DESC_MOUSE_0), _int(PART_GROUP::GROUP_ITEM_DESC_FUNC_1), CTRL_COMMAND::COM_RENDER, true);
+		const CItem_Manager::ITEM* pItem = GET_GAMEINTERFACE->Get_Equip_Item_Info(EQUIP_SLOT(_int(m_eFocus_Group) - _int(PART_GROUP::GROUP_TOP_CELL_0) + _int(EQUIP_SLOT::EQUIP_USING_TOP_0)));
 
-		for (_int i = _int(PART_GROUP::GROUP_ITEM_DESC_MOUSE_0); i <= _int(PART_GROUP::GROUP_ITEM_DESC_MOUSE_1); ++i)
+		if (pItem != nullptr)
 		{
-			_Vec2 fMouse = __super::Check_Mouse_By_Part(*__super::Get_Front_Part_In_Control(i));
-			if (fMouse.x != -1.f)
-				m_vec_Group_Ctrl[i]->bRender = true;
-			else
-				m_vec_Group_Ctrl[i]->bRender = false;
+			__super::Array_Control(_int(PART_GROUP::GROUP_ITEM_DESC_MOUSE_0), _int(PART_GROUP::GROUP_ITEM_DESC_FUNC_1), CTRL_COMMAND::COM_RENDER, true);
+			__super::Get_Front_Part_In_Control(_int(PART_GROUP::GROUP_ITEM_DESC_NAME))->strText = pItem->strName;
+
+			for (_int i = _int(PART_GROUP::GROUP_ITEM_DESC_MOUSE_0); i <= _int(PART_GROUP::GROUP_ITEM_DESC_MOUSE_1); ++i)
+			{
+				_Vec2 fMouse = __super::Check_Mouse_By_Part(*__super::Get_Front_Part_In_Control(i));
+				if (fMouse.x != -1.f)
+					m_vec_Group_Ctrl[i]->bRender = true;
+				else
+					m_vec_Group_Ctrl[i]->bRender = false;
+			}
 		}
+			
 	}
 
 }

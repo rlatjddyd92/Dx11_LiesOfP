@@ -140,8 +140,7 @@ public:
 	// 외부 -> 스탯 매니저 -> UI 매니저(Page_Play)
 
 	// 좌하단 포션/도구 
-	void Move_SelectCtrl(_bool bIsUp);
-	void Swich_ToolItem();
+	
 
 private:
 	void LU_Gauge_Update(_float fTimeDelta);

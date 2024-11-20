@@ -347,19 +347,6 @@ void CUIManager::UIControl_Test(_float fTimeDelta)
 		else
 			m_vecTestPageMove[i] = false;
 	}
-
-
-
-	
-
-
-
-
-
-
-
-
-
 }
 
 void CUIManager::UIControl_Common(_float fTimeDelta)

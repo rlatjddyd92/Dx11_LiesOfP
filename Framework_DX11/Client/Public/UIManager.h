@@ -55,7 +55,44 @@ public:
 
 	_Vec2 CheckMouse(_Vec2 fPos, _Vec2 fSize);
 
-	void SetIngame(_bool bTrue) { m_bIsIngame = bTrue; } // 매니저에 게임 입장 / 나가기 상태 알림
+	void SetIngame(_bool bTrue) 
+	{ 
+		m_bIsIngame = bTrue;
+		if (bTrue)
+		{
+			for (_int i =0; i < m_vecPage.size(); ++i)
+			{
+				if (i <= _int(UIPAGE::PAGE_LOADING))
+				{
+					m_vecPage[i]->SetUpdate(false);
+					//m_vecPage[i]->SetRender(false);
+				}
+				else
+				{
+					m_vecPage[i]->SetUpdate(true);
+					//m_vecPage[i]->SetRender(true);
+				}
+			}
+		}
+		else
+		{
+			for (_int i = 0; i < m_vecPage.size(); ++i)
+			{
+				if (i <= _int(UIPAGE::PAGE_LOADING))
+				{
+					m_vecPage[i]->SetUpdate(true);
+					//m_vecPage[i]->SetRender(true);
+				}
+				else
+				{
+					m_vecPage[i]->SetUpdate(false);
+					//m_vecPage[i]->SetRender(false);
+				}
+			}
+		}
+	
+	
+	} // 매니저에 게임 입장 / 나가기 상태 알림
 
 private:
 	void UIControl_Test(_float fTimeDelta);

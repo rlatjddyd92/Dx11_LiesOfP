@@ -93,12 +93,13 @@ public:
 private:
 	void Focus_Update(_float fTimeDelta); // 메뉴 화면에서 현재 하이라이트 된 
 	void Select_Update(_float fTimeDelta);
+	void Item_Icon_Update(_float fTimeDelta);
 	void Desc_Update(_float fTimeDelta);
 
 protected:
 	PART_GROUP m_eFocus_Group = PART_GROUP::GROUP_END; // 현재 하이라이트 된 셀 표시
 
-
+	
 
 
 

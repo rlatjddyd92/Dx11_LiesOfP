@@ -219,16 +219,6 @@ HRESULT CUIPage_Play::Ready_UIPart_Group_Control()
 	return S_OK;
 }
 
-void CUIPage_Play::Move_SelectCtrl(_bool bIsUp)
-{
-	
-}
-
-void CUIPage_Play::Swich_ToolItem()
-{
-	
-}
-
 void CUIPage_Play::LU_Gauge_Update(_float fTimeDelta)
 {
 	const CPlayer_Stat_Manager::STAT& tRegion = GET_GAMEINTERFACE->Get_StatInfo_Normal(STAT_NORMAL::STAT_GAUGE_REGION);

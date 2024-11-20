@@ -246,10 +246,52 @@ public:
 
 	CPlayer::WEAPON_TYPE Get_Weapon_Model_Index(); // 현재 사용 중인 무기의 모델 번호 리턴
 
-	const ITEM& Get_Equip_Item_Info(EQUIP_SLOT eSlot) // 현재 장비창에 장착된 아이템의 정보 레퍼런스 획득
+	const ITEM* Get_Equip_Item_Info(EQUIP_SLOT eSlot) // 현재 장비창에 장착된 아이템의 정보 레퍼런스 획득
 	{ 
-		return *m_vecArray_Inven[_uint(m_vecEquip_ItemInfo[_uint(eSlot)]->eType)]->vecItemInfo[_uint(m_vecEquip_ItemInfo[_uint(eSlot)]->iIndex)];
+		if (m_vecEquip_ItemInfo[_uint(eSlot)]->eType == INVEN_ARRAY_TYPE::TYPE_END)
+			return nullptr;
+
+		return m_vecArray_Inven[_uint(m_vecEquip_ItemInfo[_uint(eSlot)]->eType)]->vecItemInfo[_uint(m_vecEquip_ItemInfo[_uint(eSlot)]->iIndex)];
 	}
+
+	// 코인
+	ITEM_RESULT Add_Coin(_int iAdd, _bool bForce)
+	{
+		if (!bForce)
+			if ((iAdd < 0) && (m_iCoin < abs(iAdd)))
+				return ITEM_RESULT::RESULT_INVALID;
+	
+		m_iCoin += iAdd;
+		return ITEM_RESULT::RESULT_SUCCESS;
+	}
+
+	_int Get_Coin() { return m_iCoin; }
+
+	// 선택 아이템 조정
+	_int Change_Potion_Select(_bool bNext)
+	{
+		m_iPotion_Select += -1 + (bNext ? true : 2);
+		m_iPotion_Select = max(m_iPotion_Select, 0);
+		m_iPotion_Select = min(m_iPotion_Select, 2);
+		return m_iPotion_Select;
+	}
+	_int Change_Tool_Select(_bool bNext)
+	{
+		m_iTool_Select += -1 + (bNext ? true : 2);
+		m_iTool_Select = max(m_iTool_Select, 0);
+		m_iTool_Select = min(m_iTool_Select, 2);
+		return m_iTool_Select;
+	}
+	_int Change_Weapon()
+	{
+		++m_iWeapon_Select;
+		m_iWeapon_Select = m_iWeapon_Select ? 2 : 0;
+		return m_iWeapon_Select;
+	}
+
+	_int Get_Potion_Select() { return m_iPotion_Select; }
+	_int Get_Tool_Select() { return m_iTool_Select; }
+	_int Get_Weapon() { return m_iWeapon_Select; }
 
 	
 	// 외부에서 아이템 매니저에 필요한 것이 뭐가 있나? 
@@ -268,11 +310,11 @@ public:
 	
 	*/
 
-
-
+	
 
 private:
 	HRESULT Initialize_Item();
+
 
 	// 접근, 수정
 	ITEM_RESULT InputItem_Inven(ITEM* pItem, _uint iCount = 1); // <- 이미 게임에 존재하는 아이템을 인벤에 넣는다 
@@ -304,8 +346,15 @@ private:
 
 	_uint m_iInven_Array_Col_Count = 5; // <- 인벤 한 줄에 몇 개의 셀이 들어가는 지
 
+	// 좌하단 조작용
+	_uint m_iPotion_Select = 0;
+	_uint m_iTool_Select = 0;
 
+	// 우하단 조작용
+	_uint m_iWeapon_Select = 0;
 
+	// 보유 코인 
+	_int m_iCoin = 10000;
 
 public:
 	static CItem_Manager* Create(CGameInstance* pGameInstance);
