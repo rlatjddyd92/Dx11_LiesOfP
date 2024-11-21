@@ -410,7 +410,7 @@ void CUIManager::UIControl_Menu(_float fTimeDelta)
 void CUIManager::UIControl_Inven(_float fTimeDelta)
 {
 	if (KEY_TAP(KEY::ESC))
-		SwicthPage(UIPAGE::PAGE_INVEN, UIPAGE::PAGE_PLAY);
+		SwicthPage(UIPAGE::PAGE_INVEN, UIPAGE::PAGE_MENU);
 	else
 	{
 		m_pUIPage_Menu->Check_Page_Action(fTimeDelta);
@@ -420,7 +420,7 @@ void CUIManager::UIControl_Inven(_float fTimeDelta)
 void CUIManager::UIControl_Equip(_float fTimeDelta)
 {
 	if (KEY_TAP(KEY::ESC))
-		SwicthPage(UIPAGE::PAGE_EQUIP, UIPAGE::PAGE_PLAY);
+		SwicthPage(UIPAGE::PAGE_EQUIP, UIPAGE::PAGE_MENU);
 	else
 	{
 		m_pUIPage_Menu->Check_Page_Action(fTimeDelta);
@@ -430,7 +430,7 @@ void CUIManager::UIControl_Equip(_float fTimeDelta)
 void CUIManager::UIControl_Stat(_float fTimeDelta)
 {
 	if (KEY_TAP(KEY::ESC))
-		SwicthPage(UIPAGE::PAGE_STAT, UIPAGE::PAGE_PLAY);
+		SwicthPage(UIPAGE::PAGE_STAT, UIPAGE::PAGE_MENU);
 	else
 	{
 		m_pUIPage_Menu->Check_Page_Action(fTimeDelta);
@@ -444,7 +444,7 @@ void CUIManager::UIControl_LevelUp(_float fTimeDelta)
 void CUIManager::UIControl_Skill(_float fTimeDelta)
 {
 	if (KEY_TAP(KEY::ESC))
-		SwicthPage(UIPAGE::PAGE_SKILL, UIPAGE::PAGE_PLAY);
+		SwicthPage(UIPAGE::PAGE_SKILL, UIPAGE::PAGE_MENU);
 	else
 	{
 		m_pUIPage_Menu->Check_Page_Action(fTimeDelta);

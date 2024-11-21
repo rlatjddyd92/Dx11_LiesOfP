@@ -49,7 +49,7 @@ void CUIPage::Late_Update(_float fTimeDelta)
 
 	if ((m_vecPageAction[_int(PAGEACTION::ACTION_CLOSING)]) && (!m_vecPageAction[_int(PAGEACTION::ACTION_OPENING)]))
 	{
-		m_fTopPartMove -= 2.f * fTimeDelta;
+		m_fTopPartMove -= m_fTopPartMove_Excel * fTimeDelta;
 		if (m_fTopPartMove < 0.f)
 		{
 			m_fTopPartMove = 0.f;
@@ -59,7 +59,7 @@ void CUIPage::Late_Update(_float fTimeDelta)
 	}
 	else if ((!m_vecPageAction[_int(PAGEACTION::ACTION_CLOSING)]) && (m_vecPageAction[_int(PAGEACTION::ACTION_OPENING)]))
 	{
-		m_fTopPartMove += 2.f * fTimeDelta;
+		m_fTopPartMove += m_fTopPartMove_Excel * fTimeDelta;
 		if (m_fTopPartMove > 1.f)
 		{
 			m_fTopPartMove = 1.f;

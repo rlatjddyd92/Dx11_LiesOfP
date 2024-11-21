@@ -35,7 +35,7 @@ HRESULT CUIPage_Equip::Initialize_Prototype()
 	if (FAILED(__super::Initialize(&Desc)))
 		return E_FAIL;
 
-
+	m_fTopPartMove_Excel = 100.f;
 
 	return S_OK;
 }

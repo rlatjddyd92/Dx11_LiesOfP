@@ -209,6 +209,7 @@ protected: // 제어 변수
 protected: // 열기/닫기 액션
 	vector<_bool> m_vecPageAction;
 	_float m_fTopPartMove = 0.f; // 0.f->닫힘, 1.f->열림
+	_float m_fTopPartMove_Excel = 2.f; // <- 열고 닫는 속도 가속
 
 protected: // 그룹 컨트롤 모음 -> 여기 있는 건 전체 업데이트 + 전체 릴리즈 용도로만 사용, 구체적인 사용은 각 Paage에 얕은 복사로 따로 포인터를 마련해 진행 
 	vector<UG_CTRL*> m_vec_Group_Ctrl;
