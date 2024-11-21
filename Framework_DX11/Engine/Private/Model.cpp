@@ -49,7 +49,10 @@ CModel::CModel(const CModel & Prototype)
 		
 
 	for (auto& pMesh : m_Meshes)	
+	{
+		CalculateBoundingBox_Model(pMesh, m_vMinPos, m_vMaxPos);
 		Safe_AddRef(pMesh);
+	}
 
 	m_UFBIndices.reserve(UFB_END);
 
@@ -1088,6 +1091,30 @@ HRESULT CModel::Ready_Animations(HANDLE* pFile)
 	}
 
 	return S_OK;
+}
+
+void CModel::Culling(_Matrix worldMatrix)
+{
+	for (auto& iter : m_Meshes)
+		iter->Culling(m_pGameInstance, worldMatrix);
+}
+
+void CModel::CalculateBoundingBox_Model(CMesh* pMesh, _Vec3& minPos, _Vec3& maxPos)
+{
+	_Vec3 vMesh_Min_Pos = pMesh->Get_MinPos_Vertex();
+	_Vec3 vMesh_Max_Pos = pMesh->Get_MaxPos_Vertex();
+
+	//정점 개수 만큼 반복
+	for (int i = 0; i < pMesh->Get_NumVertices(); ++i)
+	{
+		minPos.x = min(minPos.x, vMesh_Min_Pos.x);
+		minPos.y = min(minPos.y, vMesh_Min_Pos.y);
+		minPos.z = min(minPos.z, vMesh_Min_Pos.z);
+
+		maxPos.x = max(maxPos.x, vMesh_Max_Pos.x);
+		maxPos.y = max(maxPos.y, vMesh_Max_Pos.y);
+		maxPos.z = max(maxPos.z, vMesh_Max_Pos.z);
+	}
 }
 
 

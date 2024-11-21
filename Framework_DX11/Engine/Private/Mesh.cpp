@@ -2,6 +2,8 @@
 
 #include "Model.h"
 #include "Shader.h"
+#include "Octree.h"
+#include "GameInstance.h"
 
 CMesh::CMesh(ID3D11Device * pDevice, ID3D11DeviceContext * pContext)
 	: CVIBuffer { pDevice, pContext }
@@ -10,7 +12,9 @@ CMesh::CMesh(ID3D11Device * pDevice, ID3D11DeviceContext * pContext)
 
 CMesh::CMesh(const CMesh & Prototype)
 	: CVIBuffer{ Prototype }
+	, m_pOctree{ Prototype.m_pOctree }
 {
+	Safe_AddRef(m_pOctree);
 }
 
 HRESULT CMesh::Initialize_Prototype(HANDLE* pFile, const CModel* pModel, _fmatrix PreTransformMatrix)
@@ -40,9 +44,9 @@ HRESULT CMesh::Initialize_Prototype(HANDLE* pFile, const CModel* pModel, _fmatri
 	/* 인덱스버퍼의 내용을 채워주곡 */
 	ZeroMemory(&m_BufferDesc, sizeof m_BufferDesc);
 	m_BufferDesc.ByteWidth = m_iIndexStride * m_iNumIndices;
-	m_BufferDesc.Usage = D3D11_USAGE_DEFAULT; /* 정적버퍼로 생성한다. */
+	m_BufferDesc.Usage = D3D11_USAGE_DYNAMIC; /* 동적버퍼로 생성한다. */
 	m_BufferDesc.BindFlags = D3D11_BIND_INDEX_BUFFER;
-	m_BufferDesc.CPUAccessFlags = 0;
+	m_BufferDesc.CPUAccessFlags = D3D11_CPU_ACCESS_WRITE;
 	m_BufferDesc.MiscFlags = 0;
 	m_BufferDesc.StructureByteStride = m_iIndexStride;
 
@@ -69,6 +73,12 @@ HRESULT CMesh::Initialize_Prototype(HANDLE* pFile, const CModel* pModel, _fmatri
 
 #pragma endregion
 
+	_int iDepth = -1;
+	vector<int> tmp = {};
+
+	if (m_pVertices != nullptr)
+		m_pOctree = COctree::Create(m_vMinPos, m_vMaxPos, m_pIndices, m_pVertices, m_iNumFaces, tmp, &iDepth);
+	
 	return S_OK;
 }
 
@@ -236,6 +246,9 @@ HRESULT CMesh::Ready_VertexBuffer_NonAnim(HANDLE* pFile, _fmatrix PreTransformMa
 		//XMStoreFloat3(&m_pVertices[i].vTangent, XMVector3TransformCoord(XMLoadFloat3(&m_pVertices[i].vTangent), PreTransformMatrix));
 
 		//m_ConvexHullPoints.push_back(m_pVertices[i].vPosition);
+
+		//모델 사이즈 계산
+		CalculateBoundingBox_Mesh( m_pVertices[i].vPosition);
 	}
 
 	ZeroMemory(&m_InitialData, sizeof m_InitialData);
@@ -382,6 +395,39 @@ HRESULT CMesh::Ready_VertexBuffer_To_Binary(HANDLE* pFile)
 	return S_OK;
 }
 
+void CMesh::Culling(CGameInstance* pGameInstance, _Matrix worldMatrix)
+{
+	if (m_pOctree != nullptr)
+		if (m_pOctree->Get_haveChild() == false)
+			return;
+
+	pGameInstance->Transform_ToLocalSpace(worldMatrix);
+	_uint			iNumIndices = { 0 };
+	unordered_set<_int> pDrawTriIndexes = {};
+
+	D3D11_MAPPED_SUBRESOURCE		SubResource{};
+
+	m_pContext->Map(m_pIB, 0, D3D11_MAP_WRITE_DISCARD, 0, &SubResource);
+
+	if(m_pOctree != nullptr)
+		m_pOctree->Culling(pGameInstance, m_pIndices, (_uint*)SubResource.pData, pDrawTriIndexes,  &iNumIndices);
+
+	m_pContext->Unmap(m_pIB, 0);
+
+	m_iNumIndices = iNumIndices;
+}
+
+
+void CMesh::CalculateBoundingBox_Mesh(const _Vec3& vVertexPos)
+{
+	m_vMinPos.x = min(m_vMinPos.x, vVertexPos.x);
+	m_vMinPos.y = min(m_vMinPos.y, vVertexPos.y);
+	m_vMinPos.z = min(m_vMinPos.z, vVertexPos.z);
+
+	m_vMaxPos.x = max(m_vMaxPos.x, vVertexPos.x);
+	m_vMaxPos.y = max(m_vMaxPos.y, vVertexPos.y);
+	m_vMaxPos.z = max(m_vMaxPos.z, vVertexPos.z);
+}
 
 CMesh* CMesh::Create(ID3D11Device* pDevice, ID3D11DeviceContext* pContext, HANDLE* pFile, const CModel* pModel, _fmatrix PreTransformMatrix)
 {
@@ -426,6 +472,7 @@ void CMesh::Free()
 {
 	__super::Free();
 
+	Safe_Release(m_pOctree);
 	Safe_Delete_Array(m_pVertices);
 	Safe_Delete_Array(m_pAnimVertices);
 	Safe_Delete_Array(m_pIndices);
