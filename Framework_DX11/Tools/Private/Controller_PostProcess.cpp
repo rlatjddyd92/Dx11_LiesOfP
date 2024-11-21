@@ -6,15 +6,15 @@
 #include "Controller_PostProcess.h"
 #include "Camera.h"
 
-IMPLEMENT_SINGLETON(CController_PostProcess)
+IMPLEMENT_SINGLETON(CCamera_Manager)
 
-CController_PostProcess::CController_PostProcess()
+CCamera_Manager::CCamera_Manager()
 	:m_pGameInstance{ CGameInstance::Get_Instance() }
 {
 	Safe_AddRef(m_pGameInstance);
 }
 
-HRESULT CController_PostProcess::Initialize(ID3D11Device* pDevice, ID3D11DeviceContext* pContext)
+HRESULT CCamera_Manager::Initialize(ID3D11Device* pDevice, ID3D11DeviceContext* pContext)
 {
 	m_pDevice = pDevice;
 	m_pContext = pContext;
@@ -24,7 +24,7 @@ HRESULT CController_PostProcess::Initialize(ID3D11Device* pDevice, ID3D11DeviceC
 	return S_OK;
 }
 
-void CController_PostProcess::Update_CameraSetting()
+void CCamera_Manager::Update_CameraSetting()
 {
 	static _float fCameraFar = m_pGameInstance->Get_Far();
 
@@ -33,7 +33,7 @@ void CController_PostProcess::Update_CameraSetting()
 	m_pGameInstance->Find_Camera(LEVEL_TOOL)->Set_Far(fCameraFar);
 }
 
-void CController_PostProcess::Update_SSAO()
+void CCamera_Manager::Update_SSAO()
 {
 	SSAO_DESC* tDesc = m_pGameInstance->Get_SSAODesc();
 	if (nullptr == tDesc)
@@ -59,7 +59,7 @@ void CController_PostProcess::Update_SSAO()
 	tDesc->fAmount = fAmount;
 }
 
-void CController_PostProcess::Update_HDR()
+void CCamera_Manager::Update_HDR()
 {
 	HDR_DESC* tDesc = m_pGameInstance->Get_HDRDesc();
 	if (nullptr == tDesc)
@@ -83,7 +83,7 @@ void CController_PostProcess::Update_HDR()
 	tDesc->fLumWhiteSqr = fLumWhiteSqr;
 }
 
-void CController_PostProcess::Update_BLOOM()
+void CCamera_Manager::Update_BLOOM()
 {
 	BLOOM_DESC* tDesc = m_pGameInstance->Get_BloomDesc();
 	if (nullptr == tDesc)
@@ -104,7 +104,7 @@ void CController_PostProcess::Update_BLOOM()
 	tDesc->fThreshold = fBloomThreshold;
 }
 
-void CController_PostProcess::Update_DOF()
+void CCamera_Manager::Update_DOF()
 {
 	DOF_DESC* tDesc = m_pGameInstance->Get_DOFDesc();
 	if (nullptr == tDesc)
@@ -125,7 +125,7 @@ void CController_PostProcess::Update_DOF()
 	tDesc->fDOF = fDOF;
 }
 
-void CController_PostProcess::Update_Radial()
+void CCamera_Manager::Update_Radial()
 {
 	RADIAL_DESC* tDesc = m_pGameInstance->Get_RadialDesc();
 	if (nullptr == tDesc)
@@ -153,7 +153,7 @@ void CController_PostProcess::Update_Radial()
 	tDesc->fRadius = fRadius;
 }
 
-void CController_PostProcess::Free()
+void CCamera_Manager::Free()
 {
 	__super::Free();
 

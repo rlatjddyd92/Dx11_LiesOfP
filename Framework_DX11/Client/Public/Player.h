@@ -2,6 +2,7 @@
 
 #include "Client_Defines.h"
 #include "Pawn.h"
+#include "PlayerCamera.h"
 
 BEGIN(Engine)
 class CNavigation;
@@ -33,8 +34,8 @@ public:
 	};
 
 public:
-	class CCamera*			Get_Camera() { return m_pPlayerCamera; }
-	void					Set_Camera(class CCamera* pCamera) { m_pPlayerCamera = pCamera; }
+	CPlayerCamera*			Get_Camera() { return m_pPlayerCamera; }
+	void					Set_Camera(class CPlayerCamera* pCamera) { m_pPlayerCamera = pCamera; }
 
 	_bool					Get_IsJump() { return m_isJump; }
 	void					Set_IsJump(_bool isJump) { m_isJump = isJump; }
@@ -57,10 +58,11 @@ public:
 
 	WEAPON_TYPE				Get_WeaponType() { return m_eWeaponType; }
 	void					Set_WeaponType(WEAPON_TYPE eType) { m_eWeaponType = eType; }
+	class CWeapon*			Get_CurrentWeapon() { return m_pWeapon[m_eWeaponType]; }
 
 	void					Reset_Root() { m_vCurRootMove = m_vRootMoveStack = _vector{0,0,0,0}; }
 
-
+	CPawn*					Get_TargetMonster() { return m_pTargetMonster; }
 
 private:
 	CPlayer(ID3D11Device* pDevice, ID3D11DeviceContext* pContext);
@@ -87,7 +89,10 @@ public:
 	void			Seperate_Scissor();
 	void			Combine_Scissor();
 
-	class CWeapon*	Get_CurrentWeapon() { return m_pWeapon[m_eWeaponType]; }
+	void			Chnage_CameraMode(CPlayerCamera::CAMERA_MODE eMode);
+
+	void			LockOnOff();
+	CPawn*			Find_TargetMonster();
 
 private:
 	list<OUTPUT_EVKEY>	m_EvKeyList;
@@ -95,7 +100,7 @@ private:
 	map<_uint, class CEffect_Container*>	m_Effects;
 
 private:
-	class CCamera*		m_pPlayerCamera = { nullptr };
+	CPlayerCamera*		m_pPlayerCamera = { nullptr };
 
 	_bool				m_isJump = { false };
 	_bool				m_isGuard = { false };
@@ -104,6 +109,8 @@ private:
 	_bool				m_isInvicible = { false };
 
 	_float				m_fGuardTime = {};
+
+	CPawn*				m_pTargetMonster = { nullptr };
 
 	class CWeapon*		m_pWeapon[WEP_END] = { nullptr, };
 	WEAPON_TYPE			m_eWeaponType = { WEP_RAPIER };

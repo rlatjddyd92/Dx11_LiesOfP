@@ -40,6 +40,9 @@ HRESULT CState_Player_OH_Guard::Start_State(void* pArg)
     m_pPlayer->Set_IsGuard(true);
     m_pPlayer->Set_MoveSpeed(3.f);
 
+
+    m_pPlayer->Chnage_CameraMode(CPlayerCamera::MODE_STATIC);
+
     return S_OK;
 }
 
@@ -126,10 +129,14 @@ _bool CState_Player_OH_Guard::Move(_float fTimeDelta)
     {
         m_vMoveDir -= vCameraRight;
     }
+    _Vec4 vRight = _Vec4(1.f, 0.f, 0.f, 0.f);
+
+    _float fForwardDot = m_vMoveDir.Dot(vCameraLook);
+    _float fBackwardDot = m_vMoveDir.Dot(-vCameraLook);
 
     if (m_vMoveDir.Length() > 0.f)
     {
-        if (isForward)
+        if (fForwardDot > 0.7f)
         {
             if(isLeft)
                 m_pPlayer->Change_Animation(m_iAnimation_Walk[WALK_FL], true, 0.2f);
@@ -138,7 +145,7 @@ _bool CState_Player_OH_Guard::Move(_float fTimeDelta)
             else
                 m_pPlayer->Change_Animation(m_iAnimation_Walk[WALK_F], true, 0.2f);
         }
-        else if (isBackward)
+        else if (fBackwardDot > 0.7f)
         {
             if (isLeft)
                 m_pPlayer->Change_Animation(m_iAnimation_Walk[WALK_BL], true, 0.2f);

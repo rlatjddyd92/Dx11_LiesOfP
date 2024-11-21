@@ -12,7 +12,7 @@ int g_arrKey[(_uint)KEY::LAST] =
 	'1', '2', '3', '4', '5', '6', '7', '8', '9',
 
 	VK_MENU, VK_CONTROL, VK_LSHIFT, VK_SPACE, VK_RETURN, VK_ESCAPE,
-	VK_LBUTTON, VK_RBUTTON, VK_TAB,
+	VK_LBUTTON, VK_RBUTTON, VK_MBUTTON, VK_TAB
 };
 
 CKey_Manager::CKey_Manager()

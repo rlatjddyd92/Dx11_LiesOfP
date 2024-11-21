@@ -10,6 +10,7 @@
 
 #include "Effect_Container.h"
 #include "Effect_Manager.h"
+#include "Camera_Manager.h"
 #include "StaticObj.h"
 #include "Player.h"
 
@@ -52,7 +53,15 @@ HRESULT CLevel_Tool::Initialize()
 
 void CLevel_Tool::Update(_float fTimeDelta)
 {
+	if (KEY_TAP(KEY::F2))
+	{
+		CCamera_Manager::Get_Instance()->Change_Camera(TEXT("Camera_Free"));
+	}
 
+	if (KEY_TAP(KEY::F3))
+	{
+		CCamera_Manager::Get_Instance()->Change_Camera(TEXT("Camera_Player"));
+	}
 }
 
 HRESULT CLevel_Tool::Render()
@@ -116,13 +125,13 @@ HRESULT CLevel_Tool::Ready_Layer_Camera()
 	PlayerCameraDesc.pPlayer = m_pPlayer;
 	PlayerCameraDesc.fSpeed = 5.f;
 
-	CCamera* pCamera = dynamic_cast<CCamera*>(m_pGameInstance->Get_CloneObject_ToLayer(LEVEL_GAMEPLAY, TEXT("Layer_Camera"), TEXT("Prototype_GameObject_PlayerCamera"), &PlayerCameraDesc));
-	if(nullptr == pCamera)
+	CPlayerCamera* pPlayerCamera = dynamic_cast<CPlayerCamera*>(m_pGameInstance->Get_CloneObject_ToLayer(LEVEL_GAMEPLAY, TEXT("Layer_Camera"), TEXT("Prototype_GameObject_PlayerCamera"), &PlayerCameraDesc));
+	if(nullptr == pPlayerCamera)
 		return E_FAIL;
+	CCamera_Manager::Get_Instance()->Add_Camera(TEXT("Camera_Player"), pPlayerCamera);
+	m_pPlayer->Set_Camera(pPlayerCamera);
 
-	m_pPlayer->Set_Camera(pCamera);
-
-	/*CFreeCamera::CAMERA_FREE_DESC		Desc{};
+	CFreeCamera::CAMERA_FREE_DESC		Desc{};
 
 	Desc.fSensor = 0.2f;
 	Desc.vEye = _float4(0.f, 0.f, 0.f, 1.f);
@@ -134,8 +143,12 @@ HRESULT CLevel_Tool::Ready_Layer_Camera()
 	Desc.fRotationPerSec = XMConvertToRadians(90.0f);
 	Desc.fAspect = (_float)g_iWinSizeX / g_iWinSizeY;
 
-	if (FAILED(m_pGameInstance->Add_CloneObject_ToLayer(LEVEL_GAMEPLAY, TEXT("Layer_Camera"), TEXT("Prototype_GameObject_FreeCamera"), &Desc)))
-		return E_FAIL;*/
+	CCamera* pCamera = dynamic_cast<CCamera*>(m_pGameInstance->Get_CloneObject_ToLayer(LEVEL_GAMEPLAY, TEXT("Layer_Camera"), TEXT("Prototype_GameObject_FreeCamera"), &Desc));
+	if (nullptr == pCamera)
+		return E_FAIL;
+	CCamera_Manager::Get_Instance()->Add_Camera(TEXT("Camera_Free"), pCamera);
+
+	CCamera_Manager::Get_Instance()->Change_Camera(TEXT("Camera_Player"));
 
 	return S_OK;
 }
@@ -171,8 +184,8 @@ HRESULT CLevel_Tool::Ready_Layer_Monster()
 		if (FAILED(m_pGameInstance->Add_CloneObject_ToLayer(LEVEL_GAMEPLAY, TEXT("Layer_Monster"), TEXT("Prototype_GameObject_Monster"))))
 			return E_FAIL;
 	}*/
-	//if (FAILED(m_pGameInstance->Add_CloneObject_ToLayer(LEVEL_GAMEPLAY, TEXT("Layer_Monster"), TEXT("Prototype_GameObject_CarcassBigA"))))
-	//	return E_FAIL;
+	if (FAILED(m_pGameInstance->Add_CloneObject_ToLayer(LEVEL_GAMEPLAY, TEXT("Layer_Monster"), TEXT("Prototype_GameObject_CarcassBigA"))))
+		return E_FAIL;
 
 	// 24-11-15 김성용
 	// 직교 UI 테스트용 코드 
@@ -323,4 +336,5 @@ void CLevel_Tool::Free()
 	// 인스턴싱을 할 모델들을 모아둔 매니저 클리어하기
 	Safe_Release(m_pPlayer);
 	m_pGameInstance->Clear_Instance();
+	CCamera_Manager::Get_Instance()->Destroy_Instance();
 }

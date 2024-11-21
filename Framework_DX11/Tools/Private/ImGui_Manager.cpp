@@ -211,7 +211,7 @@ HRESULT CImGui_Manager::Ready_Controllers()
 		return E_FAIL;
 	m_pController_AnimationTool->Initialize(m_pDevice, m_pContext);
 
-	m_pController_PostProcess = CController_PostProcess::Get_Instance();
+	m_pController_PostProcess = CCamera_Manager::Get_Instance();
 	if (nullptr == m_pController_PostProcess)
 		return E_FAIL;
 	m_pController_PostProcess->Initialize(m_pDevice, m_pContext);

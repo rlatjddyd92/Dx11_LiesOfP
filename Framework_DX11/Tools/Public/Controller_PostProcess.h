@@ -12,13 +12,13 @@ END
 
 BEGIN(Tools)
 
-class CController_PostProcess : public CBase
+class CCamera_Manager : public CBase
 {
-	DECLARE_SINGLETON(CController_PostProcess)
+	DECLARE_SINGLETON(CCamera_Manager)
 
 private:
-	CController_PostProcess();
-	virtual ~CController_PostProcess() = default;
+	CCamera_Manager();
+	virtual ~CCamera_Manager() = default;
 
 public:
 	HRESULT Initialize(ID3D11Device* pDevice, ID3D11DeviceContext* pContext);

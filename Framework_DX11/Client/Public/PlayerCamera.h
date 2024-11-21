@@ -8,6 +8,8 @@ class CPlayerCamera :
 	public CCamera
 {
 public:
+	enum CAMERA_MODE { MODE_LERP, MODE_STATIC, MODE_END };
+
 	typedef struct : public CCamera::CAMERA_DESC {
 		class CPlayer* pPlayer = { nullptr };
 		_float			fSpeed = {};
@@ -19,7 +21,8 @@ private:
 	virtual ~CPlayerCamera() = default;
 
 public:
-	_bool Get_IsLerpEnd() { return m_isLerpEnd; }
+	_bool	Get_IsLerpEnd() { return m_isLerpEnd; }
+	void	Change_Mode(CAMERA_MODE eMode) { m_eCameraMode = eMode; }
 
 public:
 	virtual HRESULT Initialize_Prototype() override;
@@ -30,7 +33,8 @@ public:
 	virtual HRESULT Render() override;
 
 public:
-	void Control_Player(_float fTimeDelta);
+	void PlayerMove(_float fTimeDelta);
+	void PlayerLockOn(_float fTimeDelta);
 	void Control_Camera(_float fTimeDelta);
 
 	void Setting_CameraControl(_float3 vStartPos, _float3 vEndPos, _float3 vCameraAt, _float fFovy = 0.f, _bool isKeepAt = true);
@@ -38,7 +42,6 @@ public:
 	void Start_CameraControl();
 	void Start_CameraLerp(_float fLerpDuration);
 	void End_CameraControl();
-
 
 private:
 	HRESULT					Ready_Components();
@@ -61,6 +64,9 @@ private:
 	_bool					m_isLerp = { false };
 	_bool					m_isLerpEnd = { false };
 	_bool					m_isKeepAt = { false };
+
+
+	CAMERA_MODE				m_eCameraMode = { MODE_LERP };
 
 private:
 	void CameraShaking(_matrix WorldMatrix);

@@ -5,6 +5,7 @@
 #include "GameInstance.h"
 #include "GameInterface_Controller.h"
 #include "Effect_Manager.h"
+#include "Camera_Manager.h"
 
 CMainApp::CMainApp()
 	: m_pGameInstance { CGameInstance::Get_Instance() }
@@ -53,6 +54,8 @@ HRESULT CMainApp::Initialize()
 	// 정상 작동 확인 시 까지 주석처리 
 	if (FAILED(GET_GAMEINTERFACE->Initialize_GameInterface(&m_pDevice, &m_pContext, m_pGameInstance)))
 		return E_FAIL;
+
+	CCamera_Manager::Get_Instance()->Initialize(m_pDevice, m_pContext);
 
 	if (FAILED(Open_Level(LEVEL_LOGO)))
 		return E_FAIL;

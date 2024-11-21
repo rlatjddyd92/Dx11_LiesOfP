@@ -34,7 +34,7 @@ private:
 	class CController_EffectTool*		m_pController_EffectTool = { nullptr };
 	class CController_UITool*			m_pController_UITool = { nullptr };
 	class CController_AnimationTool*	m_pController_AnimationTool = { nullptr };
-	class CController_PostProcess*		m_pController_PostProcess = { nullptr };
+	class CCamera_Manager*		m_pController_PostProcess = { nullptr };
 
 private:
 	void Update_ImGui();

@@ -2,6 +2,8 @@
 #include "..\Public\Player.h"
 
 #include "GameInstance.h"
+#include "Layer.h"
+
 #include "Camera.h"
 #include "Weapon.h"
 #include "Weapon_Scissor.h"
@@ -100,6 +102,9 @@ void CPlayer::Priority_Update(_float fTimeDelta)
 	{
 		m_fGuardTime = fTimeDelta;
 	}
+
+	if (KEY_TAP(KEY::WHEELBUTTON))
+		LockOnOff();
 
 	for (auto& pEffect : m_EffectList)
 	{
@@ -349,6 +354,76 @@ void CPlayer::Combine_Scissor()
 	dynamic_cast<CWeapon_Scissor*>(m_pWeapon[WEP_SCISSOR])->Change_CombineMode();
 }
 
+void CPlayer::Chnage_CameraMode(CPlayerCamera::CAMERA_MODE eMode)
+{
+	m_pPlayerCamera->Change_Mode(eMode);
+}
+
+void CPlayer::LockOnOff()
+{
+	if (!m_isLockOn)
+	{
+		m_pTargetMonster = Find_TargetMonster();
+		if (nullptr == m_pTargetMonster)
+		{
+			// 카메라를 플레이어 뒤로 회전
+		}
+		else
+		{
+			m_isLockOn = true;
+		}
+	}
+	else
+	{
+		m_isLockOn = false;
+	}
+}
+
+CPawn* CPlayer::Find_TargetMonster()
+{
+	if (nullptr == m_pGameInstance->Find_Layer(LEVEL_GAMEPLAY, TEXT("Layer_Monster")))
+		return nullptr;
+
+	list<CGameObject*> ObjectList = m_pGameInstance->Find_Layer(LEVEL_GAMEPLAY, TEXT("Layer_Monster"))->Get_ObjectList();
+
+	if (ObjectList.size() <= 0)
+		return nullptr;
+
+	CGameObject* pNearObject = { nullptr };
+
+	_vector vDistance = XMVectorSet(0.f, 0.f, 0.f, 0.f);
+	_float  fDistance = -1.f;
+
+	for (auto& Object : ObjectList)
+	{
+		if (!Object->IsActive())
+			continue;
+
+		_vector vOwnerPos = m_pTransformCom->Get_State(CTransform::STATE_POSITION);
+		_vector vFindObjPos = Object->Get_Transform()->Get_State(CTransform::STATE_POSITION);
+
+		vDistance = (vOwnerPos - vFindObjPos);
+
+		if (fDistance < 0.f)
+		{
+			pNearObject = Object;
+
+			XMStoreFloat(&fDistance, XMVector3Length(vDistance));
+			continue;
+		}
+
+		_float fNewDistance;
+		XMStoreFloat(&fNewDistance, XMVector3Length(vDistance));
+
+		if (fNewDistance < fDistance)
+		{
+			pNearObject = Object;
+			fDistance = fNewDistance;
+		}
+	}
+
+	return dynamic_cast<CPawn*>(pNearObject);
+}
 HRESULT CPlayer::Ready_Weapon()
 {
 	CWeapon::WEAPON_DESC		WeaponDesc{};

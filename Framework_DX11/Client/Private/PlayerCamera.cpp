@@ -4,6 +4,7 @@
 #include "GameInstance.h"
 
 #include "Player.h"
+#include "Fsm.h"
 
 CPlayerCamera::CPlayerCamera(ID3D11Device* pDevice, ID3D11DeviceContext* pContext)
 	: CCamera{ pDevice, pContext }
@@ -32,7 +33,7 @@ HRESULT CPlayerCamera::Initialize(void* pArg)
 	_Vec3 vInitPos = m_pPlayer->Get_Transform()->Get_State(CTransform::STATE::STATE_POSITION) + _Vec4(0.0f, 5.0f, -3.0f, 0.f);
 	m_pTransformCom->Set_State(CTransform::STATE::STATE_POSITION, vInitPos);
 
-	m_vOffset = _Vec3(0.f, 1.6f, 0.f);
+	m_vOffset = _Vec3(0.f, 1.8f, 0.f);
 
 	m_fRadian = m_vOffset.Dot(_Vec3(0.f, 1.f, 0.f));
 	m_fRadian = acosf(m_fRadian);
@@ -52,8 +53,16 @@ void CPlayerCamera::Update(_float fTimeDelta)
 		return;
 
 
-	Control_Player(fTimeDelta);
+	if (m_pPlayer->Get_IsLockOn())
+	{
+		PlayerLockOn(fTimeDelta);
+	}
+	else
+	{
+		PlayerMove(fTimeDelta);
+	}
 
+	Calculat_CascadeFrustum();
 }
 
 void CPlayerCamera::Late_Update(_float fTimeDelta)
@@ -65,279 +74,57 @@ HRESULT CPlayerCamera::Render()
 	return S_OK;
 }
 
-void CPlayerCamera::Control_Player(_float fTimeDelta)
+void CPlayerCamera::PlayerMove(_float fTimeDelta)
 {	
-	// 회전용 플레이어 포지션
-	_vector		vPlayerPosition = m_pPlayer->Get_Transform()->Get_State(CTransform::STATE_POSITION) + m_vOffset;
+	_long      MouseMove = { 0 };
 
-	_matrix		WorldMatrix = m_pTransformCom->Get_WorldMatrix();
+	_vector vPlayerPos = m_pPlayer->Get_Transform()->Get_State(CTransform::STATE_POSITION);
 
-	/* 플레이어 우치로 이동한 카메라의 월드 행렬 */
-	_matrix RotationMatrix = m_pTransformCom->Get_WorldMatrix();
-	RotationMatrix = XMMatrixTranslationFromVector(vPlayerPosition);
+	vPlayerPos.m128_f32[1] += 1.65f;
 
-	// 플레이어 위치로 변환한 행렬을 로컬로 내림
-	_matrix		LocalMatrix = WorldMatrix * XMMatrixInverse(nullptr, RotationMatrix);
-
-#pragma region 카메라 회전
-
-	POINT		ptMouse = m_pGameInstance->Get_MosePos();
-
-	_long	MouseMove = { 0 };
-
-	// 좌 우
-	if (MouseMove = ptMouse.x - m_ptOldMousePos.x)
+	if (XMVectorGetY(vPlayerPos) > -5.f)
 	{
-		if(abs(MouseMove) > 1)
-			m_fCurrentRotationX = MouseMove * 0.002f;
+		if (MouseMove = m_pGameInstance->Get_DIMouseMove(DIMM_X))
+		{
+			m_pTransformCom->Orbit(XMVectorSet(0.f, 1.f, 0.f, 0.f), vPlayerPos, 0.3f, 2.f, fTimeDelta * MouseMove * 0.1f);
+		}
+		if (MouseMove = m_pGameInstance->Get_DIMouseMove(DIMM_Y))
+		{
+			m_pTransformCom->Orbit(m_pTransformCom->Get_State(CTransform::STATE_RIGHT), vPlayerPos, 0.6f, 2.f, fTimeDelta * MouseMove * 0.1f);
+		}
 
-		if (fabs(m_fCurrentRotationX) > 0.03f)
-			m_fCurrentRotationX = (m_fCurrentRotationX / fabs(m_fCurrentRotationX)) * 0.05f;
-	}
-	else
-	{
-		m_fCurrentRotationX = 0.0f;
+		m_pTransformCom->Set_State(CTransform::STATE_POSITION, vPlayerPos - XMVector3Normalize(m_pTransformCom->Get_State(CTransform::STATE_LOOK)) * 2.5f);
 	}
 
-	// 상 하
-	if (MouseMove = ptMouse.y - m_ptOldMousePos.y)
+	m_pTransformCom->LookAt(vPlayerPos);
+}
+
+void CPlayerCamera::PlayerLockOn(_float fTimeDelta)
+{
+	if (nullptr == m_pPlayer->Get_TargetMonster())
+		return;
+
+	_long      MouseMove = { 0 };
+
+	_vector vPlayerPos = m_pPlayer->Get_Transform()->Get_State(CTransform::STATE_POSITION);
+
+	vPlayerPos.m128_f32[1] += 1.95f;
+
+	if (XMVectorGetY(vPlayerPos) > -5.f)
 	{
-		if (abs(MouseMove) > 1)
-			m_fCurrentRotationY = MouseMove * 0.002f;
+		if (MouseMove = m_pGameInstance->Get_DIMouseMove(DIMM_X))
+		{
+			m_pTransformCom->Orbit(XMVectorSet(0.f, 1.f, 0.f, 0.f), vPlayerPos, 0.3f, 2.f, fTimeDelta * MouseMove * 0.1f);
+		}
+		if (MouseMove = m_pGameInstance->Get_DIMouseMove(DIMM_Y))
+		{
+			m_pTransformCom->Orbit(m_pTransformCom->Get_State(CTransform::STATE_RIGHT), vPlayerPos, 0.6f, 2.f, fTimeDelta * MouseMove * 0.1f);
+		}
 
-		if (fabs(m_fCurrentRotationY) > 0.03f)
-			m_fCurrentRotationY = (m_fCurrentRotationY / fabs(m_fCurrentRotationY)) * 0.05f;
-	}
-	else if (MouseMove == 0)
-	{
-		m_fCurrentRotationY = 0.0f;
-	}
-
-	// 회전이 있으면
-	if (m_fCurrentRotationX)
-	{
-		LocalMatrix = LocalMatrix * XMMatrixRotationQuaternion(XMQuaternionRotationAxis(XMVectorSet(0.0f, 1.0f, 0.f, 0.f), m_fCurrentRotationX));
-	}
-
-	if (m_fCurrentRotationY)
-	{
-		LocalMatrix = LocalMatrix * XMMatrixRotationQuaternion(XMQuaternionRotationAxis(LocalMatrix.r[0], m_fCurrentRotationY));
-	}
-
-#pragma endregion
-
-	// 회전 상태를 저장해둔 월드 행렬임
-	WorldMatrix = LocalMatrix * RotationMatrix;
-
-	_vector vOffset = WorldMatrix.r[3] - vPlayerPosition;
-	vOffset = XMVector3Normalize(vOffset);
-
-	_vector		vPlayerUp = XMVector3Normalize(WorldMatrix.r[1]);
-	_vector		vUp = XMVectorSet(0.f, 1.f, 0.f, 0.f);
-	//XMVector3Normalize(m_pPlayer->Get_Transform()->Get_State(CTransform::STATE_UP));
-
-// 현재 카메라 각도
-	if (m_fCurrentRotationY)
-		m_fRadian = acosf(XMVectorGetX(XMVector3Dot(vUp, vOffset)));
-
-	_float fAngle = XMConvertToDegrees(m_fRadian);
-
-	if (fAngle < 30.0f)
-	{
-		m_fRadian = XMConvertToRadians(30.0f);
-		m_fCurrentRotationY = 0.0f;
-	}
-	if (fAngle > 97.f)
-	{
-		m_fRadian = XMConvertToRadians(97.f);
-		m_fCurrentRotationY = 0.0f;
+		m_pTransformCom->Set_State(CTransform::STATE_POSITION, vPlayerPos - XMVector3Normalize(m_pTransformCom->Get_State(CTransform::STATE_LOOK)) * 2.5f);
 	}
 
-#pragma region 플레이어 따라가기
-
-
-	_vector vRight = WorldMatrix.r[3] - vPlayerPosition;			// 직선 벡터
-	vRight = XMVector3Normalize(XMVector3Cross(vRight, vUp));		// 외적으로 right 벡터 구하기
-
-	// 카메라의 목표 위치를 설정함
-	_vector vTargetPosition = XMVector3Rotate(vUp, XMQuaternionRotationAxis(-vRight, m_fRadian));
-	vTargetPosition = vPlayerPosition + vTargetPosition * 3.f;
-
-	_vector vTargetLook = -vOffset;
-	vTargetLook = XMVector3Normalize(vTargetLook);
-
-	_vector vCameraPosition = WorldMatrix.r[3];
-	_vector vCameraLook = XMVector3Normalize(WorldMatrix.r[2]);
-
-	_float fLerpSpeed = 8.f * fTimeDelta;
-
-	_vector vFinalPosition = XMVectorLerp(vCameraPosition, vTargetPosition, fLerpSpeed);
-	_vector vFinalLook = XMVectorLerp(vCameraLook, vTargetLook, fLerpSpeed);
-	vFinalLook = XMVector3Normalize(vFinalLook);
-
-	XMVECTOR vFinalRight = XMVector3Cross(vUp, vFinalLook);
-	vFinalRight = XMVector3Normalize(vFinalRight);
-
-	XMVECTOR vFinalUp = XMVector3Cross(vFinalLook, vFinalRight);
-	vFinalUp = XMVector3Normalize(vFinalUp);
-
-	WorldMatrix.r[0] = vFinalRight;
-	WorldMatrix.r[1] = vFinalUp;
-	WorldMatrix.r[2] = vFinalLook;
-	WorldMatrix.r[3] = vFinalPosition;
-#pragma endregion
-
-	m_pTransformCom->Set_WorldMatrix(WorldMatrix);
-
-	m_ptOldMousePos = ptMouse;
-
-//	 //회전용 플레이어 포지션
-//	_Vec4		vPlayerPosition = m_pPlayer->Get_Transform()->Get_State(CTransform::STATE_POSITION);
-//
-//	_Matrix		WorldMatrix = m_pTransformCom->Get_WorldMatrix();
-//
-//	/* 플레이어 우치로 이동한 카메라의 월드 행렬 */
-//	_Matrix RotationMatrix = m_pTransformCom->Get_WorldMatrix();
-//	RotationMatrix = XMMatrixTranslationFromVector(vPlayerPosition);
-//
-//	// 플레이어 위치로 변환한 행렬을 로컬로 내림
-//	_Matrix		LocalMatrix = WorldMatrix * XMMatrixInverse(nullptr, RotationMatrix);
-//
-//#pragma region 카메라 회전
-//
-//	POINT		ptMouse = m_pGameInstance->Get_MosePos();
-//
-//	_long	MouseMove = { 0 };
-//
-//	// 좌 우
-//	if (MouseMove = ptMouse.x - m_ptOldMousePos.x)
-//	{
-//		if(abs(MouseMove) > 1)
-//			m_fCurrentRotationX = MouseMove * 0.002f;
-//
-//		if (fabs(m_fCurrentRotationX) > 0.03f)
-//			m_fCurrentRotationX = (m_fCurrentRotationX / fabs(m_fCurrentRotationX)) * 0.05f;
-//	}
-//	else
-//	{
-//		m_fCurrentRotationX = 0.0f;
-//	}
-//
-//	// 상 하
-//	if (MouseMove = ptMouse.y - m_ptOldMousePos.y)
-//	{
-//		if (abs(MouseMove) > 1)
-//			m_fCurrentRotationY = MouseMove * 0.002f;
-//
-//		if (fabs(m_fCurrentRotationY) > 0.03f)
-//			m_fCurrentRotationY = (m_fCurrentRotationY / fabs(m_fCurrentRotationY)) * 0.05f;
-//	}
-//	else if (MouseMove == 0)
-//	{
-//		m_fCurrentRotationY = 0.0f;
-//	}
-//
-//	// 회전이 있으면
-//	if (m_fCurrentRotationX)
-//	{
-//		LocalMatrix = LocalMatrix * XMMatrixRotationQuaternion(XMQuaternionRotationAxis(XMVectorSet(0.0f, 1.0f, 0.f, 0.f), m_fCurrentRotationX));
-//	}
-//
-//	if (m_fCurrentRotationY)
-//	{
-//		LocalMatrix = LocalMatrix * XMMatrixRotationQuaternion(XMQuaternionRotationAxis(LocalMatrix.Right(), m_fCurrentRotationY));
-//	}
-//
-//	WorldMatrix = LocalMatrix * RotationMatrix;
-//#pragma endregion
-//
-//
-//	_Vec3		vOffset = WorldMatrix.Translation() - vPlayerPosition;
-//	vOffset.Normalize();
-//	_Vec3		vUp = _Vec3(0.f, 1.f, 0.f);
-//
-//	if (m_fCurrentRotationY)
-//		m_fRadian = acosf(vOffset.Dot(vUp));
-//
-//	_float fAngle = XMConvertToDegrees(m_fRadian);
-//
-//	if (fAngle < 30.0f)
-//	{
-//		m_fRadian = XMConvertToRadians(30.0f);
-//		m_fCurrentRotationY = 0.0f;
-//	}
-//	if (fAngle > 97.f)
-//	{
-//		m_fRadian = XMConvertToRadians(97.f);
-//		m_fCurrentRotationY = 0.0f;
-//	}
-//
-//	//_Vec3 vRight = WorldMatrix.Translation() - vPlayerPosition;			// 직선 벡터
-//	//vRight = XMVector3Normalize(XMVector3Cross(vRight, vUp));		// 외적으로 right 벡터 구하기
-//
-//	//// 카메라의 목표 위치를 설정함
-//	//_Vec3 vTargetPosition = XMVector3Rotate(vUp, XMQuaternionRotationAxis(-vRight, m_fRadian));
-//	//vTargetPosition = vPlayerPosition + vTargetPosition * 5.f;
-//
-//	//_Vec3 vTargetLook = -vOffset;
-//
-//	//_Vec3 vCameraPosition = WorldMatrix.Translation();
-//	//_Vec3 vCameraLook = XMVector3Normalize(WorldMatrix.Forward());
-//
-//	//_float fLerpSpeed = 1.f * fTimeDelta;
-//
-//	//_Vec4 vFinalPosition = XMVectorLerp(vCameraPosition, vTargetPosition, fLerpSpeed);
-//	//vFinalPosition.w = 1.f;
-//	//_Vec4 vFinalLook = XMVectorLerp(vCameraLook, vTargetLook, fLerpSpeed);
-//	//vFinalLook = XMVector3Normalize(vFinalLook);
-//
-//	//_Vec4 vFinalRight = XMVector3Cross(vUp, vFinalLook);
-//	//vFinalRight = XMVector3Normalize(vFinalRight);
-//
-//	//_Vec4 vFinalUp = XMVector3Cross(vFinalLook, vFinalRight);
-//	//vFinalUp = XMVector3Normalize(vFinalUp);
-//
-//	//_matrix FinalWorldMatrix;
-//	//FinalWorldMatrix.r[0] = vFinalRight;
-//	//FinalWorldMatrix.r[1] = vFinalUp;
-//	//FinalWorldMatrix.r[2] = vFinalLook;
-//	//FinalWorldMatrix.r[3] = vFinalPosition;
-//
-//	//m_pTransformCom->Set_WorldMatrix(FinalWorldMatrix);
-//	// 
-//
-//	_vector vRight = WorldMatrix.Translation() - vPlayerPosition;			// 직선 벡터
-//	vRight = XMVector3Normalize(XMVector3Cross(vRight, vUp));		// 외적으로 right 벡터 구하기
-//
-//	// 카메라의 목표 위치를 설정함
-//	_vector vTargetPosition = XMVector3Rotate(vUp, XMQuaternionRotationAxis(-vRight, m_fRadian));
-//	vTargetPosition = vPlayerPosition + vTargetPosition * 5.f;
-//
-//	_vector vTargetLook = -vOffset;
-//	vTargetLook = XMVector3Normalize(vTargetLook);
-//
-//	_vector vCameraPosition = WorldMatrix.Translation();
-//	_vector vCameraLook = XMVector3Normalize(WorldMatrix.Forward());
-//
-//	_float fLerpSpeed = 8.f * fTimeDelta;
-//
-//	_vector vFinalPosition = XMVectorLerp(vCameraPosition, vTargetPosition, fLerpSpeed);
-//	_vector vFinalLook = XMVectorLerp(vCameraLook, vTargetLook, fLerpSpeed);
-//	vFinalLook = XMVector3Normalize(vFinalLook);
-//
-//	XMVECTOR vFinalRight = XMVector3Cross(vUp, vFinalLook);
-//	vFinalRight = XMVector3Normalize(vFinalRight);
-//
-//	XMVECTOR vFinalUp = XMVector3Cross(vFinalLook, vFinalRight);
-//	vFinalUp = XMVector3Normalize(vFinalUp);
-//
-//	WorldMatrix.r[0] = vFinalRight;
-//	WorldMatrix.r[1] = vFinalUp;
-//	WorldMatrix.r[2] = vFinalLook;
-//	WorldMatrix.r[3] = vFinalPosition;
-//
-//	//m_pTransformCom->Set_WorldMatrix(WorldMatrix);
-//	m_ptOldMousePos = ptMouse;
+	m_pTransformCom->LookAt(m_pPlayer->Get_TargetMonster()->Get_Transform()->Get_State(CTransform::STATE_POSITION));
 }
 
 void CPlayerCamera::Control_Camera(_float fTimeDelta)

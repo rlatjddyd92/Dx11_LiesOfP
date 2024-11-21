@@ -37,8 +37,6 @@ HRESULT CState_Player_TH_Dash::Start_State(void* pArg)
 
     m_pPlayer->Set_IsInvicible(true);
     m_pPlayer->Set_MoveSpeed(5.f);
-
-    //m_pPlayer->Get_RigidBody()->Set_Friction(_float3(10.f, 0.f, 10.f));
     *m_pResetRootMove = true;
 
     return S_OK;
@@ -82,7 +80,7 @@ void CState_Player_TH_Dash::Select_DashAnimation()
     }
     else
     {
-        if (m_pFsm->Get_PrevState() == CPlayer::OH_RUN || m_pFsm->Get_PrevState() == CPlayer::OH_SPRINT)
+        if (m_pFsm->Get_PrevState() == CPlayer::TH_RUN || m_pFsm->Get_PrevState() == CPlayer::TH_SPRINT)
         {
             m_pPlayer->Change_Animation(m_iAnimation_Dash[DASH_F], false);
             return;

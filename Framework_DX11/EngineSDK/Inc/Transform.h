@@ -62,6 +62,8 @@ public:
 	void		Set_NewUp(_Vec3 vNewUp);
 	void		Set_NewLook(_Vec3 vNewLook);
 
+	void		Orbit(_vector vAxis, _vector vCenter, _float fLimit, _float fDistance, _float fTimeDelta);
+
 public:
 	HRESULT Bind_ShaderResource(class CShader* pShader, const _char* pConstantName);
 

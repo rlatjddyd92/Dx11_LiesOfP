@@ -188,7 +188,7 @@ PS_OUT PS_MAIN_EFFECT(PS_IN In)
     //vColor = float4(vEffect.rgb + vColor.rgb, 1.f);
     
     //Out.vColor = float4(vEffect.rgb * vEffect.a + vColor.rgb * (1.f - vEffect.a), 1.f);
-    Out.vColor = vBack + vEffect + vEffectBlur;
+    Out.vColor = vBack + vEffect;
     
     return Out;
 }

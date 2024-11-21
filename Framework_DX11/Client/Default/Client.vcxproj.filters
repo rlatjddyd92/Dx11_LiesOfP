@@ -469,6 +469,9 @@
     <Filter Include="02.GameObjects\99.Camera\PlayerCamera">
       <UniqueIdentifier>{c0a56ddd-ef20-4590-9ba7-7d79e86e6ae0}</UniqueIdentifier>
     </Filter>
+    <Filter Include="02.GameObjects\99.Camera\00.Manager">
+      <UniqueIdentifier>{26c9c449-baa9-42b6-bafb-bd80360f756b}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Client.h">
@@ -804,6 +807,9 @@
     <ClInclude Include="..\Public\PlayerCamera.h">
       <Filter>02.GameObjects\99.Camera\PlayerCamera</Filter>
     </ClInclude>
+    <ClInclude Include="..\Public\Camera_Manager.h">
+      <Filter>02.GameObjects\99.Camera\00.Manager</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Client.cpp">
@@ -1108,6 +1114,9 @@
     </ClCompile>
     <ClCompile Include="..\Private\PlayerCamera.cpp">
       <Filter>02.GameObjects\99.Camera\PlayerCamera</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Private\Camera_Manager.cpp">
+      <Filter>02.GameObjects\99.Camera\00.Manager</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
