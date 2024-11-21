@@ -88,6 +88,8 @@ HRESULT CUIPage_LevelUp::Ready_UIPart_Group_Control()
 {
 	__super::Ready_UIPart_Group_Control();
 
+
+
 	return S_OK;
 }
 

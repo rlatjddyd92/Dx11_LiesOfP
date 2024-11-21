@@ -60,6 +60,9 @@ void CUIPage_Skill::Update(_float fTimeDelta)
 void CUIPage_Skill::Late_Update(_float fTimeDelta)
 {
 	__super::Late_Update(fTimeDelta);
+
+	for (auto& iter : m_vec_Group_Ctrl)
+		__super::UpdatePart_ByControl(iter);
 }
 
 HRESULT CUIPage_Skill::Render()
@@ -70,7 +73,6 @@ HRESULT CUIPage_Skill::Render()
 void CUIPage_Skill::OpenAction()
 {
 	__super::OpenAction();
-	GET_GAMEINTERFACE->SetIngame(false);
 }
 
 void CUIPage_Skill::CloseAction()
@@ -88,6 +90,19 @@ CHECK_MOUSE CUIPage_Skill::Check_Page_Action(_float fTimeDelta)
 HRESULT CUIPage_Skill::Ready_UIPart_Group_Control()
 {
 	__super::Ready_UIPart_Group_Control();
+
+	m_vec_Group_Ctrl.resize(_int(PART_GROUP::GROUP_END));
+
+	for (auto& iter : m_vec_Group_Ctrl)
+		iter = new UG_CTRL;
+
+	for (_int i = 0; i < m_vecPart.size(); ++i)
+	{
+		if (m_vecPart[i]->iGroupIndex != -1)
+			m_vec_Group_Ctrl[m_vecPart[i]->iGroupIndex]->PartIndexlist.push_back(i);
+	}
+
+	m_bRender = false;
 
 	return S_OK;
 }

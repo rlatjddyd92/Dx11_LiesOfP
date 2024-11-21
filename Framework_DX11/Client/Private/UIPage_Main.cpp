@@ -70,7 +70,6 @@ HRESULT CUIPage_Main::Render()
 void CUIPage_Main::OpenAction()
 {
 	__super::OpenAction();
-	GET_GAMEINTERFACE->SetIngame(false);
 }
 
 void CUIPage_Main::CloseAction()

@@ -60,6 +60,9 @@ void CUIPage_ToolTip::Update(_float fTimeDelta)
 void CUIPage_ToolTip::Late_Update(_float fTimeDelta)
 {
 	__super::Late_Update(fTimeDelta);
+
+	for (auto& iter : m_vec_Group_Ctrl)
+		__super::UpdatePart_ByControl(iter);
 }
 
 HRESULT CUIPage_ToolTip::Render()
@@ -87,6 +90,19 @@ CHECK_MOUSE CUIPage_ToolTip::Check_Page_Action(_float fTimeDelta)
 HRESULT CUIPage_ToolTip::Ready_UIPart_Group_Control()
 {
 	__super::Ready_UIPart_Group_Control();
+
+	m_vec_Group_Ctrl.resize(_int(PART_GROUP::GROUP_END));
+
+	for (auto& iter : m_vec_Group_Ctrl)
+		iter = new UG_CTRL;
+
+	for (_int i = 0; i < m_vecPart.size(); ++i)
+	{
+		if (m_vecPart[i]->iGroupIndex != -1)
+			m_vec_Group_Ctrl[m_vecPart[i]->iGroupIndex]->PartIndexlist.push_back(i);
+	}
+
+	m_bRender = false;
 
 	return S_OK;
 }

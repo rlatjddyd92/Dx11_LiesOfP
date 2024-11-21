@@ -84,8 +84,6 @@ HRESULT CUIPage_Play::Render()
 void CUIPage_Play::OpenAction()
 {
 	__super::OpenAction();
-	GET_GAMEINTERFACE->SetIngame(true);
-	
 }
 
 void CUIPage_Play::CloseAction()

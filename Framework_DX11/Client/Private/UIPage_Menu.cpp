@@ -78,8 +78,6 @@ void CUIPage_Menu::OpenAction()
 {
 	__super::OpenAction();
 
-	GET_GAMEINTERFACE->SetIngame(true);
-
 	if ((m_eFocus_Group < PART_GROUP::GROUP_MENU_EQUIP) || (m_eFocus_Group > PART_GROUP::GROUP_MENU_OPTION))
 		m_eFocus_Group = PART_GROUP::GROUP_MENU_EQUIP;
 
@@ -142,6 +140,30 @@ void CUIPage_Menu::Focus_Update(_float fTimeDelta)
 
 			// 여기에 마우스 액션 넣기
 
+			if (KEY_TAP(KEY::LBUTTON))
+			{
+				switch (i)
+				{
+				case _int(PART_GROUP::GROUP_MENU_EQUIP):
+					GET_GAMEINTERFACE->SwicthPage(UIPAGE::PAGE_MENU, UIPAGE::PAGE_EQUIP);
+					break;
+				/*case _int(PART_GROUP::GROUP_MENU_INVEN):
+					GET_GAMEINTERFACE->SwicthPage(UIPAGE::PAGE_MENU, UIPAGE::PAGE_INVEN);
+					break;
+				case _int(PART_GROUP::GROUP_MENU_CHARACTOR):
+					GET_GAMEINTERFACE->SwicthPage(UIPAGE::PAGE_MENU, UIPAGE::PAGE_STAT);
+					break;
+				case _int(PART_GROUP::GROUP_MENU_HEART):
+					GET_GAMEINTERFACE->SwicthPage(UIPAGE::PAGE_MENU, UIPAGE::PAGE_SKILL);
+					break;*/
+				default:
+					break;
+				}
+
+
+
+				
+			}
 
 
 

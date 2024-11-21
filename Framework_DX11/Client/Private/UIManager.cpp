@@ -413,7 +413,7 @@ void CUIManager::UIControl_Inven(_float fTimeDelta)
 		SwicthPage(UIPAGE::PAGE_INVEN, UIPAGE::PAGE_MENU);
 	else
 	{
-		m_pUIPage_Menu->Check_Page_Action(fTimeDelta);
+		m_pUIPage_Inven->Check_Page_Action(fTimeDelta);
 	}
 }
 
@@ -423,7 +423,7 @@ void CUIManager::UIControl_Equip(_float fTimeDelta)
 		SwicthPage(UIPAGE::PAGE_EQUIP, UIPAGE::PAGE_MENU);
 	else
 	{
-		m_pUIPage_Menu->Check_Page_Action(fTimeDelta);
+		m_pUIPage_Equip->Check_Page_Action(fTimeDelta);
 	}
 }
 
@@ -433,7 +433,7 @@ void CUIManager::UIControl_Stat(_float fTimeDelta)
 		SwicthPage(UIPAGE::PAGE_STAT, UIPAGE::PAGE_MENU);
 	else
 	{
-		m_pUIPage_Menu->Check_Page_Action(fTimeDelta);
+		m_pUIPage_Stat->Check_Page_Action(fTimeDelta);
 	}
 }
 
@@ -447,7 +447,7 @@ void CUIManager::UIControl_Skill(_float fTimeDelta)
 		SwicthPage(UIPAGE::PAGE_SKILL, UIPAGE::PAGE_MENU);
 	else
 	{
-		m_pUIPage_Menu->Check_Page_Action(fTimeDelta);
+		m_pUIPage_Skill->Check_Page_Action(fTimeDelta);
 	}
 }
 
