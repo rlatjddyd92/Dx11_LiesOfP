@@ -86,17 +86,22 @@ void CPlayerCamera::PlayerMove(_float fTimeDelta)
 	{
 		if (MouseMove = m_pGameInstance->Get_DIMouseMove(DIMM_X))
 		{
-			m_pTransformCom->Orbit(XMVectorSet(0.f, 1.f, 0.f, 0.f), vPlayerPos, 0.3f, 2.f, fTimeDelta * MouseMove * 0.1f);
+			m_pTransformCom->Orbit(XMVectorSet(0.f, 1.f, 0.f, 0.f), vPlayerPos, 0.3f, 2.5f, fTimeDelta * MouseMove * 0.1f);
 		}
 		if (MouseMove = m_pGameInstance->Get_DIMouseMove(DIMM_Y))
 		{
-			m_pTransformCom->Orbit(m_pTransformCom->Get_State(CTransform::STATE_RIGHT), vPlayerPos, 0.6f, 2.f, fTimeDelta * MouseMove * 0.1f);
+			m_pTransformCom->Orbit(m_pTransformCom->Get_State(CTransform::STATE_RIGHT), vPlayerPos, 0.6f, 2.5f, fTimeDelta * MouseMove * 0.1f);
 		}
+		_vector vTargetPos = vPlayerPos - XMVector3Normalize(m_pTransformCom->Get_State(CTransform::STATE_LOOK)) * 2.5f;
 
-		m_pTransformCom->Set_State(CTransform::STATE_POSITION, vPlayerPos - XMVector3Normalize(m_pTransformCom->Get_State(CTransform::STATE_LOOK)) * 2.5f);
+		// Lerp로 카메라 위치를 부드럽게 이동
+		_vector vCurrentPos = m_pTransformCom->Get_State(CTransform::STATE_POSITION);
+		_vector vNewPos = XMVectorLerp(vCurrentPos, vTargetPos, 0.1f); // 보간 비율 0.1
+
+		m_pTransformCom->Set_State(CTransform::STATE_POSITION, vNewPos);
 	}
 
-	m_pTransformCom->LookAt(vPlayerPos);
+	//m_pTransformCom->LookAt(vPlayerPos);
 }
 
 void CPlayerCamera::PlayerLockOn(_float fTimeDelta)
@@ -104,27 +109,21 @@ void CPlayerCamera::PlayerLockOn(_float fTimeDelta)
 	if (nullptr == m_pPlayer->Get_TargetMonster())
 		return;
 
+	m_pTransformCom->LookAt(m_pPlayer->Get_TargetMonster()->Get_Transform()->Get_State(CTransform::STATE_POSITION));
+
 	_long      MouseMove = { 0 };
 
 	_vector vPlayerPos = m_pPlayer->Get_Transform()->Get_State(CTransform::STATE_POSITION);
 
 	vPlayerPos.m128_f32[1] += 1.95f;
 
-	if (XMVectorGetY(vPlayerPos) > -5.f)
-	{
-		if (MouseMove = m_pGameInstance->Get_DIMouseMove(DIMM_X))
-		{
-			m_pTransformCom->Orbit(XMVectorSet(0.f, 1.f, 0.f, 0.f), vPlayerPos, 0.3f, 2.f, fTimeDelta * MouseMove * 0.1f);
-		}
-		if (MouseMove = m_pGameInstance->Get_DIMouseMove(DIMM_Y))
-		{
-			m_pTransformCom->Orbit(m_pTransformCom->Get_State(CTransform::STATE_RIGHT), vPlayerPos, 0.6f, 2.f, fTimeDelta * MouseMove * 0.1f);
-		}
+	_vector vTargetPos = vPlayerPos - XMVector3Normalize(m_pTransformCom->Get_State(CTransform::STATE_LOOK)) * 2.5f;
 
-		m_pTransformCom->Set_State(CTransform::STATE_POSITION, vPlayerPos - XMVector3Normalize(m_pTransformCom->Get_State(CTransform::STATE_LOOK)) * 2.5f);
-	}
+	// Lerp로 카메라 위치를 부드럽게 이동
+	_vector vCurrentPos = m_pTransformCom->Get_State(CTransform::STATE_POSITION);
+	_vector vNewPos = XMVectorLerp(vCurrentPos, vTargetPos, 0.1f); // 보간 비율 0.1
 
-	m_pTransformCom->LookAt(m_pPlayer->Get_TargetMonster()->Get_Transform()->Get_State(CTransform::STATE_POSITION));
+	m_pTransformCom->Set_State(CTransform::STATE_POSITION, vNewPos);
 }
 
 void CPlayerCamera::Control_Camera(_float fTimeDelta)
