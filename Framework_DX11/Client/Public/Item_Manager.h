@@ -323,6 +323,11 @@ private:
 	ITEM_RESULT InputItem_Inven(ITEM* pItem, _uint iCount = 1); // <- 이미 게임에 존재하는 아이템을 인벤에 넣는다 
 
 
+	// 날 + 자루 합체
+	// 아래 내용은 추후 필요하면 퍼블릭으로 이동
+	ITEM_RESULT Assemble_Blade_Handle(_int iBladeIndex, _int iHandleIndex);
+
+
 
 private:
 	CGameInstance* m_pGameInstance = { nullptr };

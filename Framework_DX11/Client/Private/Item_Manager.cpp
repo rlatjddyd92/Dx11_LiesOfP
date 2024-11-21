@@ -45,6 +45,28 @@ ITEM_RESULT CItem_Manager::InputItem_Inven(ITEM* pItem, _uint iCount)
 	return ITEM_RESULT::RESULT_SUCCESS;
 }
 
+ITEM_RESULT CItem_Manager::Assemble_Blade_Handle(_int iBladeIndex, _int iHandleIndex)
+{
+	ITEM* pBlade = m_vecArray_Inven[_int(INVEN_ARRAY_TYPE::TYPE_BLADE_PART)]->Get_Item_Info(iBladeIndex);
+	ITEM* pHandle = m_vecArray_Inven[_int(INVEN_ARRAY_TYPE::TYPE_HANDEL_PART)]->Get_Item_Info(iHandleIndex);
+
+	if ((pBlade == nullptr) || (pHandle == nullptr))
+		return ITEM_RESULT::RESULT_INVALID;
+
+	if (m_vecArray_Inven[_int(INVEN_ARRAY_TYPE::TYPE_WEAPON_NORMAL_BLADE)]->iNextIndex != m_vecArray_Inven[_int(INVEN_ARRAY_TYPE::TYPE_WEAPON_NORMAL_HANDLE)]->iNextIndex)
+		return ITEM_RESULT::RESULT_INVALID;
+
+	if (m_vecArray_Inven[_int(INVEN_ARRAY_TYPE::TYPE_WEAPON_NORMAL_BLADE)]->Input_Item(pBlade, 1) == ITEM_RESULT::RESULT_INVALID)
+		return ITEM_RESULT::RESULT_INVALID;
+	if (m_vecArray_Inven[_int(INVEN_ARRAY_TYPE::TYPE_WEAPON_NORMAL_HANDLE)]->Input_Item(pHandle, 1) == ITEM_RESULT::RESULT_INVALID)
+		return ITEM_RESULT::RESULT_INVALID;
+
+	m_vecArray_Inven[_int(INVEN_ARRAY_TYPE::TYPE_BLADE_PART)]->Remove_Item(iBladeIndex);
+	m_vecArray_Inven[_int(INVEN_ARRAY_TYPE::TYPE_HANDEL_PART)]->Remove_Item(iHandleIndex);
+
+	return ITEM_RESULT::RESULT_SUCCESS;
+}
+
 ITEM_RESULT CItem_Manager::EquipItem_Inven(INVEN_ARRAY_TYPE eIndex, EQUIP_SLOT eSlot, _uint iIndex)
 {
 	ITEM& NewItem = *(m_vecArray_Inven[_uint(eIndex)]->vecItemInfo[iIndex]);
@@ -204,6 +226,7 @@ HRESULT CItem_Manager::Initialize_Item()
 	_int iBefore = -1;
 	iStartRow = 2;
 	_bool bInputItem = true;
+	_bool bAssembleWeapon = false;
 
 	for (auto& iter : vecBuffer_ItemInitialze)
 	{
@@ -223,6 +246,12 @@ HRESULT CItem_Manager::Initialize_Item()
 			}
 			else
 				bInputItem = false;
+		}
+
+		if (!bAssembleWeapon)
+		{
+			Assemble_Blade_Handle(0, 0);
+			bAssembleWeapon = true;
 		}
 			
 		if (stoi(iter[2]) != -1)
