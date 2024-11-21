@@ -59,10 +59,14 @@ void CUIPage_Equip::Update(_float fTimeDelta)
 
 void CUIPage_Equip::Late_Update(_float fTimeDelta)
 {
+	Update_Equip_Page(fTimeDelta);
+	Update_ToolTip(fTimeDelta);
 
 	for (auto& iter : m_vec_Group_Ctrl)
 		__super::UpdatePart_ByControl(iter);
 
+	Update_Tap_Button(fTimeDelta);
+	Update_Item_Cell(fTimeDelta);
 
 	__super::Late_Update(fTimeDelta);
 }
@@ -86,6 +90,10 @@ CHECK_MOUSE CUIPage_Equip::Check_Page_Action(_float fTimeDelta)
 {
 	__super::Check_Page_Action(fTimeDelta);
 
+	Action_Equip_Page(fTimeDelta);
+	Action_Focus(fTimeDelta);
+
+
 	return CHECK_MOUSE::MOUSE_NONE;
 }
 
@@ -108,6 +116,229 @@ HRESULT CUIPage_Equip::Ready_UIPart_Group_Control()
 
 
 	return S_OK;
+}
+
+void CUIPage_Equip::Action_Equip_Page(_float fTimeDelta)
+{
+	for (_int i = 0; i < 3; ++i)
+	{
+		_Vec2 fPos = Check_Mouse_By_Part(*m_vecPart[__super::Get_Front_PartIndex_In_Control(_int(PART_GROUP::GROUP_TOP_TAP_BUTTON_0) + i)]);
+
+		if (fPos.x != -1.f)
+			m_iNow_Page = i;
+	}
+		
+	if (KEY_TAP(KEY::Q))
+	{
+		if (m_iNow_Page > 0)
+			--m_iNow_Page;
+	}
+	else if (KEY_TAP(KEY::E))
+	{
+		if (m_iNow_Page < 2)
+			++m_iNow_Page;
+	}
+}
+
+void CUIPage_Equip::Action_Focus(_float fTimeDelta)
+{
+
+
+
+
+
+
+}
+
+void CUIPage_Equip::Update_Equip_Page(_float fTimeDelta)
+{
+	if (m_iNow_Page == 0)
+	{
+		__super::Array_Control(_int(PART_GROUP::GROUP_PAGE_0_FRAME), _int(PART_GROUP::GROUP_PAGE_0_DEFENCE_3), CTRL_COMMAND::COM_RENDER, true);
+		__super::Array_Control(_int(PART_GROUP::GROUP_PAGE_1_FRAME), _int(PART_GROUP::GROUP_PAGE_1_BAG_3), CTRL_COMMAND::COM_RENDER, false);
+		__super::Array_Control(_int(PART_GROUP::GROUP_PAGE_2_FRAME), _int(PART_GROUP::GROUP_PAGE_2_COSTUME), CTRL_COMMAND::COM_RENDER, false);
+		m_vec_Group_Ctrl[_int(PART_GROUP::GROUP_TOP_TAP_HIGHLIGHT_LINE)]->fRatio = 0.f;
+	}
+	else if (m_iNow_Page == 1)
+	{
+		__super::Array_Control(_int(PART_GROUP::GROUP_PAGE_0_FRAME), _int(PART_GROUP::GROUP_PAGE_0_DEFENCE_3), CTRL_COMMAND::COM_RENDER, false);
+		__super::Array_Control(_int(PART_GROUP::GROUP_PAGE_1_FRAME), _int(PART_GROUP::GROUP_PAGE_1_BAG_3), CTRL_COMMAND::COM_RENDER, true);
+		__super::Array_Control(_int(PART_GROUP::GROUP_PAGE_2_FRAME), _int(PART_GROUP::GROUP_PAGE_2_COSTUME), CTRL_COMMAND::COM_RENDER, false);
+		m_vec_Group_Ctrl[_int(PART_GROUP::GROUP_TOP_TAP_HIGHLIGHT_LINE)]->fRatio = 0.5f;
+	}
+	else if (m_iNow_Page == 2)
+	{
+		__super::Array_Control(_int(PART_GROUP::GROUP_PAGE_0_FRAME), _int(PART_GROUP::GROUP_PAGE_0_DEFENCE_3), CTRL_COMMAND::COM_RENDER, false);
+		__super::Array_Control(_int(PART_GROUP::GROUP_PAGE_1_FRAME), _int(PART_GROUP::GROUP_PAGE_1_BAG_3), CTRL_COMMAND::COM_RENDER, false);
+		__super::Array_Control(_int(PART_GROUP::GROUP_PAGE_2_FRAME), _int(PART_GROUP::GROUP_PAGE_2_COSTUME), CTRL_COMMAND::COM_RENDER, true);
+		m_vec_Group_Ctrl[_int(PART_GROUP::GROUP_TOP_TAP_HIGHLIGHT_LINE)]->fRatio = 1.f;
+	}
+
+	Update_Item_Cell(fTimeDelta);
+}
+
+void CUIPage_Equip::Update_Tap_Button(_float fTimeDelta)
+{
+	for (_int i = 0; i < 3; ++i)
+	{
+		list<_int>::iterator iter = m_vec_Group_Ctrl[_int(PART_GROUP::GROUP_TOP_TAP_BUTTON_0) + i]->PartIndexlist.begin();
+
+		if (i == m_iNow_Page)
+		{
+			++iter;
+			m_vecPart[*iter]->bRender = true;
+			++iter;
+			m_vecPart[*iter]->Set_RedText();
+		}
+		else
+		{
+			++iter;
+			m_vecPart[*iter]->bRender = false;
+			++iter;
+			m_vecPart[*iter]->Set_WhiteText();
+		}
+	}
+}
+
+void CUIPage_Equip::Update_ToolTip(_float fTimeDelta)
+{
+}
+
+void CUIPage_Equip::Update_Item_Cell(_float fTimeDelta)
+{
+	if (m_iNow_Page == 0)
+	{
+		Update_Weapon_Cell();
+		Update_Arm_Cell();
+	}
+
+	Update_Normal_Cell();
+}
+
+void CUIPage_Equip::Update_Weapon_Cell()
+{
+	for (_int i = 0; i < 2; ++i)
+	{
+		_int iEquip_Slot_Index = _int(EQUIP_SLOT::EQUIP_WEAPON_BLADE_0) + (i * 2);
+
+		const CItem_Manager::ITEM* pItemBlade = GET_GAMEINTERFACE->Get_Equip_Item_Info(EQUIP_SLOT(iEquip_Slot_Index));
+		const CItem_Manager::ITEM* pItemHandle = GET_GAMEINTERFACE->Get_Equip_Item_Info(EQUIP_SLOT(iEquip_Slot_Index + 1));
+
+		_int iGroup = _int(PART_GROUP::GROUP_PAGE_0_WEAPON_FIRST) + i;
+		list<_int>::iterator iter = m_vec_Group_Ctrl[iGroup]->PartIndexlist.begin();
+
+		if ((pItemBlade == nullptr) || (pItemBlade->eType_Index == ITEM_TYPE::ITEMTYPE_END))
+		{
+			++iter; m_vecPart[*iter]->bRender = m_eFocus_Group == PART_GROUP(iGroup) ? true : false;
+			++iter; m_vecPart[*iter]->bRender = true;
+			++iter; m_vecPart[*iter]->bRender = false;
+			++iter; m_vecPart[*iter]->bRender = false;
+			++iter; m_vecPart[*iter]->bRender = false;
+			++iter; m_vecPart[*iter]->bRender = false;
+			++iter; m_vecPart[*iter]->bRender = false;
+		}
+		else if (pItemBlade->bModule_Weapon)
+		{
+			++iter; m_vecPart[*iter]->bRender = m_eFocus_Group == PART_GROUP(iGroup) ? true : false;
+			++iter; m_vecPart[*iter]->bRender = false;
+			++iter; m_vecPart[*iter]->bRender = true;
+			++iter; m_vecPart[*iter]->bRender = false;
+			++iter; m_vecPart[*iter]->bRender = true; m_vecPart[*iter]->iTexture_Index = pItemBlade->iTexture_Index;
+			++iter; m_vecPart[*iter]->bRender = true; m_vecPart[*iter]->iTexture_Index = pItemHandle->iTexture_Index;
+			++iter; m_vecPart[*iter]->bRender = true;
+		}
+		else
+		{
+			++iter; m_vecPart[*iter]->bRender = m_eFocus_Group == PART_GROUP(iGroup) ? true : false;
+			++iter; m_vecPart[*iter]->bRender = false;
+			++iter; m_vecPart[*iter]->bRender = false;
+			++iter; m_vecPart[*iter]->bRender = true; m_vecPart[*iter]->iTexture_Index = pItemBlade->iTexture_Index;
+			++iter; m_vecPart[*iter]->bRender = false;
+			++iter; m_vecPart[*iter]->bRender = false;
+			++iter; m_vecPart[*iter]->bRender = true;
+		}
+	}
+}
+
+void CUIPage_Equip::Update_Arm_Cell()
+{
+	const CItem_Manager::ITEM* pItem = GET_GAMEINTERFACE->Get_Equip_Item_Info(EQUIP_SLOT::EQUIP_RESION_ARM);
+	list<_int>::iterator iter = m_vec_Group_Ctrl[_int(PART_GROUP::GROUP_PAGE_0_ARM)]->PartIndexlist.begin();
+
+	if((pItem == nullptr) || (pItem->eType_Index == ITEM_TYPE::ITEMTYPE_END))
+	{
+		++iter; m_vecPart[*iter]->bRender = m_eFocus_Group == PART_GROUP::GROUP_PAGE_0_ARM ? true : false;
+		++iter; 
+		++iter; m_vecPart[*iter]->bRender = false;
+	}
+	else
+	{
+		++iter; m_vecPart[*iter]->bRender = m_eFocus_Group == PART_GROUP::GROUP_PAGE_0_ARM ? true : false;
+		++iter;
+		++iter; m_vecPart[*iter]->bRender = false; m_vecPart[*iter]->iTexture_Index = pItem->iTexture_Index;
+	}
+}
+
+void CUIPage_Equip::Update_Normal_Cell()
+{
+	_int iStart_Index = 0;
+	_int iEnd_Index = 0;
+
+	if (m_iNow_Page == 0)
+	{
+		iStart_Index = _int(PART_GROUP::GROUP_PAGE_0_AMULET_FIRST);
+		iEnd_Index = _int(PART_GROUP::GROUP_PAGE_0_DEFENCE_3);
+	}
+	else if (m_iNow_Page == 1)
+	{
+		iStart_Index = _int(PART_GROUP::GROUP_PAGE_1_TOP_0);
+		iEnd_Index = _int(PART_GROUP::GROUP_PAGE_1_BAG_3);
+	}
+	else if (m_iNow_Page == 2)
+	{
+		iStart_Index = _int(PART_GROUP::GROUP_PAGE_2_HEAD_0);
+		iEnd_Index = _int(PART_GROUP::GROUP_PAGE_2_COSTUME);
+	}
+
+	for (_int i = iStart_Index; i <= iEnd_Index; ++i)
+	{
+		list<_int>::iterator iter = m_vec_Group_Ctrl[i]->PartIndexlist.begin();
+
+		++iter;
+		if (_int(m_eFocus_Group) == i)
+			m_vecPart[*iter]->bRender = true;
+		else
+			m_vecPart[*iter]->bRender = false;
+
+		const CItem_Manager::ITEM* pItem = GET_GAMEINTERFACE->Get_Equip_Item_Info(EQUIP_SLOT(i - _int(PART_GROUP::GROUP_PAGE_0_WEAPON_FIRST) + 2));
+
+		if ((pItem == nullptr) || (pItem->eType_Index == ITEM_TYPE::ITEMTYPE_END)) 
+		{
+			m_vecPart[*iter]->bRender = true;
+			++iter;
+			m_vecPart[*iter]->bRender = false;
+
+			if (m_iNow_Page == 1)
+			{
+				++iter;
+				m_vecPart[*iter]->bRender = false;
+			}
+		}
+		else
+		{
+			m_vecPart[*iter]->bRender = false;
+			++iter;
+			m_vecPart[*iter]->bRender = true;
+			m_vecPart[*iter]->iTexture_Index = pItem->iTexture_Index;
+
+			if (m_iNow_Page == 1)
+			{
+				++iter;
+				m_vecPart[*iter]->bRender = true;
+				m_vecPart[*iter]->strText = pItem->iCount;
+			}
+		}
+	}
 }
 
 CUIPage_Equip* CUIPage_Equip::Create(ID3D11Device* pDevice, ID3D11DeviceContext* pContext)
