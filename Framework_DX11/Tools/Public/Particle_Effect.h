@@ -99,7 +99,6 @@ public:
 	}
 	void Set_Desc(const PARTICLE_EFFECT_DESC& ParticleDesc);
 
-
 	virtual void Set_Loop(_bool bLoop) override;
 
 private:

@@ -164,6 +164,7 @@ PS_EFFECT_OUT PS_MAIN(PS_IN In)
     vColor.rgb *= g_vColor.rgb;
     
     Out.vDiffuse = vColor;
+    Out.vDiffuse = vector(0.f, 0.f, 0.f, 0.f);
     Out.vBlur = vColor;
     
     return Out;
@@ -212,6 +213,7 @@ technique11 DefaultTechnique
         GeometryShader = compile gs_5_0 GS_MAIN();
         PixelShader = compile ps_5_0 PS_BLEND_MAIN();
     }
+
 }
 
 

@@ -30,7 +30,7 @@ HRESULT CController_AnimationTool::Initialize(ID3D11Device* pDevice, ID3D11Devic
 	//모델 생성 부분
 	CAnimModel::ANIMMODEL_DESC Desc{};
 	Desc.vPosition = { 0.f,0.f,0.f };
-	Desc.vScale = { 2.f, 2.f, 2.f };
+	Desc.vScale = { 1.f, 1.f, 1.f };
 	Desc.vRotation = { 0.f,0.f,0.f };
 	Desc.pUpdateCtr = &m_bObjRenderCtr;
 	Desc.fRotationPerSec = 90.f;

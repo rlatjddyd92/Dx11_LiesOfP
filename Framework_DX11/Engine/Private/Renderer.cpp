@@ -209,12 +209,12 @@ HRESULT CRenderer::Initialize()
 		return E_FAIL;
 	if (FAILED(m_pGameInstance->Ready_RT_Debug(TEXT("Target_Bloom_BlurXY1"), 100.f, 500.f, 200.f, 200.f)))
 		return E_FAIL;
-	if (FAILED(m_pGameInstance->Ready_RT_Debug(TEXT("Target_BackBuffer"), 300.f, 100.f, 200.f, 200.f)))
+	if (FAILED(m_pGameInstance->Ready_RT_Debug(TEXT("Target_Bloom_DownSample0"), 300.f, 100.f, 200.f, 200.f)))
+		return E_FAIL; 
+	if (FAILED(m_pGameInstance->Ready_RT_Debug(TEXT("Target_Bloom_DownSample1"), 300.f, 300.f, 200.f, 200.f)))
+		return E_FAIL;	
+	if (FAILED(m_pGameInstance->Ready_RT_Debug(TEXT("Target_Bloom_UpSample0"), 300.f, 500.f, 200.f, 200.f)))
 		return E_FAIL;
-	//if (FAILED(m_pGameInstance->Ready_RT_Debug(TEXT("Target_Bloom_UpSample0"), 300.f, 100.f, 200.f, 200.f)))
-	//	return E_FAIL;	
-	//if (FAILED(m_pGameInstance->Ready_RT_Debug(TEXT("Target_Bloom_BlurXY0"), 300.f, 300.f, 200.f, 200.f)))
-	//	return E_FAIL;
 #endif
 
 
@@ -1195,14 +1195,14 @@ HRESULT CRenderer::Render_Effect()
 	if (FAILED(m_pPostProcessShader->Bind_Matrix("g_ProjMatrix", &m_ProjMatrix)))
 		return E_FAIL;
 
-	//if (FAILED(Copy_BackBuffer()))
-	//	return E_FAIL;
+	if (FAILED(Copy_BackBuffer()))
+		return E_FAIL;
 
 	if (FAILED(m_pGameInstance->Bind_RT_ShaderResource(m_pPostProcessShader, TEXT("Target_Effect_Diffuse"), "g_EffectTexture")))
 		return E_FAIL;
 	if (FAILED(m_pGameInstance->Bind_RT_ShaderResource(m_pPostProcessShader, TEXT("Target_Effect_Blur"), "g_EffectBlur")))
 		return E_FAIL;
-	if (FAILED(m_pGameInstance->Bind_RT_ShaderResource(m_pPostProcessShader, TEXT("Target_LDR"), "g_BackTexture")))
+	if (FAILED(m_pGameInstance->Bind_RT_ShaderResource(m_pPostProcessShader, TEXT("Target_BackBuffer"), "g_BackTexture")))
 		return E_FAIL;
 	
 	m_pPostProcessShader->Begin(3);
@@ -1845,7 +1845,9 @@ HRESULT CRenderer::Render_Debug()
 	m_pGameInstance->Render_MRT_Debug(TEXT("MRT_Effect_Final"), m_pShader, m_pVIBuffer);
 	m_pGameInstance->Render_MRT_Debug(TEXT("MRT_BackBuffer"), m_pShader, m_pVIBuffer);
 	m_pGameInstance->Render_MRT_Debug(TEXT("MRT_Bloom_BlurXY1"), m_pShader, m_pVIBuffer);
-
+	m_pGameInstance->Render_MRT_Debug(TEXT("MRT_Bloom_DownSample0"), m_pShader, m_pVIBuffer);
+	m_pGameInstance->Render_MRT_Debug(TEXT("MRT_Bloom_DownSample1"), m_pShader, m_pVIBuffer);
+	m_pGameInstance->Render_MRT_Debug(TEXT("MRT_Bloom_UpSample0"), m_pShader, m_pVIBuffer);
 	return S_OK;
 }
 

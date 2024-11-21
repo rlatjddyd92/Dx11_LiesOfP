@@ -124,20 +124,34 @@ PS_OUT PS_BLEND_MAIN(PS_IN In)
     return Out;
 }
 
+PS_OUT PS_BLEND_GLOW_MAIN(PS_IN In)
+{
+    PS_OUT Out = (PS_OUT) 0;
+    
+    Out.vColor = g_DiffuseTexture.Sample(LinearSampler, Get_SpriteTexcoord(In.vTexcoord));
+    
+    Out.vColor.a *= g_fRatio;
+    
+    Out.vColor.r = 1.f - (1 - g_vColor.r) * (1 - Out.vColor.a);
+    Out.vColor.g = 1.f - (1 - g_vColor.g) * (1 - Out.vColor.a);
+    Out.vColor.b = 1.f - (1 - g_vColor.b) * (1 - Out.vColor.a);
+    
+    return Out;
+}
+
 PS_OUT PS_BLEND_RGBTOA_MAIN(PS_IN In)
 {
     PS_OUT Out = (PS_OUT) 0;
     
     Out.vColor = g_DiffuseTexture.Sample(LinearSampler, Get_SpriteTexcoord(In.vTexcoord));
     
-    Out.vColor.a = max(Out.vColor.g, max(Out.vColor.g, Out.vColor.b));
+    Out.vColor.a = max(Out.vColor.r, max(Out.vColor.g, Out.vColor.b));
 
     Out.vColor.rgb *= g_vColor.rgb;
     Out.vColor.a *= g_fRatio;
     
     return Out;
 }
-
 
 PS_EFFECT_OUT PS_GLOW_MAIN(PS_IN In)
 {
@@ -164,7 +178,7 @@ PS_EFFECT_OUT PS_GLOW_RGBTOA_MAIN(PS_IN In)
     
     vector vColor = g_DiffuseTexture.Sample(LinearSampler, Get_SpriteTexcoord(In.vTexcoord));
     
-    vColor.a = max(vColor.g, max(vColor.g, vColor.b));
+    vColor.a = max(vColor.r, max(vColor.g, vColor.b));
     
     if (vColor.a <= 0.3f)
         discard;
@@ -181,12 +195,29 @@ PS_EFFECT_OUT PS_GLOW_RGBTOA_MAIN(PS_IN In)
     return Out;
 }
 
+PS_OUT PS_BLEND_RGBTOA_GLOW_MAIN(PS_IN In)
+{
+    PS_OUT Out = (PS_OUT) 0;
+    
+    Out.vColor = g_DiffuseTexture.Sample(LinearSampler, Get_SpriteTexcoord(In.vTexcoord));
+    
+    Out.vColor.a = max(Out.vColor.r, max(Out.vColor.g, Out.vColor.b));
+
+    Out.vColor.r = 1.f - (1 - g_vColor.r) * (1 - Out.vColor.a);
+    Out.vColor.g = 1.f - (1 - g_vColor.g) * (1 - Out.vColor.a);
+    Out.vColor.b = 1.f - (1 - g_vColor.b) * (1 - Out.vColor.a);
+
+    Out.vColor.a *= g_fRatio;
+    
+    return Out;
+}
+
 technique11 DefaultTechnique
 {
     pass Default // 0
     {
         SetRasterizerState(RS_Default);
-        SetDepthStencilState(DSS_NonWrite, 0);
+        SetDepthStencilState(DSS_Default, 0);
         SetBlendState(BS_Default, vector(0.f, 0.f, 0.f, 0.f), 0xffffffff);
 
         VertexShader = compile vs_5_0 VS_MAIN();
@@ -208,7 +239,7 @@ technique11 DefaultTechnique
     pass Glow // 2
     {
         SetRasterizerState(RS_Default);
-        SetDepthStencilState(DSS_NonWrite, 0);
+        SetDepthStencilState(DSS_Default, 0);
         SetBlendState(BS_Default, vector(0.f, 0.f, 0.f, 0.f), 0xffffffff);
 
         VertexShader = compile vs_5_0 VS_MAIN();
@@ -216,7 +247,7 @@ technique11 DefaultTechnique
         PixelShader = compile ps_5_0 PS_GLOW_MAIN();
     }
 
-    pass Ring_Blend // 3
+    pass BLEND_RGBTOA // 3
     {
         SetRasterizerState(RS_Default);
         SetDepthStencilState(DSS_NonWrite, 0);
@@ -227,15 +258,37 @@ technique11 DefaultTechnique
         PixelShader = compile ps_5_0 PS_BLEND_RGBTOA_MAIN();
     }
 
-    pass Ring_Effect // 4
+    pass GLOW_RGBTOA // 4
     {
         SetRasterizerState(RS_Default);
-        SetDepthStencilState(DSS_NonWrite, 0);
+        SetDepthStencilState(DSS_Default, 0);
         SetBlendState(BS_Default, vector(0.f, 0.f, 0.f, 0.f), 0xffffffff);
 
         VertexShader = compile vs_5_0 VS_MAIN();
         GeometryShader = NULL;
         PixelShader = compile ps_5_0 PS_GLOW_RGBTOA_MAIN();
+    }
+
+    pass BLEND_GLOW // 5
+    {
+        SetRasterizerState(RS_Default);
+        SetDepthStencilState(DSS_NonWrite, 0);
+        SetBlendState(BS_AlphaBlend, vector(0.f, 0.f, 0.f, 0.f), 0xffffffff);
+
+        VertexShader = compile vs_5_0 VS_MAIN();
+        GeometryShader = NULL;
+        PixelShader = compile ps_5_0 PS_BLEND_GLOW_MAIN();
+    }
+
+    pass BLEND_RGBTOA_GLOW // 6
+    {
+        SetRasterizerState(RS_Default);
+        SetDepthStencilState(DSS_NonWrite, 0);
+        SetBlendState(BS_AlphaBlend, vector(0.f, 0.f, 0.f, 0.f), 0xffffffff);
+
+        VertexShader = compile vs_5_0 VS_MAIN();
+        GeometryShader = NULL;
+        PixelShader = compile ps_5_0 PS_BLEND_RGBTOA_GLOW_MAIN();
     }
 }
 

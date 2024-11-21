@@ -50,14 +50,14 @@ void CTrail_Effect_OP::Update(_float fTimeDelta)
 	{
 		if (true == m_pVIBufferCom->Update_Buffer(XMLoadFloat4x4(&m_WorldMatrix).r[3], m_DefaultDesc.fTrailInterval, m_DefaultDesc.bLoop, fTimeDelta))
 		{
-			//m_isActive = false;
+			m_isActive = false;
 		}
 	}
 	else if (TYPE_SPREAD == m_DefaultDesc.eType)
 	{
 		if (true == m_pVIBufferCom->Spread_Buffer(XMLoadFloat4x4(&m_WorldMatrix).r[3], m_DefaultDesc.fTrailInterval, m_DefaultDesc.fSpreadSpeed, m_DefaultDesc.bLoop, fTimeDelta))
 		{
-			//m_isActive = false;
+			m_isActive = false;
 		}
 	}
 }
@@ -129,6 +129,7 @@ void CTrail_Effect_OP::Reset()
 {
 	m_pVIBufferCom->Reset();
 	m_DefaultDesc = m_InitDesc.DefaultDesc;
+	m_isActive = true;
 }
 
 HRESULT CTrail_Effect_OP::Save(_wstring strFilePath)
@@ -168,6 +169,9 @@ void CTrail_Effect_OP::Set_Desc(const TRAIL_OP_DESC& TrailDesc)
 	m_DefaultDesc = TrailDesc.DefaultDesc;
 	m_RenderDesc = TrailDesc.RenderDesc;
 	m_InitDesc.DefaultDesc = TrailDesc.DefaultDesc;
+	m_InitDesc.RenderDesc = TrailDesc.RenderDesc;
+
+	Reset();
 }
 
 HRESULT CTrail_Effect_OP::Ready_Components(const TRAIL_OP_DESC& Desc)

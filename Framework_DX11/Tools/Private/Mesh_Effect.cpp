@@ -70,7 +70,7 @@ void CMesh_Effect::Late_Update(_float fTimeDelta)
 			Reset();
 		else
 		{
-			//m_isActive = false;
+			m_isActive = false;
 		}
 	}
 
@@ -141,10 +141,12 @@ void CMesh_Effect::Set_Desc(const MESH_EFFECT_DESC& desc)
 	m_RenderDesc = desc.RenderDesc;
 
 	m_InitDesc.DefaultDesc = desc.DefaultDesc;
+	m_InitDesc.RenderDesc = desc.RenderDesc;
 
 	m_pTransformCom->Set_State(CTransform::STATE_POSITION, desc.DefaultDesc.vPos);
 	m_pTransformCom->Rotation(desc.DefaultDesc.vStartRotation.x, desc.DefaultDesc.vStartRotation.y, desc.DefaultDesc.vStartRotation.z);
 	m_pTransformCom->Set_Scaled(desc.DefaultDesc.vStartScale.x, desc.DefaultDesc.vStartScale.y, desc.DefaultDesc.vStartScale.z);
+	Reset();
 }
 
 void CMesh_Effect::Reset()
@@ -154,6 +156,7 @@ void CMesh_Effect::Reset()
 
 	m_DefaultDesc = m_InitDesc.DefaultDesc;
 	m_RenderDesc = m_InitDesc.RenderDesc;
+	m_isActive = true;
 
 	m_pTransformCom->Set_State(CTransform::STATE_POSITION, m_DefaultDesc.vPos);
 	m_pTransformCom->Rotation(m_DefaultDesc.vStartRotation.x, m_DefaultDesc.vStartRotation.y, m_DefaultDesc.vStartRotation.z);

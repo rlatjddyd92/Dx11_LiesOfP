@@ -325,6 +325,8 @@ void CController_EffectTool::RenderGroup_Selection()
 	ImGui::SeparatorText("Render Group");
 	ImGui::RadioButton("RG_Nonblend", &m_RenderDesc.iRenderGroup, CRenderer::RG_NONBLEND);
 	ImGui::SameLine();
+	ImGui::RadioButton("RG_NonLight", &m_RenderDesc.iRenderGroup, CRenderer::RG_NONLIGHT);
+	ImGui::SameLine();
 	ImGui::RadioButton("RG_Effect", &m_RenderDesc.iRenderGroup, CRenderer::RG_EFFECT);
 	ImGui::SameLine();
 	ImGui::RadioButton("RG_Blend", &m_RenderDesc.iRenderGroup, CRenderer::RG_BLEND);
@@ -1180,12 +1182,12 @@ void CController_EffectTool::Get_Trail_OP()
 		++iIndex;
 	}
 
-	if (CParticle_Effect::PS_GROW == (m_Trail_OPDesc.DefaultDesc.iGeomState & CTrail_Effect_OP::TOP_GROW))
+	if (CTrail_Effect_OP::TOP_GROW == (m_Trail_OPDesc.DefaultDesc.iGeomState & CTrail_Effect_OP::TOP_GROW))
 		m_Trail_OPState[TOP_GROW] = true;
 	else
 		m_Trail_OPState[TOP_GROW] = false;
 
-	if (CParticle_Effect::PS_SHRINK == (m_Trail_OPDesc.DefaultDesc.iGeomState & CTrail_Effect_OP::TOP_GROW))
+	if (CTrail_Effect_OP::TOP_SHRINK == (m_Trail_OPDesc.DefaultDesc.iGeomState & CTrail_Effect_OP::TOP_SHRINK))
 		m_Trail_OPState[TOP_SHRINK] = true;
 	else
 		m_Trail_OPState[TOP_SHRINK] = false;
@@ -1337,25 +1339,25 @@ void CController_EffectTool::Get_Trail_TP()
 		return;
 
 	m_Trail_TPDesc = pTP->Get_Desc();
-	m_RenderDesc = m_Trail_TPDesc.RenderDesc();
+	m_RenderDesc = m_Trail_TPDesc.RenderDesc;
 
 	_uint iIndex = 0;
 
 	for (auto& Tag : m_Texture_PrototypeTags)
 	{
-		if (0 == wcscmp(Tag.c_str(), m_Trail_OPDesc.TextDesc.szDiffuseTexturTag))
+		if (0 == wcscmp(Tag.c_str(), m_Trail_TPDesc.TextDesc.szDiffuseTexturTag))
 		{
 			m_iSelected_DiffuseTextureIndex = iIndex;
 		}
-		if (0 == wcscmp(Tag.c_str(), m_Trail_OPDesc.TextDesc.szMaskTextureTag_1))
+		if (0 == wcscmp(Tag.c_str(), m_Trail_TPDesc.TextDesc.szMaskTextureTag_1))
 		{
 			m_iSelected_MaskTextureIndex_1 = iIndex;
 		}
-		if (0 == wcscmp(Tag.c_str(), m_Trail_OPDesc.TextDesc.szMaskTextureTag_2))
+		if (0 == wcscmp(Tag.c_str(), m_Trail_TPDesc.TextDesc.szMaskTextureTag_2))
 		{
 			m_iSelected_MaskTextureIndex_2 = iIndex;
 		}
-		if (0 == wcscmp(Tag.c_str(), m_Trail_OPDesc.TextDesc.szNormalTextureTag))
+		if (0 == wcscmp(Tag.c_str(), m_Trail_TPDesc.TextDesc.szNormalTextureTag))
 		{
 			m_iSelected_NormalTextureIndex = iIndex;
 		}
@@ -1591,19 +1593,19 @@ void CController_EffectTool::Get_Trail_MP()
 
 	for (auto& Tag : m_Texture_PrototypeTags)
 	{
-		if (0 == wcscmp(Tag.c_str(), m_Trail_OPDesc.TextDesc.szDiffuseTexturTag))
+		if (0 == wcscmp(Tag.c_str(), m_Trail_MPDesc.TextDesc.szDiffuseTexturTag))
 		{
 			m_iSelected_DiffuseTextureIndex = iIndex;
 		}
-		if (0 == wcscmp(Tag.c_str(), m_Trail_OPDesc.TextDesc.szMaskTextureTag_1))
+		if (0 == wcscmp(Tag.c_str(), m_Trail_MPDesc.TextDesc.szMaskTextureTag_1))
 		{
 			m_iSelected_MaskTextureIndex_1 = iIndex;
 		}
-		if (0 == wcscmp(Tag.c_str(), m_Trail_OPDesc.TextDesc.szMaskTextureTag_2))
+		if (0 == wcscmp(Tag.c_str(), m_Trail_MPDesc.TextDesc.szMaskTextureTag_2))
 		{
 			m_iSelected_MaskTextureIndex_2 = iIndex;
 		}
-		if (0 == wcscmp(Tag.c_str(), m_Trail_OPDesc.TextDesc.szNormalTextureTag))
+		if (0 == wcscmp(Tag.c_str(), m_Trail_MPDesc.TextDesc.szNormalTextureTag))
 		{
 			m_iSelected_NormalTextureIndex = iIndex;
 		}
@@ -2287,7 +2289,7 @@ void CController_EffectTool::Set_TrailOP_State()
 	else
 		m_Trail_OPDesc.DefaultDesc.iGeomState &= ~CTrail_Effect_OP::TOP_GROW;
 
-	if (true == m_ParticleStates[TOP_SHRINK])
+	if (true == m_Trail_OPState[TOP_SHRINK])
 		m_Trail_OPDesc.DefaultDesc.iGeomState |= CTrail_Effect_OP::TOP_SHRINK;
 	else
 		m_Trail_OPDesc.DefaultDesc.iGeomState &= ~CTrail_Effect_OP::TOP_SHRINK;

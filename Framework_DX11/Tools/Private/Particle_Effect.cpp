@@ -83,7 +83,7 @@ void CParticle_Effect::Update(_float fTimeDelta)
 
     if (true == bOver)
     {
-        // m_isActive = false;
+        m_isActive = false;
     }
 
 }
@@ -157,7 +157,7 @@ HRESULT CParticle_Effect::Render()
 void CParticle_Effect::Reset()
 {
     m_DefaultDesc = m_InitDesc.DefaultDesc;
-
+    m_isActive = true;
     m_pTransformCom->Set_State(CTransform::STATE_POSITION, m_DefaultDesc.vPos);
     m_pTransformCom->Rotation(m_DefaultDesc.vRotation.x, m_DefaultDesc.vRotation.y, m_DefaultDesc.vRotation.z);
     m_pTransformCom->Set_Scaled(m_DefaultDesc.vScale.x, m_DefaultDesc.vScale.y, m_DefaultDesc.vScale.z);
@@ -203,16 +203,21 @@ void CParticle_Effect::Set_Desc(const PARTICLE_EFFECT_DESC& ParticleDesc)
     m_DefaultDesc = ParticleDesc.DefaultDesc;
     m_RenderDesc = ParticleDesc.RenderDesc;
     m_InitDesc.DefaultDesc = ParticleDesc.DefaultDesc;
+    m_InitDesc.RenderDesc = ParticleDesc.RenderDesc;
 
     m_pTransformCom->Set_State(CTransform::STATE_POSITION, m_DefaultDesc.vPos);
     m_pTransformCom->Rotation(m_DefaultDesc.vRotation.x, m_DefaultDesc.vRotation.y, m_DefaultDesc.vRotation.z);
     m_pTransformCom->Set_Scaled(m_DefaultDesc.vScale.x, m_DefaultDesc.vScale.y, m_DefaultDesc.vScale.z);
+    Reset();
 }
 
 void CParticle_Effect::Set_Loop(_bool bLoop)
 {
     if (true == bLoop)
+    {
         m_DefaultDesc.iComputeState |= CVIBuffer_Instancing::STATE_LOOP;
+        Reset();
+    }
     else
         m_DefaultDesc.iComputeState &= ~CVIBuffer_Instancing::STATE_LOOP;
 }

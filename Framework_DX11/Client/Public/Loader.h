@@ -5,7 +5,6 @@
 
 BEGIN(Engine)
 class CGameInstance;
-class Cte;
 END
 
 BEGIN(Client)

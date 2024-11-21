@@ -58,9 +58,11 @@ PS_EFFECT_OUT PS_MAIN(PS_IN In)
 	
     float2 vTexcoord = In.vTexcoord * g_vTileRepeat + g_vTileMove;
 	
-    Out.vDiffuse = g_DiffuseTexture.Sample(LinearSampler, In.vTexcoord);
-    Out.vBlur = g_DiffuseTexture.Sample(LinearSampler, In.vTexcoord);
+    vector vColor = g_DiffuseTexture.Sample(LinearSampler, vTexcoord);
 	
+    Out.vDiffuse = vColor;
+    Out.vBlur = vColor;
+		
     return Out;
 }
 
@@ -71,8 +73,14 @@ PS_EFFECT_OUT PS_SELF_DISTORTION_MAIN(PS_IN In)
 	
     float fDistortion = g_MaskTexture_1.Sample(LinearSampler, vTexcoord).x * 0.3f;
 	
-    Out.vDiffuse = g_DiffuseTexture.Sample(LinearSampler, In.vTexcoord + float2(fDistortion, fDistortion));
-    Out.vBlur = g_DiffuseTexture.Sample(LinearSampler, In.vTexcoord);
+    vector vColor = g_DiffuseTexture.Sample(LinearSampler, vTexcoord + float2(fDistortion, fDistortion));
+	
+    vColor.rgb *= g_vColor.rgb;
+    vColor.a *= g_fAlpha;
+	
+	
+    Out.vDiffuse = vColor;
+    Out.vBlur = vColor;
 
 	
     return Out;

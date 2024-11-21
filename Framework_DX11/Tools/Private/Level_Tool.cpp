@@ -75,6 +75,15 @@ HRESULT CLevel_Tool::Initialize()
 	//if (FAILED(m_pGameInstance->Add_CloneObject_ToLayer(LEVEL_TOOL, TEXT("Layer_MeshEffect"), TEXT("Prototype_GameObject_Mesh_Effect"), &desc)))
 	//	return E_FAIL;
 
+	CNonAnimModel::NONMODEL_DESC Desc{};
+	Desc.vPosition = { 0.f, 0.f, 0.f };
+	Desc.vScale = { 1.f,1.f,1.f };
+	Desc.vRotation = { 0.f,0.f,0.f };
+	Desc.iRenderGroupID = 0;
+	strcpy_s(Desc.szModelTag, "Prototype_Component_Model_Rapier");
+	if (FAILED(m_pGameInstance->Add_CloneObject_ToLayer(LEVEL_TOOL, TEXT("Layer_Weapon"), TEXT("Prototype_GameObject_NonAnim"), &Desc)))
+		return E_FAIL;
+
 	return S_OK;
 }
 

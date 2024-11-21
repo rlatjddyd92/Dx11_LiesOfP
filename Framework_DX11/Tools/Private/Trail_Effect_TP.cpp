@@ -58,7 +58,7 @@ void CTrail_Effect_TP::Late_Update(_float fTimeDelta)
 {
 	if (false == m_DefaultDesc.bLoop && 1.f < m_fAlpha)
 	{
-		// m_isActive = false;
+		m_isActive = false;
 	}
 
 	if (CRenderer::RG_END <= m_RenderDesc.iRenderGroup)
@@ -121,6 +121,8 @@ void CTrail_Effect_TP::Reset()
 {
 	m_pVIBufferCom->Reset();
 	m_DefaultDesc = m_InitDesc.DefaultDesc;
+	m_isActive = true;
+	m_fAlpha = 0.f;
 }
 
 HRESULT CTrail_Effect_TP::Save(_wstring strFilePath)
@@ -158,6 +160,9 @@ void CTrail_Effect_TP::Set_Desc(const TRAIL_TP_DESC& desc)
 	m_DefaultDesc = desc.DefaultDesc;
 	m_RenderDesc = desc.RenderDesc;
 	m_InitDesc.DefaultDesc = desc.DefaultDesc;
+	m_InitDesc.RenderDesc = desc.RenderDesc;
+
+	Reset();
 }
 
 HRESULT CTrail_Effect_TP::Ready_Components(const TRAIL_TP_DESC& Desc)

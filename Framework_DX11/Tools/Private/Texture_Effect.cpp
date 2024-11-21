@@ -88,7 +88,7 @@ void CTexture_Effect::Late_Update(_float fTimeDelta)
             Reset();
         else
         {
-            //m_isActive = false;
+            m_isActive = false;
         }
     }
 
@@ -157,9 +157,13 @@ void CTexture_Effect::Set_Desc(const TEXTURE_EFFECT_DESC& desc)
     m_DefaultDesc = desc.DefaultDesc;
     m_RenderDesc = desc.RenderDesc;
     m_InitDesc.DefaultDesc = desc.DefaultDesc;
+    m_InitDesc.RenderDesc = desc.RenderDesc;
+
 
     m_pTransformCom->Set_State(CTransform::STATE_POSITION, m_DefaultDesc.vPos);
     m_pTransformCom->Set_Scaled(m_DefaultDesc.vStartScale.x, m_DefaultDesc.vStartScale.y, m_DefaultDesc.vStartScale.z);
+
+    Reset();
 }
 
 void CTexture_Effect::Reset()

@@ -81,6 +81,9 @@ public:
 	virtual HRESULT Save(_wstring strFilePath) override;
 	virtual void Set_Loop(_bool bLoop) override {
 		m_DefaultDesc.bLoop = bLoop;
+
+		if (true == bLoop)
+			Reset();
 	}
 
 public:
