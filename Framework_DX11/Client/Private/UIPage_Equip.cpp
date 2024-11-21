@@ -283,21 +283,25 @@ void CUIPage_Equip::Update_Normal_Cell()
 {
 	_int iStart_Index = 0;
 	_int iEnd_Index = 0;
+	EQUIP_SLOT eStart_Slot = EQUIP_SLOT::EQUIP_END;
 
 	if (m_iNow_Page == 0)
 	{
 		iStart_Index = _int(PART_GROUP::GROUP_PAGE_0_AMULET_FIRST);
 		iEnd_Index = _int(PART_GROUP::GROUP_PAGE_0_DEFENCE_3);
+		eStart_Slot = EQUIP_SLOT::EQUIP_AMULET_0;
 	}
 	else if (m_iNow_Page == 1)
 	{
 		iStart_Index = _int(PART_GROUP::GROUP_PAGE_1_TOP_0);
 		iEnd_Index = _int(PART_GROUP::GROUP_PAGE_1_BAG_3);
+		eStart_Slot = EQUIP_SLOT::EQUIP_USING_TOP_0;
 	}
 	else if (m_iNow_Page == 2)
 	{
 		iStart_Index = _int(PART_GROUP::GROUP_PAGE_2_HEAD_0);
 		iEnd_Index = _int(PART_GROUP::GROUP_PAGE_2_COSTUME);
+		eStart_Slot = EQUIP_SLOT::EQUIP_HEAD_0;
 	}
 
 	for (_int i = iStart_Index; i <= iEnd_Index; ++i)
@@ -310,10 +314,11 @@ void CUIPage_Equip::Update_Normal_Cell()
 		else
 			m_vecPart[*iter]->bRender = false;
 
-		const CItem_Manager::ITEM* pItem = GET_GAMEINTERFACE->Get_Equip_Item_Info(EQUIP_SLOT(i - _int(PART_GROUP::GROUP_PAGE_0_WEAPON_FIRST) + 2));
+		const CItem_Manager::ITEM* pItem = GET_GAMEINTERFACE->Get_Equip_Item_Info(EQUIP_SLOT(_int(eStart_Slot) + (i - iStart_Index)));
 
 		if ((pItem == nullptr) || (pItem->eType_Index == ITEM_TYPE::ITEMTYPE_END)) 
 		{
+			++iter;
 			m_vecPart[*iter]->bRender = true;
 			++iter;
 			m_vecPart[*iter]->bRender = false;
@@ -326,6 +331,7 @@ void CUIPage_Equip::Update_Normal_Cell()
 		}
 		else
 		{
+			++iter;
 			m_vecPart[*iter]->bRender = false;
 			++iter;
 			m_vecPart[*iter]->bRender = true;
@@ -335,7 +341,7 @@ void CUIPage_Equip::Update_Normal_Cell()
 			{
 				++iter;
 				m_vecPart[*iter]->bRender = true;
-				m_vecPart[*iter]->strText = pItem->iCount;
+				m_vecPart[*iter]->strText = to_wstring(pItem->iCount);
 			}
 		}
 	}

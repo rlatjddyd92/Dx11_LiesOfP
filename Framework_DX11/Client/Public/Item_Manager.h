@@ -248,6 +248,9 @@ public:
 
 	const ITEM* Get_Equip_Item_Info(EQUIP_SLOT eSlot) // 현재 장비창에 장착된 아이템의 정보 레퍼런스 획득
 	{ 
+		if((_int(eSlot) < 0) || (_int(eSlot) >= _int(EQUIP_SLOT::EQUIP_END)))
+			return nullptr;
+
 		if (m_vecEquip_ItemInfo[_uint(eSlot)]->eType == INVEN_ARRAY_TYPE::TYPE_END)
 			return nullptr;
 
