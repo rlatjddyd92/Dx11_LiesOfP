@@ -1455,7 +1455,6 @@ HRESULT CLoader::Ready_Resources_For_ToolLevel_Map1()
 		CModel::Create(m_pDevice, m_pContext, CModel::TYPE_NONANIM, "../Bin/ModelData/NonAnim/Map/Etc/Sophia/Sophia_Stoned.dat", PreTransformMatrix))))
 		return E_FAIL;
 
-
 	m_isFinished_Map1 = true;
 
 	return S_OK;
