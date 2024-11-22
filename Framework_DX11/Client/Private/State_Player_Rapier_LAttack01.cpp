@@ -24,6 +24,9 @@ HRESULT CState_Player_Rapier_LAttack01::Initialize(_uint iStateNum, void* pArg)
     m_iChangeFrame = 35;
     m_iStateNum = iStateNum;
 
+    m_iColliderStartFrame = 18;
+    m_iColliderEndFrame = 29;
+
     return S_OK;
 }
 
@@ -77,15 +80,28 @@ void CState_Player_Rapier_LAttack01::Update(_float fTimeDelta)
     {
         m_pPlayer->Change_State(CPlayer::OH_IDLE);
     }
+
+    Control_Collider();
 }
 
 void CState_Player_Rapier_LAttack01::End_State()
 {
+    m_pPlayer->DeActive_CurretnWeaponCollider();
 }
 
 _bool CState_Player_Rapier_LAttack01::End_Check()
 {
     return m_pPlayer->Get_EndAnim(m_iAnimation_RapierNA2);
+}
+
+void CState_Player_Rapier_LAttack01::Control_Collider()
+{
+    _int iFrame = m_pPlayer->Get_Frame();
+
+    if (m_iColliderStartFrame <= iFrame && iFrame <= m_iColliderEndFrame)
+        m_pPlayer->Active_CurrentWeaponCollider();
+    else
+        m_pPlayer->DeActive_CurretnWeaponCollider();
 }
 
 CState_Player_Rapier_LAttack01* CState_Player_Rapier_LAttack01::Create(CFsm* pFsm, CPlayer* pPlayer, _uint iStateNum, void* pArg)

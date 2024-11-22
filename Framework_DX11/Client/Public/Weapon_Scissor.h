@@ -29,8 +29,8 @@ public:
 	virtual HRESULT Render_LightDepth() override;
 
 public:
-	virtual void Active_Collider();
-	virtual void DeActive_Collider();
+	virtual void Active_Collider(_float fDamageRatio = 1.f, _uint iHandIndex = 1) override;
+	virtual void DeActive_Collider(_uint iHandIndex = 1) override;
 
 public:
 	void		Change_SeperateMode();
@@ -40,7 +40,6 @@ private:
 	_bool		m_isSeperate = {};
 
 	CWeapon_Scissor_Handle*		m_pScissor_Sperate[CWeapon_Scissor_Handle::SCISSOR_END] = { nullptr, };
-	CCollider*					m_pCollider_Scissor_Sperate[CWeapon_Scissor_Handle::SCISSOR_END] = { nullptr, };
 
 private:
 	HRESULT Ready_Components();

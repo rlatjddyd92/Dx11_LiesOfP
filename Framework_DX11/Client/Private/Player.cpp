@@ -50,7 +50,9 @@
 #include "State_Player_Scissor_Charge00.h"
 #include "State_Player_Scissor_Charge01.h"
 #include "State_Player_Scissor_Buff.h"
-#include "State_Player_Scissor_Fatal.h"
+#include "State_Player_Scissor_Fatal0.h"
+#include "State_Player_Scissor_Fatal1.h"
+#include "State_Player_Scissor_Fatal2.h"
 
 CPlayer::CPlayer(ID3D11Device * pDevice, ID3D11DeviceContext * pContext)
 	: CPawn{ pDevice, pContext }
@@ -93,6 +95,8 @@ HRESULT CPlayer::Initialize(void * pArg)
 	m_pModelCom->Set_UFBIndices(UFB_BOUNDARY_UPPER, 6);
 	m_pModelCom->Update_Boundary();
 
+	m_strObjectTag = TEXT("Player");
+
 	return S_OK;
 }
 
@@ -126,7 +130,7 @@ void CPlayer::Update(_float fTimeDelta)
 {
 	m_pFsmCom->Update(fTimeDelta);
 
-	m_vCurRootMove = m_pModelCom->Play_Animation(fTimeDelta, &m_EvKeyList);
+	m_vCurRootMove = m_pModelCom->Play_Animation(fTimeDelta * 0.5f, &m_EvKeyList);
 
 
 	_vector vPos = m_pTransformCom->Get_State(CTransform::STATE_POSITION);
@@ -354,10 +358,21 @@ void CPlayer::Combine_Scissor()
 	dynamic_cast<CWeapon_Scissor*>(m_pWeapon[WEP_SCISSOR])->Change_CombineMode();
 }
 
+void CPlayer::Active_CurrentWeaponCollider(_float fDamageRatio)
+{
+	m_pWeapon[m_eWeaponType]->Active_Collider(fDamageRatio);
+}
+
+void CPlayer::DeActive_CurretnWeaponCollider()
+{
+	m_pWeapon[m_eWeaponType]->DeActive_Collider();
+}
+
 void CPlayer::Chnage_CameraMode(CPlayerCamera::CAMERA_MODE eMode)
 {
 	m_pPlayerCamera->Change_Mode(eMode);
 }
+
 
 void CPlayer::LockOnOff()
 {
@@ -550,7 +565,9 @@ HRESULT CPlayer::Ready_FSM()
 	m_pFsmCom->Add_State(CState_Player_Scissor_Charge00::Create(m_pFsmCom, this, SCISSOR_CHARGE0, &Desc));	// ¿ìÅ¬¸¯ °ø°Ý2
 	m_pFsmCom->Add_State(CState_Player_Scissor_Charge01::Create(m_pFsmCom, this, SCISSOR_CHARGE1, &Desc));	// ¿ìÅ¬¸¯ °ø°Ý2
 	m_pFsmCom->Add_State(CState_Player_Scissor_Buff::Create(m_pFsmCom, this, SCISSOR_BUFF, &Desc));	// ¹öÇÁ
-	m_pFsmCom->Add_State(CState_Player_Scissor_Fatal::Create(m_pFsmCom, this, SCISSOR_FATAL, &Desc));	// ÄÞº¸
+	m_pFsmCom->Add_State(CState_Player_Scissor_Fatal0::Create(m_pFsmCom, this, SCISSOR_FATAL0, &Desc));	// ÄÞº¸1
+	m_pFsmCom->Add_State(CState_Player_Scissor_Fatal1::Create(m_pFsmCom, this, SCISSOR_FATAL1, &Desc));	// ÄÞº¸2
+	m_pFsmCom->Add_State(CState_Player_Scissor_Fatal2::Create(m_pFsmCom, this, SCISSOR_FATAL2, &Desc));	// ÄÞº¸3
 
 	m_pFsmCom->Set_State(OH_IDLE);
 

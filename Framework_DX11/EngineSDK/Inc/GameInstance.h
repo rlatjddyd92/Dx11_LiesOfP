@@ -4,6 +4,9 @@
 #include "Renderer.h"
 #include "PipeLine.h"
 
+#include "fmod.h"
+#include "fmod.hpp"
+
 /* 1. 엔진과 클라이언트의 소통을 위한 클래스읻. */
 /* 2. 엔진에서 클라이언트에 보여주고 싶은 함수들을 모아놓는다. */
 /* 3. 함수들 -> 클래스의 멤버함수. 객체가 필요하다! 그래서 기능응ㄹ 제공해주기위한 클래스 객체를 보관한다. */
@@ -220,6 +223,18 @@ public:
 		void Clear_Instance();
 #pragma endregion
 
+#pragma region SOUND_MANAGER
+		void Play_BGM(const TCHAR* pSoundKey, _float fVolume);
+		void Play_Effect(const TCHAR* pSoundKey, _float fVolume);
+		void Stop_BGM();
+		void Pause_BGM();
+		void SetVolume_BGM(_float fVolume);
+		void	Set_Listener(class CGameObject* pListener);
+		FMOD::System* Get_SoundSystem();
+		map<TCHAR*, FMOD::Sound*>& Get_Sounds();
+		void	LoadSoundFile(const char* pFolderName);
+#pragma endregion
+
 private:
 	class CGraphic_Device*			m_pGraphic_Device = { nullptr };
 	class CInput_Device*			m_pInput_Device = { nullptr };
@@ -239,7 +254,8 @@ private:
 	class CCollider_Manager*		m_pCollider_Manager = { nullptr };
 	class CKey_Manager*				m_pKey_Manager = { nullptr };
 	class CPhysX_Manager*			m_pPhysX_Manager = { nullptr };
-	class CInstance_Manager*			m_pInstance_Manager = { nullptr };
+	class CInstance_Manager*		m_pInstance_Manager = { nullptr };
+	class CSound_Manager*			m_pSound_Manager = { nullptr };
 
 	// 2024-11-06 김성용
 	class CCSVFile_Manager*			m_pCSVFile_Manager = { nullptr };

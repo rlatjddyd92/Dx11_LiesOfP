@@ -39,8 +39,13 @@ public:
 	virtual HRESULT Render_LightDepth() override;
 
 public:
-	virtual void Active_Collider() {};
-	virtual void DeActive_Collider() {};
+	virtual void OnCollisionEnter(CGameObject* pOther) {};
+	virtual void OnCollisionStay(CGameObject* pOther) {};
+	virtual void OnCollisionExit(CGameObject* pOther) {};
+
+public:
+	virtual void Active_Collider(_float fDamageRatio = 1.f, _uint iHandIndex = 1);		//0번 외손 1번 오른손
+	virtual void DeActive_Collider(_uint iHandIndex = 1);
 
 public:
 	void Appear();
@@ -56,6 +61,12 @@ protected:
 	const _Matrix*			m_pSocketMatrix = { nullptr };
 	const _Matrix*			m_pSocketMatrix2 = { nullptr };
 	_Matrix					m_WorldMatrix = {};
+
+protected:
+	_float					m_fDamageAmount = {};
+	_float					m_fDamageRatio = { 1.f };
+
+	list<CGameObject*>			m_DamagedObjects;
 
 protected:
 	HRESULT Ready_Components();

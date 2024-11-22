@@ -47,6 +47,7 @@ HRESULT CCamera_Manager::Change_Camera(const _wstring& strCameraTag)
 	Safe_AddRef(pCamera);
 	m_pCurrentCamera = pCamera;
 
+	return S_OK;
 }
 
 CCamera* CCamera_Manager::Find_Camera(const _wstring& strCameraTag)

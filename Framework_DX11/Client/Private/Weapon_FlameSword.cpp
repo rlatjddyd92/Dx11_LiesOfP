@@ -29,7 +29,11 @@ HRESULT CWeapon_FlameSword::Initialize(void* pArg)
 	if (FAILED(Ready_Components()))
 		return E_FAIL;
 
+	m_strObjectTag = TEXT("PlayerWeapon");
+	m_fDamageAmount = 5.f;
+
 	m_isActive = false;
+	m_pColliderCom->IsActive(false);
 
 	return S_OK;
 }

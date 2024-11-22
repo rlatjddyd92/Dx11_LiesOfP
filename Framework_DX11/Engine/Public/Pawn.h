@@ -52,6 +52,7 @@ protected:
 	class CCollider*	m_pColliderCom = { nullptr };
 	class CFsm*			m_pFsmCom = { nullptr };
 	class CRigidBody*	m_pRigidBodyCom = { nullptr };
+	class CSound*		m_pSoundCom = { nullptr };
 
 	_bool				m_isGravity = { false };
 	

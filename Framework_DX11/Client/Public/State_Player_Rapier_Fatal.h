@@ -37,6 +37,11 @@ private:
 private:
     _bool               End_Check();
 
+private:
+    _int                m_iColliderStartFrame[5] = {};
+    _int                m_iColliderEndFrame[5] = {};
+    void                Control_Collider();
+
 public:
     static CState_Player_Rapier_Fatal* Create(class CFsm* pFsm, class CPlayer* pPlayer, _uint iStateNum, void* pArg = nullptr);
     virtual void Free() override;

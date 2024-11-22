@@ -32,6 +32,7 @@ HRESULT CMonster::Initialize(void* pArg)
 		return E_FAIL;
 
 
+	m_strObjectTag = TEXT("Monster");
 
 	return S_OK;
 }

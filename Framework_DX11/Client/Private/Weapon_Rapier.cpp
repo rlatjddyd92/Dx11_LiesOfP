@@ -29,9 +29,10 @@ HRESULT CWeapon_Rapier::Initialize(void* pArg)
 	if (FAILED(Ready_Components()))
 		return E_FAIL;
 
-	//m_pTransformCom->Set_Scaled(1.f, 1.f, 1.f);
-	////m_pTransformCom->Rotation(0.0f, XMConvertToRadians(90.0f), 0.1f);
-	//m_pTransformCom->Set_State(CTransform::STATE_POSITION, XMVectorSet(3.f, 0.f, 3.f, 1.f));
+	m_strObjectTag = TEXT("PlayerWeapon");
+	m_fDamageAmount = 5.f;
+
+	m_pColliderCom->IsActive(false);
 
 	return S_OK;
 }
@@ -80,6 +81,30 @@ HRESULT CWeapon_Rapier::Render_LightDepth()
 		return E_FAIL;
 
 	return S_OK;
+}
+
+void CWeapon_Rapier::OnCollisionEnter(CGameObject* pOther)
+{
+	if (pOther->Get_Tag() == TEXT("Monster"))
+	{
+
+	}
+}
+
+void CWeapon_Rapier::OnCollisionStay(CGameObject* pOther)
+{
+	if (pOther->Get_Tag() == TEXT("Monster"))
+	{
+
+	}
+}
+
+void CWeapon_Rapier::OnCollisionExit(CGameObject* pOther)
+{
+	if (pOther->Get_Tag() == TEXT("Monster"))
+	{
+
+	}
 }
 
 HRESULT CWeapon_Rapier::Ready_Components()

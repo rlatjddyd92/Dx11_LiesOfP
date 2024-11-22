@@ -96,7 +96,7 @@ HRESULT CNavigation::Initialize_Prototype(const _wstring& strNavigationDataFile)
 		return E_FAIL;
 	}
 
-	_uint iCellCout = { 0 };
+	_int iCellCout = { 0 };
 	//getline(fin, line);
 	//LayerCout = std::stoi(line);
 	fin.read(reinterpret_cast<char*>(&iCellCout), sizeof(iCellCout));

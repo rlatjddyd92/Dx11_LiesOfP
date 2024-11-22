@@ -24,6 +24,9 @@ HRESULT CState_Player_Flame_RAttack00::Initialize(_uint iStateNum, void* pArg)
     m_iChangeFrame = 100;
     m_iStateNum = iStateNum;
 
+    m_iColliderStartFrame = 58;
+    m_iColliderEndFrame = 66;
+
     return S_OK;
 }
 
@@ -80,15 +83,28 @@ void CState_Player_Flame_RAttack00::Update(_float fTimeDelta)
     {
         m_pPlayer->Change_State(CPlayer::TH_IDLE);
     }
+
+    Control_Collider();
 }
 
 void CState_Player_Flame_RAttack00::End_State()
 {
+    m_pPlayer->DeActive_CurretnWeaponCollider();
 }
 
 _bool CState_Player_Flame_RAttack00::End_Check()
 {
     return m_pPlayer->Get_EndAnim(m_iAnimation_FlameSA3);
+}
+
+void CState_Player_Flame_RAttack00::Control_Collider()
+{
+    _int iFrame = m_pPlayer->Get_Frame();
+
+    if (m_iColliderStartFrame <= iFrame && iFrame <= m_iColliderEndFrame)
+        m_pPlayer->Active_CurrentWeaponCollider();
+    else
+        m_pPlayer->DeActive_CurretnWeaponCollider();
 }
 
 CState_Player_Flame_RAttack00* CState_Player_Flame_RAttack00::Create(CFsm* pFsm, CPlayer* pPlayer, _uint iStateNum, void* pArg)

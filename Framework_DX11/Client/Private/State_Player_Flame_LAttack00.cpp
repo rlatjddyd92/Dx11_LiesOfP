@@ -21,10 +21,11 @@ HRESULT CState_Player_Flame_LAttack00::Initialize(_uint iStateNum, void* pArg)
     m_pResetRootMove = pDesc->pIsResetRootMove;
     m_pTrackPos = pDesc->pPrevTrackPos;
 
-    // 여기 프레임 확인학
-
     m_iChangeFrame = 55;
     m_iStateNum = iStateNum;
+
+    m_iColliderStartFrame = 33;
+    m_iColliderEndFrame = 38;
 
     return S_OK;
 }
@@ -39,6 +40,9 @@ HRESULT CState_Player_Flame_LAttack00::Start_State(void* pArg)
     m_isInputLButton = false;
     m_isInputRButton = false;
     m_fRButtonTime = 0.f;
+
+    m_iColliderStartFrame = 33;
+    m_iColliderEndFrame = 38;
 
     return S_OK;
 }
@@ -82,15 +86,28 @@ void CState_Player_Flame_LAttack00::Update(_float fTimeDelta)
     {
         m_pPlayer->Change_State(CPlayer::TH_IDLE);
     }
+
+    Control_Collider();
 }
 
 void CState_Player_Flame_LAttack00::End_State()
 {
+    m_pPlayer->DeActive_CurretnWeaponCollider();
 }
 
 _bool CState_Player_Flame_LAttack00::End_Check()
 {
     return m_pPlayer->Get_EndAnim(m_iAnimation_FlameNA3);
+}
+
+void CState_Player_Flame_LAttack00::Control_Collider()
+{
+    _int iFrame = m_pPlayer->Get_Frame();
+
+    if (m_iColliderStartFrame <= iFrame && iFrame <= m_iColliderEndFrame)
+        m_pPlayer->Active_CurrentWeaponCollider();
+    else
+        m_pPlayer->DeActive_CurretnWeaponCollider();
 }
 
 CState_Player_Flame_LAttack00* CState_Player_Flame_LAttack00::Create(CFsm* pFsm, CPlayer* pPlayer, _uint iStateNum, void* pArg)

@@ -108,6 +108,11 @@ HRESULT CWeapon::Render()
 			return E_FAIL;
 	}
 
+#ifdef _DEBUG
+	if(nullptr != m_pColliderCom)
+		m_pColliderCom->Render();
+#endif
+
 	return S_OK;
 }
 
@@ -135,6 +140,24 @@ HRESULT CWeapon::Render_LightDepth()
 	}
 
 	return S_OK;
+}
+
+void CWeapon::Active_Collider(_float fDamageRatio, _uint iHandIndex)
+{
+	if (m_pColliderCom->IsActive())
+		return;
+
+	m_fDamageRatio = fDamageRatio;
+	m_pColliderCom->IsActive(true);
+	m_DamagedObjects.clear();
+}
+
+void CWeapon::DeActive_Collider(_uint iHandIndex)
+{
+	if (!m_pColliderCom->IsActive())
+		return;
+
+	m_pColliderCom->IsActive(false);
 }
 
 void CWeapon::Appear()

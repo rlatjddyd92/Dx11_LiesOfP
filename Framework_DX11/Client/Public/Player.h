@@ -28,7 +28,8 @@ public:
 
 		FLAME_LATTACK0, FLAME_LATTACK1, FLAME_RATTACK0, FLAME_RATTACK1, FLAME_CHARGE0, FLAME_CHARGE1, FLAME_FATAL, FLAME_PARRYATTACK,
 
-		SCISSOR_LATTACK0, SCISSOR_LATTACK1, SCISSOR_RATTACK0, SCISSOR_RATTACK1, SCISSOR_CHARGE0, SCISSOR_CHARGE1, SCISSOR_FATAL, SCISSOR_BUFF,
+		SCISSOR_LATTACK0, SCISSOR_LATTACK1, SCISSOR_RATTACK0, SCISSOR_RATTACK1, SCISSOR_CHARGE0, SCISSOR_CHARGE1, 
+		SCISSOR_FATAL0, SCISSOR_FATAL1, SCISSOR_FATAL2, SCISSOR_BUFF,
 
 		STATE_END
 	};
@@ -86,6 +87,11 @@ public:
 	void			Change_Weapon();
 	_uint			Change_WeaponType();
 	
+	void			Active_CurrentWeaponCollider(_float fDamageRatio = 1.f);
+	void			DeActive_CurretnWeaponCollider();
+
+	void			Active_ScissorCollider(_float fDamageRatio);
+
 	void			Seperate_Scissor();
 	void			Combine_Scissor();
 

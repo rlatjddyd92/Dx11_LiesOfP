@@ -31,8 +31,13 @@ HRESULT CWeapon_Scissor::Initialize(void* pArg)
 	if (FAILED(Ready_Seperate()))
 		return E_FAIL;
 
+	m_strObjectTag = TEXT("PlayerWeapon");
+	m_fDamageAmount = 5.f;
+
 	m_isActive = false;
 	m_isSeperate = false;
+	m_pColliderCom->IsActive(false);
+
 
 	return S_OK;
 }
@@ -100,20 +105,27 @@ HRESULT CWeapon_Scissor::Render_LightDepth()
 	return S_OK;
 }
 
-void CWeapon_Scissor::Active_Collider()
+void CWeapon_Scissor::Active_Collider(_float fDamageRatio, _uint iHandIndex)
 {
-	if (m_isSeperate)
+	if (!m_isSeperate)
 	{
+		if (m_pColliderCom->IsActive())
+			return;
+
+		m_fDamageRatio = fDamageRatio;
 		m_pColliderCom->IsActive(true);
+		m_DamagedObjects.clear();
 	}
 	else
 	{
-		m_pCollider_Scissor_Sperate[CWeapon_Scissor_Handle::SCISSOR_LEFT]->IsActive(true);
-		m_pCollider_Scissor_Sperate[CWeapon_Scissor_Handle::SCISSOR_RIGHT]->IsActive(true);
+		if (!m_pColliderCom->IsActive())
+			return;
+
+		m_pScissor_Sperate[iHandIndex]->Active_Collider();
 	}
 }
 
-void CWeapon_Scissor::DeActive_Collider()
+void CWeapon_Scissor::DeActive_Collider(_uint iHandIndex)
 {
 	if (m_isSeperate)
 	{
@@ -121,8 +133,7 @@ void CWeapon_Scissor::DeActive_Collider()
 	}
 	else
 	{
-		m_pCollider_Scissor_Sperate[CWeapon_Scissor_Handle::SCISSOR_LEFT]->IsActive(false);
-		m_pCollider_Scissor_Sperate[CWeapon_Scissor_Handle::SCISSOR_RIGHT]->IsActive(false);
+		m_pScissor_Sperate[iHandIndex]->DeActive_Collider();
 	}
 }
 
@@ -143,9 +154,6 @@ void CWeapon_Scissor::Change_CombineMode()
 {
 	if (!m_isSeperate)
 		return;
-
-	m_pCollider_Scissor_Sperate[CWeapon_Scissor_Handle::SCISSOR_LEFT]->IsActive(false);
-	m_pCollider_Scissor_Sperate[CWeapon_Scissor_Handle::SCISSOR_RIGHT]->IsActive(false);
 
 	m_pScissor_Sperate[0]->IsActive(false);
 	m_pScissor_Sperate[1]->IsActive(false);
@@ -187,15 +195,13 @@ HRESULT CWeapon_Scissor::Ready_Seperate()
 	ScissorDesc.pSocketBoneMatrix = m_pSocketMatrix; //m_pModelCom->Get_BoneCombindTransformationMatrix_Ptr("BN_Blade");BN_Weapon_R
 
 	m_pScissor_Sperate[CWeapon_Scissor_Handle::SCISSOR_LEFT] = dynamic_cast<CWeapon_Scissor_Handle*>(m_pGameInstance->Clone_GameObject(TEXT("Prototype_GameObject_Weapon_Scissor_Handle"), &ScissorDesc));
-	m_pCollider_Scissor_Sperate[CWeapon_Scissor_Handle::SCISSOR_LEFT] = m_pScissor_Sperate[CWeapon_Scissor_Handle::SCISSOR_LEFT]->Get_Collider();
-	if (nullptr == m_pScissor_Sperate[CWeapon_Scissor_Handle::SCISSOR_LEFT] || nullptr == m_pCollider_Scissor_Sperate[CWeapon_Scissor_Handle::SCISSOR_LEFT])
+	if (nullptr == m_pScissor_Sperate[CWeapon_Scissor_Handle::SCISSOR_LEFT])
 		return E_FAIL;
 
 	ScissorDesc.eScissorType = CWeapon_Scissor_Handle::SCISSOR_RIGHT;
 	ScissorDesc.pSocketBoneMatrix = m_pSocketMatrix2;
 	m_pScissor_Sperate[CWeapon_Scissor_Handle::SCISSOR_RIGHT] = dynamic_cast<CWeapon_Scissor_Handle*>(m_pGameInstance->Clone_GameObject(TEXT("Prototype_GameObject_Weapon_Scissor_Handle"), &ScissorDesc));
-	m_pCollider_Scissor_Sperate[CWeapon_Scissor_Handle::SCISSOR_RIGHT] = m_pScissor_Sperate[CWeapon_Scissor_Handle::SCISSOR_RIGHT]->Get_Collider();
-	if (nullptr == m_pScissor_Sperate[CWeapon_Scissor_Handle::SCISSOR_RIGHT] || nullptr == m_pCollider_Scissor_Sperate[CWeapon_Scissor_Handle::SCISSOR_RIGHT])
+	if (nullptr == m_pScissor_Sperate[CWeapon_Scissor_Handle::SCISSOR_RIGHT])
 		return E_FAIL;
 
 	return S_OK;

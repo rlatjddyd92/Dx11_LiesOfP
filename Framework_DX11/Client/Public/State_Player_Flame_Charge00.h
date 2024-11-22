@@ -30,12 +30,17 @@ private:
     _bool               m_isInputRButton = {};
     _float              m_fRButtonTime = {};
 
-    _bool* m_pIsEndAnim = { nullptr };
-    _bool* m_pResetRootMove = { nullptr };
-    _float* m_pTrackPos = { nullptr };
+    _bool*              m_pIsEndAnim = { nullptr };
+    _bool*              m_pResetRootMove = { nullptr };
+    _float*             m_pTrackPos = { nullptr };
 
 private:
     _bool               End_Check();
+
+private:
+    _int                m_iColliderStartFrame[2] = {};
+    _int                m_iColliderEndFrame[2] = {};
+    void                Control_Collider();
 
 public:
     static CState_Player_Flame_Charge00* Create(class CFsm* pFsm, class CPlayer* pPlayer, _uint iStateNum, void* pArg = nullptr);

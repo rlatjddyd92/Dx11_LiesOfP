@@ -24,6 +24,11 @@ HRESULT CState_Player_Flame_Charge00::Initialize(_uint iStateNum, void* pArg)
     m_iChangeFrame = 150;
     m_iStateNum = iStateNum;
 
+    m_iColliderStartFrame[0] = 83;
+    m_iColliderEndFrame[0] = 88;
+    m_iColliderStartFrame[1] = 120;
+    m_iColliderEndFrame[1] = 130;
+
     return S_OK;
 }
 
@@ -96,15 +101,36 @@ void CState_Player_Flame_Charge00::Update(_float fTimeDelta)
     {
         m_pPlayer->Change_State(CPlayer::TH_IDLE);
     }
+
+    Control_Collider();
 }
 
 void CState_Player_Flame_Charge00::End_State()
 {
+    m_pPlayer->DeActive_CurretnWeaponCollider();
 }
 
 _bool CState_Player_Flame_Charge00::End_Check()
 {
     return m_pPlayer->Get_EndAnim(m_iAnimation_FlameCA1);
+}
+
+void CState_Player_Flame_Charge00::Control_Collider()
+{
+    _int iFrame = m_pPlayer->Get_Frame();
+
+    _bool   isColliderActive = false;
+
+    for (_uint i = 0; i < 2; ++i)
+    {
+        if (m_iColliderStartFrame[i] <= iFrame && iFrame <= m_iColliderEndFrame[i])
+            isColliderActive = true;
+    }
+
+    if (isColliderActive)
+        m_pPlayer->Active_CurrentWeaponCollider();
+    else
+        m_pPlayer->DeActive_CurretnWeaponCollider();
 }
 
 CState_Player_Flame_Charge00* CState_Player_Flame_Charge00::Create(CFsm* pFsm, CPlayer* pPlayer, _uint iStateNum, void* pArg)

@@ -107,13 +107,13 @@
       <Optimization>Disabled</Optimization>
       <PreprocessorDefinitions>_DEBUG;_WINDOWS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <SDLCheck>true</SDLCheck>
-      <AdditionalIncludeDirectories>../../EngineSDK/Inc/;../Public/;../Default</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>../../EngineSDK/Inc/;../Public/;../Default;../../EngineSDK/Inc/Fmod</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <AdditionalLibraryDirectories>../../EngineSDK/lib/</AdditionalLibraryDirectories>
-      <AdditionalDependencies>Engine.lib;DirectXTKd.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>Engine.lib;DirectXTKd.lib;fmod_vc.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
     <FxCompile>
       <ShaderType>Effect</ShaderType>
@@ -232,7 +232,9 @@
     <ClInclude Include="..\Public\State_Player_Scissor_Buff.h" />
     <ClInclude Include="..\Public\State_Player_Scissor_Charge00.h" />
     <ClInclude Include="..\Public\State_Player_Scissor_Charge01.h" />
-    <ClInclude Include="..\Public\State_Player_Scissor_Fatal.h" />
+    <ClInclude Include="..\Public\State_Player_Scissor_Fatal0.h" />
+    <ClInclude Include="..\Public\State_Player_Scissor_Fatal1.h" />
+    <ClInclude Include="..\Public\State_Player_Scissor_Fatal2.h" />
     <ClInclude Include="..\Public\State_Player_Scissor_LAttack00.h" />
     <ClInclude Include="..\Public\State_Player_Scissor_LAttack01.h" />
     <ClInclude Include="..\Public\State_Player_Scissor_RAttack00.h" />
@@ -345,7 +347,9 @@
     <ClCompile Include="..\Private\State_Player_Scissor_Buff.cpp" />
     <ClCompile Include="..\Private\State_Player_Scissor_Charge00.cpp" />
     <ClCompile Include="..\Private\State_Player_Scissor_Charge01.cpp" />
-    <ClCompile Include="..\Private\State_Player_Scissor_Fatal.cpp" />
+    <ClCompile Include="..\Private\State_Player_Scissor_Fatal0.cpp" />
+    <ClCompile Include="..\Private\State_Player_Scissor_Fatal1.cpp" />
+    <ClCompile Include="..\Private\State_Player_Scissor_Fatal2.cpp" />
     <ClCompile Include="..\Private\State_Player_Scissor_LAttack00.cpp" />
     <ClCompile Include="..\Private\State_Player_Scissor_LAttack01.cpp" />
     <ClCompile Include="..\Private\State_Player_Scissor_RAttack00.cpp" />

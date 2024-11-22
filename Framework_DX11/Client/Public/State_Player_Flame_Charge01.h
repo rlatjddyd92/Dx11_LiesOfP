@@ -37,6 +37,11 @@ private:
 private:
     _bool               End_Check();
 
+private:
+    _int                m_iColliderStartFrame[2] = {};
+    _int                m_iColliderEndFrame[2] = {};
+    void                Control_Collider();
+
 public:
     static CState_Player_Flame_Charge01* Create(class CFsm* pFsm, class CPlayer* pPlayer, _uint iStateNum, void* pArg = nullptr);
     virtual void Free() override;

@@ -65,7 +65,7 @@ void CState_Player_OH_Idle::Update(_float fTimeDelta)
         if (m_pPlayer->Get_WeaponType() == CPlayer::WEP_RAPIER)
             m_pPlayer->Change_State(CPlayer::RAPIER_FATAL);
         else if (m_pPlayer->Get_WeaponType() == CPlayer::WEP_SCISSOR)
-            m_pPlayer->Change_State(CPlayer::SCISSOR_FATAL);
+            m_pPlayer->Change_State(CPlayer::SCISSOR_FATAL0);
     }
     else if (KEY_TAP(KEY::R))
     {
