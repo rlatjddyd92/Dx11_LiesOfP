@@ -246,7 +246,26 @@ public:
 
 	CPlayer::WEAPON_TYPE Get_Weapon_Model_Index(); // 현재 사용 중인 무기의 모델 번호 리턴
 
-	const ITEM* Get_Equip_Item_Info(EQUIP_SLOT eSlot) // 현재 장비창에 장착된 아이템의 정보 레퍼런스 획득
+	ITEM_RESULT Get_Array_Info(INVEN_ARRAY_TYPE eIndex, _wstring* strName, _int* iRow)
+	{
+		if ((_int(eIndex) < 0) || (_int(eIndex) >= _int(INVEN_ARRAY_TYPE::TYPE_END)))
+			return ITEM_RESULT::RESULT_INVALID;
+
+		*strName = m_vecArray_Inven[_int(eIndex)]->strInven_Array_Name;
+		*iRow = m_vecArray_Inven[_int(eIndex)]->Get_Array_Size() / 5;
+	}
+	const ITEM* Get_Array_Item_Info(INVEN_ARRAY_TYPE eIndex, _uint iIndex) // <- 인벤의 아이템 정보 획득
+	{
+		if ((_int(eIndex) < 0) || (_int(eIndex) >= _int(INVEN_ARRAY_TYPE::TYPE_END)))
+			return nullptr;
+
+		if (m_vecArray_Inven[_int(eIndex)]->vecItemInfo[iIndex]->eType_Index == ITEM_TYPE::ITEMTYPE_END)
+			return nullptr;
+
+		return m_vecArray_Inven[_int(eIndex)]->vecItemInfo[iIndex];
+	}
+
+	const ITEM* Get_Equip_Item_Info(EQUIP_SLOT eSlot) // 현재 장비창에 장착된 아이템의 정보 획득
 	{ 
 		if((_int(eSlot) < 0) || (_int(eSlot) >= _int(EQUIP_SLOT::EQUIP_END)))
 			return nullptr;

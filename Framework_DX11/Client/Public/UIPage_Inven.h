@@ -58,6 +58,7 @@ public:
 		TAP_WEAPON_PART,
 		TAP_ARM,
 		TAP_DEFENCE,
+		TAP_AMULET,
 		TAP_COSTUME,
 		TAP_GESTURE,
 		TAP_COLLECTION,
@@ -67,10 +68,10 @@ public:
 	typedef struct ARRAY_RENDER_INFO // 어떤 인벤 배열을 어디에 그릴 지만 결정 
 	{
 		_float fAdjust_Y = 0.f; // <- 여기 표시된 만큼 내려가야 함
-
-		INVEN_ARRAY_TYPE eType = INVEN_ARRAY_TYPE::TYPE_END; // <- 여기 있는 내용을 그림
-		_int iRow = 0; // <- 인벤 배열이 차지한 줄이 여러 줄일 경우 몇 번째 줄을 그릴 지 기록
-
+		_wstring strName = TEXT("none");
+		_int iTexture[5] = { -1,-1,-1,-1,-1 };
+		_int iTexture_Handle[5] = { -1,-1,-1,-1,-1 };
+		_int iTexture_Symbol[5] = { -1,-1,-1,-1,-1 };
 	}RENDER;
 
 
@@ -106,6 +107,9 @@ private:
 	// update
 	void Update_Top_Part(_float fTimeDelta); // 상단 탭버튼 하이라이트 라인 및 무게, 코인 표시 조정 
 	void Update_Array_Position(_float fTimeDelta); // 페이지 조작 내용에 따라 Array들의 위치 및 형태를 잡음
+
+
+
 	void Update_BoxInfo(_float fTimeDelta); // 하단의 보유 정보 갱신
 
 	// Part 조정 후
@@ -116,9 +120,13 @@ private:
 
 
 private:
-	INVEN_UI_TAP eNow_Tap = INVEN_UI_TAP::TAP_NORMAL_ITEM;
+	INVEN_UI_TAP m_eNow_Tap = INVEN_UI_TAP::TAP_NORMAL_ITEM;
 
+	_float m_fGap = 2.5f; // Array 위치 계산 때 각 요소 사이의 간격 
 
+	vector<INVEN_ARRAY_TYPE> m_vecSelected_Array; // 선택된 Tap에 따라 그려야 하는 Inven_array 목록
+
+	queue<RENDER*> m_queueRender; // <- 이번 프레임에 그려야 하는 내용
 
 public:
 	static CUIPage_Inven* Create(ID3D11Device* pDevice, ID3D11DeviceContext* pContext);

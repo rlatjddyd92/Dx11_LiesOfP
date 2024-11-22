@@ -91,8 +91,8 @@ HRESULT CUIManager::Render()
 	if (FAILED(m_pUIRender_Client->Render_UI(m_vecPage)))
 		return E_FAIL;
 
-	if (FAILED(m_pUIPage_Inven->Render_Inven_Array(m_pUIRender_Client)))
-		return E_FAIL;
+	/*if (FAILED(m_pUIPage_Inven->Render_Inven_Array(m_pUIRender_Client)))
+		return E_FAIL;*/
 
 	// 여기에 나중에 Tooltip 내용 넣기
 
