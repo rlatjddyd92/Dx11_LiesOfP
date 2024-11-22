@@ -21,7 +21,7 @@ HRESULT CState_CarcassBigA_Idle::Initialize(_uint iStateNum, void* pArg)
 
 HRESULT CState_CarcassBigA_Idle::Start_State(void* pArg)
 {
-    m_pMonster->Change_Animation(20, true, 0.1f, 0.f);
+    m_pMonster->Change_Animation(20, true, 0.1f, 0);
     
     return S_OK;
 }

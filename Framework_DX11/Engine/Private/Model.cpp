@@ -579,6 +579,12 @@ void CModel::Update_Animation_Boundary(_float fTimeDelta, list<OUTPUT_EVKEY>* pE
 					continue;
 				}
 
+				if (m_Bones[CurrentChannels[i]->Get_BoneIndex()]->Get_isNeedTuning())
+				{
+					m_Bones[CurrentChannels[i]->Get_BoneIndex()]->Apply_Tuning();
+					continue;
+				}
+
 				KEYFRAME tCurrentKeyFrame = CurrentChannels[i]->Find_KeyFrameIndex(&m_KeyFrameIndices[m_iCurrentAnimIndex_Boundary][i], m_CurrentTrackPosition_Boundary); // 여기서부터
 				KEYFRAME tNextKeyFrame = NextChannels[i]->Find_KeyFrameIndex(&m_KeyFrameIndices[m_tChaneAnimDesc_Boundary.iNextAnimIndex][i], m_ChangeTrackPosition_Boundary); // 여기로 보간
 

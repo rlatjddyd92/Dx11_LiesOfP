@@ -152,7 +152,7 @@ public:
 			}
 		}
 
-		_uint Get_Array_Size() { return vecItemInfo.size(); }
+		_uint Get_Array_Size() { return (_uint)vecItemInfo.size(); }
 		ITEM* Get_Item_Info(_uint iIndex) 
 		{
 			if ((iIndex < 0) || (iIndex >= Get_Array_Size()))

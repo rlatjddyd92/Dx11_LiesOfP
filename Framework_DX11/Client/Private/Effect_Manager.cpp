@@ -124,6 +124,11 @@ HRESULT CEffect_Manager::Add_Effect_ToLayer(_uint iLevelID, const _wstring& strE
 
     auto& iter = m_EffectContainers.find(strECTag);
 
+    if (m_EffectContainers.end() == iter)
+    {
+        return E_FAIL;
+    }
+
     for (auto& strEffectTag : iter->second)
     {
         _wstring strFileExtention = Get_FileExtentin(strEffectTag);   // È®ÀåÀÚ

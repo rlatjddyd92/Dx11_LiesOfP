@@ -178,12 +178,7 @@ void CUIPage_Inven::Action_Focus(_float fTimeDelta)
 void CUIPage_Inven::Update_Top_Part(_float fTimeDelta)
 {
 	// 하이라이트 라인 조정 
-	m_vec_Group_Ctrl[_int(PART_GROUP::GROUP_TOP_HIGHLIGHT)]->fRatio = (_int)m_eNow_Tap / (_int)INVEN_UI_TAP::TAP_END;
-
-	
-
-
-
+	m_vec_Group_Ctrl[_int(PART_GROUP::GROUP_TOP_HIGHLIGHT)]->fRatio = (_float)((_int)m_eNow_Tap / (_int)INVEN_UI_TAP::TAP_END);
 
 }
 

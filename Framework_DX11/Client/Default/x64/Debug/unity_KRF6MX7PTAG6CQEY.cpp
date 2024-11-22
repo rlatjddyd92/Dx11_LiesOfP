@@ -83,7 +83,6 @@
 
 #include "D:\GitProject\Dx11_LiesOfP\Framework_DX11\Client\Private\Stargazer.cpp"
 
-
 #include "D:\GitProject\Dx11_LiesOfP\Framework_DX11\Client\Private\State_CarcassBigA_AttackRoute_0.cpp"
 
 
@@ -429,7 +428,10 @@
 #include "D:\GitProject\Dx11_LiesOfP\Framework_DX11\Client\Private\UIPage_Stat.cpp"
 
 
-#include "D:\GitProject\Dx11_LiesOfP\Framework_DX11\Client\Private\UIPage_Test.cpp"
+#include "D:\GitProject\Dx11_LiesOfP\Framework_DX11\Client\Private\UIPage_ToolTip.cpp"
+
+
+#include "D:\GitProject\Dx11_LiesOfP\Framework_DX11\Client\Private\UIRender_Batching.cpp"
 
 
 #include "D:\GitProject\Dx11_LiesOfP\Framework_DX11\Client\Private\UIRender_Client.cpp"

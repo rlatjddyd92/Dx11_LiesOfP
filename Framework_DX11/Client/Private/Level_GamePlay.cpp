@@ -42,19 +42,6 @@ HRESULT CLevel_Tool::Initialize()
 	if (FAILED(Read_Map_Data()))
 		return E_FAIL;	
 
-	CEffect_Container::EFFECT_DESC desc = {};
-
-	desc.fRotationPerSec = XMConvertToRadians(90.f);
-	desc.fSpeedPerSec = 1.f;
-	desc.iLevelIndex = LEVEL_GAMEPLAY;
-	desc.pParentMatrix = nullptr;
-	desc.pSocketMatrix = nullptr;
-	desc.vPos = { 0.f, 0.f, 0.f };
-	desc.vRotation = { 0.f, 0.f, 0.f };
-	desc.vScale = { 1.f, 1.f, 1.f };
-
-	CEffect_Manager::Get_Instance()->Add_Effect_ToLayer(LEVEL_GAMEPLAY, TEXT("TEST_Effect"), &desc);
-
 	// 24-11-19 김성용
 	// 게임 인터페이스를 인게임 모드로 전환
 	GET_GAMEINTERFACE->SetIngame(true);
