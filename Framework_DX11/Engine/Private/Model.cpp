@@ -944,10 +944,15 @@ HRESULT CModel::ReadyModel_To_Binary(HANDLE* pFile)
 
 	ReadFile(*pFile, &m_iNumMaterials, sizeof(_uint), &dwByte, nullptr);
 	
+	if (m_FilePaths != nullptr)
+	{
+		m_FilePaths->pStruct.resize(m_iNumMaterials);
+	}
+
 	for (_uint i = 0; i < m_iNumMaterials; ++i)
 	{
 		MESH_MATERIAL		MeshMaterial{};
-
+		
 		for (_uint j = 0; j < TEXTURE_TYPE_MAX; ++j)
 		{
 			_bool	isHaveTextures = true;
@@ -960,6 +965,13 @@ HRESULT CModel::ReadyModel_To_Binary(HANDLE* pFile)
 			_char				szTexturePath[MAX_PATH] = "";
 
 			ReadFile(*pFile, szTexturePath, MAX_PATH, &dwByte, nullptr);
+			
+			if (m_FilePaths != nullptr)
+			{
+				string strTextureFilePath;
+				strTextureFilePath.assign(szTexturePath);
+				m_FilePaths->pStruct[i].m_ModelFilePaths.push_back(strTextureFilePath);
+			}
 
 			_tchar				szFinalPath[MAX_PATH] = TEXT("");
 

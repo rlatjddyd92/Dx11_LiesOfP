@@ -32,11 +32,12 @@ void CState_SimonManusP1_Idle::Update(_float fTimeDelta)
     _float fDist = m_pMonster->Calc_Distance_XZ();
     if (m_fIdleEndDuration <= m_fIdleTime)
     {
-        //if (m_iAtkCnt >= 3.f && fDist <= 15.f && 6.f < fDist)
-        //{
-        //    //하이점프폴
-        //
-        //}
+        if (m_iAtkCnt >= 3.f && fDist <= 15.f && 6.f < fDist)   //m_iAtkCnt >= 3.f && fDist <= 15.f && 6.f < fDist
+        {
+            //하이점프폴
+            m_pMonster->Change_State(CSimonManus::ATK_HIGHJUMPFALL);
+            return;
+        }
         if (fDist <= 7.f)
         {
             Calc_Act_Attack(fDist);

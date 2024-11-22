@@ -32,16 +32,18 @@ void CState_SimonManusP1_HighJumpFall::Update(_float fTimeDelta)
     _double CurTrackPos{};
     CurTrackPos = m_pMonster->Get_CurrentTrackPos();
 
-    if (CurTrackPos >= 220.f && CurTrackPos < 230.f) //점프 이후 공중 체공 + 플레이어방향 회전
+    if (CurTrackPos >= 200.f && CurTrackPos < 230.f) //점프 이후 공중 체공 + 플레이어방향 회전
     {
         m_vTargetDir = m_pMonster->Get_TargetDir();
-        m_pMonster->Get_Transform()->LookAt_Lerp_NoHeight(m_vTargetDir, 3, fTimeDelta);
+        m_pMonster->Get_Transform()->LookAt_Lerp_NoHeight(m_vTargetDir, 2, fTimeDelta);
+
+        m_vTargetDir -= 4 * XMVector3Normalize(m_vTargetDir);
     }
     else if(CurTrackPos >= 230.f && CurTrackPos <= 245.f) //땅 찍기까지
     {
         _Vec3 vPos = m_pMonster->Get_Transform()->Get_State(CTransform::STATE_POSITION);
 
-        _Vec3 vMove = m_vTargetDir * ((CurTrackPos - 230.f) / 15.f);
+        _Vec3 vMove = m_vTargetDir * ((CurTrackPos - 230.f) / 20.f);
         m_pMonster->Get_Transform()->Set_State(CTransform::STATE_POSITION, vPos + vMove - m_vFlyMoveStack);
 
         m_vFlyMoveStack = vMove;
@@ -59,7 +61,7 @@ void CState_SimonManusP1_HighJumpFall::End_State()
 {
     m_iAnimCnt = 0;//혹시 완료되지 않고 변하는 경우에 대비
     m_fParalizeTime = 0.f;
-    *m_pResetRootMove = true;
+    m_vFlyMoveStack = _vector{0, 0, 0, 0};
 }
 
 _bool CState_SimonManusP1_HighJumpFall::End_Check()

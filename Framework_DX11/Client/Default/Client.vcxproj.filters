@@ -520,14 +520,14 @@
     <Filter Include="05.Fsm\Monster\SimonManus\P2\Attack\Route\Route0">
       <UniqueIdentifier>{57e7b286-635d-48c5-bffc-666a38b621a5}</UniqueIdentifier>
     </Filter>
-    <Filter Include="05.Fsm\Monster\SimonManus\P1\Attck\Route\Stamp">
-      <UniqueIdentifier>{29d16570-4bed-4aa6-b8ef-4624cab0bdf3}</UniqueIdentifier>
-    </Filter>
     <Filter Include="05.Fsm\Monster\SimonManus\P2\Attack\Route\Route1">
       <UniqueIdentifier>{6467109c-1f2c-49c7-99be-29881975b050}</UniqueIdentifier>
     </Filter>
     <Filter Include="05.Fsm\Monster\SimonManus\P2\Attack\Route\Route2">
       <UniqueIdentifier>{0c443aba-e819-493a-b1d5-b0477bdc89c1}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="05.Fsm\Monster\SimonManus\P1\Attck\Route\Stamp">
+      <UniqueIdentifier>{29d16570-4bed-4aa6-b8ef-4624cab0bdf3}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>

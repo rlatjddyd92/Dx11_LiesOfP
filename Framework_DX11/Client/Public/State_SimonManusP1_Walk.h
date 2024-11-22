@@ -12,6 +12,7 @@ class CState_SimonManusP1_Walk : public CState
 private:
     typedef enum {
         AN_WALK_BACK = 49, AN_WALK_FRONT = 50, AN_WALK_LEFT = 51, AN_WALK_RIGHT = 52
+        , AN_TURNLEFT = 47, AN_TURNRIGHT = 48
     }ANIMNUM;
 
 public:

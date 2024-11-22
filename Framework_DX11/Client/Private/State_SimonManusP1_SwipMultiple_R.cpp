@@ -34,54 +34,26 @@ HRESULT CState_SimonManusP1_SwipMultiple_R::Start_State(void* pArg)
 
 void CState_SimonManusP1_SwipMultiple_R::Update(_float fTimeDelta)
 {
-    if (!m_isDelayed)
+    if (End_Check())
     {
-        if (m_iRouteTrack == 1)
+        switch (m_iRouteTrack)
         {
-            m_pMonster->Change_Animation(AN_ROUTE_LAST, false, 0.0f, 0);
-        }
-
-        if (End_Check())
-        {
-            ++m_iRouteTrack;
-
-            if (m_iRouteTrack >= 2)
-            {
-                m_pMonster->Change_State(CSimonManus::IDLE);
-                return;
-            }
-            m_fIdleTime = 0.f;
-            m_isDelayed = true;
-        }
-    }
-    else
-    {
-        m_fIdleTime += fTimeDelta;
-
-        if (m_fIdleTime >= m_fIdleDuration)
-        {
-            m_isDelayed = false;
-        }
-        _int iDir = m_pMonster->Get_Transform()->LookAt_Lerp_NoHeight(m_pMonster->Get_TargetDir(), 3, fTimeDelta);
-        switch (iDir)
-        {
-        case -1:
-            m_pMonster->Change_Animation(30, true, 0.1f, 0);
-            break;
-
         case 0:
-            m_pMonster->Change_Animation(20, true, 0.1f, 0);
+            m_pMonster->Change_Animation(AN_ROUTE_LAST, false, 0.2f, 0);
+
             break;
 
         case 1:
-            m_pMonster->Change_Animation(31, true, 0.1f, 0);
+
+            m_pMonster->Change_State(CSimonManus::IDLE);
+            return;
             break;
 
         default:
             break;
         }
+        ++m_iRouteTrack;
     }
-
 
 }
 

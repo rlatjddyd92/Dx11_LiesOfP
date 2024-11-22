@@ -33,10 +33,12 @@ void CState_SimonManusP2_HighJumpFall::Update(_float fTimeDelta)
     _double CurTrackPos{};
     CurTrackPos = m_pMonster->Get_CurrentTrackPos();
 
-    if (CurTrackPos >= 215.f && CurTrackPos < 230.f) //점프 이후 공중 체공 + 플레이어방향 회전
+    if (CurTrackPos >= 210.f && CurTrackPos < 230.f) //점프 이후 공중 체공 + 플레이어방향 회전
     {
         m_vTargetDir = m_pMonster->Get_TargetDir();
         m_pMonster->Get_Transform()->LookAt_Lerp_NoHeight(m_vTargetDir, 3, fTimeDelta);
+
+        m_vTargetDir -= 4 * XMVector3Normalize(m_vTargetDir);
     }
     else if (CurTrackPos >= 230.f && CurTrackPos <= 245.f) //땅 찍기까지
     {
