@@ -89,6 +89,8 @@ private:
 
 	_uint m_EventTypeIndex{};
 
+	_uint m_ActiveTypeIndex{};
+
 	//입력값 혹은 출력값
 	_double m_AnimSpeedPS{};
 	_double m_AnimDuration{};

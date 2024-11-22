@@ -38,7 +38,7 @@ void CState_SimonManusP1_ChasingSwing::Update(_float fTimeDelta)
         if (End_Check())
         {
             ++m_iRouteTrack;
-            m_pMonster->Change_Animation(AN_CHASINGSWING_LOOP, true, 0.1f, 0);
+            m_pMonster->Change_Animation(AN_CHASINGSWING_LOOP, true, 0.f, 0);
         }
         break;
 
@@ -46,14 +46,14 @@ void CState_SimonManusP1_ChasingSwing::Update(_float fTimeDelta)
         if (m_fCurrentTime >= 6.f)
         {
             ++m_iRouteTrack;
-            m_pMonster->Change_Animation(AN_CHASINGSWING_END, false, 0.1f, 0);
+            m_pMonster->Change_Animation(AN_CHASINGSWING_END, false, 0.f, 0);
         }
         else if (m_fCurrentTime >= m_fChaseDuration)
         {
             if (m_pMonster->Calc_Distance_XZ() <= 6.f)
             {
                 ++m_iRouteTrack;
-                m_pMonster->Change_Animation(AN_CHASINGSWING_END, false, 0.1f, 0);
+                m_pMonster->Change_Animation(AN_CHASINGSWING_END, false, 0.f, 0);
             }
         }
         else

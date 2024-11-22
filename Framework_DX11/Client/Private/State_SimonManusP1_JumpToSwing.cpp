@@ -17,7 +17,6 @@ HRESULT CState_SimonManusP1_JumpToSwing::Initialize(_uint iStateNum, void* pArg)
     m_fIdleDuration = 3.3f;
     CSimonManus::FSMSTATE_DESC* pDesc = static_cast<CSimonManus::FSMSTATE_DESC*>(pArg);
 
-    m_pIsEndAnim = pDesc->pIsEndAnim;
     m_pResetRootMove = pDesc->pIsResetRootMove;
 
     return S_OK;
@@ -70,7 +69,7 @@ void CState_SimonManusP1_JumpToSwing::Update(_float fTimeDelta)
             else
                 m_iCurLastAnim = AN_SWING;
 
-            m_pMonster->Change_Animation(m_iCurLastAnim, false, 0, 0);
+            m_pMonster->Change_Animation(m_iCurLastAnim, false, 0.1f, 0);
             break;
 
         case 1:

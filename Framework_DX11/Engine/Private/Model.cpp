@@ -34,6 +34,7 @@ CModel::CModel(const CModel & Prototype)
 	, m_UseFullVtxIndices{ Prototype.m_UseFullVtxIndices }
 	, m_isEnd_Animations{ nullptr }
 	, m_isEnd_Animations_Boundary{ nullptr }
+	, m_eType{ Prototype.m_eType }
 {
 	for (auto& pAnimation : m_Animations)
 		Safe_AddRef(pAnimation);

@@ -41,6 +41,7 @@ public:
 	void		Change_Animation_Boundry(_uint iAnimIndex, _bool IsLoop = false, _float fDuration = 0.2f, _uint iStartFrame = 0);
 	_uint		Get_CurrentAnimIndex();
 	_int		Get_Frame();
+	_int		Get_CurrentTrackPos();
 	_bool		Get_EndAnim(_int iAnimIndex, _bool bIsBoundary = false);
 
 protected:

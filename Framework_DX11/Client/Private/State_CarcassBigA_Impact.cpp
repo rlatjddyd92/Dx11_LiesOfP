@@ -31,7 +31,7 @@ HRESULT CState_CarcassBigA_Impact::Start_State(void* pArg)
 
 void CState_CarcassBigA_Impact::Update(_float fTimeDelta)
 {
-    if (*m_pIsEndAnim == true)
+    if (End_Check())
         m_pMonster->Change_State(CCarcassBigA::IDLE);
 
 }

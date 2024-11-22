@@ -34,16 +34,14 @@ void CState_SimonManusP1_SwingDown_Swing_L::Update(_float fTimeDelta)
 {
     if (m_isSwing)
     {
-        m_fCurrentTime += fTimeDelta;
-        if (m_fCurrentTime >= m_fSwingTime)
+        if (100.f >= m_pMonster->Get_CurrentTrackPos())
         {
             m_pMonster->Change_Animation(AN_ROUTE_LAST, false, 0, 0);
             ++m_iRouteTrack;
             m_isSwing = false;
         }
     }
-
-
+    
     if (End_Check())
     {
         m_pMonster->Change_State(CSimonManus::IDLE);

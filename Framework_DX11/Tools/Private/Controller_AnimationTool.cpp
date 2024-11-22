@@ -852,7 +852,7 @@ void CController_AnimationTool::NewPage_AnimTool()
 
 			ImGui::PushItemWidth(100); // 크기조정
 
-			if (ImGui::BeginListBox("EVENT_Type"))
+			if (ImGui::BeginListBox("##EVENT_Type"))
 			{
 				if (ImGui::Selectable("ONCE", (m_EventTypeIndex == 0)))
 				{
@@ -863,6 +863,27 @@ void CController_AnimationTool::NewPage_AnimTool()
 				if (ImGui::Selectable("REPET", (m_EventTypeIndex == 1)))
 				{
 					m_EventTypeIndex = 1;
+				}
+				else
+					ImGui::SetItemDefaultFocus();
+				ImGui::EndListBox();
+			}
+
+			ImGui::SameLine();
+
+			ImGui::PushItemWidth(100); // 크기조정
+
+			if (ImGui::BeginListBox("##Active_Type"))
+			{
+				if (ImGui::Selectable("EFFECT", (m_ActiveTypeIndex == 0)))
+				{
+					m_ActiveTypeIndex = 0;
+				}
+				else
+					ImGui::SetItemDefaultFocus();
+				if (ImGui::Selectable("COLLIDER", (m_ActiveTypeIndex == 1)))
+				{
+					m_ActiveTypeIndex = 1;
 				}
 				else
 					ImGui::SetItemDefaultFocus();
@@ -910,7 +931,20 @@ void CController_AnimationTool::NewPage_AnimTool()
 					default:
 						break;
 					}
-					
+
+					switch (m_ActiveTypeIndex)
+					{
+					case 0:
+						EventKeyDesc.eTarget_Type = EVENT_KEYFRAME::EFFECT;
+						break;
+
+					case 1:
+						EventKeyDesc.eTarget_Type = EVENT_KEYFRAME::COLLIDER;
+						break;
+
+					default:
+						break;
+					}
 					(*m_pCopyAnimVec)[m_iSelected_Index_Anim]->Add_EventKeyFrame(EventKeyDesc);
 				}
 			}

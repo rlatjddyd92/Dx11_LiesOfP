@@ -32,6 +32,9 @@ private:
     _float              m_fCurrentTime = { 0.f };
     _float              m_fIdleDuration = { 2.6f };
 
+    _Vec4               m_vTargetDir{};
+    _Vec3               m_vFlyMoveStack{};
+
     _bool               m_isPrevChance = { false };
     _bool               m_isActivatedSpecial = { false };
 

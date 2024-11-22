@@ -28,6 +28,26 @@ HRESULT CState_SimonManusP2_HighJumpFall::Start_State(void* pArg)
 
 void CState_SimonManusP2_HighJumpFall::Update(_float fTimeDelta)
 {
+    m_fCurrentTime += fTimeDelta;
+
+    _double CurTrackPos{};
+    CurTrackPos = m_pMonster->Get_CurrentTrackPos();
+
+    if (CurTrackPos >= 215.f && CurTrackPos < 230.f) //점프 이후 공중 체공 + 플레이어방향 회전
+    {
+        m_vTargetDir = m_pMonster->Get_TargetDir();
+        m_pMonster->Get_Transform()->LookAt_Lerp_NoHeight(m_vTargetDir, 3, fTimeDelta);
+    }
+    else if (CurTrackPos >= 230.f && CurTrackPos <= 245.f) //땅 찍기까지
+    {
+        _Vec3 vPos = m_pMonster->Get_Transform()->Get_State(CTransform::STATE_POSITION);
+
+        _Vec3 vMove = m_vTargetDir * ((CurTrackPos - 230.f) / 15.f);
+        m_pMonster->Get_Transform()->Set_State(CTransform::STATE_POSITION, vPos + vMove - m_vFlyMoveStack);
+
+        m_vFlyMoveStack = vMove;
+    }
+
     if (End_Check())//애니메이션의 종료 받아오도록 해서 어택이 종료된 시점에
     {
         m_pMonster->Change_State(CSimonManus::IDLE);

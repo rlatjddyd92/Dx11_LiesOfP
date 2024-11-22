@@ -226,9 +226,6 @@
     <Filter Include="05.Fsm\Player\Common\Dead">
       <UniqueIdentifier>{bd30e2d5-25fb-4905-bacd-c5625c31e943}</UniqueIdentifier>
     </Filter>
-    <Filter Include="02.GameObjects\ColiderObject">
-      <UniqueIdentifier>{3f8ea392-82e9-488f-b871-07a2d20ce4cf}</UniqueIdentifier>
-    </Filter>
     <Filter Include="02.GameObjects\02.Monster\SimonManus">
       <UniqueIdentifier>{57195b03-ed04-4599-966f-cd38e86fb16d}</UniqueIdentifier>
     </Filter>
@@ -343,9 +340,6 @@
     <Filter Include="05.Fsm\Player\TwoHand\00.Attack\FlameSword\RAttack_Charge">
       <UniqueIdentifier>{2e7c81d7-bc79-49a7-b525-d8fd9889eb74}</UniqueIdentifier>
     </Filter>
-    <Filter Include="05.Fsm\Monster\CarcassBigA\Attack\Impact">
-      <UniqueIdentifier>{4bc0bea3-c446-4d60-9852-a813d7be6342}</UniqueIdentifier>
-    </Filter>
     <Filter Include="05.Fsm\Monster\CarcassBigA\Attack\Route">
       <UniqueIdentifier>{defc5ddf-41fa-4d35-a731-88c238c47ef0}</UniqueIdentifier>
     </Filter>
@@ -397,17 +391,8 @@
     <Filter Include="05.Fsm\Monster\SimonManus\P1\Attck\Single">
       <UniqueIdentifier>{66d90f26-f279-4151-b69b-acdf215d1b9f}</UniqueIdentifier>
     </Filter>
-    <Filter Include="05.Fsm\Monster\SimonManus\P1\Attck\Single\ChasingSwing">
-      <UniqueIdentifier>{8d36650d-2580-4ce0-8926-bb9c616f1bdc}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="05.Fsm\Monster\SimonManus\P1\Attck\Single\Stamp">
-      <UniqueIdentifier>{29d16570-4bed-4aa6-b8ef-4624cab0bdf3}</UniqueIdentifier>
-    </Filter>
     <Filter Include="05.Fsm\Monster\SimonManus\P1\Attck\Single\Sting">
       <UniqueIdentifier>{6237cc31-566e-4238-9cc0-842b6d5a1659}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="05.Fsm\Monster\SimonManus\P1\Attck\Single\JumpToSwing">
-      <UniqueIdentifier>{2def39bb-8155-4fb6-8739-272b8c5b856c}</UniqueIdentifier>
     </Filter>
     <Filter Include="05.Fsm\Monster\SimonManus\P1\Attck\Single\AvoidSwing">
       <UniqueIdentifier>{5020c6ac-0497-4710-95db-fa739b2c22b6}</UniqueIdentifier>
@@ -417,18 +402,6 @@
     </Filter>
     <Filter Include="05.Fsm\Monster\SimonManus\P1\Attck\Single\HighJumpFall">
       <UniqueIdentifier>{0204ee7d-1724-4ff0-8340-f74ce4cf84f2}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="05.Fsm\Monster\SimonManus\P1\Attck\Single\SwipMultiple_L">
-      <UniqueIdentifier>{b4d6a51f-333f-494c-878e-e9ab94ac77d0}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="05.Fsm\Monster\SimonManus\P1\Attck\Single\SwipMultiple_R">
-      <UniqueIdentifier>{f0d6030b-a350-4749-b4c4-c3acc6c59444}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="05.Fsm\Monster\SimonManus\P1\Attck\Single\SwingDown_Swing_L">
-      <UniqueIdentifier>{2ef440b2-3dd3-4b83-88a0-8d955e36bd3c}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="05.Fsm\Monster\SimonManus\P1\Attck\Single\SwingDown_Swing_R">
-      <UniqueIdentifier>{b575aa31-8fc8-439c-b7c9-cfcb748540a0}</UniqueIdentifier>
     </Filter>
     <Filter Include="05.Fsm\Monster\SimonManus\P1\Die">
       <UniqueIdentifier>{1ca82e15-8b8c-4a48-9c88-a5f24fc38858}</UniqueIdentifier>
@@ -493,9 +466,6 @@
     <Filter Include="05.Fsm\Monster\SimonManus\P2\Attack\Single\SpreadMagic">
       <UniqueIdentifier>{927e6e2d-8506-48a0-8258-0c917447cec5}</UniqueIdentifier>
     </Filter>
-    <Filter Include="05.Fsm\Monster\SimonManus\P2\Attack\Route\Route1">
-      <UniqueIdentifier>{57e7b286-635d-48c5-bffc-666a38b621a5}</UniqueIdentifier>
-    </Filter>
     <Filter Include="05.Fsm\Monster\SimonManus\P2\HitFatal">
       <UniqueIdentifier>{cfa0a51c-d72a-4dc8-ba57-c8476da79ca9}</UniqueIdentifier>
     </Filter>
@@ -504,6 +474,60 @@
     </Filter>
     <Filter Include="05.Fsm\Monster\SimonManus\P2\Attack\Single\ThunderCalling">
       <UniqueIdentifier>{c534f025-5164-46b2-bd30-4e813cb4bed1}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="05.Fsm\Monster\SimonManus\P1\Attck\Route">
+      <UniqueIdentifier>{fe5d8cc9-5204-4605-9b50-c3021fabb842}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="05.Fsm\Monster\SimonManus\P1\Attck\Route\ChasingSwing">
+      <UniqueIdentifier>{8d36650d-2580-4ce0-8926-bb9c616f1bdc}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="05.Fsm\Monster\SimonManus\P1\Attck\Route\JumpToSwing">
+      <UniqueIdentifier>{2def39bb-8155-4fb6-8739-272b8c5b856c}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="05.Fsm\Monster\SimonManus\P1\Attck\Route\SwipMultiple_L">
+      <UniqueIdentifier>{b4d6a51f-333f-494c-878e-e9ab94ac77d0}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="05.Fsm\Monster\SimonManus\P1\Attck\Route\SwipMultiple_R">
+      <UniqueIdentifier>{f0d6030b-a350-4749-b4c4-c3acc6c59444}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="05.Fsm\Monster\SimonManus\P1\Attck\Route\SwingDown_Swing_R">
+      <UniqueIdentifier>{b575aa31-8fc8-439c-b7c9-cfcb748540a0}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="05.Fsm\Monster\SimonManus\P1\Attck\Route\SwingDown_Swing_L">
+      <UniqueIdentifier>{2ef440b2-3dd3-4b83-88a0-8d955e36bd3c}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="05.Fsm\Monster\SimonManus\P2\Attack\Route\ChasingSwing">
+      <UniqueIdentifier>{9fca7200-91e9-4f1a-995d-4b8ee1f3cbb3}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="05.Fsm\Monster\CarcassBigA\Attack\Single\Impact">
+      <UniqueIdentifier>{4bc0bea3-c446-4d60-9852-a813d7be6342}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="05.Fsm\Monster\SimonManus\P2\Attack\Route\SwipMultiple">
+      <UniqueIdentifier>{e417e7fa-1188-43d8-b4cd-4b21ddb676d4}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="05.Fsm\Monster\SimonManus\P2\Attack\Route\Stamp">
+      <UniqueIdentifier>{da7d2547-96c3-433f-976d-177660af0b99}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="05.Fsm\Monster\SimonManus\P2\Attack\Route\SwingDown_Swing">
+      <UniqueIdentifier>{e4017f7a-df12-469b-a6f4-a93eb0af6524}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="05.Fsm\Monster\SimonManus\P2\Attack\Route\JumpToAttack">
+      <UniqueIdentifier>{e534a47a-1113-4d6c-848d-832d77482ffa}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="05.Fsm\Monster\SimonManus\P2\Attack\Route\LightningToWave">
+      <UniqueIdentifier>{36fc1f37-9fa8-4bcb-9bd8-eb43b4acc6b1}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="05.Fsm\Monster\SimonManus\P2\Attack\Route\Route0">
+      <UniqueIdentifier>{57e7b286-635d-48c5-bffc-666a38b621a5}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="05.Fsm\Monster\SimonManus\P1\Attck\Route\Stamp">
+      <UniqueIdentifier>{29d16570-4bed-4aa6-b8ef-4624cab0bdf3}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="05.Fsm\Monster\SimonManus\P2\Attack\Route\Route1">
+      <UniqueIdentifier>{6467109c-1f2c-49c7-99be-29881975b050}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="05.Fsm\Monster\SimonManus\P2\Attack\Route\Route2">
+      <UniqueIdentifier>{0c443aba-e819-493a-b1d5-b0477bdc89c1}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -631,7 +655,7 @@
       <Filter>05.Fsm\Monster\CarcassBigA\Paralize</Filter>
     </ClInclude>
     <ClInclude Include="..\Public\State_CarcassBigA_Impact.h">
-      <Filter>05.Fsm\Monster\CarcassBigA\Attack\Impact</Filter>
+      <Filter>05.Fsm\Monster\CarcassBigA\Attack\Single\Impact</Filter>
     </ClInclude>
     <ClInclude Include="..\Public\State_CarcassBigA_Idle.h">
       <Filter>05.Fsm\Monster\CarcassBigA\Idle</Filter>
@@ -799,10 +823,10 @@
       <Filter>05.Fsm\Monster\SimonManus\P1\Grogy</Filter>
     </ClInclude>
     <ClInclude Include="..\Public\State_SimonManusP1_JumpToSwing.h">
-      <Filter>05.Fsm\Monster\SimonManus\P1\Attck\Single\JumpToSwing</Filter>
+      <Filter>05.Fsm\Monster\SimonManus\P1\Attck\Route\JumpToSwing</Filter>
     </ClInclude>
     <ClInclude Include="..\Public\State_SimonManusP1_Stamp.h">
-      <Filter>05.Fsm\Monster\SimonManus\P1\Attck\Single\Stamp</Filter>
+      <Filter>05.Fsm\Monster\SimonManus\P1\Attck\Route\Stamp</Filter>
     </ClInclude>
     <ClInclude Include="..\Public\State_SimonManusP1_StingAttack.h">
       <Filter>05.Fsm\Monster\SimonManus\P1\Attck\Single\Sting</Filter>
@@ -811,7 +835,7 @@
       <Filter>05.Fsm\Monster\SimonManus\P1\Idle</Filter>
     </ClInclude>
     <ClInclude Include="..\Public\State_SimonManusP1_ChasingSwing.h">
-      <Filter>05.Fsm\Monster\SimonManus\P1\Attck\Single\ChasingSwing</Filter>
+      <Filter>05.Fsm\Monster\SimonManus\P1\Attck\Route\ChasingSwing</Filter>
     </ClInclude>
     <ClInclude Include="..\Public\State_CarcassBigA_WheelWind.h">
       <Filter>05.Fsm\Monster\CarcassBigA\Attack\Single\WheelWind</Filter>
@@ -847,22 +871,19 @@
       <Filter>05.Fsm\Monster\SimonManus\P1\Attck\Single\HighJumpFall</Filter>
     </ClInclude>
     <ClInclude Include="..\Public\State_SimonManusP1_SwingDown_Swing_R.h">
-      <Filter>05.Fsm\Monster\SimonManus\P1\Attck\Single\SwingDown_Swing_R</Filter>
+      <Filter>05.Fsm\Monster\SimonManus\P1\Attck\Route\SwingDown_Swing_R</Filter>
     </ClInclude>
     <ClInclude Include="..\Public\State_SimonManusP1_SwipMultiple_L.h">
-      <Filter>05.Fsm\Monster\SimonManus\P1\Attck\Single\SwipMultiple_L</Filter>
+      <Filter>05.Fsm\Monster\SimonManus\P1\Attck\Route\SwipMultiple_L</Filter>
     </ClInclude>
     <ClInclude Include="..\Public\State_SimonManusP1_SwipMultiple_R.h">
-      <Filter>05.Fsm\Monster\SimonManus\P1\Attck\Single\SwipMultiple_R</Filter>
+      <Filter>05.Fsm\Monster\SimonManus\P1\Attck\Route\SwipMultiple_R</Filter>
     </ClInclude>
     <ClInclude Include="..\Public\State_SimonManusP1_SwingDown_Swing_L.h">
-      <Filter>05.Fsm\Monster\SimonManus\P1\Attck\Single\SwingDown_Swing_L</Filter>
+      <Filter>05.Fsm\Monster\SimonManus\P1\Attck\Route\SwingDown_Swing_L</Filter>
     </ClInclude>
     <ClInclude Include="..\Public\Weapon_SimonManus_Hammer.h">
       <Filter>02.GameObjects\06.Weapon\01.SimonManusWeapon</Filter>
-    </ClInclude>
-    <ClInclude Include="..\Public\State_SimonManusP2_Idle.h">
-      <Filter>05.Fsm\Monster\SimonManus\P2\Idle</Filter>
     </ClInclude>
     <ClInclude Include="..\Public\State_SimonManusP2_Walk.h">
       <Filter>05.Fsm\Monster\SimonManus\P2\Walk</Filter>
@@ -876,7 +897,7 @@
     <ClInclude Include="..\Public\State_SimonManusP2_HitFatal.h">
       <Filter>05.Fsm\Monster\SimonManus\P2\HitFatal</Filter>
     </ClInclude>
-    <ClInclude Include="..\Public\State_SimonMansuP2_Die.h">
+    <ClInclude Include="..\Public\State_SimonManusP2_Die.h">
       <Filter>05.Fsm\Monster\SimonManus\P2\Die</Filter>
     </ClInclude>
     <ClInclude Include="..\Public\State_SimonManusP2_Sting.h">
@@ -902,6 +923,39 @@
     </ClInclude>
     <ClInclude Include="..\Public\State_SimonManusP2_ThunderCalling.h">
       <Filter>05.Fsm\Monster\SimonManus\P2\Attack\Single\ThunderCalling</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Public\State_SimonManusP2_Route0.h">
+      <Filter>05.Fsm\Monster\SimonManus\P2\Attack\Route\Route0</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Public\State_SimonManusP2_ChasingSwing.h">
+      <Filter>05.Fsm\Monster\SimonManus\P2\Attack\Route\ChasingSwing</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Public\State_SimonManusP2_LightningToWave.h">
+      <Filter>05.Fsm\Monster\SimonManus\P2\Attack\Route\LightningToWave</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Public\State_SimonManusP2_SwingDown_Swing.h">
+      <Filter>05.Fsm\Monster\SimonManus\P2\Attack\Route\SwingDown_Swing</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Public\State_SimonManusP2_SwipMultiple.h">
+      <Filter>05.Fsm\Monster\SimonManus\P2\Attack\Route\SwipMultiple</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Public\State_SimonManusP2_Stamp.h">
+      <Filter>05.Fsm\Monster\SimonManus\P2\Attack\Route\Stamp</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Public\State_SimonManusP2_JumpToAttack.h">
+      <Filter>05.Fsm\Monster\SimonManus\P2\Attack\Route\JumpToAttack</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Public\State_SimonManusP2_Idle.h">
+      <Filter>05.Fsm\Monster\SimonManus\P2\Idle</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Public\State_SimonManusP2_SpreadMagic.h">
+      <Filter>05.Fsm\Monster\SimonManus\P2\Attack\Single\SpreadMagic</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Public\State_SimonManusP2_Route1.h">
+      <Filter>05.Fsm\Monster\SimonManus\P2\Attack\Route\Route1</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Public\State_SimonManusP2_Route2.h">
+      <Filter>05.Fsm\Monster\SimonManus\P2\Attack\Route\Route2</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -999,7 +1053,7 @@
       <Filter>05.Fsm\Monster\CarcassBigA\Paralize</Filter>
     </ClCompile>
     <ClCompile Include="..\Private\State_CarcassBigA_Impact.cpp">
-      <Filter>05.Fsm\Monster\CarcassBigA\Attack\Impact</Filter>
+      <Filter>05.Fsm\Monster\CarcassBigA\Attack\Single\Impact</Filter>
     </ClCompile>
     <ClCompile Include="..\Private\State_CarcassBigA_Idle.cpp">
       <Filter>05.Fsm\Monster\CarcassBigA\Idle</Filter>
@@ -1161,7 +1215,7 @@
       <Filter>05.Fsm\Monster\SimonManus\P1\Attck\Single\AvoidSwing</Filter>
     </ClCompile>
     <ClCompile Include="..\Private\State_SimonManusP1_ChasingSwing.cpp">
-      <Filter>05.Fsm\Monster\SimonManus\P1\Attck\Single\ChasingSwing</Filter>
+      <Filter>05.Fsm\Monster\SimonManus\P1\Attck\Route\ChasingSwing</Filter>
     </ClCompile>
     <ClCompile Include="..\Private\State_SimonManusP1_Die.cpp">
       <Filter>05.Fsm\Monster\SimonManus\P1\Die</Filter>
@@ -1170,10 +1224,10 @@
       <Filter>05.Fsm\Monster\SimonManus\P1\Grogy</Filter>
     </ClCompile>
     <ClCompile Include="..\Private\State_SimonManusP1_JumpToSwing.cpp">
-      <Filter>05.Fsm\Monster\SimonManus\P1\Attck\Single\JumpToSwing</Filter>
+      <Filter>05.Fsm\Monster\SimonManus\P1\Attck\Route\JumpToSwing</Filter>
     </ClCompile>
     <ClCompile Include="..\Private\State_SimonManusP1_Stamp.cpp">
-      <Filter>05.Fsm\Monster\SimonManus\P1\Attck\Single\Stamp</Filter>
+      <Filter>05.Fsm\Monster\SimonManus\P1\Attck\Route\Stamp</Filter>
     </ClCompile>
     <ClCompile Include="..\Private\State_SimonManusP1_StingAttack.cpp">
       <Filter>05.Fsm\Monster\SimonManus\P1\Attck\Single\Sting</Filter>
@@ -1212,25 +1266,22 @@
       <Filter>05.Fsm\Monster\SimonManus\P1\Attck\Single\HighJumpFall</Filter>
     </ClCompile>
     <ClCompile Include="..\Private\State_SimonManusP1_SwingDown_Swing_R.cpp">
-      <Filter>05.Fsm\Monster\SimonManus\P1\Attck\Single\SwingDown_Swing_R</Filter>
+      <Filter>05.Fsm\Monster\SimonManus\P1\Attck\Route\SwingDown_Swing_R</Filter>
     </ClCompile>
     <ClCompile Include="..\Private\State_SimonManusP1_SwipMultiple_L.cpp">
-      <Filter>05.Fsm\Monster\SimonManus\P1\Attck\Single\SwipMultiple_L</Filter>
+      <Filter>05.Fsm\Monster\SimonManus\P1\Attck\Route\SwipMultiple_L</Filter>
     </ClCompile>
     <ClCompile Include="..\Private\State_SimonManusP1_SwipMultiple_R.cpp">
-      <Filter>05.Fsm\Monster\SimonManus\P1\Attck\Single\SwipMultiple_R</Filter>
+      <Filter>05.Fsm\Monster\SimonManus\P1\Attck\Route\SwipMultiple_R</Filter>
     </ClCompile>
     <ClCompile Include="..\Private\State_SimonManusP1_SwingDown_Swing_L.cpp">
-      <Filter>05.Fsm\Monster\SimonManus\P1\Attck\Single\SwingDown_Swing_L</Filter>
+      <Filter>05.Fsm\Monster\SimonManus\P1\Attck\Route\SwingDown_Swing_L</Filter>
     </ClCompile>
     <ClCompile Include="..\Private\Weapon_SimonManus_Hammer.cpp">
       <Filter>02.GameObjects\06.Weapon\01.SimonManusWeapon</Filter>
     </ClCompile>
     <ClCompile Include="..\Private\Weapon.cpp">
       <Filter>02.GameObjects\06.Weapon</Filter>
-    </ClCompile>
-    <ClCompile Include="..\Private\State_SimonManusP2_Idle.cpp">
-      <Filter>05.Fsm\Monster\SimonManus\P2\Idle</Filter>
     </ClCompile>
     <ClCompile Include="..\Private\State_SimonManusP2_Walk.cpp">
       <Filter>05.Fsm\Monster\SimonManus\P2\Walk</Filter>
@@ -1244,7 +1295,7 @@
     <ClCompile Include="..\Private\State_SimonManusP2_HitFatal.cpp">
       <Filter>05.Fsm\Monster\SimonManus\P2\HitFatal</Filter>
     </ClCompile>
-    <ClCompile Include="..\Private\State_SimonMansuP2_Die.cpp">
+    <ClCompile Include="..\Private\State_SimonManusP2_Die.cpp">
       <Filter>05.Fsm\Monster\SimonManus\P2\Die</Filter>
     </ClCompile>
     <ClCompile Include="..\Private\State_SimonManusP2_Sting.cpp">
@@ -1270,6 +1321,39 @@
     </ClCompile>
     <ClCompile Include="..\Private\State_SimonManusP2_ThunderCalling.cpp">
       <Filter>05.Fsm\Monster\SimonManus\P2\Attack\Single\ThunderCalling</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Private\State_SimonManusP2_Route0.cpp">
+      <Filter>05.Fsm\Monster\SimonManus\P2\Attack\Route\Route0</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Private\State_SimonManusP2_ChasingSwing.cpp">
+      <Filter>05.Fsm\Monster\SimonManus\P2\Attack\Route\ChasingSwing</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Private\State_SimonManusP2_LightningToWave.cpp">
+      <Filter>05.Fsm\Monster\SimonManus\P2\Attack\Route\LightningToWave</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Private\State_SimonManusP2_SwingDown_Swing.cpp">
+      <Filter>05.Fsm\Monster\SimonManus\P2\Attack\Route\SwingDown_Swing</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Private\State_SimonManusP2_SwipMultiple.cpp">
+      <Filter>05.Fsm\Monster\SimonManus\P2\Attack\Route\SwipMultiple</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Private\State_SimonManusP2_Stamp.cpp">
+      <Filter>05.Fsm\Monster\SimonManus\P2\Attack\Route\Stamp</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Private\State_SimonManusP2_JumpToAttack.cpp">
+      <Filter>05.Fsm\Monster\SimonManus\P2\Attack\Route\JumpToAttack</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Private\State_SimonManusP2_Idle.cpp">
+      <Filter>05.Fsm\Monster\SimonManus\P2\Idle</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Private\State_SimonManusP2_SpreadMagic.cpp">
+      <Filter>05.Fsm\Monster\SimonManus\P2\Attack\Single\SpreadMagic</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Private\State_SimonManusP2_Route1.cpp">
+      <Filter>05.Fsm\Monster\SimonManus\P2\Attack\Route\Route1</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Private\State_SimonManusP2_Route2.cpp">
+      <Filter>05.Fsm\Monster\SimonManus\P2\Attack\Route\Route2</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

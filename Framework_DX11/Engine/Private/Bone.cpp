@@ -31,21 +31,24 @@ HRESULT CBone::Initialize_ToBinary(HANDLE* pFile, _bool bUseBoundary, _uint eTyp
 	ReadFile(*pFile, &m_szName, MAX_PATH, &dwByte, nullptr);
 
 	ReadFile(*pFile, &m_TransformationMatrix, sizeof(_float4x4), &dwByte, nullptr);
-
-	if (bUseBoundary)
-	{
-		ReadFile(*pFile, &m_bIsChildOf_Boundary, sizeof(_bool), &dwByte, nullptr);
-	}
-
+	
 	if (eType == CModel::TYPE_ANIM)
 	{
-		//ReadFile(*pFile, &m_isNeedTuning, sizeof(_bool), &dwByte, nullptr);
-		//
-		//if (m_isNeedTuning)
-		//{
-		//	ReadFile(*pFile, &m_TuningMatrix, sizeof(_float4x4), &dwByte, nullptr);
-		//}
+		ReadFile(*pFile, &m_isNeedTuning, sizeof(_bool), &dwByte, nullptr);
+
+		if (m_isNeedTuning)
+		{
+			ReadFile(*pFile, &m_TuningMatrix, sizeof(_float4x4), &dwByte, nullptr);
+		}
+
+		if (bUseBoundary)
+		{
+			ReadFile(*pFile, &m_bIsChildOf_Boundary, sizeof(_bool), &dwByte, nullptr);
+		}
+
 	}
+
+	
 
 	return S_OK;
 }
@@ -90,11 +93,8 @@ HRESULT CBone::Create_BinaryFile(HANDLE* pFile, _bool bUseBoundary, _uint eType)
 	_ulong dwByte = 0;
 	//ºÎ¸ð»À ÀÎµ¦½º
 	WriteFile(*pFile, &m_iParentBoneIndex, sizeof(_int), &dwByte, nullptr);
-
 	//»ÀÀÇ ÀÌ¸§
 	WriteFile(*pFile, &m_szName, MAX_PATH, &dwByte, nullptr);
-
-	
 	//»À Çà·Ä
 	WriteFile(*pFile, &m_TransformationMatrix, sizeof(_float4x4), &dwByte, nullptr);
 
@@ -104,16 +104,17 @@ HRESULT CBone::Create_BinaryFile(HANDLE* pFile, _bool bUseBoundary, _uint eType)
 		WriteFile(*pFile, &m_isNeedTuning, sizeof(_bool), &dwByte, nullptr);
 
 		//Á¶Á¤ Çà·Ä
-		if (m_isNeedTuning)
+		if (m_isNeedTuning == true)
 		{
 			WriteFile(*pFile, &m_TuningMatrix, sizeof(_float4x4), &dwByte, nullptr);
 		}
+
+		if (bUseBoundary == true)
+		{
+			WriteFile(*pFile, &m_bIsChildOf_Boundary, sizeof(_bool), &dwByte, nullptr);
+		}
 	}
 	
-	if (bUseBoundary)
-	{
-		WriteFile(*pFile, &m_bIsChildOf_Boundary, sizeof(_bool), &dwByte, nullptr);
-	}
 	return S_OK;
 }
 

@@ -25,7 +25,7 @@ HRESULT CState_CarcassBigA_Paralyze::Initialize(_uint iStateNum, void* pArg)
 
 HRESULT CState_CarcassBigA_Paralyze::Start_State(void* pArg)
 {
-    m_pMonster->Change_Animation(AN_PARALYZE_START, false);
+    m_pMonster->Change_Animation(AN_PARALYZE_START, false, 0.2f, 0);
     *m_pResetRootMove = false;//애니메이션의 시작부터 끝의 루트본의 이동값이 달라지면 안됨.
     m_iAnimCnt = 0;
 
@@ -42,7 +42,7 @@ void CState_CarcassBigA_Paralyze::Update(_float fTimeDelta)
         if (bCheck)
         {
             ++m_iAnimCnt;
-            m_pMonster->Change_Animation(AN_PARALYZE_START - m_iAnimCnt, true, true);
+            m_pMonster->Change_Animation(AN_PARALYZE_START - m_iAnimCnt, true, 0.f, 0.f);
         }
         break;
 
@@ -50,7 +50,7 @@ void CState_CarcassBigA_Paralyze::Update(_float fTimeDelta)
         if (m_fParalizeTime >= m_fParalizeDuration)
         {
             ++m_iAnimCnt;
-            m_pMonster->Change_Animation(AN_PARALYZE_START - m_iAnimCnt, false, true);
+            m_pMonster->Change_Animation(AN_PARALYZE_START - m_iAnimCnt, false, 0.f, 0.f);
         }
         else
             m_fParalizeTime += fTimeDelta;

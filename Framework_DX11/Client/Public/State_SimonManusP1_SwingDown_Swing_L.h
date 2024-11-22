@@ -33,7 +33,7 @@ private:
     _uint               m_iIdleCount = {};
 
     _float              m_fIdleTime = {};
-    _float              m_fSwingTime = { 3.f };
+    _float              m_fSwingTime = { 2.f };
 
     _bool               m_isPrevChance = { false };
     _bool               m_isActivatedSpecial = { false };

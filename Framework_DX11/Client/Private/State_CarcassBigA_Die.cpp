@@ -41,7 +41,7 @@ HRESULT CState_CarcassBigA_Die::Start_State(void* pArg)
     {
         m_iDirCnt = DIR::DIR_BEHIND;
     }
-    m_pMonster->Change_Animation(19 - m_iDirCnt, true);
+    m_pMonster->Change_Animation(19 - m_iDirCnt, false, 0.1f);
 
     return S_OK;
 }

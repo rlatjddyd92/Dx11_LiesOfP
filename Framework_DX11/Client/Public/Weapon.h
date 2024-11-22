@@ -38,6 +38,8 @@ public:
 	void Appear();
 	void Disappear();
 
+	void ChangeSocketMatrix(const _Matrix* pMat) { m_pSocketMatrix = pMat; }
+
 protected:
 	CShader*			m_pShaderCom = { nullptr };	
 	CModel*				m_pModelCom = { nullptr };

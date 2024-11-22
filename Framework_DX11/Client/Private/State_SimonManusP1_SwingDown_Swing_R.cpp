@@ -25,61 +25,28 @@ HRESULT CState_SimonManusP1_SwingDown_Swing_R::Start_State(void* pArg)
 {
     m_pMonster->Change_Animation(AN_ROUTE_FIRST, false, 0.1f, 0);
 
-    m_fIdleTime = m_fIdleDuration;
-
-    m_isDelayed = false;
+    m_isSwing = true;
 
     return S_OK;
 }
 
 void CState_SimonManusP1_SwingDown_Swing_R::Update(_float fTimeDelta)
 {
-    if (!m_isDelayed)
+    if (m_isSwing)
     {
-        if (m_iRouteTrack == 1)
+        if (100.f >= m_pMonster->Get_CurrentTrackPos())
         {
-            m_pMonster->Change_Animation(AN_ROUTE_LAST, false, 0.2f, 0);
-        }
-
-        if (End_Check())
-        {
+            m_pMonster->Change_Animation(AN_ROUTE_LAST, false, 0, 0);
             ++m_iRouteTrack;
-
-            if (m_iRouteTrack >= 2)
-            {
-                m_pMonster->Change_State(CSimonManus::IDLE);
-                return;
-            }
-            m_fIdleTime = 0.f;
-            m_isDelayed = true;
+            m_isSwing = false;
         }
     }
-    else
+
+
+    if (End_Check())
     {
-        m_fIdleTime += fTimeDelta;
-
-        if (m_fIdleTime >= m_fIdleDuration)
-        {
-            m_isDelayed = false;
-        }
-        _int iDir = m_pMonster->Get_Transform()->LookAt_Lerp_NoHeight(m_pMonster->Get_TargetDir(), 3, fTimeDelta);
-        switch (iDir)
-        {
-        case -1:
-            m_pMonster->Change_Animation(30, true, 0.1f, 0);
-            break;
-
-        case 0:
-            m_pMonster->Change_Animation(20, true, 0.1f, 0);
-            break;
-
-        case 1:
-            m_pMonster->Change_Animation(31, true, 0.1f, 0);
-            break;
-
-        default:
-            break;
-        }
+        m_pMonster->Change_State(CSimonManus::IDLE);
+        return;
     }
 
 

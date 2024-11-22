@@ -49,7 +49,7 @@ void CState_SimonManusP1_Grogy::Update(_float fTimeDelta)
         if (End_Check())
         {
             ++m_iAnimCnt;
-            m_pMonster->Change_Animation(AN_GROGY_START - m_iAnimCnt, true, 0.1f, 0);
+            m_pMonster->Change_Animation(AN_GROGY_START - m_iAnimCnt, true, 0.0f, 0);
         }
         break;
 
@@ -57,7 +57,7 @@ void CState_SimonManusP1_Grogy::Update(_float fTimeDelta)
         if (m_fGrogyTime >= m_fGrogyDuration)
         {
             ++m_iAnimCnt;
-            m_pMonster->Change_Animation(AN_GROGY_START - m_iAnimCnt, false, 0.1f, 0);
+            m_pMonster->Change_Animation(AN_GROGY_START - m_iAnimCnt, false, 0.0f, 0);
         }
         else
             m_fGrogyTime += fTimeDelta;

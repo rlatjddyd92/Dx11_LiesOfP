@@ -38,7 +38,7 @@ void CState_SimonManusP1_SwipMultiple_L::Update(_float fTimeDelta)
     {
         if (m_iRouteTrack == 1)
         {
-            m_pMonster->Change_Animation(AN_ROUTE_LAST, false, 0.2f, 0);
+            m_pMonster->Change_Animation(AN_ROUTE_LAST, false, 0.0f, 0);
         }
 
         if (End_Check())

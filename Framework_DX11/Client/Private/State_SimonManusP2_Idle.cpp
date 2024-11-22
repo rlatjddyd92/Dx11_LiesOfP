@@ -32,11 +32,20 @@ void CState_SimonManusP2_Idle::Update(_float fTimeDelta)
     _float fDist = m_pMonster->Calc_Distance_XZ();
     if (m_fIdleEndDuration <= m_fIdleTime)
     {
-        //if (m_iAtkCnt >= 3.f && fDist <= 15.f && 6.f < fDist)
-        //{
-        //    //하이점프폴
-        //
-        //}
+        if (fDist <= 15.f && 6.f < fDist)
+        {
+            //하이점프폴
+            if (m_iAtkCnt >= 3.f)
+            {
+                m_pMonster->Change_State(CSimonManus::ATKP2_HIGHJUMPFALL);
+            }
+            else    //스윙 점프
+            {
+                m_pMonster->Change_State(CSimonManus::ATKP2_ROUTE_2);
+                return;
+            }
+        }
+
         if (fDist <= 7.f)
         {
             Calc_Act_Attack(fDist);
@@ -74,25 +83,6 @@ void CState_SimonManusP2_Idle::Update(_float fTimeDelta)
         break;
     }
 
-
-    if (KEY_TAP(KEY::Z))
-    {
-        m_pMonster->Change_State(CSimonManus::GROGY);
-        return;
-    }
-
-    if (KEY_TAP(KEY::C))
-    {
-        m_pMonster->Change_State(CSimonManus::PARALYZE);
-        return;
-    }
-
-    if (KEY_TAP(KEY::V))
-    {
-        m_pMonster->Change_State(CSimonManus::DIE);
-        return;
-    }
-
 }
 
 void CState_SimonManusP2_Idle::End_State()
@@ -104,63 +94,111 @@ void CState_SimonManusP2_Idle::Calc_Act_Attack(_float fDist)
 {
     if (fDist <= 4.f)
     {
-        //어보이드, 점프, 스다 엘알  스탬프 까지
-        _int iAtkNum = rand() % 4;
+        //거리가 짧을때
+        _int iAtkNum = rand() % 11;
         switch (iAtkNum)
         {
         case 0:
-            //m_pMonster->Change_State(CSimonManusP1::ATK_AVOIDSWING);
+            m_pMonster->Change_State(CSimonManus::ATKP2_AVOIDSWING);
             break;
 
         case 1:
-            m_pMonster->Change_State(CSimonManus::ATK_SWINGDOWN_L);
+            m_pMonster->Change_State(CSimonManus::ATKP2_BRUTALATTACK);
             break;
 
         case 2:
-            m_pMonster->Change_State(CSimonManus::ATK_SWINGDOWN_R);
+            m_pMonster->Change_State(CSimonManus::ATKP2_STING);
             break;
 
         case 3:
-            m_pMonster->Change_State(CSimonManus::ATK_STAMP);
+            m_pMonster->Change_State(CSimonManus::ATKP2_WAVE);
             break;
 
         case 4:
-            m_pMonster->Change_State(CSimonManus::ATK_JUMPTOSWING);
+            m_pMonster->Change_State(CSimonManus::ATKP2_JUMPTOATTACK);
+            break;
+
+        case 5:
+            m_pMonster->Change_State(CSimonManus::ATKP2_LIGHTNINGTOWAVE);
+            break;
+
+        case 6:
+            m_pMonster->Change_State(CSimonManus::ATKP2_ROUTE_0);
+            break;
+
+        case 7:
+            m_pMonster->Change_State(CSimonManus::ATKP2_ROUTE_1);
+            break;
+
+        case 8:
+            m_pMonster->Change_State(CSimonManus::ATKP2_STAMP);
+            break;
+
+        case 9:
+            m_pMonster->Change_State(CSimonManus::ATKP2_SWINGDOWN_SWING);
+            break;
+
+        case 10:
+            m_pMonster->Change_State(CSimonManus::ATKP2_SWIPMULTIPLE);
             break;
 
         default:
             break;
         }
         ++m_iAtkCnt;
-
         return;
     }
     else
     {
         //거리가 긴 기술 스멀 엘알 체이싱 스팅
-        _int iAtkNum = rand() % 4;
+        //스프레드, 서몬, 볼, 콜링, 웨이브
+        //체이싱, 루트 0, 1, 2, 스윕 멀티
+        _int iAtkNum = rand() % 11;
         switch (iAtkNum)
         {
         case 0:
-            m_pMonster->Change_State(CSimonManus::ATK_STING);
+            m_pMonster->Change_State(CSimonManus::ATKP2_SPREADMAGIC);
             break;
 
         case 1:
-            m_pMonster->Change_State(CSimonManus::ATK_CHASINGSWING);
+            m_pMonster->Change_State(CSimonManus::ATKP2_SUMMONHAND);
             break;
 
         case 2:
-            m_pMonster->Change_State(CSimonManus::ATK_SWIPMULT_L);
+            m_pMonster->Change_State(CSimonManus::ATKP2_THUNDERBALL);
             break;
 
         case 3:
-            m_pMonster->Change_State(CSimonManus::ATK_SWIPMULT_R);
+            m_pMonster->Change_State(CSimonManus::ATKP2_THUNDERCALLING);
+            break;
+
+        case 4:
+            m_pMonster->Change_State(CSimonManus::ATKP2_WAVE);
+            break;
+
+        case 5:
+            m_pMonster->Change_State(CSimonManus::ATKP2_CHASINGSWING);
+            break;
+
+        case 6:
+            m_pMonster->Change_State(CSimonManus::ATKP2_ROUTE_0);
+            break;
+
+        case 7:
+            m_pMonster->Change_State(CSimonManus::ATKP2_ROUTE_1);
+            break;
+
+        case 8:
+            m_pMonster->Change_State(CSimonManus::ATKP2_ROUTE_2);
+            break;
+
+        case 9:
+            m_pMonster->Change_State(CSimonManus::ATKP2_SWIPMULTIPLE);
             break;
 
         default:
             break;
         }
-
         ++m_iAtkCnt;
 
         return;

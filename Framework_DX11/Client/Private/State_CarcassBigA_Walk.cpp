@@ -21,7 +21,7 @@ HRESULT CState_CarcassBigA_Walk::Initialize(_uint iStateNum, void* pArg)
 
 HRESULT CState_CarcassBigA_Walk::Start_State(void* pArg)
 {
-    m_pMonster->Change_Animation(33, true);;
+    m_pMonster->Change_Animation(33, true, 0.1f, 0.f);
 
 
     return S_OK;
@@ -33,15 +33,15 @@ void CState_CarcassBigA_Walk::Update(_float fTimeDelta)
     switch (iDir)
     {
     case -1:
-        m_pMonster->Change_Animation(30, true, true);
+        m_pMonster->Change_Animation(30, true, 0.1f, 0.f);
         break;
 
     case 0:
-        m_pMonster->Change_Animation(33, true, true);
+        m_pMonster->Change_Animation(33, true, 0.1f, 0.f);
         break;
 
     case 1:
-        m_pMonster->Change_Animation(31, true, true);
+        m_pMonster->Change_Animation(31, true, 0.1f, 0.f);
         break;
 
     default:

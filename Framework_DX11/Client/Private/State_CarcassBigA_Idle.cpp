@@ -21,7 +21,7 @@ HRESULT CState_CarcassBigA_Idle::Initialize(_uint iStateNum, void* pArg)
 
 HRESULT CState_CarcassBigA_Idle::Start_State(void* pArg)
 {
-    m_pMonster->Change_Animation(20, true, 0);
+    m_pMonster->Change_Animation(20, true, 0.1f, 0.f);
     
     return S_OK;
 }
@@ -55,36 +55,20 @@ void CState_CarcassBigA_Idle::Update(_float fTimeDelta)
     switch (iDir)
     {
     case -1:
-        m_pMonster->Change_Animation(30, true);
+        m_pMonster->Change_Animation(30, true, 0.1f);
         break;
 
     case 0:
-        m_pMonster->Change_Animation(20, true);
+        m_pMonster->Change_Animation(20, true, 0.1f);
         break;
 
     case 1:
-        m_pMonster->Change_Animation(31, true);
+        m_pMonster->Change_Animation(31, true, 0.1f);
         break;
 
     default:
         break;
     }
-
-    if (KEY_TAP(KEY::Z))
-    {
-        m_pMonster->Change_State(CCarcassBigA::GROGY);
-    }
-
-    if (KEY_TAP(KEY::C))
-    {
-        m_pMonster->Change_State(CCarcassBigA::PARALYZE);
-    }
-
-    if (KEY_TAP(KEY::V))
-    {
-        m_pMonster->Change_State(CCarcassBigA::DIE);
-    }
-
 }
 
 void CState_CarcassBigA_Idle::End_State()

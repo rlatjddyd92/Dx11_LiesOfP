@@ -74,25 +74,6 @@ void CState_SimonManusP1_Idle::Update(_float fTimeDelta)
         break;
     }
 
-
-    if (KEY_TAP(KEY::Z))
-    {
-        m_pMonster->Change_State(CSimonManus::GROGY);
-        return;
-    }
-
-    if (KEY_TAP(KEY::C))
-    {
-        m_pMonster->Change_State(CSimonManus::PARALYZE);
-        return;
-    }
-
-    if (KEY_TAP(KEY::V))
-    {
-        m_pMonster->Change_State(CSimonManus::DIE);
-        return;
-    }
-
 }
 
 void CState_SimonManusP1_Idle::End_State()

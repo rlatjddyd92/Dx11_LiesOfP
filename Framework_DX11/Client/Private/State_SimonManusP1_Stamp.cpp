@@ -53,8 +53,13 @@ void CState_SimonManusP1_Stamp::Update(_float fTimeDelta)
 
     if (m_bStamp)
     {
-        m_fCurrentTime += fTimeDelta;
-        if (m_fCurrentTime >= m_fStampTime)
+        _float fTime = 120.f;
+        if (m_iCurStartAnim == AN_STAMP_MOVE)
+        {
+            fTime = 140.f;
+        }
+        
+        if (fTime >= m_pMonster->Get_CurrentTrackPos())
         {
             m_pMonster->Change_Animation(AN_SPINBLAST, false, 0, 0);
             ++m_iRouteTrack;

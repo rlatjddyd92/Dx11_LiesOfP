@@ -33,11 +33,11 @@ private:
     _uint               m_iIdleCount = {};
 
     _float              m_fIdleTime = {};
-    _float              m_fIdleDuration = { 0.2f };
+    _float              m_fSwingTime = { 2.f };
 
     _bool               m_isPrevChance = { false };
     _bool               m_isActivatedSpecial = { false };
-    _bool               m_isDelayed = { false };
+    _bool               m_isSwing = { false };
 
     _bool*              m_pResetRootMove = { nullptr };
 

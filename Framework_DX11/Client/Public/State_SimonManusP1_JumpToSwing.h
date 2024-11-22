@@ -11,7 +11,8 @@ class CState_SimonManusP1_JumpToSwing : public CState
 {
 private:
     typedef enum {
-        AN_JUMPTO_BACK = 31, AN_JUMPTO_LEFT = 33, AN_JUMPTO_RIGHT = 34, AN_SWING = 30, AN_CANCLEATTACK = 32
+        AN_JUMPTO_BACK = 31, AN_JUMPTO_LEFT = 33, AN_JUMPTO_RIGHT = 34
+        , AN_SWING = 30, AN_CANCLEATTACK = 32
     }ANIMNUM;
 
 public:
@@ -38,7 +39,6 @@ private:
     _bool               m_isPrevChance = { false };
     _bool               m_isActivatedSpecial = { false };
 
-    _bool*              m_pIsEndAnim = { false };
     _bool*              m_pResetRootMove = { nullptr };
 
     _bool               m_bJump = { false };

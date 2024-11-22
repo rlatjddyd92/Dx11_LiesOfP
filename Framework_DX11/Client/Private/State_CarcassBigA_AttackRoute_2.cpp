@@ -37,11 +37,11 @@ void CState_CarcassBigA_AttackRoute_2::Update(_float fTimeDelta)
     {
         if (m_iRouteTrack == 1)
         {
-            m_pMonster->Change_Animation(AN_ROUTE_MIDDLE, false, 0.2f, 0, true);
+            m_pMonster->Change_Animation(AN_ROUTE_MIDDLE, false, 0.f, 0, true);
         }
         else if (m_iRouteTrack == 2)
         {
-            m_pMonster->Change_Animation(AN_ROUTE_LAST, false, 0.2f, 0, true);
+            m_pMonster->Change_Animation(AN_ROUTE_LAST, false, 0.1f, 0, true);
         }
 
         if (End_Check())
@@ -69,15 +69,15 @@ void CState_CarcassBigA_AttackRoute_2::Update(_float fTimeDelta)
         switch (iDir)
         {
         case -1:
-            m_pMonster->Change_Animation(30, true);
+            m_pMonster->Change_Animation(30, true, 0.1f);
             break;
 
         case 0:
-            m_pMonster->Change_Animation(20, true);
+            m_pMonster->Change_Animation(20, true, 0.1f);
             break;
 
         case 1:
-            m_pMonster->Change_Animation(31, true);
+            m_pMonster->Change_Animation(31, true, 0.1f);
             break;
 
         default:
