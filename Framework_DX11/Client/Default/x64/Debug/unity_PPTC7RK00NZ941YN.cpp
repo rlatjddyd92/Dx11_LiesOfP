@@ -75,7 +75,7 @@
 #include "D:\GitProject\Dx11_LiesOfP\Framework_DX11\Client\Private\Player_Stat_Manager.cpp"
 
 
-#include "D:\GitProject\Dx11_LiesOfP\Framework_DX11\Client\Private\SimonManusP1.cpp"
+#include "D:\GitProject\Dx11_LiesOfP\Framework_DX11\Client\Private\SimonManus.cpp"
 
 
 #include "D:\GitProject\Dx11_LiesOfP\Framework_DX11\Client\Private\Sky.cpp"
@@ -84,7 +84,19 @@
 #include "D:\GitProject\Dx11_LiesOfP\Framework_DX11\Client\Private\Stargazer.cpp"
 
 
-#include "D:\GitProject\Dx11_LiesOfP\Framework_DX11\Client\Private\State_CarcassBigA_Attack.cpp"
+#include "D:\GitProject\Dx11_LiesOfP\Framework_DX11\Client\Private\State_CarcassBigA_AttackRoute_0.cpp"
+
+
+#include "D:\GitProject\Dx11_LiesOfP\Framework_DX11\Client\Private\State_CarcassBigA_AttackRoute_1.cpp"
+
+
+#include "D:\GitProject\Dx11_LiesOfP\Framework_DX11\Client\Private\State_CarcassBigA_AttackRoute_2.cpp"
+
+
+#include "D:\GitProject\Dx11_LiesOfP\Framework_DX11\Client\Private\State_CarcassBigA_AttackRoute_3.cpp"
+
+
+#include "D:\GitProject\Dx11_LiesOfP\Framework_DX11\Client\Private\State_CarcassBigA_AttackRoute_4.cpp"
 
 
 #include "D:\GitProject\Dx11_LiesOfP\Framework_DX11\Client\Private\State_CarcassBigA_Die.cpp"
@@ -102,13 +114,25 @@
 #include "D:\GitProject\Dx11_LiesOfP\Framework_DX11\Client\Private\State_CarcassBigA_Impact.cpp"
 
 
+#include "D:\GitProject\Dx11_LiesOfP\Framework_DX11\Client\Private\State_CarcassBigA_LOSwingRight.cpp"
+
+
+#include "D:\GitProject\Dx11_LiesOfP\Framework_DX11\Client\Private\State_CarcassBigA_LTSwingRight.cpp"
+
+
 #include "D:\GitProject\Dx11_LiesOfP\Framework_DX11\Client\Private\State_CarcassBigA_Paralyze.cpp"
+
+
+#include "D:\GitProject\Dx11_LiesOfP\Framework_DX11\Client\Private\State_CarcassBigA_RageAttack.cpp"
 
 
 #include "D:\GitProject\Dx11_LiesOfP\Framework_DX11\Client\Private\State_CarcassBigA_Run.cpp"
 
 
 #include "D:\GitProject\Dx11_LiesOfP\Framework_DX11\Client\Private\State_CarcassBigA_Walk.cpp"
+
+
+#include "D:\GitProject\Dx11_LiesOfP\Framework_DX11\Client\Private\State_CarcassBigA_WheelWind.cpp"
 
 
 #include "D:\GitProject\Dx11_LiesOfP\Framework_DX11\Client\Private\State_Player_ChangeWeapon.cpp"
@@ -228,6 +252,129 @@
 #include "D:\GitProject\Dx11_LiesOfP\Framework_DX11\Client\Private\State_Player_TH_Walk.cpp"
 
 
+#include "D:\GitProject\Dx11_LiesOfP\Framework_DX11\Client\Private\State_SimonManusP1_AvoidSwing.cpp"
+
+
+#include "D:\GitProject\Dx11_LiesOfP\Framework_DX11\Client\Private\State_SimonManusP1_ChasingSwing.cpp"
+
+
+#include "D:\GitProject\Dx11_LiesOfP\Framework_DX11\Client\Private\State_SimonManusP1_Die.cpp"
+
+
+#include "D:\GitProject\Dx11_LiesOfP\Framework_DX11\Client\Private\State_SimonManusP1_Grogy.cpp"
+
+
+#include "D:\GitProject\Dx11_LiesOfP\Framework_DX11\Client\Private\State_SimonManusP1_HighJumpFall.cpp"
+
+
+#include "D:\GitProject\Dx11_LiesOfP\Framework_DX11\Client\Private\State_SimonManusP1_HitFatal.cpp"
+
+
+#include "D:\GitProject\Dx11_LiesOfP\Framework_DX11\Client\Private\State_SimonManusP1_Idle.cpp"
+
+
+#include "D:\GitProject\Dx11_LiesOfP\Framework_DX11\Client\Private\State_SimonManusP1_JumpToSwing.cpp"
+
+
+#include "D:\GitProject\Dx11_LiesOfP\Framework_DX11\Client\Private\State_SimonManusP1_Run.cpp"
+
+
+#include "D:\GitProject\Dx11_LiesOfP\Framework_DX11\Client\Private\State_SimonManusP1_Stamp.cpp"
+
+
+#include "D:\GitProject\Dx11_LiesOfP\Framework_DX11\Client\Private\State_SimonManusP1_StingAttack.cpp"
+
+
+#include "D:\GitProject\Dx11_LiesOfP\Framework_DX11\Client\Private\State_SimonManusP1_SwingDown_Swing_L.cpp"
+
+
+#include "D:\GitProject\Dx11_LiesOfP\Framework_DX11\Client\Private\State_SimonManusP1_SwingDown_Swing_R.cpp"
+
+
+#include "D:\GitProject\Dx11_LiesOfP\Framework_DX11\Client\Private\State_SimonManusP1_SwingMultiple.cpp"
+
+
+#include "D:\GitProject\Dx11_LiesOfP\Framework_DX11\Client\Private\State_SimonManusP1_SwipMultiple_L.cpp"
+
+
+#include "D:\GitProject\Dx11_LiesOfP\Framework_DX11\Client\Private\State_SimonManusP1_SwipMultiple_R.cpp"
+
+
+#include "D:\GitProject\Dx11_LiesOfP\Framework_DX11\Client\Private\State_SimonManusP1_Walk.cpp"
+
+
+#include "D:\GitProject\Dx11_LiesOfP\Framework_DX11\Client\Private\State_SimonManusP2_AvoidSwing.cpp"
+
+
+#include "D:\GitProject\Dx11_LiesOfP\Framework_DX11\Client\Private\State_SimonManusP2_BrutalAttack.cpp"
+
+
+#include "D:\GitProject\Dx11_LiesOfP\Framework_DX11\Client\Private\State_SimonManusP2_ChasingSwing.cpp"
+
+
+#include "D:\GitProject\Dx11_LiesOfP\Framework_DX11\Client\Private\State_SimonManusP2_Die.cpp"
+
+
+#include "D:\GitProject\Dx11_LiesOfP\Framework_DX11\Client\Private\State_SimonManusP2_Grogy.cpp"
+
+
+#include "D:\GitProject\Dx11_LiesOfP\Framework_DX11\Client\Private\State_SimonManusP2_HighJumpFall.cpp"
+
+
+#include "D:\GitProject\Dx11_LiesOfP\Framework_DX11\Client\Private\State_SimonManusP2_HitFatal.cpp"
+
+
+#include "D:\GitProject\Dx11_LiesOfP\Framework_DX11\Client\Private\State_SimonManusP2_Idle.cpp"
+
+
+#include "D:\GitProject\Dx11_LiesOfP\Framework_DX11\Client\Private\State_SimonManusP2_JumpToAttack.cpp"
+
+
+#include "D:\GitProject\Dx11_LiesOfP\Framework_DX11\Client\Private\State_SimonManusP2_LightningToWave.cpp"
+
+
+#include "D:\GitProject\Dx11_LiesOfP\Framework_DX11\Client\Private\State_SimonManusP2_Route0.cpp"
+
+
+#include "D:\GitProject\Dx11_LiesOfP\Framework_DX11\Client\Private\State_SimonManusP2_Route1.cpp"
+
+
+#include "D:\GitProject\Dx11_LiesOfP\Framework_DX11\Client\Private\State_SimonManusP2_Route2.cpp"
+
+
+#include "D:\GitProject\Dx11_LiesOfP\Framework_DX11\Client\Private\State_SimonManusP2_Run.cpp"
+
+
+#include "D:\GitProject\Dx11_LiesOfP\Framework_DX11\Client\Private\State_SimonManusP2_SpreadMagic.cpp"
+
+
+#include "D:\GitProject\Dx11_LiesOfP\Framework_DX11\Client\Private\State_SimonManusP2_Stamp.cpp"
+
+
+#include "D:\GitProject\Dx11_LiesOfP\Framework_DX11\Client\Private\State_SimonManusP2_Sting.cpp"
+
+
+#include "D:\GitProject\Dx11_LiesOfP\Framework_DX11\Client\Private\State_SimonManusP2_SummonHand.cpp"
+
+
+#include "D:\GitProject\Dx11_LiesOfP\Framework_DX11\Client\Private\State_SimonManusP2_SwingDown_Swing.cpp"
+
+
+#include "D:\GitProject\Dx11_LiesOfP\Framework_DX11\Client\Private\State_SimonManusP2_SwipMultiple.cpp"
+
+
+#include "D:\GitProject\Dx11_LiesOfP\Framework_DX11\Client\Private\State_SimonManusP2_ThunderBall.cpp"
+
+
+#include "D:\GitProject\Dx11_LiesOfP\Framework_DX11\Client\Private\State_SimonManusP2_ThunderCalling.cpp"
+
+
+#include "D:\GitProject\Dx11_LiesOfP\Framework_DX11\Client\Private\State_SimonManusP2_Walk.cpp"
+
+
+#include "D:\GitProject\Dx11_LiesOfP\Framework_DX11\Client\Private\State_SimonManusP2_Wave.cpp"
+
+
 #include "D:\GitProject\Dx11_LiesOfP\Framework_DX11\Client\Private\StaticObj.cpp"
 
 
@@ -304,6 +451,9 @@
 
 
 #include "D:\GitProject\Dx11_LiesOfP\Framework_DX11\Client\Private\Weapon_Scissor_Handle.cpp"
+
+
+#include "D:\GitProject\Dx11_LiesOfP\Framework_DX11\Client\Private\Weapon_SimonManus_Hammer.cpp"
 
 
 #include "D:\GitProject\Dx11_LiesOfP\Framework_DX11\Client\Default\Client.cpp"
