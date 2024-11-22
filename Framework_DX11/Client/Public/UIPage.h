@@ -112,6 +112,11 @@ public:
 		_float fShaking_Interval = 0.f;
 		_float fShaking_Time = 0.f;
 
+		// 렌더 관련 제어 변수 
+		_bool bTexture_Color_Multiple = false; // <- true인 경우 텍스쳐 컬러 보정값을 원래 값에 곱하는 방식으로 진행
+		_float fStrash_Alpha = 0.3; // 파트 별로 버리는 알파 기준을 다르게 설정해야 하는 경우 사용
+		_bool bText_Right = false; // 텍스트를 오른쪽 정렬로 그리는 경우 
+
 	}UPART;
 
 	typedef struct UIPART_GROUP_CONTROL

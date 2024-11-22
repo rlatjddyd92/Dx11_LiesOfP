@@ -91,6 +91,11 @@ HRESULT CUIManager::Render()
 	if (FAILED(m_pUIRender_Client->Render_UI(m_vecPage)))
 		return E_FAIL;
 
+	if (FAILED(m_pUIPage_Inven->Render_Inven_Array(m_pUIRender_Client)))
+		return E_FAIL;
+
+	// 여기에 나중에 Tooltip 내용 넣기
+
 #ifdef _DEBUG
 	if (m_iFonttest != 0)
 		if (FAILED(m_pUIRender_Client->Render_TestFont(m_iFonttest == 1)))
@@ -355,26 +360,20 @@ void CUIManager::UIControl_Common(_float fTimeDelta)
 		UIControl_Main(fTimeDelta);
 	else if (m_pUIPage_Loading->GetPageAction(PAGEACTION::ACTION_ACTIVE))
 		UIControl_Loading(fTimeDelta);
-	else if (m_pUIPage_Play->GetPageAction(PAGEACTION::ACTION_ACTIVE))
+	else if ((m_pUIPage_Play->GetPageAction(PAGEACTION::ACTION_ACTIVE)) || (m_pUIPage_Play->GetPageAction(PAGEACTION::ACTION_OPENING)))
 		UIControl_Play(fTimeDelta);
-	else if (m_pUIPage_Menu->GetPageAction(PAGEACTION::ACTION_ACTIVE))
+	else if ((m_pUIPage_Menu->GetPageAction(PAGEACTION::ACTION_ACTIVE)) || (m_pUIPage_Menu->GetPageAction(PAGEACTION::ACTION_OPENING)))
 		UIControl_Menu(fTimeDelta);
-	else if (m_pUIPage_Inven->GetPageAction(PAGEACTION::ACTION_ACTIVE))
+	else if ((m_pUIPage_Inven->GetPageAction(PAGEACTION::ACTION_ACTIVE)) || (m_pUIPage_Inven->GetPageAction(PAGEACTION::ACTION_OPENING)))
 		UIControl_Inven(fTimeDelta);
-	else if (m_pUIPage_Equip->GetPageAction(PAGEACTION::ACTION_ACTIVE))
+	else if ((m_pUIPage_Equip->GetPageAction(PAGEACTION::ACTION_ACTIVE)) || (m_pUIPage_Equip->GetPageAction(PAGEACTION::ACTION_OPENING)))
 		UIControl_Equip(fTimeDelta);
-	else if (m_pUIPage_Stat->GetPageAction(PAGEACTION::ACTION_ACTIVE))
+	else if ((m_pUIPage_Stat->GetPageAction(PAGEACTION::ACTION_ACTIVE)) || (m_pUIPage_Stat->GetPageAction(PAGEACTION::ACTION_OPENING)))
 		UIControl_Stat(fTimeDelta);
-	else if (m_pUIPage_Skill->GetPageAction(PAGEACTION::ACTION_ACTIVE))
+	else if ((m_pUIPage_Skill->GetPageAction(PAGEACTION::ACTION_ACTIVE)) || (m_pUIPage_Skill->GetPageAction(PAGEACTION::ACTION_OPENING)))
 		UIControl_Skill(fTimeDelta);
 	else if (m_bIsIngame)
-	{
-		if (KEY_TAP(KEY::ESC))
-			SwicthPage(UIPAGE::PAGE_MENU, UIPAGE::PAGE_PLAY);
-		else if ((!m_pUIPage_Play->GetPageAction(PAGEACTION::ACTION_OPENING)) && (!m_pUIPage_Menu->GetPageAction(PAGEACTION::ACTION_OPENING)))
-			if ((!m_pUIPage_Play->GetPageAction(PAGEACTION::ACTION_ACTIVE)) && (!m_pUIPage_Menu->GetPageAction(PAGEACTION::ACTION_ACTIVE)))
-				OpenPage(UIPAGE::PAGE_PLAY);
-	}
+		OpenPage(UIPAGE::PAGE_PLAY);
 }
 
 void CUIManager::UIControl_Main(_float fTimeDelta)
@@ -660,6 +659,10 @@ HRESULT CUIManager::Load_UIDataFile_Part(HANDLE handle, DWORD* dword, _int iInde
 		ReadFile(handle, &pNew->bIsItem, sizeof(_bool), dword, nullptr);
 		ReadFile(handle, &pNew->bTurn, sizeof(_bool), dword, nullptr);
 		ReadFile(handle, &pNew->fTurn_Degree, sizeof(_float), dword, nullptr);
+
+		ReadFile(handle, &pNew->bTexture_Color_Multiple, sizeof(_bool), dword, nullptr);
+		ReadFile(handle, &pNew->fStrash_Alpha, sizeof(_float), dword, nullptr);
+		ReadFile(handle, &pNew->bText_Right, sizeof(_bool), dword, nullptr);
 
 		if (!pNew->bIsItem)
 			m_pUIRender_Client->Make_Texture(pNew->iTexture_Index);

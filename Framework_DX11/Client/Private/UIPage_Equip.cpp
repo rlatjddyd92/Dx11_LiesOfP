@@ -125,7 +125,8 @@ void CUIPage_Equip::Action_Equip_Page(_float fTimeDelta)
 		_Vec2 fPos = Check_Mouse_By_Part(*m_vecPart[__super::Get_Front_PartIndex_In_Control(_int(PART_GROUP::GROUP_TOP_TAP_BUTTON_0) + i)]);
 
 		if (fPos.x != -1.f)
-			m_iNow_Page = i;
+			if (KEY_TAP(LBUTTON))
+				m_iNow_Page = i;
 	}
 		
 	if (KEY_TAP(KEY::Q))

@@ -147,10 +147,10 @@ void CUIPage_Menu::Focus_Update(_float fTimeDelta)
 				case _int(PART_GROUP::GROUP_MENU_EQUIP):
 					GET_GAMEINTERFACE->SwicthPage(UIPAGE::PAGE_MENU, UIPAGE::PAGE_EQUIP);
 					break;
-				/*case _int(PART_GROUP::GROUP_MENU_INVEN):
+				case _int(PART_GROUP::GROUP_MENU_INVEN):
 					GET_GAMEINTERFACE->SwicthPage(UIPAGE::PAGE_MENU, UIPAGE::PAGE_INVEN);
 					break;
-				case _int(PART_GROUP::GROUP_MENU_CHARACTOR):
+				/*case _int(PART_GROUP::GROUP_MENU_CHARACTOR):
 					GET_GAMEINTERFACE->SwicthPage(UIPAGE::PAGE_MENU, UIPAGE::PAGE_STAT);
 					break;
 				case _int(PART_GROUP::GROUP_MENU_HEART):

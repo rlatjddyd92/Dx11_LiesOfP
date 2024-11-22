@@ -40,6 +40,22 @@ HRESULT CCustomFont::Render_Center(const _tchar* pText, _fvector vPosition, _fve
 
 	return S_OK;
 }
+// 24-11-22 김성용 
+// 오른쪽 정렬로 텍스트 그리기
+HRESULT CCustomFont::Render_Right(const _tchar* pText, _fvector vPosition, _fvector vColor, _float fRadian, _fvector vPivot, _float fScale)
+{
+	XMVECTOR vSize = { 0.f,0.f,0.f,0.f };
+	vSize.m128_f32[0] = m_pFont->MeasureString(pText).m128_f32[0] * -1;
+	XMVECTOR vAdjustedPosition = vPosition - (vSize * fScale);
+
+	m_pBatch->Begin();
+
+	m_pFont->DrawString(m_pBatch, pText, vAdjustedPosition, vColor, fRadian, vPivot, fScale);
+
+	m_pBatch->End();
+
+	return S_OK;
+}
 
 CCustomFont * CCustomFont::Create(ID3D11Device * pDevice, ID3D11DeviceContext * pContext, const _tchar * pFontFilePath)
 {

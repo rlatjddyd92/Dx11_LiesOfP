@@ -88,6 +88,11 @@ CHECK_MOUSE CUIPage_Inven::Check_Page_Action(_float fTimeDelta)
 	return CHECK_MOUSE::MOUSE_NONE;
 }
 
+HRESULT CUIPage_Inven::Render_Inven_Array(class CUIRender_Client* pRender_Client)
+{
+	return E_NOTIMPL;
+}
+
 HRESULT CUIPage_Inven::Ready_UIPart_Group_Control()
 {
 	__super::Ready_UIPart_Group_Control();
@@ -103,9 +108,57 @@ HRESULT CUIPage_Inven::Ready_UIPart_Group_Control()
 			m_vec_Group_Ctrl[m_vecPart[i]->iGroupIndex]->PartIndexlist.push_back(i);
 	}
 
+	__super::Array_Control(_int(PART_GROUP::GROUP_ITEMINFO_SLIDE), _int(PART_GROUP::GROUP_ITEMINFO_SLIDE_BAR), CTRL_COMMAND::COM_RENDER, false);
+	__super::Array_Control(_int(PART_GROUP::GROUP_ARRAY_FRAME), _int(PART_GROUP::GROUP_CELL_4), CTRL_COMMAND::COM_RENDER, false);
+	
 	m_bRender = false;
 
 	return S_OK;
+}
+
+void CUIPage_Inven::Action_Inven_Page(_float fTimeDelta)
+{
+	_int iTap = 0;
+
+	for (auto& iter : m_vec_Group_Ctrl[_int(PART_GROUP::GROUP_TOP_MOUSE)]->PartIndexlist)
+	{
+		_Vec2 fPos = Check_Mouse_By_Part(*m_vecPart[iter]);
+
+		if (fPos.x != -1.f)
+			if (KEY_TAP(LBUTTON))
+			{
+				eNow_Tap = INVEN_UI_TAP(iTap);
+				break;
+			}
+				
+		++iTap;
+	}
+
+	if (KEY_TAP(KEY::Q))
+	{
+		if (_int(eNow_Tap) > 0)
+			eNow_Tap = INVEN_UI_TAP(_int(eNow_Tap) - 1);
+	}
+	else if (KEY_TAP(KEY::E))
+	{
+		if (_int(eNow_Tap) < _int(INVEN_UI_TAP::TAP_END) - 1)
+			eNow_Tap = INVEN_UI_TAP(_int(eNow_Tap) + 1);
+	}
+}
+
+void CUIPage_Inven::Action_Focus(_float fTimeDelta)
+{
+}
+
+void CUIPage_Inven::Update_Array_Position(_float fTimeDelta)
+{
+
+
+
+
+
+
+
 }
 
 CUIPage_Inven* CUIPage_Inven::Create(ID3D11Device* pDevice, ID3D11DeviceContext* pContext)

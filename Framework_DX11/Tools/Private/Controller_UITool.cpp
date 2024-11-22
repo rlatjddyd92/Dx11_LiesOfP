@@ -281,6 +281,9 @@ void CController_UITool::UIPart_Edit()
 		ImGui::SameLine();
 		ImGui::DragFloat("A", &pNow->fTextureColor.w);
 
+		ImGui::SameLine();
+		ImGui::Checkbox("Multiple", &pNow->bTexture_Color_Multiple);
+
 		ImGui::Checkbox("Turn", &pNow->bTurn);
 
 		if (pNow->bTurn)
@@ -313,6 +316,14 @@ void CController_UITool::UIPart_Edit()
 				pNow->szText[iIndex] = m_InputText[iIndex];
 			} while (m_InputText[iIndex] != '\0');
 		}
+		if(ImGui::Checkbox("TextCenter", &pNow->bCenter))
+			if (pNow->bCenter)
+				pNow->bText_Right = false;
+		ImGui::SameLine();
+		if (ImGui::Checkbox("TextRight", &pNow->bText_Right))
+			if (pNow->bText_Right)
+				pNow->bCenter = false;
+		
 
 		ImGui::SeparatorText("Position");
 		// À§Ä¡
@@ -564,6 +575,11 @@ HRESULT CController_UITool::SavePart()
 			vecPart.push_back(to_wstring(pNow->bIsItem));
 			vecPart.push_back(to_wstring(pNow->bTurn));
 			vecPart.push_back(to_wstring(pNow->fTurn_Degree));
+
+			vecPart.push_back(to_wstring(pNow->bTexture_Color_Multiple));
+			vecPart.push_back(to_wstring(pNow->fStrash_Alpha));
+			vecPart.push_back(to_wstring(pNow->bText_Right));
+
 			vecBuffer.push_back(vecPart);
 		}
 	}
@@ -618,6 +634,10 @@ HRESULT CController_UITool::LoadPart()
 
 		pNew->bTurn = stoi(vecBuffer[i][33]);
 		pNew->fTurn_Degree = stof(vecBuffer[i][34]);
+
+		pNew->bTexture_Color_Multiple = stoi(vecBuffer[i][35]);
+		pNew->fStrash_Alpha = stof(vecBuffer[i][36]);
+		pNew->bText_Right = stoi(vecBuffer[i][37]);
 
 		pNew->MakeDirec();
 		if (pNew->iParentPart_Index == -1)
@@ -738,6 +758,10 @@ HRESULT CController_UITool::MakeClientData_Part(HANDLE handle, DWORD* dword, vec
 		WriteFile(handle, &iter->bIsItem, sizeof(_bool), dword, nullptr);
 		WriteFile(handle, &iter->bTurn, sizeof(_bool), dword, nullptr);
 		WriteFile(handle, &iter->fTurn_Degree, sizeof(_float), dword, nullptr);
+
+		WriteFile(handle, &iter->bTexture_Color_Multiple, sizeof(_bool), dword, nullptr);
+		WriteFile(handle, &iter->fStrash_Alpha, sizeof(_float), dword, nullptr);
+		WriteFile(handle, &iter->bText_Right, sizeof(_bool), dword, nullptr);
 
 		_int iIndexPartName = -1;
 
