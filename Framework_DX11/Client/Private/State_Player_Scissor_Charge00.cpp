@@ -38,6 +38,14 @@ HRESULT CState_Player_Scissor_Charge00::Start_State(void* pArg)
     m_isInputRButton = false;
     m_fRButtonTime = 0.f;
 
+    m_iColliderStartFrame_Left = 114;
+    m_iColliderEndFrame_Left = 117;
+
+    m_iColliderStartFrame_Right[0] = 80;
+    m_iColliderEndFrame_Right[0] = 83;
+    m_iColliderStartFrame_Right[1] = 116;
+    m_iColliderEndFrame_Right[1] = 119;
+
     return S_OK;
 }
 
@@ -88,6 +96,8 @@ void CState_Player_Scissor_Charge00::Update(_float fTimeDelta)
     {
         m_pPlayer->Change_State(CPlayer::OH_IDLE);
     }
+
+    Control_Collider();
 }
 
 void CState_Player_Scissor_Charge00::End_State()
@@ -97,6 +107,36 @@ void CState_Player_Scissor_Charge00::End_State()
 _bool CState_Player_Scissor_Charge00::End_Check()
 {
     return m_pPlayer->Get_EndAnim(m_iAnimation_ScissorCA1);
+}
+
+void CState_Player_Scissor_Charge00::Control_Collider()
+{
+    _int iFrame = m_pPlayer->Get_Frame();
+
+    if (m_iCombineFrame >= iFrame)
+    {
+        if (m_iColliderStartFrame_Left<= iFrame && iFrame <= m_iColliderEndFrame_Left)
+        {
+            m_pPlayer->Active_CurrentWeaponCollider(3.f, 1);
+        }
+        else
+        {
+            m_pPlayer->DeActive_CurretnWeaponCollider(1);
+        }
+
+
+        for (_uint i = 0; i < 2; ++i)
+        {
+            if (m_iColliderStartFrame_Right[i] <= iFrame && iFrame <= m_iColliderEndFrame_Right[i])
+            {
+                m_pPlayer->Active_CurrentWeaponCollider(3.f, 0);
+            }
+            else
+            {
+                m_pPlayer->DeActive_CurretnWeaponCollider(0);
+            }
+        }
+    }
 }
 
 CState_Player_Scissor_Charge00* CState_Player_Scissor_Charge00::Create(CFsm* pFsm, CPlayer* pPlayer, _uint iStateNum, void* pArg)

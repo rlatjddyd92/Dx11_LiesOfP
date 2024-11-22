@@ -118,16 +118,13 @@ void CWeapon_Scissor::Active_Collider(_float fDamageRatio, _uint iHandIndex)
 	}
 	else
 	{
-		if (!m_pColliderCom->IsActive())
-			return;
-
-		m_pScissor_Sperate[iHandIndex]->Active_Collider();
+		m_pScissor_Sperate[iHandIndex]->Active_Collider(fDamageRatio);
 	}
 }
 
 void CWeapon_Scissor::DeActive_Collider(_uint iHandIndex)
 {
-	if (m_isSeperate)
+	if (!m_isSeperate)
 	{
 		m_pColliderCom->IsActive(false);
 	}

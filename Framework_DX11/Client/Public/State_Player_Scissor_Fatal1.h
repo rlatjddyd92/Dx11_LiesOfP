@@ -46,7 +46,8 @@ private:
     _bool               End_Check();
 
 private:
-
+    _int                m_iColliderStartFrame = {};
+    _int                m_iColliderEndFrame = {};
     void                Control_Collider();
 
 public:

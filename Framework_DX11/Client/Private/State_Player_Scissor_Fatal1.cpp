@@ -26,6 +26,9 @@ HRESULT CState_Player_Scissor_Fatal1::Initialize(_uint iStateNum, void* pArg)
     m_iSeperateFrame = 1;
     m_iCombineFrame = 81;
 
+    m_iColliderStartFrame = 10;
+    m_iColliderEndFrame = 18;
+
     m_iStateNum = iStateNum;
 
     return S_OK;
@@ -114,10 +117,13 @@ void CState_Player_Scissor_Fatal1::Update(_float fTimeDelta)
     {
         m_pPlayer->Change_State(CPlayer::OH_IDLE);
     }
+
+    Control_Collider();
 }
 
 void CState_Player_Scissor_Fatal1::End_State()
 {
+    m_pPlayer->DeActive_CurretnWeaponCollider();
 }
 
 _bool CState_Player_Scissor_Fatal1::End_Check()
@@ -127,6 +133,18 @@ _bool CState_Player_Scissor_Fatal1::End_Check()
 
 void CState_Player_Scissor_Fatal1::Control_Collider()
 {
+    _int iFrame = m_pPlayer->Get_Frame();
+
+    if (m_iColliderStartFrame <= iFrame && iFrame <= m_iColliderEndFrame)
+    {
+        m_pPlayer->Active_CurrentWeaponCollider(3.f, 0);
+        m_pPlayer->Active_CurrentWeaponCollider(3.f, 1);
+    }
+    else
+    {
+        m_pPlayer->DeActive_CurretnWeaponCollider(0);
+        m_pPlayer->DeActive_CurretnWeaponCollider(1);
+    }
 }
 
 CState_Player_Scissor_Fatal1* CState_Player_Scissor_Fatal1::Create(CFsm* pFsm, CPlayer* pPlayer, _uint iStateNum, void* pArg)

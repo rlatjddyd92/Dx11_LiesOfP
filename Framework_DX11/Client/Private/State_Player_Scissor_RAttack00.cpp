@@ -27,6 +27,12 @@ HRESULT CState_Player_Scissor_RAttack00::Initialize(_uint iStateNum, void* pArg)
 
     m_iStateNum = iStateNum;
 
+    m_iColliderStartFrameLeft = 15;
+    m_iColliderEndFrameLeft = 20;
+
+    m_iColliderStartFrameRight = 30;
+    m_iColliderEndFrameRight = 35;
+
     return S_OK;
 }
 
@@ -78,9 +84,9 @@ void CState_Player_Scissor_RAttack00::Update(_float fTimeDelta)
             m_pPlayer->Change_State(CPlayer::SCISSOR_LATTACK1);
         else if (m_isInputRButton)
         {
-            //if (m_fRButtonTime > 0.15f)
-            //    m_pPlayer->Change_State(CPlayer::FLAME_LATTACK1);
-            //else
+            if (m_fRButtonTime > 0.15f)
+                m_pPlayer->Change_State(CPlayer::SCISSOR_CHARGE1);
+            else
                 m_pPlayer->Change_State(CPlayer::SCISSOR_RATTACK1);
         }
     }
@@ -88,6 +94,8 @@ void CState_Player_Scissor_RAttack00::Update(_float fTimeDelta)
     {
         m_pPlayer->Change_State(CPlayer::OH_IDLE);
     }
+
+    Control_Collider();
 }
 
 void CState_Player_Scissor_RAttack00::End_State()
@@ -97,6 +105,32 @@ void CState_Player_Scissor_RAttack00::End_State()
 _bool CState_Player_Scissor_RAttack00::End_Check()
 {
     return m_pPlayer->Get_EndAnim(m_iAnimation_ScissorSA1);
+}
+
+void CState_Player_Scissor_RAttack00::Control_Collider()
+{
+    _int iFrame = m_pPlayer->Get_Frame();
+
+    if (m_iCombineFrame >= iFrame)
+    {
+            if (m_iColliderStartFrameLeft <= iFrame && iFrame <= m_iColliderEndFrameLeft)
+            {
+                m_pPlayer->Active_CurrentWeaponCollider(3.f, 1);
+            }
+            else
+            {
+                m_pPlayer->DeActive_CurretnWeaponCollider(1);
+            }
+
+            if (m_iColliderStartFrameRight <= iFrame && iFrame <= m_iColliderEndFrameRight)
+            {
+                m_pPlayer->Active_CurrentWeaponCollider(3.f, 0);
+            }
+            else
+            {
+                m_pPlayer->DeActive_CurretnWeaponCollider(0);
+            }
+    }
 }
 
 CState_Player_Scissor_RAttack00* CState_Player_Scissor_RAttack00::Create(CFsm* pFsm, CPlayer* pPlayer, _uint iStateNum, void* pArg)

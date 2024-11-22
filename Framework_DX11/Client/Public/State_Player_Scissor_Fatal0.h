@@ -24,7 +24,6 @@ private:
 
     _uint               m_iAnimation_ScissorCombos1 = { };
 
-    _int                m_iComboIndex = {};
     _int                m_iComboFrame = {};
 
     _int                m_iChangeFrame = {};
@@ -46,7 +45,8 @@ private:
     _bool               End_Check();
 
 private:
-
+    _int                m_iColliderStartFrame = {};
+    _int                m_iColliderEndFrame = {};
     void                Control_Collider();
 
 public:

@@ -24,6 +24,9 @@ HRESULT CState_Player_Scissor_LAttack00::Initialize(_uint iStateNum, void* pArg)
     m_iChangeFrame = 45;
     m_iStateNum = iStateNum;
 
+    m_iColliderStartFrame = 29;
+    m_iColliderEndFrame = 33;
+
     return S_OK;
 }
 
@@ -80,15 +83,28 @@ void CState_Player_Scissor_LAttack00::Update(_float fTimeDelta)
     {
         m_pPlayer->Change_State(CPlayer::OH_IDLE);
     }
+
+    Control_Collider();
 }
 
 void CState_Player_Scissor_LAttack00::End_State()
 {
+    m_pPlayer->DeActive_CurretnWeaponCollider();
 }
 
 _bool CState_Player_Scissor_LAttack00::End_Check()
 {
     return m_pPlayer->Get_EndAnim(m_iAnimation_ScissorNA1);
+}
+
+void CState_Player_Scissor_LAttack00::Control_Collider()
+{
+    _int iFrame = m_pPlayer->Get_Frame();
+
+    if (m_iColliderStartFrame <= iFrame && iFrame <= m_iColliderEndFrame)
+        m_pPlayer->Active_CurrentWeaponCollider();
+    else
+        m_pPlayer->DeActive_CurretnWeaponCollider();
 }
 
 CState_Player_Scissor_LAttack00* CState_Player_Scissor_LAttack00::Create(CFsm* pFsm, CPlayer* pPlayer, _uint iStateNum, void* pArg)

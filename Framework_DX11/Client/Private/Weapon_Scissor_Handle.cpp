@@ -108,6 +108,16 @@ HRESULT CWeapon_Scissor_Handle::Ready_Components()
 		if (FAILED(__super::Add_Component(LEVEL_GAMEPLAY, TEXT("Prototype_Component_Model_Scissor_Left_Hnd"),
 			TEXT("Com_Model"), reinterpret_cast<CComponent**>(&m_pModelCom))))
 			return E_FAIL;
+
+		/* FOR.Com_Collider */
+		CBounding_OBB::BOUNDING_OBB_DESC			ColliderDesc{};
+		ColliderDesc.vExtents = _float3(0.1f, 0.1f, 0.75f);
+		ColliderDesc.vCenter = _float3(0.f, 0.f, -0.6f);
+		ColliderDesc.vAngles = _float3(0.f, 0.f, 0.f);
+
+		if (FAILED(__super::Add_Component(LEVEL_STATIC, TEXT("Prototype_Component_Collider_OBB"),
+			TEXT("Com_Collider"), reinterpret_cast<CComponent**>(&m_pColliderCom), &ColliderDesc)))
+			return E_FAIL;
 	}
 	else if (m_eType == SCISSOR_RIGHT)
 	{
@@ -115,17 +125,19 @@ HRESULT CWeapon_Scissor_Handle::Ready_Components()
 		if (FAILED(__super::Add_Component(LEVEL_GAMEPLAY, TEXT("Prototype_Component_Model_Scissor_Right_Hnd"),
 			TEXT("Com_Model"), reinterpret_cast<CComponent**>(&m_pModelCom))))
 			return E_FAIL;
+
+		/* FOR.Com_Collider */
+		CBounding_OBB::BOUNDING_OBB_DESC			ColliderDesc{};
+		ColliderDesc.vExtents = _float3(0.1f, 0.1f, 0.75f);
+		ColliderDesc.vCenter = _float3(0.f, 0.f, 0.6f);
+		ColliderDesc.vAngles = _float3(0.f, 0.f, 0.f);
+
+		if (FAILED(__super::Add_Component(LEVEL_STATIC, TEXT("Prototype_Component_Collider_OBB"),
+			TEXT("Com_Collider"), reinterpret_cast<CComponent**>(&m_pColliderCom), &ColliderDesc)))
+			return E_FAIL;
 	}
 
-	/* FOR.Com_Collider */
-	CBounding_OBB::BOUNDING_OBB_DESC			ColliderDesc{};
-	ColliderDesc.vExtents = _float3(0.1f, 0.1f, 0.75f);
-	ColliderDesc.vCenter = _float3(0.f, 0.f, -0.6f);
-	ColliderDesc.vAngles = _float3(0.f, 0.f, 0.f);
 
-	if (FAILED(__super::Add_Component(LEVEL_STATIC, TEXT("Prototype_Component_Collider_OBB"),
-		TEXT("Com_Collider"), reinterpret_cast<CComponent**>(&m_pColliderCom), &ColliderDesc)))
-		return E_FAIL;
 
 
 	return S_OK;

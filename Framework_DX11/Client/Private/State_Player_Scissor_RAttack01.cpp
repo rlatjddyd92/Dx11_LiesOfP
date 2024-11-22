@@ -27,6 +27,12 @@ HRESULT CState_Player_Scissor_RAttack01::Initialize(_uint iStateNum, void* pArg)
 
     m_iStateNum = iStateNum;
 
+    m_iColliderStartFrameLeft = 33;
+    m_iColliderEndFrameLeft = 40;
+
+    m_iColliderStartFrameRight = 10;
+    m_iColliderEndFrameRight = 17;
+
     return S_OK;
 }
 
@@ -78,9 +84,9 @@ void CState_Player_Scissor_RAttack01::Update(_float fTimeDelta)
              m_pPlayer->Change_State(CPlayer::SCISSOR_LATTACK0);
          else if (m_isInputRButton)
          {
-             //if (m_fRButtonTime > 0.15f)
-             //    m_pPlayer->Change_State(CPlayer::FLAME_LATTACK1);
-             //else
+             if (m_fRButtonTime > 0.15f)
+                 m_pPlayer->Change_State(CPlayer::SCISSOR_CHARGE1);
+             else
                  m_pPlayer->Change_State(CPlayer::SCISSOR_RATTACK0);
          }
      }
@@ -88,6 +94,8 @@ void CState_Player_Scissor_RAttack01::Update(_float fTimeDelta)
      {
          m_pPlayer->Change_State(CPlayer::OH_IDLE);
      }
+
+     Control_Collider();
 }
 
 void CState_Player_Scissor_RAttack01::End_State()
@@ -97,6 +105,32 @@ void CState_Player_Scissor_RAttack01::End_State()
 _bool CState_Player_Scissor_RAttack01::End_Check()
 {
     return m_pPlayer->Get_EndAnim(m_iAnimation_ScissorSA2);
+}
+
+void CState_Player_Scissor_RAttack01::Control_Collider()
+{
+    _int iFrame = m_pPlayer->Get_Frame();
+
+    if (m_iCombineFrame >= iFrame)
+    {
+        if (m_iColliderStartFrameLeft <= iFrame && iFrame <= m_iColliderEndFrameLeft)
+        {
+            m_pPlayer->Active_CurrentWeaponCollider(3.f, 1);
+        }
+        else
+        {
+            m_pPlayer->DeActive_CurretnWeaponCollider(1);
+        }
+
+        if (m_iColliderStartFrameRight <= iFrame && iFrame <= m_iColliderEndFrameRight)
+        {
+            m_pPlayer->Active_CurrentWeaponCollider(3.f, 0);
+        }
+        else
+        {
+            m_pPlayer->DeActive_CurretnWeaponCollider(0);
+        }
+    }
 }
 
 CState_Player_Scissor_RAttack01* CState_Player_Scissor_RAttack01::Create(CFsm* pFsm, CPlayer* pPlayer, _uint iStateNum, void* pArg)

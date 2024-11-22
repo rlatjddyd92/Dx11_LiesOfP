@@ -25,6 +25,19 @@ HRESULT CState_Player_Scissor_Fatal2::Initialize(_uint iStateNum, void* pArg)
     m_iSeperateFrame = 1;
     m_iCombineFrame = 50;
 
+    m_iColliderStartFrame_Left[0] = 25;
+    m_iColliderEndFrame_Left[0] = 27;
+    m_iColliderStartFrame_Left[1] = 39;
+    m_iColliderEndFrame_Left[1] = 44;
+
+    m_iColliderStartFrame_Right[0] = 21;
+    m_iColliderEndFrame_Right[0] = 24;
+    m_iColliderStartFrame_Right[1] = 29;
+    m_iColliderEndFrame_Right[1] = 36;
+
+    m_iColliderStartFrame = 55;
+    m_iColliderEndFrame = 60;
+
     m_iStateNum = iStateNum;
 
     return S_OK;
@@ -32,7 +45,7 @@ HRESULT CState_Player_Scissor_Fatal2::Initialize(_uint iStateNum, void* pArg)
 
 HRESULT CState_Player_Scissor_Fatal2::Start_State(void* pArg)
 {
-    m_pPlayer->Change_Animation(m_iAnimation_ScissorCombos3, false, 0.05f);
+    m_pPlayer->Change_Animation(m_iAnimation_ScissorCombos3, false, 0.f);
 
     m_isInputLButton = false;
     m_isInputRButton = false;
@@ -46,7 +59,6 @@ HRESULT CState_Player_Scissor_Fatal2::Start_State(void* pArg)
 void CState_Player_Scissor_Fatal2::Update(_float fTimeDelta)
 {
     _int iFrame = m_pPlayer->Get_Frame();
-    _uint iCurrentAnim = m_pPlayer->Get_Model()->Get_CurrentAnimationIndex();
 
     if (iFrame < m_iChangeFrame)
     {
@@ -93,11 +105,15 @@ void CState_Player_Scissor_Fatal2::Update(_float fTimeDelta)
     {
         m_pPlayer->Change_State(CPlayer::OH_IDLE);
     }
+
+    Control_Collider();
+
 }
 
 
 void CState_Player_Scissor_Fatal2::End_State()
 {
+    m_pPlayer->DeActive_CurretnWeaponCollider();
     m_pPlayer->Combine_Scissor();
 }
 
@@ -108,6 +124,45 @@ _bool CState_Player_Scissor_Fatal2::End_Check()
 
 void CState_Player_Scissor_Fatal2::Control_Collider()
 {
+    _int iFrame = m_pPlayer->Get_Frame();
+
+    if (m_iAnimation_ScissorCombos3 != m_pPlayer->Get_CurrentAnimIndex())
+        return;
+
+    if (m_iCombineFrame >= iFrame)
+    {
+        for (_uint i = 0; i < 2; ++i)
+        {
+            if (m_iColliderStartFrame_Left[i] <= iFrame && iFrame <= m_iColliderEndFrame_Left[i])
+            {
+                m_pPlayer->Active_CurrentWeaponCollider(3.f, 1);
+            }
+            else
+            {
+                m_pPlayer->DeActive_CurretnWeaponCollider(1);
+            }
+
+            if (m_iColliderStartFrame_Right[i] <= iFrame && iFrame <= m_iColliderEndFrame_Right[i])
+            {
+                m_pPlayer->Active_CurrentWeaponCollider(3.f, 0);
+            }
+            else
+            {
+                m_pPlayer->DeActive_CurretnWeaponCollider(0);
+            }
+        }
+    }
+    else
+    {
+        if (m_iColliderStartFrame <= iFrame && iFrame <= m_iColliderEndFrame)
+        {
+            m_pPlayer->Active_CurrentWeaponCollider(3.f);
+        }
+        else
+        {
+            m_pPlayer->DeActive_CurretnWeaponCollider();
+        }
+    }
 }
 
 CState_Player_Scissor_Fatal2* CState_Player_Scissor_Fatal2::Create(CFsm* pFsm, CPlayer* pPlayer, _uint iStateNum, void* pArg)

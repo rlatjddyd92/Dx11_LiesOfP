@@ -130,7 +130,7 @@ void CPlayer::Update(_float fTimeDelta)
 {
 	m_pFsmCom->Update(fTimeDelta);
 
-	m_vCurRootMove = m_pModelCom->Play_Animation(fTimeDelta * 0.5f, &m_EvKeyList);
+	m_vCurRootMove = m_pModelCom->Play_Animation(fTimeDelta * 0.3f, &m_EvKeyList);
 
 
 	_vector vPos = m_pTransformCom->Get_State(CTransform::STATE_POSITION);
@@ -357,14 +357,14 @@ void CPlayer::Combine_Scissor()
 	dynamic_cast<CWeapon_Scissor*>(m_pWeapon[WEP_SCISSOR])->Change_CombineMode();
 }
 
-void CPlayer::Active_CurrentWeaponCollider(_float fDamageRatio)
+void CPlayer::Active_CurrentWeaponCollider(_float fDamageRatio, _uint iHandIndex)
 {
-	m_pWeapon[m_eWeaponType]->Active_Collider(fDamageRatio);
+	m_pWeapon[m_eWeaponType]->Active_Collider(fDamageRatio, iHandIndex);
 }
 
-void CPlayer::DeActive_CurretnWeaponCollider()
+void CPlayer::DeActive_CurretnWeaponCollider(_uint iHandIndex)
 {
-	m_pWeapon[m_eWeaponType]->DeActive_Collider();
+	m_pWeapon[m_eWeaponType]->DeActive_Collider(iHandIndex);
 }
 
 void CPlayer::Chnage_CameraMode(CPlayerCamera::CAMERA_MODE eMode)

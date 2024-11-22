@@ -39,6 +39,13 @@ private:
 private:
     _bool               End_Check();
 
+private:
+    _int                m_iColliderStartFrameLeft = {};
+    _int                m_iColliderEndFrameLeft = {};
+    _int                m_iColliderStartFrameRight = {};
+    _int                m_iColliderEndFrameRight = {};
+    void                Control_Collider();
+
 public:
     static CState_Player_Scissor_RAttack01* Create(class CFsm* pFsm, class CPlayer* pPlayer, _uint iStateNum, void* pArg = nullptr);
     virtual void Free() override;

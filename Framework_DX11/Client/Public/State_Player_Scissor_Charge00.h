@@ -39,6 +39,14 @@ private:
 private:
     _bool               End_Check();
 
+private:
+    _int                m_iColliderStartFrame_Left= {};
+    _int                m_iColliderEndFrame_Left = {};
+    _int                m_iColliderStartFrame_Right[2] = {};
+    _int                m_iColliderEndFrame_Right[2] = {};
+
+    void                Control_Collider();
+
 public:
     static CState_Player_Scissor_Charge00* Create(class CFsm* pFsm, class CPlayer* pPlayer, _uint iStateNum, void* pArg = nullptr);
     virtual void Free() override;

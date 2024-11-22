@@ -87,10 +87,8 @@ public:
 	void			Change_Weapon();
 	_uint			Change_WeaponType();
 	
-	void			Active_CurrentWeaponCollider(_float fDamageRatio = 1.f);
-	void			DeActive_CurretnWeaponCollider();
-
-	void			Active_ScissorCollider(_float fDamageRatio);
+	void			Active_CurrentWeaponCollider(_float fDamageRatio = 1.f, _uint iHandIndex = 1);
+	void			DeActive_CurretnWeaponCollider(_uint iHandIndex = 1);
 
 	void			Seperate_Scissor();
 	void			Combine_Scissor();

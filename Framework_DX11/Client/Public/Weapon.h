@@ -44,7 +44,7 @@ public:
 	virtual void OnCollisionExit(CGameObject* pOther) {};
 
 public:
-	virtual void Active_Collider(_float fDamageRatio = 1.f, _uint iHandIndex = 1);		//0번 외손 1번 오른손
+	virtual void Active_Collider(_float fDamageRatio = 1.f, _uint iHandIndex = 0);		//1번 외손 0번 오른손
 	virtual void DeActive_Collider(_uint iHandIndex = 1);
 
 public:
