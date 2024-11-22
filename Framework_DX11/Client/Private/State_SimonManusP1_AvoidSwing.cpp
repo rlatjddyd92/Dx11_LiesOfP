@@ -2,7 +2,7 @@
 #include "State_SimonManusP1_AvoidSwing.h"
 #include "GameInstance.h"
 #include "Model.h"
-#include "SimonManusP1.h"
+#include "SimonManus.h"
 
 CState_SimonManusP1_AvoidSwing::CState_SimonManusP1_AvoidSwing(CFsm* pFsm, CMonster* pMonster)
     :CState{ pFsm }
@@ -13,10 +13,8 @@ CState_SimonManusP1_AvoidSwing::CState_SimonManusP1_AvoidSwing(CFsm* pFsm, CMons
 HRESULT CState_SimonManusP1_AvoidSwing::Initialize(_uint iStateNum, void* pArg)
 {
     m_iStateNum = iStateNum;
-    m_fIdleDuration = 3.3f;
-    CSimonManusP1::FSMSTATE_DESC* pDesc = static_cast<CSimonManusP1::FSMSTATE_DESC*>(pArg);
+    CSimonManus::FSMSTATE_DESC* pDesc = static_cast<CSimonManus::FSMSTATE_DESC*>(pArg);
 
-    m_pIsEndAnim = pDesc->pIsEndAnim;
     m_pResetRootMove = pDesc->pIsResetRootMove;
 
     return S_OK;
@@ -24,22 +22,28 @@ HRESULT CState_SimonManusP1_AvoidSwing::Initialize(_uint iStateNum, void* pArg)
 
 HRESULT CState_SimonManusP1_AvoidSwing::Start_State(void* pArg)
 {
-    m_pMonster->Change_Animation(AN_AVOIDSWING_START, false, true);
+    m_pMonster->Change_Animation(AN_AVOIDSWING, false, 0.1f, 0);
 
     return S_OK;
 }
 
 void CState_SimonManusP1_AvoidSwing::Update(_float fTimeDelta)
 {
-    if (*m_pIsEndAnim)
+    if (End_Check())
     {
-        m_pMonster->Change_State(CSimonManusP1::IDLE);
+        m_pMonster->Change_State(CSimonManus::IDLE);
+        return;
     }
 
 }
 
 void CState_SimonManusP1_AvoidSwing::End_State()
 {
+}
+
+_bool CState_SimonManusP1_AvoidSwing::End_Check()
+{
+    return m_pMonster->Get_EndAnim(AN_AVOIDSWING);
 }
 
 CState_SimonManusP1_AvoidSwing* CState_SimonManusP1_AvoidSwing::Create(CFsm* pFsm, CMonster* pMonster, _uint iStateNum, void* pArg)

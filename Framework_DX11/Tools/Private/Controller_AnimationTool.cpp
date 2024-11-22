@@ -66,6 +66,7 @@ HRESULT CController_AnimationTool::Initialize(ID3D11Device* pDevice, ID3D11Devic
 void CController_AnimationTool::SetUp_AnimTool()
 {
 	m_bObjRenderCtr = true;
+	m_bTargetBallRender = true;
 	CModel* pModel = dynamic_cast<CModel*>(m_pGameInstance->Find_Component(LEVEL_TOOL, TEXT("Layer_AnimationTool_Test"), TEXT("Com_Model")));
 	
 	if (m_pCopyModelCom != pModel)
@@ -102,6 +103,7 @@ void CController_AnimationTool::SetUp_AnimTool()
 
 	if (ImGui::BeginTabBar("AnimTool"))
 	{
+		m_bTargetBallRender = true;
 		if (ImGui::BeginTabItem("Anim"))
 		{
 			ListUp_Anim();
@@ -131,7 +133,7 @@ void CController_AnimationTool::SetUp_AnimTool()
 
 		if(!RenderCheck)
 		{
-			m_bTargetBallRender = false;
+			//m_bTargetBallRender = false;
 		}
 
 		ImGui::EndTabItem();
@@ -518,6 +520,7 @@ void CController_AnimationTool::ListUp_Bone()
 	ImGui::SameLine();
 	ImGui::Text(" : %d", m_iSelected_Index_Bone);
 
+
 	//이전 선택지 비교 후 애니메이션 전환
 	if (m_pCopyModelCom != nullptr)
 	{
@@ -548,12 +551,36 @@ void CController_AnimationTool::SetUp_Controller_Bone()
 		}
 	}
 	ImGui::Text("\n");
-	_vector vPos{};
+	_Vec3 vPos{};
 	_float3 vTemp{};
 	if (m_pCopyModelCom != nullptr)
 	{
-		//vPos = ((*m_pCopyBoneVec)[m_iSelected_Index_Bone])->Get_TransformationMatrix().r[CTransform::STATE_POSITION];
 		vPos = ((*m_pCopyBoneVec)[m_iSelected_Index_Bone])->Get_CombinedTransformationMatrix().Translation();
+		Matrix WorldMat = ((*m_pCopyBoneVec)[m_iSelected_Index_Bone])->Get_CombinedTransformationMatrix();
+		vPos.x = WorldMat._41;
+		vPos.y = WorldMat._42;
+		vPos.z = WorldMat._43;
+	}
+
+
+	ImGui::Text("\tBone_Needs_Tuning ? : ");
+	ImGui::SameLine();
+	if ((*m_pCopyBoneVec)[m_iSelected_Index_Bone]->Get_isNeedTuning())
+	{
+		ImGui::Text("True");
+	}
+	else
+		ImGui::Text("False");
+
+
+	if (ImGui::Button("SetUpTuning"))
+	{
+		m_pCopyModelCom->SetUp_isNeedTuning(m_iSelected_Index_Bone, true);
+	}
+	ImGui::SameLine();
+	if (ImGui::Button("DiscardTuning"))
+	{
+		m_pCopyModelCom->SetUp_isNeedTuning(m_iSelected_Index_Bone, false);
 	}
 
 	ImGui::Text("Pos_X   %f", XMVectorGetX(vPos));
@@ -628,7 +655,7 @@ void CController_AnimationTool::ListUp_Virtex()
 	ImGui::PushItemWidth(300); // 크기조정
 	if (ImGui::BeginListBox("Mesh List"))
 	{
-		if (m_pCopyMeshVec != nullptr || m_pCopyModelCom != nullptr)
+		if (m_pCopyMeshVec != nullptr && m_pCopyModelCom != nullptr)
 		{
 			bool is_selected{ false };
 			for (_uint i = 0; i < m_pCopyModelCom->Get_NumMeshes(); i++)
@@ -825,7 +852,7 @@ void CController_AnimationTool::NewPage_AnimTool()
 
 			ImGui::PushItemWidth(100); // 크기조정
 
-			if (ImGui::BeginListBox("EVENT_Type"))
+			if (ImGui::BeginListBox("##EVENT_Type"))
 			{
 				if (ImGui::Selectable("ONCE", (m_EventTypeIndex == 0)))
 				{
@@ -836,6 +863,27 @@ void CController_AnimationTool::NewPage_AnimTool()
 				if (ImGui::Selectable("REPET", (m_EventTypeIndex == 1)))
 				{
 					m_EventTypeIndex = 1;
+				}
+				else
+					ImGui::SetItemDefaultFocus();
+				ImGui::EndListBox();
+			}
+
+			ImGui::SameLine();
+
+			ImGui::PushItemWidth(100); // 크기조정
+
+			if (ImGui::BeginListBox("##Active_Type"))
+			{
+				if (ImGui::Selectable("EFFECT", (m_ActiveTypeIndex == 0)))
+				{
+					m_ActiveTypeIndex = 0;
+				}
+				else
+					ImGui::SetItemDefaultFocus();
+				if (ImGui::Selectable("COLLIDER", (m_ActiveTypeIndex == 1)))
+				{
+					m_ActiveTypeIndex = 1;
 				}
 				else
 					ImGui::SetItemDefaultFocus();
@@ -883,7 +931,20 @@ void CController_AnimationTool::NewPage_AnimTool()
 					default:
 						break;
 					}
-					
+
+					switch (m_ActiveTypeIndex)
+					{
+					case 0:
+						EventKeyDesc.eTarget_Type = EVENT_KEYFRAME::EFFECT;
+						break;
+
+					case 1:
+						EventKeyDesc.eTarget_Type = EVENT_KEYFRAME::COLLIDER;
+						break;
+
+					default:
+						break;
+					}
 					(*m_pCopyAnimVec)[m_iSelected_Index_Anim]->Add_EventKeyFrame(EventKeyDesc);
 				}
 			}
@@ -971,8 +1032,6 @@ void CController_AnimationTool::NewPage_AnimTool()
 void CController_AnimationTool::EndFrame_AnimTool()
 {
 	Safe_Release(m_pCopyModelCom);
-	m_pCopyAnimVec = nullptr;
-	m_pCopyBoneVec = nullptr;
 }
 
 void CController_AnimationTool::Free()

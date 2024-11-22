@@ -86,6 +86,11 @@ _int CPawn::Get_Frame()
 	return m_pModelCom->Get_CurrentFrame();
 }
 
+_int CPawn::Get_CurrentTrackPos()
+{
+	return m_pModelCom->Get_CurrentTrackPosition();
+}
+
 _bool CPawn::Get_EndAnim(_int iAnimIndex, _bool bIsBoundary)
 {
 	if (bIsBoundary)

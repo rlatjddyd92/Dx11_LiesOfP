@@ -46,6 +46,9 @@ private:
 
     _uint               m_iDirCnt = {};
 
+private:
+    _bool               End_Check();
+
 public:
     static CState_SimonManusP1_HitFatal* Create(class CFsm* pFsm, class CMonster* pMonster, _uint iStateNum, void* pArg = nullptr);
     virtual void Free() override;

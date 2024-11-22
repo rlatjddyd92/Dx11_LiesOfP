@@ -9,6 +9,10 @@ BEGIN(Client)
 
 class CState_CarcassBigA_Impact : public CState
 {
+private:
+    typedef enum {
+        AN_IMPACT = 5
+    }ANIMNUM;
 public:
     CState_CarcassBigA_Impact(class CFsm* pFsm, class CMonster* pMonster);
     virtual ~CState_CarcassBigA_Impact() = default;

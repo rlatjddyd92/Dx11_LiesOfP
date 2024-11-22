@@ -83,7 +83,7 @@ void CAnimModel::Update(_float fTimeDelta)
 	}
 	else
 	{
-		*m_tDesc.pRenderCtr_TB = false;
+		//*m_tDesc.pRenderCtr_TB = false;
 	}
 
 	_vector vPos = m_pTransformCom->Get_State(CTransform::STATE_POSITION);

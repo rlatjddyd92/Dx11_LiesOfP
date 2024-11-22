@@ -2,7 +2,7 @@
 #include "State_SimonManusP1_Stamp.h"
 #include "GameInstance.h"
 #include "Model.h"
-#include "SimonManusP1.h"
+#include "SimonManus.h"
 
 CState_SimonManusP1_Stamp::CState_SimonManusP1_Stamp(CFsm* pFsm, CMonster* pMonster)
     :CState{ pFsm }
@@ -14,10 +14,8 @@ HRESULT CState_SimonManusP1_Stamp::Initialize(_uint iStateNum, void* pArg)
 {
     //m_iAnimation_Idle = m_pMonster->Get_Model()->Get_AnimationIndex("Kurama_Idle_Loop");
     m_iStateNum = iStateNum;
-    m_fIdleDuration = 3.3f;
-    CSimonManusP1::FSMSTATE_DESC* pDesc = static_cast<CSimonManusP1::FSMSTATE_DESC*>(pArg);
+    CSimonManus::FSMSTATE_DESC* pDesc = static_cast<CSimonManus::FSMSTATE_DESC*>(pArg);
 
-    m_pIsEndAnim = pDesc->pIsEndAnim;
     m_pResetRootMove = pDesc->pIsResetRootMove;
 
     return S_OK;
@@ -26,28 +24,54 @@ HRESULT CState_SimonManusP1_Stamp::Initialize(_uint iStateNum, void* pArg)
 HRESULT CState_SimonManusP1_Stamp::Start_State(void* pArg)
 {
     *m_pResetRootMove = false;
+    m_iRouteTrack = 0;
+    if (m_pMonster->Calc_Distance_XZ() >= 4.f)
+    {
+        m_pMonster->Change_Animation(AN_STAMP_MOVE, false, 0.1f, 0);
+        m_iCurStartAnim = AN_STAMP_MOVE;
+    }
+    else
+    {
+        m_pMonster->Change_Animation(AN_STAMP, false, 0.1f, 0);
+        m_iCurStartAnim = AN_STAMP;
+    }
 
+    _int iCnt = rand() % 4;
 
-    //방향 정하기 - 랜덤? 뒤 왼 오 니까 나머지 3 해서 더하기
-    m_pMonster->Change_Animation(AN_STAMP, false, true);
+    if (iCnt >= 3)
+    {
+        m_bStamp = true;
+    }
+    else
+        m_bStamp = false;
 
-    m_bStamp = false;
     return S_OK;
 }
 
 void CState_SimonManusP1_Stamp::Update(_float fTimeDelta)
 {
-    if (*m_pIsEndAnim)
+
+    if (m_bStamp)
     {
-        if (!m_bStamp)
+        _float fTime = 120.f;
+        if (m_iCurStartAnim == AN_STAMP_MOVE)
         {
-            m_bStamp = true;
-            m_pMonster->Change_Animation(AN_SPINBLAST, false, true);
+            fTime = 140.f;
         }
-        else
+        
+        if (fTime >= m_pMonster->Get_CurrentTrackPos())
         {
-            m_pMonster->Change_State(CSimonManusP1::IDLE);
+            m_pMonster->Change_Animation(AN_SPINBLAST, false, 0, 0);
+            ++m_iRouteTrack;
+            m_bStamp = false;
         }
+    }
+
+
+    if (End_Check())
+    {
+        m_pMonster->Change_State(CSimonManus::IDLE);
+        return;
     }
 }
 
@@ -55,6 +79,33 @@ void CState_SimonManusP1_Stamp::End_State()
 {
     m_bStamp = false;
     *m_pResetRootMove = true;
+}
+
+_bool CState_SimonManusP1_Stamp::End_Check()
+{
+    _uint iCurAnim = m_pMonster->Get_CurrentAnimIndex();
+    _bool bEndCheck{ false };
+    switch (m_iRouteTrack)
+    {
+    case 0:
+        if ((m_iCurStartAnim) == iCurAnim)
+        {
+            bEndCheck = m_pMonster->Get_EndAnim(m_iCurStartAnim);
+        }
+        break;
+
+    case 1:
+        if ((AN_SPINBLAST) == iCurAnim)
+        {
+            bEndCheck = m_pMonster->Get_EndAnim(AN_SPINBLAST);
+        }
+        break;
+
+    default:
+        break;
+    }
+
+    return bEndCheck;
 }
 
 CState_SimonManusP1_Stamp* CState_SimonManusP1_Stamp::Create(CFsm* pFsm, CMonster* pMonster, _uint iStateNum, void* pArg)

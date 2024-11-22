@@ -40,6 +40,12 @@ namespace Engine
 	//이봉준 이벤트 키 프레임
 	typedef struct
 	{
+		enum ACTIVE_TARGET
+		{
+			EFFECT,
+			COLLIDER,
+			TARGET_END
+		};
 		enum EVENT_TYPE
 		{
 			ET_ONCE,
@@ -54,6 +60,7 @@ namespace Engine
 		};
 
 		EVENT_TYPE		eEvent_type{ ET_END };
+		ACTIVE_TARGET	eTarget_Type{TARGET_END};
 		BODY_TYPE_EV	eEvent_Body_Type{ BT_EITHER };
 		_char			szEventName[MAX_PATH];	//키프레임 이름(안쓸지도)
 		_double			Start_TrackPosition{};	//시작점 위치
@@ -62,6 +69,7 @@ namespace Engine
 		_double			Repet_Duration{};		//이벤트의 재생성 시간(중단점 - 시작점)
 
 		_uint			iBoneIndex{};			//이펙트를 생성 혹은 부착시킬 뼈의 인덱스
+		_uint			iActiveColliderIndex{};	//콜라이더를 생성 혹은 부착시킬 뼈의 인덱스
 
 		_uint			iEffectNum{};			//생성할 이펙트의 번호?
 

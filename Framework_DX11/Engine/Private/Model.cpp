@@ -34,6 +34,7 @@ CModel::CModel(const CModel & Prototype)
 	, m_UseFullVtxIndices{ Prototype.m_UseFullVtxIndices }
 	, m_isEnd_Animations{ nullptr }
 	, m_isEnd_Animations_Boundary{ nullptr }
+	, m_eType{ Prototype.m_eType }
 {
 	for (auto& pAnimation : m_Animations)
 		Safe_AddRef(pAnimation);
@@ -109,6 +110,11 @@ HRESULT CModel::Update_Boundary()
 	}
 	
 	return S_OK;
+}
+
+void CModel::SetUp_isNeedTuning(_int iBoneIndex, _bool bState)
+{
+	m_Bones[iBoneIndex]->SetUp_isNeedTuning(bState);
 }
 
 HRESULT CModel::Initialize_Prototype(TYPE eType, const _char * pModelFilePath, _fmatrix PreTransformMatrix, _bool isBinaryAnimModel, FilePathStructStack* pStructStack)
@@ -211,6 +217,7 @@ HRESULT CModel::Initialize(void * pArg)
 		if (FAILED(m_pDevice->CreateBuffer(&m_InstanceBufferDesc, &m_InstanceInitialData, &m_pVBInstance)))
 			return E_FAIL;
 	}
+	
 
 	return S_OK;
 }
@@ -314,10 +321,7 @@ HRESULT CModel::SetUp_NextAnimation(_uint iNextAnimationIndex, _bool isLoop, _fl
 
 	if (bEitherBoundary)
 	{
-		if (m_iCurrentAnimIndex == m_iCurrentAnimIndex_Boundary)
-		{
-			SetUp_NextAnimation_Boundary(iNextAnimationIndex, isLoop, fChangeDuration, iStartFrame);
-		}
+		SetUp_NextAnimation_Boundary(iNextAnimationIndex, isLoop, fChangeDuration, iStartFrame);
 	}
 
 	m_isEnd_Animations[iNextAnimationIndex] = false;
@@ -430,6 +434,7 @@ _vector CModel::Play_Animation(_float fTimeDelta, list<OUTPUT_EVKEY>* pEvKeyList
 	//상하체 분리에 영향받지 않는 부분들의 업데이트
 	Update_Animation(fAddTime, pEvKeyList);
 
+	//저 부모뼈들 이름으로 인덱스 찾아서 해당 인덱스 업데이트 멈추고 확인해서 나머지 팔은 잘 움직인다면
 
 	//분리된 부분 업데이트
 	Update_Animation_Boundary(fAddTime, pEvKeyList);
@@ -459,6 +464,13 @@ void CModel::Update_Animation(_float fTimeDelta, list<OUTPUT_EVKEY>* pEvKeyList)
 			{
 				continue;
 			}
+
+			if (m_Bones[CurrentChannels[i]->Get_BoneIndex()]->Get_isNeedTuning())
+			{
+				m_Bones[CurrentChannels[i]->Get_BoneIndex()]->Apply_Tuning();
+				continue;
+			}
+
 
 			KEYFRAME tCurrentKeyFrame = CurrentChannels[i]->Find_KeyFrameIndex(&m_KeyFrameIndices[m_iCurrentAnimIndex][i], m_CurrentTrackPosition); // 여기서부터
 			KEYFRAME tNextKeyFrame = NextChannels[i]->Find_KeyFrameIndex(&m_KeyFrameIndices[m_tChaneAnimDesc.iNextAnimIndex][i], m_ChangeTrackPosition); // 여기로 보간
@@ -673,6 +685,10 @@ _vector CModel::Finish_Update_Anim()
 		}
 	}
 
+	if (m_isEnd_Animations[m_iCurrentAnimIndex])
+	{
+		m_vRootMoveStack = m_vCurRootMove = _vector{0, 0, 0, 1};
+	}
 
 	if (XMVectorGetX(XMVector3Length(m_vRootMoveStack)) == 0
 		 || XMVectorGetX(XMVector3Length(m_vCurRootMove)) == 0)
@@ -687,6 +703,19 @@ _vector CModel::Finish_Update_Anim()
 	}
 
 
+
+	//for (_int i = 0; i < m_Bones.size(); ++i)
+	//{
+	//	if (i == 560 || i ==756)
+	//	{
+	//		m_Bones[i]->Apply_SaveCombined();
+	//	}
+	//	else
+	//	{
+	//		m_Bones[i]->Update_CombinedTransformationMatrix(m_Bones, XMLoadFloat4x4(&m_PreTransformMatrix));
+	//
+	//	}
+	//}
 
 	/* 모든 뼈가 가지고 있는 m_CombinedTransformationMatrix를 갱신한다. */
 	for (auto& pBone : m_Bones)
@@ -793,7 +822,7 @@ HRESULT CModel::Create_Bin_Bones(HANDLE* pFile)
 
 	for (auto& pBone : m_Bones)
 	{//뼈의 바이너리화 함수 호출
-		pBone->Create_BinaryFile(pFile, m_isUseBoundary);
+		pBone->Create_BinaryFile(pFile, m_isUseBoundary, m_eType);
 	}
 	return S_OK;
 }
@@ -890,7 +919,7 @@ HRESULT CModel::ReadyModel_To_Binary(HANDLE* pFile)
 
 	for (_uint i = 0; i < iNumBone; ++ i)
 	{
-		CBone* pBone = CBone::Create_To_Binary(pFile, m_isUseBoundary);
+		CBone* pBone = CBone::Create_To_Binary(pFile, m_isUseBoundary, m_eType);
 		if (pBone == nullptr)
 			return E_FAIL;
 		
@@ -915,10 +944,15 @@ HRESULT CModel::ReadyModel_To_Binary(HANDLE* pFile)
 
 	ReadFile(*pFile, &m_iNumMaterials, sizeof(_uint), &dwByte, nullptr);
 	
+	if (m_FilePaths != nullptr)
+	{
+		m_FilePaths->pStruct.resize(m_iNumMaterials);
+	}
+
 	for (_uint i = 0; i < m_iNumMaterials; ++i)
 	{
 		MESH_MATERIAL		MeshMaterial{};
-
+		
 		for (_uint j = 0; j < TEXTURE_TYPE_MAX; ++j)
 		{
 			_bool	isHaveTextures = true;
@@ -931,6 +965,13 @@ HRESULT CModel::ReadyModel_To_Binary(HANDLE* pFile)
 			_char				szTexturePath[MAX_PATH] = "";
 
 			ReadFile(*pFile, szTexturePath, MAX_PATH, &dwByte, nullptr);
+			
+			if (m_FilePaths != nullptr)
+			{
+				string strTextureFilePath;
+				strTextureFilePath.assign(szTexturePath);
+				m_FilePaths->pStruct[i].m_ModelFilePaths.push_back(strTextureFilePath);
+			}
 
 			_tchar				szFinalPath[MAX_PATH] = TEXT("");
 

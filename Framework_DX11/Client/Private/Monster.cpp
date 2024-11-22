@@ -108,27 +108,43 @@ HRESULT CMonster::Render()
 	return S_OK;
 }
 
+_Vec4 CMonster::Get_TargetDir()
+{
+	_Vec4 vDir = m_vPosTarget - m_pTransformCom->Get_State(CTransform::STATE_POSITION);
+
+	if (vDir.Length() == 0)
+	{
+		return _Vec4{0, 0, -1, 1};
+	}
+	return vDir;
+}
+
+
+void CMonster::Set_UpTargetPos()
+{
+	if (m_pGameInstance->Find_Player(LEVEL_GAMEPLAY) != nullptr)
+	{
+		m_vPosTarget = m_pGameInstance->Find_Player(LEVEL_GAMEPLAY)->Get_Transform()->Get_State(CTransform::STATE_POSITION);
+	}
+}
 
 void CMonster::Look_Player()
 {
 	_vector vPos = m_pTransformCom->Get_State(CTransform::STATE_POSITION);
-	_vector vCamPos = m_pGameInstance->Get_CamPosition_Vec4();//임시사용 캠 포지션
-		
-	if (!(XMVectorGetX(vPos) == XMVectorGetX(vCamPos))
-		&& !(XMVectorGetZ(vPos) == XMVectorGetZ(vCamPos)))
+	
+	if (!(XMVectorGetX(vPos) == XMVectorGetX(m_vPosTarget))
+		&& !(XMVectorGetZ(vPos) == XMVectorGetZ(m_vPosTarget)))
 	{
-		m_pTransformCom->LookAt(XMVectorSetY(vCamPos, 0.f));
-
+		m_pTransformCom->LookAt(XMVectorSetY(m_vPosTarget, 0.f));
 	}
+
 }
 
 _float CMonster::Calc_Distance_XZ()
 {
 	_vector vPos = m_pTransformCom->Get_State(CTransform::STATE_POSITION);
 
-	_vector vPosTarget = m_pGameInstance->Get_CamPosition_Vec4();//임시사용 캠 포지션
-
-	_float fDist = XMVectorGetX(XMVector3Length(XMVectorSetY(vPos, 0) - XMVectorSetY(vPosTarget, 0)));
+	_float fDist = XMVectorGetX(XMVector3Length(XMVectorSetY(vPos, 0) - XMVectorSetY(m_vPosTarget, 0)));
 
 	//X, Y 값 플레이어 비교로 위치구하기
 	return fDist;

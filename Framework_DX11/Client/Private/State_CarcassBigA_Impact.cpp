@@ -24,14 +24,14 @@ HRESULT CState_CarcassBigA_Impact::Initialize(_uint iStateNum, void* pArg)
 
 HRESULT CState_CarcassBigA_Impact::Start_State(void* pArg)
 {
-    m_pMonster->Change_Animation(5, true);;
+    m_pMonster->Change_Animation(AN_IMPACT, false, 0.1f, 0, true);
 
     return S_OK;
 }
 
 void CState_CarcassBigA_Impact::Update(_float fTimeDelta)
 {
-    if (*m_pIsEndAnim == true)
+    if (End_Check())
         m_pMonster->Change_State(CCarcassBigA::IDLE);
 
 }
@@ -43,7 +43,7 @@ void CState_CarcassBigA_Impact::End_State()
 
 _bool CState_CarcassBigA_Impact::End_Check()
 {
-    return _bool();
+    return m_pMonster->Get_EndAnim(AN_IMPACT);
 }
 
 CState_CarcassBigA_Impact* CState_CarcassBigA_Impact::Create(CFsm* pFsm, CMonster* pMonster, _uint iStateNum, void* pArg)

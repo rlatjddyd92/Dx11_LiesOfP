@@ -8,8 +8,17 @@
 
 #include "State_CarcassBigA_Idle.h"
 #include "State_CarcassBigA_Die.h"
-#include "State_CarcassBigA_Attack.h"
-#include "State_CarcassBigA_Impact.h"
+
+#include "State_CarcassBigA_LTSwingRight.h"
+#include "State_CarcassBigA_LOSwingRight.h"
+#include "State_CarcassBigA_RageAttack.h"
+#include "State_CarcassBigA_WheelWind.h"
+
+#include "State_CarcassBigA_AttackRoute_0.h"
+#include "State_CarcassBigA_AttackRoute_1.h"
+#include "State_CarcassBigA_AttackRoute_2.h"
+#include "State_CarcassBigA_AttackRoute_3.h"
+#include "State_CarcassBigA_AttackRoute_4.h"
 
 #include "State_CarcassBigA_Grogy.h"
 #include "State_CarcassBigA_HitFatal.h"
@@ -89,7 +98,7 @@ HRESULT CCarcassBigA::Initialize(void* pArg)
 
 void CCarcassBigA::Priority_Update(_float fTimeDelta)
 {
-
+	__super::Set_UpTargetPos();
 	
 }
 
@@ -101,12 +110,10 @@ void CCarcassBigA::Update(_float fTimeDelta)
 
 	_Vec3 vPos = m_pTransformCom->Get_State(CTransform::STATE_POSITION);
 	
-	if (true)//조건을 애니메이션이 끝났을때 or 변경 되었을때로
-	{
-		m_vCurRootMove = XMVector3TransformNormal(m_vCurRootMove, m_pTransformCom->Get_WorldMatrix());
+	m_vCurRootMove = XMVector3TransformNormal(m_vCurRootMove, m_pTransformCom->Get_WorldMatrix());
 
-		m_pTransformCom->Set_State(CTransform::STATE_POSITION, vPos + m_vCurRootMove);
-	}
+	m_pTransformCom->Set_State(CTransform::STATE_POSITION, vPos + m_vCurRootMove);
+	
 
 	//m_pColliderCom->Update(m_pTransformCom->Get_WorldMatrix_Ptr());
 }
@@ -261,13 +268,21 @@ HRESULT CCarcassBigA::Ready_FSM()
 	m_pFsmCom->Add_State(CState_CarcassBigA_Idle::Create(m_pFsmCom, this, IDLE, &Desc));
 	m_pFsmCom->Add_State(CState_CarcassBigA_Walk::Create(m_pFsmCom, this, WALK, &Desc));
 	m_pFsmCom->Add_State(CState_CarcassBigA_Run::Create(m_pFsmCom, this, RUN, &Desc));
-	m_pFsmCom->Add_State(CState_CarcassBigA_Attack::Create(m_pFsmCom, this, ATTACK, &Desc));
 	m_pFsmCom->Add_State(CState_CarcassBigA_Grogy::Create(m_pFsmCom, this, GROGY, &Desc));
 	m_pFsmCom->Add_State(CState_CarcassBigA_HitFatal::Create(m_pFsmCom, this, HITFATAL, &Desc));
 	m_pFsmCom->Add_State(CState_CarcassBigA_Paralyze::Create(m_pFsmCom, this, PARALYZE, &Desc));
 	m_pFsmCom->Add_State(CState_CarcassBigA_Die::Create(m_pFsmCom, this, DIE, &Desc));
 
-	m_pFsmCom->Add_State(CState_CarcassBigA_Impact::Create(m_pFsmCom, this, IMPACT, &Desc));
+	m_pFsmCom->Add_State(CState_CarcassBigA_WheelWind::Create(m_pFsmCom, this, WHEELWIND, &Desc));
+	m_pFsmCom->Add_State(CState_CarcassBigA_LOSwingRight::Create(m_pFsmCom, this, LO_SWINGRIGHT, &Desc));
+	m_pFsmCom->Add_State(CState_CarcassBigA_LTSwingRight::Create(m_pFsmCom, this, LT_SWINGRIGHT, &Desc));
+	m_pFsmCom->Add_State(CState_CarcassBigA_RageAttack::Create(m_pFsmCom, this, RAGE_ATTACK, &Desc));
+
+	m_pFsmCom->Add_State(CState_CarcassBigA_AttackRoute_0::Create(m_pFsmCom, this, ATK_ROUTE_0, &Desc));
+	m_pFsmCom->Add_State(CState_CarcassBigA_AttackRoute_1::Create(m_pFsmCom, this, ATK_ROUTE_1, &Desc));
+	m_pFsmCom->Add_State(CState_CarcassBigA_AttackRoute_2::Create(m_pFsmCom, this, ATK_ROUTE_2, &Desc));
+	m_pFsmCom->Add_State(CState_CarcassBigA_AttackRoute_3::Create(m_pFsmCom, this, ATK_ROUTE_3, &Desc));
+	m_pFsmCom->Add_State(CState_CarcassBigA_AttackRoute_4::Create(m_pFsmCom, this, ATK_ROUTE_4, &Desc));
 
 
 	m_pFsmCom->Set_State(IDLE);

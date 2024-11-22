@@ -9,6 +9,10 @@ BEGIN(Client)
 
 class CState_CarcassBigA_Grogy : public CState
 {
+private:
+    typedef enum {
+        AN_GROGY_START = 17, AN_GROGY_LOOP = 16, AN_GROGY_END = 15
+    }ANIMNUM;
 public:
     CState_CarcassBigA_Grogy(class CFsm* pFsm, class CMonster* pMonster);
     virtual ~CState_CarcassBigA_Grogy() = default;
@@ -38,6 +42,9 @@ private:
     _float*             m_pTrackPos = { nullptr };
 
     _uint               m_iAnimCnt = {};
+
+private:
+    _bool               End_Check();
 
 public:
     static CState_CarcassBigA_Grogy* Create(class CFsm* pFsm, class CMonster* pMonster, _uint iStateNum, void* pArg = nullptr);

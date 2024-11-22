@@ -2,7 +2,7 @@
 #include "State_SimonManusP1_Die.h"
 #include "GameInstance.h"
 #include "Model.h"
-#include "SimonManusP1.h"
+#include "SimonManus.h"
 
 CState_SimonManusP1_Die::CState_SimonManusP1_Die(CFsm* pFsm, CMonster* pMonster)
     :CState{ pFsm }
@@ -15,7 +15,7 @@ HRESULT CState_SimonManusP1_Die::Initialize(_uint iStateNum, void* pArg)
     m_iStateNum = iStateNum;
     m_fIdleDuration = 3.3f;
 
-    CSimonManusP1::FSMSTATE_DESC* pDesc = static_cast<CSimonManusP1::FSMSTATE_DESC*>(pArg);
+    CSimonManus::FSMSTATE_DESC* pDesc = static_cast<CSimonManus::FSMSTATE_DESC*>(pArg);
 
     m_pIsEndAnim = pDesc->pIsEndAnim;
     return S_OK;
@@ -23,24 +23,29 @@ HRESULT CState_SimonManusP1_Die::Initialize(_uint iStateNum, void* pArg)
 
 HRESULT CState_SimonManusP1_Die::Start_State(void* pArg)
 {
-    m_pMonster->Change_Animation(AN_DIE, true);
+    m_pMonster->Change_Animation(AN_DIE, true, 0.1f, 0);
 
     return S_OK;
 }
 
 void CState_SimonManusP1_Die::Update(_float fTimeDelta)
 {
-    if (*m_pIsEndAnim == true)
+    if (End_Check())
     {
         //몬스터 사망
-        m_pMonster->Change_State(CSimonManusP1::IDLE);   //임시
-
+        m_pMonster->Change_State(CSimonManus::IDLE);
+        return;
     }
 
 }
 
 void CState_SimonManusP1_Die::End_State()
 {
+}
+
+_bool CState_SimonManusP1_Die::End_Check()
+{
+    return m_pMonster->Get_EndAnim(AN_DIE);
 }
 
 CState_SimonManusP1_Die* CState_SimonManusP1_Die::Create(CFsm* pFsm, CMonster* pMonster, _uint iStateNum, void* pArg)

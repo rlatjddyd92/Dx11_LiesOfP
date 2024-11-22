@@ -9,6 +9,10 @@ BEGIN(Client)
 
 class CState_CarcassBigA_Paralyze : public CState
 {
+private:
+    typedef enum {
+        AN_PARALYZE_START = 28, AN_PARALYZE_LOOP = 27, AN_PARALYZE_END = 26
+    }ANIMNUM;
 public:
     CState_CarcassBigA_Paralyze(class CFsm* pFsm, class CMonster* pMonster);
     virtual ~CState_CarcassBigA_Paralyze() = default;

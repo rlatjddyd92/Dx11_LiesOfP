@@ -2,7 +2,7 @@
 #include "State_SimonManusP1_Run.h"
 #include "GameInstance.h"
 #include "Model.h"
-#include "SimonManusP1.h"
+#include "SimonManus.h"
 
 CState_SimonManusP1_Run::CState_SimonManusP1_Run(CFsm* pFsm, CMonster* pMonster)
     :CState{ pFsm }
@@ -21,7 +21,7 @@ HRESULT CState_SimonManusP1_Run::Initialize(_uint iStateNum, void* pArg)
 
 HRESULT CState_SimonManusP1_Run::Start_State(void* pArg)
 {
-    m_pMonster->Change_Animation(AN_RUN, true);;
+    m_pMonster->Change_Animation(AN_RUN, true, 0.1f, 0);
     m_pMonster->Look_Player();
 
     return S_OK;
@@ -29,12 +29,13 @@ HRESULT CState_SimonManusP1_Run::Start_State(void* pArg)
 
 void CState_SimonManusP1_Run::Update(_float fTimeDelta)
 {
+    _int iDir = m_pMonster->Get_Transform()->LookAt_Lerp_NoHeight(m_pMonster->Get_TargetDir(), 1, fTimeDelta);
     m_pMonster->Get_Transform()->Go_Straight(fTimeDelta * m_fRunSpeed);
 
 
     if (m_pMonster->Calc_Distance_XZ() <= 5.f)
     {
-        m_pMonster->Change_State(CSimonManusP1::IDLE);
+        m_pMonster->Change_State(CSimonManus::IDLE);
     }
 }
 

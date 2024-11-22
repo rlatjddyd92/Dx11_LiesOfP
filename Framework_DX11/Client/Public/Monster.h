@@ -33,7 +33,11 @@ public:
 	virtual void Late_Update(_float fTimeDelta) override;
 	virtual HRESULT Render() override;
 
+	_Vec4		Get_TargetPos() { return m_vPosTarget; }
+	_Vec4		Get_TargetDir();
+
 public:
+	void		Set_UpTargetPos();
 	void		Look_Player();
 	_float		Calc_Distance_XZ();
 
@@ -45,6 +49,8 @@ protected:
 	_bool		m_bResetRootMove{ true };
 
 	_float		m_fPrevTrackPos{};
+
+	_Vec4		m_vPosTarget{};
 
 protected:
 	HRESULT Ready_Components();
