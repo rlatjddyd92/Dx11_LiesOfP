@@ -282,6 +282,7 @@ HRESULT CSimonManus::Ready_FSM()
 	m_pExtraFsmCom->Add_State(CState_SimonManusP2_Route1::Create(m_pExtraFsmCom, this, ATKP2_ROUTE_1, &Desc));
 	m_pExtraFsmCom->Add_State(CState_SimonManusP2_Route2::Create(m_pExtraFsmCom, this, ATKP2_ROUTE_2, &Desc));
 
+	m_pExtraFsmCom->Set_State(IDLE);
 #pragma endregion
 
 	return S_OK;
@@ -364,8 +365,13 @@ void CSimonManus::Free()
 	//	Safe_Release(m_pColliderObject[i]);
 	//}
 	Safe_Release(m_pWeapon);
-	Safe_Release(m_pExtraFsmCom);
 	Safe_Release(m_pExtraModelCom);
+
+	if (m_pExtraFsmCom != nullptr)
+	{
+		m_pExtraFsmCom->Release_States();
+	}
+	Safe_Release(m_pExtraFsmCom);
 	__super::Free();
 
 }
