@@ -115,9 +115,6 @@
     <Filter Include="03.GameInterface_Controller\00.UIManager\00.UIPage\06.UIPage_Stat">
       <UniqueIdentifier>{f815fc82-3802-4a2a-8c10-2a59b6325fce}</UniqueIdentifier>
     </Filter>
-    <Filter Include="03.GameInterface_Controller\00.UIManager\00.UIPage\07.UIPage_LevelUp">
-      <UniqueIdentifier>{49687bb1-cd51-47be-b319-ccccb8021b98}</UniqueIdentifier>
-    </Filter>
     <Filter Include="03.GameInterface_Controller\00.UIManager\00.UIPage\08.UIPage_Skill">
       <UniqueIdentifier>{101ea800-761b-49e9-ae2b-58825aebc3f3}</UniqueIdentifier>
     </Filter>
@@ -270,9 +267,6 @@
     </Filter>
     <Filter Include="05.Fsm\Player\Common\Heal">
       <UniqueIdentifier>{01bca6de-05e8-46a3-89e2-a924a96ef387}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="03.GameInterface_Controller\00.UIManager\00.UIPage\09.UIPage_Test">
-      <UniqueIdentifier>{d6f0816f-b248-400f-ae9c-070eac27ca42}</UniqueIdentifier>
     </Filter>
     <Filter Include="03.GameInterface_Controller\00.UIManager\00.UIPage\10.UIPage_Ortho">
       <UniqueIdentifier>{552aab2a-e554-4f80-96c8-2caa20267ba5}</UniqueIdentifier>
@@ -618,6 +612,12 @@
     </Filter>
     <Filter Include="05.Fsm\Monster\SimonManus\P1\Walk">
       <UniqueIdentifier>{fe395b30-26dd-4e7d-9184-bb5c5d694b6b}</UniqueIdentifier>
+	</Filter>
+    <Filter Include="03.GameInterface_Controller\00.UIManager\00.UIPage\07.UIPage_LevelUp%28미사용%29">
+      <UniqueIdentifier>{49687bb1-cd51-47be-b319-ccccb8021b98}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="03.GameInterface_Controller\00.UIManager\00.UIPage\09.UIPage_ToolTip">
+      <UniqueIdentifier>{d6f0816f-b248-400f-ae9c-070eac27ca42}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -862,7 +862,7 @@
       <Filter>03.GameInterface_Controller\00.UIManager\00.UIPage\04.UIPage_Inven</Filter>
     </ClInclude>
     <ClInclude Include="..\Public\UIPage_LevelUp.h">
-      <Filter>03.GameInterface_Controller\00.UIManager\00.UIPage\07.UIPage_LevelUp</Filter>
+      <Filter>03.GameInterface_Controller\00.UIManager\00.UIPage\07.UIPage_LevelUp%28미사용%29</Filter>
     </ClInclude>
     <ClInclude Include="..\Public\UIPage_Skill.h">
       <Filter>03.GameInterface_Controller\00.UIManager\00.UIPage\08.UIPage_Skill</Filter>
@@ -870,8 +870,8 @@
     <ClInclude Include="..\Public\UIPage_Stat.h">
       <Filter>03.GameInterface_Controller\00.UIManager\00.UIPage\06.UIPage_Stat</Filter>
     </ClInclude>
-    <ClInclude Include="..\Public\UIPage_Test.h">
-      <Filter>03.GameInterface_Controller\00.UIManager\00.UIPage\09.UIPage_Test</Filter>
+    <ClInclude Include="..\Public\UIPage_ToolTip.h">
+      <Filter>03.GameInterface_Controller\00.UIManager\00.UIPage\09.UIPage_ToolTip</Filter>
     </ClInclude>
     <ClInclude Include="..\public\Mesh_Effect.h">
       <Filter>02.GameObjects\05.Effect\Effect_Base\Mesh_Effect</Filter>
@@ -1117,6 +1117,9 @@
     </ClInclude>
     <ClInclude Include="..\Public\State_SimonManusP2_Wave.h">
       <Filter>05.Fsm\Monster\SimonManus\P2\Attack\Single\Wave</Filter>
+	</ClInclude>
+    <ClInclude Include="..\Public\UIRender_Batching.h">
+      <Filter>03.GameInterface_Controller\00.UIManager\01.UIRender</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -1328,7 +1331,7 @@
       <Filter>03.GameInterface_Controller\00.UIManager\00.UIPage\04.UIPage_Inven</Filter>
     </ClCompile>
     <ClCompile Include="..\Private\UIPage_LevelUp.cpp">
-      <Filter>03.GameInterface_Controller\00.UIManager\00.UIPage\07.UIPage_LevelUp</Filter>
+      <Filter>03.GameInterface_Controller\00.UIManager\00.UIPage\07.UIPage_LevelUp%28미사용%29</Filter>
     </ClCompile>
     <ClCompile Include="..\Private\UIPage_Skill.cpp">
       <Filter>03.GameInterface_Controller\00.UIManager\00.UIPage\08.UIPage_Skill</Filter>
@@ -1336,8 +1339,8 @@
     <ClCompile Include="..\Private\UIPage_Stat.cpp">
       <Filter>03.GameInterface_Controller\00.UIManager\00.UIPage\06.UIPage_Stat</Filter>
     </ClCompile>
-    <ClCompile Include="..\Private\UIPage_Test.cpp">
-      <Filter>03.GameInterface_Controller\00.UIManager\00.UIPage\09.UIPage_Test</Filter>
+    <ClCompile Include="..\Private\UIPage_ToolTip.cpp">
+      <Filter>03.GameInterface_Controller\00.UIManager\00.UIPage\09.UIPage_ToolTip</Filter>
     </ClCompile>
     <ClCompile Include="..\private\Mesh_Effect.cpp">
       <Filter>02.GameObjects\05.Effect\Effect_Base\Mesh_Effect</Filter>
@@ -1586,6 +1589,9 @@
     </ClCompile>
     <ClCompile Include="..\Private\State_SimonManusP2_Wave.cpp">
       <Filter>05.Fsm\Monster\SimonManus\P2\Attack\Single\Wave</Filter>
+	</ClCompile>
+    <ClCompile Include="..\Private\UIRender_Batching.cpp">
+      <Filter>03.GameInterface_Controller\00.UIManager\01.UIRender</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

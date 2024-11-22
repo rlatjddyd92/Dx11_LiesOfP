@@ -1,21 +1,21 @@
 #include "stdafx.h"
-#include "..\Public\UIPage_Stat.h"
+#include "..\Public\UIPage_ToolTip.h"
 
 #include "GameInstance.h"
-#include "GameInterface_Controller.h"
 
-CUIPage_Stat::CUIPage_Stat(ID3D11Device* pDevice, ID3D11DeviceContext* pContext)
+
+CUIPage_ToolTip::CUIPage_ToolTip(ID3D11Device* pDevice, ID3D11DeviceContext* pContext)
 	: CUIPage{ pDevice, pContext }
 {
 
 }
 
-CUIPage_Stat::CUIPage_Stat(const CUIPage_Stat& Prototype)
+CUIPage_ToolTip::CUIPage_ToolTip(const CUIPage_ToolTip& Prototype)
 	: CUIPage{ Prototype }
 {
 }
 
-HRESULT CUIPage_Stat::Initialize_Prototype()
+HRESULT CUIPage_ToolTip::Initialize_Prototype()
 {
 	// 모든 UIPage는 클론 안 함, 여기서 모든 세팅 끝내기 
 
@@ -40,24 +40,24 @@ HRESULT CUIPage_Stat::Initialize_Prototype()
 	return S_OK;
 }
 
-HRESULT CUIPage_Stat::Initialize(void* pArg)
+HRESULT CUIPage_ToolTip::Initialize(void* pArg)
 {
 
 
 	return S_OK;
 }
 
-void CUIPage_Stat::Priority_Update(_float fTimeDelta)
+void CUIPage_ToolTip::Priority_Update(_float fTimeDelta)
 {
 	__super::Priority_Update(fTimeDelta);
 }
 
-void CUIPage_Stat::Update(_float fTimeDelta)
+void CUIPage_ToolTip::Update(_float fTimeDelta)
 {
 	__super::Update(fTimeDelta);
 }
 
-void CUIPage_Stat::Late_Update(_float fTimeDelta)
+void CUIPage_ToolTip::Late_Update(_float fTimeDelta)
 {
 	__super::Late_Update(fTimeDelta);
 
@@ -65,29 +65,29 @@ void CUIPage_Stat::Late_Update(_float fTimeDelta)
 		__super::UpdatePart_ByControl(iter);
 }
 
-HRESULT CUIPage_Stat::Render()
+HRESULT CUIPage_ToolTip::Render()
 {
 	return S_OK;
 }
 
-void CUIPage_Stat::OpenAction()
+void CUIPage_ToolTip::OpenAction()
 {
 	__super::OpenAction();
 }
 
-void CUIPage_Stat::CloseAction()
+void CUIPage_ToolTip::CloseAction()
 {
 	__super::CloseAction();
 }
 
-CHECK_MOUSE CUIPage_Stat::Check_Page_Action(_float fTimeDelta)
+CHECK_MOUSE CUIPage_ToolTip::Check_Page_Action(_float fTimeDelta)
 {
 	__super::Check_Page_Action(fTimeDelta);
 
 	return CHECK_MOUSE::MOUSE_NONE;
 }
 
-HRESULT CUIPage_Stat::Ready_UIPart_Group_Control()
+HRESULT CUIPage_ToolTip::Ready_UIPart_Group_Control()
 {
 	__super::Ready_UIPart_Group_Control();
 
@@ -107,33 +107,33 @@ HRESULT CUIPage_Stat::Ready_UIPart_Group_Control()
 	return S_OK;
 }
 
-CUIPage_Stat* CUIPage_Stat::Create(ID3D11Device* pDevice, ID3D11DeviceContext* pContext)
+CUIPage_ToolTip* CUIPage_ToolTip::Create(ID3D11Device* pDevice, ID3D11DeviceContext* pContext)
 {
-	CUIPage_Stat* pInstance = new CUIPage_Stat(pDevice, pContext);
+	CUIPage_ToolTip* pInstance = new CUIPage_ToolTip(pDevice, pContext);
 
 	if (FAILED(pInstance->Initialize_Prototype()))
 	{
-		MSG_BOX(TEXT("Failed to Created : CUIPage_Stat"));
+		MSG_BOX(TEXT("Failed to Created : CUIPage_ToolTip"));
 		Safe_Release(pInstance);
 	}
 
 	return pInstance;
 }
 
-CGameObject* CUIPage_Stat::Clone(void* pArg)
+CGameObject* CUIPage_ToolTip::Clone(void* pArg)
 {
-	CUIPage_Stat* pInstance = new CUIPage_Stat(*this);
+	CUIPage_ToolTip* pInstance = new CUIPage_ToolTip(*this);
 
 	if (FAILED(pInstance->Initialize(pArg)))
 	{
-		MSG_BOX(TEXT("Failed to Cloned : CUIPage_Stat"));
+		MSG_BOX(TEXT("Failed to Cloned : CUIPage_ToolTip"));
 		Safe_Release(pInstance);
 	}
 
 	return pInstance;
 }
 
-void CUIPage_Stat::Free()
+void CUIPage_ToolTip::Free()
 {
 	__super::Free();
 

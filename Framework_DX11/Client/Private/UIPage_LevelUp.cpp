@@ -77,9 +77,18 @@ void CUIPage_LevelUp::CloseAction()
 	__super::CloseAction();
 }
 
+CHECK_MOUSE CUIPage_LevelUp::Check_Page_Action(_float fTimeDelta)
+{
+	__super::Check_Page_Action(fTimeDelta);
+
+	return CHECK_MOUSE::MOUSE_NONE;
+}
+
 HRESULT CUIPage_LevelUp::Ready_UIPart_Group_Control()
 {
 	__super::Ready_UIPart_Group_Control();
+
+
 
 	return S_OK;
 }

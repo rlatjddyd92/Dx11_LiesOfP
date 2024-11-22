@@ -53,8 +53,8 @@ public:
 
 	void Input_TestPageInfo(
 		TEST_PAGE_NAME eName,
-		_float2 fPosition,
-		_float2 fSize,
+		_Vec2 fPosition,
+		_Vec2 fSize,
 		vector<_wstring>& vecName,
 		vector<_wstring>& vecValue
 	);
@@ -80,8 +80,8 @@ private:
 	vector<_tchar*> m_vecFont_tchar;
 
 	vector<vector<vector<_tchar*>>> m_vecTestPageInfo;
-	vector<_float2> m_vecTestPage_Pos;
-	vector<_float2> m_vecTestPage_Size;
+	vector<_Vec2> m_vecTestPage_Pos;
+	vector<_Vec2> m_vecTestPage_Size;
 
 public:
 	static CUIRender_Client* Create(ID3D11Device* pDevice, ID3D11DeviceContext* pContext);

@@ -114,6 +114,8 @@ public:
 		// 작동 제어
 		_bool bUpdate = true;
 		_bool bRender = true;
+		_bool bTurn = false;
+		_float fTurn_Degree = 0.f;
 
 		// 쉐이킹
 		_float2 fShaking_Adjust = { 0.f,0.f };
@@ -122,6 +124,11 @@ public:
 		_float fShaking_Interval_Now = 0.f;
 		_float fShaking_Interval = 0.f;
 		_float fShaking_Time = 0.f;
+
+		// 렌더 관련 제어 변수 
+		_bool bTexture_Color_Multiple = false; // <- true인 경우 텍스쳐 컬러 보정값을 원래 값에 곱하는 방식으로 진행
+		_float fStrash_Alpha = 0.3; // 파트 별로 버리는 알파 기준을 다르게 설정해야 하는 경우 사용
+		_bool bText_Right = false; // 텍스트를 오른쪽 정렬로 그리는 경우 
 
 		
 	}UPART;
@@ -178,6 +185,10 @@ public: // 개발 편의 기능
 		_wstring DataNameD = TEXT("none"), _float* DataD = nullptr); // 설정된 내용에 따라 커서 옆에 정보 노출
 
 
+	//imgui 콘솔 
+	void Show_console();
+
+
 private:
 	void UIPage_Edit();
 	void UIPart_Edit();
@@ -229,8 +240,7 @@ private:
 
 	_float2 m_InputPageCenter = { 0.f,0.f };
 
-
-
+	list<string> logs;
 
 	_char m_InputText[100] = "";
 	_char m_InputPartName[100] = "";

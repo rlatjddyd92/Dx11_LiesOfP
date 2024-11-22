@@ -29,6 +29,8 @@ public:
 		_bool bFocus = true;
 		_bool bSpecial_Attack = true;
 
+
+
 	}TDATA;
 
 
@@ -51,12 +53,60 @@ public:
 	void Update_UIManager(_float fTimeDelta);
 	void Update_UIControl(_float fTimeDelta);
 
+	_Vec2 CheckMouse(_Vec2 fPos, _Vec2 fSize);
+
+	void SetIngame(_bool bTrue) 
+	{ 
+		m_bIsIngame = bTrue;
+		if (bTrue)
+		{
+			for (_int i =0; i < m_vecPage.size(); ++i)
+			{
+				if (i <= _int(UIPAGE::PAGE_LOADING))
+				{
+					m_vecPage[i]->SetUpdate(false);
+					//m_vecPage[i]->SetRender(false);
+				}
+				else
+				{
+					m_vecPage[i]->SetUpdate(true);
+					//m_vecPage[i]->SetRender(true);
+				}
+			}
+		}
+		else
+		{
+			for (_int i = 0; i < m_vecPage.size(); ++i)
+			{
+				if (i <= _int(UIPAGE::PAGE_LOADING))
+				{
+					m_vecPage[i]->SetUpdate(true);
+					//m_vecPage[i]->SetRender(true);
+				}
+				else
+				{
+					m_vecPage[i]->SetUpdate(false);
+					//m_vecPage[i]->SetRender(false);
+				}
+			}
+		}
+	
+	
+	} // 매니저에 게임 입장 / 나가기 상태 알림
+
 private:
 	void UIControl_Test(_float fTimeDelta);
+
+	void UIControl_Common(_float fTimeDelta);
 	void UIControl_Main(_float fTimeDelta);
 	void UIControl_Loading(_float fTimeDelta);
 	void UIControl_Play(_float fTimeDelta);
+	void UIControl_Menu(_float fTimeDelta);
 	void UIControl_Inven(_float fTimeDelta);
+	void UIControl_Equip(_float fTimeDelta);
+	void UIControl_Stat(_float fTimeDelta);
+	void UIControl_LevelUp(_float fTimeDelta);
+	void UIControl_Skill(_float fTimeDelta);
 
 public:
 #pragma region Page_Main
@@ -68,16 +118,8 @@ public:
 #pragma endregion
 
 #pragma region PlayMode
-	// 플레이 모드 진입
-	_bool GetPlayMode() { return m_bPlayMode; }
-	void SetPlayMode(_bool bIsPlayMode)
-	{
-		m_vecPage[_int(UIPAGE::PAGE_LOADING)]->SetRender(false);
-		m_bPlayMode = bIsPlayMode;
-	}
-
 	// 화면 전환 
-	void SwicthPage(UIPAGE eNextPage);
+	void SwicthPage(UIPAGE ePageA, UIPAGE ePageB);
 
 
 
@@ -121,6 +163,12 @@ private:
 
 	void InputTestPageInfo(vector<_wstring>* pName, vector<_wstring>* pValue, _wstring DataNameA, TEST_PAGE_VALUE_TYPE eTypeA, const void* ValueA);
 
+	void Open_Close_Page(UIPAGE ePage); // 열려 있거나 열리는 중이면 닫고, 닫혀 있거나 닫히는 중이면 연다 
+	void OpenPage(UIPAGE ePage); // 열렸거나 열리는 중이면 무시하고 아니면 연다 
+	void ClosePage(UIPAGE ePage); // 닫혔거나 닫히는 중이면 무시하고 아니면 닫는다 
+
+	
+
 private:
 	vector<CUIPage*> m_vecPage; // <- 렌더러 참조용
 
@@ -147,7 +195,7 @@ private:
 	// 스킬트리
 	CUIPage_Skill* m_pUIPage_Skill = { nullptr };
 	// 테스트
-	CUIPage_Test* m_pUIPage_Test = { nullptr };
+	CUIPage_ToolTip* m_pUIPage_ToolTip = { nullptr };
 	// 직교
 	CUIPage_Ortho* m_pUIPage_Ortho = { nullptr };
 
@@ -155,8 +203,11 @@ private:
 
 	CUIRender_Client* m_pUIRender_Client = { nullptr };
 
+	_bool m_bIsIngame = false;
+
+
 	// 플레이 모드 진입 
-	_bool m_bPlayMode = false;
+	//_bool m_bPlayMode = false;
 
 	// test code
 #ifdef _DEBUG
@@ -168,9 +219,9 @@ private:
 	// GameInterface 싱글톤으로 아무나 접근 및 수정이 가능함 
 	// 정식 데이터는 이렇게 접근/수정 불가능하도록 만들 예정
 
-	vector<_float2> m_vecTestPage_Pos;
-	vector<_float2> m_vecTestPage_Size;
-	vector<_float2> m_vecTestPage_ClickPos;
+	vector<_Vec2> m_vecTestPage_Pos;
+	vector<_Vec2> m_vecTestPage_Size;
+	vector<_Vec2> m_vecTestPage_ClickPos;
 
 	vector<_bool> m_vecTestPageOpen;
 	vector<_bool> m_vecTestPageMove;

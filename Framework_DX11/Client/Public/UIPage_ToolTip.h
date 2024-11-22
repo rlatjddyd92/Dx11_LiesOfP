@@ -9,7 +9,7 @@ END
 
 BEGIN(Client)
 
-class CUIPage_Test : public CUIPage
+class CUIPage_ToolTip : public CUIPage
 {
 public:
 	enum class PART_GROUP
@@ -26,9 +26,9 @@ public:
 
 
 protected:
-	CUIPage_Test(ID3D11Device* pDevice, ID3D11DeviceContext* pContext);
-	CUIPage_Test(const CUIPage_Test& Prototype);
-	virtual ~CUIPage_Test() = default;
+	CUIPage_ToolTip(ID3D11Device* pDevice, ID3D11DeviceContext* pContext);
+	CUIPage_ToolTip(const CUIPage_ToolTip& Prototype);
+	virtual ~CUIPage_ToolTip() = default;
 
 public:
 	virtual HRESULT Initialize_Prototype() override;
@@ -40,6 +40,8 @@ public:
 
 	virtual void OpenAction() override;
 	virtual void CloseAction() override;
+
+	virtual CHECK_MOUSE Check_Page_Action(_float fTimeDelta) override;
 
 public:
 	const vector<UPART*>& Get_UIPartInfo() { return m_vecPart; }
@@ -55,7 +57,7 @@ protected:
 
 
 public:
-	static CUIPage_Test* Create(ID3D11Device* pDevice, ID3D11DeviceContext* pContext);
+	static CUIPage_ToolTip* Create(ID3D11Device* pDevice, ID3D11DeviceContext* pContext);
 	virtual CGameObject* Clone(void* pArg);
 	virtual void Free() override;
 

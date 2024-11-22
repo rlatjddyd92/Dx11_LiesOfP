@@ -178,8 +178,8 @@ HRESULT CUIRender_Client::Render_TestFont(_bool bIsKorean)
 
 void CUIRender_Client::Input_TestPageInfo(
 	TEST_PAGE_NAME eName,
-	_float2 fPosition,
-	_float2 fSize,
+	_Vec2 fPosition,
+	_Vec2 fSize,
 	vector<_wstring>& vecName,
 	vector<_wstring>& vecValue)
 {
@@ -248,6 +248,9 @@ HRESULT CUIRender_Client::Render_Part(CUIPage::UPART& pPart, CUIPage& pPage, _bo
 		m_pTransformCom->Set_State(CTransform::STATE_POSITION,
 			XMVectorSet(pPart.fPosition.x - m_fViewWidth * 0.5f, -pPart.fPosition.y + m_fViewHeight * 0.5f, 0.f, 1.f));
 
+		if (pPart.bTurn)
+			m_pTransformCom->Rotation({ 0.f,0.f,1.f,0.f }, XMConvertToRadians(pPart.fTurn_Degree));
+
 		if (FAILED(m_pTransformCom->Bind_ShaderResource(m_pShaderCom, "g_WorldMatrix")))
 			return E_FAIL;
 
@@ -270,13 +273,13 @@ HRESULT CUIRender_Client::Render_Part(CUIPage::UPART& pPart, CUIPage& pPage, _bo
 
 		if ((bTopMove) && (pPart.iParentPart_Index == -1))
 		{
-			_float4 fColor = pPart.fTextureColor;
+			_Vec4 fColor = pPart.fTextureColor;
 			fColor.w = pPage.GetTopPartMove();
 
-			if (FAILED(m_pShaderCom->Bind_RawValue("g_Color", &fColor, sizeof(_float4))))
+			if (FAILED(m_pShaderCom->Bind_RawValue("g_Color", &fColor, sizeof(_Vec4))))
 				return E_FAIL;
 		}
-		else if (FAILED(m_pShaderCom->Bind_RawValue("g_Color", &pPart.fTextureColor, sizeof(_float4))))
+		else if (FAILED(m_pShaderCom->Bind_RawValue("g_Color", &pPart.fTextureColor, sizeof(_Vec4))))
 			return E_FAIL;
 
 		if (FAILED(m_pShaderCom->Begin(0)))
@@ -293,20 +296,20 @@ HRESULT CUIRender_Client::Render_Part(CUIPage::UPART& pPart, CUIPage& pPage, _bo
 		if (pPart.strText.size() == 0)
 			return S_OK;
 
-		_vector vPosition = { pPart.fPosition.x, pPart.fPosition.y, 0.f,0.f };
-		_vector vColor = { 1.f,1.f,1.f,1.f };
+		_Vec4 vPosition = { pPart.fPosition.x, pPart.fPosition.y, 0.f,0.f };
+		_Vec4 vColor = { 1.f,1.f,1.f,1.f };
 
-		if (pPart.fTextColor.x > 0.f)
-			vColor.m128_f32[0] = pPart.fTextColor.x;
+		if (pPart.fTextColor.x >= 0.f)
+			vColor.x = pPart.fTextColor.x;
 
-		if (pPart.fTextColor.y > 0.f)
-			vColor.m128_f32[1] = pPart.fTextColor.y;
+		if (pPart.fTextColor.y >= 0.f)
+			vColor.y = pPart.fTextColor.y;
 
-		if (pPart.fTextColor.z > 0.f)
-			vColor.m128_f32[2] = pPart.fTextColor.z;
+		if (pPart.fTextColor.z >= 0.f)
+			vColor.z = pPart.fTextColor.z;
 
-		if (pPart.fTextColor.w > 0.f)
-			vColor.m128_f32[3] = pPart.fTextColor.w;
+		if (pPart.fTextColor.w >= 0.f)
+			vColor.w = pPart.fTextColor.w;
 
 		_tchar* tText = new _tchar[pPart.strText.size() + 1];
 		for (_int i = 0; i <= pPart.strText.size(); ++i)
@@ -447,7 +450,7 @@ HRESULT CUIRender_Client::Render_TestPage_Info()
 
 		_float4 fColor = { -1.f,-1.f,-1.f,-1.f };
 
-		if (FAILED(m_pShaderCom->Bind_RawValue("g_Color", &fColor, sizeof(_float4))))
+		if (FAILED(m_pShaderCom->Bind_RawValue("g_Color", &fColor, sizeof(_Vec4))))
 			return E_FAIL;
 
 		if (FAILED(m_pShaderCom->Begin(0)))

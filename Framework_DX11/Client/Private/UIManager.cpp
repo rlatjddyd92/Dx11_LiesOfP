@@ -91,6 +91,11 @@ HRESULT CUIManager::Render()
 	if (FAILED(m_pUIRender_Client->Render_UI(m_vecPage)))
 		return E_FAIL;
 
+	/*if (FAILED(m_pUIPage_Inven->Render_Inven_Array(m_pUIRender_Client)))
+		return E_FAIL;*/
+
+	// 여기에 나중에 Tooltip 내용 넣기
+
 #ifdef _DEBUG
 	if (m_iFonttest != 0)
 		if (FAILED(m_pUIRender_Client->Render_TestFont(m_iFonttest == 1)))
@@ -116,11 +121,7 @@ void CUIManager::Update_UIControl(_float fTimeDelta)
 	// 마우스, 키보드를 통한 UI 조작은 모두 여기 작성한다 
 
 	UIControl_Test(fTimeDelta);
-	//UIControl_Main(fTimeDelta);
-	//UIControl_Loading(fTimeDelta);
-	UIControl_Play(fTimeDelta);
-
-
+	UIControl_Common(fTimeDelta);
 }
 
 void CUIManager::UIControl_Test(_float fTimeDelta)
@@ -128,19 +129,7 @@ void CUIManager::UIControl_Test(_float fTimeDelta)
 #ifdef _DEBUG
 	if (KEY_TAP(KEY::P)) // Page_Play(기본 플레이 화면) 띄우기/닫기 -> 정식 기능에서는 사용하지 않음 
 	{
-		if (m_vecPage[_int(UIPAGE::PAGE_PLAY)]->GetRender())
-		{
-			if (m_vecPage[_int(UIPAGE::PAGE_PLAY)]->GetPageAction(PAGEACTION::ACTION_OPENING))
-			{
-				m_vecPage[_int(UIPAGE::PAGE_PLAY)]->CloseAction();
-			}
-			else if (m_vecPage[_int(UIPAGE::PAGE_PLAY)]->GetPageAction(PAGEACTION::ACTION_CLOSING))
-			{
-				m_vecPage[_int(UIPAGE::PAGE_PLAY)]->OpenAction();
-			}
-		}
-		else
-			m_vecPage[_int(UIPAGE::PAGE_PLAY)]->OpenAction();
+		Open_Close_Page(UIPAGE::PAGE_PLAY);
 	}
 
 	// 상단 바 
@@ -190,7 +179,7 @@ void CUIManager::UIControl_Test(_float fTimeDelta)
 		m_pTestData->fHP_Now = max(0, m_pTestData->fHP_Now);
 		m_pTestData->fHP_Now = min(m_pTestData->fHP_Now, m_pTestData->fHP_Max);
 
-		if (KEY_HOLD(KEY::K))
+		if (KEY_TAP(KEY::K))
 		{
 			if (m_pTestData->bFocus)
 				m_pTestData->bFocus = false;
@@ -198,7 +187,7 @@ void CUIManager::UIControl_Test(_float fTimeDelta)
 				m_pTestData->bFocus = true;
 		}
 
-		if (KEY_HOLD(KEY::M))
+		if (KEY_TAP(KEY::M))
 		{
 			if (m_pTestData->bSpecial_Attack)
 				m_pTestData->bSpecial_Attack = false;
@@ -208,27 +197,10 @@ void CUIManager::UIControl_Test(_float fTimeDelta)
 	}
 
 
-	// 하단 아이템 
-
-	if (KEY_TAP(KEY::T))
-	{
-		m_pUIPage_Play->Move_SelectCtrl(true);
-	}
-
-	if (KEY_TAP(KEY::G))
-	{
-		m_pUIPage_Play->Move_SelectCtrl(false);
-	}
+	
 
 
-	// 폰트 테스트
 
-	if (KEY_TAP(KEY::F2))
-	{
-		++m_iFonttest;
-		if (m_iFonttest > 1)
-			m_iFonttest = -1;
-	}
 
 #endif // DEBUG
 
@@ -307,11 +279,11 @@ void CUIManager::UIControl_Test(_float fTimeDelta)
 
 	if (m_vecTestPageOpen[_int(TEST_PAGE_NAME::NAME_PLAYER_STAT)])
 	{
-		_float3 fHP = { GET_GAMEINTERFACE->Get_StatInfo_Normal(STAT_NORMAL::STAT_GAUGE_HP).fStat_Now , GET_GAMEINTERFACE->Get_StatInfo_Normal(STAT_NORMAL::STAT_GAUGE_HP).fStat_Max, GET_GAMEINTERFACE->Get_StatInfo_Normal(STAT_NORMAL::STAT_GAUGE_HP).fStat_Max_Limit };
-		_float3 fST = { GET_GAMEINTERFACE->Get_StatInfo_Normal(STAT_NORMAL::STAT_GAUGE_STAMINA).fStat_Now , GET_GAMEINTERFACE->Get_StatInfo_Normal(STAT_NORMAL::STAT_GAUGE_STAMINA).fStat_Max, GET_GAMEINTERFACE->Get_StatInfo_Normal(STAT_NORMAL::STAT_GAUGE_STAMINA).fStat_Max_Limit };
-		_float3 fRE = { GET_GAMEINTERFACE->Get_StatInfo_Normal(STAT_NORMAL::STAT_GAUGE_REGION).fStat_Now , GET_GAMEINTERFACE->Get_StatInfo_Normal(STAT_NORMAL::STAT_GAUGE_REGION).fStat_Max, GET_GAMEINTERFACE->Get_StatInfo_Normal(STAT_NORMAL::STAT_GAUGE_REGION).fStat_Max_Limit };
-		_float3 fWE = { GET_GAMEINTERFACE->Get_StatInfo_Normal(STAT_NORMAL::STAT_GAUGE_WEIGHT).fStat_Now , GET_GAMEINTERFACE->Get_StatInfo_Normal(STAT_NORMAL::STAT_GAUGE_WEIGHT).fStat_Max, GET_GAMEINTERFACE->Get_StatInfo_Normal(STAT_NORMAL::STAT_GAUGE_WEIGHT).fStat_Max_Limit };
-		_float3 fGA = { GET_GAMEINTERFACE->Get_StatInfo_Normal(STAT_NORMAL::STAT_GADRIGAIN).fStat_Now , GET_GAMEINTERFACE->Get_StatInfo_Normal(STAT_NORMAL::STAT_GADRIGAIN).fStat_Max, GET_GAMEINTERFACE->Get_StatInfo_Normal(STAT_NORMAL::STAT_GADRIGAIN).fStat_Max_Limit };
+		_Vec3 fHP = { GET_GAMEINTERFACE->Get_StatInfo_Normal(STAT_NORMAL::STAT_GAUGE_HP).fStat_Now , GET_GAMEINTERFACE->Get_StatInfo_Normal(STAT_NORMAL::STAT_GAUGE_HP).fStat_Max, GET_GAMEINTERFACE->Get_StatInfo_Normal(STAT_NORMAL::STAT_GAUGE_HP).fStat_Max_Limit };
+		_Vec3 fST = { GET_GAMEINTERFACE->Get_StatInfo_Normal(STAT_NORMAL::STAT_GAUGE_STAMINA).fStat_Now , GET_GAMEINTERFACE->Get_StatInfo_Normal(STAT_NORMAL::STAT_GAUGE_STAMINA).fStat_Max, GET_GAMEINTERFACE->Get_StatInfo_Normal(STAT_NORMAL::STAT_GAUGE_STAMINA).fStat_Max_Limit };
+		_Vec3 fRE = { GET_GAMEINTERFACE->Get_StatInfo_Normal(STAT_NORMAL::STAT_GAUGE_REGION).fStat_Now , GET_GAMEINTERFACE->Get_StatInfo_Normal(STAT_NORMAL::STAT_GAUGE_REGION).fStat_Max, GET_GAMEINTERFACE->Get_StatInfo_Normal(STAT_NORMAL::STAT_GAUGE_REGION).fStat_Max_Limit };
+		_Vec3 fWE = { GET_GAMEINTERFACE->Get_StatInfo_Normal(STAT_NORMAL::STAT_GAUGE_WEIGHT).fStat_Now , GET_GAMEINTERFACE->Get_StatInfo_Normal(STAT_NORMAL::STAT_GAUGE_WEIGHT).fStat_Max, GET_GAMEINTERFACE->Get_StatInfo_Normal(STAT_NORMAL::STAT_GAUGE_WEIGHT).fStat_Max_Limit };
+		_Vec3 fGA = { GET_GAMEINTERFACE->Get_StatInfo_Normal(STAT_NORMAL::STAT_GADRIGAIN).fStat_Now , GET_GAMEINTERFACE->Get_StatInfo_Normal(STAT_NORMAL::STAT_GADRIGAIN).fStat_Max, GET_GAMEINTERFACE->Get_StatInfo_Normal(STAT_NORMAL::STAT_GADRIGAIN).fStat_Max_Limit };
 		_int iHP = (_int)GET_GAMEINTERFACE->Get_NowStat_Normal(STAT_NORMAL::STAT_POINT_BODY);
 		_int iST = (_int)GET_GAMEINTERFACE->Get_NowStat_Normal(STAT_NORMAL::STAT_POINT_STAMINA);
 		_int iWE = (_int)GET_GAMEINTERFACE->Get_NowStat_Normal(STAT_NORMAL::STAT_POINT_WEIGHT);
@@ -320,11 +292,11 @@ void CUIManager::UIControl_Test(_float fTimeDelta)
 		_int iEV = (_int)GET_GAMEINTERFACE->Get_NowStat_Normal(STAT_NORMAL::STAT_POINT_EVOLUTION);
 
 		ShowTestPage(TEST_PAGE_NAME::NAME_PLAYER_STAT,
-			TEXT("HP(현재/제한/최대치)"), TEST_PAGE_VALUE_TYPE::TYPE_FLOAT3, &fHP,
-			TEXT("스태미나(현재/제한/최대치)"), TEST_PAGE_VALUE_TYPE::TYPE_FLOAT3, &fST,
-			TEXT("리전(현재/제한/최대치)"), TEST_PAGE_VALUE_TYPE::TYPE_FLOAT3, &fRE,
-			TEXT("무게(현재/제한/최대치)"), TEST_PAGE_VALUE_TYPE::TYPE_FLOAT3, &fWE,
-			TEXT("가드리게인(현재/제한/최대치)"), TEST_PAGE_VALUE_TYPE::TYPE_FLOAT3, &fGA,
+			TEXT("HP(현재/제한/최대치)"), TEST_PAGE_VALUE_TYPE::TYPE_VEC3, &fHP,
+			TEXT("스태미나(현재/제한/최대치)"), TEST_PAGE_VALUE_TYPE::TYPE_VEC3, &fST,
+			TEXT("리전(현재/제한/최대치)"), TEST_PAGE_VALUE_TYPE::TYPE_VEC3, &fRE,
+			TEXT("무게(현재/제한/최대치)"), TEST_PAGE_VALUE_TYPE::TYPE_VEC3, &fWE,
+			TEXT("가드리게인(현재/제한/최대치)"), TEST_PAGE_VALUE_TYPE::TYPE_VEC3, &fGA,
 			TEXT("신체 스탯"), TEST_PAGE_VALUE_TYPE::TYPE_INT, &iHP,
 			TEXT("지구력 스탯"), TEST_PAGE_VALUE_TYPE::TYPE_INT, &iST,
 			TEXT("무게 스탯"), TEST_PAGE_VALUE_TYPE::TYPE_INT, &iWE,
@@ -342,23 +314,16 @@ void CUIManager::UIControl_Test(_float fTimeDelta)
 
 		if (m_vecTestPageOpen[i])
 		{
-			
-
 			if ((KEY_TAP(KEY::LBUTTON)) && (!m_vecTestPageMove[i]))
 			{
-				POINT			ptMouse{};
-				GetCursorPos(&ptMouse);
-				ScreenToClient(g_hWnd, &ptMouse);
+				_Vec2 fPoint = CheckMouse(m_vecTestPage_Pos[i], m_vecTestPage_Size[i]);
 
-				if (ptMouse.x > m_vecTestPage_Pos[i].x - (m_vecTestPage_Size[i].x * 0.5f))
-					if (ptMouse.x < m_vecTestPage_Pos[i].x + (m_vecTestPage_Size[i].x * 0.5f))
-						if (ptMouse.y > m_vecTestPage_Pos[i].y - (m_vecTestPage_Size[i].y * 0.5f))
-							if (ptMouse.y < m_vecTestPage_Pos[i].y + (m_vecTestPage_Size[i].y * 0.5f))
-							{
-								m_vecTestPageMove[i] = true;
-								m_vecTestPage_ClickPos[i] = { (_float)ptMouse.x, (_float)ptMouse.y };
-								bMoving = true;
-							}
+				if (fPoint.x != -1)
+				{
+					m_vecTestPageMove[i] = true;
+					m_vecTestPage_ClickPos[i] = { fPoint.x, fPoint.y };
+					bMoving = true;
+				}
 			}
 			else if (m_vecTestPageMove[i])
 			{
@@ -368,7 +333,7 @@ void CUIManager::UIControl_Test(_float fTimeDelta)
 					GetCursorPos(&ptMouse);
 					ScreenToClient(g_hWnd, &ptMouse);
 
-					_float2 fMove = { 0.f,0.f };
+					_Vec2 fMove = { 0.f,0.f };
 
 					fMove.x = ptMouse.x - m_vecTestPage_ClickPos[i].x;
 					fMove.y = ptMouse.y - m_vecTestPage_ClickPos[i].y;
@@ -387,38 +352,102 @@ void CUIManager::UIControl_Test(_float fTimeDelta)
 		else
 			m_vecTestPageMove[i] = false;
 	}
+}
 
-
-
-	
-
-
-
-
-
-
-
-
-
+void CUIManager::UIControl_Common(_float fTimeDelta)
+{
+	if (m_pUIPage_Main->GetPageAction(PAGEACTION::ACTION_ACTIVE))
+		UIControl_Main(fTimeDelta);
+	else if (m_pUIPage_Loading->GetPageAction(PAGEACTION::ACTION_ACTIVE))
+		UIControl_Loading(fTimeDelta);
+	else if ((m_pUIPage_Play->GetPageAction(PAGEACTION::ACTION_ACTIVE)) || (m_pUIPage_Play->GetPageAction(PAGEACTION::ACTION_OPENING)))
+		UIControl_Play(fTimeDelta);
+	else if ((m_pUIPage_Menu->GetPageAction(PAGEACTION::ACTION_ACTIVE)) || (m_pUIPage_Menu->GetPageAction(PAGEACTION::ACTION_OPENING)))
+		UIControl_Menu(fTimeDelta);
+	else if ((m_pUIPage_Inven->GetPageAction(PAGEACTION::ACTION_ACTIVE)) || (m_pUIPage_Inven->GetPageAction(PAGEACTION::ACTION_OPENING)))
+		UIControl_Inven(fTimeDelta);
+	else if ((m_pUIPage_Equip->GetPageAction(PAGEACTION::ACTION_ACTIVE)) || (m_pUIPage_Equip->GetPageAction(PAGEACTION::ACTION_OPENING)))
+		UIControl_Equip(fTimeDelta);
+	else if ((m_pUIPage_Stat->GetPageAction(PAGEACTION::ACTION_ACTIVE)) || (m_pUIPage_Stat->GetPageAction(PAGEACTION::ACTION_OPENING)))
+		UIControl_Stat(fTimeDelta);
+	else if ((m_pUIPage_Skill->GetPageAction(PAGEACTION::ACTION_ACTIVE)) || (m_pUIPage_Skill->GetPageAction(PAGEACTION::ACTION_OPENING)))
+		UIControl_Skill(fTimeDelta);
+	else if (m_bIsIngame)
+		OpenPage(UIPAGE::PAGE_PLAY);
 }
 
 void CUIManager::UIControl_Main(_float fTimeDelta)
 {
+	// 메인 페이지 필요
 }
 
 void CUIManager::UIControl_Loading(_float fTimeDelta)
 {
+	// 로딩 페이지 필요
 }
 
 void CUIManager::UIControl_Play(_float fTimeDelta)
 {
-	/*m_pTestData->fHP_Now = GET_GAMEINTERFACE->Get_NowStat_Normal(STAT_NORMAL::STAT_GAUGE_HP);
-	m_pUIPage_Play->SetRatio_HPBarMax(m_pTestData->fMax_HP_Now / m_pTestData->fMax_HP_Limit);
-	m_pUIPage_Play->SetRatio_HPBarFill(m_pTestData->fHP_Now / m_pTestData->fMax_HP_Limit);*/
+	if (KEY_TAP(KEY::ESC))
+		SwicthPage(UIPAGE::PAGE_MENU, UIPAGE::PAGE_PLAY);
+	else
+	{
+		m_pUIPage_Play->Check_Page_Action(fTimeDelta);
+	}
+}
+
+void CUIManager::UIControl_Menu(_float fTimeDelta)
+{
+	if (KEY_TAP(KEY::ESC))
+		SwicthPage(UIPAGE::PAGE_MENU, UIPAGE::PAGE_PLAY);
+	else
+	{
+		m_pUIPage_Menu->Check_Page_Action(fTimeDelta);
+	}
 }
 
 void CUIManager::UIControl_Inven(_float fTimeDelta)
 {
+	if (KEY_TAP(KEY::ESC))
+		SwicthPage(UIPAGE::PAGE_INVEN, UIPAGE::PAGE_MENU);
+	else
+	{
+		m_pUIPage_Inven->Check_Page_Action(fTimeDelta);
+	}
+}
+
+void CUIManager::UIControl_Equip(_float fTimeDelta)
+{
+	if (KEY_TAP(KEY::ESC))
+		SwicthPage(UIPAGE::PAGE_EQUIP, UIPAGE::PAGE_MENU);
+	else
+	{
+		m_pUIPage_Equip->Check_Page_Action(fTimeDelta);
+	}
+}
+
+void CUIManager::UIControl_Stat(_float fTimeDelta)
+{
+	if (KEY_TAP(KEY::ESC))
+		SwicthPage(UIPAGE::PAGE_STAT, UIPAGE::PAGE_MENU);
+	else
+	{
+		m_pUIPage_Stat->Check_Page_Action(fTimeDelta);
+	}
+}
+
+void CUIManager::UIControl_LevelUp(_float fTimeDelta)
+{
+}
+
+void CUIManager::UIControl_Skill(_float fTimeDelta)
+{
+	if (KEY_TAP(KEY::ESC))
+		SwicthPage(UIPAGE::PAGE_SKILL, UIPAGE::PAGE_MENU);
+	else
+	{
+		m_pUIPage_Skill->Check_Page_Action(fTimeDelta);
+	}
 }
 
 void CUIManager::OpenMainPage()
@@ -436,12 +465,10 @@ void CUIManager::OpenLoadingPage()
 	//m_vecPage[_int(UIPAGE::PAGE_LOADING)]->SetRender(true);
 }
 
-void CUIManager::SwicthPage(UIPAGE eNextPage)
+void CUIManager::SwicthPage(UIPAGE ePageA, UIPAGE ePageB)
 {
-	for (auto& iter : m_vecPage)
-		iter->CloseAction();
-
-	m_vecPage[_int(eNextPage)]->OpenAction();
+	Open_Close_Page(ePageA);
+	Open_Close_Page(ePageB);
 }
 
 void CUIManager::ShowTestPage(TEST_PAGE_NAME eName, _wstring DataNameA, TEST_PAGE_VALUE_TYPE eTypeA, const void* ValueA, _wstring DataNameB, TEST_PAGE_VALUE_TYPE eTypeB, const void* ValueB, _wstring DataNameC, TEST_PAGE_VALUE_TYPE eTypeC, const void* ValueC, _wstring DataNameD, TEST_PAGE_VALUE_TYPE eTypeD, const void* ValueD, _wstring DataNameE, TEST_PAGE_VALUE_TYPE eTypeE, const void* ValueE, _wstring DataNameF, TEST_PAGE_VALUE_TYPE eTypeF, const void* ValueF, _wstring DataNameG, TEST_PAGE_VALUE_TYPE eTypeG, const void* ValueG, _wstring DataNameH, TEST_PAGE_VALUE_TYPE eTypeH, const void* ValueH, _wstring DataNameI, TEST_PAGE_VALUE_TYPE eTypeI, const void* ValueI, _wstring DataNameJ, TEST_PAGE_VALUE_TYPE eTypeJ, const void* ValueJ)
@@ -513,8 +540,8 @@ HRESULT CUIManager::Load_UIDataFile()
 			}
 			m_vecPage[i]->SetUIPageName(strName);
 
-			_float2 fPosition = { 0.f,0.f };
-			ReadFile(hFile, &fPosition, sizeof(_float2), &dwByte, nullptr);
+			_Vec2 fPosition = { 0.f,0.f };
+			ReadFile(hFile, &fPosition, sizeof(_Vec2), &dwByte, nullptr);
 
 			m_vecPage[i]->SetUIPagePosition(fPosition);
 
@@ -585,10 +612,10 @@ HRESULT CUIManager::Make_UIPage(_int iIndex)
 		m_pUIPage_Skill = CUIPage_Skill::Create(m_pDevice, m_pContext);
 		m_vecPage[iIndex] = static_cast<CUIPage*>(m_pUIPage_Skill);
 	}
-	else if (iIndex == _int(UIPAGE::PAGE_TEST))
+	else if (iIndex == _int(UIPAGE::PAGE_TOOLTIP))
 	{
-		m_pUIPage_Test = CUIPage_Test::Create(m_pDevice, m_pContext);
-		m_vecPage[iIndex] = static_cast<CUIPage*>(m_pUIPage_Test);
+		m_pUIPage_ToolTip = CUIPage_ToolTip::Create(m_pDevice, m_pContext);
+		m_vecPage[iIndex] = static_cast<CUIPage*>(m_pUIPage_ToolTip);
 	}
 	else if (iIndex == _int(UIPAGE::PAGE_ORTHO))
 	{
@@ -615,22 +642,32 @@ HRESULT CUIManager::Load_UIDataFile_Part(HANDLE handle, DWORD* dword, _int iInde
 
 		ReadFile(handle, &pNew->bBarDirecX, sizeof(_int), dword, nullptr);
 		ReadFile(handle, &pNew->bCenter, sizeof(_bool), dword, nullptr);
-		ReadFile(handle, &pNew->fAdjust, sizeof(_float2), dword, nullptr);
-		ReadFile(handle, &pNew->fAdjust_End, sizeof(_float2), dword, nullptr);
-		ReadFile(handle, &pNew->fAdjust_Start, sizeof(_float2), dword, nullptr);
-		ReadFile(handle, &pNew->fDirec, sizeof(_float2), dword, nullptr);
-		ReadFile(handle, &pNew->fPosition, sizeof(_float2), dword, nullptr);
+		ReadFile(handle, &pNew->fAdjust, sizeof(_Vec2), dword, nullptr);
+		ReadFile(handle, &pNew->fAdjust_End, sizeof(_Vec2), dword, nullptr);
+		ReadFile(handle, &pNew->fAdjust_Start, sizeof(_Vec2), dword, nullptr);
+		ReadFile(handle, &pNew->fDirec, sizeof(_Vec2), dword, nullptr);
+		ReadFile(handle, &pNew->fPosition, sizeof(_Vec2), dword, nullptr);
 		ReadFile(handle, &pNew->fRatio, sizeof(_float), dword, nullptr);
-		ReadFile(handle, &pNew->fSize, sizeof(_float2), dword, nullptr);
-		ReadFile(handle, &pNew->fTextColor, sizeof(_float4), dword, nullptr);
+		ReadFile(handle, &pNew->fSize, sizeof(_Vec2), dword, nullptr);
+		ReadFile(handle, &pNew->fTextColor, sizeof(_Vec4), dword, nullptr);
 		ReadFile(handle, &pNew->iFontIndex, sizeof(_int), dword, nullptr);
 		ReadFile(handle, &pNew->iGroupIndex, sizeof(_int), dword, nullptr);
 		ReadFile(handle, &pNew->iMoveType, sizeof(_int), dword, nullptr);
 		ReadFile(handle, &pNew->iParentPart_Index, sizeof(_int), dword, nullptr);
 		ReadFile(handle, &pNew->iTexture_Index, sizeof(_int), dword, nullptr);
-		ReadFile(handle, &pNew->fTextureColor, sizeof(_float4), dword, nullptr);
+		ReadFile(handle, &pNew->fTextureColor, sizeof(_Vec4), dword, nullptr);
 		ReadFile(handle, &pNew->bIsItem, sizeof(_bool), dword, nullptr);
-		m_pUIRender_Client->Make_Texture(pNew->iTexture_Index);
+		ReadFile(handle, &pNew->bTurn, sizeof(_bool), dword, nullptr);
+		ReadFile(handle, &pNew->fTurn_Degree, sizeof(_float), dword, nullptr);
+
+		ReadFile(handle, &pNew->bTexture_Color_Multiple, sizeof(_bool), dword, nullptr);
+		ReadFile(handle, &pNew->fStrash_Alpha, sizeof(_float), dword, nullptr);
+		ReadFile(handle, &pNew->bText_Right, sizeof(_bool), dword, nullptr);
+
+		if (!pNew->bIsItem)
+			m_pUIRender_Client->Make_Texture(pNew->iTexture_Index);
+		else 
+			m_pUIRender_Client->Make_Texture_Item(pNew->iTexture_Index);
 		_wstring strName = {};
 		while (true)
 		{
@@ -694,10 +731,10 @@ void CUIManager::InputTestPageInfo(vector<_wstring>* pName, vector<_wstring>* pV
 		_wstring strValue = to_wstring(iValue);
 		pValue->push_back(strValue);
 	}
-	else if (eTypeA == TEST_PAGE_VALUE_TYPE::TYPE_FLOAT2)
+	else if (eTypeA == TEST_PAGE_VALUE_TYPE::TYPE_VEC2)
 	{
-		_float2 fValue = { 0.f , 0.f };
-		memcpy(&fValue, ValueA, sizeof(_float2));
+		_Vec2 fValue = { 0.f , 0.f };
+		memcpy(&fValue, ValueA, sizeof(_Vec2));
 		_wstring strTemp = to_wstring(fValue.x);
 		_wstring strValue = strTemp;
 		strValue += TEXT(" | ");
@@ -705,10 +742,10 @@ void CUIManager::InputTestPageInfo(vector<_wstring>* pName, vector<_wstring>* pV
 		strValue += strTemp;
 		pValue->push_back(strValue);
 	}
-	else if (eTypeA == TEST_PAGE_VALUE_TYPE::TYPE_FLOAT3)
+	else if (eTypeA == TEST_PAGE_VALUE_TYPE::TYPE_VEC3)
 	{
-		_float3 fValue = { 0.f , 0.f , 0.f };
-		memcpy(&fValue, ValueA, sizeof(_float3));
+		_Vec3 fValue = { 0.f , 0.f , 0.f };
+		memcpy(&fValue, ValueA, sizeof(_Vec3));
 		_wstring strTemp = to_wstring(fValue.x);
 		_wstring strValue = strTemp;
 		strValue += TEXT(" | ");
@@ -719,10 +756,10 @@ void CUIManager::InputTestPageInfo(vector<_wstring>* pName, vector<_wstring>* pV
 		strValue += strTemp;
 		pValue->push_back(strValue);
 	}
-	else if (eTypeA == TEST_PAGE_VALUE_TYPE::TYPE_FLOAT4)
+	else if (eTypeA == TEST_PAGE_VALUE_TYPE::TYPE_VEC4)
 	{
-		_float4 fValue = { 0.f , 0.f, 0.f, 0.f };
-		memcpy(&fValue, ValueA, sizeof(_float4));
+		_Vec4 fValue = { 0.f , 0.f, 0.f, 0.f };
+		memcpy(&fValue, ValueA, sizeof(_Vec4));
 		_wstring strTemp = to_wstring(fValue.x);
 		_wstring strValue = strTemp;
 		strValue += TEXT(" | ");
@@ -736,6 +773,44 @@ void CUIManager::InputTestPageInfo(vector<_wstring>* pName, vector<_wstring>* pV
 		strValue += strTemp;
 		pValue->push_back(strValue);
 	}
+}
+
+void CUIManager::Open_Close_Page(UIPAGE ePage)
+{
+	if (m_vecPage[_int(ePage)]->GetRender())
+	{
+		if ((m_vecPage[_int(ePage)]->GetPageAction(PAGEACTION::ACTION_OPENING)) || (m_vecPage[_int(ePage)]->GetPageAction(PAGEACTION::ACTION_ACTIVE)))
+			ClosePage(ePage);
+		else if ((m_vecPage[_int(ePage)]->GetPageAction(PAGEACTION::ACTION_CLOSING)) || (m_vecPage[_int(ePage)]->GetPageAction(PAGEACTION::ACTION_INACTIVE)))
+			OpenPage(ePage);
+	}
+	else
+		OpenPage(ePage);
+}
+
+void CUIManager::OpenPage(UIPAGE ePage)
+{
+	m_vecPage[_int(ePage)]->OpenAction();
+}
+
+void CUIManager::ClosePage(UIPAGE ePage)
+{
+	m_vecPage[_int(ePage)]->CloseAction();
+}
+
+_Vec2 CUIManager::CheckMouse(_Vec2 fPos, _Vec2 fSize)
+{
+	POINT			ptMouse{};
+	GetCursorPos(&ptMouse);
+	ScreenToClient(g_hWnd, &ptMouse);
+
+	if (ptMouse.x > fPos.x - (fSize.x * 0.5f))
+		if (ptMouse.x < fPos.x + (fSize.x * 0.5f))
+			if (ptMouse.y > fPos.y - (fSize.y * 0.5f))
+				if (ptMouse.y < fPos.y + (fSize.y * 0.5f))
+					return { (_float)ptMouse.x, (_float)ptMouse.y};
+
+	return { -1.f,-1.f };
 }
 
 CUIManager* CUIManager::Create(ID3D11Device* pDevice, ID3D11DeviceContext* pContext)

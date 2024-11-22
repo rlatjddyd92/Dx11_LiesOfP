@@ -52,6 +52,20 @@ HRESULT CFont_Manager::Render_Center(const _wstring& strFontTag, const _tchar* p
 	return pFont->Render_Center(pText, vPosition, vColor, fRadian, vPivot, fScale);
 }
 
+// 24-11-22 김성용 
+// 오른쪽 정렬로 텍스트 그리기
+HRESULT CFont_Manager::Render_Right(const _wstring& strFontTag, const _tchar* pText, _fvector vPosition, _fvector vColor, _float fRadian, _fvector vPivot, _float fScale)
+{
+	CCustomFont* pFont = Find_Font(strFontTag);
+
+	if (nullptr == pFont)
+		return E_FAIL;
+
+	m_pContext->GSSetShader(nullptr, nullptr, 0);
+
+	return pFont->Render_Right(pText, vPosition, vColor, fRadian, vPivot, fScale);
+}
+
 CCustomFont * CFont_Manager::Find_Font(const _wstring & strFontTag)
 {
 	auto	iter = m_Fonts.find(strFontTag);

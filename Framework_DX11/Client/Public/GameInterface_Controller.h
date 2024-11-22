@@ -49,10 +49,11 @@ public: // 외부에서 매니저 접근
 	void OpenMainPage() { m_pUIManager->OpenMainPage(); }
 	void OpenLoadingPage() { m_pUIManager->OpenLoadingPage(); }
 
-	_bool GetPlayMode() { return m_pUIManager->GetPlayMode(); }
-	void SetPlayMode(_bool bIsPlayMode) { m_pUIManager->SetPlayMode(bIsPlayMode); }
+	_Vec2 CheckMouse(_Vec2 fPos, _Vec2 fSize) { return m_pUIManager->CheckMouse(fPos, fSize); }
 
-	void SwicthPage(UIPAGE eNextPage) { m_pUIManager->SwicthPage(eNextPage); }
+	void SetIngame(_bool bTrue) { m_pUIManager->SetIngame(bTrue); }
+
+	void SwicthPage(UIPAGE ePageA, UIPAGE ePageB) { m_pUIManager->SwicthPage(ePageA, ePageB); }
 	CUIManager::TDATA* GetTestData() { return m_pUIManager->GetTestData(); }
 	// TestPage 
 	void ShowTestPage(TEST_PAGE_NAME eName,
@@ -78,6 +79,31 @@ public: // 외부에서 매니저 접근
 
 
 #pragma region Item_Manager
+	// 접근, 수정
+	ITEM_RESULT AddNewItem_Inven(_uint iItemIndex, _uint iCount = 1) { return m_pItem_Manager->AddNewItem_Inven(iItemIndex, iCount); } // <- 새롭게 아이템을 만들어 인벤에 넣는다 
+	ITEM_RESULT EquipItem_Inven(INVEN_ARRAY_TYPE eIndex, EQUIP_SLOT eSlot, _uint iIndex) { return m_pItem_Manager->EquipItem_Inven(eIndex, eSlot, iIndex); } // <- 인벤에 있는 아이템을 장비한다 
+	ITEM_RESULT UseItem_Equip(EQUIP_SLOT eSlot, _uint iCount = 1) { return m_pItem_Manager->UseItem_Equip(eSlot, iCount); } // <- 장비된 아이템을 사용한다
+	ITEM_RESULT UseItem_Inven(INVEN_ARRAY_TYPE eIndex, _uint iIndex, _uint iCount = 1) { return m_pItem_Manager->UseItem_Inven(eIndex, iIndex, iCount); } // <- 인벤에 있는 아이템을 직접 사용 
+	ITEM_RESULT Remove_Item_Inven(INVEN_ARRAY_TYPE eIndex, _uint iIndex) { return m_pItem_Manager->Remove_Item_Inven(eIndex, iIndex); } // <- 인벤의 아이템 제거
+
+	ITEM_RESULT Get_Array_Info(INVEN_ARRAY_TYPE eIndex, _wstring* strName, _int* iRow) { return m_pItem_Manager->Get_Array_Info(eIndex, strName, iRow); } // <- 인벤 배열 정보 획득
+	const CItem_Manager::ITEM* Get_Array_Item_Info(INVEN_ARRAY_TYPE eIndex, _uint iIndex) { return m_pItem_Manager->Get_Array_Item_Info(eIndex, iIndex); } // <- 인벤의 아이템 정보 획득
+
+	CPlayer::WEAPON_TYPE Get_Weapon_Model_Index() { return m_pItem_Manager->Get_Weapon_Model_Index(); } // 현재 사용 중인 무기의 모델 번호 리턴
+
+	const CItem_Manager::ITEM* Get_Equip_Item_Info(EQUIP_SLOT eSlot) { return m_pItem_Manager->Get_Equip_Item_Info(eSlot); } // 현재 장비창에 장착된 아이템의 정보 레퍼런스 획득
+	
+	// 코인
+	ITEM_RESULT Add_Coin(_int iAdd, _bool bForce) { return m_pItem_Manager->Add_Coin(iAdd, bForce); }
+	_int Get_Coin() { return m_pItem_Manager->Get_Coin(); }
+
+	// 선택 아이템 조정
+	_int Change_Potion_Select(_bool bNext) { return m_pItem_Manager->Change_Potion_Select(bNext); }
+	_int Change_Tool_Select(_bool bNext) { return m_pItem_Manager->Change_Tool_Select(bNext); }
+	_int Change_Weapon() { return m_pItem_Manager->Change_Weapon(); }
+	_int Get_Potion_Select() { return m_pItem_Manager->Get_Potion_Select(); }
+	_int Get_Tool_Select() { return m_pItem_Manager->Get_Tool_Select(); }
+	_int Get_Weapon() { return m_pItem_Manager->Get_Weapon(); }
 
 
 
@@ -88,6 +114,10 @@ public: // 외부에서 매니저 접근
 	// 정보 접근 
 	const _float& Get_NowStat_Normal(STAT_NORMAL eIndex) { return m_pPlayer_Stat_Manager->Get_NowStat_Normal(eIndex); }
 	const CPlayer_Stat_Manager::STAT& Get_StatInfo_Normal(STAT_NORMAL eIndex) { return m_pPlayer_Stat_Manager->Get_StatInfo_Normal(eIndex); }
+
+	const _float Get_Now_Max_Ratio(STAT_NORMAL eIndex) { return  m_pPlayer_Stat_Manager->Get_Now_Max_Ratio(eIndex);}
+	const _float Get_Max_Limit_Ratio(STAT_NORMAL eIndex) { return  m_pPlayer_Stat_Manager->Get_Max_Limit_Ratio(eIndex);}
+	const _float Get_Now_Limit_Ratio(STAT_NORMAL eIndex) { return m_pPlayer_Stat_Manager->Get_Now_Limit_Ratio(eIndex); }
 
 	const CPlayer_Stat_Manager::STAT& Get_StatInfo_DEF(STAT_DEF eIndex) { return m_pPlayer_Stat_Manager->Get_StatInfo_DEF(eIndex); }
 

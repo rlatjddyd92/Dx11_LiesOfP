@@ -34,11 +34,13 @@ public:
 	typedef struct ORTHO_RENDER_CTRL
 	{
 		_float fDistance_From_Cam = 0.f;
-		_float2 fPosition = { 0.f,0.f };
+		_Vec2 fPosition = { 0.f,0.f };
 		PART_GROUP eType = PART_GROUP::GROUP_END;
 		_float fRatio = 0.f;
 		_wstring strText = {};
 		_int iTexture = -1;
+
+
 
 	}OR_RENDER;
 
@@ -47,7 +49,7 @@ public:
 		{
 			if (First->fDistance_From_Cam < Second->fDistance_From_Cam)
 				return true;
-			else if (_int(First->eType) > _int(First->eType))
+			else if ((First->fDistance_From_Cam == Second->fDistance_From_Cam)&&(_int(First->eType) > _int(Second->eType)))
 				return true;
 
 			return false; // 카메라와 거리가 더 먼 것이 먼저 그려지도록
@@ -69,6 +71,8 @@ public:
 
 	virtual void OpenAction() override;
 	virtual void CloseAction() override;
+
+	virtual CHECK_MOUSE Check_Page_Action(_float fTimeDelta) override;
 
 public:
 	const vector<UPART*>& Get_UIPartInfo() { return m_vecPart; }
@@ -95,14 +99,13 @@ private:
 
 
 
-	_bool Make_OrthoGraphy_Position(CGameObject* pHost, PART_GROUP eGroup, _float2* fPosition); // <- 직교 좌표를 뽑는다, 직교 UI 타입 별 보정치도 적용한다 
+	_bool Make_OrthoGraphy_Position(CGameObject* pHost, PART_GROUP eGroup, _Vec2* fPosition); // <- 직교 좌표를 뽑는다, 직교 UI 타입 별 보정치도 적용한다 
 	_float Check_Distance_From_Cam(CGameObject* pHost);
 
 protected:
 	list<OR_HOST*> m_Ortho_Host_list; // <- 직교 UI 가 필요한 대상 목록
 	priority_queue<OR_RENDER*, vector<OR_RENDER*>, Order_Ortho_UI_Render> m_queue_Ortho_Render_Ctrl; // <- 이번 프레임에 실제 렌더 해야 하는 내용
-	vector<UG_CTRL*> m_vecOrtho_Group_Ctrl; // <- 직교 UI 조정을 위한 콘트롤 구조체 원본
-	vector<_float3> m_vecOrtho_Adjust; // <- 직교 좌표 뽑을 때 대상 객체 Pos에서 어디로 얼마나 떨어진 위치에 그릴 것인지 정해놓는다 
+	vector<_Vec3> m_vecOrtho_Adjust; // <- 직교 좌표 뽑을 때 대상 객체 Pos에서 어디로 얼마나 떨어진 위치에 그릴 것인지 정해놓는다 
 
 	_float m_fTimeDelta = 0.f;
 

@@ -58,6 +58,9 @@ public:
 	// 정보 접근 
 	const _float& Get_NowStat_Normal(STAT_NORMAL eIndex) { return m_vecStat_Normal[_int(eIndex)]->fStat_Now; }
 	const STAT& Get_StatInfo_Normal(STAT_NORMAL eIndex) { return *m_vecStat_Normal[_int(eIndex)]; }
+	const _float Get_Now_Max_Ratio(STAT_NORMAL eIndex) { return m_vecStat_Normal[_int(eIndex)]->fStat_Now / m_vecStat_Normal[_int(eIndex)]->fStat_Max; }
+	const _float Get_Max_Limit_Ratio(STAT_NORMAL eIndex) { return m_vecStat_Normal[_int(eIndex)]->fStat_Max / m_vecStat_Normal[_int(eIndex)]->fStat_Max_Limit; }
+	const _float Get_Now_Limit_Ratio(STAT_NORMAL eIndex) { return m_vecStat_Normal[_int(eIndex)]->fStat_Now / m_vecStat_Normal[_int(eIndex)]->fStat_Max_Limit; }
 
 	const STAT& Get_StatInfo_DEF(STAT_DEF eIndex) { return *m_vecStat_DEF[_int(eIndex)]; }
 

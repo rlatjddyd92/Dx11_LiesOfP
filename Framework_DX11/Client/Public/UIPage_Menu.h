@@ -14,10 +14,53 @@ class CUIPage_Menu : public CUIPage
 public:
 	enum class PART_GROUP
 	{
+		GROUP_BACK,
+		GROUP_MENU_SYMBOL,
+		GROUP_MENU_TITLE,
 
+		GROUP_TOP_SYMBOL,
+		GROUP_TOP_TITLE,
 
+		GROUP_BOTTOM_SYMBOL,
+		GROUP_BOTTOM_TITLE,
 
+		GROUP_BAG_SYMBOL,
+		GROUP_BAG_TITLE,
 
+		GROUP_DESC_BACK,
+		GROUP_DESC_TITLE,
+		GROUP_DESC_TEXT,
+		GROUP_DESC_FX,
+		GROUP_DESC_BUTTON,
+		GROUP_DESC_MOUSE,
+
+		GROUP_MENU_EQUIP,
+		GROUP_MENU_INVEN,
+		GROUP_MENU_CHARACTOR,
+		GROUP_MENU_HEART,
+		GROUP_MENU_OPTION,
+
+		GROUP_TOP_CELL_0, // 위 벨트 0번에 대한 것 수행 (ItemManager에서 정보 받기 -> 백판,셀 심벌ON/OFF, 아이템 정보 ON/OFF, 마우스 감지 -> 셀렉트 요청)
+		GROUP_TOP_CELL_1,
+		GROUP_TOP_CELL_2,
+
+		GROUP_BOTTOM_CELL_0,
+		GROUP_BOTTOM_CELL_1,
+		GROUP_BOTTOM_CELL_2,
+
+		GROUP_BAG_CELL_0,
+		GROUP_BAG_CELL_1,
+		GROUP_BAG_CELL_2,
+		GROUP_BAG_CELL_3,
+
+		GROUP_ITEM_DESC_MOUSE_0,
+		GROUP_ITEM_DESC_MOUSE_1,
+		GROUP_ITEM_DESC_BACK,
+		GROUP_ITEM_DESC_NAME,
+		GROUP_ITEM_DESC_FUNC_0,
+		GROUP_ITEM_DESC_FUNC_1,
+
+		GROUP_SELECT_MARK,
 
 		GROUP_END
 	};
@@ -41,14 +84,22 @@ public:
 	virtual void OpenAction() override;
 	virtual void CloseAction() override;
 
+	virtual CHECK_MOUSE Check_Page_Action(_float fTimeDelta) override;
+
 public:
 	const vector<UPART*>& Get_UIPartInfo() { return m_vecPart; }
 	virtual HRESULT Ready_UIPart_Group_Control() override;
 
+private:
+	void Focus_Update(_float fTimeDelta); // 메뉴 화면에서 현재 하이라이트 된 
+	void Select_Update(_float fTimeDelta);
+	void Item_Icon_Update(_float fTimeDelta);
+	void Desc_Update(_float fTimeDelta);
+
 protected:
+	PART_GROUP m_eFocus_Group = PART_GROUP::GROUP_END; // 현재 하이라이트 된 셀 표시
 
-
-
+	
 
 
 

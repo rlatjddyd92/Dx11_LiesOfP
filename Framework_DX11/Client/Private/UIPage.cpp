@@ -2,6 +2,7 @@
 #include "..\Public\UIPage.h"
 
 #include "GameInstance.h"
+#include "GameInterface_Controller.h"
 
 CUIPage::CUIPage(ID3D11Device* pDevice, ID3D11DeviceContext* pContext)
     : CUIObject{ pDevice, pContext }
@@ -48,15 +49,23 @@ void CUIPage::Late_Update(_float fTimeDelta)
 
 	if ((m_vecPageAction[_int(PAGEACTION::ACTION_CLOSING)]) && (!m_vecPageAction[_int(PAGEACTION::ACTION_OPENING)]))
 	{
-		m_fTopPartMove -= 2.f * fTimeDelta;
+		m_fTopPartMove -= m_fTopPartMove_Excel * fTimeDelta;
 		if (m_fTopPartMove < 0.f)
+		{
 			m_fTopPartMove = 0.f;
+			m_vecPageAction[_int(PAGEACTION::ACTION_CLOSING)] = false;
+			m_vecPageAction[_int(PAGEACTION::ACTION_INACTIVE)] = true;
+		}
 	}
 	else if ((!m_vecPageAction[_int(PAGEACTION::ACTION_CLOSING)]) && (m_vecPageAction[_int(PAGEACTION::ACTION_OPENING)]))
 	{
-		m_fTopPartMove += 2.f * fTimeDelta;
+		m_fTopPartMove += m_fTopPartMove_Excel * fTimeDelta;
 		if (m_fTopPartMove > 1.f)
+		{
 			m_fTopPartMove = 1.f;
+			m_vecPageAction[_int(PAGEACTION::ACTION_OPENING)] = false;
+			m_vecPageAction[_int(PAGEACTION::ACTION_ACTIVE)] = true;
+		}
 	}
 
 	for (auto& iter : m_vecPart)
@@ -71,7 +80,10 @@ void CUIPage::Late_Update(_float fTimeDelta)
 			iter->MovePart({ m_fX,m_fY }, fTimeDelta);
 		}
 		else
+		{
 			iter->MovePart(m_vecPart[iter->iParentPart_Index]->fPosition, fTimeDelta);
+		}
+			
 	}
 
 	if ((m_fTopPartMove == 0.f) || (m_fTopPartMove == -1.f))
@@ -93,6 +105,8 @@ void CUIPage::OpenAction()
 {
 	m_vecPageAction[_int(PAGEACTION::ACTION_CLOSING)] = false;
 	m_vecPageAction[_int(PAGEACTION::ACTION_OPENING)] = true;
+	m_vecPageAction[_int(PAGEACTION::ACTION_INACTIVE)] = false;
+	m_vecPageAction[_int(PAGEACTION::ACTION_ACTIVE)] = false;
 	m_bRender = true;
 }
 
@@ -100,6 +114,9 @@ void CUIPage::CloseAction()
 {
 	m_vecPageAction[_int(PAGEACTION::ACTION_CLOSING)] = true;
 	m_vecPageAction[_int(PAGEACTION::ACTION_OPENING)] = false;
+	m_vecPageAction[_int(PAGEACTION::ACTION_INACTIVE)] = false;
+	m_vecPageAction[_int(PAGEACTION::ACTION_ACTIVE)] = false;
+	m_bRender = false;
 }
 
 HRESULT CUIPage::Ready_UIPart_Group_Control()
@@ -107,10 +124,22 @@ HRESULT CUIPage::Ready_UIPart_Group_Control()
 	return S_OK;
 }
 
+CHECK_MOUSE CUIPage::Check_Page_Action(_float fTimeDelta)
+{
+	return CHECK_MOUSE::MOUSE_NONE;
+}
+
 void CUIPage::Release_Control(UG_CTRL* pCtrl)
 {
 	pCtrl->PartIndexlist.clear();
 	Safe_Delete(pCtrl);
+}
+
+_Vec2 CUIPage::Check_Mouse_By_Part(UPART& Part)
+{
+	_Vec2 fPos = Part.fPosition;
+	_Vec2 fSize = Part.fSize;
+	return GET_GAMEINTERFACE->CheckMouse(fPos, fSize);
 }
 
 void CUIPage::UpdatePart_ByIndex(_int Index, _float fTimeDelta)
@@ -170,8 +199,8 @@ void CUIPage::Free()
 
 	m_vecPageAction.clear();
 
-	for (auto& iter : m_Ctrllist)
+	for (auto& iter : m_vec_Group_Ctrl)
 		Safe_Delete(iter);
 
-	m_Ctrllist.clear();
+	m_vec_Group_Ctrl.clear();
 }
