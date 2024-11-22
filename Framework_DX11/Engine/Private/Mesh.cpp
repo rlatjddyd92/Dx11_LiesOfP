@@ -73,12 +73,15 @@ HRESULT CMesh::Initialize_Prototype(HANDLE* pFile, const CModel* pModel, _fmatri
 
 #pragma endregion
 
-	_int iDepth = -1;
-	vector<int> tmp = {};
 
-	if (m_pVertices != nullptr)
-		m_pOctree = COctree::Create(m_vMinPos, m_vMaxPos, m_pIndices, m_pVertices, m_iNumFaces, tmp, &iDepth);
-	
+#pragma region Octree
+	//¿ÁÆ®¸® »ý¼º
+	//_int iDepth = -1;
+	//vector<int> tmp = {};
+
+	//if (m_pVertices != nullptr)
+	//	m_pOctree = COctree::Create(m_vMinPos, m_vMaxPos, m_pIndices, m_pVertices, m_iNumFaces, tmp, &iDepth);
+#pragma endregion
 	return S_OK;
 }
 

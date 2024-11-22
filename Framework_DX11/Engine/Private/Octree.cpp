@@ -28,7 +28,7 @@ HRESULT COctree::Initialize(_Vec3 _vMinPos, _Vec3 _vMaxPos, _uint* pIndices,  VT
 	//if (m_iDepth <= 0)
 	//	return 		S_OK;	
 	
-	if (iNumTri <= 80000)
+	if (iNumTri <= 10000)
 		return 		S_OK;
 	else
 		m_bHaveChild = true;

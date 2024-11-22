@@ -1036,6 +1036,7 @@ HRESULT CLoader::Ready_Resources_For_ToolLevel_Map0()
 	m_pGameInstance->Add_ModelPrototype(LEVEL_TOOL, ("SK_NewTown_Lift_01_Door"), pModel);
 
 #pragma endregion
+
 	m_isFinished_Map0 = true;
 
 	return S_OK;
@@ -1228,7 +1229,6 @@ HRESULT CLoader::Ready_Resources_For_ToolLevel_Map1()
 		iResult = _findnext(handle, &fd);
 	}
 
-
 #pragma region ETC Cathedral
 	handle = _findfirst("../Bin/ModelData/NonAnim/Map/Etc/Cathedral/*", &fd);
 
@@ -1313,10 +1313,147 @@ HRESULT CLoader::Ready_Resources_For_ToolLevel_Map1()
 			CModel::Create(m_pDevice, m_pContext, CModel::TYPE_NONANIM, szFullPath6, PreTransformMatrix))))
 			return E_FAIL;
 
-		//_findnext : <io.h>에서 제공하며 다음 위치의 파일을 찾는 함수, 더이상 없다면 -1을 리턴
 		iResult = _findnext(handle, &fd);
 	}
 #pragma endregion
+
+#pragma region ETC WoodStr
+	handle = _findfirst("../Bin/ModelData/NonAnim/Map/Etc/WoodStr/*", &fd);
+
+	if (handle == -1)
+		return E_FAIL;
+
+	char szCurPath7[128] = "../Bin/ModelData/NonAnim/Map/Etc/WoodStr/";    // 상대 경로
+	char szFullPath7[128] = "";
+
+	iResult = 0;
+
+	while (iResult != -1)
+	{
+		strcpy_s(szFullPath7, szCurPath7);
+		strcat_s(szFullPath7, fd.name);
+
+		_char szFileName[MAX_PATH] = "";
+		_char szExt[MAX_PATH] = "";
+		_splitpath_s(szFullPath7, nullptr, 0, nullptr, 0, szFileName, MAX_PATH, szExt, MAX_PATH);
+
+		if (!strcmp(fd.name, ".") || !strcmp(fd.name, "..")
+			|| strcmp(szExt, ".dat"))
+		{
+			iResult = _findnext(handle, &fd);
+			continue;
+		}
+
+		string strFileName = szFileName;
+		_wstring strPrototypeName;
+
+		strPrototypeName.assign(strFileName.begin(), strFileName.end());
+		wprintf(strPrototypeName.c_str());
+
+		PreTransformMatrix = XMMatrixIdentity();
+		PreTransformMatrix = XMMatrixScaling(0.0002f, 0.0002f, 0.0002f);
+
+		if (FAILED(m_pGameInstance->Add_Prototype(LEVEL_TOOL, strPrototypeName,
+			CModel::Create(m_pDevice, m_pContext, CModel::TYPE_NONANIM, szFullPath7, PreTransformMatrix))))
+			return E_FAIL;
+
+		iResult = _findnext(handle, &fd);
+	}
+#pragma endregion
+
+#pragma region ETC Furniture
+	handle = _findfirst("../Bin/ModelData/NonAnim/Map/Etc/Furniture/*", &fd);
+
+	if (handle == -1)
+		return E_FAIL;
+
+	char szCurPath8[128] = "../Bin/ModelData/NonAnim/Map/Etc/Furniture/";    // 상대 경로
+	char szFullPath8[128] = "";
+
+	iResult = 0;
+
+	while (iResult != -1)
+	{
+		strcpy_s(szFullPath8, szCurPath8);
+		strcat_s(szFullPath8, fd.name);
+
+		_char szFileName[MAX_PATH] = "";
+		_char szExt[MAX_PATH] = "";
+		_splitpath_s(szFullPath8, nullptr, 0, nullptr, 0, szFileName, MAX_PATH, szExt, MAX_PATH);
+
+		if (!strcmp(fd.name, ".") || !strcmp(fd.name, "..")
+			|| strcmp(szExt, ".dat"))
+		{
+			iResult = _findnext(handle, &fd);
+			continue;
+		}
+
+		string strFileName = szFileName;
+		_wstring strPrototypeName;
+
+		strPrototypeName.assign(strFileName.begin(), strFileName.end());
+		wprintf(strPrototypeName.c_str());
+
+		PreTransformMatrix = XMMatrixIdentity();
+		PreTransformMatrix = XMMatrixScaling(0.01f, 0.01f, 0.01f);
+
+		if (FAILED(m_pGameInstance->Add_Prototype(LEVEL_TOOL, strPrototypeName,
+			CModel::Create(m_pDevice, m_pContext, CModel::TYPE_NONANIM, szFullPath8, PreTransformMatrix))))
+			return E_FAIL;
+
+		iResult = _findnext(handle, &fd);
+	}
+#pragma endregion
+
+#pragma region ETC Interior
+	handle = _findfirst("../Bin/ModelData/NonAnim/Map/Etc/Interior/*", &fd);
+
+	if (handle == -1)
+		return E_FAIL;
+
+	char szCurPath9[128] = "../Bin/ModelData/NonAnim/Map/Etc/Interior/";    // 상대 경로
+	char szFullPath9[128] = "";
+
+	iResult = 0;
+
+	while (iResult != -1)
+	{
+		strcpy_s(szFullPath9, szCurPath9);
+		strcat_s(szFullPath9, fd.name);
+
+		_char szFileName[MAX_PATH] = "";
+		_char szExt[MAX_PATH] = "";
+		_splitpath_s(szFullPath9, nullptr, 0, nullptr, 0, szFileName, MAX_PATH, szExt, MAX_PATH);
+
+		if (!strcmp(fd.name, ".") || !strcmp(fd.name, "..")
+			|| strcmp(szExt, ".dat"))
+		{
+			iResult = _findnext(handle, &fd);
+			continue;
+		}
+
+		string strFileName = szFileName;
+		_wstring strPrototypeName;
+
+		strPrototypeName.assign(strFileName.begin(), strFileName.end());
+		wprintf(strPrototypeName.c_str());
+
+		PreTransformMatrix = XMMatrixIdentity();
+		PreTransformMatrix = XMMatrixScaling(0.01f, 0.01f, 0.01f);
+
+		if (FAILED(m_pGameInstance->Add_Prototype(LEVEL_TOOL, strPrototypeName,
+			CModel::Create(m_pDevice, m_pContext, CModel::TYPE_NONANIM, szFullPath9, PreTransformMatrix))))
+			return E_FAIL;
+
+		iResult = _findnext(handle, &fd);
+	}
+#pragma endregion
+	PreTransformMatrix = XMMatrixIdentity();
+	PreTransformMatrix = XMMatrixScaling(0.01f, 0.01f, 0.01f);
+
+	if (FAILED(m_pGameInstance->Add_Prototype(LEVEL_TOOL, TEXT("Sophia_Stoned"),
+		CModel::Create(m_pDevice, m_pContext, CModel::TYPE_NONANIM, "../Bin/ModelData/NonAnim/Map/Etc/Sophia/Sophia_Stoned.dat", PreTransformMatrix))))
+		return E_FAIL;
 
 
 	m_isFinished_Map1 = true;
