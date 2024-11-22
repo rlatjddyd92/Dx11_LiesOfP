@@ -311,6 +311,7 @@ void CSimonManus::ChangePhase()
 	{
 		return;
 	}
+	m_pFsmCom->Release_States();
 	
 	Safe_Release(m_pModelCom);
 	Safe_Release(m_pFsmCom);
