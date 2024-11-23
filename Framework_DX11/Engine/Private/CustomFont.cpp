@@ -45,7 +45,7 @@ HRESULT CCustomFont::Render_Center(const _tchar* pText, _fvector vPosition, _fve
 HRESULT CCustomFont::Render_Right(const _tchar* pText, _fvector vPosition, _fvector vColor, _float fRadian, _fvector vPivot, _float fScale)
 {
 	XMVECTOR vSize = { 0.f,0.f,0.f,0.f };
-	vSize.m128_f32[0] = m_pFont->MeasureString(pText).m128_f32[0] * -1;
+	vSize.m128_f32[0] = m_pFont->MeasureString(pText).m128_f32[0];
 	XMVECTOR vAdjustedPosition = vPosition - (vSize * fScale);
 
 	m_pBatch->Begin();

@@ -67,12 +67,15 @@ void CUIPage_Play::Late_Update(_float fTimeDelta)
 	LD_Arm_Update(fTimeDelta);
 	RU_Coin_Update(fTimeDelta);
 	RD_Weapon_Update(fTimeDelta);
-
+	Action_InterAction(fTimeDelta);
+	
 	
 	for(auto& iter : m_vec_Group_Ctrl)
 		__super::UpdatePart_ByControl(iter);
 
 	__super::Late_Update(fTimeDelta);
+
+	PlayInfo_Update(fTimeDelta);
 
 }
 
@@ -185,7 +188,7 @@ HRESULT CUIPage_Play::Ready_UIPart_Group_Control()
 
 	__super::Array_Control(_int(PART_GROUP::GROUP_POTION_FRAME), _int(PART_GROUP::GROUP_SELECT_CELL), CTRL_COMMAND::COM_RENDER, true);
 	__super::Array_Control(_int(PART_GROUP::GROUP_BAG_FRAMELINE), _int(PART_GROUP::GROUP_BAG_NUM), CTRL_COMMAND::COM_RENDER, false);
-		
+	__super::Array_Control(_int(PART_GROUP::GROUP_DROP_STATIC), _int(PART_GROUP::GROUP_DEBUFF_FILL), CTRL_COMMAND::COM_RENDER, false);
 	
 	m_bWeapon_Top = true;
 	m_vec_Group_Ctrl[_int(PART_GROUP::GROUP_WEAPON_NORMAL_BACK)]->bRender = true;

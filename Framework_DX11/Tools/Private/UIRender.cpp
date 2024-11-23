@@ -89,6 +89,26 @@ HRESULT CUIRender::Render()
 
 		if (rNow.iTexture_Index != -1)
 		{
+			UI_SHADER eShader = UI_SHADER::SHADER_NORMAL;
+
+			if (rNow.bTexture_Color_Multiple)
+			{
+				eShader = UI_SHADER::SHADER_MULTIPLE_COLOR;
+				if (rNow.fTextureColor.x < 0) rNow.fTextureColor.x = 1.f;
+				if (rNow.fTextureColor.y < 0) rNow.fTextureColor.y = 1.f;
+				if (rNow.fTextureColor.z < 0) rNow.fTextureColor.z = 1.f;
+				if (rNow.fTextureColor.w < 0) rNow.fTextureColor.w = 1.f;
+			}
+			else
+			{
+				if (rNow.fTextureColor.x >= 0) eShader = UI_SHADER::SHADER_CHANGE_COLOR;
+				else if (rNow.fTextureColor.y >= 0) eShader = UI_SHADER::SHADER_CHANGE_COLOR;
+				else if (rNow.fTextureColor.z >= 0) eShader = UI_SHADER::SHADER_CHANGE_COLOR;
+				else if (rNow.fTextureColor.w >= 0) eShader = UI_SHADER::SHADER_CHANGE_COLOR;
+			}
+			
+
+
 			m_pTransformCom->Set_WorldMatrix(XMMatrixIdentity());
 
 			if (rNow.iMoveType == _int(CController_UITool::MOVETYPE::TYPE_BAR))
@@ -104,13 +124,13 @@ HRESULT CUIRender::Render()
 			if (rNow.bTurn)
 				m_pTransformCom->Rotation({ 0.f,0.f,1.f,0.f }, XMConvertToRadians(rNow.fTurn_Degree));
 
-			if (FAILED(m_pTransformCom->Bind_ShaderResource(m_pShaderCom, "g_WorldMatrix")))
+			if (FAILED(m_pTransformCom->Bind_ShaderResource(m_vecShader_UI[_int(eShader)], "g_WorldMatrix")))
 				return E_FAIL;
 
-			if (FAILED(m_pShaderCom->Bind_Matrix("g_ViewMatrix", &m_ViewMatrix)))
+			if (FAILED(m_vecShader_UI[_int(eShader)]->Bind_Matrix("g_ViewMatrix", &m_ViewMatrix)))
 				return E_FAIL;
 
-			if (FAILED(m_pShaderCom->Bind_Matrix("g_ProjMatrix", &m_ProjMatrix)))
+			if (FAILED(m_vecShader_UI[_int(eShader)]->Bind_Matrix("g_ProjMatrix", &m_ProjMatrix)))
 				return E_FAIL;
 
 			if (!rNow.bIsItem)
@@ -118,7 +138,7 @@ HRESULT CUIRender::Render()
 				if (rNow.iTexture_Index >= m_vecTextureInfo.size())
 					return S_OK;
 
-				if (FAILED(m_vecTextureInfo[rNow.iTexture_Index]->Texture->Bind_ShadeResource(m_pShaderCom, "g_Texture", 0)))
+				if (FAILED(m_vecTextureInfo[rNow.iTexture_Index]->Texture->Bind_ShadeResource(m_vecShader_UI[_int(eShader)], "g_Texture", 0)))
 					return E_FAIL;
 			}
 			else
@@ -126,14 +146,20 @@ HRESULT CUIRender::Render()
 				if (rNow.iTexture_Index >= m_vecTextureInfo_ItemIcon.size())
 					return S_OK;
 
-				if (FAILED(m_vecTextureInfo_ItemIcon[rNow.iTexture_Index]->Texture->Bind_ShadeResource(m_pShaderCom, "g_Texture", 0)))
+				if (FAILED(m_vecTextureInfo_ItemIcon[rNow.iTexture_Index]->Texture->Bind_ShadeResource(m_vecShader_UI[_int(eShader)], "g_Texture", 0)))
 					return E_FAIL;
 			}
 
-			if (FAILED(m_pShaderCom->Bind_RawValue("g_Color", &rNow.fTextureColor, sizeof(_float4))))
+			if (FAILED(m_vecShader_UI[_int(eShader)]->Bind_RawValue("g_Multiple", &rNow.bTexture_Color_Multiple, sizeof(_bool))))
 				return E_FAIL;
 
-			if (FAILED(m_pShaderCom->Begin(0)))
+			if (FAILED(m_vecShader_UI[_int(eShader)]->Bind_RawValue("g_Alpha_Strash", &rNow.fStrash_Alpha, sizeof(_float))))
+				return E_FAIL;
+
+			if (FAILED(m_vecShader_UI[_int(eShader)]->Bind_RawValue("g_Color", &rNow.fTextureColor, sizeof(_float4))))
+				return E_FAIL;
+
+			if (FAILED(m_vecShader_UI[_int(eShader)]->Begin(0)))
 				return E_FAIL;
 
 			if (FAILED(m_pVIBufferCom->Bind_Buffers()))
@@ -165,6 +191,8 @@ HRESULT CUIRender::Render()
 
 			if (rNow.bCenter)
 				m_pGameInstance->Render_TextCenter(m_vecFont_tchar[rNow.iFontIndex], rNow.szText, vPosition, vColor);
+			else if (rNow.bText_Right)
+				m_pGameInstance->Render_TextRight(m_vecFont_tchar[rNow.iFontIndex], rNow.szText, vPosition, vColor);
 			else
 				m_pGameInstance->Render_Text(m_vecFont_tchar[rNow.iFontIndex], rNow.szText, vPosition, vColor);
 		}
@@ -209,24 +237,24 @@ HRESULT CUIRender::BackRender(_int iIndex)
 	m_pTransformCom->Set_State(CTransform::STATE_POSITION,
 		XMVectorSet((1280.f * 0.5f) - m_fViewWidth * 0.5f, -(720.f * 0.5f) + m_fViewHeight * 0.5f, 0.f, 1.f));
 
-	if (FAILED(m_pTransformCom->Bind_ShaderResource(m_pShaderCom, "g_WorldMatrix")))
+	if (FAILED(m_pTransformCom->Bind_ShaderResource(m_vecShader_UI[_int(UI_SHADER::SHADER_NORMAL)], "g_WorldMatrix")))
 		return E_FAIL;
 
-	if (FAILED(m_pShaderCom->Bind_Matrix("g_ViewMatrix", &m_ViewMatrix)))
+	if (FAILED(m_vecShader_UI[_int(UI_SHADER::SHADER_NORMAL)]->Bind_Matrix("g_ViewMatrix", &m_ViewMatrix)))
 		return E_FAIL;
 
-	if (FAILED(m_pShaderCom->Bind_Matrix("g_ProjMatrix", &m_ProjMatrix)))
+	if (FAILED(m_vecShader_UI[_int(UI_SHADER::SHADER_NORMAL)]->Bind_Matrix("g_ProjMatrix", &m_ProjMatrix)))
 		return E_FAIL;
 
-	if (FAILED(m_vecTextureInfo[iIndex]->Texture->Bind_ShadeResource(m_pShaderCom, "g_Texture", 0)))
+	if (FAILED(m_vecTextureInfo[iIndex]->Texture->Bind_ShadeResource(m_vecShader_UI[_int(UI_SHADER::SHADER_NORMAL)], "g_Texture", 0)))
 		return E_FAIL;
 
 	_float4 fColor = { -1,-1,-1,-1 };
 
-	if (FAILED(m_pShaderCom->Bind_RawValue("g_Color", &fColor, sizeof(_float4))))
+	if (FAILED(m_vecShader_UI[_int(UI_SHADER::SHADER_NORMAL)]->Bind_RawValue("g_Color", &fColor, sizeof(_float4))))
 		return E_FAIL;
 
-	if (FAILED(m_pShaderCom->Begin(0)))
+	if (FAILED(m_vecShader_UI[_int(UI_SHADER::SHADER_NORMAL)]->Begin(0)))
 		return E_FAIL;
 
 	if (FAILED(m_pVIBufferCom->Bind_Buffers()))
@@ -242,15 +270,28 @@ HRESULT CUIRender::BackRender(_int iIndex)
 
 HRESULT CUIRender::Ready_Components()
 {
+	m_vecShader_UI.resize(_int(UI_SHADER::SHADER_END));
+
 	/* FOR.Com_Shader */
 	if (FAILED(__super::Add_Component(LEVEL_STATIC, TEXT("Prototype_Component_Shader_VtxPosTex"),
 		TEXT("Com_Shader"), reinterpret_cast<CComponent**>(&m_pShaderCom))))
 		return E_FAIL;
 
-	///* FOR.Com_Texture */
-	//if (FAILED(__super::Add_Component(LEVEL_TOOL, TEXT("Prototype_Component_Texture_UIRender"),
-	//	TEXT("Com_Texture"), reinterpret_cast<CComponent**>(&m_pTextureCom))))
-	//	return E_FAIL;
+	/* FOR.Com_Shader */
+	if (FAILED(__super::Add_Component(LEVEL_STATIC, TEXT("Prototype_Component_Shader_UI_Normal"),
+		TEXT("Com_Shader_Normal"), reinterpret_cast<CComponent**>(&m_vecShader_UI[_int(UI_SHADER::SHADER_NORMAL)]))))
+		return E_FAIL;
+
+	/* FOR.Com_Shader */
+	if (FAILED(__super::Add_Component(LEVEL_STATIC, TEXT("Prototype_Component_Shader_UI_Change_Color"),
+		TEXT("Com_Shader_Change_Color"), reinterpret_cast<CComponent**>(&m_vecShader_UI[_int(UI_SHADER::SHADER_CHANGE_COLOR)]))))
+		return E_FAIL;
+
+	/* FOR.Com_Shader */
+	if (FAILED(__super::Add_Component(LEVEL_STATIC, TEXT("Prototype_Component_Shader_UI_Multiple_Color"),
+		TEXT("Com_Shader_Multiple_Color"), reinterpret_cast<CComponent**>(&m_vecShader_UI[_int(UI_SHADER::SHADER_MULTIPLE_COLOR)]))))
+		return E_FAIL;
+
 
 	/* FOR.Com_VIBuffer */
 	if (FAILED(__super::Add_Component(LEVEL_STATIC, TEXT("Prototype_Component_VIBuffer_Rect"),
@@ -439,6 +480,10 @@ void CUIRender::Free()
 	m_vecFont_char.clear();
 	m_vecFont_tchar.clear();
 
+	for (auto& iter : m_vecShader_UI)
+		Safe_Release(iter);
+
+	m_vecShader_UI.clear();
 	
 
 	m_UIRenderlist.clear();

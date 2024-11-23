@@ -71,6 +71,7 @@ public:
 		_int iTexture = -1;
 		_bool bIsMultiple = false;
 		_Vec4 vColor_Texture = { 0.f,0.f,0.f,0.f };
+		_float fAlpha_Strash = 0.3f;
 
 		TEXT_TYPE eText_Type = TEXT_TYPE::TEXT_END;
 		_int iFont = 14;
@@ -80,7 +81,13 @@ public:
 		_float fTurn = 0.f;
 	}URENDER;
 
-
+	enum class UI_SHADER
+	{
+		SHADER_NORMAL,
+		SHADER_CHANGE_COLOR,
+		SHADER_MULTIPLE_COLOR,
+		SHADER_END
+	};
 
 
 private:
@@ -133,6 +140,8 @@ private:
 	vector<UTEXTURE*> m_vecTextureInfo_UIPart;
 	vector<UTEXTURE*> m_vecTextureInfo_ItemIcon;
 	vector<_tchar*> m_vecFont_tchar;
+
+	vector<class CShader*> m_vecShader_UI;
 
 
 	// 아래 내용은 다음 단계 

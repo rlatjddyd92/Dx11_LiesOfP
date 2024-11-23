@@ -188,6 +188,7 @@ void CUIPage::Input_Render_Info(UPART& Part)
 	pNew->vColor_Texture = Part.fTextureColor;
 	pNew->vPosition = Part.fPosition;
 	pNew->vSize = Part.fSize;
+	pNew->fAlpha_Strash = Part.fStrash_Alpha;
 
 	if (Part.iMoveType == _int(MOVETYPE::TYPE_BAR))
 		pNew->vSize = Part.GetBarSize();

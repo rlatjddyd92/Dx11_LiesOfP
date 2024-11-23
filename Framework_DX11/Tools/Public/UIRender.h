@@ -67,6 +67,14 @@ public:
 		_float fAlpah = -1.f;
 	}URCOM;
 
+	enum class UI_SHADER
+	{
+		SHADER_NORMAL,
+		SHADER_CHANGE_COLOR,
+		SHADER_MULTIPLE_COLOR,
+		SHADER_END
+	};
+
 
 private:
 	CUIRender(ID3D11Device* pDevice, ID3D11DeviceContext* pContext);
@@ -111,7 +119,7 @@ private:
 	vector<_char*> m_vecFont_char;
 	vector<_tchar*> m_vecFont_tchar;
 
-	
+	vector<class CShader*> m_vecShader_UI;
 
 public:
 	static CUIRender* Create(ID3D11Device* pDevice, ID3D11DeviceContext* pContext);
