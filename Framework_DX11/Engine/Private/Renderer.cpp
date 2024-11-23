@@ -198,11 +198,6 @@ HRESULT CRenderer::Initialize()
 		return E_FAIL;
 	if (FAILED(m_pGameInstance->Ready_RT_Debug(TEXT("Target_RimLight"), 100.f, 500.f, 200.f, 200.f)))
 		return E_FAIL;
-
-	//if (FAILED(m_pGameInstance->Ready_RT_Debug(TEXT("Target_Bloom_UpSample0"), 300.f, 100.f, 200.f, 200.f)))
-	//	return E_FAIL;	
-	//if (FAILED(m_pGameInstance->Ready_RT_Debug(TEXT("Target_Bloom_BlurXY0"), 300.f, 300.f, 200.f, 200.f)))
-	//	return E_FAIL;
 #endif
 
 
@@ -1187,19 +1182,14 @@ HRESULT CRenderer::Render_Effect()
 	if (FAILED(m_pPostProcessShader->Bind_Matrix("g_ProjMatrix", &m_ProjMatrix)))
 		return E_FAIL;
 
-	if (FAILED(m_pGameInstance->Begin_MRT(TEXT("MRT_Effect_Final"))))
+	if (FAILED(Copy_BackBuffer()))
 		return E_FAIL;
-	if (FAILED(m_pGameInstance->End_MRT()))
-		return E_FAIL;
-
-	//if (FAILED(Copy_BackBuffer()))
-	//	return E_FAIL;
 
 	if (FAILED(m_pGameInstance->Bind_RT_ShaderResource(m_pPostProcessShader, TEXT("Target_Effect_Diffuse"), "g_EffectTexture")))
 		return E_FAIL;
 	if (FAILED(m_pGameInstance->Bind_RT_ShaderResource(m_pPostProcessShader, TEXT("Target_Effect_Blur"), "g_EffectBlur")))
 		return E_FAIL;
-	if (FAILED(m_pGameInstance->Bind_RT_ShaderResource(m_pPostProcessShader, TEXT("Target_LDR"), "g_BackTexture")))
+	if (FAILED(m_pGameInstance->Bind_RT_ShaderResource(m_pPostProcessShader, TEXT("Target_BackBuffer"), "g_BackTexture")))
 		return E_FAIL;
 	
 	m_pPostProcessShader->Begin(3);

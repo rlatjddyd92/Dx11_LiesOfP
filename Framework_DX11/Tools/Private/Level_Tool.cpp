@@ -69,10 +69,19 @@ HRESULT CLevel_Tool::Initialize()
 
 	desc.DefaultDesc.vStartScale = _float3(10.f, 10.f, 10.f);
 	desc.DefaultDesc.bLoop = true;
-	desc.DefaultDesc.iShaderIndex = CMesh_Effect::SHADER_TEST;
+	desc.DefaultDesc.iShaderIndex = 1;
 	desc.DefaultDesc.fTileMoveSpeed = 0.f;
 	desc.DefaultDesc.vTileMoveDir = _Vec2(1.f, 1.f);
-	if (FAILED(m_pGameInstance->Add_CloneObject_ToLayer(LEVEL_TOOL, TEXT("Layer_MeshEffect"), TEXT("Prototype_GameObject_Mesh_Effect"), &desc)))
+	//if (FAILED(m_pGameInstance->Add_CloneObject_ToLayer(LEVEL_TOOL, TEXT("Layer_MeshEffect"), TEXT("Prototype_GameObject_Mesh_Effect"), &desc)))
+	//	return E_FAIL;
+
+	CNonAnimModel::NONMODEL_DESC Desc{};
+	Desc.vPosition = { 0.f, 0.f, 0.f };
+	Desc.vScale = { 1.f,1.f,1.f };
+	Desc.vRotation = { 0.f,0.f,0.f };
+	Desc.iRenderGroupID = 0;
+	strcpy_s(Desc.szModelTag, "Prototype_Component_Model_Rapier");
+	if (FAILED(m_pGameInstance->Add_CloneObject_ToLayer(LEVEL_TOOL, TEXT("Layer_Weapon"), TEXT("Prototype_GameObject_NonAnim"), &Desc)))
 		return E_FAIL;
 
 	return S_OK;

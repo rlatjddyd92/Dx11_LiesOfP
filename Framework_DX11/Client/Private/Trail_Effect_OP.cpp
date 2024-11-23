@@ -64,6 +64,8 @@ void CTrail_Effect_OP::Update(_float fTimeDelta)
 
 void CTrail_Effect_OP::Late_Update(_float fTimeDelta)
 {
+	if (CRenderer::RG_END <= m_RenderDesc.iRenderGroup)
+		return;
 	m_pGameInstance->Add_RenderObject((CRenderer::RENDERGROUP)m_RenderDesc.iRenderGroup, this);
 }
 

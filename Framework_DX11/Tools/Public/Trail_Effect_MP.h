@@ -13,44 +13,44 @@ BEGIN(Tools)
 class CTrail_Effect_MP final : public CEffect_Base
 {
 public:
-	enum SHADER_TYPE { SHADER_DEFAULT, SHADER_END };
 	enum TRAIL_MP_TYPE{ MT_SPREAD, MT_MOVE, MT_CONVERGE, MT_FOLLOW, MT_END };
 
 	typedef struct
 	{
 		// 움직임
-		TRAIL_MP_TYPE		eType = { MT_END };
-		_uint				iComputeState = { 0 };
-		_float				fGravity = { 0.f };
-		_Vec4				vPivot = { 0.f, 0.f, 0.f, 1.f };
-		_Vec4				vMoveDir = { 0.f, -1.f, 0.f, 0.f };
+		TRAIL_MP_TYPE		eType				= { MT_END };
+		_uint				iComputeState		= { 0 };
+		_float				fGravity			= { 0.f };
+		_Vec4				vPivot				= { 0.f, 0.f, 0.f, 1.f };
+		_Vec4				vMoveDir			= { 0.f, -1.f, 0.f, 0.f };
 
-		_Vec3				vOrbitAxis = { 0.f, 1.f, 0.f };
-		_float				fOrbitAngle = { 90.f };
+		_Vec3				vOrbitAxis			= { 0.f, 1.f, 0.f };
+		_float				fOrbitAngle			= { 90.f };
 
 		_float				fRandomTimeInterval = { 0.25f };
-		_float				fRandomMoveRatio = { 0.f };
+		_float				fRandomMoveRatio	= { 0.f };
 
-		_float				fAccelSpeed = { 0.f };
-		_float				fAccelLimit = { 0.f };
+		_float				fAccelSpeed			= { 0.f };
+		_float				fAccelLimit			= { 0.f };
 
-		_float				fTailInterval = { 0.1f };	// 꼬리와 꼬리 사이 간격
-		_float				fTailDistance = { 0.5f };	// 꼬리와 헤드 사이 간격 : 이걸 늘리면 더 렌덤하게 감.
-		_Vec4				vTailMoveDir = { 0.f, 1.f, 0.f, 0.f };
+		_float				fTailInterval		= { 0.1f };	// 꼬리와 꼬리 사이 간격
+		_float				fTailDistance		= { 0.5f };	// 꼬리와 헤드 사이 간격 : 이걸 늘리면 더 렌덤하게 감.
+		_Vec4				vTailMoveDir		= { 0.f, 1.f, 0.f, 0.f };
 		
 		// 위치 초기화
-		_Vec3				vPos = {};
-		_Vec3				vRotation = {};
-		_Vec3				vScale = { 1.f, 1.f, 1.f };
+		_Vec3				vPos				= {};
+		_Vec3				vRotation			= {};
+		_Vec3				vScale				= { 1.f, 1.f, 1.f };
 
 		// 셰이더
-		_uint				iShaderIndex = { 0 };
-		_uint				iGeomState = { 0 };
-		_Vec2				vTexDevide = { 1.f ,1.f };
-		_float				fSpriteSpeed = { 0.f };
-		_Vec2				vScaling = { 1.f, 1.f };
-		_float				fStartRotation = { 0.f };
-		_float				fRotationPerSecond = { 0.f };
+		_uint				iShaderIndex		= { 0 };
+		_uint				iGeomState			= { 0 };
+		_Vec2				vTexDevide			= { 1.f ,1.f };
+		_float				fSpriteSpeed		= { 0.f };
+		_Vec2				vStartScaling		= { 1.f, 1.f };
+		_Vec2				vScalingRatio		= { 0.f, 0.f };
+		_float				fStartRotation		= { 0.f };
+		_float				fRotationPerSecond	= { 0.f };
 	}DEFAULT_DESC;
 
 	typedef struct

@@ -531,7 +531,7 @@ void CS_FOLLOW_MAIN(uint3 DTid : SV_DispatchThreadID)
         float fTime = fmod(HeadParticle.particle.vLifeTime.y, fTimeInterval);
         float4 vPrePos = HeadParticle.vPreTranslation;
         
-        while (true)
+        while (iState & STATE_LOOP)
         {
             float3 vCurrentDir = (HeadParticle.particle.vTranslation - vPrePos).xyz;
             
@@ -539,7 +539,7 @@ void CS_FOLLOW_MAIN(uint3 DTid : SV_DispatchThreadID)
             float3 vRandomPos = CosineInterpolate(HeadParticle.vCurrentRandomPos.xyz, HeadParticle.vNextRandomPos.xyz, fTime / fTimeInterval);
             
             TailParticles[HeadParticle.iTailInitIndex].particle.vTranslation = vPrePos + float4(vRandomPos, 0.f);
-            TailParticles[HeadParticle.iTailInitIndex].vMoveDir = float4(vRandomPos, 0.f);
+            TailParticles[HeadParticle.iTailInitIndex].vMoveDir = float4(normalize(vRandomPos + normalize(vCurrentDir)), 0.f);
             TailParticles[HeadParticle.iTailInitIndex].particle.vLifeTime.y = 0.f;
             ++HeadParticle.iTailInitIndex;
             

@@ -58,16 +58,12 @@ void CTrail_Effect_TP::Late_Update(_float fTimeDelta)
 {
 	if (false == m_DefaultDesc.bLoop && 1.f < m_fAlpha)
 	{
-		// m_isActive = false;
+		m_isActive = false;
 	}
 
-	if (CRenderer::RG_END == m_RenderDesc.iRenderGroup)
+	if (CRenderer::RG_END <= m_RenderDesc.iRenderGroup)
 		return;
-
-	if (CRenderer::RG_EFFECT == m_RenderDesc.iRenderGroup)
-		m_pGameInstance->Add_RenderObject(CRenderer::RG_NONLIGHT, this);
-	else
-		m_pGameInstance->Add_RenderObject((CRenderer::RENDERGROUP)m_RenderDesc.iRenderGroup, this);
+	m_pGameInstance->Add_RenderObject((CRenderer::RENDERGROUP)m_RenderDesc.iRenderGroup, this);
 }
 
 HRESULT CTrail_Effect_TP::Render()
@@ -90,7 +86,7 @@ HRESULT CTrail_Effect_TP::Render()
 		if (FAILED(m_pTextureCom[TEXTURE_MASK_1]->Bind_ShadeResource(m_pShaderCom, "g_MaskTexture_1", 0)))
 			return E_FAIL;
 	}
-
+	  
 	if (nullptr != m_pTextureCom[TEXTURE_MASK_2])
 	{
 		if (FAILED(m_pTextureCom[TEXTURE_MASK_2]->Bind_ShadeResource(m_pShaderCom, "g_MaskTexture_2", 0)))
@@ -125,6 +121,8 @@ void CTrail_Effect_TP::Reset()
 {
 	m_pVIBufferCom->Reset();
 	m_DefaultDesc = m_InitDesc.DefaultDesc;
+	m_isActive = true;
+	m_fAlpha = 0.f;
 }
 
 HRESULT CTrail_Effect_TP::Save(_wstring strFilePath)
@@ -162,6 +160,9 @@ void CTrail_Effect_TP::Set_Desc(const TRAIL_TP_DESC& desc)
 	m_DefaultDesc = desc.DefaultDesc;
 	m_RenderDesc = desc.RenderDesc;
 	m_InitDesc.DefaultDesc = desc.DefaultDesc;
+	m_InitDesc.RenderDesc = desc.RenderDesc;
+
+	Reset();
 }
 
 HRESULT CTrail_Effect_TP::Ready_Components(const TRAIL_TP_DESC& Desc)

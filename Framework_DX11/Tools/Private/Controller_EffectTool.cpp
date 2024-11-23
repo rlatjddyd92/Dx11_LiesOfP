@@ -20,10 +20,21 @@ CController_EffectTool::CController_EffectTool()
 	Safe_AddRef(m_pGameInstance);
 }
 
-HRESULT CController_EffectTool::Initialize()
+HRESULT CController_EffectTool::Initialize(ID3D11Device* pDevice, ID3D11DeviceContext* pContext, const _wstring& strEffectPath)
 {
+	m_pDevice = pDevice;
+	Safe_AddRef(m_pDevice);
+
+	m_pContext = pContext;
+	Safe_AddRef(m_pContext);
+
 	m_RenderDesc.iRenderGroup = CRenderer::RG_END;
 	m_RenderDesc.iPpState = 0;
+
+	Load_Texture(strEffectPath);
+	Load_Model();
+	Load_Shader();
+
 	return S_OK;
 }
 
@@ -31,6 +42,9 @@ void CController_EffectTool::Render()
 {
 	bool bDemo = true;
 	ImGui::ShowDemoWindow(&bDemo);
+
+	ImGui::Begin("Effect_Check");
+
 	if (ImGui::CollapsingHeader("Texture"))
 	{
 		RenderGroup_Selection();
@@ -59,6 +73,8 @@ void CController_EffectTool::Render()
 	{
 		Trail_MP_Check();
 	}
+
+	ImGui::End();
 
 	ImGui::Begin("EffectList");
 	if (ImGui::Button("Load Effect"))
@@ -314,9 +330,13 @@ void CController_EffectTool::RenderGroup_Selection()
 	ImGui::SeparatorText("Render Group");
 	ImGui::RadioButton("RG_Nonblend", &m_RenderDesc.iRenderGroup, CRenderer::RG_NONBLEND);
 	ImGui::SameLine();
+	ImGui::RadioButton("RG_NonLight", &m_RenderDesc.iRenderGroup, CRenderer::RG_NONLIGHT);
+	ImGui::SameLine();
 	ImGui::RadioButton("RG_Effect", &m_RenderDesc.iRenderGroup, CRenderer::RG_EFFECT);
 	ImGui::SameLine();
 	ImGui::RadioButton("RG_Blend", &m_RenderDesc.iRenderGroup, CRenderer::RG_BLEND);
+	ImGui::SameLine();
+	ImGui::RadioButton("RG_Distortion", &m_RenderDesc.iRenderGroup, CRenderer::RG_DISTORTION);
 
 	switch (m_RenderDesc.iRenderGroup)
 	{
@@ -432,9 +452,6 @@ void CController_EffectTool::Particle_Check()
 		ImGui::SeparatorText("Shader");
 		ImGui::InputInt("Shader Index", (_int*)&m_ParticleDesc.DefaultDesc.iShaderIndex);
 
-		if (CParticle_Effect::SHADER_END <= m_ParticleDesc.DefaultDesc.iShaderIndex)
-			m_ParticleDesc.DefaultDesc.iShaderIndex = CParticle_Effect::SHADER_DEFAULT;
-
 		Set_ParticleState();
 		
 		ImGui::TreePop();
@@ -444,7 +461,11 @@ void CController_EffectTool::Particle_Check()
 		ImGui::SeparatorText("Transform");
 		ImGui::InputFloat3("Pos", (_float*)&m_ParticleDesc.DefaultDesc.vPos);
 		ImGui::InputFloat3("Rotation", (_float*)&m_ParticleDesc.DefaultDesc.vRotation);
-		ImGui::InputFloat3("Scale", (_float*)&m_ParticleDesc.DefaultDesc.vScale);
+		ImGui::InputFloat3("Scale", (_float*)&m_ParticleDesc.DefaultDesc.vStartScale);
+		ImGui::InputFloat3("Overall Scaling", (_float*)&m_ParticleDesc.DefaultDesc.vOverallScaling);
+
+		ImGui::SeparatorText("Duration");
+		ImGui::InputFloat("Duration", &m_ParticleDesc.DefaultDesc.fDuration);
 
 		ImGui::SeparatorText("Particle Action"); 
 		ImGui::InputFloat4("Pivot", (_float*)&m_ParticleDesc.DefaultDesc.vPivot);
@@ -454,7 +475,8 @@ void CController_EffectTool::Particle_Check()
 		ImGui::InputFloat2("Tex Devide", (_float*)&m_ParticleDesc.DefaultDesc.vTexDevide);
 		ImGui::InputFloat("Sprite Speed", &m_ParticleDesc.DefaultDesc.fSpriteSpeed);
 
-		ImGui::InputFloat2("Scaling", (_float*)&m_ParticleDesc.DefaultDesc.vScaling);
+		ImGui::InputFloat2("Start Scaling", (_float*)&m_ParticleDesc.DefaultDesc.vStartScaling);
+		ImGui::InputFloat2("Scaling Ratio", (_float*)&m_ParticleDesc.DefaultDesc.vScalingRatio);
 
 		ImGui::InputFloat("Start Rotation", &m_ParticleDesc.DefaultDesc.fStartRotation);
 		ImGui::InputFloat("Rotation Per Second", (_float*)&m_ParticleDesc.DefaultDesc.fRotationPerSecond);
@@ -481,6 +503,8 @@ void CController_EffectTool::Update_Particle()
 
 	if (nullptr == pParticle)
 		return;
+
+	m_ParticleDesc.RenderDesc = m_RenderDesc;
 
 	pParticle->Set_Desc(m_ParticleDesc);
 }
@@ -521,6 +545,28 @@ void CController_EffectTool::Get_Particle()
 
 	m_ParticleDesc = pParticle->Get_Desc();
 	m_RenderDesc = m_ParticleDesc.RenderDesc;
+
+	_uint iIndex = 0;
+	for (auto& Tag : m_Texture_PrototypeTags)
+	{
+		if (0 == wcscmp(Tag.c_str(), m_ParticleDesc.TextDesc.szDiffuseTexturTag))
+		{
+			m_iSelected_DiffuseTextureIndex = iIndex;
+		}
+		if (0 == wcscmp(Tag.c_str(), m_ParticleDesc.TextDesc.szMaskTextureTag_1))
+		{
+			m_iSelected_MaskTextureIndex_1 = iIndex;
+		}
+		if (0 == wcscmp(Tag.c_str(), m_ParticleDesc.TextDesc.szMaskTextureTag_2))
+		{
+			m_iSelected_MaskTextureIndex_2 = iIndex;
+		}
+		if (0 == wcscmp(Tag.c_str(), m_ParticleDesc.TextDesc.szNormalTextureTag))
+		{
+			m_iSelected_NormalTextureIndex = iIndex;
+		}
+		++iIndex;
+	}
 
 	Set_PpState();
 
@@ -666,9 +712,6 @@ void CController_EffectTool::TE_Check()
 		ImGui::SeparatorText("Loop");
 		ImGui::Checkbox("Texture Loop", &m_TextureDesc.DefaultDesc.bLoop);
 		ImGui::TreePop();
-
-		if (CTexture_Effect::SHADER_END <= m_TextureDesc.DefaultDesc.iShaderIndex)
-			m_TextureDesc.DefaultDesc.iShaderIndex = CTexture_Effect::SHADER_DEFAULT;
 	}
 }
 
@@ -679,6 +722,7 @@ void CController_EffectTool::Update_TE()
 	if (nullptr == pTE)
 		return;
 
+	m_TextureDesc.RenderDesc = m_RenderDesc;
 	pTE->Set_Desc(m_TextureDesc);
 }
 
@@ -719,6 +763,28 @@ void CController_EffectTool::Get_TE()
 
 	m_TextureDesc = pTextureEffect->Get_Desc();
 	m_RenderDesc = m_TextureDesc.RenderDesc;
+
+	_uint iIndex = 0;
+	for (auto& Tag : m_Texture_PrototypeTags)
+	{
+		if (0 == wcscmp(Tag.c_str(), m_TextureDesc.TextDesc.szDiffuseTexturTag))
+		{
+			m_iSelected_DiffuseTextureIndex = iIndex;
+		}
+		if (0 == wcscmp(Tag.c_str(), m_TextureDesc.TextDesc.szMaskTextureTag_1))
+		{
+			m_iSelected_MaskTextureIndex_1 = iIndex;
+		}
+		if (0 == wcscmp(Tag.c_str(), m_TextureDesc.TextDesc.szMaskTextureTag_2))
+		{
+			m_iSelected_MaskTextureIndex_2 = iIndex;
+		}
+		if (0 == wcscmp(Tag.c_str(), m_TextureDesc.TextDesc.szNormalTextureTag))
+		{
+			m_iSelected_NormalTextureIndex = iIndex;
+		}
+		++iIndex;
+	}
 
 	Set_PpState();
 }
@@ -859,10 +925,6 @@ void CController_EffectTool::Mesh_Check()
 
 		ImGui::SeparatorText("Loop");
 		ImGui::Checkbox("Mesh Loop", &m_MeshDesc.DefaultDesc.bLoop);
-
-		if (CMesh_Effect::SHADER_END <= m_MeshDesc.DefaultDesc.iShaderIndex)
-			m_MeshDesc.DefaultDesc.iShaderIndex = CMesh_Effect::SHADER_DEFAULT;
-
 		ImGui::TreePop();
 	}
 }
@@ -873,6 +935,7 @@ void CController_EffectTool::Update_Mesh()
 
 	if (nullptr == pME)
 		return;
+	m_MeshDesc.RenderDesc = m_RenderDesc;
 
 	pME->Set_Desc(m_MeshDesc);
 
@@ -914,6 +977,40 @@ void CController_EffectTool::Get_Mesh()
 
 	m_MeshDesc = pMeshEffect->Get_Desc();
 	m_RenderDesc = m_MeshDesc.RenderDesc;
+
+	_uint iIndex = 0;
+	for (auto& Tag : m_Texture_PrototypeTags)
+	{
+		if (0 == wcscmp(Tag.c_str(), m_MeshDesc.TextDesc.szDiffuseTexturTag))
+		{
+			m_iSelected_DiffuseTextureIndex = iIndex;
+		}
+		if (0 == wcscmp(Tag.c_str(), m_MeshDesc.TextDesc.szMaskTextureTag_1))
+		{
+			m_iSelected_MaskTextureIndex_1 = iIndex;
+		}
+		if (0 == wcscmp(Tag.c_str(), m_MeshDesc.TextDesc.szMaskTextureTag_2))
+		{
+			m_iSelected_MaskTextureIndex_2 = iIndex;
+		}
+		if (0 == wcscmp(Tag.c_str(), m_MeshDesc.TextDesc.szNormalTextureTag))
+		{
+			m_iSelected_NormalTextureIndex = iIndex;
+		}
+		++iIndex;
+	}
+
+	_uint iModelIndex = 0;
+	for (auto& Tag : m_Model_PrototypeTags)
+	{
+		if (0 == wcscmp(Tag.c_str(), m_MeshDesc.TextDesc.szModelTag))
+		{
+			m_iSelected_ModelIndex = iModelIndex;
+		}
+		++iModelIndex;
+	}
+
+
 	Set_PpState();
 }
 
@@ -1008,10 +1105,6 @@ void CController_EffectTool::Trail_OP_Check()
 		ImGui::InputFloat("Trail OP SCale", (_float*)&m_Trail_OPDesc.DefaultDesc.fScaling);
 		ImGui::InputFloat2("Trail OP Divide", (_float*)&m_Trail_OPDesc.DefaultDesc.vDivide);
 		ImGui::InputFloat("Trail OP Sprite Speed", (_float*)&m_Trail_OPDesc.DefaultDesc.fSpriteSpeed);
-		
-		if (CTrail_Effect_OP::SHADER_END <= m_Trail_OPDesc.DefaultDesc.iShaderIndex)
-			m_Trail_OPDesc.DefaultDesc.iShaderIndex = CTrail_Effect_OP::SHADER_DEFAULT;
-
 		ImGui::SeparatorText("Else");
 		ImGui::Checkbox("Loop", &m_Trail_OPDesc.DefaultDesc.bLoop);
 		ImGui::TreePop();
@@ -1026,7 +1119,7 @@ void CController_EffectTool::Trail_OP_Check()
 		ImGui::SeparatorText("Geom State");
 		ImGui::Checkbox("OP_Grow", &m_Trail_OPState[TOP_GROW]);
 		ImGui::SameLine();
-		ImGui::Checkbox("OP_Shrink", &m_EffectPP[TOP_SHRINK]);
+		ImGui::Checkbox("OP_Shrink", &m_Trail_OPState[TOP_SHRINK]);
 
 		Set_TrailOP_State();
 		ImGui::TreePop();
@@ -1039,7 +1132,7 @@ void CController_EffectTool::Update_Trail_OP()
 
 	if (nullptr == pTOP)
 		return;
-
+	m_Trail_OPDesc.RenderDesc = m_RenderDesc;
 	pTOP->Set_Desc(m_Trail_OPDesc);
 }
 
@@ -1078,16 +1171,42 @@ void CController_EffectTool::Get_Trail_OP()
 		return;
 
 	m_Trail_OPDesc = pTOP->Get_Desc();
+	m_RenderDesc = m_Trail_OPDesc.RenderDesc;
 
-	if (CParticle_Effect::PS_GROW == (m_Trail_OPDesc.DefaultDesc.iGeomState & CTrail_Effect_OP::TOP_GROW))
+	_uint iIndex = 0;
+
+	for (auto& Tag : m_Texture_PrototypeTags)
+	{
+		if (0 == wcscmp(Tag.c_str(), m_Trail_OPDesc.TextDesc.szDiffuseTexturTag))
+		{
+			m_iSelected_DiffuseTextureIndex = iIndex;
+		}
+		if (0 == wcscmp(Tag.c_str(), m_Trail_OPDesc.TextDesc.szMaskTextureTag_1))
+		{
+			m_iSelected_MaskTextureIndex_1 = iIndex;
+		}
+		if (0 == wcscmp(Tag.c_str(), m_Trail_OPDesc.TextDesc.szMaskTextureTag_2))
+		{
+			m_iSelected_MaskTextureIndex_2 = iIndex;
+		}
+		if (0 == wcscmp(Tag.c_str(), m_Trail_OPDesc.TextDesc.szNormalTextureTag))
+		{
+			m_iSelected_NormalTextureIndex = iIndex;
+		}
+		++iIndex;
+	}
+
+	if (CTrail_Effect_OP::TOP_GROW == (m_Trail_OPDesc.DefaultDesc.iGeomState & CTrail_Effect_OP::TOP_GROW))
 		m_Trail_OPState[TOP_GROW] = true;
 	else
 		m_Trail_OPState[TOP_GROW] = false;
 
-	if (CParticle_Effect::PS_SHRINK == (m_Trail_OPDesc.DefaultDesc.iGeomState & CTrail_Effect_OP::TOP_GROW))
+	if (CTrail_Effect_OP::TOP_SHRINK == (m_Trail_OPDesc.DefaultDesc.iGeomState & CTrail_Effect_OP::TOP_SHRINK))
 		m_Trail_OPState[TOP_SHRINK] = true;
 	else
 		m_Trail_OPState[TOP_SHRINK] = false;
+
+	Set_PpState();
 }
 
 void CController_EffectTool::Delete_Trail_OP()
@@ -1181,9 +1300,6 @@ void CController_EffectTool::Trail_TP_Check()
 		ImGui::InputFloat4("Trail TP Color", (_float*)&m_Trail_TPDesc.DefaultDesc.vColor);
 		ImGui::InputFloat("Trail TP Alpha Speed", (_float*)&m_Trail_TPDesc.DefaultDesc.fAlphaSpeed);
 
-		if (CTrail_Effect_TP::SHADER_END <= m_Trail_TPDesc.DefaultDesc.iShaderIndex)
-			m_Trail_TPDesc.DefaultDesc.iShaderIndex = CTrail_Effect_TP::SHADER_DEFAULT;
-
 		// 기타
 		ImGui::Checkbox("TP Loop", &m_Trail_TPDesc.DefaultDesc.bLoop);
 		ImGui::TreePop();
@@ -1197,7 +1313,7 @@ void CController_EffectTool::Update_Trail_TP()
 
 	if (nullptr == pTP)
 		return;
-
+	m_Trail_TPDesc.RenderDesc = m_RenderDesc;
 	pTP->Set_Desc(m_Trail_TPDesc);
 }
 
@@ -1237,7 +1353,32 @@ void CController_EffectTool::Get_Trail_TP()
 		return;
 
 	m_Trail_TPDesc = pTP->Get_Desc();
+	m_RenderDesc = m_Trail_TPDesc.RenderDesc;
 
+	_uint iIndex = 0;
+
+	for (auto& Tag : m_Texture_PrototypeTags)
+	{
+		if (0 == wcscmp(Tag.c_str(), m_Trail_TPDesc.TextDesc.szDiffuseTexturTag))
+		{
+			m_iSelected_DiffuseTextureIndex = iIndex;
+		}
+		if (0 == wcscmp(Tag.c_str(), m_Trail_TPDesc.TextDesc.szMaskTextureTag_1))
+		{
+			m_iSelected_MaskTextureIndex_1 = iIndex;
+		}
+		if (0 == wcscmp(Tag.c_str(), m_Trail_TPDesc.TextDesc.szMaskTextureTag_2))
+		{
+			m_iSelected_MaskTextureIndex_2 = iIndex;
+		}
+		if (0 == wcscmp(Tag.c_str(), m_Trail_TPDesc.TextDesc.szNormalTextureTag))
+		{
+			m_iSelected_NormalTextureIndex = iIndex;
+		}
+		++iIndex;
+	}
+
+	Set_PpState();
 }
 
 void CController_EffectTool::Delete_Trail_TP()
@@ -1369,9 +1510,6 @@ void CController_EffectTool::Trail_MP_Check()
 		ImGui::SeparatorText("Shader");
 		ImGui::InputInt("Shader Index", (_int*)&m_Trail_MPDesc.DefaultDesc.iShaderIndex);
 
-		if (CTrail_Effect_MP::SHADER_END <= m_Trail_MPDesc.DefaultDesc.iShaderIndex)
-			m_Trail_MPDesc.DefaultDesc.iShaderIndex = CTrail_Effect_MP::SHADER_DEFAULT;
-
 		Set_TrailMP_State();
 
 		ImGui::TreePop();
@@ -1409,7 +1547,8 @@ void CController_EffectTool::Trail_MP_Check()
 		ImGui::InputFloat2("Tex Devide", (_float*)&m_Trail_MPDesc.DefaultDesc.vTexDevide);
 		ImGui::InputFloat("Sprite Speed", &m_Trail_MPDesc.DefaultDesc.fSpriteSpeed);
 
-		ImGui::InputFloat2("Scaling", (_float*)&m_Trail_MPDesc.DefaultDesc.vScaling);
+		ImGui::InputFloat2("Tail Start Scaling", (_float*)&m_ParticleDesc.DefaultDesc.vStartScaling);
+		ImGui::InputFloat2("Tail Scaling Ratio", (_float*)&m_ParticleDesc.DefaultDesc.vScalingRatio);		
 		ImGui::InputFloat("Tail StartRotation", &m_Trail_MPDesc.DefaultDesc.fStartRotation);
 		ImGui::InputFloat("Tail Rotation Per Second", &m_Trail_MPDesc.DefaultDesc.fRotationPerSecond);
 
@@ -1424,7 +1563,7 @@ void CController_EffectTool::Update_Trail_MP()
 
 	if (nullptr == pMP)
 		return;
-
+	m_Trail_MPDesc.RenderDesc = m_RenderDesc;
 	pMP->Set_Desc(m_Trail_MPDesc);
 }
 
@@ -1463,6 +1602,30 @@ void CController_EffectTool::Get_Trail_MP()
 		return;
 
 	m_Trail_MPDesc = pMP->Get_Desc();
+	m_RenderDesc = m_Trail_MPDesc.RenderDesc;
+
+	_uint iIndex = 0;
+
+	for (auto& Tag : m_Texture_PrototypeTags)
+	{
+		if (0 == wcscmp(Tag.c_str(), m_Trail_MPDesc.TextDesc.szDiffuseTexturTag))
+		{
+			m_iSelected_DiffuseTextureIndex = iIndex;
+		}
+		if (0 == wcscmp(Tag.c_str(), m_Trail_MPDesc.TextDesc.szMaskTextureTag_1))
+		{
+			m_iSelected_MaskTextureIndex_1 = iIndex;
+		}
+		if (0 == wcscmp(Tag.c_str(), m_Trail_MPDesc.TextDesc.szMaskTextureTag_2))
+		{
+			m_iSelected_MaskTextureIndex_2 = iIndex;
+		}
+		if (0 == wcscmp(Tag.c_str(), m_Trail_MPDesc.TextDesc.szNormalTextureTag))
+		{
+			m_iSelected_NormalTextureIndex = iIndex;
+		}
+		++iIndex;
+	}
 
 #pragma region TRAIL_MP
 	if (CVIBuffer_Point_Instance::STATE_ORBIT == (m_Trail_MPDesc.DefaultDesc.iComputeState & CVIBuffer_Point_Instance::STATE_ORBIT))
@@ -1505,6 +1668,8 @@ void CController_EffectTool::Get_Trail_MP()
 	else
 		m_Trail_MPState[PB_ROTATION] = false;
 #pragma endregion
+
+	Set_PpState();
 }
 
 void CController_EffectTool::Delete_Trail_MP()
@@ -1953,6 +2118,142 @@ HRESULT CController_EffectTool::Load_EffectContainer()
 	return S_OK;
 }
 
+HRESULT CController_EffectTool::Load_Texture(const _wstring& strEffectPath)
+{
+	Add_Texture_ProtytypeTag(NONE_TEXT);
+
+	_wstring searchPath = strEffectPath + L"\\*.*";
+	WIN32_FIND_DATAW findFileData;
+	HANDLE hFind = FindFirstFileW(searchPath.c_str(), &findFileData);
+
+	if (hFind == INVALID_HANDLE_VALUE) {
+		MSG_BOX(TEXT("Folder Open Failed"));
+		return E_FAIL;
+	}
+
+	while (FindNextFileW(hFind, &findFileData))
+	{
+		if (!(findFileData.dwFileAttributes & FILE_ATTRIBUTE_DIRECTORY))
+		{
+			_wstring strFileName = findFileData.cFileName;   // 파일 이름 + 확장자
+			_wstring strFileExtention = Get_FileExtentin(strFileName);   // 확장자
+			_wstring strFileBaseName = Remove_FileExtentin(strFileName);
+
+			_wstring strResultPath = strEffectPath + TEXT('/') + strFileName;
+
+			_wstring strPrototypeTag = TEXT("Prototype_Component_Texture_") + strFileBaseName;
+
+			if (FAILED(m_pGameInstance->Add_Prototype(LEVEL_TOOL, strPrototypeTag, 
+				CTexture::Create(m_pDevice, m_pContext, strResultPath.c_str(), 1))))
+				return E_FAIL;
+			Add_Texture_ProtytypeTag(strPrototypeTag);
+		}
+	}
+	// 핸들 닫기
+	FindClose(hFind);
+
+	return S_OK;
+}
+
+HRESULT CController_EffectTool::Load_Model()
+{
+	_matrix		PreTransformMatrix = XMMatrixIdentity();
+
+	/* For. Prototype_Component_Model_HalfSphere_1 */
+	PreTransformMatrix = XMMatrixScaling(0.005f, 0.005f, 0.005f) * XMMatrixRotationX(XMConvertToRadians(90.0f));
+	if (FAILED(m_pGameInstance->Add_Prototype(LEVEL_TOOL, TEXT("Prototype_Component_Model_HalfSphere_1"),
+		CModel::Create(m_pDevice, m_pContext, CModel::TYPE_NONANIM, "../Bin/ModelData/NonAnim/Effect/SM_HalfSphere_01_GDH.dat", PreTransformMatrix))))
+		return E_FAIL;
+
+	Add_Model_ProtytypeTag(TEXT("Prototype_Component_Model_HalfSphere_1"));
+
+	return S_OK;
+}
+
+HRESULT CController_EffectTool::Load_Shader()
+{
+	/* For. Prototype_Component_Shader_Effect_Texture */
+	if (FAILED(m_pGameInstance->Add_Prototype(LEVEL_TOOL, TEXT("Prototype_Component_Shader_Effect_Texture"),
+		CShader::Create(m_pDevice, m_pContext, TEXT("../Bin/ShaderFiles/Shader_Effect_Texture.hlsl"), VTXPOSTEX::Elements, VTXPOSTEX::iNumElements))))
+		return E_FAIL;
+
+	/* For. Prototype_Component_Shader_Effect_Mesh */
+	if (FAILED(m_pGameInstance->Add_Prototype(LEVEL_TOOL, TEXT("Prototype_Component_Shader_Effect_Mesh"),
+		CShader::Create(m_pDevice, m_pContext, TEXT("../Bin/ShaderFiles/Shader_Effect_Mesh.hlsl"), VTXPOSTEX::Elements, VTXPOSTEX::iNumElements))))
+		return E_FAIL;
+
+	/* For. Prototype_Component_Shader_Trail_OnePoint_Instance */
+	if (FAILED(m_pGameInstance->Add_Prototype(LEVEL_TOOL, TEXT("Prototype_Component_Shader_Trail_OnePoint_Instance"),
+		CShader::Create(m_pDevice, m_pContext, TEXT("../Bin/ShaderFiles/Shader_VtxTrail_OnePoint_Instance.hlsl"), VTXTRAIL_ONEPOINT_INSTANCE::Elements, VTXTRAIL_ONEPOINT_INSTANCE::iNumElements))))
+		return E_FAIL;
+
+	/* For. Prototype_Component_Shader_Trail_TwoPoint_Instance */
+	if (FAILED(m_pGameInstance->Add_Prototype(LEVEL_TOOL, TEXT("Prototype_Component_Shader_Trail_TwoPoint_Instance"),
+		CShader::Create(m_pDevice, m_pContext, TEXT("../Bin/ShaderFiles/Shader_VtxTrail_TwoPoint_Instance.hlsl"), VTXTRAIL_TWOPOINT_INSTANCE::Elements, VTXTRAIL_TWOPOINT_INSTANCE::iNumElements))))
+		return E_FAIL;
+
+	/* For. Prototype_Component_Shader_VtxPointInstance */
+	if (FAILED(m_pGameInstance->Add_Prototype(LEVEL_TOOL, TEXT("Prototype_Component_Shader_VtxPointInstance"),
+		CShader_NonVTX::Create(m_pDevice, m_pContext, TEXT("../Bin/ShaderFiles/Shader_VtxPointInstance.hlsl")))))
+		return E_FAIL;
+
+	/* For. Prototype_Component_Shader_Compute_Particle_Spread */
+	if (FAILED(m_pGameInstance->Add_Prototype(LEVEL_TOOL, TEXT("Prototype_Component_Shader_Compute_Particle_Spread"),
+		CShader_Compute::Create(m_pDevice, m_pContext, TEXT("../Bin/ShaderFiles/Shader_ParticleCompute.hlsl"), "CS_SPREAD_MAIN"))))
+		return E_FAIL;
+
+	/* For. Prototype_Component_Shader_Compute_Particle_Move */
+	if (FAILED(m_pGameInstance->Add_Prototype(LEVEL_TOOL, TEXT("Prototype_Component_Shader_Compute_Particle_Move"),
+		CShader_Compute::Create(m_pDevice, m_pContext, TEXT("../Bin/ShaderFiles/Shader_ParticleCompute.hlsl"), "CS_MOVE_MAIN"))))
+		return E_FAIL;
+
+	/* For. Prototype_Component_Shader_Compute_Particle_Converge */
+	if (FAILED(m_pGameInstance->Add_Prototype(LEVEL_TOOL, TEXT("Prototype_Component_Shader_Compute_Particle_Converge"),
+		CShader_Compute::Create(m_pDevice, m_pContext, TEXT("../Bin/ShaderFiles/Shader_ParticleCompute.hlsl"), "CS_CONVERGE_MAIN"))))
+		return E_FAIL;
+
+	/* For. Prototype_Component_Shader_Compute_Particle_Reset */
+	if (FAILED(m_pGameInstance->Add_Prototype(LEVEL_TOOL, TEXT("Prototype_Component_Shader_Compute_Particle_Reset"),
+		CShader_Compute::Create(m_pDevice, m_pContext, TEXT("../Bin/ShaderFiles/Shader_ParticleCompute.hlsl"), "CS_RESET_MAIN"))))
+		return E_FAIL;
+
+	/* For. Prototype_Component_Shader_TrailTail_PointInstance */
+	if (FAILED(m_pGameInstance->Add_Prototype(LEVEL_TOOL, TEXT("Prototype_Component_Shader_TrailTail_PointInstance"),
+		CShader_NonVTX::Create(m_pDevice, m_pContext, TEXT("../Bin/ShaderFiles/Shader_TrailTail_PointInstance.hlsl")))))
+		return E_FAIL;
+	/* For. Prototype_Component_Shader_TrailHead_PointInstance */
+	if (FAILED(m_pGameInstance->Add_Prototype(LEVEL_TOOL, TEXT("Prototype_Component_Shader_TrailHead_PointInstance"),
+		CShader_NonVTX::Create(m_pDevice, m_pContext, TEXT("../Bin/ShaderFiles/Shader_TrailHead_PointInstance.hlsl")))))
+		return E_FAIL;
+
+	/* For. Prototype_Component_Shader_Compute_Trail_Spread */
+	if (FAILED(m_pGameInstance->Add_Prototype(LEVEL_TOOL, TEXT("Prototype_Component_Shader_Compute_Trail_Spread"),
+		CShader_Compute::Create(m_pDevice, m_pContext, TEXT("../Bin/ShaderFiles/Shader_Trail_MultiPoint_Compute.hlsl"), "CS_SPREAD_MAIN"))))
+		return E_FAIL;
+
+	/* For. Prototype_Component_Shader_Compute_Trail_Move */
+	if (FAILED(m_pGameInstance->Add_Prototype(LEVEL_TOOL, TEXT("Prototype_Component_Shader_Compute_Trail_Move"),
+		CShader_Compute::Create(m_pDevice, m_pContext, TEXT("../Bin/ShaderFiles/Shader_Trail_MultiPoint_Compute.hlsl"), "CS_MOVE_MAIN"))))
+		return E_FAIL;
+
+	/* For. Prototype_Component_Shader_Compute_Trail_Converge */
+	if (FAILED(m_pGameInstance->Add_Prototype(LEVEL_TOOL, TEXT("Prototype_Component_Shader_Compute_Trail_Converge"),
+		CShader_Compute::Create(m_pDevice, m_pContext, TEXT("../Bin/ShaderFiles/Shader_Trail_MultiPoint_Compute.hlsl"), "CS_CONVERGE_MAIN"))))
+		return E_FAIL;
+
+	/* For. Prototype_Component_Shader_Compute_Trail_Follow */
+	if (FAILED(m_pGameInstance->Add_Prototype(LEVEL_TOOL, TEXT("Prototype_Component_Shader_Compute_Trail_Follow"),
+		CShader_Compute::Create(m_pDevice, m_pContext, TEXT("../Bin/ShaderFiles/Shader_Trail_MultiPoint_Compute.hlsl"), "CS_FOLLOW_MAIN"))))
+		return E_FAIL;
+
+	/* For. Prototype_Component_Shader_Compute_Trail_Reset */
+	if (FAILED(m_pGameInstance->Add_Prototype(LEVEL_TOOL, TEXT("Prototype_Component_Shader_Compute_Trail_Reset"),
+		CShader_Compute::Create(m_pDevice, m_pContext, TEXT("../Bin/ShaderFiles/Shader_Trail_MultiPoint_Compute.hlsl"), "CS_RESET_MAIN"))))
+		return E_FAIL;
+
+	return S_OK;
+}
+
 void CController_EffectTool::Set_ParticleState()
 {
 	if (true == m_ParticleStates[PB_ORBIT])
@@ -2003,7 +2304,7 @@ void CController_EffectTool::Set_TrailOP_State()
 	else
 		m_Trail_OPDesc.DefaultDesc.iGeomState &= ~CTrail_Effect_OP::TOP_GROW;
 
-	if (true == m_ParticleStates[TOP_SHRINK])
+	if (true == m_Trail_OPState[TOP_SHRINK])
 		m_Trail_OPDesc.DefaultDesc.iGeomState |= CTrail_Effect_OP::TOP_SHRINK;
 	else
 		m_Trail_OPDesc.DefaultDesc.iGeomState &= ~CTrail_Effect_OP::TOP_SHRINK;
@@ -2081,19 +2382,21 @@ void CController_EffectTool::Texture_Selection()
 		szTextureArray.emplace_back(str.c_str());
 	}
 
+
+	_int iHeightInItem = { 10 };
 	switch (m_iTextureSelect)
 	{
 	case 0:
-		ImGui::ListBox("Diffuse Texture List", &m_iSelected_DiffuseTextureIndex, szTextureArray.data(), (_int)szTextureArray.size(), 5);
+		ImGui::ListBox("Diffuse Texture List", &m_iSelected_DiffuseTextureIndex, szTextureArray.data(), (_int)szTextureArray.size(), iHeightInItem);
 		break;
 	case 1:
-		ImGui::ListBox("Mask Texture List_1", &m_iSelected_MaskTextureIndex_1, szTextureArray.data(), (_int)szTextureArray.size(), 5);
+		ImGui::ListBox("Mask Texture List_1", &m_iSelected_MaskTextureIndex_1, szTextureArray.data(), (_int)szTextureArray.size(), iHeightInItem);
 		break;
 	case 2:
-		ImGui::ListBox("Mask Texture List_2", &m_iSelected_MaskTextureIndex_2, szTextureArray.data(), (_int)szTextureArray.size(), 5);
+		ImGui::ListBox("Mask Texture List_2", &m_iSelected_MaskTextureIndex_2, szTextureArray.data(), (_int)szTextureArray.size(), iHeightInItem);
 		break;
 	case 3:
-		ImGui::ListBox("Normal Texture List", &m_iSelected_NormalTextureIndex, szTextureArray.data(), (_int)szTextureArray.size(), 5);
+		ImGui::ListBox("Normal Texture List", &m_iSelected_NormalTextureIndex, szTextureArray.data(), (_int)szTextureArray.size(), iHeightInItem);
 		break;
 	}
 	
@@ -2145,9 +2448,37 @@ void CController_EffectTool::Set_PpState()
 		m_EffectPP[PP_DISTORTION] = false;
 }
 
+_wstring CController_EffectTool::Get_FileExtentin(const _wstring& strFileTag)
+{
+	size_t dotPos = strFileTag.find_last_of(L'.');
+	if (dotPos == _wstring::npos) {
+		return L""; // 확장자가 없으면 빈 문자열 반환
+	}
+
+	_wstring strExtention = strFileTag.substr(dotPos + 1);
+
+	size_t nullPos = strExtention.find(L'\0');
+	if (nullPos != _wstring::npos) {
+		strExtention.erase(nullPos);
+	}
+
+	return strExtention;
+}
+
+_wstring CController_EffectTool::Remove_FileExtentin(const _wstring& strFileTag)
+{
+	size_t dotPosition = strFileTag.find_last_of('.');
+	if (dotPosition != std::string::npos) {
+		return strFileTag.substr(0, dotPosition); // 확장자 제거
+	}
+	return strFileTag; // 확장자가 없으면 그대로 반환
+}
+
 void CController_EffectTool::Free()
 {
 	__super::Free();
 
 	Safe_Release(m_pGameInstance);
+	Safe_Release(m_pDevice);
+	Safe_Release(m_pContext);
 }

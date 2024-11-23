@@ -47,7 +47,8 @@ public:
 		_uint				iGeomState = { 0 };
 		_Vec2				vTexDevide = { 1.f ,1.f };
 		_float				fSpriteSpeed = { 0.f };
-		_Vec2				vScaling = { 1.f, 1.f };
+		_Vec2				vStartScaling = { 1.f, 1.f };
+		_Vec2				vScalingRatio = { 0.f, 0.f };
 		_float				fStartRotation = { 0.f };
 		_float				fRotationPerSecond = { 0.f };
 	}DEFAULT_DESC;

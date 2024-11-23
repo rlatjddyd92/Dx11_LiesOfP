@@ -66,7 +66,8 @@ public:
 	virtual void Reset() override;
 	virtual void Set_Loop(_bool bLoop) override {
 		m_DefaultDesc.bLoop = bLoop;
-		if(true == bLoop)
+		m_InitDesc.bLoop = bLoop;
+		if (true == bLoop)
 			Reset();
 	}
 

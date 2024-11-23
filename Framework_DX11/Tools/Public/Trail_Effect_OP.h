@@ -12,7 +12,6 @@ BEGIN(Tools)
 class CTrail_Effect_OP final : public CEffect_Base
 {
 public:
-	enum SHADER_TYPE { SHADER_DEFAULT, SHADER_END };
 	enum TRAIL_OP_TYPE{TYPE_UPDATE, TYPE_SPREAD, TYPE_END};
 
 	enum TRAIL_OP_STATE
@@ -82,6 +81,9 @@ public:
 	virtual HRESULT Save(_wstring strFilePath) override;
 	virtual void Set_Loop(_bool bLoop) override {
 		m_DefaultDesc.bLoop = bLoop;
+
+		if (true == bLoop)
+			Reset();
 	}
 
 public:

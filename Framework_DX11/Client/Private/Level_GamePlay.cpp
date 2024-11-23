@@ -46,6 +46,9 @@ HRESULT CLevel_Tool::Initialize()
 	// 게임 인터페이스를 인게임 모드로 전환
 	GET_GAMEINTERFACE->SetIngame(true);
 
+	CEffect_Manager::Get_Instance()->Add_Effect_ToLayer(LEVEL_GAMEPLAY, TEXT("Monster_Impact_Death"),
+		_Vec3(0.f, 5.f, 0.f), _Vec3(0.f, 0.f, 0.f), _Vec3(1.f, 1.f, 1.f));
+
 	return S_OK;
 }
 
