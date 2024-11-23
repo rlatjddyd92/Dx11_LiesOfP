@@ -103,6 +103,10 @@ private:
 	_tchar m_szTextureTag_Normal[MAX_PATH];
 	_tchar m_szTextureTag_ARM[MAX_PATH];
 
+	INSTANCE_DATA		m_tInstanceData = {};
+
+	_float4				m_vHashColor = {};
+
 private:
 	HRESULT Ready_Components(NONMODEL_DESC* pNonAnimDesc);
 

@@ -4,6 +4,7 @@ matrix g_WorldMatrix, g_ViewMatrix, g_ProjMatrix;
 matrix g_CascadeViewMatrix[3], g_CascadeProjMatrix[3];
 
 float g_fFar;
+float4 g_fHashColor;
 
 texture2D g_DiffuseTexture;
 texture2D g_NormalTexture;
@@ -24,6 +25,7 @@ struct VS_IN_MODEL_INSTANCE
     float4 vUp : TEXCOORD2;
     float4 vLook : TEXCOORD3;
     float4 vTranslation : TEXCOORD4;
+    float4 vHashColor : TEXCOORD5;
 };
 
 struct VS_OUT_MODEL
@@ -32,6 +34,7 @@ struct VS_OUT_MODEL
     float4 vNormal : NORMAL;
     float2 vTexcoord : TEXCOORD0;
     float4 vProjPos : TEXCOORD1;
+    float4 vHashColor : TEXCOORD2;
 };
 
 VS_OUT_MODEL VS_MAIN(VS_IN_MODEL_INSTANCE In)
@@ -49,7 +52,8 @@ VS_OUT_MODEL VS_MAIN(VS_IN_MODEL_INSTANCE In)
     Out.vNormal = normalize(mul(vector(In.vNormal, 0.f), WorldMatrix));
     Out.vTexcoord = In.vTexcoord;
     Out.vProjPos = Out.vPosition;
-
+    Out.vHashColor = In.vHashColor;
+    
     return Out;
 }
 
@@ -61,6 +65,7 @@ struct VS_OUT_NORMAL
     float4 vProjPos : TEXCOORD1;
     float3 vTangent : TANGENT;
     float3 vBinormal : BINORMAL;
+    float4 vHashColor : TEXCOORD2;
 };
 
 VS_OUT_NORMAL VS_MAIN_NORMAL(VS_IN_MODEL_INSTANCE In)
@@ -80,6 +85,7 @@ VS_OUT_NORMAL VS_MAIN_NORMAL(VS_IN_MODEL_INSTANCE In)
     Out.vProjPos = Out.vPosition;
     Out.vTangent = normalize(mul(vector(In.vTangent, 0.f), WorldMatrix)).xyz;
     Out.vBinormal = normalize(cross(Out.vNormal, Out.vTangent));
+    Out.vHashColor = In.vHashColor;
 
     return Out;
 }
@@ -131,6 +137,7 @@ struct PS_IN_MODEL
     float4 vNormal : NORMAL;
     float2 vTexcoord : TEXCOORD0;
     float4 vProjPos : TEXCOORD1;
+    float4 vHashColor : TEXCOORD2;
 };
 
 struct PS_OUT_MODEL
@@ -142,6 +149,7 @@ struct PS_OUT_MODEL
     vector vEmessive : SV_TARGET4;
     vector vRimLight : SV_TARGET5;
     vector vPickDepth : SV_TARGET6;
+    vector vPickObjectDepth : SV_TARGET7;
 };
 
 PS_OUT_MODEL PS_MAIN(PS_IN_MODEL In)
@@ -164,6 +172,7 @@ PS_OUT_MODEL PS_MAIN(PS_IN_MODEL In)
     Out.vEmessive = vEmissive;
     Out.vRimLight = vector(0.f, 0.f, 0.f, 0.f);
     Out.vPickDepth = vector(In.vProjPos.z / In.vProjPos.w, 0.f, 0.f, 1.f);
+    Out.vPickObjectDepth = In.vHashColor;;
     
     return Out;
 }
@@ -176,6 +185,7 @@ struct PS_IN_NORMAL
     float4 vProjPos : TEXCOORD1;
     float3 vTangent : TANGENT;
     float3 vBinormal : BINORMAL;
+    float4 vHashColor : TEXCOORD2;
 };
 
 PS_OUT_MODEL PS_MAIN_NORMAL(PS_IN_NORMAL In)
@@ -207,6 +217,7 @@ PS_OUT_MODEL PS_MAIN_NORMAL(PS_IN_NORMAL In)
     Out.vEmessive = vEmissive;
     Out.vRimLight = vector(0.f, 0.f, 0.f, 0.f);
     Out.vPickDepth = vector(In.vProjPos.z / In.vProjPos.w, 0.f, 0.f, 1.f);
+    Out.vPickObjectDepth = In.vHashColor;;
     
     return Out;
 }

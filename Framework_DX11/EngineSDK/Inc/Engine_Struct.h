@@ -174,6 +174,13 @@ namespace Engine
 	}RADIAL_DESC;
 #pragma endregion
 
+	typedef struct
+	{
+		SimpleMath::Matrix  WorldMatrix;
+		_float4				vHashColor;
+
+	}INSTANCE_DATA;
+
 	//오브젝트 저장 및 불러오기에 사용
 	typedef struct
 	{
@@ -331,8 +338,9 @@ namespace Engine
 		XMFLOAT4		vUp;
 		XMFLOAT4		vLook;
 		XMFLOAT4		vTranslation;
+		XMFLOAT4		vHashColor;
 
-		static const unsigned int	iNumElements = 8;
+		static const unsigned int	iNumElements = 9;
 		static const D3D11_INPUT_ELEMENT_DESC	Elements[iNumElements];
 	}VTXMODELINSTANCE;
 

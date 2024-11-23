@@ -243,7 +243,7 @@ HRESULT CModel::Render_Instance(_uint iMeshIndex)
 
 	VTXMODELINSTANCE* pVertices = static_cast<VTXMODELINSTANCE*>(SubResource.pData);
 
-	memcpy(SubResource.pData, m_InstanceDatas.data(), sizeof(_float4x4) * m_InstanceDatas.size());
+	memcpy(SubResource.pData, m_InstanceDatas.data(), sizeof(VTXMODELINSTANCE) * m_InstanceDatas.size());
 
 	/*_float4x4 v[10];
 	_float4x4* pData = reinterpret_cast<_float4x4*>(SubResource.pData);

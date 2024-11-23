@@ -65,7 +65,7 @@ public:
 	virtual HRESULT Render(_uint iMeshIndex);
 	HRESULT Render_Instance(_uint iMeshIndex);
 
-	void Add_InstanceData(_Matrix WorldMatrix) { m_InstanceDatas.push_back(WorldMatrix); }
+	void Add_InstanceData(INSTANCE_DATA tInstanceData) { m_InstanceDatas.push_back(tInstanceData); }
 	void Clear_InstanceData() { m_InstanceDatas.clear(); }
 
 public:		//_bool pOut은 메인 애니메이션의 종료를 반환,				
@@ -162,7 +162,7 @@ private:
 
 	_bool							m_isInstance = {};
 
-	vector<_Matrix>					m_InstanceDatas;
+	vector<INSTANCE_DATA>			m_InstanceDatas;
 	void*							m_pInstanceVertices = { nullptr };
 
 	//우송 최적화 (모델단위)

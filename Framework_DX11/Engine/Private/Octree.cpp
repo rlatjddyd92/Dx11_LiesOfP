@@ -123,7 +123,7 @@ void COctree::Build_Octree(vector<int> ParentTriangleIndexes, VTXMESH* pVertexes
 {
 	m_iDepth--;
 
-	for (int i = 0; i < iNumTri; ++i)
+	for (_uint i = 0; i < iNumTri; ++i)
 	{
 		const _Vec3& v1 = pVertexes[indices[ParentTriangleIndexes[i] * 3]].vPosition;
 		const  _Vec3& v2 = pVertexes[indices[ParentTriangleIndexes[i] * 3 + 1]].vPosition;

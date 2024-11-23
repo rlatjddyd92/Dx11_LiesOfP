@@ -48,6 +48,15 @@ HRESULT CNonAnimModel::Initialize(void* pArg)
 	m_iStaticHashId++;
 	m_iHashId = m_iStaticHashId;
 
+	uint32_t hash = static_cast<uint32_t>(m_iHashId * 100); // 임의의 상수로 인덱스를 해시처럼 변환
+
+	UINT8 a = (hash >> 24) & 0xff;
+	UINT8 r = (hash >> 16) & 0xff;
+	UINT8 g = (hash >> 8) & 0xff;
+	UINT8 b = (hash) & 0xff;
+
+	m_vHashColor = _float4(r / 255.f, g / 255.f, b / 255.f, a / 255.f);
+
 	return S_OK;
 }
 
@@ -106,16 +115,7 @@ HRESULT CNonAnimModel::Render()
 	if (FAILED(m_pShaderCom->Bind_RawValue("g_fFar", &m_pGameInstance->Get_Far(), sizeof(_float))))
 		return E_FAIL;
 
-	uint32_t hash = static_cast<uint32_t>(m_iHashId * 100); // 임의의 상수로 인덱스를 해시처럼 변환
-
-	UINT8 a = (hash >> 24) & 0xff;
-	UINT8 r = (hash >> 16) & 0xff;
-	UINT8 g = (hash >> 8) & 0xff;
-	UINT8 b = (hash) & 0xff;
-
-	_float4 fColor = _float4(r / 255.f, g / 255.f, b / 255.f, a / 255.f);
-
-	if (FAILED(m_pShaderCom->Bind_RawValue("g_fHashColor", &fColor, sizeof(_float4))))
+	if (FAILED(m_pShaderCom->Bind_RawValue("g_fHashColor", &m_vHashColor, sizeof(_float4))))
 		return E_FAIL;
 
 	if (m_isDecal)
@@ -146,16 +146,7 @@ HRESULT CNonAnimModel::Render_Picking()
 	if (FAILED(m_pShaderCom->Bind_RawValue("g_fFar", &m_pGameInstance->Get_Far(), sizeof(_float))))
 		return E_FAIL;
 
-	uint32_t hash = static_cast<uint32_t>(m_iHashId * 100); // 임의의 상수로 인덱스를 해시처럼 변환
-
-	UINT8 a = (hash >> 24) & 0xff;
-	UINT8 r = (hash >> 16) & 0xff;
-	UINT8 g = (hash >> 8) & 0xff;
-	UINT8 b = (hash) & 0xff;
-
-	_float4 fColor = _float4(r / 255.f, g / 255.f, b / 255.f, a / 255.f);
-
-	if (FAILED(m_pShaderCom->Bind_RawValue("g_fHashColor", &fColor, sizeof(_float4))))
+	if (FAILED(m_pShaderCom->Bind_RawValue("g_fHashColor", &m_vHashColor, sizeof(_float4))))
 		return E_FAIL;
 
 	if (m_isDecal)
@@ -319,7 +310,11 @@ HRESULT CNonAnimModel::Render_NonAnim()
 
 	if (m_isInstance)
 	{
-		m_pModelCom->Add_InstanceData(m_pTransformCom->Get_WorldMatrix());
+		INSTANCE_DATA tData{};
+		tData.WorldMatrix = m_pTransformCom->Get_WorldMatrix();
+		tData.vHashColor = m_vHashColor;
+
+		m_pModelCom->Add_InstanceData(tData);
 		return S_OK;
 	}
 
