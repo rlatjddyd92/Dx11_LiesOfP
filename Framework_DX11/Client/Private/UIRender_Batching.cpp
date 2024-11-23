@@ -36,6 +36,14 @@ HRESULT CUIRender_Batching::Initialize_Prototype()
 	if (FAILED(Ready_Components()))
 		return E_FAIL;
 
+	Ready_Font();
+
+	if (FAILED(Ready_Texture_UIPart()))
+		return E_FAIL;
+
+	if (FAILED(Ready_Texture_ItemIcon()))
+		return E_FAIL;
+
 
 	return S_OK;
 }
@@ -69,7 +77,7 @@ HRESULT CUIRender_Batching::Render()
 		URENDER* pNow = m_queueRender.front();
 		m_queueRender.pop();
 
-		if (pNow->eText_Type == TEXT_TYPE::TEXT_END)
+		if (pNow->iTexture >= 0)
 		{
 			m_pTransformCom->Set_WorldMatrix(XMMatrixIdentity());
 
@@ -124,7 +132,11 @@ HRESULT CUIRender_Batching::Render()
 		else
 		{
 			if (pNow->strText.size() == 0)
-				return S_OK;
+			{
+				Safe_Delete(pNow);
+				continue;
+			}
+				
 
 			_Vec4 vPosition = { pNow->vPosition.x, pNow->vPosition.y, 0.f,0.f };
 			_Vec4 vColor = { 1.f,1.f,1.f,1.f };
@@ -154,6 +166,8 @@ HRESULT CUIRender_Batching::Render()
 
 			Safe_Delete_Array(tText);
 		}
+
+		Safe_Delete(pNow);
 	}
 	return S_OK;
 }

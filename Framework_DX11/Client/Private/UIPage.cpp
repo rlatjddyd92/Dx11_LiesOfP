@@ -84,7 +84,9 @@ void CUIPage::Late_Update(_float fTimeDelta)
 			iter->MovePart(m_vecPart[iter->iParentPart_Index]->fPosition, fTimeDelta);
 		}
 
-		//Input_Render_Info(*iter);
+		if (m_bRender)
+			if (iter->bRender)
+				Input_Render_Info(*iter);
 	}
 
 	if ((m_fTopPartMove == 0.f) || (m_fTopPartMove == -1.f))
@@ -161,11 +163,17 @@ void CUIPage::UpdatePart_ByIndex(_int Index, _float fTimeDelta)
 
 void CUIPage::Input_Render_Info(UPART& Part)
 {
+	if (Part.iTexture_Index < 0)
+		if ((Part.iFontIndex < 0) || (Part.iFontIndex >= _int(UI_FONT::FONT_END)))
+			return;
+
+
 	CUIRender_Batching::UIRENDER_INFO* pNew = new CUIRender_Batching::UIRENDER_INFO;
 
 	pNew->bIsItem = Part.bIsItem;
+	pNew->iTexture = Part.iTexture_Index;
 	pNew->bIsMultiple = Part.bTexture_Color_Multiple;
-	if (Part.iFontIndex == _int(UI_FONT::FONT_END))
+	if (Part.iTexture_Index > 0)
 		pNew->eText_Type = TEXT_TYPE::TEXT_END;
 	else if (Part.bText_Right)
 		pNew->eText_Type = TEXT_TYPE::TEXT_RIGHT;
@@ -179,7 +187,7 @@ void CUIPage::Input_Render_Info(UPART& Part)
 	pNew->vColor_Text = Part.fTextColor;
 	pNew->vColor_Texture = Part.fTextureColor;
 	pNew->vPosition = Part.fPosition;
-	pNew->vSize = Part.fPosition;
+	pNew->vSize = Part.fSize;
 
 	if (Part.iMoveType == _int(MOVETYPE::TYPE_BAR))
 		pNew->vSize = Part.GetBarSize();

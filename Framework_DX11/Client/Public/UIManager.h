@@ -4,7 +4,6 @@
 #include "UIObject.h"
 
 #include "UIPage_Defines.h"
-#include "UIRender_Client.h"
 #include "UIRender_Batching.h"
 #include "Interface_Enums.h"
 
@@ -52,6 +51,8 @@ public:
 
 	void Update_UIManager(_float fTimeDelta);
 	void Update_UIControl(_float fTimeDelta);
+
+	void Update_TestPage(_float fTimeDelta);
 
 	_Vec2 CheckMouse(_Vec2 fPos, _Vec2 fSize);
 
@@ -161,7 +162,7 @@ private:
 
 	void Setting_TestPage();
 
-	void InputTestPageInfo(vector<_wstring>* pName, vector<_wstring>* pValue, _wstring DataNameA, TEST_PAGE_VALUE_TYPE eTypeA, const void* ValueA);
+	void InputTestPageInfo(TEST_PAGE_NAME eName, _wstring DataNameA, TEST_PAGE_VALUE_TYPE eTypeA, const void* ValueA, _int iIndex);
 
 	void Open_Close_Page(UIPAGE ePage); // 열려 있거나 열리는 중이면 닫고, 닫혀 있거나 닫히는 중이면 연다 
 	void OpenPage(UIPAGE ePage); // 열렸거나 열리는 중이면 무시하고 아니면 연다 
@@ -200,9 +201,6 @@ private:
 	CUIPage_Ortho* m_pUIPage_Ortho = { nullptr };
 
 
-
-	CUIRender_Client* m_pUIRender_Client = { nullptr };
-
 	CUIRender_Batching* m_pUIRender_Batching = { nullptr };
 
 	_bool m_bIsIngame = false;
@@ -228,6 +226,7 @@ private:
 	vector<_bool> m_vecTestPageOpen;
 	vector<_bool> m_vecTestPageMove;
 
+	vector<vector<vector<_wstring>>> m_vecTestPageInfo;
 
 
 

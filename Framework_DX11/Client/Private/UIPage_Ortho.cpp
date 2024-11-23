@@ -68,6 +68,10 @@ void CUIPage_Ortho::Late_Update(_float fTimeDelta)
 	m_fTimeDelta = fTimeDelta;
 	CheckHost(fTimeDelta);
 	__super::Late_Update(fTimeDelta);
+
+	Render_Ortho_UI();
+
+
 }
 
 HRESULT CUIPage_Ortho::Render()
@@ -121,7 +125,7 @@ void CUIPage_Ortho::Register_Pointer_Into_OrthoUIPage(UI_ORTHO_OBJ_TYPE eType, v
 	m_Ortho_Host_list.push_back(pNew);
 }
 
-HRESULT CUIPage_Ortho::Render_Ortho_UI(CUIRender_Client* pRender_Client)
+HRESULT CUIPage_Ortho::Render_Ortho_UI()
 {
 	// 여기서 렌더 해야 함
 	
@@ -148,9 +152,7 @@ HRESULT CUIPage_Ortho::Render_Ortho_UI(CUIRender_Client* pRender_Client)
 
 			__super::UpdatePart_ByIndex(iter, m_fTimeDelta);
 
-			
-
-			pRender_Client->Render_Part(*m_vecPart[iter], *this, false);
+			__super::Input_Render_Info(*m_vecPart[iter]);
 		}
 
 		Safe_Delete(pRender);
