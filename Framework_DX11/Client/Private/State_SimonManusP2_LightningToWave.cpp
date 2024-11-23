@@ -28,25 +28,21 @@ HRESULT CState_SimonManusP2_LightningToWave::Start_State(void* pArg)
 
 void CState_SimonManusP2_LightningToWave::Update(_float fTimeDelta)
 {
+    _double CurTrackPos = m_pMonster->Get_CurrentTrackPos();
+
+    if (m_iRouteTrack == 0)
+    {
+        if (CurTrackPos >= 100.f)
+        {
+            m_pMonster->Change_Animation(AN_ROUTE_LAST, false, 0.2f, 0);
+            ++m_iRouteTrack;
+        }
+    }
+
     if (End_Check())
     {
-        switch (m_iRouteTrack)
-        {
-        case 0:
-            m_pMonster->Change_Animation(AN_ROUTE_LAST, false, 0.2f, 0);
-
-            break;
-
-        case 1:
-
-            m_pMonster->Change_State(CSimonManus::IDLE);
-            return;
-            break;
-
-        default:
-            break;
-        }
-        ++m_iRouteTrack;
+        m_pMonster->Change_State(CSimonManus::IDLE);
+        return;
     }
 }
 
