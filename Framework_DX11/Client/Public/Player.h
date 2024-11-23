@@ -80,6 +80,11 @@ public:
 	virtual HRESULT Render_LightDepth() override;
 
 public:
+	virtual void OnCollisionEnter(CGameObject* pOther) override;
+	virtual void OnCollisionStay(CGameObject* pOther) override;
+	virtual void OnCollisionExit(CGameObject* pOther) override;
+
+public:
 	void			Move_Dir(_Vec4 vDir, _float fTimeDelta, _bool isTurn = true);
 	_Vec4			Calculate_Direction_Straight();
 	_Vec4			Calculate_Direction_Right();

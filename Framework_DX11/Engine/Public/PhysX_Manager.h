@@ -36,7 +36,7 @@ public:
     HRESULT AddPhysX_StaticMesh(class CGameObject* pObject, _wstring strModelName);
     HRESULT SetUp_Player(class CGameObject* pPlayer);
 
-    HRESULT Add_Monster(class CGameObject* pMonster);
+    HRESULT Add_Monster(class CGameObject* pMonster, _float fRadius, _float fHalfHeight);
 
     _bool   RayCast(PxVec3 vRayPos, PxVec3 vRayDir, _vector* vHitPos, _vector* vNormal, _float* fHitDistance);
     _bool   RayCast(_vector vRayPos, _vector vRayDir, _vector* vHitPos, _vector* vNormal, _float* fHitDistance);

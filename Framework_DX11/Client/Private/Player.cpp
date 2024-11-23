@@ -207,6 +207,23 @@ HRESULT CPlayer::Render_LightDepth()
 	return S_OK;
 }
 
+void CPlayer::OnCollisionEnter(CGameObject* pOther)
+{
+}
+
+void CPlayer::OnCollisionStay(CGameObject* pOther)
+{
+	if (pOther->Get_Tag() == TEXT("Monster"))
+	{
+		_Vec3 vColDir = pOther->Get_Transform()->Get_State(CTransform::STATE_POSITION) - m_pTransformCom->Get_State(CTransform::STATE_POSITION);
+
+	}
+}
+
+void CPlayer::OnCollisionExit(CGameObject* pOther)
+{
+}
+
 void CPlayer::Move_Dir(_Vec4 vDir, _float fTimeDelta, _bool isTurn)
 {
 	if(isTurn)
@@ -491,8 +508,6 @@ CPlayer * CPlayer::Create(ID3D11Device * pDevice, ID3D11DeviceContext * pContext
 
 	return pInstance;
 }
-
-
 
 CPawn* CPlayer::Clone(void * pArg)
 {

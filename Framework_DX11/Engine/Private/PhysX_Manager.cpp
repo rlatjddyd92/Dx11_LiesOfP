@@ -184,7 +184,7 @@ HRESULT CPhysX_Manager::SetUp_Player(CGameObject* pPlayer)
     return S_OK;
 }
 
-HRESULT CPhysX_Manager::Add_Monster(CGameObject* pMonster)
+HRESULT CPhysX_Manager::Add_Monster(CGameObject* pMonster, _float fRadius, _float fHalfHeight)
 {
     if (nullptr == pMonster)
         return E_FAIL;
@@ -197,7 +197,7 @@ HRESULT CPhysX_Manager::Add_Monster(CGameObject* pMonster)
 
     // 반지름이 0.5이고 높이가 0.3인 캡슐 헝태
 
-    PxCapsuleGeometry MonsterCapsule = PxCapsuleGeometry(0.55f, 0.29f);
+    PxCapsuleGeometry MonsterCapsule = PxCapsuleGeometry(fRadius, fHalfHeight);
     PxShape* pShape = m_PhysX->createShape(MonsterCapsule, *Material);
 
     pRigid->attachShape(*pShape);
@@ -505,9 +505,6 @@ void CPhysX_Manager::Compute_MonsterCollision()
         CTransform* MonsterTransformCom = m_Monsters[i]->Get_Transform();
         Safe_AddRef(MonsterTransformCom);
 
-        //CRigidBody* MonsterRigidbodyCom = dynamic_cast<CRigidBody*>(m_Monsters[i]->Find_Component(RIGIDBODY));
-        //Safe_AddRef(MonsterRigidbodyCom);
-
         _matrix MonsterWorldMatirx = MonsterTransformCom->Get_WorldMatrix();
 
         _vector vMonsterPos = MonsterWorldMatirx.r[3];
@@ -529,6 +526,7 @@ void CPhysX_Manager::Compute_MonsterCollision()
 
         for (auto& Mesh : m_ColMesheGeometries)
         {
+            
             // 충돌한 반대 방향, 충돌 깊이, 검사할 형태(EX: 캡슐), 
             if (PxComputeTriangleMeshPenetration(vPxDir, fHitLenght, m_MonsterCapsules[i], m_PxMonsterTransforms[i], *Mesh, PxTransform(PxIDENTITY::PxIdentity), 1))
             {
