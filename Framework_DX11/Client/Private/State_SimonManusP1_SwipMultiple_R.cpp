@@ -55,6 +55,7 @@ void CState_SimonManusP1_SwipMultiple_R::Update(_float fTimeDelta)
         ++m_iRouteTrack;
     }
 
+    Collider_Check();
 }
 
 void CState_SimonManusP1_SwipMultiple_R::End_State()
@@ -89,6 +90,34 @@ _bool CState_SimonManusP1_SwipMultiple_R::End_Check()
     }
 
     return bEndCheck;
+}
+
+void CState_SimonManusP1_SwipMultiple_R::Collider_Check()
+{
+    _double CurTrackPos = m_pMonster->Get_CurrentTrackPos();
+
+    if (m_iRouteTrack == 0)
+    {
+        if (CurTrackPos >= 130.f && CurTrackPos <= 155.f)
+        {
+            m_pMonster->Active_CurrentWeaponCollider(1);
+        }
+        else
+        {
+            m_pMonster->DeActive_CurretnWeaponCollider();
+        }
+    }
+    else
+    {
+        if (CurTrackPos >= 20.f && CurTrackPos <= 80.f)
+        {
+            m_pMonster->Active_CurrentWeaponCollider(1);
+        }
+        else
+        {
+            m_pMonster->DeActive_CurretnWeaponCollider();
+        }
+    }
 }
 
 CState_SimonManusP1_SwipMultiple_R* CState_SimonManusP1_SwipMultiple_R::Create(CFsm* pFsm, CMonster* pMonster, _uint iStateNum, void* pArg)

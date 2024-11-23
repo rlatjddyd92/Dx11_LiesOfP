@@ -15,6 +15,7 @@ HRESULT CState_SimonManusP2_Route2::Initialize(_uint iStateNum, void* pArg)
     m_iStateNum = iStateNum;
     FSM_INIT_DESC* pDesc = static_cast<FSM_INIT_DESC*>(pArg);
 
+    //
     return S_OK;
 }
 
@@ -29,12 +30,21 @@ HRESULT CState_SimonManusP2_Route2::Start_State(void* pArg)
 
 void CState_SimonManusP2_Route2::Update(_float fTimeDelta)
 {
+    _double CurTrackPos = m_pMonster->Get_CurrentTrackPos();
 
     if (m_isJump)
     {
-        if (130 >= m_pMonster->Get_CurrentTrackPos())
+        if (160 >= CurTrackPos && 130 <= CurTrackPos)
         {
-            m_pMonster->Change_Animation(AN_ROUTE_LAST, false, 0, 0);
+            m_vTargetDir = m_pMonster->Get_TargetDir();
+            m_pMonster->Get_Transform()->LookAt_Lerp_NoHeight(m_vTargetDir, 5, fTimeDelta);
+
+            m_vTargetDir -= 4 * XMVector3Normalize(m_vTargetDir);
+            
+        }
+        else if (160 < CurTrackPos && 240>= CurTrackPos)
+        {
+            m_pMonster->Change_Animation(AN_ROUTE_LAST, false, 0.2f, 180);
             ++m_iRouteTrack;
             m_isJump = false;
         }
@@ -46,6 +56,9 @@ void CState_SimonManusP2_Route2::Update(_float fTimeDelta)
         m_pMonster->Change_State(CSimonManus::IDLE);
         return;
     }
+
+    Collider_Check();
+
 }
 
 void CState_SimonManusP2_Route2::End_State()
@@ -78,6 +91,33 @@ _bool CState_SimonManusP2_Route2::End_Check()
     }
 
     return bEndCheck;
+}
+
+void CState_SimonManusP2_Route2::Collider_Check()
+{
+    _double CurTrackPos = m_pMonster->Get_CurrentTrackPos();
+    if (m_iRouteTrack == 0) //AN_ROUTE_FIRST, 쓰러지면서 하는 스윙
+    {
+        if (CurTrackPos >= 60 && CurTrackPos <= 85.f)
+        {
+            m_pMonster->Active_CurrentWeaponCollider(1);
+        }
+        else
+        {
+            m_pMonster->DeActive_CurretnWeaponCollider();
+        }
+    }
+    else        //하이점프 폴
+    {
+        if (CurTrackPos >= 140 && CurTrackPos <= 150.f)
+        {
+            m_pMonster->Active_CurrentWeaponCollider(1);
+        }
+        else
+        {
+            m_pMonster->DeActive_CurretnWeaponCollider();
+        }
+    }
 }
 
 CState_SimonManusP2_Route2* CState_SimonManusP2_Route2::Create(CFsm* pFsm, CMonster* pMonster, _uint iStateNum, void* pArg)

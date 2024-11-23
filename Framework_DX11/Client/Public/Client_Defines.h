@@ -13,6 +13,7 @@ namespace Client
 	{
 		bool* pIsEndAnim{ nullptr };
 		bool* pIsResetRootMove{ nullptr };
+		bool* pRootMoveCtr{ nullptr };
 		float* pPrevTrackPos{ nullptr };
 	};
 

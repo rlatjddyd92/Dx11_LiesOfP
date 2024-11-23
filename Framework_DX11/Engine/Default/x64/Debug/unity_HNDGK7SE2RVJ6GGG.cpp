@@ -146,6 +146,12 @@
 #include "C:\Users\Administrator\Documents\GitHub\Dx11_LiesOfP\Framework_DX11\Engine\private\Shader_NonVTX.cpp"
 
 
+#include "C:\Users\Administrator\Documents\GitHub\Dx11_LiesOfP\Framework_DX11\Engine\Private\Sound.cpp"
+
+
+#include "C:\Users\Administrator\Documents\GitHub\Dx11_LiesOfP\Framework_DX11\Engine\Private\Sound_Manager.cpp"
+
+
 #include "C:\Users\Administrator\Documents\GitHub\Dx11_LiesOfP\Framework_DX11\Engine\Private\State.cpp"
 
 

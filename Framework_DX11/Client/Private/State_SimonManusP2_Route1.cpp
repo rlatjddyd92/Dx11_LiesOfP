@@ -51,6 +51,9 @@ void CState_SimonManusP2_Route1::Update(_float fTimeDelta)
         }
         ++m_iRouteTrack;
     }
+
+    Collider_Check(fTimeDelta);
+
 }
 
 void CState_SimonManusP2_Route1::End_State()
@@ -72,6 +75,13 @@ _bool CState_SimonManusP2_Route1::End_Check()
         break;
 
     case 1:
+        if ((AN_ROUTE_MIDDLE) == iCurAnim)
+        {
+            bEndCheck = m_pMonster->Get_EndAnim(AN_ROUTE_MIDDLE);
+        }
+        break;
+
+    case 2:
         if ((AN_ROUTE_LAST) == iCurAnim)
         {
             bEndCheck = m_pMonster->Get_EndAnim(AN_ROUTE_LAST);
@@ -83,6 +93,49 @@ _bool CState_SimonManusP2_Route1::End_Check()
     }
 
     return bEndCheck;
+}
+
+void CState_SimonManusP2_Route1::Collider_Check(_float fTimeDelta)
+{
+    _double CurTrackPos = m_pMonster->Get_CurrentTrackPos();
+    if (m_iRouteTrack == 0) //AN_ROUTE_FIRST, 쓰러지면서 하는 스윙
+    {
+        if (CurTrackPos <= 50.f)
+        {
+            m_pMonster->Get_Transform()->LookAt_Lerp_NoHeight(m_pMonster->Get_TargetDir(), 5, fTimeDelta);
+        }
+
+        if (CurTrackPos >= 60 && CurTrackPos <= 85.f)
+        {
+            m_pMonster->Active_CurrentWeaponCollider(1);
+        }
+        else
+        {
+            m_pMonster->DeActive_CurretnWeaponCollider();
+        }
+    }
+    else if(m_iRouteTrack == 1)       //어보이드 스윙
+    {
+        if (CurTrackPos >= 120 && CurTrackPos <= 180.f)
+        {
+            m_pMonster->Active_CurrentWeaponCollider(1);
+        }
+        else
+        {
+            m_pMonster->DeActive_CurretnWeaponCollider();
+        }
+    }
+    else       //스탬프
+    {
+        if (CurTrackPos >= 60 && CurTrackPos <= 75.f)
+        {
+            m_pMonster->Active_CurrentWeaponCollider(1);
+        }
+        else
+        {
+            m_pMonster->DeActive_CurretnWeaponCollider();
+        }
+    }
 }
 
 CState_SimonManusP2_Route1* CState_SimonManusP2_Route1::Create(CFsm* pFsm, CMonster* pMonster, _uint iStateNum, void* pArg)

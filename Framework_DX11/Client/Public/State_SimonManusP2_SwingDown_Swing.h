@@ -47,6 +47,7 @@ private:
 
 private:
     _bool               End_Check();
+    void                Collider_Check();
 
 public:
     static CState_SimonManusP2_SwingDown_Swing* Create(class CFsm* pFsm, class CMonster* pMonster, _uint iStateNum, void* pArg = nullptr);

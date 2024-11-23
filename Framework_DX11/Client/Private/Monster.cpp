@@ -136,6 +136,14 @@ _float CMonster::Calc_Distance_XZ()
 	return fDist;
 }
 
+void CMonster::Active_CurrentWeaponCollider(_float fDamageRatio)
+{
+}
+
+void CMonster::DeActive_CurretnWeaponCollider()
+{
+}
+
 HRESULT CMonster::Ready_Components()
 {
 	/* FOR.Com_Shader */

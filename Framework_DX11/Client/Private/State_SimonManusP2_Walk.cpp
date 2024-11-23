@@ -20,7 +20,7 @@ HRESULT CState_SimonManusP2_Walk::Initialize(_uint iStateNum, void* pArg)
 
 HRESULT CState_SimonManusP2_Walk::Start_State(void* pArg)
 {
-    m_pMonster->Change_Animation(33, true, 0.1f, 0);;
+    m_pMonster->Change_Animation(AN_WALK_FRONT, true, 0.1f, 0);;
 
 
     return S_OK;
@@ -29,24 +29,8 @@ HRESULT CState_SimonManusP2_Walk::Start_State(void* pArg)
 void CState_SimonManusP2_Walk::Update(_float fTimeDelta)
 {
 
-    _int iDir = m_pMonster->Get_Transform()->LookAt_Lerp_NoHeight(m_pMonster->Get_TargetDir(), 1, fTimeDelta);
-    switch (iDir)
-    {
-    case -1:
-        m_pMonster->Change_Animation(30, true, 0.1f, 0);
-        break;
-
-    case 0:
-        m_pMonster->Change_Animation(33, true, 0.1f, 0);
-        break;
-
-    case 1:
-        m_pMonster->Change_Animation(31, true, 0.1f, 0);
-        break;
-
-    default:
-        break;
-    }
+    _int iDir = m_pMonster->Get_Transform()->LookAt_Lerp_NoHeight(m_pMonster->Get_TargetDir(), 2, fTimeDelta);
+  
     m_pMonster->Get_Transform()->Go_Straight(fTimeDelta);
 
 

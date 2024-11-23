@@ -32,21 +32,25 @@ void CState_SimonManusP2_Idle::Update(_float fTimeDelta)
     _float fDist = m_pMonster->Calc_Distance_XZ();
     if (m_fIdleEndDuration <= m_fIdleTime)
     {
-        if (fDist <= 15.f && 6.f < fDist)
+        if (m_fIdleTime >= m_fIdleDuration + 2.f)
         {
-            //하이점프폴
-            if (m_iAtkCnt >= 3.f)
+            if (fDist <= 15.f && 9.f < fDist)
             {
-                m_iAtkCnt = 0;
-                m_pMonster->Change_State(CSimonManus::ATKP2_HIGHJUMPFALL);
-                return;
-            }
-            else    //스윙 점프
-            {
-                m_pMonster->Change_State(CSimonManus::ATKP2_ROUTE_2);
-                return;
+                //하이점프폴
+                if (m_iAtkCnt >= 3.f)
+                {
+                    m_pMonster->Change_State(CSimonManus::ATKP2_HIGHJUMPFALL);
+                    m_iAtkCnt = 0;
+                    return;
+                }
+                else    //스윙 점프
+                {
+                    m_pMonster->Change_State(CSimonManus::ATKP2_ROUTE_2);
+                    return;
+                }
             }
         }
+        
 
         if (fDist <= 7.f)
         {
@@ -66,7 +70,7 @@ void CState_SimonManusP2_Idle::Update(_float fTimeDelta)
 
     }
 
-    _int iDir = m_pMonster->Get_Transform()->LookAt_Lerp_NoHeight(m_pMonster->Get_TargetDir(), 1, fTimeDelta);
+    _int iDir = m_pMonster->Get_Transform()->LookAt_Lerp_NoHeight(m_pMonster->Get_TargetDir(), 3, fTimeDelta);
     switch (iDir)
     {
     case -1:

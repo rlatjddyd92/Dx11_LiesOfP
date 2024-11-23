@@ -57,7 +57,7 @@ void CState_SimonManusP1_Idle::Update(_float fTimeDelta)
 
     }
 
-    _int iDir = m_pMonster->Get_Transform()->LookAt_Lerp_NoHeight(m_pMonster->Get_TargetDir(), 1, fTimeDelta);
+    _int iDir = m_pMonster->Get_Transform()->LookAt_Lerp_NoHeight(m_pMonster->Get_TargetDir(), 3, fTimeDelta);
     switch (iDir)
     {
     case -1:

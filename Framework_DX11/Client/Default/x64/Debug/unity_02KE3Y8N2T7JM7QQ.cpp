@@ -3,6 +3,9 @@
 #include "C:\Users\Administrator\Documents\GitHub\Dx11_LiesOfP\Framework_DX11\Client\private\BackGround.cpp"
 
 
+#include "C:\Users\Administrator\Documents\GitHub\Dx11_LiesOfP\Framework_DX11\Client\Private\Camera_Manager.cpp"
+
+
 #include "C:\Users\Administrator\Documents\GitHub\Dx11_LiesOfP\Framework_DX11\Client\Private\CarcassBigA.cpp"
 
 
@@ -36,6 +39,15 @@
 #include "C:\Users\Administrator\Documents\GitHub\Dx11_LiesOfP\Framework_DX11\Client\Private\Level_Logo.cpp"
 
 
+#include "C:\Users\Administrator\Documents\GitHub\Dx11_LiesOfP\Framework_DX11\Client\Private\Lift_Controller.cpp"
+
+
+#include "C:\Users\Administrator\Documents\GitHub\Dx11_LiesOfP\Framework_DX11\Client\Private\Lift_Door.cpp"
+
+
+#include "C:\Users\Administrator\Documents\GitHub\Dx11_LiesOfP\Framework_DX11\Client\Private\Lift_Floor.cpp"
+
+
 #include "C:\Users\Administrator\Documents\GitHub\Dx11_LiesOfP\Framework_DX11\Client\private\Loader.cpp"
 
 
@@ -55,6 +67,9 @@
 
 
 #include "C:\Users\Administrator\Documents\GitHub\Dx11_LiesOfP\Framework_DX11\Client\private\Player.cpp"
+
+
+#include "C:\Users\Administrator\Documents\GitHub\Dx11_LiesOfP\Framework_DX11\Client\Private\PlayerCamera.cpp"
 
 
 #include "C:\Users\Administrator\Documents\GitHub\Dx11_LiesOfP\Framework_DX11\Client\Private\Player_Stat_Manager.cpp"
@@ -126,6 +141,9 @@
 #include "C:\Users\Administrator\Documents\GitHub\Dx11_LiesOfP\Framework_DX11\Client\Private\State_Player_Flame_Charge00.cpp"
 
 
+#include "C:\Users\Administrator\Documents\GitHub\Dx11_LiesOfP\Framework_DX11\Client\Private\State_Player_Flame_Charge01.cpp"
+
+
 #include "C:\Users\Administrator\Documents\GitHub\Dx11_LiesOfP\Framework_DX11\Client\Private\State_Player_Flame_LAttack00.cpp"
 
 
@@ -133,6 +151,9 @@
 
 
 #include "C:\Users\Administrator\Documents\GitHub\Dx11_LiesOfP\Framework_DX11\Client\Private\State_Player_Flame_RAttack00.cpp"
+
+
+#include "C:\Users\Administrator\Documents\GitHub\Dx11_LiesOfP\Framework_DX11\Client\Private\State_Player_Flame_RAttack01.cpp"
 
 
 #include "C:\Users\Administrator\Documents\GitHub\Dx11_LiesOfP\Framework_DX11\Client\Private\State_Player_Heal.cpp"
@@ -180,6 +201,36 @@
 #include "C:\Users\Administrator\Documents\GitHub\Dx11_LiesOfP\Framework_DX11\Client\Private\State_Player_Rapier_RAttack00.cpp"
 
 
+#include "C:\Users\Administrator\Documents\GitHub\Dx11_LiesOfP\Framework_DX11\Client\Private\State_Player_Scissor_Buff.cpp"
+
+
+#include "C:\Users\Administrator\Documents\GitHub\Dx11_LiesOfP\Framework_DX11\Client\Private\State_Player_Scissor_Charge00.cpp"
+
+
+#include "C:\Users\Administrator\Documents\GitHub\Dx11_LiesOfP\Framework_DX11\Client\Private\State_Player_Scissor_Charge01.cpp"
+
+
+#include "C:\Users\Administrator\Documents\GitHub\Dx11_LiesOfP\Framework_DX11\Client\Private\State_Player_Scissor_Fatal0.cpp"
+
+
+#include "C:\Users\Administrator\Documents\GitHub\Dx11_LiesOfP\Framework_DX11\Client\Private\State_Player_Scissor_Fatal1.cpp"
+
+
+#include "C:\Users\Administrator\Documents\GitHub\Dx11_LiesOfP\Framework_DX11\Client\Private\State_Player_Scissor_Fatal2.cpp"
+
+
+#include "C:\Users\Administrator\Documents\GitHub\Dx11_LiesOfP\Framework_DX11\Client\Private\State_Player_Scissor_LAttack00.cpp"
+
+
+#include "C:\Users\Administrator\Documents\GitHub\Dx11_LiesOfP\Framework_DX11\Client\Private\State_Player_Scissor_LAttack01.cpp"
+
+
+#include "C:\Users\Administrator\Documents\GitHub\Dx11_LiesOfP\Framework_DX11\Client\Private\State_Player_Scissor_RAttack00.cpp"
+
+
+#include "C:\Users\Administrator\Documents\GitHub\Dx11_LiesOfP\Framework_DX11\Client\Private\State_Player_Scissor_RAttack01.cpp"
+
+
 #include "C:\Users\Administrator\Documents\GitHub\Dx11_LiesOfP\Framework_DX11\Client\Private\State_Player_TH_Dash.cpp"
 
 
@@ -199,42 +250,6 @@
 
 
 #include "C:\Users\Administrator\Documents\GitHub\Dx11_LiesOfP\Framework_DX11\Client\Private\State_Player_TH_Walk.cpp"
-
-
-#include "C:\Users\Administrator\Documents\GitHub\Dx11_LiesOfP\Framework_DX11\Client\Private\State_SimonManusP2_BrutalAttack.cpp"
-
-
-#include "C:\Users\Administrator\Documents\GitHub\Dx11_LiesOfP\Framework_DX11\Client\Private\State_SimonManusP2_ChasingSwing.cpp"
-
-
-#include "C:\Users\Administrator\Documents\GitHub\Dx11_LiesOfP\Framework_DX11\Client\Private\State_SimonManusP2_HighJumpFall.cpp"
-
-
-#include "C:\Users\Administrator\Documents\GitHub\Dx11_LiesOfP\Framework_DX11\Client\Private\State_SimonManusP2_JumpToAttack.cpp"
-
-
-#include "C:\Users\Administrator\Documents\GitHub\Dx11_LiesOfP\Framework_DX11\Client\Private\State_SimonManusP2_LightningToWave.cpp"
-
-
-#include "C:\Users\Administrator\Documents\GitHub\Dx11_LiesOfP\Framework_DX11\Client\Private\State_SimonManusP2_Route0.cpp"
-
-
-#include "C:\Users\Administrator\Documents\GitHub\Dx11_LiesOfP\Framework_DX11\Client\Private\State_SimonManusP2_Route2.cpp"
-
-
-#include "C:\Users\Administrator\Documents\GitHub\Dx11_LiesOfP\Framework_DX11\Client\Private\State_SimonManusP2_SpreadMagic.cpp"
-
-
-#include "C:\Users\Administrator\Documents\GitHub\Dx11_LiesOfP\Framework_DX11\Client\Private\State_SimonManusP2_Stamp.cpp"
-
-
-#include "C:\Users\Administrator\Documents\GitHub\Dx11_LiesOfP\Framework_DX11\Client\Private\State_SimonManusP2_ThunderCalling.cpp"
-
-
-#include "C:\Users\Administrator\Documents\GitHub\Dx11_LiesOfP\Framework_DX11\Client\Private\State_SimonManusP2_Wave.cpp"
-
-
-#include "C:\Users\Administrator\Documents\GitHub\Dx11_LiesOfP\Framework_DX11\Client\Private\State_SimonManusP2_Die.cpp"
 
 
 #include "C:\Users\Administrator\Documents\GitHub\Dx11_LiesOfP\Framework_DX11\Client\Private\State_SimonManusP1_AvoidSwing.cpp"
@@ -291,7 +306,19 @@
 #include "C:\Users\Administrator\Documents\GitHub\Dx11_LiesOfP\Framework_DX11\Client\Private\State_SimonManusP2_AvoidSwing.cpp"
 
 
+#include "C:\Users\Administrator\Documents\GitHub\Dx11_LiesOfP\Framework_DX11\Client\Private\State_SimonManusP2_BrutalAttack.cpp"
+
+
+#include "C:\Users\Administrator\Documents\GitHub\Dx11_LiesOfP\Framework_DX11\Client\Private\State_SimonManusP2_ChasingSwing.cpp"
+
+
+#include "C:\Users\Administrator\Documents\GitHub\Dx11_LiesOfP\Framework_DX11\Client\Private\State_SimonManusP2_Die.cpp"
+
+
 #include "C:\Users\Administrator\Documents\GitHub\Dx11_LiesOfP\Framework_DX11\Client\Private\State_SimonManusP2_Grogy.cpp"
+
+
+#include "C:\Users\Administrator\Documents\GitHub\Dx11_LiesOfP\Framework_DX11\Client\Private\State_SimonManusP2_HighJumpFall.cpp"
 
 
 #include "C:\Users\Administrator\Documents\GitHub\Dx11_LiesOfP\Framework_DX11\Client\Private\State_SimonManusP2_HitFatal.cpp"
@@ -300,7 +327,28 @@
 #include "C:\Users\Administrator\Documents\GitHub\Dx11_LiesOfP\Framework_DX11\Client\Private\State_SimonManusP2_Idle.cpp"
 
 
+#include "C:\Users\Administrator\Documents\GitHub\Dx11_LiesOfP\Framework_DX11\Client\Private\State_SimonManusP2_JumpToAttack.cpp"
+
+
+#include "C:\Users\Administrator\Documents\GitHub\Dx11_LiesOfP\Framework_DX11\Client\Private\State_SimonManusP2_LightningToWave.cpp"
+
+
+#include "C:\Users\Administrator\Documents\GitHub\Dx11_LiesOfP\Framework_DX11\Client\Private\State_SimonManusP2_Route0.cpp"
+
+
+#include "C:\Users\Administrator\Documents\GitHub\Dx11_LiesOfP\Framework_DX11\Client\Private\State_SimonManusP2_Route1.cpp"
+
+
+#include "C:\Users\Administrator\Documents\GitHub\Dx11_LiesOfP\Framework_DX11\Client\Private\State_SimonManusP2_Route2.cpp"
+
+
 #include "C:\Users\Administrator\Documents\GitHub\Dx11_LiesOfP\Framework_DX11\Client\Private\State_SimonManusP2_Run.cpp"
+
+
+#include "C:\Users\Administrator\Documents\GitHub\Dx11_LiesOfP\Framework_DX11\Client\Private\State_SimonManusP2_SpreadMagic.cpp"
+
+
+#include "C:\Users\Administrator\Documents\GitHub\Dx11_LiesOfP\Framework_DX11\Client\Private\State_SimonManusP2_Stamp.cpp"
 
 
 #include "C:\Users\Administrator\Documents\GitHub\Dx11_LiesOfP\Framework_DX11\Client\Private\State_SimonManusP2_Sting.cpp"
@@ -309,28 +357,40 @@
 #include "C:\Users\Administrator\Documents\GitHub\Dx11_LiesOfP\Framework_DX11\Client\Private\State_SimonManusP2_SummonHand.cpp"
 
 
+#include "C:\Users\Administrator\Documents\GitHub\Dx11_LiesOfP\Framework_DX11\Client\Private\State_SimonManusP2_SwingDown_Swing.cpp"
+
+
+#include "C:\Users\Administrator\Documents\GitHub\Dx11_LiesOfP\Framework_DX11\Client\Private\State_SimonManusP2_SwipMultiple.cpp"
+
+
 #include "C:\Users\Administrator\Documents\GitHub\Dx11_LiesOfP\Framework_DX11\Client\Private\State_SimonManusP2_ThunderBall.cpp"
+
+
+#include "C:\Users\Administrator\Documents\GitHub\Dx11_LiesOfP\Framework_DX11\Client\Private\State_SimonManusP2_ThunderCalling.cpp"
 
 
 #include "C:\Users\Administrator\Documents\GitHub\Dx11_LiesOfP\Framework_DX11\Client\Private\State_SimonManusP2_Walk.cpp"
 
 
-#include "C:\Users\Administrator\Documents\GitHub\Dx11_LiesOfP\Framework_DX11\Client\Private\State_SimonManusP2_SwingDown_Swing.cpp"
-
-
-#include "C:\Users\Administrator\Documents\GitHub\Dx11_LiesOfP\Framework_DX11\Client\Private\State_SimonManusP2_Route1.cpp"
+#include "C:\Users\Administrator\Documents\GitHub\Dx11_LiesOfP\Framework_DX11\Client\Private\State_SimonManusP2_Wave.cpp"
 
 
 #include "C:\Users\Administrator\Documents\GitHub\Dx11_LiesOfP\Framework_DX11\Client\Private\StaticObj.cpp"
-
-
-#include "C:\Users\Administrator\Documents\GitHub\Dx11_LiesOfP\Framework_DX11\Client\Private\State_SimonManusP2_SwipMultiple.cpp"
 
 
 #include "C:\Users\Administrator\Documents\GitHub\Dx11_LiesOfP\Framework_DX11\Client\Private\Terrain.cpp"
 
 
 #include "C:\Users\Administrator\Documents\GitHub\Dx11_LiesOfP\Framework_DX11\Client\Private\Texture_Effect.cpp"
+
+
+#include "C:\Users\Administrator\Documents\GitHub\Dx11_LiesOfP\Framework_DX11\Client\Private\Trail_Effect_MP.cpp"
+
+
+#include "C:\Users\Administrator\Documents\GitHub\Dx11_LiesOfP\Framework_DX11\Client\Private\Trail_Effect_OP.cpp"
+
+
+#include "C:\Users\Administrator\Documents\GitHub\Dx11_LiesOfP\Framework_DX11\Client\Private\Trail_Effect_TP.cpp"
 
 
 #include "C:\Users\Administrator\Documents\GitHub\Dx11_LiesOfP\Framework_DX11\Client\Private\UIManager.cpp"
@@ -369,7 +429,10 @@
 #include "C:\Users\Administrator\Documents\GitHub\Dx11_LiesOfP\Framework_DX11\Client\Private\UIPage_Stat.cpp"
 
 
-#include "C:\Users\Administrator\Documents\GitHub\Dx11_LiesOfP\Framework_DX11\Client\Private\UIPage_Test.cpp"
+#include "C:\Users\Administrator\Documents\GitHub\Dx11_LiesOfP\Framework_DX11\Client\Private\UIPage_ToolTip.cpp"
+
+
+#include "C:\Users\Administrator\Documents\GitHub\Dx11_LiesOfP\Framework_DX11\Client\Private\UIRender_Batching.cpp"
 
 
 #include "C:\Users\Administrator\Documents\GitHub\Dx11_LiesOfP\Framework_DX11\Client\Private\UIRender_Client.cpp"
@@ -385,6 +448,12 @@
 
 
 #include "C:\Users\Administrator\Documents\GitHub\Dx11_LiesOfP\Framework_DX11\Client\Private\Weapon_Scissor.cpp"
+
+
+#include "C:\Users\Administrator\Documents\GitHub\Dx11_LiesOfP\Framework_DX11\Client\Private\Weapon_Scissor_Blade.cpp"
+
+
+#include "C:\Users\Administrator\Documents\GitHub\Dx11_LiesOfP\Framework_DX11\Client\Private\Weapon_Scissor_Handle.cpp"
 
 
 #include "C:\Users\Administrator\Documents\GitHub\Dx11_LiesOfP\Framework_DX11\Client\Private\Weapon_SimonManus_Hammer.cpp"

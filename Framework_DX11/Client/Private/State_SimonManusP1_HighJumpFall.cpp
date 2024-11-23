@@ -55,6 +55,8 @@ void CState_SimonManusP1_HighJumpFall::Update(_float fTimeDelta)
         return;
     }
 
+    Collider_Check();
+
 }
 
 void CState_SimonManusP1_HighJumpFall::End_State()
@@ -67,6 +69,20 @@ void CState_SimonManusP1_HighJumpFall::End_State()
 _bool CState_SimonManusP1_HighJumpFall::End_Check()
 {
     return m_pMonster->Get_EndAnim(AN_HIGHJUMPFALL);
+}
+
+void CState_SimonManusP1_HighJumpFall::Collider_Check()
+{
+    _double CurTrackPos = m_pMonster->Get_CurrentTrackPos();
+
+    if ((CurTrackPos >= 140.f && CurTrackPos <= 150.f))
+    {
+        m_pMonster->Active_CurrentWeaponCollider(1);
+    }
+    else
+    {
+        m_pMonster->DeActive_CurretnWeaponCollider();
+    }
 }
 
 CState_SimonManusP1_HighJumpFall* CState_SimonManusP1_HighJumpFall::Create(CFsm* pFsm, CMonster* pMonster, _uint iStateNum, void* pArg)

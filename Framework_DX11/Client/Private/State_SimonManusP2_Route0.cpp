@@ -47,6 +47,9 @@ void CState_SimonManusP2_Route0::Update(_float fTimeDelta)
         }
         ++m_iRouteTrack;
     }
+
+    Collider_Check();
+
 }
 
 void CState_SimonManusP2_Route0::End_State()
@@ -79,6 +82,33 @@ _bool CState_SimonManusP2_Route0::End_Check()
     }
 
     return bEndCheck;
+}
+
+void CState_SimonManusP2_Route0::Collider_Check()
+{
+    _double CurTrackPos = m_pMonster->Get_CurrentTrackPos();
+    if (m_iRouteTrack == 0) //AN_ROUTE_FIRST, 쓰러지면서 하는 스윙
+    {
+        if (CurTrackPos >= 60 && CurTrackPos <= 85.f)
+        {
+            m_pMonster->Active_CurrentWeaponCollider(1);
+        }
+        else
+        {
+            m_pMonster->DeActive_CurretnWeaponCollider();
+        }
+    }
+    else       //어보이드 스윙
+    {
+        if (CurTrackPos >= 120 && CurTrackPos <= 180.f)
+        {
+            m_pMonster->Active_CurrentWeaponCollider(1);
+        }
+        else
+        {
+            m_pMonster->DeActive_CurretnWeaponCollider();
+        }
+    }
 }
 
 CState_SimonManusP2_Route0* CState_SimonManusP2_Route0::Create(CFsm* pFsm, CMonster* pMonster, _uint iStateNum, void* pArg)

@@ -98,6 +98,8 @@ HRESULT CSimonManus::Initialize(void* pArg)
 	if (FAILED(Ready_Weapon()))
 		return E_FAIL;
 
+	m_pWeapon->DeActive_Collider();
+
 	return S_OK;
 }
 
@@ -112,25 +114,53 @@ void CSimonManus::Update(_float fTimeDelta)
 {
 
 	m_pFsmCom->Update(fTimeDelta);
-	 
+
 	m_vCurRootMove = m_pModelCom->Play_Animation(fTimeDelta, nullptr);
 
+	if (m_bRootMoveCtr)
+	{
+		_Vec3 vPos = m_pTransformCom->Get_State(CTransform::STATE_POSITION);
 
-	_Vec3 vPos = m_pTransformCom->Get_State(CTransform::STATE_POSITION);
+		m_vCurRootMove = XMVector3TransformNormal(m_vCurRootMove, m_pTransformCom->Get_WorldMatrix());
 
-	m_vCurRootMove = XMVector3TransformNormal(m_vCurRootMove, m_pTransformCom->Get_WorldMatrix());
-
-	m_pTransformCom->Set_State(CTransform::STATE_POSITION, vPos + m_vCurRootMove);
+		m_pTransformCom->Set_State(CTransform::STATE_POSITION, vPos + m_vCurRootMove);
+	}
 
 	if (KEY_TAP(KEY::B))
 	{
 		ChangePhase();
 	}
-	//for (auto& pColliderObj : m_pColliderObject)
-	//	pColliderObj->Update(fTimeDelta);
 
-	//for (auto& pCollider : m_pColliderCom)
-	//	pCollider->Update(m_pTransformCom->Get_WorldMatrix_Ptr());
+	_float4x4 UpdateMat{};
+	XMStoreFloat4x4(&UpdateMat							//척추2(상하체 분리부)
+		, m_pModelCom->Get_BoneCombindTransformationMatrix(6) * XMLoadFloat4x4(m_pTransformCom->Get_WorldMatrix_Ptr()));
+	m_pColliderCom->Update(&UpdateMat);
+
+	XMStoreFloat4x4(&UpdateMat							//골반()
+		, m_pModelCom->Get_BoneCombindTransformationMatrix(5) * XMLoadFloat4x4(m_pTransformCom->Get_WorldMatrix_Ptr()));
+	m_EXCollider[LOWERBODY]->Update(&UpdateMat);
+	if (!m_isChanged)
+	{
+		XMStoreFloat4x4(&UpdateMat							//왼 종아리()
+			, m_pModelCom->Get_BoneCombindTransformationMatrix(112) * XMLoadFloat4x4(m_pTransformCom->Get_WorldMatrix_Ptr()));
+		m_EXCollider[LEG_LEFT]->Update(&UpdateMat);
+
+		XMStoreFloat4x4(&UpdateMat							//오른 종아리()
+			, m_pModelCom->Get_BoneCombindTransformationMatrix(126) * XMLoadFloat4x4(m_pTransformCom->Get_WorldMatrix_Ptr()));
+		m_EXCollider[LEG_RIGHT]->Update(&UpdateMat);
+
+	}
+	else
+	{
+		XMStoreFloat4x4(&UpdateMat							//왼 종아리()
+			, m_pModelCom->Get_BoneCombindTransformationMatrix(173) * XMLoadFloat4x4(m_pTransformCom->Get_WorldMatrix_Ptr()));
+		m_EXCollider[LEG_LEFT]->Update(&UpdateMat);
+
+		XMStoreFloat4x4(&UpdateMat							//오른 종아리()
+			, m_pModelCom->Get_BoneCombindTransformationMatrix(187) * XMLoadFloat4x4(m_pTransformCom->Get_WorldMatrix_Ptr()));
+		m_EXCollider[LEG_RIGHT]->Update(&UpdateMat);
+
+	}
 
 	m_pWeapon->Update(fTimeDelta);
 }
@@ -160,7 +190,22 @@ HRESULT CSimonManus::Render()
 	if (FAILED(m_pWeapon->Render()))
 		return E_FAIL;
 
+	m_pColliderCom->Render();
+	m_EXCollider[LEG_LEFT]->Render();
+	m_EXCollider[LEG_RIGHT]->Render();
+	m_EXCollider[LOWERBODY]->Render();
+
 	return S_OK;
+}
+
+void CSimonManus::Active_CurrentWeaponCollider(_float fDamageRatio)
+{
+	m_pWeapon->Active_Collider(fDamageRatio);
+}
+
+void CSimonManus::DeActive_CurretnWeaponCollider()
+{
+	m_pWeapon->DeActive_Collider();
 }
 
 HRESULT CSimonManus::Ready_Components()
@@ -178,6 +223,40 @@ HRESULT CSimonManus::Ready_Components()
 		TEXT("Com_ExtraModel"), reinterpret_cast<CComponent**>(&m_pExtraModelCom))))
 		return E_FAIL;
 
+	/* FOR.Com_Collider */		//Body
+	CBounding_OBB::BOUNDING_OBB_DESC			ColliderDesc{};
+	ColliderDesc.vExtents = _float3(1.3f, 1.3f, 1.7f);
+	ColliderDesc.vCenter = _float3(1.4f, 0.3f, 0.35f);
+	ColliderDesc.vAngles = _float3(-0.3f, 0.f, 0.2f);
+
+	if (FAILED(__super::Add_Component(LEVEL_STATIC, TEXT("Prototype_Component_Collider_OBB"),
+		TEXT("Com_Collider"), reinterpret_cast<CComponent**>(&m_pColliderCom), &ColliderDesc)))
+		return E_FAIL;
+
+	//LegsL
+	ColliderDesc.vExtents = _float3(0.3f, 0.6f, 0.3f);
+	ColliderDesc.vCenter = _float3(-0.1f, -0.4f, 0.f);
+	ColliderDesc.vAngles = _float3(0.f, 0.f, -0.45f);
+	if (FAILED(__super::Add_Component(LEVEL_STATIC, TEXT("Prototype_Component_Collider_OBB"),
+		TEXT("Com_Collider_LL"), reinterpret_cast<CComponent**>(&m_EXCollider[LEG_LEFT]), &ColliderDesc)))
+		return E_FAIL;
+	//R
+	ColliderDesc.vExtents = _float3(0.3f, 0.6f, 0.3f);
+	ColliderDesc.vCenter = _float3(-0.1f, -0.4f, 0.f);
+	ColliderDesc.vAngles = _float3(0.f, 0.f, -0.45f);
+
+	if (FAILED(__super::Add_Component(LEVEL_STATIC, TEXT("Prototype_Component_Collider_OBB"),
+		TEXT("Com_Collider_RL"), reinterpret_cast<CComponent**>(&m_EXCollider[LEG_RIGHT]), &ColliderDesc)))
+		return E_FAIL;
+	//LowerBody
+	ColliderDesc.vExtents = _float3(0.6f, 1.f, 0.8f);
+	ColliderDesc.vCenter = _float3(0.f, -0.1f, 0.f);
+	ColliderDesc.vAngles = _float3(0.f, 0.f, 0.f);
+
+	if (FAILED(__super::Add_Component(LEVEL_STATIC, TEXT("Prototype_Component_Collider_OBB"),
+		TEXT("Com_Collider_LowerBody"), reinterpret_cast<CComponent**>(&m_EXCollider[LOWERBODY]), &ColliderDesc)))
+		return E_FAIL;
+
 	return S_OK;
 }
 
@@ -186,11 +265,11 @@ HRESULT CSimonManus::Ready_FSM()
 	if (FAILED(__super::Ready_FSM()))
 		return E_FAIL;
 
-	FSMSTATE_DESC Desc{};
+	FSM_INIT_DESC Desc{};
 	
 	Desc.pIsEndAnim = &m_bEndAnim;
 	Desc.pIsResetRootMove =&m_bResetRootMove;
-	Desc.pColliderCtrs = m_bColliderCtrs;
+	Desc.pRootMoveCtr = &m_bRootMoveCtr;
 	//
 
 
@@ -253,7 +332,7 @@ HRESULT CSimonManus::Ready_FSM()
 	m_pExtraFsmCom->Add_State(CState_SimonManusP2_Route1::Create(m_pExtraFsmCom, this, ATKP2_ROUTE_1, &Desc));
 	m_pExtraFsmCom->Add_State(CState_SimonManusP2_Route2::Create(m_pExtraFsmCom, this, ATKP2_ROUTE_2, &Desc));
 
-	m_pExtraFsmCom->Set_State(IDLE);
+	//m_pExtraFsmCom->Set_State(IDLE);
 #pragma endregion
 
 	return S_OK;
@@ -300,6 +379,7 @@ void CSimonManus::ChangePhase()
 
 	m_pWeapon->ChangeSocketMatrix(m_pModelCom->Get_BoneCombindTransformationMatrix_Ptr(46));
 
+	m_isChanged = true;
 }
 
 CSimonManus* CSimonManus::Create(ID3D11Device* pDevice, ID3D11DeviceContext* pContext)

@@ -95,6 +95,8 @@ void CState_SimonManusP2_JumpToAttack::Update(_float fTimeDelta)
         }
     }
 
+    Collider_Check();
+
 }
 
 void CState_SimonManusP2_JumpToAttack::End_State()
@@ -127,6 +129,26 @@ _bool CState_SimonManusP2_JumpToAttack::End_Check()
     }
 
     return bEndCheck;
+}
+
+void CState_SimonManusP2_JumpToAttack::Collider_Check()
+{
+    if (m_iCurLastAnim == AN_SWING)
+    {
+        if (m_iRouteTrack == 1)
+        {
+            _double CurTrackPos = m_pMonster->Get_CurrentTrackPos();
+
+            if (CurTrackPos >= 35.f && CurTrackPos <= 65.f)
+            {
+                m_pMonster->Active_CurrentWeaponCollider(1);
+            }
+            else
+            {
+                m_pMonster->DeActive_CurretnWeaponCollider();
+            }
+        }
+    }
 }
 
 CState_SimonManusP2_JumpToAttack* CState_SimonManusP2_JumpToAttack::Create(CFsm* pFsm, CMonster* pMonster, _uint iStateNum, void* pArg)

@@ -74,6 +74,8 @@ void CState_SimonManusP2_ChasingSwing::Update(_float fTimeDelta)
     default:
         break;
     }
+    
+    Collider_Check();
 
 }
 
@@ -114,6 +116,23 @@ _bool CState_SimonManusP2_ChasingSwing::End_Check()
     }
 
     return bEndCheck;
+}
+
+void CState_SimonManusP2_ChasingSwing::Collider_Check()
+{
+    if (m_iRouteTrack == 2)
+    {
+        _double CurTrackPos = m_pMonster->Get_CurrentTrackPos();
+
+        if (CurTrackPos >= 25.f && CurTrackPos <= 50.f)
+        {
+            m_pMonster->Active_CurrentWeaponCollider(1);
+        }
+        else
+        {
+            m_pMonster->DeActive_CurretnWeaponCollider();
+        }
+    }
 }
 
 CState_SimonManusP2_ChasingSwing* CState_SimonManusP2_ChasingSwing::Create(CFsm* pFsm, CMonster* pMonster, _uint iStateNum, void* pArg)

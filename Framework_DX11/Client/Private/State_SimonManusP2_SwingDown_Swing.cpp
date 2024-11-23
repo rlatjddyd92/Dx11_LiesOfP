@@ -69,6 +69,8 @@ void CState_SimonManusP2_SwingDown_Swing::Update(_float fTimeDelta)
     }
 
 
+    Collider_Check();
+
 }
 
 void CState_SimonManusP2_SwingDown_Swing::End_State()
@@ -103,6 +105,48 @@ _bool CState_SimonManusP2_SwingDown_Swing::End_Check()
     }
 
     return bEndCheck;
+}
+
+void CState_SimonManusP2_SwingDown_Swing::Collider_Check()
+{
+    _double CurTrackPos = m_pMonster->Get_CurrentTrackPos();
+
+    if (m_iRouteTrack == 1)
+    {
+        if (m_iCurLastAnim == AN_ROUTE_LAST_L)
+        {
+            if (CurTrackPos >= 45.f && CurTrackPos <= 95.f)
+            {
+                m_pMonster->Active_CurrentWeaponCollider(1);
+            }
+            else
+            {
+                m_pMonster->DeActive_CurretnWeaponCollider();
+            }
+        }
+        else    //루트 R일때
+        {
+            if (CurTrackPos >= 45 && CurTrackPos <= 80.f)
+            {
+                m_pMonster->Active_CurrentWeaponCollider(1);
+            }
+            else
+            {
+                m_pMonster->DeActive_CurretnWeaponCollider();
+            }
+        }
+    }
+    else    //처음 공격일때
+    {
+        if (CurTrackPos >= 60.f && CurTrackPos <= 75.f)
+        {
+            m_pMonster->Active_CurrentWeaponCollider(1);
+        }
+        else
+        {
+            m_pMonster->DeActive_CurretnWeaponCollider();
+        }
+    }
 }
 
 CState_SimonManusP2_SwingDown_Swing* CState_SimonManusP2_SwingDown_Swing::Create(CFsm* pFsm, CMonster* pMonster, _uint iStateNum, void* pArg)

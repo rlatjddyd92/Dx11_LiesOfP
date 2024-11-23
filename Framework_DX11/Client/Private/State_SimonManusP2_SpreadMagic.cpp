@@ -32,6 +32,7 @@ void CState_SimonManusP2_SpreadMagic::Update(_float fTimeDelta)
         m_pMonster->Change_State(CSimonManus::IDLE);
         return;
     }
+
 }
 
 void CState_SimonManusP2_SpreadMagic::End_State()

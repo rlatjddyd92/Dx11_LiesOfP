@@ -35,12 +35,12 @@ void CState_SimonManusP2_HighJumpFall::Update(_float fTimeDelta)
 
     if (CurTrackPos >= 210.f && CurTrackPos < 230.f) //점프 이후 공중 체공 + 플레이어방향 회전
     {
-        m_vTargetDir = m_pMonster->Get_TargetDir();
+                                                                                                                                             m_vTargetDir = m_pMonster->Get_TargetDir();
         m_pMonster->Get_Transform()->LookAt_Lerp_NoHeight(m_vTargetDir, 3, fTimeDelta);
 
         m_vTargetDir -= 4 * XMVector3Normalize(m_vTargetDir);
     }
-    else if (CurTrackPos >= 230.f && CurTrackPos <= 245.f) //땅 찍기까지
+    else if (CurTrackPos >= 230 && CurTrackPos <= 245.f) //땅 찍기까지
     {
         _Vec3 vPos = m_pMonster->Get_Transform()->Get_State(CTransform::STATE_POSITION);
 
@@ -55,6 +55,9 @@ void CState_SimonManusP2_HighJumpFall::Update(_float fTimeDelta)
         m_pMonster->Change_State(CSimonManus::IDLE);
         return;
     }
+
+    Collider_Check();
+
 }
 
 void CState_SimonManusP2_HighJumpFall::End_State()
@@ -65,6 +68,20 @@ void CState_SimonManusP2_HighJumpFall::End_State()
 _bool CState_SimonManusP2_HighJumpFall::End_Check()
 {
     return m_pMonster->Get_EndAnim(AN_HIGHJUMPFALL);
+}
+
+void CState_SimonManusP2_HighJumpFall::Collider_Check()
+{
+    _double CurTrackPos = m_pMonster->Get_CurrentTrackPos();
+
+    if (CurTrackPos >= 135.f && CurTrackPos <= 150.f)
+    {
+        m_pMonster->Active_CurrentWeaponCollider(1);
+    }
+    else
+    {
+        m_pMonster->DeActive_CurretnWeaponCollider();
+    }
 }
 
 CState_SimonManusP2_HighJumpFall* CState_SimonManusP2_HighJumpFall::Create(CFsm* pFsm, CMonster* pMonster, _uint iStateNum, void* pArg)

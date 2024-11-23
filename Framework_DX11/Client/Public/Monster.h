@@ -39,6 +39,8 @@ public:
 	void		Set_UpTargetPos();
 	void		Look_Player();
 	_float		Calc_Distance_XZ();
+	virtual void	Active_CurrentWeaponCollider(_float fDamageRatio);
+	virtual void	DeActive_CurretnWeaponCollider();
 
 
 protected:
@@ -46,6 +48,7 @@ protected:
 	_Vec4		m_vCurRootMove{};
 	_bool		m_bEndAnim{ false };
 	_bool		m_bResetRootMove{ true };
+	_bool		m_bRootMoveCtr{ true };
 
 	_float		m_fPrevTrackPos{};
 
