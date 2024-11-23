@@ -29,8 +29,10 @@
 #include "Lift_Controller.h"
 #include "Lift_Door.h"
 #include "Lift_Floor.h"
-#include "Stargazer.h"
-#include "Stargazer.h"
+#include "WallDeco.h"
+#include "TowerDoor.h"
+#include "TreasureBox.h"
+#include "Ladder.h"
 #include "Weapon_Rapier.h"
 #include "Weapon_FlameSword.h"
 #include "Weapon_Scissor.h"
@@ -688,13 +690,13 @@ HRESULT CLoader::Ready_Resources_For_Obj()
 		CModel::Create(m_pDevice, m_pContext, CModel::TYPE_ANIM, "../Bin/ModelData/NonAnim/InteractObj/SK_FO_TreasureChest_02_Red.dat", PreTransformMatrix))))
 		return E_FAIL;
 
-	//if (FAILED(m_pGameInstance->Add_Prototype(LEVEL_GAMEPLAY, TEXT("Prototype_Component_Model_Ladder_"),
-	//	CModel::Create(m_pDevice, m_pContext, CModel::TYPE_ANIM, "../Bin/ModelData/NonAnim/InteractObj/SK_LV_Ladder_MetalWood_01_KSJ.dat", PreTransformMatrix))))
-	//	return E_FAIL;
+	if (FAILED(m_pGameInstance->Add_Prototype(LEVEL_GAMEPLAY, TEXT("SK_LV_Ladder_MetalWood_01_KSJ"),
+		CModel::Create(m_pDevice, m_pContext, CModel::TYPE_ANIM, "../Bin/ModelData/NonAnim/InteractObj/SK_LV_Ladder_MetalWood_01_KSJ.dat", PreTransformMatrix))))
+		return E_FAIL;
 
-	//if (FAILED(m_pGameInstance->Add_Prototype(LEVEL_GAMEPLAY, TEXT("Prototype_Component_Model_Ladder_"),
-	//	CModel::Create(m_pDevice, m_pContext, CModel::TYPE_ANIM, "../Bin/ModelData/NonAnim/InteractObj/SK_LV_Ladder_MetalWood_Slide6m_SM_KSJ.dat", PreTransformMatrix))))
-	//	return E_FAIL;
+	if (FAILED(m_pGameInstance->Add_Prototype(LEVEL_GAMEPLAY, TEXT("SK_LV_Ladder_MetalWood_Slide6m_SM_KSJ"),
+		CModel::Create(m_pDevice, m_pContext, CModel::TYPE_ANIM, "../Bin/ModelData/NonAnim/InteractObj/SK_LV_Ladder_MetalWood_Slide6m_SM_KSJ.dat", PreTransformMatrix))))
+		return E_FAIL;
 
 	return S_OK;
 }
@@ -787,19 +789,39 @@ HRESULT CLoader::Ready_Prototype()
 		CStargazer::Create(m_pDevice, m_pContext))))
 		return E_FAIL;
 	
-	/* For. Prototype_GameObject_Stargazer */
+	/* For. Prototype_GameObject_Lift_Controller */
 	if (FAILED(m_pGameInstance->Add_Prototype(TEXT("Prototype_GameObject_Lift_Controller"),
 		CLift_Controller::Create(m_pDevice, m_pContext))))
 		return E_FAIL;
 
-	/* For. Prototype_GameObject_Stargazer */
+	/* For. Prototype_GameObject_Lift_Door */
 	if (FAILED(m_pGameInstance->Add_Prototype(TEXT("Prototype_GameObject_Lift_Door"),
 		CLift_Door::Create(m_pDevice, m_pContext))))
 		return E_FAIL;
 
-	/* For. Prototype_GameObject_Stargazer */
+	/* For. Prototype_GameObject_Lift_Floor */
 	if (FAILED(m_pGameInstance->Add_Prototype(TEXT("Prototype_GameObject_Lift_Floor"),
 		CLift_Floor::Create(m_pDevice, m_pContext))))
+		return E_FAIL;
+
+	/* For. Prototype_GameObject_TowerDoor */
+	if (FAILED(m_pGameInstance->Add_Prototype(TEXT("Prototype_GameObject_TowerDoor"),
+		CTowerDoor::Create(m_pDevice, m_pContext))))
+		return E_FAIL;
+
+	/* For. Prototype_GameObject_WallDeco */
+	if (FAILED(m_pGameInstance->Add_Prototype(TEXT("Prototype_GameObject_WallDeco"),
+		CWallDeco::Create(m_pDevice, m_pContext))))
+		return E_FAIL;
+	
+	/* For. Prototype_GameObject_TreasureBox */
+	if (FAILED(m_pGameInstance->Add_Prototype(TEXT("Prototype_GameObject_TreasureBox"),
+		CTreasureBox::Create(m_pDevice, m_pContext))))
+		return E_FAIL;
+
+	/* For. Prototype_GameObject_Ladder */
+	if (FAILED(m_pGameInstance->Add_Prototype(TEXT("Prototype_GameObject_Ladder"),
+		CLadder::Create(m_pDevice, m_pContext))))
 		return E_FAIL;
 #pragma endregion
 

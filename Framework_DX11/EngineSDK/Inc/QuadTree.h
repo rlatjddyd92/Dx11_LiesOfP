@@ -26,8 +26,6 @@ private:
 	_uint				m_iCenter = {};
 	CQuadTree*			m_pNeighbors[NEIGHBOR_END] = { nullptr, nullptr, nullptr, nullptr };
 
-
-
 private:
 	_bool isDraw(_fvector vCamPosition, const _float3* pVertexPositions);
 

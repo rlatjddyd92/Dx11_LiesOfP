@@ -924,6 +924,9 @@
     <ClInclude Include="..\Public\State_Player_Scissor_Buff.h">
       <Filter>05.Fsm\Player\OneHand\00.Attack\Scissor\00.FableArts</Filter>
     </ClInclude>
+    <ClInclude Include="..\Public\State_Player_Scissor_Fatal.h">
+      <Filter>05.Fsm\Player\OneHand\00.Attack\Scissor\01.Fatal</Filter>
+    </ClInclude>
     <ClInclude Include="..\Public\Trail_Effect_MP.h">
       <Filter>02.GameObjects\05.Effect\Effect_Base\Trail_Effect\Trail_Effect_MP</Filter>
     </ClInclude>
@@ -1124,6 +1127,18 @@
     </ClInclude>
     <ClInclude Include="..\Public\Pawn.h">
       <Filter>02.GameObjects\02.Pawn</Filter>
+	</ClInclude>
+    <ClInclude Include="..\Public\TowerDoor.h">
+      <Filter>02.GameObjects\10.InteractObj\02.TowerDoor</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Public\WallDeco.h">
+      <Filter>02.GameObjects\10.InteractObj\03.WallDeco</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Public\TreasureBox.h">
+      <Filter>02.GameObjects\10.InteractObj\04.TreasureBox</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Public\Ladder.h">
+      <Filter>02.GameObjects\10.InteractObj\05.Ladder</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -1394,6 +1409,9 @@
     <ClCompile Include="..\Private\State_Player_Scissor_Buff.cpp">
       <Filter>05.Fsm\Player\OneHand\00.Attack\Scissor\00.FableArts</Filter>
     </ClCompile>
+    <ClCompile Include="..\Private\State_Player_Scissor_Fatal.cpp">
+      <Filter>05.Fsm\Player\OneHand\00.Attack\Scissor\01.Fatal</Filter>
+    </ClCompile>
     <ClCompile Include="..\Private\Trail_Effect_MP.cpp">
       <Filter>02.GameObjects\05.Effect\Effect_Base\Trail_Effect\Trail_Effect_MP</Filter>
     </ClCompile>
@@ -1597,6 +1615,18 @@
     </ClCompile>
     <ClCompile Include="..\Private\Pawn.cpp">
       <Filter>02.GameObjects\02.Pawn</Filter>
+	</ClCompile>
+    <ClCompile Include="..\Private\TowerDoor.cpp">
+      <Filter>02.GameObjects\10.InteractObj\02.TowerDoor</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Private\WallDeco.cpp">
+      <Filter>02.GameObjects\10.InteractObj\03.WallDeco</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Private\TreasureBox.cpp">
+      <Filter>02.GameObjects\10.InteractObj\04.TreasureBox</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Private\Ladder.cpp">
+      <Filter>02.GameObjects\10.InteractObj\05.Ladder</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

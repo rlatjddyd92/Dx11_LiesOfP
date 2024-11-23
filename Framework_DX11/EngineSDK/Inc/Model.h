@@ -165,6 +165,10 @@ private:
 	vector<_Matrix>					m_InstanceDatas;
 	void*							m_pInstanceVertices = { nullptr };
 
+	//우송 최적화 (모델단위)
+	_Vec3							m_vMinPos = { FLT_MAX ,FLT_MAX ,FLT_MAX };	//물체의 최소 좌표 , 최대한 크게 초기화
+	_Vec3							m_vMaxPos = { -FLT_MAX ,-FLT_MAX ,-FLT_MAX };	//물체의 최대 좌표, 최대한 작게 초기화
+
 private:
 	vector<_uint>					m_UFBIndices;
 	vector<UFVTX>					m_UseFullVtxIndices;
@@ -176,6 +180,12 @@ public:
 	HRESULT Ready_Materials(HANDLE* pFile, const _char* pModelFilePath);
 	HRESULT Ready_Bones(HANDLE* pFile, _int iParentBoneIndex);
 	HRESULT Ready_Animations(HANDLE* pFile);
+
+public:
+	void Culling(_Matrix worldMatrix);
+
+private:
+	void CalculateBoundingBox_Model(CMesh* pMesh, _Vec3& minPos, _Vec3& maxPos ); //모델 최대, 최소 사이즈 구하기
 
 public:
 	static CModel* Create(ID3D11Device* pDevice, ID3D11DeviceContext* pContext, TYPE eType, const _char* pModelFilePath, _fmatrix PreTransformMatrix = XMMatrixIdentity(), _bool isBinaryAnimModel = false, FilePathStructStack* pStructStack = nullptr);

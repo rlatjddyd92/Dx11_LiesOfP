@@ -222,6 +222,9 @@
     </Filter>
     <Filter Include="01.Utility\03.Components\Sound\Manager">
       <UniqueIdentifier>{2c7048d2-5fe6-442b-874d-b64f26d2bb4f}</UniqueIdentifier>
+	</Filter>
+    <Filter Include="01.Utility\03.Components\Octree">
+      <UniqueIdentifier>{706e6451-360e-4c02-8a2e-b8a1205ffb67}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -426,6 +429,9 @@
     </ClCompile>
     <ClCompile Include="..\Private\Sound_Manager.cpp">
       <Filter>01.Utility\03.Components\Sound\Manager</Filter>
+	</ClCompile>
+    <ClCompile Include="..\Private\Octree.cpp">
+      <Filter>01.Utility\03.Components\Octree</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -654,6 +660,9 @@
     </ClInclude>
     <ClInclude Include="..\Public\Sound_Manager.h">
       <Filter>01.Utility\03.Components\Sound\Manager</Filter>
+	</ClInclude>
+    <ClInclude Include="..\Public\Octree.h">
+      <Filter>01.Utility\03.Components\Octree</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

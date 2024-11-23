@@ -44,7 +44,6 @@ void CLift_Controller::Priority_Update(_float fTimeDelta)
 void CLift_Controller::Update(_float fTimeDelta)
 {
 	m_pModelCom->Play_Animation(fTimeDelta);
-	m_pTransformCom->Rotation(0.f, -25.f, 0.f);
 	if(m_pColliderCom != nullptr)
 		m_pColliderCom->Update(m_pTransformCom->Get_WorldMatrix_Ptr());
 }
@@ -117,14 +116,15 @@ HRESULT CLift_Controller::Ready_Components()
 		TEXT("Com_Model"), reinterpret_cast<CComponent**>(&m_pModelCom))))
 		return E_FAIL;
 
-	/* For.Com_Collider */
-	CBounding_AABB::BOUNDING_AABB_DESC			ColliderDesc{};
-	ColliderDesc.vExtents = _float3(0.5f, 1.0f, 0.5f);
-	ColliderDesc.vCenter = _float3(0.f, ColliderDesc.vExtents.y, 0.f);
+	///* For.Com_Collider */
+	//CBounding_OBB::BOUNDING_OBB_DESC			ColliderDesc{};
+	//ColliderDesc.vExtents = _float3(0.5f, 1.0f, 0.5f);
+	//ColliderDesc.vAngles = _float3(0.f, -30.f, 0.f);
+	//ColliderDesc.vCenter = _float3(0.f, 1.0f, 0.f);
 
-	if (FAILED(__super::Add_Component(LEVEL_STATIC, TEXT("Prototype_Component_Collider_AABB"),
-		TEXT("Com_Collider"), reinterpret_cast<CComponent**>(&m_pColliderCom), &ColliderDesc)))
-		return E_FAIL;
+	//if (FAILED(__super::Add_Component(LEVEL_STATIC, TEXT("Prototype_Component_Collider_OBB"),
+	//	TEXT("Com_Collider"), reinterpret_cast<CComponent**>(&m_pColliderCom), &ColliderDesc)))
+	//	return E_FAIL;
 
 	return S_OK;
 }

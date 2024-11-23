@@ -80,6 +80,8 @@ void CNonAnimModel::Late_Update(_float fTimeDelta)
 
 	if(m_pGameInstance->isIn_Frustum_WorldSpace(m_pTransformCom->Get_State(CTransform::STATE_POSITION), fCullDistance))
 	{
+		//m_pModelCom->Culling(m_pTransformCom->Get_WorldMatrix());
+
 		if (m_isDecal)
 			m_pGameInstance->Add_RenderObject(CRenderer::RG_DECAL, this);
 		else
