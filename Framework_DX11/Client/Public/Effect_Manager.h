@@ -32,7 +32,7 @@ private:
 	virtual ~CEffect_Manager() = default;
 
 public:
-	HRESULT Initialize(ID3D11Device* pDevice, ID3D11DeviceContext* pContext, const _wstring& strEffectPath);
+	HRESULT Initialize(ID3D11Device* pDevice, ID3D11DeviceContext* pContext, const _wstring& strEffectPath, const _wstring strTexturePath);
 
 public:
 	class CEffect_Container* Clone_Effect(const _wstring& strECTag, _Matrix* pParentMatrix, _Matrix* pSocketMatrix, _Vec3 vPos, _Vec3 vRotation, _Vec3 vScale);
@@ -59,7 +59,7 @@ private:
 	HRESULT Load_Effects(const _wstring& strEffectPath);
 	HRESULT Load_EffectContainers(const _wstring& strEffectPath);
 
-	HRESULT Load_Textures();
+	HRESULT Load_Textures(const _wstring strTexturePath);
 	HRESULT Load_Models();
 	HRESULT Load_Shaders();
 	HRESULT Load_Objects();

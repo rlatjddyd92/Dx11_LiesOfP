@@ -17,7 +17,7 @@ CEffect_Manager::CEffect_Manager()
 	Safe_AddRef(m_pGameInstance);
 }
 
-HRESULT CEffect_Manager::Initialize(ID3D11Device* pDevice, ID3D11DeviceContext* pContext, const _wstring& strEffectPath)
+HRESULT CEffect_Manager::Initialize(ID3D11Device* pDevice, ID3D11DeviceContext* pContext, const _wstring& strEffectPath, const _wstring strTexturePath)
 {
     m_pDevice = pDevice;
     Safe_AddRef(m_pDevice);
@@ -28,7 +28,7 @@ HRESULT CEffect_Manager::Initialize(ID3D11Device* pDevice, ID3D11DeviceContext* 
     if(FAILED(Load_Effects(strEffectPath)))
         return E_FAIL;
 
-    if(FAILED(Load_Textures()))
+    if(FAILED(Load_Textures(strTexturePath)))
         return E_FAIL;
 
     if(FAILED(Load_EffectContainers(strEffectPath)))
@@ -155,6 +155,8 @@ HRESULT CEffect_Manager::Add_Effect_ToLayer(_uint iLevelID, const _wstring& strE
         }
     }
 
+    pEffectContainer->Set_Loop(true);
+
     if(FAILED(m_pGameInstance->Add_Object_ToLayer(iLevelID, TEXT("Layer_Effect"), pEffectContainer)))
         return E_FAIL;
 
@@ -219,82 +221,36 @@ HRESULT CEffect_Manager::Load_Effects(const _wstring& strEffectPath)
 	return S_OK;
 }
 
-HRESULT CEffect_Manager::Load_Textures()
+HRESULT CEffect_Manager::Load_Textures(const _wstring strTexturePath)
 {
-    /* For. Prototype_Component_Texture_DefaultBlack */
-    if (FAILED(m_pGameInstance->Add_Prototype(LEVEL_GAMEPLAY, TEXT("Prototype_Component_Texture_T_Sample_Black"),
-        CTexture::Create(m_pDevice, m_pContext, TEXT("../Bin/Resources/Textures/Effect/T_Sample_Black.dds"), 1))))
-        return E_FAIL;
+    _wstring searchPath = strTexturePath + L"\\*.*";
+    WIN32_FIND_DATAW findFileData;
+    HANDLE hFind = FindFirstFileW(searchPath.c_str(), &findFileData);
 
-    /* For. Prototype_Component_Texture_Particle_Spark */
-    if (FAILED(m_pGameInstance->Add_Prototype(LEVEL_GAMEPLAY, TEXT("Prototype_Component_Texture_Particle_Spark"),
-        CTexture::Create(m_pDevice, m_pContext, TEXT("../Bin/Resources/Textures/Effect/Particle_Spark.dds"), 1))))
+    if (hFind == INVALID_HANDLE_VALUE) {
+        MSG_BOX(TEXT("Folder Open Failed"));
         return E_FAIL;
+    }
 
-    /* For. Prototype_Component_Texture_Glow_0 */
-    if (FAILED(m_pGameInstance->Add_Prototype(LEVEL_GAMEPLAY, TEXT("Prototype_Component_Texture_Glow_0"),
-        CTexture::Create(m_pDevice, m_pContext, TEXT("../Bin/Resources/Textures/Effect/Glow_0.dds"), 1))))
-        return E_FAIL;
+    while (FindNextFileW(hFind, &findFileData))
+    {
+        if (!(findFileData.dwFileAttributes & FILE_ATTRIBUTE_DIRECTORY))
+        {
+            _wstring strFileName = findFileData.cFileName;   // 파일 이름 + 확장자
+            _wstring strFileExtention = Get_FileExtentin(strFileName);   // 확장자
+            _wstring strFileBaseName = Get_FileName(strFileName);
 
-    /* For. Prototype_Component_Texture_T_Thunder_02_C_HJS */
-    if (FAILED(m_pGameInstance->Add_Prototype(LEVEL_GAMEPLAY, TEXT("Prototype_Component_Texture_T_Thunder_02_C_HJS"),
-        CTexture::Create(m_pDevice, m_pContext, TEXT("../Bin/Resources/Textures/Effect/T_Thunder_02_C_HJS.dds"), 1))))
-        return E_FAIL;
+            _wstring strResultPath = strTexturePath + TEXT('/') + strFileName;
 
-    /* For. Prototype_Component_Texture_T_LensFlare_01_C_KMH */
-    if (FAILED(m_pGameInstance->Add_Prototype(LEVEL_GAMEPLAY, TEXT("Prototype_Component_Texture_T_LensFlare_01_C_KMH"),
-        CTexture::Create(m_pDevice, m_pContext, TEXT("../Bin/Resources/Textures/Effect/T_LensFlare_01_C_KMH.dds"), 1))))
-        return E_FAIL;
+            _wstring strPrototypeTag = TEXT("Prototype_Component_Texture_") + strFileBaseName;
 
-    /* For. Prototype_Component_Texture_T_Ring_04_C_KMH */
-    if (FAILED(m_pGameInstance->Add_Prototype(LEVEL_GAMEPLAY, TEXT("Prototype_Component_Texture_T_Ring_04_C_KMH"),
-        CTexture::Create(m_pDevice, m_pContext, TEXT("../Bin/Resources/Textures/Effect/T_Ring_04_C_KMH.dds"), 1))))
-        return E_FAIL;
-
-    /* For. Prototype_Component_Texture_T_Ring_08_C_HJS */
-    if (FAILED(m_pGameInstance->Add_Prototype(LEVEL_GAMEPLAY, TEXT("Prototype_Component_Texture_T_Ring_08_C_HJS"),
-        CTexture::Create(m_pDevice, m_pContext, TEXT("../Bin/Resources/Textures/Effect/T_Ring_08_C_HJS.dds"), 1))))
-        return E_FAIL;
-
-    /* For. Prototype_Component_Texture_T_Tile_Spark_01_C_HJS */
-    if (FAILED(m_pGameInstance->Add_Prototype(LEVEL_GAMEPLAY, TEXT("Prototype_Component_Texture_T_Tile_Spark_01_C_HJS"),
-        CTexture::Create(m_pDevice, m_pContext, TEXT("../Bin/Resources/Textures/Effect/T_Tile_Spark_01_C_HJS.dds"), 1))))
-        return E_FAIL;
-
-    /* For. Prototype_Component_Texture_T_SubUV_DebStone_03_8x8_SC_KMH */
-    if (FAILED(m_pGameInstance->Add_Prototype(LEVEL_GAMEPLAY, TEXT("Prototype_Component_Texture_T_SubUV_DebStone_03_8x8_SC_KMH"),
-        CTexture::Create(m_pDevice, m_pContext, TEXT("../Bin/Resources/Textures/Effect/T_SubUV_DebStone_03_8x8_SC_KMH.dds"), 1))))
-        return E_FAIL;
-
-    /* For. Prototype_Component_Texture_T_SubUV_Thunder_01_4x4_SC_HJS */
-    if (FAILED(m_pGameInstance->Add_Prototype(LEVEL_GAMEPLAY, TEXT("Prototype_Component_Texture_T_SubUV_Thunder_01_4x4_SC_HJS"),
-        CTexture::Create(m_pDevice, m_pContext, TEXT("../Bin/Resources/Textures/Effect/T_SubUV_Thunder_01_4x4_SC_HJS.dds"), 1))))
-        return E_FAIL;
-
-    /* For. Prototype_Component_Texture_T_SubUV_Thunder_01_4x1_SC_GDH */
-    if (FAILED(m_pGameInstance->Add_Prototype(LEVEL_GAMEPLAY, TEXT("Prototype_Component_Texture_T_SubUV_Thunder_01_4x1_SC_GDH"),
-        CTexture::Create(m_pDevice, m_pContext, TEXT("../Bin/Resources/Textures/Effect/T_SubUV_Thunder_01_4x1_SC_GDH.dds"), 1))))
-        return E_FAIL;
-
-    /* For. Prototype_Component_Texture_T_TrailGrad_01_C_RSW */
-    if (FAILED(m_pGameInstance->Add_Prototype(LEVEL_GAMEPLAY, TEXT("Prototype_Component_Texture_T_TrailGrad_01_C_RSW"),
-        CTexture::Create(m_pDevice, m_pContext, TEXT("../Bin/Resources/Textures/Effect/T_TrailGrad_01_C_RSW.dds"), 1))))
-        return E_FAIL;
-
-    /* For. Prototype_Component_Texture_default_normal */
-    if (FAILED(m_pGameInstance->Add_Prototype(LEVEL_GAMEPLAY, TEXT("Prototype_Component_Texture_default_normal"),
-        CTexture::Create(m_pDevice, m_pContext, TEXT("../Bin/Resources/Textures/Effect/default_normal.dds"), 1))))
-        return E_FAIL;
-
-    /* For. Prototype_Component_Texture_T_SubUV_DebStone_03_8x8_SN_KMH */
-    if (FAILED(m_pGameInstance->Add_Prototype(LEVEL_GAMEPLAY, TEXT("Prototype_Component_Texture_T_SubUV_DebStone_03_8x8_SN_KMH"),
-        CTexture::Create(m_pDevice, m_pContext, TEXT("../Bin/Resources/Textures/Effect/T_SubUV_DebStone_03_8x8_SN_KMH.dds"), 1))))
-        return E_FAIL;
-
-    /* For. Prototype_Component_Texture_T_Tile_Noise_39_C_RSW */
-    if (FAILED(m_pGameInstance->Add_Prototype(LEVEL_GAMEPLAY, TEXT("Prototype_Component_Texture_T_Tile_Noise_39_C_RSW"),
-        CTexture::Create(m_pDevice, m_pContext, TEXT("../Bin/Resources/Textures/Effect/T_Tile_Noise_39_C_RSW.dds"), 1))))
-        return E_FAIL;
+            if (FAILED(m_pGameInstance->Add_Prototype(LEVEL_GAMEPLAY, strPrototypeTag,
+                CTexture::Create(m_pDevice, m_pContext, strResultPath.c_str(), 1))))
+                return E_FAIL;
+        }
+    }
+    // 핸들 닫기
+    FindClose(hFind);
 
     return S_OK;
 }

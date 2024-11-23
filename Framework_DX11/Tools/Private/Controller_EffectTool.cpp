@@ -42,6 +42,9 @@ void CController_EffectTool::Render()
 {
 	bool bDemo = true;
 	ImGui::ShowDemoWindow(&bDemo);
+
+	ImGui::Begin("Effect_Check");
+
 	if (ImGui::CollapsingHeader("Texture"))
 	{
 		RenderGroup_Selection();
@@ -70,6 +73,8 @@ void CController_EffectTool::Render()
 	{
 		Trail_MP_Check();
 	}
+
+	ImGui::End();
 
 	ImGui::Begin("EffectList");
 	if (ImGui::Button("Load Effect"))
@@ -456,7 +461,11 @@ void CController_EffectTool::Particle_Check()
 		ImGui::SeparatorText("Transform");
 		ImGui::InputFloat3("Pos", (_float*)&m_ParticleDesc.DefaultDesc.vPos);
 		ImGui::InputFloat3("Rotation", (_float*)&m_ParticleDesc.DefaultDesc.vRotation);
-		ImGui::InputFloat3("Scale", (_float*)&m_ParticleDesc.DefaultDesc.vScale);
+		ImGui::InputFloat3("Scale", (_float*)&m_ParticleDesc.DefaultDesc.vStartScale);
+		ImGui::InputFloat3("Overall Scaling", (_float*)&m_ParticleDesc.DefaultDesc.vOverallScaling);
+
+		ImGui::SeparatorText("Duration");
+		ImGui::InputFloat("Duration", &m_ParticleDesc.DefaultDesc.fDuration);
 
 		ImGui::SeparatorText("Particle Action"); 
 		ImGui::InputFloat4("Pivot", (_float*)&m_ParticleDesc.DefaultDesc.vPivot);
@@ -466,7 +475,8 @@ void CController_EffectTool::Particle_Check()
 		ImGui::InputFloat2("Tex Devide", (_float*)&m_ParticleDesc.DefaultDesc.vTexDevide);
 		ImGui::InputFloat("Sprite Speed", &m_ParticleDesc.DefaultDesc.fSpriteSpeed);
 
-		ImGui::InputFloat2("Scaling", (_float*)&m_ParticleDesc.DefaultDesc.vScaling);
+		ImGui::InputFloat2("Start Scaling", (_float*)&m_ParticleDesc.DefaultDesc.vStartScaling);
+		ImGui::InputFloat2("Scaling Ratio", (_float*)&m_ParticleDesc.DefaultDesc.vScalingRatio);
 
 		ImGui::InputFloat("Start Rotation", &m_ParticleDesc.DefaultDesc.fStartRotation);
 		ImGui::InputFloat("Rotation Per Second", (_float*)&m_ParticleDesc.DefaultDesc.fRotationPerSecond);
@@ -493,6 +503,8 @@ void CController_EffectTool::Update_Particle()
 
 	if (nullptr == pParticle)
 		return;
+
+	m_ParticleDesc.RenderDesc = m_RenderDesc;
 
 	pParticle->Set_Desc(m_ParticleDesc);
 }
@@ -710,6 +722,7 @@ void CController_EffectTool::Update_TE()
 	if (nullptr == pTE)
 		return;
 
+	m_TextureDesc.RenderDesc = m_RenderDesc;
 	pTE->Set_Desc(m_TextureDesc);
 }
 
@@ -922,6 +935,7 @@ void CController_EffectTool::Update_Mesh()
 
 	if (nullptr == pME)
 		return;
+	m_MeshDesc.RenderDesc = m_RenderDesc;
 
 	pME->Set_Desc(m_MeshDesc);
 
@@ -1118,7 +1132,7 @@ void CController_EffectTool::Update_Trail_OP()
 
 	if (nullptr == pTOP)
 		return;
-
+	m_Trail_OPDesc.RenderDesc = m_RenderDesc;
 	pTOP->Set_Desc(m_Trail_OPDesc);
 }
 
@@ -1299,7 +1313,7 @@ void CController_EffectTool::Update_Trail_TP()
 
 	if (nullptr == pTP)
 		return;
-
+	m_Trail_TPDesc.RenderDesc = m_RenderDesc;
 	pTP->Set_Desc(m_Trail_TPDesc);
 }
 
@@ -1533,7 +1547,8 @@ void CController_EffectTool::Trail_MP_Check()
 		ImGui::InputFloat2("Tex Devide", (_float*)&m_Trail_MPDesc.DefaultDesc.vTexDevide);
 		ImGui::InputFloat("Sprite Speed", &m_Trail_MPDesc.DefaultDesc.fSpriteSpeed);
 
-		ImGui::InputFloat2("Scaling", (_float*)&m_Trail_MPDesc.DefaultDesc.vScaling);
+		ImGui::InputFloat2("Tail Start Scaling", (_float*)&m_ParticleDesc.DefaultDesc.vStartScaling);
+		ImGui::InputFloat2("Tail Scaling Ratio", (_float*)&m_ParticleDesc.DefaultDesc.vScalingRatio);		
 		ImGui::InputFloat("Tail StartRotation", &m_Trail_MPDesc.DefaultDesc.fStartRotation);
 		ImGui::InputFloat("Tail Rotation Per Second", &m_Trail_MPDesc.DefaultDesc.fRotationPerSecond);
 
@@ -1548,7 +1563,7 @@ void CController_EffectTool::Update_Trail_MP()
 
 	if (nullptr == pMP)
 		return;
-
+	m_Trail_MPDesc.RenderDesc = m_RenderDesc;
 	pMP->Set_Desc(m_Trail_MPDesc);
 }
 

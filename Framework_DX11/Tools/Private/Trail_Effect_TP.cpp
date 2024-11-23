@@ -86,7 +86,7 @@ HRESULT CTrail_Effect_TP::Render()
 		if (FAILED(m_pTextureCom[TEXTURE_MASK_1]->Bind_ShadeResource(m_pShaderCom, "g_MaskTexture_1", 0)))
 			return E_FAIL;
 	}
-
+	  
 	if (nullptr != m_pTextureCom[TEXTURE_MASK_2])
 	{
 		if (FAILED(m_pTextureCom[TEXTURE_MASK_2]->Bind_ShadeResource(m_pShaderCom, "g_MaskTexture_2", 0)))

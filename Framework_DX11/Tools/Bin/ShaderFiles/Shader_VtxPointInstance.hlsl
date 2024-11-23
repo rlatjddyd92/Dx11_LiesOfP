@@ -31,7 +31,10 @@ texture2D       g_MaskTexture_2;
 vector			g_vCamPosition;
 
 float2          g_vTexDivide;
-float2          g_vScaling;
+
+float2          g_vStartScaling;
+float2          g_vScalingRatio;
+
 int             g_iState = 0;
 float           g_fStartRotation = 0.f;
 float           g_fAngle = 0.f;
@@ -111,22 +114,26 @@ void GS_MAIN(point GS_IN In[1], inout TriangleStream<GS_OUT> Container)
 	float3		vRight = normalize(cross(float3(0.f, 1.f, 0.f), vLook));
     float3      vUp = normalize(cross(vLook, vRight));
     
-    vRight *= In[0].vPSize.x * 0.5f * g_vScaling.x;
-    vUp *= In[0].vPSize.y * 0.5f * g_vScaling.y;
+    vRight *= In[0].vPSize.x * 0.5f;
+    vUp *= In[0].vPSize.y * 0.5f;
 
     vRight = RotateByAxis(vRight, vLook, radians(g_fStartRotation));
     vUp = RotateByAxis(vUp, vLook, radians(g_fStartRotation));
     
-    if(g_iState & STATE_GROW)
+    if (g_iState & STATE_GROW)
     {
-        vRight *= In[0].vLifeTime.y / In[0].vLifeTime.x;
-        vUp *= In[0].vLifeTime.y / In[0].vLifeTime.x;
-
+        vRight *= g_vStartScaling.x + (g_vScalingRatio.x * (In[0].vLifeTime.y / In[0].vLifeTime.x));
+        vUp *= g_vStartScaling.y + (g_vScalingRatio.y * (In[0].vLifeTime.y / In[0].vLifeTime.x));
     }
-    else if(g_iState & STATE_SHRINK)
+    else if (g_iState & STATE_SHRINK)
     {
-        vRight *= (1.f - In[0].vLifeTime.y / In[0].vLifeTime.x);
-        vUp *= (1.f - In[0].vLifeTime.y / In[0].vLifeTime.x);
+        vRight *= g_vStartScaling.x - (g_vScalingRatio.x * (In[0].vLifeTime.y / In[0].vLifeTime.x));
+        vUp *= g_vStartScaling.y - (g_vScalingRatio.y * (In[0].vLifeTime.y / In[0].vLifeTime.x));
+    }
+    else
+    {
+        vRight *= g_vStartScaling.x;
+        vUp *= g_vStartScaling.y;
     }
     
     if(g_iState & STATE_ROTATION)
@@ -191,24 +198,28 @@ void GS_DIR_MAIN(point GS_IN In[1], inout TriangleStream<GS_OUT> Container)
     float3 vUp = normalize(cross(vLook, vCamDir));
     float3 vRight = normalize(cross(vUp, vLook));
 	
-    vLook *= In[0].vPSize.x * 0.5f * g_vScaling.x;
-    vUp *= In[0].vPSize.y * 0.5f * g_vScaling.y;
+    vLook *= In[0].vPSize.x * 0.5f;
+    vUp *= In[0].vPSize.y * 0.5f;
 	
     vLook = RotateByAxis(vLook, vRight, radians(g_fStartRotation));
     vUp = RotateByAxis(vUp, vRight, radians(g_fStartRotation));
 
     if (g_iState & STATE_GROW)
     {
-        vLook *= In[0].vLifeTime.y / In[0].vLifeTime.x;
-        vUp *= In[0].vLifeTime.y / In[0].vLifeTime.x;
-
+        vLook *= g_vStartScaling.x + (g_vScalingRatio.x * (In[0].vLifeTime.y / In[0].vLifeTime.x));
+        vUp *= g_vStartScaling.y + (g_vScalingRatio.y * (In[0].vLifeTime.y / In[0].vLifeTime.x));
     }
     else if (g_iState & STATE_SHRINK)
     {
-        vLook *= (1.f - In[0].vLifeTime.y / In[0].vLifeTime.x);
-        vUp *= (1.f - In[0].vLifeTime.y / In[0].vLifeTime.x);
+        vLook *= g_vStartScaling.x - (g_vScalingRatio.x * (In[0].vLifeTime.y / In[0].vLifeTime.x));
+        vUp *= g_vStartScaling.y - (g_vScalingRatio.y * (In[0].vLifeTime.y / In[0].vLifeTime.x));
     }
-    
+    else
+    {
+        vLook *= g_vStartScaling.x;
+        vUp *= g_vStartScaling.y;
+    }
+
     Out[0].vPosition = float4(In[0].vPosition.xyz - vLook + vUp, 1.f);
     Out[0].vTexcoord = float2(0.f, 0.0f);
     Out[0].vLifeTime = In[0].vLifeTime;
@@ -247,14 +258,17 @@ void GS_DIR_MAIN(point GS_IN In[1], inout TriangleStream<GS_OUT> Container)
     Container.RestartStrip();
 }
 
-
-
 struct PS_IN
 {
     float4 vPosition : SV_POSITION;
     float2 vTexcoord : TEXCOORD0;
     float2 vLifeTime : COLOR0;
     float4 vColor : COLOR1;
+};
+
+struct PS_OUT
+{
+    vector vColor : SV_TARGET0;
 };
 
 struct PS_EFFECT_OUT
@@ -271,6 +285,8 @@ struct PS_NORMAL_OUT
     vector vARM : SV_TARGET3;
     vector vPickDepth : SV_TARGET4;
 };
+
+float2 Get_SpriteTexcoord(float2 vTexcoord, int iTexIndex);
 
 PS_EFFECT_OUT PS_MAIN(PS_IN In)
 {
@@ -316,19 +332,9 @@ PS_NORMAL_OUT PS_SPRITE_NORMAL_MAIN(PS_IN In)
 {
     PS_NORMAL_OUT Out = (PS_NORMAL_OUT) 0;
 	
-    float2 start = (float2) 0;
-    float2 over = (float2) 0;
 	
     int iTexIndex = (int) ((In.vLifeTime.y / In.vLifeTime.x) * (g_vTexDivide.x * g_vTexDivide.y - 1.f) * g_fSpriteSpeed);
-    
-    start.x = (1 / g_vTexDivide.x) * iTexIndex;
-    start.y = (1 / g_vTexDivide.y) * (int) (iTexIndex / g_vTexDivide.x);
-	
-    over.x = start.x + (1 / g_vTexDivide.x);
-    over.y = start.y + (1 / g_vTexDivide.y);
-	
-    float2 vTexcoord = start + (over - start) * In.vTexcoord;
-
+    float2 vTexcoord = Get_SpriteTexcoord(In.vTexcoord, iTexIndex);
     Out.vDiffuse = g_DiffuseTexture.Sample(LinearSampler, vTexcoord);
 
     if (Out.vDiffuse.a <= 0.3f)
@@ -368,6 +374,60 @@ PS_EFFECT_OUT PS_GLOW_RGBTOA_MAIN(PS_IN In)
     Out.vDiffuse = vColor;
     Out.vBlur = vColor;
 
+    return Out;
+}
+
+PS_NORMAL_OUT PS_BLOOD_SPREAD_MAIN(PS_IN In)
+{
+    PS_NORMAL_OUT Out = (PS_NORMAL_OUT) 0;
+
+    Out.vDiffuse    = g_DiffuseTexture.Sample(LinearSampler, In.vTexcoord);
+    Out.vNormal     = g_NormalTexture.Sample(LinearSampler, In.vTexcoord) * 2.f - 1.f;
+
+    Out.vDiffuse.a *= Out.vDiffuse.r * (1.f - (In.vLifeTime.y / In.vLifeTime.x));
+    if(Out.vDiffuse.a < 0.3f)
+        discard;
+    
+    Out.vDiffuse.rgb = Out.vDiffuse.r * In.vColor.rgb;
+    
+    Out.vARM        = float4(1.f, 1.f, 1.f, 1.f);
+    Out.vDepth = float4(0.f, 0.f, 0.f, 0.f);
+    Out.vPickDepth = float4(0.f, 0.f, 0.f, 0.f);
+    
+    return Out;
+}
+
+PS_NORMAL_OUT PS_BLOOD_DROPLETS_MAIN(PS_IN In)
+{
+    PS_NORMAL_OUT Out = (PS_NORMAL_OUT) 0;
+
+    Out.vDiffuse = g_DiffuseTexture.Sample(LinearSampler, In.vTexcoord);
+    Out.vNormal = g_NormalTexture.Sample(LinearSampler, In.vTexcoord) * 2.f - 1.f;
+    
+    Out.vDiffuse.a = Out.vDiffuse.r;
+    
+    if(Out.vDiffuse.a < 0.1f)
+        discard;
+    
+    Out.vDiffuse.rgb *= In.vColor.rgb;
+    
+    Out.vARM = float4(1.f, 1.f, 1.f, 1.f);
+    Out.vDepth = float4(0.f, 0.f, 0.f, 0.f);
+    Out.vPickDepth = float4(0.f, 0.f, 0.f, 0.f);
+    
+    return Out;
+}
+
+PS_OUT PS_SMOKE_MAIN(PS_IN In)
+{
+    PS_OUT Out = (PS_OUT) 0;
+    
+    int iTexIndex = (int) ((In.vLifeTime.y / In.vLifeTime.x) * (g_vTexDivide.x * g_vTexDivide.y - 1.f) * g_fSpriteSpeed);
+    
+    Out.vColor = g_DiffuseTexture.Sample(LinearSampler, Get_SpriteTexcoord(In.vTexcoord, iTexIndex));
+    
+    Out.vColor.a *= 1.f - (In.vLifeTime.y / In.vLifeTime.x);
+    
     return Out;
 }
 
@@ -416,4 +476,52 @@ technique11	DefaultTechnique
         GeometryShader = compile gs_5_0 GS_MAIN();
         PixelShader = compile ps_5_0 PS_SPRITE_NORMAL_MAIN();
     }
+
+    pass PARTICLE_BLOOD_SPREAD // 4
+    {
+        SetRasterizerState(RS_Default);
+        SetDepthStencilState(DSS_Default, 0);
+        SetBlendState(BS_Default, vector(0.f, 0.f, 0.f, 0.f), 0xffffffff);
+
+        VertexShader = compile vs_5_0 VS_MAIN();
+        GeometryShader = compile gs_5_0 GS_MAIN();
+        PixelShader = compile ps_5_0 PS_BLOOD_SPREAD_MAIN();
+    }
+
+    pass PARTICLE_BLOOD_DROPLETS // 5
+    {
+        SetRasterizerState(RS_Default);
+        SetDepthStencilState(DSS_Default, 0);
+        SetBlendState(BS_Default, vector(0.f, 0.f, 0.f, 0.f), 0xffffffff);
+
+        VertexShader = compile vs_5_0 VS_MAIN();
+        GeometryShader = compile gs_5_0 GS_DIR_MAIN();
+        PixelShader = compile ps_5_0 PS_BLOOD_DROPLETS_MAIN();
+    }
+
+    pass PARTICLE_SMOKE // 6
+    {
+        SetRasterizerState(RS_Default);
+        SetDepthStencilState(DSS_NonWrite, 0);
+        SetBlendState(BS_AlphaBlend, vector(0.f, 0.f, 0.f, 0.f), 0xffffffff);
+
+        VertexShader = compile vs_5_0 VS_MAIN();
+        GeometryShader = compile gs_5_0 GS_MAIN();
+        PixelShader = compile ps_5_0 PS_SMOKE_MAIN();
+    }
+
+}
+
+float2 Get_SpriteTexcoord(float2 vTexcoord, int iTexIndex)
+{
+    float2 start = (float2) 0;
+    float2 over = (float2) 0;
+
+    start.x = (1 / g_vTexDivide.x) * iTexIndex;
+    start.y = (1 / g_vTexDivide.y) * (int) (iTexIndex / g_vTexDivide.x);
+	
+    over.x = start.x + (1 / g_vTexDivide.x);
+    over.y = start.y + (1 / g_vTexDivide.y);
+	
+    return start + (over - start) * vTexcoord;
 }

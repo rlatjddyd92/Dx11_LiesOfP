@@ -9,11 +9,11 @@ texture2D g_MaskTexture_1;
 texture2D g_MaskTexture_2;
 
 vector g_vCamPosition;
-float4  g_vColor;
-float   g_fScale;
-int     g_iState;
-float2  g_vTexDivide;
-float   g_fSpriteSpeed;
+float4 g_vColor;
+float g_fScale;
+int g_iState;
+float2 g_vTexDivide;
+float g_fSpriteSpeed;
 
 struct VS_IN
 {
@@ -141,30 +141,42 @@ struct PS_OUT
 
 struct PS_EFFECT_OUT
 {
-    vector vColor : SV_TARGET0;
-    vector vDistortion : SV_TARGET1;
-    vector vBlur : SV_TARGET2;
+    vector vDiffuse : SV_TARGET0;
+    vector vBlur : SV_TARGET1;
 };
 
-/* 1. 픽셀의 최종적인 색상을 결정한다. */
-PS_OUT PS_MAIN(PS_IN In)
+float2 Get_SpriteTexcoord(float2 vTexcoord, int iTexIndex);
+
+PS_EFFECT_OUT PS_MAIN(PS_IN In)
+{
+    PS_EFFECT_OUT Out = (PS_EFFECT_OUT) 0;
+    
+    int iTexIndex = (int) ((In.vLifeTime.y / In.vLifeTime.x) * (g_vTexDivide.x * g_vTexDivide.y - 1.f) * g_fSpriteSpeed);
+
+    vector vColor = g_DiffuseTexture.Sample(LinearSampler, Get_SpriteTexcoord(In.vTexcoord, iTexIndex));
+    
+    if (vColor.a < 0.1f)
+        discard;
+    
+    if (In.vLifeTime.x < In.vLifeTime.y)
+        discard;
+    
+    vColor.rgb *= g_vColor.rgb;
+    
+    Out.vDiffuse = vColor;
+    Out.vDiffuse = vector(0.f, 0.f, 0.f, 0.f);
+    Out.vBlur = vColor;
+    
+    return Out;
+}
+
+PS_OUT PS_BLEND_MAIN(PS_IN In)
 {
     PS_OUT Out = (PS_OUT) 0;
-
-    float2 start = (float2) 0;
-    float2 over = (float2) 0;
-	
+    
     int iTexIndex = (int) ((In.vLifeTime.y / In.vLifeTime.x) * (g_vTexDivide.x * g_vTexDivide.y - 1.f) * g_fSpriteSpeed);
-    
-    start.x = (1 / g_vTexDivide.x) * iTexIndex;
-    start.y = (1 / g_vTexDivide.y) * (int) (iTexIndex / g_vTexDivide.x);
-	
-    over.x = start.x + (1 / g_vTexDivide.x);
-    over.y = start.y + (1 / g_vTexDivide.y);
-    
-    float2 vTexcoord = start + (over - start) * In.vTexcoord;
 
-    Out.vColor = g_DiffuseTexture.Sample(LinearSampler, vTexcoord);
+    Out.vColor = g_DiffuseTexture.Sample(LinearSampler, Get_SpriteTexcoord(In.vTexcoord, iTexIndex));
     
     if (Out.vColor.a < 0.1f)
         discard;
@@ -172,12 +184,15 @@ PS_OUT PS_MAIN(PS_IN In)
     if (In.vLifeTime.x < In.vLifeTime.y)
         discard;
     
+    Out.vColor.rgb *= g_vColor.rgb;
+    
     return Out;
 }
 
+
 technique11 DefaultTechnique
 {
-    pass DEFAULT
+    pass Default
     {
         SetRasterizerState(RS_Cull_None);
         SetDepthStencilState(DSS_Default, 0);
@@ -187,4 +202,34 @@ technique11 DefaultTechnique
         GeometryShader = compile gs_5_0 GS_MAIN();
         PixelShader = compile ps_5_0 PS_MAIN();
     }
+
+    pass Blend
+    {
+        SetRasterizerState(RS_Cull_None);
+        SetDepthStencilState(DSS_NonWrite, 0);
+        SetBlendState(BS_AlphaBlend, vector(0.f, 0.f, 0.f, 0.f), 0xffffffff);
+
+        VertexShader = compile vs_5_0 VS_MAIN();
+        GeometryShader = compile gs_5_0 GS_MAIN();
+        PixelShader = compile ps_5_0 PS_BLEND_MAIN();
+    }
+
 }
+
+
+
+float2 Get_SpriteTexcoord(float2 vTexcoord, int iTexIndex)
+{
+        
+    float2 start = (float2) 0;
+    float2 over = (float2) 0;
+
+    start.x = (1 / g_vTexDivide.x) * iTexIndex;
+    start.y = (1 / g_vTexDivide.y) * (int) (iTexIndex / g_vTexDivide.x);
+	
+    over.x = start.x + (1 / g_vTexDivide.x);
+    over.y = start.y + (1 / g_vTexDivide.y);
+	
+    return start + (over - start) * vTexcoord;
+}
+

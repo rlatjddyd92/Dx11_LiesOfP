@@ -54,8 +54,6 @@ void CTexture_Effect::Update(_float fTimeDelta)
     if (true == m_isDead)
         return;
 
-    m_pTransformCom->BillBoard();
-
     m_DefaultDesc.fAlpha += fTimeDelta * m_DefaultDesc.fAlphaSpeed;
 
     _Vec3 vScale = m_pTransformCom->Get_Scaled();
@@ -64,9 +62,8 @@ void CTexture_Effect::Update(_float fTimeDelta)
     if (0.f < vScale.x && 0.f < vScale.y && 0.f < vScale.z)
         m_pTransformCom->Set_Scaled(vScale.x, vScale.y, vScale.z);
 
-    m_pTransformCom->Set_Scaled(vScale.x, vScale.y, vScale.z);
-
-    m_fCurrenrtIndex += fTimeDelta * m_DefaultDesc.fSpriteSpeed;
+    if (0.f < m_DefaultDesc.vDivide.x * m_DefaultDesc.vDivide.y)
+        m_fCurrenrtIndex += fTimeDelta * m_DefaultDesc.fSpriteSpeed;
 
     __super::Set_WorldMatrix();
 
@@ -93,7 +90,7 @@ void CTexture_Effect::Late_Update(_float fTimeDelta)
 
     m_fAccumulateTime += fTimeDelta;
 
-    if (m_DefaultDesc.fDuration < m_fAccumulateTime)
+    if (m_DefaultDesc.fDuration < m_fAccumulateTime || (m_DefaultDesc.vDivide.x * m_DefaultDesc.vDivide.y - 1.f) < m_fCurrenrtIndex)
     {
         if (true == m_DefaultDesc.bLoop)
             Reset();
@@ -101,6 +98,8 @@ void CTexture_Effect::Late_Update(_float fTimeDelta)
             m_isDead = true;
     }
 
+    if (CRenderer::RG_END <= m_RenderDesc.iRenderGroup)
+        return;
     m_pGameInstance->Add_RenderObject((CRenderer::RENDERGROUP)m_RenderDesc.iRenderGroup, this);
 }
 

@@ -318,8 +318,18 @@ struct PS_EFFECT_OUT
 
 struct PS_OUT
 {
-    vector vColor : SV_TARGET1;
+    vector vColor : SV_TARGET0;
 };
+
+struct PS_NORMAL_OUT
+{
+    vector vDiffuse : SV_TARGET0;
+    vector vNormal : SV_TARGET1;
+    vector vDepth : SV_TARGET2;
+    vector vARM : SV_TARGET3;
+    vector vPickDepth : SV_TARGET4;
+};
+
 
 /* 1. 픽셀의 최종적인 색상을 결정한다. */
 PS_EFFECT_OUT PS_MAIN(PS_IN In)
@@ -329,7 +339,8 @@ PS_EFFECT_OUT PS_MAIN(PS_IN In)
     vector vColor = g_DiffuseTexture.Sample(LinearSampler, In.vTexcoord);
     
     vColor *= g_vColor;
-    
+    vColor.rgb = 1.f - (((In.vTexcoord.x + In.fIndex) / (float) g_iNumInstance) + g_fRatio);
+
     Out.vDiffuse = vColor;
     Out.vBlur = vColor;
     
@@ -420,6 +431,8 @@ PS_EFFECT_OUT PS_TRAIL_B_MAIN(PS_IN In)
     
     return Out;
 }
+
+
 
 technique11 DefaultTechnique
 {

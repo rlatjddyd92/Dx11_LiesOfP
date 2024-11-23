@@ -34,7 +34,7 @@ HRESULT CParticle_Effect::Initialize(void* pArg)
     m_InitDesc = *pDesc;
 
     m_pTransformCom->Set_State(CTransform::STATE_POSITION, m_DefaultDesc.vPos);
-    m_pTransformCom->Set_Scaled(m_DefaultDesc.vScale.x, m_DefaultDesc.vScale.y, m_DefaultDesc.vScale.z);
+    m_pTransformCom->Set_Scaled(m_DefaultDesc.vStartScale.x, m_DefaultDesc.vStartScale.y, m_DefaultDesc.vStartScale.z);
     m_pTransformCom->Rotation(m_DefaultDesc.vRotation.x, m_DefaultDesc.vRotation.y, m_DefaultDesc.vRotation.z);
 
     return S_OK;
@@ -46,6 +46,10 @@ void CParticle_Effect::Priority_Update(_float fTimeDelta)
 
 void CParticle_Effect::Update(_float fTimeDelta)
 {
+    _Vec3 vScale = m_pTransformCom->Get_Scaled();
+    vScale += m_DefaultDesc.vOverallScaling * fTimeDelta;
+    m_pTransformCom->Set_Scaled(vScale.x ,vScale.y, vScale.z);
+
     __super::Set_WorldMatrix();
 
     _bool bOver = { false };
@@ -86,10 +90,15 @@ void CParticle_Effect::Update(_float fTimeDelta)
         m_isActive = false;
     }
 
+    if (0.f < m_DefaultDesc.fDuration && m_DefaultDesc.fDuration < m_fAccumulateTime)
+        m_DefaultDesc.iComputeState &= ~CVIBuffer_Instancing::STATE_LOOP;
+
 }
 
 void CParticle_Effect::Late_Update(_float fTimeDelta)
 {
+    m_fAccumulateTime += fTimeDelta;
+
     if (CRenderer::RG_END <= m_RenderDesc.iRenderGroup)
         return;
     m_pGameInstance->Add_RenderObject((CRenderer::RENDERGROUP)m_RenderDesc.iRenderGroup, this);
@@ -133,7 +142,9 @@ HRESULT CParticle_Effect::Render()
         return E_FAIL;
     if (FAILED(m_pShaderCom->Bind_RawValue("g_vTexDivide", &m_DefaultDesc.vTexDevide, sizeof(_Vec2))))
         return E_FAIL;
-    if (FAILED(m_pShaderCom->Bind_RawValue("g_vScaling", &m_DefaultDesc.vScaling, sizeof(_Vec2))))
+    if (FAILED(m_pShaderCom->Bind_RawValue("g_vStartScaling", &m_DefaultDesc.vStartScaling, sizeof(_Vec2))))
+        return E_FAIL;
+    if (FAILED(m_pShaderCom->Bind_RawValue("g_vScalingRatio", &m_DefaultDesc.vScalingRatio, sizeof(_Vec2))))
         return E_FAIL;
     if (FAILED(m_pShaderCom->Bind_RawValue("g_iState", &m_DefaultDesc.iGeomState, sizeof(_uint))))
         return E_FAIL;
@@ -158,9 +169,11 @@ void CParticle_Effect::Reset()
 {
     m_DefaultDesc = m_InitDesc.DefaultDesc;
     m_isActive = true;
+    m_fAccumulateTime = 0.f;
+
     m_pTransformCom->Set_State(CTransform::STATE_POSITION, m_DefaultDesc.vPos);
     m_pTransformCom->Rotation(m_DefaultDesc.vRotation.x, m_DefaultDesc.vRotation.y, m_DefaultDesc.vRotation.z);
-    m_pTransformCom->Set_Scaled(m_DefaultDesc.vScale.x, m_DefaultDesc.vScale.y, m_DefaultDesc.vScale.z);
+    m_pTransformCom->Set_Scaled(m_DefaultDesc.vStartScale.x, m_DefaultDesc.vStartScale.y, m_DefaultDesc.vStartScale.z);
 
     CVIBuffer_Point_Instance::PARTICLE_MOVEMENT Movement = {};
 
@@ -207,7 +220,7 @@ void CParticle_Effect::Set_Desc(const PARTICLE_EFFECT_DESC& ParticleDesc)
 
     m_pTransformCom->Set_State(CTransform::STATE_POSITION, m_DefaultDesc.vPos);
     m_pTransformCom->Rotation(m_DefaultDesc.vRotation.x, m_DefaultDesc.vRotation.y, m_DefaultDesc.vRotation.z);
-    m_pTransformCom->Set_Scaled(m_DefaultDesc.vScale.x, m_DefaultDesc.vScale.y, m_DefaultDesc.vScale.z);
+    m_pTransformCom->Set_Scaled(m_DefaultDesc.vStartScale.x, m_DefaultDesc.vStartScale.y, m_DefaultDesc.vStartScale.z);
     Reset();
 }
 

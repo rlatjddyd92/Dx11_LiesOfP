@@ -92,6 +92,15 @@ struct PS_EFFECT_OUT
     vector vBlur : SV_TARGET1;
 };
 
+struct PS_NORMAL_OUT
+{
+    vector vDiffuse : SV_TARGET0;
+    vector vNormal : SV_TARGET1;
+    vector vDepth : SV_TARGET2;
+    vector vARM : SV_TARGET3;
+    vector vPickDepth : SV_TARGET4;
+};
+
 float2 Get_SpriteTexcoord(float2 vTexcoord);
 
 PS_EFFECT_OUT PS_MAIN(PS_IN In)
@@ -212,6 +221,24 @@ PS_OUT PS_BLEND_RGBTOA_GLOW_MAIN(PS_IN In)
     return Out;
 }
 
+PS_NORMAL_OUT PS_BLOOD_MAIN(PS_IN In)
+{
+    PS_NORMAL_OUT Out = (PS_NORMAL_OUT) 0;
+    
+    Out.vDiffuse = g_DiffuseTexture.Sample(LinearSampler, Get_SpriteTexcoord(In.vTexcoord));
+    Out.vNormal = Out.vDiffuse * 2.f - 1.f;
+    Out.vDepth = float4(0.f, 0.f, 0.f, 0.f);
+    Out.vARM = float4(0.f, 0.f, 0.f, 0.f);
+    Out.vPickDepth = float4(0.f, 0.f, 0.f, 0.f);
+    
+    if (Out.vDiffuse.a < 0.1f)
+        discard;
+    
+    Out.vDiffuse *= g_vColor;
+
+    return Out;
+}
+
 technique11 DefaultTechnique
 {
     pass Default // 0
@@ -290,12 +317,22 @@ technique11 DefaultTechnique
         GeometryShader = NULL;
         PixelShader = compile ps_5_0 PS_BLEND_RGBTOA_GLOW_MAIN();
     }
+
+    pass BLOOD // 7
+    {
+        SetRasterizerState(RS_Default);
+        SetDepthStencilState(DSS_Default, 0);
+        SetBlendState(BS_Default, vector(0.f, 0.f, 0.f, 0.f), 0xffffffff);
+
+        VertexShader = compile vs_5_0 VS_MAIN();
+        GeometryShader = NULL;
+        PixelShader = compile ps_5_0 PS_BLOOD_MAIN();
+    }
 }
 
 
 float2 Get_SpriteTexcoord(float2 vTexcoord)
 {
-        
     float2 start = (float2) 0;
     float2 over = (float2) 0;
 

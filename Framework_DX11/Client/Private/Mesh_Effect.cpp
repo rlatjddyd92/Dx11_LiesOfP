@@ -82,6 +82,9 @@ void CMesh_Effect::Late_Update(_float fTimeDelta)
 			m_isDead = true;
 	}
 
+	if (CRenderer::RG_END <= m_RenderDesc.iRenderGroup)
+		return;
+
 	m_pGameInstance->Add_RenderObject((CRenderer::RENDERGROUP)m_RenderDesc.iRenderGroup, this);
 }
 
@@ -142,6 +145,7 @@ HRESULT CMesh_Effect::Render()
 
 void CMesh_Effect::Reset()
 {
+	m_vCurrentTileMove ={0.f, 0.f};
 	m_fAccumulateTime = { 0.f };
 
 	m_DefaultDesc = m_InitDesc;

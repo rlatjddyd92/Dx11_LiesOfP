@@ -284,7 +284,7 @@ HRESULT CLoader::Ready_Resources_For_GamePlayLevel()
 	//}
 
 	lstrcpy(m_szLoadingText, TEXT("이펙트 매니저를 로딩중입니다."));
-	if(FAILED(CEffect_Manager::Get_Instance()->Initialize(m_pDevice, m_pContext, TEXT("../../Tools/Bin/DataFiles/Effect"))))
+	if(FAILED(CEffect_Manager::Get_Instance()->Initialize(m_pDevice, m_pContext, TEXT("../../Tools/Bin/DataFiles/Effect"), TEXT("../Bin/Resources/Textures/Effect"))))
 		return E_FAIL;
 
 	lstrcpy(m_szLoadingText, TEXT("텍스쳐를 로딩중입니다."));
