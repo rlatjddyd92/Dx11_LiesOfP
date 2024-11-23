@@ -36,12 +36,13 @@ private:
     _bool               m_isPrevChance = { false };
     _bool               m_isActivatedSpecial = { false };
 
-    _bool* m_pResetRootMove = { nullptr };
+    _bool*              m_pResetRootMove = { nullptr };
 
     _uint               m_iRouteTrack = {};
 
 private:
     _bool               End_Check();
+    void                Collider_Check();
 
 public:
     static CState_SimonManusP1_ChasingSwing* Create(class CFsm* pFsm, class CMonster* pMonster, _uint iStateNum, void* pArg = nullptr);

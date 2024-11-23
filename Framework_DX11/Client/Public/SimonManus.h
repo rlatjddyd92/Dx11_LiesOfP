@@ -28,6 +28,7 @@ public:
 
 public:
 	enum COLLIDERTYPE { TYPE_LEFTHAND, TYPE_RIGHTHAND, TYPE_END };
+	enum EXCOLLIDER { LEG_LEFT, LEG_RIGHT, LOWERBODY, LEG_END };
 
 public:
 	enum SIMONMANUS_P1_STATE {
@@ -57,6 +58,7 @@ public:
 	virtual void Late_Update(_float fTimeDelta) override;
 	virtual HRESULT Render() override;
 
+	
 private:
 	CGameObject*			m_pColliderObject[TYPE_END] = { nullptr, nullptr };
 	_bool					m_bColliderCtrs[TYPE_END] = {true,  true};
@@ -65,8 +67,15 @@ private:
 	class CWeapon*	m_pWeapon = { nullptr };
 	class CFsm*		m_pExtraFsmCom = { nullptr };	//2페이즈 fsm
 	class CModel*	m_pExtraModelCom = { nullptr };	//2페이즈 model
+	
+	class CCollider* m_EXCollider[LEG_END] = { nullptr, nullptr };
+
+	_bool			m_isChanged = { false };
 
 private:
+	virtual void	Active_CurrentWeaponCollider(_float fDamageRatio);
+	virtual void	DeActive_CurretnWeaponCollider();
+
 	HRESULT Ready_Components();
 	HRESULT Ready_FSM();
 	HRESULT Ready_Weapon();

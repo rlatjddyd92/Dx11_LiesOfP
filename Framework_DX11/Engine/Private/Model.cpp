@@ -284,13 +284,13 @@ void CModel::SetUp_Animation(_uint iAnimationIndex, _bool isLoop)
 	m_CurrentTrackPosition = 0.0;
 }
 
-HRESULT CModel::SetUp_NextAnimation(_uint iNextAnimationIndex, _bool isLoop, _float fChangeDuration, _uint iStartFrame, _bool bEitherBoundary)
+HRESULT CModel::SetUp_NextAnimation(_uint iNextAnimationIndex, _bool isLoop, _float fChangeDuration, _uint iStartFrame, _bool bEitherBoundary, _bool bSameChange)
 {
 	if (iNextAnimationIndex >= m_iNumAnimations)
 		return E_FAIL;
 
 	//같은걸로 바꿀순 없어
-	if (m_iCurrentAnimIndex == iNextAnimationIndex && !m_isChangeAni)
+	if (m_iCurrentAnimIndex == iNextAnimationIndex && !m_isChangeAni && !bSameChange)
 		return E_FAIL;
 
 	// 이미 같은걸로 바꾸고 있어
@@ -332,13 +332,13 @@ HRESULT CModel::SetUp_NextAnimation(_uint iNextAnimationIndex, _bool isLoop, _fl
 	return S_OK;
 }
 
-HRESULT CModel::SetUp_NextAnimation_Boundary(_uint iNextAnimationIndex, _bool isLoop, _float fChangeDuration, _uint iStartFrame)
+HRESULT CModel::SetUp_NextAnimation_Boundary(_uint iNextAnimationIndex, _bool isLoop, _float fChangeDuration, _uint iStartFrame, _bool bSameChange)
 {
 	if (iNextAnimationIndex >= m_iNumAnimations)
 		return E_FAIL;
 
 	//같은걸로 바꿀순 없어
-	if (m_iCurrentAnimIndex_Boundary == iNextAnimationIndex && !m_isChangeAni_Boundary)	//만약 지금 바꾸는중이 아니라면
+	if (m_iCurrentAnimIndex_Boundary == iNextAnimationIndex && !m_isChangeAni_Boundary && !bSameChange)	//만약 지금 바꾸는중이 아니라면
 		return E_FAIL;
 
 	// 이미 같은걸로 바꾸고 있어														이미 변환이 진행중인데, 같은 변환이 들어왔으면

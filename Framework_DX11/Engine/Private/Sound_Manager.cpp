@@ -188,5 +188,5 @@ void CSound_Manager::Free()
 	m_Sounds.clear();
 
 	m_pSystem->close();
-	m_pSystem->release();
+	m_pSystem->release();	//터지는 문제
 }

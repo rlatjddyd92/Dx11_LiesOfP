@@ -30,7 +30,6 @@ void CState_SimonManusP2_LightningToWave::Update(_float fTimeDelta)
 {
     if (End_Check())
     {
-
         switch (m_iRouteTrack)
         {
         case 0:

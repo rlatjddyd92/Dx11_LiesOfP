@@ -12,9 +12,9 @@ class CState_SimonManusP2_SwipMultiple :
 {
 private:
     typedef enum {
-        AN_ROUTE_FIRST_L = 19,        //SwingDown
-        AN_ROUTE_FIRST_R = 18,        //SwingDown
-        AN_ROUTE_LAST = 17,       //SwingRight
+        AN_ROUTE_FIRST_L = 19,        //SwingLeft
+        AN_ROUTE_FIRST_R = 18,        //SwingRight
+        AN_ROUTE_LAST = 17,       //SwingTwice
     }ANIMNUM;
 
 public:
@@ -46,6 +46,7 @@ private:
 
 private:
     _bool               End_Check();
+    void                Collider_Check();
 
 public:
     static CState_SimonManusP2_SwipMultiple* Create(class CFsm* pFsm, class CMonster* pMonster, _uint iStateNum, void* pArg = nullptr);

@@ -33,6 +33,9 @@ void CState_SimonManusP2_Sting::Update(_float fTimeDelta)
         m_pMonster->Change_State(CSimonManus::IDLE);
         return;
     }
+
+    Collider_Check();
+
 }
 
 void CState_SimonManusP2_Sting::End_State()
@@ -43,6 +46,21 @@ void CState_SimonManusP2_Sting::End_State()
 _bool CState_SimonManusP2_Sting::End_Check()
 {
     return m_pMonster->Get_EndAnim(AN_STINGATTACK);
+}
+
+void CState_SimonManusP2_Sting::Collider_Check()
+{
+    _double CurTrackPos = m_pMonster->Get_CurrentTrackPos();
+
+    if ((CurTrackPos >= 75.f && CurTrackPos <= 105.f) ||
+        (CurTrackPos >= 175.f && CurTrackPos <= 225.f))
+    {
+        m_pMonster->Active_CurrentWeaponCollider(1);
+    }
+    else
+    {
+        m_pMonster->DeActive_CurretnWeaponCollider();
+    }
 }
 
 CState_SimonManusP2_Sting* CState_SimonManusP2_Sting::Create(CFsm* pFsm, CMonster* pMonster, _uint iStateNum, void* pArg)

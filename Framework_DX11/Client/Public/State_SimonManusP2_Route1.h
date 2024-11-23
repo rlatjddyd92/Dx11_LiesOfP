@@ -45,6 +45,7 @@ private:
 
 private:
     _bool               End_Check();
+    void                Collider_Check(_float fTimeDelta);
 
 public:
     static CState_SimonManusP2_Route1* Create(class CFsm* pFsm, class CMonster* pMonster, _uint iStateNum, void* pArg = nullptr);

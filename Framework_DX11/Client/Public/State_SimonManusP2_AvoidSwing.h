@@ -11,7 +11,7 @@ class CState_SimonManusP2_AvoidSwing : public CState
 {
 private:
     typedef enum {
-        AN_AVOIDSWING = 45
+        AN_AVOIDSWING = 53
     }ANIMNUM;
 public:
     CState_SimonManusP2_AvoidSwing(class CFsm* pFsm, class CMonster* pMonster);
@@ -39,6 +39,7 @@ private:
 
 private:
     _bool               End_Check();
+    void                Collider_Check();
 
 public:
     static CState_SimonManusP2_AvoidSwing* Create(class CFsm* pFsm, class CMonster* pMonster, _uint iStateNum, void* pArg = nullptr);

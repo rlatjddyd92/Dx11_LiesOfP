@@ -77,8 +77,8 @@ public:		//_bool pOut은 메인 애니메이션의 종료를 반환,
 
 	_uint		Find_AnimationIndex(const _char* pAnimationmName, _float fSpeedRatio = 1.f);
 	void		SetUp_Animation(_uint iAnimationIndex, _bool isLoop = false);
-	HRESULT     SetUp_NextAnimation(_uint iNextAnimationIndex, _bool isLoop = false, _float fChangeDuration = 0.2f, _uint iStartFrame = 0, _bool bEitherBoundary = true);
-	HRESULT     SetUp_NextAnimation_Boundary(_uint iNextAnimationIndex, _bool isLoop = false, _float fChangeDuration = 0.2f, _uint iStartFrame = 0);
+	HRESULT     SetUp_NextAnimation(_uint iNextAnimationIndex, _bool isLoop = false, _float fChangeDuration = 0.2f, _uint iStartFrame = 0, _bool bEitherBoundary = true, _bool bSameChange = false);
+	HRESULT     SetUp_NextAnimation_Boundary(_uint iNextAnimationIndex, _bool isLoop = false, _float fChangeDuration = 0.2f, _uint iStartFrame = 0, _bool bSameChange = false);
 
 	_uint		Setting_Animation(const _char* szAnimationmName, _double SpeedRatio = 1.0) const;
 	_matrix		CalcMatrix_forVtxAnim(_uint iMeshNum, VTXANIMMESH VtxStruct);

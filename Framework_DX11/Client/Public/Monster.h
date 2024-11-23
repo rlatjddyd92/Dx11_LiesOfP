@@ -40,6 +40,8 @@ public:
 	void		Set_UpTargetPos();
 	void		Look_Player();
 	_float		Calc_Distance_XZ();
+	virtual void	Active_CurrentWeaponCollider(_float fDamageRatio);
+	virtual void	DeActive_CurretnWeaponCollider();
 
 
 protected:

@@ -33,6 +33,9 @@ void CState_SimonManusP2_AvoidSwing::Update(_float fTimeDelta)
         m_pMonster->Change_State(CSimonManus::IDLE);
         return;
     }
+
+    Collider_Check();
+
 }
 
 void CState_SimonManusP2_AvoidSwing::End_State()
@@ -43,6 +46,20 @@ void CState_SimonManusP2_AvoidSwing::End_State()
 _bool CState_SimonManusP2_AvoidSwing::End_Check()
 {
     return m_pMonster->Get_EndAnim(AN_AVOIDSWING);
+}
+
+void CState_SimonManusP2_AvoidSwing::Collider_Check()
+{
+    _double CurTrackPos = m_pMonster->Get_CurrentTrackPos();
+
+    if (CurTrackPos >= 120.f && CurTrackPos <= 180.f)
+    {
+        m_pMonster->Active_CurrentWeaponCollider(1);
+    }
+    else
+    {
+        m_pMonster->DeActive_CurretnWeaponCollider();
+    }
 }
 
 CState_SimonManusP2_AvoidSwing* CState_SimonManusP2_AvoidSwing::Create(CFsm* pFsm, CMonster* pMonster, _uint iStateNum, void* pArg)

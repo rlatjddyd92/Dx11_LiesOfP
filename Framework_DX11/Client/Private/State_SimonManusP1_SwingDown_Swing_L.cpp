@@ -48,7 +48,7 @@ void CState_SimonManusP1_SwingDown_Swing_L::Update(_float fTimeDelta)
         return;
     }
 
-
+    Collider_Check();
 }
 
 void CState_SimonManusP1_SwingDown_Swing_L::End_State()
@@ -83,6 +83,34 @@ _bool CState_SimonManusP1_SwingDown_Swing_L::End_Check()
     }
 
     return bEndCheck;
+}
+
+void CState_SimonManusP1_SwingDown_Swing_L::Collider_Check()
+{
+    _double CurTrackPos = m_pMonster->Get_CurrentTrackPos();
+
+    if (m_iRouteTrack == 0)
+    {
+        if (CurTrackPos >= 65.f && CurTrackPos <= 80.f)
+        {
+            m_pMonster->Active_CurrentWeaponCollider(1);
+        }
+        else
+        {
+            m_pMonster->DeActive_CurretnWeaponCollider();
+        }
+    }
+    else
+    {
+        if (CurTrackPos >= 40.f && CurTrackPos <= 85.f)
+        {
+            m_pMonster->Active_CurrentWeaponCollider(1);
+        }
+        else
+        {
+            m_pMonster->DeActive_CurretnWeaponCollider();
+        }
+    }
 }
 
 CState_SimonManusP1_SwingDown_Swing_L* CState_SimonManusP1_SwingDown_Swing_L::Create(CFsm* pFsm, CMonster* pMonster, _uint iStateNum, void* pArg)
