@@ -1351,7 +1351,7 @@ HRESULT CLoader::Ready_Resources_For_ToolLevel_Map1()
 		wprintf(strPrototypeName.c_str());
 
 		PreTransformMatrix = XMMatrixIdentity();
-		PreTransformMatrix = XMMatrixScaling(0.0002f, 0.0002f, 0.0002f);
+		PreTransformMatrix = XMMatrixScaling(0.0001f, 0.0001f, 0.0001f);
 
 		if (FAILED(m_pGameInstance->Add_Prototype(LEVEL_TOOL, strPrototypeName,
 			CModel::Create(m_pDevice, m_pContext, CModel::TYPE_NONANIM, szFullPath7, PreTransformMatrix))))

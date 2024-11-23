@@ -364,28 +364,32 @@ void CController_MapTool::Select_Map_Model()
 	{
 		iFolder = Folder_Interior;
 		item_selected_idx = 0;
-		Show_List(iFolder);
+		if(m_iPreSelectedFolder != iFolder)
+			Show_List(iFolder);
 	} ImGui::SameLine();
 
 	if (ImGui::RadioButton("Line", iFolder == Folder_Line))
 	{
 		iFolder = Folder_Line;
 		item_selected_idx = 0;
-		Show_List(iFolder);
+		if (m_iPreSelectedFolder != iFolder)
+			Show_List(iFolder);
 	} ImGui::SameLine();
 
 	if (ImGui::RadioButton("Structure", iFolder == Folder_Structure))
 	{
 		iFolder = Folder_Structure;
 		item_selected_idx = 0;
-		Show_List(iFolder);
+		if (m_iPreSelectedFolder != iFolder)
+			Show_List(iFolder);
 	} ImGui::SameLine();
 
 	if (ImGui::RadioButton("Temp", iFolder == Folder_Temp))
 	{
 		iFolder = Folder_Temp;
 		item_selected_idx = 0;
-		Show_List(iFolder);
+		if (m_iPreSelectedFolder != iFolder)
+			Show_List(iFolder);
 	}
 
 	////////////////////////
@@ -563,53 +567,60 @@ void CController_MapTool::Select_Etc_Model()
 	}
 #pragma endregion
 
+	static int preSelectedFolder = -1;
+	static int iImagesCount = 0;
+
 #pragma region SHOW ETC SELECTED FOLDER FILES
-
-	//내용물 초기화 (capacity는 그냥 냅둠)
-	for (auto& filename : m_Etc_File_Names) {
-		Safe_Delete_Array(filename);
-	}
-	m_Etc_File_Names.clear();
-
-	char szImageFindPath[128] = "../Bin/ModelData/NonAnim/Map/Etc/";    // 상대 경로 -> 모든 파일을 돌겠다
-	char szImagePathReset[128] = "../Bin/ModelData/NonAnim/Map/Etc/";
-	char szImagePath[128] = "../Bin/ModelData/NonAnim/Map/Etc/";
-
-	//폴더 리스트에서 선택한 인덱스로 파일 검색 경로 생성
-	strcat_s(szImageFindPath, m_Etc_Folder_Names[item_selected_idx]);
-	strcat_s(szImageFindPath, "/*");
-	handle = _findfirst(szImageFindPath, &fd);
-
-	if (handle == -1)
-		return;
-
-	iResult = 0;
-	int iImagesCount = 0;
-
-	while (iResult != -1)
+	if(preSelectedFolder != item_selected_idx)
 	{
-		strcpy_s(szImagePath, szImagePathReset);
-		strcat_s(szImagePath, fd.name);
+		preSelectedFolder = item_selected_idx;
 
-		_char szDirName[MAX_PATH] = "";
-		_char szFileName[MAX_PATH] = "";
-		_char szExt[MAX_PATH] = "";
-		_splitpath_s(szImagePath, nullptr, 0, szDirName, MAX_PATH, szFileName, MAX_PATH, szExt, MAX_PATH);
-
-		if (!strcmp(szExt, ".") || !strcmp(szExt, "..") || strcmp(szExt, ".dat"))
-		{
-			iResult = _findnext(handle, &fd);
-			continue;
+		//내용물 초기화 (capacity는 그냥 냅둠)
+		for (auto& filename : m_Etc_File_Names) {
+			Safe_Delete_Array(filename);
+			iImagesCount = 0;
 		}
+		m_Etc_File_Names.clear();
 
-		iImagesCount++;
+		char szImageFindPath[128] = "../Bin/ModelData/NonAnim/Map/Etc/";    // 상대 경로 -> 모든 파일을 돌겠다
+		char szImagePathReset[128] = "../Bin/ModelData/NonAnim/Map/Etc/";
+		char szImagePath[128] = "../Bin/ModelData/NonAnim/Map/Etc/";
 
-		//_strup : 문자열 내용을 복사해 그 주소를 저장-> 주소에 따라 문자열이 바뀌는걸 막아 모두 동일해지는걸 막음
-	//	m_FileNames.push_back(_strdup(fd.name));
-		m_Etc_File_Names.push_back(_strdup(szFileName));
+		//폴더 리스트에서 선택한 인덱스로 파일 검색 경로 생성
+		strcat_s(szImageFindPath, m_Etc_Folder_Names[item_selected_idx]);
+		strcat_s(szImageFindPath, "/*");
+		handle = _findfirst(szImageFindPath, &fd);
 
-		//_findnext : <io.h>에서 제공하며 다음 위치의 파일을 찾는 함수, 더이상 없다면 -1을 리턴
-		iResult = _findnext(handle, &fd);
+		if (handle == -1)
+			return;
+
+		iResult = 0;
+	
+		while (iResult != -1)
+		{
+			strcpy_s(szImagePath, szImagePathReset);
+			strcat_s(szImagePath, fd.name);
+
+			_char szDirName[MAX_PATH] = "";
+			_char szFileName[MAX_PATH] = "";
+			_char szExt[MAX_PATH] = "";
+			_splitpath_s(szImagePath, nullptr, 0, szDirName, MAX_PATH, szFileName, MAX_PATH, szExt, MAX_PATH);
+
+			if (!strcmp(szExt, ".") || !strcmp(szExt, "..") || strcmp(szExt, ".dat"))
+			{
+				iResult = _findnext(handle, &fd);
+				continue;
+			}
+
+			iImagesCount++;
+
+			//_strup : 문자열 내용을 복사해 그 주소를 저장-> 주소에 따라 문자열이 바뀌는걸 막아 모두 동일해지는걸 막음
+		//	m_FileNames.push_back(_strdup(fd.name));
+			m_Etc_File_Names.push_back(_strdup(szFileName));
+
+			//_findnext : <io.h>에서 제공하며 다음 위치의 파일을 찾는 함수, 더이상 없다면 -1을 리턴
+			iResult = _findnext(handle, &fd);
+		}
 	}
 
 	static bool item_Image_highlight = false;
@@ -639,6 +650,8 @@ void CController_MapTool::Select_Etc_Model()
 
 void CController_MapTool::Show_List(_uint iFolder)
 {
+	m_iPreSelectedFolder = iFolder;
+
 	//내용물 초기화 (capacity는 그냥 냅둠)
 	for (auto& filename : m_FileNames) {
 		Safe_Delete_Array(filename);
