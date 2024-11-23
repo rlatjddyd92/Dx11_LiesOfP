@@ -6,6 +6,7 @@ texture2D		g_Texture;
 
 texture2D       g_DownSampleTexture;
 texture2D		g_BlurTexture;
+texture2D       g_EmessiveTexture;
 
 float2          g_vScreenSize;
 bool            g_isSelectBright = false;
@@ -98,9 +99,10 @@ PS_OUT PS_MAIN_DOWNSAMPLE(PS_IN In)
         {
             float2 vTexcoord = In.vTexcoord + float2(1.f / g_vScreenSize.x * x, 1.f / g_vScreenSize.y * y);
             vector vSampleColor = g_DownSampleTexture.Sample(LinearClampSampler, vTexcoord);
-    
+            vector vEmessiveTexture = g_EmessiveTexture.Sample(LinearClampSampler, vTexcoord);
             
-            vColor += vSampleColor;
+            
+            vColor += vSampleColor + vEmessiveTexture;
         }
     }
     

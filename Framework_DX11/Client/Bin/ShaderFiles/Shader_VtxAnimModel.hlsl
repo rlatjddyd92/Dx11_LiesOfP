@@ -11,6 +11,12 @@ matrix g_CascadeViewMatrix[3], g_CascadeProjMatrix[3];
 texture2D       g_DiffuseTexture;
 texture2D       g_NormalTexture;
 texture2D       g_ARMTexture;
+texture2D		g_EmessiveTexture;
+
+float4			g_vRimLight;
+
+float			g_fEmessiveMask;
+float			g_fRimLightMask;
 
 vector g_vLightDir;
 vector g_vLightDiffuse;
@@ -141,11 +147,15 @@ PS_OUT_MODEL PS_MAIN(PS_IN_ANIMODEL In)
 
     if (0.3f > vMtrlDiffuse.a)
         discard;
-
-    Out.vDiffuse = vMtrlDiffuse;
+	
+    vector vEmissive = g_EmessiveTexture.Sample(LinearClampSampler, In.vTexcoord) * g_fEmessiveMask;
+	
+    Out.vDiffuse = vMtrlDiffuse + vEmissive;
     Out.vNormal = vector(In.vNormal.xyz * 0.5f + 0.5f, 0.f);
-    Out.vDepth = vector(In.vProjPos.z / In.vProjPos.w, In.vProjPos.w / g_fFar, 0.f, 0.f); // x:0~F를 Z로 나눈 값 , y: view스페이스 깊이 정규화
+    Out.vDepth = vector(In.vProjPos.z / In.vProjPos.w, In.vProjPos.w / g_fFar, 0.f, 0.f); // 0~F사이의 깊이, 정규화된 Z값
     Out.vARM = g_ARMTexture.Sample(LinearSampler, In.vTexcoord);
+    Out.vEmessive = vEmissive * g_fEmessiveMask;
+    Out.vRimLight = g_vRimLight;
 
 
     return Out;
@@ -158,8 +168,6 @@ PS_OUT_MODEL PS_MAIN_NORMAL(PS_IN_NORMAL In)
     vector vDiffuse = g_DiffuseTexture.Sample(LinearSampler, In.vTexcoord);
 
     vector vNormalDesc = g_NormalTexture.Sample(LinearSampler, In.vTexcoord);
-	/* 로컬상의 변환되지 않은 노말벡터를 구했다. */
-	/* 로컬스페이스 => 정점의로컬스페이스(x), 노멀벡터당 하나씩 로컬스페이스를 독립적으로 구성했다. */
     float3 vNormal = vNormalDesc.xyz * 2.f - 1.f;
 
     float3x3 WorldMatrix = float3x3(In.vTangent, In.vBinormal, In.vNormal);
@@ -167,13 +175,16 @@ PS_OUT_MODEL PS_MAIN_NORMAL(PS_IN_NORMAL In)
 
     if (0.3f >= vDiffuse.a)
         discard;
-
-    Out.vDiffuse = vDiffuse;
-
+	
+    vector vEmissive = g_EmessiveTexture.Sample(LinearClampSampler, In.vTexcoord) * g_fEmessiveMask;
+	
+    Out.vDiffuse = vDiffuse + vEmissive;
 	/* -1.f ~ 1.f -> 0.f ~ 1.f */
     Out.vNormal = vector(vNormal.xyz * 0.5f + 0.5f, 0.f);
     Out.vDepth = vector(In.vProjPos.z / In.vProjPos.w, In.vProjPos.w / g_fFar, 0.f, 0.f);
     Out.vARM = g_ARMTexture.Sample(LinearSampler, In.vTexcoord);
+    Out.vEmessive = vEmissive * g_fEmessiveMask;
+    Out.vRimLight = g_vRimLight;
 
     return Out;
 }

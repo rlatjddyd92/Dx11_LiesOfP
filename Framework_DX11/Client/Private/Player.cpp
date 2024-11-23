@@ -130,7 +130,7 @@ void CPlayer::Update(_float fTimeDelta)
 {
 	m_pFsmCom->Update(fTimeDelta);
 
-	m_vCurRootMove = m_pModelCom->Play_Animation(fTimeDelta * 0.3f, &m_EvKeyList);
+	m_vCurRootMove = m_pModelCom->Play_Animation(fTimeDelta, &m_EvKeyList);
 
 
 	_vector vPos = m_pTransformCom->Get_State(CTransform::STATE_POSITION);
@@ -140,51 +140,6 @@ void CPlayer::Update(_float fTimeDelta)
 
 	m_pTransformCom->Set_State(CTransform::STATE_POSITION, vPos + m_vCurRootMove);
 	
-
-	for (auto& EvKey : m_EvKeyList)
-	{
-
-		//if (EvKey.eEvent_type == EVENT_KEYFRAME::ET_ONCE)
-		//{
-		//	auto Effect = m_Effects.find(EvKey.iEffectNum);
-		//	if (Effect == m_Effects.end())
-		//	{
-		//		CEffect_Container::EFFECT_DESC EffectDesc = {};
-		//		EffectDesc.fRotationPerSec = XMConvertToRadians(90.f);
-		//		EffectDesc.fSpeedPerSec = 1.f;
-		//		EffectDesc.iLevelIndex = LEVEL_GAMEPLAY;
-		//		EffectDesc.pParentMatrix = m_pTransformCom->Get_WorldMatrix_Ptr();
-		//		EffectDesc.pSocketMatrix = (_Matrix*)m_pModelCom->Get_BoneCombindTransformationMatrix_Ptr(EvKey.iBoneIndex);
-		//		
-		//		CEffect_Manager::Get_Instance()->Clone_Effect(CEffect_Manager::EFFECT_POWER_HIT, &EffectDesc);
-		//	}
-		//}
-		//else if (EvKey.eEvent_type == EVENT_KEYFRAME::ET_REPET)
-		//{
-		//	CEffect_Container* pEffectCon;
-		//	auto Effect = m_Effects.find(EvKey.iEffectNum);
-		//	if (Effect == m_Effects.end())
-		//	{
-		//		CEffect_Container::EFFECT_DESC EffectDesc = {};
-		//		EffectDesc.fRotationPerSec = XMConvertToRadians(90.f);
-		//		EffectDesc.fSpeedPerSec = 1.f;
-		//		EffectDesc.iLevelIndex = LEVEL_GAMEPLAY;
-		//		EffectDesc.vScale = _Vec3{1, 1, 1};
-		//		EffectDesc.vPos = _Vec3{ 0, 0, 0 };
-		//		EffectDesc.vRotation = _Vec3{ 0, 0, 0 };
-		//		EffectDesc.pParentMatrix = m_pTransformCom->Get_WorldMatrix_Ptr();
-		//		EffectDesc.pSocketMatrix = (_Matrix*)m_pModelCom->Get_BoneCombindTransformationMatrix_Ptr(EvKey.iBoneIndex);
-		//		pEffectCon =	CEffect_Manager::Get_Instance()->Clone_Effect(CEffect_Manager::EFFECT_POWER_HIT, &EffectDesc);
-		//		m_Effects.emplace(EvKey.iEffectNum, pEffectCon);
-		//	}
-		//	else
-		//	{
-		//		pEffectCon = Effect->second;
-		//	}
-		//	m_EffectList.push_back(pEffectCon);
-		//}
-	}
-
 	for (auto& pEffect : m_EffectList)
 	{
 		pEffect->Update(fTimeDelta);
@@ -197,14 +152,6 @@ void CPlayer::Update(_float fTimeDelta)
 
 void CPlayer::Late_Update(_float fTimeDelta)
 {
-	//if (GetKeyState(VK_LBUTTON) & 0x8000)
-	//{
-	//	_float3		vPickPos;
-	//	if (true == m_pGameInstance->Picking(&vPickPos))
-	//		m_pTransformCom->Set_State(CTransform::STATE_POSITION, XMVectorSetW(XMLoadFloat3(&vPickPos), 1.f));		
-	//}
-
-
 	m_pRigidBodyCom->Update(fTimeDelta);
 	m_pNavigationCom->SetUp_OnCell(m_pTransformCom, 0.f, fTimeDelta);
 
@@ -221,49 +168,8 @@ void CPlayer::Late_Update(_float fTimeDelta)
 
 HRESULT CPlayer::Render()
 {
-	if (FAILED(Bind_WorldViewProj()))
+	if (FAILED(__super::Render()))
 		return E_FAIL;
-
-	_uint		iNumMeshes = m_pModelCom->Get_NumMeshes();
-
-	for (size_t i = 0; i < iNumMeshes; i++)
-	{
-		m_pModelCom->Bind_MeshBoneMatrices(m_pShaderCom, "g_BoneMatrices", (_uint)i);
-
-		if (FAILED(m_pModelCom->Bind_Material(m_pShaderCom, "g_DiffuseTexture", DIFFUSE, (_uint)i)))
-			return E_FAIL;
-
-		if (nullptr != m_pModelCom->Find_Texture((_uint)i, TEXTURE_TYPE::ROUGHNESS))
-		{
-			if (FAILED(m_pModelCom->Bind_Material(m_pShaderCom, "g_ARMTexture", ROUGHNESS, (_uint)i)))
-				return E_FAIL;
-		}
-
-		if (nullptr != m_pModelCom->Find_Texture((_uint)i, TEXTURE_TYPE::NORMALS))
-		{
-			if (FAILED(m_pModelCom->Bind_Material(m_pShaderCom, "g_NormalTexture", NORMALS, (_uint)i)))
-				return E_FAIL;
-
-			if (FAILED(m_pShaderCom->Begin(2)))
-				return E_FAIL;
-		}
-		else
-		{
-			if (FAILED(m_pShaderCom->Begin(0)))
-				return E_FAIL;
-		}
-
-		if (FAILED(m_pModelCom->Render((_uint)i)))
-			return E_FAIL;
-	}
-
-	return S_OK;
-
-#ifdef _DEBUG
-	m_pColliderCom->Render();
-	m_pNavigationCom->Render();
-#endif
-
 
 	if (FAILED(m_pWeapon[m_eWeaponType]->Render()))
 		return E_FAIL;

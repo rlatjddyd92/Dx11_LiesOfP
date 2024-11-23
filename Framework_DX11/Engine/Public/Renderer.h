@@ -84,7 +84,7 @@ private:
 	_bool						m_isUseBloom = { true };
 
 	/* SSAO */
-	SSAO_DESC					m_tSSAO = {  };
+	SSAO_DESC					m_tSSAO;
 	ID3D11Buffer*				m_pBuffer_SSAO = { nullptr };
 	class CTexture*				m_pNoiseTexture_SSAO = { nullptr };
 
@@ -92,13 +92,13 @@ private:
 	ID3D11DepthStencilView*		m_pCascadeDepthStencilViewArr = { nullptr };
 
 	/* HDR */
-	HDR_DESC					m_tHDR = {};
+	HDR_DESC					m_tHDR;
 
 	/* DOF */
-	DOF_DESC					m_tDOF = {};
+	DOF_DESC					m_tDOF;
 
 	/* Radial Blur*/
-	RADIAL_DESC					m_tRadial = {};
+	RADIAL_DESC					m_tRadial;
 
 #ifdef _DEBUG
 private:
@@ -140,6 +140,7 @@ private:
 	HRESULT Ready_LightDepthStencilView();
 	HRESULT Copy_BackBuffer();
 	HRESULT Ready_CascadeDepthStencilView();
+	HRESULT Ready_SSAO();
 	HRESULT Ready_HDR();
 	HRESULT Ready_Bloom();
 	HRESULT Ready_DOF();

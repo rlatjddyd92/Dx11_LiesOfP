@@ -22,8 +22,19 @@ HRESULT CState_Player_Scissor_Charge00::Initialize(_uint iStateNum, void* pArg)
     m_pTrackPos = pDesc->pPrevTrackPos;
 
     m_iChangeFrame = 180;
-    m_iSeperateFrame = 30;
+    m_iSeperateFrame = 28;
     m_iCombineFrame = 129;
+
+    m_iColliderStartFrame_Left[0] = 69;
+    m_iColliderEndFrame_Left[0] = 75;
+    m_iColliderStartFrame_Left[1] = 114;
+    m_iColliderEndFrame_Left[1] = 117;
+
+    m_iColliderStartFrame_Right[0] = 80;
+    m_iColliderEndFrame_Right[0] = 83;
+    m_iColliderStartFrame_Right[1] = 116;
+    m_iColliderEndFrame_Right[1] = 119;
+
 
     m_iStateNum = iStateNum;
 
@@ -37,14 +48,6 @@ HRESULT CState_Player_Scissor_Charge00::Start_State(void* pArg)
     m_isInputLButton = false;
     m_isInputRButton = false;
     m_fRButtonTime = 0.f;
-
-    m_iColliderStartFrame_Left = 114;
-    m_iColliderEndFrame_Left = 117;
-
-    m_iColliderStartFrame_Right[0] = 80;
-    m_iColliderEndFrame_Right[0] = 83;
-    m_iColliderStartFrame_Right[1] = 116;
-    m_iColliderEndFrame_Right[1] = 119;
 
     return S_OK;
 }
@@ -113,30 +116,28 @@ void CState_Player_Scissor_Charge00::Control_Collider()
 {
     _int iFrame = m_pPlayer->Get_Frame();
 
-    if (m_iCombineFrame >= iFrame)
+    for (_uint i = 0; i < 2; ++i)
     {
-        if (m_iColliderStartFrame_Left<= iFrame && iFrame <= m_iColliderEndFrame_Left)
+
+        if (m_iColliderStartFrame_Left[i] <= iFrame && iFrame <= m_iColliderEndFrame_Left[i])
         {
             m_pPlayer->Active_CurrentWeaponCollider(3.f, 1);
         }
         else
         {
-            m_pPlayer->DeActive_CurretnWeaponCollider(1);
+            //m_pPlayer->DeActive_CurretnWeaponCollider(1);
         }
 
-
-        for (_uint i = 0; i < 2; ++i)
+        if (m_iColliderStartFrame_Right[i] <= iFrame && iFrame <= m_iColliderEndFrame_Right[i])
         {
-            if (m_iColliderStartFrame_Right[i] <= iFrame && iFrame <= m_iColliderEndFrame_Right[i])
-            {
-                m_pPlayer->Active_CurrentWeaponCollider(3.f, 0);
-            }
-            else
-            {
-                m_pPlayer->DeActive_CurretnWeaponCollider(0);
-            }
+            m_pPlayer->Active_CurrentWeaponCollider(3.f, 0);
+        }
+        else
+        {
+            //m_pPlayer->DeActive_CurretnWeaponCollider(0);
         }
     }
+
 }
 
 CState_Player_Scissor_Charge00* CState_Player_Scissor_Charge00::Create(CFsm* pFsm, CPlayer* pPlayer, _uint iStateNum, void* pArg)

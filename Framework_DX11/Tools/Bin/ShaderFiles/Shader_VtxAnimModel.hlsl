@@ -3,11 +3,17 @@
 /* float2 float3 float4 == vector */
 
 matrix			g_WorldMatrix, g_ViewMatrix, g_ProjMatrix;
-float g_fFar;
+float			g_fFar;
 
 texture2D		g_DiffuseTexture;
 texture2D		g_NormalTexture;
 texture2D		g_ARMTexture;
+texture2D		g_EmessiveTexture;
+
+float4			g_vLimLight;
+
+float			g_fEmessiveMask;
+float			g_fRimLightMask;
 
 vector			g_vLightDir;
 vector			g_vLightDiffuse;
@@ -122,11 +128,13 @@ struct PS_IN
 
 struct PS_OUT
 {
-	vector vDiffuse : SV_TARGET0;
-	vector vNormal : SV_TARGET1;
-	vector vDepth : SV_TARGET2;
+    vector vDiffuse : SV_TARGET0;
+    vector vNormal : SV_TARGET1;
+    vector vDepth : SV_TARGET2;
     vector vARM : SV_TARGET3;
-	vector vPickDepth : SV_TARGET4;
+    vector vEmessive : SV_TARGET4;
+    vector vRimLight : SV_TARGET5;
+    vector vPickDepth : SV_TARGET6;
 };
 
 
@@ -138,11 +146,15 @@ PS_OUT PS_MAIN(PS_IN In)
 
 	if (0.3f > vMtrlDiffuse.a)
 		discard;
-
-	Out.vDiffuse = vMtrlDiffuse;
+	
+    vector vEmissive = g_EmessiveTexture.Sample(LinearClampSampler, In.vTexcoord) * g_fEmessiveMask;
+	
+    Out.vDiffuse = vMtrlDiffuse + vEmissive;
 	Out.vNormal = vector(In.vNormal.xyz * 0.5f + 0.5f, 0.f);
     Out.vDepth = vector(In.vProjPos.z / In.vProjPos.w, In.vProjPos.w / g_fFar, 0.f, 0.f); // 0~F사이의 깊이, 정규화된 Z값
     Out.vARM = g_ARMTexture.Sample(LinearSampler, In.vTexcoord);
+    Out.vEmessive = vEmissive * g_fEmessiveMask;
+    Out.vRimLight = g_vLimLight;
 	Out.vPickDepth = vector(In.vProjPos.z / In.vProjPos.w, 0.f, 0.f, 0.f);
 
 
@@ -166,8 +178,6 @@ PS_OUT PS_MAIN_NORMAL(PS_IN_NORMAL In)
     vector vDiffuse = g_DiffuseTexture.Sample(LinearSampler, In.vTexcoord);
 
     vector vNormalDesc = g_NormalTexture.Sample(LinearSampler, In.vTexcoord);
-	/* 로컬상의 변환되지 않은 노말벡터를 구했다. */
-	/* 로컬스페이스 => 정점의로컬스페이스(x), 노멀벡터당 하나씩 로컬스페이스를 독립적으로 구성했다. */
     float3 vNormal = vNormalDesc.xyz * 2.f - 1.f;
 
     float3x3 WorldMatrix = float3x3(In.vTangent, In.vBinormal, In.vNormal);
@@ -175,13 +185,16 @@ PS_OUT PS_MAIN_NORMAL(PS_IN_NORMAL In)
 
     if (0.3f >= vDiffuse.a)
         discard;
-
-    Out.vDiffuse = vDiffuse;
-
+	
+    vector vEmissive = g_EmessiveTexture.Sample(LinearClampSampler, In.vTexcoord) * g_fEmessiveMask;
+	
+    Out.vDiffuse = vDiffuse + vEmissive;
 	/* -1.f ~ 1.f -> 0.f ~ 1.f */
     Out.vNormal = vector(vNormal.xyz * 0.5f + 0.5f, 0.f);
     Out.vDepth = vector(In.vProjPos.z / In.vProjPos.w, In.vProjPos.w / g_fFar, 0.f, 0.f);
     Out.vARM = g_ARMTexture.Sample(LinearSampler, In.vTexcoord);
+    Out.vEmessive = vEmissive * g_fEmessiveMask;
+    Out.vRimLight = g_vLimLight;
     Out.vPickDepth = vector(In.vProjPos.z / In.vProjPos.w, 0.f, 0.f, 1.f);
 
     return Out;

@@ -96,7 +96,7 @@ void CPlayerCamera::PlayerMove(_float fTimeDelta)
 
 		// Lerp로 카메라 위치를 부드럽게 이동
 		_vector vCurrentPos = m_pTransformCom->Get_State(CTransform::STATE_POSITION);
-		_vector vNewPos = XMVectorLerp(vCurrentPos, vTargetPos, 0.1f); // 보간 비율 0.1
+		_vector vNewPos = XMVectorLerp(vCurrentPos, vTargetPos, 0.5f); 
 
 		m_pTransformCom->Set_State(CTransform::STATE_POSITION, vNewPos);
 	}

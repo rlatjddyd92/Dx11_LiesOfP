@@ -135,6 +135,20 @@ HRESULT CAnimModel::Render()
 				return E_FAIL;
 		}
 
+		// EMISSIVE
+		if (nullptr != m_pModelCom->Find_Texture((_uint)i, TEXTURE_TYPE::EMISSIVE))
+		{
+			m_fEmissive = 1.f;
+			if (FAILED(m_pModelCom->Bind_Material(m_pShaderCom, "g_EmessiveTexture", EMISSIVE, (_uint)i)))
+				return E_FAIL;
+		}
+		else
+		{
+			m_fEmissive = 0.f;
+		}
+		if (FAILED(m_pShaderCom->Bind_RawValue("g_fEmessiveMask", &m_fEmissive, sizeof(_float))))
+			return E_FAIL;
+
 		if (nullptr != m_pModelCom->Find_Texture((_uint)i, TEXTURE_TYPE::NORMALS))
 		{
 			if (FAILED(m_pModelCom->Bind_Material(m_pShaderCom, "g_NormalTexture", NORMALS, (_uint)i)))

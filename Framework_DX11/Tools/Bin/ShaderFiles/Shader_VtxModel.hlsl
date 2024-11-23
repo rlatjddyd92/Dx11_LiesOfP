@@ -6,6 +6,9 @@ float			g_fFar;
 texture2D		g_DiffuseTexture;
 texture2D		g_NormalTexture;
 texture2D		g_ARMTexture;
+texture2D		g_EmessiveTexture;
+
+float			g_fEmessiveMask;
 
 float4			g_fHashColor;
 bool			g_bSelect = false;
@@ -88,7 +91,9 @@ struct PS_OUT
 	vector vNormal : SV_TARGET1;
 	vector vDepth : SV_TARGET2;
     vector vARM : SV_TARGET3;
-	vector vPickDepth : SV_TARGET4;
+    vector vEmessive : SV_TARGET4;
+    vector vRimLight : SV_TARGET5;
+	vector vPickDepth : SV_TARGET6;
 };
 
 
@@ -109,19 +114,22 @@ PS_OUT PS_MAIN(PS_IN In)
 	
 	if (0.3f >= vDiffuse.a)
 		discard;
-
-	Out.vDiffuse = vDiffuse;
+	
+    vector vEmissive = g_EmessiveTexture.Sample(LinearClampSampler, In.vTexcoord) * g_fEmessiveMask;
+    Out.vDiffuse = vDiffuse + vEmissive;
 
     if (g_bSelect)
     {
         Out.vDiffuse *= 3.f;
         Out.vDiffuse.b *= 5.f;
     }
-       
+	
 	/* -1.f ~ 1.f -> 0.f ~ 1.f */
 	Out.vNormal = vector(In.vNormal.xyz * 0.5f + 0.5f, 0.f);
     Out.vDepth = vector(In.vProjPos.z / In.vProjPos.w, In.vProjPos.w / g_fFar, 0.f, 0.f);
     Out.vARM = g_ARMTexture.Sample(LinearSampler, In.vTexcoord);
+    Out.vEmessive = vEmissive;
+    Out.vRimLight = vector(0.f, 0.f, 0.f, 0.f);
 	Out.vPickDepth = vector(In.vProjPos.z / In.vProjPos.w, 0.f, 0.f, 1.f);
 
 	return Out;
@@ -170,7 +178,9 @@ PS_OUT PS_MAIN_NORMAL(PS_IN_NORMAL In)
 		discard;
 
 	
-	Out.vDiffuse = vDiffuse;
+    vector vEmissive = g_EmessiveTexture.Sample(LinearClampSampler, In.vTexcoord) * g_fEmessiveMask;
+
+    Out.vDiffuse += vDiffuse + vEmissive;
 
     if (g_bSelect)
     {
@@ -182,6 +192,8 @@ PS_OUT PS_MAIN_NORMAL(PS_IN_NORMAL In)
 	Out.vNormal = vector(vNormal * 0.5f + 0.5f, 0.f);
     Out.vDepth = vector(In.vProjPos.z / In.vProjPos.w, In.vProjPos.w / g_fFar, 0.f, 0.f);
     Out.vARM = g_ARMTexture.Sample(LinearSampler, In.vTexcoord);
+    Out.vEmessive = g_EmessiveTexture.Sample(LinearClampSampler, In.vTexcoord) * g_fEmessiveMask;
+    Out.vRimLight = vector(0.f, 0.f, 0.f, 0.f);
 	Out.vPickDepth = vector(In.vProjPos.z / In.vProjPos.w, 0.f, 0.f, 1.f);
 
 	return Out;

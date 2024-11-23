@@ -141,28 +141,28 @@ namespace Engine
 	typedef struct
 	{
 		_int isOnSSAO = false;
-		_float fRadius;
-		_float fBias;
-		_float fAmount;
+		_float fRadius = 0.94f;
+		_float fBias = 0.335f;
+		_float fAmount = 3.f;
 	}SSAO_DESC;
 
 	typedef struct
 	{
 		_bool isOnHDR = false;
-		_float fMiddleGrey;
-		_float fLumWhiteSqr;
+		_float fMiddleGrey = 0.7f;
+		_float fLumWhiteSqr = 0.3f;
 	}HDR_DESC;
 
 	typedef struct
 	{
 		_bool isOnBloom = false;
-		_float fThreshold = 1.f;
+		_float fThreshold = 0.5f;
 	}BLOOM_DESC;
 
 	typedef struct
 	{
 		_bool isOnDOF = false;
-		_float fDOF = 30.f;
+		_float fDOF = 10.f;
 	}DOF_DESC;
 
 	typedef struct
