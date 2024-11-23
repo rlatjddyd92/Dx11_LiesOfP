@@ -87,7 +87,10 @@ HRESULT CUIManager::Render()
 {
 	if (FAILED(m_pUIPage_Ortho->Render_Ortho_UI(m_pUIRender_Client)))
 		return E_FAIL;
-	
+
+	/*if (FAILED(m_pUIRender_Batching->Render()))
+		return E_FAIL;*/
+
 	if (FAILED(m_pUIRender_Client->Render_UI(m_vecPage)))
 		return E_FAIL;
 
@@ -857,5 +860,7 @@ void CUIManager::Free()
 	m_vecTestPageMove.clear();
 
 	Safe_Release(m_pUIRender_Client);
+	Safe_Release(m_pUIRender_Batching);
+
 	Safe_Delete(m_pTestData);
 }

@@ -108,7 +108,6 @@ HRESULT CUIRender_Client::Render_UI(vector<CUIPage*>& rPage)
 		}
 	}
 
-
 	Render_TestPage_Info();
 
 	return S_OK;

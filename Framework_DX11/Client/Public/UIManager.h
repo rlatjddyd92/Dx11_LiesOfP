@@ -5,6 +5,7 @@
 
 #include "UIPage_Defines.h"
 #include "UIRender_Client.h"
+#include "UIRender_Batching.h"
 #include "Interface_Enums.h"
 
 BEGIN(Engine)
@@ -28,9 +29,6 @@ public:
 
 		_bool bFocus = true;
 		_bool bSpecial_Attack = true;
-
-
-
 	}TDATA;
 
 
@@ -50,6 +48,8 @@ public:
 	virtual HRESULT Render() override;
 
 public:
+	void Input_Render_Info(CUIRender_Batching::UIRENDER_INFO* pInfo) { m_pUIRender_Batching->Input_Render_Info(pInfo); }
+
 	void Update_UIManager(_float fTimeDelta);
 	void Update_UIControl(_float fTimeDelta);
 
@@ -202,6 +202,8 @@ private:
 
 
 	CUIRender_Client* m_pUIRender_Client = { nullptr };
+
+	CUIRender_Batching* m_pUIRender_Batching = { nullptr };
 
 	_bool m_bIsIngame = false;
 

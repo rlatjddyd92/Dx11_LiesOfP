@@ -83,7 +83,8 @@ void CUIPage::Late_Update(_float fTimeDelta)
 		{
 			iter->MovePart(m_vecPart[iter->iParentPart_Index]->fPosition, fTimeDelta);
 		}
-			
+
+		//Input_Render_Info(*iter);
 	}
 
 	if ((m_fTopPartMove == 0.f) || (m_fTopPartMove == -1.f))
@@ -94,6 +95,7 @@ void CUIPage::Late_Update(_float fTimeDelta)
 		m_vecPageAction[_int(PAGEACTION::ACTION_CLOSING)] = false;
 		m_vecPageAction[_int(PAGEACTION::ACTION_OPENING)] = false;
 	}
+
 }
 
 HRESULT CUIPage::Render()
@@ -155,6 +157,34 @@ void CUIPage::UpdatePart_ByIndex(_int Index, _float fTimeDelta)
 	}
 	else
 		m_vecPart[Index]->MovePart(m_vecPart[m_vecPart[Index]->iParentPart_Index]->fPosition, fTimeDelta);
+}
+
+void CUIPage::Input_Render_Info(UPART& Part)
+{
+	CUIRender_Batching::UIRENDER_INFO* pNew = new CUIRender_Batching::UIRENDER_INFO;
+
+	pNew->bIsItem = Part.bIsItem;
+	pNew->bIsMultiple = Part.bTexture_Color_Multiple;
+	if (Part.iFontIndex == _int(UI_FONT::FONT_END))
+		pNew->eText_Type = TEXT_TYPE::TEXT_END;
+	else if (Part.bText_Right)
+		pNew->eText_Type = TEXT_TYPE::TEXT_RIGHT;
+	else if (Part.bCenter)
+		pNew->eText_Type = TEXT_TYPE::TEXT_CENTER;
+	else 
+		pNew->eText_Type = TEXT_TYPE::TEXT_LEFT;
+	pNew->fTurn = Part.bTurn;
+	pNew->iFont = Part.iFontIndex;
+	pNew->strText = Part.strText;
+	pNew->vColor_Text = Part.fTextColor;
+	pNew->vColor_Texture = Part.fTextureColor;
+	pNew->vPosition = Part.fPosition;
+	pNew->vSize = Part.fPosition;
+
+	if (Part.iMoveType == _int(MOVETYPE::TYPE_BAR))
+		pNew->vSize = Part.GetBarSize();
+
+	GET_GAMEINTERFACE->Input_Render_Info(pNew);
 }
 
 void CUIPage::UpdatePart_ByControl(UG_CTRL* pCtrl)

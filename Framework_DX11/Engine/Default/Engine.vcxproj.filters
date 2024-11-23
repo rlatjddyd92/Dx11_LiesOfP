@@ -219,7 +219,7 @@
     </Filter>
     <Filter Include="01.Utility\03.Components\Model\ObjectOctree">
       <UniqueIdentifier>{a24fcefc-62b5-4a50-8240-d400693ea04d}</UniqueIdentifier>
-	</Filter>
+    </Filter>
     <Filter Include="01.Utility\03.Components\VIBuffer\Instancing\Trail\MultiPoint">
       <UniqueIdentifier>{c5a9687c-ed44-49d1-ae87-959bb47dbd00}</UniqueIdentifier>
     </Filter>
@@ -428,13 +428,14 @@
     </ClCompile>
     <ClCompile Include="..\Private\ObjectOctree.cpp">
       <Filter>01.Utility\03.Components\Model\ObjectOctree</Filter>
-	</ClCompile>
+    </ClCompile>
     <ClCompile Include="..\Private\ObjectOctree.cpp">
       <Filter>01.Utility\03.Components\Model\ObjectOctree</Filter>
     </ClCompile>
     <ClCompile Include="..\private\Trail_MultiPoint_Instance.cpp">
       <Filter>01.Utility\03.Components\VIBuffer\Instancing\Trail\MultiPoint</Filter>
     </ClCompile>
+    <ClCompile Include="..\Private\EasyDrawSphere.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\Public\Base.h">
@@ -649,7 +650,7 @@
     </ClInclude>
     <ClInclude Include="..\Public\ObjectOctree.h">
       <Filter>01.Utility\03.Components\Model\ObjectOctree</Filter>
-	</ClInclude>
+    </ClInclude>
     <ClInclude Include="..\public\Trail_MultiPoint_Instance.h">
       <Filter>01.Utility\03.Components\VIBuffer\Instancing\Trail\MultiPoint</Filter>
     </ClInclude>
@@ -665,6 +666,7 @@
     <ClInclude Include="..\public\Trail_MultiPoint_Instance.h">
       <Filter>01.Utility\03.Components\VIBuffer\Instancing\Trail\MultiPoint</Filter>
     </ClInclude>
+    <ClInclude Include="..\Public\EasyDrawSphere.h" />
   </ItemGroup>
   <ItemGroup>
     <FxCompile Include="..\Bin\ShaderFiles\Shader_Cell.hlsl">

@@ -203,6 +203,10 @@ protected:
 
 	void UpdatePart_ByIndex(_int Index, _float fTimeDelta);
 
+	void Input_Render_Info(UPART& Part);
+	
+
+
 protected:
 	vector<UPART*> m_vecPart;
 	_wstring m_UIPageName = {};
@@ -219,6 +223,9 @@ protected: // 열기/닫기 액션
 
 protected: // 그룹 컨트롤 모음 -> 여기 있는 건 전체 업데이트 + 전체 릴리즈 용도로만 사용, 구체적인 사용은 각 Paage에 얕은 복사로 따로 포인터를 마련해 진행 
 	vector<UG_CTRL*> m_vec_Group_Ctrl;
+
+	// 테스트 
+	_bool m_bIsBatching = false;
 
 public:
 	static CUIPage* Create(ID3D11Device* pDevice, ID3D11DeviceContext* pContext);

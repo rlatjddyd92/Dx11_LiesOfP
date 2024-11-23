@@ -35,6 +35,7 @@ HRESULT CUIPage_Play::Initialize_Prototype()
 	if (FAILED(__super::Initialize(&Desc)))
 		return E_FAIL;
 
+	m_bIsBatching = false;
 
     return S_OK;
 }
@@ -73,7 +74,6 @@ void CUIPage_Play::Late_Update(_float fTimeDelta)
 
 	__super::Late_Update(fTimeDelta);
 
-	
 }
 
 HRESULT CUIPage_Play::Render()
@@ -217,6 +217,27 @@ HRESULT CUIPage_Play::Ready_UIPart_Group_Control()
 	return S_OK;
 }
 
+HRESULT CUIPage_Play::Render_PlayInfo(CUIRender_Client* pRender_Client)
+{
+	return S_OK;
+}
+
+void CUIPage_Play::Action_Potion_Tool(_float fTimeDelta)
+{
+}
+
+void CUIPage_Play::Action_Arm(_float fTimeDelta)
+{
+}
+
+void CUIPage_Play::Action_Weapon(_float fTimeDelta)
+{
+}
+
+void CUIPage_Play::Action_InterAction(_float fTimeDelta)
+{
+}
+
 void CUIPage_Play::LU_Gauge_Update(_float fTimeDelta)
 {
 	const CPlayer_Stat_Manager::STAT& tRegion = GET_GAMEINTERFACE->Get_StatInfo_Normal(STAT_NORMAL::STAT_GAUGE_REGION);
@@ -340,6 +361,10 @@ void CUIPage_Play::RD_Weapon_Update(_float fTimeDelta)
 
 
 
+}
+
+void CUIPage_Play::PlayInfo_Update(_float fTimeDelta)
+{
 }
 
 CUIPage_Play* CUIPage_Play::Create(ID3D11Device* pDevice, ID3D11DeviceContext* pContext)

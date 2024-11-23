@@ -152,7 +152,7 @@ public:
 	const vector<UPART*>& Get_UIPartInfo() { return m_vecPart; }
 	virtual HRESULT Ready_UIPart_Group_Control() override;
 
-	
+	HRESULT Render_PlayInfo(class CUIRender_Client* pRender_Client);
 
 	// 좌상단 게이지는 스탯 매니저의 내용을 참조하여 변경 
 	// 외부 -> 스탯 매니저 -> UI 매니저(Page_Play)
@@ -161,12 +161,20 @@ public:
 	
 
 private:
+	void Action_Potion_Tool(_float fTimeDelta);
+	void Action_Arm(_float fTimeDelta);
+	void Action_Weapon(_float fTimeDelta);
+	void Action_InterAction(_float fTimeDelta);
+
+
 	void LU_Gauge_Update(_float fTimeDelta);
 	void LD_Potion_Tool_Update(_float fTimeDelta);
 	void LD_Bag_Update(_float fTimeDelta);
 	void LD_Arm_Update(_float fTimeDelta);
 	void RU_Coin_Update(_float fTimeDelta);
 	void RD_Weapon_Update(_float fTimeDelta);
+
+	void PlayInfo_Update(_float fTimeDelta);
 	
 private:
 	_float m_fBag_Open_Waiting_Now = 0.f;

@@ -511,7 +511,7 @@ HRESULT CGameInstance::Render_TextCenter(const _wstring& strFontTag, const _tcha
 }
 // 24-11-22 김성용 
 // 오른쪽 정렬로 텍스트 그리기
-HRESULT CGameInstance::Render_Right(const _wstring& strFontTag, const _tchar* pText, _fvector vPosition, _fvector vColor, _float fRadian, _fvector vPivot, _float fScale)
+HRESULT CGameInstance::Render_TextRight(const _wstring& strFontTag, const _tchar* pText, _fvector vPosition, _fvector vColor, _float fRadian, _fvector vPivot, _float fScale)
 {
 	return m_pFont_Manager->Render_Right(strFontTag, pText, vPosition, vColor, fRadian, vPivot, fScale);
 }
