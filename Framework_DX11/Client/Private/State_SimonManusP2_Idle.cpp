@@ -37,7 +37,7 @@ void CState_SimonManusP2_Idle::Update(_float fTimeDelta)
             //하이점프폴
             if (m_iAtkCnt >= 3.f)
             {
-                m_iAtkCnt = 0.f;
+                m_iAtkCnt = 0;
                 m_pMonster->Change_State(CSimonManus::ATKP2_HIGHJUMPFALL);
                 return;
             }

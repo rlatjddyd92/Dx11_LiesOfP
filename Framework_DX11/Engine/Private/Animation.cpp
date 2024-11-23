@@ -154,8 +154,6 @@ _uint CAnimation::Update_TransformationMatrices(const vector<class CBone*>& Bone
 			pChannel->Update_TransformationMatrix(Bones, &CurrentKeyFrameIndices[iChannelIndex], *pCurrentTrackPosition);
 			if (iCurrentFrame < CurrentKeyFrameIndices[iChannelIndex])
 			{
-				//// 혹시모를 예외 처리 갑자기 프레임이 이상하게 증가하는 오류 방지
-				//if (CurrentKeyFrameIndices[iChannelIndex] - iCurrentFrame < 3)
 					iCurrentFrame = CurrentKeyFrameIndices[iChannelIndex];
 			}
 		}
@@ -212,7 +210,7 @@ void	 CAnimation::Find_ChannelWide()
 		if (m_Channels[i]->Get_KeyFrames().size() > iSize)
 		{
 			iChannelIndex = i;
-			iSize = m_Channels[i]->Get_KeyFrames().size();
+			iSize = (_int)m_Channels[i]->Get_KeyFrames().size();
 		}
 	}
 	m_iWideChannelIndex = iChannelIndex;

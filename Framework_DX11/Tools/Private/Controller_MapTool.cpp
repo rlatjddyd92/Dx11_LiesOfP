@@ -725,7 +725,7 @@ void CController_MapTool::SaveMap()
 
 	//전체 레이어 수 저장
 	_uint iLayerCount = m_pGameInstance->Get_Object_Layer_Count(LEVEL_TOOL);
-	iLayerCount -= 2;//카메라 레이어, 애니메이션 Tool용 모델 레이어, Background 제외
+	iLayerCount -= 4;//카메라 레이어, 애니메이션 Tool용 모델 레이어, Background 제외
 
 	//strUint = to_string(iLayerCount);
 	//fout.write(strUint.c_str(), sizeof(strUint));
@@ -743,9 +743,9 @@ void CController_MapTool::SaveMap()
 	string strInt = {};
 	_float3 vfloat3 = {};
 
-	for (_uint i = 0; i < iLayerCount + 2; ++i)
+	for (_uint i = 0; i < iLayerCount + 4; ++i)
 	{
-		if (i < 2)
+		if (i < 4)
 			continue;
 
 		sLayerTag = m_pGameInstance->Get_LayerTag(LEVEL_TOOL, i);
@@ -1263,7 +1263,7 @@ void CController_MapTool::Nav_Menu()
 	ImGui::Text("Total Cell Count : %d", iCellCount);
 	ImGui::Text("Select Cell Index : %d", iSelectedCellNum);
 	ImGui::SameLine(); ImGui::Text("    "); 	ImGui::SameLine();
-	if (ImGui::Button("Delete Cell"))
+	if (ImGui::Button("Delete Cell") && iSelectedCellNum != -1)
 	{
 		m_pNavigationController->Delete_Selected(iSelectedCellNum);
 		iSelectedCellNum = -1;

@@ -34,7 +34,7 @@ private:
 	class CController_EffectTool*		m_pController_EffectTool = { nullptr };
 	class CController_UITool*			m_pController_UITool = { nullptr };
 	class CController_AnimationTool*	m_pController_AnimationTool = { nullptr };
-	class CController_PostProcess*		m_pController_PostProcess = { nullptr };
+	class CCamera_Manager*		m_pController_PostProcess = { nullptr };
 
 private:
 	void Update_ImGui();
@@ -51,6 +51,8 @@ private:
 private:
 	void Tool_Animation();
 
+	_bool	bAnimCtr{false};
+
 private:
 	void Tool_PostProcess();
 
@@ -58,6 +60,9 @@ private:
 	void ImGui_Spacing(_uint iSpaceCount = 1);
 
 	HRESULT Ready_Controllers();
+
+	//Å×½ºÆ® 
+	_float m_fTest = 0.f;
 
 public:
 	virtual void Free() override;

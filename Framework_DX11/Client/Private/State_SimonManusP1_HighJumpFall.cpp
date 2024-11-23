@@ -43,7 +43,7 @@ void CState_SimonManusP1_HighJumpFall::Update(_float fTimeDelta)
     {
         _Vec3 vPos = m_pMonster->Get_Transform()->Get_State(CTransform::STATE_POSITION);
 
-        _Vec3 vMove = m_vTargetDir * ((CurTrackPos - 230.f) / 20.f);
+        _Vec3 vMove = m_vTargetDir * (((_float)CurTrackPos - 230.f) / 20.f);
         m_pMonster->Get_Transform()->Set_State(CTransform::STATE_POSITION, vPos + vMove - m_vFlyMoveStack);
 
         m_vFlyMoveStack = vMove;

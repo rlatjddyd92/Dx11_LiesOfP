@@ -2,8 +2,11 @@
 #include "..\Public\Player.h"
 
 #include "GameInstance.h"
+#include "Layer.h"
+
 #include "Camera.h"
 #include "Weapon.h"
+#include "Weapon_Scissor.h"
 
 #include "Effect_Manager.h"
 #include "Effect_Container.h"
@@ -36,6 +39,20 @@
 #include "State_Player_Flame_LAttack00.h"
 #include "State_Player_Flame_LAttack01.h"
 #include "State_Player_Flame_RAttack00.h"
+#include "State_Player_Flame_RAttack01.h"
+#include "State_Player_Flame_Charge00.h"
+#include "State_Player_Flame_Charge01.h"
+
+#include "State_Player_Scissor_LAttack00.h"
+#include "State_Player_Scissor_LAttack01.h"
+#include "State_Player_Scissor_RAttack00.h"
+#include "State_Player_Scissor_RAttack01.h"
+#include "State_Player_Scissor_Charge00.h"
+#include "State_Player_Scissor_Charge01.h"
+#include "State_Player_Scissor_Buff.h"
+#include "State_Player_Scissor_Fatal0.h"
+#include "State_Player_Scissor_Fatal1.h"
+#include "State_Player_Scissor_Fatal2.h"
 
 CPlayer::CPlayer(ID3D11Device * pDevice, ID3D11DeviceContext * pContext)
 	: CPawn{ pDevice, pContext }
@@ -73,12 +90,12 @@ HRESULT CPlayer::Initialize(void * pArg)
 
 	m_pTransformCom->Set_State(CTransform::STATE_POSITION, XMVectorSet(2.f, 0.f, 0.f, 1.f));
 
-	m_pPlayerCamera = m_pGameInstance->Find_Camera(LEVEL_GAMEPLAY);
-
 	// 임시 루트본 설정
 	m_pModelCom->Set_UFBIndices(UFB_ROOT, 2);
 	m_pModelCom->Set_UFBIndices(UFB_BOUNDARY_UPPER, 6);
 	m_pModelCom->Update_Boundary();
+
+	m_strObjectTag = TEXT("Player");
 
 	return S_OK;
 }
@@ -89,6 +106,9 @@ void CPlayer::Priority_Update(_float fTimeDelta)
 	{
 		m_fGuardTime = fTimeDelta;
 	}
+
+	if (KEY_TAP(KEY::WHEELBUTTON))
+		LockOnOff();
 
 	for (auto& pEffect : m_EffectList)
 	{
@@ -110,7 +130,7 @@ void CPlayer::Update(_float fTimeDelta)
 {
 	m_pFsmCom->Update(fTimeDelta);
 
-	m_vCurRootMove = m_pModelCom->Play_Animation(fTimeDelta, &m_EvKeyList);
+	m_vCurRootMove = m_pModelCom->Play_Animation(fTimeDelta * 0.3f, &m_EvKeyList);
 
 
 	_vector vPos = m_pTransformCom->Get_State(CTransform::STATE_POSITION);
@@ -261,6 +281,9 @@ HRESULT CPlayer::Render_LightDepth()
 	if (FAILED(m_pShaderCom->Bind_Matrices("g_CascadeProjMatrix", m_pGameInstance->Get_CascadeProjMatirx(), 3)))
 		return E_FAIL;
 
+	if (FAILED(m_pShaderCom->Bind_RawValue("g_fFar", &m_pGameInstance->Get_Far(), sizeof(_float))))
+		return E_FAIL;
+
 	_uint		iNumMeshes = m_pModelCom->Get_NumMeshes();
 
 	for (size_t i = 0; i < iNumMeshes; i++)
@@ -318,6 +341,103 @@ _uint CPlayer::Change_WeaponType()
 	return m_eWeaponType;
 }
 
+void CPlayer::Seperate_Scissor()
+{
+	if (WEP_SCISSOR != m_eWeaponType)
+		return;
+
+	dynamic_cast<CWeapon_Scissor*>(m_pWeapon[WEP_SCISSOR])->Change_SeperateMode();
+}
+
+void CPlayer::Combine_Scissor()
+{
+	if (WEP_SCISSOR != m_eWeaponType)
+		return;
+
+	dynamic_cast<CWeapon_Scissor*>(m_pWeapon[WEP_SCISSOR])->Change_CombineMode();
+}
+
+void CPlayer::Active_CurrentWeaponCollider(_float fDamageRatio, _uint iHandIndex)
+{
+	m_pWeapon[m_eWeaponType]->Active_Collider(fDamageRatio, iHandIndex);
+}
+
+void CPlayer::DeActive_CurretnWeaponCollider(_uint iHandIndex)
+{
+	m_pWeapon[m_eWeaponType]->DeActive_Collider(iHandIndex);
+}
+
+void CPlayer::Chnage_CameraMode(CPlayerCamera::CAMERA_MODE eMode)
+{
+	m_pPlayerCamera->Change_Mode(eMode);
+}
+
+
+void CPlayer::LockOnOff()
+{
+	if (!m_isLockOn)
+	{
+		m_pTargetMonster = Find_TargetMonster();
+		if (nullptr == m_pTargetMonster)
+		{
+			// 카메라를 플레이어 뒤로 회전
+		}
+		else
+		{
+			m_isLockOn = true;
+		}
+	}
+	else
+	{
+		m_isLockOn = false;
+	}
+}
+
+CPawn* CPlayer::Find_TargetMonster()
+{
+	if (nullptr == m_pGameInstance->Find_Layer(LEVEL_GAMEPLAY, TEXT("Layer_Monster")))
+		return nullptr;
+
+	list<CGameObject*> ObjectList = m_pGameInstance->Find_Layer(LEVEL_GAMEPLAY, TEXT("Layer_Monster"))->Get_ObjectList();
+
+	if (ObjectList.size() <= 0)
+		return nullptr;
+
+	CGameObject* pNearObject = { nullptr };
+
+	_vector vDistance = XMVectorSet(0.f, 0.f, 0.f, 0.f);
+	_float  fDistance = -1.f;
+
+	for (auto& Object : ObjectList)
+	{
+		if (!Object->IsActive())
+			continue;
+
+		_vector vOwnerPos = m_pTransformCom->Get_State(CTransform::STATE_POSITION);
+		_vector vFindObjPos = Object->Get_Transform()->Get_State(CTransform::STATE_POSITION);
+
+		vDistance = (vOwnerPos - vFindObjPos);
+
+		if (fDistance < 0.f)
+		{
+			pNearObject = Object;
+
+			XMStoreFloat(&fDistance, XMVector3Length(vDistance));
+			continue;
+		}
+
+		_float fNewDistance;
+		XMStoreFloat(&fNewDistance, XMVector3Length(vDistance));
+
+		if (fNewDistance < fDistance)
+		{
+			pNearObject = Object;
+			fDistance = fNewDistance;
+		}
+	}
+
+	return dynamic_cast<CPawn*>(pNearObject);
+}
 HRESULT CPlayer::Ready_Weapon()
 {
 	CWeapon::WEAPON_DESC		WeaponDesc{};
@@ -332,6 +452,8 @@ HRESULT CPlayer::Ready_Weapon()
 	if (nullptr == m_pWeapon)
 		return E_FAIL;
 
+
+	WeaponDesc.pSocketBoneMatrix2 = m_pModelCom->Get_BoneCombindTransformationMatrix_Ptr("BN_Weapon_L");
 	m_pWeapon[WEP_SCISSOR] = dynamic_cast<CWeapon*>(m_pGameInstance->Clone_GameObject(TEXT("Prototype_GameObject_Weapon_Scissor"), &WeaponDesc));
 	if (nullptr == m_pWeapon)
 		return E_FAIL;
@@ -424,11 +546,27 @@ HRESULT CPlayer::Ready_FSM()
 	m_pFsmCom->Add_State(CState_Player_Rapier_RAttack00::Create(m_pFsmCom, this, RAPIER_RATTACK0, &Desc));	// 우클릭 공격
 	m_pFsmCom->Add_State(CState_Player_Rapier_Charge::Create(m_pFsmCom, this, RAPIER_CHARGE, &Desc));	// 우클릭 차지공격
 	m_pFsmCom->Add_State(CState_Player_Rapier_Fatal::Create(m_pFsmCom, this, RAPIER_FATAL, &Desc));	// F 페이탈아츠
-
+	// Shift + F 패리 어택
 
 	m_pFsmCom->Add_State(CState_Player_Flame_LAttack00::Create(m_pFsmCom, this, FLAME_LATTACK0, &Desc));	// 좌클릭 공격1
 	m_pFsmCom->Add_State(CState_Player_Flame_LAttack01::Create(m_pFsmCom, this, FLAME_LATTACK1, &Desc));	// 좌클릭 공격1
-	m_pFsmCom->Add_State(CState_Player_Flame_RAttack00::Create(m_pFsmCom, this, FLAME_RATTACK0, &Desc));	// 좌클릭 공격2
+	m_pFsmCom->Add_State(CState_Player_Flame_RAttack00::Create(m_pFsmCom, this, FLAME_RATTACK0, &Desc));	// 우클릭 공격1
+	m_pFsmCom->Add_State(CState_Player_Flame_RAttack01::Create(m_pFsmCom, this, FLAME_RATTACK1, &Desc));	// 우클릭 공격2
+	m_pFsmCom->Add_State(CState_Player_Flame_Charge00::Create(m_pFsmCom, this, FLAME_CHARGE0, &Desc));	// 우클릭 차지 공격1
+	m_pFsmCom->Add_State(CState_Player_Flame_Charge01::Create(m_pFsmCom, this, FLAME_CHARGE1, &Desc));	// 우클릭 차지 공격2
+	//페이탈 아츠
+		// Shift + F 패리 어택
+
+	m_pFsmCom->Add_State(CState_Player_Scissor_LAttack00::Create(m_pFsmCom, this, SCISSOR_LATTACK0, &Desc));	// 좌클릭 공격1
+	m_pFsmCom->Add_State(CState_Player_Scissor_LAttack01::Create(m_pFsmCom, this, SCISSOR_LATTACK1, &Desc));	// 좌클릭 공격2
+	m_pFsmCom->Add_State(CState_Player_Scissor_RAttack00::Create(m_pFsmCom, this, SCISSOR_RATTACK0, &Desc));	// 우클릭 공격1
+	m_pFsmCom->Add_State(CState_Player_Scissor_RAttack01::Create(m_pFsmCom, this, SCISSOR_RATTACK1, &Desc));	// 우클릭 공격2
+	m_pFsmCom->Add_State(CState_Player_Scissor_Charge00::Create(m_pFsmCom, this, SCISSOR_CHARGE0, &Desc));	// 우클릭 공격2
+	m_pFsmCom->Add_State(CState_Player_Scissor_Charge01::Create(m_pFsmCom, this, SCISSOR_CHARGE1, &Desc));	// 우클릭 공격2
+	m_pFsmCom->Add_State(CState_Player_Scissor_Buff::Create(m_pFsmCom, this, SCISSOR_BUFF, &Desc));	// 버프
+	m_pFsmCom->Add_State(CState_Player_Scissor_Fatal0::Create(m_pFsmCom, this, SCISSOR_FATAL0, &Desc));	// 콤보1
+	m_pFsmCom->Add_State(CState_Player_Scissor_Fatal1::Create(m_pFsmCom, this, SCISSOR_FATAL1, &Desc));	// 콤보2
+	m_pFsmCom->Add_State(CState_Player_Scissor_Fatal2::Create(m_pFsmCom, this, SCISSOR_FATAL2, &Desc));	// 콤보3
 
 	m_pFsmCom->Set_State(OH_IDLE);
 

@@ -51,70 +51,57 @@ struct PS_OUT
     vector vColor : SV_TARGET0;
 };
 
-PS_OUT PS_TEST_MAIN_1(PS_IN In)
+struct PS_EFFECT_OUT
+{
+    vector vDiffuse : SV_TARGET0;
+    vector vBlur : SV_TARGET1;
+};
+
+PS_OUT PS_MAIN(PS_IN In)
 {
 	PS_OUT			Out = (PS_OUT)0;
 	
-    float2 vTexcoord = (float2) 0;
-    vTexcoord.x = In.vTexcoord.x * g_vTileRepeat.x + g_vTileMove.x;
-    vTexcoord.y = In.vTexcoord.y * g_vTileRepeat.y + g_vTileMove.y;
-    
+    float2 vTexcoord = In.vTexcoord * g_vTileRepeat + g_vTileMove;
+
     Out.vColor = g_DiffuseTexture.Sample(LinearSampler, vTexcoord);
     
-    //if (Out.vColor.b < 0.1f)
-    //    discard;
-    Out.vColor.a = (Out.vColor.r + Out.vColor.g + Out.vColor.b) / 3.f;
-	
-    
-	
-    // Out.vColor.rgb = g_vColor.rgb;
-    Out.vColor.a *= g_fAlpha;
-	
 	return Out;
 }
 
-PS_OUT PS_TEST_MAIN_2(PS_IN In)
+PS_EFFECT_OUT PS_TEST_MAIN(PS_IN In)
 {
-    PS_OUT Out = (PS_OUT) 0;
-    
-    float2 vTexcoord = (float2) 0;
-    vTexcoord = In.vTexcoord * g_vTileRepeat + g_vTileMove;
+    PS_EFFECT_OUT Out = (PS_EFFECT_OUT) 0;
 	
-    Out.vColor = float4(0.f, 0.f, 0.f, 1.f);
-    Out.vColor.rgb += g_DiffuseTexture.Sample(LinearSampler, vTexcoord).rgb;
-    
-    //if (Out.vColor.b < 0.1f)
-    //    discard;
+    float2 vTexcoord = In.vTexcoord * g_vTileRepeat + g_vTileMove;
+    float fDistortion = g_MaskTexture_1.Sample(LinearSampler, vTexcoord).x * 0.3f;
 	
-    //Out.vColor.a = Out.vColor.b;
-	
-    //Out.vColor.rgb = g_vColor.rgb;
-    //Out.vColor.a *= g_fAlpha;
+    Out.vDiffuse = g_DiffuseTexture.Sample(LinearSampler, In.vTexcoord + float2(fDistortion, fDistortion));
+    Out.vBlur = g_DiffuseTexture.Sample(LinearSampler, In.vTexcoord);
 	
     return Out;
 }
 
 technique11	DefaultTechnique
 {
-	pass Test_1
+	pass Default //0
 	{
 		SetRasterizerState(RS_Default);
 		SetDepthStencilState(DSS_Default, 0);
-		SetBlendState(BS_AlphaBlend, vector(0.f, 0.f, 0.f, 0.f), 0xffffffff);
+		SetBlendState(BS_Default, vector(0.f, 0.f, 0.f, 0.f), 0xffffffff);
 
 		VertexShader = compile vs_5_0 VS_MAIN();
 		GeometryShader = NULL;
-        PixelShader = compile ps_5_0 PS_TEST_MAIN_1();
+        PixelShader = compile ps_5_0 PS_MAIN();
     }
 
-    pass Test_2
+    pass Test //1
     {
         SetRasterizerState(RS_Default);
         SetDepthStencilState(DSS_Default, 0);
-        SetBlendState(BS_AlphaBlend, vector(0.f, 0.f, 0.f, 0.f), 0xffffffff);
+        SetBlendState(BS_Default, vector(0.f, 0.f, 0.f, 0.f), 0xffffffff);
 
         VertexShader = compile vs_5_0 VS_MAIN();
         GeometryShader = NULL;
-        PixelShader = compile ps_5_0 PS_TEST_MAIN_2();
+        PixelShader = compile ps_5_0 PS_TEST_MAIN();
     }
 }

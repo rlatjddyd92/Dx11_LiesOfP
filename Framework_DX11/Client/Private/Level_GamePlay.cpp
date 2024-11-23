@@ -4,11 +4,13 @@
 #include<fstream>
 
 #include "FreeCamera.h"
+#include "PlayerCamera.h"
 #include "GameInstance.h"
 #include "GameInterface_Controller.h"
 
 #include "Effect_Container.h"
 #include "Effect_Manager.h"
+#include "Camera_Manager.h"
 #include "StaticObj.h"
 #include "Player.h"
 
@@ -22,48 +24,42 @@ HRESULT CLevel_Tool::Initialize()
 	if (FAILED(Ready_Lights()))
 		return E_FAIL;
 
+	if (FAILED(Ready_Layer_Player()))
+		return E_FAIL;
 	if (FAILED(Ready_Layer_Camera()))
 		return E_FAIL;
 	if (FAILED(Ready_Layer_BackGround()))
 		return E_FAIL;
 	if (FAILED(Ready_Layer_Effect()))
 		return E_FAIL;
+
 	if (FAILED(Ready_Layer_Monster()))
 		return E_FAIL;
 
-	if (FAILED(Ready_Layer_Player()))
-		return E_FAIL;
 	if (FAILED(Ready_Layer_Paticle()))
 		return E_FAIL;	
 	
 	if (FAILED(Read_Map_Data()))
 		return E_FAIL;	
-	
 
-	// 2024-11-10 김성용
-	// 게임 인터페이스를 플레이 모드로 설정 
-	// 게임 플레이에 필요한 인벤, 플레이 화면, 스탯 화면 등을 상황에 따라 보여 주도록 설정 
-	GET_GAMEINTERFACE->SetPlayMode(true);
-
-	CEffect_Container::EFFECT_DESC desc = {};
-
-	desc.fRotationPerSec = XMConvertToRadians(90.f);
-	desc.fSpeedPerSec = 1.f;
-	desc.iLevelIndex = LEVEL_GAMEPLAY;
-	desc.pParentMatrix = nullptr;
-	desc.pSocketMatrix = nullptr;
-	desc.vPos = { 0.f, 0.f, 0.f };
-	desc.vRotation = { 0.f, 0.f, 0.f };
-	desc.vScale = { 1.f, 1.f, 1.f };
-
-	CEffect_Manager::Get_Instance()->Add_Effect_ToLayer(LEVEL_GAMEPLAY, TEXT("TEST_Effect"), &desc);
+	// 24-11-19 김성용
+	// 게임 인터페이스를 인게임 모드로 전환
+	GET_GAMEINTERFACE->SetIngame(true);
 
 	return S_OK;
 }
 
 void CLevel_Tool::Update(_float fTimeDelta)
 {
+	if (KEY_TAP(KEY::F2))
+	{
+		CCamera_Manager::Get_Instance()->Change_Camera(TEXT("Camera_Free"));
+	}
 
+	if (KEY_TAP(KEY::F3))
+	{
+		CCamera_Manager::Get_Instance()->Change_Camera(TEXT("Camera_Player"));
+	}
 }
 
 HRESULT CLevel_Tool::Render()
@@ -80,7 +76,7 @@ HRESULT CLevel_Tool::Ready_Lights()
 	ZeroMemory(&LightDesc, sizeof LightDesc);
 	LightDesc.eType = LIGHT_DESC::TYPE_DIRECTIONAL;
 	LightDesc.vDirection = _float4(1.f, -1.f, 1.f, 0.f);
-	LightDesc.vDiffuse = _float4(1.f, 1.f, 1.f, 1.f);
+	LightDesc.vDiffuse = _float4(0.8f, 0.8f, 0.8f, 1.f);
 	LightDesc.vAmbient = _float4(0.4f, 0.4f, 0.4f, 1.f);
 	LightDesc.vSpecular = _float4(1.f, 1.f, 1.f, 1.f);
 
@@ -115,6 +111,24 @@ HRESULT CLevel_Tool::Ready_Lights()
 
 HRESULT CLevel_Tool::Ready_Layer_Camera()
 {
+	CPlayerCamera::CAMERA_PLAYER_DESC PlayerCameraDesc{};
+	PlayerCameraDesc.vEye = _float4(0.f, 0.f, 0.f, 1.f);
+	PlayerCameraDesc.vAt = _float4(0.f, 0.f, 1.f, 1.f);
+	PlayerCameraDesc.fFovy = XMConvertToRadians(60.0f);
+	PlayerCameraDesc.fNear = 0.1f;
+	PlayerCameraDesc.fFar = 500.f;
+	PlayerCameraDesc.fSpeedPerSec = 30.f;
+	PlayerCameraDesc.fRotationPerSec = XMConvertToRadians(90.0f);
+	PlayerCameraDesc.fAspect = (_float)g_iWinSizeX / g_iWinSizeY;
+	PlayerCameraDesc.pPlayer = m_pPlayer;
+	PlayerCameraDesc.fSpeed = 5.f;
+
+	CPlayerCamera* pPlayerCamera = dynamic_cast<CPlayerCamera*>(m_pGameInstance->Get_CloneObject_ToLayer(LEVEL_GAMEPLAY, TEXT("Layer_Camera"), TEXT("Prototype_GameObject_PlayerCamera"), &PlayerCameraDesc));
+	if(nullptr == pPlayerCamera)
+		return E_FAIL;
+	CCamera_Manager::Get_Instance()->Add_Camera(TEXT("Camera_Player"), pPlayerCamera);
+	m_pPlayer->Set_Camera(pPlayerCamera);
+
 	CFreeCamera::CAMERA_FREE_DESC		Desc{};
 
 	Desc.fSensor = 0.2f;
@@ -122,13 +136,17 @@ HRESULT CLevel_Tool::Ready_Layer_Camera()
 	Desc.vAt = _float4(0.f, 0.f, 1.f, 1.f);
 	Desc.fFovy = XMConvertToRadians(60.0f);
 	Desc.fNear = 0.1f;
-	Desc.fFar = 1000.f;
+	Desc.fFar = 500.f;
 	Desc.fSpeedPerSec = 30.f;
 	Desc.fRotationPerSec = XMConvertToRadians(90.0f);
 	Desc.fAspect = (_float)g_iWinSizeX / g_iWinSizeY;
 
-	if (FAILED(m_pGameInstance->Add_CloneObject_ToLayer(LEVEL_GAMEPLAY, TEXT("Layer_Camera"), TEXT("Prototype_GameObject_FreeCamera"), &Desc)))
+	CCamera* pCamera = dynamic_cast<CCamera*>(m_pGameInstance->Get_CloneObject_ToLayer(LEVEL_GAMEPLAY, TEXT("Layer_Camera"), TEXT("Prototype_GameObject_FreeCamera"), &Desc));
+	if (nullptr == pCamera)
 		return E_FAIL;
+	CCamera_Manager::Get_Instance()->Add_Camera(TEXT("Camera_Free"), pCamera);
+
+	CCamera_Manager::Get_Instance()->Change_Camera(TEXT("Camera_Player"));
 
 	return S_OK;
 }
@@ -164,13 +182,6 @@ HRESULT CLevel_Tool::Ready_Layer_Monster()
 		if (FAILED(m_pGameInstance->Add_CloneObject_ToLayer(LEVEL_GAMEPLAY, TEXT("Layer_Monster"), TEXT("Prototype_GameObject_Monster"))))
 			return E_FAIL;
 	}*/
-	//if (FAILED(m_pGameInstance->Add_CloneObject_ToLayer(LEVEL_GAMEPLAY, TEXT("Layer_Monster"), TEXT("Prototype_GameObject_CarcassBigA"))))
-	//	return E_FAIL;
-
-	// 24-11-15 김성용
-	// 직교 UI 테스트용 코드 
-	// 테스트 후에 for문만 제거하기 
-
 	if (FAILED(m_pGameInstance->Add_CloneObject_ToLayer(LEVEL_GAMEPLAY, TEXT("Layer_Monster"), TEXT("Prototype_GameObject_CarcassBigA"))))
 		return E_FAIL;
 
@@ -193,7 +204,8 @@ HRESULT CLevel_Tool::Ready_Layer_Paticle()
 
 HRESULT CLevel_Tool::Ready_Layer_Player()
 {
-	CPlayer* pPlayer = dynamic_cast<CPlayer*>(m_pGameInstance->Get_CloneObject_ToLayer(LEVEL_GAMEPLAY, TEXT("Layer_Player"), TEXT("Prototype_GameObject_Player")));
+	m_pPlayer = dynamic_cast<CPlayer*>(m_pGameInstance->Get_CloneObject_ToLayer(LEVEL_GAMEPLAY, TEXT("Layer_Player"), TEXT("Prototype_GameObject_Player")));
+	Safe_AddRef(m_pPlayer);
 
 	return S_OK;
 }
@@ -240,8 +252,15 @@ HRESULT CLevel_Tool::Read_Map_Data()
 				OBJECT_DEFAULT_DESC pDesc = {};
 				fin.read(reinterpret_cast<char*>(&pDesc), sizeof(pDesc));
 
-				if (strLayerTag == "Layer_Map")
+				if (strLayerTag == "Layer_Map" || strLayerTag == "Layer_Etc")
 				{
+					/*if (wcscmp(pDesc.szModelTag, TEXT("SM_Monastery_Lift_01_Bottom")) == 0)
+					{
+						if (FAILED(m_pGameInstance->Add_CloneObject_ToLayer(LEVEL_GAMEPLAY, TEXT("Layer_InteractObj"), TEXT("Prototype_GameObject_Lift_Floor"), &pDesc)))
+							return E_FAIL;
+						continue;
+					}*/
+
 					CStaticObj::STATICOBJ_DESC staticObjDesc = {};
 					int bufferSize = WideCharToMultiByte(CP_ACP, 0, pDesc.szModelTag, -1, NULL, 0, NULL, NULL);
 					WideCharToMultiByte(CP_ACP, 0, pDesc.szModelTag, -1, staticObjDesc.szModelTag, bufferSize, NULL, NULL);
@@ -261,7 +280,17 @@ HRESULT CLevel_Tool::Read_Map_Data()
 				{
 					 if (wcscmp(pDesc.szModelTag, TEXT("SK_DLV_Stargazer_01")) == 0)
 					 {
-						 if (FAILED(m_pGameInstance->Add_CloneObject_ToLayer(LEVEL_GAMEPLAY, TEXT("Layer_Stargazer"), TEXT("Prototype_GameObject_Stargazer"), &pDesc)))
+						 if (FAILED(m_pGameInstance->Add_CloneObject_ToLayer(LEVEL_GAMEPLAY, TEXT("Layer_InteractObj"), TEXT("Prototype_GameObject_Stargazer"), &pDesc)))
+							 return E_FAIL;
+					 }
+					 else if (wcscmp(pDesc.szModelTag, TEXT("SK_FO_Monastery_Lift_01_Controller")) == 0)
+					 {
+						 if (FAILED(m_pGameInstance->Add_CloneObject_ToLayer(LEVEL_GAMEPLAY, TEXT("Layer_InteractObj"), TEXT("Prototype_GameObject_Lift_Controller"), &pDesc)))
+							 return E_FAIL;
+					 }
+					 	 else if (wcscmp(pDesc.szModelTag, TEXT("SK_NewTown_Lift_01_Door")) == 0)
+					 {
+						 if (FAILED(m_pGameInstance->Add_CloneObject_ToLayer(LEVEL_GAMEPLAY, TEXT("Layer_InteractObj"), TEXT("Prototype_GameObject_Lift_Door"), &pDesc)))
 							 return E_FAIL;
 					 }
 				}
@@ -299,5 +328,7 @@ void CLevel_Tool::Free()
 {
 	__super::Free();
 	// 인스턴싱을 할 모델들을 모아둔 매니저 클리어하기
+	Safe_Release(m_pPlayer);
 	m_pGameInstance->Clear_Instance();
+	CCamera_Manager::Get_Instance()->Destroy_Instance();
 }

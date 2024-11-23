@@ -12,38 +12,41 @@ BEGIN(Tools)
 class CTrail_Effect_TP final :public CEffect_Base
 {
 public:
+	enum SHADER_TYPE { SHADER_DEFAULT, SHADER_END };
 	typedef struct
 	{
-		_uint		iNumInstance = { 100 };
-		_float2		vLifeTime = { 2.f, 4.f };
+		_uint		iNumInstance = { 10 };
+		_float2		vLifeTime = { 2.f, 2.f };
 	}BUFFER_DESC;
 
 	typedef struct
 	{
-		_uint		iRenderState = { 0 };
-		_float4		vColor = {};
-		_float		fScale = { 0.f };
-		_Vec2		vDivide = {};
-		_float		fSpriteSpeed = { 0.f };
+		// 움직임
+		_Vec3		vTopOffset = {};
+		_Vec3		vBottomOffset = {};
+		
+		// 셰이더
+		_uint		iNumInstance = { 10 };
+		_Vec4		vColor = { 0.f, 0.f, 0.f, 1.f };
+		_float		fAlphaSpeed = { 1.f };
+
+		// 기타
 		_uint		iShaderIndex = { 0 };
-	} ACTION_DESC;
+		_bool		bLoop = { false };
+	} DEFAULT_DESC;
 
 	typedef struct
 	{
-		_tchar strDiffuseTextureTag[MAX_PATH] = TEXT("");
-		_tchar strMaskTextureTag_1[MAX_PATH] = TEXT("");
-		_tchar strMaskTextureTag_2[MAX_PATH] = TEXT("");
-	}TEXTURE_DESC;
-
-	typedef struct
-	{
-		ACTION_DESC ActionDesc = {};
-		TEXTURE_DESC TextureDesc = {};
-	}INIT_DESC;
+		_tchar		szDiffuseTexturTag[MAX_PATH] = L"";
+		_tchar		szMaskTextureTag_1[MAX_PATH] = L"";
+		_tchar		szMaskTextureTag_2[MAX_PATH] = L"";
+		_tchar		szNormalTextureTag[MAX_PATH] = L"";
+	}TEXT_DESC;
 
 	typedef struct : public CEffect_Base::EFFECT_BASE_DESC
 	{
-		INIT_DESC InitDesc = {};
+		DEFAULT_DESC DefaultDesc = {};
+		TEXT_DESC TextDesc = {};
 		BUFFER_DESC BufferDesc = {};
 	}TRAIL_TP_DESC;
 
@@ -64,23 +67,28 @@ public:
 public:
 	virtual void Reset() override;
 	virtual HRESULT Save(_wstring strFilePath) override;
-public:
-	void Set_Desc(const ACTION_DESC& desc);
-	TRAIL_TP_DESC Get_Desc();
 
+	void Set_Loop(_bool bLoop) override {
+		m_DefaultDesc.bLoop = bLoop;
+	}
+
+public:
+	void Set_Desc(const TRAIL_TP_DESC& desc);
+	TRAIL_TP_DESC Get_Desc() {
+		return m_InitDesc;
+	}
+	TRAIL_TP_DESC* Get_InitDesc_Ptr() {
+		return &m_InitDesc;
+	}
 private:
 	class CShader* m_pShaderCom = { nullptr };
 	class CTrail_TwoPoint_Instance* m_pVIBufferCom = { nullptr };
-	class CTexture* m_pDiffuseTextureCom = { nullptr };
-	class CTexture* m_pMaskTextureCom_1 = { nullptr };
-	class CTexture* m_pMaskTextureCom_2 = { nullptr };
+	class CTexture* m_pTextureCom[TEXTURE_END] = { nullptr, nullptr, nullptr, nullptr };
 
-	ACTION_DESC m_ActionDesc = {};
+	DEFAULT_DESC m_DefaultDesc = {};
+	TRAIL_TP_DESC m_InitDesc = {};
 
-	TRAIL_TP_DESC m_SaveDesc = {};
-
-	_float3 m_vTestTop = {};
-	_float3 m_vTestBottom = {};
+	_float m_fAlpha = 0.f;
 
 private:
 	HRESULT Ready_Components(const TRAIL_TP_DESC& Desc);

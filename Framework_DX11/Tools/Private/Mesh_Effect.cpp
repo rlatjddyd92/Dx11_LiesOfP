@@ -65,12 +65,19 @@ void CMesh_Effect::Late_Update(_float fTimeDelta)
 	m_fAccumulateTime += fTimeDelta;
 
 	if (m_DefaultDesc.fDuration < m_fAccumulateTime)
-		m_isActive = false;
+	{
+		if (true == m_DefaultDesc.bLoop)
+			Reset();
+		else
+		{
+			//m_isActive = false;
+		}
+	}
+	if (CRenderer::RG_END == m_RenderDesc.iRenderGroup)
+		return;
 
-	if (CRenderer::RG_EFFECT == m_RenderDesc.iRenderGroup)
-		m_pGameInstance->Add_RenderObject(CRenderer::RG_NONLIGHT, this);
-	else
-		m_pGameInstance->Add_RenderObject((CRenderer::RENDERGROUP)m_RenderDesc.iRenderGroup, this);
+
+	m_pGameInstance->Add_RenderObject((CRenderer::RENDERGROUP)m_RenderDesc.iRenderGroup, this);
 }
 
 HRESULT CMesh_Effect::Render()
@@ -143,6 +150,9 @@ void CMesh_Effect::Set_Desc(const MESH_EFFECT_DESC& desc)
 
 void CMesh_Effect::Reset()
 {
+	m_vCurrentTileMove = {0.f, 0.f};
+	m_fAccumulateTime = { 0.f };
+
 	m_DefaultDesc = m_InitDesc.DefaultDesc;
 	m_RenderDesc = m_InitDesc.RenderDesc;
 

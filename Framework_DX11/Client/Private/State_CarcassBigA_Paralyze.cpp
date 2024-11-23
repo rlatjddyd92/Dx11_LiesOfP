@@ -42,7 +42,7 @@ void CState_CarcassBigA_Paralyze::Update(_float fTimeDelta)
         if (bCheck)
         {
             ++m_iAnimCnt;
-            m_pMonster->Change_Animation(AN_PARALYZE_START - m_iAnimCnt, true, 0.f, 0.f);
+            m_pMonster->Change_Animation(AN_PARALYZE_START - m_iAnimCnt, true, 0.f, 0);
         }
         break;
 
@@ -50,7 +50,7 @@ void CState_CarcassBigA_Paralyze::Update(_float fTimeDelta)
         if (m_fParalizeTime >= m_fParalizeDuration)
         {
             ++m_iAnimCnt;
-            m_pMonster->Change_Animation(AN_PARALYZE_START - m_iAnimCnt, false, 0.f, 0.f);
+            m_pMonster->Change_Animation(AN_PARALYZE_START - m_iAnimCnt, false, 0.f, 0);
         }
         else
             m_fParalizeTime += fTimeDelta;

@@ -7,7 +7,11 @@
 #include "Controller_AnimationTool.h"
 #include "Controller_PostProcess.h"
 
+#include <iostream>
+using namespace std;
+
 IMPLEMENT_SINGLETON(CImGui_Manager)
+
 
 
 CImGui_Manager::CImGui_Manager()
@@ -87,6 +91,8 @@ void CImGui_Manager::Update_ImGui()
 	ImGuiTabBarFlags tab_bar_flags = ImGuiTabBarFlags_None;
 	if (ImGui::BeginTabBar("MyTabBar", tab_bar_flags))
 	{
+		//이펙트 툴에서 플레이어 보이게 하기 위한 변수
+		bAnimCtr = false;
 		Tool_Map();
 
 		Tool_Effect();
@@ -101,6 +107,8 @@ void CImGui_Manager::Update_ImGui()
 	ImGui::EndTabBar();
 
 	ImGui::End();
+
+	
 }
 
 void CImGui_Manager::Tool_Map()
@@ -124,6 +132,7 @@ void CImGui_Manager::Tool_Effect()
 	{
 		m_pController_EffectTool->Set_JumhoCamera(true);
 		m_pController_EffectTool->Render();
+		bAnimCtr = true;
 	}
 	else
 		m_pController_EffectTool->Set_JumhoCamera(false);
@@ -155,7 +164,12 @@ void CImGui_Manager::Tool_Animation()
 	}
 	else
 	{
-		m_pController_AnimationTool->BlockObjCtr();
+		if (!bAnimCtr)
+		{
+			m_pController_AnimationTool->Set_BlockObjCtr(false);
+		}
+		else
+			m_pController_AnimationTool->Set_BlockObjCtr(true);
 	}
 }
 
@@ -163,9 +177,13 @@ void CImGui_Manager::Tool_PostProcess()
 {
 	if (ImGui::BeginTabItem("PostProcess Tool"))
 	{
+		m_pController_PostProcess->Update_CameraSetting();
 		m_pController_PostProcess->Update_SSAO();
 		m_pController_PostProcess->Update_HDR();
 		m_pController_PostProcess->Update_BLOOM();
+		m_pController_PostProcess->Update_DOF();
+		m_pController_PostProcess->Update_Radial();
+
 		ImGui::EndTabItem();
 	}
 }
@@ -199,7 +217,7 @@ HRESULT CImGui_Manager::Ready_Controllers()
 		return E_FAIL;
 	m_pController_AnimationTool->Initialize(m_pDevice, m_pContext);
 
-	m_pController_PostProcess = CController_PostProcess::Get_Instance();
+	m_pController_PostProcess = CCamera_Manager::Get_Instance();
 	if (nullptr == m_pController_PostProcess)
 		return E_FAIL;
 	m_pController_PostProcess->Initialize(m_pDevice, m_pContext);

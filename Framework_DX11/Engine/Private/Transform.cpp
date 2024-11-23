@@ -232,7 +232,25 @@ void CTransform::LookAt_Dir(_Vec4 vDir)
 	Set_State(STATE_LOOK, vLook * vScale.z);
 }
 
-void CTransform::Go_Straight(_float fTimeDelta, _float fSpeed, CNavigation* pNavigation)
+void CTransform::Look_Dir(_Vec4 vDir)
+{
+	_Vec3		vScale = Get_Scaled();
+
+	_Vec4		vPosition = Get_State(STATE_POSITION);
+
+	_Vec4		vLook = vDir;
+
+	_Vec4		vRight = XMVector3Cross(XMVectorSet(0.f, 1.f, 0.f, 0.f), vLook);
+
+	_Vec4		vUp = XMVector3Cross(vLook, vRight);
+
+	Set_State(STATE_RIGHT, XMVector3Normalize(vRight) * vScale.x);
+	Set_State(STATE_UP, XMVector3Normalize(vUp) * vScale.y);
+	Set_State(STATE_LOOK, XMVector3Normalize(vLook) * vScale.z);
+
+}
+
+void CTransform::Go_Straight(_float fTimeDelta, _float fSpeed, class CNavigation* pNavigation)
 {
 	_Vec3		vPosition = Get_State(STATE_POSITION);
 	_Vec3		vLook = Get_State(STATE_LOOK);
@@ -469,7 +487,7 @@ void CTransform::BillBoard()
 	_Vec3		vCameraPos = pCamera->Get_Transform()->Get_State(CTransform::STATE_POSITION);
 	_Vec3		vLook = vPosition - vCameraPos;
 
-	if (vLook == _Vec3(0.f, 0.f, 0.f))
+	if (0.f == vLook.Length())
 		return;
 
 	// Up 벡터와 Look 벡터를 외적하여 Right 벡터를 구함
@@ -541,6 +559,33 @@ void CTransform::Set_NewLook(_Vec3 vNewLook)
 	Set_State(CTransform::STATE_RIGHT, vRight * vScale.x);
 	Set_State(CTransform::STATE_UP, vUp * vScale.y);
 	Set_State(CTransform::STATE_LOOK, vNewLook * vScale.z);
+}
+
+void CTransform::Orbit(_vector vAxis, _vector vCenter, _float fLimit, _float fDistance, _float fTimeDelta)
+{
+	Set_State(STATE_POSITION, vCenter);
+
+	_vector      vRight = Get_State(STATE_RIGHT);
+	_vector      vUp = Get_State(STATE_UP);
+	_vector      vLook = Get_State(STATE_LOOK);
+
+	_matrix      RotationMatrix = XMMatrixRotationAxis(vAxis, m_fRotationPerSec * fTimeDelta);
+
+	_vector vMovedLook = XMVector3TransformNormal(vLook, RotationMatrix);
+
+	_vector vNonY_MovedLook = XMVectorSetY(vMovedLook, 0.f);
+
+	_float fDot = XMVectorGetX(XMVector3Dot(XMVector3Normalize(vMovedLook), XMVector3Normalize(vNonY_MovedLook)));
+
+	if (fDot < fLimit)
+		return;
+
+	Set_State(STATE_RIGHT, XMVector3TransformNormal(vRight, RotationMatrix));
+	Set_State(STATE_UP, XMVector3TransformNormal(vUp, RotationMatrix));
+	Set_State(STATE_LOOK, XMVector3TransformNormal(vLook, RotationMatrix));
+
+	Set_State(STATE_POSITION, vCenter - XMVector3Normalize(Get_State(STATE_LOOK)) * fDistance);
+
 }
 
 CTransform * CTransform::Create(ID3D11Device * pDevice, ID3D11DeviceContext * pContext, void * pArg)

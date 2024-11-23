@@ -13,12 +13,12 @@ CState_Player_OH_Dash::CState_Player_OH_Dash(CFsm* pFsm, CPlayer* pPlayer)
 
 HRESULT CState_Player_OH_Dash::Initialize(_uint iStateNum, void* pArg)
 {
-    m_iAnimation_Dash[DASH_F] = m_pPlayer->Get_Model()->Find_AnimationIndex("AS_Pino_O_Dash_Normal_F", 3.5f);
-    m_iAnimation_Dash[DASH_B] = m_pPlayer->Get_Model()->Find_AnimationIndex("AS_Pino_O_Dash_Normal_B", 3.5f);
-    m_iAnimation_Dash[DASH_FOCUS_F] = m_pPlayer->Get_Model()->Find_AnimationIndex("AS_Pino_O_Dash_FocusHurt_F", 3.5f);
-    m_iAnimation_Dash[DASH_FOCUS_B] = m_pPlayer->Get_Model()->Find_AnimationIndex("AS_Pino_O_Dash_FocusHurt_B", 3.5f);
-    m_iAnimation_Dash[DASH_FOCUS_L] = m_pPlayer->Get_Model()->Find_AnimationIndex("AS_Pino_O_Dash_FocusHurt_L", 3.5f);
-    m_iAnimation_Dash[DASH_FOCUS_R] = m_pPlayer->Get_Model()->Find_AnimationIndex("AS_Pino_O_Dash_FocusHurt_R", 3.5f);
+    m_iAnimation_Dash[DASH_F] = m_pPlayer->Get_Model()->Find_AnimationIndex("AS_Pino_O_Dash_Normal_F", 2.5f);
+    m_iAnimation_Dash[DASH_B] = m_pPlayer->Get_Model()->Find_AnimationIndex("AS_Pino_O_Dash_Normal_B", 2.5f);
+    m_iAnimation_Dash[DASH_FOCUS_F] = m_pPlayer->Get_Model()->Find_AnimationIndex("AS_Pino_O_Dash_FocusHurt_F", 2.5f);
+    m_iAnimation_Dash[DASH_FOCUS_B] = m_pPlayer->Get_Model()->Find_AnimationIndex("AS_Pino_O_Dash_FocusHurt_B", 2.5f);
+    m_iAnimation_Dash[DASH_FOCUS_L] = m_pPlayer->Get_Model()->Find_AnimationIndex("AS_Pino_O_Dash_FocusHurt_L", 2.5f);
+    m_iAnimation_Dash[DASH_FOCUS_R] = m_pPlayer->Get_Model()->Find_AnimationIndex("AS_Pino_O_Dash_FocusHurt_R", 2.5f);
 
     FSM_INIT_DESC* pDesc = static_cast<FSM_INIT_DESC*>(pArg);
 
@@ -46,14 +46,9 @@ HRESULT CState_Player_OH_Dash::Start_State(void* pArg)
 
 void CState_Player_OH_Dash::Update(_float fTimeDelta)
 {
-    if (*m_pIsEndAnim)
-    {
-        m_pPlayer->Change_State(CPlayer::OH_IDLE);
-    }
-
     if (End_Check())
     {
-        m_pPlayer->Change_State(CPlayer::TH_IDLE);
+        m_pPlayer->Change_State(CPlayer::OH_IDLE);
     }
 }
 
@@ -70,30 +65,30 @@ void CState_Player_OH_Dash::Select_DashAnimation()
     {
         if (KEY_HOLD(KEY::W))
         {
-            m_pPlayer->Change_Animation(m_iAnimation_Dash[DASH_FOCUS_F], false);
+            m_pPlayer->Change_Animation(m_iAnimation_Dash[DASH_FOCUS_F], false, 0.f);
         }
         else if (KEY_HOLD(KEY::S))
         {
-            m_pPlayer->Change_Animation(m_iAnimation_Dash[DASH_FOCUS_B], false);
+            m_pPlayer->Change_Animation(m_iAnimation_Dash[DASH_FOCUS_B], false, 0.f);
         }
         else if (KEY_HOLD(KEY::A))
         {
-            m_pPlayer->Change_Animation(m_iAnimation_Dash[DASH_FOCUS_L], false);
+            m_pPlayer->Change_Animation(m_iAnimation_Dash[DASH_FOCUS_L], false, 0.f);
         }
         else if (KEY_HOLD(KEY::D))
         {
-            m_pPlayer->Change_Animation(m_iAnimation_Dash[DASH_FOCUS_R], false);
+            m_pPlayer->Change_Animation(m_iAnimation_Dash[DASH_FOCUS_R], false, 0.f);
         }
     }
     else
     {
-        if (m_pFsm->Get_PrevState() == CPlayer::TH_RUN || m_pFsm->Get_PrevState() == CPlayer::TH_SPRINT)
+        if (m_pFsm->Get_PrevState() == CPlayer::OH_RUN || m_pFsm->Get_PrevState() == CPlayer::OH_SPRINT)
         {
-            m_pPlayer->Change_Animation(m_iAnimation_Dash[DASH_F], false);
+            m_pPlayer->Change_Animation(m_iAnimation_Dash[DASH_F], false, 0.f);
             return;
         }
 
-        m_pPlayer->Change_Animation(m_iAnimation_Dash[DASH_B], false);
+        m_pPlayer->Change_Animation(m_iAnimation_Dash[DASH_B], false, 0.f);
     }
 
 }

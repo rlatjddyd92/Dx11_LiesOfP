@@ -2,7 +2,7 @@
 #include "..\Public\UIPage_Loading.h"
 
 #include "GameInstance.h"
-
+#include "GameInterface_Controller.h"
 
 CUIPage_Loading::CUIPage_Loading(ID3D11Device* pDevice, ID3D11DeviceContext* pContext)
 	: CUIPage{ pDevice, pContext }
@@ -75,6 +75,13 @@ void CUIPage_Loading::OpenAction()
 void CUIPage_Loading::CloseAction()
 {
 	__super::CloseAction();
+}
+
+CHECK_MOUSE CUIPage_Loading::Check_Page_Action(_float fTimeDelta)
+{
+	__super::Check_Page_Action(fTimeDelta);
+
+	return CHECK_MOUSE::MOUSE_NONE;
 }
 
 HRESULT CUIPage_Loading::Ready_UIPart_Group_Control()

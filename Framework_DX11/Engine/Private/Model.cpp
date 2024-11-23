@@ -310,8 +310,8 @@ HRESULT CModel::SetUp_NextAnimation(_uint iNextAnimationIndex, _bool isLoop, _fl
 
 	m_ChangeTrackPosition = 0.0;
 
-
-	m_ChangeTrackPosition = m_Animations[m_tChaneAnimDesc.iNextAnimIndex]->Get_WideChannel()->Get_KeyFrame(iStartFrame).TrackPosition;
+	if(iStartFrame > 0)
+		m_ChangeTrackPosition = m_Animations[m_tChaneAnimDesc.iNextAnimIndex]->Get_WideChannel()->Get_KeyFrame(iStartFrame).TrackPosition;
 
 	m_vRootMoveStack = m_vCurRootMove = _vector{ 0, 0, 0, 1 };
 

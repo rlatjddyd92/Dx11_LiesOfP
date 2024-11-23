@@ -33,6 +33,9 @@ public:
 		return nullptr;
 	}
 
+	_wstring				Get_Tag() { return m_strObjectTag; }
+	void					Set_Tag(_wstring strTag) { m_strObjectTag = strTag; }
+
 public:
 	virtual HRESULT Initialize_Prototype();
 	virtual HRESULT Initialize(void* pArg = nullptr);
@@ -67,6 +70,8 @@ protected:
 
 	_bool						m_isActive = { true };
 	_bool						m_isDead = { false };
+
+	_wstring					m_strObjectTag = {};
 
 protected:
 	map<const _wstring, class CComponent*>			m_Components;

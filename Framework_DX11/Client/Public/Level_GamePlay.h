@@ -32,6 +32,9 @@ public:
 	HRESULT Read_Map_Data();
 	//HRESULT Ready_Layer_Monster(CLandObject::LANDOBJECT_DESC& LandObjectDesc);
 	
+private:
+	class CPlayer*		m_pPlayer = { nullptr };
+
 public:
 	static CLevel_Tool* Create(ID3D11Device* pDevice, ID3D11DeviceContext* pContext);
 	virtual void Free() override;

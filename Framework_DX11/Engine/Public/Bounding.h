@@ -24,6 +24,8 @@ public:
 
 public:
 	virtual _bool Intersect(CCollider::TYPE eColliderType, CBounding* pBounding) = 0;
+	virtual void Change_BoundingDesc(CBounding::BOUNDING_DESC* pBoundingDesc) = 0;
+	virtual void Reset_Bounding() = 0;
 
 protected:
 	ID3D11Device*				m_pDevice = { nullptr };

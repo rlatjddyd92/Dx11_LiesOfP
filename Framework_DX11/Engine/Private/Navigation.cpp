@@ -96,7 +96,7 @@ HRESULT CNavigation::Initialize_Prototype(const _wstring& strNavigationDataFile)
 		return E_FAIL;
 	}
 
-	_uint iCellCout = { 0 };
+	_int iCellCout = { 0 };
 	//getline(fin, line);
 	//LayerCout = std::stoi(line);
 	fin.read(reinterpret_cast<char*>(&iCellCout), sizeof(iCellCout));
@@ -212,70 +212,32 @@ void CNavigation::SetUp_OnCell(CTransform* pTransform, _float fOffset, _float fT
 	_vector vPointB = m_Cells[m_iCurrentCellIndex]->Get_Point(CCell::POINT_B);
 	_vector vPointC = m_Cells[m_iCurrentCellIndex]->Get_Point(CCell::POINT_C);
 
-	// 각각 거리를 구함
-	_float fDistanceA = XMVectorGetX(XMVector3Length(vPointA - vLocalPos));
-	_float fDistanceB = XMVectorGetX(XMVector3Length(vPointB - vLocalPos));
-	_float fDistanceC = XMVectorGetX(XMVector3Length(vPointC - vLocalPos));
+	XMFLOAT3 pA, pB, pC;
+	XMStoreFloat3(&pA, vPointA);
+	XMStoreFloat3(&pB, vPointB);
+	XMStoreFloat3(&pC, vPointC);
 
-	_float fMaxDistance = max(max(fDistanceA, fDistanceB), fDistanceC);
-	_float fMinDistance = min(min(fDistanceA, fDistanceB), fDistanceC);
-	_float fMidDistance = 0.f;
+	XMFLOAT3 v1 = { pB.x - pA.x, pB.y - pA.y, pB.z - pA.z };
+	XMFLOAT3 v2 = { pC.x - pA.x, pC.y - pA.y, pC.z - pA.z };
 
-	_float fMaxFarY = 0.f;
-	_float fMidFarY = 0.f;
-	_float fMinFarY = 0.f;
+	XMFLOAT3 normal;
+	normal.x = v1.y * v2.z - v1.z * v2.y;
+	normal.y = v1.z * v2.x - v1.x * v2.z;
+	normal.z = v1.x * v2.y - v1.y * v2.x;
 
-	if (fMaxDistance != fDistanceA && fMinDistance != fDistanceA)
-	{
-		fMidDistance = fDistanceA;
-		fMidFarY = XMVectorGetY(vPointA);
-	}
-	else if (fMaxDistance != fDistanceB && fMinDistance != fDistanceB)
-	{
-		fMidDistance = fDistanceB;
-		fMidFarY = XMVectorGetY(vPointB);
-	}
-	else if (fMaxDistance != fDistanceC && fMinDistance != fDistanceC)
-	{
-		fMidDistance = fDistanceC;
-		fMidFarY = XMVectorGetY(vPointC);
-	}
+	_float A = normal.x;
+	_float B = normal.y;
+	_float C = normal.z;
+	_float D = -(A * pA.x + B * pA.y + C * pA.z);
 
-	if (fMaxDistance == fDistanceA)
-	{
-		fMaxFarY = XMVectorGetY(vPointA);
-	}
-	else if (fMaxDistance == fDistanceB)
-	{
-		fMaxFarY = XMVectorGetY(vPointB);
-	}
-	else if (fMaxDistance == fDistanceC)
-	{
-		fMaxFarY = XMVectorGetY(vPointC);
-	}
+	XMFLOAT3 playerPos;
+	XMStoreFloat3(&playerPos, vLocalPos);
+	_float x = playerPos.x;
+	_float z = playerPos.z;
 
-	if (fMinDistance == fDistanceA)
-	{
-		fMinFarY = XMVectorGetY(vPointA);
-	}
-	else if (fMinDistance == fDistanceB)
-	{
-		fMinFarY = XMVectorGetY(vPointB);
-	}
-	else if (fMinDistance == fDistanceC)
-	{
-		fMinFarY = XMVectorGetY(vPointC);
-	}
+	_float y = -(A * x + C * z + D) / B;
 
-	// 총 거리의 합
-	_float fTotalDistance = fMaxDistance + fMinDistance + fMidDistance;
-
-	_float fNewY = (fMaxDistance * fMinFarY + fMidDistance * fMidFarY + fMinDistance * fMaxFarY) / fTotalDistance;
-
-	_vector vNewLocalPos = XMVectorSetY(vLocalPos, fNewY + fOffset);
-	vLocalPos = XMVectorLerp(vLocalPos, vNewLocalPos, 8.f * fTimeDelta);
-
-	_vector vWorldPos = XMVector3TransformCoord(vLocalPos, XMLoadFloat4x4(&m_WorldMatrix));
+	_Vec3 vWorldPos = _Vec3(x, y, z);
 
 	pTransform->Set_State(CTransform::STATE_POSITION, vWorldPos);
 

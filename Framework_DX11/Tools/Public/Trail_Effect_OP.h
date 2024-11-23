@@ -12,50 +12,57 @@ BEGIN(Tools)
 class CTrail_Effect_OP final : public CEffect_Base
 {
 public:
-	typedef struct
-	{
-		_uint		iNumInstance = { 100 };
-		_float2		vLifeTime = { 2.f, 4.f };
-	}BUFFER_DESC;
+	enum SHADER_TYPE { SHADER_DEFAULT, SHADER_END };
+	enum TRAIL_OP_TYPE{TYPE_UPDATE, TYPE_SPREAD, TYPE_END};
 
 	enum TRAIL_OP_STATE
 	{
-		PS_GROW = 0x0001,
-		PS_SHRINK = 0x0002,
-		PS_END
+		TOP_GROW = 0x0001,
+		TOP_SHRINK = 0x0002,
+		TOP_END
 	};
 
 	typedef struct
 	{
-		_uint		iState = { 0 };
-		_uint		iRenderState = { 0 };
-		_float4		vColor = {};
-		_float		fScale = { 0.f };
-		_Vec2		vDivide = {};
+		_uint		iNumInstance = { 20 };
+		_float2		vLifeTime = { 2.f, 2.f };
+	}BUFFER_DESC;
+
+	typedef struct
+	{
+		// 움직임 제어용
+		TRAIL_OP_TYPE	eType = TYPE_END;
+		_float			fTrailInterval = { 0.1f };
+		_float			fSpreadSpeed = { 0.f };
+		_Vec3			vPos = { 0.f, 0.f, 0.f };
+		// 셰이더 전달용
+		_uint		iGeomState = { 0 };
+		_Vec4		vColor = { 0.f, 0.f, 0.f, 1.f };
+
+		_float		fScaling = { 1.f };
+		_Vec2		vDivide = { 1.f, 1.f };
 		_float		fSpriteSpeed = { 0.f };
+
+		// 기타
 		_uint		iShaderIndex = { 0 };
-	} ACTION_DESC;
+		_bool		bLoop = { false };
+	} DEFAULT_DESC;
 
 
 	typedef struct
 	{
-		_tchar strDiffuseTextureTag[MAX_PATH] = TEXT("");
-		_tchar strMaskTextureTag_1[MAX_PATH] = TEXT("");
-		_tchar strMaskTextureTag_2[MAX_PATH] = TEXT("");
-	}TEXTURE_DESC;
-
-	typedef struct
-	{
-		ACTION_DESC ActionDesc = {};
-		TEXTURE_DESC TextureDesc = {};
-	}INIT_DESC;
+		_tchar		szDiffuseTexturTag[MAX_PATH] = L"";
+		_tchar		szMaskTextureTag_1[MAX_PATH] = L"";
+		_tchar		szMaskTextureTag_2[MAX_PATH] = L"";
+		_tchar		szNormalTextureTag[MAX_PATH] = L"";
+	} TEXT_DESC;
 
 	typedef struct : public CEffect_Base::EFFECT_BASE_DESC
 	{
-		INIT_DESC InitDesc = {};
+		DEFAULT_DESC DefaultDesc = {};
+		TEXT_DESC TextDesc = {};
 		BUFFER_DESC BufferDesc = {};
 	}TRAIL_OP_DESC;
-
 
 private:
 	CTrail_Effect_OP(ID3D11Device* pDevice, ID3D11DeviceContext* pContext);
@@ -73,24 +80,28 @@ public:
 public:
 	virtual void Reset() override;
 	virtual HRESULT Save(_wstring strFilePath) override;
+	virtual void Set_Loop(_bool bLoop) override {
+		m_DefaultDesc.bLoop = bLoop;
+	}
+
 public:
-	void Set_Desc(const ACTION_DESC& desc);
-	TRAIL_OP_DESC Get_Desc();
+	void Set_Desc(const TRAIL_OP_DESC& TrailDesc);
+	TRAIL_OP_DESC Get_Desc() {
+		return m_InitDesc;
+	}
+	TRAIL_OP_DESC* Get_InitDesc_Ptr() {
+		return &m_InitDesc;
+	}
+
 
 private:
 	class CShader* m_pShaderCom = { nullptr };
 	class CTrail_OnePoint_Instance* m_pVIBufferCom = { nullptr };
-	class CTexture* m_pDiffuseTextureCom = { nullptr };
-	class CTexture* m_pMaskTextureCom_1 = { nullptr };
-	class CTexture* m_pMaskTextureCom_2 = { nullptr };
+	class CTexture* m_pTextureCom[TEXTURE_END] = { nullptr, nullptr, nullptr, nullptr };
 
-	ACTION_DESC m_ActionDesc = {};
+	DEFAULT_DESC m_DefaultDesc = {};
+	TRAIL_OP_DESC m_InitDesc = {};
 
-	TRAIL_OP_DESC m_SaveDesc = {};
-
-	// 테스트용
-	_float3 m_vTestTop = {};
-	_bool m_bLoop = { false };
 
 private:
 	HRESULT Ready_Components(const TRAIL_OP_DESC& Desc);

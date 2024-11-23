@@ -2,6 +2,7 @@
 
 #include "Client_Defines.h"
 #include "Pawn.h"
+#include "PlayerCamera.h"
 
 BEGIN(Engine)
 class CNavigation;
@@ -18,16 +19,24 @@ public:
 	enum PLAYER_STATE
 	{
 		HIT, PARRY, HEAL, CHANGEWEP,
+
 		OH_IDLE, OH_WALK, OH_RUN, OH_SPRINT, OH_GUARD, OH_JUMP, OH_DASH,
+
 		TH_IDLE, TH_WALK, TH_RUN, TH_SPRINT, TH_GUARD, TH_JUMP, TH_DASH,
+
 		RAPIER_LATTACK0, RAPIER_LATTACK1, RAPIER_RATTACK0, RAPIER_CHARGE, RAPIER_FATAL, RAPIER_PARRYATTACK,
+
 		FLAME_LATTACK0, FLAME_LATTACK1, FLAME_RATTACK0, FLAME_RATTACK1, FLAME_CHARGE0, FLAME_CHARGE1, FLAME_FATAL, FLAME_PARRYATTACK,
+
+		SCISSOR_LATTACK0, SCISSOR_LATTACK1, SCISSOR_RATTACK0, SCISSOR_RATTACK1, SCISSOR_CHARGE0, SCISSOR_CHARGE1, 
+		SCISSOR_FATAL0, SCISSOR_FATAL1, SCISSOR_FATAL2, SCISSOR_BUFF,
+
 		STATE_END
 	};
 
 public:
-	class CCamera*			Get_Camera() { return m_pPlayerCamera; }
-	void					Set_Camera(class CCamera* pCamera) { m_pPlayerCamera = pCamera; }
+	CPlayerCamera*			Get_Camera() { return m_pPlayerCamera; }
+	void					Set_Camera(class CPlayerCamera* pCamera) { m_pPlayerCamera = pCamera; }
 
 	_bool					Get_IsJump() { return m_isJump; }
 	void					Set_IsJump(_bool isJump) { m_isJump = isJump; }
@@ -50,10 +59,11 @@ public:
 
 	WEAPON_TYPE				Get_WeaponType() { return m_eWeaponType; }
 	void					Set_WeaponType(WEAPON_TYPE eType) { m_eWeaponType = eType; }
+	class CWeapon*			Get_CurrentWeapon() { return m_pWeapon[m_eWeaponType]; }
 
 	void					Reset_Root() { m_vCurRootMove = m_vRootMoveStack = _vector{0,0,0,0}; }
 
-
+	CPawn*					Get_TargetMonster() { return m_pTargetMonster; }
 
 private:
 	CPlayer(ID3D11Device* pDevice, ID3D11DeviceContext* pContext);
@@ -77,13 +87,24 @@ public:
 	void			Change_Weapon();
 	_uint			Change_WeaponType();
 	
+	void			Active_CurrentWeaponCollider(_float fDamageRatio = 1.f, _uint iHandIndex = 1);
+	void			DeActive_CurretnWeaponCollider(_uint iHandIndex = 1);
+
+	void			Seperate_Scissor();
+	void			Combine_Scissor();
+
+	void			Chnage_CameraMode(CPlayerCamera::CAMERA_MODE eMode);
+
+	void			LockOnOff();
+	CPawn*			Find_TargetMonster();
+
 private:
 	list<OUTPUT_EVKEY>	m_EvKeyList;
 	list<class CEffect_Container*>	m_EffectList;
 	map<_uint, class CEffect_Container*>	m_Effects;
 
 private:
-	class CCamera*		m_pPlayerCamera = { nullptr };
+	CPlayerCamera*		m_pPlayerCamera = { nullptr };
 
 	_bool				m_isJump = { false };
 	_bool				m_isGuard = { false };
@@ -92,6 +113,8 @@ private:
 	_bool				m_isInvicible = { false };
 
 	_float				m_fGuardTime = {};
+
+	CPawn*				m_pTargetMonster = { nullptr };
 
 	class CWeapon*		m_pWeapon[WEP_END] = { nullptr, };
 	WEAPON_TYPE			m_eWeaponType = { WEP_RAPIER };

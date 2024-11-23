@@ -10,9 +10,7 @@ texture2D		g_BlurTexture;
 float2          g_vScreenSize;
 bool            g_isSelectBright = false;
 
-float g_fMiddleGrey = 1.f;
-float g_fLumWhiteSqr = 1.f;
-float g_fAvgLum;
+float g_fThreshold = 1.f;
 
 static const float4 LUM_FACTOR = float4(0.299, 0.587, 0.114, 0);
 
@@ -28,18 +26,18 @@ struct VS_OUT
 	float2 vTexcoord : TEXCOORD0;
 };
 
-//float g_fWeights[13] =
-//{
-//    0.0561f, 0.1353f, 0.278f, 0.4868f, 0.7261f, 0.9231f, 1.f, 0.9231f, 0.7261f, 0.4868f, 0.278f, 0.1353f, 0.0561f
-//};
-//float g_fWeightTotal = 6.21f;
+float g_fWeights[13] =
+{
+    0.0561f, 0.1353f, 0.278f, 0.4868f, 0.7261f, 0.9231f, 1.f, 0.9231f, 0.7261f, 0.4868f, 0.278f, 0.1353f, 0.0561f
+};
+float g_fWeightTotal = 6.21f;
 
 // 다른거
-float g_fWeights[9] =
-{
-    0.1f, 0.18f, 0.55f, 0.9f, 1.f, 0.9f, 0.55f, 0.18f, 0.1f
-};
-float g_fWeightTotal = 4.46f;
+//float g_fWeights[9] =
+//{
+//    0.1f, 0.18f, 0.55f, 0.9f, 1.f, 0.9f, 0.55f, 0.18f, 0.1f
+//};
+//float g_fWeightTotal = 4.46f;
 
 VS_OUT VS_MAIN(/*정점*/VS_IN In)
 {
@@ -71,7 +69,7 @@ struct PS_OUT
 float Get_BloomCurve(float x)
 {
     float result = x;
-    result = max(0, x - 1.2f);
+    result = max(0, x - g_fThreshold);
     result *= result;
 
     return result * 0.8f;
@@ -98,7 +96,8 @@ PS_OUT PS_MAIN_DOWNSAMPLE(PS_IN In)
     {
         for (int x = -2; x <= 2; ++x)
         {
-            vector vSampleColor = g_DownSampleTexture.Sample(LinearClampSampler, In.vTexcoord, int2(x, y));
+            float2 vTexcoord = In.vTexcoord + float2(1.f / g_vScreenSize.x * x, 1.f / g_vScreenSize.y * y);
+            vector vSampleColor = g_DownSampleTexture.Sample(LinearClampSampler, vTexcoord);
     
             
             vColor += vSampleColor;
@@ -129,7 +128,8 @@ PS_OUT PS_MAIN_UPSAMPLE(PS_IN In)
     float3 vBlur = g_BlurTexture.Sample(LinearClampSampler, In.vTexcoord).rgb;
     float3 vDown = g_DownSampleTexture.Sample(LinearClampSampler, In.vTexcoord).rgb;
     
-    vColor = pow(pow(abs(vBlur), 2.2f) + pow(abs(vDown), 2.2f), 1.f / 2.2f);    // 감마보정
+    vColor = vBlur + vDown;
+    //pow(pow(abs(vBlur), 2.2f) + pow(abs(vDown), 2.2f), 1.f / 2.2f); // 감마보정
     Out.vColor = vector(vColor, 1.f);
     
     return Out;
@@ -141,7 +141,7 @@ PS_OUT PS_MAIN_BLUR_X(PS_IN In)
     
     float2 vBlurTexCoord = (float2) 0.f;
 
-    for (int i = -4; i < 5; i++)
+    for (int i = -6; i <= 6; i++)
     {
         vBlurTexCoord = In.vTexcoord + float2(1.f / g_vScreenSize.x * i, 0.f);
         if (vBlurTexCoord.x > 1.f || vBlurTexCoord.y > 1.f || vBlurTexCoord.x < 0.f || vBlurTexCoord.y < 0.f)   // 화면 밖으로 나갈 경우 예외 처리
@@ -151,7 +151,7 @@ PS_OUT PS_MAIN_BLUR_X(PS_IN In)
         
         // 알파값으로 판별해서 일정 이상이어야 블러를 먹일거임
        if (vDownSample.a > 0.03f)
-            Out.vColor += g_fWeights[i + 4] * vDownSample;
+            Out.vColor += g_fWeights[i + 6] * vDownSample;
 		
     }
 
@@ -168,7 +168,7 @@ PS_OUT PS_MAIN_BLUR_Y(PS_IN In)
     
     float2 vBlurTexCoord = (float2) 0.f;
 
-    for (int i = -4; i < 5; i++)
+    for (int i = -6; i <= 6; i++)
     {
         vBlurTexCoord = In.vTexcoord + float2(0.f, 1.f / g_vScreenSize.y * i);
         if (vBlurTexCoord.x > 1.f || vBlurTexCoord.y > 1.f || vBlurTexCoord.x < 0.f || vBlurTexCoord.y < 0.f)   // 화면 밖으로 나갈 경우 예외 처리
@@ -178,7 +178,7 @@ PS_OUT PS_MAIN_BLUR_Y(PS_IN In)
         
         // 알파값으로 판별해서 일정 이상이어야 블러를 먹일거임
         if (vDownSample.a > 0.03f)
-            Out.vColor += g_fWeights[i + 4] * vDownSample;
+            Out.vColor += g_fWeights[i + 6] * vDownSample;
 		
     }
 

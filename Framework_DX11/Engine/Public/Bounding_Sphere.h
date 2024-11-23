@@ -27,6 +27,8 @@ public:
 
 public:
 	virtual _bool Intersect(CCollider::TYPE eColliderType, CBounding* pBounding) override;
+	virtual void Change_BoundingDesc(CBounding::BOUNDING_DESC* pBoundingDesc) override;
+	virtual void Reset_Bounding() override;
 
 private:
 	BoundingSphere*					m_pOriginalBoundingDesc = { nullptr };

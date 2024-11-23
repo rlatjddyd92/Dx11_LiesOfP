@@ -182,7 +182,7 @@ HRESULT CLoader::LoadingMapModel1()
 	switch (m_eNextLevelID)
 	{
 	case LEVEL_TOOL:
-		//hr = Ready_Resources_For_ToolLevel_Map1();
+		hr = Ready_Resources_For_ToolLevel_Map1();
 		m_isFinished_Map1 = true;
 		break;
 	default:
@@ -284,7 +284,7 @@ HRESULT CLoader::Ready_Resources_For_ToolLevel()
 
 	/* For. Prototype_Component_Texture_Sky */
 	if (FAILED(m_pGameInstance->Add_Prototype(LEVEL_TOOL, TEXT("Prototype_Component_Texture_Sky"),
-		CTexture::Create(m_pDevice, m_pContext, TEXT("../Bin/Resources/Textures/SkyBox/Sky_%d.dds"), 4))))
+		CTexture::Create(m_pDevice, m_pContext, TEXT("../Bin/Resources/Textures/SkyBox/Sky_%d.dds"), 6))))
 		return E_FAIL;
 
 	/* For. Prototype_Component_Texture_Snow */
@@ -298,10 +298,10 @@ HRESULT CLoader::Ready_Resources_For_ToolLevel()
 #pragma region DIFFUSE
 	CController_EffectTool::Get_Instance()->Add_Texture_ProtytypeTag(NONE_TEXT);
 	/* For. Prototype_Component_Texture_DefaultBlack */
-	if (FAILED(m_pGameInstance->Add_Prototype(LEVEL_TOOL, TEXT("Prototype_Component_Texture_DefaultBlack"),
+	if (FAILED(m_pGameInstance->Add_Prototype(LEVEL_TOOL, TEXT("Prototype_Component_Texture_T_Sample_Black"),
 		CTexture::Create(m_pDevice, m_pContext, TEXT("../Bin/Resources/Textures/Effect/T_Sample_Black.dds"), 1))))
 		return E_FAIL;
-	CController_EffectTool::Get_Instance()->Add_Texture_ProtytypeTag(TEXT("Prototype_Component_Texture_DefaultBlack"));
+	CController_EffectTool::Get_Instance()->Add_Texture_ProtytypeTag(TEXT("Prototype_Component_Texture_T_Sample_Black"));
 
 	/* For. Prototype_Component_Texture_Particle_Spark */
 	if (FAILED(m_pGameInstance->Add_Prototype(LEVEL_TOOL, TEXT("Prototype_Component_Texture_Particle_Spark"),
@@ -309,79 +309,83 @@ HRESULT CLoader::Ready_Resources_For_ToolLevel()
 		return E_FAIL;
 	CController_EffectTool::Get_Instance()->Add_Texture_ProtytypeTag(TEXT("Prototype_Component_Texture_Particle_Spark"));
 
-	/* For. Prototype_Component_Texture_Glow */
-	if (FAILED(m_pGameInstance->Add_Prototype(LEVEL_TOOL, TEXT("Prototype_Component_Texture_Glow"),
+	/* For. Prototype_Component_Texture_Glow_0 */
+	if (FAILED(m_pGameInstance->Add_Prototype(LEVEL_TOOL, TEXT("Prototype_Component_Texture_Glow_0"),
 		CTexture::Create(m_pDevice, m_pContext, TEXT("../Bin/Resources/Textures/Effect/Glow_0.dds"), 1))))
 		return E_FAIL;
-	CController_EffectTool::Get_Instance()->Add_Texture_ProtytypeTag(TEXT("Prototype_Component_Texture_Glow"));
+	CController_EffectTool::Get_Instance()->Add_Texture_ProtytypeTag(TEXT("Prototype_Component_Texture_Glow_0"));
 
-	/* For. Prototype_Component_Texture_Thunder */
-	if (FAILED(m_pGameInstance->Add_Prototype(LEVEL_TOOL, TEXT("Prototype_Component_Texture_Thunder"),
+	/* For. Prototype_Component_Texture_T_Thunder_02_C_HJS */
+	if (FAILED(m_pGameInstance->Add_Prototype(LEVEL_TOOL, TEXT("Prototype_Component_Texture_T_Thunder_02_C_HJS"),
 		CTexture::Create(m_pDevice, m_pContext, TEXT("../Bin/Resources/Textures/Effect/T_Thunder_02_C_HJS.dds"), 1))))
 		return E_FAIL;
-	CController_EffectTool::Get_Instance()->Add_Texture_ProtytypeTag(TEXT("Prototype_Component_Texture_Thunder"));
+	CController_EffectTool::Get_Instance()->Add_Texture_ProtytypeTag(TEXT("Prototype_Component_Texture_T_Thunder_02_C_HJS"));
 
-	/* For. Prototype_Component_Texture_LensFlare */
-	if (FAILED(m_pGameInstance->Add_Prototype(LEVEL_TOOL, TEXT("Prototype_Component_Texture_LensFlare"),
+	/* For. Prototype_Component_Texture_T_LensFlare_01_C_KMH */
+	if (FAILED(m_pGameInstance->Add_Prototype(LEVEL_TOOL, TEXT("Prototype_Component_Texture_T_LensFlare_01_C_KMH"),
 		CTexture::Create(m_pDevice, m_pContext, TEXT("../Bin/Resources/Textures/Effect/T_LensFlare_01_C_KMH.dds"), 1))))
 		return E_FAIL;
-	CController_EffectTool::Get_Instance()->Add_Texture_ProtytypeTag(TEXT("Prototype_Component_Texture_LensFlare"));
+	CController_EffectTool::Get_Instance()->Add_Texture_ProtytypeTag(TEXT("Prototype_Component_Texture_T_LensFlare_01_C_KMH"));
 
-	/* For. Prototype_Component_Texture_Ring */
-	if (FAILED(m_pGameInstance->Add_Prototype(LEVEL_TOOL, TEXT("Prototype_Component_Texture_Ring_4"),
+	/* For. Prototype_Component_Texture_T_Ring_04_C_KMH */
+	if (FAILED(m_pGameInstance->Add_Prototype(LEVEL_TOOL, TEXT("Prototype_Component_Texture_T_Ring_04_C_KMH"),
 		CTexture::Create(m_pDevice, m_pContext, TEXT("../Bin/Resources/Textures/Effect/T_Ring_04_C_KMH.dds"), 1))))
 		return E_FAIL;
-	CController_EffectTool::Get_Instance()->Add_Texture_ProtytypeTag(TEXT("Prototype_Component_Texture_Ring_4"));
+	CController_EffectTool::Get_Instance()->Add_Texture_ProtytypeTag(TEXT("Prototype_Component_Texture_T_Ring_04_C_KMH"));
 
-	/* For. Prototype_Component_Texture_Ring_2 */
-	if (FAILED(m_pGameInstance->Add_Prototype(LEVEL_TOOL, TEXT("Prototype_Component_Texture_Ring_8"),
+	/* For. Prototype_Component_Texture_T_Ring_08_C_HJS */
+	if (FAILED(m_pGameInstance->Add_Prototype(LEVEL_TOOL, TEXT("Prototype_Component_Texture_T_Ring_08_C_HJS"),
 		CTexture::Create(m_pDevice, m_pContext, TEXT("../Bin/Resources/Textures/Effect/T_Ring_08_C_HJS.dds"), 1))))
 		return E_FAIL;
-	CController_EffectTool::Get_Instance()->Add_Texture_ProtytypeTag(TEXT("Prototype_Component_Texture_Ring_8"));
+	CController_EffectTool::Get_Instance()->Add_Texture_ProtytypeTag(TEXT("Prototype_Component_Texture_T_Ring_08_C_HJS"));
 
-	/* For. Prototype_Component_Texture_Tile_Spark */
-	if (FAILED(m_pGameInstance->Add_Prototype(LEVEL_TOOL, TEXT("Prototype_Component_Texture_Tile_Spark"),
+	/* For. Prototype_Component_Texture_T_Tile_Spark_01_C_HJS */
+	if (FAILED(m_pGameInstance->Add_Prototype(LEVEL_TOOL, TEXT("Prototype_Component_Texture_T_Tile_Spark_01_C_HJS"),
 		CTexture::Create(m_pDevice, m_pContext, TEXT("../Bin/Resources/Textures/Effect/T_Tile_Spark_01_C_HJS.dds"), 1))))
 		return E_FAIL;
-	CController_EffectTool::Get_Instance()->Add_Texture_ProtytypeTag(TEXT("Prototype_Component_Texture_Tile_Spark"));
+	CController_EffectTool::Get_Instance()->Add_Texture_ProtytypeTag(TEXT("Prototype_Component_Texture_T_Tile_Spark_01_C_HJS"));
 
-	/* For. Prototype_Component_Texture_Stone_8x8 */
-	if (FAILED(m_pGameInstance->Add_Prototype(LEVEL_TOOL, TEXT("Prototype_Component_Texture_Stone_8x8"),
+	/* For. Prototype_Component_Texture_T_SubUV_DebStone_03_8x8_SC_KMH */
+	if (FAILED(m_pGameInstance->Add_Prototype(LEVEL_TOOL, TEXT("Prototype_Component_Texture_T_SubUV_DebStone_03_8x8_SC_KMH"),
 		CTexture::Create(m_pDevice, m_pContext, TEXT("../Bin/Resources/Textures/Effect/T_SubUV_DebStone_03_8x8_SC_KMH.dds"), 1))))
 		return E_FAIL;
-	CController_EffectTool::Get_Instance()->Add_Texture_ProtytypeTag(TEXT("Prototype_Component_Texture_Stone_8x8"));
+	CController_EffectTool::Get_Instance()->Add_Texture_ProtytypeTag(TEXT("Prototype_Component_Texture_T_SubUV_DebStone_03_8x8_SC_KMH"));
 
-	/* For. Prototype_Component_Texture_Thunder_4x4 */
-	if (FAILED(m_pGameInstance->Add_Prototype(LEVEL_TOOL, TEXT("Prototype_Component_Texture_Thunder_4x4"),
+	/* For. Prototype_Component_Texture_T_SubUV_Thunder_01_4x4_SC_HJS */
+	if (FAILED(m_pGameInstance->Add_Prototype(LEVEL_TOOL, TEXT("Prototype_Component_Texture_T_SubUV_Thunder_01_4x4_SC_HJS"),
 		CTexture::Create(m_pDevice, m_pContext, TEXT("../Bin/Resources/Textures/Effect/T_SubUV_Thunder_01_4x4_SC_HJS.dds"), 1))))
 		return E_FAIL;
-	CController_EffectTool::Get_Instance()->Add_Texture_ProtytypeTag(TEXT("Prototype_Component_Texture_Thunder_4x4"));
+	CController_EffectTool::Get_Instance()->Add_Texture_ProtytypeTag(TEXT("Prototype_Component_Texture_T_SubUV_Thunder_01_4x4_SC_HJS"));
 
-	/* For. Prototype_Component_Texture_Thunder_4x1 */
- 	if (FAILED(m_pGameInstance->Add_Prototype(LEVEL_TOOL, TEXT("Prototype_Component_Texture_Thunder_4x1"),
+	/* For. Prototype_Component_Texture_T_SubUV_Thunder_01_4x1_SC_GDH */
+ 	if (FAILED(m_pGameInstance->Add_Prototype(LEVEL_TOOL, TEXT("Prototype_Component_Texture_T_SubUV_Thunder_01_4x1_SC_GDH"),
 		CTexture::Create(m_pDevice, m_pContext, TEXT("../Bin/Resources/Textures/Effect/T_SubUV_Thunder_01_4x1_SC_GDH.dds"), 1))))
 		return E_FAIL;
-	CController_EffectTool::Get_Instance()->Add_Texture_ProtytypeTag(TEXT("Prototype_Component_Texture_Thunder_4x1"));
+	CController_EffectTool::Get_Instance()->Add_Texture_ProtytypeTag(TEXT("Prototype_Component_Texture_T_SubUV_Thunder_01_4x1_SC_GDH"));
 	
-	/* For. Prototype_Component_Texture_Test_Trail */
-	if (FAILED(m_pGameInstance->Add_Prototype(LEVEL_TOOL, TEXT("Prototype_Component_Texture_Test_Trail"),
+	/* For. Prototype_Component_Texture_T_TrailGrad_01_C_RSW */
+	if (FAILED(m_pGameInstance->Add_Prototype(LEVEL_TOOL, TEXT("Prototype_Component_Texture_T_TrailGrad_01_C_RSW"),
 		CTexture::Create(m_pDevice, m_pContext, TEXT("../Bin/Resources/Textures/Effect/T_TrailGrad_01_C_RSW.dds"), 1))))
 		return E_FAIL;
-	CController_EffectTool::Get_Instance()->Add_Texture_ProtytypeTag(TEXT("Prototype_Component_Texture_Test_Trail"));
+	CController_EffectTool::Get_Instance()->Add_Texture_ProtytypeTag(TEXT("Prototype_Component_Texture_T_TrailGrad_01_C_RSW"));
 
-#pragma endregion
-#pragma region
-	/* For. Prototype_Component_Texture_DefaultNormal */
-	if (FAILED(m_pGameInstance->Add_Prototype(LEVEL_TOOL, TEXT("Prototype_Component_Texture_DefaultNormal"),
+	/* For. Prototype_Component_Texture_default_normal */
+	if (FAILED(m_pGameInstance->Add_Prototype(LEVEL_TOOL, TEXT("Prototype_Component_Texture_default_normal"),
 		CTexture::Create(m_pDevice, m_pContext, TEXT("../Bin/Resources/Textures/Effect/default_normal.dds"), 1))))
 		return E_FAIL;
-	CController_EffectTool::Get_Instance()->Add_Texture_ProtytypeTag(TEXT("Prototype_Component_Texture_DefaultNormal"));
+	CController_EffectTool::Get_Instance()->Add_Texture_ProtytypeTag(TEXT("Prototype_Component_Texture_default_normal"));
 
-	/* For. Prototype_Component_Texture_Stone_8x8_Normal */
-	if (FAILED(m_pGameInstance->Add_Prototype(LEVEL_TOOL, TEXT("Prototype_Component_Texture_Stone_8x8_Normal"),
+	/* For. Prototype_Component_Texture_T_SubUV_DebStone_03_8x8_SN_KMH */
+	if (FAILED(m_pGameInstance->Add_Prototype(LEVEL_TOOL, TEXT("Prototype_Component_Texture_T_SubUV_DebStone_03_8x8_SN_KMH"),
 		CTexture::Create(m_pDevice, m_pContext, TEXT("../Bin/Resources/Textures/Effect/T_SubUV_DebStone_03_8x8_SN_KMH.dds"), 1))))
 		return E_FAIL;
-	CController_EffectTool::Get_Instance()->Add_Texture_ProtytypeTag(TEXT("Prototype_Component_Texture_Stone_8x8_Normal"));
+	CController_EffectTool::Get_Instance()->Add_Texture_ProtytypeTag(TEXT("Prototype_Component_Texture_T_SubUV_DebStone_03_8x8_SN_KMH"));
+
+	/* For. Prototype_Component_Texture_T_Tile_Noise_39_C_RSW */
+	if (FAILED(m_pGameInstance->Add_Prototype(LEVEL_TOOL, TEXT("Prototype_Component_Texture_T_Tile_Noise_39_C_RSW"),
+		CTexture::Create(m_pDevice, m_pContext, TEXT("../Bin/Resources/Textures/Effect/T_Tile_Noise_39_C_RSW.dds"), 1))))
+		return E_FAIL;
+	CController_EffectTool::Get_Instance()->Add_Texture_ProtytypeTag(TEXT("Prototype_Component_Texture_T_Tile_Noise_39_C_RSW"));
 
 #pragma endregion
 #pragma endregion
@@ -540,6 +544,15 @@ HRESULT CLoader::Ready_Resources_For_ToolLevel()
 		CShader_Compute::Create(m_pDevice, m_pContext, TEXT("../Bin/ShaderFiles/Shader_Trail_MultiPoint_Compute.hlsl"), "CS_CONVERGE_MAIN"))))
 		return E_FAIL;
 
+	/* For. Prototype_Component_Shader_Compute_Trail_Follow */
+	if (FAILED(m_pGameInstance->Add_Prototype(LEVEL_TOOL, TEXT("Prototype_Component_Shader_Compute_Trail_Follow"),
+		CShader_Compute::Create(m_pDevice, m_pContext, TEXT("../Bin/ShaderFiles/Shader_Trail_MultiPoint_Compute.hlsl"), "CS_FOLLOW_MAIN"))))
+		return E_FAIL;
+
+	/* For. Prototype_Component_Shader_Compute_Trail_Reset */
+	if (FAILED(m_pGameInstance->Add_Prototype(LEVEL_TOOL, TEXT("Prototype_Component_Shader_Compute_Trail_Reset"),
+		CShader_Compute::Create(m_pDevice, m_pContext, TEXT("../Bin/ShaderFiles/Shader_Trail_MultiPoint_Compute.hlsl"), "CS_RESET_MAIN"))))
+		return E_FAIL;
 #pragma endregion
 
 #pragma endregion
@@ -632,7 +645,7 @@ HRESULT CLoader::Ready_Resources_For_ToolLevel_Map0()
 	CModel* pModel = { nullptr };
 	PreTransformMatrix = XMMatrixScaling(0.01f, 0.01f, 0.01f) * XMMatrixRotationY(XMConvertToRadians(270.f));
 	
-	CController_AnimationTool::Get_Instance()->SetUp_Lump(13);
+	CController_AnimationTool::Get_Instance()->SetUp_Lump(100);
 
 	int iModelCnt = { 0 };
 	if (false)
@@ -970,10 +983,25 @@ HRESULT CLoader::Ready_Resources_For_ToolLevel_Map0()
 //#pragma endregion
 
 #pragma region AnimObject
+	pModel = CModel::Create(m_pDevice, m_pContext, CModel::TYPE_ANIM, "../Bin/ModelData/NonAnim/InteractObj/SK_DLV_Global_LiftController_01_Normal.dat", PreTransformMatrix, false, CController_AnimationTool::Get_Instance()->Get_StructStack(iModelCnt++));
+	if (FAILED(m_pGameInstance->Add_Prototype(LEVEL_TOOL, TEXT("SK_DLV_Global_LiftController_01_Normal"), pModel)))
+	return E_FAIL;
+	m_pGameInstance->Add_ModelPrototype(LEVEL_TOOL, ("SK_DLV_Global_LiftController_01_Normal"), pModel);	
+	
 	pModel = CModel::Create(m_pDevice, m_pContext, CModel::TYPE_ANIM, "../Bin/ModelData/NonAnim/InteractObj/SK_DLV_Stargazer_01.dat", PreTransformMatrix, false, CController_AnimationTool::Get_Instance()->Get_StructStack(iModelCnt++));
 	if (FAILED(m_pGameInstance->Add_Prototype(LEVEL_TOOL, TEXT("SK_DLV_Stargazer_01"), pModel)))
 	return E_FAIL;
 	m_pGameInstance->Add_ModelPrototype(LEVEL_TOOL, ("SK_DLV_Stargazer_01"), pModel);
+
+	pModel = CModel::Create(m_pDevice, m_pContext, CModel::TYPE_ANIM, "../Bin/ModelData/NonAnim/InteractObj/SK_FO_LadderActivater.dat", PreTransformMatrix, false, CController_AnimationTool::Get_Instance()->Get_StructStack(iModelCnt++));
+	if (FAILED(m_pGameInstance->Add_Prototype(LEVEL_TOOL, TEXT("SK_FO_LadderActivater"), pModel)))
+		return E_FAIL;
+	m_pGameInstance->Add_ModelPrototype(LEVEL_TOOL, ("SK_FO_LadderActivater"), pModel);
+
+	pModel = CModel::Create(m_pDevice, m_pContext, CModel::TYPE_ANIM, "../Bin/ModelData/NonAnim/InteractObj/SK_FO_Monastery_Lift_01_Controller.dat", PreTransformMatrix, false, CController_AnimationTool::Get_Instance()->Get_StructStack(iModelCnt++));
+	if (FAILED(m_pGameInstance->Add_Prototype(LEVEL_TOOL, TEXT("SK_FO_Monastery_Lift_01_Controller"), pModel)))
+		return E_FAIL;
+	m_pGameInstance->Add_ModelPrototype(LEVEL_TOOL, ("SK_FO_Monastery_Lift_01_Controller"), pModel);
 
 	pModel = CModel::Create(m_pDevice, m_pContext, CModel::TYPE_ANIM, "../Bin/ModelData/NonAnim/InteractObj/SK_FO_Monastery_TheLastDoor_01.dat", PreTransformMatrix, false, CController_AnimationTool::Get_Instance()->Get_StructStack(iModelCnt++));
 	if (FAILED(m_pGameInstance->Add_Prototype(LEVEL_TOOL, TEXT("SK_FO_Monastery_TheLastDoor_01"), pModel)))
@@ -984,6 +1012,31 @@ HRESULT CLoader::Ready_Resources_For_ToolLevel_Map0()
 	if (FAILED(m_pGameInstance->Add_Prototype(LEVEL_TOOL, TEXT("SK_FO_Monastery_TowerDoor_01"), pModel)))
 		return E_FAIL;
 	m_pGameInstance->Add_ModelPrototype(LEVEL_TOOL, ("SK_FO_Monastery_TowerDoor_01"), pModel);
+
+	pModel = CModel::Create(m_pDevice, m_pContext, CModel::TYPE_ANIM, "../Bin/ModelData/NonAnim/InteractObj/SK_FO_Monastery_WallDeco_01_Scupture04.dat", PreTransformMatrix, false, CController_AnimationTool::Get_Instance()->Get_StructStack(iModelCnt++));
+	if (FAILED(m_pGameInstance->Add_Prototype(LEVEL_TOOL, TEXT("SK_FO_Monastery_WallDeco_01_Scupture04"), pModel)))
+		return E_FAIL;
+	m_pGameInstance->Add_ModelPrototype(LEVEL_TOOL, ("SK_FO_Monastery_WallDeco_01_Scupture04"), pModel);
+
+	pModel = CModel::Create(m_pDevice, m_pContext, CModel::TYPE_ANIM, "../Bin/ModelData/NonAnim/InteractObj/SK_FO_TreasureChest_02_Red.dat", PreTransformMatrix, false, CController_AnimationTool::Get_Instance()->Get_StructStack(iModelCnt++));
+	if (FAILED(m_pGameInstance->Add_Prototype(LEVEL_TOOL, TEXT("SK_FO_TreasureChest_02_Red"), pModel)))
+		return E_FAIL;
+	m_pGameInstance->Add_ModelPrototype(LEVEL_TOOL, ("SK_FO_TreasureChest_02_Red"), pModel);
+	
+	pModel = CModel::Create(m_pDevice, m_pContext, CModel::TYPE_ANIM, "../Bin/ModelData/NonAnim/InteractObj/SK_LV_Ladder_MetalWood_01_KSJ.dat", PreTransformMatrix, false, CController_AnimationTool::Get_Instance()->Get_StructStack(iModelCnt++));
+	if (FAILED(m_pGameInstance->Add_Prototype(LEVEL_TOOL, TEXT("SK_LV_Ladder_MetalWood_01_KSJ"), pModel)))
+		return E_FAIL;
+	m_pGameInstance->Add_ModelPrototype(LEVEL_TOOL, ("SK_LV_Ladder_MetalWood_01_KSJ"), pModel);	
+	
+	pModel = CModel::Create(m_pDevice, m_pContext, CModel::TYPE_ANIM, "../Bin/ModelData/NonAnim/InteractObj/SK_LV_Ladder_MetalWood_Slide6m_SM_KSJ.dat", PreTransformMatrix, false, CController_AnimationTool::Get_Instance()->Get_StructStack(iModelCnt++));
+	if (FAILED(m_pGameInstance->Add_Prototype(LEVEL_TOOL, TEXT("SK_LV_Ladder_MetalWood_Slide6m_SM_KSJ"), pModel)))
+		return E_FAIL;
+	m_pGameInstance->Add_ModelPrototype(LEVEL_TOOL, ("SK_LV_Ladder_MetalWood_Slide6m_SM_KSJ"), pModel);	
+	
+	pModel = CModel::Create(m_pDevice, m_pContext, CModel::TYPE_ANIM, "../Bin/ModelData/NonAnim/InteractObj/SK_NewTown_Lift_01_Door.dat", PreTransformMatrix, false, CController_AnimationTool::Get_Instance()->Get_StructStack(iModelCnt++));
+	if (FAILED(m_pGameInstance->Add_Prototype(LEVEL_TOOL, TEXT("SK_NewTown_Lift_01_Door"), pModel)))
+		return E_FAIL;
+	m_pGameInstance->Add_ModelPrototype(LEVEL_TOOL, ("SK_NewTown_Lift_01_Door"), pModel);
 
 #pragma endregion
 	m_isFinished_Map0 = true;
@@ -1179,7 +1232,7 @@ HRESULT CLoader::Ready_Resources_For_ToolLevel_Map1()
 	}
 
 
-#pragma region ETX Cathedral
+#pragma region ETC Cathedral
 	handle = _findfirst("../Bin/ModelData/NonAnim/Map/Etc/Cathedral/*", &fd);
 
 	if (handle == -1)

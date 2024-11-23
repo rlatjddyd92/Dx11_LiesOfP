@@ -13,52 +13,36 @@ BEGIN(Client)
 class CParticle_Effect final : public CEffect_Base
 {
 public:
-	enum TYPE { TYPE_SPREAD, TYPE_MOVE, TYPE_CONVERGE, TYPE_END };
-
-	enum PARTICLE_STATE 
-	{ 
-		PS_GROW = 0x0001, 
-		PS_SHRINK = 0x0002,
-		PS_ROTATION = 0x0004,
-		PS_END
-	};
-
-	enum RENDER_STATE 
-	{ 
-		RS_NONBLEND = 0x0001,
-		RS_NONLIGHT = 0x0002,
-		RS_BLUR = 0x0004,
-		RS_END = 0x9999
-	};
+	enum PARTICLE_TYPE { PT_SPREAD, PT_MOVE, PT_CONVERGE, PT_END };
 
 	typedef struct
 	{
 		// 컴퓨트 셰이더에 전달
-		TYPE		eType = { TYPE_END };
-		_uint		iComputeState = { 0 };
-		_Vec4		vPivot = { 0.f, 0.f, 0.f, 1.f };
-		_float		fGravity = { 0.f };
-		_Vec4		vMoveDir = { 0.f, -1.f, 0.f, 0.f };
-		_Vec3		vOrbitAxis = { 0.f, 1.f, 0.f };
-		_float		fOrbitAngle = { 90.f };
-		_float		fRandomTimeInterval = { 0.f };
-		_float		fRandomMoveRatio = { 0.f };
-		_float		fAccelSpeed = { 0.f };
-		_float		fAccelLimit = { 0.f };
+		PARTICLE_TYPE		eType = { PT_END };
+		_uint				iComputeState = { 0 };
+		_Vec4				vPivot = { 0.f, 0.f, 0.f, 1.f };
+		_float				fGravity = { 0.f };
+		_Vec4				vMoveDir = { 0.f, -1.f, 0.f, 0.f };
+		_Vec3				vOrbitAxis = { 0.f, 1.f, 0.f };
+		_float				fOrbitAngle = { 90.f };
+		_float				fRandomTimeInterval = { 0.f };
+		_float				fRandomMoveRatio = { 0.f };
+		_float				fAccelSpeed = { 0.f };
+		_float				fAccelLimit = { 0.f };
 
 		// 위치 초기화
-		_Vec3		vPos = {};
-		_Vec3		vRotation = {};
-		_Vec3		vScale = { 1.f, 1.f, 1.f };
+		_Vec3				vPos = {};
+		_Vec3				vRotation = {};
+		_Vec3				vScale = { 1.f, 1.f, 1.f };
 
 		// 렌더 셰이더에 전달
-		_uint		iShaderIndex = { 0 };
-		_uint		iGeomState = { 0 };
-		_Vec2		vTexDevide = { 1.f ,1.f };
-		_float		fSpriteSpeed = { 0.f };
-		_Vec2		vScaling = { 1.f, 1.f };
-		_float		fStartRotation = { 0.f };
-		_float		fRotationPerSecond = { 0.f };
+		_uint				iShaderIndex = { 0 };
+		_uint				iGeomState = { 0 };
+		_Vec2				vTexDevide = { 1.f ,1.f };
+		_float				fSpriteSpeed = { 0.f };
+		_Vec2				vScaling = { 1.f, 1.f };
+		_float				fStartRotation = { 0.f };
+		_float				fRotationPerSecond = { 0.f };
 	}DEFAULT_DESC;
 
 	typedef struct
@@ -91,6 +75,7 @@ public:
 
 public:
 	virtual void Reset() override;
+	virtual void Set_Loop(_bool bLoop) override;
 
 private:
 	class CShader_NonVTX* m_pShaderCom = { nullptr };

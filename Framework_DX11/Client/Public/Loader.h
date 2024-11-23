@@ -67,6 +67,7 @@ private:
 private:
 	HRESULT Ready_Resources_For_Player();
 	HRESULT Ready_Resources_For_Monster();
+	HRESULT Ready_Resources_For_Obj();
 
 	HRESULT Ready_Prototype();
 

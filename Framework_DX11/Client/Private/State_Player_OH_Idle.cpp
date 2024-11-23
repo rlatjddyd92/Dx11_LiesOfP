@@ -20,8 +20,8 @@ HRESULT CState_Player_OH_Idle::Initialize(_uint iStateNum, void* pArg)
 
 HRESULT CState_Player_OH_Idle::Start_State(void* pArg)
 {
-    m_pPlayer->Change_Animation_Boundry(m_iAnimation_Idle, true);
-    m_pPlayer->Change_Animation(m_iAnimation_Idle, true);
+    m_pPlayer->Change_Animation_Boundry(m_iAnimation_Idle, true, 0.3f);
+    m_pPlayer->Change_Animation(m_iAnimation_Idle, true, 0.3f);
 
     m_fRButtonTime = 0.f;
 
@@ -44,17 +44,28 @@ void CState_Player_OH_Idle::Update(_float fTimeDelta)
     }
     else if (KEY_TAP(KEY::LBUTTON))
     {
-        m_pPlayer->Change_State(CPlayer::RAPIER_LATTACK0);
+        if(m_pPlayer->Get_WeaponType() == CPlayer::WEP_RAPIER)
+            m_pPlayer->Change_State(CPlayer::RAPIER_LATTACK0);
+        else if (m_pPlayer->Get_WeaponType() == CPlayer::WEP_SCISSOR)
+            m_pPlayer->Change_State(CPlayer::SCISSOR_LATTACK0);
     }
     else if (KEY_HOLD(KEY::RBUTTON))
     {
         m_fRButtonTime += fTimeDelta;
-        if(m_fRButtonTime > 0.15f)
-            m_pPlayer->Change_State(CPlayer::RAPIER_CHARGE);
+        if (m_fRButtonTime > 0.15f)
+        {
+            if (m_pPlayer->Get_WeaponType() == CPlayer::WEP_RAPIER)
+                m_pPlayer->Change_State(CPlayer::RAPIER_CHARGE);
+            else if (m_pPlayer->Get_WeaponType() == CPlayer::WEP_SCISSOR)
+                m_pPlayer->Change_State(CPlayer::SCISSOR_CHARGE0);
+        }
     }
     else if (KEY_TAP(KEY::F))
     {
-        m_pPlayer->Change_State(CPlayer::RAPIER_FATAL);
+        if (m_pPlayer->Get_WeaponType() == CPlayer::WEP_RAPIER)
+            m_pPlayer->Change_State(CPlayer::RAPIER_FATAL);
+        else if (m_pPlayer->Get_WeaponType() == CPlayer::WEP_SCISSOR)
+            m_pPlayer->Change_State(CPlayer::SCISSOR_FATAL0);
     }
     else if (KEY_TAP(KEY::R))
     {
@@ -68,7 +79,10 @@ void CState_Player_OH_Idle::Update(_float fTimeDelta)
     if (KEY_AWAY(KEY::RBUTTON))
     {
         m_fRButtonTime = 0.f;
-        m_pPlayer->Change_State(CPlayer::RAPIER_RATTACK0);
+        if (m_pPlayer->Get_WeaponType() == CPlayer::WEP_RAPIER)
+            m_pPlayer->Change_State(CPlayer::RAPIER_RATTACK0);
+        else if (m_pPlayer->Get_WeaponType() == CPlayer::WEP_SCISSOR)
+            m_pPlayer->Change_State(CPlayer::SCISSOR_RATTACK0);
     }
 }
 

@@ -43,6 +43,8 @@ public:
 	HRESULT Add_Effect(class CEffect_Base* pEffectBase);
 	HRESULT Reset_Effects();
 
+	void Set_Loop(_bool bLoop);
+
 private:
 	vector<class CEffect_Base*> m_Effects;
 	_Matrix m_WorldMatrix = {};

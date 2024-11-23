@@ -19,7 +19,16 @@ public:
 		RENDER_DESC		RenderDesc = {};
 	} EFFECT_BASE_DESC;
 
-	enum EFFECT_TYPE { TYPE_PARTICLE, TYPE_TEXTURE, TYPE_MESH, TYPE_END };
+	enum EFFECT_TYPE { TYPE_PARTICLE, TYPE_TEXTURE, TYPE_MESH, TYPE_TRAIL_OP, TYPE_TRAIL_TP, TYPE_TRAIL_MP, TYPE_END };
+
+	enum GEOM_STATE
+	{
+		PS_GROW = 0x0001,
+		PS_SHRINK = 0x0002,
+		PS_ROTATION = 0x0004,
+		PS_END
+	};
+
 	enum EFFECT_POSTPROCESSING
 	{
 		PP_NONE = 0x0001,
@@ -27,6 +36,7 @@ public:
 		PP_BLUR = 0x0004,
 		PP_END = 0xFFFF
 	};
+
 	enum EFFECT_TEXTURE
 	{
 		TEXTURE_DIFFUSE,
@@ -56,18 +66,18 @@ public:
 
 public:
 	virtual void Reset();
-	
+	virtual void Set_Loop(_bool bLoop);
 
 protected:
 	HRESULT Bind_WorldMatrix(class CShader* pShader, const _char* pConstantName);
 	void Set_WorldMatrix();
 
 protected:
-	EFFECT_TYPE m_eEffectType = { TYPE_END };
+	EFFECT_TYPE		m_eEffectType = { TYPE_END };
 	RENDER_DESC		m_RenderDesc = {};
 
-	_Matrix m_WorldMatrix = XMMatrixIdentity();
-	const _Matrix* m_pParentMatrix = { nullptr };
+	_Matrix			m_WorldMatrix = XMMatrixIdentity();
+	const _Matrix*	m_pParentMatrix = { nullptr };
 
 public:
 	virtual CGameObject* Clone(void* pArg) = 0;

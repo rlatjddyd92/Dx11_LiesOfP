@@ -24,6 +24,13 @@ HRESULT CState_Player_Rapier_Charge::Initialize(_uint iStateNum, void* pArg)
     m_iChangeFrame = 140;
     m_iStateNum = iStateNum;
 
+    m_iColliderStartFrame[0] = 60;
+    m_iColliderEndFrame[0] = 65;
+    m_iColliderStartFrame[1] = 70;
+    m_iColliderEndFrame[1] = 74;
+    m_iColliderStartFrame[2] = 105;
+    m_iColliderEndFrame[2] = 120;
+
     return S_OK;
 }
 
@@ -49,6 +56,8 @@ void CState_Player_Rapier_Charge::Update(_float fTimeDelta)
     {
         m_pPlayer->Change_State(CPlayer::OH_IDLE);
     }
+
+    Control_Collider();
 }
 
 void CState_Player_Rapier_Charge::End_State()
@@ -58,6 +67,24 @@ void CState_Player_Rapier_Charge::End_State()
 _bool CState_Player_Rapier_Charge::End_Check()
 {
     return m_pPlayer->Get_EndAnim(m_iAnimation_RapierCA1);
+}
+
+void CState_Player_Rapier_Charge::Control_Collider()
+{
+    _int iFrame = m_pPlayer->Get_Frame();
+
+    _bool   isColliderActive = false;
+
+    for (_uint i = 0; i < 3; ++i)
+    {
+        if (m_iColliderStartFrame[i] <= iFrame && iFrame <= m_iColliderEndFrame[i])
+            isColliderActive = true;
+    }
+
+    if (isColliderActive)
+        m_pPlayer->Active_CurrentWeaponCollider();
+    else
+        m_pPlayer->DeActive_CurretnWeaponCollider();
 }
 
 CState_Player_Rapier_Charge* CState_Player_Rapier_Charge::Create(CFsm* pFsm, CPlayer* pPlayer, _uint iStateNum, void* pArg)

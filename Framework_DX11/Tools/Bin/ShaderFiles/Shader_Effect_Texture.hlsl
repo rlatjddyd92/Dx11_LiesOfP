@@ -86,58 +86,53 @@ struct PS_OUT
     vector vColor : SV_TARGET0;
 };
 
+struct PS_EFFECT_OUT
+{
+    vector vDiffuse : SV_TARGET0;
+    vector vNonDownSample : SV_TARGET1;
+    vector vDownSample : SV_TARGET2;
+};
+
 PS_OUT PS_MAIN(PS_IN In)
 {
     PS_OUT Out = (PS_OUT) 0;
+    
+    float2 start = (float2) 0;
+    float2 over = (float2) 0;
 
-    vector vDiffuse = g_DiffuseTexture.Sample(LinearSampler, In.vTexcoord);
-    
-    Out.vColor = vDiffuse;
-    Out.vColor.a = Out.vColor.r;
-    
-    Out.vColor.rgb *= g_vColor.rgb;
-    Out.vColor.a *= g_fRatio;
+    start.x = (1 / g_vTexDivide.x) * g_iTexIndex;
+    start.y = (1 / g_vTexDivide.y) * (int) (g_iTexIndex / g_vTexDivide.x);
+	
+    over.x = start.x + (1 / g_vTexDivide.x);
+    over.y = start.y + (1 / g_vTexDivide.y);
+	
+    float2 vTexcoord = start + (over - start) * In.vTexcoord;
+
+    Out.vColor = g_DiffuseTexture.Sample(LinearSampler, vTexcoord);
     
     return Out;
 }
 
-PS_OUT PS_MAIN_MASK_1_2(PS_IN In)
+PS_EFFECT_OUT PS_ATTACK_NORMAL_LIGHT_MAIN(PS_IN In)
 {
-    PS_OUT Out = (PS_OUT) 0;
+    PS_EFFECT_OUT Out = (PS_EFFECT_OUT) 0;
+    
+    vector vColor = g_DiffuseTexture.Sample(LinearSampler, In.vTexcoord);
+    
+    vColor.r = 1.f - (1 - g_vColor.r) * (1 - vColor.a);
+    vColor.g = 1.f - (1 - g_vColor.g) * (1 - vColor.a);
+    vColor.b = 1.f - (1 - g_vColor.b) * (1 - vColor.a);
 
-    vector vDiffuse = g_DiffuseTexture.Sample(LinearSampler, In.vTexcoord);
-    vector vMask_1 = g_MaskTexture_1.Sample(LinearSampler, In.vTexcoord);
-    vector vMask_2 = g_MaskTexture_2.Sample(LinearSampler, In.vTexcoord);
-    
-    Out.vColor = vDiffuse;
-    Out.vColor += vMask_1 + vMask_2;
-    
-    Out.vColor.rgb *= g_vColor.rgb;
-    Out.vColor.a *= g_fRatio;
-    
-    return Out;
-}
-
-struct PS_OUT_EFFECT
-{
-    vector vColor : SV_TARGET0;
-    vector vEmissive : SV_TARGET1;
-    vector vDistortion : SV_TARGET2;
-};
-
-PS_OUT_EFFECT PS_MAIN_EFFECT(PS_IN In, bool isAlphaBlend)
-{
-    PS_OUT_EFFECT Out = (PS_OUT_EFFECT) 0;
-    
-    vector vDiffuse = g_DiffuseTexture.Sample(LinearClampSampler, In.vTexcoord);
-    
+    Out.vDiffuse = vColor;
+    Out.vNonDownSample = (vector) 0.f;
+    Out.vDownSample = vColor;
     
     return Out;
 }
 
 technique11 DefaultTechnique
 {
-    pass Blend_RTOA
+    pass Default
     {
         SetRasterizerState(RS_Default);
         SetDepthStencilState(DSS_None, 0);
@@ -148,7 +143,7 @@ technique11 DefaultTechnique
         PixelShader = compile ps_5_0 PS_MAIN();
     }
 
-    pass Blend_MASK_1_2
+    pass Attack_Normal_Light
     {
         SetRasterizerState(RS_Default);
         SetDepthStencilState(DSS_None, 0);
@@ -156,7 +151,6 @@ technique11 DefaultTechnique
 
         VertexShader = compile vs_5_0 VS_MAIN();
         GeometryShader = NULL;
-        PixelShader = compile ps_5_0 PS_MAIN_MASK_1_2();
+        PixelShader = compile ps_5_0 PS_ATTACK_NORMAL_LIGHT_MAIN();
     }
-
 }

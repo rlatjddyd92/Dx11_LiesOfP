@@ -4,16 +4,17 @@
 #include <io.h>
 
 #include "Controller_PostProcess.h"
+#include "Camera.h"
 
-IMPLEMENT_SINGLETON(CController_PostProcess)
+IMPLEMENT_SINGLETON(CCamera_Manager)
 
-CController_PostProcess::CController_PostProcess()
+CCamera_Manager::CCamera_Manager()
 	:m_pGameInstance{ CGameInstance::Get_Instance() }
 {
 	Safe_AddRef(m_pGameInstance);
 }
 
-HRESULT CController_PostProcess::Initialize(ID3D11Device* pDevice, ID3D11DeviceContext* pContext)
+HRESULT CCamera_Manager::Initialize(ID3D11Device* pDevice, ID3D11DeviceContext* pContext)
 {
 	m_pDevice = pDevice;
 	m_pContext = pContext;
@@ -23,7 +24,16 @@ HRESULT CController_PostProcess::Initialize(ID3D11Device* pDevice, ID3D11DeviceC
 	return S_OK;
 }
 
-void CController_PostProcess::Update_SSAO()
+void CCamera_Manager::Update_CameraSetting()
+{
+	static _float fCameraFar = m_pGameInstance->Get_Far();
+
+	ImGui::DragFloat("Far", &fCameraFar, 5.f, 1.f, 1000.f);
+
+	m_pGameInstance->Find_Camera(LEVEL_TOOL)->Set_Far(fCameraFar);
+}
+
+void CCamera_Manager::Update_SSAO()
 {
 	SSAO_DESC* tDesc = m_pGameInstance->Get_SSAODesc();
 	if (nullptr == tDesc)
@@ -49,7 +59,7 @@ void CController_PostProcess::Update_SSAO()
 	tDesc->fAmount = fAmount;
 }
 
-void CController_PostProcess::Update_HDR()
+void CCamera_Manager::Update_HDR()
 {
 	HDR_DESC* tDesc = m_pGameInstance->Get_HDRDesc();
 	if (nullptr == tDesc)
@@ -73,14 +83,14 @@ void CController_PostProcess::Update_HDR()
 	tDesc->fLumWhiteSqr = fLumWhiteSqr;
 }
 
-void CController_PostProcess::Update_BLOOM()
+void CCamera_Manager::Update_BLOOM()
 {
 	BLOOM_DESC* tDesc = m_pGameInstance->Get_BloomDesc();
 	if (nullptr == tDesc)
 		return;
 
 	static _bool isOnBloom = false;
-	static _float fBloomThreshold = tDesc->fBloomThreshold;
+	static _float fBloomThreshold = tDesc->fThreshold;
 
 	ImGui::Checkbox("BLOOM Value", &isOnBloom);
 
@@ -91,10 +101,59 @@ void CController_PostProcess::Update_BLOOM()
 	}
 
 	tDesc->isOnBloom = isOnBloom;
-	tDesc->fBloomThreshold = fBloomThreshold;
+	tDesc->fThreshold = fBloomThreshold;
 }
 
-void CController_PostProcess::Free()
+void CCamera_Manager::Update_DOF()
+{
+	DOF_DESC* tDesc = m_pGameInstance->Get_DOFDesc();
+	if (nullptr == tDesc)
+		return;
+
+	static _bool isOnDof = false;
+	static _float fDOF = tDesc->fDOF;
+
+	ImGui::Checkbox("DOF Value", &isOnDof);
+
+
+	if (tDesc->isOnDOF)
+	{
+		ImGui::DragFloat("DOF", &fDOF, 0.02f);
+	}
+
+	tDesc->isOnDOF = isOnDof;
+	tDesc->fDOF = fDOF;
+}
+
+void CCamera_Manager::Update_Radial()
+{
+	RADIAL_DESC* tDesc = m_pGameInstance->Get_RadialDesc();
+	if (nullptr == tDesc)
+		return;
+
+	static _bool isOnRadial = tDesc->isOnRadial;
+	static _Vec2 vCenterPos = tDesc->vRadialCenterPos;
+	static _float fRadialPower = tDesc->fRadialPower;
+	static _float fRadius = tDesc->fRadius;
+
+	ImGui::Checkbox("Radial Value", &isOnRadial);
+
+
+	if (tDesc->isOnRadial)
+	{
+		ImGui::DragFloat("CenterX", &vCenterPos.x, 0.02f);
+		ImGui::DragFloat("CenterY", &vCenterPos.y, 0.02f);
+		ImGui::DragFloat("Radius", &fRadius, 0.02f);
+		ImGui::DragFloat("RadialPower", &fRadialPower, 0.02f);
+	}
+
+	tDesc->isOnRadial = isOnRadial;
+	tDesc->vRadialCenterPos = vCenterPos;
+	tDesc->fRadialPower = fRadialPower;
+	tDesc->fRadius = fRadius;
+}
+
+void CCamera_Manager::Free()
 {
 	__super::Free();
 

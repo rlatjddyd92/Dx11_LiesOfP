@@ -25,7 +25,7 @@ HRESULT CState_CarcassBigA_AttackRoute_3::Initialize(_uint iStateNum, void* pArg
 
 HRESULT CState_CarcassBigA_AttackRoute_3::Start_State(void* pArg)
 {
-    m_pMonster->Change_Animation(AN_ROUTE_FIRST, false, 0.1f, 0.f);
+    m_pMonster->Change_Animation(AN_ROUTE_FIRST, false, 0.1f, 0);
 
     m_fIdleTime = m_fIdleDuration;
     return S_OK;

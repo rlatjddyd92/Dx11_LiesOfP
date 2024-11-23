@@ -13,6 +13,8 @@
 #include "Trail_Effect_MP.h"
 #include "Trail_Effect_OP.h"
 
+#include "Mesh_Effect.h"
+
 CLevel_Tool::CLevel_Tool(ID3D11Device* pDevice, ID3D11DeviceContext* pContext)
 	: CLevel{ pDevice, pContext }
 {
@@ -52,20 +54,26 @@ HRESULT CLevel_Tool::Initialize()
 	//		return E_FAIL;
 	//}
 
+	CMesh_Effect::MESH_EFFECT_DESC desc = {};
 
-	// 트레일 테스트용
-	CTrail_Effect_TP::TRAIL_TP_DESC TestDesc = {};
-	TestDesc.fRotationPerSec = XMConvertToRadians(90.f);
-	TestDesc.fSpeedPerSec = 1.f;
-	TestDesc.iLevelIndex = LEVEL_TOOL;
-	m_pGameInstance->Add_CloneObject_ToLayer(LEVEL_TOOL, TEXT("Layer_Test"), TEXT("Prototype_GameObject_Trail_Effect_TP"), &TestDesc);
+	desc.fRotationPerSec = XMConvertToRadians(90.f);
+	desc.fSpeedPerSec = 1.f;
+	desc.iLevelIndex = LEVEL_TOOL;
+	desc.pParentMatrix = { nullptr };
+	desc.RenderDesc.iRenderGroup = CRenderer::RG_EFFECT;
+	wcscpy_s(desc.TextDesc.szModelTag, TEXT("Prototype_Component_Model_HalfSphere_1"));
+	wcscpy_s(desc.TextDesc.szDiffuseTexturTag, TEXT("Prototype_Component_Texture_T_Tile_Spark_01_C_HJS"));
+	wcscpy_s(desc.TextDesc.szMaskTextureTag_1, TEXT("Prototype_Component_Texture_T_Tile_Noise_39_C_RSW"));
+	wcscpy_s(desc.TextDesc.szMaskTextureTag_2, NONE_TEXT);
+	wcscpy_s(desc.TextDesc.szNormalTextureTag, NONE_TEXT);
 
-	CTrail_Effect_OP::TRAIL_OP_DESC OPDesc = {};
-	OPDesc.fRotationPerSec = XMConvertToRadians(90.f);
-	OPDesc.fSpeedPerSec = 1.f;
-	OPDesc.iLevelIndex = LEVEL_TOOL;
-	OPDesc.pParentMatrix = { nullptr };
-	m_pGameInstance->Add_CloneObject_ToLayer(LEVEL_TOOL, TEXT("Layer_Test"), TEXT("Prototype_GameObject_Trail_Effect_OP"), &OPDesc);
+	desc.DefaultDesc.vStartScale = _float3(10.f, 10.f, 10.f);
+	desc.DefaultDesc.bLoop = true;
+	desc.DefaultDesc.iShaderIndex = CMesh_Effect::SHADER_TEST;
+	desc.DefaultDesc.fTileMoveSpeed = 0.f;
+	desc.DefaultDesc.vTileMoveDir = _Vec2(1.f, 1.f);
+	if (FAILED(m_pGameInstance->Add_CloneObject_ToLayer(LEVEL_TOOL, TEXT("Layer_MeshEffect"), TEXT("Prototype_GameObject_Mesh_Effect"), &desc)))
+		return E_FAIL;
 
 	return S_OK;
 }
@@ -92,7 +100,7 @@ HRESULT CLevel_Tool::Ready_Lights()
 
 	ZeroMemory(&LightDesc, sizeof LightDesc);
 	LightDesc.eType = LIGHT_DESC::TYPE_DIRECTIONAL;
-	LightDesc.vDirection = _float4(1.f, -1.f, 1.f, 0.f);
+	LightDesc.vDiffuse = _float4(0.8f, 0.8f, 0.8f, 1.f);
 	LightDesc.vDiffuse = _float4(0.7f, 0.7f, 0.7f, 1.f);
 	LightDesc.vAmbient = _float4(0.4f, 0.4f, 0.4f, 1.f);
 	LightDesc.vSpecular = _float4(1.f, 1.f, 1.f, 1.f);
@@ -112,7 +120,7 @@ HRESULT CLevel_Tool::Ready_Layer_Camera()
 	Desc.fFovy = XMConvertToRadians(60.0f);
 	Desc.fAspect = (_float)g_iWinSizeX / (_float)g_iWinSizeY;
 	Desc.fNear = 0.1f;
-	Desc.fFar = 1000.f;
+	Desc.fFar = 300.f;
 	Desc.fSpeedPerSec = 30.f;
 	Desc.fRotationPerSec = XMConvertToRadians(90.0f);
 

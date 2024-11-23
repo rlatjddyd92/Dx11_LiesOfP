@@ -4,6 +4,9 @@
 #include "Renderer.h"
 #include "PipeLine.h"
 
+#include "fmod.h"
+#include "fmod.hpp"
+
 /* 1. 엔진과 클라이언트의 소통을 위한 클래스읻. */
 /* 2. 엔진에서 클라이언트에 보여주고 싶은 함수들을 모아놓는다. */
 /* 3. 함수들 -> 클래스의 멤버함수. 객체가 필요하다! 그래서 기능응ㄹ 제공해주기위한 클래스 객체를 보관한다. */
@@ -88,9 +91,11 @@ public:
 #pragma region RENDERER
 	HRESULT Add_RenderObject(CRenderer::RENDERGROUP eRenderGroupID, class CGameObject* pRenderObject);
 
-	SSAO_DESC*	Get_SSAODesc();
-	HDR_DESC* Get_HDRDesc();
-	BLOOM_DESC* Get_BloomDesc();
+	SSAO_DESC*		Get_SSAODesc();
+	HDR_DESC*		Get_HDRDesc();
+	BLOOM_DESC*		Get_BloomDesc();
+	DOF_DESC*		Get_DOFDesc();
+	RADIAL_DESC* Get_RadialDesc();
 
 #ifdef _DEBUG
 	HRESULT Add_DebugObject(class CComponent* pDebugObject);
@@ -98,12 +103,16 @@ public:
 #pragma endregion
 
 #pragma region PIPELINE
-	void Set_Transform(CPipeLine::D3DTRANSFORMSTATE eState, _fmatrix TransformMatrix);
-	const _Matrix& Get_Transform(CPipeLine::D3DTRANSFORMSTATE eState) const;
-	const _Matrix& Get_Transform_Inverse(CPipeLine::D3DTRANSFORMSTATE eState) const;
+	void			Set_Transform(CPipeLine::D3DTRANSFORMSTATE eState, _fmatrix TransformMatrix);
+	void			Set_NearFar(_float fNear, _float fFar);
+	const _Matrix&	Get_Transform(CPipeLine::D3DTRANSFORMSTATE eState) const;
+	const _Matrix&	Get_Transform_Inverse(CPipeLine::D3DTRANSFORMSTATE eState) const;
 
 	const _Vec4& Get_CamPosition_Vec4() const;
 	const _Vec3& Get_CamPosition_Vec3() const;
+
+	const _float& Get_Near();
+	const _float& Get_Far();
 
 	const _Matrix* Get_CascadeViewMatirx() const;
 	void Set_CascadeViewMatirx(_Matrix* CascadeViewMatrices);
@@ -129,6 +138,9 @@ public:
 	HRESULT Add_Font(const _wstring& strFontTag, const _tchar* pFontFilePath);
 	HRESULT Render_Text(const _wstring& strFontTag, const _tchar* pText, _fvector vPosition, _fvector vColor = XMVectorSet(1.f, 1.f, 1.f, 1.f), _float fRadian = 0.f, _fvector vPivot = XMVectorSet(0.f, 0.f, 0.f, 1.f), _float fScale = 1.f);
 	HRESULT Render_TextCenter(const _wstring& strFontTag, const _tchar* pText, _fvector vPosition, _fvector vColor = XMVectorSet(1.f, 1.f, 1.f, 1.f), _float fRadian = 0.f, _fvector vPivot = XMVectorSet(0.f, 0.f, 0.f, 1.f), _float fScale = 1.f);
+	// 24-11-22 김성용 
+	// 오른쪽 정렬로 텍스트 그리기
+	HRESULT Render_Right(const _wstring& strFontTag, const _tchar* pText, _fvector vPosition, _fvector vColor = XMVectorSet(1.f, 1.f, 1.f, 1.f), _float fRadian = 0.f, _fvector vPivot = XMVectorSet(0.f, 0.f, 0.f, 1.f), _float fScale = 1.f);
 #pragma endregion
 
 #pragma region TARGET_MANAGER
@@ -214,6 +226,18 @@ public:
 		void Clear_Instance();
 #pragma endregion
 
+#pragma region SOUND_MANAGER
+		void Play_BGM(const TCHAR* pSoundKey, _float fVolume);
+		void Play_Effect(const TCHAR* pSoundKey, _float fVolume);
+		void Stop_BGM();
+		void Pause_BGM();
+		void SetVolume_BGM(_float fVolume);
+		void	Set_Listener(class CGameObject* pListener);
+		FMOD::System* Get_SoundSystem();
+		map<TCHAR*, FMOD::Sound*>& Get_Sounds();
+		void	LoadSoundFile(const char* pFolderName);
+#pragma endregion
+
 private:
 	class CGraphic_Device*			m_pGraphic_Device = { nullptr };
 	class CInput_Device*			m_pInput_Device = { nullptr };
@@ -233,7 +257,8 @@ private:
 	class CCollider_Manager*		m_pCollider_Manager = { nullptr };
 	class CKey_Manager*				m_pKey_Manager = { nullptr };
 	class CPhysX_Manager*			m_pPhysX_Manager = { nullptr };
-	class CInstance_Manager*			m_pInstance_Manager = { nullptr };
+	class CInstance_Manager*		m_pInstance_Manager = { nullptr };
+	class CSound_Manager*			m_pSound_Manager = { nullptr };
 
 	// 2024-11-06 김성용
 	class CCSVFile_Manager*			m_pCSVFile_Manager = { nullptr };

@@ -14,6 +14,7 @@
 #include "Collider_Manager.h"
 #include "Key_Manager.h"
 #include "PhysX_Manager.h"
+#include "Sound_Manager.h"
 
 // 2024-11-06 김성용
 #include "CSVFile_Manager.h"
@@ -118,6 +119,9 @@ HRESULT CGameInstance::Initialize_Engine(HINSTANCE hInst, _uint iNumLevels, cons
 	if (nullptr == m_pInstance_Manager)
 		return E_FAIL;
 
+	m_pSound_Manager = CSound_Manager::Create();
+	if (nullptr == m_pSound_Manager)
+		return E_FAIL;
 
 	return S_OK;
 }
@@ -143,10 +147,11 @@ void CGameInstance::Update_Engine(_float fTimeDelta)
 	
 	m_pLevel_Manager->Update(fTimeDelta);		
 
-
 	m_pCollider_Manager->Update();
 
 	m_pPhysX_Manager->PhysX_Update(fTimeDelta);
+
+	m_pSound_Manager->Update();
 }
 
 HRESULT CGameInstance::Draw_Engine()
@@ -392,6 +397,14 @@ BLOOM_DESC* CGameInstance::Get_BloomDesc()
 {
 	return m_pRenderer->Get_BloomDesc();
 }
+DOF_DESC* CGameInstance::Get_DOFDesc()
+{
+	return m_pRenderer->Get_DOFDesc();
+}
+RADIAL_DESC* CGameInstance::Get_RadialDesc()
+{
+	return m_pRenderer->Get_RadialDesc();
+}
 #ifdef _DEBUG
 HRESULT CGameInstance::Add_DebugObject(CComponent * pDebugObject)
 {
@@ -404,6 +417,10 @@ HRESULT CGameInstance::Add_DebugObject(CComponent * pDebugObject)
 void CGameInstance::Set_Transform(CPipeLine::D3DTRANSFORMSTATE eState, _fmatrix TransformMatrix)
 {
 	return m_pPipeLine->Set_Transform(eState, TransformMatrix);
+}
+void CGameInstance::Set_NearFar(_float fNear, _float fFar)
+{
+	return m_pPipeLine->Set_NearFar(fNear, fFar);
 }
 const _Matrix& CGameInstance::Get_Transform(CPipeLine::D3DTRANSFORMSTATE eState) const
 {
@@ -421,6 +438,16 @@ const _Vec4& CGameInstance::Get_CamPosition_Vec4() const
 const _Vec3& CGameInstance::Get_CamPosition_Vec3() const
 {
 	return m_pPipeLine->Get_CamPosition_Vec3();
+}
+
+const _float& CGameInstance::Get_Near()
+{
+	return m_pPipeLine->Get_Near();
+}
+
+const _float& CGameInstance::Get_Far()
+{
+	return m_pPipeLine->Get_Far();
 }
 
 const _Matrix* CGameInstance::Get_CascadeViewMatirx() const
@@ -508,6 +535,12 @@ HRESULT CGameInstance::Render_Text(const _wstring & strFontTag, const _tchar * p
 HRESULT CGameInstance::Render_TextCenter(const _wstring& strFontTag, const _tchar* pText, _fvector vPosition, _fvector vColor, _float fRadian, _fvector vPivot, _float fScale)
 {
 	return m_pFont_Manager->Render_Center(strFontTag, pText, vPosition, vColor, fRadian, vPivot, fScale);
+}
+// 24-11-22 김성용 
+// 오른쪽 정렬로 텍스트 그리기
+HRESULT CGameInstance::Render_Right(const _wstring& strFontTag, const _tchar* pText, _fvector vPosition, _fvector vColor, _float fRadian, _fvector vPivot, _float fScale)
+{
+	return m_pFont_Manager->Render_Right(strFontTag, pText, vPosition, vColor, fRadian, vPivot, fScale);
 }
 #pragma endregion
 
@@ -713,6 +746,55 @@ void CGameInstance::Clear_Instance()
 }
 #pragma endregion
 
+#pragma region SOUND_MANAGER
+
+void CGameInstance::Play_BGM(const TCHAR* pSoundKey, _float fVolume)
+{
+	m_pSound_Manager->Play_BGM(pSoundKey, fVolume);
+}
+
+void CGameInstance::Play_Effect(const TCHAR* pSoundKey, _float fVolume)
+{
+	m_pSound_Manager->Play_Effect(pSoundKey, fVolume);
+}
+
+void CGameInstance::Stop_BGM()
+{
+	m_pSound_Manager->Stop_BGM();
+}
+
+void CGameInstance::Pause_BGM()
+{
+	m_pSound_Manager->Pause_BGM();
+}
+
+void CGameInstance::SetVolume_BGM(_float fVolume)
+{
+	m_pSound_Manager->SetVolume_BGM(fVolume);
+}
+
+void CGameInstance::Set_Listener(CGameObject* pListener)
+{
+	m_pSound_Manager->Set_Listener(pListener);
+}
+
+FMOD::System* CGameInstance::Get_SoundSystem()
+{
+	return m_pSound_Manager->Get_System();
+}
+
+map<TCHAR*, FMOD::Sound*>& CGameInstance::Get_Sounds()
+{
+	return m_pSound_Manager->Get_Sounds();
+}
+
+void CGameInstance::LoadSoundFile(const char* pFolderName)
+{
+	m_pSound_Manager->LoadSoundFile(pFolderName);
+}
+
+#pragma endregion
+
 void CGameInstance::Release_Engine()
 {
 	Safe_Release(m_pPhysX_Manager);
@@ -733,6 +815,7 @@ void CGameInstance::Release_Engine()
 	Safe_Release(m_pComponent_Manager);
 	Safe_Release(m_pLevel_Manager);
 	Safe_Release(m_pInstance_Manager);
+	Safe_Release(m_pSound_Manager);
 	Safe_Release(m_pInput_Device);
 	Safe_Release(m_pGraphic_Device);
 

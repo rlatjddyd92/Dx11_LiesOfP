@@ -44,14 +44,17 @@ void CFreeCamera::Priority_Update(_float fTimeDelta)
 
 	if (true == CController_EffectTool::Get_Instance()->Get_JunhoCamera())
 	{
-		if (KEY_HOLD(KEY::W))
-			m_pTransformCom->Go_Straight(fTimeDelta);
-		if (KEY_HOLD(KEY::S))
-			m_pTransformCom->Go_Backward(fTimeDelta);
-		if (KEY_HOLD(KEY::A))
-			m_pTransformCom->Go_Left(fTimeDelta);
-		if (KEY_HOLD(KEY::D))
-			m_pTransformCom->Go_Right(fTimeDelta);
+		if(KEY_HOLD(KEY::LSHIFT))
+		{
+			if (KEY_HOLD(KEY::W))
+				m_pTransformCom->Go_Straight(fTimeDelta);
+			if (KEY_HOLD(KEY::S))
+				m_pTransformCom->Go_Backward(fTimeDelta);
+			if (KEY_HOLD(KEY::A))
+				m_pTransformCom->Go_Left(fTimeDelta);
+			if (KEY_HOLD(KEY::D))
+				m_pTransformCom->Go_Right(fTimeDelta);
+		}
 
 		if (KEY_HOLD(KEY::CTRL))
 		{

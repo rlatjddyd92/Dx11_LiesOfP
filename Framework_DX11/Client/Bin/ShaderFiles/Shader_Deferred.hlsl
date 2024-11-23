@@ -12,6 +12,8 @@ vector			g_vLightDir;
 vector			g_vLightPos;
 float			g_fLightRange;
 
+float           g_fFar;
+
 vector			g_vLightDiffuse;
 vector			g_vLightAmbient;
 vector			g_vLightSpecular;
@@ -34,11 +36,7 @@ texture2D		g_CascadeShadowTexture;
 
 texture2D		g_DecalDiffuseTexture;
 texture2D		g_DecalNormalTexture;
-
-/* DOF */
-texture2D       g_DofBlurTexture;
-float           g_fFocus;   // 초점
-float           g_fFocusRatio;
+texture2D		g_DecalARMTexture;
 
 vector			g_vCamPosition;
 
@@ -166,20 +164,29 @@ PS_OUT_LIGHT PS_MAIN_LIGHT_DIRECTIONAL(PS_IN In)
 
 	vector		vDepthDesc = g_DepthTexture.Sample(PointSampler, In.vTexcoord);
 	vector		vNormalDesc = g_NormalTexture.Sample(PointSampler, In.vTexcoord);
+    
+    vector      vDecalDiffuse = g_DecalDiffuseTexture.Sample(LinearSampler, In.vTexcoord);
+    vector      vDecalNormalDesc = g_DecalNormalTexture.Sample(PointSampler, In.vTexcoord);
 	
-    float		fViewZ = vDepthDesc.y * 1000.f;
-    float3		vNormal = float3(vNormalDesc.xyz * 2.f - 1.f);
+    float		fViewZ = vDepthDesc.y * g_fFar;
+    float3      vNormal = float3(vNormalDesc.xyz * 2.f - 1.f);
+    float3      vDecalNormal = float3(vDecalNormalDesc.xyz * 2.f - 1.f);
 	
+    vNormal = vector(lerp(vNormal, vDecalNormal, vDecalDiffuse.a), 0.f); // 알파 값에 따라 혼합
+    
     vector		vPosition = Compute_WorldPos(In.vTexcoord, vDepthDesc.x, fViewZ);
 	
     
     float fHalfLambert = saturate(dot(normalize(g_vLightDir) * -1.f, vNormal) * 0.5f + 0.5f);
     Out.vShade = g_vLightDiffuse * saturate(fHalfLambert + (g_vLightAmbient * g_vMtrlAmbient));
     
-    
     // PBR
-    vector vDiffuse = g_DiffuseTexture.Sample(LinearSampler, In.vTexcoord);
-    vector vARM = g_ARMTexture.Sample(LinearSampler, In.vTexcoord);
+    vector      vDiffuse = g_DiffuseTexture.Sample(LinearSampler, In.vTexcoord);
+    
+    vector      vARM = g_ARMTexture.Sample(LinearSampler, In.vTexcoord);
+    vector      vDecalARM = g_DecalARMTexture.Sample(LinearSampler, In.vTexcoord);
+    
+    vARM = vector(lerp(vARM, vDecalARM, vDecalDiffuse.a)); // 알파 값에 따라 혼합
     
     float       fAmbietnOcc = vARM.r;
     float		fRoughness = vARM.g;
@@ -189,7 +196,7 @@ PS_OUT_LIGHT PS_MAIN_LIGHT_DIRECTIONAL(PS_IN In)
     
     if ((0.f == fAmbietnOcc && 0.f == fRoughness && 0.f == fMetallic))
     {
-        Out.vSpecular = float4(1.f, 0.f, 0.f, 0.f);
+        Out.vSpecular = float4(0.f, 0.f, 0.f, 0.f);
     }
     else
     {
@@ -248,7 +255,7 @@ PS_OUT_LIGHT_POINT PS_MAIN_LIGHT_POINT(PS_IN In)
     PS_OUT_LIGHT_POINT Out = (PS_OUT_LIGHT_POINT) 0;
 
 	vector		vDepthDesc = g_DepthTexture.Sample(PointSampler, In.vTexcoord);
-	float		fViewZ = vDepthDesc.y * 1000.f;
+	float		fViewZ = vDepthDesc.y * g_fFar;
 
 	vector		vNormalDesc = g_NormalTexture.Sample(PointSampler, In.vTexcoord);
 	vector		vNormal = float4(vNormalDesc.xyz * 2.f - 1.f, 0.f);
@@ -275,12 +282,12 @@ PS_OUT PS_MAIN_DEFERRED(PS_IN In)
     
     vector vDiffuse = g_DiffuseTexture.Sample(LinearSampler, In.vTexcoord);
     
-    if (vDiffuse.a == 0.f)
-    {
-        vector vPriority = g_PriorityTexture.Sample(LinearSampler, In.vTexcoord);
-        Out.vColor = vPriority;
-        return Out;
-    }
+    //if (vDiffuse.a == 0.f)
+    //{
+    //    vector vPriority = g_PriorityTexture.Sample(LinearSampler, In.vTexcoord);
+    //    Out.vColor = vPriority;
+    //    return Out;
+    //}
 
 
     vector vDecal = g_DecalDiffuseTexture.Sample(LinearSampler, In.vTexcoord);
@@ -293,7 +300,7 @@ PS_OUT PS_MAIN_DEFERRED(PS_IN In)
     Out.vColor = (vDiffuse * vShade + vSpecular) * g_CascadeShadowTexture.Sample(LinearSampler, In.vTexcoord);
 
 	vector		vDepthDesc = g_DepthTexture.Sample(PointSampler, In.vTexcoord);
-	float		fViewZ = vDepthDesc.y * 1000.f;
+	float		fViewZ = vDepthDesc.y * g_fFar;
 
 	/* 1. 현재 그려내는 픽셀을 광원기준의 위치로 변환하기위해서 우선 월드로 역치환하여 월드위치를 구한다. */
 	vector		vPosition = Compute_WorldPos(In.vTexcoord, vDepthDesc.x, fViewZ);

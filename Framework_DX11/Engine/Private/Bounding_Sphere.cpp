@@ -55,6 +55,23 @@ _bool CBounding_Sphere::Intersect(CCollider::TYPE eColliderType, CBounding * pBo
 	return m_isColl;
 }
 
+void CBounding_Sphere::Change_BoundingDesc(CBounding::BOUNDING_DESC* pBoundingDesc)
+{
+	if (nullptr == pBoundingDesc)
+		return;
+
+	BOUNDING_SPHERE_DESC* pDesc = static_cast<BOUNDING_SPHERE_DESC*>(pBoundingDesc);
+
+	m_pBoundingDesc->Center = pDesc->vCenter;
+	m_pBoundingDesc->Radius = pDesc->fRadius;
+}
+
+void CBounding_Sphere::Reset_Bounding()
+{
+	m_pBoundingDesc->Center = m_pOriginalBoundingDesc->Center;
+	m_pBoundingDesc->Radius = m_pOriginalBoundingDesc->Radius;
+}
+
 CBounding_Sphere * CBounding_Sphere::Create(ID3D11Device * pDevice, ID3D11DeviceContext * pContext, CBounding::BOUNDING_DESC * pBoundingDesc)
 {
 	CBounding_Sphere*		pInstance = new CBounding_Sphere(pDevice, pContext);

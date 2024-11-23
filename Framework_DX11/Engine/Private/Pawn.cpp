@@ -86,7 +86,7 @@ _int CPawn::Get_Frame()
 	return m_pModelCom->Get_CurrentFrame();
 }
 
-_int CPawn::Get_CurrentTrackPos()
+_double CPawn::Get_CurrentTrackPos()
 {
 	return m_pModelCom->Get_CurrentTrackPosition();
 }

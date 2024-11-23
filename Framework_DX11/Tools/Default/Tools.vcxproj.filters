@@ -121,6 +121,15 @@
     <Filter Include="02.GameObjects\04.Effect\Effect_Base\Trail_Effect\Multi_Point">
       <UniqueIdentifier>{bd043202-5d95-47a8-9766-4ac80fbb99f8}</UniqueIdentifier>
     </Filter>
+    <Filter Include="97.ShaderFiles\Effect">
+      <UniqueIdentifier>{f81dbfcd-ecda-403c-9324-638c5f34b230}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="97.ShaderFiles\Effect\Compute">
+      <UniqueIdentifier>{08a3ab64-91fd-4aeb-8498-5e4af0e7be85}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="97.ShaderFiles\Effect\Vtx">
+      <UniqueIdentifier>{2c6070df-9069-4751-b2d5-ebb05aa2ff3d}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="framework.h">
@@ -472,34 +481,52 @@
     <FxCompile Include="..\Bin\ShaderFiles\Shader_VtxRectInstance.hlsl">
       <Filter>97.ShaderFiles</Filter>
     </FxCompile>
-    <FxCompile Include="..\Bin\ShaderFiles\Shader_ParticleCompute.hlsl">
-      <Filter>97.ShaderFiles</Filter>
+    <FxCompile Include="..\Bin\ShaderFiles\Shader_SSD.hlsl">
+    </FxCompile>
+    <FxCompile Include="..\Bin\ShaderFiles\Shader_Effect_Mesh.hlsl">
+      <Filter>97.ShaderFiles\Effect\Mesh</Filter>
     </FxCompile>
     <FxCompile Include="..\Bin\ShaderFiles\Shader_Effect_Texture.hlsl">
-      <Filter>97.ShaderFiles</Filter>
+      <Filter>97.ShaderFiles\Effect\Texture</Filter>
+    </FxCompile>
+    <FxCompile Include="..\Bin\ShaderFiles\Shader_ParticleCompute.hlsl">
+      <Filter>97.ShaderFiles\Effect\Particle</Filter>
     </FxCompile>
     <FxCompile Include="..\Bin\ShaderFiles\Shader_VtxPointInstance.hlsl">
+      <Filter>97.ShaderFiles\Effect\Particle</Filter>
+    </FxCompile>
+    <FxCompile Include="..\Bin\ShaderFiles\Shader_VtxTrail_TwoPoint_Instance.hlsl">
+      <Filter>97.ShaderFiles\Effect\Trail\TP</Filter>
+    </FxCompile>
+    <FxCompile Include="..\Bin\ShaderFiles\Shader_SSD.hlsl">
       <Filter>97.ShaderFiles</Filter>
     </FxCompile>
     <FxCompile Include="..\Bin\ShaderFiles\Shader_Effect_Mesh.hlsl">
-      <Filter>97.ShaderFiles</Filter>
+      <Filter>97.ShaderFiles\Effect\Vtx</Filter>
     </FxCompile>
-    <FxCompile Include="..\Bin\ShaderFiles\Shader_SSD.hlsl">
+    <FxCompile Include="..\Bin\ShaderFiles\Shader_VtxPointInstance.hlsl">
+      <Filter>97.ShaderFiles\Effect\Vtx</Filter>
     </FxCompile>
-    <FxCompile Include="..\Bin\ShaderFiles\Shader_VtxTrail_TwoPoint_Instance.hlsl">
-      <Filter>97.ShaderFiles</Filter>
+    <FxCompile Include="..\Bin\ShaderFiles\Shader_ParticleCompute.hlsl">
+      <Filter>97.ShaderFiles\Effect\Compute</Filter>
     </FxCompile>
-    <FxCompile Include="..\Bin\ShaderFiles\Shader_VtxTrail_OnePoint_Instance.hlsl">
-      <Filter>97.ShaderFiles</Filter>
+    <FxCompile Include="..\Bin\ShaderFiles\Shader_Effect_Texture.hlsl">
+      <Filter>97.ShaderFiles\Effect\Vtx</Filter>
     </FxCompile>
     <FxCompile Include="..\Bin\ShaderFiles\Shader_Trail_MultiPoint_Compute.hlsl">
-      <Filter>97.ShaderFiles</Filter>
+      <Filter>97.ShaderFiles\Effect\Compute</Filter>
     </FxCompile>
     <FxCompile Include="..\Bin\ShaderFiles\Shader_TrailHead_PointInstance.hlsl">
-      <Filter>97.ShaderFiles</Filter>
+      <Filter>97.ShaderFiles\Effect\Vtx</Filter>
     </FxCompile>
     <FxCompile Include="..\Bin\ShaderFiles\Shader_TrailTail_PointInstance.hlsl">
-      <Filter>97.ShaderFiles</Filter>
+      <Filter>97.ShaderFiles\Effect\Vtx</Filter>
+    </FxCompile>
+    <FxCompile Include="..\Bin\ShaderFiles\Shader_VtxTrail_OnePoint_Instance.hlsl">
+      <Filter>97.ShaderFiles\Effect\Vtx</Filter>
+    </FxCompile>
+    <FxCompile Include="..\Bin\ShaderFiles\Shader_VtxTrail_TwoPoint_Instance.hlsl">
+      <Filter>97.ShaderFiles\Effect\Vtx</Filter>
     </FxCompile>
   </ItemGroup>
 </Project>

@@ -8,6 +8,8 @@ IMPLEMENT_SINGLETON(CController_UITool)
 
 void CController_UITool::UITool_Edit()
 {
+	//Show_console();
+
 	if (ImGui::Button("SaveUIData"))
 	{
 		if (FAILED(SavePage()))
@@ -87,6 +89,32 @@ void CController_UITool::Show_SystemMessage(_wstring Text, _float fTime)
 
 void CController_UITool::Show_MouseInfo(_wstring DataNameA, _float* DataA, _wstring DataNameB, _float* DataB, _wstring DataNameC, _float* DataC, _wstring DataNameD, _float* DataD)
 {
+}
+
+void CController_UITool::Show_console()
+{
+	// ImGui 창 시작
+	ImGui::Begin("Console");
+
+	// 로그 출력
+	ImGui::BeginChild("ScrollingRegion", ImVec2(0, -ImGui::GetFrameHeightWithSpacing()), true);
+	for (const auto& log : logs) {
+		ImGui::TextUnformatted(log.c_str());
+	}
+	ImGui::EndChild();
+
+	// 사용자 입력 처리
+	string strCenter;
+
+	strCenter += to_string(m_InputPageCenter.x);
+	strCenter += " | ";
+	strCenter += to_string(m_InputPageCenter.y);
+	//
+
+
+	logs.push_back(strCenter); // 입력을 로그에 추가
+
+	ImGui::End();
 }
 
 void CController_UITool::UIPage_Edit()
@@ -253,7 +281,16 @@ void CController_UITool::UIPart_Edit()
 		ImGui::SameLine();
 		ImGui::DragFloat("A", &pNow->fTextureColor.w);
 
+		ImGui::SameLine();
+		ImGui::Checkbox("Multiple", &pNow->bTexture_Color_Multiple);
 
+		ImGui::Checkbox("Turn", &pNow->bTurn);
+
+		if (pNow->bTurn)
+		{
+			ImGui::SameLine();
+			ImGui::DragFloat("Turn_Degree", &pNow->fTurn_Degree);
+		}
 
 		ImGui::SeparatorText("Text");
 		// 텍스트 
@@ -279,6 +316,14 @@ void CController_UITool::UIPart_Edit()
 				pNow->szText[iIndex] = m_InputText[iIndex];
 			} while (m_InputText[iIndex] != '\0');
 		}
+		if(ImGui::Checkbox("TextCenter", &pNow->bCenter))
+			if (pNow->bCenter)
+				pNow->bText_Right = false;
+		ImGui::SameLine();
+		if (ImGui::Checkbox("TextRight", &pNow->bText_Right))
+			if (pNow->bText_Right)
+				pNow->bCenter = false;
+		
 
 		ImGui::SeparatorText("Position");
 		// 위치
@@ -528,6 +573,12 @@ HRESULT CController_UITool::SavePart()
 			vecPart.push_back(to_wstring(pNow->fTextColor.z));
 			vecPart.push_back(to_wstring(pNow->fTextColor.w));
 			vecPart.push_back(to_wstring(pNow->bIsItem));
+			vecPart.push_back(to_wstring(pNow->bTurn));
+			vecPart.push_back(to_wstring(pNow->fTurn_Degree));
+
+			vecPart.push_back(to_wstring(pNow->bTexture_Color_Multiple));
+			vecPart.push_back(to_wstring(pNow->fStrash_Alpha));
+			vecPart.push_back(to_wstring(pNow->bText_Right));
 
 			vecBuffer.push_back(vecPart);
 		}
@@ -580,6 +631,13 @@ HRESULT CController_UITool::LoadPart()
 		pNew->fTextColor = { stof(vecBuffer[i][28]) , stof(vecBuffer[i][29]) , stof(vecBuffer[i][30]) , stof(vecBuffer[i][31]) };
 
 		pNew->bIsItem = stoi(vecBuffer[i][32]);
+
+		pNew->bTurn = stoi(vecBuffer[i][33]);
+		pNew->fTurn_Degree = stof(vecBuffer[i][34]);
+
+		pNew->bTexture_Color_Multiple = stoi(vecBuffer[i][35]);
+		pNew->fStrash_Alpha = stof(vecBuffer[i][36]);
+		pNew->bText_Right = stoi(vecBuffer[i][37]);
 
 		pNew->MakeDirec();
 		if (pNew->iParentPart_Index == -1)
@@ -698,6 +756,12 @@ HRESULT CController_UITool::MakeClientData_Part(HANDLE handle, DWORD* dword, vec
 		WriteFile(handle, &iter->iTexture_Index, sizeof(_int), dword, nullptr);
 		WriteFile(handle, &iter->fTextureColor, sizeof(_float4), dword, nullptr);
 		WriteFile(handle, &iter->bIsItem, sizeof(_bool), dword, nullptr);
+		WriteFile(handle, &iter->bTurn, sizeof(_bool), dword, nullptr);
+		WriteFile(handle, &iter->fTurn_Degree, sizeof(_float), dword, nullptr);
+
+		WriteFile(handle, &iter->bTexture_Color_Multiple, sizeof(_bool), dword, nullptr);
+		WriteFile(handle, &iter->fStrash_Alpha, sizeof(_float), dword, nullptr);
+		WriteFile(handle, &iter->bText_Right, sizeof(_bool), dword, nullptr);
 
 		_int iIndexPartName = -1;
 
@@ -728,5 +792,7 @@ void CController_UITool::Free()
 	EraseUIData();
 
 	Safe_Release(m_pUIRender);
+
+	logs.clear();
 	
 }

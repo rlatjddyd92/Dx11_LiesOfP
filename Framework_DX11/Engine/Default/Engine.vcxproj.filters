@@ -217,8 +217,14 @@
     <Filter Include="01.Utility\03.Components\VIBuffer\Instancing\Trail\MultiPoint">
       <UniqueIdentifier>{c5a9687c-ed44-49d1-ae87-959bb47dbd00}</UniqueIdentifier>
     </Filter>
-    <Filter Include="01.Utility\03.Components\VIBuffer\Instancing\Trail\MultiPoint">
-      <UniqueIdentifier>{a1734479-4275-46a1-8e81-571e451eea75}</UniqueIdentifier>
+    <Filter Include="01.Utility\13.Occludee">
+      <UniqueIdentifier>{70fc1e80-1456-4179-843f-5d3bf3038f65}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="01.Utility\03.Components\Sound">
+      <UniqueIdentifier>{4dfe3d33-55c1-417a-a63d-4e7f6d924d34}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="01.Utility\03.Components\Sound\Manager">
+      <UniqueIdentifier>{2c7048d2-5fe6-442b-874d-b64f26d2bb4f}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -417,13 +423,16 @@
     <ClCompile Include="..\Private\ObjectOctree.cpp">
       <Filter>01.Utility\03.Components\Model\ObjectOctree</Filter>
     </ClCompile>
-    <ClCompile Include="..\Private\ObjectOctree.cpp">
-      <Filter>01.Utility\03.Components\Model\ObjectOctree</Filter>
-    </ClCompile>
     <ClCompile Include="..\private\Trail_MultiPoint_Instance.cpp">
       <Filter>01.Utility\03.Components\VIBuffer\Instancing\Trail\MultiPoint</Filter>
     </ClCompile>
     <ClCompile Include="..\Private\EasyDrawSphere.cpp" />
+    <ClCompile Include="..\Private\Sound.cpp">
+      <Filter>01.Utility\03.Components\Sound</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Private\Sound_Manager.cpp">
+      <Filter>01.Utility\03.Components\Sound\Manager</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\Public\Base.h">
@@ -649,6 +658,12 @@
       <Filter>01.Utility\03.Components\VIBuffer\Instancing\Trail\MultiPoint</Filter>
     </ClInclude>
     <ClInclude Include="..\Public\EasyDrawSphere.h" />
+    <ClInclude Include="..\Public\Sound.h">
+      <Filter>01.Utility\03.Components\Sound</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Public\Sound_Manager.h">
+      <Filter>01.Utility\03.Components\Sound\Manager</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <FxCompile Include="..\Bin\ShaderFiles\Shader_Cell.hlsl">
@@ -684,7 +699,7 @@
     <FxCompile Include="..\Bin\ShaderFiles\Shader_Bloom.hlsl">
       <Filter>01.Utility\98.ShaderFiles</Filter>
     </FxCompile>
-    <FxCompile Include="..\..\Client\Bin\ShaderFiles\Shader_PostProcess.hlsl">
+    <FxCompile Include="..\Bin\ShaderFiles\Shader_PostProcess.hlsl">
       <Filter>01.Utility\98.ShaderFiles</Filter>
     </FxCompile>
   </ItemGroup>

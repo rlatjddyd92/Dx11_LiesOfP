@@ -69,17 +69,17 @@ void CNonAnimModel::Update(_float fTimeDelta)
 
 void CNonAnimModel::Late_Update(_float fTimeDelta)
 {
+	/* 직교투영을 위한 월드행렬까지 셋팅하게 된다. */
+	__super::Late_Update(fTimeDelta);
+
 	_float fCullDistance = 0.f;
 	if (wcscmp(m_szModelTag, TEXT("SM_Monastery_Floor_06")) == 0)
 		fCullDistance = 150.f;
 	else
-		fCullDistance = 40.f;
+		fCullDistance = 30.f;
 
 	if(m_pGameInstance->isIn_Frustum_WorldSpace(m_pTransformCom->Get_State(CTransform::STATE_POSITION), fCullDistance))
 	{
-		/* 직교투영을 위한 월드행렬까지 셋팅하게 된다. */
-		__super::Late_Update(fTimeDelta);
-
 		if (m_isDecal)
 			m_pGameInstance->Add_RenderObject(CRenderer::RG_DECAL, this);
 		else
@@ -99,6 +99,9 @@ HRESULT CNonAnimModel::Render()
 	if (FAILED(m_pShaderCom->Bind_Matrix("g_ViewMatrix", &m_pGameInstance->Get_Transform(CPipeLine::D3DTS_VIEW))))
 		return E_FAIL;
 	if (FAILED(m_pShaderCom->Bind_Matrix("g_ProjMatrix", &m_pGameInstance->Get_Transform(CPipeLine::D3DTS_PROJ))))
+		return E_FAIL;
+
+	if (FAILED(m_pShaderCom->Bind_RawValue("g_fFar", &m_pGameInstance->Get_Far(), sizeof(_float))))
 		return E_FAIL;
 
 	if (m_isDecal)
@@ -124,6 +127,9 @@ HRESULT CNonAnimModel::Render_Picking()
 	if (FAILED(m_pShaderCom->Bind_Matrix("g_ViewMatrix", &m_pGameInstance->Get_Transform(CPipeLine::D3DTS_VIEW))))
 		return E_FAIL;
 	if (FAILED(m_pShaderCom->Bind_Matrix("g_ProjMatrix", &m_pGameInstance->Get_Transform(CPipeLine::D3DTS_PROJ))))
+		return E_FAIL;
+
+	if (FAILED(m_pShaderCom->Bind_RawValue("g_fFar", &m_pGameInstance->Get_Far(), sizeof(_float))))
 		return E_FAIL;
 
 	uint32_t hash = static_cast<uint32_t>(m_iHashId * 100); // 임의의 상수로 인덱스를 해시처럼 변환

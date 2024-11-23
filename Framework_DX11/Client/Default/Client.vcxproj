@@ -107,13 +107,13 @@
       <Optimization>Disabled</Optimization>
       <PreprocessorDefinitions>_DEBUG;_WINDOWS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <SDLCheck>true</SDLCheck>
-      <AdditionalIncludeDirectories>../../EngineSDK/Inc/;../Public/;../Default</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>../../EngineSDK/Inc/;../Public/;../Default;../../EngineSDK/Inc/Fmod</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <AdditionalLibraryDirectories>../../EngineSDK/lib/</AdditionalLibraryDirectories>
-      <AdditionalDependencies>Engine.lib;DirectXTKd.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>Engine.lib;DirectXTKd.lib;fmod_vc.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
     <FxCompile>
       <ShaderType>Effect</ShaderType>
@@ -170,6 +170,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\public\BackGround.h" />
+    <ClInclude Include="..\Public\Camera_Manager.h" />
     <ClInclude Include="..\Public\CarcassBigA.h" />
     <ClInclude Include="..\Public\Client_Defines.h" />
     <ClInclude Include="..\Public\ColliderObject.h" />
@@ -182,6 +183,9 @@
     <ClInclude Include="..\Public\Level_GamePlay.h" />
     <ClInclude Include="..\Public\Level_Loading.h" />
     <ClInclude Include="..\Public\Level_Logo.h" />
+    <ClInclude Include="..\Public\Lift_Controller.h" />
+    <ClInclude Include="..\Public\Lift_Door.h" />
+    <ClInclude Include="..\Public\Lift_Floor.h" />
     <ClInclude Include="..\public\Loader.h" />
     <ClInclude Include="..\Public\MainApp.h" />
     <ClInclude Include="..\public\Mesh_Effect.h" />
@@ -189,10 +193,13 @@
     <ClInclude Include="..\Public\NavDataObj.h" />
     <ClInclude Include="..\Public\Particle_Effect.h" />
     <ClInclude Include="..\public\Player.h" />
+    <ClInclude Include="..\Public\PlayerCamera.h" />
     <ClInclude Include="..\Public\Player_Stat_Manager.h" />
     <ClInclude Include="..\Public\SimonManus.h" />
+    <ClInclude Include="..\Public\SimonManusP1.h" />
     <ClInclude Include="..\Public\Sky.h" />
     <ClInclude Include="..\Public\Stargazer.h" />
+    <ClInclude Include="..\Public\State_CarcassBigA_Attack.h" />
     <ClInclude Include="..\Public\State_CarcassBigA_AttackRoute_0.h" />
     <ClInclude Include="..\Public\State_CarcassBigA_AttackRoute_1.h" />
     <ClInclude Include="..\Public\State_CarcassBigA_AttackRoute_2.h" />
@@ -212,9 +219,11 @@
     <ClInclude Include="..\Public\State_CarcassBigA_WheelWind.h" />
     <ClInclude Include="..\Public\State_Player_ChangeWeapon.h" />
     <ClInclude Include="..\Public\State_Player_Flame_Charge00.h" />
+    <ClInclude Include="..\Public\State_Player_Flame_Charge01.h" />
     <ClInclude Include="..\Public\State_Player_Flame_LAttack00.h" />
     <ClInclude Include="..\Public\State_Player_Flame_LAttack01.h" />
     <ClInclude Include="..\Public\State_Player_Flame_RAttack00.h" />
+    <ClInclude Include="..\Public\State_Player_Flame_RAttack01.h" />
     <ClInclude Include="..\Public\State_Player_Heal.h" />
     <ClInclude Include="..\Public\State_Player_OH_Dash.h" />
     <ClInclude Include="..\Public\State_Player_OH_Guard.h" />
@@ -230,6 +239,16 @@
     <ClInclude Include="..\Public\State_Player_Rapier_LAttack01.h" />
     <ClInclude Include="..\Public\State_Player_Parry.h" />
     <ClInclude Include="..\Public\State_Player_Rapier_RAttack00.h" />
+    <ClInclude Include="..\Public\State_Player_Scissor_Buff.h" />
+    <ClInclude Include="..\Public\State_Player_Scissor_Charge00.h" />
+    <ClInclude Include="..\Public\State_Player_Scissor_Charge01.h" />
+    <ClInclude Include="..\Public\State_Player_Scissor_Fatal0.h" />
+    <ClInclude Include="..\Public\State_Player_Scissor_Fatal1.h" />
+    <ClInclude Include="..\Public\State_Player_Scissor_Fatal2.h" />
+    <ClInclude Include="..\Public\State_Player_Scissor_LAttack00.h" />
+    <ClInclude Include="..\Public\State_Player_Scissor_LAttack01.h" />
+    <ClInclude Include="..\Public\State_Player_Scissor_RAttack00.h" />
+    <ClInclude Include="..\Public\State_Player_Scissor_RAttack01.h" />
     <ClInclude Include="..\Public\State_Player_TH_Dash.h" />
     <ClInclude Include="..\Public\State_Player_TH_Guard.h" />
     <ClInclude Include="..\Public\State_Player_TH_Idle.h" />
@@ -237,18 +256,6 @@
     <ClInclude Include="..\Public\State_Player_TH_Run.h" />
     <ClInclude Include="..\Public\State_Player_TH_Sprint.h" />
     <ClInclude Include="..\Public\State_Player_TH_Walk.h" />
-    <ClInclude Include="..\Public\State_SimonManusP2_BrutalAttack.h" />
-    <ClInclude Include="..\Public\State_SimonManusP2_ChasingSwing.h" />
-    <ClInclude Include="..\Public\State_SimonManusP2_HighJumpFall.h" />
-    <ClInclude Include="..\Public\State_SimonManusP2_JumpToAttack.h" />
-    <ClInclude Include="..\Public\State_SimonManusP2_LightningToWave.h" />
-    <ClInclude Include="..\Public\State_SimonManusP2_Route0.h" />
-    <ClInclude Include="..\Public\State_SimonManusP2_Route2.h" />
-    <ClInclude Include="..\Public\State_SimonManusP2_SpreadMagic.h" />
-    <ClInclude Include="..\Public\State_SimonManusP2_Stamp.h" />
-    <ClInclude Include="..\Public\State_SimonManusP2_ThunderCalling.h" />
-    <ClInclude Include="..\Public\State_SimonManusP2_Wave.h" />
-    <ClInclude Include="..\Public\State_SimonManusP2_Die.h" />
     <ClInclude Include="..\Public\State_SimonManusP1_AvoidSwing.h" />
     <ClInclude Include="..\Public\State_SimonManusP1_ChasingSwing.h" />
     <ClInclude Include="..\Public\State_SimonManusP1_Die.h" />
@@ -267,20 +274,35 @@
     <ClInclude Include="..\Public\State_SimonManusP1_SwipMultiple_R.h" />
     <ClInclude Include="..\Public\State_SimonManusP1_Walk.h" />
     <ClInclude Include="..\Public\State_SimonManusP2_AvoidSwing.h" />
+    <ClInclude Include="..\Public\State_SimonManusP2_BrutalAttack.h" />
+    <ClInclude Include="..\Public\State_SimonManusP2_ChasingSwing.h" />
+    <ClInclude Include="..\Public\State_SimonManusP2_Die.h" />
     <ClInclude Include="..\Public\State_SimonManusP2_Grogy.h" />
+    <ClInclude Include="..\Public\State_SimonManusP2_HighJumpFall.h" />
     <ClInclude Include="..\Public\State_SimonManusP2_HitFatal.h" />
     <ClInclude Include="..\Public\State_SimonManusP2_Idle.h" />
+    <ClInclude Include="..\Public\State_SimonManusP2_JumpToAttack.h" />
+    <ClInclude Include="..\Public\State_SimonManusP2_LightningToWave.h" />
+    <ClInclude Include="..\Public\State_SimonManusP2_Route0.h" />
+    <ClInclude Include="..\Public\State_SimonManusP2_Route1.h" />
+    <ClInclude Include="..\Public\State_SimonManusP2_Route2.h" />
     <ClInclude Include="..\Public\State_SimonManusP2_Run.h" />
+    <ClInclude Include="..\Public\State_SimonManusP2_SpreadMagic.h" />
+    <ClInclude Include="..\Public\State_SimonManusP2_Stamp.h" />
     <ClInclude Include="..\Public\State_SimonManusP2_Sting.h" />
     <ClInclude Include="..\Public\State_SimonManusP2_SummonHand.h" />
-    <ClInclude Include="..\Public\State_SimonManusP2_ThunderBall.h" />
-    <ClInclude Include="..\Public\State_SimonManusP2_Walk.h" />
     <ClInclude Include="..\Public\State_SimonManusP2_SwingDown_Swing.h" />
-    <ClInclude Include="..\Public\State_SimonManusP2_Route1.h" />
-    <ClInclude Include="..\Public\StaticObj.h" />
     <ClInclude Include="..\Public\State_SimonManusP2_SwipMultiple.h" />
+    <ClInclude Include="..\Public\State_SimonManusP2_ThunderBall.h" />
+    <ClInclude Include="..\Public\State_SimonManusP2_ThunderCalling.h" />
+    <ClInclude Include="..\Public\State_SimonManusP2_Walk.h" />
+    <ClInclude Include="..\Public\State_SimonManusP2_Wave.h" />
+    <ClInclude Include="..\Public\StaticObj.h" />
     <ClInclude Include="..\Public\Terrain.h" />
     <ClInclude Include="..\Public\Texture_Effect.h" />
+    <ClInclude Include="..\Public\Trail_Effect_MP.h" />
+    <ClInclude Include="..\Public\Trail_Effect_OP.h" />
+    <ClInclude Include="..\Public\Trail_Effect_TP.h" />
     <ClInclude Include="..\Public\UIManager.h" />
     <ClInclude Include="..\Public\UIPage.h" />
     <ClInclude Include="..\Public\UIPage_Equip.h" />
@@ -293,12 +315,15 @@
     <ClInclude Include="..\Public\UIPage_Play.h" />
     <ClInclude Include="..\Public\UIPage_Skill.h" />
     <ClInclude Include="..\Public\UIPage_Stat.h" />
-    <ClInclude Include="..\Public\UIPage_Test.h" />
+    <ClInclude Include="..\Public\UIPage_ToolTip.h" />
+    <ClInclude Include="..\Public\UIRender_Batching.h" />
     <ClInclude Include="..\Public\UIRender_Client.h" />
     <ClInclude Include="..\Public\Weapon.h" />
     <ClInclude Include="..\Public\Weapon_FlameSword.h" />
     <ClInclude Include="..\Public\Weapon_Rapier.h" />
     <ClInclude Include="..\Public\Weapon_Scissor.h" />
+    <ClInclude Include="..\Public\Weapon_Scissor_Blade.h" />
+    <ClInclude Include="..\Public\Weapon_Scissor_Handle.h" />
     <ClInclude Include="..\Public\Weapon_SimonManus_Hammer.h" />
     <ClInclude Include="Client.h" />
     <ClInclude Include="Interface_Enums.h" />
@@ -314,6 +339,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\private\BackGround.cpp" />
+    <ClCompile Include="..\Private\Camera_Manager.cpp" />
     <ClCompile Include="..\Private\CarcassBigA.cpp" />
     <ClCompile Include="..\Private\ColliderObject.cpp" />
     <ClCompile Include="..\Private\Effect_Base.cpp" />
@@ -325,6 +351,9 @@
     <ClCompile Include="..\Private\Level_GamePlay.cpp" />
     <ClCompile Include="..\Private\Level_Loading.cpp" />
     <ClCompile Include="..\Private\Level_Logo.cpp" />
+    <ClCompile Include="..\Private\Lift_Controller.cpp" />
+    <ClCompile Include="..\Private\Lift_Door.cpp" />
+    <ClCompile Include="..\Private\Lift_Floor.cpp" />
     <ClCompile Include="..\private\Loader.cpp" />
     <ClCompile Include="..\Private\MainApp.cpp" />
     <ClCompile Include="..\private\Mesh_Effect.cpp" />
@@ -332,10 +361,13 @@
     <ClCompile Include="..\Private\NavDataObj.cpp" />
     <ClCompile Include="..\Private\Particle_Effect.cpp" />
     <ClCompile Include="..\private\Player.cpp" />
+    <ClCompile Include="..\Private\PlayerCamera.cpp" />
     <ClCompile Include="..\Private\Player_Stat_Manager.cpp" />
     <ClCompile Include="..\Private\SimonManus.cpp" />
+    <ClCompile Include="..\Private\SimonManusP1.cpp" />
     <ClCompile Include="..\Private\Sky.cpp" />
     <ClCompile Include="..\Private\Stargazer.cpp" />
+    <ClCompile Include="..\Private\State_CarcassBigA_Attack.cpp" />
     <ClCompile Include="..\Private\State_CarcassBigA_AttackRoute_0.cpp" />
     <ClCompile Include="..\Private\State_CarcassBigA_AttackRoute_1.cpp" />
     <ClCompile Include="..\Private\State_CarcassBigA_AttackRoute_2.cpp" />
@@ -355,9 +387,11 @@
     <ClCompile Include="..\Private\State_CarcassBigA_WheelWind.cpp" />
     <ClCompile Include="..\Private\State_Player_ChangeWeapon.cpp" />
     <ClCompile Include="..\Private\State_Player_Flame_Charge00.cpp" />
+    <ClCompile Include="..\Private\State_Player_Flame_Charge01.cpp" />
     <ClCompile Include="..\Private\State_Player_Flame_LAttack00.cpp" />
     <ClCompile Include="..\Private\State_Player_Flame_LAttack01.cpp" />
     <ClCompile Include="..\Private\State_Player_Flame_RAttack00.cpp" />
+    <ClCompile Include="..\Private\State_Player_Flame_RAttack01.cpp" />
     <ClCompile Include="..\Private\State_Player_Heal.cpp" />
     <ClCompile Include="..\Private\State_Player_OH_Dash.cpp" />
     <ClCompile Include="..\Private\State_Player_OH_Guard.cpp" />
@@ -373,6 +407,16 @@
     <ClCompile Include="..\Private\State_Player_Rapier_LAttack01.cpp" />
     <ClCompile Include="..\Private\State_Player_Parry.cpp" />
     <ClCompile Include="..\Private\State_Player_Rapier_RAttack00.cpp" />
+    <ClCompile Include="..\Private\State_Player_Scissor_Buff.cpp" />
+    <ClCompile Include="..\Private\State_Player_Scissor_Charge00.cpp" />
+    <ClCompile Include="..\Private\State_Player_Scissor_Charge01.cpp" />
+    <ClCompile Include="..\Private\State_Player_Scissor_Fatal0.cpp" />
+    <ClCompile Include="..\Private\State_Player_Scissor_Fatal1.cpp" />
+    <ClCompile Include="..\Private\State_Player_Scissor_Fatal2.cpp" />
+    <ClCompile Include="..\Private\State_Player_Scissor_LAttack00.cpp" />
+    <ClCompile Include="..\Private\State_Player_Scissor_LAttack01.cpp" />
+    <ClCompile Include="..\Private\State_Player_Scissor_RAttack00.cpp" />
+    <ClCompile Include="..\Private\State_Player_Scissor_RAttack01.cpp" />
     <ClCompile Include="..\Private\State_Player_TH_Dash.cpp" />
     <ClCompile Include="..\Private\State_Player_TH_Guard.cpp" />
     <ClCompile Include="..\Private\State_Player_TH_Idle.cpp" />
@@ -380,18 +424,6 @@
     <ClCompile Include="..\Private\State_Player_TH_Run.cpp" />
     <ClCompile Include="..\Private\State_Player_TH_Sprint.cpp" />
     <ClCompile Include="..\Private\State_Player_TH_Walk.cpp" />
-    <ClCompile Include="..\Private\State_SimonManusP2_BrutalAttack.cpp" />
-    <ClCompile Include="..\Private\State_SimonManusP2_ChasingSwing.cpp" />
-    <ClCompile Include="..\Private\State_SimonManusP2_HighJumpFall.cpp" />
-    <ClCompile Include="..\Private\State_SimonManusP2_JumpToAttack.cpp" />
-    <ClCompile Include="..\Private\State_SimonManusP2_LightningToWave.cpp" />
-    <ClCompile Include="..\Private\State_SimonManusP2_Route0.cpp" />
-    <ClCompile Include="..\Private\State_SimonManusP2_Route2.cpp" />
-    <ClCompile Include="..\Private\State_SimonManusP2_SpreadMagic.cpp" />
-    <ClCompile Include="..\Private\State_SimonManusP2_Stamp.cpp" />
-    <ClCompile Include="..\Private\State_SimonManusP2_ThunderCalling.cpp" />
-    <ClCompile Include="..\Private\State_SimonManusP2_Wave.cpp" />
-    <ClCompile Include="..\Private\State_SimonManusP2_Die.cpp" />
     <ClCompile Include="..\Private\State_SimonManusP1_AvoidSwing.cpp" />
     <ClCompile Include="..\Private\State_SimonManusP1_ChasingSwing.cpp" />
     <ClCompile Include="..\Private\State_SimonManusP1_Die.cpp" />
@@ -410,20 +442,35 @@
     <ClCompile Include="..\Private\State_SimonManusP1_SwipMultiple_R.cpp" />
     <ClCompile Include="..\Private\State_SimonManusP1_Walk.cpp" />
     <ClCompile Include="..\Private\State_SimonManusP2_AvoidSwing.cpp" />
+    <ClCompile Include="..\Private\State_SimonManusP2_BrutalAttack.cpp" />
+    <ClCompile Include="..\Private\State_SimonManusP2_ChasingSwing.cpp" />
+    <ClCompile Include="..\Private\State_SimonManusP2_Die.cpp" />
     <ClCompile Include="..\Private\State_SimonManusP2_Grogy.cpp" />
+    <ClCompile Include="..\Private\State_SimonManusP2_HighJumpFall.cpp" />
     <ClCompile Include="..\Private\State_SimonManusP2_HitFatal.cpp" />
     <ClCompile Include="..\Private\State_SimonManusP2_Idle.cpp" />
+    <ClCompile Include="..\Private\State_SimonManusP2_JumpToAttack.cpp" />
+    <ClCompile Include="..\Private\State_SimonManusP2_LightningToWave.cpp" />
+    <ClCompile Include="..\Private\State_SimonManusP2_Route0.cpp" />
+    <ClCompile Include="..\Private\State_SimonManusP2_Route1.cpp" />
+    <ClCompile Include="..\Private\State_SimonManusP2_Route2.cpp" />
     <ClCompile Include="..\Private\State_SimonManusP2_Run.cpp" />
+    <ClCompile Include="..\Private\State_SimonManusP2_SpreadMagic.cpp" />
+    <ClCompile Include="..\Private\State_SimonManusP2_Stamp.cpp" />
     <ClCompile Include="..\Private\State_SimonManusP2_Sting.cpp" />
     <ClCompile Include="..\Private\State_SimonManusP2_SummonHand.cpp" />
-    <ClCompile Include="..\Private\State_SimonManusP2_ThunderBall.cpp" />
-    <ClCompile Include="..\Private\State_SimonManusP2_Walk.cpp" />
     <ClCompile Include="..\Private\State_SimonManusP2_SwingDown_Swing.cpp" />
-    <ClCompile Include="..\Private\State_SimonManusP2_Route1.cpp" />
-    <ClCompile Include="..\Private\StaticObj.cpp" />
     <ClCompile Include="..\Private\State_SimonManusP2_SwipMultiple.cpp" />
+    <ClCompile Include="..\Private\State_SimonManusP2_ThunderBall.cpp" />
+    <ClCompile Include="..\Private\State_SimonManusP2_ThunderCalling.cpp" />
+    <ClCompile Include="..\Private\State_SimonManusP2_Walk.cpp" />
+    <ClCompile Include="..\Private\State_SimonManusP2_Wave.cpp" />
+    <ClCompile Include="..\Private\StaticObj.cpp" />
     <ClCompile Include="..\Private\Terrain.cpp" />
     <ClCompile Include="..\Private\Texture_Effect.cpp" />
+    <ClCompile Include="..\Private\Trail_Effect_MP.cpp" />
+    <ClCompile Include="..\Private\Trail_Effect_OP.cpp" />
+    <ClCompile Include="..\Private\Trail_Effect_TP.cpp" />
     <ClCompile Include="..\Private\UIManager.cpp" />
     <ClCompile Include="..\Private\UIPage.cpp" />
     <ClCompile Include="..\Private\UIPage_Equip.cpp" />
@@ -436,12 +483,15 @@
     <ClCompile Include="..\Private\UIPage_Play.cpp" />
     <ClCompile Include="..\Private\UIPage_Skill.cpp" />
     <ClCompile Include="..\Private\UIPage_Stat.cpp" />
-    <ClCompile Include="..\Private\UIPage_Test.cpp" />
+    <ClCompile Include="..\Private\UIPage_ToolTip.cpp" />
+    <ClCompile Include="..\Private\UIRender_Batching.cpp" />
     <ClCompile Include="..\Private\UIRender_Client.cpp" />
     <ClCompile Include="..\Private\Weapon.cpp" />
     <ClCompile Include="..\Private\Weapon_FlameSword.cpp" />
     <ClCompile Include="..\Private\Weapon_Rapier.cpp" />
     <ClCompile Include="..\Private\Weapon_Scissor.cpp" />
+    <ClCompile Include="..\Private\Weapon_Scissor_Blade.cpp" />
+    <ClCompile Include="..\Private\Weapon_Scissor_Handle.cpp" />
     <ClCompile Include="..\Private\Weapon_SimonManus_Hammer.cpp" />
     <ClCompile Include="Client.cpp" />
     <ClCompile Include="stdafx.cpp">

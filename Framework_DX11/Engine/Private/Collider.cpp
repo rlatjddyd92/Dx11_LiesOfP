@@ -72,9 +72,24 @@ void CCollider::Update(const _float4x4 * pWorldMatrix)
 {
 	m_pBounding->Update(XMLoadFloat4x4(pWorldMatrix));
 }
+
+void CCollider::Change_BoundingDesc(void* pBoundingDesc)
+{
+	CBounding::BOUNDING_DESC* pDesc = static_cast<CBounding::BOUNDING_DESC*>(pBoundingDesc);
+	m_pBounding->Change_BoundingDesc(pDesc);
+}
+
+
+void CCollider::Reset_Bounding()
+{
+	m_pBounding->Reset_Bounding();
+}
+
 #ifdef _DEBUG
 HRESULT CCollider::Render()
 {
+	if (!m_isActive)
+		return S_OK;
 
 	m_pContext->GSSetShader(nullptr, nullptr, 0);
 

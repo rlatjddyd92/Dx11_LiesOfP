@@ -4,6 +4,8 @@
 #include "Model.h"
 #include "Player.h"
 #include "Camera.h"
+#include "Effect_Manager.h"
+#include "Weapon.h"
 
 CState_Player_Rapier_RAttack00::CState_Player_Rapier_RAttack00(CFsm* pFsm, CPlayer* pPlayer)
     :CState{ pFsm }
@@ -23,6 +25,9 @@ HRESULT CState_Player_Rapier_RAttack00::Initialize(_uint iStateNum, void* pArg)
 
     m_iChangeFrame = 45;
     m_iStateNum = iStateNum;
+
+    m_iColliderStartFrame = 7;
+    m_iColliderEndFrame = 20;
 
     return S_OK;
 }
@@ -44,6 +49,14 @@ HRESULT CState_Player_Rapier_RAttack00::Start_State(void* pArg)
 void CState_Player_Rapier_RAttack00::Update(_float fTimeDelta)
 {
     _int iFrame = m_pPlayer->Get_Frame();
+
+    if (iFrame == 30)
+    {
+        _Vec3 vPos = m_pPlayer->Get_CurrentWeapon()->Get_Transform()->Get_State(CTransform::STATE_POSITION);
+        _Vec3 vRot = _Vec3(0.f, 0.f, 0.f);
+        _Vec3 vScale = _Vec3(1.f, 1.f, 1.f);
+        CEffect_Manager::Get_Instance()->Add_Effect_ToLayer(LEVEL_GAMEPLAY, TEXT("Player_Attack_Rapier_Normal"), vPos, vRot, vScale);
+    }
 
     if (iFrame < m_iChangeFrame)
     {
@@ -80,15 +93,28 @@ void CState_Player_Rapier_RAttack00::Update(_float fTimeDelta)
     {
         m_pPlayer->Change_State(CPlayer::OH_IDLE);
     }
+
+    Control_Collider();
 }
 
 void CState_Player_Rapier_RAttack00::End_State()
 {
+    m_pPlayer->DeActive_CurretnWeaponCollider();
 }
 
 _bool CState_Player_Rapier_RAttack00::End_Check()
 {
     return m_pPlayer->Get_EndAnim(m_iAnimation_RapierSA1);
+}
+
+void CState_Player_Rapier_RAttack00::Control_Collider()
+{
+    _int iFrame = m_pPlayer->Get_Frame();
+
+    if (m_iColliderStartFrame <= iFrame && iFrame <= m_iColliderEndFrame)
+        m_pPlayer->Active_CurrentWeaponCollider();
+    else
+        m_pPlayer->DeActive_CurretnWeaponCollider();
 }
 
 CState_Player_Rapier_RAttack00* CState_Player_Rapier_RAttack00::Create(CFsm* pFsm, CPlayer* pPlayer, _uint iStateNum, void* pArg)

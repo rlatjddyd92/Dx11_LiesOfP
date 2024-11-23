@@ -61,32 +61,6 @@ HRESULT CRenderer::Initialize()
 	if (FAILED(m_pGameInstance->Add_RenderTarget(TEXT("Target_BackBuffer"), (_uint)ViewportDesc.Width, (_uint)ViewportDesc.Height, DXGI_FORMAT_B8G8R8A8_UNORM, _float4(1.f, 1.f, 1.f, 1.f))))
 		return E_FAIL;
 
-	// Bloom
-	if (FAILED(m_pGameInstance->Add_RenderTarget(TEXT("Target_Bloom_DownSample0"), (_uint)ViewportDesc.Width / (_uint)m_fSamplerRatio, (_uint)ViewportDesc.Height / (_uint)m_fSamplerRatio, DXGI_FORMAT_B8G8R8A8_UNORM, _float4(0.f, 0.f, 0.f, 0.f))))
-		return E_FAIL;
-	if (FAILED(m_pGameInstance->Add_RenderTarget(TEXT("Target_Bloom_DownSample1"), (_uint)ViewportDesc.Width / (_uint)pow(m_fSamplerRatio,2), (_uint)ViewportDesc.Height / (_uint)pow(m_fSamplerRatio, 2), DXGI_FORMAT_B8G8R8A8_UNORM, _float4(0.f, 0.f, 0.f, 0.f))))
-		return E_FAIL;
-	if (FAILED(m_pGameInstance->Add_RenderTarget(TEXT("Target_Bloom_DownSample2"), (_uint)ViewportDesc.Width / (_uint)pow(m_fSamplerRatio, 3), (_uint)ViewportDesc.Height / (_uint)pow(m_fSamplerRatio, 3), DXGI_FORMAT_B8G8R8A8_UNORM, _float4(0.f, 0.f, 0.f, 0.f))))
-		return E_FAIL;
-
-	if (FAILED(m_pGameInstance->Add_RenderTarget(TEXT("Target_Bloom_BlurX0"), (_uint)ViewportDesc.Width / (_uint)pow(m_fSamplerRatio, 3), (_uint)ViewportDesc.Height / (_uint)pow(m_fSamplerRatio, 3), DXGI_FORMAT_B8G8R8A8_UNORM, _float4(0.f, 0.f, 0.f, 0.f))))
-		return E_FAIL;
-	if (FAILED(m_pGameInstance->Add_RenderTarget(TEXT("Target_Bloom_BlurXY0"), (_uint)ViewportDesc.Width / (_uint)pow(m_fSamplerRatio, 3), (_uint)ViewportDesc.Height / (_uint)pow(m_fSamplerRatio, 3), DXGI_FORMAT_B8G8R8A8_UNORM, _float4(0.f, 0.f, 0.f, 0.f))))
-		return E_FAIL;
-	if (FAILED(m_pGameInstance->Add_RenderTarget(TEXT("Target_Bloom_BlurX1"), (_uint)ViewportDesc.Width / (_uint)pow(m_fSamplerRatio, 2), (_uint)ViewportDesc.Height / (_uint)pow(m_fSamplerRatio, 2), DXGI_FORMAT_B8G8R8A8_UNORM, _float4(0.f, 0.f, 0.f, 0.f))))
-		return E_FAIL;
-	if (FAILED(m_pGameInstance->Add_RenderTarget(TEXT("Target_Bloom_BlurXY1"), (_uint)ViewportDesc.Width / (_uint)pow(m_fSamplerRatio, 2), (_uint)ViewportDesc.Height / (_uint)pow(m_fSamplerRatio, 2), DXGI_FORMAT_B8G8R8A8_UNORM, _float4(0.f, 0.f, 0.f, 0.f))))
-		return E_FAIL;
-	if (FAILED(m_pGameInstance->Add_RenderTarget(TEXT("Target_Bloom_BlurX2"), (_uint)ViewportDesc.Width / (_uint)m_fSamplerRatio, (_uint)ViewportDesc.Height / (_uint)m_fSamplerRatio, DXGI_FORMAT_B8G8R8A8_UNORM, _float4(0.f, 0.f, 0.f, 0.f))))
-		return E_FAIL;
-	if (FAILED(m_pGameInstance->Add_RenderTarget(TEXT("Target_Bloom_BlurXY2"), (_uint)ViewportDesc.Width / (_uint)m_fSamplerRatio, (_uint)ViewportDesc.Height / (_uint)m_fSamplerRatio, DXGI_FORMAT_B8G8R8A8_UNORM, _float4(0.f, 0.f, 0.f, 0.f))))
-		return E_FAIL;
-
-	if (FAILED(m_pGameInstance->Add_RenderTarget(TEXT("Target_Bloom_UpSample0"), (_uint)ViewportDesc.Width / (_uint)pow(m_fSamplerRatio, 2), (_uint)ViewportDesc.Height / (_uint)pow(m_fSamplerRatio, 2), DXGI_FORMAT_B8G8R8A8_UNORM, _float4(0.f, 0.f, 0.f, 0.f))))
-		return E_FAIL;
-	if (FAILED(m_pGameInstance->Add_RenderTarget(TEXT("Target_Bloom_UpSample1"), (_uint)ViewportDesc.Width / (_uint)m_fSamplerRatio, (_uint)ViewportDesc.Height / (_uint)m_fSamplerRatio, DXGI_FORMAT_B8G8R8A8_UNORM, _float4(0.f, 0.f, 0.f, 0.f))))
-		return E_FAIL;
-
 	if (FAILED(m_pGameInstance->Add_RenderTarget(TEXT("Target_Distortion"), (_uint)ViewportDesc.Width, (_uint)ViewportDesc.Height, DXGI_FORMAT_B8G8R8A8_UNORM, _float4(0.f, 0.f, 0.f, 0.f))))
 		return E_FAIL;
 
@@ -106,6 +80,16 @@ HRESULT CRenderer::Initialize()
 	if (FAILED(m_pGameInstance->Add_RenderTarget(TEXT("Target_DecalNormal"), (_uint)ViewportDesc.Width, (_uint)ViewportDesc.Height, DXGI_FORMAT_R16G16B16A16_UNORM, _float4(1.f, 1.f, 1.f, 1.f))))
 		return E_FAIL;
 	if (FAILED(m_pGameInstance->Add_RenderTarget(TEXT("Target_DecalARM"), (_uint)ViewportDesc.Width, (_uint)ViewportDesc.Height, DXGI_FORMAT_B8G8R8A8_UNORM, _float4(0.f, 0.f, 0.f, 0.f))))
+		return E_FAIL;
+
+	/* Effect */
+	if (FAILED(m_pGameInstance->Add_RenderTarget(TEXT("Target_Effect_Diffuse"), (_uint)ViewportDesc.Width, (_uint)ViewportDesc.Height, DXGI_FORMAT_B8G8R8A8_UNORM, _float4(0.f, 0.f, 0.f, 0.f))))
+		return E_FAIL;
+	if (FAILED(m_pGameInstance->Add_RenderTarget(TEXT("Target_Effect_Blur"), (_uint)ViewportDesc.Width, (_uint)ViewportDesc.Height, DXGI_FORMAT_B8G8R8A8_UNORM, _float4(0.f, 0.f, 0.f, 0.f))))
+		return E_FAIL;
+
+	/* Effect_Final */
+	if (FAILED(m_pGameInstance->Add_RenderTarget(TEXT("Target_Effect_Final"), (_uint)ViewportDesc.Width, (_uint)ViewportDesc.Height, DXGI_FORMAT_B8G8R8A8_UNORM, _float4(0.f, 0.f, 0.f, 0.f))))
 		return E_FAIL;
 
 	/* MRT_Priority */
@@ -169,32 +153,16 @@ HRESULT CRenderer::Initialize()
 	/* MRT_Distortion */
 	if (FAILED(m_pGameInstance->Add_MRT(TEXT("MRT_Distortion"), TEXT("Target_Distortion"))))
 		return E_FAIL;
-#pragma region Bloom
-	if (FAILED(m_pGameInstance->Add_MRT(TEXT("MRT_Bloom_DownSample0"), TEXT("Target_Bloom_DownSample0"))))
+
+	/* MRT_Effect */
+	if (FAILED(m_pGameInstance->Add_MRT(TEXT("MRT_Effect"), TEXT("Target_Effect_Diffuse"))))
 		return E_FAIL;
-	if (FAILED(m_pGameInstance->Add_MRT(TEXT("MRT_Bloom_DownSample1"), TEXT("Target_Bloom_DownSample1"))))
-		return E_FAIL;
-	if (FAILED(m_pGameInstance->Add_MRT(TEXT("MRT_Bloom_DownSample2"), TEXT("Target_Bloom_DownSample2"))))
+	if (FAILED(m_pGameInstance->Add_MRT(TEXT("MRT_Effect"), TEXT("Target_Effect_Blur"))))
 		return E_FAIL;
 
-	if (FAILED(m_pGameInstance->Add_MRT(TEXT("MRT_Bloom_BlurX0"), TEXT("Target_Bloom_BlurX0"))))
+	/* MRT_Effect_Final */
+	if (FAILED(m_pGameInstance->Add_MRT(TEXT("MRT_Effect_Final"), TEXT("Target_Effect_Final"))))
 		return E_FAIL;
-	if (FAILED(m_pGameInstance->Add_MRT(TEXT("MRT_Bloom_BlurXY0"), TEXT("Target_Bloom_BlurXY0"))))
-		return E_FAIL;
-	if (FAILED(m_pGameInstance->Add_MRT(TEXT("MRT_Bloom_BlurX1"), TEXT("Target_Bloom_BlurX1"))))
-		return E_FAIL;
-	if (FAILED(m_pGameInstance->Add_MRT(TEXT("MRT_Bloom_BlurXY1"), TEXT("Target_Bloom_BlurXY1"))))
-		return E_FAIL;
-	if (FAILED(m_pGameInstance->Add_MRT(TEXT("MRT_Bloom_BlurX2"), TEXT("Target_Bloom_BlurX2"))))
-		return E_FAIL;
-	if (FAILED(m_pGameInstance->Add_MRT(TEXT("MRT_Bloom_BlurXY2"), TEXT("Target_Bloom_BlurXY2"))))
-		return E_FAIL;
-
-	if (FAILED(m_pGameInstance->Add_MRT(TEXT("MRT_Bloom_UpSample0"), TEXT("Target_Bloom_UpSample0"))))
-		return E_FAIL;
-	if (FAILED(m_pGameInstance->Add_MRT(TEXT("MRT_Bloom_UpSample1"), TEXT("Target_Bloom_UpSample1"))))
-		return E_FAIL;
-#pragma endregion
 
 	// 캐스캐이드 오브젝트 그리기용도
 	if (FAILED(m_pGameInstance->Add_MRT(TEXT("MRT_Cascade"), TEXT("Target_Cascade"))))
@@ -204,33 +172,7 @@ HRESULT CRenderer::Initialize()
 	if (FAILED(m_pGameInstance->Add_MRT(TEXT("MRT_BackBuffer"), TEXT("Target_BackBuffer"))))
 		return E_FAIL;
 
-	m_pShader = CShader::Create(m_pDevice, m_pContext, TEXT("../Bin/ShaderFiles/Shader_Deferred.hlsl"), VTXPOSTEX::Elements, VTXPOSTEX::iNumElements);
-	if (nullptr == m_pShader)
-		return E_FAIL;
-
-	m_pSSAOShader = CShader::Create(m_pDevice, m_pContext, TEXT("../Bin/ShaderFiles/Shader_SSAO.hlsl"), VTXPOSTEX::Elements, VTXPOSTEX::iNumElements);
-	if (nullptr == m_pSSAOShader)
-		return E_FAIL;
-	m_pNoiseTexture_SSAO = CTexture::Create(m_pDevice, m_pContext, TEXT("../Bin/Resources/T_Tile_Noise_01_C_LGS.dds"), 1);
-
-	m_pDistortionShader = CShader::Create(m_pDevice, m_pContext, TEXT("../Bin/ShaderFiles/Shader_Distortion.hlsl"), VTXPOSTEX::Elements, VTXPOSTEX::iNumElements);
-	if (nullptr == m_pDistortionShader)
-		return E_FAIL;
-
-	m_pBackShader = CShader::Create(m_pDevice, m_pContext, TEXT("../Bin/ShaderFiles/Shader_Compute_Back.hlsl"));
-	if (nullptr == m_pBackShader)
-		return E_FAIL;
-
-	m_pHDRShader = CShader::Create(m_pDevice, m_pContext, TEXT("../Bin/ShaderFiles/Shader_Compute_HDR.hlsl"));
-	if (nullptr == m_pHDRShader)
-		return E_FAIL;
-
-	m_pBloomShader = CShader::Create(m_pDevice, m_pContext, TEXT("../Bin/ShaderFiles/Shader_Bloom.hlsl"), VTXPOSTEX::Elements, VTXPOSTEX::iNumElements);
-	if (nullptr == m_pBloomShader)
-		return E_FAIL;
-
-	m_pBlurShader = CShader::Create(m_pDevice, m_pContext, TEXT("../Bin/ShaderFiles/Shader_Compute_Blur.hlsl"));
-	if (nullptr == m_pBlurShader)
+	if (FAILED(Ready_Shader()))
 		return E_FAIL;
 
 	m_pVIBuffer = CVIBuffer_Rect::Create(m_pDevice, m_pContext);
@@ -251,25 +193,26 @@ HRESULT CRenderer::Initialize()
 	if (FAILED(Ready_HDR()))
 		return E_FAIL;
 
-	if(FAILED(Ready_Bloom()))
+	if (FAILED(Ready_Bloom()))
+		return E_FAIL;
+
+	if (FAILED(Ready_DOF()))
 		return E_FAIL;
 
 	if (FAILED(Ready_Desc()))
 		return E_FAIL;
 
 #ifdef _DEBUG
-	if (FAILED(m_pGameInstance->Ready_RT_Debug(TEXT("Target_Diffuse"), 100.f, 100.f, 200.f, 200.f)))
+	if (FAILED(m_pGameInstance->Ready_RT_Debug(TEXT("Target_CascadeShadow"), 100.f, 100.f, 200.f, 200.f)))
 		return E_FAIL;
 	if (FAILED(m_pGameInstance->Ready_RT_Debug(TEXT("Target_Cascade"), 100.f, 300.f, 200.f, 200.f)))
 		return E_FAIL;
-	if (FAILED(m_pGameInstance->Ready_RT_Debug(TEXT("Target_Bloom_UpSample1"), 100.f, 500.f, 200.f, 200.f)))
+	if (FAILED(m_pGameInstance->Ready_RT_Debug(TEXT("Target_DecalARM"), 100.f, 500.f, 200.f, 200.f)))
 		return E_FAIL;
 
-	//if (FAILED(m_pGameInstance->Ready_RT_Debug(TEXT("Target_ARM"), 300.f, 300.f, 200.f, 200.f)))
-	//	return E_FAIL;
-	//if (FAILED(m_pGameInstance->Ready_RT_Debug(TEXT("Target_HDR"), 300.f,500.f, 200.f, 200.f)))
-	//	return E_FAIL;
-	//if (FAILED(m_pGameInstance->Ready_RT_Debug(TEXT("Target_Shade"), 300.f,500.f, 200.f, 200.f)))
+	//if (FAILED(m_pGameInstance->Ready_RT_Debug(TEXT("Target_Bloom_UpSample0"), 300.f, 100.f, 200.f, 200.f)))
+	//	return E_FAIL;	
+	//if (FAILED(m_pGameInstance->Ready_RT_Debug(TEXT("Target_Bloom_BlurXY0"), 300.f, 300.f, 200.f, 200.f)))
 	//	return E_FAIL;
 #endif
 
@@ -294,7 +237,6 @@ HRESULT CRenderer::Draw()
 {
 	if (FAILED(Render_Priority()))
 		return E_FAIL;
-
 	if (FAILED(Render_Height()))
 		return E_FAIL;
 	if (FAILED(Render_NonBlend()))
@@ -323,14 +265,22 @@ HRESULT CRenderer::Draw()
 	if (FAILED(Render_HDR()))
 		return E_FAIL;
 
-	if (FAILED(Render_Bloom()))	// 다시 고치기
+	if (FAILED(Render_Effect()))
 		return E_FAIL;
 
+
+	if (FAILED(Render_Bloom()))	// 다시 고치기
+		return E_FAIL;
+	if (FAILED(Render_DOF())) // DOF 추가
+		return E_FAIL;
+	if (FAILED(Render_Radial()))
+		return E_FAIL;
 	if (FAILED(Render_Distortion()))
 		return E_FAIL;
 
 	if (FAILED(Render_NonLights()))
 		return E_FAIL;
+
 	if (FAILED(Render_Blend()))
 		return E_FAIL;
 
@@ -503,6 +453,9 @@ HRESULT CRenderer::Render_Lights()
 	if (FAILED(m_pShader->Bind_RawValue("g_vCamPosition", &m_pGameInstance->Get_CamPosition_Vec4(), sizeof(_float4))))
 		return E_FAIL;
 
+	if (FAILED(m_pShader->Bind_RawValue("g_fFar", &m_pGameInstance->Get_Far(), sizeof(_float))))
+		return E_FAIL;
+
 	if (FAILED(m_pGameInstance->Bind_RT_ShaderResource(m_pShader, TEXT("Target_Diffuse"), "g_DiffuseTexture")))
 		return E_FAIL;
 	if (FAILED(m_pGameInstance->Bind_RT_ShaderResource(m_pShader, TEXT("Target_ARM"), "g_ARMTexture")))
@@ -537,6 +490,9 @@ HRESULT CRenderer::Render_Deferred()
 	if (FAILED(m_pShader->Bind_Matrix("g_LightViewMatrix", &ViewMatrix)))
 		return E_FAIL;
 	if (FAILED(m_pShader->Bind_Matrix("g_LightProjMatrix", &m_pGameInstance->Get_Transform(CPipeLine::D3DTS_PROJ))))
+		return E_FAIL;
+
+	if (FAILED(m_pShader->Bind_RawValue("g_fFar", &m_pGameInstance->Get_Far(), sizeof(_float))))
 		return E_FAIL;
 
 	if (FAILED(m_pGameInstance->Bind_RT_ShaderResource(m_pShader, TEXT("Target_Priority"), "g_PriorityTexture")))
@@ -593,6 +549,8 @@ HRESULT CRenderer::Render_SSAO()
 	if (FAILED(m_pSSAOShader->Bind_Matrix("g_ProjMatrixInv", &m_pGameInstance->Get_Transform_Inverse(CPipeLine::D3DTS_PROJ))))
 		return E_FAIL;
 
+	if (FAILED(m_pSSAOShader->Bind_RawValue("g_fFar", &m_pGameInstance->Get_Far(), sizeof(_float))))
+		return E_FAIL;
 
 	if (FAILED(m_pGameInstance->Begin_MRT(TEXT("MRT_SSAO"))))
 		return E_FAIL;
@@ -706,43 +664,43 @@ HRESULT CRenderer::Render_HDR()
 	m_pContext->CSSetUnorderedAccessViews(0, 8, m_pClearUAV, nullptr);
 
 #pragma region Stagind 버퍼로 값 꺼내오기
-	D3D11_BUFFER_DESC bufferDesc = {};
-	bufferDesc.Usage = D3D11_USAGE_STAGING;          // Staging 버퍼 용도로 설정
-	bufferDesc.BindFlags = 0;                         // 바인드 플래그 없음
-	bufferDesc.CPUAccessFlags = D3D11_CPU_ACCESS_READ; // CPU 읽기 접근 허용
-	bufferDesc.MiscFlags = 0;
-	bufferDesc.StructureByteStride = sizeof(float);   // 구조체 크기
+	//D3D11_BUFFER_DESC bufferDesc = {};
+	//bufferDesc.Usage = D3D11_USAGE_STAGING;          // Staging 버퍼 용도로 설정
+	//bufferDesc.BindFlags = 0;                         // 바인드 플래그 없음
+	//bufferDesc.CPUAccessFlags = D3D11_CPU_ACCESS_READ; // CPU 읽기 접근 허용
+	//bufferDesc.MiscFlags = 0;
+	//bufferDesc.StructureByteStride = sizeof(float);   // 구조체 크기
 
-	// 복사할 데이터 크기 설정 (예: UAV에 저장된 float 개수만큼)
-	bufferDesc.ByteWidth = sizeof(float);
+	//// 복사할 데이터 크기 설정 (예: UAV에 저장된 float 개수만큼)
+	//bufferDesc.ByteWidth = sizeof(float);
 
-	ID3D11Buffer* pStagingBuffer = nullptr;
-	HRESULT hr = m_pDevice->CreateBuffer(&bufferDesc, nullptr, &pStagingBuffer);
-	if (FAILED(hr)) {
-		return hr; // 버퍼 생성 실패 시 처리
-	}
+	//ID3D11Buffer* pStagingBuffer = nullptr;
+	//HRESULT hr = m_pDevice->CreateBuffer(&bufferDesc, nullptr, &pStagingBuffer);
+	//if (FAILED(hr)) {
+	//	return hr; // 버퍼 생성 실패 시 처리
+	//}
 
-	// GPU에서 Staging 버퍼로 데이터 복사
-	ID3D11Buffer* pBuffer = m_pGameInstance->Get_Buffer(TEXT("Target_HDR1"));
-	m_pContext->CopyResource(pStagingBuffer, pBuffer); // pBuffer는 UAV 리소스
+	//// GPU에서 Staging 버퍼로 데이터 복사
+	//ID3D11Buffer* pBuffer = m_pGameInstance->Get_Buffer(TEXT("Target_HDR1"));
+	//m_pContext->CopyResource(pStagingBuffer, pBuffer); // pBuffer는 UAV 리소스
 
-	// CPU에서 Staging 버퍼 데이터 읽기
-	D3D11_MAPPED_SUBRESOURCE mappedResource;
-	hr = m_pContext->Map(pStagingBuffer, 0, D3D11_MAP_READ, 0, &mappedResource);
-	if (FAILED(hr)) {
-		pStagingBuffer->Release();
-		return hr; // Map 실패 시 처리
-	}
+	//// CPU에서 Staging 버퍼 데이터 읽기
+	//D3D11_MAPPED_SUBRESOURCE mappedResource;
+	//hr = m_pContext->Map(pStagingBuffer, 0, D3D11_MAP_READ, 0, &mappedResource);
+	//if (FAILED(hr)) {
+	//	pStagingBuffer->Release();
+	//	return hr; // Map 실패 시 처리
+	//}
 
-	float* pData = static_cast<float*>(mappedResource.pData);
-	// CPU에서 데이터를 처리 (예: 첫 번째 값 읽기)
-	float value = pData[0]; // 편균 휘도값
+	//float* pData = static_cast<float*>(mappedResource.pData);
+	//// CPU에서 데이터를 처리 (예: 첫 번째 값 읽기)
+	//float value = pData[0]; // 편균 휘도값
 
-	// Map 해제
-	m_pContext->Unmap(pStagingBuffer, 0);
+	//// Map 해제
+	//m_pContext->Unmap(pStagingBuffer, 0);
 
-	// Staging 버퍼 해제
-	pStagingBuffer->Release();
+	//// Staging 버퍼 해제
+	//pStagingBuffer->Release();
 #pragma endregion
 
 	// 톤 매핑 할거임
@@ -804,7 +762,7 @@ HRESULT CRenderer::Render_Bloom_Compute()
 	if (FAILED(m_pBloomShader->Bind_RawValue("g_vRes", vRes, sizeof(_uint) * 2)))
 		return E_FAIL;
 
-	if (FAILED(m_pBloomShader->Bind_RawValue("g_fBloomThreshold", &m_tBloom.fBloomThreshold, sizeof(_float))))
+	if (FAILED(m_pBloomShader->Bind_RawValue("g_fBloomThreshold", &m_tBloom.fThreshold, sizeof(_float))))
 		return E_FAIL;
 
 	if (FAILED(m_pGameInstance->Bind_RT_ShaderResource(m_pBloomShader, TEXT("Target_HDR1"), "AvgLum"))) // 휘도값
@@ -836,15 +794,20 @@ HRESULT CRenderer::Render_Bloom_Compute()
 		return E_FAIL;
 	if (FAILED(m_pGameInstance->BInd_RT_UnorderedView(m_pBlurShader, TEXT("Target_Bloom2"), "g_OutputTexture"))) 
 		return E_FAIL;
+
+	_float2 vWinSize = { m_vWinSize.x / 4, m_vWinSize.y / 4 };
+	if (FAILED(m_pBlurShader->Bind_RawValue("g_vWinSize", &vWinSize, sizeof(_float2))))
+		return E_FAIL;
+
 	m_pBlurShader->Begin(1);
 	m_pContext->Dispatch(static_cast <_uint> (ceil(1280.f / 4.f / (128.f - 12.f))), static_cast <_uint> (ceil(720.f / 4.f)), 1);
 	m_pContext-> CSSetShaderResources(0, 128, m_pClearSRV);
 	m_pContext-> CSSetUnorderedAccessViews(0, 8, m_pClearUAV, nullptr);
 
 	//세로 블러
-	if (FAILED(m_pGameInstance->Bind_RT_ShaderResource(m_pBlurShader, TEXT("Target_Bloom2"), "g_InputTexture"))) // 휘도값
+	if (FAILED(m_pGameInstance->Bind_RT_ShaderResource(m_pBlurShader, TEXT("Target_Bloom2"), "g_InputTexture")))
 		return E_FAIL;
-	if (FAILED(m_pGameInstance->BInd_RT_UnorderedView(m_pBlurShader, TEXT("Target_Bloom1"), "g_OutputTexture"))) // 휘도값
+	if (FAILED(m_pGameInstance->BInd_RT_UnorderedView(m_pBlurShader, TEXT("Target_Bloom1"), "g_OutputTexture")))
 		return E_FAIL;
 	m_pBlurShader->Begin(2);
 	m_pContext->Dispatch(static_cast <_uint> (ceil(1280.f / 4.f)), static_cast <_uint> (ceil(720.f / 4.f / (128.f - 12.f))), 1);
@@ -852,8 +815,7 @@ HRESULT CRenderer::Render_Bloom_Compute()
 	m_pContext->CSSetUnorderedAccessViews(0, 8, m_pClearUAV, nullptr);
 
 	// 합쳐
-	_uint vWinSize[2] = { _uint(1280.f), _uint(720.f) };
-	m_pBackShader->Bind_RawValue("g_vRes", vWinSize, sizeof(_uint) * 2);
+	m_pBackShader->Bind_RawValue("g_vRes", &m_vWinSize, sizeof(_uint) * 2);
 
 	if (FAILED(m_pGameInstance->Bind_RT_ShaderResource(m_pBackShader, TEXT("Target_Bloom1"), "g_InputBloomTexture"))) 
 		return E_FAIL;
@@ -891,7 +853,7 @@ HRESULT CRenderer::Render_Bloom_Compute()
 
 HRESULT CRenderer::Render_Bloom()
 {
-	if (!m_isUseBloom)
+	if (!m_tBloom.isOnBloom)
 	{
 		m_pGameInstance->Clear_MRT(TEXT("MRT_Bloom_BlurXY2"));
 
@@ -906,6 +868,9 @@ HRESULT CRenderer::Render_Bloom()
 	if (FAILED(m_pBloomShader->Bind_Matrix("g_ViewMatrix", &m_ViewMatrix)))
 		return E_FAIL;
 	if (FAILED(m_pBloomShader->Bind_Matrix("g_ProjMatrix", &m_ProjMatrix)))
+		return E_FAIL;
+
+	if(FAILED(m_pBloomShader->Bind_RawValue("g_fThreshold",&m_tBloom.fThreshold, sizeof(_float))))
 		return E_FAIL;
 
 	D3D11_VIEWPORT      ViewportDesc;
@@ -928,7 +893,11 @@ HRESULT CRenderer::Render_Bloom()
 
 	m_pContext->RSSetViewports(iNumViewports, &ViewportDesc);
 
-	if (FAILED(m_pGameInstance->Bind_RT_ShaderResource(m_pBloomShader, TEXT("Target_LDR"), "g_DownSampleTexture")))
+	if (FAILED(m_pGameInstance->Bind_RT_ShaderResource(m_pBloomShader, TEXT("Target_Effect_Blur"), "g_DownSampleTexture")))
+		return E_FAIL;
+
+	_Vec2 vScreenSize = _Vec2((_float)(fInitWidth), ViewportDesc.Height = (_float)(fInitHeight));
+	if (FAILED(m_pBloomShader->Bind_RawValue("g_vScreenSize", &vScreenSize, sizeof(_Vec2))))
 		return E_FAIL;
 
 	if (FAILED(m_pBloomShader->Bind_RawValue("g_isSelectBright", &isSelectBright, sizeof(_bool))))
@@ -954,27 +923,13 @@ HRESULT CRenderer::Render_Bloom()
 	if (FAILED(m_pGameInstance->Bind_RT_ShaderResource(m_pBloomShader, TEXT("Target_Bloom_DownSample0"), "g_DownSampleTexture")))
 		return E_FAIL;
 
+	vScreenSize = _Vec2((_float)(fInitWidth / m_fSamplerRatio), ViewportDesc.Height = (_float)(fInitHeight / m_fSamplerRatio));
+	if (FAILED(m_pBloomShader->Bind_RawValue("g_vScreenSize", &vScreenSize, sizeof(_Vec2))))
+		return E_FAIL;
+
 	if (FAILED(m_pBloomShader->Bind_RawValue("g_isSelectBright", &isSelectBright, sizeof(_bool))))
 		return E_FAIL;
 
-	m_pBloomShader->Begin(1);
-	m_pVIBuffer->Bind_Buffers();
-	m_pVIBuffer->Render();
-
-	if (FAILED(m_pGameInstance->End_MRT()))
-		return E_FAIL;
-
-	// 다운 샘플 3번
-	if (FAILED(m_pGameInstance->Begin_MRT(TEXT("MRT_Bloom_DownSample2"), m_pDownSampleDepthStencilView2)))
-		return E_FAIL;
-
-	ViewportDesc.Width = (_float)(fInitWidth / pow(m_fSamplerRatio, 3));
-	ViewportDesc.Height = (_float)(fInitHeight / pow(m_fSamplerRatio, 3));
-
-	m_pContext->RSSetViewports(iNumViewports, &ViewportDesc);
-
-	if (FAILED(m_pGameInstance->Bind_RT_ShaderResource(m_pBloomShader, TEXT("Target_Bloom_DownSample1"), "g_DownSampleTexture")))
-		return E_FAIL;
 
 	m_pBloomShader->Begin(1);
 	m_pVIBuffer->Bind_Buffers();
@@ -986,67 +941,10 @@ HRESULT CRenderer::Render_Bloom()
 
 #pragma region 블러 업샘플링1
 	// 블러X
-	if (FAILED(m_pGameInstance->Begin_MRT(TEXT("MRT_Bloom_BlurX0"), m_pDownSampleDepthStencilView2)))
+	if (FAILED(m_pGameInstance->Begin_MRT(TEXT("MRT_Bloom_BlurX0"), m_pDownSampleDepthStencilView1)))
 		return E_FAIL;
 
-	if (FAILED(m_pGameInstance->Bind_RT_ShaderResource(m_pBloomShader, TEXT("Target_Bloom_DownSample2"), "g_DownSampleTexture")))
-		return E_FAIL;
-
-	_Vec2 vScreenSize = _Vec2((_float)(fInitWidth / pow(m_fSamplerRatio, 3)), ViewportDesc.Height = (_float)(fInitHeight / pow(m_fSamplerRatio, 3)));
-	if (FAILED(m_pBloomShader->Bind_RawValue("g_vScreenSize", &vScreenSize, sizeof(_Vec2))))
-		return E_FAIL;
-
-	if (FAILED((m_pBloomShader->Begin(2))))
-		return E_FAIL;
-
-	m_pVIBuffer->Bind_Buffers();
-	m_pVIBuffer->Render();
-
-	if (FAILED(m_pGameInstance->End_MRT()))
-		return E_FAIL;
-
-	// 블러Y
-	if (FAILED(m_pGameInstance->Begin_MRT(TEXT("MRT_Bloom_BlurXY0"), m_pDownSampleDepthStencilView2)))
-		return E_FAIL;
-
-	if (FAILED(m_pGameInstance->Bind_RT_ShaderResource(m_pBloomShader, TEXT("Target_Bloom_BlurX0"), "g_DownSampleTexture")))
-		return E_FAIL;
-
-	m_pBloomShader->Begin(3);
-	m_pVIBuffer->Bind_Buffers();
-	m_pVIBuffer->Render();
-
-	if (FAILED(m_pGameInstance->End_MRT()))
-		return E_FAIL;
-
-	// 업 샘플
-	if (FAILED(m_pGameInstance->Begin_MRT(TEXT("MRT_Bloom_UpSample0"), m_pDownSampleDepthStencilView1)))
-		return E_FAIL;
-
-	ViewportDesc.Width = (_float)(fInitWidth / pow(m_fSamplerRatio, 2));
-	ViewportDesc.Height = (_float)(fInitHeight / pow(m_fSamplerRatio, 2));
-
-	m_pContext->RSSetViewports(iNumViewports, &ViewportDesc);
-
-	if (FAILED(m_pGameInstance->Bind_RT_ShaderResource(m_pBloomShader, TEXT("Target_Bloom_BlurXY0"), "g_BlurTexture")))
-		return E_FAIL;
-	if (FAILED(m_pGameInstance->Bind_RT_ShaderResource(m_pBloomShader, TEXT("Target_Bloom_DownSample2"), "g_DownSampleTexture")))
-		return E_FAIL;
-
-	m_pBloomShader->Begin(4);
-	m_pVIBuffer->Bind_Buffers();
-	m_pVIBuffer->Render();
-
-	if (FAILED(m_pGameInstance->End_MRT()))
-		return E_FAIL;
-#pragma endregion
-
-#pragma region 블러 업샘플링2
-	// 블러X
-	if (FAILED(m_pGameInstance->Begin_MRT(TEXT("MRT_Bloom_BlurX1"), m_pDownSampleDepthStencilView1)))
-		return E_FAIL;
-
-	if (FAILED(m_pGameInstance->Bind_RT_ShaderResource(m_pBloomShader, TEXT("Target_Bloom_UpSample0"), "g_DownSampleTexture")))
+	if (FAILED(m_pGameInstance->Bind_RT_ShaderResource(m_pBloomShader, TEXT("Target_Bloom_DownSample1"), "g_DownSampleTexture")))
 		return E_FAIL;
 
 	vScreenSize = _Vec2((_float)(fInitWidth / pow(m_fSamplerRatio, 2)), ViewportDesc.Height = (_float)(fInitHeight / pow(m_fSamplerRatio, 2)));
@@ -1063,10 +961,10 @@ HRESULT CRenderer::Render_Bloom()
 		return E_FAIL;
 
 	// 블러Y
-	if (FAILED(m_pGameInstance->Begin_MRT(TEXT("MRT_Bloom_BlurXY1"), m_pDownSampleDepthStencilView1)))
+	if (FAILED(m_pGameInstance->Begin_MRT(TEXT("MRT_Bloom_BlurXY0"), m_pDownSampleDepthStencilView1)))
 		return E_FAIL;
 
-	if (FAILED(m_pGameInstance->Bind_RT_ShaderResource(m_pBloomShader, TEXT("Target_Bloom_BlurX1"), "g_DownSampleTexture")))
+	if (FAILED(m_pGameInstance->Bind_RT_ShaderResource(m_pBloomShader, TEXT("Target_Bloom_BlurX0"), "g_DownSampleTexture")))
 		return E_FAIL;
 
 	m_pBloomShader->Begin(3);
@@ -1077,7 +975,7 @@ HRESULT CRenderer::Render_Bloom()
 		return E_FAIL;
 
 	// 업 샘플
-	if (FAILED(m_pGameInstance->Begin_MRT(TEXT("MRT_Bloom_UpSample1"), m_pDownSampleDepthStencilView0)))
+	if (FAILED(m_pGameInstance->Begin_MRT(TEXT("MRT_Bloom_UpSample0"), m_pDownSampleDepthStencilView0)))
 		return E_FAIL;
 
 	ViewportDesc.Width = (_float)(fInitWidth / m_fSamplerRatio);
@@ -1085,9 +983,9 @@ HRESULT CRenderer::Render_Bloom()
 
 	m_pContext->RSSetViewports(iNumViewports, &ViewportDesc);
 
-	if (FAILED(m_pGameInstance->Bind_RT_ShaderResource(m_pBloomShader, TEXT("Target_Bloom_BlurXY1"), "g_BlurTexture")))
+	if (FAILED(m_pGameInstance->Bind_RT_ShaderResource(m_pBloomShader, TEXT("Target_Bloom_BlurXY0"), "g_BlurTexture")))
 		return E_FAIL;
-	if (FAILED(m_pGameInstance->Bind_RT_ShaderResource(m_pBloomShader, TEXT("Target_Bloom_UpSample0"), "g_DownSampleTexture")))
+	if (FAILED(m_pGameInstance->Bind_RT_ShaderResource(m_pBloomShader, TEXT("Target_Bloom_DownSample1"), "g_DownSampleTexture")))
 		return E_FAIL;
 
 	m_pBloomShader->Begin(4);
@@ -1100,10 +998,10 @@ HRESULT CRenderer::Render_Bloom()
 
 #pragma region 마지막 블러 이후 원본이랑 섞기
 	// 블러X
-	if (FAILED(m_pGameInstance->Begin_MRT(TEXT("MRT_Bloom_BlurX2"), m_pDownSampleDepthStencilView0)))
+	if (FAILED(m_pGameInstance->Begin_MRT(TEXT("MRT_Bloom_BlurX1"), m_pDownSampleDepthStencilView0)))
 		return E_FAIL;
 
-	if (FAILED(m_pGameInstance->Bind_RT_ShaderResource(m_pBloomShader, TEXT("Target_Bloom_UpSample1"), "g_DownSampleTexture")))
+	if (FAILED(m_pGameInstance->Bind_RT_ShaderResource(m_pBloomShader, TEXT("Target_Bloom_UpSample0"), "g_DownSampleTexture")))
 		return E_FAIL;
 
 	vScreenSize = _Vec2((_float)(fInitWidth / m_fSamplerRatio), ViewportDesc.Height = (_float)(fInitHeight / m_fSamplerRatio));
@@ -1120,10 +1018,10 @@ HRESULT CRenderer::Render_Bloom()
 		return E_FAIL;
 
 	// 블러Y
-	if (FAILED(m_pGameInstance->Begin_MRT(TEXT("MRT_Bloom_BlurXY2"), m_pDownSampleDepthStencilView0)))
+	if (FAILED(m_pGameInstance->Begin_MRT(TEXT("MRT_Bloom_BlurXY1"), m_pDownSampleDepthStencilView0)))
 		return E_FAIL;
 
-	if (FAILED(m_pGameInstance->Bind_RT_ShaderResource(m_pBloomShader, TEXT("Target_Bloom_BlurX2"), "g_DownSampleTexture")))
+	if (FAILED(m_pGameInstance->Bind_RT_ShaderResource(m_pBloomShader, TEXT("Target_Bloom_BlurX1"), "g_DownSampleTexture")))
 		return E_FAIL;
 
 	m_pBloomShader->Begin(3);
@@ -1139,6 +1037,182 @@ HRESULT CRenderer::Render_Bloom()
 	ViewportDesc.Height = fInitHeight;
 
 	m_pContext->RSSetViewports(iNumViewports, &ViewportDesc);
+
+	if (FAILED(m_pPostProcessShader->Bind_Matrix("g_WorldMatrix", &m_WorldMatrix)))
+		return E_FAIL;
+	if (FAILED(m_pPostProcessShader->Bind_Matrix("g_ViewMatrix", &m_ViewMatrix)))
+		return E_FAIL;
+	if (FAILED(m_pPostProcessShader->Bind_Matrix("g_ProjMatrix", &m_ProjMatrix)))
+		return E_FAIL;
+
+	//if (FAILED(Copy_BackBuffer()))
+	//	return E_FAIL;
+
+	if (FAILED(m_pGameInstance->Bind_RT_ShaderResource(m_pPostProcessShader, TEXT("Target_BackBuffer"), "g_BackTexture")))
+		return E_FAIL;
+	if (FAILED(m_pGameInstance->Bind_RT_ShaderResource(m_pPostProcessShader, TEXT("Target_Bloom_BlurXY1"), "g_BloomTexture")))
+		return E_FAIL;
+
+	m_pPostProcessShader->Begin(4);
+	m_pVIBuffer->Bind_Buffers();
+	m_pVIBuffer->Render();
+
+	return S_OK;
+}
+
+HRESULT CRenderer::Render_DOF()
+{	
+	if (m_tDOF.isOnDOF || m_tRadial.isOnRadial)
+	{
+		if (FAILED(Copy_BackBuffer()))
+			return E_FAIL;
+
+		// 다운 샘플
+		if (FAILED(m_pGameInstance->Bind_RT_ShaderResource(m_pBlurShader, TEXT("Target_BackBuffer"), "g_InputTexture")))
+			return E_FAIL;
+		if (FAILED(m_pGameInstance->BInd_RT_UnorderedView(m_pBlurShader, TEXT("Target_DOF0"), "g_OutputTexture")))
+			return E_FAIL;
+
+		m_pBlurShader->Begin(0);
+		m_pContext->Dispatch(static_cast<_uint>(ceil(1280.f / 4.f / 32.f)), static_cast<_uint>(ceil(720.f / 4.f / 32.f)), 1);
+		m_pContext->CSSetShaderResources(0, 128, m_pClearSRV);
+		m_pContext->CSSetUnorderedAccessViews(0, 8, m_pClearUAV, nullptr);
+
+		// 가로 블러
+		if (FAILED(m_pGameInstance->Bind_RT_ShaderResource(m_pBlurShader, TEXT("Target_DOF0"), "g_InputTexture")))
+			return E_FAIL;
+		if (FAILED(m_pGameInstance->BInd_RT_UnorderedView(m_pBlurShader, TEXT("Target_DOF1"), "g_OutputTexture")))
+			return E_FAIL;
+
+		_float2 vWinSize = { m_vWinSize.x / 4, m_vWinSize.y / 4 };
+		if (FAILED(m_pBlurShader->Bind_RawValue("g_vWinSize", &vWinSize, sizeof(_float2))))
+			return E_FAIL;
+
+		m_pBlurShader->Begin(1);
+		m_pContext->Dispatch(static_cast <_uint> (ceil(1280.f / 4.f / (128.f - 12.f))), static_cast <_uint> (ceil(720.f / 4.f)), 1);
+		m_pContext->CSSetShaderResources(0, 128, m_pClearSRV);
+		m_pContext->CSSetUnorderedAccessViews(0, 8, m_pClearUAV, nullptr);
+
+		//세로 블러
+		if (FAILED(m_pGameInstance->Bind_RT_ShaderResource(m_pBlurShader, TEXT("Target_DOF1"), "g_InputTexture")))
+			return E_FAIL;
+		if (FAILED(m_pGameInstance->BInd_RT_UnorderedView(m_pBlurShader, TEXT("Target_DOF2"), "g_OutputTexture")))
+			return E_FAIL;
+		m_pBlurShader->Begin(2);
+		m_pContext->Dispatch(static_cast <_uint> (ceil(1280.f / 4.f)), static_cast <_uint> (ceil(720.f / 4.f / (128.f - 12.f))), 1);
+		m_pContext->CSSetShaderResources(0, 128, m_pClearSRV);
+		m_pContext->CSSetUnorderedAccessViews(0, 8, m_pClearUAV, nullptr);
+	}
+
+	if (!m_tDOF.isOnDOF)
+		return S_OK;
+
+	//if (FAILED(m_pGameInstance->Begin_MRT(TEXT("MRT_DOF_Final"))))
+	//	return E_FAIL;
+
+	if (FAILED(m_pPostProcessShader->Bind_Matrix("g_WorldMatrix", &m_WorldMatrix)))
+		return E_FAIL;
+	if (FAILED(m_pPostProcessShader->Bind_Matrix("g_ViewMatrix", &m_ViewMatrix)))
+		return E_FAIL;
+	if (FAILED(m_pPostProcessShader->Bind_Matrix("g_ProjMatrix", &m_ProjMatrix)))
+		return E_FAIL;
+
+	if (FAILED(m_pPostProcessShader->Bind_RawValue("g_fFar", &m_pGameInstance->Get_Far(), sizeof(_float))))
+		return E_FAIL;
+
+	if (FAILED(m_pGameInstance->Bind_RT_ShaderResource(m_pPostProcessShader, TEXT("Target_Depth"), "g_DepthTexture")))
+		return E_FAIL;
+	if (FAILED(m_pGameInstance->Bind_RT_ShaderResource(m_pPostProcessShader, TEXT("Target_BackBuffer"), "g_BackTexture")))
+		return E_FAIL;
+	if (FAILED(m_pGameInstance->Bind_RT_ShaderResource(m_pPostProcessShader, TEXT("Target_DOF2"), "g_DofBlurTexture")))
+		return E_FAIL;
+
+	m_pPostProcessShader->Bind_RawValue("g_fFocus", &m_tDOF.fDOF, sizeof(_float));
+
+	m_pPostProcessShader->Begin(0);
+	m_pVIBuffer->Bind_Buffers();
+	m_pVIBuffer->Render();
+
+	return S_OK;
+}
+
+HRESULT CRenderer::Render_Radial()
+{
+	if (!m_tRadial.isOnRadial)
+		return S_OK;
+
+	if (FAILED(m_pPostProcessShader->Bind_Matrix("g_WorldMatrix", &m_WorldMatrix)))
+		return E_FAIL;
+	if (FAILED(m_pPostProcessShader->Bind_Matrix("g_ViewMatrix", &m_ViewMatrix)))
+		return E_FAIL;
+	if (FAILED(m_pPostProcessShader->Bind_Matrix("g_ProjMatrix", &m_ProjMatrix)))
+		return E_FAIL;
+
+	if (FAILED(m_pPostProcessShader->Bind_RawValue("g_vRadialCenterPos", &m_tRadial.vRadialCenterPos, sizeof(_float2))))
+		return E_FAIL;
+	if (FAILED(m_pPostProcessShader->Bind_RawValue("g_fRadius", &m_tRadial.fRadius, sizeof(_float))))
+		return E_FAIL;
+	if (FAILED(m_pPostProcessShader->Bind_RawValue("g_RadialPower", &m_tRadial.fRadialPower, sizeof(_float))))
+		return E_FAIL;
+
+	if (FAILED(m_pGameInstance->Bind_RT_ShaderResource(m_pPostProcessShader, TEXT("Target_Depth"), "g_DepthTexture")))
+		return E_FAIL;
+	if (FAILED(m_pGameInstance->Bind_RT_ShaderResource(m_pPostProcessShader, TEXT("Target_BackBuffer"), "g_BackTexture")))
+		return E_FAIL;
+	if (FAILED(m_pGameInstance->Bind_RT_ShaderResource(m_pPostProcessShader, TEXT("Target_DOF2"), "g_DofBlurTexture")))
+		return E_FAIL;
+
+	m_pPostProcessShader->Begin(2);
+	m_pVIBuffer->Bind_Buffers();
+	m_pVIBuffer->Render();
+
+	
+	return S_OK;
+}
+
+HRESULT CRenderer::Render_Effect()
+{
+	if (FAILED(m_pGameInstance->Begin_MRT(TEXT("MRT_Effect"))))
+		return E_FAIL;
+
+	for (auto& pGameObject : m_RenderObjects[RG_EFFECT])
+	{
+		if (nullptr != pGameObject)
+			pGameObject->Render();
+
+		Safe_Release(pGameObject);
+	}
+	m_RenderObjects[RG_EFFECT].clear();
+
+	if (FAILED(m_pGameInstance->End_MRT()))
+		return E_FAIL;
+
+	if (FAILED(m_pPostProcessShader->Bind_Matrix("g_WorldMatrix", &m_WorldMatrix)))
+		return E_FAIL;
+	if (FAILED(m_pPostProcessShader->Bind_Matrix("g_ViewMatrix", &m_ViewMatrix)))
+		return E_FAIL;
+	if (FAILED(m_pPostProcessShader->Bind_Matrix("g_ProjMatrix", &m_ProjMatrix)))
+		return E_FAIL;
+
+	if (FAILED(m_pGameInstance->Begin_MRT(TEXT("MRT_Effect_Final"))))
+		return E_FAIL;
+	if (FAILED(m_pGameInstance->End_MRT()))
+		return E_FAIL;
+
+	//if (FAILED(Copy_BackBuffer()))
+	//	return E_FAIL;
+
+	if (FAILED(m_pGameInstance->Bind_RT_ShaderResource(m_pPostProcessShader, TEXT("Target_Effect_Diffuse"), "g_EffectTexture")))
+		return E_FAIL;
+	if (FAILED(m_pGameInstance->Bind_RT_ShaderResource(m_pPostProcessShader, TEXT("Target_Effect_Blur"), "g_EffectBlur")))
+		return E_FAIL;
+	if (FAILED(m_pGameInstance->Bind_RT_ShaderResource(m_pPostProcessShader, TEXT("Target_LDR"), "g_BackTexture")))
+		return E_FAIL;
+	
+	m_pPostProcessShader->Begin(3);
+	m_pVIBuffer->Bind_Buffers();
+	m_pVIBuffer->Render();
+
 
 	return S_OK;
 }
@@ -1571,14 +1645,68 @@ HRESULT CRenderer::Ready_HDR()
 
 	if (FAILED(m_pGameInstance->Add_RenderTarget_For_Desc(TEXT("Target_Test1"), &BufferDesc, nullptr, &SRVDesc, &UAVDesc, _float4(0.f, 0.f, 0.f, 0.f))))
 		return E_FAIL;
+
 	m_tHDR.isOnHDR = true;
-	m_tHDR.fMiddleGrey = 1.4f;
-	m_tHDR.fLumWhiteSqr = 2.3f;
+	m_tHDR.fMiddleGrey = 0.95f;
+	m_tHDR.fLumWhiteSqr = 0.8f;
 
 	return S_OK;
 }
 
 HRESULT CRenderer::Ready_Bloom()
+{
+	_uint			iNumViewports = { 1 };
+
+	D3D11_VIEWPORT	ViewportDesc{};
+
+	m_pContext->RSGetViewports(&iNumViewports, &ViewportDesc);
+
+	// Bloom
+	if (FAILED(m_pGameInstance->Add_RenderTarget(TEXT("Target_Bloom_DownSample0"), (_uint)ViewportDesc.Width / (_uint)m_fSamplerRatio, (_uint)ViewportDesc.Height / (_uint)m_fSamplerRatio, DXGI_FORMAT_B8G8R8A8_UNORM, _float4(0.f, 0.f, 0.f, 0.f))))
+		return E_FAIL;
+	if (FAILED(m_pGameInstance->Add_RenderTarget(TEXT("Target_Bloom_DownSample1"), (_uint)ViewportDesc.Width / (_uint)pow(m_fSamplerRatio, 2), (_uint)ViewportDesc.Height / (_uint)pow(m_fSamplerRatio, 2), DXGI_FORMAT_B8G8R8A8_UNORM, _float4(0.f, 0.f, 0.f, 0.f))))
+		return E_FAIL;
+
+	if (FAILED(m_pGameInstance->Add_RenderTarget(TEXT("Target_Bloom_BlurX0"), (_uint)ViewportDesc.Width / (_uint)pow(m_fSamplerRatio, 2), (_uint)ViewportDesc.Height / (_uint)pow(m_fSamplerRatio, 2), DXGI_FORMAT_B8G8R8A8_UNORM, _float4(0.f, 0.f, 0.f, 0.f))))
+		return E_FAIL;
+	if (FAILED(m_pGameInstance->Add_RenderTarget(TEXT("Target_Bloom_BlurXY0"), (_uint)ViewportDesc.Width / (_uint)pow(m_fSamplerRatio, 2), (_uint)ViewportDesc.Height / (_uint)pow(m_fSamplerRatio, 2), DXGI_FORMAT_B8G8R8A8_UNORM, _float4(0.f, 0.f, 0.f, 0.f))))
+		return E_FAIL;
+	if (FAILED(m_pGameInstance->Add_RenderTarget(TEXT("Target_Bloom_BlurX1"), (_uint)ViewportDesc.Width / (_uint)m_fSamplerRatio, (_uint)ViewportDesc.Height / (_uint)m_fSamplerRatio, DXGI_FORMAT_B8G8R8A8_UNORM, _float4(0.f, 0.f, 0.f, 0.f))))
+		return E_FAIL;
+	if (FAILED(m_pGameInstance->Add_RenderTarget(TEXT("Target_Bloom_BlurXY1"), (_uint)ViewportDesc.Width / (_uint)m_fSamplerRatio, (_uint)ViewportDesc.Height / (_uint)m_fSamplerRatio, DXGI_FORMAT_B8G8R8A8_UNORM, _float4(0.f, 0.f, 0.f, 0.f))))
+		return E_FAIL;
+
+	//if (FAILED(m_pGameInstance->Add_RenderTarget(TEXT("Target_Bloom_UpSample0"), (_uint)ViewportDesc.Width / (_uint)pow(m_fSamplerRatio, 2), (_uint)ViewportDesc.Height / (_uint)pow(m_fSamplerRatio, 2), DXGI_FORMAT_B8G8R8A8_UNORM, _float4(0.f, 0.f, 0.f, 0.f))))
+	//	return E_FAIL;
+	if (FAILED(m_pGameInstance->Add_RenderTarget(TEXT("Target_Bloom_UpSample0"), (_uint)ViewportDesc.Width / (_uint)m_fSamplerRatio, (_uint)ViewportDesc.Height / (_uint)m_fSamplerRatio, DXGI_FORMAT_B8G8R8A8_UNORM, _float4(0.f, 0.f, 0.f, 0.f))))
+		return E_FAIL;
+
+	if (FAILED(m_pGameInstance->Add_MRT(TEXT("MRT_Bloom_DownSample0"), TEXT("Target_Bloom_DownSample0"))))
+		return E_FAIL;
+	if (FAILED(m_pGameInstance->Add_MRT(TEXT("MRT_Bloom_DownSample1"), TEXT("Target_Bloom_DownSample1"))))
+		return E_FAIL;
+
+	if (FAILED(m_pGameInstance->Add_MRT(TEXT("MRT_Bloom_BlurX0"), TEXT("Target_Bloom_BlurX0"))))
+		return E_FAIL;
+	if (FAILED(m_pGameInstance->Add_MRT(TEXT("MRT_Bloom_BlurXY0"), TEXT("Target_Bloom_BlurXY0"))))
+		return E_FAIL;
+	if (FAILED(m_pGameInstance->Add_MRT(TEXT("MRT_Bloom_BlurX1"), TEXT("Target_Bloom_BlurX1"))))
+		return E_FAIL;
+	if (FAILED(m_pGameInstance->Add_MRT(TEXT("MRT_Bloom_BlurXY1"), TEXT("Target_Bloom_BlurXY1"))))
+		return E_FAIL;
+
+	if (FAILED(m_pGameInstance->Add_MRT(TEXT("MRT_Bloom_UpSample0"), TEXT("Target_Bloom_UpSample0"))))
+		return E_FAIL;
+	//if (FAILED(m_pGameInstance->Add_MRT(TEXT("MRT_Bloom_UpSample1"), TEXT("Target_Bloom_UpSample1"))))
+	//	return E_FAIL;
+
+	m_tBloom.fThreshold = 1.f;
+	m_tBloom.isOnBloom = true;
+
+	return S_OK;
+}
+
+HRESULT CRenderer::Ready_DOF()
 {
 	D3D11_VIEWPORT		ViewportDesc;
 
@@ -1589,7 +1717,7 @@ HRESULT CRenderer::Ready_Bloom()
 
 	D3D11_TEXTURE2D_DESC TextureDesc{};
 	ZeroMemory(&TextureDesc, sizeof(D3D11_TEXTURE2D_DESC));
-	TextureDesc.Width = (_uint)(ViewportDesc.Width) ;
+	TextureDesc.Width = (_uint)(ViewportDesc.Width);
 	TextureDesc.Height = (_uint)(ViewportDesc.Height);
 	TextureDesc.MipLevels = 1;
 	TextureDesc.ArraySize = 1;
@@ -1601,27 +1729,32 @@ HRESULT CRenderer::Ready_Bloom()
 	TextureDesc.CPUAccessFlags = 0;
 	TextureDesc.MiscFlags = 0;
 
-	if (FAILED(m_pGameInstance->Add_RenderTarget_For_Desc(TEXT("Target_Bloom0"), nullptr, &TextureDesc, nullptr, nullptr, _float4(0.f, 0.f, 0.f, 0.f))))
-		return E_FAIL;
-	if (FAILED(m_pGameInstance->Add_MRT(TEXT("MRT_Bloom0"), TEXT("Target_Bloom0"))))
+	if (FAILED(m_pGameInstance->Add_RenderTarget_For_Desc(TEXT("Target_DOF0"), nullptr, &TextureDesc, nullptr, nullptr, _float4(0.f, 0.f, 0.f, 0.f))))
 		return E_FAIL;
 
 	TextureDesc.Width = (_uint)(ViewportDesc.Width / 4);
 	TextureDesc.Height = (_uint)(ViewportDesc.Height / 4);
-	if (FAILED(m_pGameInstance->Add_RenderTarget_For_Desc(TEXT("Target_Bloom1"), nullptr, &TextureDesc, nullptr, nullptr, _float4(0.f, 0.f, 0.f, 0.f))))
-		return E_FAIL;
-	if (FAILED(m_pGameInstance->Add_MRT(TEXT("MRT_Bloom1"), TEXT("Target_Bloom1"))))
+	if (FAILED(m_pGameInstance->Add_RenderTarget_For_Desc(TEXT("Target_DOF1"), nullptr, &TextureDesc, nullptr, nullptr, _float4(0.f, 0.f, 0.f, 0.f))))
 		return E_FAIL;
 
 	TextureDesc.Width = (_uint)(ViewportDesc.Width / 4);
 	TextureDesc.Height = (_uint)(ViewportDesc.Height / 4);
-	if (FAILED(m_pGameInstance->Add_RenderTarget_For_Desc(TEXT("Target_Bloom2"), nullptr, &TextureDesc, nullptr, nullptr, _float4(0.f, 0.f, 0.f, 0.f))))
-		return E_FAIL;
-	if (FAILED(m_pGameInstance->Add_MRT(TEXT("MRT_Bloom2"), TEXT("Target_Bloom2"))))
+	if (FAILED(m_pGameInstance->Add_RenderTarget_For_Desc(TEXT("Target_DOF2"), nullptr, &TextureDesc, nullptr, nullptr, _float4(0.f, 0.f, 0.f, 0.f))))
 		return E_FAIL;
 
-	m_tBloom.fBloomThreshold = 1.f;
-	m_tBloom.isOnBloom = true;
+	TextureDesc.Width = (_uint)(ViewportDesc.Width);
+	TextureDesc.Height = (_uint)(ViewportDesc.Height);
+	if (FAILED(m_pGameInstance->Add_RenderTarget_For_Desc(TEXT("Target_DOF_Final"), nullptr, &TextureDesc, nullptr, nullptr, _float4(0.f, 0.f, 0.f, 0.f))))
+		return E_FAIL;
+
+	if (FAILED(m_pGameInstance->Add_MRT(TEXT("MRT_DOF0"), TEXT("Target_DOF0"))))
+		return E_FAIL;
+	if (FAILED(m_pGameInstance->Add_MRT(TEXT("MRT_DOF1"), TEXT("Target_DOF1"))))
+		return E_FAIL;
+	if (FAILED(m_pGameInstance->Add_MRT(TEXT("MRT_DOF2"), TEXT("Target_DOF2"))))
+		return E_FAIL;
+	if (FAILED(m_pGameInstance->Add_MRT(TEXT("MRT_DOF_Final"), TEXT("Target_DOF_Final"))))
+		return E_FAIL;
 
 	return S_OK;
 }
@@ -1647,6 +1780,43 @@ HRESULT CRenderer::Ready_Desc()
 	return S_OK;
 }
 
+HRESULT CRenderer::Ready_Shader()
+{
+	m_pShader = CShader::Create(m_pDevice, m_pContext, TEXT("../Bin/ShaderFiles/Shader_Deferred.hlsl"), VTXPOSTEX::Elements, VTXPOSTEX::iNumElements);
+	if (nullptr == m_pShader)
+		return E_FAIL;
+
+	m_pSSAOShader = CShader::Create(m_pDevice, m_pContext, TEXT("../Bin/ShaderFiles/Shader_SSAO.hlsl"), VTXPOSTEX::Elements, VTXPOSTEX::iNumElements);
+	if (nullptr == m_pSSAOShader)
+		return E_FAIL;
+	m_pNoiseTexture_SSAO = CTexture::Create(m_pDevice, m_pContext, TEXT("../Bin/Resources/T_Tile_Noise_01_C_LGS.dds"), 1);
+
+	m_pDistortionShader = CShader::Create(m_pDevice, m_pContext, TEXT("../Bin/ShaderFiles/Shader_Distortion.hlsl"), VTXPOSTEX::Elements, VTXPOSTEX::iNumElements);
+	if (nullptr == m_pDistortionShader)
+		return E_FAIL;
+
+	m_pBackShader = CShader::Create(m_pDevice, m_pContext, TEXT("../Bin/ShaderFiles/Shader_Compute_Back.hlsl"));
+	if (nullptr == m_pBackShader)
+		return E_FAIL;
+
+	m_pHDRShader = CShader::Create(m_pDevice, m_pContext, TEXT("../Bin/ShaderFiles/Shader_Compute_HDR.hlsl"));
+	if (nullptr == m_pHDRShader)
+		return E_FAIL;
+
+	m_pBloomShader = CShader::Create(m_pDevice, m_pContext, TEXT("../Bin/ShaderFiles/Shader_Bloom.hlsl"), VTXPOSTEX::Elements, VTXPOSTEX::iNumElements);
+	if (nullptr == m_pBloomShader)
+		return E_FAIL;
+
+	m_pBlurShader = CShader::Create(m_pDevice, m_pContext, TEXT("../Bin/ShaderFiles/Shader_Compute_Blur.hlsl"));
+	if (nullptr == m_pBlurShader)
+		return E_FAIL;
+
+	m_pPostProcessShader = CShader::Create(m_pDevice, m_pContext, TEXT("../Bin/ShaderFiles/Shader_PostProcess.hlsl"));
+	if (nullptr == m_pPostProcessShader)
+		return E_FAIL;
+	return S_OK;
+}
+
 #ifdef _DEBUG
 
 HRESULT CRenderer::Render_Debug()
@@ -1666,26 +1836,16 @@ HRESULT CRenderer::Render_Debug()
 	if (FAILED(m_pShader->Bind_Matrix("g_ViewMatrix", &m_ViewMatrix)))
 		return E_FAIL;
 	if (FAILED(m_pShader->Bind_Matrix("g_ProjMatrix", &m_ProjMatrix)))
-		return E_FAIL;
+		return E_FAIL; 
 	
-	m_pGameInstance->Render_MRT_Debug(TEXT("MRT_GameObjects"), m_pShader, m_pVIBuffer);
-	m_pGameInstance->Render_MRT_Debug(TEXT("MRT_Lights"), m_pShader, m_pVIBuffer); 
-	m_pGameInstance->Render_MRT_Debug(TEXT("MRT_Bloom_DownSample0"), m_pShader, m_pVIBuffer);
-	m_pGameInstance->Render_MRT_Debug(TEXT("MRT_Bloom_BlurXY0"), m_pShader, m_pVIBuffer);
-	m_pGameInstance->Render_MRT_Debug(TEXT("MRT_Bloom_BlurXY1"), m_pShader, m_pVIBuffer);
-	m_pGameInstance->Render_MRT_Debug(TEXT("MRT_Bloom_BlurXY2"), m_pShader, m_pVIBuffer);
-	m_pGameInstance->Render_MRT_Debug(TEXT("MRT_SSAO"), m_pShader, m_pVIBuffer);
-	m_pGameInstance->Render_MRT_Debug(TEXT("MRT_SSAO_BlurXY"), m_pShader, m_pVIBuffer);
-	m_pGameInstance->Render_MRT_Debug(TEXT("MRT_HDR"), m_pShader, m_pVIBuffer);
-	m_pGameInstance->Render_MRT_Debug(TEXT("MRT_LDR"), m_pShader, m_pVIBuffer);
-	m_pGameInstance->Render_MRT_Debug(TEXT("MRT_ShadowObj"), m_pShader, m_pVIBuffer);
-	m_pGameInstance->Render_MRT_Debug(TEXT("MRT_Bloom_BlurXY2"), m_pShader, m_pVIBuffer);
+	//m_pGameInstance->Render_MRT_Debug(TEXT("MRT_GameObjects"), m_pShader, m_pVIBuffer);
+	m_pGameInstance->Render_MRT_Debug(TEXT("MRT_Lights"), m_pShader, m_pVIBuffer);
 	m_pGameInstance->Render_MRT_Debug(TEXT("MRT_Cascade"), m_pShader, m_pVIBuffer);
-	m_pGameInstance->Render_MRT_Debug(TEXT("MRT_Bloom_UpSample1"), m_pShader, m_pVIBuffer);
-	m_pGameInstance->Render_MRT_Debug(TEXT("MRT_Decal"), m_pShader, m_pVIBuffer);
-	m_pGameInstance->Render_MRT_Debug(TEXT("MRT_Picking"), m_pShader, m_pVIBuffer);
-	m_pGameInstance->Render_MRT_Debug(TEXT("MRT_Bloom0"), m_pShader, m_pVIBuffer);
-	
+	//m_pGameInstance->Render_MRT_Debug(TEXT("MRT_Bloom_DownSample0"), m_pShader, m_pVIBuffer);
+	//m_pGameInstance->Render_MRT_Debug(TEXT("MRT_Bloom_DownSample1"), m_pShader, m_pVIBuffer);
+	//m_pGameInstance->Render_MRT_Debug(TEXT("MRT_Bloom_BlurXY0"), m_pShader, m_pVIBuffer);
+	//m_pGameInstance->Render_MRT_Debug(TEXT("MRT_Bloom_BlurXY1"), m_pShader, m_pVIBuffer);
+
 	return S_OK;
 }
 
@@ -1726,6 +1886,7 @@ void CRenderer::Free()
 	Safe_Release(m_pLightDepthStencilView);
 	Safe_Release(m_pCascadeDepthStencilViewArr);
 
+	Safe_Release(m_pPostProcessShader);
 	Safe_Release(m_pBlurShader);
 	Safe_Release(m_pBackShader);
 	Safe_Release(m_pHDRShader);

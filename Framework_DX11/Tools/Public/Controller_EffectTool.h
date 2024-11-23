@@ -14,6 +14,7 @@
 
 BEGIN(Engine)
 class CGameObject;
+class casdf;
 END
 
 BEGIN(Tools)
@@ -27,10 +28,15 @@ public:
 	enum PARTICLE_BOOL
 	{
 		// Compute State
-		BOOL_ORBIT, BOOL_RANDOM, BOOL_LOOP, BOOL_ACCEL, BOOL_DECEL,
+		PB_ORBIT, PB_RANDOM, PB_LOOP, PB_ACCEL, PB_DECEL,
 		// Geom State
-		BOOL_GROW, BOOL_SHRINK, BOOL_ROTATION,
-		BOOL_END
+		PB_GROW, PB_SHRINK, PB_ROTATION,
+		PB_END
+	};
+
+	enum TRAIL_OP_BOOL
+	{
+		TOP_GROW, TOP_SHRINK, TOP_END
 	};
 
 	enum EFFECT_POSTPROCESSING
@@ -42,14 +48,14 @@ public:
 	};
 #pragma endregion
 #pragma region TEXTURE
-	vector<_wstring>& Get_Texture_PrototypeTags() { 
+	vector<_wstring>& Get_Texture_PrototypeTags() {
 		return m_Texture_PrototypeTags;
 	}
-	
+
 	_wstring& Get_Texture_PrototypeTags_Index(_uint iIndex) {
 		return m_Texture_PrototypeTags[iIndex];
 	}
-	
+
 	void Add_Texture_ProtytypeTag(_wstring strTag) {
 		m_Texture_PrototypeTags.emplace_back(strTag);
 	}
@@ -111,13 +117,38 @@ public:
 	void Delete_Mesh();
 	void Clear_ME();
 
+	HRESULT Add_Trail_OP();
+	void Trail_OP_Check();
+	void Update_Trail_OP();
+	void Select_Trail_OP();
+	void Get_Trail_OP();
+	void Delete_Trail_OP();
+	void Clear_Trail_OP();
+
+	HRESULT Add_Trail_TP();
+	void Trail_TP_Check();
+	void Update_Trail_TP();
+	void Select_Trail_TP();
+	void Get_Trail_TP();
+	void Delete_Trail_TP();
+	void Clear_Trail_TP();
+
+	HRESULT Add_Trail_MP();
+	void Trail_MP_Check();
+	void Update_Trail_MP();
+	void Select_Trail_MP();
+	void Get_Trail_MP();
+	void Delete_Trail_MP();
+	void Clear_Trail_MP();
+
 	HRESULT Check_EffectContainer();
 	HRESULT Add_EffectContainer();
 	HRESULT Back_EffectContainer();
-	void Reset_EffectContainer();
-	void Delete_EffectContainer();
-	HRESULT Save_EffectContainer();
+	void	Reset_EffectContainer();
+	void	Delete_EffectContainer();
+
 	HRESULT Load_Effect();
+	HRESULT Save_EffectContainer();
 	HRESULT Load_EffectContainer();
 
 private:
@@ -129,10 +160,14 @@ private:
 	_char m_szParticleName[MAX_PATH] = "";
 	_char m_szTextureName[MAX_PATH] = "";
 	_char m_szMeshName[MAX_PATH] = "";
+
+	_char m_szTrail_OPName[MAX_PATH] = "";
+	_char m_szTrail_TPName[MAX_PATH] = "";
+	_char m_szTrail_MPName[MAX_PATH] = "";
+
 	_char m_szEffectContainerName[MAX_PATH] = "";
 
 	_bool m_bJunHoCamera = { false };
-	
 
 	_int		m_iSelected_DiffuseTextureIndex = { 0 };
 	_int		m_iSelected_NormalTextureIndex = { 0 };
@@ -140,26 +175,43 @@ private:
 	_int		m_iSelected_MaskTextureIndex_2 = { 0 };
 	_int		m_iSelected_ModelIndex = { 0 };
 
+	_int		m_iTextureSelect = { 0 }; // 리스트 박스에 띄울 텍스처
+
 private:
 	CParticle_Effect::PARTICLE_EFFECT_DESC	m_ParticleDesc = {};
 	CTexture_Effect::TEXTURE_EFFECT_DESC	m_TextureDesc = {};
 	CMesh_Effect::MESH_EFFECT_DESC			m_MeshDesc = {};
 
+	CTrail_Effect_OP::TRAIL_OP_DESC			m_Trail_OPDesc = {};
+	CTrail_Effect_TP::TRAIL_TP_DESC			m_Trail_TPDesc = {};
+	CTrail_Effect_MP::TRAIL_MP_DESC			m_Trail_MPDesc = {};
+
 	CEffect_Base::RENDER_DESC				m_RenderDesc = {};
 
 	_int m_iParticleIndex = { 0 };
-	_int m_iTextureIndex = { CEffect_Base::TEXTURE_END };
+	_int m_iTextureIndex = { 0 };
 	_int m_iMeshIndex = { 0 };
-
-	_int m_iTextureSelect = { 0 };
+	_int m_iTrail_OPIndex = { 0 };
+	_int m_iTrail_TPIndex = { 0 };
+	_int m_iTrail_MPIndex = { 0 };
 
 #pragma region CHECKBOX
-	_bool m_ParticleStates[BOOL_END] = {};
-	_bool m_EffectPP[PP_END] = {};		// 디스토션? 블러? 그냥?
+	_bool m_ParticleStates[PB_END] = {};
+
+	_bool m_Trail_OPState[TOP_END] = {};
+	_bool m_Trail_MPState[PB_END] = {};
+
+	_bool m_EffectPP[PP_END] = {};
 #pragma endregion
+
+
+public:
+	list<string> logs;
 
 private:
 	void Set_ParticleState();
+	void Set_TrailOP_State();
+	void Set_TrailMP_State();
 	void Texture_Selection();
 	void Set_PpState();
 

@@ -17,9 +17,11 @@ private:
 	virtual ~CRenderer() = default;
 
 public:
-	SSAO_DESC*	Get_SSAODesc() { return &m_tSSAO; }
-	HDR_DESC*	Get_HDRDesc() { return &m_tHDR; }
-	BLOOM_DESC*	Get_BloomDesc() { return &m_tBloom; }
+	SSAO_DESC*		Get_SSAODesc() { return &m_tSSAO; }
+	HDR_DESC*		Get_HDRDesc() { return &m_tHDR; }
+	BLOOM_DESC*		Get_BloomDesc() { return &m_tBloom; }
+	DOF_DESC*		Get_DOFDesc() { return &m_tDOF; }
+	RADIAL_DESC*	Get_RadialDesc() { return &m_tRadial; }
 
 public:
 	HRESULT Initialize();
@@ -50,6 +52,7 @@ private:
 	ID3D11DepthStencilView*		m_pLightDepthStencilView = { nullptr };
 	class CGameInstance*		m_pGameInstance = { nullptr };
 
+	_float2						m_vWinSize = { 1280.f, 720.f };
 	
 	list<class CGameObject*>	m_RenderObjects[RG_END];
 	list<CGameObject*>			m_InstanceRenderObjects[RG_END];
@@ -58,6 +61,7 @@ private:
 	class CShader*				m_pShader = { nullptr };
 	class CShader*				m_pSSAOShader = { nullptr };
 	class CShader*				m_pDistortionShader = { nullptr };
+	class CShader*				m_pPostProcessShader = { nullptr };
 
 	// ÄÄÇ»Æ®
 	class CShader*				m_pBackShader = { nullptr };
@@ -70,7 +74,7 @@ private:
 	_float4x4					m_WorldMatrix{}, m_ViewMatrix{}, m_ProjMatrix{};
 
 	/* Bloom */
-	_float						m_fSamplerRatio = { 5.f };
+	_float						m_fSamplerRatio = { 6.f };
 	BLOOM_DESC					m_tBloom;
 
 	ID3D11DepthStencilView*		m_pDownSampleDepthStencilView0 = { nullptr };
@@ -89,6 +93,12 @@ private:
 
 	/* HDR */
 	HDR_DESC					m_tHDR = {};
+
+	/* DOF */
+	DOF_DESC					m_tDOF = {};
+
+	/* Radial Blur*/
+	RADIAL_DESC					m_tRadial = {};
 
 #ifdef _DEBUG
 private:
@@ -110,7 +120,10 @@ private:
 	HRESULT Render_HDR();
 	HRESULT Render_Bloom_Compute();
 	HRESULT Render_Bloom();
+	HRESULT Render_DOF();
+	HRESULT Render_Radial();
 
+	HRESULT Render_Effect();
 	HRESULT Render_Distortion();
 
 	HRESULT Render_Final();
@@ -129,8 +142,12 @@ private:
 	HRESULT Ready_CascadeDepthStencilView();
 	HRESULT Ready_HDR();
 	HRESULT Ready_Bloom();
+	HRESULT Ready_DOF();
 
 	HRESULT Ready_Desc();
+
+
+	HRESULT Ready_Shader();
 
 #ifdef _DEBUG
 private:

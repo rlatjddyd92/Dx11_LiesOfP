@@ -12,6 +12,7 @@ BEGIN(Tools)
 class CTexture_Effect final : public CEffect_Base
 {
 public:
+	enum SHADER_TYPE { SHADER_DEFAULT, SHADER_GLOW, SHADER_SPARK, SHADER_END };
 	typedef struct
 	{
 		_uint		iShaderIndex = { 0 };
@@ -22,14 +23,17 @@ public:
 
 		_Vec3		vPos = { 0.f, 0.f, 0.f };
 
-		_float		fRotationAngle = {};
-		_float		fRotationSpeed = { 0.f };
-
 		_Vec3		vStartScale = { 1.f, 1.f, 1.f };
 		_Vec3		vScalingSpeed = {};
 
+		_float		fStarRotation = { 0.f };
+		_float		fRotationPerSecond = { 0.f };
+
 		_float		fAlpha = { 1.f };
 		_float		fAlphaSpeed = { 0.f };
+
+		_bool		bPreserveRotation = { false };
+		_bool		bLoop = { false };
 	}DEFAULT_DESC;
 
 	typedef struct
@@ -52,8 +56,8 @@ private:
 	virtual ~CTexture_Effect() = default;
 
 public:
-	TEXTURE_EFFECT_DESC* Get_InitDesc_Ptr() {
-		return &m_InitDesc;
+	virtual void Set_Loop(_bool bLoop) override {
+		m_DefaultDesc.bLoop = bLoop;
 	}
 
 public:
@@ -73,6 +77,9 @@ public:
 	TEXTURE_EFFECT_DESC Get_Desc() {
 		return m_InitDesc;
 	}
+	TEXTURE_EFFECT_DESC* Get_InitDesc_Ptr() {
+		return &m_InitDesc;
+	}
 
 private:
 	class CShader* m_pShaderCom = { nullptr };
@@ -89,6 +96,8 @@ private:
 
 private:
 	HRESULT Ready_Components(const TEXT_DESC& Desc);
+	void Preserve_Rotation_Billboard(_Vec3 vCurrentScale, _Vec3 vLook);
+	void Billboard(_Vec3 vCurrentScale, _Vec3 vLook);
 
 public:
 	static CTexture_Effect* Create(ID3D11Device* pDevice, ID3D11DeviceContext* pContext);

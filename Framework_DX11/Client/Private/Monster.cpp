@@ -4,6 +4,11 @@
 #include "GameInstance.h"
 #include "Player.h"
 
+// 24-11-18 김성용
+// 게임인터페이스 접근 코드 
+// 정식 코드  
+#include "GameInterface_Controller.h"
+
 CMonster::CMonster(ID3D11Device* pDevice, ID3D11DeviceContext* pContext)
 	: CPawn{ pDevice, pContext }
 {
@@ -30,8 +35,13 @@ HRESULT CMonster::Initialize(void* pArg)
 
 	if (FAILED(__super::Initialize(&Desc)))
 		return E_FAIL;
+	
+	m_strObjectTag = TEXT("Monster");
 
-
+	// 24-11-18 김성용
+	// 몬스터 직교 UI 접근 코드 
+	// 정식 코드  
+	GET_GAMEINTERFACE->Register_Pointer_Into_OrthoUIPage(UI_ORTHO_OBJ_TYPE::ORTHO_NORMAL_MONSTER, this);
 
 	return S_OK;
 }

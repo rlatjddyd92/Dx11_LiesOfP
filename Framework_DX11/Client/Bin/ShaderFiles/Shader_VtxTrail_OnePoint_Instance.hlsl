@@ -22,7 +22,8 @@ struct VS_IN
 	/* InputSlot : 1 */ 
     float3 vCurPos : TEXCOORD0;
     float3 vPrePos : TEXCOORD1;
-    float2 vLifeTime : TEXCOORD2;
+    float3 vMoveDir : TEXCOORD2;
+    float2 vLifeTime : TEXCOORD3;
 };
 
 struct VS_OUT
@@ -30,7 +31,8 @@ struct VS_OUT
     float4 vPosition : POSITION;
     float3 vCurPos : TEXCOORD0;
     float3 vPrePos : TEXCOORD1;
-    float2 vLifeTime : TEXCOORD2;
+    float3 vMoveDir : TEXCOORD2;
+    float2 vLifeTime : TEXCOORD3;
 };
 
 /* 1. 정점의 변환과정을 수행한다. */
@@ -42,6 +44,7 @@ VS_OUT VS_MAIN( /*정점*/VS_IN In)
     Out.vPosition = float4(In.vCurPos, 1.f);
     Out.vCurPos = In.vCurPos;
     Out.vPrePos = In.vPrePos;
+    Out.vMoveDir = In.vMoveDir;
     Out.vLifeTime = In.vLifeTime;
     
     return Out;
@@ -54,7 +57,8 @@ struct GS_IN
     float4 vPosition : POSITION;
     float3 vCurPos : TEXCOORD0;
     float3 vPrePos : TEXCOORD1;
-    float2 vLifeTime : TEXCOORD2;
+    float3 vMoveDir : TEXCOORD2;
+    float2 vLifeTime : TEXCOORD3;
 };
 
 struct GS_OUT
@@ -88,7 +92,6 @@ void GS_MAIN(point GS_IN In[1], inout TriangleStream<GS_OUT> Container)
         vRight *= (1.f - In[0].vLifeTime.y / In[0].vLifeTime.x);
         vUp *= (1.f - In[0].vLifeTime.y / In[0].vLifeTime.x);
     }
-    
     
     Out[0].vPosition = float4(In[0].vPosition.xyz + vRight + vUp, 1.f);
     Out[0].vTexcoord = float2(0.f, 0.f);
@@ -124,7 +127,6 @@ void GS_MAIN(point GS_IN In[1], inout TriangleStream<GS_OUT> Container)
     Container.RestartStrip();
 }
 
-
 struct PS_IN
 {
     float4 vPosition : SV_POSITION;
@@ -137,6 +139,12 @@ struct PS_OUT
     vector vColor : SV_TARGET0;
 };
 
+struct PS_EFFECT_OUT
+{
+    vector vColor : SV_TARGET0;
+    vector vDistortion : SV_TARGET1;
+    vector vBlur : SV_TARGET2;
+};
 
 /* 1. 픽셀의 최종적인 색상을 결정한다. */
 PS_OUT PS_MAIN(PS_IN In)
@@ -154,7 +162,9 @@ PS_OUT PS_MAIN(PS_IN In)
     over.x = start.x + (1 / g_vTexDivide.x);
     over.y = start.y + (1 / g_vTexDivide.y);
     
-    Out.vColor = g_DiffuseTexture.Sample(LinearSampler, In.vTexcoord);
+    float2 vTexcoord = start + (over - start) * In.vTexcoord;
+
+    Out.vColor = g_DiffuseTexture.Sample(LinearSampler, vTexcoord);
     
     if (Out.vColor.a < 0.1f)
         discard;
@@ -162,18 +172,12 @@ PS_OUT PS_MAIN(PS_IN In)
     if (In.vLifeTime.x < In.vLifeTime.y)
         discard;
     
-    //vector vColor = Out.vColor;
-    //Out.vColor.rgb = 1.f - (1 - g_vColor.rgb) * (1 - vColor.a * 0.85f);
-    
     return Out;
 }
 
-
-
 technique11 DefaultTechnique
 {
-	/* 빛연산 + 림라이트 + ssao + 노멀맵핑 + pbr*/
-    pass UI
+    pass DEFAULT
     {
         SetRasterizerState(RS_Cull_None);
         SetDepthStencilState(DSS_Default, 0);
@@ -183,5 +187,4 @@ technique11 DefaultTechnique
         GeometryShader = compile gs_5_0 GS_MAIN();
         PixelShader = compile ps_5_0 PS_MAIN();
     }
-
 }

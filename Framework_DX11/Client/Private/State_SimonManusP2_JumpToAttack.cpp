@@ -54,7 +54,7 @@ HRESULT CState_SimonManusP2_JumpToAttack::Start_State(void* pArg)
     iCnt = rand() % 2;
     if (iCnt == 0)
     {
-        m_iCurStartAnim != AN_CANCLEATTACK;
+        m_iCurStartAnim = AN_CANCLEATTACK;
     }
 
     m_pMonster->Change_Animation(m_iCurStartAnim, false, 0.1f, 0);

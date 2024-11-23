@@ -41,6 +41,8 @@ public:
 	virtual void OpenAction() override;
 	virtual void CloseAction() override;
 
+	virtual CHECK_MOUSE Check_Page_Action(_float fTimeDelta) override;
+
 public:
 	const vector<UPART*>& Get_UIPartInfo() { return m_vecPart; }
 	virtual HRESULT Ready_UIPart_Group_Control() override;

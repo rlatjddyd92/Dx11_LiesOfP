@@ -555,7 +555,7 @@ void CController_AnimationTool::SetUp_Controller_Bone()
 	_float3 vTemp{};
 	if (m_pCopyModelCom != nullptr)
 	{
-		//vPos = ((*m_pCopyBoneVec)[m_iSelected_Index_Bone])->Get_TransformationMatrix().r[CTransform::STATE_POSITION];
+		vPos = ((*m_pCopyBoneVec)[m_iSelected_Index_Bone])->Get_CombinedTransformationMatrix().Translation();
 		Matrix WorldMat = ((*m_pCopyBoneVec)[m_iSelected_Index_Bone])->Get_CombinedTransformationMatrix();
 		vPos.x = WorldMat._41;
 		vPos.y = WorldMat._42;
