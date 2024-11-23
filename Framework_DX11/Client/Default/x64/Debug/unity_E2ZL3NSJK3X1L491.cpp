@@ -30,6 +30,9 @@
 #include "D:\GitProject\Dx11_LiesOfP\Framework_DX11\Client\Private\Item_Manager.cpp"
 
 
+#include "D:\GitProject\Dx11_LiesOfP\Framework_DX11\Client\Private\Ladder.cpp"
+
+
 #include "D:\GitProject\Dx11_LiesOfP\Framework_DX11\Client\Private\Level_GamePlay.cpp"
 
 
@@ -387,6 +390,9 @@
 #include "D:\GitProject\Dx11_LiesOfP\Framework_DX11\Client\Private\Texture_Effect.cpp"
 
 
+#include "D:\GitProject\Dx11_LiesOfP\Framework_DX11\Client\Private\TowerDoor.cpp"
+
+
 #include "D:\GitProject\Dx11_LiesOfP\Framework_DX11\Client\Private\Trail_Effect_MP.cpp"
 
 
@@ -394,6 +400,9 @@
 
 
 #include "D:\GitProject\Dx11_LiesOfP\Framework_DX11\Client\Private\Trail_Effect_TP.cpp"
+
+
+#include "D:\GitProject\Dx11_LiesOfP\Framework_DX11\Client\Private\TreasureBox.cpp"
 
 
 #include "D:\GitProject\Dx11_LiesOfP\Framework_DX11\Client\Private\UIManager.cpp"
@@ -439,6 +448,9 @@
 
 
 #include "D:\GitProject\Dx11_LiesOfP\Framework_DX11\Client\Private\UIRender_Client.cpp"
+
+
+#include "D:\GitProject\Dx11_LiesOfP\Framework_DX11\Client\Private\WallDeco.cpp"
 
 
 #include "D:\GitProject\Dx11_LiesOfP\Framework_DX11\Client\Private\Weapon.cpp"

@@ -46,6 +46,11 @@ public:
 	_bool		m_bShadow = { false };
 
 	_float		m_fCullDistance = {40.f};
+
+	INSTANCE_DATA		m_tInstanceData = {};
+
+	_float4				m_vHashColor = {};
+
 private:
 	HRESULT Ready_Components(STATICOBJ_DESC* pNonAnimDesc);
 

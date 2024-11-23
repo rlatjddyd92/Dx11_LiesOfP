@@ -1627,8 +1627,8 @@ HRESULT CRenderer::Ready_HDR()
 		return E_FAIL;
 
 	m_tHDR.isOnHDR = true;
-	m_tHDR.fMiddleGrey = 0.7f;
-	m_tHDR.fLumWhiteSqr = 0.3f;
+	m_tHDR.fMiddleGrey = 0.35f;
+	m_tHDR.fLumWhiteSqr = 0.35f;
 
 	return S_OK;
 }

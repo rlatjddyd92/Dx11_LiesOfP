@@ -73,7 +73,11 @@ HRESULT CStaticObj::Render()
 
 	if (m_isInstance)
 	{
-		m_pModelCom->Add_InstanceData(m_pTransformCom->Get_WorldMatrix());
+		INSTANCE_DATA tData{};
+		tData.WorldMatrix = m_pTransformCom->Get_WorldMatrix();
+		tData.vHashColor = m_vHashColor;
+
+		m_pModelCom->Add_InstanceData(tData);
 		return S_OK;
 	}
 
@@ -119,7 +123,11 @@ HRESULT CStaticObj::Render_LightDepth()
 {
 	if (m_isInstance)
 	{
-		m_pModelCom->Add_InstanceData(m_pTransformCom->Get_WorldMatrix());
+		INSTANCE_DATA tData{};
+		tData.WorldMatrix = m_pTransformCom->Get_WorldMatrix();
+		tData.vHashColor = m_vHashColor;
+
+		m_pModelCom->Add_InstanceData(tData);
 		return S_OK;
 	}
 
