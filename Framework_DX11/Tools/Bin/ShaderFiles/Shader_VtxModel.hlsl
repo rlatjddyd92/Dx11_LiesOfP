@@ -93,7 +93,8 @@ struct PS_OUT
     vector vARM : SV_TARGET3;
     vector vEmessive : SV_TARGET4;
     vector vRimLight : SV_TARGET5;
-	vector vPickDepth : SV_TARGET6;
+    vector vPickDepth : SV_TARGET6;
+    vector vPickObjectDepth : SV_TARGET7;
 };
 
 
@@ -130,7 +131,8 @@ PS_OUT PS_MAIN(PS_IN In)
     Out.vARM = g_ARMTexture.Sample(LinearSampler, In.vTexcoord);
     Out.vEmessive = vEmissive;
     Out.vRimLight = vector(0.f, 0.f, 0.f, 0.f);
-	Out.vPickDepth = vector(In.vProjPos.z / In.vProjPos.w, 0.f, 0.f, 1.f);
+    Out.vPickDepth = vector(In.vProjPos.z / In.vProjPos.w, 0.f, 0.f, 1.f);
+    Out.vPickObjectDepth = g_fHashColor;
 
 	return Out;
 }
@@ -194,7 +196,8 @@ PS_OUT PS_MAIN_NORMAL(PS_IN_NORMAL In)
     Out.vARM = g_ARMTexture.Sample(LinearSampler, In.vTexcoord);
     Out.vEmessive = g_EmessiveTexture.Sample(LinearClampSampler, In.vTexcoord) * g_fEmessiveMask;
     Out.vRimLight = vector(0.f, 0.f, 0.f, 0.f);
-	Out.vPickDepth = vector(In.vProjPos.z / In.vProjPos.w, 0.f, 0.f, 1.f);
+    Out.vPickDepth = vector(In.vProjPos.z / In.vProjPos.w, 0.f, 0.f, 1.f);
+    Out.vPickObjectDepth = g_fHashColor;
 
 	return Out;
 }

@@ -8,6 +8,7 @@ float g_fFar;
 
 texture2D g_BackTexture;
 texture2D g_DepthTexture;
+texture2D g_PriorityTexture;
 
 /* Bloom */
 texture2D g_BloomTexture;
@@ -200,7 +201,15 @@ PS_OUT PS_MAIN_BLOOM(PS_IN In)
     //vColor = float4(vEffect.rgb + vColor.rgb, 1.f);
     
     //Out.vColor = float4(vEffect.rgb * vEffect.a + vColor.rgb * (1.f - vEffect.a), 1.f);
+    
     Out.vColor = vBack + vBloom;
+    if (Out.vColor.a == 0.f)
+    {
+        vector vPriority = g_PriorityTexture.Sample(LinearSampler, In.vTexcoord);
+        Out.vColor = vPriority;
+        return Out;
+    }
+
     
     return Out;
 }

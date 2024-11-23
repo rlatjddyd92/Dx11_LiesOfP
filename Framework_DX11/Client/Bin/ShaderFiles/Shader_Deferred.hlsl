@@ -291,13 +291,6 @@ PS_OUT PS_MAIN_DEFERRED(PS_IN In)
     float3 vNormal = float3(vNormalDesc.xyz * 2.f - 1.f);
     
     vector vPosition = Compute_WorldPos(In.vTexcoord, vDepthDesc.x, fViewZ);
-    //if (vDiffuse.a == 0.f)
-    //{
-    //    vector vPriority = g_PriorityTexture.Sample(LinearSampler, In.vTexcoord);
-    //    Out.vColor = vPriority;
-    //    return Out;
-    //}
-
 
     vector vDecal = g_DecalDiffuseTexture.Sample(LinearSampler, In.vTexcoord);
     vDiffuse = vector(lerp(vDiffuse, vDecal, vDecal.a)); // 알파 값에 따라 혼합

@@ -89,7 +89,7 @@ void CNonAnimModel::Late_Update(_float fTimeDelta)
 			m_pGameInstance->Add_RenderObject(CRenderer::RG_NONBLEND, this);
 
 		}
-		m_pGameInstance->Add_RenderObject(CRenderer::RG_PICKING, this);
+		//m_pGameInstance->Add_RenderObject(CRenderer::RG_PICKING, this);
 	}
 }
 
@@ -104,6 +104,18 @@ HRESULT CNonAnimModel::Render()
 		return E_FAIL;
 
 	if (FAILED(m_pShaderCom->Bind_RawValue("g_fFar", &m_pGameInstance->Get_Far(), sizeof(_float))))
+		return E_FAIL;
+
+	uint32_t hash = static_cast<uint32_t>(m_iHashId * 100); // 임의의 상수로 인덱스를 해시처럼 변환
+
+	UINT8 a = (hash >> 24) & 0xff;
+	UINT8 r = (hash >> 16) & 0xff;
+	UINT8 g = (hash >> 8) & 0xff;
+	UINT8 b = (hash) & 0xff;
+
+	_float4 fColor = _float4(r / 255.f, g / 255.f, b / 255.f, a / 255.f);
+
+	if (FAILED(m_pShaderCom->Bind_RawValue("g_fHashColor", &fColor, sizeof(_float4))))
 		return E_FAIL;
 
 	if (m_isDecal)

@@ -113,6 +113,9 @@
 #include "D:\GitProject\Dx11_LiesOfP\Framework_DX11\Engine\Private\Object_Manager.cpp"
 
 
+#include "D:\GitProject\Dx11_LiesOfP\Framework_DX11\Engine\Private\Octree.cpp"
+
+
 #include "D:\GitProject\Dx11_LiesOfP\Framework_DX11\Engine\Private\PhysX_Manager.cpp"
 
 
