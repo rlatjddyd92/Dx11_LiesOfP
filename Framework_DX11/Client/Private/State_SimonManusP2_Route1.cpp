@@ -72,6 +72,13 @@ _bool CState_SimonManusP2_Route1::End_Check()
         break;
 
     case 1:
+        if ((AN_ROUTE_MIDDLE) == iCurAnim)
+        {
+            bEndCheck = m_pMonster->Get_EndAnim(AN_ROUTE_MIDDLE);
+        }
+        break;
+
+    case 2:
         if ((AN_ROUTE_LAST) == iCurAnim)
         {
             bEndCheck = m_pMonster->Get_EndAnim(AN_ROUTE_LAST);

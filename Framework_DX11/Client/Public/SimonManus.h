@@ -21,6 +21,7 @@ public:
 		_bool* pIsEndAnim { nullptr };
 		_bool* pIsResetRootMove { nullptr };
 		_bool* pColliderCtrs{ nullptr };
+		_bool* pRootMoveCtrs{ nullptr };
 		
 		_double* pGrogyTrackPos { nullptr };
 	}FSMSTATE_DESC;

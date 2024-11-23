@@ -115,12 +115,14 @@ void CSimonManus::Update(_float fTimeDelta)
 	 
 	m_vCurRootMove = m_pModelCom->Play_Animation(fTimeDelta, nullptr);
 
+	if (m_bRootMoveCtr)
+	{
+		_Vec3 vPos = m_pTransformCom->Get_State(CTransform::STATE_POSITION);
 
-	_Vec3 vPos = m_pTransformCom->Get_State(CTransform::STATE_POSITION);
+		m_vCurRootMove = XMVector3TransformNormal(m_vCurRootMove, m_pTransformCom->Get_WorldMatrix());
 
-	m_vCurRootMove = XMVector3TransformNormal(m_vCurRootMove, m_pTransformCom->Get_WorldMatrix());
-
-	m_pTransformCom->Set_State(CTransform::STATE_POSITION, vPos + m_vCurRootMove);
+		m_pTransformCom->Set_State(CTransform::STATE_POSITION, vPos + m_vCurRootMove);
+	}
 
 	if (KEY_TAP(KEY::B))
 	{
@@ -215,11 +217,11 @@ HRESULT CSimonManus::Ready_FSM()
 	if (FAILED(__super::Ready_FSM()))
 		return E_FAIL;
 
-	FSMSTATE_DESC Desc{};
+	FSM_INIT_DESC Desc{};
 	
 	Desc.pIsEndAnim = &m_bEndAnim;
 	Desc.pIsResetRootMove =&m_bResetRootMove;
-	Desc.pColliderCtrs = m_bColliderCtrs;
+	Desc.pRootMoveCtr = &m_bRootMoveCtr;
 	//
 
 
@@ -282,7 +284,7 @@ HRESULT CSimonManus::Ready_FSM()
 	m_pExtraFsmCom->Add_State(CState_SimonManusP2_Route1::Create(m_pExtraFsmCom, this, ATKP2_ROUTE_1, &Desc));
 	m_pExtraFsmCom->Add_State(CState_SimonManusP2_Route2::Create(m_pExtraFsmCom, this, ATKP2_ROUTE_2, &Desc));
 
-	m_pExtraFsmCom->Set_State(IDLE);
+	//m_pExtraFsmCom->Set_State(IDLE);
 #pragma endregion
 
 	return S_OK;
