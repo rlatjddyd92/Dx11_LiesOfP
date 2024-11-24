@@ -292,8 +292,8 @@ HRESULT CTrail_MultiPoint_Instance::Init_HeadParticle(HEAD_PARTICLE* pParticles)
         pParticles[i].Particle.vNextRandomDir = _float4(m_pGameInstance->Get_Random(-1.f, 1.f), m_pGameInstance->Get_Random(-1.f, 1.f), m_pGameInstance->Get_Random(-1.f, 1.f), 0.f);
 
         pParticles[i].vPreTranslation = {};
-        pParticles[i].vCurrentRandomPos = _float4(0.f, 0.f, 0.f, 0.f);
-        pParticles[i].vNextRandomPos = _float4(0.f, 0.f, 0.f, 0.f);
+        pParticles[i].vCurrentRandomPos = _float4(m_pGameInstance->Get_Random(-1.f, 1.f), m_pGameInstance->Get_Random(-1.f, 1.f), m_pGameInstance->Get_Random(-1.f, 1.f), 0.f);
+        pParticles[i].vNextRandomPos = _float4(m_pGameInstance->Get_Random(-1.f, 1.f), m_pGameInstance->Get_Random(-1.f, 1.f), m_pGameInstance->Get_Random(-1.f, 1.f), 0.f);
         pParticles[i].iTailInitIndex = i * m_iNumTailInstance;
     }
 

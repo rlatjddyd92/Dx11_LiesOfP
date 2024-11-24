@@ -119,7 +119,7 @@ float3 CatmullRom(float3 p0, float3 p1, float3 p2, float3 p3, float t)
         (-p0 + 3.0 * p1 - 3.0 * p2 + p3) * t3
     );
 }
-[maxvertexcount(96)] // 꼭 해줘야 함. 점을 몇 번 찍을 건지.(인덱스 갯수) : 사각형 최대 16개
+[maxvertexcount(102)] // 꼭 해줘야 함. 점을 몇 번 찍을 건지.(인덱스 갯수) : 사각형 최대 16개
 void GS_MAIN(point GS_IN In[1], inout TriangleStream<GS_OUT> Container)
 {
     GS_OUT Out[4];
@@ -213,7 +213,7 @@ void GS_MAIN(point GS_IN In[1], inout TriangleStream<GS_OUT> Container)
     }
 }
 
-[maxvertexcount(96)] // 꼭 해줘야 함. 점을 몇 번 찍을 건지.(인덱스 갯수) : 사각형 최대 16개
+[maxvertexcount(102)] // 꼭 해줘야 함. 점을 몇 번 찍을 건지.(인덱스 갯수) : 사각형 최대 16개
 void GS_CONTINUOUS_MAIN(point GS_IN In[1], inout TriangleStream<GS_OUT> Container)
 {
     GS_OUT Out[4];
@@ -339,7 +339,7 @@ PS_EFFECT_OUT PS_MAIN(PS_IN In)
     vector vColor = g_DiffuseTexture.Sample(LinearSampler, In.vTexcoord);
     
     vColor *= g_vColor;
-    vColor.rgb = 1.f - (((In.vTexcoord.x + In.fIndex) / (float) g_iNumInstance) + g_fRatio);
+    vColor.rgb *= 1.f - (((In.vTexcoord.x + In.fIndex) / (float) g_iNumInstance) + g_fRatio);
 
     Out.vDiffuse = vColor;
     Out.vBlur = vColor;
@@ -353,7 +353,7 @@ PS_OUT PS_BLEND_MAIN(PS_IN In)
     
     Out.vColor = g_DiffuseTexture.Sample(LinearSampler, In.vTexcoord);
     
-    Out.vColor.a = 1.f - (((In.vTexcoord.x + In.fIndex) / (float) g_iNumInstance) + g_fRatio);
+    Out.vColor.a *= 1.f - (((In.vTexcoord.x + In.fIndex) / (float) g_iNumInstance) + g_fRatio);
         
     return Out;
 }
@@ -432,6 +432,33 @@ PS_EFFECT_OUT PS_TRAIL_B_MAIN(PS_IN In)
     return Out;
 }
 
+PS_OUT PS_BLEND_RGBTOA_MAIN(PS_IN In)
+{
+    PS_OUT Out = (PS_OUT) 0;
+    
+    Out.vColor = g_DiffuseTexture.Sample(LinearSampler, In.vTexcoord);
+    
+    Out.vColor.a = max(Out.vColor.r, max(Out.vColor.g, Out.vColor.b));
+    Out.vColor.a *= 1.f - (((In.vTexcoord.x + In.fIndex) / (float) g_iNumInstance) + g_fRatio);
+        
+    return Out;
+}
+
+PS_OUT PS_DISTORTION_TRAIL_MAIN(PS_IN In)
+{
+    PS_OUT Out = (PS_OUT) 0;
+    
+    Out.vColor = g_DiffuseTexture.Sample(LinearSampler, In.vTexcoord);
+    vector vMask = g_MaskTexture_1.Sample(LinearSampler, In.vTexcoord);
+    
+    Out.vColor *= vMask;
+    Out.vColor.rgb *= 1.f - (((In.vTexcoord.x + In.fIndex) / (float) g_iNumInstance) + g_fRatio);
+
+    if (Out.vColor.r < 0.3f)
+        discard;
+
+    return Out;
+}
 
 
 technique11 DefaultTechnique
@@ -462,7 +489,7 @@ technique11 DefaultTechnique
     pass Distortion // 2
     {
         SetRasterizerState(RS_Cull_None);
-        SetDepthStencilState(DSS_Default, 0);
+        SetDepthStencilState(DSS_NonWrite, 0);
         SetBlendState(BS_Default, vector(0.f, 0.f, 0.f, 0.f), 0xffffffff);
 
         VertexShader = compile vs_5_0 VS_MAIN();
@@ -512,6 +539,28 @@ technique11 DefaultTechnique
         VertexShader = compile vs_5_0 VS_MAIN();
         GeometryShader = compile gs_5_0 GS_MAIN();
         PixelShader = compile ps_5_0 PS_TRAIL_B_MAIN();
+    }
+
+    pass Blend_RGBTOA // 7
+    {
+        SetRasterizerState(RS_Cull_None);
+        SetDepthStencilState(DSS_NonWrite, 0);
+        SetBlendState(BS_AlphaBlend, vector(0.f, 0.f, 0.f, 0.f), 0xffffffff);
+
+        VertexShader = compile vs_5_0 VS_MAIN();
+        GeometryShader = compile gs_5_0 GS_MAIN();
+        PixelShader = compile ps_5_0 PS_BLEND_RGBTOA_MAIN();
+    }
+
+    pass Distortion_Trail // 8
+    {
+        SetRasterizerState(RS_Cull_None);
+        SetDepthStencilState(DSS_Default, 0);
+        SetBlendState(BS_Default, vector(0.f, 0.f, 0.f, 0.f), 0xffffffff);
+
+        VertexShader = compile vs_5_0 VS_MAIN();
+        GeometryShader = compile gs_5_0 GS_MAIN();
+        PixelShader = compile ps_5_0 PS_DISTORTION_TRAIL_MAIN();
     }
 
 }

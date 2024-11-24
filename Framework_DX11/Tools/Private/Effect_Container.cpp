@@ -172,7 +172,6 @@ void CEffect_Container::Update(_float fTimeDelta)
 			Effect->Set_Loop(true);
 		}
 	}
-	
 
 	if (KEY_TAP(KEY::LEFT))
 	{
@@ -184,7 +183,16 @@ void CEffect_Container::Update(_float fTimeDelta)
 		}
 	}
 
-
+	if (KEY_TAP(KEY::UP))
+	{
+		_Vec3 vPos = m_pTransformCom->Get_State(CTransform::STATE_POSITION);
+		m_pTransformCom->Set_State(CTransform::STATE_POSITION, vPos + _Vec3(0.f, 1.f, 0.f));
+	}
+	if (KEY_TAP(KEY::DOWN))
+	{
+		_Vec3 vPos = m_pTransformCom->Get_State(CTransform::STATE_POSITION);
+		m_pTransformCom->Set_State(CTransform::STATE_POSITION, vPos - _Vec3(0.f, 1.f, 0.f));
+	}
 
 	if (true == m_bOrbit)
 	{

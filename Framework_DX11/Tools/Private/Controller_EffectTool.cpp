@@ -1547,8 +1547,8 @@ void CController_EffectTool::Trail_MP_Check()
 		ImGui::InputFloat2("Tex Devide", (_float*)&m_Trail_MPDesc.DefaultDesc.vTexDevide);
 		ImGui::InputFloat("Sprite Speed", &m_Trail_MPDesc.DefaultDesc.fSpriteSpeed);
 
-		ImGui::InputFloat2("Tail Start Scaling", (_float*)&m_ParticleDesc.DefaultDesc.vStartScaling);
-		ImGui::InputFloat2("Tail Scaling Ratio", (_float*)&m_ParticleDesc.DefaultDesc.vScalingRatio);		
+		ImGui::InputFloat2("Tail Start Scaling", (_float*)&m_Trail_MPDesc.DefaultDesc.vStartScaling);
+		ImGui::InputFloat2("Tail Scaling Ratio", (_float*)&m_Trail_MPDesc.DefaultDesc.vScalingRatio);
 		ImGui::InputFloat("Tail StartRotation", &m_Trail_MPDesc.DefaultDesc.fStartRotation);
 		ImGui::InputFloat("Tail Rotation Per Second", &m_Trail_MPDesc.DefaultDesc.fRotationPerSecond);
 

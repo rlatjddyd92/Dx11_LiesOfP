@@ -46,6 +46,11 @@ struct PS_IN
 	float2 vTexcoord : TEXCOORD0;
 };
 
+struct PS_OUT
+{
+    vector vColor : SV_TARGET0;
+};
+
 struct PS_EFFECT_OUT
 {
     vector vDiffuse : SV_TARGET0;
@@ -86,6 +91,21 @@ PS_EFFECT_OUT PS_SELF_DISTORTION_MAIN(PS_IN In)
     return Out;
 }
 
+PS_OUT PS_BLEND_DA_MAIN(PS_IN In)
+{
+    PS_OUT Out = (PS_OUT) 0;
+    float2 vTexcoord = In.vTexcoord * g_vTileRepeat + g_vTileMove;
+    vector vColor = g_DiffuseTexture.Sample(LinearSampler, vTexcoord);
+	
+    vColor.rgb *= g_vColor.rgb;
+    vColor.a *= g_fAlpha * vColor.a;
+	
+    Out.vColor = vColor;
+	
+    return Out;
+}
+
+
 technique11	DefaultTechnique
 {
 	pass Default //0
@@ -109,4 +129,16 @@ technique11	DefaultTechnique
         GeometryShader = NULL;
         PixelShader = compile ps_5_0 PS_SELF_DISTORTION_MAIN();
     }
+
+    pass Blend_DA //2
+    {
+        SetRasterizerState(RS_Default);
+        SetDepthStencilState(DSS_NonWrite, 0);
+        SetBlendState(BS_AlphaBlend, vector(0.f, 0.f, 0.f, 0.f), 0xffffffff);
+
+        VertexShader = compile vs_5_0 VS_MAIN();
+        GeometryShader = NULL;
+        PixelShader = compile ps_5_0 PS_BLEND_DA_MAIN();
+    }
+
 }

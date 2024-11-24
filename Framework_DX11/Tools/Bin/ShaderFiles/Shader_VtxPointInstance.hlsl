@@ -332,7 +332,6 @@ PS_NORMAL_OUT PS_SPRITE_NORMAL_MAIN(PS_IN In)
 {
     PS_NORMAL_OUT Out = (PS_NORMAL_OUT) 0;
 	
-	
     int iTexIndex = (int) ((In.vLifeTime.y / In.vLifeTime.x) * (g_vTexDivide.x * g_vTexDivide.y - 1.f) * g_fSpriteSpeed);
     float2 vTexcoord = Get_SpriteTexcoord(In.vTexcoord, iTexIndex);
     Out.vDiffuse = g_DiffuseTexture.Sample(LinearSampler, vTexcoord);
@@ -431,6 +430,55 @@ PS_OUT PS_SMOKE_MAIN(PS_IN In)
     return Out;
 }
 
+PS_NORMAL_OUT PS_INDEX_NORMAL_MAIN(PS_IN In)
+{
+    PS_NORMAL_OUT Out = (PS_NORMAL_OUT) 0;
+	
+    int iTexIndex = (int)(In.vColor.a * 16.f);
+    float2 vTexcoord = Get_SpriteTexcoord(In.vTexcoord, iTexIndex);
+    Out.vDiffuse = g_DiffuseTexture.Sample(LinearSampler, vTexcoord);
+
+    if (Out.vDiffuse.a <= 0.3f)
+        discard;
+
+    if (In.vLifeTime.y >= In.vLifeTime.x)
+        discard;
+    
+    vector vNomral = g_NormalTexture.Sample(LinearSampler, vTexcoord);
+    Out.vNormal = vNomral * 2.f - 1.f;
+    
+    Out.vDepth = float4(0.f, 0.f, 0.f, 0.f);
+    Out.vARM = float4(0.f, 0.f, 0.f, 0.f);
+    Out.vPickDepth = float4(0.f, 0.f, 0.f, 0.f);
+    
+    return Out;
+}
+
+PS_EFFECT_OUT PS_THUNDER_MAIN(PS_IN In)
+{
+    PS_EFFECT_OUT Out = (PS_EFFECT_OUT) 0;
+	
+    int iTexIndex = (int) ((In.vLifeTime.y / In.vLifeTime.x) * (g_vTexDivide.x * g_vTexDivide.y - 1.f) * g_fSpriteSpeed);
+    vector vColor = g_DiffuseTexture.Sample(LinearSampler, Get_SpriteTexcoord(In.vTexcoord, iTexIndex));
+    
+    vColor.a = max(vColor.r, max(vColor.g, vColor.b));
+    
+    if (vColor.a <= 0.1f)
+        discard;
+
+    if (In.vLifeTime.y >= In.vLifeTime.x)
+        discard;
+    
+    vColor.rgb *= 3.f;
+    vColor.rgb *= In.vColor.rgb;
+    vColor.rgb *= 1.f - (In.vLifeTime.y / In.vLifeTime.x);
+    
+    Out.vDiffuse = vColor;
+    Out.vBlur = vColor;
+
+    return Out;
+}
+
 technique11	DefaultTechnique
 {
 	pass DEFAULT // 0
@@ -508,6 +556,28 @@ technique11	DefaultTechnique
         VertexShader = compile vs_5_0 VS_MAIN();
         GeometryShader = compile gs_5_0 GS_MAIN();
         PixelShader = compile ps_5_0 PS_SMOKE_MAIN();
+    }
+
+    pass PARTICLE_INDEX_STONE // 7
+    {
+        SetRasterizerState(RS_Default);
+        SetDepthStencilState(DSS_Default, 0);
+        SetBlendState(BS_Default, vector(0.f, 0.f, 0.f, 0.f), 0xffffffff);
+
+        VertexShader = compile vs_5_0 VS_MAIN();
+        GeometryShader = compile gs_5_0 GS_MAIN();
+        PixelShader = compile ps_5_0 PS_INDEX_NORMAL_MAIN();
+    }
+
+    pass PARTICLE_THUNDER // 8
+    {
+        SetRasterizerState(RS_Default);
+        SetDepthStencilState(DSS_NonWrite, 0);
+        SetBlendState(BS_Default, vector(0.f, 0.f, 0.f, 0.f), 0xffffffff);
+
+        VertexShader = compile vs_5_0 VS_MAIN();
+        GeometryShader = compile gs_5_0 GS_DIR_MAIN();
+        PixelShader = compile ps_5_0 PS_THUNDER_MAIN();
     }
 
 }

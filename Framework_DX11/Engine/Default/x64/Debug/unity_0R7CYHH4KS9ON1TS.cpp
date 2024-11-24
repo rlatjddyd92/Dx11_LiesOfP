@@ -113,9 +113,6 @@
 #include "C:\Users\wnsgh\GitHub\3D\Dx11_LiesOfP\Framework_DX11\Engine\Private\Object_Manager.cpp"
 
 
-#include "C:\Users\wnsgh\GitHub\3D\Dx11_LiesOfP\Framework_DX11\Engine\Private\Pawn.cpp"
-
-
 #include "C:\Users\wnsgh\GitHub\3D\Dx11_LiesOfP\Framework_DX11\Engine\Private\PhysX_Manager.cpp"
 
 
@@ -144,6 +141,12 @@
 
 
 #include "C:\Users\wnsgh\GitHub\3D\Dx11_LiesOfP\Framework_DX11\Engine\private\Shader_NonVTX.cpp"
+
+
+#include "C:\Users\wnsgh\GitHub\3D\Dx11_LiesOfP\Framework_DX11\Engine\Private\Sound.cpp"
+
+
+#include "C:\Users\wnsgh\GitHub\3D\Dx11_LiesOfP\Framework_DX11\Engine\Private\Sound_Manager.cpp"
 
 
 #include "C:\Users\wnsgh\GitHub\3D\Dx11_LiesOfP\Framework_DX11\Engine\Private\State.cpp"
