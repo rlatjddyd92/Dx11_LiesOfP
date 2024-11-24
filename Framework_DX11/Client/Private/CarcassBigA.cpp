@@ -13,6 +13,7 @@
 #include "State_CarcassBigA_LOSwingRight.h"
 #include "State_CarcassBigA_RageAttack.h"
 #include "State_CarcassBigA_WheelWind.h"
+#include "State_CarcassBigA_Impact.h"
 
 #include "State_CarcassBigA_AttackRoute_0.h"
 #include "State_CarcassBigA_AttackRoute_1.h"
@@ -64,7 +65,6 @@ HRESULT CCarcassBigA::Initialize(void* pArg)
 		return E_FAIL;
 
 	m_strObjectTag = TEXT("Monster");
-	m_pColliderCom->Set_Owner(this);
 
 	m_pTransformCom->Set_State(CTransform::STATE_POSITION,
 		XMVectorSet(0.f, 0.f, 0.f, 1.f));
@@ -179,19 +179,18 @@ HRESULT CCarcassBigA::Ready_Components()
 
 	/* FOR.Com_Collider */		//Body
 	CBounding_OBB::BOUNDING_OBB_DESC			ColliderDesc{};
-	ColliderDesc.vExtents = _float3(0.5f, 2.f, 0.5f);
-	ColliderDesc.vCenter = _float3(0.f, 1.f, 0.f);
-	ColliderDesc.vAngles = _float3(0.f, 0.f, 0.f);
+	ColliderDesc.vExtents = _float3(0.8f, 2.f, 0.7f);
+	ColliderDesc.vCenter = _float3(0.f, 1.f, 0.3f);
+	ColliderDesc.vAngles = _float3(0.f, 0.3f, 0.f);
 
 	if (FAILED(__super::Add_Component(LEVEL_STATIC, TEXT("Prototype_Component_Collider_OBB"),
 		TEXT("Com_Collider"), reinterpret_cast<CComponent**>(&m_pColliderCom), &ColliderDesc)))
 		return E_FAIL;
 
+	m_pColliderCom->Set_Owner(this);
+
 	/* FOR.Com_Collider_OBB */
 	CBounding_OBB::BOUNDING_OBB_DESC			ColliderOBBDesc_Obj{};
-
-	//ColliderAABBDesc_Obj.vExtents = _float3(0.5f, 1.0f, 0.5f);
-	//ColliderAABBDesc_Obj.vCenter = _float3(0.f, ColliderAABBDesc.vExtents.y, 0.f);
 
 	ColliderOBBDesc_Obj.vAngles = _float3(0.0f, 0.0f, 0.0f);
 	ColliderOBBDesc_Obj.vCenter = _float3(0.2f, 0.f, 0.f);
@@ -215,19 +214,15 @@ HRESULT CCarcassBigA::Ready_Components()
 	ColliderOBBDesc_Obj.vCenter = _float3(0.2f, 0.f, 0.f);
 	ColliderOBBDesc_Obj.vExtents = _float3(0.5f, 0.3f, 0.3f);
 	
-	Desc.pBoundingDesc = &ColliderOBBDesc_Obj;
-	Desc.eType = CCollider::TYPE_OBB;
 	Desc.pSocketBoneMatrix = m_pModelCom->Get_BoneCombindTransformationMatrix_Ptr(m_pModelCom->Get_UFBIndices(UFB_HAND_RIGHT));
 	
 	m_pColliderObject[TYPE_RIGHTHAND] = dynamic_cast<CColliderObject*>(m_pGameInstance->Clone_GameObject(TEXT("Prototype_GameObject_ColliderObj"), &Desc));
 
-	ColliderOBBDesc_Obj.vAngles = _float3(0.0f, 0.0f, 0.0f);
-	ColliderOBBDesc_Obj.vCenter = _float3(0.f, 0.f, 0.f);
-	ColliderOBBDesc_Obj.vExtents = _float3(0.7f, 0.5f, 0.5f);
+	ColliderOBBDesc_Obj.vAngles = _float3(0.f, 0.0f, 0.f);
+	ColliderOBBDesc_Obj.vCenter = _float3(0.8f, 0.f, -1.8f);
+	ColliderOBBDesc_Obj.vExtents = _float3(0.4f, 0.75f, 1.2f);
 
-	Desc.pBoundingDesc = &ColliderOBBDesc_Obj;
-	Desc.eType = CCollider::TYPE_OBB;
-	Desc.pSocketBoneMatrix = m_pModelCom->Get_BoneCombindTransformationMatrix_Ptr(5);
+	Desc.pSocketBoneMatrix = m_pModelCom->Get_BoneCombindTransformationMatrix_Ptr(2);
 	Desc.fDamageAmount = 3.f;
 
 	m_pColliderObject[TYPE_IMPACT] = dynamic_cast<CColliderObject*>(m_pGameInstance->Clone_GameObject(TEXT("Prototype_GameObject_ColliderObj"), &Desc));
@@ -260,6 +255,7 @@ HRESULT CCarcassBigA::Ready_FSM()
 	m_pFsmCom->Add_State(CState_CarcassBigA_LOSwingRight::Create(m_pFsmCom, this, LO_SWINGRIGHT, &Desc));
 	m_pFsmCom->Add_State(CState_CarcassBigA_LTSwingRight::Create(m_pFsmCom, this, LT_SWINGRIGHT, &Desc));
 	m_pFsmCom->Add_State(CState_CarcassBigA_RageAttack::Create(m_pFsmCom, this, RAGE_ATTACK, &Desc));
+	m_pFsmCom->Add_State(CState_CarcassBigA_Impact::Create(m_pFsmCom, this, ATK_IMPACT, &Desc));
 
 	m_pFsmCom->Add_State(CState_CarcassBigA_AttackRoute_0::Create(m_pFsmCom, this, ATK_ROUTE_0, &Desc));
 	m_pFsmCom->Add_State(CState_CarcassBigA_AttackRoute_1::Create(m_pFsmCom, this, ATK_ROUTE_1, &Desc));

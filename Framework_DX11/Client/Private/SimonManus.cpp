@@ -26,6 +26,7 @@
 #include "State_SimonManusP1_SwipMultiple_L.h"
 #include "State_SimonManusP1_SwingDown_Swing_R.h"
 #include "State_SimonManusP1_SwingDown_Swing_L.h"
+#include "State_SimonManusP1_Charge_SwingDown.h"
 #pragma endregion
 
 #pragma region Phase2
@@ -125,9 +126,6 @@ void CSimonManus::Priority_Update(_float fTimeDelta)
 
 void CSimonManus::Update(_float fTimeDelta)
 {
-
-	m_fHp;
-
 	m_pFsmCom->Update(fTimeDelta);
 
 	m_vCurRootMove = m_pModelCom->Play_Animation(fTimeDelta, nullptr);
@@ -345,8 +343,9 @@ HRESULT CSimonManus::Ready_FSM()
 	m_pFsmCom->Add_State(CState_SimonManusP1_SwingDown_Swing_L::Create(m_pFsmCom, this, ATK_SWINGDOWN_L, &Desc));
 	m_pFsmCom->Add_State(CState_SimonManusP1_JumpToSwing::Create(m_pFsmCom, this, ATK_JUMPTOSWING, &Desc));
 	m_pFsmCom->Add_State(CState_SimonManusP1_HighJumpFall::Create(m_pFsmCom, this, ATK_HIGHJUMPFALL, &Desc));
+	m_pFsmCom->Add_State(CState_SimonManusP1_Charge_SwingDown::Create(m_pFsmCom, this, ATK_CHARGE_SWINGDOWN, &Desc));
 
-
+	
 	m_pFsmCom->Set_State(IDLE);
 #pragma endregion
 

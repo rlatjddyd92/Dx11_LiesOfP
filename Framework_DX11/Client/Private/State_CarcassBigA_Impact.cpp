@@ -33,6 +33,15 @@ void CState_CarcassBigA_Impact::Update(_float fTimeDelta)
 {
     if (End_Check())
         m_pMonster->Change_State(CCarcassBigA::IDLE);
+    
+    
+    _double CurTrackPos = m_pMonster->Get_CurrentTrackPos();
+    
+    if (CurTrackPos >= 55.f && CurTrackPos <= 135.f)
+    {
+        m_pMonster->Get_Transform()->Go_Straight(fTimeDelta * 2);
+    }
+   
 
     Collider_Check();
 }

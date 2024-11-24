@@ -31,6 +31,7 @@ public:
 	virtual HRESULT Render_Height() { return S_OK; }
 	virtual HRESULT Render_LightDepth() { return S_OK; }
 
+	virtual _bool Calc_DamageGain(_float fAtkDmg);
 public:
 	virtual void OnCollisionEnter(CGameObject* pOther) override;
 	virtual void OnCollisionStay(CGameObject* pOther) override;

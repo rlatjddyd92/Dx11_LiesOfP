@@ -170,12 +170,12 @@ void CMonster::DeActive_CurretnWeaponCollider(_uint iCollIndex)
 
 void CMonster::OnCollisionEnter(CGameObject* pOther)
 {
-	if (pOther->Get_Tag() == TEXT("PlayerWeapon"))
-	{
-		CWeapon* pWeapon = dynamic_cast<CWeapon*>(pOther);
-		
-		m_fHp -= pWeapon->Get_AtkDmg();
-	}
+	//if (pOther->Get_Tag() == TEXT("PlayerWeapon"))
+	//{
+	//	CWeapon* pWeapon = dynamic_cast<CWeapon*>(pOther);
+	//	
+	//	m_fHp -= pWeapon->Get_AtkDmg();
+	//}
 
 }
 

@@ -87,8 +87,8 @@ void CState_SimonManusP1_Idle::Calc_Act_Attack(_float fDist)
 {
     if (fDist <= 4.f)
     {
-        //어보이드, 점프, 스다 엘알  스탬프 까지
-        _int iAtkNum = rand() % 5;
+        //어보이드, 점프, 스다 엘알  스탬프, 차지까지 까지
+        _int iAtkNum = rand() % 6;
         switch (iAtkNum)
         {
         case 0:
@@ -109,6 +109,10 @@ void CState_SimonManusP1_Idle::Calc_Act_Attack(_float fDist)
 
         case 4:
             m_pMonster->Change_State(CSimonManus::ATK_JUMPTOSWING);
+            break;
+
+        case 5:
+            m_pMonster->Change_State(CSimonManus::ATK_CHARGE_SWINGDOWN);
             break;
 
         default:

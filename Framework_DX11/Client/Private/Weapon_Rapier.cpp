@@ -90,7 +90,21 @@ void CWeapon_Rapier::OnCollisionEnter(CGameObject* pOther)
 {
 	if (pOther->Get_Tag() == TEXT("Monster"))
 	{
+		_bool bOverlapCheck = false;
+		for (auto& pObj : m_DamagedObjects)
+		{
+			if (pObj == pOther)
+			{
+				bOverlapCheck = true;
+				break;
+			}
+		}
 
+		if (!bOverlapCheck)
+		{
+			m_DamagedObjects.push_back(pOther);
+			pOther->Calc_DamageGain(m_fDamageAmount * m_fDamageRatio);
+		}
 	}
 }
 
