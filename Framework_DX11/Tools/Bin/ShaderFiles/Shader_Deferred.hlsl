@@ -286,6 +286,7 @@ PS_OUT PS_MAIN_DEFERRED(PS_IN In)
     vector vDiffuse = g_DiffuseTexture.Sample(LinearSampler, In.vTexcoord);
     vector vDepthDesc = g_DepthTexture.Sample(PointSampler, In.vTexcoord);
     vector vNormalDesc = g_NormalTexture.Sample(PointSampler, In.vTexcoord);
+    vector vPriority = g_PriorityTexture.Sample(LinearSampler, In.vTexcoord);
 	
     float fViewZ = vDepthDesc.y * g_fFar;
     float3 vNormal = float3(vNormalDesc.xyz * 2.f - 1.f);
@@ -294,13 +295,18 @@ PS_OUT PS_MAIN_DEFERRED(PS_IN In)
 
     vector vDecal = g_DecalDiffuseTexture.Sample(LinearSampler, In.vTexcoord);
     vDiffuse = vector(lerp(vDiffuse, vDecal, vDecal.a)); // 알파 값에 따라 혼합
-    //vDiffuse = vDiffuse / 3.141592;
+
     
 	vector		vShade = g_ShadeTexture.Sample(LinearSampler, In.vTexcoord);
 	vector		vSpecular = g_SpecularTexture.Sample(LinearSampler, In.vTexcoord);
 	
     Out.vColor = (vDiffuse * vShade + vSpecular) * g_CascadeShadowTexture.Sample(LinearSampler, In.vTexcoord);
+    if (vDiffuse.a == 0)
+    {
+        Out.vColor = vPriority;
+        Out.vColor.a = 0;
 
+    }
         
     //림라이트
     float4 vRimLightColor = g_RimLightTexture.Sample(LinearSampler, In.vTexcoord);
