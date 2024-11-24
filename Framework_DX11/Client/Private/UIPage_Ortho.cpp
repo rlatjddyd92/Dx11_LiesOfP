@@ -39,6 +39,7 @@ HRESULT CUIPage_Ortho::Initialize_Prototype()
 	Initialize_Ortho_Info();
 
 	m_bRender = false;
+	m_fTopPartMove = 1.f;
 
 	return S_OK;
 }
@@ -148,9 +149,11 @@ HRESULT CUIPage_Ortho::Render_Ortho_UI()
 		{
 			if ((eType == PART_GROUP::GROUP_HP_COUNT) || (eType == PART_GROUP::GROUP_HP_FILL))
 				m_vecPart[0]->fPosition = { m_fX, m_fY };
-		
 
 			__super::UpdatePart_ByIndex(iter, m_fTimeDelta);
+
+			/*if (eType != PART_GROUP::GROUP_HP_COUNT)
+				m_vecPart[iter]->fPosition = { m_vecPart[iter]->fPosition.x + m_fViewWidth * 0.5f, m_vecPart[iter]->fPosition.y - m_fViewHeight * 0.5f };*/
 
 			__super::Input_Render_Info(*m_vecPart[iter]);
 		}
