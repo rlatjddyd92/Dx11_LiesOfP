@@ -79,6 +79,9 @@ public: // 외부에서 매니저 접근
 	// 직교 UI 요청 
 	void Register_Pointer_Into_OrthoUIPage(UI_ORTHO_OBJ_TYPE eType, void* pObj) { m_pUIManager->Register_Pointer_Into_OrthoUIPage(eType, pObj); }
 
+	// 아이템 획득 정보 
+	void Input_Drop_Item_Info(_int iIndex, _int iCount) { m_pUIManager->Input_Drop_Item_Info(iIndex, iCount); }
+
 #pragma endregion
 
 

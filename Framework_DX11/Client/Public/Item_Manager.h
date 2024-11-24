@@ -154,7 +154,7 @@ public:
 			}
 		}
 
-		_uint Get_Array_Size() { return vecItemInfo.size(); }
+		_uint Get_Array_Size() { return _uint(vecItemInfo.size()); }
 		ITEM* Get_Item_Info(_uint iIndex) 
 		{
 			if ((iIndex < 0) || (iIndex >= Get_Array_Size()))
@@ -291,7 +291,6 @@ public:
 		return m_vecArray_Inven[_uint(m_vecEquip_ItemInfo[_uint(eSlot)]->eType)]->vecItemInfo[_uint(m_vecEquip_ItemInfo[_uint(eSlot)]->iIndex)];
 	}
 
-	
 
 	// 코인
 	ITEM_RESULT Add_Coin(_int iAdd, _bool bForce)
@@ -309,16 +308,30 @@ public:
 	// 선택 아이템 조정
 	_int Change_Potion_Select(_bool bNext)
 	{
-		m_iPotion_Select += -1 + (bNext ? true : 2);
-		m_iPotion_Select = max(m_iPotion_Select, 0);
-		m_iPotion_Select = min(m_iPotion_Select, 2);
+		if (bNext)
+			++m_iPotion_Select;
+		else
+			--m_iPotion_Select;
+		
+		if (m_iPotion_Select > 2)
+			m_iPotion_Select = 0;
+		else if (m_iPotion_Select < 0)
+			m_iPotion_Select = 2;
+
 		return m_iPotion_Select;
 	}
 	_int Change_Tool_Select(_bool bNext)
 	{
-		m_iTool_Select += -1 + (bNext ? true : 2);
-		m_iTool_Select = max(m_iTool_Select, 0);
-		m_iTool_Select = min(m_iTool_Select, 2);
+		if (bNext)
+			++m_iTool_Select;
+		else
+			--m_iTool_Select;
+
+		if (m_iTool_Select > 2)
+			m_iTool_Select = 0;
+		else if (m_iTool_Select < 0)
+			m_iTool_Select = 2;
+
 		return m_iTool_Select;
 	}
 	_int Get_Potion_Select() { return m_iPotion_Select; }
@@ -328,7 +341,9 @@ public:
 	_int Change_Weapon()
 	{
 		++m_iWeapon_Select;
-		m_iWeapon_Select = m_iWeapon_Select ? 2 : 0;
+		if (m_iWeapon_Select >= 2)
+			m_iWeapon_Select = 0;
+
 		return m_iWeapon_Select;
 	}
 	_int Get_Weapon() { return m_iWeapon_Select; }

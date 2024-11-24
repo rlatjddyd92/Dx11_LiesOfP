@@ -75,6 +75,7 @@ void CUIPage_Play::Late_Update(_float fTimeDelta)
 
 	PlayInfo_Update(fTimeDelta);
 	m_bCan_InterAction = true;
+	__super::Array_Control(_int(PART_GROUP::GROUP_INTER_STATIC), _int(PART_GROUP::GROUP_INTER_TEXT), CTRL_COMMAND::COM_RENDER, false);
 }
 
 HRESULT CUIPage_Play::Render()
@@ -124,6 +125,8 @@ HRESULT CUIPage_Play::Ready_UIPart_Group_Control()
 	__super::Array_Control(_int(PART_GROUP::GROUP_POTION_FRAME), _int(PART_GROUP::GROUP_SELECT_CELL), CTRL_COMMAND::COM_RENDER, true);
 	__super::Array_Control(_int(PART_GROUP::GROUP_BAG_FRAMELINE), _int(PART_GROUP::GROUP_BAG_NUM), CTRL_COMMAND::COM_RENDER, false);
 	__super::Array_Control(_int(PART_GROUP::GROUP_DROP_STATIC), _int(PART_GROUP::GROUP_DEBUFF_FILL), CTRL_COMMAND::COM_RENDER, false);
+
+	m_iWeapon_Equip_0_Symbol = m_vecPart[m_vec_Group_Ctrl[_int(PART_GROUP::GROUP_WEAPON_EQUIP_NUM)]->PartIndexlist.front()]->iTexture_Index;
 	
 	return S_OK;
 }
@@ -164,14 +167,14 @@ void CUIPage_Play::Action_Potion_Tool(_float fTimeDelta)
 			if (m_bIsBagOpen)
 			{
 				m_bIsBagOpen = false;
-				__super::Array_Control(_int(PART_GROUP::GROUP_POTION_FRAME), _int(PART_GROUP::GROUP_SELECT_CELL), CTRL_COMMAND::COM_RENDER, false);
-				__super::Array_Control(_int(PART_GROUP::GROUP_BAG_FRAMELINE), _int(PART_GROUP::GROUP_BAG_NUM), CTRL_COMMAND::COM_RENDER, true);
+				__super::Array_Control(_int(PART_GROUP::GROUP_POTION_FRAME), _int(PART_GROUP::GROUP_SELECT_CELL), CTRL_COMMAND::COM_RENDER, true);
+				__super::Array_Control(_int(PART_GROUP::GROUP_BAG_FRAMELINE), _int(PART_GROUP::GROUP_BAG_NUM), CTRL_COMMAND::COM_RENDER, false);
 			}
 			else
 			{
 				m_bIsBagOpen = true;
-				__super::Array_Control(_int(PART_GROUP::GROUP_POTION_FRAME), _int(PART_GROUP::GROUP_SELECT_CELL), CTRL_COMMAND::COM_RENDER, true);
-				__super::Array_Control(_int(PART_GROUP::GROUP_BAG_FRAMELINE), _int(PART_GROUP::GROUP_BAG_NUM), CTRL_COMMAND::COM_RENDER, false);
+				__super::Array_Control(_int(PART_GROUP::GROUP_POTION_FRAME), _int(PART_GROUP::GROUP_SELECT_CELL), CTRL_COMMAND::COM_RENDER, false);
+				__super::Array_Control(_int(PART_GROUP::GROUP_BAG_FRAMELINE), _int(PART_GROUP::GROUP_BAG_NUM), CTRL_COMMAND::COM_RENDER, true);
 			}
 		}
 	}
@@ -282,7 +285,6 @@ void CUIPage_Play::LD_Potion_Tool_Update(_float fTimeDelta)
 	{
 		if (i == iPotion_Select)
 			dequeTexture_Index_Potion.push_front(GET_GAMEINTERFACE->Get_Equip_Item_Info(EQUIP_SLOT(i + _int(EQUIP_SLOT::EQUIP_USING_TOP_0))));
-
 		else 
 			dequeTexture_Index_Potion.push_back(GET_GAMEINTERFACE->Get_Equip_Item_Info(EQUIP_SLOT(i + _int(EQUIP_SLOT::EQUIP_USING_TOP_0))));
 	}
@@ -292,10 +294,28 @@ void CUIPage_Play::LD_Potion_Tool_Update(_float fTimeDelta)
 		const CItem_Manager::ITEM* pNow = dequeTexture_Index_Potion.front();
 		dequeTexture_Index_Potion.pop_front();
 
+		if (pNow == nullptr)
+		{
+			if (i == 0)
+			{
+				__super::Get_Front_Part_In_Control(_int(PART_GROUP::GROUP_POTION_ITEM))->iTexture_Index = -1;
+				m_vec_Group_Ctrl[_int(PART_GROUP::GROUP_POTION_COUNT)]->bRender = false;
+				//__super::Get_Front_Part_In_Control(_int(PART_GROUP::GROUP_POTION_FILL))
+			}
+			else if (i != 2)
+			{
+				m_vecPart[m_vec_Group_Ctrl[_int(PART_GROUP::GROUP_POTION_QUEUE_ITEM)]->PartIndexlist.front()]->iTexture_Index = -1;
+			}
+			else
+				m_vecPart[m_vec_Group_Ctrl[_int(PART_GROUP::GROUP_POTION_QUEUE_ITEM)]->PartIndexlist.back()]->iTexture_Index = -1;
+			continue;
+		}
+
 		if (i == 0)
 		{
+			m_vec_Group_Ctrl[_int(PART_GROUP::GROUP_POTION_COUNT)]->bRender = true;
 			__super::Get_Front_Part_In_Control(_int(PART_GROUP::GROUP_POTION_ITEM))->iTexture_Index = pNow->iTexture_Index;
-			__super::Get_Front_Part_In_Control(_int(PART_GROUP::GROUP_POTION_COUNT))->strText = pNow->iCount;
+			__super::Get_Front_Part_In_Control(_int(PART_GROUP::GROUP_POTION_COUNT))->strText = to_wstring(pNow->iCount);
 			//__super::Get_Front_Part_In_Control(_int(PART_GROUP::GROUP_POTION_FILL))
 		}
 		else if (i != 2)
@@ -303,7 +323,10 @@ void CUIPage_Play::LD_Potion_Tool_Update(_float fTimeDelta)
 			m_vecPart[m_vec_Group_Ctrl[_int(PART_GROUP::GROUP_POTION_QUEUE_ITEM)]->PartIndexlist.front()]->iTexture_Index = pNow->iTexture_Index;
 		}
 		else
+		{
 			m_vecPart[m_vec_Group_Ctrl[_int(PART_GROUP::GROUP_POTION_QUEUE_ITEM)]->PartIndexlist.back()]->iTexture_Index = pNow->iTexture_Index;
+		}
+			
 	}
 
 	_int iTool_Select = GET_GAMEINTERFACE->Get_Tool_Select();
@@ -311,7 +334,7 @@ void CUIPage_Play::LD_Potion_Tool_Update(_float fTimeDelta)
 
 	for (_int i = 0; i < 3; ++i)
 	{
-		if (i == iPotion_Select)
+		if (i == iTool_Select)
 			dequeTexture_Index_Tool.push_front(GET_GAMEINTERFACE->Get_Equip_Item_Info(EQUIP_SLOT(i + _int(EQUIP_SLOT::EQUIP_USING_BOTTOM_0))));
 
 		else
@@ -323,10 +346,29 @@ void CUIPage_Play::LD_Potion_Tool_Update(_float fTimeDelta)
 		const CItem_Manager::ITEM* pNow = dequeTexture_Index_Tool.front();
 		dequeTexture_Index_Tool.pop_front();
 
+		if (pNow == nullptr)
+		{
+			if (i == 0)
+			{
+				__super::Get_Front_Part_In_Control(_int(PART_GROUP::GROUP_TOOL_ITEM))->iTexture_Index = -1;
+				m_vec_Group_Ctrl[_int(PART_GROUP::GROUP_TOOL_COUNT)]->bRender = false;
+				__super::Get_Front_Part_In_Control(_int(PART_GROUP::GROUP_TOOL_COUNT))->bRender = false;
+				//__super::Get_Front_Part_In_Control(_int(PART_GROUP::GROUP_POTION_FILL))
+			}
+			else if (i != 2)
+			{
+				m_vecPart[m_vec_Group_Ctrl[_int(PART_GROUP::GROUP_TOOL_QUEUE_ITEM)]->PartIndexlist.front()]->iTexture_Index = -1;
+			}
+			else
+				m_vecPart[m_vec_Group_Ctrl[_int(PART_GROUP::GROUP_TOOL_QUEUE_ITEM)]->PartIndexlist.back()]->iTexture_Index = -1;
+			continue;
+		}
+
 		if (i == 0)
 		{
+			m_vec_Group_Ctrl[_int(PART_GROUP::GROUP_TOOL_COUNT)]->bRender = true;
 			__super::Get_Front_Part_In_Control(_int(PART_GROUP::GROUP_TOOL_ITEM))->iTexture_Index = pNow->iTexture_Index;
-			__super::Get_Front_Part_In_Control(_int(PART_GROUP::GROUP_TOOL_COUNT))->strText = pNow->iCount;
+			__super::Get_Front_Part_In_Control(_int(PART_GROUP::GROUP_TOOL_COUNT))->strText = to_wstring(pNow->iCount);
 			//__super::Get_Front_Part_In_Control(_int(PART_GROUP::GROUP_POTION_FILL))
 		}
 		else if (i != 2)
@@ -334,7 +376,10 @@ void CUIPage_Play::LD_Potion_Tool_Update(_float fTimeDelta)
 			m_vecPart[m_vec_Group_Ctrl[_int(PART_GROUP::GROUP_TOOL_QUEUE_ITEM)]->PartIndexlist.front()]->iTexture_Index = pNow->iTexture_Index;
 		}
 		else
+		{
 			m_vecPart[m_vec_Group_Ctrl[_int(PART_GROUP::GROUP_TOOL_QUEUE_ITEM)]->PartIndexlist.back()]->iTexture_Index = pNow->iTexture_Index;
+		}
+			
 	}		
 }
 
@@ -396,14 +441,13 @@ void CUIPage_Play::RD_Weapon_Update(_float fTimeDelta)
 	m_vecPart[m_vec_Group_Ctrl[_int(PART_GROUP::GROUP_WEAPON_EQUIP_NUM)]->PartIndexlist.front()]->iTexture_Index = m_iWeapon_Equip_0_Symbol + iSelect;
 
 	_bool bSingle_Cell_Blade = pNowBlade->iFable_Art_Cost ? 1 : true;
-	_bool bSingle_Cell_Handle = pNowHandle->iFable_Art_Cost ? 1 : true;
 
 	__super::Array_Control(_int(PART_GROUP::GROUP_WEAPON_GAUGE_LEFT_SIDE_FRAME), _int(PART_GROUP::GROUP_WEAPON_GAUGE_LEFT_SIDE_FILL), CTRL_COMMAND::COM_RENDER, !bSingle_Cell_Blade);
-	__super::Array_Control(_int(PART_GROUP::GROUP_WEAPON_GAUGE_RIGHT_SIDE_FRAME), _int(PART_GROUP::GROUP_WEAPON_GAUGE_RIGHT_SIDE_FILL), CTRL_COMMAND::COM_RENDER, !bSingle_Cell_Handle);
+	__super::Array_Control(_int(PART_GROUP::GROUP_WEAPON_GAUGE_RIGHT_SIDE_FRAME), _int(PART_GROUP::GROUP_WEAPON_GAUGE_RIGHT_SIDE_FILL), CTRL_COMMAND::COM_RENDER, bSingle_Cell_Blade);
 	m_vec_Group_Ctrl[_int(PART_GROUP::GROUP_WEAPON_GAUGE_LEFT_KEYSET_A)]->bRender = bSingle_Cell_Blade;
 	m_vec_Group_Ctrl[_int(PART_GROUP::GROUP_WEAPON_GAUGE_LEFT_KEYSET_B)]->bRender = !bSingle_Cell_Blade;
-	m_vec_Group_Ctrl[_int(PART_GROUP::GROUP_WEAPON_GAUGE_RIGHT_KEYSET_A)]->bRender = bSingle_Cell_Handle;
-	m_vec_Group_Ctrl[_int(PART_GROUP::GROUP_WEAPON_GAUGE_RIGHT_KEYSET_B)]->bRender = !bSingle_Cell_Handle;
+	m_vec_Group_Ctrl[_int(PART_GROUP::GROUP_WEAPON_GAUGE_RIGHT_KEYSET_A)]->bRender = !bSingle_Cell_Blade;
+	m_vec_Group_Ctrl[_int(PART_GROUP::GROUP_WEAPON_GAUGE_RIGHT_KEYSET_B)]->bRender = bSingle_Cell_Blade;
 }
 
 void CUIPage_Play::PlayInfo_Update(_float fTimeDelta)
@@ -414,7 +458,7 @@ void CUIPage_Play::PlayInfo_Update(_float fTimeDelta)
 
 void CUIPage_Play::Add_Render_Info_DropInfo(_float fTimeDelta)
 {
-	_int iAlpha_Ratio_Origin = m_fTopPartMove;
+	_float fAlpha_Ratio_Origin = m_fTopPartMove;
 	_float fHeight = __super::Get_Front_Part_In_Control(_int(PART_GROUP::GROUP_DROP_STATIC))->fSize.y * 1.1f;
 
 	for (list<DROP_ITEM_INFO*>::iterator iter = m_DropItem_Index_list.begin(); iter != m_DropItem_Index_list.end(); )
@@ -423,6 +467,7 @@ void CUIPage_Play::Add_Render_Info_DropInfo(_float fTimeDelta)
 
 		if ((*iter)->fLifeTime <= 0.f)
 		{
+			Safe_Delete(*iter);
 			iter = m_DropItem_Index_list.erase(iter);
 		}
 		else
@@ -436,9 +481,10 @@ void CUIPage_Play::Add_Render_Info_DropInfo(_float fTimeDelta)
 					__super::Get_Front_Part_In_Control(_int(PART_GROUP::GROUP_DROP_NAME))->strText = GET_GAMEINTERFACE->Get_Item_Origin_Spec((*iter)->iIndex)->strName;
 
 				if (m_fDrop_Item_ShowTime - (*iter)->fLifeTime < m_fEmerge_Effect_Time)
-					m_fTopPartMove = m_fEmerge_Effect_Time - (m_fDrop_Item_ShowTime - (*iter)->fLifeTime) / m_fEmerge_Effect_Time;
-				else if ((*iter)->fLifeTime > m_fEmerge_Effect_Time)
+					m_fTopPartMove = (m_fDrop_Item_ShowTime - (*iter)->fLifeTime) / m_fEmerge_Effect_Time;
+				else if ((*iter)->fLifeTime < m_fEmerge_Effect_Time)
 					m_fTopPartMove = (*iter)->fLifeTime / m_fEmerge_Effect_Time;
+				
 
 				for (auto& iterIndex : m_vec_Group_Ctrl[i]->PartIndexlist)
 				{
@@ -446,15 +492,17 @@ void CUIPage_Play::Add_Render_Info_DropInfo(_float fTimeDelta)
 					m_vecPart[iterIndex]->fPosition.y -= fHeight;
 				}
 			}
+
+			++iter;
 		}
 	}
 
-	m_fTopPartMove = iAlpha_Ratio_Origin;
+	m_fTopPartMove = fAlpha_Ratio_Origin;
 }
 
 void CUIPage_Play::Add_Render_Info_BuffInfo(_float fTimeDelta)
 {
-	_int iAlpha_Ratio_Origin = m_fTopPartMove;
+	_float fAlpha_Ratio_Origin = m_fTopPartMove;
 	_float fHeight = __super::Get_Front_Part_In_Control(_int(PART_GROUP::GROUP_DEBUFF_STATIC))->fSize.y * 1.1f;
 
 	for (_int i = 0; i < _int(BUFF_INDEX::BUFF_END); ++i)
@@ -464,13 +512,21 @@ void CUIPage_Play::Add_Render_Info_BuffInfo(_float fTimeDelta)
 			for (_int j = _int(PART_GROUP::GROUP_DEBUFF_STATIC); j <= _int(PART_GROUP::GROUP_DEBUFF_FILL); ++j)
 			{
 				if (j == _int(PART_GROUP::GROUP_DEBUFF_ICON))
-					__super::Get_Front_Part_In_Control(_int(PART_GROUP::GROUP_DROP_ITEM))->iTexture_Index = GET_GAMEINTERFACE->Get_Buff_Info(BUFF_INDEX(i))->iTexture_Index;
+					__super::Get_Front_Part_In_Control(_int(PART_GROUP::GROUP_DEBUFF_ICON))->iTexture_Index = GET_GAMEINTERFACE->Get_Buff_Info(BUFF_INDEX(i))->iTexture_Index;
 
 				if (j == _int(PART_GROUP::GROUP_DEBUFF_NAME))
-					__super::Get_Front_Part_In_Control(_int(PART_GROUP::GROUP_DROP_NAME))->strText = GET_GAMEINTERFACE->Get_Buff_Info(BUFF_INDEX(i))->strBuff_Name;
+					__super::Get_Front_Part_In_Control(_int(PART_GROUP::GROUP_DEBUFF_NAME))->strText = GET_GAMEINTERFACE->Get_Buff_Info(BUFF_INDEX(i))->strBuff_Name;
 
 				if (j == _int(PART_GROUP::GROUP_DEBUFF_FILL))
+				{
 					__super::Get_Front_Part_In_Control(_int(PART_GROUP::GROUP_DEBUFF_FILL))->fRatio = GET_GAMEINTERFACE->Get_Buff_Ratio(BUFF_INDEX(i));
+					__super::Get_Front_Part_In_Control(_int(PART_GROUP::GROUP_DEBUFF_FILL))->fTextureColor = GET_GAMEINTERFACE->Get_Buff_Info(BUFF_INDEX(i))->vTexture_Color;
+					_Vec2 vPos = m_vecPart[m_vec_Group_Ctrl[_int(PART_GROUP::GROUP_DEBUFF_STATIC)]->PartIndexlist.back()]->fPosition;
+					vPos.y += fHeight;
+
+					__super::Get_Front_Part_In_Control(_int(PART_GROUP::GROUP_DEBUFF_FILL))->MovePart(vPos, fTimeDelta);
+				}
+					
 
 				for (auto& iterIndex : m_vec_Group_Ctrl[j]->PartIndexlist)
 				{
@@ -480,6 +536,8 @@ void CUIPage_Play::Add_Render_Info_BuffInfo(_float fTimeDelta)
 			}
 		}
 	}
+
+	m_fTopPartMove = fAlpha_Ratio_Origin;
 }
 
 CUIPage_Play* CUIPage_Play::Create(ID3D11Device* pDevice, ID3D11DeviceContext* pContext)

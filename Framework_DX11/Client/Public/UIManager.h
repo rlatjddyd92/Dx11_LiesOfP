@@ -97,6 +97,10 @@ public:
 	
 	} // 매니저에 게임 입장 / 나가기 상태 알림
 
+	// 아이템 획득 
+	void Input_Drop_Item_Info(_int iIndex, _int iCount) { m_pUIPage_Play->Input_Drop_Item_Info(iIndex, iCount); }
+
+
 private:
 	void UIControl_Test(_float fTimeDelta);
 

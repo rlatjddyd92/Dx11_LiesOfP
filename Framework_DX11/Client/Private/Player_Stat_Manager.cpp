@@ -92,17 +92,19 @@ HRESULT CPlayer_Stat_Manager::Initialize_Stat()
 	if (FAILED(m_pGameInstance->LoadDataByFile("../Bin/DataFiles/Buff_Info.csv", &vecBuffer_Buff_Info)))
 		return E_FAIL;
 
-	m_vecBuff.resize(_int(BUFF_INDEX::BUFF_END));
-
-	for (_int i = 1; i < _int(BUFF_INDEX::BUFF_END); ++i)
+	for (_int i = 1; i <= _int(BUFF_INDEX::BUFF_END); ++i)
 	{
-		m_vecBuff[i]->strBuff_Name = vecBuffer_Buff_Info[i][1];
-		m_vecBuff[i]->iTexture_Index = stoi(vecBuffer_Buff_Info[i][2]);
-		m_vecBuff[i]->vTexture_Color.x = stof(vecBuffer_Buff_Info[i][3]);
-		m_vecBuff[i]->vTexture_Color.y = stof(vecBuffer_Buff_Info[i][4]);
-		m_vecBuff[i]->vTexture_Color.z = stof(vecBuffer_Buff_Info[i][5]);
-		m_vecBuff[i]->vTexture_Color.w = stof(vecBuffer_Buff_Info[i][6]);
-		m_vecBuff[i]->fLifeTime_Max = stof(vecBuffer_Buff_Info[i][7]);
+		BUFF* pNew = new BUFF;
+
+		pNew->strBuff_Name = vecBuffer_Buff_Info[i][1];
+		pNew->iTexture_Index = stoi(vecBuffer_Buff_Info[i][2]);
+		pNew->vTexture_Color.x = stof(vecBuffer_Buff_Info[i][3]);
+		pNew->vTexture_Color.y = stof(vecBuffer_Buff_Info[i][4]);
+		pNew->vTexture_Color.z = stof(vecBuffer_Buff_Info[i][5]);
+		pNew->vTexture_Color.w = stof(vecBuffer_Buff_Info[i][6]);
+		pNew->fLifeTime_Max = stof(vecBuffer_Buff_Info[i][7]);
+
+		m_vecBuff.push_back(pNew);
 	}
 
 	return S_OK;

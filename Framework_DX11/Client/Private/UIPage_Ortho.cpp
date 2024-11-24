@@ -292,8 +292,8 @@ _bool CUIPage_Ortho::Make_OrthoGraphy_Position(CGameObject* pHost, PART_GROUP eG
 	fPosition->y = fResult.y / fResult.w;
 
 	// 스크린 좌표로 변환
-	fPosition->x = ((fPosition->x + 1.f) * 0.5) * 1280.f;
-	fPosition->y = ((1.f - fPosition->y) * 0.5) * 720.f;
+	fPosition->x = ((fPosition->x + 1.f) * 0.5f) * 1280.f;
+	fPosition->y = ((1.f - fPosition->y) * 0.5f) * 720.f;
 
 	return true;
 }
@@ -301,7 +301,7 @@ _bool CUIPage_Ortho::Make_OrthoGraphy_Position(CGameObject* pHost, PART_GROUP eG
 _float CUIPage_Ortho::Check_Distance_From_Cam(CGameObject* pHost)
 {
 	_Vec4 vDistance = pHost->Get_Transform()->Get_State(CTransform::STATE_POSITION) - m_pGameInstance->Get_CamPosition_Vec4();
-	return sqrt(pow(vDistance.x, 2) + pow(vDistance.y, 2) + pow(vDistance.z, 2));
+	return _float(sqrt(pow(vDistance.x, 2) + pow(vDistance.y, 2) + pow(vDistance.z, 2)));
 }
 
 

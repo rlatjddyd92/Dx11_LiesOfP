@@ -135,7 +135,7 @@ public:
 		_int iIndex = -1;
 		_int iCount = 0;
 		_float fLifeTime = 0.f;
-	};
+	}DROP;
 
 protected:
 	CUIPage_Play(ID3D11Device* pDevice, ID3D11DeviceContext* pContext);
@@ -172,7 +172,10 @@ public:
 		m_DropItem_Index_list.push_back(pNew);
 		if (m_DropItem_Index_list.size() > m_iDrop_Item_Render_Limit)
 			while (m_DropItem_Index_list.size() > m_iDrop_Item_Render_Limit)
+			{
+				Safe_Delete(m_DropItem_Index_list.front());
 				m_DropItem_Index_list.pop_front();
+			}
 	}
 
 	// 좌상단 게이지는 스탯 매니저의 내용을 참조하여 변경 
@@ -211,7 +214,7 @@ private:
 	// 드랍
 	list<DROP_ITEM_INFO*> m_DropItem_Index_list;
 	_int m_iDrop_Item_Render_Limit = 3;
-	_float m_fEmerge_Effect_Time = 0.3;
+	_float m_fEmerge_Effect_Time = 1.f;
 	_float m_fDrop_Item_ShowTime = 3.f;
 
 

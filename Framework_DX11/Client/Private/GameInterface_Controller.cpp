@@ -51,7 +51,7 @@ void CGameInterface_Controller::Update_GameInterface(_float fTimeDelta)
 			if (iItem == 3)
 				m_pItem_Manager->AddNewItem_Inven(279);
 		}
-		else if (KEY_TAP(KEY::F4))
+		else if (KEY_TAP(KEY::F5))
 		{
 			for (_int i = 0; i < _int(BUFF_INDEX::BUFF_END); ++i)
 			{
@@ -62,6 +62,8 @@ void CGameInterface_Controller::Update_GameInterface(_float fTimeDelta)
 				}
 			}
 		}
+		else if (KEY_HOLD(KEY::F6))
+			m_pUIManager->Action_InterAction(TEXT("테스트 상호작용"));
 	}
 
 

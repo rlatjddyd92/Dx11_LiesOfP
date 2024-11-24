@@ -30,6 +30,8 @@ ITEM_RESULT CItem_Manager::AddNewItem_Inven(_uint iItemIndex, _uint iCount)
 
 	m_vecArray_Inven[iInvenSlotIndex]->Input_Item(NewItem, iCount);
 
+	GET_GAMEINTERFACE->Input_Drop_Item_Info(iItemIndex, iCount);
+
 	return ITEM_RESULT::RESULT_SUCCESS;
 }
 
