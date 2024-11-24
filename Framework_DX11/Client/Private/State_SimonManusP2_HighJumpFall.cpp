@@ -14,8 +14,9 @@ HRESULT CState_SimonManusP2_HighJumpFall::Initialize(_uint iStateNum, void* pArg
 {
     m_iStateNum = iStateNum;
     m_fIdleDuration = 3.3f;
-    CSimonManus::FSMSTATE_DESC* pDesc = static_cast<CSimonManus::FSMSTATE_DESC*>(pArg);
+    FSM_INIT_DESC* pDesc = static_cast<FSM_INIT_DESC*>(pArg);
 
+    m_pRootMoveCtr = pDesc->pRootMoveCtr;
     return S_OK;
 }
 
@@ -33,22 +34,23 @@ void CState_SimonManusP2_HighJumpFall::Update(_float fTimeDelta)
     _double CurTrackPos{};
     CurTrackPos = m_pMonster->Get_CurrentTrackPos();
 
-    if (CurTrackPos >= 210.f && CurTrackPos < 230.f) //점프 이후 공중 체공 + 플레이어방향 회전
+    if (CurTrackPos >= 200.f && CurTrackPos < 230.f) //점프 이후 공중 체공 + 플레이어방향 회전
     {
-                                                                                                                                             m_vTargetDir = m_pMonster->Get_TargetDir();
-        m_pMonster->Get_Transform()->LookAt_Lerp_NoHeight(m_vTargetDir, 3, fTimeDelta);
-
-        m_vTargetDir -= 4 * XMVector3Normalize(m_vTargetDir);
+        m_vTargetDir = m_pMonster->Get_TargetDir();
+        m_pMonster->Get_Transform()->LookAt_Lerp_NoHeight(m_vTargetDir, 1.8, fTimeDelta);
     }
-    else if (CurTrackPos >= 230 && CurTrackPos <= 245.f) //땅 찍기까지
+    else if (CurTrackPos >= 230.f && CurTrackPos <= 245.f) //땅 찍기까지
     {
+        *m_pRootMoveCtr = false;
         _Vec3 vPos = m_pMonster->Get_Transform()->Get_State(CTransform::STATE_POSITION);
 
-        _Vec3 vMove = m_vTargetDir * (((_float)CurTrackPos - 230.f) / 15.f);
+        _Vec3 vMove = m_vTargetDir * (((_float)CurTrackPos - 230.f) / 20.f);
         m_pMonster->Get_Transform()->Set_State(CTransform::STATE_POSITION, vPos + vMove - m_vFlyMoveStack);
 
         m_vFlyMoveStack = vMove;
     }
+    else
+        *m_pRootMoveCtr = true;
 
     if (End_Check())//애니메이션의 종료 받아오도록 해서 어택이 종료된 시점에
     {
@@ -62,7 +64,7 @@ void CState_SimonManusP2_HighJumpFall::Update(_float fTimeDelta)
 
 void CState_SimonManusP2_HighJumpFall::End_State()
 {
-
+    *m_pRootMoveCtr = true;
 }
 
 _bool CState_SimonManusP2_HighJumpFall::End_Check()

@@ -130,8 +130,7 @@ void CPlayer::Update(_float fTimeDelta)
 {
 	m_pFsmCom->Update(fTimeDelta);
 
-	m_vCurRootMove = m_pModelCom->Play_Animation(fTimeDelta * 0.3f, &m_EvKeyList);
-
+	m_vCurRootMove = m_pModelCom->Play_Animation(fTimeDelta, &m_EvKeyList);
 
 	_vector vPos = m_pTransformCom->Get_State(CTransform::STATE_POSITION);
 

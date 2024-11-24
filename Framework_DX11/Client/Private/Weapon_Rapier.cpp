@@ -30,6 +30,7 @@ HRESULT CWeapon_Rapier::Initialize(void* pArg)
 		return E_FAIL;
 
 	m_strObjectTag = TEXT("PlayerWeapon");
+	m_pColliderCom->Set_Owner(this);
 	m_fDamageAmount = 5.f;
 
 	m_pColliderCom->IsActive(false);
@@ -65,6 +66,8 @@ void CWeapon_Rapier::Late_Update(_float fTimeDelta)
 
 	m_pGameInstance->Add_RenderObject(CRenderer::RG_NONBLEND, this);
 	m_pGameInstance->Add_RenderObject(CRenderer::RG_SHADOWOBJ, this);
+
+	m_pGameInstance->Add_ColliderList(m_pColliderCom);
 }
 
 HRESULT CWeapon_Rapier::Render()

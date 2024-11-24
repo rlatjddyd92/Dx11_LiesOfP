@@ -98,6 +98,19 @@ HRESULT CSimonManus::Initialize(void* pArg)
 	if (FAILED(Ready_Weapon()))
 		return E_FAIL;
 
+	m_strObjectTag = TEXT("Monster");
+	m_pColliderCom->Set_Owner(this);
+
+	for (_uint i = 0; i < EXCOLLIDER::COLLTYPE_END; ++i)
+	{
+		m_EXCollider[i]->Set_Owner(this);
+	}
+
+	m_fHp = 100.f;
+	m_fAtk = 10.f;
+	m_fDefence = 5.f;
+	m_fStemina = 100.f;
+
 	m_pWeapon->DeActive_Collider();
 
 	return S_OK;
@@ -112,6 +125,8 @@ void CSimonManus::Priority_Update(_float fTimeDelta)
 
 void CSimonManus::Update(_float fTimeDelta)
 {
+
+	m_fHp;
 
 	m_pFsmCom->Update(fTimeDelta);
 
@@ -180,6 +195,15 @@ void CSimonManus::Late_Update(_float fTimeDelta)
 	}
 	m_pWeapon->Late_Update(fTimeDelta);
 
+
+	m_pGameInstance->Add_ColliderList(m_pColliderCom);
+
+	for (_uint i = 0; i < EXCOLLIDER::COLLTYPE_END; ++i)
+	{
+		m_pGameInstance->Add_ColliderList(m_EXCollider[i]);
+	}
+
+
 }
 
 HRESULT CSimonManus::Render()
@@ -227,12 +251,12 @@ HRESULT CSimonManus::Render()
 	return S_OK;
 }
 
-void CSimonManus::Active_CurrentWeaponCollider(_float fDamageRatio)
+void CSimonManus::Active_CurrentWeaponCollider(_float fDamageRatio, _uint iCollIndex)
 {
 	m_pWeapon->Active_Collider(fDamageRatio);
 }
 
-void CSimonManus::DeActive_CurretnWeaponCollider()
+void CSimonManus::DeActive_CurretnWeaponCollider(_uint iCollIndex)
 {
 	m_pWeapon->DeActive_Collider();
 }
@@ -441,10 +465,10 @@ CGameObject* CSimonManus::Clone(void* pArg)
 
 void CSimonManus::Free()
 {
-	//for (_uint i = 0; i < TYPE_END; ++i)
-	//{
-	//	Safe_Release(m_pColliderObject[i]);
-	//}
+	for (_uint i = 0; i < COLLTYPE_END; ++i)
+	{
+		Safe_Release(m_EXCollider[i]);
+	}
 	Safe_Release(m_pWeapon);
 	Safe_Release(m_pExtraModelCom);
 

@@ -59,6 +59,12 @@ protected:
 	
 	_float				m_fMoveSpeed = {};
 
+						//스테이터스 부분
+	_float				m_fHp{};
+	_float				m_fAtk{};
+	_float				m_fDefence{};
+	_float				m_fStemina{};
+
 protected:
 	HRESULT Bind_WorldViewProj();
 

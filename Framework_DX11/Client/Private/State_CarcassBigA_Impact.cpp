@@ -34,6 +34,7 @@ void CState_CarcassBigA_Impact::Update(_float fTimeDelta)
     if (End_Check())
         m_pMonster->Change_State(CCarcassBigA::IDLE);
 
+    Collider_Check();
 }
 
 void CState_CarcassBigA_Impact::End_State()
@@ -44,6 +45,20 @@ void CState_CarcassBigA_Impact::End_State()
 _bool CState_CarcassBigA_Impact::End_Check()
 {
     return m_pMonster->Get_EndAnim(AN_IMPACT);
+}
+
+void CState_CarcassBigA_Impact::Collider_Check()
+{
+    _double CurTrackPos = m_pMonster->Get_CurrentTrackPos();
+
+    if (CurTrackPos >= 55.f && CurTrackPos <= 140.f)
+    {
+        m_pMonster->Active_CurrentWeaponCollider(1, 2);
+    }
+    else
+    {
+        m_pMonster->DeActive_CurretnWeaponCollider(2);
+    }
 }
 
 CState_CarcassBigA_Impact* CState_CarcassBigA_Impact::Create(CFsm* pFsm, CMonster* pMonster, _uint iStateNum, void* pArg)

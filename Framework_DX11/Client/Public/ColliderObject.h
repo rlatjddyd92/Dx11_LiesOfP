@@ -1,18 +1,16 @@
 #pragma once
-#include "GameObject.h"
+#include "Weapon.h"
 #include "Collider.h"
 #include "Bounding.h"
 
-class CColliderObject	final : public CGameObject
+class CColliderObject	final : public CWeapon
 {
 public:
-	typedef struct
+	typedef struct : CWeapon::WEAPON_DESC
 	{
-		const _float4x4*	pCombinedBoneTransformMatrix;
-		const _float4x4*	pParentTransformComMatrix;
 		CBounding::BOUNDING_DESC* pBoundingDesc;
 		CCollider::TYPE		eType;
-
+		_float fDamageAmount = {};
 	}COLIDEROBJECT_DESC;
 
 private:
@@ -29,13 +27,7 @@ public:
 	virtual HRESULT Render() override;
 
 private:
-	CCollider*			m_pColliderCom = { nullptr };
-
-private:
 	CCollider::TYPE		m_eType{ CCollider::TYPE::TYPE_END};
-
-	const _float4x4*	m_pCombinedBoneTransformMatrix = { nullptr };
-	const _float4x4*	m_pParentTransformComMatrix = { nullptr };
 
 private:
 	HRESULT Ready_Components(CBounding::BOUNDING_DESC* pBoundingDesc, CCollider::TYPE eType);

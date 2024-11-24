@@ -38,6 +38,7 @@ private:
 
 private:
     _bool               End_Check();
+    void                Collider_Check();
 
 public:
     static CState_CarcassBigA_Impact* Create(class CFsm* pFsm, class CMonster* pMonster, _uint iStateNum, void* pArg = nullptr);

@@ -454,9 +454,6 @@
     <Filter Include="05.Fsm\Monster\CarcassBigA\Attack\Route\AttackRoute_3">
       <UniqueIdentifier>{de0f89ed-e0cc-4a00-8120-a518ea964014}</UniqueIdentifier>
     </Filter>
-    <Filter Include="05.Fsm\Monster\CarcassBigA\Attack\Route\AttackToute_4">
-      <UniqueIdentifier>{12670bf0-76fd-432d-9278-b73ac8212e84}</UniqueIdentifier>
-    </Filter>
     <Filter Include="02.GameObjects\10.ColliderObject">
       <UniqueIdentifier>{e0ad8f06-a0d8-4d14-8a84-d74eacc4032c}</UniqueIdentifier>
     </Filter>
@@ -612,12 +609,15 @@
     </Filter>
     <Filter Include="05.Fsm\Monster\SimonManus\P1\Walk">
       <UniqueIdentifier>{fe395b30-26dd-4e7d-9184-bb5c5d694b6b}</UniqueIdentifier>
-	</Filter>
+    </Filter>
     <Filter Include="03.GameInterface_Controller\00.UIManager\00.UIPage\07.UIPage_LevelUp%28미사용%29">
       <UniqueIdentifier>{49687bb1-cd51-47be-b319-ccccb8021b98}</UniqueIdentifier>
     </Filter>
     <Filter Include="03.GameInterface_Controller\00.UIManager\00.UIPage\09.UIPage_ToolTip">
       <UniqueIdentifier>{d6f0816f-b248-400f-ae9c-070eac27ca42}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="05.Fsm\Monster\CarcassBigA\Attack\Route\AttackRoute_4">
+      <UniqueIdentifier>{12670bf0-76fd-432d-9278-b73ac8212e84}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -782,9 +782,6 @@
     </ClInclude>
     <ClInclude Include="..\Public\State_Player_OH_Dash.h">
       <Filter>05.Fsm\Player\OneHand\Dash</Filter>
-    </ClInclude>
-    <ClInclude Include="..\Public\ColliderObject.h">
-      <Filter>02.GameObjects\10.ColliderObject</Filter>
     </ClInclude>
     <ClInclude Include="..\Public\State_Player_Hit.h">
       <Filter>05.Fsm\Player\Common\Hit</Filter>
@@ -960,8 +957,6 @@
     <ClInclude Include="..\Public\State_Player_Scissor_Fatal2.h">
       <Filter>05.Fsm\Player\OneHand\00.Attack\Scissor\01.Fatal\Combo3</Filter>
     </ClInclude>
-    <ClInclude Include="..\Public\SimonManusP1.h" />
-    <ClInclude Include="..\Public\State_CarcassBigA_Attack.h" />
     <ClInclude Include="..\Public\State_CarcassBigA_AttackRoute_0.h">
       <Filter>05.Fsm\Monster\CarcassBigA\Attack\Route\AttackRoute_0</Filter>
     </ClInclude>
@@ -975,7 +970,7 @@
       <Filter>05.Fsm\Monster\CarcassBigA\Attack\Route\AttackRoute_3</Filter>
     </ClInclude>
     <ClInclude Include="..\Public\State_CarcassBigA_AttackRoute_4.h">
-      <Filter>05.Fsm\Monster\CarcassBigA\Attack\Route\AttackToute_4</Filter>
+      <Filter>05.Fsm\Monster\CarcassBigA\Attack\Route\AttackRoute_4</Filter>
     </ClInclude>
     <ClInclude Include="..\Public\State_CarcassBigA_LOSwingRight.h">
       <Filter>05.Fsm\Monster\CarcassBigA\Attack\Single\LOSwingRight</Filter>
@@ -1117,9 +1112,12 @@
     </ClInclude>
     <ClInclude Include="..\Public\State_SimonManusP2_Wave.h">
       <Filter>05.Fsm\Monster\SimonManus\P2\Attack\Single\Wave</Filter>
-	</ClInclude>
+    </ClInclude>
     <ClInclude Include="..\Public\UIRender_Batching.h">
       <Filter>03.GameInterface_Controller\00.UIManager\01.UIRender</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Public\ColliderObject.h">
+      <Filter>02.GameObjects\10.ColliderObject</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -1254,9 +1252,6 @@
     </ClCompile>
     <ClCompile Include="..\Private\State_Player_OH_Dash.cpp">
       <Filter>05.Fsm\Player\OneHand\Dash</Filter>
-    </ClCompile>
-    <ClCompile Include="..\Private\ColliderObject.cpp">
-      <Filter>02.GameObjects\10.ColliderObject</Filter>
     </ClCompile>
     <ClCompile Include="..\Private\State_Player_Hit.cpp">
       <Filter>05.Fsm\Player\Common\Hit</Filter>
@@ -1432,8 +1427,6 @@
     <ClCompile Include="..\Private\Weapon.cpp">
       <Filter>02.GameObjects\06.Weapon</Filter>
     </ClCompile>
-    <ClCompile Include="..\Private\SimonManusP1.cpp" />
-    <ClCompile Include="..\Private\State_CarcassBigA_Attack.cpp" />
     <ClCompile Include="..\Private\State_CarcassBigA_AttackRoute_0.cpp">
       <Filter>05.Fsm\Monster\CarcassBigA\Attack\Route\AttackRoute_0</Filter>
     </ClCompile>
@@ -1447,7 +1440,7 @@
       <Filter>05.Fsm\Monster\CarcassBigA\Attack\Route\AttackRoute_3</Filter>
     </ClCompile>
     <ClCompile Include="..\Private\State_CarcassBigA_AttackRoute_4.cpp">
-      <Filter>05.Fsm\Monster\CarcassBigA\Attack\Route\AttackToute_4</Filter>
+      <Filter>05.Fsm\Monster\CarcassBigA\Attack\Route\AttackRoute_4</Filter>
     </ClCompile>
     <ClCompile Include="..\Private\State_CarcassBigA_LOSwingRight.cpp">
       <Filter>05.Fsm\Monster\CarcassBigA\Attack\Single\LOSwingRight</Filter>
@@ -1589,9 +1582,12 @@
     </ClCompile>
     <ClCompile Include="..\Private\State_SimonManusP2_Wave.cpp">
       <Filter>05.Fsm\Monster\SimonManus\P2\Attack\Single\Wave</Filter>
-	</ClCompile>
+    </ClCompile>
     <ClCompile Include="..\Private\UIRender_Batching.cpp">
       <Filter>03.GameInterface_Controller\00.UIManager\01.UIRender</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Private\ColliderObject.cpp">
+      <Filter>02.GameObjects\10.ColliderObject</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

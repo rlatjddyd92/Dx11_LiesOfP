@@ -62,12 +62,19 @@ HRESULT CCarcassBigA::Initialize(void* pArg)
 
 	if (FAILED(Ready_FSM()))
 		return E_FAIL;
-	
+
+	m_strObjectTag = TEXT("Monster");
+	m_pColliderCom->Set_Owner(this);
+
 	m_pTransformCom->Set_State(CTransform::STATE_POSITION,
 		XMVectorSet(0.f, 0.f, 0.f, 1.f));
 	m_pTransformCom->LookAt(_vector{ 0, 0, -1, 0 });
 
-	
+
+	m_fHp = 500.f;
+	m_fAtk = 4.f;
+	m_fDefence = 2.f;
+	m_fStemina = 30.f;
 
 	return S_OK;
 }
@@ -91,7 +98,7 @@ void CCarcassBigA::Update(_float fTimeDelta)
 	m_pTransformCom->Set_State(CTransform::STATE_POSITION, vPos + m_vCurRootMove);
 	
 
-	//m_pColliderCom->Update(m_pTransformCom->Get_WorldMatrix_Ptr());
+	m_pColliderCom->Update(m_pTransformCom->Get_WorldMatrix_Ptr());
 }
 
 void CCarcassBigA::Late_Update(_float fTimeDelta)
@@ -104,13 +111,10 @@ void CCarcassBigA::Late_Update(_float fTimeDelta)
 
 	for (_uint i = 0; i < TYPE_END; ++i)
 	{
-		if (m_bColliderCtrs[i] == true)
-		{
-			continue;
-		}
 		m_pColliderObject[i]->Late_Update(fTimeDelta);
 	}
 
+	m_pGameInstance->Add_ColliderList(m_pColliderCom);
 }
 
 HRESULT CCarcassBigA::Render()
@@ -142,11 +146,24 @@ HRESULT CCarcassBigA::Render()
 
 
 #ifdef _DEBUG
-	//m_pColliderCom->Render();
-	//for (auto& pColliderObj : m_pColliderObject)
-	//	pColliderObj->Render();
+	m_pColliderCom->Render();
+
+	for (_uint i = 0; i < TYPE_END; ++i)
+	{
+		m_pColliderObject[i]->Render();
+	}
 #endif
 	return S_OK;
+}
+
+void CCarcassBigA::Active_CurrentWeaponCollider(_float fDamageRatio, _uint iCollIndex)
+{
+	m_pColliderObject[iCollIndex]->Active_Collider(fDamageRatio);
+}
+
+void CCarcassBigA::DeActive_CurretnWeaponCollider(_uint iCollIndex)
+{
+	m_pColliderObject[iCollIndex]->DeActive_Collider();
 }
 
 HRESULT CCarcassBigA::Ready_Components()
@@ -160,35 +177,15 @@ HRESULT CCarcassBigA::Ready_Components()
 		return E_FAIL;
 
 
-	/* For.Com_Collider_AABB */
-	//CBounding_AABB::BOUNDING_AABB_DESC			ColliderAABBDesc{};
-	//ColliderAABBDesc.vExtents = _float3(0.5f, 1.0f, 0.5f);
-	//ColliderAABBDesc.vCenter = _float3(0.f, ColliderAABBDesc.vExtents.y, 0.f);
-	//
-	//if (FAILED(__super::Add_Component(LEVEL_GAMEPLAY, TEXT("Prototype_Component_Collider_AABB"),
-	//	TEXT("Com_Collider_AABB"), reinterpret_cast<CComponent**>(&m_pColliderCom[CCollider::TYPE_AABB]), &ColliderAABBDesc)))
-	//	return E_FAIL;
-	//
-	///* FOR.Com_Collider_OBB */
-	//CBounding_OBB::BOUNDING_OBB_DESC			ColliderOBBDesc{};
-	//ColliderOBBDesc.vExtents = _float3(0.7f, 0.7f, 0.7f);
-	//ColliderOBBDesc.vCenter = _float3(0.f, ColliderOBBDesc.vExtents.y, 0.f);
-	//ColliderOBBDesc.vAngles = _float3(0.f, m_pGameInstance->Get_Random(XMConvertToRadians(0.f), XMConvertToRadians(360.f)), 0.f);
-	//
-	//if (FAILED(__super::Add_Component(LEVEL_GAMEPLAY, TEXT("Prototype_Component_Collider_OBB"),
-	//	TEXT("Com_Collider_OBB"), reinterpret_cast<CComponent**>(&m_pColliderCom[CCollider::TYPE_OBB]), &ColliderOBBDesc)))
-	//	return E_FAIL;
-	//
-	///* FOR.Com_Collider_Sphere */
-	//CBounding_Sphere::BOUNDING_SPHERE_DESC			ColliderSphereDesc{};
-	//ColliderSphereDesc.fRadius = 1.2f;
-	//ColliderSphereDesc.vCenter = _float3(0.f, ColliderSphereDesc.fRadius, 0.f);
-	//
-	//
-	//if (FAILED(__super::Add_Component(LEVEL_GAMEPLAY, TEXT("Prototype_Component_Collider_Sphere"),
-	//	TEXT("Com_Collider_Sphere"), reinterpret_cast<CComponent**>(&m_pColliderCom[CCollider::TYPE_SPHERE]), &ColliderSphereDesc)))
-	//	return E_FAIL;
+	/* FOR.Com_Collider */		//Body
+	CBounding_OBB::BOUNDING_OBB_DESC			ColliderDesc{};
+	ColliderDesc.vExtents = _float3(0.5f, 2.f, 0.5f);
+	ColliderDesc.vCenter = _float3(0.f, 1.f, 0.f);
+	ColliderDesc.vAngles = _float3(0.f, 0.f, 0.f);
 
+	if (FAILED(__super::Add_Component(LEVEL_STATIC, TEXT("Prototype_Component_Collider_OBB"),
+		TEXT("Com_Collider"), reinterpret_cast<CComponent**>(&m_pColliderCom), &ColliderDesc)))
+		return E_FAIL;
 
 	/* FOR.Com_Collider_OBB */
 	CBounding_OBB::BOUNDING_OBB_DESC			ColliderOBBDesc_Obj{};
@@ -204,10 +201,13 @@ HRESULT CCarcassBigA::Ready_Components()
 
 	Desc.pBoundingDesc = &ColliderOBBDesc_Obj;
 	Desc.eType = CCollider::TYPE_OBB;
-	Desc.pCombinedBoneTransformMatrix = m_pModelCom->Get_BoneCombindTransformationMatrix_Ptr(m_pModelCom->Get_UFBIndices(UFB_HAND_LEFT));
-	Desc.pParentTransformComMatrix = m_pTransformCom->Get_WorldMatrix_Ptr();
-	;
-	m_pColliderObject[COLLIDERTYPE::TYPE_LEFTHAND] = m_pGameInstance->Clone_GameObject(TEXT("Prototype_GameObject_ColliderObj"), &Desc);
+	Desc.pSocketBoneMatrix = m_pModelCom->Get_BoneCombindTransformationMatrix_Ptr(m_pModelCom->Get_UFBIndices(UFB_HAND_LEFT));
+	Desc.pParentWorldMatrix = m_pTransformCom->Get_WorldMatrix_Ptr();
+	Desc.pSocketBoneMatrix2 = m_pTransformCom->Get_WorldMatrix_Ptr();
+	Desc.fDamageAmount = 2.f;
+
+
+	m_pColliderObject[TYPE_LEFTHAND] = dynamic_cast<CColliderObject*>(m_pGameInstance->Clone_GameObject(TEXT("Prototype_GameObject_ColliderObj"), &Desc));
 
 
 	/* FOR.Com_Collider_OBB */
@@ -217,11 +217,20 @@ HRESULT CCarcassBigA::Ready_Components()
 	
 	Desc.pBoundingDesc = &ColliderOBBDesc_Obj;
 	Desc.eType = CCollider::TYPE_OBB;
-	Desc.pCombinedBoneTransformMatrix = (_Matrix*)m_pModelCom->Get_BoneCombindTransformationMatrix_Ptr(m_pModelCom->Get_UFBIndices(UFB_HAND_RIGHT));
-	Desc.pParentTransformComMatrix = m_pTransformCom->Get_WorldMatrix_Ptr();
+	Desc.pSocketBoneMatrix = m_pModelCom->Get_BoneCombindTransformationMatrix_Ptr(m_pModelCom->Get_UFBIndices(UFB_HAND_RIGHT));
 	
-	m_pColliderObject[COLLIDERTYPE::TYPE_RIGHTHAND] = m_pGameInstance->Clone_GameObject(TEXT("Prototype_GameObject_ColliderObj"), &Desc);
+	m_pColliderObject[TYPE_RIGHTHAND] = dynamic_cast<CColliderObject*>(m_pGameInstance->Clone_GameObject(TEXT("Prototype_GameObject_ColliderObj"), &Desc));
 
+	ColliderOBBDesc_Obj.vAngles = _float3(0.0f, 0.0f, 0.0f);
+	ColliderOBBDesc_Obj.vCenter = _float3(0.f, 0.f, 0.f);
+	ColliderOBBDesc_Obj.vExtents = _float3(0.7f, 0.5f, 0.5f);
+
+	Desc.pBoundingDesc = &ColliderOBBDesc_Obj;
+	Desc.eType = CCollider::TYPE_OBB;
+	Desc.pSocketBoneMatrix = m_pModelCom->Get_BoneCombindTransformationMatrix_Ptr(5);
+	Desc.fDamageAmount = 3.f;
+
+	m_pColliderObject[TYPE_IMPACT] = dynamic_cast<CColliderObject*>(m_pGameInstance->Clone_GameObject(TEXT("Prototype_GameObject_ColliderObj"), &Desc));
 
 
 	return S_OK;
@@ -233,12 +242,10 @@ HRESULT CCarcassBigA::Ready_FSM()
 		return E_FAIL;
 
 	FSM_INIT_DESC Desc{};
-	
+
 	Desc.pIsEndAnim = &m_bEndAnim;
-	Desc.pIsResetRootMove =&m_bResetRootMove;
-	Desc.pPrevTrackPos = &m_fPrevTrackPos;
-	//Desc.pColliderCtrs = m_bColliderCtrs;
-	//
+	Desc.pIsResetRootMove = &m_bResetRootMove;
+	Desc.pRootMoveCtr = &m_bRootMoveCtr;
 
 
 	m_pFsmCom->Add_State(CState_CarcassBigA_Idle::Create(m_pFsmCom, this, IDLE, &Desc));

@@ -37,6 +37,9 @@ void CState_CarcassBigA_WheelWind::Update(_float fTimeDelta)
     {
         m_pMonster->Change_State(CMonster::IDLE);
     }
+
+    Collider_Check();
+
 }
 
 void CState_CarcassBigA_WheelWind::End_State()
@@ -46,6 +49,20 @@ void CState_CarcassBigA_WheelWind::End_State()
 _bool CState_CarcassBigA_WheelWind::End_Check()
 {
     return m_pMonster->Get_EndAnim(AN_SWINGRIGHT);
+}
+
+void CState_CarcassBigA_WheelWind::Collider_Check()
+{
+    _double CurTrackPos = m_pMonster->Get_CurrentTrackPos();
+
+    if (CurTrackPos >= 85.f && CurTrackPos <= 155.f)
+    {
+        m_pMonster->Active_CurrentWeaponCollider(1, 1);
+    }
+    else
+    {
+        m_pMonster->DeActive_CurretnWeaponCollider(1);
+    }
 }
 
 CState_CarcassBigA_WheelWind* CState_CarcassBigA_WheelWind::Create(CFsm* pFsm, CMonster* pMonster, _uint iStateNum, void* pArg)

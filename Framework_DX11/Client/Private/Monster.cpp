@@ -3,6 +3,7 @@
 
 #include "GameInstance.h"
 #include "Player.h"
+#include "Weapon.h"
 
 // 24-11-18 김성용
 // 게임인터페이스 접근 코드 
@@ -159,12 +160,33 @@ _float CMonster::Calc_Distance_XZ()
 	return fDist;
 }
 
-void CMonster::Active_CurrentWeaponCollider(_float fDamageRatio)
+void CMonster::Active_CurrentWeaponCollider(_float fDamageRatio, _uint iCollIndex)
 {
 }
 
-void CMonster::DeActive_CurretnWeaponCollider()
+void CMonster::DeActive_CurretnWeaponCollider(_uint iCollIndex)
 {
+}
+
+void CMonster::OnCollisionEnter(CGameObject* pOther)
+{
+	if (pOther->Get_Tag() == TEXT("PlayerWeapon"))
+	{
+		CWeapon* pWeapon = dynamic_cast<CWeapon*>(pOther);
+		
+		m_fHp -= pWeapon->Get_AtkDmg();
+	}
+
+}
+
+void CMonster::OnCollisionStay(CGameObject* pOther)
+{
+	int a = 0;
+}
+
+void CMonster::OnCollisionExit(CGameObject* pOther)
+{
+	int a = 0;
 }
 
 HRESULT CMonster::Ready_Components()

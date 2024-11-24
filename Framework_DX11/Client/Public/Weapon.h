@@ -38,6 +38,8 @@ public:
 	virtual HRESULT Render() override;
 	virtual HRESULT Render_LightDepth() override;
 
+	_float Get_AtkDmg() { return m_fDamageAmount * m_fDamageRatio; }
+
 public:
 	virtual void OnCollisionEnter(CGameObject* pOther) {};
 	virtual void OnCollisionStay(CGameObject* pOther) {};
