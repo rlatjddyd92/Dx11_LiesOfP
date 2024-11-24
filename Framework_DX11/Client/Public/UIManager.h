@@ -56,6 +56,8 @@ public:
 
 	_Vec2 CheckMouse(_Vec2 fPos, _Vec2 fSize);
 
+	_bool Action_InterAction(_wstring strInterName) { return m_pUIPage_Play->Action_InterAction(strInterName); }
+
 	void SetIngame(_bool bTrue) 
 	{ 
 		m_bIsIngame = bTrue;

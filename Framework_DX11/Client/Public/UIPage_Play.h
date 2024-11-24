@@ -130,6 +130,13 @@ public:
 		GROUP_END
 	};
 
+	typedef struct DROP_ITEM_INFO
+	{
+		_int iIndex = -1;
+		_int iCount = 0;
+		_float fLifeTime = 0.f;
+	};
+
 protected:
 	CUIPage_Play(ID3D11Device* pDevice, ID3D11DeviceContext* pContext);
 	CUIPage_Play(const CUIPage_Play& Prototype);
@@ -154,6 +161,20 @@ public:
 
 	HRESULT Render_PlayInfo(class CUIRender_Client* pRender_Client);
 
+	_bool Action_InterAction(_wstring strInterName);
+
+	void Input_Drop_Item_Info(_int iIndex, _int iCount)
+	{
+		DROP_ITEM_INFO* pNew = new DROP_ITEM_INFO;
+		pNew->iIndex = iIndex;
+		pNew->iCount = iCount;
+		pNew->fLifeTime = m_fDrop_Item_ShowTime;
+		m_DropItem_Index_list.push_back(pNew);
+		if (m_DropItem_Index_list.size() > m_iDrop_Item_Render_Limit)
+			while (m_DropItem_Index_list.size() > m_iDrop_Item_Render_Limit)
+				m_DropItem_Index_list.pop_front();
+	}
+
 	// 좌상단 게이지는 스탯 매니저의 내용을 참조하여 변경 
 	// 외부 -> 스탯 매니저 -> UI 매니저(Page_Play)
 
@@ -164,8 +185,6 @@ private:
 	void Action_Potion_Tool(_float fTimeDelta);
 	void Action_Arm(_float fTimeDelta);
 	void Action_Weapon(_float fTimeDelta);
-	void Action_InterAction(_float fTimeDelta);
-
 
 	void LU_Gauge_Update(_float fTimeDelta);
 	void LD_Potion_Tool_Update(_float fTimeDelta);
@@ -175,11 +194,29 @@ private:
 	void RD_Weapon_Update(_float fTimeDelta);
 
 	void PlayInfo_Update(_float fTimeDelta);
-	
+	void Add_Render_Info_DropInfo(_float fTimeDelta);
+	void Add_Render_Info_BuffInfo(_float fTimeDelta);
+
+
+
 private:
+	// 보조 가방
+	_bool m_bIsBagOpen = false;
 	_float m_fBag_Open_Waiting_Now = 0.f;
 	_float m_fBag_Open_Waiting_Limit = 0.5f;
 
+	// 인터랙션
+	_bool m_bCan_InterAction = true;
+
+	// 드랍
+	list<DROP_ITEM_INFO*> m_DropItem_Index_list;
+	_int m_iDrop_Item_Render_Limit = 3;
+	_float m_fEmerge_Effect_Time = 0.3;
+	_float m_fDrop_Item_ShowTime = 3.f;
+
+
+	// 무기 조정 
+	_int m_iWeapon_Equip_0_Symbol = 0;
 private: // 테스트 변수
 	_bool m_bWeapon_Top = true;
 

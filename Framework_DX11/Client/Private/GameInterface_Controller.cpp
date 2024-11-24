@@ -36,8 +36,43 @@ HRESULT CGameInterface_Controller::Initialize_GameInterface(ID3D11Device** pDevi
 
 void CGameInterface_Controller::Update_GameInterface(_float fTimeDelta)
 {
+	// 테스트용 
+	if (KEY_HOLD(KEY::ALT))
+	{
+		if (KEY_TAP(KEY::F3))
+		{
+			_int iItem = _int(m_pGameInstance->Get_Random(0.f, 3.1f));
+			if (iItem == 0)
+				m_pItem_Manager->AddNewItem_Inven(255);
+			if (iItem == 1)
+				m_pItem_Manager->AddNewItem_Inven(247);
+			if (iItem == 2)
+				m_pItem_Manager->AddNewItem_Inven(277);
+			if (iItem == 3)
+				m_pItem_Manager->AddNewItem_Inven(279);
+		}
+		else if (KEY_TAP(KEY::F4))
+		{
+			for (_int i = 0; i < _int(BUFF_INDEX::BUFF_END); ++i)
+			{
+				if (m_pPlayer_Stat_Manager->Get_Buff_Ratio(BUFF_INDEX(i)) == 0.f)
+				{
+					m_pPlayer_Stat_Manager->Start_Buff(BUFF_INDEX(i));
+					break;
+				}
+			}
+		}
+	}
 
+
+
+
+
+
+	m_pPlayer_Stat_Manager->Update_Stat(fTimeDelta);
 	m_pUIManager->Update_UIManager(fTimeDelta);
+	
+
 }
 
 void CGameInterface_Controller::Release_GameInterface()

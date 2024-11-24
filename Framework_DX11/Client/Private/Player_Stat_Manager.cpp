@@ -10,6 +10,16 @@ CPlayer_Stat_Manager::CPlayer_Stat_Manager(CGameInstance* pGameInstance)
 	Safe_AddRef(m_pGameInstance);
 }
 
+void CPlayer_Stat_Manager::Update_Stat(_float fTimeDelta)
+{
+	for (auto& iter : m_vecBuff)
+	{
+		iter->fLifeTime_Now -= fTimeDelta;
+		if (iter->fLifeTime_Now < 0)
+			iter->fLifeTime_Now = 0.f;
+	}
+}
+
 
 
 void CPlayer_Stat_Manager::Add_Stat_Normal(STAT_NORMAL eIndex, _float fValue)
@@ -77,6 +87,24 @@ HRESULT CPlayer_Stat_Manager::Initialize_Stat()
 		}
 	}
 
+	vector<vector<_wstring>> vecBuffer_Buff_Info;
+
+	if (FAILED(m_pGameInstance->LoadDataByFile("../Bin/DataFiles/Buff_Info.csv", &vecBuffer_Buff_Info)))
+		return E_FAIL;
+
+	m_vecBuff.resize(_int(BUFF_INDEX::BUFF_END));
+
+	for (_int i = 1; i < _int(BUFF_INDEX::BUFF_END); ++i)
+	{
+		m_vecBuff[i]->strBuff_Name = vecBuffer_Buff_Info[i][1];
+		m_vecBuff[i]->iTexture_Index = stoi(vecBuffer_Buff_Info[i][2]);
+		m_vecBuff[i]->vTexture_Color.x = stof(vecBuffer_Buff_Info[i][3]);
+		m_vecBuff[i]->vTexture_Color.y = stof(vecBuffer_Buff_Info[i][4]);
+		m_vecBuff[i]->vTexture_Color.z = stof(vecBuffer_Buff_Info[i][5]);
+		m_vecBuff[i]->vTexture_Color.w = stof(vecBuffer_Buff_Info[i][6]);
+		m_vecBuff[i]->fLifeTime_Max = stof(vecBuffer_Buff_Info[i][7]);
+	}
+
 	return S_OK;
 }
 
@@ -105,4 +133,8 @@ void CPlayer_Stat_Manager::Free()
 	for (auto& iter : m_vecStat_DEF)
 		Safe_Delete(iter);
 	m_vecStat_DEF.clear();
+
+	for (auto& iter : m_vecBuff)
+		Safe_Delete(iter);
+	m_vecBuff.clear();
 }
