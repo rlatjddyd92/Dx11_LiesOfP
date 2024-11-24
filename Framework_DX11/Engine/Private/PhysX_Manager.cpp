@@ -67,7 +67,89 @@ void CPhysX_Manager::PhysX_Update(_float fTimeDelta)
     if (nullptr == m_pPlayer)
         return;
 
-    Compute_MonsterCollision();
+    for (_uint i = 0; i < m_Monsters.size(); ++i)
+    {
+        CRigidBody* pMonsterRigidBody = dynamic_cast<CRigidBody*>(m_Monsters[i]->Find_Component(RIGIDBODY));
+        CNavigation* pNavigation = dynamic_cast<CNavigation*>(m_Monsters[i]->Find_Component(NAVIGATION));
+
+        // 1. 현재 속도 가져오기
+        _Vec3 vVelocity = pMonsterRigidBody->Get_Velocity();
+
+        // 2. 현재 PhysX 위치 가져오기
+        PxTransform MonsterPxTransform = m_MonsterRigids[i]->getGlobalPose();
+        PxVec3 vPxMonsterPos = MonsterPxTransform.p;
+        _Vec3 vPos = _Vec3(vPxMonsterPos.x, vPxMonsterPos.y, vPxMonsterPos.z);
+       
+        // 3. 이동 가능 여부 판단
+        if (!pNavigation->isMove(vPos + vVelocity * fTimeDelta)) {
+            // 이동 불가: 속도를 0으로 설정
+            m_MonsterRigids[i]->setLinearVelocity(PxVec3(0.f, 0.f, 0.f));
+
+            // PhysX 위치를 유지 (추가 이동 방지)
+            MonsterPxTransform.p = PxVec3(vPos.x, vPos.y, vPos.z);
+            m_MonsterRigids[i]->setGlobalPose(MonsterPxTransform);
+        }
+        else {
+            // 이동 가능: 기존 속도 유지
+            m_MonsterRigids[i]->setLinearVelocity(PxVec3(vVelocity.x, vVelocity.y, vVelocity.z));
+        }
+
+        MonsterPxTransform = m_MonsterRigids[i]->getGlobalPose();
+        vPxMonsterPos = MonsterPxTransform.p;
+
+        m_Monsters[i]->Get_Transform()->Set_State(CTransform::STATE_POSITION, _Vec3(vPxMonsterPos.x, vPxMonsterPos.y, vPxMonsterPos.z));
+
+        // 4. y축 지형 보정 (네비게이션)
+        vPxMonsterPos.y = pNavigation->SetUp_OnCell(m_pPlayer->Get_Transform(), 0.f, fTimeDelta);
+
+        // 5. y축 보정 후 위치 동기화
+        MonsterPxTransform.p = vPxMonsterPos;
+        m_MonsterRigids[i]->setGlobalPose(MonsterPxTransform);
+
+        // 6. 최종 Transform 동기화
+        m_Monsters[i]->Get_Transform()->Set_State(CTransform::STATE_POSITION, _Vec3(vPxMonsterPos.x, vPxMonsterPos.y, vPxMonsterPos.z));
+    }
+
+    CRigidBody* pPlayerRigidBody = dynamic_cast<CRigidBody*>(m_pPlayer->Find_Component(RIGIDBODY));
+    CNavigation* pNavigation = dynamic_cast<CNavigation*>(m_pPlayer->Find_Component(NAVIGATION));
+
+    // 1. 현재 속도 가져오기
+    _Vec3 vVelocity = pPlayerRigidBody->Get_Velocity();
+
+    // 2. 현재 PhysX 위치 가져오기
+    PxTransform PlayerPxTransform = m_pPlayerRigid->getGlobalPose();
+    PxVec3 vPxPlayerPos = PlayerPxTransform.p;
+    _Vec3 vPos = _Vec3(vPxPlayerPos.x, vPxPlayerPos.y, vPxPlayerPos.z);
+
+    // 3. 이동 가능 여부 판단
+    if (!pNavigation->isMove(vPos + vVelocity * fTimeDelta)) {
+        // 이동 불가: 속도를 0으로 설정
+        m_pPlayerRigid->setLinearVelocity(PxVec3(0.f, 0.f, 0.f));
+
+        // PhysX 위치를 유지 (추가 이동 방지)
+        PlayerPxTransform.p = PxVec3(vPos.x, vPos.y, vPos.z);
+        m_pPlayerRigid->setGlobalPose(PlayerPxTransform);
+    }
+    else {
+        // 이동 가능: 기존 속도 유지
+        m_pPlayerRigid->setLinearVelocity(PxVec3(vVelocity.x, vVelocity.y, vVelocity.z));
+    }
+
+    PlayerPxTransform = m_pPlayerRigid->getGlobalPose();
+    vPxPlayerPos = PlayerPxTransform.p;
+
+    m_pPlayer->Get_Transform()->Set_State(CTransform::STATE_POSITION, _Vec3(vPxPlayerPos.x, vPxPlayerPos.y, vPxPlayerPos.z));
+
+    // 4. y축 지형 보정 (네비게이션)
+    vPxPlayerPos.y = pNavigation->SetUp_OnCell(m_pPlayer->Get_Transform(), 0.f, fTimeDelta);
+
+    // 5. y축 보정 후 위치 동기화
+    PlayerPxTransform.p = vPxPlayerPos;
+    m_pPlayerRigid->setGlobalPose(PlayerPxTransform);
+
+    // 6. 최종 Transform 동기화
+    m_pPlayer->Get_Transform()->Set_State(CTransform::STATE_POSITION, _Vec3(vPxPlayerPos.x, vPxPlayerPos.y, vPxPlayerPos.z));
+
 
     // 물리 씬 업데이트
     m_PxScene->simulate(fTimeDelta);
@@ -163,10 +245,10 @@ HRESULT CPhysX_Manager::AddPhysX_StaticMesh(CGameObject* pObject, _wstring strMo
 HRESULT CPhysX_Manager::SetUp_Player(CGameObject* pPlayer)
 {
     PxRigidDynamic* pRigid = m_PhysX->createRigidDynamic(Get_PhysXTransform(pPlayer));
-
+    pRigid->setLinearDamping(10.f);
     // 머테리얼 환경 정의
     // 정적 마찰, 동적 마찰, 반발 계수
-    PxMaterial* Material = m_PhysX->createMaterial(0.5f, 0.5f, 0.6f);
+    PxMaterial* Material = m_PhysX->createMaterial(1.f, 1.f, 0.f);
 
     // 반지름이 0.5이고 높이가 0.3인 캡슐 헝태
 
@@ -193,7 +275,7 @@ HRESULT CPhysX_Manager::Add_Monster(CGameObject* pMonster, _float fRadius, _floa
 
     // 머테리얼 환경 정의
     // 정적 마찰, 동적 마찰, 반발 계수
-    PxMaterial* Material = m_PhysX->createMaterial(0.5f, 0.5f, 0.6f);
+    PxMaterial* Material = m_PhysX->createMaterial(1.f, 1.f, 0.f);
 
     // 반지름이 0.5이고 높이가 0.3인 캡슐 헝태
 

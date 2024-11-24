@@ -63,6 +63,8 @@ protected:
 
 	_Vec4				m_vRimLightColor = {};
 
+	_Vec3				m_vVelocity = {};
+
 protected:
 	HRESULT Bind_WorldViewProj();
 

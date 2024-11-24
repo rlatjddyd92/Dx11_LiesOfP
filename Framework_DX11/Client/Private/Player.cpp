@@ -97,6 +97,8 @@ HRESULT CPlayer::Initialize(void * pArg)
 
 	m_strObjectTag = TEXT("Player");
 
+	m_pGameInstance->SetUpPhysX_Player(this);
+
 	return S_OK;
 }
 
@@ -128,34 +130,28 @@ void CPlayer::Priority_Update(_float fTimeDelta)
 
 void CPlayer::Update(_float fTimeDelta)
 {
+	m_vCurRootMove = XMVector3TransformNormal(m_pModelCom->Play_Animation(fTimeDelta, &m_EvKeyList), m_pTransformCom->Get_WorldMatrix());
+
+	m_pRigidBodyCom->Set_Velocity(m_vCurRootMove / fTimeDelta);
+
 	m_pFsmCom->Update(fTimeDelta);
 
-	m_vCurRootMove = m_pModelCom->Play_Animation(fTimeDelta, &m_EvKeyList);
-
-
-	_vector vPos = m_pTransformCom->Get_State(CTransform::STATE_POSITION);
-
-	
-	m_vCurRootMove = XMVector3TransformNormal(m_vCurRootMove, m_pTransformCom->Get_WorldMatrix());
-
-	m_pTransformCom->Set_State(CTransform::STATE_POSITION, vPos + m_vCurRootMove);
-	
 	for (auto& pEffect : m_EffectList)
 	{
 		pEffect->Update(fTimeDelta);
 	}
 
 	m_pColliderCom->Update(m_pTransformCom->Get_WorldMatrix_Ptr());
+	m_pGameInstance->Add_ColliderList(m_pColliderCom);
 
 	m_pWeapon[m_eWeaponType]->Update(fTimeDelta);
 }
 
 void CPlayer::Late_Update(_float fTimeDelta)
 {
-	m_pRigidBodyCom->Update(fTimeDelta);
-	m_pNavigationCom->SetUp_OnCell(m_pTransformCom, 0.f, fTimeDelta);
+	//m_pRigidBodyCom->Update(fTimeDelta);
+	//m_pNavigationCom->SetUp_OnCell(m_pTransformCom, 0.f, fTimeDelta);
 
-	m_pGameInstance->Add_ColliderList(m_pColliderCom);
 	m_pGameInstance->Add_RenderObject(CRenderer::RG_NONBLEND, this);
 	m_pGameInstance->Add_RenderObject(CRenderer::RG_SHADOWOBJ, this);
 
@@ -210,7 +206,7 @@ HRESULT CPlayer::Render_LightDepth()
 
 void CPlayer::OnCollisionEnter(CGameObject* pOther)
 {
-	if (pOther->Get_Tag() == TEXT("Monster"))
+	/*if (pOther->Get_Tag() == TEXT("Monster"))
 	{
 		_Vec3 vColDir = pOther->Get_Transform()->Get_State(CTransform::STATE_POSITION) - m_pTransformCom->Get_State(CTransform::STATE_POSITION);
 		vColDir.y = 0.f;
@@ -219,21 +215,23 @@ void CPlayer::OnCollisionEnter(CGameObject* pOther)
 		vPlayerPos += (vColDir * -0.07f);
 
 		m_pTransformCom->Set_State(CTransform::STATE_POSITION, vPlayerPos);
-	}
+	}*/
 }
 
 void CPlayer::OnCollisionStay(CGameObject* pOther)
 {
-	if (pOther->Get_Tag() == TEXT("Monster"))
+	/*if (pOther->Get_Tag() == TEXT("Monster"))
 	{
-		_Vec3 vColDir = pOther->Get_Transform()->Get_State(CTransform::STATE_POSITION) - m_pTransformCom->Get_State(CTransform::STATE_POSITION);
-		vColDir.y = 0.f;
-		vColDir.Normalize();
-		_Vec3 vPlayerPos = m_pTransformCom->Get_State(CTransform::STATE_POSITION);
-		vPlayerPos += (vColDir * -0.07f);
+		_Vec3 vColNormal = m_pTransformCom->Get_State(CTransform::STATE_POSITION) - pOther->Get_Transform()->Get_State(CTransform::STATE_POSITION);
+		vColNormal.y = 0.f;
+		vColNormal.Normalize();
 
-		m_pTransformCom->Set_State(CTransform::STATE_POSITION, vPlayerPos);
-	}
+		_Vec3 vVel = m_pRigidBodyCom->Get_Velocity();
+		_Vec3 vProjected = vVel.Dot(vColNormal) * vColNormal;
+
+		vVel = vVel = vProjected;
+		m_pRigidBodyCom->Set_Velocity(vVel);
+	}*/
 }
 
 void CPlayer::OnCollisionExit(CGameObject* pOther)

@@ -75,31 +75,28 @@ HRESULT CPlayerCamera::Render()
 }
 
 void CPlayerCamera::PlayerMove(_float fTimeDelta)
-{	
+{
 	_long      MouseMove = { 0 };
 
 	_vector vPlayerPos = m_pPlayer->Get_Transform()->Get_State(CTransform::STATE_POSITION);
 
 	vPlayerPos.m128_f32[1] += 1.65f;
 
-	if (XMVectorGetY(vPlayerPos) > -5.f)
+	if (MouseMove = m_pGameInstance->Get_DIMouseMove(DIMM_X))
 	{
-		if (MouseMove = m_pGameInstance->Get_DIMouseMove(DIMM_X))
-		{
-			m_pTransformCom->Orbit(XMVectorSet(0.f, 1.f, 0.f, 0.f), vPlayerPos, 0.3f, 2.5f, fTimeDelta * MouseMove * 0.1f);
-		}
-		if (MouseMove = m_pGameInstance->Get_DIMouseMove(DIMM_Y))
-		{
-			m_pTransformCom->Orbit(m_pTransformCom->Get_State(CTransform::STATE_RIGHT), vPlayerPos, 0.6f, 2.5f, fTimeDelta * MouseMove * 0.1f);
-		}
-		_vector vTargetPos = vPlayerPos - XMVector3Normalize(m_pTransformCom->Get_State(CTransform::STATE_LOOK)) * 2.5f;
-
-		// Lerp로 카메라 위치를 부드럽게 이동
-		_vector vCurrentPos = m_pTransformCom->Get_State(CTransform::STATE_POSITION);
-		_vector vNewPos = XMVectorLerp(vCurrentPos, vTargetPos, 0.5f); 
-
-		m_pTransformCom->Set_State(CTransform::STATE_POSITION, vNewPos);
+		m_pTransformCom->Orbit(XMVectorSet(0.f, 1.f, 0.f, 0.f), vPlayerPos, 0.3f, 2.5f, fTimeDelta * MouseMove * 0.1f);
 	}
+	if (MouseMove = m_pGameInstance->Get_DIMouseMove(DIMM_Y))
+	{
+		m_pTransformCom->Orbit(m_pTransformCom->Get_State(CTransform::STATE_RIGHT), vPlayerPos, 0.6f, 2.5f, fTimeDelta * MouseMove * 0.1f);
+	}
+	_vector vTargetPos = vPlayerPos - XMVector3Normalize(m_pTransformCom->Get_State(CTransform::STATE_LOOK)) * 2.5f;
+
+	// Lerp로 카메라 위치를 부드럽게 이동
+	_vector vCurrentPos = m_pTransformCom->Get_State(CTransform::STATE_POSITION);
+	_vector vNewPos = XMVectorLerp(vCurrentPos, vTargetPos, 0.5f);
+
+	m_pTransformCom->Set_State(CTransform::STATE_POSITION, vNewPos);
 
 	//m_pTransformCom->LookAt(vPlayerPos);
 }

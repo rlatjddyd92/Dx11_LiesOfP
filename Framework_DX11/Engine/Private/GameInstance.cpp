@@ -142,12 +142,13 @@ void CGameInstance::Update_Engine(_float fTimeDelta)
 	m_pFrustum->Update();
 
 	m_pObject_Manager->Update(fTimeDelta);
+
+	m_pCollider_Manager->Update();
 	
 	m_pObject_Manager->Late_Update(fTimeDelta);
 	
 	m_pLevel_Manager->Update(fTimeDelta);		
 
-	m_pCollider_Manager->Update();
 
 	m_pPhysX_Manager->PhysX_Update(fTimeDelta);
 
@@ -681,6 +682,11 @@ HRESULT CGameInstance::SetUpPhysX_Player(CGameObject* pPlayer)
 {
 	return m_pPhysX_Manager->SetUp_Player(pPlayer);
 }
+HRESULT CGameInstance::AddPhysX_Monster(CGameObject* pMonster, _float fRadius, _float fHalfHeight)
+{
+	return m_pPhysX_Manager->Add_Monster(pMonster, fRadius, fHalfHeight);
+}
+
 void CGameInstance::Reset_PhsyX()
 {
 	m_pPhysX_Manager->Reset_PhsyX();

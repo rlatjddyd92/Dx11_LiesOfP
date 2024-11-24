@@ -14,6 +14,7 @@ _Matrix CNavigation::m_WorldMatrix = {};
 CNavigation::CNavigation(ID3D11Device * pDevice, ID3D11DeviceContext * pContext)
 	: CComponent { pDevice, pContext }
 {
+	m_eComponentType = NAVIGATION;
 }
 
 CNavigation::CNavigation(const CNavigation & Prototype)
@@ -30,6 +31,8 @@ CNavigation::CNavigation(const CNavigation & Prototype)
 #ifdef _DEBUG
 	Safe_AddRef(m_pShader);
 #endif
+
+	m_eComponentType = NAVIGATION;
 }
 
 //HRESULT CNavigation::Initialize_Prototype(const _wstring& strNavigationDataFile)
@@ -201,10 +204,10 @@ _bool CNavigation::isMove(_Vec3 vPosition)
 	}		
 }
 
-void CNavigation::SetUp_OnCell(CTransform* pTransform, _float fOffset, _float fTimeDelta)
+_float CNavigation::SetUp_OnCell(CTransform* pTransform, _float fOffset, _float fTimeDelta)
 {
 	if (m_iCurrentCellIndex < 0 || m_iCurrentCellIndex >= m_Cells.size())
-		return;
+		return pTransform->Get_State(CTransform::STATE_POSITION).y;
 
 	_vector      vLocalPos = XMVector3TransformCoord(pTransform->Get_State(CTransform::STATE_POSITION), XMMatrixInverse(nullptr, XMLoadFloat4x4(&m_WorldMatrix)));
 
@@ -241,6 +244,7 @@ void CNavigation::SetUp_OnCell(CTransform* pTransform, _float fOffset, _float fT
 
 	pTransform->Set_State(CTransform::STATE_POSITION, vWorldPos);
 
+	return y;
 }
 
 

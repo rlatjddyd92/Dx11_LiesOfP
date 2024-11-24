@@ -421,7 +421,7 @@ void CModel::Update_Bone()
 
 }
 
-_vector CModel::Play_Animation(_float fTimeDelta, list<OUTPUT_EVKEY>* pEvKeyList)
+_Vec3 CModel::Play_Animation(_float fTimeDelta, list<OUTPUT_EVKEY>* pEvKeyList)
 {
 	_bool	bRootCheck{false};
 	if (m_UFBIndices[UFB_ROOT] != 1024)

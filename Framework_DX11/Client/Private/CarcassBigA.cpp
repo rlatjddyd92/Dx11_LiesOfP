@@ -70,6 +70,8 @@ HRESULT CCarcassBigA::Initialize(void* pArg)
 
 	m_vRimLightColor = { 0.7f, 0.f, 0.f, 3.f };
 
+	m_pGameInstance->AddPhysX_Monster(this, 0.3f, 0.3f);
+
 	return S_OK;
 }
 
@@ -81,25 +83,19 @@ void CCarcassBigA::Priority_Update(_float fTimeDelta)
 
 void CCarcassBigA::Update(_float fTimeDelta)
 {
-	m_vCurRootMove = m_pModelCom->Play_Animation(fTimeDelta, nullptr);
+	m_vCurRootMove = XMVector3TransformNormal(m_pModelCom->Play_Animation(fTimeDelta), m_pTransformCom->Get_WorldMatrix());
+
+	m_pRigidBodyCom->Set_Velocity(m_vCurRootMove / fTimeDelta);
 
 	m_pFsmCom->Update(fTimeDelta);
 
-	_Vec3 vPos = m_pTransformCom->Get_State(CTransform::STATE_POSITION);
-	
-	m_vCurRootMove = XMVector3TransformNormal(m_vCurRootMove, m_pTransformCom->Get_WorldMatrix());
-
-	m_pTransformCom->Set_State(CTransform::STATE_POSITION, vPos + m_vCurRootMove);
-	
-
-	//m_pColliderCom->Update(m_pTransformCom->Get_WorldMatrix_Ptr());
+	m_pColliderCom->Update(m_pTransformCom->Get_WorldMatrix_Ptr());
+	m_pGameInstance->Add_ColliderList(m_pColliderCom);
 }
 
 void CCarcassBigA::Late_Update(_float fTimeDelta)
 {
 	__super::Late_Update(fTimeDelta);
-
-
 
 	m_pGameInstance->Add_RenderObject(CRenderer::RG_NONBLEND, this);
 
@@ -120,9 +116,7 @@ HRESULT CCarcassBigA::Render()
 		return E_FAIL;
 
 #ifdef _DEBUG
-	//m_pColliderCom->Render();
-	//for (auto& pColliderObj : m_pColliderObject)
-	//	pColliderObj->Render();
+	m_pColliderCom->Render();
 #endif
 	return S_OK;
 }
@@ -137,35 +131,24 @@ HRESULT CCarcassBigA::Ready_Components()
 		TEXT("Com_Model"), reinterpret_cast<CComponent**>(&m_pModelCom))))
 		return E_FAIL;
 
+	/* For.Com_Navigation */
+	CNavigation::NAVIGATION_DESC			NaviDesc{};
+	NaviDesc.iCurrentIndex = 0;
 
-	/* For.Com_Collider_AABB */
-	//CBounding_AABB::BOUNDING_AABB_DESC			ColliderAABBDesc{};
-	//ColliderAABBDesc.vExtents = _float3(0.5f, 1.0f, 0.5f);
-	//ColliderAABBDesc.vCenter = _float3(0.f, ColliderAABBDesc.vExtents.y, 0.f);
-	//
-	//if (FAILED(__super::Add_Component(LEVEL_GAMEPLAY, TEXT("Prototype_Component_Collider_AABB"),
-	//	TEXT("Com_Collider_AABB"), reinterpret_cast<CComponent**>(&m_pColliderCom[CCollider::TYPE_AABB]), &ColliderAABBDesc)))
-	//	return E_FAIL;
-	//
-	///* FOR.Com_Collider_OBB */
-	//CBounding_OBB::BOUNDING_OBB_DESC			ColliderOBBDesc{};
-	//ColliderOBBDesc.vExtents = _float3(0.7f, 0.7f, 0.7f);
-	//ColliderOBBDesc.vCenter = _float3(0.f, ColliderOBBDesc.vExtents.y, 0.f);
-	//ColliderOBBDesc.vAngles = _float3(0.f, m_pGameInstance->Get_Random(XMConvertToRadians(0.f), XMConvertToRadians(360.f)), 0.f);
-	//
-	//if (FAILED(__super::Add_Component(LEVEL_GAMEPLAY, TEXT("Prototype_Component_Collider_OBB"),
-	//	TEXT("Com_Collider_OBB"), reinterpret_cast<CComponent**>(&m_pColliderCom[CCollider::TYPE_OBB]), &ColliderOBBDesc)))
-	//	return E_FAIL;
-	//
-	///* FOR.Com_Collider_Sphere */
-	//CBounding_Sphere::BOUNDING_SPHERE_DESC			ColliderSphereDesc{};
-	//ColliderSphereDesc.fRadius = 1.2f;
-	//ColliderSphereDesc.vCenter = _float3(0.f, ColliderSphereDesc.fRadius, 0.f);
-	//
-	//
-	//if (FAILED(__super::Add_Component(LEVEL_GAMEPLAY, TEXT("Prototype_Component_Collider_Sphere"),
-	//	TEXT("Com_Collider_Sphere"), reinterpret_cast<CComponent**>(&m_pColliderCom[CCollider::TYPE_SPHERE]), &ColliderSphereDesc)))
-	//	return E_FAIL;
+	if (FAILED(__super::Add_Component(LEVEL_GAMEPLAY, TEXT("Prototype_Component_Navigation"),
+		TEXT("Com_Navigation"), reinterpret_cast<CComponent**>(&m_pNavigationCom), &NaviDesc)))
+		return E_FAIL;
+
+	/* FOR.Com_Collider */      //Body
+	CBounding_OBB::BOUNDING_OBB_DESC         ColliderDesc{};
+	ColliderDesc.vExtents = _float3(0.7f, 2.f, 0.7f);
+	ColliderDesc.vCenter = _float3(0.f, 1.f, 0.f);
+	ColliderDesc.vAngles = _float3(0.f, 0.f, 0.f);
+
+	if (FAILED(__super::Add_Component(LEVEL_STATIC, TEXT("Prototype_Component_Collider_OBB"),
+		TEXT("Com_Collider"), reinterpret_cast<CComponent**>(&m_pColliderCom), &ColliderDesc)))
+		return E_FAIL;
+	m_pColliderCom->Set_Owner(this);
 
 
 	/* FOR.Com_Collider_OBB */
@@ -184,7 +167,7 @@ HRESULT CCarcassBigA::Ready_Components()
 	Desc.eType = CCollider::TYPE_OBB;
 	Desc.pCombinedBoneTransformMatrix = m_pModelCom->Get_BoneCombindTransformationMatrix_Ptr(m_pModelCom->Get_UFBIndices(UFB_HAND_LEFT));
 	Desc.pParentTransformComMatrix = m_pTransformCom->Get_WorldMatrix_Ptr();
-	;
+	
 	m_pColliderObject[COLLIDERTYPE::TYPE_LEFTHAND] = m_pGameInstance->Clone_GameObject(TEXT("Prototype_GameObject_ColliderObj"), &Desc);
 
 
@@ -200,7 +183,17 @@ HRESULT CCarcassBigA::Ready_Components()
 	
 	m_pColliderObject[COLLIDERTYPE::TYPE_RIGHTHAND] = m_pGameInstance->Clone_GameObject(TEXT("Prototype_GameObject_ColliderObj"), &Desc);
 
-
+	/* FOR.Com_RigidBody */
+	if (FAILED(__super::Add_Component(LEVEL_STATIC, TEXT("Prototype_Component_RigidBody"),
+		TEXT("Com_RigidBody"), reinterpret_cast<CComponent**>(&m_pRigidBodyCom))))
+		return E_FAIL;
+	m_pRigidBodyCom->Set_Owner(this);
+	m_pRigidBodyCom->Set_IsFriction(true);
+	m_pRigidBodyCom->Set_Friction(_float3(10.f, 0.f, 10.f));
+	m_pRigidBodyCom->Set_IsGravity(false);
+	m_pRigidBodyCom->Set_GravityScale(15.f);
+	m_pRigidBodyCom->Set_VelocityLimit(_float3(25.f, 30.f, 25.f));
+	m_pRigidBodyCom->Set_Navigation(m_pNavigationCom);
 
 	return S_OK;
 }
