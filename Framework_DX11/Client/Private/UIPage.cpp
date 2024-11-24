@@ -185,7 +185,12 @@ void CUIPage::Input_Render_Info(UPART& Part)
 	pNew->iFont = Part.iFontIndex;
 	pNew->strText = Part.strText;
 	pNew->vColor_Text = Part.fTextColor;
+
+	pNew->vColor_Text.w *= m_fTopPartMove;
+
 	pNew->vColor_Texture = Part.fTextureColor;
+	pNew->vColor_Texture.w *= m_fTopPartMove;
+
 	pNew->vPosition = Part.fPosition;
 	pNew->vSize = Part.fSize;
 	pNew->fAlpha_Strash = Part.fStrash_Alpha;
