@@ -97,8 +97,6 @@ HRESULT CPlayer::Initialize(void * pArg)
 
 	m_strObjectTag = TEXT("Player");
 
-	m_pGameInstance->SetUpPhysX_Player(this);
-
 	return S_OK;
 }
 
@@ -149,7 +147,7 @@ void CPlayer::Update(_float fTimeDelta)
 
 void CPlayer::Late_Update(_float fTimeDelta)
 {
-	//m_pRigidBodyCom->Update(fTimeDelta);
+	m_pRigidBodyCom->Update(fTimeDelta);
 	//m_pNavigationCom->SetUp_OnCell(m_pTransformCom, 0.f, fTimeDelta);
 
 	m_pGameInstance->Add_RenderObject(CRenderer::RG_NONBLEND, this);
@@ -431,17 +429,27 @@ HRESULT CPlayer::Ready_Components()
 		return E_FAIL;
 	m_pColliderCom->Set_Owner(this);
 
+	// 항상 마지막에 생성하기
+	CRigidBody::RIGIDBODY_DESC RigidBodyDesc{};
+	RigidBodyDesc.isStatic = false;
+	RigidBodyDesc.isGravity = false;
+	RigidBodyDesc.pOwnerTransform = m_pTransformCom;
+	RigidBodyDesc.pOwnerNavigation = m_pNavigationCom;
+
+	RigidBodyDesc.pOwner = this;
+	RigidBodyDesc.fStaticFriction = 1.0f;
+	RigidBodyDesc.fDynamicFriction = 0.0f;
+	RigidBodyDesc.fRestituion = 0.0f;
+
+	physX::GeometryCapsule CapsuleDesc;
+	CapsuleDesc.fHeight = 1.5f;
+	CapsuleDesc.fRadius = 0.25f;
+	RigidBodyDesc.pGeometry = &CapsuleDesc;
+
 	/* FOR.Com_RigidBody */
 	if (FAILED(__super::Add_Component(LEVEL_STATIC, TEXT("Prototype_Component_RigidBody"),
-		TEXT("Com_RigidBody"), reinterpret_cast<CComponent**>(&m_pRigidBodyCom))))
+		TEXT("Com_RigidBody"), reinterpret_cast<CComponent**>(&m_pRigidBodyCom), &RigidBodyDesc)))
 		return E_FAIL;
-	m_pRigidBodyCom->Set_Owner(this);
-	m_pRigidBodyCom->Set_IsFriction(true);
-	m_pRigidBodyCom->Set_Friction(_float3(10.f, 0.f, 10.f));
-	m_pRigidBodyCom->Set_IsGravity(false);
-	m_pRigidBodyCom->Set_GravityScale(15.f);
-	m_pRigidBodyCom->Set_VelocityLimit(_float3(25.f, 30.f, 25.f));
-	m_pRigidBodyCom->Set_Navigation(m_pNavigationCom);
 
 	return S_OK;
 }

@@ -674,23 +674,17 @@ KEY_STATE CGameInstance::Get_KeyState(KEY _eKey)
 #pragma endregion
 
 #pragma region PhysX_Manager
-HRESULT CGameInstance::AddPhysX_StaticMesh(CGameObject* pObject, _wstring strModelName)
+
+PxPhysics* CGameInstance::Get_PhysX() const
 {
-	return m_pPhysX_Manager->AddPhysX_StaticMesh(pObject, strModelName);
-}
-HRESULT CGameInstance::SetUpPhysX_Player(CGameObject* pPlayer)
-{
-	return m_pPhysX_Manager->SetUp_Player(pPlayer);
-}
-HRESULT CGameInstance::AddPhysX_Monster(CGameObject* pMonster, _float fRadius, _float fHalfHeight)
-{
-	return m_pPhysX_Manager->Add_Monster(pMonster, fRadius, fHalfHeight);
+	return m_pPhysX_Manager->Get_PhysX();
 }
 
-void CGameInstance::Reset_PhsyX()
+PxScene* CGameInstance::Get_PhysXScene() const
 {
-	m_pPhysX_Manager->Reset_PhsyX();
+	return m_pPhysX_Manager->Get_PhysXScene();
 }
+
 _bool CGameInstance::RayCast_PhysX(_vector vRayPos, _vector vRayDir, _vector* vHitPos, _vector* vNormal, _float* fHitDistance)
 {
 	return m_pPhysX_Manager->RayCast(vRayPos, vRayDir, vHitPos, vNormal, fHitDistance);
@@ -803,7 +797,6 @@ void CGameInstance::LoadSoundFile(const char* pFolderName)
 
 void CGameInstance::Release_Engine()
 {
-	Safe_Release(m_pPhysX_Manager);
 	Safe_Release(m_pKey_Manager);
 	Safe_Release(m_pCollider_Manager);
 	// 2024-11-06 ±è¼º¿ë
@@ -820,6 +813,7 @@ void CGameInstance::Release_Engine()
 	Safe_Release(m_pObject_Manager);
 	Safe_Release(m_pComponent_Manager);
 	Safe_Release(m_pLevel_Manager);
+	Safe_Release(m_pPhysX_Manager);
 	Safe_Release(m_pInstance_Manager);
 	Safe_Release(m_pSound_Manager);
 	Safe_Release(m_pInput_Device);

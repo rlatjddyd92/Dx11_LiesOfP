@@ -197,11 +197,8 @@ public:
 #pragma endregion
 
 #pragma region PhysX_MANAGER
-		HRESULT AddPhysX_StaticMesh(class CGameObject* pObject, _wstring strModelName);
-		HRESULT SetUpPhysX_Player(class CGameObject* pPlayer);
-		HRESULT AddPhysX_Monster(class CGameObject* pMonster, _float fRadius, _float fHalfHeight);
-		void    Reset_PhsyX();
-
+		PxPhysics* Get_PhysX() const;
+		PxScene* Get_PhysXScene() const;
 		_bool   RayCast_PhysX(_vector vRayPos, _vector vRayDir, _vector* vHitPos, _vector* vNormal, _float* fHitDistance);
 #pragma endregion
 

@@ -70,8 +70,6 @@ HRESULT CCarcassBigA::Initialize(void* pArg)
 
 	m_vRimLightColor = { 0.7f, 0.f, 0.f, 3.f };
 
-	m_pGameInstance->AddPhysX_Monster(this, 0.3f, 0.3f);
-
 	return S_OK;
 }
 
@@ -97,6 +95,7 @@ void CCarcassBigA::Late_Update(_float fTimeDelta)
 {
 	__super::Late_Update(fTimeDelta);
 
+	m_pRigidBodyCom->Update(fTimeDelta);
 	m_pGameInstance->Add_RenderObject(CRenderer::RG_NONBLEND, this);
 
 	for (_uint i = 0; i < TYPE_END; ++i)
@@ -170,7 +169,6 @@ HRESULT CCarcassBigA::Ready_Components()
 	
 	m_pColliderObject[COLLIDERTYPE::TYPE_LEFTHAND] = m_pGameInstance->Clone_GameObject(TEXT("Prototype_GameObject_ColliderObj"), &Desc);
 
-
 	/* FOR.Com_Collider_OBB */
 	ColliderOBBDesc_Obj.vAngles = _float3(0.0f, 0.0f, 0.0f);
 	ColliderOBBDesc_Obj.vCenter = _float3(0.2f, 0.f, 0.f);
@@ -183,18 +181,28 @@ HRESULT CCarcassBigA::Ready_Components()
 	
 	m_pColliderObject[COLLIDERTYPE::TYPE_RIGHTHAND] = m_pGameInstance->Clone_GameObject(TEXT("Prototype_GameObject_ColliderObj"), &Desc);
 
+
+	// 항상 마지막에 생성하기
+	CRigidBody::RIGIDBODY_DESC RigidBodyDesc{};
+	RigidBodyDesc.isStatic = false;
+	RigidBodyDesc.isGravity = false;
+	RigidBodyDesc.pOwnerTransform = m_pTransformCom;
+	RigidBodyDesc.pOwnerNavigation = m_pNavigationCom;
+
+	RigidBodyDesc.pOwner = this;
+	RigidBodyDesc.fStaticFriction = 1.0f;
+	RigidBodyDesc.fDynamicFriction = 0.0f;
+	RigidBodyDesc.fRestituion = 0.0f;
+
+	physX::GeometryCapsule CapsuleDesc;
+	CapsuleDesc.fHeight = 1.5f;
+	CapsuleDesc.fRadius = 0.25f;
+	RigidBodyDesc.pGeometry = &CapsuleDesc;
+
 	/* FOR.Com_RigidBody */
 	if (FAILED(__super::Add_Component(LEVEL_STATIC, TEXT("Prototype_Component_RigidBody"),
-		TEXT("Com_RigidBody"), reinterpret_cast<CComponent**>(&m_pRigidBodyCom))))
+		TEXT("Com_RigidBody"), reinterpret_cast<CComponent**>(&m_pRigidBodyCom), &RigidBodyDesc)))
 		return E_FAIL;
-	m_pRigidBodyCom->Set_Owner(this);
-	m_pRigidBodyCom->Set_IsFriction(true);
-	m_pRigidBodyCom->Set_Friction(_float3(10.f, 0.f, 10.f));
-	m_pRigidBodyCom->Set_IsGravity(false);
-	m_pRigidBodyCom->Set_GravityScale(15.f);
-	m_pRigidBodyCom->Set_VelocityLimit(_float3(25.f, 30.f, 25.f));
-	m_pRigidBodyCom->Set_Navigation(m_pNavigationCom);
-
 	return S_OK;
 }
 

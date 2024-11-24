@@ -113,7 +113,7 @@
 #include "D:\GitHubProjects\Dx11_LiesOfP\Framework_DX11\Engine\Private\Object_Manager.cpp"
 
 
-#include "D:\GitHubProjects\Dx11_LiesOfP\Framework_DX11\Engine\Private\Pawn.cpp"
+#include "D:\GitHubProjects\Dx11_LiesOfP\Framework_DX11\Engine\Private\Octree.cpp"
 
 
 #include "D:\GitHubProjects\Dx11_LiesOfP\Framework_DX11\Engine\Private\PhysX_Manager.cpp"
@@ -144,6 +144,12 @@
 
 
 #include "D:\GitHubProjects\Dx11_LiesOfP\Framework_DX11\Engine\private\Shader_NonVTX.cpp"
+
+
+#include "D:\GitHubProjects\Dx11_LiesOfP\Framework_DX11\Engine\Private\Sound.cpp"
+
+
+#include "D:\GitHubProjects\Dx11_LiesOfP\Framework_DX11\Engine\Private\Sound_Manager.cpp"
 
 
 #include "D:\GitHubProjects\Dx11_LiesOfP\Framework_DX11\Engine\Private\State.cpp"

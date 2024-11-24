@@ -1152,7 +1152,7 @@ void CModel::CalculateBoundingBox_Model(CMesh* pMesh, _Vec3& minPos, _Vec3& maxP
 	_Vec3 vMesh_Max_Pos = pMesh->Get_MaxPos_Vertex();
 
 	//정점 개수 만큼 반복
-	for (int i = 0; i < pMesh->Get_NumVertices(); ++i)
+	for (_uint i = 0; i < pMesh->Get_NumVertices(); ++i)
 	{
 		minPos.x = min(minPos.x, vMesh_Min_Pos.x);
 		minPos.y = min(minPos.y, vMesh_Min_Pos.y);

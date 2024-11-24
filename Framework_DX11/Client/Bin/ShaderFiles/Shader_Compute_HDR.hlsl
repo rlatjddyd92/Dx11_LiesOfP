@@ -21,12 +21,7 @@ float DownScale4x4(uint2 vPixel, uint groupThreadId)
     {
 			[unroll]
         for (int j = 0; j < 4; ++j)
-        {
-            float4 vInput = g_InputTexture.Load(iFullResPos, int2(j, i));
-            if(vInput.a != 0.f)
-                vDownScaled += vInput;
-
-        }
+            vDownScaled += g_InputTexture.Load(iFullResPos, int2(j, i));
     }
     vDownScaled /= 16;
 

@@ -76,7 +76,7 @@ void COctree::Culling(CGameInstance* pGameInstance, _uint* pOriIndices, _uint* p
 
 	if (allIn) {
 		// 모두 포함된 경우
-		for (int i = 0; i < m_iNumFaces; ++i)
+		for (_uint i = 0; i < m_iNumFaces; ++i)
 		{
 			//기존에 그린다고 담아둔 면인지 확인
 			if (pDrawTriIndexes.find(m_TrianglgeIndexes[i]) == pDrawTriIndexes.end()) {
@@ -104,7 +104,7 @@ void COctree::Build_Octree(_uint* indices, VTXMESH* pVertexes, _uint iNumTri)
 {
 	m_iDepth--;
 
-	for (int i = 0; i < iNumTri; ++i)
+	for (_uint i = 0; i < iNumTri; ++i)
 	{
 		const _Vec3& v1 = pVertexes[indices[i * 3]].vPosition;
 		const  _Vec3& v2 = pVertexes[indices[i * 3 + 1]].vPosition;

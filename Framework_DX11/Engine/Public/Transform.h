@@ -28,6 +28,15 @@ public:
 
 	_Matrix				Get_WorldMatrix_Inverse() const { return m_WorldMatrix.Invert(); }
 
+	_Quaternion			Get_Quaternion() {
+		_Matrix MatQuat;
+		MatQuat.Right(XMVector3Normalize(m_WorldMatrix.Right()));
+		MatQuat.Up(XMVector3Normalize(m_WorldMatrix.Up()));
+		MatQuat.Forward(XMVector3Normalize(m_WorldMatrix.Forward()));
+
+		return XMQuaternionRotationMatrix(MatQuat);
+	}
+
 public:	
 	virtual HRESULT Initialize_Prototype();
 	virtual HRESULT Initialize(void* pArg);
