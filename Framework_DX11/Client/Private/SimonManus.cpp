@@ -179,7 +179,11 @@ void CSimonManus::Late_Update(_float fTimeDelta)
 		//}
 	}
 	m_pWeapon->Late_Update(fTimeDelta);
-
+	for (_uint i = 0; i < LEG_END; ++i)
+	{
+		m_pGameInstance->Add_ColliderList(m_EXCollider[i]);
+	}
+	m_pGameInstance->Add_ColliderList(m_pColliderCom);
 }
 
 HRESULT CSimonManus::Render()
@@ -232,6 +236,7 @@ HRESULT CSimonManus::Ready_Components()
 	if (FAILED(__super::Add_Component(LEVEL_STATIC, TEXT("Prototype_Component_Collider_OBB"),
 		TEXT("Com_Collider"), reinterpret_cast<CComponent**>(&m_pColliderCom), &ColliderDesc)))
 		return E_FAIL;
+	m_pColliderCom->Set_Owner(this);
 
 	//LegsL
 	ColliderDesc.vExtents = _float3(0.3f, 0.6f, 0.3f);
@@ -240,6 +245,7 @@ HRESULT CSimonManus::Ready_Components()
 	if (FAILED(__super::Add_Component(LEVEL_STATIC, TEXT("Prototype_Component_Collider_OBB"),
 		TEXT("Com_Collider_LL"), reinterpret_cast<CComponent**>(&m_EXCollider[LEG_LEFT]), &ColliderDesc)))
 		return E_FAIL;
+
 	//R
 	ColliderDesc.vExtents = _float3(0.3f, 0.6f, 0.3f);
 	ColliderDesc.vCenter = _float3(-0.1f, -0.4f, 0.f);
@@ -257,6 +263,9 @@ HRESULT CSimonManus::Ready_Components()
 		TEXT("Com_Collider_LowerBody"), reinterpret_cast<CComponent**>(&m_EXCollider[LOWERBODY]), &ColliderDesc)))
 		return E_FAIL;
 
+	for (_uint i = 0; i < LEG_END; ++i)
+		m_EXCollider[i]->Set_Owner(this);
+		
 	return S_OK;
 }
 
@@ -412,10 +421,10 @@ CGameObject* CSimonManus::Clone(void* pArg)
 
 void CSimonManus::Free()
 {
-	//for (_uint i = 0; i < TYPE_END; ++i)
-	//{
-	//	Safe_Release(m_pColliderObject[i]);
-	//}
+	for (_uint i = 0; i < LEG_END; ++i)
+	{
+		Safe_Release(m_EXCollider[i]);
+	}
 	Safe_Release(m_pWeapon);
 	Safe_Release(m_pExtraModelCom);
 

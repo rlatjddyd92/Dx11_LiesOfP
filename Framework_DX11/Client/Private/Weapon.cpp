@@ -58,8 +58,8 @@ void CWeapon::Late_Update(_float fTimeDelta)
 	/* 직교투영을 위한 월드행렬까지 셋팅하게 된다. */
 	__super::Late_Update(fTimeDelta);
 
-	if (nullptr != m_pColliderCom)
-		m_pGameInstance->Add_ColliderList(m_pColliderCom);
+	/*if (nullptr != m_pColliderCom)
+		m_pGameInstance->Add_ColliderList(m_pColliderCom);*/
 }
 
 HRESULT CWeapon::Render()

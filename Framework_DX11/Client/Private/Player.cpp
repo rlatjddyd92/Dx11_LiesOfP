@@ -155,6 +155,7 @@ void CPlayer::Late_Update(_float fTimeDelta)
 	m_pRigidBodyCom->Update(fTimeDelta);
 	m_pNavigationCom->SetUp_OnCell(m_pTransformCom, 0.f, fTimeDelta);
 
+	m_pGameInstance->Add_ColliderList(m_pColliderCom);
 	m_pGameInstance->Add_RenderObject(CRenderer::RG_NONBLEND, this);
 	m_pGameInstance->Add_RenderObject(CRenderer::RG_SHADOWOBJ, this);
 
@@ -209,6 +210,16 @@ HRESULT CPlayer::Render_LightDepth()
 
 void CPlayer::OnCollisionEnter(CGameObject* pOther)
 {
+	if (pOther->Get_Tag() == TEXT("Monster"))
+	{
+		_Vec3 vColDir = pOther->Get_Transform()->Get_State(CTransform::STATE_POSITION) - m_pTransformCom->Get_State(CTransform::STATE_POSITION);
+		vColDir.y = 0.f;
+		vColDir.Normalize();
+		_Vec3 vPlayerPos = m_pTransformCom->Get_State(CTransform::STATE_POSITION);
+		vPlayerPos += (vColDir * -0.07f);
+
+		m_pTransformCom->Set_State(CTransform::STATE_POSITION, vPlayerPos);
+	}
 }
 
 void CPlayer::OnCollisionStay(CGameObject* pOther)
@@ -216,7 +227,12 @@ void CPlayer::OnCollisionStay(CGameObject* pOther)
 	if (pOther->Get_Tag() == TEXT("Monster"))
 	{
 		_Vec3 vColDir = pOther->Get_Transform()->Get_State(CTransform::STATE_POSITION) - m_pTransformCom->Get_State(CTransform::STATE_POSITION);
+		vColDir.y = 0.f;
+		vColDir.Normalize();
+		_Vec3 vPlayerPos = m_pTransformCom->Get_State(CTransform::STATE_POSITION);
+		vPlayerPos += (vColDir * -0.07f);
 
+		m_pTransformCom->Set_State(CTransform::STATE_POSITION, vPlayerPos);
 	}
 }
 
@@ -408,13 +424,14 @@ HRESULT CPlayer::Ready_Components()
 
 	/* FOR.Com_Collider */
 	CBounding_OBB::BOUNDING_OBB_DESC			ColliderDesc{};
-	ColliderDesc.vExtents = _float3(0.5f, 0.8f, 0.5f);
+	ColliderDesc.vExtents = _float3(0.4f, 1.f, 0.4f);
 	ColliderDesc.vCenter = _float3(0.f, ColliderDesc.vExtents.y, 0.f);
 	ColliderDesc.vAngles = _float3(0.f, 0.f, 0.f);
 
 	if (FAILED(__super::Add_Component(LEVEL_STATIC, TEXT("Prototype_Component_Collider_OBB"),
 		TEXT("Com_Collider"), reinterpret_cast<CComponent**>(&m_pColliderCom), &ColliderDesc)))
 		return E_FAIL;
+	m_pColliderCom->Set_Owner(this);
 
 	/* FOR.Com_RigidBody */
 	if (FAILED(__super::Add_Component(LEVEL_STATIC, TEXT("Prototype_Component_RigidBody"),
