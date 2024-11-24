@@ -37,6 +37,7 @@ public:
 
 public:
     void Set_Velocity(const _Vec3& vVelocity);
+    void Add_Force(const _Vec3& vForce, PxForceMode::Enum _eMode = PxForceMode::eFORCE);
 
 private:
     class CGameObject* m_pOwner = { nullptr };
@@ -51,6 +52,7 @@ private:
     PxShape* m_PxShape = { nullptr };  //여러개 붙일 수도 있음
 
     _Vec3 m_vVelocity = {};
+    _Vec3 m_vForce = {};
 
 private:
     HRESULT Add_PxActor(RIGIDBODY_DESC* pDesc);

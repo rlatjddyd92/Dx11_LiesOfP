@@ -90,6 +90,12 @@ void CRigidBody::Set_Velocity(const _Vec3& vVelocity)
 	m_vVelocity = vVelocity;
 }
 
+void CRigidBody::Add_Force(const _Vec3& vForce, PxForceMode::Enum _eMode)
+{
+	m_vForce = vForce;
+	//static_cast<PxRigidDynamic*>(m_PxActor)->addForce(_vForce, _eMode, _isAutowake);
+}
+
 
 HRESULT CRigidBody::Add_PxActor(RIGIDBODY_DESC* pDesc)
 {
