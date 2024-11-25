@@ -19,6 +19,8 @@ public:
 		const _Matrix*	pParentWorldMatrix = { nullptr };
 		const _Matrix*	pSocketBoneMatrix = { nullptr };
 		const _Matrix*	pSocketBoneMatrix2 = { nullptr };
+
+		_float*		pParentAtk = { nullptr };
 	}WEAPON_DESC;
 
 protected:
@@ -72,6 +74,8 @@ protected:
 
 	list<CGameObject*>			m_DamagedObjects;
 
+
+	_float*					m_pParentAtk = { nullptr };
 protected:
 	HRESULT Ready_Components();
 

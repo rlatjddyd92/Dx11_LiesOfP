@@ -28,6 +28,8 @@ HRESULT CWeapon::Initialize(void * pArg)
 	m_pSocketMatrix2 = pDesc->pSocketBoneMatrix2;
 	m_pParentMatrix = pDesc->pParentWorldMatrix;
 
+	m_pParentAtk = pDesc->pParentAtk;
+
 	if (FAILED(__super::Initialize(pDesc)))
 		return E_FAIL;
 

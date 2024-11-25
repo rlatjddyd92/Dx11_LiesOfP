@@ -122,60 +122,48 @@ void CSimonManus::Priority_Update(_float fTimeDelta)
 
 	__super::Set_UpTargetPos();
 	m_pWeapon->Priority_Update(fTimeDelta);
+
+	if (m_fHp <= 0.f)
+	{
+		m_pFsmCom->Set_State(DIE);
+	}
 }
 
 void CSimonManus::Update(_float fTimeDelta)
 {
-	m_pFsmCom->Update(fTimeDelta);
-
-	m_vCurRootMove = m_pModelCom->Play_Animation(fTimeDelta, nullptr);
-
-	if (m_bRootMoveCtr)
+	if (m_isDead)
 	{
-		_Vec3 vPos = m_pTransformCom->Get_State(CTransform::STATE_POSITION);
-
-		m_vCurRootMove = XMVector3TransformNormal(m_vCurRootMove, m_pTransformCom->Get_WorldMatrix());
-
-		m_pTransformCom->Set_State(CTransform::STATE_POSITION, vPos + m_vCurRootMove);
-	}
-
-	if (KEY_TAP(KEY::B))
-	{
-		ChangePhase();
-	}
-
-	_float4x4 UpdateMat{};
-	XMStoreFloat4x4(&UpdateMat							//척추2(상하체 분리부)
-		, m_pModelCom->Get_BoneCombindTransformationMatrix(6) * XMLoadFloat4x4(m_pTransformCom->Get_WorldMatrix_Ptr()));
-	m_pColliderCom->Update(&UpdateMat);
-
-	XMStoreFloat4x4(&UpdateMat							//골반()
-		, m_pModelCom->Get_BoneCombindTransformationMatrix(5) * XMLoadFloat4x4(m_pTransformCom->Get_WorldMatrix_Ptr()));
-	m_EXCollider[LOWERBODY]->Update(&UpdateMat);
-	if (!m_isChanged)
-	{
-		XMStoreFloat4x4(&UpdateMat							//왼 종아리()
-			, m_pModelCom->Get_BoneCombindTransformationMatrix(112) * XMLoadFloat4x4(m_pTransformCom->Get_WorldMatrix_Ptr()));
-		m_EXCollider[LEG_LEFT]->Update(&UpdateMat);
-
-		XMStoreFloat4x4(&UpdateMat							//오른 종아리()
-			, m_pModelCom->Get_BoneCombindTransformationMatrix(126) * XMLoadFloat4x4(m_pTransformCom->Get_WorldMatrix_Ptr()));
-		m_EXCollider[LEG_RIGHT]->Update(&UpdateMat);
-
+		//m_isChanged 이용해서 1페면 초기화하고 2페 들어가도록
 	}
 	else
 	{
-		XMStoreFloat4x4(&UpdateMat							//왼 종아리()
-			, m_pModelCom->Get_BoneCombindTransformationMatrix(173) * XMLoadFloat4x4(m_pTransformCom->Get_WorldMatrix_Ptr()));
-		m_EXCollider[LEG_LEFT]->Update(&UpdateMat);
+		m_pFsmCom->Update(fTimeDelta);
 
-		XMStoreFloat4x4(&UpdateMat							//오른 종아리()
-			, m_pModelCom->Get_BoneCombindTransformationMatrix(187) * XMLoadFloat4x4(m_pTransformCom->Get_WorldMatrix_Ptr()));
-		m_EXCollider[LEG_RIGHT]->Update(&UpdateMat);
+		m_vCurRootMove = m_pModelCom->Play_Animation(fTimeDelta, nullptr);
 
+		if (m_bRootMoveCtr)
+		{
+			_Vec3 vPos = m_pTransformCom->Get_State(CTransform::STATE_POSITION);
+
+			m_vCurRootMove = XMVector3TransformNormal(m_vCurRootMove, m_pTransformCom->Get_WorldMatrix());
+
+			m_pTransformCom->Set_State(CTransform::STATE_POSITION, vPos + m_vCurRootMove);
+		}
+
+		if (KEY_TAP(KEY::B))
+		{
+			ChangePhase();
+		}
+
+		//콜라이더 업데이트 함수로 빼기
+
+		Update_Collider();
+
+		
+
+		m_pWeapon->Update(fTimeDelta);
 	}
-
-	m_pWeapon->Update(fTimeDelta);
+	
 }
 
 void CSimonManus::Late_Update(_float fTimeDelta)
@@ -184,13 +172,6 @@ void CSimonManus::Late_Update(_float fTimeDelta)
 
 	m_pGameInstance->Add_RenderObject(CRenderer::RG_NONBLEND, this);
 
-	for (_uint i = 0; i < TYPE_END; ++i)
-	{
-		//if (m_bColliderCtrs[i] != true)
-		//{
-		//	m_pColliderObject[i]->Late_Update(fTimeDelta);
-		//}
-	}
 	m_pWeapon->Late_Update(fTimeDelta);
 
 
@@ -308,6 +289,11 @@ HRESULT CSimonManus::Ready_Components()
 		TEXT("Com_Collider_LowerBody"), reinterpret_cast<CComponent**>(&m_EXCollider[LOWERBODY]), &ColliderDesc)))
 		return E_FAIL;
 
+	m_pColliderBindMatrix[CT_LEG_LEFT] = m_pModelCom->Get_BoneCombindTransformationMatrix_Ptr(112);
+	m_pColliderBindMatrix[CT_LEG_RIGHT] = m_pModelCom->Get_BoneCombindTransformationMatrix_Ptr(126);
+	m_pColliderBindMatrix[CT_UPPERBODY] = m_pModelCom->Get_BoneCombindTransformationMatrix_Ptr(6);
+	m_pColliderBindMatrix[CT_LOWERBODY] = m_pModelCom->Get_BoneCombindTransformationMatrix_Ptr(5);
+
 	return S_OK;
 }
 
@@ -406,6 +392,29 @@ HRESULT CSimonManus::Ready_Weapon()
 	return S_OK;
 }
 
+void CSimonManus::Update_Collider()
+{
+	_float4x4 UpdateMat{};
+
+	_Matrix WorldMat = XMLoadFloat4x4(m_pTransformCom->Get_WorldMatrix_Ptr());
+	XMStoreFloat4x4(&UpdateMat							//척추2(상하체 분리부)
+		, *(m_pColliderBindMatrix[CT_UPPERBODY]) * WorldMat);
+	m_pColliderCom->Update(&UpdateMat);
+
+	XMStoreFloat4x4(&UpdateMat							//골반()
+		, *(m_pColliderBindMatrix[CT_LOWERBODY]) * WorldMat);
+	m_EXCollider[LOWERBODY]->Update(&UpdateMat);
+
+	//변경되는 다리 뼈 부분을 체인지 페이즈 할때 같이 바꿔주도록
+	XMStoreFloat4x4(&UpdateMat							//왼 종아리()
+		, *(m_pColliderBindMatrix[CT_LEG_LEFT]) * WorldMat);
+	m_EXCollider[LEG_LEFT]->Update(&UpdateMat);
+
+	XMStoreFloat4x4(&UpdateMat							//오른 종아리()
+		, *(m_pColliderBindMatrix[CT_LEG_RIGHT]) * WorldMat);
+	m_EXCollider[LEG_RIGHT]->Update(&UpdateMat);
+}
+
 void CSimonManus::ChangePhase()
 {
 	//모델, fsm 정리 후 엑스트라에 있던 컴포넌트들을 소유하도록, 그 후 초기화 작업까지
@@ -428,6 +437,9 @@ void CSimonManus::ChangePhase()
 	m_pFsmCom->Set_State(IDLE);
 
 	m_pModelCom->Play_Animation(0);		//업데이트만 한번
+
+	m_pColliderBindMatrix[CT_LEG_LEFT] = m_pModelCom->Get_BoneCombindTransformationMatrix_Ptr(173);
+	m_pColliderBindMatrix[CT_LEG_RIGHT] = m_pModelCom->Get_BoneCombindTransformationMatrix_Ptr(187);
 
 	m_pWeapon->ChangeSocketMatrix(m_pModelCom->Get_BoneCombindTransformationMatrix_Ptr(46));
 
