@@ -67,10 +67,11 @@ HRESULT CModel::Initialize_Prototype(TYPE eType, const _char* pModelFilePath, co
 	/* 이전 : 모든 메시가 다 원점을 기준으로 그렺니다. */
 	/* 이후 : 모델을 구성하는 모든 메시들을 각각 정해진 상태(메시를 배치하기위한 뼈대의 위치에 맞춰서)대로 미리 변환해준다.*/
 
-	iFlag = aiProcess_ConvertToLeftHanded | aiProcessPreset_TargetRealtime_Fast;
+	iFlag = aiProcess_ConvertToLeftHanded | aiProcess_CalcTangentSpace |
+		aiProcess_GenNormals | aiProcess_JoinIdenticalVertices | aiProcess_Triangulate | aiProcess_SortByPType;
 
-	//if (eType == TYPE_NONANIM)
-	//	iFlag |= aiProcess_PreTransformVertices;
+	if (eType == TYPE_NONANIM)
+		iFlag |= aiProcess_PreTransformVertices;
 
 	m_pAIScene = m_Importer.ReadFile(pModelFilePath, iFlag);
 	if (nullptr == m_pAIScene)

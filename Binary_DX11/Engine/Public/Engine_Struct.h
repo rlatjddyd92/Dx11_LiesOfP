@@ -57,6 +57,18 @@ namespace Engine
 	{
 		XMFLOAT3		vPosition;
 		XMFLOAT3		vNormal;
+		XMFLOAT2		vTexcoord_1;
+		XMFLOAT2		vTexcoord_2;
+		XMFLOAT3		vTangent;
+
+		static const unsigned int	iNumElements = 5;
+		static const D3D11_INPUT_ELEMENT_DESC	Elements[iNumElements];
+	}VTXEFFECTMESH;
+
+	typedef struct ENGINE_DLL
+	{
+		XMFLOAT3		vPosition;
+		XMFLOAT3		vNormal;
 		XMFLOAT2		vTexcoord;
 		XMFLOAT3		vTangent;
 		XMUINT4			vBlendIndices; /* 이 정점은 어떤 뼈(최대 4개 뼈의 인덱스)의 상태를 따라가야하는가? */

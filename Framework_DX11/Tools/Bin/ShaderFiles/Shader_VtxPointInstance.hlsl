@@ -471,13 +471,32 @@ PS_EFFECT_OUT PS_THUNDER_MAIN(PS_IN In)
     
     vColor.rgb *= 3.f;
     vColor.rgb *= In.vColor.rgb;
-    vColor.rgb *= 1.f - (In.vLifeTime.y / In.vLifeTime.x);
+    //vColor.rgb *= 1.f - (In.vLifeTime.y / In.vLifeTime.x);
     
     Out.vDiffuse = vColor;
     Out.vBlur = vColor;
 
     return Out;
 }
+
+PS_OUT PS_SMOKE_LOWALPHA_MAIN(PS_IN In)
+{
+    PS_OUT Out = (PS_OUT) 0;
+    
+    int iTexIndex = (int) ((In.vLifeTime.y / In.vLifeTime.x) * (g_vTexDivide.x * g_vTexDivide.y - 1.f) * g_fSpriteSpeed);
+    
+    Out.vColor = g_DiffuseTexture.Sample(LinearSampler, Get_SpriteTexcoord(In.vTexcoord, iTexIndex));
+    
+    if (In.vLifeTime.x < In.vLifeTime.y)
+        discard;
+    
+    Out.vColor.a *= In.vLifeTime.y / In.vLifeTime.x;
+    Out.vColor.a *= 1.f - (In.vLifeTime.y / In.vLifeTime.x);
+    Out.vColor.a *= 2.f;
+    
+    return Out;
+}
+
 
 technique11	DefaultTechnique
 {
@@ -572,12 +591,23 @@ technique11	DefaultTechnique
     pass PARTICLE_THUNDER // 8
     {
         SetRasterizerState(RS_Default);
-        SetDepthStencilState(DSS_NonWrite, 0);
+        SetDepthStencilState(DSS_Default, 0);
         SetBlendState(BS_Default, vector(0.f, 0.f, 0.f, 0.f), 0xffffffff);
 
         VertexShader = compile vs_5_0 VS_MAIN();
         GeometryShader = compile gs_5_0 GS_DIR_MAIN();
         PixelShader = compile ps_5_0 PS_THUNDER_MAIN();
+    }
+
+    pass PARTICLE_LOAWALPHA // 9
+    {
+        SetRasterizerState(RS_Default);
+        SetDepthStencilState(DSS_NonWrite, 0);
+        SetBlendState(BS_AlphaBlend, vector(0.f, 0.f, 0.f, 0.f), 0xffffffff);
+
+        VertexShader = compile vs_5_0 VS_MAIN();
+        GeometryShader = compile gs_5_0 GS_MAIN();
+        PixelShader = compile ps_5_0 PS_SMOKE_LOWALPHA_MAIN();
     }
 
 }
