@@ -20,7 +20,7 @@ public:
 		GROUP_TOP_TEXT,
 
 		GROUP_TOP_HIGHLIGHT,
-		
+
 		GROUP_WEIGHT_TEXT,
 		GROUP_WEIGHT_STAT,
 		GROUP_WEIGHT_RATIO,
@@ -107,7 +107,8 @@ private:
 	// update
 	void Update_Top_Part(_float fTimeDelta); // 상단 탭버튼 하이라이트 라인 및 무게, 코인 표시 조정 
 	void Update_Array_Position(_float fTimeDelta); // 페이지 조작 내용에 따라 Array들의 위치 및 형태를 잡음
-
+	void Update_Array_Position_Weapon(_float fTimeDelta); // 페이지 조작 내용에 따라 Array들의 위치 및 형태를 잡음
+	void Update_Array_Position_Weapon_Heroic(_float fTimeDelta, _float fAdjust, _int iRowCount); // 페이지 조작 내용에 따라 Array들의 위치 및 형태를 잡음
 
 
 	void Update_BoxInfo(_float fTimeDelta); // 하단의 보유 정보 갱신
@@ -115,8 +116,11 @@ private:
 	// Part 조정 후
 	void Update_Tap_Button(_float fTimeDelta); // 상단 탭버튼 이미지, 텍스트 조정
 
-
-
+	// slide 바 조정 관련 
+	void Activate_Slide(_float Slide_Y);
+	void DeActivate_Slide();
+	void Action_Slide(_float fTimeDelta);
+	void Update_Slide(_float fTimeDelta);
 
 
 private:
@@ -127,6 +131,23 @@ private:
 	vector<INVEN_ARRAY_TYPE> m_vecSelected_Array; // 선택된 Tap에 따라 그려야 하는 Inven_array 목록
 
 	queue<RENDER*> m_queueRender; // <- 이번 프레임에 그려야 하는 내용
+
+	// 슬라이드 바 관련
+	_bool m_bSlide_Bar = false;
+
+	// 인벤 페이지 조정 스펙 
+	_float m_fSlide_Y_Min = 0.f; // <- Y축이 이 길이 이상 되어야 스크롤 진행 
+	_float m_fSlide_Y_Adjust_Now = 0.f; // <- 현재 페이지 조정 높이
+	_float m_fSlide_Y_Adjust_Max = 0.f; // 최대 조정 높이 
+
+	// 바 스펙 
+	_float m_fSlide_Bar_Moving_Now = 0.f; // <- 현재 바 내려온 위치 
+	_float m_fSlide_Bar_Moving_Max = 0.f; // <- 바 최대 조정 길이 
+
+	_float m_fSlide_Ratio = 0.f;
+
+	_bool m_bSlide_Bar_Moving = false;
+	_float m_fBefore_Pos_Y = 0.f;
 
 public:
 	static CUIPage_Inven* Create(ID3D11Device* pDevice, ID3D11DeviceContext* pContext);

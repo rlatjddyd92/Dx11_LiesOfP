@@ -45,10 +45,10 @@ public:
 
 	typedef struct UIPART_INFO
 	{
-		
+
 		~UIPART_INFO() { Safe_Delete_Array(szText); }
 
-		void MakeDirec() 
+		void MakeDirec()
 		{
 			fDirec = { fAdjust_End.x - fAdjust_Start.x,  fAdjust_End.y - fAdjust_Start.y };
 		}
@@ -73,7 +73,7 @@ public:
 				fAdjust.x = fAdjust_Start.x + (fDirec.x * fRatio);
 				fAdjust.y = fAdjust_Start.y + (fDirec.y * fRatio);
 			}
-			
+
 			fPosition.x = fParentPosition.x + fAdjust.x;
 			fPosition.y = fParentPosition.y + fAdjust.y;
 
@@ -130,16 +130,16 @@ public:
 		_float fStrash_Alpha = 0.3; // 파트 별로 버리는 알파 기준을 다르게 설정해야 하는 경우 사용
 		_bool bText_Right = false; // 텍스트를 오른쪽 정렬로 그리는 경우 
 
-		
+
 	}UPART;
 
-	
+
 
 	typedef struct UIPAGE_INFO
 	{
 		_char* strUIPage_Name = {};
 		_int iNowSelectPart = 0;
-		_float2 fPosition = { g_iWinSizeX * 0.5f,g_iWinSizeY*0.5f }; // 페이지의 포지션
+		_float2 fPosition = { g_iWinSizeX * 0.5f,g_iWinSizeY * 0.5f }; // 페이지의 포지션
 		vector<UPART*> vecPart;
 	}UPAGE;
 
@@ -154,11 +154,11 @@ public:
 
 	void Add_ProtytypeTag(_wstring strTag) { m_PrototypeTags.emplace_back(strTag); }
 
-	UPART& Get_PartRenderInfo(_int iIndex) 
-	{ 
+	UPART& Get_PartRenderInfo(_int iIndex)
+	{
 		if ((iIndex >= 0) && (iIndex < m_vecPageInfo[m_iNowSelectNum]->vecPart.size()))
 			return *m_vecPageInfo[m_iNowSelectNum]->vecPart[iIndex];
-		
+
 		return UPART{};
 	}
 
@@ -168,7 +168,7 @@ public:
 
 
 public: // imgui_UI메뉴 전용
-	void UITool_Edit(); 
+	void UITool_Edit();
 	HRESULT UITool_Render();
 
 public: // 개발 편의 기능
@@ -177,7 +177,7 @@ public: // 개발 편의 기능
 	void Off_StaticSystemMessage(); // <- StaticMessage Off 명령
 	void Show_SystemMessage(_wstring Text, _float fTime); // 표시 내용과 노출 시간 설정, 메시지는 한번에 10개까지 노출 가능(Static 포함 10개)
 
-	
+
 	//MouseInfo
 	void Show_MouseInfo(_wstring DataNameA, _float* DataA,
 		_wstring DataNameB = TEXT("none"), _float* DataB = nullptr,
@@ -229,7 +229,7 @@ private:
 
 	_int m_iNowSelectNum = 0;
 
-	
+
 
 	_int m_iTextureNum = 0;
 	_int m_iPageNum = 100;
@@ -251,7 +251,7 @@ private:
 
 	_char* m_szPositionType[3] = { "Static", "Move", "Bar" };
 	_char* m_szBarDirec[2] = { "Y", "X" };
-	
+
 	vector<_wstring> m_DataTag_Page;
 	vector<_wstring> m_DataTag_Part;
 

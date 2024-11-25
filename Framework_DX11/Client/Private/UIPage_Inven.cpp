@@ -59,11 +59,17 @@ void CUIPage_Inven::Update(_float fTimeDelta)
 
 void CUIPage_Inven::Late_Update(_float fTimeDelta)
 {
-	__super::Late_Update(fTimeDelta);
-
 	for (auto& iter : m_vec_Group_Ctrl)
 		__super::UpdatePart_ByControl(iter);
-	
+
+	Update_Top_Part(fTimeDelta);
+
+	__super::Late_Update(fTimeDelta);
+
+	if (m_bRender)
+		Update_Array_Position(fTimeDelta);
+	/*if (m_bSlide_Bar)
+		Update_Slide(fTimeDelta);*/
 }
 
 HRESULT CUIPage_Inven::Render()
@@ -79,12 +85,18 @@ void CUIPage_Inven::OpenAction()
 void CUIPage_Inven::CloseAction()
 {
 	__super::CloseAction();
-	
+
 }
 
 CHECK_MOUSE CUIPage_Inven::Check_Page_Action(_float fTimeDelta)
 {
 	__super::Check_Page_Action(fTimeDelta);
+
+	Action_Inven_Page(fTimeDelta);
+	Action_Focus(fTimeDelta);
+
+	/*if (m_bSlide_Bar)
+		Action_Slide(fTimeDelta);*/
 
 	return CHECK_MOUSE::MOUSE_NONE;
 }
@@ -109,12 +121,13 @@ HRESULT CUIPage_Inven::Ready_UIPart_Group_Control()
 			m_vec_Group_Ctrl[m_vecPart[i]->iGroupIndex]->PartIndexlist.push_back(i);
 	}
 
-	return S_OK;
-
-
 	__super::Array_Control(_int(PART_GROUP::GROUP_ITEMINFO_SLIDE), _int(PART_GROUP::GROUP_ITEMINFO_SLIDE_BAR), CTRL_COMMAND::COM_RENDER, false);
 	__super::Array_Control(_int(PART_GROUP::GROUP_ARRAY_FRAME), _int(PART_GROUP::GROUP_CELL_4), CTRL_COMMAND::COM_RENDER, false);
-	
+
+	m_fSlide_Bar_Moving_Max = m_vecPart[__super::Get_Front_PartIndex_In_Control(_int(PART_GROUP::GROUP_ITEMINFO_SLIDE_BAR))]->fAdjust_End.y - m_vecPart[__super::Get_Front_PartIndex_In_Control(_int(PART_GROUP::GROUP_ITEMINFO_SLIDE_BAR))]->fAdjust_Start.y;
+	m_fSlide_Y_Min = m_vecPart[__super::Get_Front_PartIndex_In_Control(_int(PART_GROUP::GROUP_ITEMINFO_FRAME))]->fSize.y;
+
+
 	m_bRender = false;
 
 	m_vecSelected_Array.resize(_int(INVEN_UI_TAP::TAP_END));
@@ -130,7 +143,7 @@ HRESULT CUIPage_Inven::Ready_UIPart_Group_Control()
 	m_vecSelected_Array[_int(INVEN_UI_TAP::TAP_COSTUME)] = INVEN_ARRAY_TYPE::TYPE_COUSTUME_ACC;
 	m_vecSelected_Array[_int(INVEN_UI_TAP::TAP_GESTURE)] = INVEN_ARRAY_TYPE::TYPE_GEUSTURE_COMMON;
 	m_vecSelected_Array[_int(INVEN_UI_TAP::TAP_COLLECTION)] = INVEN_ARRAY_TYPE::TYPE_COLLECTION_MEMO;
-	
+
 	return S_OK;
 }
 
@@ -148,7 +161,7 @@ void CUIPage_Inven::Action_Inven_Page(_float fTimeDelta)
 				m_eNow_Tap = INVEN_UI_TAP(iTap);
 				break;
 			}
-				
+
 		++iTap;
 	}
 
@@ -165,9 +178,9 @@ void CUIPage_Inven::Action_Inven_Page(_float fTimeDelta)
 
 	if ((m_eNow_Tap == INVEN_UI_TAP::TAP_WEAPON) || (m_eNow_Tap == INVEN_UI_TAP::TAP_ARM))
 		__super::Array_Control(_int(PART_GROUP::GROUP_CELL_0), _int(PART_GROUP::GROUP_CELL_4), CTRL_COMMAND::COM_RATIO, 1.f);
-	else if (m_eNow_Tap == INVEN_UI_TAP::TAP_COSTUME) 
+	else if (m_eNow_Tap == INVEN_UI_TAP::TAP_COSTUME)
 		__super::Array_Control(_int(PART_GROUP::GROUP_CELL_0), _int(PART_GROUP::GROUP_CELL_4), CTRL_COMMAND::COM_RATIO, 1.f);
-	else 
+	else
 		__super::Array_Control(_int(PART_GROUP::GROUP_CELL_0), _int(PART_GROUP::GROUP_CELL_4), CTRL_COMMAND::COM_RATIO, 0.5f);
 }
 
@@ -177,7 +190,23 @@ void CUIPage_Inven::Action_Focus(_float fTimeDelta)
 
 void CUIPage_Inven::Update_Top_Part(_float fTimeDelta)
 {
-	m_vec_Group_Ctrl[_int(PART_GROUP::GROUP_TOP_HIGHLIGHT)]->fRatio = (_float)m_eNow_Tap / (_float)INVEN_UI_TAP::TAP_END;
+	// 하이라이트 라인 조정 
+	m_vec_Group_Ctrl[_int(PART_GROUP::GROUP_TOP_HIGHLIGHT)]->fRatio = (_float)m_eNow_Tap / ((_float)INVEN_UI_TAP::TAP_END - 1.f);
+
+	for (auto& iter : m_vec_Group_Ctrl[_int(PART_GROUP::GROUP_TOP_TEXT)]->PartIndexlist)
+	{
+		if (_int(m_eNow_Tap) == iter)
+		{
+			m_vecPart[iter]->bRender = true;
+			m_vecPart[iter]->Set_RedText();
+		}
+		else
+			m_vecPart[iter]->bRender = false;
+	}
+
+
+
+
 
 }
 
@@ -192,30 +221,322 @@ void CUIPage_Inven::Update_Array_Position(_float fTimeDelta)
 
 	// 슬라이드 조정 반영해야 함
 
+	if (m_eNow_Tap == INVEN_UI_TAP::TAP_WEAPON)
+	{
+		Update_Array_Position_Weapon(fTimeDelta);
+		return;
+	}
+
+
 	INVEN_ARRAY_TYPE eStart = INVEN_ARRAY_TYPE::TYPE_USING_BASIC;
 	if (_int(m_eNow_Tap) > 0)
-		INVEN_ARRAY_TYPE eStart = m_vecSelected_Array[_int(m_eNow_Tap) - 1];
+		eStart = INVEN_ARRAY_TYPE(_int(m_vecSelected_Array[_int(m_eNow_Tap) - 1]) + 1);
 
 	INVEN_ARRAY_TYPE eEnd = m_vecSelected_Array[_int(m_eNow_Tap)];
 
 	_float fAdjust_Y = 0.f; // <- Y를 얼마나 조정해야 하는지
-	_float fAdjust_Title = m_vecPart[__super::Get_Front_PartIndex_In_Control(_int(PART_GROUP::GROUP_ARRAY_FRAME))]->fSize.y;
-	_float fAdjust_Cell = m_vecPart[__super::Get_Front_PartIndex_In_Control(_int(PART_GROUP::GROUP_CELL_0))]->fSize.y;
+	_float fAdjust_Title = m_vecPart[__super::Get_Front_PartIndex_In_Control(_int(PART_GROUP::GROUP_ARRAY_FRAME))]->fSize.y * 1.1f;
+	_float fAdjust_Cell = m_vecPart[__super::Get_Front_PartIndex_In_Control(_int(PART_GROUP::GROUP_CELL_0))]->GetBarSize().y * 1.1f;
+
+	__super::Array_Control(_int(PART_GROUP::GROUP_ARRAY_FRAME), _int(PART_GROUP::GROUP_CELL_4), CTRL_COMMAND::COM_RENDER, false);
+
+	_int iTitle = 0;
 
 	for (_int i = _int(eStart); i <= _int(eEnd); ++i)
 	{
-		
+		_wstring strArrayTitle = {};
+		_int iRow = 0;
+		GET_GAMEINTERFACE->Get_Array_Info(INVEN_ARRAY_TYPE(i), &strArrayTitle, &iRow);
+
+		if (strArrayTitle[0] == 'n')
+			fAdjust_Y -= fAdjust_Title + (fAdjust_Cell * iTitle);
+		else
+		{
+			for (auto& iter : m_vec_Group_Ctrl[_int(PART_GROUP::GROUP_ARRAY_FRAME)]->PartIndexlist)
+			{
+				m_vecPart[iter]->fPosition.y += fAdjust_Y + (fAdjust_Cell * iTitle);
+				m_vecPart[iter]->bRender = true;
+				__super::Input_Render_Info(*m_vecPart[iter]);
+			}
+
+			_int iText = __super::Get_Front_PartIndex_In_Control(_int(PART_GROUP::GROUP_ARRAY_TEXT));
+
+			m_vecPart[iText]->strText = strArrayTitle;
+			m_vecPart[iText]->fPosition.y += fAdjust_Y + (fAdjust_Cell * iTitle);
+			m_vecPart[iText]->bRender = true;
+			__super::Input_Render_Info(*m_vecPart[iText]);
+		}
+
+		iTitle = 0;
+
+		for (_int j = 0; j < iRow * 5; ++j)
+		{
+			const CItem_Manager::ITEM* pNow = GET_GAMEINTERFACE->Get_Array_Item_Info(INVEN_ARRAY_TYPE(i), j);
+
+			list<_int>::iterator iter = m_vec_Group_Ctrl[_int(PART_GROUP::GROUP_CELL_0) + (j % 5)]->PartIndexlist.begin();
+
+			m_vecPart[*iter]->fPosition.y += fAdjust_Y;  m_vecPart[*iter]->bRender = true;
+			_Vec2 vCheck = GET_GAMEINTERFACE->CheckMouse(m_vecPart[*iter]->fPosition, m_vecPart[*iter]->fSize);
+			m_vecPart[*iter]->fPosition.y -= fAdjust_Y;
+			++iter; if (vCheck.x != -1) m_vecPart[*iter]->bRender = true;
+			++iter;
+			if (pNow == nullptr) m_vecPart[*iter]->iTexture_Index = -1;
+			else m_vecPart[*iter]->iTexture_Index = pNow->iTexture_Index;
+			m_vecPart[*iter]->bRender = true;
+			++iter;
+			++iter;
+			++iter;
+			++iter;
+			m_vecPart[*iter]->bRender = false;
+			if (pNow != nullptr)
+			{
+				if (pNow->bStack)  m_vecPart[*iter]->bRender = true; m_vecPart[*iter]->strText = to_wstring(pNow->iCount);
+			}
+
+			++iter;
+			m_vecPart[*iter]->bRender = false;
+			if (pNow != nullptr)
+			{
+				EQUIP_SLOT eSlot = pNow->eSlot;
+
+				if ((_int(eSlot) >= _int(EQUIP_SLOT::EQUIP_USING_TOP_0)) && (_int(eSlot) <= _int(EQUIP_SLOT::EQUIP_USING_TOP_2)))
+				{
+					m_vecPart[*iter]->bRender = true;
+					m_vecPart[*iter]->iTexture_Index = 472;
+				}
+				else if ((_int(eSlot) >= _int(EQUIP_SLOT::EQUIP_USING_BOTTOM_0)) && (_int(eSlot) <= _int(EQUIP_SLOT::EQUIP_USING_BOTTOM_2)))
+				{
+					m_vecPart[*iter]->bRender = true;
+					m_vecPart[*iter]->iTexture_Index = 0;
+				}
+				else if ((_int(eSlot) >= _int(EQUIP_SLOT::EQUIP_USING_BAG_0)) && (_int(eSlot) <= _int(EQUIP_SLOT::EQUIP_USING_BAG_3)))
+				{
+					m_vecPart[*iter]->bRender = true;
+					m_vecPart[*iter]->iTexture_Index = 2;
+				}
+			}
+
+
+			iter = m_vec_Group_Ctrl[_int(PART_GROUP::GROUP_CELL_0) + (j % 5)]->PartIndexlist.begin();
+
+			for (iter; iter != m_vec_Group_Ctrl[_int(PART_GROUP::GROUP_CELL_0) + (j % 5)]->PartIndexlist.end(); ++iter)
+			{
+
+				m_vecPart[*iter]->fPosition.y += fAdjust_Y;
+
+				if (m_vecPart[*iter]->bRender == true)
+					__super::Input_Render_Info(*m_vecPart[*iter]);
+			}
+
+			if (j % 5 == 4)
+			{
+				++iTitle;
+				fAdjust_Y = fAdjust_Cell;
+			}
+
+		}
+
+		--iTitle;
+
+		fAdjust_Y += fAdjust_Title;
 	}
 
+	//_float fYMax = m_vecPart[__super::Get_Front_PartIndex_In_Control(_int(PART_GROUP::GROUP_CELL_0))]->fPosition.y + m_vecPart[__super::Get_Front_PartIndex_In_Control(_int(PART_GROUP::GROUP_CELL_0))]->fSize.y * 0.5f;
+	//if (fYMax > m_fSlide_Y_Min)
+	//	Activate_Slide(fYMax - m_fSlide_Y_Min);
+}
+
+void CUIPage_Inven::Update_Array_Position_Weapon(_float fTimeDelta)
+{
+	// 비율에 따른 조정 이후임 
+
+	// 계산식 
+	// Title 한 줄 -> GROUP_ARRAY_FRAME y 길이만큼 내려가기 
+	// Cell 한 줄 -> GROUP_CELL_0 y 길이 만큼 내려가기 
+	// 각 요소 추가 시 마다 m_fGap 만큼 더 내려가기 
+
+	// 슬라이드 조정 반영해야 함
+
+	_float fAdjust_Y = 0.f; // <- Y를 얼마나 조정해야 하는지
+	_float fAdjust_Title = m_vecPart[__super::Get_Front_PartIndex_In_Control(_int(PART_GROUP::GROUP_ARRAY_FRAME))]->fSize.y * 1.1f;
+	_float fAdjust_Cell = m_vecPart[__super::Get_Front_PartIndex_In_Control(_int(PART_GROUP::GROUP_CELL_0))]->GetBarSize().y * 1.1f;
+
+	__super::Array_Control(_int(PART_GROUP::GROUP_ARRAY_FRAME), _int(PART_GROUP::GROUP_CELL_4), CTRL_COMMAND::COM_RENDER, false);
+
+	_wstring strArrayTitle = {};
+	_int iRow = 0;
+	GET_GAMEINTERFACE->Get_Array_Info(INVEN_ARRAY_TYPE::TYPE_WEAPON_NORMAL_BLADE, &strArrayTitle, &iRow);
+
+	for (auto& iter : m_vec_Group_Ctrl[_int(PART_GROUP::GROUP_ARRAY_FRAME)]->PartIndexlist)
+	{
+		m_vecPart[iter]->fPosition.y += fAdjust_Y;
+		m_vecPart[iter]->bRender = true;
+		__super::Input_Render_Info(*m_vecPart[iter]);
+	}
+
+	_int iText = __super::Get_Front_PartIndex_In_Control(_int(PART_GROUP::GROUP_ARRAY_TEXT));
+
+	m_vecPart[iText]->strText = strArrayTitle;
+	m_vecPart[iText]->fPosition.y += fAdjust_Y;
+	m_vecPart[iText]->bRender = true;
+	__super::Input_Render_Info(*m_vecPart[iText]);
+
+	_int iTitle = 0;
+
+	// 일반 무기 
+	for (_int j = 0; j < iRow * 5; ++j)
+	{
+		const CItem_Manager::ITEM* pNowBlade = GET_GAMEINTERFACE->Get_Array_Item_Info(INVEN_ARRAY_TYPE::TYPE_WEAPON_NORMAL_BLADE, j);
+		const CItem_Manager::ITEM* pNowHandle = GET_GAMEINTERFACE->Get_Array_Item_Info(INVEN_ARRAY_TYPE::TYPE_WEAPON_NORMAL_HANDLE, j);
+
+		list<_int>::iterator iter = m_vec_Group_Ctrl[_int(PART_GROUP::GROUP_CELL_0) + (j % 5)]->PartIndexlist.begin();
+
+		m_vecPart[*iter]->fPosition.y += fAdjust_Y;  m_vecPart[*iter]->bRender = true;
+		_Vec2 vCheck = GET_GAMEINTERFACE->CheckMouse(m_vecPart[*iter]->fPosition, m_vecPart[*iter]->fSize);
+		m_vecPart[*iter]->fPosition.y -= fAdjust_Y;
+		++iter; if (vCheck.x != -1) m_vecPart[*iter]->bRender = true;
+		++iter;
+		if (pNowBlade == nullptr) m_vecPart[*iter]->iTexture_Index = -1;
+		else m_vecPart[*iter]->iTexture_Index = pNowBlade->iTexture_Index;
+		m_vecPart[*iter]->bRender = true;
+		++iter;
+		if (pNowHandle == nullptr) m_vecPart[*iter]->iTexture_Index = -1;
+		else m_vecPart[*iter]->iTexture_Index = pNowHandle->iTexture_Index;
+		m_vecPart[*iter]->bRender = true;
+		++iter; m_vecPart[*iter]->bRender = true;
+		++iter;
+		++iter;
+		++iter;
+		m_vecPart[*iter]->bRender = false;
+		if (pNowBlade != nullptr)
+		{
+			EQUIP_SLOT eSlot = pNowBlade->eSlot;
+			if (eSlot == EQUIP_SLOT::EQUIP_WEAPON_BLADE_0)
+			{
+				m_vecPart[*iter]->bRender = true;
+				m_vecPart[*iter]->iTexture_Index = 381;
+			}
+			else if (eSlot == EQUIP_SLOT::EQUIP_WEAPON_BLADE_1)
+			{
+				m_vecPart[*iter]->bRender = true;
+				m_vecPart[*iter]->iTexture_Index = 382;
+			}
+		}
+
+		iter = m_vec_Group_Ctrl[_int(PART_GROUP::GROUP_CELL_0) + (j % 5)]->PartIndexlist.begin();
+
+		for (iter; iter != m_vec_Group_Ctrl[_int(PART_GROUP::GROUP_CELL_0) + (j % 5)]->PartIndexlist.end(); ++iter)
+		{
+			m_vecPart[*iter]->fPosition.y += fAdjust_Y;
+			if (m_vecPart[*iter]->bRender == true)
+				__super::Input_Render_Info(*m_vecPart[*iter]);
+		}
+
+		if (j % 5 == 4)
+		{
+			++iTitle;
+			fAdjust_Y = fAdjust_Cell;
+		}
+	}
+
+	--iTitle;
+
+	fAdjust_Y += fAdjust_Title;
+
+	Update_Array_Position_Weapon_Heroic(fTimeDelta, fAdjust_Y, iTitle);
+}
+
+void CUIPage_Inven::Update_Array_Position_Weapon_Heroic(_float fTimeDelta, _float fAdjust, _int iRowCount)
+{
+	// 비율에 따른 조정 이후임 
+
+	// 계산식 
+	// Title 한 줄 -> GROUP_ARRAY_FRAME y 길이만큼 내려가기 
+	// Cell 한 줄 -> GROUP_CELL_0 y 길이 만큼 내려가기 
+	// 각 요소 추가 시 마다 m_fGap 만큼 더 내려가기 
+
+	// 슬라이드 조정 반영해야 함
+
+	_float fAdjust_Y = fAdjust; // <- Y를 얼마나 조정해야 하는지
+	_float fAdjust_Title = m_vecPart[__super::Get_Front_PartIndex_In_Control(_int(PART_GROUP::GROUP_ARRAY_FRAME))]->fSize.y * 1.1f;
+	_float fAdjust_Cell = m_vecPart[__super::Get_Front_PartIndex_In_Control(_int(PART_GROUP::GROUP_CELL_0))]->GetBarSize().y * 1.1f;
+
+	__super::Array_Control(_int(PART_GROUP::GROUP_ARRAY_FRAME), _int(PART_GROUP::GROUP_CELL_4), CTRL_COMMAND::COM_RENDER, false);
+	for (_int i = _int(PART_GROUP::GROUP_ARRAY_FRAME); i <= _int(PART_GROUP::GROUP_CELL_4); ++i)
+		__super::UpdatePart_ByControl(m_vec_Group_Ctrl[i]);
+
+	_wstring strArrayTitle = {};
+	_int iRow = 0;
+	GET_GAMEINTERFACE->Get_Array_Info(INVEN_ARRAY_TYPE::TYPE_WEAPON_SPECIAL_BLADE, &strArrayTitle, &iRow);
+
+	for (auto& iter : m_vec_Group_Ctrl[_int(PART_GROUP::GROUP_ARRAY_FRAME)]->PartIndexlist)
+	{
+		m_vecPart[iter]->fPosition.y += fAdjust_Y + (fAdjust_Cell * iRowCount);
+		m_vecPart[iter]->bRender = true;
+		__super::Input_Render_Info(*m_vecPart[iter]);
+	}
+
+	_int iText = __super::Get_Front_PartIndex_In_Control(_int(PART_GROUP::GROUP_ARRAY_TEXT));
+
+	m_vecPart[iText]->strText = strArrayTitle;
+	m_vecPart[iText]->fPosition.y += fAdjust_Y + (fAdjust_Cell * iRowCount);
+	m_vecPart[iText]->bRender = true;
+	__super::Input_Render_Info(*m_vecPart[iText]);
 
 
+	// 특수 무기 
+	for (_int j = 0; j < iRow * 5; ++j)
+	{
+		const CItem_Manager::ITEM* pNowBlade = GET_GAMEINTERFACE->Get_Array_Item_Info(INVEN_ARRAY_TYPE::TYPE_WEAPON_SPECIAL_BLADE, j);
+		const CItem_Manager::ITEM* pNowHandle = GET_GAMEINTERFACE->Get_Array_Item_Info(INVEN_ARRAY_TYPE::TYPE_WEAPON_SPECIAL_HANDLE, j);
 
+		list<_int>::iterator iter = m_vec_Group_Ctrl[_int(PART_GROUP::GROUP_CELL_0) + (j % 5)]->PartIndexlist.begin();
 
+		m_vecPart[*iter]->fPosition.y += fAdjust_Y;  m_vecPart[*iter]->bRender = true;
+		_Vec2 vCheck = GET_GAMEINTERFACE->CheckMouse(m_vecPart[*iter]->fPosition, m_vecPart[*iter]->fSize);
+		m_vecPart[*iter]->fPosition.y -= fAdjust_Y;
+		++iter; if (vCheck.x != -1) m_vecPart[*iter]->bRender = true;
+		++iter;
+		++iter;
+		++iter;
+		++iter;
+		if (pNowBlade == nullptr) m_vecPart[*iter]->iTexture_Index = -1;
+		else m_vecPart[*iter]->iTexture_Index = pNowBlade->iTexture_Index;
+		m_vecPart[*iter]->bRender = true;
+		++iter;
+		++iter;
+		m_vecPart[*iter]->bRender = false;
+		if (pNowBlade != nullptr)
+		{
+			EQUIP_SLOT eSlot = pNowBlade->eSlot;
+			if (eSlot == EQUIP_SLOT::EQUIP_WEAPON_BLADE_0)
+			{
+				m_vecPart[*iter]->bRender = true;
+				m_vecPart[*iter]->iTexture_Index = 381;
+			}
+			else if (eSlot == EQUIP_SLOT::EQUIP_WEAPON_BLADE_1)
+			{
+				m_vecPart[*iter]->bRender = true;
+				m_vecPart[*iter]->iTexture_Index = 382;
+			}
+		}
 
+		iter = m_vec_Group_Ctrl[_int(PART_GROUP::GROUP_CELL_0) + (j % 5)]->PartIndexlist.begin();
 
+		for (iter; iter != m_vec_Group_Ctrl[_int(PART_GROUP::GROUP_CELL_0) + (j % 5)]->PartIndexlist.end(); ++iter)
+		{
+			m_vecPart[*iter]->fPosition.y += fAdjust_Y;
+			if (m_vecPart[*iter]->bRender == true)
+				__super::Input_Render_Info(*m_vecPart[*iter]);
+		}
 
+		if (j % 5 == 4)
+			fAdjust_Y = fAdjust_Cell;
+	}
 
-
+	/*_float fYMax = m_vecPart[__super::Get_Front_PartIndex_In_Control(_int(PART_GROUP::GROUP_CELL_0))]->fPosition.y + m_vecPart[__super::Get_Front_PartIndex_In_Control(_int(PART_GROUP::GROUP_CELL_0))]->fSize.y * 0.5f;
+	if (fYMax > m_fSlide_Y_Min)
+		Activate_Slide(fYMax - m_fSlide_Y_Min);*/
 
 }
 
@@ -242,7 +563,7 @@ void CUIPage_Inven::Update_Tap_Button(_float fTimeDelta)
 			else
 				m_vecPart[iter]->bRender = false;
 		}
-		else 
+		else
 		{
 			if (bSymbol)
 				m_vecPart[iter]->fTextureColor = { 1.f,0.f ,0.f ,-1.f };
@@ -257,6 +578,89 @@ void CUIPage_Inven::Update_Tap_Button(_float fTimeDelta)
 		if (iNow_Tap >= _int(INVEN_UI_TAP::TAP_END))
 			iNow_Tap = 0;
 	}
+}
+
+void CUIPage_Inven::Activate_Slide(_float Slide_Y)
+{
+	m_bSlide_Bar = true;
+
+	// 인벤 페이지 조정 스펙 
+	m_fSlide_Y_Adjust_Now = 0.f; // <- 현재 페이지 조정 높이
+	m_fSlide_Y_Adjust_Max = Slide_Y; // 최대 조정 높이 
+
+	// 바 스펙 
+	m_fSlide_Bar_Moving_Now = 0.f; // <- 현재 바 내려온 위치 
+
+
+	m_fSlide_Ratio = 0.f;
+
+	m_bSlide_Bar_Moving = false;
+	m_fBefore_Pos_Y = 0.f;
+}
+
+void CUIPage_Inven::DeActivate_Slide()
+{
+	m_bSlide_Bar = false;
+
+	// 인벤 페이지 조정 스펙 
+	m_fSlide_Y_Adjust_Now = 0.f; // <- 현재 페이지 조정 높이
+	m_fSlide_Y_Adjust_Max = 0.f; // 최대 조정 높이 
+
+	// 바 스펙 
+	m_fSlide_Bar_Moving_Now = 0.f; // <- 현재 바 내려온 위치 
+
+
+	m_fSlide_Ratio = 0.f;
+
+	m_bSlide_Bar_Moving = false;
+	m_fBefore_Pos_Y = 0.f;
+}
+
+void CUIPage_Inven::Action_Slide(_float fTimeDelta)
+{
+	if ((!m_bSlide_Bar_Moving) && (KEY_TAP(LBUTTON)))
+	{
+		UPART* pBar = m_vecPart[__super::Get_Front_PartIndex_In_Control(_int(PART_GROUP::GROUP_ITEMINFO_SLIDE_BAR))];
+
+		_Vec2 vMouse = GET_GAMEINTERFACE->CheckMouse(pBar->fPosition, pBar->fSize);
+
+		if (vMouse.x != -1)
+		{
+			m_bSlide_Bar_Moving = true;
+			m_fBefore_Pos_Y = vMouse.y;
+		}
+	}
+	else if ((m_bSlide_Bar_Moving) && (KEY_HOLD(LBUTTON)))
+	{
+		POINT			ptMouse{};
+		GetCursorPos(&ptMouse);
+		ScreenToClient(g_hWnd, &ptMouse);
+
+		m_fSlide_Bar_Moving_Now += _float(ptMouse.y) - m_fBefore_Pos_Y;
+
+		m_fSlide_Bar_Moving_Now = min(m_fSlide_Bar_Moving_Now, m_fSlide_Bar_Moving_Max);
+
+		m_fSlide_Ratio = m_fSlide_Bar_Moving_Now / m_fSlide_Bar_Moving_Max;
+		m_fSlide_Y_Adjust_Now = m_fSlide_Y_Adjust_Max * m_fSlide_Ratio;
+
+		m_fBefore_Pos_Y = _float(ptMouse.y);
+	}
+	else
+	{
+		m_bSlide_Bar_Moving = false;
+		m_fBefore_Pos_Y = 0.f;
+	}
+}
+
+void CUIPage_Inven::Update_Slide(_float fTimeDelta)
+{
+
+
+
+
+
+
+
 }
 
 CUIPage_Inven* CUIPage_Inven::Create(ID3D11Device* pDevice, ID3D11DeviceContext* pContext)

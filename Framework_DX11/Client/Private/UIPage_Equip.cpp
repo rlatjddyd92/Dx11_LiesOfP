@@ -128,7 +128,7 @@ void CUIPage_Equip::Action_Equip_Page(_float fTimeDelta)
 			if (KEY_TAP(LBUTTON))
 				m_iNow_Page = i;
 	}
-		
+
 	if (KEY_TAP(KEY::Q))
 	{
 		if (m_iNow_Page > 0)
@@ -266,10 +266,10 @@ void CUIPage_Equip::Update_Arm_Cell()
 	const CItem_Manager::ITEM* pItem = GET_GAMEINTERFACE->Get_Equip_Item_Info(EQUIP_SLOT::EQUIP_RESION_ARM);
 	list<_int>::iterator iter = m_vec_Group_Ctrl[_int(PART_GROUP::GROUP_PAGE_0_ARM)]->PartIndexlist.begin();
 
-	if((pItem == nullptr) || (pItem->eType_Index == ITEM_TYPE::ITEMTYPE_END))
+	if ((pItem == nullptr) || (pItem->eType_Index == ITEM_TYPE::ITEMTYPE_END))
 	{
 		++iter; m_vecPart[*iter]->bRender = m_eFocus_Group == PART_GROUP::GROUP_PAGE_0_ARM ? true : false;
-		++iter; 
+		++iter;
 		++iter; m_vecPart[*iter]->bRender = false;
 	}
 	else
@@ -317,7 +317,7 @@ void CUIPage_Equip::Update_Normal_Cell()
 
 		const CItem_Manager::ITEM* pItem = GET_GAMEINTERFACE->Get_Equip_Item_Info(EQUIP_SLOT(_int(eStart_Slot) + (i - iStart_Index)));
 
-		if ((pItem == nullptr) || (pItem->eType_Index == ITEM_TYPE::ITEMTYPE_END)) 
+		if ((pItem == nullptr) || (pItem->eType_Index == ITEM_TYPE::ITEMTYPE_END))
 		{
 			++iter;
 			m_vecPart[*iter]->bRender = true;

@@ -20,7 +20,7 @@ void CController_UITool::UITool_Edit()
 		{
 			MSG_BOX(TEXT("Failed to Save Part"));
 		}
-		else 
+		else
 			MSG_BOX(TEXT("UI 파일 저장 완료"));
 	}
 
@@ -58,7 +58,7 @@ void CController_UITool::UITool_Edit()
 
 		if (FAILED(MakeClientData_Page()))
 			MSG_BOX(TEXT("UI 데이터 생성 실패"));
-		else 
+		else
 			MSG_BOX(TEXT("Client 프로젝트에 UI 데이터 생성 완료"));
 	}
 
@@ -271,7 +271,7 @@ void CController_UITool::UIPart_Edit()
 			else
 				ImGui::Text(m_pUIRender->GetTextureTag(pNow->iTexture_Index));
 		}
-		
+
 
 		ImGui::DragFloat("R", &pNow->fTextureColor.x, 0.01f);
 		ImGui::SameLine();
@@ -283,7 +283,7 @@ void CController_UITool::UIPart_Edit()
 
 		ImGui::SameLine();
 		ImGui::Checkbox("Multiple", &pNow->bTexture_Color_Multiple);
-		ImGui::DragFloat("Alpha_Strash", &pNow->fStrash_Alpha,0.01f);
+		ImGui::DragFloat("Alpha_Strash", &pNow->fStrash_Alpha, 0.01f);
 
 		ImGui::Checkbox("Turn", &pNow->bTurn);
 
@@ -317,14 +317,14 @@ void CController_UITool::UIPart_Edit()
 				pNow->szText[iIndex] = m_InputText[iIndex];
 			} while (m_InputText[iIndex] != '\0');
 		}
-		if(ImGui::Checkbox("TextCenter", &pNow->bCenter))
+		if (ImGui::Checkbox("TextCenter", &pNow->bCenter))
 			if (pNow->bCenter)
 				pNow->bText_Right = false;
 		ImGui::SameLine();
 		if (ImGui::Checkbox("TextRight", &pNow->bText_Right))
 			if (pNow->bText_Right)
 				pNow->bCenter = false;
-		
+
 
 		ImGui::SeparatorText("Position");
 		// 위치
@@ -367,22 +367,22 @@ void CController_UITool::UIPart_Edit()
 			ImGui::SliderFloat("Slider", &pNow->fRatio, 0.f, 1.f);
 		}
 
-		
+
 	}
 
 	for (auto& iter : m_vecPageInfo[m_iNowSelectNum]->vecPart)
 	{
 		iter->MakeDirec();
-		
+
 		if (iter->iParentPart_Index == -1)
 			iter->MovePart(m_vecPageInfo[m_iNowSelectNum]->fPosition);
-		else 
+		else
 			iter->MovePart(m_vecPageInfo[m_iNowSelectNum]->vecPart[iter->iParentPart_Index]->fPosition);
 	}
 
 	Safe_Delete_Array(tTemp);
 	Safe_Delete_Array(szCount);
-	
+
 
 	ImGui::NewLine();
 
@@ -395,14 +395,14 @@ void CController_UITool::AddNewPage()
 
 void CController_UITool::UIPart_Render()
 {
-	
+
 
 
 }
 
 void CController_UITool::FontTest()
 {
-	
+
 
 }
 
@@ -428,7 +428,7 @@ HRESULT CController_UITool::Initialize(ID3D11Device* pDevice, ID3D11DeviceContex
 
 HRESULT CController_UITool::InitializeResource()
 {
-	
+
 
 	if (FAILED(LoadPage()))
 		return E_FAIL;
@@ -458,7 +458,7 @@ HRESULT CController_UITool::SavePage()
 			++iIndex;
 			vecBuffer[i][1] += (_tchar)(m_vecPageInfo[i - 1]->strUIPage_Name)[iIndex];
 		} while ((_tchar)(m_vecPageInfo[i - 1]->strUIPage_Name)[iIndex] != '\0');
-		
+
 		vecBuffer[i][2] = to_wstring(m_vecPageInfo[i - 1]->fPosition.x);
 		vecBuffer[i][3] = to_wstring(m_vecPageInfo[i - 1]->fPosition.y);
 	}
@@ -484,12 +484,12 @@ HRESULT CController_UITool::LoadPage()
 
 		pNew->strUIPage_Name = new _char[vecBuffer[i][1].size() + 1];
 		m_ArrPageName[i - 1] = new _char[vecBuffer[i][1].size() + 1];
-		for (_int j = 0; j <= vecBuffer[i][1].size();++j)
+		for (_int j = 0; j <= vecBuffer[i][1].size(); ++j)
 		{
 			pNew->strUIPage_Name[j] = (_char)vecBuffer[i][1][j];
 			m_ArrPageName[i - 1][j] = (_char)vecBuffer[i][1][j];
 		}
-			
+
 
 		pNew->fPosition.x = stof(vecBuffer[i][2]);
 		pNew->fPosition.y = stof(vecBuffer[i][3]);
@@ -606,7 +606,7 @@ HRESULT CController_UITool::LoadPart()
 		UPART* pNew = new UPART;
 
 		pNew->strUIPart_Name = new _char[vecBuffer[i][2].size() + 1];
-		for (_int j = 0; j <= vecBuffer[i][2].size();++j)
+		for (_int j = 0; j <= vecBuffer[i][2].size(); ++j)
 			pNew->strUIPart_Name[j] = (_char)vecBuffer[i][2][j];
 
 		pNew->iParentPart_Index = stoi(vecBuffer[i][3]);
@@ -623,9 +623,9 @@ HRESULT CController_UITool::LoadPart()
 		pNew->iTexture_Index = stoi(vecBuffer[i][20]);
 		pNew->fTextureColor = { stof(vecBuffer[i][21]) , stof(vecBuffer[i][22]) , stof(vecBuffer[i][23]) , stof(vecBuffer[i][24]) };
 		pNew->iFontIndex = stoi(vecBuffer[i][25]);
-		
+
 		pNew->szText = new _tchar[vecBuffer[i][26].size() + 1];
-		for (_int j = 0; j <= vecBuffer[i][26].size();++j)
+		for (_int j = 0; j <= vecBuffer[i][26].size(); ++j)
 			pNew->szText[j] = vecBuffer[i][26][j];
 
 		pNew->bCenter = stoi(vecBuffer[i][27]);
@@ -721,8 +721,8 @@ HRESULT CController_UITool::MakeClientData_Page()
 		} while (iter->strUIPage_Name[iIndexPageName] != '\0');
 
 		WriteFile(hFile, &iter->fPosition, sizeof(_float2), &dwByte, nullptr);
-		
-		if (FAILED(MakeClientData_Part(hFile , &dwByte, &iter->vecPart)))
+
+		if (FAILED(MakeClientData_Part(hFile, &dwByte, &iter->vecPart)))
 			MSG_BOX(TEXT("UI 데이터 생성 실패"));
 	}
 
@@ -795,5 +795,5 @@ void CController_UITool::Free()
 	Safe_Release(m_pUIRender);
 
 	logs.clear();
-	
+
 }

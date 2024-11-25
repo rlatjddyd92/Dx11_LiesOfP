@@ -78,7 +78,7 @@ HRESULT CUIRender::Render()
 	_int iBack = CController_UITool::Get_Instance()->GetBackNum();
 
 	if ((iBack >= 478) && (iBack <= 507))
-		if(FAILED(BackRender(iBack)))
+		if (FAILED(BackRender(iBack)))
 			return E_FAIL;
 
 	_int iMax = CController_UITool::Get_Instance()->GetPartCount();
@@ -106,17 +106,17 @@ HRESULT CUIRender::Render()
 				else if (rNow.fTextureColor.z >= 0) eShader = UI_SHADER::SHADER_CHANGE_COLOR;
 				else if (rNow.fTextureColor.w >= 0) eShader = UI_SHADER::SHADER_CHANGE_COLOR;
 			}
-			
+
 
 
 			m_pTransformCom->Set_WorldMatrix(XMMatrixIdentity());
 
 			if (rNow.iMoveType == _int(CController_UITool::MOVETYPE::TYPE_BAR))
 				m_pTransformCom->Set_Scaled(rNow.GetBarSize().x, rNow.GetBarSize().y, 1.f);
-			else 
+			else
 				m_pTransformCom->Set_Scaled(rNow.fSize.x, rNow.fSize.y, 1.f);
 
-			
+
 
 			m_pTransformCom->Set_State(CTransform::STATE_POSITION,
 				XMVectorSet(rNow.fPosition.x - m_fViewWidth * 0.5f, -rNow.fPosition.y + m_fViewHeight * 0.5f, 0.f, 1.f));
@@ -197,7 +197,7 @@ HRESULT CUIRender::Render()
 				m_pGameInstance->Render_Text(m_vecFont_tchar[rNow.iFontIndex], rNow.szText, vPosition, vColor);
 		}
 	}
-	
+
 	return S_OK;
 }
 
@@ -305,7 +305,7 @@ void CUIRender::Ready_Font()
 {
 	m_vecFont_char.resize(_int(UI_FONT::FONT_END));
 	m_vecFont_tchar.resize(_int(UI_FONT::FONT_END));
-	
+
 	m_pGameInstance->Add_Font(TEXT("Font_Normal_8"), TEXT("../Bin/Resources/Fonts/Font_Normal_8.spritefont"));
 	m_pGameInstance->Add_Font(TEXT("Font_Normal_12"), TEXT("../Bin/Resources/Fonts/Font_Normal_12.spritefont"));
 	m_pGameInstance->Add_Font(TEXT("Font_Normal_16"), TEXT("../Bin/Resources/Fonts/Font_Normal_16.spritefont"));
@@ -321,7 +321,7 @@ void CUIRender::Ready_Font()
 	m_pGameInstance->Add_Font(TEXT("Font_Bold_40"), TEXT("../Bin/Resources/Fonts/Font_Bold_40.spritefont"));
 	m_pGameInstance->Add_Font(TEXT("Font_Bold_48"), TEXT("../Bin/Resources/Fonts/Font_Bold_48.spritefont"));
 
-	m_vecFont_char[_int(UI_FONT::FONT_NORMAL_8)] ="Font_Normal_8";
+	m_vecFont_char[_int(UI_FONT::FONT_NORMAL_8)] = "Font_Normal_8";
 	m_vecFont_char[_int(UI_FONT::FONT_NORMAL_12)] = "Font_Normal_12";
 	m_vecFont_char[_int(UI_FONT::FONT_NORMAL_16)] = "Font_Normal_16";
 	m_vecFont_char[_int(UI_FONT::FONT_NORMAL_24)] = "Font_Normal_24";
@@ -456,7 +456,7 @@ void CUIRender::Free()
 
 	for (auto& iter : m_vecTextureInfo)
 	{
-//		Safe_Release(iter->Texture);
+		//		Safe_Release(iter->Texture);
 		Safe_Delete_Array(iter->strTexturePath);
 		Safe_Delete_Array(iter->strTextureTag);
 		Safe_Delete(iter);
@@ -484,7 +484,7 @@ void CUIRender::Free()
 		Safe_Release(iter);
 
 	m_vecShader_UI.clear();
-	
+
 
 	m_UIRenderlist.clear();
 
