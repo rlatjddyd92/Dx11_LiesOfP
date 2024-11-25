@@ -70,7 +70,7 @@ void CGameInterface_Controller::Update_GameInterface(_float fTimeDelta)
 
 
 
-
+	m_pItem_Manager->Update_Item(fTimeDelta);
 	m_pPlayer_Stat_Manager->Update_Stat(fTimeDelta);
 	m_pUIManager->Update_UIManager(fTimeDelta);
 

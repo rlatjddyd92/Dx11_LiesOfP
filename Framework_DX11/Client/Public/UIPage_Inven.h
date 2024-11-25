@@ -108,7 +108,7 @@ private:
 	void Update_Top_Part(_float fTimeDelta); // 상단 탭버튼 하이라이트 라인 및 무게, 코인 표시 조정 
 	void Update_Array_Position(_float fTimeDelta); // 페이지 조작 내용에 따라 Array들의 위치 및 형태를 잡음
 	void Update_Array_Position_Weapon(_float fTimeDelta); // 페이지 조작 내용에 따라 Array들의 위치 및 형태를 잡음
-	void Update_Array_Position_Weapon_Heroic(_float fTimeDelta, _float fAdjust, _int iRowCount); // 페이지 조작 내용에 따라 Array들의 위치 및 형태를 잡음
+	void Update_Array_Position_Weapon_Heroic(_float fTimeDelta, _float fAdjust, _int iRowCount, _float fStart); // 페이지 조작 내용에 따라 Array들의 위치 및 형태를 잡음
 
 
 	void Update_BoxInfo(_float fTimeDelta); // 하단의 보유 정보 갱신
@@ -116,11 +116,49 @@ private:
 	// Part 조정 후
 	void Update_Tap_Button(_float fTimeDelta); // 상단 탭버튼 이미지, 텍스트 조정
 
-	// slide 바 조정 관련 
-	void Activate_Slide(_float Slide_Y);
-	void DeActivate_Slide();
-	void Action_Slide(_float fTimeDelta);
-	void Update_Slide(_float fTimeDelta);
+	// 슬라이드 조정 
+	// 
+	// 1. 바 움직일 수 있는 최대 거리 
+	// 2. 바 움직인 거리
+	// 
+	// 3. 아이템 배경판 기본 크기 
+	// 4. 아이템이 그려진 총 높이 (Y)
+	// 5. 배경판 움직일 수 있는 거리 (4 - 3)
+	// 
+	// 6. 움직임 감지 불 변수 
+	// 7. 마우스 이전 위치 기록 
+	// 8. 
+	// 
+	// 
+	// 
+
+	// 슬라이드 조정 
+	void Activate_Slide(_float fData_Size_Y);
+	void deActivate_Slide();
+	void Change_Data_Y_Size(_float fSize);
+	
+	void Action_Slide(_float fSize);
+	void Update_Slide(_float fSize);
+
+
+
+	_bool m_bSlide_Active = false;
+	_bool m_bSlide_Bar_Move = false; 
+
+	_float m_fSlide_Bar_Y_Max = 0.f; // 이니셜라이즈에서 적용 
+	_float m_fSlide_Bar_Y_Now = 0.f; // 현재 위치 
+
+	_float m_fSlide_Ratio = 0.f;
+
+	_float m_fData_Y_Min = 0.f; 
+	_float m_fData_Adjust_Y_Origin = 0.f;
+	_float m_fData_Y_Max = 0.f;
+	_float m_fData_Y_Now = 0.f;
+
+	_float m_fMouse_Y_Before = 0.f;
+
+
+
 
 
 private:
@@ -132,22 +170,8 @@ private:
 
 	queue<RENDER*> m_queueRender; // <- 이번 프레임에 그려야 하는 내용
 
-	// 슬라이드 바 관련
-	_bool m_bSlide_Bar = false;
+	_bool m_IsTab_Change = false;
 
-	// 인벤 페이지 조정 스펙 
-	_float m_fSlide_Y_Min = 0.f; // <- Y축이 이 길이 이상 되어야 스크롤 진행 
-	_float m_fSlide_Y_Adjust_Now = 0.f; // <- 현재 페이지 조정 높이
-	_float m_fSlide_Y_Adjust_Max = 0.f; // 최대 조정 높이 
-
-	// 바 스펙 
-	_float m_fSlide_Bar_Moving_Now = 0.f; // <- 현재 바 내려온 위치 
-	_float m_fSlide_Bar_Moving_Max = 0.f; // <- 바 최대 조정 길이 
-
-	_float m_fSlide_Ratio = 0.f;
-
-	_bool m_bSlide_Bar_Moving = false;
-	_float m_fBefore_Pos_Y = 0.f;
 
 public:
 	static CUIPage_Inven* Create(ID3D11Device* pDevice, ID3D11DeviceContext* pContext);

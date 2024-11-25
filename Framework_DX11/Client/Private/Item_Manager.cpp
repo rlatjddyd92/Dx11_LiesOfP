@@ -11,6 +11,11 @@ CItem_Manager::CItem_Manager(CGameInstance* pGameInstance)
 	Safe_AddRef(m_pGameInstance);
 }
 
+void CItem_Manager::Update_Item(_float fDeltatime)
+{
+	m_bIsChange = false;
+}
+
 ITEM_RESULT CItem_Manager::AddNewItem_Inven(_uint iItemIndex, _uint iCount)
 {
 	ITEM* NewItem = m_vecItem_BasicSpec[iItemIndex];
@@ -32,6 +37,7 @@ ITEM_RESULT CItem_Manager::AddNewItem_Inven(_uint iItemIndex, _uint iCount)
 
 	GET_GAMEINTERFACE->Input_Drop_Item_Info(iItemIndex, iCount);
 
+	m_bIsChange = true;
 	return ITEM_RESULT::RESULT_SUCCESS;
 }
 
@@ -44,6 +50,7 @@ ITEM_RESULT CItem_Manager::InputItem_Inven(ITEM* pItem, _uint iCount)
 
 	m_vecArray_Inven[iInvenSlotIndex]->Input_Item(pItem, iCount);
 
+	m_bIsChange = true;
 	return ITEM_RESULT::RESULT_SUCCESS;
 }
 
@@ -66,6 +73,7 @@ ITEM_RESULT CItem_Manager::Assemble_Blade_Handle(_int iBladeIndex, _int iHandleI
 	m_vecArray_Inven[_int(INVEN_ARRAY_TYPE::TYPE_BLADE_PART)]->Remove_Item(iBladeIndex);
 	m_vecArray_Inven[_int(INVEN_ARRAY_TYPE::TYPE_HANDEL_PART)]->Remove_Item(iHandleIndex);
 
+	m_bIsChange = true;
 	return ITEM_RESULT::RESULT_SUCCESS;
 }
 
@@ -81,6 +89,7 @@ ITEM_RESULT CItem_Manager::EquipItem_Inven(INVEN_ARRAY_TYPE eIndex, EQUIP_SLOT e
 		m_vecEquip_ItemInfo[_uint(eSlot)]->eType = eIndex;
 		m_vecEquip_ItemInfo[_uint(eSlot)]->iIndex = iIndex;
 		NewItem.eSlot = eSlot;
+		m_bIsChange = true;
 		return ITEM_RESULT::RESULT_SUCCESS;
 	}
 
@@ -112,7 +121,10 @@ ITEM_RESULT CItem_Manager::UseItem_Equip(EQUIP_SLOT eSlot, _uint iCount)
 	if (m_vecArray_Inven[_uint(eArray)]->Get_Item_Info(iIndex)->iItem_Index == _int(SPECIAL_ITEM::SP_PULSE_BATTERY))
 	{
 		if (Use_Potion())
+		{
+			m_bIsChange = true;
 			return ITEM_RESULT::RESULT_SUCCESS;
+		}
 		else
 			return ITEM_RESULT::RESULT_INVALID;
 	}
@@ -125,7 +137,10 @@ ITEM_RESULT CItem_Manager::UseItem_Inven(INVEN_ARRAY_TYPE eIndex, _uint iIndex, 
 	if (m_vecArray_Inven[_uint(eIndex)]->Get_Item_Info(iIndex)->iItem_Index == _int(SPECIAL_ITEM::SP_PULSE_BATTERY))
 	{
 		if (Use_Potion())
+		{
+			m_bIsChange = true;
 			return ITEM_RESULT::RESULT_SUCCESS;
+		}
 		else
 			return ITEM_RESULT::RESULT_INVALID;
 	}
@@ -135,6 +150,7 @@ ITEM_RESULT CItem_Manager::UseItem_Inven(INVEN_ARRAY_TYPE eIndex, _uint iIndex, 
 
 ITEM_RESULT CItem_Manager::Remove_Item_Inven(INVEN_ARRAY_TYPE eIndex, _uint iIndex)
 {
+	m_bIsChange = true;
 	return m_vecArray_Inven[_uint(eIndex)]->Remove_Item(iIndex);
 }
 
@@ -163,6 +179,7 @@ _bool CItem_Manager::Use_Potion()
 	if (m_iNow_Potion_Count <= 0)
 		return false;
 
+	m_bIsChange = true;
 	--m_iNow_Potion_Count;
 	for (_int i = 0; i < 5; ++i)
 		if (m_vecArray_Inven[_int(INVEN_ARRAY_TYPE::TYPE_USING_BASIC)]->Get_Item_Info(i)->iItem_Index == _int(SPECIAL_ITEM::SP_PULSE_BATTERY))

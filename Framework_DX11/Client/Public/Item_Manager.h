@@ -243,7 +243,11 @@ private:
 
 
 public:
+	// 업데이트
+	void Update_Item(_float fDeltatime);
+
 	// 접근, 수정
+	_bool Is_ItemData_Change() { return m_bIsChange; }
 	ITEM_RESULT AddNewItem_Inven(_uint iItemIndex, _uint iCount = 1); // <- 새롭게 아이템을 만들어 인벤에 넣는다 
 	ITEM_RESULT EquipItem_Inven(INVEN_ARRAY_TYPE eIndex, EQUIP_SLOT eSlot, _uint iIndex); // <- 인벤에 있는 아이템을 장비한다 
 	ITEM_RESULT UnEquipItem_Inven(EQUIP_SLOT eSlot); // <- 인벤에 있는 아이템을 장비한다 
@@ -315,6 +319,7 @@ public:
 	// 선택 아이템 조정
 	_int Change_Potion_Select(_bool bNext)
 	{
+		m_bIsChange = true;
 		if (bNext)
 			++m_iPotion_Select;
 		else
@@ -329,6 +334,7 @@ public:
 	}
 	_int Change_Tool_Select(_bool bNext)
 	{
+		m_bIsChange = true;
 		if (bNext)
 			++m_iTool_Select;
 		else
@@ -347,6 +353,7 @@ public:
 	// 무기 관련
 	_int Change_Weapon()
 	{
+		m_bIsChange = true;
 		++m_iWeapon_Select;
 		if (m_iWeapon_Select >= 2)
 			m_iWeapon_Select = 0;
@@ -356,6 +363,7 @@ public:
 	_int Get_Weapon() { return m_iWeapon_Select; }
 	const ITEM* Get_Now_Equip_Weapon_Blade()
 	{
+		m_bIsChange = true;
 		if (m_iWeapon_Select == 0)
 			return Get_Equip_Item_Info(EQUIP_SLOT::EQUIP_WEAPON_BLADE_0);
 		else
@@ -364,6 +372,7 @@ public:
 
 	const ITEM* Get_Now_Equip_Weapon_Handle()
 	{
+		m_bIsChange = true;
 		if (m_iWeapon_Select == 0)
 			return Get_Equip_Item_Info(EQUIP_SLOT::EQUIP_WEAPON_HANDLE_0);
 		else
@@ -376,6 +385,7 @@ public:
 	// 포션 관련 
 	void Add_Potion_Gauge(_float fAdd)
 	{
+		m_bIsChange = true;
 		m_fNow_Potion_Gauge += fAdd;
 		if (m_fNow_Potion_Gauge >= m_fMax_Potion_Gauge)
 		{
@@ -392,6 +402,7 @@ public:
 	// 암 관련
 	void Add_Arm_Gauge(_float fAdd)
 	{
+		m_bIsChange = true;
 		_int iIndex = m_vecEquip_ItemInfo[_int(EQUIP_SLOT::EQUIP_RESION_ARM)]->iIndex;
 		ITEM* pItem = m_vecArray_Inven[_int(INVEN_ARRAY_TYPE::TYPE_REASON_ARM)]->Get_Item_Info(iIndex);
 		if (pItem == nullptr)
@@ -404,6 +415,7 @@ public:
 	}
 	_float Get_Arm_Gauge_Ratio()
 	{
+		m_bIsChange = true;
 		_int iIndex = m_vecEquip_ItemInfo[_int(EQUIP_SLOT::EQUIP_RESION_ARM)]->iIndex;
 		ITEM* pItem = m_vecArray_Inven[_int(INVEN_ARRAY_TYPE::TYPE_REASON_ARM)]->Get_Item_Info(iIndex);
 		if (pItem == nullptr)
@@ -490,7 +502,8 @@ private:
 	_float m_fNow_Potion_Gauge = 0.f;
 	_float m_fMax_Potion_Gauge = 1000.f;
 
-
+	// 아이템 갱신 
+	_bool m_bIsChange = false;
 
 public:
 	static CItem_Manager* Create(CGameInstance* pGameInstance);
