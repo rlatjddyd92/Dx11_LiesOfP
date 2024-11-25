@@ -32,10 +32,7 @@ private:
     _Vec4               m_vMoveDir = {};
 
 
-    //юс╫ц
-    _bool* m_pIsEndAnim = { nullptr };
-    _bool* m_pResetRootMove = { nullptr };
-    _float* m_pTrackPos = { nullptr };
+    _double* m_pTrackPos = { nullptr };
 
 private:
     void                Select_DashAnimation();

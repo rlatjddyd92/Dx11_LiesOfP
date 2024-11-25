@@ -12,21 +12,15 @@ CState_CarcassBigA_Paralyze::CState_CarcassBigA_Paralyze(CFsm* pFsm, CMonster* p
 
 HRESULT CState_CarcassBigA_Paralyze::Initialize(_uint iStateNum, void* pArg)
 {
-   //m_iAnimation_Idle = m_pMonster->Get_Model()->Get_AnimationIndex("Kurama_Idle_Loop");
     m_iStateNum = iStateNum;
-    m_fIdleDuration = 3.3f;
-    FSM_INIT_DESC* pDesc = static_cast<FSM_INIT_DESC*>(pArg);
+    //FSM_INIT_DESC* pDesc = static_cast<FSM_INIT_DESC*>(pArg);
 
-    m_pIsEndAnim = pDesc->pIsEndAnim;
-    m_pResetRootMove = pDesc->pIsResetRootMove;
-    
     return S_OK;
 }
 
 HRESULT CState_CarcassBigA_Paralyze::Start_State(void* pArg)
 {
     m_pMonster->Change_Animation(AN_PARALYZE_START, false, 0.2f, 0);
-    *m_pResetRootMove = false;//애니메이션의 시작부터 끝의 루트본의 이동값이 달라지면 안됨.
     m_iAnimCnt = 0;
 
     return S_OK;
@@ -75,7 +69,6 @@ void CState_CarcassBigA_Paralyze::End_State()
 {
     m_iAnimCnt = 0;//혹시 완료되지 않고 변하는 경우에 대비
     m_fParalizeTime = 0.f;
-    *m_pResetRootMove = true;
 }
 
 _bool CState_CarcassBigA_Paralyze::End_Check()

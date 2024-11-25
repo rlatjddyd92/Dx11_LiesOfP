@@ -13,8 +13,7 @@ CState_SimonManusP2_SummonHand::CState_SimonManusP2_SummonHand(CFsm* pFsm, CMons
 HRESULT CState_SimonManusP2_SummonHand::Initialize(_uint iStateNum, void* pArg)
 {
     m_iStateNum = iStateNum;
-    m_fIdleDuration = 3.3f;
-    CSimonManus::FSMSTATE_DESC* pDesc = static_cast<CSimonManus::FSMSTATE_DESC*>(pArg);
+    //CSimonManus::FSMSTATE_DESC* pDesc = static_cast<CSimonManus::FSMSTATE_DESC*>(pArg);
 
     return S_OK;
 }

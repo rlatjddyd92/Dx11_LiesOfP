@@ -12,22 +12,14 @@ CState_SimonManusP2_HitFatal::CState_SimonManusP2_HitFatal(CFsm* pFsm, CMonster*
 
 HRESULT CState_SimonManusP2_HitFatal::Initialize(_uint iStateNum, void* pArg)
 {
-    //m_iAnimation_Idle = m_pMonster->Get_Model()->Get_AnimationIndex("Kurama_Idle_Loop");
     m_iStateNum = iStateNum;
-    m_fIdleDuration = 3.3f;
-    CSimonManus::FSMSTATE_DESC* pDesc = static_cast<CSimonManus::FSMSTATE_DESC*>(pArg);
-
-    m_pIsEndAnim = pDesc->pIsEndAnim;
-    m_pResetRootMove = pDesc->pIsResetRootMove;
+    //CSimonManus::FSMSTATE_DESC* pDesc = static_cast<CSimonManus::FSMSTATE_DESC*>(pArg);
 
     return S_OK;
 }
 
 HRESULT CState_SimonManusP2_HitFatal::Start_State(void* pArg)
 {
-    *m_pResetRootMove = false;
-
-
     m_pMonster->Change_Animation(AN_FATAL_START - (m_iAnimCnt), false, 0.1f, 0);
 
     return S_OK;
@@ -55,7 +47,6 @@ void CState_SimonManusP2_HitFatal::End_State()
 {
     m_fHitFatalTime = 0.f;
     m_iAnimCnt = 0;
-    *m_pResetRootMove = true;
 }
 
 _bool CState_SimonManusP2_HitFatal::End_Check()

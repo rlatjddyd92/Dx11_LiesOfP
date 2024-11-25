@@ -58,6 +58,7 @@ public:
 	virtual void Late_Update(_float fTimeDelta) override;
 	virtual HRESULT Render() override;
 
+	void	ChangePhase();
 	
 private:
 	vector<CGameObject*>	CollObjRenderP{};
@@ -71,6 +72,8 @@ private:
 	_bool					m_isChanged = { false };
 
 	const _Matrix*			m_pColliderBindMatrix[CT_END] = { nullptr, nullptr, nullptr};
+
+
 private:
 	virtual void	Active_CurrentWeaponCollider(_float fDamageRatio, _uint iCollIndex = 0);
 	virtual void	DeActive_CurretnWeaponCollider(_uint iCollIndex = 0);
@@ -80,7 +83,6 @@ private:
 	HRESULT Ready_Weapon();
 
 	void	Update_Collider();
-	void	ChangePhase();
 
 
 public:

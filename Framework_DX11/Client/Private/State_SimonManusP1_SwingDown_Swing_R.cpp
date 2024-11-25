@@ -12,11 +12,8 @@ CState_SimonManusP1_SwingDown_Swing_R::CState_SimonManusP1_SwingDown_Swing_R(CFs
 
 HRESULT CState_SimonManusP1_SwingDown_Swing_R::Initialize(_uint iStateNum, void* pArg)
 {
-    //m_iAnimation_Idle = m_pMonster->Get_Model()->Get_AnimationIndex("Kurama_Idle_Loop");
     m_iStateNum = iStateNum;
-    FSM_INIT_DESC* pDesc = static_cast<FSM_INIT_DESC*>(pArg);
-
-    m_pResetRootMove = pDesc->pIsResetRootMove;
+    //FSM_INIT_DESC* pDesc = static_cast<FSM_INIT_DESC*>(pArg);
 
     return S_OK;
 }
@@ -56,8 +53,6 @@ void CState_SimonManusP1_SwingDown_Swing_R::Update(_float fTimeDelta)
 void CState_SimonManusP1_SwingDown_Swing_R::End_State()
 {
     m_iRouteTrack = 0;
-    m_fIdleTime = 0.f;
-    *m_pResetRootMove = true;
 }
 
 _bool CState_SimonManusP1_SwingDown_Swing_R::End_Check()

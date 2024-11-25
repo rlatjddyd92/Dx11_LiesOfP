@@ -13,8 +13,7 @@ CState_SimonManusP2_Wave::CState_SimonManusP2_Wave(CFsm* pFsm, CMonster* pMonste
 HRESULT CState_SimonManusP2_Wave::Initialize(_uint iStateNum, void* pArg)
 {
     m_iStateNum = iStateNum;
-    m_fIdleDuration = 3.3f;
-    CSimonManus::FSMSTATE_DESC* pDesc = static_cast<CSimonManus::FSMSTATE_DESC*>(pArg);
+    //CSimonManus::FSMSTATE_DESC* pDesc = static_cast<CSimonManus::FSMSTATE_DESC*>(pArg);
 
     return S_OK;
 }

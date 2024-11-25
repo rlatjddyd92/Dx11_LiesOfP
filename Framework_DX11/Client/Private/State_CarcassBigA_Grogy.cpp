@@ -13,20 +13,15 @@ CState_CarcassBigA_Grogy::CState_CarcassBigA_Grogy(CFsm* pFsm, CMonster* pMonste
 HRESULT CState_CarcassBigA_Grogy::Initialize(_uint iStateNum, void* pArg)
 {
     m_iStateNum = iStateNum;
-    m_fIdleDuration = 3.3f;
     FSM_INIT_DESC* pDesc = static_cast<FSM_INIT_DESC*>(pArg);
 
-    m_pIsEndAnim = pDesc->pIsEndAnim;
-    m_pResetRootMove = pDesc->pIsResetRootMove;
-    m_pTrackPos = pDesc->pPrevTrackPos;
+     m_pTrackPos = pDesc->pPrevTrackPos;
 
     return S_OK;
 }
 
 HRESULT CState_CarcassBigA_Grogy::Start_State(void* pArg)
 {
-    *m_pResetRootMove = true;
-
     if (*m_pTrackPos > 0) 
     {
         ++m_iAnimCnt;
@@ -85,7 +80,6 @@ void CState_CarcassBigA_Grogy::Update(_float fTimeDelta)
 void CState_CarcassBigA_Grogy::End_State()
 {
     m_iAnimCnt = 0;//혹시 완료되지 않고 변하는 경우에 대비
-    *m_pResetRootMove = false;
 }
 
 _bool CState_CarcassBigA_Grogy::End_Check()

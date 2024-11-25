@@ -13,17 +13,14 @@ CState_SimonManusP1_Die::CState_SimonManusP1_Die(CFsm* pFsm, CMonster* pMonster)
 HRESULT CState_SimonManusP1_Die::Initialize(_uint iStateNum, void* pArg)
 {
     m_iStateNum = iStateNum;
-    m_fIdleDuration = 3.3f;
+    //CSimonManus::FSMSTATE_DESC* pDesc = static_cast<CSimonManus::FSMSTATE_DESC*>(pArg);
 
-    CSimonManus::FSMSTATE_DESC* pDesc = static_cast<CSimonManus::FSMSTATE_DESC*>(pArg);
-
-    m_pIsEndAnim = pDesc->pIsEndAnim;
     return S_OK;
 }
 
 HRESULT CState_SimonManusP1_Die::Start_State(void* pArg)
 {
-    m_pMonster->Change_Animation(AN_DIE, true, 0.1f, 0);
+    m_pMonster->Change_Animation(AN_DIE, false, 0.1f, 0);
 
     return S_OK;
 }
@@ -32,8 +29,7 @@ void CState_SimonManusP1_Die::Update(_float fTimeDelta)
 {
     if (End_Check())
     {
-        //¸ó½ºÅÍ »ç¸Á
-        m_pMonster->Change_State(CSimonManus::IDLE);
+        dynamic_cast<CSimonManus*>(m_pMonster)->ChangePhase();
         return;
     }
 

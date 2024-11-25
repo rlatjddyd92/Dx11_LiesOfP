@@ -16,9 +16,7 @@ HRESULT CState_Player_ChangeWeapon::Initialize(_uint iStateNum, void* pArg)
     m_iAnimation_ChangeWeapon[1] = m_pPlayer->Get_Model()->Find_AnimationIndex("AS_Pino_T_EquipWeapon");
 
     FSM_INIT_DESC* pDesc = static_cast<FSM_INIT_DESC*>(pArg);
-
-    m_pIsEndAnim = pDesc->pIsEndAnim;
-    m_pResetRootMove = pDesc->pIsResetRootMove;
+    
     m_pTrackPos = pDesc->pPrevTrackPos;
 
     m_iStateNum = iStateNum;

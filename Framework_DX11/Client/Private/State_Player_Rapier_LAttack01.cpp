@@ -17,8 +17,6 @@ HRESULT CState_Player_Rapier_LAttack01::Initialize(_uint iStateNum, void* pArg)
 
     FSM_INIT_DESC* pDesc = static_cast<FSM_INIT_DESC*>(pArg);
 
-    m_pIsEndAnim = pDesc->pIsEndAnim;
-    m_pResetRootMove = pDesc->pIsResetRootMove;
     m_pTrackPos = pDesc->pPrevTrackPos;
 
     m_iChangeFrame = 35;

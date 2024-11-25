@@ -28,9 +28,8 @@ private:
 
     _bool               m_isChangeWeapon = { false };
 
-    _bool* m_pIsEndAnim = { nullptr };
-    _bool* m_pResetRootMove = { nullptr };
-    _float* m_pTrackPos = { nullptr };
+
+    _double* m_pTrackPos = { nullptr };
 
 private:
     _bool               End_Check();

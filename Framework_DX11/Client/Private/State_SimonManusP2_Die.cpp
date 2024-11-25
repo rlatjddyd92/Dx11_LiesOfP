@@ -13,11 +13,8 @@ CState_SimonManusP2_Die::CState_SimonManusP2_Die(CFsm* pFsm, CMonster* pMonster)
 HRESULT CState_SimonManusP2_Die::Initialize(_uint iStateNum, void* pArg)
 {
     m_iStateNum = iStateNum;
-    m_fIdleDuration = 3.3f;
+    //CSimonManus::FSMSTATE_DESC* pDesc = static_cast<CSimonManus::FSMSTATE_DESC*>(pArg);
 
-    CSimonManus::FSMSTATE_DESC* pDesc = static_cast<CSimonManus::FSMSTATE_DESC*>(pArg);
-
-    m_pIsEndAnim = pDesc->pIsEndAnim;
     return S_OK;
 }
 

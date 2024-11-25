@@ -107,7 +107,7 @@ HRESULT CSimonManus::Initialize(void* pArg)
 		m_EXCollider[i]->Set_Owner(this);
 	}
 
-	m_fHp = 100.f;
+	m_fHp = 10.f;
 	m_fAtk = 10.f;
 	m_fDefence = 5.f;
 	m_fStemina = 100.f;
@@ -131,38 +131,20 @@ void CSimonManus::Priority_Update(_float fTimeDelta)
 
 void CSimonManus::Update(_float fTimeDelta)
 {
-	if (m_isDead)
+	if (KEY_TAP(KEY::B))
 	{
-		//m_isChanged 이용해서 1페면 초기화하고 2페 들어가도록
+		ChangePhase();
 	}
-	else
-	{
-		m_pFsmCom->Update(fTimeDelta);
 
-		m_vCurRootMove = m_pModelCom->Play_Animation(fTimeDelta, nullptr);
+	m_vCurRootMove = XMVector3TransformNormal(m_pModelCom->Play_Animation(fTimeDelta), m_pTransformCom->Get_WorldMatrix());
 
-		if (m_bRootMoveCtr)
-		{
-			_Vec3 vPos = m_pTransformCom->Get_State(CTransform::STATE_POSITION);
+	m_pRigidBodyCom->Set_Velocity(m_vCurRootMove / fTimeDelta);
 
-			m_vCurRootMove = XMVector3TransformNormal(m_vCurRootMove, m_pTransformCom->Get_WorldMatrix());
+	m_pFsmCom->Update(fTimeDelta);
 
-			m_pTransformCom->Set_State(CTransform::STATE_POSITION, vPos + m_vCurRootMove);
-		}
+	Update_Collider();
 
-		if (KEY_TAP(KEY::B))
-		{
-			ChangePhase();
-		}
-
-		//콜라이더 업데이트 함수로 빼기
-
-		Update_Collider();
-
-		
-
-		m_pWeapon->Update(fTimeDelta);
-	}
+	m_pWeapon->Update(fTimeDelta);
 	
 }
 
@@ -274,7 +256,7 @@ HRESULT CSimonManus::Ready_Components()
 	m_pColliderBindMatrix[CT_UPPERBODY] = m_pModelCom->Get_BoneCombindTransformationMatrix_Ptr(6);
 	m_pColliderBindMatrix[CT_LOWERBODY] = m_pModelCom->Get_BoneCombindTransformationMatrix_Ptr(5);
 
-	for (_uint i = 0; i < TYPE_END; ++i)
+	for (_uint i = 0; i < COLLTYPE_END; ++i)
 		m_EXCollider[i]->Set_Owner(this);
 		
 
@@ -311,10 +293,6 @@ HRESULT CSimonManus::Ready_FSM()
 
 	FSM_INIT_DESC Desc{};
 	
-	Desc.pIsEndAnim = &m_bEndAnim;
-	Desc.pIsResetRootMove =&m_bResetRootMove;
-	Desc.pRootMoveCtr = &m_bRootMoveCtr;
-	//
 
 
 #pragma region Phase1_Fsm
@@ -389,6 +367,7 @@ HRESULT CSimonManus::Ready_Weapon()
 	WeaponDesc.pParentWorldMatrix = m_pTransformCom->Get_WorldMatrix_Ptr();
 	WeaponDesc.pSocketBoneMatrix = m_pModelCom->Get_BoneCombindTransformationMatrix_Ptr(66);	//Weapon_R
 
+	WeaponDesc.pParentAtk = &m_fAtk;
 
 	m_pWeapon = dynamic_cast<CWeapon*>(m_pGameInstance->Clone_GameObject(TEXT("Prototype_GameObject_Weapon_SimonManus_Hammer"), &WeaponDesc));
 	if (nullptr == m_pWeapon)
@@ -450,6 +429,12 @@ void CSimonManus::ChangePhase()
 
 	m_pWeapon->ChangeSocketMatrix(m_pModelCom->Get_BoneCombindTransformationMatrix_Ptr(46));
 
+	m_fHp = 200.f;
+	m_fAtk = 15.f;
+	m_fDefence = 8.f;
+	m_fStemina = 100.f;
+
+	m_isDead = false;
 	m_isChanged = true;
 }
 

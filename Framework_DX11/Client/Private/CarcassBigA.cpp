@@ -236,9 +236,6 @@ HRESULT CCarcassBigA::Ready_FSM()
 
 	FSM_INIT_DESC Desc{};
 
-	Desc.pIsEndAnim = &m_bEndAnim;
-	Desc.pIsResetRootMove = &m_bResetRootMove;
-	Desc.pRootMoveCtr = &m_bRootMoveCtr;
 
 
 	m_pFsmCom->Add_State(CState_CarcassBigA_Idle::Create(m_pFsmCom, this, IDLE, &Desc));

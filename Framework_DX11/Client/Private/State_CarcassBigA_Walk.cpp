@@ -12,9 +12,7 @@ CState_CarcassBigA_Walk::CState_CarcassBigA_Walk(CFsm* pFsm, CMonster* pMonster)
 
 HRESULT CState_CarcassBigA_Walk::Initialize(_uint iStateNum, void* pArg)
 {
-   //m_iAnimation_Idle = m_pMonster->Get_Model()->Get_AnimationIndex("Kurama_Idle_Loop");
     m_iStateNum = iStateNum;
-    m_fIdleDuration = 3.3f;
 
     return S_OK;
 }

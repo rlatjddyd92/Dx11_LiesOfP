@@ -12,9 +12,7 @@ CState_SimonManusP1_Walk::CState_SimonManusP1_Walk(CFsm* pFsm, CMonster* pMonste
 
 HRESULT CState_SimonManusP1_Walk::Initialize(_uint iStateNum, void* pArg)
 {
-   //m_iAnimation_Idle = m_pMonster->Get_Model()->Get_AnimationIndex("Kurama_Idle_Loop");
     m_iStateNum = iStateNum;
-    m_fIdleDuration = 3.3f;
 
     return S_OK;
 }
@@ -30,11 +28,10 @@ HRESULT CState_SimonManusP1_Walk::Start_State(void* pArg)
 void CState_SimonManusP1_Walk::Update(_float fTimeDelta)
 {
 
-    _int iDir = m_pMonster->Get_Transform()->LookAt_Lerp_NoHeight(m_pMonster->Get_TargetDir(), 1, fTimeDelta);
+    m_pMonster->Get_Transform()->LookAt_Lerp_NoHeight(m_pMonster->Get_TargetDir(), 1, fTimeDelta);
+    _Vec3 vMove = XMVector3Normalize(m_pMonster->Get_Transform()->Get_State(CTransform::STATE_LOOK)) * m_fWalkSpeed;
     
-
-
-    m_pMonster->Get_Transform()->Go_Straight(fTimeDelta);
+    m_pMonster->Get_RigidBody()->Set_Velocity(vMove);
 
 
     if (m_pMonster->Calc_Distance_XZ() <= 5.f)

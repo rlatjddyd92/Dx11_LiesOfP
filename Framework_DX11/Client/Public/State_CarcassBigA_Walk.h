@@ -22,14 +22,6 @@ public:
 private:
     class CMonster* m_pMonster = { nullptr };
 
-    _uint               m_iAnimation_Idle = {};
-    _uint               m_iIdleCount = {};
-
-    _float              m_fIdleDuration = { 2.6f };
-
-    _bool               m_isPrevChance = { false };
-    _bool               m_isActivatedSpecial = { false };
-
 public:
     static CState_CarcassBigA_Walk* Create(class CFsm* pFsm, class CMonster* pMonster, _uint iStateNum, void* pArg = nullptr);
     virtual void Free() override;

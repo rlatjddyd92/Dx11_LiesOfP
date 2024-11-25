@@ -13,7 +13,7 @@ CState_SimonManusP2_ThunderCalling::CState_SimonManusP2_ThunderCalling(CFsm* pFs
 HRESULT CState_SimonManusP2_ThunderCalling::Initialize(_uint iStateNum, void* pArg)
 {
     m_iStateNum = iStateNum;
-    CSimonManus::FSMSTATE_DESC* pDesc = static_cast<CSimonManus::FSMSTATE_DESC*>(pArg);
+    //CSimonManus::FSMSTATE_DESC* pDesc = static_cast<CSimonManus::FSMSTATE_DESC*>(pArg);
 
     return S_OK;
 }

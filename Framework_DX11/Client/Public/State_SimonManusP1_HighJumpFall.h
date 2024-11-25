@@ -26,22 +26,8 @@ public:
 private:
     class CMonster* m_pMonster = { nullptr };
 
-    _uint               m_iAnimation_Idle = {};
-    _uint               m_iIdleCount = {};
-
-    _float              m_fCurrentTime = { 0.f };
-
     _Vec4               m_vTargetDir{};
     _Vec3               m_vFlyMoveStack{};
-
-    _bool               m_isPrevChance = { false };
-    _bool               m_isActivatedSpecial = { false };
-
-    _float              m_fParalizeTime = { 0.f };
-    _float              m_fParalizeDuration = { 3.f };
-
-    _bool*              m_pRootMoveCtr = { nullptr };
-    _bool*              m_pResetRootMove = { nullptr };
 
     _uint               m_iAnimCnt = {};
 

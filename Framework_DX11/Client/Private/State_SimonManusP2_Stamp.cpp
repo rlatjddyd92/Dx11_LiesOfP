@@ -14,16 +14,13 @@ HRESULT CState_SimonManusP2_Stamp::Initialize(_uint iStateNum, void* pArg)
 {
     //m_iAnimation_Idle = m_pMonster->Get_Model()->Get_AnimationIndex("Kurama_Idle_Loop");
     m_iStateNum = iStateNum;
-    CSimonManus::FSMSTATE_DESC* pDesc = static_cast<CSimonManus::FSMSTATE_DESC*>(pArg);
-
-    m_pResetRootMove = pDesc->pIsResetRootMove;
+    //CSimonManus::FSMSTATE_DESC* pDesc = static_cast<CSimonManus::FSMSTATE_DESC*>(pArg);
 
     return S_OK;
 }
 
 HRESULT CState_SimonManusP2_Stamp::Start_State(void* pArg)
 {
-    *m_pResetRootMove = false;
     m_iRouteTrack = 0;
     if (m_pMonster->Calc_Distance_XZ() >= 4.f)
     {
@@ -81,7 +78,6 @@ void CState_SimonManusP2_Stamp::Update(_float fTimeDelta)
 void CState_SimonManusP2_Stamp::End_State()
 {
     m_bStamp = false;
-    *m_pResetRootMove = true;
 }
 
 _bool CState_SimonManusP2_Stamp::End_Check()

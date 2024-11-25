@@ -13,12 +13,8 @@ CState_CarcassBigA_RageAttack::CState_CarcassBigA_RageAttack(CFsm* pFsm, CMonste
 
 HRESULT CState_CarcassBigA_RageAttack::Initialize(_uint iStateNum, void* pArg)
 {
-    FSM_INIT_DESC* pDesc = static_cast<FSM_INIT_DESC*>(pArg);
+    //FSM_INIT_DESC* pDesc = static_cast<FSM_INIT_DESC*>(pArg);
 
-    m_pResetRootMove = pDesc->pIsResetRootMove;
-    m_pTrackPos = pDesc->pPrevTrackPos;
-
-    m_iChangeFrame = 35;
     m_iStateNum = iStateNum;
 
     return S_OK;

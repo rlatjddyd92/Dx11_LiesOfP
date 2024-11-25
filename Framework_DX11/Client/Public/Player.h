@@ -127,7 +127,7 @@ private:
 private:
 	_vector		m_vRootMoveStack = {};
 	_Vec3		m_vCurRootMove = {};
-	_float		m_fPrevTrackPos = {};
+	_double		m_PrevTrackPos = {};
 	_bool		m_bEndAnim = { false };
 	_bool		m_bResetRootMove = { true };
 

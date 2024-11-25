@@ -26,11 +26,6 @@ public:
 private:
     class CMonster* m_pMonster = { nullptr };
 
-    _int               m_iChangeFrame = {};
-
-    _bool* m_pResetRootMove = { nullptr };
-    _float* m_pTrackPos = { nullptr };
-
 private:
     _bool               End_Check();
     void                Collider_Check();

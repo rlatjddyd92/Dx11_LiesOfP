@@ -13,7 +13,7 @@ CState_SimonManusP2_SwipMultiple::CState_SimonManusP2_SwipMultiple(CFsm* pFsm, C
 HRESULT CState_SimonManusP2_SwipMultiple::Initialize(_uint iStateNum, void* pArg)
 {
     m_iStateNum = iStateNum;
-    FSM_INIT_DESC* pDesc = static_cast<FSM_INIT_DESC*>(pArg);
+    //FSM_INIT_DESC* pDesc = static_cast<FSM_INIT_DESC*>(pArg);
 
     return S_OK;
 }

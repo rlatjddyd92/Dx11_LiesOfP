@@ -26,16 +26,6 @@ public:
 private:
     class CMonster* m_pMonster = { nullptr };
 
-    _uint               m_iAnimation_Idle = {};
-    _uint               m_iIdleCount = {};
-
-    _float              m_fCurrentTime = { 0.f };
-    _float              m_fIdleDuration = { 2.6f };
-
-    _bool               m_isPrevChance = { false };
-    _bool               m_isActivatedSpecial = { false };
-
-    _bool* m_pResetRootMove = { nullptr };
 
 private:
     _bool               End_Check();

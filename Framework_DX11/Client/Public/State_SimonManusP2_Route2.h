@@ -29,23 +29,11 @@ public:
 private:
     class CMonster* m_pMonster = { nullptr };
 
-    _uint               m_iAnimation_Idle = {};
-    _uint               m_iIdleCount = {};
-
-    _float              m_fIdleTime = {};
-    _float              m_fIdleDuration = { 0.2f };
-
     _Vec4               m_vTargetDir{};
     _Vec3               m_vFlyMoveStack{};
 
-    _bool               m_isPrevChance = { false };
-    _bool               m_isActivatedSpecial = { false };
     _bool               m_isJump = { false };
     
-    _bool* m_pRootMoveCtr{ nullptr };
-
-    _bool* m_pResetRootMove = { nullptr };
-
     _uint               m_iRouteTrack = {};
 
 private:

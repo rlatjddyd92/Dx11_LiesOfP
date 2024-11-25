@@ -13,9 +13,7 @@ CState_SimonManusP2_JumpToAttack::CState_SimonManusP2_JumpToAttack(CFsm* pFsm, C
 HRESULT CState_SimonManusP2_JumpToAttack::Initialize(_uint iStateNum, void* pArg)
 {
     m_iStateNum = iStateNum;
-    CSimonManus::FSMSTATE_DESC* pDesc = static_cast<CSimonManus::FSMSTATE_DESC*>(pArg);
-
-    m_pResetRootMove = pDesc->pIsResetRootMove;
+    //CSimonManus::FSMSTATE_DESC* pDesc = static_cast<CSimonManus::FSMSTATE_DESC*>(pArg);
 
     return S_OK;
 }

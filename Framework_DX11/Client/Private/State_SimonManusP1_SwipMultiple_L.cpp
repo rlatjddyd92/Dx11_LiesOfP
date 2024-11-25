@@ -12,11 +12,8 @@ CState_SimonManusP1_SwipMultiple_L::CState_SimonManusP1_SwipMultiple_L(CFsm* pFs
 
 HRESULT CState_SimonManusP1_SwipMultiple_L::Initialize(_uint iStateNum, void* pArg)
 {
-    //m_iAnimation_Idle = m_pMonster->Get_Model()->Get_AnimationIndex("Kurama_Idle_Loop");
     m_iStateNum = iStateNum;
-    FSM_INIT_DESC* pDesc = static_cast<FSM_INIT_DESC*>(pArg);
-
-    m_pResetRootMove = pDesc->pIsResetRootMove;
+    //FSM_INIT_DESC* pDesc = static_cast<FSM_INIT_DESC*>(pArg);
 
     return S_OK;
 }
@@ -24,10 +21,6 @@ HRESULT CState_SimonManusP1_SwipMultiple_L::Initialize(_uint iStateNum, void* pA
 HRESULT CState_SimonManusP1_SwipMultiple_L::Start_State(void* pArg)
 {
     m_pMonster->Change_Animation(AN_ROUTE_FIRST, false, 0.1f, 0);
-
-    m_fIdleTime = m_fIdleDuration;
-
-    m_isDelayed = false;
 
     return S_OK;
 }
@@ -62,8 +55,6 @@ void CState_SimonManusP1_SwipMultiple_L::Update(_float fTimeDelta)
 void CState_SimonManusP1_SwipMultiple_L::End_State()
 {
     m_iRouteTrack = 0;
-    m_fIdleTime = 0.f;
-    *m_pResetRootMove = true;
 }
 
 _bool CState_SimonManusP1_SwipMultiple_L::End_Check()

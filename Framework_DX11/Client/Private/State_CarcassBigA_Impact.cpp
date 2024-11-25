@@ -12,12 +12,8 @@ CState_CarcassBigA_Impact::CState_CarcassBigA_Impact(CFsm* pFsm, CMonster* pMons
 
 HRESULT CState_CarcassBigA_Impact::Initialize(_uint iStateNum, void* pArg)
 {
-   //m_iAnimation_Idle = m_pMonster->Get_Model()->Get_AnimationIndex("Kurama_Idle_Loop");
     m_iStateNum = iStateNum;
-    m_fIdleDuration = 3.3f;
-    FSM_INIT_DESC* pDesc = static_cast<FSM_INIT_DESC*>(pArg);
-
-    m_pIsEndAnim = pDesc->pIsEndAnim;
+    //FSM_INIT_DESC* pDesc = static_cast<FSM_INIT_DESC*>(pArg);
 
     return S_OK;
 }

@@ -88,6 +88,29 @@ _char* CModel::Get_CurrentAnimationName()
 	return m_Animations[m_iCurrentAnimIndex]->Get_Name();
 }
 
+_uint	CModel::Get_CurrentFrame(_bool isBoundary)
+{
+	if (!isBoundary)
+	{
+		if (m_isChangeAni)
+		{
+			return m_tChaneAnimDesc.iStartFrame;
+		}
+		else
+			return m_iCurrentFrame;
+	}
+
+	else
+	{
+		if (m_isChangeAni_Boundary)
+		{
+			return m_tChaneAnimDesc_Boundary.iStartFrame;
+		}
+		else
+			return m_iCurrentFrame;
+	}
+}
+
 CTexture* CModel::Find_Texture(_uint iMeshNum, TEXTURE_TYPE eMaterialType)
 {
 	_uint iMaterialIndex = m_Meshes[iMeshNum]->Get_MaterialIndex();
