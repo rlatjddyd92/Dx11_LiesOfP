@@ -119,91 +119,91 @@ HRESULT CMainApp::Ready_Gara()
 	if (FAILED(m_pGameInstance->Add_Font(TEXT("Font_145"), TEXT("../Bin/Resources/Fonts/143ex.spritefont"))))
 		return E_FAIL;
 
-	ID3D11Texture2D*		pTexture2D = { nullptr };
+	//ID3D11Texture2D*		pTexture2D = { nullptr };
 
-	D3D11_TEXTURE2D_DESC	TextureDesc{};
-	ZeroMemory(&TextureDesc, sizeof(D3D11_TEXTURE2D_DESC));
+	//D3D11_TEXTURE2D_DESC	TextureDesc{};
+	//ZeroMemory(&TextureDesc, sizeof(D3D11_TEXTURE2D_DESC));
 
-	TextureDesc.Width = 256;
-	TextureDesc.Height = 256;
-	TextureDesc.MipLevels = 1;
-	TextureDesc.ArraySize = 1;
-	TextureDesc.Format = DXGI_FORMAT_R8G8B8A8_UNORM;
+	//TextureDesc.Width = 256;
+	//TextureDesc.Height = 256;
+	//TextureDesc.MipLevels = 1;
+	//TextureDesc.ArraySize = 1;
+	//TextureDesc.Format = DXGI_FORMAT_R8G8B8A8_UNORM;
 
-	TextureDesc.SampleDesc.Quality = 0;
-	TextureDesc.SampleDesc.Count = 1;
+	//TextureDesc.SampleDesc.Quality = 0;
+	//TextureDesc.SampleDesc.Count = 1;
 
-	TextureDesc.Usage = D3D11_USAGE_STAGING;
-	/* 추후에 어떤 용도로 바인딩 될 수 있는 View타입의 텍스쳐를 만들기위한 Texture2D입니까? */
-	TextureDesc.BindFlags = 0;
+	//TextureDesc.Usage = D3D11_USAGE_STAGING;
+	///* 추후에 어떤 용도로 바인딩 될 수 있는 View타입의 텍스쳐를 만들기위한 Texture2D입니까? */
+	//TextureDesc.BindFlags = 0;
 
-	TextureDesc.CPUAccessFlags = D3D11_CPU_ACCESS_READ | D3D11_CPU_ACCESS_WRITE;
-	TextureDesc.MiscFlags = 0;
+	//TextureDesc.CPUAccessFlags = D3D11_CPU_ACCESS_READ | D3D11_CPU_ACCESS_WRITE;
+	//TextureDesc.MiscFlags = 0;
 
-	_uint*			pPixel = new _uint[TextureDesc.Width * 	TextureDesc.Height];
-	ZeroMemory(pPixel, sizeof(_uint) * TextureDesc.Width * 	TextureDesc.Height);
+	//_uint*			pPixel = new _uint[TextureDesc.Width * 	TextureDesc.Height];
+	//ZeroMemory(pPixel, sizeof(_uint) * TextureDesc.Width * 	TextureDesc.Height);
 
-	D3D11_SUBRESOURCE_DATA	InitialDesc{};
-	InitialDesc.pSysMem = pPixel;
-	InitialDesc.SysMemPitch = TextureDesc.Width * sizeof(_uint);
+	//D3D11_SUBRESOURCE_DATA	InitialDesc{};
+	//InitialDesc.pSysMem = pPixel;
+	//InitialDesc.SysMemPitch = TextureDesc.Width * sizeof(_uint);
 
-	if (FAILED(m_pDevice->CreateTexture2D(&TextureDesc, &InitialDesc, &pTexture2D)))
-		return E_FAIL;	
+	//if (FAILED(m_pDevice->CreateTexture2D(&TextureDesc, &InitialDesc, &pTexture2D)))
+	//	return E_FAIL;	
 
-	D3D11_MAPPED_SUBRESOURCE	SubResource{};
+	//D3D11_MAPPED_SUBRESOURCE	SubResource{};
 
-	m_pContext->Map(pTexture2D, 0, D3D11_MAP_READ_WRITE, 0, &SubResource);
+	//m_pContext->Map(pTexture2D, 0, D3D11_MAP_READ_WRITE, 0, &SubResource);
 
-	/* a b g r */
-	for (size_t i = 0; i < 256; i++)
-	{
-		for (size_t j = 0; j < 256; j++)
-		{
-			_uint iIndex = (_uint)i * 256 + (_uint)j;
+	///* a b g r */
+	//for (size_t i = 0; i < 256; i++)
+	//{
+	//	for (size_t j = 0; j < 256; j++)
+	//	{
+	//		_uint iIndex = (_uint)i * 256 + (_uint)j;
 
-			if(j < 128)
-				((_uint*)SubResource.pData)[iIndex] = D3DCOLOR_ARGB(255, 0, 0, 0);			
-			else
-				((_uint*)SubResource.pData)[iIndex] = D3DCOLOR_ARGB(255, 255, 255, 255);
-		}
-	}
+	//		if(j < 128)
+	//			((_uint*)SubResource.pData)[iIndex] = D3DCOLOR_ARGB(255, 0, 0, 0);			
+	//		else
+	//			((_uint*)SubResource.pData)[iIndex] = D3DCOLOR_ARGB(255, 255, 255, 255);
+	//	}
+	//}
 
-	m_pContext->Unmap(pTexture2D, 0);
+	//m_pContext->Unmap(pTexture2D, 0);
 
-	if (FAILED(SaveDDSTextureToFile(m_pContext, pTexture2D, TEXT("../Bin/Resources/Textures/Terrain/MyMask.dds"))))
-		return E_FAIL;
+	//if (FAILED(SaveDDSTextureToFile(m_pContext, pTexture2D, TEXT("../Bin/Resources/Textures/Terrain/MyMask.dds"))))
+	//	return E_FAIL;
 
-	_ulong			dwByte = {};
-	HANDLE			hFile = CreateFile(TEXT("../Bin/DataFiles/Navigation.dat"), GENERIC_WRITE, 0, nullptr, CREATE_ALWAYS, FILE_ATTRIBUTE_NORMAL, 0);
-	if (0 == hFile)
-		return E_FAIL;
+	//_ulong			dwByte = {};
+	//HANDLE			hFile = CreateFile(TEXT("../Bin/DataFiles/Navigation.dat"), GENERIC_WRITE, 0, nullptr, CREATE_ALWAYS, FILE_ATTRIBUTE_NORMAL, 0);
+	//if (0 == hFile)
+	//	return E_FAIL;
 
-	_float3			vPoints[3];
+	//_float3			vPoints[3];
 
-	vPoints[0] = _float3(0.0f, 0.f, 10.f);
-	vPoints[1] = _float3(10.f, 0.f, 0.f);
-	vPoints[2] = _float3(0.0f, 0.f, 0.f);
-	WriteFile(hFile, vPoints, sizeof(_float3) * 3, &dwByte, nullptr);
+	//vPoints[0] = _float3(0.0f, 0.f, 10.f);
+	//vPoints[1] = _float3(10.f, 0.f, 0.f);
+	//vPoints[2] = _float3(0.0f, 0.f, 0.f);
+	//WriteFile(hFile, vPoints, sizeof(_float3) * 3, &dwByte, nullptr);
 
-	vPoints[0] = _float3(0.0f, 0.f, 10.f);
-	vPoints[1] = _float3(10.f, 0.f, 10.f);
-	vPoints[2] = _float3(10.f, 0.f, 0.f);
-	WriteFile(hFile, vPoints, sizeof(_float3) * 3, &dwByte, nullptr);
+	//vPoints[0] = _float3(0.0f, 0.f, 10.f);
+	//vPoints[1] = _float3(10.f, 0.f, 10.f);
+	//vPoints[2] = _float3(10.f, 0.f, 0.f);
+	//WriteFile(hFile, vPoints, sizeof(_float3) * 3, &dwByte, nullptr);
 
-	vPoints[0] = _float3(0.0f, 0.f, 20.f);
-	vPoints[1] = _float3(10.f, 0.f, 10.f);
-	vPoints[2] = _float3(0.f, 0.f, 10.f);
-	WriteFile(hFile, vPoints, sizeof(_float3) * 3, &dwByte, nullptr);
+	//vPoints[0] = _float3(0.0f, 0.f, 20.f);
+	//vPoints[1] = _float3(10.f, 0.f, 10.f);
+	//vPoints[2] = _float3(0.f, 0.f, 10.f);
+	//WriteFile(hFile, vPoints, sizeof(_float3) * 3, &dwByte, nullptr);
 
-	vPoints[0] = _float3(10.f, 0.f, 10.f);
-	vPoints[1] = _float3(20.f, 0.f, 0.f);
-	vPoints[2] = _float3(10.f, 0.f, 0.f);
-	WriteFile(hFile, vPoints, sizeof(_float3) * 3, &dwByte, nullptr);
+	//vPoints[0] = _float3(10.f, 0.f, 10.f);
+	//vPoints[1] = _float3(20.f, 0.f, 0.f);
+	//vPoints[2] = _float3(10.f, 0.f, 0.f);
+	//WriteFile(hFile, vPoints, sizeof(_float3) * 3, &dwByte, nullptr);
 
-	CloseHandle(hFile);
+	//CloseHandle(hFile);
 
-	Safe_Delete_Array(pPixel);
-	Safe_Release(pTexture2D);
+	//Safe_Delete_Array(pPixel);
+	//Safe_Release(pTexture2D);
 
 	return S_OK;
 }
@@ -285,6 +285,11 @@ HRESULT CMainApp::Ready_Prototype_Component_Static()
 	/* For.Prototype_Component_FSM */
 	if (FAILED(m_pGameInstance->Add_Prototype(LEVEL_STATIC, TEXT("Prototype_Component_FSM"),
 		CFsm::Create(m_pDevice, m_pContext))))
+		return E_FAIL;
+
+	/* For.Prototype_Component_Sound */
+	if (FAILED(m_pGameInstance->Add_Prototype(LEVEL_STATIC, TEXT("Prototype_Component_Sound"),
+		CSound::Create(m_pDevice, m_pContext))))
 		return E_FAIL;
 #pragma endregion
 	return S_OK;

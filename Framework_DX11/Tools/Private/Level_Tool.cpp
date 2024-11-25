@@ -15,12 +15,12 @@
 
 #include "Mesh_Effect.h"
 
-CLevel_Tool::CLevel_Tool(ID3D11Device* pDevice, ID3D11DeviceContext* pContext)
+CLevel_GamePlay::CLevel_GamePlay(ID3D11Device* pDevice, ID3D11DeviceContext* pContext)
 	: CLevel{ pDevice, pContext }
 {
 }
 
-HRESULT CLevel_Tool::Initialize()
+HRESULT CLevel_GamePlay::Initialize()
 {
 	if (FAILED(Ready_Lights()))
 		return E_FAIL;
@@ -57,11 +57,11 @@ HRESULT CLevel_Tool::Initialize()
 	return S_OK;
 }
 
-void CLevel_Tool::Update(_float fTimeDelta)
+void CLevel_GamePlay::Update(_float fTimeDelta)
 {
 }
 
-HRESULT CLevel_Tool::Render()
+HRESULT CLevel_GamePlay::Render()
 {
 	SetWindowText(g_hWnd, TEXT("툴 프로그램입니다."));
 
@@ -71,7 +71,7 @@ HRESULT CLevel_Tool::Render()
 	return S_OK;
 }
 
-HRESULT CLevel_Tool::Ready_Lights()
+HRESULT CLevel_GamePlay::Ready_Lights()
 {
 	/* 게임플레이 레벨에 필요한 광원을 준비한다. */
 	/* 게임플레이 레벨에 필요한 광원을 준비한다. */
@@ -90,7 +90,7 @@ HRESULT CLevel_Tool::Ready_Lights()
 	return S_OK;
 }
 
-HRESULT CLevel_Tool::Ready_Layer_Camera()
+HRESULT CLevel_GamePlay::Ready_Layer_Camera()
 {
 	CCamera::CAMERA_DESC		Desc{};
 
@@ -109,7 +109,7 @@ HRESULT CLevel_Tool::Ready_Layer_Camera()
 	return S_OK;
 }
 
-HRESULT CLevel_Tool::Ready_Layer_BackGround()
+HRESULT CLevel_GamePlay::Ready_Layer_BackGround()
 {
 	if (FAILED(m_pGameInstance->Add_CloneObject_ToLayer(LEVEL_TOOL, TEXT("Layer_BackGround"), TEXT("Prototype_GameObject_Sky"))))
 		return E_FAIL;
@@ -120,31 +120,31 @@ HRESULT CLevel_Tool::Ready_Layer_BackGround()
 	return S_OK;
 }
 
-HRESULT CLevel_Tool::Ready_Layer_Effect()
+HRESULT CLevel_GamePlay::Ready_Layer_Effect()
 {
 	return S_OK;
 }
 
-HRESULT CLevel_Tool::Ready_LandObjects()
+HRESULT CLevel_GamePlay::Ready_LandObjects()
 {
 	
 	return S_OK;
 }
 
-CLevel_Tool* CLevel_Tool::Create(ID3D11Device* pDevice, ID3D11DeviceContext* pContext)
+CLevel_GamePlay* CLevel_GamePlay::Create(ID3D11Device* pDevice, ID3D11DeviceContext* pContext)
 {
-	CLevel_Tool* pInstance = new CLevel_Tool(pDevice, pContext);
+	CLevel_GamePlay* pInstance = new CLevel_GamePlay(pDevice, pContext);
 
 	if (FAILED(pInstance->Initialize()))
 	{
-		MSG_BOX(TEXT("Failed to Created : CLevel_Tool"));
+		MSG_BOX(TEXT("Failed to Created : CLevel_GamePlay"));
 		Safe_Release(pInstance);
 	}
 
 	return pInstance;
 }
 
-void CLevel_Tool::Free()
+void CLevel_GamePlay::Free()
 {
 	__super::Free();
 

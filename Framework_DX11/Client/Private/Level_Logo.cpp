@@ -21,6 +21,9 @@ HRESULT CLevel_Logo::Initialize()
 	// 게임 인터페이스 인게임 모드 해제
 	GET_GAMEINTERFACE->SetIngame(false);
 
+
+	m_pGameInstance->Play_BGM(TEXT("MU_MS_Title_Piano_03.wav"), g_fBGMVolume);
+
 	return S_OK;
 }
 

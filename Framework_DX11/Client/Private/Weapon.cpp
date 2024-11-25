@@ -160,6 +160,24 @@ void CWeapon::DeActive_Collider(_uint iHandIndex)
 	m_pColliderCom->IsActive(false);
 }
 
+void CWeapon::Play_Sound(WEP_SOUND_TYPE eType, const TCHAR* pSoundKey)
+{
+	//_float fVolume = {};
+	//switch (eType)
+	//{
+	//case SOUND_WEAPON:
+	//	fVolume = g_fVoiceVolume;
+	//	break;
+	//case SOUND_EFFECT1:
+	//case SOUND_EFFECT2:
+	//	fVolume = ;
+	//	break;
+	//default:
+	//	return;
+	//}
+	m_pSoundCom[eType]->Play2D(pSoundKey, g_fEffectVolume);
+}
+
 void CWeapon::Appear()
 {
 	m_pModelCom->Update_Bone();
@@ -189,6 +207,24 @@ HRESULT CWeapon::Ready_Components()
 		TEXT("Com_Shader"), reinterpret_cast<CComponent**>(&m_pShaderCom))))
 		return E_FAIL;
 
+	/* FOR.Com_WeaponSound */
+	if (FAILED(__super::Add_Component(LEVEL_STATIC, TEXT("Prototype_Component_Sound"),
+		TEXT("Com_WeaponSound"), reinterpret_cast<CComponent**>(&m_pSoundCom[WEP_SOUND_WEAPON]))))
+		return E_FAIL;
+	m_pSoundCom[WEP_SOUND_WEAPON]->Set_Owner(this);
+
+	/* FOR.Com_EffectSound */
+	if (FAILED(__super::Add_Component(LEVEL_STATIC, TEXT("Prototype_Component_Sound"),
+		TEXT("Com_EffectSound"), reinterpret_cast<CComponent**>(&m_pSoundCom[WEP_SOUND_EFFECT1]))))
+		return E_FAIL;
+	m_pSoundCom[WEP_SOUND_EFFECT1]->Set_Owner(this);
+
+	/* FOR.Com_EffectSound2 */
+	if (FAILED(__super::Add_Component(LEVEL_STATIC, TEXT("Prototype_Component_Sound"),
+		TEXT("Com_EffectSound2"), reinterpret_cast<CComponent**>(&m_pSoundCom[WEP_SOUND_EFFECT2]))))
+		return E_FAIL;
+	m_pSoundCom[WEP_SOUND_EFFECT2]->Set_Owner(this);
+
 	return S_OK;
 }
 
@@ -204,4 +240,9 @@ void CWeapon::Free()
 	Safe_Release(m_pColliderCom);
 	Safe_Release(m_pShaderCom);	
 	Safe_Release(m_pModelCom);
+
+	for (_uint i = 0; i < WEP_SOUND_END; ++i)
+	{
+		Safe_Release(m_pSoundCom[i]);
+	}
 }

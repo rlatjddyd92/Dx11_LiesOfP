@@ -158,6 +158,8 @@ void CWeapon_Scissor::Change_CombineMode()
 	m_pScissor_Sperate[0]->IsActive(false);
 	m_pScissor_Sperate[1]->IsActive(false);
 
+	m_pSoundCom[WEP_SOUND_WEAPON]->Play2D(TEXT("SE_PC_SK_Spark_Metal_07.wav"), g_fEffectVolume);
+
 	m_isSeperate = false;
 }
 

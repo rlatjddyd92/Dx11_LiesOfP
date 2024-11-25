@@ -4,6 +4,7 @@
 #include "Model.h"
 #include "Player.h"
 #include "Camera.h"
+#include "Weapon.h"
 
 CState_Player_Rapier_LAttack01::CState_Player_Rapier_LAttack01(CFsm* pFsm, CPlayer* pPlayer)
     :CState{ pFsm }
@@ -26,6 +27,8 @@ HRESULT CState_Player_Rapier_LAttack01::Initialize(_uint iStateNum, void* pArg)
 
     m_iColliderStartFrame = 18;
     m_iColliderEndFrame = 29;
+
+    m_iSoundFrame = 18;
 
     return S_OK;
 }
@@ -75,6 +78,10 @@ void CState_Player_Rapier_LAttack01::Update(_float fTimeDelta)
             else
                 m_pPlayer->Change_State(CPlayer::RAPIER_RATTACK0);
         }
+        else if (KEY_HOLD(KEY::W) || KEY_HOLD(KEY::S) || KEY_HOLD(KEY::D) || KEY_HOLD(KEY::A))
+        {
+            m_pPlayer->Change_State(CPlayer::OH_RUN);
+        }
     }
     else if (End_Check())
     {
@@ -82,6 +89,7 @@ void CState_Player_Rapier_LAttack01::Update(_float fTimeDelta)
     }
 
     Control_Collider();
+    Control_Sound();
 }
 
 void CState_Player_Rapier_LAttack01::End_State()
@@ -102,6 +110,21 @@ void CState_Player_Rapier_LAttack01::Control_Collider()
         m_pPlayer->Active_CurrentWeaponCollider();
     else
         m_pPlayer->DeActive_CurretnWeaponCollider();
+}
+
+void CState_Player_Rapier_LAttack01::Control_Sound()
+{
+    _int iFrame = m_pPlayer->Get_Frame();
+
+    if (iFrame == m_iSoundFrame && !m_isPlaySound)
+    {
+        m_pPlayer->Play_CurrentWeaponSound(CWeapon::WEP_SOUND_EFFECT1, TEXT("SE_PC_SK_WS_Dagger_1H_S_02.wav"));
+        m_isPlaySound = true;
+    }
+    else
+    {
+        m_isPlaySound = false;
+    }
 }
 
 CState_Player_Rapier_LAttack01* CState_Player_Rapier_LAttack01::Create(CFsm* pFsm, CPlayer* pPlayer, _uint iStateNum, void* pArg)

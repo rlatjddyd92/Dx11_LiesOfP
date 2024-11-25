@@ -15,12 +15,12 @@
 #include "Player.h"
 #include "Ladder.h"
 
-CLevel_Tool::CLevel_Tool(ID3D11Device* pDevice, ID3D11DeviceContext* pContext)
+CLevel_GamePlay::CLevel_GamePlay(ID3D11Device* pDevice, ID3D11DeviceContext* pContext)
 	: CLevel{ pDevice, pContext }
 {
 }
 
-HRESULT CLevel_Tool::Initialize()
+HRESULT CLevel_GamePlay::Initialize()
 {
 	if (FAILED(Ready_Lights()))
 		return E_FAIL;
@@ -50,10 +50,14 @@ HRESULT CLevel_Tool::Initialize()
 	CEffect_Manager::Get_Instance()->Add_Effect_ToLayer(LEVEL_GAMEPLAY, TEXT("Monster_Impact_Death"),
 		_Vec3(0.f, 5.f, 0.f), _Vec3(0.f, 0.f, 0.f), _Vec3(1.f, 1.f, 1.f));
 
+	m_pGameInstance->Set_Listener(m_pPlayer);
+
+	m_pGameInstance->Play_BGM(TEXT("MU_MS_Simon_PH1.wav"), g_fBGMVolume);
+
 	return S_OK;
 }
 
-void CLevel_Tool::Update(_float fTimeDelta)
+void CLevel_GamePlay::Update(_float fTimeDelta)
 {
 	if (KEY_TAP(KEY::F2))
 	{
@@ -66,13 +70,13 @@ void CLevel_Tool::Update(_float fTimeDelta)
 	}
 }
 
-HRESULT CLevel_Tool::Render()
+HRESULT CLevel_GamePlay::Render()
 {
 	SetWindowText(g_hWnd, TEXT("게임플레이레벨입니다."));
 	return S_OK;
 }
 
-HRESULT CLevel_Tool::Ready_Lights()
+HRESULT CLevel_GamePlay::Ready_Lights()
 {
 	/* 게임플레이 레벨에 필요한 광원을 준비한다. */
 	LIGHT_DESC			LightDesc{};
@@ -113,7 +117,7 @@ HRESULT CLevel_Tool::Ready_Lights()
 	return S_OK;
 }
 
-HRESULT CLevel_Tool::Ready_Layer_Camera()
+HRESULT CLevel_GamePlay::Ready_Layer_Camera()
 {
 	CPlayerCamera::CAMERA_PLAYER_DESC PlayerCameraDesc{};
 	PlayerCameraDesc.vEye = _float4(0.f, 0.f, 0.f, 1.f);
@@ -156,7 +160,7 @@ HRESULT CLevel_Tool::Ready_Layer_Camera()
 }
 
 
-HRESULT CLevel_Tool::Ready_Layer_BackGround()
+HRESULT CLevel_GamePlay::Ready_Layer_BackGround()
 {
 
 //	if (FAILED(m_pGameInstance->Add_CloneObject_ToLayer(LEVEL_GAMEPLAY, TEXT("Layer_BackGround"), TEXT("Prototype_GameObject_Terrain"))))
@@ -173,13 +177,13 @@ HRESULT CLevel_Tool::Ready_Layer_BackGround()
 	return S_OK;
 }
 
-HRESULT CLevel_Tool::Ready_Layer_Effect()
+HRESULT CLevel_GamePlay::Ready_Layer_Effect()
 {
 
 	return S_OK;
 }
 
-HRESULT CLevel_Tool::Ready_Layer_Monster()
+HRESULT CLevel_GamePlay::Ready_Layer_Monster()
 {
 	/*for (size_t i = 0; i < 10; i++)
 	{
@@ -195,7 +199,7 @@ HRESULT CLevel_Tool::Ready_Layer_Monster()
 	return S_OK;
 }
 
-HRESULT CLevel_Tool::Ready_Layer_Paticle()
+HRESULT CLevel_GamePlay::Ready_Layer_Paticle()
 {
 	//if (FAILED(m_pGameInstance->Add_CloneObject_ToLayer(LEVEL_GAMEPLAY, TEXT("Layer_Particle"), TEXT("Prototype_GameObject_Particle_Expolosion"))))
 	//	return E_FAIL;
@@ -206,7 +210,7 @@ HRESULT CLevel_Tool::Ready_Layer_Paticle()
 	return S_OK;
 }
 
-HRESULT CLevel_Tool::Ready_Layer_Player()
+HRESULT CLevel_GamePlay::Ready_Layer_Player()
 {
 	m_pPlayer = dynamic_cast<CPlayer*>(m_pGameInstance->Get_CloneObject_ToLayer(LEVEL_GAMEPLAY, TEXT("Layer_Player"), TEXT("Prototype_GameObject_Player")));
 	Safe_AddRef(m_pPlayer);
@@ -214,7 +218,7 @@ HRESULT CLevel_Tool::Ready_Layer_Player()
 	return S_OK;
 }
 
-HRESULT CLevel_Tool::Read_Map_Data()
+HRESULT CLevel_GamePlay::Read_Map_Data()
 {
 	const char cFile[128] = "../Bin/DataFiles/Map_Data.dat";
 	ifstream fin(cFile, ios::in | ios::binary);
@@ -343,22 +347,25 @@ HRESULT CLevel_Tool::Read_Map_Data()
 	return S_OK;
 }
 
-CLevel_Tool * CLevel_Tool::Create(ID3D11Device* pDevice, ID3D11DeviceContext* pContext)
+CLevel_GamePlay * CLevel_GamePlay::Create(ID3D11Device* pDevice, ID3D11DeviceContext* pContext)
 {
-	CLevel_Tool*		pInstance = new CLevel_Tool(pDevice, pContext);
+	CLevel_GamePlay*		pInstance = new CLevel_GamePlay(pDevice, pContext);
 
 	if (FAILED(pInstance->Initialize()))
 	{
-		MSG_BOX(TEXT("Failed to Created : CLevel_Tool"));
+		MSG_BOX(TEXT("Failed to Created : CLevel_GamePlay"));
 		Safe_Release(pInstance);
 	}
 
 	return pInstance;
 }
 
-void CLevel_Tool::Free()
+void CLevel_GamePlay::Free()
 {
 	__super::Free();
+
+
+	m_pGameInstance->Set_Listener(nullptr);
 	// 인스턴싱을 할 모델들을 모아둔 매니저 클리어하기
 	Safe_Release(m_pPlayer);
 	m_pGameInstance->Clear_Instance();

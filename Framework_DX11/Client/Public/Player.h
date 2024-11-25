@@ -103,6 +103,8 @@ public:
 	void			LockOnOff();
 	CPawn*			Find_TargetMonster();
 
+	void			Play_CurrentWeaponSound(const _uint iType, const TCHAR* pSoundKey);
+
 private:
 	list<OUTPUT_EVKEY>	m_EvKeyList;
 	list<class CEffect_Container*>	m_EffectList;

@@ -4,6 +4,7 @@
 #include "Model.h"
 #include "Player.h"
 #include "Camera.h"
+#include "Weapon.h"
 
 CState_Player_Rapier_Fatal::CState_Player_Rapier_Fatal(CFsm* pFsm, CPlayer* pPlayer)
     :CState{ pFsm }
@@ -13,7 +14,7 @@ CState_Player_Rapier_Fatal::CState_Player_Rapier_Fatal(CFsm* pFsm, CPlayer* pPla
 
 HRESULT CState_Player_Rapier_Fatal::Initialize(_uint iStateNum, void* pArg)
 {
-    m_iAnimation_RapierFCA = m_pPlayer->Get_Model()->Find_AnimationIndex("AS_Pino_O_Rapier_FCA", 2.2f);
+    m_iAnimation_RapierFCA = m_pPlayer->Get_Model()->Find_AnimationIndex("AS_Pino_O_Rapier_FCA", 3.f);
 
     FSM_INIT_DESC* pDesc = static_cast<FSM_INIT_DESC*>(pArg);
 
@@ -35,12 +36,21 @@ HRESULT CState_Player_Rapier_Fatal::Initialize(_uint iStateNum, void* pArg)
     m_iColliderStartFrame[4] = 78;
     m_iColliderEndFrame[4] = 90;
 
+    m_iSoundFrame[0] = 4;
+    m_iSoundFrame[1] = 16;
+    m_iSoundFrame[2] = 35;
+    m_iSoundFrame[3] = 44;
+    m_iSoundFrame[4] = 75;
+
     return S_OK;
 }
 
 HRESULT CState_Player_Rapier_Fatal::Start_State(void* pArg)
 {
-    m_pPlayer->Change_Animation(m_iAnimation_RapierFCA, false);
+    m_pPlayer->Change_Animation(m_iAnimation_RapierFCA, false, 0.05f);
+
+    m_pPlayer->Play_Sound(CPawn::PAWN_SOUND_EFFECT1, TEXT("SE_PC_SK_FX_Rapier_1H_B_FableArts_Start_01.wav"));
+    m_pPlayer->Play_Sound(CPawn::PAWN_SOUND_EFFECT2, TEXT("SE_PC_SK_FX_Rapier_1H_B_FableArts_Motor_03.wav"));
 
     return S_OK;
 }
@@ -86,6 +96,7 @@ void CState_Player_Rapier_Fatal::Update(_float fTimeDelta)
     }
 
     Control_Collider();
+    Control_Sound();
 }
 
 void CState_Player_Rapier_Fatal::End_State()
@@ -115,6 +126,41 @@ void CState_Player_Rapier_Fatal::Control_Collider()
     else
         m_pPlayer->DeActive_CurretnWeaponCollider();
 
+}
+
+void CState_Player_Rapier_Fatal::Control_Sound()
+{
+    _int iFrame = m_pPlayer->Get_Frame();
+
+    if (iFrame == m_iSoundFrame[0] && !m_isPlaySound)
+    {
+        m_pPlayer->Play_CurrentWeaponSound(CWeapon::WEP_SOUND_EFFECT1, TEXT("SE_PC_SK_WS_Dagger_1H_S_01.wav"));
+        m_isPlaySound = true;
+    }
+    else if (iFrame == m_iSoundFrame[1] && !m_isPlaySound)
+    {
+        m_pPlayer->Play_CurrentWeaponSound(CWeapon::WEP_SOUND_EFFECT1, TEXT("SE_PC_SK_WS_Dagger_1H_S_01.wav"));
+        m_isPlaySound = true;
+    }
+    else if (iFrame == m_iSoundFrame[2] && !m_isPlaySound)
+    {
+        m_pPlayer->Play_CurrentWeaponSound(CWeapon::WEP_SOUND_EFFECT1, TEXT("SE_PC_SK_WS_Dagger_1H_S_01.wav"));
+        m_isPlaySound = true;
+    }
+    else if (iFrame == m_iSoundFrame[3] && !m_isPlaySound)
+    {
+        m_pPlayer->Play_CurrentWeaponSound(CWeapon::WEP_SOUND_EFFECT1, TEXT("SE_PC_SK_WS_Dagger_1H_S_01.wav"));
+        m_isPlaySound = true;
+    }
+    else if (iFrame == m_iSoundFrame[4] && !m_isPlaySound)
+    {
+        m_pPlayer->Play_CurrentWeaponSound(CWeapon::WEP_SOUND_EFFECT1, TEXT("SE_PC_SK_WS_Dagger_1H_S_01.wav"));
+        m_isPlaySound = true;
+    }
+    else
+    {
+        m_isPlaySound = false;
+    }
 }
 
 CState_Player_Rapier_Fatal* CState_Player_Rapier_Fatal::Create(CFsm* pFsm, CPlayer* pPlayer, _uint iStateNum, void* pArg)

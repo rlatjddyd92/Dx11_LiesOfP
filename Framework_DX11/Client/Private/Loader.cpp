@@ -257,7 +257,9 @@ HRESULT CLoader::Ready_Resources_For_LogoLevel()
 
 
 	lstrcpy(m_szLoadingText, TEXT("사운드을(를) 로딩중입니다."));
-
+	m_pGameInstance->LoadSoundFile("BGM");
+	m_pGameInstance->LoadSoundFile("Player");
+	m_pGameInstance->LoadSoundFile("Player/Rapier");
 
 	lstrcpy(m_szLoadingText, TEXT("객체원형을(를) 로딩중입니다."));
 	/* For. Prototype_GameObject_BackGround */

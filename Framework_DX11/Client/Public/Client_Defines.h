@@ -31,5 +31,11 @@ namespace Client
 extern HINSTANCE g_hInst;
 extern HWND g_hWnd;
 
+extern float g_fBGMVolume;
+extern float g_fEffectVolume;
+extern float g_fVoiceVolume;
+extern float g_fEnvVolume;
+extern float g_fUIVolume;
+
 using namespace Client;
 using namespace std;

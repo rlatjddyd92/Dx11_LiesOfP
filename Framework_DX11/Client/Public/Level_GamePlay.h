@@ -7,11 +7,11 @@
 
 BEGIN(Client)
 
-class CLevel_Tool final : public CLevel
+class CLevel_GamePlay final : public CLevel
 {
 private:
-	CLevel_Tool(ID3D11Device* pDevice, ID3D11DeviceContext* pContext);
-	virtual ~CLevel_Tool() = default;
+	CLevel_GamePlay(ID3D11Device* pDevice, ID3D11DeviceContext* pContext);
+	virtual ~CLevel_GamePlay() = default;
 
 public:
 	virtual HRESULT Initialize() override;
@@ -36,7 +36,7 @@ private:
 	class CPlayer*		m_pPlayer = { nullptr };
 
 public:
-	static CLevel_Tool* Create(ID3D11Device* pDevice, ID3D11DeviceContext* pContext);
+	static CLevel_GamePlay* Create(ID3D11Device* pDevice, ID3D11DeviceContext* pContext);
 	virtual void Free() override;
 };
 

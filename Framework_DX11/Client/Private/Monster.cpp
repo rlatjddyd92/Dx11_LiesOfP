@@ -168,9 +168,7 @@ void CMonster::OnCollisionExit(CGameObject* pOther)
 
 HRESULT CMonster::Ready_Components()
 {
-	/* FOR.Com_Shader */
-	if (FAILED(__super::Add_Component(LEVEL_STATIC, TEXT("Prototype_Component_Shader_VtxAnimModel"),
-		TEXT("Com_Shader"), reinterpret_cast<CComponent**>(&m_pShaderCom))))
+	if (FAILED(__super::Ready_Components()))
 		return E_FAIL;
 
 	return S_OK;

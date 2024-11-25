@@ -14,6 +14,8 @@ BEGIN(Client)
 class CWeapon abstract : public CGameObject
 {
 public:
+	enum WEP_SOUND_TYPE { WEP_SOUND_WEAPON, WEP_SOUND_EFFECT1, WEP_SOUND_EFFECT2, WEP_SOUND_END };
+
 	typedef struct
 	{
 		const _Matrix*	pParentWorldMatrix = { nullptr };
@@ -28,6 +30,8 @@ protected:
 
 public:
 	class CCollider* Get_Collider() { return m_pColliderCom; }
+
+	class CSound* Get_SoundCom(WEP_SOUND_TYPE eType) { return m_pSoundCom[eType]; }
 
 public:
 	virtual HRESULT Initialize_Prototype() override;
@@ -49,6 +53,8 @@ public:
 	virtual void Active_Collider(_float fDamageRatio = 1.f, _uint iHandIndex = 0);		//1번 외손 0번 오른손
 	virtual void DeActive_Collider(_uint iHandIndex = 1);
 
+	void		Play_Sound(WEP_SOUND_TYPE eType, const TCHAR* pSoundKey);
+
 public:
 	void Appear();
 	void Disappear();
@@ -59,6 +65,8 @@ protected:
 	CShader*			m_pShaderCom = { nullptr };	
 	CModel*				m_pModelCom = { nullptr };
 	CCollider*			m_pColliderCom = { nullptr };
+	class CSound*		m_pSoundCom[WEP_SOUND_END] = {nullptr,};
+
 
 protected:
 	const _Matrix*			m_pParentMatrix = { nullptr };

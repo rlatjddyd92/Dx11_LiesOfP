@@ -7,6 +7,9 @@ BEGIN(Client)
 
 class CPawn abstract : public CGameObject
 {
+public :
+	enum PAWN_SOUND_TYPE { PAWN_SOUND_VOICE, PAWN_SOUND_EFFECT1, PAWN_SOUND_EFFECT2, PAWN_SOUND_END };
+	
 protected:
 	CPawn(ID3D11Device* pDevice, ID3D11DeviceContext* pContext);
 	CPawn(const CPawn& Prototype);
@@ -17,6 +20,8 @@ public:
 	class CRigidBody*	Get_RigidBody() { return m_pRigidBodyCom; }
 	class CCollider*	Get_Collider() { return m_pColliderCom; }
 	class CFsm*			Get_Fsm() { return m_pFsmCom; }
+
+	class CSound*		Get_SoundCom(PAWN_SOUND_TYPE eType) { return m_pSoundCom[eType]; }
 
 	_float				Get_MoveSpeed() { return m_fMoveSpeed; }
 	void				Set_MoveSpeed(_float fSpeed) { m_fMoveSpeed = fSpeed; }
@@ -47,6 +52,9 @@ public:
 	_double		Get_CurrentTrackPos();
 	_bool		Get_EndAnim(_int iAnimIndex, _bool bIsBoundary = false);
 
+	void		Play_Sound(const PAWN_SOUND_TYPE eType, const TCHAR* pSoundKey);
+	void		PlayRepeat_Sound(const PAWN_SOUND_TYPE eType, const TCHAR* pSoundKey);
+
 protected:
 	class CShader*		m_pShaderCom = { nullptr };
 	class CModel*		m_pModelCom = { nullptr };
@@ -54,7 +62,7 @@ protected:
 	class CCollider*	m_pColliderCom = { nullptr };
 	class CFsm*			m_pFsmCom = { nullptr };
 	class CRigidBody*	m_pRigidBodyCom = { nullptr };
-	class CSound*		m_pSoundCom = { nullptr };
+	class CSound*		m_pSoundCom[PAWN_SOUND_END] = { nullptr, };
 
 	_bool				m_isGravity = { false };
 	
@@ -73,6 +81,7 @@ protected:
 	_float				m_fStemina{};
 protected:
 	HRESULT Bind_WorldViewProj();
+	HRESULT Ready_Components();
 
 public:
 	virtual CGameObject* Clone(void* pArg) = 0;

@@ -179,6 +179,42 @@ _bool CPawn::Get_EndAnim(_int iAnimIndex, _bool bIsBoundary)
 
 }
 
+void CPawn::Play_Sound(const PAWN_SOUND_TYPE eType, const TCHAR* pSoundKey)
+{
+	_float fVolume = {};
+	switch (eType)
+	{
+		case PAWN_SOUND_VOICE:
+			fVolume = g_fVoiceVolume;
+			break;
+		case PAWN_SOUND_EFFECT1:
+		case PAWN_SOUND_EFFECT2:
+			fVolume = g_fEffectVolume;
+			break;
+	default:
+		return;
+	}
+	m_pSoundCom[eType]->Play2D(pSoundKey, fVolume);
+}
+
+void CPawn::PlayRepeat_Sound(const PAWN_SOUND_TYPE eType, const TCHAR* pSoundKey)
+{
+	_float fVolume = {};
+	switch (eType)
+	{
+	case PAWN_SOUND_VOICE:
+		fVolume = g_fVoiceVolume;
+		break;
+	case PAWN_SOUND_EFFECT1:
+	case PAWN_SOUND_EFFECT2:
+		fVolume = g_fEffectVolume;
+		break;
+	default:
+		return;
+	}
+	m_pSoundCom[eType]->Play2D_Repeat(pSoundKey, fVolume);
+}
+
 HRESULT CPawn::Bind_WorldViewProj()
 {
 	if (FAILED(m_pTransformCom->Bind_ShaderResource(m_pShaderCom, "g_WorldMatrix")))
@@ -187,6 +223,43 @@ HRESULT CPawn::Bind_WorldViewProj()
 		return E_FAIL;
 	if (FAILED(m_pShaderCom->Bind_Matrix("g_ProjMatrix", &m_pGameInstance->Get_Transform(CPipeLine::D3DTS_PROJ))))
 		return E_FAIL;
+
+	return S_OK;
+}
+
+HRESULT CPawn::Ready_Components()
+{
+	/* FOR.Com_Shader */
+	if (FAILED(__super::Add_Component(LEVEL_STATIC, TEXT("Prototype_Component_Shader_VtxAnimModel"),
+		TEXT("Com_Shader"), reinterpret_cast<CComponent**>(&m_pShaderCom))))
+		return E_FAIL;
+
+	/* For.Com_Navigation */
+	CNavigation::NAVIGATION_DESC			NaviDesc{};
+	NaviDesc.iCurrentIndex = 0;
+
+	if (FAILED(__super::Add_Component(LEVEL_GAMEPLAY, TEXT("Prototype_Component_Navigation"),
+		TEXT("Com_Navigation"), reinterpret_cast<CComponent**>(&m_pNavigationCom), &NaviDesc)))
+		return E_FAIL;
+
+	/* FOR.Com_VoiceSound */
+	if (FAILED(__super::Add_Component(LEVEL_STATIC, TEXT("Prototype_Component_Sound"),
+		TEXT("Com_VoiceSound"), reinterpret_cast<CComponent**>(&m_pSoundCom[PAWN_SOUND_VOICE]))))
+		return E_FAIL;
+	m_pSoundCom[PAWN_SOUND_VOICE]->Set_Owner(this);
+
+	/* FOR.Com_EffectSound */
+	if (FAILED(__super::Add_Component(LEVEL_STATIC, TEXT("Prototype_Component_Sound"),
+		TEXT("Com_EffectSound"), reinterpret_cast<CComponent**>(&m_pSoundCom[PAWN_SOUND_EFFECT1]))))
+		return E_FAIL;
+	m_pSoundCom[PAWN_SOUND_EFFECT1]->Set_Owner(this);
+
+	/* FOR.Com_EffectSound2 */
+	if (FAILED(__super::Add_Component(LEVEL_STATIC, TEXT("Prototype_Component_Sound"),
+		TEXT("Com_EffectSound2"), reinterpret_cast<CComponent**>(&m_pSoundCom[PAWN_SOUND_EFFECT2]))))
+		return E_FAIL;
+	m_pSoundCom[PAWN_SOUND_EFFECT2]->Set_Owner(this);
+
 
 	return S_OK;
 }
@@ -207,4 +280,8 @@ void CPawn::Free()
 	}
 	Safe_Release(m_pFsmCom);
 
+	for (_uint i = 0; i < PAWN_SOUND_END; ++i)
+	{
+		Safe_Release(m_pSoundCom[i]);
+	}
 }

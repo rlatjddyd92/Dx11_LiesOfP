@@ -45,8 +45,8 @@ void CSound::Update(_float fTimeDelta)
 
 void CSound::Play3D(const TCHAR* pSoundKey, _float fVolume)
 {
-	/*if (m_isPlaying)
-		m_pChannel->stop();*/
+	if (m_isPlaying)
+		m_pChannel->stop();
 
 	map<TCHAR*, FMOD::Sound*> Sounds = m_pGameInstance->Get_Sounds();
 

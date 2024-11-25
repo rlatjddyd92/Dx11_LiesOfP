@@ -134,6 +134,11 @@ void CPlayer::Update(_float fTimeDelta)
 
 	m_pFsmCom->Update(fTimeDelta);
 
+	for (_uint i = 0; i < PAWN_SOUND_END; ++i)
+	{
+		m_pSoundCom[i]->Update(fTimeDelta);
+	}
+
 	for (auto& pEffect : m_EffectList)
 	{
 		pEffect->Update(fTimeDelta);
@@ -398,24 +403,19 @@ HRESULT CPlayer::Ready_Weapon()
 	return S_OK;
 }
 
+void CPlayer::Play_CurrentWeaponSound(const _uint iType, const TCHAR* pSoundKey)
+{
+	m_pWeapon[iType]->Play_Sound(CWeapon::WEP_SOUND_TYPE(iType), pSoundKey);
+}
+
 HRESULT CPlayer::Ready_Components()
 {
-	/* FOR.Com_Shader */
-	if (FAILED(__super::Add_Component(LEVEL_STATIC, TEXT("Prototype_Component_Shader_VtxAnimModel"),
-		TEXT("Com_Shader"), reinterpret_cast<CComponent**>(&m_pShaderCom))))
+	if (FAILED(__super::Ready_Components()))
 		return E_FAIL;
 
 	/* FOR.Com_Model */
 	if (FAILED(__super::Add_Component(LEVEL_GAMEPLAY, TEXT("Prototype_Component_Model_Player"),
 		TEXT("Com_Model"), reinterpret_cast<CComponent**>(&m_pModelCom))))
-		return E_FAIL;
-
-	/* For.Com_Navigation */
-	CNavigation::NAVIGATION_DESC			NaviDesc{};
-	NaviDesc.iCurrentIndex = 0;
-
-	if (FAILED(__super::Add_Component(LEVEL_GAMEPLAY, TEXT("Prototype_Component_Navigation"),
-		TEXT("Com_Navigation"), reinterpret_cast<CComponent**>(&m_pNavigationCom), &NaviDesc)))
 		return E_FAIL;
 
 	/* FOR.Com_Collider */

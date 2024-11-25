@@ -125,7 +125,7 @@ void CState_Player_Scissor_Charge00::Control_Collider()
         }
         else
         {
-            //m_pPlayer->DeActive_CurretnWeaponCollider(1);
+            m_pPlayer->DeActive_CurretnWeaponCollider(1);
         }
 
         if (m_iColliderStartFrame_Right[i] <= iFrame && iFrame <= m_iColliderEndFrame_Right[i])
@@ -134,7 +134,7 @@ void CState_Player_Scissor_Charge00::Control_Collider()
         }
         else
         {
-            //m_pPlayer->DeActive_CurretnWeaponCollider(0);
+            m_pPlayer->DeActive_CurretnWeaponCollider(0);
         }
     }
 

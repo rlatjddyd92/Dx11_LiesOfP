@@ -28,6 +28,8 @@ HRESULT CLevel_Loading::Initialize(LEVELID eNextLevelID)
 	// 게임 인터페이스 인게임 모드 해제
 	GET_GAMEINTERFACE->SetIngame(false);
 
+	m_pGameInstance->Stop_BGM();
+
 	return S_OK;
 }
 
@@ -45,7 +47,7 @@ void CLevel_Loading::Update(_float fTimeDelta)
 			pNewLevel = CLevel_Logo::Create(m_pDevice, m_pContext);
 			break;
 		case LEVEL_GAMEPLAY:
-			pNewLevel = CLevel_Tool::Create(m_pDevice, m_pContext);
+			pNewLevel = CLevel_GamePlay::Create(m_pDevice, m_pContext);
 			break;
 		}
 

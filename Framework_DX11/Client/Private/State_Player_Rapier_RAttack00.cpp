@@ -29,13 +29,15 @@ HRESULT CState_Player_Rapier_RAttack00::Initialize(_uint iStateNum, void* pArg)
     m_iColliderStartFrame = 7;
     m_iColliderEndFrame = 20;
 
+    m_iSoundFrame = 7;
+
     return S_OK;
 }
 
 HRESULT CState_Player_Rapier_RAttack00::Start_State(void* pArg)
 {
     if(m_pFsm->Get_PrevState() == CPlayer::OH_IDLE)
-        m_pPlayer->Change_Animation(m_iAnimation_RapierSA1, false);
+        m_pPlayer->Change_Animation(m_iAnimation_RapierSA1, false, 0.05f);
     else
         m_pPlayer->Change_Animation(m_iAnimation_RapierSA1, false, 0.1f, 5);
 
@@ -88,6 +90,10 @@ void CState_Player_Rapier_RAttack00::Update(_float fTimeDelta)
             else
                 m_pPlayer->Change_State(CPlayer::RAPIER_RATTACK0);
         }
+        else if(KEY_HOLD(KEY::W) || KEY_HOLD(KEY::S) || KEY_HOLD(KEY::D) || KEY_HOLD(KEY::A))
+        {
+            m_pPlayer->Change_State(CPlayer::OH_RUN);
+        }
     }
     else if (End_Check())
     {
@@ -95,6 +101,7 @@ void CState_Player_Rapier_RAttack00::Update(_float fTimeDelta)
     }
 
     Control_Collider();
+    Control_Sound();
 }
 
 void CState_Player_Rapier_RAttack00::End_State()
@@ -115,6 +122,21 @@ void CState_Player_Rapier_RAttack00::Control_Collider()
         m_pPlayer->Active_CurrentWeaponCollider();
     else
         m_pPlayer->DeActive_CurretnWeaponCollider();
+}
+
+void CState_Player_Rapier_RAttack00::Control_Sound()
+{
+    _int iFrame = m_pPlayer->Get_Frame();
+
+    if (iFrame == m_iSoundFrame && !m_isPlaySound)
+    {
+        m_pPlayer->Play_CurrentWeaponSound(CWeapon::WEP_SOUND_EFFECT1, TEXT("SE_PC_SK_WS_Dagger_1H_S_03.wav"));
+        m_isPlaySound = true;
+    }
+    else
+    {
+        m_isPlaySound = false;
+    }
 }
 
 CState_Player_Rapier_RAttack00* CState_Player_Rapier_RAttack00::Create(CFsm* pFsm, CPlayer* pPlayer, _uint iStateNum, void* pArg)
