@@ -121,7 +121,9 @@ public:
 		_wstring strFabel_Desc = {};
 		_wstring strItem_Desc = {};
 
-	
+		// 암 관련
+		_float Arm_Gauge_Now = 1000.f;
+		_float Arm_Gauge_Max = 1000.f;
 
 	}ITEM;
 
@@ -152,7 +154,8 @@ public:
 			}
 		}
 
-		_uint Get_Array_Size() { return (_uint)vecItemInfo.size(); }
+		_uint Get_Array_Size() { return _uint(vecItemInfo.size()); }
+
 		ITEM* Get_Item_Info(_uint iIndex) 
 		{
 			if ((iIndex < 0) || (iIndex >= Get_Array_Size()))
@@ -192,6 +195,7 @@ public:
 			else if (vecItemInfo[iIndex]->iCount >= iCount)
 			{
 				vecItemInfo[iIndex]->iCount -= iCount;
+
 				return ITEM_RESULT::RESULT_SUCCESS;
 			}
 			else
@@ -241,7 +245,12 @@ public:
 	ITEM_RESULT AddNewItem_Inven(_uint iItemIndex, _uint iCount = 1); // <- 새롭게 아이템을 만들어 인벤에 넣는다 
 	ITEM_RESULT EquipItem_Inven(INVEN_ARRAY_TYPE eIndex, EQUIP_SLOT eSlot, _uint iIndex); // <- 인벤에 있는 아이템을 장비한다 
 	ITEM_RESULT UseItem_Equip(EQUIP_SLOT eSlot, _uint iCount = 1); // <- 장비된 아이템을 사용한다
-	ITEM_RESULT UseItem_Inven(INVEN_ARRAY_TYPE eIndex, _uint iIndex, _uint iCount = 1); // <- 인벤에 있는 아이템을 직접 사용 
+	ITEM_RESULT UseItem_Inven(INVEN_ARRAY_TYPE eIndex, _uint iIndex, _uint iCount = 1); // <- 인벤에 있는 아이템을 직접 사용
+
+	ITEM_RESULT Use_Potion_Slot(_uint iCount = 1) { return UseItem_Equip(EQUIP_SLOT(_int(EQUIP_SLOT::EQUIP_USING_TOP_0) + m_iPotion_Select), iCount); } // <- 선택된 위 벨트 아이템 사용
+	ITEM_RESULT Use_Tool_Slot(_uint iCount = 1) { return UseItem_Equip(EQUIP_SLOT(_int(EQUIP_SLOT::EQUIP_USING_BOTTOM_0) + m_iTool_Select), iCount); }  // <- 선택된 아래 벨트 아이템 사용
+	ITEM_RESULT Use_Bag_Slot(_uint iSelect, _uint iCount = 1) { return UseItem_Equip(EQUIP_SLOT(_int(EQUIP_SLOT::EQUIP_USING_BAG_0) + iSelect), iCount); }  // <- 선택된 보조 가방 아이템 사용
+
 	ITEM_RESULT Remove_Item_Inven(INVEN_ARRAY_TYPE eIndex, _uint iIndex); // <- 인벤의 아이템 제거
 
 	CPlayer::WEAPON_TYPE Get_Weapon_Model_Index(); // 현재 사용 중인 무기의 모델 번호 리턴
@@ -253,6 +262,13 @@ public:
 
 		*strName = m_vecArray_Inven[_int(eIndex)]->strInven_Array_Name;
 		*iRow = m_vecArray_Inven[_int(eIndex)]->Get_Array_Size() / 5;
+	}
+	const ITEM* Get_Item_Origin_Spec(_uint iIndex)
+	{
+		if ((iIndex < 0) || (iIndex >= m_vecItem_BasicSpec.size()))
+			return nullptr;
+
+		return m_vecItem_BasicSpec[iIndex];
 	}
 	const ITEM* Get_Array_Item_Info(INVEN_ARRAY_TYPE eIndex, _uint iIndex) // <- 인벤의 아이템 정보 획득
 	{
@@ -276,6 +292,7 @@ public:
 		return m_vecArray_Inven[_uint(m_vecEquip_ItemInfo[_uint(eSlot)]->eType)]->vecItemInfo[_uint(m_vecEquip_ItemInfo[_uint(eSlot)]->iIndex)];
 	}
 
+
 	// 코인
 	ITEM_RESULT Add_Coin(_int iAdd, _bool bForce)
 	{
@@ -292,28 +309,106 @@ public:
 	// 선택 아이템 조정
 	_int Change_Potion_Select(_bool bNext)
 	{
-		m_iPotion_Select += -1 + (bNext ? true : 2);
-		m_iPotion_Select = max(m_iPotion_Select, 0);
-		m_iPotion_Select = min(m_iPotion_Select, 2);
+		if (bNext)
+			++m_iPotion_Select;
+		else
+			--m_iPotion_Select;
+		
+		if (m_iPotion_Select > 2)
+			m_iPotion_Select = 0;
+		else if (m_iPotion_Select < 0)
+			m_iPotion_Select = 2;
+
 		return m_iPotion_Select;
 	}
 	_int Change_Tool_Select(_bool bNext)
 	{
-		m_iTool_Select += -1 + (bNext ? true : 2);
-		m_iTool_Select = max(m_iTool_Select, 0);
-		m_iTool_Select = min(m_iTool_Select, 2);
+		if (bNext)
+			++m_iTool_Select;
+		else
+			--m_iTool_Select;
+
+		if (m_iTool_Select > 2)
+			m_iTool_Select = 0;
+		else if (m_iTool_Select < 0)
+			m_iTool_Select = 2;
+
 		return m_iTool_Select;
 	}
+	_int Get_Potion_Select() { return m_iPotion_Select; }
+	_int Get_Tool_Select() { return m_iTool_Select; }
+
+	// 무기 관련
 	_int Change_Weapon()
 	{
 		++m_iWeapon_Select;
-		m_iWeapon_Select = m_iWeapon_Select ? 2 : 0;
+		if (m_iWeapon_Select >= 2)
+			m_iWeapon_Select = 0;
+
 		return m_iWeapon_Select;
 	}
-
-	_int Get_Potion_Select() { return m_iPotion_Select; }
-	_int Get_Tool_Select() { return m_iTool_Select; }
 	_int Get_Weapon() { return m_iWeapon_Select; }
+	const ITEM* Get_Now_Equip_Weapon_Blade()
+	{
+		if (m_iWeapon_Select == 0)
+			return Get_Equip_Item_Info(EQUIP_SLOT::EQUIP_WEAPON_BLADE_0);
+		else
+			return Get_Equip_Item_Info(EQUIP_SLOT::EQUIP_WEAPON_BLADE_1);
+	}
+
+	const ITEM* Get_Now_Equip_Weapon_Handle()
+	{
+		if (m_iWeapon_Select == 0)
+			return Get_Equip_Item_Info(EQUIP_SLOT::EQUIP_WEAPON_HANDLE_0);
+		else
+			return Get_Equip_Item_Info(EQUIP_SLOT::EQUIP_WEAPON_HANDLE_1);
+	}
+
+
+	
+
+	// 포션 관련 
+	void Add_Potion_Gauge(_float fAdd)
+	{
+		m_fNow_Potion_Gauge += fAdd;
+		if (m_fNow_Potion_Gauge >= m_fMax_Potion_Gauge)
+		{
+			m_fNow_Potion_Gauge = 0.f;
+			m_iNow_Potion_Count = min(m_iNow_Potion_Count + 1, m_iMax_Potion_Count);
+
+			for (_int i = 0; i < 5; ++i)
+				if (m_vecArray_Inven[_int(INVEN_ARRAY_TYPE::TYPE_USING_BASIC)]->Get_Item_Info(i)->iItem_Index == _int(SPECIAL_ITEM::SP_PULSE_BATTERY))
+					m_vecArray_Inven[_int(INVEN_ARRAY_TYPE::TYPE_USING_BASIC)]->Get_Item_Info(i)->iCount = m_iNow_Potion_Count;
+		}
+	}
+	_bool Use_Potion();
+
+	// 암 관련
+	void Add_Arm_Gauge(_float fAdd)
+	{
+		_int iIndex = m_vecEquip_ItemInfo[_int(EQUIP_SLOT::EQUIP_RESION_ARM)]->iIndex;
+		ITEM* pItem = m_vecArray_Inven[_int(INVEN_ARRAY_TYPE::TYPE_REASON_ARM)]->Get_Item_Info(iIndex);
+		if (pItem == nullptr)
+			return;
+
+		if (fAdd > 0)
+			pItem->Arm_Gauge_Now = min(pItem->Arm_Gauge_Now + fAdd, pItem->Arm_Gauge_Max);
+		else if ((fAdd < 0) && (abs(fAdd) <= pItem->Arm_Gauge_Now))
+			pItem->Arm_Gauge_Now = max(pItem->Arm_Gauge_Now + fAdd, 0.f);
+	}
+	_float Get_Arm_Gauge_Ratio()
+	{
+		_int iIndex = m_vecEquip_ItemInfo[_int(EQUIP_SLOT::EQUIP_RESION_ARM)]->iIndex;
+		ITEM* pItem = m_vecArray_Inven[_int(INVEN_ARRAY_TYPE::TYPE_REASON_ARM)]->Get_Item_Info(iIndex);
+		if (pItem == nullptr)
+			return 0.f;
+
+		return pItem->Arm_Gauge_Now / pItem->Arm_Gauge_Max;
+	}
+
+
+
+
 
 	
 	// 외부에서 아이템 매니저에 필요한 것이 뭐가 있나? 
@@ -382,6 +477,14 @@ private:
 
 	// 보유 코인 
 	_int m_iCoin = 10000;
+
+	// 포션 관련 
+	_int m_iNow_Potion_Count = 3;
+	_int m_iMax_Potion_Count = 5;
+	_float m_fNow_Potion_Gauge = 0.f;
+	_float m_fMax_Potion_Gauge = 1000.f;
+
+
 
 public:
 	static CItem_Manager* Create(CGameInstance* pGameInstance);

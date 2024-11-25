@@ -39,6 +39,7 @@ HRESULT CUIPage_Ortho::Initialize_Prototype()
 	Initialize_Ortho_Info();
 
 	m_bRender = false;
+	m_fTopPartMove = 1.f;
 
 	return S_OK;
 }
@@ -68,6 +69,10 @@ void CUIPage_Ortho::Late_Update(_float fTimeDelta)
 	m_fTimeDelta = fTimeDelta;
 	CheckHost(fTimeDelta);
 	__super::Late_Update(fTimeDelta);
+
+	Render_Ortho_UI();
+
+
 }
 
 HRESULT CUIPage_Ortho::Render()
@@ -121,7 +126,7 @@ void CUIPage_Ortho::Register_Pointer_Into_OrthoUIPage(UI_ORTHO_OBJ_TYPE eType, v
 	m_Ortho_Host_list.push_back(pNew);
 }
 
-HRESULT CUIPage_Ortho::Render_Ortho_UI(CUIRender_Client* pRender_Client)
+HRESULT CUIPage_Ortho::Render_Ortho_UI()
 {
 	// 여기서 렌더 해야 함
 	
@@ -144,13 +149,13 @@ HRESULT CUIPage_Ortho::Render_Ortho_UI(CUIRender_Client* pRender_Client)
 		{
 			if ((eType == PART_GROUP::GROUP_HP_COUNT) || (eType == PART_GROUP::GROUP_HP_FILL))
 				m_vecPart[0]->fPosition = { m_fX, m_fY };
-		
 
 			__super::UpdatePart_ByIndex(iter, m_fTimeDelta);
 
-			
+			/*if (eType != PART_GROUP::GROUP_HP_COUNT)
+				m_vecPart[iter]->fPosition = { m_vecPart[iter]->fPosition.x + m_fViewWidth * 0.5f, m_vecPart[iter]->fPosition.y - m_fViewHeight * 0.5f };*/
 
-			pRender_Client->Render_Part(*m_vecPart[iter], *this, false);
+			__super::Input_Render_Info(*m_vecPart[iter]);
 		}
 
 		Safe_Delete(pRender);
@@ -290,8 +295,8 @@ _bool CUIPage_Ortho::Make_OrthoGraphy_Position(CGameObject* pHost, PART_GROUP eG
 	fPosition->y = fResult.y / fResult.w;
 
 	// 스크린 좌표로 변환
-	fPosition->x = _float((fPosition->x + 1.f) * 0.5) * 1280.f;
-	fPosition->y = _float((1.f - fPosition->y) * 0.5) * 720.f;
+	fPosition->x = ((fPosition->x + 1.f) * 0.5f) * 1280.f;
+	fPosition->y = ((1.f - fPosition->y) * 0.5f) * 720.f;
 
 	return true;
 }
@@ -299,7 +304,8 @@ _bool CUIPage_Ortho::Make_OrthoGraphy_Position(CGameObject* pHost, PART_GROUP eG
 _float CUIPage_Ortho::Check_Distance_From_Cam(CGameObject* pHost)
 {
 	_Vec4 vDistance = pHost->Get_Transform()->Get_State(CTransform::STATE_POSITION) - m_pGameInstance->Get_CamPosition_Vec4();
-	return (_float)sqrt(pow(vDistance.x, 2) + pow(vDistance.y, 2) + pow(vDistance.z, 2));
+
+	return _float(sqrt(pow(vDistance.x, 2) + pow(vDistance.y, 2) + pow(vDistance.z, 2)));
 }
 
 

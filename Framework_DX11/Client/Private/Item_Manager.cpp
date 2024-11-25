@@ -30,6 +30,8 @@ ITEM_RESULT CItem_Manager::AddNewItem_Inven(_uint iItemIndex, _uint iCount)
 
 	m_vecArray_Inven[iInvenSlotIndex]->Input_Item(NewItem, iCount);
 
+	GET_GAMEINTERFACE->Input_Drop_Item_Info(iItemIndex, iCount);
+
 	return ITEM_RESULT::RESULT_SUCCESS;
 }
 
@@ -91,12 +93,28 @@ ITEM_RESULT CItem_Manager::UseItem_Equip(EQUIP_SLOT eSlot, _uint iCount)
 	if(eArray == INVEN_ARRAY_TYPE::TYPE_END)
 		return ITEM_RESULT::RESULT_INVALID;
 
-	return m_vecArray_Inven[_uint(eArray)]->Use_Item(iIndex, iCount);
+	if (m_vecArray_Inven[_uint(eArray)]->Get_Item_Info(iIndex)->iItem_Index == _int(SPECIAL_ITEM::SP_PULSE_BATTERY))
+	{
+		if (Use_Potion())
+			return ITEM_RESULT::RESULT_SUCCESS;
+		else
+			return ITEM_RESULT::RESULT_INVALID;
+	}
+	else
+		return m_vecArray_Inven[_uint(eArray)]->Use_Item(iIndex, iCount);
 }
 
 ITEM_RESULT CItem_Manager::UseItem_Inven(INVEN_ARRAY_TYPE eIndex, _uint iIndex, _uint iCount)
 {
-	return m_vecArray_Inven[_uint(eIndex)]->Use_Item(iIndex, iCount);
+	if (m_vecArray_Inven[_uint(eIndex)]->Get_Item_Info(iIndex)->iItem_Index == _int(SPECIAL_ITEM::SP_PULSE_BATTERY))
+	{
+		if (Use_Potion())
+			return ITEM_RESULT::RESULT_SUCCESS;
+		else
+			return ITEM_RESULT::RESULT_INVALID;
+	}
+	else
+		return m_vecArray_Inven[_uint(eIndex)]->Use_Item(iIndex, iCount);
 }
 
 ITEM_RESULT CItem_Manager::Remove_Item_Inven(INVEN_ARRAY_TYPE eIndex, _uint iIndex)
@@ -123,6 +141,21 @@ CPlayer::WEAPON_TYPE CItem_Manager::Get_Weapon_Model_Index()
 	return CPlayer::WEAPON_TYPE::WEP_END;
 }
 
+
+_bool CItem_Manager::Use_Potion()
+{
+	if (m_iNow_Potion_Count <= 0)
+		return false;
+
+	--m_iNow_Potion_Count;
+	for (_int i = 0; i < 5; ++i)
+		if (m_vecArray_Inven[_int(INVEN_ARRAY_TYPE::TYPE_USING_BASIC)]->Get_Item_Info(i)->iItem_Index == _int(SPECIAL_ITEM::SP_PULSE_BATTERY))
+			m_vecArray_Inven[_int(INVEN_ARRAY_TYPE::TYPE_USING_BASIC)]->Get_Item_Info(i)->iCount = m_iNow_Potion_Count;
+
+	GET_GAMEINTERFACE->Add_Stat_Normal(STAT_NORMAL::STAT_GAUGE_HP, 100.f);
+
+	return true;
+}
 
 HRESULT CItem_Manager::Initialize_Item()
 {
@@ -241,6 +274,10 @@ HRESULT CItem_Manager::Initialize_Item()
 			if (iBefore < stoi(iter[0]))
 			{
 				AddNewItem_Inven(stoi(iter[2]), stoi(iter[3]));
+
+				if (stoi(iter[2]) == _int(SPECIAL_ITEM::SP_PULSE_BATTERY))
+					m_iNow_Potion_Count = stoi(iter[3]);
+
 				++iBefore;
 				continue;
 			}

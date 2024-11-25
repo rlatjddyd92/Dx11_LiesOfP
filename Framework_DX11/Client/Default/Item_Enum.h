@@ -162,5 +162,12 @@ enum class ABLITY_TYPE
 };
 
 
+enum class SPECIAL_ITEM
+{
+	// 특수 기능의 아이템 인덱스 기록 
+	SP_PULSE_BATTERY = 284, // 펄스 전지, 충전 수치 따로 존재하며 사용 시, 체력 회복 
+	SP_END
+};
+
 
 

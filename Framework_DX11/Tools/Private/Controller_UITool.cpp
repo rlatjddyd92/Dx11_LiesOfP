@@ -273,16 +273,17 @@ void CController_UITool::UIPart_Edit()
 		}
 		
 
-		ImGui::DragFloat("R", &pNow->fTextureColor.x);
+		ImGui::DragFloat("R", &pNow->fTextureColor.x, 0.01f);
 		ImGui::SameLine();
-		ImGui::DragFloat("G", &pNow->fTextureColor.y);
+		ImGui::DragFloat("G", &pNow->fTextureColor.y, 0.01f);
 		ImGui::SameLine();
-		ImGui::DragFloat("B", &pNow->fTextureColor.z);
+		ImGui::DragFloat("B", &pNow->fTextureColor.z, 0.01f);
 		ImGui::SameLine();
-		ImGui::DragFloat("A", &pNow->fTextureColor.w);
+		ImGui::DragFloat("A", &pNow->fTextureColor.w, 0.01f);
 
 		ImGui::SameLine();
 		ImGui::Checkbox("Multiple", &pNow->bTexture_Color_Multiple);
+		ImGui::DragFloat("Alpha_Strash", &pNow->fStrash_Alpha,0.01f);
 
 		ImGui::Checkbox("Turn", &pNow->bTurn);
 
