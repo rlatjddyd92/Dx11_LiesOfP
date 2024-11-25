@@ -28,13 +28,13 @@ public:
 
 public:
 	enum COLLIDERTYPE { TYPE_LEFTHAND, TYPE_RIGHTHAND, TYPE_END };
-	enum EXCOLLIDER { LEG_LEFT, LEG_RIGHT, LOWERBODY, LEG_END };
+	enum EXCOLLIDER { LEG_LEFT, LEG_RIGHT, LOWERBODY, COLLTYPE_END };
 
 public:
 	enum SIMONMANUS_P1_STATE {
 		ATK_AVOIDSWING = MONSTER_STATE_END, ATK_CHASINGSWING, ATK_JUMPTOSWING, ATK_STAMP
 		, ATK_STING, ATK_HIGHJUMPFALL, ATK_SWINGDOWN_L, ATK_SWINGDOWN_R
-		, ATK_SWIPMULT_L, ATK_SWIPMULT_R, ATK_SWINGMULTIPLE
+		, ATK_SWIPMULT_L, ATK_SWIPMULT_R, ATK_SWINGMULTIPLE, ATK_CHARGE_SWINGDOWN
 	};
 
 	enum SIMONMANUS_P2_STATE {
@@ -68,13 +68,13 @@ private:
 	class CFsm*		m_pExtraFsmCom = { nullptr };	//2페이즈 fsm
 	class CModel*	m_pExtraModelCom = { nullptr };	//2페이즈 model
 	
-	class CCollider* m_EXCollider[LEG_END] = { nullptr, nullptr };
+	class CCollider* m_EXCollider[COLLTYPE_END] = { nullptr, nullptr };
 
 	_bool			m_isChanged = { false };
 
 private:
-	virtual void	Active_CurrentWeaponCollider(_float fDamageRatio);
-	virtual void	DeActive_CurretnWeaponCollider();
+	virtual void	Active_CurrentWeaponCollider(_float fDamageRatio, _uint iCollIndex = 0);
+	virtual void	DeActive_CurretnWeaponCollider(_uint iCollIndex = 0);
 
 	HRESULT Ready_Components();
 	HRESULT Ready_FSM();

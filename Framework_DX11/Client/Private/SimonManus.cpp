@@ -26,6 +26,7 @@
 #include "State_SimonManusP1_SwipMultiple_L.h"
 #include "State_SimonManusP1_SwingDown_Swing_R.h"
 #include "State_SimonManusP1_SwingDown_Swing_L.h"
+#include "State_SimonManusP1_Charge_SwingDown.h"
 #pragma endregion
 
 #pragma region Phase2
@@ -98,6 +99,19 @@ HRESULT CSimonManus::Initialize(void* pArg)
 	if (FAILED(Ready_Weapon()))
 		return E_FAIL;
 
+	m_strObjectTag = TEXT("Monster");
+	m_pColliderCom->Set_Owner(this);
+
+	for (_uint i = 0; i < EXCOLLIDER::COLLTYPE_END; ++i)
+	{
+		m_EXCollider[i]->Set_Owner(this);
+	}
+
+	m_fHp = 100.f;
+	m_fAtk = 10.f;
+	m_fDefence = 5.f;
+	m_fStemina = 100.f;
+
 	m_pWeapon->DeActive_Collider();
 
 	return S_OK;
@@ -112,7 +126,6 @@ void CSimonManus::Priority_Update(_float fTimeDelta)
 
 void CSimonManus::Update(_float fTimeDelta)
 {
-
 	m_pFsmCom->Update(fTimeDelta);
 
 	m_vCurRootMove = m_pModelCom->Play_Animation(fTimeDelta, nullptr);
@@ -171,19 +184,14 @@ void CSimonManus::Late_Update(_float fTimeDelta)
 
 	m_pGameInstance->Add_RenderObject(CRenderer::RG_NONBLEND, this);
 
-	for (_uint i = 0; i < TYPE_END; ++i)
-	{
-		//if (m_bColliderCtrs[i] != true)
-		//{
-		//	m_pColliderObject[i]->Late_Update(fTimeDelta);
-		//}
-	}
 	m_pWeapon->Late_Update(fTimeDelta);
-	for (_uint i = 0; i < LEG_END; ++i)
+
+	m_pGameInstance->Add_ColliderList(m_pColliderCom);
+
+	for (_uint i = 0; i < EXCOLLIDER::COLLTYPE_END; ++i)
 	{
 		m_pGameInstance->Add_ColliderList(m_EXCollider[i]);
 	}
-	m_pGameInstance->Add_ColliderList(m_pColliderCom);
 }
 
 HRESULT CSimonManus::Render()
@@ -202,12 +210,12 @@ HRESULT CSimonManus::Render()
 	return S_OK;
 }
 
-void CSimonManus::Active_CurrentWeaponCollider(_float fDamageRatio)
+void CSimonManus::Active_CurrentWeaponCollider(_float fDamageRatio, _uint iCollIndex)
 {
 	m_pWeapon->Active_Collider(fDamageRatio);
 }
 
-void CSimonManus::DeActive_CurretnWeaponCollider()
+void CSimonManus::DeActive_CurretnWeaponCollider(_uint iCollIndex)
 {
 	m_pWeapon->DeActive_Collider();
 }
@@ -301,8 +309,9 @@ HRESULT CSimonManus::Ready_FSM()
 	m_pFsmCom->Add_State(CState_SimonManusP1_SwingDown_Swing_L::Create(m_pFsmCom, this, ATK_SWINGDOWN_L, &Desc));
 	m_pFsmCom->Add_State(CState_SimonManusP1_JumpToSwing::Create(m_pFsmCom, this, ATK_JUMPTOSWING, &Desc));
 	m_pFsmCom->Add_State(CState_SimonManusP1_HighJumpFall::Create(m_pFsmCom, this, ATK_HIGHJUMPFALL, &Desc));
+	m_pFsmCom->Add_State(CState_SimonManusP1_Charge_SwingDown::Create(m_pFsmCom, this, ATK_CHARGE_SWINGDOWN, &Desc));
 
-
+	
 	m_pFsmCom->Set_State(IDLE);
 #pragma endregion
 
@@ -421,7 +430,7 @@ CGameObject* CSimonManus::Clone(void* pArg)
 
 void CSimonManus::Free()
 {
-	for (_uint i = 0; i < LEG_END; ++i)
+	for (_uint i = 0; i < COLLTYPE_END; ++i)
 	{
 		Safe_Release(m_EXCollider[i]);
 	}

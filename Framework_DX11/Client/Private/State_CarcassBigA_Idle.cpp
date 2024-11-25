@@ -12,7 +12,6 @@ CState_CarcassBigA_Idle::CState_CarcassBigA_Idle(CFsm* pFsm, CMonster* pMonster)
 
 HRESULT CState_CarcassBigA_Idle::Initialize(_uint iStateNum, void* pArg)
 {
-   //m_iAnimation_Idle = m_pMonster->Get_Model()->Get_AnimationIndex("Kurama_Idle_Loop");
     m_iStateNum = iStateNum;
     m_fIdleDuration = 3.3f;
 
@@ -86,6 +85,7 @@ void CState_CarcassBigA_Idle::Calc_Act_Attack()
     if (m_iAtkCnt < 3.f)
     {
         _int iAtkNum = rand() % 6;
+        iAtkNum = 6;
         switch (iAtkNum)
         {
         case 0:
@@ -110,6 +110,10 @@ void CState_CarcassBigA_Idle::Calc_Act_Attack()
 
         case 5:
             m_pMonster->Change_State(CCarcassBigA::WHEELWIND);
+            break;
+
+        case 6:
+            m_pMonster->Change_State(CCarcassBigA::ATK_IMPACT);
             break;
 
         default:

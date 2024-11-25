@@ -38,6 +38,7 @@ private:
     _bool               m_isPrevChance = { false };
     _bool               m_isActivatedSpecial = { false };
 
+    _bool* m_pRootMoveCtr = { nullptr };
     _bool* m_pResetRootMove = { nullptr };
 
 private:

@@ -5,12 +5,12 @@
 #include "ColliderObject.h"
 
 CColliderObject::CColliderObject(ID3D11Device* pDevice, ID3D11DeviceContext* pContext)
-	: CGameObject{ pDevice, pContext }
+	: CWeapon{ pDevice, pContext }
 {
 }
 
 CColliderObject::CColliderObject(const CColliderObject& Prototype)
-	: CGameObject{ Prototype }
+	: CWeapon{ Prototype }
 {
 }
 
@@ -21,20 +21,18 @@ HRESULT CColliderObject::Initialize_Prototype()
 
 HRESULT CColliderObject::Initialize(void* pArg)
 {
-	CGameObject::GAMEOBJECT_DESC		Desc{};
-
-	if (FAILED(__super::Initialize(&Desc)))
-		return E_FAIL;
 
 	COLIDEROBJECT_DESC* pDesc = static_cast<COLIDEROBJECT_DESC*>(pArg);
 	m_eType = pDesc->eType;
-	m_pParentTransformComMatrix = pDesc->pParentTransformComMatrix;
-	
-	m_pCombinedBoneTransformMatrix = pDesc->pCombinedBoneTransformMatrix;
-	
+
+	if (FAILED(__super::Initialize(pDesc)))
+		return E_FAIL;
 	
 	if(FAILED(Ready_Components(pDesc->pBoundingDesc, pDesc->eType)))
 		return E_FAIL;
+
+	m_fDamageAmount = pDesc->fDamageAmount;
+	m_pColliderCom->IsActive(false);
 
 	return S_OK;
 }
@@ -50,21 +48,23 @@ void CColliderObject::Update(_float fTimeDelta)
 
 void CColliderObject::Late_Update(_float fTimeDelta)
 {
-	__super::Late_Update(fTimeDelta);
+	if (!m_pColliderCom->IsActive())
+		return;
+
 	_float4x4 WorldMatrix;
-	// 
-	XMStoreFloat4x4(&WorldMatrix, XMLoadFloat4x4(m_pCombinedBoneTransformMatrix) * XMLoadFloat4x4(m_pParentTransformComMatrix));
+
+	XMStoreFloat4x4(&WorldMatrix, (*m_pSocketMatrix) * (*m_pParentMatrix));
 
 	m_pColliderCom->Update(&WorldMatrix);
 
-#ifdef _DEBUG
-	m_pGameInstance->Add_DebugObject(m_pColliderCom);
-	m_pGameInstance->Add_RenderObject(CRenderer::RG_NONBLEND, this);
-#endif
+	if (nullptr != m_pColliderCom)
+		m_pGameInstance->Add_ColliderList(m_pColliderCom);
 }
 
 HRESULT CColliderObject::Render()
 {
+	if (!m_pColliderCom->IsActive())
+		return S_OK;
 	
 #ifdef _DEBUG
 	m_pColliderCom->Render();

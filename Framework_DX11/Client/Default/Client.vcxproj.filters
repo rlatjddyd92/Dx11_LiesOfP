@@ -442,9 +442,6 @@
     <Filter Include="05.Fsm\Monster\CarcassBigA\Attack\Route\AttackRoute_3">
       <UniqueIdentifier>{de0f89ed-e0cc-4a00-8120-a518ea964014}</UniqueIdentifier>
     </Filter>
-    <Filter Include="05.Fsm\Monster\CarcassBigA\Attack\Route\AttackToute_4">
-      <UniqueIdentifier>{12670bf0-76fd-432d-9278-b73ac8212e84}</UniqueIdentifier>
-    </Filter>
     <Filter Include="02.GameObjects\10.ColliderObject">
       <UniqueIdentifier>{e0ad8f06-a0d8-4d14-8a84-d74eacc4032c}</UniqueIdentifier>
     </Filter>
@@ -624,6 +621,12 @@
 	</Filter>
     <Filter Include="97.ShaderFiles\99.UI_Shader">
       <UniqueIdentifier>{b83c9fd9-a108-45c5-8e6f-296e8b63c2da}</UniqueIdentifier>
+	</Filter>
+    <Filter Include="05.Fsm\Monster\CarcassBigA\Attack\Route\AttackRoute_4">
+      <UniqueIdentifier>{12670bf0-76fd-432d-9278-b73ac8212e84}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="05.Fsm\Monster\SimonManus\P1\Attck\Single\Charge_SwingDown">
+      <UniqueIdentifier>{05fe4e4d-e39d-4f03-82ea-5b72b6f9b0ac}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -786,9 +789,6 @@
     <ClInclude Include="..\Public\State_Player_OH_Dash.h">
       <Filter>05.Fsm\Player\OneHand\Dash</Filter>
     </ClInclude>
-    <ClInclude Include="..\Public\ColliderObject.h">
-      <Filter>02.GameObjects\10.ColliderObject</Filter>
-    </ClInclude>
     <ClInclude Include="..\Public\State_Player_Hit.h">
       <Filter>05.Fsm\Player\Common\Hit</Filter>
     </ClInclude>
@@ -942,9 +942,6 @@
     <ClInclude Include="..\Public\Lift_Door.h">
       <Filter>02.GameObjects\10.InteractObj\01.Lift\Lift_Door</Filter>
     </ClInclude>
-    <ClInclude Include="..\Public\ColliderObject.h">
-      <Filter>02.GameObjects\ColiderObject</Filter>
-    </ClInclude>
     <ClInclude Include="..\public\FreeCamera.h">
       <Filter>02.GameObjects\99.Camera\FreeCamera</Filter>
     </ClInclude>
@@ -976,7 +973,7 @@
       <Filter>05.Fsm\Monster\CarcassBigA\Attack\Route\AttackRoute_3</Filter>
     </ClInclude>
     <ClInclude Include="..\Public\State_CarcassBigA_AttackRoute_4.h">
-      <Filter>05.Fsm\Monster\CarcassBigA\Attack\Route\AttackToute_4</Filter>
+      <Filter>05.Fsm\Monster\CarcassBigA\Attack\Route\AttackRoute_4</Filter>
     </ClInclude>
     <ClInclude Include="..\Public\State_CarcassBigA_LOSwingRight.h">
       <Filter>05.Fsm\Monster\CarcassBigA\Attack\Single\LOSwingRight</Filter>
@@ -1136,6 +1133,13 @@
     </ClInclude>
     <ClInclude Include="..\Public\Ladder.h">
       <Filter>02.GameObjects\10.InteractObj\05.Ladder</Filter>
+	</ClInclude>
+    <ClInclude Include="..\Public\ColliderObject.h">
+      <Filter>02.GameObjects\10.ColliderObject</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Public\ColliderObject.h" />
+    <ClInclude Include="..\Public\State_SimonManusP1_Charge_SwingDown.h">
+      <Filter>05.Fsm\Monster\SimonManus\P1\Attck\Single\Charge_SwingDown</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -1267,9 +1271,6 @@
     </ClCompile>
     <ClCompile Include="..\Private\State_Player_OH_Dash.cpp">
       <Filter>05.Fsm\Player\OneHand\Dash</Filter>
-    </ClCompile>
-    <ClCompile Include="..\Private\ColliderObject.cpp">
-      <Filter>02.GameObjects\10.ColliderObject</Filter>
     </ClCompile>
     <ClCompile Include="..\Private\State_Player_Hit.cpp">
       <Filter>05.Fsm\Player\Common\Hit</Filter>
@@ -1421,9 +1422,6 @@
     <ClCompile Include="..\Private\Lift_Floor.cpp">
       <Filter>02.GameObjects\10.InteractObj\01.Lift\Lift_Floor</Filter>
     </ClCompile>
-    <ClCompile Include="..\Private\ColliderObject.cpp">
-      <Filter>02.GameObjects\ColiderObject</Filter>
-    </ClCompile>
     <ClCompile Include="..\private\FreeCamera.cpp">
       <Filter>02.GameObjects\99.Camera\FreeCamera</Filter>
     </ClCompile>
@@ -1458,7 +1456,7 @@
       <Filter>05.Fsm\Monster\CarcassBigA\Attack\Route\AttackRoute_3</Filter>
     </ClCompile>
     <ClCompile Include="..\Private\State_CarcassBigA_AttackRoute_4.cpp">
-      <Filter>05.Fsm\Monster\CarcassBigA\Attack\Route\AttackToute_4</Filter>
+      <Filter>05.Fsm\Monster\CarcassBigA\Attack\Route\AttackRoute_4</Filter>
     </ClCompile>
     <ClCompile Include="..\Private\State_CarcassBigA_LOSwingRight.cpp">
       <Filter>05.Fsm\Monster\CarcassBigA\Attack\Single\LOSwingRight</Filter>
@@ -1618,6 +1616,13 @@
     </ClCompile>
     <ClCompile Include="..\Private\Ladder.cpp">
       <Filter>02.GameObjects\10.InteractObj\05.Ladder</Filter>
+	</ClCompile>
+    <ClCompile Include="..\Private\ColliderObject.cpp">
+      <Filter>02.GameObjects\10.ColliderObject</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Private\ColliderObject.cpp" />
+    <ClCompile Include="..\Private\State_SimonManusP1_Charge_SwingDown.cpp">
+      <Filter>05.Fsm\Monster\SimonManus\P1\Attck\Single\Charge_SwingDown</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

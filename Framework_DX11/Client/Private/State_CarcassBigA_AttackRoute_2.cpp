@@ -85,6 +85,8 @@ void CState_CarcassBigA_AttackRoute_2::Update(_float fTimeDelta)
         }
     }
 
+    Collider_Check();
+
 }
 
 void CState_CarcassBigA_AttackRoute_2::End_State()
@@ -125,6 +127,45 @@ _bool CState_CarcassBigA_AttackRoute_2::End_Check()
     }
 
     return bEndCheck;
+}
+
+void CState_CarcassBigA_AttackRoute_2::Collider_Check()
+{
+    _double CurTrackPos = m_pMonster->Get_CurrentTrackPos();
+
+    if (m_iRouteTrack == 0)
+    {
+        if (CurTrackPos >= 110.f && CurTrackPos <= 130.f)
+        {
+            m_pMonster->Active_CurrentWeaponCollider(1, 1);
+        }
+        else
+        {
+            m_pMonster->DeActive_CurretnWeaponCollider(1);
+        }
+    }
+    else if (m_iRouteTrack == 1)
+    {
+        if (CurTrackPos >= 90.f && CurTrackPos <= 105.f)
+        {
+            m_pMonster->Active_CurrentWeaponCollider(1, 1);
+        }
+        else
+        {
+            m_pMonster->DeActive_CurretnWeaponCollider(1);
+        }
+    }
+    else
+    {
+        if (CurTrackPos >= 115.f && CurTrackPos <= 140.f)
+        {
+            m_pMonster->Active_CurrentWeaponCollider(1, 1);
+        }
+        else
+        {
+            m_pMonster->DeActive_CurretnWeaponCollider(1);
+        }
+    }
 }
 
 CState_CarcassBigA_AttackRoute_2* CState_CarcassBigA_AttackRoute_2::Create(CFsm* pFsm, CMonster* pMonster, _uint iStateNum, void* pArg)

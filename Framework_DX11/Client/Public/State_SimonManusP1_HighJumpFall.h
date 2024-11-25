@@ -40,7 +40,8 @@ private:
     _float              m_fParalizeTime = { 0.f };
     _float              m_fParalizeDuration = { 3.f };
 
-    _bool* m_pResetRootMove = { nullptr };
+    _bool*              m_pRootMoveCtr = { nullptr };
+    _bool*              m_pResetRootMove = { nullptr };
 
     _uint               m_iAnimCnt = {};
 

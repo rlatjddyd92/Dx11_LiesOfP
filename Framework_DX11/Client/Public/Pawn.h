@@ -31,6 +31,7 @@ public:
 	virtual HRESULT Render_Height() { return S_OK; }
 	virtual HRESULT Render_LightDepth() { return S_OK; }
 
+	virtual _bool Calc_DamageGain(_float fAtkDmg);
 public:
 	virtual void OnCollisionEnter(CGameObject* pOther) override;
 	virtual void OnCollisionStay(CGameObject* pOther) override;
@@ -65,6 +66,11 @@ protected:
 
 	_Vec3				m_vVelocity = {};
 
+						//스테이터스 부분
+	_float				m_fHp{};
+	_float				m_fAtk{};
+	_float				m_fDefence{};
+	_float				m_fStemina{};
 protected:
 	HRESULT Bind_WorldViewProj();
 

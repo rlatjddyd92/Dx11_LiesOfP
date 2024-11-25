@@ -39,9 +39,13 @@ public:
 	void		Set_UpTargetPos();
 	void		Look_Player();
 	_float		Calc_Distance_XZ();
-	virtual void	Active_CurrentWeaponCollider(_float fDamageRatio);
-	virtual void	DeActive_CurretnWeaponCollider();
+	virtual void	Active_CurrentWeaponCollider(_float fDamageRatio, _uint iCollIndex = 0);
+	virtual void	DeActive_CurretnWeaponCollider(_uint iCollIndex = 0);
 
+public:
+	virtual void OnCollisionEnter(CGameObject* pOther) override;
+	virtual void OnCollisionStay(CGameObject* pOther) override;
+	virtual void OnCollisionExit(CGameObject* pOther) override;
 
 protected:
 	_Vec4		m_vRootMoveStack{};

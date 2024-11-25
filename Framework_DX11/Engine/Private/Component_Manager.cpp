@@ -62,7 +62,7 @@ void CComponent_Manager::Clear(_uint iLevelIndex)
 
 	m_pPrototypes[iLevelIndex].clear();
 	m_pModelPrototypes[iLevelIndex].clear();
-}
+} 
 
 CComponent * CComponent_Manager::Find_Prototype(_uint iLevelIndex, const _wstring & strPrototypeTag)
 {

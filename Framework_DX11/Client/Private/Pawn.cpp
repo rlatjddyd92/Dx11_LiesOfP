@@ -104,6 +104,19 @@ HRESULT CPawn::Render()
 	return S_OK;
 }
 
+_bool CPawn::Calc_DamageGain(_float fAtkDmg)
+{
+
+	//if () 피해를 입는지에관한 판단, 무적인지등
+	//{
+	//
+	//}		//피해를 입는다면 true 반환, 
+	
+	m_fHp -= (fAtkDmg * ((100 - m_fDefence) / 100));
+
+	return true;
+}
+
 void CPawn::OnCollisionEnter(CGameObject* pOther)
 {
 }
