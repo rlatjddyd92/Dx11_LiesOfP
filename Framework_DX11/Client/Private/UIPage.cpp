@@ -161,7 +161,7 @@ void CUIPage::UpdatePart_ByIndex(_int Index, _float fTimeDelta)
 		m_vecPart[Index]->MovePart(m_vecPart[m_vecPart[Index]->iParentPart_Index]->fPosition, fTimeDelta);
 }
 
-void CUIPage::Input_Render_Info(UPART& Part)
+void CUIPage::Input_Render_Info(UPART& Part, SCROLL_AREA eArea)
 {
 	if (Part.iTexture_Index < 0)
 		if ((Part.iFontIndex < 0) || (Part.iFontIndex >= _int(UI_FONT::FONT_END)))
@@ -194,6 +194,8 @@ void CUIPage::Input_Render_Info(UPART& Part)
 	pNew->vPosition = Part.fPosition;
 	pNew->vSize = Part.fSize;
 	pNew->fAlpha_Strash = Part.fStrash_Alpha;
+
+	pNew->eArea = eArea;
 
 	if (Part.iMoveType == _int(MOVETYPE::TYPE_BAR))
 		pNew->vSize = Part.GetBarSize();

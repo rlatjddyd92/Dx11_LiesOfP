@@ -203,7 +203,7 @@ protected:
 
 	void UpdatePart_ByIndex(_int Index, _float fTimeDelta);
 
-	void Input_Render_Info(UPART& Part);
+	void Input_Render_Info(UPART& Part, SCROLL_AREA eArea = SCROLL_AREA::SCROLL_NONE);
 
 
 

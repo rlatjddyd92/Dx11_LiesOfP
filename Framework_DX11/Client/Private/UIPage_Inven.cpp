@@ -59,6 +59,8 @@ void CUIPage_Inven::Update(_float fTimeDelta)
 
 void CUIPage_Inven::Late_Update(_float fTimeDelta)
 {
+	
+	
 	for (auto& iter : m_vec_Group_Ctrl)
 		__super::UpdatePart_ByControl(iter);
 
@@ -73,6 +75,17 @@ void CUIPage_Inven::Late_Update(_float fTimeDelta)
 		Update_Array_Position(fTimeDelta);
 	if (m_bSlide_Active)
 		Update_Slide(fTimeDelta);
+
+	if (m_bScroll_Setting == false)
+	{
+		_Vec2 vPos = m_vecPart[__super::Get_Front_PartIndex_In_Control(_int(PART_GROUP::GROUP_ITEMINFO_FRAME))]->fPosition;
+		_Vec2 vSize = m_vecPart[__super::Get_Front_PartIndex_In_Control(_int(PART_GROUP::GROUP_ITEMINFO_FRAME))]->fSize;
+
+		GET_GAMEINTERFACE->Set_Scroll_Area(SCROLL_AREA::SCROLL_INVEN, vPos, vSize);
+		m_bScroll_Setting = true;
+	}
+
+	GET_GAMEINTERFACE->Select_Scroll_Area(SCROLL_AREA::SCROLL_NONE);
 	
 	m_IsTab_Change = false;
 }
@@ -281,7 +294,7 @@ void CUIPage_Inven::Update_Array_Position(_float fTimeDelta)
 				m_vecPart[iter]->fPosition.y += fAdjust_Y + (fAdjust_Cell * iTitle);
 				m_vecPart[iter]->bRender = true;
 				if (fStartY == -1.f) fStartY = m_vecPart[iter]->fPosition.y - m_vecPart[iter]->fSize.y * 0.5;
-				__super::Input_Render_Info(*m_vecPart[iter]);
+				__super::Input_Render_Info(*m_vecPart[iter], SCROLL_AREA::SCROLL_INVEN);
 			}
 
 			_int iText = __super::Get_Front_PartIndex_In_Control(_int(PART_GROUP::GROUP_ARRAY_TEXT));
@@ -289,7 +302,7 @@ void CUIPage_Inven::Update_Array_Position(_float fTimeDelta)
 			m_vecPart[iText]->strText = strArrayTitle;
 			m_vecPart[iText]->fPosition.y += fAdjust_Y + (fAdjust_Cell * iTitle);
 			m_vecPart[iText]->bRender = true;
-			__super::Input_Render_Info(*m_vecPart[iText]);
+			__super::Input_Render_Info(*m_vecPart[iText], SCROLL_AREA::SCROLL_INVEN);
 		}
 
 		iTitle = 0;
@@ -353,7 +366,7 @@ void CUIPage_Inven::Update_Array_Position(_float fTimeDelta)
 				m_vecPart[*iter]->fPosition.y += fAdjust_Y;
 
 				if (m_vecPart[*iter]->bRender == true)
-					__super::Input_Render_Info(*m_vecPart[*iter]);
+					__super::Input_Render_Info(*m_vecPart[*iter], SCROLL_AREA::SCROLL_INVEN);
 			}
 
 			if (j % 5 == 4)
@@ -408,7 +421,7 @@ void CUIPage_Inven::Update_Array_Position_Weapon(_float fTimeDelta)
 		m_vecPart[iter]->fPosition.y += fAdjust_Y;
 		m_vecPart[iter]->bRender = true;
 		if (fStartY == -1.f) fStartY = m_vecPart[iter]->fPosition.y - m_vecPart[iter]->fSize.y * 0.5;
-		__super::Input_Render_Info(*m_vecPart[iter]);
+		__super::Input_Render_Info(*m_vecPart[iter], SCROLL_AREA::SCROLL_INVEN);
 	}
 
 	_int iText = __super::Get_Front_PartIndex_In_Control(_int(PART_GROUP::GROUP_ARRAY_TEXT));
@@ -416,7 +429,7 @@ void CUIPage_Inven::Update_Array_Position_Weapon(_float fTimeDelta)
 	m_vecPart[iText]->strText = strArrayTitle;
 	m_vecPart[iText]->fPosition.y += fAdjust_Y;
 	m_vecPart[iText]->bRender = true;
-	__super::Input_Render_Info(*m_vecPart[iText]);
+	__super::Input_Render_Info(*m_vecPart[iText], SCROLL_AREA::SCROLL_INVEN);
 
 	_int iTitle = 0;
 
@@ -471,7 +484,7 @@ void CUIPage_Inven::Update_Array_Position_Weapon(_float fTimeDelta)
 		{
 			m_vecPart[*iter]->fPosition.y += fAdjust_Y;
 			if (m_vecPart[*iter]->bRender == true)
-				__super::Input_Render_Info(*m_vecPart[*iter]);
+				__super::Input_Render_Info(*m_vecPart[*iter], SCROLL_AREA::SCROLL_INVEN);
 		}
 
 		if (j % 5 == 4)
@@ -516,7 +529,7 @@ void CUIPage_Inven::Update_Array_Position_Weapon_Heroic(_float fTimeDelta, _floa
 		m_vecPart[iter]->fPosition.y += fAdjust_Y + (fAdjust_Cell * iRowCount);
 		m_vecPart[iter]->bRender = true;
 
-		__super::Input_Render_Info(*m_vecPart[iter]);
+		__super::Input_Render_Info(*m_vecPart[iter], SCROLL_AREA::SCROLL_INVEN);
 	}
 
 	_int iText = __super::Get_Front_PartIndex_In_Control(_int(PART_GROUP::GROUP_ARRAY_TEXT));
@@ -524,7 +537,7 @@ void CUIPage_Inven::Update_Array_Position_Weapon_Heroic(_float fTimeDelta, _floa
 	m_vecPart[iText]->strText = strArrayTitle;
 	m_vecPart[iText]->fPosition.y += fAdjust_Y + (fAdjust_Cell * iRowCount);
 	m_vecPart[iText]->bRender = true;
-	__super::Input_Render_Info(*m_vecPart[iText]);
+	__super::Input_Render_Info(*m_vecPart[iText], SCROLL_AREA::SCROLL_INVEN);
 
 	
 	
@@ -577,7 +590,7 @@ void CUIPage_Inven::Update_Array_Position_Weapon_Heroic(_float fTimeDelta, _floa
 		{
 			m_vecPart[*iter]->fPosition.y += fAdjust_Y;
 			if (m_vecPart[*iter]->bRender == true)
-				__super::Input_Render_Info(*m_vecPart[*iter]);
+				__super::Input_Render_Info(*m_vecPart[*iter], SCROLL_AREA::SCROLL_INVEN);
 		}
 
 		if (j % 5 == 4)
@@ -655,6 +668,8 @@ void CUIPage_Inven::Activate_Slide(_float fData_Size_Y)
 
 	 m_vecPart[__super::Get_Front_PartIndex_In_Control(_int(PART_GROUP::GROUP_ITEMINFO_SLIDE_BAR))]->fRatio = m_fSlide_Ratio;
 	 m_vecPart[__super::Get_Front_PartIndex_In_Control(_int(PART_GROUP::GROUP_ITEMINFO_FRAME))]->fAdjust.y = m_fData_Y_Now;
+
+	 GET_GAMEINTERFACE->Set_Scroll_Y_Offset(SCROLL_AREA::SCROLL_INVEN, m_fData_Y_Max);
 }
 
 void CUIPage_Inven::deActivate_Slide()
@@ -692,6 +707,8 @@ void CUIPage_Inven::Change_Data_Y_Size(_float fSize)
 
 	m_vec_Group_Ctrl[_int(PART_GROUP::GROUP_ITEMINFO_SLIDE_BAR)]->fRatio = m_fSlide_Ratio;
 	m_vecPart[__super::Get_Front_PartIndex_In_Control(_int(PART_GROUP::GROUP_ITEMINFO_FRAME))]->fAdjust.y = -m_fData_Y_Now;
+
+	GET_GAMEINTERFACE->Set_Scroll_Y_Offset(SCROLL_AREA::SCROLL_INVEN, m_fData_Y_Max);
 }
 
 void CUIPage_Inven::Action_Slide(_float fSize)

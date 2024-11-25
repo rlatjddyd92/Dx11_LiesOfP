@@ -157,7 +157,7 @@ private:
 
 	_float m_fMouse_Y_Before = 0.f;
 
-
+	_bool m_bScroll_Setting = false;
 
 
 
@@ -171,6 +171,7 @@ private:
 	queue<RENDER*> m_queueRender; // <- 이번 프레임에 그려야 하는 내용
 
 	_bool m_IsTab_Change = false;
+
 
 
 public:

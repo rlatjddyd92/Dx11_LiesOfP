@@ -49,6 +49,8 @@ HRESULT CUIManager::Initialize_Prototype()
 	m_pUIRender_Batching = CUIRender_Batching::Create(m_pDevice, m_pContext);
 	//Safe_AddRef(m_pUIRender_Client);
 
+	m_pUIRender_Batching->Set_Scroll_Area(SCROLL_AREA::SCROLL_NONE, { m_fX,m_fY }, { m_fSizeX,m_fSizeY });
+
 	if (FAILED(Load_UIDataFile()))
 		return E_FAIL;
 

@@ -33,6 +33,7 @@ public:
 
 
 
+
 private:
 	CUIManager(ID3D11Device* pDevice, ID3D11DeviceContext* pContext);
 	CUIManager(const CUIManager& Prototype);
@@ -49,6 +50,8 @@ public:
 public:
 	void Input_Render_Info(CUIRender_Batching::UIRENDER_INFO* pInfo) { m_pUIRender_Batching->Input_Render_Info(pInfo); }
 
+	void Set_Scroll_Y_Offset(SCROLL_AREA eArea, _float fOffset) { m_pUIRender_Batching->Set_Scroll_Y_Offset(eArea, fOffset); }
+
 	void Update_UIManager(_float fTimeDelta);
 	void Update_UIControl(_float fTimeDelta);
 
@@ -57,6 +60,9 @@ public:
 	_Vec2 CheckMouse(_Vec2 fPos, _Vec2 fSize);
 
 	_bool Action_InterAction(_wstring strInterName) { return m_pUIPage_Play->Action_InterAction(strInterName); }
+
+	void Set_Scroll_Area(SCROLL_AREA eArea, _Vec2 vPos, _Vec2 vSize) { m_pUIRender_Batching->Set_Scroll_Area(eArea, vPos, vSize); }
+	void Select_Scroll_Area(SCROLL_AREA eArea) { m_pUIRender_Batching->Select_Scroll_Area(eArea); }
 
 	void SetIngame(_bool bTrue) 
 	{ 

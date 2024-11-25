@@ -114,3 +114,10 @@
 		TEXT_RIGHT,
 		TEXT_END
 	};
+
+	enum class SCROLL_AREA
+	{
+		SCROLL_NONE,
+		SCROLL_INVEN,
+		SCROLL_END
+	};
