@@ -252,6 +252,7 @@ HRESULT CSimonManus::Ready_Components()
 		return E_FAIL;
 
 	m_pColliderBindMatrix[CT_LEG_LEFT] = m_pModelCom->Get_BoneCombindTransformationMatrix_Ptr(112);
+	m_pColliderBindMatrix[CT_LEG_LEFT] = m_pModelCom->Get_BoneCombindTransformationMatrix_Ptr(112);
 	m_pColliderBindMatrix[CT_LEG_RIGHT] = m_pModelCom->Get_BoneCombindTransformationMatrix_Ptr(126);
 	m_pColliderBindMatrix[CT_UPPERBODY] = m_pModelCom->Get_BoneCombindTransformationMatrix_Ptr(6);
 	m_pColliderBindMatrix[CT_LOWERBODY] = m_pModelCom->Get_BoneCombindTransformationMatrix_Ptr(5);
@@ -424,8 +425,32 @@ void CSimonManus::ChangePhase()
 
 	m_pModelCom->Play_Animation(0);		//업데이트만 한번
 
+
+	CBounding_OBB::BOUNDING_OBB_DESC			ColliderDesc{};
+
+	ColliderDesc.vExtents = _float3(0.6f, 0.3f, 0.3f);
+	ColliderDesc.vCenter = _float3(0.4f, 0.f, 0.f);
+	ColliderDesc.vAngles = _float3(0.f, 0.f, 0.f);
+
+	(m_EXCollider[LEG_LEFT])->Change_BoundingDesc(&ColliderDesc);
+	(m_EXCollider[LEG_RIGHT])->Change_BoundingDesc(&ColliderDesc);
+	 
 	m_pColliderBindMatrix[CT_LEG_LEFT] = m_pModelCom->Get_BoneCombindTransformationMatrix_Ptr(173);
 	m_pColliderBindMatrix[CT_LEG_RIGHT] = m_pModelCom->Get_BoneCombindTransformationMatrix_Ptr(187);
+
+	ColliderDesc.vExtents = _float3(0.8f, 0.6f, 0.7f);
+	ColliderDesc.vCenter = _float3(0.f, 0.f, 0.f);
+	ColliderDesc.vAngles = _float3(-0.5f, -0.3f, 0.f);
+
+	(m_EXCollider[LOWERBODY])->Change_BoundingDesc(&ColliderDesc);
+
+	ColliderDesc.vExtents = _float3(1.5f, 1.5f, 1.5f);
+	ColliderDesc.vCenter = _float3(0.f, 0.f, 0.f);
+	ColliderDesc.vAngles = _float3(0.2f, -0.2f, -0.1f);
+
+	(m_pColliderCom)->Change_BoundingDesc(&ColliderDesc);
+
+	m_pColliderBindMatrix[CT_UPPERBODY] = m_pModelCom->Get_BoneCombindTransformationMatrix_Ptr(72);
 
 	m_pWeapon->ChangeSocketMatrix(m_pModelCom->Get_BoneCombindTransformationMatrix_Ptr(46));
 
@@ -433,6 +458,7 @@ void CSimonManus::ChangePhase()
 	m_fAtk = 15.f;
 	m_fDefence = 8.f;
 	m_fStemina = 100.f;
+	m_fMaxGrogyPoint = 50.f;
 
 	m_isDead = false;
 	m_isChanged = true;

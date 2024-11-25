@@ -256,6 +256,7 @@ HRESULT CRenderer::Draw()
 
 	if (FAILED(Render_Bloom()))	// 다시 고치기
 		return E_FAIL;
+
 	if (FAILED(Render_DOF())) // DOF 추가
 		return E_FAIL;
 	if (FAILED(Render_Radial()))

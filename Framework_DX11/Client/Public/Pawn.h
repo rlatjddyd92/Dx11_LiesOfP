@@ -32,6 +32,7 @@ public:
 	virtual HRESULT Render_LightDepth() { return S_OK; }
 
 	virtual _bool Calc_DamageGain(_float fAtkDmg);
+	virtual void Get_Grory_Point(_float fGrogyPoint) { m_fGrogyPoint += fGrogyPoint; }
 public:
 	virtual void OnCollisionEnter(CGameObject* pOther) override;
 	virtual void OnCollisionStay(CGameObject* pOther) override;
@@ -71,6 +72,9 @@ protected:
 	_float				m_fAtk{};
 	_float				m_fDefence{};
 	_float				m_fStemina{};
+
+	_float				m_fGrogyPoint{};
+	_float				m_fMaxGrogyPoint{};
 protected:
 	HRESULT Bind_WorldViewProj();
 

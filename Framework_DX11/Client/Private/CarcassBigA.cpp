@@ -71,12 +71,13 @@ HRESULT CCarcassBigA::Initialize(void* pArg)
 	m_pTransformCom->LookAt(_vector{ 0, 0, -1, 0 });
 
 
-	m_vRimLightColor = { 0.7f, 0.f, 0.f, 3.f };
+	m_vRimLightColor = { 0.f, 0.f, 0.f, 0.f };
 
 	m_fHp = 500.f;
 	m_fAtk = 4.f;
 	m_fDefence = 2.f;
 	m_fStemina = 30.f;
+	m_fMaxGrogyPoint = 10.f;
 
 	return S_OK;
 }

@@ -24,6 +24,7 @@ HRESULT CState_CarcassBigA_LTSwingRight::Start_State(void* pArg)
 {
     m_pMonster->Change_Animation(AN_LTSWINGRIGHT, false, 0.1f, 0, true);
 
+    m_pMonster->Set_RimLightColor(_Vec4{ 0.9f, 0.f, 0.f, 1.f });
     return S_OK;
 }
 
@@ -40,6 +41,7 @@ void CState_CarcassBigA_LTSwingRight::Update(_float fTimeDelta)
 
 void CState_CarcassBigA_LTSwingRight::End_State()
 {
+    m_pMonster->Set_RimLightColor(_Vec4{ 0.f, 0.f, 0.f, 0.f });
 }
 
 _bool CState_CarcassBigA_LTSwingRight::End_Check()
