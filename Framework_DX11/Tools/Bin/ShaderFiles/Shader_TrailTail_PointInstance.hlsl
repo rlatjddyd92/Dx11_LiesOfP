@@ -35,7 +35,10 @@ texture2D       g_MaskTexture;
 vector			g_vCamPosition;
 
 float2          g_vTexDivide;
-float2          g_vScaling;
+
+float2          g_vStartScaling;
+float2          g_vScalingRatio;
+
 int             g_iState = 0;
 float           g_fStartRotation = 0.f;
 float           g_fAngle = 0.f;
@@ -115,24 +118,28 @@ void GS_MAIN(point GS_IN In[1], inout TriangleStream<GS_OUT> Container)
 	float3		vRight = normalize(cross(float3(0.f, 1.f, 0.f), vLook));
     float3      vUp = normalize(cross(vLook, vRight));
     
-    vRight *= In[0].vPSize.x * 0.5f * g_vScaling.x;
-    vUp *= In[0].vPSize.y * 0.5f * g_vScaling.y;
+    vRight *= In[0].vPSize.x * 0.5f;
+    vUp *= In[0].vPSize.y * 0.5f;
 
     vRight = RotateByAxis(vRight, vLook, radians(g_fStartRotation));
     vUp = RotateByAxis(vUp, vLook, radians(g_fStartRotation));
     
-    if(g_iState & STATE_GROW)
+    if (g_iState & STATE_GROW)
     {
-        vRight *= In[0].vLifeTime.y / In[0].vLifeTime.x;
-        vUp *= In[0].vLifeTime.y / In[0].vLifeTime.x;
+        vRight *= g_vStartScaling.x + (g_vScalingRatio.x * (In[0].vLifeTime.y / In[0].vLifeTime.x));
+        vUp *= g_vStartScaling.y + (g_vScalingRatio.y * (In[0].vLifeTime.y / In[0].vLifeTime.x));
+    }
+    else if (g_iState & STATE_SHRINK)
+    {
+        vRight *= g_vStartScaling.x - (g_vScalingRatio.x * (In[0].vLifeTime.y / In[0].vLifeTime.x));
+        vUp *= g_vStartScaling.y - (g_vScalingRatio.y * (In[0].vLifeTime.y / In[0].vLifeTime.x));
+    }
+    else
+    {
+        vRight *= g_vStartScaling.x;
+        vUp *= g_vStartScaling.y;
+    }
 
-    }
-    else if(g_iState & STATE_SHRINK)
-    {
-        vRight *= (1.f - In[0].vLifeTime.y / In[0].vLifeTime.x);
-        vUp *= (1.f - In[0].vLifeTime.y / In[0].vLifeTime.x);
-    }
-    
     if(g_iState & STATE_ROTATION)
     {
         float fAngle = g_fAngle;
@@ -195,24 +202,28 @@ void GS_DIR_MAIN(point GS_IN In[1], inout TriangleStream<GS_OUT> Container)
     float3 vUp = normalize(cross(vLook, vCamDir));
     float3 vRight = normalize(cross(vUp, vLook));
 	
-    vLook *= In[0].vPSize.x * 0.5f * g_vScaling.x;
-    vUp *= In[0].vPSize.y * 0.5f * g_vScaling.y;
+    vLook *= In[0].vPSize.x * 0.5f;
+    vUp *= In[0].vPSize.y * 0.5f;
 	
     vLook = RotateByAxis(vLook, vRight, radians(g_fStartRotation));
     vUp = RotateByAxis(vUp, vRight, radians(g_fStartRotation));
 
     if (g_iState & STATE_GROW)
     {
-        vLook *= In[0].vLifeTime.y / In[0].vLifeTime.x;
-        vUp *= In[0].vLifeTime.y / In[0].vLifeTime.x;
-
+        vLook *= g_vStartScaling.x + (g_vScalingRatio.x * (In[0].vLifeTime.y / In[0].vLifeTime.x));
+        vUp *= g_vStartScaling.y + (g_vScalingRatio.y * (In[0].vLifeTime.y / In[0].vLifeTime.x));
     }
     else if (g_iState & STATE_SHRINK)
     {
-        vLook *= (1.f - In[0].vLifeTime.y / In[0].vLifeTime.x);
-        vUp *= (1.f - In[0].vLifeTime.y / In[0].vLifeTime.x);
+        vLook *= g_vStartScaling.x - (g_vScalingRatio.x * (In[0].vLifeTime.y / In[0].vLifeTime.x));
+        vUp *= g_vStartScaling.y - (g_vScalingRatio.y * (In[0].vLifeTime.y / In[0].vLifeTime.x));
     }
-    
+    else
+    {
+        vLook *= g_vStartScaling.x;
+        vUp *= g_vStartScaling.y;
+    }
+
     Out[0].vPosition = float4(In[0].vPosition.xyz - vLook + vUp, 1.f);
     Out[0].vTexcoord = float2(0.f, 0.0f);
     Out[0].vLifeTime = In[0].vLifeTime;
@@ -259,50 +270,73 @@ struct PS_IN
     float4 vColor : COLOR1;
 };
 
-struct PS_OUT
-{
-    vector vColor : SV_TARGET0;
-};
-
 struct PS_EFFECT_OUT
 {
-    vector vColor : SV_TARGET0;
-    vector vDistortion : SV_TARGET1;
-    vector vBlur : SV_TARGET2;
+    vector vDiffuse : SV_TARGET0;
+    vector vBlur : SV_TARGET1;
 };
 
-PS_OUT PS_MAIN(PS_IN In)
+
+PS_EFFECT_OUT PS_MAIN(PS_IN In)
 {
-    PS_OUT Out = (PS_OUT) 0;
+    PS_EFFECT_OUT Out = (PS_EFFECT_OUT) 0;
 	
-    Out.vColor = g_DiffuseTexture.Sample(LinearSampler, In.vTexcoord);
-
-    if (Out.vColor.a <= 0.3f)
+    vector vColor = g_DiffuseTexture.Sample(LinearSampler, In.vTexcoord);
+    
+    if (vColor.a <= 0.3f)
         discard;
-
+    
     if (In.vLifeTime.y >= In.vLifeTime.x)
         discard;
-
+    
+    Out.vDiffuse = vColor;
+    Out.vBlur = vColor;
+    
     return Out;
 }
 
-PS_OUT PS_GLOW_MAIN(PS_IN In)
+PS_EFFECT_OUT PS_GLOW_MAIN(PS_IN In)
 {
-    PS_OUT Out = (PS_OUT) 0;
+    PS_EFFECT_OUT Out = (PS_EFFECT_OUT) 0;
 	
-    Out.vColor = g_DiffuseTexture.Sample(LinearSampler, In.vTexcoord);
+    vector vColor = g_DiffuseTexture.Sample(LinearSampler, In.vTexcoord);
+    
+    if (vColor.a <= 0.3f)
+        discard;
+    
+    if (In.vLifeTime.y >= In.vLifeTime.x)
+        discard;
 
-    Out.vColor.a = Out.vColor.r;
+    vColor.r = 1.f - (1 - In.vColor.r) * (1 - vColor.a);
+    vColor.g = 1.f - (1 - In.vColor.g) * (1 - vColor.a);
+    vColor.b = 1.f - (1 - In.vColor.b) * (1 - vColor.a);
 
-    if (Out.vColor.a <= 0.1f)
+    Out.vDiffuse = vColor;
+    Out.vBlur = vColor;
+    
+    return Out;
+}
+
+PS_EFFECT_OUT PS_GLOW_RGBTOA_MAIN(PS_IN In)
+{
+    PS_EFFECT_OUT Out = (PS_EFFECT_OUT) 0;
+	
+    vector vColor = g_DiffuseTexture.Sample(LinearSampler, In.vTexcoord);
+
+    vColor.a = max(vColor.r, max(vColor.g, vColor.b));
+    
+    if (vColor.a <= 0.1f)
         discard;
 
     if (In.vLifeTime.y >= In.vLifeTime.x)
         discard;
 
-    Out.vColor.r = 1.f - (1 - In.vColor.r) * (1 - Out.vColor.a);
-    Out.vColor.g = 1.f - (1 - In.vColor.g) * (1 - Out.vColor.a);
-    Out.vColor.b = 1.f - (1 - In.vColor.b) * (1 - Out.vColor.a);
+    vColor.r = 1.f - (1 - In.vColor.r) * (1 - vColor.a);
+    vColor.g = 1.f - (1 - In.vColor.g) * (1 - vColor.a);
+    vColor.b = 1.f - (1 - In.vColor.b) * (1 - vColor.a);
+
+    Out.vDiffuse = vColor;
+    Out.vBlur = vColor;
 
     return Out;
 }
@@ -339,7 +373,7 @@ technique11	DefaultTechnique
 
         VertexShader = compile vs_5_0 VS_MAIN();
         GeometryShader = compile gs_5_0 GS_DIR_MAIN();
-        PixelShader = compile ps_5_0 PS_GLOW_MAIN();
+        PixelShader = compile ps_5_0 PS_GLOW_RGBTOA_MAIN();
     }
 
 }

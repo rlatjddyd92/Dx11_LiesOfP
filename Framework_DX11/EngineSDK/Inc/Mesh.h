@@ -26,6 +26,8 @@ public:
 	VTXANIMMESH*	Get_AnimVertices() { return m_pAnimVertices; }
 	_uint*			Get_Indices() { return m_pIndices; }
 
+	void Culling(CGameInstance* pGameInstance, _Matrix worldMatrix);
+
 public:
 	virtual HRESULT Initialize_Prototype(HANDLE* pFile, const CModel* pModel, _fmatrix PreTransformMatrix);
 	virtual HRESULT Initialize_Prototype_To_Binary(HANDLE* pFile, const CModel* pModel, _fmatrix PreTransformMatrix);
@@ -35,7 +37,8 @@ public:
 	HRESULT Bind_BoneMatrices(const CModel* pModel, class CShader * pShader, const _char * pConstantName);
 	_matrix		CalcMatrix_forVtxAnim(vector<class CBone*>&	Bones	,VTXANIMMESH VtxStruct);
 	HRESULT		Create_BinaryFile(HANDLE* pFile);
-
+	_Vec3 Get_MinPos_Vertex() { return m_vMinPos; }
+	_Vec3 Get_MaxPos_Vertex() { return m_vMaxPos; }
 private:
 	_char				m_szName[MAX_PATH] = {};
 	_uint				m_iMaterialIndex = { 0 };
@@ -55,12 +58,19 @@ private:
 
 	_int*				m_pWeightsCnts = { nullptr };
 
+	//우송 최적화 (메쉬단위)
+	_Vec3				m_vMinPos = { FLT_MAX ,FLT_MAX ,FLT_MAX };	//물체의 최소 좌표 , 최대한 크게 초기화
+	_Vec3				m_vMaxPos = { -FLT_MAX ,-FLT_MAX ,-FLT_MAX };	//물체의 최대 좌표, 최대한 작게 초기화
+
+	class COctree*		m_pOctree = { nullptr };
 private:
 	HRESULT	Ready_VertexBuffer_NonAnim(HANDLE* pFile, _fmatrix PreTransformMatrix);
 	HRESULT	Ready_VertexBuffer_Anim(HANDLE* pFile, const CModel* pModel);
 
 	HRESULT	Ready_VertexBuffer_To_Binary(HANDLE* pFile);
 
+private:
+	void CalculateBoundingBox_Mesh(const _Vec3& vVertexPos);
 public:
 	static CMesh* Create(ID3D11Device* pDevice, ID3D11DeviceContext* pContext, HANDLE* pFile, const CModel* pModel, _fmatrix PreTransformMatrix);
 	static CMesh* Create_To_Binary(ID3D11Device* pDevice, ID3D11DeviceContext* pContext, HANDLE* pFile, const CModel* pModel, _fmatrix PreTransformMatrix);

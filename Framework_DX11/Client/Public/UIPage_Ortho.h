@@ -80,7 +80,7 @@ public:
 
 	void Register_Pointer_Into_OrthoUIPage(UI_ORTHO_OBJ_TYPE eType, void* pObj);
 
-	HRESULT Render_Ortho_UI(class CUIRender_Client* pRender_Client);
+	HRESULT Render_Ortho_UI();
 
 private:
 	void Initialize_Ortho_Info(); // <- 직교 UI 사용을 위한 기본 세팅을 진행한다 

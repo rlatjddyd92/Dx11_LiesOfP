@@ -106,3 +106,11 @@
 		MOUSE_NONE, // 마우스 동작 없음 
 		MOUSE_END
 	};
+
+	enum class TEXT_TYPE
+	{
+		TEXT_LEFT,
+		TEXT_CENTER,
+		TEXT_RIGHT,
+		TEXT_END
+	};

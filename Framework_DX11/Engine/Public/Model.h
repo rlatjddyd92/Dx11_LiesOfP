@@ -65,11 +65,11 @@ public:
 	virtual HRESULT Render(_uint iMeshIndex);
 	HRESULT Render_Instance(_uint iMeshIndex);
 
-	void Add_InstanceData(_Matrix WorldMatrix) { m_InstanceDatas.push_back(WorldMatrix); }
+	void Add_InstanceData(INSTANCE_DATA tInstanceData) { m_InstanceDatas.push_back(tInstanceData); }
 	void Clear_InstanceData() { m_InstanceDatas.clear(); }
 
 public:		//_bool pOut은 메인 애니메이션의 종료를 반환,				
-	_vector		Play_Animation(_float fTimeDelta, list<OUTPUT_EVKEY>* pEvKeyList = nullptr);
+	_Vec3		Play_Animation(_float fTimeDelta, list<OUTPUT_EVKEY>* pEvKeyList = nullptr);
 	//플레이 애니메이션 하위
 	void		Update_Animation(_float fTimeDelta, list<OUTPUT_EVKEY>* pEvKeyList = nullptr);
 	void		Update_Animation_Boundary(_float fTimeDelta, list<OUTPUT_EVKEY>* pEvKeyList = nullptr);
@@ -162,8 +162,12 @@ private:
 
 	_bool							m_isInstance = {};
 
-	vector<_Matrix>					m_InstanceDatas;
+	vector<INSTANCE_DATA>			m_InstanceDatas;
 	void*							m_pInstanceVertices = { nullptr };
+
+	//우송 최적화 (모델단위)
+	_Vec3							m_vMinPos = { FLT_MAX ,FLT_MAX ,FLT_MAX };	//물체의 최소 좌표 , 최대한 크게 초기화
+	_Vec3							m_vMaxPos = { -FLT_MAX ,-FLT_MAX ,-FLT_MAX };	//물체의 최대 좌표, 최대한 작게 초기화
 
 private:
 	vector<_uint>					m_UFBIndices;
@@ -176,6 +180,12 @@ public:
 	HRESULT Ready_Materials(HANDLE* pFile, const _char* pModelFilePath);
 	HRESULT Ready_Bones(HANDLE* pFile, _int iParentBoneIndex);
 	HRESULT Ready_Animations(HANDLE* pFile);
+
+public:
+	void Culling(_Matrix worldMatrix);
+
+private:
+	void CalculateBoundingBox_Model(CMesh* pMesh, _Vec3& minPos, _Vec3& maxPos ); //모델 최대, 최소 사이즈 구하기
 
 public:
 	static CModel* Create(ID3D11Device* pDevice, ID3D11DeviceContext* pContext, TYPE eType, const _char* pModelFilePath, _fmatrix PreTransformMatrix = XMMatrixIdentity(), _bool isBinaryAnimModel = false, FilePathStructStack* pStructStack = nullptr);

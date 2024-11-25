@@ -65,6 +65,7 @@ HRESULT CCollider::Initialize(void * pArg)
 		break;
 	}
 
+	m_isActive = true;
 	return S_OK;
 }
 

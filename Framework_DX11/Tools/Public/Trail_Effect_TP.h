@@ -12,7 +12,6 @@ BEGIN(Tools)
 class CTrail_Effect_TP final :public CEffect_Base
 {
 public:
-	enum SHADER_TYPE { SHADER_DEFAULT, SHADER_END };
 	typedef struct
 	{
 		_uint		iNumInstance = { 10 };
@@ -70,6 +69,8 @@ public:
 
 	void Set_Loop(_bool bLoop) override {
 		m_DefaultDesc.bLoop = bLoop;
+		if (true == bLoop)
+			Reset();
 	}
 
 public:

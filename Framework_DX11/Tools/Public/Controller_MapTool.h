@@ -73,6 +73,9 @@ private:
 	_int m_iSelectedLightIndex = { -1 };	//피킹으로 고른 조명 index	
 	_int m_iPreSelectedLightIndex = { -1 };	//피킹으로 이전 조명 index	
 	_int m_iPreSeletImage = { -1 };
+	_int m_iPreSelectedFolder = { -1 };
+
+	_bool m_bReadFolder = { false };
 
 	_uint m_iPickObject_ID = { 0 };
 	_uint m_iPre_Picked_ID={ 0 };

@@ -73,7 +73,11 @@ HRESULT CStaticObj::Render()
 
 	if (m_isInstance)
 	{
-		m_pModelCom->Add_InstanceData(m_pTransformCom->Get_WorldMatrix());
+		INSTANCE_DATA tData{};
+		tData.WorldMatrix = m_pTransformCom->Get_WorldMatrix();
+		tData.vHashColor = m_vHashColor;
+
+		m_pModelCom->Add_InstanceData(tData);
 		return S_OK;
 	}
 
@@ -119,7 +123,11 @@ HRESULT CStaticObj::Render_LightDepth()
 {
 	if (m_isInstance)
 	{
-		m_pModelCom->Add_InstanceData(m_pTransformCom->Get_WorldMatrix());
+		INSTANCE_DATA tData{};
+		tData.WorldMatrix = m_pTransformCom->Get_WorldMatrix();
+		tData.vHashColor = m_vHashColor;
+
+		m_pModelCom->Add_InstanceData(tData);
 		return S_OK;
 	}
 
@@ -158,9 +166,9 @@ HRESULT CStaticObj::Ready_Components(STATICOBJ_DESC* pNonAnimDesc)
 	_tchar szModelTag[MAX_PATH];
 	MultiByteToWideChar(CP_ACP, MB_PRECOMPOSED, pNonAnimDesc->szModelTag, MAX_PATH, szModelTag, MAX_PATH);
 
-	//유독 큰 물체 컬링 예외처리
-	if (wcscmp(szModelTag, TEXT("SM_Monastery_Floor_06")) == 0)
-		m_fCullDistance = 150.f;
+	////유독 큰 물체 컬링 예외처리
+	//if (wcscmp(szModelTag, TEXT("SM_Monastery_Floor_06")) == 0)
+	//	m_fCullDistance = 150.f;
 
 	/* FOR.Com_Shader */
 	if (FAILED(__super::Add_Component(LEVEL_STATIC, TEXT("Prototype_Component_Shader_VtxModel"),

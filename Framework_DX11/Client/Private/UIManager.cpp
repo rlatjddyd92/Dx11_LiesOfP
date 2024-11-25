@@ -33,13 +33,39 @@ HRESULT CUIManager::Initialize_Prototype()
 	if (FAILED(__super::Initialize(&Desc)))
 		return E_FAIL;
 
-	m_pUIRender_Client = CUIRender_Client::Create(m_pDevice, m_pContext);
+	// 24-22-23 김성용 : UI 전용 쉐이더 추가 
+#pragma region UI_Shader 
+	if (FAILED(m_pGameInstance->Add_Prototype(LEVEL_STATIC, TEXT("Prototype_Component_Shader_UI_Change_Color"),
+		CShader::Create(m_pDevice, m_pContext, TEXT("../Bin/ShaderFiles/Shader_UI_Change_Color.hlsl"), VTXPOSTEX::Elements, VTXPOSTEX::iNumElements))))
+		return E_FAIL;
+	if (FAILED(m_pGameInstance->Add_Prototype(LEVEL_STATIC, TEXT("Prototype_Component_Shader_UI_Multiple_Color"),
+		CShader::Create(m_pDevice, m_pContext, TEXT("../Bin/ShaderFiles/Shader_UI_Multiple_Color.hlsl"), VTXPOSTEX::Elements, VTXPOSTEX::iNumElements))))
+		return E_FAIL;
+	if (FAILED(m_pGameInstance->Add_Prototype(LEVEL_STATIC, TEXT("Prototype_Component_Shader_UI_Normal"),
+		CShader::Create(m_pDevice, m_pContext, TEXT("../Bin/ShaderFiles/Shader_UI_Normal.hlsl"), VTXPOSTEX::Elements, VTXPOSTEX::iNumElements))))
+		return E_FAIL;
+#pragma endregion
+
+	m_pUIRender_Batching = CUIRender_Batching::Create(m_pDevice, m_pContext);
 	//Safe_AddRef(m_pUIRender_Client);
 
 	if (FAILED(Load_UIDataFile()))
 		return E_FAIL;
 
 	Setting_TestPage();
+
+	m_vecTestPageInfo.resize(_int(TEST_PAGE_NAME::NAME_END));
+	for (auto& iter : m_vecTestPageInfo)
+	{
+		iter.resize(10);
+
+		for (auto& iterIndex : iter)
+			iterIndex.resize(2);
+	}
+		
+
+	m_vecTestPage_Pos.resize(_int(TEST_PAGE_NAME::NAME_END));
+	m_vecTestPage_Size.resize(_int(TEST_PAGE_NAME::NAME_END));
 
 #ifdef _DEBUG
 	m_pTestData = new TESTDATA;
@@ -74,10 +100,12 @@ void CUIManager::Late_Update(_float fTimeDelta)
 	// 렌더 최종 결정 
 	_int iCountOpen = 0;
 
-	for (auto& iter : m_vecPage)
+	m_pUIPage_Ortho->Late_Update(fTimeDelta);
+
+	for (_int i = 0; i < _int(UIPAGE::PAGE_END) - 1; ++i)
 	{
-		if (iter->GetUpdate())
-			iter->Late_Update(fTimeDelta);
+		if (m_vecPage[i]->GetUpdate())
+			m_vecPage[i]->Late_Update(fTimeDelta);
 	}
 
 	m_pGameInstance->Add_RenderObject(CRenderer::RG_UI, this);
@@ -85,21 +113,10 @@ void CUIManager::Late_Update(_float fTimeDelta)
 
 HRESULT CUIManager::Render()
 {
-	if (FAILED(m_pUIPage_Ortho->Render_Ortho_UI(m_pUIRender_Client)))
+	if (FAILED(m_pUIRender_Batching->Render()))
 		return E_FAIL;
-	
-	if (FAILED(m_pUIRender_Client->Render_UI(m_vecPage)))
-		return E_FAIL;
-
-	/*if (FAILED(m_pUIPage_Inven->Render_Inven_Array(m_pUIRender_Client)))
-		return E_FAIL;*/
-
-	// 여기에 나중에 Tooltip 내용 넣기
 
 #ifdef _DEBUG
-	if (m_iFonttest != 0)
-		if (FAILED(m_pUIRender_Client->Render_TestFont(m_iFonttest == 1)))
-			return E_FAIL;
 
 #endif // _DEBUG
 
@@ -113,6 +130,7 @@ void CUIManager::Update_UIManager(_float fTimeDelta)
 	Update(fTimeDelta);
 	Update_UIControl(fTimeDelta);
 	Late_Update(fTimeDelta);
+	Update_TestPage(fTimeDelta);
 }
 
 void CUIManager::Update_UIControl(_float fTimeDelta)
@@ -122,6 +140,12 @@ void CUIManager::Update_UIControl(_float fTimeDelta)
 
 	UIControl_Test(fTimeDelta);
 	UIControl_Common(fTimeDelta);
+}
+
+void CUIManager::Update_TestPage(_float fTimeDelta)
+{
+	
+
 }
 
 void CUIManager::UIControl_Test(_float fTimeDelta)
@@ -478,31 +502,29 @@ void CUIManager::ShowTestPage(TEST_PAGE_NAME eName, _wstring DataNameA, TEST_PAG
 	if (!m_vecTestPageOpen[iFunc])
 		return;
 
-	vector<_wstring> vecName;
-	vector<_wstring> vecValue;
-
 	if (ValueA)
-		InputTestPageInfo(&vecName, &vecValue, DataNameA, eTypeA, ValueA);
+		InputTestPageInfo(eName, DataNameA, eTypeA, ValueA,0);
 	if (ValueB)
-		InputTestPageInfo(&vecName, &vecValue, DataNameB, eTypeB, ValueB);
+		InputTestPageInfo(eName, DataNameB, eTypeB, ValueB,1);
 	if (ValueC)
-		InputTestPageInfo(&vecName, &vecValue, DataNameC, eTypeC, ValueC);
+		InputTestPageInfo(eName, DataNameC, eTypeC, ValueC,2);
 	if (ValueD)
-		InputTestPageInfo(&vecName, &vecValue, DataNameD, eTypeD, ValueD);
+		InputTestPageInfo(eName, DataNameD, eTypeD, ValueD,3);
 	if (ValueE)
-		InputTestPageInfo(&vecName, &vecValue, DataNameE, eTypeE, ValueE);
+		InputTestPageInfo(eName, DataNameE, eTypeE, ValueE,4);
 	if (ValueF)
-		InputTestPageInfo(&vecName, &vecValue, DataNameF, eTypeF, ValueF);
+		InputTestPageInfo(eName, DataNameF, eTypeF, ValueF,5);
 	if (ValueG)
-		InputTestPageInfo(&vecName, &vecValue, DataNameG, eTypeG, ValueG);
+		InputTestPageInfo(eName, DataNameG, eTypeG, ValueG,6);
 	if (ValueH)
-		InputTestPageInfo(&vecName, &vecValue, DataNameH, eTypeH, ValueH);
+		InputTestPageInfo(eName, DataNameH, eTypeH, ValueH,7);
 	if (ValueI)
-		InputTestPageInfo(&vecName, &vecValue, DataNameI, eTypeI, ValueI);
+		InputTestPageInfo(eName, DataNameI, eTypeI, ValueI,8);
 	if (ValueJ)
-		InputTestPageInfo(&vecName, &vecValue, DataNameJ, eTypeJ, ValueJ);
+		InputTestPageInfo(eName, DataNameJ, eTypeJ, ValueJ,9);
 
-	m_pUIRender_Client->Input_TestPageInfo(eName, m_vecTestPage_Pos[iFunc], m_vecTestPage_Size[iFunc], vecName, vecValue);
+
+
 }
 
 HRESULT CUIManager::Load_UIDataFile()
@@ -665,9 +687,9 @@ HRESULT CUIManager::Load_UIDataFile_Part(HANDLE handle, DWORD* dword, _int iInde
 		ReadFile(handle, &pNew->bText_Right, sizeof(_bool), dword, nullptr);
 
 		if (!pNew->bIsItem)
-			m_pUIRender_Client->Make_Texture(pNew->iTexture_Index);
+			m_pUIRender_Batching->Make_Texture(pNew->iTexture_Index);
 		else 
-			m_pUIRender_Client->Make_Texture_Item(pNew->iTexture_Index);
+			m_pUIRender_Batching->Make_Texture_Item(pNew->iTexture_Index);
 		_wstring strName = {};
 		while (true)
 		{
@@ -713,23 +735,23 @@ void CUIManager::Setting_TestPage()
 
 }
 
-void CUIManager::InputTestPageInfo(vector<_wstring>* pName, vector<_wstring>* pValue, _wstring DataNameA, TEST_PAGE_VALUE_TYPE eTypeA, const void* ValueA)
+void CUIManager::InputTestPageInfo(TEST_PAGE_NAME eName, _wstring DataNameA, TEST_PAGE_VALUE_TYPE eTypeA, const void* ValueA, _int iIndex)
 {
-	pName->push_back(DataNameA);
+	m_vecTestPageInfo[_int(eName)][iIndex][0] = DataNameA;
 
 	if (eTypeA == TEST_PAGE_VALUE_TYPE::TYPE_FLOAT)
 	{
 		_float fValue = 0.f;
 		memcpy(&fValue, ValueA, sizeof(_float));
 		_wstring strValue = to_wstring(fValue);
-		pValue->push_back(strValue);
+		m_vecTestPageInfo[_int(eName)][iIndex][1] = strValue;
 	}
 	else if (eTypeA == TEST_PAGE_VALUE_TYPE::TYPE_INT)
 	{
 		_int iValue = 0;
 		memcpy(&iValue, ValueA, sizeof(_int));
 		_wstring strValue = to_wstring(iValue);
-		pValue->push_back(strValue);
+		m_vecTestPageInfo[_int(eName)][iIndex][1] = strValue;
 	}
 	else if (eTypeA == TEST_PAGE_VALUE_TYPE::TYPE_VEC2)
 	{
@@ -740,7 +762,7 @@ void CUIManager::InputTestPageInfo(vector<_wstring>* pName, vector<_wstring>* pV
 		strValue += TEXT(" | ");
 		strTemp = to_wstring(fValue.y);
 		strValue += strTemp;
-		pValue->push_back(strValue);
+		m_vecTestPageInfo[_int(eName)][iIndex][1] = strValue;
 	}
 	else if (eTypeA == TEST_PAGE_VALUE_TYPE::TYPE_VEC3)
 	{
@@ -754,7 +776,7 @@ void CUIManager::InputTestPageInfo(vector<_wstring>* pName, vector<_wstring>* pV
 		strValue += TEXT(" | ");
 		strTemp = to_wstring(fValue.z);
 		strValue += strTemp;
-		pValue->push_back(strValue);
+		m_vecTestPageInfo[_int(eName)][iIndex][1] = strValue;
 	}
 	else if (eTypeA == TEST_PAGE_VALUE_TYPE::TYPE_VEC4)
 	{
@@ -771,8 +793,9 @@ void CUIManager::InputTestPageInfo(vector<_wstring>* pName, vector<_wstring>* pV
 		strValue += TEXT(" | ");
 		strTemp = to_wstring(fValue.w);
 		strValue += strTemp;
-		pValue->push_back(strValue);
+		m_vecTestPageInfo[_int(eName)][iIndex][1] = strValue;
 	}
+
 }
 
 void CUIManager::Open_Close_Page(UIPAGE ePage)
@@ -856,6 +879,17 @@ void CUIManager::Free()
 	m_vecTestPageOpen.clear();
 	m_vecTestPageMove.clear();
 
-	Safe_Release(m_pUIRender_Client);
+	Safe_Release(m_pUIRender_Batching);
+
+	for (auto& iter : m_vecTestPageInfo)
+	{
+		for (auto& iterIndex : iter)
+			iterIndex.clear();
+
+		iter.clear();
+	}
+
+	m_vecTestPageInfo.clear();
+
 	Safe_Delete(m_pTestData);
 }

@@ -95,10 +95,17 @@ private:
 	_bool		m_isARM = { false };
 	_bool		m_bUseWorldColor = { false };
 
+	_float		m_fEmissive = {};
+	_float		m_fRimLight = {};
+
 	_tchar m_szModelTag[MAX_PATH];
 	_tchar m_szTextureTag_Diffuse[MAX_PATH];
 	_tchar m_szTextureTag_Normal[MAX_PATH];
 	_tchar m_szTextureTag_ARM[MAX_PATH];
+
+	INSTANCE_DATA		m_tInstanceData = {};
+
+	_float4				m_vHashColor = {};
 
 private:
 	HRESULT Ready_Components(NONMODEL_DESC* pNonAnimDesc);

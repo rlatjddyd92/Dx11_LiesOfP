@@ -50,6 +50,10 @@ void CParticle_Effect::Update(_float fTimeDelta)
     if (true == m_isDead)
         return;
 
+    _Vec3 vScale = m_pTransformCom->Get_Scaled();
+    vScale += m_DefaultDesc.vOverallScaling * fTimeDelta;
+    m_pTransformCom->Set_Scaled(vScale.x, vScale.y, vScale.z);
+
     __super::Set_WorldMatrix();
 
     CVIBuffer_Point_Instance::PARTICLE_MOVEMENT Movement = {};
@@ -69,6 +73,10 @@ void CParticle_Effect::Update(_float fTimeDelta)
 
     if(true == m_pVIBufferCom->DispatchCS(m_pActionCS, Movement))
         m_isDead = true;
+
+    if (0.f < m_DefaultDesc.fDuration && m_DefaultDesc.fDuration < m_fAccumulateTime)
+        m_DefaultDesc.iComputeState &= ~CVIBuffer_Instancing::STATE_LOOP;
+
 }
 
 void CParticle_Effect::Late_Update(_float fTimeDelta)
@@ -76,6 +84,8 @@ void CParticle_Effect::Late_Update(_float fTimeDelta)
     if (true == m_isDead)
         return;
 
+    if (CRenderer::RG_END <= m_RenderDesc.iRenderGroup)
+        return;
     m_pGameInstance->Add_RenderObject((CRenderer::RENDERGROUP)m_RenderDesc.iRenderGroup, this);
 }
 
@@ -117,7 +127,9 @@ HRESULT CParticle_Effect::Render()
         return E_FAIL;
     if (FAILED(m_pShaderCom->Bind_RawValue("g_vTexDivide", &m_DefaultDesc.vTexDevide, sizeof(_Vec2))))
         return E_FAIL;
-    if (FAILED(m_pShaderCom->Bind_RawValue("g_vScaling", &m_DefaultDesc.vScaling, sizeof(_Vec2))))
+    if (FAILED(m_pShaderCom->Bind_RawValue("g_vStartScaling", &m_DefaultDesc.vStartScaling, sizeof(_Vec2))))
+        return E_FAIL;
+    if (FAILED(m_pShaderCom->Bind_RawValue("g_vScalingRatio", &m_DefaultDesc.vScalingRatio, sizeof(_Vec2))))
         return E_FAIL;
     if (FAILED(m_pShaderCom->Bind_RawValue("g_iState", &m_DefaultDesc.iGeomState, sizeof(_uint))))
         return E_FAIL;
@@ -142,6 +154,7 @@ void CParticle_Effect::Reset()
 {
     m_DefaultDesc = m_InitDesc;
     m_isDead = false;
+    m_fAccumulateTime = 0.f;
 
     m_pTransformCom->Set_State(CTransform::STATE_POSITION, m_DefaultDesc.vPos);
     m_pTransformCom->Rotation(m_DefaultDesc.vRotation.x, m_DefaultDesc.vRotation.y, m_DefaultDesc.vRotation.z);
@@ -150,6 +163,7 @@ void CParticle_Effect::Reset()
     CVIBuffer_Point_Instance::PARTICLE_MOVEMENT Movement = {};
 
     m_pVIBufferCom->DispatchCS(m_pResetCS, Movement);
+    m_pVIBufferCom->Reset();
 }
 
 void CParticle_Effect::Set_Loop(_bool bLoop)
@@ -157,10 +171,14 @@ void CParticle_Effect::Set_Loop(_bool bLoop)
     if (true == bLoop)
     {
         m_DefaultDesc.iComputeState |= CVIBuffer_Instancing::STATE_LOOP;
+        m_InitDesc.iComputeState |= CVIBuffer_Instancing::STATE_LOOP;
         Reset();
     }
     else
+    {
         m_DefaultDesc.iComputeState &= ~CVIBuffer_Instancing::STATE_LOOP;
+        m_InitDesc.iComputeState &= ~CVIBuffer_Instancing::STATE_LOOP;
+    }
 }
 
 

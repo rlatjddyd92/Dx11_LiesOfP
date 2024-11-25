@@ -142,12 +142,13 @@ void CGameInstance::Update_Engine(_float fTimeDelta)
 	m_pFrustum->Update();
 
 	m_pObject_Manager->Update(fTimeDelta);
+
+	m_pCollider_Manager->Update();
 	
 	m_pObject_Manager->Late_Update(fTimeDelta);
 	
 	m_pLevel_Manager->Update(fTimeDelta);		
 
-	m_pCollider_Manager->Update();
 
 	m_pPhysX_Manager->PhysX_Update(fTimeDelta);
 
@@ -538,7 +539,7 @@ HRESULT CGameInstance::Render_TextCenter(const _wstring& strFontTag, const _tcha
 }
 // 24-11-22 김성용 
 // 오른쪽 정렬로 텍스트 그리기
-HRESULT CGameInstance::Render_Right(const _wstring& strFontTag, const _tchar* pText, _fvector vPosition, _fvector vColor, _float fRadian, _fvector vPivot, _float fScale)
+HRESULT CGameInstance::Render_TextRight(const _wstring& strFontTag, const _tchar* pText, _fvector vPosition, _fvector vColor, _float fRadian, _fvector vPivot, _float fScale)
 {
 	return m_pFont_Manager->Render_Right(strFontTag, pText, vPosition, vColor, fRadian, vPivot, fScale);
 }
@@ -673,18 +674,17 @@ KEY_STATE CGameInstance::Get_KeyState(KEY _eKey)
 #pragma endregion
 
 #pragma region PhysX_Manager
-HRESULT CGameInstance::AddPhysX_StaticMesh(CGameObject* pObject, _wstring strModelName)
+
+PxPhysics* CGameInstance::Get_PhysX() const
 {
-	return m_pPhysX_Manager->AddPhysX_StaticMesh(pObject, strModelName);
+	return m_pPhysX_Manager->Get_PhysX();
 }
-HRESULT CGameInstance::SetUpPhysX_Player(CGameObject* pPlayer)
+
+PxScene* CGameInstance::Get_PhysXScene() const
 {
-	return m_pPhysX_Manager->SetUp_Player(pPlayer);
+	return m_pPhysX_Manager->Get_PhysXScene();
 }
-void CGameInstance::Reset_PhsyX()
-{
-	m_pPhysX_Manager->Reset_PhsyX();
-}
+
 _bool CGameInstance::RayCast_PhysX(_vector vRayPos, _vector vRayDir, _vector* vHitPos, _vector* vNormal, _float* fHitDistance)
 {
 	return m_pPhysX_Manager->RayCast(vRayPos, vRayDir, vHitPos, vNormal, fHitDistance);
@@ -797,7 +797,6 @@ void CGameInstance::LoadSoundFile(const char* pFolderName)
 
 void CGameInstance::Release_Engine()
 {
-	Safe_Release(m_pPhysX_Manager);
 	Safe_Release(m_pKey_Manager);
 	Safe_Release(m_pCollider_Manager);
 	// 2024-11-06 김성용
@@ -814,6 +813,7 @@ void CGameInstance::Release_Engine()
 	Safe_Release(m_pObject_Manager);
 	Safe_Release(m_pComponent_Manager);
 	Safe_Release(m_pLevel_Manager);
+	Safe_Release(m_pPhysX_Manager);
 	Safe_Release(m_pInstance_Manager);
 	Safe_Release(m_pSound_Manager);
 	Safe_Release(m_pInput_Device);

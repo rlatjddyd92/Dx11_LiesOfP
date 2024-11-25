@@ -12,7 +12,6 @@ BEGIN(Tools)
 class CTexture_Effect final : public CEffect_Base
 {
 public:
-	enum SHADER_TYPE { SHADER_DEFAULT, SHADER_GLOW, SHADER_SPARK, SHADER_END };
 	typedef struct
 	{
 		_uint		iShaderIndex = { 0 };
@@ -58,6 +57,9 @@ private:
 public:
 	virtual void Set_Loop(_bool bLoop) override {
 		m_DefaultDesc.bLoop = bLoop;
+
+		if (true == bLoop)
+			Reset();
 	}
 
 public:

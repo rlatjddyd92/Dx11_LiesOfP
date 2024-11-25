@@ -42,6 +42,7 @@ HRESULT CBounding_AABB::Render(PrimitiveBatch<VertexPositionColor>* pBatch)
 _bool CBounding_AABB::Intersect(CCollider::TYPE eColliderType, CBounding * pBounding)
 {
 	m_isColl = false;
+	float penetrationDepth = 0.0f; // 침투 깊이를 담을 변수
 
 	switch (eColliderType)
 	{

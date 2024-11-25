@@ -40,8 +40,8 @@ private:
     _bool               End_Check();
 
 private:
-    _int                m_iColliderStartFrame_Left= {};
-    _int                m_iColliderEndFrame_Left = {};
+    _int                m_iColliderStartFrame_Left[2] = {};
+    _int                m_iColliderEndFrame_Left[2] = {};
     _int                m_iColliderStartFrame_Right[2] = {};
     _int                m_iColliderEndFrame_Right[2] = {};
 

@@ -51,6 +51,7 @@ using namespace std;
 #include "Engine_Typedef.h"
 #include "Engine_Struct.h"
 
+
 namespace Engine
 {
 	const _wstring		g_strTransformTag = TEXT("Com_Transform");
@@ -58,6 +59,11 @@ namespace Engine
 }
 
 using namespace Engine;
+
+#include "PxPhysics.h"
+#include "PxPhysicsAPI.h"
+
+using namespace physx;
 
 #define TEXTURE_TYPE_MAX 18
 
@@ -77,3 +83,82 @@ using namespace Engine;
 #endif // _DEBUG
 
 
+namespace physX
+{
+	enum GEOMETRY_TYPE { PX_CAPSULE, PX_SPHERE, PX_BOX, PX_MODEL, PX_END };
+
+	struct ENGINE_DLL Geometry abstract
+	{
+	protected:
+		Geometry() = delete;
+		Geometry(GEOMETRY_TYPE eType)
+			:m_eGeometryType(eType) {};
+		GEOMETRY_TYPE m_eGeometryType = { PX_END };
+	public:
+		GEOMETRY_TYPE GetType() { return m_eGeometryType; };
+	};
+
+	struct ENGINE_DLL GeometryCapsule final : public Geometry
+	{
+		GeometryCapsule()
+			: Geometry(PX_CAPSULE) {}
+		_float fRadius = 0.f;
+		_float fHeight = 0.f;
+	};
+
+	struct ENGINE_DLL GeometrySphere final : public Geometry
+	{
+		GeometrySphere() : Geometry(PX_SPHERE) {}
+		_float fRadius = 0.f;
+	};
+
+	struct ENGINE_DLL GeometryBox final : public Geometry
+	{
+		GeometryBox()
+			: Geometry(PX_BOX) {}
+		_Vec3 vSize = { 0.f,0.f,0.f };
+	};
+
+	struct ENGINE_DLL GeometryTriangleMesh final : public Geometry
+	{
+		GeometryTriangleMesh()
+			: Geometry(PX_MODEL), pModel(nullptr) {}
+		class CModel* pModel = { nullptr };
+	};
+}
+
+
+PxVec2 ConvertToPxVec2(const _Vec2& _vector)
+{
+	return PxVec2(_vector.x, _vector.y);
+}
+
+PxVec3 ConvertToPxVec3(const _Vec3& _vector)
+{
+	return PxVec3(_vector.x, _vector.y, _vector.z);
+}
+
+PxVec4 ConvertToPxVec4(const _Vec4& _vector)
+{
+	return PxVec4(_vector.x, _vector.y, _vector.z, _vector.w);
+}
+
+PxQuat ConvertToPxQuat(const _Quaternion& _Quaternion)
+{
+	return PxQuat(_Quaternion.x, _Quaternion.y, _Quaternion.z, _Quaternion.w);
+}
+
+PxMat33 ConvertToPxMat33(const _Matrix& _Matrix)
+{
+	return PxMat33(ConvertToPxVec3(_Matrix.Right()), ConvertToPxVec3(_Matrix.Up()), ConvertToPxVec3(_Matrix.Forward()));
+}
+
+PxMat44 ConvertToPxMat44(const _Matrix& _Matrix)
+{
+	return PxMat44(ConvertToPxVec3(_Matrix.Right()), ConvertToPxVec3(_Matrix.Up()), ConvertToPxVec3(_Matrix.Forward()), ConvertToPxVec3(_Matrix.Translation()));
+}
+
+PxTransform ConvertToPxTransform(const _Vec3& _vector, const _Quaternion& _Quaternion)
+{
+	return PxTransform(ConvertToPxVec3(_vector), ConvertToPxQuat(_Quaternion));
+}

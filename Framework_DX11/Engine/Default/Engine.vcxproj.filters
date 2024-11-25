@@ -184,9 +184,6 @@
     <Filter Include="01.Utility\04.Renderer">
       <UniqueIdentifier>{718a3997-f34f-41c2-ba36-80a9e1481f1b}</UniqueIdentifier>
     </Filter>
-    <Filter Include="01.Utility\02.GameObjects\01.Pawn">
-      <UniqueIdentifier>{797f81b3-b812-4a52-80a6-373a88f8797a}</UniqueIdentifier>
-    </Filter>
     <Filter Include="01.Utility\97.CSVFileManager">
       <UniqueIdentifier>{a318eb36-df00-4b66-85dc-c9029b0fbc28}</UniqueIdentifier>
     </Filter>
@@ -225,6 +222,9 @@
     </Filter>
     <Filter Include="01.Utility\03.Components\Sound\Manager">
       <UniqueIdentifier>{2c7048d2-5fe6-442b-874d-b64f26d2bb4f}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="01.Utility\03.Components\Octree">
+      <UniqueIdentifier>{706e6451-360e-4c02-8a2e-b8a1205ffb67}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -396,9 +396,6 @@
     <ClCompile Include="..\Private\RigidBody.cpp">
       <Filter>01.Utility\03.Components\RigidBody</Filter>
     </ClCompile>
-    <ClCompile Include="..\Private\Pawn.cpp">
-      <Filter>01.Utility\02.GameObjects\01.Pawn</Filter>
-    </ClCompile>
     <ClCompile Include="..\Private\CSVFile_Manager.cpp">
       <Filter>01.Utility\97.CSVFileManager</Filter>
     </ClCompile>
@@ -423,15 +420,20 @@
     <ClCompile Include="..\Private\ObjectOctree.cpp">
       <Filter>01.Utility\03.Components\Model\ObjectOctree</Filter>
     </ClCompile>
+    <ClCompile Include="..\Private\ObjectOctree.cpp">
+      <Filter>01.Utility\03.Components\Model\ObjectOctree</Filter>
+    </ClCompile>
     <ClCompile Include="..\private\Trail_MultiPoint_Instance.cpp">
       <Filter>01.Utility\03.Components\VIBuffer\Instancing\Trail\MultiPoint</Filter>
     </ClCompile>
-    <ClCompile Include="..\Private\EasyDrawSphere.cpp" />
     <ClCompile Include="..\Private\Sound.cpp">
       <Filter>01.Utility\03.Components\Sound</Filter>
     </ClCompile>
     <ClCompile Include="..\Private\Sound_Manager.cpp">
       <Filter>01.Utility\03.Components\Sound\Manager</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Private\Octree.cpp">
+      <Filter>01.Utility\03.Components\Octree</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -612,9 +614,6 @@
     <ClInclude Include="..\Public\RigidBody.h">
       <Filter>01.Utility\03.Components\RigidBody</Filter>
     </ClInclude>
-    <ClInclude Include="..\Public\Pawn.h">
-      <Filter>01.Utility\02.GameObjects\01.Pawn</Filter>
-    </ClInclude>
     <ClInclude Include="..\Public\Engine_Enum.h">
       <Filter>99.Defines</Filter>
     </ClInclude>
@@ -657,12 +656,14 @@
     <ClInclude Include="..\public\Trail_MultiPoint_Instance.h">
       <Filter>01.Utility\03.Components\VIBuffer\Instancing\Trail\MultiPoint</Filter>
     </ClInclude>
-    <ClInclude Include="..\Public\EasyDrawSphere.h" />
     <ClInclude Include="..\Public\Sound.h">
       <Filter>01.Utility\03.Components\Sound</Filter>
     </ClInclude>
     <ClInclude Include="..\Public\Sound_Manager.h">
       <Filter>01.Utility\03.Components\Sound\Manager</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Public\Octree.h">
+      <Filter>01.Utility\03.Components\Octree</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

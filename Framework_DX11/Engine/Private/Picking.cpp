@@ -52,7 +52,7 @@ HRESULT CPicking::Initialize(HWND hWnd)
 	textureDesc.Height = (_int)ViewportDesc.Height;
 	textureDesc.MipLevels = 1;
 	textureDesc.ArraySize = 1;
-	textureDesc.Format = DXGI_FORMAT_R32G32B32A32_SINT;
+	textureDesc.Format = DXGI_FORMAT_R32G32B32A32_FLOAT;
 	textureDesc.SampleDesc.Count = 1;
 	textureDesc.SampleDesc.Quality = 0;
 	textureDesc.CPUAccessFlags = D3D11_CPU_ACCESS_READ;
@@ -70,7 +70,7 @@ HRESULT CPicking::Initialize(HWND hWnd)
 	textureDescMini.Height = 1 ;
 	textureDescMini.MipLevels = 1;
 	textureDescMini.ArraySize = 1;
-	textureDescMini.Format = DXGI_FORMAT_R32G32B32A32_SINT;
+	textureDescMini.Format = DXGI_FORMAT_R32G32B32A32_FLOAT;
 	textureDescMini.SampleDesc.Count = 1;
 	textureDescMini.SampleDesc.Quality = 0;
 	textureDescMini.CPUAccessFlags = D3D11_CPU_ACCESS_READ;

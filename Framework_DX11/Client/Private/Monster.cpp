@@ -88,31 +88,8 @@ void CMonster::Late_Update(_float fTimeDelta)
 
 HRESULT CMonster::Render()
 {
-	if (FAILED(m_pTransformCom->Bind_ShaderResource(m_pShaderCom, "g_WorldMatrix")))
+	if (FAILED(__super::Render()))
 		return E_FAIL;
-
-	if (FAILED(m_pShaderCom->Bind_Matrix("g_ViewMatrix", &m_pGameInstance->Get_Transform(CPipeLine::D3DTS_VIEW))))
-		return E_FAIL;
-	if (FAILED(m_pShaderCom->Bind_Matrix("g_ProjMatrix", &m_pGameInstance->Get_Transform(CPipeLine::D3DTS_PROJ))))
-		return E_FAIL;
-
-	_uint		iNumMeshes = m_pModelCom->Get_NumMeshes();
-
-	for (size_t i = 0; i < iNumMeshes; i++)
-	{
-		m_pModelCom->Bind_MeshBoneMatrices(m_pShaderCom, "g_BoneMatrices", (_uint)i);
-
-		if (FAILED(m_pModelCom->Bind_Material(m_pShaderCom, "g_DiffuseTexture", DIFFUSE, (_uint)i)))
-			return E_FAIL;
-
-
-		if (FAILED(m_pShaderCom->Begin(0)))
-			return E_FAIL;
-
-		if (FAILED(m_pModelCom->Render((_uint)i)))
-			return E_FAIL;
-	}
-
 
 
 	return S_OK;

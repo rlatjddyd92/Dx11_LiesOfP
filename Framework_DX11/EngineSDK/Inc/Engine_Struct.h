@@ -141,28 +141,28 @@ namespace Engine
 	typedef struct
 	{
 		_int isOnSSAO = false;
-		_float fRadius;
-		_float fBias;
-		_float fAmount;
+		_float fRadius = 0.94f;
+		_float fBias = 0.335f;
+		_float fAmount = 3.f;
 	}SSAO_DESC;
 
 	typedef struct
 	{
 		_bool isOnHDR = false;
-		_float fMiddleGrey;
-		_float fLumWhiteSqr;
+		_float fMiddleGrey = 0.7f;
+		_float fLumWhiteSqr = 0.3f;
 	}HDR_DESC;
 
 	typedef struct
 	{
 		_bool isOnBloom = false;
-		_float fThreshold = 1.f;
+		_float fThreshold = 0.5f;
 	}BLOOM_DESC;
 
 	typedef struct
 	{
 		_bool isOnDOF = false;
-		_float fDOF = 30.f;
+		_float fDOF = 10.f;
 	}DOF_DESC;
 
 	typedef struct
@@ -173,6 +173,13 @@ namespace Engine
 		_float	fRadialPower = 0.f;
 	}RADIAL_DESC;
 #pragma endregion
+
+	typedef struct
+	{
+		SimpleMath::Matrix  WorldMatrix;
+		_float4				vHashColor;
+
+	}INSTANCE_DATA;
 
 	//오브젝트 저장 및 불러오기에 사용
 	typedef struct
@@ -331,9 +338,11 @@ namespace Engine
 		XMFLOAT4		vUp;
 		XMFLOAT4		vLook;
 		XMFLOAT4		vTranslation;
+		XMFLOAT4		vHashColor;
 
-		static const unsigned int	iNumElements = 8;
+		static const unsigned int	iNumElements = 9;
 		static const D3D11_INPUT_ELEMENT_DESC	Elements[iNumElements];
 	}VTXMODELINSTANCE;
 
 }
+

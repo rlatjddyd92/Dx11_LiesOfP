@@ -13,6 +13,7 @@
 #include "Camera_Manager.h"
 #include "StaticObj.h"
 #include "Player.h"
+#include "Ladder.h"
 
 CLevel_Tool::CLevel_Tool(ID3D11Device* pDevice, ID3D11DeviceContext* pContext)
 	: CLevel{ pDevice, pContext }
@@ -45,6 +46,9 @@ HRESULT CLevel_Tool::Initialize()
 	// 24-11-19 김성용
 	// 게임 인터페이스를 인게임 모드로 전환
 	GET_GAMEINTERFACE->SetIngame(true);
+
+	CEffect_Manager::Get_Instance()->Add_Effect_ToLayer(LEVEL_GAMEPLAY, TEXT("Monster_Impact_Death"),
+		_Vec3(0.f, 5.f, 0.f), _Vec3(0.f, 0.f, 0.f), _Vec3(1.f, 1.f, 1.f));
 
 	return S_OK;
 }
@@ -182,8 +186,8 @@ HRESULT CLevel_Tool::Ready_Layer_Monster()
 		if (FAILED(m_pGameInstance->Add_CloneObject_ToLayer(LEVEL_GAMEPLAY, TEXT("Layer_Monster"), TEXT("Prototype_GameObject_Monster"))))
 			return E_FAIL;
 	}*/
-	if (FAILED(m_pGameInstance->Add_CloneObject_ToLayer(LEVEL_GAMEPLAY, TEXT("Layer_Monster"), TEXT("Prototype_GameObject_CarcassBigA"))))
-		return E_FAIL;
+	//if (FAILED(m_pGameInstance->Add_CloneObject_ToLayer(LEVEL_GAMEPLAY, TEXT("Layer_Monster"), TEXT("Prototype_GameObject_CarcassBigA"))))
+	//	return E_FAIL;
 
 	if (FAILED(m_pGameInstance->Add_CloneObject_ToLayer(LEVEL_GAMEPLAY, TEXT("Layer_Monster"), TEXT("Prototype_GameObject_SimonManus"))))
 		return E_FAIL;
@@ -254,12 +258,12 @@ HRESULT CLevel_Tool::Read_Map_Data()
 
 				if (strLayerTag == "Layer_Map" || strLayerTag == "Layer_Etc")
 				{
-					/*if (wcscmp(pDesc.szModelTag, TEXT("SM_Monastery_Lift_01_Bottom")) == 0)
+					if (wcscmp(pDesc.szModelTag, TEXT("SM_Monastery_Lift_01_Bottom")) == 0)
 					{
 						if (FAILED(m_pGameInstance->Add_CloneObject_ToLayer(LEVEL_GAMEPLAY, TEXT("Layer_InteractObj"), TEXT("Prototype_GameObject_Lift_Floor"), &pDesc)))
 							return E_FAIL;
 						continue;
-					}*/
+					}
 
 					CStaticObj::STATICOBJ_DESC staticObjDesc = {};
 					int bufferSize = WideCharToMultiByte(CP_ACP, 0, pDesc.szModelTag, -1, NULL, 0, NULL, NULL);
@@ -288,9 +292,37 @@ HRESULT CLevel_Tool::Read_Map_Data()
 						 if (FAILED(m_pGameInstance->Add_CloneObject_ToLayer(LEVEL_GAMEPLAY, TEXT("Layer_InteractObj"), TEXT("Prototype_GameObject_Lift_Controller"), &pDesc)))
 							 return E_FAIL;
 					 }
-					 	 else if (wcscmp(pDesc.szModelTag, TEXT("SK_NewTown_Lift_01_Door")) == 0)
+					 else if (wcscmp(pDesc.szModelTag, TEXT("SK_NewTown_Lift_01_Door")) == 0)
 					 {
 						 if (FAILED(m_pGameInstance->Add_CloneObject_ToLayer(LEVEL_GAMEPLAY, TEXT("Layer_InteractObj"), TEXT("Prototype_GameObject_Lift_Door"), &pDesc)))
+							 return E_FAIL;
+					 }
+					 else if (wcscmp(pDesc.szModelTag, TEXT("SK_FO_Monastery_TowerDoor_01")) == 0)
+					 {
+						 if (FAILED(m_pGameInstance->Add_CloneObject_ToLayer(LEVEL_GAMEPLAY, TEXT("Layer_InteractObj"), TEXT("Prototype_GameObject_TowerDoor"), &pDesc)))
+							 return E_FAIL;
+					 }	 
+					 else if (wcscmp(pDesc.szModelTag, TEXT("SK_FO_Monastery_WallDeco_01_Scupture04")) == 0)
+					 {
+						 if (FAILED(m_pGameInstance->Add_CloneObject_ToLayer(LEVEL_GAMEPLAY, TEXT("Layer_InteractObj"), TEXT("Prototype_GameObject_WallDeco"), &pDesc)))
+							 return E_FAIL;
+					 }
+					 else if (wcscmp(pDesc.szModelTag, TEXT("SK_FO_TreasureChest_02_Red")) == 0)
+					 {
+						 if (FAILED(m_pGameInstance->Add_CloneObject_ToLayer(LEVEL_GAMEPLAY, TEXT("Layer_InteractObj"), TEXT("Prototype_GameObject_TreasureBox"), &pDesc)))
+							 return E_FAIL;
+					 }
+					 else if (wcscmp(pDesc.szModelTag, TEXT("SK_LV_Ladder_MetalWood_01_KSJ")) == 0 || wcscmp(pDesc.szModelTag, TEXT("SK_LV_Ladder_MetalWood_Slide6m_SM_KSJ")) == 0 )
+					 {
+						 CLadder::LADDER_DESC laderDesc = {};
+						 int bufferSize = WideCharToMultiByte(CP_ACP, 0, pDesc.szModelTag, -1, NULL, 0, NULL, NULL);
+						 WideCharToMultiByte(CP_ACP, 0, pDesc.szModelTag, -1, laderDesc.szModelTag, bufferSize, NULL, NULL);
+						 laderDesc.vPosition = pDesc.vPosition;
+						 laderDesc.vScale = pDesc.vScale;
+						 laderDesc.vRotation = pDesc.vRotation;
+						 laderDesc.bShadow = pDesc.bShadow;
+						 laderDesc.iRenderGroupID = pDesc.iID;
+						 if (FAILED(m_pGameInstance->Add_CloneObject_ToLayer(LEVEL_GAMEPLAY, TEXT("Layer_InteractObj"), TEXT("Prototype_GameObject_Ladder"), &laderDesc)))
 							 return E_FAIL;
 					 }
 				}

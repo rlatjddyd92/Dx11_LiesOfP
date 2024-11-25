@@ -40,12 +40,6 @@
     <Filter Include="02.GameObjects\99.Camera">
       <UniqueIdentifier>{aae6caeb-858d-4707-9718-e4b878cdd9de}</UniqueIdentifier>
     </Filter>
-    <Filter Include="02.GameObjects\02.Monster">
-      <UniqueIdentifier>{0083e25f-5f57-4f81-8604-c0d79a304e39}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="02.GameObjects\03.Player">
-      <UniqueIdentifier>{a04ca2a0-1907-4180-8363-482efb3255f2}</UniqueIdentifier>
-    </Filter>
     <Filter Include="02.GameObjects\04.Sky">
       <UniqueIdentifier>{f17d1c89-2983-427e-9a62-7fa4c30d3ae8}</UniqueIdentifier>
     </Filter>
@@ -66,9 +60,6 @@
     </Filter>
     <Filter Include="03.GameInterface_Controller\00.UIManager\00.UIPage\02.UIPage_Play">
       <UniqueIdentifier>{0bf63bb1-37d5-4135-837b-20c74ddf9ad5}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="02.GameObjects\02.Monster\CarcassBigA">
-      <UniqueIdentifier>{f6168eed-c521-4165-b051-0becd723a0a2}</UniqueIdentifier>
     </Filter>
     <Filter Include="05.Fsm">
       <UniqueIdentifier>{4a0e87ac-4260-4525-a5db-96fc69f89d7f}</UniqueIdentifier>
@@ -222,9 +213,6 @@
     </Filter>
     <Filter Include="05.Fsm\Player\Common\Dead">
       <UniqueIdentifier>{bd30e2d5-25fb-4905-bacd-c5625c31e943}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="02.GameObjects\02.Monster\SimonManus">
-      <UniqueIdentifier>{57195b03-ed04-4599-966f-cd38e86fb16d}</UniqueIdentifier>
     </Filter>
     <Filter Include="05.Fsm\Monster\SimonManus">
       <UniqueIdentifier>{52ec9403-e7cc-4dda-857e-4376e9606cb8}</UniqueIdentifier>
@@ -616,6 +604,24 @@
     <Filter Include="03.GameInterface_Controller\00.UIManager\00.UIPage\09.UIPage_ToolTip">
       <UniqueIdentifier>{d6f0816f-b248-400f-ae9c-070eac27ca42}</UniqueIdentifier>
     </Filter>
+    <Filter Include="02.GameObjects\02.Pawn">
+      <UniqueIdentifier>{a51c24d7-a10f-438d-8dc2-c2f87467615b}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.GameObjects\02.Pawn\01.Monster">
+      <UniqueIdentifier>{0083e25f-5f57-4f81-8604-c0d79a304e39}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.GameObjects\02.Pawn\01.Monster\CarcassBigA">
+      <UniqueIdentifier>{f6168eed-c521-4165-b051-0becd723a0a2}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.GameObjects\02.Pawn\01.Monster\SimonManus">
+      <UniqueIdentifier>{57195b03-ed04-4599-966f-cd38e86fb16d}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.GameObjects\02.Pawn\00.Player">
+      <UniqueIdentifier>{a04ca2a0-1907-4180-8363-482efb3255f2}</UniqueIdentifier>
+	</Filter>
+    <Filter Include="97.ShaderFiles\99.UI_Shader">
+      <UniqueIdentifier>{b83c9fd9-a108-45c5-8e6f-296e8b63c2da}</UniqueIdentifier>
+	</Filter>
     <Filter Include="05.Fsm\Monster\CarcassBigA\Attack\Route\AttackRoute_4">
       <UniqueIdentifier>{12670bf0-76fd-432d-9278-b73ac8212e84}</UniqueIdentifier>
     </Filter>
@@ -661,10 +667,10 @@
       <Filter>02.GameObjects\01.Terrain</Filter>
     </ClInclude>
     <ClInclude Include="..\Public\Monster.h">
-      <Filter>02.GameObjects\02.Monster</Filter>
+      <Filter>02.GameObjects\02.Pawn\01.Monster</Filter>
     </ClInclude>
     <ClInclude Include="..\public\Player.h">
-      <Filter>02.GameObjects\03.Player</Filter>
+      <Filter>02.GameObjects\02.Pawn\00.Player</Filter>
     </ClInclude>
     <ClInclude Include="..\Public\Weapon.h">
       <Filter>02.GameObjects\06.Weapon</Filter>
@@ -686,9 +692,6 @@
     </ClInclude>
     <ClInclude Include="..\Public\UIPage.h">
       <Filter>03.GameInterface_Controller\00.UIManager\00.UIPage</Filter>
-    </ClInclude>
-    <ClInclude Include="..\Public\UIRender_Client.h">
-      <Filter>03.GameInterface_Controller\00.UIManager\01.UIRender</Filter>
     </ClInclude>
     <ClInclude Include="..\Public\GameInterface_Controller.h">
       <Filter>03.GameInterface_Controller</Filter>
@@ -733,7 +736,7 @@
       <Filter>02.GameObjects\05.Effect\Effect_Manager</Filter>
     </ClInclude>
     <ClInclude Include="..\Public\CarcassBigA.h">
-      <Filter>02.GameObjects\02.Monster\CarcassBigA</Filter>
+      <Filter>02.GameObjects\02.Pawn\01.Monster\CarcassBigA</Filter>
     </ClInclude>
     <ClInclude Include="..\Public\State_CarcassBigA_Walk.h">
       <Filter>05.Fsm\Monster\CarcassBigA\Walk</Filter>
@@ -985,7 +988,7 @@
       <Filter>05.Fsm\Monster\CarcassBigA\Attack\Single\WheelWind</Filter>
     </ClInclude>
     <ClInclude Include="..\Public\SimonManus.h">
-      <Filter>02.GameObjects\02.Monster\SimonManus</Filter>
+      <Filter>02.GameObjects\02.Pawn\01.Monster\SimonManus</Filter>
     </ClInclude>
     <ClInclude Include="..\Public\Weapon_SimonManus_Hammer.h">
       <Filter>02.GameObjects\06.Weapon\01.SimonManusWeapon</Filter>
@@ -1116,6 +1119,21 @@
     <ClInclude Include="..\Public\UIRender_Batching.h">
       <Filter>03.GameInterface_Controller\00.UIManager\01.UIRender</Filter>
     </ClInclude>
+    <ClInclude Include="..\Public\Pawn.h">
+      <Filter>02.GameObjects\02.Pawn</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Public\TowerDoor.h">
+      <Filter>02.GameObjects\10.InteractObj\02.TowerDoor</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Public\WallDeco.h">
+      <Filter>02.GameObjects\10.InteractObj\03.WallDeco</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Public\TreasureBox.h">
+      <Filter>02.GameObjects\10.InteractObj\04.TreasureBox</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Public\Ladder.h">
+      <Filter>02.GameObjects\10.InteractObj\05.Ladder</Filter>
+	</ClInclude>
     <ClInclude Include="..\Public\ColliderObject.h">
       <Filter>02.GameObjects\10.ColliderObject</Filter>
     </ClInclude>
@@ -1153,10 +1171,10 @@
       <Filter>02.GameObjects\01.Terrain</Filter>
     </ClCompile>
     <ClCompile Include="..\Private\Monster.cpp">
-      <Filter>02.GameObjects\02.Monster</Filter>
+      <Filter>02.GameObjects\02.Pawn\01.Monster</Filter>
     </ClCompile>
     <ClCompile Include="..\private\Player.cpp">
-      <Filter>02.GameObjects\03.Player</Filter>
+      <Filter>02.GameObjects\02.Pawn\00.Player</Filter>
     </ClCompile>
     <ClCompile Include="..\Private\Sky.cpp">
       <Filter>02.GameObjects\04.Sky</Filter>
@@ -1166,9 +1184,6 @@
     </ClCompile>
     <ClCompile Include="..\Private\UIPage.cpp">
       <Filter>03.GameInterface_Controller\00.UIManager\00.UIPage</Filter>
-    </ClCompile>
-    <ClCompile Include="..\Private\UIRender_Client.cpp">
-      <Filter>03.GameInterface_Controller\00.UIManager\01.UIRender</Filter>
     </ClCompile>
     <ClCompile Include="..\Private\GameInterface_Controller.cpp">
       <Filter>03.GameInterface_Controller</Filter>
@@ -1204,7 +1219,7 @@
       <Filter>02.GameObjects\05.Effect\Effect_Manager</Filter>
     </ClCompile>
     <ClCompile Include="..\Private\CarcassBigA.cpp">
-      <Filter>02.GameObjects\02.Monster\CarcassBigA</Filter>
+      <Filter>02.GameObjects\02.Pawn\01.Monster\CarcassBigA</Filter>
     </ClCompile>
     <ClCompile Include="..\Private\State_CarcassBigA_Walk.cpp">
       <Filter>05.Fsm\Monster\CarcassBigA\Walk</Filter>
@@ -1456,7 +1471,7 @@
       <Filter>05.Fsm\Monster\CarcassBigA\Attack\Single\WheelWind</Filter>
     </ClCompile>
     <ClCompile Include="..\Private\SimonManus.cpp">
-      <Filter>02.GameObjects\02.Monster\SimonManus</Filter>
+      <Filter>02.GameObjects\02.Pawn\01.Monster\SimonManus</Filter>
     </ClCompile>
     <ClCompile Include="..\Private\Weapon_SimonManus_Hammer.cpp">
       <Filter>02.GameObjects\06.Weapon\01.SimonManusWeapon</Filter>
@@ -1587,6 +1602,21 @@
     <ClCompile Include="..\Private\UIRender_Batching.cpp">
       <Filter>03.GameInterface_Controller\00.UIManager\01.UIRender</Filter>
     </ClCompile>
+    <ClCompile Include="..\Private\Pawn.cpp">
+      <Filter>02.GameObjects\02.Pawn</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Private\TowerDoor.cpp">
+      <Filter>02.GameObjects\10.InteractObj\02.TowerDoor</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Private\WallDeco.cpp">
+      <Filter>02.GameObjects\10.InteractObj\03.WallDeco</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Private\TreasureBox.cpp">
+      <Filter>02.GameObjects\10.InteractObj\04.TreasureBox</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Private\Ladder.cpp">
+      <Filter>02.GameObjects\10.InteractObj\05.Ladder</Filter>
+	</ClCompile>
     <ClCompile Include="..\Private\ColliderObject.cpp">
       <Filter>02.GameObjects\10.ColliderObject</Filter>
     </ClCompile>
@@ -1658,6 +1688,15 @@
     </FxCompile>
     <FxCompile Include="..\Bin\ShaderFiles\Shader_VtxTrail_TwoPoint_Instance.hlsl">
       <Filter>97.ShaderFiles\Effect</Filter>
+    </FxCompile>
+    <FxCompile Include="..\Bin\ShaderFiles\Shader_UI_Normal.hlsl">
+      <Filter>97.ShaderFiles\99.UI_Shader</Filter>
+    </FxCompile>
+    <FxCompile Include="..\Bin\ShaderFiles\Shader_UI_Change_Color.hlsl">
+      <Filter>97.ShaderFiles\99.UI_Shader</Filter>
+    </FxCompile>
+    <FxCompile Include="..\Bin\ShaderFiles\Shader_UI_Multiple_Color.hlsl">
+      <Filter>97.ShaderFiles\99.UI_Shader</Filter>
     </FxCompile>
   </ItemGroup>
   <ItemGroup>

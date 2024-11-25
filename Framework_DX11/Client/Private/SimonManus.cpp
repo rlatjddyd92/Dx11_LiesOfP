@@ -170,54 +170,24 @@ void CSimonManus::Late_Update(_float fTimeDelta)
 {
 	__super::Late_Update(fTimeDelta);
 
-	m_pGameInstance->Add_RenderObject(CRenderer::RG_NONBLEND, this);
+	m_pRigidBodyCom->Update(fTimeDelta);
 
 	m_pWeapon->Late_Update(fTimeDelta);
 
-
 	m_pGameInstance->Add_ColliderList(m_pColliderCom);
 
+
+	m_pGameInstance->Add_RenderObject(CRenderer::RG_NONBLEND, this);
 	for (_uint i = 0; i < EXCOLLIDER::COLLTYPE_END; ++i)
 	{
 		m_pGameInstance->Add_ColliderList(m_EXCollider[i]);
 	}
-
-
 }
 
 HRESULT CSimonManus::Render()
 {
-	if (FAILED(m_pTransformCom->Bind_ShaderResource(m_pShaderCom, "g_WorldMatrix")))
+	if (FAILED(__super::Render()))
 		return E_FAIL;
-
-	if (FAILED(m_pShaderCom->Bind_Matrix("g_ViewMatrix", &m_pGameInstance->Get_Transform(CPipeLine::D3DTS_VIEW))))
-		return E_FAIL;
-	if (FAILED(m_pShaderCom->Bind_Matrix("g_ProjMatrix", &m_pGameInstance->Get_Transform(CPipeLine::D3DTS_PROJ))))
-		return E_FAIL;
-
-	_uint		iNumMeshes = m_pModelCom->Get_NumMeshes();
-
-	for (size_t i = 0; i < iNumMeshes; i++)
-	{
-		m_pModelCom->Bind_MeshBoneMatrices(m_pShaderCom, "g_BoneMatrices", (_uint)i);
-
-		if (FAILED(m_pModelCom->Bind_Material(m_pShaderCom, "g_DiffuseTexture", DIFFUSE, (_uint)i)))
-			return E_FAIL;
-
-
-		if (FAILED(m_pShaderCom->Begin(0)))
-			return E_FAIL;
-
-		if (FAILED(m_pModelCom->Render((_uint)i)))
-			return E_FAIL;
-	}
-
-
-#ifdef _DEBUG
-	//m_pColliderCom[1]->Render();
-	//for (auto& pColliderObj : m_pColliderObject)
-	//	pColliderObj->Render();
-#endif
 
 	if (FAILED(m_pWeapon->Render()))
 		return E_FAIL;
@@ -245,6 +215,14 @@ HRESULT CSimonManus::Ready_Components()
 	if (FAILED(__super::Ready_Components()))
 		return E_FAIL;
 
+	/* For.Com_Navigation */
+	CNavigation::NAVIGATION_DESC			NaviDesc{};
+	NaviDesc.iCurrentIndex = 0;
+
+	if (FAILED(__super::Add_Component(LEVEL_GAMEPLAY, TEXT("Prototype_Component_Navigation"),
+		TEXT("Com_Navigation"), reinterpret_cast<CComponent**>(&m_pNavigationCom), &NaviDesc)))
+		return E_FAIL;
+
 	/* FOR.Com_Model */
 	if (FAILED(__super::Add_Component(LEVEL_GAMEPLAY, TEXT("Prototype_Component_Model_SimonManusP1"),
 		TEXT("Com_Model"), reinterpret_cast<CComponent**>(&m_pModelCom))))
@@ -264,6 +242,7 @@ HRESULT CSimonManus::Ready_Components()
 	if (FAILED(__super::Add_Component(LEVEL_STATIC, TEXT("Prototype_Component_Collider_OBB"),
 		TEXT("Com_Collider"), reinterpret_cast<CComponent**>(&m_pColliderCom), &ColliderDesc)))
 		return E_FAIL;
+	m_pColliderCom->Set_Owner(this);
 
 	//LegsL
 	ColliderDesc.vExtents = _float3(0.3f, 0.6f, 0.3f);
@@ -272,6 +251,7 @@ HRESULT CSimonManus::Ready_Components()
 	if (FAILED(__super::Add_Component(LEVEL_STATIC, TEXT("Prototype_Component_Collider_OBB"),
 		TEXT("Com_Collider_LL"), reinterpret_cast<CComponent**>(&m_EXCollider[LEG_LEFT]), &ColliderDesc)))
 		return E_FAIL;
+
 	//R
 	ColliderDesc.vExtents = _float3(0.3f, 0.6f, 0.3f);
 	ColliderDesc.vCenter = _float3(-0.1f, -0.4f, 0.f);
@@ -293,6 +273,33 @@ HRESULT CSimonManus::Ready_Components()
 	m_pColliderBindMatrix[CT_LEG_RIGHT] = m_pModelCom->Get_BoneCombindTransformationMatrix_Ptr(126);
 	m_pColliderBindMatrix[CT_UPPERBODY] = m_pModelCom->Get_BoneCombindTransformationMatrix_Ptr(6);
 	m_pColliderBindMatrix[CT_LOWERBODY] = m_pModelCom->Get_BoneCombindTransformationMatrix_Ptr(5);
+
+	for (_uint i = 0; i < TYPE_END; ++i)
+		m_EXCollider[i]->Set_Owner(this);
+		
+
+	// 항상 마지막에 생성하기
+	CRigidBody::RIGIDBODY_DESC RigidBodyDesc{};
+	RigidBodyDesc.isStatic = false;
+	RigidBodyDesc.isGravity = false;
+	RigidBodyDesc.pOwnerTransform = m_pTransformCom;
+	RigidBodyDesc.pOwnerNavigation = m_pNavigationCom;
+
+	RigidBodyDesc.pOwner = this;
+	RigidBodyDesc.fStaticFriction = 1.0f;
+	RigidBodyDesc.fDynamicFriction = 0.0f;
+	RigidBodyDesc.fRestituion = 0.0f;
+
+	physX::GeometryCapsule CapsuleDesc;
+	CapsuleDesc.fHeight = 2.5f;
+	CapsuleDesc.fRadius = 0.45f;
+	RigidBodyDesc.pGeometry = &CapsuleDesc;
+
+	/* FOR.Com_RigidBody */
+	if (FAILED(__super::Add_Component(LEVEL_STATIC, TEXT("Prototype_Component_RigidBody"),
+		TEXT("Com_RigidBody"), reinterpret_cast<CComponent**>(&m_pRigidBodyCom), &RigidBodyDesc)))
+		return E_FAIL;
+	return S_OK;
 
 	return S_OK;
 }

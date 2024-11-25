@@ -57,7 +57,8 @@ void CTexture_Effect::Update(_float fTimeDelta)
     if(0.f < vScale.x && 0.f < vScale.y && 0.f < vScale.z)
         m_pTransformCom->Set_Scaled(vScale.x, vScale.y, vScale.z);
 
-    m_fCurrenrtIndex += fTimeDelta * m_DefaultDesc.fSpriteSpeed;
+    if(0.f < m_DefaultDesc.vDivide.x * m_DefaultDesc.vDivide.y)
+        m_fCurrenrtIndex += fTimeDelta * m_DefaultDesc.fSpriteSpeed;
 
     __super::Set_WorldMatrix();
 
@@ -75,35 +76,30 @@ void CTexture_Effect::Update(_float fTimeDelta)
     {
         Billboard(vCurrentScale, vLook);
     }
-
 }
 
 void CTexture_Effect::Late_Update(_float fTimeDelta)
 {
     m_fAccumulateTime += fTimeDelta;
 
-    if (m_DefaultDesc.fDuration < m_fAccumulateTime)
+    if (m_DefaultDesc.fDuration < m_fAccumulateTime || (m_DefaultDesc.vDivide.x * m_DefaultDesc.vDivide.y - 1.f) < m_fCurrenrtIndex)
     {
         if (true == m_DefaultDesc.bLoop)
             Reset();
         else
         {
-            //m_isActive = false;
+            m_isActive = false;
         }
     }
 
-    if (CRenderer::RG_END == m_RenderDesc.iRenderGroup)
+    if (CRenderer::RG_END <= m_RenderDesc.iRenderGroup)
         return;
-    if(CRenderer::RG_EFFECT == m_RenderDesc.iRenderGroup)
-        m_pGameInstance->Add_RenderObject(CRenderer::RG_NONLIGHT, this);
-    else
-        m_pGameInstance->Add_RenderObject((CRenderer::RENDERGROUP)m_RenderDesc.iRenderGroup, this);
-    
+    m_pGameInstance->Add_RenderObject((CRenderer::RENDERGROUP)m_RenderDesc.iRenderGroup, this);
+
 }
 
 HRESULT CTexture_Effect::Render()
 {
-
     if (FAILED(__super::Bind_WorldMatrix(m_pShaderCom, "g_WorldMatrix")))
         return E_FAIL;
     if (FAILED(m_pShaderCom->Bind_Matrix("g_ViewMatrix", &m_pGameInstance->Get_Transform(CPipeLine::D3DTS_VIEW))))
@@ -161,9 +157,13 @@ void CTexture_Effect::Set_Desc(const TEXTURE_EFFECT_DESC& desc)
     m_DefaultDesc = desc.DefaultDesc;
     m_RenderDesc = desc.RenderDesc;
     m_InitDesc.DefaultDesc = desc.DefaultDesc;
+    m_InitDesc.RenderDesc = desc.RenderDesc;
+
 
     m_pTransformCom->Set_State(CTransform::STATE_POSITION, m_DefaultDesc.vPos);
     m_pTransformCom->Set_Scaled(m_DefaultDesc.vStartScale.x, m_DefaultDesc.vStartScale.y, m_DefaultDesc.vStartScale.z);
+
+    Reset();
 }
 
 void CTexture_Effect::Reset()
@@ -268,6 +268,12 @@ void CTexture_Effect::Billboard(_Vec3 vCurrentScale, _Vec3 vLook)
 {
     _Vec4 vRight = XMVector3Cross(XMVectorSet(0.f, 1.f, 0.f, 0.f), vLook);
     _Vec4 vUp = XMVector3Cross(vLook, vRight);
+
+    _Matrix LocalRotationMatrix = XMMatrixRotationAxis(vLook,
+        XMConvertToRadians(m_DefaultDesc.fStarRotation + m_DefaultDesc.fRotationPerSecond * m_fAccumulateTime));
+
+    vRight = XMVector3TransformNormal(vRight, LocalRotationMatrix);
+    vUp = XMVector3TransformNormal(vUp, LocalRotationMatrix);
 
     XMStoreFloat3((_float3*)&m_WorldMatrix.m[0][0], vRight * vCurrentScale.x);
     XMStoreFloat3((_float3*)&m_WorldMatrix.m[1][0], vUp * vCurrentScale.y);

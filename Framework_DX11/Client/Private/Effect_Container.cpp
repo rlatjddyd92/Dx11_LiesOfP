@@ -47,7 +47,8 @@ void CEffect_Container::Priority_Update(_float fTimeDelta)
 		if (nullptr == Effect)
 			continue;
 
-		Effect->Priority_Update(fTimeDelta);
+		if (false == Effect->Get_Dead())
+			Effect->Priority_Update(fTimeDelta);
 	}
 }
 
@@ -76,7 +77,8 @@ void CEffect_Container::Update(_float fTimeDelta)
 		if (nullptr == Effect)
 			continue;
 
-		Effect->Update(fTimeDelta);
+		if(false== Effect->Get_Dead())
+			Effect->Update(fTimeDelta);
 	}
 }
 
@@ -87,11 +89,12 @@ void CEffect_Container::Late_Update(_float fTimeDelta)
 	{
 		if (nullptr == Effect)
 			continue;
-
-		Effect->Late_Update(fTimeDelta);
 	
 		if(false == Effect->Get_Dead())
+		{
+			Effect->Late_Update(fTimeDelta);
 			m_isDead = false;
+		}
 	}
 }
 

@@ -71,6 +71,8 @@ HRESULT CCarcassBigA::Initialize(void* pArg)
 	m_pTransformCom->LookAt(_vector{ 0, 0, -1, 0 });
 
 
+	m_vRimLightColor = { 0.7f, 0.f, 0.f, 3.f };
+
 	m_fHp = 500.f;
 	m_fAtk = 4.f;
 	m_fDefence = 2.f;
@@ -87,26 +89,21 @@ void CCarcassBigA::Priority_Update(_float fTimeDelta)
 
 void CCarcassBigA::Update(_float fTimeDelta)
 {
-	m_vCurRootMove = m_pModelCom->Play_Animation(fTimeDelta, nullptr);
+	m_vCurRootMove = XMVector3TransformNormal(m_pModelCom->Play_Animation(fTimeDelta), m_pTransformCom->Get_WorldMatrix());
+
+	m_pRigidBodyCom->Set_Velocity(m_vCurRootMove / fTimeDelta);
 
 	m_pFsmCom->Update(fTimeDelta);
 
-	_Vec3 vPos = m_pTransformCom->Get_State(CTransform::STATE_POSITION);
-	
-	m_vCurRootMove = XMVector3TransformNormal(m_vCurRootMove, m_pTransformCom->Get_WorldMatrix());
-
-	m_pTransformCom->Set_State(CTransform::STATE_POSITION, vPos + m_vCurRootMove);
-	
-
 	m_pColliderCom->Update(m_pTransformCom->Get_WorldMatrix_Ptr());
+	m_pGameInstance->Add_ColliderList(m_pColliderCom);
 }
 
 void CCarcassBigA::Late_Update(_float fTimeDelta)
 {
 	__super::Late_Update(fTimeDelta);
 
-
-
+	m_pRigidBodyCom->Update(fTimeDelta);
 	m_pGameInstance->Add_RenderObject(CRenderer::RG_NONBLEND, this);
 
 	for (_uint i = 0; i < TYPE_END; ++i)
@@ -119,31 +116,8 @@ void CCarcassBigA::Late_Update(_float fTimeDelta)
 
 HRESULT CCarcassBigA::Render()
 {
-	if (FAILED(m_pTransformCom->Bind_ShaderResource(m_pShaderCom, "g_WorldMatrix")))
+	if (FAILED(__super::Render()))
 		return E_FAIL;
-
-	if (FAILED(m_pShaderCom->Bind_Matrix("g_ViewMatrix", &m_pGameInstance->Get_Transform(CPipeLine::D3DTS_VIEW))))
-		return E_FAIL;
-	if (FAILED(m_pShaderCom->Bind_Matrix("g_ProjMatrix", &m_pGameInstance->Get_Transform(CPipeLine::D3DTS_PROJ))))
-		return E_FAIL;
-
-	_uint		iNumMeshes = m_pModelCom->Get_NumMeshes();
-
-	for (size_t i = 0; i < iNumMeshes; i++)
-	{
-		m_pModelCom->Bind_MeshBoneMatrices(m_pShaderCom, "g_BoneMatrices", (_uint)i);
-
-		if (FAILED(m_pModelCom->Bind_Material(m_pShaderCom, "g_DiffuseTexture", DIFFUSE, (_uint)i)))
-			return E_FAIL;
-
-
-		if (FAILED(m_pShaderCom->Begin(0)))
-			return E_FAIL;
-
-		if (FAILED(m_pModelCom->Render((_uint)i)))
-			return E_FAIL;
-	}
-
 
 #ifdef _DEBUG
 	m_pColliderCom->Render();
@@ -176,6 +150,13 @@ HRESULT CCarcassBigA::Ready_Components()
 		TEXT("Com_Model"), reinterpret_cast<CComponent**>(&m_pModelCom))))
 		return E_FAIL;
 
+	/* For.Com_Navigation */
+	CNavigation::NAVIGATION_DESC			NaviDesc{};
+	NaviDesc.iCurrentIndex = 0;
+
+	if (FAILED(__super::Add_Component(LEVEL_GAMEPLAY, TEXT("Prototype_Component_Navigation"),
+		TEXT("Com_Navigation"), reinterpret_cast<CComponent**>(&m_pNavigationCom), &NaviDesc)))
+		return E_FAIL;
 
 	/* FOR.Com_Collider */		//Body
 	CBounding_OBB::BOUNDING_OBB_DESC			ColliderDesc{};
@@ -186,7 +167,6 @@ HRESULT CCarcassBigA::Ready_Components()
 	if (FAILED(__super::Add_Component(LEVEL_STATIC, TEXT("Prototype_Component_Collider_OBB"),
 		TEXT("Com_Collider"), reinterpret_cast<CComponent**>(&m_pColliderCom), &ColliderDesc)))
 		return E_FAIL;
-
 	m_pColliderCom->Set_Owner(this);
 
 	/* FOR.Com_Collider_OBB */
@@ -205,9 +185,7 @@ HRESULT CCarcassBigA::Ready_Components()
 	Desc.pSocketBoneMatrix2 = m_pTransformCom->Get_WorldMatrix_Ptr();
 	Desc.fDamageAmount = 2.f;
 
-
 	m_pColliderObject[TYPE_LEFTHAND] = dynamic_cast<CColliderObject*>(m_pGameInstance->Clone_GameObject(TEXT("Prototype_GameObject_ColliderObj"), &Desc));
-
 
 	/* FOR.Com_Collider_OBB */
 	ColliderOBBDesc_Obj.vAngles = _float3(0.0f, 0.0f, 0.0f);
@@ -227,7 +205,27 @@ HRESULT CCarcassBigA::Ready_Components()
 
 	m_pColliderObject[TYPE_IMPACT] = dynamic_cast<CColliderObject*>(m_pGameInstance->Clone_GameObject(TEXT("Prototype_GameObject_ColliderObj"), &Desc));
 
+	// 항상 마지막에 생성하기
+	CRigidBody::RIGIDBODY_DESC RigidBodyDesc{};
+	RigidBodyDesc.isStatic = false;
+	RigidBodyDesc.isGravity = false;
+	RigidBodyDesc.pOwnerTransform = m_pTransformCom;
+	RigidBodyDesc.pOwnerNavigation = m_pNavigationCom;
 
+	RigidBodyDesc.pOwner = this;
+	RigidBodyDesc.fStaticFriction = 1.0f;
+	RigidBodyDesc.fDynamicFriction = 0.0f;
+	RigidBodyDesc.fRestituion = 0.0f;
+
+	physX::GeometryCapsule CapsuleDesc;
+	CapsuleDesc.fHeight = 1.5f;
+	CapsuleDesc.fRadius = 0.25f;
+	RigidBodyDesc.pGeometry = &CapsuleDesc;
+
+	/* FOR.Com_RigidBody */
+	if (FAILED(__super::Add_Component(LEVEL_STATIC, TEXT("Prototype_Component_RigidBody"),
+		TEXT("Com_RigidBody"), reinterpret_cast<CComponent**>(&m_pRigidBodyCom), &RigidBodyDesc)))
+		return E_FAIL;
 	return S_OK;
 }
 

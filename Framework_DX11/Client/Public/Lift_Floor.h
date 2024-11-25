@@ -34,7 +34,7 @@ private:
 private:
 	_bool m_bShadow = false;
 private:
-	HRESULT Ready_Components();
+	HRESULT Ready_Components(OBJECT_DEFAULT_DESC* pDesc);
 
 public:
 	static CLift_Floor* Create(ID3D11Device* pDevice, ID3D11DeviceContext* pContext);

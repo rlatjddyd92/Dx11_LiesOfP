@@ -1,6 +1,5 @@
 #pragma once
 
-#include "Client_Defines.h"
 #include "Pawn.h"
 
 BEGIN(Engine)
@@ -50,7 +49,7 @@ public:
 
 protected:
 	_Vec4		m_vRootMoveStack{};
-	_Vec4		m_vCurRootMove{};
+	_Vec3		m_vCurRootMove{};
 	_bool		m_bEndAnim{ false };
 	_bool		m_bResetRootMove{ true };
 	_bool		m_bRootMoveCtr{ true };

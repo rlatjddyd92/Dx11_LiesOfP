@@ -128,61 +128,11 @@ void CPlayer::Priority_Update(_float fTimeDelta)
 
 void CPlayer::Update(_float fTimeDelta)
 {
+	m_vCurRootMove = XMVector3TransformNormal(m_pModelCom->Play_Animation(fTimeDelta, &m_EvKeyList), m_pTransformCom->Get_WorldMatrix());
+
+	m_pRigidBodyCom->Set_Velocity(m_vCurRootMove / fTimeDelta);
+
 	m_pFsmCom->Update(fTimeDelta);
-
-	m_vCurRootMove = m_pModelCom->Play_Animation(fTimeDelta, &m_EvKeyList);
-
-	_vector vPos = m_pTransformCom->Get_State(CTransform::STATE_POSITION);
-
-	
-	m_vCurRootMove = XMVector3TransformNormal(m_vCurRootMove, m_pTransformCom->Get_WorldMatrix());
-
-	m_pTransformCom->Set_State(CTransform::STATE_POSITION, vPos + m_vCurRootMove);
-	
-
-	for (auto& EvKey : m_EvKeyList)
-	{
-
-		//if (EvKey.eEvent_type == EVENT_KEYFRAME::ET_ONCE)
-		//{
-		//	auto Effect = m_Effects.find(EvKey.iEffectNum);
-		//	if (Effect == m_Effects.end())
-		//	{
-		//		CEffect_Container::EFFECT_DESC EffectDesc = {};
-		//		EffectDesc.fRotationPerSec = XMConvertToRadians(90.f);
-		//		EffectDesc.fSpeedPerSec = 1.f;
-		//		EffectDesc.iLevelIndex = LEVEL_GAMEPLAY;
-		//		EffectDesc.pParentMatrix = m_pTransformCom->Get_WorldMatrix_Ptr();
-		//		EffectDesc.pSocketMatrix = (_Matrix*)m_pModelCom->Get_BoneCombindTransformationMatrix_Ptr(EvKey.iBoneIndex);
-		//		
-		//		CEffect_Manager::Get_Instance()->Clone_Effect(CEffect_Manager::EFFECT_POWER_HIT, &EffectDesc);
-		//	}
-		//}
-		//else if (EvKey.eEvent_type == EVENT_KEYFRAME::ET_REPET)
-		//{
-		//	CEffect_Container* pEffectCon;
-		//	auto Effect = m_Effects.find(EvKey.iEffectNum);
-		//	if (Effect == m_Effects.end())
-		//	{
-		//		CEffect_Container::EFFECT_DESC EffectDesc = {};
-		//		EffectDesc.fRotationPerSec = XMConvertToRadians(90.f);
-		//		EffectDesc.fSpeedPerSec = 1.f;
-		//		EffectDesc.iLevelIndex = LEVEL_GAMEPLAY;
-		//		EffectDesc.vScale = _Vec3{1, 1, 1};
-		//		EffectDesc.vPos = _Vec3{ 0, 0, 0 };
-		//		EffectDesc.vRotation = _Vec3{ 0, 0, 0 };
-		//		EffectDesc.pParentMatrix = m_pTransformCom->Get_WorldMatrix_Ptr();
-		//		EffectDesc.pSocketMatrix = (_Matrix*)m_pModelCom->Get_BoneCombindTransformationMatrix_Ptr(EvKey.iBoneIndex);
-		//		pEffectCon =	CEffect_Manager::Get_Instance()->Clone_Effect(CEffect_Manager::EFFECT_POWER_HIT, &EffectDesc);
-		//		m_Effects.emplace(EvKey.iEffectNum, pEffectCon);
-		//	}
-		//	else
-		//	{
-		//		pEffectCon = Effect->second;
-		//	}
-		//	m_EffectList.push_back(pEffectCon);
-		//}
-	}
 
 	for (auto& pEffect : m_EffectList)
 	{
@@ -190,22 +140,15 @@ void CPlayer::Update(_float fTimeDelta)
 	}
 
 	m_pColliderCom->Update(m_pTransformCom->Get_WorldMatrix_Ptr());
+	m_pGameInstance->Add_ColliderList(m_pColliderCom);
 
 	m_pWeapon[m_eWeaponType]->Update(fTimeDelta);
 }
 
 void CPlayer::Late_Update(_float fTimeDelta)
 {
-	//if (GetKeyState(VK_LBUTTON) & 0x8000)
-	//{
-	//	_float3		vPickPos;
-	//	if (true == m_pGameInstance->Picking(&vPickPos))
-	//		m_pTransformCom->Set_State(CTransform::STATE_POSITION, XMVectorSetW(XMLoadFloat3(&vPickPos), 1.f));		
-	//}
-
-
 	m_pRigidBodyCom->Update(fTimeDelta);
-	m_pNavigationCom->SetUp_OnCell(m_pTransformCom, 0.f, fTimeDelta);
+	//m_pNavigationCom->SetUp_OnCell(m_pTransformCom, 0.f, fTimeDelta);
 
 	m_pGameInstance->Add_RenderObject(CRenderer::RG_NONBLEND, this);
 	m_pGameInstance->Add_RenderObject(CRenderer::RG_SHADOWOBJ, this);
@@ -220,49 +163,8 @@ void CPlayer::Late_Update(_float fTimeDelta)
 
 HRESULT CPlayer::Render()
 {
-	if (FAILED(Bind_WorldViewProj()))
+	if (FAILED(__super::Render()))
 		return E_FAIL;
-
-	_uint		iNumMeshes = m_pModelCom->Get_NumMeshes();
-
-	for (size_t i = 0; i < iNumMeshes; i++)
-	{
-		m_pModelCom->Bind_MeshBoneMatrices(m_pShaderCom, "g_BoneMatrices", (_uint)i);
-
-		if (FAILED(m_pModelCom->Bind_Material(m_pShaderCom, "g_DiffuseTexture", DIFFUSE, (_uint)i)))
-			return E_FAIL;
-
-		if (nullptr != m_pModelCom->Find_Texture((_uint)i, TEXTURE_TYPE::ROUGHNESS))
-		{
-			if (FAILED(m_pModelCom->Bind_Material(m_pShaderCom, "g_ARMTexture", ROUGHNESS, (_uint)i)))
-				return E_FAIL;
-		}
-
-		if (nullptr != m_pModelCom->Find_Texture((_uint)i, TEXTURE_TYPE::NORMALS))
-		{
-			if (FAILED(m_pModelCom->Bind_Material(m_pShaderCom, "g_NormalTexture", NORMALS, (_uint)i)))
-				return E_FAIL;
-
-			if (FAILED(m_pShaderCom->Begin(2)))
-				return E_FAIL;
-		}
-		else
-		{
-			if (FAILED(m_pShaderCom->Begin(0)))
-				return E_FAIL;
-		}
-
-		if (FAILED(m_pModelCom->Render((_uint)i)))
-			return E_FAIL;
-	}
-
-	return S_OK;
-
-#ifdef _DEBUG
-	m_pColliderCom->Render();
-	m_pNavigationCom->Render();
-#endif
-
 
 	if (FAILED(m_pWeapon[m_eWeaponType]->Render()))
 		return E_FAIL;
@@ -298,6 +200,40 @@ HRESULT CPlayer::Render_LightDepth()
 	}
 
 	return S_OK;
+}
+
+void CPlayer::OnCollisionEnter(CGameObject* pOther)
+{
+	/*if (pOther->Get_Tag() == TEXT("Monster"))
+	{
+		_Vec3 vColDir = pOther->Get_Transform()->Get_State(CTransform::STATE_POSITION) - m_pTransformCom->Get_State(CTransform::STATE_POSITION);
+		vColDir.y = 0.f;
+		vColDir.Normalize();
+		_Vec3 vPlayerPos = m_pTransformCom->Get_State(CTransform::STATE_POSITION);
+		vPlayerPos += (vColDir * -0.07f);
+
+		m_pTransformCom->Set_State(CTransform::STATE_POSITION, vPlayerPos);
+	}*/
+}
+
+void CPlayer::OnCollisionStay(CGameObject* pOther)
+{
+	/*if (pOther->Get_Tag() == TEXT("Monster"))
+	{
+		_Vec3 vColNormal = m_pTransformCom->Get_State(CTransform::STATE_POSITION) - pOther->Get_Transform()->Get_State(CTransform::STATE_POSITION);
+		vColNormal.y = 0.f;
+		vColNormal.Normalize();
+
+		_Vec3 vVel = m_pRigidBodyCom->Get_Velocity();
+		_Vec3 vProjected = vVel.Dot(vColNormal) * vColNormal;
+
+		vVel = vVel = vProjected;
+		m_pRigidBodyCom->Set_Velocity(vVel);
+	}*/
+}
+
+void CPlayer::OnCollisionExit(CGameObject* pOther)
+{
 }
 
 void CPlayer::Move_Dir(_Vec4 vDir, _float fTimeDelta, _bool isTurn)
@@ -484,25 +420,36 @@ HRESULT CPlayer::Ready_Components()
 
 	/* FOR.Com_Collider */
 	CBounding_OBB::BOUNDING_OBB_DESC			ColliderDesc{};
-	ColliderDesc.vExtents = _float3(0.5f, 0.8f, 0.5f);
+	ColliderDesc.vExtents = _float3(0.4f, 1.f, 0.4f);
 	ColliderDesc.vCenter = _float3(0.f, ColliderDesc.vExtents.y, 0.f);
 	ColliderDesc.vAngles = _float3(0.f, 0.f, 0.f);
 
 	if (FAILED(__super::Add_Component(LEVEL_STATIC, TEXT("Prototype_Component_Collider_OBB"),
 		TEXT("Com_Collider"), reinterpret_cast<CComponent**>(&m_pColliderCom), &ColliderDesc)))
 		return E_FAIL;
+	m_pColliderCom->Set_Owner(this);
+
+	// 항상 마지막에 생성하기
+	CRigidBody::RIGIDBODY_DESC RigidBodyDesc{};
+	RigidBodyDesc.isStatic = false;
+	RigidBodyDesc.isGravity = false;
+	RigidBodyDesc.pOwnerTransform = m_pTransformCom;
+	RigidBodyDesc.pOwnerNavigation = m_pNavigationCom;
+
+	RigidBodyDesc.pOwner = this;
+	RigidBodyDesc.fStaticFriction = 1.0f;
+	RigidBodyDesc.fDynamicFriction = 0.0f;
+	RigidBodyDesc.fRestituion = 0.0f;
+
+	physX::GeometryCapsule CapsuleDesc;
+	CapsuleDesc.fHeight = 1.5f;
+	CapsuleDesc.fRadius = 0.25f;
+	RigidBodyDesc.pGeometry = &CapsuleDesc;
 
 	/* FOR.Com_RigidBody */
 	if (FAILED(__super::Add_Component(LEVEL_STATIC, TEXT("Prototype_Component_RigidBody"),
-		TEXT("Com_RigidBody"), reinterpret_cast<CComponent**>(&m_pRigidBodyCom))))
+		TEXT("Com_RigidBody"), reinterpret_cast<CComponent**>(&m_pRigidBodyCom), &RigidBodyDesc)))
 		return E_FAIL;
-	m_pRigidBodyCom->Set_Owner(this);
-	m_pRigidBodyCom->Set_IsFriction(true);
-	m_pRigidBodyCom->Set_Friction(_float3(10.f, 0.f, 10.f));
-	m_pRigidBodyCom->Set_IsGravity(false);
-	m_pRigidBodyCom->Set_GravityScale(15.f);
-	m_pRigidBodyCom->Set_VelocityLimit(_float3(25.f, 30.f, 25.f));
-	m_pRigidBodyCom->Set_Navigation(m_pNavigationCom);
 
 	return S_OK;
 }
@@ -584,8 +531,6 @@ CPlayer * CPlayer::Create(ID3D11Device * pDevice, ID3D11DeviceContext * pContext
 
 	return pInstance;
 }
-
-
 
 CPawn* CPlayer::Clone(void * pArg)
 {

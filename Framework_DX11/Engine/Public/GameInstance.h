@@ -140,7 +140,7 @@ public:
 	HRESULT Render_TextCenter(const _wstring& strFontTag, const _tchar* pText, _fvector vPosition, _fvector vColor = XMVectorSet(1.f, 1.f, 1.f, 1.f), _float fRadian = 0.f, _fvector vPivot = XMVectorSet(0.f, 0.f, 0.f, 1.f), _float fScale = 1.f);
 	// 24-11-22 김성용 
 	// 오른쪽 정렬로 텍스트 그리기
-	HRESULT Render_Right(const _wstring& strFontTag, const _tchar* pText, _fvector vPosition, _fvector vColor = XMVectorSet(1.f, 1.f, 1.f, 1.f), _float fRadian = 0.f, _fvector vPivot = XMVectorSet(0.f, 0.f, 0.f, 1.f), _float fScale = 1.f);
+	HRESULT Render_TextRight(const _wstring& strFontTag, const _tchar* pText, _fvector vPosition, _fvector vColor = XMVectorSet(1.f, 1.f, 1.f, 1.f), _float fRadian = 0.f, _fvector vPivot = XMVectorSet(0.f, 0.f, 0.f, 1.f), _float fScale = 1.f);
 #pragma endregion
 
 #pragma region TARGET_MANAGER
@@ -197,10 +197,8 @@ public:
 #pragma endregion
 
 #pragma region PhysX_MANAGER
-		HRESULT AddPhysX_StaticMesh(class CGameObject* pObject, _wstring strModelName);
-		HRESULT SetUpPhysX_Player(class CGameObject* pPlayer);
-		void    Reset_PhsyX();
-
+		PxPhysics* Get_PhysX() const;
+		PxScene* Get_PhysXScene() const;
 		_bool   RayCast_PhysX(_vector vRayPos, _vector vRayDir, _vector* vHitPos, _vector* vNormal, _float* fHitDistance);
 #pragma endregion
 

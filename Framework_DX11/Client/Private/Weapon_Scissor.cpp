@@ -91,6 +91,9 @@ void CWeapon_Scissor::Late_Update(_float fTimeDelta)
 
 HRESULT CWeapon_Scissor::Render()
 {
+	if (m_isSeperate)
+		return S_OK;
+
 	if (FAILED(__super::Render()))
 		return E_FAIL;
 

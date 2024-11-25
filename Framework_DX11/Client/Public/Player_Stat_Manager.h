@@ -50,11 +50,23 @@ public:
 
 	}STAT;
 
+	typedef struct BUFF_INFO
+	{
+		_wstring strBuff_Name = TEXT("none");
+		_int iTexture_Index = 0;
+		_Vec4 vTexture_Color = { 0.f,0.f,0.f,0.f };
+		_float fLifeTime_Now = 0.f;
+		_float fLifeTime_Max = 0.f;
+	}BUFF;
+
 private:
 	CPlayer_Stat_Manager(CGameInstance* pGameInstance);
 	virtual ~CPlayer_Stat_Manager() = default;
 
 public:
+	// 업데이트 
+	void Update_Stat(_float fTimeDelta);
+
 	// 정보 접근 
 	const _float& Get_NowStat_Normal(STAT_NORMAL eIndex) { return m_vecStat_Normal[_int(eIndex)]->fStat_Now; }
 	const STAT& Get_StatInfo_Normal(STAT_NORMAL eIndex) { return *m_vecStat_Normal[_int(eIndex)]; }
@@ -64,9 +76,17 @@ public:
 
 	const STAT& Get_StatInfo_DEF(STAT_DEF eIndex) { return *m_vecStat_DEF[_int(eIndex)]; }
 
+	_bool Get_Buff(BUFF_INDEX eIndex) { return _bool(m_vecBuff[_int(eIndex)]->fLifeTime_Now); }
+	_float Get_Buff_Ratio(BUFF_INDEX eIndex) { return (m_vecBuff[_int(eIndex)]->fLifeTime_Now / m_vecBuff[_int(eIndex)]->fLifeTime_Max); }
+	const BUFF* Get_Buff_Info(BUFF_INDEX eIndex) { return m_vecBuff[_int(eIndex)]; }
+	void Start_Buff(BUFF_INDEX eIndex) { m_vecBuff[_int(eIndex)]->fLifeTime_Now = m_vecBuff[_int(eIndex)]->fLifeTime_Max; }
+
 	// 정보 수정 
 	void Add_Stat_Normal(STAT_NORMAL eIndex, _float fValue);
 	void Add_StatMax_Normal(STAT_NORMAL eIndex, _float fValue);
+
+	
+
 
 private:
 	HRESULT Initialize_Stat();
@@ -77,9 +97,11 @@ private:
 	CGameInstance* m_pGameInstance = { nullptr };
 	vector<STAT*> m_vecStat_Normal; 
 	vector<STAT*> m_vecStat_DEF;
+	vector<BUFF*> m_vecBuff;
 	_int m_iLevel = 0;
 	_int m_iErgo_NextLevel = 100;
 
+	
 
 
 

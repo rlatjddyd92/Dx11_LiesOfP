@@ -57,7 +57,7 @@
     <ClCompile Include="..\private\Navigation.cpp" />
     <ClCompile Include="..\Private\ObjectOctree.cpp" />
     <ClCompile Include="..\Private\Object_Manager.cpp" />
-    <ClCompile Include="..\Private\Pawn.cpp" />
+    <ClCompile Include="..\Private\Octree.cpp" />
     <ClCompile Include="..\Private\PhysX_Manager.cpp" />
     <ClCompile Include="..\private\Picking.cpp" />
     <ClCompile Include="..\private\PipeLine.cpp" />
@@ -133,7 +133,7 @@
     <ClInclude Include="..\public\Navigation.h" />
     <ClInclude Include="..\Public\ObjectOctree.h" />
     <ClInclude Include="..\Public\Object_Manager.h" />
-    <ClInclude Include="..\Public\Pawn.h" />
+    <ClInclude Include="..\Public\Octree.h" />
     <ClInclude Include="..\Public\PhysX_Manager.h" />
     <ClInclude Include="..\public\Picking.h" />
     <ClInclude Include="..\public\PipeLine.h" />

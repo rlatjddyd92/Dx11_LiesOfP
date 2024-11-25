@@ -32,8 +32,6 @@ HRESULT CTrail_Effect_TP::Initialize(void* pArg)
 	m_InitDesc = m_DefaultDesc;
 	m_eEffectType = TYPE_TRAIL_TP;
 
-	m_DefaultDesc.fAlphaSpeed = 1.f;
-
 	return S_OK;
 }
 
@@ -64,6 +62,8 @@ void CTrail_Effect_TP::Late_Update(_float fTimeDelta)
 		m_isDead = true;
 	}
 
+	if (CRenderer::RG_END <= m_RenderDesc.iRenderGroup)
+		return;
 	m_pGameInstance->Add_RenderObject((CRenderer::RENDERGROUP)m_RenderDesc.iRenderGroup, this);
 }
 

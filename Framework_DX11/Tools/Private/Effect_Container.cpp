@@ -133,7 +133,8 @@ void CEffect_Container::Priority_Update(_float fTimeDelta)
 		if (nullptr == Effect)
 			continue;
 
-		Effect->Priority_Update(fTimeDelta);
+		if(true == Effect->IsActive())
+			Effect->Priority_Update(fTimeDelta);
 	}
 }
 
@@ -164,17 +165,26 @@ void CEffect_Container::Update(_float fTimeDelta)
 
 	if (KEY_TAP(KEY::RIGHT))
 	{
-		m_fCurrentAngle += 10.f;
+		for (auto& Effect : m_Effects)
+		{
+			if (nullptr == Effect)
+				continue;
+			Effect->Set_Loop(true);
+		}
 	}
 	
 
 	if (KEY_TAP(KEY::LEFT))
 	{
-		m_fCurrentAngle -= 10.f;
+		for (auto& Effect : m_Effects)
+		{
+			if (nullptr == Effect)
+				continue;
+			Effect->Set_Loop(false);
+		}
 	}
 
 
-	m_pTransformCom->Rotation(_Vec4(0.f, 0.f, 1.f, 0.f), XMConvertToRadians(m_fCurrentAngle));
 
 	if (true == m_bOrbit)
 	{
@@ -189,16 +199,16 @@ void CEffect_Container::Update(_float fTimeDelta)
 
 	if(true == m_bTurn)
 	{ 
-		// m_pTransformCom->Turn(_Vec4(0.f, 1.f, 0.f, 0.f), fTimeDelta, 10.f);
-		m_pTransformCom->Turn(true, true, true, fTimeDelta, 5.f);
+		m_pTransformCom->Turn(_Vec4(0.f, 1.f, 0.f, 0.f), fTimeDelta, 10.f);
+		// m_pTransformCom->Turn(true, true, true, fTimeDelta, 5.f);
 	}
 
 	for (auto& Effect : m_Effects)
 	{
 		if (nullptr == Effect)
 			continue;
-
-		Effect->Update(fTimeDelta);
+		if (true == Effect->IsActive())
+			Effect->Update(fTimeDelta);
 	}
 }
 
@@ -208,8 +218,8 @@ void CEffect_Container::Late_Update(_float fTimeDelta)
 	{
 		if (nullptr == Effect)
 			continue;
-
-		Effect->Late_Update(fTimeDelta);
+		if (true == Effect->IsActive())
+			Effect->Late_Update(fTimeDelta);
 	}
 }
 

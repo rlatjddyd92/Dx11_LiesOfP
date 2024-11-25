@@ -17,6 +17,15 @@ HRESULT CPhysX_Manager::Initialize()
     // PhysX와 관련된 모든 객체들의 기반이 되는 싱글톤 객체
     m_PxFoundation = PxCreateFoundation(PX_PHYSICS_VERSION, m_PxAllocator, m_PXErrorCallback);
 
+    // Cuda를 사용한 GPU 물리 연산
+    PxCudaContextManagerDesc cudaContextManagerDesc;
+    m_CudaContextManager = PxCreateCudaContextManager(*m_PxFoundation, cudaContextManagerDesc, PxGetProfilerCallback());
+    if (m_CudaContextManager)
+    {
+        if (!m_CudaContextManager->contextIsValid())
+            PX_RELEASE(m_CudaContextManager);
+    }
+
     // PVD(PhysX Visual Debugger) 생성
     m_Pvd = PxCreatePvd(*m_PxFoundation);
     // PVD 소켓 연결 설정
@@ -31,12 +40,29 @@ HRESULT CPhysX_Manager::Initialize()
 
     // 씬 설명 설정
     PxSceneDesc sceneDesc(m_PhysX->getTolerancesScale());
-    sceneDesc.gravity = PxVec3(0.0f, 0.0f, 0.0f);
+    sceneDesc.gravity = PxVec3(0.0f, -9.81f, 0.0f);
 
     // CPU 디스패처(워커 스레드) 생성
     m_PxDispatcher = PxDefaultCpuDispatcherCreate(2);
     sceneDesc.cpuDispatcher = m_PxDispatcher;
     sceneDesc.filterShader = PxDefaultSimulationFilterShader;
+
+    sceneDesc.solverBatchSize = 256;
+    sceneDesc.solverArticulationBatchSize = 32;
+
+    sceneDesc.contactReportStreamBufferSize = 16384;
+    sceneDesc.contactPairSlabSize = 512;
+
+    // GPU 관련 설정
+    sceneDesc.cudaContextManager = m_CudaContextManager;
+    sceneDesc.flags |= PxSceneFlag::eENABLE_GPU_DYNAMICS;
+    sceneDesc.flags |= PxSceneFlag::eENABLE_PCM;
+    sceneDesc.broadPhaseType = PxBroadPhaseType::eGPU;
+    sceneDesc.gpuMaxNumPartitions = 8;
+    sceneDesc.gpuMaxNumStaticPartitions = 255;
+
+    // 매 프레임마다 마찰 계산 - 필요할까?
+    //sceneDesc.flags |= PxSceneFlag::eENABLE_FRICTION_EVERY_ITERATION;
 
     // 씬 생성 PhysX 액터들이 배치될 수 있는 씬
     m_PxScene = m_PhysX->createScene(sceneDesc);
@@ -64,153 +90,95 @@ HRESULT CPhysX_Manager::Initialize()
 
 void CPhysX_Manager::PhysX_Update(_float fTimeDelta)
 {
-    if (nullptr == m_pPlayer)
-        return;
+   
 
-    Compute_MonsterCollision();
+    //for (_uint i = 0; i < m_Monsters.size(); ++i)
+    //{
+    //    CRigidBody* pMonsterRigidBody = dynamic_cast<CRigidBody*>(m_Monsters[i]->Find_Component(RIGIDBODY));
+    //    CNavigation* pNavigation = dynamic_cast<CNavigation*>(m_Monsters[i]->Find_Component(NAVIGATION));
+
+    //    // 1. 현재 속도 가져오기
+    //    _Vec3 vVelocity = pMonsterRigidBody->Get_Velocity();
+
+    //    // 2. 현재 PhysX 위치 가져오기
+    //    PxTransform MonsterPxTransform = m_MonsterRigids[i]->getGlobalPose();
+    //    PxVec3 vPxMonsterPos = MonsterPxTransform.p;
+    //    _Vec3 vPos = _Vec3(vPxMonsterPos.x, vPxMonsterPos.y, vPxMonsterPos.z);
+    //   
+    //    // 3. 이동 가능 여부 판단
+    //    if (!pNavigation->isMove(vPos + vVelocity * fTimeDelta)) {
+    //        // 이동 불가: 속도를 0으로 설정
+    //        m_MonsterRigids[i]->setLinearVelocity(PxVec3(0.f, 0.f, 0.f));
+
+    //        // PhysX 위치를 유지 (추가 이동 방지)
+    //        MonsterPxTransform.p = PxVec3(vPos.x, vPos.y, vPos.z);
+    //        m_MonsterRigids[i]->setGlobalPose(MonsterPxTransform);
+    //    }
+    //    else {
+    //        // 이동 가능: 기존 속도 유지
+    //        m_MonsterRigids[i]->setLinearVelocity(PxVec3(vVelocity.x, vVelocity.y, vVelocity.z));
+    //    }
+
+    //    MonsterPxTransform = m_MonsterRigids[i]->getGlobalPose();
+    //    vPxMonsterPos = MonsterPxTransform.p;
+
+    //    m_Monsters[i]->Get_Transform()->Set_State(CTransform::STATE_POSITION, _Vec3(vPxMonsterPos.x, vPxMonsterPos.y, vPxMonsterPos.z));
+
+    //    // 4. y축 지형 보정 (네비게이션)
+    //    vPxMonsterPos.y = pNavigation->SetUp_OnCell(m_pPlayer->Get_Transform(), 0.f, fTimeDelta);
+
+    //    // 5. y축 보정 후 위치 동기화
+    //    MonsterPxTransform.p = vPxMonsterPos;
+    //    m_MonsterRigids[i]->setGlobalPose(MonsterPxTransform);
+
+    //    // 6. 최종 Transform 동기화
+    //    m_Monsters[i]->Get_Transform()->Set_State(CTransform::STATE_POSITION, _Vec3(vPxMonsterPos.x, vPxMonsterPos.y, vPxMonsterPos.z));
+    //}
+
+    //CRigidBody* pPlayerRigidBody = dynamic_cast<CRigidBody*>(m_pPlayer->Find_Component(RIGIDBODY));
+    //CNavigation* pNavigation = dynamic_cast<CNavigation*>(m_pPlayer->Find_Component(NAVIGATION));
+
+    //// 1. 현재 속도 가져오기
+    //_Vec3 vVelocity = pPlayerRigidBody->Get_Velocity();
+
+    //// 2. 현재 PhysX 위치 가져오기
+    //PxTransform PlayerPxTransform = m_pPlayerRigid->getGlobalPose();
+    //PxVec3 vPxPlayerPos = PlayerPxTransform.p;
+    //_Vec3 vPos = _Vec3(vPxPlayerPos.x, vPxPlayerPos.y, vPxPlayerPos.z);
+
+    //// 3. 이동 가능 여부 판단
+    //if (!pNavigation->isMove(vPos + vVelocity * fTimeDelta)) {
+    //    // 이동 불가: 속도를 0으로 설정
+    //    m_pPlayerRigid->setLinearVelocity(PxVec3(0.f, 0.f, 0.f));
+
+    //    // PhysX 위치를 유지 (추가 이동 방지)
+    //    PlayerPxTransform.p = PxVec3(vPos.x, vPos.y, vPos.z);
+    //    m_pPlayerRigid->setGlobalPose(PlayerPxTransform);
+    //}
+    //else {
+    //    // 이동 가능: 기존 속도 유지
+    //    m_pPlayerRigid->setLinearVelocity(PxVec3(vVelocity.x, vVelocity.y, vVelocity.z));
+    //}
+
+    //PlayerPxTransform = m_pPlayerRigid->getGlobalPose();
+    //vPxPlayerPos = PlayerPxTransform.p;
+
+    //m_pPlayer->Get_Transform()->Set_State(CTransform::STATE_POSITION, _Vec3(vPxPlayerPos.x, vPxPlayerPos.y, vPxPlayerPos.z));
+
+    //// 4. y축 지형 보정 (네비게이션)
+    //vPxPlayerPos.y = pNavigation->SetUp_OnCell(m_pPlayer->Get_Transform(), 0.f, fTimeDelta);
+
+    //// 5. y축 보정 후 위치 동기화
+    //PlayerPxTransform.p = vPxPlayerPos;
+    //m_pPlayerRigid->setGlobalPose(PlayerPxTransform);
+
+    //// 6. 최종 Transform 동기화
+    //m_pPlayer->Get_Transform()->Set_State(CTransform::STATE_POSITION, _Vec3(vPxPlayerPos.x, vPxPlayerPos.y, vPxPlayerPos.z));
+
 
     // 물리 씬 업데이트
     m_PxScene->simulate(fTimeDelta);
     m_PxScene->fetchResults(true);
-}
-
-HRESULT CPhysX_Manager::AddPhysX_StaticMesh(CGameObject* pObject, _wstring strModelName)
-{
-    // 게임 객체의 모델 컴포넌트를 얻음
-    CModel* pModel = dynamic_cast<CModel*>(pObject->Find_Component(MODEL));
-
-    // 모델의 각 메쉬에 대해 처리
-    for (auto* Mesh : pModel->Get_Meshes())
-    {
-        VTXMESH* pVB = Mesh->Get_Vertices();  // 정점 데이터
-        VTXANIMMESH* pAnimVB = Mesh->Get_AnimVertices();  // 정점 데이터
-        _uint* pIB = Mesh->Get_Indices();  // 인덱스 데이터
-
-        _uint iNumVertices = Mesh->Get_NumVertices();  // 정점 개수
-        _uint iNumIndices = Mesh->Get_NumIndices();  // 인덱스 개수
-        _uint iNumTriangles = iNumIndices / 3;  // 삼각형 개수
-
-        // 정점 좌표를 저장할 피직스용 벡터
-        vector<PxVec3> Vertices;
-        Vertices.reserve(iNumVertices);
-
-        // 게임 객체의 월드 변환 행렬
-        _matrix WorldMatrix = pObject->Get_Transform()->Get_WorldMatrix();
-
-        // 정점 좌표 변환 및 저장
-        for (_uint i = 0; i < iNumVertices; ++i)
-        {
-            _vector vVertexPosition = {};
-            if (nullptr == pVB)
-                vVertexPosition = XMLoadFloat3(&pAnimVB[i].vPosition);
-            else
-                vVertexPosition = XMLoadFloat3(&pVB[i].vPosition);
-
-            vVertexPosition = XMVector3TransformCoord(vVertexPosition, WorldMatrix);
-            Vertices.push_back(PxVec3(XMVectorGetX(vVertexPosition), XMVectorGetY(vVertexPosition), XMVectorGetZ(vVertexPosition)));
-
-        }
-
-        // 인덱스를 저장할 벡터
-        vector<PxU32> Indices;
-        Indices.reserve(iNumIndices);
-
-        // 인덱스 데이터 저장
-        for (_uint i = 0; i < iNumIndices; ++i)
-        {
-            _uint Index = pIB[i];
-            Indices.push_back(Index);
-        }
-
-        // 삼각형 메쉬 설명 생성
-        PxTriangleMeshDesc tDesc;
-        tDesc.points.count = iNumVertices;
-        tDesc.points.stride = sizeof(PxVec3);
-        tDesc.points.data = Vertices.data();
-        tDesc.triangles.count = iNumTriangles;
-        tDesc.triangles.stride = sizeof(PxU32) * 3;
-        tDesc.triangles.data = Indices.data();
-
-        // 삼각형 메쉬 생성
-        PxTriangleMesh* pTriangleMesh = PxCreateTriangleMesh(PxCookingParams(PxTolerancesScale(0.0f, 0.0f)), tDesc);
-
-        // 삼각형 메쉬 형상 생성
-        PxTriangleMeshGeometry* pGeometry = new PxTriangleMeshGeometry(pTriangleMesh);
-
-        // 충돌 메쉬 목록에 추가
-        m_ColMesheGeometries.push_back(pGeometry);
-
-        // RigidStatic 객체 생성
-        // 움직이지 않는 정적 모델들은 이거로 만들어야함
-        PxRigidStatic* pActor = m_PhysX->createRigidStatic(Get_PhysXTransform(pObject));
-
-        // 물리 재질 생성
-        PxMaterial* Material = m_PhysX->createMaterial(0.5f, 0.5f, 0.6f);
-        // 충돌 형상 생성 및 추가
-        PxShape* pShape = m_PhysX->createShape(*pGeometry, *Material);
-        pActor->attachShape(*pShape);
-
-        // 물리 씬에 Actor 추가
-        m_PxScene->addActor(*pActor);
-
-        // 정적 Actor 목록에 추가
-        m_StaticActors.push_back(pActor);
-    }
-
-    return S_OK;
-}
-
-HRESULT CPhysX_Manager::SetUp_Player(CGameObject* pPlayer)
-{
-    PxRigidDynamic* pRigid = m_PhysX->createRigidDynamic(Get_PhysXTransform(pPlayer));
-
-    // 머테리얼 환경 정의
-    // 정적 마찰, 동적 마찰, 반발 계수
-    PxMaterial* Material = m_PhysX->createMaterial(0.5f, 0.5f, 0.6f);
-
-    // 반지름이 0.5이고 높이가 0.3인 캡슐 헝태
-
-    m_PlayerCapusle = PxCapsuleGeometry(0.55f, 0.29f);
-    PxShape* pShape = m_PhysX->createShape(m_PlayerCapusle, *Material);
-
-    pRigid->attachShape(*pShape);
-
-    m_PxScene->addActor(*pRigid);
-    m_pPlayerRigid = pRigid;
-
-    m_pPlayer = pPlayer;
-    Safe_AddRef(m_pPlayer);
-
-    return S_OK;
-}
-
-HRESULT CPhysX_Manager::Add_Monster(CGameObject* pMonster)
-{
-    if (nullptr == pMonster)
-        return E_FAIL;
-
-    PxRigidDynamic* pRigid = m_PhysX->createRigidDynamic(Get_PhysXTransform(pMonster));
-
-    // 머테리얼 환경 정의
-    // 정적 마찰, 동적 마찰, 반발 계수
-    PxMaterial* Material = m_PhysX->createMaterial(0.5f, 0.5f, 0.6f);
-
-    // 반지름이 0.5이고 높이가 0.3인 캡슐 헝태
-
-    PxCapsuleGeometry MonsterCapsule = PxCapsuleGeometry(0.55f, 0.29f);
-    PxShape* pShape = m_PhysX->createShape(MonsterCapsule, *Material);
-
-    pRigid->attachShape(*pShape);
-    m_PxScene->addActor(*pRigid);
-
-    PxTransform             PxMonsterransform;
-
-    m_PxMonsterTransforms.emplace_back(PxMonsterransform);
-    m_MonsterCapsules.emplace_back(MonsterCapsule);
-    m_MonsterRigids.emplace_back(pRigid);
-    m_Monsters.emplace_back(pMonster);
-
-    return S_OK;
 }
 
 _bool CPhysX_Manager::RayCast(PxVec3 vRayPos, PxVec3 vRayDir, _vector* vHitPos, _vector* vNormal, _float* fHitDistance)
@@ -299,8 +267,6 @@ _bool CPhysX_Manager::RayCast(PxVec3 vRayPos, PxVec3 vRayDir, _vector* vHitPos, 
 
     return isHit;
 }
-
-
 
 _bool CPhysX_Manager::RayCast(_vector vRayPos, _vector vRayDir, _vector* vHitPos, _vector* vNormal, _float* fHitDistance)
 {
@@ -392,216 +358,6 @@ _bool CPhysX_Manager::RayCast(_vector vRayPos, _vector vRayDir, _vector* vHitPos
     return isHit;
 }
 
-_bool CPhysX_Manager::RayCast_PlayerDown(_vector* vHitPos, _vector* vNormal, _float* fHitDistance)
-{
-    _vector vPlayerDown = XMVector3Normalize(m_pPlayer->Get_Transform()->Get_State(CTransform::STATE_UP)) * -1.f;
-    _vector vPlayerLook = XMVector3Normalize(m_pPlayer->Get_Transform()->Get_State(CTransform::STATE_LOOK));
-    _vector vPlayerPos = m_pPlayer->Get_Transform()->Get_State(CTransform::STATE_POSITION);
-
-    PxVec3 vRayDir = PxVec3(XMVectorGetX(vPlayerDown), XMVectorGetY(vPlayerDown), XMVectorGetZ(vPlayerDown));
-    PxVec3 vRayPos = m_pPlayerRigid->getGlobalPose().p;// +(vRayDir * (0.86f));
-    //PxVec3 vRayPos = PxVec3(XMVectorGetX(vPlayerPos), XMVectorGetY(vPlayerPos), XMVectorGetZ(vPlayerPos));
-
-    return RayCast(vRayPos, vRayDir, vHitPos, vNormal, fHitDistance);
-}
-
-_bool CPhysX_Manager::RayCast_PlayerLook(_vector* vHitPos, _vector* vNormal, _float* fHitDistance)
-{
-    _vector vPlayerLook = XMVector3Normalize(m_pPlayer->Get_Transform()->Get_State(CTransform::STATE_LOOK));
-    PxVec3 vRayDir = PxVec3(XMVectorGetX(vPlayerLook), XMVectorGetY(vPlayerLook), XMVectorGetZ(vPlayerLook));
-
-    PxVec3 vCenterPos = m_pPlayerRigid->getGlobalPose().p;
-    PxVec3 vRayPos = m_pPlayerRigid->getGlobalPose().p + (vRayDir * (m_PlayerCapusle.radius + 0.01f));
-
-    return RayCast(vRayPos, vRayDir, vHitPos, vNormal, fHitDistance);
-}
-
-_bool CPhysX_Manager::RayCast_PlayerHitDir(_vector* vHitPos, _vector* vNormal, _float* fHitDistance)
-{
-    _vector vPlayerDown = XMVector3Normalize(m_pPlayer->Get_Transform()->Get_State(CTransform::STATE_UP)) * -1.f;
-
-    static _float f = 0.01f;
-    if (GetKeyState(VK_UP) & 0x8000)
-        f += 0.01f;
-
-    if (GetKeyState(VK_DOWN) & 0x8000)
-        f -= 0.01f;
-
-    PxVec3 vCenterPos = m_pPlayerRigid->getGlobalPose().p;
-    PxVec3 vRayDir = PxVec3(XMVectorGetX(vPlayerDown), XMVectorGetY(vPlayerDown), XMVectorGetZ(vPlayerDown));
-    PxVec3 vRayPos = m_pPlayerRigid->getGlobalPose().p + (vRayDir * (0.97f));
-
-    return RayCast(vRayPos, vRayDir, vHitPos, vNormal, fHitDistance);
-}
-
-void CPhysX_Manager::Compute_Collision(_vector* vHitDir, _float* fHitLength)
-{
-    if (nullptr == m_pPlayer)
-        return;
-
-    CTransform* PlayerTransformCom = m_pPlayer->Get_Transform();
-    Safe_AddRef(PlayerTransformCom);
-
-    _matrix PlayerWorldMatirx = PlayerTransformCom->Get_WorldMatrix();
-
-    _vector vPlayerPos = PlayerWorldMatirx.r[3];
-    _vector vPlayerUp = XMVector3Normalize(PlayerWorldMatirx.r[1]);
-
-    PxVec3  vDir = { XMVectorGetX(*vHitDir), XMVectorGetY(*vHitDir), XMVectorGetZ(*vHitDir) };
-
-    _vector vStartPos = vPlayerPos + vPlayerUp * 0.1f; // 아래
-    _vector vEndPos = vPlayerPos + vPlayerUp * 1.5f;
-
-    PxVec3 PxStartPos = { XMVectorGetX(vStartPos), XMVectorGetY(vStartPos), XMVectorGetZ(vStartPos) };
-    PxVec3 PxEndPos = { XMVectorGetX(vEndPos), XMVectorGetY(vEndPos), XMVectorGetZ(vEndPos) };
-
-    m_PxPlayerTransform = PxTransformFromSegment(PxStartPos, PxEndPos);
-
-    _bool isCollision = false;
-    _bool isGround = false;
-
-    for (auto& Mesh : m_ColMesheGeometries)
-    {
-        // 충돌한 반대 방향, 충돌 깊이, 검사할 형태(EX: 캡슐), 
-        if (PxComputeTriangleMeshPenetration(vDir, *fHitLength, m_PlayerCapusle, m_PxPlayerTransform, *Mesh, PxTransform(PxIDENTITY::PxIdentity), 1))
-        {
-            // 충돌한 깊이가 0.1f 이상이면
-            if (*fHitLength > 0.1f)
-            {
-                isCollision = true;
-
-                // 충돌한 반대 방향
-                *vHitDir = XMVector3Normalize(XMVectorSet(vDir.x, vDir.y, vDir.z, 0.f));
-
-                _float fRadain;
-                XMStoreFloat(&fRadain, XMVector3Dot(vPlayerUp, *vHitDir));
-
-                // 충돌 각도가 45도 아래면 땅에 붙어있는걸로 판단
-                _float fAngle = XMConvertToDegrees(acosf(fRadain));
-                if (fAngle <= 45.f)
-                {
-                    isGround = true;
-                }
-
-                // 충돌한 방향의 반대 방향으로 충돌한 깊이만큼 위치를 이동
-                vPlayerPos = vPlayerPos + (*vHitDir * ((*fHitLength - 0.05f)));
-                PlayerTransformCom->Set_State(CTransform::STATE_POSITION, vPlayerPos);
-            }
-        }
-    }
-
-    //m_pPlayer->Set_IsCollision(isCollision);
-    //m_pPlayer->Set_IsGround(isGround);
-
-    m_pPlayerRigid->setGlobalPose(m_PxPlayerTransform);
-
-    Safe_Release(PlayerTransformCom);
-}
-
-void CPhysX_Manager::Compute_MonsterCollision()
-{
-    for (_uint i = 0; i < m_Monsters.size(); ++i)
-    {
-        CTransform* MonsterTransformCom = m_Monsters[i]->Get_Transform();
-        Safe_AddRef(MonsterTransformCom);
-
-        //CRigidBody* MonsterRigidbodyCom = dynamic_cast<CRigidBody*>(m_Monsters[i]->Find_Component(RIGIDBODY));
-        //Safe_AddRef(MonsterRigidbodyCom);
-
-        _matrix MonsterWorldMatirx = MonsterTransformCom->Get_WorldMatrix();
-
-        _vector vMonsterPos = MonsterWorldMatirx.r[3];
-        _vector vMonsterUp = XMVector3Normalize(MonsterWorldMatirx.r[1]);
-
-        PxVec3  vPxDir;
-        PxReal fHitLenght;
-
-        _vector vStartPos = vMonsterPos + vMonsterUp * 0.1f; // 아래
-        _vector vEndPos = vMonsterPos + vMonsterUp * 1.5f;
-
-        PxVec3 PxStartPos = { XMVectorGetX(vStartPos), XMVectorGetY(vStartPos), XMVectorGetZ(vStartPos) };
-        PxVec3 PxEndPos = { XMVectorGetX(vEndPos), XMVectorGetY(vEndPos), XMVectorGetZ(vEndPos) };
-
-        m_PxMonsterTransforms[i] = PxTransformFromSegment(PxStartPos, PxEndPos);
-
-        _bool isCollision = false;
-        _bool isGround = false;
-
-        for (auto& Mesh : m_ColMesheGeometries)
-        {
-            // 충돌한 반대 방향, 충돌 깊이, 검사할 형태(EX: 캡슐), 
-            if (PxComputeTriangleMeshPenetration(vPxDir, fHitLenght, m_MonsterCapsules[i], m_PxMonsterTransforms[i], *Mesh, PxTransform(PxIDENTITY::PxIdentity), 1))
-            {
-                // 충돌한 깊이가 0.1f 이상이면
-                if (fHitLenght > 0.1f)
-                {
-                    isCollision = true;
-
-                    // 충돌한 반대 방향
-                    _vector vDir = XMVector3Normalize(XMVectorSet(vPxDir.x, vPxDir.y, vPxDir.z, 0.f));
-
-                    _float fRadain;
-                    XMStoreFloat(&fRadain, XMVector3Dot(vMonsterUp, vDir));
-
-                    // 충돌 각도가 45도 아래면 땅에 붙어있는걸로 판단
-                    _float fAngle = XMConvertToDegrees(acosf(fRadain));
-                    if (fAngle <= 45.f)
-                    {
-                        isGround = true;
-                    }
-
-                    // 충돌한 방향의 반대 방향으로 충돌한 깊이만큼 위치를 이동
-                    vMonsterPos = vMonsterPos + (vDir * ((fHitLenght - 0.1f)));
-                    MonsterTransformCom->Set_State(CTransform::STATE_POSITION, vMonsterPos);
-                }
-            }
-        }
-
-        //m_Monsters[i]->Set_IsCollision(isCollision);
-        //m_Monsters[i]->Set_IsGround(isGround);
-
-        //m_MonsterRigids[i]->setGlobalPose(m_PxPlayerTransform);
-
-        //Safe_Release(MonsterRigidbodyCom);
-        Safe_Release(MonsterTransformCom);
-    }
-
-    m_MonsterCapsules.clear();
-    for (auto& Rigid : m_MonsterRigids)
-    {
-        PhysX_RELEASE(Rigid);
-    }
-    m_MonsterRigids.clear();
-    m_Monsters.clear();
-}
-
-void CPhysX_Manager::Reset_PhsyX()
-{
-    for (auto& Geometry : m_ColMesheGeometries)
-    {
-        PhysX_RELEASE(Geometry->triangleMesh);
-        Safe_Delete(Geometry);
-    }
-    m_ColMesheGeometries.clear();
-
-    for (auto& Actor : m_StaticActors)
-    {
-        PhysX_RELEASE(Actor);
-    }
-    m_StaticActors.clear();
-
-    PhysX_RELEASE(m_pPlayerRigid);
-
-    for (auto& Rigid : m_MonsterRigids)
-    {
-        PhysX_RELEASE(Rigid);
-    }
-    m_MonsterRigids.clear();
-
-    Safe_Release(m_pPlayer);
-    m_pPlayer = nullptr;
-}
-
 PxTransform CPhysX_Manager::Get_PhysXTransform(CGameObject* pObject)
 {
     //이게 맞나?
@@ -638,8 +394,6 @@ void CPhysX_Manager::Free()
 {
     __super::Free();
 
-    Reset_PhsyX();
-
     PhysX_RELEASE(m_PxScene);
 
     // PhysX Extensions 닫기
@@ -647,9 +401,14 @@ void CPhysX_Manager::Free()
 
     PhysX_RELEASE(m_PxDispatcher);
     PhysX_RELEASE(m_PhysX);
-    PhysX_RELEASE(m_pTransport);
-    PhysX_RELEASE(m_Pvd);
 
+
+    PxPvdTransport* transport = m_Pvd->getTransport();
+    m_pTransport->disconnect();
+    PhysX_RELEASE(m_Pvd);
+    PhysX_RELEASE(m_pTransport);
+
+    PhysX_RELEASE(m_CudaContextManager);
     // 제일 마지막에 Release
     PhysX_RELEASE(m_PxFoundation);
 

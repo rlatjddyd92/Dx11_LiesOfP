@@ -34,13 +34,18 @@ public:
 		_Vec3				vPos = {};
 		_Vec3				vRotation = {};
 		_Vec3				vScale = { 1.f, 1.f, 1.f };
+		_Vec3				vOverallScaling = { 0.f, 0.f, 0.f };
+
+		// 지속 시간
+		_float				fDuration = { 0.f };
 
 		// 렌더 셰이더에 전달
 		_uint				iShaderIndex = { 0 };
 		_uint				iGeomState = { 0 };
 		_Vec2				vTexDevide = { 1.f ,1.f };
 		_float				fSpriteSpeed = { 0.f };
-		_Vec2				vScaling = { 1.f, 1.f };
+		_Vec2				vStartScaling = { 1.f, 1.f };
+		_Vec2				vScalingRatio = { 0.f, 0.f };
 		_float				fStartRotation = { 0.f };
 		_float				fRotationPerSecond = { 0.f };
 	}DEFAULT_DESC;
@@ -89,6 +94,7 @@ private:
 	DEFAULT_DESC m_DefaultDesc = {};
 	DEFAULT_DESC m_InitDesc = {};
 
+	_float m_fAccumulateTime = { 0.f };
 
 private:
 	HRESULT Ready_Components(const PARTICLE_EFFECT_DESC& Desc);

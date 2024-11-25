@@ -27,12 +27,23 @@ HRESULT CSky::Initialize(void * pArg)
 	if (FAILED(Ready_Components()))
 		return E_FAIL;
 
+
 	return S_OK;
 }
 
 void CSky::Priority_Update(_float fTimeDelta)
 {
-	
+	static float aa = 90.f;
+
+	if (KEY_TAP(KEY::UP))
+	{
+		aa += 1.f;
+	}
+	if (KEY_TAP(KEY::DOWN))
+	{
+		aa -= 1.f;
+	}
+	m_pTransformCom->Rotation(0.f, aa, 0.f);
 }
 
 void CSky::Update(_float fTimeDelta)

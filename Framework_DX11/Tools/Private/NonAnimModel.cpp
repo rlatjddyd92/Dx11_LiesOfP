@@ -48,6 +48,15 @@ HRESULT CNonAnimModel::Initialize(void* pArg)
 	m_iStaticHashId++;
 	m_iHashId = m_iStaticHashId;
 
+	uint32_t hash = static_cast<uint32_t>(m_iHashId * 100); // 임의의 상수로 인덱스를 해시처럼 변환
+
+	UINT8 a = (hash >> 24) & 0xff;
+	UINT8 r = (hash >> 16) & 0xff;
+	UINT8 g = (hash >> 8) & 0xff;
+	UINT8 b = (hash) & 0xff;
+
+	m_vHashColor = _float4(r / 255.f, g / 255.f, b / 255.f, a / 255.f);
+
 	return S_OK;
 }
 
@@ -80,6 +89,8 @@ void CNonAnimModel::Late_Update(_float fTimeDelta)
 
 	if(m_pGameInstance->isIn_Frustum_WorldSpace(m_pTransformCom->Get_State(CTransform::STATE_POSITION), fCullDistance))
 	{
+		//m_pModelCom->Culling(m_pTransformCom->Get_WorldMatrix());
+
 		if (m_isDecal)
 			m_pGameInstance->Add_RenderObject(CRenderer::RG_DECAL, this);
 		else
@@ -87,7 +98,7 @@ void CNonAnimModel::Late_Update(_float fTimeDelta)
 			m_pGameInstance->Add_RenderObject(CRenderer::RG_NONBLEND, this);
 
 		}
-		m_pGameInstance->Add_RenderObject(CRenderer::RG_PICKING, this);
+		//m_pGameInstance->Add_RenderObject(CRenderer::RG_PICKING, this);
 	}
 }
 
@@ -102,6 +113,9 @@ HRESULT CNonAnimModel::Render()
 		return E_FAIL;
 
 	if (FAILED(m_pShaderCom->Bind_RawValue("g_fFar", &m_pGameInstance->Get_Far(), sizeof(_float))))
+		return E_FAIL;
+
+	if (FAILED(m_pShaderCom->Bind_RawValue("g_fHashColor", &m_vHashColor, sizeof(_float4))))
 		return E_FAIL;
 
 	if (m_isDecal)
@@ -132,16 +146,7 @@ HRESULT CNonAnimModel::Render_Picking()
 	if (FAILED(m_pShaderCom->Bind_RawValue("g_fFar", &m_pGameInstance->Get_Far(), sizeof(_float))))
 		return E_FAIL;
 
-	uint32_t hash = static_cast<uint32_t>(m_iHashId * 100); // 임의의 상수로 인덱스를 해시처럼 변환
-
-	UINT8 a = (hash >> 24) & 0xff;
-	UINT8 r = (hash >> 16) & 0xff;
-	UINT8 g = (hash >> 8) & 0xff;
-	UINT8 b = (hash) & 0xff;
-
-	_float4 fColor = _float4(r / 255.f, g / 255.f, b / 255.f, a / 255.f);
-
-	if (FAILED(m_pShaderCom->Bind_RawValue("g_fHashColor", &fColor, sizeof(_float4))))
+	if (FAILED(m_pShaderCom->Bind_RawValue("g_fHashColor", &m_vHashColor, sizeof(_float4))))
 		return E_FAIL;
 
 	if (m_isDecal)
@@ -305,7 +310,11 @@ HRESULT CNonAnimModel::Render_NonAnim()
 
 	if (m_isInstance)
 	{
-		m_pModelCom->Add_InstanceData(m_pTransformCom->Get_WorldMatrix());
+		INSTANCE_DATA tData{};
+		tData.WorldMatrix = m_pTransformCom->Get_WorldMatrix();
+		tData.vHashColor = m_vHashColor;
+
+		m_pModelCom->Add_InstanceData(tData);
 		return S_OK;
 	}
 
@@ -319,18 +328,35 @@ HRESULT CNonAnimModel::Render_NonAnim()
 
 	for (size_t i = 0; i < iNumMeshes; i++)
 	{
-
+		// ARM
 		if (nullptr != m_pModelCom->Find_Texture((_uint)i, TEXTURE_TYPE::ROUGHNESS))
 		{
 			if (FAILED(m_pModelCom->Bind_Material(m_pShaderCom, "g_ARMTexture", ROUGHNESS, (_uint)i)))
 				return E_FAIL;
 		}
+
+		// EMISSIVE
+		if (nullptr != m_pModelCom->Find_Texture((_uint)i, TEXTURE_TYPE::EMISSIVE))
+		{
+			m_fEmissive = 1.f;
+			if (FAILED(m_pModelCom->Bind_Material(m_pShaderCom, "g_EmessiveTexture", EMISSIVE, (_uint)i)))
+				return E_FAIL;
+		}
+		else
+		{
+			m_fEmissive = 0.f;
+		}
+		if (FAILED(m_pShaderCom->Bind_RawValue("g_fEmessiveMask", &m_fEmissive, sizeof(_float))))
+			return E_FAIL;
+
+
 		if (m_isLight == false)
 		{
 			if (FAILED(m_pModelCom->Bind_Material(m_pShaderCom, "g_DiffuseTexture", TEXTURE_TYPE::DIFFUSE, (_uint)i)))
 				return E_FAIL;
 		}
 
+		// NORMAL
 		if (nullptr != m_pModelCom->Find_Texture((_uint)i, TEXTURE_TYPE::NORMALS))
 		{
 			if (FAILED(m_pModelCom->Bind_Material(m_pShaderCom, "g_NormalTexture", NORMALS, (_uint)i)))
