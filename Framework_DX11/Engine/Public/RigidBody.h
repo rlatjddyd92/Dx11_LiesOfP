@@ -38,6 +38,7 @@ public:
 public:
     void Set_Velocity(const _Vec3& vVelocity);
     void Add_Force(const _Vec3& vForce, PxForceMode::Enum _eMode = PxForceMode::eFORCE);
+    void Set_Mass(_float fMass);
 
 private:
     class CGameObject* m_pOwner = { nullptr };

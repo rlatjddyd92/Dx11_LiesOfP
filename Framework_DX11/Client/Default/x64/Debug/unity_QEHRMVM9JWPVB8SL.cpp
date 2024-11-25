@@ -9,6 +9,9 @@
 #include "D:\GitProject\Dx11_LiesOfP\Framework_DX11\Client\Private\CarcassBigA.cpp"
 
 
+#include "D:\GitProject\Dx11_LiesOfP\Framework_DX11\Client\Private\State_SimonManusP1_Charge_SwingDown.cpp"
+
+
 #include "D:\GitProject\Dx11_LiesOfP\Framework_DX11\Client\Private\ColliderObject.cpp"
 
 

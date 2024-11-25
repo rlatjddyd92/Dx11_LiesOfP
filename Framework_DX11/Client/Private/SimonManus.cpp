@@ -126,18 +126,11 @@ void CSimonManus::Priority_Update(_float fTimeDelta)
 
 void CSimonManus::Update(_float fTimeDelta)
 {
+	m_vCurRootMove = XMVector3TransformNormal(m_pModelCom->Play_Animation(fTimeDelta), m_pTransformCom->Get_WorldMatrix());
+
+	m_pRigidBodyCom->Set_Velocity(m_vCurRootMove / fTimeDelta);
+
 	m_pFsmCom->Update(fTimeDelta);
-
-	m_vCurRootMove = m_pModelCom->Play_Animation(fTimeDelta, nullptr);
-
-	if (m_bRootMoveCtr)
-	{
-		_Vec3 vPos = m_pTransformCom->Get_State(CTransform::STATE_POSITION);
-
-		m_vCurRootMove = XMVector3TransformNormal(m_vCurRootMove, m_pTransformCom->Get_WorldMatrix());
-
-		m_pTransformCom->Set_State(CTransform::STATE_POSITION, vPos + m_vCurRootMove);
-	}
 
 	if (KEY_TAP(KEY::B))
 	{
@@ -182,12 +175,14 @@ void CSimonManus::Late_Update(_float fTimeDelta)
 {
 	__super::Late_Update(fTimeDelta);
 
-	m_pGameInstance->Add_RenderObject(CRenderer::RG_NONBLEND, this);
+	m_pRigidBodyCom->Update(fTimeDelta);
 
 	m_pWeapon->Late_Update(fTimeDelta);
 
 	m_pGameInstance->Add_ColliderList(m_pColliderCom);
 
+
+	m_pGameInstance->Add_RenderObject(CRenderer::RG_NONBLEND, this);
 	for (_uint i = 0; i < EXCOLLIDER::COLLTYPE_END; ++i)
 	{
 		m_pGameInstance->Add_ColliderList(m_EXCollider[i]);
@@ -223,6 +218,14 @@ void CSimonManus::DeActive_CurretnWeaponCollider(_uint iCollIndex)
 HRESULT CSimonManus::Ready_Components()
 {
 	if (FAILED(__super::Ready_Components()))
+		return E_FAIL;
+
+	/* For.Com_Navigation */
+	CNavigation::NAVIGATION_DESC			NaviDesc{};
+	NaviDesc.iCurrentIndex = 0;
+
+	if (FAILED(__super::Add_Component(LEVEL_GAMEPLAY, TEXT("Prototype_Component_Navigation"),
+		TEXT("Com_Navigation"), reinterpret_cast<CComponent**>(&m_pNavigationCom), &NaviDesc)))
 		return E_FAIL;
 
 	/* FOR.Com_Model */
@@ -271,9 +274,33 @@ HRESULT CSimonManus::Ready_Components()
 		TEXT("Com_Collider_LowerBody"), reinterpret_cast<CComponent**>(&m_EXCollider[LOWERBODY]), &ColliderDesc)))
 		return E_FAIL;
 
-	for (_uint i = 0; i < LEG_END; ++i)
+	for (_uint i = 0; i < TYPE_END; ++i)
 		m_EXCollider[i]->Set_Owner(this);
 		
+
+	// 항상 마지막에 생성하기
+	CRigidBody::RIGIDBODY_DESC RigidBodyDesc{};
+	RigidBodyDesc.isStatic = false;
+	RigidBodyDesc.isGravity = false;
+	RigidBodyDesc.pOwnerTransform = m_pTransformCom;
+	RigidBodyDesc.pOwnerNavigation = m_pNavigationCom;
+
+	RigidBodyDesc.pOwner = this;
+	RigidBodyDesc.fStaticFriction = 1.0f;
+	RigidBodyDesc.fDynamicFriction = 0.0f;
+	RigidBodyDesc.fRestituion = 0.0f;
+
+	physX::GeometryCapsule CapsuleDesc;
+	CapsuleDesc.fHeight = 2.5f;
+	CapsuleDesc.fRadius = 0.45f;
+	RigidBodyDesc.pGeometry = &CapsuleDesc;
+
+	/* FOR.Com_RigidBody */
+	if (FAILED(__super::Add_Component(LEVEL_STATIC, TEXT("Prototype_Component_RigidBody"),
+		TEXT("Com_RigidBody"), reinterpret_cast<CComponent**>(&m_pRigidBodyCom), &RigidBodyDesc)))
+		return E_FAIL;
+	return S_OK;
+
 	return S_OK;
 }
 

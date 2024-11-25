@@ -49,38 +49,40 @@ HRESULT CRigidBody::Initialize(void* pArg)
 
 void CRigidBody::Update(_float fTimeDelta)
 {
-   // 2. 현재 PhysX 위치 가져오기
+	PxRigidDynamic* pRigidDynamic = static_cast<PxRigidDynamic*>(m_PxActor);
+
    PxTransform PlayerPxTransform = m_PxActor->getGlobalPose();
    PxVec3 vPxPlayerPos = PlayerPxTransform.p;
    _Vec3 vPos = _Vec3(vPxPlayerPos.x, vPxPlayerPos.y, vPxPlayerPos.z);
 
-   // 3. 이동 가능 여부 판단
-   if (!m_pOwnerNavigation->isMove(vPos + m_vVelocity * fTimeDelta)) {
-       // 이동 불가: 속도를 0으로 설정
-	   static_cast<PxRigidDynamic*>(m_PxActor)->setLinearVelocity(PxVec3(0.f, 0.f, 0.f));
+   if (!m_pOwnerNavigation->isMove(vPos + m_vVelocity * fTimeDelta)) 
+   {
+	   pRigidDynamic->setLinearVelocity(PxVec3(0.f, 0.f, 0.f));
 
-       // PhysX 위치를 유지 (추가 이동 방지)
        PlayerPxTransform.p = PxVec3(vPos.x, vPos.y, vPos.z);
-	   static_cast<PxRigidDynamic*>(m_PxActor)->setGlobalPose(PlayerPxTransform);
+	   pRigidDynamic->setGlobalPose(PlayerPxTransform);
    }
-   else {
-       // 이동 가능: 기존 속도 유지
-	   static_cast<PxRigidDynamic*>(m_PxActor)->setLinearVelocity(PxVec3(m_vVelocity.x, m_vVelocity.y, m_vVelocity.z));
+   else 
+   {
+
+	   //if (m_vForce.Length() > 0.f)
+	   //{
+		  // PxVec3 vForce = ConvertToPxVec3(m_vForce);
+		  // pRigidDynamic->addForce(vForce, )
+	   //}
+	   pRigidDynamic->setLinearVelocity(PxVec3(m_vVelocity.x, m_vVelocity.y, m_vVelocity.z));
    }
 
-   PlayerPxTransform = static_cast<PxRigidDynamic*>(m_PxActor)->getGlobalPose();
+   PlayerPxTransform = pRigidDynamic->getGlobalPose();
    vPxPlayerPos = PlayerPxTransform.p;
 
    m_pOwnerTransform->Set_State(CTransform::STATE_POSITION, _Vec3(vPxPlayerPos.x, vPxPlayerPos.y, vPxPlayerPos.z));
 
-   // 4. y축 지형 보정 (네비게이션)
    vPxPlayerPos.y = m_pOwnerNavigation->SetUp_OnCell(m_pOwnerTransform, 0.f, fTimeDelta);
 
-   // 5. y축 보정 후 위치 동기화
    PlayerPxTransform.p = vPxPlayerPos;
-   static_cast<PxRigidDynamic*>(m_PxActor)->setGlobalPose(PlayerPxTransform);
+   pRigidDynamic->setGlobalPose(PlayerPxTransform);
 
-   // 6. 최종 Transform 동기화
    m_pOwnerTransform->Set_State(CTransform::STATE_POSITION, _Vec3(vPxPlayerPos.x, vPxPlayerPos.y, vPxPlayerPos.z));
 
 }
