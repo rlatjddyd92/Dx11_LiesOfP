@@ -316,7 +316,7 @@
       <SDLCheck>true</SDLCheck>
       <PreprocessorDefinitions>_DEBUG;_WINDOWS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>Default</ConformanceMode>
-      <AdditionalIncludeDirectories>../../EngineSDK/Inc/;../Default;../Public;../../imgui;../../ImGuizmo</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>../../EngineSDK/Inc/;../Default;../Public;../../imgui;../../ImGuizmo;../../EngineSDK/Inc/PhysX</AdditionalIncludeDirectories>
       <LanguageStandard>Default</LanguageStandard>
       <IncludeInUnityFile>true</IncludeInUnityFile>
       <CombineFilesOnlyFromTheSameFolder>true</CombineFilesOnlyFromTheSameFolder>

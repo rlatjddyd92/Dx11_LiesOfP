@@ -35,6 +35,6 @@ using namespace std;
 #include "ImGradient.h"
 #include "ImCurveEdit.h"
 
-#ifdef _DEBUG
-#define new DBG_NEW
-#endif
+//#ifdef _DEBUG
+//#define new DBG_NEW
+//#endif
