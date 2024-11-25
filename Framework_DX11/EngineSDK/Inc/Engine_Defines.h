@@ -128,37 +128,37 @@ namespace physX
 }
 
 
-PxVec2 ConvertToPxVec2(const _Vec2& _vector)
+inline PxVec2 ConvertToPxVec2(const _Vec2& _vector)
 {
 	return PxVec2(_vector.x, _vector.y);
 }
 
-PxVec3 ConvertToPxVec3(const _Vec3& _vector)
+inline PxVec3 ConvertToPxVec3(const _Vec3& _vector)
 {
 	return PxVec3(_vector.x, _vector.y, _vector.z);
 }
 
-PxVec4 ConvertToPxVec4(const _Vec4& _vector)
+inline PxVec4 ConvertToPxVec4(const _Vec4& _vector)
 {
 	return PxVec4(_vector.x, _vector.y, _vector.z, _vector.w);
 }
 
-PxQuat ConvertToPxQuat(const _Quaternion& _Quaternion)
+inline PxQuat ConvertToPxQuat(const _Quaternion& _Quaternion)
 {
 	return PxQuat(_Quaternion.x, _Quaternion.y, _Quaternion.z, _Quaternion.w);
 }
 
-PxMat33 ConvertToPxMat33(const _Matrix& _Matrix)
+inline PxMat33 ConvertToPxMat33(const _Matrix& _Matrix)
 {
 	return PxMat33(ConvertToPxVec3(_Matrix.Right()), ConvertToPxVec3(_Matrix.Up()), ConvertToPxVec3(_Matrix.Forward()));
 }
 
-PxMat44 ConvertToPxMat44(const _Matrix& _Matrix)
+inline PxMat44 ConvertToPxMat44(const _Matrix& _Matrix)
 {
 	return PxMat44(ConvertToPxVec3(_Matrix.Right()), ConvertToPxVec3(_Matrix.Up()), ConvertToPxVec3(_Matrix.Forward()), ConvertToPxVec3(_Matrix.Translation()));
 }
 
-PxTransform ConvertToPxTransform(const _Vec3& _vector, const _Quaternion& _Quaternion)
+inline PxTransform ConvertToPxTransform(const _Vec3& _vector, const _Quaternion& _Quaternion)
 {
 	return PxTransform(ConvertToPxVec3(_vector), ConvertToPxQuat(_Quaternion));
 }

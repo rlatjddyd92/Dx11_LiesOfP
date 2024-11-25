@@ -303,8 +303,8 @@ PS_OUT PS_MAIN_DEFERRED(PS_IN In)
     Out.vColor = (vDiffuse * vShade + vSpecular) * g_CascadeShadowTexture.Sample(LinearSampler, In.vTexcoord);
     if (vDiffuse.a == 0)
     {
-        Out.vColor = vPriority;
-        Out.vColor.a = 0;
+        //Out.vColor = vPriority;
+        //Out.vColor.a = 0;
 
     }
         

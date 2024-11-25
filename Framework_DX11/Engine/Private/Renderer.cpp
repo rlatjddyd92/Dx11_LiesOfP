@@ -1040,6 +1040,13 @@ HRESULT CRenderer::Render_Bloom()
 		return E_FAIL;
 	if (FAILED(m_pGameInstance->Bind_RT_ShaderResource(m_pPostProcessShader, TEXT("Target_Bloom_BlurXY1"), "g_BloomTexture")))
 		return E_FAIL;
+	if (FAILED(m_pGameInstance->Bind_RT_ShaderResource(m_pPostProcessShader, TEXT("Target_Priority"), "g_PriorityTexture")))
+		return E_FAIL;
+	if (FAILED(m_pGameInstance->Bind_RT_ShaderResource(m_pPostProcessShader, TEXT("Target_Depth"), "g_DepthTexture")))
+		return E_FAIL;
+
+	if (FAILED(m_pPostProcessShader->Bind_RawValue("g_fFar", &m_pGameInstance->Get_Far(), sizeof(_float))))
+		return E_FAIL;
 
 	m_pPostProcessShader->Begin(4);
 	m_pVIBuffer->Bind_Buffers();
