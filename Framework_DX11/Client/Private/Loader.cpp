@@ -17,6 +17,7 @@
 #pragma region MONSTER
 #include "Monster.h"
 #include "CarcassBigA.h"
+#include "CarcassTail.h"
 #include "SimonManus.h"
 #pragma endregion
 
@@ -779,6 +780,12 @@ HRESULT CLoader::Ready_Resources_For_Monster()
 {
 	_matrix		PreTransformMatrix = XMMatrixIdentity();
 
+	//Prototype_Component_Model_CarcassTail
+	PreTransformMatrix = XMMatrixScaling(0.01f, 0.01f, 0.01f) * XMMatrixRotationY(XMConvertToRadians(270.0f));
+	if (FAILED(m_pGameInstance->Add_Prototype(LEVEL_GAMEPLAY, TEXT("Prototype_Component_Model_CarcassTail"),
+		CModel::Create(m_pDevice, m_pContext, CModel::TYPE_ANIM, "../Bin/ModelData/Anim/CreatedBinFiles/CarcassTail.dat", PreTransformMatrix, true))))
+		return E_FAIL;
+
 	//Prototype_Component_Model_CarcassBigA
 	PreTransformMatrix = XMMatrixScaling(0.01f, 0.01f, 0.01f) * XMMatrixRotationY(XMConvertToRadians(270.0f));
 	if (FAILED(m_pGameInstance->Add_Prototype(LEVEL_GAMEPLAY, TEXT("Prototype_Component_Model_CarcassBigA"),
@@ -903,6 +910,11 @@ HRESULT CLoader::Ready_Prototype()
 #pragma endregion
 
 #pragma region MONSTER
+
+	/* For. Prototype_GameObject_CarcassBigA */
+	if (FAILED(m_pGameInstance->Add_Prototype(TEXT("Prototype_GameObject_CarcassTail"),
+		CCarcassTail::Create(m_pDevice, m_pContext))))
+		return E_FAIL;
 
 	/* For. Prototype_GameObject_CarcassBigA */
 	if (FAILED(m_pGameInstance->Add_Prototype(TEXT("Prototype_GameObject_CarcassBigA"),

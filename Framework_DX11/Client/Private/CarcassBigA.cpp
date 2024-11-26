@@ -198,6 +198,12 @@ HRESULT CCarcassBigA::Ready_Components()
 
 	m_pColliderObject[TYPE_IMPACT] = dynamic_cast<CColliderObject*>(m_pGameInstance->Clone_GameObject(TEXT("Prototype_GameObject_ColliderObj"), &Desc));
 
+	for (_int i = 0; i < TYPE_END; ++i)
+	{
+		m_pColliderObject[i]->DeActive_Collider();
+	}
+
+
 	// 항상 마지막에 생성하기
 	CRigidBody::RIGIDBODY_DESC RigidBodyDesc{};
 	RigidBodyDesc.isStatic = false;
@@ -219,12 +225,6 @@ HRESULT CCarcassBigA::Ready_Components()
 	if (FAILED(__super::Add_Component(LEVEL_STATIC, TEXT("Prototype_Component_RigidBody"),
 		TEXT("Com_RigidBody"), reinterpret_cast<CComponent**>(&m_pRigidBodyCom), &RigidBodyDesc)))
 		return E_FAIL;
-
-	for (_int i = 0; i < TYPE_END; ++i)
-	{
-		m_pColliderObject[i]->DeActive_Collider();
-	}
-
 
 	return S_OK;
 }

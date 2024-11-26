@@ -41,7 +41,7 @@ public:
 	virtual HRESULT Render() override;
 
 private:
-	CColliderObject*			m_pColliderObject[TYPE_END] = { nullptr, nullptr };
+	CColliderObject*			m_pColliderObject[TYPE_END] = { nullptr, nullptr, nullptr };
 	_bool					m_bColliderCtrs[TYPE_END] = {true,  true, true};
 
 private:

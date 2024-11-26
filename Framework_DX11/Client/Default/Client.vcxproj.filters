@@ -630,9 +630,12 @@
     </Filter>
     <Filter Include="02.GameObjects\10.InteractObj\07.SteppingStone">
       <UniqueIdentifier>{eac03529-5428-443d-9fef-537ceca54b74}</UniqueIdentifier>
-	</Filter>
+    </Filter>
     <Filter Include="05.Fsm\Monster\SimonManus\P2\HitFatal">
       <UniqueIdentifier>{cfa0a51c-d72a-4dc8-ba57-c8476da79ca9}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.GameObjects\02.Pawn\01.Monster\CarcassTail">
+      <UniqueIdentifier>{e6447638-0aaa-4897-887b-a642b899134e}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -1152,9 +1155,13 @@
     </ClInclude>
     <ClInclude Include="..\Public\SteppingStone.h">
       <Filter>02.GameObjects\10.InteractObj\07.SteppingStone</Filter>
-	</ClInclude>
+    </ClInclude>
     <ClInclude Include="..\Public\ColliderObject.h">
       <Filter>02.GameObjects\10.ColliderObject</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Public\UIRender_Client.h" />
+    <ClInclude Include="..\Public\CarcassTail.h">
+      <Filter>02.GameObjects\02.Pawn\01.Monster\CarcassTail</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -1644,9 +1651,13 @@
     </ClCompile>
     <ClCompile Include="..\Private\SteppingStone.cpp">
       <Filter>02.GameObjects\10.InteractObj\07.SteppingStone</Filter>
-	</ClCompile>
+    </ClCompile>
     <ClCompile Include="..\Private\ColliderObject.cpp">
       <Filter>02.GameObjects\10.ColliderObject</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Private\UIRender_Client.cpp" />
+    <ClCompile Include="..\Private\CarcassTail.cpp">
+      <Filter>02.GameObjects\02.Pawn\01.Monster\CarcassTail</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
