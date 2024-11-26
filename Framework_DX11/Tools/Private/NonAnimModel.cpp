@@ -85,7 +85,7 @@ void CNonAnimModel::Late_Update(_float fTimeDelta)
 	if (wcscmp(m_szModelTag, TEXT("SM_Monastery_Floor_06")) == 0)
 		fCullDistance = 150.f;
 	else
-		fCullDistance = 30.f;
+		fCullDistance = 40.f;
 
 	if(m_pGameInstance->isIn_Frustum_WorldSpace(m_pTransformCom->Get_State(CTransform::STATE_POSITION), fCullDistance))
 	{
