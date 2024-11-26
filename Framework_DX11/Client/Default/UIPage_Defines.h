@@ -16,7 +16,7 @@
 #include "UIPage_Stat.h"
 #include "UIPage_LevelUp.h"
 #include "UIPage_Skill.h"
-#include "UIPage_ToolTip.h"
+#include "UIPage_ItemInfo.h"
 #include "UIPage_Ortho.h"
 
 

@@ -1,21 +1,21 @@
 #include "stdafx.h"
-#include "..\Public\UIPage_ToolTip.h"
+#include "..\Public\UIPage_ItemInfo.h"
 
 #include "GameInstance.h"
 
 
-CUIPage_ToolTip::CUIPage_ToolTip(ID3D11Device* pDevice, ID3D11DeviceContext* pContext)
+CUIPage_ItemInfo::CUIPage_ItemInfo(ID3D11Device* pDevice, ID3D11DeviceContext* pContext)
 	: CUIPage{ pDevice, pContext }
 {
 
 }
 
-CUIPage_ToolTip::CUIPage_ToolTip(const CUIPage_ToolTip& Prototype)
+CUIPage_ItemInfo::CUIPage_ItemInfo(const CUIPage_ItemInfo& Prototype)
 	: CUIPage{ Prototype }
 {
 }
 
-HRESULT CUIPage_ToolTip::Initialize_Prototype()
+HRESULT CUIPage_ItemInfo::Initialize_Prototype()
 {
 	// 모든 UIPage는 클론 안 함, 여기서 모든 세팅 끝내기 
 
@@ -40,76 +40,64 @@ HRESULT CUIPage_ToolTip::Initialize_Prototype()
 	return S_OK;
 }
 
-HRESULT CUIPage_ToolTip::Initialize(void* pArg)
+HRESULT CUIPage_ItemInfo::Initialize(void* pArg)
 {
 
 
 	return S_OK;
 }
 
-void CUIPage_ToolTip::Priority_Update(_float fTimeDelta)
+void CUIPage_ItemInfo::Priority_Update(_float fTimeDelta)
 {
 	__super::Priority_Update(fTimeDelta);
 }
 
-void CUIPage_ToolTip::Update(_float fTimeDelta)
+void CUIPage_ItemInfo::Update(_float fTimeDelta)
 {
 	__super::Update(fTimeDelta);
 }
 
-void CUIPage_ToolTip::Late_Update(_float fTimeDelta)
+void CUIPage_ItemInfo::Late_Update(_float fTimeDelta)
 {
 	__super::Late_Update(fTimeDelta);
 
-	for (auto& iter : m_vec_Group_Ctrl)
-		__super::UpdatePart_ByControl(iter);
 }
 
-HRESULT CUIPage_ToolTip::Render()
+HRESULT CUIPage_ItemInfo::Render()
 {
 	return S_OK;
 }
 
-void CUIPage_ToolTip::OpenAction()
+void CUIPage_ItemInfo::OpenAction()
 {
 	__super::OpenAction();
 }
 
-void CUIPage_ToolTip::CloseAction()
+void CUIPage_ItemInfo::CloseAction()
 {
 	__super::CloseAction();
 }
 
-CHECK_MOUSE CUIPage_ToolTip::Check_Page_Action(_float fTimeDelta)
+CHECK_MOUSE CUIPage_ItemInfo::Check_Page_Action(_float fTimeDelta)
 {
 	__super::Check_Page_Action(fTimeDelta);
 
 	return CHECK_MOUSE::MOUSE_NONE;
 }
 
-HRESULT CUIPage_ToolTip::Ready_UIPart_Group_Control()
+HRESULT CUIPage_ItemInfo::Ready_UIPart_Group_Control()
 {
 	__super::Ready_UIPart_Group_Control();
 
-	m_vec_Group_Ctrl.resize(_int(PART_GROUP::GROUP_END));
-
-	for (auto& iter : m_vec_Group_Ctrl)
-		iter = new UG_CTRL;
-
-	for (_int i = 0; i < m_vecPart.size(); ++i)
-	{
-		if (m_vecPart[i]->iGroupIndex != -1)
-			m_vec_Group_Ctrl[m_vecPart[i]->iGroupIndex]->PartIndexlist.push_back(i);
-	}
 
 	m_bRender = false;
 
 	return S_OK;
 }
 
-CUIPage_ToolTip* CUIPage_ToolTip::Create(ID3D11Device* pDevice, ID3D11DeviceContext* pContext)
+CUIPage_ItemInfo* CUIPage_ItemInfo::Create(ID3D11Device* pDevice, ID3D11DeviceContext* pContext)
 {
-	CUIPage_ToolTip* pInstance = new CUIPage_ToolTip(pDevice, pContext);
+	CUIPage_ItemInfo* pInstance = new CUIPage_ItemInfo(pDevice, pContext);
 
 	if (FAILED(pInstance->Initialize_Prototype()))
 	{
@@ -120,9 +108,9 @@ CUIPage_ToolTip* CUIPage_ToolTip::Create(ID3D11Device* pDevice, ID3D11DeviceCont
 	return pInstance;
 }
 
-CGameObject* CUIPage_ToolTip::Clone(void* pArg)
+CGameObject* CUIPage_ItemInfo::Clone(void* pArg)
 {
-	CUIPage_ToolTip* pInstance = new CUIPage_ToolTip(*this);
+	CUIPage_ItemInfo* pInstance = new CUIPage_ItemInfo(*this);
 
 	if (FAILED(pInstance->Initialize(pArg)))
 	{
@@ -133,7 +121,7 @@ CGameObject* CUIPage_ToolTip::Clone(void* pArg)
 	return pInstance;
 }
 
-void CUIPage_ToolTip::Free()
+void CUIPage_ItemInfo::Free()
 {
 	__super::Free();
 

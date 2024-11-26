@@ -458,19 +458,15 @@ void CUIPage_Play::Boss_Hp_Update(_float fTimeDelta)
 {
 	if (!m_bIs_BossHp_Activate)
 	{
-		for (_int i = 175; i <= 181; ++i)
-			m_vecPart[i]->bRender = false;
+		__super::Array_Control(_int(PART_GROUP::GROUP_BOSS_NAME), _int(PART_GROUP::GROUP_BOSS_HP_FILL), CTRL_COMMAND::COM_RENDER, false);
 	}
 	else
 	{
-		for (_int i = 175; i < m_vecPart.size(); ++i)
-			m_vecPart[i]->bRender = true;
+		__super::Array_Control(_int(PART_GROUP::GROUP_BOSS_NAME), _int(PART_GROUP::GROUP_BOSS_HP_FILL), CTRL_COMMAND::COM_RENDER, true);
 
-		m_vecPart[175]->strText = m_strBossName;
-		m_vecPart[181]->fRatio = _float(m_fBoss_Hp_Now) / _float(m_fBoss_Hp_Max);
-		m_vecPart[181]->MovePart(m_vecPart[175]->fPosition, fTimeDelta);
-		if (m_vecPart[181]->fRatio == 1.f)
-			_int i = 0;
+		__super::Get_Front_Part_In_Control(_int(PART_GROUP::GROUP_ARM_NAME))->strText = m_strBossName;
+		__super::Get_Front_Part_In_Control(_int(PART_GROUP::GROUP_BOSS_HP_FILL))->fRatio = _float(m_fBoss_Hp_Now) / _float(m_fBoss_Hp_Max);
+		__super::Get_Front_Part_In_Control(_int(PART_GROUP::GROUP_BOSS_HP_FILL))->MovePart(__super::Get_Front_Part_In_Control(_int(PART_GROUP::GROUP_ARM_NAME))->fPosition, fTimeDelta);
 	}
 }
 

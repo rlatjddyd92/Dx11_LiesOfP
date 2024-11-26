@@ -318,7 +318,7 @@
     <ClInclude Include="..\Public\UIPage_Play.h" />
     <ClInclude Include="..\Public\UIPage_Skill.h" />
     <ClInclude Include="..\Public\UIPage_Stat.h" />
-    <ClInclude Include="..\Public\UIPage_ToolTip.h" />
+    <ClInclude Include="..\Public\UIPage_ItemInfo.h" />
     <ClInclude Include="..\Public\UIRender_Batching.h" />
     <ClInclude Include="..\Public\UIRender_Client.h" />
     <ClInclude Include="..\Public\WallDeco.h" />
@@ -490,7 +490,7 @@
     <ClCompile Include="..\Private\UIPage_Play.cpp" />
     <ClCompile Include="..\Private\UIPage_Skill.cpp" />
     <ClCompile Include="..\Private\UIPage_Stat.cpp" />
-    <ClCompile Include="..\Private\UIPage_ToolTip.cpp" />
+    <ClCompile Include="..\Private\UIPage_ItemInfo.cpp" />
     <ClCompile Include="..\Private\UIRender_Batching.cpp" />
     <ClCompile Include="..\Private\UIRender_Client.cpp" />
     <ClCompile Include="..\Private\WallDeco.cpp" />

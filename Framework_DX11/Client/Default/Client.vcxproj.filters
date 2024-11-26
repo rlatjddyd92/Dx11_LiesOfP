@@ -618,10 +618,10 @@
     </Filter>
     <Filter Include="02.GameObjects\02.Pawn\00.Player">
       <UniqueIdentifier>{a04ca2a0-1907-4180-8363-482efb3255f2}</UniqueIdentifier>
-	</Filter>
+    </Filter>
     <Filter Include="97.ShaderFiles\99.UI_Shader">
       <UniqueIdentifier>{b83c9fd9-a108-45c5-8e6f-296e8b63c2da}</UniqueIdentifier>
-	</Filter>
+    </Filter>
     <Filter Include="05.Fsm\Monster\CarcassBigA\Attack\Route\AttackRoute_4">
       <UniqueIdentifier>{12670bf0-76fd-432d-9278-b73ac8212e84}</UniqueIdentifier>
     </Filter>
@@ -873,7 +873,7 @@
     <ClInclude Include="..\Public\UIPage_Stat.h">
       <Filter>03.GameInterface_Controller\00.UIManager\00.UIPage\06.UIPage_Stat</Filter>
     </ClInclude>
-    <ClInclude Include="..\Public\UIPage_ToolTip.h">
+    <ClInclude Include="..\Public\UIPage_ItemInfo.h">
       <Filter>03.GameInterface_Controller\00.UIManager\00.UIPage\09.UIPage_ToolTip</Filter>
     </ClInclude>
     <ClInclude Include="..\public\Mesh_Effect.h">
@@ -1133,7 +1133,7 @@
     </ClInclude>
     <ClInclude Include="..\Public\Ladder.h">
       <Filter>02.GameObjects\10.InteractObj\05.Ladder</Filter>
-	</ClInclude>
+    </ClInclude>
     <ClInclude Include="..\Public\ColliderObject.h">
       <Filter>02.GameObjects\10.ColliderObject</Filter>
     </ClInclude>
@@ -1141,6 +1141,7 @@
     <ClInclude Include="..\Public\State_SimonManusP1_Charge_SwingDown.h">
       <Filter>05.Fsm\Monster\SimonManus\P1\Attck\Single\Charge_SwingDown</Filter>
     </ClInclude>
+    <ClInclude Include="..\Public\UIRender_Client.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Client.cpp">
@@ -1353,7 +1354,7 @@
     <ClCompile Include="..\Private\UIPage_Stat.cpp">
       <Filter>03.GameInterface_Controller\00.UIManager\00.UIPage\06.UIPage_Stat</Filter>
     </ClCompile>
-    <ClCompile Include="..\Private\UIPage_ToolTip.cpp">
+    <ClCompile Include="..\Private\UIPage_ItemInfo.cpp">
       <Filter>03.GameInterface_Controller\00.UIManager\00.UIPage\09.UIPage_ToolTip</Filter>
     </ClCompile>
     <ClCompile Include="..\private\Mesh_Effect.cpp">
@@ -1616,7 +1617,7 @@
     </ClCompile>
     <ClCompile Include="..\Private\Ladder.cpp">
       <Filter>02.GameObjects\10.InteractObj\05.Ladder</Filter>
-	</ClCompile>
+    </ClCompile>
     <ClCompile Include="..\Private\ColliderObject.cpp">
       <Filter>02.GameObjects\10.ColliderObject</Filter>
     </ClCompile>
@@ -1624,6 +1625,7 @@
     <ClCompile Include="..\Private\State_SimonManusP1_Charge_SwingDown.cpp">
       <Filter>05.Fsm\Monster\SimonManus\P1\Attck\Single\Charge_SwingDown</Filter>
     </ClCompile>
+    <ClCompile Include="..\Private\UIRender_Client.cpp" />
   </ItemGroup>
   <ItemGroup>
     <Image Include="Client.ico">
@@ -1688,15 +1690,6 @@
     </FxCompile>
     <FxCompile Include="..\Bin\ShaderFiles\Shader_VtxTrail_TwoPoint_Instance.hlsl">
       <Filter>97.ShaderFiles\Effect</Filter>
-    </FxCompile>
-    <FxCompile Include="..\Bin\ShaderFiles\Shader_UI_Normal.hlsl">
-      <Filter>97.ShaderFiles\99.UI_Shader</Filter>
-    </FxCompile>
-    <FxCompile Include="..\Bin\ShaderFiles\Shader_UI_Change_Color.hlsl">
-      <Filter>97.ShaderFiles\99.UI_Shader</Filter>
-    </FxCompile>
-    <FxCompile Include="..\Bin\ShaderFiles\Shader_UI_Multiple_Color.hlsl">
-      <Filter>97.ShaderFiles\99.UI_Shader</Filter>
     </FxCompile>
   </ItemGroup>
   <ItemGroup>

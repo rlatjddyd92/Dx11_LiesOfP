@@ -89,7 +89,7 @@ public:
 			{
 				if (i <= _int(UIPAGE::PAGE_LOADING))
 				{
-					m_vecPage[i]->SetUpdate(true);
+					//m_vecPage[i]->SetUpdate(true);
 					//m_vecPage[i]->SetRender(true);
 				}
 				else
@@ -110,6 +110,8 @@ public:
 	void Activate_Boss_Hp_Bar(_bool bActive) { m_pUIPage_Play->Activate_Boss_Hp_Bar(bActive); }
 	void Set_Boss_Hp_Bar_Info(_wstring strName, _float HpNow, _float HpMax) { m_pUIPage_Play->Set_Boss_Hp_Bar_Info(strName, HpNow, HpMax);}
 
+	// 로딩바 조정 
+	void Set_Loading_Status(_wstring strMessage, _float fProgress) { m_pUIPage_Loading->Set_Loading_Status(strMessage, fProgress); }
 
 private:
 	void UIControl_Test(_float fTimeDelta);
@@ -212,7 +214,7 @@ private:
 	// 스킬트리
 	CUIPage_Skill* m_pUIPage_Skill = { nullptr };
 	// 테스트
-	CUIPage_ToolTip* m_pUIPage_ToolTip = { nullptr };
+	CUIPage_ItemInfo* m_pUIPage_ToolTip = { nullptr };
 	// 직교
 	CUIPage_Ortho* m_pUIPage_Ortho = { nullptr };
 

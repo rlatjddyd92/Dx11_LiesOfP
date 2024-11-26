@@ -69,9 +69,12 @@ HRESULT CUIManager::Initialize_Prototype()
 	m_vecTestPage_Pos.resize(_int(TEST_PAGE_NAME::NAME_END));
 	m_vecTestPage_Size.resize(_int(TEST_PAGE_NAME::NAME_END));
 
-#ifdef _DEBUG
+
 	m_pTestData = new TESTDATA;
-#endif
+
+
+	
+	
 
 	return S_OK;
 }
@@ -404,6 +407,15 @@ void CUIManager::UIControl_Common(_float fTimeDelta)
 
 void CUIManager::UIControl_Main(_float fTimeDelta)
 {
+	m_pUIPage_Main->Check_Page_Action(fTimeDelta);
+
+	if (m_pUIPage_Main->GetPageAction(PAGEACTION::ACTION_INACTIVE))
+	{
+		m_pUIPage_Loading->GetPageAction(PAGEACTION::ACTION_ACTIVE);
+		m_pUIPage_Loading->SetUpdate(true);
+		m_pUIPage_Loading->SetRender(true);
+	}
+		
 	// 메인 페이지 필요
 }
 
@@ -636,9 +648,9 @@ HRESULT CUIManager::Make_UIPage(_int iIndex)
 		m_pUIPage_Skill = CUIPage_Skill::Create(m_pDevice, m_pContext);
 		m_vecPage[iIndex] = static_cast<CUIPage*>(m_pUIPage_Skill);
 	}
-	else if (iIndex == _int(UIPAGE::PAGE_TOOLTIP))
+	else if (iIndex == _int(UIPAGE::PAGE_ITEMINFO))
 	{
-		m_pUIPage_ToolTip = CUIPage_ToolTip::Create(m_pDevice, m_pContext);
+		m_pUIPage_ToolTip = CUIPage_ItemInfo::Create(m_pDevice, m_pContext);
 		m_vecPage[iIndex] = static_cast<CUIPage*>(m_pUIPage_ToolTip);
 	}
 	else if (iIndex == _int(UIPAGE::PAGE_ORTHO))

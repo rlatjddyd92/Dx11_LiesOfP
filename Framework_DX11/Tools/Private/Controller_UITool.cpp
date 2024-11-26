@@ -317,6 +317,14 @@ void CController_UITool::UIPart_Edit()
 				pNow->szText[iIndex] = m_InputText[iIndex];
 			} while (m_InputText[iIndex] != '\0');
 		}
+		ImGui::DragFloat("TexR", &pNow->fTextColor.x, 0.01f);
+		ImGui::SameLine();
+		ImGui::DragFloat("TexG", &pNow->fTextColor.y, 0.01f);
+		ImGui::SameLine();
+		ImGui::DragFloat("TexB", &pNow->fTextColor.z, 0.01f);
+		ImGui::SameLine();
+		ImGui::DragFloat("TexA", &pNow->fTextColor.w, 0.01f);
+
 		if (ImGui::Checkbox("TextCenter", &pNow->bCenter))
 			if (pNow->bCenter)
 				pNow->bText_Right = false;

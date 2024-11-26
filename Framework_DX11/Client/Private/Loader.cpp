@@ -42,6 +42,7 @@
 #pragma endregion
 
 #include "GameInstance.h"
+#include "GameInterface_Controller.h"
 
 CLoader::CLoader(ID3D11Device * pDevice, ID3D11DeviceContext * pContext)
 	: m_pDevice { pDevice }
@@ -287,9 +288,15 @@ HRESULT CLoader::Ready_Resources_For_GamePlayLevel()
 	//		return textureFuture.get();
 	//}
 
+	// 24-11-26 김성용
+	// 로딩 화면 조정용 내용 추가 
+	GET_GAMEINTERFACE->Set_Loading_Status(TEXT("이펙트 준비 중"), 0.2f);
+
 	lstrcpy(m_szLoadingText, TEXT("이펙트 매니저를 로딩중입니다."));
 	if(FAILED(CEffect_Manager::Get_Instance()->Initialize(m_pDevice, m_pContext, TEXT("../../Tools/Bin/DataFiles/Effect"), TEXT("../Bin/Resources/Textures/Effect"))))
 		return E_FAIL;
+
+	GET_GAMEINTERFACE->Set_Loading_Status(TEXT("이미지 준비 중"), 0.4f);
 
 	lstrcpy(m_szLoadingText, TEXT("텍스쳐를 로딩중입니다."));
 
@@ -327,16 +334,22 @@ HRESULT CLoader::Ready_Resources_For_GamePlayLevel()
 
 	lstrcpy(m_szLoadingText, TEXT("모델을(를) 로딩중입니다."));
 
+	GET_GAMEINTERFACE->Set_Loading_Status(TEXT("플레이어 준비 중"), 0.5f);
 
 	if (FAILED(Ready_Resources_For_Player()))
 		return E_FAIL;
 
+	GET_GAMEINTERFACE->Set_Loading_Status(TEXT("시몬 마누스가 다가오는 중"), 0.6f);
+
 	if (FAILED(Ready_Resources_For_Monster()))
 		return E_FAIL;
+
+	GET_GAMEINTERFACE->Set_Loading_Status(TEXT("무기와 장비를 준비하는 중"), 0.7f);
 	
 	if (FAILED(Ready_Resources_For_Obj()))
 		return E_FAIL;
 
+	GET_GAMEINTERFACE->Set_Loading_Status(TEXT("거짓의 세계를 만드는 중"), 0.8f);
 
 	lstrcpy(m_szLoadingText, TEXT("네비게이션을(를) 로딩중입니다."));
 	/* For.Prototype_Component_Navigation */
@@ -344,7 +357,11 @@ HRESULT CLoader::Ready_Resources_For_GamePlayLevel()
 		CNavigation::Create(m_pDevice, m_pContext, TEXT("../Bin/DataFiles/Nav_Data.dat")))))
 		return E_FAIL;
 
+	GET_GAMEINTERFACE->Set_Loading_Status(TEXT("소리 준비 중"), 0.9f);
+
 	lstrcpy(m_szLoadingText, TEXT("사운드을(를) 로딩중입니다."));
+
+	GET_GAMEINTERFACE->Set_Loading_Status(TEXT("준비 완료"), 1.f);
 	
 	m_isFinished_Main = true;
 
