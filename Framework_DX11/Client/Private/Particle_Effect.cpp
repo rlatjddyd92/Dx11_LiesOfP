@@ -84,6 +84,8 @@ void CParticle_Effect::Late_Update(_float fTimeDelta)
     if (true == m_isDead)
         return;
 
+    m_fAccumulateTime += fTimeDelta;
+
     if (CRenderer::RG_END <= m_RenderDesc.iRenderGroup)
         return;
     m_pGameInstance->Add_RenderObject((CRenderer::RENDERGROUP)m_RenderDesc.iRenderGroup, this);

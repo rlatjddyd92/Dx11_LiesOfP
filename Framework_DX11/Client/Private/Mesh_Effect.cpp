@@ -145,7 +145,7 @@ HRESULT CMesh_Effect::Render()
 
 void CMesh_Effect::Reset()
 {
-	m_vCurrentTileMove ={0.f, 0.f};
+	m_vCurrentTileMove = {0.f, 0.f};
 	m_fAccumulateTime = { 0.f };
 
 	m_DefaultDesc = m_InitDesc;

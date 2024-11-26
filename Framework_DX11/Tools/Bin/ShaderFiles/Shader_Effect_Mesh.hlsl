@@ -136,26 +136,6 @@ PS_OUT PS_DISTORTION_MAIN(PS_IN In)
     return Out;
 }
 
-struct PS_NORMAL_OUT
-{
-    vector vDiffuse : SV_TARGET0;
-    vector vNormal : SV_TARGET1;
-    vector vDepth : SV_TARGET2;
-    vector vARM : SV_TARGET3;
-    vector vPickDepth : SV_TARGET4;
-};
-
-
-PS_NORMAL_OUT PS_TEST(PS_IN In)
-{
-    PS_NORMAL_OUT Out = (PS_NORMAL_OUT) 0;
-    
-    float2 vTexcoord = In.vTexcoord * g_vTileRepeat + g_vTileMove;
-    Out.vDiffuse = g_DiffuseTexture.Sample(LinearSampler, vTexcoord);
-    
-    return Out;
-}
-
 technique11	DefaultTechnique
 {
 	pass Default //0
@@ -213,15 +193,5 @@ technique11	DefaultTechnique
         PixelShader = compile ps_5_0 PS_DISTORTION_MAIN();
     }
 
-    pass Test   //5
-    {
-        SetRasterizerState(RS_Cull_None);
-        SetDepthStencilState(DSS_Default, 0);
-        SetBlendState(BS_Default, vector(0.f, 0.f, 0.f, 0.f), 0xffffffff);
-
-        VertexShader = compile vs_5_0 VS_MAIN();
-        GeometryShader = NULL;
-        PixelShader = compile ps_5_0 PS_TEST();
-    }
 
 }
