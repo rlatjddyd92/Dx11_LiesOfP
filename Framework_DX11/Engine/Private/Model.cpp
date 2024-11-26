@@ -584,11 +584,12 @@ void CModel::Update_Animation(_float fTimeDelta)
 			//m_Animations[m_iCurrentAnimIndex]->Reset();
 
 			//m_iCurrentFrame = m_Animations[m_iCurrentAnimIndex].
-			m_iCurrentFrame = m_Animations[m_iCurrentAnimIndex]->Update_TransformationMatrices(m_Bones, &m_CurrentTrackPosition, m_KeyFrameIndices[m_iCurrentAnimIndex], m_isLoop, &m_isEnd_Animations[m_iCurrentAnimIndex], 0, false, nullptr, &m_isBoneUpdated);
-
+			
 			m_vRootMoveStack = m_vCurRootMove = _vector{ 0, 0, 0, 1 };
 			m_iCurrentAnimIndex = m_tChaneAnimDesc.iNextAnimIndex;
 			ZeroMemory(&m_tChaneAnimDesc, sizeof(CHANGEANIMATION_DESC));
+
+			m_iCurrentFrame = m_Animations[m_iCurrentAnimIndex]->Update_TransformationMatrices(m_Bones, &m_CurrentTrackPosition, m_KeyFrameIndices[m_iCurrentAnimIndex], m_isLoop, &m_isEnd_Animations[m_iCurrentAnimIndex], 0, false, nullptr, &m_isBoneUpdated);
 
 			m_isChangeAni = false;
 		}
@@ -701,10 +702,11 @@ void CModel::Update_Animation_Boundary(_float fTimeDelta)
 				}
 
 				//m_Animations[m_iCurrentAnimIndex]->Reset();
-				m_iCurrentFrame_Boundary = m_Animations[m_iCurrentAnimIndex_Boundary]->Update_TransformationMatrices(m_Bones, &m_CurrentTrackPosition, m_KeyFrameIndices[m_iCurrentAnimIndex_Boundary], m_isLoop, &m_isEnd_Animations_Boundary[m_iCurrentAnimIndex_Boundary], 0, true, &m_isBoneUpdated, true);
 				m_vRootMoveStack = m_vCurRootMove = _vector{ 0, 0, 0, 1 };
 				m_iCurrentAnimIndex_Boundary = m_tChaneAnimDesc_Boundary.iNextAnimIndex;
 				ZeroMemory(&m_tChaneAnimDesc_Boundary, sizeof(CHANGEANIMATION_DESC));
+
+				m_iCurrentFrame_Boundary = m_Animations[m_iCurrentAnimIndex_Boundary]->Update_TransformationMatrices(m_Bones, &m_CurrentTrackPosition, m_KeyFrameIndices[m_iCurrentAnimIndex_Boundary], m_isLoop, &m_isEnd_Animations_Boundary[m_iCurrentAnimIndex_Boundary], 0, true, &m_isBoneUpdated, true);
 
 				m_isChangeAni_Boundary = false;
 			}
