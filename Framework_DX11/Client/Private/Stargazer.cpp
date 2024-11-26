@@ -43,7 +43,6 @@ void CStargazer::Priority_Update(_float fTimeDelta)
 
 void CStargazer::Update(_float fTimeDelta)
 {
-	//m_pModelCom->Play_Animation(fTimeDelta);
 	m_pModelCom->Update_Bone();
 
 	if(m_pColliderCom != nullptr)
@@ -120,10 +119,10 @@ HRESULT CStargazer::Ready_Components()
 
 	/* For.Com_Collider */
 	CBounding_AABB::BOUNDING_AABB_DESC			ColliderDesc{};
-	ColliderDesc.vExtents = _float3(0.5f, 1.0f, 0.5f);
+	ColliderDesc.vExtents = _float3(0.7f, 1.0f, 0.7f);
 	ColliderDesc.vCenter = _float3(0.f, ColliderDesc.vExtents.y, 0.f);
 
-	if (FAILED(__super::Add_Component(LEVEL_STATIC, TEXT("Prototype_Component_Collider_AABB"),
+	if (FAILED(__super::Add_Component(LEVEL_STATIC, TEXT("Prototype_Component_Collider_Sphere"),
 		TEXT("Com_Collider"), reinterpret_cast<CComponent**>(&m_pColliderCom), &ColliderDesc)))
 		return E_FAIL;
 

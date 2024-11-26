@@ -41,8 +41,22 @@ void CSteppingStone::Priority_Update(_float fTimeDelta)
 
 void CSteppingStone::Update(_float fTimeDelta)
 {
+    if (m_bCollision)
+        m_fCollisonTimer += fTimeDelta;
+
+    if (m_fCollisonTimer >= 2.f)
+    {
+        m_fCollisonTimer = 0.f;
+        //m_bCollison도 확인
+      //  Change_Player_Pos();
+    }
+
     if (m_pColliderCom != nullptr)
+    {
         m_pColliderCom->Update(m_pTransformCom->Get_WorldMatrix_Ptr());
+        m_pGameInstance->Add_ColliderList(m_pColliderCom);
+    }
+
 }
 
 void CSteppingStone::Late_Update(_float fTimeDelta)
@@ -105,6 +119,27 @@ HRESULT CSteppingStone::Render()
     return S_OK;
 }
 
+void CSteppingStone::OnCollisionEnter(CGameObject* pOther)
+{
+}
+
+void CSteppingStone::OnCollisionStay(CGameObject* pOther)
+{
+    if (pOther->Get_Tag() == TEXT("Player"))
+    {
+        m_bCollision = true;
+    }
+}
+
+void CSteppingStone::OnCollisionExit(CGameObject* pOther)
+{
+    if (pOther->Get_Tag() == TEXT("Player"))
+    {
+        m_bCollision = false;
+        m_fCollisonTimer = 0.f;
+    }
+}
+
 HRESULT CSteppingStone::Ready_Components(OBJECT_DEFAULT_DESC* pDesc)
 {
     /* FOR.Com_Shader */
@@ -119,14 +154,34 @@ HRESULT CSteppingStone::Ready_Components(OBJECT_DEFAULT_DESC* pDesc)
 
     /* For.Com_Collider */
     CBounding_OBB::BOUNDING_OBB_DESC			ColliderDesc{};
-    ColliderDesc.vExtents = _float3(1.f, 1.f, 1.f);
-    ColliderDesc.vAngles = _float3(0.f, XMConvertToRadians(pDesc->vRotation.y), 0.f);
+    ColliderDesc.vExtents = _float3(1.2f, 1.f, 1.2f);
+    ColliderDesc.vAngles = _float3(0.f,0.f,0.f);
 
     if (FAILED(__super::Add_Component(LEVEL_STATIC, TEXT("Prototype_Component_Collider_OBB"),
         TEXT("Com_Collider"), reinterpret_cast<CComponent**>(&m_pColliderCom), &ColliderDesc)))
         return E_FAIL;
+    m_pColliderCom->Set_Owner(this);
 
     return S_OK;
+}
+
+void CSteppingStone::Change_Player_Pos()
+{
+    _Vec4 vTargetPos4;
+    _Vec3 vTargetPos3;
+
+    //다른 발판의 위치 받아오기
+    for(_int i = 0; i < 2; ++i)
+    {
+       CGameObject* pObj =  m_pGameInstance->Find_Object(LEVEL_GAMEPLAY, TEXT("Layer_SteppingStone"), (_uint)i);
+       if (static_cast<CSteppingStone*>(pObj) != this)
+           vTargetPos4 = pObj->Get_Transform()->Get_State(CTransform::STATE_POSITION);
+    }
+    vTargetPos3 = { vTargetPos4.x, vTargetPos4.y, vTargetPos4.z };
+
+    //플레이어 이동
+    CComponent* pComponenet = m_pGameInstance->Find_Player()->Find_Component(RIGIDBODY);
+    static_cast<CRigidBody*>(pComponenet)->Set_GloblePose(vTargetPos3);
 }
 
 CSteppingStone* CSteppingStone::Create(ID3D11Device* pDevice, ID3D11DeviceContext* pContext)

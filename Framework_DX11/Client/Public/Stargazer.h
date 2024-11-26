@@ -7,6 +7,7 @@ BEGIN(Engine)
 class CCollider;
 class CShader;
 class CModel;
+
 END
 
 BEGIN(Client)
@@ -31,6 +32,7 @@ private:
 	CCollider* m_pColliderCom = { nullptr};
 	CShader* m_pShaderCom = { nullptr };
 	CModel* m_pModelCom = { nullptr };
+
 private:
 	_bool m_bShadow = false;
 private:

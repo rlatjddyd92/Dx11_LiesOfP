@@ -112,11 +112,13 @@ void CFreeCamera::Priority_Update(_float fTimeDelta)
 
 	__super::Priority_Update(fTimeDelta);
 
+
 	m_ptOldMousePos = ptMouse;
 }
 
 void CFreeCamera::Update(_float fTimeDelta)
 {
+	Calculat_CascadeFrustum();
 }
 
 void CFreeCamera::Late_Update(_float fTimeDelta)

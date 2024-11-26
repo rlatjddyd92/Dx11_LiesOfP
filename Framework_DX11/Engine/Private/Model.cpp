@@ -237,6 +237,9 @@ HRESULT CModel::Render(_uint iMeshIndex)
 
 HRESULT CModel::Render_Instance(_uint iMeshIndex)
 {
+	if (m_InstanceDatas.size() <= 0)
+		return S_OK;
+
 	D3D11_MAPPED_SUBRESOURCE	SubResource{};
 
 	m_pContext->Map(m_pVBInstance, 0, D3D11_MAP_WRITE_NO_OVERWRITE, 0, &SubResource);
@@ -255,7 +258,6 @@ HRESULT CModel::Render_Instance(_uint iMeshIndex)
 
 	m_Meshes[iMeshIndex]->Bind_Buffers_Instance(m_pVBInstance);
 
-	_uint iNumIndices = m_Meshes[iMeshIndex]->Get_NumIndices();
 	m_pContext->DrawIndexedInstanced(m_Meshes[iMeshIndex]->Get_NumIndices(), (_uint)m_InstanceDatas.size(), 0, 0, 0);
 
 	return S_OK;
