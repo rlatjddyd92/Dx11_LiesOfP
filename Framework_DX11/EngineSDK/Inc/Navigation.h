@@ -24,6 +24,7 @@ public:
 	void Update(_fmatrix TerrainWorldMatrix);
 	_bool isMove(_Vec3 vPosition);
 	_float SetUp_OnCell(class CTransform* pTransform, _float fOffset, _float fTimeDelta);
+	void Move_to_Cell(class CRigidBody* pRigidBody, _int iIndex);
 
 #ifdef _DEBUG
 public:

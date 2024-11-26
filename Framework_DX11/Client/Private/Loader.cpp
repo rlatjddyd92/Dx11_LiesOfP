@@ -31,8 +31,10 @@
 #include "Lift_Floor.h"
 #include "WallDeco.h"
 #include "TowerDoor.h"
+#include "LastDoor.h"
 #include "TreasureBox.h"
 #include "Ladder.h"
+#include "SteppingStone.h"
 #include "Weapon_Rapier.h"
 #include "Weapon_FlameSword.h"
 #include "Weapon_Scissor.h"
@@ -562,6 +564,147 @@ HRESULT CLoader::Ready_Resources_For_GamePlayLevel_Map1()
 	}
 #pragma endregion
 
+#pragma region ETC Interior
+	handle = _findfirst("../Bin/ModelData/NonAnim/Map/Etc/Interior/*", &fd);
+
+	if (handle == -1)
+		return E_FAIL;
+
+	char szCurPath6[128] = "../Bin/ModelData/NonAnim/Map/Etc/Interior/";    // 상대 경로
+	char szFullPath6[128] = "";
+
+	iResult = 0;
+
+	while (iResult != -1)
+	{
+		strcpy_s(szFullPath6, szCurPath6);
+		strcat_s(szFullPath6, fd.name);
+
+		_char szFileName[MAX_PATH] = "";
+		_char szExt[MAX_PATH] = "";
+		_splitpath_s(szFullPath6, nullptr, 0, nullptr, 0, szFileName, MAX_PATH, szExt, MAX_PATH);
+
+		if (!strcmp(fd.name, ".") || !strcmp(fd.name, "..")
+			|| strcmp(szExt, ".dat"))
+		{
+			iResult = _findnext(handle, &fd);
+			continue;
+		}
+
+		string strFileName = szFileName;
+		_wstring strPrototypeName;
+
+		strPrototypeName.assign(strFileName.begin(), strFileName.end());
+		wprintf(strPrototypeName.c_str());
+
+		PreTransformMatrix = XMMatrixIdentity();
+		PreTransformMatrix = XMMatrixScaling(0.01f, 0.01f, 0.01f);
+
+		if (FAILED(m_pGameInstance->Add_Prototype(LEVEL_GAMEPLAY, strPrototypeName,
+			CModel::Create(m_pDevice, m_pContext, CModel::TYPE_NONANIM, szFullPath6, PreTransformMatrix))))
+			return E_FAIL;
+
+		//_findnext : <io.h>에서 제공하며 다음 위치의 파일을 찾는 함수, 더이상 없다면 -1을 리턴
+		iResult = _findnext(handle, &fd);
+	}
+#pragma endregion
+
+#pragma region ETC Furniture
+	handle = _findfirst("../Bin/ModelData/NonAnim/Map/Etc/Furniture/*", &fd);
+
+	if (handle == -1)
+		return E_FAIL;
+
+	char szCurPath7[128] = "../Bin/ModelData/NonAnim/Map/Etc/Furniture/";    // 상대 경로
+	char szFullPath7[128] = "";
+
+	iResult = 0;
+
+	while (iResult != -1)
+	{
+		strcpy_s(szFullPath7, szCurPath7);
+		strcat_s(szFullPath7, fd.name);
+
+		_char szFileName[MAX_PATH] = "";
+		_char szExt[MAX_PATH] = "";
+		_splitpath_s(szFullPath7, nullptr, 0, nullptr, 0, szFileName, MAX_PATH, szExt, MAX_PATH);
+
+		if (!strcmp(fd.name, ".") || !strcmp(fd.name, "..")
+			|| strcmp(szExt, ".dat"))
+		{
+			iResult = _findnext(handle, &fd);
+			continue;
+		}
+
+		string strFileName = szFileName;
+		_wstring strPrototypeName;
+
+		strPrototypeName.assign(strFileName.begin(), strFileName.end());
+		wprintf(strPrototypeName.c_str());
+
+		PreTransformMatrix = XMMatrixIdentity();
+		PreTransformMatrix = XMMatrixScaling(0.01f, 0.01f, 0.01f);
+
+		if (FAILED(m_pGameInstance->Add_Prototype(LEVEL_GAMEPLAY, strPrototypeName,
+			CModel::Create(m_pDevice, m_pContext, CModel::TYPE_NONANIM, szFullPath7, PreTransformMatrix))))
+			return E_FAIL;
+
+		iResult = _findnext(handle, &fd);
+	}
+#pragma endregion
+
+
+#pragma region ETC WoodStr
+	handle = _findfirst("../Bin/ModelData/NonAnim/Map/Etc/WoodStr/*", &fd);
+
+	if (handle == -1)
+		return E_FAIL;
+
+	char szCurPath8[128] = "../Bin/ModelData/NonAnim/Map/Etc/WoodStr/";    // 상대 경로
+	char szFullPath8[128] = "";
+
+	iResult = 0;
+
+	while (iResult != -1)
+	{
+		strcpy_s(szFullPath8, szCurPath8);
+		strcat_s(szFullPath8, fd.name);
+
+		_char szFileName[MAX_PATH] = "";
+		_char szExt[MAX_PATH] = "";
+		_splitpath_s(szFullPath8, nullptr, 0, nullptr, 0, szFileName, MAX_PATH, szExt, MAX_PATH);
+
+		if (!strcmp(fd.name, ".") || !strcmp(fd.name, "..")
+			|| strcmp(szExt, ".dat"))
+		{
+			iResult = _findnext(handle, &fd);
+			continue;
+		}
+
+		string strFileName = szFileName;
+		_wstring strPrototypeName;
+
+		strPrototypeName.assign(strFileName.begin(), strFileName.end());
+		wprintf(strPrototypeName.c_str());
+
+		PreTransformMatrix = XMMatrixIdentity();
+		PreTransformMatrix = XMMatrixScaling(0.0001f, 0.0001f, 0.0001f);
+
+		if (FAILED(m_pGameInstance->Add_Prototype(LEVEL_GAMEPLAY, strPrototypeName,
+			CModel::Create(m_pDevice, m_pContext, CModel::TYPE_NONANIM, szFullPath8, PreTransformMatrix))))
+			return E_FAIL;
+
+		iResult = _findnext(handle, &fd);
+	}
+#pragma endregion
+
+	PreTransformMatrix = XMMatrixIdentity();
+	PreTransformMatrix = XMMatrixScaling(0.01f, 0.01f, 0.01f);
+
+	if (FAILED(m_pGameInstance->Add_Prototype(LEVEL_GAMEPLAY, TEXT("Sophia_Stoned"),
+		CModel::Create(m_pDevice, m_pContext, CModel::TYPE_NONANIM, "../Bin/ModelData/NonAnim/Map/Etc/Sophia/Sophia_Stoned.dat", PreTransformMatrix))))
+		return E_FAIL;
+
 	m_isFinished_Map1 = true;
 
 	return S_OK;
@@ -700,6 +843,10 @@ HRESULT CLoader::Ready_Resources_For_Obj()
 		CModel::Create(m_pDevice, m_pContext, CModel::TYPE_ANIM, "../Bin/ModelData/NonAnim/InteractObj/SK_LV_Ladder_MetalWood_Slide6m_SM_KSJ.dat", PreTransformMatrix))))
 		return E_FAIL;
 
+	if (FAILED(m_pGameInstance->Add_Prototype(LEVEL_GAMEPLAY, TEXT("Prototype_Component_Model_LastDoor"),
+		CModel::Create(m_pDevice, m_pContext, CModel::TYPE_ANIM, "../Bin/ModelData/NonAnim/InteractObj/SK_FO_Monastery_TheLastDoor_01.dat", PreTransformMatrix))))
+		return E_FAIL;
+
 	return S_OK;
 }
 
@@ -785,7 +932,6 @@ HRESULT CLoader::Ready_Prototype()
 		CStaticObj::Create(m_pDevice, m_pContext))))
 		return E_FAIL;
 
-
 	/* For. Prototype_GameObject_Stargazer */
 	if (FAILED(m_pGameInstance->Add_Prototype(TEXT("Prototype_GameObject_Stargazer"),
 		CStargazer::Create(m_pDevice, m_pContext))))
@@ -825,6 +971,16 @@ HRESULT CLoader::Ready_Prototype()
 	if (FAILED(m_pGameInstance->Add_Prototype(TEXT("Prototype_GameObject_Ladder"),
 		CLadder::Create(m_pDevice, m_pContext))))
 		return E_FAIL;
+
+	/* For. Prototype_GameObject_SteppingStone */
+	if (FAILED(m_pGameInstance->Add_Prototype(TEXT("Prototype_GameObject_SteppingStone"),
+		CSteppingStone::Create(m_pDevice, m_pContext))))
+		return E_FAIL;
+
+	/* For. Prototype_GameObject_LastDoor */
+	if (FAILED(m_pGameInstance->Add_Prototype(TEXT("Prototype_GameObject_LastDoor"),
+		CLastDoor::Create(m_pDevice, m_pContext))))
+		return E_FAIL;
 #pragma endregion
 
 	/* For. Prototype_GameObject_Sky */
@@ -837,9 +993,6 @@ HRESULT CLoader::Ready_Prototype()
 	if (FAILED(m_pGameInstance->Add_Prototype(TEXT("Prototype_GameObject_NavDataObj"),
 		CNavDataObj::Create(m_pDevice, m_pContext))))
 		return E_FAIL;
-
-
-
 
 
 	return S_OK;

@@ -88,7 +88,9 @@ HRESULT CPlayer::Initialize(void * pArg)
 	if (FAILED(Ready_FSM()))
 		return E_FAIL;
 
-	m_pTransformCom->Set_State(CTransform::STATE_POSITION, XMVectorSet(2.f, 0.f, 0.f, 1.f));
+//	m_pTransformCom->Set_State(CTransform::STATE_POSITION, XMVectorSet(2.f, 0.f, 0.f, 1.f));
+
+	m_pNavigationCom->Move_to_Cell(m_pRigidBodyCom, 0);
 
 	// 임시 루트본 설정
 	m_pModelCom->Set_UFBIndices(UFB_ROOT, 2);
@@ -101,6 +103,7 @@ HRESULT CPlayer::Initialize(void * pArg)
 }
 
 void CPlayer::Priority_Update(_float fTimeDelta)
+
 {
 	if (m_isGuard)
 	{

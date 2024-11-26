@@ -247,6 +247,15 @@ _float CNavigation::SetUp_OnCell(CTransform* pTransform, _float fOffset, _float 
 	return y;
 }
 
+void CNavigation::Move_to_Cell(CRigidBody* pRigidBody, _int iIndex)
+{
+	_Vec3 vAverage = m_Cells[iIndex]->Get_Point(CCell::POINT_A) + m_Cells[iIndex]->Get_Point(CCell::POINT_B) + m_Cells[iIndex]->Get_Point(CCell::POINT_C);
+	vAverage /= 3.f;
+
+	pRigidBody->Set_GloblePose(vAverage);
+	m_iCurrentCellIndex = iIndex;
+}
+
 
 #ifdef _DEBUG
 
