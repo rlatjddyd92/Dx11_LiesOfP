@@ -98,6 +98,8 @@ HRESULT CMesh::Ready_VertexBuffer_NonAnim(HANDLE* pFile, const aiMesh* pAIMesh, 
 
 	m_pVertices = new VTXMESH[m_iNumVertices];
 	ZeroMemory(m_pVertices, sizeof(VTXMESH) * m_iNumVertices);
+	
+	_uint iNumFace = pAIMesh->mNumFaces;
 
 	for (size_t i = 0; i < m_iNumVertices; i++)
 	{

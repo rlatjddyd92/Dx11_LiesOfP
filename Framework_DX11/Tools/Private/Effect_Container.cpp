@@ -172,7 +172,6 @@ void CEffect_Container::Update(_float fTimeDelta)
 			Effect->Set_Loop(true);
 		}
 	}
-	
 
 	if (KEY_TAP(KEY::LEFT))
 	{
@@ -184,7 +183,16 @@ void CEffect_Container::Update(_float fTimeDelta)
 		}
 	}
 
-
+	if (KEY_TAP(KEY::UP))
+	{
+		_Vec3 vPos = m_pTransformCom->Get_State(CTransform::STATE_POSITION);
+		m_pTransformCom->Set_State(CTransform::STATE_POSITION, vPos + _Vec3(0.f, 1.f, 0.f));
+	}
+	if (KEY_TAP(KEY::DOWN))
+	{
+		_Vec3 vPos = m_pTransformCom->Get_State(CTransform::STATE_POSITION);
+		m_pTransformCom->Set_State(CTransform::STATE_POSITION, vPos - _Vec3(0.f, 1.f, 0.f));
+	}
 
 	if (true == m_bOrbit)
 	{
@@ -299,6 +307,7 @@ HRESULT CEffect_Container::Reset_Effects()
 	for (auto& Effect : m_Effects)
 	{
 		Effect->Reset();
+		
 	}
 
 	return S_OK;
@@ -381,7 +390,7 @@ HRESULT CEffect_Container::Load_Effect_By_Path(const _wstring& strFilePath)
 		if (!infile.is_open())
 			return E_FAIL;
 
-		TestDesc.pParentMatrix = { nullptr };
+		TestDesc.pParentMatrix = m_pTransformCom->Get_WorldMatrix_Ptr();;
 		TestDesc.fRotationPerSec = XMConvertToRadians(90.f);
 		TestDesc.fSpeedPerSec = 1.f;
 		TestDesc.iLevelIndex = LEVEL_TOOL;
@@ -410,7 +419,7 @@ HRESULT CEffect_Container::Load_Effect_By_Path(const _wstring& strFilePath)
 		if (!infile.is_open())
 			return E_FAIL;
 
-		TestDesc.pParentMatrix = { nullptr };
+		TestDesc.pParentMatrix = m_pTransformCom->Get_WorldMatrix_Ptr();;
 		TestDesc.fRotationPerSec = XMConvertToRadians(90.f);
 		TestDesc.fSpeedPerSec = 1.f;
 		TestDesc.iLevelIndex = LEVEL_TOOL;
@@ -438,7 +447,7 @@ HRESULT CEffect_Container::Load_Effect_By_Path(const _wstring& strFilePath)
 		if (!infile.is_open())
 			return E_FAIL;
 
-		TestDesc.pParentMatrix = { nullptr };
+		TestDesc.pParentMatrix = m_pTransformCom->Get_WorldMatrix_Ptr();;
 		TestDesc.fRotationPerSec = XMConvertToRadians(90.f);
 		TestDesc.fSpeedPerSec = 1.f;
 		TestDesc.iLevelIndex = LEVEL_TOOL;
@@ -466,7 +475,7 @@ HRESULT CEffect_Container::Load_Effect_By_Path(const _wstring& strFilePath)
 		if (!infile.is_open())
 			return E_FAIL;
 
-		TestDesc.pParentMatrix = { nullptr };
+		TestDesc.pParentMatrix = m_pTransformCom->Get_WorldMatrix_Ptr();;
 		TestDesc.fRotationPerSec = XMConvertToRadians(90.f);
 		TestDesc.fSpeedPerSec = 1.f;
 		TestDesc.iLevelIndex = LEVEL_TOOL;
@@ -495,7 +504,7 @@ HRESULT CEffect_Container::Load_Effect_By_Path(const _wstring& strFilePath)
 		if (!infile.is_open())
 			return E_FAIL;
 
-		TestDesc.pParentMatrix = { nullptr };
+		TestDesc.pParentMatrix = m_pTransformCom->Get_WorldMatrix_Ptr();;
 		TestDesc.fRotationPerSec = XMConvertToRadians(90.f);
 		TestDesc.fSpeedPerSec = 1.f;
 		TestDesc.iLevelIndex = LEVEL_TOOL;
@@ -524,7 +533,7 @@ HRESULT CEffect_Container::Load_Effect_By_Path(const _wstring& strFilePath)
 		if (!infile.is_open())
 			return E_FAIL;
 
-		TestDesc.pParentMatrix = { nullptr };
+		TestDesc.pParentMatrix = m_pTransformCom->Get_WorldMatrix_Ptr();;
 		TestDesc.fRotationPerSec = XMConvertToRadians(90.f);
 		TestDesc.fSpeedPerSec = 1.f;
 		TestDesc.iLevelIndex = LEVEL_TOOL;

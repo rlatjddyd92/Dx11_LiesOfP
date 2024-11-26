@@ -239,6 +239,20 @@ PS_NORMAL_OUT PS_BLOOD_MAIN(PS_IN In)
     return Out;
 }
 
+PS_OUT PS_BLEND_DIRT_MAIN(PS_IN In)
+{
+    PS_OUT Out = (PS_OUT) 0;
+    
+    Out.vColor = g_DiffuseTexture.Sample(LinearSampler, Get_SpriteTexcoord(In.vTexcoord));
+    vector vMask = g_MaskTexture_1.Sample(LinearSampler, Get_SpriteTexcoord(In.vTexcoord));
+    
+    Out.vColor.rgb *= g_vColor.rgb;
+    Out.vColor.a *= g_fRatio;
+    Out.vColor *= vMask;
+    
+    return Out;
+}
+
 technique11 DefaultTechnique
 {
     pass Default // 0
@@ -327,6 +341,17 @@ technique11 DefaultTechnique
         VertexShader = compile vs_5_0 VS_MAIN();
         GeometryShader = NULL;
         PixelShader = compile ps_5_0 PS_BLOOD_MAIN();
+    }
+
+    pass DIRT   // 8
+    {
+        SetRasterizerState(RS_Default);
+        SetDepthStencilState(DSS_NonWrite, 0);
+        SetBlendState(BS_AlphaBlend, vector(0.f, 0.f, 0.f, 0.f), 0xffffffff);
+
+        VertexShader = compile vs_5_0 VS_MAIN();
+        GeometryShader = NULL;
+        PixelShader = compile ps_5_0 PS_BLEND_DIRT_MAIN();
     }
 }
 

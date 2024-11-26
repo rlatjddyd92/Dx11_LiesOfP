@@ -276,6 +276,21 @@ struct PS_EFFECT_OUT
     vector vBlur : SV_TARGET1;
 };
 
+struct PS_OUT
+{
+    vector vColor : SV_TARGET0;
+};
+
+struct PS_NORMAL_OUT
+{
+    vector vDiffuse : SV_TARGET0;
+    vector vNormal : SV_TARGET1;
+    vector vDepth : SV_TARGET2;
+    vector vARM : SV_TARGET3;
+    vector vPickDepth : SV_TARGET4;
+};
+
+float2 Get_SpriteTexcoord(float2 vTexcoord, int iTexIndex);
 
 PS_EFFECT_OUT PS_MAIN(PS_IN In)
 {
@@ -341,6 +356,72 @@ PS_EFFECT_OUT PS_GLOW_RGBTOA_MAIN(PS_IN In)
     return Out;
 }
 
+PS_NORMAL_OUT PS_SPRITE_NORMAL_MAIN(PS_IN In)
+{
+    PS_NORMAL_OUT Out = (PS_NORMAL_OUT) 0;
+	
+    int iTexIndex = (int) ((In.vLifeTime.y / In.vLifeTime.x) * (g_vTexDivide.x * g_vTexDivide.y - 1.f) * g_fSpriteSpeed);
+    float2 vTexcoord = Get_SpriteTexcoord(In.vTexcoord, iTexIndex);
+    Out.vDiffuse = g_DiffuseTexture.Sample(LinearSampler, vTexcoord);
+
+    if (Out.vDiffuse.a <= 0.3f)
+        discard;
+
+    if (In.vLifeTime.y >= In.vLifeTime.x)
+        discard;
+    
+    vector vNomral = g_NormalTexture.Sample(LinearSampler, vTexcoord);
+    Out.vNormal = vNomral * 2.f - 1.f;
+    
+    Out.vDepth = float4(0.f, 0.f, 0.f, 0.f);
+    Out.vARM = float4(0.f, 0.f, 0.f, 0.f);
+    Out.vPickDepth = float4(0.f, 0.f, 0.f, 0.f);
+    
+    return Out;
+}
+
+PS_NORMAL_OUT PS_INDEX_NORMAL_MAIN(PS_IN In)
+{
+    PS_NORMAL_OUT Out = (PS_NORMAL_OUT) 0;
+	
+    int iTexIndex = (int) (In.vColor.a * 16.f);
+    float2 vTexcoord = Get_SpriteTexcoord(In.vTexcoord, iTexIndex);
+    Out.vDiffuse = g_DiffuseTexture.Sample(LinearSampler, vTexcoord);
+
+    if (Out.vDiffuse.a <= 0.3f)
+        discard;
+
+    if (In.vLifeTime.y >= In.vLifeTime.x)
+        discard;
+    
+    vector vNomral = g_NormalTexture.Sample(LinearSampler, vTexcoord);
+    Out.vNormal = vNomral * 2.f - 1.f;
+    
+    Out.vDepth = float4(0.f, 0.f, 0.f, 0.f);
+    Out.vARM = float4(0.f, 0.f, 0.f, 0.f);
+    Out.vPickDepth = float4(0.f, 0.f, 0.f, 0.f);
+    
+    return Out;
+}
+
+PS_OUT PS_SMOKE_MAIN(PS_IN In)
+{
+    PS_OUT Out = (PS_OUT) 0;
+    
+    int iTexIndex = (int) ((In.vLifeTime.y / In.vLifeTime.x) * (g_vTexDivide.x * g_vTexDivide.y - 1.f) * g_fSpriteSpeed);
+    
+    Out.vColor = g_DiffuseTexture.Sample(LinearSampler, Get_SpriteTexcoord(In.vTexcoord, iTexIndex));
+    
+    if(In.vLifeTime.x < In.vLifeTime.y)
+        discard;
+    
+    Out.vColor.a *= In.vLifeTime.y / In.vLifeTime.x;
+    Out.vColor.a *= 1.f - (In.vLifeTime.y / In.vLifeTime.x);
+    Out.vColor.a *= 2.f;
+    
+    return Out;
+}
+
 technique11	DefaultTechnique
 {
 	pass DEFAULT // 0
@@ -376,4 +457,50 @@ technique11	DefaultTechnique
         PixelShader = compile ps_5_0 PS_GLOW_RGBTOA_MAIN();
     }
 
+    pass PARTICLE_SPRITE_STONE // 3
+    {
+        SetRasterizerState(RS_Default);
+        SetDepthStencilState(DSS_Default, 0);
+        SetBlendState(BS_Default, vector(0.f, 0.f, 0.f, 0.f), 0xffffffff);
+
+        VertexShader = compile vs_5_0 VS_MAIN();
+        GeometryShader = compile gs_5_0 GS_MAIN();
+        PixelShader = compile ps_5_0 PS_SPRITE_NORMAL_MAIN();
+    }
+
+    pass PARTICLE_INDEX_STONE // 4
+    {
+        SetRasterizerState(RS_Default);
+        SetDepthStencilState(DSS_Default, 0);
+        SetBlendState(BS_Default, vector(0.f, 0.f, 0.f, 0.f), 0xffffffff);
+
+        VertexShader = compile vs_5_0 VS_MAIN();
+        GeometryShader = compile gs_5_0 GS_MAIN();
+        PixelShader = compile ps_5_0 PS_INDEX_NORMAL_MAIN();
+    }
+
+    pass PARTICLE_SMOKE // 5
+    {
+        SetRasterizerState(RS_Default);
+        SetDepthStencilState(DSS_NonWrite, 0);
+        SetBlendState(BS_AlphaBlend, vector(0.f, 0.f, 0.f, 0.f), 0xffffffff);
+
+        VertexShader = compile vs_5_0 VS_MAIN();
+        GeometryShader = compile gs_5_0 GS_MAIN();
+        PixelShader = compile ps_5_0 PS_SMOKE_MAIN();
+    }
+}
+
+float2 Get_SpriteTexcoord(float2 vTexcoord, int iTexIndex)
+{
+    float2 start = (float2) 0;
+    float2 over = (float2) 0;
+
+    start.x = (1 / g_vTexDivide.x) * iTexIndex;
+    start.y = (1 / g_vTexDivide.y) * (int) (iTexIndex / g_vTexDivide.x);
+	
+    over.x = start.x + (1 / g_vTexDivide.x);
+    over.y = start.y + (1 / g_vTexDivide.y);
+	
+    return start + (over - start) * vTexcoord;
 }

@@ -39,20 +39,14 @@ HRESULT CLevel_GamePlay::Initialize()
 	if (FAILED(m_pImGui_Manager->Initialize(m_pDevice, m_pContext)))
 		return E_FAIL;
 
-	// 프레임 실험용
-	//for (_uint i = 0; i < 200; ++i)
-	//{
-	//	CNonAnimModel::NONMODEL_DESC Desc{};
-	//	Desc.vPosition = _float3(1.f + i*2, 0.f, 0.f);
-	//	Desc.vScale = { 1.f,1.f,1.f };
-	//	Desc.vRotation = { 0.f,0.f,0.f };
-	//	Desc.iRenderGroupID = 0;
-	//	Desc.isInstance = true;
-	//	strcpy_s(Desc.szModelTag, "SM_Monstery_Machine_01A_Temp");
-
-	//	if (FAILED(m_pGameInstance->Add_CloneObject_ToLayer(LEVEL_TOOL, TEXT("Layer_Map"), TEXT("Prototype_GameObject_NonAnim"), &Desc)))
-	//		return E_FAIL;
-	//}
+	CNonAnimModel::NONMODEL_DESC Desc{};
+	Desc.vPosition = { 0.f, 0.f, 0.f };
+	Desc.vScale = { 1.f,1.f,1.f };
+	Desc.vRotation = { 0.f,0.f,0.f };
+	Desc.iRenderGroupID = 0;
+	strcpy_s(Desc.szModelTag, "Prototype_AnimModel_SimonManus_Weapon");
+	if (FAILED(m_pGameInstance->Add_CloneObject_ToLayer(LEVEL_TOOL, TEXT("Layer_Weapon"), TEXT("Prototype_GameObject_NonAnim"), &Desc)))
+		return E_FAIL;
 
 	return S_OK;
 }

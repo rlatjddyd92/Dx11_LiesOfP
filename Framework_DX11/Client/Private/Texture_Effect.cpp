@@ -240,6 +240,12 @@ void CTexture_Effect::Billboard(_Vec3 vCurrentScale, _Vec3 vLook)
     _Vec4 vRight = XMVector3Cross(XMVectorSet(0.f, 1.f, 0.f, 0.f), vLook);
     _Vec4 vUp = XMVector3Cross(vLook, vRight);
 
+    _Matrix LocalRotationMatrix = XMMatrixRotationAxis(vLook,
+        XMConvertToRadians(m_DefaultDesc.fStarRotation + m_DefaultDesc.fRotationPerSecond * m_fAccumulateTime));
+
+    vRight = XMVector3TransformNormal(vRight, LocalRotationMatrix);
+    vUp = XMVector3TransformNormal(vUp, LocalRotationMatrix);
+
     XMStoreFloat3((_float3*)&m_WorldMatrix.m[0][0], vRight * vCurrentScale.x);
     XMStoreFloat3((_float3*)&m_WorldMatrix.m[1][0], vUp * vCurrentScale.y);
     XMStoreFloat3((_float3*)&m_WorldMatrix.m[2][0], vLook * vCurrentScale.z);
