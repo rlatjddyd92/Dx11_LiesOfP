@@ -41,7 +41,6 @@ void CLift_Floor::Priority_Update(_float fTimeDelta)
 
 void CLift_Floor::Update(_float fTimeDelta)
 {
-
 	if(m_pColliderCom != nullptr)
 		m_pColliderCom->Update(m_pTransformCom->Get_WorldMatrix_Ptr());
 }

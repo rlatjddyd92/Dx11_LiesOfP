@@ -270,6 +270,13 @@ HRESULT CLevel_GamePlay::Read_Map_Data()
 						continue;
 					}
 
+					if (wcscmp(pDesc.szModelTag, TEXT("SM_Monastery_SteppingStone_01")) == 0)
+					{
+						if (FAILED(m_pGameInstance->Add_CloneObject_ToLayer(LEVEL_GAMEPLAY, TEXT("Layer_InteractObj"), TEXT("Prototype_GameObject_SteppingStone"), &pDesc)))
+							return E_FAIL;
+						continue;
+					}
+
 					CStaticObj::STATICOBJ_DESC staticObjDesc = {};
 					int bufferSize = WideCharToMultiByte(CP_ACP, 0, pDesc.szModelTag, -1, NULL, 0, NULL, NULL);
 					WideCharToMultiByte(CP_ACP, 0, pDesc.szModelTag, -1, staticObjDesc.szModelTag, bufferSize, NULL, NULL);
@@ -315,6 +322,11 @@ HRESULT CLevel_GamePlay::Read_Map_Data()
 					 else if (wcscmp(pDesc.szModelTag, TEXT("SK_FO_TreasureChest_02_Red")) == 0)
 					 {
 						 if (FAILED(m_pGameInstance->Add_CloneObject_ToLayer(LEVEL_GAMEPLAY, TEXT("Layer_InteractObj"), TEXT("Prototype_GameObject_TreasureBox"), &pDesc)))
+							 return E_FAIL;
+					 }
+					 else if (wcscmp(pDesc.szModelTag, TEXT("SK_FO_Monastery_TheLastDoor_01")) == 0)
+					 {
+						 if (FAILED(m_pGameInstance->Add_CloneObject_ToLayer(LEVEL_GAMEPLAY, TEXT("Layer_InteractObj"), TEXT("Prototype_GameObject_LastDoor"), &pDesc)))
 							 return E_FAIL;
 					 }
 					 else if (wcscmp(pDesc.szModelTag, TEXT("SK_LV_Ladder_MetalWood_01_KSJ")) == 0 || wcscmp(pDesc.szModelTag, TEXT("SK_LV_Ladder_MetalWood_Slide6m_SM_KSJ")) == 0 )

@@ -25,14 +25,14 @@ HRESULT CTowerDoor::Initialize(void* pArg)
 		return E_FAIL;
 
 	m_pTransformCom->Set_Scaled(pDesc->vScale.x, pDesc->vScale.y, pDesc->vScale.z);
-	m_pTransformCom->Rotation(0.f, pDesc->vRotation.y, 0.f);
+	m_pTransformCom->Rotation(0.f, -120.f, 0.f);
 	m_pTransformCom->Set_State(CTransform::STATE_POSITION, XMLoadFloat3(&pDesc->vPosition));
 	m_bShadow = pDesc->bShadow;
 
 	if (FAILED(Ready_Components()))
 		return E_FAIL;
 
-	m_pModelCom->SetUp_Animation(1, true);
+	m_pModelCom->SetUp_Animation(0, true);
 
 	return S_OK;
 }
@@ -43,7 +43,7 @@ void CTowerDoor::Priority_Update(_float fTimeDelta)
 
 void CTowerDoor::Update(_float fTimeDelta)
 {
-	//m_pModelCom->Play_Animation(fTimeDelta);
+	m_pModelCom->Update_Bone();
 
 	if (m_pColliderCom != nullptr)
 		m_pColliderCom->Update(m_pTransformCom->Get_WorldMatrix_Ptr());

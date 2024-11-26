@@ -1,4 +1,4 @@
-#include "stdafx.h"
+ #include "stdafx.h"
 #include "Ladder.h"
 #include "GameInstance.h"
 
@@ -47,7 +47,8 @@ void CLadder::Priority_Update(_float fTimeDelta)
 
 void CLadder::Update(_float fTimeDelta)
 {
-	m_pModelCom->Play_Animation(fTimeDelta);
+	//m_pModelCom->Play_Animation(fTimeDelta);
+	m_pModelCom->Update_Bone();
 
 	if (m_pColliderCom != nullptr)
 		m_pColliderCom->Update(m_pTransformCom->Get_WorldMatrix_Ptr());
