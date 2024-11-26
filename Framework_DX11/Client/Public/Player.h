@@ -103,12 +103,14 @@ public:
 	void			LockOnOff();
 	CPawn*			Find_TargetMonster();
 
-	void			Play_CurrentWeaponSound(const _uint iType, const TCHAR* pSoundKey);
+	void			Play_CurrentWeaponSound(const _uint iType, const TCHAR* pSoundKey, _uint iHandIndex = 1);
+
+	void			Active_Effect(const _wstring& strECTag);
+	void			DeActive_Effect(const _wstring& strECTag);
 
 private:
-	list<OUTPUT_EVKEY>	m_EvKeyList;
-	list<class CEffect_Container*>	m_EffectList;
-	map<_uint, class CEffect_Container*>	m_Effects;
+	map<_wstring, class CEffect_Container*>	m_Effects;
+	map<_wstring, class CEffect_Container*>	m_ActiveEffects;
 
 private:
 	CPlayerCamera*		m_pPlayerCamera = { nullptr };

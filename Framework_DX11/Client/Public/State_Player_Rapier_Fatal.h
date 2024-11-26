@@ -40,12 +40,17 @@ private:
 private:
     _int                m_iColliderStartFrame[5] = {};
     _int                m_iColliderEndFrame[5] = {};
-    void                Control_Collider();
+    void                Control_Collider(_int iFrame);
 
 private:
     _int                m_iSoundFrame[5] = {};
     _bool               m_isPlaySound = {};
-    void                Control_Sound();
+    void                Control_Sound(_int iFrame);
+
+private:
+    _int                m_iEffectFrame[2] = {};
+    _bool               m_isActiveEffect[2] = {};
+    void                Control_Effect(_int iFrame);
 
 public:
     static CState_Player_Rapier_Fatal* Create(class CFsm* pFsm, class CPlayer* pPlayer, _uint iStateNum, void* pArg = nullptr);

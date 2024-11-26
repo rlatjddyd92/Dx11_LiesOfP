@@ -38,7 +38,7 @@ HRESULT CState_Player_Rapier_LAttack00::Start_State(void* pArg)
     if(m_pFsm->Get_PrevState() == CPlayer::OH_IDLE)
         m_pPlayer->Change_Animation(m_iAnimation_RapierNA1, false, 0.1f);
     else
-        m_pPlayer->Change_Animation(m_iAnimation_RapierNA1, false, 0.2f, 12);
+        m_pPlayer->Change_Animation(m_iAnimation_RapierNA1, false, 0.1f, 8);
 
     m_isInputLButton = false;
     m_isInputRButton = false;

@@ -36,7 +36,10 @@ void CState_Player_OH_Idle::Update(_float fTimeDelta)
     }
     else if (KEY_HOLD(KEY::W) || KEY_HOLD(KEY::S) || KEY_HOLD(KEY::D) || KEY_HOLD(KEY::A))
     {
-        m_pPlayer->Change_State(CPlayer::OH_RUN);
+        if(m_pPlayer->Get_IsLockOn())
+            m_pPlayer->Change_State(CPlayer::OH_WALK);
+        else
+            m_pPlayer->Change_State(CPlayer::OH_RUN);
     }
     else if (KEY_TAP(KEY::SPACE))
     {

@@ -50,10 +50,10 @@ public:
 	virtual void OnCollisionExit(CGameObject* pOther) {};
 
 public:
-	virtual void Active_Collider(_float fDamageRatio = 1.f, _uint iHandIndex = 0);		//1번 외손 0번 오른손
+	virtual void Active_Collider(_float fDamageRatio = 1.f, _uint iHandIndex = 0);		//1번 왼손 0번 오른손
 	virtual void DeActive_Collider(_uint iHandIndex = 1);
 
-	void		Play_Sound(WEP_SOUND_TYPE eType, const TCHAR* pSoundKey);
+	virtual void Play_Sound(WEP_SOUND_TYPE eType, const TCHAR* pSoundKey, _uint iHandIndex = 1);
 
 public:
 	void Appear();
@@ -66,7 +66,7 @@ protected:
 	CModel*				m_pModelCom = { nullptr };
 	CCollider*			m_pColliderCom = { nullptr };
 	class CSound*		m_pSoundCom[WEP_SOUND_END] = {nullptr,};
-
+	_float				m_fEmissiveMask = {};
 
 protected:
 	const _Matrix*			m_pParentMatrix = { nullptr };

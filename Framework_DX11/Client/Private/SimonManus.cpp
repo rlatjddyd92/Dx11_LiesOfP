@@ -278,9 +278,9 @@ HRESULT CSimonManus::Ready_Components()
 	RigidBodyDesc.pOwnerNavigation = m_pNavigationCom;
 
 	RigidBodyDesc.pOwner = this;
-	RigidBodyDesc.fStaticFriction = 1.0f;
-	RigidBodyDesc.fDynamicFriction = 0.0f;
-	RigidBodyDesc.fRestituion = 0.0f;
+	RigidBodyDesc.fStaticFriction = 0.f;
+	RigidBodyDesc.fDynamicFriction = 0.f;
+	RigidBodyDesc.fRestituion = 0.f;
 
 	physX::GeometryCapsule CapsuleDesc;
 	CapsuleDesc.fHeight = 2.5f;
@@ -292,6 +292,7 @@ HRESULT CSimonManus::Ready_Components()
 		TEXT("Com_RigidBody"), reinterpret_cast<CComponent**>(&m_pRigidBodyCom), &RigidBodyDesc)))
 		return E_FAIL;
 	return S_OK;
+	m_pRigidBodyCom->Set_Mass(100000.f);
 
 	return S_OK;
 }

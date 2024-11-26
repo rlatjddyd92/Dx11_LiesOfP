@@ -27,14 +27,31 @@ HRESULT CState_Player_OH_Walk::Initialize(_uint iStateNum, void* pArg)
 
     m_iStateNum = iStateNum;
 
+    m_iFootStepFrame[WALK_B][0] = 28;
+    m_iFootStepFrame[WALK_B][1] = 64;
+    m_iFootStepFrame[WALK_BL][0] = 24;
+    m_iFootStepFrame[WALK_BL][1] = 56;
+    m_iFootStepFrame[WALK_BR][0] = 26;
+    m_iFootStepFrame[WALK_BR][1] = 61;
+    m_iFootStepFrame[WALK_F][0] = 3;
+    m_iFootStepFrame[WALK_F][1] = 37;
+    m_iFootStepFrame[WALK_FL][0] = 2; // 70 씩 더하기
+    m_iFootStepFrame[WALK_FL][1] = 34; // 보류
+    m_iFootStepFrame[WALK_FR][0] = 6;
+    m_iFootStepFrame[WALK_FR][1] = 37;
+    m_iFootStepFrame[WALK_L][0] = 9;
+    m_iFootStepFrame[WALK_L][1] = 48;
+    m_iFootStepFrame[WALK_R][0] = 12;
+    m_iFootStepFrame[WALK_R][1] = 51;
+
     return S_OK;
 }
 
 HRESULT CState_Player_OH_Walk::Start_State(void* pArg)
 {
-    m_pPlayer->Change_Animation(m_iAnimation_Walk[WALK_F], true);
+    //m_pPlayer->Change_Animation(m_iAnimation_Walk[WALK_F], true);
 
-    m_pPlayer->Set_MoveSpeed(4.f);
+    m_pPlayer->Set_MoveSpeed(2.f);
 
     m_fSpaceTime = 0.f;
     m_isInputSpace = false;
@@ -55,7 +72,7 @@ void CState_Player_OH_Walk::Update(_float fTimeDelta)
         return;
     }
 
-    if (m_fSpaceTime > 0.1f)
+    if (m_fSpaceTime > 0.15f)
     {
         if (KEY_NONE(KEY::SPACE))
         {
@@ -64,7 +81,7 @@ void CState_Player_OH_Walk::Update(_float fTimeDelta)
 
         if (KEY_HOLD(KEY::SPACE))
         {
-            m_pPlayer->Change_State(CPlayer::OH_RUN);
+            m_pPlayer->Change_State(CPlayer::OH_SPRINT);
         }
     }
     else if (KEY_HOLD(KEY::LSHIFT))
@@ -74,6 +91,8 @@ void CState_Player_OH_Walk::Update(_float fTimeDelta)
 
     if (KEY_TAP(KEY::SPACE))
         m_isInputSpace = true;
+
+    Control_Sound();
 }
 
 
@@ -90,6 +109,8 @@ void CState_Player_OH_Walk::Select_WalkAnimation()
 
 _bool CState_Player_OH_Walk::Move(_float fTimeDelta)
 {
+    // 움직임은 카메라 방향 그대로 
+   // 애니메이션은 플레이어 기준
     _bool isMoving = false;
     m_vMoveDir = _Vec4(0.f, 0.f, 0.f, 0.f);
 
@@ -101,70 +122,141 @@ _bool CState_Player_OH_Walk::Move(_float fTimeDelta)
     vCameraLook.Normalize();
     vCameraRight.Normalize();
 
-    if (KEY_HOLD(KEY::W))
+    _bool isForward = KEY_HOLD(KEY::W);
+    _bool isBackward = KEY_HOLD(KEY::S);
+    _bool isRight = KEY_HOLD(KEY::D);
+    _bool isLeft = KEY_HOLD(KEY::A);
+
+    if (isForward)
     {
         m_vMoveDir += vCameraLook;
-        isMoving = true;
     }
-    else if (KEY_HOLD(KEY::S))
+
+    if (isBackward)
     {
         m_vMoveDir -= vCameraLook;
-        isMoving = true;
     }
 
-    if (KEY_HOLD(KEY::D))
+    if (isRight)
     {
         m_vMoveDir += vCameraRight;
-
-        isMoving = true;
     }
 
-    if (KEY_HOLD(KEY::A))
+    if (isLeft)
     {
         m_vMoveDir -= vCameraRight;
-
-        isMoving = true;
     }
+    _Vec4 vRight = _Vec4(1.f, 0.f, 0.f, 0.f);
+
+    _float fForwardDot = m_vMoveDir.Dot(vCameraLook);
+    _float fBackwardDot = m_vMoveDir.Dot(-vCameraLook);
 
     m_vMoveDir.Normalize();
 
-    _Vec4 vLocalMoveDir = { m_vMoveDir.Dot(vCameraRight), 0.f, m_vMoveDir.Dot(vCameraLook), 0.f};
-    vLocalMoveDir.Normalize();
-
-    //// 방향을 기반으로 애니메이션 선정
-    //if (vLocalMoveDir.z > 0.5f)
-    //{
-    //    if (vLocalMoveDir.x > 0.5f)
-    //        m_pPlayer->Change_Animation(m_iAnimation_Walk[WALK_FR], true, false);
-    //    else if (vLocalMoveDir.x < 0)
-    //        m_pPlayer->Change_Animation(m_iAnimation_Walk[WALK_FL], true, false);
-    //    else
-    //        m_pPlayer->Change_Animation(m_iAnimation_Walk[WALK_F], true, false);
-    //}
-    //else if (vLocalMoveDir.z < 0.5f)
-    //{
-    //    if (vLocalMoveDir.x > 0.5f)
-    //        m_pPlayer->Change_Animation(m_iAnimation_Walk[WALK_BR], true, false);
-    //    else if (vLocalMoveDir.x < 0)
-    //        m_pPlayer->Change_Animation(m_iAnimation_Walk[WALK_BL], true, false);
-    //    else
-    //        m_pPlayer->Change_Animation(m_iAnimation_Walk[WALK_B], true, false);
-    //}
-    //else
-    //{
-    //    if (vLocalMoveDir.x > 0.5f)
-    //        m_pPlayer->Change_Animation(m_iAnimation_Walk[WALK_R], true, false);
-    //    else if (vLocalMoveDir.x < 0.5f)
-    //        m_pPlayer->Change_Animation(m_iAnimation_Walk[WALK_L], true, false);
-    //}
-
-
     if (m_vMoveDir.Length() > 0.f)
     {
-        m_pPlayer->Move_Dir(m_vMoveDir, fTimeDelta);
+        if (fForwardDot > 0.7f)
+        {
+            if (isLeft)
+            {
+                m_pPlayer->Change_Animation(m_iAnimation_Walk[WALK_FL], true, 0.05f);
+                m_eWalkState = WALK_FL;
+            }
+            else if (isRight)
+            {
+                m_pPlayer->Change_Animation(m_iAnimation_Walk[WALK_FR], true, 0.05f);
+                m_eWalkState = WALK_FR;
+            }
+            else
+            {
+                m_pPlayer->Change_Animation(m_iAnimation_Walk[WALK_F], true, 0.05f);
+                m_eWalkState = WALK_F;
+            }
+        }
+        else if (fBackwardDot > 0.7f)
+        {
+            if (isLeft)
+            {
+                m_pPlayer->Change_Animation(m_iAnimation_Walk[WALK_BL], true, 0.05f);
+                m_eWalkState = WALK_BL;
+            }
+            else if (isRight)
+            {
+                m_pPlayer->Change_Animation(m_iAnimation_Walk[WALK_BR], true, 0.05f);
+                m_eWalkState = WALK_BR;
+            }
+            else
+            {
+                m_pPlayer->Change_Animation(m_iAnimation_Walk[WALK_B], true, 0.05f);
+                m_eWalkState = WALK_B;
+            }
+        }
+        else
+        {
+            if (isLeft)
+            {
+                m_pPlayer->Change_Animation(m_iAnimation_Walk[WALK_L], true, 0.05f);
+                m_eWalkState = WALK_L;
+            }
+            else if (isRight)
+            {
+                m_pPlayer->Change_Animation(m_iAnimation_Walk[WALK_R], true, 0.05f);
+                m_eWalkState = WALK_R;
+            }
+        }
+
+        if (m_vMoveDir.Length() > 0.f)
+        {
+            // 가드 상태에서는 회전 안 함
+            m_pPlayer->Move_Dir(m_vMoveDir, fTimeDelta, false);
+        }
+        isMoving = true;
     }
 
     return isMoving;
+}
+
+void CState_Player_OH_Walk::Control_Sound()
+{
+    _int iFrame = m_pPlayer->Get_Frame();
+
+    if (m_eWalkState == WALK_FL || m_eWalkState == WALK_BR)
+    {
+        if (iFrame % 70 == m_iFootStepFrame[m_eWalkState][0] && !m_isPlaySound)
+        {
+            m_pPlayer->Play_Sound(CPlayer::PAWN_SOUND_EFFECT1, TEXT("SE_PC_FS_Stone_Walk_01.wav"));
+            m_isPlaySound = true;
+        }
+        else if (iFrame % 70 == m_iFootStepFrame[m_eWalkState][1] && !m_isPlaySound)
+        {
+            m_pPlayer->Play_Sound(CPlayer::PAWN_SOUND_EFFECT1, TEXT("SE_PC_FS_Stone_Walk_02.wav"));
+            m_isPlaySound = true;
+        }
+        else
+        {
+            m_isPlaySound = false;
+        }
+    }
+    else if (iFrame == m_iFootStepFrame[m_eWalkState][0] && !m_isPlaySound)
+    {
+        if (m_eWalkState == WALK_FL || m_eWalkState == WALK_BR)
+            return;
+        
+        m_pPlayer->Play_Sound(CPlayer::PAWN_SOUND_EFFECT1, TEXT("SE_PC_FS_Stone_Walk_01.wav"));
+        m_isPlaySound = true;
+    }
+    else if (iFrame == m_iFootStepFrame[m_eWalkState][1] && !m_isPlaySound)
+    {
+        if (m_eWalkState == WALK_FL || m_eWalkState == WALK_BR)
+            return;
+
+        m_pPlayer->Play_Sound(CPlayer::PAWN_SOUND_EFFECT1, TEXT("SE_PC_FS_Stone_Walk_02.wav"));
+        m_isPlaySound = true;
+    }
+    else
+    {
+        m_isPlaySound = false;
+    }
 }
 
 CState_Player_OH_Walk* CState_Player_OH_Walk::Create(CFsm* pFsm, CPlayer* pPlayer, _uint iStateNum, void* pArg)

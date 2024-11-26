@@ -46,7 +46,7 @@ HRESULT CEffect_Manager::Initialize(ID3D11Device* pDevice, ID3D11DeviceContext* 
     return S_OK;
 }
 
-CEffect_Container* CEffect_Manager::Clone_Effect(const _wstring& strECTag, _Matrix* pParentMatrix, _Matrix* pSocketMatrix, _Vec3 vPos, _Vec3 vRotation, _Vec3 vScale)
+CEffect_Container* CEffect_Manager::Clone_Effect(const _wstring& strECTag, const _Matrix* pParentMatrix, const _Matrix* pSocketMatrix, _Vec3 vPos, _Vec3 vRotation, _Vec3 vScale)
 {
     CEffect_Container::EFFECT_DESC desc = {};
 
@@ -159,8 +159,6 @@ HRESULT CEffect_Manager::Add_Effect_ToLayer(_uint iLevelID, const _wstring& strE
             pEffectContainer->Add_Effect(Clone_TrailMP_Effect(strEffectName));
         }
     }
-
-    pEffectContainer->Set_Loop(true);
 
     if(FAILED(m_pGameInstance->Add_Object_ToLayer(iLevelID, TEXT("Layer_Effect"), pEffectContainer)))
         return E_FAIL;

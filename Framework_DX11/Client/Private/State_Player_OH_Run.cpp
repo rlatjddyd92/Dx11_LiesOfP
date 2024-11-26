@@ -34,7 +34,7 @@ HRESULT CState_Player_OH_Run::Start_State(void* pArg)
 {
     m_pPlayer->Change_Animation(m_iAnimation_Run[RUN_F], true, 0.1f);
 
-    m_pPlayer->Set_MoveSpeed(3.f);
+    m_pPlayer->Set_MoveSpeed(3.5f);
 
     m_isInputSpace = false;
     m_fSpaceTime = 0.f;

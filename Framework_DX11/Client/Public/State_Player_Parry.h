@@ -31,6 +31,11 @@ private:
 private:
     _bool               End_Check();
 
+private:
+    _int                m_iSoundFrame = {};
+    _bool               m_isPlaySound = {};
+    void                Control_Sound();
+
 public:
     static CState_Player_Parry* Create(class CFsm* pFsm, class CPlayer* pPlayer, _uint iStateNum, void* pArg = nullptr);
     virtual void Free() override;

@@ -4,6 +4,7 @@
 #include "Model.h"
 #include "Player.h"
 #include "Camera.h"
+#include "Weapon.h"
 
 CState_Player_Scissor_LAttack01::CState_Player_Scissor_LAttack01(CFsm* pFsm, CPlayer* pPlayer)
     :CState{ pFsm }
@@ -26,6 +27,8 @@ HRESULT CState_Player_Scissor_LAttack01::Initialize(_uint iStateNum, void* pArg)
 
     m_iColliderStartFrame = 27;
     m_iColliderEndFrame = 32;
+
+    m_iSoundFrame = 28;
 
     return S_OK;
 }
@@ -82,6 +85,7 @@ void CState_Player_Scissor_LAttack01::Update(_float fTimeDelta)
     }
 
     Control_Collider();
+    Control_Sound();
 
 }
 
@@ -103,6 +107,21 @@ void CState_Player_Scissor_LAttack01::Control_Collider()
         m_pPlayer->Active_CurrentWeaponCollider();
     else
         m_pPlayer->DeActive_CurretnWeaponCollider();
+}
+
+void CState_Player_Scissor_LAttack01::Control_Sound()
+{
+    _int iFrame = m_pPlayer->Get_Frame();
+
+    if (iFrame == m_iSoundFrame && !m_isPlaySound)
+    {
+        m_pPlayer->Play_CurrentWeaponSound(CWeapon::WEP_SOUND_EFFECT1, TEXT("SE_PC_SK_WS_Glaive_P_B_SS_02.wav"));
+        m_isPlaySound = true;
+    }
+    else
+    {
+        m_isPlaySound = false;
+    }
 }
 
 CState_Player_Scissor_LAttack01* CState_Player_Scissor_LAttack01::Create(CFsm* pFsm, CPlayer* pPlayer, _uint iStateNum, void* pArg)

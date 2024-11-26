@@ -137,6 +137,18 @@ void CWeapon_Scissor::DeActive_Collider(_uint iHandIndex)
 	}
 }
 
+void CWeapon_Scissor::Play_Sound(WEP_SOUND_TYPE eType, const TCHAR* pSoundKey, _uint iHandIndex)
+{
+	if (!m_isSeperate)
+	{
+		m_pSoundCom[eType]->Play2D(pSoundKey, g_fEffectVolume);
+	}
+	else
+	{
+		m_pScissor_Sperate[iHandIndex]->Play_Sound(eType, pSoundKey);
+	}
+}
+
 void CWeapon_Scissor::Change_SeperateMode()
 {
 	if (m_isSeperate)

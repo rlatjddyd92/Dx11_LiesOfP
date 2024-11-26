@@ -35,10 +35,17 @@ private:
 
     _bool               m_isInputSpace = {};
 
+    WALK                m_eWalkState = { WALK_END };
+
 private:
     void                Select_WalkAnimation();
 
     _bool               Move(_float fTimeDelta);
+
+private:
+    _int                m_iFootStepFrame[WALK_END][2] = {};
+    _bool               m_isPlaySound = { false };
+    void                Control_Sound();
 
 public:
     static CState_Player_OH_Walk* Create(class CFsm* pFsm, class CPlayer* pPlayer, _uint iStateNum, void* pArg = nullptr);

@@ -97,6 +97,18 @@ HRESULT CPlayer::Initialize(void * pArg)
 
 	m_strObjectTag = TEXT("Player");
 
+
+	const _Matrix* pParetnMatrix = m_pTransformCom->Get_WorldMatrix_Ptr();
+	const _Matrix* pSocketBoneMatrix = m_pModelCom->Get_BoneCombindTransformationMatrix_Ptr("BN_Weapon_R");
+
+	CEffect_Container* pTest = CEffect_Manager::Get_Instance()->Clone_Effect(TEXT("Player_Attack_Rapier_StormStab_First"), pParetnMatrix,
+		pSocketBoneMatrix, _Vec3(0.f, 0.f, 0.f), _Vec3(0.f, 180.f, 0.f), _Vec3(1.f, 1.f, 1.f));
+	m_Effects.emplace(TEXT("Player_Attack_Rapier_StormStab_First"), pTest);
+
+	pTest = CEffect_Manager::Get_Instance()->Clone_Effect(TEXT("Player_Attack_Rapier_StormStab_Second"), pParetnMatrix,
+		pSocketBoneMatrix, _Vec3(0.f, 0.f, 0.f), _Vec3(0.f, 180.f, 0.f), _Vec3(1.f, 1.f, 1.f));
+	m_Effects.emplace(TEXT("Player_Attack_Rapier_StormStab_Second"), pTest);
+
 	return S_OK;
 }
 
@@ -110,25 +122,23 @@ void CPlayer::Priority_Update(_float fTimeDelta)
 	if (KEY_TAP(KEY::WHEELBUTTON))
 		LockOnOff();
 
-	for (auto& pEffect : m_EffectList)
-	{
-		pEffect->Priority_Update(fTimeDelta);
-	}
-	//업데이트에서 생성하니 업데이트 이전에 비우기
-	for (auto& pEffect : m_EffectList)
-	{
-		pEffect->Late_Update(fTimeDelta);
-	}
-
-	m_EffectList.clear();
-	m_EvKeyList.clear();
-
 	m_pWeapon[m_eWeaponType]->Priority_Update(fTimeDelta);
+
+	for (auto iter = m_ActiveEffects.begin(); iter != m_ActiveEffects.end(); )
+	{
+		if (iter->second->Get_Dead())
+			iter = m_ActiveEffects.erase(iter);
+		else
+		{
+			iter->second->Priority_Update(fTimeDelta);
+			++iter;
+		}
+	}
 }
 
 void CPlayer::Update(_float fTimeDelta)
 {
-	m_vCurRootMove = XMVector3TransformNormal(m_pModelCom->Play_Animation(fTimeDelta, &m_EvKeyList), m_pTransformCom->Get_WorldMatrix());
+	m_vCurRootMove = XMVector3TransformNormal(m_pModelCom->Play_Animation(fTimeDelta), m_pTransformCom->Get_WorldMatrix());
 
 	m_pRigidBodyCom->Set_Velocity(m_vCurRootMove / fTimeDelta);
 
@@ -139,9 +149,9 @@ void CPlayer::Update(_float fTimeDelta)
 		m_pSoundCom[i]->Update(fTimeDelta);
 	}
 
-	for (auto& pEffect : m_EffectList)
+	for (auto& pEffect : m_ActiveEffects)
 	{
-		pEffect->Update(fTimeDelta);
+		pEffect.second->Update(fTimeDelta);
 	}
 
 	m_pColliderCom->Update(m_pTransformCom->Get_WorldMatrix_Ptr());
@@ -152,8 +162,18 @@ void CPlayer::Update(_float fTimeDelta)
 
 void CPlayer::Late_Update(_float fTimeDelta)
 {
+	if(m_isLockOn && m_pFsmCom->Get_CurrentState() != OH_SPRINT && m_pFsmCom->Get_CurrentState() != TH_SPRINT)
+		m_pTransformCom->LookAt_NoHeight(m_pTargetMonster->Get_Transform()->Get_State(CTransform::STATE_POSITION));
+
 	m_pRigidBodyCom->Update(fTimeDelta);
-	//m_pNavigationCom->SetUp_OnCell(m_pTransformCom, 0.f, fTimeDelta);
+
+	m_pWeapon[m_eWeaponType]->Late_Update(fTimeDelta);
+
+	//업데이트에서 생성하니 업데이트 이전에 비우기
+	for (auto& pEffect : m_ActiveEffects)
+	{
+		pEffect.second->Late_Update(fTimeDelta);
+	}
 
 	m_pGameInstance->Add_RenderObject(CRenderer::RG_NONBLEND, this);
 	m_pGameInstance->Add_RenderObject(CRenderer::RG_SHADOWOBJ, this);
@@ -163,7 +183,6 @@ void CPlayer::Late_Update(_float fTimeDelta)
 	m_pGameInstance->Add_DebugObject(m_pNavigationCom);
 #endif
 
-	m_pWeapon[m_eWeaponType]->Late_Update(fTimeDelta);
 }
 
 HRESULT CPlayer::Render()
@@ -245,6 +264,7 @@ void CPlayer::Move_Dir(_Vec4 vDir, _float fTimeDelta, _bool isTurn)
 {
 	if(isTurn)
 		m_pTransformCom->LookAt_Lerp_NoHeight(vDir, 30.0f, fTimeDelta);
+
 	m_pRigidBodyCom->Set_Velocity((_Vec3(vDir * m_fMoveSpeed)));
 }
 
@@ -378,6 +398,34 @@ CPawn* CPlayer::Find_TargetMonster()
 
 	return dynamic_cast<CPawn*>(pNearObject);
 }
+
+void CPlayer::Play_CurrentWeaponSound(const _uint iType, const TCHAR* pSoundKey, _uint iHandIndex)
+{
+	m_pWeapon[iType]->Play_Sound(CWeapon::WEP_SOUND_TYPE(iType), pSoundKey, iHandIndex);
+}
+
+void CPlayer::Active_Effect(const _wstring& strECTag)
+{
+	CEffect_Container* pEffect = m_Effects.find(strECTag)->second;
+	if (nullptr == pEffect)
+		return;
+
+	m_ActiveEffects.emplace(strECTag, pEffect);
+}
+void CPlayer::DeActive_Effect(const _wstring& strECTag)
+{
+	auto	iter = m_ActiveEffects.find(strECTag);
+
+	if (iter == m_ActiveEffects.end())
+		return;
+
+	CEffect_Container* pEffect = iter->second;
+	if (nullptr == pEffect)
+		return;
+
+	m_ActiveEffects.erase(strECTag);
+}
+
 HRESULT CPlayer::Ready_Weapon()
 {
 	CWeapon::WEAPON_DESC		WeaponDesc{};
@@ -401,11 +449,6 @@ HRESULT CPlayer::Ready_Weapon()
 	Change_Weapon();
 
 	return S_OK;
-}
-
-void CPlayer::Play_CurrentWeaponSound(const _uint iType, const TCHAR* pSoundKey)
-{
-	m_pWeapon[iType]->Play_Sound(CWeapon::WEP_SOUND_TYPE(iType), pSoundKey);
 }
 
 HRESULT CPlayer::Ready_Components()
@@ -437,9 +480,9 @@ HRESULT CPlayer::Ready_Components()
 	RigidBodyDesc.pOwnerNavigation = m_pNavigationCom;
 
 	RigidBodyDesc.pOwner = this;
-	RigidBodyDesc.fStaticFriction = 1.0f;
-	RigidBodyDesc.fDynamicFriction = 0.0f;
-	RigidBodyDesc.fRestituion = 0.0f;
+	RigidBodyDesc.fStaticFriction = 0.f;
+	RigidBodyDesc.fDynamicFriction = 0.f;
+	RigidBodyDesc.fRestituion = 0.f;
 
 	physX::GeometryCapsule CapsuleDesc;
 	CapsuleDesc.fHeight = 1.5f;

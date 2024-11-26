@@ -50,6 +50,7 @@ HRESULT CLevel_GamePlay::Initialize()
 	CEffect_Manager::Get_Instance()->Add_Effect_ToLayer(LEVEL_GAMEPLAY, TEXT("Monster_Impact_Death"),
 		_Vec3(0.f, 5.f, 0.f), _Vec3(0.f, 0.f, 0.f), _Vec3(1.f, 1.f, 1.f));
 
+
 	m_pGameInstance->Set_Listener(m_pPlayer);
 
 	m_pGameInstance->Play_BGM(TEXT("MU_MS_Simon_PH1.wav"), g_fBGMVolume);

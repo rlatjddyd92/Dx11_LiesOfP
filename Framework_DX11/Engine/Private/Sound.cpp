@@ -114,6 +114,14 @@ void CSound::Play2D(const TCHAR* pSoundKey, _float fVolume)
 	m_pChannel->setVolume(fVolume);
 }
 
+void CSound::Play2D_Repeat(const TCHAR* pSoundKey, _float fVolume)
+{
+	if (m_isPlaying)
+	{
+		Play2D(pSoundKey, fVolume);
+	}
+}
+
 void CSound::Pause()
 {
 	m_pChannel->setPaused(!m_isPause);

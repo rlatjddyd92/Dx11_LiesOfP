@@ -28,7 +28,7 @@ HRESULT CState_Player_OH_Sprint::Start_State(void* pArg)
 {
     m_pPlayer->Change_Animation(m_iAnimation_Sprint, true, 0.05f);
 
-    m_pPlayer->Set_MoveSpeed(4.5f);
+    m_pPlayer->Set_MoveSpeed(5.5f);
 
     m_isSprintEnd = false;
     m_fSprintEndTime = 0.f;

@@ -98,6 +98,20 @@ void CRigidBody::Add_Force(const _Vec3& vForce, PxForceMode::Enum _eMode)
 	//static_cast<PxRigidDynamic*>(m_PxActor)->addForce(_vForce, _eMode, _isAutowake);
 }
 
+void CRigidBody::Set_Mass(_float fMass)
+{
+	static_cast<PxRigidDynamic*>(m_PxActor)->setMass(fMass);
+}
+
+void CRigidBody::Set_GloblePose(const _Vec3& vPos)
+{
+	PxTransform PxTransform = m_PxActor->getGlobalPose();
+	PxVec3 vPxPos = ConvertToPxVec3(vPos);
+	PxTransform.p = vPxPos;
+
+	m_PxActor->setGlobalPose(PxTransform);
+	m_pOwnerTransform->Set_State(CTransform::STATE_POSITION, _Vec3(vPos.x, vPos.y, vPos.z));
+}
 
 HRESULT CRigidBody::Add_PxActor(RIGIDBODY_DESC* pDesc)
 {

@@ -52,6 +52,11 @@ HRESULT CState_Player_Rapier_Fatal::Start_State(void* pArg)
     m_pPlayer->Play_Sound(CPawn::PAWN_SOUND_EFFECT1, TEXT("SE_PC_SK_FX_Rapier_1H_B_FableArts_Start_01.wav"));
     m_pPlayer->Play_Sound(CPawn::PAWN_SOUND_EFFECT2, TEXT("SE_PC_SK_FX_Rapier_1H_B_FableArts_Motor_03.wav"));
 
+    m_isActiveEffect[0] = false;
+    m_isActiveEffect[1] = false;
+
+    //m_pPlayer->Active_Effect(TEXT("Player_Attack_Rapier_StormStab_First_Ready"));
+    
     return S_OK;
 }
 
@@ -95,8 +100,9 @@ void CState_Player_Rapier_Fatal::Update(_float fTimeDelta)
         m_pPlayer->Change_State(CPlayer::OH_IDLE);
     }
 
-    Control_Collider();
-    Control_Sound();
+    Control_Collider(iFrame);
+    Control_Sound(iFrame);
+    Control_Effect(iFrame);
 }
 
 void CState_Player_Rapier_Fatal::End_State()
@@ -109,10 +115,8 @@ _bool CState_Player_Rapier_Fatal::End_Check()
     return m_pPlayer->Get_EndAnim(m_iAnimation_RapierFCA);
 }
 
-void CState_Player_Rapier_Fatal::Control_Collider()
+void CState_Player_Rapier_Fatal::Control_Collider(_int iFrame)
 {
-    _int iFrame = m_pPlayer->Get_Frame();
-
     _bool   isColliderActive = false;
 
     for (_uint i = 0; i < 5; ++i)
@@ -128,10 +132,8 @@ void CState_Player_Rapier_Fatal::Control_Collider()
 
 }
 
-void CState_Player_Rapier_Fatal::Control_Sound()
+void CState_Player_Rapier_Fatal::Control_Sound(_int iFrame)
 {
-    _int iFrame = m_pPlayer->Get_Frame();
-
     if (iFrame == m_iSoundFrame[0] && !m_isPlaySound)
     {
         m_pPlayer->Play_CurrentWeaponSound(CWeapon::WEP_SOUND_EFFECT1, TEXT("SE_PC_SK_WS_Dagger_1H_S_01.wav"));
@@ -160,6 +162,25 @@ void CState_Player_Rapier_Fatal::Control_Sound()
     else
     {
         m_isPlaySound = false;
+    }
+}
+
+void CState_Player_Rapier_Fatal::Control_Effect(_int iFrame)
+{
+    if (!m_isActiveEffect[0] && iFrame == m_iColliderStartFrame[0])
+    {
+        m_pPlayer->Active_Effect(TEXT("Player_Attack_Rapier_StormStab_First"));
+        m_isActiveEffect[0] = true;
+    }
+    else if (!m_isActiveEffect[1] && iFrame == m_iColliderStartFrame[4])
+    {
+        m_pPlayer->DeActive_Effect(TEXT("Player_Attack_Rapier_StormStab_First"));
+        m_pPlayer->Active_Effect(TEXT("Player_Attack_Rapier_StormStab_Second"));
+        m_isActiveEffect[1] = true;
+    }
+    else if (m_iChangeFrame - 3 < iFrame)
+    {
+        m_pPlayer->DeActive_Effect(TEXT("Player_Attack_Rapier_StormStab_Second"));
     }
 }
 

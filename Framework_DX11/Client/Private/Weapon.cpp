@@ -90,17 +90,17 @@ HRESULT CWeapon::Render()
 				return E_FAIL;
 		}
 
-		//// EMISSIVE
-		//if (nullptr != m_pModelCom->Find_Texture((_uint)i, TEXTURE_TYPE::EMISSIVE))
-		//{
-		//	m_fEmissiveMask = 1.f;
-		//	if (FAILED(m_pModelCom->Bind_Material(m_pShaderCom, "g_EmessiveTexture", EMISSIVE, (_uint)i)))
-		//		return E_FAIL;
-		//}
-		//else
-		//{
-		//	m_fEmissiveMask = 0.f;
-		//}
+		// EMISSIVE
+		if (nullptr != m_pModelCom->Find_Texture((_uint)i, TEXTURE_TYPE::EMISSIVE))
+		{
+			m_fEmissiveMask = 1.f;
+			if (FAILED(m_pModelCom->Bind_Material(m_pShaderCom, "g_EmessiveTexture", EMISSIVE, (_uint)i)))
+				return E_FAIL;
+		}
+		else
+		{
+			m_fEmissiveMask = 0.f;
+		}
 
 		if (nullptr != m_pModelCom->Find_Texture((_uint)i, TEXTURE_TYPE::NORMALS))
 		{
@@ -172,7 +172,7 @@ void CWeapon::DeActive_Collider(_uint iHandIndex)
 	m_pColliderCom->IsActive(false);
 }
 
-void CWeapon::Play_Sound(WEP_SOUND_TYPE eType, const TCHAR* pSoundKey)
+void CWeapon::Play_Sound(WEP_SOUND_TYPE eType, const TCHAR* pSoundKey, _uint iHandIndex)
 {
 	//_float fVolume = {};
 	//switch (eType)

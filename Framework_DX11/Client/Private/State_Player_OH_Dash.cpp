@@ -67,10 +67,6 @@ void CState_Player_OH_Dash::Select_DashAnimation()
         {
             m_pPlayer->Change_Animation(m_iAnimation_Dash[DASH_FOCUS_F], false, 0.f);
         }
-        else if (KEY_HOLD(KEY::S))
-        {
-            m_pPlayer->Change_Animation(m_iAnimation_Dash[DASH_FOCUS_B], false, 0.f);
-        }
         else if (KEY_HOLD(KEY::A))
         {
             m_pPlayer->Change_Animation(m_iAnimation_Dash[DASH_FOCUS_L], false, 0.f);
@@ -78,6 +74,10 @@ void CState_Player_OH_Dash::Select_DashAnimation()
         else if (KEY_HOLD(KEY::D))
         {
             m_pPlayer->Change_Animation(m_iAnimation_Dash[DASH_FOCUS_R], false, 0.f);
+        }
+        else
+        {
+            m_pPlayer->Change_Animation(m_iAnimation_Dash[DASH_FOCUS_B], false, 0.f);
         }
     }
     else

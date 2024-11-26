@@ -260,13 +260,14 @@ HRESULT CLoader::Ready_Resources_For_LogoLevel()
 	m_pGameInstance->LoadSoundFile("BGM");
 	m_pGameInstance->LoadSoundFile("Player");
 	m_pGameInstance->LoadSoundFile("Player/Rapier");
+	m_pGameInstance->LoadSoundFile("Player/Flame");
+	m_pGameInstance->LoadSoundFile("Player/Scissor");
 
 	lstrcpy(m_szLoadingText, TEXT("객체원형을(를) 로딩중입니다."));
 	/* For. Prototype_GameObject_BackGround */
 	if (FAILED(m_pGameInstance->Add_Prototype(TEXT("Prototype_GameObject_BackGround"),
 		CBackGround::Create(m_pDevice, m_pContext))))
 		return E_FAIL;
-
 
 	m_isFinished_Main = true;
 
