@@ -5,6 +5,11 @@
 #include "Player.h"
 #include "Fsm.h"
 
+// 24-11-26 김성용
+// 게임인터페이스 접근 코드 
+// 정식 코드  
+#include "GameInterface_Controller.h"
+
 //전부 수정하기
 
 #pragma region Phase1
@@ -107,12 +112,25 @@ HRESULT CSimonManus::Initialize(void* pArg)
 		m_EXCollider[i]->Set_Owner(this);
 	}
 
-	m_fHp = 100.f;
-	m_fAtk = 10.f;
-	m_fDefence = 5.f;
-	m_fStemina = 100.f;
+	m_eStat.strName = TEXT("시몬 마누스");
+
+	m_eStat.fHp = 200.f;
+	m_eStat.fMaxHp = 200.f;
+	m_eStat.fAtk = 10.f;
+	m_eStat.fDefence = 5.f;
+	m_eStat.fStemina = 100.f;
+
+	m_eStat.bWeakness = false;
+
+	m_eStat.fGrogyPoint = 0.f;
+	m_eStat.fMaxGrogyPoint = 50.f;
 
 	m_pWeapon->DeActive_Collider();
+
+	// 24-11-26 김성용
+	// 몬스터 직교 UI 접근 코드 
+	// 정식 코드  
+	GET_GAMEINTERFACE->Register_Pointer_Into_OrthoUIPage(UI_ORTHO_OBJ_TYPE::ORTHO_BOSS_SIMON, this);
 
 	return S_OK;
 }

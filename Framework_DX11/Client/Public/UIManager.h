@@ -106,6 +106,10 @@ public:
 	// ¾ÆÀÌÅÛ È¹µæ 
 	void Input_Drop_Item_Info(_int iIndex, _int iCount) { m_pUIPage_Play->Input_Drop_Item_Info(iIndex, iCount); }
 
+	// º¸½º Ã¼·Â¹Ù 
+	void Activate_Boss_Hp_Bar(_bool bActive) { m_pUIPage_Play->Activate_Boss_Hp_Bar(bActive); }
+	void Set_Boss_Hp_Bar_Info(_wstring strName, _float HpNow, _float HpMax) { m_pUIPage_Play->Set_Boss_Hp_Bar_Info(strName, HpNow, HpMax);}
+
 
 private:
 	void UIControl_Test(_float fTimeDelta);

@@ -5,6 +5,11 @@
 #include "Player.h"
 #include "Fsm.h"
 
+// 24-11-26 김성용
+// 게임인터페이스 접근 코드 
+// 정식 코드  
+#include "GameInterface_Controller.h"
+
 
 #include "State_CarcassBigA_Idle.h"
 #include "State_CarcassBigA_Die.h"
@@ -73,10 +78,21 @@ HRESULT CCarcassBigA::Initialize(void* pArg)
 
 	m_vRimLightColor = { 0.7f, 0.f, 0.f, 3.f };
 
-	m_fHp = 500.f;
-	m_fAtk = 4.f;
-	m_fDefence = 2.f;
-	m_fStemina = 30.f;
+	m_eStat.fHp = 50.f;
+	m_eStat.fMaxHp = 50.f;
+	m_eStat.fAtk = 4.f;
+	m_eStat.fDefence = 3.f;
+	m_eStat.fStemina = 30.f;
+
+	m_eStat.bWeakness = false;
+
+	m_eStat.fGrogyPoint = 0.f;
+	m_eStat.fMaxGrogyPoint = 50.f;
+
+	// 24-11-26 김성용
+	// 몬스터 직교 UI 접근 코드 
+	// 정식 코드  
+	GET_GAMEINTERFACE->Register_Pointer_Into_OrthoUIPage(UI_ORTHO_OBJ_TYPE::ORTHO_NORMAL_MONSTER, this);
 
 	return S_OK;
 }
@@ -94,6 +110,14 @@ void CCarcassBigA::Update(_float fTimeDelta)
 	m_pRigidBodyCom->Set_Velocity(m_vCurRootMove / fTimeDelta);
 
 	m_pFsmCom->Update(fTimeDelta);
+
+	// 테스트 임시 코드 
+	if (KEY_HOLD(KEY::ALT))
+		if (KEY_TAP(KEY::NUM5))
+		{
+			if (m_eStat.bWeakness) m_eStat.bWeakness = false;
+			else m_eStat.bWeakness = true;
+		}
 
 	m_pColliderCom->Update(m_pTransformCom->Get_WorldMatrix_Ptr());
 	m_pGameInstance->Add_ColliderList(m_pColliderCom);

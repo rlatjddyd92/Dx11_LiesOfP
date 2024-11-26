@@ -178,6 +178,10 @@ public:
 			}
 	}
 
+	// 보스 체력바 
+	void Activate_Boss_Hp_Bar(_bool bActive) { m_bIs_BossHp_Activate = bActive; }
+	void Set_Boss_Hp_Bar_Info(_wstring strName, _float HpNow, _float HpMax) { m_strBossName = strName, m_fBoss_Hp_Now = HpNow; m_fBoss_Hp_Max = HpMax; }
+
 	// 좌상단 게이지는 스탯 매니저의 내용을 참조하여 변경 
 	// 외부 -> 스탯 매니저 -> UI 매니저(Page_Play)
 
@@ -195,6 +199,8 @@ private:
 	void LD_Arm_Update(_float fTimeDelta);
 	void RU_Coin_Update(_float fTimeDelta);
 	void RD_Weapon_Update(_float fTimeDelta);
+
+	void Boss_Hp_Update(_float fTimeDelta);
 
 	void PlayInfo_Update(_float fTimeDelta);
 	void Add_Render_Info_DropInfo(_float fTimeDelta);
@@ -220,6 +226,15 @@ private:
 
 	// 무기 조정 
 	_int m_iWeapon_Equip_0_Symbol = 0;
+
+
+	// 보스 체력바 
+	_bool m_bIs_BossHp_Activate = false;
+	_wstring m_strBossName = {};
+	_float m_fBoss_Hp_Now = 0.f;
+	_float m_fBoss_Hp_Max = 0.f;
+
+
 private: // 테스트 변수
 	_bool m_bWeapon_Top = true;
 

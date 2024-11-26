@@ -68,10 +68,14 @@ void CUIPage_Play::Late_Update(_float fTimeDelta)
 	RU_Coin_Update(fTimeDelta);
 	RD_Weapon_Update(fTimeDelta);
 	
+	
 	for(auto& iter : m_vec_Group_Ctrl)
 		__super::UpdatePart_ByControl(iter);
 
+	Boss_Hp_Update(fTimeDelta);
 	__super::Late_Update(fTimeDelta);
+
+	
 
 	PlayInfo_Update(fTimeDelta);
 	m_bCan_InterAction = true;
@@ -448,6 +452,26 @@ void CUIPage_Play::RD_Weapon_Update(_float fTimeDelta)
 	m_vec_Group_Ctrl[_int(PART_GROUP::GROUP_WEAPON_GAUGE_LEFT_KEYSET_B)]->bRender = !bSingle_Cell_Blade;
 	m_vec_Group_Ctrl[_int(PART_GROUP::GROUP_WEAPON_GAUGE_RIGHT_KEYSET_A)]->bRender = !bSingle_Cell_Blade;
 	m_vec_Group_Ctrl[_int(PART_GROUP::GROUP_WEAPON_GAUGE_RIGHT_KEYSET_B)]->bRender = bSingle_Cell_Blade;
+}
+
+void CUIPage_Play::Boss_Hp_Update(_float fTimeDelta)
+{
+	if (!m_bIs_BossHp_Activate)
+	{
+		for (_int i = 175; i <= 181; ++i)
+			m_vecPart[i]->bRender = false;
+	}
+	else
+	{
+		for (_int i = 175; i < m_vecPart.size(); ++i)
+			m_vecPart[i]->bRender = true;
+
+		m_vecPart[175]->strText = m_strBossName;
+		m_vecPart[181]->fRatio = _float(m_fBoss_Hp_Now) / _float(m_fBoss_Hp_Max);
+		m_vecPart[181]->MovePart(m_vecPart[175]->fPosition, fTimeDelta);
+		if (m_vecPart[181]->fRatio == 1.f)
+			_int i = 0;
+	}
 }
 
 void CUIPage_Play::PlayInfo_Update(_float fTimeDelta)

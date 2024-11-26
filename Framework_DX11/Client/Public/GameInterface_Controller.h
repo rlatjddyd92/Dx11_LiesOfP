@@ -86,6 +86,11 @@ public: // 외부에서 매니저 접근
 // 직교 UI 요청 
 	void Register_Pointer_Into_OrthoUIPage(UI_ORTHO_OBJ_TYPE eType, void* pObj) { m_pUIManager->Register_Pointer_Into_OrthoUIPage(eType, pObj); }
 
+	// 보스 체력바 
+	void Activate_Boss_Hp_Bar(_bool bActive) { m_pUIManager->Activate_Boss_Hp_Bar(bActive); }
+	void Set_Boss_Hp_Bar_Info(_wstring strName, _float HpNow, _float HpMax) { m_pUIManager->Set_Boss_Hp_Bar_Info(strName, HpNow, HpMax); }
+
+
 	// 아이템 획득 정보 
 	void Input_Drop_Item_Info(_int iIndex, _int iCount) { m_pUIManager->Input_Drop_Item_Info(iIndex, iCount); }
 
