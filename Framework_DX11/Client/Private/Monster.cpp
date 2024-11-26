@@ -95,6 +95,36 @@ HRESULT CMonster::Render()
 	return S_OK;
 }
 
+HRESULT CMonster::Render_LightDepth()
+{
+	if (FAILED(m_pTransformCom->Bind_ShaderResource(m_pShaderCom, "g_WorldMatrix")))
+		return E_FAIL;
+
+	if (FAILED(m_pShaderCom->Bind_Matrices("g_CascadeViewMatrix", m_pGameInstance->Get_CascadeViewMatirx(), 3)))
+		return E_FAIL;
+	if (FAILED(m_pShaderCom->Bind_Matrices("g_CascadeProjMatrix", m_pGameInstance->Get_CascadeProjMatirx(), 3)))
+		return E_FAIL;
+
+	if (FAILED(m_pShaderCom->Bind_RawValue("g_fFar", &m_pGameInstance->Get_Far(), sizeof(_float))))
+		return E_FAIL;
+
+	_uint		iNumMeshes = m_pModelCom->Get_NumMeshes();
+
+	for (size_t i = 0; i < iNumMeshes; i++)
+	{
+		m_pModelCom->Bind_MeshBoneMatrices(m_pShaderCom, "g_BoneMatrices", (_uint)i);
+
+
+		if (FAILED(m_pShaderCom->Begin(3)))
+			return E_FAIL;
+
+		if (FAILED(m_pModelCom->Render((_uint)i)))
+			return E_FAIL;
+	}
+
+	return S_OK;
+}
+
 _Vec4 CMonster::Get_TargetDir()
 {
 	_Vec4 vDir = m_vPosTarget - m_pTransformCom->Get_State(CTransform::STATE_POSITION);

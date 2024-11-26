@@ -1,59 +1,7 @@
-﻿FXC : warning X4717: Effects deprecated for D3DCompiler_47
-  
-  compilation object save succeeded; see D:\GitProject\Dx11_LiesOfP\Framework_DX11\Client\Bin\Shader_Effect_Mesh.cso
-FXC : warning X4717: Effects deprecated for D3DCompiler_47
-  
-  compilation object save succeeded; see D:\GitProject\Dx11_LiesOfP\Framework_DX11\Client\Bin\Shader_Effect_Texture.cso
-FXC : warning X4717: Effects deprecated for D3DCompiler_47
-  
-  compilation object save succeeded; see D:\GitProject\Dx11_LiesOfP\Framework_DX11\Client\Bin\Shader_ParticleCompute.cso
-FXC : warning X4717: Effects deprecated for D3DCompiler_47
-D:\GitProject\Dx11_LiesOfP\Framework_DX11\Client\Bin\ShaderFiles\Shader_TrailHead_PointInstance.hlsl(77,5-75): warning X3206: implicit truncation of vector type
-  
-  compilation object save succeeded; see D:\GitProject\Dx11_LiesOfP\Framework_DX11\Client\Bin\Shader_TrailHead_PointInstance.cso
-FXC : warning X4717: Effects deprecated for D3DCompiler_47
-D:\GitProject\Dx11_LiesOfP\Framework_DX11\Client\Bin\ShaderFiles\Shader_TrailTail_PointInstance.hlsl(74,5-55): warning X3206: implicit truncation of vector type
-  
-  compilation object save succeeded; see D:\GitProject\Dx11_LiesOfP\Framework_DX11\Client\Bin\Shader_TrailTail_PointInstance.cso
-FXC : warning X4717: Effects deprecated for D3DCompiler_47
-  
-  compilation object save succeeded; see D:\GitProject\Dx11_LiesOfP\Framework_DX11\Client\Bin\Shader_Trail_MultiPoint_Compute.cso
-FXC : warning X4717: Effects deprecated for D3DCompiler_47
-  
-  compilation object save succeeded; see D:\GitProject\Dx11_LiesOfP\Framework_DX11\Client\Bin\Shader_VtxAnimModel.cso
-FXC : warning X4717: Effects deprecated for D3DCompiler_47
-  
-  compilation object save succeeded; see D:\GitProject\Dx11_LiesOfP\Framework_DX11\Client\Bin\Shader_VtxCubeTex.cso
-FXC : warning X4717: Effects deprecated for D3DCompiler_47
-  
-  compilation object save succeeded; see D:\GitProject\Dx11_LiesOfP\Framework_DX11\Client\Bin\Shader_VtxModel.cso
-FXC : warning X4717: Effects deprecated for D3DCompiler_47
-  
-  compilation object save succeeded; see D:\GitProject\Dx11_LiesOfP\Framework_DX11\Client\Bin\Shader_VtxNorTex.cso
-FXC : warning X4717: Effects deprecated for D3DCompiler_47
-D:\GitProject\Dx11_LiesOfP\Framework_DX11\Client\Bin\ShaderFiles\Shader_VtxPointInstance.hlsl(70,5-66): warning X3206: implicit truncation of vector type
-  
-  compilation object save succeeded; see D:\GitProject\Dx11_LiesOfP\Framework_DX11\Client\Bin\Shader_VtxPointInstance.cso
-FXC : warning X4717: Effects deprecated for D3DCompiler_47
-  
-  compilation object save succeeded; see D:\GitProject\Dx11_LiesOfP\Framework_DX11\Client\Bin\Shader_VtxPosTex.cso
-FXC : warning X4717: Effects deprecated for D3DCompiler_47
-  
-  compilation object save succeeded; see D:\GitProject\Dx11_LiesOfP\Framework_DX11\Client\Bin\Shader_VtxRectInstance.cso
-FXC : warning X4717: Effects deprecated for D3DCompiler_47
-  
-  compilation object save succeeded; see D:\GitProject\Dx11_LiesOfP\Framework_DX11\Client\Bin\Shader_VtxTrail_OnePoint_Instance.cso
-FXC : warning X4717: Effects deprecated for D3DCompiler_47
-  
-  compilation object save succeeded; see D:\GitProject\Dx11_LiesOfP\Framework_DX11\Client\Bin\Shader_VtxTrail_TwoPoint_Instance.cso
-  stdafx.cpp
-  unity_KQOJA1ZNY4BUS7KU.cpp
+﻿  unity_CTDE8VLEITF8SU4Z.cpp
   코드를 생성하고 있습니다.
-  Previous IPDB not found, fall back to full compilation.
-D:\GitProject\Dx11_LiesOfP\Framework_DX11\Client\Private\Camera_Manager.cpp(50): warning C4715: 'Client::CCamera_Manager::Change_Camera': 모든 제어 경로에서 값을 반환하지는 않습니다.
-  All 3890 functions were compiled because no usable IPDB/IOBJ from previous compilation was found.
+  1 of 5410 functions (<0.1%) were compiled, the rest were copied from previous compilation.
+    0 functions were new in current compilation
+    5 functions had inline decision re-evaluated but remain unchanged
   코드를 생성했습니다.
-DirectXTK.lib(ScreenGrab.obj) : warning LNK4099: '' PDB를 'DirectXTK.lib(ScreenGrab.obj)' 또는 ''에서 찾을 수 없습니다. 디버그 정보가 없는 것처럼 개체를 링크합니다.
-DirectXTK.lib(WICTextureLoader.obj) : warning LNK4099: '' PDB를 'DirectXTK.lib(WICTextureLoader.obj)' 또는 ''에서 찾을 수 없습니다. 디버그 정보가 없는 것처럼 개체를 링크합니다.
-DirectXTK.lib(pch.obj) : warning LNK4099: '' PDB를 'DirectXTK.lib(pch.obj)' 또는 ''에서 찾을 수 없습니다. 디버그 정보가 없는 것처럼 개체를 링크합니다.
   Client.vcxproj -> D:\GitProject\Dx11_LiesOfP\Framework_DX11\Client\Bin\Client.exe

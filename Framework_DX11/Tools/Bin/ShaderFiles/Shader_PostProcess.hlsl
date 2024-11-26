@@ -202,7 +202,7 @@ PS_OUT PS_MAIN_BLOOM(PS_IN In)
     Out.vColor = vBack + vBloom;
     
     if (fDepth >= g_fFar)
-        Out.vColor = vPriority;
+        Out.vColor += vPriority;
     
     return Out;
 }

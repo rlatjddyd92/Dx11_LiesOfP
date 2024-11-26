@@ -172,16 +172,6 @@ HRESULT CRigidBody::Add_PxGeometry(RIGIDBODY_DESC* pDesc)
 	return S_OK;
 }
 
-void CRigidBody::Set_GloblePose(const _Vec3& vPos)
-{
-	PxTransform PxTransform = m_PxActor->getGlobalPose();
-	PxVec3 vPxPos = ConvertToPxVec3(vPos);
-	PxTransform.p = vPxPos;
-
-	m_PxActor->setGlobalPose(PxTransform);
-	m_pOwnerTransform->Set_State(CTransform::STATE_POSITION, _Vec3(vPos.x, vPos.y, vPos.z));
-}
-
 CRigidBody* CRigidBody::Create(ID3D11Device* pDevice, ID3D11DeviceContext* pContext)
 {
 	CRigidBody* pInstance = new CRigidBody(pDevice, pContext);

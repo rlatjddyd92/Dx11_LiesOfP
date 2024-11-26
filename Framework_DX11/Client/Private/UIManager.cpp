@@ -67,9 +67,9 @@ HRESULT CUIManager::Initialize_Prototype()
 	m_vecTestPage_Pos.resize(_int(TEST_PAGE_NAME::NAME_END));
 	m_vecTestPage_Size.resize(_int(TEST_PAGE_NAME::NAME_END));
 
-#ifdef _DEBUG
+
 	m_pTestData = new TESTDATA;
-#endif
+
 
 	return S_OK;
 }

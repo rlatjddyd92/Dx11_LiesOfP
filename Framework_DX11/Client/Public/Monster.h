@@ -31,6 +31,7 @@ public:
 	virtual void Update(_float fTimeDelta) override;
 	virtual void Late_Update(_float fTimeDelta) override;
 	virtual HRESULT Render() override;
+	virtual HRESULT Render_LightDepth() override;
 
 	_Vec4		Get_TargetPos() { return m_vPosTarget; }
 	_Vec4		Get_TargetDir();

@@ -435,6 +435,7 @@
     <ClCompile Include="..\Private\Octree.cpp">
       <Filter>01.Utility\03.Components\Octree</Filter>
     </ClCompile>
+    <ClCompile Include="..\Private\EasyDrawSphere.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\Public\Base.h">
@@ -665,6 +666,7 @@
     <ClInclude Include="..\Public\Octree.h">
       <Filter>01.Utility\03.Components\Octree</Filter>
     </ClInclude>
+    <ClInclude Include="..\Public\EasyDrawSphere.h" />
   </ItemGroup>
   <ItemGroup>
     <FxCompile Include="..\Bin\ShaderFiles\Shader_Cell.hlsl">

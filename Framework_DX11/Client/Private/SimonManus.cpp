@@ -183,6 +183,8 @@ void CSimonManus::Late_Update(_float fTimeDelta)
 
 
 	m_pGameInstance->Add_RenderObject(CRenderer::RG_NONBLEND, this);
+	m_pGameInstance->Add_RenderObject(CRenderer::RG_SHADOWOBJ, this);
+
 	for (_uint i = 0; i < EXCOLLIDER::COLLTYPE_END; ++i)
 	{
 		m_pGameInstance->Add_ColliderList(m_EXCollider[i]);
@@ -197,10 +199,12 @@ HRESULT CSimonManus::Render()
 	if (FAILED(m_pWeapon->Render()))
 		return E_FAIL;
 
+#ifdef _DEBUG
 	m_pColliderCom->Render();
 	m_EXCollider[LEG_LEFT]->Render();
 	m_EXCollider[LEG_RIGHT]->Render();
 	m_EXCollider[LOWERBODY]->Render();
+#endif
 
 	return S_OK;
 }
