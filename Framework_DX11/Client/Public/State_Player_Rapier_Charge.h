@@ -38,6 +38,11 @@ private:
     _int                m_iColliderEndFrame[3] = {};
     void                Control_Collider();
 
+private:
+    _int                m_iSoundFrame[3] = {};
+    _bool               m_isPlaySound = {};
+    void                Control_Sound();
+
 public:
     static CState_Player_Rapier_Charge* Create(class CFsm* pFsm, class CPlayer* pPlayer, _uint iStateNum, void* pArg = nullptr);
     virtual void Free() override;
