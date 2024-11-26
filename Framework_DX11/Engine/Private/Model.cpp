@@ -288,17 +288,11 @@ HRESULT CModel::Render_Instance(_uint iMeshIndex)
 
 	D3D11_MAPPED_SUBRESOURCE	SubResource{};
 
-	m_pContext->Map(m_pVBInstance, 0, D3D11_MAP_WRITE_NO_OVERWRITE, 0, &SubResource);
+	m_pContext->Map(m_pVBInstance, 0, D3D11_MAP_WRITE_DISCARD, 0, &SubResource);
 
 	VTXMODELINSTANCE* pVertices = static_cast<VTXMODELINSTANCE*>(SubResource.pData);
 
 	memcpy(SubResource.pData, m_InstanceDatas.data(), sizeof(VTXMODELINSTANCE) * m_InstanceDatas.size());
-
-	/*_float4x4 v[10];
-	_float4x4* pData = reinterpret_cast<_float4x4*>(SubResource.pData);
-	for (int i = 0; i < 10; ++i) {
-		v[i] = pData[i];
-	}*/
 
 	m_pContext->Unmap(m_pVBInstance, 0);
 

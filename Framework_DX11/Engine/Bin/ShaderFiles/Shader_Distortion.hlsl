@@ -67,7 +67,7 @@ PS_OUT PS_MAIN_DISTORTION(PS_IN In)
     
     if (vDistortionTexture.r > 0.000001f)
     {
-        float2 vNoiseTexcoord = In.vTexcoord + vDistortionTexture.rg * 2.0f;
+        float2 vNoiseTexcoord = In.vTexcoord + vDistortionTexture.rg * 0.3f;
 
         In.vTexcoord = lerp(In.vTexcoord, vNoiseTexcoord, 0.1f);
     }

@@ -248,32 +248,32 @@ HRESULT CRenderer::Draw()
 	if (FAILED(Render_Deferred()))
 		return E_FAIL;
 
-	//if (FAILED(Render_SSAO()))
-	//	return E_FAIL;
+	if (FAILED(Render_SSAO()))
+		return E_FAIL;
 
-	//if (FAILED(Render_HDR()))
-	//	return E_FAIL;
+	if (FAILED(Render_HDR()))
+		return E_FAIL;
 
-	//if (FAILED(Render_Effect()))
-	//	return E_FAIL;
+	if (FAILED(Render_Effect()))
+		return E_FAIL;
 
-	//if (FAILED(Render_Bloom()))	// 다시 고치기
-	//	return E_FAIL;
-	//if (FAILED(Render_DOF())) // DOF 추가
-	//	return E_FAIL;
-	//if (FAILED(Render_Radial()))
-	//	return E_FAIL;
-	//if (FAILED(Render_Distortion()))
-	//	return E_FAIL;
+	if (FAILED(Render_Bloom()))	// 다시 고치기
+		return E_FAIL;
+	if (FAILED(Render_DOF())) // DOF 추가
+		return E_FAIL;
+	if (FAILED(Render_Radial()))
+		return E_FAIL;
+	if (FAILED(Render_Distortion()))
+		return E_FAIL;
 
-	//if (FAILED(Render_NonLights()))
-	//	return E_FAIL;
+	if (FAILED(Render_NonLights()))
+		return E_FAIL;
 
-	//if (FAILED(Render_Blend()))
-	//	return E_FAIL;
+	if (FAILED(Render_Blend()))
+		return E_FAIL;
 
-	//if (FAILED(Render_UI()))
-	//	return E_FAIL;
+	if (FAILED(Render_UI()))
+		return E_FAIL;
 
 #ifdef _DEBUG
 	if (KEY_TAP(KEY::F1))

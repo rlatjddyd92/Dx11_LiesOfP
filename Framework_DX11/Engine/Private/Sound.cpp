@@ -190,4 +190,6 @@ CComponent* CSound::Clone(void* pArg)
 void CSound::Free()
 {
 	__super::Free();
+
+	m_pChannel->stop();
 }

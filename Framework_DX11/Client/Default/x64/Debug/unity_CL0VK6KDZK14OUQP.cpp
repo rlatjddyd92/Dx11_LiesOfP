@@ -9,6 +9,12 @@
 #include "D:\GitHubProjects\Dx11_LiesOfP\Framework_DX11\Client\Private\CarcassBigA.cpp"
 
 
+#include "D:\GitHubProjects\Dx11_LiesOfP\Framework_DX11\Client\Private\LastDoor.cpp"
+
+
+#include "D:\GitHubProjects\Dx11_LiesOfP\Framework_DX11\Client\Private\State_SimonManusP1_Charge_SwingDown.cpp"
+
+
 #include "D:\GitHubProjects\Dx11_LiesOfP\Framework_DX11\Client\Private\ColliderObject.cpp"
 
 
@@ -382,6 +388,9 @@
 
 
 #include "D:\GitHubProjects\Dx11_LiesOfP\Framework_DX11\Client\Private\StaticObj.cpp"
+
+
+#include "D:\GitHubProjects\Dx11_LiesOfP\Framework_DX11\Client\Private\SteppingStone.cpp"
 
 
 #include "D:\GitHubProjects\Dx11_LiesOfP\Framework_DX11\Client\Private\Terrain.cpp"
