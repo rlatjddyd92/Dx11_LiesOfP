@@ -17,7 +17,7 @@ public:
 private:
 	//vector<_int[3]> m_iTriangle;	//노드에 포함한 삼각형
 	vector<_int> m_TrianglgeIndexes;	//노드에 포함한 삼각형의 인덱스
-	COctree* m_pChildren[8] = {};		//자식 노드
+	COctree* m_pChildren[8] = {nullptr, };		//자식 노드
 	BoundingBox* m_pBoundBox;			//현재 노드 AABB
 	_int m_iDepth = { -1 };				//노드 깊이, 모델 사이즈에 따라 유동적으로 하는게 좋을 듯
 	_uint m_iNumFaces = { 0 };
