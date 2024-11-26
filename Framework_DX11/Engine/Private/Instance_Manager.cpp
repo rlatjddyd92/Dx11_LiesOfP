@@ -111,6 +111,9 @@ HRESULT CInstance_Manager::Draw_Shadow()
 	if (FAILED(m_pNonAnimInstanceShader->Bind_Matrices("g_CascadeProjMatrix", m_pGameInstance->Get_CascadeProjMatirx(), 3)))
 		return E_FAIL;
 
+	if (FAILED(m_pNonAnimInstanceShader->Bind_RawValue("g_fFar", &m_pGameInstance->Get_Far(), sizeof(_float))))
+		return E_FAIL;
+
 	for (auto& Pair : m_pNonAnimModels)
 	{
 		_uint		iNumMeshes = Pair.second->Get_NumMeshes();

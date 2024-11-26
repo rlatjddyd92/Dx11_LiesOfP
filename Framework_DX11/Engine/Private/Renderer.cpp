@@ -193,11 +193,14 @@ HRESULT CRenderer::Initialize()
 		return E_FAIL;
 
 #ifdef _DEBUG
-	if (FAILED(m_pGameInstance->Ready_RT_Debug(TEXT("Target_Priority"), 100.f, 100.f, 200.f, 200.f)))
+	if (FAILED(m_pGameInstance->Ready_RT_Debug(TEXT("Target_LightDepth"), 100.f, 100.f, 200.f, 200.f)))
 		return E_FAIL;
 	if (FAILED(m_pGameInstance->Ready_RT_Debug(TEXT("Target_Emessive"), 100.f, 300.f, 200.f, 200.f)))
 		return E_FAIL;
-	if (FAILED(m_pGameInstance->Ready_RT_Debug(TEXT("Target_Distortion"), 100.f, 500.f, 200.f, 200.f)))
+	if (FAILED(m_pGameInstance->Ready_RT_Debug(TEXT("Target_CascadeShadow"), 100.f, 500.f, 200.f, 200.f)))
+		return E_FAIL;
+	
+	if (FAILED(m_pGameInstance->Ready_RT_Debug(TEXT("Target_Cascade"), 300.f, 100.f, 200.f, 200.f)))
 		return E_FAIL;
 	
 #endif
@@ -245,33 +248,32 @@ HRESULT CRenderer::Draw()
 	if (FAILED(Render_Deferred()))
 		return E_FAIL;
 
-	if (FAILED(Render_SSAO()))
-		return E_FAIL;
+	//if (FAILED(Render_SSAO()))
+	//	return E_FAIL;
 
-	if (FAILED(Render_HDR()))
-		return E_FAIL;
+	//if (FAILED(Render_HDR()))
+	//	return E_FAIL;
 
-	if (FAILED(Render_Effect()))
-		return E_FAIL;
+	//if (FAILED(Render_Effect()))
+	//	return E_FAIL;
 
-	if (FAILED(Render_Bloom()))	// 다시 고치기
-		return E_FAIL;
+	//if (FAILED(Render_Bloom()))	// 다시 고치기
+	//	return E_FAIL;
+	//if (FAILED(Render_DOF())) // DOF 추가
+	//	return E_FAIL;
+	//if (FAILED(Render_Radial()))
+	//	return E_FAIL;
+	//if (FAILED(Render_Distortion()))
+	//	return E_FAIL;
 
-	if (FAILED(Render_DOF())) // DOF 추가
-		return E_FAIL;
-	if (FAILED(Render_Radial()))
-		return E_FAIL;
-	if (FAILED(Render_Distortion()))
-		return E_FAIL;
+	//if (FAILED(Render_NonLights()))
+	//	return E_FAIL;
 
-	if (FAILED(Render_NonLights()))
-		return E_FAIL;
+	//if (FAILED(Render_Blend()))
+	//	return E_FAIL;
 
-	if (FAILED(Render_Blend()))
-		return E_FAIL;
-
-	if (FAILED(Render_UI()))
-		return E_FAIL;
+	//if (FAILED(Render_UI()))
+	//	return E_FAIL;
 
 #ifdef _DEBUG
 	if (KEY_TAP(KEY::F1))

@@ -272,7 +272,7 @@ HRESULT CLevel_GamePlay::Read_Map_Data()
 
 					if (wcscmp(pDesc.szModelTag, TEXT("SM_Monastery_SteppingStone_01")) == 0)
 					{
-						if (FAILED(m_pGameInstance->Add_CloneObject_ToLayer(LEVEL_GAMEPLAY, TEXT("Layer_InteractObj"), TEXT("Prototype_GameObject_SteppingStone"), &pDesc)))
+						if (FAILED(m_pGameInstance->Add_CloneObject_ToLayer(LEVEL_GAMEPLAY, TEXT("Layer_SteppingStone"), TEXT("Prototype_GameObject_SteppingStone"), &pDesc)))
 							return E_FAIL;
 						continue;
 					}

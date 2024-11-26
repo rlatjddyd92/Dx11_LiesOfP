@@ -3,6 +3,8 @@
 matrix			g_WorldMatrix, g_ViewMatrix, g_ProjMatrix;
 float			g_fFar;
 
+matrix g_CascadeViewMatrix[3], g_CascadeProjMatrix[3];
+
 texture2D		g_DiffuseTexture;
 texture2D		g_NormalTexture;
 texture2D		g_ARMTexture;
@@ -76,6 +78,44 @@ VS_OUT_NORMAL VS_MAIN_NORMAL(VS_IN In)
 	return Out;
 }
 
+struct GS_IN_CASCADE
+{
+    float4 vPosition : SV_POSITION;
+};
+
+GS_IN_CASCADE VS_MAIN_CASCADE(VS_IN In)
+{
+    GS_IN_CASCADE Out = (GS_IN_CASCADE) 0;
+    
+    Out.vPosition = mul(vector(In.vPosition, 1.f), g_WorldMatrix);
+    return Out;
+}
+
+struct GS_OUT_CASCADE
+{
+    float4 vPosition : SV_POSITION;
+    uint iRTVIndex : SV_RenderTargetArrayIndex;
+};
+
+[maxvertexcount(9)]
+void GS_MAIN(triangle GS_IN_CASCADE In[3], inout TriangleStream<GS_OUT_CASCADE> Container)
+{
+    GS_OUT_CASCADE Out[3];
+    
+    // 각 렌더타겟 별로 찍어두기
+    for (uint i = 0; i < 3; ++i)
+    {
+        for (uint j = 0; j < 3; ++j)
+        {
+            // 뷰상의 위치
+            float4 vViewPos = mul(In[j].vPosition, g_CascadeViewMatrix[i]);
+            Out[j].vPosition = mul(vViewPos, g_CascadeProjMatrix[i]);
+            Out[j].iRTVIndex = i;
+            Container.Append(Out[j]);
+        }
+        Container.RestartStrip();
+    }
+}
 
 struct PS_IN
 {
@@ -202,7 +242,16 @@ PS_OUT PS_MAIN_NORMAL(PS_IN_NORMAL In)
 	return Out;
 }
 
+struct PS_IN_CASCADE
+{
+    float4 vPosition : SV_POSITION;
+    uint iRTVIndex : SV_RenderTargetArrayIndex; // 렌더타겟 배열 중에 어떤 것에 그릴거야?
+};
 
+float4 PS_MAIN_CASCADE(PS_IN_CASCADE In) : SV_Target0
+{
+    return float4(In.vPosition.z, 0.f, 0.f, 1.f);
+}
 
 
 technique11	DefaultTechnique
@@ -238,5 +287,16 @@ technique11	DefaultTechnique
         VertexShader = compile vs_5_0 VS_MAIN();
         GeometryShader = NULL;
         PixelShader = compile ps_5_0 PS_MAIN_PICKING();
+    }
+
+    pass Cascade //3
+    {
+        SetRasterizerState(RS_Default);
+        SetDepthStencilState(DSS_Default, 0);
+        SetBlendState(BS_Default, vector(0.f, 0.f, 0.f, 0.f), 0xffffffff);
+
+        VertexShader = compile vs_5_0 VS_MAIN_CASCADE();
+        GeometryShader = compile gs_5_0 GS_MAIN();
+        PixelShader = compile ps_5_0 PS_MAIN_CASCADE();
     }
 }

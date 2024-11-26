@@ -52,6 +52,7 @@ public:
 	virtual void Late_Update(_float fTimeDelta) override;
 	virtual HRESULT Render() override;
 	virtual HRESULT Render_Picking()override;
+	virtual HRESULT Render_LightDepth() override;
 
 	virtual _bool Is_Pick(_float3* vPickPos);
 	int Get_HashId() { return m_iHashId; }
