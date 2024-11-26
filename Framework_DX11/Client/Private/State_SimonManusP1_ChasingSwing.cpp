@@ -13,17 +13,13 @@ CState_SimonManusP1_ChasingSwing::CState_SimonManusP1_ChasingSwing(CFsm* pFsm, C
 HRESULT CState_SimonManusP1_ChasingSwing::Initialize(_uint iStateNum, void* pArg)
 {
     m_iStateNum = iStateNum;
-    CSimonManus::FSMSTATE_DESC* pDesc = static_cast<CSimonManus::FSMSTATE_DESC*>(pArg);
-
-    m_pResetRootMove = pDesc->pIsResetRootMove;
+    //CSimonManus::FSMSTATE_DESC* pDesc = static_cast<CSimonManus::FSMSTATE_DESC*>(pArg);
 
     return S_OK;
 }
 
 HRESULT CState_SimonManusP1_ChasingSwing::Start_State(void* pArg)
 {
-    *m_pResetRootMove = false;
-
     m_iRouteTrack = 0;
     m_pMonster->Change_Animation(AN_CHASINGSWING_START, false,  0.f, 0);
 
@@ -81,7 +77,6 @@ void CState_SimonManusP1_ChasingSwing::Update(_float fTimeDelta)
 
 void CState_SimonManusP1_ChasingSwing::End_State()
 {
-    *m_pResetRootMove = true;
 }
 
 _bool CState_SimonManusP1_ChasingSwing::End_Check()

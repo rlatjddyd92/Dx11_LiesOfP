@@ -68,9 +68,9 @@ void CBounding_OBB::Change_BoundingDesc(CBounding::BOUNDING_DESC* pBoundingDesc)
 	_float4			vQuaternion = {};
 	XMStoreFloat4(&vQuaternion, XMQuaternionRotationRollPitchYaw(pDesc->vAngles.x, pDesc->vAngles.y, pDesc->vAngles.z));
 
-	m_pBoundingDesc->Center = pDesc->vCenter;
-	m_pBoundingDesc->Orientation = vQuaternion;
-	m_pBoundingDesc->Extents = pDesc->vExtents;
+	m_pOriginalBoundingDesc->Center = pDesc->vCenter;
+	m_pOriginalBoundingDesc->Orientation = vQuaternion;
+	m_pOriginalBoundingDesc->Extents = pDesc->vExtents;
 }
 
 void CBounding_OBB::Reset_Bounding()

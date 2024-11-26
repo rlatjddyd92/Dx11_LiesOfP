@@ -26,10 +26,7 @@ public:
 private:
     class CMonster* m_pMonster = { nullptr };
 
-    _int               m_iChangeFrame = {};
-
-    _bool* m_pResetRootMove = { nullptr };
-    _float* m_pTrackPos = { nullptr };
+    _bool       m_bResetRim = { false };
 
 private:
     _bool               End_Check();

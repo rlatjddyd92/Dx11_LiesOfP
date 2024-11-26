@@ -13,7 +13,6 @@ CState_CarcassBigA_Idle::CState_CarcassBigA_Idle(CFsm* pFsm, CMonster* pMonster)
 HRESULT CState_CarcassBigA_Idle::Initialize(_uint iStateNum, void* pArg)
 {
     m_iStateNum = iStateNum;
-    m_fIdleDuration = 3.3f;
 
     return S_OK;
 }
@@ -29,19 +28,19 @@ void CState_CarcassBigA_Idle::Update(_float fTimeDelta)
 {
     m_fIdleTime += fTimeDelta;
     _float fDist = m_pMonster->Calc_Distance_XZ();
-    if (fDist <= m_fIdleTime)
+    if (m_fIdleEndDuration <= m_fIdleTime)
     {
-        if (m_pMonster->Calc_Distance_XZ() <= 5.f)
+        if (m_pMonster->Calc_Distance_XZ() <= 7.f)
         {
             Calc_Act_Attack();
             return;
         }
-        else if (fDist > 8.f)
+        else if (fDist > 10.f)
         {
             m_pMonster->Change_State(CCarcassBigA::RUN);
             return;
         }
-        else if (fDist > 5.f)
+        else if (fDist > 7.f)
         {
             m_pMonster->Change_State(CCarcassBigA::WALK);
             return;
@@ -50,7 +49,7 @@ void CState_CarcassBigA_Idle::Update(_float fTimeDelta)
     }
 
 
-    _int iDir = m_pMonster->Get_Transform()->LookAt_Lerp_NoHeight(m_pMonster->Get_TargetDir(), 1, fTimeDelta);
+    _int iDir = m_pMonster->Get_Transform()->LookAt_Lerp_NoHeight(m_pMonster->Get_TargetDir(), 2, fTimeDelta);
     switch (iDir)
     {
     case -1:
@@ -85,7 +84,6 @@ void CState_CarcassBigA_Idle::Calc_Act_Attack()
     if (m_iAtkCnt < 3.f)
     {
         _int iAtkNum = rand() % 6;
-        iAtkNum = 6;
         switch (iAtkNum)
         {
         case 0:

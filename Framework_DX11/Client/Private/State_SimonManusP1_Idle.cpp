@@ -12,9 +12,7 @@ CState_SimonManusP1_Idle::CState_SimonManusP1_Idle(CFsm* pFsm, CMonster* pMonste
 
 HRESULT CState_SimonManusP1_Idle::Initialize(_uint iStateNum, void* pArg)
 {
-   //m_iAnimation_Idle = m_pMonster->Get_Model()->Get_AnimationIndex("Kurama_Idle_Loop");
     m_iStateNum = iStateNum;
-    m_fIdleDuration = 3.3f;
 
     return S_OK;
 }
@@ -80,7 +78,6 @@ void CState_SimonManusP1_Idle::Update(_float fTimeDelta)
 
 void CState_SimonManusP1_Idle::End_State()
 {
-    m_fIdleTime = 0.f;
 }
 
 void CState_SimonManusP1_Idle::Calc_Act_Attack(_float fDist)

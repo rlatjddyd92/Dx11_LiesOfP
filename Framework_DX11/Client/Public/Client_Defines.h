@@ -11,10 +11,7 @@ namespace Client
 
 	struct FSM_INIT_DESC
 	{
-		bool* pIsEndAnim{ nullptr };
-		bool* pIsResetRootMove{ nullptr };
-		bool* pRootMoveCtr{ nullptr };
-		float* pPrevTrackPos{ nullptr };
+		double* pPrevTrackPos{ nullptr };
 	};
 
 	// 24-11-09 ±Ëº∫øÎ : GameInterface ΩÃ±€≈Ê ¡¢±Ÿ ∏≈≈©∑Œ 

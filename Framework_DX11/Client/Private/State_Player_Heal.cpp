@@ -15,8 +15,6 @@ HRESULT CState_Player_Heal::Initialize(_uint iStateNum, void* pArg)
 {
     FSM_INIT_DESC* pDesc = static_cast<FSM_INIT_DESC*>(pArg);
 
-    m_pIsEndAnim = pDesc->pIsEndAnim;
-    m_pResetRootMove = pDesc->pIsResetRootMove;
     m_pTrackPos = pDesc->pPrevTrackPos;
 
     m_iAnimation_Walk[0][WALK_B] = m_pPlayer->Get_Model()->Find_AnimationIndex("AS_Pino_O_Walk_B", 2.5f);

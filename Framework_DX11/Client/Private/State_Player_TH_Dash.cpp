@@ -22,8 +22,6 @@ HRESULT CState_Player_TH_Dash::Initialize(_uint iStateNum, void* pArg)
 
     FSM_INIT_DESC* pDesc = static_cast<FSM_INIT_DESC*>(pArg);
 
-    m_pIsEndAnim = pDesc->pIsEndAnim;
-    m_pResetRootMove = pDesc->pIsResetRootMove;
     m_pTrackPos = pDesc->pPrevTrackPos;
 
     m_iStateNum = iStateNum;
@@ -37,7 +35,6 @@ HRESULT CState_Player_TH_Dash::Start_State(void* pArg)
 
     m_pPlayer->Set_IsInvicible(true);
     m_pPlayer->Set_MoveSpeed(5.f);
-    *m_pResetRootMove = true;
 
     return S_OK;
 }

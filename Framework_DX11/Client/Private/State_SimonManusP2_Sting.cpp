@@ -13,8 +13,7 @@ CState_SimonManusP2_Sting::CState_SimonManusP2_Sting(CFsm* pFsm, CMonster* pMons
 HRESULT CState_SimonManusP2_Sting::Initialize(_uint iStateNum, void* pArg)
 {
     m_iStateNum = iStateNum;
-    m_fIdleDuration = 3.3f;
-    CSimonManus::FSMSTATE_DESC* pDesc = static_cast<CSimonManus::FSMSTATE_DESC*>(pArg);
+    //CSimonManus::FSMSTATE_DESC* pDesc = static_cast<CSimonManus::FSMSTATE_DESC*>(pArg);
 
     return S_OK;
 }

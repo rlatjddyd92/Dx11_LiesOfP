@@ -30,17 +30,7 @@ public:
 private:
     class CMonster* m_pMonster = { nullptr };
 
-    _uint               m_iAnimation_Idle = {};
-    _uint               m_iIdleCount = {};
     _uint               m_iCurStartAnim = {};
-
-    _float              m_fIdleTime = {};
-    _float              m_fIdleDuration = { 0.2f };
-
-    _bool               m_isPrevChance = { false };
-    _bool               m_isActivatedSpecial = { false };
-
-    _bool*              m_pResetRootMove = { nullptr };
 
     _uint               m_iRouteTrack = {};
 

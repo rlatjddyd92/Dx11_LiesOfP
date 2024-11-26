@@ -35,9 +35,6 @@ public:
 	void	SetUp_Controller_Bone();
 
 	void	ListUp_Virtex();
-	void	SetUp_Controller_Vertex();
-
-	void	NewPage_AnimTool();
 
 	void	EndFrame_AnimTool();
 	void	Set_BlockObjCtr(_bool bState) { m_bObjRenderCtr = bState; };

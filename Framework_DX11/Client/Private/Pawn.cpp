@@ -112,7 +112,7 @@ _bool CPawn::Calc_DamageGain(_float fAtkDmg)
 	//
 	//}		//피해를 입는다면 true 반환, 
 	
-	m_fHp -= (fAtkDmg * ((100 - m_fDefence) / 100));
+	m_eStat.fHp -= (fAtkDmg * ((100 - m_eStat.fDefence) / 100));
 
 	return true;
 }
@@ -140,9 +140,9 @@ void CPawn::Set_Animation(_uint iAnimIndex, _bool IsLoop)
 	m_pModelCom->SetUp_Animation(iAnimIndex, IsLoop);
 }
 
-void CPawn::Change_Animation(_uint iAnimIndex, _bool IsLoop, _float fDuration, _uint iStartFrame, _bool bEitherBoundary)
+void CPawn::Change_Animation(_uint iAnimIndex, _bool IsLoop, _float fDuration, _uint iStartFrame, _bool bEitherBoundary, _bool bSameChange)
 {
-	m_pModelCom->SetUp_NextAnimation(iAnimIndex, IsLoop, fDuration, iStartFrame, bEitherBoundary);
+	m_pModelCom->SetUp_NextAnimation(iAnimIndex, IsLoop, fDuration, iStartFrame, bEitherBoundary, bSameChange);
 }
 
 void CPawn::Change_Animation_Boundry(_uint iAnimIndex, _bool IsLoop, _float fDuration, _uint iStartFrame)

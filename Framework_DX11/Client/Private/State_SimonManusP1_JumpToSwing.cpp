@@ -12,21 +12,14 @@ CState_SimonManusP1_JumpToSwing::CState_SimonManusP1_JumpToSwing(CFsm* pFsm, CMo
 
 HRESULT CState_SimonManusP1_JumpToSwing::Initialize(_uint iStateNum, void* pArg)
 {
-    //m_iAnimation_Idle = m_pMonster->Get_Model()->Get_AnimationIndex("Kurama_Idle_Loop");
     m_iStateNum = iStateNum;
-    m_fIdleDuration = 3.3f;
-    CSimonManus::FSMSTATE_DESC* pDesc = static_cast<CSimonManus::FSMSTATE_DESC*>(pArg);
-
-    m_pResetRootMove = pDesc->pIsResetRootMove;
+    //CSimonManus::FSMSTATE_DESC* pDesc = static_cast<CSimonManus::FSMSTATE_DESC*>(pArg);
 
     return S_OK;
 }
 
 HRESULT CState_SimonManusP1_JumpToSwing::Start_State(void* pArg)
 {
-    *m_pResetRootMove = false;
-
-
     //방향 정하기 - 랜덤? 뒤 왼 오 니까 나머지 3 해서 더하기
     _int iCnt = rand() % 3;
     switch (iCnt)
@@ -90,7 +83,6 @@ void CState_SimonManusP1_JumpToSwing::Update(_float fTimeDelta)
 void CState_SimonManusP1_JumpToSwing::End_State()
 {
     m_bJump = false;
-    *m_pResetRootMove = true;
 }
 
 _bool CState_SimonManusP1_JumpToSwing::End_Check()

@@ -10,6 +10,20 @@ class CPawn abstract : public CGameObject
 public :
 	enum PAWN_SOUND_TYPE { PAWN_SOUND_VOICE, PAWN_SOUND_EFFECT1, PAWN_SOUND_EFFECT2, PAWN_SOUND_END };
 	
+public:
+	struct PAWN_STATUS
+	{
+		_float				fHp{};
+		_float				fMaxHp{};
+		_float				fAtk{};
+		_float				fDefence{};
+		_float				fStemina{};
+
+		_float				fGrogyPoint{};
+		_float				fMaxGrogyPoint{};
+		
+	};
+
 protected:
 	CPawn(ID3D11Device* pDevice, ID3D11DeviceContext* pContext);
 	CPawn(const CPawn& Prototype);
@@ -37,6 +51,7 @@ public:
 	virtual HRESULT Render_LightDepth() { return S_OK; }
 
 	virtual _bool Calc_DamageGain(_float fAtkDmg);
+	virtual void Gain_Grory_Point(_float fGainGrogyPoint) { m_eStat.fGrogyPoint += fGainGrogyPoint; }
 public:
 	virtual void OnCollisionEnter(CGameObject* pOther) override;
 	virtual void OnCollisionStay(CGameObject* pOther) override;
@@ -45,15 +60,19 @@ public:
 public:
 	void		Change_State(const _uint iState, void* pArg = nullptr);
 	void		Set_Animation(_uint iAnimIndex, _bool IsLoop = false);
-	void		Change_Animation(_uint iAnimIndex, _bool IsLoop = false, _float fDuration = 0.3f, _uint iStartFrame = 0, _bool bEitherBoundary = true);
+	void		Change_Animation(_uint iAnimIndex, _bool IsLoop = false, _float fDuration = 0.3f, _uint iStartFrame = 0, _bool bEitherBoundary = true, _bool bSameChange = false);
 	void		Change_Animation_Boundry(_uint iAnimIndex, _bool IsLoop = false, _float fDuration = 0.3f, _uint iStartFrame = 0);
 	_uint		Get_CurrentAnimIndex();
 	_int		Get_Frame();
 	_double		Get_CurrentTrackPos();
 	_bool		Get_EndAnim(_int iAnimIndex, _bool bIsBoundary = false);
 
+
 	void		Play_Sound(const PAWN_SOUND_TYPE eType, const TCHAR* pSoundKey);
 	void		PlayRepeat_Sound(const PAWN_SOUND_TYPE eType, const TCHAR* pSoundKey);
+
+	PAWN_STATUS* Get_Status() { return &m_eStat; }
+
 
 protected:
 	class CShader*		m_pShaderCom = { nullptr };
@@ -75,10 +94,8 @@ protected:
 	_Vec3				m_vVelocity = {};
 
 						//스테이터스 부분
-	_float				m_fHp{};
-	_float				m_fAtk{};
-	_float				m_fDefence{};
-	_float				m_fStemina{};
+	PAWN_STATUS			m_eStat{};
+
 protected:
 	HRESULT Bind_WorldViewProj();
 	HRESULT Ready_Components();

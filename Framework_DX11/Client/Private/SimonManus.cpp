@@ -107,10 +107,13 @@ HRESULT CSimonManus::Initialize(void* pArg)
 		m_EXCollider[i]->Set_Owner(this);
 	}
 
-	m_fHp = 100.f;
-	m_fAtk = 10.f;
-	m_fDefence = 5.f;
-	m_fStemina = 100.f;
+	m_eStat.fHp = 20.f;
+	m_eStat.fMaxHp = 20.f;
+	m_eStat.fAtk = 5.f;
+	m_eStat.fDefence = 8.f;
+	m_eStat.fStemina = 100.f;
+	m_eStat.fMaxGrogyPoint = 50.f;
+	m_eStat.fGrogyPoint = 0.f;
 
 	m_pWeapon->DeActive_Collider();
 
@@ -122,53 +125,30 @@ void CSimonManus::Priority_Update(_float fTimeDelta)
 
 	__super::Set_UpTargetPos();
 	m_pWeapon->Priority_Update(fTimeDelta);
+
+	if (m_eStat.fHp <= 0.f)
+	{
+		m_pFsmCom->Set_State(DIE);
+	}
 }
 
 void CSimonManus::Update(_float fTimeDelta)
 {
+	if (KEY_TAP(KEY::B))
+	{
+		ChangePhase();
+	}
+
 	m_vCurRootMove = XMVector3TransformNormal(m_pModelCom->Play_Animation(fTimeDelta), m_pTransformCom->Get_WorldMatrix());
 
 	m_pRigidBodyCom->Set_Velocity(m_vCurRootMove / fTimeDelta);
 
 	m_pFsmCom->Update(fTimeDelta);
 
-	if (KEY_TAP(KEY::B))
-	{
-		ChangePhase();
-	}
-
-	_float4x4 UpdateMat{};
-	XMStoreFloat4x4(&UpdateMat							//척추2(상하체 분리부)
-		, m_pModelCom->Get_BoneCombindTransformationMatrix(6) * XMLoadFloat4x4(m_pTransformCom->Get_WorldMatrix_Ptr()));
-	m_pColliderCom->Update(&UpdateMat);
-
-	XMStoreFloat4x4(&UpdateMat							//골반()
-		, m_pModelCom->Get_BoneCombindTransformationMatrix(5) * XMLoadFloat4x4(m_pTransformCom->Get_WorldMatrix_Ptr()));
-	m_EXCollider[LOWERBODY]->Update(&UpdateMat);
-	if (!m_isChanged)
-	{
-		XMStoreFloat4x4(&UpdateMat							//왼 종아리()
-			, m_pModelCom->Get_BoneCombindTransformationMatrix(112) * XMLoadFloat4x4(m_pTransformCom->Get_WorldMatrix_Ptr()));
-		m_EXCollider[LEG_LEFT]->Update(&UpdateMat);
-
-		XMStoreFloat4x4(&UpdateMat							//오른 종아리()
-			, m_pModelCom->Get_BoneCombindTransformationMatrix(126) * XMLoadFloat4x4(m_pTransformCom->Get_WorldMatrix_Ptr()));
-		m_EXCollider[LEG_RIGHT]->Update(&UpdateMat);
-
-	}
-	else
-	{
-		XMStoreFloat4x4(&UpdateMat							//왼 종아리()
-			, m_pModelCom->Get_BoneCombindTransformationMatrix(173) * XMLoadFloat4x4(m_pTransformCom->Get_WorldMatrix_Ptr()));
-		m_EXCollider[LEG_LEFT]->Update(&UpdateMat);
-
-		XMStoreFloat4x4(&UpdateMat							//오른 종아리()
-			, m_pModelCom->Get_BoneCombindTransformationMatrix(187) * XMLoadFloat4x4(m_pTransformCom->Get_WorldMatrix_Ptr()));
-		m_EXCollider[LEG_RIGHT]->Update(&UpdateMat);
-
-	}
+	Update_Collider();
 
 	m_pWeapon->Update(fTimeDelta);
+	
 }
 
 void CSimonManus::Late_Update(_float fTimeDelta)
@@ -270,7 +250,13 @@ HRESULT CSimonManus::Ready_Components()
 		TEXT("Com_Collider_LowerBody"), reinterpret_cast<CComponent**>(&m_EXCollider[LOWERBODY]), &ColliderDesc)))
 		return E_FAIL;
 
-	for (_uint i = 0; i < TYPE_END; ++i)
+	m_pColliderBindMatrix[CT_LEG_LEFT] = m_pModelCom->Get_BoneCombindTransformationMatrix_Ptr(112);
+	m_pColliderBindMatrix[CT_LEG_LEFT] = m_pModelCom->Get_BoneCombindTransformationMatrix_Ptr(112);
+	m_pColliderBindMatrix[CT_LEG_RIGHT] = m_pModelCom->Get_BoneCombindTransformationMatrix_Ptr(126);
+	m_pColliderBindMatrix[CT_UPPERBODY] = m_pModelCom->Get_BoneCombindTransformationMatrix_Ptr(6);
+	m_pColliderBindMatrix[CT_LOWERBODY] = m_pModelCom->Get_BoneCombindTransformationMatrix_Ptr(5);
+
+	for (_uint i = 0; i < COLLTYPE_END; ++i)
 		m_EXCollider[i]->Set_Owner(this);
 		
 
@@ -308,10 +294,6 @@ HRESULT CSimonManus::Ready_FSM()
 
 	FSM_INIT_DESC Desc{};
 	
-	Desc.pIsEndAnim = &m_bEndAnim;
-	Desc.pIsResetRootMove =&m_bResetRootMove;
-	Desc.pRootMoveCtr = &m_bRootMoveCtr;
-	//
 
 
 #pragma region Phase1_Fsm
@@ -386,6 +368,7 @@ HRESULT CSimonManus::Ready_Weapon()
 	WeaponDesc.pParentWorldMatrix = m_pTransformCom->Get_WorldMatrix_Ptr();
 	WeaponDesc.pSocketBoneMatrix = m_pModelCom->Get_BoneCombindTransformationMatrix_Ptr(66);	//Weapon_R
 
+	WeaponDesc.pParentAtk = &m_eStat.fAtk;
 
 	m_pWeapon = dynamic_cast<CWeapon*>(m_pGameInstance->Clone_GameObject(TEXT("Prototype_GameObject_Weapon_SimonManus_Hammer"), &WeaponDesc));
 	if (nullptr == m_pWeapon)
@@ -394,6 +377,29 @@ HRESULT CSimonManus::Ready_Weapon()
 	m_pWeapon->Appear();
 
 	return S_OK;
+}
+
+void CSimonManus::Update_Collider()
+{
+	_float4x4 UpdateMat{};
+
+	_Matrix WorldMat = XMLoadFloat4x4(m_pTransformCom->Get_WorldMatrix_Ptr());
+	XMStoreFloat4x4(&UpdateMat							//척추2(상하체 분리부)
+		, *(m_pColliderBindMatrix[CT_UPPERBODY]) * WorldMat);
+	m_pColliderCom->Update(&UpdateMat);
+
+	XMStoreFloat4x4(&UpdateMat							//골반()
+		, *(m_pColliderBindMatrix[CT_LOWERBODY]) * WorldMat);
+	m_EXCollider[LOWERBODY]->Update(&UpdateMat);
+
+	//변경되는 다리 뼈 부분을 체인지 페이즈 할때 같이 바꿔주도록
+	XMStoreFloat4x4(&UpdateMat							//왼 종아리()
+		, *(m_pColliderBindMatrix[CT_LEG_LEFT]) * WorldMat);
+	m_EXCollider[LEG_LEFT]->Update(&UpdateMat);
+
+	XMStoreFloat4x4(&UpdateMat							//오른 종아리()
+		, *(m_pColliderBindMatrix[CT_LEG_RIGHT]) * WorldMat);
+	m_EXCollider[LEG_RIGHT]->Update(&UpdateMat);
 }
 
 void CSimonManus::ChangePhase()
@@ -419,8 +425,44 @@ void CSimonManus::ChangePhase()
 
 	m_pModelCom->Play_Animation(0);		//업데이트만 한번
 
+
+	CBounding_OBB::BOUNDING_OBB_DESC			ColliderDesc{};
+
+	ColliderDesc.vExtents = _float3(0.6f, 0.3f, 0.3f);
+	ColliderDesc.vCenter = _float3(0.4f, 0.f, 0.f);
+	ColliderDesc.vAngles = _float3(0.f, 0.f, 0.f);
+
+	(m_EXCollider[LEG_LEFT])->Change_BoundingDesc(&ColliderDesc);
+	(m_EXCollider[LEG_RIGHT])->Change_BoundingDesc(&ColliderDesc);
+	 
+	m_pColliderBindMatrix[CT_LEG_LEFT] = m_pModelCom->Get_BoneCombindTransformationMatrix_Ptr(173);
+	m_pColliderBindMatrix[CT_LEG_RIGHT] = m_pModelCom->Get_BoneCombindTransformationMatrix_Ptr(187);
+
+	ColliderDesc.vExtents = _float3(0.8f, 0.6f, 0.7f);
+	ColliderDesc.vCenter = _float3(0.f, 0.f, 0.f);
+	ColliderDesc.vAngles = _float3(-0.5f, -0.3f, 0.f);
+
+	(m_EXCollider[LOWERBODY])->Change_BoundingDesc(&ColliderDesc);
+
+	ColliderDesc.vExtents = _float3(1.5f, 1.5f, 1.5f);
+	ColliderDesc.vCenter = _float3(0.f, 0.f, 0.f);
+	ColliderDesc.vAngles = _float3(0.2f, -0.2f, -0.1f);
+
+	(m_pColliderCom)->Change_BoundingDesc(&ColliderDesc);
+
+	m_pColliderBindMatrix[CT_UPPERBODY] = m_pModelCom->Get_BoneCombindTransformationMatrix_Ptr(72);
+
 	m_pWeapon->ChangeSocketMatrix(m_pModelCom->Get_BoneCombindTransformationMatrix_Ptr(46));
 
+	m_eStat.fHp = 200.f;
+	m_eStat.fMaxHp = 200.f;
+	m_eStat.fAtk = 15.f;
+	m_eStat.fDefence = 8.f;
+	m_eStat.fStemina = 100.f;
+	m_eStat.fMaxGrogyPoint = 50.f;
+	m_eStat.fGrogyPoint = 0.f;
+
+	m_isDead = false;
 	m_isChanged = true;
 }
 

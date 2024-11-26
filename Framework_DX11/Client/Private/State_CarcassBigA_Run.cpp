@@ -12,9 +12,7 @@ CState_CarcassBigA_Run::CState_CarcassBigA_Run(CFsm* pFsm, CMonster* pMonster)
 
 HRESULT CState_CarcassBigA_Run::Initialize(_uint iStateNum, void* pArg)
 {
-   //m_iAnimation_Idle = m_pMonster->Get_Model()->Get_AnimationIndex("Kurama_Idle_Loop");
     m_iStateNum = iStateNum;
-    m_fIdleDuration = 3.3f;
 
     return S_OK;
 }
@@ -29,11 +27,13 @@ HRESULT CState_CarcassBigA_Run::Start_State(void* pArg)
 
 void CState_CarcassBigA_Run::Update(_float fTimeDelta)
 {
-    m_pMonster->Look_Player();
-    m_pMonster->Get_Transform()->Go_Straight(fTimeDelta * m_fRunSpeed);
+    m_pMonster->Get_Transform()->LookAt_Lerp_NoHeight(m_pMonster->Get_TargetDir(), 1, fTimeDelta);
+    _Vec3 vDir = m_pMonster->Get_Transform()->Get_State(CTransform::STATE_LOOK);
+
+    m_pMonster->Get_RigidBody()->Set_Velocity(XMVector3Normalize(vDir) * m_fRunSpeed);
 
 
-    if (m_pMonster->Calc_Distance_XZ() <= 5.f)
+    if (m_pMonster->Calc_Distance_XZ() <= 6.f)
     {
         m_pMonster->Change_State(CCarcassBigA::IDLE);
     }

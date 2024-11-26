@@ -19,9 +19,6 @@ public:
 	_double						Get_SpeedRatio() { return m_SpeedRatio; }
 	void						Set_SpeedRatio(_double SpeedRatio) { m_SpeedRatio = SpeedRatio; }
 
-	void						Add_EventKeyFrame(EVENT_KEYFRAME Event_Struct_KeyFrame) { m_EventKeyFrames.push_back(Event_Struct_KeyFrame); }
-	vector<EVENT_KEYFRAME>*		Get_EventKeyFrames_Ptr() { return &m_EventKeyFrames; }
-
 	//이봉준 애니메이션 툴 속도 제어, 
 	_double						Get_SpeedPerSec() { return m_SpeedPerSec; }
 	void						Set_SpeedPerSec(_double SpeedPerSec) { m_SpeedPerSec = SpeedPerSec; }
@@ -32,7 +29,7 @@ public:
 	HRESULT Initialize(HANDLE* pFile, vector<_uint>& KeyFrameIndices, const class CModel* pModel);
 	HRESULT Initialize__To_Binary(HANDLE* pFile, vector<_uint>& KeyFrameIndices, const class CModel* pModel);
 	_uint						Update_TransformationMatrices(const vector<class CBone*>& Bones, _double* pCurrentTrackPosition, vector<_uint>& CurrentKeyFrameIndices
-		, _bool isLoop, _bool* isEnd, _float fTimeDelta, _bool isChildOfBoundary, list<OUTPUT_EVKEY>* pEvKeyList, _bool* bBoneUpdated = nullptr, _bool BlockStackTime = false);
+		, _bool isLoop, _bool* isEnd, _float fTimeDelta, _bool isChildOfBoundary, _bool* bBoneUpdated = nullptr, _bool BlockStackTime = false);
 
 	HRESULT						Create_BinaryFile(HANDLE* pFile);
 
@@ -48,9 +45,6 @@ private:
 	/* 실제 뼈들의 정보*/
 	/* Channel : 뼈 (시간에 따른 이 뼈의 상태 행렬을 보관한다) */
 	vector<class CChannel*>		m_Channels;
-
-	//애니메이션 툴에서 만든 키프레임 정보
-	vector<EVENT_KEYFRAME>		m_EventKeyFrames;
 
 	/* 이 애니메이션을 구동하기위해 거리는 전체 거리. */
 	_double						m_Duration = {};

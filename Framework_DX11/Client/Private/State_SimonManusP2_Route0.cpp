@@ -13,7 +13,7 @@ CState_SimonManusP2_Route0::CState_SimonManusP2_Route0(CFsm* pFsm, CMonster* pMo
 HRESULT CState_SimonManusP2_Route0::Initialize(_uint iStateNum, void* pArg)
 {
     m_iStateNum = iStateNum;
-    FSM_INIT_DESC* pDesc = static_cast<FSM_INIT_DESC*>(pArg);
+    //FSM_INIT_DESC* pDesc = static_cast<FSM_INIT_DESC*>(pArg);
 
     return S_OK;
 }

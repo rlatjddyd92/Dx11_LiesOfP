@@ -12,21 +12,14 @@ CState_CarcassBigA_HitFatal::CState_CarcassBigA_HitFatal(CFsm* pFsm, CMonster* p
 
 HRESULT CState_CarcassBigA_HitFatal::Initialize(_uint iStateNum, void* pArg)
 {
-   //m_iAnimation_Idle = m_pMonster->Get_Model()->Get_AnimationIndex("Kurama_Idle_Loop");
     m_iStateNum = iStateNum;
-    m_fIdleDuration = 3.3f;
-    FSM_INIT_DESC* pDesc = static_cast<FSM_INIT_DESC*>(pArg);
-
-    m_pIsEndAnim = pDesc->pIsEndAnim;
-    m_pResetRootMove = pDesc->pIsResetRootMove;
+    //FSM_INIT_DESC* pDesc = static_cast<FSM_INIT_DESC*>(pArg);
 
     return S_OK;
 }
 
 HRESULT CState_CarcassBigA_HitFatal::Start_State(void* pArg)
 {
-    *m_pResetRootMove = false;
-
     _vector vPos = XMVectorSetY(m_pMonster->Get_Transform()->Get_State(CTransform::STATE_POSITION), 0);
     _vector vLook = XMVectorSetY(m_pMonster->Get_Transform()->Get_State(CTransform::STATE_LOOK), 0);
     _vector vDir = XMVectorSetY(m_pGameInstance->Get_CamPosition_Vec4(), 0);
@@ -69,7 +62,6 @@ void CState_CarcassBigA_HitFatal::Update(_float fTimeDelta)
 void CState_CarcassBigA_HitFatal::End_State()
 {
     m_fHitFatalTime = 0.f;
-    *m_pResetRootMove = true;
 }
 
 _bool CState_CarcassBigA_HitFatal::End_Check()

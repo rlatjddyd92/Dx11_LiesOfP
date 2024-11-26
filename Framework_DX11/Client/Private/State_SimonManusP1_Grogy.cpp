@@ -13,12 +13,9 @@ CState_SimonManusP1_Grogy::CState_SimonManusP1_Grogy(CFsm* pFsm, CMonster* pMons
 HRESULT CState_SimonManusP1_Grogy::Initialize(_uint iStateNum, void* pArg)
 {
     m_iStateNum = iStateNum;
-    m_fIdleDuration = 3.3f;
-    CSimonManus::FSMSTATE_DESC* pDesc = static_cast<CSimonManus::FSMSTATE_DESC*>(pArg);
+    FSM_INIT_DESC* pDesc = static_cast<FSM_INIT_DESC*>(pArg);
 
-    m_pIsEndAnim = pDesc->pIsEndAnim;
-    m_pResetRootMove = pDesc->pIsResetRootMove;
-    m_pTrackPos = pDesc->pGrogyTrackPos;
+    m_pTrackPos = pDesc->pPrevTrackPos;
 
     return S_OK;
 }
@@ -35,7 +32,6 @@ HRESULT CState_SimonManusP1_Grogy::Start_State(void* pArg)
     {
         m_pMonster->Change_Animation(AN_GROGY_START, false, 0.1f, 0);
     }
-    *m_pResetRootMove = false;  //애니메이션의 시작부터 끝의 루트본의 이동값이 달라지면 안됨.
 
     return S_OK;
 }
@@ -90,7 +86,6 @@ void CState_SimonManusP1_Grogy::End_State()
 {
     m_iAnimCnt = 0;//혹시 완료되지 않고 변하는 경우에 대비
     m_fGrogyTime = 0;
-    *m_pResetRootMove = true;
 }
 
 _bool CState_SimonManusP1_Grogy::End_Check()

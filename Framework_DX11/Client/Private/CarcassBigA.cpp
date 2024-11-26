@@ -71,12 +71,13 @@ HRESULT CCarcassBigA::Initialize(void* pArg)
 	m_pTransformCom->LookAt(_vector{ 0, 0, -1, 0 });
 
 
-	m_vRimLightColor = { 0.7f, 0.f, 0.f, 3.f };
+	m_vRimLightColor = { 0.f, 0.f, 0.f, 0.f };
 
-	m_fHp = 500.f;
-	m_fAtk = 4.f;
-	m_fDefence = 2.f;
-	m_fStemina = 30.f;
+	m_eStat.fHp = 500;
+	m_eStat.fAtk = 4.f;
+	m_eStat.fDefence = 2.f;
+	m_eStat.fStemina = 30.f;
+	
 
 	return S_OK;
 }
@@ -218,6 +219,13 @@ HRESULT CCarcassBigA::Ready_Components()
 	if (FAILED(__super::Add_Component(LEVEL_STATIC, TEXT("Prototype_Component_RigidBody"),
 		TEXT("Com_RigidBody"), reinterpret_cast<CComponent**>(&m_pRigidBodyCom), &RigidBodyDesc)))
 		return E_FAIL;
+
+	for (_int i = 0; i < TYPE_END; ++i)
+	{
+		m_pColliderObject[i]->DeActive_Collider();
+	}
+
+
 	return S_OK;
 }
 
@@ -228,9 +236,6 @@ HRESULT CCarcassBigA::Ready_FSM()
 
 	FSM_INIT_DESC Desc{};
 
-	Desc.pIsEndAnim = &m_bEndAnim;
-	Desc.pIsResetRootMove = &m_bResetRootMove;
-	Desc.pRootMoveCtr = &m_bRootMoveCtr;
 
 
 	m_pFsmCom->Add_State(CState_CarcassBigA_Idle::Create(m_pFsmCom, this, IDLE, &Desc));

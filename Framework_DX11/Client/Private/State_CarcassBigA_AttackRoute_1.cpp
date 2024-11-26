@@ -12,12 +12,8 @@ CState_CarcassBigA_AttackRoute_1::CState_CarcassBigA_AttackRoute_1(CFsm* pFsm, C
 
 HRESULT CState_CarcassBigA_AttackRoute_1::Initialize(_uint iStateNum, void* pArg)
 {
-    //m_iAnimation_Idle = m_pMonster->Get_Model()->Get_AnimationIndex("Kurama_Idle_Loop");
     m_iStateNum = iStateNum;
-    FSM_INIT_DESC* pDesc = static_cast<FSM_INIT_DESC*>(pArg);
-
-    m_pIsEndAnim = pDesc->pIsEndAnim;
-    m_pResetRootMove = pDesc->pIsResetRootMove;
+    //FSM_INIT_DESC* pDesc = static_cast<FSM_INIT_DESC*>(pArg);
 
     return S_OK;
 }
@@ -93,7 +89,6 @@ void CState_CarcassBigA_AttackRoute_1::End_State()
 
     m_iRouteTrack = 0;
     m_fIdleTime = 0.f;
-    *m_pResetRootMove = true;
 }
 
 _bool CState_CarcassBigA_AttackRoute_1::End_Check()

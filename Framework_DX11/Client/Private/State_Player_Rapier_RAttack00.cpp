@@ -19,8 +19,6 @@ HRESULT CState_Player_Rapier_RAttack00::Initialize(_uint iStateNum, void* pArg)
 
     FSM_INIT_DESC* pDesc = static_cast<FSM_INIT_DESC*>(pArg);
 
-    m_pIsEndAnim = pDesc->pIsEndAnim;
-    m_pResetRootMove = pDesc->pIsResetRootMove;
     m_pTrackPos = pDesc->pPrevTrackPos;
 
     m_iChangeFrame = 45;
@@ -39,7 +37,7 @@ HRESULT CState_Player_Rapier_RAttack00::Start_State(void* pArg)
     if(m_pFsm->Get_PrevState() == CPlayer::OH_IDLE)
         m_pPlayer->Change_Animation(m_iAnimation_RapierSA1, false, 0.05f);
     else
-        m_pPlayer->Change_Animation(m_iAnimation_RapierSA1, false, 0.1f, 5);
+        m_pPlayer->Change_Animation(m_iAnimation_RapierSA1, false, 0.05f, 5, true, true);
 
     m_isInputLButton = false;
     m_isInputRButton = false;

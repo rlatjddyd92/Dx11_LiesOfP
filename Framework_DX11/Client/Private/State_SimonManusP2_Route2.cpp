@@ -13,9 +13,8 @@ CState_SimonManusP2_Route2::CState_SimonManusP2_Route2(CFsm* pFsm, CMonster* pMo
 HRESULT CState_SimonManusP2_Route2::Initialize(_uint iStateNum, void* pArg)
 {
     m_iStateNum = iStateNum;
-    FSM_INIT_DESC* pDesc = static_cast<FSM_INIT_DESC*>(pArg);
+    //FSM_INIT_DESC* pDesc = static_cast<FSM_INIT_DESC*>(pArg);
 
-    //
     return S_OK;
 }
 
@@ -32,23 +31,37 @@ void CState_SimonManusP2_Route2::Update(_float fTimeDelta)
 {
     _double CurTrackPos = m_pMonster->Get_CurrentTrackPos();
 
-    if (m_isJump)
+    if (m_iRouteTrack == 0)
     {
-        if (160 >= CurTrackPos && 130 <= CurTrackPos)
+        if (CurTrackPos >= 110.f)
         {
-            m_vTargetDir = m_pMonster->Get_TargetDir();
-            m_pMonster->Get_Transform()->LookAt_Lerp_NoHeight(m_vTargetDir, 5, fTimeDelta);
-
-            m_vTargetDir -= 4 * XMVector3Normalize(m_vTargetDir);
-            
-        }
-        else if (160 < CurTrackPos && 240>= CurTrackPos)
-        {
-            m_pMonster->Change_Animation(AN_ROUTE_LAST, false, 0.2f, 180);
             ++m_iRouteTrack;
-            m_isJump = false;
+            m_pMonster->Change_Animation(AN_ROUTE_LAST, false, 0.1f, 170);
         }
     }
+    else
+    {
+        if (m_isJump)
+        {
+            if (160 >= CurTrackPos && 130 <= CurTrackPos)
+            {
+                m_vTargetDir = m_pMonster->Get_TargetDir();
+                m_pMonster->Get_Transform()->LookAt_Lerp_NoHeight(m_vTargetDir, 1.8f, fTimeDelta);
+
+            }
+            else if (160 < CurTrackPos && 240 >= CurTrackPos)
+            {
+                _Vec3 vPos = m_pMonster->Get_Transform()->Get_State(CTransform::STATE_POSITION);
+
+                _Vec3 vMove = m_vTargetDir * (((_float)CurTrackPos - 230.f) / 20.f);
+                m_pMonster->Get_RigidBody()->Set_Velocity((vMove - m_vFlyMoveStack) / fTimeDelta);
+                m_vFlyMoveStack = vMove;
+                m_isJump = false;
+            }
+        }
+    }
+
+    
 
 
     if (End_Check())

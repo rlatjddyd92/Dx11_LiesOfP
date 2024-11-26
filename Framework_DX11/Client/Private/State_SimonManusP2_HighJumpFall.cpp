@@ -13,10 +13,8 @@ CState_SimonManusP2_HighJumpFall::CState_SimonManusP2_HighJumpFall(CFsm* pFsm, C
 HRESULT CState_SimonManusP2_HighJumpFall::Initialize(_uint iStateNum, void* pArg)
 {
     m_iStateNum = iStateNum;
-    m_fIdleDuration = 3.3f;
-    FSM_INIT_DESC* pDesc = static_cast<FSM_INIT_DESC*>(pArg);
+    //FSM_INIT_DESC* pDesc = static_cast<FSM_INIT_DESC*>(pArg);
 
-    m_pRootMoveCtr = pDesc->pRootMoveCtr;
     return S_OK;
 }
 
@@ -24,6 +22,7 @@ HRESULT CState_SimonManusP2_HighJumpFall::Start_State(void* pArg)
 {
     m_pMonster->Change_Animation(AN_HIGHJUMPFALL, false, 0.1f, 0);
 
+    m_pMonster->Set_RimLightColor(_Vec4{ 0.9f, 0.f, 0.f, 1.f });
     return S_OK;
 }
 
@@ -41,16 +40,21 @@ void CState_SimonManusP2_HighJumpFall::Update(_float fTimeDelta)
     }
     else if (CurTrackPos >= 230.f && CurTrackPos <= 245.f) //땅 찍기까지
     {
-        *m_pRootMoveCtr = false;
         _Vec3 vPos = m_pMonster->Get_Transform()->Get_State(CTransform::STATE_POSITION);
 
         _Vec3 vMove = m_vTargetDir * (((_float)CurTrackPos - 230.f) / 20.f);
-        m_pMonster->Get_Transform()->Set_State(CTransform::STATE_POSITION, vPos + vMove - m_vFlyMoveStack);
-
+        m_pMonster->Get_RigidBody()->Set_Velocity((vMove - m_vFlyMoveStack) / fTimeDelta);
         m_vFlyMoveStack = vMove;
     }
-    else
-        *m_pRootMoveCtr = true;
+
+    if (!m_bResetRim)
+    {
+        if (CurTrackPos > 245.f)
+        {
+            m_pMonster->Set_RimLightColor(_Vec4{ 0.f, 0.f, 0.f, 0.f });
+            m_bResetRim = true;
+        }
+    }
 
     if (End_Check())//애니메이션의 종료 받아오도록 해서 어택이 종료된 시점에
     {
@@ -64,7 +68,7 @@ void CState_SimonManusP2_HighJumpFall::Update(_float fTimeDelta)
 
 void CState_SimonManusP2_HighJumpFall::End_State()
 {
-    *m_pRootMoveCtr = true;
+    m_pMonster->Set_RimLightColor(_Vec4{ 0.f, 0.f, 0.f, 0.f });
 }
 
 _bool CState_SimonManusP2_HighJumpFall::End_Check()

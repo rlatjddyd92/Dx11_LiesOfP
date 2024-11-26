@@ -509,9 +509,7 @@ HRESULT CPlayer::Ready_FSM()
 
 	FSM_INIT_DESC Desc{};
 
-	Desc.pIsEndAnim = &m_bEndAnim;
-	Desc.pIsResetRootMove = &m_bResetRootMove;
-	Desc.pPrevTrackPos = &m_fPrevTrackPos;
+	Desc.pPrevTrackPos = &m_PrevTrackPos;
 
 
 	m_pFsmCom->Add_State(CState_Player_Hit::Create(m_pFsmCom, this, HIT, &Desc));

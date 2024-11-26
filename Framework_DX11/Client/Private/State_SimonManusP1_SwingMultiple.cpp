@@ -13,8 +13,7 @@ CState_SimonManusP1_SwingMultiple::CState_SimonManusP1_SwingMultiple(CFsm* pFsm,
 HRESULT CState_SimonManusP1_SwingMultiple::Initialize(_uint iStateNum, void* pArg)
 {
     m_iStateNum = iStateNum;
-    m_fIdleDuration = 3.3f;
-    CSimonManus::FSMSTATE_DESC* pDesc = static_cast<CSimonManus::FSMSTATE_DESC*>(pArg);
+    //CSimonManus::FSMSTATE_DESC* pDesc = static_cast<CSimonManus::FSMSTATE_DESC*>(pArg);
 
     return S_OK;
 }
@@ -41,8 +40,6 @@ void CState_SimonManusP1_SwingMultiple::Update(_float fTimeDelta)
 void CState_SimonManusP1_SwingMultiple::End_State()
 {
     m_iAnimCnt = 0;//혹시 완료되지 않고 변하는 경우에 대비
-    m_fParalizeTime = 0.f;
-    *m_pResetRootMove = true;
 }
 
 _bool CState_SimonManusP1_SwingMultiple::End_Check()

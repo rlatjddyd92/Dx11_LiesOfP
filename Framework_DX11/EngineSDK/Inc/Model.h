@@ -31,8 +31,8 @@ public:
 	_uint					Get_CurrentAnimationIndex_Boundary() { return m_iCurrentAnimIndex_Boundary; }
 	_char*					Get_CurrentAnimationName();
 
-	_uint					Get_CurrentFrame() { return m_iCurrentFrame; }
-	_double					Get_CurrentTrackPosition() { return m_CurrentTrackPosition; }
+	_uint					Get_CurrentFrame(_bool isBoundary = false);
+	_double					Get_CurrentTrackPosition(_bool isBoundary = false);
 	void					Set_CurrentTrackPosition(_double TrackPos) { m_CurrentTrackPosition = TrackPos; }
 	void					Set_CurrentTrackPosition_Boundary(_double TrackPos) { m_CurrentTrackPosition_Boundary = TrackPos; }
 
@@ -40,9 +40,6 @@ public:
 	_uint					Get_UFBIndices(_uint eCount) { return m_UFBIndices[eCount]; }
 
 	class CTexture*			Find_Texture(_uint iMeshNum, TEXTURE_TYPE eMaterialType);
-
-	void					Add_UFVtxIndices(UFVTX UFVtx) { m_UseFullVtxIndices.push_back(UFVtx); }
-	vector<UFVTX>*			Get_UFVtxIndices() { return &m_UseFullVtxIndices; }
 
 	void					Set_AnimPlay(_bool bCtrAnim) { m_bPlayAnimCtr = bCtrAnim; }
 
@@ -69,10 +66,10 @@ public:
 	void Clear_InstanceData() { m_InstanceDatas.clear(); }
 
 public:		//_bool pOut은 메인 애니메이션의 종료를 반환,				
-	_Vec3		Play_Animation(_float fTimeDelta, list<OUTPUT_EVKEY>* pEvKeyList = nullptr);
+	_Vec3		Play_Animation(_float fTimeDelta);
 	//플레이 애니메이션 하위
-	void		Update_Animation(_float fTimeDelta, list<OUTPUT_EVKEY>* pEvKeyList = nullptr);
-	void		Update_Animation_Boundary(_float fTimeDelta, list<OUTPUT_EVKEY>* pEvKeyList = nullptr);
+	void		Update_Animation(_float fTimeDelta);
+	void		Update_Animation_Boundary(_float fTimeDelta);
 	_vector		Finish_Update_Anim();
 
 	_uint		Find_AnimationIndex(const _char* pAnimationmName, _float fSpeedRatio = 1.f);
@@ -113,6 +110,7 @@ private:
 	vector<class CBone*>			m_Bones;
 
 private:
+	_bool							m_bSameChange = { false };	// 애니메이션 정지, 재생
 	_bool							m_isLoop = { false };
 	_bool							m_isLoop_Boundary = { false };		//상하체 분리
 	_uint							m_iCurrentAnimIndex = { 0 };
@@ -171,7 +169,6 @@ private:
 
 private:
 	vector<_uint>					m_UFBIndices;
-	vector<UFVTX>					m_UseFullVtxIndices;
 	//바이너리화 용도
 	FilePathStructStack*			m_FilePaths = { nullptr };
 
