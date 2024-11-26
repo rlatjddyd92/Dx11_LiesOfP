@@ -21,7 +21,7 @@ HRESULT CState_SimonManusP1_HighJumpFall::Initialize(_uint iStateNum, void* pArg
 HRESULT CState_SimonManusP1_HighJumpFall::Start_State(void* pArg)
 {
     m_pMonster->Change_Animation(AN_HIGHJUMPFALL, false, 0.1f, 0);
-
+    m_bResetRim = false;
     m_pMonster->Set_RimLightColor(_Vec4{0.9f, 0.f, 0.f, 1.f});
     return S_OK;
 }
@@ -47,6 +47,15 @@ void CState_SimonManusP1_HighJumpFall::Update(_float fTimeDelta)
         m_vFlyMoveStack = vMove;
     }
 
+    if (!m_bResetRim)
+    {
+        if (CurTrackPos >= 250.f)
+        {
+            m_pMonster->Set_RimLightColor(_Vec4{ 0.f, 0.f, 0.f, 0.f });
+            m_bResetRim = true;
+        }
+    }
+
     if (End_Check())//애니메이션의 종료 받아오도록 해서 어택이 종료된 시점에
     {
         m_pMonster->Change_State(CSimonManus::IDLE);
@@ -59,7 +68,6 @@ void CState_SimonManusP1_HighJumpFall::Update(_float fTimeDelta)
 
 void CState_SimonManusP1_HighJumpFall::End_State()
 {
-    m_iAnimCnt = 0;//혹시 완료되지 않고 변하는 경우에 대비
     m_vFlyMoveStack = _vector{0, 0, 0, 0};
     m_pMonster->Set_RimLightColor(_Vec4{ 0.f, 0.f, 0.f, 0.f });
 }

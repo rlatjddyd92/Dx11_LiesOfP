@@ -29,6 +29,8 @@ private:
     _Vec4               m_vTargetDir{};
     _Vec3               m_vFlyMoveStack{};
 
+    _bool       m_bResetRim = { false };
+
 private:
     _bool               End_Check();
     void                Collider_Check();

@@ -28,6 +28,8 @@ private:
 
     _bool*              m_pIsEndAnim = { false };
 
+    _float              m_fImpactSpeed = { 5.f };
+
 private:
     _bool               End_Check();
     void                Collider_Check();

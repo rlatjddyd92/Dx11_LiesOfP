@@ -32,7 +32,7 @@ public:
 	_char*					Get_CurrentAnimationName();
 
 	_uint					Get_CurrentFrame(_bool isBoundary = false);
-	_double					Get_CurrentTrackPosition() { return m_CurrentTrackPosition; }
+	_double					Get_CurrentTrackPosition(_bool isBoundary = false);
 	void					Set_CurrentTrackPosition(_double TrackPos) { m_CurrentTrackPosition = TrackPos; }
 	void					Set_CurrentTrackPosition_Boundary(_double TrackPos) { m_CurrentTrackPosition_Boundary = TrackPos; }
 

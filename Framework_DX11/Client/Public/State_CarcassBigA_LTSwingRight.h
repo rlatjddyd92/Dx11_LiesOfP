@@ -26,6 +26,8 @@ public:
 private:
     class CMonster* m_pMonster = { nullptr };
 
+    _bool       m_bResetRim = { false };
+
 private:
     _bool               End_Check();
     void                Collider_Check();

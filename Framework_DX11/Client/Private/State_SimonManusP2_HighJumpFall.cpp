@@ -47,6 +47,15 @@ void CState_SimonManusP2_HighJumpFall::Update(_float fTimeDelta)
         m_vFlyMoveStack = vMove;
     }
 
+    if (!m_bResetRim)
+    {
+        if (CurTrackPos > 245.f)
+        {
+            m_pMonster->Set_RimLightColor(_Vec4{ 0.f, 0.f, 0.f, 0.f });
+            m_bResetRim = true;
+        }
+    }
+
     if (End_Check())//애니메이션의 종료 받아오도록 해서 어택이 종료된 시점에
     {
         m_pMonster->Change_State(CSimonManus::IDLE);

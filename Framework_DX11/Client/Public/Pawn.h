@@ -41,7 +41,7 @@ public:
 public:
 	void		Change_State(const _uint iState, void* pArg = nullptr);
 	void		Set_Animation(_uint iAnimIndex, _bool IsLoop = false);
-	void		Change_Animation(_uint iAnimIndex, _bool IsLoop = false, _float fDuration = 0.3f, _uint iStartFrame = 0, _bool bEitherBoundary = true);
+	void		Change_Animation(_uint iAnimIndex, _bool IsLoop = false, _float fDuration = 0.3f, _uint iStartFrame = 0, _bool bEitherBoundary = true, _bool bSameChange = false);
 	void		Change_Animation_Boundry(_uint iAnimIndex, _bool IsLoop = false, _float fDuration = 0.3f, _uint iStartFrame = 0);
 	_uint		Get_CurrentAnimIndex();
 	_int		Get_Frame();

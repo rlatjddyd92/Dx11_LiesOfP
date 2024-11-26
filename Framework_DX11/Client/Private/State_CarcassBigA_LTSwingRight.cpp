@@ -61,6 +61,15 @@ void CState_CarcassBigA_LTSwingRight::Collider_Check()
     {
         m_pMonster->DeActive_CurretnWeaponCollider(0);
     }
+
+    if (!m_bResetRim)
+    {
+        if (CurTrackPos > 85.f)
+        {
+            m_pMonster->Set_RimLightColor(_Vec4{ 0.f, 0.f, 0.f, 0.f });
+            m_bResetRim = true;
+        }
+    }
 }
 
 CState_CarcassBigA_LTSwingRight* CState_CarcassBigA_LTSwingRight::Create(CFsm* pFsm, CMonster* pMonster, _uint iStateNum, void* pArg)

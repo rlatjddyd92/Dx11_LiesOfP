@@ -13,7 +13,6 @@ CState_CarcassBigA_AttackRoute_4::CState_CarcassBigA_AttackRoute_4(CFsm* pFsm, C
 HRESULT CState_CarcassBigA_AttackRoute_4::Initialize(_uint iStateNum, void* pArg)
 {
     m_iStateNum = iStateNum;
-    m_fIdleDuration = 1.f;
    // FSM_INIT_DESC* pDesc = static_cast<FSM_INIT_DESC*>(pArg);
 
     return S_OK;
@@ -23,59 +22,39 @@ HRESULT CState_CarcassBigA_AttackRoute_4::Start_State(void* pArg)
 {
     m_pMonster->Change_Animation(AN_ROUTE_FIRST, false, 0.1f);
 
-    m_fIdleTime = m_fIdleDuration;
     return S_OK;
 }
 
 void CState_CarcassBigA_AttackRoute_4::Update(_float fTimeDelta)
 {
-    if (!m_isDelayed)
+    if (End_Check())
     {
-        if (m_iRouteTrack == 1)
+        ++m_iRouteTrack;
+        if (m_iRouteTrack == 2)
         {
-            m_pMonster->Change_Animation(AN_ROUTE_LAST, false, 0.1f, 0, true);
+            m_pMonster->Change_State(CCarcassBigA::IDLE);
+            return;
         }
+    }
+    _double CurTrackPos = m_pMonster->Get_CurrentTrackPos();
 
-        if (End_Check())
-        {
-            ++m_iRouteTrack;
+    if (m_iRouteTrack == 0 && CurTrackPos >= 55.f && CurTrackPos <= 140.f)
+    {
+        _Vec3 vDir = m_pMonster->Get_Transform()->Get_State(CTransform::STATE_LOOK);
 
-            if (m_iRouteTrack >= 2)
-            {
-                m_pMonster->Change_State(CCarcassBigA::IDLE);
-                return;
-            }
-            m_fIdleTime = 0.f;
-            m_isDelayed = true;
-        }
+        m_pMonster->Get_RigidBody()->Set_Velocity(XMVector3Normalize(vDir) * m_fImpactSpeed);
     }
     else
     {
-        m_fIdleTime += fTimeDelta;
 
-        if (m_fIdleTime >= m_fIdleDuration)
+        if (CurTrackPos <= 30.f)
         {
-            m_isDelayed = false;
+            m_pMonster->Get_Transform()->LookAt_Lerp_NoHeight(m_pMonster->Get_TargetDir(), 1.5, fTimeDelta);
         }
-        _int iDir = m_pMonster->Get_Transform()->LookAt_Lerp_NoHeight(m_pMonster->Get_TargetDir(), 3, fTimeDelta);
-        switch (iDir)
-        {
-        case -1:
-            m_pMonster->Change_Animation(30, true, 0.1f);
-            break;
 
-        case 0:
-            m_pMonster->Change_Animation(20, true, 0.1f);
-            break;
-
-        case 1:
-            m_pMonster->Change_Animation(31, true, 0.1f);
-            break;
-
-        default:
-            break;
-        }
+        m_pMonster->Change_Animation(AN_ROUTE_LAST, false, 0.1f, 0, true);
     }
+
 
     Collider_Check();
 

@@ -22,6 +22,7 @@ public:
 private:
     class CMonster* m_pMonster = { nullptr };
 
+    _float          m_fWalkSpeed = { 2.f };
 public:
     static CState_CarcassBigA_Walk* Create(class CFsm* pFsm, class CMonster* pMonster, _uint iStateNum, void* pArg = nullptr);
     virtual void Free() override;

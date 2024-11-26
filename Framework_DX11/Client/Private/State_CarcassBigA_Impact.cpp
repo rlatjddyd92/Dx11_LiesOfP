@@ -35,7 +35,10 @@ void CState_CarcassBigA_Impact::Update(_float fTimeDelta)
     
     if (CurTrackPos >= 55.f && CurTrackPos <= 135.f)
     {
-        m_pMonster->Get_Transform()->Go_Straight(fTimeDelta * 2);
+        _Vec3 vDir = m_pMonster->Get_Transform()->Get_State(CTransform::STATE_LOOK);
+
+        m_pMonster->Get_RigidBody()->Set_Velocity(XMVector3Normalize(vDir) * m_fImpactSpeed);
+
     }
    
 
