@@ -149,6 +149,8 @@ private:
 	HRESULT Ready_Texture_UIPart();
 	HRESULT Ready_Texture_ItemIcon();
 
+	void Ready_Scroll_Adjust_Data();
+
 	queue<UIRENDER_INFO*> m_queueRender; // <- 이번 프레임에 그릴 내용, 
 
 	vector<UTEXTURE*> m_vecTextureInfo_UIPart;
@@ -157,11 +159,12 @@ private:
 
 	vector<class CShader*> m_vecShader_UI;
 	vector<D3D11_VIEWPORT*> m_vecViewPort;
+	vector<_Vec2> m_vecViewPort_Adjust;
 
 	SCROLL_AREA m_eNow_Area = SCROLL_AREA::SCROLL_NONE;
 	vector<_float> m_vecfScrollY_Offset_Max;
 
-
+	
 
 	// 아래 내용은 다음 단계 
 

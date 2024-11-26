@@ -363,7 +363,6 @@ public:
 	_int Get_Weapon() { return m_iWeapon_Select; }
 	const ITEM* Get_Now_Equip_Weapon_Blade()
 	{
-		m_bIsChange = true;
 		if (m_iWeapon_Select == 0)
 			return Get_Equip_Item_Info(EQUIP_SLOT::EQUIP_WEAPON_BLADE_0);
 		else
@@ -372,7 +371,6 @@ public:
 
 	const ITEM* Get_Now_Equip_Weapon_Handle()
 	{
-		m_bIsChange = true;
 		if (m_iWeapon_Select == 0)
 			return Get_Equip_Item_Info(EQUIP_SLOT::EQUIP_WEAPON_HANDLE_0);
 		else
@@ -415,7 +413,6 @@ public:
 	}
 	_float Get_Arm_Gauge_Ratio()
 	{
-		m_bIsChange = true;
 		_int iIndex = m_vecEquip_ItemInfo[_int(EQUIP_SLOT::EQUIP_RESION_ARM)]->iIndex;
 		ITEM* pItem = m_vecArray_Inven[_int(INVEN_ARRAY_TYPE::TYPE_REASON_ARM)]->Get_Item_Info(iIndex);
 		if (pItem == nullptr)

@@ -44,6 +44,7 @@ HRESULT CUIRender_Batching::Initialize_Prototype()
 	if (FAILED(Ready_Texture_ItemIcon()))
 		return E_FAIL;
 
+	Ready_Scroll_Adjust_Data();
 
 	return S_OK;
 }
@@ -120,8 +121,50 @@ HRESULT CUIRender_Batching::Render()
 
 			m_pTransformCom->Set_Scaled(pNow->vSize.x * fSizeX_Adjust, pNow->vSize.y * fSizeY_Adjust, 1.f);
 
-			m_pTransformCom->Set_State(CTransform::STATE_POSITION,
-				XMVectorSet((pNow->vPosition.x) - fWidth * 0.5f + fStartX, -(pNow->vPosition.y) + m_vecfScrollY_Offset_Max[_int(m_eNow_Area)] * 0.5f + fStartY , 0.f, 1.f));
+			if (m_eNow_Area == SCROLL_AREA::SCROLL_NONE)
+			{
+				m_pTransformCom->Set_State(CTransform::STATE_POSITION,
+					XMVectorSet((pNow->vPosition.x) - fWidth * 0.5f, -(pNow->vPosition.y) + fHeight * 0.5f, 0.f, 1.f));
+			}
+			else 
+			{
+				pNow->vPosition.x *= fSizeX_Adjust;
+				pNow->vPosition.y *= fSizeY_Adjust;
+
+				pNow->vPosition.x -= fStartX;
+				pNow->vPosition.y -= fStartY;
+
+
+				if (KEY_HOLD(KEY::ALT))
+				{
+					if (KEY_HOLD(KEY::NUM1))
+					{
+						m_vecViewPort_Adjust[_int(m_eNow_Area)].x += 0.01f;
+					}
+					if (KEY_HOLD(KEY::NUM2))
+					{
+						m_vecViewPort_Adjust[_int(m_eNow_Area)].x -= 0.01f;
+					}
+
+					if (KEY_HOLD(KEY::NUM3))
+					{
+						m_vecViewPort_Adjust[_int(m_eNow_Area)].y += 0.01f;
+					}
+					if (KEY_HOLD(KEY::NUM4))
+					{
+						m_vecViewPort_Adjust[_int(m_eNow_Area)].y -= 0.01f;
+					}
+
+				}
+
+				pNow->vPosition.x += m_vecViewPort_Adjust[_int(m_eNow_Area)].x;
+				pNow->vPosition.y += m_vecViewPort_Adjust[_int(m_eNow_Area)].y;
+				
+					m_pTransformCom->Set_State(CTransform::STATE_POSITION,
+						XMVectorSet((pNow->vPosition.x) - fWidth * 0.5f, -(pNow->vPosition.y) + fHeight * 0.5f, 0.f, 1.f));
+			}
+			
+			
 
 			if (pNow->fTurn != 0.f)
 				m_pTransformCom->Rotation({ 0.f,0.f,1.f,0.f }, XMConvertToRadians(pNow->fTurn));
@@ -213,6 +256,9 @@ HRESULT CUIRender_Batching::Render()
 
 		Safe_Delete(pNow);
 	}
+
+	//m_eNow_Area = SCROLL_AREA::SCROLL_NONE;
+
 	return S_OK;
 }
 
@@ -335,6 +381,7 @@ HRESULT CUIRender_Batching::Ready_Components()
 		iter = pNew;
 	}
 	m_vecfScrollY_Offset_Max.resize(_int(SCROLL_AREA::SCROLL_END));
+	m_vecViewPort_Adjust.resize(_int(SCROLL_AREA::SCROLL_END));
 	
 	return S_OK;
 }
@@ -422,6 +469,18 @@ HRESULT CUIRender_Batching::Ready_Texture_ItemIcon()
 	return S_OK;
 }
 
+void CUIRender_Batching::Ready_Scroll_Adjust_Data()
+{
+	vector<vector<_wstring>> vecBuffer;
+	m_pGameInstance->LoadDataByFile("../Bin/DataFiles/Scroll_Adjust_Data.csv", &vecBuffer);
+
+	for (_int i = 1; i < vecBuffer.size(); ++i)
+	{
+		m_vecViewPort_Adjust[i - 1] = { stof(vecBuffer[i][1]), stof(vecBuffer[i][2]) };
+	}
+
+}
+
 
 CUIRender_Batching* CUIRender_Batching::Create(ID3D11Device* pDevice, ID3D11DeviceContext* pContext)
 {
@@ -499,4 +558,6 @@ void CUIRender_Batching::Free()
 	m_vecViewPort.clear();
 
 	m_vecfScrollY_Offset_Max.clear();
+
+	m_vecViewPort_Adjust.clear();
 }

@@ -162,6 +162,9 @@ HRESULT CUIPage_Inven::Ready_UIPart_Group_Control()
 	m_fData_Y_Min = m_vecPart[__super::Get_Front_PartIndex_In_Control(_int(PART_GROUP::GROUP_ITEMINFO_FRAME))]->fSize.y;
 	m_fData_Adjust_Y_Origin = m_vecPart[__super::Get_Front_PartIndex_In_Control(_int(PART_GROUP::GROUP_ITEMINFO_FRAME))]->fAdjust.y;
 
+	__super::Array_Control(_int(PART_GROUP::GROUP_CELL_0), _int(PART_GROUP::GROUP_CELL_4), CTRL_COMMAND::COM_RATIO, 0.5f);
+	m_vecPart[__super::Get_Front_PartIndex_In_Control(_int(PART_GROUP::GROUP_ITEMINFO_SLIDE_BAR))]->fRatio = 0.f;
+
 	return S_OK;
 }
 
@@ -317,8 +320,7 @@ void CUIPage_Inven::Update_Array_Position(_float fTimeDelta)
 			_Vec2 vCheck = GET_GAMEINTERFACE->CheckMouse(m_vecPart[*iter]->fPosition, m_vecPart[*iter]->fSize);
 			m_vecPart[*iter]->fPosition.y -= fAdjust_Y;
 
-			if ((GET_GAMEINTERFACE->Is_ItemData_Change()) || (m_IsTab_Change))
-			{
+			
 				++iter; if (vCheck.x != -1) m_vecPart[*iter]->bRender = true;
 				++iter;
 				if (pNow == nullptr) m_vecPart[*iter]->iTexture_Index = -1;
@@ -356,7 +358,7 @@ void CUIPage_Inven::Update_Array_Position(_float fTimeDelta)
 						m_vecPart[*iter]->iTexture_Index = 2;
 					}
 				}
-			}
+			
 
 			iter = m_vec_Group_Ctrl[_int(PART_GROUP::GROUP_CELL_0) + (j % 5)]->PartIndexlist.begin();
 
@@ -386,7 +388,7 @@ void CUIPage_Inven::Update_Array_Position(_float fTimeDelta)
 	fEndY = m_vecPart[m_vec_Group_Ctrl[_int(PART_GROUP::GROUP_CELL_0)]->PartIndexlist.front()]->fPosition.y + m_vecPart[m_vec_Group_Ctrl[_int(PART_GROUP::GROUP_CELL_0)]->PartIndexlist.front()]->fSize.y * 0.5;
 
 
-	if (!m_bSlide_Active)
+	if ((!m_bSlide_Active) || (m_IsTab_Change))
 		Activate_Slide(fEndY - fStartY);
 	else if (GET_GAMEINTERFACE->Is_ItemData_Change())
 		Change_Data_Y_Size(fEndY - fStartY);
@@ -445,8 +447,7 @@ void CUIPage_Inven::Update_Array_Position_Weapon(_float fTimeDelta)
 		_Vec2 vCheck = GET_GAMEINTERFACE->CheckMouse(m_vecPart[*iter]->fPosition, m_vecPart[*iter]->fSize);
 		m_vecPart[*iter]->fPosition.y -= fAdjust_Y;
 		
-		if ((GET_GAMEINTERFACE->Is_ItemData_Change()) || (m_IsTab_Change))
-		{
+		
 			++iter; if (vCheck.x != -1) m_vecPart[*iter]->bRender = true;
 			++iter;
 			if (pNowBlade == nullptr) m_vecPart[*iter]->iTexture_Index = -1;
@@ -475,7 +476,7 @@ void CUIPage_Inven::Update_Array_Position_Weapon(_float fTimeDelta)
 					m_vecPart[*iter]->iTexture_Index = 382;
 				}
 			}
-		}
+		
 		
 
 		iter = m_vec_Group_Ctrl[_int(PART_GROUP::GROUP_CELL_0) + (j % 5)]->PartIndexlist.begin();
@@ -554,8 +555,7 @@ void CUIPage_Inven::Update_Array_Position_Weapon_Heroic(_float fTimeDelta, _floa
 		_Vec2 vCheck = GET_GAMEINTERFACE->CheckMouse(m_vecPart[*iter]->fPosition, m_vecPart[*iter]->fSize);
 		m_vecPart[*iter]->fPosition.y -= fAdjust_Y;
 
-		if ((GET_GAMEINTERFACE->Is_ItemData_Change()) || (m_IsTab_Change))
-		{
+		
 			++iter; if (vCheck.x != -1) m_vecPart[*iter]->bRender = true;
 			++iter;
 			++iter;
@@ -581,7 +581,7 @@ void CUIPage_Inven::Update_Array_Position_Weapon_Heroic(_float fTimeDelta, _floa
 					m_vecPart[*iter]->iTexture_Index = 382;
 				}
 			}
-		}
+		
 		
 
 		iter = m_vec_Group_Ctrl[_int(PART_GROUP::GROUP_CELL_0) + (j % 5)]->PartIndexlist.begin();
@@ -600,7 +600,7 @@ void CUIPage_Inven::Update_Array_Position_Weapon_Heroic(_float fTimeDelta, _floa
 	_float fEndY = 0.f;
 	fEndY = m_vecPart[m_vec_Group_Ctrl[_int(PART_GROUP::GROUP_CELL_0)]->PartIndexlist.front()]->fPosition.y + m_vecPart[m_vec_Group_Ctrl[_int(PART_GROUP::GROUP_CELL_0)]->PartIndexlist.front()]->fSize.y * 0.5;
 
-	if (!m_bSlide_Active)
+	if ((!m_bSlide_Active) || (m_IsTab_Change))
 		Activate_Slide(fEndY - fStart);
 	else if (GET_GAMEINTERFACE->Is_ItemData_Change())
 		Change_Data_Y_Size(fEndY - fStart);
@@ -666,8 +666,9 @@ void CUIPage_Inven::Activate_Slide(_float fData_Size_Y)
 
 	 m_fMouse_Y_Before = 0.f;
 
-	 m_vecPart[__super::Get_Front_PartIndex_In_Control(_int(PART_GROUP::GROUP_ITEMINFO_SLIDE_BAR))]->fRatio = m_fSlide_Ratio;
-	 m_vecPart[__super::Get_Front_PartIndex_In_Control(_int(PART_GROUP::GROUP_ITEMINFO_FRAME))]->fAdjust.y = m_fData_Y_Now;
+	 UPART* pBar = m_vecPart[__super::Get_Front_PartIndex_In_Control(_int(PART_GROUP::GROUP_ITEMINFO_SLIDE_BAR))];
+	 pBar->fRatio = m_fSlide_Ratio;
+	 m_vecPart[__super::Get_Front_PartIndex_In_Control(_int(PART_GROUP::GROUP_ITEMINFO_FRAME))]->fAdjust.y = m_fData_Y_Now + m_fData_Adjust_Y_Origin;
 
 	 GET_GAMEINTERFACE->Set_Scroll_Y_Offset(SCROLL_AREA::SCROLL_INVEN, m_fData_Y_Max);
 }
@@ -686,8 +687,9 @@ void CUIPage_Inven::deActivate_Slide()
 
 	m_fMouse_Y_Before = 0.f;
 
-	m_vecPart[__super::Get_Front_PartIndex_In_Control(_int(PART_GROUP::GROUP_ITEMINFO_SLIDE_BAR))]->fRatio = m_fSlide_Ratio;
-	m_vecPart[__super::Get_Front_PartIndex_In_Control(_int(PART_GROUP::GROUP_ITEMINFO_FRAME))]->fAdjust.y = m_fData_Y_Now;
+	UPART* pBar = m_vecPart[__super::Get_Front_PartIndex_In_Control(_int(PART_GROUP::GROUP_ITEMINFO_SLIDE_BAR))];
+	pBar->fRatio = m_fSlide_Ratio;
+	m_vecPart[__super::Get_Front_PartIndex_In_Control(_int(PART_GROUP::GROUP_ITEMINFO_FRAME))]->fAdjust.y = m_fData_Y_Now + m_fData_Adjust_Y_Origin;
 }
 
 void CUIPage_Inven::Change_Data_Y_Size(_float fSize)
@@ -706,7 +708,7 @@ void CUIPage_Inven::Change_Data_Y_Size(_float fSize)
 	m_fSlide_Ratio = m_fData_Y_Now / (m_fData_Y_Max - m_fData_Y_Min);
 
 	m_vec_Group_Ctrl[_int(PART_GROUP::GROUP_ITEMINFO_SLIDE_BAR)]->fRatio = m_fSlide_Ratio;
-	m_vecPart[__super::Get_Front_PartIndex_In_Control(_int(PART_GROUP::GROUP_ITEMINFO_FRAME))]->fAdjust.y = -m_fData_Y_Now;
+	m_vecPart[__super::Get_Front_PartIndex_In_Control(_int(PART_GROUP::GROUP_ITEMINFO_FRAME))]->fAdjust.y = -m_fData_Y_Now + m_fData_Adjust_Y_Origin;
 
 	GET_GAMEINTERFACE->Set_Scroll_Y_Offset(SCROLL_AREA::SCROLL_INVEN, m_fData_Y_Max);
 }
@@ -732,7 +734,7 @@ void CUIPage_Inven::Action_Slide(_float fSize)
 		m_fData_Y_Now = m_fSlide_Ratio * (m_fData_Y_Max - m_fData_Y_Min);
 
 		m_vec_Group_Ctrl[_int(PART_GROUP::GROUP_ITEMINFO_SLIDE_BAR)]->fRatio = m_fSlide_Ratio;
-		m_vecPart[__super::Get_Front_PartIndex_In_Control(_int(PART_GROUP::GROUP_ITEMINFO_FRAME))]->fAdjust.y = -m_fData_Y_Now;
+		m_vecPart[__super::Get_Front_PartIndex_In_Control(_int(PART_GROUP::GROUP_ITEMINFO_FRAME))]->fAdjust.y = -m_fData_Y_Now + m_fData_Adjust_Y_Origin;
 
 		m_fMouse_Y_Before = fMouseY;
 	}
