@@ -356,8 +356,6 @@ HRESULT CModel::SetUp_NextAnimation(_uint iNextAnimationIndex, _bool isLoop, _fl
 	{
 		m_tChaneAnimDesc.iStartFrame = iStartFrame;
 	}
-	vector<CChannel*> NextChannels = m_Animations[m_tChaneAnimDesc.iNextAnimIndex]->Get_Channels();
-
 	m_ChangeTrackPosition = 0.0;
 
 	if(iStartFrame > 0)
@@ -368,16 +366,15 @@ HRESULT CModel::SetUp_NextAnimation(_uint iNextAnimationIndex, _bool isLoop, _fl
 	m_tChaneAnimDesc.fChangeDuration = fChangeDuration;
 	m_tChaneAnimDesc.fChangeTime = 0.f;
 
+	m_isEnd_Animations[iNextAnimationIndex] = false;
+	m_isEnd_Animations[m_iCurrentAnimIndex] = false;
+	m_isLoop = isLoop;
+	m_isChangeAni = true;
 
 	if (bEitherBoundary)
 	{
 		SetUp_NextAnimation_Boundary(iNextAnimationIndex, isLoop, fChangeDuration, iStartFrame, bSameChange);
 	}
-
-	m_isEnd_Animations[iNextAnimationIndex] = false;
-	m_isEnd_Animations[m_iCurrentAnimIndex] = false;
-	m_isLoop = isLoop;
-	m_isChangeAni = true;
 
 	return S_OK;
 }
@@ -392,7 +389,7 @@ HRESULT CModel::SetUp_NextAnimation_Boundary(_uint iNextAnimationIndex, _bool is
 		return E_FAIL;
 
 	// 이미 같은걸로 바꾸고 있어														이미 변환이 진행중인데, 같은 변환이 들어왔으면
-	if (m_isChangeAni_Boundary == true && iNextAnimationIndex == m_tChaneAnimDesc_Boundary.iNextAnimIndex)
+	if (m_isChangeAni_Boundary == true && iNextAnimationIndex == m_tChaneAnimDesc_Boundary.iNextAnimIndex && !bSameChange)
 		return S_OK;
 
 	m_ChangeTrackPosition_Boundary = 0.0;
@@ -407,18 +404,8 @@ HRESULT CModel::SetUp_NextAnimation_Boundary(_uint iNextAnimationIndex, _bool is
 		m_tChaneAnimDesc_Boundary.iStartFrame = iStartFrame;
 	}
 
-	vector<CChannel*> NextChannels = m_Animations[iNextAnimationIndex]->Get_Channels();
-
-	for (_uint i = 0; i < NextChannels.size(); ++i)
-	{
-		KEYFRAME tNextKeyFrame = NextChannels[i]->Find_KeyFrameIndex(&m_KeyFrameIndices[iNextAnimationIndex][i], NextChannels[i]->Get_KeyFrame(iStartFrame).TrackPosition); // 여기로 보간
-
-		if (m_ChangeTrackPosition_Boundary < tNextKeyFrame.TrackPosition)
-		{
-			m_ChangeTrackPosition_Boundary = tNextKeyFrame.TrackPosition;
-
-		}
-	}
+	if (iStartFrame > 0)
+		m_ChangeTrackPosition_Boundary = m_Animations[m_tChaneAnimDesc_Boundary.iNextAnimIndex]->Get_WideChannel()->Get_KeyFrame(iStartFrame).TrackPosition;
 
 	m_vRootMoveStack = m_vCurRootMove = _vector{ 0, 0, 0, 1 };
 

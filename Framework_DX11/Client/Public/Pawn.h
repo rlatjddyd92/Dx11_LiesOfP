@@ -7,6 +7,19 @@ BEGIN(Client)
 
 class CPawn abstract : public CGameObject
 {
+public:
+	struct PAWN_STATUS
+	{
+		_float				fHp{};
+		_float				fMaxHp{};
+		_float				fAtk{};
+		_float				fDefence{};
+		_float				fStemina{};
+
+		_float				fGrogyPoint{};
+		_float				fMaxGrogyPoint{};
+		
+	};
 protected:
 	CPawn(ID3D11Device* pDevice, ID3D11DeviceContext* pContext);
 	CPawn(const CPawn& Prototype);
@@ -32,7 +45,7 @@ public:
 	virtual HRESULT Render_LightDepth() { return S_OK; }
 
 	virtual _bool Calc_DamageGain(_float fAtkDmg);
-	virtual void Get_Grory_Point(_float fGrogyPoint) { m_fGrogyPoint += fGrogyPoint; }
+	virtual void Gain_Grory_Point(_float fGainGrogyPoint) { m_eStat.fGrogyPoint += fGainGrogyPoint; }
 public:
 	virtual void OnCollisionEnter(CGameObject* pOther) override;
 	virtual void OnCollisionStay(CGameObject* pOther) override;
@@ -47,6 +60,8 @@ public:
 	_int		Get_Frame();
 	_double		Get_CurrentTrackPos();
 	_bool		Get_EndAnim(_int iAnimIndex, _bool bIsBoundary = false);
+
+	PAWN_STATUS* Get_Status() { return &m_eStat; }
 
 protected:
 	class CShader*		m_pShaderCom = { nullptr };
@@ -68,13 +83,8 @@ protected:
 	_Vec3				m_vVelocity = {};
 
 						//스테이터스 부분
-	_float				m_fHp{};
-	_float				m_fAtk{};
-	_float				m_fDefence{};
-	_float				m_fStemina{};
+	PAWN_STATUS			m_eStat{};
 
-	_float				m_fGrogyPoint{};
-	_float				m_fMaxGrogyPoint{};
 protected:
 	HRESULT Bind_WorldViewProj();
 

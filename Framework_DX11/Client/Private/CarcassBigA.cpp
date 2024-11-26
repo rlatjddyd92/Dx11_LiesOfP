@@ -73,11 +73,11 @@ HRESULT CCarcassBigA::Initialize(void* pArg)
 
 	m_vRimLightColor = { 0.f, 0.f, 0.f, 0.f };
 
-	m_fHp = 500.f;
-	m_fAtk = 4.f;
-	m_fDefence = 2.f;
-	m_fStemina = 30.f;
-	m_fMaxGrogyPoint = 10.f;
+	m_eStat.fHp = 500;
+	m_eStat.fAtk = 4.f;
+	m_eStat.fDefence = 2.f;
+	m_eStat.fStemina = 30.f;
+	
 
 	return S_OK;
 }

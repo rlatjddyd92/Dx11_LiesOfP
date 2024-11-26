@@ -112,7 +112,7 @@ _bool CPawn::Calc_DamageGain(_float fAtkDmg)
 	//
 	//}		//피해를 입는다면 true 반환, 
 	
-	m_fHp -= (fAtkDmg * ((100 - m_fDefence) / 100));
+	m_eStat.fHp -= (fAtkDmg * ((100 - m_eStat.fDefence) / 100));
 
 	return true;
 }

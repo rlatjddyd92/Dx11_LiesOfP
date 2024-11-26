@@ -107,10 +107,13 @@ HRESULT CSimonManus::Initialize(void* pArg)
 		m_EXCollider[i]->Set_Owner(this);
 	}
 
-	m_fHp = 10.f;
-	m_fAtk = 10.f;
-	m_fDefence = 5.f;
-	m_fStemina = 100.f;
+	m_eStat.fHp = 20.f;
+	m_eStat.fMaxHp = 20.f;
+	m_eStat.fAtk = 5.f;
+	m_eStat.fDefence = 8.f;
+	m_eStat.fStemina = 100.f;
+	m_eStat.fMaxGrogyPoint = 50.f;
+	m_eStat.fGrogyPoint = 0.f;
 
 	m_pWeapon->DeActive_Collider();
 
@@ -123,7 +126,7 @@ void CSimonManus::Priority_Update(_float fTimeDelta)
 	__super::Set_UpTargetPos();
 	m_pWeapon->Priority_Update(fTimeDelta);
 
-	if (m_fHp <= 0.f)
+	if (m_eStat.fHp <= 0.f)
 	{
 		m_pFsmCom->Set_State(DIE);
 	}
@@ -368,7 +371,7 @@ HRESULT CSimonManus::Ready_Weapon()
 	WeaponDesc.pParentWorldMatrix = m_pTransformCom->Get_WorldMatrix_Ptr();
 	WeaponDesc.pSocketBoneMatrix = m_pModelCom->Get_BoneCombindTransformationMatrix_Ptr(66);	//Weapon_R
 
-	WeaponDesc.pParentAtk = &m_fAtk;
+	WeaponDesc.pParentAtk = &m_eStat.fAtk;
 
 	m_pWeapon = dynamic_cast<CWeapon*>(m_pGameInstance->Clone_GameObject(TEXT("Prototype_GameObject_Weapon_SimonManus_Hammer"), &WeaponDesc));
 	if (nullptr == m_pWeapon)
@@ -454,11 +457,13 @@ void CSimonManus::ChangePhase()
 
 	m_pWeapon->ChangeSocketMatrix(m_pModelCom->Get_BoneCombindTransformationMatrix_Ptr(46));
 
-	m_fHp = 200.f;
-	m_fAtk = 15.f;
-	m_fDefence = 8.f;
-	m_fStemina = 100.f;
-	m_fMaxGrogyPoint = 50.f;
+	m_eStat.fHp = 200.f;
+	m_eStat.fMaxHp = 200.f;
+	m_eStat.fAtk = 15.f;
+	m_eStat.fDefence = 8.f;
+	m_eStat.fStemina = 100.f;
+	m_eStat.fMaxGrogyPoint = 50.f;
+	m_eStat.fGrogyPoint = 0.f;
 
 	m_isDead = false;
 	m_isChanged = true;
