@@ -1134,14 +1134,14 @@
     <ClInclude Include="..\Public\Ladder.h">
       <Filter>02.GameObjects\10.InteractObj\05.Ladder</Filter>
     </ClInclude>
-    <ClInclude Include="..\Public\ColliderObject.h">
-      <Filter>02.GameObjects\10.ColliderObject</Filter>
-    </ClInclude>
     <ClInclude Include="..\Public\ColliderObject.h" />
     <ClInclude Include="..\Public\State_SimonManusP1_Charge_SwingDown.h">
       <Filter>05.Fsm\Monster\SimonManus\P1\Attck\Single\Charge_SwingDown</Filter>
     </ClInclude>
     <ClInclude Include="..\Public\UIRender_Client.h" />
+    <ClInclude Include="..\Public\ColliderObject.h">
+      <Filter>02.GameObjects\10.ColliderObject</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Client.cpp">
@@ -1618,14 +1618,14 @@
     <ClCompile Include="..\Private\Ladder.cpp">
       <Filter>02.GameObjects\10.InteractObj\05.Ladder</Filter>
     </ClCompile>
-    <ClCompile Include="..\Private\ColliderObject.cpp">
-      <Filter>02.GameObjects\10.ColliderObject</Filter>
-    </ClCompile>
     <ClCompile Include="..\Private\ColliderObject.cpp" />
     <ClCompile Include="..\Private\State_SimonManusP1_Charge_SwingDown.cpp">
       <Filter>05.Fsm\Monster\SimonManus\P1\Attck\Single\Charge_SwingDown</Filter>
     </ClCompile>
     <ClCompile Include="..\Private\UIRender_Client.cpp" />
+    <ClCompile Include="..\Private\ColliderObject.cpp">
+      <Filter>02.GameObjects\10.ColliderObject</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <Image Include="Client.ico">

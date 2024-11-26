@@ -30,7 +30,11 @@ void CState_CarcassBigA_AttackRoute_4::Update(_float fTimeDelta)
     if (End_Check())
     {
         ++m_iRouteTrack;
-        if (m_iRouteTrack == 2)
+        if (m_iRouteTrack == 1)
+        {
+            m_pMonster->Change_Animation(AN_ROUTE_LAST, false, 0.1f);
+        }
+        else if (m_iRouteTrack == 2)
         {
             m_pMonster->Change_State(CCarcassBigA::IDLE);
             return;
@@ -51,8 +55,6 @@ void CState_CarcassBigA_AttackRoute_4::Update(_float fTimeDelta)
         {
             m_pMonster->Get_Transform()->LookAt_Lerp_NoHeight(m_pMonster->Get_TargetDir(), 1.5, fTimeDelta);
         }
-
-        m_pMonster->Change_Animation(AN_ROUTE_LAST, false, 0.1f, 0, true);
     }
 
 

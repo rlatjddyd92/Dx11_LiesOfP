@@ -121,14 +121,13 @@ void CPlayer::Priority_Update(_float fTimeDelta)
 	}
 
 	m_EffectList.clear();
-	m_EvKeyList.clear();
 
 	m_pWeapon[m_eWeaponType]->Priority_Update(fTimeDelta);
 }
 
 void CPlayer::Update(_float fTimeDelta)
 {
-	m_vCurRootMove = XMVector3TransformNormal(m_pModelCom->Play_Animation(fTimeDelta, &m_EvKeyList), m_pTransformCom->Get_WorldMatrix());
+	m_vCurRootMove = XMVector3TransformNormal(m_pModelCom->Play_Animation(fTimeDelta), m_pTransformCom->Get_WorldMatrix());
 
 	m_pRigidBodyCom->Set_Velocity(m_vCurRootMove / fTimeDelta);
 

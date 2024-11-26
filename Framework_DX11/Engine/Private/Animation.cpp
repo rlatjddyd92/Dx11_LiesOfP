@@ -46,17 +46,6 @@ HRESULT CAnimation::Initialize__To_Binary(HANDLE* pFile, vector<_uint>& KeyFrame
 
 	KeyFrameIndices.resize(m_iNumChannels);
 
-	_int iNumEventKeyFrame;
-	ReadFile(*pFile, &iNumEventKeyFrame, sizeof(_uint), &dwByte, nullptr);
-	for (_int i = 0; i < iNumEventKeyFrame; ++i)
-	{
-		EVENT_KEYFRAME EventKeyFrame;
-
-		ReadFile(*pFile, &EventKeyFrame, sizeof(EVENT_KEYFRAME), &dwByte, nullptr);
-
-		m_EventKeyFrames.push_back(EventKeyFrame);
-	}
-
 	for (_int i = 0; i < (_int)m_iNumChannels; ++i)
 	{
 		CChannel* pChannel = CChannel::Create(pFile, pModel);
@@ -69,7 +58,7 @@ HRESULT CAnimation::Initialize__To_Binary(HANDLE* pFile, vector<_uint>& KeyFrame
 
 _uint CAnimation::Update_TransformationMatrices(const vector<class CBone*>& Bones
 	, _double* pCurrentTrackPosition, vector<_uint>& CurrentKeyFrameIndices, _bool isLoop, _bool* isEnd
-	, _float fTimeDelta, _bool isChildOfBoundary, list<OUTPUT_EVKEY>* pEvKeyList, _bool* bBoneUpdated,_bool BlockStackTime)
+	, _float fTimeDelta, _bool isChildOfBoundary, _bool* bBoneUpdated,_bool BlockStackTime)
 {
 	_uint iCurrentFrame = 0;
 
@@ -90,55 +79,6 @@ _uint CAnimation::Update_TransformationMatrices(const vector<class CBone*>& Bone
 			for (auto& pKeyFrameIndex : CurrentKeyFrameIndices)
 			{
 				pKeyFrameIndex = 0;
-			}
-
-		}
-	}
-
-	//이벤트 키 프레임 설정
-	if (pEvKeyList != nullptr)
-	{
-		_double CurPos = *pCurrentTrackPosition;
-		for (_int i = 0; i < m_EventKeyFrames.size(); ++i)
-		{
-			OUTPUT_EVKEY EvKey{};
-			_bool		bCheck{ false };
-			if (m_EventKeyFrames[i].eEvent_type == EVENT_KEYFRAME::ET_ONCE)
-			{
-				if (CurPos >= m_EventKeyFrames[i].Start_TrackPosition)
-				{
-					EvKey.eEvent_type = EVENT_KEYFRAME::ET_ONCE;
-					EvKey.iBoneIndex = m_EventKeyFrames[i].iBoneIndex;
-					EvKey.iEffectNum = m_EventKeyFrames[i].iEffectNum;
-					bCheck = true;
-				}
-			}
-			else if (m_EventKeyFrames[i].eEvent_type == EVENT_KEYFRAME::ET_REPET)
-			{
-				if (CurPos >= m_EventKeyFrames[i].Start_TrackPosition && m_EventKeyFrames[i].End_TrackPosition >= CurPos)
-				{
-					EvKey.eEvent_type = EVENT_KEYFRAME::ET_REPET;
-					EvKey.iBoneIndex = m_EventKeyFrames[i].iBoneIndex;
-					EvKey.iEffectNum = m_EventKeyFrames[i].iEffectNum;
-					bCheck = true;
-				}
-			}
-
-			if (bCheck)
-			{
-				// 
-				if (m_EventKeyFrames[i].eEvent_Body_Type == EVENT_KEYFRAME::BT_UPPER && isChildOfBoundary)
-				{
-					EvKey.bActiveEffect = true;
-					pEvKeyList->push_back(EvKey);
-				}
-				else if (m_EventKeyFrames[i].eEvent_Body_Type == EVENT_KEYFRAME::BT_EITHER && !isChildOfBoundary)
-				{
-					EvKey.bActiveEffect = false;
-					pEvKeyList->push_back(EvKey);
-				}
-				else
-					EvKey.bActiveEffect = false;
 			}
 
 		}
@@ -181,16 +121,6 @@ HRESULT CAnimation::Create_BinaryFile(HANDLE* pFile)
 
 	//채널 갯수 저장
 	WriteFile(*pFile, &m_iNumChannels, sizeof(_uint), &dwByte, nullptr);
-
-	_int iNumEventKeyFrame{};
-	//이벤트 키프레임 갯수 저장
-	iNumEventKeyFrame = (_int)m_EventKeyFrames.size();
-	WriteFile(*pFile, &iNumEventKeyFrame, sizeof(_uint), &dwByte, nullptr);
-
-	for (_int i = 0; i < m_EventKeyFrames.size(); ++i)
-	{//이벤트 키프레임 저장
-		WriteFile(*pFile, &m_EventKeyFrames[i], sizeof(EVENT_KEYFRAME), &dwByte, nullptr);
-	}
 
 	for (auto& pChannel : m_Channels)
 	{//채널 저장

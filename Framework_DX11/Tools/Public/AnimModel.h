@@ -52,8 +52,6 @@ public:
 	ANIMMODEL_DESC	m_tDesc;
 	_vector		m_vRootMoveStack{};
 
-	list<OUTPUT_EVKEY>	m_EvKeyList;
-
 	_float		m_fEmissive = {};
 	_float		m_fRimLight = {};
 

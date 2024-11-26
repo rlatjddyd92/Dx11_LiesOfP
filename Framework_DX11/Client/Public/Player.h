@@ -104,7 +104,6 @@ public:
 	CPawn*			Find_TargetMonster();
 
 private:
-	list<OUTPUT_EVKEY>	m_EvKeyList;
 	list<class CEffect_Container*>	m_EffectList;
 	map<_uint, class CEffect_Container*>	m_Effects;
 

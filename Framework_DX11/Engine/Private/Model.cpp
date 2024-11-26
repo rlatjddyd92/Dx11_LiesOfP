@@ -31,7 +31,6 @@ CModel::CModel(const CModel & Prototype)
 	, m_FilePaths { Prototype.m_FilePaths }
 	, m_isUseBoundary { Prototype.m_isUseBoundary }
 	, m_UFBIndices { Prototype.m_UFBIndices }
-	, m_UseFullVtxIndices{ Prototype.m_UseFullVtxIndices }
 	, m_isEnd_Animations{ nullptr }
 	, m_isEnd_Animations_Boundary{ nullptr }
 	, m_eType{ Prototype.m_eType }
@@ -346,9 +345,14 @@ HRESULT CModel::SetUp_NextAnimation(_uint iNextAnimationIndex, _bool isLoop, _fl
 	// 이미 같은걸로 바꾸고 있어
 	if (m_isChangeAni == true && iNextAnimationIndex == m_tChaneAnimDesc.iNextAnimIndex && !bSameChange)
 		return S_OK;
+	
+	if (bSameChange && m_iCurrentAnimIndex == iNextAnimationIndex)
+	{
+		m_bSameChange = true;
+	}
 
 	m_tChaneAnimDesc.iNextAnimIndex = iNextAnimationIndex;
-	if (iNextAnimationIndex == m_iCurrentAnimIndex_Boundary && !m_isChangeAni_Boundary)
+	if (iNextAnimationIndex == m_iCurrentAnimIndex_Boundary && !m_isChangeAni_Boundary && !bSameChange)
 	{
 		m_tChaneAnimDesc.iStartFrame = (_uint)m_CurrentTrackPosition_Boundary;
 	}
@@ -388,14 +392,19 @@ HRESULT CModel::SetUp_NextAnimation_Boundary(_uint iNextAnimationIndex, _bool is
 	if (m_iCurrentAnimIndex_Boundary == iNextAnimationIndex && !m_isChangeAni_Boundary && !bSameChange)	//만약 지금 바꾸는중이 아니라면
 		return E_FAIL;
 
-	// 이미 같은걸로 바꾸고 있어														이미 변환이 진행중인데, 같은 변환이 들어왔으면
+	// 이미 같은걸로 바꾸고 있어 이미 변환이 진행중인데, 같은 변환이 들어왔으면
 	if (m_isChangeAni_Boundary == true && iNextAnimationIndex == m_tChaneAnimDesc_Boundary.iNextAnimIndex && !bSameChange)
 		return S_OK;
+
+	if (bSameChange && m_iCurrentAnimIndex == iNextAnimationIndex)
+	{
+		m_bSameChange = true;
+	}
 
 	m_ChangeTrackPosition_Boundary = 0.0;
 
 	m_tChaneAnimDesc_Boundary.iNextAnimIndex = iNextAnimationIndex;
-	if (iNextAnimationIndex == m_iCurrentAnimIndex && !m_isChangeAni)
+	if (iNextAnimationIndex == m_iCurrentAnimIndex && !m_isChangeAni && !bSameChange)
 	{
 		m_tChaneAnimDesc_Boundary.iStartFrame = (_uint)m_CurrentTrackPosition;
 	}
@@ -455,7 +464,7 @@ void CModel::Update_Bone()
 
 }
 
-_Vec3 CModel::Play_Animation(_float fTimeDelta, list<OUTPUT_EVKEY>* pEvKeyList)
+_Vec3 CModel::Play_Animation(_float fTimeDelta)
 {
 	_bool	bRootCheck{false};
 	if (m_UFBIndices[UFB_ROOT] != 1024)
@@ -469,12 +478,12 @@ _Vec3 CModel::Play_Animation(_float fTimeDelta, list<OUTPUT_EVKEY>* pEvKeyList)
 	m_isBoneUpdated = false; //뼈 업데이트 함수 호출시에 실제 업데이트 됐는지, 루프 애니메이션이 아니라서 중단됐는지 확인하기위한 불 변수
 
 	//상하체 분리에 영향받지 않는 부분들의 업데이트
-	Update_Animation(fAddTime, pEvKeyList);
+	Update_Animation(fAddTime);
 
 	//저 부모뼈들 이름으로 인덱스 찾아서 해당 인덱스 업데이트 멈추고 확인해서 나머지 팔은 잘 움직인다면
 
 	//분리된 부분 업데이트
-	Update_Animation_Boundary(fAddTime, pEvKeyList);
+	Update_Animation_Boundary(fAddTime);
 
 
 	//루트본에 의한 이동값을 루트본에서 제거하고 이동량만큼 바깥으로 배출
@@ -483,7 +492,7 @@ _Vec3 CModel::Play_Animation(_float fTimeDelta, list<OUTPUT_EVKEY>* pEvKeyList)
 	return vRootMove;
 }
 
-void CModel::Update_Animation(_float fTimeDelta, list<OUTPUT_EVKEY>* pEvKeyList)
+void CModel::Update_Animation(_float fTimeDelta)
 {
 	if (m_isChangeAni)
 	{
@@ -564,12 +573,14 @@ void CModel::Update_Animation(_float fTimeDelta, list<OUTPUT_EVKEY>* pEvKeyList)
 
 		if (isChangeEnd)
 		{
-			if (m_tChaneAnimDesc.iNextAnimIndex == m_iCurrentAnimIndex_Boundary)
+			if (m_tChaneAnimDesc.iNextAnimIndex == m_iCurrentAnimIndex_Boundary && !m_bSameChange)
 			{
 				m_CurrentTrackPosition = m_CurrentTrackPosition_Boundary;
 			}
 			else
+			{
 				m_CurrentTrackPosition = m_ChangeTrackPosition;
+			}
 			//m_Animations[m_iCurrentAnimIndex]->Reset();
 
 			//m_iCurrentFrame = m_Animations[m_iCurrentAnimIndex].
@@ -586,12 +597,12 @@ void CModel::Update_Animation(_float fTimeDelta, list<OUTPUT_EVKEY>* pEvKeyList)
 	{
 
 		/* 뼈를 움직인다.(CBone`s m_TransformationMatrix행렬을 갱신한다.) */
-		m_iCurrentFrame = m_Animations[m_iCurrentAnimIndex]->Update_TransformationMatrices(m_Bones, &m_CurrentTrackPosition, m_KeyFrameIndices[m_iCurrentAnimIndex], m_isLoop, &m_isEnd_Animations[m_iCurrentAnimIndex], fTimeDelta, false, pEvKeyList, &m_isBoneUpdated);
+		m_iCurrentFrame = m_Animations[m_iCurrentAnimIndex]->Update_TransformationMatrices(m_Bones, &m_CurrentTrackPosition, m_KeyFrameIndices[m_iCurrentAnimIndex], m_isLoop, &m_isEnd_Animations[m_iCurrentAnimIndex], fTimeDelta, false, &m_isBoneUpdated);
 
 	}
 }
 
-void CModel::Update_Animation_Boundary(_float fTimeDelta, list<OUTPUT_EVKEY>* pEvKeyList)
+void CModel::Update_Animation_Boundary(_float fTimeDelta)
 {
 	if (m_isUseBoundary)
 	{
@@ -679,15 +690,18 @@ void CModel::Update_Animation_Boundary(_float fTimeDelta, list<OUTPUT_EVKEY>* pE
 
 			if (isChangeEnd)
 			{
-				if (m_tChaneAnimDesc_Boundary.iNextAnimIndex == m_iCurrentAnimIndex && !m_isChangeAni)
+				if (m_tChaneAnimDesc_Boundary.iNextAnimIndex == m_iCurrentAnimIndex && !m_isChangeAni && !m_bSameChange)
 				{
-					m_CurrentTrackPosition_Boundary = m_CurrentTrackPosition_Boundary;
+					m_CurrentTrackPosition_Boundary = m_CurrentTrackPosition;
 				}
 				else
+				{
 					m_CurrentTrackPosition_Boundary = m_ChangeTrackPosition_Boundary;
+					m_bSameChange = false;
+				}
 
 				//m_Animations[m_iCurrentAnimIndex]->Reset();
-				m_iCurrentFrame_Boundary = m_Animations[m_iCurrentAnimIndex_Boundary]->Update_TransformationMatrices(m_Bones, &m_CurrentTrackPosition, m_KeyFrameIndices[m_iCurrentAnimIndex_Boundary], m_isLoop, &m_isEnd_Animations_Boundary[m_iCurrentAnimIndex_Boundary], 0, true, nullptr, &m_isBoneUpdated, true);
+				m_iCurrentFrame_Boundary = m_Animations[m_iCurrentAnimIndex_Boundary]->Update_TransformationMatrices(m_Bones, &m_CurrentTrackPosition, m_KeyFrameIndices[m_iCurrentAnimIndex_Boundary], m_isLoop, &m_isEnd_Animations_Boundary[m_iCurrentAnimIndex_Boundary], 0, true, &m_isBoneUpdated, true);
 				m_vRootMoveStack = m_vCurRootMove = _vector{ 0, 0, 0, 1 };
 				m_iCurrentAnimIndex_Boundary = m_tChaneAnimDesc_Boundary.iNextAnimIndex;
 				ZeroMemory(&m_tChaneAnimDesc_Boundary, sizeof(CHANGEANIMATION_DESC));
@@ -700,11 +714,11 @@ void CModel::Update_Animation_Boundary(_float fTimeDelta, list<OUTPUT_EVKEY>* pE
 			//if 상하체 애니메이션이 같으면 시간누적 없는 업데이트 하체 변수로 호출
 			if (m_iCurrentAnimIndex == m_iCurrentAnimIndex_Boundary && !m_isChangeAni)
 			{
-				m_iCurrentFrame_Boundary = m_Animations[m_iCurrentAnimIndex_Boundary]->Update_TransformationMatrices(m_Bones, &m_CurrentTrackPosition, m_KeyFrameIndices[m_iCurrentAnimIndex_Boundary], m_isLoop, &m_isEnd_Animations_Boundary[m_iCurrentAnimIndex_Boundary], fTimeDelta, true, pEvKeyList, &m_isBoneUpdated, true);
+				m_iCurrentFrame_Boundary = m_Animations[m_iCurrentAnimIndex_Boundary]->Update_TransformationMatrices(m_Bones, &m_CurrentTrackPosition, m_KeyFrameIndices[m_iCurrentAnimIndex_Boundary], m_isLoop, &m_isEnd_Animations_Boundary[m_iCurrentAnimIndex_Boundary], fTimeDelta, true, &m_isBoneUpdated, true);
 			}
 			else
 			{
-				m_iCurrentFrame_Boundary = m_Animations[m_iCurrentAnimIndex_Boundary]->Update_TransformationMatrices(m_Bones, &m_CurrentTrackPosition_Boundary, m_KeyFrameIndices[m_iCurrentAnimIndex_Boundary], m_isLoop_Boundary, &m_isEnd_Animations_Boundary[m_iCurrentAnimIndex_Boundary], fTimeDelta, true, pEvKeyList, &m_isBoneUpdated, false);
+				m_iCurrentFrame_Boundary = m_Animations[m_iCurrentAnimIndex_Boundary]->Update_TransformationMatrices(m_Bones, &m_CurrentTrackPosition_Boundary, m_KeyFrameIndices[m_iCurrentAnimIndex_Boundary], m_isLoop_Boundary, &m_isEnd_Animations_Boundary[m_iCurrentAnimIndex_Boundary], fTimeDelta, true, &m_isBoneUpdated, false);
 			}
 		}
 
@@ -818,15 +832,6 @@ HRESULT CModel::Create_BinaryFile(const _char* ModelTag)
 	for (_int i = 0; i < UFB_END; ++i)
 	{
 		WriteFile(hFile, &m_UFBIndices[i], sizeof(_uint), &dwByte, nullptr);
-	}
-
-	//아래 정점의 갯수
-	_int iNumUFVtx = (_int)m_UseFullVtxIndices.size();
-	WriteFile(hFile, &iNumUFVtx, sizeof(_int), &dwByte, nullptr);
-	//사용하려고 저장한 정점
-	for (int j = 0; j < iNumUFVtx; ++j)
-	{
-		WriteFile(hFile, &m_UseFullVtxIndices[j], sizeof(UFVTX), &dwByte, nullptr);
 	}
 
 	if (FAILED(Create_Bin_Bones(&hFile)))
@@ -947,17 +952,7 @@ HRESULT CModel::ReadyModel_To_Binary(HANDLE* pFile)
 	for (_int i = 0; i < UFB_END; ++i)
 	{
 		ReadFile(*pFile, &m_UFBIndices[i], sizeof(_uint), &dwByte, nullptr);
-	}
-
-	_int iNumUFVtx = {};
-	ReadFile(*pFile, &iNumUFVtx, sizeof(_int), &dwByte, nullptr);
-
-	for (_int i = 0; i < iNumUFVtx; ++ i)
-	{
-		ReadFile(*pFile, &m_UseFullVtxIndices[i], sizeof(UFVTX), &dwByte, nullptr);
-	}
-	//여기까지 모델.
-	
+	}	
 
 	_uint iNumBone = {};
 	ReadFile(*pFile, &iNumBone, sizeof(_uint), &dwByte, nullptr);

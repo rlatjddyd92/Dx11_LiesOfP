@@ -227,6 +227,13 @@ HRESULT CCarcassBigA::Ready_Components()
 	if (FAILED(__super::Add_Component(LEVEL_STATIC, TEXT("Prototype_Component_RigidBody"),
 		TEXT("Com_RigidBody"), reinterpret_cast<CComponent**>(&m_pRigidBodyCom), &RigidBodyDesc)))
 		return E_FAIL;
+
+	for (_int i = 0; i < TYPE_END; ++i)
+	{
+		m_pColliderObject[i]->DeActive_Collider();
+	}
+
+
 	return S_OK;
 }
 
