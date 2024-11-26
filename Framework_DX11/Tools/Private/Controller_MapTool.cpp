@@ -778,6 +778,7 @@ void CController_MapTool::SaveMap()
 		//	fout.write(reinterpret_cast<const char*>(&m_iFloorSizeX), sizeof(_int));	
 		//	fout.write(reinterpret_cast<const char*>(&m_iFloorSizeZ), sizeof(_int));
 		//}
+
 		if (sLayerTag == TEXT("Layer_Player"))
 			continue;
 
