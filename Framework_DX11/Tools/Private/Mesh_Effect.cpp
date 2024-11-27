@@ -88,29 +88,29 @@ HRESULT CMesh_Effect::Render()
 	if (FAILED(m_pShaderCom->Bind_Matrix("g_ProjMatrix", &m_pGameInstance->Get_Transform(CPipeLine::D3DTS_PROJ))))
 		return E_FAIL;
 
-	//if(nullptr != m_pTextureCom[TEXTURE_DIFFUSE])
-	//{
-	//	if (FAILED(m_pTextureCom[TEXTURE_DIFFUSE]->Bind_ShadeResource(m_pShaderCom, "g_DiffuseTexture", 0)))
-	//		return E_FAIL;
-	//}
+	if(nullptr != m_pTextureCom[TEXTURE_DIFFUSE])
+	{
+		if (FAILED(m_pTextureCom[TEXTURE_DIFFUSE]->Bind_ShadeResource(m_pShaderCom, "g_DiffuseTexture", 0)))
+			return E_FAIL;
+	}
 
-	//if(nullptr != m_pTextureCom[TEXTURE_MASK_1])
-	//{
-	//	if (FAILED(m_pTextureCom[TEXTURE_MASK_1]->Bind_ShadeResource(m_pShaderCom, "g_MaskTexture_1", 0)))
-	//		return E_FAIL;
-	//}
+	if(nullptr != m_pTextureCom[TEXTURE_MASK_1])
+	{
+		if (FAILED(m_pTextureCom[TEXTURE_MASK_1]->Bind_ShadeResource(m_pShaderCom, "g_MaskTexture_1", 0)))
+			return E_FAIL;
+	}
 
-	//if(nullptr != m_pTextureCom[TEXTURE_MASK_2])
-	//{
-	//	if (FAILED(m_pTextureCom[TEXTURE_MASK_2]->Bind_ShadeResource(m_pShaderCom, "g_MaskTexture_2", 0)))
-	//		return E_FAIL;
-	//}
+	if(nullptr != m_pTextureCom[TEXTURE_MASK_2])
+	{
+		if (FAILED(m_pTextureCom[TEXTURE_MASK_2]->Bind_ShadeResource(m_pShaderCom, "g_MaskTexture_2", 0)))
+			return E_FAIL;
+	}
 
-	//if(nullptr != m_pTextureCom[TEXTURE_NORMAL])
-	//{
-	//	if (FAILED(m_pTextureCom[TEXTURE_NORMAL]->Bind_ShadeResource(m_pShaderCom, "g_NormalTexture", 0)))
-	//		return E_FAIL;
-	//}
+	if(nullptr != m_pTextureCom[TEXTURE_NORMAL])
+	{
+		if (FAILED(m_pTextureCom[TEXTURE_NORMAL]->Bind_ShadeResource(m_pShaderCom, "g_NormalTexture", 0)))
+			return E_FAIL;
+	}
 
 	if (FAILED(m_pShaderCom->Bind_RawValue("g_vColor", &m_DefaultDesc.vColor, sizeof m_DefaultDesc.vColor)))
 		return E_FAIL;
@@ -125,9 +125,6 @@ HRESULT CMesh_Effect::Render()
 
 	for (size_t i = 0; i < iNumMeshes; i++)
 	{
-		if(FAILED(m_pModelCom->Bind_Material(m_pShaderCom, "g_DiffuseTexture", TEXTURE_TYPE::DIFFUSE, (_uint)i)))
-			return E_FAIL;
-		
 		if (FAILED(m_pShaderCom->Begin(m_DefaultDesc.iShaderIndex)))
 			return E_FAIL;
 		if (FAILED(m_pModelCom->Render((_uint)i)))

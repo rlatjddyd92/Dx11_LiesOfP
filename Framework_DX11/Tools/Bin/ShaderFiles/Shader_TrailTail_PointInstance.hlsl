@@ -31,7 +31,8 @@ StructuredBuffer<TailParticle> Particle_SRV : register(t0);
 matrix			g_WorldMatrix, g_ViewMatrix, g_ProjMatrix;
 texture2D		g_DiffuseTexture;
 texture2D       g_NormalTexture;
-texture2D       g_MaskTexture;
+texture2D       g_MaskTexture_1;
+texture2D       g_MaskTexture_2;
 vector			g_vCamPosition;
 
 float2          g_vTexDivide;
@@ -422,6 +423,34 @@ PS_OUT PS_SMOKE_MAIN(PS_IN In)
     return Out;
 }
 
+PS_EFFECT_OUT PS_FIRE_MAIN(PS_IN In)
+{
+    PS_EFFECT_OUT Out = (PS_EFFECT_OUT) 0;
+    
+    if (In.vLifeTime.x < In.vLifeTime.y)
+        discard;
+    
+    float2 vTexcoord = In.vTexcoord + float2(In.vLifeTime.y, In.vLifeTime.y);
+    vector vColor = g_DiffuseTexture.Sample(LinearSampler, In.vTexcoord);
+    vector vMask = g_MaskTexture_1.Sample(LinearSampler, vTexcoord);
+    
+    vColor *= vMask;
+    vColor.rgb *= In.vColor.rgb;
+    
+    vColor.a = max(vColor.r, max(vColor.g, vColor.b));
+    vColor.a *= 1.f - (In.vLifeTime.y / In.vLifeTime.x);
+    
+    vColor.rgb *= 2.f;
+    
+    if (vColor.a < 0.1f)
+        discard;
+    
+    Out.vDiffuse = vColor;
+    Out.vBlur = vColor;
+    
+    return Out;
+}
+
 technique11	DefaultTechnique
 {
 	pass DEFAULT // 0
@@ -489,6 +518,18 @@ technique11	DefaultTechnique
         GeometryShader = compile gs_5_0 GS_MAIN();
         PixelShader = compile ps_5_0 PS_SMOKE_MAIN();
     }
+
+    pass PARTICLE_FIRE // 6
+    {
+        SetRasterizerState(RS_Default);
+        SetDepthStencilState(DSS_Default, 0);
+        SetBlendState(BS_Default, vector(0.f, 0.f, 0.f, 0.f), 0xffffffff);
+
+        VertexShader = compile vs_5_0 VS_MAIN();
+        GeometryShader = compile gs_5_0 GS_MAIN();
+        PixelShader = compile ps_5_0 PS_FIRE_MAIN();
+    }
+
 }
 
 float2 Get_SpriteTexcoord(float2 vTexcoord, int iTexIndex)

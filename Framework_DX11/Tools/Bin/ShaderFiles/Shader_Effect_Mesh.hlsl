@@ -111,8 +111,7 @@ PS_OUT PS_BLEND_DA_MAIN(PS_IN In)
     float2 vTexcoord = In.vTexcoord * g_vTileRepeat + g_vTileMove;
     vector vColor = g_DiffuseTexture.Sample(LinearSampler, vTexcoord);
 	
-    vColor.rgb *= g_vColor.rgb;
-    vColor.a *= g_fAlpha * vColor.a;
+    vColor.rgb *= g_vColor.rgb * g_fAlpha;
 	
     Out.vColor = vColor;
 	
@@ -124,9 +123,12 @@ PS_OUT PS_DISTORTION_MAIN(PS_IN In)
     PS_OUT Out = (PS_OUT) 0;
     float2 vTexcoord = In.vTexcoord * g_vTileRepeat + g_vTileMove;
     vector vColor = g_DiffuseTexture.Sample(LinearSampler, vTexcoord);
+    vector vMask = g_MaskTexture_1.Sample(LinearSampler, vTexcoord);
 	
     vColor.rgb *= g_vColor.rgb;
     vColor.a *= g_fAlpha;
+    
+    vColor *= vMask;
     
     if(vColor.a < 0.1f)
         discard;
@@ -140,7 +142,7 @@ technique11	DefaultTechnique
 {
 	pass Default //0
 	{
-		SetRasterizerState(RS_Default);
+        SetRasterizerState(RS_Cull_None);
 		SetDepthStencilState(DSS_Default, 0);
 		SetBlendState(BS_Default, vector(0.f, 0.f, 0.f, 0.f), 0xffffffff);
 
@@ -151,7 +153,7 @@ technique11	DefaultTechnique
 
     pass SelfDistortion //1
     {
-        SetRasterizerState(RS_Default);
+        SetRasterizerState(RS_Cull_None);
         SetDepthStencilState(DSS_Default, 0);
         SetBlendState(BS_Default, vector(0.f, 0.f, 0.f, 0.f), 0xffffffff);
 
@@ -173,7 +175,7 @@ technique11	DefaultTechnique
 
     pass Blend_DA //3
     {
-        SetRasterizerState(RS_Default);
+        SetRasterizerState(RS_Cull_None);
         SetDepthStencilState(DSS_NonWrite, 0);
         SetBlendState(BS_AlphaBlend, vector(0.f, 0.f, 0.f, 0.f), 0xffffffff);
 
@@ -184,7 +186,7 @@ technique11	DefaultTechnique
 
     pass Distortion //4
     {
-        SetRasterizerState(RS_Default);
+        SetRasterizerState(RS_Cull_None);
         SetDepthStencilState(DSS_Default, 0);
         SetBlendState(BS_Default, vector(0.f, 0.f, 0.f, 0.f), 0xffffffff);
 
@@ -192,6 +194,5 @@ technique11	DefaultTechnique
         GeometryShader = NULL;
         PixelShader = compile ps_5_0 PS_DISTORTION_MAIN();
     }
-
 
 }

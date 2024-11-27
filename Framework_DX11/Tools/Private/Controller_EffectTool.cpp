@@ -2159,64 +2159,26 @@ HRESULT CController_EffectTool::Load_Model()
 {
 	_matrix		PreTransformMatrix = XMMatrixIdentity();
 
-	/* For. Prototype_Component_Model_Effect_Swirl_1 */
-	PreTransformMatrix = XMMatrixScaling(0.005f, 0.005f, 0.005f) * XMMatrixRotationX(XMConvertToRadians(90.0f));
-	if (FAILED(m_pGameInstance->Add_Prototype(LEVEL_TOOL, TEXT("Prototype_Component_Model_Effect_Swirl_1"),
-		CModel::Create(m_pDevice, m_pContext, CModel::TYPE_NONANIM, "../Bin/ModelData/NonAnim/Effect/SM_Swirl_01_RSW.dat", PreTransformMatrix))))
+	/* For. Prototype_Component_Model_Effect_Helix */
+	PreTransformMatrix = XMMatrixScaling(0.005f, 0.005f, 0.005f);
+	if (FAILED(m_pGameInstance->Add_Prototype(LEVEL_TOOL, TEXT("Prototype_Component_Model_Effect_Helix"),
+		CModel::Create(m_pDevice, m_pContext, CModel::TYPE_NONANIM, "../Bin/ModelData/NonAnim/Effect/Mesh_Helix_Single.dat", PreTransformMatrix))))
 		return E_FAIL;
-	Add_Model_ProtytypeTag(TEXT("Prototype_Component_Model_Effect_Swirl_1"));
+	Add_Model_ProtytypeTag(TEXT("Prototype_Component_Model_Effect_Helix"));
 
-	/* For. Prototype_Component_Model_Effect_Swirl_2 */
-	PreTransformMatrix = XMMatrixScaling(0.005f, 0.005f, 0.005f) * XMMatrixRotationX(XMConvertToRadians(90.0f));
-	if (FAILED(m_pGameInstance->Add_Prototype(LEVEL_TOOL, TEXT("Prototype_Component_Model_Effect_Swirl_2"),
-		CModel::Create(m_pDevice, m_pContext, CModel::TYPE_NONANIM, "../Bin/ModelData/NonAnim/Effect/SM_Swirl_02_RSW.dat", PreTransformMatrix))))
+	/* For. Prototype_Component_Model_Effect_CrystalCloud */
+	PreTransformMatrix = XMMatrixScaling(0.005f, 0.005f, 0.005f);
+	if (FAILED(m_pGameInstance->Add_Prototype(LEVEL_TOOL, TEXT("Prototype_Component_Model_Effect_CrystalCloud"),
+		CModel::Create(m_pDevice, m_pContext, CModel::TYPE_NONANIM, "../Bin/ModelData/NonAnim/Effect/Mesh_Crystal_Clouds_01.dat", PreTransformMatrix))))
 		return E_FAIL;
-	Add_Model_ProtytypeTag(TEXT("Prototype_Component_Model_Effect_Swirl_2"));
+	Add_Model_ProtytypeTag(TEXT("Prototype_Component_Model_Effect_CrystalCloud"));
 
-	/* For. Prototype_Component_Model_Effect_Swirl_3 */
-	PreTransformMatrix = XMMatrixScaling(0.005f, 0.005f, 0.005f) * XMMatrixRotationX(XMConvertToRadians(90.0f));
-	if (FAILED(m_pGameInstance->Add_Prototype(LEVEL_TOOL, TEXT("Prototype_Component_Model_Effect_Swirl_3"),
-		CModel::Create(m_pDevice, m_pContext, CModel::TYPE_NONANIM, "../Bin/ModelData/NonAnim/Effect/SM_Swirl_03_RSW.dat", PreTransformMatrix))))
+	/* For. Prototype_Component_Model_Effect_HalfSphere */
+	PreTransformMatrix = XMMatrixRotationX(XMConvertToRadians(90.0f));
+	if (FAILED(m_pGameInstance->Add_Prototype(LEVEL_TOOL, TEXT("Prototype_Component_Model_Effect_HalfSphere"),
+		CModel::Create(m_pDevice, m_pContext, CModel::TYPE_NONANIM, "../Bin/ModelData/NonAnim/Effect/Mesh_HalfSphere.dat", PreTransformMatrix))))
 		return E_FAIL;
-	Add_Model_ProtytypeTag(TEXT("Prototype_Component_Model_Effect_Swirl_3"));
-
-	/* For. Prototype_Component_Model_Effect_Swirl_4 */
-	PreTransformMatrix = XMMatrixScaling(0.005f, 0.005f, 0.005f) * XMMatrixRotationX(XMConvertToRadians(90.0f));
-	if (FAILED(m_pGameInstance->Add_Prototype(LEVEL_TOOL, TEXT("Prototype_Component_Model_Effect_Swirl_4"),
-		CModel::Create(m_pDevice, m_pContext, CModel::TYPE_NONANIM, "../Bin/ModelData/NonAnim/Effect/SM_Swirl_04_RSW.dat", PreTransformMatrix))))
-		return E_FAIL;
-	Add_Model_ProtytypeTag(TEXT("Prototype_Component_Model_Effect_Swirl_4"));
-
-	/* For. Prototype_Component_Model_Effect_Tornado */
-	PreTransformMatrix = XMMatrixScaling(0.005f, 0.005f, 0.005f) * XMMatrixRotationX(XMConvertToRadians(90.0f));
-	if (FAILED(m_pGameInstance->Add_Prototype(LEVEL_TOOL, TEXT("Prototype_Component_Model_Effect_Tornado"),
-		CModel::Create(m_pDevice, m_pContext, CModel::TYPE_NONANIM, "../Bin/ModelData/NonAnim/Effect/SM_Tornado_02_RSW.dat", PreTransformMatrix))))
-		return E_FAIL;
-	Add_Model_ProtytypeTag(TEXT("Prototype_Component_Model_Effect_Tornado"));
-
-
-	/* For. Prototype_Component_Model_Effect_Helix_3 */
-	PreTransformMatrix = XMMatrixScaling(0.005f, 0.005f, 0.005f) * XMMatrixRotationX(XMConvertToRadians(90.0f));
-	if (FAILED(m_pGameInstance->Add_Prototype(LEVEL_TOOL, TEXT("Prototype_Component_Model_Effect_Helix_3"),
-		CModel::Create(m_pDevice, m_pContext, CModel::TYPE_NONANIM, "../Bin/ModelData/NonAnim/Effect/SM_Helix_03_GDH.dat", PreTransformMatrix))))
-		return E_FAIL;
-	Add_Model_ProtytypeTag(TEXT("Prototype_Component_Model_Effect_Helix_3"));
-
-
-	/* For. Prototype_Component_Model_Effect_Helix_4 */
-	PreTransformMatrix = XMMatrixScaling(0.005f, 0.005f, 0.005f) * XMMatrixRotationX(XMConvertToRadians(90.0f));
-	if (FAILED(m_pGameInstance->Add_Prototype(LEVEL_TOOL, TEXT("Prototype_Component_Model_Effect_Helix_4"),
-		CModel::Create(m_pDevice, m_pContext, CModel::TYPE_NONANIM, "../Bin/ModelData/NonAnim/Effect/SM_Helix_04_LGS.dat", PreTransformMatrix))))
-		return E_FAIL;
-	Add_Model_ProtytypeTag(TEXT("Prototype_Component_Model_Effect_Helix_4"));
-
-
-	/* For. Prototype_Component_Model_Effect_Helix_8 */
-	PreTransformMatrix = XMMatrixScaling(0.005f, 0.005f, 0.005f) * XMMatrixRotationX(XMConvertToRadians(90.0f));
-	if (FAILED(m_pGameInstance->Add_Prototype(LEVEL_TOOL, TEXT("Prototype_Component_Model_Effect_Helix_8"),
-		CModel::Create(m_pDevice, m_pContext, CModel::TYPE_NONANIM, "../Bin/ModelData/NonAnim/Effect/SM_Helix_08_HJS.dat", PreTransformMatrix))))
-		return E_FAIL;
-	Add_Model_ProtytypeTag(TEXT("Prototype_Component_Model_Effect_Helix_8"));
+	Add_Model_ProtytypeTag(TEXT("Prototype_Component_Model_Effect_HalfSphere"));
 
 	return S_OK;
 }

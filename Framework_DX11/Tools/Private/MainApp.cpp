@@ -139,6 +139,5 @@ void CMainApp::Free()
 	m_pGameInstance->Release_Engine();
 
 	Safe_Release(m_pGameInstance);
-	
 }
 

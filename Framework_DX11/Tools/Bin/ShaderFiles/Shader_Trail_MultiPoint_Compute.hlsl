@@ -191,8 +191,14 @@ void CS_SPREAD_MAIN(uint3 DTid : SV_DispatchThreadID)
                 float3 vCurrentDir = (HeadParticle.particle.vTranslation - vPrePos).xyz;
             
                 vPrePos += float4(normalize(vCurrentDir) * fTailInterval, 0.f);
-                float3 vRandomPos = CosineInterpolate(HeadParticle.vCurrentRandomPos.xyz * fTailDistance, HeadParticle.vNextRandomPos.xyz * fTailDistance, fTime / fTimeInterval);
+                
+                float3 vRandomPos = (float3) 0;
             
+                if (fTailDistance == 0.f)
+                    vRandomPos = normalize(vCurrentDir);
+                else
+                    vRandomPos = CosineInterpolate(HeadParticle.vCurrentRandomPos.xyz * fTailDistance, HeadParticle.vNextRandomPos.xyz * fTailDistance, fTime / fTimeInterval);
+                
                 TailParticles[HeadParticle.iTailInitIndex].particle.vTranslation = vPrePos + float4(vRandomPos, 0.f);
                 TailParticles[HeadParticle.iTailInitIndex].vMoveDir = float4(vRandomPos, 0.f);
                 TailParticles[HeadParticle.iTailInitIndex].particle.vLifeTime.y = 0.f;
@@ -331,8 +337,13 @@ void CS_MOVE_MAIN(uint3 DTid : SV_DispatchThreadID)
                 float3 vCurrentDir = (HeadParticle.particle.vTranslation - vPrePos).xyz;
             
                 vPrePos += float4(normalize(vCurrentDir) * fTailInterval, 0.f);
-                float3 vRandomPos = CosineInterpolate(HeadParticle.vCurrentRandomPos.xyz * fTailDistance, HeadParticle.vNextRandomPos.xyz * fTailDistance, fTime / fTimeInterval);
+                float3 vRandomPos = (float3) 0;
             
+                if (fTailDistance == 0.f)
+                    vRandomPos = normalize(vCurrentDir);
+                else
+                    vRandomPos = CosineInterpolate(HeadParticle.vCurrentRandomPos.xyz * fTailDistance, HeadParticle.vNextRandomPos.xyz * fTailDistance, fTime / fTimeInterval);
+                
                 TailParticles[HeadParticle.iTailInitIndex].particle.vTranslation = vPrePos + float4(vRandomPos, 0.f);
                 TailParticles[HeadParticle.iTailInitIndex].vMoveDir = float4(vRandomPos, 0.f);
                 TailParticles[HeadParticle.iTailInitIndex].particle.vLifeTime.y = 0.f;
@@ -470,7 +481,12 @@ void CS_CONVERGE_MAIN(uint3 DTid : SV_DispatchThreadID)
                 float3 vCurrentDir = (HeadParticle.particle.vTranslation - vPrePos).xyz;
             
                 vPrePos += float4(normalize(vCurrentDir) * fTailInterval, 0.f);
-                float3 vRandomPos = CosineInterpolate(HeadParticle.vCurrentRandomPos.xyz * fTailDistance, HeadParticle.vNextRandomPos.xyz * fTailDistance, fTime / fTimeInterval);
+                float3 vRandomPos = (float3) 0;
+            
+                if (fTailDistance == 0.f)
+                    vRandomPos = normalize(vCurrentDir);
+                else
+                    vRandomPos = CosineInterpolate(HeadParticle.vCurrentRandomPos.xyz * fTailDistance, HeadParticle.vNextRandomPos.xyz * fTailDistance, fTime / fTimeInterval);
             
                 TailParticles[HeadParticle.iTailInitIndex].particle.vTranslation = vPrePos + float4(vRandomPos, 0.f);
                 TailParticles[HeadParticle.iTailInitIndex].vMoveDir = float4(vRandomPos, 0.f);
