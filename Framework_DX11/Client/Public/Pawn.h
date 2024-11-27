@@ -55,8 +55,9 @@ public:
     virtual HRESULT Render_Height() { return S_OK; }
     virtual HRESULT Render_LightDepth() { return S_OK; }
 
+public:
     virtual _bool Calc_DamageGain(_float fAtkDmg);
-    virtual void Gain_Grory_Point(_float fGainGrogyPoint) { m_eStat.fGrogyPoint += fGainGrogyPoint; }
+    virtual void Gain_Grogy_Point(_float fGainGrogyPoint) { m_eStat.fGrogyPoint += fGainGrogyPoint; }
 
 public:
     virtual void OnCollisionEnter(CGameObject* pOther) override;

@@ -163,6 +163,9 @@ public:
 	void			Active_Effect(const EFFECT_TYPE& eType);
 	void			DeActive_Effect(const EFFECT_TYPE& eType);
 
+	virtual _bool	Calc_DamageGain(_float fAtkDmg);
+
+
 private:
 	vector<class CEffect_Container*> m_Effects;
 
