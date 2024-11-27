@@ -157,6 +157,9 @@ void CPlayer::Update(_float fTimeDelta)
 	m_pGameInstance->Add_ColliderList(m_pColliderCom);
 
 	m_pWeapon[m_eWeaponType]->Update(fTimeDelta);
+
+	if (KEY_TAP(KEY::L))
+		Calc_DamageGain(5.f);
 }
 
 void CPlayer::Late_Update(_float fTimeDelta)
@@ -562,6 +565,18 @@ HRESULT CPlayer::Ready_Effect()
 
 
 	return S_OK;
+}
+
+_bool CPlayer::Calc_DamageGain(_float fAtkDmg)
+{
+	if (fAtkDmg <= 0)
+		return false;
+
+	m_tPlayer_Stat->vGauge_Hp.x = max(0.f, m_tPlayer_Stat->vGauge_Hp.x - fAtkDmg);
+	//if (m_eStat.fHp <= 0.f)
+	//	m_pFsmCom->Change_State(HIT);
+
+	return true;
 }
 
 CPlayer * CPlayer::Create(ID3D11Device * pDevice, ID3D11DeviceContext * pContext)

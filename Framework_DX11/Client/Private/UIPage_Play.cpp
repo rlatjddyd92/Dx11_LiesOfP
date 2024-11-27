@@ -242,11 +242,11 @@ void CUIPage_Play::LU_Gauge_Update(_float fTimeDelta)
 {
 	const CPlayer::STAT_INFO& Info = GET_GAMEINTERFACE->Get_Player()->Get_Player_Stat();
 
-	m_vec_Group_Ctrl[_int(PART_GROUP::GROUP_HP_FRAME)]->fRatio = Info.vGauge_Hp.y / Info.vGauge_Hp.z;
-	m_vec_Group_Ctrl[_int(PART_GROUP::GROUP_HP_FILL)]->fRatio = Info.vGauge_Hp.x / Info.vGauge_Hp.z;
+	m_vec_Group_Ctrl[_int(PART_GROUP::GROUP_HP_FRAME)]->fRatio = Info.vGauge_Hp.z / Info.vGauge_Hp.w;
+	m_vec_Group_Ctrl[_int(PART_GROUP::GROUP_HP_FILL)]->fRatio = Info.vGauge_Hp.x / Info.vGauge_Hp.w;
 
-	m_vec_Group_Ctrl[_int(PART_GROUP::GROUP_ST_FRAME)]->fRatio = Info.vGauge_Stamina.y / Info.vGauge_Stamina.z;
-	m_vec_Group_Ctrl[_int(PART_GROUP::GROUP_ST_FILL)]->fRatio = Info.vGauge_Stamina.x / Info.vGauge_Stamina.z;
+	m_vec_Group_Ctrl[_int(PART_GROUP::GROUP_ST_FRAME)]->fRatio = Info.vGauge_Stamina.z / Info.vGauge_Stamina.w;
+	m_vec_Group_Ctrl[_int(PART_GROUP::GROUP_ST_FILL)]->fRatio = Info.vGauge_Stamina.x / Info.vGauge_Stamina.w;
 
 	_int iSP_Cell_Num = (_int)((_float)Info.vGauge_Region.z / (_float)Info.fRegion_Interval);
 	_int iSP_Cell_Filled = (_int)((_float)Info.vGauge_Region.x / (_float)Info.fRegion_Interval);
