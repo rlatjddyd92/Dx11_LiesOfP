@@ -24,14 +24,16 @@ HRESULT CLevel_Logo::Initialize()
 
 	m_pGameInstance->Play_BGM(TEXT("MU_MS_Title_Piano_03.wav"), g_fBGMVolume);
 
-	GET_GAMEINTERFACE->OpenMainPage(); // 메인 페이지 진입 
+	
 
 	return S_OK;
 }
 
 void CLevel_Logo::Update(_float fTimeDelta)
 {
-	if (GetKeyState(VK_RETURN) & 0x8000)
+	GET_GAMEINTERFACE->OpenMainPage(); // 메인 페이지 진입 
+
+	if ((GetKeyState(VK_RETURN) & 0x8000) || (GET_GAMEINTERFACE->Get_Start_Loading()))
 	{
 		if (FAILED(m_pGameInstance->Change_Level(LEVEL_LOADING, CLevel_Loading::Create(m_pDevice, m_pContext, LEVEL_GAMEPLAY))))
 			return;

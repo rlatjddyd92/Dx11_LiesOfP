@@ -407,7 +407,7 @@ void CUIManager::OpenMainPage()
 {
 	m_vecPage[_int(UIPAGE::PAGE_MAIN)]->Update(true);
 	m_vecPage[_int(UIPAGE::PAGE_MAIN)]->SetRender(true);
-
+	m_pUIPage_Main->Open_Main_Page();
 }
 
 void CUIManager::OpenLoadingPage()

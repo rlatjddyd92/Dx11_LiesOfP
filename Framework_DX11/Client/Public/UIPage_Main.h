@@ -48,7 +48,8 @@ public:
 	const vector<UPART*>& Get_UIPartInfo() { return m_vecPart; }
 	virtual HRESULT Ready_UIPart_Group_Control() override;
 
-	HRESULT Enter_Game();
+	HRESULT Open_Loading_Page();
+	void Open_Main_Page();
 
 protected:
 

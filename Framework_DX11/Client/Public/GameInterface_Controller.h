@@ -100,7 +100,8 @@ public: // 외부에서 매니저 접근
 	void Input_Drop_Item_Info(_int iIndex, _int iCount) { m_pUIManager->Input_Drop_Item_Info(iIndex, iCount); }
 
 	// 메인 조정 
-	HRESULT Open_Loading_Page() { return m_pUIManager->Enter_Game(); }
+	HRESULT Open_Loading_Page() { return m_pUIManager->Open_Loading_Page(); }
+	_bool Get_Start_Loading() { return m_pUIManager->Get_Start_Loading(); }
 
 	// 로딩바 조정 
 	void Set_Loading_Status(_wstring strMessage, _float fProgress) { m_pUIManager->Set_Loading_Status(strMessage, fProgress); }

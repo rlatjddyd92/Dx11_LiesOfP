@@ -90,7 +90,7 @@ public:
 				if (i <= _int(UIPAGE::PAGE_LOADING))
 				{
 					//m_vecPage[i]->SetUpdate(true);
-					m_vecPage[i]->SetRender(true);
+					//m_vecPage[i]->SetRender(true);
 				}
 				else
 				{
@@ -130,12 +130,13 @@ private:
 public:
 #pragma region Page_Main
 	void OpenMainPage();
-	HRESULT Enter_Game()
+	HRESULT Open_Loading_Page()
 	{
 		m_pUIPage_Loading->SetUpdate(true);
 		m_pUIPage_Loading->SetRender(true);
-		return m_pUIPage_Main->Enter_Game();
+		return m_pUIPage_Main->Open_Loading_Page();
 	}
+	_bool Get_Start_Loading() { return m_pUIPage_Loading->GetUpdate(); }
 #pragma endregion
 
 #pragma region Page_Loading

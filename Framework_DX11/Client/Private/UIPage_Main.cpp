@@ -108,14 +108,14 @@ HRESULT CUIPage_Main::Ready_UIPart_Group_Control()
 		if (m_vecPart[i]->iGroupIndex != -1)
 			m_vec_Group_Ctrl[m_vecPart[i]->iGroupIndex]->PartIndexlist.push_back(i);
 	}
-
-	m_bRender = true;
+	m_bUpdate = false;
+	m_bRender = false;
 	m_fTopPartMove = 1.f;
 
 	return S_OK;
 }
 
-HRESULT CUIPage_Main::Enter_Game()
+HRESULT CUIPage_Main::Open_Loading_Page()
 {
 
 		m_bRender = false;
@@ -126,9 +126,19 @@ HRESULT CUIPage_Main::Enter_Game()
 
 }
 
+void CUIPage_Main::Open_Main_Page()
+{
+	m_vecPageAction[_int(PAGEACTION::ACTION_ACTIVE)] = true;
+	m_bUpdate = true;
+	m_bRender = true;
+}
+
 
 void CUIPage_Main::Check_Mouse(_float fTimeDelta)
 {
+	if (m_vecPageAction[_int(PAGEACTION::ACTION_ACTIVE)] == false)
+		return;
+
 	const UPART* pMouse = m_vecPart[__super::Get_Front_PartIndex_In_Control(_int(PART_GROUP::MAIN_MOUSE))];
 
 	if (GET_GAMEINTERFACE->CheckMouse(pMouse->fPosition, pMouse->fSize).x != -1.f)
@@ -138,7 +148,7 @@ void CUIPage_Main::Check_Mouse(_float fTimeDelta)
 
 		if (KEY_TAP(KEY::LBUTTON))
 		{
-			Enter_Game();
+			Open_Loading_Page(); // 로딩 진행 
 		}
 	}
 	else
@@ -146,6 +156,7 @@ void CUIPage_Main::Check_Mouse(_float fTimeDelta)
 		m_fMouse_Effect_Ratio -= fTimeDelta;
 		m_fMouse_Effect_Ratio = max(m_fMouse_Effect_Ratio, 0.f);
 	}
+
 }
 
 void CUIPage_Main::Main_Update(_float fTimeDelta)
