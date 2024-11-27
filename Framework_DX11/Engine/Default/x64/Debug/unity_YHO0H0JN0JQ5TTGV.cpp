@@ -107,9 +107,6 @@
 #include "C:\Users\olivi\GitHub\Dx11_LiesOfP\Framework_DX11\Engine\private\Navigation.cpp"
 
 
-#include "C:\Users\olivi\GitHub\Dx11_LiesOfP\Framework_DX11\Engine\Private\ObjectOctree.cpp"
-
-
 #include "C:\Users\olivi\GitHub\Dx11_LiesOfP\Framework_DX11\Engine\Private\Object_Manager.cpp"
 
 

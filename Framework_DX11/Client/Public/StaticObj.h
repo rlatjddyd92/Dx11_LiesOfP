@@ -45,7 +45,7 @@ public:
 	_bool		m_isInstance = { false };
 	_bool		m_bShadow = { false };
 
-	_float		m_fCullDistance = {40.f};
+	_float		m_fCullDistance = {50.f};
 
 	INSTANCE_DATA		m_tInstanceData = {};
 

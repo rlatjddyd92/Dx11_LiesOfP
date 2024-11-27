@@ -42,6 +42,9 @@ private:
 	_bool m_bCollision = false;
 	_float m_fCollisonTimer = { 0.f };
 
+	static int iStaticIndex;
+	_int m_iIndex = { 0 };
+
 private:
 	HRESULT Ready_Components(OBJECT_DEFAULT_DESC* pDesc);
 
