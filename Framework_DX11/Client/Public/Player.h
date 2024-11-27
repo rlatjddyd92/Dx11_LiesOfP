@@ -166,6 +166,7 @@ public:
 	virtual _bool	Calc_DamageGain(_float fAtkDmg);
 
 
+
 private:
 	vector<class CEffect_Container*> m_Effects;
 
@@ -177,8 +178,10 @@ private:
 	_bool				m_isParry = { false };
 	_bool				m_isLockOn = { false };
 	_bool				m_isInvicible = { false };
+	_bool				m_isRecoveryStamina = { false };
 
 	_float				m_fGuardTime = {};
+	_float				m_fRecoveryStaminaTime = { 0.f };
 
 	CPawn*				m_pTargetMonster = { nullptr };
 
