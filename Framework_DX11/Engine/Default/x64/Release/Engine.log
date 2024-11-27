@@ -1,10 +1,32 @@
-﻿  unity_MBVEM21H7NKP5WD6.cpp
+﻿FXC : warning X4717: Effects deprecated for D3DCompiler_47
+  
+  compilation object save succeeded; see D:\GitProject\Dx11_LiesOfP\Framework_DX11\Engine\Bin\Shader_Distortion.cso
+  unity_SH3XU96TB0GDS8ME.cpp
 C:\Program Files\Microsoft Visual Studio\2022\Community\VC\Tools\MSVC\14.38.33130\include\filesystem(12): warning STL4038: The contents of <filesystem> are available only with C++17 or later.
+D:\GitProject\Dx11_LiesOfP\Framework_DX11\Engine\Private\Octree.cpp(52,9): warning C4101: 'fBack' :참조되지 않은 지역 변수입니다.
+  (소스 파일 'x64/Release/unity_SH3XU96TB0GDS8ME.cpp'을(를) 컴파일하는 중)
+  
+D:\GitProject\Dx11_LiesOfP\Framework_DX11\Engine\Private\Octree.cpp(50,9): warning C4101: 'fBottom' :참조되지 않은 지역 변수입니다.
+  (소스 파일 'x64/Release/unity_SH3XU96TB0GDS8ME.cpp'을(를) 컴파일하는 중)
+  
+D:\GitProject\Dx11_LiesOfP\Framework_DX11\Engine\Private\Octree.cpp(49,9): warning C4101: 'fTop' :참조되지 않은 지역 변수입니다.
+  (소스 파일 'x64/Release/unity_SH3XU96TB0GDS8ME.cpp'을(를) 컴파일하는 중)
+  
+D:\GitProject\Dx11_LiesOfP\Framework_DX11\Engine\Private\Octree.cpp(47,9): warning C4101: 'fLeft' :참조되지 않은 지역 변수입니다.
+  (소스 파일 'x64/Release/unity_SH3XU96TB0GDS8ME.cpp'을(를) 컴파일하는 중)
+  
+D:\GitProject\Dx11_LiesOfP\Framework_DX11\Engine\Private\Octree.cpp(48,9): warning C4101: 'fRight' :참조되지 않은 지역 변수입니다.
+  (소스 파일 'x64/Release/unity_SH3XU96TB0GDS8ME.cpp'을(를) 컴파일하는 중)
+  
+D:\GitProject\Dx11_LiesOfP\Framework_DX11\Engine\Private\Octree.cpp(51,9): warning C4101: 'fFront' :참조되지 않은 지역 변수입니다.
+  (소스 파일 'x64/Release/unity_SH3XU96TB0GDS8ME.cpp'을(를) 컴파일하는 중)
+  
      ..\Bin\Engine.lib 라이브러리 및 ..\Bin\Engine.exp 개체를 생성하고 있습니다.
   코드를 생성하고 있습니다.
-  2 of 5056 functions (<0.1%) were compiled, the rest were copied from previous compilation.
-    0 functions were new in current compilation
-    14 functions had inline decision re-evaluated but remain unchanged
+D:\GitProject\Dx11_LiesOfP\Framework_DX11\Engine\Public\PipeLine.h(27): warning C4172: 지역 변수 또는 임시의 주소를 반환하고 있습니다.
+  5019 of 5056 functions (99.3%) were compiled, the rest were copied from previous compilation.
+    33 functions were new in current compilation
+    5 functions had inline decision re-evaluated but remain unchanged
   코드를 생성했습니다.
 Effects11.lib(EffectAPI.obj) : warning LNK4099: '' PDB를 'Effects11.lib(EffectAPI.obj)' 또는 ''에서 찾을 수 없습니다. 디버그 정보가 없는 것처럼 개체를 링크합니다.
 Effects11.lib(EffectNonRuntime.obj) : warning LNK4099: '' PDB를 'Effects11.lib(EffectNonRuntime.obj)' 또는 ''에서 찾을 수 없습니다. 디버그 정보가 없는 것처럼 개체를 링크합니다.
@@ -118,7 +140,6 @@ PhysXPvdSDK_static_64.lib(PxPvdProfileZoneClient.obj) : warning LNK4099: '' PDB�
   ..\Public\Mesh.h
   ..\Public\Model.h
   ..\Public\Navigation.h
-  ..\Public\ObjectOctree.h
   ..\Public\Object_Manager.h
   ..\Public\Occludee.h
   ..\Public\Octree.h
@@ -640,7 +661,7 @@ PhysXPvdSDK_static_64.lib(PxPvdProfileZoneClient.obj) : warning LNK4099: '' PDB�
   ..\Public\PhysX\vehicle2\wheel\PxVehicleWheelHelpers.h
   ..\Public\PhysX\vehicle2\wheel\PxVehicleWheelParams.h
   ..\Public\PhysX\vehicle2\wheel\PxVehicleWheelStates.h
-  564개 파일이 복사되었습니다.
+  563개 파일이 복사되었습니다.
   ..\Bin\Engine.dll
   1개 파일이 복사되었습니다.
   ..\Bin\ShaderFiles\Shader_Bloom.hlsl
