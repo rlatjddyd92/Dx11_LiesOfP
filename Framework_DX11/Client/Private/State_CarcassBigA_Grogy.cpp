@@ -25,12 +25,12 @@ HRESULT CState_CarcassBigA_Grogy::Start_State(void* pArg)
     if (*m_pTrackPos > 0) 
     {
         ++m_iAnimCnt;
-        m_pMonster->Change_Animation(17 - m_iAnimCnt, false, 0);
+        m_pMonster->Change_Animation(AN_GROGY_START - m_iAnimCnt, false, 0);
         m_fGrogyTime = (_float)*m_pTrackPos;
     }
     else
     {
-        m_pMonster->Change_Animation(17, false);
+        m_pMonster->Change_Animation(AN_GROGY_START, false);
     }  //애니메이션의 시작부터 끝의 루트본의 이동값이 달라지면 안됨.
 
     return S_OK;

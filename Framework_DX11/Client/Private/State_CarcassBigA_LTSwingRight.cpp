@@ -24,7 +24,8 @@ HRESULT CState_CarcassBigA_LTSwingRight::Start_State(void* pArg)
 {
     m_pMonster->Change_Animation(AN_LTSWINGRIGHT, false, 0.1f, 0, true);
 
-    m_pMonster->Set_RimLightColor(_Vec4{ 0.9f, 0.f, 0.f, 1.f });
+    m_fGoalRimAlpha = 1.f;
+    m_fCurtRimAlpha = 0.f;
     return S_OK;
 }
 
@@ -36,12 +37,13 @@ void CState_CarcassBigA_LTSwingRight::Update(_float fTimeDelta)
     }
 
     Collider_Check();
+    Update_Rimlight();
 
 }
 
 void CState_CarcassBigA_LTSwingRight::End_State()
 {
-    m_pMonster->Set_RimLightColor(_Vec4{ 0.f, 0.f, 0.f, 0.f });
+
 }
 
 _bool CState_CarcassBigA_LTSwingRight::End_Check()
@@ -66,9 +68,18 @@ void CState_CarcassBigA_LTSwingRight::Collider_Check()
     {
         if (CurTrackPos > 85.f)
         {
-            m_pMonster->Set_RimLightColor(_Vec4{ 0.f, 0.f, 0.f, 0.f });
+            m_fGoalRimAlpha = 0.f;
             m_bResetRim = true;
         }
+    }
+}
+
+void CState_CarcassBigA_LTSwingRight::Update_Rimlight()
+{
+    if (m_fCurtRimAlpha != m_fGoalRimAlpha)
+    {
+        m_fCurtRimAlpha += (m_fGoalRimAlpha - m_fCurtRimAlpha) / 10;
+        m_pMonster->Set_RimLightColor(_Vec4{ 0.9f, 0.f, 0.f, m_fCurtRimAlpha });
     }
 }
 
