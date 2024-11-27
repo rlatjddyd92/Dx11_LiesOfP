@@ -63,17 +63,25 @@ public:
 	virtual HRESULT Ready_UIPart_Group_Control() override;
 
 public:
-	// æ∆¿Ã≈€ Focusing 
-	
+	void Show_Focus(_Vec2 vItemCellPos, _Vec2 vItemCellSize);
+	void Off_Focus(_Vec2 vItemCellPos, _Vec2 vItemCellSize);
+
+	void Show_NewMark(_Vec2 vItemCellPos, _Vec2 vItemCellSize);
+
+	void Show_ItemAction(_Vec2 vItemCellPos, _Vec2 vItemCellSize, ITEM_FUNC eFunc0, ITEM_FUNC eFunc1 = ITEM_FUNC::FUNC_END, ITEM_FUNC eFunc2 = ITEM_FUNC::FUNC_END, ITEM_FUNC eFunc3 = ITEM_FUNC::FUNC_END);
+	void Off_ItemAction();
+
+	void Action_ItemAction(_float fTimeDelta);
+
 
 protected:
+	_bool m_bFocus = false;
+	_float m_fFocus_Fire_Move_Ratio = 0.f;
 
+	queue<_Vec2> m_queueNewMarkPos;
 
-
-
-
-
-
+	ITEM_FUNC m_eActive_Func[4] = { ITEM_FUNC::FUNC_END, ITEM_FUNC::FUNC_END ,ITEM_FUNC::FUNC_END ,ITEM_FUNC::FUNC_END };
+	_wstring m_strFuncName[_int(ITEM_FUNC::FUNC_END)];
 
 public:
 	static CUIPage_ItemInfo* Create(ID3D11Device* pDevice, ID3D11DeviceContext* pContext);

@@ -85,7 +85,7 @@ void CGameInterface_Controller::Release_GameInterface()
 	Safe_Release(m_pItem_Manager);
 	Safe_Release(m_pPlayer_Stat_Manager);
 	m_pPlayer = nullptr;
-	
+
 	GET_GAMEINTERFACE->Destroy_Instance();
 }
 

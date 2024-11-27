@@ -8,7 +8,7 @@
 CUIPage_Main::CUIPage_Main(ID3D11Device* pDevice, ID3D11DeviceContext* pContext)
 	: CUIPage{ pDevice, pContext }
 {
-	
+
 }
 
 CUIPage_Main::CUIPage_Main(const CUIPage_Main& Prototype)
@@ -62,7 +62,7 @@ void CUIPage_Main::Late_Update(_float fTimeDelta)
 {
 	if (m_fOpening_Progress < 1.f)
 		m_fOpening_Progress += fTimeDelta * 0.5f;
-	
+
 	if (m_fOpening_Progress > 1.f)
 		m_fOpening_Progress = 1.f;
 
@@ -115,6 +115,20 @@ HRESULT CUIPage_Main::Ready_UIPart_Group_Control()
 	return S_OK;
 }
 
+HRESULT CUIPage_Main::Enter_Game()
+{
+	if (FAILED(m_pGameInstance->Change_Level(LEVEL_LOADING, CLevel_Loading::Create(m_pDevice, m_pContext, LEVEL_GAMEPLAY))))
+		return E_FAIL;
+	else
+	{
+		m_bRender = false;
+		m_bUpdate = false;
+		m_vecPageAction[_int(PAGEACTION::ACTION_ACTIVE)] = false;
+		m_vecPageAction[_int(PAGEACTION::ACTION_INACTIVE)] = true;
+		return S_OK;
+	}
+}
+
 
 void CUIPage_Main::Check_Mouse(_float fTimeDelta)
 {
@@ -127,15 +141,7 @@ void CUIPage_Main::Check_Mouse(_float fTimeDelta)
 
 		if (KEY_TAP(KEY::LBUTTON))
 		{
-			if (FAILED(m_pGameInstance->Change_Level(LEVEL_LOADING, CLevel_Loading::Create(m_pDevice, m_pContext, LEVEL_GAMEPLAY))))
-				return;
-			else
-			{
-				m_bRender = false;
-				m_bUpdate = false;
-				m_vecPageAction[_int(PAGEACTION::ACTION_ACTIVE)] = false;
-				m_vecPageAction[_int(PAGEACTION::ACTION_INACTIVE)] = true;
-			}
+			Enter_Game();
 		}
 	}
 	else
@@ -184,7 +190,7 @@ void CUIPage_Main::Main_Update(_float fTimeDelta)
 						m_vecPart[iter]->fTextureColor.w = fOrigin_Alpha;
 					}
 				}
-			}	
+			}
 		}
 	}
 	else

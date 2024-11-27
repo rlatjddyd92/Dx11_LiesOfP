@@ -65,10 +65,16 @@ HRESULT CUIManager::Initialize_Prototype()
 			iterIndex.resize(2);
 	}
 
+
 	m_vecTestPage_Pos.resize(_int(TEST_PAGE_NAME::NAME_END));
 	m_vecTestPage_Size.resize(_int(TEST_PAGE_NAME::NAME_END));
 
+
 	m_pTestData = new TESTDATA;
+
+
+
+
 
 	return S_OK;
 }
@@ -119,7 +125,7 @@ HRESULT CUIManager::Render()
 
 #endif // _DEBUG
 
-	
+
 	return S_OK;
 }
 
@@ -143,7 +149,7 @@ void CUIManager::Update_UIControl(_float fTimeDelta)
 
 void CUIManager::Update_TestPage(_float fTimeDelta)
 {
-	
+
 
 }
 
@@ -318,7 +324,7 @@ void CUIManager::UIControl_Main(_float fTimeDelta)
 		m_pUIPage_Loading->SetUpdate(true);
 		m_pUIPage_Loading->SetRender(true);
 	}
-		
+
 	// 메인 페이지 필요
 }
 
@@ -426,25 +432,25 @@ void CUIManager::ShowTestPage(TEST_PAGE_NAME eName, _wstring DataNameA, TEST_PAG
 		return;
 
 	if (ValueA)
-		InputTestPageInfo(eName, DataNameA, eTypeA, ValueA,0);
+		InputTestPageInfo(eName, DataNameA, eTypeA, ValueA, 0);
 	if (ValueB)
-		InputTestPageInfo(eName, DataNameB, eTypeB, ValueB,1);
+		InputTestPageInfo(eName, DataNameB, eTypeB, ValueB, 1);
 	if (ValueC)
-		InputTestPageInfo(eName, DataNameC, eTypeC, ValueC,2);
+		InputTestPageInfo(eName, DataNameC, eTypeC, ValueC, 2);
 	if (ValueD)
-		InputTestPageInfo(eName, DataNameD, eTypeD, ValueD,3);
+		InputTestPageInfo(eName, DataNameD, eTypeD, ValueD, 3);
 	if (ValueE)
-		InputTestPageInfo(eName, DataNameE, eTypeE, ValueE,4);
+		InputTestPageInfo(eName, DataNameE, eTypeE, ValueE, 4);
 	if (ValueF)
-		InputTestPageInfo(eName, DataNameF, eTypeF, ValueF,5);
+		InputTestPageInfo(eName, DataNameF, eTypeF, ValueF, 5);
 	if (ValueG)
-		InputTestPageInfo(eName, DataNameG, eTypeG, ValueG,6);
+		InputTestPageInfo(eName, DataNameG, eTypeG, ValueG, 6);
 	if (ValueH)
-		InputTestPageInfo(eName, DataNameH, eTypeH, ValueH,7);
+		InputTestPageInfo(eName, DataNameH, eTypeH, ValueH, 7);
 	if (ValueI)
-		InputTestPageInfo(eName, DataNameI, eTypeI, ValueI,8);
+		InputTestPageInfo(eName, DataNameI, eTypeI, ValueI, 8);
 	if (ValueJ)
-		InputTestPageInfo(eName, DataNameJ, eTypeJ, ValueJ,9);
+		InputTestPageInfo(eName, DataNameJ, eTypeJ, ValueJ, 9);
 
 
 
@@ -496,9 +502,9 @@ HRESULT CUIManager::Load_UIDataFile()
 
 			m_vecPage[i]->Ready_UIPart_Group_Control();
 		}
-		else 
+		else
 			MSG_BOX(TEXT("UIPage 제작 필요"));
-		
+
 	}
 
 	CloseHandle(hFile);
@@ -611,7 +617,7 @@ HRESULT CUIManager::Load_UIDataFile_Part(HANDLE handle, DWORD* dword, _int iInde
 
 		if (!pNew->bIsItem)
 			m_pUIRender_Batching->Make_Texture(pNew->iTexture_Index);
-		else 
+		else
 			m_pUIRender_Batching->Make_Texture_Item(pNew->iTexture_Index);
 		_wstring strName = {};
 		while (true)
@@ -754,7 +760,7 @@ _Vec2 CUIManager::CheckMouse(_Vec2 fPos, _Vec2 fSize)
 		if (ptMouse.x < fPos.x + (fSize.x * 0.5f))
 			if (ptMouse.y > fPos.y - (fSize.y * 0.5f))
 				if (ptMouse.y < fPos.y + (fSize.y * 0.5f))
-					return { (_float)ptMouse.x, (_float)ptMouse.y};
+					return { (_float)ptMouse.x, (_float)ptMouse.y };
 
 	return { -1.f,-1.f };
 }

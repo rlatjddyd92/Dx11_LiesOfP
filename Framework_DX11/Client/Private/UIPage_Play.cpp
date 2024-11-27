@@ -5,13 +5,13 @@
 #include "GameInterface_Controller.h"
 
 CUIPage_Play::CUIPage_Play(ID3D11Device* pDevice, ID3D11DeviceContext* pContext)
-    : CUIPage{ pDevice, pContext }
+	: CUIPage{ pDevice, pContext }
 {
-	
+
 }
 
 CUIPage_Play::CUIPage_Play(const CUIPage_Play& Prototype)
-    : CUIPage{ Prototype }
+	: CUIPage{ Prototype }
 {
 }
 
@@ -37,7 +37,7 @@ HRESULT CUIPage_Play::Initialize_Prototype()
 
 	m_bIsBatching = false;
 
-    return S_OK;
+	return S_OK;
 }
 
 HRESULT CUIPage_Play::Initialize(void* pArg)
@@ -57,7 +57,7 @@ void CUIPage_Play::Update(_float fTimeDelta)
 
 	__super::Update(fTimeDelta);
 
-	
+
 }
 
 void CUIPage_Play::Late_Update(_float fTimeDelta)
@@ -67,15 +67,15 @@ void CUIPage_Play::Late_Update(_float fTimeDelta)
 	LD_Arm_Update(fTimeDelta);
 	RU_Coin_Update(fTimeDelta);
 	RD_Weapon_Update(fTimeDelta);
-	
-	
-	for(auto& iter : m_vec_Group_Ctrl)
+
+
+	for (auto& iter : m_vec_Group_Ctrl)
 		__super::UpdatePart_ByControl(iter);
 
 	Boss_Hp_Update(fTimeDelta);
 	__super::Late_Update(fTimeDelta);
 
-	
+
 
 	PlayInfo_Update(fTimeDelta);
 	m_bCan_InterAction = true;
@@ -84,7 +84,7 @@ void CUIPage_Play::Late_Update(_float fTimeDelta)
 
 HRESULT CUIPage_Play::Render()
 {
-    return S_OK;
+	return S_OK;
 }
 
 void CUIPage_Play::OpenAction()
@@ -95,7 +95,7 @@ void CUIPage_Play::OpenAction()
 void CUIPage_Play::CloseAction()
 {
 	__super::CloseAction();
-	
+
 }
 
 CHECK_MOUSE CUIPage_Play::Check_Page_Action(_float fTimeDelta)
@@ -106,7 +106,7 @@ CHECK_MOUSE CUIPage_Play::Check_Page_Action(_float fTimeDelta)
 	Action_Arm(fTimeDelta);
 	Action_Weapon(fTimeDelta);
 
-	
+
 
 	return CHECK_MOUSE::MOUSE_NONE;
 }
@@ -117,7 +117,7 @@ HRESULT CUIPage_Play::Ready_UIPart_Group_Control()
 
 	m_vec_Group_Ctrl.resize(_int(PART_GROUP::GROUP_END));
 
-	for(auto& iter : m_vec_Group_Ctrl)
+	for (auto& iter : m_vec_Group_Ctrl)
 		iter = new UG_CTRL;
 
 	for (_int i = 0; i < m_vecPart.size(); ++i)
@@ -131,7 +131,7 @@ HRESULT CUIPage_Play::Ready_UIPart_Group_Control()
 	__super::Array_Control(_int(PART_GROUP::GROUP_DROP_STATIC), _int(PART_GROUP::GROUP_DEBUFF_FILL), CTRL_COMMAND::COM_RENDER, false);
 
 	m_iWeapon_Equip_0_Symbol = m_vecPart[m_vec_Group_Ctrl[_int(PART_GROUP::GROUP_WEAPON_EQUIP_NUM)]->PartIndexlist.front()]->iTexture_Index;
-	
+
 	return S_OK;
 }
 
@@ -142,7 +142,7 @@ HRESULT CUIPage_Play::Render_PlayInfo(CUIRender_Client* pRender_Client)
 
 void CUIPage_Play::Action_Potion_Tool(_float fTimeDelta)
 {
-	if ((!m_bIsBagOpen)&&(KEY_TAP(KEY::T)))
+	if ((!m_bIsBagOpen) && (KEY_TAP(KEY::T)))
 	{
 		if (m_vec_Group_Ctrl[_int(PART_GROUP::GROUP_SELECT_CELL)]->fRatio != 0.f)
 		{
@@ -243,9 +243,11 @@ void CUIPage_Play::LU_Gauge_Update(_float fTimeDelta)
 	const CPlayer::STAT_INFO& Info = GET_GAMEINTERFACE->Get_Player()->Get_Player_Stat();
 
 	m_vec_Group_Ctrl[_int(PART_GROUP::GROUP_HP_FRAME)]->fRatio = Info.vGauge_Hp.z / Info.vGauge_Hp.w;
+	m_vec_Group_Ctrl[_int(PART_GROUP::GROUP_PLAYER_HP_SECOND)]->fRatio = Info.vGauge_Hp.y / Info.vGauge_Hp.w;
 	m_vec_Group_Ctrl[_int(PART_GROUP::GROUP_HP_FILL)]->fRatio = Info.vGauge_Hp.x / Info.vGauge_Hp.w;
 
 	m_vec_Group_Ctrl[_int(PART_GROUP::GROUP_ST_FRAME)]->fRatio = Info.vGauge_Stamina.z / Info.vGauge_Stamina.w;
+	m_vec_Group_Ctrl[_int(PART_GROUP::GROUP_PLAYER_STAMINA_SECOND)]->fRatio = Info.vGauge_Stamina.y / Info.vGauge_Stamina.w;
 	m_vec_Group_Ctrl[_int(PART_GROUP::GROUP_ST_FILL)]->fRatio = Info.vGauge_Stamina.x / Info.vGauge_Stamina.w;
 
 	_int iSP_Cell_Num = (_int)((_float)Info.vGauge_Region.z / (_float)Info.fRegion_Interval);
@@ -284,12 +286,12 @@ void CUIPage_Play::LD_Potion_Tool_Update(_float fTimeDelta)
 
 	_int iPotion_Select = GET_GAMEINTERFACE->Get_Potion_Select();
 	deque<const CItem_Manager::ITEM*> dequeTexture_Index_Potion;
-	
+
 	for (_int i = 0; i < 3; ++i)
 	{
 		if (i == iPotion_Select)
 			dequeTexture_Index_Potion.push_front(GET_GAMEINTERFACE->Get_Equip_Item_Info(EQUIP_SLOT(i + _int(EQUIP_SLOT::EQUIP_USING_TOP_0))));
-		else 
+		else
 			dequeTexture_Index_Potion.push_back(GET_GAMEINTERFACE->Get_Equip_Item_Info(EQUIP_SLOT(i + _int(EQUIP_SLOT::EQUIP_USING_TOP_0))));
 	}
 
@@ -330,7 +332,7 @@ void CUIPage_Play::LD_Potion_Tool_Update(_float fTimeDelta)
 		{
 			m_vecPart[m_vec_Group_Ctrl[_int(PART_GROUP::GROUP_POTION_QUEUE_ITEM)]->PartIndexlist.back()]->iTexture_Index = pNow->iTexture_Index;
 		}
-			
+
 	}
 
 	_int iTool_Select = GET_GAMEINTERFACE->Get_Tool_Select();
@@ -383,8 +385,8 @@ void CUIPage_Play::LD_Potion_Tool_Update(_float fTimeDelta)
 		{
 			m_vecPart[m_vec_Group_Ctrl[_int(PART_GROUP::GROUP_TOOL_QUEUE_ITEM)]->PartIndexlist.back()]->iTexture_Index = pNow->iTexture_Index;
 		}
-			
-	}		
+
+	}
 }
 
 void CUIPage_Play::LD_Bag_Update(_float fTimeDelta)
@@ -394,7 +396,7 @@ void CUIPage_Play::LD_Bag_Update(_float fTimeDelta)
 
 	vector<const CItem_Manager::ITEM*> vecItem;
 
-	for (_int i = 0; i < 4; ++ i)
+	for (_int i = 0; i < 4; ++i)
 	{
 		const CItem_Manager::ITEM* pNow = GET_GAMEINTERFACE->Get_Equip_Item_Info(EQUIP_SLOT(i + _int(EQUIP_SLOT::EQUIP_USING_BAG_0)));
 		vecItem.push_back(pNow);
@@ -409,7 +411,7 @@ void CUIPage_Play::LD_Bag_Update(_float fTimeDelta)
 	}
 
 	iIndex = 0;
-		
+
 	for (auto& iter : m_vec_Group_Ctrl[_int(PART_GROUP::GROUP_BAG_COUNT)]->PartIndexlist)
 	{
 		m_vecPart[iter]->strText = to_wstring(vecItem[iIndex]->iCount);
@@ -466,6 +468,7 @@ void CUIPage_Play::Boss_Hp_Update(_float fTimeDelta)
 
 		__super::Get_Front_Part_In_Control(_int(PART_GROUP::GROUP_BOSS_NAME))->strText = m_strBossName;
 		__super::Get_Front_Part_In_Control(_int(PART_GROUP::GROUP_BOSS_HP_FILL))->fRatio = _float(m_fBoss_Hp_Now) / _float(m_fBoss_Hp_Max);
+		__super::Get_Front_Part_In_Control(_int(PART_GROUP::GROUP_BOSS_HP_SECOND))->fRatio = 0.f; // <- 임시 수치 
 		__super::Get_Front_Part_In_Control(_int(PART_GROUP::GROUP_BOSS_HP_FILL))->MovePart(__super::Get_Front_Part_In_Control(_int(PART_GROUP::GROUP_BOSS_NAME))->fPosition, fTimeDelta);
 	}
 }
@@ -504,7 +507,7 @@ void CUIPage_Play::Add_Render_Info_DropInfo(_float fTimeDelta)
 					m_fTopPartMove = (m_fDrop_Item_ShowTime - (*iter)->fLifeTime) / m_fEmerge_Effect_Time;
 				else if ((*iter)->fLifeTime < m_fEmerge_Effect_Time)
 					m_fTopPartMove = (*iter)->fLifeTime / m_fEmerge_Effect_Time;
-				
+
 
 				for (auto& iterIndex : m_vec_Group_Ctrl[i]->PartIndexlist)
 				{
@@ -558,7 +561,7 @@ void CUIPage_Play::Add_Render_Info_BuffInfo(_float fTimeDelta)
 
 					__super::Get_Front_Part_In_Control(_int(PART_GROUP::GROUP_DEBUFF_FILL))->MovePart(vPos, fTimeDelta);
 				}
-					
+
 
 				for (auto& iterIndex : m_vec_Group_Ctrl[j]->PartIndexlist)
 				{

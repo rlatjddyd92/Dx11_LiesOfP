@@ -88,7 +88,7 @@ public: // 외부에서 매니저 접근
 
 	void Set_Scroll_Y_Offset(SCROLL_AREA eArea, _float fOffset) { m_pUIManager->Set_Scroll_Y_Offset(eArea, fOffset); }
 
-// 직교 UI 요청 
+	// 직교 UI 요청 
 	void Register_Pointer_Into_OrthoUIPage(UI_ORTHO_OBJ_TYPE eType, void* pObj) { m_pUIManager->Register_Pointer_Into_OrthoUIPage(eType, pObj); }
 
 	// 보스 체력바 
@@ -98,6 +98,9 @@ public: // 외부에서 매니저 접근
 
 	// 아이템 획득 정보 
 	void Input_Drop_Item_Info(_int iIndex, _int iCount) { m_pUIManager->Input_Drop_Item_Info(iIndex, iCount); }
+
+	// 메인 조정 
+	HRESULT Enter_Game() { return m_pUIManager->Enter_Game(); }
 
 	// 로딩바 조정 
 	void Set_Loading_Status(_wstring strMessage, _float fProgress) { m_pUIManager->Set_Loading_Status(strMessage, fProgress); }

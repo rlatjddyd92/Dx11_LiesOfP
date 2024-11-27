@@ -64,12 +64,12 @@ public:
 	void Set_Scroll_Area(SCROLL_AREA eArea, _Vec2 vPos, _Vec2 vSize) { m_pUIRender_Batching->Set_Scroll_Area(eArea, vPos, vSize); }
 	void Select_Scroll_Area(SCROLL_AREA eArea) { m_pUIRender_Batching->Select_Scroll_Area(eArea); }
 
-	void SetIngame(_bool bTrue) 
-	{ 
+	void SetIngame(_bool bTrue)
+	{
 		m_bIsIngame = bTrue;
 		if (bTrue)
 		{
-			for (_int i =0; i < m_vecPage.size(); ++i)
+			for (_int i = 0; i < m_vecPage.size(); ++i)
 			{
 				if (i <= _int(UIPAGE::PAGE_LOADING))
 				{
@@ -90,7 +90,7 @@ public:
 				if (i <= _int(UIPAGE::PAGE_LOADING))
 				{
 					//m_vecPage[i]->SetUpdate(true);
-					//m_vecPage[i]->SetRender(true);
+					m_vecPage[i]->SetRender(true);
 				}
 				else
 				{
@@ -99,8 +99,8 @@ public:
 				}
 			}
 		}
-	
-	
+
+
 	} // 매니저에 게임 입장 / 나가기 상태 알림
 
 	// 아이템 획득 
@@ -108,7 +108,7 @@ public:
 
 	// 보스 체력바 
 	void Activate_Boss_Hp_Bar(_bool bActive) { m_pUIPage_Play->Activate_Boss_Hp_Bar(bActive); }
-	void Set_Boss_Hp_Bar_Info(_wstring strName, _float HpNow, _float HpMax) { m_pUIPage_Play->Set_Boss_Hp_Bar_Info(strName, HpNow, HpMax);}
+	void Set_Boss_Hp_Bar_Info(_wstring strName, _float HpNow, _float HpMax) { m_pUIPage_Play->Set_Boss_Hp_Bar_Info(strName, HpNow, HpMax); }
 
 	// 로딩바 조정 
 	void Set_Loading_Status(_wstring strMessage, _float fProgress) { m_pUIPage_Loading->Set_Loading_Status(strMessage, fProgress); }
@@ -130,6 +130,12 @@ private:
 public:
 #pragma region Page_Main
 	void OpenMainPage();
+	HRESULT Enter_Game()
+	{
+		m_pUIPage_Loading->SetUpdate(true);
+		m_pUIPage_Loading->SetRender(true);
+		return m_pUIPage_Main->Enter_Game();
+	}
 #pragma endregion
 
 #pragma region Page_Loading
@@ -186,7 +192,7 @@ private:
 	void OpenPage(UIPAGE ePage); // 열렸거나 열리는 중이면 무시하고 아니면 연다 
 	void ClosePage(UIPAGE ePage); // 닫혔거나 닫히는 중이면 무시하고 아니면 닫는다 
 
-	
+
 
 private:
 	vector<CUIPage*> m_vecPage; // <- 렌더러 참조용

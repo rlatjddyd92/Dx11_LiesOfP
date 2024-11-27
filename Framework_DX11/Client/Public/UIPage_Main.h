@@ -48,8 +48,10 @@ public:
 	const vector<UPART*>& Get_UIPartInfo() { return m_vecPart; }
 	virtual HRESULT Ready_UIPart_Group_Control() override;
 
+	HRESULT Enter_Game();
+
 protected:
-	
+
 	void Check_Mouse(_float fTimeDelta);
 
 	void Main_Update(_float fTimeDelta);

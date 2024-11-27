@@ -42,7 +42,7 @@ public:
 		GROUP_POTION_COUNT,
 		GROUP_POTION_QUEUE_BACK,
 		GROUP_POTION_QUEUE_ITEM,
-		
+
 		GROUP_TOOL_ITEM,
 		GROUP_TOOL_COUNT,
 		GROUP_TOOL_QUEUE_BACK,
@@ -132,6 +132,11 @@ public:
 		GROUP_BOSS_STATIC,
 		GROUP_BOSS_HP_FILL,
 
+		// 보조
+		GROUP_PLAYER_HP_SECOND,
+		GROUP_PLAYER_STAMINA_SECOND,
+		GROUP_BOSS_HP_SECOND,
+
 		GROUP_END
 	};
 
@@ -191,7 +196,7 @@ public:
 	// 외부 -> 스탯 매니저 -> UI 매니저(Page_Play)
 
 	// 좌하단 포션/도구 
-	
+
 
 private:
 	void Action_Potion_Tool(_float fTimeDelta);
