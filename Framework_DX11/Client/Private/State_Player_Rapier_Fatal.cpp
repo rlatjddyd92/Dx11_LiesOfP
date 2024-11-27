@@ -167,18 +167,18 @@ void CState_Player_Rapier_Fatal::Control_Effect(_int iFrame)
 {
     if (!m_isActiveEffect[0] && iFrame == m_iColliderStartFrame[0])
     {
-        m_pPlayer->Active_Effect(TEXT("Player_Attack_Rapier_StormStab_First"));
+        m_pPlayer->Active_Effect(CPlayer::RAPIER_TRAIL_FIRST);
         m_isActiveEffect[0] = true;
     }
-    else if (!m_isActiveEffect[1] && iFrame == m_iColliderStartFrame[4])
+    else if (!m_isActiveEffect[1] && iFrame == m_iColliderStartFrame[3])
     {
-        m_pPlayer->DeActive_Effect(TEXT("Player_Attack_Rapier_StormStab_First"));
-        m_pPlayer->Active_Effect(TEXT("Player_Attack_Rapier_StormStab_Second"));
+        m_pPlayer->DeActive_Effect(CPlayer::RAPIER_TRAIL_FIRST);
+        m_pPlayer->Active_Effect(CPlayer::RAPIER_TRAIL_SECOND);
         m_isActiveEffect[1] = true;
     }
-    else if (m_iChangeFrame - 3 < iFrame)
+    else if (m_iChangeFrame - 1 < iFrame)
     {
-        m_pPlayer->DeActive_Effect(TEXT("Player_Attack_Rapier_StormStab_Second"));
+        m_pPlayer->DeActive_Effect(CPlayer::RAPIER_TRAIL_SECOND);
     }
 }
 

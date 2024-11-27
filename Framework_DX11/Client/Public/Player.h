@@ -16,6 +16,13 @@ class CPlayer final : public CPawn
 public:
 	enum WEAPON_TYPE { WEP_RAPIER, WEP_SCISSOR, WEP_FLAME, WEP_END };
 
+	enum EFFECT_TYPE 
+	{
+		RAPIER_TRAIL_FIRST, RAPIER_TRAIL_SECOND,
+
+		EFFECT_END
+	};
+
 	enum PLAYER_STATE
 	{
 		HIT, PARRY, HEAL, CHANGEWEP,
@@ -105,12 +112,11 @@ public:
 
 	void			Play_CurrentWeaponSound(const _uint iType, const TCHAR* pSoundKey, _uint iHandIndex = 1);
 
-	void			Active_Effect(const _wstring& strECTag);
-	void			DeActive_Effect(const _wstring& strECTag);
+	void			Active_Effect(const EFFECT_TYPE& eType);
+	void			DeActive_Effect(const EFFECT_TYPE& eType);
 
 private:
-	map<_wstring, class CEffect_Container*>	m_Effects;
-	map<_wstring, class CEffect_Container*>	m_ActiveEffects;
+	vector<class CEffect_Container*> m_Effects;
 
 private:
 	CPlayerCamera*		m_pPlayerCamera = { nullptr };
@@ -139,6 +145,7 @@ private:
 	HRESULT Ready_Components();
 	HRESULT Ready_Weapon();
 	HRESULT Ready_FSM();
+	HRESULT Ready_Effect();
 
 public:
 	static CPlayer* Create(ID3D11Device* pDevice, ID3D11DeviceContext* pContext);

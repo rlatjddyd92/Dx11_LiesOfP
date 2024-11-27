@@ -88,34 +88,23 @@ HRESULT CPlayer::Initialize(void * pArg)
 	if (FAILED(Ready_FSM()))
 		return E_FAIL;
 
-//	m_pTransformCom->Set_State(CTransform::STATE_POSITION, XMVectorSet(2.f, 0.f, 0.f, 1.f));
+	if (FAILED(Ready_Effect()))
+		return E_FAIL;
 
 	m_pNavigationCom->Move_to_Cell(m_pRigidBodyCom, 0);
 
-	// 임시 루트본 설정
-	m_pModelCom->Set_UFBIndices(UFB_ROOT, 2);
-	m_pModelCom->Set_UFBIndices(UFB_BOUNDARY_UPPER, 6);
-	m_pModelCom->Update_Boundary();
+	//// 임시 루트본 설정
+	//m_pModelCom->Set_UFBIndices(UFB_ROOT, 2);
+	//m_pModelCom->Set_UFBIndices(UFB_BOUNDARY_UPPER, 6);
+	//m_pModelCom->Update_Boundary();
 
 	m_strObjectTag = TEXT("Player");
 
-
-	const _Matrix* pParetnMatrix = m_pTransformCom->Get_WorldMatrix_Ptr();
-	const _Matrix* pSocketBoneMatrix = m_pModelCom->Get_BoneCombindTransformationMatrix_Ptr("BN_Weapon_R");
-
-	CEffect_Container* pTest = CEffect_Manager::Get_Instance()->Clone_Effect(TEXT("Player_Attack_Rapier_StormStab_First"), pParetnMatrix,
-		pSocketBoneMatrix, _Vec3(0.f, 0.f, 0.f), _Vec3(0.f, 180.f, 0.f), _Vec3(1.f, 1.f, 1.f));
-	m_Effects.emplace(TEXT("Player_Attack_Rapier_StormStab_First"), pTest);
-
-	pTest = CEffect_Manager::Get_Instance()->Clone_Effect(TEXT("Player_Attack_Rapier_StormStab_Second"), pParetnMatrix,
-		pSocketBoneMatrix, _Vec3(0.f, 0.f, 0.f), _Vec3(0.f, 180.f, 0.f), _Vec3(1.f, 1.f, 1.f));
-	m_Effects.emplace(TEXT("Player_Attack_Rapier_StormStab_Second"), pTest);
-
+	
 	return S_OK;
 }
 
 void CPlayer::Priority_Update(_float fTimeDelta)
-
 {
 	if (m_isGuard)
 	{
@@ -127,15 +116,10 @@ void CPlayer::Priority_Update(_float fTimeDelta)
 
 	m_pWeapon[m_eWeaponType]->Priority_Update(fTimeDelta);
 
-	for (auto iter = m_ActiveEffects.begin(); iter != m_ActiveEffects.end(); )
+	for (auto& pEffect : m_Effects)
 	{
-		if (iter->second->Get_Dead())
-			iter = m_ActiveEffects.erase(iter);
-		else
-		{
-			iter->second->Priority_Update(fTimeDelta);
-			++iter;
-		}
+		if(!pEffect->Get_Dead())
+			pEffect->Priority_Update(fTimeDelta);
 	}
 }
 
@@ -152,9 +136,10 @@ void CPlayer::Update(_float fTimeDelta)
 		m_pSoundCom[i]->Update(fTimeDelta);
 	}
 
-	for (auto& pEffect : m_ActiveEffects)
+	for (auto& pEffect : m_Effects)
 	{
-		pEffect.second->Update(fTimeDelta);
+		if (!pEffect->Get_Dead())
+			pEffect->Update(fTimeDelta);
 	}
 
 	m_pColliderCom->Update(m_pTransformCom->Get_WorldMatrix_Ptr());
@@ -173,9 +158,10 @@ void CPlayer::Late_Update(_float fTimeDelta)
 	m_pWeapon[m_eWeaponType]->Late_Update(fTimeDelta);
 
 	//업데이트에서 생성하니 업데이트 이전에 비우기
-	for (auto& pEffect : m_ActiveEffects)
+	for (auto& pEffect : m_Effects)
 	{
-		pEffect.second->Late_Update(fTimeDelta);
+		if (!pEffect->Get_Dead())
+			pEffect->Late_Update(fTimeDelta);
 	}
 
 	m_pGameInstance->Add_RenderObject(CRenderer::RG_NONBLEND, this);
@@ -407,26 +393,13 @@ void CPlayer::Play_CurrentWeaponSound(const _uint iType, const TCHAR* pSoundKey,
 	m_pWeapon[iType]->Play_Sound(CWeapon::WEP_SOUND_TYPE(iType), pSoundKey, iHandIndex);
 }
 
-void CPlayer::Active_Effect(const _wstring& strECTag)
+void CPlayer::Active_Effect(const EFFECT_TYPE& eType)
 {
-	CEffect_Container* pEffect = m_Effects.find(strECTag)->second;
-	if (nullptr == pEffect)
-		return;
-
-	m_ActiveEffects.emplace(strECTag, pEffect);
+	m_Effects[eType]->Set_Loop(true);
 }
-void CPlayer::DeActive_Effect(const _wstring& strECTag)
+void CPlayer::DeActive_Effect(const EFFECT_TYPE& eType)
 {
-	auto	iter = m_ActiveEffects.find(strECTag);
-
-	if (iter == m_ActiveEffects.end())
-		return;
-
-	CEffect_Container* pEffect = iter->second;
-	if (nullptr == pEffect)
-		return;
-
-	m_ActiveEffects.erase(strECTag);
+	m_Effects[eType]->Set_Loop(false);
 }
 
 HRESULT CPlayer::Ready_Weapon()
@@ -563,6 +536,23 @@ HRESULT CPlayer::Ready_FSM()
 	return S_OK;
 }
 
+HRESULT CPlayer::Ready_Effect()
+{
+	m_Effects.resize(EFFECT_END);
+
+	const _Matrix* pParetnMatrix = m_pTransformCom->Get_WorldMatrix_Ptr();
+	const _Matrix* pSocketBoneMatrix = m_pModelCom->Get_BoneCombindTransformationMatrix_Ptr("BN_Weapon_R");
+
+	m_Effects[RAPIER_TRAIL_FIRST] = CEffect_Manager::Get_Instance()->Clone_Effect(TEXT("Player_Attack_Rapier_StormStab_First"), pParetnMatrix,
+		pSocketBoneMatrix, _Vec3(0.f, 0.f, 0.f), _Vec3(0.f, 180.f, 0.f), _Vec3(1.f, 1.f, 1.f));;
+
+	m_Effects[RAPIER_TRAIL_SECOND] = CEffect_Manager::Get_Instance()->Clone_Effect(TEXT("Player_Attack_Rapier_StormStab_Second"), pParetnMatrix,
+		pSocketBoneMatrix, _Vec3(0.f, 0.f, 0.f), _Vec3(0.f, 180.f, 0.f), _Vec3(1.f, 1.f, 1.f));;
+
+
+	return S_OK;
+}
+
 CPlayer * CPlayer::Create(ID3D11Device * pDevice, ID3D11DeviceContext * pContext)
 {
 	CPlayer*		pInstance = new CPlayer(pDevice, pContext);
@@ -593,9 +583,9 @@ void CPlayer::Free()
 {
 	__super::Free();
 
-	for (auto & Pair : m_Effects)
+	for (auto& pEffect : m_Effects)
 	{
-		Safe_Release(Pair.second);
+		Safe_Release(pEffect);
 	}
 	m_Effects.clear();
 
@@ -607,3 +597,4 @@ void CPlayer::Free()
 	Safe_Release(m_pColliderCom);
 	Safe_Release(m_pNavigationCom);
 }
+
