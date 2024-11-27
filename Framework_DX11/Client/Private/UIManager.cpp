@@ -156,77 +156,7 @@ void CUIManager::Update_TestPage(_float fTimeDelta)
 void CUIManager::UIControl_Test(_float fTimeDelta)
 {
 #ifdef _DEBUG
-	if (KEY_TAP(KEY::P)) // Page_Play(기본 플레이 화면) 띄우기/닫기 -> 정식 기능에서는 사용하지 않음 
-	{
-		Open_Close_Page(UIPAGE::PAGE_PLAY);
-	}
 
-	// 상단 바 
-	if (KEY_HOLD(KEY::LSHIFT)) // 최대치 조정 
-	{
-		if (KEY_HOLD(KEY::I)) // 체력바 표시 수치 감소
-			GET_GAMEINTERFACE->Add_StatMax_Normal(STAT_NORMAL::STAT_GAUGE_HP, -100.f * fTimeDelta);
-		else if (KEY_HOLD(KEY::O)) // 체력바 표시 수치 감소
-			GET_GAMEINTERFACE->Add_StatMax_Normal(STAT_NORMAL::STAT_GAUGE_HP, +100.f * fTimeDelta);
-
-		if (KEY_HOLD(KEY::K)) // 체력바 표시 수치 감소
-			GET_GAMEINTERFACE->Add_StatMax_Normal(STAT_NORMAL::STAT_GAUGE_STAMINA, -100.f * fTimeDelta);
-		else if (KEY_HOLD(KEY::L)) // 체력바 표시 수치 감소
-			GET_GAMEINTERFACE->Add_StatMax_Normal(STAT_NORMAL::STAT_GAUGE_STAMINA, +100.f * fTimeDelta);
-
-		if (KEY_HOLD(KEY::N)) // 체력바 표시 수치 감소
-			GET_GAMEINTERFACE->Add_StatMax_Normal(STAT_NORMAL::STAT_GAUGE_REGION, -100.f * fTimeDelta);
-		else if (KEY_HOLD(KEY::M)) // 체력바 표시 수치 감소
-			GET_GAMEINTERFACE->Add_StatMax_Normal(STAT_NORMAL::STAT_GAUGE_REGION, +100.f * fTimeDelta);
-	}
-	else // 스탯 조정 
-	{
-		if (KEY_HOLD(KEY::I)) // 체력바 표시 수치 감소
-			GET_GAMEINTERFACE->Add_Stat_Normal(STAT_NORMAL::STAT_GAUGE_HP, -100.f * fTimeDelta);
-		else if (KEY_HOLD(KEY::O)) // 체력바 표시 수치 증가 
-			GET_GAMEINTERFACE->Add_Stat_Normal(STAT_NORMAL::STAT_GAUGE_HP, +100.f * fTimeDelta);
-
-		if (KEY_HOLD(KEY::K)) // 체력바 표시 수치 감소
-			GET_GAMEINTERFACE->Add_Stat_Normal(STAT_NORMAL::STAT_GAUGE_STAMINA, -100.f * fTimeDelta);
-		else if (KEY_HOLD(KEY::L)) // 체력바 표시 수치 증가 
-			GET_GAMEINTERFACE->Add_Stat_Normal(STAT_NORMAL::STAT_GAUGE_STAMINA, +100.f * fTimeDelta);
-
-		if (KEY_HOLD(KEY::N)) // 체력바 표시 수치 감소
-			GET_GAMEINTERFACE->Add_Stat_Normal(STAT_NORMAL::STAT_GAUGE_REGION, -100.f * fTimeDelta);
-		else if (KEY_HOLD(KEY::M)) // 체력바 표시 수치 증가 
-			GET_GAMEINTERFACE->Add_Stat_Normal(STAT_NORMAL::STAT_GAUGE_REGION, +100.f * fTimeDelta);
-	}
-
-	// 몬스터 체력바 확인 
-	if (KEY_HOLD(KEY::ALT))
-	{
-		if (KEY_HOLD(KEY::I))
-			m_pTestData->fHP_Now -= 100.f * fTimeDelta;
-		else if (KEY_HOLD(KEY::O))
-			m_pTestData->fHP_Now += 100.f * fTimeDelta;
-
-		m_pTestData->fHP_Now = max(0, m_pTestData->fHP_Now);
-		m_pTestData->fHP_Now = min(m_pTestData->fHP_Now, m_pTestData->fHP_Max);
-
-		if (KEY_TAP(KEY::K))
-		{
-			if (m_pTestData->bFocus)
-				m_pTestData->bFocus = false;
-			else
-				m_pTestData->bFocus = true;
-		}
-
-		if (KEY_TAP(KEY::M))
-		{
-			if (m_pTestData->bSpecial_Attack)
-				m_pTestData->bSpecial_Attack = false;
-			else
-				m_pTestData->bSpecial_Attack = true;
-		}
-	}
-
-
-	
 
 
 
@@ -239,148 +169,125 @@ void CUIManager::UIControl_Test(_float fTimeDelta)
 
 
 	// TestPage 조작 
-	if (KEY_HOLD(KEY::LSHIFT))
-	{
-		if (KEY_TAP(KEY::F3)) // TestPage 팀장
-		{
-			if (m_vecTestPageOpen[_int(TEST_PAGE_NAME::NAME_TEAMJANG)])
-				m_vecTestPageOpen[_int(TEST_PAGE_NAME::NAME_TEAMJANG)] = false;
-			else
-				m_vecTestPageOpen[_int(TEST_PAGE_NAME::NAME_TEAMJANG)] = true;
-		}
-		if (KEY_TAP(KEY::F4)) // TestPage 애니메이션
-		{
-			if (m_vecTestPageOpen[_int(TEST_PAGE_NAME::NAME_ANIM)])
-				m_vecTestPageOpen[_int(TEST_PAGE_NAME::NAME_ANIM)] = false;
-			else
-				m_vecTestPageOpen[_int(TEST_PAGE_NAME::NAME_ANIM)] = true;
-		}
-		if (KEY_TAP(KEY::F5)) // TestPage 이펙트
-		{
-			if (m_vecTestPageOpen[_int(TEST_PAGE_NAME::NAME_EFFECT)])
-				m_vecTestPageOpen[_int(TEST_PAGE_NAME::NAME_EFFECT)] = false;
-			else
-				m_vecTestPageOpen[_int(TEST_PAGE_NAME::NAME_EFFECT)] = true;
-		}
-		if (KEY_TAP(KEY::F6)) // TestPage 맵
-		{
-			if (m_vecTestPageOpen[_int(TEST_PAGE_NAME::NAME_MAP)])
-				m_vecTestPageOpen[_int(TEST_PAGE_NAME::NAME_MAP)] = false;
-			else
-				m_vecTestPageOpen[_int(TEST_PAGE_NAME::NAME_MAP)] = true;
-		}
-		if (KEY_TAP(KEY::F7)) // TestPage 스탯
-		{
-			if (m_vecTestPageOpen[_int(TEST_PAGE_NAME::NAME_PLAYER_STAT)])
-				m_vecTestPageOpen[_int(TEST_PAGE_NAME::NAME_PLAYER_STAT)] = false;
-			else
-				m_vecTestPageOpen[_int(TEST_PAGE_NAME::NAME_PLAYER_STAT)] = true;
-		}
-		if (KEY_TAP(KEY::F8)) // TestPage 아이템
-		{
-			if (m_vecTestPageOpen[_int(TEST_PAGE_NAME::NAME_ITEM)])
-				m_vecTestPageOpen[_int(TEST_PAGE_NAME::NAME_ITEM)] = false;
-			else
-				m_vecTestPageOpen[_int(TEST_PAGE_NAME::NAME_ITEM)] = true;
-		}
-	}
+	//if (KEY_HOLD(KEY::LSHIFT))
+	//{
+	//	if (KEY_TAP(KEY::F3)) // TestPage 팀장
+	//	{
+	//		if (m_vecTestPageOpen[_int(TEST_PAGE_NAME::NAME_TEAMJANG)])
+	//			m_vecTestPageOpen[_int(TEST_PAGE_NAME::NAME_TEAMJANG)] = false;
+	//		else
+	//			m_vecTestPageOpen[_int(TEST_PAGE_NAME::NAME_TEAMJANG)] = true;
+	//	}
+	//	if (KEY_TAP(KEY::F4)) // TestPage 애니메이션
+	//	{
+	//		if (m_vecTestPageOpen[_int(TEST_PAGE_NAME::NAME_ANIM)])
+	//			m_vecTestPageOpen[_int(TEST_PAGE_NAME::NAME_ANIM)] = false;
+	//		else
+	//			m_vecTestPageOpen[_int(TEST_PAGE_NAME::NAME_ANIM)] = true;
+	//	}
+	//	if (KEY_TAP(KEY::F5)) // TestPage 이펙트
+	//	{
+	//		if (m_vecTestPageOpen[_int(TEST_PAGE_NAME::NAME_EFFECT)])
+	//			m_vecTestPageOpen[_int(TEST_PAGE_NAME::NAME_EFFECT)] = false;
+	//		else
+	//			m_vecTestPageOpen[_int(TEST_PAGE_NAME::NAME_EFFECT)] = true;
+	//	}
+	//	if (KEY_TAP(KEY::F6)) // TestPage 맵
+	//	{
+	//		if (m_vecTestPageOpen[_int(TEST_PAGE_NAME::NAME_MAP)])
+	//			m_vecTestPageOpen[_int(TEST_PAGE_NAME::NAME_MAP)] = false;
+	//		else
+	//			m_vecTestPageOpen[_int(TEST_PAGE_NAME::NAME_MAP)] = true;
+	//	}
+	//	if (KEY_TAP(KEY::F7)) // TestPage 스탯
+	//	{
+	//		if (m_vecTestPageOpen[_int(TEST_PAGE_NAME::NAME_PLAYER_STAT)])
+	//			m_vecTestPageOpen[_int(TEST_PAGE_NAME::NAME_PLAYER_STAT)] = false;
+	//		else
+	//			m_vecTestPageOpen[_int(TEST_PAGE_NAME::NAME_PLAYER_STAT)] = true;
+	//	}
+	//	if (KEY_TAP(KEY::F8)) // TestPage 아이템
+	//	{
+	//		if (m_vecTestPageOpen[_int(TEST_PAGE_NAME::NAME_ITEM)])
+	//			m_vecTestPageOpen[_int(TEST_PAGE_NAME::NAME_ITEM)] = false;
+	//		else
+	//			m_vecTestPageOpen[_int(TEST_PAGE_NAME::NAME_ITEM)] = true;
+	//	}
+	//}
 
-	if (m_vecTestPageOpen[_int(TEST_PAGE_NAME::NAME_TEAMJANG)])
-		ShowTestPage(TEST_PAGE_NAME::NAME_TEAMJANG,
-			TEXT("테스트 변수 타임델타 : "), TEST_PAGE_VALUE_TYPE::TYPE_FLOAT, &fTimeDelta);
+	//if (m_vecTestPageOpen[_int(TEST_PAGE_NAME::NAME_TEAMJANG)])
+	//	ShowTestPage(TEST_PAGE_NAME::NAME_TEAMJANG,
+	//		TEXT("테스트 변수 타임델타 : "), TEST_PAGE_VALUE_TYPE::TYPE_FLOAT, &fTimeDelta);
 
-	if (m_vecTestPageOpen[_int(TEST_PAGE_NAME::NAME_ANIM)])
-		ShowTestPage(TEST_PAGE_NAME::NAME_ANIM,
-			TEXT("테스트 변수 타임델타 : "), TEST_PAGE_VALUE_TYPE::TYPE_FLOAT, &fTimeDelta);
+	//if (m_vecTestPageOpen[_int(TEST_PAGE_NAME::NAME_ANIM)])
+	//	ShowTestPage(TEST_PAGE_NAME::NAME_ANIM,
+	//		TEXT("테스트 변수 타임델타 : "), TEST_PAGE_VALUE_TYPE::TYPE_FLOAT, &fTimeDelta);
 
-	if (m_vecTestPageOpen[_int(TEST_PAGE_NAME::NAME_EFFECT)])
-		ShowTestPage(TEST_PAGE_NAME::NAME_EFFECT,
-			TEXT("테스트 변수 타임델타 : "), TEST_PAGE_VALUE_TYPE::TYPE_FLOAT, &fTimeDelta);
+	//if (m_vecTestPageOpen[_int(TEST_PAGE_NAME::NAME_EFFECT)])
+	//	ShowTestPage(TEST_PAGE_NAME::NAME_EFFECT,
+	//		TEXT("테스트 변수 타임델타 : "), TEST_PAGE_VALUE_TYPE::TYPE_FLOAT, &fTimeDelta);
 
-	if (m_vecTestPageOpen[_int(TEST_PAGE_NAME::NAME_MAP)])
-		ShowTestPage(TEST_PAGE_NAME::NAME_MAP,
-			TEXT("테스트 변수 타임델타 : "), TEST_PAGE_VALUE_TYPE::TYPE_FLOAT, &fTimeDelta);
+	//if (m_vecTestPageOpen[_int(TEST_PAGE_NAME::NAME_MAP)])
+	//	ShowTestPage(TEST_PAGE_NAME::NAME_MAP,
+	//		TEXT("테스트 변수 타임델타 : "), TEST_PAGE_VALUE_TYPE::TYPE_FLOAT, &fTimeDelta);
 
-	if (m_vecTestPageOpen[_int(TEST_PAGE_NAME::NAME_ITEM)])
-		ShowTestPage(TEST_PAGE_NAME::NAME_ITEM,
-			TEXT("테스트 변수 타임델타 : "), TEST_PAGE_VALUE_TYPE::TYPE_FLOAT, &fTimeDelta);
+	//if (m_vecTestPageOpen[_int(TEST_PAGE_NAME::NAME_ITEM)])
+	//	ShowTestPage(TEST_PAGE_NAME::NAME_ITEM,
+	//		TEXT("테스트 변수 타임델타 : "), TEST_PAGE_VALUE_TYPE::TYPE_FLOAT, &fTimeDelta);
 
 
-	if (m_vecTestPageOpen[_int(TEST_PAGE_NAME::NAME_PLAYER_STAT)])
-	{
-		_Vec3 fHP = { GET_GAMEINTERFACE->Get_StatInfo_Normal(STAT_NORMAL::STAT_GAUGE_HP).fStat_Now , GET_GAMEINTERFACE->Get_StatInfo_Normal(STAT_NORMAL::STAT_GAUGE_HP).fStat_Max, GET_GAMEINTERFACE->Get_StatInfo_Normal(STAT_NORMAL::STAT_GAUGE_HP).fStat_Max_Limit };
-		_Vec3 fST = { GET_GAMEINTERFACE->Get_StatInfo_Normal(STAT_NORMAL::STAT_GAUGE_STAMINA).fStat_Now , GET_GAMEINTERFACE->Get_StatInfo_Normal(STAT_NORMAL::STAT_GAUGE_STAMINA).fStat_Max, GET_GAMEINTERFACE->Get_StatInfo_Normal(STAT_NORMAL::STAT_GAUGE_STAMINA).fStat_Max_Limit };
-		_Vec3 fRE = { GET_GAMEINTERFACE->Get_StatInfo_Normal(STAT_NORMAL::STAT_GAUGE_REGION).fStat_Now , GET_GAMEINTERFACE->Get_StatInfo_Normal(STAT_NORMAL::STAT_GAUGE_REGION).fStat_Max, GET_GAMEINTERFACE->Get_StatInfo_Normal(STAT_NORMAL::STAT_GAUGE_REGION).fStat_Max_Limit };
-		_Vec3 fWE = { GET_GAMEINTERFACE->Get_StatInfo_Normal(STAT_NORMAL::STAT_GAUGE_WEIGHT).fStat_Now , GET_GAMEINTERFACE->Get_StatInfo_Normal(STAT_NORMAL::STAT_GAUGE_WEIGHT).fStat_Max, GET_GAMEINTERFACE->Get_StatInfo_Normal(STAT_NORMAL::STAT_GAUGE_WEIGHT).fStat_Max_Limit };
-		_Vec3 fGA = { GET_GAMEINTERFACE->Get_StatInfo_Normal(STAT_NORMAL::STAT_GADRIGAIN).fStat_Now , GET_GAMEINTERFACE->Get_StatInfo_Normal(STAT_NORMAL::STAT_GADRIGAIN).fStat_Max, GET_GAMEINTERFACE->Get_StatInfo_Normal(STAT_NORMAL::STAT_GADRIGAIN).fStat_Max_Limit };
-		_int iHP = (_int)GET_GAMEINTERFACE->Get_NowStat_Normal(STAT_NORMAL::STAT_POINT_BODY);
-		_int iST = (_int)GET_GAMEINTERFACE->Get_NowStat_Normal(STAT_NORMAL::STAT_POINT_STAMINA);
-		_int iWE = (_int)GET_GAMEINTERFACE->Get_NowStat_Normal(STAT_NORMAL::STAT_POINT_WEIGHT);
-		_int iPO = (_int)GET_GAMEINTERFACE->Get_NowStat_Normal(STAT_NORMAL::STAT_POINT_POWER);
-		_int iSK = (_int)GET_GAMEINTERFACE->Get_NowStat_Normal(STAT_NORMAL::STAT_POINT_SKILL);
-		_int iEV = (_int)GET_GAMEINTERFACE->Get_NowStat_Normal(STAT_NORMAL::STAT_POINT_EVOLUTION);
+	//if (m_vecTestPageOpen[_int(TEST_PAGE_NAME::NAME_PLAYER_STAT)])
+	//{
+	//	
+	//}
 
-		ShowTestPage(TEST_PAGE_NAME::NAME_PLAYER_STAT,
-			TEXT("HP(현재/제한/최대치)"), TEST_PAGE_VALUE_TYPE::TYPE_VEC3, &fHP,
-			TEXT("스태미나(현재/제한/최대치)"), TEST_PAGE_VALUE_TYPE::TYPE_VEC3, &fST,
-			TEXT("리전(현재/제한/최대치)"), TEST_PAGE_VALUE_TYPE::TYPE_VEC3, &fRE,
-			TEXT("무게(현재/제한/최대치)"), TEST_PAGE_VALUE_TYPE::TYPE_VEC3, &fWE,
-			TEXT("가드리게인(현재/제한/최대치)"), TEST_PAGE_VALUE_TYPE::TYPE_VEC3, &fGA,
-			TEXT("신체 스탯"), TEST_PAGE_VALUE_TYPE::TYPE_INT, &iHP,
-			TEXT("지구력 스탯"), TEST_PAGE_VALUE_TYPE::TYPE_INT, &iST,
-			TEXT("무게 스탯"), TEST_PAGE_VALUE_TYPE::TYPE_INT, &iWE,
-			TEXT("힘 스탯"), TEST_PAGE_VALUE_TYPE::TYPE_INT, &iPO,
-			TEXT("기술 스탯"), TEST_PAGE_VALUE_TYPE::TYPE_INT, &iSK
-		);
-	}
+	//// 테스트 페이지 이동
+	//_bool bMoving = false;
+	//for (_int i = 0; i < _int(TEST_PAGE_NAME::NAME_END); ++i)
+	//{
+	//	if (bMoving)
+	//		break;
 
-	// 테스트 페이지 이동
-	_bool bMoving = false;
-	for (_int i = 0; i < _int(TEST_PAGE_NAME::NAME_END); ++i)
-	{
-		if (bMoving)
-			break;
+	//	if (m_vecTestPageOpen[i])
+	//	{
+	//		if ((KEY_TAP(KEY::LBUTTON)) && (!m_vecTestPageMove[i]))
+	//		{
+	//			_Vec2 fPoint = CheckMouse(m_vecTestPage_Pos[i], m_vecTestPage_Size[i]);
 
-		if (m_vecTestPageOpen[i])
-		{
-			if ((KEY_TAP(KEY::LBUTTON)) && (!m_vecTestPageMove[i]))
-			{
-				_Vec2 fPoint = CheckMouse(m_vecTestPage_Pos[i], m_vecTestPage_Size[i]);
+	//			if (fPoint.x != -1)
+	//			{
+	//				m_vecTestPageMove[i] = true;
+	//				m_vecTestPage_ClickPos[i] = { fPoint.x, fPoint.y };
+	//				bMoving = true;
+	//			}
+	//		}
+	//		else if (m_vecTestPageMove[i])
+	//		{
+	//			if (KEY_HOLD(KEY::LBUTTON))
+	//			{
+	//				POINT			ptMouse{};
+	//				GetCursorPos(&ptMouse);
+	//				ScreenToClient(g_hWnd, &ptMouse);
 
-				if (fPoint.x != -1)
-				{
-					m_vecTestPageMove[i] = true;
-					m_vecTestPage_ClickPos[i] = { fPoint.x, fPoint.y };
-					bMoving = true;
-				}
-			}
-			else if (m_vecTestPageMove[i])
-			{
-				if (KEY_HOLD(KEY::LBUTTON))
-				{
-					POINT			ptMouse{};
-					GetCursorPos(&ptMouse);
-					ScreenToClient(g_hWnd, &ptMouse);
+	//				_Vec2 fMove = { 0.f,0.f };
 
-					_Vec2 fMove = { 0.f,0.f };
+	//				fMove.x = ptMouse.x - m_vecTestPage_ClickPos[i].x;
+	//				fMove.y = ptMouse.y - m_vecTestPage_ClickPos[i].y;
 
-					fMove.x = ptMouse.x - m_vecTestPage_ClickPos[i].x;
-					fMove.y = ptMouse.y - m_vecTestPage_ClickPos[i].y;
+	//				m_vecTestPage_Pos[i].x += fMove.x;
+	//				m_vecTestPage_Pos[i].y += fMove.y;
 
-					m_vecTestPage_Pos[i].x += fMove.x;
-					m_vecTestPage_Pos[i].y += fMove.y;
+	//				m_vecTestPage_ClickPos[i] = { (_float)ptMouse.x, (_float)ptMouse.y };
 
-					m_vecTestPage_ClickPos[i] = { (_float)ptMouse.x, (_float)ptMouse.y };
-
-					bMoving = true;
-				}
-				else
-					m_vecTestPageMove[i] = false;
-			}
-		}
-		else
-			m_vecTestPageMove[i] = false;
-	}
+	//				bMoving = true;
+	//			}
+	//			else
+	//				m_vecTestPageMove[i] = false;
+	//		}
+	//	}
+	//	else
+	//		m_vecTestPageMove[i] = false;
+	//}
 }
 
 void CUIManager::UIControl_Common(_float fTimeDelta)
@@ -399,6 +306,8 @@ void CUIManager::UIControl_Common(_float fTimeDelta)
 		UIControl_Equip(fTimeDelta);
 	else if ((m_pUIPage_Stat->GetPageAction(PAGEACTION::ACTION_ACTIVE)) || (m_pUIPage_Stat->GetPageAction(PAGEACTION::ACTION_OPENING)))
 		UIControl_Stat(fTimeDelta);
+	else if ((m_pUIPage_Option->GetPageAction(PAGEACTION::ACTION_ACTIVE)) || (m_pUIPage_Option->GetPageAction(PAGEACTION::ACTION_OPENING)))
+		UIControl_Option(fTimeDelta);
 	else if ((m_pUIPage_Skill->GetPageAction(PAGEACTION::ACTION_ACTIVE)) || (m_pUIPage_Skill->GetPageAction(PAGEACTION::ACTION_OPENING)))
 		UIControl_Skill(fTimeDelta);
 	else if (m_bIsIngame)
@@ -474,8 +383,14 @@ void CUIManager::UIControl_Stat(_float fTimeDelta)
 	}
 }
 
-void CUIManager::UIControl_LevelUp(_float fTimeDelta)
+void CUIManager::UIControl_Option(_float fTimeDelta)
 {
+	if (KEY_TAP(KEY::ESC))
+		SwicthPage(UIPAGE::PAGE_OPTION, UIPAGE::PAGE_MENU);
+	else
+	{
+		m_pUIPage_Option->Check_Page_Action(fTimeDelta);
+	}
 }
 
 void CUIManager::UIControl_Skill(_float fTimeDelta)
@@ -638,15 +553,15 @@ HRESULT CUIManager::Make_UIPage(_int iIndex)
 		m_pUIPage_Stat = CUIPage_Stat::Create(m_pDevice, m_pContext);
 		m_vecPage[iIndex] = static_cast<CUIPage*>(m_pUIPage_Stat);
 	}
-	else if (iIndex == _int(UIPAGE::PAGE_LEVELUP))
-	{
-		m_pUIPage_LevelUp = CUIPage_LevelUp::Create(m_pDevice, m_pContext);
-		m_vecPage[iIndex] = static_cast<CUIPage*>(m_pUIPage_LevelUp);
-	}
 	else if (iIndex == _int(UIPAGE::PAGE_SKILL))
 	{
 		m_pUIPage_Skill = CUIPage_Skill::Create(m_pDevice, m_pContext);
 		m_vecPage[iIndex] = static_cast<CUIPage*>(m_pUIPage_Skill);
+	}
+	else if (iIndex == _int(UIPAGE::PAGE_OPTION))
+	{
+		m_pUIPage_Option = CUIPage_Option::Create(m_pDevice, m_pContext);
+		m_vecPage[iIndex] = static_cast<CUIPage*>(m_pUIPage_Option);
 	}
 	else if (iIndex == _int(UIPAGE::PAGE_ITEMINFO))
 	{

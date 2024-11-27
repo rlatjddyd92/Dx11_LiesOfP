@@ -54,6 +54,10 @@
 #include "State_Player_Scissor_Fatal1.h"
 #include "State_Player_Scissor_Fatal2.h"
 
+// 24-11-27 김성용
+// 게임 인터페이스와 연결을 위해 추가 
+#include "GameInterface_Controller.h"
+
 CPlayer::CPlayer(ID3D11Device * pDevice, ID3D11DeviceContext * pContext)
 	: CPawn{ pDevice, pContext }
 {
@@ -96,6 +100,14 @@ HRESULT CPlayer::Initialize(void * pArg)
 	m_pModelCom->Update_Boundary();
 
 	m_strObjectTag = TEXT("Player");
+
+	// 24-11-27 김성용
+	// 스탯 구조체 생성 
+	m_tPlayer_Stat = new STAT_INFO;
+
+	// 24-11-27 김성용
+	// 게임 인터페이스와 연결을 위해 추가 
+	GET_GAMEINTERFACE->Input_Player_Pointer(this);
 
 	return S_OK;
 }
@@ -559,6 +571,10 @@ void CPlayer::Free()
 	{
 		Safe_Release(m_pWeapon[i]);
 	}
+
+	// 24-11-27 김성용
+	// 스탯 구조체 제거 
+	Safe_Delete(m_tPlayer_Stat);
 
 	Safe_Release(m_pColliderCom);
 	Safe_Release(m_pNavigationCom);

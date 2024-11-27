@@ -124,7 +124,7 @@ private:
 	void UIControl_Inven(_float fTimeDelta);
 	void UIControl_Equip(_float fTimeDelta);
 	void UIControl_Stat(_float fTimeDelta);
-	void UIControl_LevelUp(_float fTimeDelta);
+	void UIControl_Option(_float fTimeDelta);
 	void UIControl_Skill(_float fTimeDelta);
 
 public:
@@ -209,8 +209,8 @@ private:
 	CUIPage_Equip* m_pUIPage_Equip = { nullptr };
 	// 스탯
 	CUIPage_Stat* m_pUIPage_Stat = { nullptr };
-	// 레벨업
-	CUIPage_LevelUp* m_pUIPage_LevelUp = { nullptr };
+	// 옵션
+	CUIPage_Option* m_pUIPage_Option = { nullptr };
 	// 스킬트리
 	CUIPage_Skill* m_pUIPage_Skill = { nullptr };
 	// 테스트

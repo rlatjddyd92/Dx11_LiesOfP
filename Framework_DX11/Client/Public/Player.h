@@ -34,6 +34,45 @@ public:
 		STATE_END
 	};
 
+	// 24-11-27 김성용
+	// 플레이어 스탯 구조체 
+#pragma region PLAYER_STAT
+	typedef struct PLAYER_STAT_INFO
+	{
+		// 스탯 
+		_int iStat_HP = 1;
+		_int iStat_Stamina = 1;
+		_int iStat_Attack = 1;
+		_int iStat_Defence = 1;
+		_int iStat_Heal = 1;
+
+		// 게이지 수치 
+		// x : 현재 수치
+		// y : 보조 수치(HP의 가드리게인 등 표시)
+		// z : 현재 최대치 (현재 수치가 늘어날 수 있는 최대치)
+		// w : 최대치 한계 (게이지의 최대치를 늘릴 때 늘어날 수 있는 한계치) 
+		_Vec4 vGauge_Hp = { 500.f,500.f,500.f,1000.f };
+		_Vec4 vGauge_Stamina = { 500.f,500.f,500.f,1000.f };
+		_Vec4 vGauge_Region = { 600.f,600.f,600.f,1000.f };
+
+		// 리전 1칸의 수치 
+		// UI 리전 1칸에 표시되는 양 
+		// 리전 게이지는 _int(현재 최대치) / _int(1칸 수치)의 값 만큼만 나타남 -> 현재 최대치 700, 1칸 수치 200이면 3칸만 뜬다 
+		_float fRegion_Interval = 200.f;
+		
+		// 에르고 
+		_int iErgo = 1000;
+
+		// 상태이상 
+		// x : 현재 수치 
+		// y : 최대치 
+		// 현재 수치가 0보다 크면 게이지가 나타난다 
+		_Vec2 fDebuff_Fire = { 0.f, 100.f };
+		_Vec2 fDebuff_Electric = { 0.f, 100.f };
+		_Vec2 fDebuff_Acid = { 0.f, 100.f };
+	}STAT_INFO;
+#pragma endregion
+
 public:
 	CPlayerCamera*			Get_Camera() { return m_pPlayerCamera; }
 	void					Set_Camera(class CPlayerCamera* pCamera) { m_pPlayerCamera = pCamera; }
@@ -64,6 +103,15 @@ public:
 	void					Reset_Root() { m_vCurRootMove = m_vRootMoveStack = _vector{0,0,0,0}; }
 
 	CPawn*					Get_TargetMonster() { return m_pTargetMonster; }
+
+	// 24-11-27 김성용
+	// 플레이어 스탯 구조체 접근 함수 
+	// 외부에서는 레퍼런스로 접근 
+	// 수치 조정은 반드시 플레이어에서만 진행 
+#pragma region PLAYER_STAT
+	const STAT_INFO&		Get_Player_Stat() const { return *m_tPlayer_Stat; }
+
+#pragma endregion
 
 private:
 	CPlayer(ID3D11Device* pDevice, ID3D11DeviceContext* pContext);
@@ -130,6 +178,12 @@ private:
 	_float		m_fPrevTrackPos = {};
 	_bool		m_bEndAnim = { false };
 	_bool		m_bResetRootMove = { true };
+
+	// 24-11-27 김성용
+	// 플레이어 스탯 구조체 변수 
+#pragma region PLAYER_STAT
+	STAT_INFO*	m_tPlayer_Stat = { nullptr };
+#pragma endregion
 
 private:
 	HRESULT Ready_Components();

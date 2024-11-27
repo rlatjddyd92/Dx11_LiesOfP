@@ -9,7 +9,7 @@ END
 
 BEGIN(Client)
 
-class CUIPage_LevelUp : public CUIPage
+class CUIPage_Option : public CUIPage
 {
 public:
 	enum class PART_GROUP
@@ -26,9 +26,9 @@ public:
 
 
 protected:
-	CUIPage_LevelUp(ID3D11Device* pDevice, ID3D11DeviceContext* pContext);
-	CUIPage_LevelUp(const CUIPage_LevelUp& Prototype);
-	virtual ~CUIPage_LevelUp() = default;
+	CUIPage_Option(ID3D11Device* pDevice, ID3D11DeviceContext* pContext);
+	CUIPage_Option(const CUIPage_Option& Prototype);
+	virtual ~CUIPage_Option() = default;
 
 public:
 	virtual HRESULT Initialize_Prototype() override;
@@ -57,7 +57,7 @@ protected:
 
 
 public:
-	static CUIPage_LevelUp* Create(ID3D11Device* pDevice, ID3D11DeviceContext* pContext);
+	static CUIPage_Option* Create(ID3D11Device* pDevice, ID3D11DeviceContext* pContext);
 	virtual CGameObject* Clone(void* pArg);
 	virtual void Free() override;
 
