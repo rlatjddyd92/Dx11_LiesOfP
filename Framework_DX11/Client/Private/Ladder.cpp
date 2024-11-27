@@ -36,7 +36,9 @@ HRESULT CLadder::Initialize(void* pArg)
 	if (FAILED(Ready_Components(pDesc)))
 		return E_FAIL;
 
-	m_pModelCom->SetUp_Animation(1, true);
+	int iAnimIndex = m_pModelCom->Find_AnimationIndex("AS_Down_Idle", 3.f);
+
+	m_pModelCom->SetUp_Animation(iAnimIndex, true);
 
 	return S_OK;
 }
@@ -47,11 +49,13 @@ void CLadder::Priority_Update(_float fTimeDelta)
 
 void CLadder::Update(_float fTimeDelta)
 {
-	//m_pModelCom->Play_Animation(fTimeDelta);
-	m_pModelCom->Update_Bone();
+	m_pModelCom->Play_Animation(fTimeDelta);
 
 	if (m_pColliderCom != nullptr)
-		m_pColliderCom->Update(m_pTransformCom->Get_WorldMatrix_Ptr());
+	{
+		m_pColliderCom[UP]->Update(m_pTransformCom->Get_WorldMatrix_Ptr());
+		m_pColliderCom[DOWN]->Update(m_pTransformCom->Get_WorldMatrix_Ptr());
+	}
 }
 
 void CLadder::Late_Update(_float fTimeDelta)
@@ -61,7 +65,8 @@ void CLadder::Late_Update(_float fTimeDelta)
 
 #ifdef _DEBUG
 	if (m_pColliderCom != nullptr)
-		m_pGameInstance->Add_DebugObject(m_pColliderCom);
+		m_pGameInstance->Add_DebugObject(m_pColliderCom[UP]);
+		m_pGameInstance->Add_DebugObject(m_pColliderCom[DOWN]);
 #endif
 }
 
@@ -127,12 +132,25 @@ HRESULT CLadder::Ready_Components(LADDER_DESC* Desc)
 
 	/* For.Com_Collider */
 	CBounding_OBB::BOUNDING_OBB_DESC			ColliderDesc{};
-	ColliderDesc.vExtents = _float3(1.8f, 1.0f, 0.2f);
+	ColliderDesc.vExtents = _float3(1.f, 0.5f, 0.2f);
 	ColliderDesc.vAngles = _float3(0.f,0.f, 0.f);
 	ColliderDesc.vCenter = _float3(0.f, 1.0f, 0.f);
 
 	if (FAILED(__super::Add_Component(LEVEL_STATIC, TEXT("Prototype_Component_Collider_OBB"),
-		TEXT("Com_Collider"), reinterpret_cast<CComponent**>(&m_pColliderCom), &ColliderDesc)))
+		TEXT("Com_Collider1"), reinterpret_cast<CComponent**>(&m_pColliderCom[DOWN]), &ColliderDesc)))
+		return E_FAIL;
+
+	if (strcmp(Desc->szModelTag, "SK_LV_Ladder_MetalWood_Slide6m_SM_KSJ") == 0)
+	{
+		ColliderDesc.vCenter = _float3(0.f, 6.f, 0.f);
+	}
+	else
+	{
+		ColliderDesc.vCenter = _float3(0.f, 10.f, 0.f);
+	}
+
+	if (FAILED(__super::Add_Component(LEVEL_STATIC, TEXT("Prototype_Component_Collider_OBB"),
+		TEXT("Com_Collider2"), reinterpret_cast<CComponent**>(&m_pColliderCom[UP]), &ColliderDesc)))
 		return E_FAIL;
 
 	return S_OK;
@@ -167,7 +185,10 @@ CGameObject* CLadder::Clone(void* pArg)
 void CLadder::Free()
 {
 	__super::Free();
-	Safe_Release(m_pColliderCom);
+	for (_uint i = 0; i < COLLIDER_END; ++i)
+	{
+		Safe_Release(m_pColliderCom[i]);
+	}
 	Safe_Release(m_pShaderCom);
 	Safe_Release(m_pModelCom);
 }

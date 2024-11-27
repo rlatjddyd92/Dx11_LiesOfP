@@ -25,6 +25,7 @@ public:
 		_uint		iRenderGroupID = { true };
 	}LADDER_DESC;
 
+	enum COLLIDERTYPE {UP,DOWN, COLLIDER_END};
 protected:
 	CLadder(ID3D11Device* pDevice, ID3D11DeviceContext* pContext);
 	CLadder(const CLadder& Prototype);
@@ -39,7 +40,7 @@ public:
 	virtual HRESULT Render() override;
 
 private:
-	CCollider* m_pColliderCom = { nullptr };
+	CCollider* m_pColliderCom[COLLIDER_END] = {nullptr, nullptr};
 	CShader* m_pShaderCom = { nullptr };
 	CModel* m_pModelCom = { nullptr };
 private:

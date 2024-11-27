@@ -291,7 +291,7 @@ HRESULT CLevel_GamePlay::Read_Map_Data()
 					staticObjDesc.isInstance = pDesc.isInstance;
 					staticObjDesc.iRenderGroupID = pDesc.iID;
 					staticObjDesc.bShadow = pDesc.bShadow;
-
+					staticObjDesc.iCurrentCellNum = pDesc.iCurrentCellNum;
 					if (FAILED(m_pGameInstance->Add_CloneObject_ToLayer(LEVEL_GAMEPLAY, TEXT("Layer_Map"), TEXT("Prototype_GameObject_StaticObj"), &staticObjDesc)))
 						return E_FAIL;
 				} 

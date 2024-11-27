@@ -165,6 +165,7 @@ void CPlayer::Update(_float fTimeDelta)
 		m_pFsmCom->Change_State(LADDER, &v);
 		//Calc_DamageGain(5.f, m_pTransformCom->Get_WorldMatrix().Forward() + m_pTransformCom->Get_WorldMatrix().Translation());
 	}
+		Calc_DamageGain(5.f);
 }
 
 void CPlayer::Late_Update(_float fTimeDelta)
@@ -576,7 +577,7 @@ HRESULT CPlayer::Ready_Effect()
 	return S_OK;
 }
 
-_bool CPlayer::Calc_DamageGain(_float fAtkDmg, _Vec3 vHitPos)
+_bool CPlayer::Calc_DamageGain(_float fAtkDmg)
 {
 	if (fAtkDmg <= 0)
 		return false;
@@ -591,6 +592,9 @@ _bool CPlayer::Calc_DamageGain(_float fAtkDmg, _Vec3 vHitPos)
 		if (fAtkDmg > 0.f)
 			m_pFsmCom->Change_State(HIT, &vHitPos);
 	}
+	m_tPlayer_Stat->vGauge_Hp.x = max(0.f, m_tPlayer_Stat->vGauge_Hp.x - fAtkDmg);
+	//if (m_eStat.fHp <= 0.f)
+	//	m_pFsmCom->Change_State(HIT);
 
 	return true;
 }

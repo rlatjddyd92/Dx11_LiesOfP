@@ -77,6 +77,8 @@ public:
 	void		    Play_Sound(const PAWN_SOUND_TYPE eType, const TCHAR* pSoundKey);
 	void		    PlayRepeat_Sound(const PAWN_SOUND_TYPE eType, const TCHAR* pSoundKey);
 
+    void            Set_Respawn_Cell_Num(_int iNum) { m_iRespawn_Cell_Num = iNum; }
+
 	PAWN_STATUS* Get_Status() { return &m_eStat; }
 
 
@@ -91,9 +93,10 @@ protected:
 
     _bool            m_isGravity = { false };
 
-    _float            m_fMoveSpeed = {};
+    _int             m_iRespawn_Cell_Num = { -1 };
 
-    _float            m_fEmissiveMask = {};
+    _float           m_fMoveSpeed = {};
+    _float           m_fEmissiveMask = {};
 
     _Vec4            m_vRimLightColor = {};
 
