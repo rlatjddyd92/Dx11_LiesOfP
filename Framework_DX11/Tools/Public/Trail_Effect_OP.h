@@ -104,7 +104,6 @@ private:
 	DEFAULT_DESC m_DefaultDesc = {};
 	TRAIL_OP_DESC m_InitDesc = {};
 
-
 private:
 	HRESULT Ready_Components(const TRAIL_OP_DESC& Desc);
 

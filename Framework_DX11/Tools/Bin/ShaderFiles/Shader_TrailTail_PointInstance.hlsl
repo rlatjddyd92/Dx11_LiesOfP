@@ -46,6 +46,7 @@ float           g_fStartRotation = 0.f;
 float           g_fAngle = 0.f;
 float           g_fSpriteSpeed = 0.f;
 
+float           g_fInterval = 0.f;
 
 struct VS_OUT
 {
@@ -284,9 +285,22 @@ void GS_TRAIL_MAIN(point GS_IN In[1], inout TriangleStream<GS_OUT> Container)
     float3 vLook = normalize(vLookDir);
     float3 vUp = normalize(cross(vLook, vCamDir));
     float3 vRight = normalize(cross(vUp, vLook));
-	
-    vLook *= fXLength * 0.5f;
+    
+    vLook *= g_fInterval * 0.5f;
     vUp *= In[0].vPSize.y * 0.5f;
+    
+    if (g_iState & STATE_GROW)
+    {
+        vUp *= g_vStartScaling.y + (g_vScalingRatio.y * (In[0].vLifeTime.y / In[0].vLifeTime.x));
+    }
+    else if (g_iState & STATE_SHRINK)
+    {
+        vUp *= g_vStartScaling.y - (g_vScalingRatio.y * (In[0].vLifeTime.y / In[0].vLifeTime.x));
+    }
+    else
+    {
+        vUp *= g_vStartScaling.y;
+    }
     
     Out[0].vPosition = float4(vPosition.xyz - vLook + vUp, 1.f);
     Out[0].vTexcoord = float2(0.f, 0.0f);
@@ -517,9 +531,12 @@ PS_EFFECT_OUT PS_FIRE_MAIN(PS_IN In)
 PS_EFFECT_OUT PS_TEST(PS_IN In)
 {
     PS_EFFECT_OUT Out = (PS_EFFECT_OUT) 0;
-    
-    Out.vDiffuse = In.vColor;
-    Out.vBlur = In.vColor;
+
+    if (In.vLifeTime.y >= In.vLifeTime.x)
+        discard;
+
+    Out.vDiffuse = In.vColor * In.vTexcoord.x * 2.f;
+    Out.vBlur = In.vColor * In.vTexcoord.x * 2.f;
     
     return Out;
 }

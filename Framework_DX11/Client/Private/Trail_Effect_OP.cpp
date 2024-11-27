@@ -64,8 +64,6 @@ void CTrail_Effect_OP::Update(_float fTimeDelta)
 
 void CTrail_Effect_OP::Late_Update(_float fTimeDelta)
 {
-	if (CRenderer::RG_END <= m_RenderDesc.iRenderGroup)
-		return;
 	m_pGameInstance->Add_RenderObject((CRenderer::RENDERGROUP)m_RenderDesc.iRenderGroup, this);
 }
 
@@ -130,8 +128,6 @@ void CTrail_Effect_OP::Reset()
 	m_pVIBufferCom->Reset();
 	m_DefaultDesc = m_InitDesc;
 	m_isDead = false;
-
-	m_pTransformCom->Set_State(CTransform::STATE_POSITION, m_DefaultDesc.vPos);
 }
 
 

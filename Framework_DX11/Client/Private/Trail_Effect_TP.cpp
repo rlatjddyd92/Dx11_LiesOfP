@@ -62,8 +62,6 @@ void CTrail_Effect_TP::Late_Update(_float fTimeDelta)
 		m_isDead = true;
 	}
 
-	if (CRenderer::RG_END <= m_RenderDesc.iRenderGroup)
-		return;
 	m_pGameInstance->Add_RenderObject((CRenderer::RENDERGROUP)m_RenderDesc.iRenderGroup, this);
 }
 

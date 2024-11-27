@@ -59,48 +59,9 @@ CEffect_Container* CEffect_Manager::Clone_Effect(const _wstring& strECTag, const
     desc.vRotation = vRotation;
     desc.vScale = vScale;
 
-    return Clone_Effect(strECTag, &desc);
+    return Find_PoolingEffect(strECTag, &desc);
 }
 
-CEffect_Container* CEffect_Manager::Clone_Effect(const _wstring& strECTag, void* pArg)
-{
-    CEffect_Container* pEffectContainer = CREATE_CONTAINER(pArg);
-
-    auto& iter = m_EffectContainers.find(strECTag);
-
-    for (auto& strEffectTag : iter->second)
-    {
-        _wstring strFileExtention = Get_FileExtentin(strEffectTag);   // 확장자
-        _wstring strEffectName = Get_FileName(strEffectTag);
-
-        if (TEXT("PE") == strFileExtention)
-        {
-            pEffectContainer->Add_Effect(Clone_ParticleEffect(strEffectName));
-        }
-        else if (TEXT("TE") == strFileExtention)
-        {
-            pEffectContainer->Add_Effect(Clone_TextureEffect(strEffectName));
-        }
-        else if (TEXT("ME") == strFileExtention)
-        {
-            pEffectContainer->Add_Effect(Clone_MeshEffect(strEffectName));
-        }
-        else if (TEXT("TOP") == strFileExtention)
-        {
-            pEffectContainer->Add_Effect(Clone_TrailOP_Effect(strEffectName));
-        }
-        else if (TEXT("TTP") == strFileExtention)
-        {
-            pEffectContainer->Add_Effect(Clone_TrailTP_Effect(strEffectName));
-        }
-        else if (TEXT("TMP") == strFileExtention)
-        {
-            pEffectContainer->Add_Effect(Clone_TrailMP_Effect(strEffectName));
-        }
-    }
-
-    return pEffectContainer;
-}
 
 HRESULT CEffect_Manager::Add_Effect_ToLayer(_uint iLevelID, const _wstring& strECTag, _Vec3 vPos, _Vec3 vRotation, _Vec3 vScale)
 {
@@ -115,55 +76,23 @@ HRESULT CEffect_Manager::Add_Effect_ToLayer(_uint iLevelID, const _wstring& strE
     desc.vRotation = vRotation;
     desc.vScale = vScale;
 
-    return Add_Effect_ToLayer(iLevelID, strECTag, &desc);
+    return m_pGameInstance->Add_Object_ToLayer(desc.iLevelIndex, TEXT("Layer_Effect"), Find_PoolingEffect(strECTag, &desc));
 }
 
-HRESULT CEffect_Manager::Add_Effect_ToLayer(_uint iLevelID, const _wstring& strECTag, void* pArg)
+HRESULT CEffect_Manager::Add_Effect_ToLayer(_uint iLevelID, const _wstring& strECTag, const _Matrix* pParentMatrix, const _Matrix* pSocketMatrix, _Vec3 vPos, _Vec3 vRotation, _Vec3 vScale)
 {
-    CEffect_Container* pEffectContainer = CREATE_CONTAINER(pArg);
+    CEffect_Container::EFFECT_DESC desc = {};
 
-    auto& iter = m_EffectContainers.find(strECTag);
+    desc.fRotationPerSec = XMConvertToRadians(90.f);
+    desc.fSpeedPerSec = 1.f;
+    desc.iLevelIndex = iLevelID;
+    desc.pParentMatrix = pParentMatrix;
+    desc.pSocketMatrix = pSocketMatrix;
+    desc.vPos = vPos;
+    desc.vRotation = vRotation;
+    desc.vScale = vScale;
 
-    if (m_EffectContainers.end() == iter)
-    {
-        return E_FAIL;
-    }
-
-    for (auto& strEffectTag : iter->second)
-    {
-        _wstring strFileExtention = Get_FileExtentin(strEffectTag);   // 확장자
-        _wstring strEffectName = Get_FileName(strEffectTag);
-
-        if (TEXT("PE") == strFileExtention)
-        {
-            pEffectContainer->Add_Effect(Clone_ParticleEffect(strEffectName));
-        }
-        else if (TEXT("TE") == strFileExtention)
-        {
-            pEffectContainer->Add_Effect(Clone_TextureEffect(strEffectName));
-        }
-        else if (TEXT("ME") == strFileExtention)
-        {
-            pEffectContainer->Add_Effect(Clone_MeshEffect(strEffectName));
-        }
-        else if (TEXT("TOP") == strFileExtention)
-        {
-            pEffectContainer->Add_Effect(Clone_TrailOP_Effect(strEffectName));
-        }
-        else if (TEXT("TTP") == strFileExtention)
-        {
-            pEffectContainer->Add_Effect(Clone_TrailTP_Effect(strEffectName));
-        }
-        else if (TEXT("TMP") == strFileExtention)
-        {
-            pEffectContainer->Add_Effect(Clone_TrailMP_Effect(strEffectName));
-        }
-    }
-
-    if(FAILED(m_pGameInstance->Add_Object_ToLayer(iLevelID, TEXT("Layer_Effect"), pEffectContainer)))
-        return E_FAIL;
-
-    return S_OK;
+    return m_pGameInstance->Add_Object_ToLayer(desc.iLevelIndex, TEXT("Layer_Effect"), Find_PoolingEffect(strECTag, &desc));
 }
 
 HRESULT CEffect_Manager::Load_Effects(const _wstring& strEffectPath)
@@ -807,6 +736,95 @@ _wstring CEffect_Manager::Get_FileExtentin(const _wstring& strFileTag)
     return strExtention;
 }
 
+CEffect_Container* CEffect_Manager::Find_PoolingEffect(const _wstring& strECTag, void* pArg)
+{
+    auto& iter = m_EffectPooling.find(strECTag);
+
+    // 아예 처음이면 만들어서 반환.
+    if (m_EffectPooling.end() == iter)
+    {
+        CEffect_Container* pContainer = Clone_Effect_From_Prototype(strECTag, pArg);
+
+        if (nullptr == pContainer)
+            return nullptr;
+
+        vector<CEffect_Container*> Containers;
+        Containers.emplace_back(pContainer);
+
+        m_EffectPooling.emplace(strECTag, Containers);
+
+        Safe_AddRef(pContainer);
+        return pContainer;
+    }
+
+    for (auto& pContainer : iter->second)
+    {
+        // 찾아서 안돌아가는 거 있으면 그거 반환.
+        if (true == pContainer->Get_Dead())
+        {
+            CEffect_Container::EFFECT_DESC* pDesc = static_cast<CEffect_Container::EFFECT_DESC*>(pArg);
+            pContainer->Set_EffectDesc(*pDesc);
+            pContainer->Set_Dead(false);
+
+            Safe_AddRef(pContainer);
+            return pContainer;
+        }
+    }
+
+    // 찾아봤는데 안돌아가는 게 없으면 새로 만들어서 넣고 반환.
+    CEffect_Container* pContainer = Clone_Effect_From_Prototype(strECTag, pArg);
+    iter->second.emplace_back(pContainer);
+
+    Safe_AddRef(pContainer);
+    return pContainer;
+}
+
+CEffect_Container* CEffect_Manager::Clone_Effect_From_Prototype(const _wstring& strECTag, void* pArg)
+{
+    auto& iter = m_EffectContainers.find(strECTag);
+
+    if (m_EffectContainers.end() == iter)
+        return nullptr;
+
+    CEffect_Container* pEffectContainer = CREATE_CONTAINER(pArg);
+
+
+    for (auto& strEffectTag : iter->second)
+    {
+        _wstring strFileExtention = Get_FileExtentin(strEffectTag);   // 확장자
+        _wstring strEffectName = Get_FileName(strEffectTag);
+
+        if (TEXT("PE") == strFileExtention)
+        {
+            pEffectContainer->Add_Effect(Clone_ParticleEffect(strEffectName));
+        }
+        else if (TEXT("TE") == strFileExtention)
+        {
+            pEffectContainer->Add_Effect(Clone_TextureEffect(strEffectName));
+        }
+        else if (TEXT("ME") == strFileExtention)
+        {
+            pEffectContainer->Add_Effect(Clone_MeshEffect(strEffectName));
+        }
+        else if (TEXT("TOP") == strFileExtention)
+        {
+            pEffectContainer->Add_Effect(Clone_TrailOP_Effect(strEffectName));
+        }
+        else if (TEXT("TTP") == strFileExtention)
+        {
+            pEffectContainer->Add_Effect(Clone_TrailTP_Effect(strEffectName));
+        }
+        else if (TEXT("TMP") == strFileExtention)
+        {
+            pEffectContainer->Add_Effect(Clone_TrailMP_Effect(strEffectName));
+        }
+    }
+
+    return pEffectContainer;
+}
+
+
+
 void CEffect_Manager::Free()
 {
 	__super::Free();
@@ -814,4 +832,12 @@ void CEffect_Manager::Free()
 	Safe_Release(m_pGameInstance);
     Safe_Release(m_pDevice);
     Safe_Release(m_pContext);
+
+    for (auto& Pair : m_EffectPooling)
+    {
+        for (auto& Effect : Pair.second)
+        {
+            Safe_Release(Effect);
+        }
+    }
 }

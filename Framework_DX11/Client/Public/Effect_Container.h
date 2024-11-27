@@ -44,6 +44,7 @@ public:
 	HRESULT Reset_Effects();
 
 	void Set_Loop(_bool bLoop);
+	void Set_EffectDesc(const EFFECT_DESC& desc);
 
 private:
 	vector<class CEffect_Base*> m_Effects;
