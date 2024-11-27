@@ -68,10 +68,14 @@ void CUIPage_Play::Late_Update(_float fTimeDelta)
 	RU_Coin_Update(fTimeDelta);
 	RD_Weapon_Update(fTimeDelta);
 	
+	
 	for(auto& iter : m_vec_Group_Ctrl)
 		__super::UpdatePart_ByControl(iter);
 
+	Boss_Hp_Update(fTimeDelta);
 	__super::Late_Update(fTimeDelta);
+
+	
 
 	PlayInfo_Update(fTimeDelta);
 	m_bCan_InterAction = true;
@@ -236,17 +240,17 @@ _bool CUIPage_Play::Action_InterAction(_wstring strInterName)
 
 void CUIPage_Play::LU_Gauge_Update(_float fTimeDelta)
 {
-	const CPlayer_Stat_Manager::STAT& tRegion = GET_GAMEINTERFACE->Get_StatInfo_Normal(STAT_NORMAL::STAT_GAUGE_REGION);
+	const CPlayer::STAT_INFO& Info = GET_GAMEINTERFACE->Get_Player()->Get_Player_Stat();
 
-	m_vec_Group_Ctrl[_int(PART_GROUP::GROUP_HP_FRAME)]->fRatio = GET_GAMEINTERFACE->Get_Max_Limit_Ratio(STAT_NORMAL::STAT_GAUGE_HP);
-	m_vec_Group_Ctrl[_int(PART_GROUP::GROUP_HP_FILL)]->fRatio = GET_GAMEINTERFACE->Get_Now_Limit_Ratio(STAT_NORMAL::STAT_GAUGE_HP);
+	m_vec_Group_Ctrl[_int(PART_GROUP::GROUP_HP_FRAME)]->fRatio = Info.vGauge_Hp.y / Info.vGauge_Hp.z;
+	m_vec_Group_Ctrl[_int(PART_GROUP::GROUP_HP_FILL)]->fRatio = Info.vGauge_Hp.x / Info.vGauge_Hp.z;
 
-	m_vec_Group_Ctrl[_int(PART_GROUP::GROUP_ST_FRAME)]->fRatio = GET_GAMEINTERFACE->Get_Max_Limit_Ratio(STAT_NORMAL::STAT_GAUGE_STAMINA);
-	m_vec_Group_Ctrl[_int(PART_GROUP::GROUP_ST_FILL)]->fRatio = GET_GAMEINTERFACE->Get_Now_Limit_Ratio(STAT_NORMAL::STAT_GAUGE_STAMINA);
+	m_vec_Group_Ctrl[_int(PART_GROUP::GROUP_ST_FRAME)]->fRatio = Info.vGauge_Stamina.y / Info.vGauge_Stamina.z;
+	m_vec_Group_Ctrl[_int(PART_GROUP::GROUP_ST_FILL)]->fRatio = Info.vGauge_Stamina.x / Info.vGauge_Stamina.z;
 
-	_int iSP_Cell_Num = (_int)((_float)tRegion.fStat_Max / (_float)tRegion.fStat_Interval);
-	_int iSP_Cell_Filled = (_int)((_float)tRegion.fStat_Now / (_float)tRegion.fStat_Interval);
-	_float fSP_Ratio = (tRegion.fStat_Now - ((_float)iSP_Cell_Filled * tRegion.fStat_Interval)) / (_float)tRegion.fStat_Interval;
+	_int iSP_Cell_Num = (_int)((_float)Info.vGauge_Region.z / (_float)Info.fRegion_Interval);
+	_int iSP_Cell_Filled = (_int)((_float)Info.vGauge_Region.x / (_float)Info.fRegion_Interval);
+	_float fSP_Ratio = (Info.vGauge_Region.x - ((_float)iSP_Cell_Filled * Info.fRegion_Interval)) / (_float)Info.fRegion_Interval;
 
 	for (_int i = 0; i < 5; ++i)
 	{
@@ -450,6 +454,22 @@ void CUIPage_Play::RD_Weapon_Update(_float fTimeDelta)
 	m_vec_Group_Ctrl[_int(PART_GROUP::GROUP_WEAPON_GAUGE_RIGHT_KEYSET_B)]->bRender = bSingle_Cell_Blade;
 }
 
+void CUIPage_Play::Boss_Hp_Update(_float fTimeDelta)
+{
+	if (!m_bIs_BossHp_Activate)
+	{
+		__super::Array_Control(_int(PART_GROUP::GROUP_BOSS_NAME), _int(PART_GROUP::GROUP_BOSS_HP_FILL), CTRL_COMMAND::COM_RENDER, false);
+	}
+	else
+	{
+		__super::Array_Control(_int(PART_GROUP::GROUP_BOSS_NAME), _int(PART_GROUP::GROUP_BOSS_HP_FILL), CTRL_COMMAND::COM_RENDER, true);
+
+		__super::Get_Front_Part_In_Control(_int(PART_GROUP::GROUP_BOSS_NAME))->strText = m_strBossName;
+		__super::Get_Front_Part_In_Control(_int(PART_GROUP::GROUP_BOSS_HP_FILL))->fRatio = _float(m_fBoss_Hp_Now) / _float(m_fBoss_Hp_Max);
+		__super::Get_Front_Part_In_Control(_int(PART_GROUP::GROUP_BOSS_HP_FILL))->MovePart(__super::Get_Front_Part_In_Control(_int(PART_GROUP::GROUP_BOSS_NAME))->fPosition, fTimeDelta);
+	}
+}
+
 void CUIPage_Play::PlayInfo_Update(_float fTimeDelta)
 {
 	Add_Render_Info_DropInfo(fTimeDelta);
@@ -502,12 +522,24 @@ void CUIPage_Play::Add_Render_Info_DropInfo(_float fTimeDelta)
 
 void CUIPage_Play::Add_Render_Info_BuffInfo(_float fTimeDelta)
 {
+	const CPlayer::STAT_INFO& Info = GET_GAMEINTERFACE->Get_Player()->Get_Player_Stat();
+
 	_float fAlpha_Ratio_Origin = m_fTopPartMove;
 	_float fHeight = __super::Get_Front_Part_In_Control(_int(PART_GROUP::GROUP_DEBUFF_STATIC))->fSize.y * 1.1f;
 
 	for (_int i = 0; i < _int(BUFF_INDEX::BUFF_END); ++i)
 	{
-		if (GET_GAMEINTERFACE->Get_Buff_Ratio(BUFF_INDEX(i)) > 0.f)
+		_Vec2 vBuff = { 0.f,0.f };
+
+		if (i == _int(BUFF_INDEX::BUFF_FIRE))
+			vBuff = Info.fDebuff_Fire;
+		if (i == _int(BUFF_INDEX::BUFF_ELECTRIC))
+			vBuff = Info.fDebuff_Electric;
+		if (i == _int(BUFF_INDEX::BUFF_AICD))
+			vBuff = Info.fDebuff_Acid;
+
+
+		if (vBuff.x > 0.f)
 		{
 			for (_int j = _int(PART_GROUP::GROUP_DEBUFF_STATIC); j <= _int(PART_GROUP::GROUP_DEBUFF_FILL); ++j)
 			{
@@ -519,7 +551,7 @@ void CUIPage_Play::Add_Render_Info_BuffInfo(_float fTimeDelta)
 
 				if (j == _int(PART_GROUP::GROUP_DEBUFF_FILL))
 				{
-					__super::Get_Front_Part_In_Control(_int(PART_GROUP::GROUP_DEBUFF_FILL))->fRatio = GET_GAMEINTERFACE->Get_Buff_Ratio(BUFF_INDEX(i));
+					__super::Get_Front_Part_In_Control(_int(PART_GROUP::GROUP_DEBUFF_FILL))->fRatio = vBuff.x / vBuff.y;
 					__super::Get_Front_Part_In_Control(_int(PART_GROUP::GROUP_DEBUFF_FILL))->fTextureColor = GET_GAMEINTERFACE->Get_Buff_Info(BUFF_INDEX(i))->vTexture_Color;
 					_Vec2 vPos = m_vecPart[m_vec_Group_Ctrl[_int(PART_GROUP::GROUP_DEBUFF_STATIC)]->PartIndexlist.back()]->fPosition;
 					vPos.y += fHeight;

@@ -22,15 +22,19 @@ CLevel_GamePlay::CLevel_GamePlay(ID3D11Device* pDevice, ID3D11DeviceContext* pCo
 
 HRESULT CLevel_GamePlay::Initialize()
 {
+	
 	if (FAILED(Ready_Lights()))
 		return E_FAIL;
 
 	if (FAILED(Ready_Layer_Player()))
 		return E_FAIL;
+
 	if (FAILED(Ready_Layer_Camera()))
 		return E_FAIL;
+
 	if (FAILED(Ready_Layer_BackGround()))
 		return E_FAIL;
+
 	if (FAILED(Ready_Layer_Effect()))
 		return E_FAIL;
 
@@ -39,7 +43,7 @@ HRESULT CLevel_GamePlay::Initialize()
 
 	if (FAILED(Ready_Layer_Paticle()))
 		return E_FAIL;	
-	
+
 	if (FAILED(Read_Map_Data()))
 		return E_FAIL;	
 

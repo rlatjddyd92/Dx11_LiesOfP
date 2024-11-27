@@ -33,6 +33,7 @@ public:
 
 
 
+
 private:
 	CUIManager(ID3D11Device* pDevice, ID3D11DeviceContext* pContext);
 	CUIManager(const CUIManager& Prototype);
@@ -49,6 +50,8 @@ public:
 public:
 	void Input_Render_Info(CUIRender_Batching::UIRENDER_INFO* pInfo) { m_pUIRender_Batching->Input_Render_Info(pInfo); }
 
+	void Set_Scroll_Y_Offset(SCROLL_AREA eArea, _float fOffset) { m_pUIRender_Batching->Set_Scroll_Y_Offset(eArea, fOffset); }
+
 	void Update_UIManager(_float fTimeDelta);
 	void Update_UIControl(_float fTimeDelta);
 
@@ -57,6 +60,9 @@ public:
 	_Vec2 CheckMouse(_Vec2 fPos, _Vec2 fSize);
 
 	_bool Action_InterAction(_wstring strInterName) { return m_pUIPage_Play->Action_InterAction(strInterName); }
+
+	void Set_Scroll_Area(SCROLL_AREA eArea, _Vec2 vPos, _Vec2 vSize) { m_pUIRender_Batching->Set_Scroll_Area(eArea, vPos, vSize); }
+	void Select_Scroll_Area(SCROLL_AREA eArea) { m_pUIRender_Batching->Select_Scroll_Area(eArea); }
 
 	void SetIngame(_bool bTrue) 
 	{ 
@@ -83,7 +89,7 @@ public:
 			{
 				if (i <= _int(UIPAGE::PAGE_LOADING))
 				{
-					m_vecPage[i]->SetUpdate(true);
+					//m_vecPage[i]->SetUpdate(true);
 					//m_vecPage[i]->SetRender(true);
 				}
 				else
@@ -100,6 +106,12 @@ public:
 	// 아이템 획득 
 	void Input_Drop_Item_Info(_int iIndex, _int iCount) { m_pUIPage_Play->Input_Drop_Item_Info(iIndex, iCount); }
 
+	// 보스 체력바 
+	void Activate_Boss_Hp_Bar(_bool bActive) { m_pUIPage_Play->Activate_Boss_Hp_Bar(bActive); }
+	void Set_Boss_Hp_Bar_Info(_wstring strName, _float HpNow, _float HpMax) { m_pUIPage_Play->Set_Boss_Hp_Bar_Info(strName, HpNow, HpMax);}
+
+	// 로딩바 조정 
+	void Set_Loading_Status(_wstring strMessage, _float fProgress) { m_pUIPage_Loading->Set_Loading_Status(strMessage, fProgress); }
 
 private:
 	void UIControl_Test(_float fTimeDelta);
@@ -112,7 +124,7 @@ private:
 	void UIControl_Inven(_float fTimeDelta);
 	void UIControl_Equip(_float fTimeDelta);
 	void UIControl_Stat(_float fTimeDelta);
-	void UIControl_LevelUp(_float fTimeDelta);
+	void UIControl_Option(_float fTimeDelta);
 	void UIControl_Skill(_float fTimeDelta);
 
 public:
@@ -197,12 +209,12 @@ private:
 	CUIPage_Equip* m_pUIPage_Equip = { nullptr };
 	// 스탯
 	CUIPage_Stat* m_pUIPage_Stat = { nullptr };
-	// 레벨업
-	CUIPage_LevelUp* m_pUIPage_LevelUp = { nullptr };
+	// 옵션
+	CUIPage_Option* m_pUIPage_Option = { nullptr };
 	// 스킬트리
 	CUIPage_Skill* m_pUIPage_Skill = { nullptr };
 	// 테스트
-	CUIPage_ToolTip* m_pUIPage_ToolTip = { nullptr };
+	CUIPage_ItemInfo* m_pUIPage_ToolTip = { nullptr };
 	// 직교
 	CUIPage_Ortho* m_pUIPage_Ortho = { nullptr };
 

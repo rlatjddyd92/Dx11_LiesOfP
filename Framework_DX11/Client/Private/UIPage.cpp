@@ -5,18 +5,18 @@
 #include "GameInterface_Controller.h"
 
 CUIPage::CUIPage(ID3D11Device* pDevice, ID3D11DeviceContext* pContext)
-    : CUIObject{ pDevice, pContext }
+	: CUIObject{ pDevice, pContext }
 {
 }
 
 CUIPage::CUIPage(const CUIPage& Prototype)
-    : CUIObject{ Prototype }
+	: CUIObject{ Prototype }
 {
 }
 
 HRESULT CUIPage::Initialize_Prototype()
 {
-    return S_OK;
+	return S_OK;
 }
 
 HRESULT CUIPage::Initialize(void* pArg)
@@ -25,7 +25,7 @@ HRESULT CUIPage::Initialize(void* pArg)
 	if (FAILED(__super::Initialize(&pArg)))
 		return E_FAIL;
 
-    return S_OK;
+	return S_OK;
 }
 
 void CUIPage::Priority_Update(_float fTimeDelta)
@@ -45,7 +45,7 @@ void CUIPage::Late_Update(_float fTimeDelta)
 	// 각 페이지 별 조정 사항을 최종 반영하는 단계
 	__super::Late_Update(fTimeDelta);
 
-	
+
 
 	if ((m_vecPageAction[_int(PAGEACTION::ACTION_CLOSING)]) && (!m_vecPageAction[_int(PAGEACTION::ACTION_OPENING)]))
 	{
@@ -102,7 +102,7 @@ void CUIPage::Late_Update(_float fTimeDelta)
 
 HRESULT CUIPage::Render()
 {
-    return S_OK;
+	return S_OK;
 }
 
 void CUIPage::OpenAction()
@@ -161,7 +161,7 @@ void CUIPage::UpdatePart_ByIndex(_int Index, _float fTimeDelta)
 		m_vecPart[Index]->MovePart(m_vecPart[m_vecPart[Index]->iParentPart_Index]->fPosition, fTimeDelta);
 }
 
-void CUIPage::Input_Render_Info(UPART& Part)
+void CUIPage::Input_Render_Info(UPART& Part, SCROLL_AREA eArea)
 {
 	if (Part.iTexture_Index < 0)
 		if ((Part.iFontIndex < 0) || (Part.iFontIndex >= _int(UI_FONT::FONT_END)))
@@ -179,9 +179,9 @@ void CUIPage::Input_Render_Info(UPART& Part)
 		pNew->eText_Type = TEXT_TYPE::TEXT_RIGHT;
 	else if (Part.bCenter)
 		pNew->eText_Type = TEXT_TYPE::TEXT_CENTER;
-	else 
+	else
 		pNew->eText_Type = TEXT_TYPE::TEXT_LEFT;
-	pNew->fTurn = Part.bTurn;
+	pNew->fTurn = Part.fTurn_Degree;
 	pNew->iFont = Part.iFontIndex;
 	pNew->strText = Part.strText;
 	pNew->vColor_Text = Part.fTextColor;
@@ -194,6 +194,8 @@ void CUIPage::Input_Render_Info(UPART& Part)
 	pNew->vPosition = Part.fPosition;
 	pNew->vSize = Part.fSize;
 	pNew->fAlpha_Strash = Part.fStrash_Alpha;
+
+	pNew->eArea = eArea;
 
 	if (Part.iMoveType == _int(MOVETYPE::TYPE_BAR))
 		pNew->vSize = Part.GetBarSize();

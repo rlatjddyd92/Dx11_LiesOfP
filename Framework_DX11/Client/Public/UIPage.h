@@ -64,8 +64,8 @@ public:
 		_Vec2 Get_Shaking() { return fShaking_Adjust; }
 
 		void Set_RedText() { fTextColor = { 1.f,0.f,0.f,1.f }; }
-		void Set_WhiteText() { fTextColor = { 0.f,0.f,0.f,1.f }; }
-		void Set_BlackText() { fTextColor = { 1.f,1.f,1.f,1.f }; }
+		void Set_WhiteText() { fTextColor = { 1.f,1.f,1.f,1.f }; }
+		void Set_BlackText() { fTextColor = { 0.f,0.f,0.f,1.f }; }
 
 		_wstring strUIPart_Name = {};
 
@@ -162,7 +162,7 @@ public:
 
 	virtual CHECK_MOUSE Check_Page_Action(_float fTimeDelta);
 
-	
+
 
 protected:
 	void UpdatePart_ByControl(UG_CTRL* pCtrl);
@@ -203,8 +203,8 @@ protected:
 
 	void UpdatePart_ByIndex(_int Index, _float fTimeDelta);
 
-	void Input_Render_Info(UPART& Part);
-	
+	void Input_Render_Info(UPART& Part, SCROLL_AREA eArea = SCROLL_AREA::SCROLL_NONE);
+
 
 
 protected:

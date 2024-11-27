@@ -92,10 +92,10 @@ public:
 
 		// 데미지
 		vector<_float> vecDamege;
-		
+
 		// 방어
 		vector<_float> vecDefence;
-		
+
 		// 특수공격
 		_wstring strAttack_Type = {};
 		_float fType_Damege = 0.f;
@@ -124,6 +124,9 @@ public:
 		// 암 관련
 		_float Arm_Gauge_Now = 1000.f;
 		_float Arm_Gauge_Max = 1000.f;
+
+		// 장착 정보 
+		EQUIP_SLOT eSlot = EQUIP_SLOT::EQUIP_END;
 
 	}ITEM;
 
@@ -155,8 +158,7 @@ public:
 		}
 
 		_uint Get_Array_Size() { return _uint(vecItemInfo.size()); }
-
-		ITEM* Get_Item_Info(_uint iIndex) 
+		ITEM* Get_Item_Info(_uint iIndex)
 		{
 			if ((iIndex < 0) || (iIndex >= Get_Array_Size()))
 				return nullptr;
@@ -172,7 +174,7 @@ public:
 						return ITEM_RESULT::RESULT_SUCCESS;
 					}
 
-			if (iNextIndex >=Get_Array_Size())
+			if (iNextIndex >= Get_Array_Size())
 				Add_Array();
 
 			*vecItemInfo[iNextIndex] = *pNew;
@@ -190,7 +192,7 @@ public:
 			if (vecItemInfo[iIndex]->eType_Index == ITEM_TYPE::ITEMTYPE_END)
 				return ITEM_RESULT::RESULT_INVALID;
 
-			if(!vecItemInfo[iIndex]->bStack)
+			if (!vecItemInfo[iIndex]->bStack)
 				return ITEM_RESULT::RESULT_SUCCESS;
 			else if (vecItemInfo[iIndex]->iCount >= iCount)
 			{
@@ -241,9 +243,14 @@ private:
 
 
 public:
+	// 업데이트
+	void Update_Item(_float fDeltatime);
+
 	// 접근, 수정
+	_bool Is_ItemData_Change() { return m_bIsChange; }
 	ITEM_RESULT AddNewItem_Inven(_uint iItemIndex, _uint iCount = 1); // <- 새롭게 아이템을 만들어 인벤에 넣는다 
 	ITEM_RESULT EquipItem_Inven(INVEN_ARRAY_TYPE eIndex, EQUIP_SLOT eSlot, _uint iIndex); // <- 인벤에 있는 아이템을 장비한다 
+	ITEM_RESULT UnEquipItem_Inven(EQUIP_SLOT eSlot); // <- 인벤에 있는 아이템을 장비한다 
 	ITEM_RESULT UseItem_Equip(EQUIP_SLOT eSlot, _uint iCount = 1); // <- 장비된 아이템을 사용한다
 	ITEM_RESULT UseItem_Inven(INVEN_ARRAY_TYPE eIndex, _uint iIndex, _uint iCount = 1); // <- 인벤에 있는 아이템을 직접 사용
 
@@ -275,6 +282,9 @@ public:
 		if ((_int(eIndex) < 0) || (_int(eIndex) >= _int(INVEN_ARRAY_TYPE::TYPE_END)))
 			return nullptr;
 
+		if ((iIndex < 0) || (iIndex >= m_vecArray_Inven[_int(eIndex)]->Get_Array_Size()))
+			return nullptr;
+
 		if (m_vecArray_Inven[_int(eIndex)]->vecItemInfo[iIndex]->eType_Index == ITEM_TYPE::ITEMTYPE_END)
 			return nullptr;
 
@@ -282,8 +292,8 @@ public:
 	}
 
 	const ITEM* Get_Equip_Item_Info(EQUIP_SLOT eSlot) // 현재 장비창에 장착된 아이템의 정보 획득
-	{ 
-		if((_int(eSlot) < 0) || (_int(eSlot) >= _int(EQUIP_SLOT::EQUIP_END)))
+	{
+		if ((_int(eSlot) < 0) || (_int(eSlot) >= _int(EQUIP_SLOT::EQUIP_END)))
 			return nullptr;
 
 		if (m_vecEquip_ItemInfo[_uint(eSlot)]->eType == INVEN_ARRAY_TYPE::TYPE_END)
@@ -299,7 +309,7 @@ public:
 		if (!bForce)
 			if ((iAdd < 0) && (m_iCoin < abs(iAdd)))
 				return ITEM_RESULT::RESULT_INVALID;
-	
+
 		m_iCoin += iAdd;
 		return ITEM_RESULT::RESULT_SUCCESS;
 	}
@@ -309,11 +319,12 @@ public:
 	// 선택 아이템 조정
 	_int Change_Potion_Select(_bool bNext)
 	{
+		m_bIsChange = true;
 		if (bNext)
 			++m_iPotion_Select;
 		else
 			--m_iPotion_Select;
-		
+
 		if (m_iPotion_Select > 2)
 			m_iPotion_Select = 0;
 		else if (m_iPotion_Select < 0)
@@ -323,6 +334,7 @@ public:
 	}
 	_int Change_Tool_Select(_bool bNext)
 	{
+		m_bIsChange = true;
 		if (bNext)
 			++m_iTool_Select;
 		else
@@ -341,6 +353,7 @@ public:
 	// 무기 관련
 	_int Change_Weapon()
 	{
+		m_bIsChange = true;
 		++m_iWeapon_Select;
 		if (m_iWeapon_Select >= 2)
 			m_iWeapon_Select = 0;
@@ -365,11 +378,12 @@ public:
 	}
 
 
-	
+
 
 	// 포션 관련 
 	void Add_Potion_Gauge(_float fAdd)
 	{
+		m_bIsChange = true;
 		m_fNow_Potion_Gauge += fAdd;
 		if (m_fNow_Potion_Gauge >= m_fMax_Potion_Gauge)
 		{
@@ -386,6 +400,7 @@ public:
 	// 암 관련
 	void Add_Arm_Gauge(_float fAdd)
 	{
+		m_bIsChange = true;
 		_int iIndex = m_vecEquip_ItemInfo[_int(EQUIP_SLOT::EQUIP_RESION_ARM)]->iIndex;
 		ITEM* pItem = m_vecArray_Inven[_int(INVEN_ARRAY_TYPE::TYPE_REASON_ARM)]->Get_Item_Info(iIndex);
 		if (pItem == nullptr)
@@ -410,24 +425,24 @@ public:
 
 
 
-	
+
 	// 외부에서 아이템 매니저에 필요한 것이 뭐가 있나? 
 	/*
-	0. 새로운 아이템을 만들어 유저 인벤에 넣는다 
-	  -> 아이템 스펙 Array에서 복사해서 인벤에 넣는 기능 필요 + 수량도 설정할 수 있어야 한다 (스택 아이템) 
-	  -> 만일 스택 아이템이고 이미 인벤에 있다면 숫자만 늘려야 한다 
-	1. 인벤에 있는 아이템의 저장 위치를 변경한다 
-	  -> 게임 특성상 쓸 일이 많아보이지 않는다 -> 후순위로 미룬다 
-	2. 장착 정보를 변경한다 
-	  -> 어느 Array의 몇 번째 아이템을 사용하는 지만 등록하여 간편하게 구성하자 
-	  -> 장착 가능한 칸만 구분하여야 한다 
-	  -> 
-	
-	
-	
+	0. 새로운 아이템을 만들어 유저 인벤에 넣는다
+	  -> 아이템 스펙 Array에서 복사해서 인벤에 넣는 기능 필요 + 수량도 설정할 수 있어야 한다 (스택 아이템)
+	  -> 만일 스택 아이템이고 이미 인벤에 있다면 숫자만 늘려야 한다
+	1. 인벤에 있는 아이템의 저장 위치를 변경한다
+	  -> 게임 특성상 쓸 일이 많아보이지 않는다 -> 후순위로 미룬다
+	2. 장착 정보를 변경한다
+	  -> 어느 Array의 몇 번째 아이템을 사용하는 지만 등록하여 간편하게 구성하자
+	  -> 장착 가능한 칸만 구분하여야 한다
+	  ->
+
+
+
 	*/
 
-	
+
 
 private:
 	HRESULT Initialize_Item();
@@ -454,7 +469,7 @@ private:
 	_uint m_iAdd_Heroic = 2;
 	_uint m_iAdd_Separate = 4;
 	/*
-	날/자루의 경우 
+	날/자루의 경우
 	0. 일반 합체 날 +0;
 	1. 일반 합체 자루 +1;
 	2. 특수 합체 날 +2;
@@ -484,7 +499,8 @@ private:
 	_float m_fNow_Potion_Gauge = 0.f;
 	_float m_fMax_Potion_Gauge = 1000.f;
 
-
+	// 아이템 갱신 
+	_bool m_bIsChange = false;
 
 public:
 	static CItem_Manager* Create(CGameInstance* pGameInstance);

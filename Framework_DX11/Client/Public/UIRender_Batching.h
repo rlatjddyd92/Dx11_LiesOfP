@@ -79,6 +79,10 @@ public:
 		_Vec4 vColor_Text = { 0.f,0.f,0.f,0.f };
 
 		_float fTurn = 0.f;
+
+		// 스크롤 영역
+		SCROLL_AREA eArea = SCROLL_AREA::SCROLL_END;
+
 	}URENDER;
 
 	enum class UI_SHADER
@@ -88,6 +92,7 @@ public:
 		SHADER_MULTIPLE_COLOR,
 		SHADER_END
 	};
+
 
 
 private:
@@ -120,6 +125,15 @@ public:
 
 	HRESULT Render_Part(CUIPage::UPART& pPart, CUIPage& pPage, _bool bTopMove);
 
+	void Set_Scroll_Area(SCROLL_AREA eArea, _Vec2 vPos, _Vec2 vSize);
+	void Select_Scroll_Area(SCROLL_AREA eArea) 
+	{ 
+		m_eNow_Area = eArea;
+		m_pContext->RSSetViewports(1, m_vecViewPort[_int(m_eNow_Area)]);
+	}
+
+	void Set_Scroll_Y_Offset(SCROLL_AREA eArea, _float fOffset) { m_vecfScrollY_Offset_Max[_int(eArea)] = fOffset; }
+
 public:
 	class CShader* m_pShaderCom = { nullptr };
 	class CVIBuffer_Rect* m_pVIBufferCom = { nullptr };
@@ -135,6 +149,8 @@ private:
 	HRESULT Ready_Texture_UIPart();
 	HRESULT Ready_Texture_ItemIcon();
 
+	void Ready_Scroll_Adjust_Data();
+
 	queue<UIRENDER_INFO*> m_queueRender; // <- 이번 프레임에 그릴 내용, 
 
 	vector<UTEXTURE*> m_vecTextureInfo_UIPart;
@@ -142,7 +158,13 @@ private:
 	vector<_tchar*> m_vecFont_tchar;
 
 	vector<class CShader*> m_vecShader_UI;
+	vector<D3D11_VIEWPORT*> m_vecViewPort;
+	vector<_Vec2> m_vecViewPort_Adjust;
 
+	SCROLL_AREA m_eNow_Area = SCROLL_AREA::SCROLL_NONE;
+	vector<_float> m_vecfScrollY_Offset_Max;
+
+	
 
 	// 아래 내용은 다음 단계 
 

@@ -192,11 +192,23 @@ void CUIPage_Ortho::CheckHost(_float fTimeDelta)
 			Safe_Delete(*iter);
 			iter = m_Ortho_Host_list.erase(iter);
 		}
-		else
+		else if ((*iter)->eType == UI_ORTHO_OBJ_TYPE::ORTHO_NORMAL_MONSTER)
 		{
 			_float fDistnace = Check_Distance_From_Cam((*iter)->pHost);
 
 			Make_Monster_HP_Bar((*iter)->pHost, fTimeDelta, fDistnace);
+			Make_Monster_Focusing((*iter)->pHost, fTimeDelta, fDistnace);
+			Make_Monster_SpecialHit((*iter)->pHost, fTimeDelta, fDistnace);
+			++iter;
+		}
+		else if ((*iter)->eType == UI_ORTHO_OBJ_TYPE::ORTHO_BOSS_SIMON)
+		{
+			const CPawn::PAWN_STATUS* pStat = static_cast<CPawn*>((*iter)->pHost)->Get_Status();
+
+			_float fDistnace = Check_Distance_From_Cam((*iter)->pHost);
+
+			GET_GAMEINTERFACE->Activate_Boss_Hp_Bar(true);
+			GET_GAMEINTERFACE->Set_Boss_Hp_Bar_Info(pStat->strName, pStat->fHp, pStat->fMaxHp);
 			Make_Monster_Focusing((*iter)->pHost, fTimeDelta, fDistnace);
 			Make_Monster_SpecialHit((*iter)->pHost, fTimeDelta, fDistnace);
 			++iter;
@@ -209,8 +221,10 @@ void CUIPage_Ortho::Make_Monster_HP_Bar(CGameObject* pHost, _float fTimeDelta, _
 	// 여기에 HP 바를 띄우는 논리가 필요함 
 
 	// 테스트 수치 
-	_float fRatio = GET_GAMEINTERFACE->GetTestData()->fHP_Now / GET_GAMEINTERFACE->GetTestData()->fHP_Max;
-	_float fDamege = GET_GAMEINTERFACE->GetTestData()->fHP_Damege;
+	const CPawn::PAWN_STATUS* pStat = static_cast<CPawn*>(pHost)->Get_Status();
+
+	_float fRatio = pStat->fHp / pStat->fMaxHp;
+	_float fDamege = pStat->fAtkDmg;
 
 	_Vec2 fPosition = { 0.f,0.f };
 	if (!Make_OrthoGraphy_Position(pHost, PART_GROUP::GROUP_HP_FRAME, &fPosition))
@@ -220,12 +234,17 @@ void CUIPage_Ortho::Make_Monster_HP_Bar(CGameObject* pHost, _float fTimeDelta, _
 	*pRender_HP_Frame = { fDistance ,fPosition,  PART_GROUP::GROUP_HP_FRAME, fRatio, {}, -1 };
 	OR_RENDER* pRender_HP_Fill = new OR_RENDER;
 	*pRender_HP_Fill = { fDistance ,fPosition,  PART_GROUP::GROUP_HP_FILL, fRatio, {}, -1 };
-	OR_RENDER* pRender_HP_Demege = new OR_RENDER;
-	*pRender_HP_Demege = { fDistance ,fPosition,  PART_GROUP::GROUP_HP_COUNT, fRatio, to_wstring(_int(fDamege)), -1};
 
 	m_queue_Ortho_Render_Ctrl.push(pRender_HP_Frame);
 	m_queue_Ortho_Render_Ctrl.push(pRender_HP_Fill);
-	m_queue_Ortho_Render_Ctrl.push(pRender_HP_Demege);
+
+	if (fDamege > 0.f)
+	{
+		OR_RENDER* pRender_HP_Demege = new OR_RENDER;
+		*pRender_HP_Demege = { fDistance ,fPosition,  PART_GROUP::GROUP_HP_COUNT, fRatio, to_wstring(_int(fDamege)), -1 };
+		m_queue_Ortho_Render_Ctrl.push(pRender_HP_Demege);
+	}
+	
 }
 
 void CUIPage_Ortho::Make_Monster_Focusing(CGameObject* pHost, _float fTimeDelta, _float fDistance)
@@ -251,7 +270,7 @@ void CUIPage_Ortho::Make_Monster_SpecialHit(CGameObject* pHost, _float fTimeDelt
 	// 여기에 특수 공격 가능 상태 띄우는 논리가 필요함 
 
 	// 테스트 수치 
-	if (!GET_GAMEINTERFACE->GetTestData()->bSpecial_Attack)
+	if (static_cast<CPawn*>(pHost)->Get_Status()->bWeakness)
 		return;
 
 	_Vec2 fPosition = { 0.f,0.f };

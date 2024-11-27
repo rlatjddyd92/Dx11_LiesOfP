@@ -11,6 +11,11 @@ CItem_Manager::CItem_Manager(CGameInstance* pGameInstance)
 	Safe_AddRef(m_pGameInstance);
 }
 
+void CItem_Manager::Update_Item(_float fDeltatime)
+{
+	m_bIsChange = false;
+}
+
 ITEM_RESULT CItem_Manager::AddNewItem_Inven(_uint iItemIndex, _uint iCount)
 {
 	ITEM* NewItem = m_vecItem_BasicSpec[iItemIndex];
@@ -26,12 +31,13 @@ ITEM_RESULT CItem_Manager::AddNewItem_Inven(_uint iItemIndex, _uint iCount)
 		else iInvenSlotIndex += m_iAdd_Separate;
 		if (NewItem->bIsHandele) iInvenSlotIndex += m_iAdd_Handle;
 	}
-	
+
 
 	m_vecArray_Inven[iInvenSlotIndex]->Input_Item(NewItem, iCount);
 
 	GET_GAMEINTERFACE->Input_Drop_Item_Info(iItemIndex, iCount);
 
+	m_bIsChange = true;
 	return ITEM_RESULT::RESULT_SUCCESS;
 }
 
@@ -44,6 +50,7 @@ ITEM_RESULT CItem_Manager::InputItem_Inven(ITEM* pItem, _uint iCount)
 
 	m_vecArray_Inven[iInvenSlotIndex]->Input_Item(pItem, iCount);
 
+	m_bIsChange = true;
 	return ITEM_RESULT::RESULT_SUCCESS;
 }
 
@@ -66,6 +73,7 @@ ITEM_RESULT CItem_Manager::Assemble_Blade_Handle(_int iBladeIndex, _int iHandleI
 	m_vecArray_Inven[_int(INVEN_ARRAY_TYPE::TYPE_BLADE_PART)]->Remove_Item(iBladeIndex);
 	m_vecArray_Inven[_int(INVEN_ARRAY_TYPE::TYPE_HANDEL_PART)]->Remove_Item(iHandleIndex);
 
+	m_bIsChange = true;
 	return ITEM_RESULT::RESULT_SUCCESS;
 }
 
@@ -80,23 +88,43 @@ ITEM_RESULT CItem_Manager::EquipItem_Inven(INVEN_ARRAY_TYPE eIndex, EQUIP_SLOT e
 	{
 		m_vecEquip_ItemInfo[_uint(eSlot)]->eType = eIndex;
 		m_vecEquip_ItemInfo[_uint(eSlot)]->iIndex = iIndex;
+		NewItem.eSlot = eSlot;
+		m_bIsChange = true;
 		return ITEM_RESULT::RESULT_SUCCESS;
 	}
 
 	return ITEM_RESULT::RESULT_INVALID;
 }
 
+ITEM_RESULT CItem_Manager::UnEquipItem_Inven(EQUIP_SLOT eSlot)
+{
+	ITEM& NewItem = *(m_vecArray_Inven[_uint(m_vecEquip_ItemInfo[_uint(eSlot)]->eType)]->vecItemInfo[m_vecEquip_ItemInfo[_uint(eSlot)]->iIndex]);
+
+	if (NewItem.eType_Index == ITEM_TYPE::ITEMTYPE_END)
+		return ITEM_RESULT::RESULT_INVALID;
+
+	NewItem.eSlot = EQUIP_SLOT::EQUIP_END;
+
+	m_vecEquip_ItemInfo[_uint(eSlot)]->eType = INVEN_ARRAY_TYPE::TYPE_END;
+	m_vecEquip_ItemInfo[_uint(eSlot)]->iIndex = -1;
+
+	return ITEM_RESULT();
+}
+
 ITEM_RESULT CItem_Manager::UseItem_Equip(EQUIP_SLOT eSlot, _uint iCount)
 {
 	INVEN_ARRAY_TYPE eArray = m_vecEquip_ItemInfo[_uint(eSlot)]->eType;
 	_uint iIndex = m_vecEquip_ItemInfo[_uint(eSlot)]->iIndex;
-	if(eArray == INVEN_ARRAY_TYPE::TYPE_END)
+	if (eArray == INVEN_ARRAY_TYPE::TYPE_END)
 		return ITEM_RESULT::RESULT_INVALID;
 
 	if (m_vecArray_Inven[_uint(eArray)]->Get_Item_Info(iIndex)->iItem_Index == _int(SPECIAL_ITEM::SP_PULSE_BATTERY))
 	{
 		if (Use_Potion())
+		{
+			m_bIsChange = true;
 			return ITEM_RESULT::RESULT_SUCCESS;
+		}
 		else
 			return ITEM_RESULT::RESULT_INVALID;
 	}
@@ -109,7 +137,10 @@ ITEM_RESULT CItem_Manager::UseItem_Inven(INVEN_ARRAY_TYPE eIndex, _uint iIndex, 
 	if (m_vecArray_Inven[_uint(eIndex)]->Get_Item_Info(iIndex)->iItem_Index == _int(SPECIAL_ITEM::SP_PULSE_BATTERY))
 	{
 		if (Use_Potion())
+		{
+			m_bIsChange = true;
 			return ITEM_RESULT::RESULT_SUCCESS;
+		}
 		else
 			return ITEM_RESULT::RESULT_INVALID;
 	}
@@ -119,6 +150,7 @@ ITEM_RESULT CItem_Manager::UseItem_Inven(INVEN_ARRAY_TYPE eIndex, _uint iIndex, 
 
 ITEM_RESULT CItem_Manager::Remove_Item_Inven(INVEN_ARRAY_TYPE eIndex, _uint iIndex)
 {
+	m_bIsChange = true;
 	return m_vecArray_Inven[_uint(eIndex)]->Remove_Item(iIndex);
 }
 
@@ -126,7 +158,7 @@ CPlayer::WEAPON_TYPE CItem_Manager::Get_Weapon_Model_Index()
 {
 	INVEN_ARRAY_TYPE eArray = m_vecEquip_ItemInfo[_int(EQUIP_SLOT::EQUIP_WEAPON_BLADE_0) + (m_iWeapon_Select * 2)]->eType;
 	_int iIndex = m_vecEquip_ItemInfo[_int(EQUIP_SLOT::EQUIP_WEAPON_BLADE_0) + (m_iWeapon_Select * 2)]->iIndex;
-	
+
 	const ITEM* pItem = m_vecArray_Inven[_int(eArray)]->Get_Item_Info(iIndex);
 
 	if (pItem == nullptr)
@@ -137,7 +169,7 @@ CPlayer::WEAPON_TYPE CItem_Manager::Get_Weapon_Model_Index()
 		return CPlayer::WEAPON_TYPE::WEP_FLAME;
 	else if (pItem->strName == TEXT("인간성의 증거"))
 		return CPlayer::WEAPON_TYPE::WEP_SCISSOR;
-	
+
 	return CPlayer::WEAPON_TYPE::WEP_END;
 }
 
@@ -147,12 +179,13 @@ _bool CItem_Manager::Use_Potion()
 	if (m_iNow_Potion_Count <= 0)
 		return false;
 
+	m_bIsChange = true;
 	--m_iNow_Potion_Count;
 	for (_int i = 0; i < 5; ++i)
 		if (m_vecArray_Inven[_int(INVEN_ARRAY_TYPE::TYPE_USING_BASIC)]->Get_Item_Info(i)->iItem_Index == _int(SPECIAL_ITEM::SP_PULSE_BATTERY))
 			m_vecArray_Inven[_int(INVEN_ARRAY_TYPE::TYPE_USING_BASIC)]->Get_Item_Info(i)->iCount = m_iNow_Potion_Count;
 
-	GET_GAMEINTERFACE->Add_Stat_Normal(STAT_NORMAL::STAT_GAUGE_HP, 100.f);
+	//GET_GAMEINTERFACE->Add_Stat_Normal(STAT_NORMAL::STAT_GAUGE_HP, 100.f);
 
 	return true;
 }
@@ -196,7 +229,7 @@ HRESULT CItem_Manager::Initialize_Item()
 
 		for (_uint i = 0; i < _uint(DEFENCE_TYPE::DEFENCE_END); ++i)
 			pNew->vecDefence[i] = stof(iter[17 + i]);
-		
+
 		pNew->strAttack_Type = iter[26];
 		pNew->fType_Damege = stof(iter[27]);
 		pNew->fType_Damege_Fatal_Ratio = stof(iter[28]);
@@ -222,7 +255,7 @@ HRESULT CItem_Manager::Initialize_Item()
 	if (FAILED(m_pGameInstance->LoadDataByFile("../Bin/DataFiles/Item_Inven_Array_Data.csv", &vecBuffer_InvenSlot)))
 		return E_FAIL;
 
-	 iStartRow = 2;
+	iStartRow = 2;
 
 	for (_uint i = iStartRow; i < _uint(ITEM_TYPE::ITEMTYPE_END) + iStartRow; ++i)
 		m_vecItem_InvenSlotIndex[i - iStartRow] = stoi(vecBuffer_InvenSlot[i][2]);
@@ -232,17 +265,17 @@ HRESULT CItem_Manager::Initialize_Item()
 	if (FAILED(m_pGameInstance->LoadDataByFile("../Bin/DataFiles/Item_Equip_Slot_Data.csv", &vecBuffer_EquipSlot)))
 		return E_FAIL;
 
-	 iStartRow = 1;
+	iStartRow = 1;
 
-	 for (_uint i = iStartRow; i < _uint(INVEN_ARRAY_TYPE::TYPE_END) + iStartRow; ++i)
-	 {
-		 m_vecArray_Inven[i - iStartRow] = new ARRAY;
-		 m_vecArray_Inven[i - iStartRow]->strInven_Array_Name = vecBuffer_EquipSlot[i][2];
+	for (_uint i = iStartRow; i < _uint(INVEN_ARRAY_TYPE::TYPE_END) + iStartRow; ++i)
+	{
+		m_vecArray_Inven[i - iStartRow] = new ARRAY;
+		m_vecArray_Inven[i - iStartRow]->strInven_Array_Name = vecBuffer_EquipSlot[i][2];
 	}
-		
 
 
-	for (_uint i=3; i < _uint(EQUIP_SLOT::EQUIP_END) + 3; ++i)
+
+	for (_uint i = 3; i < _uint(EQUIP_SLOT::EQUIP_END) + 3; ++i)
 	{
 		EQUIP* pNew = new EQUIP;
 		m_vecEquip_ItemInfo.push_back(pNew);
@@ -290,7 +323,7 @@ HRESULT CItem_Manager::Initialize_Item()
 			Assemble_Blade_Handle(0, 0);
 			bAssembleWeapon = true;
 		}
-			
+
 		if (stoi(iter[2]) != -1)
 			EquipItem_Inven(INVEN_ARRAY_TYPE(stoi(iter[2])), EQUIP_SLOT(stoi(iter[0])), stoi(iter[3]));
 	}

@@ -53,14 +53,14 @@ void CGameInterface_Controller::Update_GameInterface(_float fTimeDelta)
 		}
 		else if (KEY_TAP(KEY::F5))
 		{
-			for (_int i = 0; i < _int(BUFF_INDEX::BUFF_END); ++i)
+			/*for (_int i = 0; i < _int(BUFF_INDEX::BUFF_END); ++i)
 			{
 				if (m_pPlayer_Stat_Manager->Get_Buff_Ratio(BUFF_INDEX(i)) == 0.f)
 				{
 					m_pPlayer_Stat_Manager->Start_Buff(BUFF_INDEX(i));
 					break;
 				}
-			}
+			}*/
 		}
 		else if (KEY_HOLD(KEY::F6))
 			m_pUIManager->Action_InterAction(TEXT("테스트 상호작용"));
@@ -70,10 +70,10 @@ void CGameInterface_Controller::Update_GameInterface(_float fTimeDelta)
 
 
 
-
-	m_pPlayer_Stat_Manager->Update_Stat(fTimeDelta);
+	m_pItem_Manager->Update_Item(fTimeDelta);
+	//m_pPlayer_Stat_Manager->Update_Stat(fTimeDelta);
 	m_pUIManager->Update_UIManager(fTimeDelta);
-	
+
 
 }
 
@@ -84,10 +84,8 @@ void CGameInterface_Controller::Release_GameInterface()
 	Safe_Release(m_pUIManager);
 	Safe_Release(m_pItem_Manager);
 	Safe_Release(m_pPlayer_Stat_Manager);
-
-
-
-
+	m_pPlayer = nullptr;
+	
 	GET_GAMEINTERFACE->Destroy_Instance();
 }
 

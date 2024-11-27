@@ -44,6 +44,7 @@ HRESULT CUIRender_Batching::Initialize_Prototype()
 	if (FAILED(Ready_Texture_ItemIcon()))
 		return E_FAIL;
 
+	Ready_Scroll_Adjust_Data();
 
 	return S_OK;
 }
@@ -72,11 +73,30 @@ void CUIRender_Batching::Late_Update(_float fTimeDelta)
 
 HRESULT CUIRender_Batching::Render()
 {
+	_float fWidth = m_vecViewPort[_int(m_eNow_Area)]->Width;
+	_float fHeight = m_vecViewPort[_int(m_eNow_Area)]->Height;
+	_float fStartX = m_vecViewPort[_int(m_eNow_Area)]->TopLeftX;
+	_float fStartY = m_vecViewPort[_int(m_eNow_Area)]->TopLeftY;
+	_float fSizeX_Adjust = _float(g_iWinSizeX) / fWidth;
+	_float fSizeY_Adjust = _float(g_iWinSizeY) / fHeight;
+
 	while (!m_queueRender.empty())
 	{
 		URENDER* pNow = m_queueRender.front();
 		m_queueRender.pop();
 
+		if (m_eNow_Area != pNow->eArea)
+		{
+			m_eNow_Area = pNow->eArea;
+			m_pContext->RSSetViewports(1, m_vecViewPort[_int(m_eNow_Area)]);
+			 fWidth = m_vecViewPort[_int(m_eNow_Area)]->Width;
+			 fHeight = m_vecViewPort[_int(m_eNow_Area)]->Height;
+			 fStartX = m_vecViewPort[_int(m_eNow_Area)]->TopLeftX;
+			 fStartY = m_vecViewPort[_int(m_eNow_Area)]->TopLeftY;
+			 fSizeX_Adjust = _float(g_iWinSizeX) / fWidth;
+			 fSizeY_Adjust = _float(g_iWinSizeY) / fHeight;
+		}
+			
 		if (pNow->iTexture >= 0)
 		{
 			UI_SHADER eShader = UI_SHADER::SHADER_NORMAL;
@@ -99,10 +119,52 @@ HRESULT CUIRender_Batching::Render()
 
 			m_pTransformCom->Set_WorldMatrix(XMMatrixIdentity());
 
-			m_pTransformCom->Set_Scaled(pNow->vSize.x, pNow->vSize.y, 1.f);
+			m_pTransformCom->Set_Scaled(pNow->vSize.x * fSizeX_Adjust, pNow->vSize.y * fSizeY_Adjust, 1.f);
 
-			m_pTransformCom->Set_State(CTransform::STATE_POSITION,
-				XMVectorSet(pNow->vPosition.x - m_fViewWidth * 0.5f, -pNow->vPosition.y + m_fViewHeight * 0.5f, 0.f, 1.f));
+			if (m_eNow_Area == SCROLL_AREA::SCROLL_NONE)
+			{
+				m_pTransformCom->Set_State(CTransform::STATE_POSITION,
+					XMVectorSet((pNow->vPosition.x) - fWidth * 0.5f, -(pNow->vPosition.y) + fHeight * 0.5f, 0.f, 1.f));
+			}
+			else 
+			{
+				pNow->vPosition.x *= fSizeX_Adjust;
+				pNow->vPosition.y *= fSizeY_Adjust;
+
+				pNow->vPosition.x -= fStartX;
+				pNow->vPosition.y -= fStartY;
+
+
+				if (KEY_HOLD(KEY::ALT))
+				{
+					if (KEY_HOLD(KEY::NUM1))
+					{
+						m_vecViewPort_Adjust[_int(m_eNow_Area)].x += 0.01f;
+					}
+					if (KEY_HOLD(KEY::NUM2))
+					{
+						m_vecViewPort_Adjust[_int(m_eNow_Area)].x -= 0.01f;
+					}
+
+					if (KEY_HOLD(KEY::NUM3))
+					{
+						m_vecViewPort_Adjust[_int(m_eNow_Area)].y += 0.01f;
+					}
+					if (KEY_HOLD(KEY::NUM4))
+					{
+						m_vecViewPort_Adjust[_int(m_eNow_Area)].y -= 0.01f;
+					}
+
+				}
+
+				pNow->vPosition.x += m_vecViewPort_Adjust[_int(m_eNow_Area)].x;
+				pNow->vPosition.y += m_vecViewPort_Adjust[_int(m_eNow_Area)].y;
+				
+					m_pTransformCom->Set_State(CTransform::STATE_POSITION,
+						XMVectorSet((pNow->vPosition.x) - fWidth * 0.5f, -(pNow->vPosition.y) + fHeight * 0.5f, 0.f, 1.f));
+			}
+			
+			
 
 			if (pNow->fTurn != 0.f)
 				m_pTransformCom->Rotation({ 0.f,0.f,1.f,0.f }, XMConvertToRadians(pNow->fTurn));
@@ -163,7 +225,7 @@ HRESULT CUIRender_Batching::Render()
 			}
 				
 
-			_Vec4 vPosition = { pNow->vPosition.x, pNow->vPosition.y, 0.f,0.f };
+			_Vec4 vPosition = { pNow->vPosition.x - fStartX, pNow->vPosition.y - fStartY, 0.f,0.f };
 			_Vec4 vColor = { 1.f,1.f,1.f,1.f };
 
 			if (pNow->vColor_Text.x >= 0.f)
@@ -194,6 +256,9 @@ HRESULT CUIRender_Batching::Render()
 
 		Safe_Delete(pNow);
 	}
+
+	//m_eNow_Area = SCROLL_AREA::SCROLL_NONE;
+
 	return S_OK;
 }
 
@@ -250,6 +315,20 @@ HRESULT CUIRender_Batching::Render_Part(CUIPage::UPART& pPart, CUIPage& pPage, _
 	return E_NOTIMPL;
 }
 
+void CUIRender_Batching::Set_Scroll_Area(SCROLL_AREA eArea, _Vec2 vPos, _Vec2 vSize)
+{
+	m_vecViewPort[_int(eArea)]->Width = vSize.x;
+	m_vecViewPort[_int(eArea)]->Height = vSize.y;
+
+	m_vecViewPort[_int(eArea)]->TopLeftX = vPos.x - (vSize.x * 0.5f);
+	m_vecViewPort[_int(eArea)]->TopLeftY = vPos.y - (vSize.y * 0.5f);
+
+	m_vecViewPort[_int(eArea)]->MinDepth = 0.f;
+	m_vecViewPort[_int(eArea)]->MaxDepth = 1.f;
+
+	m_vecfScrollY_Offset_Max[_int(eArea)] = m_vecViewPort[_int(eArea)]->Height;
+}
+
 
 HRESULT CUIRender_Batching::Ready_Components()
 {
@@ -295,8 +374,15 @@ HRESULT CUIRender_Batching::Ready_Components()
 	//	TEXT("Com_VIBuffer_Scroll"), reinterpret_cast<CComponent**>(&m_pVIBufferCom_Scroll))))
 	//	return E_FAIL;
 
+	m_vecViewPort.resize(_int(SCROLL_AREA::SCROLL_END));
+	for (auto& iter : m_vecViewPort)
+	{
+		D3D11_VIEWPORT* pNew = new D3D11_VIEWPORT;
+		iter = pNew;
+	}
+	m_vecfScrollY_Offset_Max.resize(_int(SCROLL_AREA::SCROLL_END));
+	m_vecViewPort_Adjust.resize(_int(SCROLL_AREA::SCROLL_END));
 	
-
 	return S_OK;
 }
 
@@ -383,6 +469,18 @@ HRESULT CUIRender_Batching::Ready_Texture_ItemIcon()
 	return S_OK;
 }
 
+void CUIRender_Batching::Ready_Scroll_Adjust_Data()
+{
+	vector<vector<_wstring>> vecBuffer;
+	m_pGameInstance->LoadDataByFile("../Bin/DataFiles/Scroll_Adjust_Data.csv", &vecBuffer);
+
+	for (_int i = 1; i < vecBuffer.size(); ++i)
+	{
+		m_vecViewPort_Adjust[i - 1] = { stof(vecBuffer[i][1]), stof(vecBuffer[i][2]) };
+	}
+
+}
+
 
 CUIRender_Batching* CUIRender_Batching::Create(ID3D11Device* pDevice, ID3D11DeviceContext* pContext)
 {
@@ -453,4 +551,13 @@ void CUIRender_Batching::Free()
 		Safe_Delete(m_queueRender.front());
 		m_queueRender.pop();
 	}
+
+	for (auto& iter : m_vecViewPort)
+		Safe_Delete(iter);
+
+	m_vecViewPort.clear();
+
+	m_vecfScrollY_Offset_Max.clear();
+
+	m_vecViewPort_Adjust.clear();
 }

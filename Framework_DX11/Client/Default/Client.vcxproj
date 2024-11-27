@@ -313,7 +313,7 @@
     <ClInclude Include="..\Public\UIPage.h" />
     <ClInclude Include="..\Public\UIPage_Equip.h" />
     <ClInclude Include="..\Public\UIPage_Inven.h" />
-    <ClInclude Include="..\Public\UIPage_LevelUp.h" />
+    <ClInclude Include="..\Public\UIPage_Option.h" />
     <ClInclude Include="..\Public\UIPage_Loading.h" />
     <ClInclude Include="..\Public\UIPage_Main.h" />
     <ClInclude Include="..\Public\UIPage_Menu.h" />
@@ -321,7 +321,7 @@
     <ClInclude Include="..\Public\UIPage_Play.h" />
     <ClInclude Include="..\Public\UIPage_Skill.h" />
     <ClInclude Include="..\Public\UIPage_Stat.h" />
-    <ClInclude Include="..\Public\UIPage_ToolTip.h" />
+    <ClInclude Include="..\Public\UIPage_ItemInfo.h" />
     <ClInclude Include="..\Public\UIRender_Batching.h" />
     <ClInclude Include="..\Public\UIRender_Client.h" />
     <ClInclude Include="..\Public\WallDeco.h" />
@@ -487,7 +487,7 @@
     <ClCompile Include="..\Private\UIPage.cpp" />
     <ClCompile Include="..\Private\UIPage_Equip.cpp" />
     <ClCompile Include="..\Private\UIPage_Inven.cpp" />
-    <ClCompile Include="..\Private\UIPage_LevelUp.cpp" />
+    <ClCompile Include="..\Private\UIPage_Option.cpp" />
     <ClCompile Include="..\Private\UIPage_Loading.cpp" />
     <ClCompile Include="..\Private\UIPage_Main.cpp" />
     <ClCompile Include="..\Private\UIPage_Menu.cpp" />
@@ -495,7 +495,7 @@
     <ClCompile Include="..\Private\UIPage_Play.cpp" />
     <ClCompile Include="..\Private\UIPage_Skill.cpp" />
     <ClCompile Include="..\Private\UIPage_Stat.cpp" />
-    <ClCompile Include="..\Private\UIPage_ToolTip.cpp" />
+    <ClCompile Include="..\Private\UIPage_ItemInfo.cpp" />
     <ClCompile Include="..\Private\UIRender_Batching.cpp" />
     <ClCompile Include="..\Private\UIRender_Client.cpp" />
     <ClCompile Include="..\Private\WallDeco.cpp" />
