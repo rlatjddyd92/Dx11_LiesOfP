@@ -7,6 +7,7 @@ matrix g_WorldMatrix, g_ViewMatrix, g_ProjMatrix;
 texture2D g_DiffuseTexture;
 texture2D g_MaskTexture_1;
 texture2D g_MaskTexture_2;
+texture2D g_NormalTexture;
 
 vector g_vCamPosition;
 float4 g_vColor;

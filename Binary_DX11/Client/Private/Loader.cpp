@@ -340,54 +340,19 @@ HRESULT CLoader::Ready_Resources_For_Effect()
 {
 	_matrix		PreTransformMatrix = XMMatrixIdentity();
 
-	/* For. Prototype_Component_Model_Effect_HalfSphere_01 */
-	//if (FAILED(m_pGameInstance->Add_Prototype(LEVEL_GAMEPLAY, TEXT("Prototype_Component_Model_Effect_HalfSphere_01"),
-	//	CModel::Create(m_pDevice, m_pContext, CModel::TYPE_NONANIM, "../Bin/Resources/Models/Effect/SM_HalfSphere_01_GDH.fbx", "../Bin/ModelData/NonAnim/Effect/", PreTransformMatrix))))
-	//	return E_FAIL;
-
-	///* For. Prototype_Component_Model_Effect_HalfSphere_02 */
-	//if (FAILED(m_pGameInstance->Add_Prototype(LEVEL_GAMEPLAY, TEXT("Prototype_Component_Model_Effect_HalfSphere_02"),
-	//	CModel::Create(m_pDevice, m_pContext, CModel::TYPE_NONANIM, "../Bin/Resources/Models/Effect/SM_HalfSphere_02_KMH.fbx", "../Bin/ModelData/NonAnim/Effect/", PreTransformMatrix))))
-	//	return E_FAIL;
-
 	/* For. Prototype_Component_Model_Effect_Helix_03 */
-	if (FAILED(m_pGameInstance->Add_Prototype(LEVEL_GAMEPLAY, TEXT("Prototype_Component_Model_Effect_Helix_03"),
-		CModel::Create(m_pDevice, m_pContext, CModel::TYPE_NONANIM, "../Bin/Resources/Models/Effect/SM_Helix_03_GDH.fbx", "../Bin/ModelData/NonAnim/Effect/", PreTransformMatrix))))
+	if (FAILED(m_pGameInstance->Add_Prototype(LEVEL_GAMEPLAY, TEXT("Prototype_Component_Model_Effect_Crystal_Cloud"),
+		CModel::Create(m_pDevice, m_pContext, CModel::TYPE_NONANIM, "../Bin/Resources/Models/Effect/Mesh_Crystal_Clouds_01.fbx", "../Bin/ModelData/NonAnim/Effect/", PreTransformMatrix))))
 		return E_FAIL;
 
 	/* For. Prototype_Component_Model_Effect_Helix_04 */
-	if (FAILED(m_pGameInstance->Add_Prototype(LEVEL_GAMEPLAY, TEXT("Prototype_Component_Model_Effect_Helix_04"),
-		CModel::Create(m_pDevice, m_pContext, CModel::TYPE_NONANIM, "../Bin/Resources/Models/Effect/SM_Helix_04_LGS.fbx", "../Bin/ModelData/NonAnim/Effect/", PreTransformMatrix))))
+	if (FAILED(m_pGameInstance->Add_Prototype(LEVEL_GAMEPLAY, TEXT("Prototype_Component_Model_Effect_Helix_Single"),
+		CModel::Create(m_pDevice, m_pContext, CModel::TYPE_NONANIM, "../Bin/Resources/Models/Effect/Mesh_Helix_Single.fbx", "../Bin/ModelData/NonAnim/Effect/", PreTransformMatrix))))
 		return E_FAIL;
 
 	/* For. Prototype_Component_Model_Effect_Helix_08 */
-	if (FAILED(m_pGameInstance->Add_Prototype(LEVEL_GAMEPLAY, TEXT("Prototype_Component_Model_Effect_Helix_08"),
-		CModel::Create(m_pDevice, m_pContext, CModel::TYPE_NONANIM, "../Bin/Resources/Models/Effect/SM_Helix_08_HJS.fbx", "../Bin/ModelData/NonAnim/Effect/", PreTransformMatrix))))
-		return E_FAIL;
-
-	/* For. Prototype_Component_Model_Effect_Swirl_01 */
-	if (FAILED(m_pGameInstance->Add_Prototype(LEVEL_GAMEPLAY, TEXT("Prototype_Component_Model_Effect_Swirl_01"),
-		CModel::Create(m_pDevice, m_pContext, CModel::TYPE_NONANIM, "../Bin/Resources/Models/Effect/SM_Swirl_01_RSW.fbx", "../Bin/ModelData/NonAnim/Effect/", PreTransformMatrix))))
-		return E_FAIL;
-
-	/* For. Prototype_Component_Model_Effect_Swirl_02 */
-	if (FAILED(m_pGameInstance->Add_Prototype(LEVEL_GAMEPLAY, TEXT("Prototype_Component_Model_Effect_Swirl_02"),
-		CModel::Create(m_pDevice, m_pContext, CModel::TYPE_NONANIM, "../Bin/Resources/Models/Effect/SM_Swirl_02_RSW.fbx", "../Bin/ModelData/NonAnim/Effect/", PreTransformMatrix))))
-		return E_FAIL;
-
-	/* For. Prototype_Component_Model_Effect_Swirl_03 */
-	if (FAILED(m_pGameInstance->Add_Prototype(LEVEL_GAMEPLAY, TEXT("Prototype_Component_Model_Effect_Swirl_03"),
-		CModel::Create(m_pDevice, m_pContext, CModel::TYPE_NONANIM, "../Bin/Resources/Models/Effect/SM_Swirl_03_RSW.fbx", "../Bin/ModelData/NonAnim/Effect/", PreTransformMatrix))))
-		return E_FAIL;
-
-	/* For. Prototype_Component_Model_Effect_Swirl_04 */
-	if (FAILED(m_pGameInstance->Add_Prototype(LEVEL_GAMEPLAY, TEXT("Prototype_Component_Model_Effect_Swirl_04"),
-		CModel::Create(m_pDevice, m_pContext, CModel::TYPE_NONANIM, "../Bin/Resources/Models/Effect/SM_Swirl_04_RSW.fbx", "../Bin/ModelData/NonAnim/Effect/", PreTransformMatrix))))
-		return E_FAIL;
-
-	/* For. Prototype_Component_Model_Effect_Tornado_02 */
-	if (FAILED(m_pGameInstance->Add_Prototype(LEVEL_GAMEPLAY, TEXT("Prototype_Component_Model_Effect_Tornado_02"),
-		CModel::Create(m_pDevice, m_pContext, CModel::TYPE_NONANIM, "../Bin/Resources/Models/Effect/SM_Tornado_02_RSW.fbx", "../Bin/ModelData/NonAnim/Effect/", PreTransformMatrix))))
+	if (FAILED(m_pGameInstance->Add_Prototype(LEVEL_GAMEPLAY, TEXT("Prototype_Component_Model_Effect_Half_Sphere"),
+		CModel::Create(m_pDevice, m_pContext, CModel::TYPE_NONANIM, "../Bin/Resources/Models/Effect/Mesh_HalfSphere.fbx", "../Bin/ModelData/NonAnim/Effect/", PreTransformMatrix))))
 		return E_FAIL;
 
 	return S_OK;
