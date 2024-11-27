@@ -426,7 +426,7 @@
 #include "D:\GitProject\Dx11_LiesOfP\Framework_DX11\Client\Private\UIPage_Inven.cpp"
 
 
-#include "D:\GitProject\Dx11_LiesOfP\Framework_DX11\Client\Private\UIPage_LevelUp.cpp"
+#include "D:\GitProject\Dx11_LiesOfP\Framework_DX11\Client\Private\UIPage_Option.cpp"
 
 
 #include "D:\GitProject\Dx11_LiesOfP\Framework_DX11\Client\Private\UIPage_Loading.cpp"
@@ -450,7 +450,7 @@
 #include "D:\GitProject\Dx11_LiesOfP\Framework_DX11\Client\Private\UIPage_Stat.cpp"
 
 
-#include "D:\GitProject\Dx11_LiesOfP\Framework_DX11\Client\Private\UIPage_ToolTip.cpp"
+#include "D:\GitProject\Dx11_LiesOfP\Framework_DX11\Client\Private\UIPage_ItemInfo.cpp"
 
 
 #include "D:\GitProject\Dx11_LiesOfP\Framework_DX11\Client\Private\UIRender_Batching.cpp"

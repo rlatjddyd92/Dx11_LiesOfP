@@ -296,7 +296,7 @@ void CUIPage_Inven::Update_Array_Position(_float fTimeDelta)
 			{
 				m_vecPart[iter]->fPosition.y += fAdjust_Y + (fAdjust_Cell * iTitle);
 				m_vecPart[iter]->bRender = true;
-				if (fStartY == -1.f) fStartY = m_vecPart[iter]->fPosition.y - m_vecPart[iter]->fSize.y * 0.5;
+				if (fStartY == -1.f) fStartY = m_vecPart[iter]->fPosition.y - m_vecPart[iter]->fSize.y * 0.5f;
 				__super::Input_Render_Info(*m_vecPart[iter], SCROLL_AREA::SCROLL_INVEN);
 			}
 
@@ -385,7 +385,7 @@ void CUIPage_Inven::Update_Array_Position(_float fTimeDelta)
 	}
 
 	_float fEndY = 0.f;
-	fEndY = m_vecPart[m_vec_Group_Ctrl[_int(PART_GROUP::GROUP_CELL_0)]->PartIndexlist.front()]->fPosition.y + m_vecPart[m_vec_Group_Ctrl[_int(PART_GROUP::GROUP_CELL_0)]->PartIndexlist.front()]->fSize.y * 0.5;
+	fEndY = m_vecPart[m_vec_Group_Ctrl[_int(PART_GROUP::GROUP_CELL_0)]->PartIndexlist.front()]->fPosition.y + m_vecPart[m_vec_Group_Ctrl[_int(PART_GROUP::GROUP_CELL_0)]->PartIndexlist.front()]->fSize.y * 0.5f;
 
 
 	if ((!m_bSlide_Active) || (m_IsTab_Change))
@@ -422,7 +422,7 @@ void CUIPage_Inven::Update_Array_Position_Weapon(_float fTimeDelta)
 	{
 		m_vecPart[iter]->fPosition.y += fAdjust_Y;
 		m_vecPart[iter]->bRender = true;
-		if (fStartY == -1.f) fStartY = m_vecPart[iter]->fPosition.y - m_vecPart[iter]->fSize.y * 0.5;
+		if (fStartY == -1.f) fStartY = m_vecPart[iter]->fPosition.y - m_vecPart[iter]->fSize.y * 0.5f;
 		__super::Input_Render_Info(*m_vecPart[iter], SCROLL_AREA::SCROLL_INVEN);
 	}
 
@@ -598,7 +598,7 @@ void CUIPage_Inven::Update_Array_Position_Weapon_Heroic(_float fTimeDelta, _floa
 	}
 
 	_float fEndY = 0.f;
-	fEndY = m_vecPart[m_vec_Group_Ctrl[_int(PART_GROUP::GROUP_CELL_0)]->PartIndexlist.front()]->fPosition.y + m_vecPart[m_vec_Group_Ctrl[_int(PART_GROUP::GROUP_CELL_0)]->PartIndexlist.front()]->fSize.y * 0.5;
+	fEndY = m_vecPart[m_vec_Group_Ctrl[_int(PART_GROUP::GROUP_CELL_0)]->PartIndexlist.front()]->fPosition.y + m_vecPart[m_vec_Group_Ctrl[_int(PART_GROUP::GROUP_CELL_0)]->PartIndexlist.front()]->fSize.y * 0.5f;
 
 	if ((!m_bSlide_Active) || (m_IsTab_Change))
 		Activate_Slide(fEndY - fStart);

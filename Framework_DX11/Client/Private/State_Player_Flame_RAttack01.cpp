@@ -77,7 +77,7 @@ void CState_Player_Flame_RAttack01::Update(_float fTimeDelta)
                    m_pPlayer->Change_State(CPlayer::FLAME_RATTACK0);
            }
     }
-    else if (*m_pIsEndAnim)
+    else if (End_Check())
     {
         m_pPlayer->Change_State(CPlayer::TH_IDLE);
     }
