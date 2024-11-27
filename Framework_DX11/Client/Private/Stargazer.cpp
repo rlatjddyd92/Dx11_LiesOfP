@@ -1,7 +1,7 @@
 #include "stdafx.h"
 #include "Stargazer.h"
 #include "GameInstance.h"
-
+#include "Pawn.h"
 CStargazer::CStargazer(ID3D11Device* pDevice, ID3D11DeviceContext* pContext)
 	: CGameObject{ pDevice, pContext }
 {
@@ -28,11 +28,18 @@ HRESULT CStargazer::Initialize(void* pArg)
 	m_pTransformCom->Rotation(0.f, pDesc->vRotation.y, pDesc->vRotation.z);
 	m_pTransformCom->Set_State(CTransform::STATE_POSITION, XMLoadFloat3(&pDesc->vPosition));
 	m_bShadow = pDesc->bShadow;
+	m_iCurrnetCellNum = pDesc->iCurrentCellNum;
 
 	if (FAILED(Ready_Components()))
 		return E_FAIL;
 
-	m_pModelCom->SetUp_Animation(1, true);
+	m_pPlayer = m_pGameInstance->Find_Player(LEVEL_GAMEPLAY);
+
+	m_iAnim_Close = m_pModelCom->Find_AnimationIndex("AS_Close_Idle", 3.f);
+	m_iAnim_Open = m_pModelCom->Find_AnimationIndex("AS_Open", 0.1f);
+	m_iAnim_OpenIdle = m_pModelCom->Find_AnimationIndex("AS_Open_Idle", 3.f);
+
+	m_pModelCom->SetUp_Animation(m_iAnim_Close, true);
 
 	return S_OK;
 }
@@ -43,7 +50,35 @@ void CStargazer::Priority_Update(_float fTimeDelta)
 
 void CStargazer::Update(_float fTimeDelta)
 {
-	m_pModelCom->Update_Bone();
+	m_pModelCom->Play_Animation(fTimeDelta);
+
+	Calculate_Distance_Between_Player();
+
+	if (m_bClose_with_Player)
+	{
+		if (KEY_TAP(KEY::E))
+		{
+			//키 입력 확인 부분은 나중에 UI에서 받아와야 함
+			static_cast<CPawn*>(m_pPlayer)->Set_Respawn_Cell_Num(m_iCurrnetCellNum);
+
+			if (m_isClose)
+			{
+				m_isClose = false;
+				m_isOpening = true;
+				m_pModelCom->SetUp_NextAnimation(m_iAnim_Open);
+			}
+			
+			//UI 기능 넣기
+		}
+	}
+
+	//열리는 중->열리고 나서 기본 애니로 변경
+	if (m_isOpening && m_pModelCom->Get_IsEndAnimArray())
+	{
+		m_isOpening = false;
+		m_isOpened = true;
+		m_pModelCom->SetUp_NextAnimation(m_iAnim_OpenIdle, true);
+	}
 
 	if(m_pColliderCom != nullptr)
 		m_pColliderCom->Update(m_pTransformCom->Get_WorldMatrix_Ptr());
@@ -127,6 +162,19 @@ HRESULT CStargazer::Ready_Components()
 		return E_FAIL;
 
 	return S_OK;
+}
+
+void CStargazer::Calculate_Distance_Between_Player()
+{
+	_Vec4 vMyPos = m_pTransformCom->Get_State(CTransform::STATE_POSITION);
+	_Vec4 vPlayerPos = m_pPlayer->Get_Transform()->Get_State(CTransform::STATE_POSITION);
+
+	_float fDistance = XMVectorGetX(XMVector4Length(vMyPos - vPlayerPos));
+
+	if(fDistance < 2.f)
+		m_bClose_with_Player = true;
+	else
+		m_bClose_with_Player = false;
 }
 
 CStargazer* CStargazer::Create(ID3D11Device* pDevice, ID3D11DeviceContext* pContext)

@@ -295,6 +295,7 @@ _int CNavigationController::SelectCell(_float3 vPickPos, _int* iSelectNum)
 	if (Get_CellSize() == 0) //Cell이 없는 경우
 	{
 		m_iSelectCellIndex = -1;
+		*iSelectNum = -1;
 		return -1;
 	}
 

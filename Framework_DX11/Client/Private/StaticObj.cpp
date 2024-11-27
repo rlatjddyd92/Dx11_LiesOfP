@@ -32,6 +32,7 @@ HRESULT CStaticObj::Initialize(void* pArg)
 	m_pTransformCom->Set_State(CTransform::STATE_POSITION, XMLoadFloat3(&pDesc->vPosition));
 	m_isInstance = pDesc->isInstance;
 	m_bShadow = pDesc->bShadow;
+	m_iCurrentCellNum = pDesc->iCurrentCellNum;
 
 	if (FAILED(Ready_Components(pDesc)))
 		return E_FAIL;

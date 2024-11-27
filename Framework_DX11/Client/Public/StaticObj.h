@@ -22,6 +22,7 @@ public:
 		_bool		isInstance = { false };
 		_bool		bShadow = { false };
 		_uint		iRenderGroupID = { true };
+		_int		iCurrentCellNum;
 	}STATICOBJ_DESC;
 
 private:
@@ -44,6 +45,8 @@ public:
 
 	_bool		m_isInstance = { false };
 	_bool		m_bShadow = { false };
+
+	_int		m_iCurrentCellNum = { -1 };
 
 	_float		m_fCullDistance = {50.f};
 

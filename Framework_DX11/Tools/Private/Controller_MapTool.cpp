@@ -828,7 +828,9 @@ void CController_MapTool::SaveMap()
 				pDesc.bShadow = static_cast<CNonAnimModel*>(pGameObject)->Get_bShadow();
 
 				//현재 위치한 Cell 번호 저장
-				_int iCellnum = m_pNavigationController->Get_WhereCell(pDesc.vPosition);
+				//_int iCellnum = m_pNavigationController->Get_WhereCell(pDesc.vPosition);
+				_int iCellnum ;
+				m_pNavigationController->SelectCell(pDesc.vPosition, &iCellnum);
 				pDesc.iCurrentCellNum = iCellnum;
 
 				fout.write(reinterpret_cast<const char*>(&pDesc), sizeof(pDesc));
