@@ -163,9 +163,7 @@ public:
 	void			Active_Effect(const EFFECT_TYPE& eType);
 	void			DeActive_Effect(const EFFECT_TYPE& eType);
 
-	virtual _bool	Calc_DamageGain(_float fAtkDmg);
-
-
+	virtual _bool	Calc_DamageGain(_float fAtkDmg, _Vec3 vHitPos = { 0.f,0.f,0.f }) override;
 
 private:
 	vector<class CEffect_Container*> m_Effects;

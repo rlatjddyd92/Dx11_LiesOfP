@@ -56,7 +56,7 @@ public:
     virtual HRESULT Render_LightDepth() { return S_OK; }
 
 public:
-    virtual _bool Calc_DamageGain(_float fAtkDmg);
+    virtual _bool Calc_DamageGain(_float fAtkDmg, _Vec3 vHitPos = { 0.f,0.f,0.f });
     virtual void Gain_Grogy_Point(_float fGainGrogyPoint) { m_eStat.fGrogyPoint += fGainGrogyPoint; }
 
 public:

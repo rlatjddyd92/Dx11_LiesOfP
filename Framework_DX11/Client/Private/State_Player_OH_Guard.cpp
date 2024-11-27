@@ -13,14 +13,10 @@ CState_Player_OH_Guard::CState_Player_OH_Guard(CFsm* pFsm, CPlayer* pPlayer)
 
 HRESULT CState_Player_OH_Guard::Initialize(_uint iStateNum, void* pArg)
 {
-    m_iAnimation_Walk[WALK_B] = m_pPlayer->Get_Model()->Find_AnimationIndex("AS_Pino_O_Walk_B", 2.5f);
-    m_iAnimation_Walk[WALK_BL] = m_pPlayer->Get_Model()->Find_AnimationIndex("AS_Pino_O_Walk_BL", 2.5f);
-    m_iAnimation_Walk[WALK_BR] = m_pPlayer->Get_Model()->Find_AnimationIndex("AS_Pino_O_Walk_BR", 2.5f);
-    m_iAnimation_Walk[WALK_F] = m_pPlayer->Get_Model()->Find_AnimationIndex("AS_Pino_O_Walk_F", 2.5f);
-    m_iAnimation_Walk[WALK_FL] = m_pPlayer->Get_Model()->Find_AnimationIndex("AS_Pino_O_Walk_FL", 2.5f);
-    m_iAnimation_Walk[WALK_FR] = m_pPlayer->Get_Model()->Find_AnimationIndex("AS_Pino_O_Walk_FR", 2.5f);
-    m_iAnimation_Walk[WALK_L] = m_pPlayer->Get_Model()->Find_AnimationIndex("AS_Pino_O_Walk_L", 2.5f);
-    m_iAnimation_Walk[WALK_R] = m_pPlayer->Get_Model()->Find_AnimationIndex("AS_Pino_O_Walk_R", 2.5f);
+    m_iAnimation_Walk[WALK_B] = m_pPlayer->Get_Model()->Find_AnimationIndex("AS_Pino_O_Guard_Walk_B", 2.5f);
+    m_iAnimation_Walk[WALK_F] = m_pPlayer->Get_Model()->Find_AnimationIndex("AS_Pino_O_Guard_Walk_F", 2.5f);
+    m_iAnimation_Walk[WALK_L] = m_pPlayer->Get_Model()->Find_AnimationIndex("AS_Pino_O_Guard_Walk_L", 2.5f);
+    m_iAnimation_Walk[WALK_R] = m_pPlayer->Get_Model()->Find_AnimationIndex("AS_Pino_O_Guard_Walk_R", 2.5f);
 
     m_iAnimation_Guard = m_pPlayer->Get_Model()->Find_AnimationIndex("AS_Pino_O_Guard_Idle", 2.5f);
 
@@ -138,21 +134,11 @@ _bool CState_Player_OH_Guard::Move(_float fTimeDelta)
     {
         if (fForwardDot > 0.7f)
         {
-            if(isLeft)
-                m_pPlayer->Change_Animation(m_iAnimation_Walk[WALK_FL], true, 0.2f);
-            else if(isRight)
-                m_pPlayer->Change_Animation(m_iAnimation_Walk[WALK_FR], true, 0.2f);
-            else
-                m_pPlayer->Change_Animation(m_iAnimation_Walk[WALK_F], true, 0.2f);
+            m_pPlayer->Change_Animation(m_iAnimation_Walk[WALK_F], true, 0.2f);
         }
         else if (fBackwardDot > 0.7f)
         {
-            if (isLeft)
-                m_pPlayer->Change_Animation(m_iAnimation_Walk[WALK_BL], true, 0.2f);
-            else if (isRight)
-                m_pPlayer->Change_Animation(m_iAnimation_Walk[WALK_BR], true, 0.2f);
-            else
-                m_pPlayer->Change_Animation(m_iAnimation_Walk[WALK_B], true, 0.2f);
+            m_pPlayer->Change_Animation(m_iAnimation_Walk[WALK_B], true, 0.2f);
         }
         else
         {

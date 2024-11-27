@@ -31,11 +31,16 @@ HRESULT CState_Player_Hit::Initialize(_uint iStateNum, void* pArg)
 
 HRESULT CState_Player_Hit::Start_State(void* pArg)
 {
-    _uint* iHitIndex = static_cast<_uint*>(pArg);
+    _Vec3* vHitPos = static_cast<_Vec3*>(pArg);
+ 
+    HIT_TYPE eType = (HIT_TYPE)Choice_HitAnim(*vHitPos);
 
-    m_pPlayer->Change_Animation(m_iAnimation_Hit[*iHitIndex], false);
+    if (eType == m_eHitType)
+        m_pPlayer->Change_Animation(m_iAnimation_Hit[m_eHitType], false, 0.f, 0, true, true);
+    else
+        m_pPlayer->Change_Animation(m_iAnimation_Hit[m_eHitType], false, 0.f);
 
-    m_pPlayer->Set_IsGuard(true);
+    m_eHitType = eType;
 
     return S_OK;
 }
@@ -51,6 +56,46 @@ void CState_Player_Hit::Update(_float fTimeDelta)
 void CState_Player_Hit::End_State()
 {
     m_pPlayer->Set_IsGuard(false);
+}
+
+_uint CState_Player_Hit::Choice_HitAnim(_Vec3 vHitPos)
+{
+    _Matrix PlayerWorldMatrix = m_pPlayer->Get_Transform()->Get_WorldMatrix();
+    _Vec3 vHitDir = vHitPos - PlayerWorldMatrix.Translation();
+    vHitDir.Normalize();
+
+    _float fForwardDot = vHitDir.Dot(PlayerWorldMatrix.Forward()); // 앞뒤 방향
+    _float fRightDot = vHitDir.Dot(PlayerWorldMatrix.Right());     // 좌우 방향
+
+    if (fForwardDot > 0.5f)
+    {
+        if (fRightDot > 0.2f)
+        {
+            return HIT_R; // 정면 + 살짝 오른쪽
+        }
+        else if (fRightDot < -0.2f)
+        {
+            return HIT_L; // 정면 + 살짝 왼쪽
+        }
+        else
+        {
+            return HIT_FB; // 완전 정면
+        }
+    }
+    else if (fForwardDot < -0.5f)
+    {
+        return HIT_B;  // 뒤쪽
+    }
+    else {
+        if (fRightDot > 0.5f)
+        {
+            return HIT_RL;
+        }
+        else if (fRightDot < -0.5f)
+        {
+            return HIT_LR;
+        }
+    }
 }
 
 _bool CState_Player_Hit::End_Check()

@@ -104,7 +104,7 @@ HRESULT CPawn::Render()
 	return S_OK;
 }
 
-_bool CPawn::Calc_DamageGain(_float fAtkDmg)
+_bool CPawn::Calc_DamageGain(_float fAtkDmg, _Vec3 vHitPos)
 {
 
 	//if () 피해를 입는지에관한 판단, 무적인지등

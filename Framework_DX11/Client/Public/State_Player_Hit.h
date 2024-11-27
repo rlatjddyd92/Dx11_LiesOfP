@@ -10,7 +10,7 @@ BEGIN(Client)
 class CState_Player_Hit : public CState
 {
 public:
-    enum HIT
+    enum HIT_TYPE
     {
         HIT_B, HIT_L, HIT_R, HIT_FB, HIT_LR, HIT_RL, HIT_END
     };
@@ -28,11 +28,13 @@ public:
 private:
     class CPlayer*      m_pPlayer = { nullptr };
 
-    _uint               m_iAnimation_Hit[HIT_END] = {};
+    _uint               m_iAnimation_Hit[HIT_END] = {};               
 
-    _double*             m_pTrackPos = { nullptr };
+    _double*            m_pTrackPos = { nullptr };
 
+    HIT_TYPE            m_eHitType = { HIT_END };
 private:
+    _uint            Choice_HitAnim(_Vec3 vHitPos);
     _bool               End_Check();
 
 public:

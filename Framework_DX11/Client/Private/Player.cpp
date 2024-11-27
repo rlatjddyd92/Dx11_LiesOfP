@@ -159,7 +159,7 @@ void CPlayer::Update(_float fTimeDelta)
 	m_pWeapon[m_eWeaponType]->Update(fTimeDelta);
 
 	if (KEY_TAP(KEY::L))
-		Calc_DamageGain(5.f);
+		Calc_DamageGain(5.f, m_pTransformCom->Get_WorldMatrix().Forward() + m_pTransformCom->Get_WorldMatrix().Translation());
 }
 
 void CPlayer::Late_Update(_float fTimeDelta)
@@ -567,14 +567,21 @@ HRESULT CPlayer::Ready_Effect()
 	return S_OK;
 }
 
-_bool CPlayer::Calc_DamageGain(_float fAtkDmg)
+_bool CPlayer::Calc_DamageGain(_float fAtkDmg, _Vec3 vHitPos)
 {
 	if (fAtkDmg <= 0)
 		return false;
 
-	m_tPlayer_Stat->vGauge_Hp.x = max(0.f, m_tPlayer_Stat->vGauge_Hp.x - fAtkDmg);
-	//if (m_eStat.fHp <= 0.f)
-	//	m_pFsmCom->Change_State(HIT);
+	if (m_isGuard)
+	{
+
+	}
+	else
+	{
+		m_tPlayer_Stat->vGauge_Hp.x = max(0.f, m_tPlayer_Stat->vGauge_Hp.x - fAtkDmg);
+		if (fAtkDmg > 0.f)
+			m_pFsmCom->Change_State(HIT, &vHitPos);
+	}
 
 	return true;
 }

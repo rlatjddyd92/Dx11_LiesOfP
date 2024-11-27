@@ -11,7 +11,7 @@ class CState_Player_OH_Guard : public CState
 {
     enum WALK
     {
-        WALK_B, WALK_BL, WALK_BR, WALK_F, WALK_FL, WALK_FR, WALK_L, WALK_R, WALK_END
+        WALK_B, WALK_F, WALK_L, WALK_R, WALK_END
     };
 
 public:
