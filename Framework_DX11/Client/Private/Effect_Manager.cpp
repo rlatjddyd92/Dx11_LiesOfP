@@ -260,13 +260,13 @@ HRESULT CEffect_Manager::Load_Textures(const _wstring strTexturePath)
 
 HRESULT CEffect_Manager::Load_Models()
 {
-    _matrix		PreTransformMatrix = XMMatrixIdentity();
+    //_matrix		PreTransformMatrix = XMMatrixIdentity();
 
-    /* For. Prototype_Component_Model_HalfSphere_1 */
-    PreTransformMatrix = XMMatrixScaling(0.005f, 0.005f, 0.005f) * XMMatrixRotationX(XMConvertToRadians(90.0f));
-    if (FAILED(m_pGameInstance->Add_Prototype(LEVEL_GAMEPLAY, TEXT("Prototype_Component_Model_HalfSphere_1"),
-        CModel::Create(m_pDevice, m_pContext, CModel::TYPE_NONANIM, "../Bin/ModelData/NonAnim/Effect/SM_HalfSphere_01_GDH.dat", PreTransformMatrix))))
-        return E_FAIL;
+    ///* For. Prototype_Component_Model_HalfSphere_1 */
+    //PreTransformMatrix = XMMatrixScaling(0.005f, 0.005f, 0.005f) * XMMatrixRotationX(XMConvertToRadians(90.0f));
+    //if (FAILED(m_pGameInstance->Add_Prototype(LEVEL_GAMEPLAY, TEXT("Prototype_Component_Model_HalfSphere_1"),
+    //    CModel::Create(m_pDevice, m_pContext, CModel::TYPE_NONANIM, "../Bin/ModelData/NonAnim/Effect/SM_HalfSphere_01_GDH.dat", PreTransformMatrix))))
+    //    return E_FAIL;
 
     return S_OK;
 }

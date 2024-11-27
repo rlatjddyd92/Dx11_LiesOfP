@@ -34,6 +34,7 @@ struct TailParticle
 {
     Particle particle;
     float4 vMoveDir;
+    float4 vPreTranslation;
 };
 
 // UAV로 접근할 수 있는 Structured Buffer 선언
@@ -189,7 +190,7 @@ void CS_SPREAD_MAIN(uint3 DTid : SV_DispatchThreadID)
             while (true)
             {
                 float3 vCurrentDir = (HeadParticle.particle.vTranslation - vPrePos).xyz;
-            
+                
                 vPrePos += float4(normalize(vCurrentDir) * fTailInterval, 0.f);
                 float3 vRandomPos = CosineInterpolate(HeadParticle.vCurrentRandomPos.xyz * fTailDistance, HeadParticle.vNextRandomPos.xyz * fTailDistance, fTime / fTimeInterval);
             
@@ -420,7 +421,7 @@ void CS_CONVERGE_MAIN(uint3 DTid : SV_DispatchThreadID)
             HeadParticle.vNextRandomPos.x = rand(HeadParticle.particle.vTranslation.x * HeadParticle.particle.vTranslation.y);
             HeadParticle.vNextRandomPos.y = rand(HeadParticle.particle.vTranslation.y * HeadParticle.particle.vTranslation.z);
             HeadParticle.vNextRandomPos.z = rand(HeadParticle.particle.vTranslation.z * HeadParticle.particle.vTranslation.x);
-            
+               
             HeadParticle.vNextRandomPos = float4(normalize(HeadParticle.vNextRandomPos).xyz, 1.f);
         }
     
@@ -526,7 +527,7 @@ void CS_FOLLOW_MAIN(uint3 DTid : SV_DispatchThreadID)
     
         HeadParticle.particle.vTranslation = mul(InitParticles[iHeadIndex].particle.vTranslation, WorldMatrix);
 
-        if(0.f == fPadding)
+        if (0.f == fPadding)
             HeadParticle.vPreTranslation = HeadParticle.particle.vTranslation;
         
         float fTime = fmod(HeadParticle.particle.vLifeTime.y, fTimeInterval);

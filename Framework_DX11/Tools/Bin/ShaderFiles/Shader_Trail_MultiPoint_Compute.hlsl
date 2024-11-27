@@ -5,6 +5,7 @@
 #define STATE_LOOP 0x0004
 #define STATE_ACCEL 0x0008
 #define STATE_DECEL 0x0010
+#define STATE_TAILSPREAD 0x0020
 
 struct Particle
 {
@@ -34,13 +35,15 @@ struct TailParticle
 {
     Particle particle;
     float4 vMoveDir;
+    float4 vPreTranslation;
 };
 
 // UAV로 접근할 수 있는 Structured Buffer 선언
 RWStructuredBuffer<HeadParticle> HeadParticles : register(u0);
 RWStructuredBuffer<TailParticle> TailParticles : register(u1);
 
-StructuredBuffer<HeadParticle> InitParticles : register(t0);
+StructuredBuffer<HeadParticle> Init_HeadParticles : register(t0);
+StructuredBuffer<TailParticle> Init_TailParticles : register(t1);
 
 
 cbuffer MovementBuffer : register(b0) // 받아온 걸 상수로 쓰기 위한 버퍼인듯?
@@ -177,7 +180,7 @@ void CS_SPREAD_MAIN(uint3 DTid : SV_DispatchThreadID)
 
         if ((iState & STATE_LOOP) && HeadParticle.particle.vLifeTime.y >= HeadParticle.particle.vLifeTime.x)
         {
-            HeadParticle.particle.vTranslation = mul(InitParticles[iHeadIndex].particle.vTranslation, WorldMatrix);
+            HeadParticle.particle.vTranslation = mul(Init_HeadParticles[iHeadIndex].particle.vTranslation, WorldMatrix);
             HeadParticle.vPreTranslation = HeadParticle.particle.vTranslation;
             HeadParticle.particle.vLifeTime.y = 0.f;
             HeadParticle.particle.vRight = vWorldPivot;
@@ -189,23 +192,26 @@ void CS_SPREAD_MAIN(uint3 DTid : SV_DispatchThreadID)
             while (true)
             {
                 float3 vCurrentDir = (HeadParticle.particle.vTranslation - vPrePos).xyz;
-            
+                
+                TailParticles[HeadParticle.iTailInitIndex].vPreTranslation = vPrePos;
+                
                 vPrePos += float4(normalize(vCurrentDir) * fTailInterval, 0.f);
                 
-                float3 vRandomPos = (float3) 0;
+                float3 vRandomPos = CosineInterpolate(HeadParticle.vCurrentRandomPos.xyz * fTailDistance, HeadParticle.vNextRandomPos.xyz * fTailDistance, fTime / fTimeInterval);
             
-                if (fTailDistance == 0.f)
-                    vRandomPos = normalize(vCurrentDir);
-                else
-                    vRandomPos = CosineInterpolate(HeadParticle.vCurrentRandomPos.xyz * fTailDistance, HeadParticle.vNextRandomPos.xyz * fTailDistance, fTime / fTimeInterval);
+                float4 vTailSpreadDir = (float4) 0;
+                if (iState & STATE_TAILSPREAD)
+                    vTailSpreadDir = float4(normalize(vCurrentDir), 0.f);
                 
-                TailParticles[HeadParticle.iTailInitIndex].particle.vTranslation = vPrePos + float4(vRandomPos, 0.f);
-                TailParticles[HeadParticle.iTailInitIndex].vMoveDir = float4(vRandomPos, 0.f);
+                float4 vFinalDir = float4(normalize(vRandomPos + (float3) vTailSpreadDir), 0.f);
+                
+                TailParticles[HeadParticle.iTailInitIndex].particle.vTranslation = vPrePos + vFinalDir;
+                TailParticles[HeadParticle.iTailInitIndex].vMoveDir = vFinalDir;
                 TailParticles[HeadParticle.iTailInitIndex].particle.vLifeTime.y = 0.f;
                 ++HeadParticle.iTailInitIndex;
             
-                if (HeadParticle.iTailInitIndex > InitParticles[iHeadIndex].iTailInitIndex + iNumTailInstance)
-                    HeadParticle.iTailInitIndex = InitParticles[iHeadIndex].iTailInitIndex;
+                if (HeadParticle.iTailInitIndex > Init_HeadParticles[iHeadIndex].iTailInitIndex + iNumTailInstance)
+                    HeadParticle.iTailInitIndex = Init_HeadParticles[iHeadIndex].iTailInitIndex;
             
                 if (length(vCurrentDir) <= fTailInterval)
                     break;
@@ -322,7 +328,7 @@ void CS_MOVE_MAIN(uint3 DTid : SV_DispatchThreadID)
         
         if (iState & STATE_LOOP && HeadParticle.particle.vLifeTime.y >= HeadParticle.particle.vLifeTime.x)
         {
-            HeadParticle.particle.vTranslation = mul(InitParticles[iHeadIndex].particle.vTranslation, WorldMatrix);
+            HeadParticle.particle.vTranslation = mul(Init_HeadParticles[iHeadIndex].particle.vTranslation, WorldMatrix);
             HeadParticle.vPreTranslation = HeadParticle.particle.vTranslation;
             HeadParticle.particle.vLifeTime.y = 0.f;
             HeadParticle.particle.vTranslation = mul(HeadParticle.particle.vTranslation, WorldMatrix);
@@ -335,22 +341,25 @@ void CS_MOVE_MAIN(uint3 DTid : SV_DispatchThreadID)
             while (true)
             {
                 float3 vCurrentDir = (HeadParticle.particle.vTranslation - vPrePos).xyz;
-            
-                vPrePos += float4(normalize(vCurrentDir) * fTailInterval, 0.f);
-                float3 vRandomPos = (float3) 0;
-            
-                if (fTailDistance == 0.f)
-                    vRandomPos = normalize(vCurrentDir);
-                else
-                    vRandomPos = CosineInterpolate(HeadParticle.vCurrentRandomPos.xyz * fTailDistance, HeadParticle.vNextRandomPos.xyz * fTailDistance, fTime / fTimeInterval);
                 
-                TailParticles[HeadParticle.iTailInitIndex].particle.vTranslation = vPrePos + float4(vRandomPos, 0.f);
-                TailParticles[HeadParticle.iTailInitIndex].vMoveDir = float4(vRandomPos, 0.f);
+                TailParticles[HeadParticle.iTailInitIndex].vPreTranslation = vPrePos;
+                
+                vPrePos += float4(normalize(vCurrentDir) * fTailInterval, 0.f);
+                float3 vRandomPos = CosineInterpolate(HeadParticle.vCurrentRandomPos.xyz * fTailDistance, HeadParticle.vNextRandomPos.xyz * fTailDistance, fTime / fTimeInterval);
+            
+                float4 vTailSpreadDir = (float4) 0;
+                if (iState & STATE_TAILSPREAD)
+                    vTailSpreadDir = float4(normalize(vCurrentDir), 0.f);
+                
+                float4 vFinalDir = float4(normalize(vRandomPos + (float3) vTailSpreadDir), 0.f);
+                
+                TailParticles[HeadParticle.iTailInitIndex].particle.vTranslation = vPrePos + vFinalDir;
+                TailParticles[HeadParticle.iTailInitIndex].vMoveDir = vFinalDir;
                 TailParticles[HeadParticle.iTailInitIndex].particle.vLifeTime.y = 0.f;
                 ++HeadParticle.iTailInitIndex;
             
-                if (HeadParticle.iTailInitIndex > InitParticles[iHeadIndex].iTailInitIndex + iNumTailInstance)
-                    HeadParticle.iTailInitIndex = InitParticles[iHeadIndex].iTailInitIndex;
+                if (HeadParticle.iTailInitIndex > Init_HeadParticles[iHeadIndex].iTailInitIndex + iNumTailInstance)
+                    HeadParticle.iTailInitIndex = Init_HeadParticles[iHeadIndex].iTailInitIndex;
             
                 if (length(vCurrentDir) <= fTailInterval)
                     break;
@@ -466,7 +475,7 @@ void CS_CONVERGE_MAIN(uint3 DTid : SV_DispatchThreadID)
 
         if (iState & STATE_LOOP && HeadParticle.particle.vLifeTime.y >= HeadParticle.particle.vLifeTime.x)
         {
-            HeadParticle.particle.vTranslation = mul(InitParticles[iHeadIndex].particle.vTranslation, WorldMatrix);
+            HeadParticle.particle.vTranslation = mul(Init_HeadParticles[iHeadIndex].particle.vTranslation, WorldMatrix);
             HeadParticle.vPreTranslation = HeadParticle.particle.vTranslation;
             HeadParticle.particle.vLifeTime.y = 0.f;
             HeadParticle.particle.vTranslation = mul(HeadParticle.particle.vTranslation, WorldMatrix);
@@ -479,22 +488,25 @@ void CS_CONVERGE_MAIN(uint3 DTid : SV_DispatchThreadID)
             while (true)
             {
                 float3 vCurrentDir = (HeadParticle.particle.vTranslation - vPrePos).xyz;
-            
+                
+                TailParticles[HeadParticle.iTailInitIndex].vPreTranslation = vPrePos;
+                
                 vPrePos += float4(normalize(vCurrentDir) * fTailInterval, 0.f);
-                float3 vRandomPos = (float3) 0;
+                float3 vRandomPos = CosineInterpolate(HeadParticle.vCurrentRandomPos.xyz * fTailDistance, HeadParticle.vNextRandomPos.xyz * fTailDistance, fTime / fTimeInterval);
             
-                if (fTailDistance == 0.f)
-                    vRandomPos = normalize(vCurrentDir);
-                else
-                    vRandomPos = CosineInterpolate(HeadParticle.vCurrentRandomPos.xyz * fTailDistance, HeadParticle.vNextRandomPos.xyz * fTailDistance, fTime / fTimeInterval);
-            
-                TailParticles[HeadParticle.iTailInitIndex].particle.vTranslation = vPrePos + float4(vRandomPos, 0.f);
-                TailParticles[HeadParticle.iTailInitIndex].vMoveDir = float4(vRandomPos, 0.f);
+                float4 vTailSpreadDir = (float4) 0;
+                if (iState & STATE_TAILSPREAD)
+                    vTailSpreadDir = float4(normalize(vCurrentDir), 0.f);
+                
+                float4 vFinalDir = float4(normalize(vRandomPos + (float3) vTailSpreadDir), 0.f);
+                
+                TailParticles[HeadParticle.iTailInitIndex].particle.vTranslation = vPrePos + vFinalDir;
+                TailParticles[HeadParticle.iTailInitIndex].vMoveDir = vFinalDir;
                 TailParticles[HeadParticle.iTailInitIndex].particle.vLifeTime.y = 0.f;
                 ++HeadParticle.iTailInitIndex;
             
-                if (HeadParticle.iTailInitIndex > InitParticles[iHeadIndex].iTailInitIndex + iNumTailInstance)
-                    HeadParticle.iTailInitIndex = InitParticles[iHeadIndex].iTailInitIndex;
+                if (HeadParticle.iTailInitIndex > Init_HeadParticles[iHeadIndex].iTailInitIndex + iNumTailInstance)
+                    HeadParticle.iTailInitIndex = Init_HeadParticles[iHeadIndex].iTailInitIndex;
             
                 if (length(vCurrentDir) <= fTailInterval)
                     break;
@@ -540,9 +552,9 @@ void CS_FOLLOW_MAIN(uint3 DTid : SV_DispatchThreadID)
     {
         HeadParticle HeadParticle = HeadParticles[iHeadIndex];
     
-        HeadParticle.particle.vTranslation = mul(InitParticles[iHeadIndex].particle.vTranslation, WorldMatrix);
+        HeadParticle.particle.vTranslation = mul(Init_HeadParticles[iHeadIndex].particle.vTranslation, WorldMatrix);
 
-        if(0.f == fPadding)
+        if (0.f == fPadding)
             HeadParticle.vPreTranslation = HeadParticle.particle.vTranslation;
         
         float fTime = fmod(HeadParticle.particle.vLifeTime.y, fTimeInterval);
@@ -552,10 +564,13 @@ void CS_FOLLOW_MAIN(uint3 DTid : SV_DispatchThreadID)
         {
             float3 vCurrentDir = (HeadParticle.particle.vTranslation - vPrePos).xyz;
             
+            TailParticles[HeadParticle.iTailInitIndex].vPreTranslation = vPrePos;
+            
             vPrePos += float4(normalize(vCurrentDir) * fTailInterval, 0.f);
             
             TailParticles[HeadParticle.iTailInitIndex].particle.vTranslation = vPrePos;
-            if(fTailDistance < 1.f)
+            
+            if (iState & STATE_TAILSPREAD)
                 TailParticles[HeadParticle.iTailInitIndex].vMoveDir = float4(normalize(vCurrentDir), 0.f);
             else
                 TailParticles[HeadParticle.iTailInitIndex].vMoveDir = float4(0.f, 0.f, 0.f, 0.f);
@@ -563,8 +578,8 @@ void CS_FOLLOW_MAIN(uint3 DTid : SV_DispatchThreadID)
             TailParticles[HeadParticle.iTailInitIndex].particle.vLifeTime.y = 0.f;
             ++HeadParticle.iTailInitIndex;
             
-            if (HeadParticle.iTailInitIndex > InitParticles[iHeadIndex].iTailInitIndex + iNumTailInstance)
-                HeadParticle.iTailInitIndex = InitParticles[iHeadIndex].iTailInitIndex;
+            if (HeadParticle.iTailInitIndex > Init_HeadParticles[iHeadIndex].iTailInitIndex + iNumTailInstance)
+                HeadParticle.iTailInitIndex = Init_HeadParticles[iHeadIndex].iTailInitIndex;
             
             if (length(vCurrentDir) <= fTailInterval)
                 break;
@@ -588,10 +603,15 @@ void CS_RESET_MAIN(uint3 DTid : SV_DispatchThreadID)
 {
     uint iIndex = DTid.x;
     
-    if (iIndex >= iNumInstance)
+    if (iIndex >= iNumInstance * iNumTailInstance)
         return;
     
-    HeadParticles[iIndex] = InitParticles[iIndex];
+    uint iHeadIndex = iIndex / iNumTailInstance;
+    
+    if (0 == iIndex % iNumTailInstance)
+        HeadParticles[iHeadIndex] = Init_HeadParticles[iHeadIndex];
+    
+    TailParticles[iIndex] = Init_TailParticles[iIndex];
 }
 
 float rand(float seed)

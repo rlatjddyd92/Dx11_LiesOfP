@@ -413,6 +413,8 @@ void CPlayer::Active_Effect(const _wstring& strECTag)
 	if (nullptr == pEffect)
 		return;
 
+	pEffect->Set_Loop(true);
+
 	m_ActiveEffects.emplace(strECTag, pEffect);
 }
 void CPlayer::DeActive_Effect(const _wstring& strECTag)
@@ -425,6 +427,8 @@ void CPlayer::DeActive_Effect(const _wstring& strECTag)
 	CEffect_Container* pEffect = iter->second;
 	if (nullptr == pEffect)
 		return;
+
+	pEffect->Set_Loop(false);
 
 	m_ActiveEffects.erase(strECTag);
 }

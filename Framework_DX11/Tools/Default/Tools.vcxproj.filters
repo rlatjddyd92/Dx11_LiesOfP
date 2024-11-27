@@ -489,18 +489,6 @@
     <FxCompile Include="..\Bin\ShaderFiles\Shader_SSD.hlsl">
       <Filter>97.ShaderFiles</Filter>
     </FxCompile>
-    <FxCompile Include="..\Bin\ShaderFiles\Shader_Effect_Mesh.hlsl">
-      <Filter>97.ShaderFiles\Effect\Vtx</Filter>
-    </FxCompile>
-    <FxCompile Include="..\Bin\ShaderFiles\Shader_VtxPointInstance.hlsl">
-      <Filter>97.ShaderFiles\Effect\Vtx</Filter>
-    </FxCompile>
-    <FxCompile Include="..\Bin\ShaderFiles\Shader_ParticleCompute.hlsl">
-      <Filter>97.ShaderFiles\Effect\Compute</Filter>
-    </FxCompile>
-    <FxCompile Include="..\Bin\ShaderFiles\Shader_Effect_Texture.hlsl">
-      <Filter>97.ShaderFiles\Effect\Vtx</Filter>
-    </FxCompile>
     <FxCompile Include="..\Bin\ShaderFiles\Shader_Trail_MultiPoint_Compute.hlsl">
       <Filter>97.ShaderFiles\Effect\Compute</Filter>
     </FxCompile>
@@ -511,9 +499,6 @@
       <Filter>97.ShaderFiles\Effect\Vtx</Filter>
     </FxCompile>
     <FxCompile Include="..\Bin\ShaderFiles\Shader_VtxTrail_OnePoint_Instance.hlsl">
-      <Filter>97.ShaderFiles\Effect\Vtx</Filter>
-    </FxCompile>
-    <FxCompile Include="..\Bin\ShaderFiles\Shader_VtxTrail_TwoPoint_Instance.hlsl">
       <Filter>97.ShaderFiles\Effect\Vtx</Filter>
     </FxCompile>
     <FxCompile Include="..\Bin\ShaderFiles\Shader_UI_Change_Color.hlsl">
@@ -530,5 +515,20 @@
     <FxCompile Include="..\Bin\ShaderFiles\Shader_Effect_Texture.hlsl" />
     <FxCompile Include="..\Bin\ShaderFiles\Shader_VtxPointInstance.hlsl" />
     <FxCompile Include="..\Bin\ShaderFiles\Shader_VtxTrail_TwoPoint_Instance.hlsl" />
+    <FxCompile Include="..\Bin\ShaderFiles\Shader_ParticleCompute.hlsl">
+      <Filter>97.ShaderFiles\Effect\Compute</Filter>
+    </FxCompile>
+    <FxCompile Include="..\Bin\ShaderFiles\Shader_Effect_Mesh.hlsl">
+      <Filter>97.ShaderFiles\Effect\Vtx</Filter>
+    </FxCompile>
+    <FxCompile Include="..\Bin\ShaderFiles\Shader_Effect_Texture.hlsl">
+      <Filter>97.ShaderFiles\Effect\Vtx</Filter>
+    </FxCompile>
+    <FxCompile Include="..\Bin\ShaderFiles\Shader_VtxPointInstance.hlsl">
+      <Filter>97.ShaderFiles\Effect\Vtx</Filter>
+    </FxCompile>
+    <FxCompile Include="..\Bin\ShaderFiles\Shader_VtxTrail_TwoPoint_Instance.hlsl">
+      <Filter>97.ShaderFiles\Effect\Vtx</Filter>
+    </FxCompile>
   </ItemGroup>
 </Project>

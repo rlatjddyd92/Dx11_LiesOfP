@@ -49,11 +49,12 @@ public:
 
 	enum STATE
 	{
-		STATE_ORBIT			= 0x0001,
+		STATE_ORBIT				= 0x0001,
 		STATE_RANDOM			= 0x0002,
 		STATE_LOOP				= 0x0004,
 		STATE_ACCEL				= 0x0008,
 		STATE_DECEL				= 0x0010,
+		STATE_TAILSPRAED		= 0x0020,
 		STATE_END				= 0x9999
 	};
 

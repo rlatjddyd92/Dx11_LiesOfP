@@ -24,6 +24,7 @@ struct TailParticle
 {
     Particle particle;
     float4 vMoveDir;
+    float4 vPreTranslation;
 };
 
 StructuredBuffer<TailParticle> Particle_SRV : register(t0);
@@ -53,6 +54,7 @@ struct VS_OUT
     float2 vLifeTime : COLOR0;
     float4 vColor : COLOR1;
     float3 vLook : TEXCOORD0;
+    float4 vPreTranslation : TEXCOORD1;
 };
 
 
@@ -76,6 +78,7 @@ VS_OUT VS_MAIN(uint instanceID : SV_InstanceID)
     Out.vLifeTime = Particle_SRV[instanceID].particle.vLifeTime;
     Out.vColor = Particle_SRV[instanceID].particle.vColor;
     Out.vLook = Particle_SRV[instanceID].particle.vLook;
+    Out.vPreTranslation = Particle_SRV[instanceID].vPreTranslation;
     
     return Out;
 }
@@ -100,6 +103,7 @@ struct GS_IN
     float2 vLifeTime : COLOR0;
     float4 vColor : COLOR1;
     float3 vLook : TEXCOORD0;
+    float4 vPreTranslation : TEXCOORD1;
 };
 
 struct GS_OUT
@@ -241,6 +245,65 @@ void GS_DIR_MAIN(point GS_IN In[1], inout TriangleStream<GS_OUT> Container)
     Out[2].vColor = In[0].vColor;
 
     Out[3].vPosition = float4(In[0].vPosition.xyz - vLook - vUp, 1.f);
+    Out[3].vTexcoord = float2(0.f, 1.f);
+    Out[3].vLifeTime = In[0].vLifeTime;
+    Out[3].vColor = In[0].vColor;
+
+    matrix matVP = mul(g_ViewMatrix, g_ProjMatrix);
+
+    Out[0].vPosition = mul(Out[0].vPosition, matVP);
+    Out[1].vPosition = mul(Out[1].vPosition, matVP);
+    Out[2].vPosition = mul(Out[2].vPosition, matVP);
+    Out[3].vPosition = mul(Out[3].vPosition, matVP);
+
+    Container.Append(Out[0]);
+    Container.Append(Out[1]);
+    Container.Append(Out[2]);
+    Container.RestartStrip(); // 여기서부터 다시 찍겠다. 이거 안해주면 123으로 찍어버림.
+
+    Container.Append(Out[0]);
+    Container.Append(Out[2]);
+    Container.Append(Out[3]);
+    Container.RestartStrip();
+}
+
+[maxvertexcount(6)]
+void GS_TRAIL_MAIN(point GS_IN In[1], inout TriangleStream<GS_OUT> Container)
+{
+    GS_OUT Out[4];
+
+    float3 vCamDir = normalize(g_vCamPosition - In[0].vPosition).xyz;
+	// 빌보드용. : 룩 방향으로 점을 찍음.
+    
+    float4 vLookDir = In[0].vPosition - In[0].vPreTranslation;
+    
+    float fXLength = length(vLookDir);
+    
+    float4 vPosition = In[0].vPreTranslation + (vLookDir * 0.5f);
+    
+    float3 vLook = normalize(vLookDir);
+    float3 vUp = normalize(cross(vLook, vCamDir));
+    float3 vRight = normalize(cross(vUp, vLook));
+	
+    vLook *= fXLength * 0.5f;
+    vUp *= In[0].vPSize.y * 0.5f;
+    
+    Out[0].vPosition = float4(vPosition.xyz - vLook + vUp, 1.f);
+    Out[0].vTexcoord = float2(0.f, 0.0f);
+    Out[0].vLifeTime = In[0].vLifeTime;
+    Out[0].vColor = In[0].vColor;
+
+    Out[1].vPosition = float4(vPosition.xyz + vLook + vUp, 1.f);
+    Out[1].vTexcoord = float2(1.f, 0.0f);
+    Out[1].vLifeTime = In[0].vLifeTime;
+    Out[1].vColor = In[0].vColor;
+
+    Out[2].vPosition = float4(vPosition.xyz + vLook - vUp, 1.f);
+    Out[2].vTexcoord = float2(1.f, 1.f);
+    Out[2].vLifeTime = In[0].vLifeTime;
+    Out[2].vColor = In[0].vColor;
+
+    Out[3].vPosition = float4(vPosition.xyz - vLook - vUp, 1.f);
     Out[3].vTexcoord = float2(0.f, 1.f);
     Out[3].vLifeTime = In[0].vLifeTime;
     Out[3].vColor = In[0].vColor;
@@ -451,6 +514,16 @@ PS_EFFECT_OUT PS_FIRE_MAIN(PS_IN In)
     return Out;
 }
 
+PS_EFFECT_OUT PS_TEST(PS_IN In)
+{
+    PS_EFFECT_OUT Out = (PS_EFFECT_OUT) 0;
+    
+    Out.vDiffuse = In.vColor;
+    Out.vBlur = In.vColor;
+    
+    return Out;
+}
+
 technique11	DefaultTechnique
 {
 	pass DEFAULT // 0
@@ -528,6 +601,17 @@ technique11	DefaultTechnique
         VertexShader = compile vs_5_0 VS_MAIN();
         GeometryShader = compile gs_5_0 GS_MAIN();
         PixelShader = compile ps_5_0 PS_FIRE_MAIN();
+    }
+
+    pass PARTICLE_TEST  // 7
+    {
+        SetRasterizerState(RS_Default);
+        SetDepthStencilState(DSS_Default, 0);
+        SetBlendState(BS_Default, vector(0.f, 0.f, 0.f, 0.f), 0xffffffff);
+
+        VertexShader = compile vs_5_0 VS_MAIN();
+        GeometryShader = compile gs_5_0 GS_TRAIL_MAIN();
+        PixelShader = compile ps_5_0 PS_TEST();
     }
 
 }
