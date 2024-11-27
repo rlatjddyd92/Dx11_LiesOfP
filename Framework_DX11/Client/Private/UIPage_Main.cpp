@@ -117,16 +117,13 @@ HRESULT CUIPage_Main::Ready_UIPart_Group_Control()
 
 HRESULT CUIPage_Main::Enter_Game()
 {
-	if (FAILED(m_pGameInstance->Change_Level(LEVEL_LOADING, CLevel_Loading::Create(m_pDevice, m_pContext, LEVEL_GAMEPLAY))))
-		return E_FAIL;
-	else
-	{
+
 		m_bRender = false;
 		m_bUpdate = false;
 		m_vecPageAction[_int(PAGEACTION::ACTION_ACTIVE)] = false;
 		m_vecPageAction[_int(PAGEACTION::ACTION_INACTIVE)] = true;
 		return S_OK;
-	}
+
 }
 
 

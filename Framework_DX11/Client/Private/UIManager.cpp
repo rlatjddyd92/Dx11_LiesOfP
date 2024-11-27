@@ -405,8 +405,8 @@ void CUIManager::UIControl_Skill(_float fTimeDelta)
 
 void CUIManager::OpenMainPage()
 {
-	// 게임 첫 시작 화면 세팅 
-	//m_vecPage[_int(UIPAGE::PAGE_MAIN)]->SetRender(true);
+	m_vecPage[_int(UIPAGE::PAGE_MAIN)]->Update(true);
+	m_vecPage[_int(UIPAGE::PAGE_MAIN)]->SetRender(true);
 
 }
 

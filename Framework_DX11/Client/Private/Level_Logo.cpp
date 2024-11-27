@@ -24,6 +24,8 @@ HRESULT CLevel_Logo::Initialize()
 
 	m_pGameInstance->Play_BGM(TEXT("MU_MS_Title_Piano_03.wav"), g_fBGMVolume);
 
+	GET_GAMEINTERFACE->OpenMainPage(); // 메인 페이지 진입 
+
 	return S_OK;
 }
 
@@ -31,7 +33,10 @@ void CLevel_Logo::Update(_float fTimeDelta)
 {
 	if (GetKeyState(VK_RETURN) & 0x8000)
 	{
-		GET_GAMEINTERFACE->Enter_Game(); // 24-11-27 김성용 : 로딩 화면으로 
+		if (FAILED(m_pGameInstance->Change_Level(LEVEL_LOADING, CLevel_Loading::Create(m_pDevice, m_pContext, LEVEL_GAMEPLAY))))
+			return;
+
+		GET_GAMEINTERFACE->Open_Loading_Page(); // 로딩 진행 
 	}
 }
 
