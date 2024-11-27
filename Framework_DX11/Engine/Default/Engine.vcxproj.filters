@@ -208,9 +208,6 @@
     <Filter Include="01.Utility\98.ShaderFiles\Compute">
       <UniqueIdentifier>{a1106976-7960-4715-ae4b-81cbb80200aa}</UniqueIdentifier>
     </Filter>
-    <Filter Include="01.Utility\03.Components\Model\ObjectOctree">
-      <UniqueIdentifier>{a24fcefc-62b5-4a50-8240-d400693ea04d}</UniqueIdentifier>
-    </Filter>
     <Filter Include="01.Utility\03.Components\VIBuffer\Instancing\Trail\MultiPoint">
       <UniqueIdentifier>{c5a9687c-ed44-49d1-ae87-959bb47dbd00}</UniqueIdentifier>
     </Filter>
@@ -416,9 +413,6 @@
     </ClCompile>
     <ClCompile Include="..\private\Trail_TwoPoint_Instance.cpp">
       <Filter>01.Utility\03.Components\VIBuffer\Instancing\Trail\TwoPoint</Filter>
-    </ClCompile>
-    <ClCompile Include="..\Private\ObjectOctree.cpp">
-      <Filter>01.Utility\03.Components\Model\ObjectOctree</Filter>
     </ClCompile>
     <ClCompile Include="..\Private\ObjectOctree.cpp">
       <Filter>01.Utility\03.Components\Model\ObjectOctree</Filter>
@@ -638,9 +632,6 @@
     </ClInclude>
     <ClInclude Include="..\public\Trail_TwoPoint_Instance.h">
       <Filter>01.Utility\03.Components\VIBuffer\Instancing\Trail\TwoPoint</Filter>
-    </ClInclude>
-    <ClInclude Include="..\Public\ObjectOctree.h">
-      <Filter>01.Utility\03.Components\Model\ObjectOctree</Filter>
     </ClInclude>
     <ClInclude Include="..\public\Trail_MultiPoint_Instance.h">
       <Filter>01.Utility\03.Components\VIBuffer\Instancing\Trail\MultiPoint</Filter>

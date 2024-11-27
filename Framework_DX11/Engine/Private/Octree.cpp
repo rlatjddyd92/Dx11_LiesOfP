@@ -10,10 +10,10 @@ HRESULT COctree::Initialize(_Vec3 _vMinPos, _Vec3 _vMaxPos, _uint* pIndices,  VT
 	//바운딩 박스 생성
 	// 정육면체로 만드는게 나을듯
 	_Vec3 vCenter = { (_vMinPos.x + _vMaxPos.x) * 0.5f ,(_vMinPos.y + _vMaxPos.y) * 0.5f ,(_vMinPos.z + _vMaxPos.z) * 0.5f };
+
+	/////////////////////////////////////가장 긴걸로 수정하기
 	_Vec3 vExtend = { abs(_vMinPos.x - _vMaxPos.x),abs(_vMinPos.y - _vMaxPos.y),abs(_vMinPos.z - _vMaxPos.z) };
 	m_pBoundBox =new BoundingBox(vCenter, vExtend);
-
-	// x y z의 길이가 다 다른데 하나의 값으로 만들어?
 	m_fRadius = XMVectorGetX(XMVector3Length(_vMinPos - m_pBoundBox->Center));
 
 	//if(*iDepth != -1)
@@ -51,7 +51,7 @@ HRESULT COctree::Initialize(_Vec3 _vMinPos, _Vec3 _vMaxPos, _uint* pIndices,  VT
 	_float fFront;
 	_float fBack;
 
-
+	//예쁘게 변수 만들어서~
 	//윗층
 	m_pChildren[0] = COctree::Create(_Vec3(_vMinPos.x, _vMinPos.y + vExtend.y * 0.5f, _vMinPos.z + vExtend.z * 0.5f), _Vec3(_vMinPos.x + vExtend.x*0.5f, _vMaxPos.y, _vMaxPos.z), pIndices, pVertexes, m_iNumFaces, m_TrianglgeIndexes ,&m_iDepth);
 	m_pChildren[1] = COctree::Create(_Vec3(_vMinPos.x + vExtend.x * 0.5f, _vMinPos.y + vExtend.y * 0.5f, _vMinPos.z + vExtend.z * 0.5f), _Vec3(_vMaxPos.x, _vMaxPos.y, _vMaxPos.z), pIndices, pVertexes, m_iNumFaces,  m_TrianglgeIndexes, &m_iDepth);
