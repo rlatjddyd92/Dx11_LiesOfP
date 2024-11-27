@@ -96,7 +96,7 @@ HRESULT CPlayer::Initialize(void * pArg)
 	if (FAILED(Ready_Effect()))
 		return E_FAIL;
 
-	m_pNavigationCom->Move_to_Cell(m_pRigidBodyCom, 0);
+	m_pNavigationCom->Move_to_Cell(m_pRigidBodyCom, 772);
 
 	//// 임시 루트본 설정
 	//m_pModelCom->Set_UFBIndices(UFB_ROOT, 2);
@@ -165,7 +165,6 @@ void CPlayer::Update(_float fTimeDelta)
 		m_pFsmCom->Change_State(LADDER, &v);
 		//Calc_DamageGain(5.f, m_pTransformCom->Get_WorldMatrix().Forward() + m_pTransformCom->Get_WorldMatrix().Translation());
 	}
-		Calc_DamageGain(5.f);
 }
 
 void CPlayer::Late_Update(_float fTimeDelta)
@@ -577,7 +576,7 @@ HRESULT CPlayer::Ready_Effect()
 	return S_OK;
 }
 
-_bool CPlayer::Calc_DamageGain(_float fAtkDmg)
+_bool CPlayer::Calc_DamageGain(_float fAtkDmg, _Vec3 vHitPos)
 {
 	if (fAtkDmg <= 0)
 		return false;

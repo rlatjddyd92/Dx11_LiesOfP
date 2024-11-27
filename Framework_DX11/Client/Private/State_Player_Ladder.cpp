@@ -60,12 +60,12 @@ void CState_Player_Ladder::Update(_float fTimeDelta)
 {
     _uint iCurAnim = m_pPlayer->Get_CurrentAnimIndex();
 
-    if (KEY_TAP(KEY::W))
+    if (KEY_TAP(KEY::W) || KEY_HOLD(KEY::W))
     {
         m_isInputW = true;
         m_isInputS = false;
     }
-    else if (KEY_TAP(KEY::S))
+    else if (KEY_TAP(KEY::S) || KEY_HOLD(KEY::S))
     {
         m_isInputS = true;
         m_isInputW = false;
@@ -91,7 +91,7 @@ void CState_Player_Ladder::Update(_float fTimeDelta)
         }
         else
         {
-            //m_iHandIndex = ((m_iHandIndex + 1) % 2);
+            m_iHandIndex = ((m_iHandIndex) % 2);
             m_pPlayer->Change_Animation(m_iAnimation_LadderIdle[m_iHandIndex], true, 0.f);
         }
 
