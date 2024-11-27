@@ -7,17 +7,18 @@ BEGIN(Engine)
 class ENGINE_DLL CRigidBody final : public CComponent
 {
 public:
-public:
     typedef struct
     {
         _bool               isStatic = false;
         _bool               isGravity = false;
+        _bool               isOnCell = true;
 
         _float              fStaticFriction = 0.5f;
         _float              fDynamicFriction = 0.5f;
         _float              fRestituion = 0.f;
 
         physX::Geometry*    pGeometry = { nullptr };
+        PxRigidDynamicLockFlags PxLockFlags = {};
 
         class CGameObject* pOwner = { nullptr };
         class CTransform* pOwnerTransform = { nullptr };
@@ -29,6 +30,8 @@ private:
     CRigidBody(const CRigidBody& Prototype);
     virtual ~CRigidBody() = default;
 
+public:
+    void    Set_IsOnCell(_bool isOnCell) { m_isOnCell = isOnCell; }
 
 public:
     virtual HRESULT Initialize_Prototype();
@@ -47,7 +50,8 @@ private:
     class CNavigation* m_pOwnerNavigation = { nullptr };
 
 private:
-    _bool			m_isStatic = false;
+    _bool			m_isStatic = { false };
+    _bool           m_isOnCell = { true };
     PxRigidActor* m_PxActor = { nullptr };
     PxMaterial* m_PxMaterial = { nullptr };
     PxScene* m_PxScene = { nullptr };

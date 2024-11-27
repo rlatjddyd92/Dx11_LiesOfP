@@ -31,6 +31,8 @@ HRESULT CRigidBody::Initialize(void* pArg)
 		return E_FAIL;
 
 	m_isStatic = pDesc->isStatic;
+	m_isOnCell = pDesc->isOnCell;
+
 	m_PxScene = m_pGameInstance->Get_PhysXScene();
 	m_pOwner = pDesc->pOwner;
 	m_pOwnerTransform = pDesc->pOwnerTransform;
@@ -51,39 +53,42 @@ void CRigidBody::Update(_float fTimeDelta)
 {
 	PxRigidDynamic* pRigidDynamic = static_cast<PxRigidDynamic*>(m_PxActor);
 
-   PxTransform PlayerPxTransform = m_PxActor->getGlobalPose();
-   PxVec3 vPxPlayerPos = PlayerPxTransform.p;
-   _Vec3 vPos = _Vec3(vPxPlayerPos.x, vPxPlayerPos.y, vPxPlayerPos.z);
+	PxTransform PlayerPxTransform = m_PxActor->getGlobalPose();
+	PxVec3 vPxPlayerPos = PlayerPxTransform.p;
+	_Vec3 vPos = _Vec3(vPxPlayerPos.x, vPxPlayerPos.y, vPxPlayerPos.z);
 
-   if (!m_pOwnerNavigation->isMove(vPos + m_vVelocity * fTimeDelta)) 
-   {
-	   pRigidDynamic->setLinearVelocity(PxVec3(0.f, 0.f, 0.f));
+	if (!m_pOwnerNavigation->isMove(vPos + m_vVelocity * fTimeDelta))
+	{
+		pRigidDynamic->setLinearVelocity(PxVec3(0.f, 0.f, 0.f));
 
-       PlayerPxTransform.p = PxVec3(vPos.x, vPos.y, vPos.z);
-	   pRigidDynamic->setGlobalPose(PlayerPxTransform);
-   }
-   else 
-   {
+		PlayerPxTransform.p = PxVec3(vPos.x, vPos.y, vPos.z);
+		pRigidDynamic->setGlobalPose(PlayerPxTransform);
+	}
+	else
+	{
 
-	   //if (m_vForce.Length() > 0.f)
-	   //{
-		  // PxVec3 vForce = ConvertToPxVec3(m_vForce);
-		  // pRigidDynamic->addForce(vForce, )
-	   //}
-	   pRigidDynamic->setLinearVelocity(PxVec3(m_vVelocity.x, m_vVelocity.y, m_vVelocity.z));
-   }
+		//if (m_vForce.Length() > 0.f)
+		//{
+		   // PxVec3 vForce = ConvertToPxVec3(m_vForce);
+		   // pRigidDynamic->addForce(vForce, )
+		//}
+		pRigidDynamic->setLinearVelocity(PxVec3(m_vVelocity.x, m_vVelocity.y, m_vVelocity.z));
+	}
 
-   PlayerPxTransform = pRigidDynamic->getGlobalPose();
-   vPxPlayerPos = PlayerPxTransform.p;
+	PlayerPxTransform = pRigidDynamic->getGlobalPose();
+	vPxPlayerPos = PlayerPxTransform.p;
 
-   m_pOwnerTransform->Set_State(CTransform::STATE_POSITION, _Vec3(vPxPlayerPos.x, vPxPlayerPos.y, vPxPlayerPos.z));
+	m_pOwnerTransform->Set_State(CTransform::STATE_POSITION, _Vec3(vPxPlayerPos.x, vPxPlayerPos.y, vPxPlayerPos.z));
 
-   vPxPlayerPos.y = m_pOwnerNavigation->SetUp_OnCell(m_pOwnerTransform, 0.f, fTimeDelta);
+	if (m_isOnCell)
+	{
+		vPxPlayerPos.y = m_pOwnerNavigation->SetUp_OnCell(m_pOwnerTransform, 0.f, fTimeDelta);
+	}
 
-   PlayerPxTransform.p = vPxPlayerPos;
-   pRigidDynamic->setGlobalPose(PlayerPxTransform);
+	PlayerPxTransform.p = vPxPlayerPos;
+	pRigidDynamic->setGlobalPose(PlayerPxTransform);
 
-   m_pOwnerTransform->Set_State(CTransform::STATE_POSITION, _Vec3(vPxPlayerPos.x, vPxPlayerPos.y, vPxPlayerPos.z));
+	m_pOwnerTransform->Set_State(CTransform::STATE_POSITION, _Vec3(vPxPlayerPos.x, vPxPlayerPos.y, vPxPlayerPos.z));
 
 }
 
@@ -131,6 +136,8 @@ HRESULT CRigidBody::Add_PxActor(RIGIDBODY_DESC* pDesc)
 		}
 	}
 	m_PxActor->setActorFlag(PxActorFlag::eVISUALIZATION, true);
+	static_cast<PxRigidDynamic*>(m_PxActor)->setRigidDynamicLockFlags(pDesc->PxLockFlags);
+
 
 	m_PxMaterial = pPhysx->createMaterial(pDesc->fStaticFriction, pDesc->fDynamicFriction, pDesc->fRestituion);
 

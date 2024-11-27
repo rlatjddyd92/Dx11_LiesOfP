@@ -15,6 +15,7 @@
 #include "State_Player_Parry.h"
 #include "State_Player_Heal.h"
 #include "State_Player_ChangeWeapon.h"
+#include "State_Player_Ladder.h"
 
 #include "State_Player_OH_Idle.h"
 #include "State_Player_OH_Walk.h"
@@ -159,7 +160,11 @@ void CPlayer::Update(_float fTimeDelta)
 	m_pWeapon[m_eWeaponType]->Update(fTimeDelta);
 
 	if (KEY_TAP(KEY::L))
-		Calc_DamageGain(5.f, m_pTransformCom->Get_WorldMatrix().Forward() + m_pTransformCom->Get_WorldMatrix().Translation());
+	{
+		_Vec3 v = m_pTransformCom->Get_WorldMatrix().Up() + m_pTransformCom->Get_WorldMatrix().Translation();
+		m_pFsmCom->Change_State(LADDER, &v);
+		//Calc_DamageGain(5.f, m_pTransformCom->Get_WorldMatrix().Forward() + m_pTransformCom->Get_WorldMatrix().Translation());
+	}
 }
 
 void CPlayer::Late_Update(_float fTimeDelta)
@@ -473,6 +478,9 @@ HRESULT CPlayer::Ready_Components()
 	RigidBodyDesc.fStaticFriction = 0.f;
 	RigidBodyDesc.fDynamicFriction = 0.f;
 	RigidBodyDesc.fRestituion = 0.f;
+	RigidBodyDesc.PxLockFlags = PxRigidDynamicLockFlag::eLOCK_ANGULAR_X |
+		PxRigidDynamicLockFlag::eLOCK_ANGULAR_Y |
+		PxRigidDynamicLockFlag::eLOCK_ANGULAR_Z;
 
 	physX::GeometryCapsule CapsuleDesc;
 	CapsuleDesc.fHeight = 1.5f;
@@ -503,6 +511,7 @@ HRESULT CPlayer::Ready_FSM()
 	m_pFsmCom->Add_State(CState_Player_Parry::Create(m_pFsmCom, this, PARRY, &Desc));
 	m_pFsmCom->Add_State(CState_Player_Heal::Create(m_pFsmCom, this, HEAL, &Desc));
 	m_pFsmCom->Add_State(CState_Player_ChangeWeapon::Create(m_pFsmCom, this, CHANGEWEP, &Desc));
+	m_pFsmCom->Add_State(CState_Player_Ladder::Create(m_pFsmCom, this, LADDER, &Desc));
 
 	m_pFsmCom->Add_State(CState_Player_OH_Idle::Create(m_pFsmCom, this, OH_IDLE, &Desc));
 	m_pFsmCom->Add_State(CState_Player_OH_Walk::Create(m_pFsmCom, this, OH_WALK, &Desc));
