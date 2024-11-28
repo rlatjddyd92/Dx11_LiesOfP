@@ -1,6 +1,7 @@
 #include "stdafx.h"
 #include "Lift_Floor.h"
 #include "GameInstance.h"
+#include "Lift_Door.h"
 
 CLift_Floor::CLift_Floor(ID3D11Device* pDevice, ID3D11DeviceContext* pContext)
 	: CGameObject{ pDevice, pContext }
@@ -31,16 +32,50 @@ HRESULT CLift_Floor::Initialize(void* pArg)
 
 	if (FAILED(Ready_Components(pDesc)))
 		return E_FAIL;
+	m_vTargetPos = m_pTransformCom->Get_State(CTransform::STATE_POSITION);
 
 	return S_OK;
 }
 
 void CLift_Floor::Priority_Update(_float fTimeDelta)
 {
+	if (m_pDoors[0] == nullptr || m_pDoors[1] == nullptr)
+	{
+		for (int i = 0; i < 2; ++i)
+		{
+			CGameObject* pObj = m_pGameInstance->Find_Object(LEVEL_GAMEPLAY, TEXT("Layer_LiftDoor"), i);
+
+			if (pObj == nullptr)
+				return;
+
+			if (pObj->Get_Transform()->Get_State(CTransform::STATE_POSITION).y > -100.f)
+				m_pDoors[UP] = static_cast<CLift_Door*>(pObj);
+			else
+				m_pDoors[DOWN] = static_cast<CLift_Door*>(pObj);
+		}
+	}
 }
 
 void CLift_Floor::Update(_float fTimeDelta)
 {
+	if (m_bMove)
+	{
+		m_isMoving = true;
+		m_pTransformCom->Go_Lerp(m_pTransformCom->Get_State(CTransform::STATE_POSITION), m_vTargetPos, 0.1f);
+	}
+
+	if (m_bMove && Calculate_Arrive_TargetPos())
+	{
+		m_bMove = false;
+		m_isMoving = false;
+		m_bArrive = true;
+	}
+
+	if (m_bArrive)
+	{
+		Open_Door();
+	}
+
 	if(m_pColliderCom != nullptr)
 		m_pColliderCom->Update(m_pTransformCom->Get_WorldMatrix_Ptr());
 }
@@ -106,6 +141,28 @@ HRESULT CLift_Floor::Render()
 
 }
 
+void CLift_Floor::Set_Move_Dir(_int iDir)
+{
+	switch (iDir)
+	{
+	case UP:
+		m_iMoveDir = 1.f;
+		m_vTargetPos.y = m_vTargetPosList[UP];
+		break;
+	case DOWN:
+		m_iMoveDir = -1.f;
+		m_vTargetPos.y = m_vTargetPosList[DOWN];
+		break;
+	}
+
+	if (m_iPreDir != iDir)
+	{
+		m_iPreDir = iDir;
+		m_bMove = true;
+		m_isMoving = true;
+	}
+}
+
 HRESULT CLift_Floor::Ready_Components(OBJECT_DEFAULT_DESC* pDesc)
 {
 	/* FOR.Com_Shader */
@@ -128,6 +185,31 @@ HRESULT CLift_Floor::Ready_Components(OBJECT_DEFAULT_DESC* pDesc)
 		return E_FAIL;
 
 	return S_OK;
+}
+
+_bool CLift_Floor::Calculate_Arrive_TargetPos()
+{
+	_Vec4 vCurPos = m_pTransformCom->Get_State(CTransform::STATE_POSITION);
+
+	if (fabs(vCurPos.y - m_vTargetPos.y) < 0.1f)
+		return true;
+	else
+		return false;
+}
+
+void CLift_Floor::Open_Door()
+{
+	switch (m_iPreDir)
+	{
+	case UP:
+		m_pDoors[UP]->Set_Open(true);
+		break;
+	case DOWN:
+		m_pDoors[UP]->Set_Open(true);
+		break;
+	default:
+		break;
+	}
 }
 
 CLift_Floor* CLift_Floor::Create(ID3D11Device* pDevice, ID3D11DeviceContext* pContext)

@@ -44,6 +44,7 @@ private:
 	_int m_iAnim_Open = { 0 };
 	_int m_iAnim_OpenIdle = { 0 };
 	_int m_iCurrnetCellNum = { -1 };
+
 	CGameObject* m_pPlayer = { nullptr };
 
 private:

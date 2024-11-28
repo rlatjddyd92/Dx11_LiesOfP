@@ -40,7 +40,6 @@ HRESULT CLadder::Initialize(void* pArg)
 
 	m_pModelCom->SetUp_Animation(iAnimIndex, true);
 
-
 	m_strObjectTag = TEXT("Ladder");
 
 	return S_OK;

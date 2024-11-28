@@ -32,7 +32,12 @@ HRESULT CLift_Door::Initialize(void* pArg)
 	if (FAILED(Ready_Components()))
 		return E_FAIL;
 
-	m_pModelCom->SetUp_Animation(1, true);
+	m_iAnim_Close = m_pModelCom->Find_AnimationIndex("AS_Close", 3.f);
+	m_iAnim_Close_Idle = m_pModelCom->Find_AnimationIndex("AS_Close_Idle", 3.f);
+	m_iAnim_Open = m_pModelCom->Find_AnimationIndex("AS_Open", 3.f);
+	m_iAnim_Open_Idle = m_pModelCom->Find_AnimationIndex("AS_Open_Idle", 3.f);
+
+	m_pModelCom->SetUp_Animation(m_iAnim_Close, false);
 
 	return S_OK;
 }
@@ -44,6 +49,17 @@ void CLift_Door::Priority_Update(_float fTimeDelta)
 void CLift_Door::Update(_float fTimeDelta)
 {
 	m_pModelCom->Play_Animation(fTimeDelta);
+
+	if (m_bOpen)
+	{
+		if(m_pModelCom->Get_CurrentAnimationIndex() != m_iAnim_Open)
+			m_pModelCom->SetUp_NextAnimation(m_iAnim_Open);
+
+		if(m_pModelCom->Get_CurrentAnimationIndex() == m_iAnim_Open 
+			&& m_pModelCom->Get_IsEndAnimArray()
+			&& m_pModelCom->Get_CurrentAnimationIndex() == m_iAnim_Open_Idle)
+			m_pModelCom->SetUp_NextAnimation(m_iAnim_Open_Idle);
+	}
 
 	if(m_pColliderCom != nullptr)
 		m_pColliderCom->Update(m_pTransformCom->Get_WorldMatrix_Ptr());

@@ -306,6 +306,18 @@ void CTransform::Go_Left(_float fTimeDelta, _float fSpeed, CNavigation* pNavigat
 		Set_State(STATE_POSITION, vPosition);
 }
 
+void CTransform::Go_Lerp(_Vec4 _CurrentPos, _Vec4 _TargetPos, _float _fSpeed, class CNavigation* pNavigation)
+{
+	_vector vPosition = _CurrentPos;
+
+	_vector vDir = XMVector3Normalize(_TargetPos - _CurrentPos);
+	vPosition += vDir * _fSpeed;
+
+	if (nullptr == pNavigation || true == pNavigation->isMove(vPosition))
+		Set_State(STATE_POSITION, vPosition);
+
+}
+
 void CTransform::Turn(_Vec4 vAxis, _float fTimeDelta, _float fSpeed)
 {
 	if (fSpeed == 0.f)
