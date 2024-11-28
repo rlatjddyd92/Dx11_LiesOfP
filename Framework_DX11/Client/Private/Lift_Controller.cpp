@@ -24,7 +24,7 @@ HRESULT CLift_Controller::Initialize(void* pArg)
 	if (FAILED(__super::Initialize(pArg)))
 		return E_FAIL;
 
-	m_pTransformCom->Set_Scaled(pDesc->vScale.x - 0.05f, pDesc->vScale.y - 0.05f, pDesc->vScale.z - 0.05f);
+	m_pTransformCom->Set_Scaled(pDesc->vScale.x, pDesc->vScale.y, pDesc->vScale.z);
 	m_pTransformCom->Rotation(0.f, -25.f, 0.f);
 	m_pTransformCom->Set_State(CTransform::STATE_POSITION, XMLoadFloat3(&pDesc->vPosition));
 	m_bShadow = pDesc->bShadow;

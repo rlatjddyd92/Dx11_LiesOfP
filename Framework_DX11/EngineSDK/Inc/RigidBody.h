@@ -12,6 +12,7 @@ public:
         _bool               isStatic = false;
         _bool               isGravity = false;
         _bool               isOnCell = true;
+        _bool               isLockCell = true;
 
         _float              fStaticFriction = 0.5f;
         _float              fDynamicFriction = 0.5f;
@@ -32,6 +33,7 @@ private:
 
 public:
     void    Set_IsOnCell(_bool isOnCell) { m_isOnCell = isOnCell; }
+    void    Set_IsLockCell(_bool isLockCell) { m_isLockCell = isLockCell; }
 
 public:
     virtual HRESULT Initialize_Prototype();
@@ -40,6 +42,7 @@ public:
 
 public:
     void Set_Velocity(const _Vec3& vVelocity);
+    void Add_Velocity(const _Vec3& vVelocity);
     void Add_Force(const _Vec3& vForce, PxForceMode::Enum _eMode = PxForceMode::eFORCE);
     void Set_Mass(_float fMass);
     void Set_GloblePose(const _Vec3& vPos);
@@ -52,6 +55,8 @@ private:
 private:
     _bool			m_isStatic = { false };
     _bool           m_isOnCell = { true };
+    _bool           m_isLockCell = { true };
+
     PxRigidActor* m_PxActor = { nullptr };
     PxMaterial* m_PxMaterial = { nullptr };
     PxScene* m_PxScene = { nullptr };

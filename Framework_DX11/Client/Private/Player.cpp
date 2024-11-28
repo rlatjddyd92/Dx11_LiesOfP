@@ -9,6 +9,7 @@
 #include "Weapon_Scissor.h"
 
 #include "Ladder.h"
+#include "Lift_Floor.h"
 
 #include "Effect_Manager.h"
 #include "Effect_Container.h"
@@ -100,7 +101,7 @@ HRESULT CPlayer::Initialize(void * pArg)
 		return E_FAIL;
 
 	//m_pNavigationCom->Move_to_Cell(m_pRigidBodyCom, 427);
-	m_pNavigationCom->Move_to_Cell(m_pRigidBodyCom, 307);
+	m_pNavigationCom->Move_to_Cell(m_pRigidBodyCom, 341); //307
 
 	//// 임시 루트본 설정
 	//m_pModelCom->Set_UFBIndices(UFB_ROOT, 2);
@@ -147,6 +148,8 @@ void CPlayer::Update(_float fTimeDelta)
 
 	m_pFsmCom->Update(fTimeDelta);
 
+	m_pRigidBodyCom->Update(fTimeDelta);
+
 	for (_uint i = 0; i < PAWN_SOUND_END; ++i)
 	{
 		m_pSoundCom[i]->Update(fTimeDelta);
@@ -173,8 +176,6 @@ void CPlayer::Late_Update(_float fTimeDelta)
 {
 	if(m_isLockOn && m_pFsmCom->Get_CurrentState() != OH_SPRINT && m_pFsmCom->Get_CurrentState() != TH_SPRINT)
 		m_pTransformCom->LookAt_NoHeight(m_pTargetMonster->Get_Transform()->Get_State(CTransform::STATE_POSITION));
-
-	m_pRigidBodyCom->Update(fTimeDelta);
 
 	m_pWeapon[m_eWeaponType]->Late_Update(fTimeDelta);
 
@@ -270,6 +271,21 @@ void CPlayer::OnCollisionStay(CGameObject* pOther)
 			m_pFsmCom->Change_State(LIFT, pOther);
 		}
 	}
+	if (pOther->Get_Tag() == TEXT("Lift_Floor"))
+	{
+		m_pRigidBodyCom->Set_IsOnCell(false);
+		m_pRigidBodyCom->Set_IsLockCell(false);
+		
+		//_Vec3 vLiftFloorPos = pOther->Get_Transform()->Get_State(CTransform::STATE_POSITION);
+		//_Vec3 vLiftFloorPrevPos = dynamic_cast<CLift_Floor*>(pOther)->Get_PrevPos();
+
+		//if (dynamic_cast<CLift_Floor*>(pOther)->Get_isMoving())
+		//{
+		//	_Vec3 vVel = dynamic_cast<CLift_Floor*>(pOther)->Get_Velocity();
+
+		//	m_pRigidBodyCom->Add_Velocity(vVel);
+		//}
+	}
 
 	/*if (pOther->Get_Tag() == TEXT("Monster"))
 	{
@@ -290,6 +306,15 @@ void CPlayer::OnCollisionExit(CGameObject* pOther)
 	if (pOther->Get_Tag() == TEXT("Ladder"))
 	{
 		m_isLadderEnd = false;
+	}
+	if (pOther->Get_Tag() == TEXT("Lift_Floor"))
+	{
+
+		if (!dynamic_cast<CLift_Floor*>(pOther)->Get_isMoving())
+		{
+			m_pRigidBodyCom->Set_IsOnCell(true);
+			m_pRigidBodyCom->Set_IsLockCell(true);
+		}
 	}
 }
 

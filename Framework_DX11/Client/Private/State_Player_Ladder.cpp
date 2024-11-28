@@ -56,6 +56,7 @@ HRESULT CState_Player_Ladder::Start_State(void* pArg)
     m_pPlayer->Change_Animation(m_iAnimation_Ladder[m_eUpDownType][0], false, 0.f);
 
     m_pPlayer->Get_RigidBody()->Set_IsOnCell(false);
+    m_pPlayer->Get_RigidBody()->Set_IsLockCell(false);
 
     return S_OK;
 }
@@ -161,6 +162,7 @@ void CState_Player_Ladder::End_State()
     m_pPlayer->Get_Navigation()->Research_Cell(vPlayerPos);
 
     m_pPlayer->Get_RigidBody()->Set_IsOnCell(true);
+    m_pPlayer->Get_RigidBody()->Set_IsLockCell(true);
 }
 
 void CState_Player_Ladder::Choice_UpDown(CLadder* pLadder)

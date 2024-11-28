@@ -32,6 +32,7 @@ HRESULT CRigidBody::Initialize(void* pArg)
 
 	m_isStatic = pDesc->isStatic;
 	m_isOnCell = pDesc->isOnCell;
+	m_isLockCell = pDesc->isLockCell;
 
 	m_PxScene = m_pGameInstance->Get_PhysXScene();
 	m_pOwner = pDesc->pOwner;
@@ -52,49 +53,65 @@ HRESULT CRigidBody::Initialize(void* pArg)
 void CRigidBody::Update(_float fTimeDelta)
 {
 	PxRigidDynamic* pRigidDynamic = static_cast<PxRigidDynamic*>(m_PxActor);
-
-	PxTransform PlayerPxTransform = m_PxActor->getGlobalPose();
-	PxVec3 vPxPlayerPos = PlayerPxTransform.p;
-	_Vec3 vPos = _Vec3(vPxPlayerPos.x, vPxPlayerPos.y, vPxPlayerPos.z);
-
-	if (m_isOnCell && !m_pOwnerNavigation->isMove(vPos + m_vVelocity * fTimeDelta))
+	if (m_pOwnerNavigation != nullptr)
 	{
-		pRigidDynamic->setLinearVelocity(PxVec3(0.f, 0.f, 0.f));
+		PxTransform PlayerPxTransform = m_PxActor->getGlobalPose();
+		PxVec3 vPxPlayerPos = PlayerPxTransform.p;
+		_Vec3 vPos = _Vec3(vPxPlayerPos.x, vPxPlayerPos.y, vPxPlayerPos.z);
 
-		PlayerPxTransform.p = PxVec3(vPos.x, vPos.y, vPos.z);
+		if (m_isLockCell && !m_pOwnerNavigation->isMove(vPos + m_vVelocity * fTimeDelta))
+		{
+			pRigidDynamic->setLinearVelocity(PxVec3(0.f, 0.f, 0.f));
+
+			PlayerPxTransform.p = PxVec3(vPos.x, vPos.y, vPos.z);
+			pRigidDynamic->setGlobalPose(PlayerPxTransform);
+		}
+		else
+		{
+
+			//if (m_vForce.Length() > 0.f)
+			//{
+			   // PxVec3 vForce = ConvertToPxVec3(m_vForce);
+			   // pRigidDynamic->addForce(vForce, )
+			//}
+
+			pRigidDynamic->setLinearVelocity(PxVec3(m_vVelocity.x, m_vVelocity.y, m_vVelocity.z));
+		}
+
+		PlayerPxTransform = pRigidDynamic->getGlobalPose();
+		vPxPlayerPos = PlayerPxTransform.p;
+
+		m_pOwnerTransform->Set_State(CTransform::STATE_POSITION, _Vec3(vPxPlayerPos.x, vPxPlayerPos.y, vPxPlayerPos.z));
+
+		if (m_isOnCell)
+		{
+			vPxPlayerPos.y = m_pOwnerNavigation->SetUp_OnCell(m_pOwnerTransform, 0.f, fTimeDelta);
+		}
+
+		PlayerPxTransform.p = vPxPlayerPos;
 		pRigidDynamic->setGlobalPose(PlayerPxTransform);
+
+		m_pOwnerTransform->Set_State(CTransform::STATE_POSITION, _Vec3(vPxPlayerPos.x, vPxPlayerPos.y, vPxPlayerPos.z));
 	}
 	else
 	{
-
-		//if (m_vForce.Length() > 0.f)
-		//{
-		   // PxVec3 vForce = ConvertToPxVec3(m_vForce);
-		   // pRigidDynamic->addForce(vForce, )
-		//}
 		pRigidDynamic->setLinearVelocity(PxVec3(m_vVelocity.x, m_vVelocity.y, m_vVelocity.z));
+
+		PxTransform PxTransform = pRigidDynamic->getGlobalPose();
+		PxVec3 vPxPos = PxTransform.p;
+
+		m_pOwnerTransform->Set_State(CTransform::STATE_POSITION, _Vec3(vPxPos.x, vPxPos.y, vPxPos.z));
 	}
-
-	PlayerPxTransform = pRigidDynamic->getGlobalPose();
-	vPxPlayerPos = PlayerPxTransform.p;
-
-	m_pOwnerTransform->Set_State(CTransform::STATE_POSITION, _Vec3(vPxPlayerPos.x, vPxPlayerPos.y, vPxPlayerPos.z));
-
-	if (m_isOnCell)
-	{
-		vPxPlayerPos.y = m_pOwnerNavigation->SetUp_OnCell(m_pOwnerTransform, 0.f, fTimeDelta);
-	}
-
-	PlayerPxTransform.p = vPxPlayerPos;
-	pRigidDynamic->setGlobalPose(PlayerPxTransform);
-
-	m_pOwnerTransform->Set_State(CTransform::STATE_POSITION, _Vec3(vPxPlayerPos.x, vPxPlayerPos.y, vPxPlayerPos.z));
-
 }
 
 void CRigidBody::Set_Velocity(const _Vec3& vVelocity)
 {
 	m_vVelocity = vVelocity;
+}
+
+void CRigidBody::Add_Velocity(const _Vec3& vVelocity)
+{
+	m_vVelocity += vVelocity;
 }
 
 void CRigidBody::Add_Force(const _Vec3& vForce, PxForceMode::Enum _eMode)
@@ -170,6 +187,13 @@ HRESULT CRigidBody::Add_PxGeometry(RIGIDBODY_DESC* pDesc)
 	{
 		physX::GeometryBox* BoxGeometry = static_cast<physX::GeometryBox*>(pGeometry);
 		m_PxShape = pPhysx->createShape(PxBoxGeometry(BoxGeometry->vSize.x * 0.5f, BoxGeometry->vSize.y * 0.5f, BoxGeometry->vSize.z * 0.5f), *m_PxMaterial, false, eShapeFlags);
+	}
+		break;
+	case physX::PX_MODEL:
+	{
+		// 수정하기
+		//physX::GeometryBox* BoxGeometry = static_cast<physX::GeometryBox*>(pGeometry);
+		//m_PxShape = pPhysx->createShape(PxBoxGeometry(BoxGeometry->vSize.x * 0.5f, BoxGeometry->vSize.y * 0.5f, BoxGeometry->vSize.z * 0.5f), *m_PxMaterial, false, eShapeFlags);
 	}
 		break;
 	}

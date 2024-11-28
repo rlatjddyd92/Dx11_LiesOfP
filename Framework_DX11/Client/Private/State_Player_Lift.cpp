@@ -36,7 +36,7 @@ HRESULT CState_Player_Lift::Start_State(void* pArg)
     vLiftControllerRight.Normalize();
     vLiftControllerLook.Normalize();
 
-    _Vec3 vInitPos = vLiftControllerPos + vLiftControllerRight * 0.87f + vLiftControllerLook * 0.25f;
+    _Vec3 vInitPos = vLiftControllerPos + vLiftControllerRight * 0.9f + vLiftControllerLook * 0.25f;
     vInitPos.y = vPlayerPos.y;
 
     m_pPlayer->Get_RigidBody()->Set_GloblePose(vInitPos);
@@ -64,6 +64,7 @@ void CState_Player_Lift::Update(_float fTimeDelta)
 
 void CState_Player_Lift::End_State()
 {
+    m_pPlayer->Get_RigidBody()->Set_IsOnCell(true);
 }
 
 _bool CState_Player_Lift::End_Check()

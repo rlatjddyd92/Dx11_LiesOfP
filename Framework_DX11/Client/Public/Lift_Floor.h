@@ -43,6 +43,8 @@ private:
 	CCollider* m_pColliderCom = { nullptr};
 	CShader* m_pShaderCom = { nullptr };
 	CModel* m_pModelCom = { nullptr };
+	class CRigidBody* m_pRigidBodyCom = { nullptr };
+
 private:
 	_bool m_bShadow = { false };
 	_bool m_isMoving = { false };	//¿Ãµø ¡ﬂ

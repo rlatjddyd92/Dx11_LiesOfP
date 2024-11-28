@@ -35,11 +35,14 @@ HRESULT CLift_Floor::Initialize(void* pArg)
 		return E_FAIL;
 	m_vTargetPos = m_pTransformCom->Get_State(CTransform::STATE_POSITION);
 
+	m_strObjectTag = TEXT("Lift_Floor");
+
 	return S_OK;
 }
 
 void CLift_Floor::Priority_Update(_float fTimeDelta)
 {
+
 	if (m_pDoors[0] == nullptr || m_pDoors[1] == nullptr)
 	{
 		for (int i = 0; i < 2; ++i)
@@ -62,7 +65,31 @@ void CLift_Floor::Update(_float fTimeDelta)
 	if (m_bMove)
 	{
 		m_isMoving = true;
-		m_pTransformCom->Go_Lerp(m_pTransformCom->Get_State(CTransform::STATE_POSITION), m_vTargetPos, 0.05f);
+		_Vec3 vVel = _Vec3(0.f, 10.f, 0.f);
+
+		if (m_fMoveDir > 0.f)
+		{
+			if (m_pTransformCom->Get_State(CTransform::STATE_POSITION).y >= m_vTargetPos.y)
+			{
+				m_pRigidBodyCom->Set_GloblePose((_Vec3)m_vTargetPos);
+			}
+			else
+			{
+				m_pRigidBodyCom->Set_Velocity(vVel * m_fMoveDir);
+			}
+		}
+		else if (m_fMoveDir < 0.f)
+		{
+			if (m_pTransformCom->Get_State(CTransform::STATE_POSITION).y <= m_vTargetPos.y)
+			{
+				m_pRigidBodyCom->Set_GloblePose((_Vec3)m_vTargetPos);
+			}
+			else
+			{
+				m_pRigidBodyCom->Set_Velocity(vVel * m_fMoveDir);
+			}
+		}
+
 	}
 
 	if (m_bMove && Calculate_Arrive_TargetPos())
@@ -87,6 +114,8 @@ void CLift_Floor::Update(_float fTimeDelta)
 		m_fCollisonTimer = 0.f;
 		m_bCollid = false;
 	}
+
+	m_pRigidBodyCom->Update(fTimeDelta);
 
 	if(m_pColliderCom != nullptr)
 		m_pColliderCom->Update(m_pTransformCom->Get_WorldMatrix_Ptr());
@@ -210,13 +239,39 @@ HRESULT CLift_Floor::Ready_Components(OBJECT_DEFAULT_DESC* pDesc)
 
 	/* For.Com_Collider */
 	CBounding_OBB::BOUNDING_OBB_DESC			ColliderDesc{};
-	ColliderDesc.vExtents = _float3(2.f, 0.5f, 2.f);
+	ColliderDesc.vExtents = _float3(2.f, 1.f, 2.f);
 	ColliderDesc.vAngles = _float3(0.f, XMConvertToRadians(pDesc->vRotation.y),0.f);
 
 	if (FAILED(__super::Add_Component(LEVEL_STATIC, TEXT("Prototype_Component_Collider_OBB"),
 		TEXT("Com_Collider"), reinterpret_cast<CComponent**>(&m_pColliderCom), &ColliderDesc)))
 		return E_FAIL;
 	m_pColliderCom->Set_Owner(this);
+
+	// 항상 마지막에 생성하기
+	CRigidBody::RIGIDBODY_DESC RigidBodyDesc{};
+	RigidBodyDesc.isStatic = false;
+	RigidBodyDesc.isGravity = false;
+	RigidBodyDesc.pOwnerTransform = m_pTransformCom;
+	RigidBodyDesc.pOwnerNavigation = nullptr;
+
+	RigidBodyDesc.pOwner = this;
+	RigidBodyDesc.fStaticFriction = 0.f;
+	RigidBodyDesc.fDynamicFriction = 0.f;
+	RigidBodyDesc.fRestituion = 0.f;
+	RigidBodyDesc.PxLockFlags = PxRigidDynamicLockFlag::eLOCK_ANGULAR_X |
+		PxRigidDynamicLockFlag::eLOCK_ANGULAR_Y |
+		PxRigidDynamicLockFlag::eLOCK_ANGULAR_Z |
+		PxRigidDynamicLockFlag::eLOCK_LINEAR_X | 
+		PxRigidDynamicLockFlag::eLOCK_LINEAR_Z;
+
+	physX::GeometryBox BoxDesc;
+	BoxDesc.vSize = _Vec3(1.f, 0.1f, 1.f);
+	RigidBodyDesc.pGeometry = &BoxDesc;
+
+	/* FOR.Com_RigidBody */
+	if (FAILED(__super::Add_Component(LEVEL_STATIC, TEXT("Prototype_Component_RigidBody"),
+		TEXT("Com_RigidBody"), reinterpret_cast<CComponent**>(&m_pRigidBodyCom), &RigidBodyDesc)))
+		return E_FAIL;
 
 	return S_OK;
 }
@@ -226,7 +281,13 @@ _bool CLift_Floor::Calculate_Arrive_TargetPos()
 	_Vec4 vCurPos = m_pTransformCom->Get_State(CTransform::STATE_POSITION);
 
 	if (fabs(vCurPos.y - m_vTargetPos.y) < 0.1f)
+	{
+		m_pRigidBodyCom->Set_GloblePose((_Vec3)m_vTargetPos);
+
+		_Vec3 vZero = _Vec3(0.f, 0.f, 0.f);
+		m_pRigidBodyCom->Set_Velocity(vZero);
 		return true;
+	}
 	else
 		return false;
 }
