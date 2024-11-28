@@ -37,7 +37,7 @@ HRESULT CLift_Door::Initialize(void* pArg)
 	m_iAnim_Open = m_pModelCom->Find_AnimationIndex("AS_Open", 3.f);
 	m_iAnim_Open_Idle = m_pModelCom->Find_AnimationIndex("AS_Open_Idle", 3.f);
 
-	m_pModelCom->SetUp_Animation(m_iAnim_Close, false);
+	m_pModelCom->SetUp_Animation(m_iAnim_Close_Idle, false);
 
 	return S_OK;
 }
@@ -52,13 +52,24 @@ void CLift_Door::Update(_float fTimeDelta)
 
 	if (m_bOpen)
 	{
-		if(m_pModelCom->Get_CurrentAnimationIndex() != m_iAnim_Open)
+		if(m_pModelCom->Get_CurrentAnimationIndex() != m_iAnim_Open
+			&& m_pModelCom->Get_CurrentAnimationIndex() == m_iAnim_Close_Idle)
 			m_pModelCom->SetUp_NextAnimation(m_iAnim_Open);
 
 		if(m_pModelCom->Get_CurrentAnimationIndex() == m_iAnim_Open 
-			&& m_pModelCom->Get_IsEndAnimArray()
-			&& m_pModelCom->Get_CurrentAnimationIndex() == m_iAnim_Open_Idle)
+			&& m_pModelCom->Get_IsEndAnimArray())
 			m_pModelCom->SetUp_NextAnimation(m_iAnim_Open_Idle);
+	}
+	
+	if(m_bClose)
+	{
+		if (m_pModelCom->Get_CurrentAnimationIndex() == m_iAnim_Open_Idle)
+			m_pModelCom->SetUp_NextAnimation(m_iAnim_Close);
+
+		if (m_pModelCom->Get_CurrentAnimationIndex() == m_iAnim_Close
+			&& m_pModelCom->Get_IsEndAnimArray()
+			&& m_pModelCom->Get_CurrentAnimationIndex() != m_iAnim_Close_Idle)
+			m_pModelCom->SetUp_NextAnimation(m_iAnim_Close_Idle);
 	}
 
 	if(m_pColliderCom != nullptr)
@@ -142,6 +153,7 @@ HRESULT CLift_Door::Ready_Components()
 	if (FAILED(__super::Add_Component(LEVEL_STATIC, TEXT("Prototype_Component_Collider_OBB"),
 		TEXT("Com_Collider"), reinterpret_cast<CComponent**>(&m_pColliderCom), &ColliderDesc)))
 		return E_FAIL;
+	m_pColliderCom->Set_Owner(this);
 
 	return S_OK;
 }

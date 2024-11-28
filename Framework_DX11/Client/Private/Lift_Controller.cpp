@@ -52,7 +52,7 @@ void CLift_Controller::Priority_Update(_float fTimeDelta)
 void CLift_Controller::Update(_float fTimeDelta)
 {
 	//컨트롤러 작동, 엘베가 도착해 있으면 작동 X
-	if (m_bClose_with_Player && m_bMoveFloor == false && Is_Close_Between_Lift_Floor() == false)
+	if (m_bCollision && m_bMoveFloor == false && Is_Close_Between_Lift_Floor() == false)
 	{
 		//키 입력 확인 부분은 나중에 UI에서 받아와야 함
 		if (KEY_TAP(KEY::E))
@@ -85,8 +85,6 @@ void CLift_Controller::Update(_float fTimeDelta)
 		m_bActiveFloor = false;
 		fActiveTimer = 0.f;
 	}
-
-	Calculate_Distance_Between_Player();
 
 	if(m_pColliderCom != nullptr)
 		m_pColliderCom->Update(m_pTransformCom->Get_WorldMatrix_Ptr());
@@ -149,6 +147,26 @@ HRESULT CLift_Controller::Render()
 
 }
 
+void CLift_Controller::OnCollisionEnter(CGameObject* pOther)
+{
+	if (pOther->Get_Tag() == TEXT("Player"))
+	{
+		m_bCollision = true;
+	}
+}
+
+void CLift_Controller::OnCollisionStay(CGameObject* pOther)
+{
+}
+
+void CLift_Controller::OnCollisionExit(CGameObject* pOther)
+{
+	if (pOther->Get_Tag() == TEXT("Player"))
+	{
+		m_bCollision = false;
+	}
+}
+
 HRESULT CLift_Controller::Ready_Components()
 {
 	/* FOR.Com_Shader */
@@ -165,7 +183,8 @@ HRESULT CLift_Controller::Ready_Components()
 	CBounding_OBB::BOUNDING_OBB_DESC			ColliderDesc{};
 	ColliderDesc.vExtents = _float3(0.5f, 1.0f, 0.5f);
 	ColliderDesc.vAngles = _float3(0.f, 0.f, 0.f);
-	ColliderDesc.vCenter = _float3(0.f, 1.0f, 0.f);
+	//ColliderDesc.vCenter = _float3(0.2f, 1.0f, -0.2f);
+	ColliderDesc.vCenter = _float3(0.5f, 1.0f, 0.f);
 
 	if (FAILED(__super::Add_Component(LEVEL_STATIC, TEXT("Prototype_Component_Collider_OBB"),
 		TEXT("Com_Collider"), reinterpret_cast<CComponent**>(&m_pColliderCom), &ColliderDesc)))
@@ -173,19 +192,6 @@ HRESULT CLift_Controller::Ready_Components()
 	m_pColliderCom->Set_Owner(this);
 
 	return S_OK;
-}
-
-void CLift_Controller::Calculate_Distance_Between_Player()
-{
-	_Vec4 vMyPos = m_pTransformCom->Get_State(CTransform::STATE_POSITION);
-	_Vec4 vPlayerPos = m_pPlayer->Get_Transform()->Get_State(CTransform::STATE_POSITION);
-
-	_float fDistance = XMVectorGetX(XMVector4Length(vMyPos - vPlayerPos));
-
-	if (fDistance < 2.f)
-		m_bClose_with_Player = true;
-	else
-		m_bClose_with_Player = false;
 }
 
 _bool CLift_Controller::Is_Close_Between_Lift_Floor()

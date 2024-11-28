@@ -28,7 +28,8 @@ public:
 	virtual HRESULT Render() override;
 
 public:
-	void Set_Open(_bool bOpen) { m_bOpen = bOpen; }
+	void Open() { m_bOpen = true; m_bClose = false; }
+	void Close() { m_bOpen = false; m_bClose = true; }
 private:
 	CCollider* m_pColliderCom = { nullptr};
 	CShader* m_pShaderCom = { nullptr };
@@ -37,6 +38,7 @@ private:
 private:
 	_bool m_bShadow = false;
 	_bool m_bOpen = false;
+	_bool m_bClose = false;
 
 	_int m_iAnim_Close = { 0 };
 	_int m_iAnim_Close_Idle = { 0 };

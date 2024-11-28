@@ -27,7 +27,8 @@ HRESULT CLift_Floor::Initialize(void* pArg)
 
 	m_pTransformCom->Set_Scaled(pDesc->vScale.x, pDesc->vScale.y, pDesc->vScale.z);
 	m_pTransformCom->Rotation(pDesc->vRotation.x, pDesc->vRotation.y, pDesc->vRotation.z);
-	m_pTransformCom->Set_State(CTransform::STATE_POSITION, XMLoadFloat3(&pDesc->vPosition));
+	_Vec3 vPos = { pDesc->vPosition.x, -97.8f, pDesc->vPosition.z};
+	m_pTransformCom->Set_State(CTransform::STATE_POSITION, vPos);
 	m_bShadow = pDesc->bShadow;
 
 	if (FAILED(Ready_Components(pDesc)))
@@ -61,7 +62,7 @@ void CLift_Floor::Update(_float fTimeDelta)
 	if (m_bMove)
 	{
 		m_isMoving = true;
-		m_pTransformCom->Go_Lerp(m_pTransformCom->Get_State(CTransform::STATE_POSITION), m_vTargetPos, 0.1f);
+		m_pTransformCom->Go_Lerp(m_pTransformCom->Get_State(CTransform::STATE_POSITION), m_vTargetPos, 0.05f);
 	}
 
 	if (m_bMove && Calculate_Arrive_TargetPos())
@@ -76,6 +77,17 @@ void CLift_Floor::Update(_float fTimeDelta)
 		Open_Door();
 	}
 
+	if (m_bCollid)
+		m_fCollisonTimer += fTimeDelta;
+
+	if (m_fCollisonTimer > 2.f)
+	{
+		Close_Door();
+		m_bArrive = false;
+		m_fCollisonTimer = 0.f;
+		m_bCollid = false;
+	}
+
 	if(m_pColliderCom != nullptr)
 		m_pColliderCom->Update(m_pTransformCom->Get_WorldMatrix_Ptr());
 }
@@ -84,9 +96,9 @@ void CLift_Floor::Late_Update(_float fTimeDelta)
 {
 	if (m_pGameInstance->isIn_Frustum_WorldSpace(m_pTransformCom->Get_State(CTransform::STATE_POSITION), 15.f))
 	{
-
-	__super::Late_Update(fTimeDelta);
-	m_pGameInstance->Add_RenderObject(CRenderer::RG_NONBLEND, this);
+		__super::Late_Update(fTimeDelta);
+		m_pGameInstance->Add_RenderObject(CRenderer::RG_NONBLEND, this);
+		m_pGameInstance->Add_ColliderList(m_pColliderCom);
 
 #ifdef _DEBUG
 	if (m_pColliderCom != nullptr)
@@ -141,16 +153,37 @@ HRESULT CLift_Floor::Render()
 
 }
 
+void CLift_Floor::OnCollisionEnter(CGameObject* pOther)
+{
+}
+
+void CLift_Floor::OnCollisionStay(CGameObject* pOther)
+{
+	if (pOther->Get_Tag() == TEXT("Player"))
+	{
+		m_bCollid = true;
+	}
+}
+
+void CLift_Floor::OnCollisionExit(CGameObject* pOther)
+{
+	if (pOther->Get_Tag() == TEXT("Player"))
+	{
+		m_bCollid = false;
+		m_fCollisonTimer = 0.f;
+	}
+}
+
 void CLift_Floor::Set_Move_Dir(_int iDir)
 {
 	switch (iDir)
 	{
 	case UP:
-		m_iMoveDir = 1.f;
+		m_fMoveDir = 1.f;
 		m_vTargetPos.y = m_vTargetPosList[UP];
 		break;
 	case DOWN:
-		m_iMoveDir = -1.f;
+		m_fMoveDir = -1.f;
 		m_vTargetPos.y = m_vTargetPosList[DOWN];
 		break;
 	}
@@ -183,6 +216,7 @@ HRESULT CLift_Floor::Ready_Components(OBJECT_DEFAULT_DESC* pDesc)
 	if (FAILED(__super::Add_Component(LEVEL_STATIC, TEXT("Prototype_Component_Collider_OBB"),
 		TEXT("Com_Collider"), reinterpret_cast<CComponent**>(&m_pColliderCom), &ColliderDesc)))
 		return E_FAIL;
+	m_pColliderCom->Set_Owner(this);
 
 	return S_OK;
 }
@@ -202,14 +236,32 @@ void CLift_Floor::Open_Door()
 	switch (m_iPreDir)
 	{
 	case UP:
-		m_pDoors[UP]->Set_Open(true);
+		m_pDoors[UP]->Open();
 		break;
 	case DOWN:
-		m_pDoors[UP]->Set_Open(true);
+		m_pDoors[DOWN]->Open();
 		break;
 	default:
 		break;
 	}
+}
+
+void CLift_Floor::Close_Door()
+{
+	switch (m_iPreDir)
+	{
+	case UP:
+		m_pDoors[UP]->Close();
+		break;
+	case DOWN:
+		m_pDoors[DOWN]->Close();
+		break;
+	default:
+		break;
+	}
+
+	_int iNewDir = m_iPreDir == DOWN ? UP : DOWN;
+	Set_Move_Dir(iNewDir);
 }
 
 CLift_Floor* CLift_Floor::Create(ID3D11Device* pDevice, ID3D11DeviceContext* pContext)
