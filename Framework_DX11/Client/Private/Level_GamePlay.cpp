@@ -73,7 +73,7 @@ void CLevel_GamePlay::Update(_float fTimeDelta)
 
 	if (KEY_TAP(KEY::F5))
 	{
-		// CEffect_Manager::Get_Instance()->Add_Effect_ToLayer(LEVEL_GAMEPLAY, TEXT("Player_Attack_Rapier_StormStab_First"),_Vec3(0.f, 5.f, 0.f), _Vec3(0.f, 0.f, 0.f), _Vec3(1.f, 1.f, 1.f));
+		CEffect_Manager::Get_Instance()->Add_Effect_ToLayer(LEVEL_GAMEPLAY, TEXT("Player_Attack_Rapier_StormStab_First"),_Vec3(0.f, 5.f, 0.f), _Vec3(0.f, 0.f, 0.f), _Vec3(1.f, 1.f, 1.f));
 	}
 
 

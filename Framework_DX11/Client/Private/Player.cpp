@@ -161,8 +161,6 @@ void CPlayer::Update(_float fTimeDelta)
 
 	if (KEY_TAP(KEY::L))
 	{
-		_Vec3 v = m_pTransformCom->Get_WorldMatrix().Up() + m_pTransformCom->Get_WorldMatrix().Translation();
-		m_pFsmCom->Change_State(LADDER, &v);
 		//Calc_DamageGain(5.f, m_pTransformCom->Get_WorldMatrix().Forward() + m_pTransformCom->Get_WorldMatrix().Translation());
 	}
 }
@@ -250,6 +248,15 @@ void CPlayer::OnCollisionEnter(CGameObject* pOther)
 
 void CPlayer::OnCollisionStay(CGameObject* pOther)
 {
+	if (pOther->Get_Tag() == TEXT("Ladder"))
+	{
+		if (KEY_TAP(KEY::E))
+		{
+
+			_Vec3 v = m_pTransformCom->Get_WorldMatrix().Up() + m_pTransformCom->Get_WorldMatrix().Translation();
+			m_pFsmCom->Change_State(LADDER, &v);
+		}
+	}
 	/*if (pOther->Get_Tag() == TEXT("Monster"))
 	{
 		_Vec3 vColNormal = m_pTransformCom->Get_State(CTransform::STATE_POSITION) - pOther->Get_Transform()->Get_State(CTransform::STATE_POSITION);
@@ -459,7 +466,7 @@ HRESULT CPlayer::Ready_Components()
 
 	/* FOR.Com_Collider */
 	CBounding_OBB::BOUNDING_OBB_DESC			ColliderDesc{};
-	ColliderDesc.vExtents = _float3(0.4f, 1.f, 0.4f);
+	ColliderDesc.vExtents = _float3(0.3f, 0.9f, 0.3f);
 	ColliderDesc.vCenter = _float3(0.f, ColliderDesc.vExtents.y, 0.f);
 	ColliderDesc.vAngles = _float3(0.f, 0.f, 0.f);
 
