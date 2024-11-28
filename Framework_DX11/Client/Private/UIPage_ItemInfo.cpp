@@ -102,7 +102,9 @@ void CUIPage_ItemInfo::Late_Update(_float fTimeDelta)
 	for (_int i = _int(PART_GROUP::ITEMINFO_ACTION_Back); i <= _int(PART_GROUP::ITEMINFO_ACTION_Text_3); ++i)
 	{
 		m_vecPart[i]->MovePart(m_vecPart[m_vecPart[i]->iParentPart_Index]->fPosition, fTimeDelta);
-		Input_Render_Info(*m_vecPart[i], SCROLL_AREA::SCROLL_NONE);
+
+		if (m_vecPart[i]->bRender)
+			Input_Render_Info(*m_vecPart[i], SCROLL_AREA::SCROLL_NONE);
 	}
 
 	m_vecPageAction[_int(PAGEACTION::ACTION_ACTIVE)] = false;
@@ -126,7 +128,9 @@ void CUIPage_ItemInfo::CloseAction()
 CHECK_MOUSE CUIPage_ItemInfo::Check_Page_Action(_float fTimeDelta)
 {
 	__super::Check_Page_Action(fTimeDelta);
-	Action_ItemAction(fTimeDelta);
+
+	if (m_bIsActive_Func)
+		Action_ItemAction(fTimeDelta);
 
 	return CHECK_MOUSE::MOUSE_NONE;
 }
@@ -150,6 +154,7 @@ HRESULT CUIPage_ItemInfo::Ready_UIPart_Group_Control()
 
 	m_strFuncName[_int(ITEM_FUNC::FUNC_USING)] = TEXT("사용하기");
 	m_strFuncName[_int(ITEM_FUNC::FUNC_TO_INVEN)] = TEXT("인벤토리로 이동");
+	m_strFuncName[_int(ITEM_FUNC::FUNC_TO_EQUIP)] = TEXT("장비창으로 이동");
 	m_strFuncName[_int(ITEM_FUNC::FUNC_EQUIP)] = TEXT("착용하기");
 	m_strFuncName[_int(ITEM_FUNC::FUNC_UNEQUIP)] = TEXT("해제하기");
 	m_strFuncName[_int(ITEM_FUNC::FUNC_DELETE)] = TEXT("버리기");
@@ -206,9 +211,7 @@ void CUIPage_ItemInfo::Show_NewMark(_Vec2 vItemCellPos, _Vec2 vItemCellSize)
 void CUIPage_ItemInfo::Show_ItemAction(_Vec2 vItemCellPos, _Vec2 vItemCellSize, ITEM_FUNC eFunc0, ITEM_FUNC eFunc1, ITEM_FUNC eFunc2, ITEM_FUNC eFunc3)
 {
 	m_bIsActive_Func = true;
-
-	m_vecPart[_int(PART_GROUP::ITEMINFO_ACTION_Header)]->fPosition = vItemCellPos + (vItemCellSize * 0.5f) + (m_vecPart[_int(PART_GROUP::ITEMINFO_ACTION_Header)]->fSize * 0.5f);
-
+	m_vecPart[_int(PART_GROUP::ITEMINFO_ACTION_Header)]->fPosition = vItemCellPos + (m_vecPart[_int(PART_GROUP::ITEMINFO_ACTION_Header)]->fSize * 0.5f) + (vItemCellSize * 0.5f);
 	m_vecPart[_int(PART_GROUP::ITEMINFO_ACTION_Back)]->bRender = true;
 	m_vecPart[_int(PART_GROUP::ITEMINFO_ACTION_Deco)]->bRender = true;
 
@@ -225,9 +228,13 @@ void CUIPage_ItemInfo::Show_ItemAction(_Vec2 vItemCellPos, _Vec2 vItemCellSize, 
 		{
 			m_vecPart[_int(PART_GROUP::ITEMINFO_ACTION_Back)]->fRatio += 0.25f;
 			m_vecPart[_int(PART_GROUP::ITEMINFO_ACTION_Text_0) + (i * 3)]->strText = m_strFuncName[_int(m_eActive_Func[i])];
+			m_vecPart[_int(PART_GROUP::ITEMINFO_ACTION_Text_0) + (i * 3)]->bRender = true;
 		}
 		else
-			break;
+		{
+			m_vecPart[_int(PART_GROUP::ITEMINFO_ACTION_Text_0) + (i * 3)]->strText = {};
+			m_vecPart[_int(PART_GROUP::ITEMINFO_ACTION_Text_0) + (i * 3)]->bRender = false;
+		}
 	}
 }
 
@@ -242,6 +249,8 @@ void CUIPage_ItemInfo::Off_ItemAction()
 
 void CUIPage_ItemInfo::Action_ItemAction(_float fTimeDelta)
 {
+	m_iNow_Func = -1;
+
 	for (_int i = 0; i < 4; ++i)
 	{
 		if (m_eActive_Func[i] != ITEM_FUNC::FUNC_END)
@@ -252,21 +261,15 @@ void CUIPage_ItemInfo::Action_ItemAction(_float fTimeDelta)
 
 				if (KEY_TAP(KEY::LBUTTON))
 				{
-
+					m_iNow_Func = i;
 				}
 			}
-
-
-
+			else 
+				m_vecPart[_int(PART_GROUP::ITEMINFO_ACTION_Fx_0) + (i * 3)]->bRender = false;
 		}
 		else
 			break;
 	}
-
-
-
-
-
 }
 
 

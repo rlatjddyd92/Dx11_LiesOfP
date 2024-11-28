@@ -84,6 +84,7 @@ void CUIPage_Equip::OpenAction()
 {
 	__super::OpenAction();
 	GET_GAMEINTERFACE->Off_ItemInfo_UI();
+	Reset_ItemAction();
 }
 
 void CUIPage_Equip::CloseAction()
@@ -91,6 +92,7 @@ void CUIPage_Equip::CloseAction()
 	__super::CloseAction();
 	GET_GAMEINTERFACE->Set_Show_NewMark_Off();
 	GET_GAMEINTERFACE->Off_ItemInfo_UI();
+	Reset_ItemAction();
 }
 
 CHECK_MOUSE CUIPage_Equip::Check_Page_Action(_float fTimeDelta)
@@ -154,6 +156,7 @@ void CUIPage_Equip::Action_Equip_Page(_float fTimeDelta)
 	{
 		Reset_Focus();
 		GET_GAMEINTERFACE->Off_Focus();
+		Reset_ItemAction();
 	}
 }
 
@@ -181,6 +184,8 @@ void CUIPage_Equip::Action_Focus(_float fTimeDelta)
 		iEnd_Index = _int(PART_GROUP::GROUP_PAGE_2_COSTUME);
 		eStart_Slot = EQUIP_SLOT::EQUIP_HEAD_0;
 	}
+
+	_int iItemActionActive = false;
 
 	for (_int i = iStart_Index; i <= iEnd_Index; ++i)
 	{
@@ -214,8 +219,17 @@ void CUIPage_Equip::Action_Focus(_float fTimeDelta)
 		{
 			m_vFocus_Pos = m_vecPart[iIndex]->fPosition;
 			m_vFocus_Size = m_vecPart[iIndex]->fSize * 1.1f;
+
+			if (KEY_TAP(KEY::RBUTTON))
+			{
+				iItemActionActive = true;
+				Set_ItemAction(m_vecPart[iIndex]->fPosition, m_vecPart[iIndex]->fSize, INVEN_ARRAY_TYPE::TYPE_END, EQUIP_SLOT(_int(eStart_Slot) + (i - iStart_Index)), i);
+			}
 		}
 	}
+
+	if ((KEY_TAP(KEY::RBUTTON)) && (iItemActionActive == false))
+		Reset_ItemAction();
 }
 
 void CUIPage_Equip::Update_Equip_Page(_float fTimeDelta)
@@ -347,7 +361,7 @@ void CUIPage_Equip::Update_Arm_Cell()
 
 		++iter; m_vecPart[*iter]->bRender = m_eFocus_Group == PART_GROUP::GROUP_PAGE_0_ARM ? true : false;
 		++iter;
-		++iter; m_vecPart[*iter]->bRender = false; m_vecPart[*iter]->iTexture_Index = pItem->iTexture_Index;
+		++iter; m_vecPart[*iter]->bRender = true; m_vecPart[*iter]->iTexture_Index = pItem->iTexture_Index;
 	}
 }
 

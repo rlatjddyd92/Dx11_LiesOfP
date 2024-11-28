@@ -74,9 +74,6 @@ void CGameInterface_Controller::Update_GameInterface(_float fTimeDelta)
 
 	m_pUIManager->Update_UIManager(fTimeDelta);
 
-	return;
-
-
 
 	const CUIPage::ITEMACTION_INFO* pNowAction = m_pUIManager->Get_ItemAction_Info();
 
@@ -85,7 +82,9 @@ void CGameInterface_Controller::Update_GameInterface(_float fTimeDelta)
 		m_pItem_Manager->Operate_ItemAction(m_pUIManager->Get_ActiveFunc(), pNowAction->vAction_Pos, pNowAction->vAction_Size);
 	}
 
-	if (pNowAction->eAction_Array_Type != INVEN_ARRAY_TYPE::TYPE_END)
+	if (pNowAction == nullptr)
+		m_pItem_Manager->Reset_ItemAction();
+	else if (pNowAction->eAction_Array_Type != INVEN_ARRAY_TYPE::TYPE_END)
 	{
 		m_pItem_Manager->Set_ItemAction(pNowAction->eAction_Array_Type, pNowAction->iAction_Array_Index, pNowAction->vAction_Pos, pNowAction->vAction_Size);
 	}

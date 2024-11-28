@@ -120,6 +120,8 @@ public:
 			return m_pUIPage_Equip->Get_ItemAction_Info();
 		else if (m_pUIPage_Inven->GetPageAction(PAGEACTION::ACTION_ACTIVE))
 			return m_pUIPage_Inven->Get_ItemAction_Info();
+		else
+			return nullptr;
 	}
 
 	ITEM_FUNC Get_ActiveFunc() 

@@ -166,6 +166,8 @@ private:
 	_Vec2 m_vFocus_Pos = { -1.f,-1.f };
 	_Vec2 m_vFocus_Size = { -1.f,-1.f };
 
+	// ItemActionInfo 
+	_bool m_bReset_ItemAction_Info = false;
 	
 
 

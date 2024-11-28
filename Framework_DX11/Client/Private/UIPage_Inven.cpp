@@ -59,6 +59,9 @@ void CUIPage_Inven::Update(_float fTimeDelta)
 
 void CUIPage_Inven::Late_Update(_float fTimeDelta)
 {
+	if (m_bReset_ItemAction_Info == true)
+		Reset_ItemAction();
+
 	for (auto& iter : m_vec_Group_Ctrl)
 		__super::UpdatePart_ByControl(iter);
 
@@ -93,6 +96,7 @@ void CUIPage_Inven::Late_Update(_float fTimeDelta)
 
 	
 	m_IsTab_Change = false;
+	m_bReset_ItemAction_Info = true;
 }
 
 HRESULT CUIPage_Inven::Render()
@@ -105,6 +109,7 @@ void CUIPage_Inven::OpenAction()
 	__super::OpenAction();
 	m_IsTab_Change = true;
 	GET_GAMEINTERFACE->Off_ItemInfo_UI();
+	Reset_ItemAction();
 }
 
 void CUIPage_Inven::CloseAction()
@@ -112,6 +117,7 @@ void CUIPage_Inven::CloseAction()
 	__super::CloseAction();
 	GET_GAMEINTERFACE->Set_Show_NewMark_Off();
 	GET_GAMEINTERFACE->Off_ItemInfo_UI();
+	Reset_ItemAction();
 }
 
 CHECK_MOUSE CUIPage_Inven::Check_Page_Action(_float fTimeDelta)
@@ -224,6 +230,7 @@ void CUIPage_Inven::Action_Inven_Page(_float fTimeDelta)
 	{
 		m_vFocus_Pos = { -1.f,-1.f };
 		GET_GAMEINTERFACE->Off_Focus();
+		Reset_ItemAction();
 	}
 		
 }
@@ -343,13 +350,26 @@ void CUIPage_Inven::Update_Array_Position(_float fTimeDelta)
 			m_vecPart[*iter]->fPosition.y += fAdjust_Y;  m_vecPart[*iter]->bRender = true;
 			_Vec2 vCheck = GET_GAMEINTERFACE->CheckMouse(m_vecPart[*iter]->fPosition, m_vecPart[*iter]->fSize);
 			m_vecPart[*iter]->fPosition.y -= fAdjust_Y;
+			_Vec2 vRootPos = m_vecPart[*iter]->fPosition;
+			_Vec2 vRootSize = m_vecPart[*iter]->fSize;
 
 			_bool bIsFocus = false;
-			++iter; 
+			++iter;
+			m_vecPart[*iter]->fPosition = vRootPos;
+			m_vecPart[*iter]->fSize = vRootSize;
+
 			if (vCheck.x != -1)
 			{
 				m_vecPart[*iter]->bRender = true;  bIsFocus = true;
+				if (KEY_TAP(KEY::RBUTTON))
+				{
+					m_bReset_ItemAction_Info = false;
+					Set_ItemAction(m_vecPart[*iter]->fPosition + _Vec2(0.f, fAdjust_Y), m_vecPart[*iter]->GetBarSize(), INVEN_ARRAY_TYPE(i), EQUIP_SLOT::EQUIP_END, j);
+				}
+				
 			}
+			
+
 				++iter;
 				if (pNow == nullptr) m_vecPart[*iter]->iTexture_Index = -1;
 				else m_vecPart[*iter]->iTexture_Index = pNow->iTexture_Index;
@@ -495,13 +515,25 @@ void CUIPage_Inven::Update_Array_Position_Weapon(_float fTimeDelta)
 		_Vec2 vCheck = GET_GAMEINTERFACE->CheckMouse(m_vecPart[*iter]->fPosition, m_vecPart[*iter]->fSize);
 		m_vecPart[*iter]->fPosition.y -= fAdjust_Y;
 		
-		_bool bIsFocus = false;
+		_Vec2 vRootPos = m_vecPart[*iter]->fPosition;
+		_Vec2 vRootSize = m_vecPart[*iter]->fSize;
 
-			++iter; 
+		_bool bIsFocus = false;
+		++iter;
+		m_vecPart[*iter]->fPosition = vRootPos;
+		m_vecPart[*iter]->fSize = vRootSize;
+		
 			if (vCheck.x != -1)
 			{
 				m_vecPart[*iter]->bRender = true;  bIsFocus = true;
+				if (KEY_TAP(KEY::RBUTTON))
+				{
+					m_bReset_ItemAction_Info = false;
+					Set_ItemAction(m_vecPart[*iter]->fPosition + _Vec2(0.f, fAdjust_Y), m_vecPart[*iter]->GetBarSize(), INVEN_ARRAY_TYPE::TYPE_WEAPON_NORMAL_BLADE, EQUIP_SLOT::EQUIP_END, j);
+				}
+			
 			}
+		
 			++iter;
 			if (pNowBlade == nullptr) m_vecPart[*iter]->iTexture_Index = -1;
 			else m_vecPart[*iter]->iTexture_Index = pNowBlade->iTexture_Index;
@@ -626,13 +658,25 @@ void CUIPage_Inven::Update_Array_Position_Weapon_Heroic(_float fTimeDelta, _floa
 		_Vec2 vCheck = GET_GAMEINTERFACE->CheckMouse(m_vecPart[*iter]->fPosition, m_vecPart[*iter]->fSize);
 		m_vecPart[*iter]->fPosition.y -= fAdjust_Y;
 
+		_Vec2 vRootPos = m_vecPart[*iter]->fPosition;
+		_Vec2 vRootSize = m_vecPart[*iter]->fSize;
+
 		_bool bIsFocus = false;
-		
 		++iter;
+		m_vecPart[*iter]->fPosition = vRootPos;
+		m_vecPart[*iter]->fSize = vRootSize;
+		
 		if (vCheck.x != -1)
 		{
 			m_vecPart[*iter]->bRender = true;  bIsFocus = true;
+			if (KEY_TAP(KEY::RBUTTON))
+			{
+				m_bReset_ItemAction_Info = false;
+				Set_ItemAction(m_vecPart[*iter]->fPosition + _Vec2(0.f, fAdjust_Y), m_vecPart[*iter]->GetBarSize(), INVEN_ARRAY_TYPE::TYPE_WEAPON_SPECIAL_BLADE, EQUIP_SLOT::EQUIP_END, j);
+			}
+			
 		}
+		
 			++iter;
 			++iter;
 			++iter;
@@ -823,12 +867,18 @@ void CUIPage_Inven::Action_Slide(_float fSize)
 
 		m_fSlide_Ratio = m_fSlide_Bar_Y_Now / m_fSlide_Bar_Y_Max;
 
+		_float fFocus_Y_Adjust = m_fData_Y_Now;
+
 		m_fData_Y_Now = m_fSlide_Ratio * (m_fData_Y_Max - m_fData_Y_Min);
+
+		fFocus_Y_Adjust -= m_fData_Y_Now;
 
 		m_vec_Group_Ctrl[_int(PART_GROUP::GROUP_ITEMINFO_SLIDE_BAR)]->fRatio = m_fSlide_Ratio;
 		m_vecPart[__super::Get_Front_PartIndex_In_Control(_int(PART_GROUP::GROUP_ITEMINFO_FRAME))]->fAdjust.y = -m_fData_Y_Now + m_fData_Adjust_Y_Origin;
 
 		m_fMouse_Y_Before = fMouseY;
+
+		m_vFocus_Pos.y += fFocus_Y_Adjust;
 	}
 	else if ((!m_bSlide_Bar_Move) && (KEY_TAP(KEY::LBUTTON)))
 	{
@@ -845,6 +895,8 @@ void CUIPage_Inven::Action_Slide(_float fSize)
 		m_bSlide_Bar_Move = false;
 		m_fMouse_Y_Before = 0.f;
 	}
+
+	
 }
 
 void CUIPage_Inven::Update_Slide(_float fSize)
