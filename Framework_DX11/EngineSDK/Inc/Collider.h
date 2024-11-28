@@ -36,6 +36,7 @@ public:
 
 public:
 	_bool Intersect(CCollider* pTargetCollider);
+	const _Vec3 Get_WorldCenter();
 
 private:
 	class CBounding*					m_pBounding = { nullptr };

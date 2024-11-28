@@ -18,6 +18,9 @@ protected:
 	virtual ~CBounding() = default;
 
 public:
+	virtual const _Vec3 Get_WorldCenter() = 0;
+
+public:
 	virtual HRESULT Initialize(CBounding::BOUNDING_DESC* pBoundingDesc);
 	virtual void Update(_fmatrix WorldMatrix);
 	virtual HRESULT Render(PrimitiveBatch<VertexPositionColor>* pBatch);

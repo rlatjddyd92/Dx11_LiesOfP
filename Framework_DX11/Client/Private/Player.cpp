@@ -8,6 +8,8 @@
 #include "Weapon.h"
 #include "Weapon_Scissor.h"
 
+#include "Ladder.h"
+
 #include "Effect_Manager.h"
 #include "Effect_Container.h"
 
@@ -252,9 +254,7 @@ void CPlayer::OnCollisionStay(CGameObject* pOther)
 	{
 		if (KEY_TAP(KEY::E))
 		{
-
-			_Vec3 v = m_pTransformCom->Get_WorldMatrix().Up() + m_pTransformCom->Get_WorldMatrix().Translation();
-			m_pFsmCom->Change_State(LADDER, &v);
+			m_pFsmCom->Change_State(LADDER, pOther);
 		}
 	}
 	/*if (pOther->Get_Tag() == TEXT("Monster"))

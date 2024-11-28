@@ -32,14 +32,16 @@ protected:
 	virtual ~CLadder() = default;
 
 public:
-	//_Vec3 Get_LadderUpPos() {return m_pColliderCom[UP]->ge }
-public:
 	virtual HRESULT Initialize_Prototype() override;
 	virtual HRESULT Initialize(void* pArg) override;
 	virtual void Priority_Update(_float fTimeDelta) override;
 	virtual void Update(_float fTimeDelta) override;
 	virtual void Late_Update(_float fTimeDelta) override;
 	virtual HRESULT Render() override;
+
+public:
+	const _Vec3 Get_LadderUpPos();
+	const _Vec3 Get_LadderDonwPos();
 
 private:
 	CCollider* m_pColliderCom[COLLIDER_END] = {nullptr, nullptr};

@@ -73,7 +73,7 @@ void CCollider_Manager::Update()
 			{
 				//근데 목록에 있네
 				if (pCollider1->GetCollisionSet().find(pGameObject2) != pCollider1->GetCollisionSet().end()
-					|| pCollider2->GetCollisionSet().find(pGameObject1) != pCollider2->GetCollisionSet().end())
+					&& pCollider2->GetCollisionSet().find(pGameObject1) != pCollider2->GetCollisionSet().end())
 				{
 					pGameObject1->OnCollisionExit(pGameObject2);
 					pGameObject2->OnCollisionExit(pGameObject1);

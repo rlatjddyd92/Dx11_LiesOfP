@@ -5,6 +5,7 @@
 #include "Player.h"
 #include "Camera.h"
 #include "Weapon.h"
+#include "Ladder.h"
 
 CState_Player_Ladder::CState_Player_Ladder(CFsm* pFsm, CPlayer* pPlayer)
     :CState{ pFsm }
@@ -45,8 +46,10 @@ HRESULT CState_Player_Ladder::Initialize(_uint iStateNum, void* pArg)
 
 HRESULT CState_Player_Ladder::Start_State(void* pArg)
 {
-    _Vec3* vLadderPos = static_cast<_Vec3*>(pArg);
-    Choice_UpDown(*vLadderPos);
+    CLadder* pLadder = static_cast<CLadder*>(pArg);
+
+    //_Vec3* vLadderPos = static_cast<_Vec3*>(pArg);
+    Choice_UpDown(pLadder);
 
     
     m_pPlayer->Change_Animation(m_iAnimation_Ladder[m_eUpDownType][0], false, 0.f);
@@ -118,6 +121,8 @@ void CState_Player_Ladder::Update(_float fTimeDelta)
         m_isInputS = false;
     }
 
+    if (KEY_TAP(KEY::Q))
+        m_pPlayer->Change_State(CPlayer::OH_IDLE);
 }
 
 void CState_Player_Ladder::End_State()
@@ -125,11 +130,21 @@ void CState_Player_Ladder::End_State()
     m_pPlayer->Get_RigidBody()->Set_IsOnCell(true);
 }
 
-void CState_Player_Ladder::Choice_UpDown(_Vec3 vLadderPos)
+void CState_Player_Ladder::Choice_UpDown(CLadder* pLadder)
 {
-    _Vec3 vPlayerPos = m_pPlayer->Get_Transform()->Get_State(CTransform::STATE_POSITION);
 
-    _float fHeightDiff = vLadderPos.y - vPlayerPos.y;
+    _Vec3 vLadderPos = pLadder->Get_Transform()->Get_State(CTransform::STATE_POSITION);
+    _Vec3 vUpPos = pLadder->Get_LadderUpPos();
+    _Vec3 vDownPos = pLadder->Get_LadderDonwPos();
+    _Vec3 vPlayerPos = m_pPlayer->Get_Transform()->Get_State(CTransform::STATE_POSITION);
+    _Vec3 vLadderColliderPos;
+    
+    if ((vUpPos - vPlayerPos).Length() < (vDownPos - vPlayerPos).Length())
+        vLadderColliderPos = vUpPos;
+    else
+        vLadderColliderPos = vDownPos;
+
+    _float fHeightDiff = vLadderColliderPos.y - vPlayerPos.y + 2.f;
     if (fHeightDiff > 0.f)
     {
         m_eUpDownType = LADDER_UP;
@@ -140,6 +155,14 @@ void CState_Player_Ladder::Choice_UpDown(_Vec3 vLadderPos)
         m_eUpDownType = LADDER_DOWN;
         m_iHandIndex = 1;
     }
+
+    _Vec3 vInitPos;
+    vInitPos.x = vLadderPos.x;
+    vInitPos.y = vPlayerPos.y + 0.05f;
+    vInitPos.z = vLadderPos.z;
+
+
+    m_pPlayer->Get_RigidBody()->Set_GloblePose(vInitPos);
 }
 
 _bool CState_Player_Ladder::End_Check()

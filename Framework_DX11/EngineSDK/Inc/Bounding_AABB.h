@@ -20,6 +20,7 @@ public:
 		return m_pBoundingDesc;
 	}
 
+	virtual const _Vec3 Get_WorldCenter() { return m_pBoundingDesc->Center; };
 
 public:
 	virtual HRESULT Initialize(CBounding::BOUNDING_DESC* pBoundingDesc) override;

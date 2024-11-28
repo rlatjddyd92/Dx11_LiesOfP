@@ -66,6 +66,10 @@ void CLadder::Late_Update(_float fTimeDelta)
 	__super::Late_Update(fTimeDelta);
 	m_pGameInstance->Add_RenderObject(CRenderer::RG_NONBLEND, this);
 
+	m_pGameInstance->Add_ColliderList(m_pColliderCom[UP]);
+	m_pGameInstance->Add_ColliderList(m_pColliderCom[DOWN]);
+
+
 #ifdef _DEBUG
 	if (m_pColliderCom != nullptr)
 		m_pGameInstance->Add_DebugObject(m_pColliderCom[UP]);
@@ -118,6 +122,16 @@ HRESULT CLadder::Render()
 
 }
 
+const _Vec3 CLadder::Get_LadderUpPos()
+{
+	return m_pColliderCom[UP]->Get_WorldCenter();
+}
+
+const _Vec3 CLadder::Get_LadderDonwPos()
+{
+	return m_pColliderCom[DOWN]->Get_WorldCenter();
+}
+
 HRESULT CLadder::Ready_Components(LADDER_DESC* Desc)
 {
 	/* FOR.Com_Shader */
@@ -142,6 +156,8 @@ HRESULT CLadder::Ready_Components(LADDER_DESC* Desc)
 	if (FAILED(__super::Add_Component(LEVEL_STATIC, TEXT("Prototype_Component_Collider_OBB"),
 		TEXT("Com_Collider1"), reinterpret_cast<CComponent**>(&m_pColliderCom[DOWN]), &ColliderDesc)))
 		return E_FAIL;
+	m_pColliderCom[DOWN]->Set_Owner(this);
+	m_pColliderCom[DOWN]->IsActive(true);
 
 	if (strcmp(Desc->szModelTag, "SK_LV_Ladder_MetalWood_Slide6m_SM_KSJ") == 0)
 	{
@@ -155,6 +171,8 @@ HRESULT CLadder::Ready_Components(LADDER_DESC* Desc)
 	if (FAILED(__super::Add_Component(LEVEL_STATIC, TEXT("Prototype_Component_Collider_OBB"),
 		TEXT("Com_Collider2"), reinterpret_cast<CComponent**>(&m_pColliderCom[UP]), &ColliderDesc)))
 		return E_FAIL;
+	m_pColliderCom[UP]->Set_Owner(this);
+	m_pColliderCom[UP]->IsActive(true);
 
 	return S_OK;
 }

@@ -35,7 +35,7 @@ private:
     LADDER_UPDONW       m_eUpDownType = { UPDOWN_END };
 
 private:
-    void                Choice_UpDown(_Vec3 vLadderPos);
+    void                Choice_UpDown(class CLadder* pLadder);
     _bool               End_Check();
 
 private:

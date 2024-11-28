@@ -119,6 +119,11 @@ _bool CCollider::Intersect(CCollider * pTargetCollider)
 	return m_pBounding->Intersect(pTargetCollider->m_eColliderType, pTargetCollider->m_pBounding);	
 }
 
+const _Vec3 CCollider::Get_WorldCenter()
+{
+	return m_pBounding->Get_WorldCenter();
+};
+
 CCollider * CCollider::Create(ID3D11Device * pDevice, ID3D11DeviceContext * pContext, TYPE eColliderType)
 {
 	CCollider*		pInstance = new CCollider(pDevice, pContext);
