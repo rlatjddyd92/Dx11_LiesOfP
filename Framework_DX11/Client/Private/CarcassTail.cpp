@@ -94,11 +94,6 @@ void CCarcassTail::Update(_float fTimeDelta)
 
 	m_pFsmCom->Update(fTimeDelta);
 
-	for (_int i = 0; i < TYPE_END; ++i)
-	{
-		m_pColliderObject[i]->Active_Collider();
-	}
-
 	_float4x4 WorldMat{};
 	XMStoreFloat4x4(&WorldMat , m_pModelCom->Get_BoneCombindTransformationMatrix(7) * XMLoadFloat4x4(m_pTransformCom->Get_WorldMatrix_Ptr()));
 
@@ -159,8 +154,8 @@ HRESULT CCarcassTail::Ready_Components()
 
 	/* FOR.Com_Collider */		//Body
 	CBounding_OBB::BOUNDING_OBB_DESC			ColliderDesc{};
-	ColliderDesc.vExtents = _float3(2.f, 0.6f, 1.3f);
-	ColliderDesc.vCenter = _float3(0.2f, -0.1f, 0.f);
+	ColliderDesc.vExtents = _float3(1.7f, 0.6f, 1.3f);
+	ColliderDesc.vCenter = _float3(0.3f, -0.1f, 0.f);
 	ColliderDesc.vAngles = _float3(0.f, 0.f, 0.f);
 
 	if (FAILED(__super::Add_Component(LEVEL_STATIC, TEXT("Prototype_Component_Collider_OBB"),

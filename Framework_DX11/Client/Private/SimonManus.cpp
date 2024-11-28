@@ -10,6 +10,8 @@
 // 정식 코드  
 #include "GameInterface_Controller.h"
 
+#include "Effect_Manager.h"
+#include "Effect_Container.h"
 //전부 수정하기
 
 #pragma region Phase1
@@ -212,6 +214,16 @@ void CSimonManus::DeActive_CurretnWeaponCollider(_uint iCollIndex)
 	m_pWeapon->DeActive_Collider();
 }
 
+void CSimonManus::Active_Effect(const EFFECT_TYPE& eType)
+{
+	m_Effects[eType]->Set_Loop(true);
+}
+
+void CSimonManus::DeActive_Effect(const EFFECT_TYPE& eType)
+{
+	m_Effects[eType]->Set_Loop(false);
+}
+
 HRESULT CSimonManus::Ready_Components()
 {
 	if (FAILED(__super::Ready_Components()))
@@ -388,6 +400,20 @@ HRESULT CSimonManus::Ready_Weapon()
 		return E_FAIL;
 
 	m_pWeapon->Appear();
+
+	return S_OK;
+}
+
+HRESULT CSimonManus::Ready_Effects()
+{
+	m_Effects.resize(EFFECT_END);
+
+	const _Matrix* pParetnMatrix = m_pTransformCom->Get_WorldMatrix_Ptr();
+	const _Matrix* pSocketBoneMatrix = m_pModelCom->Get_BoneCombindTransformationMatrix_Ptr("BN_Weapon_R");
+
+
+
+
 
 	return S_OK;
 }

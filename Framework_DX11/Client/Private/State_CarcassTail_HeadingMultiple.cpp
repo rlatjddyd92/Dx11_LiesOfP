@@ -32,6 +32,12 @@ void CState_CarcassTail_HeadingMultiple::Update(_float fTimeDelta)
 {
     _double CurTrackPos = m_pMonster->Get_CurrentTrackPos();
 
+    if (CurTrackPos < 65.f)
+    {
+        m_pMonster->Get_Transform()->LookAt_Lerp_NoHeight(m_pMonster->Get_TargetDir(), 1.f, fTimeDelta);
+    }
+
+
     if (m_iRouteTrack < 2)
     {
         if (CurTrackPos >= 140)

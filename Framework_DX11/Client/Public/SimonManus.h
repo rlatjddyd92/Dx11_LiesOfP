@@ -45,6 +45,14 @@ public:
 		, ATKP2_ROUTE_0, ATKP2_ROUTE_1, ATKP2_ROUTE_2
 	};
 
+	enum EFFECT_TYPE
+	{
+		P1_TRAIL, P1_CHARGE, P2_MAGICMISSILE, P2_DARKBALL, P2_LIGHTNINGBALL, P2_LIGHTNINGSPEAR,
+		P2_WAVETRAIL, P2_WAVE, P2_THUNDERCALLING, P2_SUMMONHAND,
+
+		EFFECT_END
+	};
+
 private:
 	CSimonManus(ID3D11Device* pDevice, ID3D11DeviceContext* pContext);
 	CSimonManus(const CSimonManus& Prototype);
@@ -59,9 +67,16 @@ public:
 	virtual HRESULT Render() override;
 
 	void	ChangePhase();
-	
+
+	virtual void	Active_CurrentWeaponCollider(_float fDamageRatio, _uint iCollIndex = 0);
+	virtual void	DeActive_CurretnWeaponCollider(_uint iCollIndex = 0);
+
+	void			Active_Effect(const EFFECT_TYPE& eType);
+	void			DeActive_Effect(const EFFECT_TYPE& eType);
+
 private:
 	vector<CGameObject*>	CollObjRenderP{};
+	vector<class CEffect_Container*> m_Effects;
 
 	class CWeapon*			m_pWeapon = { nullptr };
 	class CFsm*				m_pExtraFsmCom = { nullptr };	//2∆‰¿Ã¡Ó fsm
@@ -75,12 +90,11 @@ private:
 
 
 private:
-	virtual void	Active_CurrentWeaponCollider(_float fDamageRatio, _uint iCollIndex = 0);
-	virtual void	DeActive_CurretnWeaponCollider(_uint iCollIndex = 0);
 
 	HRESULT Ready_Components();
 	HRESULT Ready_FSM();
 	HRESULT Ready_Weapon();
+	HRESULT Ready_Effects();
 
 	void	Update_Collider();
 
