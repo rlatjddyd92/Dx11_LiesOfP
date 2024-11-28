@@ -24,7 +24,7 @@ HRESULT CLift_Controller::Initialize(void* pArg)
 	if (FAILED(__super::Initialize(pArg)))
 		return E_FAIL;
 
-	m_pTransformCom->Set_Scaled(pDesc->vScale.x, pDesc->vScale.y, pDesc->vScale.z);
+	m_pTransformCom->Set_Scaled(pDesc->vScale.x - 0.05f, pDesc->vScale.y - 0.05f, pDesc->vScale.z - 0.05f);
 	m_pTransformCom->Rotation(0.f, -25.f, 0.f);
 	m_pTransformCom->Set_State(CTransform::STATE_POSITION, XMLoadFloat3(&pDesc->vPosition));
 	m_bShadow = pDesc->bShadow;
@@ -34,9 +34,11 @@ HRESULT CLift_Controller::Initialize(void* pArg)
 
 	m_pPlayer = m_pGameInstance->Find_Player(LEVEL_GAMEPLAY);
 	
-	m_iAnim_Idle = m_pModelCom->Find_AnimationIndex("AS_Idle", 3.f);
-	m_iAnim_Open = m_pModelCom->Find_AnimationIndex("AS_Lever_Open", 3.f);
+	m_iAnim_Idle = m_pModelCom->Find_AnimationIndex("AS_Idle", 2.5f);
+	m_iAnim_Open = m_pModelCom->Find_AnimationIndex("AS_Lever_Open", 2.5f);
 	m_pModelCom->SetUp_Animation(m_iAnim_Open);
+
+	m_strObjectTag = TEXT("Lift_Controller");
 
 	return S_OK;
 }
@@ -94,6 +96,7 @@ void CLift_Controller::Late_Update(_float fTimeDelta)
 {
 	__super::Late_Update(fTimeDelta);
 	m_pGameInstance->Add_RenderObject(CRenderer::RG_NONBLEND, this);
+	m_pGameInstance->Add_ColliderList(m_pColliderCom);
 
 #ifdef _DEBUG
 	if (m_pColliderCom != nullptr)

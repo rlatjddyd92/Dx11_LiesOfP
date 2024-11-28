@@ -18,6 +18,7 @@
 #include "State_Player_Heal.h"
 #include "State_Player_ChangeWeapon.h"
 #include "State_Player_Ladder.h"
+#include "State_Player_Lift.h"
 
 #include "State_Player_OH_Idle.h"
 #include "State_Player_OH_Walk.h"
@@ -99,7 +100,7 @@ HRESULT CPlayer::Initialize(void * pArg)
 		return E_FAIL;
 
 	//m_pNavigationCom->Move_to_Cell(m_pRigidBodyCom, 427);
-	//m_pNavigationCom->Move_to_Cell(m_pRigidBodyCom, 307);
+	m_pNavigationCom->Move_to_Cell(m_pRigidBodyCom, 307);
 
 	//// 임시 루트본 설정
 	//m_pModelCom->Set_UFBIndices(UFB_ROOT, 2);
@@ -262,6 +263,14 @@ void CPlayer::OnCollisionStay(CGameObject* pOther)
 			m_pFsmCom->Change_State(LADDER, pOther);
 		}
 	}
+	if (pOther->Get_Tag() == TEXT("Lift_Controller"))
+	{
+		if (KEY_TAP(KEY::E))
+		{
+			m_pFsmCom->Change_State(LIFT, pOther);
+		}
+	}
+
 	/*if (pOther->Get_Tag() == TEXT("Monster"))
 	{
 		_Vec3 vColNormal = m_pTransformCom->Get_State(CTransform::STATE_POSITION) - pOther->Get_Transform()->Get_State(CTransform::STATE_POSITION);
@@ -527,8 +536,9 @@ HRESULT CPlayer::Ready_FSM()
 	m_pFsmCom->Add_State(CState_Player_Hit::Create(m_pFsmCom, this, HIT, &Desc));
 	m_pFsmCom->Add_State(CState_Player_Parry::Create(m_pFsmCom, this, PARRY, &Desc));
 	m_pFsmCom->Add_State(CState_Player_Heal::Create(m_pFsmCom, this, HEAL, &Desc));
-	m_pFsmCom->Add_State(CState_Player_ChangeWeapon::Create(m_pFsmCom, this, CHANGEWEP, &Desc));
+	m_pFsmCom->Add_State(CState_Player_ChangeWeapon::Create(m_pFsmCom, this, CHANGEWEP, &Desc)); 
 	m_pFsmCom->Add_State(CState_Player_Ladder::Create(m_pFsmCom, this, LADDER, &Desc));
+	m_pFsmCom->Add_State(CState_Player_Lift::Create(m_pFsmCom, this, LIFT, &Desc));
 
 	m_pFsmCom->Add_State(CState_Player_OH_Idle::Create(m_pFsmCom, this, OH_IDLE, &Desc));
 	m_pFsmCom->Add_State(CState_Player_OH_Walk::Create(m_pFsmCom, this, OH_WALK, &Desc));

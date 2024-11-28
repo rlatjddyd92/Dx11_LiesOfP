@@ -703,6 +703,9 @@
     <Filter Include="05.Fsm\Monster\CarcassTail\Attack\Single\TailSwingDown">
       <UniqueIdentifier>{8a11709a-37a7-4065-8439-01f82a11e519}</UniqueIdentifier>
     </Filter>
+    <Filter Include="05.Fsm\Player\Common\Lift">
+      <UniqueIdentifier>{cdbc26ed-3d4d-42ff-a1bb-7938a82a3abe}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Client.h">
@@ -1286,6 +1289,9 @@
     <ClInclude Include="..\Public\State_CarcassBigA_Paralyze.h">
       <Filter>05.Fsm\Monster\CarcassBigA\Paralize</Filter>
     </ClInclude>
+    <ClInclude Include="..\Public\State_Player_Lift.h">
+      <Filter>05.Fsm\Player\Common\Lift</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Client.cpp">
@@ -1838,6 +1844,9 @@
     </ClCompile>
     <ClCompile Include="..\Private\State_CarcassBigA_Paralyze.cpp">
       <Filter>05.Fsm\Monster\CarcassBigA\Paralize</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Private\State_Player_Lift.cpp">
+      <Filter>05.Fsm\Player\Common\Lift</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

@@ -76,7 +76,6 @@ void CState_Player_Heal::Update(_float fTimeDelta)
 
 void CState_Player_Heal::End_State()
 {
-    m_pPlayer->Set_IsGuard(false);
 }
 
 _bool CState_Player_Heal::Move(_float fTimeDelta)
