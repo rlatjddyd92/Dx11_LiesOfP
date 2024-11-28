@@ -1,5 +1,4 @@
 #include "stdafx.h"
-#include "State_CarcassBigA_Paralyze.h"
 #include "GameInstance.h"
 #include "Model.h"
 #include "CarcassBigA.h"
