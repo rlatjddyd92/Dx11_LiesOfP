@@ -103,6 +103,8 @@ public:
 	_bool					Get_IsInvicible() { return m_isInvicible; }
 	void					Set_IsInvicible(_bool isInvicible) { m_isInvicible = isInvicible; }
 
+	_bool					Get_IsLadderEnd() { return m_isLadderEnd; }
+
 	WEAPON_TYPE				Get_WeaponType() { return m_eWeaponType; }
 	void					Set_WeaponType(WEAPON_TYPE eType) { m_eWeaponType = eType; }
 	class CWeapon*			Get_CurrentWeapon() { return m_pWeapon[m_eWeaponType]; }
@@ -177,6 +179,7 @@ private:
 	_bool				m_isLockOn = { false };
 	_bool				m_isInvicible = { false };
 	_bool				m_isRecoveryStamina = { false };
+	_bool				m_isLadderEnd = { false };
 
 	_float				m_fGuardTime = {};
 	_float				m_fRecoveryStaminaTime = { 0.f };

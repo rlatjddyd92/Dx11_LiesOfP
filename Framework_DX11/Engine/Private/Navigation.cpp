@@ -256,6 +256,48 @@ void CNavigation::Move_to_Cell(CRigidBody* pRigidBody, _int iIndex)
 	m_iCurrentCellIndex = iIndex;
 }
 
+void CNavigation::Research_Cell(_Vec3 vNewPos)
+{
+	if (m_Cells.size() <= 0) //Cell이 없는 경우
+	{
+		return;
+	}
+
+	for (_uint i = 0; i < m_Cells.size(); ++i)
+	{
+		CCell* pCell = m_Cells[i];
+		if (nullptr == pCell)
+			continue;
+
+		_int			iNeighborIndex = { -1 };
+
+		if (true == m_Cells[i]->isIn(XMLoadFloat3(&vNewPos), &iNeighborIndex))
+		{
+			//y축 비교
+			_Vec3 vPointA = m_Cells[i]->Get_Point(CCell::POINT_A);
+			_Vec3 vPointB = m_Cells[i]->Get_Point(CCell::POINT_B);
+			_Vec3 vPointC = m_Cells[i]->Get_Point(CCell::POINT_C);
+
+			_float fCellBigY = max(vPointA.y, vPointB.y);
+			fCellBigY = max(fCellBigY, vPointC.y);
+
+			_float fCellSmallY = min(vPointA.y, vPointB.y);
+			fCellSmallY = min(fCellSmallY, vPointC.y);
+
+			//약간 느슨하게 검사
+			if (vNewPos.y <= fCellBigY + 1.f && vNewPos.y >= fCellSmallY - 1.f)
+			{
+				m_iCurrentCellIndex = i;
+				return;
+			}
+			else
+				continue;
+		}
+	}
+
+	m_iCurrentCellIndex = -1;
+}
+
 
 #ifdef _DEBUG
 

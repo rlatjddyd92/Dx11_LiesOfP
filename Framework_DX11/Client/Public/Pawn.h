@@ -35,10 +35,11 @@ protected:
     virtual ~CPawn() = default;
 
 public:
-    class CModel* Get_Model() { return m_pModelCom; }
-    class CRigidBody* Get_RigidBody() { return m_pRigidBodyCom; }
-    class CCollider* Get_Collider() { return m_pColliderCom; }
-    class CFsm* Get_Fsm() { return m_pFsmCom; }
+    class CModel*           Get_Model() { return m_pModelCom; }
+    class CRigidBody*       Get_RigidBody() { return m_pRigidBodyCom; }
+    class CCollider*        Get_Collider() { return m_pColliderCom; }
+    class CFsm*             Get_Fsm() { return m_pFsmCom; }
+    class CNavigation*      Get_Navigation() { return m_pNavigationCom; }
 
 	class CSound*		Get_SoundCom(PAWN_SOUND_TYPE eType) { return m_pSoundCom[eType]; }
 

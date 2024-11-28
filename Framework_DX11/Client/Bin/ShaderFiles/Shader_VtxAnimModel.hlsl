@@ -157,7 +157,6 @@ PS_OUT_MODEL PS_MAIN(PS_IN_ANIMODEL In)
     Out.vEmessive = vEmissive * g_fEmessiveMask;
     Out.vRimLight = g_vRimLight;
 
-
     return Out;
 }
 

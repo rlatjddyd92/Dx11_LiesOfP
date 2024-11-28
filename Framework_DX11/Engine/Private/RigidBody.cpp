@@ -57,7 +57,7 @@ void CRigidBody::Update(_float fTimeDelta)
 	PxVec3 vPxPlayerPos = PlayerPxTransform.p;
 	_Vec3 vPos = _Vec3(vPxPlayerPos.x, vPxPlayerPos.y, vPxPlayerPos.z);
 
-	if (!m_pOwnerNavigation->isMove(vPos + m_vVelocity * fTimeDelta))
+	if (m_isOnCell && !m_pOwnerNavigation->isMove(vPos + m_vVelocity * fTimeDelta))
 	{
 		pRigidDynamic->setLinearVelocity(PxVec3(0.f, 0.f, 0.f));
 

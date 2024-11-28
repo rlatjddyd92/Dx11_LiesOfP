@@ -32,6 +32,10 @@ private:
     _bool               m_isInputW = {};
     _bool               m_isInputS = {};
 
+    _float              m_fMoveAmount = 0.413163f;
+    _float              m_fOffset = {};
+    
+    class CLadder*      m_pLadder = { nullptr };
     LADDER_UPDONW       m_eUpDownType = { UPDOWN_END };
 
 private:

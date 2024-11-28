@@ -32,6 +32,9 @@ protected:
 	virtual ~CLadder() = default;
 
 public:
+	string Get_LadderTag() { return m_strLadderTag; }
+
+public:
 	virtual HRESULT Initialize_Prototype() override;
 	virtual HRESULT Initialize(void* pArg) override;
 	virtual void Priority_Update(_float fTimeDelta) override;
@@ -49,6 +52,7 @@ private:
 	CModel* m_pModelCom = { nullptr };
 private:
 	_bool m_bShadow = false;
+	string m_strLadderTag = {};
 private:
 	HRESULT Ready_Components(LADDER_DESC* Desc);
 

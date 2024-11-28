@@ -50,7 +50,8 @@ HRESULT CState_Player_Ladder::Start_State(void* pArg)
 
     //_Vec3* vLadderPos = static_cast<_Vec3*>(pArg);
     Choice_UpDown(pLadder);
-
+    m_isInputW = false;
+    m_isInputS = false;
     
     m_pPlayer->Change_Animation(m_iAnimation_Ladder[m_eUpDownType][0], false, 0.f);
 
@@ -74,27 +75,22 @@ void CState_Player_Ladder::Update(_float fTimeDelta)
         m_isInputW = false;
     }
 
-
-
     if (m_pPlayer->Get_EndAnim(iCurAnim))
     {
-        ++m_iHandIndex;
-
-        if (m_isInputW)
+        if (iCurAnim == m_iAnimation_Ladder[LADDER_UP][3] || iCurAnim == m_iAnimation_Ladder[LADDER_UP][4]
+            || iCurAnim == m_iAnimation_Ladder[LADDER_DOWN][3] || iCurAnim == m_iAnimation_Ladder[LADDER_DOWN][4])
         {
-            m_iHandIndex = ((m_iHandIndex + 1) % 2) + 1;
-            m_eUpDownType = LADDER_UP;
-            m_pPlayer->Change_Animation(m_iAnimation_Ladder[m_eUpDownType][m_iHandIndex], false, 0.f);
-        }
-        else if (m_isInputS)
-        {
-            m_iHandIndex = ((m_iHandIndex + 1) % 2) + 1;
-            m_eUpDownType = LADDER_DOWN;
-            m_pPlayer->Change_Animation(m_iAnimation_Ladder[m_eUpDownType][m_iHandIndex], false, 0.f);
+            m_pPlayer->Change_State(CPlayer::OH_IDLE);
         }
         else
         {
-            m_iHandIndex = ((m_iHandIndex) % 2);
+            if (iCurAnim == m_iAnimation_Ladder[LADDER_DOWN][0])
+            {
+                m_iHandIndex -= 1;
+                _Vec3 vLadderLook = m_pLadder->Get_Transform()->Get_State(CTransform::STATE_LOOK);
+                m_pPlayer->Get_Transform()->Set_NewLook(-vLadderLook);
+            }
+            m_iHandIndex = ((m_iHandIndex + 1) % 2);
             m_pPlayer->Change_Animation(m_iAnimation_LadderIdle[m_iHandIndex], true, 0.f);
         }
 
@@ -106,19 +102,53 @@ void CState_Player_Ladder::Update(_float fTimeDelta)
     {
         if (m_isInputW)
         {
-            m_iHandIndex = ((m_iHandIndex+1) % 2) + 1;
-            m_eUpDownType = LADDER_UP;
-            m_pPlayer->Change_Animation(m_iAnimation_Ladder[m_eUpDownType][m_iHandIndex], false, 0.f);
+            _Vec3 vDiff = m_pLadder->Get_LadderUpPos() - m_pPlayer->Get_Transform()->Get_State(CTransform::STATE_POSITION);
+            _float fDiff = vDiff.Length();
+            if (m_pPlayer->Get_IsLadderEnd() && vDiff.Length() <= 2.f)
+            {
+                m_iHandIndex = ((m_iHandIndex) % 2) + 3;
+                m_eUpDownType = LADDER_UP;
+                m_pPlayer->Change_Animation(m_iAnimation_Ladder[m_eUpDownType][m_iHandIndex], false, 0.f);
+            }
+            else
+            {
+                m_iHandIndex = ((m_iHandIndex + 1) % 2) + 1;
+                m_eUpDownType = LADDER_UP;
+                m_pPlayer->Change_Animation(m_iAnimation_Ladder[m_eUpDownType][m_iHandIndex], false, 0.f);
+            }
         }
         else if (m_isInputS)
         {
-            m_iHandIndex = ((m_iHandIndex + 1) % 2) + 1;
-            m_eUpDownType = LADDER_DOWN;
-            m_pPlayer->Change_Animation(m_iAnimation_Ladder[m_eUpDownType][m_iHandIndex], false, 0.f);
+            _Vec3 vDiff = m_pLadder->Get_LadderDonwPos() - m_pPlayer->Get_Transform()->Get_State(CTransform::STATE_POSITION);
+            _float fDiff = vDiff.Length();
+            if (m_pPlayer->Get_IsLadderEnd() && vDiff.Length() <= 2.f)
+            {
+                m_iHandIndex = ((m_iHandIndex) % 2) + 3;
+                m_eUpDownType = LADDER_DOWN;
+                m_pPlayer->Change_Animation(m_iAnimation_Ladder[m_eUpDownType][m_iHandIndex], false, 0.f);
+            }
+            else
+            {
+                m_iHandIndex = ((m_iHandIndex + 1) % 2) + 1;
+                m_eUpDownType = LADDER_DOWN;
+                m_pPlayer->Change_Animation(m_iAnimation_Ladder[m_eUpDownType][m_iHandIndex], false, 0.f);
+            }
         }
 
         m_isInputW = false;
         m_isInputS = false;
+    }
+    else if (iCurAnim != m_iAnimation_Ladder[LADDER_UP][0] && iCurAnim != m_iAnimation_Ladder[LADDER_DOWN][0]
+        && iCurAnim != m_iAnimation_Ladder[LADDER_UP][3] && iCurAnim != m_iAnimation_Ladder[LADDER_DOWN][3]
+        && iCurAnim != m_iAnimation_Ladder[LADDER_UP][4] && iCurAnim != m_iAnimation_Ladder[LADDER_DOWN][4])
+    {
+        _Vec3 vPlayerPos = m_pPlayer->Get_Transform()->Get_State(CTransform::STATE_POSITION);
+        if (m_eUpDownType == LADDER_UP)
+            vPlayerPos.y += 0.95f * fTimeDelta;
+        else
+            vPlayerPos.y -= 0.95f * fTimeDelta;
+
+        m_pPlayer->Get_RigidBody()->Set_GloblePose(vPlayerPos);
     }
 
     if (KEY_TAP(KEY::Q))
@@ -127,13 +157,18 @@ void CState_Player_Ladder::Update(_float fTimeDelta)
 
 void CState_Player_Ladder::End_State()
 {
+    _Vec3 vPlayerPos = m_pPlayer->Get_Transform()->Get_State(CTransform::STATE_POSITION);
+    m_pPlayer->Get_Navigation()->Research_Cell(vPlayerPos);
+
     m_pPlayer->Get_RigidBody()->Set_IsOnCell(true);
 }
 
 void CState_Player_Ladder::Choice_UpDown(CLadder* pLadder)
 {
+    m_pLadder = pLadder;
 
     _Vec3 vLadderPos = pLadder->Get_Transform()->Get_State(CTransform::STATE_POSITION);
+    _Vec3 vLadderLook = pLadder->Get_Transform()->Get_State(CTransform::STATE_LOOK);
     _Vec3 vUpPos = pLadder->Get_LadderUpPos();
     _Vec3 vDownPos = pLadder->Get_LadderDonwPos();
     _Vec3 vPlayerPos = m_pPlayer->Get_Transform()->Get_State(CTransform::STATE_POSITION);
@@ -144,24 +179,48 @@ void CState_Player_Ladder::Choice_UpDown(CLadder* pLadder)
     else
         vLadderColliderPos = vDownPos;
 
-    _float fHeightDiff = vLadderColliderPos.y - vPlayerPos.y + 2.f;
-    if (fHeightDiff > 0.f)
-    {
-        m_eUpDownType = LADDER_UP;
-        m_iHandIndex = 0;
-    }
-    else
+    _Vec3 vInitPos;
+    _float fHeightDiff = vLadderPos.y - vPlayerPos.y;
+    if (fHeightDiff  < -1.5f)
     {
         m_eUpDownType = LADDER_DOWN;
         m_iHandIndex = 1;
+
+        vLadderLook.Normalize();
+        m_pPlayer->Get_Transform()->Set_NewLook(vLadderLook);
+        vLadderColliderPos -= vLadderLook * 1.15f;
+        vInitPos.x = vLadderColliderPos.x;
+        vInitPos.z = vLadderColliderPos.z;
+
+        if (pLadder->Get_LadderTag() == "LV_Ladder_MetalWood_01_KSJ")// ±ä³ð
+        {
+            vInitPos.y = vPlayerPos.y;
+        }
+        else
+        {
+            vInitPos.y = vPlayerPos.y + 0.1f;
+        }
     }
+    else
+    {
+        m_eUpDownType = LADDER_UP;
+        m_iHandIndex = 0;
 
-    _Vec3 vInitPos;
-    vInitPos.x = vLadderPos.x;
-    vInitPos.y = vPlayerPos.y + 0.05f;
-    vInitPos.z = vLadderPos.z;
+        vLadderLook.Normalize();
+        m_pPlayer->Get_Transform()->Set_NewLook(-vLadderLook);
 
+        vInitPos.x = vLadderColliderPos.x;
+        vInitPos.z = vLadderColliderPos.z;
 
+        if (pLadder->Get_LadderTag() == "LV_Ladder_MetalWood_01_KSJ")// ±ä³ð
+        {
+            vInitPos.y = vPlayerPos.y + 0.05f;
+        }
+        else
+        {
+            vInitPos.y = vPlayerPos.y - 0.05f;
+        }
+    }
     m_pPlayer->Get_RigidBody()->Set_GloblePose(vInitPos);
 }
 

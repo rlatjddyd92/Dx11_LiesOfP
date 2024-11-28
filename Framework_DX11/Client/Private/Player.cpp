@@ -98,7 +98,7 @@ HRESULT CPlayer::Initialize(void * pArg)
 	if (FAILED(Ready_Effect()))
 		return E_FAIL;
 
-	m_pNavigationCom->Move_to_Cell(m_pRigidBodyCom, 772);
+	//m_pNavigationCom->Move_to_Cell(m_pRigidBodyCom, 427);
 
 	//// 임시 루트본 설정
 	//m_pModelCom->Set_UFBIndices(UFB_ROOT, 2);
@@ -236,6 +236,10 @@ HRESULT CPlayer::Render_LightDepth()
 
 void CPlayer::OnCollisionEnter(CGameObject* pOther)
 {
+	if (pOther->Get_Tag() == TEXT("Ladder"))
+	{
+		m_isLadderEnd = true;
+	}
 	/*if (pOther->Get_Tag() == TEXT("Monster"))
 	{
 		_Vec3 vColDir = pOther->Get_Transform()->Get_State(CTransform::STATE_POSITION) - m_pTransformCom->Get_State(CTransform::STATE_POSITION);
@@ -273,6 +277,10 @@ void CPlayer::OnCollisionStay(CGameObject* pOther)
 
 void CPlayer::OnCollisionExit(CGameObject* pOther)
 {
+	if (pOther->Get_Tag() == TEXT("Ladder"))
+	{
+		m_isLadderEnd = false;
+	}
 }
 
 void CPlayer::Move_Dir(_Vec4 vDir, _float fTimeDelta, _bool isTurn)

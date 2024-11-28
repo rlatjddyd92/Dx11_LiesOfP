@@ -40,7 +40,7 @@ HRESULT CLadder::Initialize(void* pArg)
 
 	m_pModelCom->SetUp_Animation(iAnimIndex, true);
 
-
+	m_strLadderTag = pDesc->szModelTag;
 	m_strObjectTag = TEXT("Ladder");
 
 	return S_OK;
@@ -149,9 +149,9 @@ HRESULT CLadder::Ready_Components(LADDER_DESC* Desc)
 
 	/* For.Com_Collider */
 	CBounding_OBB::BOUNDING_OBB_DESC			ColliderDesc{};
-	ColliderDesc.vExtents = _float3(1.f, 0.5f, 1.f);
+	ColliderDesc.vExtents = _float3(1.f, 0.1f, 1.f);
 	ColliderDesc.vAngles = _float3(0.f,0.f, 0.f);
-	ColliderDesc.vCenter = _float3(0.f, 1.0f, 0.f);
+	ColliderDesc.vCenter = _float3(0.f, 1.f, 0.52f);
 
 	if (FAILED(__super::Add_Component(LEVEL_STATIC, TEXT("Prototype_Component_Collider_OBB"),
 		TEXT("Com_Collider1"), reinterpret_cast<CComponent**>(&m_pColliderCom[DOWN]), &ColliderDesc)))
@@ -159,13 +159,15 @@ HRESULT CLadder::Ready_Components(LADDER_DESC* Desc)
 	m_pColliderCom[DOWN]->Set_Owner(this);
 	m_pColliderCom[DOWN]->IsActive(true);
 
-	if (strcmp(Desc->szModelTag, "SK_LV_Ladder_MetalWood_Slide6m_SM_KSJ") == 0)
+	if (strcmp(Desc->szModelTag, "SK_LV_Ladder_MetalWood_Slide6m_SM_KSJ") == 0)	//ÂªÀº³ð
 	{
-		ColliderDesc.vCenter = _float3(0.f, 6.f, 0.f);
+		ColliderDesc.vExtents = _float3(1.f, 0.3f, 1.f);
+		ColliderDesc.vCenter = _float3(0.f, 5.8f, 0.52f);
 	}
 	else
 	{
-		ColliderDesc.vCenter = _float3(0.f, 10.f, 0.f);
+		ColliderDesc.vExtents = _float3(1.f, 0.3f, 1.f);	//±ä³ð
+		ColliderDesc.vCenter = _float3(0.f, 9.8f, 0.52f);
 	}
 
 	if (FAILED(__super::Add_Component(LEVEL_STATIC, TEXT("Prototype_Component_Collider_OBB"),
