@@ -2,7 +2,7 @@
 #include "..\Public\UIPage_ItemInfo.h"
 
 #include "GameInstance.h"
-
+#include "GameInterface_Controller.h"
 
 CUIPage_ItemInfo::CUIPage_ItemInfo(ID3D11Device* pDevice, ID3D11DeviceContext* pContext)
 	: CUIPage{ pDevice, pContext }
@@ -59,8 +59,33 @@ void CUIPage_ItemInfo::Update(_float fTimeDelta)
 
 void CUIPage_ItemInfo::Late_Update(_float fTimeDelta)
 {
-	__super::Late_Update(fTimeDelta);
+	SCROLL_AREA eArea = SCROLL_AREA::SCROLL_NONE;
+	if (m_eNowPage == UIPAGE::PAGE_INVEN)
+		eArea = SCROLL_AREA::SCROLL_INVEN;
 
+	// focus
+	Input_Render_Info(*m_vecPart[_int(PART_GROUP::ITEMINFO_SELECT_Rect)], eArea);
+	Input_Render_Info(*m_vecPart[_int(PART_GROUP::ITEMINFO_SELECT_Fire)], eArea);
+
+	// New
+	while (!m_queueNewMarkPos.empty())
+	{
+		_Vec2 vPos = m_queueNewMarkPos.front();
+		m_queueNewMarkPos.pop();
+
+		m_vecPart[_int(PART_GROUP::ITEMINFO_NEW)]->fPosition = vPos;
+
+		Input_Render_Info(*m_vecPart[_int(PART_GROUP::ITEMINFO_NEW)], eArea);
+	}
+
+	// Action
+	for (_int i = _int(PART_GROUP::ITEMINFO_ACTION_Back); i <= _int(PART_GROUP::ITEMINFO_ACTION_Text_3); ++i)
+	{
+		m_vecPart[i]->MovePart(m_vecPart[m_vecPart[i]->iParentPart_Index]->fPosition, fTimeDelta);
+		Input_Render_Info(*m_vecPart[i], SCROLL_AREA::SCROLL_NONE);
+	}
+
+	m_vecPageAction[_int(PAGEACTION::ACTION_ACTIVE)] = false;
 }
 
 HRESULT CUIPage_ItemInfo::Render()
@@ -154,14 +179,12 @@ void CUIPage_ItemInfo::Show_NewMark(_Vec2 vItemCellPos, _Vec2 vItemCellSize)
 
 void CUIPage_ItemInfo::Show_ItemAction(_Vec2 vItemCellPos, _Vec2 vItemCellSize, ITEM_FUNC eFunc0, ITEM_FUNC eFunc1, ITEM_FUNC eFunc2, ITEM_FUNC eFunc3)
 {
-	//m_vecPart[_int(PART_GROUP::ITEMINFO_ACTION_Header)].
+	m_vecPart[_int(PART_GROUP::ITEMINFO_ACTION_Header)]->fPosition = vItemCellPos + (vItemCellSize * 0.5f) + (m_vecPart[_int(PART_GROUP::ITEMINFO_ACTION_Header)]->fSize * 0.5f);
 
 	m_vecPart[_int(PART_GROUP::ITEMINFO_ACTION_Back)]->bRender = true;
 	m_vecPart[_int(PART_GROUP::ITEMINFO_ACTION_Deco)]->bRender = true;
 
 	m_vecPart[_int(PART_GROUP::ITEMINFO_ACTION_Back)]->fRatio = 0.f;
-
-
 
 	m_eActive_Func[0] = eFunc0;
 	m_eActive_Func[1] = eFunc1;
@@ -178,19 +201,11 @@ void CUIPage_ItemInfo::Show_ItemAction(_Vec2 vItemCellPos, _Vec2 vItemCellSize, 
 		else
 			break;
 	}
-
-
-
-
-
-
-
-
 }
 
 void CUIPage_ItemInfo::Off_ItemAction()
 {
-	__super::Array_Control(_int(PART_GROUP::ITEMINFO_ACTION_Header), _int(PART_GROUP::ITEMINFO_ACTION_Text_3), CTRL_COMMAND::COM_RENDER, true);
+	__super::Array_Control(_int(PART_GROUP::ITEMINFO_ACTION_Header), _int(PART_GROUP::ITEMINFO_ACTION_Text_3), CTRL_COMMAND::COM_RENDER, false);
 	for (_int i = 0; i < 4; ++i)
 		m_eActive_Func[i] = ITEM_FUNC::FUNC_END;
 }
@@ -201,11 +216,17 @@ void CUIPage_ItemInfo::Action_ItemAction(_float fTimeDelta)
 	{
 		if (m_eActive_Func[i] != ITEM_FUNC::FUNC_END)
 		{
+			if (GET_GAMEINTERFACE->CheckMouse(m_vecPart[_int(PART_GROUP::ITEMINFO_ACTION_Mouse_0) + (i * 3)]->fPosition, m_vecPart[_int(PART_GROUP::ITEMINFO_ACTION_Mouse_0) + (i * 3)]->fSize).x != -1.f)
+			{
+				m_vecPart[_int(PART_GROUP::ITEMINFO_ACTION_Fx_0) + (i * 3)]->bRender = true;
+
+				if (KEY_TAP(KEY::LBUTTON))
+				{
+
+				}
+			}
 
 
-			/*m_vecPart[_int(PART_GROUP::ITEMINFO_ACTION_Mouse_0) + (i * 3)]
-				m_vecPart[_int(PART_GROUP::ITEMINFO_ACTION_Fx_0) + (i * 3)]
-				m_vecPart[_int(PART_GROUP::ITEMINFO_ACTION_Text_0) + (i * 3)]*/
 
 		}
 		else

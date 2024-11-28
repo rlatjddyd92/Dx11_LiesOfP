@@ -360,6 +360,8 @@ void CUIManager::UIControl_Inven(_float fTimeDelta)
 	else
 	{
 		m_pUIPage_Inven->Check_Page_Action(fTimeDelta);
+		m_pUIPage_ItemInfo->Set_Active_ItemInfo(true, UIPAGE::PAGE_INVEN);
+		m_pUIPage_ItemInfo->Check_Page_Action(fTimeDelta);
 	}
 }
 
@@ -370,6 +372,8 @@ void CUIManager::UIControl_Equip(_float fTimeDelta)
 	else
 	{
 		m_pUIPage_Equip->Check_Page_Action(fTimeDelta);
+		m_pUIPage_ItemInfo->Set_Active_ItemInfo(true, UIPAGE::PAGE_EQUIP);
+		m_pUIPage_ItemInfo->Check_Page_Action(fTimeDelta);
 	}
 }
 
@@ -565,8 +569,8 @@ HRESULT CUIManager::Make_UIPage(_int iIndex)
 	}
 	else if (iIndex == _int(UIPAGE::PAGE_ITEMINFO))
 	{
-		m_pUIPage_ToolTip = CUIPage_ItemInfo::Create(m_pDevice, m_pContext);
-		m_vecPage[iIndex] = static_cast<CUIPage*>(m_pUIPage_ToolTip);
+		m_pUIPage_ItemInfo = CUIPage_ItemInfo::Create(m_pDevice, m_pContext);
+		m_vecPage[iIndex] = static_cast<CUIPage*>(m_pUIPage_ItemInfo);
 	}
 	else if (iIndex == _int(UIPAGE::PAGE_ORTHO))
 	{

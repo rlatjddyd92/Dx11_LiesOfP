@@ -63,6 +63,8 @@ public:
 	virtual HRESULT Ready_UIPart_Group_Control() override;
 
 public:
+	void Set_Active_ItemInfo(_bool bIsActive, UIPAGE eNowPage) { m_vecPageAction[_int(PAGEACTION::ACTION_ACTIVE)] = bIsActive; m_eNowPage = eNowPage; }
+
 	void Show_Focus(_Vec2 vItemCellPos, _Vec2 vItemCellSize);
 	void Off_Focus(_Vec2 vItemCellPos, _Vec2 vItemCellSize);
 
@@ -82,6 +84,8 @@ protected:
 
 	ITEM_FUNC m_eActive_Func[4] = { ITEM_FUNC::FUNC_END, ITEM_FUNC::FUNC_END ,ITEM_FUNC::FUNC_END ,ITEM_FUNC::FUNC_END };
 	_wstring m_strFuncName[_int(ITEM_FUNC::FUNC_END)];
+
+	UIPAGE m_eNowPage = UIPAGE::PAGE_END;
 
 public:
 	static CUIPage_ItemInfo* Create(ID3D11Device* pDevice, ID3D11DeviceContext* pContext);

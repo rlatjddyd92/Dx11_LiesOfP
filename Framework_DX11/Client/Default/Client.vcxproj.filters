@@ -592,9 +592,6 @@
     <Filter Include="05.Fsm\Monster\SimonManus\P1\Walk">
       <UniqueIdentifier>{fe395b30-26dd-4e7d-9184-bb5c5d694b6b}</UniqueIdentifier>
     </Filter>
-    <Filter Include="03.GameInterface_Controller\00.UIManager\00.UIPage\09.UIPage_ToolTip">
-      <UniqueIdentifier>{d6f0816f-b248-400f-ae9c-070eac27ca42}</UniqueIdentifier>
-    </Filter>
     <Filter Include="02.GameObjects\02.Pawn">
       <UniqueIdentifier>{a51c24d7-a10f-438d-8dc2-c2f87467615b}</UniqueIdentifier>
     </Filter>
@@ -633,6 +630,9 @@
     </Filter>
     <Filter Include="03.GameInterface_Controller\00.UIManager\00.UIPage\08.UIPage_Option">
       <UniqueIdentifier>{49687bb1-cd51-47be-b319-ccccb8021b98}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="03.GameInterface_Controller\00.UIManager\00.UIPage\09.UIPage_ItemInfo">
+      <UniqueIdentifier>{d6f0816f-b248-400f-ae9c-070eac27ca42}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -880,7 +880,7 @@
       <Filter>03.GameInterface_Controller\00.UIManager\00.UIPage\06.UIPage_Stat</Filter>
     </ClInclude>
     <ClInclude Include="..\Public\UIPage_ItemInfo.h">
-      <Filter>03.GameInterface_Controller\00.UIManager\00.UIPage\09.UIPage_ToolTip</Filter>
+      <Filter>03.GameInterface_Controller\00.UIManager\00.UIPage\09.UIPage_ItemInfo</Filter>
     </ClInclude>
     <ClInclude Include="..\public\Mesh_Effect.h">
       <Filter>02.GameObjects\05.Effect\Effect_Base\Mesh_Effect</Filter>
@@ -1373,7 +1373,7 @@
       <Filter>03.GameInterface_Controller\00.UIManager\00.UIPage\06.UIPage_Stat</Filter>
     </ClCompile>
     <ClCompile Include="..\Private\UIPage_ItemInfo.cpp">
-      <Filter>03.GameInterface_Controller\00.UIManager\00.UIPage\09.UIPage_ToolTip</Filter>
+      <Filter>03.GameInterface_Controller\00.UIManager\00.UIPage\09.UIPage_ItemInfo</Filter>
     </ClCompile>
     <ClCompile Include="..\private\Mesh_Effect.cpp">
       <Filter>02.GameObjects\05.Effect\Effect_Base\Mesh_Effect</Filter>

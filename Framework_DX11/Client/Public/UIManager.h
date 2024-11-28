@@ -151,6 +151,8 @@ public:
 
 #pragma endregion
 
+	void Set_Active_ItemInfo(_bool bIsActive, UIPAGE eNowPage) { m_pUIPage_ItemInfo->Set_Active_ItemInfo(bIsActive, eNowPage); }
+
 
 #pragma region Page_Ortho
 	void Register_Pointer_Into_OrthoUIPage(UI_ORTHO_OBJ_TYPE eType, void* pObj) { m_pUIPage_Ortho->Register_Pointer_Into_OrthoUIPage(eType, pObj); }
@@ -221,7 +223,7 @@ private:
 	// 스킬트리
 	CUIPage_Skill* m_pUIPage_Skill = { nullptr };
 	// 테스트
-	CUIPage_ItemInfo* m_pUIPage_ToolTip = { nullptr };
+	CUIPage_ItemInfo* m_pUIPage_ItemInfo = { nullptr };
 	// 직교
 	CUIPage_Ortho* m_pUIPage_Ortho = { nullptr };
 
