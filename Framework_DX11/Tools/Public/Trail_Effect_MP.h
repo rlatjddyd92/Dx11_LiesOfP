@@ -37,6 +37,9 @@ public:
 		_float				fTailDistance		= { 0.5f };	// 꼬리와 헤드 사이 간격 : 이걸 늘리면 더 렌덤하게 감.
 		_Vec4				vTailMoveDir		= { 0.f, 1.f, 0.f, 0.f };
 		
+		// 지속 시간
+		_float				fDuration			= { 0.f };
+
 		// 위치 초기화
 		_Vec3				vPos				= {};
 		_Vec3				vRotation			= {};
@@ -124,6 +127,8 @@ private:
 	
 	// 초기화.
 	class CShader_Compute* m_pResetCS = { nullptr };
+
+	_float m_fAccumulateTime = { 0.f };
 
 private:
 	DEFAULT_DESC m_DefaultDesc = {};

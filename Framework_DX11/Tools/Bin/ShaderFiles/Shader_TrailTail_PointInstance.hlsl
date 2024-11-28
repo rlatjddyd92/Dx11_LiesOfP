@@ -528,15 +528,24 @@ PS_EFFECT_OUT PS_FIRE_MAIN(PS_IN In)
     return Out;
 }
 
-PS_EFFECT_OUT PS_TEST(PS_IN In)
+PS_EFFECT_OUT PS_TRAIL_MAIN(PS_IN In)
 {
     PS_EFFECT_OUT Out = (PS_EFFECT_OUT) 0;
 
     if (In.vLifeTime.y >= In.vLifeTime.x)
         discard;
 
-    Out.vDiffuse = In.vColor * In.vTexcoord.x * 2.f;
-    Out.vBlur = In.vColor * In.vTexcoord.x * 2.f;
+    vector vColor = g_DiffuseTexture.Sample(LinearSampler, In.vTexcoord);
+    
+    vColor *= In.vColor;
+    
+    vColor.a = max(vColor.r, max(vColor.g, vColor.b));
+    
+    if(vColor.a < 0.3f)
+        discard;
+    
+    Out.vDiffuse = vColor;
+    Out.vBlur = vColor;
     
     return Out;
 }
@@ -620,7 +629,7 @@ technique11	DefaultTechnique
         PixelShader = compile ps_5_0 PS_FIRE_MAIN();
     }
 
-    pass PARTICLE_TEST  // 7
+    pass PARTICLE_TRAIL  // 7
     {
         SetRasterizerState(RS_Default);
         SetDepthStencilState(DSS_Default, 0);
@@ -628,7 +637,7 @@ technique11	DefaultTechnique
 
         VertexShader = compile vs_5_0 VS_MAIN();
         GeometryShader = compile gs_5_0 GS_TRAIL_MAIN();
-        PixelShader = compile ps_5_0 PS_TEST();
+        PixelShader = compile ps_5_0 PS_TRAIL_MAIN();
     }
 
 }

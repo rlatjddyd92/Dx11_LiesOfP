@@ -93,12 +93,17 @@ void CTrail_Effect_MP::Update(_float fTimeDelta)
 		m_isActive = false;
 	}
 
+	if (0.f < m_DefaultDesc.fDuration && m_DefaultDesc.fDuration < m_fAccumulateTime)
+		m_DefaultDesc.iComputeState &= ~CVIBuffer_Instancing::STATE_LOOP;
 }
 
 void CTrail_Effect_MP::Late_Update(_float fTimeDelta)
 {
+	m_fAccumulateTime += fTimeDelta;
+
 	if (CRenderer::RG_END <= m_RenderDesc.iRenderGroup)
 		return;
+
 	m_pGameInstance->Add_RenderObject((CRenderer::RENDERGROUP)m_RenderDesc.iRenderGroup, this);
 }
 
@@ -175,6 +180,8 @@ void CTrail_Effect_MP::Reset()
 {
 	m_DefaultDesc = m_InitDesc.DefaultDesc;
 	m_isActive = true;
+	m_fAccumulateTime = 0.f;
+
 	m_pTransformCom->Set_State(CTransform::STATE_POSITION, m_DefaultDesc.vPos);
 	m_pTransformCom->Rotation(m_DefaultDesc.vRotation.x, m_DefaultDesc.vRotation.y, m_DefaultDesc.vRotation.z);
 	m_pTransformCom->Set_Scaled(m_DefaultDesc.vScale.x, m_DefaultDesc.vScale.y, m_DefaultDesc.vScale.z);
@@ -223,10 +230,14 @@ void CTrail_Effect_MP::Set_Loop(_bool bLoop)
 	if (true == bLoop)
 	{
 		m_DefaultDesc.iComputeState |= CVIBuffer_Instancing::STATE_LOOP;
+		m_InitDesc.DefaultDesc.iComputeState |= CVIBuffer_Instancing::STATE_LOOP;
 		Reset();
 	}
 	else
+	{
 		m_DefaultDesc.iComputeState &= ~CVIBuffer_Instancing::STATE_LOOP;
+		m_InitDesc.DefaultDesc.iComputeState &= CVIBuffer_Instancing::STATE_LOOP;
+	}
 }
 
 void CTrail_Effect_MP::Set_Desc(TRAIL_MP_DESC Desc)

@@ -342,7 +342,6 @@ void CS_MOVE_MAIN(uint3 DTid : SV_DispatchThreadID)
             HeadParticle.particle.vTranslation = mul(Init_HeadParticles[iHeadIndex].particle.vTranslation, WorldMatrix);
             HeadParticle.vPreTranslation = HeadParticle.particle.vTranslation;
             HeadParticle.particle.vLifeTime.y = 0.f;
-            HeadParticle.particle.vTranslation = mul(HeadParticle.particle.vTranslation, WorldMatrix);
             HeadParticle.particle.vRight = vWorldPivot;
             HeadParticle.particle.vUp = float4(vOrbitAxis.x, vOrbitAxis.y, vOrbitAxis.z, 0.f);
         }
@@ -500,7 +499,6 @@ void CS_CONVERGE_MAIN(uint3 DTid : SV_DispatchThreadID)
             HeadParticle.particle.vTranslation = mul(Init_HeadParticles[iHeadIndex].particle.vTranslation, WorldMatrix);
             HeadParticle.vPreTranslation = HeadParticle.particle.vTranslation;
             HeadParticle.particle.vLifeTime.y = 0.f;
-            HeadParticle.particle.vTranslation = mul(HeadParticle.particle.vTranslation, WorldMatrix);
             HeadParticle.particle.vRight = vWorldPivot;
             HeadParticle.particle.vUp = float4(vOrbitAxis.x, vOrbitAxis.y, vOrbitAxis.z, 0.f);
         }
@@ -570,7 +568,7 @@ void CS_FOLLOW_MAIN(uint3 DTid : SV_DispatchThreadID)
     
     float4 vResultTailDir = vTailMoveDir + TailParticle.vMoveDir;
     vResultTailDir.y -= fGravity * TailParticle.particle.vLifeTime.y;
-
+    
     if (0.f < length(vResultTailDir))
         TailParticle.particle.vTranslation += normalize(vResultTailDir) * TailParticle.particle.fSpeed * fTimeDelta;
     else
@@ -604,23 +602,18 @@ void CS_FOLLOW_MAIN(uint3 DTid : SV_DispatchThreadID)
             TailParticle.vPreTranslation = vPrePos;
             
             vPrePos += float4(normalize(vCurrentDir) * fTailInterval, 0.f);
-            // TailParticle.particle.vTranslation = vPrePos;
+            TailParticle.particle.vTranslation = vPrePos;
             
-            // ·£´ý À§Ä¡·Î Æ¢°Ô
-            float3 vRandomPos = CosineInterpolate(HeadParticle.vCurrentRandomPos.xyz, HeadParticle.vNextRandomPos.xyz, fTime / fTimeInterval);
-            vRandomPos *= fTailDistance;
+            if (iState & STATE_RANDOM)
+            {
+                vCurrentDir += normalize(TailParticle.particle.vCurrenrRandomDir) * fRandomRatio;
+                vCurrentDir = normalize(vCurrentDir);
                 
-            float4 vTailSpreadDir = (float4) 0;
-                
-            if (iState & STATE_TAILSPREAD)
-                vTailSpreadDir = float4(normalize(vCurrentDir), 0.f);
-                
-            float4 vFinalDir = (float4) 0;
-            if (0.f < length(vRandomPos) || 0.f < length(vTailSpreadDir))
-                vFinalDir = float4(normalize(vRandomPos + (float3) vTailSpreadDir), 0.f);
-                
-            TailParticle.particle.vTranslation = vPrePos + vFinalDir;
-            //
+                TailParticle.particle.vCurrenrRandomDir.x = rand(TailParticle.particle.vTranslation.x);
+                TailParticle.particle.vCurrenrRandomDir.y = rand(TailParticle.particle.vTranslation.y);
+                TailParticle.particle.vCurrenrRandomDir.z = rand(TailParticle.particle.vTranslation.z);
+            
+            }
             
             if (iState & STATE_TAILSPREAD)
                 TailParticle.vMoveDir = float4(normalize(vCurrentDir), 0.f);

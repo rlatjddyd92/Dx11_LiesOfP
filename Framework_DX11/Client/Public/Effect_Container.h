@@ -52,6 +52,8 @@ private:
 	const _Matrix* m_pParentMatrix = { nullptr };
 	const _Matrix* m_pSocketMatrix = { nullptr };
 
+	_bool m_bTurn = { false };
+
 public:
 	static CEffect_Container* Create(ID3D11Device* pDevice, ID3D11DeviceContext* pContext);
 	virtual CGameObject* Clone(void* pArg);

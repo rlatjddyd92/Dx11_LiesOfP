@@ -14,25 +14,29 @@ class CTexture_Effect final : public CEffect_Base
 public:
 	typedef struct
 	{
-		_uint		iShaderIndex = { 0 };
-		_float		fDuration = { 10.f };
-		_Vec4		vColor = { 0.f, 0.f, 0.f, 1.f };
-		_Vec2		vDivide = { 1.f, 1.f };
-		_float		fSpriteSpeed = { 0.f };
+		_uint		iShaderIndex		= { 0 };
+		_float		fDuration			= { 10.f };
+		_Vec4		vColor				= { 0.f, 0.f, 0.f, 1.f };
+		_Vec2		vDivide				= { 1.f, 1.f };
+		_float		fSpriteSpeed		= { 0.f };
 
-		_Vec3		vPos = { 0.f, 0.f, 0.f };
+		_Vec3		vPos				= { 0.f, 0.f, 0.f };
 
-		_Vec3		vStartScale = { 1.f, 1.f, 1.f };
-		_Vec3		vScalingSpeed = {};
+		_Vec3		vStartScale			= { 1.f, 1.f, 1.f };
+		_Vec3		vScalingSpeed		= {};
 
-		_float		fStarRotation = { 0.f };
-		_float		fRotationPerSecond = { 0.f };
+		_float		fStarRotation		= { 0.f };
+		_float		fRotationPerSecond	= { 0.f };
 
-		_float		fAlpha = { 1.f };
-		_float		fAlphaSpeed = { 0.f };
+		_float		fAlpha				= { 1.f };
+		_float		fAlphaSpeed			= { 0.f };
 
-		_bool		bPreserveRotation = { false };
-		_bool		bLoop = { false };
+		_Vec2		vTileRepeat			= { 1.f, 1.f };
+		_Vec2		vTileMoveDir		= {};
+		_float		fTileMoveSpeed		= { 0.f };
+
+		_bool		bPreserveRotation	= { false };
+		_bool		bLoop				= { false };
 	}DEFAULT_DESC;
 
 	typedef struct
@@ -93,6 +97,8 @@ private:
 
 	_float	m_fAccumulateTime = { 0.f };
 	_float	m_fCurrenrtIndex = { 0.f };
+
+	_Vec2	m_vCurrentTileMove = {};
 
 	TEXTURE_EFFECT_DESC m_InitDesc = {};
 
