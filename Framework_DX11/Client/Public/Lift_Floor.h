@@ -31,6 +31,11 @@ public:
 	virtual HRESULT Render() override;
 
 public:
+	virtual void OnCollisionEnter(CGameObject* pOther) override;
+	virtual void OnCollisionStay(CGameObject* pOther) override;
+	virtual void OnCollisionExit(CGameObject* pOther) override;
+
+public:
 	_bool Get_isMoving() { return m_isMoving; }
 	void Set_Move_Dir(_int iDir);
 
@@ -43,10 +48,12 @@ private:
 	_bool m_isMoving = { false };	//이동 중
 	_bool m_bMove = { false };		//이동 할 건지
 	_bool m_bArrive = { false };		//이동 할 건지
+	_bool m_bCollid = { false };		//이동 할 건지
 
 	_int m_iPreDir = { DIR_END };
 
-	_float m_iMoveDir = { 0.f };
+	_float m_fMoveDir = { 0.f };
+	_float m_fCollisonTimer = { 0.f };
 	_float m_vTargetPosList[2] = { -97.8f,-130.85f};
 	_Vec4 m_vTargetPos = {};
 
@@ -56,6 +63,7 @@ private:
 
 	_bool Calculate_Arrive_TargetPos();
 	void Open_Door();
+	void Close_Door();
 public:
 	static CLift_Floor* Create(ID3D11Device* pDevice, ID3D11DeviceContext* pContext);
 	virtual CGameObject* Clone(void* pArg);

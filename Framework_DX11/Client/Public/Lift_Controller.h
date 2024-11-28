@@ -27,6 +27,11 @@ public:
 	virtual void Late_Update(_float fTimeDelta) override;
 	virtual HRESULT Render() override;
 
+public:
+	virtual void OnCollisionEnter(CGameObject* pOther) override;
+	virtual void OnCollisionStay(CGameObject* pOther) override;
+	virtual void OnCollisionExit(CGameObject* pOther) override;
+
 private:
 	CCollider* m_pColliderCom = { nullptr};
 	CShader* m_pShaderCom = { nullptr };
@@ -36,6 +41,7 @@ private:
 	_bool m_bClose_with_Player = { false };
 	_bool m_bMoveFloor = { false };					//상호작용 키를 눌러 바닥을 움직일 지 말지
 	_bool m_bActiveFloor = { false };				//바닥 이동방향 계산 및 작동 시켰는지
+	_bool m_bCollision = { false };
 
 	_int  m_iAnim_Open = { 0 };
 	_int  m_iAnim_Idle = { 0 };
@@ -48,7 +54,6 @@ private:
 private:
 	HRESULT Ready_Components();
 
-	void Calculate_Distance_Between_Player();
 	void Set_Floor_Dir();
 
 	_bool Is_Close_Between_Lift_Floor();
