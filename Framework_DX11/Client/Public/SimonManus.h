@@ -47,7 +47,7 @@ public:
 
 	enum EFFECT_TYPE
 	{
-		P1_TRAIL, P1_CHARGE, P2_MAGICMISSILE, P2_DARKBALL, P2_LIGHTNINGBALL, P2_LIGHTNINGSPEAR,
+		P1_TRAIL, P1_CHARGE, P1_STAMP, P2_MAGICMISSILE, P2_DARKBALL, P2_LIGHTNINGBALL, P2_LIGHTNINGSPEAR,
 		P2_WAVETRAIL, P2_WAVE, P2_THUNDERCALLING, P2_SUMMONHAND,
 
 		EFFECT_END
@@ -71,8 +71,8 @@ public:
 	virtual void	Active_CurrentWeaponCollider(_float fDamageRatio, _uint iCollIndex = 0);
 	virtual void	DeActive_CurretnWeaponCollider(_uint iCollIndex = 0);
 
-	void			Active_Effect(const EFFECT_TYPE& eType);
-	void			DeActive_Effect(const EFFECT_TYPE& eType);
+	virtual void		Active_Effect(const _uint eType);
+	virtual void		DeActive_Effect(const _uint eType);
 
 private:
 	vector<CGameObject*>	CollObjRenderP{};

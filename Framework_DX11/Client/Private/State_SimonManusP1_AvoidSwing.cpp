@@ -53,10 +53,12 @@ void CState_SimonManusP1_AvoidSwing::Collider_Check()
 
     if (CurTrackPos >= 105.f && CurTrackPos <= 185.f)
     {
+        m_pMonster->Active_Effect(CSimonManus::P1_TRAIL);
         m_pMonster->Active_CurrentWeaponCollider(1);
     }
     else
     {
+        m_pMonster->DeActive_Effect(CSimonManus::P1_TRAIL);
         m_pMonster->DeActive_CurretnWeaponCollider();
     }
 }

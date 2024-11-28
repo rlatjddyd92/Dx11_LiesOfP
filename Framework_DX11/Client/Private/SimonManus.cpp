@@ -145,6 +145,11 @@ void CSimonManus::Priority_Update(_float fTimeDelta)
 	{
 		m_pFsmCom->Set_State(DIE);
 	}
+	for (auto& pEffect : m_Effects)
+	{
+		if (!pEffect->Get_Dead())
+			pEffect->Priority_Update(fTimeDelta);
+	}
 }
 
 void CSimonManus::Update(_float fTimeDelta)
@@ -159,6 +164,12 @@ void CSimonManus::Update(_float fTimeDelta)
 	m_pRigidBodyCom->Set_Velocity(m_vCurRootMove / fTimeDelta);
 
 	m_pFsmCom->Update(fTimeDelta);
+
+	for (auto& pEffect : m_Effects)
+	{
+		if (!pEffect->Get_Dead())
+			pEffect->Update(fTimeDelta);
+	}
 
 	Update_Collider();
 
@@ -176,6 +187,11 @@ void CSimonManus::Late_Update(_float fTimeDelta)
 
 	m_pGameInstance->Add_ColliderList(m_pColliderCom);
 
+	for (auto& pEffect : m_Effects)
+	{
+		if (!pEffect->Get_Dead())
+			pEffect->Late_Update(fTimeDelta);
+	}
 
 	m_pGameInstance->Add_RenderObject(CRenderer::RG_NONBLEND, this);
 	m_pGameInstance->Add_RenderObject(CRenderer::RG_SHADOWOBJ, this);
@@ -214,12 +230,12 @@ void CSimonManus::DeActive_CurretnWeaponCollider(_uint iCollIndex)
 	m_pWeapon->DeActive_Collider();
 }
 
-void CSimonManus::Active_Effect(const EFFECT_TYPE& eType)
+void CSimonManus::Active_Effect(const _uint eType)
 {
 	m_Effects[eType]->Set_Loop(true);
 }
 
-void CSimonManus::DeActive_Effect(const EFFECT_TYPE& eType)
+void CSimonManus::DeActive_Effect(const _uint eType)
 {
 	m_Effects[eType]->Set_Loop(false);
 }
@@ -410,6 +426,9 @@ HRESULT CSimonManus::Ready_Effects()
 
 	const _Matrix* pParetnMatrix = m_pTransformCom->Get_WorldMatrix_Ptr();
 	const _Matrix* pSocketBoneMatrix = m_pModelCom->Get_BoneCombindTransformationMatrix_Ptr("BN_Weapon_R");
+
+	m_Effects[P1_TRAIL] = CEffect_Manager::Get_Instance()->Clone_Effect(TEXT("SimonManus_Attack_Swing"), pParetnMatrix,
+		pSocketBoneMatrix, _Vec3(0.f, 0.f, 0.f), _Vec3(0.f, 0.f, 0.f), _Vec3(1.f, 1.f, 1.f));
 
 
 

@@ -37,6 +37,9 @@ public:
 	_Vec4		Get_TargetDir();
 
 public:
+	virtual void		Active_Effect(const _uint eType) {};
+	virtual void		DeActive_Effect(const _uint eType) {};
+
 	void		Set_UpTargetPos();
 	void		Look_Player();
 	_float		Calc_Distance_XZ();
