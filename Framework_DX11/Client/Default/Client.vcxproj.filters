@@ -633,6 +633,75 @@
     </Filter>
     <Filter Include="03.GameInterface_Controller\00.UIManager\00.UIPage\08.UIPage_Option">
       <UniqueIdentifier>{49687bb1-cd51-47be-b319-ccccb8021b98}</UniqueIdentifier>
+	</Filter>
+    <Filter Include="02.GameObjects\02.Pawn\01.Monster\CarcassTail">
+      <UniqueIdentifier>{e6447638-0aaa-4897-887b-a642b899134e}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="05.Fsm\Monster\CarcassTail">
+      <UniqueIdentifier>{294ef219-6700-4441-acb8-5f4368999759}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="05.Fsm\Monster\CarcassTail\Attack">
+      <UniqueIdentifier>{0d002725-6e97-4b57-a9d6-5ed638726932}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="05.Fsm\Monster\CarcassTail\Die">
+      <UniqueIdentifier>{186f6f27-a6cd-4f1c-8966-1d267014745d}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="05.Fsm\Monster\CarcassTail\Grogy">
+      <UniqueIdentifier>{f566fc2b-43db-46f6-a995-f427b2b910cd}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="05.Fsm\Monster\CarcassTail\HitFatal">
+      <UniqueIdentifier>{e9eb7ceb-1896-44d4-bb3a-a789f2b319ca}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="05.Fsm\Monster\CarcassTail\Idle">
+      <UniqueIdentifier>{b09b699c-63c3-496c-8b7c-87d17ebb1c8f}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="05.Fsm\Monster\CarcassTail\Run">
+      <UniqueIdentifier>{889f9f2f-9aa7-43e5-a6c9-3bfc6b63911d}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="05.Fsm\Monster\CarcassTail\Walk">
+      <UniqueIdentifier>{4ffefbf0-da3c-4da0-9440-7196dd9408f0}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="05.Fsm\Monster\CarcassTail\Attack\Single">
+      <UniqueIdentifier>{8e725ebb-d395-4cb9-bf69-4e54017cea7e}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="05.Fsm\Monster\CarcassTail\Attack\Route">
+      <UniqueIdentifier>{a141140e-b60b-46ca-8301-070a74d2cd55}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="05.Fsm\Monster\CarcassTail\Attack\Route\HeadingMultiple">
+      <UniqueIdentifier>{a4a9d1f2-c722-4e92-bfa2-5cc1f1bbb898}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="05.Fsm\Monster\CarcassTail\Attack\Route\LeapAttack">
+      <UniqueIdentifier>{912858f5-c399-4f19-8864-2ebf741af1cd}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="05.Fsm\Monster\CarcassTail\Attack\Route\LeapToAttack">
+      <UniqueIdentifier>{4256e3b0-3a1f-4e5c-9fac-955a21e1f082}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="05.Fsm\Monster\CarcassTail\Attack\Route\ScratchingToSwip">
+      <UniqueIdentifier>{a9510d49-db18-497d-82cc-1033e2a4c031}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="05.Fsm\Monster\CarcassTail\Attack\Route\ScratchingMultiple">
+      <UniqueIdentifier>{c9e7ebe0-a596-40cb-841a-eb9f2b1ba738}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="05.Fsm\Monster\CarcassTail\Attack\Single\MultyHittingDown">
+      <UniqueIdentifier>{2872a704-fd93-4d85-be8b-bef06fd7677e}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="05.Fsm\Monster\CarcassTail\Attack\Single\Heading">
+      <UniqueIdentifier>{85d4fcdf-b7e6-496f-9d37-e22af1168e0b}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="05.Fsm\Monster\CarcassTail\Attack\Single\Scratching">
+      <UniqueIdentifier>{3e641e79-dd30-4777-a8d3-0472677edbe3}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="05.Fsm\Monster\CarcassTail\Attack\Single\Leap">
+      <UniqueIdentifier>{1698a62c-7b7e-45af-b4a5-8e74ec7555ce}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="05.Fsm\Monster\CarcassTail\Attack\Single\TailSwip">
+      <UniqueIdentifier>{e3b8b2b9-99c7-4ee4-9754-9b2edc53c90e}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="05.Fsm\Monster\CarcassTail\Attack\Single\TailSwipMultiple">
+      <UniqueIdentifier>{98ea0a72-a20e-4108-903f-7c9db7f588d1}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="05.Fsm\Monster\CarcassTail\Attack\Single\TailSwingDown">
+      <UniqueIdentifier>{8a11709a-37a7-4065-8439-01f82a11e519}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -1156,9 +1225,65 @@
     <ClInclude Include="..\Public\ColliderObject.h">
       <Filter>02.GameObjects\10.ColliderObject</Filter>
     </ClInclude>
-    <ClInclude Include="..\Public\UIRender_Client.h" />
     <ClInclude Include="..\Public\State_Player_Ladder.h">
       <Filter>05.Fsm\Player\Common\Ladder</Filter>
+	</ClInclude>
+    <ClInclude Include="..\Public\CarcassTail.h">
+      <Filter>02.GameObjects\02.Pawn\01.Monster\CarcassTail</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Public\State_CarcassTail_Idle.h">
+      <Filter>05.Fsm\Monster\CarcassTail\Idle</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Public\State_CarcassTail_Run.h">
+      <Filter>05.Fsm\Monster\CarcassTail\Run</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Public\State_CarcassTail_Walk.h">
+      <Filter>05.Fsm\Monster\CarcassTail\Walk</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Public\State_CarcassTail_HitFatal.h">
+      <Filter>05.Fsm\Monster\CarcassTail\HitFatal</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Public\State_CarcassTail_Grogy.h">
+      <Filter>05.Fsm\Monster\CarcassTail\Grogy</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Public\State_CarcassTail_Die.h">
+      <Filter>05.Fsm\Monster\CarcassTail\Die</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Public\State_CarcassTail_TailSwingDown.h">
+      <Filter>05.Fsm\Monster\CarcassTail\Attack\Single\TailSwingDown</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Public\State_CarcassTail_TailSwipMultiple.h">
+      <Filter>05.Fsm\Monster\CarcassTail\Attack\Single\TailSwipMultiple</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Public\State_CarcassTail_Scratching.h">
+      <Filter>05.Fsm\Monster\CarcassTail\Attack\Single\Scratching</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Public\State_CarcassTail_TailSwip.h">
+      <Filter>05.Fsm\Monster\CarcassTail\Attack\Single\TailSwip</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Public\State_CarcassTail_Leap.h">
+      <Filter>05.Fsm\Monster\CarcassTail\Attack\Single\Leap</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Public\State_CarcassTail_Heading.h">
+      <Filter>05.Fsm\Monster\CarcassTail\Attack\Single\Heading</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Public\State_CarcassTail_MultyHittingDown.h">
+      <Filter>05.Fsm\Monster\CarcassTail\Attack\Single\MultyHittingDown</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Public\State_CarcassTail_ScratchingToSwip.h">
+      <Filter>05.Fsm\Monster\CarcassTail\Attack\Route\ScratchingToSwip</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Public\State_CarcassTail_ScratchingMultiple.h">
+      <Filter>05.Fsm\Monster\CarcassTail\Attack\Route\ScratchingMultiple</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Public\State_CarcassTail_LeapToAttack.h">
+      <Filter>05.Fsm\Monster\CarcassTail\Attack\Route\LeapToAttack</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Public\State_CarcassTail_LeapAttack.h">
+      <Filter>05.Fsm\Monster\CarcassTail\Attack\Route\LeapAttack</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Public\State_CarcassTail_HeadingMultiple.h">
+      <Filter>05.Fsm\Monster\CarcassTail\Attack\Route\HeadingMultiple</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -1652,9 +1777,65 @@
     <ClCompile Include="..\Private\ColliderObject.cpp">
       <Filter>02.GameObjects\10.ColliderObject</Filter>
     </ClCompile>
-    <ClCompile Include="..\Private\UIRender_Client.cpp" />
     <ClCompile Include="..\Private\State_Player_Ladder.cpp">
       <Filter>05.Fsm\Player\Common\Ladder</Filter>
+	</ClCompile>
+    <ClCompile Include="..\Private\CarcassTail.cpp">
+      <Filter>02.GameObjects\02.Pawn\01.Monster\CarcassTail</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Private\State_CarcassTail_Idle.cpp">
+      <Filter>05.Fsm\Monster\CarcassTail\Idle</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Private\State_CarcassTail_Run.cpp">
+      <Filter>05.Fsm\Monster\CarcassTail\Run</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Private\State_CarcassTail_Walk.cpp">
+      <Filter>05.Fsm\Monster\CarcassTail\Walk</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Private\State_CarcassTail_HitFatal.cpp">
+      <Filter>05.Fsm\Monster\CarcassTail\HitFatal</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Private\State_CarcassTail_Grogy.cpp">
+      <Filter>05.Fsm\Monster\CarcassTail\Grogy</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Private\State_CarcassTail_Die.cpp">
+      <Filter>05.Fsm\Monster\CarcassTail\Die</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Private\State_CarcassTail_TailSwingDown.cpp">
+      <Filter>05.Fsm\Monster\CarcassTail\Attack\Single\TailSwingDown</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Private\State_CarcassTail_TailSwipMultiple.cpp">
+      <Filter>05.Fsm\Monster\CarcassTail\Attack\Single\TailSwipMultiple</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Private\State_CarcassTail_Scratching.cpp">
+      <Filter>05.Fsm\Monster\CarcassTail\Attack\Single\Scratching</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Private\State_CarcassTail_TailSwip.cpp">
+      <Filter>05.Fsm\Monster\CarcassTail\Attack\Single\TailSwip</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Private\State_CarcassTail_Leap.cpp">
+      <Filter>05.Fsm\Monster\CarcassTail\Attack\Single\Leap</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Private\State_CarcassTail_Heading.cpp">
+      <Filter>05.Fsm\Monster\CarcassTail\Attack\Single\Heading</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Private\State_CarcassTail_MultyHittingDown.cpp">
+      <Filter>05.Fsm\Monster\CarcassTail\Attack\Single\MultyHittingDown</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Private\State_CarcassTail_ScratchingToSwip.cpp">
+      <Filter>05.Fsm\Monster\CarcassTail\Attack\Route\ScratchingToSwip</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Private\State_CarcassTail_ScratchingMultiple.cpp">
+      <Filter>05.Fsm\Monster\CarcassTail\Attack\Route\ScratchingMultiple</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Private\State_CarcassTail_LeapToAttack.cpp">
+      <Filter>05.Fsm\Monster\CarcassTail\Attack\Route\LeapToAttack</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Private\State_CarcassTail_LeapAttack.cpp">
+      <Filter>05.Fsm\Monster\CarcassTail\Attack\Route\LeapAttack</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Private\State_CarcassTail_HeadingMultiple.cpp">
+      <Filter>05.Fsm\Monster\CarcassTail\Attack\Route\HeadingMultiple</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
