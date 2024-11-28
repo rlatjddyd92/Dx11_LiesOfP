@@ -76,6 +76,9 @@ void CTexture_Effect::Update(_float fTimeDelta)
     {
         Billboard(vCurrentScale, vLook);
     }
+
+    m_vCurrentTileMove += m_DefaultDesc.vTileMoveDir * m_DefaultDesc.fTileMoveSpeed * fTimeDelta;
+
 }
 
 void CTexture_Effect::Late_Update(_float fTimeDelta)
@@ -140,7 +143,11 @@ HRESULT CTexture_Effect::Render()
         return E_FAIL;
     if (FAILED(m_pShaderCom->Bind_RawValue("g_fRatio", &m_DefaultDesc.fAlpha, sizeof m_DefaultDesc.fAlpha)))
         return E_FAIL;
-    
+    if (FAILED(m_pShaderCom->Bind_RawValue("g_vTileRepeat", &m_DefaultDesc.vTileRepeat, sizeof m_DefaultDesc.vTileRepeat)))
+        return E_FAIL;
+    if (FAILED(m_pShaderCom->Bind_RawValue("g_vTileMove", &m_vCurrentTileMove, sizeof m_vCurrentTileMove)))
+        return E_FAIL;
+
     if (FAILED(m_pShaderCom->Begin(m_DefaultDesc.iShaderIndex)))
         return E_FAIL;
     if (FAILED(m_pVIBufferCom->Bind_Buffers()))
@@ -169,6 +176,8 @@ void CTexture_Effect::Reset()
 {
     m_fAccumulateTime = { 0.f };
     m_fCurrenrtIndex = { 0.f };
+    m_vCurrentTileMove = { 0.f, 0.f };
+
     m_isActive = true;
 
     m_DefaultDesc = m_InitDesc.DefaultDesc;
