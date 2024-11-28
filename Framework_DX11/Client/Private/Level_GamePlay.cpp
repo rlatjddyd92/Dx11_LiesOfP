@@ -51,9 +51,6 @@ HRESULT CLevel_GamePlay::Initialize()
 	// 게임 인터페이스를 인게임 모드로 전환
 	GET_GAMEINTERFACE->SetIngame(true);
 
-	CEffect_Manager::Get_Instance()->Add_Effect_ToLayer(LEVEL_GAMEPLAY, TEXT("Monster_Impact_Death"),
-		_Vec3(0.f, 5.f, 0.f), _Vec3(0.f, 0.f, 0.f), _Vec3(1.f, 1.f, 1.f));
-
 
 	m_pGameInstance->Set_Listener(m_pPlayer);
 
@@ -73,6 +70,15 @@ void CLevel_GamePlay::Update(_float fTimeDelta)
 	{
 		CCamera_Manager::Get_Instance()->Change_Camera(TEXT("Camera_Player"));
 	}
+
+	if (KEY_TAP(KEY::F5))
+	{
+		// CEffect_Manager::Get_Instance()->Add_Effect_ToLayer(LEVEL_GAMEPLAY, TEXT("Player_Attack_Rapier_StormStab_First"),_Vec3(0.f, 5.f, 0.f), _Vec3(0.f, 0.f, 0.f), _Vec3(1.f, 1.f, 1.f));
+	}
+
+
+
+
 }
 
 HRESULT CLevel_GamePlay::Render()

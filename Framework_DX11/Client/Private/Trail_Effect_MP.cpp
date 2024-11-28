@@ -65,14 +65,14 @@ void CTrail_Effect_MP::Update(_float fTimeDelta)
 	Movement.fTimeDelta = fTimeDelta;
 	Movement.WorldMatrix = m_WorldMatrix;
 
+	
+
 	if (true == m_pVIBufferCom->DispatchCS(m_pActionCS, Movement))
 		m_isDead = true;
 }
 
 void CTrail_Effect_MP::Late_Update(_float fTimeDelta)
 {
-	if (CRenderer::RG_END <= m_RenderDesc.iRenderGroup)
-		return;
 	m_pGameInstance->Add_RenderObject((CRenderer::RENDERGROUP)m_RenderDesc.iRenderGroup, this);
 }
 
@@ -131,6 +131,9 @@ HRESULT CTrail_Effect_MP::Render()
 		return E_FAIL;
 	if (FAILED(m_pShaderCom->Bind_RawValue("g_fSpriteSpeed", &m_DefaultDesc.fSpriteSpeed, sizeof(_float))))
 		return E_FAIL;
+	if (FAILED(m_pShaderCom->Bind_RawValue("g_fInterval", &m_DefaultDesc.fTailInterval, sizeof(_float))))
+		return E_FAIL;
+
 	if (FAILED(m_pVIBufferCom->Bind_TailBuffer(m_pShaderCom, "Particle_SRV")))
 		return E_FAIL;
 	if (FAILED(m_pShaderCom->Begin(m_DefaultDesc.iShaderIndex)))
@@ -154,7 +157,6 @@ void CTrail_Effect_MP::Reset()
 
 	m_pVIBufferCom->DispatchCS(m_pResetCS, Movement);
 	m_pVIBufferCom->Reset();
-
 }
 
 void CTrail_Effect_MP::Set_Loop(_bool bLoop)

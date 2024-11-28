@@ -1490,22 +1490,24 @@ void CController_EffectTool::Trail_MP_Check()
 		ImGui::RadioButton("Follow", (_int*)&m_Trail_MPDesc.DefaultDesc.eType, CTrail_Effect_MP::MT_FOLLOW);
 
 		ImGui::SeparatorText("Compute State");
-		ImGui::Checkbox("Orbit", &m_Trail_MPState[PB_ORBIT]);
+		ImGui::Checkbox("Orbit", &m_Trail_MPState[TMP_ORBIT]);
 		ImGui::SameLine();
-		ImGui::Checkbox("Random", &m_Trail_MPState[PB_RANDOM]);
+		ImGui::Checkbox("Random", &m_Trail_MPState[TMP_RANDOM]);
 		ImGui::SameLine();
-		ImGui::Checkbox("Loop", &m_Trail_MPState[PB_LOOP]);
+		ImGui::Checkbox("Loop", &m_Trail_MPState[TMP_LOOP]);
 
-		ImGui::Checkbox("Accel", &m_Trail_MPState[PB_ACCEL]);
+		ImGui::Checkbox("Accel", &m_Trail_MPState[TMP_ACCEL]);
 		ImGui::SameLine();
-		ImGui::Checkbox("Decel", &m_Trail_MPState[PB_DECEL]);
+		ImGui::Checkbox("Decel", &m_Trail_MPState[TMP_DECEL]);
+		ImGui::SameLine();
+		ImGui::Checkbox("TailSpread", &m_Trail_MPState[TMP_TAILSPREAD]);
 
 		ImGui::SeparatorText("Geom State");
-		ImGui::Checkbox("Grow", &m_Trail_MPState[PB_GROW]);
+		ImGui::Checkbox("Grow", &m_Trail_MPState[TMP_GROW]);
 		ImGui::SameLine();
-		ImGui::Checkbox("Shrink", &m_Trail_MPState[PB_SHRINK]);
+		ImGui::Checkbox("Shrink", &m_Trail_MPState[TMP_SHRINK]);
 		ImGui::SameLine();
-		ImGui::Checkbox("Rotation", &m_Trail_MPState[PB_ROTATION]);
+		ImGui::Checkbox("Rotation", &m_Trail_MPState[TMP_ROTATION]);
 
 		ImGui::SeparatorText("Shader");
 		ImGui::InputInt("Shader Index", (_int*)&m_Trail_MPDesc.DefaultDesc.iShaderIndex);
@@ -1629,44 +1631,49 @@ void CController_EffectTool::Get_Trail_MP()
 
 #pragma region TRAIL_MP
 	if (CVIBuffer_Point_Instance::STATE_ORBIT == (m_Trail_MPDesc.DefaultDesc.iComputeState & CVIBuffer_Point_Instance::STATE_ORBIT))
-		m_Trail_MPState[PB_ORBIT] = true;
+		m_Trail_MPState[TMP_ORBIT] = true;
 	else
-		m_Trail_MPState[PB_ORBIT] = false;
+		m_Trail_MPState[TMP_ORBIT] = false;
 
 	if (CVIBuffer_Point_Instance::STATE_RANDOM == (m_Trail_MPDesc.DefaultDesc.iComputeState & CVIBuffer_Point_Instance::STATE_RANDOM))
-		m_Trail_MPState[PB_RANDOM] = true;
+		m_Trail_MPState[TMP_RANDOM] = true;
 	else
-		m_Trail_MPState[PB_RANDOM] = false;
+		m_Trail_MPState[TMP_RANDOM] = false;
 
 	if (CVIBuffer_Point_Instance::STATE_LOOP == (m_Trail_MPDesc.DefaultDesc.iComputeState & CVIBuffer_Point_Instance::STATE_LOOP))
-		m_Trail_MPState[PB_LOOP] = true;
+		m_Trail_MPState[TMP_LOOP] = true;
 	else
-		m_Trail_MPState[PB_LOOP] = false;
+		m_Trail_MPState[TMP_LOOP] = false;
 
 	if (CVIBuffer_Point_Instance::STATE_ACCEL == (m_Trail_MPDesc.DefaultDesc.iComputeState & CVIBuffer_Point_Instance::STATE_ACCEL))
-		m_Trail_MPState[PB_ACCEL] = true;
+		m_Trail_MPState[TMP_ACCEL] = true;
 	else
-		m_Trail_MPState[PB_ACCEL] = false;
+		m_Trail_MPState[TMP_ACCEL] = false;
 
 	if (CVIBuffer_Point_Instance::STATE_DECEL == (m_Trail_MPDesc.DefaultDesc.iComputeState & CVIBuffer_Point_Instance::STATE_DECEL))
-		m_Trail_MPState[PB_DECEL] = true;
+		m_Trail_MPState[TMP_DECEL] = true;
 	else
-		m_Trail_MPState[PB_DECEL] = false;
+		m_Trail_MPState[TMP_DECEL] = false;
+
+	if (CVIBuffer_Point_Instance::STATE_TAILSPRAED == (m_Trail_MPDesc.DefaultDesc.iComputeState & CVIBuffer_Point_Instance::STATE_TAILSPRAED))
+		m_Trail_MPState[TMP_TAILSPREAD] = true;
+	else
+		m_Trail_MPState[TMP_TAILSPREAD] = false;
 
 	if (CParticle_Effect::PS_GROW == (m_Trail_MPDesc.DefaultDesc.iGeomState & CParticle_Effect::PS_GROW))
-		m_Trail_MPState[PB_GROW] = true;
+		m_Trail_MPState[TMP_GROW] = true;
 	else
-		m_Trail_MPState[PB_GROW] = false;
+		m_Trail_MPState[TMP_GROW] = false;
 
 	if (CParticle_Effect::PS_SHRINK == (m_Trail_MPDesc.DefaultDesc.iGeomState & CParticle_Effect::PS_SHRINK))
-		m_Trail_MPState[PB_SHRINK] = true;
+		m_Trail_MPState[TMP_SHRINK] = true;
 	else
-		m_Trail_MPState[PB_SHRINK] = false;
+		m_Trail_MPState[TMP_SHRINK] = false;
 
 	if (CParticle_Effect::PS_ROTATION == (m_Trail_MPDesc.DefaultDesc.iGeomState & CParticle_Effect::PS_ROTATION))
-		m_Trail_MPState[PB_ROTATION] = true;
+		m_Trail_MPState[TMP_ROTATION] = true;
 	else
-		m_Trail_MPState[PB_ROTATION] = false;
+		m_Trail_MPState[TMP_ROTATION] = false;
 #pragma endregion
 
 	Set_PpState();
@@ -2326,42 +2333,48 @@ void CController_EffectTool::Set_TrailOP_State()
 
 void CController_EffectTool::Set_TrailMP_State()
 {
-	if (true == m_Trail_MPState[PB_ORBIT])
+	if (true == m_Trail_MPState[TMP_ORBIT])
 		m_Trail_MPDesc.DefaultDesc.iComputeState |= CVIBuffer_Point_Instance::STATE_ORBIT;
 	else
 		m_Trail_MPDesc.DefaultDesc.iComputeState &= ~CVIBuffer_Point_Instance::STATE_ORBIT;
 
-	if (true == m_Trail_MPState[PB_RANDOM])
+	if (true == m_Trail_MPState[TMP_RANDOM])
 		m_Trail_MPDesc.DefaultDesc.iComputeState |= CVIBuffer_Point_Instance::STATE_RANDOM;
 	else
 		m_Trail_MPDesc.DefaultDesc.iComputeState &= ~CVIBuffer_Point_Instance::STATE_RANDOM;
 
-	if (true == m_Trail_MPState[PB_LOOP])
+	if (true == m_Trail_MPState[TMP_LOOP])
 		m_Trail_MPDesc.DefaultDesc.iComputeState |= CVIBuffer_Point_Instance::STATE_LOOP;
 	else
 		m_Trail_MPDesc.DefaultDesc.iComputeState &= ~CVIBuffer_Point_Instance::STATE_LOOP;
 
-	if (true == m_Trail_MPState[PB_ACCEL])
+	if (true == m_Trail_MPState[TMP_ACCEL])
 		m_Trail_MPDesc.DefaultDesc.iComputeState |= CVIBuffer_Point_Instance::STATE_ACCEL;
 	else
 		m_Trail_MPDesc.DefaultDesc.iComputeState &= ~CVIBuffer_Point_Instance::STATE_ACCEL;
 
-	if (true == m_Trail_MPState[PB_DECEL])
+	if (true == m_Trail_MPState[TMP_DECEL])
 		m_Trail_MPDesc.DefaultDesc.iComputeState |= CVIBuffer_Point_Instance::STATE_DECEL;
 	else
 		m_Trail_MPDesc.DefaultDesc.iComputeState &= ~CVIBuffer_Point_Instance::STATE_DECEL;
 
-	if (true == m_Trail_MPState[PB_GROW])
+	if (true == m_Trail_MPState[TMP_TAILSPREAD])
+		m_Trail_MPDesc.DefaultDesc.iComputeState |= CVIBuffer_Point_Instance::STATE_TAILSPRAED;
+	else
+		m_Trail_MPDesc.DefaultDesc.iComputeState &= ~CVIBuffer_Point_Instance::STATE_TAILSPRAED;
+
+
+	if (true == m_Trail_MPState[TMP_GROW])
 		m_Trail_MPDesc.DefaultDesc.iGeomState |= CParticle_Effect::PS_GROW;
 	else
 		m_Trail_MPDesc.DefaultDesc.iGeomState &= ~CParticle_Effect::PS_GROW;
 
-	if (true == m_Trail_MPState[PB_SHRINK])
+	if (true == m_Trail_MPState[TMP_SHRINK])
 		m_Trail_MPDesc.DefaultDesc.iGeomState |= CParticle_Effect::PS_SHRINK;
 	else
 		m_Trail_MPDesc.DefaultDesc.iGeomState &= ~CParticle_Effect::PS_SHRINK;
 
-	if (true == m_Trail_MPState[PB_ROTATION])
+	if (true == m_Trail_MPState[TMP_ROTATION])
 		m_Trail_MPDesc.DefaultDesc.iGeomState |= CParticle_Effect::PS_ROTATION;
 	else
 		m_Trail_MPDesc.DefaultDesc.iGeomState &= ~CParticle_Effect::PS_ROTATION;

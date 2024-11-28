@@ -419,6 +419,7 @@ void CPlayer::Active_Effect(const EFFECT_TYPE& eType)
 void CPlayer::DeActive_Effect(const EFFECT_TYPE& eType)
 {
 	m_Effects[eType]->Set_Loop(false);
+
 }
 
 HRESULT CPlayer::Ready_Weapon()

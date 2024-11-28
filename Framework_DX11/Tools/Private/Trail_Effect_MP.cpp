@@ -92,6 +92,7 @@ void CTrail_Effect_MP::Update(_float fTimeDelta)
 	{
 		m_isActive = false;
 	}
+
 }
 
 void CTrail_Effect_MP::Late_Update(_float fTimeDelta)
@@ -156,6 +157,10 @@ HRESULT CTrail_Effect_MP::Render()
 		return E_FAIL;
 	if (FAILED(m_pShaderCom->Bind_RawValue("g_fSpriteSpeed", &m_DefaultDesc.fSpriteSpeed, sizeof(_float))))
 		return E_FAIL;
+	if (FAILED(m_pShaderCom->Bind_RawValue("g_fInterval", &m_DefaultDesc.fTailInterval, sizeof(_float))))
+		return E_FAIL;
+
+
 	if (FAILED(m_pVIBufferCom->Bind_TailBuffer(m_pShaderCom, "Particle_SRV")))
 		return E_FAIL;
 	if (FAILED(m_pShaderCom->Begin(m_DefaultDesc.iShaderIndex)))

@@ -134,6 +134,18 @@ void CEffect_Container::Set_Loop(_bool bLoop)
 	}
 }
 
+void CEffect_Container::Set_EffectDesc(const EFFECT_DESC& desc)
+{
+	m_pTransformCom->Set_State(CTransform::STATE_POSITION, desc.vPos);
+	m_pTransformCom->Set_Scaled(desc.vScale.x, desc.vScale.y, desc.vScale.z);
+	m_pTransformCom->Rotation(desc.vRotation.x, desc.vRotation.y, desc.vRotation.z);
+
+	m_pParentMatrix = desc.pParentMatrix;
+	m_pSocketMatrix = desc.pSocketMatrix;
+
+	Reset_Effects();
+}
+
 CEffect_Container* CEffect_Container::Create(ID3D11Device* pDevice, ID3D11DeviceContext* pContext)
 {
 	CEffect_Container* pInstance = new CEffect_Container(pDevice, pContext);

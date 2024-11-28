@@ -19,6 +19,7 @@ public:
 	{
 		PARTICLE Particle;
 		_float4 vMoveDir;
+		_float4 vPreTranslation;
 	}TAIL_PARTICLE;
 
 	typedef struct : CVIBuffer_Instancing::INSTANCE_DESC
@@ -114,6 +115,12 @@ private:
 	D3D11_SHADER_RESOURCE_VIEW_DESC		m_InitHeadSRV_Desc = {};
 	ID3D11Buffer*						m_pInitHeadBuffer = { nullptr };
 	ID3D11ShaderResourceView*			m_pInitHeadSRV = { nullptr };
+
+	D3D11_BUFFER_DESC					m_InitTailBuffer_Desc = {};
+	D3D11_SHADER_RESOURCE_VIEW_DESC		m_InitTailSRV_Desc = {};
+	ID3D11Buffer*						m_pInitTailBuffer = { nullptr };
+	ID3D11ShaderResourceView*			m_pInitTailSRV = { nullptr };
+
 
 	void* m_pInstanceTailes = { nullptr };
 	D3D11_SUBRESOURCE_DATA		m_TailInitialData = {};

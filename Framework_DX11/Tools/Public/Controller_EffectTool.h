@@ -33,6 +33,15 @@ public:
 		PB_END
 	};
 
+	enum TRAIL_MT_BOOL
+	{
+		// Compute State
+		TMP_ORBIT, TMP_RANDOM, TMP_LOOP, TMP_ACCEL, TMP_DECEL, TMP_TAILSPREAD,
+		// Geom State
+		TMP_GROW, TMP_SHRINK, TMP_ROTATION,
+		TMP_END
+	};
+
 	enum TRAIL_OP_BOOL
 	{
 		TOP_GROW, TOP_SHRINK, TOP_END
@@ -204,7 +213,7 @@ private:
 	_bool m_ParticleStates[PB_END] = {};
 
 	_bool m_Trail_OPState[TOP_END] = {};
-	_bool m_Trail_MPState[PB_END] = {};
+	_bool m_Trail_MPState[TMP_END] = {};
 
 	_bool m_EffectPP[PP_END] = {};
 #pragma endregion
