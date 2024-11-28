@@ -78,6 +78,45 @@ void CState_CarcassTail_Idle::End_State()
 void CState_CarcassTail_Idle::Calc_Act_Attack()
 {
     //얘는 뒤에있는지 아닌지 판단해서 꼬리로 할지 앞으로 공격할지 판단해야함
+
+
+    _Vec3 vPlayerUp = m_pMonster->Get_Transform()->Get_State(CTransform::STATE_UP);
+    _Vec3 vLook = m_pMonster->Get_Transform()->Get_State(CTransform::STATE_LOOK);
+    _Vec3 vTargetDir = m_pMonster->Get_TargetDir();
+
+    _Vec3 vCrossUp = vLook.Cross(vTargetDir);
+
+    if (vPlayerUp.Dot(vCrossUp) <= 0)
+    {
+        //앞 행동
+        _int iAtkNum = rand() % 6;
+        iAtkNum = 0;
+        switch (iAtkNum)
+        {
+        case 0:
+            m_pMonster->Change_State(CCarcassTail::SCRATCHING);
+            break;
+
+        default:
+            break;
+        }
+
+    }
+    else
+    {
+        //뒤 행동
+        _int iAtkNum = rand() % 6;
+        iAtkNum = 0;
+        switch (iAtkNum)
+        {
+        case 0:
+            m_pMonster->Change_State(CCarcassTail::SCRATCHING);
+            break;
+
+        default:
+            break;
+        }
+    }
 }
 
 CState_CarcassTail_Idle* CState_CarcassTail_Idle::Create(CFsm* pFsm, CMonster* pMonster, _uint iStateNum, void* pArg)

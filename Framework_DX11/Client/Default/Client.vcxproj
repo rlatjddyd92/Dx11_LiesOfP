@@ -186,7 +186,7 @@
     <ClInclude Include="..\Public\State_CarcassTail_LeapToAttack.h" />
     <ClInclude Include="..\Public\State_CarcassTail_MultyHittingDown.h" />
     <ClInclude Include="..\Public\State_CarcassTail_Run.h" />
-    <ClInclude Include="..\Public\State_CarcassTail_Scratchig.h" />
+    <ClInclude Include="..\Public\State_CarcassTail_Scratching.h" />
     <ClInclude Include="..\Public\State_CarcassTail_ScratchingMultiple.h" />
     <ClInclude Include="..\Public\State_CarcassTail_ScratchingToSwip.h" />
     <ClInclude Include="..\Public\State_CarcassTail_TailSwingDown.h" />
@@ -379,7 +379,7 @@
     <ClCompile Include="..\Private\State_CarcassTail_LeapToAttack.cpp" />
     <ClCompile Include="..\Private\State_CarcassTail_MultyHittingDown.cpp" />
     <ClCompile Include="..\Private\State_CarcassTail_Run.cpp" />
-    <ClCompile Include="..\Private\State_CarcassTail_Scratchig.cpp" />
+    <ClCompile Include="..\Private\State_CarcassTail_Scratching.cpp" />
     <ClCompile Include="..\Private\State_CarcassTail_ScratchingMultiple.cpp" />
     <ClCompile Include="..\Private\State_CarcassTail_ScratchingToSwip.cpp" />
     <ClCompile Include="..\Private\State_CarcassTail_TailSwingDown.cpp" />

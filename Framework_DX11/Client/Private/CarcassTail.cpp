@@ -5,6 +5,27 @@
 #include "Player.h"
 #include "Fsm.h"
 
+#include "State_CarcassTail_Idle.h"
+#include "State_CarcassTail_Die.h"
+#include "State_CarcassTail_Grogy.h"
+#include "State_CarcassTail_HitFatal.h"
+#include "State_CarcassTail_Run.h"
+#include "State_CarcassTail_Walk.h"
+
+#include "State_CarcassTail_Heading.h"
+#include "State_CarcassTail_Leap.h"
+#include "State_CarcassTail_MultyHittingDown.h"
+#include "State_CarcassTail_Scratching.h"
+#include "State_CarcassTail_TailSwingDown.h"
+#include "State_CarcassTail_TailSwip.h"
+#include "State_CarcassTail_TailSwipMultiple.h"
+
+#include "State_CarcassTail_HeadingMultiple.h"
+#include "State_CarcassTail_LeapAttack.h"
+#include "State_CarcassTail_LeapToAttack.h"
+#include "State_CarcassTail_ScratchingMultiple.h"
+#include "State_CarcassTail_ScratchingToSwip.h"
+
 CCarcassTail::CCarcassTail(ID3D11Device* pDevice, ID3D11DeviceContext* pContext)
 	: CMonster{ pDevice, pContext }
 {
@@ -71,9 +92,17 @@ void CCarcassTail::Update(_float fTimeDelta)
 
 	m_pRigidBodyCom->Set_Velocity(m_vCurRootMove / fTimeDelta);
 
-	//m_pFsmCom->Update(fTimeDelta);
+	m_pFsmCom->Update(fTimeDelta);
 
-	m_pColliderCom->Update(m_pTransformCom->Get_WorldMatrix_Ptr());
+	for (_int i = 0; i < TYPE_END; ++i)
+	{
+		m_pColliderObject[i]->Active_Collider();
+	}
+
+	_float4x4 WorldMat{};
+	XMStoreFloat4x4(&WorldMat , m_pModelCom->Get_BoneCombindTransformationMatrix(7) * XMLoadFloat4x4(m_pTransformCom->Get_WorldMatrix_Ptr()));
+
+	m_pColliderCom->Update(&WorldMat);
 	m_pGameInstance->Add_ColliderList(m_pColliderCom);
 }
 
@@ -130,8 +159,8 @@ HRESULT CCarcassTail::Ready_Components()
 
 	/* FOR.Com_Collider */		//Body
 	CBounding_OBB::BOUNDING_OBB_DESC			ColliderDesc{};
-	ColliderDesc.vExtents = _float3(0.5f, 0.5f, 0.5f);
-	ColliderDesc.vCenter = _float3(0.f, 0.f, 0.f);
+	ColliderDesc.vExtents = _float3(2.f, 0.6f, 1.3f);
+	ColliderDesc.vCenter = _float3(0.2f, -0.1f, 0.f);
 	ColliderDesc.vAngles = _float3(0.f, 0.f, 0.f);
 
 	if (FAILED(__super::Add_Component(LEVEL_STATIC, TEXT("Prototype_Component_Collider_OBB"),
@@ -142,9 +171,9 @@ HRESULT CCarcassTail::Ready_Components()
 	/* FOR.Com_Collider_OBB */
 	CBounding_OBB::BOUNDING_OBB_DESC			ColliderOBBDesc_Obj{};
 
-	ColliderOBBDesc_Obj.vAngles = _float3(0.5f, 0.5f, 0.5f);
+	ColliderOBBDesc_Obj.vExtents = _float3(0.5f, 0.25f, 0.25f);
 	ColliderOBBDesc_Obj.vCenter = _float3(0.f, 0.f, 0.f);
-	ColliderOBBDesc_Obj.vExtents = _float3(0.f, 0.f, 0.f);
+	ColliderOBBDesc_Obj.vAngles = _float3(0.f, 0.f, 0.f);
 
 	CColliderObject::COLIDEROBJECT_DESC Desc{};
 
@@ -157,19 +186,31 @@ HRESULT CCarcassTail::Ready_Components()
 
 	m_pColliderObject[TYPE_LEFTHAND] = dynamic_cast<CColliderObject*>(m_pGameInstance->Clone_GameObject(TEXT("Prototype_GameObject_ColliderObj"), &Desc));
 
-	ColliderOBBDesc_Obj.vAngles = _float3(0.5f, 0.5f, 0.5f);
-	ColliderOBBDesc_Obj.vCenter = _float3(0.f, 0.f, 0.f);
-	ColliderOBBDesc_Obj.vExtents = _float3(0.f, 0.f, 0.f);
+	//
+	//ColliderOBBDesc_Obj.vExtents = _float3(0.5f, 0.5f, 0.5f);
+	//ColliderOBBDesc_Obj.vCenter = _float3(0.f, 0.f, 0.f);
+	//ColliderOBBDesc_Obj.vAngles = _float3(0.f, 0.f, 0.f);
 
 	Desc.pSocketBoneMatrix = m_pModelCom->Get_BoneCombindTransformationMatrix_Ptr(m_pModelCom->Get_UFBIndices(UFB_HAND_RIGHT));
 
 	m_pColliderObject[TYPE_RIGHTHAND] = dynamic_cast<CColliderObject*>(m_pGameInstance->Clone_GameObject(TEXT("Prototype_GameObject_ColliderObj"), &Desc));
 
-	ColliderOBBDesc_Obj.vAngles = _float3(0.5f, 0.5f, 0.5f);
-	ColliderOBBDesc_Obj.vCenter = _float3(0.f, 0.f, 0.f);
-	ColliderOBBDesc_Obj.vExtents = _float3(0.f, 0.f, 0.f);
+	//
+	ColliderOBBDesc_Obj.vExtents = _float3(1.f, 0.2f, 0.2f);
+	ColliderOBBDesc_Obj.vCenter = _float3(0.4f, 0.f, 0.f);
+	ColliderOBBDesc_Obj.vAngles = _float3(0.f, 0.f, 0.f);
 
-	Desc.pSocketBoneMatrix = m_pModelCom->Get_BoneCombindTransformationMatrix_Ptr(m_pModelCom->Get_UFBIndices(UFB_HEAD));
+	Desc.pSocketBoneMatrix = m_pModelCom->Get_BoneCombindTransformationMatrix_Ptr(m_pModelCom->Get_UFBIndices(UFB_WEAPON));
+	Desc.fDamageAmount = 3.f;
+
+	m_pColliderObject[TYPE_TAIL] = dynamic_cast<CColliderObject*>(m_pGameInstance->Clone_GameObject(TEXT("Prototype_GameObject_ColliderObj"), &Desc));
+
+	//
+	ColliderOBBDesc_Obj.vExtents = _float3(0.5f, 0.7f, 1.4f);
+	ColliderOBBDesc_Obj.vCenter = _float3(0.8f, 0.f, 0.f);
+	ColliderOBBDesc_Obj.vAngles = _float3(0.f, 0.f, 0.f);
+
+	Desc.pSocketBoneMatrix = m_pModelCom->Get_BoneCombindTransformationMatrix_Ptr(8);
 	Desc.fDamageAmount = 3.f;
 
 	m_pColliderObject[TYPE_IMPACT] = dynamic_cast<CColliderObject*>(m_pGameInstance->Clone_GameObject(TEXT("Prototype_GameObject_ColliderObj"), &Desc));
@@ -212,14 +253,32 @@ HRESULT CCarcassTail::Ready_FSM()
 	if (FAILED(__super::Ready_FSM()))
 		return E_FAIL;
 
-	//FSM_INIT_DESC Desc{};
-	//
-	//
-	//
-	//
-	//
-	//
-	//m_pFsmCom->Set_State(IDLE);
+	FSM_INIT_DESC Desc{};
+	
+
+	m_pFsmCom->Add_State(CState_CarcassTail_Idle::Create(m_pFsmCom, this, IDLE, &Desc));
+	m_pFsmCom->Add_State(CState_CarcassTail_Die::Create(m_pFsmCom, this, DIE, &Desc));
+	m_pFsmCom->Add_State(CState_CarcassTail_Grogy::Create(m_pFsmCom, this, GROGY, &Desc));
+	m_pFsmCom->Add_State(CState_CarcassTail_HitFatal::Create(m_pFsmCom, this, HITFATAL, &Desc));
+	m_pFsmCom->Add_State(CState_CarcassTail_Run::Create(m_pFsmCom, this, RUN, &Desc));
+	m_pFsmCom->Add_State(CState_CarcassTail_Walk::Create(m_pFsmCom, this, WALK, &Desc));
+
+	m_pFsmCom->Add_State(CState_CarcassTail_Heading::Create(m_pFsmCom, this, HEADING, &Desc));
+	m_pFsmCom->Add_State(CState_CarcassTail_Leap::Create(m_pFsmCom, this, LEAP, &Desc));
+	m_pFsmCom->Add_State(CState_CarcassTail_MultyHittingDown::Create(m_pFsmCom, this, MULTYHITTINGDOWN, &Desc));
+	m_pFsmCom->Add_State(CState_CarcassTail_Scratching::Create(m_pFsmCom, this, SCRATCHING, &Desc));
+	m_pFsmCom->Add_State(CState_CarcassTail_TailSwingDown::Create(m_pFsmCom, this, TAILSWINGDOWN, &Desc));
+	m_pFsmCom->Add_State(CState_CarcassTail_TailSwip::Create(m_pFsmCom, this, TAILSWIP, &Desc));
+	m_pFsmCom->Add_State(CState_CarcassTail_TailSwipMultiple::Create(m_pFsmCom, this, TAILSWIPMULTIPLE, &Desc));
+
+	m_pFsmCom->Add_State(CState_CarcassTail_HeadingMultiple::Create(m_pFsmCom, this, HEADINGMULTIPLE, &Desc));
+	m_pFsmCom->Add_State(CState_CarcassTail_LeapAttack::Create(m_pFsmCom, this, LEAPATTACK, &Desc));
+	m_pFsmCom->Add_State(CState_CarcassTail_LeapToAttack::Create(m_pFsmCom, this, LEAPTOATTACK, &Desc));
+	m_pFsmCom->Add_State(CState_CarcassTail_ScratchingMultiple::Create(m_pFsmCom, this, SCRATCHINGMULTIPLE, &Desc));
+	m_pFsmCom->Add_State(CState_CarcassTail_ScratchingToSwip::Create(m_pFsmCom, this, SCRATCHINGTOWIP, &Desc));
+	
+	
+	m_pFsmCom->Set_State(IDLE);
 
 
 	return S_OK;

@@ -7,15 +7,15 @@ END
 
 BEGIN(Client)
 
-class CState_CarcassTail_Scratchig : public CState
+class CState_CarcassTail_Scratching : public CState
 {
 private:
     typedef enum {
         AN_SCRATCHING_L = 7, AN_SCRATCHING_R = 6
     }ANIMNUM;
 public:
-    CState_CarcassTail_Scratchig(class CFsm* pFsm, class CMonster* pMonster);
-    virtual ~CState_CarcassTail_Scratchig() = default;
+    CState_CarcassTail_Scratching(class CFsm* pFsm, class CMonster* pMonster);
+    virtual ~CState_CarcassTail_Scratching() = default;
 
 public:
     virtual HRESULT Initialize(_uint iStateNum, void* pArg) override;
@@ -33,7 +33,7 @@ private:
     void                Collider_Check();
 
 public:
-    static CState_CarcassTail_Scratchig* Create(class CFsm* pFsm, class CMonster* pMonster, _uint iStateNum, void* pArg = nullptr);
+    static CState_CarcassTail_Scratching* Create(class CFsm* pFsm, class CMonster* pMonster, _uint iStateNum, void* pArg = nullptr);
     virtual void Free() override;
 
 };

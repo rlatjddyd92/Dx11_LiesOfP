@@ -117,22 +117,22 @@ void CState_CarcassTail_ScratchingMultiple::Collider_Check()
 {
     _double CurTrackPos = m_pMonster->Get_CurrentTrackPos();
 
-    if (m_iRouteTrack == 0)
+    if (CurTrackPos >= 85.f && CurTrackPos <= 115.f)
     {
-        if (CurTrackPos >= 50.f && CurTrackPos <= 70.f)
+        if (m_iRouteTrack == 0)
         {
-            m_pMonster->Active_CurrentWeaponCollider(1, 1);
+            m_pMonster->Active_CurrentWeaponCollider(1, 0);
         }
         else
         {
-            m_pMonster->DeActive_CurretnWeaponCollider(1);
+            m_pMonster->Active_CurrentWeaponCollider(1, 1);
         }
     }
     else
     {
-        if (CurTrackPos >= 90.f && CurTrackPos <= 105.f)
+        if (m_iRouteTrack == 0)
         {
-            m_pMonster->Active_CurrentWeaponCollider(1, 1);
+            m_pMonster->DeActive_CurretnWeaponCollider(0);
         }
         else
         {

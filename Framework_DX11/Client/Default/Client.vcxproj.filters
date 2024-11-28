@@ -1252,7 +1252,7 @@
     <ClInclude Include="..\Public\State_CarcassTail_TailSwipMultiple.h">
       <Filter>05.Fsm\Monster\CarcassTail\Attack\Single\TailSwipMultiple</Filter>
     </ClInclude>
-    <ClInclude Include="..\Public\State_CarcassTail_Scratchig.h">
+    <ClInclude Include="..\Public\State_CarcassTail_Scratching.h">
       <Filter>05.Fsm\Monster\CarcassTail\Attack\Single\Scratching</Filter>
     </ClInclude>
     <ClInclude Include="..\Public\State_CarcassTail_TailSwip.h">
@@ -1801,7 +1801,7 @@
     <ClCompile Include="..\Private\State_CarcassTail_TailSwipMultiple.cpp">
       <Filter>05.Fsm\Monster\CarcassTail\Attack\Single\TailSwipMultiple</Filter>
     </ClCompile>
-    <ClCompile Include="..\Private\State_CarcassTail_Scratchig.cpp">
+    <ClCompile Include="..\Private\State_CarcassTail_Scratching.cpp">
       <Filter>05.Fsm\Monster\CarcassTail\Attack\Single\Scratching</Filter>
     </ClCompile>
     <ClCompile Include="..\Private\State_CarcassTail_TailSwip.cpp">

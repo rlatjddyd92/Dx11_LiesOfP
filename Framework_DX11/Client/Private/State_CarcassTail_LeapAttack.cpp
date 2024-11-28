@@ -23,7 +23,6 @@ HRESULT CState_CarcassTail_LeapAttack::Start_State(void* pArg)
 {
     m_pMonster->Change_Animation(AN_ROUTE_FIRST, false, 0.1f, 0);
 
-    m_fIdleTime = m_fIdleDuration;
     return S_OK;
 }
 
@@ -98,15 +97,16 @@ void CState_CarcassTail_LeapAttack::Collider_Check()
     {
         if (CurTrackPos >= 50.f && CurTrackPos <= 70.f)
         {
-            m_pMonster->Active_CurrentWeaponCollider(1, 1);
+            m_pMonster->Active_CurrentWeaponCollider(1, 3);
         }
         else
         {
-            m_pMonster->DeActive_CurretnWeaponCollider(1);
+            m_pMonster->DeActive_CurretnWeaponCollider(3);
         }
     }
     else
     {
+        //공격 손,꼬리 판단
         if (CurTrackPos >= 90.f && CurTrackPos <= 105.f)
         {
             m_pMonster->Active_CurrentWeaponCollider(1, 1);

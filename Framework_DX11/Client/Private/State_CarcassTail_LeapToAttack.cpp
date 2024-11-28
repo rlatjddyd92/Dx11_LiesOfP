@@ -45,8 +45,6 @@ void CState_CarcassTail_LeapToAttack::Update(_float fTimeDelta)
             return;
         }
         ++m_iRouteTrack;
-        m_fIdleTime = 0.f;
-        m_isDelayed = true;
     }
 
     Collider_Check();
@@ -93,11 +91,11 @@ void CState_CarcassTail_LeapToAttack::Collider_Check()
     {
         if (CurTrackPos >= 50.f && CurTrackPos <= 70.f)
         {
-            m_pMonster->Active_CurrentWeaponCollider(1, 1);
+            m_pMonster->Active_CurrentWeaponCollider(1, 3);
         }
         else
         {
-            m_pMonster->DeActive_CurretnWeaponCollider(1);
+            m_pMonster->DeActive_CurretnWeaponCollider(3);
         }
     }
     else

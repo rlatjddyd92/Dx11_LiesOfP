@@ -32,53 +32,26 @@ HRESULT CState_CarcassTail_ScratchingToSwip::Start_State(void* pArg)
 
 void CState_CarcassTail_ScratchingToSwip::Update(_float fTimeDelta)
 {
-    if (!m_isDelayed)
-    {
-        if (m_iRouteTrack == 1)
-        {
-            m_pMonster->Change_Animation(m_iLastAnim, false, 0.1f, 0, true);
-        }
+    _double CurTrackPos = m_pMonster->Get_CurrentTrackPos();
 
-        if (End_Check())
+    if (m_iRouteTrack == 0)
+    {
+        if (CurTrackPos >= 179)
         {
             ++m_iRouteTrack;
 
-            if (m_iRouteTrack >= 2)
-            {
-                m_pMonster->Change_State(CCarcassBigA::IDLE);
-                return;
-            }
-            m_fIdleTime = 0.f;
-            m_isDelayed = true;
+            m_pMonster->Change_Animation(m_iFirstAnim, false, 0.1f, 80);
         }
     }
     else
     {
-        m_fIdleTime += fTimeDelta;
-
-        if (m_fIdleTime >= m_fIdleDuration)
+        if (End_Check())
         {
-            m_isDelayed = false;
-        }
-        _int iDir = m_pMonster->Get_Transform()->LookAt_Lerp_NoHeight(m_pMonster->Get_TargetDir(), 3, fTimeDelta);
-        switch (iDir)
-        {
-        case -1:
-            m_pMonster->Change_Animation(30, true, 0.1f);
-            break;
-
-        case 0:
-            m_pMonster->Change_Animation(20, true, 0.1f);
-            break;
-
-        case 1:
-            m_pMonster->Change_Animation(31, true, 0.1f);
-            break;
-
-        default:
-            break;
+            m_pMonster->Change_State(CCarcassBigA::IDLE);
+            return;
         }
     }
+
 
     Collider_Check();
 
@@ -122,24 +95,38 @@ void CState_CarcassTail_ScratchingToSwip::Collider_Check()
 
     if (m_iRouteTrack == 0)
     {
-        if (CurTrackPos >= 50.f && CurTrackPos <= 70.f)
+        if (CurTrackPos >= 85.f && CurTrackPos <= 95.f)
         {
-            m_pMonster->Active_CurrentWeaponCollider(1, 1);
+            if (m_iFirstAnim == AN_ROUTE_FIRST_L)
+            {
+                m_pMonster->Active_CurrentWeaponCollider(1, 0);
+            }
+            else
+            {
+                m_pMonster->Active_CurrentWeaponCollider(1, 1);
+            }
         }
         else
         {
-            m_pMonster->DeActive_CurretnWeaponCollider(1);
+            if (m_iFirstAnim == AN_ROUTE_FIRST_L)
+            {
+                m_pMonster->DeActive_CurretnWeaponCollider(0);
+            }
+            else
+            {
+                m_pMonster->DeActive_CurretnWeaponCollider(1);
+            }
         }
     }
     else
     {
-        if (CurTrackPos >= 90.f && CurTrackPos <= 105.f)
+        if (CurTrackPos >= 110.f && CurTrackPos <= 135.f)
         {
-            m_pMonster->Active_CurrentWeaponCollider(1, 1);
+            m_pMonster->Active_CurrentWeaponCollider(1, 2);
         }
         else
         {
-            m_pMonster->DeActive_CurretnWeaponCollider(1);
+            m_pMonster->DeActive_CurretnWeaponCollider(2);
         }
     }
 }

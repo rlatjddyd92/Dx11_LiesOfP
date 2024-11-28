@@ -24,21 +24,27 @@ HRESULT CState_CarcassTail_HeadingMultiple::Start_State(void* pArg)
 {
     m_pMonster->Change_Animation(AN_HEADING, false, 0.1f, 0, true);
 
+    m_iRouteTrack = 0;
     return S_OK;
 }
 
 void CState_CarcassTail_HeadingMultiple::Update(_float fTimeDelta)
 {
-    if (End_Check())
+    _double CurTrackPos = m_pMonster->Get_CurrentTrackPos();
+
+    if (m_iRouteTrack < 2)
     {
-        if (m_iRouteTrack == 2)
-        {
-            m_pMonster->Change_State(CMonster::IDLE);
-        }
-        else
+        if (CurTrackPos >= 140)
         {
             ++m_iRouteTrack;
             m_pMonster->Change_Animation(AN_HEADING, false, 0.1f, 0, true, true);
+        }
+    }
+    else
+    {
+        if (End_Check())
+        {
+            m_pMonster->Change_State(CMonster::IDLE);
         }
     }
 
@@ -60,29 +66,15 @@ void CState_CarcassTail_HeadingMultiple::Collider_Check()
 {
     _double CurTrackPos = m_pMonster->Get_CurrentTrackPos();
 
-    if ((CurTrackPos >= 90.f && CurTrackPos <= 115.f) ||
-        (CurTrackPos >= 135.f && CurTrackPos <= 165.f) ||
-        (CurTrackPos >= 225.f && CurTrackPos <= 245.f) ||
-        (CurTrackPos >= 275.f && CurTrackPos <= 295.f))
+    if ((CurTrackPos >= 80.f && CurTrackPos <= 95.f))
     {
-        m_pMonster->Active_CurrentWeaponCollider(1, 0);
+        m_pMonster->Active_CurrentWeaponCollider(1, 3);
     }
     else
     {
-        m_pMonster->DeActive_CurretnWeaponCollider(0);
+        m_pMonster->DeActive_CurretnWeaponCollider(3);
     }
 
-    if ((CurTrackPos >= 82.f && CurTrackPos <= 100.f) ||
-        (CurTrackPos >= 150.f && CurTrackPos <= 165.f) ||
-        (CurTrackPos >= 185.f && CurTrackPos <= 195.f) ||
-        (CurTrackPos >= 205.f && CurTrackPos <= 225.f))
-    {
-        m_pMonster->Active_CurrentWeaponCollider(1, 1);
-    }
-    else
-    {
-        m_pMonster->DeActive_CurretnWeaponCollider(1);
-    }
 }
 
 CState_CarcassTail_HeadingMultiple* CState_CarcassTail_HeadingMultiple::Create(CFsm* pFsm, CMonster* pMonster, _uint iStateNum, void* pArg)

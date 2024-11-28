@@ -51,10 +51,8 @@ void CState_CarcassTail_MultyHittingDown::Collider_Check()
 {
     _double CurTrackPos = m_pMonster->Get_CurrentTrackPos();
 
-    if ((CurTrackPos >= 90.f && CurTrackPos <= 115.f) ||
-        (CurTrackPos >= 135.f && CurTrackPos <= 165.f) ||
-        (CurTrackPos >= 225.f && CurTrackPos <= 245.f) ||
-        (CurTrackPos >= 275.f && CurTrackPos <= 295.f))
+    if ((CurTrackPos >= 85.f && CurTrackPos <= 95.f) ||
+        (CurTrackPos >= 165.f && CurTrackPos <= 175.f))
     {
         m_pMonster->Active_CurrentWeaponCollider(1, 0);
     }
@@ -63,10 +61,8 @@ void CState_CarcassTail_MultyHittingDown::Collider_Check()
         m_pMonster->DeActive_CurretnWeaponCollider(0);
     }
 
-    if ((CurTrackPos >= 82.f && CurTrackPos <= 100.f) ||
-        (CurTrackPos >= 150.f && CurTrackPos <= 165.f) ||
-        (CurTrackPos >= 185.f && CurTrackPos <= 195.f) ||
-        (CurTrackPos >= 205.f && CurTrackPos <= 225.f))
+    if ((CurTrackPos >= 120.f && CurTrackPos <= 129.f) ||
+        (CurTrackPos >= 195.f && CurTrackPos <= 204.f))
     {
         m_pMonster->Active_CurrentWeaponCollider(1, 1);
     }
