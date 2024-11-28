@@ -148,7 +148,6 @@ _bool CState_Player_OH_Guard::Move(_float fTimeDelta)
                 m_pPlayer->Change_Animation(m_iAnimation_Walk[WALK_R], true, 0.2f);
         }
 
-
         if (m_vMoveDir.Length() > 0.f)
         {
             // 가드 상태에서는 회전 안 함

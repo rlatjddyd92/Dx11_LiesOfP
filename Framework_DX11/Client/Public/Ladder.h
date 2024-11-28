@@ -25,12 +25,14 @@ public:
 		_uint		iRenderGroupID = { true };
 	}LADDER_DESC;
 
-	enum COLLIDERTYPE {UP,DOWN, COLLIDER_END};
+	enum COLLIDERTYPE { UP, DOWN, COLLIDER_END };
 protected:
 	CLadder(ID3D11Device* pDevice, ID3D11DeviceContext* pContext);
 	CLadder(const CLadder& Prototype);
 	virtual ~CLadder() = default;
 
+public:
+	//_Vec3 Get_LadderUpPos() {return m_pColliderCom[UP]->ge }
 public:
 	virtual HRESULT Initialize_Prototype() override;
 	virtual HRESULT Initialize(void* pArg) override;
