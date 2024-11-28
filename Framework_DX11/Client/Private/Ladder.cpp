@@ -135,7 +135,7 @@ HRESULT CLadder::Ready_Components(LADDER_DESC* Desc)
 
 	/* For.Com_Collider */
 	CBounding_OBB::BOUNDING_OBB_DESC			ColliderDesc{};
-	ColliderDesc.vExtents = _float3(1.f, 0.5f, 0.2f);
+	ColliderDesc.vExtents = _float3(1.f, 0.5f, 1.f);
 	ColliderDesc.vAngles = _float3(0.f,0.f, 0.f);
 	ColliderDesc.vCenter = _float3(0.f, 1.0f, 0.f);
 
