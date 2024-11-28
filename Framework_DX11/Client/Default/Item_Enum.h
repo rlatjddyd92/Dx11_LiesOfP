@@ -173,6 +173,7 @@ enum class ITEM_FUNC
 {
 	FUNC_USING, // <- 일반 아이템을 사용하여 기능 활성화 
 	FUNC_TO_INVEN, // <- 인벤으로 이동
+	FUNC_TO_EQUIP, // <- 장비로 이동
 	FUNC_EQUIP, // <- 일반 아이템 및 장비류를 장착
 	FUNC_UNEQUIP, // <- 장착된 것을 해제 
 	FUNC_DELETE, // <- 아이템 버리기 (삭제)

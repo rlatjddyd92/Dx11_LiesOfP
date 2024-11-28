@@ -246,6 +246,39 @@ void CUIPage_Menu::Desc_Update(_float fTimeDelta)
 			m_vec_Group_Ctrl[_int(PART_GROUP::GROUP_DESC_FX)]->bRender = true;
 		else
 			m_vec_Group_Ctrl[_int(PART_GROUP::GROUP_DESC_FX)]->bRender = false;
+
+		_wstring strTitle = {};
+		_wstring strDesc = {};
+
+		switch (m_eFocus_Group)
+		{
+		case Client::CUIPage_Menu::PART_GROUP::GROUP_MENU_EQUIP:
+			strTitle = TEXT("장비");
+			strDesc = TEXT("장착하는 장비를 변경할 수 있습니다.");
+			break;
+		case Client::CUIPage_Menu::PART_GROUP::GROUP_MENU_INVEN:
+			strTitle = TEXT("가방");
+			strDesc = TEXT("보유한 아이템을 관리할 수 있습니다.");
+			break;
+		case Client::CUIPage_Menu::PART_GROUP::GROUP_MENU_CHARACTOR:
+			strTitle = TEXT("캐릭터 정보");
+			strDesc = TEXT("상태를 확인할 수 있습니다.");
+			break;
+		case Client::CUIPage_Menu::PART_GROUP::GROUP_MENU_HEART:
+			strTitle = TEXT("P기관");
+			strDesc = TEXT("업그레이드 및 기능을 선택할 수 있습니다.");
+			break;
+		case Client::CUIPage_Menu::PART_GROUP::GROUP_MENU_OPTION:
+			strTitle = TEXT("설정");
+			strDesc = TEXT("게임 내 설정을 변경할 수 있습니다.");
+			break;
+		default:
+			break;
+		}
+
+		__super::Get_Front_Part_In_Control(_int(PART_GROUP::GROUP_DESC_TITLE))->strText = strTitle;
+		__super::Get_Front_Part_In_Control(_int(PART_GROUP::GROUP_DESC_TEXT))->strText = strDesc;
+	
 	}
 	else
 	{

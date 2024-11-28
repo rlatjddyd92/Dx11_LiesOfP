@@ -1721,6 +1721,15 @@
     <FxCompile Include="..\Bin\ShaderFiles\Shader_VtxTrail_TwoPoint_Instance.hlsl">
       <Filter>97.ShaderFiles\Effect</Filter>
     </FxCompile>
+    <FxCompile Include="..\Bin\ShaderFiles\Shader_UI_Change_Color.hlsl">
+      <Filter>97.ShaderFiles\99.UI_Shader</Filter>
+    </FxCompile>
+    <FxCompile Include="..\Bin\ShaderFiles\Shader_UI_Multiple_Color.hlsl">
+      <Filter>97.ShaderFiles\99.UI_Shader</Filter>
+    </FxCompile>
+    <FxCompile Include="..\Bin\ShaderFiles\Shader_UI_Normal.hlsl">
+      <Filter>97.ShaderFiles\99.UI_Shader</Filter>
+    </FxCompile>
   </ItemGroup>
   <ItemGroup>
     <None Include="..\Bin\ShaderFiles\Shader_Client_InOut.hlsli">

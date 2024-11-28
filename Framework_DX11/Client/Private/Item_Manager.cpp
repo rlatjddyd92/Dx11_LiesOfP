@@ -190,6 +190,135 @@ _bool CItem_Manager::Use_Potion()
 	return true;
 }
 
+void CItem_Manager::Set_ItemAction(EQUIP_SLOT eSlot, _Vec2 vPos, _Vec2 vSize)
+{
+	m_bItemAction_Active = true;
+	m_eNow_ActionSlot = eSlot;
+	m_eNow_ActionArray = INVEN_ARRAY_TYPE::TYPE_END;
+	m_iArray_Index = -1;
+
+
+
+}
+
+void CItem_Manager::Set_ItemAction(INVEN_ARRAY_TYPE eType, _int iIndex, _Vec2 vPos, _Vec2 vSize)
+{
+	m_bItemAction_Active = true;
+	m_eNow_ActionSlot = EQUIP_SLOT::EQUIP_END;
+	m_eNow_ActionArray = eType;
+	m_iArray_Index = iIndex;
+
+	vector<ITEM_FUNC> vecFunc;
+	_int iArray = _int(eType);
+
+
+	if ((iArray >= _int(INVEN_ARRAY_TYPE::TYPE_USING_BASIC)) && (iArray <= _int(INVEN_ARRAY_TYPE::TYPE_USING_RARE_ERGO)))
+	{
+		if (m_iActionPopup_Page == 0)
+		{
+			if (iArray != _int(INVEN_ARRAY_TYPE::TYPE_USING_THROW))
+				vecFunc.push_back(ITEM_FUNC::FUNC_USING);
+			
+			if (iArray < _int(INVEN_ARRAY_TYPE::TYPE_USING_ERGO))
+			{
+				vecFunc.push_back(ITEM_FUNC::FUNC_EQUIP);
+				if (m_vecArray_Inven[iArray]->vecItemInfo[iIndex]->eSlot != EQUIP_SLOT::EQUIP_END)
+					vecFunc.push_back(ITEM_FUNC::FUNC_UNEQUIP);
+			}
+
+			vecFunc.push_back(ITEM_FUNC::FUNC_TO_EQUIP);
+
+			vecFunc.push_back(ITEM_FUNC::FUNC_DELETE);
+		}
+		if (m_iActionPopup_Page == 1)
+		{
+			vecFunc.push_back(ITEM_FUNC::FUNC_EQUIP_TOP);
+			vecFunc.push_back(ITEM_FUNC::FUNC_EQUIP_BOTTOM);
+			vecFunc.push_back(ITEM_FUNC::FUNC_EQUIP_BAG);
+			if (m_vecArray_Inven[iArray]->vecItemInfo[iIndex]->eSlot != EQUIP_SLOT::EQUIP_END)
+				vecFunc.push_back(ITEM_FUNC::FUNC_UNEQUIP);
+		}
+	}
+	else if ((iArray >= _int(INVEN_ARRAY_TYPE::TYPE_INGRADIENT_GROW)) && (iArray <= _int(INVEN_ARRAY_TYPE::TYPE_FUNTIONAL_COMMON)))
+	{
+		vecFunc.push_back(ITEM_FUNC::FUNC_USING);
+		vecFunc.push_back(ITEM_FUNC::FUNC_DELETE);
+	}
+	else if ((iArray >= _int(INVEN_ARRAY_TYPE::TYPE_WEAPON_NORMAL_BLADE)) && (iArray <= _int(INVEN_ARRAY_TYPE::TYPE_WEAPON_SPECIAL_HANDLE)))
+	{
+		if (m_vecArray_Inven[iArray]->vecItemInfo[iIndex]->eSlot != EQUIP_SLOT::EQUIP_END)
+			vecFunc.push_back(ITEM_FUNC::FUNC_UNEQUIP);
+		else
+		{
+			vecFunc.push_back(ITEM_FUNC::FUNC_EQUIP_WEAPON_FIRST);
+			vecFunc.push_back(ITEM_FUNC::FUNC_EQUIP_WEAPON_SECOND);
+		}
+		vecFunc.push_back(ITEM_FUNC::FUNC_TO_EQUIP);
+	}
+	else if ((iArray >= _int(INVEN_ARRAY_TYPE::TYPE_BLADE_PART)) && (iArray <= _int(INVEN_ARRAY_TYPE::TYPE_HANDEL_PART)))
+	{
+		vecFunc.push_back(ITEM_FUNC::FUNC_USING);
+		vecFunc.push_back(ITEM_FUNC::FUNC_DELETE);
+	}
+	else if ((iArray >= _int(INVEN_ARRAY_TYPE::TYPE_REASON_ARM)) && (iArray <= _int(INVEN_ARRAY_TYPE::TYPE_REASON_ARM)))
+	{
+		vecFunc.push_back(ITEM_FUNC::FUNC_EQUIP);
+		if (m_vecArray_Inven[iArray]->vecItemInfo[iIndex]->eSlot != EQUIP_SLOT::EQUIP_END)
+			vecFunc.push_back(ITEM_FUNC::FUNC_UNEQUIP);
+		vecFunc.push_back(ITEM_FUNC::FUNC_TO_EQUIP);
+	}
+	else if ((iArray >= _int(INVEN_ARRAY_TYPE::TYPE_DEFENCE_FRAME)) && (iArray <= _int(INVEN_ARRAY_TYPE::TYPE_DEFENCE_RAINER)))
+	{
+		vecFunc.push_back(ITEM_FUNC::FUNC_EQUIP);
+		if (m_vecArray_Inven[iArray]->vecItemInfo[iIndex]->eSlot != EQUIP_SLOT::EQUIP_END)
+			vecFunc.push_back(ITEM_FUNC::FUNC_UNEQUIP);
+		vecFunc.push_back(ITEM_FUNC::FUNC_TO_EQUIP);
+	}
+	else if ((iArray >= _int(INVEN_ARRAY_TYPE::TYPE_AMULET_COMMON)) && (iArray <= _int(INVEN_ARRAY_TYPE::TYPE_AMULET_COMMON)))
+	{
+		vecFunc.push_back(ITEM_FUNC::FUNC_EQUIP);
+		if (m_vecArray_Inven[iArray]->vecItemInfo[iIndex]->eSlot != EQUIP_SLOT::EQUIP_END)
+			vecFunc.push_back(ITEM_FUNC::FUNC_UNEQUIP);
+		vecFunc.push_back(ITEM_FUNC::FUNC_TO_EQUIP);
+	}
+	else if ((iArray >= _int(INVEN_ARRAY_TYPE::TYPE_COUSTUME_CLOTHES)) && (iArray <= _int(INVEN_ARRAY_TYPE::TYPE_COUSTUME_ACC)))
+	{
+		// 이건 나중에 
+	}
+	else if ((iArray >= _int(INVEN_ARRAY_TYPE::TYPE_GEUSTURE_COMMON)) && (iArray <= _int(INVEN_ARRAY_TYPE::TYPE_GEUSTURE_COMMON)))
+	{
+		// 이건 나중에 
+	}
+	else if ((iArray >= _int(INVEN_ARRAY_TYPE::TYPE_COLLECTION_NEWS)) && (iArray <= _int(INVEN_ARRAY_TYPE::TYPE_COLLECTION_MEMO)))
+	{
+		// 이건 나중에 
+	}
+
+	for (_int i = vecFunc.size(); i < 4; ++i)
+		vecFunc.push_back(ITEM_FUNC::FUNC_END);
+
+	GET_GAMEINTERFACE->Show_ItemAction(vPos, vSize, vecFunc[0], vecFunc[1], vecFunc[2], vecFunc[3]);
+}
+
+void CItem_Manager::Reset_ItemAction()
+{
+	m_bItemAction_Active = false;
+	m_eNow_ActionSlot = EQUIP_SLOT::EQUIP_END;
+	m_eNow_ActionArray = INVEN_ARRAY_TYPE::TYPE_END;
+	m_iArray_Index = -1;
+	m_iActionPopup_Page = 0;
+}
+
+ITEM_RESULT CItem_Manager::Operate_ItemAction(ITEM_FUNC eFunc, _Vec2 vPos, _Vec2 vSize)
+{
+
+
+
+
+
+	return ITEM_RESULT();
+}
+
 HRESULT CItem_Manager::Initialize_Item()
 {
 	m_vecArray_Inven.resize(_uint(INVEN_ARRAY_TYPE::TYPE_END));

@@ -35,7 +35,7 @@ HRESULT CUIPage_ItemInfo::Initialize_Prototype()
 	if (FAILED(__super::Initialize(&Desc)))
 		return E_FAIL;
 
-
+	m_fTopPartMove = -1.f;
 
 	return S_OK;
 }
@@ -59,13 +59,32 @@ void CUIPage_ItemInfo::Update(_float fTimeDelta)
 
 void CUIPage_ItemInfo::Late_Update(_float fTimeDelta)
 {
+	if (m_vecPageAction[_int(PAGEACTION::ACTION_ACTIVE)] == false)
+		return;
+
 	SCROLL_AREA eArea = SCROLL_AREA::SCROLL_NONE;
 	if (m_eNowPage == UIPAGE::PAGE_INVEN)
 		eArea = SCROLL_AREA::SCROLL_INVEN;
 
-	// focus
-	Input_Render_Info(*m_vecPart[_int(PART_GROUP::ITEMINFO_SELECT_Rect)], eArea);
-	Input_Render_Info(*m_vecPart[_int(PART_GROUP::ITEMINFO_SELECT_Fire)], eArea);
+	// focus 
+	if (m_bFocus)
+	{
+		if (m_vecPart[_int(PART_GROUP::ITEMINFO_SELECT_Fire)]->bRender)
+		{
+			m_fFocus_Fire_Move_Ratio += fTimeDelta * 5.f;
+			m_fFocus_Fire_Move_Ratio = min(m_fFocus_Fire_Move_Ratio, 1.f);
+
+			m_vecPart[_int(PART_GROUP::ITEMINFO_SELECT_Fire)]->MakeDirec();
+			m_vecPart[_int(PART_GROUP::ITEMINFO_SELECT_Fire)]->fPosition =
+			{
+				m_vecPart[_int(PART_GROUP::ITEMINFO_SELECT_Fire)]->fAdjust_Start.x + (m_vecPart[_int(PART_GROUP::ITEMINFO_SELECT_Fire)]->fDirec.x * m_fFocus_Fire_Move_Ratio),
+				m_vecPart[_int(PART_GROUP::ITEMINFO_SELECT_Fire)]->fAdjust_Start.y + (m_vecPart[_int(PART_GROUP::ITEMINFO_SELECT_Fire)]->fDirec.y * m_fFocus_Fire_Move_Ratio)
+			};
+		}
+
+		Input_Render_Info(*m_vecPart[_int(PART_GROUP::ITEMINFO_SELECT_Rect)], eArea);
+		Input_Render_Info(*m_vecPart[_int(PART_GROUP::ITEMINFO_SELECT_Fire)], eArea);
+	}
 
 	// New
 	while (!m_queueNewMarkPos.empty())
@@ -79,6 +98,7 @@ void CUIPage_ItemInfo::Late_Update(_float fTimeDelta)
 	}
 
 	// Action
+	if (m_bIsActive_Func)
 	for (_int i = _int(PART_GROUP::ITEMINFO_ACTION_Back); i <= _int(PART_GROUP::ITEMINFO_ACTION_Text_3); ++i)
 	{
 		m_vecPart[i]->MovePart(m_vecPart[m_vecPart[i]->iParentPart_Index]->fPosition, fTimeDelta);
@@ -126,7 +146,7 @@ HRESULT CUIPage_ItemInfo::Ready_UIPart_Group_Control()
 			m_vec_Group_Ctrl[m_vecPart[i]->iGroupIndex]->PartIndexlist.push_back(i);
 	}
 
-	__super::Array_Control(_int(PART_GROUP::ITEMINFO_TOOLTIP_Frame), _int(PART_GROUP::ITEMINFO_ACTION_Text_3), CTRL_COMMAND::COM_RENDER, true);
+	__super::Array_Control(_int(PART_GROUP::ITEMINFO_TOOLTIP_Frame), _int(PART_GROUP::ITEMINFO_ACTION_Text_3), CTRL_COMMAND::COM_RENDER, false);
 
 	m_strFuncName[_int(ITEM_FUNC::FUNC_USING)] = TEXT("사용하기");
 	m_strFuncName[_int(ITEM_FUNC::FUNC_TO_INVEN)] = TEXT("인벤토리로 이동");
@@ -147,25 +167,31 @@ HRESULT CUIPage_ItemInfo::Ready_UIPart_Group_Control()
 
 void CUIPage_ItemInfo::Show_Focus(_Vec2 vItemCellPos, _Vec2 vItemCellSize)
 {
-	m_vecPart[_int(PART_GROUP::ITEMINFO_SELECT_Rect)]->fPosition = vItemCellPos;
-	m_vecPart[_int(PART_GROUP::ITEMINFO_SELECT_Rect)]->fSize = vItemCellSize;
+	m_bFocus = true;
 
-	if (m_vecPart[_int(PART_GROUP::ITEMINFO_SELECT_Rect)]->bRender)
+	m_vecPart[_int(PART_GROUP::ITEMINFO_SELECT_Rect)]->fPosition = vItemCellPos;
+	m_vecPart[_int(PART_GROUP::ITEMINFO_SELECT_Rect)]->fSize = vItemCellSize * 1.1f;
+
+	if (!m_vecPart[_int(PART_GROUP::ITEMINFO_SELECT_Rect)]->bRender)
 	{
+		//m_vecPart[_int(PART_GROUP::ITEMINFO_SELECT_Fire)]->fAdjust_Start = vItemCellPos + _Vec2{ -(vItemCellSize.x * 0.4f), vItemCellSize.y * 0.4f };
 		m_vecPart[_int(PART_GROUP::ITEMINFO_SELECT_Fire)]->fAdjust_End = vItemCellPos + _Vec2{ -(vItemCellSize.x * 0.4f), vItemCellSize.y * 0.4f };
 	}
 	else
 	{
 		m_fFocus_Fire_Move_Ratio = 0.f;
-		m_vecPart[_int(PART_GROUP::ITEMINFO_SELECT_Fire)]->fAdjust_Start = vItemCellPos + _Vec2{ -(vItemCellSize.x * 0.4f), vItemCellSize.y * 0.4f };
+		m_vecPart[_int(PART_GROUP::ITEMINFO_SELECT_Fire)]->fAdjust_Start = m_vecPart[_int(PART_GROUP::ITEMINFO_SELECT_Fire)]->fPosition;
+		m_vecPart[_int(PART_GROUP::ITEMINFO_SELECT_Fire)]->fAdjust_End = vItemCellPos + _Vec2{ -(vItemCellSize.x * 0.4f), vItemCellSize.y * 0.4f };
 	}
 
 	m_vecPart[_int(PART_GROUP::ITEMINFO_SELECT_Rect)]->bRender = true;
 	m_vecPart[_int(PART_GROUP::ITEMINFO_SELECT_Fire)]->bRender = true;
 }
 
-void CUIPage_ItemInfo::Off_Focus(_Vec2 vItemCellPos, _Vec2 vItemCellSize)
+void CUIPage_ItemInfo::Off_Focus()
 {
+	m_bFocus = false;
+
 	m_fFocus_Fire_Move_Ratio = 0.f;
 	m_vecPart[_int(PART_GROUP::ITEMINFO_SELECT_Rect)]->bRender = false;
 	m_vecPart[_int(PART_GROUP::ITEMINFO_SELECT_Fire)]->bRender = false;
@@ -173,12 +199,14 @@ void CUIPage_ItemInfo::Off_Focus(_Vec2 vItemCellPos, _Vec2 vItemCellSize)
 
 void CUIPage_ItemInfo::Show_NewMark(_Vec2 vItemCellPos, _Vec2 vItemCellSize)
 {
-	_Vec2 vPos = vItemCellPos + (vItemCellSize * 0.5f);
+	_Vec2 vPos = vItemCellPos + _Vec2(vItemCellSize.x * 0.5f, -vItemCellSize.y * 0.5f);
 	m_queueNewMarkPos.push(vPos);
 }
 
 void CUIPage_ItemInfo::Show_ItemAction(_Vec2 vItemCellPos, _Vec2 vItemCellSize, ITEM_FUNC eFunc0, ITEM_FUNC eFunc1, ITEM_FUNC eFunc2, ITEM_FUNC eFunc3)
 {
+	m_bIsActive_Func = true;
+
 	m_vecPart[_int(PART_GROUP::ITEMINFO_ACTION_Header)]->fPosition = vItemCellPos + (vItemCellSize * 0.5f) + (m_vecPart[_int(PART_GROUP::ITEMINFO_ACTION_Header)]->fSize * 0.5f);
 
 	m_vecPart[_int(PART_GROUP::ITEMINFO_ACTION_Back)]->bRender = true;
@@ -205,6 +233,8 @@ void CUIPage_ItemInfo::Show_ItemAction(_Vec2 vItemCellPos, _Vec2 vItemCellSize, 
 
 void CUIPage_ItemInfo::Off_ItemAction()
 {
+	m_bIsActive_Func = false;
+
 	__super::Array_Control(_int(PART_GROUP::ITEMINFO_ACTION_Header), _int(PART_GROUP::ITEMINFO_ACTION_Text_3), CTRL_COMMAND::COM_RENDER, false);
 	for (_int i = 0; i < 4; ++i)
 		m_eActive_Func[i] = ITEM_FUNC::FUNC_END;

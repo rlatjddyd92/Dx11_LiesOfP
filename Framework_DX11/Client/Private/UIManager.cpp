@@ -88,6 +88,8 @@ HRESULT CUIManager::Initialize(void* pArg)
 
 void CUIManager::Priority_Update(_float fTimeDelta)
 {
+	
+
 	for (auto& iter : m_vecPage)
 		if (iter->GetUpdate())
 			iter->Priority_Update(fTimeDelta);
@@ -359,9 +361,11 @@ void CUIManager::UIControl_Inven(_float fTimeDelta)
 		SwicthPage(UIPAGE::PAGE_INVEN, UIPAGE::PAGE_MENU);
 	else
 	{
+		m_eNow_Active_Func = ITEM_FUNC::FUNC_END;
 		m_pUIPage_Inven->Check_Page_Action(fTimeDelta);
 		m_pUIPage_ItemInfo->Set_Active_ItemInfo(true, UIPAGE::PAGE_INVEN);
 		m_pUIPage_ItemInfo->Check_Page_Action(fTimeDelta);
+		m_eNow_Active_Func = m_pUIPage_ItemInfo->Get_Active_Func();
 	}
 }
 
@@ -371,9 +375,11 @@ void CUIManager::UIControl_Equip(_float fTimeDelta)
 		SwicthPage(UIPAGE::PAGE_EQUIP, UIPAGE::PAGE_MENU);
 	else
 	{
+		m_eNow_Active_Func = ITEM_FUNC::FUNC_END;
 		m_pUIPage_Equip->Check_Page_Action(fTimeDelta);
 		m_pUIPage_ItemInfo->Set_Active_ItemInfo(true, UIPAGE::PAGE_EQUIP);
 		m_pUIPage_ItemInfo->Check_Page_Action(fTimeDelta);
+		m_eNow_Active_Func = m_pUIPage_ItemInfo->Get_Active_Func();
 	}
 }
 

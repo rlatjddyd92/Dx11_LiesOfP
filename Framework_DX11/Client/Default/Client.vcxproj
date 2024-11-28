@@ -530,6 +530,9 @@
     <FxCompile Include="..\Bin\ShaderFiles\Shader_TrailHead_PointInstance.hlsl" />
     <FxCompile Include="..\Bin\ShaderFiles\Shader_TrailTail_PointInstance.hlsl" />
     <FxCompile Include="..\Bin\ShaderFiles\Shader_Trail_MultiPoint_Compute.hlsl" />
+    <FxCompile Include="..\Bin\ShaderFiles\Shader_UI_Change_Color.hlsl" />
+    <FxCompile Include="..\Bin\ShaderFiles\Shader_UI_Multiple_Color.hlsl" />
+    <FxCompile Include="..\Bin\ShaderFiles\Shader_UI_Normal.hlsl" />
     <FxCompile Include="..\Bin\ShaderFiles\Shader_VtxAnimModel.hlsl" />
     <FxCompile Include="..\Bin\ShaderFiles\Shader_VtxCubeTex.hlsl" />
     <FxCompile Include="..\Bin\ShaderFiles\Shader_VtxModel.hlsl" />

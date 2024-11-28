@@ -59,8 +59,6 @@ void CUIPage_Inven::Update(_float fTimeDelta)
 
 void CUIPage_Inven::Late_Update(_float fTimeDelta)
 {
-	
-	
 	for (auto& iter : m_vec_Group_Ctrl)
 		__super::UpdatePart_ByControl(iter);
 
@@ -85,7 +83,14 @@ void CUIPage_Inven::Late_Update(_float fTimeDelta)
 		m_bScroll_Setting = true;
 	}
 
+	if (m_vFocus_Pos.x != -1)
+	{
+		GET_GAMEINTERFACE->Show_Focus(m_vFocus_Pos, m_vFocus_Size);
+	}
+	
+
 	GET_GAMEINTERFACE->Select_Scroll_Area(SCROLL_AREA::SCROLL_NONE);
+
 	
 	m_IsTab_Change = false;
 }
@@ -99,12 +104,14 @@ void CUIPage_Inven::OpenAction()
 {
 	__super::OpenAction();
 	m_IsTab_Change = true;
+	GET_GAMEINTERFACE->Off_ItemInfo_UI();
 }
 
 void CUIPage_Inven::CloseAction()
 {
 	__super::CloseAction();
-
+	GET_GAMEINTERFACE->Set_Show_NewMark_Off();
+	GET_GAMEINTERFACE->Off_ItemInfo_UI();
 }
 
 CHECK_MOUSE CUIPage_Inven::Check_Page_Action(_float fTimeDelta)
@@ -212,10 +219,22 @@ void CUIPage_Inven::Action_Inven_Page(_float fTimeDelta)
 		__super::Array_Control(_int(PART_GROUP::GROUP_CELL_0), _int(PART_GROUP::GROUP_CELL_4), CTRL_COMMAND::COM_RATIO, 1.f);
 	else
 		__super::Array_Control(_int(PART_GROUP::GROUP_CELL_0), _int(PART_GROUP::GROUP_CELL_4), CTRL_COMMAND::COM_RATIO, 0.5f);
+
+	if (m_IsTab_Change)
+	{
+		m_vFocus_Pos = { -1.f,-1.f };
+		GET_GAMEINTERFACE->Off_Focus();
+	}
+		
 }
 
 void CUIPage_Inven::Action_Focus(_float fTimeDelta)
 {
+
+
+
+
+
 }
 
 void CUIPage_Inven::Update_Top_Part(_float fTimeDelta)
@@ -303,9 +322,14 @@ void CUIPage_Inven::Update_Array_Position(_float fTimeDelta)
 			_int iText = __super::Get_Front_PartIndex_In_Control(_int(PART_GROUP::GROUP_ARRAY_TEXT));
 
 			m_vecPart[iText]->strText = strArrayTitle;
-			m_vecPart[iText]->fPosition.y += fAdjust_Y + (fAdjust_Cell * iTitle);
-			m_vecPart[iText]->bRender = true;
-			__super::Input_Render_Info(*m_vecPart[iText], SCROLL_AREA::SCROLL_INVEN);
+
+			for (auto& iter : m_vec_Group_Ctrl[_int(PART_GROUP::GROUP_ARRAY_TEXT)]->PartIndexlist)
+			{
+				m_vecPart[iter]->fPosition.y += fAdjust_Y + (fAdjust_Cell * iTitle);
+				m_vecPart[iter]->bRender = true;
+				__super::Input_Render_Info(*m_vecPart[iter], SCROLL_AREA::SCROLL_INVEN);
+			}
+			
 		}
 
 		iTitle = 0;
@@ -320,8 +344,12 @@ void CUIPage_Inven::Update_Array_Position(_float fTimeDelta)
 			_Vec2 vCheck = GET_GAMEINTERFACE->CheckMouse(m_vecPart[*iter]->fPosition, m_vecPart[*iter]->fSize);
 			m_vecPart[*iter]->fPosition.y -= fAdjust_Y;
 
-			
-				++iter; if (vCheck.x != -1) m_vecPart[*iter]->bRender = true;
+			_bool bIsFocus = false;
+			++iter; 
+			if (vCheck.x != -1)
+			{
+				m_vecPart[*iter]->bRender = true;  bIsFocus = true;
+			}
 				++iter;
 				if (pNow == nullptr) m_vecPart[*iter]->iTexture_Index = -1;
 				else m_vecPart[*iter]->iTexture_Index = pNow->iTexture_Index;
@@ -361,6 +389,22 @@ void CUIPage_Inven::Update_Array_Position(_float fTimeDelta)
 			
 
 			iter = m_vec_Group_Ctrl[_int(PART_GROUP::GROUP_CELL_0) + (j % 5)]->PartIndexlist.begin();
+
+			if (bIsFocus)
+			{
+				m_vFocus_Pos = m_vecPart[*iter]->fPosition + _Vec2(0.f, fAdjust_Y);
+				m_vFocus_Size = m_vecPart[*iter]->GetBarSize();
+			}
+			else if ((m_IsTab_Change) && (i + j == _int(eStart)))
+			{
+				m_vFocus_Pos = m_vecPart[*iter]->fPosition + _Vec2(0.f, fAdjust_Y);
+				m_vFocus_Size = m_vecPart[*iter]->GetBarSize();
+			}
+			if ((pNow != nullptr)&&(pNow->bIsNew))
+			{
+				GET_GAMEINTERFACE->Show_NewMark(m_vecPart[*iter]->fPosition + _Vec2(0.f,fAdjust_Y), m_vecPart[*iter]->GetBarSize());
+				GET_GAMEINTERFACE->Set_IsNew_Show(INVEN_ARRAY_TYPE(i), j);
+			}
 
 			for (iter; iter != m_vec_Group_Ctrl[_int(PART_GROUP::GROUP_CELL_0) + (j % 5)]->PartIndexlist.end(); ++iter)
 			{
@@ -429,9 +473,13 @@ void CUIPage_Inven::Update_Array_Position_Weapon(_float fTimeDelta)
 	_int iText = __super::Get_Front_PartIndex_In_Control(_int(PART_GROUP::GROUP_ARRAY_TEXT));
 
 	m_vecPart[iText]->strText = strArrayTitle;
-	m_vecPart[iText]->fPosition.y += fAdjust_Y;
-	m_vecPart[iText]->bRender = true;
-	__super::Input_Render_Info(*m_vecPart[iText], SCROLL_AREA::SCROLL_INVEN);
+
+	for (auto& iter : m_vec_Group_Ctrl[_int(PART_GROUP::GROUP_ARRAY_TEXT)]->PartIndexlist)
+	{
+		m_vecPart[iter]->fPosition.y += fAdjust_Y;
+		m_vecPart[iter]->bRender = true;
+		__super::Input_Render_Info(*m_vecPart[iter], SCROLL_AREA::SCROLL_INVEN);
+	}
 
 	_int iTitle = 0;
 
@@ -447,8 +495,13 @@ void CUIPage_Inven::Update_Array_Position_Weapon(_float fTimeDelta)
 		_Vec2 vCheck = GET_GAMEINTERFACE->CheckMouse(m_vecPart[*iter]->fPosition, m_vecPart[*iter]->fSize);
 		m_vecPart[*iter]->fPosition.y -= fAdjust_Y;
 		
-		
-			++iter; if (vCheck.x != -1) m_vecPart[*iter]->bRender = true;
+		_bool bIsFocus = false;
+
+			++iter; 
+			if (vCheck.x != -1)
+			{
+				m_vecPart[*iter]->bRender = true;  bIsFocus = true;
+			}
 			++iter;
 			if (pNowBlade == nullptr) m_vecPart[*iter]->iTexture_Index = -1;
 			else m_vecPart[*iter]->iTexture_Index = pNowBlade->iTexture_Index;
@@ -480,6 +533,22 @@ void CUIPage_Inven::Update_Array_Position_Weapon(_float fTimeDelta)
 		
 
 		iter = m_vec_Group_Ctrl[_int(PART_GROUP::GROUP_CELL_0) + (j % 5)]->PartIndexlist.begin();
+
+		if (bIsFocus)
+		{
+			m_vFocus_Pos = m_vecPart[*iter]->fPosition + _Vec2(0.f, fAdjust_Y);
+			m_vFocus_Size = m_vecPart[*iter]->GetBarSize();
+		}
+		else if ((m_IsTab_Change) && (j == 0))
+		{
+			m_vFocus_Pos = m_vecPart[*iter]->fPosition + _Vec2(0.f, fAdjust_Y);
+			m_vFocus_Size = m_vecPart[*iter]->GetBarSize();
+		}
+		if ((pNowBlade != nullptr) && (pNowBlade->bIsNew))
+		{
+			GET_GAMEINTERFACE->Show_NewMark(m_vecPart[*iter]->fPosition + _Vec2(0.f, fAdjust_Y), m_vecPart[*iter]->GetBarSize());
+			GET_GAMEINTERFACE->Set_IsNew_Show(INVEN_ARRAY_TYPE::TYPE_WEAPON_NORMAL_BLADE, j);
+		}
 
 		for (iter; iter != m_vec_Group_Ctrl[_int(PART_GROUP::GROUP_CELL_0) + (j % 5)]->PartIndexlist.end(); ++iter)
 		{
@@ -536,11 +605,13 @@ void CUIPage_Inven::Update_Array_Position_Weapon_Heroic(_float fTimeDelta, _floa
 	_int iText = __super::Get_Front_PartIndex_In_Control(_int(PART_GROUP::GROUP_ARRAY_TEXT));
 
 	m_vecPart[iText]->strText = strArrayTitle;
-	m_vecPart[iText]->fPosition.y += fAdjust_Y + (fAdjust_Cell * iRowCount);
-	m_vecPart[iText]->bRender = true;
-	__super::Input_Render_Info(*m_vecPart[iText], SCROLL_AREA::SCROLL_INVEN);
 
-	
+	for (auto& iter : m_vec_Group_Ctrl[_int(PART_GROUP::GROUP_ARRAY_TEXT)]->PartIndexlist)
+	{
+		m_vecPart[iter]->fPosition.y += fAdjust_Y + (fAdjust_Cell * iRowCount);
+		m_vecPart[iter]->bRender = true;
+		__super::Input_Render_Info(*m_vecPart[iter], SCROLL_AREA::SCROLL_INVEN);
+	}
 	
 
 	// 특수 무기 
@@ -555,8 +626,13 @@ void CUIPage_Inven::Update_Array_Position_Weapon_Heroic(_float fTimeDelta, _floa
 		_Vec2 vCheck = GET_GAMEINTERFACE->CheckMouse(m_vecPart[*iter]->fPosition, m_vecPart[*iter]->fSize);
 		m_vecPart[*iter]->fPosition.y -= fAdjust_Y;
 
+		_bool bIsFocus = false;
 		
-			++iter; if (vCheck.x != -1) m_vecPart[*iter]->bRender = true;
+		++iter;
+		if (vCheck.x != -1)
+		{
+			m_vecPart[*iter]->bRender = true;  bIsFocus = true;
+		}
 			++iter;
 			++iter;
 			++iter;
@@ -586,6 +662,22 @@ void CUIPage_Inven::Update_Array_Position_Weapon_Heroic(_float fTimeDelta, _floa
 
 		iter = m_vec_Group_Ctrl[_int(PART_GROUP::GROUP_CELL_0) + (j % 5)]->PartIndexlist.begin();
 
+		if (bIsFocus)
+		{
+			m_vFocus_Pos = m_vecPart[*iter]->fPosition + _Vec2(0.f, fAdjust_Y);
+			m_vFocus_Size = m_vecPart[*iter]->GetBarSize();
+		}
+		else if ((m_IsTab_Change) && (j == 0))
+		{
+			m_vFocus_Pos = m_vecPart[*iter]->fPosition + _Vec2(0.f, fAdjust_Y);
+			m_vFocus_Size = m_vecPart[*iter]->GetBarSize();
+		}
+		if ((pNowBlade != nullptr) && (pNowBlade->bIsNew))
+		{
+			GET_GAMEINTERFACE->Show_NewMark(m_vecPart[*iter]->fPosition + _Vec2(0.f, fAdjust_Y), m_vecPart[*iter]->GetBarSize());
+			GET_GAMEINTERFACE->Set_IsNew_Show(INVEN_ARRAY_TYPE::TYPE_WEAPON_SPECIAL_BLADE, j);
+		}
+			
 		for (iter; iter != m_vec_Group_Ctrl[_int(PART_GROUP::GROUP_CELL_0) + (j % 5)]->PartIndexlist.end(); ++iter)
 		{
 			m_vecPart[*iter]->fPosition.y += fAdjust_Y;
