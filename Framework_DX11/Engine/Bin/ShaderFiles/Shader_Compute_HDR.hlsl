@@ -23,9 +23,9 @@ float DownScale4x4(uint2 vPixel, uint groupThreadId)
         for (int j = 0; j < 4; ++j)
             vDownScaled += g_InputTexture.Load(iFullResPos, int2(j, i));
     }
-    vDownScaled /= 16;
+    //vDownScaled /= 16;
 
-    avgLum = dot(vDownScaled, LUM_FACTOR);
+    avgLum = dot(vDownScaled, LUM_FACTOR) / 16.f;
     SharedPositions[groupThreadId] = avgLum;
 
     GroupMemoryBarrierWithGroupSync();
@@ -57,6 +57,7 @@ float DownScale1024to4(uint groupThreadId, uint dispachThreadId, float avgLum)
         }
         GroupMemoryBarrierWithGroupSync();
     }
+
     return avgLum;
 }
 

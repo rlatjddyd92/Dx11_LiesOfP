@@ -26,6 +26,7 @@
 #include "State_Player_OH_Run.h"
 #include "State_Player_OH_Sprint.h"
 #include "State_Player_OH_Guard.h"
+#include "State_Player_OH_GuardHit.h"
 #include "State_Player_OH_Dash.h"
 
 #include "State_Player_TH_Idle.h"
@@ -103,11 +104,6 @@ HRESULT CPlayer::Initialize(void * pArg)
 	//m_pNavigationCom->Move_to_Cell(m_pRigidBodyCom, 427);
 	m_pNavigationCom->Move_to_Cell(m_pRigidBodyCom, 341); //307
 
-	//// 임시 루트본 설정
-	//m_pModelCom->Set_UFBIndices(UFB_ROOT, 2);
-	//m_pModelCom->Set_UFBIndices(UFB_BOUNDARY_UPPER, 6);
-	//m_pModelCom->Update_Boundary();
-
 	m_strObjectTag = TEXT("Player");
 
 	// 24-11-27 김성용
@@ -168,6 +164,7 @@ void CPlayer::Update(_float fTimeDelta)
 
 	if (KEY_TAP(KEY::L))
 	{
+		Change_State(OH_GUARDHIT);
 		//Calc_DamageGain(5.f, m_pTransformCom->Get_WorldMatrix().Forward() + m_pTransformCom->Get_WorldMatrix().Translation());
 	}
 }
@@ -566,10 +563,11 @@ HRESULT CPlayer::Ready_FSM()
 	m_pFsmCom->Add_State(CState_Player_Lift::Create(m_pFsmCom, this, LIFT, &Desc));
 
 	m_pFsmCom->Add_State(CState_Player_OH_Idle::Create(m_pFsmCom, this, OH_IDLE, &Desc));
-	m_pFsmCom->Add_State(CState_Player_OH_Walk::Create(m_pFsmCom, this, OH_WALK, &Desc));
+	m_pFsmCom->Add_State(CState_Player_OH_Walk::Create(m_pFsmCom, this, OH_WALK, &Desc)); 
 	m_pFsmCom->Add_State(CState_Player_OH_Run::Create(m_pFsmCom, this, OH_RUN, &Desc));
 	m_pFsmCom->Add_State(CState_Player_OH_Sprint::Create(m_pFsmCom, this, OH_SPRINT, &Desc));
 	m_pFsmCom->Add_State(CState_Player_OH_Guard::Create(m_pFsmCom, this, OH_GUARD, &Desc));
+	m_pFsmCom->Add_State(CState_Player_OH_GuardHit::Create(m_pFsmCom, this, OH_GUARDHIT, &Desc));
 	m_pFsmCom->Add_State(CState_Player_OH_Dash::Create(m_pFsmCom, this, OH_DASH, &Desc));
 
 	m_pFsmCom->Add_State(CState_Player_TH_Idle::Create(m_pFsmCom, this, TH_IDLE, &Desc));

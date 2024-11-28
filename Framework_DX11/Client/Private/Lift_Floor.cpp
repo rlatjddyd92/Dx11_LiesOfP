@@ -65,31 +65,9 @@ void CLift_Floor::Update(_float fTimeDelta)
 	if (m_bMove)
 	{
 		m_isMoving = true;
-		_Vec3 vVel = _Vec3(0.f, 10.f, 0.f);
+		_Vec3 vVel = _Vec3(0.f, 3.f, 0.f);
 
-		if (m_fMoveDir > 0.f)
-		{
-			if (m_pTransformCom->Get_State(CTransform::STATE_POSITION).y >= m_vTargetPos.y)
-			{
-				m_pRigidBodyCom->Set_GloblePose((_Vec3)m_vTargetPos);
-			}
-			else
-			{
-				m_pRigidBodyCom->Set_Velocity(vVel * m_fMoveDir);
-			}
-		}
-		else if (m_fMoveDir < 0.f)
-		{
-			if (m_pTransformCom->Get_State(CTransform::STATE_POSITION).y <= m_vTargetPos.y)
-			{
-				m_pRigidBodyCom->Set_GloblePose((_Vec3)m_vTargetPos);
-			}
-			else
-			{
-				m_pRigidBodyCom->Set_Velocity(vVel * m_fMoveDir);
-			}
-		}
-
+		m_pRigidBodyCom->Set_Velocity(vVel * m_fMoveDir);
 	}
 
 	if (m_bMove && Calculate_Arrive_TargetPos())
@@ -265,7 +243,7 @@ HRESULT CLift_Floor::Ready_Components(OBJECT_DEFAULT_DESC* pDesc)
 		PxRigidDynamicLockFlag::eLOCK_LINEAR_Z;
 
 	physX::GeometryBox BoxDesc;
-	BoxDesc.vSize = _Vec3(1.f, 0.1f, 1.f);
+	BoxDesc.vSize = _Vec3(1.f, 0.05f, 1.f);
 	RigidBodyDesc.pGeometry = &BoxDesc;
 
 	/* FOR.Com_RigidBody */
@@ -282,10 +260,11 @@ _bool CLift_Floor::Calculate_Arrive_TargetPos()
 
 	if (fabs(vCurPos.y - m_vTargetPos.y) < 0.1f)
 	{
-		m_pRigidBodyCom->Set_GloblePose((_Vec3)m_vTargetPos);
-
 		_Vec3 vZero = _Vec3(0.f, 0.f, 0.f);
 		m_pRigidBodyCom->Set_Velocity(vZero);
+
+		m_pRigidBodyCom->Set_GloblePose((_Vec3)m_vTargetPos);
+
 		return true;
 	}
 	else
@@ -354,6 +333,8 @@ CGameObject* CLift_Floor::Clone(void* pArg)
 void CLift_Floor::Free()
 {
 	__super::Free();
+
+	Safe_Release(m_pRigidBodyCom);
 	Safe_Release(m_pColliderCom);
 	Safe_Release(m_pShaderCom);
 	Safe_Release(m_pModelCom);

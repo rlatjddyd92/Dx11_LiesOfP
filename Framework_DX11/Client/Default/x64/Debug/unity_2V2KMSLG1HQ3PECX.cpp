@@ -9,10 +9,76 @@
 #include "D:\GitHubProjects\Dx11_LiesOfP\Framework_DX11\Client\Private\CarcassBigA.cpp"
 
 
+#include "D:\GitHubProjects\Dx11_LiesOfP\Framework_DX11\Client\Private\CarcassTail.cpp"
+
+
 #include "D:\GitHubProjects\Dx11_LiesOfP\Framework_DX11\Client\Private\LastDoor.cpp"
 
 
+#include "D:\GitHubProjects\Dx11_LiesOfP\Framework_DX11\Client\Private\State_CarcassBigA_Paralyze.cpp"
+
+
+#include "D:\GitHubProjects\Dx11_LiesOfP\Framework_DX11\Client\Private\State_CarcassTail_Die.cpp"
+
+
+#include "D:\GitHubProjects\Dx11_LiesOfP\Framework_DX11\Client\Private\State_CarcassTail_Grogy.cpp"
+
+
+#include "D:\GitHubProjects\Dx11_LiesOfP\Framework_DX11\Client\Private\State_CarcassTail_Heading.cpp"
+
+
+#include "D:\GitHubProjects\Dx11_LiesOfP\Framework_DX11\Client\Private\State_CarcassTail_HeadingMultiple.cpp"
+
+
+#include "D:\GitHubProjects\Dx11_LiesOfP\Framework_DX11\Client\Private\State_CarcassTail_HitFatal.cpp"
+
+
+#include "D:\GitHubProjects\Dx11_LiesOfP\Framework_DX11\Client\Private\State_CarcassTail_Idle.cpp"
+
+
+#include "D:\GitHubProjects\Dx11_LiesOfP\Framework_DX11\Client\Private\State_CarcassTail_Leap.cpp"
+
+
+#include "D:\GitHubProjects\Dx11_LiesOfP\Framework_DX11\Client\Private\State_CarcassTail_LeapAttack.cpp"
+
+
+#include "D:\GitHubProjects\Dx11_LiesOfP\Framework_DX11\Client\Private\State_CarcassTail_LeapToAttack.cpp"
+
+
+#include "D:\GitHubProjects\Dx11_LiesOfP\Framework_DX11\Client\Private\State_CarcassTail_MultyHittingDown.cpp"
+
+
+#include "D:\GitHubProjects\Dx11_LiesOfP\Framework_DX11\Client\Private\State_CarcassTail_Run.cpp"
+
+
+#include "D:\GitHubProjects\Dx11_LiesOfP\Framework_DX11\Client\Private\State_CarcassTail_Scratching.cpp"
+
+
+#include "D:\GitHubProjects\Dx11_LiesOfP\Framework_DX11\Client\Private\State_CarcassTail_ScratchingMultiple.cpp"
+
+
+#include "D:\GitHubProjects\Dx11_LiesOfP\Framework_DX11\Client\Private\State_CarcassTail_ScratchingToSwip.cpp"
+
+
+#include "D:\GitHubProjects\Dx11_LiesOfP\Framework_DX11\Client\Private\State_CarcassTail_TailSwingDown.cpp"
+
+
+#include "D:\GitHubProjects\Dx11_LiesOfP\Framework_DX11\Client\Private\State_CarcassTail_TailSwip.cpp"
+
+
+#include "D:\GitHubProjects\Dx11_LiesOfP\Framework_DX11\Client\Private\State_CarcassTail_TailSwipMultiple.cpp"
+
+
+#include "D:\GitHubProjects\Dx11_LiesOfP\Framework_DX11\Client\Private\State_CarcassTail_Walk.cpp"
+
+
+#include "D:\GitHubProjects\Dx11_LiesOfP\Framework_DX11\Client\Private\State_Player_OH_GuardHit.cpp"
+
+
 #include "D:\GitHubProjects\Dx11_LiesOfP\Framework_DX11\Client\Private\State_Player_Ladder.cpp"
+
+
+#include "D:\GitHubProjects\Dx11_LiesOfP\Framework_DX11\Client\Private\State_Player_Lift.cpp"
 
 
 #include "D:\GitHubProjects\Dx11_LiesOfP\Framework_DX11\Client\Private\State_SimonManusP1_Charge_SwingDown.cpp"
@@ -133,9 +199,6 @@
 
 
 #include "D:\GitHubProjects\Dx11_LiesOfP\Framework_DX11\Client\Private\State_CarcassBigA_LTSwingRight.cpp"
-
-
-#include "D:\GitHubProjects\Dx11_LiesOfP\Framework_DX11\Client\Private\State_CarcassBigA_Paralyze.cpp"
 
 
 #include "D:\GitHubProjects\Dx11_LiesOfP\Framework_DX11\Client\Private\State_CarcassBigA_RageAttack.cpp"

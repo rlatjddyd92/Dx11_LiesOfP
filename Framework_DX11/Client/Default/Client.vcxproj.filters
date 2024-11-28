@@ -706,6 +706,9 @@
     <Filter Include="05.Fsm\Player\Common\Lift">
       <UniqueIdentifier>{cdbc26ed-3d4d-42ff-a1bb-7938a82a3abe}</UniqueIdentifier>
     </Filter>
+    <Filter Include="05.Fsm\Player\OneHand\GuardHit">
+      <UniqueIdentifier>{b20b41ad-0ddc-43a2-a360-b833295b592a}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Client.h">
@@ -1292,6 +1295,9 @@
     <ClInclude Include="..\Public\State_Player_Lift.h">
       <Filter>05.Fsm\Player\Common\Lift</Filter>
     </ClInclude>
+    <ClInclude Include="..\Public\State_Player_OH_GuardHit.h">
+      <Filter>05.Fsm\Player\OneHand\GuardHit</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Client.cpp">
@@ -1847,6 +1853,9 @@
     </ClCompile>
     <ClCompile Include="..\Private\State_Player_Lift.cpp">
       <Filter>05.Fsm\Player\Common\Lift</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Private\State_Player_OH_GuardHit.cpp">
+      <Filter>05.Fsm\Player\OneHand\GuardHit</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
