@@ -11,7 +11,7 @@ class CState_CarcassTail_Heading : public CState
 {
 private:
     typedef enum {
-        AN_LEAP = 5
+        AN_HEADING = 5
     }ANIMNUM;
 public:
     CState_CarcassTail_Heading(class CFsm* pFsm, class CMonster* pMonster);

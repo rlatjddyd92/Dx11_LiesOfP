@@ -1,5 +1,5 @@
 #include "stdafx.h"
-#include "State_CarcassTail_Scratchig.h"
+#include "State_CarcassTail_Scratching.h"
 #include "GameInstance.h"
 #include "Model.h"
 #include "Monster.h"

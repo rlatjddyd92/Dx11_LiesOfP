@@ -22,7 +22,7 @@ HRESULT CState_CarcassTail_Heading::Initialize(_uint iStateNum, void* pArg)
 
 HRESULT CState_CarcassTail_Heading::Start_State(void* pArg)
 {
-    m_pMonster->Change_Animation(AN_LEAP, false, 0.1f, 0, true);
+    m_pMonster->Change_Animation(AN_HEADING, false, 0.1f, 0, true);
 
     return S_OK;
 }
@@ -44,7 +44,7 @@ void CState_CarcassTail_Heading::End_State()
 
 _bool CState_CarcassTail_Heading::End_Check()
 {
-    return m_pMonster->Get_EndAnim(AN_LEAP);
+    return m_pMonster->Get_EndAnim(AN_HEADING);
 }
 
 void CState_CarcassTail_Heading::Collider_Check()
