@@ -27,12 +27,22 @@ public:
 	virtual void Late_Update(_float fTimeDelta) override;
 	virtual HRESULT Render() override;
 
+public:
+	void Set_Open(_bool bOpen) { m_bOpen = bOpen; }
 private:
 	CCollider* m_pColliderCom = { nullptr};
 	CShader* m_pShaderCom = { nullptr };
 	CModel* m_pModelCom = { nullptr };
+
 private:
 	_bool m_bShadow = false;
+	_bool m_bOpen = false;
+
+	_int m_iAnim_Close = { 0 };
+	_int m_iAnim_Close_Idle = { 0 };
+	_int m_iAnim_Open = { 0 };
+	_int m_iAnim_Open_Idle = { 0 };
+
 private:
 	HRESULT Ready_Components();
 

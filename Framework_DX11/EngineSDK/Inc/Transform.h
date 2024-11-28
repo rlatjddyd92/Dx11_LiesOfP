@@ -56,6 +56,7 @@ public:
 	void		Go_Backward(_float fTimeDelta, _float fSpeed = 0.f, class CNavigation* pNavigation = nullptr);
 	void		Go_Right(_float fTimeDelta, _float fSpeed = 0.f, class CNavigation* pNavigation = nullptr);
 	void		Go_Left(_float fTimeDelta, _float fSpeed = 0.f, class CNavigation* pNavigation = nullptr);
+	void		Go_Lerp(_Vec4 _CurrentPos, _Vec4 _TargetPos, _float _fSpeed, class CNavigation* pNavigation = nullptr);
 
 	void		Turn(_Vec4 vAxis, _float fTimeDelta, _float fSpeed = 0.f);
 	void		Turn(_bool isRotationX, _bool isRotationY, _bool isRotationZ, _float fTimeDelta, _float fSpeed = 0.f);

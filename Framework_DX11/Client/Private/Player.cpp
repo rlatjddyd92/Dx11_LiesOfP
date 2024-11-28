@@ -99,6 +99,7 @@ HRESULT CPlayer::Initialize(void * pArg)
 		return E_FAIL;
 
 	//m_pNavigationCom->Move_to_Cell(m_pRigidBodyCom, 427);
+	m_pNavigationCom->Move_to_Cell(m_pRigidBodyCom, 307);
 
 	//// 임시 루트본 설정
 	//m_pModelCom->Set_UFBIndices(UFB_ROOT, 2);

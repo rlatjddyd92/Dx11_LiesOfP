@@ -275,7 +275,7 @@ HRESULT CLevel_GamePlay::Read_Map_Data()
 				{
 					if (wcscmp(pDesc.szModelTag, TEXT("SM_Monastery_Lift_01_Bottom")) == 0)
 					{
-						if (FAILED(m_pGameInstance->Add_CloneObject_ToLayer(LEVEL_GAMEPLAY, TEXT("Layer_InteractObj"), TEXT("Prototype_GameObject_Lift_Floor"), &pDesc)))
+						if (FAILED(m_pGameInstance->Add_CloneObject_ToLayer(LEVEL_GAMEPLAY, TEXT("Layer_Lift_Floor"), TEXT("Prototype_GameObject_Lift_Floor"), &pDesc)))
 							return E_FAIL;
 						continue;
 					}
@@ -316,7 +316,7 @@ HRESULT CLevel_GamePlay::Read_Map_Data()
 					 }
 					 else if (wcscmp(pDesc.szModelTag, TEXT("SK_NewTown_Lift_01_Door")) == 0)
 					 {
-						 if (FAILED(m_pGameInstance->Add_CloneObject_ToLayer(LEVEL_GAMEPLAY, TEXT("Layer_InteractObj"), TEXT("Prototype_GameObject_Lift_Door"), &pDesc)))
+						 if (FAILED(m_pGameInstance->Add_CloneObject_ToLayer(LEVEL_GAMEPLAY, TEXT("Layer_LiftDoor"), TEXT("Prototype_GameObject_Lift_Door"), &pDesc)))
 							 return E_FAIL;
 					 }
 					 else if (wcscmp(pDesc.szModelTag, TEXT("SK_FO_Monastery_TowerDoor_01")) == 0)

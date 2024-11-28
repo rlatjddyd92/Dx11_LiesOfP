@@ -160,6 +160,7 @@ HRESULT CStargazer::Ready_Components()
 	if (FAILED(__super::Add_Component(LEVEL_STATIC, TEXT("Prototype_Component_Collider_Sphere"),
 		TEXT("Com_Collider"), reinterpret_cast<CComponent**>(&m_pColliderCom), &ColliderDesc)))
 		return E_FAIL;
+	m_pColliderCom->Set_Owner(this);
 
 	return S_OK;
 }
