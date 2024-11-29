@@ -108,11 +108,11 @@ HRESULT CNavigation::Initialize_Prototype(const _wstring& strNavigationDataFile)
 
 	for (_int i = 0; i < iCellCout; ++i)
 	{
-		_uint iCellType = { };
-		fin.read(reinterpret_cast<char*>(&iCellType), sizeof(iCellType));
-
 		_uint iRoomNum = { };
 		fin.read(reinterpret_cast<char*>(&iRoomNum), sizeof(iRoomNum));
+
+		_uint iCellType = { };
+		fin.read(reinterpret_cast<char*>(&iCellType), sizeof(iCellType));
 
 		for (int j = 0; j < 3; ++j)
 		{
@@ -124,7 +124,7 @@ HRESULT CNavigation::Initialize_Prototype(const _wstring& strNavigationDataFile)
 		CCell::CELL_DESC pDesc = {};
 		pDesc.iIndex = (_int)m_Cells.size();
 		pDesc.iAreaNum = iRoomNum;
-		pDesc.iCellTypeNum = iCellType;
+ 		pDesc.iCellTypeNum = iCellType;
 
 		CCell* pCell = CCell::Create(m_pDevice, m_pContext, vPos, &pDesc);
 		if (nullptr == pCell)

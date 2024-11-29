@@ -34,6 +34,8 @@ HRESULT CTowerDoor::Initialize(void* pArg)
 
 	m_pModelCom->SetUp_Animation(0, true);
 
+	m_strObjectTag = TEXT("TowerDoor");
+
 	return S_OK;
 }
 

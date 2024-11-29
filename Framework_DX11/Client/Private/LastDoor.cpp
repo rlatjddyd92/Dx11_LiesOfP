@@ -36,6 +36,8 @@ HRESULT CLastDoor::Initialize(void* pArg)
 
 	m_pModelCom->SetUp_Animation(1, true);
 
+	m_strObjectTag = TEXT("LastDoor");
+
 	return S_OK;
 }
 void CLastDoor::Priority_Update(_float fTimeDelta)
