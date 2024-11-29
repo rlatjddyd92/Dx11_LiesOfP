@@ -29,6 +29,7 @@ private:
 public:
     PxPhysics*      Get_PhysX() const { return m_PhysX; }
     PxScene*        Get_PhysXScene() const { return m_PxScene; }
+    PxFoundation*   Get_PhysXFoundation() const { return m_PxFoundation; }
 
 public:
     HRESULT Initialize();

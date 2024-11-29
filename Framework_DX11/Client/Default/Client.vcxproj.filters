@@ -709,6 +709,15 @@
     <Filter Include="05.Fsm\Player\OneHand\GuardHit">
       <UniqueIdentifier>{b20b41ad-0ddc-43a2-a360-b833295b592a}</UniqueIdentifier>
     </Filter>
+    <Filter Include="05.Fsm\Player\TwoHand\GuardHit">
+      <UniqueIdentifier>{e86527f3-22d4-4603-8ccb-dd54068f1212}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="05.Fsm\Player\Common\Chest">
+      <UniqueIdentifier>{ae7bc7a2-3c6b-4dac-88a8-80e89620b1a7}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="05.Fsm\Player\Common\ItemGet">
+      <UniqueIdentifier>{bab6dc0c-4bf4-4770-aa28-7517dc2be5af}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Client.h">
@@ -1298,6 +1307,15 @@
     <ClInclude Include="..\Public\State_Player_OH_GuardHit.h">
       <Filter>05.Fsm\Player\OneHand\GuardHit</Filter>
     </ClInclude>
+    <ClInclude Include="..\Public\State_Player_TH_GuardHit.h">
+      <Filter>05.Fsm\Player\TwoHand\GuardHit</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Public\State_Player_Chest.h">
+      <Filter>05.Fsm\Player\Common\Chest</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Public\State_Player_ItemGet.h">
+      <Filter>05.Fsm\Player\Common\ItemGet</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Client.cpp">
@@ -1856,6 +1874,15 @@
     </ClCompile>
     <ClCompile Include="..\Private\State_Player_OH_GuardHit.cpp">
       <Filter>05.Fsm\Player\OneHand\GuardHit</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Private\State_Player_TH_GuardHit.cpp">
+      <Filter>05.Fsm\Player\TwoHand\GuardHit</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Private\State_Player_Chest.cpp">
+      <Filter>05.Fsm\Player\Common\Chest</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Private\State_Player_ItemGet.cpp">
+      <Filter>05.Fsm\Player\Common\ItemGet</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

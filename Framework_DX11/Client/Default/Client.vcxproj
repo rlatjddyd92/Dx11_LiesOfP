@@ -194,9 +194,12 @@
     <ClInclude Include="..\Public\State_CarcassTail_TailSwip.h" />
     <ClInclude Include="..\Public\State_CarcassTail_TailSwipMultiple.h" />
     <ClInclude Include="..\Public\State_CarcassTail_Walk.h" />
+    <ClInclude Include="..\Public\State_Player_Chest.h" />
+    <ClInclude Include="..\Public\State_Player_ItemGet.h" />
     <ClInclude Include="..\Public\State_Player_OH_GuardHit.h" />
     <ClInclude Include="..\Public\State_Player_Ladder.h" />
     <ClInclude Include="..\Public\State_Player_Lift.h" />
+    <ClInclude Include="..\Public\State_Player_TH_GuardHit.h" />
     <ClInclude Include="..\Public\State_SimonManusP1_Charge_SwingDown.h" />
     <ClInclude Include="..\Public\Client_Defines.h" />
     <ClInclude Include="..\Public\ColliderObject.h" />
@@ -391,9 +394,12 @@
     <ClCompile Include="..\Private\State_CarcassTail_TailSwip.cpp" />
     <ClCompile Include="..\Private\State_CarcassTail_TailSwipMultiple.cpp" />
     <ClCompile Include="..\Private\State_CarcassTail_Walk.cpp" />
+    <ClCompile Include="..\Private\State_Player_Chest.cpp" />
+    <ClCompile Include="..\Private\State_Player_ItemGet.cpp" />
     <ClCompile Include="..\Private\State_Player_OH_GuardHit.cpp" />
     <ClCompile Include="..\Private\State_Player_Ladder.cpp" />
     <ClCompile Include="..\Private\State_Player_Lift.cpp" />
+    <ClCompile Include="..\Private\State_Player_TH_GuardHit.cpp" />
     <ClCompile Include="..\Private\State_SimonManusP1_Charge_SwingDown.cpp" />
     <ClCompile Include="..\Private\ColliderObject.cpp" />
     <ClCompile Include="..\Private\Effect_Base.cpp" />

@@ -20,6 +20,8 @@
 #include "State_Player_ChangeWeapon.h"
 #include "State_Player_Ladder.h"
 #include "State_Player_Lift.h"
+#include "State_Player_Chest.h"
+#include "State_Player_ItemGet.h"
 
 #include "State_Player_OH_Idle.h"
 #include "State_Player_OH_Walk.h"
@@ -34,6 +36,7 @@
 #include "State_Player_TH_Run.h"
 #include "State_Player_TH_Sprint.h"
 #include "State_Player_TH_Guard.h"
+#include "State_Player_TH_GuardHit.h"
 #include "State_Player_TH_Dash.h"
 
 #include "State_Player_Rapier_LAttack00.h"
@@ -102,7 +105,7 @@ HRESULT CPlayer::Initialize(void * pArg)
 		return E_FAIL;
 
 	//m_pNavigationCom->Move_to_Cell(m_pRigidBodyCom, 427);
-	m_pNavigationCom->Move_to_Cell(m_pRigidBodyCom, 341); //307
+	//m_pNavigationCom->Move_to_Cell(m_pRigidBodyCom, 341); //307
 
 	m_strObjectTag = TEXT("Player");
 
@@ -121,7 +124,7 @@ void CPlayer::Priority_Update(_float fTimeDelta)
 {
 	if (m_isGuard)
 	{
-		m_fGuardTime = fTimeDelta;
+		m_fGuardTime += fTimeDelta;
 	}
 
 	if (KEY_TAP(KEY::WHEELBUTTON))
@@ -164,7 +167,12 @@ void CPlayer::Update(_float fTimeDelta)
 
 	if (KEY_TAP(KEY::L))
 	{
-		Change_State(OH_GUARDHIT);
+		Change_State(ITEMGET);
+		//Calc_DamageGain(5.f, m_pTransformCom->Get_WorldMatrix().Forward() + m_pTransformCom->Get_WorldMatrix().Translation());
+	}
+	else if (KEY_TAP(KEY::K))
+	{
+		Change_State(CHEST);
 		//Calc_DamageGain(5.f, m_pTransformCom->Get_WorldMatrix().Forward() + m_pTransformCom->Get_WorldMatrix().Translation());
 	}
 }
@@ -356,6 +364,16 @@ _uint CPlayer::Change_WeaponType()
 	m_pWeapon[m_eWeaponType]->Disappear();
 	m_eWeaponType = WEAPON_TYPE((m_eWeaponType + 1) % WEP_END);
 	return m_eWeaponType;
+}
+
+void CPlayer::Appear_Weapon()
+{
+	m_pWeapon[m_eWeaponType]->Appear();
+}
+
+void CPlayer::Disappear_Weapon()
+{
+	m_pWeapon[m_eWeaponType]->Disappear();
 }
 
 void CPlayer::Seperate_Scissor()
@@ -563,6 +581,8 @@ HRESULT CPlayer::Ready_FSM()
 	m_pFsmCom->Add_State(CState_Player_ChangeWeapon::Create(m_pFsmCom, this, CHANGEWEP, &Desc)); 
 	m_pFsmCom->Add_State(CState_Player_Ladder::Create(m_pFsmCom, this, LADDER, &Desc));
 	m_pFsmCom->Add_State(CState_Player_Lift::Create(m_pFsmCom, this, LIFT, &Desc));
+	m_pFsmCom->Add_State(CState_Player_Chest::Create(m_pFsmCom, this, CHEST, &Desc));
+	m_pFsmCom->Add_State(CState_Player_ItemGet::Create(m_pFsmCom, this, ITEMGET, &Desc));
 
 	m_pFsmCom->Add_State(CState_Player_OH_Idle::Create(m_pFsmCom, this, OH_IDLE, &Desc));
 	m_pFsmCom->Add_State(CState_Player_OH_Walk::Create(m_pFsmCom, this, OH_WALK, &Desc)); 
@@ -577,6 +597,7 @@ HRESULT CPlayer::Ready_FSM()
 	m_pFsmCom->Add_State(CState_Player_TH_Run::Create(m_pFsmCom, this, TH_RUN, &Desc));
 	m_pFsmCom->Add_State(CState_Player_TH_Sprint::Create(m_pFsmCom, this, TH_SPRINT, &Desc));
 	m_pFsmCom->Add_State(CState_Player_TH_Guard::Create(m_pFsmCom, this, TH_GUARD, &Desc));
+	m_pFsmCom->Add_State(CState_Player_TH_GuardHit::Create(m_pFsmCom, this, TH_GUARDHIT, &Desc));
 	m_pFsmCom->Add_State(CState_Player_TH_Dash::Create(m_pFsmCom, this, TH_DASH, &Desc));
 
 	m_pFsmCom->Add_State(CState_Player_Rapier_LAttack00::Create(m_pFsmCom, this, RAPIER_LATTACK0, &Desc));	// 좌클릭 공격1
@@ -630,22 +651,61 @@ HRESULT CPlayer::Ready_Effect()
 
 _bool CPlayer::Calc_DamageGain(_float fAtkDmg, _Vec3 vHitPos)
 {
-	if (fAtkDmg <= 0)
+	if (fAtkDmg <= 0.f)
 		return false;
 
 	if (m_isGuard)
 	{
+		//퍼펙트 가드
+		if (m_fGuardTime < 0.15f)
+		{
 
+		}
+		else
+		{
+			m_tPlayer_Stat->vGauge_Hp.x = max(0.f, m_tPlayer_Stat->vGauge_Hp.x - fAtkDmg * 0.7f);
+		}
+
+		if (m_eWeaponType < 2)
+			m_pFsmCom->Change_State(OH_GUARDHIT, &vHitPos);
+		else
+			m_pFsmCom->Change_State(TH_GUARDHIT, &vHitPos);
 	}
 	else
 	{
 		m_tPlayer_Stat->vGauge_Hp.x = max(0.f, m_tPlayer_Stat->vGauge_Hp.x - fAtkDmg);
+		m_tPlayer_Stat->vGauge_Hp.y = m_tPlayer_Stat->vGauge_Hp.x;
 		if (fAtkDmg > 0.f)
 			m_pFsmCom->Change_State(HIT, &vHitPos);
 	}
-	m_tPlayer_Stat->vGauge_Hp.x = max(0.f, m_tPlayer_Stat->vGauge_Hp.x - fAtkDmg);
 	//if (m_eStat.fHp <= 0.f)
 	//	m_pFsmCom->Change_State(HIT);
+
+	return true;
+}
+
+_bool CPlayer::Decrease_Stamina(_float fAmount)
+{
+	m_tPlayer_Stat->vGauge_Stamina.x -= fAmount;
+	if (m_tPlayer_Stat->vGauge_Stamina.x < 0.f)
+	{
+		m_tPlayer_Stat->vGauge_Stamina.x = 0.f;
+		return false;
+	}
+
+	return true;
+}
+
+_bool CPlayer::Decrease_Region(_uint iRegionCount)
+{
+	_float fCurretnRegion = m_tPlayer_Stat->vGauge_Region.x;
+	for (_uint i = 0; i < iRegionCount; ++i)
+	{
+		fCurretnRegion -= m_tPlayer_Stat->fRegion_Interval * iRegionCount;
+
+		if (fCurretnRegion < 0.f)
+			return false;
+	}
 
 	return true;
 }

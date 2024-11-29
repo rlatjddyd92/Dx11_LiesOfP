@@ -4,6 +4,8 @@
 #include "GameObject.h"
 #include "Transform.h"
 #include "Navigation.h"
+#include "Model.h"
+#include "Mesh.h"
 
 CRigidBody::CRigidBody(ID3D11Device* pDevice, ID3D11DeviceContext* pContext)
 	: CComponent{ pDevice,  pContext }
@@ -186,26 +188,111 @@ HRESULT CRigidBody::Add_PxGeometry(RIGIDBODY_DESC* pDesc)
 		physX::GeometryCapsule* CapsuleGeometry = static_cast<physX::GeometryCapsule*>(pGeometry);
 		m_PxShape = pPhysx->createShape(PxCapsuleGeometry(CapsuleGeometry->fRadius, CapsuleGeometry->fHeight * 0.5f), *m_PxMaterial, false, eShapeFlags);
 	}
-		break;
+	break;
 	case physX::PX_SPHERE:
 	{
 		physX::GeometrySphere* SphereGeometry = static_cast<physX::GeometrySphere*>(pGeometry);
 		m_PxShape = pPhysx->createShape(PxSphereGeometry(SphereGeometry->fRadius), *m_PxMaterial, false, eShapeFlags);
 	}
-		break;
+	break;
 	case physX::PX_BOX:
 	{
 		physX::GeometryBox* BoxGeometry = static_cast<physX::GeometryBox*>(pGeometry);
 		m_PxShape = pPhysx->createShape(PxBoxGeometry(BoxGeometry->vSize.x * 0.5f, BoxGeometry->vSize.y * 0.5f, BoxGeometry->vSize.z * 0.5f), *m_PxMaterial, false, eShapeFlags);
 	}
-		break;
+	break;
 	case physX::PX_MODEL:
 	{
-		// 수정하기
-		//physX::GeometryBox* BoxGeometry = static_cast<physX::GeometryBox*>(pGeometry);
-		//m_PxShape = pPhysx->createShape(PxBoxGeometry(BoxGeometry->vSize.x * 0.5f, BoxGeometry->vSize.y * 0.5f, BoxGeometry->vSize.z * 0.5f), *m_PxMaterial, false, eShapeFlags);
+		//physX::GeometryTriangleMesh* TriangleGeometry = static_cast<physX::GeometryTriangleMesh*>(pGeometry);
+		//// 게임 객체의 모델 컴포넌트를 얻음
+		//CModel* pModel = TriangleGeometry->pModel;
+
+		//// 모델의 각 메쉬에 대해 처리
+		//for (auto* Mesh : pModel->Get_Meshes())
+		//{
+		//	VTXMESH* pVB = Mesh->Get_Vertices();  // 정점 데이터
+		//	VTXANIMMESH* pAnimVB = Mesh->Get_AnimVertices();  // 정점 데이터
+		//	_uint* pIB = Mesh->Get_Indices();  // 인덱스 데이터
+
+		//	_uint iNumVertices = Mesh->Get_NumVertices();  // 정점 개수
+		//	_uint iNumIndices = Mesh->Get_NumIndices();  // 인덱스 개수
+		//	_uint iNumTriangles = iNumIndices / 3;  // 삼각형 개수
+
+		//	// 정점 좌표를 저장할 피직스용 벡터
+		//	vector<PxVec3> Vertices;
+		//	Vertices.reserve(iNumVertices);
+
+		//	// 게임 객체의 월드 변환 행렬
+		//	_matrix WorldMatrix = m_pOwnerTransform->Get_WorldMatrix();
+
+		//	// 정점 좌표 변환 및 저장
+		//	for (_uint i = 0; i < iNumVertices; ++i)
+		//	{
+		//		_vector vVertexPosition = {};
+		//		if (nullptr == pVB)
+		//			vVertexPosition = XMLoadFloat3(&pAnimVB[i].vPosition);
+		//		else
+		//			vVertexPosition = XMLoadFloat3(&pVB[i].vPosition);
+
+		//		vVertexPosition = XMVector3TransformCoord(vVertexPosition, WorldMatrix);
+		//		Vertices.push_back(PxVec3(XMVectorGetX(vVertexPosition), XMVectorGetY(vVertexPosition), XMVectorGetZ(vVertexPosition)));
+
+		//	}
+
+		//	PxConvexMeshDesc convexDesc;
+		//	convexDesc.points.count = static_cast<PxU32>(Vertices.size());
+		//	convexDesc.points.stride = sizeof(PxVec3);
+		//	convexDesc.points.data = Vertices.data();
+		//	convexDesc.flags = PxConvexFlag::eCOMPUTE_CONVEX;
+
+		//	// 1. 쿠킹 객체 생성
+		//	PxCookingParams cookingParams(pPhysx->getTolerancesScale());
+		//	cookingParams.meshPreprocessParams |= PxMeshPreprocessingFlag::eWELD_VERTICES; // 정점 용접 옵션
+
+		//	PxDefaultMemoryInputData input(buffer.getData(), buffer.getSize());
+		//	PxConvexMesh* convexMesh = pPhysx->createConvexMesh(input);
+
+		//	// Convex Mesh 형상 생성
+		//	PxConvexMeshGeometry convexGeometry(convexMesh);
+
+		//	// 동적 Actor 생성
+		//	m_PxActor = pPhysx->createRigidDynamic(PxTransform(PxVec3(0.0f, 0.0f, 0.0f)));
+		//	PxShape* pShape = pPhysx->createShape(convexGeometry, *m_PxMaterial);
+		//	m_PxActor->attachShape(*pShape);
+
+			//// 인덱스를 저장할 벡터
+			//vector<PxU32> Indices;
+			//Indices.reserve(iNumIndices);
+
+			//// 인덱스 데이터 저장
+			//for (_uint i = 0; i < iNumIndices; ++i)
+			//{
+			//	_uint Index = pIB[i];
+			//	Indices.push_back(Index);
+			//}
+
+			//// 삼각형 메쉬 설명 생성
+			//PxTriangleMeshDesc tDesc;
+			//tDesc.points.count = iNumVertices;
+			//tDesc.points.stride = sizeof(PxVec3);
+			//tDesc.points.data = Vertices.data();
+			//tDesc.triangles.count = iNumTriangles;
+			//tDesc.triangles.stride = sizeof(PxU32) * 3;
+			//tDesc.triangles.data = Indices.data();
+
+			//// 삼각형 메쉬 생성
+			//PxTriangleMesh* pTriangleMesh = PxCreateTriangleMesh(PxCookingParams(PxTolerancesScale(0.0f, 0.0f)), tDesc);
+
+			//// 삼각형 메쉬 형상 생성
+			//PxTriangleMeshGeometry* pGeometry = new PxTriangleMeshGeometry(pTriangleMesh);
+
+			//// 충돌 형상 생성 및 추가
+			//m_PxShape = pPhysx->createShape(PxTriangleMeshGeometry(pTriangleMesh), *m_PxMaterial);
+			//// 물리 씬에 Actor 추가
+			//m_PxScene->addActor(*m_PxActor);
+		//}
 	}
-		break;
+	break;
 	}
 
 	m_PxActor->attachShape(*m_PxShape);

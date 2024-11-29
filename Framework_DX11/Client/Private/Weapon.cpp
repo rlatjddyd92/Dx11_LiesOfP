@@ -103,6 +103,8 @@ HRESULT CWeapon::Render()
 		{
 			m_fEmissiveMask = 0.f;
 		}
+		if (FAILED(m_pShaderCom->Bind_RawValue("g_fEmessiveMask", &m_fEmissiveMask, sizeof(_float))))
+			return E_FAIL;
 
 		if (nullptr != m_pModelCom->Find_Texture((_uint)i, TEXTURE_TYPE::NORMALS))
 		{
@@ -122,6 +124,9 @@ HRESULT CWeapon::Render()
 			return E_FAIL;
 	}
 
+	m_fEmissiveMask = 0.f;
+	if (FAILED(m_pShaderCom->Bind_RawValue("g_fEmessiveMask", &m_fEmissiveMask, sizeof(_float))))
+		return E_FAIL;
 #ifdef _DEBUG
 	if(nullptr != m_pColliderCom)
 		m_pColliderCom->Render();

@@ -20,6 +20,14 @@ HRESULT CState_Player_Hit::Initialize(_uint iStateNum, void* pArg)
     m_iAnimation_Hit[HIT_LR] = m_pPlayer->Get_Model()->Find_AnimationIndex("AS_Pino_Hit_LtoR", 2.5f);
     m_iAnimation_Hit[HIT_RL] = m_pPlayer->Get_Model()->Find_AnimationIndex("AS_Pino_Hit_RtoL", 2.5f);
 
+    m_iAnimation_Down[DOWN_DRAG_B] = m_pPlayer->Get_Model()->Find_AnimationIndex("AS_Pino_Down_Drag_Intro_B", 2.5f);
+    m_iAnimation_Down[DOWN_STAMP_B] = m_pPlayer->Get_Model()->Find_AnimationIndex("AS_Pino_Down_Stamp_Intro_B", 2.5f);
+    m_iAnimation_Down[DOWN_DRAG_F] = m_pPlayer->Get_Model()->Find_AnimationIndex("AS_Pino_Down_Drag_Intro_F", 2.5f);
+    m_iAnimation_Down[DOWN_STAMP_F] = m_pPlayer->Get_Model()->Find_AnimationIndex("AS_Pino_Down_Stamp_Intro_F", 2.5f);
+
+    m_iAnimation_GetUp[0] = m_pPlayer->Get_Model()->Find_AnimationIndex("AS_Pino_Down_Getup_B", 2.5f);
+    m_iAnimation_GetUp[1] = m_pPlayer->Get_Model()->Find_AnimationIndex("AS_Pino_Down_Getup_F", 2.5f);
+
     FSM_INIT_DESC* pDesc = static_cast<FSM_INIT_DESC*>(pArg);
 
     m_pTrackPos = pDesc->pPrevTrackPos;
@@ -31,25 +39,44 @@ HRESULT CState_Player_Hit::Initialize(_uint iStateNum, void* pArg)
 
 HRESULT CState_Player_Hit::Start_State(void* pArg)
 {
-    _Vec3* vHitPos = static_cast<_Vec3*>(pArg);
+    HIT_DESC* pDesc = static_cast<HIT_DESC*>(pArg);
  
-    HIT_TYPE eType = (HIT_TYPE)Choice_HitAnim(*vHitPos);
+    m_isDown = pDesc->isDown;
+    if (m_isDown)
+    {
+        DOWN_TYPE eType = (DOWN_TYPE)Choice_DonwAnim(pDesc->vHitPos);
+        if(eType != m_eHitType)
+            m_pPlayer->Change_Animation(m_iAnimation_Down[eType], false, 0.1f);
 
-    if (eType == m_eHitType)
-        m_pPlayer->Change_Animation(m_iAnimation_Hit[m_eHitType], false, 0.f, 0, true, true);
+        m_eDownType = eType;
+    }
     else
-        m_pPlayer->Change_Animation(m_iAnimation_Hit[m_eHitType], false, 0.f);
+    {
+        HIT_TYPE eType = (HIT_TYPE)Choice_HitAnim(pDesc->vHitPos);
 
-    m_eHitType = eType;
+        if (eType == m_eHitType)
+            m_pPlayer->Change_Animation(m_iAnimation_Hit[eType], false, 0.f, 0, true, true);
+        else
+            m_pPlayer->Change_Animation(m_iAnimation_Hit[eType], false, 0.f);
+
+        m_eHitType = eType;
+    }
 
     return S_OK;
 }
 
 void CState_Player_Hit::Update(_float fTimeDelta)
 {
-    if (End_Check())
+    if (m_isDown)
     {
-        m_pPlayer->Change_State(CPlayer::OH_IDLE);
+
+    }
+    else
+    {
+        if (End_Check())
+        {
+            m_pPlayer->Change_State(CPlayer::OH_IDLE);
+        }
     }
 }
 
@@ -66,6 +93,8 @@ _uint CState_Player_Hit::Choice_HitAnim(_Vec3 vHitPos)
 
     _float fForwardDot = vHitDir.Dot(PlayerWorldMatrix.Forward()); // 앞뒤 방향
     _float fRightDot = vHitDir.Dot(PlayerWorldMatrix.Right());     // 좌우 방향
+
+    m_isHitFront = true;
 
     if (fForwardDot > 0.5f)
     {
@@ -84,6 +113,7 @@ _uint CState_Player_Hit::Choice_HitAnim(_Vec3 vHitPos)
     }
     else if (fForwardDot < -0.5f)
     {
+        m_isHitFront = false;
         return HIT_B;  // 뒤쪽
     }
     else {
@@ -96,6 +126,50 @@ _uint CState_Player_Hit::Choice_HitAnim(_Vec3 vHitPos)
             return HIT_LR;
         }
     }
+
+    return HIT_FB;
+}
+
+_uint CState_Player_Hit::Choice_DonwAnim(_Vec3 vHitPos)
+{
+    _Matrix PlayerWorldMatrix = m_pPlayer->Get_Transform()->Get_WorldMatrix();
+    _Vec3 vHitDir = vHitPos - PlayerWorldMatrix.Translation();
+    vHitDir.Normalize();
+
+    _Vec3 vRight = PlayerWorldMatrix.Right();
+    _Vec3 vUp = PlayerWorldMatrix.Up();
+    _Vec3 vLook = PlayerWorldMatrix.Forward();
+
+    _float fUpDot = vHitDir.Dot(vUp);
+    _float fForwardDot = vHitDir.Dot(vLook);
+
+    m_isHitFront = true;
+
+    // 위쪽에서 때림
+    if (fUpDot > 0.7f) 
+    {
+        if (fForwardDot > 0.5f)
+        {
+            return DOWN_STAMP_F;
+        }
+        else
+        {
+            return DOWN_STAMP_B;
+        }
+    }
+    else
+    {
+        if (fForwardDot > 0.5f)
+        {
+            return DOWN_DRAG_F;
+        }
+        else
+        {
+            return DOWN_DRAG_B;
+        }
+    }
+
+    return DOWN_STAMP_F;
 }
 
 _bool CState_Player_Hit::End_Check()

@@ -25,7 +25,7 @@ public:
 
 	enum PLAYER_STATE
 	{
-		HIT, PARRY, HEAL, CHANGEWEP, LADDER, LIFT,
+		HIT, PARRY, HEAL, CHANGEWEP, LADDER, LIFT, CHEST, ITEMGET,
 
 		OH_IDLE, OH_WALK, OH_RUN, OH_SPRINT, OH_GUARD, OH_GUARDHIT, OH_JUMP, OH_DASH,
 
@@ -148,6 +148,8 @@ public:
 
 	void			Change_Weapon();
 	_uint			Change_WeaponType();
+	void			Appear_Weapon();
+	void			Disappear_Weapon();
 	
 	void			Active_CurrentWeaponCollider(_float fDamageRatio = 1.f, _uint iHandIndex = 1);
 	void			DeActive_CurretnWeaponCollider(_uint iHandIndex = 1);
@@ -166,6 +168,8 @@ public:
 	void			DeActive_Effect(const EFFECT_TYPE& eType);
 
 	virtual _bool	Calc_DamageGain(_float fAtkDmg, _Vec3 vHitPos = { 0.f,0.f,0.f }) override;
+	_bool			Decrease_Stamina(_float fAmount);
+	_bool			Decrease_Region(_uint iRegionCount = 1);
 
 private:
 	vector<class CEffect_Container*> m_Effects;

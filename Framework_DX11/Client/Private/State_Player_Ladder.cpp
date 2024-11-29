@@ -58,6 +58,8 @@ HRESULT CState_Player_Ladder::Start_State(void* pArg)
     m_pPlayer->Get_RigidBody()->Set_IsOnCell(false);
     m_pPlayer->Get_RigidBody()->Set_IsLockCell(false);
 
+    m_pPlayer->Disappear_Weapon();
+
     return S_OK;
 }
 
@@ -163,6 +165,8 @@ void CState_Player_Ladder::End_State()
 
     m_pPlayer->Get_RigidBody()->Set_IsOnCell(true);
     m_pPlayer->Get_RigidBody()->Set_IsLockCell(true);
+
+    m_pPlayer->Appear_Weapon();
 }
 
 void CState_Player_Ladder::Choice_UpDown(CLadder* pLadder)
