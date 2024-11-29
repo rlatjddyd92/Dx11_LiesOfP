@@ -260,6 +260,9 @@ public:
 	ITEM_RESULT EquipWeapon_Inven(INVEN_ARRAY_TYPE eIndex, EQUIP_SLOT eSlot, _uint iIndex); // <- 인벤에 있는 아이템을 장비한다 
 	ITEM_RESULT UnEquipItem_Inven(EQUIP_SLOT eSlot); // <- 인벤에 있는 아이템을 장비한다 
 	ITEM_RESULT UnEquipWeapon_Inven(EQUIP_SLOT eSlot); // <- 인벤에 있는 아이템을 장비한다 
+
+	ITEM_RESULT Move_EquipItem(EQUIP_SLOT eBefore, EQUIP_SLOT eDest); // <-장비된 아이템의 장비 위치 변경
+
 	ITEM_RESULT UseItem_Equip(EQUIP_SLOT eSlot, _uint iCount = 1); // <- 장비된 아이템을 사용한다
 	ITEM_RESULT UseItem_Inven(INVEN_ARRAY_TYPE eIndex, _uint iIndex, _uint iCount = 1); // <- 인벤에 있는 아이템을 직접 사용
 

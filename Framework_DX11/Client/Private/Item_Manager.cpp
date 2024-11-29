@@ -206,6 +206,32 @@ ITEM_RESULT CItem_Manager::UnEquipWeapon_Inven(EQUIP_SLOT eSlot)
 	return ITEM_RESULT::RESULT_SUCCESS;
 }
 
+ITEM_RESULT CItem_Manager::Move_EquipItem(EQUIP_SLOT eBefore, EQUIP_SLOT eDest)
+{
+	if ((_int(eBefore) >= _int(EQUIP_SLOT::EQUIP_WEAPON_BLADE_0)) && (_int(eBefore) <= _int(EQUIP_SLOT::EQUIP_WEAPON_HANDLE_0)))
+		eBefore = EQUIP_SLOT::EQUIP_WEAPON_BLADE_0;
+	if ((_int(eBefore) >= _int(EQUIP_SLOT::EQUIP_WEAPON_BLADE_1)) && (_int(eBefore) <= _int(EQUIP_SLOT::EQUIP_WEAPON_HANDLE_1)))
+		eBefore = EQUIP_SLOT::EQUIP_WEAPON_BLADE_1;
+
+	if ((_int(eDest) >= _int(EQUIP_SLOT::EQUIP_WEAPON_BLADE_0)) && (_int(eDest) <= _int(EQUIP_SLOT::EQUIP_WEAPON_HANDLE_0)))
+		eDest = EQUIP_SLOT::EQUIP_WEAPON_BLADE_0;
+	if ((_int(eDest) >= _int(EQUIP_SLOT::EQUIP_WEAPON_BLADE_1)) && (_int(eDest) <= _int(EQUIP_SLOT::EQUIP_WEAPON_HANDLE_1)))
+		eDest = EQUIP_SLOT::EQUIP_WEAPON_BLADE_1;
+
+	if ((IsValid_Equip(eBefore)) && (IsValid_Equip(eDest)))
+	{
+		INVEN_ARRAY_TYPE eDest_Type = m_vecEquip_ItemInfo[_uint(eBefore)]->eType;
+		_int iDest_Index = m_vecEquip_ItemInfo[_uint(eBefore)]->iIndex;
+		if (!IsValid_Inven(eDest_Type, iDest_Index))
+			return ITEM_RESULT::RESULT_INVALID;
+
+		UnEquipItem_Inven(eBefore);
+		EquipItem_Inven(eDest_Type, eDest, iDest_Index);
+	}
+
+	return ITEM_RESULT();
+}
+
 ITEM_RESULT CItem_Manager::UseItem_Equip(EQUIP_SLOT eSlot, _uint iCount)
 {
 	INVEN_ARRAY_TYPE eArray = m_vecEquip_ItemInfo[_uint(eSlot)]->eType;
@@ -609,22 +635,26 @@ ITEM_RESULT CItem_Manager::Operate_ItemAction(ITEM_FUNC eFunc, _Vec2 vPos, _Vec2
 	{
 		if (m_eNow_ActionArray != INVEN_ARRAY_TYPE::TYPE_END)
 			EquipItem_Inven(m_eNow_ActionArray, EQUIP_SLOT::EQUIP_WEAPON_BLADE_0, m_iArray_Index);
-		else 
-			EquipItem_Inven(Get_Equip_Slot_Info(EQUIP_SLOT::EQUIP_WEAPON_BLADE_0)->eType, m_eNow_ActionSlot, Get_Equip_Slot_Info(EQUIP_SLOT::EQUIP_WEAPON_BLADE_0)->iIndex);
+		else
+			Move_EquipItem(m_eNow_ActionSlot, EQUIP_SLOT::EQUIP_WEAPON_BLADE_0);
 	}
 	else if (iFunc == _int(ITEM_FUNC::FUNC_EQUIP_WEAPON_SECOND))
 	{
 		if (m_eNow_ActionArray != INVEN_ARRAY_TYPE::TYPE_END)
 			EquipItem_Inven(m_eNow_ActionArray, EQUIP_SLOT::EQUIP_WEAPON_BLADE_1, m_iArray_Index);
 		else
-			EquipItem_Inven(Get_Equip_Slot_Info(EQUIP_SLOT::EQUIP_WEAPON_BLADE_1)->eType, m_eNow_ActionSlot, Get_Equip_Slot_Info(EQUIP_SLOT::EQUIP_WEAPON_BLADE_1)->iIndex);
+			Move_EquipItem(m_eNow_ActionSlot, EQUIP_SLOT::EQUIP_WEAPON_BLADE_1);
 	}
 	else if ((iFunc >= _int(ITEM_FUNC::FUNC_EQUIP_TOP_0)) && (iFunc <= _int(ITEM_FUNC::FUNC_EQUIP_TOP_2)))
 	{
 		if (m_eNow_ActionArray != INVEN_ARRAY_TYPE::TYPE_END)
 			EquipItem_Inven(m_eNow_ActionArray, EQUIP_SLOT(_int(EQUIP_SLOT::EQUIP_USING_TOP_0) + (iFunc - _int(ITEM_FUNC::FUNC_EQUIP_TOP_0))), m_iArray_Index);
-		else 
-			EquipItem_Inven(Get_Equip_Slot_Info(EQUIP_SLOT(_int(EQUIP_SLOT::EQUIP_USING_TOP_0) + (iFunc - _int(ITEM_FUNC::FUNC_EQUIP_TOP_0))))->eType, m_eNow_ActionSlot, m_iArray_Index);
+		else
+		{
+			EQUIP_SLOT eDest = EQUIP_SLOT(_int(EQUIP_SLOT::EQUIP_USING_TOP_0) + (iFunc - _int(ITEM_FUNC::FUNC_EQUIP_TOP_0)));
+			Move_EquipItem(m_eNow_ActionSlot, eDest);
+		}
+			
 		
 		Reset_ItemAction();
 	}
@@ -633,7 +663,10 @@ ITEM_RESULT CItem_Manager::Operate_ItemAction(ITEM_FUNC eFunc, _Vec2 vPos, _Vec2
 		if (m_eNow_ActionArray != INVEN_ARRAY_TYPE::TYPE_END)
 			EquipItem_Inven(m_eNow_ActionArray, EQUIP_SLOT(_int(EQUIP_SLOT::EQUIP_USING_BOTTOM_0) + (iFunc - _int(ITEM_FUNC::FUNC_EQUIP_BOTTOM_0))), m_iArray_Index);
 		else
-			EquipItem_Inven(Get_Equip_Slot_Info(EQUIP_SLOT(_int(EQUIP_SLOT::EQUIP_USING_BOTTOM_0) + (iFunc - _int(ITEM_FUNC::FUNC_EQUIP_BOTTOM_0))))->eType, m_eNow_ActionSlot, m_iArray_Index);
+		{
+			EQUIP_SLOT eDest = EQUIP_SLOT(_int(EQUIP_SLOT::EQUIP_USING_BOTTOM_0) + (iFunc - _int(ITEM_FUNC::FUNC_EQUIP_BOTTOM_0)));
+			Move_EquipItem(m_eNow_ActionSlot, eDest);
+		}
 		Reset_ItemAction();
 	}
 	else if ((iFunc >= _int(ITEM_FUNC::FUNC_EQUIP_BAG_0)) && (iFunc <= _int(ITEM_FUNC::FUNC_EQUIP_BAG_3)))
@@ -641,7 +674,10 @@ ITEM_RESULT CItem_Manager::Operate_ItemAction(ITEM_FUNC eFunc, _Vec2 vPos, _Vec2
 		if (m_eNow_ActionArray != INVEN_ARRAY_TYPE::TYPE_END)
 			EquipItem_Inven(m_eNow_ActionArray, EQUIP_SLOT(_int(EQUIP_SLOT::EQUIP_USING_BAG_0) + (iFunc - _int(ITEM_FUNC::FUNC_EQUIP_BAG_0))), m_iArray_Index);
 		else
-			EquipItem_Inven(Get_Equip_Slot_Info(EQUIP_SLOT(_int(EQUIP_SLOT::EQUIP_USING_BAG_0) + (iFunc - _int(ITEM_FUNC::FUNC_EQUIP_BAG_0))))->eType, m_eNow_ActionSlot, m_iArray_Index);
+		{
+			EQUIP_SLOT eDest = EQUIP_SLOT(_int(EQUIP_SLOT::EQUIP_USING_BAG_0) + (iFunc - _int(ITEM_FUNC::FUNC_EQUIP_BAG_0)));
+			Move_EquipItem(m_eNow_ActionSlot, eDest);
+		}
 		Reset_ItemAction();
 	}
 

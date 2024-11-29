@@ -77,6 +77,12 @@ public:
 		_Vec2 fDebuff_Fire = { 0.f, 100.f };
 		_Vec2 fDebuff_Electric = { 0.f, 100.f };
 		_Vec2 fDebuff_Acid = { 0.f, 100.f };
+
+
+		// UI 조작 
+		// 24-11-29 김성용
+		_bool m_bInvenLock = { true }; // 인벤토리 관련 조작을 막는다 
+
 	}STAT_INFO;
 #pragma endregion
 

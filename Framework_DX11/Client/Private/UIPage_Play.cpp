@@ -142,6 +142,9 @@ HRESULT CUIPage_Play::Render_PlayInfo(CUIRender_Client* pRender_Client)
 
 void CUIPage_Play::Action_Potion_Tool(_float fTimeDelta)
 {
+	/*if (GET_GAMEINTERFACE->Get_InvenLock())
+		return;*/
+
 	if ((!m_bIsBagOpen) && (KEY_TAP(KEY::T)))
 	{
 		if (m_vec_Group_Ctrl[_int(PART_GROUP::GROUP_SELECT_CELL)]->fRatio != 0.f)
@@ -204,24 +207,19 @@ void CUIPage_Play::Action_Potion_Tool(_float fTimeDelta)
 
 void CUIPage_Play::Action_Arm(_float fTimeDelta)
 {
-	if (KEY_TAP(KEY::CTRL))
-		GET_GAMEINTERFACE->UseItem_Equip(EQUIP_SLOT::EQUIP_RESION_ARM);
+	// 무기 조작은 플레이어로 
 }
 
 void CUIPage_Play::Action_Weapon(_float fTimeDelta)
 {
+	/*if (GET_GAMEINTERFACE->Get_InvenLock())
+		return;*/
+
 	if (KEY_TAP(KEY::TAPKEY))
 	{
 		GET_GAMEINTERFACE->Change_Weapon();
 	}
-	else if ((KEY_HOLD(KEY::LSHIFT)) && (KEY_TAP(KEY::F)))
-	{
-		// 무기 별 페이블 아츠 구현할 것 
-	}
-	else if (KEY_TAP(KEY::F))
-	{
-		// 무기 별 페이블 아츠 구현할 것 
-	}
+	
 }
 
 _bool CUIPage_Play::Action_InterAction(_wstring strInterName)
@@ -435,7 +433,7 @@ void CUIPage_Play::LD_Arm_Update(_float fTimeDelta)
 
 void CUIPage_Play::RU_Coin_Update(_float fTimeDelta)
 {
-	__super::Get_Front_Part_In_Control(_int(PART_GROUP::GROUP_COIN_COUNT))->strText = to_wstring(GET_GAMEINTERFACE->Get_Coin());
+	__super::Get_Front_Part_In_Control(_int(PART_GROUP::GROUP_COIN_COUNT))->strText = to_wstring(GET_GAMEINTERFACE->Get_Player()->Get_Player_Stat().iErgo);
 }
 
 void CUIPage_Play::RD_Weapon_Update(_float fTimeDelta)

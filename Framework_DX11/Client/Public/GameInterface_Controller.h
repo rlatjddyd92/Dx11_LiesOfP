@@ -45,7 +45,10 @@ public: // 외부에서 매니저 접근
 
 	void Input_Player_Pointer(const CPlayer* pPointer) { m_pPlayer = pPointer; }
 
+	// 플레이어 정보 
 	const CPlayer* Get_Player() { return m_pPlayer; }
+	_bool Get_InvenLock() { return m_pPlayer->Get_Player_Stat().m_bInvenLock; }
+
 
 #pragma endregion
 

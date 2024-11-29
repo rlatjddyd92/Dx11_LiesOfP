@@ -186,19 +186,29 @@ void CUIPage_ItemInfo::Show_Focus(_Vec2 vItemCellPos, _Vec2 vItemCellSize)
 {
 	m_bFocus = true;
 
+	_float fSize_Adjust = 1.1f;
+	_float fFire_Adjust = 0.35f;
+
+	if (m_eNowPage == UIPAGE::PAGE_INVEN)
+	{
+		fSize_Adjust = 1.2f;
+		fFire_Adjust = 0.45f;
+	}
+		
+
 	m_vecPart[_int(PART_GROUP::ITEMINFO_SELECT_Rect)]->fPosition = vItemCellPos;
-	m_vecPart[_int(PART_GROUP::ITEMINFO_SELECT_Rect)]->fSize = vItemCellSize * 1.1f;
+	m_vecPart[_int(PART_GROUP::ITEMINFO_SELECT_Rect)]->fSize = vItemCellSize * fSize_Adjust;
 
 	if (!m_vecPart[_int(PART_GROUP::ITEMINFO_SELECT_Rect)]->bRender)
 	{
 		//m_vecPart[_int(PART_GROUP::ITEMINFO_SELECT_Fire)]->fAdjust_Start = vItemCellPos + _Vec2{ -(vItemCellSize.x * 0.4f), vItemCellSize.y * 0.4f };
-		m_vecPart[_int(PART_GROUP::ITEMINFO_SELECT_Fire)]->fAdjust_End = vItemCellPos + _Vec2{ -(vItemCellSize.x * 0.4f), vItemCellSize.y * 0.4f };
+		m_vecPart[_int(PART_GROUP::ITEMINFO_SELECT_Fire)]->fAdjust_End = vItemCellPos + _Vec2{ -(vItemCellSize.x * fFire_Adjust), vItemCellSize.y * fFire_Adjust };
 	}
 	else
 	{
 		m_fFocus_Fire_Move_Ratio = 0.f;
 		m_vecPart[_int(PART_GROUP::ITEMINFO_SELECT_Fire)]->fAdjust_Start = m_vecPart[_int(PART_GROUP::ITEMINFO_SELECT_Fire)]->fPosition;
-		m_vecPart[_int(PART_GROUP::ITEMINFO_SELECT_Fire)]->fAdjust_End = vItemCellPos + _Vec2{ -(vItemCellSize.x * 0.4f), vItemCellSize.y * 0.4f };
+		m_vecPart[_int(PART_GROUP::ITEMINFO_SELECT_Fire)]->fAdjust_End = vItemCellPos + _Vec2{ -(vItemCellSize.x * fFire_Adjust), vItemCellSize.y * fFire_Adjust };
 	}
 
 	m_vecPart[_int(PART_GROUP::ITEMINFO_SELECT_Rect)]->bRender = true;

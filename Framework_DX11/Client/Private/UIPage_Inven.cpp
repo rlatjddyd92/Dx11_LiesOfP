@@ -62,6 +62,8 @@ void CUIPage_Inven::Late_Update(_float fTimeDelta)
 	if ((KEY_TAP(KEY::RBUTTON))&&(m_bReset_ItemAction_Info == true))
 		Reset_ItemAction();
 
+
+
 	for (auto& iter : m_vec_Group_Ctrl)
 		__super::UpdatePart_ByControl(iter);
 
@@ -268,7 +270,7 @@ void CUIPage_Inven::Update_Top_Part(_float fTimeDelta)
 		++iTap;
 	}
 
-
+	__super::Get_Front_Part_In_Control(_int(PART_GROUP::GROUP_COIN_COUNT))->strText = to_wstring(GET_GAMEINTERFACE->Get_Player()->Get_Player_Stat().iErgo);
 
 
 
