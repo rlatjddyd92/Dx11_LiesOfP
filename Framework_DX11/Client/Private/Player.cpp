@@ -105,7 +105,7 @@ HRESULT CPlayer::Initialize(void * pArg)
 	if (FAILED(Ready_Effect()))
 		return E_FAIL;
 
-	m_pNavigationCom->Move_to_Cell(m_pRigidBodyCom, 440); //307
+	m_pNavigationCom->Move_to_Cell(m_pRigidBodyCom, 1030); //307
 
 	m_strObjectTag = TEXT("Player");
 
