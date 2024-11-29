@@ -20,7 +20,7 @@ HRESULT CState_SimonManusP1_SwingDown_Swing_L::Initialize(_uint iStateNum, void*
 
 HRESULT CState_SimonManusP1_SwingDown_Swing_L::Start_State(void* pArg)
 {
-    m_pMonster->Change_Animation(AN_ROUTE_FIRST, false, 0.1f, 0);
+    m_pMonster->Change_Animation(AN_ROUTE_FIRST, false, 0.2f, 0);
 
     m_isSwing = true;
 
@@ -31,7 +31,7 @@ void CState_SimonManusP1_SwingDown_Swing_L::Update(_float fTimeDelta)
 {
     if (m_isSwing)
     {
-        if (100.f >= m_pMonster->Get_CurrentTrackPos())
+        if (100.f <= m_pMonster->Get_CurrentTrackPos())
         {
             m_pMonster->Change_Animation(AN_ROUTE_LAST, false, 0, 0);
             ++m_iRouteTrack;

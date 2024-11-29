@@ -47,7 +47,7 @@ public:
 
 	enum EFFECT_TYPE
 	{
-		P1_TRAIL, 
+		P1_TRAIL, P1_STAMP,
 		EFFECT_END
 	};
 	//enum EFFECT_TYPE
@@ -80,6 +80,11 @@ public:
 	virtual void		DeActive_Effect(const _uint eType) override;
 
 	virtual _bool		Get_EffectsLoop(const _uint eType) override;
+	virtual void	Reset_WeaponOverlapCheck(_uint iCollIndex = 0) override;
+
+	virtual void	Change_WeaponAnimation(_int iAnimIndex, _bool isLoop, _float fChangeDuration = 0.2f, _int iStartFrame = 0, _bool bEitherChange = true, _bool bSameChange = false);
+	virtual _bool	Get_WeaponAnimEnd(_int iAnimIndex) override;
+
 
 private:
 	vector<CGameObject*>	CollObjRenderP{};

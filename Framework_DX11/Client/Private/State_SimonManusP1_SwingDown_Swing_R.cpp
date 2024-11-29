@@ -31,7 +31,7 @@ void CState_SimonManusP1_SwingDown_Swing_R::Update(_float fTimeDelta)
 {
     if (m_isSwing)
     {
-        if (100.f >= m_pMonster->Get_CurrentTrackPos())
+        if (100.f <= m_pMonster->Get_CurrentTrackPos())
         {
             m_pMonster->Change_Animation(AN_ROUTE_LAST, false, 0, 0);
             ++m_iRouteTrack;

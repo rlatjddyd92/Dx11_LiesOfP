@@ -11,7 +11,7 @@ class CState_SimonManusP1_Charge_SwingDown : public CState
 {
 private:
     typedef enum {
-        AN_STINGATTACK = 20
+        AN_CHARGESWINGDOWN = 35
     }ANIMNUM;
 public:
     CState_SimonManusP1_Charge_SwingDown(class CFsm* pFsm, class CMonster* pMonster);

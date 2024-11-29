@@ -20,22 +20,31 @@ HRESULT CState_SimonManusP1_Run::Initialize(_uint iStateNum, void* pArg)
 HRESULT CState_SimonManusP1_Run::Start_State(void* pArg)
 {
     m_pMonster->Change_Animation(AN_RUN, true, 0.1f, 0);
-    m_pMonster->Look_Player();
 
+    m_fAttackDelay = 0.f;
     return S_OK;
 }
 
 void CState_SimonManusP1_Run::Update(_float fTimeDelta)
 {
-    m_pMonster->Get_Transform()->LookAt_Lerp_NoHeight(m_pMonster->Get_TargetDir(), 1, fTimeDelta);
+    m_fAttackDelay += fTimeDelta;
+    m_pMonster->Get_Transform()->LookAt_Lerp_NoHeight(m_pMonster->Get_TargetDir(), 3, fTimeDelta);
     _Vec3 vMove = XMVector3Normalize(m_pMonster->Get_Transform()->Get_State(CTransform::STATE_LOOK)) * m_fRunSpeed;
 
     m_pMonster->Get_RigidBody()->Set_Velocity(vMove);
 
 
-    if (m_pMonster->Calc_Distance_XZ() <= 5.f)
+    _float fDist = m_pMonster->Calc_Distance_XZ();
+
+    if (fDist <= 7.f)
     {
         m_pMonster->Change_State(CSimonManus::IDLE);
+    }
+    else if (fDist <= 10.f && m_fAttackDelay >= 2.f)
+    {
+        _float fTime = { 1.5f };
+        m_pMonster->Change_State(CSimonManus::IDLE, &fTime);
+        return;
     }
 }
 

@@ -31,6 +31,8 @@ private:
 
     _uint               m_iRouteTrack = {};
 
+    _bool               m_bResetCheck = { false };
+
 private:
     _bool               End_Check();
     void                Collider_Check(_double CurTrackPos);

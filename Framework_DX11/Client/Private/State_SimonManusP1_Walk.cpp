@@ -22,21 +22,29 @@ HRESULT CState_SimonManusP1_Walk::Start_State(void* pArg)
     m_pMonster->Change_Animation(AN_WALK_FRONT, true, 0.1f, 0);;
 
 
+    m_fAttackDelay = 0.f;
     return S_OK;
 }
 
 void CState_SimonManusP1_Walk::Update(_float fTimeDelta)
 {
-
+    m_fAttackDelay += fTimeDelta;
     m_pMonster->Get_Transform()->LookAt_Lerp_NoHeight(m_pMonster->Get_TargetDir(), 1, fTimeDelta);
     _Vec3 vMove = XMVector3Normalize(m_pMonster->Get_Transform()->Get_State(CTransform::STATE_LOOK)) * m_fWalkSpeed;
     
     m_pMonster->Get_RigidBody()->Set_Velocity(vMove);
 
+    _float fDist = m_pMonster->Calc_Distance_XZ();
 
-    if (m_pMonster->Calc_Distance_XZ() <= 5.f)
+    if (fDist <= 7.f)
     {
         m_pMonster->Change_State(CSimonManus::IDLE);
+    }
+    else if (fDist <= 10.f && m_fAttackDelay >= 2.f)
+    {
+        _float fTime = {1.5f};
+        m_pMonster->Change_State(CSimonManus::IDLE, &fTime);
+        return;
     }
 }
 

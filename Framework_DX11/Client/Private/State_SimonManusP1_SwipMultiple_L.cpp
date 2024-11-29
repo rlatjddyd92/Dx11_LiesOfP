@@ -91,7 +91,7 @@ void CState_SimonManusP1_SwipMultiple_L::Collider_Check(_double CurTrackPos)
 {
     if (m_iRouteTrack == 0)
     {
-        if (CurTrackPos >= 175.f && CurTrackPos <= 200.f)
+        if (CurTrackPos >= 80.f && CurTrackPos <= 205.f)
         {
             m_pMonster->Active_CurrentWeaponCollider(1);
         }
@@ -141,6 +141,13 @@ void CState_SimonManusP1_SwipMultiple_L::Effect_Check(_double CurTrackPos)
         else
         {
             m_pMonster->DeActive_Effect(CSimonManus::P1_TRAIL);
+        }
+
+        if (!m_bResetCheck && 40.f <= CurTrackPos && CurTrackPos >= 50.f)
+        {
+
+            m_pMonster->Reset_WeaponOverlapCheck();
+            m_bResetCheck = true;
         }
     }
 }
