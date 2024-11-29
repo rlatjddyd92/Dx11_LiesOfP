@@ -118,13 +118,6 @@ HRESULT CPlayer::Initialize(void * pArg)
 
 void CPlayer::Priority_Update(_float fTimeDelta)
 {
-	// 24-11-29 김성용
-	// 테스트 코드 
-	/*if (Get_Fsm()->Get_CurrentState() == CPlayer::CHANGEWEP)
-		m_tPlayer_Stat->m_bInvenLock = true;
-	else 
-		m_tPlayer_Stat->m_bInvenLock = false;*/
-
 	if (m_isGuard)
 	{
 		m_fGuardTime = fTimeDelta;
