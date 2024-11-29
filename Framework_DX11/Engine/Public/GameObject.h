@@ -47,7 +47,8 @@ public:
 	virtual HRESULT Render_LightDepth() { return S_OK; }
 	virtual HRESULT Render_Picking() { return S_OK; }
 
-	virtual _bool Calc_DamageGain(_float fAtkDmg) { return false; }
+	virtual _bool Calc_DamageGain(_float fAtkDmg, _Vec3 vHitPos = { 0.f,0.f,0.f }) { return false; }
+
 public:
 	virtual void OnCollisionEnter(CGameObject* pOther) {};
 	virtual void OnCollisionStay(CGameObject* pOther) {};

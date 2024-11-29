@@ -43,6 +43,8 @@ HRESULT CWeapon_SimonManus_Hammer::Initialize(void* pArg)
 
 	m_strObjectTag = TEXT("MonsterWeapon");
 
+	m_fDamageAmount = 20.f;
+
 	return S_OK;
 }
 
@@ -71,7 +73,7 @@ void CWeapon_SimonManus_Hammer::Late_Update(_float fTimeDelta)
 	/* 직교투영을 위한 월드행렬까지 셋팅하게 된다. */
 	__super::Late_Update(fTimeDelta);
 
-
+	m_pGameInstance->Add_ColliderList(m_pColliderCom);
 	m_pGameInstance->Add_RenderObject(CRenderer::RG_NONBLEND, this);
 	m_pGameInstance->Add_RenderObject(CRenderer::RG_SHADOWOBJ, this);
 }
@@ -141,6 +143,7 @@ HRESULT CWeapon_SimonManus_Hammer::Ready_Components()
 	if (FAILED(__super::Add_Component(LEVEL_STATIC, TEXT("Prototype_Component_Collider_OBB"),
 		TEXT("Com_Collider"), reinterpret_cast<CComponent**>(&m_pColliderCom), &ColliderDesc)))
 		return E_FAIL;
+	m_pColliderCom->Set_Owner(this);
 
 	return S_OK;
 }

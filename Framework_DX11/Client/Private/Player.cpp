@@ -659,7 +659,7 @@ _bool CPlayer::Calc_DamageGain(_float fAtkDmg, _Vec3 vHitPos)
 		//∆€∆Â∆Æ ∞°µÂ
 		if (m_fGuardTime < 0.15f)
 		{
-
+			int a = 0;
 		}
 		else
 		{
