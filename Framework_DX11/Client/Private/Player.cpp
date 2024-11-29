@@ -10,6 +10,7 @@
 
 #include "Ladder.h"
 #include "Lift_Floor.h"
+#include "TreasureBox.h"
 
 #include "Effect_Manager.h"
 #include "Effect_Container.h"
@@ -291,7 +292,16 @@ void CPlayer::OnCollisionStay(CGameObject* pOther)
 			m_pRigidBodyCom->Set_Gravity(false);
 		}
 	}
+	if (pOther->Get_Tag() == TEXT("TreasureBox"))
+	{
+		if (KEY_TAP(KEY::E))
+		{
+			dynamic_cast<CTreasureBox*>(pOther)->Set_IsOpen(true);
+			m_pFsmCom->Change_State(CHEST, pOther);
+		}
+	}
 
+	
 	/*if (pOther->Get_Tag() == TEXT("Monster"))
 	{
 		_Vec3 vColNormal = m_pTransformCom->Get_State(CTransform::STATE_POSITION) - pOther->Get_Transform()->Get_State(CTransform::STATE_POSITION);
@@ -550,7 +560,7 @@ HRESULT CPlayer::Ready_Components()
 		PxRigidDynamicLockFlag::eLOCK_ANGULAR_Z;
 
 	physX::GeometryCapsule CapsuleDesc;
-	CapsuleDesc.fHeight = 1.5f;
+	CapsuleDesc.fHeight = 1.f;
 	CapsuleDesc.fRadius = 0.25f;
 	RigidBodyDesc.pGeometry = &CapsuleDesc;
 
@@ -656,7 +666,7 @@ _bool CPlayer::Calc_DamageGain(_float fAtkDmg, _Vec3 vHitPos)
 	if (m_isGuard)
 	{
 		//∆€∆Â∆Æ ∞°µÂ
-		if (m_fGuardTime < 0.15f)
+		if (m_fGuardTime < 0.2f)
 		{
 			int a = 0;
 		}

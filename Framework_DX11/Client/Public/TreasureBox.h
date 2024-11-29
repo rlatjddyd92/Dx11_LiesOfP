@@ -21,6 +21,10 @@ protected:
 	virtual ~CTreasureBox() = default;
 
 public:
+	_bool	Get_IsOpen() { return m_bOpen; }
+	void	Set_IsOpen(_bool isOpen) { m_bOpen = isOpen; }
+
+public:
 	virtual HRESULT Initialize_Prototype() override;
 	virtual HRESULT Initialize(void* pArg) override;
 	virtual void Priority_Update(_float fTimeDelta) override;

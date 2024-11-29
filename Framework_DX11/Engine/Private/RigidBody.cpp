@@ -156,6 +156,9 @@ HRESULT CRigidBody::Add_PxActor(RIGIDBODY_DESC* pDesc)
 	PxPhysics* pPhysx = m_pGameInstance->Get_PhysX();
 
 	PxTransform Transform = ConvertToPxTransform((_Vec3)m_pOwnerTransform->Get_State(CTransform::STATE_POSITION), m_pOwnerTransform->Get_Quaternion());
+	PxQuat qq = PxQuat(PxPiDivTwo, PxVec3(0.0f, 0.0f, 1.0f)); // Z축 기준으로 90도 회전
+	Transform.q = qq;
+
 	if (m_isStatic)
 	{
 		m_PxActor = pPhysx->createRigidStatic(Transform);
@@ -168,10 +171,11 @@ HRESULT CRigidBody::Add_PxActor(RIGIDBODY_DESC* pDesc)
 			m_PxActor->setActorFlag(PxActorFlag::eDISABLE_GRAVITY, true);
 		}
 	}
+#ifdef _DEBUG
 	m_PxActor->setActorFlag(PxActorFlag::eVISUALIZATION, true);
+#endif
 	static_cast<PxRigidDynamic*>(m_PxActor)->setRigidDynamicLockFlags(pDesc->PxLockFlags);
 
-	m_PxActor->setActorFlag(PxActorFlag::eDISABLE_GRAVITY, true);
 	m_PxMaterial = pPhysx->createMaterial(pDesc->fStaticFriction, pDesc->fDynamicFriction, pDesc->fRestituion);
 
 	return S_OK;
@@ -181,7 +185,11 @@ HRESULT CRigidBody::Add_PxGeometry(RIGIDBODY_DESC* pDesc)
 {
 	PxPhysics* pPhysx = m_pGameInstance->Get_PhysX();
 
-	PxShapeFlags eShapeFlags = PxShapeFlag::eSIMULATION_SHAPE | PxShapeFlag::eVISUALIZATION;
+	PxShapeFlags eShapeFlags = PxShapeFlag::eSIMULATION_SHAPE ;
+
+#ifdef _DEBUG
+	eShapeFlags = eShapeFlags | PxShapeFlag::eVISUALIZATION;
+#endif
 
 	physX::Geometry* pGeometry = pDesc->pGeometry;
 
@@ -189,14 +197,20 @@ HRESULT CRigidBody::Add_PxGeometry(RIGIDBODY_DESC* pDesc)
 	{
 	case physX::PX_CAPSULE:
 	{
+
 		physX::GeometryCapsule* CapsuleGeometry = static_cast<physX::GeometryCapsule*>(pGeometry);
 		m_PxShape = pPhysx->createShape(PxCapsuleGeometry(CapsuleGeometry->fRadius, CapsuleGeometry->fHeight * 0.5f), *m_PxMaterial, false, eShapeFlags);
 	}
 	break;
 	case physX::PX_SPHERE:
 	{
+		//PlayerPxTransform = PxTransformFromSegment(PlayerPxTransform.p, PlayerPxTransform.p + PxVec3(0.f, 1.f, 0.f) * 1.5f);
 		physX::GeometrySphere* SphereGeometry = static_cast<physX::GeometrySphere*>(pGeometry);
 		m_PxShape = pPhysx->createShape(PxSphereGeometry(SphereGeometry->fRadius), *m_PxMaterial, false, eShapeFlags);
+		// Shape 로컬 포즈에 회전 적용
+		PxQuat rotation = PxQuat(PxPiDivTwo, PxVec3(0.f, 0.f, 1.f)); // Z축 기준 90도 회전
+		PxTransform localPose(PxVec3(0.f), rotation);                // 회전만 적용, 위치는 (0, 0, 0)
+		m_PxShape->setLocalPose(localPose);
 	}
 	break;
 	case physX::PX_BOX:

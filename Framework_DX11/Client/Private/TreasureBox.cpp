@@ -34,9 +34,9 @@ HRESULT CTreasureBox::Initialize(void* pArg)
 
 	m_pModelCom->SetUp_Animation(1, true);
 
-	m_iAnim_Close_Idle = m_pModelCom->Find_AnimationIndex("AS_Close_Idle", 3.f);
-	m_iAnim_Open = m_pModelCom->Find_AnimationIndex("AS_Open", 3.f);
-	m_iAnim_Open_Idle = m_pModelCom->Find_AnimationIndex("AS_Open_Idle", 3.f);
+	m_iAnim_Close_Idle = m_pModelCom->Find_AnimationIndex("AS_Close_Idle", 2.f);
+	m_iAnim_Open = m_pModelCom->Find_AnimationIndex("AS_Open", 2.f);
+	m_iAnim_Open_Idle = m_pModelCom->Find_AnimationIndex("AS_Open_Idle", 2.f);
 
 	m_pModelCom->SetUp_Animation(m_iAnim_Close_Idle, true);
 
@@ -51,15 +51,6 @@ void CTreasureBox::Priority_Update(_float fTimeDelta)
 
 void CTreasureBox::Update(_float fTimeDelta)
 {
-	if (m_bCollision)
-	{
-		//키 입력 확인 부분은 나중에 UI에서 받아와야 함
-		if (KEY_TAP(KEY::E))
-		{
-			m_bOpen = true;
-		}
-	}
-
 	if (m_bOpen)
 	{
 		m_pModelCom->SetUp_NextAnimation(m_iAnim_Open, false);
