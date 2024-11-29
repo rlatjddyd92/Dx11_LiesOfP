@@ -41,6 +41,8 @@ HRESULT CStargazer::Initialize(void* pArg)
 
 	m_pModelCom->SetUp_Animation(m_iAnim_Close, true);
 
+	m_strObjectTag = TEXT("Stargazer");
+
 	return S_OK;
 }
 

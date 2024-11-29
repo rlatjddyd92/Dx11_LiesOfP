@@ -34,6 +34,8 @@ HRESULT CTreasureBox::Initialize(void* pArg)
 
 	m_pModelCom->SetUp_Animation(1, true);
 
+	m_strObjectTag = TEXT("TreasureBox");
+
 	return S_OK;
 }
 

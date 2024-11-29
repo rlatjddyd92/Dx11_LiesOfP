@@ -37,6 +37,8 @@ HRESULT CSteppingStone::Initialize(void* pArg)
     m_iIndex = iStaticIndex;
     iStaticIndex++;
 
+    m_strObjectTag = TEXT("SteppingStone");
+
     return S_OK;
 }
 
@@ -57,18 +59,16 @@ void CSteppingStone::Update(_float fTimeDelta)
     if (m_pColliderCom != nullptr)
     {
         m_pColliderCom->Update(m_pTransformCom->Get_WorldMatrix_Ptr());
-        m_pGameInstance->Add_ColliderList(m_pColliderCom);
     }
-
 }
 
 void CSteppingStone::Late_Update(_float fTimeDelta)
 {
     if (m_pGameInstance->isIn_Frustum_WorldSpace(m_pTransformCom->Get_State(CTransform::STATE_POSITION), 15.f))
     {
-
         __super::Late_Update(fTimeDelta);
         m_pGameInstance->Add_RenderObject(CRenderer::RG_NONBLEND, this);
+        m_pGameInstance->Add_ColliderList(m_pColliderCom);
 
 #ifdef _DEBUG
         if (m_pColliderCom != nullptr)

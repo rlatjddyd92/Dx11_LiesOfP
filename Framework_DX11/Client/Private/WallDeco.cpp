@@ -34,6 +34,8 @@ HRESULT CWallDeco::Initialize(void* pArg)
 
 	m_pModelCom->SetUp_Animation(0, true);
 
+	m_strObjectTag = TEXT("WallDeco");
+
 	return S_OK;
 }
 

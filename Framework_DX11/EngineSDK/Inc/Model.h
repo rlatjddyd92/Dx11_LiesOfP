@@ -27,7 +27,7 @@ public:
 	const _Matrix*			Get_BoneCombindTransformationMatrix_Ptr(_uint iBoneIndex) const { return m_Bones[iBoneIndex]->Get_CombinedTransformationMatrix_Ptr(); }
 
 	vector<class CAnimation*>& Get_Animations() { return m_Animations; }
-	_uint					Get_CurrentAnimationIndex() { return m_iCurrentAnimIndex; }
+          	_uint					Get_CurrentAnimationIndex() { return m_iCurrentAnimIndex; }
 	_uint					Get_CurrentAnimationIndex_Boundary() { return m_iCurrentAnimIndex_Boundary; }
 	_char*					Get_CurrentAnimationName();
 
