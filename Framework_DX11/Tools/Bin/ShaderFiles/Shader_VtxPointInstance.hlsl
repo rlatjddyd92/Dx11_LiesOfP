@@ -376,6 +376,7 @@ PS_EFFECT_OUT PS_GLOW_RGBTOA_MAIN(PS_IN In)
     return Out;
 }
 
+
 PS_NORMAL_OUT PS_BLOOD_SPREAD_MAIN(PS_IN In)
 {
     PS_NORMAL_OUT Out = (PS_NORMAL_OUT) 0;
@@ -430,6 +431,21 @@ PS_OUT PS_SMOKE_MAIN(PS_IN In)
     return Out;
 }
 
+PS_OUT PS_SMOKE_COLOR_MAIN(PS_IN In)
+{
+    PS_OUT Out = (PS_OUT) 0;
+    
+    int iTexIndex = (int) ((In.vLifeTime.y / In.vLifeTime.x) * (g_vTexDivide.x * g_vTexDivide.y - 1.f) * g_fSpriteSpeed);
+    
+    Out.vColor = g_DiffuseTexture.Sample(LinearSampler, Get_SpriteTexcoord(In.vTexcoord, iTexIndex));
+    
+    Out.vColor.rgb *= In.vColor.rgb;
+    Out.vColor.a *= 1.f - (In.vLifeTime.y / In.vLifeTime.x);
+    
+    return Out;
+}
+
+
 PS_NORMAL_OUT PS_INDEX_NORMAL_MAIN(PS_IN In)
 {
     PS_NORMAL_OUT Out = (PS_NORMAL_OUT) 0;
@@ -478,6 +494,7 @@ PS_EFFECT_OUT PS_THUNDER_MAIN(PS_IN In)
 
     return Out;
 }
+
 
 PS_OUT PS_SMOKE_LOWALPHA_MAIN(PS_IN In)
 {
@@ -540,6 +557,32 @@ PS_OUT PS_DISTORTION_MAIN(PS_IN In)
     Out.vColor.a *= 1.f - (In.vLifeTime.y / In.vLifeTime.x);
     
     Out.vColor.rgb *= Out.vColor.a;
+    
+    return Out;
+}
+
+PS_EFFECT_OUT PS_INDEX_ELECTROAURA_MAIN(PS_IN In)
+{
+    PS_EFFECT_OUT Out = (PS_EFFECT_OUT) 0;
+    
+    if (In.vLifeTime.x < In.vLifeTime.y)
+        discard;
+    
+    int iTexIndex = (int) (In.vColor.a * g_vTexDivide.x * g_vTexDivide.y);
+    vector vColor = g_DiffuseTexture.Sample(LinearSampler, Get_SpriteTexcoord(In.vTexcoord, iTexIndex));
+    
+    float2 vTexcoord = In.vTexcoord + float2(In.vLifeTime.y, In.vLifeTime.y);
+    vector vMask = g_MaskTexture_1.Sample(LinearSampler, vTexcoord);
+    
+    vColor.rgb *= In.vColor.rgb;
+    vColor.a *= vMask.r;
+    vColor.a *= 1.f - (In.vLifeTime.y / In.vLifeTime.x);
+    
+    if(vColor.a < 0.3f)
+        discard;
+    
+    Out.vDiffuse = vColor;
+    Out.vBlur = vColor;
     
     return Out;
 }
@@ -676,6 +719,28 @@ technique11	DefaultTechnique
         VertexShader = compile vs_5_0 VS_MAIN();
         GeometryShader = compile gs_5_0 GS_MAIN();
         PixelShader = compile ps_5_0 PS_DISTORTION_MAIN();
+    }
+
+    pass PARTICLE_INDEX_ELECTROAURA // 12
+    {
+        SetRasterizerState(RS_Default);
+        SetDepthStencilState(DSS_Default, 0);
+        SetBlendState(BS_Default, vector(0.f, 0.f, 0.f, 0.f), 0xffffffff);
+
+        VertexShader = compile vs_5_0 VS_MAIN();
+        GeometryShader = compile gs_5_0 GS_MAIN();
+        PixelShader = compile ps_5_0 PS_INDEX_ELECTROAURA_MAIN();
+    }
+
+    pass PARTICLE_COLORSMOKE // 13
+    {
+        SetRasterizerState(RS_Default);
+        SetDepthStencilState(DSS_NonWrite, 0);
+        SetBlendState(BS_AlphaBlend, vector(0.f, 0.f, 0.f, 0.f), 0xffffffff);
+
+        VertexShader = compile vs_5_0 VS_MAIN();
+        GeometryShader = compile gs_5_0 GS_MAIN();
+        PixelShader = compile ps_5_0 PS_SMOKE_COLOR_MAIN();
     }
 }
 

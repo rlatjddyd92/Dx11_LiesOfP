@@ -83,6 +83,9 @@ void CParticle_Effect::Update(_float fTimeDelta)
         bOver = m_pVIBufferCom->DispatchCS(m_pConvergeCS, Movement);
         break;
 
+    case PT_LOCALSPREAD:
+        bOver = m_pVIBufferCom->DispatchCS(m_pLocalSpreadCS, Movement);
+        break;
     }
 
     if (true == bOver)
@@ -106,9 +109,18 @@ void CParticle_Effect::Late_Update(_float fTimeDelta)
 
 HRESULT CParticle_Effect::Render()
 {
-    _Matrix WorldMatrix = XMMatrixIdentity();
-    if (FAILED(m_pShaderCom->Bind_Matrix("g_WorldMatrix", &WorldMatrix)))
-        return E_FAIL;
+    if (PT_LOCALSPREAD == m_DefaultDesc.eType)
+    {
+        if (FAILED(m_pShaderCom->Bind_Matrix("g_WorldMatrix", &m_WorldMatrix)))
+            return E_FAIL;
+    }
+    else
+    {
+        _Matrix WorldMatrix = XMMatrixIdentity();
+        if (FAILED(m_pShaderCom->Bind_Matrix("g_WorldMatrix", &WorldMatrix)))
+            return E_FAIL;
+    }
+    
     if (FAILED(m_pShaderCom->Bind_Matrix("g_ViewMatrix", &m_pGameInstance->Get_Transform(CPipeLine::D3DTS_VIEW))))
         return E_FAIL;
     if (FAILED(m_pShaderCom->Bind_Matrix("g_ProjMatrix", &m_pGameInstance->Get_Transform(CPipeLine::D3DTS_PROJ))))
@@ -275,6 +287,11 @@ HRESULT CParticle_Effect::Ready_Components(const PARTICLE_EFFECT_DESC& Desc)
         TEXT("Com_ConvergeCS"), reinterpret_cast<CComponent**>(&m_pConvergeCS))))
         return E_FAIL;
 
+    /* FOR.Com_LocalSpreadCS */
+    if (FAILED(__super::Add_Component(LEVEL_TOOL, TEXT("Prototype_Component_Shader_Compute_Particle_LocalSpread"),
+        TEXT("Com_LocalSpreadCS"), reinterpret_cast<CComponent**>(&m_pLocalSpreadCS))))
+        return E_FAIL;
+
     /* FOR.Com_ResetCS */
     if (FAILED(__super::Add_Component(LEVEL_TOOL, TEXT("Prototype_Component_Shader_Compute_Particle_Reset"),
         TEXT("Com_ResetCS"), reinterpret_cast<CComponent**>(&m_pResetCS))))
@@ -345,6 +362,7 @@ void CParticle_Effect::Free()
     Safe_Release(m_pSpreadCS);
     Safe_Release(m_pMoveCS);
     Safe_Release(m_pConvergeCS);
+    Safe_Release(m_pLocalSpreadCS);
     Safe_Release(m_pResetCS);
 
     for (size_t i = 0; i < TEXTURE_END; ++i)

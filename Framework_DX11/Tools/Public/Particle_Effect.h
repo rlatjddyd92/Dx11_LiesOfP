@@ -13,7 +13,7 @@ BEGIN(Tools)
 class CParticle_Effect final : public CEffect_Base
 {
 public:
-	enum PARTICLE_TYPE { PT_SPREAD, PT_MOVE, PT_CONVERGE, PT_END };
+	enum PARTICLE_TYPE { PT_SPREAD, PT_MOVE, PT_CONVERGE, PT_LOCALSPREAD, PT_END };
 
 	typedef struct
 	{
@@ -113,6 +113,7 @@ private:
 
 	// 이거 3개는 월드의 역행렬
 	class CShader_Compute* m_pSpreadCS = { nullptr };
+	class CShader_Compute* m_pLocalSpreadCS = { nullptr };
 	class CShader_Compute* m_pMoveCS = { nullptr };
 	class CShader_Compute* m_pConvergeCS = { nullptr };
 

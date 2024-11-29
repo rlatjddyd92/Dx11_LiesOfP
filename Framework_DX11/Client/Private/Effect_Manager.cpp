@@ -256,6 +256,11 @@ HRESULT CEffect_Manager::Load_Shaders()
         CShader_Compute::Create(m_pDevice, m_pContext, TEXT("../Bin/ShaderFiles/Shader_ParticleCompute.hlsl"), "CS_CONVERGE_MAIN"))))
         return E_FAIL;
 
+    /* For. Prototype_Component_Shader_Compute_Particle_LocalSpread */
+    if (FAILED(m_pGameInstance->Add_Prototype(LEVEL_STATIC, TEXT("Prototype_Component_Shader_Compute_Particle_LocalSpread"),
+        CShader_Compute::Create(m_pDevice, m_pContext, TEXT("../Bin/ShaderFiles/Shader_ParticleCompute.hlsl"), "CS_SPREAD_LOCAL_MAIN"))))
+        return E_FAIL;
+
     /* For. Prototype_Component_Shader_Compute_Particle_Reset */
     if (FAILED(m_pGameInstance->Add_Prototype(LEVEL_STATIC, TEXT("Prototype_Component_Shader_Compute_Particle_Reset"),
         CShader_Compute::Create(m_pDevice, m_pContext, TEXT("../Bin/ShaderFiles/Shader_ParticleCompute.hlsl"), "CS_RESET_MAIN"))))
