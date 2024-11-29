@@ -135,6 +135,16 @@ void CRigidBody::Set_GloblePose(const _Vec3& vPos)
 	m_pOwnerTransform->Set_State(CTransform::STATE_POSITION, _Vec3(vPos.x, vPos.y, vPos.z));
 }
 
+void CRigidBody::Set_Gravity(_bool isGravity)
+{
+	m_PxActor->setActorFlag(PxActorFlag::eDISABLE_GRAVITY, !isGravity);
+}
+
+void CRigidBody::Set_Kinematic(_bool isKinematic)
+{
+	static_cast<PxRigidDynamic*>(m_PxActor)->setRigidBodyFlag(PxRigidBodyFlag::eKINEMATIC, isKinematic);
+}
+
 HRESULT CRigidBody::Add_PxActor(RIGIDBODY_DESC* pDesc)
 {
 	PxPhysics* pPhysx = m_pGameInstance->Get_PhysX();
@@ -155,7 +165,7 @@ HRESULT CRigidBody::Add_PxActor(RIGIDBODY_DESC* pDesc)
 	m_PxActor->setActorFlag(PxActorFlag::eVISUALIZATION, true);
 	static_cast<PxRigidDynamic*>(m_PxActor)->setRigidDynamicLockFlags(pDesc->PxLockFlags);
 
-
+	m_PxActor->setActorFlag(PxActorFlag::eDISABLE_GRAVITY, true);
 	m_PxMaterial = pPhysx->createMaterial(pDesc->fStaticFriction, pDesc->fDynamicFriction, pDesc->fRestituion);
 
 	return S_OK;

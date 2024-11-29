@@ -272,16 +272,17 @@ void CPlayer::OnCollisionStay(CGameObject* pOther)
 	{
 		m_pRigidBodyCom->Set_IsOnCell(false);
 		m_pRigidBodyCom->Set_IsLockCell(false);
-		
 		//_Vec3 vLiftFloorPos = pOther->Get_Transform()->Get_State(CTransform::STATE_POSITION);
 		//_Vec3 vLiftFloorPrevPos = dynamic_cast<CLift_Floor*>(pOther)->Get_PrevPos();
 
-		//if (dynamic_cast<CLift_Floor*>(pOther)->Get_isMoving())
-		//{
-		//	_Vec3 vVel = dynamic_cast<CLift_Floor*>(pOther)->Get_Velocity();
-
-		//	m_pRigidBodyCom->Add_Velocity(vVel);
-		//}
+		if (dynamic_cast<CLift_Floor*>(pOther)->Get_isMoving())
+		{
+			m_pRigidBodyCom->Set_Gravity(true);
+		}
+		else
+		{
+			m_pRigidBodyCom->Set_Gravity(false);
+		}
 	}
 
 	/*if (pOther->Get_Tag() == TEXT("Monster"))

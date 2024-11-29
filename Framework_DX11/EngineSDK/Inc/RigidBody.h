@@ -46,6 +46,8 @@ public:
     void Add_Force(const _Vec3& vForce, PxForceMode::Enum _eMode = PxForceMode::eFORCE);
     void Set_Mass(_float fMass);
     void Set_GloblePose(const _Vec3& vPos);
+    void Set_Gravity(_bool isGravity);
+    void Set_Kinematic(_bool isKinematic);
 
 private:
     class CGameObject* m_pOwner = { nullptr };

@@ -40,7 +40,7 @@ HRESULT CPhysX_Manager::Initialize()
 
     // 씬 설명 설정
     PxSceneDesc sceneDesc(m_PhysX->getTolerancesScale());
-    sceneDesc.gravity = PxVec3(0.0f, -9.81f, 0.0f);
+    sceneDesc.gravity = PxVec3(0.0f, -9.81f * 50.f, 0.0f);
 
     // CPU 디스패처(워커 스레드) 생성
     m_PxDispatcher = PxDefaultCpuDispatcherCreate(2);
