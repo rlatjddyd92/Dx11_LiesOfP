@@ -73,6 +73,8 @@ void CUIRender_Batching::Late_Update(_float fTimeDelta)
 
 HRESULT CUIRender_Batching::Render()
 {
+	
+
 	_float fWidth = m_vecViewPort[_int(m_eNow_Area)]->Width;
 	_float fHeight = m_vecViewPort[_int(m_eNow_Area)]->Height;
 	_float fStartX = m_vecViewPort[_int(m_eNow_Area)]->TopLeftX;
@@ -257,6 +259,7 @@ HRESULT CUIRender_Batching::Render()
 		Safe_Delete(pNow);
 	}
 
+
 	//m_eNow_Area = SCROLL_AREA::SCROLL_NONE;
 
 	return S_OK;
@@ -389,8 +392,6 @@ HRESULT CUIRender_Batching::Ready_Components()
 void CUIRender_Batching::Ready_Font()
 {
 	m_vecFont_tchar.resize(_int(UI_FONT::FONT_END));
-
-
 
 	m_pGameInstance->Add_Font(TEXT("Font_Normal_8"), TEXT("../Bin/Resources/Fonts/Font_Normal_8.spritefont"));
 	m_pGameInstance->Add_Font(TEXT("Font_Normal_12"), TEXT("../Bin/Resources/Fonts/Font_Normal_12.spritefont"));
