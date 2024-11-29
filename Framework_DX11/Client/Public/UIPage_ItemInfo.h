@@ -80,6 +80,7 @@ public:
 
 	void Action_ItemAction(_float fTimeDelta);
 
+
 	ITEM_FUNC Get_Active_Func()
 	{
 		if (m_iNow_Func == -1)

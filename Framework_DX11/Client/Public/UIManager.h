@@ -126,14 +126,14 @@ public:
 
 	ITEM_FUNC Get_ActiveFunc() 
 	{ 
-		if (m_eNow_Active_Func != ITEM_FUNC::FUNC_END)
-		{
-			m_pUIPage_Equip->Reset_ItemAction();
-			m_pUIPage_Inven->Reset_ItemAction();
-			m_pUIPage_ItemInfo->Off_ItemAction();
-		}
-		
 		return m_eNow_Active_Func;
+	}
+
+	void Reset_ItemAction()
+	{
+		m_pUIPage_Equip->Reset_ItemAction();
+		m_pUIPage_Inven->Reset_ItemAction();
+		m_pUIPage_ItemInfo->Off_ItemAction();
 	}
 
 private:

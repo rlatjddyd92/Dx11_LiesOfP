@@ -192,11 +192,7 @@ void CUIPage_Equip::Action_Focus(_float fTimeDelta)
 		const CItem_Manager::ITEM* pItem = GET_GAMEINTERFACE->Get_Equip_Item_Info(EQUIP_SLOT(_int(eStart_Slot) + (i - iStart_Index)));
 		_int iIndex = __super::Get_Front_PartIndex_In_Control(i);
 
-		if (eStart_Slot == EQUIP_SLOT::EQUIP_WEAPON_BLADE_0)
-			eStart_Slot = EQUIP_SLOT(_int(eStart_Slot) + 1);
-
-		if (eStart_Slot == EQUIP_SLOT::EQUIP_WEAPON_BLADE_1)
-			eStart_Slot = EQUIP_SLOT(_int(eStart_Slot) + 1);
+		
 
 		if ((pItem != nullptr) && (pItem->bIsNew))
 		{
@@ -226,6 +222,12 @@ void CUIPage_Equip::Action_Focus(_float fTimeDelta)
 				Set_ItemAction(m_vecPart[iIndex]->fPosition, m_vecPart[iIndex]->fSize, INVEN_ARRAY_TYPE::TYPE_END, EQUIP_SLOT(_int(eStart_Slot) + (i - iStart_Index)), i);
 			}
 		}
+
+		if (eStart_Slot == EQUIP_SLOT::EQUIP_WEAPON_BLADE_0)
+			eStart_Slot = EQUIP_SLOT(_int(eStart_Slot) + 1);
+
+		if (eStart_Slot == EQUIP_SLOT::EQUIP_WEAPON_HANDLE_0)
+			eStart_Slot = EQUIP_SLOT(_int(eStart_Slot) + 1);
 	}
 
 	if ((KEY_TAP(KEY::RBUTTON)) && (iItemActionActive == false))
@@ -306,12 +308,19 @@ void CUIPage_Equip::Update_Weapon_Cell()
 		const CItem_Manager::ITEM* pItemBlade = GET_GAMEINTERFACE->Get_Equip_Item_Info(EQUIP_SLOT(iEquip_Slot_Index));
 		const CItem_Manager::ITEM* pItemHandle = GET_GAMEINTERFACE->Get_Equip_Item_Info(EQUIP_SLOT(iEquip_Slot_Index + 1));
 
+		_bool bIsEnmpty = false;
+
+		if (pItemBlade == nullptr)
+			bIsEnmpty = true;
+		else if ((pItemHandle == nullptr) && (pItemBlade->bModule_Weapon))
+			bIsEnmpty = true;
+
 		_int iGroup = _int(PART_GROUP::GROUP_PAGE_0_WEAPON_FIRST) + i;
 		list<_int>::iterator iter = m_vec_Group_Ctrl[iGroup]->PartIndexlist.begin();
 
 	
 
-		if ((pItemBlade == nullptr) || (pItemBlade->eType_Index == ITEM_TYPE::ITEMTYPE_END))
+		if ((bIsEnmpty) || (pItemBlade->eType_Index == ITEM_TYPE::ITEMTYPE_END))
 		{
 			++iter; m_vecPart[*iter]->bRender = m_eFocus_Group == PART_GROUP(iGroup) ? true : false;
 			++iter; m_vecPart[*iter]->bRender = true;

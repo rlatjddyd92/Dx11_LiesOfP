@@ -59,7 +59,7 @@ void CUIPage_Inven::Update(_float fTimeDelta)
 
 void CUIPage_Inven::Late_Update(_float fTimeDelta)
 {
-	if (m_bReset_ItemAction_Info == true)
+	if ((KEY_TAP(KEY::RBUTTON))&&(m_bReset_ItemAction_Info == true))
 		Reset_ItemAction();
 
 	for (auto& iter : m_vec_Group_Ctrl)

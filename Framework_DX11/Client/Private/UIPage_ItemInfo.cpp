@@ -163,6 +163,18 @@ HRESULT CUIPage_ItemInfo::Ready_UIPart_Group_Control()
 	m_strFuncName[_int(ITEM_FUNC::FUNC_EQUIP_BAG)] = TEXT("착용하기 : 보조가방");
 	m_strFuncName[_int(ITEM_FUNC::FUNC_EQUIP_WEAPON_FIRST)] = TEXT("착용하기 : 무기 1번");
 	m_strFuncName[_int(ITEM_FUNC::FUNC_EQUIP_WEAPON_SECOND)] = TEXT("착용하기 : 무기 2번");
+	m_strFuncName[_int(ITEM_FUNC::FUNC_EQUIP_TOP_0)] = TEXT("착용하기 : 위 벨트 1번");
+	m_strFuncName[_int(ITEM_FUNC::FUNC_EQUIP_TOP_1)] = TEXT("착용하기 : 위 벨트 2번");
+	m_strFuncName[_int(ITEM_FUNC::FUNC_EQUIP_TOP_2)] = TEXT("착용하기 : 위 벨트 3번");
+	m_strFuncName[_int(ITEM_FUNC::FUNC_EQUIP_BOTTOM_0)] = TEXT("착용하기 : 아래 벨트 1번");
+	m_strFuncName[_int(ITEM_FUNC::FUNC_EQUIP_BOTTOM_1)] = TEXT("착용하기 : 아래 벨트 2번");
+	m_strFuncName[_int(ITEM_FUNC::FUNC_EQUIP_BOTTOM_2)] = TEXT("착용하기 : 아래 벨트 3번");
+	m_strFuncName[_int(ITEM_FUNC::FUNC_EQUIP_BAG_0)] = TEXT("착용하기 : 보조가방 1번");
+	m_strFuncName[_int(ITEM_FUNC::FUNC_EQUIP_BAG_1)] = TEXT("착용하기 : 보조가방 2번");
+	m_strFuncName[_int(ITEM_FUNC::FUNC_EQUIP_BAG_2)] = TEXT("착용하기 : 보조가방 3번");
+	m_strFuncName[_int(ITEM_FUNC::FUNC_EQUIP_BAG_3)] = TEXT("착용하기 : 보조가방 4번");
+
+
 	Off_ItemAction();
 
 	m_bRender = false;
@@ -254,21 +266,14 @@ void CUIPage_ItemInfo::Action_ItemAction(_float fTimeDelta)
 	for (_int i = 0; i < 4; ++i)
 	{
 		if (m_eActive_Func[i] != ITEM_FUNC::FUNC_END)
-		{
 			if (GET_GAMEINTERFACE->CheckMouse(m_vecPart[_int(PART_GROUP::ITEMINFO_ACTION_Mouse_0) + (i * 3)]->fPosition, m_vecPart[_int(PART_GROUP::ITEMINFO_ACTION_Mouse_0) + (i * 3)]->fSize).x != -1.f)
 			{
 				m_vecPart[_int(PART_GROUP::ITEMINFO_ACTION_Fx_0) + (i * 3)]->bRender = true;
-
 				if (KEY_TAP(KEY::LBUTTON))
-				{
 					m_iNow_Func = i;
-				}
+				continue;
 			}
-			else 
-				m_vecPart[_int(PART_GROUP::ITEMINFO_ACTION_Fx_0) + (i * 3)]->bRender = false;
-		}
-		else
-			break;
+		m_vecPart[_int(PART_GROUP::ITEMINFO_ACTION_Fx_0) + (i * 3)]->bRender = false;
 	}
 }
 
