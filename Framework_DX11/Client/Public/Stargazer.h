@@ -36,7 +36,7 @@ public:
 	virtual void OnCollisionExit(CGameObject* pOther) override;
 
 public:
-	_bool Get_IsRestored() { return m_bRestored; }
+	_bool Get_IsOpend() { return m_isOpened; }
 
 private:
 	CCollider* m_pColliderCom = { nullptr};
