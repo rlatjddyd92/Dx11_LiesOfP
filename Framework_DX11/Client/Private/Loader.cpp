@@ -31,6 +31,7 @@
 #include "Lift_Door.h"
 #include "Lift_Floor.h"
 #include "WallDeco.h"
+#include "Deco_Collider.h"
 #include "TowerDoor.h"
 #include "LastDoor.h"
 #include "TreasureBox.h"
@@ -1001,6 +1002,11 @@ HRESULT CLoader::Ready_Prototype()
 	/* For. Prototype_GameObject_WallDeco */
 	if (FAILED(m_pGameInstance->Add_Prototype(TEXT("Prototype_GameObject_WallDeco"),
 		CWallDeco::Create(m_pDevice, m_pContext))))
+		return E_FAIL;
+
+		/* For. Prototype_GameObject_Deco_Collider */
+	if (FAILED(m_pGameInstance->Add_Prototype(TEXT("Prototype_GameObject_Deco_Collider"),
+		CDeco_Collider::Create(m_pDevice, m_pContext))))
 		return E_FAIL;
 	
 	/* For. Prototype_GameObject_TreasureBox */

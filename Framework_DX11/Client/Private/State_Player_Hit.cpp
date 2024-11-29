@@ -213,7 +213,7 @@ CState_Player_Hit* CState_Player_Hit::Create(CFsm* pFsm, CPlayer* pPlayer, _uint
 {
     CState_Player_Hit* pInstance = new CState_Player_Hit(pFsm, pPlayer);
 
-    if (FAILED(pInstance->Initialize(iStateNum, pArg)))
+     if (FAILED(pInstance->Initialize(iStateNum, pArg)))
     {
         MSG_BOX(TEXT("Failed to Created : CState_Player_Hit"));
         Safe_Release(pInstance);

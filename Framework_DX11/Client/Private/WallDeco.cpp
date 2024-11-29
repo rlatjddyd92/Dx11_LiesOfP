@@ -1,7 +1,7 @@
 #include "stdafx.h"
 #include "WallDeco.h"
 #include "GameInstance.h"
-
+#include "Deco_Collider.h"
 CWallDeco::CWallDeco(ID3D11Device* pDevice, ID3D11DeviceContext* pContext)
 	: CGameObject{ pDevice, pContext }
 {
@@ -38,6 +38,16 @@ HRESULT CWallDeco::Initialize(void* pArg)
 	m_pModelCom->SetUp_Animation(m_iAnim_Deactivate, true);
 
 	m_strObjectTag = TEXT("WallDeco");
+
+	CDeco_Collider::DECO_COLLIDER_DESC Desc = {};
+	Desc.pSoketMatrix = m_pModelCom->Get_BoneCombindTransformationMatrix_Ptr(3);
+	Desc.pParentWorldMatrix = m_pTransformCom->Get_WorldMatrix_Ptr();
+
+	CGameObject* pColliderObj = m_pGameInstance->Clone_GameObject(TEXT("Prototype_GameObject_Deco_Collider"), &Desc);
+	if (nullptr != pColliderObj)
+	{
+		m_pCollider_Object = pColliderObj;
+	}
 
 	return S_OK;
 }

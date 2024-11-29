@@ -21,6 +21,9 @@ HRESULT CDeco_Collider::Initialize(void* pArg)
 {
     DECO_COLLIDER_DESC* pDesc = static_cast<DECO_COLLIDER_DESC*>(pArg);
 
+    m_pParentWorldMatrix = pDesc->pParentWorldMatrix;
+    m_pSoketMatrix = pDesc->pSoketMatrix;
+
     if (FAILED(__super::Initialize(pArg)))
         return E_FAIL;
 
@@ -35,10 +38,27 @@ void CDeco_Collider::Priority_Update(_float fTimeDelta)
 
 void CDeco_Collider::Update(_float fTimeDelta)
 {
+    _matrix		SocketMatrix = XMLoadFloat4x4(m_pSoketMatrix);
+
+    for (size_t i = 0; i < 3; i++)
+    {
+        SocketMatrix.r[i] = XMVector3Normalize(SocketMatrix.r[i]);
+    }
+    m_pTransformCom->Set_WorldMatrix( SocketMatrix * XMLoadFloat4x4(m_pParentWorldMatrix));
+
+    if (m_pColliderCom != nullptr)
+        m_pColliderCom->Update(m_pTransformCom->Get_WorldMatrix_Ptr());
 }
 
 void CDeco_Collider::Late_Update(_float fTimeDelta)
 {
+    __super::Late_Update(fTimeDelta);
+    m_pGameInstance->Add_ColliderList(m_pColliderCom);
+
+#ifdef _DEBUG
+    if (m_pColliderCom != nullptr)
+        m_pGameInstance->Add_DebugObject(m_pColliderCom);
+#endif
 }
 
 HRESULT CDeco_Collider::Render()
@@ -60,6 +80,17 @@ void CDeco_Collider::OnCollisionExit(CGameObject* pOther)
 
 HRESULT CDeco_Collider::Ready_Components()
 {
+    /* For.Com_Collider */
+    CBounding_OBB::BOUNDING_OBB_DESC			ColliderDesc{};
+    ColliderDesc.vExtents = _float3(1.f, 1.f, 1.f);
+    ColliderDesc.vAngles = _float3(0.f, 0.f, 0.f);
+    ColliderDesc.vCenter = _float3(0.f, 0.f, 0.f);
+
+    if (FAILED(__super::Add_Component(LEVEL_STATIC, TEXT("Prototype_Component_Collider_OBB"),
+        TEXT("Com_Collider"), reinterpret_cast<CComponent**>(&m_pColliderCom), &ColliderDesc)))
+        return E_FAIL;
+    m_pColliderCom->Set_Owner(this);
+     
     return S_OK;
 }
 

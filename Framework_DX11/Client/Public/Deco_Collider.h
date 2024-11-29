@@ -14,6 +14,7 @@ class CDeco_Collider :
 public:
 	typedef struct
 	{
+		const _float4x4* pSoketMatrix = { nullptr };
 		const _float4x4* pParentWorldMatrix = { nullptr };
 	}DECO_COLLIDER_DESC;
 
@@ -37,6 +38,8 @@ public:
 
 private:
 	CCollider* m_pColliderCom = { nullptr };
+	const _float4x4* m_pParentWorldMatrix = { nullptr };
+	const _float4x4* m_pSoketMatrix = { nullptr };
 
 private:
 	HRESULT Ready_Components();
