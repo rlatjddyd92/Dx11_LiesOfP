@@ -18,7 +18,7 @@ HRESULT CState_Player_OH_Guard::Initialize(_uint iStateNum, void* pArg)
     m_iAnimation_Walk[WALK_L] = m_pPlayer->Get_Model()->Find_AnimationIndex("AS_Pino_O_Guard_Walk_L", 2.5f);
     m_iAnimation_Walk[WALK_R] = m_pPlayer->Get_Model()->Find_AnimationIndex("AS_Pino_O_Guard_Walk_R", 2.5f);
 
-    m_iAnimation_Guard = m_pPlayer->Get_Model()->Find_AnimationIndex("AS_Pino_O_Guard_Idle", 2.5f);
+    m_iAnimation_Guard = m_pPlayer->Get_Model()->Find_AnimationIndex("AS_Pino_O_Guard_Idle", 3.f);
 
     m_fMoveSpeed = 1.5f;
     m_iStateNum = iStateNum;

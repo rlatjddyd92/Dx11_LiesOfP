@@ -25,7 +25,7 @@ public:
 
 	enum PLAYER_STATE
 	{
-		HIT, PARRY, HEAL, CHANGEWEP, LADDER, LIFT, CHEST, ITEMGET,
+		HIT, PARRY, HEAL, CHANGEWEP, 
 
 		OH_IDLE, OH_WALK, OH_RUN, OH_SPRINT, OH_GUARD, OH_GUARDHIT, OH_JUMP, OH_DASH,
 
@@ -37,6 +37,9 @@ public:
 
 		SCISSOR_LATTACK0, SCISSOR_LATTACK1, SCISSOR_RATTACK0, SCISSOR_RATTACK1, SCISSOR_CHARGE0, SCISSOR_CHARGE1, 
 		SCISSOR_FATAL0, SCISSOR_FATAL1, SCISSOR_FATAL2, SCISSOR_BUFF,
+
+
+		LADDER = 100, LIFT, CHEST, ITEMGET,
 
 		STATE_END
 	};
@@ -212,6 +215,10 @@ private:
 	HRESULT Ready_Weapon();
 	HRESULT Ready_FSM();
 	HRESULT Ready_Effect();
+	
+
+
+	void CollisionStay_IntercObj(CGameObject* pGameObject);
 
 public:
 	static CPlayer* Create(ID3D11Device* pDevice, ID3D11DeviceContext* pContext);

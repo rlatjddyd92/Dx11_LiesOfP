@@ -66,6 +66,9 @@ void CWeapon::Late_Update(_float fTimeDelta)
 
 HRESULT CWeapon::Render()
 {
+	if (!m_isActive)
+		return S_OK;
+
 	if (FAILED(Bind_WorldMatrix(m_pShaderCom, "g_WorldMatrix")))
 		return E_FAIL;
 

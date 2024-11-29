@@ -106,7 +106,10 @@ HRESULT CPlayer::Initialize(void * pArg)
 		return E_FAIL;
 
 	//m_pNavigationCom->Move_to_Cell(m_pRigidBodyCom, 1030); //307
-	m_pNavigationCom->Move_to_Cell(m_pRigidBodyCom, 772); //사다리
+	//m_pNavigationCom->Move_to_Cell(m_pRigidBodyCom, 772); //긴사다리
+	//m_pNavigationCom->Move_to_Cell(m_pRigidBodyCom, 427); //짧은사다리
+	m_pNavigationCom->Move_to_Cell(m_pRigidBodyCom, 341); //아래엘베
+
 
 	m_strObjectTag = TEXT("Player");
 
@@ -263,43 +266,7 @@ void CPlayer::OnCollisionEnter(CGameObject* pOther)
 
 void CPlayer::OnCollisionStay(CGameObject* pOther)
 {
-	if (pOther->Get_Tag() == TEXT("Ladder"))
-	{
-		if (GET_GAMEINTERFACE->Action_InterAction(TEXT("사다리를 타자")))
-		{
-			m_pFsmCom->Change_State(LADDER, pOther);
-		}
-	}
-	if (pOther->Get_Tag() == TEXT("Lift_Controller"))
-	{
-		if (KEY_TAP(KEY::E))
-		{
-			m_pFsmCom->Change_State(LIFT, pOther);
-		}
-	}
-	if (pOther->Get_Tag() == TEXT("Lift_Floor"))
-	{
-		m_pRigidBodyCom->Set_IsOnCell(false);
-		m_pRigidBodyCom->Set_IsLockCell(false);
-
-		if (dynamic_cast<CLift_Floor*>(pOther)->Get_isMoving())
-		{
-			m_pRigidBodyCom->Set_Gravity(true);
-		}
-		else
-		{
-			m_pRigidBodyCom->Set_Gravity(false);
-		}
-	}
-	if (pOther->Get_Tag() == TEXT("TreasureBox"))
-	{
-		if (KEY_TAP(KEY::E))
-		{
-			dynamic_cast<CTreasureBox*>(pOther)->Set_IsOpen(true);
-			m_pFsmCom->Change_State(CHEST, pOther);
-		}
-	}
-
+	CollisionStay_IntercObj(pOther);
 	
 	/*if (pOther->Get_Tag() == TEXT("Monster"))
 	{
@@ -549,6 +516,7 @@ HRESULT CPlayer::Ready_Components()
 	RigidBodyDesc.isGravity = false;
 	RigidBodyDesc.pOwnerTransform = m_pTransformCom;
 	RigidBodyDesc.pOwnerNavigation = m_pNavigationCom;
+	RigidBodyDesc.isCapsule = true;
 
 	RigidBodyDesc.pOwner = this;
 	RigidBodyDesc.fStaticFriction = 0.f;
@@ -716,6 +684,50 @@ _bool CPlayer::Decrease_Region(_uint iRegionCount)
 	}
 
 	return true;
+}
+
+void CPlayer::CollisionStay_IntercObj(CGameObject* pGameObject)
+{
+	if (m_pFsmCom->Get_CurrentState() >= 100)
+		return;
+
+	if (pGameObject->Get_Tag() == TEXT("Ladder"))
+	{
+		if (GET_GAMEINTERFACE->Action_InterAction(TEXT("사다리를 타자")))
+		{
+			m_pFsmCom->Change_State(LADDER, pGameObject);
+		}
+	}
+	if (pGameObject->Get_Tag() == TEXT("Lift_Controller"))
+	{
+		if (KEY_TAP(KEY::E))
+		{
+			m_pFsmCom->Change_State(LIFT, pGameObject);
+		}
+	}
+	if (pGameObject->Get_Tag() == TEXT("Lift_Floor"))
+	{
+		m_pRigidBodyCom->Set_IsOnCell(false);
+		m_pRigidBodyCom->Set_IsLockCell(false);
+
+		if (dynamic_cast<CLift_Floor*>(pGameObject)->Get_isMoving())
+		{
+			m_pRigidBodyCom->Set_Gravity(true);
+		}
+		else
+		{
+			m_pRigidBodyCom->Set_Gravity(false);
+		}
+	}
+	if (pGameObject->Get_Tag() == TEXT("TreasureBox"))
+	{
+		if (KEY_TAP(KEY::E))
+		{
+			dynamic_cast<CTreasureBox*>(pGameObject)->Set_IsOpen(true);
+			m_pFsmCom->Change_State(CHEST, pGameObject);
+		}
+	}
+
 }
 
 CPlayer * CPlayer::Create(ID3D11Device * pDevice, ID3D11DeviceContext * pContext)

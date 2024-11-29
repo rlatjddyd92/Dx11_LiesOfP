@@ -198,13 +198,14 @@ void CState_Player_Ladder::Choice_UpDown(CLadder* pLadder)
         vInitPos.x = vLadderColliderPos.x;
         vInitPos.z = vLadderColliderPos.z;
 
-        if (pLadder->Get_LadderTag() == "LV_Ladder_MetalWood_01_KSJ")// 变仇
+        string strLadderTag = pLadder->Get_LadderTag();
+        if (!strcmp(strLadderTag.c_str(), "LV_Ladder_MetalWood_01_KSJ"))// 变仇
         {
             vInitPos.y = vPlayerPos.y;
         }
         else
         {
-            vInitPos.y = vPlayerPos.y + 0.1f;
+            vInitPos.y = vPlayerPos.y + 0.2f;
         }
     }
     else
@@ -218,13 +219,14 @@ void CState_Player_Ladder::Choice_UpDown(CLadder* pLadder)
         vInitPos.x = vLadderColliderPos.x;
         vInitPos.z = vLadderColliderPos.z;
 
-        if (pLadder->Get_LadderTag() == "LV_Ladder_MetalWood_01_KSJ")// 变仇
+        string strLadderTag = pLadder->Get_LadderTag();
+        if (!strcmp(strLadderTag.c_str(), "LV_Ladder_MetalWood_01_KSJ"))// 变仇
         {
-            vInitPos.y = vPlayerPos.y + 0.05f;
+            vInitPos.y = vPlayerPos.y + 0.1f;
         }
         else
         {
-            vInitPos.y = vPlayerPos.y - 0.05f;
+            vInitPos.y = vPlayerPos.y - 0.1f;
         }
     }
     m_pPlayer->Get_RigidBody()->Set_GloblePose(vInitPos);

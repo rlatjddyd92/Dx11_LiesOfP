@@ -223,6 +223,7 @@ HRESULT CCarcassTail::Ready_Components()
 	RigidBodyDesc.isGravity = false;
 	RigidBodyDesc.pOwnerTransform = m_pTransformCom;
 	RigidBodyDesc.pOwnerNavigation = m_pNavigationCom;
+	RigidBodyDesc.isCapsule = true;
 
 	RigidBodyDesc.pOwner = this;
 	RigidBodyDesc.fStaticFriction = 1.0f;

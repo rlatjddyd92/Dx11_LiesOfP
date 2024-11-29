@@ -316,6 +316,7 @@ HRESULT CSimonManus::Ready_Components()
 	RigidBodyDesc.isGravity = false;
 	RigidBodyDesc.pOwnerTransform = m_pTransformCom;
 	RigidBodyDesc.pOwnerNavigation = m_pNavigationCom;
+	RigidBodyDesc.isCapsule = true;
 
 	RigidBodyDesc.pOwner = this;
 	RigidBodyDesc.fStaticFriction = 0.f;
