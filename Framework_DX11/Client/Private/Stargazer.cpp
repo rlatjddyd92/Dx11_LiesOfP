@@ -34,10 +34,10 @@ HRESULT CStargazer::Initialize(void* pArg)
 		return E_FAIL;
 
 	m_pPlayer = m_pGameInstance->Find_Player(LEVEL_GAMEPLAY);
-
-	m_iAnim_Close = m_pModelCom[RESTORED]->Find_AnimationIndex("AS_Close_Idle", 3.f);
-	m_iAnim_Open = m_pModelCom[RESTORED]->Find_AnimationIndex("AS_Open", 2.f);
-	m_iAnim_OpenIdle = m_pModelCom[RESTORED]->Find_AnimationIndex("AS_Open_Idle", 2.f);
+	 
+	m_iAnim_Close = m_pModelCom[RESTORED]->Find_AnimationIndex("AS_Close_Idle", 1.f);
+	m_iAnim_Open = m_pModelCom[RESTORED]->Find_AnimationIndex("AS_Open", 0.5f);
+	m_iAnim_OpenIdle = m_pModelCom[RESTORED]->Find_AnimationIndex("AS_Open_Idle", 1.f);
 	m_iAnim_Broken = m_pModelCom[BROKEN]->Find_AnimationIndex("AS_Stargazer_broken_idle", 3.f);
 	m_iAnim_Restore = m_pModelCom[BROKEN]->Find_AnimationIndex("AS_Stargazer_restore", 3.f);
 	
@@ -57,7 +57,14 @@ void CStargazer::Priority_Update(_float fTimeDelta)
 
 void CStargazer::Update(_float fTimeDelta)
 {
-	m_pCurrentModel->Play_Animation(fTimeDelta);
+	_float fRatio = 1.f;
+
+	if (m_bRestored && m_pCurrentModel->Get_CurrentAnimationIndex() == m_iAnim_Open)
+		fRatio = 0.1f;
+	else
+		fRatio = 1.f;
+
+	m_pCurrentModel->Play_Animation(fTimeDelta * fRatio);
 
 	if (m_bCollison)
 	{
