@@ -44,7 +44,8 @@ HRESULT CWallDeco::Initialize(void* pArg)
 
 void CWallDeco::Priority_Update(_float fTimeDelta)
 {
-	m_pCollider_Object->Priority_Update(fTimeDelta);
+	if(m_pCollider_Object != nullptr)
+		m_pCollider_Object->Priority_Update(fTimeDelta);
 }
 
 void CWallDeco::Update(_float fTimeDelta)
@@ -72,7 +73,8 @@ void CWallDeco::Update(_float fTimeDelta)
 	if (m_pColliderCom != nullptr)
 		m_pColliderCom->Update(m_pTransformCom->Get_WorldMatrix_Ptr());
 
-	m_pCollider_Object->Update(fTimeDelta);
+	if (m_pCollider_Object != nullptr)
+		m_pCollider_Object->Update(fTimeDelta);
 }
 
 void CWallDeco::Late_Update(_float fTimeDelta)
@@ -81,7 +83,8 @@ void CWallDeco::Late_Update(_float fTimeDelta)
 	m_pGameInstance->Add_RenderObject(CRenderer::RG_NONBLEND, this);
 	m_pGameInstance->Add_ColliderList(m_pColliderCom);
 
-	m_pCollider_Object->Late_Update(fTimeDelta);
+	if (m_pCollider_Object != nullptr)
+		m_pCollider_Object->Late_Update(fTimeDelta);
 
 #ifdef _DEBUG
 	if (m_pColliderCom != nullptr)

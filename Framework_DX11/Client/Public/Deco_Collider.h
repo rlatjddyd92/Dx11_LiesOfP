@@ -12,6 +12,10 @@ class CDeco_Collider :
     public CGameObject
 {
 public:
+	typedef struct
+	{
+		const _float4x4* pParentWorldMatrix = { nullptr };
+	}DECO_COLLIDER_DESC;
 
 protected:
 	CDeco_Collider(ID3D11Device* pDevice, ID3D11DeviceContext* pContext);
