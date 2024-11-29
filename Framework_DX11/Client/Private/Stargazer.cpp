@@ -35,11 +35,16 @@ HRESULT CStargazer::Initialize(void* pArg)
 
 	m_pPlayer = m_pGameInstance->Find_Player(LEVEL_GAMEPLAY);
 
-	m_iAnim_Close = m_pModelCom->Find_AnimationIndex("AS_Close_Idle", 3.f);
-	m_iAnim_Open = m_pModelCom->Find_AnimationIndex("AS_Open", 0.1f);
-	m_iAnim_OpenIdle = m_pModelCom->Find_AnimationIndex("AS_Open_Idle", 3.f);
+	m_iAnim_Close = m_pModelCom[RESTORED]->Find_AnimationIndex("AS_Close_Idle", 3.f);
+	m_iAnim_Open = m_pModelCom[RESTORED]->Find_AnimationIndex("AS_Open", 0.1f);
+	m_iAnim_OpenIdle = m_pModelCom[RESTORED]->Find_AnimationIndex("AS_Open_Idle", 3.f);
+	m_iAnim_Broken = m_pModelCom[BROKEN]->Find_AnimationIndex("AS_Stargazer_broken_idle", 3.f);
+	m_iAnim_Restore = m_pModelCom[BROKEN]->Find_AnimationIndex("AS_Stargazer_restore", 3.f);
+	
+	m_pModelCom[RESTORED]->SetUp_Animation(m_iAnim_Close, true);
+	m_pModelCom[BROKEN]->SetUp_Animation(m_iAnim_Broken, true);
 
-	m_pModelCom->SetUp_Animation(m_iAnim_Close, true);
+	m_pCurrentModel = m_pModelCom[BROKEN];
 
 	m_strObjectTag = TEXT("Stargazer");
 
@@ -52,7 +57,7 @@ void CStargazer::Priority_Update(_float fTimeDelta)
 
 void CStargazer::Update(_float fTimeDelta)
 {
-	m_pModelCom->Play_Animation(fTimeDelta);
+	m_pCurrentModel->Play_Animation(fTimeDelta);
 
 	if (m_bCollison)
 	{
@@ -61,23 +66,46 @@ void CStargazer::Update(_float fTimeDelta)
 			//키 입력 확인 부분은 나중에 UI에서 받아와야 함
 			static_cast<CPawn*>(m_pPlayer)->Set_Respawn_Cell_Num(m_iCurrnetCellNum);
 
-			if (m_isClose)
+			if (m_bRestored == false)
+			{
+				m_pCurrentModel->SetUp_Animation(m_iAnim_Restore);
+			}
+
+			if (m_bRestored && m_isClose)
 			{
 				m_isClose = false;
 				m_isOpening = true;
-				m_pModelCom->SetUp_NextAnimation(m_iAnim_Open);
+				m_pCurrentModel->SetUp_NextAnimation(m_iAnim_Open);
 			}
 			
 			//UI 기능 넣기
 		}
 	}
 
+	//복구 애니메이션 진행 중
+	if (m_bRestored == false && m_pCurrentModel->Get_CurrentAnimationIndex() == m_iAnim_Restore)
+	{
+		m_fRestoreTimer += fTimeDelta;
+
+		if (m_fRestoreTimer > 3.3f)
+		{
+			m_pModelCom[RESTORED]->Play_Animation(fTimeDelta);
+		}
+
+		if (m_fRestoreTimer > 3.8f)
+		{
+			m_bRestored = true;
+			m_pCurrentModel = m_pModelCom[RESTORED];
+			m_fRestoreTimer = 0.f; 
+		}
+	}
+
 	//열리는 중->열리고 나서 기본 애니로 변경
-	if (m_isOpening && m_pModelCom->Get_IsEndAnimArray())
+	if (m_isOpening && m_pCurrentModel->Get_IsEndAnimArray())
 	{
 		m_isOpening = false;
 		m_isOpened = true;
-		m_pModelCom->SetUp_NextAnimation(m_iAnim_OpenIdle, true);
+		m_pCurrentModel->SetUp_NextAnimation(m_iAnim_OpenIdle, true);
 	}
 
 	if(m_pColliderCom != nullptr)
@@ -104,24 +132,24 @@ HRESULT CStargazer::Render()
 		return E_FAIL;
 	if (FAILED(m_pShaderCom->Bind_Matrix("g_ProjMatrix", &m_pGameInstance->Get_Transform(CPipeLine::D3DTS_PROJ))))
 		return E_FAIL;
-	_uint		iNumMeshes = m_pModelCom->Get_NumMeshes();
+	_uint		iNumMeshes = m_pCurrentModel->Get_NumMeshes();
 
 	for (size_t i = 0; i < iNumMeshes; i++)
 	{
-		m_pModelCom->Bind_MeshBoneMatrices(m_pShaderCom, "g_BoneMatrices", (_uint)i);
+		m_pCurrentModel->Bind_MeshBoneMatrices(m_pShaderCom, "g_BoneMatrices", (_uint)i);
 
-		if (FAILED(m_pModelCom->Bind_Material(m_pShaderCom, "g_DiffuseTexture", DIFFUSE, (_uint)i)))
+		if (FAILED(m_pCurrentModel->Bind_Material(m_pShaderCom, "g_DiffuseTexture", DIFFUSE, (_uint)i)))
 			return E_FAIL;
 
-		if (nullptr != m_pModelCom->Find_Texture((_uint)i, TEXTURE_TYPE::ROUGHNESS))
+		if (nullptr != m_pCurrentModel->Find_Texture((_uint)i, TEXTURE_TYPE::ROUGHNESS))
 		{
-			if (FAILED(m_pModelCom->Bind_Material(m_pShaderCom, "g_ARMTexture", ROUGHNESS, (_uint)i)))
+			if (FAILED(m_pCurrentModel->Bind_Material(m_pShaderCom, "g_ARMTexture", ROUGHNESS, (_uint)i)))
 				return E_FAIL;
 		}
 
-		if (nullptr != m_pModelCom->Find_Texture((_uint)i, TEXTURE_TYPE::NORMALS))
+		if (nullptr != m_pCurrentModel->Find_Texture((_uint)i, TEXTURE_TYPE::NORMALS))
 		{
-			if (FAILED(m_pModelCom->Bind_Material(m_pShaderCom, "g_NormalTexture", NORMALS, (_uint)i)))
+			if (FAILED(m_pCurrentModel->Bind_Material(m_pShaderCom, "g_NormalTexture", NORMALS, (_uint)i)))
 				return E_FAIL;
 
 			if (FAILED(m_pShaderCom->Begin(2)))
@@ -133,10 +161,45 @@ HRESULT CStargazer::Render()
 				return E_FAIL;
 		}
 
-		if (FAILED(m_pModelCom->Render((_uint)i)))
+		if (FAILED(m_pCurrentModel->Render((_uint)i)))
 			return E_FAIL;
 	}
 
+	if (m_fRestoreTimer > 3.5f && m_bRestored == false)
+	{
+		_uint		iNumMeshes = m_pModelCom[RESTORED]->Get_NumMeshes();
+
+		for (size_t i = 0; i < iNumMeshes; i++)
+		{
+			m_pModelCom[RESTORED]->Bind_MeshBoneMatrices(m_pShaderCom, "g_BoneMatrices", (_uint)i);
+
+			if (FAILED(m_pModelCom[RESTORED]->Bind_Material(m_pShaderCom, "g_DiffuseTexture", DIFFUSE, (_uint)i)))
+				return E_FAIL;
+
+			if (nullptr != m_pModelCom[RESTORED]->Find_Texture((_uint)i, TEXTURE_TYPE::ROUGHNESS))
+			{
+				if (FAILED(m_pModelCom[RESTORED]->Bind_Material(m_pShaderCom, "g_ARMTexture", ROUGHNESS, (_uint)i)))
+					return E_FAIL;
+			}
+
+			if (nullptr != m_pModelCom[RESTORED]->Find_Texture((_uint)i, TEXTURE_TYPE::NORMALS))
+			{
+				if (FAILED(m_pModelCom[RESTORED]->Bind_Material(m_pShaderCom, "g_NormalTexture", NORMALS, (_uint)i)))
+					return E_FAIL;
+
+				if (FAILED(m_pShaderCom->Begin(2)))
+					return E_FAIL;
+			}
+			else
+			{
+				if (FAILED(m_pShaderCom->Begin(0)))
+					return E_FAIL;
+			}
+
+			if (FAILED(m_pModelCom[RESTORED]->Render((_uint)i)))
+				return E_FAIL;
+		}
+	}
 	return S_OK;
 
 }
@@ -169,8 +232,12 @@ HRESULT CStargazer::Ready_Components()
 		return E_FAIL;
 
 	/* FOR.Com_Model */
+	if (FAILED(__super::Add_Component(LEVEL_GAMEPLAY, TEXT("Prototype_Component_Model_Stargazer_Broken"),
+		TEXT("Com_Model0"), reinterpret_cast<CComponent**>(&m_pModelCom[BROKEN]))))
+		return E_FAIL;
+
 	if (FAILED(__super::Add_Component(LEVEL_GAMEPLAY, TEXT("Prototype_Component_Model_Stargazer"),
-		TEXT("Com_Model"), reinterpret_cast<CComponent**>(&m_pModelCom))))
+		TEXT("Com_Model1"), reinterpret_cast<CComponent**>(&m_pModelCom[RESTORED]))))
 		return E_FAIL;
 
 	/* For.Com_Collider */
@@ -245,6 +312,11 @@ void CStargazer::Free()
 	__super::Free();
 	Safe_Release(m_pColliderCom);
 	Safe_Release(m_pShaderCom);
-	Safe_Release(m_pModelCom);
+
+	for (int i = 0; i < 2; ++i)
+	{
+		Safe_Release(m_pModelCom[i]);
+	}
+
 	Safe_Release(m_pRigidBodyCom);
 }

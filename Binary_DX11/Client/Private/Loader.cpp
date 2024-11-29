@@ -92,10 +92,10 @@ HRESULT CLoader::Ready_Resources_For_GamePlayLevel()
 	//	return E_FAIL;
 
 	/* For. Prototype_Component_Model_PlayerExample*/
-	PreTransformMatrix = XMMatrixRotationY(XMConvertToRadians(180.0f));
-	if (FAILED(m_pGameInstance->Add_Prototype(LEVEL_GAMEPLAY, TEXT("Prototype_Component_Model_Player"),
-		CModel::Create(m_pDevice, m_pContext, CModel::TYPE_ANIM, "../Bin/Resources/Models/Player/Player.fbx", "../Bin/ModelData/Anim/Player/", PreTransformMatrix))))
-		return E_FAIL;
+	//PreTransformMatrix = XMMatrixRotationY(XMConvertToRadians(180.0f));
+	//if (FAILED(m_pGameInstance->Add_Prototype(LEVEL_GAMEPLAY, TEXT("Prototype_Component_Model_Player"),
+	//	CModel::Create(m_pDevice, m_pContext, CModel::TYPE_ANIM, "../Bin/Resources/Models/Player/Player.fbx", "../Bin/ModelData/Anim/Player/", PreTransformMatrix))))
+	//	return E_FAIL;
 
 	//if (FAILED(m_pGameInstance->Add_Prototype(LEVEL_GAMEPLAY, TEXT("Prototype_Component_Model_Monastery_TowerDoor"),
 	//	CModel::Create(m_pDevice, m_pContext, CModel::TYPE_ANIM, "../Bin/Resources/Models/Monastery_TowerDoor/SK_FO_Monastery_TowerDoor_01.fbx", "../Bin/ModelData/NonAnim/InteractObj/Tex/", PreTransformMatrix))))
@@ -335,6 +335,10 @@ HRESULT CLoader::Ready_Resources_Object()
 	
 	if (FAILED(m_pGameInstance->Add_Prototype(LEVEL_GAMEPLAY, TEXT("Prototype_Component_Model_Monastery_SK_NewTown_Lift_01_Door"),
 		CModel::Create(m_pDevice, m_pContext, CModel::TYPE_ANIM, "../Bin/Resources/Models/InteractObj/SK_NewTown_Lift_01_Door.fbx", "../Bin/ModelData/NonAnim/InteractObj/Tex/", PreTransformMatrix))))
+		return E_FAIL;	
+
+	if (FAILED(m_pGameInstance->Add_Prototype(LEVEL_GAMEPLAY, TEXT("Prototype_Component_Model_SK_DLV_Stargazer_Broken_01"),
+		CModel::Create(m_pDevice, m_pContext, CModel::TYPE_ANIM, "../Bin/Resources/Models/InteractObj/SK_DLV_Stargazer_Broken_01.fbx", "../Bin/ModelData/NonAnim/InteractObj/Tex/", PreTransformMatrix))))
 		return E_FAIL;
 
 	return S_OK;
