@@ -4,6 +4,7 @@
 #include "GameObject.h"
 
 BEGIN(Engine)
+class CCollider;
 class CShader;
 class CModel;
 END
@@ -26,11 +27,25 @@ public:
 	virtual void Late_Update(_float fTimeDelta) override;
 	virtual HRESULT Render() override;
 
+public:
+	virtual void OnCollisionEnter(CGameObject* pOther) override;
+	virtual void OnCollisionStay(CGameObject* pOther) override;
+	virtual void OnCollisionExit(CGameObject* pOther) override;
+
 private:
+	CCollider* m_pColliderCom = { nullptr };
 	CShader* m_pShaderCom = { nullptr };
 	CModel* m_pModelCom = { nullptr };
 private:
-	_bool m_bShadow = false;
+	_bool m_bShadow = { false };
+	_bool m_bDetect = { false };
+
+	_int m_iAnim_Activate = { 0 };
+	_int m_iAnim_Deactivate = { 0 };
+
+	_float m_fPlayActiveAnimTimer = { 0.f };
+
+	CGameObject* m_pCollider_Object = { nullptr };
 private:
 	HRESULT Ready_Components();
 

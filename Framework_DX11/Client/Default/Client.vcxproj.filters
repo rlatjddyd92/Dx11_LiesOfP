@@ -717,6 +717,9 @@
     </Filter>
     <Filter Include="05.Fsm\Player\Common\ItemGet">
       <UniqueIdentifier>{bab6dc0c-4bf4-4770-aa28-7517dc2be5af}</UniqueIdentifier>
+	</Filter>
+    <Filter Include="02.GameObjects\10.InteractObj\03.WallDeco\Deco_Collider_Obj">
+      <UniqueIdentifier>{de6a80df-b5fc-4917-8178-d30e289d2253}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -1315,6 +1318,9 @@
     </ClInclude>
     <ClInclude Include="..\Public\State_Player_ItemGet.h">
       <Filter>05.Fsm\Player\Common\ItemGet</Filter>
+	</ClInclude>
+    <ClInclude Include="..\Public\Deco_Collider.h">
+      <Filter>02.GameObjects\10.InteractObj\03.WallDeco\Deco_Collider_Obj</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -1883,6 +1889,9 @@
     </ClCompile>
     <ClCompile Include="..\Private\State_Player_ItemGet.cpp">
       <Filter>05.Fsm\Player\Common\ItemGet</Filter>
+	</ClCompile>
+    <ClCompile Include="..\Private\Deco_Collider.cpp">
+      <Filter>02.GameObjects\10.InteractObj\03.WallDeco\Deco_Collider_Obj</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

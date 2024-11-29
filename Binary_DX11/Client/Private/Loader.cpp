@@ -115,8 +115,7 @@ HRESULT CLoader::Ready_Resources_For_GamePlayLevel()
 	// 일반 몬스터 로드 함수
 	//if (FAILED(Ready_Resources_For_BasicMonster()))
 	//	return E_FAIL;
-
-	//// 보스 몬스터 로드 함수
+	// 
 	//if (FAILED(Ready_Resources_For_BossMonster()))
 	//	return E_FAIL;
 
@@ -128,8 +127,8 @@ HRESULT CLoader::Ready_Resources_For_GamePlayLevel()
 	 
 
 	//우송
-	// if (FAILED(Ready_Resources_Object()))
-	//	return E_FAIL;
+	 if (FAILED(Ready_Resources_Object()))
+		return E_FAIL;
 
 	//if (FAILED(Ready_Resources_For_Weapon()))
 	//	return E_FAIL;

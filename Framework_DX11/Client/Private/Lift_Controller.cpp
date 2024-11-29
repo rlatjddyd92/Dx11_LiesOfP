@@ -31,8 +31,6 @@ HRESULT CLift_Controller::Initialize(void* pArg)
 
 	if (FAILED(Ready_Components()))
 		return E_FAIL;
-
-	m_pPlayer = m_pGameInstance->Find_Player(LEVEL_GAMEPLAY);
 	
 	m_iAnim_Idle = m_pModelCom->Find_AnimationIndex("AS_Idle", 2.5f);
 	m_iAnim_Open = m_pModelCom->Find_AnimationIndex("AS_Lever_Open", 2.5f);

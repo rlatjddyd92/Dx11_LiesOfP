@@ -54,9 +54,7 @@ void CStargazer::Update(_float fTimeDelta)
 {
 	m_pModelCom->Play_Animation(fTimeDelta);
 
-	Calculate_Distance_Between_Player();
-
-	if (m_bClose_with_Player)
+	if (m_bCollison)
 	{
 		if (KEY_TAP(KEY::E))
 		{
@@ -90,6 +88,7 @@ void CStargazer::Late_Update(_float fTimeDelta)
 {
 	__super::Late_Update(fTimeDelta);
 	m_pGameInstance->Add_RenderObject(CRenderer::RG_NONBLEND, this);
+	m_pGameInstance->Add_ColliderList(m_pColliderCom);
 
 #ifdef _DEBUG
 	if (m_pColliderCom != nullptr)
@@ -142,6 +141,26 @@ HRESULT CStargazer::Render()
 
 }
 
+void CStargazer::OnCollisionEnter(CGameObject* pOther)
+{
+	if (pOther->Get_Tag() == TEXT("Player"))
+	{
+		m_bCollison = true;
+	}
+}
+
+void CStargazer::OnCollisionStay(CGameObject* pOther)
+{
+}
+
+void CStargazer::OnCollisionExit(CGameObject* pOther)
+{
+	if (pOther->Get_Tag() == TEXT("Player"))
+	{
+		m_bCollison = false;
+	}
+}
+
 HRESULT CStargazer::Ready_Components()
 {
 	/* FOR.Com_Shader */
@@ -156,7 +175,7 @@ HRESULT CStargazer::Ready_Components()
 
 	/* For.Com_Collider */
 	CBounding_AABB::BOUNDING_AABB_DESC			ColliderDesc{};
-	ColliderDesc.vExtents = _float3(0.7f, 1.0f, 0.7f);
+	ColliderDesc.vExtents = _float3(1.5f, 1.0f, 1.5f);
 	ColliderDesc.vCenter = _float3(0.f, ColliderDesc.vExtents.y, 0.f);
 
 	if (FAILED(__super::Add_Component(LEVEL_STATIC, TEXT("Prototype_Component_Collider_Sphere"),
@@ -164,20 +183,35 @@ HRESULT CStargazer::Ready_Components()
 		return E_FAIL;
 	m_pColliderCom->Set_Owner(this);
 
+	// 항상 마지막에 생성하기
+	CRigidBody::RIGIDBODY_DESC RigidBodyDesc{};
+	RigidBodyDesc.isStatic = false;
+	RigidBodyDesc.isGravity = false;
+	RigidBodyDesc.pOwnerTransform = m_pTransformCom;
+	RigidBodyDesc.pOwnerNavigation = nullptr;
+
+	RigidBodyDesc.pOwner = this;
+	RigidBodyDesc.fStaticFriction = 0.f;
+	RigidBodyDesc.fDynamicFriction = 0.f;
+	RigidBodyDesc.fRestituion = 0.f;
+	RigidBodyDesc.PxLockFlags = PxRigidDynamicLockFlag::eLOCK_ANGULAR_X |
+		PxRigidDynamicLockFlag::eLOCK_ANGULAR_Y |
+		PxRigidDynamicLockFlag::eLOCK_ANGULAR_Z |
+		PxRigidDynamicLockFlag::eLOCK_LINEAR_X |
+		PxRigidDynamicLockFlag::eLOCK_LINEAR_Y |
+		PxRigidDynamicLockFlag::eLOCK_LINEAR_Z
+		;
+
+	physX::GeometryCapsule CapsuleDesc;
+	CapsuleDesc.fHeight = 0.5f;
+	CapsuleDesc.fRadius = 0.25f;
+	RigidBodyDesc.pGeometry = &CapsuleDesc;
+
+	/* FOR.Com_RigidBody */
+	if (FAILED(__super::Add_Component(LEVEL_STATIC, TEXT("Prototype_Component_RigidBody"),
+		TEXT("Com_RigidBody"), reinterpret_cast<CComponent**>(&m_pRigidBodyCom), &RigidBodyDesc)))
+		return E_FAIL;
 	return S_OK;
-}
-
-void CStargazer::Calculate_Distance_Between_Player()
-{
-	_Vec4 vMyPos = m_pTransformCom->Get_State(CTransform::STATE_POSITION);
-	_Vec4 vPlayerPos = m_pPlayer->Get_Transform()->Get_State(CTransform::STATE_POSITION);
-
-	_float fDistance = XMVectorGetX(XMVector4Length(vMyPos - vPlayerPos));
-
-	if(fDistance < 2.f)
-		m_bClose_with_Player = true;
-	else
-		m_bClose_with_Player = false;
 }
 
 CStargazer* CStargazer::Create(ID3D11Device* pDevice, ID3D11DeviceContext* pContext)
@@ -212,4 +246,5 @@ void CStargazer::Free()
 	Safe_Release(m_pColliderCom);
 	Safe_Release(m_pShaderCom);
 	Safe_Release(m_pModelCom);
+	Safe_Release(m_pRigidBodyCom);
 }

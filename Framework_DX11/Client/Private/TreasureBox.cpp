@@ -34,6 +34,12 @@ HRESULT CTreasureBox::Initialize(void* pArg)
 
 	m_pModelCom->SetUp_Animation(1, true);
 
+	m_iAnim_Close_Idle = m_pModelCom->Find_AnimationIndex("AS_Close_Idle", 3.f);
+	m_iAnim_Open = m_pModelCom->Find_AnimationIndex("AS_Open", 3.f);
+	m_iAnim_Open_Idle = m_pModelCom->Find_AnimationIndex("AS_Open_Idle", 3.f);
+
+	m_pModelCom->SetUp_Animation(m_iAnim_Close_Idle, true);
+
 	m_strObjectTag = TEXT("TreasureBox");
 
 	return S_OK;
@@ -45,6 +51,20 @@ void CTreasureBox::Priority_Update(_float fTimeDelta)
 
 void CTreasureBox::Update(_float fTimeDelta)
 {
+	if (m_bCollision)
+	{
+		//키 입력 확인 부분은 나중에 UI에서 받아와야 함
+		if (KEY_TAP(KEY::E))
+		{
+			m_bOpen = true;
+		}
+	}
+
+	if (m_bOpen)
+	{
+		m_pModelCom->SetUp_NextAnimation(m_iAnim_Open, false);
+	}
+
 	m_pModelCom->Play_Animation(fTimeDelta);
 
 	if (m_pColliderCom != nullptr)
@@ -55,6 +75,7 @@ void CTreasureBox::Late_Update(_float fTimeDelta)
 {
 	__super::Late_Update(fTimeDelta);
 	m_pGameInstance->Add_RenderObject(CRenderer::RG_NONBLEND, this);
+	m_pGameInstance->Add_ColliderList(m_pColliderCom);
 
 #ifdef _DEBUG
 	if (m_pColliderCom != nullptr)
@@ -107,6 +128,26 @@ HRESULT CTreasureBox::Render()
 
 }
 
+void CTreasureBox::OnCollisionEnter(CGameObject* pOther)
+{
+	if (pOther->Get_Tag() == TEXT("Player"))
+	{
+		m_bCollision = true;
+	}
+}
+
+void CTreasureBox::OnCollisionStay(CGameObject* pOther)
+{
+}
+
+void CTreasureBox::OnCollisionExit(CGameObject* pOther)
+{
+	if (pOther->Get_Tag() == TEXT("Player"))
+	{
+		m_bCollision = false;
+	}
+}
+
 HRESULT CTreasureBox::Ready_Components(OBJECT_DEFAULT_DESC* pDesc)
 {
 	/* FOR.Com_Shader */
@@ -121,12 +162,41 @@ HRESULT CTreasureBox::Ready_Components(OBJECT_DEFAULT_DESC* pDesc)
 
 	/* For.Com_Collider */
 	CBounding_OBB::BOUNDING_OBB_DESC			ColliderDesc{};
-	ColliderDesc.vExtents = _float3(1.0f, 1.0f, 1.0f);
-	ColliderDesc.vAngles = _float3(0.f, XMConvertToRadians(pDesc->vRotation.y + 90.f), 0.f);
-	ColliderDesc.vCenter = _float3(0.f, 1.0f, 0.f);
+	ColliderDesc.vExtents = _float3(1.f, 0.8f, 0.8f);
+	ColliderDesc.vAngles = _float3(0.f, 0.f, 0.f);
+	ColliderDesc.vCenter = _float3(0.f, 1.0f, ColliderDesc.vExtents.z * 0.5f);
 
 	if (FAILED(__super::Add_Component(LEVEL_STATIC, TEXT("Prototype_Component_Collider_OBB"),
 		TEXT("Com_Collider"), reinterpret_cast<CComponent**>(&m_pColliderCom), &ColliderDesc)))
+		return E_FAIL;
+	m_pColliderCom->Set_Owner(this);
+
+	// 항상 마지막에 생성하기
+	CRigidBody::RIGIDBODY_DESC RigidBodyDesc{};
+	RigidBodyDesc.isStatic = false;
+	RigidBodyDesc.isGravity = false;
+	RigidBodyDesc.pOwnerTransform = m_pTransformCom;
+	RigidBodyDesc.pOwnerNavigation = nullptr;
+
+	RigidBodyDesc.pOwner = this;
+	RigidBodyDesc.fStaticFriction = 0.f;
+	RigidBodyDesc.fDynamicFriction = 0.f;
+	RigidBodyDesc.fRestituion = 0.f;
+	RigidBodyDesc.PxLockFlags = PxRigidDynamicLockFlag::eLOCK_ANGULAR_X |
+		PxRigidDynamicLockFlag::eLOCK_ANGULAR_Y |
+		PxRigidDynamicLockFlag::eLOCK_ANGULAR_Z |
+		PxRigidDynamicLockFlag::eLOCK_LINEAR_X |
+		PxRigidDynamicLockFlag::eLOCK_LINEAR_Y |
+		PxRigidDynamicLockFlag::eLOCK_LINEAR_Z
+		;
+
+	physX::GeometryBox BoxDesc;
+	BoxDesc.vSize = _Vec3(1.f, 1.f, 1.f);
+	RigidBodyDesc.pGeometry = &BoxDesc;
+
+	/* FOR.Com_RigidBody */
+	if (FAILED(__super::Add_Component(LEVEL_STATIC, TEXT("Prototype_Component_RigidBody"),
+		TEXT("Com_RigidBody"), reinterpret_cast<CComponent**>(&m_pRigidBodyCom), &RigidBodyDesc)))
 		return E_FAIL;
 
 	return S_OK;
@@ -164,4 +234,5 @@ void CTreasureBox::Free()
 	Safe_Release(m_pColliderCom);
 	Safe_Release(m_pShaderCom);
 	Safe_Release(m_pModelCom);
+	Safe_Release(m_pRigidBodyCom);
 }
