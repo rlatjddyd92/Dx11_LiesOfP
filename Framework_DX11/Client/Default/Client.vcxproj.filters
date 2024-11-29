@@ -709,6 +709,9 @@
     <Filter Include="05.Fsm\Player\OneHand\GuardHit">
       <UniqueIdentifier>{b20b41ad-0ddc-43a2-a360-b833295b592a}</UniqueIdentifier>
     </Filter>
+    <Filter Include="02.GameObjects\10.InteractObj\03.WallDeco\Deco_Collider_Obj">
+      <UniqueIdentifier>{de6a80df-b5fc-4917-8178-d30e289d2253}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Client.h">
@@ -1298,6 +1301,9 @@
     <ClInclude Include="..\Public\State_Player_OH_GuardHit.h">
       <Filter>05.Fsm\Player\OneHand\GuardHit</Filter>
     </ClInclude>
+    <ClInclude Include="..\Public\Deco_Collider.h">
+      <Filter>02.GameObjects\10.InteractObj\03.WallDeco\Deco_Collider_Obj</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Client.cpp">
@@ -1856,6 +1862,9 @@
     </ClCompile>
     <ClCompile Include="..\Private\State_Player_OH_GuardHit.cpp">
       <Filter>05.Fsm\Player\OneHand\GuardHit</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Private\Deco_Collider.cpp">
+      <Filter>02.GameObjects\10.InteractObj\03.WallDeco\Deco_Collider_Obj</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

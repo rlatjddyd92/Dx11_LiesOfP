@@ -5,19 +5,18 @@
 
 BEGIN(Engine)
 class CCollider;
-class CShader;
-class CModel;
 END
 
 BEGIN(Client)
-
-class CWallDeco :
-	public CGameObject
+class CDeco_Collider :
+    public CGameObject
 {
+public:
+
 protected:
-	CWallDeco(ID3D11Device* pDevice, ID3D11DeviceContext* pContext);
-	CWallDeco(const CWallDeco& Prototype);
-	virtual ~CWallDeco() = default;
+	CDeco_Collider(ID3D11Device* pDevice, ID3D11DeviceContext* pContext);
+	CDeco_Collider(const CDeco_Collider& Prototype);
+	virtual ~CDeco_Collider() = default;
 
 public:
 	virtual HRESULT Initialize_Prototype() override;
@@ -34,23 +33,12 @@ public:
 
 private:
 	CCollider* m_pColliderCom = { nullptr };
-	CShader* m_pShaderCom = { nullptr };
-	CModel* m_pModelCom = { nullptr };
-private:
-	_bool m_bShadow = { false };
-	_bool m_bDetect = { false };
 
-	_int m_iAnim_Activate = { 0 };
-	_int m_iAnim_Deactivate = { 0 };
-
-	_float m_fPlayActiveAnimTimer = { 0.f };
-
-	CGameObject* m_pCollider_Object = { nullptr };
 private:
 	HRESULT Ready_Components();
 
 public:
-	static CWallDeco* Create(ID3D11Device* pDevice, ID3D11DeviceContext* pContext);
+	static CDeco_Collider* Create(ID3D11Device* pDevice, ID3D11DeviceContext* pContext);
 	virtual CGameObject* Clone(void* pArg);
 	virtual void Free() override;
 };

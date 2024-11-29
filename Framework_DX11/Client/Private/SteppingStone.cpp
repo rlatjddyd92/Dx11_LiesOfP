@@ -184,7 +184,7 @@ void CSteppingStone::Change_Player_Pos()
         static_cast<CNavigation*>(pNavComponenet)->Move_to_Cell(pRigidComponenet, 792);
         break;
     case 1:
-        static_cast<CNavigation*>(pNavComponenet)->Move_to_Cell(pRigidComponenet, 1070);
+        static_cast<CNavigation*>(pNavComponenet)->Move_to_Cell(pRigidComponenet, 1068);
         break;
     default:
         break;

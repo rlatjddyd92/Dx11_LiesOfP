@@ -102,7 +102,7 @@ HRESULT CPlayer::Initialize(void * pArg)
 		return E_FAIL;
 
 	//m_pNavigationCom->Move_to_Cell(m_pRigidBodyCom, 427);
-	m_pNavigationCom->Move_to_Cell(m_pRigidBodyCom, 307); //341
+	m_pNavigationCom->Move_to_Cell(m_pRigidBodyCom, 440); //307
 
 	m_strObjectTag = TEXT("Player");
 
