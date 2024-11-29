@@ -76,7 +76,9 @@ void CState_SimonManusP1_JumpToSwing::Update(_float fTimeDelta)
         }
     }
 
-    Collider_Check();
+    _double CurTrackPos = m_pMonster->Get_CurrentTrackPos();
+
+    Collider_Check(CurTrackPos);
 
 }
 
@@ -112,15 +114,13 @@ _bool CState_SimonManusP1_JumpToSwing::End_Check()
     return bEndCheck;
 }
 
-void CState_SimonManusP1_JumpToSwing::Collider_Check()
+void CState_SimonManusP1_JumpToSwing::Collider_Check(_double CurTrackPos)
 {
     if (m_iCurLastAnim != AN_SWING)
     {
         return;
     }
-    _double CurTrackPos = m_pMonster->Get_CurrentTrackPos();
-
-    if (m_iRouteTrack == 2)
+    if (m_iRouteTrack == 1)
     {
         if (CurTrackPos >= 30.f && CurTrackPos <= 80.f)
         {
@@ -129,6 +129,24 @@ void CState_SimonManusP1_JumpToSwing::Collider_Check()
         else
         {
             m_pMonster->DeActive_CurretnWeaponCollider();
+        }
+    }
+}
+
+void CState_SimonManusP1_JumpToSwing::Effect_Check(_double CurTrackPos)
+{
+    if (m_iRouteTrack == 1)
+    {
+        if ((CurTrackPos >= 20.f && CurTrackPos <= 60.f))
+        {
+            if (!m_pMonster->Get_EffectsLoop(CSimonManus::P1_TRAIL))
+            {
+                m_pMonster->Active_Effect(CSimonManus::P1_TRAIL);
+            }
+        }
+        else
+        {
+            m_pMonster->DeActive_Effect(CSimonManus::P1_TRAIL);
         }
     }
 }

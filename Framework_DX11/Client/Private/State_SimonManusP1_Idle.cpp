@@ -52,7 +52,17 @@ void CState_SimonManusP1_Idle::Update(_float fTimeDelta)
             m_pMonster->Change_State(CSimonManus::WALK);
             return;
         }
+        //if (true)
+        //{
+        //    m_pMonster->Change_State(CSimonManus::ATK_SWIPMULT_L);
+        //
+        //}
+        //else
+        //{
+        //    m_pMonster->Change_State(CSimonManus::ATK_AVOIDSWING);
+        //}
 
+        return;
     }
 
     _int iDir = m_pMonster->Get_Transform()->LookAt_Lerp_NoHeight(m_pMonster->Get_TargetDir(), 3, fTimeDelta);

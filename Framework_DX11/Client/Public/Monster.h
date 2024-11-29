@@ -40,6 +40,8 @@ public:
 	virtual void		Active_Effect(const _uint eType) {};
 	virtual void		DeActive_Effect(const _uint eType) {};
 
+	virtual _bool		Get_EffectsLoop(const _uint eType) = 0;
+
 	void		Set_UpTargetPos();
 	void		Look_Player();
 	_float		Calc_Distance_XZ();

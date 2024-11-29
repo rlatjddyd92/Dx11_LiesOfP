@@ -106,6 +106,9 @@ HRESULT CSimonManus::Initialize(void* pArg)
 	if (FAILED(Ready_Weapon()))
 		return E_FAIL;
 
+	if (FAILED(Ready_Effects()))
+		return E_FAIL;
+
 	m_strObjectTag = TEXT("Monster");
 	m_pColliderCom->Set_Owner(this);
 
@@ -132,6 +135,7 @@ HRESULT CSimonManus::Initialize(void* pArg)
 	// 정식 코드  
 	GET_GAMEINTERFACE->Register_Pointer_Into_OrthoUIPage(UI_ORTHO_OBJ_TYPE::ORTHO_BOSS_SIMON, this);
 
+	
 	return S_OK;
 }
 
@@ -238,6 +242,11 @@ void CSimonManus::Active_Effect(const _uint eType)
 void CSimonManus::DeActive_Effect(const _uint eType)
 {
 	m_Effects[eType]->Set_Loop(false);
+}
+
+_bool CSimonManus::Get_EffectsLoop(const _uint eType)
+{
+	return m_Effects[eType]->Get_Active();
 }
 
 HRESULT CSimonManus::Ready_Components()
@@ -425,7 +434,7 @@ HRESULT CSimonManus::Ready_Effects()
 	m_Effects.resize(EFFECT_END);
 
 	const _Matrix* pParetnMatrix = m_pTransformCom->Get_WorldMatrix_Ptr();
-	const _Matrix* pSocketBoneMatrix = m_pModelCom->Get_BoneCombindTransformationMatrix_Ptr("BN_Weapon_R");
+	const _Matrix* pSocketBoneMatrix = m_pModelCom->Get_BoneCombindTransformationMatrix_Ptr(m_pModelCom->Get_UFBIndices(UFB_HAND_RIGHT));
 
 	m_Effects[P1_TRAIL] = CEffect_Manager::Get_Instance()->Clone_Effect(TEXT("SimonManus_Attack_Swing"), pParetnMatrix,
 		pSocketBoneMatrix, _Vec3(0.f, 0.f, 0.f), _Vec3(0.f, 0.f, 0.f), _Vec3(1.f, 1.f, 1.f));

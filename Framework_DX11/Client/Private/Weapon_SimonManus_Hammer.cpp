@@ -92,6 +92,36 @@ HRESULT CWeapon_SimonManus_Hammer::Render_LightDepth()
 	return S_OK;
 }
 
+void CWeapon_SimonManus_Hammer::OnCollisionEnter(CGameObject* pOther)
+{
+	if (pOther->Get_Tag() == TEXT("Player"))
+	{
+		_bool bOverlapCheck = false;
+		for (auto& pObj : m_DamagedObjects)
+		{
+			if (pObj == pOther)
+			{
+				bOverlapCheck = true;
+				break;
+			}
+		}
+
+		if (!bOverlapCheck)
+		{
+			m_DamagedObjects.push_back(pOther);
+			pOther->Calc_DamageGain(m_fDamageAmount * m_fDamageRatio);
+		}
+	}
+}
+
+void CWeapon_SimonManus_Hammer::OnCollisionStay(CGameObject* pOther)
+{
+}
+
+void CWeapon_SimonManus_Hammer::OnCollisionExit(CGameObject* pOther)
+{
+}
+
 HRESULT CWeapon_SimonManus_Hammer::Ready_Components()
 {
 	if (FAILED(__super::Ready_Components()))

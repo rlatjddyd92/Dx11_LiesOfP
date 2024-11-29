@@ -47,11 +47,16 @@ public:
 
 	enum EFFECT_TYPE
 	{
-		P1_TRAIL, P1_CHARGE, P1_STAMP, P2_MAGICMISSILE, P2_DARKBALL, P2_LIGHTNINGBALL, P2_LIGHTNINGSPEAR,
-		P2_WAVETRAIL, P2_WAVE, P2_THUNDERCALLING, P2_SUMMONHAND,
-
+		P1_TRAIL, 
 		EFFECT_END
 	};
+	//enum EFFECT_TYPE
+	//{
+	//	P1_TRAIL, P1_CHARGE, P1_STAMP, P2_MAGICMISSILE, P2_DARKBALL, P2_LIGHTNINGBALL, P2_LIGHTNINGSPEAR,
+	//	P2_WAVETRAIL, P2_WAVE, P2_THUNDERCALLING, P2_SUMMONHAND,
+	//
+	//	EFFECT_END
+	//};
 
 private:
 	CSimonManus(ID3D11Device* pDevice, ID3D11DeviceContext* pContext);
@@ -73,6 +78,8 @@ public:
 
 	virtual void		Active_Effect(const _uint eType);
 	virtual void		DeActive_Effect(const _uint eType);
+
+	virtual _bool		Get_EffectsLoop(const _uint eType);
 
 private:
 	vector<CGameObject*>	CollObjRenderP{};

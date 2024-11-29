@@ -35,7 +35,7 @@ HRESULT CState_Player_Rapier_RAttack00::Initialize(_uint iStateNum, void* pArg)
 HRESULT CState_Player_Rapier_RAttack00::Start_State(void* pArg)
 {
     if(m_pFsm->Get_PrevState() == CPlayer::OH_IDLE)
-        m_pPlayer->Change_Animation(m_iAnimation_RapierSA1, false, 0.05f);
+        m_pPlayer->Change_Animation(m_iAnimation_RapierSA1, false, 0.05f, 0, true, true);
     else
         m_pPlayer->Change_Animation(m_iAnimation_RapierSA1, false, 0.05f, 5, true, true);
 
