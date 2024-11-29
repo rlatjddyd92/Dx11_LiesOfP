@@ -70,15 +70,17 @@ void CLift_Floor::Update(_float fTimeDelta)
 		m_pRigidBodyCom->Set_Velocity(vVel * m_fMoveDir);
 	}
 
-	if (m_bMove && Calculate_Arrive_TargetPos())
+	//µµÂø ÆÇº°
+	if (m_bMove && Calculate_Arrive_TargetPos())	
 	{
 		m_bMove = false;
 		m_isMoving = false;
 		m_bArrive = true;
 	}
-
+	
 	if (m_bArrive)
 	{
+		m_bArrive = false;
 		Open_Door();
 	}
 
@@ -88,10 +90,13 @@ void CLift_Floor::Update(_float fTimeDelta)
 	if (m_fCollisonTimer > 2.f)
 	{
 		Close_Door();
-		m_bArrive = false;
+		//m_bArrive = false;
 		m_fCollisonTimer = 0.f;
 		m_bCollid = false;
 	}
+
+
+
 
 	m_pRigidBodyCom->Update(fTimeDelta);
 
@@ -162,14 +167,14 @@ HRESULT CLift_Floor::Render()
 
 void CLift_Floor::OnCollisionEnter(CGameObject* pOther)
 {
-}
-
-void CLift_Floor::OnCollisionStay(CGameObject* pOther)
-{
 	if (pOther->Get_Tag() == TEXT("Player"))
 	{
 		m_bCollid = true;
 	}
+}
+
+void CLift_Floor::OnCollisionStay(CGameObject* pOther)
+{
 }
 
 void CLift_Floor::OnCollisionExit(CGameObject* pOther)
