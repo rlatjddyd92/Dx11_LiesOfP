@@ -65,7 +65,7 @@ void CLift_Floor::Update(_float fTimeDelta)
 	if (m_bMove)
 	{
 		m_isMoving = true;
-		_Vec3 vVel = _Vec3(0.f, 3.f, 0.f);
+		_Vec3 vVel = _Vec3(0.f, 1.f, 0.f);
 
 		m_pRigidBodyCom->Set_Velocity(vVel * m_fMoveDir);
 	}
@@ -191,11 +191,11 @@ void CLift_Floor::Set_Move_Dir(_int iDir)
 	switch (iDir)
 	{
 	case UP:
-		m_fMoveDir = 1.f;
+		m_fMoveDir = 13.f;
 		m_vTargetPos.y = m_vTargetPosList[UP];
 		break;
 	case DOWN:
-		m_fMoveDir = -1.f;
+		m_fMoveDir = -3.f;
 		m_vTargetPos.y = m_vTargetPosList[DOWN];
 		break;
 	}
@@ -248,7 +248,7 @@ HRESULT CLift_Floor::Ready_Components(OBJECT_DEFAULT_DESC* pDesc)
 		PxRigidDynamicLockFlag::eLOCK_LINEAR_Z;
 
 	physX::GeometryBox BoxDesc;
-	BoxDesc.vSize = _Vec3(1.5f, 0.05f, 1.5f);
+	BoxDesc.vSize = _Vec3(2.f, 0.05f, 2.f);
 	RigidBodyDesc.pGeometry = &BoxDesc;
 
 	/* FOR.Com_RigidBody */

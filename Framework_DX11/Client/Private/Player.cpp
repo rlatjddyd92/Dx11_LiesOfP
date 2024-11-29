@@ -312,6 +312,7 @@ void CPlayer::OnCollisionExit(CGameObject* pOther)
 		{
 			m_pRigidBodyCom->Set_IsOnCell(true);
 			m_pRigidBodyCom->Set_IsLockCell(true);
+			m_pNavigationCom->Research_Cell((_Vec3)m_pTransformCom->Get_State(CTransform::STATE_POSITION));
 		}
 	}
 }
