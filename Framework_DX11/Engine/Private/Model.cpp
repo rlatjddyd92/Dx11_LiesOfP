@@ -342,7 +342,8 @@ HRESULT CModel::SetUp_NextAnimation(_uint iNextAnimationIndex, _bool isLoop, _fl
 	if (m_isChangeAni == true && iNextAnimationIndex == m_tChaneAnimDesc.iNextAnimIndex && !bSameChange)
 		return S_OK;
 	
-	if (bSameChange && m_iCurrentAnimIndex == iNextAnimationIndex)
+	if ((bSameChange && m_iCurrentAnimIndex == iNextAnimationIndex) || 
+		(m_isChangeAni && m_iCurrentAnimIndex == iNextAnimationIndex))
 	{
 		m_bSameChange = true;
 	}
