@@ -4,9 +4,9 @@
 #include "GameObject.h"
 
 BEGIN(Engine)
-class CCollider;
 class CShader;
 class CModel;
+class CRigidBody;
 END
 
 BEGIN(Client)
@@ -31,9 +31,9 @@ public:
 	void Open() { m_bOpen = true; m_bClose = false; }
 	void Close() { m_bOpen = false; m_bClose = true; }
 private:
-	CCollider* m_pColliderCom = { nullptr};
 	CShader* m_pShaderCom = { nullptr };
 	CModel* m_pModelCom = { nullptr };
+	CRigidBody* m_pRigidBodyCom = { nullptr };
 
 private:
 	_bool m_bShadow = false;

@@ -32,10 +32,10 @@ HRESULT CLift_Door::Initialize(void* pArg)
 	if (FAILED(Ready_Components()))
 		return E_FAIL;
 
-	m_iAnim_Close = m_pModelCom->Find_AnimationIndex("AS_Close", 3.f);
-	m_iAnim_Close_Idle = m_pModelCom->Find_AnimationIndex("AS_Close_Idle", 3.f);
-	m_iAnim_Open = m_pModelCom->Find_AnimationIndex("AS_Open", 3.f);
-	m_iAnim_Open_Idle = m_pModelCom->Find_AnimationIndex("AS_Open_Idle", 3.f);
+	m_iAnim_Close = m_pModelCom->Find_AnimationIndex("AS_Close", 1.f);
+	m_iAnim_Close_Idle = m_pModelCom->Find_AnimationIndex("AS_Close_Idle", 1.f);
+	m_iAnim_Open = m_pModelCom->Find_AnimationIndex("AS_Open", 1.f);
+	m_iAnim_Open_Idle = m_pModelCom->Find_AnimationIndex("AS_Open_Idle", 1.f);
 
 	m_pModelCom->SetUp_Animation(m_iAnim_Close_Idle, false);
 
@@ -52,6 +52,8 @@ void CLift_Door::Update(_float fTimeDelta)
 
 	if (m_bOpen)
 	{
+		m_pRigidBodyCom->Set_Kinematic(true);
+
 		if(m_pModelCom->Get_CurrentAnimationIndex() != m_iAnim_Open
 			&& m_pModelCom->Get_CurrentAnimationIndex() == m_iAnim_Close_Idle)
 			m_pModelCom->SetUp_NextAnimation(m_iAnim_Open);
@@ -63,6 +65,8 @@ void CLift_Door::Update(_float fTimeDelta)
 	
 	if(m_bClose)
 	{
+		m_pRigidBodyCom->Set_Kinematic(false);
+
 		if (m_pModelCom->Get_CurrentAnimationIndex() == m_iAnim_Open_Idle)
 			m_pModelCom->SetUp_NextAnimation(m_iAnim_Close);
 
@@ -72,19 +76,13 @@ void CLift_Door::Update(_float fTimeDelta)
 			m_pModelCom->SetUp_NextAnimation(m_iAnim_Close_Idle);
 	}
 
-	if(m_pColliderCom != nullptr)
-		m_pColliderCom->Update(m_pTransformCom->Get_WorldMatrix_Ptr());
+	m_pRigidBodyCom->Update(fTimeDelta);
 }
 
 void CLift_Door::Late_Update(_float fTimeDelta)
 {
 	__super::Late_Update(fTimeDelta);
 	m_pGameInstance->Add_RenderObject(CRenderer::RG_NONBLEND, this);
-
-#ifdef _DEBUG
-	if (m_pColliderCom != nullptr)
-		m_pGameInstance->Add_DebugObject(m_pColliderCom);
-#endif
 }
 
 HRESULT CLift_Door::Render()
@@ -144,16 +142,33 @@ HRESULT CLift_Door::Ready_Components()
 		TEXT("Com_Model"), reinterpret_cast<CComponent**>(&m_pModelCom))))
 		return E_FAIL;
 
-	/* For.Com_Collider */
-	CBounding_OBB::BOUNDING_OBB_DESC			ColliderDesc{};
-	ColliderDesc.vExtents = _float3(1.8f, 1.0f, 0.2f);
-	ColliderDesc.vAngles = _float3(0.f, XMConvertToRadians(-25.f), 0.f);
-	ColliderDesc.vCenter = _float3(0.f, 1.0f, 0.f);
+	// 항상 마지막에 생성하기
+	CRigidBody::RIGIDBODY_DESC RigidBodyDesc{};
+	RigidBodyDesc.isStatic = false;
+	RigidBodyDesc.isGravity = false;
+	RigidBodyDesc.pOwnerTransform = m_pTransformCom;
+	RigidBodyDesc.pOwnerNavigation = nullptr;
 
-	if (FAILED(__super::Add_Component(LEVEL_STATIC, TEXT("Prototype_Component_Collider_OBB"),
-		TEXT("Com_Collider"), reinterpret_cast<CComponent**>(&m_pColliderCom), &ColliderDesc)))
+	RigidBodyDesc.pOwner = this;
+	RigidBodyDesc.fStaticFriction = 0.f;
+	RigidBodyDesc.fDynamicFriction = 0.f;
+	RigidBodyDesc.fRestituion = 0.f;
+	RigidBodyDesc.PxLockFlags = PxRigidDynamicLockFlag::eLOCK_ANGULAR_X |
+		PxRigidDynamicLockFlag::eLOCK_ANGULAR_Y |
+		PxRigidDynamicLockFlag::eLOCK_ANGULAR_Z |
+		PxRigidDynamicLockFlag::eLOCK_LINEAR_X  |
+		PxRigidDynamicLockFlag::eLOCK_LINEAR_Y  |
+		PxRigidDynamicLockFlag::eLOCK_LINEAR_Z  
+		;
+
+	physX::GeometryBox BoxDesc;
+	BoxDesc.vSize = _Vec3(0.3f, 3.f, 3.f);
+	RigidBodyDesc.pGeometry = &BoxDesc;
+
+	/* FOR.Com_RigidBody */
+	if (FAILED(__super::Add_Component(LEVEL_STATIC, TEXT("Prototype_Component_RigidBody"),
+		TEXT("Com_RigidBody"), reinterpret_cast<CComponent**>(&m_pRigidBodyCom), &RigidBodyDesc)))
 		return E_FAIL;
-	m_pColliderCom->Set_Owner(this);
 
 	return S_OK;
 }
@@ -187,7 +202,7 @@ CGameObject* CLift_Door::Clone(void* pArg)
 void CLift_Door::Free()
 {
 	__super::Free();
-	Safe_Release(m_pColliderCom);
 	Safe_Release(m_pShaderCom);
 	Safe_Release(m_pModelCom);
+	Safe_Release(m_pRigidBodyCom);
 }

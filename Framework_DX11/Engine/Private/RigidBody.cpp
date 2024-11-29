@@ -142,7 +142,11 @@ void CRigidBody::Set_Gravity(_bool isGravity)
 
 void CRigidBody::Set_Kinematic(_bool isKinematic)
 {
-	static_cast<PxRigidDynamic*>(m_PxActor)->setRigidBodyFlag(PxRigidBodyFlag::eKINEMATIC, isKinematic);
+	if (isKinematic)
+		m_PxScene->removeActor(*m_PxActor);
+	/*static_cast<PxRigidDynamic*>(m_PxActor)->setRigidBodyFlag(PxRigidBodyFlag::eKINEMATIC, isKinematic);
+	m_PxShape->setFlag(PxShapeFlag::eTRIGGER_SHAPE, isKinematic);
+	m_PxShape->setFlag(PxShapeFlag::eSIMULATION_SHAPE, !isKinematic);*/
 }
 
 HRESULT CRigidBody::Add_PxActor(RIGIDBODY_DESC* pDesc)
