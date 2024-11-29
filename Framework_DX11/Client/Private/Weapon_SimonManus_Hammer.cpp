@@ -36,7 +36,7 @@ HRESULT CWeapon_SimonManus_Hammer::Initialize(void* pArg)
 	}
 
 	*m_pParentAtk = 5.f;
-
+	m_fDamageAmount = 20.f;
 	//m_pTransformCom->Set_Scaled(1.f, 1.f, 1.f);
 	////m_pTransformCom->Rotation(0.0f, XMConvertToRadians(90.0f), 0.1f);
 	//m_pTransformCom->Set_State(CTransform::STATE_POSITION, XMVectorSet(3.f, 0.f, 3.f, 1.f));

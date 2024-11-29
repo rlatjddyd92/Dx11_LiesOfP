@@ -73,13 +73,13 @@ public:
 
 	void	ChangePhase();
 
-	virtual void	Active_CurrentWeaponCollider(_float fDamageRatio, _uint iCollIndex = 0);
-	virtual void	DeActive_CurretnWeaponCollider(_uint iCollIndex = 0);
+	virtual void	Active_CurrentWeaponCollider(_float fDamageRatio, _uint iCollIndex = 0) override;
+	virtual void	DeActive_CurretnWeaponCollider(_uint iCollIndex = 0) override;
 
-	virtual void		Active_Effect(const _uint eType);
-	virtual void		DeActive_Effect(const _uint eType);
+	virtual void		Active_Effect(const _uint eType) override;
+	virtual void		DeActive_Effect(const _uint eType) override;
 
-	virtual _bool		Get_EffectsLoop(const _uint eType);
+	virtual _bool		Get_EffectsLoop(const _uint eType) override;
 
 private:
 	vector<CGameObject*>	CollObjRenderP{};
