@@ -105,7 +105,8 @@ HRESULT CPlayer::Initialize(void * pArg)
 	if (FAILED(Ready_Effect()))
 		return E_FAIL;
 
-	m_pNavigationCom->Move_to_Cell(m_pRigidBodyCom, 1030); //307
+	//m_pNavigationCom->Move_to_Cell(m_pRigidBodyCom, 1030); //307
+	m_pNavigationCom->Move_to_Cell(m_pRigidBodyCom, 772); //사다리
 
 	m_strObjectTag = TEXT("Player");
 
@@ -264,7 +265,7 @@ void CPlayer::OnCollisionStay(CGameObject* pOther)
 {
 	if (pOther->Get_Tag() == TEXT("Ladder"))
 	{
-		if (KEY_TAP(KEY::E))
+		if (GET_GAMEINTERFACE->Action_InterAction(TEXT("사다리를 타자")))
 		{
 			m_pFsmCom->Change_State(LADDER, pOther);
 		}
@@ -280,8 +281,6 @@ void CPlayer::OnCollisionStay(CGameObject* pOther)
 	{
 		m_pRigidBodyCom->Set_IsOnCell(false);
 		m_pRigidBodyCom->Set_IsLockCell(false);
-		//_Vec3 vLiftFloorPos = pOther->Get_Transform()->Get_State(CTransform::STATE_POSITION);
-		//_Vec3 vLiftFloorPrevPos = dynamic_cast<CLift_Floor*>(pOther)->Get_PrevPos();
 
 		if (dynamic_cast<CLift_Floor*>(pOther)->Get_isMoving())
 		{
