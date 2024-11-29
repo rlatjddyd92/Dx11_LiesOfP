@@ -32,7 +32,7 @@ HRESULT CWeapon_Scissor::Initialize(void* pArg)
 		return E_FAIL;
 
 	m_strObjectTag = TEXT("PlayerWeapon");
-	m_fDamageAmount = 5.f;
+	m_fDamageAmount = 10.f;
 
 	m_isActive = false;
 	m_isSeperate = false;
@@ -81,6 +81,9 @@ void CWeapon_Scissor::Late_Update(_float fTimeDelta)
 #endif
 		m_pGameInstance->Add_RenderObject(CRenderer::RG_NONBLEND, this);
 		m_pGameInstance->Add_RenderObject(CRenderer::RG_SHADOWOBJ, this);
+
+		m_pGameInstance->Add_ColliderList(m_pColliderCom);
+
 	}
 	else if (m_isSeperate)
 	{
@@ -106,6 +109,36 @@ HRESULT CWeapon_Scissor::Render_LightDepth()
 		return E_FAIL;
 
 	return S_OK;
+}
+
+void CWeapon_Scissor::OnCollisionEnter(CGameObject* pOther)
+{
+	if (pOther->Get_Tag() == TEXT("Monster"))
+	{
+		_bool bOverlapCheck = false;
+		for (auto& pObj : m_DamagedObjects)
+		{
+			if (pObj == pOther)
+			{
+				bOverlapCheck = true;
+				break;
+			}
+		}
+
+		if (!bOverlapCheck)
+		{
+			m_DamagedObjects.push_back(pOther);
+			pOther->Calc_DamageGain(m_fDamageAmount * m_fDamageRatio);
+		}
+	}
+}
+
+void CWeapon_Scissor::OnCollisionStay(CGameObject* pOther)
+{
+}
+
+void CWeapon_Scissor::OnCollisionExit(CGameObject* pOther)
+{
 }
 
 void CWeapon_Scissor::Active_Collider(_float fDamageRatio, _uint iHandIndex)
@@ -194,7 +227,7 @@ HRESULT CWeapon_Scissor::Ready_Components()
 	if (FAILED(__super::Add_Component(LEVEL_STATIC, TEXT("Prototype_Component_Collider_OBB"),
 		TEXT("Com_Collider"), reinterpret_cast<CComponent**>(&m_pColliderCom), &ColliderDesc)))
 		return E_FAIL;
-
+	m_pColliderCom->Set_Owner(this);
 
 	return S_OK;
 }

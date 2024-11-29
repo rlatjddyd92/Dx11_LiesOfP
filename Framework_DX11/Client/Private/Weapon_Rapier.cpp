@@ -4,6 +4,7 @@
 #include "Player.h"
 
 #include "GameInstance.h"
+#include "Effect_Manager.h"
 
 CWeapon_Rapier::CWeapon_Rapier(ID3D11Device* pDevice, ID3D11DeviceContext* pContext)
 	: CWeapon{ pDevice, pContext }
@@ -143,6 +144,7 @@ HRESULT CWeapon_Rapier::Ready_Components()
 	if (FAILED(__super::Add_Component(LEVEL_STATIC, TEXT("Prototype_Component_Collider_OBB"),
 		TEXT("Com_Collider"), reinterpret_cast<CComponent**>(&m_pColliderCom), &ColliderDesc)))
 		return E_FAIL;
+	m_pColliderCom->Set_Owner(this);
 
 	return S_OK;
 }

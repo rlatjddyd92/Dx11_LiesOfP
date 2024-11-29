@@ -30,7 +30,7 @@ HRESULT CWeapon_FlameSword::Initialize(void* pArg)
 		return E_FAIL;
 
 	m_strObjectTag = TEXT("PlayerWeapon");
-	m_fDamageAmount = 5.f;
+	m_fDamageAmount = 10.f;
 
 	m_isActive = false;
 	m_pColliderCom->IsActive(false);
@@ -69,6 +69,8 @@ void CWeapon_FlameSword::Late_Update(_float fTimeDelta)
 #endif
 	m_pGameInstance->Add_RenderObject(CRenderer::RG_NONBLEND, this);
 	m_pGameInstance->Add_RenderObject(CRenderer::RG_SHADOWOBJ, this);
+
+	m_pGameInstance->Add_ColliderList(m_pColliderCom);
 }
 
 HRESULT CWeapon_FlameSword::Render()
@@ -85,6 +87,18 @@ HRESULT CWeapon_FlameSword::Render_LightDepth()
 		return E_FAIL;
 
 	return S_OK;
+}
+
+void CWeapon_FlameSword::OnCollisionEnter(CGameObject* pOther)
+{
+}
+
+void CWeapon_FlameSword::OnCollisionStay(CGameObject* pOther)
+{
+}
+
+void CWeapon_FlameSword::OnCollisionExit(CGameObject* pOther)
+{
 }
 
 HRESULT CWeapon_FlameSword::Ready_Components()
@@ -106,6 +120,7 @@ HRESULT CWeapon_FlameSword::Ready_Components()
 	if (FAILED(__super::Add_Component(LEVEL_STATIC, TEXT("Prototype_Component_Collider_OBB"),
 		TEXT("Com_Collider"), reinterpret_cast<CComponent**>(&m_pColliderCom), &ColliderDesc)))
 		return E_FAIL;
+	m_pColliderCom->Set_Owner(this);
 
 
 	return S_OK;

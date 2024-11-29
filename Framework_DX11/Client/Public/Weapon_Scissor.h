@@ -29,6 +29,11 @@ public:
 	virtual HRESULT Render_LightDepth() override;
 
 public:
+	virtual void OnCollisionEnter(CGameObject* pOther) override;
+	virtual void OnCollisionStay(CGameObject* pOther) override;
+	virtual void OnCollisionExit(CGameObject* pOther) override;
+
+public:
 	virtual void Active_Collider(_float fDamageRatio = 1.f, _uint iHandIndex = 1) override;
 	virtual void DeActive_Collider(_uint iHandIndex = 1) override;
 	virtual void Play_Sound(WEP_SOUND_TYPE eType, const TCHAR* pSoundKey, _uint iHandIndex = 1) override;
