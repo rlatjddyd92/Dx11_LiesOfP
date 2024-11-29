@@ -32,9 +32,11 @@ void CState_SimonManusP1_AvoidSwing::Update(_float fTimeDelta)
         m_pMonster->Change_State(CSimonManus::IDLE);
         return;
     }
-    
-    Collider_Check();
 
+    _double CurTrackPos = m_pMonster->Get_CurrentTrackPos();
+
+    Collider_Check(CurTrackPos);
+    Effect_Check(CurTrackPos);
 }
 
 void CState_SimonManusP1_AvoidSwing::End_State()
@@ -47,10 +49,8 @@ _bool CState_SimonManusP1_AvoidSwing::End_Check()
     return m_pMonster->Get_EndAnim(AN_AVOIDSWING);
 }
 
-void CState_SimonManusP1_AvoidSwing::Collider_Check()
+void CState_SimonManusP1_AvoidSwing::Collider_Check(_double CurTrackPos)
 {
-    _double CurTrackPos = m_pMonster->Get_CurrentTrackPos();
-
     if (CurTrackPos >= 105.f && CurTrackPos <= 185.f)
     {
         m_pMonster->Active_CurrentWeaponCollider(1);
@@ -58,6 +58,21 @@ void CState_SimonManusP1_AvoidSwing::Collider_Check()
     else
     {
         m_pMonster->DeActive_CurretnWeaponCollider();
+    }
+}
+
+void CState_SimonManusP1_AvoidSwing::Effect_Check(_double CurTrackPos)
+{
+    if ((CurTrackPos >= 115.f && CurTrackPos <= 180.f))
+    {
+        if (!m_pMonster->Get_EffectsLoop(CSimonManus::P1_TRAIL))
+        {
+            m_pMonster->Active_Effect(CSimonManus::P1_TRAIL);
+        }
+    }
+    else
+    {
+        m_pMonster->DeActive_Effect(CSimonManus::P1_TRAIL);
     }
 }
 

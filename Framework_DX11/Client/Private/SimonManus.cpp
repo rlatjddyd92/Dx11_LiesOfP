@@ -10,6 +10,8 @@
 // 정식 코드  
 #include "GameInterface_Controller.h"
 
+#include "Effect_Manager.h"
+#include "Effect_Container.h"
 //전부 수정하기
 
 #pragma region Phase1
@@ -104,6 +106,9 @@ HRESULT CSimonManus::Initialize(void* pArg)
 	if (FAILED(Ready_Weapon()))
 		return E_FAIL;
 
+	if (FAILED(Ready_Effects()))
+		return E_FAIL;
+
 	m_strObjectTag = TEXT("Monster");
 	m_pColliderCom->Set_Owner(this);
 
@@ -130,6 +135,7 @@ HRESULT CSimonManus::Initialize(void* pArg)
 	// 정식 코드  
 	GET_GAMEINTERFACE->Register_Pointer_Into_OrthoUIPage(UI_ORTHO_OBJ_TYPE::ORTHO_BOSS_SIMON, this);
 
+	
 	return S_OK;
 }
 
@@ -142,6 +148,11 @@ void CSimonManus::Priority_Update(_float fTimeDelta)
 	if (m_eStat.fHp <= 0.f)
 	{
 		m_pFsmCom->Set_State(DIE);
+	}
+	for (auto& pEffect : m_Effects)
+	{
+		if (!pEffect->Get_Dead())
+			pEffect->Priority_Update(fTimeDelta);
 	}
 }
 
@@ -157,6 +168,12 @@ void CSimonManus::Update(_float fTimeDelta)
 	m_pRigidBodyCom->Set_Velocity(m_vCurRootMove / fTimeDelta);
 
 	m_pFsmCom->Update(fTimeDelta);
+
+	for (auto& pEffect : m_Effects)
+	{
+		if (!pEffect->Get_Dead())
+			pEffect->Update(fTimeDelta);
+	}
 
 	Update_Collider();
 
@@ -174,6 +191,11 @@ void CSimonManus::Late_Update(_float fTimeDelta)
 
 	m_pGameInstance->Add_ColliderList(m_pColliderCom);
 
+	for (auto& pEffect : m_Effects)
+	{
+		if (!pEffect->Get_Dead())
+			pEffect->Late_Update(fTimeDelta);
+	}
 
 	m_pGameInstance->Add_RenderObject(CRenderer::RG_NONBLEND, this);
 	m_pGameInstance->Add_RenderObject(CRenderer::RG_SHADOWOBJ, this);
@@ -210,6 +232,21 @@ void CSimonManus::Active_CurrentWeaponCollider(_float fDamageRatio, _uint iCollI
 void CSimonManus::DeActive_CurretnWeaponCollider(_uint iCollIndex)
 {
 	m_pWeapon->DeActive_Collider();
+}
+
+void CSimonManus::Active_Effect(const _uint eType)
+{
+	m_Effects[eType]->Set_Loop(true);
+}
+
+void CSimonManus::DeActive_Effect(const _uint eType)
+{
+	m_Effects[eType]->Set_Loop(false);
+}
+
+_bool CSimonManus::Get_EffectsLoop(const _uint eType)
+{
+	return m_Effects[eType]->Get_Active();
 }
 
 HRESULT CSimonManus::Ready_Components()
@@ -388,6 +425,23 @@ HRESULT CSimonManus::Ready_Weapon()
 		return E_FAIL;
 
 	m_pWeapon->Appear();
+
+	return S_OK;
+}
+
+HRESULT CSimonManus::Ready_Effects()
+{
+	m_Effects.resize(EFFECT_END);
+
+	const _Matrix* pParetnMatrix = m_pTransformCom->Get_WorldMatrix_Ptr();
+	const _Matrix* pSocketBoneMatrix = m_pModelCom->Get_BoneCombindTransformationMatrix_Ptr(m_pModelCom->Get_UFBIndices(UFB_HAND_RIGHT));
+
+	m_Effects[P1_TRAIL] = CEffect_Manager::Get_Instance()->Clone_Effect(TEXT("SimonManus_Attack_Swing"), pParetnMatrix,
+		pSocketBoneMatrix, _Vec3(0.f, 0.f, 0.f), _Vec3(0.f, 0.f, 0.f), _Vec3(1.f, 1.f, 1.f));
+
+
+
+
 
 	return S_OK;
 }

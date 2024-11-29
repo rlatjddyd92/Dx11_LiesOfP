@@ -34,7 +34,38 @@ void CState_CarcassTail_LeapToAttack::Update(_float fTimeDelta)
         if (m_iRouteTrack == 0)
         {
             //앞뒤 판단해서 꼬리 or 손으로 공격
-            m_iLastAnim = AN_ROUTE_LAST_HAND_R;
+
+            _Vec3 vUp = XMVector3Normalize(m_pMonster->Get_Transform()->Get_State(CTransform::STATE_UP));
+            _Vec3 vLook = XMVector3Normalize(m_pMonster->Get_Transform()->Get_State(CTransform::STATE_LOOK));
+            _Vec3 vTargetDir = XMVector3Normalize(m_pMonster->Get_TargetDir());
+            _Vec3 vTargetRight = vUp.Cross(vTargetDir);
+
+
+            _Vec3 vCrossUp = vLook.Cross(vTargetRight);
+
+            if (vUp.Dot(vCrossUp) >= 0)
+            {
+                if (rand() % 2 == 0)
+                {
+                    m_iLastAnim = AN_ROUTE_LAST_HAND_R;
+                }
+                else
+                {
+                    m_iLastAnim = AN_ROUTE_LAST_HAND_L;
+                }
+
+            }
+            else
+            {
+                if (rand() % 2 == 0)
+                {
+                    m_iLastAnim = AN_ROUTE_LAST_TAIL_R;
+                }
+                else
+                {
+                    m_iLastAnim = AN_ROUTE_LAST_TAIL_L;
+                }
+            }
 
             m_pMonster->Change_Animation(m_iLastAnim, false, 0.1f, 0);
         }
@@ -45,6 +76,11 @@ void CState_CarcassTail_LeapToAttack::Update(_float fTimeDelta)
             return;
         }
         ++m_iRouteTrack;
+    }
+
+    if (m_iLastAnim == AN_ROUTE_LAST_HAND_L || m_iLastAnim == AN_ROUTE_LAST_HAND_R)
+    {
+        m_pMonster->Get_Transform()->LookAt_Lerp_NoHeight(m_pMonster->Get_TargetDir(), 1.5f, fTimeDelta);
     }
 
     Collider_Check();

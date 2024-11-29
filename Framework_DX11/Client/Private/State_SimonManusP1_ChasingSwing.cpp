@@ -34,6 +34,10 @@ void CState_SimonManusP1_ChasingSwing::Update(_float fTimeDelta)
         if (End_Check())
         {
             ++m_iRouteTrack;
+            if (!m_pMonster->Get_EffectsLoop(CSimonManus::P1_TRAIL))
+            {
+                m_pMonster->Active_Effect(CSimonManus::P1_TRAIL);
+            }
             m_pMonster->Change_Animation(AN_CHASINGSWING_LOOP, true, 0.f, 0);
         }
         break;
@@ -71,7 +75,10 @@ void CState_SimonManusP1_ChasingSwing::Update(_float fTimeDelta)
         break;
     }
 
-    Collider_Check();
+    _double CurTrackPos = m_pMonster->Get_CurrentTrackPos();
+
+    Collider_Check(CurTrackPos);
+    Effect_Check(CurTrackPos);
 
 }
 
@@ -113,10 +120,8 @@ _bool CState_SimonManusP1_ChasingSwing::End_Check()
     return bEndCheck;
 }
 
-void CState_SimonManusP1_ChasingSwing::Collider_Check()
+void CState_SimonManusP1_ChasingSwing::Collider_Check(_double CurTrackPos)
 {
-    _double CurTrackPos = m_pMonster->Get_CurrentTrackPos();
-
     if (m_iRouteTrack == 2)
     {
         if (CurTrackPos >= 24.f && CurTrackPos <= 53.f)
@@ -126,6 +131,38 @@ void CState_SimonManusP1_ChasingSwing::Collider_Check()
         else
         {
             m_pMonster->DeActive_CurretnWeaponCollider();
+        }
+    }
+}
+
+void CState_SimonManusP1_ChasingSwing::Effect_Check(_double CurTrackPos)
+{
+    if (m_iRouteTrack == 0)
+    {
+        if ((CurTrackPos >= 140.f))
+        {
+            if (!m_pMonster->Get_EffectsLoop(CSimonManus::P1_TRAIL))
+            {
+                m_pMonster->Active_Effect(CSimonManus::P1_TRAIL);
+            }
+        }
+        else
+        {
+            m_pMonster->DeActive_Effect(CSimonManus::P1_TRAIL);
+        }
+    }
+    else if (m_iRouteTrack == 2)
+    {
+        if ((CurTrackPos <= 50.f))
+        {
+            if (!m_pMonster->Get_EffectsLoop(CSimonManus::P1_TRAIL))
+            {
+                m_pMonster->Active_Effect(CSimonManus::P1_TRAIL);
+            }
+        }
+        else
+        {
+            m_pMonster->DeActive_Effect(CSimonManus::P1_TRAIL);
         }
     }
 }

@@ -21,8 +21,17 @@ HRESULT CState_CarcassTail_ScratchingToSwip::Initialize(_uint iStateNum, void* p
 
 HRESULT CState_CarcassTail_ScratchingToSwip::Start_State(void* pArg)
 {
-    m_iFirstAnim = 1;   //지정하고 시작해서 따라가도록
-    m_iLastAnim = 0;
+    _int iCnt = rand() % 2;
+    if (iCnt == 0)
+    {
+        m_iFirstAnim = AN_ROUTE_FIRST_L;
+        m_iLastAnim = AN_ROUTE_LAST_L;
+    }
+    else
+    {
+        m_iFirstAnim = AN_ROUTE_FIRST_R;
+        m_iLastAnim = AN_ROUTE_LAST_R;
+    }
 
     m_pMonster->Change_Animation(m_iFirstAnim, false, 0.1f, 0);
 
@@ -40,7 +49,7 @@ void CState_CarcassTail_ScratchingToSwip::Update(_float fTimeDelta)
         {
             ++m_iRouteTrack;
 
-            m_pMonster->Change_Animation(m_iFirstAnim, false, 0.1f, 80);
+            m_pMonster->Change_Animation(m_iLastAnim, false, 0.1f, 80);
         }
     }
     else

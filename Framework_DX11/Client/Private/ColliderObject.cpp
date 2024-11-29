@@ -73,6 +73,36 @@ HRESULT CColliderObject::Render()
 	return S_OK;
 }
 
+void CColliderObject::OnCollisionEnter(CGameObject* pOther)
+{
+	if (pOther->Get_Tag() == TEXT("Player"))
+	{
+		_bool bOverlapCheck = false;
+		for (auto& pObj : m_DamagedObjects)
+		{
+			if (pObj == pOther)
+			{
+				bOverlapCheck = true;
+				break;
+			}
+		}
+
+		if (!bOverlapCheck)
+		{
+			m_DamagedObjects.push_back(pOther);
+			pOther->Calc_DamageGain(m_fDamageAmount * m_fDamageRatio);
+		}
+	}
+}
+
+void CColliderObject::OnCollisionStay(CGameObject* pOther)
+{
+}
+
+void CColliderObject::OnCollisionExit(CGameObject* pOther)
+{
+}
+
 HRESULT CColliderObject::Ready_Components(CBounding::BOUNDING_DESC* pBoundingDesc, CCollider::TYPE eType)
 {
 

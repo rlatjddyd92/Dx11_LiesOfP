@@ -32,6 +32,10 @@ private:
 
     _float              m_fIdleTime = {};
     _float              m_fIdleDuration = { 0.2f };
+    _float              m_fDistPoint = {};
+
+    _Vec3               m_vStartingPos = {};
+    _Vec3               m_vMoveSpeed = {};
 
     _bool               m_isDelayed = { false };
 

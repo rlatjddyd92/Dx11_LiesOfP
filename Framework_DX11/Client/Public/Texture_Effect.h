@@ -31,6 +31,10 @@ public:
 		_float		fAlpha = { 1.f };
 		_float		fAlphaSpeed = { 0.f };
 
+		_Vec2		vTileRepeat = { 1.f, 1.f };
+		_Vec2		vTileMoveDir = {};
+		_float		fTileMoveSpeed = { 0.f };
+
 		_bool		bPreserveRotation = { false };
 		_bool		bLoop = { false };
 	}DEFAULT_DESC;
@@ -82,6 +86,7 @@ private:
 
 	_float	m_fAccumulateTime = { 0.f };
 	_float	m_fCurrenrtIndex = { 0.f };
+	_Vec2	m_vCurrentTileMove = {};
 
 private:
 	HRESULT Ready_Components(const TEXT_DESC& Desc);

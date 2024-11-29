@@ -44,8 +44,8 @@ HRESULT CLevel_GamePlay::Initialize()
 	if (FAILED(Ready_Layer_Paticle()))
 		return E_FAIL;	
 
-	if (FAILED(Read_Map_Data()))
-		return E_FAIL;	
+	//if (FAILED(Read_Map_Data()))
+	//	return E_FAIL;	
 
 	// 24-11-19 김성용
 	// 게임 인터페이스를 인게임 모드로 전환
@@ -216,8 +216,9 @@ HRESULT CLevel_GamePlay::Ready_Layer_Monster()
 
 	//if (FAILED(m_pGameInstance->Add_CloneObject_ToLayer(LEVEL_GAMEPLAY, TEXT("Layer_Monster"), TEXT("Prototype_GameObject_CarcassTail"))))
 	//	return E_FAIL;
-	//if (FAILED(m_pGameInstance->Add_CloneObject_ToLayer(LEVEL_GAMEPLAY, TEXT("Layer_Monster"), TEXT("Prototype_GameObject_SimonManus"))))
-	//	return E_FAIL;
+
+	if (FAILED(m_pGameInstance->Add_CloneObject_ToLayer(LEVEL_GAMEPLAY, TEXT("Layer_Monster"), TEXT("Prototype_GameObject_SimonManus"))))
+		return E_FAIL;
 	
 	return S_OK;
 }

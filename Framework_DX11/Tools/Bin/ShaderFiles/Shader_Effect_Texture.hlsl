@@ -26,6 +26,9 @@ float2  g_vTexDivide;
 int     g_iTexIndex;
 float   g_fRatio;
 
+float2 g_vTileRepeat;
+float2 g_vTileMove;
+
 cbuffer Effect_Desc
 {
     float4 vColor_Add = float4(0.f, 0.f, 0.f, 0.f);         // 더할 색상
@@ -253,6 +256,28 @@ PS_OUT PS_BLEND_DIRT_MAIN(PS_IN In)
     return Out;
 }
 
+PS_OUT PS_BLEND_RGBTOA_AURA_MAIN(PS_IN In)
+{
+    PS_OUT Out = (PS_OUT) 0;
+    
+    Out.vColor = g_DiffuseTexture.Sample(LinearSampler, Get_SpriteTexcoord(In.vTexcoord));
+    
+    Out.vColor.a = Out.vColor.r;
+    
+    float2 vTexcoord = In.vTexcoord * g_vTileRepeat + g_vTileMove;
+    vector vMask = g_MaskTexture_1.Sample(LinearSampler, vTexcoord);
+    
+    Out.vColor *= vMask;
+    Out.vColor.rgb *= g_vColor.rgb;
+    
+    Out.vColor.a *= g_fRatio;
+    
+    if(Out.vColor.a < 0.1f)
+        discard;
+    
+    return Out;
+}
+
 technique11 DefaultTechnique
 {
     pass Default // 0
@@ -352,6 +377,17 @@ technique11 DefaultTechnique
         VertexShader = compile vs_5_0 VS_MAIN();
         GeometryShader = NULL;
         PixelShader = compile ps_5_0 PS_BLEND_DIRT_MAIN();
+    }
+
+    pass AURA_BALL   // 9
+    {
+        SetRasterizerState(RS_Default);
+        SetDepthStencilState(DSS_NonWrite, 0);
+        SetBlendState(BS_AlphaBlend, vector(0.f, 0.f, 0.f, 0.f), 0xffffffff);
+
+        VertexShader = compile vs_5_0 VS_MAIN();
+        GeometryShader = NULL;
+        PixelShader = compile ps_5_0 PS_BLEND_RGBTOA_AURA_MAIN();
     }
 }
 

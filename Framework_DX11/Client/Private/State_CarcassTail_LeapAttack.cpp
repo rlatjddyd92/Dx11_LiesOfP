@@ -28,15 +28,36 @@ HRESULT CState_CarcassTail_LeapAttack::Start_State(void* pArg)
 
 void CState_CarcassTail_LeapAttack::Update(_float fTimeDelta)
 {
+    if (m_iRouteTrack == 0)
+    {
+        m_pMonster->Get_Transform()->LookAt_Lerp_NoHeight(m_pMonster->Get_TargetDir(), 1.5f, fTimeDelta);
+
+    }
+    else if (m_iRouteTrack == 1)
+    {
+        if (XMVectorGetX(XMVector3Length(m_vStartingPos - m_pMonster->Get_Transform()->Get_State(CTransform::STATE_POSITION))) >= m_fDistPoint - 5.f)
+        {
+            ++m_iRouteTrack;
+            m_pMonster->Change_Animation(AN_ROUTE_LAST, false, 0.1f, 0);
+        }
+        else
+        {
+            m_pMonster->Get_RigidBody()->Set_Velocity(m_vMoveSpeed * 40);
+        }
+    }
+
+
     if (End_Check())
     {
         if (m_iRouteTrack == 0)
         {
             m_pMonster->Change_Animation(AN_ROUTE_MIDDLE, false, 0.1f, 0);
-        }
-        else if (m_iRouteTrack == 1)
-        {
-            m_pMonster->Change_Animation(AN_ROUTE_LAST, false, 0.1f, 0);
+            m_pMonster->Active_CurrentWeaponCollider(1, 3);
+
+            m_vStartingPos = (_Vec3)m_pMonster->Get_Transform()->Get_State(CTransform::STATE_POSITION);
+            m_fDistPoint = XMVectorGetX(XMVector3Length(m_pMonster->Get_TargetPos() - m_vStartingPos));
+            m_vMoveSpeed = XMVector3Normalize(m_pMonster->Get_TargetDir());
+
         }
         else if (m_iRouteTrack == 2)
         {
@@ -45,6 +66,7 @@ void CState_CarcassTail_LeapAttack::Update(_float fTimeDelta)
         }
         ++m_iRouteTrack;
     }
+
 
     Collider_Check();
 
@@ -95,7 +117,7 @@ void CState_CarcassTail_LeapAttack::Collider_Check()
 
     if (m_iRouteTrack == 0)
     {
-        if (CurTrackPos >= 50.f && CurTrackPos <= 70.f)
+        if (CurTrackPos >= 230.f)
         {
             m_pMonster->Active_CurrentWeaponCollider(1, 3);
         }
@@ -104,16 +126,16 @@ void CState_CarcassTail_LeapAttack::Collider_Check()
             m_pMonster->DeActive_CurretnWeaponCollider(3);
         }
     }
-    else
+    else if (m_iRouteTrack == 2)
     {
-        //공격 손,꼬리 판단
-        if (CurTrackPos >= 90.f && CurTrackPos <= 105.f)
+        if ((CurTrackPos <= 40.f)||
+            (CurTrackPos <= 60.f && CurTrackPos <= 80.f))
         {
-            m_pMonster->Active_CurrentWeaponCollider(1, 1);
+            m_pMonster->Active_CurrentWeaponCollider(1, 3);
         }
         else
         {
-            m_pMonster->DeActive_CurretnWeaponCollider(1);
+            m_pMonster->DeActive_CurretnWeaponCollider(3);
         }
     }
 }

@@ -2,7 +2,7 @@
 #include "State_CarcassTail_Walk.h"
 #include "GameInstance.h"
 #include "Model.h"
-#include "CarcassBigA.h"
+#include "CarcassTail.h"
 
 CState_CarcassTail_Walk::CState_CarcassTail_Walk(CFsm* pFsm, CMonster* pMonster)
     :CState{ pFsm }
@@ -27,7 +27,29 @@ HRESULT CState_CarcassTail_Walk::Start_State(void* pArg)
 
 void CState_CarcassTail_Walk::Update(_float fTimeDelta)
 {
-    m_pMonster->Get_Transform()->LookAt_Lerp_NoHeight(m_pMonster->Get_TargetDir(), 1, fTimeDelta);
+    _int iDir = m_pMonster->Get_Transform()->LookAt_Lerp_NoHeight(m_pMonster->Get_TargetDir(), 1, fTimeDelta);
+    _float fDist = m_pMonster->Calc_Distance_XZ();
+
+    if (iDir == 0 && fDist <= 20.f && fDist >= 10.f)
+    {
+        _int iAtkNum = rand() % 2;
+        switch (iAtkNum)
+        {
+        case 0:
+            m_pMonster->Change_State(CCarcassTail::LEAP);
+            return;
+            break;
+
+        case 1:
+            m_pMonster->Change_State(CCarcassTail::LEAPTOATTACK);
+            return;
+            break;
+
+        default:
+            break;
+        }
+    }
+
     _Vec3 vDir = m_pMonster->Get_Transform()->Get_State(CTransform::STATE_LOOK);
 
     m_pMonster->Get_RigidBody()->Set_Velocity(XMVector3Normalize(vDir) * m_fWalkSpeed);
@@ -36,7 +58,7 @@ void CState_CarcassTail_Walk::Update(_float fTimeDelta)
 
     if (m_pMonster->Calc_Distance_XZ() <= 6.f)
     {
-        m_pMonster->Change_State(CCarcassBigA::IDLE);
+        m_pMonster->Change_State(CCarcassTail::IDLE);
     }
 }
 

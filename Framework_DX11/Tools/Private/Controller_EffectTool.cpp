@@ -702,6 +702,11 @@ void CController_EffectTool::TE_Check()
 		ImGui::InputFloat("Start Rotation TE", &m_TextureDesc.DefaultDesc.fStarRotation);
 		ImGui::InputFloat("Rotation Per Second TE", &m_TextureDesc.DefaultDesc.fRotationPerSecond);
 
+		ImGui::SeparatorText("Tile Move");
+		ImGui::InputFloat2("Tile Repeat", (_float*)&m_TextureDesc.DefaultDesc.vTileRepeat);
+		ImGui::InputFloat2("Tile Move Dir", (_float*)&m_TextureDesc.DefaultDesc.vTileMoveDir);
+		ImGui::InputFloat("Tile Move Speed", (_float*)&m_TextureDesc.DefaultDesc.fTileMoveSpeed);
+
 		ImGui::SeparatorText("Blending");
 		ImGui::InputFloat("Start Alpha TE", (_float*)&m_TextureDesc.DefaultDesc.fAlpha);
 		ImGui::InputFloat("Alpha Speed TE", (_float*)&m_TextureDesc.DefaultDesc.fAlphaSpeed);
@@ -1523,6 +1528,9 @@ void CController_EffectTool::Trail_MP_Check()
 		ImGui::InputFloat3("Rotation", (_float*)&m_Trail_MPDesc.DefaultDesc.vRotation);
 		ImGui::InputFloat3("Scale", (_float*)&m_Trail_MPDesc.DefaultDesc.vScale);
 
+		ImGui::SeparatorText("Duration");
+		ImGui::InputFloat("Duration", (_float*)&m_Trail_MPDesc.DefaultDesc.fDuration);
+
 		ImGui::SeparatorText("TrailMP Action");
 		ImGui::InputFloat4("Pivot", (_float*)&m_Trail_MPDesc.DefaultDesc.vPivot);
 		ImGui::InputFloat("Gravity", (_float*)&m_Trail_MPDesc.DefaultDesc.fGravity);
@@ -2068,7 +2076,6 @@ HRESULT CController_EffectTool::Load_Effect()
 				infile.read(reinterpret_cast<_char*>(&TestDesc.DefaultDesc), sizeof(TestDesc.DefaultDesc));		// 이거 버퍼 초기화에 쓰고
 				infile.read(reinterpret_cast<_char*>(&TestDesc.TextDesc), sizeof(TestDesc.TextDesc));			// 이게 실제로 적용되는 거.
 				infile.read(reinterpret_cast<_char*>(&TestDesc.BufferDesc), sizeof(TestDesc.BufferDesc));			// 이게 실제로 적용되는 거.
-
 				infile.close();
 
 				if (FAILED(m_pGameInstance->Add_CloneObject_ToLayer(LEVEL_TOOL, TEXT("Layer_TrailMP"), TEXT("Prototype_GameObject_Trail_Effect_MP"), &TestDesc)))

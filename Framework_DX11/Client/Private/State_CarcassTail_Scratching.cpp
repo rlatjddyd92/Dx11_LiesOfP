@@ -31,6 +31,13 @@ HRESULT CState_CarcassTail_Scratching::Start_State(void* pArg)
 
 void CState_CarcassTail_Scratching::Update(_float fTimeDelta)
 {
+    _double CurTrackPos = m_pMonster->Get_CurrentTrackPos();
+
+    if (CurTrackPos < 80.f)
+    {
+        m_pMonster->Get_Transform()->LookAt_Lerp_NoHeight(m_pMonster->Get_TargetDir(), 1.5f, fTimeDelta);
+    }
+
     if (End_Check())
     {
         m_pMonster->Change_State(CMonster::IDLE);

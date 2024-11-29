@@ -21,8 +21,8 @@ CTrail_MultiPoint_Instance::CTrail_MultiPoint_Instance(const CTrail_MultiPoint_I
     , m_InitHeadSRV_Desc(Prototype.m_InitHeadSRV_Desc)
     , m_pInstanceTailes(Prototype.m_pInstanceTailes)
     , m_TailInitialData(Prototype.m_TailInitialData)
-    , m_InitTailBuffer_Desc(Prototype.m_InitHeadBuffer_Desc)
-    , m_InitTailSRV_Desc(Prototype.m_InitHeadSRV_Desc)
+    , m_InitTailBuffer_Desc(Prototype.m_InitTailBuffer_Desc)
+    , m_InitTailSRV_Desc(Prototype.m_InitTailSRV_Desc)
 {
 
 }
@@ -172,8 +172,8 @@ _bool CTrail_MultiPoint_Instance::DispatchCS(CShader_Compute* pComputeShader, co
     m_pContext->CSSetUnorderedAccessViews(0, 2, nullUAV, nullptr);
 
     // SRV 해제
-    ID3D11ShaderResourceView* nullSRV[1] = { nullptr };
-    m_pContext->CSSetShaderResources(0, 1, nullSRV);
+    ID3D11ShaderResourceView* nullSRV[2] = { nullptr, nullptr };
+    m_pContext->CSSetShaderResources(0, 2, nullSRV);
 
     // Compute Shader 해제
     m_pContext->CSSetShader(nullptr, nullptr, 0);
@@ -273,7 +273,6 @@ HRESULT CTrail_MultiPoint_Instance::Ready_Buffers(const TRAIL_MP_INSTANCE_DESC& 
     m_InitHeadSRV_Desc.ViewDimension = D3D11_SRV_DIMENSION_BUFFER;
     m_InitHeadSRV_Desc.Buffer.NumElements = m_iNumInstance;
 
-
     m_InitTailBuffer_Desc = {};
     m_InitTailBuffer_Desc.Usage = D3D11_USAGE_DEFAULT;
     m_InitTailBuffer_Desc.ByteWidth = sizeof(TAIL_PARTICLE) * m_iNumInstance * m_iNumTailInstance;
@@ -285,7 +284,6 @@ HRESULT CTrail_MultiPoint_Instance::Ready_Buffers(const TRAIL_MP_INSTANCE_DESC& 
     m_InitTailSRV_Desc.Format = DXGI_FORMAT_UNKNOWN;
     m_InitTailSRV_Desc.ViewDimension = D3D11_SRV_DIMENSION_BUFFER;
     m_InitTailSRV_Desc.Buffer.NumElements = m_iNumInstance * m_iNumTailInstance;
-
 
     return S_OK;
 }

@@ -48,6 +48,8 @@ private:
 	virtual void	Active_CurrentWeaponCollider(_float fDamageRatio, _uint iCollIndex = 0);
 	virtual void	DeActive_CurretnWeaponCollider(_uint iCollIndex = 0);
 
+	virtual _bool		Get_EffectsLoop(const _uint eType) { return false; };
+
 private:
 	HRESULT Ready_Components();
 	HRESULT Ready_FSM();

@@ -52,7 +52,17 @@ void CState_SimonManusP1_Idle::Update(_float fTimeDelta)
             m_pMonster->Change_State(CSimonManus::WALK);
             return;
         }
+        //if (true)
+        //{
+        //    m_pMonster->Change_State(CSimonManus::ATK_SWIPMULT_L);
+        //
+        //}
+        //else
+        //{
+        //    m_pMonster->Change_State(CSimonManus::ATK_AVOIDSWING);
+        //}
 
+        return;
     }
 
     _int iDir = m_pMonster->Get_Transform()->LookAt_Lerp_NoHeight(m_pMonster->Get_TargetDir(), 3, fTimeDelta);
@@ -86,6 +96,7 @@ void CState_SimonManusP1_Idle::Calc_Act_Attack(_float fDist)
     {
         //어보이드, 점프, 스다 엘알  스탬프, 차지까지 까지
         _int iAtkNum = rand() % 6;
+        iAtkNum = 0;
         switch (iAtkNum)
         {
         case 0:
