@@ -592,9 +592,6 @@
     <Filter Include="05.Fsm\Monster\SimonManus\P1\Walk">
       <UniqueIdentifier>{fe395b30-26dd-4e7d-9184-bb5c5d694b6b}</UniqueIdentifier>
     </Filter>
-    <Filter Include="03.GameInterface_Controller\00.UIManager\00.UIPage\09.UIPage_ToolTip">
-      <UniqueIdentifier>{d6f0816f-b248-400f-ae9c-070eac27ca42}</UniqueIdentifier>
-    </Filter>
     <Filter Include="02.GameObjects\02.Pawn">
       <UniqueIdentifier>{a51c24d7-a10f-438d-8dc2-c2f87467615b}</UniqueIdentifier>
     </Filter>
@@ -720,6 +717,9 @@
 	</Filter>
     <Filter Include="02.GameObjects\10.InteractObj\03.WallDeco\Deco_Collider_Obj">
       <UniqueIdentifier>{de6a80df-b5fc-4917-8178-d30e289d2253}</UniqueIdentifier>
+	</Filter>
+    <Filter Include="03.GameInterface_Controller\00.UIManager\00.UIPage\09.UIPage_ItemInfo">
+      <UniqueIdentifier>{d6f0816f-b248-400f-ae9c-070eac27ca42}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -964,7 +964,7 @@
       <Filter>03.GameInterface_Controller\00.UIManager\00.UIPage\06.UIPage_Stat</Filter>
     </ClInclude>
     <ClInclude Include="..\Public\UIPage_ItemInfo.h">
-      <Filter>03.GameInterface_Controller\00.UIManager\00.UIPage\09.UIPage_ToolTip</Filter>
+      <Filter>03.GameInterface_Controller\00.UIManager\00.UIPage\09.UIPage_ItemInfo</Filter>
     </ClInclude>
     <ClInclude Include="..\public\Mesh_Effect.h">
       <Filter>02.GameObjects\05.Effect\Effect_Base\Mesh_Effect</Filter>
@@ -1532,7 +1532,7 @@
       <Filter>03.GameInterface_Controller\00.UIManager\00.UIPage\06.UIPage_Stat</Filter>
     </ClCompile>
     <ClCompile Include="..\Private\UIPage_ItemInfo.cpp">
-      <Filter>03.GameInterface_Controller\00.UIManager\00.UIPage\09.UIPage_ToolTip</Filter>
+      <Filter>03.GameInterface_Controller\00.UIManager\00.UIPage\09.UIPage_ItemInfo</Filter>
     </ClCompile>
     <ClCompile Include="..\private\Mesh_Effect.cpp">
       <Filter>02.GameObjects\05.Effect\Effect_Base\Mesh_Effect</Filter>
@@ -1957,6 +1957,15 @@
     </FxCompile>
     <FxCompile Include="..\Bin\ShaderFiles\Shader_VtxTrail_TwoPoint_Instance.hlsl">
       <Filter>97.ShaderFiles\Effect</Filter>
+    </FxCompile>
+    <FxCompile Include="..\Bin\ShaderFiles\Shader_UI_Change_Color.hlsl">
+      <Filter>97.ShaderFiles\99.UI_Shader</Filter>
+    </FxCompile>
+    <FxCompile Include="..\Bin\ShaderFiles\Shader_UI_Multiple_Color.hlsl">
+      <Filter>97.ShaderFiles\99.UI_Shader</Filter>
+    </FxCompile>
+    <FxCompile Include="..\Bin\ShaderFiles\Shader_UI_Normal.hlsl">
+      <Filter>97.ShaderFiles\99.UI_Shader</Filter>
     </FxCompile>
   </ItemGroup>
   <ItemGroup>

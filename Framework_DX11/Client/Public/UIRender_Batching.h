@@ -164,14 +164,6 @@ private:
 	SCROLL_AREA m_eNow_Area = SCROLL_AREA::SCROLL_NONE;
 	vector<_float> m_vecfScrollY_Offset_Max;
 
-	
-
-	// 아래 내용은 다음 단계 
-
-	ID3D11ShaderResourceView* m_Array_UI_Texture[MAX_TEXTURES_UI]; // 텍스처의 SRV 배열
-	ID3D11ShaderResourceView* m_Array_Item_Texture[MAX_TEXTURES_ITEM]; // 텍스처의 SRV 배열
-	ID3D11SamplerState* m_pSamplerState;
-
 public:
 	static CUIRender_Batching* Create(ID3D11Device* pDevice, ID3D11DeviceContext* pContext);
 	virtual CGameObject* Clone(void* pArg);

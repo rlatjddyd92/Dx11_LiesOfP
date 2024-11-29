@@ -21,6 +21,8 @@ HRESULT CUIPage::Initialize_Prototype()
 
 HRESULT CUIPage::Initialize(void* pArg)
 {
+	m_pItemaction = new ITEMACTION;
+
 	/* 직교퉁여을 위한 데이터들을 모두 셋하낟. */
 	if (FAILED(__super::Initialize(&pArg)))
 		return E_FAIL;
@@ -189,7 +191,9 @@ void CUIPage::Input_Render_Info(UPART& Part, SCROLL_AREA eArea)
 	pNew->vColor_Text.w *= m_fTopPartMove;
 
 	pNew->vColor_Texture = Part.fTextureColor;
-	pNew->vColor_Texture.w *= m_fTopPartMove;
+
+	if (m_fTopPartMove >= 0.f)
+		pNew->vColor_Texture.w *= m_fTopPartMove;
 
 	pNew->vPosition = Part.fPosition;
 	pNew->vSize = Part.fSize;
@@ -249,4 +253,6 @@ void CUIPage::Free()
 		Safe_Delete(iter);
 
 	m_vec_Group_Ctrl.clear();
+
+	Safe_Delete(m_pItemaction);
 }

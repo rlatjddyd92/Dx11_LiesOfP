@@ -2,7 +2,7 @@
 #include "..\Public\UIPage_ItemInfo.h"
 
 #include "GameInstance.h"
-
+#include "GameInterface_Controller.h"
 
 CUIPage_ItemInfo::CUIPage_ItemInfo(ID3D11Device* pDevice, ID3D11DeviceContext* pContext)
 	: CUIPage{ pDevice, pContext }
@@ -35,7 +35,7 @@ HRESULT CUIPage_ItemInfo::Initialize_Prototype()
 	if (FAILED(__super::Initialize(&Desc)))
 		return E_FAIL;
 
-
+	m_fTopPartMove = -1.f;
 
 	return S_OK;
 }
@@ -59,8 +59,55 @@ void CUIPage_ItemInfo::Update(_float fTimeDelta)
 
 void CUIPage_ItemInfo::Late_Update(_float fTimeDelta)
 {
-	__super::Late_Update(fTimeDelta);
+	if (m_vecPageAction[_int(PAGEACTION::ACTION_ACTIVE)] == false)
+		return;
 
+	SCROLL_AREA eArea = SCROLL_AREA::SCROLL_NONE;
+	if (m_eNowPage == UIPAGE::PAGE_INVEN)
+		eArea = SCROLL_AREA::SCROLL_INVEN;
+
+	// focus 
+	if (m_bFocus)
+	{
+		if (m_vecPart[_int(PART_GROUP::ITEMINFO_SELECT_Fire)]->bRender)
+		{
+			m_fFocus_Fire_Move_Ratio += fTimeDelta * 5.f;
+			m_fFocus_Fire_Move_Ratio = min(m_fFocus_Fire_Move_Ratio, 1.f);
+
+			m_vecPart[_int(PART_GROUP::ITEMINFO_SELECT_Fire)]->MakeDirec();
+			m_vecPart[_int(PART_GROUP::ITEMINFO_SELECT_Fire)]->fPosition =
+			{
+				m_vecPart[_int(PART_GROUP::ITEMINFO_SELECT_Fire)]->fAdjust_Start.x + (m_vecPart[_int(PART_GROUP::ITEMINFO_SELECT_Fire)]->fDirec.x * m_fFocus_Fire_Move_Ratio),
+				m_vecPart[_int(PART_GROUP::ITEMINFO_SELECT_Fire)]->fAdjust_Start.y + (m_vecPart[_int(PART_GROUP::ITEMINFO_SELECT_Fire)]->fDirec.y * m_fFocus_Fire_Move_Ratio)
+			};
+		}
+
+		Input_Render_Info(*m_vecPart[_int(PART_GROUP::ITEMINFO_SELECT_Rect)], eArea);
+		Input_Render_Info(*m_vecPart[_int(PART_GROUP::ITEMINFO_SELECT_Fire)], eArea);
+	}
+
+	// New
+	while (!m_queueNewMarkPos.empty())
+	{
+		_Vec2 vPos = m_queueNewMarkPos.front();
+		m_queueNewMarkPos.pop();
+
+		m_vecPart[_int(PART_GROUP::ITEMINFO_NEW)]->fPosition = vPos;
+
+		Input_Render_Info(*m_vecPart[_int(PART_GROUP::ITEMINFO_NEW)], eArea);
+	}
+
+	// Action
+	if (m_bIsActive_Func)
+	for (_int i = _int(PART_GROUP::ITEMINFO_ACTION_Back); i <= _int(PART_GROUP::ITEMINFO_ACTION_Text_3); ++i)
+	{
+		m_vecPart[i]->MovePart(m_vecPart[m_vecPart[i]->iParentPart_Index]->fPosition, fTimeDelta);
+
+		if (m_vecPart[i]->bRender)
+			Input_Render_Info(*m_vecPart[i], SCROLL_AREA::SCROLL_NONE);
+	}
+
+	m_vecPageAction[_int(PAGEACTION::ACTION_ACTIVE)] = false;
 }
 
 HRESULT CUIPage_ItemInfo::Render()
@@ -81,7 +128,9 @@ void CUIPage_ItemInfo::CloseAction()
 CHECK_MOUSE CUIPage_ItemInfo::Check_Page_Action(_float fTimeDelta)
 {
 	__super::Check_Page_Action(fTimeDelta);
-	Action_ItemAction(fTimeDelta);
+
+	if (m_bIsActive_Func)
+		Action_ItemAction(fTimeDelta);
 
 	return CHECK_MOUSE::MOUSE_NONE;
 }
@@ -101,10 +150,11 @@ HRESULT CUIPage_ItemInfo::Ready_UIPart_Group_Control()
 			m_vec_Group_Ctrl[m_vecPart[i]->iGroupIndex]->PartIndexlist.push_back(i);
 	}
 
-	__super::Array_Control(_int(PART_GROUP::ITEMINFO_TOOLTIP_Frame), _int(PART_GROUP::ITEMINFO_ACTION_Text_3), CTRL_COMMAND::COM_RENDER, true);
+	__super::Array_Control(_int(PART_GROUP::ITEMINFO_TOOLTIP_Frame), _int(PART_GROUP::ITEMINFO_ACTION_Text_3), CTRL_COMMAND::COM_RENDER, false);
 
 	m_strFuncName[_int(ITEM_FUNC::FUNC_USING)] = TEXT("사용하기");
 	m_strFuncName[_int(ITEM_FUNC::FUNC_TO_INVEN)] = TEXT("인벤토리로 이동");
+	m_strFuncName[_int(ITEM_FUNC::FUNC_TO_EQUIP)] = TEXT("장비창으로 이동");
 	m_strFuncName[_int(ITEM_FUNC::FUNC_EQUIP)] = TEXT("착용하기");
 	m_strFuncName[_int(ITEM_FUNC::FUNC_UNEQUIP)] = TEXT("해제하기");
 	m_strFuncName[_int(ITEM_FUNC::FUNC_DELETE)] = TEXT("버리기");
@@ -113,6 +163,18 @@ HRESULT CUIPage_ItemInfo::Ready_UIPart_Group_Control()
 	m_strFuncName[_int(ITEM_FUNC::FUNC_EQUIP_BAG)] = TEXT("착용하기 : 보조가방");
 	m_strFuncName[_int(ITEM_FUNC::FUNC_EQUIP_WEAPON_FIRST)] = TEXT("착용하기 : 무기 1번");
 	m_strFuncName[_int(ITEM_FUNC::FUNC_EQUIP_WEAPON_SECOND)] = TEXT("착용하기 : 무기 2번");
+	m_strFuncName[_int(ITEM_FUNC::FUNC_EQUIP_TOP_0)] = TEXT("착용하기 : 위 벨트 1번");
+	m_strFuncName[_int(ITEM_FUNC::FUNC_EQUIP_TOP_1)] = TEXT("착용하기 : 위 벨트 2번");
+	m_strFuncName[_int(ITEM_FUNC::FUNC_EQUIP_TOP_2)] = TEXT("착용하기 : 위 벨트 3번");
+	m_strFuncName[_int(ITEM_FUNC::FUNC_EQUIP_BOTTOM_0)] = TEXT("착용하기 : 아래 벨트 1번");
+	m_strFuncName[_int(ITEM_FUNC::FUNC_EQUIP_BOTTOM_1)] = TEXT("착용하기 : 아래 벨트 2번");
+	m_strFuncName[_int(ITEM_FUNC::FUNC_EQUIP_BOTTOM_2)] = TEXT("착용하기 : 아래 벨트 3번");
+	m_strFuncName[_int(ITEM_FUNC::FUNC_EQUIP_BAG_0)] = TEXT("착용하기 : 보조가방 1번");
+	m_strFuncName[_int(ITEM_FUNC::FUNC_EQUIP_BAG_1)] = TEXT("착용하기 : 보조가방 2번");
+	m_strFuncName[_int(ITEM_FUNC::FUNC_EQUIP_BAG_2)] = TEXT("착용하기 : 보조가방 3번");
+	m_strFuncName[_int(ITEM_FUNC::FUNC_EQUIP_BAG_3)] = TEXT("착용하기 : 보조가방 4번");
+
+
 	Off_ItemAction();
 
 	m_bRender = false;
@@ -122,25 +184,41 @@ HRESULT CUIPage_ItemInfo::Ready_UIPart_Group_Control()
 
 void CUIPage_ItemInfo::Show_Focus(_Vec2 vItemCellPos, _Vec2 vItemCellSize)
 {
-	m_vecPart[_int(PART_GROUP::ITEMINFO_SELECT_Rect)]->fPosition = vItemCellPos;
-	m_vecPart[_int(PART_GROUP::ITEMINFO_SELECT_Rect)]->fSize = vItemCellSize;
+	m_bFocus = true;
 
-	if (m_vecPart[_int(PART_GROUP::ITEMINFO_SELECT_Rect)]->bRender)
+	_float fSize_Adjust = 1.1f;
+	_float fFire_Adjust = 0.35f;
+
+	if (m_eNowPage == UIPAGE::PAGE_INVEN)
 	{
-		m_vecPart[_int(PART_GROUP::ITEMINFO_SELECT_Fire)]->fAdjust_End = vItemCellPos + _Vec2{ -(vItemCellSize.x * 0.4f), vItemCellSize.y * 0.4f };
+		fSize_Adjust = 1.2f;
+		fFire_Adjust = 0.45f;
+	}
+		
+
+	m_vecPart[_int(PART_GROUP::ITEMINFO_SELECT_Rect)]->fPosition = vItemCellPos;
+	m_vecPart[_int(PART_GROUP::ITEMINFO_SELECT_Rect)]->fSize = vItemCellSize * fSize_Adjust;
+
+	if (!m_vecPart[_int(PART_GROUP::ITEMINFO_SELECT_Rect)]->bRender)
+	{
+		//m_vecPart[_int(PART_GROUP::ITEMINFO_SELECT_Fire)]->fAdjust_Start = vItemCellPos + _Vec2{ -(vItemCellSize.x * 0.4f), vItemCellSize.y * 0.4f };
+		m_vecPart[_int(PART_GROUP::ITEMINFO_SELECT_Fire)]->fAdjust_End = vItemCellPos + _Vec2{ -(vItemCellSize.x * fFire_Adjust), vItemCellSize.y * fFire_Adjust };
 	}
 	else
 	{
 		m_fFocus_Fire_Move_Ratio = 0.f;
-		m_vecPart[_int(PART_GROUP::ITEMINFO_SELECT_Fire)]->fAdjust_Start = vItemCellPos + _Vec2{ -(vItemCellSize.x * 0.4f), vItemCellSize.y * 0.4f };
+		m_vecPart[_int(PART_GROUP::ITEMINFO_SELECT_Fire)]->fAdjust_Start = m_vecPart[_int(PART_GROUP::ITEMINFO_SELECT_Fire)]->fPosition;
+		m_vecPart[_int(PART_GROUP::ITEMINFO_SELECT_Fire)]->fAdjust_End = vItemCellPos + _Vec2{ -(vItemCellSize.x * fFire_Adjust), vItemCellSize.y * fFire_Adjust };
 	}
 
 	m_vecPart[_int(PART_GROUP::ITEMINFO_SELECT_Rect)]->bRender = true;
 	m_vecPart[_int(PART_GROUP::ITEMINFO_SELECT_Fire)]->bRender = true;
 }
 
-void CUIPage_ItemInfo::Off_Focus(_Vec2 vItemCellPos, _Vec2 vItemCellSize)
+void CUIPage_ItemInfo::Off_Focus()
 {
+	m_bFocus = false;
+
 	m_fFocus_Fire_Move_Ratio = 0.f;
 	m_vecPart[_int(PART_GROUP::ITEMINFO_SELECT_Rect)]->bRender = false;
 	m_vecPart[_int(PART_GROUP::ITEMINFO_SELECT_Fire)]->bRender = false;
@@ -148,20 +226,18 @@ void CUIPage_ItemInfo::Off_Focus(_Vec2 vItemCellPos, _Vec2 vItemCellSize)
 
 void CUIPage_ItemInfo::Show_NewMark(_Vec2 vItemCellPos, _Vec2 vItemCellSize)
 {
-	_Vec2 vPos = vItemCellPos + (vItemCellSize * 0.5f);
+	_Vec2 vPos = vItemCellPos + _Vec2(vItemCellSize.x * 0.5f, -vItemCellSize.y * 0.5f);
 	m_queueNewMarkPos.push(vPos);
 }
 
 void CUIPage_ItemInfo::Show_ItemAction(_Vec2 vItemCellPos, _Vec2 vItemCellSize, ITEM_FUNC eFunc0, ITEM_FUNC eFunc1, ITEM_FUNC eFunc2, ITEM_FUNC eFunc3)
 {
-	//m_vecPart[_int(PART_GROUP::ITEMINFO_ACTION_Header)].
-
+	m_bIsActive_Func = true;
+	m_vecPart[_int(PART_GROUP::ITEMINFO_ACTION_Header)]->fPosition = vItemCellPos + (m_vecPart[_int(PART_GROUP::ITEMINFO_ACTION_Header)]->fSize * 0.5f) + (vItemCellSize * 0.5f);
 	m_vecPart[_int(PART_GROUP::ITEMINFO_ACTION_Back)]->bRender = true;
 	m_vecPart[_int(PART_GROUP::ITEMINFO_ACTION_Deco)]->bRender = true;
 
 	m_vecPart[_int(PART_GROUP::ITEMINFO_ACTION_Back)]->fRatio = 0.f;
-
-
 
 	m_eActive_Func[0] = eFunc0;
 	m_eActive_Func[1] = eFunc1;
@@ -174,48 +250,41 @@ void CUIPage_ItemInfo::Show_ItemAction(_Vec2 vItemCellPos, _Vec2 vItemCellSize, 
 		{
 			m_vecPart[_int(PART_GROUP::ITEMINFO_ACTION_Back)]->fRatio += 0.25f;
 			m_vecPart[_int(PART_GROUP::ITEMINFO_ACTION_Text_0) + (i * 3)]->strText = m_strFuncName[_int(m_eActive_Func[i])];
+			m_vecPart[_int(PART_GROUP::ITEMINFO_ACTION_Text_0) + (i * 3)]->bRender = true;
 		}
 		else
-			break;
+		{
+			m_vecPart[_int(PART_GROUP::ITEMINFO_ACTION_Text_0) + (i * 3)]->strText = {};
+			m_vecPart[_int(PART_GROUP::ITEMINFO_ACTION_Text_0) + (i * 3)]->bRender = false;
+		}
 	}
-
-
-
-
-
-
-
-
 }
 
 void CUIPage_ItemInfo::Off_ItemAction()
 {
-	__super::Array_Control(_int(PART_GROUP::ITEMINFO_ACTION_Header), _int(PART_GROUP::ITEMINFO_ACTION_Text_3), CTRL_COMMAND::COM_RENDER, true);
+	m_bIsActive_Func = false;
+
+	__super::Array_Control(_int(PART_GROUP::ITEMINFO_ACTION_Header), _int(PART_GROUP::ITEMINFO_ACTION_Text_3), CTRL_COMMAND::COM_RENDER, false);
 	for (_int i = 0; i < 4; ++i)
 		m_eActive_Func[i] = ITEM_FUNC::FUNC_END;
 }
 
 void CUIPage_ItemInfo::Action_ItemAction(_float fTimeDelta)
 {
+	m_iNow_Func = -1;
+
 	for (_int i = 0; i < 4; ++i)
 	{
 		if (m_eActive_Func[i] != ITEM_FUNC::FUNC_END)
-		{
-
-
-			/*m_vecPart[_int(PART_GROUP::ITEMINFO_ACTION_Mouse_0) + (i * 3)]
-				m_vecPart[_int(PART_GROUP::ITEMINFO_ACTION_Fx_0) + (i * 3)]
-				m_vecPart[_int(PART_GROUP::ITEMINFO_ACTION_Text_0) + (i * 3)]*/
-
-		}
-		else
-			break;
+			if (GET_GAMEINTERFACE->CheckMouse(m_vecPart[_int(PART_GROUP::ITEMINFO_ACTION_Mouse_0) + (i * 3)]->fPosition, m_vecPart[_int(PART_GROUP::ITEMINFO_ACTION_Mouse_0) + (i * 3)]->fSize).x != -1.f)
+			{
+				m_vecPart[_int(PART_GROUP::ITEMINFO_ACTION_Fx_0) + (i * 3)]->bRender = true;
+				if (KEY_TAP(KEY::LBUTTON))
+					m_iNow_Func = i;
+				continue;
+			}
+		m_vecPart[_int(PART_GROUP::ITEMINFO_ACTION_Fx_0) + (i * 3)]->bRender = false;
 	}
-
-
-
-
-
 }
 
 

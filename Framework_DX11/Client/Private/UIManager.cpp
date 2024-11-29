@@ -88,6 +88,8 @@ HRESULT CUIManager::Initialize(void* pArg)
 
 void CUIManager::Priority_Update(_float fTimeDelta)
 {
+	
+
 	for (auto& iter : m_vecPage)
 		if (iter->GetUpdate())
 			iter->Priority_Update(fTimeDelta);
@@ -359,7 +361,15 @@ void CUIManager::UIControl_Inven(_float fTimeDelta)
 		SwicthPage(UIPAGE::PAGE_INVEN, UIPAGE::PAGE_MENU);
 	else
 	{
+		m_eNow_Active_Func = ITEM_FUNC::FUNC_END;
 		m_pUIPage_Inven->Check_Page_Action(fTimeDelta);
+
+		if (m_pUIPage_Inven->Get_ItemAction_Info()->eAction_Array_Type == INVEN_ARRAY_TYPE::TYPE_END)
+			m_pUIPage_ItemInfo->Off_ItemAction();
+
+		m_pUIPage_ItemInfo->Set_Active_ItemInfo(true, UIPAGE::PAGE_INVEN);
+		m_pUIPage_ItemInfo->Check_Page_Action(fTimeDelta);
+		m_eNow_Active_Func = m_pUIPage_ItemInfo->Get_Active_Func();
 	}
 }
 
@@ -369,7 +379,15 @@ void CUIManager::UIControl_Equip(_float fTimeDelta)
 		SwicthPage(UIPAGE::PAGE_EQUIP, UIPAGE::PAGE_MENU);
 	else
 	{
+		m_eNow_Active_Func = ITEM_FUNC::FUNC_END;
 		m_pUIPage_Equip->Check_Page_Action(fTimeDelta);
+
+		if (m_pUIPage_Equip->Get_ItemAction_Info()->eAction_Equip_Slot == EQUIP_SLOT::EQUIP_END)
+			m_pUIPage_ItemInfo->Off_ItemAction();
+
+		m_pUIPage_ItemInfo->Set_Active_ItemInfo(true, UIPAGE::PAGE_EQUIP);
+		m_pUIPage_ItemInfo->Check_Page_Action(fTimeDelta);
+		m_eNow_Active_Func = m_pUIPage_ItemInfo->Get_Active_Func();
 	}
 }
 
@@ -565,8 +583,8 @@ HRESULT CUIManager::Make_UIPage(_int iIndex)
 	}
 	else if (iIndex == _int(UIPAGE::PAGE_ITEMINFO))
 	{
-		m_pUIPage_ToolTip = CUIPage_ItemInfo::Create(m_pDevice, m_pContext);
-		m_vecPage[iIndex] = static_cast<CUIPage*>(m_pUIPage_ToolTip);
+		m_pUIPage_ItemInfo = CUIPage_ItemInfo::Create(m_pDevice, m_pContext);
+		m_vecPage[iIndex] = static_cast<CUIPage*>(m_pUIPage_ItemInfo);
 	}
 	else if (iIndex == _int(UIPAGE::PAGE_ORTHO))
 	{

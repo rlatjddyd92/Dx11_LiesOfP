@@ -128,6 +128,10 @@ public:
 		// 장착 정보 
 		EQUIP_SLOT eSlot = EQUIP_SLOT::EQUIP_END;
 
+		// 획득 정보 
+		_bool bIsNew = false;
+		_bool bIsNewMark_Show = false;
+
 	}ITEM;
 
 	typedef struct ARRAY_INFO // 인벤에 존재하는 배열의 정보 
@@ -180,6 +184,9 @@ public:
 			*vecItemInfo[iNextIndex] = *pNew;
 
 			//memcpy(&vecItemInfo[iNextIndex], pNew, sizeof(ITEM));
+
+			vecItemInfo[iNextIndex]->bIsNew = true;
+			vecItemInfo[iNextIndex]->bIsNewMark_Show = false;
 
 			++iNextIndex;
 
@@ -249,8 +256,13 @@ public:
 	// 접근, 수정
 	_bool Is_ItemData_Change() { return m_bIsChange; }
 	ITEM_RESULT AddNewItem_Inven(_uint iItemIndex, _uint iCount = 1); // <- 새롭게 아이템을 만들어 인벤에 넣는다 
-	ITEM_RESULT EquipItem_Inven(INVEN_ARRAY_TYPE eIndex, EQUIP_SLOT eSlot, _uint iIndex); // <- 인벤에 있는 아이템을 장비한다 
+	ITEM_RESULT EquipItem_Inven(INVEN_ARRAY_TYPE eIndex, EQUIP_SLOT eSlot, _uint iIndex);
+	ITEM_RESULT EquipWeapon_Inven(INVEN_ARRAY_TYPE eIndex, EQUIP_SLOT eSlot, _uint iIndex); // <- 인벤에 있는 아이템을 장비한다 
 	ITEM_RESULT UnEquipItem_Inven(EQUIP_SLOT eSlot); // <- 인벤에 있는 아이템을 장비한다 
+	ITEM_RESULT UnEquipWeapon_Inven(EQUIP_SLOT eSlot); // <- 인벤에 있는 아이템을 장비한다 
+
+	ITEM_RESULT Move_EquipItem(EQUIP_SLOT eBefore, EQUIP_SLOT eDest); // <-장비된 아이템의 장비 위치 변경
+
 	ITEM_RESULT UseItem_Equip(EQUIP_SLOT eSlot, _uint iCount = 1); // <- 장비된 아이템을 사용한다
 	ITEM_RESULT UseItem_Inven(INVEN_ARRAY_TYPE eIndex, _uint iIndex, _uint iCount = 1); // <- 인벤에 있는 아이템을 직접 사용
 
@@ -302,6 +314,13 @@ public:
 		return m_vecArray_Inven[_uint(m_vecEquip_ItemInfo[_uint(eSlot)]->eType)]->vecItemInfo[_uint(m_vecEquip_ItemInfo[_uint(eSlot)]->iIndex)];
 	}
 
+	const EQUIP* Get_Equip_Slot_Info(EQUIP_SLOT eSlot)
+	{
+		if ((_int(eSlot) < 0) || (_int(eSlot) >= _int(EQUIP_SLOT::EQUIP_END)))
+			return nullptr;
+
+		return m_vecEquip_ItemInfo[_int(eSlot)];
+	}
 
 	// 코인
 	ITEM_RESULT Add_Coin(_int iAdd, _bool bForce)
@@ -421,8 +440,63 @@ public:
 		return pItem->Arm_Gauge_Now / pItem->Arm_Gauge_Max;
 	}
 
+	// New 표시 조정 관련 
+	_int Get_IsNew(INVEN_ARRAY_TYPE eType, _int iIndex) 
+	{
+		if(!IsValid_Inven(eType, iIndex))
+			return -1;
+
+		if (m_vecArray_Inven[_int(eType)]->Get_Item_Info(iIndex))
+			return _int(m_vecArray_Inven[_int(eType)]->Get_Item_Info(iIndex)->bIsNew);
+		else
+			return -1;
+	}
+	void Set_IsNew(INVEN_ARRAY_TYPE eType, _int iIndex, _bool IsNew)
+	{
+		if (!IsValid_Inven(eType, iIndex))
+			return;
+
+		if (m_vecArray_Inven[_int(eType)]->Get_Item_Info(iIndex))
+		{
+			m_vecArray_Inven[_int(eType)]->Get_Item_Info(iIndex)->bIsNew = IsNew;
+			m_vecArray_Inven[_int(eType)]->Get_Item_Info(iIndex)->bIsNewMark_Show = false;
+		}
+		else
+			return;
+	}
+	void Set_IsNew_Show(INVEN_ARRAY_TYPE eType, _int iIndex)
+	{
+		if (!IsValid_Inven(eType, iIndex))
+			return;
+
+		if (m_vecArray_Inven[_int(eType)]->Get_Item_Info(iIndex))
+			m_vecArray_Inven[_int(eType)]->Get_Item_Info(iIndex)->bIsNewMark_Show = true;
+		else
+			return;
+	}
+	void Set_Show_NewMark_Off()
+	{
+		for (auto& iter : m_vecArray_Inven)
+			for (auto& iterItem : iter->vecItemInfo)
+				if (iterItem->bIsNewMark_Show)
+				{
+					iterItem->bIsNew = false;
+					iterItem->bIsNewMark_Show - false;
+				}
+	}
+
+	// ItemAction 관련 
+	void Set_ItemAction(EQUIP_SLOT eSlot, _Vec2 vPos, _Vec2 vSize, _bool bMainTainPage = false);
+	void Set_ItemAction(INVEN_ARRAY_TYPE eType, _int iIndex, _Vec2 vPos, _Vec2 vSize, _bool bMainTainPage = false);
+
+	void Reset_ItemAction();
+
+	_bool IsReset_ItemAction();
 
 
+	ITEM_RESULT Operate_ItemAction(ITEM_FUNC eFunc, _Vec2 vPos, _Vec2 vSize);
+
+	ITEM_RESULT Operate_EquipAction(_Vec2 vPos, _Vec2 vSize);
 
 
 
@@ -455,6 +529,26 @@ private:
 	// 날 + 자루 합체
 	// 아래 내용은 추후 필요하면 퍼블릭으로 이동
 	ITEM_RESULT Assemble_Blade_Handle(_int iBladeIndex, _int iHandleIndex);
+
+	// 유효 정보 검증 
+	_bool IsValid_Inven(INVEN_ARRAY_TYPE eType, _int iIndex)
+	{
+		if ((_int(eType) < 0) || (_int(eType) >= _int(INVEN_ARRAY_TYPE::TYPE_END)))
+			return false;
+
+		if (m_vecArray_Inven[_int(eType)]->Get_Array_Size() <= iIndex)
+			return false;
+
+		return true;
+	}
+
+	_bool IsValid_Equip(EQUIP_SLOT eSlot)
+	{
+		if ((_int(eSlot) < 0) || (_int(eSlot) >= _int(EQUIP_SLOT::EQUIP_END)))
+			return false;
+
+		return true;
+	}
 
 
 
@@ -501,6 +595,14 @@ private:
 
 	// 아이템 갱신 
 	_bool m_bIsChange = false;
+
+	// 아이템 액션 조작 
+	_bool m_bItemAction_Active = false;
+	EQUIP_SLOT m_eNow_ActionSlot = EQUIP_SLOT::EQUIP_END;
+	INVEN_ARRAY_TYPE m_eNow_ActionArray = INVEN_ARRAY_TYPE::TYPE_END;
+	_int m_iArray_Index = -1;
+	_int m_iActionPopup_Page = 0;
+	
 
 public:
 	static CItem_Manager* Create(CGameInstance* pGameInstance);

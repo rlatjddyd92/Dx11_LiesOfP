@@ -11,6 +11,33 @@ CCustomFont::CCustomFont(ID3D11Device * pDevice, ID3D11DeviceContext * pContext)
 HRESULT CCustomFont::Initialize(const _tchar * pFontFilePath)
 {
 	m_pFont = new SpriteFont(m_pDevice, pFontFilePath);
+
+	// 알파 블렌딩 활성화
+	D3D11_BLEND_DESC blendDesc = {};
+	blendDesc.RenderTarget[0].BlendEnable = TRUE;
+	blendDesc.RenderTarget[0].SrcBlend = D3D11_BLEND_SRC_ALPHA;
+	blendDesc.RenderTarget[0].DestBlend = D3D11_BLEND_INV_SRC_ALPHA;
+	blendDesc.RenderTarget[0].BlendOp = D3D11_BLEND_OP_ADD;
+	blendDesc.RenderTarget[0].SrcBlendAlpha = D3D11_BLEND_ONE;
+	blendDesc.RenderTarget[0].DestBlendAlpha = D3D11_BLEND_ZERO;
+	blendDesc.RenderTarget[0].BlendOpAlpha = D3D11_BLEND_OP_ADD;
+	blendDesc.RenderTarget[0].RenderTargetWriteMask = D3D11_COLOR_WRITE_ENABLE_ALL;
+
+	// 텍스처 샘플러 설정
+	D3D11_SAMPLER_DESC samplerDesc = {};
+	samplerDesc.Filter = D3D11_FILTER_MIN_MAG_MIP_LINEAR; // 선형 필터링
+	samplerDesc.AddressU = D3D11_TEXTURE_ADDRESS_WRAP;
+	samplerDesc.AddressV = D3D11_TEXTURE_ADDRESS_WRAP;
+	samplerDesc.AddressW = D3D11_TEXTURE_ADDRESS_WRAP;
+	samplerDesc.ComparisonFunc = D3D11_COMPARISON_NEVER;
+	samplerDesc.MinLOD = 0;
+	samplerDesc.MaxLOD = D3D11_FLOAT32_MAX;
+
+	
+	m_pDevice->CreateSamplerState(&samplerDesc, &m_pSamplerState);
+	
+	m_pDevice->CreateBlendState(&blendDesc, &m_pBlendState);
+
 	m_pBatch = new SpriteBatch(m_pContext);
 
 	return S_OK;
@@ -18,7 +45,13 @@ HRESULT CCustomFont::Initialize(const _tchar * pFontFilePath)
 
 HRESULT CCustomFont::Render(const _tchar * pText, _fvector vPosition, _fvector vColor, _float fRadian, _fvector vPivot, _float fScale)
 {
-	m_pBatch->Begin();
+	if (vColor.m128_f32[3] != 1.f)
+		m_pBatch->Begin(SpriteSortMode_Deferred, m_pBlendState, m_pSamplerState);
+	else
+		m_pBatch->Begin();
+
+	round(vPosition.m128_f32[0]);
+	round(vPosition.m128_f32[1]);
 
 	m_pFont->DrawString(m_pBatch, pText, vPosition, vColor, fRadian, vPivot, fScale);
 
@@ -32,7 +65,13 @@ HRESULT CCustomFont::Render_Center(const _tchar* pText, _fvector vPosition, _fve
 	XMVECTOR vSize = m_pFont->MeasureString(pText);
 	XMVECTOR vAdjustedPosition = vPosition - (vSize * 0.5f * fScale);
 
-	m_pBatch->Begin();
+	if (vColor.m128_f32[3] != 1.f)
+		m_pBatch->Begin(SpriteSortMode_Deferred, m_pBlendState, m_pSamplerState);
+	else
+		m_pBatch->Begin();
+
+	round(vAdjustedPosition.m128_f32[0]);
+	round(vAdjustedPosition.m128_f32[1]);
 
 	m_pFont->DrawString(m_pBatch, pText, vAdjustedPosition, vColor, fRadian, vPivot, fScale);
 
@@ -48,7 +87,13 @@ HRESULT CCustomFont::Render_Right(const _tchar* pText, _fvector vPosition, _fvec
 	vSize.m128_f32[0] = m_pFont->MeasureString(pText).m128_f32[0];
 	XMVECTOR vAdjustedPosition = vPosition - (vSize * fScale);
 
-	m_pBatch->Begin();
+	if (vColor.m128_f32[3] != 1.f)
+		m_pBatch->Begin(SpriteSortMode_Deferred, m_pBlendState, m_pSamplerState);
+	else
+		m_pBatch->Begin();
+
+	round(vAdjustedPosition.m128_f32[0]);
+	round(vAdjustedPosition.m128_f32[1]);
 
 	m_pFont->DrawString(m_pBatch, pText, vAdjustedPosition, vColor, fRadian, vPivot, fScale);
 
@@ -79,4 +124,7 @@ void CCustomFont::Free()
 
 	Safe_Release(m_pDevice);
 	Safe_Release(m_pContext);
+
+	m_pBlendState->Release();
+	m_pSamplerState->Release();
 }

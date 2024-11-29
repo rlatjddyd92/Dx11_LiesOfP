@@ -129,6 +129,15 @@ public:
 		_bool bRender = true;
 	}UG_CTRL;
 
+	typedef struct ITEMACTION_INFO
+	{
+		_Vec2 vAction_Pos = { -1.f,-1.f };
+		_Vec2 vAction_Size = { -1.f,-1.f };
+		INVEN_ARRAY_TYPE eAction_Array_Type = INVEN_ARRAY_TYPE::TYPE_END;
+		EQUIP_SLOT eAction_Equip_Slot = EQUIP_SLOT::EQUIP_END;
+		_int iAction_Array_Index = -1;
+	}ITEMACTION;
+
 
 protected:
 	CUIPage(ID3D11Device* pDevice, ID3D11DeviceContext* pContext);
@@ -161,6 +170,24 @@ public:
 	virtual HRESULT Ready_UIPart_Group_Control();
 
 	virtual CHECK_MOUSE Check_Page_Action(_float fTimeDelta);
+
+	void Set_ItemAction(_Vec2 vPos, _Vec2 vSize, INVEN_ARRAY_TYPE eType = INVEN_ARRAY_TYPE::TYPE_END, EQUIP_SLOT eSlot = EQUIP_SLOT::EQUIP_END, _int iIndex = -1)
+	{
+		m_pItemaction->vAction_Pos = vPos;
+		m_pItemaction->vAction_Size = vSize;
+		m_pItemaction->eAction_Array_Type = eType;
+		m_pItemaction->eAction_Equip_Slot = eSlot;
+		m_pItemaction->iAction_Array_Index = iIndex;
+	}
+	void Reset_ItemAction()
+	{
+		m_pItemaction->vAction_Pos = { -1.f,-1.f };
+		m_pItemaction->vAction_Size = { -1.f,-1.f };
+		m_pItemaction->eAction_Array_Type = INVEN_ARRAY_TYPE::TYPE_END;
+		m_pItemaction->eAction_Equip_Slot = EQUIP_SLOT::EQUIP_END;
+		m_pItemaction->iAction_Array_Index = -1;
+	}
+	const ITEMACTION* Get_ItemAction_Info() { return m_pItemaction; }
 
 
 
@@ -206,6 +233,7 @@ protected:
 	void Input_Render_Info(UPART& Part, SCROLL_AREA eArea = SCROLL_AREA::SCROLL_NONE);
 
 
+	
 
 protected:
 	vector<UPART*> m_vecPart;
@@ -226,6 +254,9 @@ protected: // 그룹 컨트롤 모음 -> 여기 있는 건 전체 업데이트 + 전체 릴리즈 용도�
 
 	// 테스트 
 	_bool m_bIsBatching = false;
+
+protected: // ItemAction 
+	ITEMACTION* m_pItemaction = { nullptr };
 
 public:
 	static CUIPage* Create(ID3D11Device* pDevice, ID3D11DeviceContext* pContext);

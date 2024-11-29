@@ -71,10 +71,35 @@ void CGameInterface_Controller::Update_GameInterface(_float fTimeDelta)
 
 
 	m_pItem_Manager->Update_Item(fTimeDelta);
-	//m_pPlayer_Stat_Manager->Update_Stat(fTimeDelta);
+
 	m_pUIManager->Update_UIManager(fTimeDelta);
 
 
+	const CUIPage::ITEMACTION_INFO* pNowAction = m_pUIManager->Get_ItemAction_Info();
+
+	if (m_pUIManager->Get_ActiveFunc() != ITEM_FUNC::FUNC_END)
+	{
+		m_pItem_Manager->Operate_ItemAction(m_pUIManager->Get_ActiveFunc(), pNowAction->vAction_Pos, pNowAction->vAction_Size);
+
+		if (m_pItem_Manager->IsReset_ItemAction())
+			m_pUIManager->Reset_ItemAction();
+
+		
+	}
+			
+
+	if (pNowAction == nullptr)
+		m_pItem_Manager->Reset_ItemAction();
+	else if (pNowAction->eAction_Array_Type != INVEN_ARRAY_TYPE::TYPE_END)
+	{
+		m_pItem_Manager->Set_ItemAction(pNowAction->eAction_Array_Type, pNowAction->iAction_Array_Index, pNowAction->vAction_Pos, pNowAction->vAction_Size, true);
+	}
+	else if (pNowAction->eAction_Equip_Slot != EQUIP_SLOT::EQUIP_END)
+	{
+		m_pItem_Manager->Set_ItemAction(pNowAction->eAction_Equip_Slot, pNowAction->vAction_Pos, pNowAction->vAction_Size, true);
+	}
+	else
+		m_pItem_Manager->Reset_ItemAction();
 }
 
 void CGameInterface_Controller::Release_GameInterface()

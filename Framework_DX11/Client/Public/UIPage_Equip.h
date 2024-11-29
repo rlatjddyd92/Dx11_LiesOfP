@@ -143,10 +143,15 @@ protected:
 	PART_GROUP m_eFocus_Group = PART_GROUP::GROUP_END; // 현재 마우스가 가리키는 아이템 칸
 
 
-	// 툴팁 표시를 위한 변수
+	
 
 
+	// Focus 조정 
 
+	void Reset_Focus() { m_vFocus_Pos = { -1.f,-1.f }; m_vFocus_Size = { -1.f,-1.f }; }
+
+	_Vec2 m_vFocus_Pos = { -1.f,-1.f };
+	_Vec2 m_vFocus_Size = { -1.f,-1.f };
 
 
 
