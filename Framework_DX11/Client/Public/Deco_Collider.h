@@ -49,6 +49,8 @@ private:
 	_Vec3 m_vVelocity = {};
 	_Vec3 m_vCurPos = {};
 
+	_bool m_bSetRigidPos = { false };
+
 private:
 	HRESULT Ready_Components();
 	void Calculate_Velocity(_float fTimeDelta);
