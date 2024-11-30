@@ -348,8 +348,8 @@
     <ClInclude Include="..\Public\UIPage_Skill.h" />
     <ClInclude Include="..\Public\UIPage_Stat.h" />
     <ClInclude Include="..\Public\UIPage_ItemInfo.h" />
+    <ClInclude Include="..\Public\UIPage_Test.h" />
     <ClInclude Include="..\Public\UIRender_Batching.h" />
-    <ClInclude Include="..\Public\UIRender_Client.h" />
     <ClInclude Include="..\Public\WallDeco.h" />
     <ClInclude Include="..\Public\Weapon.h" />
     <ClInclude Include="..\Public\Weapon_FlameSword.h" />
@@ -548,8 +548,8 @@
     <ClCompile Include="..\Private\UIPage_Skill.cpp" />
     <ClCompile Include="..\Private\UIPage_Stat.cpp" />
     <ClCompile Include="..\Private\UIPage_ItemInfo.cpp" />
+    <ClCompile Include="..\Private\UIPage_Test.cpp" />
     <ClCompile Include="..\Private\UIRender_Batching.cpp" />
-    <ClCompile Include="..\Private\UIRender_Client.cpp" />
     <ClCompile Include="..\Private\WallDeco.cpp" />
     <ClCompile Include="..\Private\Weapon.cpp" />
     <ClCompile Include="..\Private\Weapon_FlameSword.cpp" />
