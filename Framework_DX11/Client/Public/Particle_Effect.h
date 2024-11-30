@@ -13,7 +13,7 @@ BEGIN(Client)
 class CParticle_Effect final : public CEffect_Base
 {
 public:
-	enum PARTICLE_TYPE { PT_SPREAD, PT_MOVE, PT_CONVERGE, PT_END };
+	enum PARTICLE_TYPE { PT_SPREAD, PT_MOVE, PT_CONVERGE, PT_LOCALSPREAD, PT_END };
 
 	typedef struct
 	{
