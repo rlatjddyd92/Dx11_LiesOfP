@@ -37,6 +37,7 @@ public:
 
 public:
 	_bool Get_IsOpend() { return m_isOpened; }
+	void Start_Restore() { m_bStartRestore = true; }
 
 private:
 	CCollider* m_pColliderCom = { nullptr};
@@ -51,6 +52,7 @@ private:
 	_bool m_isClose = { true };					//작동 전
 	_bool m_isOpening = { false };				//열리는 중
 	_bool m_isOpened = { false };				//작동 완
+	_bool m_bStartRestore = { false };				//작동 완
 		
 	_int m_iAnim_Broken = { 0 };
 	_int m_iAnim_Restore = { 0 };

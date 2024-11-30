@@ -59,17 +59,14 @@ void CStargazer::Update(_float fTimeDelta)
 {
 	m_pCurrentModel->Play_Animation(fTimeDelta);
 
-	if (m_bCollison)
+	if (m_bStartRestore)
 	{
-		if (KEY_TAP(KEY::E))
-		{
-			//키 입력 확인 부분은 나중에 UI에서 받아와야 함
-			static_cast<CPawn*>(m_pPlayer)->Set_Respawn_Cell_Num(m_iCurrnetCellNum);
+		//키 입력 확인 부분은 나중에 UI에서 받아와야 함
+		static_cast<CPawn*>(m_pPlayer)->Set_Respawn_Cell_Num(m_iCurrnetCellNum);
 
-			if (m_bRestored == false)
-			{
-				m_pCurrentModel->SetUp_Animation(m_iAnim_Restore);
-			}
+		if (m_bRestored == false)
+		{
+			m_pCurrentModel->SetUp_Animation(m_iAnim_Restore);
 		}
 	}
 
@@ -239,9 +236,9 @@ HRESULT CStargazer::Ready_Components()
 		return E_FAIL;
 
 	/* For.Com_Collider */
-	CBounding_AABB::BOUNDING_AABB_DESC			ColliderDesc{};
-	ColliderDesc.vExtents = _float3(1.5f, 1.0f, 1.5f);
-	ColliderDesc.vCenter = _float3(0.f, ColliderDesc.vExtents.y, 0.f);
+	CBounding_Sphere::BOUNDING_SPHERE_DESC			ColliderDesc{};
+	ColliderDesc.fRadius = { 2.f };
+	ColliderDesc.vCenter = { 0.f, 0.5f, 0.f };
 
 	if (FAILED(__super::Add_Component(LEVEL_STATIC, TEXT("Prototype_Component_Collider_Sphere"),
 		TEXT("Com_Collider"), reinterpret_cast<CComponent**>(&m_pColliderCom), &ColliderDesc)))

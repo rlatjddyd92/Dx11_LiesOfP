@@ -27,6 +27,15 @@ HRESULT CDeco_Collider::Initialize(void* pArg)
     if (FAILED(__super::Initialize(pArg)))
         return E_FAIL;
 
+   //_matrix		SocketMatrix = XMLoadFloat4x4(m_pSoketMatrix);
+
+   // for (size_t i = 0; i < 3; i++)
+   // {
+   //     SocketMatrix.r[i] = XMVector3Normalize(SocketMatrix.r[i]);
+   // }
+   // m_pTransformCom->Set_WorldMatrix( SocketMatrix * XMLoadFloat4x4(m_pParentWorldMatrix));
+
+
     if (FAILED(Ready_Components()))
         return E_FAIL;
     return S_OK;
@@ -49,22 +58,28 @@ void CDeco_Collider::Update(_float fTimeDelta)
     _Vec4 vCurPos = m_pTransformCom->Get_State(CTransform::STATE_POSITION);
     Change_Vec4_to_Vec3(vCurPos, m_vCurPos);
 
-    //현재위치 - 과거위치 / 시간
+    if (m_bSetRigidPos == false)
+    {
+        m_bSetRigidPos = true;
+        m_vPrePos = m_vCurPos;
+        m_pRigidBodyCom->Set_GloblePose(m_vCurPos);
+    }
+
+    //현재위치 - 과거 위치 / 시간
     Calculate_Velocity(fTimeDelta);
-    m_pRigidBodyCom->Add_Velocity(m_vVelocity);
+    m_pRigidBodyCom->Set_Velocity(m_vVelocity);
 
     if (m_pColliderCom != nullptr)
         m_pColliderCom->Update(m_pTransformCom->Get_WorldMatrix_Ptr());
 
-    m_pRigidBodyCom->Update(fTimeDelta);
 }
 
 void CDeco_Collider::Late_Update(_float fTimeDelta)
 {
+    m_pRigidBodyCom->Update(fTimeDelta);
     m_vPrePos = m_vCurPos;
 
     __super::Late_Update(fTimeDelta);
-    m_pGameInstance->Add_ColliderList(m_pColliderCom);
 
 #ifdef _DEBUG
     if (m_pColliderCom != nullptr)
@@ -115,14 +130,11 @@ HRESULT CDeco_Collider::Ready_Components()
     RigidBodyDesc.fRestituion = 0.f;
     RigidBodyDesc.PxLockFlags = PxRigidDynamicLockFlag::eLOCK_ANGULAR_X |
         PxRigidDynamicLockFlag::eLOCK_ANGULAR_Y |
-        PxRigidDynamicLockFlag::eLOCK_ANGULAR_Z |
-        PxRigidDynamicLockFlag::eLOCK_LINEAR_X |
-        PxRigidDynamicLockFlag::eLOCK_LINEAR_Y |
-        PxRigidDynamicLockFlag::eLOCK_LINEAR_Z
+        PxRigidDynamicLockFlag::eLOCK_ANGULAR_Z 
         ;
 
     physX::GeometryBox BoxDesc;
-    BoxDesc.vSize = _Vec3(0.3f, 3.f, 3.f);
+    BoxDesc.vSize = _Vec3(2.f, 2.f, 2.f);
     RigidBodyDesc.pGeometry = &BoxDesc;
 
     /* FOR.Com_RigidBody */
@@ -136,6 +148,7 @@ HRESULT CDeco_Collider::Ready_Components()
 void CDeco_Collider::Calculate_Velocity(_float fTimeDelta)
 {
     m_vVelocity = (m_vCurPos - m_vPrePos) / fTimeDelta;
+   // m_vVelocity.x = 0.f;m_vVelocity.y = 0.f;m_vVelocity.z = 0.f;
 }
 
 void CDeco_Collider::Change_Vec4_to_Vec3(_Vec4 vVec4, _Vec3& vVec3)
