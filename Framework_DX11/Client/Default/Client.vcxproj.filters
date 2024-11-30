@@ -724,6 +724,9 @@
     <Filter Include="05.Fsm\Player\Common\Stargazer">
       <UniqueIdentifier>{866e839e-cf8e-4ca7-b515-93065c4716fc}</UniqueIdentifier>
     </Filter>
+    <Filter Include="05.Fsm\Player\Common\Teleport">
+      <UniqueIdentifier>{fa57377f-b82c-4b4a-9495-aca98d90a783}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Client.h">
@@ -1328,6 +1331,9 @@
     <ClInclude Include="..\Public\State_Player_Stargazer.h">
       <Filter>05.Fsm\Player\Common\Stargazer</Filter>
     </ClInclude>
+    <ClInclude Include="..\Public\State_Player_Teleport.h">
+      <Filter>05.Fsm\Player\Common\Teleport</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Client.cpp">
@@ -1901,6 +1907,9 @@
     </ClCompile>
     <ClCompile Include="..\Private\State_Player_Stargazer.cpp">
       <Filter>05.Fsm\Player\Common\Stargazer</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Private\State_Player_Teleport.cpp">
+      <Filter>05.Fsm\Player\Common\Teleport</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

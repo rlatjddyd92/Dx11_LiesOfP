@@ -11,6 +11,8 @@
 #include "Ladder.h"
 #include "Lift_Floor.h"
 #include "TreasureBox.h"
+#include "Stargazer.h"
+#include "SteppingStone.h"
 
 #include "Effect_Manager.h"
 #include "Effect_Container.h"
@@ -23,6 +25,8 @@
 #include "State_Player_Lift.h"
 #include "State_Player_Chest.h"
 #include "State_Player_ItemGet.h"
+#include "State_Player_Stargazer.h"
+#include "State_Player_Teleport.h"
 
 #include "State_Player_OH_Idle.h"
 #include "State_Player_OH_Walk.h"
@@ -109,7 +113,9 @@ HRESULT CPlayer::Initialize(void * pArg)
 	//m_pNavigationCom->Move_to_Cell(m_pRigidBodyCom, 772); //긴사다리
 	//m_pNavigationCom->Move_to_Cell(m_pRigidBodyCom, 427); //짧은사다리
 	//m_pNavigationCom->Move_to_Cell(m_pRigidBodyCom, 341); //아래엘베
-	m_pNavigationCom->Move_to_Cell(m_pRigidBodyCom, 440); //상자랑 장애물
+	//m_pNavigationCom->Move_to_Cell(m_pRigidBodyCom, 440); //상자랑 장애물
+	m_pNavigationCom->Move_to_Cell(m_pRigidBodyCom, 1068); // 순간이동
+
 
 	m_strObjectTag = TEXT("Player");
 
@@ -121,6 +127,8 @@ HRESULT CPlayer::Initialize(void * pArg)
 	// 게임 인터페이스와 연결을 위해 추가 
 	GET_GAMEINTERFACE->Input_Player_Pointer(this);
 
+	m_vRimLightColor = _Vec4(0.f, 0.f, 1.f, 0.5f);
+
 	return S_OK;
 }
 
@@ -129,6 +137,17 @@ void CPlayer::Priority_Update(_float fTimeDelta)
 	if (m_isGuard)
 	{
 		m_fGuardTime += fTimeDelta;
+	}
+
+	if (m_isTeleport)
+	{
+		m_vRimLightColor.z = max(m_vRimLightColor.z + fTimeDelta, 1.f);
+		m_vRimLightColor.w = max(m_vRimLightColor.w - fTimeDelta, 0.1f);
+	}
+	else
+	{
+		m_vRimLightColor.z = max(m_vRimLightColor.z - fTimeDelta, 0.f);
+		m_vRimLightColor.w = min(m_vRimLightColor.w + 1.5f * fTimeDelta, 0.5f);
 	}
 
 	if (KEY_TAP(KEY::WHEELBUTTON))
@@ -146,6 +165,11 @@ void CPlayer::Priority_Update(_float fTimeDelta)
 void CPlayer::Update(_float fTimeDelta)
 {
 	m_vCurRootMove = XMVector3TransformNormal(m_pModelCom->Play_Animation(fTimeDelta), m_pTransformCom->Get_WorldMatrix());
+	if (m_isCollisionMonster)
+	{
+		m_vCurRootMove = _Vec3(0.f, 0.f, 0.f);
+	}
+
 
 	m_pRigidBodyCom->Set_Velocity(m_vCurRootMove / fTimeDelta);
 
@@ -252,16 +276,10 @@ void CPlayer::OnCollisionEnter(CGameObject* pOther)
 	{
 		m_isLadderEnd = true;
 	}
-	/*if (pOther->Get_Tag() == TEXT("Monster"))
+	if (pOther->Get_Tag() == TEXT("Monster"))
 	{
-		_Vec3 vColDir = pOther->Get_Transform()->Get_State(CTransform::STATE_POSITION) - m_pTransformCom->Get_State(CTransform::STATE_POSITION);
-		vColDir.y = 0.f;
-		vColDir.Normalize();
-		_Vec3 vPlayerPos = m_pTransformCom->Get_State(CTransform::STATE_POSITION);
-		vPlayerPos += (vColDir * -0.07f);
-
-		m_pTransformCom->Set_State(CTransform::STATE_POSITION, vPlayerPos);
-	}*/
+		m_isCollisionMonster = true;
+	}
 }
 
 void CPlayer::OnCollisionStay(CGameObject* pOther)
@@ -280,6 +298,10 @@ void CPlayer::OnCollisionStay(CGameObject* pOther)
 		vVel = vVel = vProjected;
 		m_pRigidBodyCom->Set_Velocity(vVel);
 	}*/
+	if (pOther->Get_Tag() == TEXT("Monster"))
+	{
+		m_isCollisionMonster = true;
+	}
 }
 
 void CPlayer::OnCollisionExit(CGameObject* pOther)
@@ -297,6 +319,10 @@ void CPlayer::OnCollisionExit(CGameObject* pOther)
 			m_pRigidBodyCom->Set_IsLockCell(true);
 			m_pNavigationCom->Research_Cell((_Vec3)m_pTransformCom->Get_State(CTransform::STATE_POSITION));
 		}
+	}
+	if (pOther->Get_Tag() == TEXT("Monster"))
+	{
+		m_isCollisionMonster = false;
 	}
 }
 
@@ -394,7 +420,19 @@ void CPlayer::LockOnOff()
 		}
 		else
 		{
-			m_isLockOn = true;
+			_Vec3 vTargetPos = m_pTargetMonster->Get_Transform()->Get_State(CTransform::STATE_POSITION);
+			_Vec3 vPlayerPos = m_pTransformCom->Get_State(CTransform::STATE_POSITION);
+
+			_float fLength = (vTargetPos - vPlayerPos).Length();
+			if (fLength < 7.f)
+			{
+				m_isLockOn = true;
+			}
+			else
+			{
+				m_pTargetMonster = nullptr;
+				m_isLockOn = false;
+			}
 		}
 	}
 	else
@@ -559,6 +597,8 @@ HRESULT CPlayer::Ready_FSM()
 	m_pFsmCom->Add_State(CState_Player_Lift::Create(m_pFsmCom, this, LIFT, &Desc));
 	m_pFsmCom->Add_State(CState_Player_Chest::Create(m_pFsmCom, this, CHEST, &Desc));
 	m_pFsmCom->Add_State(CState_Player_ItemGet::Create(m_pFsmCom, this, ITEMGET, &Desc));
+	m_pFsmCom->Add_State(CState_Player_Stargazer::Create(m_pFsmCom, this, STARGAZER, &Desc));
+	m_pFsmCom->Add_State(CState_Player_Teleport::Create(m_pFsmCom, this, TELEPORT, &Desc));
 
 	m_pFsmCom->Add_State(CState_Player_OH_Idle::Create(m_pFsmCom, this, OH_IDLE, &Desc));
 	m_pFsmCom->Add_State(CState_Player_OH_Walk::Create(m_pFsmCom, this, OH_WALK, &Desc)); 
@@ -698,14 +738,14 @@ void CPlayer::CollisionStay_IntercObj(CGameObject* pGameObject)
 			m_pFsmCom->Change_State(LADDER, pGameObject);
 		}
 	}
-	if (GET_GAMEINTERFACE->Action_InterAction(TEXT("엘리베이터를 동작시킨다")))
+	else if (pGameObject->Get_Tag() == TEXT("Lift_Controller"))
 	{
-		if (KEY_TAP(KEY::E))
+		if (GET_GAMEINTERFACE->Action_InterAction(TEXT("엘리베이터를 동작시킨다")))
 		{
 			m_pFsmCom->Change_State(LIFT, pGameObject);
 		}
 	}
-	if (pGameObject->Get_Tag() == TEXT("Lift_Floor"))
+	else if (pGameObject->Get_Tag() == TEXT("Lift_Floor"))
 	{
 		m_pRigidBodyCom->Set_IsOnCell(false);
 		m_pRigidBodyCom->Set_IsLockCell(false);
@@ -719,15 +759,45 @@ void CPlayer::CollisionStay_IntercObj(CGameObject* pGameObject)
 			m_pRigidBodyCom->Set_Gravity(false);
 		}
 	}
-	if (GET_GAMEINTERFACE->Action_InterAction(TEXT("상자를 연다")))
+	else if (pGameObject->Get_Tag() == TEXT("TreasureBox"))
 	{
-		if (KEY_TAP(KEY::E))
+		CTreasureBox* pTreasureBox = dynamic_cast<CTreasureBox*>(pGameObject);
+
+		if (!pTreasureBox->Get_IsOpen() && GET_GAMEINTERFACE->Action_InterAction(TEXT("상자를 연다")))
 		{
 			dynamic_cast<CTreasureBox*>(pGameObject)->Set_IsOpen(true);
 			m_pFsmCom->Change_State(CHEST, pGameObject);
 		}
 	}
+	else if (pGameObject->Get_Tag() == TEXT("Stargazer"))
+	{
+		CStargazer* pStargazer = dynamic_cast<CStargazer*>(pGameObject);
 
+		if (pStargazer->Get_IsOpend())
+		{
+			if (GET_GAMEINTERFACE->Action_InterAction(TEXT("별바라기를 사용한다")))
+			{
+				/*dynamic_cast<CTreasureBox*>(pGameObject)->Set_IsOpen(true);
+				m_pFsmCom->Change_State(CHEST, pGameObject);*/
+			}
+		}
+		else
+		{
+			if (GET_GAMEINTERFACE->Action_InterAction(TEXT("별바라기를 복구시킨다")))
+			{
+				m_pFsmCom->Change_State(STARGAZER, pGameObject);
+			}
+		}
+
+	}
+	else if (pGameObject->Get_Tag() == TEXT("SteppingStone"))
+	{
+		CSteppingStone* pSteppingStone = dynamic_cast<CSteppingStone*>(pGameObject);
+		if (GET_GAMEINTERFACE->Action_InterAction(TEXT("가자아아아")))
+		{
+			m_pFsmCom->Change_State(TELEPORT, pSteppingStone);
+		}
+	}
 }
 
 CPlayer * CPlayer::Create(ID3D11Device * pDevice, ID3D11DeviceContext * pContext)

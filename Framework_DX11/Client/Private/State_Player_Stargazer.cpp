@@ -18,7 +18,7 @@ HRESULT CState_Player_Stargazer::Initialize(_uint iStateNum, void* pArg)
 
     m_pTrackPos = pDesc->pPrevTrackPos;
 
-    m_iAnimation_Lift = m_pPlayer->Get_Model()->Find_AnimationIndex("AS_Pino_Stargazer_Inactive", 2.5f);
+    m_iAnimation_Stargazer = m_pPlayer->Get_Model()->Find_AnimationIndex("AS_Pino_Stargazer_Inactive", 2.5f);
 
     m_iStateNum = iStateNum;
 
@@ -27,9 +27,7 @@ HRESULT CState_Player_Stargazer::Initialize(_uint iStateNum, void* pArg)
 
 HRESULT CState_Player_Stargazer::Start_State(void* pArg)
 {
-   
-
-    m_pPlayer->Change_Animation(m_iAnimation_Lift, false, 0.f);
+    m_pPlayer->Change_Animation(m_iAnimation_Stargazer, false, 0.1f);
 
     return S_OK;
 }
@@ -54,7 +52,7 @@ void CState_Player_Stargazer::End_State()
 
 _bool CState_Player_Stargazer::End_Check()
 {
-    return m_pPlayer->Get_EndAnim(m_iAnimation_Lift);
+    return m_pPlayer->Get_EndAnim(m_iAnimation_Stargazer);
 }
 
 CState_Player_Stargazer* CState_Player_Stargazer::Create(CFsm* pFsm, CPlayer* pPlayer, _uint iStateNum, void* pArg)

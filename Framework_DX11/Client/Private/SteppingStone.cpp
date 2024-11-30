@@ -51,10 +51,10 @@ void CSteppingStone::Update(_float fTimeDelta)
     if (m_bCollision)
         m_fCollisonTimer += fTimeDelta;
 
-    if (m_fCollisonTimer >= 2.f)
-    {
-        Change_Player_Pos();
-    }
+    //if (m_fCollisonTimer >= 2.f)
+    //{
+    //    Change_Player_Pos();
+    //}
 
     if (m_pColliderCom != nullptr)
     {

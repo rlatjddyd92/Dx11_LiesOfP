@@ -307,7 +307,7 @@ PS_OUT PS_MAIN_DEFERRED(PS_IN In)
     float3 vEyeToCamera = normalize(g_vCamPosition.xyz - vPosition.xyz);
     float fRim = 1.f - saturate(dot(vEyeToCamera, vNormal));
 
-    fRim = pow(fRim, vRimLightColor.w);
+    fRim = pow(fRim, vRimLightColor.w * 10.f);
     vRimLightColor *= fRim;
     Out.vColor.xyz = saturate(Out.vColor.xyz + vRimLightColor.xyz);
 

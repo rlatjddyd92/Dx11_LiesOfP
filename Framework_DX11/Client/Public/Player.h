@@ -39,7 +39,7 @@ public:
 		SCISSOR_FATAL0, SCISSOR_FATAL1, SCISSOR_FATAL2, SCISSOR_BUFF,
 
 
-		LADDER = 100, LIFT, CHEST, ITEMGET,
+		LADDER = 100, LIFT, CHEST, ITEMGET, STARGAZER, TELEPORT,
 
 		STATE_END
 	};
@@ -107,6 +107,9 @@ public:
 	void					Set_IsInvicible(_bool isInvicible) { m_isInvicible = isInvicible; }
 
 	_bool					Get_IsLadderEnd() { return m_isLadderEnd; }
+
+	_bool					Get_IsTeleport() { return m_isTeleport; }
+	void					Set_IsTeleport(_bool isTeleport) { m_isTeleport = isTeleport; }
 
 	WEAPON_TYPE				Get_WeaponType() { return m_eWeaponType; }
 	void					Set_WeaponType(WEAPON_TYPE eType) { m_eWeaponType = eType; }
@@ -187,6 +190,8 @@ private:
 	_bool				m_isInvicible = { false };
 	_bool				m_isRecoveryStamina = { false };
 	_bool				m_isLadderEnd = { false };
+	_bool				m_isTeleport = { false };
+	_bool				m_isCollisionMonster = { false };
 
 	_float				m_fGuardTime = {};
 	_float				m_fRecoveryStaminaTime = { 0.f };
