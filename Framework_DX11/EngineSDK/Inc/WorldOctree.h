@@ -12,10 +12,13 @@ private:
 
 public:
 	HRESULT Initialize(_Vec3 _vMinPos, _Vec3 _vMaxPos, vector<class CGameObject*>& m_pParentObjList, _int* iDepth = nullptr);
+	
+public:
+	void Culling(CGameInstance* pGameInstance, unordered_set<_int>& pFrustumCulledNodes);
 	_bool Get_haveChild() { return m_bHaveChild; }
 
 private:
-	vector<class CGameObject*> m_pOpjectsList;
+	vector<class CGameObject*> m_pObjectsList;
 	CWorldOctree* m_pChildren[8] = { nullptr, };		//자식 노드
 	BoundingBox* m_pBoundBox;			//현재 노드 AABB
 
@@ -30,7 +33,7 @@ private:
 
 private:
 	void Build_WorldOctree(vector<class CGameObject*>& m_pParentObjList);
-	void CalculateObjAABB(class CGameObject* pObj, BoundingBox* pBoundingBox);
+	BoundingBox CalculateObjAABB(CModel* pModel);
 	_bool IsIntersactWithBoundingBox(BoundingBox ObjBoundingBox);
 
 public:

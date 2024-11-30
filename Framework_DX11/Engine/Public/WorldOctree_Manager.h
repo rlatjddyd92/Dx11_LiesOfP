@@ -18,11 +18,12 @@ public:
 	void		Update();
 
 	void Create_Octree(_Vec3 vMinPos, _Vec3 vMaxPos);		//옥트리 생성
-	//화면에 걸리는 octree 노드 계산 함수
-	//m_FrustumCulledNodes를 전달할지 오브젝트꺼를 받아올지 그건 좀 고민 해야함
+	_bool Is_In_FrustumCulledOctree(vector<_int>& pWorldOctreeIndex);
+
 private:
-	vector<_int> m_FrustumCulledNodes;
+	unordered_set<_int> m_FrustumCulledNodes;
 	class CWorldOctree* m_pWorldOctree = { nullptr };
+	class CGameInstance* m_pGameInstance = { nullptr };
 
 public:
 	static CWorldOctree_Manager* Create();

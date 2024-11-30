@@ -237,6 +237,11 @@ public:
 		void	LoadSoundFile(const char* pFolderName);
 #pragma endregion
 
+#pragma region World_Octree
+		void Create_Octree(_Vec3 vMinPos, _Vec3 vMaxPos);
+		_bool Is_In_FrustumCulledOctree(vector<_int>& pWorldOctreeIndex);
+#pragma endregion
+
 private:
 	class CGraphic_Device*			m_pGraphic_Device = { nullptr };
 	class CInput_Device*			m_pInput_Device = { nullptr };

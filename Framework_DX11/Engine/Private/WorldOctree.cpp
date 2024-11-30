@@ -16,15 +16,17 @@ HRESULT CWorldOctree::Initialize(_Vec3 _vMinPos, _Vec3 _vMaxPos, vector<class CG
 	//가장 긴 변을 기준으로 박스 생성
 	_Vec3 vExtend = { abs(_vMinPos.x - _vMaxPos.x),abs(_vMinPos.y - _vMaxPos.y),abs(_vMinPos.z - _vMaxPos.z) };
 	_float fLongestExtend = max(max(vExtend.x, vExtend.y), vExtend.z);
-	m_pBoundBox = new BoundingBox(vCenter, _Vec3(fLongestExtend, fLongestExtend, fLongestExtend));
-	m_fRadius = fLongestExtend*0.5f*sqrt(2.0f);
+	_float fHalfExtend = fLongestExtend * 0.5f;
+
+	m_pBoundBox = new BoundingBox(vCenter, _Vec3(fHalfExtend, fHalfExtend, fHalfExtend));
+	m_fRadius = fHalfExtend *sqrt(2.0f);
 
 	if(*iDepth != -1)
 		m_iDepth = *iDepth;
 
-	if (m_iDepth == -1)	//처음 노드 생성할 때
+	if (*iDepth == -1 )	//처음 노드 생성할 때
 	{
-		m_iDepth = 4;
+		m_iDepth = 3;
 	}
 
 	//옥트리 생성
@@ -38,20 +40,63 @@ HRESULT CWorldOctree::Initialize(_Vec3 _vMinPos, _Vec3 _vMaxPos, vector<class CG
 	else
 		m_bHaveChild = true;
 
-	_float fHalfExtend = fLongestExtend * 0.5f;
-
 	//윗층
-	m_pChildren[0] = CWorldOctree::Create(_Vec3(_vMinPos.x, _vMinPos.y + fHalfExtend, _vMinPos.z + fHalfExtend), _Vec3(_vMinPos.x + fHalfExtend, _vMaxPos.y, _vMaxPos.z), m_pOpjectsList, &m_iDepth);
-	m_pChildren[1] = CWorldOctree::Create(_Vec3(_vMinPos.x + fHalfExtend, _vMinPos.y + fHalfExtend, _vMinPos.z + fHalfExtend), _Vec3(_vMaxPos.x, _vMaxPos.y, _vMaxPos.z), m_pOpjectsList, &m_iDepth);
-	m_pChildren[2] = CWorldOctree::Create(_Vec3(_vMinPos.x, _vMinPos.y + fHalfExtend, _vMinPos.z), _Vec3(_vMinPos.x + fHalfExtend, _vMaxPos.y, _vMinPos.z + fHalfExtend), m_pOpjectsList, &m_iDepth);
-	m_pChildren[3] = CWorldOctree::Create(_Vec3(_vMinPos.x + fHalfExtend, _vMinPos.y + fHalfExtend, _vMinPos.z), _Vec3(_vMaxPos.x, _vMaxPos.y, _vMinPos.z + fHalfExtend), m_pOpjectsList, &m_iDepth);
+	m_pChildren[0] = CWorldOctree::Create(_Vec3(_vMinPos.x, _vMinPos.y + fHalfExtend, _vMinPos.z + fHalfExtend), _Vec3(_vMinPos.x + fHalfExtend, _vMaxPos.y, _vMaxPos.z), m_pObjectsList, &m_iDepth);
+	m_pChildren[1] = CWorldOctree::Create(_Vec3(_vMinPos.x + fHalfExtend, _vMinPos.y + fHalfExtend, _vMinPos.z + fHalfExtend), _Vec3(_vMaxPos.x, _vMaxPos.y, _vMaxPos.z), m_pObjectsList, &m_iDepth);
+	m_pChildren[2] = CWorldOctree::Create(_Vec3(_vMinPos.x, _vMinPos.y + fHalfExtend, _vMinPos.z), _Vec3(_vMinPos.x + fHalfExtend, _vMaxPos.y, _vMinPos.z + fHalfExtend), m_pObjectsList, &m_iDepth);
+	m_pChildren[3] = CWorldOctree::Create(_Vec3(_vMinPos.x + fHalfExtend, _vMinPos.y + fHalfExtend, _vMinPos.z), _Vec3(_vMaxPos.x, _vMaxPos.y, _vMinPos.z + fHalfExtend), m_pObjectsList, &m_iDepth);
 	//아랫층
-	m_pChildren[4] = CWorldOctree::Create(_Vec3(_vMinPos.x, _vMinPos.y, _vMinPos.z + fHalfExtend), _Vec3(_vMinPos.x + fHalfExtend, _vMinPos.y + fHalfExtend, _vMaxPos.z), m_pOpjectsList, &m_iDepth);
-	m_pChildren[5] = CWorldOctree::Create(_Vec3(_vMinPos.x + fHalfExtend, _vMinPos.y, _vMinPos.z + fHalfExtend), _Vec3(_vMaxPos.x, _vMinPos.y + fHalfExtend, _vMaxPos.z), m_pOpjectsList, &m_iDepth);
-	m_pChildren[6] = CWorldOctree::Create(_Vec3(_vMinPos.x, _vMinPos.y, _vMinPos.z), _Vec3(_vMinPos.x + fHalfExtend, _vMinPos.y + fHalfExtend, _vMinPos.z + fHalfExtend), m_pOpjectsList, &m_iDepth);
-	m_pChildren[7] = CWorldOctree::Create(_Vec3(_vMinPos.x + fHalfExtend, _vMinPos.y, _vMinPos.z), _Vec3(_vMaxPos.x, _vMinPos.y + fHalfExtend, _vMinPos.z + fHalfExtend), m_pOpjectsList, &m_iDepth);
+	m_pChildren[4] = CWorldOctree::Create(_Vec3(_vMinPos.x, _vMinPos.y, _vMinPos.z + fHalfExtend), _Vec3(_vMinPos.x + fHalfExtend, _vMinPos.y + fHalfExtend, _vMaxPos.z), m_pObjectsList, &m_iDepth);
+	m_pChildren[5] = CWorldOctree::Create(_Vec3(_vMinPos.x + fHalfExtend, _vMinPos.y, _vMinPos.z + fHalfExtend), _Vec3(_vMaxPos.x, _vMinPos.y + fHalfExtend, _vMaxPos.z), m_pObjectsList, &m_iDepth);
+	m_pChildren[6] = CWorldOctree::Create(_Vec3(_vMinPos.x, _vMinPos.y, _vMinPos.z), _Vec3(_vMinPos.x + fHalfExtend, _vMinPos.y + fHalfExtend, _vMinPos.z + fHalfExtend), m_pObjectsList, &m_iDepth);
+	m_pChildren[7] = CWorldOctree::Create(_Vec3(_vMinPos.x + fHalfExtend, _vMinPos.y, _vMinPos.z), _Vec3(_vMaxPos.x, _vMinPos.y + fHalfExtend, _vMinPos.z + fHalfExtend), m_pObjectsList, &m_iDepth);
 
 	return 		S_OK;
+}
+
+void CWorldOctree::Culling(CGameInstance* pGameInstance, unordered_set<_int>& pFrustumCulledNodes)
+{
+	//절두체에 걸리는지 확인
+	if (!pGameInstance->isIn_Frustum_WorldSpace(XMLoadFloat3(&m_pBoundBox->Center), m_fRadius ))
+		return;
+
+	_Vec3 vCorners[8];
+	m_pBoundBox->GetCorners(vCorners);
+
+	//바운드 박스가 절두체에 얼마나 들어가는지 확인
+	_bool isIn[8];
+	_bool anyIn = false;
+	_bool allIn = true;
+
+	_float fZero = 0.f;
+	for (int i = 0; i < 8; ++i) {
+		isIn[i] = pGameInstance->isIn_Frustum_WorldSpace(vCorners[i], m_fRadius);
+		if (isIn[i])
+		{
+			anyIn = true;
+		}
+		else
+		{
+			allIn = false;
+		}
+	}
+
+	if (allIn) {
+		// 모두 포함된 경우
+		pFrustumCulledNodes.insert(m_iOctreeIndex);
+	}
+	else if (anyIn ) 	// 일부 포함된 경우
+	{
+		for (int i = 0; i < 8; i++)
+		{
+			if (m_bHaveChild)
+				m_pChildren[i]->Culling(pGameInstance, pFrustumCulledNodes);
+			else
+				pFrustumCulledNodes.insert(m_iOctreeIndex);
+		}
+	}
+
+	return;
 }
 
 void CWorldOctree::Build_WorldOctree(vector<class CGameObject*>& m_pParentObjList)
@@ -62,28 +107,23 @@ void CWorldOctree::Build_WorldOctree(vector<class CGameObject*>& m_pParentObjLis
 
 	for (size_t i = 0; i < m_pParentObjList.size(); ++i)
 	{
-		BoundingBox* ObjAABB = {nullptr};
-		CalculateObjAABB(m_pParentObjList[i], ObjAABB);
-
-		if (ObjAABB == nullptr)
+		CModel* pModel = static_cast<CModel*>(m_pParentObjList[i]->Find_Component(MODEL));
+		if (pModel == nullptr)
 			continue;
 
+		BoundingBox ObjAABB = CalculateObjAABB(pModel);
+
 		//삼각형이 바운드 박스와 충돌하면 이 노드에 담는다.
-		if (IsIntersactWithBoundingBox(*ObjAABB)) {
-			m_pOpjectsList.push_back(m_pParentObjList[i]);
+		if (IsIntersactWithBoundingBox(ObjAABB)) {
+			m_pObjectsList.push_back(m_pParentObjList[i]);
 			m_pParentObjList[i]->Add_WorldOctreeIndex(m_iOctreeIndex);				//물체에 인덱스 넣기
 			m_iObjectCount++;
 		}
 	}
 }
 
-void CWorldOctree::CalculateObjAABB(class CGameObject* pObj, BoundingBox* pBoundingBox)
+BoundingBox CWorldOctree::CalculateObjAABB(CModel* pModel)
 {
-	CModel* pModel = static_cast<CModel*>(pObj->Find_Component(MODEL));
-
-	if (pModel == nullptr)
-		return;
-
 	_Vec3 MinPos = pModel->Get_Model_MinSize();
 	_Vec3 MaxPos = pModel->Get_Model_MaxSize();
 
@@ -91,7 +131,7 @@ void CWorldOctree::CalculateObjAABB(class CGameObject* pObj, BoundingBox* pBound
 	_Vec3 vCenter = { (MinPos.x + MaxPos.x) * 0.5f ,(MinPos.y + MaxPos.y) * 0.5f ,(MinPos.z + MaxPos.z) * 0.5f };
 	_Vec3 vExtend = { abs(MinPos.x - MaxPos.x),abs(MinPos.y - MaxPos.y),abs(MinPos.z - MaxPos.z) };
 
-	*pBoundingBox = BoundingBox(vCenter, vExtend);
+	return BoundingBox(vCenter, vExtend * 0.5f);
 }
 
 _bool CWorldOctree::IsIntersactWithBoundingBox(BoundingBox ObjBoundingBox)

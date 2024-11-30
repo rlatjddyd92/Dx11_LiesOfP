@@ -50,15 +50,18 @@ void CStaticObj::Update(_float fTimeDelta)
 
 void CStaticObj::Late_Update(_float fTimeDelta)
 {
-	if (m_pGameInstance->isIn_Frustum_WorldSpace(m_pTransformCom->Get_State(CTransform::STATE_POSITION), m_fCullDistance))
+	if(m_pGameInstance->Is_In_FrustumCulledOctree(m_WorldOctreeIndex))
 	{
-		/* 직교투영을 위한 월드행렬까지 셋팅하게 된다. */
-		__super::Late_Update(fTimeDelta);
+		if (m_pGameInstance->isIn_Frustum_WorldSpace(m_pTransformCom->Get_State(CTransform::STATE_POSITION), m_fCullDistance))
+		{
+			/* 직교투영을 위한 월드행렬까지 셋팅하게 된다. */
+			__super::Late_Update(fTimeDelta);
 
-		m_pGameInstance->Add_RenderObject(CRenderer::RG_NONBLEND, this);	
+			m_pGameInstance->Add_RenderObject(CRenderer::RG_NONBLEND, this);
 
-		if(m_bShadow)
-			m_pGameInstance->Add_RenderObject(CRenderer::RG_SHADOWOBJ, this);
+			if (m_bShadow)
+				m_pGameInstance->Add_RenderObject(CRenderer::RG_SHADOWOBJ, this);
+		}
 	}
 }
 

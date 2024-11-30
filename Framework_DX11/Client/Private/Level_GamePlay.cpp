@@ -244,6 +244,9 @@ HRESULT CLevel_GamePlay::Ready_Layer_Player()
 
 HRESULT CLevel_GamePlay::Read_Map_Data()
 {
+	_Vec3	vMinPos = { FLT_MAX ,FLT_MAX ,FLT_MAX };		//World_Octree의 최소 좌표, 최대한 크게 초기화
+	_Vec3	vMaxPos = { -FLT_MAX ,-FLT_MAX ,-FLT_MAX };	//World_Octree의 최대 좌표, 최대한 작게 초기화
+
 	const char cFile[128] = "../Bin/DataFiles/Map_Data.dat";
 	ifstream fin(cFile, ios::in | ios::binary);
 
@@ -313,6 +316,13 @@ HRESULT CLevel_GamePlay::Read_Map_Data()
 					staticObjDesc.iCurrentCellNum = pDesc.iCurrentCellNum;
 					if (FAILED(m_pGameInstance->Add_CloneObject_ToLayer(LEVEL_GAMEPLAY, TEXT("Layer_Map"), TEXT("Prototype_GameObject_StaticObj"), &staticObjDesc)))
 						return E_FAIL;
+
+					vMinPos.x = min(vMinPos.x, pDesc.vPosition.x);
+					vMinPos.y = min(vMinPos.y, pDesc.vPosition.y);
+					vMinPos.z = min(vMinPos.z, pDesc.vPosition.z);
+					vMaxPos.x = max(vMaxPos.x, pDesc.vPosition.x);
+					vMaxPos.y = max(vMaxPos.y, pDesc.vPosition.y);
+					vMaxPos.z = max(vMaxPos.z, pDesc.vPosition.z);
 				} 
 
 				else if (strLayerTag == "Layer_InteractObject")
@@ -380,6 +390,9 @@ HRESULT CLevel_GamePlay::Read_Map_Data()
 		++i;
 	}
 	fin.close();
+
+	m_pGameInstance->Create_Octree(vMinPos, vMaxPos);
+
 	return S_OK;
 }
 
