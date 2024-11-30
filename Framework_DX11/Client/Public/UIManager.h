@@ -113,6 +113,29 @@ public:
 	// 로딩바 조정 
 	void Set_Loading_Status(_wstring strMessage, _float fProgress) { m_pUIPage_Loading->Set_Loading_Status(strMessage, fProgress); }
 
+	// 아이템 액션 
+	const CUIPage::ITEMACTION_INFO* Get_ItemAction_Info()
+	{
+		if (m_pUIPage_Equip->GetPageAction(PAGEACTION::ACTION_ACTIVE))
+			return m_pUIPage_Equip->Get_ItemAction_Info();
+		else if (m_pUIPage_Inven->GetPageAction(PAGEACTION::ACTION_ACTIVE))
+			return m_pUIPage_Inven->Get_ItemAction_Info();
+		else
+			return nullptr;
+	}
+
+	ITEM_FUNC Get_ActiveFunc() 
+	{ 
+		return m_eNow_Active_Func;
+	}
+
+	void Reset_ItemAction()
+	{
+		m_pUIPage_Equip->Reset_ItemAction();
+		m_pUIPage_Inven->Reset_ItemAction();
+		m_pUIPage_ItemInfo->Off_ItemAction();
+	}
+
 private:
 	void UIControl_Test(_float fTimeDelta);
 
@@ -148,6 +171,25 @@ public:
 	void SwicthPage(UIPAGE ePageA, UIPAGE ePageB);
 
 
+
+#pragma endregion
+
+#pragma region Page_ItemInfo
+
+	void Set_Active_ItemInfo(_bool bIsActive, UIPAGE eNowPage) { m_pUIPage_ItemInfo->Set_Active_ItemInfo(bIsActive, eNowPage); }
+
+	void Off_ItemInfo_UI() { m_pUIPage_ItemInfo->Off_ItemInfo_UI(); }
+
+	void Show_Focus(_Vec2 vItemCellPos, _Vec2 vItemCellSize) { m_pUIPage_ItemInfo->Show_Focus(vItemCellPos, vItemCellSize); }
+	void Off_Focus() { m_pUIPage_ItemInfo->Off_Focus(); }
+
+	void Show_NewMark(_Vec2 vItemCellPos, _Vec2 vItemCellSize) { m_pUIPage_ItemInfo->Show_NewMark(vItemCellPos, vItemCellSize); }
+
+	void Show_ItemAction(_Vec2 vItemCellPos, _Vec2 vItemCellSize, ITEM_FUNC eFunc0, ITEM_FUNC eFunc1 = ITEM_FUNC::FUNC_END, ITEM_FUNC eFunc2 = ITEM_FUNC::FUNC_END, ITEM_FUNC eFunc3 = ITEM_FUNC::FUNC_END)
+	{
+		m_pUIPage_ItemInfo->Show_ItemAction(vItemCellPos, vItemCellSize, eFunc0, eFunc1, eFunc2, eFunc3);
+	}
+	void Off_ItemAction() { m_pUIPage_ItemInfo->Off_ItemAction(); }
 
 #pragma endregion
 
@@ -221,7 +263,7 @@ private:
 	// 스킬트리
 	CUIPage_Skill* m_pUIPage_Skill = { nullptr };
 	// 테스트
-	CUIPage_ItemInfo* m_pUIPage_ToolTip = { nullptr };
+	CUIPage_ItemInfo* m_pUIPage_ItemInfo = { nullptr };
 	// 직교
 	CUIPage_Ortho* m_pUIPage_Ortho = { nullptr };
 
@@ -229,6 +271,8 @@ private:
 	CUIRender_Batching* m_pUIRender_Batching = { nullptr };
 
 	_bool m_bIsIngame = false;
+
+	ITEM_FUNC m_eNow_Active_Func = ITEM_FUNC::FUNC_END;
 
 
 	// 플레이 모드 진입 

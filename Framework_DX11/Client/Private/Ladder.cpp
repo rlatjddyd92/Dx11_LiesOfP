@@ -152,7 +152,16 @@ HRESULT CLadder::Ready_Components(LADDER_DESC* Desc)
 	CBounding_OBB::BOUNDING_OBB_DESC			ColliderDesc{};
 	ColliderDesc.vExtents = _float3(1.f, 0.1f, 1.f);
 	ColliderDesc.vAngles = _float3(0.f,0.f, 0.f);
-	ColliderDesc.vCenter = _float3(0.f, 1.f, 0.52f);
+
+	if (strcmp(Desc->szModelTag, "SK_LV_Ladder_MetalWood_Slide6m_SM_KSJ") == 0)	//ÂªÀº³ð
+	{
+		ColliderDesc.vCenter = _float3(0.f, 0.5f, 0.52f);
+	}
+	else
+	{
+		ColliderDesc.vCenter = _float3(0.f, 1.f, 0.52f);
+	}
+
 
 	if (FAILED(__super::Add_Component(LEVEL_STATIC, TEXT("Prototype_Component_Collider_OBB"),
 		TEXT("Com_Collider1"), reinterpret_cast<CComponent**>(&m_pColliderCom[DOWN]), &ColliderDesc)))

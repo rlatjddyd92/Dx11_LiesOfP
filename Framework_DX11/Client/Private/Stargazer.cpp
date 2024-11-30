@@ -34,12 +34,17 @@ HRESULT CStargazer::Initialize(void* pArg)
 		return E_FAIL;
 
 	m_pPlayer = m_pGameInstance->Find_Player(LEVEL_GAMEPLAY);
+	 
+	m_iAnim_Close = m_pModelCom[RESTORED]->Find_AnimationIndex("AS_Close_Idle", 1.f);
+	m_iAnim_Open = m_pModelCom[RESTORED]->Find_AnimationIndex("AS_Open", 0.5f);
+	m_iAnim_OpenIdle = m_pModelCom[RESTORED]->Find_AnimationIndex("AS_Open_Idle", 1.f);
+	m_iAnim_Broken = m_pModelCom[BROKEN]->Find_AnimationIndex("AS_Stargazer_broken_idle", 1.f);
+	m_iAnim_Restore = m_pModelCom[BROKEN]->Find_AnimationIndex("AS_Stargazer_restore", 2.f);
+	
+	m_pModelCom[RESTORED]->SetUp_Animation(m_iAnim_Close, true);
+	m_pModelCom[BROKEN]->SetUp_Animation(m_iAnim_Broken, true);
 
-	m_iAnim_Close = m_pModelCom->Find_AnimationIndex("AS_Close_Idle", 3.f);
-	m_iAnim_Open = m_pModelCom->Find_AnimationIndex("AS_Open", 0.1f);
-	m_iAnim_OpenIdle = m_pModelCom->Find_AnimationIndex("AS_Open_Idle", 3.f);
-
-	m_pModelCom->SetUp_Animation(m_iAnim_Close, true);
+	m_pCurrentModel = m_pModelCom[BROKEN];
 
 	m_strObjectTag = TEXT("Stargazer");
 
@@ -52,34 +57,50 @@ void CStargazer::Priority_Update(_float fTimeDelta)
 
 void CStargazer::Update(_float fTimeDelta)
 {
-	m_pModelCom->Play_Animation(fTimeDelta);
+	m_pCurrentModel->Play_Animation(fTimeDelta);
 
-	Calculate_Distance_Between_Player();
-
-	if (m_bClose_with_Player)
+	if (m_bStartRestore)
 	{
-		if (KEY_TAP(KEY::E))
-		{
-			//키 입력 확인 부분은 나중에 UI에서 받아와야 함
-			static_cast<CPawn*>(m_pPlayer)->Set_Respawn_Cell_Num(m_iCurrnetCellNum);
+		//키 입력 확인 부분은 나중에 UI에서 받아와야 함
+		static_cast<CPawn*>(m_pPlayer)->Set_Respawn_Cell_Num(m_iCurrnetCellNum);
 
-			if (m_isClose)
-			{
-				m_isClose = false;
-				m_isOpening = true;
-				m_pModelCom->SetUp_NextAnimation(m_iAnim_Open);
-			}
-			
-			//UI 기능 넣기
+		if (m_bRestored == false)
+		{
+			m_pCurrentModel->SetUp_Animation(m_iAnim_Restore);
 		}
 	}
 
+	//복구 애니메이션 진행 중
+	if (m_bRestored == false && m_pCurrentModel->Get_CurrentAnimationIndex() == m_iAnim_Restore)
+	{
+		m_fRestoreTimer += fTimeDelta;
+
+		if (m_fRestoreTimer > 3.3f)
+		{
+			m_pModelCom[RESTORED]->Play_Animation(fTimeDelta);
+		}
+
+		if (m_fRestoreTimer > 3.8f)
+		{
+			m_bRestored = true;
+			m_pCurrentModel = m_pModelCom[RESTORED];
+			m_fRestoreTimer = 0.f; 
+		}
+	}
+
+	if (m_bRestored && m_isClose)
+	{
+		m_isClose = false;
+		m_isOpening = true;
+		m_pCurrentModel->SetUp_NextAnimation(m_iAnim_Open);
+	}
+
 	//열리는 중->열리고 나서 기본 애니로 변경
-	if (m_isOpening && m_pModelCom->Get_IsEndAnimArray())
+	if (m_isOpening && m_pCurrentModel->Get_IsEndAnimArray())
 	{
 		m_isOpening = false;
 		m_isOpened = true;
-		m_pModelCom->SetUp_NextAnimation(m_iAnim_OpenIdle, true);
+		m_pCurrentModel->SetUp_NextAnimation(m_iAnim_OpenIdle, true);
 	}
 
 	if(m_pColliderCom != nullptr)
@@ -90,6 +111,7 @@ void CStargazer::Late_Update(_float fTimeDelta)
 {
 	__super::Late_Update(fTimeDelta);
 	m_pGameInstance->Add_RenderObject(CRenderer::RG_NONBLEND, this);
+	m_pGameInstance->Add_ColliderList(m_pColliderCom);
 
 #ifdef _DEBUG
 	if (m_pColliderCom != nullptr)
@@ -105,24 +127,24 @@ HRESULT CStargazer::Render()
 		return E_FAIL;
 	if (FAILED(m_pShaderCom->Bind_Matrix("g_ProjMatrix", &m_pGameInstance->Get_Transform(CPipeLine::D3DTS_PROJ))))
 		return E_FAIL;
-	_uint		iNumMeshes = m_pModelCom->Get_NumMeshes();
+	_uint		iNumMeshes = m_pCurrentModel->Get_NumMeshes();
 
 	for (size_t i = 0; i < iNumMeshes; i++)
 	{
-		m_pModelCom->Bind_MeshBoneMatrices(m_pShaderCom, "g_BoneMatrices", (_uint)i);
+		m_pCurrentModel->Bind_MeshBoneMatrices(m_pShaderCom, "g_BoneMatrices", (_uint)i);
 
-		if (FAILED(m_pModelCom->Bind_Material(m_pShaderCom, "g_DiffuseTexture", DIFFUSE, (_uint)i)))
+		if (FAILED(m_pCurrentModel->Bind_Material(m_pShaderCom, "g_DiffuseTexture", DIFFUSE, (_uint)i)))
 			return E_FAIL;
 
-		if (nullptr != m_pModelCom->Find_Texture((_uint)i, TEXTURE_TYPE::ROUGHNESS))
+		if (nullptr != m_pCurrentModel->Find_Texture((_uint)i, TEXTURE_TYPE::ROUGHNESS))
 		{
-			if (FAILED(m_pModelCom->Bind_Material(m_pShaderCom, "g_ARMTexture", ROUGHNESS, (_uint)i)))
+			if (FAILED(m_pCurrentModel->Bind_Material(m_pShaderCom, "g_ARMTexture", ROUGHNESS, (_uint)i)))
 				return E_FAIL;
 		}
 
-		if (nullptr != m_pModelCom->Find_Texture((_uint)i, TEXTURE_TYPE::NORMALS))
+		if (nullptr != m_pCurrentModel->Find_Texture((_uint)i, TEXTURE_TYPE::NORMALS))
 		{
-			if (FAILED(m_pModelCom->Bind_Material(m_pShaderCom, "g_NormalTexture", NORMALS, (_uint)i)))
+			if (FAILED(m_pCurrentModel->Bind_Material(m_pShaderCom, "g_NormalTexture", NORMALS, (_uint)i)))
 				return E_FAIL;
 
 			if (FAILED(m_pShaderCom->Begin(2)))
@@ -134,12 +156,67 @@ HRESULT CStargazer::Render()
 				return E_FAIL;
 		}
 
-		if (FAILED(m_pModelCom->Render((_uint)i)))
+		if (FAILED(m_pCurrentModel->Render((_uint)i)))
 			return E_FAIL;
 	}
 
+	if (m_fRestoreTimer > 3.5f && m_bRestored == false)
+	{
+		_uint		iNumMeshes = m_pModelCom[RESTORED]->Get_NumMeshes();
+
+		for (size_t i = 0; i < iNumMeshes; i++)
+		{
+			m_pModelCom[RESTORED]->Bind_MeshBoneMatrices(m_pShaderCom, "g_BoneMatrices", (_uint)i);
+
+			if (FAILED(m_pModelCom[RESTORED]->Bind_Material(m_pShaderCom, "g_DiffuseTexture", DIFFUSE, (_uint)i)))
+				return E_FAIL;
+
+			if (nullptr != m_pModelCom[RESTORED]->Find_Texture((_uint)i, TEXTURE_TYPE::ROUGHNESS))
+			{
+				if (FAILED(m_pModelCom[RESTORED]->Bind_Material(m_pShaderCom, "g_ARMTexture", ROUGHNESS, (_uint)i)))
+					return E_FAIL;
+			}
+
+			if (nullptr != m_pModelCom[RESTORED]->Find_Texture((_uint)i, TEXTURE_TYPE::NORMALS))
+			{
+				if (FAILED(m_pModelCom[RESTORED]->Bind_Material(m_pShaderCom, "g_NormalTexture", NORMALS, (_uint)i)))
+					return E_FAIL;
+
+				if (FAILED(m_pShaderCom->Begin(2)))
+					return E_FAIL;
+			}
+			else
+			{
+				if (FAILED(m_pShaderCom->Begin(0)))
+					return E_FAIL;
+			}
+
+			if (FAILED(m_pModelCom[RESTORED]->Render((_uint)i)))
+				return E_FAIL;
+		}
+	}
 	return S_OK;
 
+}
+
+void CStargazer::OnCollisionEnter(CGameObject* pOther)
+{
+	if (pOther->Get_Tag() == TEXT("Player"))
+	{
+		m_bCollison = true;
+	}
+}
+
+void CStargazer::OnCollisionStay(CGameObject* pOther)
+{
+}
+
+void CStargazer::OnCollisionExit(CGameObject* pOther)
+{
+	if (pOther->Get_Tag() == TEXT("Player"))
+	{
+		m_bCollison = false;
+	}
 }
 
 HRESULT CStargazer::Ready_Components()
@@ -150,34 +227,53 @@ HRESULT CStargazer::Ready_Components()
 		return E_FAIL;
 
 	/* FOR.Com_Model */
+	if (FAILED(__super::Add_Component(LEVEL_GAMEPLAY, TEXT("Prototype_Component_Model_Stargazer_Broken"),
+		TEXT("Com_Model0"), reinterpret_cast<CComponent**>(&m_pModelCom[BROKEN]))))
+		return E_FAIL;
+
 	if (FAILED(__super::Add_Component(LEVEL_GAMEPLAY, TEXT("Prototype_Component_Model_Stargazer"),
-		TEXT("Com_Model"), reinterpret_cast<CComponent**>(&m_pModelCom))))
+		TEXT("Com_Model1"), reinterpret_cast<CComponent**>(&m_pModelCom[RESTORED]))))
 		return E_FAIL;
 
 	/* For.Com_Collider */
-	CBounding_AABB::BOUNDING_AABB_DESC			ColliderDesc{};
-	ColliderDesc.vExtents = _float3(0.7f, 1.0f, 0.7f);
-	ColliderDesc.vCenter = _float3(0.f, ColliderDesc.vExtents.y, 0.f);
+	CBounding_Sphere::BOUNDING_SPHERE_DESC			ColliderDesc{};
+	ColliderDesc.fRadius = { 2.f };
+	ColliderDesc.vCenter = { 0.f, 0.5f, 0.f };
 
 	if (FAILED(__super::Add_Component(LEVEL_STATIC, TEXT("Prototype_Component_Collider_Sphere"),
 		TEXT("Com_Collider"), reinterpret_cast<CComponent**>(&m_pColliderCom), &ColliderDesc)))
 		return E_FAIL;
 	m_pColliderCom->Set_Owner(this);
 
+	// 항상 마지막에 생성하기
+	CRigidBody::RIGIDBODY_DESC RigidBodyDesc{};
+	RigidBodyDesc.isStatic = false;
+	RigidBodyDesc.isGravity = false;
+	RigidBodyDesc.pOwnerTransform = m_pTransformCom;
+	RigidBodyDesc.pOwnerNavigation = nullptr;
+
+	RigidBodyDesc.pOwner = this;
+	RigidBodyDesc.fStaticFriction = 0.f;
+	RigidBodyDesc.fDynamicFriction = 0.f;
+	RigidBodyDesc.fRestituion = 0.f;
+	RigidBodyDesc.PxLockFlags = PxRigidDynamicLockFlag::eLOCK_ANGULAR_X |
+		PxRigidDynamicLockFlag::eLOCK_ANGULAR_Y |
+		PxRigidDynamicLockFlag::eLOCK_ANGULAR_Z |
+		PxRigidDynamicLockFlag::eLOCK_LINEAR_X |
+		PxRigidDynamicLockFlag::eLOCK_LINEAR_Y |
+		PxRigidDynamicLockFlag::eLOCK_LINEAR_Z
+		;
+
+	physX::GeometryCapsule CapsuleDesc;
+	CapsuleDesc.fHeight = 0.5f;
+	CapsuleDesc.fRadius = 0.25f;
+	RigidBodyDesc.pGeometry = &CapsuleDesc;
+
+	/* FOR.Com_RigidBody */
+	if (FAILED(__super::Add_Component(LEVEL_STATIC, TEXT("Prototype_Component_RigidBody"),
+		TEXT("Com_RigidBody"), reinterpret_cast<CComponent**>(&m_pRigidBodyCom), &RigidBodyDesc)))
+		return E_FAIL;
 	return S_OK;
-}
-
-void CStargazer::Calculate_Distance_Between_Player()
-{
-	_Vec4 vMyPos = m_pTransformCom->Get_State(CTransform::STATE_POSITION);
-	_Vec4 vPlayerPos = m_pPlayer->Get_Transform()->Get_State(CTransform::STATE_POSITION);
-
-	_float fDistance = XMVectorGetX(XMVector4Length(vMyPos - vPlayerPos));
-
-	if(fDistance < 2.f)
-		m_bClose_with_Player = true;
-	else
-		m_bClose_with_Player = false;
 }
 
 CStargazer* CStargazer::Create(ID3D11Device* pDevice, ID3D11DeviceContext* pContext)
@@ -211,5 +307,11 @@ void CStargazer::Free()
 	__super::Free();
 	Safe_Release(m_pColliderCom);
 	Safe_Release(m_pShaderCom);
-	Safe_Release(m_pModelCom);
+
+	for (int i = 0; i < 2; ++i)
+	{
+		Safe_Release(m_pModelCom[i]);
+	}
+
+	Safe_Release(m_pRigidBodyCom);
 }

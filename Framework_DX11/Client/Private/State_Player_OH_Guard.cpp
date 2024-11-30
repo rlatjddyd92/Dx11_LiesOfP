@@ -18,7 +18,7 @@ HRESULT CState_Player_OH_Guard::Initialize(_uint iStateNum, void* pArg)
     m_iAnimation_Walk[WALK_L] = m_pPlayer->Get_Model()->Find_AnimationIndex("AS_Pino_O_Guard_Walk_L", 2.5f);
     m_iAnimation_Walk[WALK_R] = m_pPlayer->Get_Model()->Find_AnimationIndex("AS_Pino_O_Guard_Walk_R", 2.5f);
 
-    m_iAnimation_Guard = m_pPlayer->Get_Model()->Find_AnimationIndex("AS_Pino_O_Guard_Idle", 2.5f);
+    m_iAnimation_Guard = m_pPlayer->Get_Model()->Find_AnimationIndex("AS_Pino_O_Guard_Idle", 3.5f);
 
     m_fMoveSpeed = 1.5f;
     m_iStateNum = iStateNum;
@@ -29,7 +29,7 @@ HRESULT CState_Player_OH_Guard::Initialize(_uint iStateNum, void* pArg)
 HRESULT CState_Player_OH_Guard::Start_State(void* pArg)
 {
     if(m_pFsm->Get_PrevState() != CPlayer::OH_WALK)
-        m_pPlayer->Change_Animation(m_iAnimation_Guard, true, 0.2f, 0, true);
+        m_pPlayer->Change_Animation(m_iAnimation_Guard, true, 0.05f, 0, true);
 
     m_pPlayer->Change_Animation_Boundry(m_iAnimation_Guard, true);
 

@@ -13,10 +13,13 @@ public:
         _bool               isGravity = false;
         _bool               isOnCell = true;
         _bool               isLockCell = true;
+        _bool               isCapsule = false;
 
         _float              fStaticFriction = 0.5f;
         _float              fDynamicFriction = 0.5f;
         _float              fRestituion = 0.f;
+        
+        _Vec3               vOffset = { 0.f,0.f,0.f };
 
         physX::Geometry*    pGeometry = { nullptr };
         PxRigidDynamicLockFlags PxLockFlags = {};
@@ -66,6 +69,7 @@ private:
 
     _Vec3 m_vVelocity = {};
     _Vec3 m_vForce = {};
+    _Vec3 m_vOffset = {};
 
 private:
     HRESULT Add_PxActor(RIGIDBODY_DESC* pDesc);

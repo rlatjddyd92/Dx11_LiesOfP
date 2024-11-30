@@ -173,6 +173,7 @@ enum class ITEM_FUNC
 {
 	FUNC_USING, // <- 일반 아이템을 사용하여 기능 활성화 
 	FUNC_TO_INVEN, // <- 인벤으로 이동
+	FUNC_TO_EQUIP, // <- 장비로 이동
 	FUNC_EQUIP, // <- 일반 아이템 및 장비류를 장착
 	FUNC_UNEQUIP, // <- 장착된 것을 해제 
 	FUNC_DELETE, // <- 아이템 버리기 (삭제)
@@ -183,6 +184,19 @@ enum class ITEM_FUNC
 
 	FUNC_EQUIP_WEAPON_FIRST,
 	FUNC_EQUIP_WEAPON_SECOND,
+
+	FUNC_EQUIP_TOP_0,
+	FUNC_EQUIP_TOP_1,
+	FUNC_EQUIP_TOP_2,
+
+	FUNC_EQUIP_BOTTOM_0,
+	FUNC_EQUIP_BOTTOM_1,
+	FUNC_EQUIP_BOTTOM_2,
+
+	FUNC_EQUIP_BAG_0,
+	FUNC_EQUIP_BAG_1,
+	FUNC_EQUIP_BAG_2,
+	FUNC_EQUIP_BAG_3,
 
 	FUNC_END
 };

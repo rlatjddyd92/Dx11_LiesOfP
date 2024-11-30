@@ -41,6 +41,7 @@
 
 	enum class UI_FONT
 	{
+		// 기존 폰트 
 		FONT_NORMAL_8,
 		FONT_NORMAL_12,
 		FONT_NORMAL_16,
@@ -55,6 +56,8 @@
 		FONT_BOLD_32,
 		FONT_BOLD_40,
 		FONT_BOLD_48,
+
+
 		FONT_END
 	};
 

@@ -25,7 +25,7 @@ public:
 
 	enum PLAYER_STATE
 	{
-		HIT, PARRY, HEAL, CHANGEWEP, LADDER, LIFT, CHEST, ITEMGET,
+		HIT, PARRY, HEAL, CHANGEWEP, 
 
 		OH_IDLE, OH_WALK, OH_RUN, OH_SPRINT, OH_GUARD, OH_GUARDHIT, OH_JUMP, OH_DASH,
 
@@ -37,6 +37,9 @@ public:
 
 		SCISSOR_LATTACK0, SCISSOR_LATTACK1, SCISSOR_RATTACK0, SCISSOR_RATTACK1, SCISSOR_CHARGE0, SCISSOR_CHARGE1, 
 		SCISSOR_FATAL0, SCISSOR_FATAL1, SCISSOR_FATAL2, SCISSOR_BUFF,
+
+
+		LADDER = 100, LIFT, CHEST, ITEMGET, STARGAZER, TELEPORT,
 
 		STATE_END
 	};
@@ -104,6 +107,9 @@ public:
 	void					Set_IsInvicible(_bool isInvicible) { m_isInvicible = isInvicible; }
 
 	_bool					Get_IsLadderEnd() { return m_isLadderEnd; }
+
+	_bool					Get_IsTeleport() { return m_isTeleport; }
+	void					Set_IsTeleport(_bool isTeleport) { m_isTeleport = isTeleport; }
 
 	WEAPON_TYPE				Get_WeaponType() { return m_eWeaponType; }
 	void					Set_WeaponType(WEAPON_TYPE eType) { m_eWeaponType = eType; }
@@ -184,6 +190,8 @@ private:
 	_bool				m_isInvicible = { false };
 	_bool				m_isRecoveryStamina = { false };
 	_bool				m_isLadderEnd = { false };
+	_bool				m_isTeleport = { false };
+	_bool				m_isCollisionMonster = { false };
 
 	_float				m_fGuardTime = {};
 	_float				m_fRecoveryStaminaTime = { 0.f };
@@ -203,7 +211,8 @@ private:
 	// 24-11-27 김성용
 	// 플레이어 스탯 구조체 변수 
 #pragma region PLAYER_STAT
-	STAT_INFO*	m_tPlayer_Stat = { nullptr };
+	STAT_INFO*			m_tPlayer_Stat = { nullptr };
+	_bool				m_bInvenLock = { true };
 #pragma endregion
 
 private:
@@ -211,6 +220,10 @@ private:
 	HRESULT Ready_Weapon();
 	HRESULT Ready_FSM();
 	HRESULT Ready_Effect();
+	
+
+
+	void CollisionStay_IntercObj(CGameObject* pGameObject);
 
 public:
 	static CPlayer* Create(ID3D11Device* pDevice, ID3D11DeviceContext* pContext);

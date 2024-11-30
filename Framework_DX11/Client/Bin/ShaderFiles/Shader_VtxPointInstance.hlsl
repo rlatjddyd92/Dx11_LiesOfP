@@ -544,6 +544,32 @@ PS_OUT PS_DISTORTION_MAIN(PS_IN In)
     return Out;
 }
 
+PS_EFFECT_OUT PS_INDEXAURA_MAIN(PS_IN In)
+{
+    PS_EFFECT_OUT Out = (PS_EFFECT_OUT) 0;
+    
+    if (In.vLifeTime.x < In.vLifeTime.y)
+        discard;
+    
+    int iTexIndex = (int) (In.vColor.a * g_vTexDivide.x * g_vTexDivide.y);
+    vector vColor = g_DiffuseTexture.Sample(LinearSampler, Get_SpriteTexcoord(In.vTexcoord, iTexIndex));
+    
+    float2 vTexcoord = In.vTexcoord + float2(In.vLifeTime.y, In.vLifeTime.y);
+    vector vMask = g_MaskTexture_1.Sample(LinearSampler, vTexcoord);
+    
+    vColor.rgb *= In.vColor.rgb;
+    vColor.a *= vMask.r;
+    vColor.a *= 1.f - (In.vLifeTime.y / In.vLifeTime.x);
+    
+    if(vColor.a < 0.3f)
+        discard;
+    
+    Out.vDiffuse = vColor;
+    Out.vBlur = vColor;
+    
+    return Out;
+}
+
 technique11	DefaultTechnique
 {
 	pass DEFAULT // 0
@@ -676,6 +702,17 @@ technique11	DefaultTechnique
         VertexShader = compile vs_5_0 VS_MAIN();
         GeometryShader = compile gs_5_0 GS_MAIN();
         PixelShader = compile ps_5_0 PS_DISTORTION_MAIN();
+    }
+
+    pass PARTICLE_INDEXAURA // 12
+    {
+        SetRasterizerState(RS_Default);
+        SetDepthStencilState(DSS_Default, 0);
+        SetBlendState(BS_Default, vector(0.f, 0.f, 0.f, 0.f), 0xffffffff);
+
+        VertexShader = compile vs_5_0 VS_MAIN();
+        GeometryShader = compile gs_5_0 GS_MAIN();
+        PixelShader = compile ps_5_0 PS_INDEXAURA_MAIN();
     }
 }
 

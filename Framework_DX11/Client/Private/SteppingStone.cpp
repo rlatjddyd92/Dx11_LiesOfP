@@ -51,10 +51,10 @@ void CSteppingStone::Update(_float fTimeDelta)
     if (m_bCollision)
         m_fCollisonTimer += fTimeDelta;
 
-    if (m_fCollisonTimer >= 2.f)
-    {
-        Change_Player_Pos();
-    }
+    //if (m_fCollisonTimer >= 2.f)
+    //{
+    //    Change_Player_Pos();
+    //}
 
     if (m_pColliderCom != nullptr)
     {
@@ -184,7 +184,7 @@ void CSteppingStone::Change_Player_Pos()
         static_cast<CNavigation*>(pNavComponenet)->Move_to_Cell(pRigidComponenet, 792);
         break;
     case 1:
-        static_cast<CNavigation*>(pNavComponenet)->Move_to_Cell(pRigidComponenet, 1070);
+        static_cast<CNavigation*>(pNavComponenet)->Move_to_Cell(pRigidComponenet, 1068);
         break;
     default:
         break;

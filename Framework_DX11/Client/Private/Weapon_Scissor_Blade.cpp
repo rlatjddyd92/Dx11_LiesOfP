@@ -32,7 +32,7 @@ HRESULT CWeapon_Scissor_Blade::Initialize(void* pArg)
 	if (FAILED(Ready_Components()))
 		return E_FAIL;
 
-	m_isActive = false;
+	m_isActive = true;
 
 	return S_OK;
 }

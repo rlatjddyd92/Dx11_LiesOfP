@@ -1,0 +1,490 @@
+#include "stdafx.h"
+
+#include "D:\TeamProject\Bulid\NewBulid_11_27\Dx11_LiesOfP\Framework_DX11\Client\private\BackGround.cpp"
+
+
+#include "D:\TeamProject\Bulid\NewBulid_11_27\Dx11_LiesOfP\Framework_DX11\Client\Private\Camera_Manager.cpp"
+
+
+#include "D:\TeamProject\Bulid\NewBulid_11_27\Dx11_LiesOfP\Framework_DX11\Client\Private\CarcassBigA.cpp"
+
+
+#include "D:\TeamProject\Bulid\NewBulid_11_27\Dx11_LiesOfP\Framework_DX11\Client\Private\LastDoor.cpp"
+
+
+#include "D:\TeamProject\Bulid\NewBulid_11_27\Dx11_LiesOfP\Framework_DX11\Client\Private\State_Player_Ladder.cpp"
+
+
+#include "D:\TeamProject\Bulid\NewBulid_11_27\Dx11_LiesOfP\Framework_DX11\Client\Private\State_SimonManusP1_Charge_SwingDown.cpp"
+
+
+#include "D:\TeamProject\Bulid\NewBulid_11_27\Dx11_LiesOfP\Framework_DX11\Client\Private\ColliderObject.cpp"
+
+
+#include "D:\TeamProject\Bulid\NewBulid_11_27\Dx11_LiesOfP\Framework_DX11\Client\Private\Effect_Base.cpp"
+
+
+#include "D:\TeamProject\Bulid\NewBulid_11_27\Dx11_LiesOfP\Framework_DX11\Client\Private\Effect_Container.cpp"
+
+
+#include "D:\TeamProject\Bulid\NewBulid_11_27\Dx11_LiesOfP\Framework_DX11\Client\Private\Effect_Manager.cpp"
+
+
+#include "D:\TeamProject\Bulid\NewBulid_11_27\Dx11_LiesOfP\Framework_DX11\Client\Private\GameInterface_Controller.cpp"
+
+
+#include "D:\TeamProject\Bulid\NewBulid_11_27\Dx11_LiesOfP\Framework_DX11\Client\private\FreeCamera.cpp"
+
+
+#include "D:\TeamProject\Bulid\NewBulid_11_27\Dx11_LiesOfP\Framework_DX11\Client\Private\Item_Manager.cpp"
+
+
+#include "D:\TeamProject\Bulid\NewBulid_11_27\Dx11_LiesOfP\Framework_DX11\Client\Private\Ladder.cpp"
+
+
+#include "D:\TeamProject\Bulid\NewBulid_11_27\Dx11_LiesOfP\Framework_DX11\Client\Private\Level_GamePlay.cpp"
+
+
+#include "D:\TeamProject\Bulid\NewBulid_11_27\Dx11_LiesOfP\Framework_DX11\Client\Private\Level_Loading.cpp"
+
+
+#include "D:\TeamProject\Bulid\NewBulid_11_27\Dx11_LiesOfP\Framework_DX11\Client\Private\Level_Logo.cpp"
+
+
+#include "D:\TeamProject\Bulid\NewBulid_11_27\Dx11_LiesOfP\Framework_DX11\Client\Private\Lift_Controller.cpp"
+
+
+#include "D:\TeamProject\Bulid\NewBulid_11_27\Dx11_LiesOfP\Framework_DX11\Client\Private\Lift_Door.cpp"
+
+
+#include "D:\TeamProject\Bulid\NewBulid_11_27\Dx11_LiesOfP\Framework_DX11\Client\Private\Lift_Floor.cpp"
+
+
+#include "D:\TeamProject\Bulid\NewBulid_11_27\Dx11_LiesOfP\Framework_DX11\Client\private\Loader.cpp"
+
+
+#include "D:\TeamProject\Bulid\NewBulid_11_27\Dx11_LiesOfP\Framework_DX11\Client\Private\MainApp.cpp"
+
+
+#include "D:\TeamProject\Bulid\NewBulid_11_27\Dx11_LiesOfP\Framework_DX11\Client\private\Mesh_Effect.cpp"
+
+
+#include "D:\TeamProject\Bulid\NewBulid_11_27\Dx11_LiesOfP\Framework_DX11\Client\Private\Monster.cpp"
+
+
+#include "D:\TeamProject\Bulid\NewBulid_11_27\Dx11_LiesOfP\Framework_DX11\Client\Private\NavDataObj.cpp"
+
+
+#include "D:\TeamProject\Bulid\NewBulid_11_27\Dx11_LiesOfP\Framework_DX11\Client\Private\Particle_Effect.cpp"
+
+
+#include "D:\TeamProject\Bulid\NewBulid_11_27\Dx11_LiesOfP\Framework_DX11\Client\Private\Pawn.cpp"
+
+
+#include "D:\TeamProject\Bulid\NewBulid_11_27\Dx11_LiesOfP\Framework_DX11\Client\private\Player.cpp"
+
+
+#include "D:\TeamProject\Bulid\NewBulid_11_27\Dx11_LiesOfP\Framework_DX11\Client\Private\PlayerCamera.cpp"
+
+
+#include "D:\TeamProject\Bulid\NewBulid_11_27\Dx11_LiesOfP\Framework_DX11\Client\Private\Player_Stat_Manager.cpp"
+
+
+#include "D:\TeamProject\Bulid\NewBulid_11_27\Dx11_LiesOfP\Framework_DX11\Client\Private\SimonManus.cpp"
+
+
+#include "D:\TeamProject\Bulid\NewBulid_11_27\Dx11_LiesOfP\Framework_DX11\Client\Private\Sky.cpp"
+
+
+#include "D:\TeamProject\Bulid\NewBulid_11_27\Dx11_LiesOfP\Framework_DX11\Client\Private\Stargazer.cpp"
+
+
+#include "D:\TeamProject\Bulid\NewBulid_11_27\Dx11_LiesOfP\Framework_DX11\Client\Private\State_CarcassBigA_AttackRoute_0.cpp"
+
+
+#include "D:\TeamProject\Bulid\NewBulid_11_27\Dx11_LiesOfP\Framework_DX11\Client\Private\State_CarcassBigA_AttackRoute_1.cpp"
+
+
+#include "D:\TeamProject\Bulid\NewBulid_11_27\Dx11_LiesOfP\Framework_DX11\Client\Private\State_CarcassBigA_AttackRoute_2.cpp"
+
+
+#include "D:\TeamProject\Bulid\NewBulid_11_27\Dx11_LiesOfP\Framework_DX11\Client\Private\State_CarcassBigA_AttackRoute_3.cpp"
+
+
+#include "D:\TeamProject\Bulid\NewBulid_11_27\Dx11_LiesOfP\Framework_DX11\Client\Private\State_CarcassBigA_AttackRoute_4.cpp"
+
+
+#include "D:\TeamProject\Bulid\NewBulid_11_27\Dx11_LiesOfP\Framework_DX11\Client\Private\State_CarcassBigA_Die.cpp"
+
+
+#include "D:\TeamProject\Bulid\NewBulid_11_27\Dx11_LiesOfP\Framework_DX11\Client\Private\State_CarcassBigA_Grogy.cpp"
+
+
+#include "D:\TeamProject\Bulid\NewBulid_11_27\Dx11_LiesOfP\Framework_DX11\Client\Private\State_CarcassBigA_HitFatal.cpp"
+
+
+#include "D:\TeamProject\Bulid\NewBulid_11_27\Dx11_LiesOfP\Framework_DX11\Client\Private\State_CarcassBigA_Idle.cpp"
+
+
+#include "D:\TeamProject\Bulid\NewBulid_11_27\Dx11_LiesOfP\Framework_DX11\Client\Private\State_CarcassBigA_Impact.cpp"
+
+
+#include "D:\TeamProject\Bulid\NewBulid_11_27\Dx11_LiesOfP\Framework_DX11\Client\Private\State_CarcassBigA_LOSwingRight.cpp"
+
+
+#include "D:\TeamProject\Bulid\NewBulid_11_27\Dx11_LiesOfP\Framework_DX11\Client\Private\State_CarcassBigA_LTSwingRight.cpp"
+
+
+#include "D:\TeamProject\Bulid\NewBulid_11_27\Dx11_LiesOfP\Framework_DX11\Client\Private\State_CarcassBigA_Paralyze.cpp"
+
+
+#include "D:\TeamProject\Bulid\NewBulid_11_27\Dx11_LiesOfP\Framework_DX11\Client\Private\State_CarcassBigA_RageAttack.cpp"
+
+
+#include "D:\TeamProject\Bulid\NewBulid_11_27\Dx11_LiesOfP\Framework_DX11\Client\Private\State_CarcassBigA_Run.cpp"
+
+
+#include "D:\TeamProject\Bulid\NewBulid_11_27\Dx11_LiesOfP\Framework_DX11\Client\Private\State_CarcassBigA_Walk.cpp"
+
+
+#include "D:\TeamProject\Bulid\NewBulid_11_27\Dx11_LiesOfP\Framework_DX11\Client\Private\State_CarcassBigA_WheelWind.cpp"
+
+
+#include "D:\TeamProject\Bulid\NewBulid_11_27\Dx11_LiesOfP\Framework_DX11\Client\Private\State_Player_ChangeWeapon.cpp"
+
+
+#include "D:\TeamProject\Bulid\NewBulid_11_27\Dx11_LiesOfP\Framework_DX11\Client\Private\State_Player_Flame_Charge00.cpp"
+
+
+#include "D:\TeamProject\Bulid\NewBulid_11_27\Dx11_LiesOfP\Framework_DX11\Client\Private\State_Player_Flame_Charge01.cpp"
+
+
+#include "D:\TeamProject\Bulid\NewBulid_11_27\Dx11_LiesOfP\Framework_DX11\Client\Private\State_Player_Flame_LAttack00.cpp"
+
+
+#include "D:\TeamProject\Bulid\NewBulid_11_27\Dx11_LiesOfP\Framework_DX11\Client\Private\State_Player_Flame_LAttack01.cpp"
+
+
+#include "D:\TeamProject\Bulid\NewBulid_11_27\Dx11_LiesOfP\Framework_DX11\Client\Private\State_Player_Flame_RAttack00.cpp"
+
+
+#include "D:\TeamProject\Bulid\NewBulid_11_27\Dx11_LiesOfP\Framework_DX11\Client\Private\State_Player_Flame_RAttack01.cpp"
+
+
+#include "D:\TeamProject\Bulid\NewBulid_11_27\Dx11_LiesOfP\Framework_DX11\Client\Private\State_Player_Heal.cpp"
+
+
+#include "D:\TeamProject\Bulid\NewBulid_11_27\Dx11_LiesOfP\Framework_DX11\Client\Private\State_Player_OH_Dash.cpp"
+
+
+#include "D:\TeamProject\Bulid\NewBulid_11_27\Dx11_LiesOfP\Framework_DX11\Client\Private\State_Player_OH_Guard.cpp"
+
+
+#include "D:\TeamProject\Bulid\NewBulid_11_27\Dx11_LiesOfP\Framework_DX11\Client\Private\State_Player_Hit.cpp"
+
+
+#include "D:\TeamProject\Bulid\NewBulid_11_27\Dx11_LiesOfP\Framework_DX11\Client\Private\State_Player_OH_Idle.cpp"
+
+
+#include "D:\TeamProject\Bulid\NewBulid_11_27\Dx11_LiesOfP\Framework_DX11\Client\Private\State_Player_OH_Jump.cpp"
+
+
+#include "D:\TeamProject\Bulid\NewBulid_11_27\Dx11_LiesOfP\Framework_DX11\Client\Private\State_Player_OH_Run.cpp"
+
+
+#include "D:\TeamProject\Bulid\NewBulid_11_27\Dx11_LiesOfP\Framework_DX11\Client\Private\State_Player_OH_Sprint.cpp"
+
+
+#include "D:\TeamProject\Bulid\NewBulid_11_27\Dx11_LiesOfP\Framework_DX11\Client\Private\State_Player_OH_Walk.cpp"
+
+
+#include "D:\TeamProject\Bulid\NewBulid_11_27\Dx11_LiesOfP\Framework_DX11\Client\Private\State_Player_Rapier_Charge.cpp"
+
+
+#include "D:\TeamProject\Bulid\NewBulid_11_27\Dx11_LiesOfP\Framework_DX11\Client\Private\State_Player_Rapier_Fatal.cpp"
+
+
+#include "D:\TeamProject\Bulid\NewBulid_11_27\Dx11_LiesOfP\Framework_DX11\Client\Private\State_Player_Rapier_LAttack00.cpp"
+
+
+#include "D:\TeamProject\Bulid\NewBulid_11_27\Dx11_LiesOfP\Framework_DX11\Client\Private\State_Player_Rapier_LAttack01.cpp"
+
+
+#include "D:\TeamProject\Bulid\NewBulid_11_27\Dx11_LiesOfP\Framework_DX11\Client\Private\State_Player_Parry.cpp"
+
+
+#include "D:\TeamProject\Bulid\NewBulid_11_27\Dx11_LiesOfP\Framework_DX11\Client\Private\State_Player_Rapier_RAttack00.cpp"
+
+
+#include "D:\TeamProject\Bulid\NewBulid_11_27\Dx11_LiesOfP\Framework_DX11\Client\Private\State_Player_Scissor_Buff.cpp"
+
+
+#include "D:\TeamProject\Bulid\NewBulid_11_27\Dx11_LiesOfP\Framework_DX11\Client\Private\State_Player_Scissor_Charge00.cpp"
+
+
+#include "D:\TeamProject\Bulid\NewBulid_11_27\Dx11_LiesOfP\Framework_DX11\Client\Private\State_Player_Scissor_Charge01.cpp"
+
+
+#include "D:\TeamProject\Bulid\NewBulid_11_27\Dx11_LiesOfP\Framework_DX11\Client\Private\State_Player_Scissor_Fatal0.cpp"
+
+
+#include "D:\TeamProject\Bulid\NewBulid_11_27\Dx11_LiesOfP\Framework_DX11\Client\Private\State_Player_Scissor_Fatal1.cpp"
+
+
+#include "D:\TeamProject\Bulid\NewBulid_11_27\Dx11_LiesOfP\Framework_DX11\Client\Private\State_Player_Scissor_Fatal2.cpp"
+
+
+#include "D:\TeamProject\Bulid\NewBulid_11_27\Dx11_LiesOfP\Framework_DX11\Client\Private\State_Player_Scissor_LAttack00.cpp"
+
+
+#include "D:\TeamProject\Bulid\NewBulid_11_27\Dx11_LiesOfP\Framework_DX11\Client\Private\State_Player_Scissor_LAttack01.cpp"
+
+
+#include "D:\TeamProject\Bulid\NewBulid_11_27\Dx11_LiesOfP\Framework_DX11\Client\Private\State_Player_Scissor_RAttack00.cpp"
+
+
+#include "D:\TeamProject\Bulid\NewBulid_11_27\Dx11_LiesOfP\Framework_DX11\Client\Private\State_Player_Scissor_RAttack01.cpp"
+
+
+#include "D:\TeamProject\Bulid\NewBulid_11_27\Dx11_LiesOfP\Framework_DX11\Client\Private\State_Player_TH_Dash.cpp"
+
+
+#include "D:\TeamProject\Bulid\NewBulid_11_27\Dx11_LiesOfP\Framework_DX11\Client\Private\State_Player_TH_Guard.cpp"
+
+
+#include "D:\TeamProject\Bulid\NewBulid_11_27\Dx11_LiesOfP\Framework_DX11\Client\Private\State_Player_TH_Idle.cpp"
+
+
+#include "D:\TeamProject\Bulid\NewBulid_11_27\Dx11_LiesOfP\Framework_DX11\Client\Private\State_Player_TH_Jump.cpp"
+
+
+#include "D:\TeamProject\Bulid\NewBulid_11_27\Dx11_LiesOfP\Framework_DX11\Client\Private\State_Player_TH_Run.cpp"
+
+
+#include "D:\TeamProject\Bulid\NewBulid_11_27\Dx11_LiesOfP\Framework_DX11\Client\Private\State_Player_TH_Sprint.cpp"
+
+
+#include "D:\TeamProject\Bulid\NewBulid_11_27\Dx11_LiesOfP\Framework_DX11\Client\Private\State_Player_TH_Walk.cpp"
+
+
+#include "D:\TeamProject\Bulid\NewBulid_11_27\Dx11_LiesOfP\Framework_DX11\Client\Private\State_SimonManusP1_AvoidSwing.cpp"
+
+
+#include "D:\TeamProject\Bulid\NewBulid_11_27\Dx11_LiesOfP\Framework_DX11\Client\Private\State_SimonManusP1_ChasingSwing.cpp"
+
+
+#include "D:\TeamProject\Bulid\NewBulid_11_27\Dx11_LiesOfP\Framework_DX11\Client\Private\State_SimonManusP1_Die.cpp"
+
+
+#include "D:\TeamProject\Bulid\NewBulid_11_27\Dx11_LiesOfP\Framework_DX11\Client\Private\State_SimonManusP1_Grogy.cpp"
+
+
+#include "D:\TeamProject\Bulid\NewBulid_11_27\Dx11_LiesOfP\Framework_DX11\Client\Private\State_SimonManusP1_HighJumpFall.cpp"
+
+
+#include "D:\TeamProject\Bulid\NewBulid_11_27\Dx11_LiesOfP\Framework_DX11\Client\Private\State_SimonManusP1_HitFatal.cpp"
+
+
+#include "D:\TeamProject\Bulid\NewBulid_11_27\Dx11_LiesOfP\Framework_DX11\Client\Private\State_SimonManusP1_Idle.cpp"
+
+
+#include "D:\TeamProject\Bulid\NewBulid_11_27\Dx11_LiesOfP\Framework_DX11\Client\Private\State_SimonManusP1_JumpToSwing.cpp"
+
+
+#include "D:\TeamProject\Bulid\NewBulid_11_27\Dx11_LiesOfP\Framework_DX11\Client\Private\State_SimonManusP1_Run.cpp"
+
+
+#include "D:\TeamProject\Bulid\NewBulid_11_27\Dx11_LiesOfP\Framework_DX11\Client\Private\State_SimonManusP1_Stamp.cpp"
+
+
+#include "D:\TeamProject\Bulid\NewBulid_11_27\Dx11_LiesOfP\Framework_DX11\Client\Private\State_SimonManusP1_StingAttack.cpp"
+
+
+#include "D:\TeamProject\Bulid\NewBulid_11_27\Dx11_LiesOfP\Framework_DX11\Client\Private\State_SimonManusP1_SwingDown_Swing_L.cpp"
+
+
+#include "D:\TeamProject\Bulid\NewBulid_11_27\Dx11_LiesOfP\Framework_DX11\Client\Private\State_SimonManusP1_SwingDown_Swing_R.cpp"
+
+
+#include "D:\TeamProject\Bulid\NewBulid_11_27\Dx11_LiesOfP\Framework_DX11\Client\Private\State_SimonManusP1_SwingMultiple.cpp"
+
+
+#include "D:\TeamProject\Bulid\NewBulid_11_27\Dx11_LiesOfP\Framework_DX11\Client\Private\State_SimonManusP1_SwipMultiple_L.cpp"
+
+
+#include "D:\TeamProject\Bulid\NewBulid_11_27\Dx11_LiesOfP\Framework_DX11\Client\Private\State_SimonManusP1_SwipMultiple_R.cpp"
+
+
+#include "D:\TeamProject\Bulid\NewBulid_11_27\Dx11_LiesOfP\Framework_DX11\Client\Private\State_SimonManusP1_Walk.cpp"
+
+
+#include "D:\TeamProject\Bulid\NewBulid_11_27\Dx11_LiesOfP\Framework_DX11\Client\Private\State_SimonManusP2_AvoidSwing.cpp"
+
+
+#include "D:\TeamProject\Bulid\NewBulid_11_27\Dx11_LiesOfP\Framework_DX11\Client\Private\State_SimonManusP2_BrutalAttack.cpp"
+
+
+#include "D:\TeamProject\Bulid\NewBulid_11_27\Dx11_LiesOfP\Framework_DX11\Client\Private\State_SimonManusP2_ChasingSwing.cpp"
+
+
+#include "D:\TeamProject\Bulid\NewBulid_11_27\Dx11_LiesOfP\Framework_DX11\Client\Private\State_SimonManusP2_Die.cpp"
+
+
+#include "D:\TeamProject\Bulid\NewBulid_11_27\Dx11_LiesOfP\Framework_DX11\Client\Private\State_SimonManusP2_Grogy.cpp"
+
+
+#include "D:\TeamProject\Bulid\NewBulid_11_27\Dx11_LiesOfP\Framework_DX11\Client\Private\State_SimonManusP2_HighJumpFall.cpp"
+
+
+#include "D:\TeamProject\Bulid\NewBulid_11_27\Dx11_LiesOfP\Framework_DX11\Client\Private\State_SimonManusP2_HitFatal.cpp"
+
+
+#include "D:\TeamProject\Bulid\NewBulid_11_27\Dx11_LiesOfP\Framework_DX11\Client\Private\State_SimonManusP2_Idle.cpp"
+
+
+#include "D:\TeamProject\Bulid\NewBulid_11_27\Dx11_LiesOfP\Framework_DX11\Client\Private\State_SimonManusP2_JumpToAttack.cpp"
+
+
+#include "D:\TeamProject\Bulid\NewBulid_11_27\Dx11_LiesOfP\Framework_DX11\Client\Private\State_SimonManusP2_LightningToWave.cpp"
+
+
+#include "D:\TeamProject\Bulid\NewBulid_11_27\Dx11_LiesOfP\Framework_DX11\Client\Private\State_SimonManusP2_Route0.cpp"
+
+
+#include "D:\TeamProject\Bulid\NewBulid_11_27\Dx11_LiesOfP\Framework_DX11\Client\Private\State_SimonManusP2_Route1.cpp"
+
+
+#include "D:\TeamProject\Bulid\NewBulid_11_27\Dx11_LiesOfP\Framework_DX11\Client\Private\State_SimonManusP2_Route2.cpp"
+
+
+#include "D:\TeamProject\Bulid\NewBulid_11_27\Dx11_LiesOfP\Framework_DX11\Client\Private\State_SimonManusP2_Run.cpp"
+
+
+#include "D:\TeamProject\Bulid\NewBulid_11_27\Dx11_LiesOfP\Framework_DX11\Client\Private\State_SimonManusP2_SpreadMagic.cpp"
+
+
+#include "D:\TeamProject\Bulid\NewBulid_11_27\Dx11_LiesOfP\Framework_DX11\Client\Private\State_SimonManusP2_Stamp.cpp"
+
+
+#include "D:\TeamProject\Bulid\NewBulid_11_27\Dx11_LiesOfP\Framework_DX11\Client\Private\State_SimonManusP2_Sting.cpp"
+
+
+#include "D:\TeamProject\Bulid\NewBulid_11_27\Dx11_LiesOfP\Framework_DX11\Client\Private\State_SimonManusP2_SummonHand.cpp"
+
+
+#include "D:\TeamProject\Bulid\NewBulid_11_27\Dx11_LiesOfP\Framework_DX11\Client\Private\State_SimonManusP2_SwingDown_Swing.cpp"
+
+
+#include "D:\TeamProject\Bulid\NewBulid_11_27\Dx11_LiesOfP\Framework_DX11\Client\Private\State_SimonManusP2_SwipMultiple.cpp"
+
+
+#include "D:\TeamProject\Bulid\NewBulid_11_27\Dx11_LiesOfP\Framework_DX11\Client\Private\State_SimonManusP2_ThunderBall.cpp"
+
+
+#include "D:\TeamProject\Bulid\NewBulid_11_27\Dx11_LiesOfP\Framework_DX11\Client\Private\State_SimonManusP2_ThunderCalling.cpp"
+
+
+#include "D:\TeamProject\Bulid\NewBulid_11_27\Dx11_LiesOfP\Framework_DX11\Client\Private\State_SimonManusP2_Walk.cpp"
+
+
+#include "D:\TeamProject\Bulid\NewBulid_11_27\Dx11_LiesOfP\Framework_DX11\Client\Private\State_SimonManusP2_Wave.cpp"
+
+
+#include "D:\TeamProject\Bulid\NewBulid_11_27\Dx11_LiesOfP\Framework_DX11\Client\Private\StaticObj.cpp"
+
+
+#include "D:\TeamProject\Bulid\NewBulid_11_27\Dx11_LiesOfP\Framework_DX11\Client\Private\SteppingStone.cpp"
+
+
+#include "D:\TeamProject\Bulid\NewBulid_11_27\Dx11_LiesOfP\Framework_DX11\Client\Private\Terrain.cpp"
+
+
+#include "D:\TeamProject\Bulid\NewBulid_11_27\Dx11_LiesOfP\Framework_DX11\Client\Private\Texture_Effect.cpp"
+
+
+#include "D:\TeamProject\Bulid\NewBulid_11_27\Dx11_LiesOfP\Framework_DX11\Client\Private\TowerDoor.cpp"
+
+
+#include "D:\TeamProject\Bulid\NewBulid_11_27\Dx11_LiesOfP\Framework_DX11\Client\Private\Trail_Effect_MP.cpp"
+
+
+#include "D:\TeamProject\Bulid\NewBulid_11_27\Dx11_LiesOfP\Framework_DX11\Client\Private\Trail_Effect_OP.cpp"
+
+
+#include "D:\TeamProject\Bulid\NewBulid_11_27\Dx11_LiesOfP\Framework_DX11\Client\Private\Trail_Effect_TP.cpp"
+
+
+#include "D:\TeamProject\Bulid\NewBulid_11_27\Dx11_LiesOfP\Framework_DX11\Client\Private\TreasureBox.cpp"
+
+
+#include "D:\TeamProject\Bulid\NewBulid_11_27\Dx11_LiesOfP\Framework_DX11\Client\Private\UIManager.cpp"
+
+
+#include "D:\TeamProject\Bulid\NewBulid_11_27\Dx11_LiesOfP\Framework_DX11\Client\Private\UIPage.cpp"
+
+
+#include "D:\TeamProject\Bulid\NewBulid_11_27\Dx11_LiesOfP\Framework_DX11\Client\Private\UIPage_Equip.cpp"
+
+
+#include "D:\TeamProject\Bulid\NewBulid_11_27\Dx11_LiesOfP\Framework_DX11\Client\Private\UIPage_Inven.cpp"
+
+
+#include "D:\TeamProject\Bulid\NewBulid_11_27\Dx11_LiesOfP\Framework_DX11\Client\Private\UIPage_Option.cpp"
+
+
+#include "D:\TeamProject\Bulid\NewBulid_11_27\Dx11_LiesOfP\Framework_DX11\Client\Private\UIPage_Loading.cpp"
+
+
+#include "D:\TeamProject\Bulid\NewBulid_11_27\Dx11_LiesOfP\Framework_DX11\Client\Private\UIPage_Main.cpp"
+
+
+#include "D:\TeamProject\Bulid\NewBulid_11_27\Dx11_LiesOfP\Framework_DX11\Client\Private\UIPage_Menu.cpp"
+
+
+#include "D:\TeamProject\Bulid\NewBulid_11_27\Dx11_LiesOfP\Framework_DX11\Client\Private\UIPage_Ortho.cpp"
+
+
+#include "D:\TeamProject\Bulid\NewBulid_11_27\Dx11_LiesOfP\Framework_DX11\Client\Private\UIPage_Play.cpp"
+
+
+#include "D:\TeamProject\Bulid\NewBulid_11_27\Dx11_LiesOfP\Framework_DX11\Client\Private\UIPage_Skill.cpp"
+
+
+#include "D:\TeamProject\Bulid\NewBulid_11_27\Dx11_LiesOfP\Framework_DX11\Client\Private\UIPage_Stat.cpp"
+
+
+#include "D:\TeamProject\Bulid\NewBulid_11_27\Dx11_LiesOfP\Framework_DX11\Client\Private\UIPage_ItemInfo.cpp"
+
+
+#include "D:\TeamProject\Bulid\NewBulid_11_27\Dx11_LiesOfP\Framework_DX11\Client\Private\UIRender_Batching.cpp"
+
+
+#include "D:\TeamProject\Bulid\NewBulid_11_27\Dx11_LiesOfP\Framework_DX11\Client\Private\UIRender_Client.cpp"
+
+
+#include "D:\TeamProject\Bulid\NewBulid_11_27\Dx11_LiesOfP\Framework_DX11\Client\Private\WallDeco.cpp"
+
+
+#include "D:\TeamProject\Bulid\NewBulid_11_27\Dx11_LiesOfP\Framework_DX11\Client\Private\Weapon.cpp"
+
+
+#include "D:\TeamProject\Bulid\NewBulid_11_27\Dx11_LiesOfP\Framework_DX11\Client\Private\Weapon_FlameSword.cpp"
+
+
+#include "D:\TeamProject\Bulid\NewBulid_11_27\Dx11_LiesOfP\Framework_DX11\Client\Private\Weapon_Rapier.cpp"
+
+
+#include "D:\TeamProject\Bulid\NewBulid_11_27\Dx11_LiesOfP\Framework_DX11\Client\Private\Weapon_Scissor.cpp"
+
+
+#include "D:\TeamProject\Bulid\NewBulid_11_27\Dx11_LiesOfP\Framework_DX11\Client\Private\Weapon_Scissor_Blade.cpp"
+
+
+#include "D:\TeamProject\Bulid\NewBulid_11_27\Dx11_LiesOfP\Framework_DX11\Client\Private\Weapon_Scissor_Handle.cpp"
+
+
+#include "D:\TeamProject\Bulid\NewBulid_11_27\Dx11_LiesOfP\Framework_DX11\Client\Private\Weapon_SimonManus_Hammer.cpp"
+
+
+#include "D:\TeamProject\Bulid\NewBulid_11_27\Dx11_LiesOfP\Framework_DX11\Client\Default\Client.cpp"
+

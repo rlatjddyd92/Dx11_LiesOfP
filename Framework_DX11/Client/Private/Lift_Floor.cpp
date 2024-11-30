@@ -90,13 +90,9 @@ void CLift_Floor::Update(_float fTimeDelta)
 	if (m_fCollisonTimer > 2.f)
 	{
 		Close_Door();
-		//m_bArrive = false;
 		m_fCollisonTimer = 0.f;
 		m_bCollid = false;
 	}
-
-
-
 
 	m_pRigidBodyCom->Update(fTimeDelta);
 
@@ -223,7 +219,8 @@ HRESULT CLift_Floor::Ready_Components(OBJECT_DEFAULT_DESC* pDesc)
 	/* For.Com_Collider */
 	CBounding_OBB::BOUNDING_OBB_DESC			ColliderDesc{};
 	ColliderDesc.vExtents = _float3(2.f, 1.f, 2.f);
-	ColliderDesc.vAngles = _float3(0.f, XMConvertToRadians(pDesc->vRotation.y),0.f);
+	ColliderDesc.vAngles = _float3(0.f, 0.f,0.f);
+	ColliderDesc.vCenter = _float3(0.f, 0.5f, 0.f);
 
 	if (FAILED(__super::Add_Component(LEVEL_STATIC, TEXT("Prototype_Component_Collider_OBB"),
 		TEXT("Com_Collider"), reinterpret_cast<CComponent**>(&m_pColliderCom), &ColliderDesc)))
@@ -236,6 +233,7 @@ HRESULT CLift_Floor::Ready_Components(OBJECT_DEFAULT_DESC* pDesc)
 	RigidBodyDesc.isGravity = false;
 	RigidBodyDesc.pOwnerTransform = m_pTransformCom;
 	RigidBodyDesc.pOwnerNavigation = nullptr;
+	RigidBodyDesc.vOffset = _Vec3(0.f, -0.15f, 0.f);
 
 	RigidBodyDesc.pOwner = this;
 	RigidBodyDesc.fStaticFriction = 0.f;

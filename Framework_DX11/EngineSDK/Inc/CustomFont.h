@@ -25,6 +25,9 @@ private:
 	SpriteBatch*				m_pBatch = { nullptr };
 	SpriteFont*					m_pFont = { nullptr };
 
+	ID3D11BlendState*			m_pBlendState = { nullptr };
+	ID3D11SamplerState*			m_pSamplerState = { nullptr };
+
 public:
 	static CCustomFont* Create(ID3D11Device* pDevice, ID3D11DeviceContext* pContext, const _tchar* pFontFilePath);
 	virtual void Free() override;

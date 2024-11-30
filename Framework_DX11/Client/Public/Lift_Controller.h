@@ -48,7 +48,6 @@ private:
 
 	_float fActiveTimer = { 0.f };
 
-	CGameObject* m_pPlayer = { nullptr };
 	class CLift_Floor* m_pLift_Floor = { nullptr };
 
 private:

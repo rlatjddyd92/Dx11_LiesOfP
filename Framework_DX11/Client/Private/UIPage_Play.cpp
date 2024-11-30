@@ -142,6 +142,9 @@ HRESULT CUIPage_Play::Render_PlayInfo(CUIRender_Client* pRender_Client)
 
 void CUIPage_Play::Action_Potion_Tool(_float fTimeDelta)
 {
+	/*if (GET_GAMEINTERFACE->Get_InvenLock())
+		return;*/
+
 	if ((!m_bIsBagOpen) && (KEY_TAP(KEY::T)))
 	{
 		if (m_vec_Group_Ctrl[_int(PART_GROUP::GROUP_SELECT_CELL)]->fRatio != 0.f)
@@ -204,24 +207,19 @@ void CUIPage_Play::Action_Potion_Tool(_float fTimeDelta)
 
 void CUIPage_Play::Action_Arm(_float fTimeDelta)
 {
-	if (KEY_TAP(KEY::CTRL))
-		GET_GAMEINTERFACE->UseItem_Equip(EQUIP_SLOT::EQUIP_RESION_ARM);
+	// 무기 조작은 플레이어로 
 }
 
 void CUIPage_Play::Action_Weapon(_float fTimeDelta)
 {
+	/*if (GET_GAMEINTERFACE->Get_InvenLock())
+		return;*/
+
 	if (KEY_TAP(KEY::TAPKEY))
 	{
 		GET_GAMEINTERFACE->Change_Weapon();
 	}
-	else if ((KEY_HOLD(KEY::LSHIFT)) && (KEY_TAP(KEY::F)))
-	{
-		// 무기 별 페이블 아츠 구현할 것 
-	}
-	else if (KEY_TAP(KEY::F))
-	{
-		// 무기 별 페이블 아츠 구현할 것 
-	}
+	
 }
 
 _bool CUIPage_Play::Action_InterAction(_wstring strInterName)
@@ -425,6 +423,9 @@ void CUIPage_Play::LD_Arm_Update(_float fTimeDelta)
 {
 	const CItem_Manager::ITEM* pNow = GET_GAMEINTERFACE->Get_Equip_Item_Info(EQUIP_SLOT::EQUIP_RESION_ARM);
 
+	if (pNow == nullptr)
+		return;
+
 	__super::Get_Front_Part_In_Control(_int(PART_GROUP::GROUP_ARM_NAME))->strText = pNow->strName;
 	__super::Get_Front_Part_In_Control(_int(PART_GROUP::GROUP_ARM_TEX))->iTexture_Index = pNow->iItem_Index;
 	__super::Get_Front_Part_In_Control(_int(PART_GROUP::GROUP_ARM_GAUGE_FILL))->fRatio = GET_GAMEINTERFACE->Get_Arm_Gauge_Ratio();
@@ -432,19 +433,47 @@ void CUIPage_Play::LD_Arm_Update(_float fTimeDelta)
 
 void CUIPage_Play::RU_Coin_Update(_float fTimeDelta)
 {
-	__super::Get_Front_Part_In_Control(_int(PART_GROUP::GROUP_COIN_COUNT))->strText = to_wstring(GET_GAMEINTERFACE->Get_Coin());
+	__super::Get_Front_Part_In_Control(_int(PART_GROUP::GROUP_COIN_COUNT))->strText = to_wstring(GET_GAMEINTERFACE->Get_Player()->Get_Player_Stat().iErgo);
 }
 
 void CUIPage_Play::RD_Weapon_Update(_float fTimeDelta)
 {
 	const CItem_Manager::ITEM* pNowBlade = GET_GAMEINTERFACE->Get_Now_Equip_Weapon_Blade();
 	const CItem_Manager::ITEM* pNowHandle = GET_GAMEINTERFACE->Get_Now_Equip_Weapon_Handle();
+
+	_bool bIsEnmpty = false;
+
+	if (pNowBlade == nullptr)
+		bIsEnmpty = true;
+	else if ((pNowHandle == nullptr) && (pNowBlade->bModule_Weapon))
+		bIsEnmpty = true;
+
+	if (bIsEnmpty)
+	{
+		__super::Array_Control(_int(PART_GROUP::GROUP_WEAPON_NORMAL_BACK), _int(PART_GROUP::GROUP_WEAPON_NORMAL_HANDLE), CTRL_COMMAND::COM_RENDER, true);
+		__super::Array_Control(_int(PART_GROUP::GROUP_WEAPON_SPECIAL_BACK), _int(PART_GROUP::GROUP_WEAPON_SPECIAL_TEX), CTRL_COMMAND::COM_RENDER, false);
+		m_vecPart[m_vec_Group_Ctrl[_int(PART_GROUP::GROUP_WEAPON_EQUIP_NUM)]->PartIndexlist.front()]->iTexture_Index = -1;
+		__super::Array_Control(_int(PART_GROUP::GROUP_WEAPON_GAUGE_LEFT_SYMBOL), _int(PART_GROUP::GROUP_WEAPON_GAUGE_RIGHT_KEYSET_B), CTRL_COMMAND::COM_RENDER, false);
+
+		return;
+	}
+
 	_int iSelect = GET_GAMEINTERFACE->Get_Weapon();
 	_bool bNormal = pNowBlade->bModule_Weapon;
 
 	__super::Array_Control(_int(PART_GROUP::GROUP_WEAPON_NORMAL_BACK), _int(PART_GROUP::GROUP_WEAPON_NORMAL_HANDLE), CTRL_COMMAND::COM_RENDER, bNormal);
 	__super::Array_Control(_int(PART_GROUP::GROUP_WEAPON_SPECIAL_BACK), _int(PART_GROUP::GROUP_WEAPON_SPECIAL_TEX), CTRL_COMMAND::COM_RENDER, !bNormal);
 	m_vecPart[m_vec_Group_Ctrl[_int(PART_GROUP::GROUP_WEAPON_EQUIP_NUM)]->PartIndexlist.front()]->iTexture_Index = m_iWeapon_Equip_0_Symbol + iSelect;
+
+	if (bNormal)
+	{
+		m_vecPart[m_vec_Group_Ctrl[_int(PART_GROUP::GROUP_WEAPON_NORMAL_BLADE)]->PartIndexlist.front()]->iTexture_Index = pNowBlade->iTexture_Index;
+		m_vecPart[m_vec_Group_Ctrl[_int(PART_GROUP::GROUP_WEAPON_NORMAL_HANDLE)]->PartIndexlist.front()]->iTexture_Index = pNowHandle->iTexture_Index;
+	}
+	else
+	{
+		m_vecPart[m_vec_Group_Ctrl[_int(PART_GROUP::GROUP_WEAPON_SPECIAL_TEX)]->PartIndexlist.front()]->iTexture_Index = pNowBlade->iTexture_Index;
+	}
 
 	_bool bSingle_Cell_Blade = pNowBlade->iFable_Art_Cost ? 1 : true;
 

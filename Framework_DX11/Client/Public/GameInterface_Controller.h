@@ -45,7 +45,10 @@ public: // 외부에서 매니저 접근
 
 	void Input_Player_Pointer(const CPlayer* pPointer) { m_pPlayer = pPointer; }
 
+	// 플레이어 정보 
 	const CPlayer* Get_Player() { return m_pPlayer; }
+	//_bool Get_InvenLock() { return m_pPlayer->Get_Player_Stat().m_bInvenLock; }
+
 
 #pragma endregion
 
@@ -106,6 +109,20 @@ public: // 외부에서 매니저 접근
 	// 로딩바 조정 
 	void Set_Loading_Status(_wstring strMessage, _float fProgress) { m_pUIManager->Set_Loading_Status(strMessage, fProgress); }
 
+	// 아이템 관련 UI 조작 
+	void Show_Focus(_Vec2 vItemCellPos, _Vec2 vItemCellSize) { m_pUIManager->Show_Focus(vItemCellPos, vItemCellSize); }
+	void Off_Focus() { m_pUIManager->Off_Focus(); }
+
+	void Show_NewMark(_Vec2 vItemCellPos, _Vec2 vItemCellSize) { m_pUIManager->Show_NewMark(vItemCellPos, vItemCellSize); }
+
+	void Show_ItemAction(_Vec2 vItemCellPos, _Vec2 vItemCellSize, ITEM_FUNC eFunc0, ITEM_FUNC eFunc1 = ITEM_FUNC::FUNC_END, ITEM_FUNC eFunc2 = ITEM_FUNC::FUNC_END, ITEM_FUNC eFunc3 = ITEM_FUNC::FUNC_END)
+	{
+		m_pUIManager->Show_ItemAction(vItemCellPos, vItemCellSize, eFunc0, eFunc1, eFunc2, eFunc3);
+	}
+	void Off_ItemAction() { m_pUIManager->Off_ItemAction(); }
+
+	void Off_ItemInfo_UI() { m_pUIManager->Off_ItemInfo_UI(); }
+
 #pragma endregion
 
 
@@ -133,6 +150,8 @@ public: // 외부에서 매니저 접근
 
 	const CItem_Manager::ITEM* Get_Equip_Item_Info(EQUIP_SLOT eSlot) { return m_pItem_Manager->Get_Equip_Item_Info(eSlot); } // 현재 장비창에 장착된 아이템의 정보 레퍼런스 획득
 
+	const CItem_Manager::EQUIP* Get_Equip_Slot_Info(EQUIP_SLOT eSlot) { return m_pItem_Manager->Get_Equip_Slot_Info(eSlot); }
+
 	// 코인
 	ITEM_RESULT Add_Coin(_int iAdd, _bool bForce) { return m_pItem_Manager->Add_Coin(iAdd, bForce); }
 	_int Get_Coin() { return m_pItem_Manager->Get_Coin(); }
@@ -159,6 +178,13 @@ public: // 외부에서 매니저 접근
 	// 리전 암 관련
 	void Add_Arm_Gauge(_float fAdd) { m_pItem_Manager->Add_Arm_Gauge(fAdd); }
 	_float Get_Arm_Gauge_Ratio() { return m_pItem_Manager->Get_Arm_Gauge_Ratio(); }
+
+
+	// New 관련 
+	_int Get_IsNew(INVEN_ARRAY_TYPE eType, _int iIndex) { m_pItem_Manager->Get_IsNew(eType, iIndex); }
+	void Set_IsNew(INVEN_ARRAY_TYPE eType, _int iIndex, _bool IsNew) { m_pItem_Manager->Set_IsNew(eType, iIndex, IsNew); }
+	void Set_IsNew_Show(INVEN_ARRAY_TYPE eType, _int iIndex) { m_pItem_Manager->Set_IsNew_Show(eType, iIndex); }
+	void Set_Show_NewMark_Off() { m_pItem_Manager->Set_Show_NewMark_Off(); }
 
 #pragma endregion
 

@@ -61,6 +61,9 @@ void CRigidBody::Update(_float fTimeDelta)
 		PxVec3 vPxPlayerPos = PlayerPxTransform.p;
 		_Vec3 vPos = _Vec3(vPxPlayerPos.x, vPxPlayerPos.y, vPxPlayerPos.z);
 
+		PlayerPxTransform.p = PlayerPxTransform.p;
+		m_PxActor->setGlobalPose(PlayerPxTransform);
+
 		if (m_isLockCell && !m_pOwnerNavigation->isMove(vPos + m_vVelocity * fTimeDelta))
 		{
 			pRigidDynamic->setLinearVelocity(PxVec3(0.f, 0.f, 0.f));
@@ -83,17 +86,18 @@ void CRigidBody::Update(_float fTimeDelta)
 		PlayerPxTransform = pRigidDynamic->getGlobalPose();
 		vPxPlayerPos = PlayerPxTransform.p;
 
-		m_pOwnerTransform->Set_State(CTransform::STATE_POSITION, _Vec3(vPxPlayerPos.x, vPxPlayerPos.y, vPxPlayerPos.z));
-
 		if (m_isOnCell)
 		{
 			vPxPlayerPos.y = m_pOwnerNavigation->SetUp_OnCell(m_pOwnerTransform, 0.f, fTimeDelta);
 		}
-
-		PlayerPxTransform.p = vPxPlayerPos;
 		pRigidDynamic->setGlobalPose(PlayerPxTransform);
 
 		m_pOwnerTransform->Set_State(CTransform::STATE_POSITION, _Vec3(vPxPlayerPos.x, vPxPlayerPos.y, vPxPlayerPos.z));
+
+		PlayerPxTransform.p = PlayerPxTransform.p;
+		m_PxActor->setGlobalPose(PlayerPxTransform);
+
+
 	}
 	else
 	{
@@ -144,7 +148,11 @@ void CRigidBody::Set_Gravity(_bool isGravity)
 
 void CRigidBody::Set_Kinematic(_bool isKinematic)
 {
-	static_cast<PxRigidDynamic*>(m_PxActor)->setRigidBodyFlag(PxRigidBodyFlag::eKINEMATIC, isKinematic);
+	if (isKinematic)
+		m_PxScene->removeActor(*m_PxActor);
+	/*static_cast<PxRigidDynamic*>(m_PxActor)->setRigidBodyFlag(PxRigidBodyFlag::eKINEMATIC, isKinematic);
+	m_PxShape->setFlag(PxShapeFlag::eTRIGGER_SHAPE, isKinematic);
+	m_PxShape->setFlag(PxShapeFlag::eSIMULATION_SHAPE, !isKinematic);*/
 }
 
 HRESULT CRigidBody::Add_PxActor(RIGIDBODY_DESC* pDesc)
@@ -152,6 +160,13 @@ HRESULT CRigidBody::Add_PxActor(RIGIDBODY_DESC* pDesc)
 	PxPhysics* pPhysx = m_pGameInstance->Get_PhysX();
 
 	PxTransform Transform = ConvertToPxTransform((_Vec3)m_pOwnerTransform->Get_State(CTransform::STATE_POSITION), m_pOwnerTransform->Get_Quaternion());
+
+	//if (pDesc->isCapsule)
+	//{
+	//	PxQuat qq = PxQuat(PxPiDivTwo, PxVec3(0.0f, 0.0f, 1.0f)); // Z축 기준으로 90도 회전
+	//	Transform.q = qq;
+	//}
+
 	if (m_isStatic)
 	{
 		m_PxActor = pPhysx->createRigidStatic(Transform);
@@ -164,10 +179,11 @@ HRESULT CRigidBody::Add_PxActor(RIGIDBODY_DESC* pDesc)
 			m_PxActor->setActorFlag(PxActorFlag::eDISABLE_GRAVITY, true);
 		}
 	}
+#ifdef _DEBUG
 	m_PxActor->setActorFlag(PxActorFlag::eVISUALIZATION, true);
+#endif
 	static_cast<PxRigidDynamic*>(m_PxActor)->setRigidDynamicLockFlags(pDesc->PxLockFlags);
 
-	m_PxActor->setActorFlag(PxActorFlag::eDISABLE_GRAVITY, true);
 	m_PxMaterial = pPhysx->createMaterial(pDesc->fStaticFriction, pDesc->fDynamicFriction, pDesc->fRestituion);
 
 	return S_OK;
@@ -177,7 +193,11 @@ HRESULT CRigidBody::Add_PxGeometry(RIGIDBODY_DESC* pDesc)
 {
 	PxPhysics* pPhysx = m_pGameInstance->Get_PhysX();
 
-	PxShapeFlags eShapeFlags = PxShapeFlag::eSIMULATION_SHAPE | PxShapeFlag::eVISUALIZATION;
+	PxShapeFlags eShapeFlags = PxShapeFlag::eSIMULATION_SHAPE ;
+
+#ifdef _DEBUG
+	eShapeFlags = eShapeFlags | PxShapeFlag::eVISUALIZATION;
+#endif
 
 	physX::Geometry* pGeometry = pDesc->pGeometry;
 
@@ -187,18 +207,44 @@ HRESULT CRigidBody::Add_PxGeometry(RIGIDBODY_DESC* pDesc)
 	{
 		physX::GeometryCapsule* CapsuleGeometry = static_cast<physX::GeometryCapsule*>(pGeometry);
 		m_PxShape = pPhysx->createShape(PxCapsuleGeometry(CapsuleGeometry->fRadius, CapsuleGeometry->fHeight * 0.5f), *m_PxMaterial, false, eShapeFlags);
+
+		PxVec3 newPosition(CapsuleGeometry->fHeight * 0.5f, 0.f, 0.f); // 캡슐의 새로운 로컬 위치
+		PxQuat newRotation(PxIdentity);        // 기본 회전 (필요에 따라 수정)
+
+		PxTransform newLocalPose(newPosition, newRotation);
+
+		PxTransform Transform = m_PxActor->getGlobalPose();
+
+		if (pDesc->isCapsule)
+		{
+			PxQuat qq = PxQuat(PxPiDivTwo, PxVec3(0.0f, 0.0f, 1.0f)); // Z축 기준으로 90도 회전
+			Transform.q = qq;
+			m_vOffset = { 0.f,CapsuleGeometry->fHeight , 0.f };
+		}
+
+		m_PxActor->setGlobalPose(Transform);
+
+		m_PxShape->setLocalPose(newLocalPose);
 	}
 	break;
 	case physX::PX_SPHERE:
 	{
+		//PlayerPxTransform = PxTransformFromSegment(PlayerPxTransform.p, PlayerPxTransform.p + PxVec3(0.f, 1.f, 0.f) * 1.5f);
 		physX::GeometrySphere* SphereGeometry = static_cast<physX::GeometrySphere*>(pGeometry);
 		m_PxShape = pPhysx->createShape(PxSphereGeometry(SphereGeometry->fRadius), *m_PxMaterial, false, eShapeFlags);
+
 	}
 	break;
 	case physX::PX_BOX:
 	{
 		physX::GeometryBox* BoxGeometry = static_cast<physX::GeometryBox*>(pGeometry);
 		m_PxShape = pPhysx->createShape(PxBoxGeometry(BoxGeometry->vSize.x * 0.5f, BoxGeometry->vSize.y * 0.5f, BoxGeometry->vSize.z * 0.5f), *m_PxMaterial, false, eShapeFlags);
+
+		PxVec3 newPosition(pDesc->vOffset.y, pDesc->vOffset.y, pDesc->vOffset.y); // 캡슐의 새로운 로컬 위치
+		PxQuat newRotation(PxIdentity);        // 기본 회전 (필요에 따라 수정)
+
+		PxTransform newLocalPose(newPosition, newRotation);
+		m_PxShape->setLocalPose(newLocalPose);
 	}
 	break;
 	case physX::PX_MODEL:
