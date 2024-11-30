@@ -139,9 +139,19 @@ void CState_SimonManusP1_Stamp::Collider_Check(_double CurTrackPos)
 
 void CState_SimonManusP1_Stamp::Effect_Check(_double CurTrackPos)
 {
-    if (m_iRouteTrack == 1)
+    if (m_iRouteTrack == 0)
     {
-        if ((CurTrackPos >= 40.f && CurTrackPos <= 80.f))
+        _float fTime{};
+        if (m_iCurStartAnim == AN_STAMP_MOVE)
+        {
+            fTime = 94.f;
+        }
+        else
+        {
+            fTime = 70.f;
+        }
+
+        if ((CurTrackPos >= fTime && CurTrackPos <= fTime + 10.f))
         {
             if (!m_pMonster->Get_EffectsLoop(CSimonManus::P1_STAMP))
             {
@@ -151,6 +161,12 @@ void CState_SimonManusP1_Stamp::Effect_Check(_double CurTrackPos)
         else
         {
             m_pMonster->DeActive_Effect(CSimonManus::P1_STAMP);
+        }
+    }
+    else if (m_iRouteTrack == 1)
+    {
+        if (CurTrackPos > 80.f)
+        {
             m_pMonster->DeActive_Effect(CSimonManus::P1_CHARGESTAMP);
         }
 
@@ -161,9 +177,9 @@ void CState_SimonManusP1_Stamp::Effect_Check(_double CurTrackPos)
                 m_bBlast = true;
                 CAttackObject::ATKOBJ_DESC Desc;
                 _float4x4 WorldMat{};
-                XMStoreFloat4x4(&WorldMat, *m_pMonster->Get_WeaponWorldMat());
+                XMStoreFloat4x4(&WorldMat, (*m_pMonster->Get_WeaponBoneCombinedMat(6) * (*m_pMonster->Get_WeaponWorldMat())));
                 Desc.vPos = _Vec3{ WorldMat ._41, WorldMat._42, WorldMat._43 };
-                XMVector3TransformCoord(Desc.vPos, *m_pMonster->Get_WeaponBoneCombinedMat(6));
+                
                 m_pGameInstance->Add_CloneObject_ToLayer(LEVEL_GAMEPLAY, TEXT("Monster_Attack"), TEXT("Prototype_GameObject_StampBlast"), &Desc);
             }
         }

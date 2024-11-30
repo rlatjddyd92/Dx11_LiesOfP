@@ -26,9 +26,12 @@ public:
 private:
     class CMonster* m_pMonster = { nullptr };
 
+    _bool           m_bChargeSwing = { true };
+
 private:
     _bool               End_Check();
-    void                Collider_Check();
+    void                Collider_Check(_double CurTrackPos);
+    void                Effect_Check(_double CurTrackPos);
 
 public:
     static CState_SimonManusP1_Charge_SwingDown* Create(class CFsm* pFsm, class CMonster* pMonster, _uint iStateNum, void* pArg = nullptr);

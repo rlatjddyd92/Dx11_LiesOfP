@@ -170,6 +170,7 @@
     <Text Include="ReadMe.txt" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="..\Public\AObj_ChargeSwing.h" />
     <ClInclude Include="..\Public\AObj_StampBlast.h" />
     <ClInclude Include="..\Public\AttackObject.h" />
     <ClInclude Include="..\public\BackGround.h" />
@@ -321,6 +322,7 @@
     <ClInclude Include="..\Public\State_SimonManusP2_Route1.h" />
     <ClInclude Include="..\Public\State_SimonManusP2_Route2.h" />
     <ClInclude Include="..\Public\State_SimonManusP2_Run.h" />
+    <ClInclude Include="..\Public\State_SimonManusP2_SlideMagic.h" />
     <ClInclude Include="..\Public\State_SimonManusP2_SpreadMagic.h" />
     <ClInclude Include="..\Public\State_SimonManusP2_Stamp.h" />
     <ClInclude Include="..\Public\State_SimonManusP2_Sting.h" />
@@ -376,6 +378,7 @@
     <ClInclude Include="UI_Enum.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="..\Private\AObj_ChargeSwing.cpp" />
     <ClCompile Include="..\Private\AObj_StampBlast.cpp" />
     <ClCompile Include="..\Private\AttackObject.cpp" />
     <ClCompile Include="..\private\BackGround.cpp" />
@@ -526,6 +529,7 @@
     <ClCompile Include="..\Private\State_SimonManusP2_Route1.cpp" />
     <ClCompile Include="..\Private\State_SimonManusP2_Route2.cpp" />
     <ClCompile Include="..\Private\State_SimonManusP2_Run.cpp" />
+    <ClCompile Include="..\Private\State_SimonManusP2_SlideMagic.cpp" />
     <ClCompile Include="..\Private\State_SimonManusP2_SpreadMagic.cpp" />
     <ClCompile Include="..\Private\State_SimonManusP2_Stamp.cpp" />
     <ClCompile Include="..\Private\State_SimonManusP2_Sting.cpp" />

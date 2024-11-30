@@ -746,6 +746,11 @@ _vector CModel::Finish_Update_Anim()
 	if (m_isEnd_Animations[m_iCurrentAnimIndex])
 	{
 		m_vRootMoveStack = m_vCurRootMove = _vector{0, 0, 0, 1};
+
+		if (m_iCurrentAnimIndex == m_iCurrentAnimIndex_Boundary)
+		{
+			m_isEnd_Animations_Boundary[m_iCurrentAnimIndex_Boundary] = true;
+		}
 	}
 
 	if (XMVectorGetX(XMVector3Length(m_vRootMoveStack)) == 0
@@ -761,19 +766,6 @@ _vector CModel::Finish_Update_Anim()
 	}
 
 
-
-	//for (_int i = 0; i < m_Bones.size(); ++i)
-	//{
-	//	if (i == 560 || i ==756)
-	//	{
-	//		m_Bones[i]->Apply_SaveCombined();
-	//	}
-	//	else
-	//	{
-	//		m_Bones[i]->Update_CombinedTransformationMatrix(m_Bones, XMLoadFloat4x4(&m_PreTransformMatrix));
-	//
-	//	}
-	//}
 
 	/* 모든 뼈가 가지고 있는 m_CombinedTransformationMatrix를 갱신한다. */
 	for (auto& pBone : m_Bones)

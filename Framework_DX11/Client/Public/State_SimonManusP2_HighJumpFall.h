@@ -33,6 +33,7 @@ private:
     _float              m_fGoalRimAlpha = {};
 
     _bool               m_bResetRim = { false };
+    _bool               m_bStartSpot = { true };
 
 private:
     _bool               End_Check();

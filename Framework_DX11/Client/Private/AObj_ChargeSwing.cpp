@@ -1,26 +1,26 @@
 #include "stdafx.h"
-#include "AObj_StampBlast.h"
+#include "AObj_ChargeSwing.h"
 
 #include "GameInstance.h"
 
 #include "Effect_Manager.h"
 
-CAObj_StampBlast::CAObj_StampBlast(ID3D11Device* pDevice, ID3D11DeviceContext* pContext)
+CAObj_ChargeSwing::CAObj_ChargeSwing(ID3D11Device* pDevice, ID3D11DeviceContext* pContext)
     : CAttackObject{ pDevice, pContext }
 {
 }
 
-CAObj_StampBlast::CAObj_StampBlast(const CAObj_StampBlast& Prototype)
+CAObj_ChargeSwing::CAObj_ChargeSwing(const CAObj_ChargeSwing& Prototype)
     : CAttackObject{ Prototype }
 {
 }
 
-HRESULT CAObj_StampBlast::Initialize_Prototype()
+HRESULT CAObj_ChargeSwing::Initialize_Prototype()
 {
     return S_OK;
 }
 
-HRESULT CAObj_StampBlast::Initialize(void* pArg)
+HRESULT CAObj_ChargeSwing::Initialize(void* pArg)
 {
     GAMEOBJECT_DESC GameObjDesc{};
     if (FAILED(__super::Initialize(&GameObjDesc)))
@@ -29,11 +29,11 @@ HRESULT CAObj_StampBlast::Initialize(void* pArg)
     ATKOBJ_DESC* pDesc = static_cast<ATKOBJ_DESC*>(pArg);
 
     m_pTransformCom->Set_State(CTransform::STATE_POSITION, pDesc->vPos);
-    
+
     if (FAILED(Ready_Components()))
         return E_FAIL;
 
-    m_fDamageAmount = 20.f;
+    m_fDamageAmount = 30.f;
     m_fLifeDuration = 0.6f;
     m_pColliderCom->IsActive(true);
 
@@ -42,12 +42,12 @@ HRESULT CAObj_StampBlast::Initialize(void* pArg)
     return S_OK;
 }
 
-void CAObj_StampBlast::Priority_Update(_float fTimeDelta)
+void CAObj_ChargeSwing::Priority_Update(_float fTimeDelta)
 {
     m_pEffect->Priority_Update(fTimeDelta);
 }
 
-void CAObj_StampBlast::Update(_float fTimeDelta)
+void CAObj_ChargeSwing::Update(_float fTimeDelta)
 {
     if (m_fLifeTime >= m_fLifeDuration)
     {
@@ -70,7 +70,7 @@ void CAObj_StampBlast::Update(_float fTimeDelta)
     m_pEffect->Update(fTimeDelta);
 }
 
-void CAObj_StampBlast::Late_Update(_float fTimeDelta)
+void CAObj_ChargeSwing::Late_Update(_float fTimeDelta)
 {
     m_pEffect->Late_Update(fTimeDelta);
     if (m_fLifeTime < m_fLifeDuration)
@@ -80,7 +80,7 @@ void CAObj_StampBlast::Late_Update(_float fTimeDelta)
     }
 }
 
-HRESULT CAObj_StampBlast::Render()
+HRESULT CAObj_ChargeSwing::Render()
 {
     //if (FAILED(__super::Render()))
     //    return E_FAIL;
@@ -88,7 +88,7 @@ HRESULT CAObj_StampBlast::Render()
     return S_OK;
 }
 
-HRESULT CAObj_StampBlast::Render_LightDepth()
+HRESULT CAObj_ChargeSwing::Render_LightDepth()
 {
     //if (FAILED(__super::Render_LightDepth()))
     //    return E_FAIL;
@@ -96,7 +96,7 @@ HRESULT CAObj_StampBlast::Render_LightDepth()
     return S_OK;
 }
 
-void CAObj_StampBlast::OnCollisionEnter(CGameObject* pOther)
+void CAObj_ChargeSwing::OnCollisionEnter(CGameObject* pOther)
 {
     //pOther check
     if (pOther->Get_Tag() == TEXT("Player"))
@@ -119,15 +119,15 @@ void CAObj_StampBlast::OnCollisionEnter(CGameObject* pOther)
     }
 }
 
-void CAObj_StampBlast::OnCollisionStay(CGameObject* pOther)
+void CAObj_ChargeSwing::OnCollisionStay(CGameObject* pOther)
 {
 }
 
-void CAObj_StampBlast::OnCollisionExit(CGameObject* pOther)
+void CAObj_ChargeSwing::OnCollisionExit(CGameObject* pOther)
 {
 }
 
-HRESULT CAObj_StampBlast::Ready_Components()
+HRESULT CAObj_ChargeSwing::Ready_Components()
 {
     if (FAILED(__super::Ready_Components()))
         return E_FAIL;
@@ -135,7 +135,7 @@ HRESULT CAObj_StampBlast::Ready_Components()
     /* FOR.Com_Collider */
     CBounding_Sphere::BOUNDING_SPHERE_DESC      ColliderDesc{};
     ColliderDesc.vCenter = _float3(0.f, 0.f, 0.f);
-    ColliderDesc.fRadius = 3.f;
+    ColliderDesc.fRadius = 3.5f;
 
     if (FAILED(__super::Add_Component(LEVEL_STATIC, TEXT("Prototype_Component_Collider_Sphere"),
         TEXT("Com_Collider"), reinterpret_cast<CComponent**>(&m_pColliderCom), &ColliderDesc)))
@@ -144,7 +144,7 @@ HRESULT CAObj_StampBlast::Ready_Components()
 
     const _Matrix* pParetnMatrix = m_pTransformCom->Get_WorldMatrix_Ptr();
 
-    m_pEffect = CEffect_Manager::Get_Instance()->Clone_Effect(TEXT("SimonManus_Attack_ChargeStamp2"), pParetnMatrix,
+    m_pEffect = CEffect_Manager::Get_Instance()->Clone_Effect(TEXT("SimonManus_Attack_ChargeSwing"), pParetnMatrix,
         nullptr, _Vec3(0.f, 0.f, 0.f), _Vec3(0.f, 0.f, 0.f), _Vec3(1.f, 1.f, 1.f));
 
     m_pEffect->Set_Loop(true);
@@ -152,33 +152,33 @@ HRESULT CAObj_StampBlast::Ready_Components()
     return S_OK;
 }
 
-CAObj_StampBlast* CAObj_StampBlast::Create(ID3D11Device* pDevice, ID3D11DeviceContext* pContext)
+CAObj_ChargeSwing* CAObj_ChargeSwing::Create(ID3D11Device* pDevice, ID3D11DeviceContext* pContext)
 {
-    CAObj_StampBlast* pInstance = new CAObj_StampBlast(pDevice, pContext);
+    CAObj_ChargeSwing* pInstance = new CAObj_ChargeSwing(pDevice, pContext);
 
     if (FAILED(pInstance->Initialize_Prototype()))
     {
-        MSG_BOX(TEXT("Failed to Created : CAObj_StampBlast"));
+        MSG_BOX(TEXT("Failed to Created : CAObj_ChargeSwing"));
         Safe_Release(pInstance);
     }
 
     return pInstance;
 }
 
-CGameObject* CAObj_StampBlast::Clone(void* pArg)
+CGameObject* CAObj_ChargeSwing::Clone(void* pArg)
 {
-    CAObj_StampBlast* pInstance = new CAObj_StampBlast(*this);
+    CAObj_ChargeSwing* pInstance = new CAObj_ChargeSwing(*this);
 
     if (FAILED(pInstance->Initialize(pArg)))
     {
-        MSG_BOX(TEXT("Failed to Cloned : CAObj_StampBlast"));
+        MSG_BOX(TEXT("Failed to Cloned : CAObj_ChargeSwing"));
         Safe_Release(pInstance);
     }
 
     return pInstance;
 }
 
-void CAObj_StampBlast::Free()
+void CAObj_ChargeSwing::Free()
 {
     __super::Free();
 
