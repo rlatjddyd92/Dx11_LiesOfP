@@ -226,6 +226,12 @@
     <Filter Include="01.Utility\03.Components\VIBuffer\PhysX">
       <UniqueIdentifier>{3a7d30e3-ca7f-4a12-bf0f-00c17582e3a3}</UniqueIdentifier>
     </Filter>
+    <Filter Include="01.Utility\14.WorldOctree">
+      <UniqueIdentifier>{ffea218a-0f63-4128-a203-da02453e3685}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="01.Utility\14.WorldOctree\WorldOctree_Manager">
+      <UniqueIdentifier>{6263c43f-efb2-42e8-a988-b3eaa5e7d0de}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\Private\Base.cpp">
@@ -432,6 +438,12 @@
     <ClCompile Include="..\Private\EasyDrawSphere.cpp" />
     <ClCompile Include="..\Private\VIBuffer_PhysX.cpp">
       <Filter>01.Utility\03.Components\VIBuffer\PhysX</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Private\WorldOctree.cpp">
+      <Filter>01.Utility\14.WorldOctree</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Private\WorldOctree_Manager.cpp">
+      <Filter>01.Utility\14.WorldOctree\WorldOctree_Manager</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -660,6 +672,12 @@
     <ClInclude Include="..\Public\EasyDrawSphere.h" />
     <ClInclude Include="..\Public\VIBuffer_PhysX.h">
       <Filter>01.Utility\03.Components\VIBuffer\PhysX</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Public\WorldOctree.h">
+      <Filter>01.Utility\14.WorldOctree</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Public\WorldOctree_Manager.h">
+      <Filter>01.Utility\14.WorldOctree\WorldOctree_Manager</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

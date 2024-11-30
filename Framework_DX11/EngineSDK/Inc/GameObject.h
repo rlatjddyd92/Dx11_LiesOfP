@@ -61,6 +61,8 @@ public:
 
 	HRESULT Add_Component(const _wstring& strComponentTag, CComponent* pComponent);
 
+	void Add_WorldOctreeIndex(_int iIndex) { m_WorldOctreeIndex.push_back(iIndex); }
+
 protected:
 	ID3D11Device*				m_pDevice = { nullptr };
 	ID3D11DeviceContext*		m_pContext = { nullptr };
@@ -74,6 +76,8 @@ protected:
 	_bool						m_isDead = { false };
 
 	_wstring					m_strObjectTag = {};
+
+	vector<_int>				m_WorldOctreeIndex;					//물체가 포함된 WorldOctree cube의 인덱스
 
 protected:
 	map<const _wstring, class CComponent*>			m_Components;
