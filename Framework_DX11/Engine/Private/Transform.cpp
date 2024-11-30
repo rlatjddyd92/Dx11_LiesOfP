@@ -575,8 +575,6 @@ void CTransform::Set_NewLook(_Vec3 vNewLook)
 
 void CTransform::Orbit(_vector vAxis, _vector vCenter, _float fLimit, _float fDistance, _float fTimeDelta)
 {
-	Set_State(STATE_POSITION, vCenter);
-
 	_vector      vRight = Get_State(STATE_RIGHT);
 	_vector      vUp = Get_State(STATE_UP);
 	_vector      vLook = Get_State(STATE_LOOK);
@@ -588,6 +586,8 @@ void CTransform::Orbit(_vector vAxis, _vector vCenter, _float fLimit, _float fDi
 	_vector vNonY_MovedLook = XMVectorSetY(vMovedLook, 0.f);
 
 	_float fDot = XMVectorGetX(XMVector3Dot(XMVector3Normalize(vMovedLook), XMVector3Normalize(vNonY_MovedLook)));
+
+	_vector		vWorldUp = XMVectorSet(0.f, 1.f, 0.f, 0.f);
 
 	if (fDot < fLimit)
 		return;

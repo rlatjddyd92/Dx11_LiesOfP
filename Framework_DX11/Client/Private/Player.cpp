@@ -27,6 +27,7 @@
 #include "State_Player_ItemGet.h"
 #include "State_Player_Stargazer.h"
 #include "State_Player_Teleport.h"
+#include "State_Player_Grinder.h"
 
 #include "State_Player_OH_Idle.h"
 #include "State_Player_OH_Walk.h"
@@ -414,7 +415,7 @@ void CPlayer::LockOnOff()
 			_Vec3 vPlayerPos = m_pTransformCom->Get_State(CTransform::STATE_POSITION);
 
 			_float fLength = (vTargetPos - vPlayerPos).Length();
-			if (fLength < 7.f)
+			if (fLength < 20.f)
 			{
 				m_isLockOn = true;
 			}
@@ -589,6 +590,7 @@ HRESULT CPlayer::Ready_FSM()
 	m_pFsmCom->Add_State(CState_Player_ItemGet::Create(m_pFsmCom, this, ITEMGET, &Desc));
 	m_pFsmCom->Add_State(CState_Player_Stargazer::Create(m_pFsmCom, this, STARGAZER, &Desc));
 	m_pFsmCom->Add_State(CState_Player_Teleport::Create(m_pFsmCom, this, TELEPORT, &Desc));
+	m_pFsmCom->Add_State(CState_Player_Grinder::Create(m_pFsmCom, this, GRINDER, &Desc));
 
 	m_pFsmCom->Add_State(CState_Player_OH_Idle::Create(m_pFsmCom, this, OH_IDLE, &Desc));
 	m_pFsmCom->Add_State(CState_Player_OH_Walk::Create(m_pFsmCom, this, OH_WALK, &Desc)); 

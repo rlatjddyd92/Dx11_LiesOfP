@@ -162,6 +162,11 @@ _uint CPawn::Get_CurrentAnimIndex()
 	return m_pModelCom->Get_CurrentAnimationIndex();
 }
 
+_uint CPawn::Get_CurrentAnimIndex_Boundry()
+{
+	return m_pModelCom->Get_CurrentAnimationIndex_Boundary();
+}
+
 _int CPawn::Get_Frame()
 {
 	return m_pModelCom->Get_CurrentFrame();

@@ -84,6 +84,9 @@
 #include "D:\GitProject\Dx11_LiesOfP\Framework_DX11\Client\Private\State_Player_Chest.cpp"
 
 
+#include "D:\GitProject\Dx11_LiesOfP\Framework_DX11\Client\Private\State_Player_Grinder.cpp"
+
+
 #include "D:\GitProject\Dx11_LiesOfP\Framework_DX11\Client\Private\State_Player_ItemGet.cpp"
 
 

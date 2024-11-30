@@ -98,7 +98,7 @@ void CPlayerCamera::PlayerMove(_float fTimeDelta)
 
 	m_pTransformCom->Set_State(CTransform::STATE_POSITION, vNewPos);
 
-	//m_pTransformCom->LookAt(vPlayerPos);
+	m_pTransformCom->LookAt(vPlayerPos);
 }
 
 void CPlayerCamera::PlayerLockOn(_float fTimeDelta)

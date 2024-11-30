@@ -10,22 +10,7 @@
 CMainApp::CMainApp()
 	: m_pGameInstance { CGameInstance::Get_Instance() }
 {
-	
-	/* 내가 레퍼런스 카운트를 증가시키는 시점 : */
-	/* 원래 보관하기위한 포인터에 저장을 할때는 증가시키지 않는다. */
-	/* 원래 보관된 위치에 있던 주소를 다른 포인터형변수에 저장을 하게되면 이때는 증가시킨다. */
 	Safe_AddRef(m_pGameInstance);	
-
-	//D3D11_RASTERIZER_DESC		RSDesc;
-	//m_pContext->RSSetState(pRSState);
-
-	//D3D11_DEPTH_STENCIL_DESC	DSDesc;
-	//m_pContext->OMSetDepthStencilState();
-
-	//D3D11_BLEND_DESC			BSDesc;
-	//m_pContext->OMSetBlendState();
-
-
 }
 
 HRESULT CMainApp::Initialize()
@@ -64,6 +49,26 @@ HRESULT CMainApp::Initialize()
 
 void CMainApp::Update(_float fTimeDelta)
 {
+	if (KEY_TAP(KEY::M))
+	{
+		g_isHideCursor = !g_isHideCursor;
+
+		if (g_isHideCursor)
+		{
+			//ShowCursor(FALSE);
+			RECT rect;
+			GetClientRect(g_hWnd, &rect); // 게임 창의 클라이언트 영역을 얻어옴
+			ClientToScreen(g_hWnd, (POINT*)&rect.left);  // 좌표를 화면 좌표로 변환
+			ClientToScreen(g_hWnd, (POINT*)&rect.right);
+			ClipCursor(&rect); // 마우스를 게임 창의 영역에 고정
+		}
+		else
+		{
+			//ShowCursor(TRUE);
+			ClipCursor(NULL);
+		}
+	}
+
 	m_pGameInstance->Update_Engine(fTimeDelta);
 
 
@@ -335,5 +340,9 @@ void CMainApp::Free()
 	Safe_Release(m_pGameInstance);
 	
 	CEffect_Manager::Destroy_Instance();
+
+
+	ClipCursor(NULL); // 마우스를 제한 해제
+	ShowCursor(TRUE);  // 마우스 커서를 다시 보이게 함
 }
 

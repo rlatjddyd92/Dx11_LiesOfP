@@ -12,8 +12,8 @@ CState_Player_ChangeWeapon::CState_Player_ChangeWeapon(CFsm* pFsm, CPlayer* pPla
 
 HRESULT CState_Player_ChangeWeapon::Initialize(_uint iStateNum, void* pArg)
 {
-    m_iAnimation_ChangeWeapon[0] = m_pPlayer->Get_Model()->Find_AnimationIndex("AS_Pino_O_EquipWeapon");
-    m_iAnimation_ChangeWeapon[1] = m_pPlayer->Get_Model()->Find_AnimationIndex("AS_Pino_T_EquipWeapon");
+    m_iAnimation_ChangeWeapon[0] = m_pPlayer->Get_Model()->Find_AnimationIndex("AS_Pino_O_EquipWeapon", 2.f);
+    m_iAnimation_ChangeWeapon[1] = m_pPlayer->Get_Model()->Find_AnimationIndex("AS_Pino_T_EquipWeapon", 2.f);
 
     FSM_INIT_DESC* pDesc = static_cast<FSM_INIT_DESC*>(pArg);
     

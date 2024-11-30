@@ -205,3 +205,9 @@
 
 #include "D:\GitProject\Dx11_LiesOfP\Framework_DX11\Engine\Private\VIBuffer_Terrain.cpp"
 
+
+#include "D:\GitProject\Dx11_LiesOfP\Framework_DX11\Engine\Private\WorldOctree.cpp"
+
+
+#include "D:\GitProject\Dx11_LiesOfP\Framework_DX11\Engine\Private\WorldOctree_Manager.cpp"
+

@@ -726,7 +726,7 @@
     </Filter>
     <Filter Include="05.Fsm\Player\Common\Teleport">
       <UniqueIdentifier>{fa57377f-b82c-4b4a-9495-aca98d90a783}</UniqueIdentifier>
-	</Filter>
+    </Filter>
     <Filter Include="02.GameObjects\12.AttackObject">
       <UniqueIdentifier>{ce4ea603-046b-4d4c-bb5e-c2d7a15acc70}</UniqueIdentifier>
     </Filter>
@@ -741,12 +741,15 @@
     </Filter>
     <Filter Include="02.GameObjects\12.AttackObject\SimonManus\ThunderSpear">
       <UniqueIdentifier>{09315704-54e9-4a45-9f4e-4158f3a83f9a}</UniqueIdentifier>
-	</Filter>
+    </Filter>
     <Filter Include="97.ShaderFiles\Effect\Compute">
       <UniqueIdentifier>{ede8ee30-c961-464c-89ae-e58d78db771c}</UniqueIdentifier>
     </Filter>
     <Filter Include="97.ShaderFiles\Effect\Vtx">
       <UniqueIdentifier>{9ab855b2-1a6b-463a-9090-dda8739cec69}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="05.Fsm\Player\Common\Grinder">
+      <UniqueIdentifier>{fb4067e2-a5e2-47fe-bae7-ead4bdc7b9f0}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -1354,12 +1357,15 @@
     </ClInclude>
     <ClInclude Include="..\Public\State_Player_Teleport.h">
       <Filter>05.Fsm\Player\Common\Teleport</Filter>
-	</ClInclude>
+    </ClInclude>
     <ClInclude Include="..\Public\AttackObject.h">
       <Filter>02.GameObjects\12.AttackObject</Filter>
     </ClInclude>
     <ClInclude Include="..\Public\AObj_StampBlast.h">
       <Filter>02.GameObjects\12.AttackObject\SimonManus\StampBlast</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Public\State_Player_Grinder.h">
+      <Filter>05.Fsm\Player\Common\Grinder</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -1937,12 +1943,15 @@
     </ClCompile>
     <ClCompile Include="..\Private\State_Player_Teleport.cpp">
       <Filter>05.Fsm\Player\Common\Teleport</Filter>
-	</ClCompile>
+    </ClCompile>
     <ClCompile Include="..\Private\AttackObject.cpp">
       <Filter>02.GameObjects\12.AttackObject</Filter>
     </ClCompile>
     <ClCompile Include="..\Private\AObj_StampBlast.cpp">
       <Filter>02.GameObjects\12.AttackObject\SimonManus\StampBlast</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Private\State_Player_Grinder.cpp">
+      <Filter>05.Fsm\Player\Common\Grinder</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

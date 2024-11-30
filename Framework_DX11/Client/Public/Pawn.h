@@ -73,6 +73,7 @@ public:
     void            Change_Animation(_uint iAnimIndex, _bool IsLoop = false, _float fDuration = 0.3f, _uint iStartFrame = 0, _bool bEitherBoundary = true, _bool bSameChange = false);
     void            Change_Animation_Boundry(_uint iAnimIndex, _bool IsLoop = false, _float fDuration = 0.3f, _uint iStartFrame = 0);
     _uint           Get_CurrentAnimIndex();
+    _uint           Get_CurrentAnimIndex_Boundry();
     _int            Get_Frame();
     _double         Get_CurrentTrackPos();
     _bool           Get_EndAnim(_int iAnimIndex, _bool bIsBoundary = false);

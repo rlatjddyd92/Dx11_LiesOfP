@@ -44,42 +44,30 @@ HRESULT CState_Player_OH_Guard::Start_State(void* pArg)
 
 void CState_Player_OH_Guard::Update(_float fTimeDelta)
 {
-    if (KEY_HOLD(KEY::ALT))
+    if (KEY_HOLD(KEY::LSHIFT))
     {
-        m_bTempTest = true;
-    }
-    if (m_bTempTest)
-    {
-
-        m_pPlayer->Change_Animation(m_iAnimation_Walk[WALK_F], true, 0.2f, 0, false);
+        if (KEY_TAP(KEY::F))
+        {
+            if (m_pPlayer->Get_WeaponType() == CPlayer::WEP_RAPIER)
+                m_pPlayer->Change_State(CPlayer::PARRY);
+            else if (m_pPlayer->Get_WeaponType() == CPlayer::WEP_SCISSOR)
+                m_pPlayer->Change_State(CPlayer::SCISSOR_BUFF);
+            return;
+        }
+        if (!Move(fTimeDelta))
+        {
+            m_pPlayer->Change_Animation(m_iAnimation_Guard, true);
+        }
         m_pPlayer->Change_Animation_Boundry(m_iAnimation_Guard, true, 0.2f);
     }
-    else
-    {
-        if (KEY_HOLD(KEY::LSHIFT))
-        {
-            if (KEY_TAP(KEY::F))
-            {
-                if (m_pPlayer->Get_WeaponType() == CPlayer::WEP_RAPIER)
-                    m_pPlayer->Change_State(CPlayer::PARRY);
-                else if (m_pPlayer->Get_WeaponType() == CPlayer::WEP_SCISSOR)
-                    m_pPlayer->Change_State(CPlayer::SCISSOR_BUFF);
-                return;
-            }
-            if (!Move(fTimeDelta))
-            {
-                m_pPlayer->Change_Animation(m_iAnimation_Guard, true);
-            }
-            m_pPlayer->Change_Animation_Boundry(m_iAnimation_Guard, true, 0.2f);
-        }
 
-        if (KEY_NONE(KEY::LSHIFT))
-        {
-            m_pPlayer->Change_State(CPlayer::OH_IDLE);
-        }
+    if (KEY_NONE(KEY::LSHIFT))
+    {
+        m_pPlayer->Change_State(CPlayer::OH_IDLE);
     }
-    
 }
+    
+
 
 void CState_Player_OH_Guard::End_State()
 {

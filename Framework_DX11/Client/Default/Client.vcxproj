@@ -198,6 +198,7 @@
     <ClInclude Include="..\Public\State_CarcassTail_TailSwipMultiple.h" />
     <ClInclude Include="..\Public\State_CarcassTail_Walk.h" />
     <ClInclude Include="..\Public\State_Player_Chest.h" />
+    <ClInclude Include="..\Public\State_Player_Grinder.h" />
     <ClInclude Include="..\Public\State_Player_ItemGet.h" />
     <ClInclude Include="..\Public\State_Player_OH_GuardHit.h" />
     <ClInclude Include="..\Public\State_Player_Ladder.h" />
@@ -403,6 +404,7 @@
     <ClCompile Include="..\Private\State_CarcassTail_TailSwipMultiple.cpp" />
     <ClCompile Include="..\Private\State_CarcassTail_Walk.cpp" />
     <ClCompile Include="..\Private\State_Player_Chest.cpp" />
+    <ClCompile Include="..\Private\State_Player_Grinder.cpp" />
     <ClCompile Include="..\Private\State_Player_ItemGet.cpp" />
     <ClCompile Include="..\Private\State_Player_OH_GuardHit.cpp" />
     <ClCompile Include="..\Private\State_Player_Ladder.cpp" />
