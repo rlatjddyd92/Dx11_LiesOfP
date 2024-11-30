@@ -49,6 +49,7 @@ private:
 	_bool m_bShadow = { false };
 	_bool m_bCollison = { false };
 	_bool m_bRestored = { false };
+	_bool m_bFirstRestored = { true };
 	_bool m_isClose = { true };					//작동 전
 	_bool m_isOpening = { false };				//열리는 중
 	_bool m_isOpened = { false };				//작동 완
