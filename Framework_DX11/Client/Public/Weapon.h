@@ -67,6 +67,9 @@ public:
 	void ChangeSocketMatrix(const _Matrix* pMat) { m_pSocketMatrix = pMat; }
 	void Reset_OverLapCheck() { m_DamagedObjects.clear(); }
 
+	const _Matrix* Get_BoneCombinedMatrix(_uint iBoneIndex);
+	const _Matrix* Get_WorldMatrix_Ptr() { return &m_WorldMatrix; }
+
 protected:
 	CShader*			m_pShaderCom = { nullptr };	
 	CModel*				m_pModelCom = { nullptr };

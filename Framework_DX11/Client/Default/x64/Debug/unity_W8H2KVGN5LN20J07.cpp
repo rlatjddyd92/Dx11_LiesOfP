@@ -1,5 +1,11 @@
 #include "stdafx.h"
 
+#include "C:\Users\Administrator\Documents\GitHub\Dx11_LiesOfP\Framework_DX11\Client\Private\AObj_StampBlast.cpp"
+
+
+#include "C:\Users\Administrator\Documents\GitHub\Dx11_LiesOfP\Framework_DX11\Client\Private\AttackObject.cpp"
+
+
 #include "C:\Users\Administrator\Documents\GitHub\Dx11_LiesOfP\Framework_DX11\Client\private\BackGround.cpp"
 
 

@@ -60,6 +60,9 @@ public:
 	virtual void	Change_WeaponAnimation(_int iAnimIndex, _bool isLoop, _float fChangeDuration = 0.2f, _int iStartFrame = 0, _bool bEitherChange = true, _bool bSameChange = false) {};
 	virtual _bool	Get_WeaponAnimEnd(_int iAnimIndex) { return false; }
 
+	virtual const _Matrix* Get_WeaponBoneCombinedMat(_uint iBoneIndex) { return &_Matrix{}; }
+	virtual const _Matrix* Get_WeaponWorldMat() { return &_Matrix{}; }
+
 protected:
 	_Vec4		m_vRootMoveStack{};
 	_Vec3		m_vCurRootMove{};

@@ -32,6 +32,7 @@ private:
 
     _bool               m_bStamp = { false };
     _bool               m_bWeaponSpin = { false };
+    _bool               m_bBlast = { false };
 
     _uint               m_iRouteTrack = {};
 

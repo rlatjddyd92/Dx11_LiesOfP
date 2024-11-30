@@ -22,7 +22,10 @@ HRESULT CState_SimonManusP2_HighJumpFall::Start_State(void* pArg)
 {
     m_pMonster->Change_Animation(AN_HIGHJUMPFALL, false, 0.1f, 0);
 
-    m_pMonster->Set_RimLightColor(_Vec4{ 0.9f, 0.f, 0.f, 1.f });
+    m_fGoalRimAlpha = 1.f;
+    m_fCurtRimAlpha = 0.f;
+    
+    //m_pMonster->Set_RimLightColor(_Vec4{ 0.9f, 0.f, 0.f, 1.f });
     return S_OK;
 }
 
@@ -51,7 +54,7 @@ void CState_SimonManusP2_HighJumpFall::Update(_float fTimeDelta)
     {
         if (CurTrackPos > 245.f)
         {
-            m_pMonster->Set_RimLightColor(_Vec4{ 0.f, 0.f, 0.f, 0.f });
+            m_fGoalRimAlpha = 0.f;
             m_bResetRim = true;
         }
     }
@@ -63,6 +66,7 @@ void CState_SimonManusP2_HighJumpFall::Update(_float fTimeDelta)
     }
 
     Collider_Check();
+    Update_Rimlight();
 
 }
 
@@ -87,6 +91,15 @@ void CState_SimonManusP2_HighJumpFall::Collider_Check()
     else
     {
         m_pMonster->DeActive_CurretnWeaponCollider();
+    }
+}
+
+void CState_SimonManusP2_HighJumpFall::Update_Rimlight()
+{
+    if (m_fCurtRimAlpha != m_fGoalRimAlpha)
+    {
+        m_fCurtRimAlpha += (m_fGoalRimAlpha - m_fCurtRimAlpha) / 10;
+        m_pMonster->Set_RimLightColor(_Vec4{ 0.9f, 0.f, 0.f, m_fCurtRimAlpha });
     }
 }
 

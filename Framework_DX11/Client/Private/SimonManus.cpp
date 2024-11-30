@@ -135,7 +135,6 @@ HRESULT CSimonManus::Initialize(void* pArg)
 	// 정식 코드  
 	GET_GAMEINTERFACE->Register_Pointer_Into_OrthoUIPage(UI_ORTHO_OBJ_TYPE::ORTHO_BOSS_SIMON, this);
 
-	
 	return S_OK;
 }
 
@@ -262,6 +261,16 @@ void CSimonManus::Change_WeaponAnimation(_int iAnimIndex, _bool isLoop, _float f
 _bool CSimonManus::Get_WeaponAnimEnd(_int iAnimIndex)
 {
 	return m_pWeapon->is_EndAnim(iAnimIndex);
+}
+
+const _Matrix* CSimonManus::Get_WeaponBoneCombinedMat(_uint iBoneIndex)
+{
+	return m_pWeapon->Get_BoneCombinedMatrix(iBoneIndex);
+}
+
+const _Matrix* CSimonManus::Get_WeaponWorldMat()
+{
+	return m_pWeapon->Get_WorldMatrix_Ptr();
 }
 
 HRESULT CSimonManus::Ready_Components()
@@ -455,12 +464,19 @@ HRESULT CSimonManus::Ready_Effects()
 		pSocketBoneMatrix, _Vec3(0.f, 0.f, 0.f), _Vec3(0.f, 0.f, 0.f), _Vec3(1.f, 1.f, 1.f));
 
 
-	pSocketBoneMatrix = m_pModelCom->Get_BoneCombindTransformationMatrix_Ptr(m_pModelCom->Get_UFBIndices(UFB_HAND_RIGHT));
+	pParetnMatrix = m_pWeapon->Get_WorldMatrix_Ptr();
+	pSocketBoneMatrix = m_pWeapon->Get_BoneCombinedMatrix(4);
 
 	m_Effects[P1_STAMP] = CEffect_Manager::Get_Instance()->Clone_Effect(TEXT("SimonManus_Attack_Stamp"), pParetnMatrix,
 		pSocketBoneMatrix, _Vec3(0.f, 0.f, 0.f), _Vec3(0.f, 0.f, 0.f), _Vec3(1.f, 1.f, 1.f));
 
+	m_Effects[P1_CHARGESTAMP] = CEffect_Manager::Get_Instance()->Clone_Effect(TEXT("SimonManus_Attack_ChargeStamp"), pParetnMatrix,
+		pSocketBoneMatrix, _Vec3(0.f, 0.f, 0.f), _Vec3(0.f, 0.f, 0.f), _Vec3(1.f, 1.f, 1.f));
 
+	m_Effects[P1_CHARGESTAMP_2] = CEffect_Manager::Get_Instance()->Clone_Effect(TEXT("SimonManus_Attack_ChargeStamp2"), pParetnMatrix,
+		pSocketBoneMatrix, _Vec3(0.f, 0.f, 0.f), _Vec3(0.f, 0.f, 0.f), _Vec3(1.f, 1.f, 1.f));
+
+	m_Effects[P1_CHARGESTAMP]->Set_Dead(true);
 
 
 	return S_OK;
