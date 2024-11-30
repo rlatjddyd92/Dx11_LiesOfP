@@ -561,24 +561,21 @@ PS_OUT PS_DISTORTION_MAIN(PS_IN In)
     return Out;
 }
 
-PS_EFFECT_OUT PS_INDEX_ELECTROAURA_MAIN(PS_IN In)
+PS_EFFECT_OUT PS_AURA_MAIN(PS_IN In)
 {
     PS_EFFECT_OUT Out = (PS_EFFECT_OUT) 0;
     
     if (In.vLifeTime.x < In.vLifeTime.y)
         discard;
     
-    int iTexIndex = (int) (In.vColor.a * g_vTexDivide.x * g_vTexDivide.y);
+    int iTexIndex = In.vColor.a * g_vTexDivide.x * g_vTexDivide.y;
     vector vColor = g_DiffuseTexture.Sample(LinearSampler, Get_SpriteTexcoord(In.vTexcoord, iTexIndex));
     
-    float2 vTexcoord = In.vTexcoord + float2(In.vLifeTime.y, In.vLifeTime.y);
-    vector vMask = g_MaskTexture_1.Sample(LinearSampler, vTexcoord);
-    
     vColor.rgb *= In.vColor.rgb;
-    vColor.a *= vMask.r;
+    vColor.a = max(vColor.r, max(vColor.g, vColor.b));
     vColor.a *= 1.f - (In.vLifeTime.y / In.vLifeTime.x);
     
-    if(vColor.a < 0.3f)
+    if (vColor.a < 0.1f)
         discard;
     
     Out.vDiffuse = vColor;
@@ -586,6 +583,7 @@ PS_EFFECT_OUT PS_INDEX_ELECTROAURA_MAIN(PS_IN In)
     
     return Out;
 }
+
 
 technique11	DefaultTechnique
 {
@@ -721,18 +719,7 @@ technique11	DefaultTechnique
         PixelShader = compile ps_5_0 PS_DISTORTION_MAIN();
     }
 
-    pass PARTICLE_INDEX_ELECTROAURA // 12
-    {
-        SetRasterizerState(RS_Default);
-        SetDepthStencilState(DSS_Default, 0);
-        SetBlendState(BS_Default, vector(0.f, 0.f, 0.f, 0.f), 0xffffffff);
-
-        VertexShader = compile vs_5_0 VS_MAIN();
-        GeometryShader = compile gs_5_0 GS_MAIN();
-        PixelShader = compile ps_5_0 PS_INDEX_ELECTROAURA_MAIN();
-    }
-
-    pass PARTICLE_COLORSMOKE // 13
+    pass PARTICLE_COLORSMOKE // 12
     {
         SetRasterizerState(RS_Default);
         SetDepthStencilState(DSS_NonWrite, 0);
@@ -741,6 +728,17 @@ technique11	DefaultTechnique
         VertexShader = compile vs_5_0 VS_MAIN();
         GeometryShader = compile gs_5_0 GS_MAIN();
         PixelShader = compile ps_5_0 PS_SMOKE_COLOR_MAIN();
+    }
+
+    pass PARTICLE_AURA  // 13
+    {
+        SetRasterizerState(RS_Default);
+        SetDepthStencilState(DSS_Default, 0);
+        SetBlendState(BS_Default, vector(0.f, 0.f, 0.f, 0.f), 0xffffffff);
+
+        VertexShader = compile vs_5_0 VS_MAIN();
+        GeometryShader = compile gs_5_0 GS_MAIN();
+        PixelShader = compile ps_5_0 PS_AURA_MAIN();
     }
 }
 
