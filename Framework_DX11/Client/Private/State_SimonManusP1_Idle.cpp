@@ -133,6 +133,7 @@ void CState_SimonManusP1_Idle::Calc_Act_Attack(_float fDist)
     {
 
         _int iAtkNum = rand() % 4;
+        iAtkNum = 3;
         switch (iAtkNum)
         {
         case 0:

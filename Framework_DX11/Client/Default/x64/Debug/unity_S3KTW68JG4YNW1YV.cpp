@@ -18,6 +18,9 @@
 #include "C:\Users\Administrator\Documents\GitHub\Dx11_LiesOfP\Framework_DX11\Client\Private\CarcassTail.cpp"
 
 
+#include "C:\Users\Administrator\Documents\GitHub\Dx11_LiesOfP\Framework_DX11\Client\Private\Deco_Collider.cpp"
+
+
 #include "C:\Users\Administrator\Documents\GitHub\Dx11_LiesOfP\Framework_DX11\Client\Private\LastDoor.cpp"
 
 
@@ -91,6 +94,12 @@
 
 
 #include "C:\Users\Administrator\Documents\GitHub\Dx11_LiesOfP\Framework_DX11\Client\Private\State_Player_Lift.cpp"
+
+
+#include "C:\Users\Administrator\Documents\GitHub\Dx11_LiesOfP\Framework_DX11\Client\Private\State_Player_Stargazer.cpp"
+
+
+#include "C:\Users\Administrator\Documents\GitHub\Dx11_LiesOfP\Framework_DX11\Client\Private\State_Player_Teleport.cpp"
 
 
 #include "C:\Users\Administrator\Documents\GitHub\Dx11_LiesOfP\Framework_DX11\Client\Private\State_Player_TH_GuardHit.cpp"
@@ -436,6 +445,9 @@
 
 
 #include "C:\Users\Administrator\Documents\GitHub\Dx11_LiesOfP\Framework_DX11\Client\Private\State_SimonManusP2_Run.cpp"
+
+
+#include "C:\Users\Administrator\Documents\GitHub\Dx11_LiesOfP\Framework_DX11\Client\Private\State_SimonManusP2_SlideMagic.cpp"
 
 
 #include "C:\Users\Administrator\Documents\GitHub\Dx11_LiesOfP\Framework_DX11\Client\Private\State_SimonManusP2_SpreadMagic.cpp"

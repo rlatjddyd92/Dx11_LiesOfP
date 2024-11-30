@@ -27,6 +27,8 @@ HRESULT CState_SimonManusP1_HighJumpFall::Start_State(void* pArg)
     m_fCurtRimAlpha = 1.f;
 
     //m_pMonster->Set_RimLightColor(_Vec4{0.9f, 0.f, 0.f, 1.f});
+    m_bStartSpot = true;
+
     return S_OK;
 }
 
@@ -44,9 +46,14 @@ void CState_SimonManusP1_HighJumpFall::Update(_float fTimeDelta)
     }
     else if(CurTrackPos >= 230.f && CurTrackPos <= 245.f) //¶¥ Âï±â±îÁö
     {
-        _Vec3 vPos = m_pMonster->Get_Transform()->Get_State(CTransform::STATE_POSITION);
+        if (m_bStartSpot)
+        {
+            _float fLength = m_vTargetDir.Length();
+            m_vTargetDir = XMVector3Normalize(m_pMonster->Get_Transform()->Get_State(CTransform::STATE_LOOK)) * fLength;
+            m_bStartSpot = false;
+        }
 
-        _Vec3 vMove = m_vTargetDir * (((_float)CurTrackPos - 230.f) / 20.f);
+        _Vec3 vMove = m_vTargetDir * (((_float)CurTrackPos - 230.f) / 15.f);
         m_pMonster->Get_RigidBody()->Set_Velocity((vMove - m_vFlyMoveStack) / fTimeDelta);
         m_vFlyMoveStack = vMove;
     }
