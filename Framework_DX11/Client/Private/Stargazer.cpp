@@ -57,14 +57,7 @@ void CStargazer::Priority_Update(_float fTimeDelta)
 
 void CStargazer::Update(_float fTimeDelta)
 {
-	_float fRatio = 1.f;
-
-	if (m_bRestored && m_pCurrentModel->Get_CurrentAnimationIndex() == m_iAnim_Open)
-		fRatio = 0.1f;
-	else
-		fRatio = 1.f;
-
-	m_pCurrentModel->Play_Animation(fTimeDelta * fRatio);
+	m_pCurrentModel->Play_Animation(fTimeDelta);
 
 	if (m_bCollison)
 	{

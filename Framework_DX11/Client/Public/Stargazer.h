@@ -60,6 +60,8 @@ private:
 	_int m_iCurrnetCellNum = { -1 };
 
 	_float m_fRestoreTimer = { 0.f };
+	_float m_fOpeningTimer = { 0.f };
+	_float m_fRatio = { 1.f };
 
 	CGameObject* m_pPlayer = { nullptr };
 	CModel* m_pCurrentModel = { nullptr };

@@ -46,12 +46,23 @@ void CDeco_Collider::Update(_float fTimeDelta)
     }
     m_pTransformCom->Set_WorldMatrix( SocketMatrix * XMLoadFloat4x4(m_pParentWorldMatrix));
 
+    _Vec4 vCurPos = m_pTransformCom->Get_State(CTransform::STATE_POSITION);
+    Change_Vec4_to_Vec3(vCurPos, m_vCurPos);
+
+    //현재위치 - 과거위치 / 시간
+    Calculate_Velocity(fTimeDelta);
+    m_pRigidBodyCom->Add_Velocity(m_vVelocity);
+
     if (m_pColliderCom != nullptr)
         m_pColliderCom->Update(m_pTransformCom->Get_WorldMatrix_Ptr());
+
+    m_pRigidBodyCom->Update(fTimeDelta);
 }
 
 void CDeco_Collider::Late_Update(_float fTimeDelta)
 {
+    m_vPrePos = m_vCurPos;
+
     __super::Late_Update(fTimeDelta);
     m_pGameInstance->Add_ColliderList(m_pColliderCom);
 
@@ -91,7 +102,45 @@ HRESULT CDeco_Collider::Ready_Components()
         return E_FAIL;
     m_pColliderCom->Set_Owner(this);
      
+    // 항상 마지막에 생성하기
+    CRigidBody::RIGIDBODY_DESC RigidBodyDesc{};
+    RigidBodyDesc.isStatic = false;
+    RigidBodyDesc.isGravity = false;
+    RigidBodyDesc.pOwnerTransform = m_pTransformCom;
+    RigidBodyDesc.pOwnerNavigation = nullptr;
+
+    RigidBodyDesc.pOwner = this;
+    RigidBodyDesc.fStaticFriction = 0.f;
+    RigidBodyDesc.fDynamicFriction = 0.f;
+    RigidBodyDesc.fRestituion = 0.f;
+    RigidBodyDesc.PxLockFlags = PxRigidDynamicLockFlag::eLOCK_ANGULAR_X |
+        PxRigidDynamicLockFlag::eLOCK_ANGULAR_Y |
+        PxRigidDynamicLockFlag::eLOCK_ANGULAR_Z |
+        PxRigidDynamicLockFlag::eLOCK_LINEAR_X |
+        PxRigidDynamicLockFlag::eLOCK_LINEAR_Y |
+        PxRigidDynamicLockFlag::eLOCK_LINEAR_Z
+        ;
+
+    physX::GeometryBox BoxDesc;
+    BoxDesc.vSize = _Vec3(0.3f, 3.f, 3.f);
+    RigidBodyDesc.pGeometry = &BoxDesc;
+
+    /* FOR.Com_RigidBody */
+    if (FAILED(__super::Add_Component(LEVEL_STATIC, TEXT("Prototype_Component_RigidBody"),
+        TEXT("Com_RigidBody"), reinterpret_cast<CComponent**>(&m_pRigidBodyCom), &RigidBodyDesc)))
+        return E_FAIL;
+
     return S_OK;
+}
+
+void CDeco_Collider::Calculate_Velocity(_float fTimeDelta)
+{
+    m_vVelocity = (m_vCurPos - m_vPrePos) / fTimeDelta;
+}
+
+void CDeco_Collider::Change_Vec4_to_Vec3(_Vec4 vVec4, _Vec3& vVec3)
+{
+    vVec3 = { vVec4.x, vVec4.y, vVec4.z };
 }
 
 CDeco_Collider* CDeco_Collider::Create(ID3D11Device* pDevice, ID3D11DeviceContext* pContext)
@@ -123,5 +172,7 @@ CGameObject* CDeco_Collider::Clone(void* pArg)
 void CDeco_Collider::Free()
 {
     __super::Free();
+
     Safe_Release(m_pColliderCom);
+    Safe_Release(m_pRigidBodyCom);
 }

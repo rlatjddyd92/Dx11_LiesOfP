@@ -5,6 +5,7 @@
 
 BEGIN(Engine)
 class CCollider;
+class CRigidBody;
 END
 
 BEGIN(Client)
@@ -38,11 +39,20 @@ public:
 
 private:
 	CCollider* m_pColliderCom = { nullptr };
+	CRigidBody* m_pRigidBodyCom = { nullptr };
+
+private:
 	const _float4x4* m_pParentWorldMatrix = { nullptr };
 	const _float4x4* m_pSoketMatrix = { nullptr };
 
+	_Vec3 m_vPrePos = {};
+	_Vec3 m_vVelocity = {};
+	_Vec3 m_vCurPos = {};
+
 private:
 	HRESULT Ready_Components();
+	void Calculate_Velocity(_float fTimeDelta);
+	void Change_Vec4_to_Vec3(_Vec4 vVec4, _Vec3& vVec3);
 
 public:
 	static CDeco_Collider* Create(ID3D11Device* pDevice, ID3D11DeviceContext* pContext);
