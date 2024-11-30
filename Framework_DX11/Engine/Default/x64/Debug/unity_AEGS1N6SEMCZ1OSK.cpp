@@ -191,6 +191,9 @@
 #include "D:\GitProject\Dx11_LiesOfP\Framework_DX11\Engine\private\VIBuffer_Instancing.cpp"
 
 
+#include "D:\GitProject\Dx11_LiesOfP\Framework_DX11\Engine\Private\VIBuffer_PhysX.cpp"
+
+
 #include "D:\GitProject\Dx11_LiesOfP\Framework_DX11\Engine\Private\VIBuffer_Point_Instance.cpp"
 
 

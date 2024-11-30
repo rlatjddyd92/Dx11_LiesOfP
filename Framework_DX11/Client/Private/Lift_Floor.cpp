@@ -233,6 +233,7 @@ HRESULT CLift_Floor::Ready_Components(OBJECT_DEFAULT_DESC* pDesc)
 	RigidBodyDesc.isGravity = false;
 	RigidBodyDesc.pOwnerTransform = m_pTransformCom;
 	RigidBodyDesc.pOwnerNavigation = nullptr;
+	RigidBodyDesc.vOffset = _Vec3(0.f, -0.15f, 0.f);
 
 	RigidBodyDesc.pOwner = this;
 	RigidBodyDesc.fStaticFriction = 0.f;

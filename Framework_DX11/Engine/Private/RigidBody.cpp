@@ -61,7 +61,7 @@ void CRigidBody::Update(_float fTimeDelta)
 		PxVec3 vPxPlayerPos = PlayerPxTransform.p;
 		_Vec3 vPos = _Vec3(vPxPlayerPos.x, vPxPlayerPos.y, vPxPlayerPos.z);
 
-		PlayerPxTransform.p = PlayerPxTransform.p + PxVec3(m_vOffset.x, m_vOffset.y, m_vOffset.z);
+		PlayerPxTransform.p = PlayerPxTransform.p;
 		m_PxActor->setGlobalPose(PlayerPxTransform);
 
 		if (m_isLockCell && !m_pOwnerNavigation->isMove(vPos + m_vVelocity * fTimeDelta))
@@ -84,7 +84,7 @@ void CRigidBody::Update(_float fTimeDelta)
 		}
 
 		PlayerPxTransform = pRigidDynamic->getGlobalPose();
-		vPxPlayerPos = PlayerPxTransform.p - PxVec3(m_vOffset.x, m_vOffset.y, m_vOffset.z);
+		vPxPlayerPos = PlayerPxTransform.p;
 
 		if (m_isOnCell)
 		{
@@ -94,7 +94,7 @@ void CRigidBody::Update(_float fTimeDelta)
 
 		m_pOwnerTransform->Set_State(CTransform::STATE_POSITION, _Vec3(vPxPlayerPos.x, vPxPlayerPos.y, vPxPlayerPos.z));
 
-		PlayerPxTransform.p = PlayerPxTransform.p - PxVec3(m_vOffset.x, m_vOffset.y, m_vOffset.z);
+		PlayerPxTransform.p = PlayerPxTransform.p;
 		m_PxActor->setGlobalPose(PlayerPxTransform);
 
 
@@ -205,9 +205,13 @@ HRESULT CRigidBody::Add_PxGeometry(RIGIDBODY_DESC* pDesc)
 	{
 	case physX::PX_CAPSULE:
 	{
-
 		physX::GeometryCapsule* CapsuleGeometry = static_cast<physX::GeometryCapsule*>(pGeometry);
 		m_PxShape = pPhysx->createShape(PxCapsuleGeometry(CapsuleGeometry->fRadius, CapsuleGeometry->fHeight * 0.5f), *m_PxMaterial, false, eShapeFlags);
+
+		PxVec3 newPosition(CapsuleGeometry->fHeight * 0.5f, 0.f, 0.f); // 캡슐의 새로운 로컬 위치
+		PxQuat newRotation(PxIdentity);        // 기본 회전 (필요에 따라 수정)
+
+		PxTransform newLocalPose(newPosition, newRotation);
 
 		PxTransform Transform = m_PxActor->getGlobalPose();
 
@@ -219,6 +223,8 @@ HRESULT CRigidBody::Add_PxGeometry(RIGIDBODY_DESC* pDesc)
 		}
 
 		m_PxActor->setGlobalPose(Transform);
+
+		m_PxShape->setLocalPose(newLocalPose);
 	}
 	break;
 	case physX::PX_SPHERE:
@@ -233,6 +239,12 @@ HRESULT CRigidBody::Add_PxGeometry(RIGIDBODY_DESC* pDesc)
 	{
 		physX::GeometryBox* BoxGeometry = static_cast<physX::GeometryBox*>(pGeometry);
 		m_PxShape = pPhysx->createShape(PxBoxGeometry(BoxGeometry->vSize.x * 0.5f, BoxGeometry->vSize.y * 0.5f, BoxGeometry->vSize.z * 0.5f), *m_PxMaterial, false, eShapeFlags);
+
+		PxVec3 newPosition(pDesc->vOffset.y, pDesc->vOffset.y, pDesc->vOffset.y); // 캡슐의 새로운 로컬 위치
+		PxQuat newRotation(PxIdentity);        // 기본 회전 (필요에 따라 수정)
+
+		PxTransform newLocalPose(newPosition, newRotation);
+		m_PxShape->setLocalPose(newLocalPose);
 	}
 	break;
 	case physX::PX_MODEL:

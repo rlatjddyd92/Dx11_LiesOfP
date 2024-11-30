@@ -5,8 +5,10 @@ CVIBuffer_PhysX::CVIBuffer_PhysX(ID3D11Device* pDevice, ID3D11DeviceContext* pCo
 {
 }
 
-HRESULT CVIBuffer_PhysX::Initialize(VIBUFFER_PHYSX_DESC* pDesc)
+HRESULT CVIBuffer_PhysX::Initialize(void* pArg)
 {
+	VIBUFFER_PHYSX_DESC* pDesc = static_cast<VIBUFFER_PHYSX_DESC*>(pArg);
+
 	m_iNumVertexBuffers = 1;
 	m_iVertexStride = sizeof(VTXCUBETEX);
 	m_iNumVertices = 8;
@@ -17,7 +19,7 @@ HRESULT CVIBuffer_PhysX::Initialize(VIBUFFER_PHYSX_DESC* pDesc)
 	m_eTopology = D3D_PRIMITIVE_TOPOLOGY_TRIANGLELIST;
 
 #pragma region VERTEX_BUFFER
-	/* 정점버퍼를 만든다.*/
+
 	m_BufferDesc.ByteWidth = m_iVertexStride * m_iNumVertices;
 	m_BufferDesc.Usage = D3D11_USAGE_DEFAULT;
 	m_BufferDesc.BindFlags = D3D11_BIND_VERTEX_BUFFER;
@@ -25,7 +27,7 @@ HRESULT CVIBuffer_PhysX::Initialize(VIBUFFER_PHYSX_DESC* pDesc)
 	m_BufferDesc.MiscFlags = 0;
 	m_BufferDesc.StructureByteStride = m_iVertexStride;
 
-	_float3 vCubeSize = pDesc->_vSize;
+	_float3 vCubeSize = pDesc->vSize;
 
 	VTXCUBETEX* pVertices = new VTXCUBETEX[m_iNumVertices]{};
 
@@ -55,7 +57,7 @@ HRESULT CVIBuffer_PhysX::Initialize(VIBUFFER_PHYSX_DESC* pDesc)
 
 	for (_uint i = 0; i < m_iNumVertices; ++i)
 	{
-		//pVertices[i].vPosition = XMVector3TransformCoord(XMLoadFloat3(&pVertices[i].vPosition), XMMatrixRotationQuaternion(pDesc->vOffSetQuat)) + XMLoadFloat3(&pDesc->vOffSetPosition);
+		XMStoreFloat3(&pVertices[i].vPosition, XMVector3TransformCoord(XMLoadFloat3(&pVertices[i].vPosition), XMMatrixRotationQuaternion(pDesc->vOffSetQuat)) + XMLoadFloat3(&pDesc->vOffSetPosition));
 	}
 
 	m_InitialData.pSysMem = pVertices;
@@ -121,6 +123,19 @@ CVIBuffer_PhysX * CVIBuffer_PhysX::Create(ID3D11Device* pDevice, ID3D11DeviceCon
 	if (FAILED(pInstance->Initialize_Prototype()))
 	{
 		MSG_BOX(TEXT("Failed to Created : CVIBuffer_PhysX"));
+		Safe_Release(pInstance);
+	}
+
+	return pInstance;
+}
+
+CComponent* CVIBuffer_PhysX::Clone(void* pArg)
+{
+	CVIBuffer_PhysX* pInstance = new CVIBuffer_PhysX(*this);
+
+	if (FAILED(pInstance->Initialize(pArg)))
+	{
+		MSG_BOX(TEXT("Failed to Cloned : CVIBuffer_PhysX"));
 		Safe_Release(pInstance);
 	}
 

@@ -693,12 +693,12 @@ void CPlayer::CollisionStay_IntercObj(CGameObject* pGameObject)
 
 	if (pGameObject->Get_Tag() == TEXT("Ladder"))
 	{
-		if (GET_GAMEINTERFACE->Action_InterAction(TEXT("사다리를 타자")))
+		if (GET_GAMEINTERFACE->Action_InterAction(TEXT("사다리를 탄다")))
 		{
 			m_pFsmCom->Change_State(LADDER, pGameObject);
 		}
 	}
-	if (pGameObject->Get_Tag() == TEXT("Lift_Controller"))
+	if (GET_GAMEINTERFACE->Action_InterAction(TEXT("엘리베이터를 동작시킨다")))
 	{
 		if (KEY_TAP(KEY::E))
 		{
@@ -719,7 +719,7 @@ void CPlayer::CollisionStay_IntercObj(CGameObject* pGameObject)
 			m_pRigidBodyCom->Set_Gravity(false);
 		}
 	}
-	if (pGameObject->Get_Tag() == TEXT("TreasureBox"))
+	if (GET_GAMEINTERFACE->Action_InterAction(TEXT("상자를 연다")))
 	{
 		if (KEY_TAP(KEY::E))
 		{

@@ -200,6 +200,7 @@
     <ClInclude Include="..\Public\State_Player_OH_GuardHit.h" />
     <ClInclude Include="..\Public\State_Player_Ladder.h" />
     <ClInclude Include="..\Public\State_Player_Lift.h" />
+    <ClInclude Include="..\Public\State_Player_Stargazer.h" />
     <ClInclude Include="..\Public\State_Player_TH_GuardHit.h" />
     <ClInclude Include="..\Public\State_SimonManusP1_Charge_SwingDown.h" />
     <ClInclude Include="..\Public\Client_Defines.h" />
@@ -401,6 +402,7 @@
     <ClCompile Include="..\Private\State_Player_OH_GuardHit.cpp" />
     <ClCompile Include="..\Private\State_Player_Ladder.cpp" />
     <ClCompile Include="..\Private\State_Player_Lift.cpp" />
+    <ClCompile Include="..\Private\State_Player_Stargazer.cpp" />
     <ClCompile Include="..\Private\State_Player_TH_GuardHit.cpp" />
     <ClCompile Include="..\Private\State_SimonManusP1_Charge_SwingDown.cpp" />
     <ClCompile Include="..\Private\ColliderObject.cpp" />
