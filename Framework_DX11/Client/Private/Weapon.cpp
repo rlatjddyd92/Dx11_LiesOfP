@@ -222,6 +222,11 @@ void CWeapon::Disappear()
 	m_isActive = false;
 }
 
+const _Matrix* CWeapon::Get_BoneCombinedMatrix(_uint iBoneIndex)
+{
+	return m_pModelCom->Get_BoneCombindTransformationMatrix_Ptr(iBoneIndex);
+}
+
 HRESULT CWeapon::Ready_Components()
 {
 	/* FOR.Com_Shader */

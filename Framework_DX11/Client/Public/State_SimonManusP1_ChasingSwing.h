@@ -28,7 +28,7 @@ private:
     class CMonster* m_pMonster = { nullptr };
 
     _float              m_fCurrentTime = { 0.f };
-    _float              m_fChaseDuration = { 2.f };
+    _float              m_fChaseDuration = { 1.5f };
 
     _uint               m_iRouteTrack = {};
 

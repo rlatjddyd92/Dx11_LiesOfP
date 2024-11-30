@@ -430,6 +430,8 @@ void CController_EffectTool::Particle_Check()
 		ImGui::RadioButton("Move", (_int*)&m_ParticleDesc.DefaultDesc.eType, CParticle_Effect::PT_MOVE);
 		ImGui::SameLine();
 		ImGui::RadioButton("Converge", (_int*)&m_ParticleDesc.DefaultDesc.eType, CParticle_Effect::PT_CONVERGE);
+		ImGui::SameLine();
+		ImGui::RadioButton("LocalSpread", (_int*)&m_ParticleDesc.DefaultDesc.eType, CParticle_Effect::PT_LOCALSPREAD);
 
 		ImGui::SeparatorText("Compute State");
 		ImGui::Checkbox("Orbit", &m_ParticleStates[PB_ORBIT]);
@@ -2237,6 +2239,11 @@ HRESULT CController_EffectTool::Load_Shader()
 	/* For. Prototype_Component_Shader_Compute_Particle_Converge */
 	if (FAILED(m_pGameInstance->Add_Prototype(LEVEL_TOOL, TEXT("Prototype_Component_Shader_Compute_Particle_Converge"),
 		CShader_Compute::Create(m_pDevice, m_pContext, TEXT("../Bin/ShaderFiles/Shader_ParticleCompute.hlsl"), "CS_CONVERGE_MAIN"))))
+		return E_FAIL;
+
+	/* For. Prototype_Component_Shader_Compute_Particle_LocalSpread */
+	if (FAILED(m_pGameInstance->Add_Prototype(LEVEL_TOOL, TEXT("Prototype_Component_Shader_Compute_Particle_LocalSpread"),
+		CShader_Compute::Create(m_pDevice, m_pContext, TEXT("../Bin/ShaderFiles/Shader_ParticleCompute.hlsl"), "CS_SPREAD_LOCAL_MAIN"))))
 		return E_FAIL;
 
 	/* For. Prototype_Component_Shader_Compute_Particle_Reset */

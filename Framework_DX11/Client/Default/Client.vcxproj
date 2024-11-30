@@ -170,6 +170,8 @@
     <Text Include="ReadMe.txt" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="..\Public\AObj_StampBlast.h" />
+    <ClInclude Include="..\Public\AttackObject.h" />
     <ClInclude Include="..\public\BackGround.h" />
     <ClInclude Include="..\Public\Camera_Manager.h" />
     <ClInclude Include="..\Public\CarcassBigA.h" />
@@ -201,6 +203,7 @@
     <ClInclude Include="..\Public\State_Player_Ladder.h" />
     <ClInclude Include="..\Public\State_Player_Lift.h" />
     <ClInclude Include="..\Public\State_Player_Stargazer.h" />
+    <ClInclude Include="..\Public\State_Player_Teleport.h" />
     <ClInclude Include="..\Public\State_Player_TH_GuardHit.h" />
     <ClInclude Include="..\Public\State_SimonManusP1_Charge_SwingDown.h" />
     <ClInclude Include="..\Public\Client_Defines.h" />
@@ -372,6 +375,8 @@
     <ClInclude Include="UI_Enum.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="..\Private\AObj_StampBlast.cpp" />
+    <ClCompile Include="..\Private\AttackObject.cpp" />
     <ClCompile Include="..\private\BackGround.cpp" />
     <ClCompile Include="..\Private\Camera_Manager.cpp" />
     <ClCompile Include="..\Private\CarcassBigA.cpp" />
@@ -403,6 +408,7 @@
     <ClCompile Include="..\Private\State_Player_Ladder.cpp" />
     <ClCompile Include="..\Private\State_Player_Lift.cpp" />
     <ClCompile Include="..\Private\State_Player_Stargazer.cpp" />
+    <ClCompile Include="..\Private\State_Player_Teleport.cpp" />
     <ClCompile Include="..\Private\State_Player_TH_GuardHit.cpp" />
     <ClCompile Include="..\Private\State_SimonManusP1_Charge_SwingDown.cpp" />
     <ClCompile Include="..\Private\ColliderObject.cpp" />

@@ -62,6 +62,17 @@ void CWeapon_SimonManus_Hammer::Update(_float fTimeDelta)
 
 	__super::Update(fTimeDelta);
 
+	m_pModelCom->Play_Animation(fTimeDelta);
+
+	if (!m_bStoppedSpin)
+	{
+		if (m_pModelCom->Get_IsEndAnimArray()[0])
+		{
+			m_pModelCom->SetUp_NextAnimation(1, true, 0.f, 0);
+			m_bStoppedSpin = true;
+		}
+	}
+
 	m_pColliderCom->Update(&m_WorldMatrix);
 }
 
@@ -124,6 +135,20 @@ void CWeapon_SimonManus_Hammer::OnCollisionExit(CGameObject* pOther)
 {
 }
 
+void CWeapon_SimonManus_Hammer::ChangeAnimation(_int iAnimIndex, _bool isLoop, _float fChangeDuration, _int iStartFrame, _bool bEitherChange, _bool bSameChange)
+{
+	m_pModelCom->SetUp_NextAnimation(iAnimIndex, isLoop, fChangeDuration, iStartFrame, bEitherChange, bSameChange);
+	if (iAnimIndex >= 2)
+	{
+		m_bStoppedSpin = false;
+	}
+}
+
+_bool CWeapon_SimonManus_Hammer::is_EndAnim(_int iAnimIndex)
+{
+	return m_pModelCom->Get_IsEndAnimArray()[iAnimIndex];
+}
+
 HRESULT CWeapon_SimonManus_Hammer::Ready_Components()
 {
 	if (FAILED(__super::Ready_Components()))
@@ -136,8 +161,8 @@ HRESULT CWeapon_SimonManus_Hammer::Ready_Components()
 
 	/* FOR.Com_Collider */
 	CBounding_OBB::BOUNDING_OBB_DESC			ColliderDesc{};
-	ColliderDesc.vExtents = _float3(1.f, 1.f, 1.4f);
-	ColliderDesc.vCenter = _float3(0.f, 0.0f, -1.9f);
+	ColliderDesc.vExtents = _float3(1.1f, 1.1f, 1.8f);
+	ColliderDesc.vCenter = _float3(0.f, 0.0f, -2.1f);
 	ColliderDesc.vAngles = _float3(0.f, 0.f, 0.f);
 
 	if (FAILED(__super::Add_Component(LEVEL_STATIC, TEXT("Prototype_Component_Collider_OBB"),

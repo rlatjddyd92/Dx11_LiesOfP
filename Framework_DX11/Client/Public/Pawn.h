@@ -46,6 +46,8 @@ public:
 	_float				Get_MoveSpeed() { return m_fMoveSpeed; }
 	void				Set_MoveSpeed(_float fSpeed) { m_fMoveSpeed = fSpeed; }
 
+    void                Set_RimLightColor(_Vec4 vRimLight) { m_vRimLightColor = vRimLight; }
+
 public:
     virtual HRESULT Initialize_Prototype();
     virtual HRESULT Initialize(void* pArg = nullptr);

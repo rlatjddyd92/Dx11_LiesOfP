@@ -21,7 +21,7 @@ HRESULT CState_SimonManusP1_ChasingSwing::Initialize(_uint iStateNum, void* pArg
 HRESULT CState_SimonManusP1_ChasingSwing::Start_State(void* pArg)
 {
     m_iRouteTrack = 0;
-    m_pMonster->Change_Animation(AN_CHASINGSWING_START, false,  0.f, 0);
+    m_pMonster->Change_Animation(AN_CHASINGSWING_START, false,  0.1f, 0);
 
     return S_OK;
 }
@@ -50,7 +50,7 @@ void CState_SimonManusP1_ChasingSwing::Update(_float fTimeDelta)
         }
         else if (m_fCurrentTime >= m_fChaseDuration)
         {
-            if (m_pMonster->Calc_Distance_XZ() <= 6.f)
+            if (m_pMonster->Calc_Distance_XZ() <= 7.f)
             {
                 ++m_iRouteTrack;
                 m_pMonster->Change_Animation(AN_CHASINGSWING_END, false, 0.f, 0);
@@ -122,9 +122,20 @@ _bool CState_SimonManusP1_ChasingSwing::End_Check()
 
 void CState_SimonManusP1_ChasingSwing::Collider_Check(_double CurTrackPos)
 {
-    if (m_iRouteTrack == 2)
+    if (m_iRouteTrack == 0)
     {
-        if (CurTrackPos >= 24.f && CurTrackPos <= 53.f)
+        if ((CurTrackPos >= 140.f))
+        {
+            m_pMonster->Active_CurrentWeaponCollider(1);
+        }
+        else
+        {
+            m_pMonster->DeActive_CurretnWeaponCollider();
+        }
+    }
+    else if (m_iRouteTrack == 2)
+    {
+        if ((CurTrackPos <= 53.f))
         {
             m_pMonster->Active_CurrentWeaponCollider(1);
         }

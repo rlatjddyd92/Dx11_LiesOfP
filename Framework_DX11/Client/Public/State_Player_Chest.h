@@ -26,6 +26,7 @@ private:
 
     _double* m_pTrackPos = { nullptr };
 
+    class CTreasureBox* m_pTreasureBox = { nullptr };
 private:
     _bool               End_Check();
 

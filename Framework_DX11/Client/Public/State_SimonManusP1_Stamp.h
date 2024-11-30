@@ -31,12 +31,15 @@ private:
     _uint               m_iCurStartAnim = {};
 
     _bool               m_bStamp = { false };
+    _bool               m_bWeaponSpin = { false };
+    _bool               m_bBlast = { false };
 
     _uint               m_iRouteTrack = {};
 
 private:
     _bool               End_Check();
-    void                Collider_Check();
+    void                Collider_Check(_double CurTrackPos);
+    void                Effect_Check(_double CurTrackPos);
 
 public:
     static CState_SimonManusP1_Stamp* Create(class CFsm* pFsm, class CMonster* pMonster, _uint iStateNum, void* pArg = nullptr);

@@ -135,7 +135,6 @@ HRESULT CSimonManus::Initialize(void* pArg)
 	// 정식 코드  
 	GET_GAMEINTERFACE->Register_Pointer_Into_OrthoUIPage(UI_ORTHO_OBJ_TYPE::ORTHO_BOSS_SIMON, this);
 
-	
 	return S_OK;
 }
 
@@ -247,6 +246,31 @@ void CSimonManus::DeActive_Effect(const _uint eType)
 _bool CSimonManus::Get_EffectsLoop(const _uint eType)
 {
 	return m_Effects[eType]->Get_Active();
+}
+
+void CSimonManus::Reset_WeaponOverlapCheck(_uint iCollIndex)
+{
+	m_pWeapon->Reset_OverLapCheck();
+}
+
+void CSimonManus::Change_WeaponAnimation(_int iAnimIndex, _bool isLoop, _float fChangeDuration, _int iStartFrame, _bool bEitherChange, _bool bSameChange)
+{
+	m_pWeapon->ChangeAnimation(iAnimIndex, isLoop, fChangeDuration, iStartFrame, bEitherChange, bSameChange);
+}
+
+_bool CSimonManus::Get_WeaponAnimEnd(_int iAnimIndex)
+{
+	return m_pWeapon->is_EndAnim(iAnimIndex);
+}
+
+const _Matrix* CSimonManus::Get_WeaponBoneCombinedMat(_uint iBoneIndex)
+{
+	return m_pWeapon->Get_BoneCombinedMatrix(iBoneIndex);
+}
+
+const _Matrix* CSimonManus::Get_WeaponWorldMat()
+{
+	return m_pWeapon->Get_WorldMatrix_Ptr();
 }
 
 HRESULT CSimonManus::Ready_Components()
@@ -441,7 +465,19 @@ HRESULT CSimonManus::Ready_Effects()
 		pSocketBoneMatrix, _Vec3(0.f, 0.f, 0.f), _Vec3(0.f, 0.f, 0.f), _Vec3(1.f, 1.f, 1.f));
 
 
+	pParetnMatrix = m_pWeapon->Get_WorldMatrix_Ptr();
+	pSocketBoneMatrix = m_pWeapon->Get_BoneCombinedMatrix(4);
 
+	m_Effects[P1_STAMP] = CEffect_Manager::Get_Instance()->Clone_Effect(TEXT("SimonManus_Attack_Stamp"), pParetnMatrix,
+		pSocketBoneMatrix, _Vec3(0.f, 0.f, 0.f), _Vec3(0.f, 0.f, 0.f), _Vec3(1.f, 1.f, 1.f));
+
+	m_Effects[P1_CHARGESTAMP] = CEffect_Manager::Get_Instance()->Clone_Effect(TEXT("SimonManus_Attack_ChargeStamp"), pParetnMatrix,
+		pSocketBoneMatrix, _Vec3(0.f, 0.f, 0.f), _Vec3(0.f, 0.f, 0.f), _Vec3(1.f, 1.f, 1.f));
+
+	m_Effects[P1_CHARGESTAMP_2] = CEffect_Manager::Get_Instance()->Clone_Effect(TEXT("SimonManus_Attack_ChargeStamp2"), pParetnMatrix,
+		pSocketBoneMatrix, _Vec3(0.f, 0.f, 0.f), _Vec3(0.f, 0.f, 0.f), _Vec3(1.f, 1.f, 1.f));
+
+	m_Effects[P1_CHARGESTAMP]->Set_Dead(true);
 
 
 	return S_OK;
@@ -506,11 +542,13 @@ void CSimonManus::ChangePhase()
 	m_pColliderBindMatrix[CT_LEG_LEFT] = m_pModelCom->Get_BoneCombindTransformationMatrix_Ptr(173);
 	m_pColliderBindMatrix[CT_LEG_RIGHT] = m_pModelCom->Get_BoneCombindTransformationMatrix_Ptr(187);
 
-	ColliderDesc.vExtents = _float3(0.8f, 0.6f, 0.7f);
-	ColliderDesc.vCenter = _float3(0.f, 0.f, 0.f);
-	ColliderDesc.vAngles = _float3(-0.5f, -0.3f, 0.f);
+	ColliderDesc.vExtents = _float3(0.8f, 0.7f, 0.7f);
+	ColliderDesc.vCenter = _float3(0.f, 0.f, 0.2f);
+	ColliderDesc.vAngles = _float3(0.f, -0.3f, 0.f);
 
 	(m_EXCollider[LOWERBODY])->Change_BoundingDesc(&ColliderDesc);
+
+	m_pColliderBindMatrix[CT_LOWERBODY] = m_pModelCom->Get_BoneCombindTransformationMatrix_Ptr(6);
 
 	ColliderDesc.vExtents = _float3(1.5f, 1.5f, 1.5f);
 	ColliderDesc.vCenter = _float3(0.f, 0.f, 0.f);
@@ -570,6 +608,12 @@ void CSimonManus::Free()
 	}
 	Safe_Release(m_pWeapon);
 	Safe_Release(m_pExtraModelCom);
+
+	for (auto& pEffect : m_Effects)
+	{
+		Safe_Release(pEffect);
+	}
+	m_Effects.clear();
 
 	if (m_pExtraFsmCom != nullptr)
 	{

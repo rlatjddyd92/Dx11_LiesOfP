@@ -32,10 +32,14 @@ public:
 	virtual void OnCollisionStay(CGameObject* pOther) override;
 	virtual void OnCollisionExit(CGameObject* pOther) override;
 
-private:
+	virtual void ChangeAnimation(_int iAnimIndex, _bool isLoop, _float fChangeDuration = 0.2f, _int iStartFrame = 0, _bool bEitherChange = true, _bool bSameChange = false) override;
+	virtual _bool is_EndAnim(_int iAnimIndex);
 
 private:
 	HRESULT Ready_Components();
+
+private:
+	_bool   m_bStoppedSpin = { true };
 
 public:
 	static CWeapon_SimonManus_Hammer* Create(ID3D11Device* pDevice, ID3D11DeviceContext* pContext);

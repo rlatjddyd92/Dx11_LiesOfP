@@ -22,11 +22,11 @@ public:
 private:
     class CPlayer* m_pPlayer = { nullptr };
 
-    _uint               m_iAnimation_Lift = {};
+    _uint               m_iAnimation_Stargazer = {};
 
     _double* m_pTrackPos = { nullptr };
 
-    class CLift_Controller* m_pLiftController = { nullptr };
+    class CStargazer* m_pStargazer = { nullptr };
 private:
     _bool               End_Check();
 
