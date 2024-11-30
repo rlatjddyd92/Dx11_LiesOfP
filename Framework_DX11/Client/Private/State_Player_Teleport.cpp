@@ -32,6 +32,7 @@ HRESULT CState_Player_Teleport::Start_State(void* pArg)
 
     m_pPlayer->Change_Animation(m_iAnimation_TeleportStart, false, 0.f);
 
+    m_vRimLightColor = _Vec4(0.f, 0.f, 0.f, 0.5f);
 
     m_isEnd_Teleport = false;
 
@@ -55,16 +56,18 @@ void CState_Player_Teleport::Update(_float fTimeDelta)
             m_isEnd_Teleport = false;
             m_pPlayer->Change_Animation(m_iAnimation_TeleportEnd, false, 0.3f);
         }
-        else if (iFrame > 80 && !m_isEnd_Teleport)
+        else if (iFrame > 80 )
         {
-            m_pPlayer->Set_IsTeleport(true);
+            m_vRimLightColor.z = max(m_vRimLightColor.z + fTimeDelta, 1.f);
+            m_vRimLightColor.w = max(m_vRimLightColor.w - 0.6f * fTimeDelta, 0.1f);
         }
     }
     else if (iCurAnim == m_iAnimation_TeleportEnd)
     {
         if (iFrame > 10)
         {
-            m_pPlayer->Set_IsTeleport(false);
+            m_vRimLightColor.z = max(m_vRimLightColor.z - 1.5f * fTimeDelta, 0.f);
+            m_vRimLightColor.w = min(m_vRimLightColor.w + 1.5f * fTimeDelta, 0.5f);
         }
         if (End_Check())
         {
@@ -76,10 +79,15 @@ void CState_Player_Teleport::Update(_float fTimeDelta)
                 m_pPlayer->Change_State(CPlayer::TH_IDLE);
         }
     }
+
+    m_pPlayer->Set_RimLightColor(m_vRimLightColor);
 }
 
 void CState_Player_Teleport::End_State()
 {
+    m_vRimLightColor = _Vec4(0.f, 0.f, 0.f, 0.f);
+    m_pPlayer->Set_RimLightColor(m_vRimLightColor);
+
     m_pSteppingStone = nullptr;
 }
 

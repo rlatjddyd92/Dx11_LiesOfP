@@ -4,7 +4,7 @@
 #include "Model.h"
 #include "Player.h"
 #include "Camera.h"
-#include "Lift_Controller.h"
+#include "Stargazer.h"
 
 CState_Player_Stargazer::CState_Player_Stargazer(CFsm* pFsm, CPlayer* pPlayer)
     :CState{ pFsm }
@@ -27,6 +27,8 @@ HRESULT CState_Player_Stargazer::Initialize(_uint iStateNum, void* pArg)
 
 HRESULT CState_Player_Stargazer::Start_State(void* pArg)
 {
+    m_pStargazer = static_cast<CStargazer*>(pArg);
+
     m_pPlayer->Change_Animation(m_iAnimation_Stargazer, false, 0.1f);
 
     return S_OK;
@@ -34,6 +36,13 @@ HRESULT CState_Player_Stargazer::Start_State(void* pArg)
 
 void CState_Player_Stargazer::Update(_float fTimeDelta)
 {
+    _int iFrame = m_pPlayer->Get_Frame();
+
+    if (iFrame > 50)
+    {
+        m_pStargazer->Start_Restore();
+    }
+
     if (End_Check())
     {
         _uint iWeponType = m_pPlayer->Get_WeaponType();

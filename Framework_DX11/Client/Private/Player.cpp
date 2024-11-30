@@ -113,8 +113,8 @@ HRESULT CPlayer::Initialize(void * pArg)
 	//m_pNavigationCom->Move_to_Cell(m_pRigidBodyCom, 772); //긴사다리
 	//m_pNavigationCom->Move_to_Cell(m_pRigidBodyCom, 427); //짧은사다리
 	//m_pNavigationCom->Move_to_Cell(m_pRigidBodyCom, 341); //아래엘베
-	m_pNavigationCom->Move_to_Cell(m_pRigidBodyCom, 440); //상자랑 장애물
-	//m_pNavigationCom->Move_to_Cell(m_pRigidBodyCom, 1068); // 순간이동
+	//m_pNavigationCom->Move_to_Cell(m_pRigidBodyCom, 440); //상자랑 장애물
+	m_pNavigationCom->Move_to_Cell(m_pRigidBodyCom, 1068); // 순간이동
 
 
 	m_strObjectTag = TEXT("Player");
@@ -127,7 +127,7 @@ HRESULT CPlayer::Initialize(void * pArg)
 	// 게임 인터페이스와 연결을 위해 추가 
 	GET_GAMEINTERFACE->Input_Player_Pointer(this);
 
-	m_vRimLightColor = _Vec4(0.f, 0.f, 1.f, 0.5f);
+	m_vRimLightColor = _Vec4(0.f, 0.f, 0.f, 0.f);
 
 	return S_OK;
 }
@@ -139,16 +139,6 @@ void CPlayer::Priority_Update(_float fTimeDelta)
 		m_fGuardTime += fTimeDelta;
 	}
 
-	if (m_isTeleport)
-	{
-		m_vRimLightColor.z = max(m_vRimLightColor.z + fTimeDelta, 1.f);
-		m_vRimLightColor.w = max(m_vRimLightColor.w - fTimeDelta, 0.1f);
-	}
-	else
-	{
-		m_vRimLightColor.z = max(m_vRimLightColor.z - fTimeDelta, 0.f);
-		m_vRimLightColor.w = min(m_vRimLightColor.w + 1.5f * fTimeDelta, 0.5f);
-	}
 
 	if (KEY_TAP(KEY::WHEELBUTTON))
 		LockOnOff();
