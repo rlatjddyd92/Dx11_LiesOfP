@@ -170,6 +170,7 @@
     <Text Include="ReadMe.txt" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="..\Public\AObj_ChargeSwing.h" />
     <ClInclude Include="..\Public\AObj_StampBlast.h" />
     <ClInclude Include="..\Public\AttackObject.h" />
     <ClInclude Include="..\public\BackGround.h" />
@@ -376,6 +377,7 @@
     <ClInclude Include="UI_Enum.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="..\Private\AObj_ChargeSwing.cpp" />
     <ClCompile Include="..\Private\AObj_StampBlast.cpp" />
     <ClCompile Include="..\Private\AttackObject.cpp" />
     <ClCompile Include="..\private\BackGround.cpp" />

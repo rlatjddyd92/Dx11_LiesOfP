@@ -476,8 +476,9 @@ HRESULT CSimonManus::Ready_Effects()
 
 	m_Effects[P1_CHARGESTAMP]->Set_Dead(true);
 
-	m_Effects[P1_CHARGESWING] = CEffect_Manager::Get_Instance()->Clone_Effect(TEXT("SimonManus_Attack_ChargeSwing"), pParetnMatrix,
-		pSocketBoneMatrix, _Vec3(0.f, 0.f, 0.f), _Vec3(0.f, 0.f, 0.f), _Vec3(1.f, 1.f, 1.f));
+	//해당 이펙트도 차지스탬프2처럼 오브젝트로 만들어야함
+	//m_Effects[P1_CHARGESWING] = CEffect_Manager::Get_Instance()->Clone_Effect(TEXT("SimonManus_Attack_ChargeSwing"), pParetnMatrix,
+	//	pSocketBoneMatrix, _Vec3(0.f, 0.f, 0.f), _Vec3(0.f, 0.f, 0.f), _Vec3(1.f, 1.f, 1.f));
 
 
 	return S_OK;

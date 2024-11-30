@@ -21,6 +21,7 @@
 #include "SimonManus.h"
 
 #include "AObj_StampBlast.h"
+#include "AObj_ChargeSwing.h"
 #pragma endregion
 
 #pragma region EFFECT
@@ -965,6 +966,10 @@ HRESULT CLoader::Ready_Prototype()
 	if (FAILED(m_pGameInstance->Add_Prototype(TEXT("Prototype_GameObject_StampBlast"),
 		CAObj_StampBlast::Create(m_pDevice, m_pContext))))
 		return E_FAIL;
+	if (FAILED(m_pGameInstance->Add_Prototype(TEXT("Prototype_GameObject_ChargeSwing"),
+		CAObj_ChargeSwing::Create(m_pDevice, m_pContext))))
+		return E_FAIL;
+
 
 	/* For. Prototype_GameObject_Weapon_SimonManus_Hammer */
 	if (FAILED(m_pGameInstance->Add_Prototype(TEXT("Prototype_GameObject_Weapon_SimonManus_Hammer"),

@@ -751,6 +751,9 @@
     <Filter Include="05.Fsm\Monster\SimonManus\P2\Attack\Single\SlideMagic">
       <UniqueIdentifier>{98ea13ef-4526-4f97-a1fc-776b66a793b8}</UniqueIdentifier>
     </Filter>
+    <Filter Include="02.GameObjects\12.AttackObject\SimonManus\ChargeSwing">
+      <UniqueIdentifier>{8f3085a2-11c3-46f3-b3de-5e5066470893}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Client.h">
@@ -1367,6 +1370,9 @@
     <ClInclude Include="..\Public\State_SimonManusP2_SlideMagic.h">
       <Filter>05.Fsm\Monster\SimonManus\P2\Attack\Single\SlideMagic</Filter>
     </ClInclude>
+    <ClInclude Include="..\Public\AObj_ChargeSwing.h">
+      <Filter>02.GameObjects\12.AttackObject\SimonManus\ChargeSwing</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Client.cpp">
@@ -1952,6 +1958,9 @@
     </ClCompile>
     <ClCompile Include="..\Private\State_SimonManusP2_SlideMagic.cpp">
       <Filter>05.Fsm\Monster\SimonManus\P2\Attack\Single\SlideMagic</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Private\AObj_ChargeSwing.cpp">
+      <Filter>02.GameObjects\12.AttackObject\SimonManus\ChargeSwing</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
