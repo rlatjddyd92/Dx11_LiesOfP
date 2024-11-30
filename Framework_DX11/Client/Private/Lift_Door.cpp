@@ -156,9 +156,9 @@ HRESULT CLift_Door::Ready_Components()
 	RigidBodyDesc.PxLockFlags = PxRigidDynamicLockFlag::eLOCK_ANGULAR_X |
 		PxRigidDynamicLockFlag::eLOCK_ANGULAR_Y |
 		PxRigidDynamicLockFlag::eLOCK_ANGULAR_Z |
-		PxRigidDynamicLockFlag::eLOCK_LINEAR_X  |
-		PxRigidDynamicLockFlag::eLOCK_LINEAR_Y  |
-		PxRigidDynamicLockFlag::eLOCK_LINEAR_Z  
+		PxRigidDynamicLockFlag::eLOCK_LINEAR_X |
+		PxRigidDynamicLockFlag::eLOCK_LINEAR_Y |
+		PxRigidDynamicLockFlag::eLOCK_LINEAR_Z
 		;
 
 	physX::GeometryBox BoxDesc;

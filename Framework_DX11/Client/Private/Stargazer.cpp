@@ -34,10 +34,10 @@ HRESULT CStargazer::Initialize(void* pArg)
 		return E_FAIL;
 
 	m_pPlayer = m_pGameInstance->Find_Player(LEVEL_GAMEPLAY);
-
-	m_iAnim_Close = m_pModelCom[RESTORED]->Find_AnimationIndex("AS_Close_Idle", 3.f);
-	m_iAnim_Open = m_pModelCom[RESTORED]->Find_AnimationIndex("AS_Open", 0.1f);
-	m_iAnim_OpenIdle = m_pModelCom[RESTORED]->Find_AnimationIndex("AS_Open_Idle", 3.f);
+	 
+	m_iAnim_Close = m_pModelCom[RESTORED]->Find_AnimationIndex("AS_Close_Idle", 1.f);
+	m_iAnim_Open = m_pModelCom[RESTORED]->Find_AnimationIndex("AS_Open", 0.5f);
+	m_iAnim_OpenIdle = m_pModelCom[RESTORED]->Find_AnimationIndex("AS_Open_Idle", 1.f);
 	m_iAnim_Broken = m_pModelCom[BROKEN]->Find_AnimationIndex("AS_Stargazer_broken_idle", 3.f);
 	m_iAnim_Restore = m_pModelCom[BROKEN]->Find_AnimationIndex("AS_Stargazer_restore", 3.f);
 	
@@ -70,15 +70,6 @@ void CStargazer::Update(_float fTimeDelta)
 			{
 				m_pCurrentModel->SetUp_Animation(m_iAnim_Restore);
 			}
-
-			if (m_bRestored && m_isClose)
-			{
-				m_isClose = false;
-				m_isOpening = true;
-				m_pCurrentModel->SetUp_NextAnimation(m_iAnim_Open);
-			}
-			
-			//UI 기능 넣기
 		}
 	}
 
@@ -98,6 +89,13 @@ void CStargazer::Update(_float fTimeDelta)
 			m_pCurrentModel = m_pModelCom[RESTORED];
 			m_fRestoreTimer = 0.f; 
 		}
+	}
+
+	if (m_bRestored && m_isClose)
+	{
+		m_isClose = false;
+		m_isOpening = true;
+		m_pCurrentModel->SetUp_NextAnimation(m_iAnim_Open);
 	}
 
 	//열리는 중->열리고 나서 기본 애니로 변경

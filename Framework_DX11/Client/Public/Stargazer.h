@@ -36,7 +36,7 @@ public:
 	virtual void OnCollisionExit(CGameObject* pOther) override;
 
 public:
-	_bool Get_IsRestored() { return m_bRestored; }
+	_bool Get_IsOpend() { return m_isOpened; }
 
 private:
 	CCollider* m_pColliderCom = { nullptr};
@@ -60,6 +60,8 @@ private:
 	_int m_iCurrnetCellNum = { -1 };
 
 	_float m_fRestoreTimer = { 0.f };
+	_float m_fOpeningTimer = { 0.f };
+	_float m_fRatio = { 1.f };
 
 	CGameObject* m_pPlayer = { nullptr };
 	CModel* m_pCurrentModel = { nullptr };
