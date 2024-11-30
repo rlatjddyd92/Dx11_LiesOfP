@@ -45,13 +45,23 @@ public:
 	void		Set_UpTargetPos();
 	void		Look_Player();
 	_float		Calc_Distance_XZ();
+
 	virtual void	Active_CurrentWeaponCollider(_float fDamageRatio, _uint iCollIndex = 0);
 	virtual void	DeActive_CurretnWeaponCollider(_uint iCollIndex = 0);
+
 	void		Set_RimLightColor(_Vec4 vColor) { m_vRimLightColor = vColor; }
+
 public:
 	virtual void OnCollisionEnter(CGameObject* pOther) override;
 	virtual void OnCollisionStay(CGameObject* pOther) override;
 	virtual void OnCollisionExit(CGameObject* pOther) override;
+
+	virtual void	Reset_WeaponOverlapCheck(_uint iCollIndex = 0) {};
+	virtual void	Change_WeaponAnimation(_int iAnimIndex, _bool isLoop, _float fChangeDuration = 0.2f, _int iStartFrame = 0, _bool bEitherChange = true, _bool bSameChange = false) {};
+	virtual _bool	Get_WeaponAnimEnd(_int iAnimIndex) { return false; }
+
+	virtual const _Matrix* Get_WeaponBoneCombinedMat(_uint iBoneIndex) { return &_Matrix{}; }
+	virtual const _Matrix* Get_WeaponWorldMat() { return &_Matrix{}; }
 
 protected:
 	_Vec4		m_vRootMoveStack{};

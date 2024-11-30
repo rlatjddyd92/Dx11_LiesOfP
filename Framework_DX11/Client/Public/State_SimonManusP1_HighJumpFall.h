@@ -29,11 +29,15 @@ private:
     _Vec4               m_vTargetDir{};
     _Vec3               m_vFlyMoveStack{};
 
+    _float              m_fCurtRimAlpha = {};
+    _float              m_fGoalRimAlpha = {};
+
     _bool               m_bResetRim = { false };
 
 private:
     _bool               End_Check();
     void                Collider_Check();
+    void                Update_Rimlight();
 
 public:
     static CState_SimonManusP1_HighJumpFall* Create(class CFsm* pFsm, class CMonster* pMonster, _uint iStateNum, void* pArg = nullptr);

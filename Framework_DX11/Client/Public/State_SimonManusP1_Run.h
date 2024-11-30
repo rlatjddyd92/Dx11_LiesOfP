@@ -28,6 +28,7 @@ private:
     class CMonster* m_pMonster = { nullptr };
 
     _float              m_fRunSpeed = { 5.f };
+    _float              m_fAttackDelay = {};
 
 public:
     static CState_SimonManusP1_Run* Create(class CFsm* pFsm, class CMonster* pMonster, _uint iStateNum, void* pArg = nullptr);

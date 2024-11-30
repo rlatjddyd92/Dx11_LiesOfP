@@ -19,6 +19,8 @@
 #include "CarcassBigA.h"
 #include "CarcassTail.h"
 #include "SimonManus.h"
+
+#include "AObj_StampBlast.h"
 #pragma endregion
 
 #pragma region EFFECT
@@ -957,6 +959,11 @@ HRESULT CLoader::Ready_Prototype()
 	/* For. Prototype_GameObject_SimonManus */
 	if (FAILED(m_pGameInstance->Add_Prototype(TEXT("Prototype_GameObject_SimonManus"),
 		CSimonManus::Create(m_pDevice, m_pContext))))
+		return E_FAIL;
+
+	// 이펙트 있는 공격 오브젝트
+	if (FAILED(m_pGameInstance->Add_Prototype(TEXT("Prototype_GameObject_StampBlast"),
+		CAObj_StampBlast::Create(m_pDevice, m_pContext))))
 		return E_FAIL;
 
 	/* For. Prototype_GameObject_Weapon_SimonManus_Hammer */

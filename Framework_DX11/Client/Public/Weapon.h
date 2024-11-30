@@ -51,6 +51,9 @@ public:
 	virtual void OnCollisionStay(CGameObject* pOther) {};
 	virtual void OnCollisionExit(CGameObject* pOther) {};
 
+	virtual void ChangeAnimation(_int iAnimIndex, _bool isLoop, _float fChangeDuration = 0.2f, _int iStartFrame = 0, _bool bEitherChange = true, _bool bSameChange = false) {};
+	virtual _bool is_EndAnim(_int iAnimIndex) { return false; }
+
 public:
 	virtual void Active_Collider(_float fDamageRatio = 1.f, _uint iHandIndex = 0);		//1번 왼손 0번 오른손
 	virtual void DeActive_Collider(_uint iHandIndex = 1);
@@ -62,6 +65,10 @@ public:
 	void Disappear();
 
 	void ChangeSocketMatrix(const _Matrix* pMat) { m_pSocketMatrix = pMat; }
+	void Reset_OverLapCheck() { m_DamagedObjects.clear(); }
+
+	const _Matrix* Get_BoneCombinedMatrix(_uint iBoneIndex);
+	const _Matrix* Get_WorldMatrix_Ptr() { return &m_WorldMatrix; }
 
 protected:
 	CShader*			m_pShaderCom = { nullptr };	

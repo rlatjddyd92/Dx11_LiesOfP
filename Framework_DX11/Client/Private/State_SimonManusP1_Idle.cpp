@@ -21,6 +21,16 @@ HRESULT CState_SimonManusP1_Idle::Start_State(void* pArg)
 {
     m_pMonster->Change_Animation(AN_IDLE, true, 0.1f, 0);
     
+    if (pArg != nullptr)
+    {
+        m_fIdleTime = *static_cast<_float*>(pArg);
+    }
+    else
+    {
+        m_fIdleTime = 0;
+    }
+
+
     return S_OK;
 }
 
@@ -30,37 +40,29 @@ void CState_SimonManusP1_Idle::Update(_float fTimeDelta)
     _float fDist = m_pMonster->Calc_Distance_XZ();
     if (m_fIdleEndDuration <= m_fIdleTime)
     {
-        if (m_iAtkCnt >= 3.f && fDist <= 15.f && 6.f < fDist)   //m_iAtkCnt >= 3.f && fDist <= 15.f && 6.f < fDist
+        if (m_iAtkCnt >= 3.f && fDist <= 20.f && 9.f < fDist)   //m_iAtkCnt >= 3.f && fDist <= 15.f && 6.f < fDist
         {
             //하이점프폴
             m_iAtkCnt = 0;
             m_pMonster->Change_State(CSimonManus::ATK_HIGHJUMPFALL);
             return;
         }
-        if (fDist <= 7.f)
+        if (fDist <= 10.f)
         {
             Calc_Act_Attack(fDist);
             return;
         }
-        else if (fDist > 9.f)
+        else if (fDist > 14.f)
         {
             m_pMonster->Change_State(CSimonManus::RUN);
             return;
         }
-        else if (fDist > 6.f)
+        else if (fDist > 9.f)
         {
             m_pMonster->Change_State(CSimonManus::WALK);
             return;
         }
-        //if (true)
-        //{
-        //    m_pMonster->Change_State(CSimonManus::ATK_SWIPMULT_L);
-        //
-        //}
-        //else
-        //{
-        //    m_pMonster->Change_State(CSimonManus::ATK_AVOIDSWING);
-        //}
+        //m_pMonster->Change_State(CSimonManus::ATK_SWINGDOWN_L);
 
         return;
     }
@@ -92,11 +94,11 @@ void CState_SimonManusP1_Idle::End_State()
 
 void CState_SimonManusP1_Idle::Calc_Act_Attack(_float fDist)
 {
-    if (fDist <= 4.f)
+    if (fDist <= 6.f)
     {
         //어보이드, 점프, 스다 엘알  스탬프, 차지까지 까지
-        _int iAtkNum = rand() % 6;
-        iAtkNum = 0;
+        _int iAtkNum = rand() % 5;
+        iAtkNum = 3;
         switch (iAtkNum)
         {
         case 0:
@@ -119,9 +121,6 @@ void CState_SimonManusP1_Idle::Calc_Act_Attack(_float fDist)
             m_pMonster->Change_State(CSimonManus::ATK_JUMPTOSWING);
             break;
 
-        case 5:
-            m_pMonster->Change_State(CSimonManus::ATK_CHARGE_SWINGDOWN);
-            break;
 
         default:
             break;
@@ -130,9 +129,9 @@ void CState_SimonManusP1_Idle::Calc_Act_Attack(_float fDist)
 
         return;
     }
-    else
+    else if (fDist <= 8.f)
     {
-        //거리가 긴 기술 스멀 엘알 체이싱 스팅
+
         _int iAtkNum = rand() % 4;
         switch (iAtkNum)
         {
@@ -141,14 +140,37 @@ void CState_SimonManusP1_Idle::Calc_Act_Attack(_float fDist)
             break;
 
         case 1:
-            m_pMonster->Change_State(CSimonManus::ATK_CHASINGSWING);
+            m_pMonster->Change_State(CSimonManus::ATK_SWINGDOWN_L);
             break;
 
         case 2:
-            m_pMonster->Change_State(CSimonManus::ATK_SWIPMULT_L);
+            m_pMonster->Change_State(CSimonManus::ATK_SWINGDOWN_R);
             break;
 
         case 3:
+            m_pMonster->Change_State(CSimonManus::ATK_CHARGE_SWINGDOWN);
+            break;
+
+        default:
+            break;
+        }
+
+    }
+    else
+    {
+        //거리가 긴 기술 스멀 엘알 체이싱 스팅
+        _int iAtkNum = rand() % 3;
+        switch (iAtkNum)
+        {
+        case 0:
+            m_pMonster->Change_State(CSimonManus::ATK_CHASINGSWING);
+            break;
+
+        case 1:
+            m_pMonster->Change_State(CSimonManus::ATK_SWIPMULT_L);
+            break;
+
+        case 2:
             m_pMonster->Change_State(CSimonManus::ATK_SWIPMULT_R);
             break;
 

@@ -20,7 +20,7 @@ HRESULT CState_SimonManusP1_Charge_SwingDown::Initialize(_uint iStateNum, void* 
 
 HRESULT CState_SimonManusP1_Charge_SwingDown::Start_State(void* pArg)
 {
-    m_pMonster->Change_Animation(AN_STINGATTACK, false, 0.1f, 0);
+    m_pMonster->Change_Animation(AN_CHARGESWINGDOWN, false, 0.1f, 0);
 
     return S_OK;
 }
@@ -44,7 +44,7 @@ void CState_SimonManusP1_Charge_SwingDown::End_State()
 
 _bool CState_SimonManusP1_Charge_SwingDown::End_Check()
 {
-    return m_pMonster->Get_EndAnim(AN_STINGATTACK);
+    return m_pMonster->Get_EndAnim(AN_CHARGESWINGDOWN);
 }
 
 void CState_SimonManusP1_Charge_SwingDown::Collider_Check()
