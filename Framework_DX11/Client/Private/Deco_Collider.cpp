@@ -80,7 +80,6 @@ void CDeco_Collider::Late_Update(_float fTimeDelta)
     m_vPrePos = m_vCurPos;
 
     __super::Late_Update(fTimeDelta);
-    m_pGameInstance->Add_ColliderList(m_pColliderCom);
 
 #ifdef _DEBUG
     if (m_pColliderCom != nullptr)
