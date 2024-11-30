@@ -82,6 +82,9 @@ public:		//_bool pOut은 메인 애니메이션의 종료를 반환,
 
 	void		Update_Bone();
 
+	_Vec3       Get_Model_MinSize() { return m_vMinPos; }
+	_Vec3       Get_Model_MaxSize() { return m_vMaxPos; }
+
 public:
 	HRESULT		Bind_Material(class CShader* pShader, const _char* pConstantName, TEXTURE_TYPE eMaterialType, _uint iMeshIndex);
 	HRESULT		Bind_MeshBoneMatrices(class CShader* pShader, const _char* pConstantName, _uint iMeshIndex);

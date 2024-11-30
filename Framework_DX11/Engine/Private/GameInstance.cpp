@@ -22,6 +22,9 @@
 //정승현
 #include "Instance_Manager.h"
 
+//양우송
+#include "WorldOctree_Manager.h"
+
 IMPLEMENT_SINGLETON(CGameInstance)
 
 CGameInstance::CGameInstance()
@@ -123,6 +126,11 @@ HRESULT CGameInstance::Initialize_Engine(HINSTANCE hInst, _uint iNumLevels, cons
 	if (nullptr == m_pSound_Manager)
 		return E_FAIL;
 
+	//양우송
+	/*m_pWorldOctree_Manager = CWorldOctree_Manager::Create();
+	if (nullptr == m_pWorldOctree_Manager)
+		return E_FAIL;*/
+
 	return S_OK;
 }
 
@@ -149,10 +157,11 @@ void CGameInstance::Update_Engine(_float fTimeDelta)
 	
 	m_pLevel_Manager->Update(fTimeDelta);		
 
-
 	m_pPhysX_Manager->PhysX_Update(fTimeDelta);
 
 	m_pSound_Manager->Update();
+
+	//m_pWorldOctree_Manager->Update();
 }
 
 HRESULT CGameInstance::Draw_Engine()
@@ -806,7 +815,7 @@ void CGameInstance::Release_Engine()
 	Safe_Release(m_pCollider_Manager);
 	// 2024-11-06 김성용
 	Safe_Release(m_pCSVFile_Manager);
-
+	//Safe_Release(m_pWorldOctree_Manager);
 	Safe_Release(m_pFrustum);
 	Safe_Release(m_pPicking);
 	Safe_Release(m_pTarget_Manager);

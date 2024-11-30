@@ -44,12 +44,12 @@ HRESULT COctree::Initialize(_Vec3 _vMinPos, _Vec3 _vMaxPos, _uint* pIndices,  VT
 		Build_Octree(ParentTrigangleIndexes, pVertexes, pIndices, iNumTri);
 
 	//너무 헷갈림 enum 값으로 해보자
-	_float fLeft;
-	_float fRight;
-	_float fTop;
-	_float fBottom;
-	_float fFront;
-	_float fBack;
+	//_float fLeft;
+	//_float fRight;
+	//_float fTop;
+	//_float fBottom;
+	//_float fFront;
+	//_float fBack;
 
 	//예쁘게 변수 만들어서~
 	//윗층

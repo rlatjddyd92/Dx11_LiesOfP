@@ -262,6 +262,9 @@ private:
 	// 2024-11-06 ±è¼º¿ë
 	class CCSVFile_Manager*			m_pCSVFile_Manager = { nullptr };
 
+	//¿ÁÆ®¸®
+	class CWorldOctree_Manager*		m_pWorldOctree_Manager = {nullptr};
+
 private:
 	_bool m_isPicking = { false };
 

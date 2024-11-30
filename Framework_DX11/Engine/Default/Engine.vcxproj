@@ -88,6 +88,8 @@
     <ClCompile Include="..\private\VIBuffer_Rect.cpp" />
     <ClCompile Include="..\Private\VIBuffer_Rect_Instance.cpp" />
     <ClCompile Include="..\Private\VIBuffer_Terrain.cpp" />
+    <ClCompile Include="..\Private\WorldOctree.cpp" />
+    <ClCompile Include="..\Private\WorldOctree_Manager.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\public\Animation.h" />
@@ -164,6 +166,8 @@
     <ClInclude Include="..\public\VIBuffer_Rect.h" />
     <ClInclude Include="..\Public\VIBuffer_Rect_Instance.h" />
     <ClInclude Include="..\Public\VIBuffer_Terrain.h" />
+    <ClInclude Include="..\Public\WorldOctree.h" />
+    <ClInclude Include="..\Public\WorldOctree_Manager.h" />
   </ItemGroup>
   <ItemGroup>
     <FxCompile Include="..\..\Client\Bin\ShaderFiles\Shader_Effect_Texture.hlsl" />
