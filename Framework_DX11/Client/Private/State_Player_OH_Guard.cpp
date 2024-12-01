@@ -56,9 +56,9 @@ void CState_Player_OH_Guard::Update(_float fTimeDelta)
         }
         if (!Move(fTimeDelta))
         {
-            m_pPlayer->Change_Animation(m_iAnimation_Guard, true);
+            m_pPlayer->Change_Animation(m_iAnimation_Guard, true, 0.05f);
         }
-        m_pPlayer->Change_Animation_Boundry(m_iAnimation_Guard, true, 0.2f);
+        m_pPlayer->Change_Animation_Boundry(m_iAnimation_Guard, true, 0.05f);
     }
 
     if (KEY_NONE(KEY::LSHIFT))

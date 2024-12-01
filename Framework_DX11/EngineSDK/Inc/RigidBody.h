@@ -14,6 +14,7 @@ public:
         _bool               isOnCell = true;
         _bool               isLockCell = true;
         _bool               isCapsule = false;
+        _bool               isUseClient = false;
 
         _float              fStaticFriction = 0.5f;
         _float              fDynamicFriction = 0.5f;
@@ -61,6 +62,7 @@ private:
     _bool			m_isStatic = { false };
     _bool           m_isOnCell = { true };
     _bool           m_isLockCell = { true };
+    _bool           m_isUseClient = { false };
 
     PxRigidActor* m_PxActor = { nullptr };
     PxMaterial* m_PxMaterial = { nullptr };

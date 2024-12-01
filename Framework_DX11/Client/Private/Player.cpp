@@ -115,7 +115,7 @@ HRESULT CPlayer::Initialize(void * pArg)
 	//m_pNavigationCom->Move_to_Cell(m_pRigidBodyCom, 772); //긴사다리
 	//m_pNavigationCom->Move_to_Cell(m_pRigidBodyCom, 427); //짧은사다리
 	//m_pNavigationCom->Move_to_Cell(m_pRigidBodyCom, 341); //아래엘베
-	//m_pNavigationCom->Move_to_Cell(m_pRigidBodyCom, 440); //상자랑 장애물
+	m_pNavigationCom->Move_to_Cell(m_pRigidBodyCom, 440); //상자랑 장애물
 	//m_pNavigationCom->Move_to_Cell(m_pRigidBodyCom, 1068); // 순간이동
 
 	m_strObjectTag = TEXT("Player");
@@ -711,6 +711,7 @@ _bool CPlayer::Decrease_Stamina(_float fAmount)
 		m_tPlayer_Stat->vGauge_Stamina.x = 0.f;
 		return false;
 	}
+	m_fStaminaRecoveryTime = 1.3f;	// 1.3f초 후에 회복
 
 	return true;
 }
@@ -814,6 +815,22 @@ CPlayer * CPlayer::Create(ID3D11Device * pDevice, ID3D11DeviceContext * pContext
 	}
 
 	return pInstance;
+}
+
+void CPlayer::Update_Stat(_float fTimeDelta)
+{
+#pragma region 스테미나
+	if (m_fStaminaRecoveryTime > 0.f)
+	{
+		m_fStaminaRecoveryTime -= fTimeDelta;
+	}
+	else if (m_fStaminaRecoveryTime <= 0.f)
+	{
+		m_tPlayer_Stat->vGauge_Stamina.x = min(m_tPlayer_Stat->vGauge_Stamina.x + fTimeDelta, m_tPlayer_Stat->vGauge_Stamina.z);
+	}
+#pragma endregion
+
+
 }
 
 CPawn* CPlayer::Clone(void * pArg)

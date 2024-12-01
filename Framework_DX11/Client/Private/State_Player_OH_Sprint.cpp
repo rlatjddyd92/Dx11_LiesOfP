@@ -43,6 +43,7 @@ void CState_Player_OH_Sprint::Update(_float fTimeDelta)
     if (m_isSprintEnd)
         m_fSprintEndTime += fTimeDelta;
 
+    m_pPlayer->Decrease_Stamina(fTimeDelta * 5.f);
 
     if (false == Move(fTimeDelta) && m_fSprintEndTime > 0.1f)
     {

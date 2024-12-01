@@ -216,13 +216,15 @@ private:
 #pragma endregion
 
 private:
+	_float				m_fStaminaRecoveryTime = {};
+
+private:
 	HRESULT Ready_Components();
 	HRESULT Ready_Weapon();
 	HRESULT Ready_FSM();
 	HRESULT Ready_Effect();
 	
-
-
+	void Update_Stat(_float fTimeDelta);
 	void CollisionStay_IntercObj(CGameObject* pGameObject);
 
 public:
