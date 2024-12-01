@@ -4,10 +4,14 @@
 #include "GameObject.h"
 #include "Layer.h"
 
-CWorldOctree_Manager::CWorldOctree_Manager()
+CWorldOctree_Manager::CWorldOctree_Manager(ID3D11Device* pDevice, ID3D11DeviceContext* pContext)
 	:m_pGameInstance{ CGameInstance::Get_Instance() }
+	, m_pDevice{ pDevice }
+	, m_pContext{ pContext }
 {
 	Safe_AddRef(m_pGameInstance);
+	Safe_AddRef(m_pDevice);
+	Safe_AddRef(m_pContext);
 }
 
 HRESULT CWorldOctree_Manager::Initialize()
@@ -17,6 +21,9 @@ HRESULT CWorldOctree_Manager::Initialize()
 
 void CWorldOctree_Manager::Update()
 {
+	if (m_bActive_Octree == false)
+		return;
+
 	m_FrustumCulledNodes.clear();
 
 	//절두체 컬링으로 그려질 노드 판단
@@ -26,9 +33,9 @@ void CWorldOctree_Manager::Update()
 
 void CWorldOctree_Manager::Create_Octree(_Vec3 vMinPos, _Vec3 vMaxPos)
 {
-	_int iDepth = -1;
+	_int iDepth = -100;
 	vector<CGameObject*> ObjectList = m_pGameInstance->Find_Layer((_uint)3, TEXT("Layer_Map"))->Get_ObjectList();
-	m_pWorldOctree = CWorldOctree::Create(vMinPos, vMaxPos, ObjectList, &iDepth);
+	m_pWorldOctree = CWorldOctree::Create(m_pDevice, m_pContext, vMinPos, vMaxPos, ObjectList, &iDepth);
 }
 
 _bool CWorldOctree_Manager::Is_In_FrustumCulledOctree(vector<_int>& pWorldOctreeIndex)
@@ -43,9 +50,15 @@ _bool CWorldOctree_Manager::Is_In_FrustumCulledOctree(vector<_int>& pWorldOctree
 	return false;
 }
 
-CWorldOctree_Manager* CWorldOctree_Manager::Create()
+void CWorldOctree_Manager::Render()
 {
-	CWorldOctree_Manager* pInstance = new CWorldOctree_Manager();
+	if (m_pWorldOctree)
+		m_pWorldOctree->Render();
+}
+
+CWorldOctree_Manager* CWorldOctree_Manager::Create(ID3D11Device* pDevice, ID3D11DeviceContext* pContext)
+{
+	CWorldOctree_Manager* pInstance = new CWorldOctree_Manager(pDevice, pContext);
 
 	if (FAILED(pInstance->Initialize()))
 	{
@@ -61,4 +74,6 @@ void CWorldOctree_Manager::Free()
 	__super::Free();
 
 	Safe_Release(m_pGameInstance);
+	Safe_Release(m_pDevice);
+	Safe_Release(m_pContext);
 }

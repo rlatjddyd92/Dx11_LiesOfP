@@ -45,6 +45,7 @@ public:
 
 	_bool		m_isInstance = { false };
 	_bool		m_bShadow = { false };
+	_bool		m_bOctreeCulling = { false };
 
 	_int		m_iCurrentCellNum = { -1 };
 

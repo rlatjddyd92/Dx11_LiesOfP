@@ -127,7 +127,7 @@ HRESULT CGameInstance::Initialize_Engine(HINSTANCE hInst, _uint iNumLevels, cons
 		return E_FAIL;
 
 	//¾ç¿ì¼Û
-	m_pWorldOctree_Manager = CWorldOctree_Manager::Create();
+	m_pWorldOctree_Manager = CWorldOctree_Manager::Create(*ppDevice, *ppContext);
 	if (nullptr == m_pWorldOctree_Manager)
 		return E_FAIL;
 
@@ -817,6 +817,21 @@ void CGameInstance::Create_Octree(_Vec3 vMinPos, _Vec3 vMaxPos)
 _bool CGameInstance::Is_In_FrustumCulledOctree(vector<_int>& pWorldOctreeIndex)
 {
 	return m_pWorldOctree_Manager->Is_In_FrustumCulledOctree(pWorldOctreeIndex);
+}
+
+void CGameInstance::World_Octree_Render()
+{
+	m_pWorldOctree_Manager->Render();
+}
+
+_bool CGameInstance::Is_Active_Octree()
+{
+	return m_pWorldOctree_Manager->Is_Active_Octree();
+}
+
+void CGameInstance::Change_Active_Octree()
+{
+	m_pWorldOctree_Manager->Change_Active_Octree();
 }
 
 #pragma endregion

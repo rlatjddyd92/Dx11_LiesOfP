@@ -46,11 +46,14 @@ void CStaticObj::Priority_Update(_float fTimeDelta)
 
 void CStaticObj::Update(_float fTimeDelta)
 {
+	if (KEY_TAP(L))
+		m_pGameInstance->Change_Active_Octree();
 }
 
 void CStaticObj::Late_Update(_float fTimeDelta)
 {
-	if(m_pGameInstance->Is_In_FrustumCulledOctree(m_WorldOctreeIndex))
+	
+	if(m_pGameInstance->Is_Active_Octree() == false || m_pGameInstance->Is_In_FrustumCulledOctree(m_WorldOctreeIndex))
 	{
 		if (m_pGameInstance->isIn_Frustum_WorldSpace(m_pTransformCom->Get_State(CTransform::STATE_POSITION), m_fCullDistance))
 		{

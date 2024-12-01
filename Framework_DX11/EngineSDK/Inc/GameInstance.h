@@ -238,8 +238,12 @@ public:
 #pragma endregion
 
 #pragma region World_Octree
-		void Create_Octree(_Vec3 vMinPos, _Vec3 vMaxPos);
 		_bool Is_In_FrustumCulledOctree(vector<_int>& pWorldOctreeIndex);
+		_bool Is_Active_Octree();
+
+		void Create_Octree(_Vec3 vMinPos, _Vec3 vMaxPos);
+		void World_Octree_Render();
+		void Change_Active_Octree();
 #pragma endregion
 
 private:
