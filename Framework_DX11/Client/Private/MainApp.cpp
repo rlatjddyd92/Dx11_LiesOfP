@@ -49,6 +49,10 @@ HRESULT CMainApp::Initialize()
 
 void CMainApp::Update(_float fTimeDelta)
 {
+
+
+	m_pGameInstance->Update_Engine(fTimeDelta);
+
 	if (KEY_TAP(KEY::M))
 	{
 		g_isHideCursor = !g_isHideCursor;
@@ -68,9 +72,14 @@ void CMainApp::Update(_float fTimeDelta)
 			ClipCursor(NULL);
 		}
 	}
-
-	m_pGameInstance->Update_Engine(fTimeDelta);
-
+	else if (KEY_TAP(KEY::P))
+	{
+		m_pGameInstance->Toggle_PBR();
+	}
+	else if (KEY_TAP(KEY::O))
+	{
+		m_pGameInstance->Toggle_Shadow();
+	}
 
 	// 24-11-09 김성용
 	// GameInterface 업데이트 

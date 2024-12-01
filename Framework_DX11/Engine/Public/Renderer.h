@@ -23,6 +23,12 @@ public:
 	DOF_DESC*		Get_DOFDesc() { return &m_tDOF; }
 	RADIAL_DESC*	Get_RadialDesc() { return &m_tRadial; }
 
+	_bool			Get_IsOnPBR() { return m_isOnPBR; }
+	void			Toggle_PBR() { m_isOnPBR = !m_isOnPBR; }
+
+	_bool			Get_IsOnShadow() { return m_isOnShadow; }
+	void			Toggle_Shadow() { m_isOnShadow = !m_isOnShadow; }
+
 public:
 	HRESULT Initialize();
 	HRESULT Add_RenderObject(RENDERGROUP eRenderGroupID, class CGameObject* pRenderObject);
@@ -90,6 +96,7 @@ private:
 
 	/* Cascade */
 	ID3D11DepthStencilView*		m_pCascadeDepthStencilViewArr = { nullptr };
+	_bool						m_isOnShadow = { true };
 
 	/* HDR */
 	HDR_DESC					m_tHDR;
@@ -99,6 +106,9 @@ private:
 
 	/* Radial Blur*/
 	RADIAL_DESC					m_tRadial;
+
+	/* PBR */
+	_bool						m_isOnPBR = { true };
 
 #ifdef _DEBUG
 private:

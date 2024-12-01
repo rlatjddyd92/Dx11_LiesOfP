@@ -95,6 +95,9 @@ void CCamera::ZoomOut(_float fDuration)
 
 void CCamera::Calculat_CascadeFrustum()
 {
+	if (!m_pGameInstance->Get_IsOnShadow())
+		return;
+
 	_Matrix CascadeViewMatrix[3];
 	_Matrix CascadeProjMatrix[3];
 	_Matrix CascadeProjInverseMatrix[3];

@@ -415,6 +415,22 @@ RADIAL_DESC* CGameInstance::Get_RadialDesc()
 {
 	return m_pRenderer->Get_RadialDesc();
 }
+_bool CGameInstance::Get_IsOnPBR()
+{
+	return m_pRenderer->Get_IsOnPBR();
+}
+void CGameInstance::Toggle_PBR()
+{
+	m_pRenderer->Toggle_PBR();
+}
+_bool CGameInstance::Get_IsOnShadow()
+{
+	return m_pRenderer->Get_IsOnShadow();
+}
+void CGameInstance::Toggle_Shadow()
+{
+	m_pRenderer->Toggle_Shadow();
+}
 #ifdef _DEBUG
 HRESULT CGameInstance::Add_DebugObject(CComponent * pDebugObject)
 {
@@ -504,9 +520,9 @@ LIGHT_DESC * CGameInstance::Get_LightDesc(_uint iIndex)
 }
 #pragma endregion
 
-HRESULT CGameInstance::Render_Lights(CShader * pShader, CVIBuffer_Rect * pVIBuffer)
+HRESULT CGameInstance::Render_Lights(CShader * pShader, CVIBuffer_Rect * pVIBuffer, _bool isOnPBR)
 {
-	return m_pLight_Manager->Render(pShader, pVIBuffer);
+	return m_pLight_Manager->Render(pShader, pVIBuffer, isOnPBR);
 }
 
 _int CGameInstance::Get_Total_LightCount()

@@ -13,6 +13,7 @@ vector			g_vLightPos;
 float			g_fLightRange;
 
 float           g_fFar;
+bool            g_isShadow = true;
 
 vector			g_vLightDiffuse;
 vector			g_vLightAmbient;
@@ -57,7 +58,7 @@ float ComputeShadow(float4 vPosition, int iCascadeIndex, float4 vNormalDesc)
     vTextCoord.y = vLightProjPos.y * -0.5f + 0.5f;
 
     // 그림자 떨림 방지 
-    float fNormalOffset = 0.0001f;
+    float fNormalOffset = 0.0002f;
     float fDot = saturate(dot(normalize(g_vLightDir.xyz) * -1.f, vNormalDesc.xyz));
     float fBias = max((fNormalOffset * 5.0f) * (1.0f - (fDot * -1.0f)), fNormalOffset);
     
@@ -75,7 +76,7 @@ float ComputeShadow(float4 vPosition, int iCascadeIndex, float4 vNormalDesc)
             vector vLightDepth = g_CascadeTextureArr.SampleCmpLevelZero(DepthComparisonSampler, float3(vTextCoord, iCascadeIndex), vLightProjPos.z, int2(x, y));
             if (vLightProjPos.z - fBias > vLightDepth.x)
             {
-                fShadowPower += 0.3f;
+                fShadowPower += 0.55f;
             }
             else
             {
@@ -159,7 +160,7 @@ struct PS_OUT_LIGHT_POINT
     vector vSpecular : SV_TARGET1;
 };
 
-PS_OUT_LIGHT PS_MAIN_LIGHT_DIRECTIONAL(PS_IN In)
+PS_OUT_LIGHT PS_MAIN_LIGHT_DIRECTIONAL_PBR(PS_IN In)
 {
 	PS_OUT_LIGHT			Out = (PS_OUT_LIGHT)0;
 
@@ -232,28 +233,33 @@ PS_OUT_LIGHT PS_MAIN_LIGHT_DIRECTIONAL(PS_IN In)
         Out.vSpecular = float4((((vDiffuseBRDF + vSpecularBRDF) * cosLi * radiance) * fAmbietnOcc), 1.f);
       
     }
-
-    vector vLook = vPosition - g_vCamPosition;
     
-    float fShadowPower = 1.f;
-    if (fViewZ <= 15.f)
+    if (g_isShadow)
     {
-        fShadowPower = ComputeShadow(vPosition, 0, vNormalDesc);
+        float fShadowPower = 1.f;
+        if (fViewZ <= 15.f)
+        {
+            fShadowPower = ComputeShadow(vPosition, 0, vNormalDesc);
+        }
+        else if (fViewZ > 15.f && fViewZ <= 30.f)
+        {
+            fShadowPower = ComputeShadow(vPosition, 1, vNormalDesc);
+        }
+        else if (fViewZ > 30.f && fViewZ <= 300.f)
+        {
+            fShadowPower = ComputeShadow(vPosition, 2, vNormalDesc);
+        }
+        Out.vCascadeShadow = fShadowPower;
     }
-    else if (fViewZ > 15.f && fViewZ <= 30.f)
+    else
     {
-        fShadowPower = ComputeShadow(vPosition, 1, vNormalDesc);
+        Out.vCascadeShadow = 1.f;
     }
-    else if (fViewZ > 30.f && fViewZ <= 300.f)
-    {
-        fShadowPower = ComputeShadow(vPosition, 2, vNormalDesc);
-    }
-    Out.vCascadeShadow = fShadowPower;
 	
 	return Out;
 }
 
-PS_OUT_LIGHT_POINT PS_MAIN_LIGHT_POINT(PS_IN In)
+PS_OUT_LIGHT_POINT PS_MAIN_LIGHT_POINT_PBR(PS_IN In)
 {
     PS_OUT_LIGHT_POINT Out = (PS_OUT_LIGHT_POINT) 0;
 
@@ -279,7 +285,7 @@ PS_OUT_LIGHT_POINT PS_MAIN_LIGHT_POINT(PS_IN In)
 	return Out;
 }
 
-PS_OUT PS_MAIN_DEFERRED(PS_IN In)
+PS_OUT PS_MAIN_DEFERRED_PBR(PS_IN In)
 {
 	PS_OUT			Out = (PS_OUT)0;
     
@@ -323,7 +329,143 @@ PS_OUT PS_MAIN_BACKBUFFER(PS_IN In)
 	return Out;
 }
 
+PS_OUT_LIGHT PS_MAIN_LIGHT_DIRECTIONAL(PS_IN In)
+{
+    PS_OUT_LIGHT Out = (PS_OUT_LIGHT) 0;
 
+    vector vDepthDesc = g_DepthTexture.Sample(PointSampler, In.vTexcoord);
+    float fViewZ = vDepthDesc.y * 1000.f;
+
+    vector vNormalDesc = g_NormalTexture.Sample(PointSampler, In.vTexcoord);
+    vector vNormal = float4(vNormalDesc.xyz * 2.f - 1.f, 0.f);
+    
+    float fHalfLambert = saturate(dot(normalize(g_vLightDir.xyz) * -1.f, vNormal.xyz) * 0.5f + 0.5f);
+    Out.vShade = g_vLightDiffuse * saturate(fHalfLambert) + (g_vLightAmbient * g_vMtrlAmbient);
+    //Out.vShade = g_vLightDiffuse * saturate(max(dot(normalize(g_vLightDir) * -1.f, vNormal), 0.f) + (g_vLightAmbient * g_vMtrlAmbient));
+
+    vector vReflect = reflect(normalize(g_vLightDir), normalize(vNormal));
+
+    vector vPosition = (vector) 0;
+
+	/* 투영공간상의 화면에 그려지는 픽셀의 위치를 구한다. */
+	/* 로컬위치 * 월드행렬 * 뷰행렬 * 투영행렬 / w */
+    vPosition.x = In.vTexcoord.x * 2.f - 1.f;
+    vPosition.y = In.vTexcoord.y * -2.f + 1.f;
+    vPosition.z = vDepthDesc.x;
+    vPosition.w = 1.f;
+
+	/* 뷰스페이스 상의 화면에 그려지는 픽셀의 위치를 구한다.*/
+	/* 로컬위치 * 월드행렬 * 뷰행렬  */
+    vPosition = vPosition * fViewZ;
+    vPosition = mul(vPosition, g_ProjMatrixInv);
+
+	/* 월드 상의 화면에 그려지는 픽셀의 위치를 구한다.*/
+    vPosition = mul(vPosition, g_ViewMatrixInv);
+
+    vector vLook = vPosition - g_vCamPosition;
+
+    Out.vSpecular = (g_vLightSpecular * g_vMtrlSpecular) * pow(max(dot(normalize(vReflect) * -1.f, normalize(vLook)), 0.f), 50.f);
+
+    if (g_isShadow)
+    {
+        float fShadowPower = 1.f;
+        if (fViewZ <= 15.f)
+        {
+            fShadowPower = ComputeShadow(vPosition, 0, vNormalDesc);
+        }
+        else if (fViewZ > 15.f && fViewZ <= 30.f)
+        {
+            fShadowPower = ComputeShadow(vPosition, 1, vNormalDesc);
+        }
+        else if (fViewZ > 30.f && fViewZ <= 300.f)
+        {
+            fShadowPower = ComputeShadow(vPosition, 2, vNormalDesc);
+        }
+        Out.vCascadeShadow = fShadowPower;
+    }
+    else
+    {
+        Out.vCascadeShadow = 1.f;
+    }
+	
+    
+    return Out;
+}
+
+PS_OUT_LIGHT PS_MAIN_LIGHT_POINT(PS_IN In)
+{
+    PS_OUT_LIGHT Out = (PS_OUT_LIGHT) 0;
+
+    vector vDepthDesc = g_DepthTexture.Sample(PointSampler, In.vTexcoord);
+    float fViewZ = vDepthDesc.y * g_fFar;
+
+    vector vNormalDesc = g_NormalTexture.Sample(PointSampler, In.vTexcoord);
+    vector vNormal = float4(vNormalDesc.xyz * 2.f - 1.f, 0.f);
+
+    vector vPosition = (vector) 0;
+
+	/* 투영공간상의 화면에 그려지는 픽셀의 위치를 구한다. */
+	/* 로컬위치 * 월드행렬 * 뷰행렬 * 투영행렬 / w */
+    vPosition.x = In.vTexcoord.x * 2.f - 1.f;
+    vPosition.y = In.vTexcoord.y * -2.f + 1.f;
+    vPosition.z = vDepthDesc.x;
+    vPosition.w = 1.f;
+
+	/* 뷰스페이스 상의 화면에 그려지는 픽셀의 위치를 구한다.*/
+	/* 로컬위치 * 월드행렬 * 뷰행렬  */
+    vPosition = vPosition * fViewZ;
+    vPosition = mul(vPosition, g_ProjMatrixInv);
+
+	/* 월드 상의 화면에 그려지는 픽셀의 위치를 구한다.*/
+    vPosition = mul(vPosition, g_ViewMatrixInv);
+
+    vector vLightDir = vPosition - g_vLightPos;
+
+    float fAtt = saturate((g_fLightRange - length(vLightDir)) / g_fLightRange);
+
+    Out.vShade = g_vLightDiffuse * saturate(max(dot(normalize(vLightDir) * -1.f, vNormal), 0.f) + (g_vLightAmbient * g_vMtrlAmbient)) * fAtt;
+
+    vector vReflect = reflect(normalize(vLightDir), normalize(vNormal));
+    vector vLook = vPosition - g_vCamPosition;
+
+    Out.vSpecular = (g_vLightSpecular * g_vMtrlSpecular) * pow(max(dot(normalize(vReflect) * -1.f, normalize(vLook)), 0.f), 50.f) * fAtt;
+
+    return Out;
+}
+
+PS_OUT PS_MAIN_DEFERRED(PS_IN In)
+{
+    PS_OUT Out = (PS_OUT) 0;
+
+    vector vDiffuse = g_DiffuseTexture.Sample(LinearSampler, In.vTexcoord);
+    if (vDiffuse.a == 0.f)
+        discard;
+    
+    vector vShade = g_ShadeTexture.Sample(LinearSampler, In.vTexcoord);
+    vector vSpecular = g_SpecularTexture.Sample(LinearSampler, In.vTexcoord);
+	
+    Out.vColor = (vDiffuse * vShade + vSpecular) * g_CascadeShadowTexture.Sample(LinearSampler, In.vTexcoord);
+    
+    vector vDepthDesc = g_DepthTexture.Sample(PointSampler, In.vTexcoord);
+    vector vNormalDesc = g_NormalTexture.Sample(PointSampler, In.vTexcoord);
+    
+    float fViewZ = vDepthDesc.y * g_fFar;
+    float3 vNormal = float3(vNormalDesc.xyz * 2.f - 1.f);
+   
+    vector vPosition = Compute_WorldPos(In.vTexcoord, vDepthDesc.x, fViewZ);
+
+    //림라이트
+    float4 vRimLightColor = g_RimLightTexture.Sample(LinearSampler, In.vTexcoord);
+	
+    float3 vEyeToCamera = normalize(g_vCamPosition.xyz - vPosition.xyz);
+    float fRim = 1.f - saturate(dot(vEyeToCamera, vNormal));
+
+    fRim = pow(fRim, vRimLightColor.w * 10.f);
+    vRimLightColor *= fRim;
+    Out.vColor.xyz = saturate(Out.vColor.xyz + vRimLightColor.xyz);
+    
+    return Out;
+}
 
 technique11	DefaultTechnique
 {	
@@ -338,7 +480,7 @@ technique11	DefaultTechnique
 		PixelShader = compile ps_5_0 PS_MAIN_DEBUG();
 	}
 
-	pass Light_Directional
+	pass Light_Directional_PBR //1
 	{
 		SetRasterizerState(RS_Default);
 		SetDepthStencilState(DSS_None, 0);
@@ -347,10 +489,10 @@ technique11	DefaultTechnique
 
 		VertexShader = compile vs_5_0 VS_MAIN();
 		GeometryShader = NULL;
-		PixelShader = compile ps_5_0 PS_MAIN_LIGHT_DIRECTIONAL();
+		PixelShader = compile ps_5_0 PS_MAIN_LIGHT_DIRECTIONAL_PBR();
 	}
 
-	pass Light_Point
+	pass Light_Point_PBR //2
 	{
 		SetRasterizerState(RS_Default);
 		SetDepthStencilState(DSS_None, 0);
@@ -359,10 +501,10 @@ technique11	DefaultTechnique
 
 		VertexShader = compile vs_5_0 VS_MAIN();
 		GeometryShader = NULL;
-		PixelShader = compile ps_5_0 PS_MAIN_LIGHT_POINT();
+		PixelShader = compile ps_5_0 PS_MAIN_LIGHT_POINT_PBR();
 	}
 
-	pass Deferred
+	pass Deferred_PBR //3
 	{
 		SetRasterizerState(RS_Default);
 		SetDepthStencilState(DSS_None, 0);
@@ -371,10 +513,10 @@ technique11	DefaultTechnique
 
 		VertexShader = compile vs_5_0 VS_MAIN();
 		GeometryShader = NULL;
-		PixelShader = compile ps_5_0 PS_MAIN_DEFERRED();
+		PixelShader = compile ps_5_0 PS_MAIN_DEFERRED_PBR();
 	}
 
-	pass BackBuffer
+	pass BackBuffer //4
 	{
 		SetRasterizerState(RS_Default);
 		SetDepthStencilState(DSS_None, 0);
@@ -383,5 +525,41 @@ technique11	DefaultTechnique
 		VertexShader = compile vs_5_0 VS_MAIN();
 		GeometryShader = NULL;
         PixelShader = compile ps_5_0 PS_MAIN_BACKBUFFER();
+    }
+
+    pass Light_Directional //5
+    {
+        SetRasterizerState(RS_Default);
+        SetDepthStencilState(DSS_None, 0);
+        SetBlendState(BS_OnebyOne, vector(0.f, 0.f, 0.f, 0.f), 0xffffffff);
+
+
+        VertexShader = compile vs_5_0 VS_MAIN();
+        GeometryShader = NULL;
+        PixelShader = compile ps_5_0 PS_MAIN_LIGHT_DIRECTIONAL();
+    }
+
+    pass Light_Point //6
+    {
+        SetRasterizerState(RS_Default);
+        SetDepthStencilState(DSS_None, 0);
+        SetBlendState(BS_OnebyOne, vector(0.f, 0.f, 0.f, 0.f), 0xffffffff);
+
+
+        VertexShader = compile vs_5_0 VS_MAIN();
+        GeometryShader = NULL;
+        PixelShader = compile ps_5_0 PS_MAIN_LIGHT_POINT();
+    }
+
+    pass Deferred //7
+    {
+        SetRasterizerState(RS_Default);
+        SetDepthStencilState(DSS_None, 0);
+        SetBlendState(BS_Default, vector(0.f, 0.f, 0.f, 0.f), 0xffffffff);
+
+
+        VertexShader = compile vs_5_0 VS_MAIN();
+        GeometryShader = NULL;
+        PixelShader = compile ps_5_0 PS_MAIN_DEFERRED();
     }
 }

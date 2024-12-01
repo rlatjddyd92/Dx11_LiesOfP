@@ -136,6 +136,9 @@ HRESULT CStaticObj::Render()
 
 HRESULT CStaticObj::Render_LightDepth()
 {
+	if (!m_pGameInstance->Get_IsOnShadow())
+		return S_OK;
+
 	if (m_isInstance)
 	{
 		INSTANCE_DATA tData{};

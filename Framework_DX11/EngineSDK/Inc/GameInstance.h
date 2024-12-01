@@ -97,6 +97,12 @@ public:
 	DOF_DESC*		Get_DOFDesc();
 	RADIAL_DESC* Get_RadialDesc();
 
+	_bool			Get_IsOnPBR();
+	void			Toggle_PBR();
+
+	_bool			Get_IsOnShadow();
+	void			Toggle_Shadow();
+
 #ifdef _DEBUG
 	HRESULT Add_DebugObject(class CComponent* pDebugObject);
 #endif
@@ -127,7 +133,7 @@ public:
 #pragma region LIGHT_MANAGER
 	HRESULT Add_Light(const LIGHT_DESC& LightDesc);
 	LIGHT_DESC* Get_LightDesc(_uint iIndex);
-	HRESULT Render_Lights(class CShader* pShader, class CVIBuffer_Rect* pVIBuffer);
+	HRESULT Render_Lights(class CShader* pShader, class CVIBuffer_Rect* pVIBuffer, _bool isOnPBR);
 	_int Get_Total_LightCount();
 	void Delete_Light(_int iIndex);
 	_int Find_Light_Index(_Vec4 vPos);

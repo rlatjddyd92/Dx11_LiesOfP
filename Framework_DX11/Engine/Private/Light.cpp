@@ -13,7 +13,7 @@ HRESULT CLight::Initialize(const LIGHT_DESC & LightDesc)
 	return S_OK;
 }
 
-HRESULT CLight::Render(CShader * pShader, CVIBuffer_Rect * pVIBuffer)
+HRESULT CLight::Render(CShader* pShader, CVIBuffer_Rect* pVIBuffer, _bool isOnPBR)
 {
 	_uint		iPassIndex = { 0 };
 
@@ -22,7 +22,10 @@ HRESULT CLight::Render(CShader * pShader, CVIBuffer_Rect * pVIBuffer)
 		if (FAILED(pShader->Bind_RawValue("g_vLightDir", &m_LightDesc.vDirection, sizeof(_float4))))
 			return E_FAIL;
 
-		iPassIndex = 1;
+		if (isOnPBR)
+			iPassIndex = 1;
+		else
+			iPassIndex = 5;
 	}
 	else
 	{
@@ -31,7 +34,10 @@ HRESULT CLight::Render(CShader * pShader, CVIBuffer_Rect * pVIBuffer)
 		if (FAILED(pShader->Bind_RawValue("g_fLightRange", &m_LightDesc.fRange, sizeof(_float))))
 			return E_FAIL;
 
-		iPassIndex = 2;
+		if (isOnPBR)
+			iPassIndex = 2;
+		else
+			iPassIndex = 6;
 	}
 
 	if (FAILED(pShader->Bind_RawValue("g_vLightDiffuse", &m_LightDesc.vDiffuse, sizeof(_float4))))

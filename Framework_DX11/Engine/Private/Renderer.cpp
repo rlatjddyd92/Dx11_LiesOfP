@@ -456,7 +456,7 @@ HRESULT CRenderer::Render_Lights()
 	if (FAILED(m_pGameInstance->Bind_RT_ShaderResource(m_pShader, TEXT("Target_Cascade"), "g_CascadeTextureArr")))
 		return E_FAIL;
 
-	m_pGameInstance->Render_Lights(m_pShader, m_pVIBuffer);
+	m_pGameInstance->Render_Lights(m_pShader, m_pVIBuffer, m_isOnPBR);
 
 	if (FAILED(m_pGameInstance->End_MRT()))
 		return E_FAIL;
@@ -483,6 +483,8 @@ HRESULT CRenderer::Render_Deferred()
 
 	if (FAILED(m_pShader->Bind_RawValue("g_fFar", &m_pGameInstance->Get_Far(), sizeof(_float))))
 		return E_FAIL;
+	if (FAILED(m_pShader->Bind_RawValue("g_isShadow", &m_isOnShadow, sizeof(_bool))))
+		return E_FAIL;
 
 	if (FAILED(m_pGameInstance->Bind_RT_ShaderResource(m_pShader, TEXT("Target_Diffuse"), "g_DiffuseTexture")))
 		return E_FAIL;
@@ -498,15 +500,21 @@ HRESULT CRenderer::Render_Deferred()
 	if (FAILED(m_pGameInstance->Bind_RT_ShaderResource(m_pShader, TEXT("Target_LightDepth"), "g_LightDepthTexture")))
 		return E_FAIL;
 
-	if (FAILED(m_pGameInstance->Bind_RT_ShaderResource(m_pShader, TEXT("Target_CascadeShadow"), "g_CascadeShadowTexture")))
-		return E_FAIL;
+	if (m_isOnShadow)
+	{
+		if (FAILED(m_pGameInstance->Bind_RT_ShaderResource(m_pShader, TEXT("Target_CascadeShadow"), "g_CascadeShadowTexture")))
+			return E_FAIL;
+	}
 
 	if (FAILED(m_pGameInstance->Bind_RT_ShaderResource(m_pShader, TEXT("Target_DecalDiffuse"), "g_DecalDiffuseTexture")))
 		return E_FAIL;
 	if (FAILED(m_pGameInstance->Bind_RT_ShaderResource(m_pShader, TEXT("Target_DecalDiffuse"), "g_DecalNormalTexture")))
 		return E_FAIL;
 
-	m_pShader->Begin(3);
+	if(m_isOnPBR)
+		m_pShader->Begin(3);
+	else
+		m_pShader->Begin(7);
 
 	m_pVIBuffer->Bind_Buffers();
 
@@ -1337,44 +1345,64 @@ HRESULT CRenderer::Render_UI()
 
 HRESULT CRenderer::Render_Cascade()
 {
-	D3D11_VIEWPORT			ViewportDesc;
-	ZeroMemory(&ViewportDesc, sizeof(D3D11_VIEWPORT));
-	ViewportDesc.TopLeftX = 0;
-	ViewportDesc.TopLeftY = 0;
-	ViewportDesc.Width = 2560;
-	ViewportDesc.Height = 1440;
-	ViewportDesc.MinDepth = 0.f;
-	ViewportDesc.MaxDepth = 1.f;
-
-	m_pContext->RSSetViewports(1, &ViewportDesc);
-
-	if (FAILED(m_pGameInstance->Begin_MRT(TEXT("MRT_Cascade"), m_pCascadeDepthStencilViewArr)))
-		return E_FAIL;
-
-	for (auto& pGameObject : m_RenderObjects[RG_SHADOWOBJ])
+	if (!m_isOnShadow)
 	{
-		if (nullptr != pGameObject)
-			pGameObject->Render_LightDepth();
+		if (FAILED(m_pGameInstance->Begin_MRT(TEXT("MRT_Cascade"), m_pCascadeDepthStencilViewArr)))
+			return E_FAIL;
 
-		Safe_Release(pGameObject);
+		for (auto& pGameObject : m_RenderObjects[RG_SHADOWOBJ])
+		{
+			Safe_Release(pGameObject);
+		}
+
+		m_pGameInstance->Draw_Shadow_Instance();
+
+		m_RenderObjects[RG_SHADOWOBJ].clear();
+
+		if (FAILED(m_pGameInstance->End_MRT()))
+			return E_FAIL;
 	}
+	else
+	{
+		D3D11_VIEWPORT			ViewportDesc;
+		ZeroMemory(&ViewportDesc, sizeof(D3D11_VIEWPORT));
+		ViewportDesc.TopLeftX = 0;
+		ViewportDesc.TopLeftY = 0;
+		ViewportDesc.Width = 2560;
+		ViewportDesc.Height = 1440;
+		ViewportDesc.MinDepth = 0.f;
+		ViewportDesc.MaxDepth = 1.f;
 
-	m_pGameInstance->Draw_Shadow_Instance();
+		m_pContext->RSSetViewports(1, &ViewportDesc);
 
-	m_RenderObjects[RG_SHADOWOBJ].clear();
+		if (FAILED(m_pGameInstance->Begin_MRT(TEXT("MRT_Cascade"), m_pCascadeDepthStencilViewArr)))
+			return E_FAIL;
 
-	if (FAILED(m_pGameInstance->End_MRT()))
-		return E_FAIL;
+		for (auto& pGameObject : m_RenderObjects[RG_SHADOWOBJ])
+		{
+			if (nullptr != pGameObject)
+				pGameObject->Render_LightDepth();
 
-	ZeroMemory(&ViewportDesc, sizeof(D3D11_VIEWPORT));
-	ViewportDesc.TopLeftX = 0;
-	ViewportDesc.TopLeftY = 0;
-	ViewportDesc.Width = (_float)1280.f;
-	ViewportDesc.Height = (_float)720.f;
-	ViewportDesc.MinDepth = 0.f;
-	ViewportDesc.MaxDepth = 1.f;
+			Safe_Release(pGameObject);
+		}
 
-	m_pContext->RSSetViewports(1, &ViewportDesc);
+		m_pGameInstance->Draw_Shadow_Instance();
+
+		m_RenderObjects[RG_SHADOWOBJ].clear();
+
+		if (FAILED(m_pGameInstance->End_MRT()))
+			return E_FAIL;
+
+		ZeroMemory(&ViewportDesc, sizeof(D3D11_VIEWPORT));
+		ViewportDesc.TopLeftX = 0;
+		ViewportDesc.TopLeftY = 0;
+		ViewportDesc.Width = (_float)1280.f;
+		ViewportDesc.Height = (_float)720.f;
+		ViewportDesc.MinDepth = 0.f;
+		ViewportDesc.MaxDepth = 1.f;
+
+		m_pContext->RSSetViewports(1, &ViewportDesc);
+	}
 
 	return S_OK;
 }
