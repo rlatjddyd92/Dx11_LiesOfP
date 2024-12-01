@@ -170,17 +170,22 @@ HRESULT CUIPage_Option::Initialize_Option()
 		{
 			pNewFunc->bIsShow_IntNum = stoi(vecBuffer_Spec[i][7]);
 			pNewFunc->fMin = stof(vecBuffer_Spec[i][8]);
-			pNewFunc->fMax = stof(vecBuffer_Spec[i][9]);
-			pNewFunc->fInterval = stof(vecBuffer_Spec[i][10]);
+			pNewFunc->fNow = stof(vecBuffer_Spec[i][9]);
+			pNewFunc->fMax = stof(vecBuffer_Spec[i][10]);
+
+			pNewFunc->fNow = max(pNewFunc->fNow, pNewFunc->fMin);
+			pNewFunc->fNow = min(pNewFunc->fNow, pNewFunc->fMax);
+
+			pNewFunc->fInterval = stof(vecBuffer_Spec[i][11]);
 			pNewFunc->fInterval_Ratio = (pNewFunc->fInterval / (pNewFunc->fMax - pNewFunc->fMin));
 			pNewFunc->fInterval_X = (pNewFunc->fMax - pNewFunc->fMin) * pNewFunc->fInterval_Ratio;
 			
 		}
 		else if (pNewLine->eFunc == OPTION_FUNC::FUNC_DROPBOX)
 		{
-			pNewFunc->iSize_Select_Button = stoi(vecBuffer_Spec[i][11]);
+			pNewFunc->iSize_Select_Button = stoi(vecBuffer_Spec[i][12]);
 			for (_int j = 0; j <= pNewFunc->iSize_Select_Button; ++j)
-				pNewFunc->vecSelect_Name.push_back(vecBuffer_Spec[i][12 + j]);
+				pNewFunc->vecSelect_Name.push_back(vecBuffer_Spec[i][13 + j]);
 		}
 
 		pNewLine->pFunction = pNewFunc;
@@ -195,8 +200,7 @@ HRESULT CUIPage_Option::Initialize_Option()
 void CUIPage_Option::Update_Tab(_float fTimeDelta)
 {
 	m_vecPart[_int(PART_GROUP::OPTION_Highlight_Line)]->bRender = false;
-	m_vecPart[_int(PART_GROUP::OPTION_FUNC_Slide_Bar_Button)]->fRatio = 0.f;
-	__super::UpdatePart_ByIndex(_int(PART_GROUP::OPTION_FUNC_Slide_Bar_Button), fTimeDelta);
+
 
 	// 배경 렌더 요청 
 
@@ -467,19 +471,18 @@ void CUIPage_Option::Update_Slide(FUNCTION& NowFunction, _float fTimeDelta, _boo
 
 void CUIPage_Option::Update_Slide_Button(FUNCTION& NowFunction, _float fTimeDelta, _bool bMouse)
 {
-	_float fOriginX = m_vecPart[_int(PART_GROUP::OPTION_FUNC_Slide_Bar_Button)]->fPosition.x;
-
-	m_vecPart[_int(PART_GROUP::OPTION_FUNC_Slide_Bar_Button)]->fRatio = NowFunction.fNow / NowFunction.fMax;
+	m_vecPart[_int(PART_GROUP::OPTION_FUNC_Slide_Bar_Button)]->fRatio = (NowFunction.fNow - NowFunction.fMin) / (NowFunction.fMax - NowFunction.fMin);
 	__super::UpdatePart_ByIndex(_int(PART_GROUP::OPTION_FUNC_Slide_Bar_Button), fTimeDelta);
-
-	_float fStartX = m_vecPart[_int(PART_GROUP::OPTION_FUNC_Slide_Bar_Button)]->fAdjust_Start.x;
-	_float fEndX = m_vecPart[_int(PART_GROUP::OPTION_FUNC_Slide_Bar_Button)]->fAdjust_End.x;
 
 	if (NowFunction.bIsButton_Moving)
 	{
 		if (KEY_HOLD(KEY::LBUTTON))
 		{
-			
+			m_vecPart[_int(PART_GROUP::OPTION_FUNC_Slide_Bar_Button)]->fRatio = 0.f;
+			__super::UpdatePart_ByIndex(_int(PART_GROUP::OPTION_FUNC_Slide_Bar_Button), fTimeDelta);
+			_float fOriginX = m_vecPart[_int(PART_GROUP::OPTION_FUNC_Slide_Bar_Button)]->fPosition.x;
+
+			_float fEndX = m_vecPart[_int(PART_GROUP::OPTION_FUNC_Slide_Bar_Button)]->fAdjust_End.x * 2.f;
 
 			POINT			ptMouse{};
 			GetCursorPos(&ptMouse);
@@ -491,11 +494,13 @@ void CUIPage_Option::Update_Slide_Button(FUNCTION& NowFunction, _float fTimeDelt
 			{
 				m_vecPart[_int(PART_GROUP::OPTION_FUNC_Slide_Bar_Button)]->fRatio = 1.f;
 				NowFunction.fNow = NowFunction.fMax;
+				__super::UpdatePart_ByIndex(_int(PART_GROUP::OPTION_FUNC_Slide_Bar_Button), fTimeDelta);
 			}
-			else if (fNowX <= fOriginX + fStartX)
+			else if (fNowX <= fOriginX)
 			{
 				m_vecPart[_int(PART_GROUP::OPTION_FUNC_Slide_Bar_Button)]->fRatio = 0.f;
 				NowFunction.fNow = NowFunction.fMin;
+				__super::UpdatePart_ByIndex(_int(PART_GROUP::OPTION_FUNC_Slide_Bar_Button), fTimeDelta);
 			}
 			else
 			{
@@ -507,7 +512,7 @@ void CUIPage_Option::Update_Slide_Button(FUNCTION& NowFunction, _float fTimeDelt
 				fRatio = NowFunction.fInterval_Ratio * iNowIndex;
 				m_vecPart[_int(PART_GROUP::OPTION_FUNC_Slide_Bar_Button)]->fRatio = fRatio;
 				__super::UpdatePart_ByIndex(_int(PART_GROUP::OPTION_FUNC_Slide_Bar_Button), fTimeDelta);
-				NowFunction.fNow = NowFunction.fInterval * iNowIndex;
+				NowFunction.fNow = NowFunction.fMin + NowFunction.fInterval * iNowIndex;
 			}
 		}
 		else 

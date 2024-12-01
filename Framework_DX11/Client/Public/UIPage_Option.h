@@ -117,7 +117,7 @@ public:
 		_float fInterval = 0.f;
 		_float fInterval_X = 0.f;
 		_float fInterval_Ratio = 0.f;
-		_float fNow_X = 0.f;
+		_float fNow_Ratio = 0.f;
 
 		_wstring strVariable_Key = {};
 
