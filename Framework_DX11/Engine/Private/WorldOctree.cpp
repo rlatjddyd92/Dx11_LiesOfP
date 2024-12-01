@@ -47,14 +47,14 @@ HRESULT CWorldOctree::Initialize(_Vec3 _vMinPos, _Vec3 _vMaxPos, vector<class CG
 	Desc.vExtents = _Vec3(fHalfExtend, fHalfExtend, fHalfExtend);
 	m_pBounding = CBounding_AABB::Create(m_pDevice, m_pContext, &Desc);
 
-	m_fRadius = fHalfExtend *sqrt(3.0f);
+	m_fRadius = fHalfExtend *sqrt(3.0f) ;
 
 	if(*iDepth != -1)
 		m_iDepth = *iDepth;
 
 	if (*iDepth == -100 )	//처음 노드 생성할 때
 	{
-		m_iDepth = 4;
+		m_iDepth = 3;
 	}
 
 	//옥트리 생성
@@ -227,6 +227,8 @@ void CWorldOctree::Free()
 		Safe_Release(m_pChildren[i]);
 	}
 
+	Safe_Release(m_pBounding);
+
 #ifdef _DEBUG
 	if (m_pBatch != nullptr)
 	{
@@ -235,6 +237,7 @@ void CWorldOctree::Free()
 	}
 	Safe_Release(m_pInputLayout);
 #endif
+
 	Safe_Release(m_pDevice);
 	Safe_Release(m_pContext);
 	Safe_Release(m_pGameInstance);
