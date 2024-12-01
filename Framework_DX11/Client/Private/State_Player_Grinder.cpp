@@ -33,12 +33,16 @@ HRESULT CState_Player_Grinder::Initialize(_uint iStateNum, void* pArg)
 
 HRESULT CState_Player_Grinder::Start_State(void* pArg)
 {
-    //if (m_pFsm->Get_PrevState() != CPlayer::OH_WALK)
-        m_pPlayer->Change_Animation(m_iAnimation_Grinder[0], false, 0.1f, 0, true);
+    if (m_pFsm->Get_PrevState() != CPlayer::OH_RUN && m_pFsm->Get_PrevState() != CPlayer::TH_WALK)
+        m_pPlayer->Change_Animation(m_iAnimation_Grinder[0], false, 0.f);
 
-    //m_pPlayer->Change_Animation_Boundry(m_iAnimation_Grinder[0], false, 0.05f);
+    m_pPlayer->Change_Animation_Boundry(m_iAnimation_Grinder[0], false, 0.f);
 
     m_pPlayer->Set_MoveSpeed(m_fMoveSpeed);
+
+    m_isChange[0] = false;
+    m_isChange[1] = false;
+    m_isChange[2] = false;
 
     return S_OK;
 }
@@ -57,11 +61,12 @@ void CState_Player_Grinder::Update(_float fTimeDelta)
             if (m_pPlayer->Get_EndAnim(m_iAnimation_Grinder[0], true)
                 || m_pPlayer->Get_EndAnim(m_iAnimation_Grinder[0]))
             {
-                m_pPlayer->Change_Animation(m_iAnimation_Grinder[1], true, 0.1f, 0, true);
+                m_isChange[0] = true;
+                m_pPlayer->Change_Animation(m_iAnimation_Grinder[1], true, 0.f, 0, true);
             }
             else
             {
-                if (!Move(fTimeDelta))
+                if (!Move(fTimeDelta) && !m_isChange[0])
                 {
                     m_pPlayer->Change_Animation(m_iAnimation_Grinder[0], true, 0.1f);
                 }
@@ -156,18 +161,18 @@ _bool CState_Player_Grinder::Move(_float fTimeDelta)
     {
         if (fForwardDot > 0.7f)
         {
-            m_pPlayer->Change_Animation(m_iAnimation_Walk[WALK_F], true, 0.1f, 0, false);
+            m_pPlayer->Change_Animation(m_iAnimation_Walk[WALK_F], true, 0.2f, 0, false);
         }
         else if (fBackwardDot > 0.7f)
         {
-            m_pPlayer->Change_Animation(m_iAnimation_Walk[WALK_B], true, 0.1f, 0, false);
+            m_pPlayer->Change_Animation(m_iAnimation_Walk[WALK_B], true, 0.2f, 0, false);
         }
         else
         {
             if (isLeft)
-                m_pPlayer->Change_Animation(m_iAnimation_Walk[WALK_L], true, 0.1f, 0, false);
+                m_pPlayer->Change_Animation(m_iAnimation_Walk[WALK_L], true, 0.2f, 0, false);
             else if (isRight)
-                m_pPlayer->Change_Animation(m_iAnimation_Walk[WALK_R], true, 0.1f, 0, false);
+                m_pPlayer->Change_Animation(m_iAnimation_Walk[WALK_R], true, 0.2f, 0, false);
         }
 
         if (m_vMoveDir.Length() > 0.f)

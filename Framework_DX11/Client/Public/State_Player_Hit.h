@@ -41,7 +41,6 @@ private:
 
     _uint               m_iAnimation_Hit[HIT_END] = {};       
     _uint               m_iAnimation_Down[DOWN_END] = {};
-    _uint               m_iAnimation_GetUp[2] = {};
 
     _double*            m_pTrackPos = { nullptr };
 

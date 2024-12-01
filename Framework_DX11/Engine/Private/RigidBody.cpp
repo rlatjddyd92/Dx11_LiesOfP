@@ -101,10 +101,14 @@ void CRigidBody::Update(_float fTimeDelta)
 	}
 	else
 	{
+		PxTransform Transform = ConvertToPxTransform((_Vec3)m_pOwnerTransform->Get_State(CTransform::STATE_POSITION), m_pOwnerTransform->Get_Quaternion());
+		m_PxActor->setGlobalPose(Transform);
+
+
 		pRigidDynamic->setLinearVelocity(PxVec3(m_vVelocity.x, m_vVelocity.y, m_vVelocity.z));
 
-		PxTransform PxTransform = pRigidDynamic->getGlobalPose();
-		PxVec3 vPxPos = PxTransform.p;
+		Transform = pRigidDynamic->getGlobalPose();
+		PxVec3 vPxPos = Transform.p;
 
 		m_pOwnerTransform->Set_State(CTransform::STATE_POSITION, _Vec3(vPxPos.x, vPxPos.y, vPxPos.z));
 	}

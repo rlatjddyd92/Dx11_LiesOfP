@@ -75,7 +75,8 @@ void CState_Player_OH_Run::Update(_float fTimeDelta)
     }
     else if (KEY_TAP(KEY::R))
     {
-        m_pPlayer->Change_State(CPlayer::HEAL);
+        m_pPlayer->Change_State(CPlayer::GRINDER);
+        //m_pPlayer->Change_State(CPlayer::HEAL);
     }
 
     if (KEY_TAP(KEY::SPACE))

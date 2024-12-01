@@ -2,6 +2,8 @@
 #include "WallDeco.h"
 #include "GameInstance.h"
 #include "Deco_Collider.h"
+#include "Player.h"
+
 CWallDeco::CWallDeco(ID3D11Device* pDevice, ID3D11DeviceContext* pContext)
 	: CGameObject{ pDevice, pContext }
 {
@@ -152,6 +154,7 @@ void CWallDeco::OnCollisionEnter(CGameObject* pOther)
 	if (pOther->Get_Tag() == TEXT("Player"))
 	{
 		m_bDetect = true;
+		
 	}
 }
 

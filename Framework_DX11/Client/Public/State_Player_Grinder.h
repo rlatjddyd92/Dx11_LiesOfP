@@ -29,6 +29,8 @@ private:
     _uint               m_iAnimation_Grinder[3] = {};
     _uint               m_iAnimation_Walk[WALK_END] = {};
 
+    _bool               m_isChange[3] = { false, };
+
     _Vec4               m_vMoveDir = {};
 
     _float              m_fMoveSpeed = {};

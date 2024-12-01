@@ -28,6 +28,7 @@
 #include "State_Player_Stargazer.h"
 #include "State_Player_Teleport.h"
 #include "State_Player_Grinder.h"
+#include "State_Player_GetUp.h"
 
 #include "State_Player_OH_Idle.h"
 #include "State_Player_OH_Walk.h"
@@ -114,7 +115,7 @@ HRESULT CPlayer::Initialize(void * pArg)
 	//m_pNavigationCom->Move_to_Cell(m_pRigidBodyCom, 772); //긴사다리
 	//m_pNavigationCom->Move_to_Cell(m_pRigidBodyCom, 427); //짧은사다리
 	//m_pNavigationCom->Move_to_Cell(m_pRigidBodyCom, 341); //아래엘베
-	//m_pNavigationCom->Move_to_Cell(m_pRigidBodyCom, 440); //상자랑 장애물
+	m_pNavigationCom->Move_to_Cell(m_pRigidBodyCom, 440); //상자랑 장애물
 	//m_pNavigationCom->Move_to_Cell(m_pRigidBodyCom, 1068); // 순간이동
 
 
@@ -591,6 +592,7 @@ HRESULT CPlayer::Ready_FSM()
 	m_pFsmCom->Add_State(CState_Player_Stargazer::Create(m_pFsmCom, this, STARGAZER, &Desc));
 	m_pFsmCom->Add_State(CState_Player_Teleport::Create(m_pFsmCom, this, TELEPORT, &Desc));
 	m_pFsmCom->Add_State(CState_Player_Grinder::Create(m_pFsmCom, this, GRINDER, &Desc));
+	m_pFsmCom->Add_State(CState_Player_GetUp::Create(m_pFsmCom, this, GETUP, &Desc));
 
 	m_pFsmCom->Add_State(CState_Player_OH_Idle::Create(m_pFsmCom, this, OH_IDLE, &Desc));
 	m_pFsmCom->Add_State(CState_Player_OH_Walk::Create(m_pFsmCom, this, OH_WALK, &Desc)); 
@@ -681,10 +683,17 @@ _bool CPlayer::Calc_DamageGain(_float fAtkDmg, _Vec3 vHitPos)
 	}
 	else
 	{
+		CState_Player_Hit::HIT_DESC HitDesc{};
+		HitDesc.vHitPos = vHitPos;
+		HitDesc.isDown = false;
+
+		if (fAtkDmg >= 30.f)
+			HitDesc.isDown = true;
+
 		m_tPlayer_Stat->vGauge_Hp.x = max(0.f, m_tPlayer_Stat->vGauge_Hp.x - fAtkDmg);
 		m_tPlayer_Stat->vGauge_Hp.y = m_tPlayer_Stat->vGauge_Hp.x;
 		if (fAtkDmg > 0.f)
-			m_pFsmCom->Change_State(HIT, &vHitPos);
+			m_pFsmCom->Change_State(HIT, &HitDesc);
 	}
 	//if (m_eStat.fHp <= 0.f)
 	//	m_pFsmCom->Change_State(HIT);

@@ -1,6 +1,7 @@
 #include "stdafx.h"
 #include "Deco_Collider.h"
 #include "GameInstance.h"
+#include "Player.h"
 
 CDeco_Collider::CDeco_Collider(ID3D11Device* pDevice, ID3D11DeviceContext* pContext)
     : CGameObject{ pDevice, pContext }
@@ -36,6 +37,7 @@ HRESULT CDeco_Collider::Initialize(void* pArg)
    // m_pTransformCom->Set_WorldMatrix( SocketMatrix * XMLoadFloat4x4(m_pParentWorldMatrix));
 
 
+    m_strObjectTag = TEXT("WallDeco_Collider");
     if (FAILED(Ready_Components()))
         return E_FAIL;
     return S_OK;
@@ -81,6 +83,7 @@ void CDeco_Collider::Late_Update(_float fTimeDelta)
 
     __super::Late_Update(fTimeDelta);
 
+    m_pGameInstance->Add_ColliderList(m_pColliderCom);
 #ifdef _DEBUG
     if (m_pColliderCom != nullptr)
         m_pGameInstance->Add_DebugObject(m_pColliderCom);
@@ -94,6 +97,13 @@ HRESULT CDeco_Collider::Render()
 
 void CDeco_Collider::OnCollisionEnter(CGameObject* pOther)
 {
+    if (pOther->Get_Tag() == TEXT("Player"))
+    {
+        CPlayer* pPlayer = dynamic_cast<CPlayer*>(pOther);
+
+        pPlayer->Calc_DamageGain(30.f, (_Vec3)m_pTransformCom->Get_State(CTransform::STATE_POSITION));
+    }
+  
 }
 
 void CDeco_Collider::OnCollisionStay(CGameObject* pOther)

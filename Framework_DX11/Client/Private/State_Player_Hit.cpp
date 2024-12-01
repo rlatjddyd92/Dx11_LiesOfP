@@ -20,13 +20,10 @@ HRESULT CState_Player_Hit::Initialize(_uint iStateNum, void* pArg)
     m_iAnimation_Hit[HIT_LR] = m_pPlayer->Get_Model()->Find_AnimationIndex("AS_Pino_Hit_LtoR", 2.5f);
     m_iAnimation_Hit[HIT_RL] = m_pPlayer->Get_Model()->Find_AnimationIndex("AS_Pino_Hit_RtoL", 2.5f);
 
-    m_iAnimation_Down[DOWN_DRAG_B] = m_pPlayer->Get_Model()->Find_AnimationIndex("AS_Pino_Down_Drag_Intro_B", 2.5f);
-    m_iAnimation_Down[DOWN_STAMP_B] = m_pPlayer->Get_Model()->Find_AnimationIndex("AS_Pino_Down_Stamp_Intro_B", 2.5f);
-    m_iAnimation_Down[DOWN_DRAG_F] = m_pPlayer->Get_Model()->Find_AnimationIndex("AS_Pino_Down_Drag_Intro_F", 2.5f);
-    m_iAnimation_Down[DOWN_STAMP_F] = m_pPlayer->Get_Model()->Find_AnimationIndex("AS_Pino_Down_Stamp_Intro_F", 2.5f);
-
-    m_iAnimation_GetUp[0] = m_pPlayer->Get_Model()->Find_AnimationIndex("AS_Pino_Down_Getup_B", 2.5f);
-    m_iAnimation_GetUp[1] = m_pPlayer->Get_Model()->Find_AnimationIndex("AS_Pino_Down_Getup_F", 2.5f);
+    m_iAnimation_Down[DOWN_DRAG_B] = m_pPlayer->Get_Model()->Find_AnimationIndex("AS_Pino_Down_Drag_Intro_B", 1.5f);
+    m_iAnimation_Down[DOWN_STAMP_B] = m_pPlayer->Get_Model()->Find_AnimationIndex("AS_Pino_Down_Stamp_Intro_B", 1.5f);
+    m_iAnimation_Down[DOWN_DRAG_F] = m_pPlayer->Get_Model()->Find_AnimationIndex("AS_Pino_Down_Drag_Intro_F", 1.5f);
+    m_iAnimation_Down[DOWN_STAMP_F] = m_pPlayer->Get_Model()->Find_AnimationIndex("AS_Pino_Down_Stamp_Intro_F", 1.5f);
 
     FSM_INIT_DESC* pDesc = static_cast<FSM_INIT_DESC*>(pArg);
 
@@ -46,7 +43,7 @@ HRESULT CState_Player_Hit::Start_State(void* pArg)
     {
         DOWN_TYPE eType = (DOWN_TYPE)Choice_DonwAnim(pDesc->vHitPos);
         if(eType != m_eHitType)
-            m_pPlayer->Change_Animation(m_iAnimation_Down[eType], false, 0.1f);
+            m_pPlayer->Change_Animation(m_iAnimation_Down[eType], false, 0.2f);
 
         m_eDownType = eType;
     }
@@ -55,9 +52,9 @@ HRESULT CState_Player_Hit::Start_State(void* pArg)
         HIT_TYPE eType = (HIT_TYPE)Choice_HitAnim(pDesc->vHitPos);
 
         if (eType == m_eHitType)
-            m_pPlayer->Change_Animation(m_iAnimation_Hit[eType], false, 0.f, 0, true, true);
+            m_pPlayer->Change_Animation(m_iAnimation_Hit[eType], false, 0.2f, 0, true, true);
         else
-            m_pPlayer->Change_Animation(m_iAnimation_Hit[eType], false, 0.f);
+            m_pPlayer->Change_Animation(m_iAnimation_Hit[eType], false, 0.2f);
 
         m_eHitType = eType;
     }
@@ -69,7 +66,11 @@ void CState_Player_Hit::Update(_float fTimeDelta)
 {
     if (m_isDown)
     {
-
+        if (End_Check())
+        {
+            _int iType = m_eDownType / 2;
+            m_pPlayer->Change_State(CPlayer::GETUP, &iType);
+        }
     }
     else
     {
@@ -141,12 +142,12 @@ _uint CState_Player_Hit::Choice_DonwAnim(_Vec3 vHitPos)
     _Vec3 vLook = PlayerWorldMatrix.Forward();
 
     _float fUpDot = vHitDir.Dot(vUp);
-    _float fForwardDot = vHitDir.Dot(vLook);
+    _float fForwardDot = vHitDir.Dot(-vLook);
 
     m_isHitFront = true;
 
     // 위쪽에서 때림
-    if (fUpDot > 0.7f) 
+    if (fUpDot > 0.7f && vHitPos.y - PlayerWorldMatrix.Translation().y > 1.5f)
     {
         if (fForwardDot > 0.5f)
         {
@@ -159,7 +160,7 @@ _uint CState_Player_Hit::Choice_DonwAnim(_Vec3 vHitPos)
     }
     else
     {
-        if (fForwardDot > 0.5f)
+        if (fForwardDot > 0.f)
         {
             return DOWN_DRAG_F;
         }
@@ -200,11 +201,22 @@ _bool CState_Player_Hit::End_Check()
     {
         bEndCheck = m_pPlayer->Get_EndAnim(m_iAnimation_Hit[HIT_RL]);
     }
-    else
+    else if(m_iAnimation_Down[DOWN_DRAG_B] == iCurAnim)
     {
-
+        bEndCheck = m_pPlayer->Get_EndAnim(m_iAnimation_Down[DOWN_DRAG_B]);
+    } 
+    else if (m_iAnimation_Down[DOWN_STAMP_B] == iCurAnim)
+    {
+        bEndCheck = m_pPlayer->Get_EndAnim(m_iAnimation_Down[DOWN_STAMP_B]);
     }
-    //애니메이션 번호와 일치하지 않는?다
+    else if (m_iAnimation_Down[DOWN_DRAG_F] == iCurAnim)
+    {
+        bEndCheck = m_pPlayer->Get_EndAnim(m_iAnimation_Down[DOWN_DRAG_F]);
+    }
+    else if (m_iAnimation_Down[DOWN_STAMP_F] == iCurAnim)
+    {
+        bEndCheck = m_pPlayer->Get_EndAnim(m_iAnimation_Down[DOWN_STAMP_F]);
+    }
 
     return bEndCheck;
 }
