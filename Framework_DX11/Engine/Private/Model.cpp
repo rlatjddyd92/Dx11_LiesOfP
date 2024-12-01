@@ -67,6 +67,9 @@ CModel::CModel(const CModel & Prototype)
 
 _int CModel::Get_BoneIndex(const _char * pBoneName) const
 {
+	_Vec3							m_vMinPos = { FLT_MAX ,FLT_MAX ,FLT_MAX };	//물체의 최소 좌표 , 최대한 크게 초기화
+	_Vec3							m_vMaxPos = { -FLT_MAX ,-FLT_MAX ,-FLT_MAX };	//물체의 최대 좌표, 최대한 작게 초기화
+
 	_uint	iBoneIndex = { 0 };
 	auto	iter = find_if(m_Bones.begin(), m_Bones.end(), [&](CBone* pBone)->_bool
 	{

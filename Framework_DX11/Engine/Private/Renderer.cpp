@@ -1340,6 +1340,9 @@ HRESULT CRenderer::Render_UI()
 	}
 	m_RenderObjects[RG_UI].clear();
 
+	//¿ÁÆ®¸® ·»´õ
+	//m_pGameInstance->World_Octree_Render();
+
 	return S_OK;
 }
 

@@ -127,9 +127,9 @@ HRESULT CGameInstance::Initialize_Engine(HINSTANCE hInst, _uint iNumLevels, cons
 		return E_FAIL;
 
 	//양우송
-	/*m_pWorldOctree_Manager = CWorldOctree_Manager::Create();
+	m_pWorldOctree_Manager = CWorldOctree_Manager::Create(*ppDevice, *ppContext);
 	if (nullptr == m_pWorldOctree_Manager)
-		return E_FAIL;*/
+		return E_FAIL;
 
 	return S_OK;
 }
@@ -161,7 +161,7 @@ void CGameInstance::Update_Engine(_float fTimeDelta)
 
 	m_pSound_Manager->Update();
 
-	//m_pWorldOctree_Manager->Update();
+	m_pWorldOctree_Manager->Update();
 }
 
 HRESULT CGameInstance::Draw_Engine()
@@ -822,6 +822,33 @@ void CGameInstance::LoadSoundFile(const char* pFolderName)
 {
 	m_pSound_Manager->LoadSoundFile(pFolderName);
 }
+#pragma endregion
+
+#pragma region World_Octree
+void CGameInstance::Create_Octree(_Vec3 vMinPos, _Vec3 vMaxPos)
+{
+	m_pWorldOctree_Manager->Create_Octree(vMinPos, vMaxPos);
+}
+
+_bool CGameInstance::Is_In_FrustumCulledOctree(vector<_int>& pWorldOctreeIndex)
+{
+	return m_pWorldOctree_Manager->Is_In_FrustumCulledOctree(pWorldOctreeIndex);
+}
+
+void CGameInstance::World_Octree_Render()
+{
+	m_pWorldOctree_Manager->Render();
+}
+
+_bool CGameInstance::Is_Active_Octree()
+{
+	return m_pWorldOctree_Manager->Is_Active_Octree();
+}
+
+void CGameInstance::Change_Active_Octree()
+{
+	m_pWorldOctree_Manager->Change_Active_Octree();
+}
 
 #pragma endregion
 
@@ -831,7 +858,7 @@ void CGameInstance::Release_Engine()
 	Safe_Release(m_pCollider_Manager);
 	// 2024-11-06 김성용
 	Safe_Release(m_pCSVFile_Manager);
-	//Safe_Release(m_pWorldOctree_Manager);
+	Safe_Release(m_pWorldOctree_Manager);
 	Safe_Release(m_pFrustum);
 	Safe_Release(m_pPicking);
 	Safe_Release(m_pTarget_Manager);

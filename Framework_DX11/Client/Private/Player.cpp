@@ -441,7 +441,7 @@ CPawn* CPlayer::Find_TargetMonster()
 	if (nullptr == m_pGameInstance->Find_Layer(LEVEL_GAMEPLAY, TEXT("Layer_Monster")))
 		return nullptr;
 
-	list<CGameObject*> ObjectList = m_pGameInstance->Find_Layer(LEVEL_GAMEPLAY, TEXT("Layer_Monster"))->Get_ObjectList();
+	vector<CGameObject*> ObjectList = m_pGameInstance->Find_Layer(LEVEL_GAMEPLAY, TEXT("Layer_Monster"))->Get_ObjectList();
 
 	if (ObjectList.size() <= 0)
 		return nullptr;

@@ -200,7 +200,7 @@ CGameObject* CObject_Manager::Find_NearObject(CGameObject* pOwner, _uint iLevelI
 	if (nullptr == Find_Layer(iLevelIndex, strLayerTag))
 		return nullptr;
 
-	list<CGameObject*> ObjectList = Find_Layer(iLevelIndex, strLayerTag)->Get_ObjectList();
+	vector<CGameObject*> ObjectList = Find_Layer(iLevelIndex, strLayerTag)->Get_ObjectList();
 
 	if (ObjectList.empty() || ObjectList.size() <= 0)
 		return nullptr;
