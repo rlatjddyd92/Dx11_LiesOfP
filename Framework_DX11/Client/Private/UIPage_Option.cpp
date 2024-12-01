@@ -159,7 +159,8 @@ HRESULT CUIPage_Option::Initialize_Option()
 		FUNCTION* pNewFunc = new FUNCTION;
 
 		pNewFunc->strVariable_Key = vecBuffer_Spec[i][4];
-		m_mapVariables.insert({ pNewFunc->strVariable_Key , 0.f });
+		_float* pNew = new _float;
+		m_mapVariables.insert({ pNewFunc->strVariable_Key , pNew });
 
 		if (pNewLine->eFunc == OPTION_FUNC::FUNC_BOOL)
 		{
@@ -318,6 +319,13 @@ void CUIPage_Option::Update_Line(_float fTimeDelta)
 	
 	for (auto& iter : m_vecOption_TabInfo[m_iNow_Tab]->vecOption_Line)
 	{
+		map<_wstring, _float*>::iterator iterVari = m_mapVariables.find(iter->pFunction->strVariable_Key);
+
+		if (iterVari == m_mapVariables.end())
+			continue;
+		if (iterVari->second == nullptr)
+			continue;
+
 		OPTION_FUNC eFunc = iter->eFunc;
 
 		if (eFunc == OPTION_FUNC::FUNC_TITLE)
@@ -374,10 +382,10 @@ void CUIPage_Option::Update_Line(_float fTimeDelta)
 			{
 				if (KEY_TAP(KEY::LBUTTON))
 				{
-					if (m_mapVariables.find(iter->pFunction->strVariable_Key)->second == 0.f)
-						m_mapVariables.find(iter->pFunction->strVariable_Key)->second = 1.f;
-					else if (m_mapVariables.find(iter->pFunction->strVariable_Key)->second == 1.f)
-						m_mapVariables.find(iter->pFunction->strVariable_Key)->second = 0.f;
+					if (*m_mapVariables.find(iter->pFunction->strVariable_Key)->second == 0.f)
+						*m_mapVariables.find(iter->pFunction->strVariable_Key)->second = 1.f;
+					else if (*m_mapVariables.find(iter->pFunction->strVariable_Key)->second == 1.f)
+						*m_mapVariables.find(iter->pFunction->strVariable_Key)->second = 0.f;
 				}
 			}
 			fAdjustY += fHeight_Line * 0.5f;
@@ -431,7 +439,7 @@ void CUIPage_Option::Update_BoolButton(FUNCTION& NowFunction, _float fTimeDelta,
 		if (m_vecPart[i]->bRender)
 			Input_Render_Info(*m_vecPart[i], SCROLL_AREA::SCROLL_OPTION);
 
-	m_mapVariables.find(NowFunction.strVariable_Key)->second = _float(NowFunction.bIsSelect_Left);
+	*m_mapVariables.find(NowFunction.strVariable_Key)->second = _float(NowFunction.bIsSelect_Left);
 }
 
 void CUIPage_Option::Update_Slide(FUNCTION& NowFunction, _float fTimeDelta, _bool bMouse)
@@ -466,7 +474,7 @@ void CUIPage_Option::Update_Slide(FUNCTION& NowFunction, _float fTimeDelta, _boo
 	for (_int i = _int(PART_GROUP::OPTION_FUNC_Slide_Area); i <= _int(PART_GROUP::OPTION_FUNC_Slide_Right_Arrow); ++i)
 		Input_Render_Info(*m_vecPart[i], SCROLL_AREA::SCROLL_OPTION);
 	
-	m_mapVariables.find(NowFunction.strVariable_Key)->second = _float(NowFunction.fNow);
+	*m_mapVariables.find(NowFunction.strVariable_Key)->second = _float(NowFunction.fNow);
 }
 
 void CUIPage_Option::Update_Slide_Button(FUNCTION& NowFunction, _float fTimeDelta, _bool bMouse)
@@ -635,5 +643,9 @@ void CUIPage_Option::Free()
 
 	m_vecOption_TabInfo.clear();
 
+	for (auto& iter : m_mapVariables)
+	{
+		Safe_Delete(iter.second);
+	}
 	m_mapVariables.clear();
 }

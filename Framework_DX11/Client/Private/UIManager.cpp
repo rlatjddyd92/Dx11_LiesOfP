@@ -109,8 +109,13 @@ void CUIManager::Late_Update(_float fTimeDelta)
 	if (m_pUIPage_Play->GetRender())
 		m_pUIPage_Ortho->Late_Update(fTimeDelta);
 
-	for (_int i = 0; i < _int(UIPAGE::PAGE_END) - 1; ++i)
+	m_pUIPage_Effect->SetUpdate(true);
+
+	for (_int i = 0; i < _int(UIPAGE::PAGE_END); ++i)
 	{
+		if (i == _int(UIPAGE::PAGE_ORTHO))
+			continue;
+
 		if (m_vecPage[i]->GetUpdate())
 			m_vecPage[i]->Late_Update(fTimeDelta);
 	}
@@ -208,6 +213,7 @@ void CUIManager::UIControl_Play(_float fTimeDelta)
 		SwicthPage(UIPAGE::PAGE_MENU, UIPAGE::PAGE_PLAY);
 	else
 	{
+		m_eNowPage = UIPAGE::PAGE_PLAY;
 		m_pUIPage_Play->Check_Page_Action(fTimeDelta);
 	}
 }
@@ -218,6 +224,7 @@ void CUIManager::UIControl_Menu(_float fTimeDelta)
 		SwicthPage(UIPAGE::PAGE_MENU, UIPAGE::PAGE_PLAY);
 	else
 	{
+		m_eNowPage = UIPAGE::PAGE_MENU;
 		m_pUIPage_Menu->Check_Page_Action(fTimeDelta);
 	}
 }
@@ -228,6 +235,7 @@ void CUIManager::UIControl_Inven(_float fTimeDelta)
 		SwicthPage(UIPAGE::PAGE_INVEN, UIPAGE::PAGE_MENU);
 	else
 	{
+		m_eNowPage = UIPAGE::PAGE_INVEN;
 		m_eNow_Active_Func = ITEM_FUNC::FUNC_END;
 		m_pUIPage_Inven->Check_Page_Action(fTimeDelta);
 
@@ -246,6 +254,7 @@ void CUIManager::UIControl_Equip(_float fTimeDelta)
 		SwicthPage(UIPAGE::PAGE_EQUIP, UIPAGE::PAGE_MENU);
 	else
 	{
+		m_eNowPage = UIPAGE::PAGE_EQUIP;
 		m_eNow_Active_Func = ITEM_FUNC::FUNC_END;
 		m_pUIPage_Equip->Check_Page_Action(fTimeDelta);
 
@@ -264,6 +273,7 @@ void CUIManager::UIControl_Stat(_float fTimeDelta)
 		SwicthPage(UIPAGE::PAGE_STAT, UIPAGE::PAGE_MENU);
 	else
 	{
+		m_eNowPage = UIPAGE::PAGE_STAT;
 		m_pUIPage_Stat->Check_Page_Action(fTimeDelta);
 	}
 }
@@ -274,6 +284,7 @@ void CUIManager::UIControl_Option(_float fTimeDelta)
 		SwicthPage(UIPAGE::PAGE_OPTION, UIPAGE::PAGE_MENU);
 	else
 	{
+		m_eNowPage = UIPAGE::PAGE_OPTION;
 		m_pUIPage_Option->Check_Page_Action(fTimeDelta);
 	}
 }
@@ -284,6 +295,7 @@ void CUIManager::UIControl_Skill(_float fTimeDelta)
 		SwicthPage(UIPAGE::PAGE_SKILL, UIPAGE::PAGE_MENU);
 	else
 	{
+		m_eNowPage = UIPAGE::PAGE_SKILL;
 		m_pUIPage_Skill->Check_Page_Action(fTimeDelta);
 	}
 }
@@ -465,6 +477,11 @@ HRESULT CUIManager::Make_UIPage(_int iIndex)
 	{
 		m_pUIPage_Test = CUIPage_Test::Create(m_pDevice, m_pContext);
 		m_vecPage[iIndex] = static_cast<CUIPage*>(m_pUIPage_Test);
+	}
+	else if (iIndex == _int(UIPAGE::PAGE_EFFECT))
+	{
+		m_pUIPage_Effect = CUIPage_Effect::Create(m_pDevice, m_pContext);
+		m_vecPage[iIndex] = static_cast<CUIPage*>(m_pUIPage_Effect);
 	}
 
 	if (m_vecPage[iIndex] == nullptr)

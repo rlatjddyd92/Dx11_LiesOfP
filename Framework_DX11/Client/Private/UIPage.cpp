@@ -188,7 +188,8 @@ void CUIPage::Input_Render_Info(UPART& Part, SCROLL_AREA eArea)
 	pNew->strText = Part.strText;
 	pNew->vColor_Text = Part.fTextColor;
 
-	pNew->vColor_Text.w *= m_fTopPartMove;
+	if (m_fTopPartMove >= 0.f)
+		pNew->vColor_Text.w *= m_fTopPartMove;
 
 	pNew->vColor_Texture = Part.fTextureColor;
 

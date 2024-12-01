@@ -35,7 +35,7 @@ HRESULT CUIPage_Test::Initialize_Prototype()
 	if (FAILED(__super::Initialize(&Desc)))
 		return E_FAIL;
 
-
+	m_fTopPartMove = -1.f;
 
 	return S_OK;
 }

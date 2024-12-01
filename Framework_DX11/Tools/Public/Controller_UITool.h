@@ -40,6 +40,7 @@ public:
 		PAGE_ITEMINFO,
 		PAGE_ORTHO,
 		PAGE_TEST,
+		PAGE_EFFECT,
 		PAGE_END
 	};
 

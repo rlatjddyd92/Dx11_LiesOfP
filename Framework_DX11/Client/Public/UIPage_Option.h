@@ -172,7 +172,7 @@ public:
 public: // UI 매니저 & 싱글톤이 사용하는 함수 
 	_bool Get_Variable(_wstring strKey, _float* fVariable) 
 	{
-		map<_wstring, _float>::iterator iter = m_mapVariables.find(strKey);
+		map<_wstring, _float*>::iterator iter = m_mapVariables.find(strKey);
 		if (iter == m_mapVariables.end())
 			return false;
 		else
@@ -203,6 +203,7 @@ protected:
 	SCROLL* m_pScroll_Option = { nullptr };
 	SCROLL* m_pScroll_DropBox = { nullptr };
 
+	// 옵션이 변수 직접 조작하도록 할 것 
 	vector<TAB*> m_vecOption_TabInfo;
 
 	_int m_iNow_Tab = 0;
@@ -210,7 +211,7 @@ protected:
 	_bool m_bIsOpen_DropBox = false;
 	_bool m_bChange_Tab = false;
 
-	map<_wstring, _float> m_mapVariables; 
+	map<_wstring, _float*> m_mapVariables; 
 
 	_Vec2 m_vOrigin_Focus_Dest = { 0.f,0.f };
 
