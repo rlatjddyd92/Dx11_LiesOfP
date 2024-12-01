@@ -156,6 +156,9 @@ void CUIPage_Menu::Focus_Update(_float fTimeDelta)
 				case _int(PART_GROUP::GROUP_MENU_HEART):
 					GET_GAMEINTERFACE->SwicthPage(UIPAGE::PAGE_MENU, UIPAGE::PAGE_SKILL);
 					break;*/
+				case _int(PART_GROUP::GROUP_MENU_OPTION):
+					GET_GAMEINTERFACE->SwicthPage(UIPAGE::PAGE_MENU, UIPAGE::PAGE_OPTION);
+					break;
 				default:
 					break;
 				}

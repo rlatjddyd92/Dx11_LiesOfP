@@ -724,6 +724,9 @@
     <Filter Include="03.GameInterface_Controller\00.UIManager\00.UIPage\11.UIPage_Test">
       <UniqueIdentifier>{c242bb98-b03b-45a1-9832-2f75d428ccd0}</UniqueIdentifier>
     </Filter>
+    <Filter Include="03.GameInterface_Controller\00.UIManager\00.UIPage\12.UIPage_Effect">
+      <UniqueIdentifier>{0410eb84-3479-4cd4-9076-27802a534320}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Client.h">

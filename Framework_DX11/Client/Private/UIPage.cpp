@@ -256,3 +256,49 @@ void CUIPage::Free()
 
 	Safe_Delete(m_pItemaction);
 }
+
+void CUIPage::SCROLL_INFO::Initialize_Scroll(UPART* pData, UPART* pBar, SCROLL_AREA eArea)
+{
+	
+		vPos_Render = pData->fPosition;
+		vSize_Render = pData->fSize;
+
+		fData_Height_Origin = vSize_Render.y;
+
+		fBar_Move_Max_Length = pBar->fAdjust_Start.y - pBar->fAdjust_End.y;
+
+		eScroll_Area = eArea;
+
+		fRender_Top_Y = vPos_Render.y - vSize_Render.y * 0.5f; // <- 그려지는 가장 높은 위치 
+		fRender_Bottom_Y = vPos_Render.y + vSize_Render.y * 0.5f; // <- 그려지는 가장 낮은 위치 
+
+		GET_GAMEINTERFACE->Set_Scroll_Area(eScroll_Area, pData->fPosition, pData->fSize);
+	
+}
+
+void CUIPage::SCROLL_INFO::Activate_Scroll(_float fData_Height_New, _Vec2 vPos, _Vec2 vSize)
+{
+	
+		if (fData_Height_Origin >= fData_Height_New)
+		{
+			DeActivate_Scroll();
+			return;
+		}
+
+		if ((vPos.x >= 0.f) && (vSize.x >= 0.f))
+		{
+			vPos_Render = vPos;
+			vSize_Render = vSize;
+			fData_Height_Origin = vSize_Render.y;
+
+			fRender_Top_Y = vPos_Render.y - vSize_Render.y * 0.5f; // <- 그려지는 가장 높은 위치 
+			fRender_Bottom_Y = vPos_Render.y + vSize_Render.y * 0.5f; // <- 그려지는 가장 낮은 위치 
+
+			GET_GAMEINTERFACE->Set_Scroll_Area(eScroll_Area, vPos, vSize);
+		}
+
+		bIsActive = true;
+
+		fData_Height_Max = fData_Height_New - fData_Height_Origin;
+	
+}

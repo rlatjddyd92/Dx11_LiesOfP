@@ -137,8 +137,6 @@ public:
 	}
 
 private:
-	void UIControl_Test(_float fTimeDelta);
-
 	void UIControl_Common(_float fTimeDelta);
 	void UIControl_Main(_float fTimeDelta);
 	void UIControl_Loading(_float fTimeDelta);
@@ -149,6 +147,7 @@ private:
 	void UIControl_Stat(_float fTimeDelta);
 	void UIControl_Option(_float fTimeDelta);
 	void UIControl_Skill(_float fTimeDelta);
+	void UIControl_Test(_float fTimeDelta);
 
 public:
 #pragma region Page_Main
@@ -262,11 +261,12 @@ private:
 	CUIPage_Option* m_pUIPage_Option = { nullptr };
 	// 스킬트리
 	CUIPage_Skill* m_pUIPage_Skill = { nullptr };
-	// 테스트
+	// 아이템 조작 
 	CUIPage_ItemInfo* m_pUIPage_ItemInfo = { nullptr };
 	// 직교
 	CUIPage_Ortho* m_pUIPage_Ortho = { nullptr };
-
+	// 테스트
+	CUIPage_Test* m_pUIPage_Test = { nullptr };
 
 	CUIRender_Batching* m_pUIRender_Batching = { nullptr };
 

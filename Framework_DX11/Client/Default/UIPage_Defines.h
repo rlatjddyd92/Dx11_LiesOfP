@@ -18,7 +18,7 @@
 #include "UIPage_Skill.h"
 #include "UIPage_ItemInfo.h"
 #include "UIPage_Ortho.h"
-
+#include "UIPage_Test.h"
 
 
 

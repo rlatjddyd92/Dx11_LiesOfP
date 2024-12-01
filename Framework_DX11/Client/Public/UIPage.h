@@ -9,6 +9,8 @@ BEGIN(Engine)
 END
 
 BEGIN(Client)
+class CGameInterface_Controller;
+
 
 class CUIPage : public CUIObject
 {
@@ -18,6 +20,7 @@ public:
 		COM_RENDER,
 		COM_UPDATE,
 		COM_RATIO,
+		COM_END
 	};
 
 
@@ -137,6 +140,92 @@ public:
 		EQUIP_SLOT eAction_Equip_Slot = EQUIP_SLOT::EQUIP_END;
 		_int iAction_Array_Index = -1;
 	}ITEMACTION;
+
+	typedef struct SCROLL_INFO
+	{
+		void Initialize_Scroll(UPART* pData, UPART* pBar, SCROLL_AREA eArea);
+
+		void Activate_Scroll(_float fData_Height_New, _Vec2 vPos = { -1.f,-1.f }, _Vec2 vSize = { -1.f,-1.f });
+
+		void DeActivate_Scroll()
+		{
+			bIsActive = false;
+			fScroll_Ratio = 0.f;
+			fData_Offset_Y = -1.f;
+
+		}
+
+		_bool Start_Bar_Moving(_float fNow_Y)
+		{
+			if (bIsBarMoving)
+				return false;
+
+			bIsBarMoving = true;
+			fMouse_Before_Y = fNow_Y;
+		}
+
+		_bool Bar_Moving(_float fNow_Y)
+		{
+			if (!bIsBarMoving)
+				return false;
+
+			_float fMove_Y = fNow_Y - fMouse_Before_Y;
+			fMove_Y = max(fMove_Y, 0.f);
+			fMove_Y = min(fMove_Y, fBar_Move_Max_Length);
+
+			fScroll_Ratio = fMove_Y / fBar_Move_Max_Length;
+
+			fData_Offset_Y = fData_Height_Max * fScroll_Ratio;
+
+			fMouse_Before_Y = fNow_Y;
+		}
+
+		_bool End_Bar_Moving()
+		{
+			bIsBarMoving = false;
+			fMouse_Before_Y = -1.0;
+		}
+
+		_bool Check_Is_Render_Y(_float Pos_Y, _float Size_Y)
+		{
+			if (Pos_Y + Size_Y * 0.5f < fRender_Top_Y)
+				return false;
+			else if (Pos_Y - Size_Y * 0.5f > fRender_Bottom_Y)
+				return false;
+
+			return true;
+		}
+
+
+		// Scroll
+		_bool bIsActive = false;
+		_float fScroll_Ratio = 0.f; // <- 스크롤 관련 조정치 
+
+		// BAR
+		_float fBar_Move_Max_Length = 0.f; // <- 바가 움직일 수 있는 최대 거리 (end - start)
+
+		// Data_Area
+		_Vec2 vPos_Render = { 0.f,0.f }; // <- 그려지는 위치 
+		_Vec2 vSize_Render = { 0.f,0.f }; // <- 그려지는 사이즈 
+		_float fRender_Top_Y = 0.f; // <- 그려지는 가장 높은 위치 
+		_float fRender_Bottom_Y = 0.f; // <- 그려지는 가장 낮은 위치 
+
+		_float fData_Height_Origin = 0.f; // <- 스크롤 영역의 크기 == 스크롤 작동을 위한 최소 크기 
+		_float fData_Offset_Y = 0.f; // <- 스크롤 영역의 최종 보정치 
+		_float fData_Height_Max = 0.f; // <- 스크롤 영역의 최대 보정치 
+
+		
+
+		// Mouse 
+		_bool bIsBarMoving = false;
+		_float fMouse_Before_Y = -1.0; // <- 바 클릭 유지 중, 이전 프레임의 마우스 Y 좌표 
+
+		// Scroll_Area
+		SCROLL_AREA eScroll_Area = SCROLL_AREA::SCROLL_END;
+
+	}SCROLL;
+
+
 
 
 protected:

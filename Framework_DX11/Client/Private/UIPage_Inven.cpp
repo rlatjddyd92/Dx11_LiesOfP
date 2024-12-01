@@ -433,7 +433,16 @@ void CUIPage_Inven::Update_Array_Position(_float fTimeDelta)
 
 				m_vecPart[*iter]->fPosition.y += fAdjust_Y;
 
-				if (m_vecPart[*iter]->bRender == true)
+				if ((m_eNow_Tap == INVEN_UI_TAP::TAP_ARM) && (m_vecPart[*iter]->bIsItem))
+				{
+					m_vecPart[*iter]->fPosition.y += m_vecPart[*iter]->fSize.y * 0.5f;
+
+					if (m_vecPart[*iter]->bRender == true)
+						__super::Input_Render_Info(*m_vecPart[*iter], SCROLL_AREA::SCROLL_INVEN);
+
+					m_vecPart[*iter]->fPosition.y -= m_vecPart[*iter]->fSize.y * 0.5f;
+				}
+				else if (m_vecPart[*iter]->bRender == true)
 					__super::Input_Render_Info(*m_vecPart[*iter], SCROLL_AREA::SCROLL_INVEN);
 			}
 
