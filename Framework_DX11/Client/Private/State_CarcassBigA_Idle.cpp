@@ -30,7 +30,12 @@ void CState_CarcassBigA_Idle::Update(_float fTimeDelta)
     _float fDist = m_pMonster->Calc_Distance_XZ();
     if (m_fIdleEndDuration <= m_fIdleTime)
     {
-        if (m_pMonster->Calc_Distance_XZ() <= 7.f)
+        if (fDist >= 30.f)
+        {
+            return;
+        }
+
+        if (fDist <= 7.f)
         {
             Calc_Act_Attack();
             return;

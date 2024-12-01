@@ -6,7 +6,7 @@ class CAObj_ChargeSwing	final : public CAttackObject
 {
 protected:
 	CAObj_ChargeSwing(ID3D11Device* pDevice, ID3D11DeviceContext* pContext);
-	CAObj_ChargeSwing(const CAObj_ChargeSwing& Prototype);
+	CAObj_ChargeSwing(const CGameObject& Prototype);
 	virtual ~CAObj_ChargeSwing() = default;
 
 public:

@@ -8,7 +8,7 @@ CAttackObject::CAttackObject(ID3D11Device* pDevice, ID3D11DeviceContext* pContex
 {
 }
 
-CAttackObject::CAttackObject(const CAttackObject& Prototype)
+CAttackObject::CAttackObject(const CGameObject& Prototype)
 	: CGameObject{ Prototype }
 {
 }

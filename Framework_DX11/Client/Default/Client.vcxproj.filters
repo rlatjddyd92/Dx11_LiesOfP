@@ -736,9 +736,6 @@
     <Filter Include="02.GameObjects\12.AttackObject\SimonManus\StampBlast">
       <UniqueIdentifier>{ccceba3e-2e39-473e-8a58-3e8f8e2816d2}</UniqueIdentifier>
     </Filter>
-    <Filter Include="02.GameObjects\12.AttackObject\SimonManus\MagicMissile">
-      <UniqueIdentifier>{296a8f87-b191-406d-8a87-887adfccab4c}</UniqueIdentifier>
-    </Filter>
     <Filter Include="02.GameObjects\12.AttackObject\SimonManus\ThunderSpear">
       <UniqueIdentifier>{09315704-54e9-4a45-9f4e-4158f3a83f9a}</UniqueIdentifier>
     </Filter>
@@ -759,6 +756,30 @@
     </Filter>
     <Filter Include="05.Fsm\Player\Common\GetUp">
       <UniqueIdentifier>{b0e3396b-88a4-497b-b596-2f41d05ca314}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.GameObjects\13.EffectObject">
+      <UniqueIdentifier>{edc44b0e-2a87-427c-9788-298454cb51b7}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.GameObjects\13.EffectObject\Common">
+      <UniqueIdentifier>{9999be0d-53c1-4783-a8a5-2f222899217d}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.GameObjects\13.EffectObject\Common\Followed">
+      <UniqueIdentifier>{0b287421-643e-4431-a7b3-666a04b38b65}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.GameObjects\13.EffectObject\Common\Spot">
+      <UniqueIdentifier>{957b368e-ccf5-46ea-bbbb-d448a699bfa9}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.GameObjects\12.AttackObject\SimonManus\BlackBall">
+      <UniqueIdentifier>{39713752-8c79-4b97-957c-30f68e5c7e25}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.GameObjects\12.AttackObject\SimonManus\GoldBall">
+      <UniqueIdentifier>{296a8f87-b191-406d-8a87-887adfccab4c}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.GameObjects\12.AttackObject\SimonManus\JumpMagic">
+      <UniqueIdentifier>{2bccd402-cdc1-4e0d-98b4-253b5d267fde}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.GameObjects\12.AttackObject\SimonManus\SlideMagic">
+      <UniqueIdentifier>{d094a52a-95e5-471b-bd7b-c42456ecf43c}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -1385,6 +1406,27 @@
     <ClInclude Include="..\Public\State_Player_GetUp.h">
       <Filter>05.Fsm\Player\Common\GetUp</Filter>
     </ClInclude>
+    <ClInclude Include="..\Public\EffectObject.h">
+      <Filter>02.GameObjects\13.EffectObject</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Public\SpotEffect.h">
+      <Filter>02.GameObjects\13.EffectObject\Common\Spot</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Public\FollowedEffect.h">
+      <Filter>02.GameObjects\13.EffectObject\Common\Followed</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Public\AObj_ThunderSpear.h">
+      <Filter>02.GameObjects\12.AttackObject\SimonManus\ThunderSpear</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Public\AObj_GoldBall.h">
+      <Filter>02.GameObjects\12.AttackObject\SimonManus\GoldBall</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Public\AObj_JumpMagic.h">
+      <Filter>02.GameObjects\12.AttackObject\SimonManus\JumpMagic</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Public\AObj_SlideMagic.h">
+      <Filter>02.GameObjects\12.AttackObject\SimonManus\SlideMagic</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Client.cpp">
@@ -1979,6 +2021,27 @@
     </ClCompile>
     <ClCompile Include="..\Private\State_Player_GetUp.cpp">
       <Filter>05.Fsm\Player\Common\GetUp</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Private\EffectObject.cpp">
+      <Filter>02.GameObjects\13.EffectObject</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Private\SpotEffect.cpp">
+      <Filter>02.GameObjects\13.EffectObject\Common\Spot</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Private\FollowedEffect.cpp">
+      <Filter>02.GameObjects\13.EffectObject\Common\Followed</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Private\AObj_ThunderSpear.cpp">
+      <Filter>02.GameObjects\12.AttackObject\SimonManus\ThunderSpear</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Private\AObj_GoldBall.cpp">
+      <Filter>02.GameObjects\12.AttackObject\SimonManus\GoldBall</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Private\AObj_JumpMagic.cpp">
+      <Filter>02.GameObjects\12.AttackObject\SimonManus\JumpMagic</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Private\AObj_SlideMagic.cpp">
+      <Filter>02.GameObjects\12.AttackObject\SimonManus\SlideMagic</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

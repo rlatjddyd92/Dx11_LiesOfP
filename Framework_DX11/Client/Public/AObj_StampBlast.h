@@ -7,7 +7,7 @@ class CAObj_StampBlast	final	: public CAttackObject
 {
 protected:
 	CAObj_StampBlast(ID3D11Device* pDevice, ID3D11DeviceContext* pContext);
-	CAObj_StampBlast(const CAObj_StampBlast& Prototype);
+	CAObj_StampBlast(const CGameObject& Prototype);
 	virtual ~CAObj_StampBlast() = default;
 
 public:

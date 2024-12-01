@@ -5,6 +5,7 @@
 #include "SimonManus.h"
 
 #include "AttackObject.h"
+#include "FollowedEffect.h"
 
 CState_SimonManusP1_Stamp::CState_SimonManusP1_Stamp(CFsm* pFsm, CMonster* pMonster)
     :CState{ pFsm }
@@ -33,16 +34,18 @@ HRESULT CState_SimonManusP1_Stamp::Start_State(void* pArg)
         m_pMonster->Change_Animation(AN_STAMP, false, 0.1f, 0);
         m_iCurStartAnim = AN_STAMP;
     }
-    m_bStamp = true;
+    m_bStamp = false;
     m_bBlast = false;
     m_bWeaponSpin = false;
+    m_bStampEffect = false;
+    m_bAbsorb = false;
     return S_OK;
 }
 
 void CState_SimonManusP1_Stamp::Update(_float fTimeDelta)
 {
 
-    if (m_bStamp)
+    if (!m_bStamp)
     {
         _float fTime = 120.f;
         if (m_iCurStartAnim == AN_STAMP_MOVE)
@@ -55,7 +58,7 @@ void CState_SimonManusP1_Stamp::Update(_float fTimeDelta)
             m_pMonster->Change_Animation(AN_SPINBLAST, false, 0, 0);
             m_pMonster->Change_WeaponAnimation(2, false, 0.f);
             ++m_iRouteTrack;
-            m_bStamp = false;
+            m_bStamp = true;
         }
     }
 
@@ -74,7 +77,6 @@ void CState_SimonManusP1_Stamp::Update(_float fTimeDelta)
 
 void CState_SimonManusP1_Stamp::End_State()
 {
-    m_pMonster->DeActive_Effect(CSimonManus::P1_STAMP);
     m_pMonster->Change_WeaponAnimation(0, false, 0.1f);
     m_bWeaponSpin = false;
     m_bStamp = false;
@@ -153,23 +155,24 @@ void CState_SimonManusP1_Stamp::Effect_Check(_double CurTrackPos)
 
         if ((CurTrackPos >= fTime && CurTrackPos <= fTime + 10.f))
         {
-            if (!m_pMonster->Get_EffectsLoop(CSimonManus::P1_STAMP))
+            if (!m_bStampEffect)
             {
-                m_pMonster->Active_Effect(CSimonManus::P1_STAMP);
+                CEffectObject::EFFECTOBJ_DESC Desc{};
+                Desc.fLifeDuration = 1.5f;
+                Desc.strEffectTag = TEXT("SimonManus_Attack_Stamp");
+                _float4x4 WorldMat{};
+
+                XMStoreFloat4x4(&WorldMat, (*m_pMonster->Get_WeaponBoneCombinedMat(6) * (*m_pMonster->Get_WeaponWorldMat())));
+                Desc.vPos = _Vec3{ WorldMat._41, WorldMat._42, WorldMat._43 };
+
+                m_pGameInstance->Add_CloneObject_ToLayer(LEVEL_GAMEPLAY, TEXT("Monster_Attack"), TEXT("Prototype_GameObject_SpotEffect"), &Desc);
+
+                m_bStampEffect = true;
             }
-        }
-        else
-        {
-            m_pMonster->DeActive_Effect(CSimonManus::P1_STAMP);
         }
     }
     else if (m_iRouteTrack == 1)
     {
-        if (CurTrackPos > 80.f)
-        {
-            m_pMonster->DeActive_Effect(CSimonManus::P1_CHARGESTAMP);
-        }
-
         if (!m_bBlast)
         {
             if (CurTrackPos > 125.f)
@@ -184,12 +187,32 @@ void CState_SimonManusP1_Stamp::Effect_Check(_double CurTrackPos)
             }
         }
 
+        if (!m_bAbsorb)
+        {
+            if (CurTrackPos >= 40.f)
+            {
+                CFollowedEffect::FOLLOWEFFOBJ_DESC Desc{};
+                Desc.fLifeDuration = 1.5f;
+                Desc.strEffectTag = TEXT("SimonManus_Attack_ChargeStamp");
+                _float4x4 WorldMat{};
+
+                XMStoreFloat4x4(&WorldMat, (*m_pMonster->Get_WeaponBoneCombinedMat(6) * (*m_pMonster->Get_WeaponWorldMat())));
+                Desc.vPos = _Vec3{ WorldMat._41, WorldMat._42, WorldMat._43 };
+
+                Desc.pParentWorldMat = m_pMonster->Get_WeaponWorldMat();
+                Desc.pBoneCombinedMat = m_pMonster->Get_WeaponBoneCombinedMat(6);
+
+                m_pGameInstance->Add_CloneObject_ToLayer(LEVEL_GAMEPLAY, TEXT("Monster_Attack"), TEXT("Prototype_GameObject_FollowedEffect"), &Desc);
+
+                m_bAbsorb = true;
+            }
+        }
         if (!m_bWeaponSpin)
         {
             if (m_pMonster->Get_WeaponAnimEnd(2))
             {
                 m_pMonster->Change_WeaponAnimation(3, true, 0.f, 0);
-                m_pMonster->Active_Effect(CSimonManus::P1_CHARGESTAMP);
+                
                 m_bWeaponSpin = true;
             }
         }

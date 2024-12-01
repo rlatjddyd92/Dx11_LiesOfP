@@ -27,7 +27,7 @@ public:
 
 protected:
 	CAttackObject(ID3D11Device* pDevice, ID3D11DeviceContext* pContext);
-	CAttackObject(const CAttackObject& Prototype);
+	CAttackObject(const CGameObject& Prototype);
 	virtual ~CAttackObject() = default;
 
 public:

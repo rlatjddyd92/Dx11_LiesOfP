@@ -24,8 +24,8 @@ HRESULT CState_CarcassBigA_LOSwingRight::Start_State(void* pArg)
 {
     m_pMonster->Change_Animation(AN_LOSWINGRIGHT, false, 0.1f, 0, true);
 
-    m_fGoalRimAlpha = 1.f;
-    m_fCurtRimAlpha = 0.f;
+    m_fGoalRimAlpha = 0.1f;
+    m_fCurtRimAlpha = 1.f;
     return S_OK;
 }
 
@@ -79,8 +79,16 @@ void CState_CarcassBigA_LOSwingRight::Update_Rimlight()
 {
     if (m_fCurtRimAlpha != m_fGoalRimAlpha)
     {
-        m_fCurtRimAlpha += (m_fGoalRimAlpha - m_fCurtRimAlpha) / 10;
+        m_fCurtRimAlpha += (m_fGoalRimAlpha - m_fCurtRimAlpha) / 20;
         m_pMonster->Set_RimLightColor(_Vec4{ 0.9f, 0.f, 0.f, m_fCurtRimAlpha });
+        if (abs(m_fGoalRimAlpha - m_fCurtRimAlpha) < 0.1f)
+        {
+            m_fCurtRimAlpha = m_fGoalRimAlpha;
+            if (m_fGoalRimAlpha == 1.f)
+            {
+                m_pMonster->Set_RimLightColor(_Vec4{ 0.f, 0.f, 0.f, 1.f });
+            }
+        }
     }
 }
 

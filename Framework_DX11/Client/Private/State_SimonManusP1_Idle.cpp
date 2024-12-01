@@ -40,6 +40,11 @@ void CState_SimonManusP1_Idle::Update(_float fTimeDelta)
     _float fDist = m_pMonster->Calc_Distance_XZ();
     if (m_fIdleEndDuration <= m_fIdleTime)
     {
+        if (fDist >= 30.f)
+        {
+            return;
+        }
+
         if (m_iAtkCnt >= 3.f && fDist <= 20.f && 9.f < fDist)   //m_iAtkCnt >= 3.f && fDist <= 15.f && 6.f < fDist
         {
             //하이점프폴
@@ -62,7 +67,8 @@ void CState_SimonManusP1_Idle::Update(_float fTimeDelta)
             m_pMonster->Change_State(CSimonManus::WALK);
             return;
         }
-        //m_pMonster->Change_State(CSimonManus::ATK_SWINGDOWN_L);
+        //m_pMonster->Change_State(CSimonManus::ATK_HIGHJUMPFALL);
+        //return;
 
         return;
     }

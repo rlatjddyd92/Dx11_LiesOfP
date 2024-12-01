@@ -85,6 +85,7 @@ public:
 
 	PAWN_STATUS* Get_Status() { return &m_eStat; }
 
+    _int            Get_UFBIndex(_uint UFB_Type);
 
 protected:
 	class CShader*		m_pShaderCom = { nullptr };

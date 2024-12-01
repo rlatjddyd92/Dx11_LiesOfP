@@ -30,7 +30,7 @@ private:
     _float              m_fIdleEndDuration = { 1.5f };
 
     _uint               m_iAtkCnt{};
-
+    _bool               m_bTest = false;
 private:
     void                Calc_Act_Attack(_float fDist);
 

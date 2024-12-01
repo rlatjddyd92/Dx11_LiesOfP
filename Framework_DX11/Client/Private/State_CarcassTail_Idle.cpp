@@ -30,7 +30,7 @@ void CState_CarcassTail_Idle::Update(_float fTimeDelta)
     _int iDir = 2;
 
     //뒤에있을때 공격도 있어서. 회전을 거리가 멀때만 하게 조정
-    if (fDist >= 9.f)
+    if (fDist >= 9.f && fDist < 30.f)
     {
        iDir = m_pMonster->Get_Transform()->LookAt_Lerp_NoHeight(m_pMonster->Get_TargetDir(), 2, fTimeDelta);
 
@@ -58,6 +58,11 @@ void CState_CarcassTail_Idle::Update(_float fTimeDelta)
     m_fIdleTime += fTimeDelta;
     if (m_fIdleEndDuration <= m_fIdleTime)
     {
+        if (fDist >= 30.f)
+        {
+            return;
+        }
+
         if (iDir == 0 && fDist <= 20.f && fDist >= 10.f)
         {
             _int iAtkNum = rand() % 2;

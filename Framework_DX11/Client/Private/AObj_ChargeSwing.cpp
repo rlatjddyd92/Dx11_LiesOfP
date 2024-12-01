@@ -10,7 +10,7 @@ CAObj_ChargeSwing::CAObj_ChargeSwing(ID3D11Device* pDevice, ID3D11DeviceContext*
 {
 }
 
-CAObj_ChargeSwing::CAObj_ChargeSwing(const CAObj_ChargeSwing& Prototype)
+CAObj_ChargeSwing::CAObj_ChargeSwing(const CGameObject& Prototype)
     : CAttackObject{ Prototype }
 {
 }
