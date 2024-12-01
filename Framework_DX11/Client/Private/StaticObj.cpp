@@ -46,7 +46,8 @@ void CStaticObj::Priority_Update(_float fTimeDelta)
 
 void CStaticObj::Update(_float fTimeDelta)
 {
-	if (KEY_TAP(L))
+	//¿ÁÆ®¸® ²°´Ù Å°±â
+	if (KEY_TAP(I))
 		m_pGameInstance->Change_Active_Octree();
 }
 
