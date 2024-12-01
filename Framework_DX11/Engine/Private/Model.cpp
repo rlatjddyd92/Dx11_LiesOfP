@@ -375,6 +375,15 @@ HRESULT CModel::SetUp_NextAnimation(_uint iNextAnimationIndex, _bool isLoop, _fl
 	if (bEitherBoundary)
 	{
 		SetUp_NextAnimation_Boundary(iNextAnimationIndex, isLoop, fChangeDuration, iStartFrame, bSameChange);
+		m_isSameAnimCheck = true;
+	}
+	else
+	{
+		if (m_isSameAnimCheck)
+		{
+			m_CurrentTrackPosition_Boundary = m_CurrentTrackPosition;
+		}
+		m_isSameAnimCheck = false;
 	}
 
 	return S_OK;
