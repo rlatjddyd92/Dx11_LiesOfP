@@ -118,7 +118,6 @@ HRESULT CPlayer::Initialize(void * pArg)
 	//m_pNavigationCom->Move_to_Cell(m_pRigidBodyCom, 440); //상자랑 장애물
 	//m_pNavigationCom->Move_to_Cell(m_pRigidBodyCom, 1068); // 순간이동
 
-
 	m_strObjectTag = TEXT("Player");
 
 	// 24-11-27 김성용

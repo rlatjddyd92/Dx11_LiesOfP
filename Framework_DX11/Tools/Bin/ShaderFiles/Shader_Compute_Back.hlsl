@@ -45,7 +45,7 @@ float3 ToneMapping(float3 vHDRColor)
     float fLScale = dot(vHDRColor, LUM_FACTOR);
     fLScale *= fMiddleGrey / g_HDR[0];
     fLScale = (fLScale + fLScale * fLScale / fLumWhiteSqr) / (1.f + fLScale);
-    fLScale = clamp(fLScale, 0.0f, 1.3f);
+    fLScale = clamp(fLScale, 0.5f, 1.1f);
     return vHDRColor * fLScale;
 }
 

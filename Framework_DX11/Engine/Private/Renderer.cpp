@@ -500,6 +500,9 @@ HRESULT CRenderer::Render_Deferred()
 	if (FAILED(m_pGameInstance->Bind_RT_ShaderResource(m_pShader, TEXT("Target_LightDepth"), "g_LightDepthTexture")))
 		return E_FAIL;
 
+	if (FAILED(m_pGameInstance->Bind_RT_ShaderResource(m_pShader, TEXT("Target_Priority"), "g_PriorityTexture")))
+		return E_FAIL;
+
 	if (m_isOnShadow)
 	{
 		if (FAILED(m_pGameInstance->Bind_RT_ShaderResource(m_pShader, TEXT("Target_CascadeShadow"), "g_CascadeShadowTexture")))
@@ -1072,8 +1075,8 @@ HRESULT CRenderer::Render_Bloom()
 		return E_FAIL;
 	if (FAILED(m_pGameInstance->Bind_RT_ShaderResource(m_pPostProcessShader, TEXT("Target_Bloom_BlurXY1"), "g_BloomTexture")))
 		return E_FAIL;
-	if (FAILED(m_pGameInstance->Bind_RT_ShaderResource(m_pPostProcessShader, TEXT("Target_Priority"), "g_PriorityTexture")))
-		return E_FAIL;
+	//if (FAILED(m_pGameInstance->Bind_RT_ShaderResource(m_pPostProcessShader, TEXT("Target_Priority"), "g_PriorityTexture")))
+	//	return E_FAIL;
 	if (FAILED(m_pGameInstance->Bind_RT_ShaderResource(m_pPostProcessShader, TEXT("Target_Depth"), "g_DepthTexture")))
 		return E_FAIL;
 

@@ -26,7 +26,7 @@ float4 Compute_WorldPos(float2 vTexcoord, float fDepth, float fViewZ)
 // 프레넬 - 입사와 반사각을 이용한 색상 계산(Specular)
 float3 FresnelSchlick(float LdotH, float3 fSpecularColor)
 {
-    return fSpecularColor + (1.0 - fSpecularColor) * pow(1.f - LdotH, 5.f);
+    return fSpecularColor + (1.f - fSpecularColor) * pow(1.f - LdotH, 5.f);
 }
 
 // 거칠기에 따른 반사 분포 계산 법선과 반사벡터로 계산
