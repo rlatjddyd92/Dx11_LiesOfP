@@ -4,6 +4,8 @@
 #include "Model.h"
 #include "SimonManus.h"
 
+#include "EffectObject.h"
+
 CState_SimonManusP1_HighJumpFall::CState_SimonManusP1_HighJumpFall(CFsm* pFsm, CMonster* pMonster)
     :CState{ pFsm }
     , m_pMonster{ pMonster }
@@ -36,8 +38,7 @@ void CState_SimonManusP1_HighJumpFall::Update(_float fTimeDelta)
 {
     m_fCurrentTime += fTimeDelta;
     
-    _double CurTrackPos{};
-    CurTrackPos = m_pMonster->Get_CurrentTrackPos();
+    _double CurTrackPos = m_pMonster->Get_CurrentTrackPos();
 
     if (CurTrackPos >= 200.f && CurTrackPos < 230.f) //점프 이후 공중 체공 + 플레이어방향 회전
     {
@@ -73,7 +74,8 @@ void CState_SimonManusP1_HighJumpFall::Update(_float fTimeDelta)
         return;
     }
 
-    Collider_Check();
+    Collider_Check(CurTrackPos);
+    Effect_Check(CurTrackPos);
     Update_Rimlight();
 
 }
@@ -89,9 +91,8 @@ _bool CState_SimonManusP1_HighJumpFall::End_Check()
     return m_pMonster->Get_EndAnim(AN_HIGHJUMPFALL);
 }
 
-void CState_SimonManusP1_HighJumpFall::Collider_Check()
+void CState_SimonManusP1_HighJumpFall::Collider_Check(_double CurTrackPos)
 {
-    _double CurTrackPos = m_pMonster->Get_CurrentTrackPos();
 
     if ((CurTrackPos >= 140.f && CurTrackPos <= 150.f))
     {
@@ -100,6 +101,27 @@ void CState_SimonManusP1_HighJumpFall::Collider_Check()
     else
     {
         m_pMonster->DeActive_CurretnWeaponCollider();
+    }
+}
+
+void CState_SimonManusP1_HighJumpFall::Effect_Check(_double CurTrackPos)
+{
+    if (!m_bStampEffect)
+    {
+        if ((CurTrackPos >= 150.f))
+        {
+            CEffectObject::EFFECTOBJ_DESC Desc{};
+            Desc.fLifeDuration = 1.5f;
+            Desc.strEffectTag = TEXT("SimonManus_Attack_Stamp");
+            _float4x4 WorldMat{};
+
+            XMStoreFloat4x4(&WorldMat, (*m_pMonster->Get_WeaponBoneCombinedMat(6) * (*m_pMonster->Get_WeaponWorldMat())));
+            Desc.vPos = _Vec3{ WorldMat._41, WorldMat._42, WorldMat._43 };
+
+            m_pGameInstance->Add_CloneObject_ToLayer(LEVEL_GAMEPLAY, TEXT("Monster_Attack"), TEXT("Prototype_GameObject_SpotEffect"), &Desc);
+
+            m_bStampEffect = true;
+        }
     }
 }
 

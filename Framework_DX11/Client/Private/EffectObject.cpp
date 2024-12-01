@@ -93,4 +93,9 @@ HRESULT CEffectObject::Ready_Components()
 void CEffectObject::Free()
 {
     __super::Free();
+
+	for (_uint i = 0; i < WEP_SOUND_END; ++i)
+	{
+		Safe_Release(m_pSoundCom[i]);
+	}
 }

@@ -57,7 +57,7 @@ HRESULT CState_SimonManusP2_JumpToAttack::Start_State(void* pArg)
         m_iCurLastAnim = AN_CANCLEATTACK;
     }
 
-    m_iCurStartAnim = AN_MAGICTO_RIGHT;
+    m_iCurStartAnim = AN_MAGICTO_LEFT;
     m_pMonster->Change_Animation(m_iCurStartAnim, false, 0.1f, 0);
 
     m_bMagic = false;
@@ -155,65 +155,68 @@ void CState_SimonManusP2_JumpToAttack::Collider_Check(_double CurTrackPos)
 
 void CState_SimonManusP2_JumpToAttack::Effect_Check(_double CurTrackPos)
 {
-    if (!m_bMagic)
+    if (m_iRouteTrack == 0)
     {
-        if (m_iCurStartAnim == AN_MAGICTO_LEFT || m_iCurStartAnim == AN_MAGICTO_RIGHT)
+        if (!m_bMagic)
         {
-            if ((CurTrackPos >= 15.f && CurTrackPos <= 45.f))
+            if (m_iCurStartAnim == AN_MAGICTO_LEFT || m_iCurStartAnim == AN_MAGICTO_RIGHT)
             {
-                if (!m_pMonster->Get_EffectsLoop(CSimonManus::P2_SLIDEMAGIC))
+                if ((CurTrackPos >= 40.f && CurTrackPos <= 45.f))
                 {
-                    m_pMonster->Active_Effect(CSimonManus::P2_SLIDEMAGIC);
+                    if (!m_pMonster->Get_EffectsLoop(CSimonManus::P2_JUMPMAGIC))
+                    {
+                        m_pMonster->Active_Effect(CSimonManus::P2_JUMPMAGIC);
+                    }
                 }
-            }
-            else
-            {
-                m_pMonster->DeActive_Effect(CSimonManus::P2_SLIDEMAGIC);
-            }
+                else
+                {
+                    m_pMonster->DeActive_Effect(CSimonManus::P2_JUMPMAGIC);
+                }
 
-            _float fTime = 0;
-            if (m_iCurStartAnim == AN_MAGICTO_LEFT)
-            {
-                fTime = 63.f;
-            }
-            else
-            {
-                fTime = 83.f;
-            }
+                _float fTime = 0;
+                if (m_iCurStartAnim == AN_MAGICTO_LEFT)
+                {
+                    fTime = 63.f;
+                }
+                else
+                {
+                    fTime = 83.f;
+                }
 
-            if (CurTrackPos >= fTime)
-            {
-                _Vec3 vLook = m_pMonster->Get_TargetDir();
-                _Vec3 vUp = _Vec3{ 0.f, 1.f, 0.f };
-                _Vec3 vRight = vUp.Cross(vLook);
-                vRight.Normalize();
-                vRight *= 0.1f;
+                if (CurTrackPos >= fTime)
+                {
+                    _Vec3 vLook = m_pMonster->Get_TargetDir();
+                    _Vec3 vUp = _Vec3{ 0.f, 1.f, 0.f };
+                    _Vec3 vRight = vUp.Cross(vLook);
+                    vRight.Normalize();
+                    vRight *= 0.1f;
 
-                CAttackObject::ATKOBJ_DESC Desc;
-                _float4x4 WorldMat{};
-                XMStoreFloat4x4(&WorldMat, (*m_pMonster->Get_BoneCombinedMat(m_pMonster->Get_UFBIndex(UFB_HAND_LEFT)) * (*m_pMonster->Get_Transform()->Get_WorldMatrix_Ptr())));
-                Desc.vPos = _Vec3{ WorldMat._41, WorldMat._42 - 0.2f, WorldMat._43 };
-                _Vec3 vMainDir = m_pMonster->Get_TargetPos() - Desc.vPos;
-                vMainDir.Normalize();
+                    CAttackObject::ATKOBJ_DESC Desc;
+                    _float4x4 WorldMat{};
+                    XMStoreFloat4x4(&WorldMat, (*m_pMonster->Get_BoneCombinedMat(m_pMonster->Get_UFBIndex(UFB_HAND_LEFT)) * (*m_pMonster->Get_Transform()->Get_WorldMatrix_Ptr())));
+                    Desc.vPos = _Vec3{ WorldMat._41, WorldMat._42 - 0.2f, WorldMat._43 };
+                    _Vec3 vMainDir = m_pMonster->Get_TargetPos() - Desc.vPos;
+                    vMainDir.Normalize();
 
-                Desc.vDir = _Vec3{ vMainDir - vRight * 3};
+                    Desc.vDir = _Vec3{ vMainDir - vRight * 5 };
 
-                m_pGameInstance->Add_CloneObject_ToLayer(LEVEL_GAMEPLAY, TEXT("Monster_Attack"), TEXT("Prototype_GameObject_JumpMagic"), &Desc);
+                    m_pGameInstance->Add_CloneObject_ToLayer(LEVEL_GAMEPLAY, TEXT("Monster_Attack"), TEXT("Prototype_GameObject_JumpMagic"), &Desc);
 
-                Desc.vDir = _Vec3{ vMainDir - vRight };
+                    Desc.vDir = _Vec3{ vMainDir - vRight };
 
-                m_pGameInstance->Add_CloneObject_ToLayer(LEVEL_GAMEPLAY, TEXT("Monster_Attack"), TEXT("Prototype_GameObject_JumpMagic"), &Desc);
+                    m_pGameInstance->Add_CloneObject_ToLayer(LEVEL_GAMEPLAY, TEXT("Monster_Attack"), TEXT("Prototype_GameObject_JumpMagic"), &Desc);
 
-                Desc.vDir = _Vec3{ vMainDir + vRight * 3 };
+                    Desc.vDir = _Vec3{ vMainDir + vRight * 5 };
 
-                m_pGameInstance->Add_CloneObject_ToLayer(LEVEL_GAMEPLAY, TEXT("Monster_Attack"), TEXT("Prototype_GameObject_JumpMagic"), &Desc);
+                    m_pGameInstance->Add_CloneObject_ToLayer(LEVEL_GAMEPLAY, TEXT("Monster_Attack"), TEXT("Prototype_GameObject_JumpMagic"), &Desc);
 
-                Desc.vDir = _Vec3{ vMainDir + vRight };
+                    Desc.vDir = _Vec3{ vMainDir + vRight };
 
-                m_pGameInstance->Add_CloneObject_ToLayer(LEVEL_GAMEPLAY, TEXT("Monster_Attack"), TEXT("Prototype_GameObject_JumpMagic"), &Desc);
+                    m_pGameInstance->Add_CloneObject_ToLayer(LEVEL_GAMEPLAY, TEXT("Monster_Attack"), TEXT("Prototype_GameObject_JumpMagic"), &Desc);
 
 
-                m_bMagic = true;
+                    m_bMagic = true;
+                }
             }
         }
     }

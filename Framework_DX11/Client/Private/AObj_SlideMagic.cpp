@@ -37,7 +37,7 @@ HRESULT CAObj_SlideMagic::Initialize(void* pArg)
 
     m_fDamageAmount = 20.f;
     m_fLifeDuration = 3.f;
-    m_fSpeed = 5.f;
+    m_fSpeed = 10.f;
 
     m_pColliderCom->IsActive(true);
 
@@ -144,7 +144,7 @@ HRESULT CAObj_SlideMagic::Ready_Components()
     /* FOR.Com_Collider */
     CBounding_Sphere::BOUNDING_SPHERE_DESC      ColliderDesc{};
     ColliderDesc.vCenter = _float3(0.f, 0.f, 0.f);
-    ColliderDesc.fRadius = 1.f;
+    ColliderDesc.fRadius = 0.5f;
 
     if (FAILED(__super::Add_Component(LEVEL_STATIC, TEXT("Prototype_Component_Collider_Sphere"),
         TEXT("Com_Collider"), reinterpret_cast<CComponent**>(&m_pColliderCom), &ColliderDesc)))
@@ -154,7 +154,7 @@ HRESULT CAObj_SlideMagic::Ready_Components()
     const _Matrix* pParetnMatrix = m_pTransformCom->Get_WorldMatrix_Ptr();
 
     m_pEffect = CEffect_Manager::Get_Instance()->Clone_Effect(TEXT("SimonManus_Attack_GoldBall"), pParetnMatrix,
-        nullptr, _Vec3(0.f, 0.f, 0.f), _Vec3(0.f, 0.f, 0.f), _Vec3(1.f, 1.f, 1.f));
+        nullptr, _Vec3(0.f, 0.f, 0.f), _Vec3(0.f, 0.f, 0.f), _Vec3(4.f, 4.f, 4.f));
 
     m_pEffect->Set_Loop(true);
 
