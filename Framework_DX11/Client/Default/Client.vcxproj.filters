@@ -781,6 +781,12 @@
     <Filter Include="02.GameObjects\12.AttackObject\SimonManus\SlideMagic">
       <UniqueIdentifier>{d094a52a-95e5-471b-bd7b-c42456ecf43c}</UniqueIdentifier>
     </Filter>
+    <Filter Include="03.GameInterface_Controller\00.UIManager\00.UIPage\11.UIPage_Test">
+      <UniqueIdentifier>{3e2279c1-e58e-4c57-8e40-df000692747b}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="03.GameInterface_Controller\00.UIManager\00.UIPage\12.UIPage_Effect">
+      <UniqueIdentifier>{26ca8006-fabe-45a8-b4ac-6ef7432e9707}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Client.h">
@@ -1427,6 +1433,12 @@
     <ClInclude Include="..\Public\AObj_SlideMagic.h">
       <Filter>02.GameObjects\12.AttackObject\SimonManus\SlideMagic</Filter>
     </ClInclude>
+    <ClInclude Include="..\Public\UIPage_Effect.h">
+      <Filter>03.GameInterface_Controller\00.UIManager\00.UIPage\12.UIPage_Effect</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Public\UIPage_Test.h">
+      <Filter>03.GameInterface_Controller\00.UIManager\00.UIPage\11.UIPage_Test</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Client.cpp">
@@ -2042,6 +2054,12 @@
     </ClCompile>
     <ClCompile Include="..\Private\AObj_SlideMagic.cpp">
       <Filter>02.GameObjects\12.AttackObject\SimonManus\SlideMagic</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Private\UIPage_Effect.cpp">
+      <Filter>03.GameInterface_Controller\00.UIManager\00.UIPage\12.UIPage_Effect</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Private\UIPage_Test.cpp">
+      <Filter>03.GameInterface_Controller\00.UIManager\00.UIPage\11.UIPage_Test</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

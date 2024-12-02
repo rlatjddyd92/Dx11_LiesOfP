@@ -188,13 +188,24 @@ HRESULT CUIRender::Render()
 			if (rNow.fTextColor.w > 0.f)
 				vColor.m128_f32[3] = rNow.fTextColor.w;
 
+			if (KEY_HOLD(KEY::ALT))
+			{
+				if (KEY_HOLD(KEY::NUM1))
+					m_fSize -= 0.01f;
+				else if (KEY_HOLD(KEY::NUM2))
+					m_fSize += 0.01f;
+
+				m_fSize = max(m_fSize, 0.f);
+				m_fSize = min(m_fSize, 1.f);
+			}
+
 
 			if (rNow.bCenter)
-				m_pGameInstance->Render_TextCenter(m_vecFont_tchar[rNow.iFontIndex], rNow.szText, vPosition, vColor);
+				m_pGameInstance->Render_TextCenter(m_vecFont_tchar[rNow.iFontIndex], rNow.szText, vPosition, vColor, 0.f, {0.f,0.f,0.f,1.f}, m_fSize);
 			else if (rNow.bText_Right)
-				m_pGameInstance->Render_TextRight(m_vecFont_tchar[rNow.iFontIndex], rNow.szText, vPosition, vColor);
+				m_pGameInstance->Render_TextRight(m_vecFont_tchar[rNow.iFontIndex], rNow.szText, vPosition, vColor, 0.f, { 0.f,0.f,0.f,1.f }, m_fSize);
 			else
-				m_pGameInstance->Render_Text(m_vecFont_tchar[rNow.iFontIndex], rNow.szText, vPosition, vColor);
+				m_pGameInstance->Render_Text(m_vecFont_tchar[rNow.iFontIndex], rNow.szText, vPosition, vColor, 0.f, { 0.f,0.f,0.f,1.f }, m_fSize);
 		}
 	}
 

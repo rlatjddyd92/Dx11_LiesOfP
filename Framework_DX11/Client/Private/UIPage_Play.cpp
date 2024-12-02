@@ -499,6 +499,7 @@ void CUIPage_Play::Boss_Hp_Update(_float fTimeDelta)
 		__super::Get_Front_Part_In_Control(_int(PART_GROUP::GROUP_BOSS_HP_FILL))->fRatio = _float(m_fBoss_Hp_Now) / _float(m_fBoss_Hp_Max);
 		__super::Get_Front_Part_In_Control(_int(PART_GROUP::GROUP_BOSS_HP_SECOND))->fRatio = 0.f; // <- 임시 수치 
 		__super::Get_Front_Part_In_Control(_int(PART_GROUP::GROUP_BOSS_HP_FILL))->MovePart(__super::Get_Front_Part_In_Control(_int(PART_GROUP::GROUP_BOSS_NAME))->fPosition, fTimeDelta);
+		__super::Get_Front_Part_In_Control(_int(PART_GROUP::GROUP_BOSS_HP_SECOND))->MovePart(__super::Get_Front_Part_In_Control(_int(PART_GROUP::GROUP_BOSS_NAME))->fPosition, fTimeDelta);
 	}
 }
 

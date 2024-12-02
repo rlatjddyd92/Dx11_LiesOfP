@@ -51,55 +51,31 @@ void CGameInterface_Controller::Update_GameInterface(_float fTimeDelta)
 			if (iItem == 3)
 				m_pItem_Manager->AddNewItem_Inven(279);
 		}
-		else if (KEY_TAP(KEY::F5))
-		{
-			/*for (_int i = 0; i < _int(BUFF_INDEX::BUFF_END); ++i)
-			{
-				if (m_pPlayer_Stat_Manager->Get_Buff_Ratio(BUFF_INDEX(i)) == 0.f)
-				{
-					m_pPlayer_Stat_Manager->Start_Buff(BUFF_INDEX(i));
-					break;
-				}
-			}*/
-		}
-		else if (KEY_HOLD(KEY::F6))
-			m_pUIManager->Action_InterAction(TEXT("테스트 상호작용"));
 	}
 
-
-
-
-
-	m_pItem_Manager->Update_Item(fTimeDelta);
-
+	// 매니저 업데이트 
+	m_pItem_Manager->Update_Item(fTimeDelta); 
 	m_pUIManager->Update_UIManager(fTimeDelta);
 
+	// 아이템 조작 팝업 
+	const CUIPage::ITEMACTION_INFO* pNowAction = m_pUIManager->Get_ItemAction_Info(); // 현재 UI에서 요청된 아이템 조작 팝업 정보 획득
 
-	const CUIPage::ITEMACTION_INFO* pNowAction = m_pUIManager->Get_ItemAction_Info();
-
-	if (m_pUIManager->Get_ActiveFunc() != ITEM_FUNC::FUNC_END)
+	if (m_pUIManager->Get_ActiveFunc() != ITEM_FUNC::FUNC_END) // UI 매니저에서 팝업을 통한 조작요청이 확인됨
 	{
-		m_pItem_Manager->Operate_ItemAction(m_pUIManager->Get_ActiveFunc(), pNowAction->vAction_Pos, pNowAction->vAction_Size);
+		m_pItem_Manager->Operate_ItemAction(m_pUIManager->Get_ActiveFunc(), pNowAction->vAction_Pos, pNowAction->vAction_Size); // 아이템 매니저가 요청 사항을 수행
 
-		if (m_pItem_Manager->IsReset_ItemAction())
-			m_pUIManager->Reset_ItemAction();
-
-		
+		if (m_pItem_Manager->IsReset_ItemAction()) // 아이템 매니저의 활동 결과, 팝업이 종료되었는 지 확인 
+			m_pUIManager->Reset_ItemAction(); // 팝업이 종료된 경우 UI 매니저에서도 요청 사항을 모두 리셋 
 	}
 			
-
-	if (pNowAction == nullptr)
-		m_pItem_Manager->Reset_ItemAction();
-	else if (pNowAction->eAction_Array_Type != INVEN_ARRAY_TYPE::TYPE_END)
-	{
+	if (pNowAction == nullptr) // UI 매니저의 요청 사항이 없었던 경우 
+		m_pItem_Manager->Reset_ItemAction(); // 아이템 매니저의 팝업 정보 리셋 
+	else if (pNowAction->eAction_Array_Type != INVEN_ARRAY_TYPE::TYPE_END) // UI 매니저의 요청이 장비창에서 발생 
 		m_pItem_Manager->Set_ItemAction(pNowAction->eAction_Array_Type, pNowAction->iAction_Array_Index, pNowAction->vAction_Pos, pNowAction->vAction_Size, true);
-	}
-	else if (pNowAction->eAction_Equip_Slot != EQUIP_SLOT::EQUIP_END)
-	{
+	else if (pNowAction->eAction_Equip_Slot != EQUIP_SLOT::EQUIP_END) // UI 매니저의 요청이 인벤에서 발생 
 		m_pItem_Manager->Set_ItemAction(pNowAction->eAction_Equip_Slot, pNowAction->vAction_Pos, pNowAction->vAction_Size, true);
-	}
 	else
-		m_pItem_Manager->Reset_ItemAction();
+		m_pItem_Manager->Reset_ItemAction(); // 요청 사항 내용이 nullptr은 아니지만 비정상임(장비창, 인벤 둘 중 하나여야 함)-> 리셋 진행 
 }
 
 void CGameInterface_Controller::Release_GameInterface()
@@ -109,7 +85,7 @@ void CGameInterface_Controller::Release_GameInterface()
 	Safe_Release(m_pUIManager);
 	Safe_Release(m_pItem_Manager);
 	Safe_Release(m_pPlayer_Stat_Manager);
-	m_pPlayer = nullptr;
+	//m_pPlayer = nullptr;
 
 	GET_GAMEINTERFACE->Destroy_Instance();
 }

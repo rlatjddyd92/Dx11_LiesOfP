@@ -47,7 +47,6 @@ HRESULT CUIManager::Initialize_Prototype()
 #pragma endregion
 
 	m_pUIRender_Batching = CUIRender_Batching::Create(m_pDevice, m_pContext);
-	//Safe_AddRef(m_pUIRender_Client);
 
 	m_pUIRender_Batching->Set_Scroll_Area(SCROLL_AREA::SCROLL_NONE, { m_fX,m_fY }, { m_fSizeX,m_fSizeY });
 
@@ -107,10 +106,16 @@ void CUIManager::Late_Update(_float fTimeDelta)
 	// 렌더 최종 결정 
 	_int iCountOpen = 0;
 
-	m_pUIPage_Ortho->Late_Update(fTimeDelta);
+	if (m_pUIPage_Play->GetRender())
+		m_pUIPage_Ortho->Late_Update(fTimeDelta);
 
-	for (_int i = 0; i < _int(UIPAGE::PAGE_END) - 1; ++i)
+	m_pUIPage_Effect->SetUpdate(true);
+
+	for (_int i = 0; i < _int(UIPAGE::PAGE_END); ++i)
 	{
+		if (i == _int(UIPAGE::PAGE_ORTHO))
+			continue;
+
 		if (m_vecPage[i]->GetUpdate())
 			m_vecPage[i]->Late_Update(fTimeDelta);
 	}
@@ -127,7 +132,7 @@ HRESULT CUIManager::Render()
 
 #endif // _DEBUG
 
-
+	m_pUIRender_Batching->Select_Scroll_Area(SCROLL_AREA::SCROLL_NONE);
 	return S_OK;
 }
 
@@ -145,7 +150,6 @@ void CUIManager::Update_UIControl(_float fTimeDelta)
 	// 조작 관련 모든 것 
 	// 마우스, 키보드를 통한 UI 조작은 모두 여기 작성한다 
 
-	UIControl_Test(fTimeDelta);
 	UIControl_Common(fTimeDelta);
 }
 
@@ -157,139 +161,7 @@ void CUIManager::Update_TestPage(_float fTimeDelta)
 
 void CUIManager::UIControl_Test(_float fTimeDelta)
 {
-#ifdef _DEBUG
 
-
-
-
-
-#endif // DEBUG
-
-	// 아래 내용은 테스트용 변수 확인 페이지를 위한 코드
-	// 릴리즈에서도 사용할 수 있도록 설정
-	// TestPage 이외의 내용은 아래에 넣지 않기 
-
-
-	// TestPage 조작 
-	//if (KEY_HOLD(KEY::LSHIFT))
-	//{
-	//	if (KEY_TAP(KEY::F3)) // TestPage 팀장
-	//	{
-	//		if (m_vecTestPageOpen[_int(TEST_PAGE_NAME::NAME_TEAMJANG)])
-	//			m_vecTestPageOpen[_int(TEST_PAGE_NAME::NAME_TEAMJANG)] = false;
-	//		else
-	//			m_vecTestPageOpen[_int(TEST_PAGE_NAME::NAME_TEAMJANG)] = true;
-	//	}
-	//	if (KEY_TAP(KEY::F4)) // TestPage 애니메이션
-	//	{
-	//		if (m_vecTestPageOpen[_int(TEST_PAGE_NAME::NAME_ANIM)])
-	//			m_vecTestPageOpen[_int(TEST_PAGE_NAME::NAME_ANIM)] = false;
-	//		else
-	//			m_vecTestPageOpen[_int(TEST_PAGE_NAME::NAME_ANIM)] = true;
-	//	}
-	//	if (KEY_TAP(KEY::F5)) // TestPage 이펙트
-	//	{
-	//		if (m_vecTestPageOpen[_int(TEST_PAGE_NAME::NAME_EFFECT)])
-	//			m_vecTestPageOpen[_int(TEST_PAGE_NAME::NAME_EFFECT)] = false;
-	//		else
-	//			m_vecTestPageOpen[_int(TEST_PAGE_NAME::NAME_EFFECT)] = true;
-	//	}
-	//	if (KEY_TAP(KEY::F6)) // TestPage 맵
-	//	{
-	//		if (m_vecTestPageOpen[_int(TEST_PAGE_NAME::NAME_MAP)])
-	//			m_vecTestPageOpen[_int(TEST_PAGE_NAME::NAME_MAP)] = false;
-	//		else
-	//			m_vecTestPageOpen[_int(TEST_PAGE_NAME::NAME_MAP)] = true;
-	//	}
-	//	if (KEY_TAP(KEY::F7)) // TestPage 스탯
-	//	{
-	//		if (m_vecTestPageOpen[_int(TEST_PAGE_NAME::NAME_PLAYER_STAT)])
-	//			m_vecTestPageOpen[_int(TEST_PAGE_NAME::NAME_PLAYER_STAT)] = false;
-	//		else
-	//			m_vecTestPageOpen[_int(TEST_PAGE_NAME::NAME_PLAYER_STAT)] = true;
-	//	}
-	//	if (KEY_TAP(KEY::F8)) // TestPage 아이템
-	//	{
-	//		if (m_vecTestPageOpen[_int(TEST_PAGE_NAME::NAME_ITEM)])
-	//			m_vecTestPageOpen[_int(TEST_PAGE_NAME::NAME_ITEM)] = false;
-	//		else
-	//			m_vecTestPageOpen[_int(TEST_PAGE_NAME::NAME_ITEM)] = true;
-	//	}
-	//}
-
-	//if (m_vecTestPageOpen[_int(TEST_PAGE_NAME::NAME_TEAMJANG)])
-	//	ShowTestPage(TEST_PAGE_NAME::NAME_TEAMJANG,
-	//		TEXT("테스트 변수 타임델타 : "), TEST_PAGE_VALUE_TYPE::TYPE_FLOAT, &fTimeDelta);
-
-	//if (m_vecTestPageOpen[_int(TEST_PAGE_NAME::NAME_ANIM)])
-	//	ShowTestPage(TEST_PAGE_NAME::NAME_ANIM,
-	//		TEXT("테스트 변수 타임델타 : "), TEST_PAGE_VALUE_TYPE::TYPE_FLOAT, &fTimeDelta);
-
-	//if (m_vecTestPageOpen[_int(TEST_PAGE_NAME::NAME_EFFECT)])
-	//	ShowTestPage(TEST_PAGE_NAME::NAME_EFFECT,
-	//		TEXT("테스트 변수 타임델타 : "), TEST_PAGE_VALUE_TYPE::TYPE_FLOAT, &fTimeDelta);
-
-	//if (m_vecTestPageOpen[_int(TEST_PAGE_NAME::NAME_MAP)])
-	//	ShowTestPage(TEST_PAGE_NAME::NAME_MAP,
-	//		TEXT("테스트 변수 타임델타 : "), TEST_PAGE_VALUE_TYPE::TYPE_FLOAT, &fTimeDelta);
-
-	//if (m_vecTestPageOpen[_int(TEST_PAGE_NAME::NAME_ITEM)])
-	//	ShowTestPage(TEST_PAGE_NAME::NAME_ITEM,
-	//		TEXT("테스트 변수 타임델타 : "), TEST_PAGE_VALUE_TYPE::TYPE_FLOAT, &fTimeDelta);
-
-
-	//if (m_vecTestPageOpen[_int(TEST_PAGE_NAME::NAME_PLAYER_STAT)])
-	//{
-	//	
-	//}
-
-	//// 테스트 페이지 이동
-	//_bool bMoving = false;
-	//for (_int i = 0; i < _int(TEST_PAGE_NAME::NAME_END); ++i)
-	//{
-	//	if (bMoving)
-	//		break;
-
-	//	if (m_vecTestPageOpen[i])
-	//	{
-	//		if ((KEY_TAP(KEY::LBUTTON)) && (!m_vecTestPageMove[i]))
-	//		{
-	//			_Vec2 fPoint = CheckMouse(m_vecTestPage_Pos[i], m_vecTestPage_Size[i]);
-
-	//			if (fPoint.x != -1)
-	//			{
-	//				m_vecTestPageMove[i] = true;
-	//				m_vecTestPage_ClickPos[i] = { fPoint.x, fPoint.y };
-	//				bMoving = true;
-	//			}
-	//		}
-	//		else if (m_vecTestPageMove[i])
-	//		{
-	//			if (KEY_HOLD(KEY::LBUTTON))
-	//			{
-	//				POINT			ptMouse{};
-	//				GetCursorPos(&ptMouse);
-	//				ScreenToClient(g_hWnd, &ptMouse);
-
-	//				_Vec2 fMove = { 0.f,0.f };
-
-	//				fMove.x = ptMouse.x - m_vecTestPage_ClickPos[i].x;
-	//				fMove.y = ptMouse.y - m_vecTestPage_ClickPos[i].y;
-
-	//				m_vecTestPage_Pos[i].x += fMove.x;
-	//				m_vecTestPage_Pos[i].y += fMove.y;
-
-	//				m_vecTestPage_ClickPos[i] = { (_float)ptMouse.x, (_float)ptMouse.y };
-
-	//				bMoving = true;
-	//			}
-	//			else
-	//				m_vecTestPageMove[i] = false;
-	//		}
-	//	}
-	//	else
-	//		m_vecTestPageMove[i] = false;
-	//}
 }
 
 void CUIManager::UIControl_Common(_float fTimeDelta)
@@ -341,6 +213,7 @@ void CUIManager::UIControl_Play(_float fTimeDelta)
 		SwicthPage(UIPAGE::PAGE_MENU, UIPAGE::PAGE_PLAY);
 	else
 	{
+		m_eNowPage = UIPAGE::PAGE_PLAY;
 		m_pUIPage_Play->Check_Page_Action(fTimeDelta);
 	}
 }
@@ -351,6 +224,7 @@ void CUIManager::UIControl_Menu(_float fTimeDelta)
 		SwicthPage(UIPAGE::PAGE_MENU, UIPAGE::PAGE_PLAY);
 	else
 	{
+		m_eNowPage = UIPAGE::PAGE_MENU;
 		m_pUIPage_Menu->Check_Page_Action(fTimeDelta);
 	}
 }
@@ -361,6 +235,7 @@ void CUIManager::UIControl_Inven(_float fTimeDelta)
 		SwicthPage(UIPAGE::PAGE_INVEN, UIPAGE::PAGE_MENU);
 	else
 	{
+		m_eNowPage = UIPAGE::PAGE_INVEN;
 		m_eNow_Active_Func = ITEM_FUNC::FUNC_END;
 		m_pUIPage_Inven->Check_Page_Action(fTimeDelta);
 
@@ -379,6 +254,7 @@ void CUIManager::UIControl_Equip(_float fTimeDelta)
 		SwicthPage(UIPAGE::PAGE_EQUIP, UIPAGE::PAGE_MENU);
 	else
 	{
+		m_eNowPage = UIPAGE::PAGE_EQUIP;
 		m_eNow_Active_Func = ITEM_FUNC::FUNC_END;
 		m_pUIPage_Equip->Check_Page_Action(fTimeDelta);
 
@@ -397,6 +273,7 @@ void CUIManager::UIControl_Stat(_float fTimeDelta)
 		SwicthPage(UIPAGE::PAGE_STAT, UIPAGE::PAGE_MENU);
 	else
 	{
+		m_eNowPage = UIPAGE::PAGE_STAT;
 		m_pUIPage_Stat->Check_Page_Action(fTimeDelta);
 	}
 }
@@ -407,6 +284,7 @@ void CUIManager::UIControl_Option(_float fTimeDelta)
 		SwicthPage(UIPAGE::PAGE_OPTION, UIPAGE::PAGE_MENU);
 	else
 	{
+		m_eNowPage = UIPAGE::PAGE_OPTION;
 		m_pUIPage_Option->Check_Page_Action(fTimeDelta);
 	}
 }
@@ -417,9 +295,12 @@ void CUIManager::UIControl_Skill(_float fTimeDelta)
 		SwicthPage(UIPAGE::PAGE_SKILL, UIPAGE::PAGE_MENU);
 	else
 	{
+		m_eNowPage = UIPAGE::PAGE_SKILL;
 		m_pUIPage_Skill->Check_Page_Action(fTimeDelta);
 	}
 }
+
+
 
 void CUIManager::OpenMainPage()
 {
@@ -493,6 +374,7 @@ HRESULT CUIManager::Load_UIDataFile()
 	_int iPageCount = 0;
 	ReadFile(hFile, &iPageCount, sizeof(_int), &dwByte, nullptr);
 	m_vecPage.resize(_int(UIPAGE::PAGE_END));
+	m_pGameInstance->Get_CurLevel();
 
 	for (_int i = 0; i < _int(UIPAGE::PAGE_END); ++i)
 	{
@@ -590,6 +472,16 @@ HRESULT CUIManager::Make_UIPage(_int iIndex)
 	{
 		m_pUIPage_Ortho = CUIPage_Ortho::Create(m_pDevice, m_pContext);
 		m_vecPage[iIndex] = static_cast<CUIPage*>(m_pUIPage_Ortho);
+	}
+	else if (iIndex == _int(UIPAGE::PAGE_TEST))
+	{
+		m_pUIPage_Test = CUIPage_Test::Create(m_pDevice, m_pContext);
+		m_vecPage[iIndex] = static_cast<CUIPage*>(m_pUIPage_Test);
+	}
+	else if (iIndex == _int(UIPAGE::PAGE_EFFECT))
+	{
+		m_pUIPage_Effect = CUIPage_Effect::Create(m_pDevice, m_pContext);
+		m_vecPage[iIndex] = static_cast<CUIPage*>(m_pUIPage_Effect);
 	}
 
 	if (m_vecPage[iIndex] == nullptr)
@@ -835,6 +727,7 @@ void CUIManager::Free()
 
 		iter.clear();
 	}
+	Safe_Release(m_pGameInstance);
 
 	m_vecTestPageInfo.clear();
 

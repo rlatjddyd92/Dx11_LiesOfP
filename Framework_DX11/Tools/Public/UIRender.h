@@ -121,6 +121,8 @@ private:
 
 	vector<class CShader*> m_vecShader_UI;
 
+	_float m_fSize = 1.f;
+
 public:
 	static CUIRender* Create(ID3D11Device* pDevice, ID3D11DeviceContext* pContext);
 	virtual CGameObject* Clone(void* pArg);
