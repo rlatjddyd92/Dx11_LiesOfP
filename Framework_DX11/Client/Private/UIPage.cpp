@@ -47,8 +47,6 @@ void CUIPage::Late_Update(_float fTimeDelta)
 	// 각 페이지 별 조정 사항을 최종 반영하는 단계
 	__super::Late_Update(fTimeDelta);
 
-
-
 	if ((m_vecPageAction[_int(PAGEACTION::ACTION_CLOSING)]) && (!m_vecPageAction[_int(PAGEACTION::ACTION_OPENING)]))
 	{
 		m_fTopPartMove -= m_fTopPartMove_Excel * fTimeDelta;
@@ -122,7 +120,7 @@ void CUIPage::CloseAction()
 	m_vecPageAction[_int(PAGEACTION::ACTION_OPENING)] = false;
 	m_vecPageAction[_int(PAGEACTION::ACTION_INACTIVE)] = false;
 	m_vecPageAction[_int(PAGEACTION::ACTION_ACTIVE)] = false;
-	m_bRender = false;
+	//m_bRender = false;
 }
 
 HRESULT CUIPage::Ready_UIPart_Group_Control()

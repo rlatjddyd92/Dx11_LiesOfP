@@ -71,7 +71,7 @@ void CUIPage_Option::Update(_float fTimeDelta)
 	}
 
 
-
+	
 
 
 
@@ -290,6 +290,11 @@ HRESULT CUIPage_Option::Initialize_Option()
 				pNow->pFunction->iSelected_Num = *m_mapVariables_DropBox.find(pNow->pFunction->iVariable_Key)->second;
 		}
 	}
+
+
+	m_vecPart[_int(PART_GROUP::OPTION_Calibration_Frame)]->bRender = false;
+	m_vecPart[_int(PART_GROUP::OPTION_Calibration_Image)]->bRender = false;
+	m_vecPart[_int(PART_GROUP::OPTION_Calibration_Text)]->bRender = false;
 }
 
 void CUIPage_Option::Update_Tab(_float fTimeDelta)
@@ -309,52 +314,58 @@ void CUIPage_Option::Update_Tab(_float fTimeDelta)
 	_bool bMouseLButton = KEY_TAP(KEY::LBUTTON);
 
 	Input_Render_Info(*m_vecPart[_int(PART_GROUP::OPTION_Tap_Q_Button)]);
-	_Vec2 vPos = GET_GAMEINTERFACE->CheckMouse(m_vecPart[_int(PART_GROUP::OPTION_Tap_Q_Button)]->fPosition, m_vecPart[_int(PART_GROUP::OPTION_Tap_Q_Button)]->fSize);
-
 	_int iTab_Origin = m_iNow_Tab;
+	_int iNowMouse = -1;
+	
+	
+	_Vec2 vPos = GET_GAMEINTERFACE->CheckMouse(m_vecPart[_int(PART_GROUP::OPTION_Tap_Q_Button)]->fPosition, m_vecPart[_int(PART_GROUP::OPTION_Tap_Q_Button)]->fSize);
 	m_bChange_Tab = false;
 
-
-	_int iNowMouse = -1;
-
-	// ¸¶¿ì½º 
 	for (auto& iter : m_vecOption_TabInfo)
 	{
-		vPos = GET_GAMEINTERFACE->CheckMouse(m_vecPart[_int(PART_GROUP::OPTION_Tap_Mouse_Area)]->fPosition, m_vecPart[_int(PART_GROUP::OPTION_Tap_Mouse_Area)]->fSize);
-
-		if (vPos.x != -1.f)
+		if (m_vecPageAction[_int(PAGEACTION::ACTION_ACTIVE)])
 		{
-			iNowMouse = iNowCheckTap;
-			if (bMouseLButton)
-				m_iNow_Tab = iNowCheckTap;
+			vPos = GET_GAMEINTERFACE->CheckMouse(m_vecPart[_int(PART_GROUP::OPTION_Tap_Mouse_Area)]->fPosition, m_vecPart[_int(PART_GROUP::OPTION_Tap_Mouse_Area)]->fSize);
+
+			if (vPos.x != -1.f)
+			{
+				iNowMouse = iNowCheckTap;
+				if (bMouseLButton)
+					m_iNow_Tab = iNowCheckTap;
+			}
 		}
 
 		m_vecPart[_int(PART_GROUP::OPTION_Tap_Mouse_Area)]->fPosition.x += m_vecPart[_int(PART_GROUP::OPTION_Tap_Mouse_Area)]->fSize.x;
 		++iNowCheckTap;
 	}
 
+		
+	
+	
 	m_vecPart[_int(PART_GROUP::OPTION_Tap_E_Button)]->fPosition.x = m_vecPart[_int(PART_GROUP::OPTION_Tap_Mouse_Area)]->fPosition.x + m_vecPart[_int(PART_GROUP::OPTION_Tap_Mouse_Area)]->fAdjust.x;
+
 	Input_Render_Info(*m_vecPart[_int(PART_GROUP::OPTION_Tap_E_Button)]);
 
-	if ((KEY_TAP(KEY::Q)) || (iMoveTap == -1))
-		--m_iNow_Tab;
-	else if ((KEY_TAP(KEY::E)) || (iMoveTap == 1))
-		++m_iNow_Tab;
-	else if (GET_GAMEINTERFACE->CheckMouse(m_vecPart[_int(PART_GROUP::OPTION_Tap_E_Button)]->fPosition, m_vecPart[_int(PART_GROUP::OPTION_Tap_E_Button)]->fSize).x != -1.f)
+	if (m_vecPageAction[_int(PAGEACTION::ACTION_ACTIVE)])
 	{
-		if (bMouseLButton)
-			++m_iNow_Tab;
-	}
-	else if (GET_GAMEINTERFACE->CheckMouse(m_vecPart[_int(PART_GROUP::OPTION_Tap_Q_Button)]->fPosition, m_vecPart[_int(PART_GROUP::OPTION_Tap_Q_Button)]->fSize).x != -1.f)
-	{
-		if (bMouseLButton)
+		if ((KEY_TAP(KEY::Q)) || (iMoveTap == -1))
 			--m_iNow_Tab;
+		else if ((KEY_TAP(KEY::E)) || (iMoveTap == 1))
+			++m_iNow_Tab;
+		else if (GET_GAMEINTERFACE->CheckMouse(m_vecPart[_int(PART_GROUP::OPTION_Tap_E_Button)]->fPosition, m_vecPart[_int(PART_GROUP::OPTION_Tap_E_Button)]->fSize).x != -1.f)
+		{
+			if (bMouseLButton)
+				++m_iNow_Tab;
+		}
+		else if (GET_GAMEINTERFACE->CheckMouse(m_vecPart[_int(PART_GROUP::OPTION_Tap_Q_Button)]->fPosition, m_vecPart[_int(PART_GROUP::OPTION_Tap_Q_Button)]->fSize).x != -1.f)
+		{
+			if (bMouseLButton)
+				--m_iNow_Tab;
+		}
+
+		m_iNow_Tab = max(m_iNow_Tab, 0);
+		m_iNow_Tab = min(m_iNow_Tab, m_vecOption_TabInfo.size() - 1);
 	}
-
-	m_iNow_Tab = max(m_iNow_Tab, 0);
-	m_iNow_Tab = min(m_iNow_Tab, m_vecOption_TabInfo.size() - 1);
-
-
 
 	m_vecPart[_int(PART_GROUP::OPTION_Tap_Mouse_Area)]->fPosition.x -= (m_vecPart[_int(PART_GROUP::OPTION_Tap_Mouse_Area)]->fSize.x * (m_vecOption_TabInfo.size()));
 	iNowCheckTap = 0;
@@ -394,31 +405,36 @@ void CUIPage_Option::Update_Tab(_float fTimeDelta)
 
 void CUIPage_Option::Action_Scroll(_float fTimeDelta)
 {
-	if (m_pScroll_Option->bIsBarMoving)
+	if (!m_vecPageAction[_int(PAGEACTION::ACTION_ACTIVE)])
 	{
-		if (KEY_HOLD(KEY::LBUTTON))
+		if (m_pScroll_Option->bIsBarMoving)
 		{
-			POINT			ptMouse{};
-			GetCursorPos(&ptMouse);
-			ScreenToClient(g_hWnd, &ptMouse);
-			m_pScroll_Option->Bar_Moving(_float(ptMouse.y));
-			m_bIsCloseAction_DropBox = true;
-		}
-		else
-			m_pScroll_Option->End_Bar_Moving();
-	}
-	else
-	{
-		_Vec2 vMouse = GET_GAMEINTERFACE->CheckMouse(m_vecPart[_int(PART_GROUP::OPTION_Main_Scroll_Bar)]->fPosition, m_vecPart[_int(PART_GROUP::OPTION_Main_Scroll_Bar)]->fSize);
-
-		if (vMouse.x != -1.f)
-			if (KEY_TAP(KEY::LBUTTON))
+			if (KEY_HOLD(KEY::LBUTTON))
 			{
-				m_pScroll_Option->Start_Bar_Moving(vMouse.y);
+				POINT			ptMouse{};
+				GetCursorPos(&ptMouse);
+				ScreenToClient(g_hWnd, &ptMouse);
+				m_pScroll_Option->Bar_Moving(_float(ptMouse.y));
 				m_bIsCloseAction_DropBox = true;
 			}
+			else
+				m_pScroll_Option->End_Bar_Moving();
+		}
+		else
+		{
+			_Vec2 vMouse = GET_GAMEINTERFACE->CheckMouse(m_vecPart[_int(PART_GROUP::OPTION_Main_Scroll_Bar)]->fPosition, m_vecPart[_int(PART_GROUP::OPTION_Main_Scroll_Bar)]->fSize);
 
+			if (vMouse.x != -1.f)
+				if (KEY_TAP(KEY::LBUTTON))
+				{
+					m_pScroll_Option->Start_Bar_Moving(vMouse.y);
+					m_bIsCloseAction_DropBox = true;
+				}
+
+		}
 	}
+
+	
 
 	m_vecPart[_int(PART_GROUP::OPTION_Main_Scroll_Bar)]->fRatio = m_pScroll_Option->fScroll_Ratio;
 
@@ -468,9 +484,13 @@ void CUIPage_Option::Update_Line(_float fTimeDelta)
 			{
 				bFuncion_Render = true;
 				m_vecPart[_int(PART_GROUP::OPTION_LINE_Area)]->fPosition.y = fStartY + fAdjustY;
-				_Vec2 vPos = GET_GAMEINTERFACE->CheckMouse(m_vecPart[_int(PART_GROUP::OPTION_LINE_Area)]->fPosition, m_vecPart[_int(PART_GROUP::OPTION_LINE_Area)]->fSize);
-				if (vPos.x != -1.f)
-					bMouse = true;
+				if (m_vecPageAction[_int(PAGEACTION::ACTION_ACTIVE)])
+				{
+					_Vec2 vPos = GET_GAMEINTERFACE->CheckMouse(m_vecPart[_int(PART_GROUP::OPTION_LINE_Area)]->fPosition, m_vecPart[_int(PART_GROUP::OPTION_LINE_Area)]->fSize);
+					if (vPos.x != -1.f)
+						bMouse = true;
+				}
+				
 
 				m_vecPart[_int(PART_GROUP::OPTION_LINE_Text)]->strText = iter->strName;
 
@@ -501,10 +521,7 @@ void CUIPage_Option::Update_Line(_float fTimeDelta)
 				}
 				else if (eFunc == OPTION_FUNC::FUNC_BUTTON)
 				{
-					if (KEY_TAP(KEY::LBUTTON))
-					{
-						
-					}
+					
 				}
 			}
 
@@ -534,27 +551,32 @@ void CUIPage_Option::Update_BoolButton(FUNCTION& NowFunction, _float fTimeDelta,
 
 	_int iFocus = 0;
 
-	if (GET_GAMEINTERFACE->CheckMouse(m_vecPart[_int(PART_GROUP::OPTION_FUNC_Bool_Left_Area)]->fPosition, m_vecPart[_int(PART_GROUP::OPTION_FUNC_Bool_Left_Area)]->fSize).x != -1.f)
+	if (m_vecPageAction[_int(PAGEACTION::ACTION_ACTIVE)])
 	{
-		m_vecPart[_int(PART_GROUP::OPTION_Focus)]->fAdjust_End = m_vecPart[_int(PART_GROUP::OPTION_FUNC_Bool_Left_Focus_Pos)]->fPosition;
-		iFocus = -1;
-
-		if (KEY_TAP(KEY::LBUTTON))
+		if (GET_GAMEINTERFACE->CheckMouse(m_vecPart[_int(PART_GROUP::OPTION_FUNC_Bool_Left_Area)]->fPosition, m_vecPart[_int(PART_GROUP::OPTION_FUNC_Bool_Left_Area)]->fSize).x != -1.f)
 		{
-			NowFunction.bIsSelect_Left = true;
+			m_vecPart[_int(PART_GROUP::OPTION_Focus)]->fAdjust_End = m_vecPart[_int(PART_GROUP::OPTION_FUNC_Bool_Left_Focus_Pos)]->fPosition;
+			iFocus = -1;
+
+			if (KEY_TAP(KEY::LBUTTON))
+			{
+				NowFunction.bIsSelect_Left = true;
+			}
+
 		}
-
-	}
-	else if (GET_GAMEINTERFACE->CheckMouse(m_vecPart[_int(PART_GROUP::OPTION_FUNC_Bool_Right_Area)]->fPosition, m_vecPart[_int(PART_GROUP::OPTION_FUNC_Bool_Right_Area)]->fSize).x != -1.f)
-	{
-		m_vecPart[_int(PART_GROUP::OPTION_Focus)]->fAdjust_End = m_vecPart[_int(PART_GROUP::OPTION_FUNC_Bool_Right_Focus_Pos)]->fPosition;
-		iFocus = 1;
-
-		if (KEY_TAP(KEY::LBUTTON))
+		else if (GET_GAMEINTERFACE->CheckMouse(m_vecPart[_int(PART_GROUP::OPTION_FUNC_Bool_Right_Area)]->fPosition, m_vecPart[_int(PART_GROUP::OPTION_FUNC_Bool_Right_Area)]->fSize).x != -1.f)
 		{
-			NowFunction.bIsSelect_Left = false;
+			m_vecPart[_int(PART_GROUP::OPTION_Focus)]->fAdjust_End = m_vecPart[_int(PART_GROUP::OPTION_FUNC_Bool_Right_Focus_Pos)]->fPosition;
+			iFocus = 1;
+
+			if (KEY_TAP(KEY::LBUTTON))
+			{
+				NowFunction.bIsSelect_Left = false;
+			}
 		}
 	}
+
+	
 
 	m_vecPart[_int(PART_GROUP::OPTION_FUNC_Bool_Left_Focus_Pos)]->bRender = (iFocus == -1) ? true : false;
 	m_vecPart[_int(PART_GROUP::OPTION_FUNC_Bool_Right_Focus_Pos)]->bRender = (iFocus == 1) ? true : false;
@@ -581,19 +603,24 @@ void CUIPage_Option::Update_Slide(FUNCTION& NowFunction, _float fTimeDelta, _boo
 	for (_int i = _int(PART_GROUP::OPTION_FUNC_Slide_Area); i <= _int(PART_GROUP::OPTION_FUNC_Slide_Right_Arrow); ++i)
 		__super::UpdatePart_ByIndex(i, fTimeDelta);
 
-	if (bIsClick)
-		if (GET_GAMEINTERFACE->CheckMouse(m_vecPart[_int(PART_GROUP::OPTION_FUNC_Slide_Left_Arrow)]->fPosition, m_vecPart[_int(PART_GROUP::OPTION_FUNC_Slide_Left_Arrow)]->fSize).x != -1.f)
-			iArrowMoving = -1;
 
-	if (bIsClick)
-		if (GET_GAMEINTERFACE->CheckMouse(m_vecPart[_int(PART_GROUP::OPTION_FUNC_Slide_Right_Arrow)]->fPosition, m_vecPart[_int(PART_GROUP::OPTION_FUNC_Slide_Right_Arrow)]->fSize).x != -1.f)
-			iArrowMoving = 1;
+	if (m_vecPageAction[_int(PAGEACTION::ACTION_ACTIVE)])
+	{
+		if (bIsClick)
+			if (GET_GAMEINTERFACE->CheckMouse(m_vecPart[_int(PART_GROUP::OPTION_FUNC_Slide_Left_Arrow)]->fPosition, m_vecPart[_int(PART_GROUP::OPTION_FUNC_Slide_Left_Arrow)]->fSize).x != -1.f)
+				iArrowMoving = -1;
 
-	if (!NowFunction.bIsButton_Moving)
-		NowFunction.fNow += NowFunction.fInterval * iArrowMoving;
+		if (bIsClick)
+			if (GET_GAMEINTERFACE->CheckMouse(m_vecPart[_int(PART_GROUP::OPTION_FUNC_Slide_Right_Arrow)]->fPosition, m_vecPart[_int(PART_GROUP::OPTION_FUNC_Slide_Right_Arrow)]->fSize).x != -1.f)
+				iArrowMoving = 1;
 
-	NowFunction.fNow = min(NowFunction.fNow, NowFunction.fMax);
-	NowFunction.fNow = max(NowFunction.fNow, 0.f);
+		if (!NowFunction.bIsButton_Moving)
+			NowFunction.fNow += NowFunction.fInterval * iArrowMoving;
+
+		NowFunction.fNow = min(NowFunction.fNow, NowFunction.fMax);
+		NowFunction.fNow = max(NowFunction.fNow, 0.f);
+	}
+	
 
 	Update_Slide_Button(NowFunction, fTimeDelta, bMouse);
 
@@ -613,57 +640,61 @@ void CUIPage_Option::Update_Slide_Button(FUNCTION& NowFunction, _float fTimeDelt
 	m_vecPart[_int(PART_GROUP::OPTION_FUNC_Slide_Bar_Button)]->fRatio = (NowFunction.fNow - NowFunction.fMin) / (NowFunction.fMax - NowFunction.fMin);
 	__super::UpdatePart_ByIndex(_int(PART_GROUP::OPTION_FUNC_Slide_Bar_Button), fTimeDelta);
 
-	if (NowFunction.bIsButton_Moving)
+	if (m_vecPageAction[_int(PAGEACTION::ACTION_ACTIVE)])
 	{
-		if (KEY_HOLD(KEY::LBUTTON))
+		if (NowFunction.bIsButton_Moving)
 		{
-			m_vecPart[_int(PART_GROUP::OPTION_FUNC_Slide_Bar_Button)]->fRatio = 0.f;
-			__super::UpdatePart_ByIndex(_int(PART_GROUP::OPTION_FUNC_Slide_Bar_Button), fTimeDelta);
-			_float fOriginX = m_vecPart[_int(PART_GROUP::OPTION_FUNC_Slide_Bar_Button)]->fPosition.x;
-
-			_float fEndX = m_vecPart[_int(PART_GROUP::OPTION_FUNC_Slide_Bar_Button)]->fAdjust_End.x * 2.f;
-
-			POINT			ptMouse{};
-			GetCursorPos(&ptMouse);
-			ScreenToClient(g_hWnd, &ptMouse);
-
-			_float fNowX = _float(ptMouse.x);
-
-			if (fNowX >= fOriginX + fEndX)
-			{
-				m_vecPart[_int(PART_GROUP::OPTION_FUNC_Slide_Bar_Button)]->fRatio = 1.f;
-				NowFunction.fNow = NowFunction.fMax;
-				__super::UpdatePart_ByIndex(_int(PART_GROUP::OPTION_FUNC_Slide_Bar_Button), fTimeDelta);
-			}
-			else if (fNowX <= fOriginX)
+			if (KEY_HOLD(KEY::LBUTTON))
 			{
 				m_vecPart[_int(PART_GROUP::OPTION_FUNC_Slide_Bar_Button)]->fRatio = 0.f;
-				NowFunction.fNow = NowFunction.fMin;
 				__super::UpdatePart_ByIndex(_int(PART_GROUP::OPTION_FUNC_Slide_Bar_Button), fTimeDelta);
+				_float fOriginX = m_vecPart[_int(PART_GROUP::OPTION_FUNC_Slide_Bar_Button)]->fPosition.x;
+
+				_float fEndX = m_vecPart[_int(PART_GROUP::OPTION_FUNC_Slide_Bar_Button)]->fAdjust_End.x * 2.f;
+
+				POINT			ptMouse{};
+				GetCursorPos(&ptMouse);
+				ScreenToClient(g_hWnd, &ptMouse);
+
+				_float fNowX = _float(ptMouse.x);
+
+				if (fNowX >= fOriginX + fEndX)
+				{
+					m_vecPart[_int(PART_GROUP::OPTION_FUNC_Slide_Bar_Button)]->fRatio = 1.f;
+					NowFunction.fNow = NowFunction.fMax;
+					__super::UpdatePart_ByIndex(_int(PART_GROUP::OPTION_FUNC_Slide_Bar_Button), fTimeDelta);
+				}
+				else if (fNowX <= fOriginX)
+				{
+					m_vecPart[_int(PART_GROUP::OPTION_FUNC_Slide_Bar_Button)]->fRatio = 0.f;
+					NowFunction.fNow = NowFunction.fMin;
+					__super::UpdatePart_ByIndex(_int(PART_GROUP::OPTION_FUNC_Slide_Bar_Button), fTimeDelta);
+				}
+				else
+				{
+					fNowX -= fOriginX;
+
+					_float fRatio = fNowX / fEndX;
+
+					_int iNowIndex = (_int)(fRatio / NowFunction.fInterval_Ratio);
+					fRatio = NowFunction.fInterval_Ratio * iNowIndex;
+					m_vecPart[_int(PART_GROUP::OPTION_FUNC_Slide_Bar_Button)]->fRatio = fRatio;
+					__super::UpdatePart_ByIndex(_int(PART_GROUP::OPTION_FUNC_Slide_Bar_Button), fTimeDelta);
+					NowFunction.fNow = NowFunction.fMin + NowFunction.fInterval * iNowIndex;
+				}
 			}
 			else
-			{
-				fNowX -= fOriginX;
-
-				_float fRatio = fNowX / fEndX;
-
-				_int iNowIndex = (_int)(fRatio / NowFunction.fInterval_Ratio);
-				fRatio = NowFunction.fInterval_Ratio * iNowIndex;
-				m_vecPart[_int(PART_GROUP::OPTION_FUNC_Slide_Bar_Button)]->fRatio = fRatio;
-				__super::UpdatePart_ByIndex(_int(PART_GROUP::OPTION_FUNC_Slide_Bar_Button), fTimeDelta);
-				NowFunction.fNow = NowFunction.fMin + NowFunction.fInterval * iNowIndex;
-			}
+				NowFunction.bIsButton_Moving = false;
 		}
 		else
-			NowFunction.bIsButton_Moving = false;
+		{
+			if (KEY_TAP(KEY::LBUTTON))
+				if (GET_GAMEINTERFACE->CheckMouse(m_vecPart[_int(PART_GROUP::OPTION_FUNC_Slide_Bar_Button)]->fPosition, m_vecPart[_int(PART_GROUP::OPTION_FUNC_Slide_Bar_Button)]->fSize).x != -1.f)
+					NowFunction.bIsButton_Moving = true;
+		}
 	}
-	else
-	{
-		if (KEY_TAP(KEY::LBUTTON))
-			if (GET_GAMEINTERFACE->CheckMouse(m_vecPart[_int(PART_GROUP::OPTION_FUNC_Slide_Bar_Button)]->fPosition, m_vecPart[_int(PART_GROUP::OPTION_FUNC_Slide_Bar_Button)]->fSize).x != -1.f)
-				NowFunction.bIsButton_Moving = true;
-	}
-
+	else 
+		NowFunction.bIsButton_Moving = false;
 
 }
 
@@ -682,23 +713,28 @@ void CUIPage_Option::Update_Dropbox(FUNCTION& NowFunction, _float fTimeDelta, _b
 	for (_int i = _int(PART_GROUP::OPTION_FUNC_Dropbox_Area); i <= _int(PART_GROUP::OPTION_FUNC_Dropbox_Arrow); ++i)
 		Input_Render_Info(*m_vecPart[i], SCROLL_AREA::SCROLL_OPTION);
 
-	if ((!NowFunction.bDropBox_On) && (!m_bIsCloseAction_DropBox))
+	if (m_vecPageAction[_int(PAGEACTION::ACTION_ACTIVE)])
 	{
-		if (bIsClick)
-			if (GET_GAMEINTERFACE->CheckMouse(m_vecPart[_int(PART_GROUP::OPTION_FUNC_Dropbox_Area)]->fPosition, m_vecPart[_int(PART_GROUP::OPTION_FUNC_Dropbox_Area)]->fSize).x != -1.f)
-			{
+		if ((!NowFunction.bDropBox_On) && (!m_bIsCloseAction_DropBox))
+		{
+			if (bIsClick)
+				if (GET_GAMEINTERFACE->CheckMouse(m_vecPart[_int(PART_GROUP::OPTION_FUNC_Dropbox_Area)]->fPosition, m_vecPart[_int(PART_GROUP::OPTION_FUNC_Dropbox_Area)]->fSize).x != -1.f)
+				{
 
-				Open_Dropbox_SelectBox(NowFunction, fTimeDelta);
-			}
+					Open_Dropbox_SelectBox(NowFunction, fTimeDelta);
+				}
+		}
+
+		if (NowFunction.bDropBox_On)
+		{
+			if (m_bIsCloseAction_DropBox)
+				Close_Dropbox_SelectBox(NowFunction, fTimeDelta);
+		}
+
+		Update_Dropbox_SelectBox(NowFunction, fTimeDelta);
 	}
 
-	if (NowFunction.bDropBox_On)
-	{
-		if (m_bIsCloseAction_DropBox)
-			Close_Dropbox_SelectBox(NowFunction, fTimeDelta);
-	}
-
-	Update_Dropbox_SelectBox(NowFunction, fTimeDelta);
+	
 }
 
 void CUIPage_Option::Open_Dropbox_SelectBox(FUNCTION& NowFunction, _float fTimeDelta)
@@ -835,9 +871,7 @@ void CUIPage_Option::Update_Right_Side(_float fTimeDelta)
 	Input_Render_Info(*m_vecPart[_int(PART_GROUP::OPTION_DESC_Head)], SCROLL_AREA::SCROLL_NONE);
 	Input_Render_Info(*m_vecPart[_int(PART_GROUP::OPTION_DESC_Deco)], SCROLL_AREA::SCROLL_NONE);
 	Input_Render_Info(*m_vecPart[_int(PART_GROUP::OPTION_DESC_Text)], SCROLL_AREA::SCROLL_NONE);
-	//Input_Render_Info(*m_vecPart[_int(PART_GROUP::OPTION_Calibration_Frame)], SCROLL_AREA::SCROLL_NONE);
-	//Input_Render_Info(*m_vecPart[_int(PART_GROUP::OPTION_Calibration_Image)], SCROLL_AREA::SCROLL_NONE);
-	//Input_Render_Info(*m_vecPart[_int(PART_GROUP::OPTION_Calibration_Text)], SCROLL_AREA::SCROLL_NONE);
+	
 }
 
 void CUIPage_Option::Update_Focus_Highlight(_float fTimeDelta)
@@ -878,17 +912,12 @@ void CUIPage_Option::Update_Variable()
 	m_pGameInstance->Set_HDRDesc(m_bGraphic[1]);
 	m_pGameInstance->Set_BloomDesc(m_bGraphic[2]);
 	m_pGameInstance->Set_DOFDesc(m_bGraphic[3]);
-	m_pGameInstance->Set_RadialDesc(m_bGraphic[4]);
+
+	if (m_pGameInstance->Get_IsOnPBR() != m_bGraphic[4])
+		m_pGameInstance->Toggle_PBR();
 
 	if (m_pGameInstance->Get_IsOnShadow() != m_bGraphic[5])
 		m_pGameInstance->Toggle_Shadow();
-
-	_float fVol = g_fBGMVolume;
-	 fVol = g_fEffectVolume;
-	 fVol = g_fVoiceVolume;
-	 fVol = g_fEnvVolume;
-	 fVol = g_fUIVolume;
-
 }
 
 
