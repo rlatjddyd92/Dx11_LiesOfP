@@ -1,0 +1,47 @@
+#pragma once
+
+#include "Tools_Defines.h"
+#include "Base.h"
+
+BEGIN(Engine)
+class CGameObject;
+END
+
+BEGIN(Tools)
+
+class CController_Cutscene : public CBase
+{
+	DECLARE_SINGLETON(CController_Cutscene)
+
+private:
+	CController_Cutscene();
+	virtual ~CController_Cutscene() = default;
+
+public:
+	HRESULT Initialize(ID3D11Device* pDevice, ID3D11DeviceContext* pContext);
+	void Update(_float fTimeDelta);
+
+private:
+	class CGameInstance* m_pGameInstance = { nullptr };
+	ID3D11Device* m_pDevice = { nullptr };
+	ID3D11DeviceContext* m_pContext = { nullptr };
+
+private:
+    class CCutScene* m_pCurrentCutScene = {};
+    _bool m_bFirst = { true };
+    _bool m_bPlay = { true };
+    _float* m_fCurrentFrame = { nullptr };
+    _int m_iPreSelectedCutScene = { -1 };
+
+	class CCutScene* m_CutSceneList[8] = {nullptr,};
+    const char* m_CutSceneNameList[8] = { "Boss1_Meet", "Boss1_Phase2", "Boss1_Dead", "Sophia_EnterRoom", "Boss2_Meet",  "Boss2_Phase2",  "Boss2_Defeat", "Sophia_Dead" };
+
+
+private:
+	void Menu();	
+  
+public:
+	virtual void Free() override;
+};
+
+END

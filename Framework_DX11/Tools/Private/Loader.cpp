@@ -30,6 +30,7 @@
 #include "Controller_AnimationTool.h"
 
 #include "Decal.h"
+#include "CutScene.h"
 
 #pragma comment(lib, "ole32.lib")	// 지우지 마세요
 
@@ -160,6 +161,7 @@ HRESULT CLoader::LoadingMapModel0()
 	{
 	case LEVEL_TOOL:
 		hr = Ready_Resources_For_ToolLevel_Map0();
+		m_isFinished_Map0 = true;
 		break;
 	default:
 		hr = S_OK;
@@ -458,6 +460,11 @@ HRESULT CLoader::Ready_Resources_For_ToolLevel()
 	/* For. Prototype_GameObject_Decal */
 	if (FAILED(m_pGameInstance->Add_Prototype(TEXT("Prototype_GameObject_Decal"),
 		CDecal::Create(m_pDevice, m_pContext))))
+		return E_FAIL;
+
+	/* For. Prototype_GameObject_CutScene */
+	if (FAILED(m_pGameInstance->Add_Prototype(TEXT("Prototype_GameObject_CutScene"),
+		CCutScene::Create(m_pDevice, m_pContext))))
 		return E_FAIL;
 
 	m_isFinished_Main = true;

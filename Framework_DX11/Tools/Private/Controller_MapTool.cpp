@@ -838,7 +838,7 @@ void CController_MapTool::SaveMap()
 		}
 		else
 		{
-			for (_uint j = 0; j < (_int)m_pGameInstance->Get_Total_LightCount(); ++j)
+			for (_uint j = 0; j < (_uint)m_pGameInstance->Get_Total_LightCount(); ++j)
 			{
 				if (j == 0)	//방향성 광원 저장 안함
 					continue;
@@ -2225,7 +2225,6 @@ void CController_MapTool::Free()
 	Safe_Release(m_my_texture);
 	Safe_Release(m_pDevice);
 	Safe_Release(m_pContext);
-	Safe_Release(m_pNavigationController);
 	Safe_Release(m_pNavigationController);
 	Safe_Release(m_pGameInstance);
 }

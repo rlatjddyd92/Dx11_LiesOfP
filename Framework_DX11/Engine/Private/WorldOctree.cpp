@@ -15,6 +15,7 @@ CWorldOctree::CWorldOctree(ID3D11Device* pDevice, ID3D11DeviceContext* pContext)
 
 HRESULT CWorldOctree::Initialize(_Vec3 _vMinPos, _Vec3 _vMaxPos, vector<class CGameObject*>& m_pParentObjList, _int* iDepth)
 {
+	//·»´õ ¿ë
 #ifdef _DEBUG
 
 	m_pBatch = new PrimitiveBatch<VertexPositionColor>(m_pContext);
