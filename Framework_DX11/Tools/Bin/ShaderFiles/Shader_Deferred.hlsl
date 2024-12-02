@@ -343,6 +343,9 @@ PS_OUT PS_MAIN_DEFERRED_PBR(PS_IN In)
 	PS_OUT			Out = (PS_OUT)0;
     
     vector vDiffuse = g_DiffuseTexture.Sample(LinearSampler, In.vTexcoord);
+    if (vDiffuse.a == 0)
+        discard;
+    
     vector vDepthDesc = g_DepthTexture.Sample(PointSampler, In.vTexcoord);
     vector vNormalDesc = g_NormalTexture.Sample(PointSampler, In.vTexcoord);
 	
@@ -353,13 +356,6 @@ PS_OUT PS_MAIN_DEFERRED_PBR(PS_IN In)
 
     vector vDecal = g_DecalDiffuseTexture.Sample(LinearSampler, In.vTexcoord);
     vDiffuse = vector(lerp(vDiffuse, vDecal, vDecal.a)); // 알파 값에 따라 혼합
-
-    if(vDiffuse.a == 0)
-    {
-        vector vPriority = g_PriorityTexture.Sample(PointSampler, In.vTexcoord);
-        vDiffuse = vPriority;
-    }
-    
     
 	vector		vShade = g_ShadeTexture.Sample(LinearSampler, In.vTexcoord);
 	vector		vSpecular = g_SpecularTexture.Sample(LinearSampler, In.vTexcoord);
@@ -498,10 +494,7 @@ PS_OUT PS_MAIN_DEFERRED(PS_IN In)
 
     vector vDiffuse = g_DiffuseTexture.Sample(LinearSampler, In.vTexcoord);
     if (vDiffuse.a == 0)
-    {
-        vector vPriority = g_PriorityTexture.Sample(PointSampler, In.vTexcoord);
-        vDiffuse = vPriority;
-    }
+        discard;
     
     vector vShade = g_ShadeTexture.Sample(LinearSampler, In.vTexcoord);
     vector vSpecular = g_SpecularTexture.Sample(LinearSampler, In.vTexcoord);

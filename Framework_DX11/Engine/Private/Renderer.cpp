@@ -291,8 +291,6 @@ HRESULT CRenderer::Draw()
 
 HRESULT CRenderer::Render_Priority()
 {
-	if (FAILED(m_pGameInstance->Begin_MRT(TEXT("MRT_Priority"))))
-		return E_FAIL;
 
 	for (auto& pGameObject : m_RenderObjects[RG_PRIORITY])
 	{
@@ -303,8 +301,6 @@ HRESULT CRenderer::Render_Priority()
 	}
 	m_RenderObjects[RG_PRIORITY].clear();
 
-	if (FAILED(m_pGameInstance->End_MRT()))
-		return E_FAIL;
 
 	return S_OK;
 }
