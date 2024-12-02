@@ -31,7 +31,7 @@ void CCutScene::Priority_Update(_float fTimeDelta)
 
 void CCutScene::Update(_float fTimeDelta)
 {
-	if (m_bPlay)
+	if (m_bPlay && m_fCurrentFrame < m_fMaxFrame)
 	{
 		m_fCurrentFrame += fTimeDelta;
 	}
