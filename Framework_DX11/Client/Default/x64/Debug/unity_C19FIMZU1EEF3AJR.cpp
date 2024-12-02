@@ -3,6 +3,12 @@
 #include "D:\GitProject\Dx11_LiesOfP\Framework_DX11\Client\Private\AObj_ChargeSwing.cpp"
 
 
+#include "D:\GitProject\Dx11_LiesOfP\Framework_DX11\Client\Private\AObj_JumpMagic.cpp"
+
+
+#include "D:\GitProject\Dx11_LiesOfP\Framework_DX11\Client\Private\AObj_SlideMagic.cpp"
+
+
 #include "D:\GitProject\Dx11_LiesOfP\Framework_DX11\Client\Private\AObj_StampBlast.cpp"
 
 
@@ -24,7 +30,16 @@
 #include "D:\GitProject\Dx11_LiesOfP\Framework_DX11\Client\Private\Deco_Collider.cpp"
 
 
+#include "D:\GitProject\Dx11_LiesOfP\Framework_DX11\Client\Private\EffectObject.cpp"
+
+
+#include "D:\GitProject\Dx11_LiesOfP\Framework_DX11\Client\Private\FollowedEffect.cpp"
+
+
 #include "D:\GitProject\Dx11_LiesOfP\Framework_DX11\Client\Private\LastDoor.cpp"
+
+
+#include "D:\GitProject\Dx11_LiesOfP\Framework_DX11\Client\Private\SpotEffect.cpp"
 
 
 #include "D:\GitProject\Dx11_LiesOfP\Framework_DX11\Client\Private\State_CarcassBigA_Paralyze.cpp"
@@ -499,6 +514,9 @@
 
 
 #include "D:\GitProject\Dx11_LiesOfP\Framework_DX11\Client\Private\Texture_Effect.cpp"
+
+
+#include "D:\GitProject\Dx11_LiesOfP\Framework_DX11\Client\Private\AObj_ThunderSpear.cpp"
 
 
 #include "D:\GitProject\Dx11_LiesOfP\Framework_DX11\Client\Private\TowerDoor.cpp"
