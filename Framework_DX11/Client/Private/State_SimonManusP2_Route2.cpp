@@ -41,23 +41,23 @@ void CState_SimonManusP2_Route2::Update(_float fTimeDelta)
     }
     else
     {
-        if (m_isJump)
+        if (CurTrackPos >= 200.f && CurTrackPos < 230.f) //점프 이후 공중 체공 + 플레이어방향 회전
         {
-            if (160 >= CurTrackPos && 130 <= CurTrackPos)
+            m_vTargetDir = m_pMonster->Get_TargetDir();
+            m_pMonster->Get_Transform()->LookAt_Lerp_NoHeight(m_vTargetDir, 2.2f, fTimeDelta);
+        }
+        else if (CurTrackPos >= 230.f && CurTrackPos <= 245.f) //땅 찍기까지
+        {
+            if (m_bStartSpot)
             {
-                m_vTargetDir = m_pMonster->Get_TargetDir();
-                m_pMonster->Get_Transform()->LookAt_Lerp_NoHeight(m_vTargetDir, 1.8f, fTimeDelta);
-
+                _float fLength = m_vTargetDir.Length();
+                m_vTargetDir = XMVector3Normalize(m_pMonster->Get_Transform()->Get_State(CTransform::STATE_LOOK)) * fLength;
+                m_bStartSpot = false;
             }
-            else if (160 < CurTrackPos && 240 >= CurTrackPos)
-            {
-                _Vec3 vPos = m_pMonster->Get_Transform()->Get_State(CTransform::STATE_POSITION);
 
-                _Vec3 vMove = m_vTargetDir * (((_float)CurTrackPos - 230.f) / 20.f);
-                m_pMonster->Get_RigidBody()->Set_Velocity((vMove - m_vFlyMoveStack) / fTimeDelta);
-                m_vFlyMoveStack = vMove;
-                m_isJump = false;
-            }
+            _Vec3 vMove = m_vTargetDir * (((_float)CurTrackPos - 230.f) / 15.f);
+            m_pMonster->Get_RigidBody()->Set_Velocity((vMove - m_vFlyMoveStack) / fTimeDelta);
+            m_vFlyMoveStack = vMove;
         }
     }
 
@@ -70,7 +70,8 @@ void CState_SimonManusP2_Route2::Update(_float fTimeDelta)
         return;
     }
 
-    Collider_Check();
+    Collider_Check(CurTrackPos);
+    Effect_Check(CurTrackPos);
 
 }
 
@@ -106,9 +107,8 @@ _bool CState_SimonManusP2_Route2::End_Check()
     return bEndCheck;
 }
 
-void CState_SimonManusP2_Route2::Collider_Check()
+void CState_SimonManusP2_Route2::Collider_Check(_double CurTrackPos)
 {
-    _double CurTrackPos = m_pMonster->Get_CurrentTrackPos();
     if (m_iRouteTrack == 0) //AN_ROUTE_FIRST, 쓰러지면서 하는 스윙
     {
         if (CurTrackPos >= 60 && CurTrackPos <= 85.f)
@@ -129,6 +129,24 @@ void CState_SimonManusP2_Route2::Collider_Check()
         else
         {
             m_pMonster->DeActive_CurretnWeaponCollider();
+        }
+    }
+}
+
+void CState_SimonManusP2_Route2::Effect_Check(_double CurTrackPos)
+{
+    if (m_iRouteTrack == 0) //AN_ROUTE_FIRST, 쓰러지면서 하는 스윙
+    {
+        if ((CurTrackPos >= 60 && CurTrackPos <= 85.f))
+        {
+            if (!m_pMonster->Get_EffectsLoop(CSimonManus::P1_TRAIL))
+            {
+                m_pMonster->Active_Effect(CSimonManus::P1_TRAIL);
+            }
+        }
+        else
+        {
+            m_pMonster->DeActive_Effect(CSimonManus::P1_TRAIL);
         }
     }
 }

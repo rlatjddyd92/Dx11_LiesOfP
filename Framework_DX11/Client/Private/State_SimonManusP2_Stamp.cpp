@@ -4,6 +4,10 @@
 #include "Model.h"
 #include "SimonManus.h"
 
+#include "AttackObject.h"
+#include "FollowedEffect.h"
+
+
 CState_SimonManusP2_Stamp::CState_SimonManusP2_Stamp(CFsm* pFsm, CMonster* pMonster)
     :CState{ pFsm }
     , m_pMonster{ pMonster }
@@ -42,13 +46,18 @@ HRESULT CState_SimonManusP2_Stamp::Start_State(void* pArg)
     else
         m_bStamp = false;
 
+    m_bBlast = false;
+    m_bWeaponSpin = false;
+    m_bStampEffect = false;
+    m_bAbsorb = false;
+
     return S_OK;
 }
 
 void CState_SimonManusP2_Stamp::Update(_float fTimeDelta)
 {
 
-    if (m_bStamp)
+    if (!m_bStamp)
     {
         _float fTime = 120.f;
         if (m_iCurStartAnim == AN_STAMP_MOVE)
@@ -71,13 +80,14 @@ void CState_SimonManusP2_Stamp::Update(_float fTimeDelta)
         return;
     }
 
-    Collider_Check();
+    _double CurTrackPos = m_pMonster->Get_CurrentTrackPos();
 
+    Collider_Check(CurTrackPos);
+    Effect_Check(CurTrackPos);
 }
 
 void CState_SimonManusP2_Stamp::End_State()
 {
-    m_bStamp = false;
 }
 
 _bool CState_SimonManusP2_Stamp::End_Check()
@@ -107,10 +117,8 @@ _bool CState_SimonManusP2_Stamp::End_Check()
     return bEndCheck;
 }
 
-void CState_SimonManusP2_Stamp::Collider_Check()
+void CState_SimonManusP2_Stamp::Collider_Check(_double CurTrackPos)
 {
-    _double CurTrackPos = m_pMonster->Get_CurrentTrackPos();
-
     if (m_iRouteTrack == 0)
     {
         if (m_iCurStartAnim == AN_STAMP)
@@ -133,6 +141,86 @@ void CState_SimonManusP2_Stamp::Collider_Check()
             else
             {
                 m_pMonster->DeActive_CurretnWeaponCollider();
+            }
+        }
+    }
+}
+
+void CState_SimonManusP2_Stamp::Effect_Check(_double CurTrackPos)
+{
+    if (m_iRouteTrack == 0)
+    {
+        _float fTime{};
+        if (m_iCurStartAnim == AN_STAMP_MOVE)
+        {
+            fTime = 94.f;
+        }
+        else
+        {
+            fTime = 70.f;
+        }
+
+        if ((CurTrackPos >= fTime && CurTrackPos <= fTime + 10.f))
+        {
+            if (!m_bStampEffect)
+            {
+                CEffectObject::EFFECTOBJ_DESC Desc{};
+                Desc.fLifeDuration = 1.5f;
+                Desc.strEffectTag = TEXT("SimonManus_Attack_Stamp");
+                _float4x4 WorldMat{};
+
+                XMStoreFloat4x4(&WorldMat, (*m_pMonster->Get_WeaponBoneCombinedMat(6) * (*m_pMonster->Get_WeaponWorldMat())));
+                Desc.vPos = _Vec3{ WorldMat._41, WorldMat._42, WorldMat._43 };
+
+                m_pGameInstance->Add_CloneObject_ToLayer(LEVEL_GAMEPLAY, TEXT("Monster_Attack"), TEXT("Prototype_GameObject_SpotEffect"), &Desc);
+
+                m_bStampEffect = true;
+            }
+        }
+    }
+    else if (m_iRouteTrack == 1)
+    {
+        if (!m_bBlast)
+        {
+            if (CurTrackPos > 125.f)
+            {
+                m_bBlast = true;
+                CAttackObject::ATKOBJ_DESC Desc;
+                _float4x4 WorldMat{};
+                XMStoreFloat4x4(&WorldMat, (*m_pMonster->Get_WeaponBoneCombinedMat(6) * (*m_pMonster->Get_WeaponWorldMat())));
+                Desc.vPos = _Vec3{ WorldMat._41, WorldMat._42, WorldMat._43 };
+
+                m_pGameInstance->Add_CloneObject_ToLayer(LEVEL_GAMEPLAY, TEXT("Monster_Attack"), TEXT("Prototype_GameObject_StampBlast"), &Desc);
+            }
+        }
+
+        if (!m_bAbsorb)
+        {
+            if (CurTrackPos >= 40.f)
+            {
+                CFollowedEffect::FOLLOWEFFOBJ_DESC Desc{};
+                Desc.fLifeDuration = 1.5f;
+                Desc.strEffectTag = TEXT("SimonManus_Attack_ChargeStamp");
+                _float4x4 WorldMat{};
+
+                XMStoreFloat4x4(&WorldMat, (*m_pMonster->Get_WeaponBoneCombinedMat(6) * (*m_pMonster->Get_WeaponWorldMat())));
+                Desc.vPos = _Vec3{ WorldMat._41, WorldMat._42, WorldMat._43 };
+
+                Desc.pParentWorldMat = m_pMonster->Get_WeaponWorldMat();
+                Desc.pBoneCombinedMat = m_pMonster->Get_WeaponBoneCombinedMat(6);
+
+                m_pGameInstance->Add_CloneObject_ToLayer(LEVEL_GAMEPLAY, TEXT("Monster_Attack"), TEXT("Prototype_GameObject_FollowedEffect"), &Desc);
+
+                m_bAbsorb = true;
+            }
+        }
+        if (!m_bWeaponSpin)
+        {
+            if (m_pMonster->Get_WeaponAnimEnd(2))
+            {
+                m_pMonster->Change_WeaponAnimation(3, true, 0.f, 0);
+
+                m_bWeaponSpin = true;
             }
         }
     }

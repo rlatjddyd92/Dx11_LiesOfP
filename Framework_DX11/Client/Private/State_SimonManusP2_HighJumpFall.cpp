@@ -4,6 +4,8 @@
 #include "Model.h"
 #include "SimonManus.h"
 
+#include "EffectObject.h"
+
 CState_SimonManusP2_HighJumpFall::CState_SimonManusP2_HighJumpFall(CFsm* pFsm, CMonster* pMonster)
     :CState{ pFsm }
     , m_pMonster{ pMonster }
@@ -71,7 +73,8 @@ void CState_SimonManusP2_HighJumpFall::Update(_float fTimeDelta)
         return;
     }
 
-    Collider_Check();
+    Collider_Check(CurTrackPos);
+    Effect_Check(CurTrackPos);
     Update_Rimlight();
 
 }
@@ -86,10 +89,8 @@ _bool CState_SimonManusP2_HighJumpFall::End_Check()
     return m_pMonster->Get_EndAnim(AN_HIGHJUMPFALL);
 }
 
-void CState_SimonManusP2_HighJumpFall::Collider_Check()
+void CState_SimonManusP2_HighJumpFall::Collider_Check(_double CurTrackPos)
 {
-    _double CurTrackPos = m_pMonster->Get_CurrentTrackPos();
-
     if (CurTrackPos >= 135.f && CurTrackPos <= 150.f)
     {
         m_pMonster->Active_CurrentWeaponCollider(1);
@@ -97,6 +98,27 @@ void CState_SimonManusP2_HighJumpFall::Collider_Check()
     else
     {
         m_pMonster->DeActive_CurretnWeaponCollider();
+    }
+}
+
+void CState_SimonManusP2_HighJumpFall::Effect_Check(_double CurTrackPos)
+{
+    if (CurTrackPos >= 135.f && CurTrackPos <= 150.f)
+    {
+        if (!m_bStampEffect)
+        {
+            CEffectObject::EFFECTOBJ_DESC Desc{};
+            Desc.fLifeDuration = 1.5f;
+            Desc.strEffectTag = TEXT("SimonManus_Attack_Stamp");
+            _float4x4 WorldMat{};
+
+            XMStoreFloat4x4(&WorldMat, (*m_pMonster->Get_WeaponBoneCombinedMat(6) * (*m_pMonster->Get_WeaponWorldMat())));
+            Desc.vPos = _Vec3{ WorldMat._41, WorldMat._42, WorldMat._43 };
+
+            m_pGameInstance->Add_CloneObject_ToLayer(LEVEL_GAMEPLAY, TEXT("Monster_Attack"), TEXT("Prototype_GameObject_SpotEffect"), &Desc);
+
+            m_bStampEffect = true;
+        }
     }
 }
 

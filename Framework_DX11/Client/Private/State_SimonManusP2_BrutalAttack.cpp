@@ -33,7 +33,10 @@ void CState_SimonManusP2_BrutalAttack::Update(_float fTimeDelta)
         return;
     }
 
-    Collider_Check();
+    _double CurTrackPos = m_pMonster->Get_CurrentTrackPos();
+
+    Collider_Check(CurTrackPos);
+    Effect_Check(CurTrackPos);
 
 }
 
@@ -47,10 +50,8 @@ _bool CState_SimonManusP2_BrutalAttack::End_Check()
     return m_pMonster->Get_EndAnim(AN_BRUTALATTACK);
 }
 
-void CState_SimonManusP2_BrutalAttack::Collider_Check()
+void CState_SimonManusP2_BrutalAttack::Collider_Check(_double CurTrackPos)
 {
-    _double CurTrackPos = m_pMonster->Get_CurrentTrackPos();
-
     if (CurTrackPos >= 135.f && CurTrackPos <= 150.f)
     {
         m_pMonster->Active_CurrentWeaponCollider(1);
@@ -59,6 +60,10 @@ void CState_SimonManusP2_BrutalAttack::Collider_Check()
     {
         m_pMonster->DeActive_CurretnWeaponCollider();
     }
+}
+
+void CState_SimonManusP2_BrutalAttack::Effect_Check(_double CurTrackPos)
+{
 }
 
 CState_SimonManusP2_BrutalAttack* CState_SimonManusP2_BrutalAttack::Create(CFsm* pFsm, CMonster* pMonster, _uint iStateNum, void* pArg)

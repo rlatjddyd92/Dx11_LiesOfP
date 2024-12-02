@@ -66,7 +66,10 @@ void CState_SimonManusP2_SwipMultiple::Update(_float fTimeDelta)
         ++m_iRouteTrack;
     }
 
-    Collider_Check();
+    _double CurTrackPos = m_pMonster->Get_CurrentTrackPos();
+
+    Collider_Check(CurTrackPos);
+    Effect_Check(CurTrackPos);
 
 }
 
@@ -102,10 +105,9 @@ _bool CState_SimonManusP2_SwipMultiple::End_Check()
     return bEndCheck;
 }
 
-void CState_SimonManusP2_SwipMultiple::Collider_Check()
-{
-    _double CurTrackPos = m_pMonster->Get_CurrentTrackPos();
 
+void CState_SimonManusP2_SwipMultiple::Collider_Check(_double CurTrackPos)
+{
     if (m_iRouteTrack == 0)
     {
         if (m_iCurStartAnim == AN_ROUTE_FIRST_L)
@@ -140,6 +142,55 @@ void CState_SimonManusP2_SwipMultiple::Collider_Check()
         else
         {
             m_pMonster->DeActive_CurretnWeaponCollider();
+        }
+    }
+}
+
+void CState_SimonManusP2_SwipMultiple::Effect_Check(_double CurTrackPos)
+{
+    if (m_iRouteTrack == 0)
+    {
+        if (m_iCurStartAnim == AN_ROUTE_FIRST_L)
+        {
+            if (CurTrackPos >= 135.f && CurTrackPos <= 165.f)
+            {
+                if (!m_pMonster->Get_EffectsLoop(CSimonManus::P1_TRAIL))
+                {
+                    m_pMonster->Active_Effect(CSimonManus::P1_TRAIL);
+                }
+            }
+            else
+            {
+                m_pMonster->DeActive_Effect(CSimonManus::P1_TRAIL);
+            }
+        }
+        else
+        {
+            if (CurTrackPos >= 170 && CurTrackPos <= 195.f)
+            {
+                if (!m_pMonster->Get_EffectsLoop(CSimonManus::P1_TRAIL))
+                {
+                    m_pMonster->Active_Effect(CSimonManus::P1_TRAIL);
+                }
+            }
+            else
+            {
+                m_pMonster->DeActive_Effect(CSimonManus::P1_TRAIL);
+            }
+        }
+    }
+    else
+    {
+        if (CurTrackPos >= 20.f && CurTrackPos <= 80.f)
+        {
+            if (!m_pMonster->Get_EffectsLoop(CSimonManus::P1_TRAIL))
+            {
+                m_pMonster->Active_Effect(CSimonManus::P1_TRAIL);
+            }
+        }
+        else
+        {
+            m_pMonster->DeActive_Effect(CSimonManus::P1_TRAIL);
         }
     }
 }

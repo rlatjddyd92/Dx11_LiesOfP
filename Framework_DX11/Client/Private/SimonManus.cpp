@@ -469,7 +469,7 @@ HRESULT CSimonManus::Ready_Effects()
 
 	m_Effects[P1_TRAIL] = CEffect_Manager::Get_Instance()->Clone_Effect(TEXT("SimonManus_Attack_Swing"), pParetnMatrix,
 		pSocketBoneMatrix, _Vec3(0.f, 0.f, 0.f), _Vec3(0.f, 0.f, 0.f), _Vec3(1.f, 1.f, 1.f));
-
+	
 	pSocketBoneMatrix = m_pExtraModelCom->Get_BoneCombindTransformationMatrix_Ptr(m_pExtraModelCom->Get_UFBIndices(UFB_HAND_LEFT));
 
 	m_Effects[P2_SLIDEMAGIC] = CEffect_Manager::Get_Instance()->Clone_Effect(TEXT("SimonManus_Attack_SlideMagic"), pParetnMatrix,
@@ -558,6 +558,11 @@ void CSimonManus::ChangePhase()
 	m_pColliderBindMatrix[CT_UPPERBODY] = m_pModelCom->Get_BoneCombindTransformationMatrix_Ptr(72);
 
 	m_pWeapon->ChangeSocketMatrix(m_pModelCom->Get_BoneCombindTransformationMatrix_Ptr(46));
+
+	CEffect_Container::EFFECT_DESC Desc;
+	Desc.pParentMatrix = m_pTransformCom->Get_WorldMatrix_Ptr();
+	Desc.pSocketMatrix = m_pModelCom->Get_BoneCombindTransformationMatrix_Ptr(m_pModelCom->Get_UFBIndices(UFB_HAND_RIGHT));
+	m_Effects[P1_TRAIL]->Set_EffectDesc(Desc);
 
 	m_eStat.fHp = 200.f;
 	m_eStat.fMaxHp = 200.f;

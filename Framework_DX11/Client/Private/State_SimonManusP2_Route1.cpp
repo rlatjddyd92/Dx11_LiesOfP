@@ -4,6 +4,8 @@
 #include "Model.h"
 #include "SimonManus.h"
 
+#include "EffectObject.h"
+
 CState_SimonManusP2_Route1::CState_SimonManusP2_Route1(CFsm* pFsm, CMonster* pMonster)
     :CState{ pFsm }
     , m_pMonster{ pMonster }
@@ -22,6 +24,7 @@ HRESULT CState_SimonManusP2_Route1::Start_State(void* pArg)
 {
     m_pMonster->Change_Animation(AN_ROUTE_FIRST, false, 0.1f, 0);
 
+    m_bStampEffect = false;
 
     return S_OK;
 }
@@ -51,8 +54,10 @@ void CState_SimonManusP2_Route1::Update(_float fTimeDelta)
         }
         ++m_iRouteTrack;
     }
+    _double CurTrackPos = m_pMonster->Get_CurrentTrackPos();
 
-    Collider_Check(fTimeDelta);
+    Collider_Check(fTimeDelta, CurTrackPos);
+    Effect_Check(CurTrackPos);
 
 }
 
@@ -95,9 +100,8 @@ _bool CState_SimonManusP2_Route1::End_Check()
     return bEndCheck;
 }
 
-void CState_SimonManusP2_Route1::Collider_Check(_float fTimeDelta)
+void CState_SimonManusP2_Route1::Collider_Check(_float fTimeDelta, _double CurTrackPos)
 {
-    _double CurTrackPos = m_pMonster->Get_CurrentTrackPos();
     if (m_iRouteTrack == 0) //AN_ROUTE_FIRST, 쓰러지면서 하는 스윙
     {
         if (CurTrackPos <= 50.f)
@@ -134,6 +138,58 @@ void CState_SimonManusP2_Route1::Collider_Check(_float fTimeDelta)
         else
         {
             m_pMonster->DeActive_CurretnWeaponCollider();
+        }
+    }
+}
+
+void CState_SimonManusP2_Route1::Effect_Check(_double CurTrackPos)
+{
+    if (m_iRouteTrack == 0) //AN_ROUTE_FIRST, 쓰러지면서 하는 스윙
+    {
+        if ((CurTrackPos >= 60 && CurTrackPos <= 85.f))
+        {
+            if (!m_pMonster->Get_EffectsLoop(CSimonManus::P1_TRAIL))
+            {
+                m_pMonster->Active_Effect(CSimonManus::P1_TRAIL);
+            }
+        }
+        else
+        {
+            m_pMonster->DeActive_Effect(CSimonManus::P1_TRAIL);
+        }
+    }
+    else if (m_iRouteTrack == 1)       //어보이드 스윙
+    {
+        if ((CurTrackPos >= 120 && CurTrackPos <= 180.f))
+        {
+            if (!m_pMonster->Get_EffectsLoop(CSimonManus::P1_TRAIL))
+            {
+                m_pMonster->Active_Effect(CSimonManus::P1_TRAIL);
+            }
+        }
+        else
+        {
+            m_pMonster->DeActive_Effect(CSimonManus::P1_TRAIL);
+        }
+    }
+    else       //스탬프
+    {
+        if (CurTrackPos >= 60 && CurTrackPos <= 75.f)
+        {
+            if (!m_bStampEffect)
+            {
+                CEffectObject::EFFECTOBJ_DESC Desc{};
+                Desc.fLifeDuration = 1.5f;
+                Desc.strEffectTag = TEXT("SimonManus_Attack_Stamp");
+                _float4x4 WorldMat{};
+
+                XMStoreFloat4x4(&WorldMat, (*m_pMonster->Get_WeaponBoneCombinedMat(6) * (*m_pMonster->Get_WeaponWorldMat())));
+                Desc.vPos = _Vec3{ WorldMat._41, WorldMat._42, WorldMat._43 };
+
+                m_pGameInstance->Add_CloneObject_ToLayer(LEVEL_GAMEPLAY, TEXT("Monster_Attack"), TEXT("Prototype_GameObject_SpotEffect"), &Desc);
+
+                m_bStampEffect = true;
+            }
         }
     }
 }

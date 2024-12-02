@@ -12,7 +12,7 @@ class CState_SimonManusP2_Route0 :
 {
 private:
     typedef enum {
-        AN_ROUTE_FIRST = 54,        //SwingDown
+        AN_ROUTE_FIRST = 54,        //SlideSwing
         AN_ROUTE_LAST = 53,       //SwingRight
     }ANIMNUM;
 
@@ -33,7 +33,8 @@ private:
 
 private:
     _bool               End_Check();
-    void                Collider_Check();
+    void                Collider_Check(_double CurTrackPos);
+    void                Effect_Check(_double CurTrackPos);
 
 public:
     static CState_SimonManusP2_Route0* Create(class CFsm* pFsm, class CMonster* pMonster, _uint iStateNum, void* pArg = nullptr);
