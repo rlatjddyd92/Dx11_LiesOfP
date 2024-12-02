@@ -43,7 +43,6 @@ private:
     void                Control_Collider();
 
 private:
-    _int                m_iSoundFrame = {};
     _int                m_iFootSoundFrame = {};
     _bool               m_isPlaySound = {};
     void                Control_Sound();

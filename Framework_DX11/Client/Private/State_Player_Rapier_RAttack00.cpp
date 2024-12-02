@@ -27,7 +27,7 @@ HRESULT CState_Player_Rapier_RAttack00::Initialize(_uint iStateNum, void* pArg)
     m_iColliderStartFrame = 7;
     m_iColliderEndFrame = 20;
 
-    m_iSoundFrame = 7;
+    m_iFootSoundFrame = 7;
 
     return S_OK;
 }
@@ -126,7 +126,7 @@ void CState_Player_Rapier_RAttack00::Control_Sound()
 {
     _int iFrame = m_pPlayer->Get_Frame();
 
-    if (iFrame == m_iSoundFrame && !m_isPlaySound)
+    if ((iFrame == m_iColliderStartFrame || iFrame == m_iColliderStartFrame + 1) && !m_isPlaySound)
     {
         m_pPlayer->Play_CurrentWeaponSound(CWeapon::WEP_SOUND_EFFECT1, TEXT("SE_PC_SK_WS_Dagger_1H_S_03.wav"));
         m_isPlaySound = true;

@@ -4,6 +4,7 @@
 #include "Model.h"
 #include "Player.h"
 #include "Camera.h"
+#include "Weapon.h"
 
 CState_Player_Flame_LAttack00::CState_Player_Flame_LAttack00(CFsm* pFsm, CPlayer* pPlayer)
     :CState{ pFsm }
@@ -24,6 +25,8 @@ HRESULT CState_Player_Flame_LAttack00::Initialize(_uint iStateNum, void* pArg)
 
     m_iColliderStartFrame = 33;
     m_iColliderEndFrame = 38;
+
+    m_iSoundFrame = 18;
 
     return S_OK;
 }
@@ -86,11 +89,13 @@ void CState_Player_Flame_LAttack00::Update(_float fTimeDelta)
     }
 
     Control_Collider();
+    Control_Sound();
 }
 
 void CState_Player_Flame_LAttack00::End_State()
 {
     m_pPlayer->DeActive_CurretnWeaponCollider();
+
 }
 
 _bool CState_Player_Flame_LAttack00::End_Check()
@@ -106,6 +111,21 @@ void CState_Player_Flame_LAttack00::Control_Collider()
         m_pPlayer->Active_CurrentWeaponCollider();
     else
         m_pPlayer->DeActive_CurretnWeaponCollider();
+}
+
+void CState_Player_Flame_LAttack00::Control_Sound()
+{
+    _int iFrame = m_pPlayer->Get_Frame();
+
+    if ((iFrame == m_iColliderStartFrame || iFrame == m_iColliderStartFrame + 1) && !m_isPlaySound)
+    {
+        m_pPlayer->Play_CurrentWeaponSound(CWeapon::WEP_SOUND_EFFECT1, TEXT("SE_PC_SK_WS_FlameSword_2H_M_01.wav"));
+        m_isPlaySound = true;
+    }
+    else
+    {
+        m_isPlaySound = false;
+    }
 }
 
 CState_Player_Flame_LAttack00* CState_Player_Flame_LAttack00::Create(CFsm* pFsm, CPlayer* pPlayer, _uint iStateNum, void* pArg)

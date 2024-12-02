@@ -14,7 +14,7 @@ CState_Player_Parry::CState_Player_Parry(CFsm* pFsm, CPlayer* pPlayer)
 
 HRESULT CState_Player_Parry::Initialize(_uint iStateNum, void* pArg)
 {
-    m_iAnimation_Parry = m_pPlayer->Get_Model()->Find_AnimationIndex("AS_Pino_P_Parry_Guard", 4.5f);
+    m_iAnimation_Parry[0] = m_pPlayer->Get_Model()->Find_AnimationIndex("AS_Pino_P_Parry_Guard", 4.5f);
 
     FSM_INIT_DESC* pDesc = static_cast<FSM_INIT_DESC*>(pArg);
 
@@ -29,7 +29,7 @@ HRESULT CState_Player_Parry::Initialize(_uint iStateNum, void* pArg)
 
 HRESULT CState_Player_Parry::Start_State(void* pArg)
 {
-    m_pPlayer->Change_Animation(m_iAnimation_Parry, false, 0.05f);
+    m_pPlayer->Change_Animation(m_iAnimation_Parry[0], false, 0.05f);
 
 
     return S_OK;
@@ -63,7 +63,7 @@ void CState_Player_Parry::End_State()
 
 _bool CState_Player_Parry::End_Check()
 {
-    return m_pPlayer->Get_EndAnim(m_iAnimation_Parry);
+    return m_pPlayer->Get_EndAnim(m_iAnimation_Parry[0]);
 }
 
 void CState_Player_Parry::Control_Sound()

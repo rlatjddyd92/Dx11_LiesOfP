@@ -13,7 +13,7 @@ CState_Player_Scissor_RAttack00::CState_Player_Scissor_RAttack00(CFsm* pFsm, CPl
 
 HRESULT CState_Player_Scissor_RAttack00::Initialize(_uint iStateNum, void* pArg)
 {
-    m_iAnimation_ScissorSA1 = m_pPlayer->Get_Model()->Find_AnimationIndex("AS_Pino_O_ScissorSword_SA1", 1.7f);
+    m_iAnimation_ScissorSA1 = m_pPlayer->Get_Model()->Find_AnimationIndex("AS_Pino_O_ScissorSword_SA1", 2.5f);
 
     FSM_INIT_DESC* pDesc = static_cast<FSM_INIT_DESC*>(pArg);
 

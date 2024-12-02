@@ -7,11 +7,11 @@ END
 
 BEGIN(Client)
 
-class CState_Player_Rapier_Fatal : public CState
+class CState_Player_Rapier_Fable : public CState
 {
 public:
-    CState_Player_Rapier_Fatal(class CFsm* pFsm, class CPlayer* pPlayer);
-    virtual ~CState_Player_Rapier_Fatal() = default;
+    CState_Player_Rapier_Fable(class CFsm* pFsm, class CPlayer* pPlayer);
+    virtual ~CState_Player_Rapier_Fable() = default;
 
 public:
     virtual HRESULT Initialize(_uint iStateNum, void* pArg) override;
@@ -51,7 +51,7 @@ private:
     void                Control_Effect(_int iFrame);
 
 public:
-    static CState_Player_Rapier_Fatal* Create(class CFsm* pFsm, class CPlayer* pPlayer, _uint iStateNum, void* pArg = nullptr);
+    static CState_Player_Rapier_Fable* Create(class CFsm* pFsm, class CPlayer* pPlayer, _uint iStateNum, void* pArg = nullptr);
     virtual void Free() override;
 
 };

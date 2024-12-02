@@ -1,52 +1,54 @@
 #include "stdafx.h"
-#include "State_Player_Scissor_Fatal0.h"
+#include "State_Player_Scissor_Fable1.h"
 #include "GameInstance.h"
 #include "Model.h"
 #include "Player.h"
 #include "Camera.h"
 
-CState_Player_Scissor_Fatal0::CState_Player_Scissor_Fatal0(CFsm* pFsm, CPlayer* pPlayer)
+CState_Player_Scissor_Fable1::CState_Player_Scissor_Fable1(CFsm* pFsm, CPlayer* pPlayer)
     :CState{ pFsm }
     , m_pPlayer{ pPlayer }
 {
 }
 
-HRESULT CState_Player_Scissor_Fatal0::Initialize(_uint iStateNum, void* pArg)
+HRESULT CState_Player_Scissor_Fable1::Initialize(_uint iStateNum, void* pArg)
 {
-    m_iAnimation_ScissorCombos1 = m_pPlayer->Get_Model()->Find_AnimationIndex("AS_Pino_FableArts_Combo_ScissorSword1", 2.f);
+    m_iAnimation_ScissorCombos2 = m_pPlayer->Get_Model()->Find_AnimationIndex("AS_Pino_FableArts_Combo_ScissorSword2", 2.5f);
 
     FSM_INIT_DESC* pDesc = static_cast<FSM_INIT_DESC*>(pArg);
 
     m_pTrackPos = pDesc->pPrevTrackPos;
 
-    m_iChangeFrame = 145;
+    m_iChangeFrame = 65;
     m_iComboFrame = 30;
     m_iSeperateFrame = 1;
-    m_iCombineFrame = 87;
+    m_iCombineFrame = 81;
 
-    m_iColliderStartFrame = 18;
-    m_iColliderEndFrame = 22;
+    m_iColliderStartFrame = 10;
+    m_iColliderEndFrame = 18;
 
     m_iStateNum = iStateNum;
 
     return S_OK;
 }
 
-HRESULT CState_Player_Scissor_Fatal0::Start_State(void* pArg)
+HRESULT CState_Player_Scissor_Fable1::Start_State(void* pArg)
 {
-    m_pPlayer->Change_Animation(m_iAnimation_ScissorCombos1, false, 0.1f);
+    m_pPlayer->Change_Animation(m_iAnimation_ScissorCombos2, false, 0.05f);
 
     m_isInputLButton = false;
-    m_isInputFButton = false;
     m_isInputRButton = false;
+    m_isInputFButton = false;
     m_fRButtonTime = 0.f;
+
+    m_iComboIndex = 0;
 
     m_pPlayer->Decrease_Region();
 
     return S_OK;
 }
 
-void CState_Player_Scissor_Fatal0::Update(_float fTimeDelta)
+void CState_Player_Scissor_Fable1::Update(_float fTimeDelta)
 {
     _int iFrame = m_pPlayer->Get_Frame();
     _uint iCurrentAnim = m_pPlayer->Get_Model()->Get_CurrentAnimationIndex();
@@ -107,7 +109,7 @@ void CState_Player_Scissor_Fatal0::Update(_float fTimeDelta)
     {
         if (m_iComboFrame < iFrame && iFrame < m_iComboFrame + 10)
         {
-            m_pPlayer->Change_State(CPlayer::SCISSOR_FATAL1);
+            m_pPlayer->Change_State(CPlayer::SCISSOR_FABAL2);
         }
     }
 
@@ -119,17 +121,17 @@ void CState_Player_Scissor_Fatal0::Update(_float fTimeDelta)
     Control_Collider();
 }
 
-void CState_Player_Scissor_Fatal0::End_State()
+void CState_Player_Scissor_Fable1::End_State()
 {
     m_pPlayer->DeActive_CurretnWeaponCollider();
 }
 
-_bool CState_Player_Scissor_Fatal0::End_Check()
+_bool CState_Player_Scissor_Fable1::End_Check()
 {
-    return m_pPlayer->Get_EndAnim(m_iAnimation_ScissorCombos1);
+    return m_pPlayer->Get_EndAnim(m_iAnimation_ScissorCombos2);
 }
 
-void CState_Player_Scissor_Fatal0::Control_Collider()
+void CState_Player_Scissor_Fable1::Control_Collider()
 {
     _int iFrame = m_pPlayer->Get_Frame();
 
@@ -145,20 +147,20 @@ void CState_Player_Scissor_Fatal0::Control_Collider()
     }
 }
 
-CState_Player_Scissor_Fatal0* CState_Player_Scissor_Fatal0::Create(CFsm* pFsm, CPlayer* pPlayer, _uint iStateNum, void* pArg)
+CState_Player_Scissor_Fable1* CState_Player_Scissor_Fable1::Create(CFsm* pFsm, CPlayer* pPlayer, _uint iStateNum, void* pArg)
 {
-    CState_Player_Scissor_Fatal0* pInstance = new CState_Player_Scissor_Fatal0(pFsm, pPlayer);
+    CState_Player_Scissor_Fable1* pInstance = new CState_Player_Scissor_Fable1(pFsm, pPlayer);
 
     if (FAILED(pInstance->Initialize(iStateNum, pArg)))
     {
-        MSG_BOX(TEXT("Failed to Created : CState_Player_Scissor_Fatal0"));
+        MSG_BOX(TEXT("Failed to Created : CState_Player_Scissor_Fable1"));
         Safe_Release(pInstance);
     }
 
     return pInstance;
 }
 
-void CState_Player_Scissor_Fatal0::Free()
+void CState_Player_Scissor_Fable1::Free()
 {
     __super::Free();
 }

@@ -76,7 +76,12 @@ void CState_Player_Hit::Update(_float fTimeDelta)
     {
         if (End_Check())
         {
-            m_pPlayer->Change_State(CPlayer::OH_IDLE);
+            _uint iWeponType = m_pPlayer->Get_WeaponType();
+
+            if (iWeponType < 2)
+                m_pPlayer->Change_State(CPlayer::OH_IDLE);
+            else
+                m_pPlayer->Change_State(CPlayer::TH_IDLE);
         }
     }
 }

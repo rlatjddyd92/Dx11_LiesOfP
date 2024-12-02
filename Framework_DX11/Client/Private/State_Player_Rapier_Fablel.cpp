@@ -1,18 +1,18 @@
 #include "stdafx.h"
-#include "State_Player_Rapier_Fatal.h"
+#include "State_Player_Rapier_Fablel.h"
 #include "GameInstance.h"
 #include "Model.h"
 #include "Player.h"
 #include "Camera.h"
 #include "Weapon.h"
 
-CState_Player_Rapier_Fatal::CState_Player_Rapier_Fatal(CFsm* pFsm, CPlayer* pPlayer)
+CState_Player_Rapier_Fable::CState_Player_Rapier_Fable(CFsm* pFsm, CPlayer* pPlayer)
     :CState{ pFsm }
     , m_pPlayer{ pPlayer }
 {
 }
 
-HRESULT CState_Player_Rapier_Fatal::Initialize(_uint iStateNum, void* pArg)
+HRESULT CState_Player_Rapier_Fable::Initialize(_uint iStateNum, void* pArg)
 {
     m_iAnimation_RapierFCA = m_pPlayer->Get_Model()->Find_AnimationIndex("AS_Pino_O_Rapier_FCA", 3.f);
 
@@ -43,7 +43,7 @@ HRESULT CState_Player_Rapier_Fatal::Initialize(_uint iStateNum, void* pArg)
     return S_OK;
 }
 
-HRESULT CState_Player_Rapier_Fatal::Start_State(void* pArg)
+HRESULT CState_Player_Rapier_Fable::Start_State(void* pArg)
 {
     m_pPlayer->Change_Animation(m_iAnimation_RapierFCA, false, 0.05f);
 
@@ -59,7 +59,7 @@ HRESULT CState_Player_Rapier_Fatal::Start_State(void* pArg)
     return S_OK;
 }
 
-void CState_Player_Rapier_Fatal::Update(_float fTimeDelta)
+void CState_Player_Rapier_Fable::Update(_float fTimeDelta)
 {
     _int iFrame = m_pPlayer->Get_Frame();
 
@@ -104,17 +104,18 @@ void CState_Player_Rapier_Fatal::Update(_float fTimeDelta)
     Control_Effect(iFrame);
 }
 
-void CState_Player_Rapier_Fatal::End_State()
+void CState_Player_Rapier_Fable::End_State()
 {
+    m_pPlayer->DeActive_Effect(CPlayer::RAPIER_TRAIL_SECOND);
     m_pPlayer->DeActive_CurretnWeaponCollider();
 }
 
-_bool CState_Player_Rapier_Fatal::End_Check()
+_bool CState_Player_Rapier_Fable::End_Check()
 {
     return m_pPlayer->Get_EndAnim(m_iAnimation_RapierFCA);
 }
 
-void CState_Player_Rapier_Fatal::Control_Collider(_int iFrame)
+void CState_Player_Rapier_Fable::Control_Collider(_int iFrame)
 {
     _bool   isColliderActive = false;
 
@@ -131,29 +132,29 @@ void CState_Player_Rapier_Fatal::Control_Collider(_int iFrame)
 
 }
 
-void CState_Player_Rapier_Fatal::Control_Sound(_int iFrame)
+void CState_Player_Rapier_Fable::Control_Sound(_int iFrame)
 {
-    if (iFrame == m_iSoundFrame[0] && !m_isPlaySound)
+    if ((iFrame == m_iSoundFrame[0] || iFrame == m_iSoundFrame[0] + 1) && !m_isPlaySound)
     {
         m_pPlayer->Play_CurrentWeaponSound(CWeapon::WEP_SOUND_EFFECT1, TEXT("SE_PC_SK_WS_Dagger_1H_S_01.wav"));
         m_isPlaySound = true;
     }
-    else if (iFrame == m_iSoundFrame[1] && !m_isPlaySound)
+    else if ((iFrame == m_iSoundFrame[1] || iFrame == m_iSoundFrame[1] + 1) && !m_isPlaySound)
     {
         m_pPlayer->Play_CurrentWeaponSound(CWeapon::WEP_SOUND_EFFECT1, TEXT("SE_PC_SK_WS_Dagger_1H_S_02.wav"));
         m_isPlaySound = true;
     }
-    else if (iFrame == m_iSoundFrame[2] && !m_isPlaySound)
+    else if ((iFrame == m_iSoundFrame[2] || iFrame == m_iSoundFrame[2] + 1) && !m_isPlaySound)
     {
         m_pPlayer->Play_CurrentWeaponSound(CWeapon::WEP_SOUND_EFFECT1, TEXT("SE_PC_SK_WS_Dagger_1H_S_01.wav"));
         m_isPlaySound = true;
     }
-    else if (iFrame == m_iSoundFrame[3] && !m_isPlaySound)
+    else if ((iFrame == m_iSoundFrame[3] || iFrame == m_iSoundFrame[3] + 1) && !m_isPlaySound)
     {
         m_pPlayer->Play_CurrentWeaponSound(CWeapon::WEP_SOUND_EFFECT1, TEXT("SE_PC_SK_WS_Dagger_1H_S_02.wav"));
         m_isPlaySound = true;
     }
-    else if (iFrame == m_iSoundFrame[4] && !m_isPlaySound)
+    else if ((iFrame == m_iSoundFrame[4] || iFrame == m_iSoundFrame[4] + 1) && !m_isPlaySound)
     {
         m_pPlayer->Play_CurrentWeaponSound(CWeapon::WEP_SOUND_EFFECT1, TEXT("SE_PC_SK_WS_Dagger_1H_S_03.wav"));
         m_isPlaySound = true;
@@ -164,39 +165,35 @@ void CState_Player_Rapier_Fatal::Control_Sound(_int iFrame)
     }
 }
 
-void CState_Player_Rapier_Fatal::Control_Effect(_int iFrame)
+void CState_Player_Rapier_Fable::Control_Effect(_int iFrame)
 {
-    if (!m_isActiveEffect[0] && iFrame == m_iColliderStartFrame[0])
+    if (!m_isActiveEffect[0] && (iFrame == m_iColliderStartFrame[0] || iFrame == m_iColliderStartFrame[0] + 1))
     {
         m_pPlayer->Active_Effect(CPlayer::RAPIER_TRAIL_FIRST);
         m_isActiveEffect[0] = true;
     }
-    else if (!m_isActiveEffect[1] && iFrame == m_iColliderStartFrame[3])
+    else if (!m_isActiveEffect[1] && (iFrame == m_iColliderStartFrame[3] || iFrame == m_iColliderStartFrame[3] + 1))
     {
         m_pPlayer->DeActive_Effect(CPlayer::RAPIER_TRAIL_FIRST);
         m_pPlayer->Active_Effect(CPlayer::RAPIER_TRAIL_SECOND);
         m_isActiveEffect[1] = true;
     }
-    else if (m_iChangeFrame - 1 < iFrame)
-    {
-        m_pPlayer->DeActive_Effect(CPlayer::RAPIER_TRAIL_SECOND);
-    }
 }
 
-CState_Player_Rapier_Fatal* CState_Player_Rapier_Fatal::Create(CFsm* pFsm, CPlayer* pPlayer, _uint iStateNum, void* pArg)
+CState_Player_Rapier_Fable* CState_Player_Rapier_Fable::Create(CFsm* pFsm, CPlayer* pPlayer, _uint iStateNum, void* pArg)
 {
-    CState_Player_Rapier_Fatal* pInstance = new CState_Player_Rapier_Fatal(pFsm, pPlayer);
+    CState_Player_Rapier_Fable* pInstance = new CState_Player_Rapier_Fable(pFsm, pPlayer);
 
     if (FAILED(pInstance->Initialize(iStateNum, pArg)))
     {
-        MSG_BOX(TEXT("Failed to Created : CState_Player_Rapier_Fatal"));
+        MSG_BOX(TEXT("Failed to Created : CState_Player_Rapier_Fable"));
         Safe_Release(pInstance);
     }
 
     return pInstance;
 }
 
-void CState_Player_Rapier_Fatal::Free()
+void CState_Player_Rapier_Fable::Free()
 {
     __super::Free();
 }

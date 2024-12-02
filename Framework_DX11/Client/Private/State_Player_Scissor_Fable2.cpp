@@ -1,19 +1,19 @@
 #include "stdafx.h"
-#include "State_Player_Scissor_Fatal2.h"
+#include "State_Player_Scissor_Fable2.h"
 #include "GameInstance.h"
 #include "Model.h"
 #include "Player.h"
 #include "Camera.h"
 
-CState_Player_Scissor_Fatal2::CState_Player_Scissor_Fatal2(CFsm* pFsm, CPlayer* pPlayer)
+CState_Player_Scissor_Fable2::CState_Player_Scissor_Fable2(CFsm* pFsm, CPlayer* pPlayer)
     :CState{ pFsm }
     , m_pPlayer{ pPlayer }
 {
 }
 
-HRESULT CState_Player_Scissor_Fatal2::Initialize(_uint iStateNum, void* pArg)
+HRESULT CState_Player_Scissor_Fable2::Initialize(_uint iStateNum, void* pArg)
 {
-    m_iAnimation_ScissorCombos3 = m_pPlayer->Get_Model()->Find_AnimationIndex("AS_Pino_FableArts_Combo_ScissorSword3", 2.f);
+    m_iAnimation_ScissorCombos3 = m_pPlayer->Get_Model()->Find_AnimationIndex("AS_Pino_FableArts_Combo_ScissorSword3", 2.5f);
 
     FSM_INIT_DESC* pDesc = static_cast<FSM_INIT_DESC*>(pArg);
 
@@ -41,7 +41,7 @@ HRESULT CState_Player_Scissor_Fatal2::Initialize(_uint iStateNum, void* pArg)
     return S_OK;
 }
 
-HRESULT CState_Player_Scissor_Fatal2::Start_State(void* pArg)
+HRESULT CState_Player_Scissor_Fable2::Start_State(void* pArg)
 {
     m_pPlayer->Change_Animation(m_iAnimation_ScissorCombos3, false, 0.f);
 
@@ -56,7 +56,7 @@ HRESULT CState_Player_Scissor_Fatal2::Start_State(void* pArg)
     return S_OK;
 }
 
-void CState_Player_Scissor_Fatal2::Update(_float fTimeDelta)
+void CState_Player_Scissor_Fable2::Update(_float fTimeDelta)
 {
     _int iFrame = m_pPlayer->Get_Frame();
 
@@ -111,18 +111,18 @@ void CState_Player_Scissor_Fatal2::Update(_float fTimeDelta)
 }
 
 
-void CState_Player_Scissor_Fatal2::End_State()
+void CState_Player_Scissor_Fable2::End_State()
 {
     m_pPlayer->DeActive_CurretnWeaponCollider();
     m_pPlayer->Combine_Scissor();
 }
 
-_bool CState_Player_Scissor_Fatal2::End_Check()
+_bool CState_Player_Scissor_Fable2::End_Check()
 {
     return m_pPlayer->Get_EndAnim(m_iAnimation_ScissorCombos3);
 }
 
-void CState_Player_Scissor_Fatal2::Control_Collider()
+void CState_Player_Scissor_Fable2::Control_Collider()
 {
     _int iFrame = m_pPlayer->Get_Frame();
 
@@ -165,20 +165,20 @@ void CState_Player_Scissor_Fatal2::Control_Collider()
     }
 }
 
-CState_Player_Scissor_Fatal2* CState_Player_Scissor_Fatal2::Create(CFsm* pFsm, CPlayer* pPlayer, _uint iStateNum, void* pArg)
+CState_Player_Scissor_Fable2* CState_Player_Scissor_Fable2::Create(CFsm* pFsm, CPlayer* pPlayer, _uint iStateNum, void* pArg)
 {
-    CState_Player_Scissor_Fatal2* pInstance = new CState_Player_Scissor_Fatal2(pFsm, pPlayer);
+    CState_Player_Scissor_Fable2* pInstance = new CState_Player_Scissor_Fable2(pFsm, pPlayer);
 
     if (FAILED(pInstance->Initialize(iStateNum, pArg)))
     {
-        MSG_BOX(TEXT("Failed to Created : CState_Player_Scissor_Fatal2"));
+        MSG_BOX(TEXT("Failed to Created : CState_Player_Scissor_Fable2"));
         Safe_Release(pInstance);
     }
 
     return pInstance;
 }
 
-void CState_Player_Scissor_Fatal2::Free()
+void CState_Player_Scissor_Fable2::Free()
 {
     __super::Free();
 }

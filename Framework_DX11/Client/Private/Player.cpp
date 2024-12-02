@@ -50,7 +50,7 @@
 #include "State_Player_Rapier_LAttack01.h"
 #include "State_Player_Rapier_RAttack00.h"
 #include "State_Player_Rapier_Charge.h"
-#include "State_Player_Rapier_Fatal.h"
+#include "State_Player_Rapier_Fablel.h"
 
 #include "State_Player_Flame_LAttack00.h"
 #include "State_Player_Flame_LAttack01.h"
@@ -66,9 +66,9 @@
 #include "State_Player_Scissor_Charge00.h"
 #include "State_Player_Scissor_Charge01.h"
 #include "State_Player_Scissor_Buff.h"
-#include "State_Player_Scissor_Fatal0.h"
-#include "State_Player_Scissor_Fatal1.h"
-#include "State_Player_Scissor_Fatal2.h"
+#include "State_Player_Scissor_Fable0.h"
+#include "State_Player_Scissor_Fable1.h"
+#include "State_Player_Scissor_Fable2.h"
 
 // 24-11-27 김성용
 // 게임 인터페이스와 연결을 위해 추가 
@@ -621,7 +621,7 @@ HRESULT CPlayer::Ready_FSM()
 	m_pFsmCom->Add_State(CState_Player_Rapier_LAttack01::Create(m_pFsmCom, this, RAPIER_LATTACK1, &Desc));	// 좌클릭 공격2
 	m_pFsmCom->Add_State(CState_Player_Rapier_RAttack00::Create(m_pFsmCom, this, RAPIER_RATTACK0, &Desc));	// 우클릭 공격
 	m_pFsmCom->Add_State(CState_Player_Rapier_Charge::Create(m_pFsmCom, this, RAPIER_CHARGE, &Desc));	// 우클릭 차지공격
-	m_pFsmCom->Add_State(CState_Player_Rapier_Fatal::Create(m_pFsmCom, this, RAPIER_FATAL, &Desc));	// F 페이탈아츠
+	m_pFsmCom->Add_State(CState_Player_Rapier_Fable::Create(m_pFsmCom, this, RAPIER_FABALE, &Desc));	// F 페이탈아츠
 	// Shift + F 패리 어택
 
 	m_pFsmCom->Add_State(CState_Player_Flame_LAttack00::Create(m_pFsmCom, this, FLAME_LATTACK0, &Desc));	// 좌클릭 공격1
@@ -640,9 +640,9 @@ HRESULT CPlayer::Ready_FSM()
 	m_pFsmCom->Add_State(CState_Player_Scissor_Charge00::Create(m_pFsmCom, this, SCISSOR_CHARGE0, &Desc));	// 우클릭 공격2
 	m_pFsmCom->Add_State(CState_Player_Scissor_Charge01::Create(m_pFsmCom, this, SCISSOR_CHARGE1, &Desc));	// 우클릭 공격2
 	m_pFsmCom->Add_State(CState_Player_Scissor_Buff::Create(m_pFsmCom, this, SCISSOR_BUFF, &Desc));	// 버프
-	m_pFsmCom->Add_State(CState_Player_Scissor_Fatal0::Create(m_pFsmCom, this, SCISSOR_FATAL0, &Desc));	// 콤보1
-	m_pFsmCom->Add_State(CState_Player_Scissor_Fatal1::Create(m_pFsmCom, this, SCISSOR_FATAL1, &Desc));	// 콤보2
-	m_pFsmCom->Add_State(CState_Player_Scissor_Fatal2::Create(m_pFsmCom, this, SCISSOR_FATAL2, &Desc));	// 콤보3
+	m_pFsmCom->Add_State(CState_Player_Scissor_Fable0::Create(m_pFsmCom, this, SCISSOR_FABAL0, &Desc));	// 콤보1
+	m_pFsmCom->Add_State(CState_Player_Scissor_Fable1::Create(m_pFsmCom, this, SCISSOR_FABAL1, &Desc));	// 콤보2
+	m_pFsmCom->Add_State(CState_Player_Scissor_Fable2::Create(m_pFsmCom, this, SCISSOR_FABAL2, &Desc));	// 콤보3
 
 	m_pFsmCom->Set_State(OH_IDLE);
 

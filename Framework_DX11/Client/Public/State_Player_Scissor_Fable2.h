@@ -7,11 +7,11 @@ END
 
 BEGIN(Client)
 
-class CState_Player_Scissor_Fatal2 : public CState
+class CState_Player_Scissor_Fable2 : public CState
 {
 public:
-    CState_Player_Scissor_Fatal2(class CFsm* pFsm, class CPlayer* pPlayer);
-    virtual ~CState_Player_Scissor_Fatal2() = default;
+    CState_Player_Scissor_Fable2(class CFsm* pFsm, class CPlayer* pPlayer);
+    virtual ~CState_Player_Scissor_Fable2() = default;
 
 public:
     virtual HRESULT Initialize(_uint iStateNum, void* pArg) override;
@@ -52,7 +52,7 @@ private:
     void                Control_Collider();
 
 public:
-    static CState_Player_Scissor_Fatal2* Create(class CFsm* pFsm, class CPlayer* pPlayer, _uint iStateNum, void* pArg = nullptr);
+    static CState_Player_Scissor_Fable2* Create(class CFsm* pFsm, class CPlayer* pPlayer, _uint iStateNum, void* pArg = nullptr);
     virtual void Free() override;
 
 };
