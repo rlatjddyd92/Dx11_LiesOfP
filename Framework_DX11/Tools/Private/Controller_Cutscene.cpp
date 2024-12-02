@@ -1,7 +1,9 @@
+#define _CRT_SECURE_NO_WARNINGS
+
 #include "stdafx.h"
 #include "Controller_Cutscene.h"
 #include "GameInstance.h"
-
+#include "CutScene.h"
 IMPLEMENT_SINGLETON(CController_Cutscene)
 
 
@@ -18,23 +20,43 @@ HRESULT CController_Cutscene::Initialize(ID3D11Device* pDevice, ID3D11DeviceCont
 	Safe_AddRef(m_pDevice);
 	Safe_AddRef(m_pContext);
 
+    if (m_CutSceneList[0] == nullptr)
+    {
+        CGameObject* pCutScene = nullptr;
+        for (int i = 0; i < 8; ++i)
+        {
+            pCutScene = m_pGameInstance->Get_CloneObject_ToLayer(LEVEL_TOOL, TEXT("Layer_CutScene"), TEXT("Prototype_GameObject_CutScene"));
+            if (nullptr != pCutScene)
+            {
+                m_CutSceneList[i] = static_cast<CCutScene*>(pCutScene);
+            }
+        }
+    }
+
+    m_fCurrentFrame = new float(0.0f);
 	return S_OK;
 }
 
 void CController_Cutscene::Update(_float fTimeDelta)
 {
-	Show_CutScene_List();
-	CutScene_Detail();
+    Menu();
+
+    if (m_iPreSelectedCutScene != -1)
+    {
+        m_pCurrentCutScene->Update(fTimeDelta);
+    }
 }
 
-void CController_Cutscene::Show_CutScene_List()
+void CController_Cutscene::Menu()
 {
-
-    static int item_selected_idx = 0; // Here we store our selected data as an index.
+    static int item_selected_idx = -1; // Here we store our selected data as an index.
 
     static bool item_highlight = false;
     int item_highlighted_idx = 0; // Here we store our highlighted data as an index.
 
+    static float fMaxFrame = { 50.f };
+
+#pragma region 컷신 리스트 출력
     if (ImGui::CollapsingHeader("Sequence_List"))
     {
         ImGui::PushItemWidth(180);  //사이즈 고정
@@ -58,48 +80,92 @@ void CController_Cutscene::Show_CutScene_List()
         }
     }
 
-    m_CurSequence = &m_SequenceList[item_selected_idx];
+#pragma endregion
+    //새로운 컷신 선텍
+    if(m_iPreSelectedCutScene != item_selected_idx)
+    {
+        m_iPreSelectedCutScene = item_selected_idx;
+        m_pCurrentCutScene = m_CutSceneList[item_selected_idx];
+        fMaxFrame = m_pCurrentCutScene->Get_MaxFrame();
+        m_fCurrentFrame = m_pCurrentCutScene->Get_CurFrame_Ptr();
+        m_bPlay = false;
+    }
+
+#pragma region 컷신 세부사항 조정
+    if (ImGui::CollapsingHeader("CutScene Detail"))
+    {
+        //컷신 이름
+        ImGui::Text("Name : "); 
+        if (m_iPreSelectedCutScene != -1)
+        {
+            ImGui::SameLine();
+            ImGui::Text(m_CutSceneNameList[item_selected_idx]);
+        }
+        //최대 프레임 설정
+        ImGui::PushItemWidth(150);   //사이즈 제한
+        ImGui::InputFloat("Frame Max", &fMaxFrame, 1.f);
+        ImGui::PopItemWidth();  //사이즈 제한 풀기
+        //프레임 바 관련
+        ImGui::SliderFloat("TimeLine", m_fCurrentFrame, 0.0f, fMaxFrame);
+        if (ImGui::Button("Play"))
+        {
+            m_bPlay = true;
+        }
+        ImGui::SameLine();
+        if (ImGui::Button("Stop"))
+        {
+            m_bPlay = false;
+        }
+        ImGui::SameLine();
+        if (ImGui::Button("ReSet Frame"))
+        {
+            *m_fCurrentFrame = 0.f;
+        }
+        //요소 넣기
+        if (ImGui::TreeNode("Add Actors"))
+        {
+            if (ImGui::Button("Add Camera"))
+            {
+
+            }
+            if (ImGui::Button("Add UI"))
+            {
+
+            }
+            if (ImGui::Button("Add Shader"))
+            {
+
+            }
+            if (ImGui::Button("Add GameObject"))
+            {
+
+            }
+            if (ImGui::Button("Add Sound"))
+            {
+
+            }
+            
+            ImGui::TreePop();
+        }
+
+
+
+        //정보 담기
+        if (m_iPreSelectedCutScene != -1)
+        {
+            m_pCurrentCutScene->Set_MaxFrame(fMaxFrame);
+            m_pCurrentCutScene->Set_Play(m_bPlay);
+        }
+    }
+#pragma endregion
 }
 
-void CController_Cutscene::CutScene_Detail()
-{
-    //if (ImGui::CollapsingHeader("Sequencer"))
-    //{
-    //    // let's create the sequencer
-    //    static int selectedEntry = -1;
-    //    static int firstFrame = 0;
-    //    static bool expanded = true;
-    //    static int currentFrame = 100;
-
-    //    ImGui::PushItemWidth(130);
-    //    ImGui::InputInt("Frame Min", &m_CurSequence.mFrameMin);
-    //    ImGui::SameLine();
-    //    ImGui::InputInt("Frame ", &currentFrame);
-    //    ImGui::SameLine();
-    //    ImGui::InputInt("Frame Max", &m_CurSequence.mFrameMax);
-    //    ImGui::PopItemWidth();
-    //    Sequencer(&m_CurSequence, &currentFrame, &expanded, &selectedEntry, &firstFrame, ImSequencer::SEQUENCER_EDIT_STARTEND | ImSequencer::SEQUENCER_ADD | ImSequencer::SEQUENCER_DEL | ImSequencer::SEQUENCER_CHANGE_FRAME);
-    //    // add a UI to edit that particular item
-    //    if (selectedEntry != -1)
-    //    {
-    //        const MySequence::MySequenceItem& item = m_CurSequence.myItems[selectedEntry];
-    //        ImGui::Text("I am a %s, please edit me", SequencerItemTypeNames[item.mType]);
-    //        // switch (type) ....
-    //    }
-    //}
-
-    ImGui::PushItemWidth(180);   //사이즈 제한
-    ImGui::InputInt("Frame Max", &m_CurSequence->mFrameMax);
-    ImGui::PopItemWidth();  //사이즈 제한 풀기
-
-    _float fCurrentFrame = 0.f;
-    ImGui::DragFloat("TimeLine", &fCurrentFrame, 0.01f, 0.f, m_CurSequence->mFrameMax);
-}
 
 void CController_Cutscene::Free()
 {
 	__super::Free();
 
+   
 	Safe_Release(m_pDevice);
 	Safe_Release(m_pContext);
 	Safe_Release(m_pGameInstance);
