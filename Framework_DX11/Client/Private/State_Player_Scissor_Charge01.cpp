@@ -40,7 +40,7 @@ HRESULT CState_Player_Scissor_Charge01::Initialize(_uint iStateNum, void* pArg)
 
 HRESULT CState_Player_Scissor_Charge01::Start_State(void* pArg)
 {
-    m_pPlayer->Change_Animation(m_iAnimation_ScissorCA2, false, 0.2f);
+    m_pPlayer->Change_Animation(m_iAnimation_ScissorCA2, false, 0.1f);
 
     m_isInputLButton = false;
     m_isInputRButton = false;

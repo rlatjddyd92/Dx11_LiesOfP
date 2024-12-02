@@ -40,6 +40,8 @@ HRESULT CState_Player_Rapier_LAttack00::Start_State(void* pArg)
     m_isInputRButton = false;
     m_fRButtonTime = 0.f;
 
+    m_isPlaySound = false;
+
     return S_OK;
 }
 
@@ -120,10 +122,6 @@ void CState_Player_Rapier_LAttack00::Control_Sound()
     {
         m_pPlayer->Play_CurrentWeaponSound(CWeapon::WEP_SOUND_EFFECT1, TEXT("SE_PC_SK_WS_Dagger_1H_S_01.wav"));
         m_isPlaySound = true;
-    }
-    else
-    {
-        m_isPlaySound = false;
     }
 }
 

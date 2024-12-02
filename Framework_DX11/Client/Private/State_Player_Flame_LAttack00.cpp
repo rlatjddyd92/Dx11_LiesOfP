@@ -26,17 +26,15 @@ HRESULT CState_Player_Flame_LAttack00::Initialize(_uint iStateNum, void* pArg)
     m_iColliderStartFrame = 33;
     m_iColliderEndFrame = 38;
 
-    m_iSoundFrame = 18;
-
     return S_OK;
 }
 
 HRESULT CState_Player_Flame_LAttack00::Start_State(void* pArg)
 {
     if (m_pFsm->Get_PrevState() == CPlayer::TH_IDLE)
-        m_pPlayer->Change_Animation(m_iAnimation_FlameNA3, false);
+        m_pPlayer->Change_Animation(m_iAnimation_FlameNA3, false, 0.f);
     else
-        m_pPlayer->Change_Animation(m_iAnimation_FlameNA3, false, 0.1f, 15);
+        m_pPlayer->Change_Animation(m_iAnimation_FlameNA3, false, 0.2f, 14);
 
     m_isInputLButton = false;
     m_isInputRButton = false;
@@ -44,6 +42,8 @@ HRESULT CState_Player_Flame_LAttack00::Start_State(void* pArg)
 
     m_iColliderStartFrame = 33;
     m_iColliderEndFrame = 38;
+
+    m_isPlaySound = false;
 
     return S_OK;
 }
@@ -119,12 +119,8 @@ void CState_Player_Flame_LAttack00::Control_Sound()
 
     if ((iFrame == m_iColliderStartFrame || iFrame == m_iColliderStartFrame + 1) && !m_isPlaySound)
     {
-        m_pPlayer->Play_CurrentWeaponSound(CWeapon::WEP_SOUND_EFFECT1, TEXT("SE_PC_SK_WS_FlameSword_2H_M_01.wav"));
+        m_pPlayer->Play_CurrentWeaponSound(CWeapon::WEP_SOUND_EFFECT1, TEXT("SE_PC_SK_WS_Glaive_P_B_M_01.wav"));
         m_isPlaySound = true;
-    }
-    else
-    {
-        m_isPlaySound = false;
     }
 }
 

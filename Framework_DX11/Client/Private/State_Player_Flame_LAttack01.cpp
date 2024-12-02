@@ -40,6 +40,8 @@ HRESULT CState_Player_Flame_LAttack01::Start_State(void* pArg)
     m_iColliderStartFrame = 25;
     m_iColliderEndFrame = 33;
 
+    m_isPlaySound = false;
+
     return S_OK;
 }
 
@@ -113,12 +115,8 @@ void CState_Player_Flame_LAttack01::Control_Sound()
 
     if ((iFrame == m_iColliderStartFrame || iFrame == m_iColliderStartFrame + 1) && !m_isPlaySound)
     {
-        m_pPlayer->Play_CurrentWeaponSound(CWeapon::WEP_SOUND_EFFECT1, TEXT("SE_PC_SK_WS_FlameSword_2H_M_02.wav"));
+        m_pPlayer->Play_CurrentWeaponSound(CWeapon::WEP_SOUND_EFFECT1, TEXT("SE_PC_SK_WS_Glaive_P_B_M_02.wav"));
         m_isPlaySound = true;
-    }
-    else
-    {
-        m_isPlaySound = false;
     }
 }
 
