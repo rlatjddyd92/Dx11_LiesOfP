@@ -84,6 +84,12 @@ void CController_Cutscene::Menu()
     //새로운 컷신 선텍
     if(m_iPreSelectedCutScene != item_selected_idx)
     {
+        if (m_iPreSelectedCutScene == -1)
+        {
+            delete m_fCurrentFrame;
+            m_fCurrentFrame = nullptr;
+        }
+
         m_iPreSelectedCutScene = item_selected_idx;
         m_pCurrentCutScene = m_CutSceneList[item_selected_idx];
         fMaxFrame = m_pCurrentCutScene->Get_MaxFrame();
@@ -106,6 +112,7 @@ void CController_Cutscene::Menu()
         ImGui::InputFloat("Frame Max", &fMaxFrame, 1.f);
         ImGui::PopItemWidth();  //사이즈 제한 풀기
         //프레임 바 관련
+        ImGui::SeparatorText("Frame");
         ImGui::SliderFloat("TimeLine", m_fCurrentFrame, 0.0f, fMaxFrame);
         if (ImGui::Button("Play"))
         {
@@ -120,10 +127,17 @@ void CController_Cutscene::Menu()
         if (ImGui::Button("ReSet Frame"))
         {
             *m_fCurrentFrame = 0.f;
+            m_pCurrentCutScene->Keyframe_Actived_Reset();
         }
-        //요소 목록
-
-        ImGui::Text("[Actor_List]");
+        //키프레임
+        ImGui::SeparatorText("Key Frame Detail");
+        if (ImGui::Button("Create KeyFrame"))
+        {
+            m_pCurrentCutScene->Create_KeyFrame();
+        }
+        //키프레임 리스트
+        //키프레임 별 요소 목록
+       /* ImGui::Text("[Actor_List]");
 
         static _int iSelectedCellNum = -1;
 
@@ -163,6 +177,9 @@ void CController_Cutscene::Menu()
 
         ImGui::EndChild();
         ImGui::EndGroup();
+        */
+        //요소별 정보
+        
         //정보 담기
         if (m_iPreSelectedCutScene != -1)
         {
@@ -210,7 +227,6 @@ void CController_Cutscene::Free()
 {
 	__super::Free();
 
-   
 	Safe_Release(m_pDevice);
 	Safe_Release(m_pContext);
 	Safe_Release(m_pGameInstance);

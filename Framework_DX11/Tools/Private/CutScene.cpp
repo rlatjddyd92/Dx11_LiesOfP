@@ -31,14 +31,48 @@ void CCutScene::Priority_Update(_float fTimeDelta)
 
 void CCutScene::Update(_float fTimeDelta)
 {
-	if (m_bPlay && m_fCurrentFrame < m_fMaxFrame)
+	if (m_bPlay && m_fTrackPosition < m_fMaxFrame)
 	{
-		m_fCurrentFrame += fTimeDelta;
+		m_fTrackPosition += fTimeDelta;
+		Play_Keyframes(fTimeDelta);
 	}
 }
 
 void CCutScene::Late_Update(_float fTimeDelta)
 {
+}
+
+void CCutScene::Keyframe_Actived_Reset()
+{
+	if (m_KeyFrames.size() == 0)
+		return;
+
+	for (auto& iter : m_KeyFrames)
+	{
+		iter->bActived = false;
+	}
+}
+
+void CCutScene::Create_KeyFrame()
+{
+	CUTSCENE_DESC* pDesc = new CUTSCENE_DESC;
+	pDesc->dTrackPosition = m_fTrackPosition;
+
+	m_KeyFrames.push_back(pDesc);
+}
+
+void CCutScene::Play_Keyframes(_float fTimeDelta)
+{
+	if (m_KeyFrames.size() == 0)
+		return;
+
+	for (auto& iter : m_KeyFrames)
+	{
+		if (m_fTrackPosition >= iter->dTrackPosition && iter->bActived)
+		{
+			iter->bActived = true;
+		}
+	}
 }
 
 CCutScene* CCutScene::Create(ID3D11Device* pDevice, ID3D11DeviceContext* pContext)
@@ -70,4 +104,10 @@ CGameObject* CCutScene::Clone(void* pArg)
 void CCutScene::Free()
 {
 	__super::Free();
+
+	for (auto& iter : m_KeyFrames)
+	{
+		delete iter;
+		iter = nullptr;
+	}
 }

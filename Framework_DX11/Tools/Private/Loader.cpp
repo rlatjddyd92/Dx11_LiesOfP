@@ -160,7 +160,7 @@ HRESULT CLoader::LoadingMapModel0()
 	switch (m_eNextLevelID)
 	{
 	case LEVEL_TOOL:
-		hr = Ready_Resources_For_ToolLevel_Map0();
+		//hr = Ready_Resources_For_ToolLevel_Map0();
 		m_isFinished_Map0 = true;
 		break;
 	default:
@@ -184,7 +184,7 @@ HRESULT CLoader::LoadingMapModel1()
 	switch (m_eNextLevelID)
 	{
 	case LEVEL_TOOL:
-		hr = Ready_Resources_For_ToolLevel_Map1();
+		//hr = Ready_Resources_For_ToolLevel_Map1();
 		m_isFinished_Map1 = true;
 		break;
 	default:
@@ -209,6 +209,7 @@ HRESULT CLoader::LoadingMonsterModel1()
 	{
 	case LEVEL_TOOL:
 		hr = Ready_Resources_For_ToolLevel_Monster();
+		m_isFinished_Monster = true;
 		break;
 	default:
 		hr = S_OK;
@@ -502,10 +503,10 @@ HRESULT CLoader::Ready_Resources_For_ToolLevel_Map0()
 	}
 	 
 	/* Prototype_Component_Model_Rapier */
-	PreTransformMatrix = XMMatrixScaling(0.01f, 0.01f, 0.01f) * XMMatrixRotationX(XMConvertToRadians(270.0f));
-	if (FAILED(m_pGameInstance->Add_Prototype(LEVEL_TOOL, TEXT("Prototype_Component_Model_Rapier"),
-		CModel::Create(m_pDevice, m_pContext, CModel::TYPE_NONANIM, "../Bin/ModelData/NonAnim/Weapon/Rapier.dat", PreTransformMatrix, false))))
-		return E_FAIL;
+	//PreTransformMatrix = XMMatrixScaling(0.01f, 0.01f, 0.01f) * XMMatrixRotationX(XMConvertToRadians(270.0f));
+	//if (FAILED(m_pGameInstance->Add_Prototype(LEVEL_TOOL, TEXT("Prototype_Component_Model_Rapier"),
+	//	CModel::Create(m_pDevice, m_pContext, CModel::TYPE_NONANIM, "../Bin/ModelData/NonAnim/Weapon/Rapier.dat", PreTransformMatrix, false))))
+	//	return E_FAIL;
 	
 	
 	PreTransformMatrix = XMMatrixScaling(0.01f, 0.01f, 0.01f) * XMMatrixRotationY(XMConvertToRadians(270.f));
@@ -603,12 +604,12 @@ HRESULT CLoader::Ready_Resources_For_ToolLevel_Map0()
 		m_pGameInstance->Add_ModelPrototype(LEVEL_TOOL, ("Prototype_AnimModel_RebornerMale"), pModel);
 	}
 	
-	pModel = CModel::Create(m_pDevice, m_pContext, CModel::TYPE_NONANIM, "../Bin/ModelData/Anim/Monster/RebornerBigA/RebornerMale_Weapon.dat", PreTransformMatrix, false, nullptr);
+	/*pModel = CModel::Create(m_pDevice, m_pContext, CModel::TYPE_NONANIM, "../Bin/ModelData/Anim/Monster/RebornerBigA/RebornerMale_Weapon.dat", PreTransformMatrix, false, nullptr);
 	if (pModel != nullptr)
 	{
 		if (FAILED(m_pGameInstance->Add_Prototype(LEVEL_TOOL, TEXT("Prototype_NoneAnimModel_RebornerMale_Weapon"), pModel)))
 			return E_FAIL;
-	}
+	}*/
 
 #pragma endregion
 
