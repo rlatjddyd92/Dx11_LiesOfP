@@ -10,7 +10,7 @@ CAObj_StampBlast::CAObj_StampBlast(ID3D11Device* pDevice, ID3D11DeviceContext* p
 {
 }
 
-CAObj_StampBlast::CAObj_StampBlast(const CAObj_StampBlast& Prototype)
+CAObj_StampBlast::CAObj_StampBlast(const CGameObject& Prototype)
     : CAttackObject{ Prototype }
 {
 }

@@ -190,6 +190,11 @@ void CMonster::OnCollisionExit(CGameObject* pOther)
 	int a = 0;
 }
 
+const _Matrix* CMonster::Get_BoneCombinedMat(_uint iBoneIndex)
+{
+	return m_pModelCom->Get_BoneCombindTransformationMatrix_Ptr(iBoneIndex);
+}
+
 HRESULT CMonster::Ready_Components()
 {
 	if (FAILED(__super::Ready_Components()))

@@ -226,6 +226,11 @@ void CPawn::PlayRepeat_Sound(const PAWN_SOUND_TYPE eType, const TCHAR* pSoundKey
 	m_pSoundCom[eType]->Play2D_Repeat(pSoundKey, fVolume);
 }
 
+_int CPawn::Get_UFBIndex(_uint UFB_Type)
+{
+	return m_pModelCom->Get_UFBIndices(UFB_Type);
+}
+
 HRESULT CPawn::Bind_WorldViewProj()
 {
 	if (FAILED(m_pTransformCom->Bind_ShaderResource(m_pShaderCom, "g_WorldMatrix")))

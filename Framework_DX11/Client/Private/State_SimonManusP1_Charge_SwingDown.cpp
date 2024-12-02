@@ -70,13 +70,13 @@ void CState_SimonManusP1_Charge_SwingDown::Effect_Check(_double CurTrackPos)
 {
     if (m_bChargeSwing)
     {
-        if (CurTrackPos >= 245.f)
+        if (CurTrackPos >= 240.f)
         {
             m_bChargeSwing = false;
             CAttackObject::ATKOBJ_DESC Desc;
             _float4x4 WorldMat{};
             XMStoreFloat4x4(&WorldMat, (*m_pMonster->Get_WeaponBoneCombinedMat(6) * (*m_pMonster->Get_WeaponWorldMat())));
-            Desc.vPos = _Vec3{ WorldMat._41, WorldMat._42, WorldMat._43 };
+            Desc.vPos = _Vec3{ WorldMat._41, WorldMat._42 - 0.2f, WorldMat._43 };
 
             m_pGameInstance->Add_CloneObject_ToLayer(LEVEL_GAMEPLAY, TEXT("Monster_Attack"), TEXT("Prototype_GameObject_ChargeSwing"), &Desc);
         }

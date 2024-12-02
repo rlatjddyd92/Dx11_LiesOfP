@@ -135,6 +135,10 @@ void CState_SimonManusP1_JumpToSwing::Collider_Check(_double CurTrackPos)
 
 void CState_SimonManusP1_JumpToSwing::Effect_Check(_double CurTrackPos)
 {
+    if (m_iCurLastAnim != AN_SWING)
+    {
+        return;
+    }
     if (m_iRouteTrack == 1)
     {
         if ((CurTrackPos >= 20.f && CurTrackPos <= 60.f))

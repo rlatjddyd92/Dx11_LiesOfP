@@ -31,8 +31,10 @@ private:
     _uint               m_iCurStartAnim = {};
 
     _bool               m_bStamp = { false };
+    _bool               m_bStampEffect = { false };
     _bool               m_bWeaponSpin = { false };
     _bool               m_bBlast = { false };
+    _bool               m_bAbsorb = { false };
 
     _uint               m_iRouteTrack = {};
 

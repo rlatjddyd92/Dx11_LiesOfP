@@ -20,8 +20,13 @@
 #include "CarcassTail.h"
 #include "SimonManus.h"
 
+#include "SpotEffect.h"
+#include "FollowedEffect.h"
+
 #include "AObj_StampBlast.h"
 #include "AObj_ChargeSwing.h"
+#include "AObj_SlideMagic.h"
+#include "AObj_JumpMagic.h"
 #pragma endregion
 
 #pragma region EFFECT
@@ -969,7 +974,21 @@ HRESULT CLoader::Ready_Prototype()
 	if (FAILED(m_pGameInstance->Add_Prototype(TEXT("Prototype_GameObject_ChargeSwing"),
 		CAObj_ChargeSwing::Create(m_pDevice, m_pContext))))
 		return E_FAIL;
+	if (FAILED(m_pGameInstance->Add_Prototype(TEXT("Prototype_GameObject_SlideMagic"),
+		CAObj_SlideMagic::Create(m_pDevice, m_pContext))))
+		return E_FAIL;
+	if (FAILED(m_pGameInstance->Add_Prototype(TEXT("Prototype_GameObject_JumpMagic"),
+		CAObj_JumpMagic::Create(m_pDevice, m_pContext))))
+		return E_FAIL;
 
+	// 특정 위치에 판정 없이 소환되는 이펙트
+	if (FAILED(m_pGameInstance->Add_Prototype(TEXT("Prototype_GameObject_SpotEffect"),
+		CSpotEffect::Create(m_pDevice, m_pContext))))
+		return E_FAIL;
+	// 뼈를, 혹은 위치를 따라가는 이펙트
+	if (FAILED(m_pGameInstance->Add_Prototype(TEXT("Prototype_GameObject_FollowedEffect"),
+		CFollowedEffect::Create(m_pDevice, m_pContext))))
+		return E_FAIL;
 
 	/* For. Prototype_GameObject_Weapon_SimonManus_Hammer */
 	if (FAILED(m_pGameInstance->Add_Prototype(TEXT("Prototype_GameObject_Weapon_SimonManus_Hammer"),

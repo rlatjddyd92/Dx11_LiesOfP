@@ -63,6 +63,7 @@
 #include "State_SimonManusP2_ThunderCalling.h"
 #include "State_SimonManusP2_Wave.h"
 #include "State_SimonManusP2_SpreadMagic.h"
+#include "State_SimonManusP2_SlideMagic.h"
 #pragma endregion
 
 #include "Weapon.h"
@@ -161,6 +162,10 @@ void CSimonManus::Update(_float fTimeDelta)
 	{
 		ChangePhase();
 	}
+	//if (KEY_TAP(KEY::Z))
+	//{
+	//	m_Effects[P2_JUMPMAGIC]->Set_Loop(true);
+	//}
 
 	m_vCurRootMove = XMVector3TransformNormal(m_pModelCom->Play_Animation(fTimeDelta), m_pTransformCom->Get_WorldMatrix());
 
@@ -420,7 +425,8 @@ HRESULT CSimonManus::Ready_FSM()
 	m_pExtraFsmCom->Add_State(CState_SimonManusP2_ThunderBall::Create(m_pExtraFsmCom, this, ATKP2_THUNDERBALL, &Desc));
 	m_pExtraFsmCom->Add_State(CState_SimonManusP2_ThunderCalling::Create(m_pExtraFsmCom, this, ATKP2_THUNDERCALLING, &Desc));
 	m_pExtraFsmCom->Add_State(CState_SimonManusP2_Wave::Create(m_pExtraFsmCom, this, ATKP2_WAVE, &Desc));
-
+	m_pExtraFsmCom->Add_State(CState_SimonManusP2_SlideMagic::Create(m_pExtraFsmCom, this, ATKP2_SLIDEMAGIC, &Desc));
+	
 	m_pExtraFsmCom->Add_State(CState_SimonManusP2_ChasingSwing::Create(m_pExtraFsmCom, this, ATKP2_CHASINGSWING, &Desc));
 	m_pExtraFsmCom->Add_State(CState_SimonManusP2_JumpToAttack::Create(m_pExtraFsmCom, this, ATKP2_JUMPTOATTACK, &Desc));
 	m_pExtraFsmCom->Add_State(CState_SimonManusP2_LightningToWave::Create(m_pExtraFsmCom, this, ATKP2_LIGHTNINGTOWAVE, &Desc));
@@ -464,22 +470,14 @@ HRESULT CSimonManus::Ready_Effects()
 	m_Effects[P1_TRAIL] = CEffect_Manager::Get_Instance()->Clone_Effect(TEXT("SimonManus_Attack_Swing"), pParetnMatrix,
 		pSocketBoneMatrix, _Vec3(0.f, 0.f, 0.f), _Vec3(0.f, 0.f, 0.f), _Vec3(1.f, 1.f, 1.f));
 
+	pSocketBoneMatrix = m_pExtraModelCom->Get_BoneCombindTransformationMatrix_Ptr(m_pExtraModelCom->Get_UFBIndices(UFB_HAND_LEFT));
 
-	pParetnMatrix = m_pWeapon->Get_WorldMatrix_Ptr();
-	pSocketBoneMatrix = m_pWeapon->Get_BoneCombinedMatrix(4);
-
-	m_Effects[P1_STAMP] = CEffect_Manager::Get_Instance()->Clone_Effect(TEXT("SimonManus_Attack_Stamp"), pParetnMatrix,
+	m_Effects[P2_SLIDEMAGIC] = CEffect_Manager::Get_Instance()->Clone_Effect(TEXT("SimonManus_Attack_SlideMagic"), pParetnMatrix,
 		pSocketBoneMatrix, _Vec3(0.f, 0.f, 0.f), _Vec3(0.f, 0.f, 0.f), _Vec3(1.f, 1.f, 1.f));
 
-	m_Effects[P1_CHARGESTAMP] = CEffect_Manager::Get_Instance()->Clone_Effect(TEXT("SimonManus_Attack_ChargeStamp"), pParetnMatrix,
+	m_Effects[P2_JUMPMAGIC] = CEffect_Manager::Get_Instance()->Clone_Effect(TEXT("SimonManus_Attack_JumpMagic"), pParetnMatrix,
 		pSocketBoneMatrix, _Vec3(0.f, 0.f, 0.f), _Vec3(0.f, 0.f, 0.f), _Vec3(1.f, 1.f, 1.f));
-
-	m_Effects[P1_CHARGESTAMP]->Set_Dead(true);
-
-	//해당 이펙트도 차지스탬프2처럼 오브젝트로 만들어야함
-	//m_Effects[P1_CHARGESWING] = CEffect_Manager::Get_Instance()->Clone_Effect(TEXT("SimonManus_Attack_ChargeSwing"), pParetnMatrix,
-	//	pSocketBoneMatrix, _Vec3(0.f, 0.f, 0.f), _Vec3(0.f, 0.f, 0.f), _Vec3(1.f, 1.f, 1.f));
-
+	
 
 	return S_OK;
 }
