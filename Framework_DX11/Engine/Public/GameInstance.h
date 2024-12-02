@@ -85,7 +85,8 @@ public:
 
 #pragma region TIMER_MANAGER
 	HRESULT Add_Timer(const _wstring& strTimerTag);
-	_float Compute_TimeDelta(const _wstring& strTimerTag);	
+	_float Compute_TimeDelta(const _wstring& strTimerTag);
+	void Start_TimerLack(const _wstring& strTimerTag, _float fLackTimeDelta = 0.f, _float fDuration = 0.1f);
 #pragma endregion
 
 #pragma region RENDERER

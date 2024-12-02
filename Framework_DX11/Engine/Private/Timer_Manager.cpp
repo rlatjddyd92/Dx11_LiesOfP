@@ -27,6 +27,15 @@ _float CTimer_Manager::Compute_TimeDelta(const _wstring & strTimerTag)
 	return pTimer->Get_TimeDelta();	
 }
 
+void CTimer_Manager::Start_Lack(const _wstring& strTimerTag, _float fLackTimeDelta, _float fDuration)
+{
+	CTimer* pTimer = Find_Timer(strTimerTag);
+	if (nullptr == pTimer)
+		return;
+
+	pTimer->Start_Lack(fLackTimeDelta, fDuration);
+}
+
 
 
 

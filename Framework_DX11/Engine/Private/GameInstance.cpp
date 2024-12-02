@@ -386,6 +386,11 @@ _float CGameInstance::Compute_TimeDelta(const _wstring & strTimerTag)
 	return m_pTimer_Manager->Compute_TimeDelta(strTimerTag);
 }
 
+void CGameInstance::Start_TimerLack(const _wstring& strTimerTag, _float fLackTimeDelta, _float fDuration)
+{
+	m_pTimer_Manager->Start_Lack(strTimerTag, fLackTimeDelta, fDuration);
+}
+
 #pragma endregion
 
 
