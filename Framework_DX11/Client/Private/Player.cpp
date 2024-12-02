@@ -491,9 +491,16 @@ void CPlayer::Play_CurrentWeaponSound(const _uint iType, const TCHAR* pSoundKey,
 	m_pWeapon[iType]->Play_Sound(CWeapon::WEP_SOUND_TYPE(iType), pSoundKey, iHandIndex);
 }
 
-void CPlayer::Active_Effect(const EFFECT_TYPE& eType)
+void CPlayer::Active_Effect(const EFFECT_TYPE& eType, _bool isLoop)
 {
-	m_Effects[eType]->Set_Loop(true);
+	if (isLoop)
+	{
+		m_Effects[eType]->Set_Loop(true);
+	}
+	else
+	{
+		m_Effects[eType]->Reset_Effects();
+	}
 }
 void CPlayer::DeActive_Effect(const EFFECT_TYPE& eType)
 {
@@ -651,16 +658,29 @@ HRESULT CPlayer::Ready_FSM()
 
 HRESULT CPlayer::Ready_Effect()
 {
+	m_pEffect_Manager = CEffect_Manager::Get_Instance();
+	if (nullptr == m_pEffect_Manager)
+		return E_FAIL;
+	Safe_AddRef(m_pEffect_Manager);
+
 	m_Effects.resize(EFFECT_END);
 
 	const _Matrix* pParetnMatrix = m_pTransformCom->Get_WorldMatrix_Ptr();
 	const _Matrix* pSocketBoneMatrix = m_pModelCom->Get_BoneCombindTransformationMatrix_Ptr("BN_Weapon_R");
 
-	m_Effects[RAPIER_TRAIL_FIRST] = CEffect_Manager::Get_Instance()->Clone_Effect(TEXT("Player_Attack_Rapier_StormStab_First"), pParetnMatrix,
-		pSocketBoneMatrix, _Vec3(0.f, 0.f, 0.f), _Vec3(0.f, 180.f, 0.f), _Vec3(1.f, 1.f, 1.f));;
+	m_Effects[EFFECT_RAPIER_TRAIL_FIRST] = m_pEffect_Manager->Clone_Effect(TEXT("Player_Attack_Rapier_StormStab_First"), pParetnMatrix,
+		pSocketBoneMatrix, _Vec3(0.f, 0.f, 0.f), _Vec3(0.f, 0.f, 0.f), _Vec3(1.f, 1.f, 1.f));
 
-	m_Effects[RAPIER_TRAIL_SECOND] = CEffect_Manager::Get_Instance()->Clone_Effect(TEXT("Player_Attack_Rapier_StormStab_Second"), pParetnMatrix,
-		pSocketBoneMatrix, _Vec3(0.f, 0.f, 0.f), _Vec3(0.f, 180.f, 0.f), _Vec3(1.f, 1.f, 1.f));;
+	m_Effects[EFFECT_RAPIER_TRAIL_SECOND] = m_pEffect_Manager->Clone_Effect(TEXT("Player_Attack_Rapier_StormStab_Second"), pParetnMatrix,
+		pSocketBoneMatrix, _Vec3(0.f, 0.f, 0.f), _Vec3(0.f, 0.f, 0.f), _Vec3(1.f, 1.f, 1.f));
+
+	pSocketBoneMatrix = m_pModelCom->Get_BoneCombindTransformationMatrix_Ptr("Bn_L_ForeTwist");
+	m_Effects[EFFECT_GRIND] = m_pEffect_Manager->Clone_Effect(TEXT("Player_Grind"), pParetnMatrix,
+		pSocketBoneMatrix, _Vec3(0.f, 0.f, 0.f), _Vec3(0.f, 0.f, 0.f), _Vec3(1.f, 1.f, 1.f));
+
+	pSocketBoneMatrix = m_pModelCom->Get_BoneCombindTransformationMatrix_Ptr("BN_Weapon_L");
+	m_Effects[EFFECT_HEAL] = m_pEffect_Manager->Clone_Effect(TEXT("Player_Potion"), pParetnMatrix,
+		pSocketBoneMatrix, _Vec3(0.f, 0.f, 0.f), _Vec3(0.f, 0.f, 0.f), _Vec3(1.f, 1.f, 1.f));
 
 
 	return S_OK;
@@ -671,15 +691,20 @@ _bool CPlayer::Calc_DamageGain(_float fAtkDmg, _Vec3 vHitPos)
 	if (fAtkDmg <= 0.f)
 		return false;
 
+	const _Matrix* pParetnMatrix = m_pTransformCom->Get_WorldMatrix_Ptr();
+	const _Matrix* pSocketBoneMatrix = m_pModelCom->Get_BoneCombindTransformationMatrix_Ptr("BN_Weapon_R");
+
 	if (m_isGuard)
 	{
 		//∆€∆Â∆Æ ∞°µÂ
 		if (m_fGuardTime < 0.2f)
 		{
-			m_pGameInstance->Start_TimerLack(TEXT("Timer_60"));
+			m_pEffect_Manager->Add_Effect_ToLayer(LEVEL_GAMEPLAY, TEXT("Player_PerfectGuard"), pParetnMatrix, pSocketBoneMatrix);
+			m_pGameInstance->Start_TimerLack(TEXT("Timer_60"), 0.01f, 1.f);
 		}
 		else
 		{
+			m_pEffect_Manager->Add_Effect_ToLayer(LEVEL_GAMEPLAY, TEXT("Player_Guard"), pParetnMatrix, pSocketBoneMatrix);
 			m_tPlayer_Stat->vGauge_Hp.x = max(0.f, m_tPlayer_Stat->vGauge_Hp.x - fAtkDmg * 0.7f);
 		}
 
@@ -701,6 +726,8 @@ _bool CPlayer::Calc_DamageGain(_float fAtkDmg, _Vec3 vHitPos)
 		m_tPlayer_Stat->vGauge_Hp.y = m_tPlayer_Stat->vGauge_Hp.x;
 		if (fAtkDmg > 0.f)
 			m_pFsmCom->Change_State(HIT, &HitDesc);
+
+		m_pEffect_Manager->Add_Effect_ToLayer(LEVEL_GAMEPLAY, TEXT("Player_Impact"), pParetnMatrix, pSocketBoneMatrix);
 	}
 	//if (m_eStat.fHp <= 0.f)
 	//	m_pFsmCom->Change_State(HIT);
@@ -899,6 +926,7 @@ void CPlayer::Free()
 		Safe_Release(pEffect);
 	}
 	m_Effects.clear();
+	Safe_Release(m_pEffect_Manager);
 
 	for (_uint i = 0; i < WEP_END; ++i)
 	{

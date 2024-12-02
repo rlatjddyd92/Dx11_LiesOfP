@@ -44,6 +44,8 @@ HRESULT CState_Player_Grinder::Start_State(void* pArg)
     m_isChange[1] = false;
     m_isChange[2] = false;
 
+    m_pPlayer->Active_Effect(CPlayer::EFFECT_GRIND);
+
     return S_OK;
 }
 
@@ -61,8 +63,8 @@ void CState_Player_Grinder::Update(_float fTimeDelta)
             if (m_pPlayer->Get_EndAnim(m_iAnimation_Grinder[0], true)
                 || m_pPlayer->Get_EndAnim(m_iAnimation_Grinder[0]))
             {
-                m_isChange[0] = true;
                 m_pPlayer->Change_Animation(m_iAnimation_Grinder[1], true, 0.f, 0, true);
+                m_isChange[0] = true;
             }
             else
             {
@@ -82,15 +84,18 @@ void CState_Player_Grinder::Update(_float fTimeDelta)
         }
     }
 
-    if (KEY_NONE(KEY::R))
+    if (KEY_AWAY(KEY::R))
     {
-
         m_pPlayer->Change_Animation(m_iAnimation_Grinder[2], false, 0.1f);
-
+        m_pPlayer->DeActive_Effect(CPlayer::EFFECT_GRIND);
+    }
+    else if (KEY_NONE(KEY::R))
+    {
         if (iCurAnim_Boundry == m_iAnimation_Grinder[2])
         {
             if (m_pPlayer->Get_EndAnim(m_iAnimation_Grinder[2], true) || m_pPlayer->Get_EndAnim(m_iAnimation_Grinder[2]))
             {
+                m_pPlayer->DeActive_Effect(CPlayer::EFFECT_GRIND);
                 m_pPlayer->Change_State(CPlayer::OH_IDLE);
                 return;
             }
@@ -105,6 +110,7 @@ void CState_Player_Grinder::Update(_float fTimeDelta)
 
 void CState_Player_Grinder::End_State()
 {
+    m_pPlayer->DeActive_Effect(CPlayer::EFFECT_GRIND);
 }
 
 _bool CState_Player_Grinder::End_Check()

@@ -137,6 +137,8 @@ HRESULT CEffect_Container::Add_Effect(class CEffect_Base* pEffectBase)
 
 HRESULT CEffect_Container::Reset_Effects()
 {
+	m_isDead = false;
+
 	for (auto& Effect : m_Effects)
 	{
 		Effect->Reset();

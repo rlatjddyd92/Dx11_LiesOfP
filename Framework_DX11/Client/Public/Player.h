@@ -18,7 +18,8 @@ public:
 
 	enum EFFECT_TYPE 
 	{
-		RAPIER_TRAIL_FIRST, RAPIER_TRAIL_SECOND,
+		EFFECT_RAPIER_TRAIL_FIRST, EFFECT_RAPIER_TRAIL_SECOND,
+		EFFECT_GRIND, EFFECT_HEAL,
 
 		EFFECT_END
 	};
@@ -170,7 +171,7 @@ public:
 
 	void			Play_CurrentWeaponSound(const _uint iType, const TCHAR* pSoundKey, _uint iHandIndex = 1);
 
-	void			Active_Effect(const EFFECT_TYPE& eType);
+	void			Active_Effect(const EFFECT_TYPE& eType, _bool isLoop = true);
 	void			DeActive_Effect(const EFFECT_TYPE& eType);
 
 	virtual _bool	Calc_DamageGain(_float fAtkDmg, _Vec3 vHitPos = { 0.f,0.f,0.f }) override;
@@ -180,8 +181,10 @@ public:
 	void			Decrease_Region(_uint iRegionCount = 1);
 	void			Recovery_Region(_float fAmount = 10.f);
 
+	/* Effect */
 private:
 	vector<class CEffect_Container*> m_Effects;
+	class CEffect_Manager* m_pEffect_Manager = { nullptr };
 
 private:
 	CPlayerCamera*		m_pPlayerCamera = { nullptr };
