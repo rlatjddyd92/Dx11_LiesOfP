@@ -41,6 +41,8 @@ HRESULT CState_Player_Scissor_Fatal0::Start_State(void* pArg)
     m_isInputRButton = false;
     m_fRButtonTime = 0.f;
 
+    m_pPlayer->Decrease_Region();
+
     return S_OK;
 }
 

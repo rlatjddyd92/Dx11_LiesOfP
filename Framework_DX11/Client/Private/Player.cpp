@@ -711,6 +711,8 @@ _bool CPlayer::Decrease_Stamina(_float fAmount)
 		m_tPlayer_Stat->vGauge_Stamina.x = 0.f;
 		return false;
 	}
+	m_tPlayer_Stat->vGauge_Stamina.y = m_tPlayer_Stat->vGauge_Stamina.x;
+
 	m_fStaminaRecoveryTime = 1.3f;	// 1.3f초 후에 회복
 
 	return true;
@@ -721,11 +723,15 @@ _bool CPlayer::Decrease_Region(_uint iRegionCount)
 	_float fCurretnRegion = m_tPlayer_Stat->vGauge_Region.x;
 	for (_uint i = 0; i < iRegionCount; ++i)
 	{
-		fCurretnRegion -= m_tPlayer_Stat->fRegion_Interval * iRegionCount;
+		fCurretnRegion -= m_tPlayer_Stat->fRegion_Interval;
 
 		if (fCurretnRegion < 0.f)
 			return false;
 	}
+
+	m_tPlayer_Stat->vGauge_Region.x = fCurretnRegion;
+	m_tPlayer_Stat->vGauge_Region.y = m_tPlayer_Stat->vGauge_Region.x;
+
 
 	return true;
 }

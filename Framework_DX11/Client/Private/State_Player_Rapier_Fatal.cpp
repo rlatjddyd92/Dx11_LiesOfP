@@ -53,6 +53,7 @@ HRESULT CState_Player_Rapier_Fatal::Start_State(void* pArg)
     m_isActiveEffect[0] = false;
     m_isActiveEffect[1] = false;
 
+    m_pPlayer->Decrease_Region(3);
     //m_pPlayer->Active_Effect(TEXT("Player_Attack_Rapier_StormStab_First_Ready"));
     
     return S_OK;

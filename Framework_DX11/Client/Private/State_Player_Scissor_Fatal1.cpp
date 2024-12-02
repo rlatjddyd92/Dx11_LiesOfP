@@ -43,6 +43,8 @@ HRESULT CState_Player_Scissor_Fatal1::Start_State(void* pArg)
 
     m_iComboIndex = 0;
 
+    m_pPlayer->Decrease_Region();
+
     return S_OK;
 }
 
