@@ -124,6 +124,7 @@ void CS_SPREAD_MAIN(uint3 DTid : SV_DispatchThreadID)
     vMoveDir.y -= fGravity * particle.vLifeTime.y;
     
     particle.vTranslation = particle.vTranslation + (vMoveDir * fTimeDelta + vRotateDir) * fAddSpeed;
+    particle.vLook = normalize(vMoveDir * fTimeDelta + vRotateDir);
 
     if ((iState & STATE_LOOP) && (particle.vLifeTime.y >= particle.vLifeTime.x))
     {
@@ -132,9 +133,10 @@ void CS_SPREAD_MAIN(uint3 DTid : SV_DispatchThreadID)
         particle.vTranslation = mul(particle.vTranslation, WorldMatrix);
         particle.vRight = vWorldPivot;
         particle.vUp = float4(vOrbitAxis.x, vOrbitAxis.y, vOrbitAxis.z, 0.f);
+        
+        particle.vLook = particle.vTranslation - particle.vRight;
     }
 
-    particle.vLook = normalize(vMoveDir * fTimeDelta + vRotateDir);
     particles[iIndex] = particle;
 }
 
@@ -218,6 +220,8 @@ void CS_MOVE_MAIN(uint3 DTid : SV_DispatchThreadID)
         particle.vTranslation = mul(particle.vTranslation, WorldMatrix);
         particle.vRight = vWorldPivot;
         particle.vUp = float4(vOrbitAxis.x, vOrbitAxis.y, vOrbitAxis.z, 0.f);
+        
+        particle.vLook = particle.vTranslation - particle.vRight;
     }
     
     
@@ -239,8 +243,6 @@ void CS_CONVERGE_MAIN(uint3 DTid : SV_DispatchThreadID)
     if (0.f == pad_1.x)
     {
         particle.vTranslation = mul(particle.vTranslation, WorldMatrix);
-        particle.vRight = vWorldPivot;
-        particle.vUp = float4(vOrbitAxis.x, vOrbitAxis.y, vOrbitAxis.z, 0.f);
     }
     
     float4 vDir = vWorldPivot - particle.vTranslation;
@@ -268,9 +270,8 @@ void CS_CONVERGE_MAIN(uint3 DTid : SV_DispatchThreadID)
     float4 vRotateDir = (float4) 0;
     if (iState & STATE_ORBIT)
     {
-        float4 vTargetDir = particle.vRight - particle.vTranslation;
-        float3 vAxis = float3(particle.vUp.x, particle.vUp.y, particle.vUp.z);
-        vRotateDir = float4(RotateByAxis(vTargetDir.xyz, vAxis, radians(fOrbitAngle) * fTimeDelta), 0.f);
+        float4 vTargetDir = vWorldPivot - particle.vTranslation;
+        vRotateDir = float4(RotateByAxis(vTargetDir.xyz, vOrbitAxis, radians(fOrbitAngle) * fTimeDelta), 0.f);
         vRotateDir = vTargetDir - vRotateDir;
     }
     
@@ -301,8 +302,8 @@ void CS_CONVERGE_MAIN(uint3 DTid : SV_DispatchThreadID)
         particle.vLook = normalize(vDir * particle.fSpeed * fTimeDelta + vRotateDir);
         particle.vLifeTime.y = 0.f;
         particle.vTranslation = mul(particle.vTranslation, WorldMatrix);
-        particle.vRight = vWorldPivot;
-        particle.vUp = float4(vOrbitAxis.x, vOrbitAxis.y, vOrbitAxis.z, 0.f);
+        
+        particle.vLook = particle.vTranslation - vWorldPivot;
     }
     
     
@@ -372,14 +373,14 @@ void CS_SPREAD_LOCAL_MAIN(uint3 DTid : SV_DispatchThreadID)
     vMoveDir += normalize(vGravityDir) * fGravity * particle.vLifeTime.y;
     
     particle.vTranslation = particle.vTranslation + (vMoveDir * fTimeDelta + vRotateDir) * fAddSpeed;
-    
+    particle.vLook = normalize(vMoveDir * fTimeDelta + vRotateDir);
+
     if ((iState & STATE_LOOP) && (particle.vLifeTime.y >= particle.vLifeTime.x))
     {
         particle = InitParticles[iIndex];
         particle.vLifeTime.y = 0.f;
+        particle.vLook = particle.vTranslation - vPivot;
     }
-    
-    particle.vLook = normalize(vMoveDir * fTimeDelta + vRotateDir);
     
     particles[iIndex] = particle;
 }
