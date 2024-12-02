@@ -25,13 +25,7 @@ HRESULT CEffect_Manager::Initialize(ID3D11Device* pDevice, ID3D11DeviceContext* 
     m_pContext = pContext;
     Safe_AddRef(m_pContext);
 
-    if(FAILED(Load_Effects(strEffectPath)))
-        return E_FAIL;
-
     if(FAILED(Load_Textures(strTexturePath)))
-        return E_FAIL;
-
-    if(FAILED(Load_EffectContainers(strEffectPath)))
         return E_FAIL;
 
     if(FAILED(Load_Models()))
@@ -43,7 +37,10 @@ HRESULT CEffect_Manager::Initialize(ID3D11Device* pDevice, ID3D11DeviceContext* 
     if(FAILED(Load_Objects()))
         return E_FAIL;
 
-    if (FAILED(Pooling()))
+    if (FAILED(Load_Effects(strEffectPath)))
+        return E_FAIL;
+
+    if (FAILED(Load_EffectContainers(strEffectPath)))
         return E_FAIL;
 
     return S_OK;
@@ -384,12 +381,27 @@ HRESULT CEffect_Manager::Load_EffectContainers(const _wstring& strEffectPath)
                 strFileName = strFileName.substr(0, dotPos);
 
                 m_EffectContainers.emplace(strFileName, EffectNames);
+
+                CEffect_Container::EFFECT_DESC desc = {};
+                desc.fRotationPerSec = XMConvertToRadians(90.f);
+                desc.fSpeedPerSec = 1.f;
+                desc.iLevelIndex = LEVEL_GAMEPLAY;
+                desc.pParentMatrix = nullptr;
+                desc.pSocketMatrix = nullptr;
+                desc.vPos = _Vec3(0.f, 0.f, 0.f);
+                desc.vDir = _Vec3(0.f, 0.f, 0.f);
+                desc.vScale = _Vec3(1.f, 1.f, 1.f);
+
+                Effect_Pooling(strFileName, &desc, 1);
+
                 EffectNames.clear();
             }
         }
     }
     // 핸들 닫기
     FindClose(hFind);
+
+
 
     return S_OK;
 
@@ -808,136 +820,98 @@ CEffect_Container* CEffect_Manager::Clone_Effect_From_Prototype(const _wstring& 
 
         if (TEXT("PE") == strFileExtention)
         {
-            pEffectContainer->Add_Effect(Clone_ParticleEffect(strEffectName));
+            CParticle_Effect* pEffect = Clone_ParticleEffect(strEffectName);
+
+            if (nullptr == pEffect)
+                return nullptr;
+
+            pEffectContainer->Add_Effect(pEffect);
         }
         else if (TEXT("TE") == strFileExtention)
         {
-            pEffectContainer->Add_Effect(Clone_TextureEffect(strEffectName));
+            CTexture_Effect* pEffect = Clone_TextureEffect(strEffectName);
+
+            if (nullptr == pEffect)
+                return nullptr;
+
+            pEffectContainer->Add_Effect(pEffect);
         }
         else if (TEXT("ME") == strFileExtention)
         {
-            pEffectContainer->Add_Effect(Clone_MeshEffect(strEffectName));
+            CMesh_Effect* pEffect = Clone_MeshEffect(strEffectName);
+
+            if (nullptr == pEffect)
+                return nullptr;
+
+            pEffectContainer->Add_Effect(pEffect);
         }
         else if (TEXT("TOP") == strFileExtention)
         {
-            pEffectContainer->Add_Effect(Clone_TrailOP_Effect(strEffectName));
+            CTrail_Effect_OP* pEffect = Clone_TrailOP_Effect(strEffectName);
+
+            if (nullptr == pEffect)
+                return nullptr;
+
+            pEffectContainer->Add_Effect(pEffect);
         }
         else if (TEXT("TTP") == strFileExtention)
         {
-            pEffectContainer->Add_Effect(Clone_TrailTP_Effect(strEffectName));
+            CTrail_Effect_TP* pEffect = Clone_TrailTP_Effect(strEffectName);
+
+            if (nullptr == pEffect)
+                return nullptr;
+
+            pEffectContainer->Add_Effect(pEffect);
         }
         else if (TEXT("TMP") == strFileExtention)
         {
-            pEffectContainer->Add_Effect(Clone_TrailMP_Effect(strEffectName));
+            CTrail_Effect_MP* pEffect = Clone_TrailMP_Effect(strEffectName);
+
+            if (nullptr == pEffect)
+                return nullptr;
+
+            pEffectContainer->Add_Effect(pEffect);
         }
     }
 
     return pEffectContainer;
 }
 
-HRESULT CEffect_Manager::Pooling()
+HRESULT CEffect_Manager::Effect_Pooling(const _wstring& strECTag, void* pArg, size_t iSize)
 {
-    CEffect_Container::EFFECT_DESC desc = {};
-    desc.fRotationPerSec = XMConvertToRadians(90.f);
-    desc.fSpeedPerSec = 1.f;
-    desc.iLevelIndex = LEVEL_GAMEPLAY;
-    desc.pParentMatrix = nullptr;
-    desc.pSocketMatrix = nullptr;
-    desc.vPos = _Vec3(0.f, 0.f, 0.f);
-    desc.vDir = _Vec3(0.f, 0.f, 0.f);
-    desc.vScale = _Vec3(1.f, 1.f, 1.f);
-
-    if(FAILED(Effect_Pooling(TEXT("Monster_Impact"), &desc)))
-        return E_FAIL;
-
-    if(FAILED(Effect_Pooling(TEXT("Monster_Impact_Death"), &desc)))
-        return E_FAIL;
-
-    if(FAILED(Effect_Pooling(TEXT("Player_Attack_Rapier_StormStab_First"), &desc)))
-        return E_FAIL;
-
-    if(FAILED(Effect_Pooling(TEXT("Player_Attack_Rapier_StormStab_First_Ready"), &desc)))
-        return E_FAIL;
-
-    if(FAILED(Effect_Pooling(TEXT("Player_Attack_Rapier_StormStab_Second"), &desc)))
-        return E_FAIL;
-
-    if(FAILED(Effect_Pooling(TEXT("Player_Attack_Rapier_StormStab_Second_Ready"), &desc)))
-        return E_FAIL;
-
-    if(FAILED(Effect_Pooling(TEXT("Player_Attack_Step_Normal"), &desc)))
-        return E_FAIL;
-
-    if(FAILED(Effect_Pooling(TEXT("SimonManus_Attack_BlackBall_Big"), &desc)))
-        return E_FAIL;
-
-    if(FAILED(Effect_Pooling(TEXT("SimonManus_Attack_BlackBall_Expand"), &desc)))
-        return E_FAIL;
-
-    if(FAILED(Effect_Pooling(TEXT("SimonManus_Attack_BlackBall_Explosion"), &desc)))
-        return E_FAIL;
-
-    if(FAILED(Effect_Pooling(TEXT("SimonManus_Attack_BlackBall_Impact"), &desc)))
-        return E_FAIL;
-
-    if(FAILED(Effect_Pooling(TEXT("SimonManus_Attack_BlackBall_Small"), &desc)))
-        return E_FAIL;
-
-    if(FAILED(Effect_Pooling(TEXT("SimonManus_Attack_BlackBall_Throw"), &desc)))
-        return E_FAIL;
-
-    if(FAILED(Effect_Pooling(TEXT("SimonManus_Attack_ChargeStamp"), &desc)))
-        return E_FAIL;
-
-    if(FAILED(Effect_Pooling(TEXT("SimonManus_Attack_ChargeStamp2"), &desc)))
-        return E_FAIL;
-
-    if(FAILED(Effect_Pooling(TEXT("SimonManus_Attack_ChargeSwing"), &desc)))
-        return E_FAIL;
-
-    if(FAILED(Effect_Pooling(TEXT("SimonManus_Attack_GoldBall"), &desc)))
-        return E_FAIL;
-
-    if(FAILED(Effect_Pooling(TEXT("SimonManus_Attack_JumpMagic"), &desc)))
-        return E_FAIL;
-
-    if(FAILED(Effect_Pooling(TEXT("SimonManus_Attack_LightningSpear"), &desc)))
-        return E_FAIL;
-
-    if(FAILED(Effect_Pooling(TEXT("SimonManus_Attack_SlideMagic"), &desc)))
-        return E_FAIL;
-
-    if(FAILED(Effect_Pooling(TEXT("SimonManus_Attack_Stamp"), &desc)))
-        return E_FAIL;
-
-    if(FAILED(Effect_Pooling(TEXT("SimonManus_Attack_Swing"), &desc)))
-        return E_FAIL;
-
-    return S_OK;
-}
-
-HRESULT CEffect_Manager::Effect_Pooling(const _wstring& strECTag, void* pArg)
-{
-    // 찾아봤는데 안돌아가는 게 없으면 새로 만들어서 넣고 반환.
-    CEffect_Container* pContainer = Clone_Effect_From_Prototype(strECTag, pArg);
-    
-    if (nullptr == pContainer)
-        return E_FAIL;
-
-    pContainer->Set_Dead(true);
-
     auto& iter = m_EffectPooling.find(strECTag);
 
     if (m_EffectPooling.end() == iter)
     {
         vector<CEffect_Container*> Containers;
-        Containers.emplace_back(pContainer);
+
+        for(size_t i = 0; i < iSize; ++i)
+        {
+            CEffect_Container* pContainer = Clone_Effect_From_Prototype(strECTag, pArg);
+
+            if (nullptr == pContainer)
+                return E_FAIL;
+
+            pContainer->Set_Dead(true);
+
+            Containers.emplace_back(pContainer);
+        }
 
         m_EffectPooling.emplace(strECTag, Containers);
     }
     else
     {
-        iter->second.emplace_back(pContainer);
+        for (size_t i = 0; i < iSize; ++i)
+        {
+            CEffect_Container* pContainer = Clone_Effect_From_Prototype(strECTag, pArg);
+
+            if (nullptr == pContainer)
+                return E_FAIL;
+
+            pContainer->Set_Dead(true);
+
+            iter->second.emplace_back(pContainer);
+        }
     }
 
     return S_OK;
