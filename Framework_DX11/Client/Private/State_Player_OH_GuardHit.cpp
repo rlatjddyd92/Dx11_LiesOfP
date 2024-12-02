@@ -41,6 +41,7 @@ HRESULT CState_Player_OH_GuardHit::Start_State(void* pArg)
         m_pPlayer->Change_Animation(m_iAnimation_GuardHit_Normal, false, 0.f);
     }
 
+    m_pPlayer->Set_IsGuard(true);
 
     return S_OK;
 }

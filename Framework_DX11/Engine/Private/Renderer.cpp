@@ -1762,7 +1762,7 @@ HRESULT CRenderer::Ready_Bloom()
 	//	return E_FAIL;
 
 	m_tBloom.isOnBloom = true;
-	m_tBloom.fThreshold = 0.5f;
+	m_tBloom.fThreshold = -0.5f;
 
 	return S_OK;
 }

@@ -700,7 +700,7 @@ _bool CPlayer::Calc_DamageGain(_float fAtkDmg, _Vec3 vHitPos)
 		if (m_fGuardTime < 0.2f)
 		{
 			m_pEffect_Manager->Add_Effect_ToLayer(LEVEL_GAMEPLAY, TEXT("Player_PerfectGuard"), pParetnMatrix, pSocketBoneMatrix);
-			m_pGameInstance->Start_TimerLack(TEXT("Timer_60"), 0.01f, 1.f);
+			m_pGameInstance->Start_TimerLack(TEXT("Timer_60"), 0.001f, 1.f);
 		}
 		else
 		{
