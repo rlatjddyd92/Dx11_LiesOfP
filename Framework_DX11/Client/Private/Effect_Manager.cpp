@@ -46,7 +46,7 @@ HRESULT CEffect_Manager::Initialize(ID3D11Device* pDevice, ID3D11DeviceContext* 
     return S_OK;
 }
 
-CEffect_Container* CEffect_Manager::Clone_Effect(const _wstring& strECTag, const _Matrix* pParentMatrix, const _Matrix* pSocketMatrix, _Vec3 vPos, _Vec3 vRotation, _Vec3 vScale)
+CEffect_Container* CEffect_Manager::Clone_Effect(const _wstring& strECTag, const _Matrix* pParentMatrix, const _Matrix* pSocketMatrix, _Vec3 vPos, _Vec3 vDir, _Vec3 vScale)
 {
     CEffect_Container::EFFECT_DESC desc = {};
 
@@ -56,7 +56,7 @@ CEffect_Container* CEffect_Manager::Clone_Effect(const _wstring& strECTag, const
     desc.pParentMatrix = pParentMatrix;
     desc.pSocketMatrix = pSocketMatrix;
     desc.vPos = vPos;
-    desc.vRotation = vRotation;
+    desc.vDir = vDir;
     desc.vScale = vScale;
 
     CEffect_Container* pContainer = Find_PoolingEffect(strECTag, &desc);
@@ -67,7 +67,7 @@ CEffect_Container* CEffect_Manager::Clone_Effect(const _wstring& strECTag, const
 }
 
 
-HRESULT CEffect_Manager::Add_Effect_ToLayer(_uint iLevelID, const _wstring& strECTag, _Vec3 vPos, _Vec3 vRotation, _Vec3 vScale)
+HRESULT CEffect_Manager::Add_Effect_ToLayer(_uint iLevelID, const _wstring& strECTag, _Vec3 vPos, _Vec3 vDir, _Vec3 vScale)
 {
     CEffect_Container::EFFECT_DESC desc = {};
 
@@ -77,13 +77,13 @@ HRESULT CEffect_Manager::Add_Effect_ToLayer(_uint iLevelID, const _wstring& strE
     desc.pParentMatrix = nullptr;
     desc.pSocketMatrix = nullptr;
     desc.vPos = vPos;
-    desc.vRotation = vRotation;
+    desc.vDir = vDir;
     desc.vScale = vScale;
 
     return m_pGameInstance->Add_Object_ToLayer(desc.iLevelIndex, TEXT("Layer_Effect"), Find_PoolingEffect(strECTag, &desc));
 }
 
-HRESULT CEffect_Manager::Add_Effect_ToLayer(_uint iLevelID, const _wstring& strECTag, const _Matrix* pParentMatrix, const _Matrix* pSocketMatrix, _Vec3 vPos, _Vec3 vRotation, _Vec3 vScale)
+HRESULT CEffect_Manager::Add_Effect_ToLayer(_uint iLevelID, const _wstring& strECTag, const _Matrix* pParentMatrix, const _Matrix* pSocketMatrix, _Vec3 vPos, _Vec3 vDir, _Vec3 vScale)
 {
     CEffect_Container::EFFECT_DESC desc = {};
 
@@ -93,7 +93,7 @@ HRESULT CEffect_Manager::Add_Effect_ToLayer(_uint iLevelID, const _wstring& strE
     desc.pParentMatrix = pParentMatrix;
     desc.pSocketMatrix = pSocketMatrix;
     desc.vPos = vPos;
-    desc.vRotation = vRotation;
+    desc.vDir = vDir;
     desc.vScale = vScale;
 
     return m_pGameInstance->Add_Object_ToLayer(desc.iLevelIndex, TEXT("Layer_Effect"), Find_PoolingEffect(strECTag, &desc));

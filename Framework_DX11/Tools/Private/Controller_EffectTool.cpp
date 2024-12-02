@@ -714,8 +714,14 @@ void CController_EffectTool::TE_Check()
 		ImGui::InputFloat("Alpha Speed TE", (_float*)&m_TextureDesc.DefaultDesc.fAlphaSpeed);
 		ImGui::SeparatorText("Shader");
 		ImGui::InputInt("Shader Index", (_int*)&m_TextureDesc.DefaultDesc.iShaderIndex);
-		ImGui::SeparatorText("Billboard");
-		ImGui::Checkbox("Preserve Rotation", &m_TextureDesc.DefaultDesc.bPreserveRotation);
+
+		ImGui::SeparatorText("Billboard Type");
+		ImGui::RadioButton("Billboard", (_int*)&m_TextureDesc.DefaultDesc.eBillboardType, CTexture_Effect::TYPE_BILLBOARD);
+		ImGui::SameLine();
+		ImGui::RadioButton("PreRotation", (_int*)&m_TextureDesc.DefaultDesc.eBillboardType, CTexture_Effect::TYPE_PREROTATION);
+		ImGui::SameLine();
+		ImGui::RadioButton("PreDir", (_int*)&m_TextureDesc.DefaultDesc.eBillboardType, CTexture_Effect::TYPE_PREDIR);
+
 		ImGui::SeparatorText("Loop");
 		ImGui::Checkbox("Texture Loop", &m_TextureDesc.DefaultDesc.bLoop);
 		ImGui::TreePop();
@@ -2190,11 +2196,25 @@ HRESULT CController_EffectTool::Load_Model()
 	Add_Model_ProtytypeTag(TEXT("Prototype_Component_Model_Effect_CrystalCloud"));
 
 	/* For. Prototype_Component_Model_Effect_HalfSphere */
-	PreTransformMatrix = XMMatrixRotationX(XMConvertToRadians(90.0f));
+	PreTransformMatrix = XMMatrixScaling(0.005f, 0.005f, 0.005f) * XMMatrixRotationX(XMConvertToRadians(90.0f));
 	if (FAILED(m_pGameInstance->Add_Prototype(LEVEL_TOOL, TEXT("Prototype_Component_Model_Effect_HalfSphere"),
 		CModel::Create(m_pDevice, m_pContext, CModel::TYPE_NONANIM, "../Bin/ModelData/NonAnim/Effect/Mesh_HalfSphere.dat", PreTransformMatrix))))
 		return E_FAIL;
 	Add_Model_ProtytypeTag(TEXT("Prototype_Component_Model_Effect_HalfSphere"));
+
+	/* For. Prototype_Component_Model_Effect_Sphere */
+	PreTransformMatrix = XMMatrixScaling(0.005f, 0.005f, 0.005f) * XMMatrixRotationX(XMConvertToRadians(90.0f));
+	if (FAILED(m_pGameInstance->Add_Prototype(LEVEL_TOOL, TEXT("Prototype_Component_Model_Effect_Sphere"),
+		CModel::Create(m_pDevice, m_pContext, CModel::TYPE_NONANIM, "../Bin/ModelData/NonAnim/Effect/SM_Sphere_02_KMH.dat", PreTransformMatrix))))
+		return E_FAIL;
+	Add_Model_ProtytypeTag(TEXT("Prototype_Component_Model_Effect_Sphere"));
+
+	/* For. Prototype_Component_Model_Effect_Wave */
+	PreTransformMatrix = XMMatrixScaling(0.005f, 0.005f, 0.005f);
+	if (FAILED(m_pGameInstance->Add_Prototype(LEVEL_TOOL, TEXT("Prototype_Component_Model_Effect_Wave"),
+		CModel::Create(m_pDevice, m_pContext, CModel::TYPE_NONANIM, "../Bin/ModelData/NonAnim/Effect/SM_Simon_Wave_01_HJS.dat", PreTransformMatrix))))
+		return E_FAIL;
+	Add_Model_ProtytypeTag(TEXT("Prototype_Component_Model_Effect_Wave"));
 
 	return S_OK;
 }

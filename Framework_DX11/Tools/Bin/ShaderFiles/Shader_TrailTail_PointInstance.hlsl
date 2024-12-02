@@ -490,8 +490,29 @@ PS_OUT PS_SMOKE_MAIN(PS_IN In)
     
     Out.vColor = g_DiffuseTexture.Sample(LinearSampler, Get_SpriteTexcoord(In.vTexcoord, iTexIndex));
     
+    if (In.vLifeTime.x < In.vLifeTime.y)
+        discard;
+    
+    Out.vColor.rgb *= In.vColor.rgb;
+    
+    Out.vColor.a *= 1.f - (In.vLifeTime.y / In.vLifeTime.x);
+    Out.vColor.a *= 2.f;
+    
+    return Out;
+}
+
+PS_OUT PS_SMOKE_LOWALPHA_MAIN(PS_IN In)
+{
+    PS_OUT Out = (PS_OUT) 0;
+    
+    int iTexIndex = (int) ((In.vLifeTime.y / In.vLifeTime.x) * (g_vTexDivide.x * g_vTexDivide.y - 1.f) * g_fSpriteSpeed);
+    
+    Out.vColor = g_DiffuseTexture.Sample(LinearSampler, Get_SpriteTexcoord(In.vTexcoord, iTexIndex));
+    
     if(In.vLifeTime.x < In.vLifeTime.y)
         discard;
+    
+    Out.vColor.rgb *= In.vColor.rgb;
     
     Out.vColor.a *= In.vLifeTime.y / In.vLifeTime.x;
     Out.vColor.a *= 1.f - (In.vLifeTime.y / In.vLifeTime.x);
@@ -550,7 +571,7 @@ PS_EFFECT_OUT PS_TRAIL_MAIN(PS_IN In)
     return Out;
 }
 
-PS_EFFECT_OUT PS_INDEXAURA_MAIN(PS_IN In)
+PS_EFFECT_OUT PS_AURA_EFFECT_MAIN(PS_IN In)
 {
     PS_EFFECT_OUT Out = (PS_EFFECT_OUT) 0;
     
@@ -575,6 +596,21 @@ PS_EFFECT_OUT PS_INDEXAURA_MAIN(PS_IN In)
     
     return Out;
 }
+
+PS_OUT PS_AURA_BLEND_MAIN(PS_IN In)
+{
+    PS_OUT Out = (PS_OUT) 0;
+    
+    int iTexIndex = In.vColor.a * g_vTexDivide.x * g_vTexDivide.y;
+    
+    Out.vColor = g_DiffuseTexture.Sample(LinearSampler, Get_SpriteTexcoord(In.vTexcoord, iTexIndex));
+    
+    Out.vColor.rgb *= In.vColor.rgb;
+    Out.vColor.a *= 1.f - (In.vLifeTime.y / In.vLifeTime.x);
+    
+    return Out;
+}
+
 
 technique11	DefaultTechnique
 {
@@ -633,7 +669,7 @@ technique11	DefaultTechnique
         PixelShader = compile ps_5_0 PS_INDEX_NORMAL_MAIN();
     }
 
-    pass PARTICLE_SMOKE // 5
+    pass PARTICLE_SMOKE_LOWALPHA // 5
     {
         SetRasterizerState(RS_Default);
         SetDepthStencilState(DSS_NonWrite, 0);
@@ -641,7 +677,7 @@ technique11	DefaultTechnique
 
         VertexShader = compile vs_5_0 VS_MAIN();
         GeometryShader = compile gs_5_0 GS_MAIN();
-        PixelShader = compile ps_5_0 PS_SMOKE_MAIN();
+        PixelShader = compile ps_5_0 PS_SMOKE_LOWALPHA_MAIN();
     }
 
     pass PARTICLE_FIRE // 6
@@ -666,7 +702,7 @@ technique11	DefaultTechnique
         PixelShader = compile ps_5_0 PS_TRAIL_MAIN();
     }
 
-    pass PARTICLE_INDEXAURA // 8
+    pass PARTICLE_AURA_EFFECT // 8
     {
         SetRasterizerState(RS_Default);
         SetDepthStencilState(DSS_Default, 0);
@@ -674,7 +710,29 @@ technique11	DefaultTechnique
 
         VertexShader = compile vs_5_0 VS_MAIN();
         GeometryShader = compile gs_5_0 GS_MAIN();
-        PixelShader = compile ps_5_0 PS_INDEXAURA_MAIN();
+        PixelShader = compile ps_5_0 PS_AURA_EFFECT_MAIN();
+    }
+
+    pass PARTICLE_SMOKE // 9
+    {
+        SetRasterizerState(RS_Default);
+        SetDepthStencilState(DSS_NonWrite, 0);
+        SetBlendState(BS_AlphaBlend, vector(0.f, 0.f, 0.f, 0.f), 0xffffffff);
+
+        VertexShader = compile vs_5_0 VS_MAIN();
+        GeometryShader = compile gs_5_0 GS_MAIN();
+        PixelShader = compile ps_5_0 PS_SMOKE_MAIN();
+    }
+
+    pass PARTICLE_AURA_BLEND // 10
+    {
+        SetRasterizerState(RS_Default);
+        SetDepthStencilState(DSS_NonWrite, 0);
+        SetBlendState(BS_AlphaBlend, vector(0.f, 0.f, 0.f, 0.f), 0xffffffff);
+
+        VertexShader = compile vs_5_0 VS_MAIN();
+        GeometryShader = compile gs_5_0 GS_MAIN();
+        PixelShader = compile ps_5_0 PS_AURA_BLEND_MAIN();
     }
 
 }

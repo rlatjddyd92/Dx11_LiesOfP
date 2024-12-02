@@ -35,10 +35,10 @@ public:
 	HRESULT Initialize(ID3D11Device* pDevice, ID3D11DeviceContext* pContext, const _wstring& strEffectPath, const _wstring strTexturePath);
 
 public:
-	class CEffect_Container* Clone_Effect(const _wstring& strECTag, const _Matrix* pParentMatrix, const _Matrix* pSocketMatrix, _Vec3 vPos = {}, _Vec3 vRotation = {}, _Vec3 vScale = {1.f, 1.f, 1.f});
+	class CEffect_Container* Clone_Effect(const _wstring& strECTag, const _Matrix* pParentMatrix, const _Matrix* pSocketMatrix, _Vec3 vPos = {}, _Vec3 vDir = {}, _Vec3 vScale = {1.f, 1.f, 1.f});
 
-	HRESULT Add_Effect_ToLayer(_uint iLevelID, const _wstring& strECTag, _Vec3 vPos = {}, _Vec3 vRotation = {}, _Vec3 vScale = { 1.f, 1.f, 1.f });
-	HRESULT Add_Effect_ToLayer(_uint iLevelID, const _wstring& strECTag, const _Matrix* pParentMatrix, const _Matrix* pSocketMatrix, _Vec3 vPos = {}, _Vec3 vRotation = {}, _Vec3 vScale = { 1.f, 1.f, 1.f });
+	HRESULT Add_Effect_ToLayer(_uint iLevelID, const _wstring& strECTag, _Vec3 vPos = {}, _Vec3 vDir = {}, _Vec3 vScale = { 1.f, 1.f, 1.f });
+	HRESULT Add_Effect_ToLayer(_uint iLevelID, const _wstring& strECTag, const _Matrix* pParentMatrix, const _Matrix* pSocketMatrix, _Vec3 vPos = {}, _Vec3 vDir = {}, _Vec3 vScale = { 1.f, 1.f, 1.f });
 
 
 private:

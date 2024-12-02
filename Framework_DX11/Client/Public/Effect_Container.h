@@ -18,7 +18,7 @@ public:
 
 		_Vec3 vPos = {};
 		_Vec3 vScale = { 1.f, 1.f, 1.f };
-		_Vec3 vRotation = {};
+		_Vec3 vDir = {};
 	} EFFECT_DESC;
 
 private:
