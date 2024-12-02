@@ -780,6 +780,12 @@
     </Filter>
     <Filter Include="02.GameObjects\12.AttackObject\SimonManus\SlideMagic">
       <UniqueIdentifier>{d094a52a-95e5-471b-bd7b-c42456ecf43c}</UniqueIdentifier>
+	</Filter>
+    <Filter Include="03.GameInterface_Controller\00.UIManager\00.UIPage\11.UIPage_Test">
+      <UniqueIdentifier>{c242bb98-b03b-45a1-9832-2f75d428ccd0}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="03.GameInterface_Controller\00.UIManager\00.UIPage\12.UIPage_Effect">
+      <UniqueIdentifier>{0410eb84-3479-4cd4-9076-27802a534320}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -1303,7 +1309,6 @@
     <ClInclude Include="..\Public\State_Player_Ladder.h">
       <Filter>05.Fsm\Player\Common\Ladder</Filter>
     </ClInclude>
-    <ClInclude Include="..\Public\UIRender_Client.h" />
     <ClInclude Include="..\Public\CarcassTail.h">
       <Filter>02.GameObjects\02.Pawn\01.Monster\CarcassTail</Filter>
     </ClInclude>
@@ -1426,6 +1431,12 @@
     </ClInclude>
     <ClInclude Include="..\Public\AObj_SlideMagic.h">
       <Filter>02.GameObjects\12.AttackObject\SimonManus\SlideMagic</Filter>
+	</ClInclude>
+    <ClInclude Include="..\Public\UIPage_Test.h">
+      <Filter>03.GameInterface_Controller\00.UIManager\00.UIPage\11.UIPage_Test</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Public\UIPage_Effect.h">
+      <Filter>03.GameInterface_Controller\00.UIManager\00.UIPage\12.UIPage_Effect</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -1919,7 +1930,6 @@
     <ClCompile Include="..\Private\State_Player_Ladder.cpp">
       <Filter>05.Fsm\Player\Common\Ladder</Filter>
     </ClCompile>
-    <ClCompile Include="..\Private\UIRender_Client.cpp" />
     <ClCompile Include="..\Private\CarcassTail.cpp">
       <Filter>02.GameObjects\02.Pawn\01.Monster\CarcassTail</Filter>
     </ClCompile>
@@ -2042,6 +2052,12 @@
     </ClCompile>
     <ClCompile Include="..\Private\AObj_SlideMagic.cpp">
       <Filter>02.GameObjects\12.AttackObject\SimonManus\SlideMagic</Filter>
+	</ClCompile>
+    <ClCompile Include="..\Private\UIPage_Test.cpp">
+      <Filter>03.GameInterface_Controller\00.UIManager\00.UIPage\11.UIPage_Test</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Private\UIPage_Effect.cpp">
+      <Filter>03.GameInterface_Controller\00.UIManager\00.UIPage\12.UIPage_Effect</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

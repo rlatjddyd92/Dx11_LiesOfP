@@ -49,8 +49,6 @@ HRESULT CMainApp::Initialize()
 
 void CMainApp::Update(_float fTimeDelta)
 {
-
-
 	m_pGameInstance->Update_Engine(fTimeDelta);
 
 	if (KEY_TAP(KEY::M))
@@ -81,6 +79,21 @@ void CMainApp::Update(_float fTimeDelta)
 		m_pGameInstance->Toggle_Shadow();
 	}
 
+	// 24-12-01 김성용 
+	// UI 연출 관련 테스트 코드 
+	if (KEY_HOLD(KEY::CTRL))
+	{
+		if (KEY_TAP(KEY::NUM6))
+			GET_GAMEINTERFACE->Fade_Out(TEXT("FadeOut_Test"), TEXT("FadeOut_Desc"), { 0.f,0.f,0.f }, 2.f);
+		if (KEY_TAP(KEY::NUM7))
+			GET_GAMEINTERFACE->Fade_In(2.f);
+		if (KEY_TAP(KEY::NUM8))
+			GET_GAMEINTERFACE->Show_Script(TEXT("테스트 대사 2줄 버전"), TEXT("테스트 대사 2줄 버전"), 3.f);
+		if (KEY_TAP(KEY::NUM9))
+			GET_GAMEINTERFACE->Show_Script(TEXT("테스트 대사 1줄 버전"), TEXT("none"), 3.f);
+	}
+
+	
 	// 24-11-09 김성용
 	// GameInterface 업데이트 
 	// ※ 인터페이스 업데이트를 분리하는 이유 

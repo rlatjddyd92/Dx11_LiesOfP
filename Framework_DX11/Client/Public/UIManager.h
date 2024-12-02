@@ -137,8 +137,6 @@ public:
 	}
 
 private:
-	void UIControl_Test(_float fTimeDelta);
-
 	void UIControl_Common(_float fTimeDelta);
 	void UIControl_Main(_float fTimeDelta);
 	void UIControl_Loading(_float fTimeDelta);
@@ -149,6 +147,7 @@ private:
 	void UIControl_Stat(_float fTimeDelta);
 	void UIControl_Option(_float fTimeDelta);
 	void UIControl_Skill(_float fTimeDelta);
+	void UIControl_Test(_float fTimeDelta);
 
 public:
 #pragma region Page_Main
@@ -220,7 +219,29 @@ public:
 	// 매 프레임 마다 함수를 사용해줘야 작동함 (Gameinterface가 외부 정보를 저장/관리하지 않도록 하기 위함)
 
 
+	_bool Fade_Out(_wstring strTitle, _wstring strDesc, _Vec3 vColor = _Vec3{ 0.f,0.f,0.f }, _float fTime = 1.f) 
+	{ 
+		if (m_eNowPage != UIPAGE::PAGE_END)
+		{
+			ClosePage(m_eNowPage);
+			m_eBeforePage = m_eNowPage;
+		}
+		m_pUIPage_Effect->Fade_Out(strTitle, strDesc, vColor, fTime);
+		return true;
+	}
+	_bool Fade_In(_float fTime = 1.f) 
+	{ 
+		if (m_eBeforePage != UIPAGE::PAGE_END)
+			OpenPage(m_eBeforePage);
+		m_pUIPage_Effect->Fade_In(fTime);
+		return true;
+	}
 
+	void Show_Script(_wstring strScript0, _wstring strScript1 = TEXT("none"), _float fTime = 1.f, _Vec3 vColor = _Vec3{ 0.f,0.f,0.f }) 
+	{
+		m_pUIPage_Effect->Show_Script(strScript0, strScript1, fTime, vColor);
+	}
+	_float Check_Fade() { return m_pUIPage_Effect->Check_Fade(); }
 
 private:
 	HRESULT Load_UIDataFile();
@@ -262,11 +283,14 @@ private:
 	CUIPage_Option* m_pUIPage_Option = { nullptr };
 	// 스킬트리
 	CUIPage_Skill* m_pUIPage_Skill = { nullptr };
-	// 테스트
+	// 아이템 조작 
 	CUIPage_ItemInfo* m_pUIPage_ItemInfo = { nullptr };
 	// 직교
 	CUIPage_Ortho* m_pUIPage_Ortho = { nullptr };
-
+	// 테스트
+	CUIPage_Test* m_pUIPage_Test = { nullptr };
+	// 효과 UI
+	CUIPage_Effect* m_pUIPage_Effect = { nullptr };
 
 	CUIRender_Batching* m_pUIRender_Batching = { nullptr };
 
@@ -274,9 +298,8 @@ private:
 
 	ITEM_FUNC m_eNow_Active_Func = ITEM_FUNC::FUNC_END;
 
-
-	// 플레이 모드 진입 
-	//_bool m_bPlayMode = false;
+	UIPAGE m_eNowPage = UIPAGE::PAGE_END;
+	UIPAGE m_eBeforePage = UIPAGE::PAGE_END;
 
 	// test code
 #ifdef _DEBUG
