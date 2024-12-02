@@ -170,17 +170,18 @@ public:
 				return false;
 
 			_float fMove_Y = fNow_Y - fMouse_Before_Y;
-			fMove_Y = max(fMove_Y, 0.f);
-			fMove_Y = min(fMove_Y, fBar_Move_Max_Length);
 
-			fScroll_Ratio = fMove_Y / fBar_Move_Max_Length;
+			fScroll_Ratio += fMove_Y / fBar_Move_Max_Length;
+
+			fScroll_Ratio = max(fScroll_Ratio, 0.f);
+			fScroll_Ratio = min(fScroll_Ratio, 1.f);
 
 			fData_Offset_Y = fData_Height_Max * fScroll_Ratio;
 
 			fMouse_Before_Y = fNow_Y;
 		}
 
-		_bool End_Bar_Moving()
+		void End_Bar_Moving()
 		{
 			bIsBarMoving = false;
 			fMouse_Before_Y = -1.0;

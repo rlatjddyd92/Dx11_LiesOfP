@@ -1,68 +1,52 @@
-﻿_TabNum,_TabName,_LineFunc,_LineName,_LineKey,_BoolLeftName,_BoolRightName,_SlideInt,_SlideMin,_SlideDefault,_SlideMax,_SlideInter,_DropSize,_Drop0,_Drop1,_Drop2,_Drop3,_Drop4,_Drop5,_Drop6,_Drop7,_Drop8,_Drop9,_Drop10,_Drop11,_Drop12,_Drop13,_Drop14
-0,그래픽,0,그래픽 0,00Graphic2,x,x,x,x,x,x,x,x,x,x,x,x,x,x,x,x,x,x,x,x,x,x,x
-0,그래픽,1,버튼,01Graphic3,x,x,x,x,x,x,x,x,x,x,x,x,x,x,x,x,x,x,x,x,x,x,x
-0,그래픽,2,불값,02Graphic4,왼쪽,오른쪽,x,x,x,x,x,x,x,x,x,x,x,x,x,x,x,x,x,x,x,x,x
-0,그래픽,3,드롭박스,03Graphic5,x,x,x,x,x,x,x,10,일,이,삼,사,오,월,이,삼,미,신,화,x,x,x,x
-0,그래픽,4,슬라이드,04Graphic6,x,x,0,0,0,10,1,x,x,x,x,x,x,x,x,x,x,x,x,x,x,x,x
-0,그래픽,0,그래픽 1,00Graphic7,x,x,x,x,x,x,x,x,x,x,x,x,x,x,x,x,x,x,x,x,x,x,x
-0,그래픽,1,버버튼,01Graphic8,x,x,x,x,x,x,x,x,x,x,x,x,x,x,x,x,x,x,x,x,x,x,x
-0,그래픽,2,불값,02Graphic9,왼쪽,오른쪽,x,x,x,x,x,x,x,x,x,x,x,x,x,x,x,x,x,x,x,x,x
-0,그래픽,3,드롭박스,03Graphic10,x,x,x,x,x,x,x,5,와,오,das,qwe,wqe,x,x,x,x,x,x,x,x,x,x
-0,그래픽,4,슬라이드,04Graphic11,x,x,1,5,7,10,1,x,x,x,x,x,x,x,x,x,x,x,x,x,x,x,x
-0,그래픽,0,그래픽 2,00Graphic12,x,x,x,x,x,x,x,x,x,x,x,x,x,x,x,x,x,x,x,x,x,x,x
-0,그래픽,1,버튼,01Graphic13,x,x,x,x,x,x,x,x,x,x,x,x,x,x,x,x,x,x,x,x,x,x,x
-0,그래픽,2,불이야,02Graphic14,11,12,x,x,x,x,x,x,x,x,x,x,x,x,x,x,x,x,x,x,x,x,x
-1,사운드,0,타이틀,10Sound15,x,x,x,x,x,x,x,x,x,x,x,x,x,x,x,x,x,x,x,x,x,x,x
-1,사운드,1,버버튼,11Sound16,x,x,x,x,x,x,x,x,x,x,x,x,x,x,x,x,x,x,x,x,x,x,x
-1,사운드,2,불,12Sound17,12,21,x,x,x,x,x,x,x,x,x,x,x,x,x,x,x,x,x,x,x,x,x
-1,사운드,3,드드롤,13Sound18,x,x,x,x,x,x,x,7,qwe,we,qw,qwe,qwe,qwe,qwe,x,x,x,x,x,x,x,x
-1,사운드,4,슬라라,14Sound19,x,x,0,3,10,20,1,x,x,x,x,x,x,x,x,x,x,x,x,x,x,x,x
-1,사운드,0,타타이틀,10Sound20,x,x,x,x,x,x,x,x,x,x,x,x,x,x,x,x,x,x,x,x,x,x,x
-1,사운드,1,버,11Sound21,x,x,x,x,x,x,x,x,x,x,x,x,x,x,x,x,x,x,x,x,x,x,x
-1,사운드,2,불룰,12Sound22,312,dsas,x,x,x,x,x,x,x,x,x,x,x,x,x,x,x,x,x,x,x,x,x
-1,사운드,3,자이로드롭,13Sound23,x,x,x,x,x,x,x,2,qwe,www,x,x,x,x,x,x,x,x,x,x,x,x,x
-1,사운드,4,슬라,14Sound24,x,x,1,0,5,20,2,x,x,x,x,x,x,x,x,x,x,x,x,x,x,x,x
-1,사운드,0,타타타,10Sound25,x,x,x,x,x,x,x,x,x,x,x,x,x,x,x,x,x,x,x,x,x,x,x
-1,사운드,1,법버,11Sound26,asd,dsad,x,x,x,x,x,x,x,x,x,x,x,x,x,x,x,x,x,x,x,x,x
-1,사운드,2,부부붑불,12Sound27,x,x,x,x,x,x,x,x,x,x,x,x,x,x,x,x,x,x,x,x,x,x,x
-1,사운드,3,드롤롭,13Sound28,x,x,x,x,x,x,x,1,qwe,x,x,x,x,x,x,x,x,x,x,x,x,x,x
-1,사운드,4,슬슬라,14Sound29,x,x,0,10,17,20,2,x,x,x,x,x,x,x,x,x,x,x,x,x,x,x,x
-1,사운드,1,버버튼,11Sound30,wqe,sasd,x,x,x,x,x,x,x,x,x,x,x,x,x,x,x,x,x,x,x,x,x
-2,컨트롤,0,컨트롤,20Control31,x,x,x,x,x,x,x,x,x,x,x,x,x,x,x,x,x,x,x,x,x,x,x
-2,컨트롤,1,버어튼,21Control32,123ws,ewq,x,x,x,x,x,x,x,x,x,x,x,x,x,x,x,x,x,x,x,x,x
-2,컨트롤,2,부부부붑,22Control33,x,x,x,x,x,x,x,x,x,x,x,x,x,x,x,x,x,x,x,x,x,x,x
-2,컨트롤,3,드드드롭,23Control34,x,x,x,x,x,x,x,11,qwe,qwe,qwe,we,we,qwe,rwe,wer,qw,rew,qwe,x,x,x,x
-2,컨트롤,4,슬라라,24Control35,x,x,1,22,25,45,3,x,x,x,x,x,x,x,x,x,x,x,x,x,x,x,x
-2,컨트롤,0,제목,20Control36,x,x,x,x,x,x,x,x,x,x,x,x,x,x,x,x,x,x,x,x,x,x,x
-2,컨트롤,1,버버트는,21Control37,asd,asd,x,x,x,x,x,x,x,x,x,x,x,x,x,x,x,x,x,x,x,x,x
-2,컨트롤,2,부부부불,22Control38,x,x,x,x,x,x,x,x,x,x,x,x,x,x,x,x,x,x,x,x,x,x,x
-2,컨트롤,3,드롭박스,23Control39,x,x,x,x,x,x,x,2,qwe,erw,x,x,x,x,x,x,x,x,x,x,x,x,x
-2,컨트롤,4,슷슬라,24Control40,x,x,0,23,23,45,2,x,x,x,x,x,x,x,x,x,x,x,x,x,x,x,x
-2,컨트롤,0,테테스트,20Control41,x,x,x,x,x,x,x,x,x,x,x,x,x,x,x,x,x,x,x,x,x,x,x
-2,컨트롤,1,버버버버튼,21Control42,sad,dsa,x,x,x,x,x,x,x,x,x,x,x,x,x,x,x,x,x,x,x,x,x
-3,테스트1,0,테스트,30Test043,x,x,x,x,x,x,x,x,x,x,x,x,x,x,x,x,x,x,x,x,x,x,x
-3,테스트1,1,버버버어튼,31Test044,x,x,x,x,x,x,x,x,x,x,x,x,x,x,x,x,x,x,x,x,x,x,x
-3,테스트1,2,불,32Test045,asd,qw,x,x,x,x,x,x,x,x,x,x,x,x,x,x,x,x,x,x,x,x,x
-3,테스트1,3,드롭롭,33Test046,x,x,x,x,x,x,x,3,tert,qwe,dfs,x,x,x,x,x,x,x,x,x,x,x,x
-3,테스트1,4,슬,34Test047,x,x,1,11,123,24,2,x,x,x,x,x,x,x,x,x,x,x,x,x,x,x,x
-3,테스트1,0,테테테,30Test048,x,x,x,x,x,x,x,x,x,x,x,x,x,x,x,x,x,x,x,x,x,x,x
-3,테스트1,1,버튼,31Test049,x,x,x,x,x,x,x,x,x,x,x,x,x,x,x,x,x,x,x,x,x,x,x
-3,테스트1,2,불,32Test050,das,wq,x,x,x,x,x,x,x,x,x,x,x,x,x,x,x,x,x,x,x,x,x
-3,테스트1,3,드롭,33Test051,x,x,x,x,x,x,x,10,asd,fds,ewr,qwe,dfsa,asd,eqw,fsd,qwe,qweq,x,x,x,x,x
-3,테스트1,4,슬라이드,34Test052,x,x,0,-111,22,234,10,x,x,x,x,x,x,x,x,x,x,x,x,x,x,x,x
-3,테스트1,0,테테스트,30Test053,x,x,x,x,x,x,x,x,x,x,x,x,x,x,x,x,x,x,x,x,x,x,x
-3,테스트1,1,버법턴,31Test054,x,x,x,x,x,x,x,x,x,x,x,x,x,x,x,x,x,x,x,x,x,x,x
-3,테스트1,2,부불,32Test055,dsa,dew,x,x,x,x,x,x,x,x,x,x,x,x,x,x,x,x,x,x,x,x,x
-3,테스트1,3,드드드롭,33Test056,x,x,x,x,x,x,x,3,dsa,qwe,dgs,x,x,x,x,x,x,x,x,x,x,x,x
-3,테스트1,4,슬,34Test057,x,x,1,12,12,14,5,x,x,x,x,x,x,x,x,x,x,x,x,x,x,x,x
-3,테스트1,1,버버어늩,31Test058,x,x,x,x,x,x,x,x,x,x,x,x,x,x,x,x,x,x,x,x,x,x,x
-4,테스트2,0,테2,40TestTest59,x,x,x,x,x,x,x,x,x,x,x,x,x,x,x,x,x,x,x,x,x,x,x
-4,테스트2,1,버튼버늩,41TestTest60,x,x,x,x,x,x,x,x,x,x,x,x,x,x,x,x,x,x,x,x,x,x,x
-4,테스트2,2,불불불,42TestTest61,qwe,wqe,x,x,x,x,x,x,x,x,x,x,x,x,x,x,x,x,x,x,x,x,x
-4,테스트2,3,드롭킥,43TestTest62,x,x,x,x,x,x,x,2,asd,qwe,x,x,x,x,x,x,x,x,x,x,x,x,x
-4,테스트2,4,슬라이드,44TestTest63,x,x,1,12,32,34,3,x,x,x,x,x,x,x,x,x,x,x,x,x,x,x,x
-4,테스트2,0,태테테2,40TestTest64,x,x,x,x,x,x,x,x,x,x,x,x,x,x,x,x,x,x,x,x,x,x,x
-4,테스트2,1,버버버튼,41TestTest65,x,x,x,x,x,x,x,x,x,x,x,x,x,x,x,x,x,x,x,x,x,x,x
-4,테스트2,2,불이당,42TestTest66,qwe,reqrw,x,x,x,x,x,x,x,x,x,x,x,x,x,x,x,x,x,x,x,x,x
-4,테스트2,3,드드드롭,43TestTest67,x,x,x,x,x,x,x,2,asd,qwe,x,x,x,x,x,x,x,x,x,x,x,x,x
-5,게임 종료,1,게임 종료하기,43TestTest67,x,x,x,x,x,x,x,x,x,x,x,x,x,x,x,x,x,x,x,x,x,x,x
+﻿_TabNum,_TabName,_LineFunc,_LineName,_LineKey,_BoolLeftName,_BoolRightName,_SlideInt,_SlideMin,_SlideDefault,_SlideMax,_SlideInter,_DropSize,_Drop0,_Drop1,_Drop2,_Drop3,_Drop4,_Drop5,_Drop6,_Drop7,_Drop8,_Drop9,_Drop10,_Drop11,_Drop12,_Drop13,_Drop14,_Description
+0,그래픽,0,그래픽 효과 설정,11100100,x,x,x,x,x,x,x,x,x,x,x,x,x,x,x,x,x,x,x,x,x,x,x,그래픽에 적용할 특수 효과를 선택합니다.
+0,그래픽,2,SSAO,1,사용,해제,x,x,x,x,x,x,x,x,x,x,x,x,x,x,x,x,x,x,x,x,x,SSAO 효과를 적용합니다.
+0,그래픽,2,HDR,2,사용,해제,x,x,x,x,x,x,x,x,x,x,x,x,x,x,x,x,x,x,x,x,x,HDR 효과를 적용합니다.
+0,그래픽,2,Glow,3,사용,해제,x,x,x,x,x,x,x,x,x,x,x,x,x,x,x,x,x,x,x,x,x,Glow 효과를 적용합니다.
+0,그래픽,2,DOF,4,사용,해제,x,x,x,x,x,x,x,x,x,x,x,x,x,x,x,x,x,x,x,x,x,DOF 효과를 적용합니다.
+0,그래픽,2,PBR,5,사용,해제,x,x,x,x,x,x,x,x,x,x,x,x,x,x,x,x,x,x,x,x,x,PBR 효과를 적용합니다.
+0,그래픽,2,Shadow,6,사용,해제,x,x,x,x,x,x,x,x,x,x,x,x,x,x,x,x,x,x,x,x,x,Shadow 효과를 적용합니다.
+1,사운드,0,사운드 크기 조절,11100101,x,x,x,x,x,x,x,x,x,x,x,x,x,x,x,x,x,x,x,x,x,x,x,게임 내 사운드의 볼륨을 조절합니다.
+1,사운드,4,배경 음악,8,x,x,0,0,0.7,1,0.01,x,x,x,x,x,x,x,x,x,x,x,x,x,x,x,x,배경 음악의 크기를 조절합니다.
+1,사운드,4,효과음,9,x,x,0,0,0.7,1,0.01,x,x,x,x,x,x,x,x,x,x,x,x,x,x,x,x,각종 동작 및 스킬 등 게임 플레이 행동의 소리를 조절합니다.
+1,사운드,4,등장인물 음성,10,x,x,0,0,0.7,1,0.01,x,x,x,x,x,x,x,x,x,x,x,x,x,x,x,x,게임 등장인물의 목소리 크기를 조절합니다.
+1,사운드,4,환경,11,x,x,0,0,0.7,1,0.01,x,x,x,x,x,x,x,x,x,x,x,x,x,x,x,x,플레이어 주변에서 들려오는 소리를 조절합니다.
+1,사운드,4,UI 조작,12,x,x,0,0,0.7,1,0.01,x,x,x,x,x,x,x,x,x,x,x,x,x,x,x,x,UI 조작 효과음을 조절합니다. 
+2,테스트0,0,제목,11100000,x,x,x,x,x,x,x,x,x,x,x,x,x,x,x,x,x,x,x,x,x,x,x,테스트 안내 문구 30
+2,테스트0,1,버어튼,11100001,x,x,x,x,x,x,x,x,x,x,x,x,x,x,x,x,x,x,x,x,x,x,x,테스트 안내 문구 31
+2,테스트0,2,부부부붑,11100002,123ws,ewq,x,x,x,x,x,x,x,x,x,x,x,x,x,x,x,x,x,x,x,x,x,테스트 안내 문구 32
+2,테스트0,3,드드드롭,11100003,x,x,x,x,x,x,x,11,qwe,qwe,qwe,we,we,qwe,rwe,wer,qw,rew,qwe,x,x,x,x,테스트 안내 문구 33
+2,테스트0,4,슬라라,11100004,x,x,1,22,25,45,3,x,x,x,x,x,x,x,x,x,x,x,x,x,x,x,x,테스트 안내 문구 34
+2,테스트0,0,제목,11100005,x,x,x,x,x,x,x,x,x,x,x,x,x,x,x,x,x,x,x,x,x,x,x,테스트 안내 문구 35
+2,테스트0,1,버버트는,11100006,x,x,x,x,x,x,x,x,x,x,x,x,x,x,x,x,x,x,x,x,x,x,x,테스트 안내 문구 36
+2,테스트0,2,부부부불,11100007,asd,asd,x,x,x,x,x,x,x,x,x,x,x,x,x,x,x,x,x,x,x,x,x,테스트 안내 문구 37
+2,테스트0,3,드롭박스,11100008,x,x,x,x,x,x,x,2,qwe,erw,x,x,x,x,x,x,x,x,x,x,x,x,x,테스트 안내 문구 38
+2,테스트0,4,슷슬라,11100009,x,x,0,23,23,45,2,x,x,x,x,x,x,x,x,x,x,x,x,x,x,x,x,테스트 안내 문구 39
+2,테스트0,0,테테스트,11100010,x,x,x,x,x,x,x,x,x,x,x,x,x,x,x,x,x,x,x,x,x,x,x,테스트 안내 문구 40
+2,테스트0,1,버버버버튼,11100011,x,x,x,x,x,x,x,x,x,x,x,x,x,x,x,x,x,x,x,x,x,x,x,테스트 안내 문구 41
+3,테스트1,0,테스트,11100012,x,x,x,x,x,x,x,x,x,x,x,x,x,x,x,x,x,x,x,x,x,x,x,테스트 안내 문구 42
+3,테스트1,1,버버버어튼,11100013,x,x,x,x,x,x,x,x,x,x,x,x,x,x,x,x,x,x,x,x,x,x,x,테스트 안내 문구 43
+3,테스트1,2,불,11100014,asd,qw,x,x,x,x,x,x,x,x,x,x,x,x,x,x,x,x,x,x,x,x,x,테스트 안내 문구 44
+3,테스트1,3,드롭롭,11100015,x,x,x,x,x,x,x,3,tert,qwe,dfs,x,x,x,x,x,x,x,x,x,x,x,x,테스트 안내 문구 45
+3,테스트1,4,슬,11100016,x,x,1,11,123,24,2,x,x,x,x,x,x,x,x,x,x,x,x,x,x,x,x,테스트 안내 문구 46
+3,테스트1,0,테테테,11100017,x,x,x,x,x,x,x,x,x,x,x,x,x,x,x,x,x,x,x,x,x,x,x,테스트 안내 문구 47
+3,테스트1,1,버튼,11100018,x,x,x,x,x,x,x,x,x,x,x,x,x,x,x,x,x,x,x,x,x,x,x,테스트 안내 문구 48
+3,테스트1,2,불,11100019,das,wq,x,x,x,x,x,x,x,x,x,x,x,x,x,x,x,x,x,x,x,x,x,테스트 안내 문구 49
+3,테스트1,3,드롭,11100020,x,x,x,x,x,x,x,10,asd,fds,ewr,qwe,dfsa,asd,eqw,fsd,qwe,qweq,x,x,x,x,x,테스트 안내 문구 50
+3,테스트1,4,슬라이드,11100021,x,x,0,-111,22,234,10,x,x,x,x,x,x,x,x,x,x,x,x,x,x,x,x,테스트 안내 문구 51
+3,테스트1,0,테테스트,11100022,x,x,x,x,x,x,x,x,x,x,x,x,x,x,x,x,x,x,x,x,x,x,x,테스트 안내 문구 52
+3,테스트1,1,버법턴,11100023,x,x,x,x,x,x,x,x,x,x,x,x,x,x,x,x,x,x,x,x,x,x,x,테스트 안내 문구 53
+3,테스트1,2,부불,11100024,dsa,dew,x,x,x,x,x,x,x,x,x,x,x,x,x,x,x,x,x,x,x,x,x,테스트 안내 문구 54
+3,테스트1,3,드드드롭,11100025,x,x,x,x,x,x,x,3,dsa,qwe,dgs,x,x,x,x,x,x,x,x,x,x,x,x,테스트 안내 문구 55
+3,테스트1,4,슬,11100026,x,x,1,12,12,14,5,x,x,x,x,x,x,x,x,x,x,x,x,x,x,x,x,테스트 안내 문구 56
+3,테스트1,1,버버어늩,11100027,x,x,x,x,x,x,x,x,x,x,x,x,x,x,x,x,x,x,x,x,x,x,x,테스트 안내 문구 57
+4,테스트2,0,테2,11100028,x,x,x,x,x,x,x,x,x,x,x,x,x,x,x,x,x,x,x,x,x,x,x,테스트 안내 문구 58
+4,테스트2,1,버튼버늩,11100029,x,x,x,x,x,x,x,x,x,x,x,x,x,x,x,x,x,x,x,x,x,x,x,테스트 안내 문구 59
+4,테스트2,2,불불불,11100030,qwe,wqe,x,x,x,x,x,x,x,x,x,x,x,x,x,x,x,x,x,x,x,x,x,테스트 안내 문구 60
+4,테스트2,3,드롭킥,11100031,x,x,x,x,x,x,x,2,asd,qwe,x,x,x,x,x,x,x,x,x,x,x,x,x,테스트 안내 문구 61
+4,테스트2,4,슬라이드,11100032,x,x,1,12,32,34,3,x,x,x,x,x,x,x,x,x,x,x,x,x,x,x,x,테스트 안내 문구 62
+4,테스트2,0,태테테2,11100033,x,x,x,x,x,x,x,x,x,x,x,x,x,x,x,x,x,x,x,x,x,x,x,테스트 안내 문구 63
+4,테스트2,1,버버버튼,11100034,x,x,x,x,x,x,x,x,x,x,x,x,x,x,x,x,x,x,x,x,x,x,x,테스트 안내 문구 64
+4,테스트2,2,불이당,11100035,qwe,reqrw,x,x,x,x,x,x,x,x,x,x,x,x,x,x,x,x,x,x,x,x,x,테스트 안내 문구 65
+4,테스트2,3,드드드롭,11100036,x,x,x,x,x,x,x,2,asd,qwe,x,x,x,x,x,x,x,x,x,x,x,x,x,테스트 안내 문구 66
+5,게임 종료,1,게임 종료하기,11100037,x,x,x,x,x,x,x,x,x,x,x,x,x,x,x,x,x,x,x,x,x,x,x,테스트 안내 문구 67

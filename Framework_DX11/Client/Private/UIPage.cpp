@@ -266,7 +266,7 @@ void CUIPage::SCROLL_INFO::Initialize_Scroll(UPART* pData, UPART* pBar, SCROLL_A
 
 		fData_Height_Origin = vSize_Render.y;
 
-		fBar_Move_Max_Length = pBar->fAdjust_Start.y - pBar->fAdjust_End.y;
+		fBar_Move_Max_Length = pBar->fAdjust_End.y - pBar->fAdjust_Start.y;
 
 		eScroll_Area = eArea;
 

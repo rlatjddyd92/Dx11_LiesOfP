@@ -23,6 +23,12 @@ public:
 	DOF_DESC*		Get_DOFDesc() { return &m_tDOF; }
 	RADIAL_DESC*	Get_RadialDesc() { return &m_tRadial; }
 
+	void			Set_SSAODesc(_bool bIsUsing) { m_tSSAO.isOnSSAO = bIsUsing; }
+	void			Set_HDRDesc(_bool bIsUsing) { m_tHDR.isOnHDR = bIsUsing; }
+	void			Set_BloomDesc(_bool bIsUsing) { m_tBloom.isOnBloom = bIsUsing; }
+	void			Set_DOFDesc(_bool bIsUsing) { m_tDOF.isOnDOF = bIsUsing; }
+	void			Set_RadialDesc(_bool bIsUsing) { m_tRadial.isOnRadial = bIsUsing; }
+
 	_bool			Get_IsOnPBR() { return m_isOnPBR; }
 	void			Toggle_PBR() { m_isOnPBR = !m_isOnPBR; }
 
