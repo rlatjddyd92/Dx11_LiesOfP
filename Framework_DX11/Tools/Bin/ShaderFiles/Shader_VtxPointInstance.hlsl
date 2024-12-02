@@ -584,6 +584,30 @@ PS_OUT PS_AURA_BLEND_MAIN(PS_IN In)
     return Out;
 }
 
+PS_EFFECT_OUT PS_POWERGUARD_MAIN(PS_IN In)
+{
+    PS_EFFECT_OUT Out = (PS_EFFECT_OUT) 0;
+	
+    vector vColor = g_DiffuseTexture.Sample(LinearSampler, In.vTexcoord);
+
+    vColor.a = max(vColor.r, max(vColor.g, vColor.b));
+    
+    if (vColor.a <= 0.1f)
+        discard;
+
+    if (In.vLifeTime.y >= In.vLifeTime.x)
+        discard;
+
+    vColor.r = In.vColor.r;
+    vColor.g = In.vColor.g * vColor.a;
+    vColor.b = In.vColor.b * vColor.a;;
+
+    Out.vDiffuse = vColor;
+    Out.vBlur = vColor;
+
+    return Out;
+}
+
 technique11	DefaultTechnique
 {
 	pass DEFAULT // 0
@@ -749,6 +773,17 @@ technique11	DefaultTechnique
         VertexShader = compile vs_5_0 VS_MAIN();
         GeometryShader = compile gs_5_0 GS_MAIN();
         PixelShader = compile ps_5_0 PS_THUNDER_MAIN();
+    }
+
+    pass PARTICLE_POWER_SPARK // 15
+    {
+        SetRasterizerState(RS_Default);
+        SetDepthStencilState(DSS_Default, 0);
+        SetBlendState(BS_Default, vector(0.f, 0.f, 0.f, 0.f), 0xffffffff);
+
+        VertexShader = compile vs_5_0 VS_MAIN();
+        GeometryShader = compile gs_5_0 GS_DIR_MAIN();
+        PixelShader = compile ps_5_0 PS_POWERGUARD_MAIN();
     }
 
 }

@@ -40,36 +40,8 @@ HRESULT CVIBuffer_Point_Instance::Initialize(void * pArg)
 			return E_FAIL;
 	}
 	
-	HRESULT hr = m_pDevice->CreateBuffer(&m_ParticleBuffer_Desc, &m_InstanceInitialData, &m_pParticleBuffer);
-	int a = 0;
-
-	if (FAILED(hr))
-	{
-		HRESULT reason = m_pDevice->GetDeviceRemovedReason();
-		switch (reason) {
-		case DXGI_ERROR_DEVICE_HUNG:
-			// 디바이스가 응답을 중단했습니다.
-			 a = 0;
-			break;
-		case DXGI_ERROR_DEVICE_RESET:
-			// GPU가 재설정되었습니다.
-			 a = 0;
-			break;
-		case DXGI_ERROR_DRIVER_INTERNAL_ERROR:
-			// 드라이버 내부 오류 발생.
-			 a = 0;
-			break;
-		case DXGI_ERROR_DEVICE_REMOVED:
-			// 디바이스가 제거됨.
-			 a = 0;
-			break;
-		default:
-			// 기타 오류.
-			 a = 0;
-			break;
-		}
+	if(FAILED(m_pDevice->CreateBuffer(&m_ParticleBuffer_Desc, &m_InstanceInitialData, &m_pParticleBuffer)))
 		return E_FAIL;
-	}
 
 	if (FAILED(m_pDevice->CreateBuffer(&m_MoveBuffer_Desc, nullptr, &m_pMovementBuffer)))
 		return E_FAIL;
