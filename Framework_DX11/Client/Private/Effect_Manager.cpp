@@ -43,6 +43,60 @@ HRESULT CEffect_Manager::Initialize(ID3D11Device* pDevice, ID3D11DeviceContext* 
     if(FAILED(Load_Objects()))
         return E_FAIL;
 
+    CEffect_Container::EFFECT_DESC desc = {};
+    desc.fRotationPerSec = XMConvertToRadians(90.f);
+    desc.fSpeedPerSec = 1.f;
+    desc.iLevelIndex = LEVEL_GAMEPLAY;
+    desc.pParentMatrix = nullptr;
+    desc.pSocketMatrix = nullptr;
+    desc.vPos = _Vec3(0.f, 0.f, 0.f);
+    desc.vDir = _Vec3(0.f, 0.f, 0.f);
+    desc.vScale = _Vec3(1.f, 1.f, 1.f);
+
+    Effect_Pooling(TEXT("Monster_Impact"), &desc);
+
+    Effect_Pooling(TEXT("Monster_Impact_Death"), &desc);
+
+    Effect_Pooling(TEXT("Player_Attack_Rapier_StormStab_First"), &desc);
+
+    Effect_Pooling(TEXT("Player_Attack_Rapier_StormStab_First_Ready"), &desc);
+
+    Effect_Pooling(TEXT("Player_Attack_Rapier_StormStab_Second"), &desc);
+
+    Effect_Pooling(TEXT("Player_Attack_Rapier_StormStab_Second_Ready"), &desc);
+
+    Effect_Pooling(TEXT("Player_Attack_Step_Normal"), &desc);
+
+    Effect_Pooling(TEXT("SimonManus_Attack_BlackBall_Big"), &desc);
+
+    Effect_Pooling(TEXT("SimonManus_Attack_BlackBall_Expand"), &desc);
+
+    Effect_Pooling(TEXT("SimonManus_Attack_BlackBall_Explosion"), &desc);
+
+    Effect_Pooling(TEXT("SimonManus_Attack_BlackBall_Impact"), &desc);
+
+    Effect_Pooling(TEXT("SimonManus_Attack_BlackBall_Small"), &desc);
+
+    Effect_Pooling(TEXT("SimonManus_Attack_BlackBall_Throw"), &desc);
+
+    Effect_Pooling(TEXT("SimonManus_Attack_ChargeStamp"), &desc);
+
+    Effect_Pooling(TEXT("SimonManus_Attack_ChargeStamp2"), &desc);
+
+    Effect_Pooling(TEXT("SimonManus_Attack_ChargeSwing"), &desc);
+
+    Effect_Pooling(TEXT("SimonManus_Attack_GoldBall"), &desc);
+
+    Effect_Pooling(TEXT("SimonManus_Attack_JumpMagic"), &desc);
+
+    Effect_Pooling(TEXT("SimonManus_Attack_LightningSpear"), &desc);
+
+    Effect_Pooling(TEXT("SimonManus_Attack_SlideMagic"), &desc);
+
+    Effect_Pooling(TEXT("SimonManus_Attack_Stamp"), &desc);
+
+    Effect_Pooling(TEXT("SimonManus_Attack_Swing"), &desc);
+
     return S_OK;
 }
 
@@ -768,7 +822,7 @@ CEffect_Container* CEffect_Manager::Find_PoolingEffect(const _wstring& strECTag,
 
     for (auto& pContainer : iter->second)
     {
-        // 찾아서 안돌아가는 거 있으면 그거 반환.
+        // 찾아서 안돌아가는s 거 있으면 그거 반환.
         if (true == pContainer->Get_Dead())
         {
             CEffect_Container::EFFECT_DESC* pDesc = static_cast<CEffect_Container::EFFECT_DESC*>(pArg);
@@ -832,7 +886,30 @@ CEffect_Container* CEffect_Manager::Clone_Effect_From_Prototype(const _wstring& 
     return pEffectContainer;
 }
 
+void CEffect_Manager::Effect_Pooling(const _wstring& strECTag, void* pArg)
+{
+    // 찾아봤는데 안돌아가는 게 없으면 새로 만들어서 넣고 반환.
+    CEffect_Container* pContainer = Clone_Effect_From_Prototype(strECTag, pArg);
+    
+    if (nullptr == pContainer)
+        return;
 
+    pContainer->Set_Dead(true);
+
+    auto& iter = m_EffectPooling.find(strECTag);
+
+    if (m_EffectPooling.end() == iter)
+    {
+        vector<CEffect_Container*> Containers;
+        Containers.emplace_back(pContainer);
+
+        m_EffectPooling.emplace(strECTag, Containers);
+    }
+    else
+    {
+        iter->second.emplace_back(pContainer);
+    }
+}
 
 void CEffect_Manager::Free()
 {

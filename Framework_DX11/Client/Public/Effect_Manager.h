@@ -87,6 +87,8 @@ private:
 	class CEffect_Container* Find_PoolingEffect(const _wstring& strECTag, void* pArg);
 	class CEffect_Container* Clone_Effect_From_Prototype(const _wstring& strECTag, void* pArg);
 
+	void Effect_Pooling(const _wstring& strECTag, void* pArg);
+
 public:
 	virtual void Free() override;
 };

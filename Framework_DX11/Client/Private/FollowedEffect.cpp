@@ -128,4 +128,6 @@ CGameObject* CFollowedEffect::Clone(void* pArg)
 void CFollowedEffect::Free()
 {
 	__super::Free();
+
+	Safe_Release(m_pEffect);
 }

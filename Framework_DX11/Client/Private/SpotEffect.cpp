@@ -117,4 +117,6 @@ CGameObject* CSpotEffect::Clone(void* pArg)
 void CSpotEffect::Free()
 {
 	__super::Free();
+
+	Safe_Release(m_pEffect);
 }
