@@ -204,8 +204,4 @@ CGameObject* CWeapon_SimonManus_Hammer::Clone(void* pArg)
 void CWeapon_SimonManus_Hammer::Free()
 {
 	__super::Free();
-
-	Safe_Release(m_pColliderCom);
-	Safe_Release(m_pShaderCom);
-	Safe_Release(m_pModelCom);
 }

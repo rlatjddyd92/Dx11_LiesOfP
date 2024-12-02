@@ -349,6 +349,7 @@ void CMainApp::Free()
 	Safe_Release(m_pGameInstance);
 	
 	CEffect_Manager::Destroy_Instance();
+	CCamera_Manager::Destroy_Instance();
 
 
 	ClipCursor(NULL); // 마우스를 제한 해제

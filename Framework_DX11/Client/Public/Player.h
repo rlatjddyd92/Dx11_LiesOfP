@@ -175,7 +175,10 @@ public:
 
 	virtual _bool	Calc_DamageGain(_float fAtkDmg, _Vec3 vHitPos = { 0.f,0.f,0.f }) override;
 	_bool			Decrease_Stamina(_float fAmount);
-	_bool			Decrease_Region(_uint iRegionCount = 1);
+	_bool			Check_Region_Fable01();
+	_bool			Check_Region_Fable02();
+	void			Decrease_Region(_uint iRegionCount = 1);
+	void			Recovery_Region(_float fAmount = 10.f);
 
 private:
 	vector<class CEffect_Container*> m_Effects;

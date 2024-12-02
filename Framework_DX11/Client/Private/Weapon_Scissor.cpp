@@ -21,8 +21,12 @@ HRESULT CWeapon_Scissor::Initialize_Prototype()
 
 HRESULT CWeapon_Scissor::Initialize(void* pArg)
 {
-	/* 직교퉁여을 위한 데이터들을 모두 셋하낟. */
-	if (FAILED(__super::Initialize(pArg)))
+	PLAYER_WAPON_DESC* pDesc = static_cast<PLAYER_WAPON_DESC*>(pArg);
+	m_pPlayer = pDesc->pPlayer;
+	if (nullptr == m_pPlayer)
+		return E_FAIL;
+
+	if (FAILED(__super::Initialize(pDesc)))
 		return E_FAIL;
 
 	if (FAILED(Ready_Components()))
@@ -236,6 +240,7 @@ HRESULT CWeapon_Scissor::Ready_Seperate()
 {
 	CWeapon_Scissor_Handle::SCISSOR_DESC ScissorDesc;
 	ZeroMemory(&ScissorDesc, sizeof(CWeapon_Scissor_Handle::SCISSOR_DESC));
+	ScissorDesc.pPlayer = m_pPlayer;
 
 	ScissorDesc.eScissorType = CWeapon_Scissor_Handle::SCISSOR_LEFT; 
 	ScissorDesc.pParentWorldMatrix = m_pParentMatrix;
@@ -290,8 +295,4 @@ void CWeapon_Scissor::Free()
 	{
 			Safe_Release(m_pScissor_Sperate[i]);
 	}
-
-	Safe_Release(m_pColliderCom);
-	Safe_Release(m_pShaderCom);
-	Safe_Release(m_pModelCom);
 }

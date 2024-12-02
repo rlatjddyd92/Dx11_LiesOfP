@@ -23,6 +23,11 @@ HRESULT CWeapon_Scissor_Handle::Initialize_Prototype()
 HRESULT CWeapon_Scissor_Handle::Initialize(void* pArg)
 {
 	SCISSOR_DESC* pDesc = static_cast<SCISSOR_DESC*>(pArg);
+
+	m_pPlayer = pDesc->pPlayer;
+	if (nullptr == m_pPlayer)
+		return E_FAIL;
+
 	m_eType = pDesc->eScissorType;
 
 	/* 직교퉁여을 위한 데이터들을 모두 셋하낟. */
@@ -234,7 +239,4 @@ void CWeapon_Scissor_Handle::Free()
 	__super::Free();
 
 	Safe_Release(m_pBlade);
-	Safe_Release(m_pColliderCom);
-	Safe_Release(m_pShaderCom);
-	Safe_Release(m_pModelCom);
 }

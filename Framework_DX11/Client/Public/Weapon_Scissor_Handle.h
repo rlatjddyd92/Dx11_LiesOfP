@@ -16,7 +16,7 @@ class CWeapon_Scissor_Handle : public CWeapon
 public:
 	enum SCISSOR_TYPE { SCISSOR_LEFT, SCISSOR_RIGHT, SCISSOR_END };
 
-	typedef struct : public WEAPON_DESC
+	typedef struct : public PLAYER_WAPON_DESC
 	{
 		SCISSOR_TYPE eScissorType;
 	}SCISSOR_DESC;
@@ -41,6 +41,7 @@ public:
 	virtual void OnCollisionExit(CGameObject* pOther) override;
 
 private:
+	class CPlayer* m_pPlayer = { nullptr };
 	class CWeapon_Scissor_Blade*	m_pBlade = { nullptr, };
 
 	SCISSOR_TYPE		m_eType = { SCISSOR_END };

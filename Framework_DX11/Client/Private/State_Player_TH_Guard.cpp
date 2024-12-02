@@ -49,8 +49,11 @@ void CState_Player_TH_Guard::Update(_float fTimeDelta)
     {
         if (KEY_TAP(KEY::F))
         {
-            m_pPlayer->Change_State(CPlayer::PARRY);
-            return;
+            if (m_pPlayer->Check_Region_Fable02())
+            {
+                m_pPlayer->Change_State(CPlayer::PARRY);
+                return;
+            }
         }
         if (!Move(fTimeDelta))
         {

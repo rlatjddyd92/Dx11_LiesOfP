@@ -140,11 +140,13 @@ void CPlayer::Priority_Update(_float fTimeDelta)
 		m_fGuardTime += fTimeDelta;
 	}
 
+	Update_Stat(fTimeDelta);
 
 	if (KEY_TAP(KEY::WHEELBUTTON))
 		LockOnOff();
 
-	m_pWeapon[m_eWeaponType]->Priority_Update(fTimeDelta);
+	if(nullptr != m_pWeapon[m_eWeaponType])
+		m_pWeapon[m_eWeaponType]->Priority_Update(fTimeDelta);
 
 	for (auto& pEffect : m_Effects)
 	{
@@ -182,7 +184,8 @@ void CPlayer::Update(_float fTimeDelta)
 	m_pColliderCom->Update(m_pTransformCom->Get_WorldMatrix_Ptr());
 	m_pGameInstance->Add_ColliderList(m_pColliderCom);
 
-	m_pWeapon[m_eWeaponType]->Update(fTimeDelta);
+	if (nullptr != m_pWeapon[m_eWeaponType])
+		m_pWeapon[m_eWeaponType]->Update(fTimeDelta);
 
 	if (KEY_TAP(KEY::L))
 	{
@@ -201,7 +204,8 @@ void CPlayer::Late_Update(_float fTimeDelta)
 	if(m_isLockOn && m_pFsmCom->Get_CurrentState() != OH_SPRINT && m_pFsmCom->Get_CurrentState() != TH_SPRINT)
 		m_pTransformCom->LookAt_NoHeight(m_pTargetMonster->Get_Transform()->Get_State(CTransform::STATE_POSITION));
 
-	m_pWeapon[m_eWeaponType]->Late_Update(fTimeDelta);
+	if (nullptr != m_pWeapon[m_eWeaponType])
+		m_pWeapon[m_eWeaponType]->Late_Update(fTimeDelta);
 
 	//업데이트에서 생성하니 업데이트 이전에 비우기
 	for (auto& pEffect : m_Effects)
@@ -225,7 +229,8 @@ HRESULT CPlayer::Render()
 	if (FAILED(__super::Render()))
 		return E_FAIL;
 
-	if (FAILED(m_pWeapon[m_eWeaponType]->Render()))
+	//if (nullptr != m_pWeapon[m_eWeaponType])
+	//	if (FAILED(m_pWeapon[m_eWeaponType]->Render()))
 		return E_FAIL;
 
 	return S_OK;
@@ -498,18 +503,18 @@ void CPlayer::DeActive_Effect(const EFFECT_TYPE& eType)
 
 HRESULT CPlayer::Ready_Weapon()
 {
-	CWeapon::WEAPON_DESC		WeaponDesc{};
+	CWeapon::PLAYER_WAPON_DESC		WeaponDesc{};
 	WeaponDesc.pParentWorldMatrix = m_pTransformCom->Get_WorldMatrix_Ptr();
 	WeaponDesc.pSocketBoneMatrix = m_pModelCom->Get_BoneCombindTransformationMatrix_Ptr("BN_Weapon_R");
+	WeaponDesc.pPlayer = this;
 
 	m_pWeapon[WEP_RAPIER] = dynamic_cast<CWeapon*>(m_pGameInstance->Clone_GameObject(TEXT("Prototype_GameObject_Weapon_Rapier"), &WeaponDesc));
-	if (nullptr == m_pWeapon)
+	if (nullptr == m_pWeapon[WEP_RAPIER])
 		return E_FAIL;
 
 	m_pWeapon[WEP_FLAME] = dynamic_cast<CWeapon*>(m_pGameInstance->Clone_GameObject(TEXT("Prototype_GameObject_Weapon_FlameSword"), &WeaponDesc));
 	if (nullptr == m_pWeapon)
 		return E_FAIL;
-
 
 	WeaponDesc.pSocketBoneMatrix2 = m_pModelCom->Get_BoneCombindTransformationMatrix_Ptr("BN_Weapon_L");
 	m_pWeapon[WEP_SCISSOR] = dynamic_cast<CWeapon*>(m_pGameInstance->Clone_GameObject(TEXT("Prototype_GameObject_Weapon_Scissor"), &WeaponDesc));
@@ -718,7 +723,37 @@ _bool CPlayer::Decrease_Stamina(_float fAmount)
 	return true;
 }
 
-_bool CPlayer::Decrease_Region(_uint iRegionCount)
+_bool CPlayer::Check_Region_Fable01()
+{
+	_int iRegionCount = 3;
+
+	if (WEP_SCISSOR == m_eWeaponType)
+		iRegionCount = 1;
+
+	_float fCurretnRegion = m_tPlayer_Stat->vGauge_Region.x - m_tPlayer_Stat->fRegion_Interval * iRegionCount;
+
+	if (fCurretnRegion < 0.f)
+		return false;
+
+	return true;
+}
+
+_bool CPlayer::Check_Region_Fable02()
+{
+	_int iRegionCount = 3;
+
+	if (WEP_SCISSOR != m_eWeaponType)
+		iRegionCount = 1;
+
+	_float fCurretnRegion = m_tPlayer_Stat->vGauge_Region.x - m_tPlayer_Stat->fRegion_Interval * iRegionCount;
+
+	if (fCurretnRegion < 0.f)
+		return false;
+
+	return true;
+}
+
+void CPlayer::Decrease_Region(_uint iRegionCount)
 {
 	_float fCurretnRegion = m_tPlayer_Stat->vGauge_Region.x;
 	for (_uint i = 0; i < iRegionCount; ++i)
@@ -726,14 +761,17 @@ _bool CPlayer::Decrease_Region(_uint iRegionCount)
 		fCurretnRegion -= m_tPlayer_Stat->fRegion_Interval;
 
 		if (fCurretnRegion < 0.f)
-			return false;
+			return;
 	}
 
 	m_tPlayer_Stat->vGauge_Region.x = fCurretnRegion;
 	m_tPlayer_Stat->vGauge_Region.y = m_tPlayer_Stat->vGauge_Region.x;
+}
 
-
-	return true;
+void CPlayer::Recovery_Region(_float fAmount)
+{
+	m_tPlayer_Stat->vGauge_Region.x = min(m_tPlayer_Stat->vGauge_Region.x + fAmount, m_tPlayer_Stat->vGauge_Region.z);
+	m_tPlayer_Stat->vGauge_Region.y = m_tPlayer_Stat->vGauge_Region.x;
 }
 
 void CPlayer::CollisionStay_IntercObj(CGameObject* pGameObject)
@@ -832,7 +870,7 @@ void CPlayer::Update_Stat(_float fTimeDelta)
 	}
 	else if (m_fStaminaRecoveryTime <= 0.f)
 	{
-		m_tPlayer_Stat->vGauge_Stamina.x = min(m_tPlayer_Stat->vGauge_Stamina.x + fTimeDelta, m_tPlayer_Stat->vGauge_Stamina.z);
+		m_tPlayer_Stat->vGauge_Stamina.x = min(m_tPlayer_Stat->vGauge_Stamina.x + 10.f * fTimeDelta, m_tPlayer_Stat->vGauge_Stamina.z);
 	}
 #pragma endregion
 

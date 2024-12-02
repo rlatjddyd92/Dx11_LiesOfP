@@ -54,7 +54,10 @@ void CState_Player_TH_Idle::Update(_float fTimeDelta)
     }
     else if (KEY_TAP(KEY::F))
     {
-        m_pPlayer->Change_State(CPlayer::RAPIER_FATAL);
+        if (m_pPlayer->Check_Region_Fable01())
+        {
+            m_pPlayer->Change_State(CPlayer::RAPIER_FATAL);
+        }
     }
     else if (KEY_TAP(KEY::R))
     {
