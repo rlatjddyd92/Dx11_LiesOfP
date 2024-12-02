@@ -35,11 +35,20 @@ private:
 
 	class CCutScene* m_CutSceneList[8] = {nullptr,};
     const char* m_CutSceneNameList[8] = { "Boss1_Meet", "Boss1_Phase2", "Boss1_Dead", "Sophia_EnterRoom", "Boss2_Meet",  "Boss2_Phase2",  "Boss2_Defeat", "Sophia_Dead" };
+    const char* m_ActorTypeNameList[5] = { "Camera", "UI", "Shader", "GameObject"};
 
 
 private:
 	void Menu();	
-  
+	void Show_Camera_State();
+	void Show_UI_State();
+	void Show_Shader_State();
+	void Show_GamgeObject_State();
+	void Camera_Nemu();
+	void UI_Nemu();
+	void Shader_Nemu();
+	void GamgeObject_Nemu();
+
 public:
 	virtual void Free() override;
 };

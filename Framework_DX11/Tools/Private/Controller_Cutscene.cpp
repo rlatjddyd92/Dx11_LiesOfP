@@ -121,35 +121,48 @@ void CController_Cutscene::Menu()
         {
             *m_fCurrentFrame = 0.f;
         }
-        //요소 넣기
-        if (ImGui::TreeNode("Add Actors"))
+        //요소 목록
+
+        ImGui::Text("[Actor_List]");
+
+        static _int iSelectedCellNum = -1;
+
+        ImGui::BeginChild("Actor List", ImVec2(110, 100), true);
+
+        static int selected = -1;
+        for (int n = 0; n < CCutScene::TYPE_END; n++)
         {
-            if (ImGui::Button("Add Camera"))
-            {
-
-            }
-            if (ImGui::Button("Add UI"))
-            {
-
-            }
-            if (ImGui::Button("Add Shader"))
-            {
-
-            }
-            if (ImGui::Button("Add GameObject"))
-            {
-
-            }
-            if (ImGui::Button("Add Sound"))
-            {
-
-            }
-            
-            ImGui::TreePop();
+            char buf[32];
+            sprintf_s(buf, m_ActorTypeNameList[n]);
+            if (ImGui::Selectable(buf, selected == n))
+                selected = n;
         }
 
+        ImGui::EndChild();
 
+        ImGui::BeginGroup();
+        ImGui::BeginChild("Detail view", ImVec2(0, 400)); // Leave room for 1 line below us
 
+        switch (selected)
+        {
+        case CCutScene::CAMERA:
+            Show_Camera_State();
+            break;
+        case CCutScene::UI:
+            Show_UI_State();
+            break;
+        case CCutScene::SHADER:
+            Show_Shader_State();
+            break;
+        case CCutScene::GAMEOBJECT:
+            Show_GamgeObject_State();
+            break;
+        default:
+            break;
+        }
+
+        ImGui::EndChild();
+        ImGui::EndGroup();
         //정보 담기
         if (m_iPreSelectedCutScene != -1)
         {
@@ -158,6 +171,38 @@ void CController_Cutscene::Menu()
         }
     }
 #pragma endregion
+}
+
+void CController_Cutscene::Show_Camera_State()
+{
+}
+
+void CController_Cutscene::Show_UI_State()
+{
+}
+
+void CController_Cutscene::Show_Shader_State()
+{
+}
+
+void CController_Cutscene::Show_GamgeObject_State()
+{
+}
+
+void CController_Cutscene::Camera_Nemu()
+{
+}
+
+void CController_Cutscene::UI_Nemu()
+{
+}
+
+void CController_Cutscene::Shader_Nemu()
+{
+}
+
+void CController_Cutscene::GamgeObject_Nemu()
+{
 }
 
 
