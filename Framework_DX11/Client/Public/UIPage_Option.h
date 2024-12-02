@@ -25,20 +25,20 @@ public:
 		OPTION_Tap_Text,
 		OPTION_Tap_Highlight_Line_Pos,
 		OPTION_Tap_E_Button,
-		
+
 		OPTION_Main_Scroll_Area,
 		OPTION_Main_Scroll_Bar_Line,
 		OPTION_Main_Scroll_Bar,
-		
+
 		OPTION_TITLE_Area,
 		OPTION_TITLE_Text,
 		OPTION_TITLE_Underline,
-		
+
 		OPTION_LINE_Area,
 		OPTION_LINE_Focus_Pos,
 		OPTION_LINE_Text,
 		OPTION_LINE_Underline,
-		
+
 		OPTION_FUNC_Dropbox_Area,
 		OPTION_FUNC_Dropbox_Selected_Text,
 		OPTION_FUNC_Dropbox_Arrow,
@@ -49,7 +49,7 @@ public:
 		OPTION_FUNC_Dropbox_Select_Text,
 		OPTION_FUNC_Dropbox_Scroll_Line,
 		OPTION_FUNC_Dropbox_Scroll_Bar,
-		
+
 		OPTION_FUNC_Bool_Frame,
 		OPTION_FUNC_Bool_Left_Area,
 		OPTION_FUNC_Bool_Left_Text,
@@ -59,21 +59,21 @@ public:
 		OPTION_FUNC_Bool_Right_Text,
 		OPTION_FUNC_Bool_Right_Focus_Pos,
 		OPTION_FUNC_Bool_Right_UnderLine,
-		
+
 		OPTION_FUNC_Slide_Area,
 		OPTION_FUNC_Slide_Num,
 		OPTION_FUNC_Slide_Bar_Line,
 		OPTION_FUNC_Slide_Left_Arrow,
 		OPTION_FUNC_Slide_Bar_Button,
 		OPTION_FUNC_Slide_Right_Arrow,
-		
+
 		OPTION_DESC_Head,
 		OPTION_DESC_Deco,
 		OPTION_DESC_Text,
-		
+
 		OPTION_Focus,
 		OPTION_Highlight_Line,
-		
+
 		OPTION_Calibration_Frame,
 		OPTION_Calibration_Image,
 		OPTION_Calibration_Text,
@@ -85,7 +85,7 @@ public:
 		GROUP_END
 	};
 
-	
+
 
 
 	// 구조체 
@@ -106,7 +106,7 @@ public:
 		_int iSize_Select_Button = 0;
 		_int iSelected_Num = 0;
 		vector<_wstring> vecSelect_Name;
-		
+
 		// slide 
 		_bool bIsShow_IntNum = false;
 		_bool bIsButton_Moving = false;
@@ -119,8 +119,8 @@ public:
 		_float fInterval_Ratio = 0.f;
 		_float fNow_Ratio = 0.f;
 
-		_wstring strVariable_Key = {};
-
+		_int iVariable_Key = {};
+		_wstring strDescription = {};
 	}FUNCTION;
 
 	typedef struct OPTION_LINE
@@ -136,11 +136,11 @@ public:
 	typedef struct OPTION_TAB
 	{
 		OPTION_TAB() {}
-		~OPTION_TAB() 
+		~OPTION_TAB()
 		{
 			for (auto& iter : vecOption_Line)
 				Safe_Delete(iter);
-			
+
 			vecOption_Line.clear();
 		}
 		_wstring strName = {};
@@ -170,15 +170,9 @@ public:
 	virtual HRESULT Ready_UIPart_Group_Control() override;
 
 public: // UI 매니저 & 싱글톤이 사용하는 함수 
-	_bool Get_Variable(_wstring strKey, _float* fVariable) 
-	{
-		map<_wstring, _float*>::iterator iter = m_mapVariables.find(strKey);
-		if (iter == m_mapVariables.end())
-			return false;
-		else
-			return (*iter).second;
-	}
-
+	_bool Input_Variable_Pointer_Into_Option(_int iKey, _bool* pVar);
+	_bool Input_Variable_Pointer_Into_Option(_int iKey, _float* pVar);
+	_bool Input_Variable_Pointer_Into_Option(_int iKey, _int* pVar);
 
 protected: // 자체 사용 함수 
 	HRESULT Initialize_Option();
@@ -186,7 +180,7 @@ protected: // 자체 사용 함수
 	void Update_Tab(_float fTimeDelta);
 	void Action_Scroll(_float fTimeDelta);
 	void Update_Line(_float fTimeDelta);
-	
+
 	void Update_BoolButton(FUNCTION& NowFunction, _float fTimeDelta, _bool bMouse);
 	void Update_Slide(FUNCTION& NowFunction, _float fTimeDelta, _bool bMouse);
 	void Update_Slide_Button(FUNCTION& NowFunction, _float fTimeDelta, _bool bMouse);
@@ -194,13 +188,16 @@ protected: // 자체 사용 함수
 
 	void Open_Dropbox_SelectBox(FUNCTION& NowFunction, _float fTimeDelta);
 	void Close_Dropbox_SelectBox(FUNCTION& NowFunction, _float fTimeDelta);
-	
+
 	void Update_Dropbox_SelectBox(FUNCTION& NowFunction, _float fTimeDelta);
 
 	void Update_Right_Side(_float fTimeDelta);
 	void Update_Focus_Highlight(_float fTimeDelta);
-	
+
 	void Change_Focus_Mark_Destination(_Vec2 vPos);
+	void Change_Highlight_Pos(_Vec2 vPos);
+
+	void Update_Variable();
 
 protected:
 	SCROLL* m_pScroll_Option = { nullptr };
@@ -215,9 +212,14 @@ protected:
 	_bool m_bIsMouseAction_DropBox = false; // <- 
 	_bool m_bChange_Tab = false;
 
-	map<_wstring, _float*> m_mapVariables; 
+	map<_int, _bool*> m_mapVariables_Bool;
+	map<_int, _float*> m_mapVariables_Slide;
+	map<_int, _int*> m_mapVariables_DropBox;
 
 	_Vec2 m_vOrigin_Focus_Dest = { 0.f,0.f };
+
+	// 그래픽 효과 조절용 
+	_bool m_bGraphic[6] = { true, true, true, false, true, true, };
 
 public:
 	static CUIPage_Option* Create(ID3D11Device* pDevice, ID3D11DeviceContext* pContext);

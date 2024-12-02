@@ -98,6 +98,12 @@ public:
 	DOF_DESC*		Get_DOFDesc();
 	RADIAL_DESC* Get_RadialDesc();
 
+	void			Set_SSAODesc(_bool bIsUsing);
+	void			Set_HDRDesc(_bool bIsUsing);
+	void			Set_BloomDesc(_bool bIsUsing);
+	void			Set_DOFDesc(_bool bIsUsing);
+	void			Set_RadialDesc(_bool bIsUsing);
+
 	_bool			Get_IsOnPBR();
 	void			Toggle_PBR();
 

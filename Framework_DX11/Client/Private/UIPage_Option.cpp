@@ -83,7 +83,7 @@ void CUIPage_Option::Late_Update(_float fTimeDelta)
 		return;
 
 	__super::Late_Update(fTimeDelta);
-	m_vecPart[_int(PART_GROUP::OPTION_Focus)]->bRender = false; 
+	m_vecPart[_int(PART_GROUP::OPTION_Focus)]->bRender = false;
 	m_vecPart[_int(PART_GROUP::OPTION_Highlight_Line)]->bRender = false;
 
 	Update_Tab(fTimeDelta);
@@ -94,6 +94,8 @@ void CUIPage_Option::Late_Update(_float fTimeDelta)
 	Update_Line(fTimeDelta);
 	Update_Right_Side(fTimeDelta);
 	Update_Focus_Highlight(fTimeDelta);
+
+	Update_Variable();
 }
 
 HRESULT CUIPage_Option::Render()
@@ -138,6 +140,40 @@ HRESULT CUIPage_Option::Ready_UIPart_Group_Control()
 	return S_OK;
 }
 
+_bool CUIPage_Option::Input_Variable_Pointer_Into_Option(_int iKey, _bool* pVar)
+{
+	map<_int, _bool*>::iterator iter = m_mapVariables_Bool.find(iKey);
+	if (iter == m_mapVariables_Bool.end())
+		return false;
+
+	iter->second = pVar;
+
+	return true;
+}
+
+_bool CUIPage_Option::Input_Variable_Pointer_Into_Option(_int iKey, _float* pVar)
+{
+	map<_int, _float*>::iterator iter = m_mapVariables_Slide.find(iKey);
+	if (iter == m_mapVariables_Slide.end())
+		return false;
+
+	iter->second = pVar;
+
+	return true;
+}
+
+_bool CUIPage_Option::Input_Variable_Pointer_Into_Option(_int iKey, _int* pVar)
+{
+	map<_int, _int*>::iterator iter = m_mapVariables_DropBox.find(iKey);
+	if (iter == m_mapVariables_DropBox.end())
+		return false;
+
+	iter->second = pVar;
+
+	return true;
+}
+
+
 HRESULT CUIPage_Option::Initialize_Option()
 {
 	vector<vector<_wstring>> vecBuffer_Spec;
@@ -155,22 +191,22 @@ HRESULT CUIPage_Option::Initialize_Option()
 			m_vecOption_TabInfo.push_back(pNewTab);
 			++iNowTabNum;
 		}
-			
+
 		LINE* pNewLine = new LINE;
 
 		pNewLine->eFunc = OPTION_FUNC(stoi(vecBuffer_Spec[i][2]));
 		pNewLine->strName = vecBuffer_Spec[i][3];
-		
+
 		FUNCTION* pNewFunc = new FUNCTION;
 
-		pNewFunc->strVariable_Key = vecBuffer_Spec[i][4];
-		_float* pNew = new _float;
-		m_mapVariables.insert({ pNewFunc->strVariable_Key , pNew });
+		pNewFunc->iVariable_Key = stoi(vecBuffer_Spec[i][4]);
 
 		if (pNewLine->eFunc == OPTION_FUNC::FUNC_BOOL)
 		{
 			pNewFunc->strLeft = vecBuffer_Spec[i][5];
 			pNewFunc->strRight = vecBuffer_Spec[i][6];
+
+			m_mapVariables_Bool.insert({ pNewFunc->iVariable_Key , nullptr });
 		}
 		else if (pNewLine->eFunc == OPTION_FUNC::FUNC_SLIDE)
 		{
@@ -185,22 +221,75 @@ HRESULT CUIPage_Option::Initialize_Option()
 			pNewFunc->fInterval = stof(vecBuffer_Spec[i][11]);
 			pNewFunc->fInterval_Ratio = (pNewFunc->fInterval / (pNewFunc->fMax - pNewFunc->fMin));
 			pNewFunc->fInterval_X = (pNewFunc->fMax - pNewFunc->fMin) * pNewFunc->fInterval_Ratio;
-			
+
+			m_mapVariables_Slide.insert({ pNewFunc->iVariable_Key , nullptr });
 		}
 		else if (pNewLine->eFunc == OPTION_FUNC::FUNC_DROPBOX)
 		{
 			pNewFunc->iSize_Select_Button = stoi(vecBuffer_Spec[i][12]);
 			for (_int j = 0; j <= pNewFunc->iSize_Select_Button; ++j)
 				pNewFunc->vecSelect_Name.push_back(vecBuffer_Spec[i][13 + j]);
-		}
 
+			m_mapVariables_DropBox.insert({ pNewFunc->iVariable_Key , nullptr });
+		}
+		pNewFunc->strDescription = vecBuffer_Spec[i][28];
 		pNewLine->pFunction = pNewFunc;
 		m_vecOption_TabInfo.back()->vecOption_Line.push_back(pNewLine);
 	}
 
-	
+	// 그래픽 변수 
+	//_bool* pGraTitle = new _bool;
+	//Input_Variable_Pointer_Into_Option(11100100, pGraTitle);
+	Input_Variable_Pointer_Into_Option(1, &m_bGraphic[0]);
+	Input_Variable_Pointer_Into_Option(2, &m_bGraphic[1]);
+	Input_Variable_Pointer_Into_Option(3, &m_bGraphic[2]);
+	Input_Variable_Pointer_Into_Option(4, &m_bGraphic[3]);
+	Input_Variable_Pointer_Into_Option(5, &m_bGraphic[4]);
+	Input_Variable_Pointer_Into_Option(6, &m_bGraphic[5]);
 
-	
+	// 사운드 변수 - 전역 
+	//_bool* pSoundTitle = new _bool;
+	//Input_Variable_Pointer_Into_Option(11100101, pSoundTitle);
+	Input_Variable_Pointer_Into_Option(8, &g_fBGMVolume);
+	Input_Variable_Pointer_Into_Option(9, &g_fEffectVolume);
+	Input_Variable_Pointer_Into_Option(10, &g_fVoiceVolume);
+	Input_Variable_Pointer_Into_Option(11, &g_fEnvVolume);
+	Input_Variable_Pointer_Into_Option(12, &g_fUIVolume);
+
+
+	for (_int i = 0; i < m_vecOption_TabInfo.size(); ++i)
+	{
+		for (_int j = 0; j < m_vecOption_TabInfo[i]->vecOption_Line.size(); ++j)
+		{
+			LINE* pNow = m_vecOption_TabInfo[i]->vecOption_Line[j];
+			// 테스트 코드
+			if (i >= 2)
+			{
+				if (pNow->eFunc == OPTION_FUNC::FUNC_BOOL)
+				{
+					_bool* pNew = new _bool;
+					Input_Variable_Pointer_Into_Option(pNow->pFunction->iVariable_Key, pNew);
+				}
+				else if (pNow->eFunc == OPTION_FUNC::FUNC_SLIDE)
+				{
+					_float* pNew = new _float;
+					Input_Variable_Pointer_Into_Option(pNow->pFunction->iVariable_Key, pNew);
+				}
+				else if (pNow->eFunc == OPTION_FUNC::FUNC_DROPBOX)
+				{
+					_int* pNew = new _int;
+					Input_Variable_Pointer_Into_Option(pNow->pFunction->iVariable_Key, pNew);
+				}
+			}
+
+			if (pNow->eFunc == OPTION_FUNC::FUNC_BOOL)
+				pNow->pFunction->bIsSelect_Left = *m_mapVariables_Bool.find(pNow->pFunction->iVariable_Key)->second;
+			else if (pNow->eFunc == OPTION_FUNC::FUNC_SLIDE)
+				pNow->pFunction->fNow = *m_mapVariables_Slide.find(pNow->pFunction->iVariable_Key)->second;
+			else if (pNow->eFunc == OPTION_FUNC::FUNC_DROPBOX)
+				pNow->pFunction->iSelected_Num = *m_mapVariables_DropBox.find(pNow->pFunction->iVariable_Key)->second;
+		}
+	}
 }
 
 void CUIPage_Option::Update_Tab(_float fTimeDelta)
@@ -225,7 +314,7 @@ void CUIPage_Option::Update_Tab(_float fTimeDelta)
 	_int iTab_Origin = m_iNow_Tab;
 	m_bChange_Tab = false;
 
-	
+
 	_int iNowMouse = -1;
 
 	// 마우스 
@@ -296,7 +385,7 @@ void CUIPage_Option::Update_Tab(_float fTimeDelta)
 
 		++iNowCheckTap;
 	}
-	
+
 	m_vecPart[_int(PART_GROUP::OPTION_Tap_Mouse_Area)]->fPosition.x -= (m_vecPart[_int(PART_GROUP::OPTION_Tap_Mouse_Area)]->fSize.x * (m_vecOption_TabInfo.size()));
 
 	if (iTab_Origin != m_iNow_Tab)
@@ -328,7 +417,7 @@ void CUIPage_Option::Action_Scroll(_float fTimeDelta)
 				m_pScroll_Option->Start_Bar_Moving(vMouse.y);
 				m_bIsCloseAction_DropBox = true;
 			}
-				
+
 	}
 
 	m_vecPart[_int(PART_GROUP::OPTION_Main_Scroll_Bar)]->fRatio = m_pScroll_Option->fScroll_Ratio;
@@ -344,21 +433,14 @@ void CUIPage_Option::Update_Line(_float fTimeDelta)
 {
 	_float fStartY = m_vecPart[_int(PART_GROUP::OPTION_Main_Scroll_Area)]->fPosition.y - m_vecPart[_int(PART_GROUP::OPTION_Main_Scroll_Area)]->fSize.y * 0.5f - m_pScroll_Option->fData_Offset_Y;
 	_float fAdjustY = 0.f;
-	
+
 	_float fHeight_Title = m_vecPart[_int(PART_GROUP::OPTION_TITLE_Area)]->fSize.y;
 	_float fHeight_Line = m_vecPart[_int(PART_GROUP::OPTION_LINE_Area)]->fSize.y;
 
-	
-	
+	_int iLineIndex = 0;
+
 	for (auto& iter : m_vecOption_TabInfo[m_iNow_Tab]->vecOption_Line)
 	{
-		map<_wstring, _float*>::iterator iterVari = m_mapVariables.find(iter->pFunction->strVariable_Key);
-
-		if (iterVari == m_mapVariables.end())
-			continue;
-		if (iterVari->second == nullptr)
-			continue;
-
 		OPTION_FUNC eFunc = iter->eFunc;
 
 		if (eFunc == OPTION_FUNC::FUNC_TITLE)
@@ -398,12 +480,13 @@ void CUIPage_Option::Update_Line(_float fTimeDelta)
 					if (i > _int(PART_GROUP::OPTION_LINE_Focus_Pos))
 						Input_Render_Info(*m_vecPart[i], SCROLL_AREA::SCROLL_OPTION);
 				}
-
-				m_vecPart[_int(PART_GROUP::OPTION_Focus)]->fAdjust_End = m_vecPart[_int(PART_GROUP::OPTION_LINE_Focus_Pos)]->fPosition;
+				Change_Focus_Mark_Destination(m_vecPart[_int(PART_GROUP::OPTION_LINE_Focus_Pos)]->fPosition);
 			}
-			
+
 			if (bFuncion_Render)
 			{
+				m_iNow_Line = iLineIndex;
+
 				if (eFunc == OPTION_FUNC::FUNC_BOOL)
 				{
 					Update_BoolButton(*iter->pFunction, fTimeDelta, bMouse);
@@ -420,22 +503,22 @@ void CUIPage_Option::Update_Line(_float fTimeDelta)
 				{
 					if (KEY_TAP(KEY::LBUTTON))
 					{
-						if (*m_mapVariables.find(iter->pFunction->strVariable_Key)->second == 0.f)
-							*m_mapVariables.find(iter->pFunction->strVariable_Key)->second = 1.f;
-						else if (*m_mapVariables.find(iter->pFunction->strVariable_Key)->second == 1.f)
-							*m_mapVariables.find(iter->pFunction->strVariable_Key)->second = 0.f;
+						
 					}
 				}
 			}
-			
+
 			fAdjustY += fHeight_Line * 0.5f;
 		}
+
+		++iLineIndex;
 	}
 
 	m_bIsCloseAction_DropBox = false;
 
 	if (m_bChange_Tab)
 	{
+		m_iNow_Line = 0;
 		m_bIsCloseAction_DropBox = true;
 		m_pScroll_Option->Activate_Scroll(fAdjustY);
 	}
@@ -455,12 +538,12 @@ void CUIPage_Option::Update_BoolButton(FUNCTION& NowFunction, _float fTimeDelta,
 	{
 		m_vecPart[_int(PART_GROUP::OPTION_Focus)]->fAdjust_End = m_vecPart[_int(PART_GROUP::OPTION_FUNC_Bool_Left_Focus_Pos)]->fPosition;
 		iFocus = -1;
-	
+
 		if (KEY_TAP(KEY::LBUTTON))
 		{
 			NowFunction.bIsSelect_Left = true;
 		}
-			
+
 	}
 	else if (GET_GAMEINTERFACE->CheckMouse(m_vecPart[_int(PART_GROUP::OPTION_FUNC_Bool_Right_Area)]->fPosition, m_vecPart[_int(PART_GROUP::OPTION_FUNC_Bool_Right_Area)]->fSize).x != -1.f)
 	{
@@ -470,7 +553,7 @@ void CUIPage_Option::Update_BoolButton(FUNCTION& NowFunction, _float fTimeDelta,
 		if (KEY_TAP(KEY::LBUTTON))
 		{
 			NowFunction.bIsSelect_Left = false;
-		}	
+		}
 	}
 
 	m_vecPart[_int(PART_GROUP::OPTION_FUNC_Bool_Left_Focus_Pos)]->bRender = (iFocus == -1) ? true : false;
@@ -484,7 +567,10 @@ void CUIPage_Option::Update_BoolButton(FUNCTION& NowFunction, _float fTimeDelta,
 		if (m_vecPart[i]->bRender)
 			Input_Render_Info(*m_vecPart[i], SCROLL_AREA::SCROLL_OPTION);
 
-	*m_mapVariables.find(NowFunction.strVariable_Key)->second = _float(NowFunction.bIsSelect_Left);
+	if (NowFunction.bIsSelect_Left)
+		*m_mapVariables_Bool.find(NowFunction.iVariable_Key)->second = true;
+	else 
+		*m_mapVariables_Bool.find(NowFunction.iVariable_Key)->second = false;
 }
 
 void CUIPage_Option::Update_Slide(FUNCTION& NowFunction, _float fTimeDelta, _bool bMouse)
@@ -513,13 +599,13 @@ void CUIPage_Option::Update_Slide(FUNCTION& NowFunction, _float fTimeDelta, _boo
 
 	if (NowFunction.bIsShow_IntNum)
 		m_vecPart[_int(PART_GROUP::OPTION_FUNC_Slide_Num)]->strText = to_wstring(_int(NowFunction.fNow));
-	else 
+	else
 		m_vecPart[_int(PART_GROUP::OPTION_FUNC_Slide_Num)]->strText = to_wstring(NowFunction.fNow);
 
 	for (_int i = _int(PART_GROUP::OPTION_FUNC_Slide_Area); i <= _int(PART_GROUP::OPTION_FUNC_Slide_Right_Arrow); ++i)
 		Input_Render_Info(*m_vecPart[i], SCROLL_AREA::SCROLL_OPTION);
-	
-	*m_mapVariables.find(NowFunction.strVariable_Key)->second = _float(NowFunction.fNow);
+
+	*m_mapVariables_Slide.find(NowFunction.iVariable_Key)->second = _float(NowFunction.fNow);
 }
 
 void CUIPage_Option::Update_Slide_Button(FUNCTION& NowFunction, _float fTimeDelta, _bool bMouse)
@@ -568,7 +654,7 @@ void CUIPage_Option::Update_Slide_Button(FUNCTION& NowFunction, _float fTimeDelt
 				NowFunction.fNow = NowFunction.fMin + NowFunction.fInterval * iNowIndex;
 			}
 		}
-		else 
+		else
 			NowFunction.bIsButton_Moving = false;
 	}
 	else
@@ -578,12 +664,12 @@ void CUIPage_Option::Update_Slide_Button(FUNCTION& NowFunction, _float fTimeDelt
 				NowFunction.bIsButton_Moving = true;
 	}
 
-	
+
 }
 
 void CUIPage_Option::Update_Dropbox(FUNCTION& NowFunction, _float fTimeDelta, _bool bMouse)
 {
-	// 안정화 전 안전코드 
+	// 안전 코드
 	return;
 
 	_bool bIsClick = KEY_TAP(KEY::LBUTTON);
@@ -601,11 +687,11 @@ void CUIPage_Option::Update_Dropbox(FUNCTION& NowFunction, _float fTimeDelta, _b
 		if (bIsClick)
 			if (GET_GAMEINTERFACE->CheckMouse(m_vecPart[_int(PART_GROUP::OPTION_FUNC_Dropbox_Area)]->fPosition, m_vecPart[_int(PART_GROUP::OPTION_FUNC_Dropbox_Area)]->fSize).x != -1.f)
 			{
-				
+
 				Open_Dropbox_SelectBox(NowFunction, fTimeDelta);
 			}
 	}
-	
+
 	if (NowFunction.bDropBox_On)
 	{
 		if (m_bIsCloseAction_DropBox)
@@ -622,7 +708,7 @@ void CUIPage_Option::Open_Dropbox_SelectBox(FUNCTION& NowFunction, _float fTimeD
 	for (_int i = _int(PART_GROUP::OPTION_FUNC_Dropbox_Box_Header); i <= _int(PART_GROUP::OPTION_FUNC_Dropbox_Scroll_Bar); ++i)
 		__super::UpdatePart_ByIndex(i, fTimeDelta);
 
-	_float fScroll_Size = m_vecPart[_int(PART_GROUP::OPTION_FUNC_Dropbox_Select_Area)]->fSize.y* NowFunction.iSize_Select_Button;
+	_float fScroll_Size = m_vecPart[_int(PART_GROUP::OPTION_FUNC_Dropbox_Select_Area)]->fSize.y * NowFunction.iSize_Select_Button;
 
 	m_pScroll_DropBox->Activate_Scroll(fScroll_Size, m_vecPart[_int(PART_GROUP::OPTION_FUNC_Dropbox_Box_Area)]->fPosition, m_vecPart[_int(PART_GROUP::OPTION_FUNC_Dropbox_Box_Area)]->fSize);
 	NowFunction.bDropBox_On = true;
@@ -632,9 +718,8 @@ void CUIPage_Option::Open_Dropbox_SelectBox(FUNCTION& NowFunction, _float fTimeD
 
 void CUIPage_Option::Close_Dropbox_SelectBox(FUNCTION& NowFunction, _float fTimeDelta)
 {
-
-
-
+	m_pScroll_DropBox->DeActivate_Scroll();
+	NowFunction.bDropBox_On = false;
 }
 
 void CUIPage_Option::Update_Dropbox_SelectBox(FUNCTION& NowFunction, _float fTimeDelta)
@@ -727,7 +812,7 @@ void CUIPage_Option::Update_Dropbox_SelectBox(FUNCTION& NowFunction, _float fTim
 			m_vecPart[_int(PART_GROUP::OPTION_FUNC_Dropbox_Select_Area)]->fTextureColor = _Vec4{ 0.1f,0.1f,0.1f, 1.f };
 			m_vecPart[_int(PART_GROUP::OPTION_FUNC_Dropbox_Select_Text)]->Set_WhiteText();
 		}
-		
+
 		if (i == NowFunction.iSelected_Num)
 		{
 			m_vecPart[_int(PART_GROUP::OPTION_FUNC_Dropbox_Select_Area)]->fTextureColor = _Vec4{ 0.4f,0.4f,0.4f, 1.f };
@@ -740,30 +825,69 @@ void CUIPage_Option::Update_Dropbox_SelectBox(FUNCTION& NowFunction, _float fTim
 		m_vecPart[_int(PART_GROUP::OPTION_FUNC_Dropbox_Select_Area)]->fPosition.y += m_vecPart[_int(PART_GROUP::OPTION_FUNC_Dropbox_Select_Area)]->fSize.y;
 	}
 
-	*m_mapVariables.find(NowFunction.strVariable_Key)->second = _float(NowFunction.iSelected_Num);
+	*m_mapVariables_DropBox.find(NowFunction.iVariable_Key)->second = _float(NowFunction.iSelected_Num);
 }
 
 void CUIPage_Option::Update_Right_Side(_float fTimeDelta)
 {
+	m_vecPart[_int(PART_GROUP::OPTION_DESC_Text)]->strText = m_vecOption_TabInfo[m_iNow_Tab]->vecOption_Line[m_iNow_Line]->pFunction->strDescription;
+
+	Input_Render_Info(*m_vecPart[_int(PART_GROUP::OPTION_DESC_Head)], SCROLL_AREA::SCROLL_NONE);
+	Input_Render_Info(*m_vecPart[_int(PART_GROUP::OPTION_DESC_Deco)], SCROLL_AREA::SCROLL_NONE);
+	Input_Render_Info(*m_vecPart[_int(PART_GROUP::OPTION_DESC_Text)], SCROLL_AREA::SCROLL_NONE);
+	//Input_Render_Info(*m_vecPart[_int(PART_GROUP::OPTION_Calibration_Frame)], SCROLL_AREA::SCROLL_NONE);
+	//Input_Render_Info(*m_vecPart[_int(PART_GROUP::OPTION_Calibration_Image)], SCROLL_AREA::SCROLL_NONE);
+	//Input_Render_Info(*m_vecPart[_int(PART_GROUP::OPTION_Calibration_Text)], SCROLL_AREA::SCROLL_NONE);
 }
 
 void CUIPage_Option::Update_Focus_Highlight(_float fTimeDelta)
 {
+	// Focus
+	_Vec2 vDirec = m_vecPart[_int(PART_GROUP::OPTION_Focus)]->fAdjust_End - m_vecPart[_int(PART_GROUP::OPTION_Focus)]->fAdjust_Start;
+	m_vecPart[_int(PART_GROUP::OPTION_Focus)]->fPosition = m_vecPart[_int(PART_GROUP::OPTION_Focus)]->fAdjust_Start;
+	m_vecPart[_int(PART_GROUP::OPTION_Focus)]->fPosition += vDirec * m_vecPart[_int(PART_GROUP::OPTION_Focus)]->fRatio;
+	m_vecPart[_int(PART_GROUP::OPTION_Focus)]->fRatio += fTimeDelta * 10.f;
+	m_vecPart[_int(PART_GROUP::OPTION_Focus)]->fRatio = min(m_vecPart[_int(PART_GROUP::OPTION_Focus)]->fRatio, 1.f);
 
+	Input_Render_Info(*m_vecPart[_int(PART_GROUP::OPTION_Focus)], SCROLL_AREA::SCROLL_NONE);
 
-
-
-
-
-
+	// Highlight
+	if (m_vecPart[_int(PART_GROUP::OPTION_Highlight_Line)]->bRender)
+		Input_Render_Info(*m_vecPart[_int(PART_GROUP::OPTION_Focus)], SCROLL_AREA::SCROLL_NONE);
 }
 
 void CUIPage_Option::Change_Focus_Mark_Destination(_Vec2 vPos)
 {
+	if (m_vecPart[_int(PART_GROUP::OPTION_Focus)]->fAdjust_End != vPos)
+	{
+		m_vecPart[_int(PART_GROUP::OPTION_Focus)]->fAdjust_End = vPos;
+		m_vecPart[_int(PART_GROUP::OPTION_Focus)]->fAdjust_Start = m_vecPart[_int(PART_GROUP::OPTION_Focus)]->fPosition;
+		m_vecPart[_int(PART_GROUP::OPTION_Focus)]->fRatio = 0.f;
+	}
+}
 
+void CUIPage_Option::Change_Highlight_Pos(_Vec2 vPos)
+{
+	m_vecPart[_int(PART_GROUP::OPTION_Highlight_Line)]->bRender = true;
+	m_vecPart[_int(PART_GROUP::OPTION_Highlight_Line)]->fPosition = vPos;
+}
 
+void CUIPage_Option::Update_Variable()
+{
+	m_pGameInstance->Set_SSAODesc(m_bGraphic[0]);
+	m_pGameInstance->Set_HDRDesc(m_bGraphic[1]);
+	m_pGameInstance->Set_BloomDesc(m_bGraphic[2]);
+	m_pGameInstance->Set_DOFDesc(m_bGraphic[3]);
+	m_pGameInstance->Set_RadialDesc(m_bGraphic[4]);
 
+	if (m_pGameInstance->Get_IsOnShadow() != m_bGraphic[5])
+		m_pGameInstance->Toggle_Shadow();
 
+	_float fVol = g_fBGMVolume;
+	 fVol = g_fEffectVolume;
+	 fVol = g_fVoiceVolume;
+	 fVol = g_fEnvVolume;
+	 fVol = g_fUIVolume;
 
 }
 
@@ -815,9 +939,23 @@ void CUIPage_Option::Free()
 
 	m_vecOption_TabInfo.clear();
 
-	for (auto& iter : m_mapVariables)
+	for (auto& iter : m_mapVariables_Bool)
 	{
+		if (iter.first > 100000)
+			Safe_Delete(iter.second);
+	}
+	m_mapVariables_Bool.clear();
+
+	for (auto& iter : m_mapVariables_Slide)
+	{
+		if (iter.first > 100000)
 		Safe_Delete(iter.second);
 	}
-	m_mapVariables.clear();
+	m_mapVariables_Slide.clear();
+	for (auto& iter : m_mapVariables_DropBox)
+	{
+		if (iter.first > 100000)
+		Safe_Delete(iter.second);
+	}
+	m_mapVariables_DropBox.clear();
 }

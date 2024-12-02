@@ -420,6 +420,26 @@ RADIAL_DESC* CGameInstance::Get_RadialDesc()
 {
 	return m_pRenderer->Get_RadialDesc();
 }
+void CGameInstance::Set_SSAODesc(_bool bIsUsing)
+{
+	m_pRenderer->Set_SSAODesc(bIsUsing);
+}
+void CGameInstance::Set_HDRDesc(_bool bIsUsing)
+{
+	m_pRenderer->Set_HDRDesc(bIsUsing);
+}
+void CGameInstance::Set_BloomDesc(_bool bIsUsing)
+{
+	m_pRenderer->Set_BloomDesc(bIsUsing);
+}
+void CGameInstance::Set_DOFDesc(_bool bIsUsing)
+{
+	m_pRenderer->Set_DOFDesc(bIsUsing);
+}
+void CGameInstance::Set_RadialDesc(_bool bIsUsing)
+{
+	m_pRenderer->Set_RadialDesc(bIsUsing);
+}
 _bool CGameInstance::Get_IsOnPBR()
 {
 	return m_pRenderer->Get_IsOnPBR();
