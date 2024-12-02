@@ -1,5 +1,7 @@
 #pragma once
 
+#pragma warning(disable : 26495) //구조체 경고 끄기
+
 #include <process.h>
 
 namespace Client

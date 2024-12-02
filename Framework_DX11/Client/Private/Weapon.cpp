@@ -197,7 +197,7 @@ void CWeapon::Play_Sound(WEP_SOUND_TYPE eType, const TCHAR* pSoundKey, _uint iHa
 	//default:
 	//	return;
 	//}
-	m_pSoundCom[eType]->Play2D(pSoundKey, g_fEffectVolume);
+	m_pSoundCom[eType]->Play2D(pSoundKey, &g_fEffectVolume);
 }
 
 void CWeapon::Appear()

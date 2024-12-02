@@ -149,7 +149,7 @@ void CAttackObject::Play_Sound(WEP_SOUND_TYPE eType, const TCHAR* pSoundKey, _ui
 	//default:
 	//	return;
 	//}
-	m_pSoundCom[eType]->Play2D(pSoundKey, g_fEffectVolume);
+	m_pSoundCom[eType]->Play2D(pSoundKey, &g_fEffectVolume);
 }
 
 HRESULT CAttackObject::Ready_Components()

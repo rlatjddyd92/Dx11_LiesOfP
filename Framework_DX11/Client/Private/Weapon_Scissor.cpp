@@ -174,7 +174,7 @@ void CWeapon_Scissor::Play_Sound(WEP_SOUND_TYPE eType, const TCHAR* pSoundKey, _
 {
 	if (!m_isSeperate)
 	{
-		m_pSoundCom[eType]->Play2D(pSoundKey, g_fEffectVolume);
+		m_pSoundCom[eType]->Play2D(pSoundKey, &g_fEffectVolume);
 	}
 	else
 	{
@@ -203,7 +203,7 @@ void CWeapon_Scissor::Change_CombineMode()
 	m_pScissor_Sperate[0]->IsActive(false);
 	m_pScissor_Sperate[1]->IsActive(false);
 
-	m_pSoundCom[WEP_SOUND_WEAPON]->Play2D(TEXT("SE_PC_SK_Spark_Metal_07.wav"), g_fEffectVolume);
+	m_pSoundCom[WEP_SOUND_WEAPON]->Play2D(TEXT("SE_PC_SK_Spark_Metal_07.wav"), &g_fEffectVolume);
 
 	m_isSeperate = false;
 }

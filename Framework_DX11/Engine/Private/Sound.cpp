@@ -33,6 +33,9 @@ void CSound::Update(_float fTimeDelta)
 	m_pChannel->isPlaying(&m_isPlaying);
 	m_pChannel->getPaused(&m_isPause);
 
+	if(m_pVolume != nullptr)
+		m_pChannel->setVolume(*m_pVolume);
+
 	if (!m_pOwner->IsActive())
 		m_pChannel->stop();
 
@@ -43,7 +46,7 @@ void CSound::Update(_float fTimeDelta)
 	m_pSystem->update();
 }
 
-void CSound::Play3D(const TCHAR* pSoundKey, _float fVolume)
+void CSound::Play3D(const TCHAR* pSoundKey, _float* pVolume)
 {
 	if (m_isPlaying)
 		m_pChannel->stop();
@@ -72,18 +75,20 @@ void CSound::Play3D(const TCHAR* pSoundKey, _float fVolume)
 		return;
 	}
 	m_pChannel->setMode(FMOD_3D | FMOD_LOOP_NORMAL);
-	m_pChannel->setVolume(fVolume);
+	m_pChannel->setVolume(*pVolume);
+
+	m_pVolume = pVolume;
 }
 
-void CSound::Play3D_Repeat(const TCHAR* pSoundKey, _float fVolume)
+void CSound::Play3D_Repeat(const TCHAR* pSoundKey, _float* pVolume)
 {
 	if (!m_isPlaying)
 	{
-		Play3D(pSoundKey, fVolume);
+		Play3D(pSoundKey, pVolume);
 	}
 }
 
-void CSound::Play2D(const TCHAR* pSoundKey, _float fVolume)
+void CSound::Play2D(const TCHAR* pSoundKey, _float* pVolume)
 {
 	if (m_isPlaying)
 		m_pChannel->stop();
@@ -111,14 +116,16 @@ void CSound::Play2D(const TCHAR* pSoundKey, _float fVolume)
 		return;
 	}
 	m_pChannel->setMode(FMOD_2D);
-	m_pChannel->setVolume(fVolume);
+	m_pChannel->setVolume(*pVolume);
+
+	m_pVolume = pVolume;
 }
 
-void CSound::Play2D_Repeat(const TCHAR* pSoundKey, _float fVolume)
+void CSound::Play2D_Repeat(const TCHAR* pSoundKey, _float* pVolume)
 {
 	if (m_isPlaying)
 	{
-		Play2D(pSoundKey, fVolume);
+		Play2D(pSoundKey, pVolume);
 	}
 }
 
@@ -146,9 +153,10 @@ void CSound::UnMute()
 	m_pChannel->setMute(m_isMute);
 }
 
-void CSound::Set_Volume(_float fVolume)
+void CSound::Set_Volume(_float* pVolume)
 {
-	m_pChannel->setVolume(fVolume);
+	m_pChannel->setVolume(*pVolume);
+	m_pVolume = pVolume;
 }
 
 void CSound::Set_PlaySpeed(_float fSpeedRatio)
