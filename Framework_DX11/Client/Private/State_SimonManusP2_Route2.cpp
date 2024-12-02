@@ -38,6 +38,12 @@ void CState_SimonManusP2_Route2::Update(_float fTimeDelta)
             ++m_iRouteTrack;
             m_pMonster->Change_Animation(AN_ROUTE_LAST, false, 0.1f, 170);
         }
+
+        if (CurTrackPos >= 90.f && CurTrackPos <= 110.f)
+        {
+            m_vTargetDir = m_pMonster->Get_TargetDir();
+            m_pMonster->Get_Transform()->LookAt_Lerp_NoHeight(m_vTargetDir, 2.2f, fTimeDelta);
+        }
     }
     else
     {
