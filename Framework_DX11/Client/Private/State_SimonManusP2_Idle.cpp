@@ -30,18 +30,18 @@ void CState_SimonManusP2_Idle::Update(_float fTimeDelta)
     _float fDist = m_pMonster->Calc_Distance_XZ();
     if (m_fIdleEndDuration <= m_fIdleTime)
     {
-        if (m_bTest)
-        {
-            m_bTest = !m_bTest;
-            m_pMonster->Change_State(CSimonManus::ATKP2_JUMPTOATTACK);
-            return;
-        }
-        else
-        {
-            m_bTest = !m_bTest;
-            m_pMonster->Change_State(CSimonManus::ATKP2_SLIDEMAGIC);
-            return;
-        }
+        //if (m_bTest)
+        //{
+        //    m_bTest = !m_bTest;
+        //    m_pMonster->Change_State(CSimonManus::ATKP2_JUMPTOATTACK);
+        //    return;
+        //}
+        //else
+        //{
+        //    m_bTest = !m_bTest;
+        //    m_pMonster->Change_State(CSimonManus::ATKP2_SLIDEMAGIC);
+        //    return;
+        //}
 
         if (m_fIdleTime >= m_fIdleEndDuration + 2.f)
         {
@@ -60,24 +60,24 @@ void CState_SimonManusP2_Idle::Update(_float fTimeDelta)
                     return;
                 }
             }
+            else if (fDist <= 7.f)
+            {
+                Calc_Act_Attack(fDist);
+                return;
+            }
+            else if (fDist > 9.f)
+            {
+                m_pMonster->Change_State(CSimonManus::RUN);
+                return;
+            }
+            else if (fDist > 6.f)
+            {
+                m_pMonster->Change_State(CSimonManus::WALK);
+                return;
+            }
         }
         
 
-        if (fDist <= 7.f)
-        {
-            Calc_Act_Attack(fDist);
-            return;
-        }
-        else if (fDist > 9.f)
-        {
-            m_pMonster->Change_State(CSimonManus::RUN);
-            return;
-        }
-        else if (fDist > 6.f)
-        {
-            m_pMonster->Change_State(CSimonManus::WALK);
-            return;
-        }
 
     }
 

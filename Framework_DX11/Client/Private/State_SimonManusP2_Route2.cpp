@@ -22,6 +22,9 @@ HRESULT CState_SimonManusP2_Route2::Start_State(void* pArg)
 {
     m_pMonster->Change_Animation(AN_ROUTE_FIRST, false, 0.1f, 0);
 
+    m_fGoalRimAlpha = 0.1f;
+    m_fCurtRimAlpha = 1.f;
+
     m_isJump = true;
 
     return S_OK;
@@ -38,30 +41,43 @@ void CState_SimonManusP2_Route2::Update(_float fTimeDelta)
             ++m_iRouteTrack;
             m_pMonster->Change_Animation(AN_ROUTE_LAST, false, 0.1f, 170);
         }
+
+        if (CurTrackPos >= 90.f && CurTrackPos <= 110.f)
+        {
+            m_vTargetDir = m_pMonster->Get_TargetDir();
+            m_pMonster->Get_Transform()->LookAt_Lerp_NoHeight(m_vTargetDir, 2.2f, fTimeDelta);
+        }
     }
     else
     {
-        if (m_isJump)
+        if (CurTrackPos >= 200.f && CurTrackPos < 230.f) //점프 이후 공중 체공 + 플레이어방향 회전
         {
-            if (160 >= CurTrackPos && 130 <= CurTrackPos)
+            m_vTargetDir = m_pMonster->Get_TargetDir();
+            m_pMonster->Get_Transform()->LookAt_Lerp_NoHeight(m_vTargetDir, 2.2f, fTimeDelta);
+        }
+        else if (CurTrackPos >= 230.f && CurTrackPos <= 245.f) //땅 찍기까지
+        {
+            if (m_bStartSpot)
             {
-                m_vTargetDir = m_pMonster->Get_TargetDir();
-                m_pMonster->Get_Transform()->LookAt_Lerp_NoHeight(m_vTargetDir, 1.8f, fTimeDelta);
-
+                _float fLength = m_vTargetDir.Length();
+                m_vTargetDir = XMVector3Normalize(m_pMonster->Get_Transform()->Get_State(CTransform::STATE_LOOK)) * fLength;
+                m_bStartSpot = false;
             }
-            else if (160 < CurTrackPos && 240 >= CurTrackPos)
-            {
-                _Vec3 vPos = m_pMonster->Get_Transform()->Get_State(CTransform::STATE_POSITION);
 
-                _Vec3 vMove = m_vTargetDir * (((_float)CurTrackPos - 230.f) / 20.f);
-                m_pMonster->Get_RigidBody()->Set_Velocity((vMove - m_vFlyMoveStack) / fTimeDelta);
-                m_vFlyMoveStack = vMove;
-                m_isJump = false;
+            _Vec3 vMove = m_vTargetDir * (((_float)CurTrackPos - 230.f) / 15.f);
+            m_pMonster->Get_RigidBody()->Set_Velocity((vMove - m_vFlyMoveStack) / fTimeDelta);
+            m_vFlyMoveStack = vMove;
+        }
+
+        if (!m_bResetRim)
+        {
+            if (CurTrackPos >= 245.f)
+            {
+                m_fGoalRimAlpha = 1.f;
+                m_bResetRim = true;
             }
         }
     }
-
-    
 
 
     if (End_Check())
@@ -70,12 +86,15 @@ void CState_SimonManusP2_Route2::Update(_float fTimeDelta)
         return;
     }
 
-    Collider_Check();
+    Collider_Check(CurTrackPos);
+    Effect_Check(CurTrackPos);
+    Update_Rimlight();
 
 }
 
 void CState_SimonManusP2_Route2::End_State()
 {
+    m_pMonster->Set_RimLightColor(_Vec4{ 0.f, 0.f, 0.f, 0.f });
     m_iRouteTrack = 0;
 }
 
@@ -106,9 +125,8 @@ _bool CState_SimonManusP2_Route2::End_Check()
     return bEndCheck;
 }
 
-void CState_SimonManusP2_Route2::Collider_Check()
+void CState_SimonManusP2_Route2::Collider_Check(_double CurTrackPos)
 {
-    _double CurTrackPos = m_pMonster->Get_CurrentTrackPos();
     if (m_iRouteTrack == 0) //AN_ROUTE_FIRST, 쓰러지면서 하는 스윙
     {
         if (CurTrackPos >= 60 && CurTrackPos <= 85.f)
@@ -129,6 +147,41 @@ void CState_SimonManusP2_Route2::Collider_Check()
         else
         {
             m_pMonster->DeActive_CurretnWeaponCollider();
+        }
+    }
+}
+
+void CState_SimonManusP2_Route2::Effect_Check(_double CurTrackPos)
+{
+    if (m_iRouteTrack == 0) //AN_ROUTE_FIRST, 쓰러지면서 하는 스윙
+    {
+        if ((CurTrackPos >= 60 && CurTrackPos <= 85.f))
+        {
+            if (!m_pMonster->Get_EffectsLoop(CSimonManus::P1_TRAIL))
+            {
+                m_pMonster->Active_Effect(CSimonManus::P1_TRAIL);
+            }
+        }
+        else
+        {
+            m_pMonster->DeActive_Effect(CSimonManus::P1_TRAIL);
+        }
+    }
+}
+
+void CState_SimonManusP2_Route2::Update_Rimlight()
+{
+    if (m_fCurtRimAlpha != m_fGoalRimAlpha)
+    {
+        m_fCurtRimAlpha += (m_fGoalRimAlpha - m_fCurtRimAlpha) / 20;
+        m_pMonster->Set_RimLightColor(_Vec4{ 0.9f, 0.f, 0.f, m_fCurtRimAlpha });
+        if (abs(m_fGoalRimAlpha - m_fCurtRimAlpha) < 0.1f)
+        {
+            m_fCurtRimAlpha = m_fGoalRimAlpha;
+            if (m_fGoalRimAlpha == 1.f)
+            {
+                m_pMonster->Set_RimLightColor(_Vec4{ 0.f, 0.f, 0.f, 1.f });
+            }
         }
     }
 }

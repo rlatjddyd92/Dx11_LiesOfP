@@ -4,6 +4,8 @@
 #include "Model.h"
 #include "SimonManus.h"
 
+#include "EffectObject.h"
+
 CState_SimonManusP2_SwingDown_Swing::CState_SimonManusP2_SwingDown_Swing(CFsm* pFsm, CMonster* pMonster)
     :CState{ pFsm }
     , m_pMonster{ pMonster }
@@ -66,7 +68,10 @@ void CState_SimonManusP2_SwingDown_Swing::Update(_float fTimeDelta)
     }
 
 
-    Collider_Check();
+    _double CurTrackPos = m_pMonster->Get_CurrentTrackPos();
+
+    Collider_Check(CurTrackPos);
+    Effect_Check(CurTrackPos);
 
 }
 
@@ -102,10 +107,8 @@ _bool CState_SimonManusP2_SwingDown_Swing::End_Check()
     return bEndCheck;
 }
 
-void CState_SimonManusP2_SwingDown_Swing::Collider_Check()
+void CState_SimonManusP2_SwingDown_Swing::Collider_Check(_double CurTrackPos)
 {
-    _double CurTrackPos = m_pMonster->Get_CurrentTrackPos();
-
     if (m_iRouteTrack == 1)
     {
         if (m_iCurLastAnim == AN_ROUTE_LAST_L)
@@ -140,6 +143,61 @@ void CState_SimonManusP2_SwingDown_Swing::Collider_Check()
         else
         {
             m_pMonster->DeActive_CurretnWeaponCollider();
+        }
+    }
+}
+
+void CState_SimonManusP2_SwingDown_Swing::Effect_Check(_double CurTrackPos)
+{
+    if(m_iRouteTrack == 0)    //처음 공격일때
+    {
+        if (CurTrackPos >= 60.f && CurTrackPos <= 75.f)
+        {
+            if (!m_bStampEffect)
+            {
+                CEffectObject::EFFECTOBJ_DESC Desc{};
+                Desc.fLifeDuration = 1.5f;
+                Desc.strEffectTag = TEXT("SimonManus_Attack_Stamp");
+                _float4x4 WorldMat{};
+
+                XMStoreFloat4x4(&WorldMat, (*m_pMonster->Get_WeaponBoneCombinedMat(6) * (*m_pMonster->Get_WeaponWorldMat())));
+                Desc.vPos = _Vec3{ WorldMat._41, WorldMat._42, WorldMat._43 };
+
+                m_pGameInstance->Add_CloneObject_ToLayer(LEVEL_GAMEPLAY, TEXT("Monster_Attack"), TEXT("Prototype_GameObject_SpotEffect"), &Desc);
+
+                m_bStampEffect = true;
+            }
+        }
+    }
+    else
+    {
+        if (m_iCurLastAnim == AN_ROUTE_LAST_L)
+        {
+            if (CurTrackPos >= 45.f && CurTrackPos <= 95.f)
+            {
+                if (!m_pMonster->Get_EffectsLoop(CSimonManus::P1_TRAIL))
+                {
+                    m_pMonster->Active_Effect(CSimonManus::P1_TRAIL);
+                }
+            }
+            else
+            {
+                m_pMonster->DeActive_Effect(CSimonManus::P1_TRAIL);
+            }
+        }
+        else    //루트 R일때
+        {
+            if (CurTrackPos >= 45 && CurTrackPos <= 80.f)
+            {
+                if (!m_pMonster->Get_EffectsLoop(CSimonManus::P1_TRAIL))
+                {
+                    m_pMonster->Active_Effect(CSimonManus::P1_TRAIL);
+                }
+            }
+            else
+            {
+                m_pMonster->DeActive_Effect(CSimonManus::P1_TRAIL);
+            }
         }
     }
 }

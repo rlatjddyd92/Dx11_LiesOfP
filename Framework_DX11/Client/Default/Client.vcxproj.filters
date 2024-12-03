@@ -760,9 +760,6 @@
     <Filter Include="02.GameObjects\12.AttackObject\SimonManus\BlackBall">
       <UniqueIdentifier>{39713752-8c79-4b97-957c-30f68e5c7e25}</UniqueIdentifier>
     </Filter>
-    <Filter Include="02.GameObjects\12.AttackObject\SimonManus\GoldBall">
-      <UniqueIdentifier>{296a8f87-b191-406d-8a87-887adfccab4c}</UniqueIdentifier>
-    </Filter>
     <Filter Include="02.GameObjects\12.AttackObject\SimonManus\JumpMagic">
       <UniqueIdentifier>{2bccd402-cdc1-4e0d-98b4-253b5d267fde}</UniqueIdentifier>
     </Filter>
@@ -1424,9 +1421,6 @@
     <ClInclude Include="..\Public\AObj_ThunderSpear.h">
       <Filter>02.GameObjects\12.AttackObject\SimonManus\ThunderSpear</Filter>
     </ClInclude>
-    <ClInclude Include="..\Public\AObj_GoldBall.h">
-      <Filter>02.GameObjects\12.AttackObject\SimonManus\GoldBall</Filter>
-    </ClInclude>
     <ClInclude Include="..\Public\AObj_JumpMagic.h">
       <Filter>02.GameObjects\12.AttackObject\SimonManus\JumpMagic</Filter>
     </ClInclude>
@@ -2050,9 +2044,6 @@
     </ClCompile>
     <ClCompile Include="..\Private\AObj_ThunderSpear.cpp">
       <Filter>02.GameObjects\12.AttackObject\SimonManus\ThunderSpear</Filter>
-    </ClCompile>
-    <ClCompile Include="..\Private\AObj_GoldBall.cpp">
-      <Filter>02.GameObjects\12.AttackObject\SimonManus\GoldBall</Filter>
     </ClCompile>
     <ClCompile Include="..\Private\AObj_JumpMagic.cpp">
       <Filter>02.GameObjects\12.AttackObject\SimonManus\JumpMagic</Filter>

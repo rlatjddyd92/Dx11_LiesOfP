@@ -70,9 +70,11 @@ void CState_SimonManusP2_ChasingSwing::Update(_float fTimeDelta)
     default:
         break;
     }
-    
-    Collider_Check();
 
+    _double CurTrackPos = m_pMonster->Get_CurrentTrackPos();
+
+    Collider_Check(CurTrackPos);
+    Effect_Check(CurTrackPos);
 }
 
 void CState_SimonManusP2_ChasingSwing::End_State()
@@ -113,19 +115,60 @@ _bool CState_SimonManusP2_ChasingSwing::End_Check()
     return bEndCheck;
 }
 
-void CState_SimonManusP2_ChasingSwing::Collider_Check()
+void CState_SimonManusP2_ChasingSwing::Collider_Check(_double CurTrackPos)
 {
-    if (m_iRouteTrack == 2)
+    if (m_iRouteTrack == 0)
     {
-        _double CurTrackPos = m_pMonster->Get_CurrentTrackPos();
-
-        if (CurTrackPos >= 25.f && CurTrackPos <= 50.f)
+        if ((CurTrackPos >= 140.f))
         {
             m_pMonster->Active_CurrentWeaponCollider(1);
         }
         else
         {
             m_pMonster->DeActive_CurretnWeaponCollider();
+        }
+    }
+    else if (m_iRouteTrack == 2)
+    {
+        if ((CurTrackPos <= 50.f))
+        {
+            m_pMonster->Active_CurrentWeaponCollider(1);
+        }
+        else
+        {
+            m_pMonster->DeActive_CurretnWeaponCollider();
+        }
+    }
+}
+
+void CState_SimonManusP2_ChasingSwing::Effect_Check(_double CurTrackPos)
+{
+    if (m_iRouteTrack == 0)
+    {
+        if ((CurTrackPos >= 140.f))
+        {
+            if (!m_pMonster->Get_EffectsLoop(CSimonManus::P1_TRAIL))
+            {
+                m_pMonster->Active_Effect(CSimonManus::P1_TRAIL);
+            }
+        }
+        else
+        {
+            m_pMonster->DeActive_Effect(CSimonManus::P1_TRAIL);
+        }
+    }
+    else if (m_iRouteTrack == 2)
+    {
+        if ((CurTrackPos <= 50.f))
+        {
+            if (!m_pMonster->Get_EffectsLoop(CSimonManus::P1_TRAIL))
+            {
+                m_pMonster->Active_Effect(CSimonManus::P1_TRAIL);
+            }
+        }
+        else
+        {
+            m_pMonster->DeActive_Effect(CSimonManus::P1_TRAIL);
         }
     }
 }

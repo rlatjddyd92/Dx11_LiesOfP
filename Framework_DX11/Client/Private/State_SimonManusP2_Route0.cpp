@@ -48,7 +48,10 @@ void CState_SimonManusP2_Route0::Update(_float fTimeDelta)
         ++m_iRouteTrack;
     }
 
-    Collider_Check();
+    _double CurTrackPos = m_pMonster->Get_CurrentTrackPos();
+
+    Collider_Check(CurTrackPos);
+    Effect_Check(CurTrackPos);
 
 }
 
@@ -84,9 +87,8 @@ _bool CState_SimonManusP2_Route0::End_Check()
     return bEndCheck;
 }
 
-void CState_SimonManusP2_Route0::Collider_Check()
+void CState_SimonManusP2_Route0::Collider_Check(_double CurTrackPos)
 {
-    _double CurTrackPos = m_pMonster->Get_CurrentTrackPos();
     if (m_iRouteTrack == 0) //AN_ROUTE_FIRST, 쓰러지면서 하는 스윙
     {
         if (CurTrackPos >= 60 && CurTrackPos <= 85.f)
@@ -107,6 +109,38 @@ void CState_SimonManusP2_Route0::Collider_Check()
         else
         {
             m_pMonster->DeActive_CurretnWeaponCollider();
+        }
+    }
+}
+
+void CState_SimonManusP2_Route0::Effect_Check(_double CurTrackPos)
+{
+    if (m_iRouteTrack == 0)
+    {
+        if ((CurTrackPos >= 60 && CurTrackPos <= 85.f))
+        {
+            if (!m_pMonster->Get_EffectsLoop(CSimonManus::P1_TRAIL))
+            {
+                m_pMonster->Active_Effect(CSimonManus::P1_TRAIL);
+            }
+        }
+        else
+        {
+            m_pMonster->DeActive_Effect(CSimonManus::P1_TRAIL);
+        }
+    }
+    else
+    {
+        if (CurTrackPos >= 120 && CurTrackPos <= 180.f)
+        {
+            if (!m_pMonster->Get_EffectsLoop(CSimonManus::P1_TRAIL))
+            {
+                m_pMonster->Active_Effect(CSimonManus::P1_TRAIL);
+            }
+        }
+        else
+        {
+            m_pMonster->DeActive_Effect(CSimonManus::P1_TRAIL);
         }
     }
 }

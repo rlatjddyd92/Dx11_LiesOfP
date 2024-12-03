@@ -34,10 +34,12 @@ private:
 
     _bool               m_bResetRim = { false };
     _bool               m_bStartSpot = { true };
+    _bool               m_bStampEffect = { false };
 
 private:
     _bool               End_Check();
-    void                Collider_Check();
+    void                Collider_Check(_double CurTrackPos);
+    void                Effect_Check(_double CurTrackPos);
     void                Update_Rimlight();
 
 public:

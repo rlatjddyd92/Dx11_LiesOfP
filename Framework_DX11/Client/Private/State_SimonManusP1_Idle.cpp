@@ -104,7 +104,6 @@ void CState_SimonManusP1_Idle::Calc_Act_Attack(_float fDist)
     {
         //어보이드, 점프, 스다 엘알  스탬프, 차지까지 까지
         _int iAtkNum = rand() % 5;
-        iAtkNum = 3;
         switch (iAtkNum)
         {
         case 0:
@@ -139,7 +138,6 @@ void CState_SimonManusP1_Idle::Calc_Act_Attack(_float fDist)
     {
 
         _int iAtkNum = rand() % 4;
-        iAtkNum = 3;
         switch (iAtkNum)
         {
         case 0:
@@ -161,6 +159,9 @@ void CState_SimonManusP1_Idle::Calc_Act_Attack(_float fDist)
         default:
             break;
         }
+        ++m_iAtkCnt;
+
+        return;
 
     }
     else
