@@ -57,12 +57,29 @@ void CState_SimonManusP2_Wave::Projectile_Check(_double CurTrackPos)
         if (CurTrackPos >= 40.f)
         {
             CAttackObject::ATKOBJ_DESC Desc;
-            _float4x4 WorldMat{};
-            XMStoreFloat4x4(&WorldMat, (*m_pMonster->Get_BoneCombinedMat(m_pMonster->Get_UFBIndex(UFB_HAND_LEFT)) * (*m_pMonster->Get_Transform()->Get_WorldMatrix_Ptr())));
-            Desc.vPos = _Vec3{ WorldMat._41, m_pMonster->Get_Transform()->Get_State(CTransform::STATE_POSITION).y + 1.f, WorldMat._43};
-            Desc.vDir = _Vec3{ XMVector3Normalize(m_pMonster->Get_TargetDir()) };
+            _Vec3 vPosition = m_pMonster->Get_Transform()->Get_State(CTransform::STATE_POSITION);
+            _Vec3 vLook = m_pMonster->Get_Transform()->Get_State(CTransform::STATE_LOOK);
+            _Vec3 vRight = m_pMonster->Get_Transform()->Get_State(CTransform::STATE_RIGHT) * 2.f;
+
+            _Vec3 vDirection = XMVector3Normalize(m_pMonster->Get_TargetDir());
+
+            Desc.vPos = _Vec3{ vPosition + vLook };
+            Desc.vDir = _Vec3{ vDirection };
 
             m_pGameInstance->Add_CloneObject_ToLayer(LEVEL_GAMEPLAY, TEXT("Monster_Attack"), TEXT("Prototype_GameObject_Wave"), &Desc);
+
+
+            Desc.vPos = _Vec3{ vPosition + vLook + vRight };
+            Desc.vDir = _Vec3{ vDirection };
+
+            m_pGameInstance->Add_CloneObject_ToLayer(LEVEL_GAMEPLAY, TEXT("Monster_Attack"), TEXT("Prototype_GameObject_Wave"), &Desc);
+
+
+            Desc.vPos = _Vec3{ vPosition + vLook - vRight };
+            Desc.vDir = _Vec3{ vDirection };
+
+            m_pGameInstance->Add_CloneObject_ToLayer(LEVEL_GAMEPLAY, TEXT("Monster_Attack"), TEXT("Prototype_GameObject_Wave"), &Desc);
+
 
             m_bWave = true;
         }
