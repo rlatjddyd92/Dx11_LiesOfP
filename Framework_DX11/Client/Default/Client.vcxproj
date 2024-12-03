@@ -184,6 +184,7 @@
     <ClInclude Include="..\Public\EffectObject.h" />
     <ClInclude Include="..\Public\FollowedEffect.h" />
     <ClInclude Include="..\Public\LastDoor.h" />
+    <ClInclude Include="..\Public\State_Player_OpenSophiaDoor.h" />
     <ClInclude Include="..\Public\SpotEffect.h" />
     <ClInclude Include="..\Public\State_CarcassBigA_Paralyze.h" />
     <ClInclude Include="..\Public\State_CarcassTail_Die.h" />
@@ -211,6 +212,7 @@
     <ClInclude Include="..\Public\State_Player_OH_GuardHit.h" />
     <ClInclude Include="..\Public\State_Player_Ladder.h" />
     <ClInclude Include="..\Public\State_Player_Lift.h" />
+    <ClInclude Include="..\Public\State_Player_SophiaWalk.h" />
     <ClInclude Include="..\Public\State_Player_Stargazer.h" />
     <ClInclude Include="..\Public\State_Player_Teleport.h" />
     <ClInclude Include="..\Public\State_Player_TH_GuardHit.h" />
@@ -404,6 +406,7 @@
     <ClCompile Include="..\Private\EffectObject.cpp" />
     <ClCompile Include="..\Private\FollowedEffect.cpp" />
     <ClCompile Include="..\Private\LastDoor.cpp" />
+    <ClCompile Include="..\Private\State_Player_OpenSophiaDoor.cpp" />
     <ClCompile Include="..\Private\SpotEffect.cpp" />
     <ClCompile Include="..\Private\State_CarcassBigA_Paralyze.cpp" />
     <ClCompile Include="..\Private\State_CarcassTail_Die.cpp" />
@@ -431,6 +434,7 @@
     <ClCompile Include="..\Private\State_Player_OH_GuardHit.cpp" />
     <ClCompile Include="..\Private\State_Player_Ladder.cpp" />
     <ClCompile Include="..\Private\State_Player_Lift.cpp" />
+    <ClCompile Include="..\Private\State_Player_SophiaWalk.cpp" />
     <ClCompile Include="..\Private\State_Player_Stargazer.cpp" />
     <ClCompile Include="..\Private\State_Player_Teleport.cpp" />
     <ClCompile Include="..\Private\State_Player_TH_GuardHit.cpp" />

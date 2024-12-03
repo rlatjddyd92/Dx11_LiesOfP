@@ -805,9 +805,27 @@
     </Filter>
     <Filter Include="03.GameInterface_Controller\00.UIManager\00.UIPage\00.UIPage_Main %2880%25%29">
       <UniqueIdentifier>{00ab63cd-e889-48c6-9ab0-2ba67c8a067b}</UniqueIdentifier>
-	</Filter>
+    </Filter>
     <Filter Include="02.GameObjects\12.AttackObject\SimonManus\Wave">
       <UniqueIdentifier>{3fbe7865-eaf5-4108-95d7-66b4e0d1fc8a}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="05.Fsm\Player\CutScene">
+      <UniqueIdentifier>{690a9148-4f8e-4c89-82d9-db8386a42952}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="05.Fsm\Player\CutScene\Sophia">
+      <UniqueIdentifier>{f5c45fd8-c67e-4f8d-8660-2f0adec9d8f9}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="05.Fsm\Player\CutScene\Sophia\Door">
+      <UniqueIdentifier>{523c375b-4150-4955-9992-725681b84bb3}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="05.Fsm\Player\CutScene\Sophia\Walk">
+      <UniqueIdentifier>{dc6f7b9e-e299-46ce-bf7d-94196ab07a34}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="05.Fsm\Player\CutScene\Sophia\Hand">
+      <UniqueIdentifier>{068b5a22-5213-4848-b9ce-02cf142a3e57}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="05.Fsm\Player\CutScene\Sophia\HandEnd">
+      <UniqueIdentifier>{3e0a6a80-48c4-49d6-8260-d065316ea512}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -1471,9 +1489,15 @@
     </ClInclude>
     <ClInclude Include="..\Public\UIPage_Inform.h">
       <Filter>03.GameInterface_Controller\00.UIManager\00.UIPage\15.UIPage_Inform %280%25%29</Filter>
-	</ClInclude>
+    </ClInclude>
     <ClInclude Include="..\Public\AObj_Wave.h">
       <Filter>02.GameObjects\12.AttackObject\SimonManus\Wave</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Public\State_Player_OpenSophiaDoor.h">
+      <Filter>05.Fsm\Player\CutScene\Sophia\Door</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Public\State_Player_SophiaWalk.h">
+      <Filter>05.Fsm\Player\CutScene\Sophia\Walk</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -2107,9 +2131,15 @@
     </ClCompile>
     <ClCompile Include="..\Private\UIPage_Inform.cpp">
       <Filter>03.GameInterface_Controller\00.UIManager\00.UIPage\15.UIPage_Inform %280%25%29</Filter>
-	</ClCompile>
+    </ClCompile>
     <ClCompile Include="..\Private\AObj_Wave.cpp">
       <Filter>02.GameObjects\12.AttackObject\SimonManus\Wave</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Private\State_Player_OpenSophiaDoor.cpp">
+      <Filter>05.Fsm\Player\CutScene\Sophia\Door</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Private\State_Player_SophiaWalk.cpp">
+      <Filter>05.Fsm\Player\CutScene\Sophia\Walk</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

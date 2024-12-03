@@ -70,6 +70,9 @@
 #include "State_Player_Scissor_Fable1.h"
 #include "State_Player_Scissor_Fable2.h"
 
+#include "State_Player_OpenSophiaDoor.h"
+#include "State_Player_SophiaWalk.h"
+
 // 24-11-27 김성용
 // 게임 인터페이스와 연결을 위해 추가 
 #include "GameInterface_Controller.h"
@@ -117,6 +120,7 @@ HRESULT CPlayer::Initialize(void * pArg)
 	//m_pNavigationCom->Move_to_Cell(m_pRigidBodyCom, 341); //아래엘베
 	//m_pNavigationCom->Move_to_Cell(m_pRigidBodyCom, 440); //상자랑 장애물
 	//m_pNavigationCom->Move_to_Cell(m_pRigidBodyCom, 1068); // 순간이동
+	m_pNavigationCom->Move_to_Cell(m_pRigidBodyCom, 803); // 소피아 방
 
 	m_strObjectTag = TEXT("Player");
 
@@ -190,6 +194,11 @@ void CPlayer::Update(_float fTimeDelta)
 	if (KEY_TAP(KEY::L))
 	{
 		Change_State(ITEMGET);
+		//Calc_DamageGain(5.f, m_pTransformCom->Get_WorldMatrix().Forward() + m_pTransformCom->Get_WorldMatrix().Translation());
+	}
+	if (KEY_TAP(KEY::K))
+	{
+		Change_State(SOPHIA_DOOR_OPEN);
 		//Calc_DamageGain(5.f, m_pTransformCom->Get_WorldMatrix().Forward() + m_pTransformCom->Get_WorldMatrix().Translation());
 	}
 }
@@ -645,6 +654,10 @@ HRESULT CPlayer::Ready_FSM()
 	m_pFsmCom->Add_State(CState_Player_Scissor_Fable0::Create(m_pFsmCom, this, SCISSOR_FABAL0, &Desc));	// 콤보1
 	m_pFsmCom->Add_State(CState_Player_Scissor_Fable1::Create(m_pFsmCom, this, SCISSOR_FABAL1, &Desc));	// 콤보2
 	m_pFsmCom->Add_State(CState_Player_Scissor_Fable2::Create(m_pFsmCom, this, SCISSOR_FABAL2, &Desc));	// 콤보3
+
+	/* 소피아 컷신 */
+	m_pFsmCom->Add_State(CState_Player_OpenSophiaDoor::Create(m_pFsmCom, this, SOPHIA_DOOR_OPEN, &Desc));
+	m_pFsmCom->Add_State(CState_Player_SophiaWalk::Create(m_pFsmCom, this, SOPHIA_WALK, &Desc));
 
 	m_pFsmCom->Set_State(OH_IDLE);
 
