@@ -273,6 +273,11 @@ void CController_Cutscene::Show_GamgeObject_State()
 
 void CController_Cutscene::Camera_Memu()
 {
+    //카메라 이동
+    ImGui::Checkbox("FadeOut", &pCutScene_Desc->Camera_Desc.bTeleport);
+
+    //카메라 회전
+    ImGui::Checkbox("FadeIn", &pCutScene_Desc->Camera_Desc.bTurn);
 }
 
 void CController_Cutscene::UI_Memu()

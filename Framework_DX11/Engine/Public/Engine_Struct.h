@@ -301,10 +301,20 @@ namespace Engine
 
 	typedef struct
 	{
+		_bool bTeleport = { false };
+		_bool bTurn = { false };
+		_Matrix mCameraMatrix;
+		_Vec3 vPitchTawRoll = {};
+
+	}SCENE_CAMERA_DESC;
+
+	typedef struct
+	{
 		_float			fTrackPosition;
 		_bool			bActived = false;
 		SHADER_DESC		ShaderDesc;
 		UI_DESC			UI_DESC;
+		SCENE_CAMERA_DESC	Camera_Desc;
 	}CUTSCENE_DESC;
 
 }
