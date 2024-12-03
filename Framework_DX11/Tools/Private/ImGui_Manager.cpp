@@ -120,7 +120,7 @@ void CImGui_Manager::Update_ImGui()
 void CImGui_Manager::Tool_Cutscene()
 {
 	static _bool bShow_Cutscene_Tool = false;
-	ImGui::Checkbox("Show Cuscene Tool", &bShow_Cutscene_Tool);
+	ImGui::Checkbox("Show CutScene Tool", &bShow_Cutscene_Tool);
 
 	ImGui::Text("");
 
@@ -130,7 +130,7 @@ void CImGui_Manager::Tool_Cutscene()
 	ImGui::Begin("Cutscene_Tool", NULL, ImGuiWindowFlags_MenuBar | ImGuiWindowFlags_HorizontalScrollbar
 		| ImGuiWindowFlags_AlwaysVerticalScrollbar);
 	
-	m_pController_Cutscene->Update(m_pGameInstance->Compute_TimeDelta(TEXT("Timer_60")));
+	m_pController_Cutscene->Update(m_pGameInstance->Compute_TimeDelta(TEXT("Timer_CutScene")));
 
 	ImGui::End();
 

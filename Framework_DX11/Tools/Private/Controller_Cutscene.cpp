@@ -5,6 +5,7 @@
 #include "Controller_UITool.h"
 #include "GameInstance.h"
 #include "CutScene.h"
+#include "Camera.h"
 IMPLEMENT_SINGLETON(CController_Cutscene)
 
 

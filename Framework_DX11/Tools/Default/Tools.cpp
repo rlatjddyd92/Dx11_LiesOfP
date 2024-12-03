@@ -72,7 +72,8 @@ int APIENTRY wWinMain(_In_ HINSTANCE hInstance,
         return FALSE;
     if (FAILED(pGameInstance->Add_Timer(TEXT("Timer_60"))))
         return FALSE;
-
+    if (FAILED(pGameInstance->Add_Timer(TEXT("Timer_CutScene"))))
+        return FALSE;
 
     _float		fTimeAcc = { 0.0f };
 
