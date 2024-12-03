@@ -2,6 +2,7 @@
 #include "Shader_Client_InOut.hlsli"
 
 matrix			g_WorldMatrix, g_ViewMatrix, g_ProjMatrix;
+matrix			g_OldWorldMatrix, g_OldViewMatrix;
 float			g_fFar;
 
 matrix			g_CascadeViewMatrix[3], g_CascadeProjMatrix[3];
@@ -49,6 +50,50 @@ VS_OUT_NORMAL VS_MAIN_NORMAL(VS_IN_MODEL In)
 	return Out;
 }
 
+struct VS_OUT_MOTIONBLUR
+{
+    float4 vPosition : SV_POSITION;
+    float3 vNormal : NORMAL;
+    float2 vTexcoord : TEXCOORD0;
+    float4 vDir: TEXCOORD1;
+};
+
+VS_OUT_MOTIONBLUR VS_MAIN_MOTIONBLUR(VS_IN_MODEL In)
+{
+    VS_OUT_MOTIONBLUR Out = (VS_OUT_MOTIONBLUR) 0;
+
+    matrix matWV, matWVP;
+
+    matWV = mul(g_WorldMatrix, g_ViewMatrix);
+    matWVP = mul(matWV, g_ProjMatrix);
+
+    Out.vPosition = mul(vector(In.vPosition, 1.f), matWVP);
+    Out.vNormal = normalize(mul(vector(In.vNormal, 0.f), matWV)).xyz;		// 확인하기
+    Out.vTexcoord = In.vTexcoord;
+	
+    float4 vNewPos = Out.vPosition;
+    float4 vOldPos = mul(vector(In.vPosition, 1.f), g_OldWorldMatrix);
+    vOldPos = mul(vOldPos, g_OldViewMatrix);
+    vOldPos = mul(vOldPos, g_ProjMatrix);
+	
+    float3 vDir = vNewPos.xyz - vOldPos.xyz;
+	
+    float a = dot(normalize(vDir), normalize(Out.vNormal));
+	if(a < 0.f)
+        Out.vPosition = vOldPos;
+    else
+        Out.vPosition = vNewPos;
+    
+    float2 vVelocity = (vNewPos.xy / vNewPos.w) - (vOldPos.xy / vOldPos.w);
+    Out.vDir.xy = vVelocity * 0.5f;
+    Out.vDir.y *= -1.f;
+    
+    Out.vDir.z = Out.vPosition.z;
+    Out.vDir.w = Out.vPosition.w;
+    
+    return Out;
+}
+
 struct GS_IN_CASCADE
 {
     float4 vPosition : SV_POSITION;
@@ -61,8 +106,6 @@ GS_IN_CASCADE VS_MAIN_CASCADE(VS_IN_ANIMODEL In)
     Out.vPosition = mul(vector(In.vPosition, 1.f), g_WorldMatrix);
     return Out;
 }
-
-
 
 struct GS_OUT_CASCADE
 {
@@ -156,6 +199,32 @@ float4 PS_MAIN_CASCADE(PS_IN_CASCADE In) : SV_Target0
     return float4(In.vPosition.z, 0.f, 0.f, 1.f);
 }
 
+struct PS_IN_MOTIONBLUR
+{
+    float4 vPosition : SV_POSITION;
+    float3 vNormal : NORMAL;
+    float2 vTexcoord : TEXCOORD0;
+    float4 vDir : TEXCOORD1;
+};
+
+struct PS_OUT_MOTIONBLUR
+{
+    vector vColor : SV_TARGET0;
+};
+
+
+PS_OUT_MOTIONBLUR PS_MAIN_MOTIONBLUR(PS_IN_MOTIONBLUR In)
+{
+    PS_OUT_MOTIONBLUR Out = (PS_OUT_MOTIONBLUR) 0;
+    
+    Out.vColor.xy = In.vDir.xy;
+    Out.vColor.z = 1.f;
+    Out.vColor.w = In.vDir.z / In.vDir.w;
+
+    return Out;
+}
+
+
 technique11	DefaultTechnique
 {
 	pass NonAnimModel
@@ -189,5 +258,16 @@ technique11	DefaultTechnique
         VertexShader = compile vs_5_0 VS_MAIN_CASCADE();
         GeometryShader = compile gs_5_0 GS_MAIN();
         PixelShader = compile ps_5_0 PS_MAIN_CASCADE();
+    }
+
+    pass MotionBlur
+    {
+        SetRasterizerState(RS_Default);
+        SetDepthStencilState(DSS_Default, 0);
+        SetBlendState(BS_Default, vector(0.f, 0.f, 0.f, 0.f), 0xffffffff);
+
+        VertexShader = compile vs_5_0 VS_MAIN_MOTIONBLUR();
+        GeometryShader = NULL;
+        PixelShader = compile ps_5_0 PS_MAIN_MOTIONBLUR();
     }
 }

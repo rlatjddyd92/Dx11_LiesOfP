@@ -207,6 +207,23 @@ PS_OUT PS_MAIN_BLOOM(PS_IN In)
     return Out;
 }
 
+PS_OUT PS_MAIN_MOTIONBLUR(PS_IN In)
+{
+    PS_OUT Out = (PS_OUT) 0;
+    
+    vector vBloom = g_BloomTexture.Sample(LinearSampler, In.vTexcoord);
+    vector vBack = g_BackTexture.Sample(LinearSampler, In.vTexcoord);
+    float fDepth = g_DepthTexture.Sample(PointSampler, In.vTexcoord).y * g_fFar;
+    vector vPriority = g_PriorityTexture.Sample(LinearSampler, In.vTexcoord);
+    
+    Out.vColor = vBack + vBloom;
+    
+    //if (fDepth >= g_fFar)
+    //    Out.vColor += vPriority;
+    
+    return Out;
+}
+
 technique11	DefaultTechnique
 {	
     // 0 
