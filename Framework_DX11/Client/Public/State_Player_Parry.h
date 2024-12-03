@@ -22,7 +22,7 @@ public:
 private:
     class CPlayer* m_pPlayer = { nullptr };
 
-    _uint               m_iAnimation_Parry = {};
+    _uint               m_iAnimation_Parry[2] = {};
 
     _double* m_pTrackPos = { nullptr };
 

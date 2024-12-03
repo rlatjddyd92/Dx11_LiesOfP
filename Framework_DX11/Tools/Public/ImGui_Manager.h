@@ -34,10 +34,14 @@ private:
 	class CController_EffectTool*		m_pController_EffectTool = { nullptr };
 	class CController_UITool*			m_pController_UITool = { nullptr };
 	class CController_AnimationTool*	m_pController_AnimationTool = { nullptr };
-	class CCamera_Manager*		m_pController_PostProcess = { nullptr };
+	class CCamera_Manager*				m_pController_PostProcess = { nullptr };
+	class CController_Cutscene*			m_pController_Cutscene = { nullptr };
 
 private:
 	void Update_ImGui();
+
+private:
+	void Tool_Cutscene();
 
 private:
 	void Tool_Map();

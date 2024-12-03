@@ -26,8 +26,6 @@ HRESULT CState_Player_Scissor_LAttack01::Initialize(_uint iStateNum, void* pArg)
     m_iColliderStartFrame = 27;
     m_iColliderEndFrame = 32;
 
-    m_iSoundFrame = 28;
-
     return S_OK;
 }
 
@@ -38,6 +36,8 @@ HRESULT CState_Player_Scissor_LAttack01::Start_State(void* pArg)
     m_isInputLButton = false;
     m_isInputRButton = false;
     m_fRButtonTime = 0.f;
+
+    m_isPlaySound = false;
 
     return S_OK;
 }
@@ -111,14 +111,10 @@ void CState_Player_Scissor_LAttack01::Control_Sound()
 {
     _int iFrame = m_pPlayer->Get_Frame();
 
-    if (iFrame == m_iSoundFrame && !m_isPlaySound)
+    if ((iFrame == m_iColliderStartFrame || iFrame == m_iColliderStartFrame + 1) && !m_isPlaySound)
     {
         m_pPlayer->Play_CurrentWeaponSound(CWeapon::WEP_SOUND_EFFECT1, TEXT("SE_PC_SK_WS_Glaive_P_B_SS_02.wav"));
         m_isPlaySound = true;
-    }
-    else
-    {
-        m_isPlaySound = false;
     }
 }
 

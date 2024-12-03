@@ -2,6 +2,7 @@
 
 #pragma warning (disable : 4251)
 #pragma warning(disable : 5208) //구조체 경고 끄기
+#pragma warning(disable : 26495) //구조체 경고 끄기
 #pragma warning (disable : 6031) // ReadFile 반환값 무시 경고 끄기 
 
 #include <d3d11.h>

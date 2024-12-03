@@ -96,7 +96,7 @@ namespace Engine
 	typedef struct
 	{
 		_bool isOnBloom = false;
-		_float fThreshold = 0.5f;
+		_float fThreshold = 0.f;
 	}BLOOM_DESC;
 
 	typedef struct

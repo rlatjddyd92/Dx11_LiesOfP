@@ -84,12 +84,12 @@ public:
 private:
 	_bool		m_bFirst = { false };
 	_float		m_fTime = { 0.f };
-	_uint		m_iNumTailInstance = { 0 };
-	_float2		m_vTailSpeed = {};
-	_float2		m_vTail_Size = {};
-	_float2		m_vTail_LifeTime = {};
-	_float4		m_vTail_MinColor = {};
-	_float4		m_vTail_MaxColor = {};
+	_uint		m_iNumTailInstance	= { 0 };
+	_float2		m_vTailSpeed		= {};
+	_float2		m_vTail_Size		= {};
+	_float2		m_vTail_LifeTime	= {};
+	_float4		m_vTail_MinColor	= {};
+	_float4		m_vTail_MaxColor	= {};
 
 	D3D11_BUFFER_DESC					m_HeadBuffer_Desc = {};
 	D3D11_BUFFER_DESC					m_TailBuffer_Desc = {};

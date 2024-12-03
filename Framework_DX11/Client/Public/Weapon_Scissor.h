@@ -43,6 +43,8 @@ public:
 	void		Change_CombineMode();
 
 private:
+
+	class CPlayer* m_pPlayer = { nullptr };
 	_bool		m_isSeperate = {};
 
 	CWeapon_Scissor_Handle*		m_pScissor_Sperate[CWeapon_Scissor_Handle::SCISSOR_END] = { nullptr, };

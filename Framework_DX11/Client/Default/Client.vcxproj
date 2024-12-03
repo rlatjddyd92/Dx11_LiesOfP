@@ -275,7 +275,7 @@
     <ClInclude Include="..\Public\State_Player_OH_Sprint.h" />
     <ClInclude Include="..\Public\State_Player_OH_Walk.h" />
     <ClInclude Include="..\Public\State_Player_Rapier_Charge.h" />
-    <ClInclude Include="..\Public\State_Player_Rapier_Fatal.h" />
+    <ClInclude Include="..\Public\State_Player_Rapier_Fablel.h" />
     <ClInclude Include="..\Public\State_Player_Rapier_LAttack00.h" />
     <ClInclude Include="..\Public\State_Player_Rapier_LAttack01.h" />
     <ClInclude Include="..\Public\State_Player_Parry.h" />
@@ -283,9 +283,9 @@
     <ClInclude Include="..\Public\State_Player_Scissor_Buff.h" />
     <ClInclude Include="..\Public\State_Player_Scissor_Charge00.h" />
     <ClInclude Include="..\Public\State_Player_Scissor_Charge01.h" />
-    <ClInclude Include="..\Public\State_Player_Scissor_Fatal0.h" />
-    <ClInclude Include="..\Public\State_Player_Scissor_Fatal1.h" />
-    <ClInclude Include="..\Public\State_Player_Scissor_Fatal2.h" />
+    <ClInclude Include="..\Public\State_Player_Scissor_Fable0.h" />
+    <ClInclude Include="..\Public\State_Player_Scissor_Fable1.h" />
+    <ClInclude Include="..\Public\State_Player_Scissor_Fable2.h" />
     <ClInclude Include="..\Public\State_Player_Scissor_LAttack00.h" />
     <ClInclude Include="..\Public\State_Player_Scissor_LAttack01.h" />
     <ClInclude Include="..\Public\State_Player_Scissor_RAttack00.h" />
@@ -351,6 +351,7 @@
     <ClInclude Include="..\Public\TreasureBox.h" />
     <ClInclude Include="..\Public\UIManager.h" />
     <ClInclude Include="..\Public\UIPage.h" />
+    <ClInclude Include="..\Public\UIPage_Effect.h" />
     <ClInclude Include="..\Public\UIPage_Equip.h" />
     <ClInclude Include="..\Public\UIPage_Inven.h" />
     <ClInclude Include="..\Public\UIPage_Option.h" />
@@ -362,8 +363,8 @@
     <ClInclude Include="..\Public\UIPage_Skill.h" />
     <ClInclude Include="..\Public\UIPage_Stat.h" />
     <ClInclude Include="..\Public\UIPage_ItemInfo.h" />
+    <ClInclude Include="..\Public\UIPage_Test.h" />
     <ClInclude Include="..\Public\UIRender_Batching.h" />
-    <ClInclude Include="..\Public\UIRender_Client.h" />
     <ClInclude Include="..\Public\WallDeco.h" />
     <ClInclude Include="..\Public\Weapon.h" />
     <ClInclude Include="..\Public\Weapon_FlameSword.h" />
@@ -489,7 +490,7 @@
     <ClCompile Include="..\Private\State_Player_OH_Sprint.cpp" />
     <ClCompile Include="..\Private\State_Player_OH_Walk.cpp" />
     <ClCompile Include="..\Private\State_Player_Rapier_Charge.cpp" />
-    <ClCompile Include="..\Private\State_Player_Rapier_Fatal.cpp" />
+    <ClCompile Include="..\Private\State_Player_Rapier_Fablel.cpp" />
     <ClCompile Include="..\Private\State_Player_Rapier_LAttack00.cpp" />
     <ClCompile Include="..\Private\State_Player_Rapier_LAttack01.cpp" />
     <ClCompile Include="..\Private\State_Player_Parry.cpp" />
@@ -497,9 +498,9 @@
     <ClCompile Include="..\Private\State_Player_Scissor_Buff.cpp" />
     <ClCompile Include="..\Private\State_Player_Scissor_Charge00.cpp" />
     <ClCompile Include="..\Private\State_Player_Scissor_Charge01.cpp" />
-    <ClCompile Include="..\Private\State_Player_Scissor_Fatal0.cpp" />
-    <ClCompile Include="..\Private\State_Player_Scissor_Fatal1.cpp" />
-    <ClCompile Include="..\Private\State_Player_Scissor_Fatal2.cpp" />
+    <ClCompile Include="..\Private\State_Player_Scissor_Fable0.cpp" />
+    <ClCompile Include="..\Private\State_Player_Scissor_Fable1.cpp" />
+    <ClCompile Include="..\Private\State_Player_Scissor_Fable2.cpp" />
     <ClCompile Include="..\Private\State_Player_Scissor_LAttack00.cpp" />
     <ClCompile Include="..\Private\State_Player_Scissor_LAttack01.cpp" />
     <ClCompile Include="..\Private\State_Player_Scissor_RAttack00.cpp" />
@@ -565,6 +566,7 @@
     <ClCompile Include="..\Private\TreasureBox.cpp" />
     <ClCompile Include="..\Private\UIManager.cpp" />
     <ClCompile Include="..\Private\UIPage.cpp" />
+    <ClCompile Include="..\Private\UIPage_Effect.cpp" />
     <ClCompile Include="..\Private\UIPage_Equip.cpp" />
     <ClCompile Include="..\Private\UIPage_Inven.cpp" />
     <ClCompile Include="..\Private\UIPage_Option.cpp" />
@@ -576,8 +578,8 @@
     <ClCompile Include="..\Private\UIPage_Skill.cpp" />
     <ClCompile Include="..\Private\UIPage_Stat.cpp" />
     <ClCompile Include="..\Private\UIPage_ItemInfo.cpp" />
+    <ClCompile Include="..\Private\UIPage_Test.cpp" />
     <ClCompile Include="..\Private\UIRender_Batching.cpp" />
-    <ClCompile Include="..\Private\UIRender_Client.cpp" />
     <ClCompile Include="..\Private\WallDeco.cpp" />
     <ClCompile Include="..\Private\Weapon.cpp" />
     <ClCompile Include="..\Private\Weapon_FlameSword.cpp" />

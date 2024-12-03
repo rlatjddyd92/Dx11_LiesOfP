@@ -85,7 +85,8 @@ public:
 
 #pragma region TIMER_MANAGER
 	HRESULT Add_Timer(const _wstring& strTimerTag);
-	_float Compute_TimeDelta(const _wstring& strTimerTag);	
+	_float Compute_TimeDelta(const _wstring& strTimerTag);
+	void Start_TimerLack(const _wstring& strTimerTag, _float fLackTimeDelta = 0.f, _float fDuration = 0.1f);
 #pragma endregion
 
 #pragma region RENDERER
@@ -96,6 +97,18 @@ public:
 	BLOOM_DESC*		Get_BloomDesc();
 	DOF_DESC*		Get_DOFDesc();
 	RADIAL_DESC* Get_RadialDesc();
+
+	void			Set_SSAODesc(_bool bIsUsing);
+	void			Set_HDRDesc(_bool bIsUsing);
+	void			Set_BloomDesc(_bool bIsUsing);
+	void			Set_DOFDesc(_bool bIsUsing);
+	void			Set_RadialDesc(_bool bIsUsing);
+
+	_bool			Get_IsOnPBR();
+	void			Toggle_PBR();
+
+	_bool			Get_IsOnShadow();
+	void			Toggle_Shadow();
 
 #ifdef _DEBUG
 	HRESULT Add_DebugObject(class CComponent* pDebugObject);
@@ -127,7 +140,7 @@ public:
 #pragma region LIGHT_MANAGER
 	HRESULT Add_Light(const LIGHT_DESC& LightDesc);
 	LIGHT_DESC* Get_LightDesc(_uint iIndex);
-	HRESULT Render_Lights(class CShader* pShader, class CVIBuffer_Rect* pVIBuffer);
+	HRESULT Render_Lights(class CShader* pShader, class CVIBuffer_Rect* pVIBuffer, _bool isOnPBR);
 	_int Get_Total_LightCount();
 	void Delete_Light(_int iIndex);
 	_int Find_Light_Index(_Vec4 vPos);
@@ -235,6 +248,15 @@ public:
 		FMOD::System* Get_SoundSystem();
 		map<TCHAR*, FMOD::Sound*>& Get_Sounds();
 		void	LoadSoundFile(const char* pFolderName);
+#pragma endregion
+
+#pragma region World_Octree
+		_bool Is_In_FrustumCulledOctree(vector<_int>& pWorldOctreeIndex);
+		_bool Is_Active_Octree();
+
+		void Create_Octree(_Vec3 vMinPos, _Vec3 vMaxPos);
+		void World_Octree_Render();
+		void Change_Active_Octree();
 #pragma endregion
 
 private:

@@ -35,11 +35,11 @@ HRESULT CStargazer::Initialize(void* pArg)
 
 	m_pPlayer = m_pGameInstance->Find_Player(LEVEL_GAMEPLAY);
 	 
-	m_iAnim_Close = m_pModelCom[RESTORED]->Find_AnimationIndex("AS_Close_Idle", 1.f);
+	m_iAnim_Close = m_pModelCom[RESTORED]->Find_AnimationIndex("AS_Close_Idle", 2.f);
 	m_iAnim_Open = m_pModelCom[RESTORED]->Find_AnimationIndex("AS_Open", 0.5f);
-	m_iAnim_OpenIdle = m_pModelCom[RESTORED]->Find_AnimationIndex("AS_Open_Idle", 1.f);
-	m_iAnim_Broken = m_pModelCom[BROKEN]->Find_AnimationIndex("AS_Stargazer_broken_idle", 1.f);
-	m_iAnim_Restore = m_pModelCom[BROKEN]->Find_AnimationIndex("AS_Stargazer_restore", 2.f);
+	m_iAnim_OpenIdle = m_pModelCom[RESTORED]->Find_AnimationIndex("AS_Open_Idle", 2.f);
+	m_iAnim_Broken = m_pModelCom[BROKEN]->Find_AnimationIndex("AS_Stargazer_broken_idle", 3.f);
+	m_iAnim_Restore = m_pModelCom[BROKEN]->Find_AnimationIndex("AS_Stargazer_restore", 3.f);
 	
 	m_pModelCom[RESTORED]->SetUp_Animation(m_iAnim_Close, true);
 	m_pModelCom[BROKEN]->SetUp_Animation(m_iAnim_Broken, true);
@@ -59,8 +59,9 @@ void CStargazer::Update(_float fTimeDelta)
 {
 	m_pCurrentModel->Play_Animation(fTimeDelta);
 
-	if (m_bStartRestore)
+	if (m_bStartRestore && m_bFirstRestored)
 	{
+		m_bFirstRestored = false;
 		//키 입력 확인 부분은 나중에 UI에서 받아와야 함
 		static_cast<CPawn*>(m_pPlayer)->Set_Respawn_Cell_Num(m_iCurrnetCellNum);
 
@@ -75,7 +76,7 @@ void CStargazer::Update(_float fTimeDelta)
 	{
 		m_fRestoreTimer += fTimeDelta;
 
-		if (m_fRestoreTimer > 3.3f)
+		if (m_fRestoreTimer > 3.3f)	//미리 작동
 		{
 			m_pModelCom[RESTORED]->Play_Animation(fTimeDelta);
 		}

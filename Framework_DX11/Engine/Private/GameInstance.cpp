@@ -127,9 +127,9 @@ HRESULT CGameInstance::Initialize_Engine(HINSTANCE hInst, _uint iNumLevels, cons
 		return E_FAIL;
 
 	//양우송
-	/*m_pWorldOctree_Manager = CWorldOctree_Manager::Create();
+	m_pWorldOctree_Manager = CWorldOctree_Manager::Create(*ppDevice, *ppContext);
 	if (nullptr == m_pWorldOctree_Manager)
-		return E_FAIL;*/
+		return E_FAIL;
 
 	return S_OK;
 }
@@ -161,7 +161,7 @@ void CGameInstance::Update_Engine(_float fTimeDelta)
 
 	m_pSound_Manager->Update();
 
-	//m_pWorldOctree_Manager->Update();
+	m_pWorldOctree_Manager->Update();
 }
 
 HRESULT CGameInstance::Draw_Engine()
@@ -386,6 +386,11 @@ _float CGameInstance::Compute_TimeDelta(const _wstring & strTimerTag)
 	return m_pTimer_Manager->Compute_TimeDelta(strTimerTag);
 }
 
+void CGameInstance::Start_TimerLack(const _wstring& strTimerTag, _float fLackTimeDelta, _float fDuration)
+{
+	m_pTimer_Manager->Start_Lack(strTimerTag, fLackTimeDelta, fDuration);
+}
+
 #pragma endregion
 
 
@@ -414,6 +419,42 @@ DOF_DESC* CGameInstance::Get_DOFDesc()
 RADIAL_DESC* CGameInstance::Get_RadialDesc()
 {
 	return m_pRenderer->Get_RadialDesc();
+}
+void CGameInstance::Set_SSAODesc(_bool bIsUsing)
+{
+	m_pRenderer->Set_SSAODesc(bIsUsing);
+}
+void CGameInstance::Set_HDRDesc(_bool bIsUsing)
+{
+	m_pRenderer->Set_HDRDesc(bIsUsing);
+}
+void CGameInstance::Set_BloomDesc(_bool bIsUsing)
+{
+	m_pRenderer->Set_BloomDesc(bIsUsing);
+}
+void CGameInstance::Set_DOFDesc(_bool bIsUsing)
+{
+	m_pRenderer->Set_DOFDesc(bIsUsing);
+}
+void CGameInstance::Set_RadialDesc(_bool bIsUsing)
+{
+	m_pRenderer->Set_RadialDesc(bIsUsing);
+}
+_bool CGameInstance::Get_IsOnPBR()
+{
+	return m_pRenderer->Get_IsOnPBR();
+}
+void CGameInstance::Toggle_PBR()
+{
+	m_pRenderer->Toggle_PBR();
+}
+_bool CGameInstance::Get_IsOnShadow()
+{
+	return m_pRenderer->Get_IsOnShadow();
+}
+void CGameInstance::Toggle_Shadow()
+{
+	m_pRenderer->Toggle_Shadow();
 }
 #ifdef _DEBUG
 HRESULT CGameInstance::Add_DebugObject(CComponent * pDebugObject)
@@ -504,9 +545,9 @@ LIGHT_DESC * CGameInstance::Get_LightDesc(_uint iIndex)
 }
 #pragma endregion
 
-HRESULT CGameInstance::Render_Lights(CShader * pShader, CVIBuffer_Rect * pVIBuffer)
+HRESULT CGameInstance::Render_Lights(CShader * pShader, CVIBuffer_Rect * pVIBuffer, _bool isOnPBR)
 {
-	return m_pLight_Manager->Render(pShader, pVIBuffer);
+	return m_pLight_Manager->Render(pShader, pVIBuffer, isOnPBR);
 }
 
 _int CGameInstance::Get_Total_LightCount()
@@ -806,6 +847,33 @@ void CGameInstance::LoadSoundFile(const char* pFolderName)
 {
 	m_pSound_Manager->LoadSoundFile(pFolderName);
 }
+#pragma endregion
+
+#pragma region World_Octree
+void CGameInstance::Create_Octree(_Vec3 vMinPos, _Vec3 vMaxPos)
+{
+	m_pWorldOctree_Manager->Create_Octree(vMinPos, vMaxPos);
+}
+
+_bool CGameInstance::Is_In_FrustumCulledOctree(vector<_int>& pWorldOctreeIndex)
+{
+	return m_pWorldOctree_Manager->Is_In_FrustumCulledOctree(pWorldOctreeIndex);
+}
+
+void CGameInstance::World_Octree_Render()
+{
+	m_pWorldOctree_Manager->Render();
+}
+
+_bool CGameInstance::Is_Active_Octree()
+{
+	return m_pWorldOctree_Manager->Is_Active_Octree();
+}
+
+void CGameInstance::Change_Active_Octree()
+{
+	m_pWorldOctree_Manager->Change_Active_Octree();
+}
 
 #pragma endregion
 
@@ -815,7 +883,7 @@ void CGameInstance::Release_Engine()
 	Safe_Release(m_pCollider_Manager);
 	// 2024-11-06 김성용
 	Safe_Release(m_pCSVFile_Manager);
-	//Safe_Release(m_pWorldOctree_Manager);
+	Safe_Release(m_pWorldOctree_Manager);
 	Safe_Release(m_pFrustum);
 	Safe_Release(m_pPicking);
 	Safe_Release(m_pTarget_Manager);

@@ -14,6 +14,9 @@ public:
 	HRESULT Add_Timer(const _wstring& strTimerTag);	
 	_float Compute_TimeDelta(const _wstring& strTimerTag);
 
+public:
+	void Start_Lack(const _wstring& strTimerTag, _float fLackTimeDelta, _float fDuration = 0.1f);
+
 private:
 	map<const _wstring, class CTimer*>			m_Timers;
 

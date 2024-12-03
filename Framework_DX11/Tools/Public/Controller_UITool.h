@@ -35,10 +35,12 @@ public:
 		PAGE_INVEN,
 		PAGE_EQUIP,
 		PAGE_STAT,
-		PAGE_LEVELUP,
 		PAGE_SKILL,
-		PAGE_TEST,
+		PAGE_OPTION,
+		PAGE_ITEMINFO,
 		PAGE_ORTHO,
+		PAGE_TEST,
+		PAGE_EFFECT,
 		PAGE_END
 	};
 
@@ -127,7 +129,7 @@ public:
 
 		// 렌더 관련 제어 변수 
 		_bool bTexture_Color_Multiple = false; // <- true인 경우 텍스쳐 컬러 보정값을 원래 값에 곱하는 방식으로 진행
-		_float fStrash_Alpha = 0.3; // 파트 별로 버리는 알파 기준을 다르게 설정해야 하는 경우 사용
+		_float fStrash_Alpha = 0.3f; // 파트 별로 버리는 알파 기준을 다르게 설정해야 하는 경우 사용
 		_bool bText_Right = false; // 텍스트를 오른쪽 정렬로 그리는 경우 
 
 

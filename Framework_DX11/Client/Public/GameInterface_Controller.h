@@ -123,6 +123,11 @@ public: // 외부에서 매니저 접근
 
 	void Off_ItemInfo_UI() { m_pUIManager->Off_ItemInfo_UI(); }
 
+	// UI 연출 
+	_bool Fade_Out(_wstring strTitle, _wstring strDesc, _Vec3 vColor = _Vec3{ 0.f,0.f,0.f }, _float fTime = 1.f) { return m_pUIManager->Fade_Out(strTitle, strDesc, vColor, fTime); }
+	_bool Fade_In(_float fTime = 1.f) { return m_pUIManager->Fade_In(fTime); }
+	void Show_Script(_wstring strScript0, _wstring strScript1 = TEXT("none"), _float fTime = 1.f, _Vec3 vColor = _Vec3{ 0.f,0.f,0.f }) { m_pUIManager->Show_Script(strScript0, strScript1, fTime, vColor); }
+	_float Check_Fade() { return m_pUIManager->Check_Fade(); }
 #pragma endregion
 
 

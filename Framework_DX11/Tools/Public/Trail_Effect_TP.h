@@ -23,7 +23,7 @@ public:
 		// 움직임
 		_Vec3		vTopOffset = {};
 		_Vec3		vBottomOffset = {};
-		
+
 		// 셰이더
 		_uint		iNumInstance = { 10 };
 		_Vec4		vColor = { 0.f, 0.f, 0.f, 1.f };
@@ -32,6 +32,8 @@ public:
 		// 기타
 		_uint		iShaderIndex = { 0 };
 		_bool		bLoop = { false };
+
+		_Vec2		vTileRepeat = { 1.f, 1.f };
 	} DEFAULT_DESC;
 
 	typedef struct

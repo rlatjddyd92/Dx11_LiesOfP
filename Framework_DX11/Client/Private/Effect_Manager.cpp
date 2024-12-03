@@ -25,13 +25,7 @@ HRESULT CEffect_Manager::Initialize(ID3D11Device* pDevice, ID3D11DeviceContext* 
     m_pContext = pContext;
     Safe_AddRef(m_pContext);
 
-    if(FAILED(Load_Effects(strEffectPath)))
-        return E_FAIL;
-
     if(FAILED(Load_Textures(strTexturePath)))
-        return E_FAIL;
-
-    if(FAILED(Load_EffectContainers(strEffectPath)))
         return E_FAIL;
 
     if(FAILED(Load_Models()))
@@ -43,10 +37,16 @@ HRESULT CEffect_Manager::Initialize(ID3D11Device* pDevice, ID3D11DeviceContext* 
     if(FAILED(Load_Objects()))
         return E_FAIL;
 
+    if (FAILED(Load_Effects(strEffectPath)))
+        return E_FAIL;
+
+    if (FAILED(Load_EffectContainers(strEffectPath)))
+        return E_FAIL;
+
     return S_OK;
 }
 
-CEffect_Container* CEffect_Manager::Clone_Effect(const _wstring& strECTag, const _Matrix* pParentMatrix, const _Matrix* pSocketMatrix, _Vec3 vPos, _Vec3 vRotation, _Vec3 vScale)
+CEffect_Container* CEffect_Manager::Clone_Effect(const _wstring& strECTag, const _Matrix* pParentMatrix, const _Matrix* pSocketMatrix, _Vec3 vPos, _Vec3 vDir, _Vec3 vScale)
 {
     CEffect_Container::EFFECT_DESC desc = {};
 
@@ -56,7 +56,7 @@ CEffect_Container* CEffect_Manager::Clone_Effect(const _wstring& strECTag, const
     desc.pParentMatrix = pParentMatrix;
     desc.pSocketMatrix = pSocketMatrix;
     desc.vPos = vPos;
-    desc.vRotation = vRotation;
+    desc.vDir = vDir;
     desc.vScale = vScale;
 
     CEffect_Container* pContainer = Find_PoolingEffect(strECTag, &desc);
@@ -67,7 +67,7 @@ CEffect_Container* CEffect_Manager::Clone_Effect(const _wstring& strECTag, const
 }
 
 
-HRESULT CEffect_Manager::Add_Effect_ToLayer(_uint iLevelID, const _wstring& strECTag, _Vec3 vPos, _Vec3 vRotation, _Vec3 vScale)
+HRESULT CEffect_Manager::Add_Effect_ToLayer(_uint iLevelID, const _wstring& strECTag, _Vec3 vPos, _Vec3 vDir, _Vec3 vScale)
 {
     CEffect_Container::EFFECT_DESC desc = {};
 
@@ -77,13 +77,13 @@ HRESULT CEffect_Manager::Add_Effect_ToLayer(_uint iLevelID, const _wstring& strE
     desc.pParentMatrix = nullptr;
     desc.pSocketMatrix = nullptr;
     desc.vPos = vPos;
-    desc.vRotation = vRotation;
+    desc.vDir = vDir;
     desc.vScale = vScale;
 
     return m_pGameInstance->Add_Object_ToLayer(desc.iLevelIndex, TEXT("Layer_Effect"), Find_PoolingEffect(strECTag, &desc));
 }
 
-HRESULT CEffect_Manager::Add_Effect_ToLayer(_uint iLevelID, const _wstring& strECTag, const _Matrix* pParentMatrix, const _Matrix* pSocketMatrix, _Vec3 vPos, _Vec3 vRotation, _Vec3 vScale)
+HRESULT CEffect_Manager::Add_Effect_ToLayer(_uint iLevelID, const _wstring& strECTag, const _Matrix* pParentMatrix, const _Matrix* pSocketMatrix, _Vec3 vPos, _Vec3 vDir, _Vec3 vScale)
 {
     CEffect_Container::EFFECT_DESC desc = {};
 
@@ -93,7 +93,7 @@ HRESULT CEffect_Manager::Add_Effect_ToLayer(_uint iLevelID, const _wstring& strE
     desc.pParentMatrix = pParentMatrix;
     desc.pSocketMatrix = pSocketMatrix;
     desc.vPos = vPos;
-    desc.vRotation = vRotation;
+    desc.vDir = vDir;
     desc.vScale = vScale;
 
     return m_pGameInstance->Add_Object_ToLayer(desc.iLevelIndex, TEXT("Layer_Effect"), Find_PoolingEffect(strECTag, &desc));
@@ -381,12 +381,27 @@ HRESULT CEffect_Manager::Load_EffectContainers(const _wstring& strEffectPath)
                 strFileName = strFileName.substr(0, dotPos);
 
                 m_EffectContainers.emplace(strFileName, EffectNames);
+
+                CEffect_Container::EFFECT_DESC desc = {};
+                desc.fRotationPerSec = XMConvertToRadians(90.f);
+                desc.fSpeedPerSec = 1.f;
+                desc.iLevelIndex = LEVEL_GAMEPLAY;
+                desc.pParentMatrix = nullptr;
+                desc.pSocketMatrix = nullptr;
+                desc.vPos = _Vec3(0.f, 0.f, 0.f);
+                desc.vDir = _Vec3(0.f, 0.f, 0.f);
+                desc.vScale = _Vec3(1.f, 1.f, 1.f);
+
+                Effect_Pooling(strFileName, &desc, 1);
+
                 EffectNames.clear();
             }
         }
     }
     // ÇÚµé ´Ý±â
     FindClose(hFind);
+
+
 
     return S_OK;
 
@@ -805,34 +820,102 @@ CEffect_Container* CEffect_Manager::Clone_Effect_From_Prototype(const _wstring& 
 
         if (TEXT("PE") == strFileExtention)
         {
-            pEffectContainer->Add_Effect(Clone_ParticleEffect(strEffectName));
+            CParticle_Effect* pEffect = Clone_ParticleEffect(strEffectName);
+
+            if (nullptr == pEffect)
+                return nullptr;
+
+            pEffectContainer->Add_Effect(pEffect);
         }
         else if (TEXT("TE") == strFileExtention)
         {
-            pEffectContainer->Add_Effect(Clone_TextureEffect(strEffectName));
+            CTexture_Effect* pEffect = Clone_TextureEffect(strEffectName);
+
+            if (nullptr == pEffect)
+                return nullptr;
+
+            pEffectContainer->Add_Effect(pEffect);
         }
         else if (TEXT("ME") == strFileExtention)
         {
-            pEffectContainer->Add_Effect(Clone_MeshEffect(strEffectName));
+            CMesh_Effect* pEffect = Clone_MeshEffect(strEffectName);
+
+            if (nullptr == pEffect)
+                return nullptr;
+
+            pEffectContainer->Add_Effect(pEffect);
         }
         else if (TEXT("TOP") == strFileExtention)
         {
-            pEffectContainer->Add_Effect(Clone_TrailOP_Effect(strEffectName));
+            CTrail_Effect_OP* pEffect = Clone_TrailOP_Effect(strEffectName);
+
+            if (nullptr == pEffect)
+                return nullptr;
+
+            pEffectContainer->Add_Effect(pEffect);
         }
         else if (TEXT("TTP") == strFileExtention)
         {
-            pEffectContainer->Add_Effect(Clone_TrailTP_Effect(strEffectName));
+            CTrail_Effect_TP* pEffect = Clone_TrailTP_Effect(strEffectName);
+
+            if (nullptr == pEffect)
+                return nullptr;
+
+            pEffectContainer->Add_Effect(pEffect);
         }
         else if (TEXT("TMP") == strFileExtention)
         {
-            pEffectContainer->Add_Effect(Clone_TrailMP_Effect(strEffectName));
+            CTrail_Effect_MP* pEffect = Clone_TrailMP_Effect(strEffectName);
+
+            if (nullptr == pEffect)
+                return nullptr;
+
+            pEffectContainer->Add_Effect(pEffect);
         }
     }
 
     return pEffectContainer;
 }
 
+HRESULT CEffect_Manager::Effect_Pooling(const _wstring& strECTag, void* pArg, size_t iSize)
+{
+    auto& iter = m_EffectPooling.find(strECTag);
 
+    if (m_EffectPooling.end() == iter)
+    {
+        vector<CEffect_Container*> Containers;
+
+        for(size_t i = 0; i < iSize; ++i)
+        {
+            CEffect_Container* pContainer = Clone_Effect_From_Prototype(strECTag, pArg);
+
+            if (nullptr == pContainer)
+                return E_FAIL;
+
+            pContainer->Set_Dead(true);
+
+            Containers.emplace_back(pContainer);
+        }
+
+        m_EffectPooling.emplace(strECTag, Containers);
+    }
+    else
+    {
+        for (size_t i = 0; i < iSize; ++i)
+        {
+            CEffect_Container* pContainer = Clone_Effect_From_Prototype(strECTag, pArg);
+
+            if (nullptr == pContainer)
+                return E_FAIL;
+
+            pContainer->Set_Dead(true);
+
+            iter->second.emplace_back(pContainer);
+        }
+    }
+
+    return S_OK;
+}
 
 void CEffect_Manager::Free()
 {

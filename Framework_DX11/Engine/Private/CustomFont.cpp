@@ -1,14 +1,14 @@
 #include "..\Public\CustomFont.h"
 
-CCustomFont::CCustomFont(ID3D11Device * pDevice, ID3D11DeviceContext * pContext)
-	: m_pDevice { pDevice }
-	, m_pContext { pContext }
+CCustomFont::CCustomFont(ID3D11Device* pDevice, ID3D11DeviceContext* pContext)
+	: m_pDevice{ pDevice }
+	, m_pContext{ pContext }
 {
 	Safe_AddRef(m_pDevice);
 	Safe_AddRef(m_pContext);
 }
 
-HRESULT CCustomFont::Initialize(const _tchar * pFontFilePath)
+HRESULT CCustomFont::Initialize(const _tchar* pFontFilePath)
 {
 	m_pFont = new SpriteFont(m_pDevice, pFontFilePath);
 
@@ -33,9 +33,9 @@ HRESULT CCustomFont::Initialize(const _tchar * pFontFilePath)
 	samplerDesc.MinLOD = 0;
 	samplerDesc.MaxLOD = D3D11_FLOAT32_MAX;
 
-	
+
 	m_pDevice->CreateSamplerState(&samplerDesc, &m_pSamplerState);
-	
+
 	m_pDevice->CreateBlendState(&blendDesc, &m_pBlendState);
 
 	m_pBatch = new SpriteBatch(m_pContext);
@@ -43,7 +43,7 @@ HRESULT CCustomFont::Initialize(const _tchar * pFontFilePath)
 	return S_OK;
 }
 
-HRESULT CCustomFont::Render(const _tchar * pText, _fvector vPosition, _fvector vColor, _float fRadian, _fvector vPivot, _float fScale)
+HRESULT CCustomFont::Render(const _tchar* pText, _fvector vPosition, _fvector vColor, _float fRadian, _fvector vPivot, _float fScale)
 {
 	if (vColor.m128_f32[3] != 1.f)
 		m_pBatch->Begin(SpriteSortMode_Deferred, m_pBlendState, m_pSamplerState);
@@ -102,9 +102,9 @@ HRESULT CCustomFont::Render_Right(const _tchar* pText, _fvector vPosition, _fvec
 	return S_OK;
 }
 
-CCustomFont * CCustomFont::Create(ID3D11Device * pDevice, ID3D11DeviceContext * pContext, const _tchar * pFontFilePath)
+CCustomFont* CCustomFont::Create(ID3D11Device* pDevice, ID3D11DeviceContext* pContext, const _tchar* pFontFilePath)
 {
-	CCustomFont*		pInstance = new CCustomFont(pDevice, pContext);
+	CCustomFont* pInstance = new CCustomFont(pDevice, pContext);
 
 	if (FAILED(pInstance->Initialize(pFontFilePath)))
 	{

@@ -47,8 +47,6 @@ void CUIPage::Late_Update(_float fTimeDelta)
 	// 각 페이지 별 조정 사항을 최종 반영하는 단계
 	__super::Late_Update(fTimeDelta);
 
-
-
 	if ((m_vecPageAction[_int(PAGEACTION::ACTION_CLOSING)]) && (!m_vecPageAction[_int(PAGEACTION::ACTION_OPENING)]))
 	{
 		m_fTopPartMove -= m_fTopPartMove_Excel * fTimeDelta;
@@ -122,7 +120,7 @@ void CUIPage::CloseAction()
 	m_vecPageAction[_int(PAGEACTION::ACTION_OPENING)] = false;
 	m_vecPageAction[_int(PAGEACTION::ACTION_INACTIVE)] = false;
 	m_vecPageAction[_int(PAGEACTION::ACTION_ACTIVE)] = false;
-	m_bRender = false;
+	//m_bRender = false;
 }
 
 HRESULT CUIPage::Ready_UIPart_Group_Control()
@@ -188,7 +186,8 @@ void CUIPage::Input_Render_Info(UPART& Part, SCROLL_AREA eArea)
 	pNew->strText = Part.strText;
 	pNew->vColor_Text = Part.fTextColor;
 
-	pNew->vColor_Text.w *= m_fTopPartMove;
+	if (m_fTopPartMove >= 0.f)
+		pNew->vColor_Text.w *= m_fTopPartMove;
 
 	pNew->vColor_Texture = Part.fTextureColor;
 
@@ -255,4 +254,50 @@ void CUIPage::Free()
 	m_vec_Group_Ctrl.clear();
 
 	Safe_Delete(m_pItemaction);
+}
+
+void CUIPage::SCROLL_INFO::Initialize_Scroll(UPART* pData, UPART* pBar, SCROLL_AREA eArea)
+{
+	
+		vPos_Render = pData->fPosition;
+		vSize_Render = pData->fSize;
+
+		fData_Height_Origin = vSize_Render.y;
+
+		fBar_Move_Max_Length = pBar->fAdjust_End.y - pBar->fAdjust_Start.y;
+
+		eScroll_Area = eArea;
+
+		fRender_Top_Y = vPos_Render.y - vSize_Render.y * 0.5f; // <- 그려지는 가장 높은 위치 
+		fRender_Bottom_Y = vPos_Render.y + vSize_Render.y * 0.5f; // <- 그려지는 가장 낮은 위치 
+
+		GET_GAMEINTERFACE->Set_Scroll_Area(eScroll_Area, pData->fPosition, pData->fSize);
+	
+}
+
+void CUIPage::SCROLL_INFO::Activate_Scroll(_float fData_Height_New, _Vec2 vPos, _Vec2 vSize)
+{
+	
+		if (fData_Height_Origin >= fData_Height_New)
+		{
+			DeActivate_Scroll();
+			return;
+		}
+
+		if ((vPos.x >= 0.f) && (vSize.x >= 0.f))
+		{
+			vPos_Render = vPos;
+			vSize_Render = vSize;
+			fData_Height_Origin = vSize_Render.y;
+
+			fRender_Top_Y = vPos_Render.y - vSize_Render.y * 0.5f; // <- 그려지는 가장 높은 위치 
+			fRender_Bottom_Y = vPos_Render.y + vSize_Render.y * 0.5f; // <- 그려지는 가장 낮은 위치 
+
+			GET_GAMEINTERFACE->Set_Scroll_Area(eScroll_Area, vPos, vSize);
+		}
+
+		bIsActive = true;
+
+		fData_Height_Max = fData_Height_New - fData_Height_Origin;
+	
 }

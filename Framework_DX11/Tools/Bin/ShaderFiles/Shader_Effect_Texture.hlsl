@@ -273,6 +273,24 @@ PS_OUT PS_BLEND_AURA_MAIN(PS_IN In)
     return Out;
 }
 
+
+PS_OUT PS_POWERGUARD_MAIN(PS_IN In)
+{
+    PS_OUT Out = (PS_OUT) 0;
+    
+    Out.vColor = g_DiffuseTexture.Sample(LinearSampler, Get_SpriteTexcoord(In.vTexcoord));
+    
+    Out.vColor.a = max(Out.vColor.r, max(Out.vColor.g, Out.vColor.b));
+
+    Out.vColor.r = g_vColor.r;
+    Out.vColor.g = g_vColor.g * Out.vColor.a;
+    Out.vColor.b = g_vColor.b * Out.vColor.a;;
+
+    Out.vColor.a *= g_fRatio;
+    
+    return Out;
+}
+
 technique11 DefaultTechnique
 {
     pass Default // 0
@@ -384,6 +402,18 @@ technique11 DefaultTechnique
         GeometryShader = NULL;
         PixelShader = compile ps_5_0 PS_BLEND_AURA_MAIN();
     }
+
+    pass POWER_GUARD // 10
+    {
+        SetRasterizerState(RS_Default);
+        SetDepthStencilState(DSS_NonWrite, 0);
+        SetBlendState(BS_AlphaBlend, vector(0.f, 0.f, 0.f, 0.f), 0xffffffff);
+
+        VertexShader = compile vs_5_0 VS_MAIN();
+        GeometryShader = NULL;
+        PixelShader = compile ps_5_0 PS_POWERGUARD_MAIN();
+    }
+
 }
 
 

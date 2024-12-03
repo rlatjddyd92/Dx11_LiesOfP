@@ -35,6 +35,7 @@ HRESULT CRigidBody::Initialize(void* pArg)
 	m_isStatic = pDesc->isStatic;
 	m_isOnCell = pDesc->isOnCell;
 	m_isLockCell = pDesc->isLockCell;
+	m_isUseClient = pDesc->isUseClient;
 
 	m_PxScene = m_pGameInstance->Get_PhysXScene();
 	m_pOwner = pDesc->pOwner;
@@ -101,9 +102,12 @@ void CRigidBody::Update(_float fTimeDelta)
 	}
 	else
 	{
-		PxTransform Transform = ConvertToPxTransform((_Vec3)m_pOwnerTransform->Get_State(CTransform::STATE_POSITION), m_pOwnerTransform->Get_Quaternion());
-		m_PxActor->setGlobalPose(Transform);
-
+		PxTransform Transform{};
+		if (m_isUseClient)
+		{
+			Transform = ConvertToPxTransform((_Vec3)m_pOwnerTransform->Get_State(CTransform::STATE_POSITION), m_pOwnerTransform->Get_Quaternion());
+			m_PxActor->setGlobalPose(Transform);
+		}
 
 		pRigidDynamic->setLinearVelocity(PxVec3(m_vVelocity.x, m_vVelocity.y, m_vVelocity.z));
 

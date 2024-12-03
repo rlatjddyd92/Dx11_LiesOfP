@@ -35,10 +35,10 @@ public:
 	HRESULT Initialize(ID3D11Device* pDevice, ID3D11DeviceContext* pContext, const _wstring& strEffectPath, const _wstring strTexturePath);
 
 public:
-	class CEffect_Container* Clone_Effect(const _wstring& strECTag, const _Matrix* pParentMatrix, const _Matrix* pSocketMatrix, _Vec3 vPos = {}, _Vec3 vRotation = {}, _Vec3 vScale = {1.f, 1.f, 1.f});
+	class CEffect_Container* Clone_Effect(const _wstring& strECTag, const _Matrix* pParentMatrix, const _Matrix* pSocketMatrix, _Vec3 vPos = {}, _Vec3 vDir = {}, _Vec3 vScale = {1.f, 1.f, 1.f});
 
-	HRESULT Add_Effect_ToLayer(_uint iLevelID, const _wstring& strECTag, _Vec3 vPos = {}, _Vec3 vRotation = {}, _Vec3 vScale = { 1.f, 1.f, 1.f });
-	HRESULT Add_Effect_ToLayer(_uint iLevelID, const _wstring& strECTag, const _Matrix* pParentMatrix, const _Matrix* pSocketMatrix, _Vec3 vPos = {}, _Vec3 vRotation = {}, _Vec3 vScale = { 1.f, 1.f, 1.f });
+	HRESULT Add_Effect_ToLayer(_uint iLevelID, const _wstring& strECTag, _Vec3 vPos = {}, _Vec3 vDir = {}, _Vec3 vScale = { 1.f, 1.f, 1.f });
+	HRESULT Add_Effect_ToLayer(_uint iLevelID, const _wstring& strECTag, const _Matrix* pParentMatrix, const _Matrix* pSocketMatrix, _Vec3 vPos = {}, _Vec3 vDir = {}, _Vec3 vScale = { 1.f, 1.f, 1.f });
 
 
 private:
@@ -86,6 +86,8 @@ private:
 	// 풀링할 오브젝트 만들어서 맵에 추가하고 반환하는 함수.
 	class CEffect_Container* Find_PoolingEffect(const _wstring& strECTag, void* pArg);
 	class CEffect_Container* Clone_Effect_From_Prototype(const _wstring& strECTag, void* pArg);
+	
+	HRESULT Effect_Pooling(const _wstring& strECTag, void* pArg, size_t iSize);
 
 public:
 	virtual void Free() override;

@@ -37,10 +37,10 @@ HRESULT CLight_Manager::Add_Light(const LIGHT_DESC & LightDesc)
 	return S_OK;
 }
 
-HRESULT CLight_Manager::Render(CShader * pShader, CVIBuffer_Rect * pVIBuffer)
+HRESULT CLight_Manager::Render(CShader * pShader, CVIBuffer_Rect * pVIBuffer, _bool isOnPBR)
 {
 	for (auto& pLight : m_Lights)
-		pLight->Render(pShader, pVIBuffer);
+		pLight->Render(pShader, pVIBuffer, isOnPBR);
 
 	return S_OK;
 }

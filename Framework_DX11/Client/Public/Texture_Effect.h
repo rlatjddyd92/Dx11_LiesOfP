@@ -12,33 +12,34 @@ BEGIN(Client)
 class CTexture_Effect final : public CEffect_Base
 {
 public:
+	enum BILLBOARD_TYPE { TYPE_BILLBOARD, TYPE_PREROTATION, TYPE_PREDIR, TYPE_END };
+
 	typedef struct
 	{
-		_uint		iShaderIndex = { 0 };
-		_float		fDuration = { 10.f };
-		_Vec4		vColor = { 0.f, 0.f, 0.f, 1.f };
-		_Vec2		vDivide = { 1.f, 1.f };
-		_float		fSpriteSpeed = { 0.f };
+		_uint				iShaderIndex = { 0 };
+		_float				fDuration = { 10.f };
+		_Vec4				vColor = { 0.f, 0.f, 0.f, 1.f };
+		_Vec2				vDivide = { 1.f, 1.f };
+		_float				fSpriteSpeed = { 0.f };
 
-		_Vec3		vPos = { 0.f, 0.f, 0.f };
+		_Vec3				vPos = { 0.f, 0.f, 0.f };
 
-		_Vec3		vStartScale = { 1.f, 1.f, 1.f };
-		_Vec3		vScalingSpeed = {};
+		_Vec3				vStartScale = { 1.f, 1.f, 1.f };
+		_Vec3				vScalingSpeed = {};
 
-		_float		fStarRotation = { 0.f };
-		_float		fRotationPerSecond = { 0.f };
+		_float				fStarRotation = { 0.f };
+		_float				fRotationPerSecond = { 0.f };
 
-		_float		fAlpha = { 1.f };
-		_float		fAlphaSpeed = { 0.f };
+		_float				fAlpha = { 1.f };
+		_float				fAlphaSpeed = { 0.f };
 
-		_Vec2		vTileRepeat = { 1.f, 1.f };
-		_Vec2		vTileMoveDir = {};
-		_float		fTileMoveSpeed = { 0.f };
+		_Vec2				vTileRepeat = { 1.f, 1.f };
+		_Vec2				vTileMoveDir = {};
+		_float				fTileMoveSpeed = { 0.f };
 
-		_bool		bPreserveRotation = { false };
-		_bool		bLoop = { false };
+		BILLBOARD_TYPE		eBillboardType = { TYPE_BILLBOARD };
+		_bool				bLoop = { false };
 	}DEFAULT_DESC;
-
 	typedef struct
 	{
 		_tchar		szDiffuseTexturTag[MAX_PATH] = L"";
@@ -91,6 +92,7 @@ private:
 private:
 	HRESULT Ready_Components(const TEXT_DESC& Desc);
 	void Preserve_Rotation_Billboard(_Vec3 vCurrentScale, _Vec3 vLook);
+	void Preserve_Dir_Billboard(_Vec3 vCurrentScale, _Vec3 vLook);
 	void Billboard(_Vec3 vCurrentScale, _Vec3 vLook);
 
 public:

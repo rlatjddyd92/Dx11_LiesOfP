@@ -106,7 +106,7 @@ HRESULT CPawn::Render()
 	return S_OK;
 }
 
-_bool CPawn::Calc_DamageGain(_float fAtkDmg, _Vec3 vHitPos)
+_bool CPawn::Calc_DamageGain(_float fAtkDmg, _Vec3 vHitPos, _uint iHitType, _uint iAttackStrength)
 {
 
 	//if () 피해를 입는지에관한 판단, 무적인지등
@@ -192,15 +192,15 @@ _bool CPawn::Get_EndAnim(_int iAnimIndex, _bool bIsBoundary)
 
 void CPawn::Play_Sound(const PAWN_SOUND_TYPE eType, const TCHAR* pSoundKey)
 {
-	_float fVolume = {};
+	_float* fVolume = {};
 	switch (eType)
 	{
 		case PAWN_SOUND_VOICE:
-			fVolume = g_fVoiceVolume;
+			fVolume = &g_fVoiceVolume;
 			break;
 		case PAWN_SOUND_EFFECT1:
 		case PAWN_SOUND_EFFECT2:
-			fVolume = g_fEffectVolume;
+			fVolume = &g_fEffectVolume;
 			break;
 	default:
 		return;
@@ -210,15 +210,15 @@ void CPawn::Play_Sound(const PAWN_SOUND_TYPE eType, const TCHAR* pSoundKey)
 
 void CPawn::PlayRepeat_Sound(const PAWN_SOUND_TYPE eType, const TCHAR* pSoundKey)
 {
-	_float fVolume = {};
+	_float* fVolume = {};
 	switch (eType)
 	{
 	case PAWN_SOUND_VOICE:
-		fVolume = g_fVoiceVolume;
+		fVolume = &g_fVoiceVolume;
 		break;
 	case PAWN_SOUND_EFFECT1:
 	case PAWN_SOUND_EFFECT2:
-		fVolume = g_fEffectVolume;
+		fVolume = &g_fEffectVolume;
 		break;
 	default:
 		return;

@@ -11,6 +11,8 @@ float4 g_vColor;
 float g_fRatio;
 uint g_iNumInstance;
 
+float2 g_vTileRepeat;
+
 struct VS_IN
 {
 	/* InputSlot : 0 */
@@ -352,7 +354,9 @@ PS_OUT PS_BLEND_MAIN(PS_IN In)
 {
     PS_OUT Out = (PS_OUT) 0;
     
-    Out.vColor = g_DiffuseTexture.Sample(LinearSampler, In.vTexcoord);
+    float2 vTexcoord = In.vTexcoord * g_vTileRepeat;
+    
+    Out.vColor = g_DiffuseTexture.Sample(LinearSampler, vTexcoord);
     
     Out.vColor.a *= 1.f - (((In.vTexcoord.x + In.fIndex) / (float) g_iNumInstance) + g_fRatio);
         
@@ -363,7 +367,9 @@ PS_OUT PS_DISTORTION_MAIN(PS_IN In)
 {
     PS_OUT Out = (PS_OUT) 0;
     
-    Out.vColor = g_DiffuseTexture.Sample(LinearSampler, In.vTexcoord);
+    float2 vTexcoord = In.vTexcoord * g_vTileRepeat;
+    
+    Out.vColor = g_DiffuseTexture.Sample(LinearSampler, vTexcoord);
     
     Out.vColor.gb = Out.vColor.r;
     
@@ -374,7 +380,9 @@ PS_EFFECT_OUT PS_CONTINUOUS_MAIN(PS_IN In)
 {
     PS_EFFECT_OUT Out = (PS_EFFECT_OUT) 0;
 
-    vector vColor = g_DiffuseTexture.Sample(LinearSampler, In.vTexcoord);
+    float2 vTexcoord = In.vTexcoord * g_vTileRepeat;
+    
+    vector vColor = g_DiffuseTexture.Sample(LinearSampler, vTexcoord);
     
     vColor.rgb *= g_vColor.rgb;
     vColor.rgb *= 1.f - ((In.vTexcoord.x + In.fIndex) / (float) g_iNumInstance + g_fRatio);
@@ -389,7 +397,8 @@ PS_EFFECT_OUT PS_TRAIL_R_MAIN(PS_IN In)
 {
     PS_EFFECT_OUT Out = (PS_EFFECT_OUT) 0;
 
-    vector vColor = g_DiffuseTexture.Sample(LinearSampler, In.vTexcoord);
+    float2 vTexcoord = In.vTexcoord * g_vTileRepeat;
+    vector vColor = g_DiffuseTexture.Sample(LinearSampler, vTexcoord);
     
     vColor.gb = vColor.r;
     vColor.rgb *= g_vColor.rgb;
@@ -405,7 +414,8 @@ PS_EFFECT_OUT PS_TRAIL_G_MAIN(PS_IN In)
 {
     PS_EFFECT_OUT Out = (PS_EFFECT_OUT) 0;
 
-    vector vColor = g_DiffuseTexture.Sample(LinearSampler, In.vTexcoord);
+    float2 vTexcoord = In.vTexcoord * g_vTileRepeat;
+    vector vColor = g_DiffuseTexture.Sample(LinearSampler, vTexcoord);
     
     vColor.rb = vColor.g;
     vColor.rgb *= g_vColor.rgb;
@@ -421,7 +431,8 @@ PS_EFFECT_OUT PS_TRAIL_B_MAIN(PS_IN In)
 {
     PS_EFFECT_OUT Out = (PS_EFFECT_OUT) 0;
 
-    vector vColor = g_DiffuseTexture.Sample(LinearSampler, In.vTexcoord);
+    float2 vTexcoord = In.vTexcoord * g_vTileRepeat;
+    vector vColor = g_DiffuseTexture.Sample(LinearSampler, vTexcoord);
     
     vColor.rg = vColor.b;
     vColor.rgb *= g_vColor.rgb;
@@ -437,7 +448,8 @@ PS_OUT PS_BLEND_RGBTOA_MAIN(PS_IN In)
 {
     PS_OUT Out = (PS_OUT) 0;
     
-    Out.vColor = g_DiffuseTexture.Sample(LinearSampler, In.vTexcoord);
+    float2 vTexcoord = In.vTexcoord * g_vTileRepeat;
+    Out.vColor = g_DiffuseTexture.Sample(LinearSampler, vTexcoord);
     
     Out.vColor.a = max(Out.vColor.r, max(Out.vColor.g, Out.vColor.b));
     Out.vColor.a *= 1.f - (((In.vTexcoord.x + In.fIndex) / (float) g_iNumInstance) + g_fRatio);
@@ -449,8 +461,10 @@ PS_OUT PS_DISTORTION_TRAIL_MAIN(PS_IN In)
 {
     PS_OUT Out = (PS_OUT) 0;
     
-    Out.vColor = g_DiffuseTexture.Sample(LinearSampler, In.vTexcoord);
-    vector vMask = g_MaskTexture_1.Sample(LinearSampler, In.vTexcoord);
+    float2 vTexcoord = In.vTexcoord * g_vTileRepeat;
+
+    Out.vColor = g_DiffuseTexture.Sample(LinearSampler, vTexcoord);
+    vector vMask = g_MaskTexture_1.Sample(LinearSampler, vTexcoord);
     
     Out.vColor *= vMask;
     Out.vColor.rgb *= 1.f - (((In.vTexcoord.x + In.fIndex) / (float) g_iNumInstance) + g_fRatio);
@@ -460,7 +474,6 @@ PS_OUT PS_DISTORTION_TRAIL_MAIN(PS_IN In)
 
     return Out;
 }
-
 
 technique11 DefaultTechnique
 {

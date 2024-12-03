@@ -60,6 +60,9 @@ void CTexture_Effect::Update(_float fTimeDelta)
     if(0.f < m_DefaultDesc.vDivide.x * m_DefaultDesc.vDivide.y)
         m_fCurrenrtIndex += fTimeDelta * m_DefaultDesc.fSpriteSpeed;
 
+    if (TYPE_PREDIR == m_DefaultDesc.eBillboardType)
+        m_pTransformCom->Rotation(XMVectorSet(0.f, 1.f, 0.f, 0.f), XMConvertToRadians(m_DefaultDesc.fStarRotation));
+
     __super::Set_WorldMatrix();
 
     _Vec3 vCurrentScale = _float3(m_WorldMatrix.Right().Length(), m_WorldMatrix.Up().Length(), m_WorldMatrix.Forward().Length());
@@ -68,17 +71,22 @@ void CTexture_Effect::Update(_float fTimeDelta)
     _Vec3 vDir = vPos - vCamPos;
     _Vec3 vLook = XMVector3Normalize(vDir);
 
-    if (true == m_DefaultDesc.bPreserveRotation)
+    switch (m_DefaultDesc.eBillboardType)
     {
-        Preserve_Rotation_Billboard(vCurrentScale, vLook);
-    }
-    else
-    {
+    case TYPE_BILLBOARD:
         Billboard(vCurrentScale, vLook);
+        break;
+
+    case TYPE_PREROTATION:
+        Preserve_Rotation_Billboard(vCurrentScale, vLook);
+        break;
+
+    case TYPE_PREDIR:
+        Preserve_Dir_Billboard(vCurrentScale, vLook);
+        break;
     }
 
     m_vCurrentTileMove += m_DefaultDesc.vTileMoveDir * m_DefaultDesc.fTileMoveSpeed * fTimeDelta;
-
 }
 
 void CTexture_Effect::Late_Update(_float fTimeDelta)
@@ -270,6 +278,21 @@ void CTexture_Effect::Preserve_Rotation_Billboard(_Vec3 vCurrentScale, _Vec3 vLo
     XMStoreFloat3((_float3*)&m_WorldMatrix.m[0][0], vRight * vCurrentScale.x);
     XMStoreFloat3((_float3*)&m_WorldMatrix.m[1][0], vUp * vCurrentScale.y);
     XMStoreFloat3((_float3*)&m_WorldMatrix.m[2][0], vLook * vCurrentScale.z);
+}
+
+void CTexture_Effect::Preserve_Dir_Billboard(_Vec3 vCurrentScale, _Vec3 vLook)
+{
+    _Vec3 vRight = m_WorldMatrix.Right();
+    vLook.Normalize();
+    vRight.Normalize();
+
+    _Vec3 vUp = vLook.Cross(vRight);
+    vUp.Normalize();
+
+
+    m_WorldMatrix.Right(vRight * vCurrentScale.x);
+    m_WorldMatrix.Up(vUp * vCurrentScale.y);
+    m_WorldMatrix.Forward(vLook * vCurrentScale.z);
 }
 
 void CTexture_Effect::Billboard(_Vec3 vCurrentScale, _Vec3 vLook)

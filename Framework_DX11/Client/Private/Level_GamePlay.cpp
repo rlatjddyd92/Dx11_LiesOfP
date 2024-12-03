@@ -44,8 +44,8 @@ HRESULT CLevel_GamePlay::Initialize()
 	if (FAILED(Ready_Layer_Paticle()))
 		return E_FAIL;	
 
-	//if (FAILED(Read_Map_Data()))
-	//	return E_FAIL;	
+	if (FAILED(Read_Map_Data()))
+		return E_FAIL;	
 
 	// 24-11-19 김성용
 	// 게임 인터페이스를 인게임 모드로 전환
@@ -105,23 +105,23 @@ HRESULT CLevel_GamePlay::Ready_Lights()
 	ZeroMemory(&LightDesc, sizeof LightDesc);
 	LightDesc.eType = LIGHT_DESC::TYPE_DIRECTIONAL;
 	LightDesc.vDirection = _float4(1.f, -1.f, 1.f, 0.f);
-	LightDesc.vDiffuse = _float4(0.8f, 0.8f, 0.8f, 1.f);
-	LightDesc.vAmbient = _float4(0.4f, 0.4f, 0.4f, 1.f);
-	LightDesc.vSpecular = _float4(1.f, 1.f, 1.f, 1.f);
+	LightDesc.vDiffuse = _float4(0.7f, 0.6f, 0.6f, 1.f);
+	LightDesc.vAmbient = _float4(0.7f, 0.7f, 0.7f, 1.f);
+	LightDesc.vSpecular = _float4(0.7f, 0.7f, 0.7f, 1.f);
 
 	if (FAILED(m_pGameInstance->Add_Light(LightDesc)))
 		return E_FAIL;
 
-	//ZeroMemory(&LightDesc, sizeof LightDesc);
-	//LightDesc.eType = LIGHT_DESC::TYPE_POINT;
-	//LightDesc.vPosition = _float4(10.f, 3.f, 10.f, 1.f);
-	//LightDesc.fRange = 7.f;	
-	//LightDesc.vDiffuse = _float4(1.f, 0.f, 0.f, 1.f);
-	//LightDesc.vAmbient = /*_float4(0.4f, 0.2f, 0.2f, 1.f);*/_float4(0.f, 0.f, 0.f, 0.f);
-	//LightDesc.vSpecular = LightDesc.vDiffuse;
+	ZeroMemory(&LightDesc, sizeof LightDesc);
+	LightDesc.eType = LIGHT_DESC::TYPE_POINT;
+	LightDesc.vPosition = _float4(8.4f, 1.f, 20.5f, 1.f);
+	LightDesc.fRange = 7.f;	
+	LightDesc.vDiffuse = _float4(1.f, 0.f, 0.f, 1.f);
+	LightDesc.vAmbient = /*_float4(0.4f, 0.2f, 0.2f, 1.f);*/_float4(0.f, 0.f, 0.f, 0.f);
+	LightDesc.vSpecular = LightDesc.vDiffuse;
 
-	//if (FAILED(m_pGameInstance->Add_Light(LightDesc)))
-	//	return E_FAIL;
+	if (FAILED(m_pGameInstance->Add_Light(LightDesc)))
+		return E_FAIL;
 
 	//ZeroMemory(&LightDesc, sizeof LightDesc);
 	//LightDesc.eType = LIGHT_DESC::TYPE_POINT;
@@ -244,6 +244,9 @@ HRESULT CLevel_GamePlay::Ready_Layer_Player()
 
 HRESULT CLevel_GamePlay::Read_Map_Data()
 {
+	_Vec3	vMinPos = { FLT_MAX ,FLT_MAX ,FLT_MAX };		//World_Octree의 최소 좌표, 최대한 크게 초기화
+	_Vec3	vMaxPos = { -FLT_MAX ,-FLT_MAX ,-FLT_MAX };	//World_Octree의 최대 좌표, 최대한 작게 초기화
+
 	const char cFile[128] = "../Bin/DataFiles/Map_Data.dat";
 	ifstream fin(cFile, ios::in | ios::binary);
 
@@ -313,6 +316,13 @@ HRESULT CLevel_GamePlay::Read_Map_Data()
 					staticObjDesc.iCurrentCellNum = pDesc.iCurrentCellNum;
 					if (FAILED(m_pGameInstance->Add_CloneObject_ToLayer(LEVEL_GAMEPLAY, TEXT("Layer_Map"), TEXT("Prototype_GameObject_StaticObj"), &staticObjDesc)))
 						return E_FAIL;
+
+					vMinPos.x = min(vMinPos.x, pDesc.vPosition.x);
+					vMinPos.y = min(vMinPos.y, pDesc.vPosition.y);
+					vMinPos.z = min(vMinPos.z, pDesc.vPosition.z);
+					vMaxPos.x = max(vMaxPos.x, pDesc.vPosition.x);
+					vMaxPos.y = max(vMaxPos.y, pDesc.vPosition.y);
+					vMaxPos.z = max(vMaxPos.z, pDesc.vPosition.z);
 				} 
 
 				else if (strLayerTag == "Layer_InteractObject")
@@ -380,6 +390,9 @@ HRESULT CLevel_GamePlay::Read_Map_Data()
 		++i;
 	}
 	fin.close();
+
+	m_pGameInstance->Create_Octree(vMinPos, vMaxPos);
+
 	return S_OK;
 }
 

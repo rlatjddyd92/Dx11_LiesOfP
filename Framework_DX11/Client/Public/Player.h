@@ -18,7 +18,8 @@ public:
 
 	enum EFFECT_TYPE 
 	{
-		RAPIER_TRAIL_FIRST, RAPIER_TRAIL_SECOND,
+		EFFECT_RAPIER_TRAIL_FIRST, EFFECT_RAPIER_TRAIL_SECOND,
+		EFFECT_GRIND, EFFECT_HEAL,
 
 		EFFECT_END
 	};
@@ -31,12 +32,12 @@ public:
 
 		TH_IDLE, TH_WALK, TH_RUN, TH_SPRINT, TH_GUARD, TH_GUARDHIT, TH_JUMP, TH_DASH,
 
-		RAPIER_LATTACK0, RAPIER_LATTACK1, RAPIER_RATTACK0, RAPIER_CHARGE, RAPIER_FATAL, RAPIER_PARRYATTACK,
+		RAPIER_LATTACK0, RAPIER_LATTACK1, RAPIER_RATTACK0, RAPIER_CHARGE, RAPIER_FABALE, RAPIER_PARRYATTACK, RAPIER_FATAL,
 
-		FLAME_LATTACK0, FLAME_LATTACK1, FLAME_RATTACK0, FLAME_RATTACK1, FLAME_CHARGE0, FLAME_CHARGE1, FLAME_FATAL, FLAME_PARRYATTACK,
+		FLAME_LATTACK0, FLAME_LATTACK1, FLAME_RATTACK0, FLAME_RATTACK1, FLAME_CHARGE0, FLAME_CHARGE1, FLAME_FABLE, FLAME_PARRYATTACK,
 
 		SCISSOR_LATTACK0, SCISSOR_LATTACK1, SCISSOR_RATTACK0, SCISSOR_RATTACK1, SCISSOR_CHARGE0, SCISSOR_CHARGE1, 
-		SCISSOR_FATAL0, SCISSOR_FATAL1, SCISSOR_FATAL2, SCISSOR_BUFF,
+		SCISSOR_FABAL0, SCISSOR_FABAL1, SCISSOR_FABAL2, SCISSOR_BUFF,
 
 
 		LADDER = 100, LIFT, CHEST, ITEMGET, STARGAZER, TELEPORT,
@@ -170,15 +171,21 @@ public:
 
 	void			Play_CurrentWeaponSound(const _uint iType, const TCHAR* pSoundKey, _uint iHandIndex = 1);
 
-	void			Active_Effect(const EFFECT_TYPE& eType);
+	void			Active_Effect(const EFFECT_TYPE& eType, _bool isLoop = true);
 	void			DeActive_Effect(const EFFECT_TYPE& eType);
 
-	virtual _bool	Calc_DamageGain(_float fAtkDmg, _Vec3 vHitPos = { 0.f,0.f,0.f }) override;
+	virtual _bool	Calc_DamageGain(_float fAtkDmg, _Vec3 vHitPos = { 0.f,0.f,0.f }, _uint iHitType = HIT_END, _uint iAttackStrength = ATK_END) override;
 	_bool			Decrease_Stamina(_float fAmount);
-	_bool			Decrease_Region(_uint iRegionCount = 1);
+	_bool			Check_Region_Fable01();
+	_bool			Check_Region_Fable02();
+	void			Decrease_Region(_uint iRegionCount = 1);
+	void			Recovery_Region(_float fAmount = 10.f);
 
+	void			Choice_GuardSound(_uint iAttackStrength = ATK_WEAK, _uint iHitType = HIT_END, _bool isPerfect = false);
+	/* Effect */
 private:
 	vector<class CEffect_Container*> m_Effects;
+	class CEffect_Manager* m_pEffect_Manager = { nullptr };
 
 private:
 	CPlayerCamera*		m_pPlayerCamera = { nullptr };
@@ -216,13 +223,15 @@ private:
 #pragma endregion
 
 private:
+	_float				m_fStaminaRecoveryTime = {};
+
+private:
 	HRESULT Ready_Components();
 	HRESULT Ready_Weapon();
 	HRESULT Ready_FSM();
 	HRESULT Ready_Effect();
 	
-
-
+	void Update_Stat(_float fTimeDelta);
 	void CollisionStay_IntercObj(CGameObject* pGameObject);
 
 public:

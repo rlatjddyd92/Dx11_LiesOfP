@@ -40,7 +40,7 @@ HRESULT CVIBuffer_Point_Instance::Initialize(void * pArg)
 			return E_FAIL;
 	}
 	
-	if (FAILED(m_pDevice->CreateBuffer(&m_ParticleBuffer_Desc, &m_InstanceInitialData, &m_pParticleBuffer)))
+	if(FAILED(m_pDevice->CreateBuffer(&m_ParticleBuffer_Desc, &m_InstanceInitialData, &m_pParticleBuffer)))
 		return E_FAIL;
 
 	if (FAILED(m_pDevice->CreateBuffer(&m_MoveBuffer_Desc, nullptr, &m_pMovementBuffer)))

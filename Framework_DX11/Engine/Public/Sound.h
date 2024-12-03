@@ -28,11 +28,11 @@ public:
 	virtual void Update(_float fTimeDelta);
 
 public:
-	void	Play3D(const TCHAR* pSoundKey, _float fVolume);
-	void	Play3D_Repeat(const TCHAR* pSoundKey, _float fVolume);
+	void	Play3D(const TCHAR* pSoundKey, _float* pVolume);
+	void	Play3D_Repeat(const TCHAR* pSoundKey, _float* pVolume);
 
-	void	Play2D(const TCHAR* pSoundKey, _float fVolume);
-	void	Play2D_Repeat(const TCHAR* pSoundKey, _float fVolume);
+	void	Play2D(const TCHAR* pSoundKey, _float* pVolume);
+	void	Play2D_Repeat(const TCHAR* pSoundKey, _float* pVolume);
 
 	void	Pause();
 	void	Stop();
@@ -40,7 +40,7 @@ public:
 	void	Mute();
 	void	UnMute();
 
-	void	Set_Volume(_float fVolume);
+	void	Set_Volume(_float* pVolume);
 	void	Set_PlaySpeed(_float fSpeedRatio);
 
 private:
@@ -55,6 +55,8 @@ private:
 	_bool m_isMute = { false };
 
 	FMOD_VECTOR		m_vSoundPos;
+
+	_float*			m_pVolume = { nullptr };
 
 public:
 	static CSound* Create(ID3D11Device* pDevice, ID3D11DeviceContext* pContext);

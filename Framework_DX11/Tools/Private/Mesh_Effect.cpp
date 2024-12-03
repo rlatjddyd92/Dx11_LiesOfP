@@ -90,8 +90,8 @@ HRESULT CMesh_Effect::Render()
 
 	if(nullptr != m_pTextureCom[TEXTURE_DIFFUSE])
 	{
-		if (FAILED(m_pTextureCom[TEXTURE_DIFFUSE]->Bind_ShadeResource(m_pShaderCom, "g_DiffuseTexture", 0)))
-			return E_FAIL;
+		//if (FAILED(m_pTextureCom[TEXTURE_DIFFUSE]->Bind_ShadeResource(m_pShaderCom, "g_DiffuseTexture", 0)))
+		//	return E_FAIL;
 	}
 
 	if(nullptr != m_pTextureCom[TEXTURE_MASK_1])
@@ -125,6 +125,9 @@ HRESULT CMesh_Effect::Render()
 
 	for (size_t i = 0; i < iNumMeshes; i++)
 	{
+		if (FAILED(m_pModelCom->Bind_Material(m_pShaderCom, "g_DiffuseTexture", DIFFUSE, i)))
+			return E_FAIL;
+
 		if (FAILED(m_pShaderCom->Begin(m_DefaultDesc.iShaderIndex)))
 			return E_FAIL;
 		if (FAILED(m_pModelCom->Render((_uint)i)))

@@ -6,6 +6,7 @@
 #include "Controller_UITool.h"
 #include "Controller_AnimationTool.h"
 #include "Controller_PostProcess.h"
+#include "Controller_Cutscene.h"
 
 #include <iostream>
 using namespace std;
@@ -90,11 +91,14 @@ void CImGui_Manager::Update_ImGui()
 		isInUI = true;
 	}
 
+	Tool_Cutscene();
+
 	ImGuiTabBarFlags tab_bar_flags = ImGuiTabBarFlags_None;
 	if (ImGui::BeginTabBar("MyTabBar", tab_bar_flags))
 	{
 		//이펙트 툴에서 플레이어 보이게 하기 위한 변수
 		bAnimCtr = false;
+
 		Tool_Map();
 
 		Tool_Effect();
@@ -111,6 +115,25 @@ void CImGui_Manager::Update_ImGui()
 	ImGui::End();
 
 	
+}
+
+void CImGui_Manager::Tool_Cutscene()
+{
+	static _bool bShow_Cutscene_Tool = false;
+	ImGui::Checkbox("Show Cuscene Tool", &bShow_Cutscene_Tool);
+
+	ImGui::Text("");
+
+	if (bShow_Cutscene_Tool == false)
+		return;
+
+	ImGui::Begin("Cutscene_Tool", NULL, ImGuiWindowFlags_MenuBar | ImGuiWindowFlags_HorizontalScrollbar
+		| ImGuiWindowFlags_AlwaysVerticalScrollbar);
+	
+	m_pController_Cutscene->Update(m_pGameInstance->Compute_TimeDelta(TEXT("Timer_60")));
+
+	ImGui::End();
+
 }
 
 void CImGui_Manager::Tool_Map()
@@ -224,6 +247,10 @@ HRESULT CImGui_Manager::Ready_Controllers()
 		return E_FAIL;
 	m_pController_PostProcess->Initialize(m_pDevice, m_pContext);
 
+	m_pController_Cutscene = CController_Cutscene::Get_Instance();
+	if (nullptr == m_pController_Cutscene)
+		return E_FAIL;
+	m_pController_Cutscene->Initialize(m_pDevice, m_pContext);
 
 	return S_OK;
 }
@@ -236,6 +263,7 @@ void CImGui_Manager::Free()
 	m_pController_UITool->Destroy_Instance();
 	m_pController_AnimationTool->Destroy_Instance();
 	m_pController_MapTool->Destroy_Instance();
+	m_pController_Cutscene->Destroy_Instance();
 
 	ImGui_ImplDX11_Shutdown();
 	ImGui_ImplWin32_Shutdown();

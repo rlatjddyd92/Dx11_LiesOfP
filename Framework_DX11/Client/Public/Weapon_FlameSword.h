@@ -33,6 +33,9 @@ public:
 	virtual void OnCollisionExit(CGameObject* pOther) override;
 
 private:
+	class CPlayer* m_pPlayer = { nullptr };
+
+private:
 	HRESULT Ready_Components();
 
 public:

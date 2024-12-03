@@ -43,6 +43,8 @@ void CWeapon_Scissor_Blade::Priority_Update(_float fTimeDelta)
 
 void CWeapon_Scissor_Blade::Update(_float fTimeDelta)
 {
+	if (!m_isActive)
+		return;
 
 	__super::Update(fTimeDelta);
 
@@ -50,6 +52,9 @@ void CWeapon_Scissor_Blade::Update(_float fTimeDelta)
 
 void CWeapon_Scissor_Blade::Late_Update(_float fTimeDelta)
 {
+	if (!m_isActive)
+		return;
+
 	m_pGameInstance->Add_RenderObject(CRenderer::RG_NONBLEND, this);
 	m_pGameInstance->Add_RenderObject(CRenderer::RG_SHADOWOBJ, this);
 

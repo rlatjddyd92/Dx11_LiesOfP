@@ -1,5 +1,7 @@
 #pragma once
 
+#pragma warning(disable : 26495) //구조체 경고 끄기
+
 #include <process.h>
 
 namespace Client
@@ -8,6 +10,9 @@ namespace Client
 	const unsigned int			g_iWinSizeY = { 720 };
 
 	enum LEVELID { LEVEL_STATIC, LEVEL_LOADING, LEVEL_LOGO, LEVEL_GAMEPLAY, LEVEL_END };
+
+	enum HIT_TYPE { HIT_CARCASS, HIT_METAL, HIT_ELECTRIC, HIT_FIRE, HIT_END };
+	enum ATTACK_STRENGTH { ATK_WEAK, ATK_NORMAL, ATK_STRONG, ATK_END };
 
 	struct FSM_INIT_DESC
 	{

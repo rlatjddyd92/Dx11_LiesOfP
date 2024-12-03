@@ -199,7 +199,7 @@ void CState_Player_Ladder::Choice_UpDown(CLadder* pLadder)
         vInitPos.z = vLadderColliderPos.z;
 
         string strLadderTag = pLadder->Get_LadderTag();
-        if (!strcmp(strLadderTag.c_str(), "LV_Ladder_MetalWood_01_KSJ"))// 变仇
+        if (strcmp(strLadderTag.c_str(), "SK_LV_Ladder_MetalWood_01_KSJ") == 0)// 变仇
         {
             vInitPos.y = vPlayerPos.y;
         }
@@ -220,7 +220,7 @@ void CState_Player_Ladder::Choice_UpDown(CLadder* pLadder)
         vInitPos.z = vLadderColliderPos.z;
 
         string strLadderTag = pLadder->Get_LadderTag();
-        if (!strcmp(strLadderTag.c_str(), "LV_Ladder_MetalWood_01_KSJ"))// 变仇
+        if (strcmp(strLadderTag.c_str(), "SK_LV_Ladder_MetalWood_01_KSJ") == 0)// 变仇
         {
             vInitPos.y = vPlayerPos.y + 0.1f;
         }

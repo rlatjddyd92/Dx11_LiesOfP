@@ -25,6 +25,11 @@ public:
 		_float*		pParentAtk = { nullptr };
 	}WEAPON_DESC;
 
+	typedef struct : public WEAPON_DESC
+	{
+		class CPlayer* pPlayer = { nullptr };
+	}PLAYER_WAPON_DESC;
+
 protected:
 	CWeapon(ID3D11Device* pDevice, ID3D11DeviceContext* pContext);
 	CWeapon(const CWeapon& Prototype);

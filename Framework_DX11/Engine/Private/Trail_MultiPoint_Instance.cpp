@@ -10,6 +10,7 @@ CTrail_MultiPoint_Instance::CTrail_MultiPoint_Instance(const CTrail_MultiPoint_I
     : CVIBuffer_Instancing(Prototype)
     , m_iNumTailInstance(Prototype.m_iNumTailInstance)
     , m_vTailSpeed(Prototype.m_vTailSpeed)
+    , m_vTail_LifeTime(Prototype.m_vTail_LifeTime)
     , m_HeadBuffer_Desc(Prototype.m_HeadBuffer_Desc)
     , m_TailBuffer_Desc(Prototype.m_TailBuffer_Desc)
     , m_MoveBuffer_Desc(Prototype.m_MoveBuffer_Desc)

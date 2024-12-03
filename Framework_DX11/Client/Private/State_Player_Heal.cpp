@@ -57,13 +57,18 @@ HRESULT CState_Player_Heal::Start_State(void* pArg)
 
 void CState_Player_Heal::Update(_float fTimeDelta)
 {
-    
+    _int iFrame = m_pPlayer->Get_Frame();
+
     if (!Move(fTimeDelta))
     {
         m_pPlayer->Change_Animation(m_iAnimation_Heal, false);
     }
     m_pPlayer->Change_Animation_Boundry(m_iAnimation_Heal, false, 0.1f);
     
+    if (iFrame == 50 || iFrame == 51)
+    {
+        m_pPlayer->Active_Effect(CPlayer::EFFECT_HEAL, false);
+    }
 
     if (End_Check())
     {

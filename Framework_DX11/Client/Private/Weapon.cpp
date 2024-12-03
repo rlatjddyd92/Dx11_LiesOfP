@@ -53,6 +53,11 @@ void CWeapon::Update(_float fTimeDelta)
 		SocketMatrix.r[i] = XMVector3Normalize(SocketMatrix.r[i]);
 	}
 	XMStoreFloat4x4(&m_WorldMatrix, XMLoadFloat4x4(m_pTransformCom->Get_WorldMatrix_Ptr()) * SocketMatrix * XMLoadFloat4x4(m_pParentMatrix));
+
+	for (_uint i = 0; i < WEP_SOUND_END; ++i)
+	{
+		m_pSoundCom[i]->Update(fTimeDelta);
+	}
 }
 
 void CWeapon::Late_Update(_float fTimeDelta)
@@ -197,7 +202,7 @@ void CWeapon::Play_Sound(WEP_SOUND_TYPE eType, const TCHAR* pSoundKey, _uint iHa
 	//default:
 	//	return;
 	//}
-	m_pSoundCom[eType]->Play2D(pSoundKey, g_fEffectVolume);
+	m_pSoundCom[eType]->Play2D(pSoundKey, &g_fEffectVolume);
 }
 
 void CWeapon::Appear()

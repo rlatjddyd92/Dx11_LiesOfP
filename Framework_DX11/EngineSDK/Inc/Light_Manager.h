@@ -16,7 +16,7 @@ public:
 public:
 	HRESULT Initialize();
 	HRESULT Add_Light(const LIGHT_DESC& LightDesc);
-	HRESULT Render(class CShader* pShader, class CVIBuffer_Rect* pVIBuffer); 
+	HRESULT Render(class CShader* pShader, class CVIBuffer_Rect* pVIBuffer, _bool isOnPBR);
 
 public:
 	LIGHT_DESC* Get_LightDesc(_uint iIndex);

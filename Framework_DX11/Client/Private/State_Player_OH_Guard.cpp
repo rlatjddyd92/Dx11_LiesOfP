@@ -48,17 +48,20 @@ void CState_Player_OH_Guard::Update(_float fTimeDelta)
     {
         if (KEY_TAP(KEY::F))
         {
-            if (m_pPlayer->Get_WeaponType() == CPlayer::WEP_RAPIER)
-                m_pPlayer->Change_State(CPlayer::PARRY);
-            else if (m_pPlayer->Get_WeaponType() == CPlayer::WEP_SCISSOR)
-                m_pPlayer->Change_State(CPlayer::SCISSOR_BUFF);
-            return;
+            if (m_pPlayer->Check_Region_Fable02())
+            {
+                if (m_pPlayer->Get_WeaponType() == CPlayer::WEP_RAPIER)
+                    m_pPlayer->Change_State(CPlayer::PARRY);
+                else if (m_pPlayer->Get_WeaponType() == CPlayer::WEP_SCISSOR)
+                    m_pPlayer->Change_State(CPlayer::SCISSOR_BUFF);
+                return;
+            }
         }
         if (!Move(fTimeDelta))
         {
-            m_pPlayer->Change_Animation(m_iAnimation_Guard, true);
+            m_pPlayer->Change_Animation(m_iAnimation_Guard, true, 0.05f);
         }
-        m_pPlayer->Change_Animation_Boundry(m_iAnimation_Guard, true, 0.2f);
+        m_pPlayer->Change_Animation_Boundry(m_iAnimation_Guard, true, 0.05f);
     }
 
     if (KEY_NONE(KEY::LSHIFT))

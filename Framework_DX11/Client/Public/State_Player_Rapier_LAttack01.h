@@ -41,7 +41,6 @@ private:
     void                Control_Collider();
 
 private:
-    _int                m_iSoundFrame = {};
     _bool               m_isPlaySound = {};
     void                Control_Sound();
 

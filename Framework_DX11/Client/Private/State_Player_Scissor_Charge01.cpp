@@ -13,7 +13,7 @@ CState_Player_Scissor_Charge01::CState_Player_Scissor_Charge01(CFsm* pFsm, CPlay
 
 HRESULT CState_Player_Scissor_Charge01::Initialize(_uint iStateNum, void* pArg)
 {
-    m_iAnimation_ScissorCA2 = m_pPlayer->Get_Model()->Find_AnimationIndex("AS_Pino_O_ScissorSword_CA2", 1.7f);
+    m_iAnimation_ScissorCA2 = m_pPlayer->Get_Model()->Find_AnimationIndex("AS_Pino_O_ScissorSword_CA2", 2.5f);
 
     FSM_INIT_DESC* pDesc = static_cast<FSM_INIT_DESC*>(pArg);
 
@@ -21,7 +21,7 @@ HRESULT CState_Player_Scissor_Charge01::Initialize(_uint iStateNum, void* pArg)
 
     m_iChangeFrame = 180;
     m_iSeperateFrame = 30;
-    m_iCombineFrame = 148;
+    m_iCombineFrame = 145;
 
     m_iStateNum = iStateNum;
 
@@ -40,7 +40,7 @@ HRESULT CState_Player_Scissor_Charge01::Initialize(_uint iStateNum, void* pArg)
 
 HRESULT CState_Player_Scissor_Charge01::Start_State(void* pArg)
 {
-    m_pPlayer->Change_Animation(m_iAnimation_ScissorCA2, false, 0.2f);
+    m_pPlayer->Change_Animation(m_iAnimation_ScissorCA2, false, 0.1f);
 
     m_isInputLButton = false;
     m_isInputRButton = false;

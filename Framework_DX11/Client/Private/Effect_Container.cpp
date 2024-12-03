@@ -35,7 +35,9 @@ HRESULT CEffect_Container::Initialize(void* pArg)
 
 	m_pTransformCom->Set_State(CTransform::STATE_POSITION, pDesc->vPos);
 	m_pTransformCom->Set_Scaled(pDesc->vScale.x, pDesc->vScale.y, pDesc->vScale.z);
-	m_pTransformCom->Rotation(pDesc->vRotation.x, pDesc->vRotation.y, pDesc->vRotation.z);
+
+	if(0.f < pDesc->vDir.Length())
+		m_pTransformCom->LookAt(_Vec4(pDesc->vDir.x, pDesc->vDir.y, pDesc->vDir.z, 0.f));
 
 	return S_OK;
 }
@@ -135,6 +137,8 @@ HRESULT CEffect_Container::Add_Effect(class CEffect_Base* pEffectBase)
 
 HRESULT CEffect_Container::Reset_Effects()
 {
+	m_isDead = false;
+
 	for (auto& Effect : m_Effects)
 	{
 		Effect->Reset();
@@ -160,7 +164,7 @@ void CEffect_Container::Set_EffectDesc(const EFFECT_DESC& desc)
 {
 	m_pTransformCom->Set_State(CTransform::STATE_POSITION, desc.vPos);
 	m_pTransformCom->Set_Scaled(desc.vScale.x, desc.vScale.y, desc.vScale.z);
-	m_pTransformCom->Rotation(desc.vRotation.x, desc.vRotation.y, desc.vRotation.z);
+	m_pTransformCom->Rotation(desc.vDir.x, desc.vDir.y, desc.vDir.z);
 
 	m_pParentMatrix = desc.pParentMatrix;
 	m_pSocketMatrix = desc.pSocketMatrix;

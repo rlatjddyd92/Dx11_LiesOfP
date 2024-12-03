@@ -59,7 +59,7 @@ public:
     virtual HRESULT Render_LightDepth() { return S_OK; }
 
 public:
-    virtual _bool Calc_DamageGain(_float fAtkDmg, _Vec3 vHitPos = { 0.f,0.f,0.f }) override;
+    virtual _bool Calc_DamageGain(_float fAtkDmg, _Vec3 vHitPos = { 0.f,0.f,0.f }, _uint iHitType = HIT_END, _uint iAttackStrength = ATK_END) override;
     virtual void Gain_Grogy_Point(_float fGainGrogyPoint) { m_eStat.fGrogyPoint += fGainGrogyPoint; }
 
 public:

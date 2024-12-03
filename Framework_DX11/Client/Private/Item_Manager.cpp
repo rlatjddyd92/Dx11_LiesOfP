@@ -407,7 +407,7 @@ void CItem_Manager::Set_ItemAction(EQUIP_SLOT eSlot, _Vec2 vPos, _Vec2 vSize, _b
 			vecFunc.push_back(ITEM_FUNC::FUNC_UNEQUIP);
 	}
 
-	for (_int i = vecFunc.size(); i < 4; ++i)
+	for (_int i = (_int)vecFunc.size(); i < 4; ++i)
 		vecFunc.push_back(ITEM_FUNC::FUNC_END);
 
 	GET_GAMEINTERFACE->Show_ItemAction(vPos, vSize, vecFunc[0], vecFunc[1], vecFunc[2], vecFunc[3]);
@@ -546,7 +546,7 @@ void CItem_Manager::Set_ItemAction(INVEN_ARRAY_TYPE eType, _int iIndex, _Vec2 vP
 		// 이건 나중에 
 	}
 
-	for (_int i = vecFunc.size(); i < 4; ++i)
+	for (_int i = (_int)vecFunc.size(); i < 4; ++i)
 		vecFunc.push_back(ITEM_FUNC::FUNC_END);
 
 	GET_GAMEINTERFACE->Show_ItemAction(vPos, vSize, vecFunc[0], vecFunc[1], vecFunc[2], vecFunc[3]);

@@ -13,7 +13,7 @@ CState_Player_Scissor_RAttack01::CState_Player_Scissor_RAttack01(CFsm* pFsm, CPl
 
 HRESULT CState_Player_Scissor_RAttack01::Initialize(_uint iStateNum, void* pArg)
 {
-    m_iAnimation_ScissorSA2 = m_pPlayer->Get_Model()->Find_AnimationIndex("AS_Pino_O_ScissorSword_SA2", 1.7f);
+    m_iAnimation_ScissorSA2 = m_pPlayer->Get_Model()->Find_AnimationIndex("AS_Pino_O_ScissorSword_SA2", 2.5f);
 
     FSM_INIT_DESC* pDesc = static_cast<FSM_INIT_DESC*>(pArg);
 
@@ -68,11 +68,11 @@ void CState_Player_Scissor_RAttack01::Update(_float fTimeDelta)
         }
     }
 
-    if (m_iSeperateFrame == iFrame)
+    if (m_iSeperateFrame == iFrame || m_iSeperateFrame + 1 == iFrame)
     {
         m_pPlayer->Seperate_Scissor();
     }
-    else if (m_iCombineFrame == iFrame)
+    else if (m_iCombineFrame == iFrame || m_iCombineFrame + 1 == iFrame)
     {
         m_pPlayer->Combine_Scissor();
     }

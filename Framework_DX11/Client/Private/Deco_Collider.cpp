@@ -131,6 +131,7 @@ HRESULT CDeco_Collider::Ready_Components()
     CRigidBody::RIGIDBODY_DESC RigidBodyDesc{};
     RigidBodyDesc.isStatic = false;
     RigidBodyDesc.isGravity = false;
+    RigidBodyDesc.isUseClient = true;
     RigidBodyDesc.pOwnerTransform = m_pTransformCom;
     RigidBodyDesc.pOwnerNavigation = nullptr;
 

@@ -426,25 +426,11 @@ PS_OUT PS_SMOKE_MAIN(PS_IN In)
     
     Out.vColor = g_DiffuseTexture.Sample(LinearSampler, Get_SpriteTexcoord(In.vTexcoord, iTexIndex));
     
-    Out.vColor.a *= 1.f - (In.vLifeTime.y / In.vLifeTime.x);
-    
-    return Out;
-}
-
-PS_OUT PS_SMOKE_COLOR_MAIN(PS_IN In)
-{
-    PS_OUT Out = (PS_OUT) 0;
-    
-    int iTexIndex = (int) ((In.vLifeTime.y / In.vLifeTime.x) * (g_vTexDivide.x * g_vTexDivide.y - 1.f) * g_fSpriteSpeed);
-    
-    Out.vColor = g_DiffuseTexture.Sample(LinearSampler, Get_SpriteTexcoord(In.vTexcoord, iTexIndex));
-    
     Out.vColor.rgb *= In.vColor.rgb;
     Out.vColor.a *= 1.f - (In.vLifeTime.y / In.vLifeTime.x);
     
     return Out;
 }
-
 
 PS_NORMAL_OUT PS_INDEX_NORMAL_MAIN(PS_IN In)
 {
@@ -561,7 +547,7 @@ PS_OUT PS_DISTORTION_MAIN(PS_IN In)
     return Out;
 }
 
-PS_EFFECT_OUT PS_AURA_MAIN(PS_IN In)
+PS_EFFECT_OUT PS_AURA_EFFECT_MAIN(PS_IN In)
 {
     PS_EFFECT_OUT Out = (PS_EFFECT_OUT) 0;
     
@@ -584,6 +570,43 @@ PS_EFFECT_OUT PS_AURA_MAIN(PS_IN In)
     return Out;
 }
 
+PS_OUT PS_AURA_BLEND_MAIN(PS_IN In)
+{
+    PS_OUT Out = (PS_OUT) 0;
+    
+    int iTexIndex = In.vColor.a * g_vTexDivide.x * g_vTexDivide.y;
+    
+    Out.vColor = g_DiffuseTexture.Sample(LinearSampler, Get_SpriteTexcoord(In.vTexcoord, iTexIndex));
+    
+    Out.vColor.rgb *= In.vColor.rgb;
+    Out.vColor.a *= 1.f - (In.vLifeTime.y / In.vLifeTime.x);
+    
+    return Out;
+}
+
+PS_EFFECT_OUT PS_POWERGUARD_MAIN(PS_IN In)
+{
+    PS_EFFECT_OUT Out = (PS_EFFECT_OUT) 0;
+	
+    vector vColor = g_DiffuseTexture.Sample(LinearSampler, In.vTexcoord);
+
+    vColor.a = max(vColor.r, max(vColor.g, vColor.b));
+    
+    if (vColor.a <= 0.1f)
+        discard;
+
+    if (In.vLifeTime.y >= In.vLifeTime.x)
+        discard;
+
+    vColor.r = In.vColor.r;
+    vColor.g = In.vColor.g * vColor.a;
+    vColor.b = In.vColor.b * vColor.a;;
+
+    Out.vDiffuse = vColor;
+    Out.vBlur = vColor;
+
+    return Out;
+}
 
 technique11	DefaultTechnique
 {
@@ -719,18 +742,7 @@ technique11	DefaultTechnique
         PixelShader = compile ps_5_0 PS_DISTORTION_MAIN();
     }
 
-    pass PARTICLE_COLORSMOKE // 12
-    {
-        SetRasterizerState(RS_Default);
-        SetDepthStencilState(DSS_NonWrite, 0);
-        SetBlendState(BS_AlphaBlend, vector(0.f, 0.f, 0.f, 0.f), 0xffffffff);
-
-        VertexShader = compile vs_5_0 VS_MAIN();
-        GeometryShader = compile gs_5_0 GS_MAIN();
-        PixelShader = compile ps_5_0 PS_SMOKE_COLOR_MAIN();
-    }
-
-    pass PARTICLE_AURA  // 13
+    pass PARTICLE_AURA_EFFECT  // 12
     {
         SetRasterizerState(RS_Default);
         SetDepthStencilState(DSS_Default, 0);
@@ -738,8 +750,42 @@ technique11	DefaultTechnique
 
         VertexShader = compile vs_5_0 VS_MAIN();
         GeometryShader = compile gs_5_0 GS_MAIN();
-        PixelShader = compile ps_5_0 PS_AURA_MAIN();
+        PixelShader = compile ps_5_0 PS_AURA_EFFECT_MAIN();
     }
+
+    pass PARTICLE_AURA_BLEND // 13
+    {
+        SetRasterizerState(RS_Default);
+        SetDepthStencilState(DSS_NonWrite, 0);
+        SetBlendState(BS_AlphaBlend, vector(0.f, 0.f, 0.f, 0.f), 0xffffffff);
+
+        VertexShader = compile vs_5_0 VS_MAIN();
+        GeometryShader = compile gs_5_0 GS_MAIN();
+        PixelShader = compile ps_5_0 PS_AURA_BLEND_MAIN();
+    }
+
+    pass PS_THUNDER_NONDIR_MAIN // 14
+    {
+        SetRasterizerState(RS_Default);
+        SetDepthStencilState(DSS_Default, 0);
+        SetBlendState(BS_Default, vector(0.f, 0.f, 0.f, 0.f), 0xffffffff);
+
+        VertexShader = compile vs_5_0 VS_MAIN();
+        GeometryShader = compile gs_5_0 GS_MAIN();
+        PixelShader = compile ps_5_0 PS_THUNDER_MAIN();
+    }
+
+    pass PARTICLE_POWER_SPARK // 15
+    {
+        SetRasterizerState(RS_Default);
+        SetDepthStencilState(DSS_Default, 0);
+        SetBlendState(BS_Default, vector(0.f, 0.f, 0.f, 0.f), 0xffffffff);
+
+        VertexShader = compile vs_5_0 VS_MAIN();
+        GeometryShader = compile gs_5_0 GS_DIR_MAIN();
+        PixelShader = compile ps_5_0 PS_POWERGUARD_MAIN();
+    }
+
 }
 
 float2 Get_SpriteTexcoord(float2 vTexcoord, int iTexIndex)

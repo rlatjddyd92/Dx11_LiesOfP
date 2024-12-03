@@ -133,6 +133,12 @@
     <Filter Include="97.ShaderFiles\99.UI_Shader">
       <UniqueIdentifier>{7e871b61-befb-4972-b6fa-4610ab966838}</UniqueIdentifier>
     </Filter>
+    <Filter Include="90.ImGuiManager\Controller_Cutscene">
+      <UniqueIdentifier>{14b5904b-bd91-42c7-87d7-ea3f793244ee}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.GameObjects\09.CutScene">
+      <UniqueIdentifier>{a7c3de8f-92f9-4d60-b449-ab0da6ef9193}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="framework.h">
@@ -297,6 +303,12 @@
     <ClInclude Include="..\Public\MainApp.h">
       <Filter>00.MainApp</Filter>
     </ClInclude>
+    <ClInclude Include="..\Public\Controller_Cutscene.h">
+      <Filter>90.ImGuiManager\Controller_Cutscene</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Public\CutScene.h">
+      <Filter>02.GameObjects\09.CutScene</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <Image Include="small.ico">
@@ -441,6 +453,12 @@
     </ClCompile>
     <ClCompile Include="..\private\Trail_Effect_OP.cpp">
       <Filter>02.GameObjects\04.Effect\Effect_Base\Trail_Effect\One_Point</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Private\Controller_Cutscene.cpp">
+      <Filter>90.ImGuiManager\Controller_Cutscene</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Private\CutScene.cpp">
+      <Filter>02.GameObjects\09.CutScene</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
