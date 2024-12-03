@@ -41,6 +41,9 @@ public:
 		PAGE_ORTHO,
 		PAGE_TEST,
 		PAGE_EFFECT,
+		PAGE_TALKING,
+		PAGE_POPUP,
+		PAGE_INFORM,
 		PAGE_END
 	};
 
@@ -132,7 +135,8 @@ public:
 		_float fStrash_Alpha = 0.3; // 파트 별로 버리는 알파 기준을 다르게 설정해야 하는 경우 사용
 		_bool bText_Right = false; // 텍스트를 오른쪽 정렬로 그리는 경우 
 
-
+		_Vec4 vTexture_Range = { -1.f,-1.f, -1.f, -1.f };
+		_Vec2 vTexture_Angle = { 200.f,200.f };
 	}UPART;
 
 
@@ -164,6 +168,14 @@ public:
 		return UPART{};
 	}
 
+	UPART* Get_PartRenderInfo_Effect(_int iIndex)
+	{
+		if ((iIndex >= 0) && (iIndex < m_vecPageInfo[_int(UIPAGE::PAGE_EFFECT)]->vecPart.size()))
+			return m_vecPageInfo[_int(UIPAGE::PAGE_EFFECT)]->vecPart[iIndex];
+
+		return nullptr;
+	}
+
 	_int GetPartCount() { return (_int)m_vecPageInfo[m_iNowSelectNum]->vecPart.size(); }
 
 	_int GetBackNum() { return m_iBackground; }
@@ -191,16 +203,33 @@ public: // 개발 편의 기능
 	void Show_console();
 
 
+	// UI 연출 관련 
+	_bool Get_EffectOn() { return m_bEffectOn; }
+	void UpdateEffect(_float fTimeDelta);
+
+	_bool Fade_Out(_wstring strTitle, _wstring strDesc, _Vec3 vColor = _Vec3{ 0.f,0.f,0.f }, _float fTime = 1.f);
+	_bool Fade_In(_float fTime = 1.f);
+
+	void Show_Script(_wstring strScript0, _wstring strScript1 = TEXT("none"), _float fTime = 1.f, _Vec3 vColor = _Vec3{ 0.f,0.f,0.f });
+
+	_float Check_Fade() { return m_fTime_Fade_Now / m_fTime_Fade_Max; }
+
+
 private:
 	void UIPage_Edit();
 	void UIPart_Edit();
 
-	void AddNewPage();
+	
 
-	void UIPart_Render();
+	// UI 연출 관련 
+private:
+	_bool m_bEffectOn = false;
 
-	void FontTest();
-
+	_float m_fTime_Fade_Now = 0.f;
+	_float m_fTime_Fade_Max = 0.f;
+	_bool m_bFadeOut = false;
+	_float m_fTime_Script_Now = 0.f;
+	_float m_fTime_Script_Max = 0.f;
 
 
 private:

@@ -101,22 +101,15 @@ HRESULT CUIRender_Batching::Render()
 			
 		if (pNow->iTexture >= 0)
 		{
-			UI_SHADER eShader = UI_SHADER::SHADER_NORMAL;
+			UI_SHADER eShader = UI_SHADER::SHADER_MASTER;
+			UI_SHADER_PASS ePass = Select_Shader_Pass(*pNow);
 
 			if (pNow->bIsMultiple)
 			{
-				eShader = UI_SHADER::SHADER_MULTIPLE_COLOR;
 				if (pNow->vColor_Texture.x < 0) pNow->vColor_Texture.x = 1.f;
 				if (pNow->vColor_Texture.y < 0) pNow->vColor_Texture.y = 1.f;
 				if (pNow->vColor_Texture.z < 0) pNow->vColor_Texture.z = 1.f;
 				if (pNow->vColor_Texture.w < 0) pNow->vColor_Texture.w = 1.f;
-			}
-			else
-			{
-				if (pNow->vColor_Texture.x >= 0) eShader = UI_SHADER::SHADER_CHANGE_COLOR;
-				else if (pNow->vColor_Texture.y >= 0) eShader = UI_SHADER::SHADER_CHANGE_COLOR;
-				else if (pNow->vColor_Texture.z >= 0) eShader = UI_SHADER::SHADER_CHANGE_COLOR;
-				else if (pNow->vColor_Texture.w >= 0) eShader = UI_SHADER::SHADER_CHANGE_COLOR;
 			}
 
 			m_pTransformCom->Set_WorldMatrix(XMMatrixIdentity());
@@ -209,7 +202,7 @@ HRESULT CUIRender_Batching::Render()
 			if (FAILED(m_vecShader_UI[_int(eShader)]->Bind_RawValue("g_Color", &pNow->vColor_Texture, sizeof(_Vec4))))
 				return E_FAIL;
 
-			if (FAILED(m_vecShader_UI[_int(eShader)]->Begin(0)))
+			if (FAILED(m_vecShader_UI[_int(eShader)]->Begin(_int(ePass))))
 				return E_FAIL;
 
 			if (FAILED(m_pVIBufferCom->Bind_Buffers()))
@@ -312,12 +305,6 @@ HRESULT CUIRender_Batching::Make_Texture_Item(_int iTextureIndex)
 	return S_OK;
 }
 
-
-HRESULT CUIRender_Batching::Render_Part(CUIPage::UPART& pPart, CUIPage& pPage, _bool bTopMove)
-{
-	return E_NOTIMPL;
-}
-
 void CUIRender_Batching::Set_Scroll_Area(SCROLL_AREA eArea, _Vec2 vPos, _Vec2 vSize)
 {
 	m_vecViewPort[_int(eArea)]->Width = vSize.x;
@@ -355,6 +342,11 @@ HRESULT CUIRender_Batching::Ready_Components()
 	/* FOR.Com_Shader */
 	if (FAILED(__super::Add_Component(LEVEL_STATIC, TEXT("Prototype_Component_Shader_UI_Multiple_Color"),
 		TEXT("Com_Shader_Multiple_Color"), reinterpret_cast<CComponent**>(&m_vecShader_UI[_int(UI_SHADER::SHADER_MULTIPLE_COLOR)]))))
+		return E_FAIL;
+
+	/* FOR.Com_Shader */
+	if (FAILED(__super::Add_Component(LEVEL_STATIC, TEXT("Prototype_Component_Shader_UI_Master"),
+		TEXT("Com_Shader_Master"), reinterpret_cast<CComponent**>(&m_vecShader_UI[_int(UI_SHADER::SHADER_MASTER)]))))
 		return E_FAIL;
 
 	///* FOR.Com_Texture */
@@ -480,6 +472,60 @@ void CUIRender_Batching::Ready_Scroll_Adjust_Data()
 		m_vecViewPort_Adjust[i - 1] = { stof(vecBuffer[i][1]), stof(vecBuffer[i][2]) };
 	}
 
+}
+
+CUIRender_Batching::UI_SHADER_PASS CUIRender_Batching::Select_Shader_Pass(URENDER& Info)
+{
+	UI_SHADER_PASS eResult = UI_SHADER_PASS::PASS_END;
+
+	_bool bIsMulti = false;
+	_bool bIsChange = false;
+	_bool bIsAngle = false;
+	_bool bIsRange = false;
+
+	if (Info.bIsMultiple)
+	{
+		bIsMulti = true;
+	}
+	else
+	{
+		if (Info.vColor_Texture.x >= 0) bIsChange = true;
+		else if (Info.vColor_Texture.y >= 0) bIsChange = true;
+		else if (Info.vColor_Texture.z >= 0) bIsChange = true;
+		else if (Info.vColor_Texture.w >= 0) bIsChange = true;
+	}
+
+	if ((abs(Info.vAngle.x) <= 180.f) && (abs(Info.vAngle.y) > 180.f))
+		bIsAngle = true;
+
+	if ((Info.vRange.x >= 0.f) && (Info.vRange.y >= 0.f))
+		if ((Info.vRange.z >= 0.f) && (Info.vRange.w >= 0.f))
+			bIsRange = true;
+
+	if (bIsMulti)
+	{
+		if (bIsAngle)
+			eResult = UI_SHADER_PASS::PASS_COLOR_MULTI_ANGLE;
+		else if (bIsRange)
+			eResult = UI_SHADER_PASS::PASS_COLOR_MULTI_RANGE;
+		else 
+			eResult = UI_SHADER_PASS::PASS_COLOR_MULTI;
+	}
+	else if (bIsChange)
+	{
+		if (bIsAngle)
+			eResult = UI_SHADER_PASS::PASS_COLOR_INPUT_ANGLE;
+		else if (bIsRange)
+			eResult = UI_SHADER_PASS::PASS_COLOR_INPUT_RANGE;
+		else
+			eResult = UI_SHADER_PASS::PASS_COLOR_INPUT;
+	}
+	else if (bIsAngle)
+		eResult = UI_SHADER_PASS::PASS_ANGLE;
+	else if (bIsRange)
+		eResult = UI_SHADER_PASS::PASS_RANGE;
+	
+	return eResult;
 }
 
 

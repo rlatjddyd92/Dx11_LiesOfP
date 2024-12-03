@@ -2,6 +2,7 @@
 
 #include "stdafx.h"
 #include "Controller_Cutscene.h"
+#include "Controller_UITool.h"
 #include "GameInstance.h"
 #include "CutScene.h"
 IMPLEMENT_SINGLETON(CController_Cutscene)

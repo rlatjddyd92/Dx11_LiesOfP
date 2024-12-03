@@ -175,6 +175,7 @@
       <ShaderModel Condition="'$(Configuration)|$(Platform)'=='Release|x64'">5.0</ShaderModel>
     </FxCompile>
     <FxCompile Include="..\Bin\ShaderFiles\Shader_UI_Change_Color.hlsl" />
+    <FxCompile Include="..\Bin\ShaderFiles\Shader_UI_Master.hlsl" />
     <FxCompile Include="..\Bin\ShaderFiles\Shader_UI_Multiple_Color.hlsl" />
     <FxCompile Include="..\Bin\ShaderFiles\Shader_UI_Normal.hlsl" />
     <FxCompile Include="..\Bin\ShaderFiles\Shader_VtxAnimModel.hlsl">

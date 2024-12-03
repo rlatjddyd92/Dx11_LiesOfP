@@ -199,6 +199,8 @@ void CUIPage::Input_Render_Info(UPART& Part, SCROLL_AREA eArea)
 	pNew->fAlpha_Strash = Part.fStrash_Alpha;
 
 	pNew->eArea = eArea;
+	pNew->vRange = Part.vTexture_Range;
+	pNew->vAngle = Part.vTexture_Angle;
 
 	if (Part.iMoveType == _int(MOVETYPE::TYPE_BAR))
 		pNew->vSize = Part.GetBarSize();

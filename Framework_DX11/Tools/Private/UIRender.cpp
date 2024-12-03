@@ -89,25 +89,49 @@ HRESULT CUIRender::Render()
 
 		if (rNow.iTexture_Index != -1)
 		{
-			UI_SHADER eShader = UI_SHADER::SHADER_NORMAL;
+			UI_SHADER eShader = UI_SHADER::SHADER_MASTER;
+			UI_SHADER_PASS ePass = UI_SHADER_PASS::PASS_BASIC;
 
 			if (rNow.bTexture_Color_Multiple)
 			{
-				eShader = UI_SHADER::SHADER_MULTIPLE_COLOR;
+				ePass = UI_SHADER_PASS::PASS_COLOR_MULTI;
 				if (rNow.fTextureColor.x < 0) rNow.fTextureColor.x = 1.f;
 				if (rNow.fTextureColor.y < 0) rNow.fTextureColor.y = 1.f;
 				if (rNow.fTextureColor.z < 0) rNow.fTextureColor.z = 1.f;
 				if (rNow.fTextureColor.w < 0) rNow.fTextureColor.w = 1.f;
+
+				if ((abs(rNow.vTexture_Angle.x) <= 180.f) && (abs(rNow.vTexture_Angle.y) > 180.f))
+					ePass = UI_SHADER_PASS::PASS_COLOR_MULTI_ANGLE;
+				else if ((rNow.vTexture_Range.x >= 0.f) && (rNow.vTexture_Range.y >= 0.f))
+					if ((rNow.vTexture_Range.z >= 0.f) && (rNow.vTexture_Range.w >= 0.f))
+						ePass = UI_SHADER_PASS::PASS_COLOR_MULTI_RANGE;
 			}
 			else
 			{
-				if (rNow.fTextureColor.x >= 0) eShader = UI_SHADER::SHADER_CHANGE_COLOR;
-				else if (rNow.fTextureColor.y >= 0) eShader = UI_SHADER::SHADER_CHANGE_COLOR;
-				else if (rNow.fTextureColor.z >= 0) eShader = UI_SHADER::SHADER_CHANGE_COLOR;
-				else if (rNow.fTextureColor.w >= 0) eShader = UI_SHADER::SHADER_CHANGE_COLOR;
+				if (rNow.fTextureColor.x >= 0) ePass = UI_SHADER_PASS::PASS_COLOR_INPUT;
+				else if (rNow.fTextureColor.y >= 0) ePass = UI_SHADER_PASS::PASS_COLOR_INPUT;
+				else if (rNow.fTextureColor.z >= 0) ePass = UI_SHADER_PASS::PASS_COLOR_INPUT;
+				else if (rNow.fTextureColor.w >= 0) ePass = UI_SHADER_PASS::PASS_COLOR_INPUT;
+
+				if (ePass == UI_SHADER_PASS::PASS_COLOR_INPUT)
+				{
+					if ((abs(rNow.vTexture_Angle.x) <= 180.f) && (abs(rNow.vTexture_Angle.y) > 180.f))
+						ePass = UI_SHADER_PASS::PASS_COLOR_MULTI_ANGLE;
+					else if ((rNow.vTexture_Range.x >= 0.f) && (rNow.vTexture_Range.y >= 0.f))
+						if ((rNow.vTexture_Range.z >= 0.f) && (rNow.vTexture_Range.w >= 0.f))
+							ePass = UI_SHADER_PASS::PASS_COLOR_MULTI_RANGE;
+				}
+				else
+				{
+					if ((abs(rNow.vTexture_Angle.x) <= 180.f) && (abs(rNow.vTexture_Angle.y) > 180.f))
+						ePass = UI_SHADER_PASS::PASS_COLOR_MULTI_ANGLE;
+					else if ((rNow.vTexture_Range.x >= 0.f) && (rNow.vTexture_Range.y >= 0.f))
+						if ((rNow.vTexture_Range.z >= 0.f) && (rNow.vTexture_Range.w >= 0.f))
+							ePass = UI_SHADER_PASS::PASS_COLOR_MULTI_RANGE;
+				}
 			}
 
-
+			
 
 			m_pTransformCom->Set_WorldMatrix(XMMatrixIdentity());
 
@@ -159,7 +183,13 @@ HRESULT CUIRender::Render()
 			if (FAILED(m_vecShader_UI[_int(eShader)]->Bind_RawValue("g_Color", &rNow.fTextureColor, sizeof(_float4))))
 				return E_FAIL;
 
-			if (FAILED(m_vecShader_UI[_int(eShader)]->Begin(0)))
+			if (FAILED(m_vecShader_UI[_int(eShader)]->Bind_RawValue("g_Render_Area", &rNow.vTexture_Range, sizeof(_Vec4))))
+				return E_FAIL;
+
+			if (FAILED(m_vecShader_UI[_int(eShader)]->Bind_RawValue("g_Render_Angle", &rNow.vTexture_Angle, sizeof(_Vec2))))
+				return E_FAIL;
+
+			if (FAILED(m_vecShader_UI[_int(eShader)]->Begin(_int(ePass))))
 				return E_FAIL;
 
 			if (FAILED(m_pVIBufferCom->Bind_Buffers()))
@@ -212,7 +242,7 @@ HRESULT CUIRender::Render()
 	return S_OK;
 }
 
-void CUIRender::AddRenderUIObject(_int iTextureIndex, _float2 fPosition, _float2 fSize, _float3 fRGB, _float fAlpha)
+void CUIRender::AddRenderUIObject(_int iTextureIndex, _float2 fPosition, _float2 fSize, _float3 fRGB, _float fAlpha, _float4 vRange, _float2 vAngle)
 {
 	URCOM* pNew = new URCOM;
 
@@ -221,6 +251,8 @@ void CUIRender::AddRenderUIObject(_int iTextureIndex, _float2 fPosition, _float2
 	pNew->fSize = fSize;
 	pNew->fRGB = fRGB;
 	pNew->fAlpah = fAlpha;
+	pNew->vRange = vRange;
+	pNew->vAngle = vAngle;
 
 	m_UIRenderlist.push_back(pNew);
 }
@@ -278,6 +310,182 @@ HRESULT CUIRender::BackRender(_int iIndex)
 	return S_OK;
 }
 
+HRESULT CUIRender::Render_Effect_Tool()
+{
+	_int iIndex = -1;
+
+	while (1)
+	{
+		++iIndex;
+
+		CController_UITool::UPART* pNow = CController_UITool::Get_Instance()->Get_PartRenderInfo_Effect(iIndex);
+
+		if (pNow == nullptr)
+			return S_OK;
+
+		if (pNow->bRender = false)
+			continue;
+
+		CController_UITool::UPART& rNow = *pNow;
+		
+		if (rNow.iTexture_Index != -1)
+		{
+			UI_SHADER eShader = UI_SHADER::SHADER_MASTER;
+			UI_SHADER_PASS ePass = UI_SHADER_PASS::PASS_BASIC;
+
+			if (rNow.bTexture_Color_Multiple)
+			{
+				ePass = UI_SHADER_PASS::PASS_COLOR_MULTI;
+				if (rNow.fTextureColor.x < 0) rNow.fTextureColor.x = 1.f;
+				if (rNow.fTextureColor.y < 0) rNow.fTextureColor.y = 1.f;
+				if (rNow.fTextureColor.z < 0) rNow.fTextureColor.z = 1.f;
+				if (rNow.fTextureColor.w < 0) rNow.fTextureColor.w = 1.f;
+
+				if ((abs(rNow.vTexture_Angle.x) <= 180.f) && (abs(rNow.vTexture_Angle.y) > 180.f))
+					ePass = UI_SHADER_PASS::PASS_COLOR_MULTI_ANGLE;
+				else if ((rNow.vTexture_Range.x >= 0.f) && (rNow.vTexture_Range.y >= 0.f))
+					if ((rNow.vTexture_Range.z >= 0.f) && (rNow.vTexture_Range.w >= 0.f))
+						ePass = UI_SHADER_PASS::PASS_COLOR_MULTI_RANGE;
+			}
+			else
+			{
+				if (rNow.fTextureColor.x >= 0) ePass = UI_SHADER_PASS::PASS_COLOR_INPUT;
+				else if (rNow.fTextureColor.y >= 0) ePass = UI_SHADER_PASS::PASS_COLOR_INPUT;
+				else if (rNow.fTextureColor.z >= 0) ePass = UI_SHADER_PASS::PASS_COLOR_INPUT;
+				else if (rNow.fTextureColor.w >= 0) ePass = UI_SHADER_PASS::PASS_COLOR_INPUT;
+
+				if (ePass == UI_SHADER_PASS::PASS_COLOR_INPUT)
+				{
+					if ((abs(rNow.vTexture_Angle.x) <= 180.f) && (abs(rNow.vTexture_Angle.y) > 180.f))
+						ePass = UI_SHADER_PASS::PASS_COLOR_MULTI_ANGLE;
+					else if ((rNow.vTexture_Range.x >= 0.f) && (rNow.vTexture_Range.y >= 0.f))
+						if ((rNow.vTexture_Range.z >= 0.f) && (rNow.vTexture_Range.w >= 0.f))
+							ePass = UI_SHADER_PASS::PASS_COLOR_MULTI_RANGE;
+				}
+				else
+				{
+					if ((abs(rNow.vTexture_Angle.x) <= 180.f) && (abs(rNow.vTexture_Angle.y) > 180.f))
+						ePass = UI_SHADER_PASS::PASS_COLOR_MULTI_ANGLE;
+					else if ((rNow.vTexture_Range.x >= 0.f) && (rNow.vTexture_Range.y >= 0.f))
+						if ((rNow.vTexture_Range.z >= 0.f) && (rNow.vTexture_Range.w >= 0.f))
+							ePass = UI_SHADER_PASS::PASS_COLOR_MULTI_RANGE;
+				}
+			}
+
+
+
+			m_pTransformCom->Set_WorldMatrix(XMMatrixIdentity());
+
+			if (rNow.iMoveType == _int(CController_UITool::MOVETYPE::TYPE_BAR))
+				m_pTransformCom->Set_Scaled(rNow.GetBarSize().x, rNow.GetBarSize().y, 1.f);
+			else
+				m_pTransformCom->Set_Scaled(rNow.fSize.x, rNow.fSize.y, 1.f);
+
+
+
+			m_pTransformCom->Set_State(CTransform::STATE_POSITION,
+				XMVectorSet(rNow.fPosition.x - m_fViewWidth * 0.5f, -rNow.fPosition.y + m_fViewHeight * 0.5f, 0.f, 1.f));
+
+			if (rNow.bTurn)
+				m_pTransformCom->Rotation({ 0.f,0.f,1.f,0.f }, XMConvertToRadians(rNow.fTurn_Degree));
+
+			if (FAILED(m_pTransformCom->Bind_ShaderResource(m_vecShader_UI[_int(eShader)], "g_WorldMatrix")))
+				return E_FAIL;
+
+			if (FAILED(m_vecShader_UI[_int(eShader)]->Bind_Matrix("g_ViewMatrix", &m_ViewMatrix)))
+				return E_FAIL;
+
+			if (FAILED(m_vecShader_UI[_int(eShader)]->Bind_Matrix("g_ProjMatrix", &m_ProjMatrix)))
+				return E_FAIL;
+
+			if (!rNow.bIsItem)
+			{
+				if (rNow.iTexture_Index >= m_vecTextureInfo.size())
+					return S_OK;
+
+				if (FAILED(m_vecTextureInfo[rNow.iTexture_Index]->Texture->Bind_ShadeResource(m_vecShader_UI[_int(eShader)], "g_Texture", 0)))
+					return E_FAIL;
+			}
+			else
+			{
+				if (rNow.iTexture_Index >= m_vecTextureInfo_ItemIcon.size())
+					return S_OK;
+
+				if (FAILED(m_vecTextureInfo_ItemIcon[rNow.iTexture_Index]->Texture->Bind_ShadeResource(m_vecShader_UI[_int(eShader)], "g_Texture", 0)))
+					return E_FAIL;
+			}
+
+			if (FAILED(m_vecShader_UI[_int(eShader)]->Bind_RawValue("g_Multiple", &rNow.bTexture_Color_Multiple, sizeof(_bool))))
+				return E_FAIL;
+
+			if (FAILED(m_vecShader_UI[_int(eShader)]->Bind_RawValue("g_Alpha_Strash", &rNow.fStrash_Alpha, sizeof(_float))))
+				return E_FAIL;
+
+			if (FAILED(m_vecShader_UI[_int(eShader)]->Bind_RawValue("g_Color", &rNow.fTextureColor, sizeof(_float4))))
+				return E_FAIL;
+
+			if (FAILED(m_vecShader_UI[_int(eShader)]->Bind_RawValue("g_Render_Area", &rNow.vTexture_Range, sizeof(_Vec4))))
+				return E_FAIL;
+
+			if (FAILED(m_vecShader_UI[_int(eShader)]->Bind_RawValue("g_Render_Angle", &rNow.vTexture_Angle, sizeof(_Vec2))))
+				return E_FAIL;
+
+			if (FAILED(m_vecShader_UI[_int(eShader)]->Begin(_int(ePass))))
+				return E_FAIL;
+
+			if (FAILED(m_pVIBufferCom->Bind_Buffers()))
+				return E_FAIL;
+
+			if (FAILED(m_pVIBufferCom->Render()))
+				return E_FAIL;
+		}
+		if ((rNow.iFontIndex >= 0) && (rNow.iFontIndex < _int(UI_FONT::FONT_END)))
+		{
+			if (rNow.szText == nullptr)
+				continue;
+
+			_vector vPosition = { rNow.fPosition.x, rNow.fPosition.y, 0.f,0.f };
+			_vector vColor = { 1.f,1.f,1.f,1.f };
+
+			if (rNow.fTextColor.x > 0.f)
+				vColor.m128_f32[0] = rNow.fTextColor.x;
+
+			if (rNow.fTextColor.y > 0.f)
+				vColor.m128_f32[1] = rNow.fTextColor.y;
+
+			if (rNow.fTextColor.z > 0.f)
+				vColor.m128_f32[2] = rNow.fTextColor.z;
+
+			if (rNow.fTextColor.w > 0.f)
+				vColor.m128_f32[3] = rNow.fTextColor.w;
+
+			if (KEY_HOLD(KEY::ALT))
+			{
+				if (KEY_HOLD(KEY::NUM1))
+					m_fSize -= 0.01f;
+				else if (KEY_HOLD(KEY::NUM2))
+					m_fSize += 0.01f;
+
+				m_fSize = max(m_fSize, 0.f);
+				m_fSize = min(m_fSize, 1.f);
+			}
+
+
+			if (rNow.bCenter)
+				m_pGameInstance->Render_TextCenter(m_vecFont_tchar[rNow.iFontIndex], rNow.szText, vPosition, vColor, 0.f, { 0.f,0.f,0.f,1.f }, m_fSize);
+			else if (rNow.bText_Right)
+				m_pGameInstance->Render_TextRight(m_vecFont_tchar[rNow.iFontIndex], rNow.szText, vPosition, vColor, 0.f, { 0.f,0.f,0.f,1.f }, m_fSize);
+			else
+				m_pGameInstance->Render_Text(m_vecFont_tchar[rNow.iFontIndex], rNow.szText, vPosition, vColor, 0.f, { 0.f,0.f,0.f,1.f }, m_fSize);
+		}
+	} 
+	
+
+
+
+	return S_OK;
+}
+
 
 HRESULT CUIRender::Ready_Components()
 {
@@ -297,10 +505,15 @@ HRESULT CUIRender::Ready_Components()
 	if (FAILED(__super::Add_Component(LEVEL_STATIC, TEXT("Prototype_Component_Shader_UI_Change_Color"),
 		TEXT("Com_Shader_Change_Color"), reinterpret_cast<CComponent**>(&m_vecShader_UI[_int(UI_SHADER::SHADER_CHANGE_COLOR)]))))
 		return E_FAIL;
-
+	
 	/* FOR.Com_Shader */
 	if (FAILED(__super::Add_Component(LEVEL_STATIC, TEXT("Prototype_Component_Shader_UI_Multiple_Color"),
 		TEXT("Com_Shader_Multiple_Color"), reinterpret_cast<CComponent**>(&m_vecShader_UI[_int(UI_SHADER::SHADER_MULTIPLE_COLOR)]))))
+		return E_FAIL;
+
+	/* FOR.Com_Shader */
+	if (FAILED(__super::Add_Component(LEVEL_STATIC, TEXT("Prototype_Component_Shader_UI_Master"),
+		TEXT("Com_Shader_Master"), reinterpret_cast<CComponent**>(&m_vecShader_UI[_int(UI_SHADER::SHADER_MASTER)]))))
 		return E_FAIL;
 
 
@@ -429,6 +642,22 @@ HRESULT CUIRender::Ready_Texture_ItemIcon()
 	}
 
 	return S_OK;
+}
+
+CUIRender::UI_SHADER_PASS CUIRender::Select_Shader(URCOM& Command)
+{
+	UI_SHADER_PASS eReturn = UI_SHADER_PASS::PASS_BASIC;
+
+	
+
+
+	
+
+
+
+
+
+	return eReturn;
 }
 
 CUIRender* CUIRender::Create(ID3D11Device* pDevice, ID3D11DeviceContext* pContext)
