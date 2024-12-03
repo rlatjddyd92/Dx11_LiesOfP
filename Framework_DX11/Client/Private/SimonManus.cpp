@@ -190,6 +190,8 @@ void CSimonManus::Late_Update(_float fTimeDelta)
 	__super::Late_Update(fTimeDelta);
 
 	m_pRigidBodyCom->Update(fTimeDelta);
+	
+	m_pWeapon->Active_Collider();
 
 	m_pWeapon->Late_Update(fTimeDelta);
 

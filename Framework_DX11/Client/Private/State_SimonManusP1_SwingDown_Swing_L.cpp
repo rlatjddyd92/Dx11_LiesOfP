@@ -150,6 +150,27 @@ void CState_SimonManusP1_SwingDown_Swing_L::Effect_Check(_double CurTrackPos)
     }
 }
 
+void CState_SimonManusP1_SwingDown_Swing_L::Control_Sound(_double CurTrackPos)
+{
+    if (m_iRouteTrack == 0)
+    {
+        if (!m_bStampEffect)
+        {
+            if (CurTrackPos >= 150.f)
+            {
+                m_pMonster->Play_Sound(CPawn::PAWN_SOUND_EFFECT1, TEXT("SE_NPC_SK_FX_Ground_Exp_L_03"));
+            }
+        }
+    }
+    else
+    {
+        if (CurTrackPos >= 40.f)
+        {
+
+        }
+    }
+}
+
 CState_SimonManusP1_SwingDown_Swing_L* CState_SimonManusP1_SwingDown_Swing_L::Create(CFsm* pFsm, CMonster* pMonster, _uint iStateNum, void* pArg)
 {
     CState_SimonManusP1_SwingDown_Swing_L* pInstance = new CState_SimonManusP1_SwingDown_Swing_L(pFsm, pMonster);
