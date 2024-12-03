@@ -300,6 +300,32 @@ HRESULT CLoader::Ready_Resources_For_ToolLevel()
 		CVIBuffer_Cube::Create(m_pDevice, m_pContext))))
 		return E_FAIL;
 
+	_matrix      PreTransformMatrix = XMMatrixIdentity();
+
+	CModel* pModel = { nullptr };
+	PreTransformMatrix = XMMatrixScaling(0.01f, 0.01f, 0.01f) * XMMatrixRotationY(XMConvertToRadians(270.f));
+
+	int m_iModelCount = { 0 };
+	if (false)
+	{
+		//"../Bin/ModelData/Anim/PlayerExample/PlayerExample.dat"	일반 바이너리
+		pModel = CModel::Create(m_pDevice, m_pContext, CModel::TYPE_ANIM, "../Bin/ModelData/Anim/Player/Player.dat", PreTransformMatrix, false, CController_AnimationTool::Get_Instance()->Get_StructStack(m_iModelCount++));
+		if (FAILED(m_pGameInstance->Add_Prototype(LEVEL_TOOL, TEXT("Prototype_AnimModel_Player"), pModel)))
+			return E_FAIL;
+		m_pGameInstance->Add_ModelPrototype(LEVEL_TOOL, ("Prototype_AnimModel_Player"), pModel);
+	}
+	else
+	{
+		//스택 스트럭트도 넣어주어야 새로 만든것에서 다시 저장할 수 있음.
+		//"../Bin/ModelData/Anim/CreatedBinFiles/Test.dat"			추가 조정 바이너리
+		//맨 뒤에 넣는 int 값 지역 변수 선언해서 0으로 만든 값을  i++로 넣어서 알아서 1씩 추가되도록 만들기.
+		pModel = CModel::Create(m_pDevice, m_pContext, CModel::TYPE_ANIM, "../Bin/ModelData/Anim/CreatedBinFiles/Player.dat", PreTransformMatrix, true, CController_AnimationTool::Get_Instance()->Get_StructStack(m_iModelCount++));
+		if (FAILED(m_pGameInstance->Add_Prototype(LEVEL_TOOL, TEXT("Prototype_AnimModel_Player"), pModel)))
+			return E_FAIL;
+		m_pGameInstance->Add_ModelPrototype(LEVEL_TOOL, ("Prototype_AnimModel_Player"), pModel);
+	}
+
+
 
 	CVIBuffer_Instancing::INSTANCE_DESC ParticleDesc = {};
 	/* For. Prototype_Component_VIBuffer_Point_Instance */
@@ -321,12 +347,6 @@ HRESULT CLoader::Ready_Resources_For_ToolLevel()
 	/* For. Prototype_Component_VIBuffer_Trail_MultiPoint_Instance */
 	if (FAILED(m_pGameInstance->Add_Prototype(LEVEL_TOOL, TEXT("Prototype_Component_VIBuffer_Trail_MultiPoint_Instance"),
 		CTrail_MultiPoint_Instance::Create(m_pDevice, m_pContext, TrailDesc, false))))
-		return E_FAIL;
-
-	_matrix		PreTransformMatrix = XMMatrixIdentity();
-	PreTransformMatrix = XMMatrixScaling(0.005f, 0.005f, 0.005f) * XMMatrixRotationX(XMConvertToRadians(90.0f));
-	if (FAILED(m_pGameInstance->Add_Prototype(LEVEL_TOOL, TEXT("Prototype_Model_Test"),
-		CModel::Create(m_pDevice, m_pContext, CModel::TYPE_NONANIM, "../Bin/ModelData/NonAnim/Map/Structure/SM_Monastery_Deco_01.dat", PreTransformMatrix))))
 		return E_FAIL;
 
 	lstrcpy(m_szLoadingText, TEXT("네비게이션을(를) 로딩중입니다."));
@@ -959,26 +979,6 @@ HRESULT CLoader::Ready_Resources_For_ToolLevel_Monster()
 
 	CModel* pModel = { nullptr };
 	PreTransformMatrix = XMMatrixScaling(0.01f, 0.01f, 0.01f) * XMMatrixRotationY(XMConvertToRadians(270.f));
-
-	int m_iModelCount = { 0 };
-	if (false)
-	{
-		//"../Bin/ModelData/Anim/PlayerExample/PlayerExample.dat"	일반 바이너리
-		pModel = CModel::Create(m_pDevice, m_pContext, CModel::TYPE_ANIM, "../Bin/ModelData/Anim/Player/Player.dat", PreTransformMatrix, false, CController_AnimationTool::Get_Instance()->Get_StructStack(m_iModelCount++));
-		if (FAILED(m_pGameInstance->Add_Prototype(LEVEL_TOOL, TEXT("Prototype_AnimModel_Player"), pModel)))
-			return E_FAIL;
-		m_pGameInstance->Add_ModelPrototype(LEVEL_TOOL, ("Prototype_AnimModel_Player"), pModel);
-	}
-	else
-	{
-		//스택 스트럭트도 넣어주어야 새로 만든것에서 다시 저장할 수 있음.
-		//"../Bin/ModelData/Anim/CreatedBinFiles/Test.dat"			추가 조정 바이너리
-		//맨 뒤에 넣는 int 값 지역 변수 선언해서 0으로 만든 값을  i++로 넣어서 알아서 1씩 추가되도록 만들기.
-		pModel = CModel::Create(m_pDevice, m_pContext, CModel::TYPE_ANIM, "../Bin/ModelData/Anim/CreatedBinFiles/Player.dat", PreTransformMatrix, true, CController_AnimationTool::Get_Instance()->Get_StructStack(m_iModelCount++));
-		if (FAILED(m_pGameInstance->Add_Prototype(LEVEL_TOOL, TEXT("Prototype_AnimModel_Player"), pModel)))
-			return E_FAIL;
-		m_pGameInstance->Add_ModelPrototype(LEVEL_TOOL, ("Prototype_AnimModel_Player"), pModel);
-	}
 
 	/* Prototype_Component_Model_Rapier */
 	//PreTransformMatrix = XMMatrixScaling(0.01f, 0.01f, 0.01f) * XMMatrixRotationX(XMConvertToRadians(270.0f));
