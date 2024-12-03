@@ -56,6 +56,7 @@ void CController_Cutscene::Menu()
     int item_highlighted_idx = 0; // Here we store our highlighted data as an index.
 
     static float fMaxFrame = { 0.f };
+    static _int iSelectedKeyframeNum = -1;
 
 #pragma region 컷신 리스트 출력
     if (ImGui::CollapsingHeader("Sequence_List"))
@@ -90,6 +91,7 @@ void CController_Cutscene::Menu()
         fMaxFrame = m_pCurrentCutScene->Get_MaxFrame();
         m_fTrackPosition = m_pCurrentCutScene->Get_CurFrame_Ptr();
         m_bPlay = false;
+        iSelectedKeyframeNum = -1;
     }
 
 #pragma region 컷신 세부사항 조정
@@ -144,8 +146,6 @@ void CController_Cutscene::Menu()
         ImGui::BeginGroup();
         ImGui::Text("[KeyFrame_List]");
 
-        static _int iSelectedKeyframeNum = -1;
-
         ImGui::BeginChild("KeyFrame List", ImVec2(150, 150), true); //네모 칸 만들기
 
         static _int iKeyFrameCount = 0;
@@ -174,12 +174,14 @@ void CController_Cutscene::Menu()
             m_iPreSelected_KeyFrame = iSelectedKeyframeNum;
             if(iSelectedKeyframeNum != -1)
             {
-                CCutScene::CUTSCENE_DESC* pDesc = m_pCurrentCutScene->Get_Selected_KeyFrame(iSelectedKeyframeNum);
+                CUTSCENE_DESC* pDesc = m_pCurrentCutScene->Get_Selected_KeyFrame(iSelectedKeyframeNum);
+                pCutScene_Desc = pDesc;
                 *m_fTrackPosition = pDesc->fTrackPosition;
             }
             else
             {
                 *m_fTrackPosition = m_fTrackPosition_Zero;
+                pCutScene_Desc = nullptr;
             }
         }
 
@@ -225,30 +227,28 @@ void CController_Cutscene::Menu()
         ImGui::EndGroup();
 
         //요소별 메뉴 창
-        ImGui::BeginChild("Detail view", ImVec2(300, 100));
 
-        switch (selected)
+        if(m_pCurrentCutScene != nullptr && iSelectedKeyframeNum != -1)
         {
-        case CCutScene::CAMERA:
-            Show_Camera_State();
-            break;
-        case CCutScene::UI:
-            Show_UI_State();
-            break;
-        case CCutScene::SHADER:
-            Show_Shader_State();
-            break;
-        case CCutScene::GAMEOBJECT:
-            Show_GamgeObject_State();
-            break;
-        default:
-            break;
+            switch (selected)
+            {
+            case CCutScene::CAMERA:
+                Show_Camera_State();
+                break;
+            case CCutScene::UI:
+                UI_Memu();
+                break;
+            case CCutScene::SHADER:
+                Shader_Memu();
+                break;
+            case CCutScene::GAMEOBJECT:
+                Show_GamgeObject_State();
+                break;
+            default:
+                break;
+            }
         }
-        ImGui::EndChild();
-        
-       
-        
-        
+   
     }
 #pragma endregion
 }
@@ -263,28 +263,45 @@ void CController_Cutscene::Show_UI_State()
 
 void CController_Cutscene::Show_Shader_State()
 {
-
+    
 }
 
 void CController_Cutscene::Show_GamgeObject_State()
 {
 }
 
-void CController_Cutscene::Camera_Nemu()
+void CController_Cutscene::Camera_Memu()
 {
 }
 
-void CController_Cutscene::UI_Nemu()
+void CController_Cutscene::UI_Memu()
+{
+    //FadeOut 사용
+    ImGui::Checkbox("FadeOut", &pCutScene_Desc->UI_DESC.bFadeOut);
+    ImGui::SameLine();
+    //FadeIn 사용
+    ImGui::Checkbox("FadeIn", &pCutScene_Desc->UI_DESC.bFadeIn);
+    //Fade 색 결정
+    static ImVec4 color = ImVec4(0.f,0.f,0.f,1.f);
+    ImGuiColorEditFlags misc_flags = ImGuiColorEditFlags_NoOptions;
+    ImGui::ColorEdit3("MyColor##1", (float*)&pCutScene_Desc->UI_DESC.fColor, misc_flags);
+    //Fade 속도
+    ImGui::DragFloat("Fade Time", &pCutScene_Desc->UI_DESC.fTime,0.1f, 0.f);
+}
+
+void CController_Cutscene::Shader_Memu()
+{
+    //Dof사용 유무
+    ImGui::Checkbox("Use Dof", &pCutScene_Desc->ShaderDesc.bUseDof);
+    //Dof 사용 수치
+    ImGui::DragFloat("DOF", &pCutScene_Desc->ShaderDesc.fDof, 0.02f, 0.f);
+}
+
+void CController_Cutscene::GamgeObject_Memu()
 {
 }
 
-void CController_Cutscene::Shader_Nemu()
-{
-}
 
-void CController_Cutscene::GamgeObject_Nemu()
-{
-}
 
 
 void CController_Cutscene::Free()

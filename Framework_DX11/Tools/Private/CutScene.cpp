@@ -69,11 +69,27 @@ void CCutScene::Play_Keyframes(_float fTimeDelta)
 
 	for (auto& iter : m_KeyFrames)
 	{
-		if (m_fTrackPosition >= iter->fTrackPosition && iter->bActived)
+		if (m_fTrackPosition >= iter->fTrackPosition && iter->bActived == false)
 		{
 			iter->bActived = true;
+
+			Active_Shader(iter);
 		}
 	}
+}
+
+void CCutScene::Active_Shader(CUTSCENE_DESC* pCutSceneDesc)
+{
+	DOF_DESC* tDesc = m_pGameInstance->Get_DOFDesc();
+	if (nullptr == tDesc)
+		return;
+
+	tDesc->isOnDOF = pCutSceneDesc->ShaderDesc.bUseDof;
+	tDesc->fDOF = pCutSceneDesc->ShaderDesc.fDof;
+}
+
+void CCutScene::Active_UI(CUTSCENE_DESC* pCutSceneDesc)
+{
 }
 
 void CCutScene::Sort_KeyFrame_TrackPosition()
