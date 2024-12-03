@@ -12,17 +12,7 @@ class CCutScene :
 public:
 	enum ActorType {CAMERA, UI, SHADER,GAMEOBJECT, TYPE_END};
 
-	typedef struct
-	{
-		enum ShaderType {DOF, SHADER_END};
 
-	}SHADER_DESC;
-
-	typedef struct
-	{
-		_float			fTrackPosition;
-		_bool			bActived = false;
-	}CUTSCENE_DESC;
 	
 private:
 	CCutScene(ID3D11Device* pDevice, ID3D11DeviceContext* pContext);
@@ -56,7 +46,8 @@ private:
 
 private:
 	void Play_Keyframes(_float fTimeDelta);
-	
+	void Active_Shader(CUTSCENE_DESC* pCutSceneDesc);
+	void Active_UI(CUTSCENE_DESC* pCutSceneDesc);
 public:
 	static CCutScene* Create(ID3D11Device* pDevice, ID3D11DeviceContext* pContext);
 	virtual CGameObject* Clone(void* pArg);

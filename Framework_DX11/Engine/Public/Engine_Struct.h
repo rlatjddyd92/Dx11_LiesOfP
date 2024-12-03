@@ -284,5 +284,30 @@ namespace Engine
 		static const D3D11_INPUT_ELEMENT_DESC	Elements[iNumElements];
 	}VTXMODELINSTANCE;
 
+	//¿ì¼Û ÄÆ½Å
+	typedef struct
+	{
+		_bool bUseDof = { false };
+		_float fDof = { 0.f };
+
+	}SHADER_DESC;
+
+	typedef struct
+	{
+		_bool bFadeOut = { false };
+		_bool bFadeIn = { false };
+		_float fTime = { 0.f };
+		_Vec3 fColor = { 0.f,0.f,0.f };
+
+	}UI_DESC;
+
+	typedef struct
+	{
+		_float			fTrackPosition;
+		_bool			bActived = false;
+		SHADER_DESC		ShaderDesc;
+		UI_DESC			UI_DESC;
+	}CUTSCENE_DESC;
+
 }
 
