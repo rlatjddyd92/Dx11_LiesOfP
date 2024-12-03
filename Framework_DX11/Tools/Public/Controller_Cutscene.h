@@ -30,8 +30,10 @@ private:
     class CCutScene* m_pCurrentCutScene = {};
     _bool m_bFirst = { true };
     _bool m_bPlay = { true };
-    _float* m_fCurrentFrame = { nullptr };
+    _float* m_fTrackPosition = { nullptr };
+    _float m_fTrackPosition_Zero = { 0.f };
     _int m_iPreSelectedCutScene = { -1 };
+    _int m_iPreSelected_KeyFrame = { -1 };
 
 	class CCutScene* m_CutSceneList[8] = {nullptr,};
     const char* m_CutSceneNameList[8] = { "Boss1_Meet", "Boss1_Phase2", "Boss1_Dead", "Sophia_EnterRoom", "Boss2_Meet",  "Boss2_Phase2",  "Boss2_Defeat", "Sophia_Dead" };

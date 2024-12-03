@@ -20,7 +20,7 @@ public:
 
 	typedef struct
 	{
-		_float			dTrackPosition;
+		_float			fTrackPosition;
 		_bool			bActived = false;
 	}CUTSCENE_DESC;
 	
@@ -43,6 +43,10 @@ public:
 	void Set_Play(_bool bPlay) { m_bPlay = bPlay; }
 	void Keyframe_Actived_Reset();
 	void Create_KeyFrame();
+	void Sort_KeyFrame_TrackPosition();
+	void Delete_Selected_Keyframe(_int iIndex);
+	_int Get_KeyFrameCount() { return (_int)m_KeyFrames.size(); }
+	CUTSCENE_DESC* Get_Selected_KeyFrame(_int iIndex) { return m_KeyFrames[iIndex]; }
 private:
 	_float m_fMaxFrame = { 50.f };
 	_float m_fTrackPosition = { 0.f };
@@ -52,7 +56,7 @@ private:
 
 private:
 	void Play_Keyframes(_float fTimeDelta);
-
+	
 public:
 	static CCutScene* Create(ID3D11Device* pDevice, ID3D11DeviceContext* pContext);
 	virtual CGameObject* Clone(void* pArg);

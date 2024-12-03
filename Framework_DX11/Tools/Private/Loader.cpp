@@ -160,7 +160,7 @@ HRESULT CLoader::LoadingMapModel0()
 	switch (m_eNextLevelID)
 	{
 	case LEVEL_TOOL:
-		//hr = Ready_Resources_For_ToolLevel_Map0();
+		hr = Ready_Resources_For_ToolLevel_Map0();
 		m_isFinished_Map0 = true;
 		break;
 	default:
@@ -184,7 +184,7 @@ HRESULT CLoader::LoadingMapModel1()
 	switch (m_eNextLevelID)
 	{
 	case LEVEL_TOOL:
-		//hr = Ready_Resources_For_ToolLevel_Map1();
+		hr = Ready_Resources_For_ToolLevel_Map1();
 		m_isFinished_Map1 = true;
 		break;
 	default:

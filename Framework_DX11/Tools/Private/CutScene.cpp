@@ -56,9 +56,10 @@ void CCutScene::Keyframe_Actived_Reset()
 void CCutScene::Create_KeyFrame()
 {
 	CUTSCENE_DESC* pDesc = new CUTSCENE_DESC;
-	pDesc->dTrackPosition = m_fTrackPosition;
+	pDesc->fTrackPosition = m_fTrackPosition;
 
 	m_KeyFrames.push_back(pDesc);
+	Sort_KeyFrame_TrackPosition();
 }
 
 void CCutScene::Play_Keyframes(_float fTimeDelta)
@@ -68,11 +69,26 @@ void CCutScene::Play_Keyframes(_float fTimeDelta)
 
 	for (auto& iter : m_KeyFrames)
 	{
-		if (m_fTrackPosition >= iter->dTrackPosition && iter->bActived)
+		if (m_fTrackPosition >= iter->fTrackPosition && iter->bActived)
 		{
 			iter->bActived = true;
 		}
 	}
+}
+
+void CCutScene::Sort_KeyFrame_TrackPosition()
+{
+	//TrakcPostition에 따라 자동 정렬
+	sort(m_KeyFrames.begin(), m_KeyFrames.end(), [](const CUTSCENE_DESC* a, const CUTSCENE_DESC* b)
+		{
+			return a->fTrackPosition < b->fTrackPosition;
+		});
+}
+
+void CCutScene::Delete_Selected_Keyframe(_int iIndex)
+{
+	m_KeyFrames.erase(m_KeyFrames.begin() + iIndex);
+	Sort_KeyFrame_TrackPosition();
 }
 
 CCutScene* CCutScene::Create(ID3D11Device* pDevice, ID3D11DeviceContext* pContext)

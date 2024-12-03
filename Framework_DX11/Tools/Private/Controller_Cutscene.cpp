@@ -33,7 +33,7 @@ HRESULT CController_Cutscene::Initialize(ID3D11Device* pDevice, ID3D11DeviceCont
         }
     }
 
-    m_fCurrentFrame = new float(0.0f);
+    m_fTrackPosition = &m_fTrackPosition_Zero;
 	return S_OK;
 }
 
@@ -54,7 +54,7 @@ void CController_Cutscene::Menu()
     static bool item_highlight = false;
     int item_highlighted_idx = 0; // Here we store our highlighted data as an index.
 
-    static float fMaxFrame = { 50.f };
+    static float fMaxFrame = { 0.f };
 
 #pragma region 컷신 리스트 출력
     if (ImGui::CollapsingHeader("Sequence_List"))
@@ -84,16 +84,10 @@ void CController_Cutscene::Menu()
     //새로운 컷신 선텍
     if(m_iPreSelectedCutScene != item_selected_idx)
     {
-        if (m_iPreSelectedCutScene == -1)
-        {
-            delete m_fCurrentFrame;
-            m_fCurrentFrame = nullptr;
-        }
-
         m_iPreSelectedCutScene = item_selected_idx;
         m_pCurrentCutScene = m_CutSceneList[item_selected_idx];
         fMaxFrame = m_pCurrentCutScene->Get_MaxFrame();
-        m_fCurrentFrame = m_pCurrentCutScene->Get_CurFrame_Ptr();
+        m_fTrackPosition = m_pCurrentCutScene->Get_CurFrame_Ptr();
         m_bPlay = false;
     }
 
@@ -113,7 +107,7 @@ void CController_Cutscene::Menu()
         ImGui::PopItemWidth();  //사이즈 제한 풀기
         //프레임 바 관련
         ImGui::SeparatorText("Frame");
-        ImGui::SliderFloat("TimeLine", m_fCurrentFrame, 0.0f, fMaxFrame);
+      
         if (ImGui::Button("Play"))
         {
             m_bPlay = true;
@@ -126,22 +120,78 @@ void CController_Cutscene::Menu()
         ImGui::SameLine();
         if (ImGui::Button("ReSet Frame"))
         {
-            *m_fCurrentFrame = 0.f;
+            *m_fTrackPosition = 0.f;
             m_pCurrentCutScene->Keyframe_Actived_Reset();
         }
+
+        ImGui::SliderFloat("TimeLine", m_fTrackPosition, 0.0f, fMaxFrame);
+
+        //정보 담기
+        if (m_iPreSelectedCutScene != -1)
+        {
+            m_pCurrentCutScene->Set_MaxFrame(fMaxFrame);
+            m_pCurrentCutScene->Set_Play(m_bPlay);
+        }
+
         //키프레임
         ImGui::SeparatorText("Key Frame Detail");
-        if (ImGui::Button("Create KeyFrame"))
+        if (ImGui::Button("Create KeyFrame") && m_pCurrentCutScene != nullptr)
         {
             m_pCurrentCutScene->Create_KeyFrame();
         }
         //키프레임 리스트
+        ImGui::BeginGroup();
+        ImGui::Text("[KeyFrame_List]");
+
+        static _int iSelectedKeyframeNum = -1;
+
+        ImGui::BeginChild("KeyFrame List", ImVec2(150, 150), true); //네모 칸 만들기
+
+        static _int iKeyFrameCount = 0;
+        if(m_pCurrentCutScene!=nullptr)
+            iKeyFrameCount = m_pCurrentCutScene->Get_KeyFrameCount();
+
+
+        for (_int i = 0; i < iKeyFrameCount; i++)
+        {
+            _char szText[MAX_PATH] = "KeyFrmae ";
+            _char szNum[MAX_PATH];
+            _char szTime[MAX_PATH];
+            sprintf_s(szNum, "%d : ", i);
+            sprintf_s(szTime, "%f", m_pCurrentCutScene->Get_Selected_KeyFrame(i)->fTrackPosition);
+            strcat_s(szText, szNum);
+            strcat_s(szText, szTime);
+
+            if (ImGui::Selectable(szText, iSelectedKeyframeNum == i))
+            {
+                iSelectedKeyframeNum = i;
+            }
+        }
+        
+        if (m_iPreSelected_KeyFrame != iSelectedKeyframeNum) //새로 고른 경우
+        {
+            m_iPreSelected_KeyFrame = iSelectedKeyframeNum;
+            if(iSelectedKeyframeNum != -1)
+            {
+                CCutScene::CUTSCENE_DESC* pDesc = m_pCurrentCutScene->Get_Selected_KeyFrame(iSelectedKeyframeNum);
+                *m_fTrackPosition = pDesc->fTrackPosition;
+            }
+            else
+            {
+                *m_fTrackPosition = m_fTrackPosition_Zero;
+            }
+        }
+
+        ImGui::EndChild();
+        ImGui::EndGroup();
+
+        ImGui::SameLine();
+
         //키프레임 별 요소 목록
-       /* ImGui::Text("[Actor_List]");
-
-        static _int iSelectedCellNum = -1;
-
-        ImGui::BeginChild("Actor List", ImVec2(110, 100), true);
+        ImGui::BeginGroup();
+        ImGui::Text("[Actor_List]");
+       
+        ImGui::BeginChild("Actor List", ImVec2(110, 90), true);
 
         static int selected = -1;
         for (int n = 0; n < CCutScene::TYPE_END; n++)
@@ -151,11 +201,30 @@ void CController_Cutscene::Menu()
             if (ImGui::Selectable(buf, selected == n))
                 selected = n;
         }
+        ImGui::EndChild(); 
+        //삭제 버튼
+        if (ImGui::Button("Delete Selected KeyFrame"))
+        {
+            m_pCurrentCutScene->Delete_Selected_Keyframe(iSelectedKeyframeNum);
+            iSelectedKeyframeNum = -1;
+        }
+        //TrackPosition 수정 체크박스
+        static bool bChangeTrackPos = false;
+        ImGui::Checkbox("Change TrackPosition", &bChangeTrackPos);
+        if (bChangeTrackPos)
+        {
+            if (iSelectedKeyframeNum == -1)
+                bChangeTrackPos = false;
+            else
+            {
+                m_pCurrentCutScene->Get_Selected_KeyFrame(iSelectedKeyframeNum)->fTrackPosition = *m_fTrackPosition;
+                m_pCurrentCutScene->Sort_KeyFrame_TrackPosition();
+            }
+        }
+        ImGui::EndGroup();
 
-        ImGui::EndChild();
-
-        ImGui::BeginGroup();
-        ImGui::BeginChild("Detail view", ImVec2(0, 400)); // Leave room for 1 line below us
+        //요소별 메뉴 창
+        ImGui::BeginChild("Detail view", ImVec2(300, 100));
 
         switch (selected)
         {
@@ -174,18 +243,11 @@ void CController_Cutscene::Menu()
         default:
             break;
         }
-
         ImGui::EndChild();
-        ImGui::EndGroup();
-        */
-        //요소별 정보
         
-        //정보 담기
-        if (m_iPreSelectedCutScene != -1)
-        {
-            m_pCurrentCutScene->Set_MaxFrame(fMaxFrame);
-            m_pCurrentCutScene->Set_Play(m_bPlay);
-        }
+       
+        
+        
     }
 #pragma endregion
 }
@@ -200,6 +262,7 @@ void CController_Cutscene::Show_UI_State()
 
 void CController_Cutscene::Show_Shader_State()
 {
+
 }
 
 void CController_Cutscene::Show_GamgeObject_State()
