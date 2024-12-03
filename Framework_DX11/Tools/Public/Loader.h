@@ -54,6 +54,7 @@ private:
 
 	_tchar						m_szLoadingText[MAX_PATH] = {};
 
+	_uint						m_iModelCount = {};
 private:
 	HRESULT Ready_Resources_For_LogoLevel();
 
