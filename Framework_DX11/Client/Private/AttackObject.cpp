@@ -134,7 +134,7 @@ HRESULT CAttackObject::Render_LightDepth()
 	return S_OK;
 }
 
-void CAttackObject::Play_Sound(WEP_SOUND_TYPE eType, const TCHAR* pSoundKey, _uint iHandIndex)
+void CAttackObject::Play_Sound(EFF_SOUND_TYPE eType, const TCHAR* pSoundKey, _uint iHandIndex)
 {
 	//_float fVolume = {};
 	//switch (eType)
@@ -159,23 +159,12 @@ HRESULT CAttackObject::Ready_Components()
 		TEXT("Com_Shader"), reinterpret_cast<CComponent**>(&m_pShaderCom))))
 		return E_FAIL;
 
-	/* FOR.Com_WeaponSound */
-	if (FAILED(__super::Add_Component(LEVEL_STATIC, TEXT("Prototype_Component_Sound"),
-		TEXT("Com_WeaponSound"), reinterpret_cast<CComponent**>(&m_pSoundCom[WEP_SOUND_WEAPON]))))
-		return E_FAIL;
-	m_pSoundCom[WEP_SOUND_WEAPON]->Set_Owner(this);
-
 	/* FOR.Com_EffectSound */
 	if (FAILED(__super::Add_Component(LEVEL_STATIC, TEXT("Prototype_Component_Sound"),
-		TEXT("Com_EffectSound"), reinterpret_cast<CComponent**>(&m_pSoundCom[WEP_SOUND_EFFECT1]))))
+		TEXT("Com_EffectSound"), reinterpret_cast<CComponent**>(&m_pSoundCom[EFF_SOUND_EFFECT1]))))
 		return E_FAIL;
-	m_pSoundCom[WEP_SOUND_EFFECT1]->Set_Owner(this);
+	m_pSoundCom[EFF_SOUND_EFFECT1]->Set_Owner(this);
 
-	/* FOR.Com_EffectSound2 */
-	if (FAILED(__super::Add_Component(LEVEL_STATIC, TEXT("Prototype_Component_Sound"),
-		TEXT("Com_EffectSound2"), reinterpret_cast<CComponent**>(&m_pSoundCom[WEP_SOUND_EFFECT2]))))
-		return E_FAIL;
-	m_pSoundCom[WEP_SOUND_EFFECT2]->Set_Owner(this);
 
 	return S_OK;
 }
@@ -188,7 +177,7 @@ void CAttackObject::Free()
 	Safe_Release(m_pShaderCom);
 	Safe_Release(m_pModelCom);
 
-	for (_uint i = 0; i < WEP_SOUND_END; ++i)
+	for (_uint i = 0; i < EFF_SOUND_END; ++i)
 	{
 		Safe_Release(m_pSoundCom[i]);
 	}

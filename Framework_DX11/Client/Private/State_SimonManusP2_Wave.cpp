@@ -58,25 +58,25 @@ void CState_SimonManusP2_Wave::Projectile_Check(_double CurTrackPos)
         {
             CAttackObject::ATKOBJ_DESC Desc;
             _Vec3 vPosition = m_pMonster->Get_Transform()->Get_State(CTransform::STATE_POSITION);
-            _Vec3 vLook = m_pMonster->Get_Transform()->Get_State(CTransform::STATE_LOOK);
-            _Vec3 vRight = m_pMonster->Get_Transform()->Get_State(CTransform::STATE_RIGHT) * 2.f;
-
+            _Vec3 vRight = m_pMonster->Get_Transform()->Get_State(CTransform::STATE_RIGHT);
+            _Vec3 vUp{0.f, 1.f, 0.f};
+            
             _Vec3 vDirection = XMVector3Normalize(m_pMonster->Get_TargetDir());
+            vRight = vUp.Cross(vRight) * 2.f;
 
-            Desc.vPos = _Vec3{ vPosition + (vLook * 2.5f ) };
             Desc.vDir = _Vec3{ vDirection };
+
+            Desc.vPos = _Vec3{ vPosition + ( vDirection * 2.f ) };
 
             m_pGameInstance->Add_CloneObject_ToLayer(LEVEL_GAMEPLAY, TEXT("Monster_Attack"), TEXT("Prototype_GameObject_Wave"), &Desc);
 
 
-            Desc.vPos = _Vec3{ vPosition + vLook + vRight };
-            Desc.vDir = _Vec3{ vDirection };
+            Desc.vPos = _Vec3{ vPosition + vDirection + vRight };
 
             m_pGameInstance->Add_CloneObject_ToLayer(LEVEL_GAMEPLAY, TEXT("Monster_Attack"), TEXT("Prototype_GameObject_Wave"), &Desc);
 
 
-            Desc.vPos = _Vec3{ vPosition + vLook - vRight };
-            Desc.vDir = _Vec3{ vDirection };
+            Desc.vPos = _Vec3{ vPosition + vDirection - vRight };
 
             m_pGameInstance->Add_CloneObject_ToLayer(LEVEL_GAMEPLAY, TEXT("Monster_Attack"), TEXT("Prototype_GameObject_Wave"), &Desc);
 

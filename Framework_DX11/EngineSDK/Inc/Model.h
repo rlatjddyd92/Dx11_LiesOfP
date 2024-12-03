@@ -97,6 +97,8 @@ public:
 
 	HRESULT		ReadyModel_To_Binary(HANDLE* pFile);
 
+	void		ReadyDenyNextTranslate(_int iBoneIndex);
+
 private:
 	TYPE							m_eType = { TYPE_END };
 
@@ -113,12 +115,14 @@ private:
 	vector<class CBone*>			m_Bones;
 
 private:
-	_bool							m_bSameChange = { false };	// 애니메이션 정지, 재생
+	_bool							m_bSameChange = { false };	// 동일 애니메이션 체크
+	_bool							m_bDenyTrans = { false };	// 특정 뼈 이동값 제거용
 	_bool							m_isLoop = { false };
 	_bool							m_isLoop_Boundary = { false };		//상하체 분리
 	_uint							m_iCurrentAnimIndex = { 0 };
 	_uint							m_iCurrentAnimIndex_Boundary = { 0 };		//상하체 분리
 	_uint							m_iNumAnimations = { 0 };
+	_int							m_iDenyBoneIndex = { 1024 };
 	vector<class CAnimation*>		m_Animations;
 
 

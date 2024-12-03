@@ -122,7 +122,7 @@ HRESULT CPlayer::Initialize(void * pArg)
 	//m_pNavigationCom->Move_to_Cell(m_pRigidBodyCom, 341); //아래엘베
 	//m_pNavigationCom->Move_to_Cell(m_pRigidBodyCom, 440); //상자랑 장애물
 	//m_pNavigationCom->Move_to_Cell(m_pRigidBodyCom, 1068); // 순간이동
-	m_pNavigationCom->Move_to_Cell(m_pRigidBodyCom, 803); // 소피아 방
+	//m_pNavigationCom->Move_to_Cell(m_pRigidBodyCom, 803); // 소피아 방
 
 	m_strObjectTag = TEXT("Player");
 
