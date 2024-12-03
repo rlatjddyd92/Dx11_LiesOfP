@@ -792,6 +792,12 @@ void CPlayer::Choice_GuardSound(_uint iAttackStrength, _uint iHitType, _bool isP
 				strSoundKey = strSoundKey + szBuffer + strWAV;
 				break;
 
+			case HIT_FIRE:
+				_itow_s(iRand, szBuffer, 10);
+				strSoundKey = TEXT("SE_PC_SK_Hit_Fire_M_0");
+				strSoundKey = strSoundKey + szBuffer + strWAV;
+				break;
+
 			default:
 				break;
 			}
@@ -808,7 +814,13 @@ void CPlayer::Choice_GuardSound(_uint iAttackStrength, _uint iHitType, _bool isP
 
 			case HIT_METAL:
 				_itow_s(iRand, szBuffer, 10);
-				strSoundKey = TEXT("SE_PC_SK_GetHit_Guard_Metal_L_0");
+				strSoundKey = TEXT("SE_PC_SK_GetHit_M_Guard_Metal_0");
+				strSoundKey = strSoundKey + szBuffer + strWAV;
+				break;
+
+			case HIT_FIRE:
+				_itow_s(iRand, szBuffer, 10);
+				strSoundKey = TEXT("SE_PC_SK_Hit_Fire_M_0");
 				strSoundKey = strSoundKey + szBuffer + strWAV;
 				break;
 
@@ -823,6 +835,19 @@ void CPlayer::Choice_GuardSound(_uint iAttackStrength, _uint iHitType, _bool isP
 			case HIT_CARCASS:
 				_itow_s(iRand, szBuffer, 10);
 				strSoundKey = TEXT("SE_PC_SK_GetHit_Guard_CarcassSkin_S_0");
+				strSoundKey = strSoundKey + szBuffer + strWAV;
+				break;
+
+			case HIT_METAL:
+				iRand += 3;
+				_itow_s(iRand, szBuffer, 10);
+				strSoundKey = TEXT("SE_PC_SK_GetHit_M_Guard_Metal_0");
+				strSoundKey = strSoundKey + szBuffer + strWAV;
+				break;
+
+			case HIT_FIRE:
+				_itow_s(iRand, szBuffer, 10);
+				strSoundKey = TEXT("SE_PC_SK_Hit_Fire_M_0");
 				strSoundKey = strSoundKey + szBuffer + strWAV;
 				break;
 
