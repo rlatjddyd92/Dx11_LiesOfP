@@ -26,6 +26,7 @@ HRESULT CState_SimonManusP1_SwingDown_Swing_L::Start_State(void* pArg)
 
     m_isSwing = true;
     m_bStampEffect = false;
+    m_bSwing_Sound = false;
 
     return S_OK;
 }
@@ -51,6 +52,7 @@ void CState_SimonManusP1_SwingDown_Swing_L::Update(_float fTimeDelta)
     _double CurTrackPos = m_pMonster->Get_CurrentTrackPos();
 
     Collider_Check(CurTrackPos);
+    Control_Sound(CurTrackPos);
     Effect_Check(CurTrackPos);
 }
 
@@ -164,9 +166,13 @@ void CState_SimonManusP1_SwingDown_Swing_L::Control_Sound(_double CurTrackPos)
     }
     else
     {
-        if (CurTrackPos >= 40.f)
+        if (!m_bSwing_Sound)
         {
-
+            if (CurTrackPos >= 40.f)
+            {
+                m_pMonster->Play_Sound(CPawn::PAWN_SOUND_EFFECT1, TEXT("SE_NPC_FX_Destruction_Stone_Parts_03"));
+                m_bSwing_Sound = true;
+            }
         }
     }
 }

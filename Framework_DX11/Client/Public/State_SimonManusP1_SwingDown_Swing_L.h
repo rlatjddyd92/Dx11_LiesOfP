@@ -31,6 +31,7 @@ private:
 
     _bool               m_isSwing= { false };
     _bool               m_bStampEffect = { false };
+    _bool               m_bSwing_Sound = { false };
 
     _uint               m_iRouteTrack = {};
 
