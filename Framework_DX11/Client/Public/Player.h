@@ -174,13 +174,14 @@ public:
 	void			Active_Effect(const EFFECT_TYPE& eType, _bool isLoop = true);
 	void			DeActive_Effect(const EFFECT_TYPE& eType);
 
-	virtual _bool	Calc_DamageGain(_float fAtkDmg, _Vec3 vHitPos = { 0.f,0.f,0.f }) override;
+	virtual _bool	Calc_DamageGain(_float fAtkDmg, _Vec3 vHitPos = { 0.f,0.f,0.f }, _uint iHitType = HIT_END, _uint iAttackStrength = ATK_END) override;
 	_bool			Decrease_Stamina(_float fAmount);
 	_bool			Check_Region_Fable01();
 	_bool			Check_Region_Fable02();
 	void			Decrease_Region(_uint iRegionCount = 1);
 	void			Recovery_Region(_float fAmount = 10.f);
 
+	void			Choice_GuardSound(_uint iAttackStrength = ATK_WEAK, _uint iHitType = HIT_END, _bool isPerfect = false);
 	/* Effect */
 private:
 	vector<class CEffect_Container*> m_Effects;

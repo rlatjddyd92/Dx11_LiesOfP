@@ -192,11 +192,6 @@ void CPlayer::Update(_float fTimeDelta)
 		Change_State(ITEMGET);
 		//Calc_DamageGain(5.f, m_pTransformCom->Get_WorldMatrix().Forward() + m_pTransformCom->Get_WorldMatrix().Translation());
 	}
-	else if (KEY_TAP(KEY::K))
-	{
-		Change_State(CHEST);
-		//Calc_DamageGain(5.f, m_pTransformCom->Get_WorldMatrix().Forward() + m_pTransformCom->Get_WorldMatrix().Translation());
-	}
 }
 
 void CPlayer::Late_Update(_float fTimeDelta)
@@ -686,7 +681,7 @@ HRESULT CPlayer::Ready_Effect()
 	return S_OK;
 }
 
-_bool CPlayer::Calc_DamageGain(_float fAtkDmg, _Vec3 vHitPos)
+_bool CPlayer::Calc_DamageGain(_float fAtkDmg, _Vec3 vHitPos, _uint iHitType, _uint iAttackStrength)
 {
 	if (fAtkDmg <= 0.f)
 		return false;
@@ -697,10 +692,10 @@ _bool CPlayer::Calc_DamageGain(_float fAtkDmg, _Vec3 vHitPos)
 	if (m_isGuard)
 	{
 		//ÆÛÆåÆ® °¡µå
-		if (m_fGuardTime < 0.2f)
+		if (m_fGuardTime < 0.17f)
 		{
 			m_pEffect_Manager->Add_Effect_ToLayer(LEVEL_GAMEPLAY, TEXT("Player_PerfectGuard"), pParetnMatrix, pSocketBoneMatrix);
-			m_pGameInstance->Start_TimerLack(TEXT("Timer_60"), 0.001f, 1.f);
+			m_pGameInstance->Start_TimerLack(TEXT("Timer_60"), 0.001f, 0.6f);
 		}
 		else
 		{
@@ -712,6 +707,8 @@ _bool CPlayer::Calc_DamageGain(_float fAtkDmg, _Vec3 vHitPos)
 			m_pFsmCom->Change_State(OH_GUARDHIT, &vHitPos);
 		else
 			m_pFsmCom->Change_State(TH_GUARDHIT, &vHitPos);
+
+		Choice_GuardSound(0, 0, false);
 	}
 	else
 	{
@@ -763,6 +760,79 @@ _bool CPlayer::Check_Region_Fable01()
 		return false;
 
 	return true;
+}
+
+void CPlayer::Choice_GuardSound(_uint iAttackStrength, _uint iHitType, _bool isPerfect)
+{
+	_wstring strSoundKey{};
+	_wstring strWAV = TEXT(".wav");
+	_tchar szBuffer[10];
+
+	_int iRand = rand() % 3 + 1;
+
+	if (isPerfect)	// ÆÛÆåÆ® °¡µå
+	{
+
+	}
+	else
+	{
+		if (ATK_STRONG == iAttackStrength)
+		{
+			switch (iHitType)
+			{
+			case HIT_CARCASS:
+				_itow_s(iRand, szBuffer, 10);
+				strSoundKey = TEXT("SE_PC_SK_GetHit_Guard_CarcassSkin_L_0");
+				strSoundKey = strSoundKey + szBuffer + strWAV;
+				break;
+
+			case HIT_METAL:
+				_itow_s(iRand, szBuffer, 10);
+				strSoundKey = TEXT("SE_PC_SK_GetHit_Guard_Metal_L_0");
+				strSoundKey = strSoundKey + szBuffer + strWAV;
+				break;
+
+			default:
+				break;
+			}
+		}
+		else if (ATK_NORMAL == iAttackStrength)
+		{
+			switch (iHitType)
+			{
+			case HIT_CARCASS:
+				_itow_s(iRand, szBuffer, 10);
+				strSoundKey = TEXT("SE_PC_SK_GetHit_Guard_CarcassSkin_M_0");
+				strSoundKey = strSoundKey + szBuffer + strWAV;
+				break;
+
+			case HIT_METAL:
+				_itow_s(iRand, szBuffer, 10);
+				strSoundKey = TEXT("SE_PC_SK_GetHit_Guard_Metal_L_0");
+				strSoundKey = strSoundKey + szBuffer + strWAV;
+				break;
+
+			default:
+				break;
+			}
+		}
+		else if (ATK_WEAK == iAttackStrength)
+		{
+			switch (iHitType)
+			{
+			case HIT_CARCASS:
+				_itow_s(iRand, szBuffer, 10);
+				strSoundKey = TEXT("SE_PC_SK_GetHit_Guard_CarcassSkin_S_0");
+				strSoundKey = strSoundKey + szBuffer + strWAV;
+				break;
+
+			default:
+				break;
+			}
+		}
+	}
+
+	m_pSoundCom[PAWN_SOUND_EFFECT1]->Play2D(strSoundKey.c_str(), &g_fEffectVolume);
 }
 
 _bool CPlayer::Check_Region_Fable02()
