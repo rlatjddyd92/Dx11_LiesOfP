@@ -169,10 +169,10 @@ void CImGui_Manager::Tool_UI()
    // UI 연출 관련 테스트 코드 
 	if (KEY_HOLD(KEY::CTRL))
 	{
-		if (KEY_TAP(KEY::NUM6))
+		/*if (KEY_TAP(KEY::NUM6))
 			m_pController_UITool->Fade_Out(TEXT("FadeOut_Test"), TEXT("FadeOut_Desc"), { 0.f,0.f,0.f }, 2.f);
 		if (KEY_TAP(KEY::NUM7))
-			m_pController_UITool->Fade_In(2.f);
+			m_pController_UITool->Fade_In(2.f);*/
 		/*if (KEY_TAP(KEY::NUM8))
 			m_pController_UITool->Show_Script(TEXT("테스트 대사 2줄 버전"), TEXT("테스트 대사 2줄 버전"), 3.f);
 		if (KEY_TAP(KEY::NUM9))
@@ -190,7 +190,7 @@ void CImGui_Manager::Tool_UI()
 	}
 	
 	if (m_pController_UITool->Get_EffectOn())
-		m_pController_UITool->UpdateEffect(m_pGameInstance->Compute_TimeDelta(TEXT("Timer_60")));
+		m_pController_UITool->UpdateEffect(0.01f);
 }
 
 void CImGui_Manager::Tool_Animation()

@@ -12,8 +12,6 @@ class CCutScene :
 public:
 	enum ActorType {CAMERA, UI, SHADER,GAMEOBJECT, TYPE_END};
 
-
-	
 private:
 	CCutScene(ID3D11Device* pDevice, ID3D11DeviceContext* pContext);
 	CCutScene(const CCutScene& Prototype);
@@ -44,6 +42,7 @@ private:
 
 	vector<CUTSCENE_DESC*>	m_KeyFrames;
 
+	class CController_UITool* m_pController_UITool = { nullptr };
 private:
 	void Play_Keyframes(_float fTimeDelta);
 	void Active_Shader(CUTSCENE_DESC* pCutSceneDesc);

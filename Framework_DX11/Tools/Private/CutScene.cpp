@@ -2,10 +2,12 @@
 #include "CutScene.h"
 #include "GameInstance.h"
 #include "ImGui_Manager.h"
+#include "Controller_UITool.h"
 
 CCutScene::CCutScene(ID3D11Device* pDevice, ID3D11DeviceContext* pContext)
     : CGameObject{ pDevice, pContext }
 {
+	
 }
 
 CCutScene::CCutScene(const CCutScene& Prototype)
@@ -20,8 +22,11 @@ HRESULT CCutScene::Initialize_Prototype()
 
 HRESULT CCutScene::Initialize(void* pArg)
 {
-	m_isActive = false;
+	m_pController_UITool = CController_UITool::Get_Instance();
+	Safe_AddRef(m_pController_UITool);
 
+	m_isActive = false;
+	
 	return S_OK;
 }
 
@@ -74,6 +79,7 @@ void CCutScene::Play_Keyframes(_float fTimeDelta)
 			iter->bActived = true;
 
 			Active_Shader(iter);
+			Active_UI(iter);
 		}
 	}
 }
@@ -90,6 +96,14 @@ void CCutScene::Active_Shader(CUTSCENE_DESC* pCutSceneDesc)
 
 void CCutScene::Active_UI(CUTSCENE_DESC* pCutSceneDesc)
 {
+	if (pCutSceneDesc->UI_DESC.bFadeOut)
+	{
+		m_pController_UITool->Fade_Out(TEXT(""), TEXT(""), pCutSceneDesc->UI_DESC.fColor, pCutSceneDesc->UI_DESC.fTime);
+	}
+	if (pCutSceneDesc->UI_DESC.bFadeIn)
+	{
+		m_pController_UITool->Fade_In(pCutSceneDesc->UI_DESC.fTime);
+	}
 }
 
 void CCutScene::Sort_KeyFrame_TrackPosition()
@@ -142,4 +156,6 @@ void CCutScene::Free()
 		delete iter;
 		iter = nullptr;
 	}
+
+	Safe_Release(m_pController_UITool);
 }
