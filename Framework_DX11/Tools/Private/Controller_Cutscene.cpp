@@ -235,7 +235,7 @@ void CController_Cutscene::Menu()
                 Show_Camera_State();
                 break;
             case CCutScene::UI:
-                Show_UI_State();
+                UI_Memu();
                 break;
             case CCutScene::SHADER:
                 Shader_Memu();
@@ -275,6 +275,17 @@ void CController_Cutscene::Camera_Memu()
 
 void CController_Cutscene::UI_Memu()
 {
+    //FadeOut 사용
+    ImGui::Checkbox("FadeOut", &pCutScene_Desc->UI_DESC.bFadeOut);
+    ImGui::SameLine();
+    //FadeIn 사용
+    ImGui::Checkbox("FadeIn", &pCutScene_Desc->UI_DESC.bFadeIn);
+    //Fade 색 결정
+    static ImVec4 color = ImVec4(0.f,0.f,0.f,1.f);
+    ImGuiColorEditFlags misc_flags = ImGuiColorEditFlags_NoOptions;
+    ImGui::ColorEdit3("MyColor##1", (float*)&pCutScene_Desc->UI_DESC.fColor, misc_flags);
+    //Fade 속도
+    ImGui::DragFloat("Fade Time", &pCutScene_Desc->UI_DESC.fTime,0.1f, 0.f);
 }
 
 void CController_Cutscene::Shader_Memu()

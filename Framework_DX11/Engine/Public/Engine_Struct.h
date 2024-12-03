@@ -289,7 +289,6 @@ namespace Engine
 	{
 		_bool bUseDof = { false };
 		_float fDof = { 0.f };
-
 	}SHADER_DESC;
 
 	typedef struct
@@ -298,7 +297,6 @@ namespace Engine
 		_bool bFadeIn = { false };
 		_float fTime = { 0.f };
 		_Vec3 fColor = { 0.f,0.f,0.f };
-
 	}UI_DESC;
 
 	typedef struct
