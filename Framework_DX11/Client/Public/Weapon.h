@@ -87,6 +87,7 @@ protected:
 	const _Matrix*			m_pSocketMatrix = { nullptr };
 	const _Matrix*			m_pSocketMatrix2 = { nullptr };
 	_Matrix					m_WorldMatrix = {};
+	_Matrix					m_OldWroldMatrix = {};
 
 protected:
 	_float					m_fDamageAmount = {};
@@ -96,10 +97,12 @@ protected:
 
 
 	_float*					m_pParentAtk = { nullptr };
+
 protected:
 	HRESULT Ready_Components();
 
 	HRESULT Bind_WorldMatrix(class CShader* pShader, const _char* pContantName);
+	HRESULT Bind_OldWorldMatrix(class CShader* pShader, const _char* pContantName);
 
 public:
 	virtual CGameObject* Clone(void* pArg) = 0;

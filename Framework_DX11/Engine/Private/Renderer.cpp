@@ -392,7 +392,20 @@ HRESULT CRenderer::Render_NonBlend()
 
 HRESULT CRenderer::Render_Velocity()
 {
-	return E_NOTIMPL;
+	if (FAILED(m_pGameInstance->Begin_MRT(TEXT("MRT_Velocity"))))
+		return E_FAIL;
+
+	for (auto& pGameObject : m_RenderObjects[RG_VELOCITY])
+	{
+		if (nullptr != pGameObject)
+			pGameObject->Render();
+
+		Safe_Release(pGameObject);
+	}
+	m_RenderObjects[RG_VELOCITY].clear();
+
+	if (FAILED(m_pGameInstance->End_MRT()))
+		return E_FAIL;
 }
 
 HRESULT CRenderer::Render_Decal()

@@ -52,6 +52,7 @@ void CWeapon::Update(_float fTimeDelta)
 	{
 		SocketMatrix.r[i] = XMVector3Normalize(SocketMatrix.r[i]);
 	}
+	m_OldWroldMatrix = m_WorldMatrix;
 	XMStoreFloat4x4(&m_WorldMatrix, XMLoadFloat4x4(m_pTransformCom->Get_WorldMatrix_Ptr()) * SocketMatrix * XMLoadFloat4x4(m_pParentMatrix));
 
 	for (_uint i = 0; i < WEP_SOUND_END; ++i)
@@ -81,6 +82,11 @@ HRESULT CWeapon::Render()
 		return E_FAIL;
 	if (FAILED(m_pShaderCom->Bind_Matrix("g_ProjMatrix", &m_pGameInstance->Get_Transform(CPipeLine::D3DTS_PROJ))))
 		return E_FAIL;
+
+	//if (FAILED(Bind_OldWorldMatrix(m_pShaderCom, "g_OldWorldMatrix")))
+	//	return E_FAIL;
+	//if (FAILED(m_pShaderCom->Bind_Matrix("g_OldViewMatrix", &m_pGameInstance->Get_OldTransform(CPipeLine::D3DTS_VIEW))))
+	//	return E_FAIL;
 
 	if (FAILED(m_pShaderCom->Bind_RawValue("g_fFar", &m_pGameInstance->Get_Far(), sizeof(_float))))
 		return E_FAIL;
@@ -263,6 +269,11 @@ HRESULT CWeapon::Ready_Components()
 HRESULT CWeapon::Bind_WorldMatrix(CShader* pShader, const _char* pContantName)
 {
 	return pShader->Bind_Matrix(pContantName, &m_WorldMatrix);
+}
+
+HRESULT CWeapon::Bind_OldWorldMatrix(CShader* pShader, const _char* pContantName)
+{
+	return pShader->Bind_Matrix(pContantName, &m_OldWroldMatrix);
 }
 
 void CWeapon::Free()

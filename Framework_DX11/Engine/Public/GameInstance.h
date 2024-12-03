@@ -118,8 +118,12 @@ public:
 #pragma region PIPELINE
 	void			Set_Transform(CPipeLine::D3DTRANSFORMSTATE eState, _fmatrix TransformMatrix);
 	void			Set_NearFar(_float fNear, _float fFar);
+
 	const _Matrix&	Get_Transform(CPipeLine::D3DTRANSFORMSTATE eState) const;
 	const _Matrix&	Get_Transform_Inverse(CPipeLine::D3DTRANSFORMSTATE eState) const;
+
+	const _Matrix& Get_OldTransform(CPipeLine::D3DTRANSFORMSTATE eState) const;
+	const _Matrix& Get_OldTransform_Inverse(CPipeLine::D3DTRANSFORMSTATE eState) const;
 
 	const _Vec4& Get_CamPosition_Vec4() const;
 	const _Vec3& Get_CamPosition_Vec3() const;
