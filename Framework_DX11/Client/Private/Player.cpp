@@ -70,6 +70,9 @@
 #include "State_Player_Scissor_Fable1.h"
 #include "State_Player_Scissor_Fable2.h"
 
+#include "State_Player_OpenSophiaDoor.h"
+#include "State_Player_SophiaWalk.h"
+
 // 24-11-27 김성용
 // 게임 인터페이스와 연결을 위해 추가 
 #include "GameInterface_Controller.h"
@@ -117,6 +120,7 @@ HRESULT CPlayer::Initialize(void * pArg)
 	//m_pNavigationCom->Move_to_Cell(m_pRigidBodyCom, 341); //아래엘베
 	//m_pNavigationCom->Move_to_Cell(m_pRigidBodyCom, 440); //상자랑 장애물
 	//m_pNavigationCom->Move_to_Cell(m_pRigidBodyCom, 1068); // 순간이동
+	m_pNavigationCom->Move_to_Cell(m_pRigidBodyCom, 803); // 소피아 방
 
 	m_strObjectTag = TEXT("Player");
 
@@ -190,6 +194,11 @@ void CPlayer::Update(_float fTimeDelta)
 	if (KEY_TAP(KEY::L))
 	{
 		Change_State(ITEMGET);
+		//Calc_DamageGain(5.f, m_pTransformCom->Get_WorldMatrix().Forward() + m_pTransformCom->Get_WorldMatrix().Translation());
+	}
+	if (KEY_TAP(KEY::K))
+	{
+		Change_State(SOPHIA_DOOR_OPEN);
 		//Calc_DamageGain(5.f, m_pTransformCom->Get_WorldMatrix().Forward() + m_pTransformCom->Get_WorldMatrix().Translation());
 	}
 }
@@ -646,6 +655,10 @@ HRESULT CPlayer::Ready_FSM()
 	m_pFsmCom->Add_State(CState_Player_Scissor_Fable1::Create(m_pFsmCom, this, SCISSOR_FABAL1, &Desc));	// 콤보2
 	m_pFsmCom->Add_State(CState_Player_Scissor_Fable2::Create(m_pFsmCom, this, SCISSOR_FABAL2, &Desc));	// 콤보3
 
+	/* 소피아 컷신 */
+	m_pFsmCom->Add_State(CState_Player_OpenSophiaDoor::Create(m_pFsmCom, this, SOPHIA_DOOR_OPEN, &Desc));
+	m_pFsmCom->Add_State(CState_Player_SophiaWalk::Create(m_pFsmCom, this, SOPHIA_WALK, &Desc));
+
 	m_pFsmCom->Set_State(OH_IDLE);
 
 	return S_OK;
@@ -671,7 +684,7 @@ HRESULT CPlayer::Ready_Effect()
 
 	pSocketBoneMatrix = m_pModelCom->Get_BoneCombindTransformationMatrix_Ptr("Bn_L_ForeTwist");
 	m_Effects[EFFECT_GRIND] = m_pEffect_Manager->Clone_Effect(TEXT("Player_Grind"), pParetnMatrix,
-		pSocketBoneMatrix, _Vec3(0.f, 0.f, 0.f), _Vec3(0.f, 0.f, 0.f), _Vec3(1.f, 1.f, 1.f));
+		pSocketBoneMatrix, _Vec3(0.f, 0.11f, -0.12f), _Vec3(0.f, 0.f, 0.f), _Vec3(1.f, 1.f, 1.f));
 
 	pSocketBoneMatrix = m_pModelCom->Get_BoneCombindTransformationMatrix_Ptr("BN_Weapon_L");
 	m_Effects[EFFECT_HEAL] = m_pEffect_Manager->Clone_Effect(TEXT("Player_Potion"), pParetnMatrix,
@@ -772,7 +785,9 @@ void CPlayer::Choice_GuardSound(_uint iAttackStrength, _uint iHitType, _bool isP
 
 	if (isPerfect)	// 퍼펙트 가드
 	{
-
+		_itow_s(iRand, szBuffer, 10);
+		strSoundKey = TEXT("SE_PC_SK_GetHit_Sword_PerfectGuard_Metal_Fury_0");
+		strSoundKey = strSoundKey + szBuffer + strWAV;
 	}
 	else
 	{
@@ -794,7 +809,13 @@ void CPlayer::Choice_GuardSound(_uint iAttackStrength, _uint iHitType, _bool isP
 
 			case HIT_FIRE:
 				_itow_s(iRand, szBuffer, 10);
-				strSoundKey = TEXT("SE_PC_SK_Hit_Fire_M_0");
+				strSoundKey = TEXT("SE_PC_SK_GetHit_M_Guard_Fire_0");
+				strSoundKey = strSoundKey + szBuffer + strWAV;
+				break;
+
+			case HIT_ELECTRIC:
+				_itow_s(iRand, szBuffer, 10);
+				strSoundKey = TEXT("SE_PC_SK_GetHit_M_Guard_Electric_0");
 				strSoundKey = strSoundKey + szBuffer + strWAV;
 				break;
 
@@ -813,6 +834,7 @@ void CPlayer::Choice_GuardSound(_uint iAttackStrength, _uint iHitType, _bool isP
 				break;
 
 			case HIT_METAL:
+				iRand = rand() % 6 + 1;
 				_itow_s(iRand, szBuffer, 10);
 				strSoundKey = TEXT("SE_PC_SK_GetHit_M_Guard_Metal_0");
 				strSoundKey = strSoundKey + szBuffer + strWAV;
@@ -820,7 +842,13 @@ void CPlayer::Choice_GuardSound(_uint iAttackStrength, _uint iHitType, _bool isP
 
 			case HIT_FIRE:
 				_itow_s(iRand, szBuffer, 10);
-				strSoundKey = TEXT("SE_PC_SK_Hit_Fire_M_0");
+				strSoundKey = TEXT("SE_PC_SK_GetHit_M_Guard_Fire_0");
+				strSoundKey = strSoundKey + szBuffer + strWAV;
+				break;
+
+			case HIT_ELECTRIC:
+				_itow_s(iRand, szBuffer, 10);
+				strSoundKey = TEXT("SE_PC_SK_GetHit_M_Guard_Electric_0");
 				strSoundKey = strSoundKey + szBuffer + strWAV;
 				break;
 
@@ -839,15 +867,18 @@ void CPlayer::Choice_GuardSound(_uint iAttackStrength, _uint iHitType, _bool isP
 				break;
 
 			case HIT_METAL:
-				iRand += 3;
-				_itow_s(iRand, szBuffer, 10);
-				strSoundKey = TEXT("SE_PC_SK_GetHit_M_Guard_Metal_0");
-				strSoundKey = strSoundKey + szBuffer + strWAV;
+				strSoundKey = TEXT("SE_PC_SK_GetHit_S_Guard_Metal_01");
 				break;
 
 			case HIT_FIRE:
 				_itow_s(iRand, szBuffer, 10);
-				strSoundKey = TEXT("SE_PC_SK_Hit_Fire_M_0");
+				strSoundKey = TEXT("SE_PC_SK_GetHit_M_Guard_Fire_0");
+				strSoundKey = strSoundKey + szBuffer + strWAV;
+				break;
+
+			case HIT_ELECTRIC:
+				_itow_s(iRand, szBuffer, 10);
+				strSoundKey = TEXT("SE_PC_SK_GetHit_M_Guard_Electric_0");
 				strSoundKey = strSoundKey + szBuffer + strWAV;
 				break;
 

@@ -44,7 +44,7 @@ private:
 
 private:
     _int                m_iSoundFrame = {};
-    _bool               m_isPlaySound = {};
+    _bool               m_isPlaySound[2] = {};
     void                Control_Sound();
 
 public:

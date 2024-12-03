@@ -2,6 +2,7 @@
 
 #include "Tools_Defines.h"
 #include "Base.h"
+#include "Engine_Struct.h"
 
 BEGIN(Engine)
 class CGameObject;
@@ -35,6 +36,8 @@ private:
     _int m_iPreSelectedCutScene = { -1 };
     _int m_iPreSelected_KeyFrame = { -1 };
 
+	CUTSCENE_DESC* pCutScene_Desc = { nullptr };
+
 	class CCutScene* m_CutSceneList[8] = {nullptr,};
     const char* m_CutSceneNameList[8] = { "Boss1_Meet", "Boss1_Phase2", "Boss1_Dead", "Sophia_EnterRoom", "Boss2_Meet",  "Boss2_Phase2",  "Boss2_Defeat", "Sophia_Dead" };
     const char* m_ActorTypeNameList[5] = { "Camera", "UI", "Shader", "GameObject"};
@@ -46,10 +49,10 @@ private:
 	void Show_UI_State();
 	void Show_Shader_State();
 	void Show_GamgeObject_State();
-	void Camera_Nemu();
-	void UI_Nemu();
-	void Shader_Nemu();
-	void GamgeObject_Nemu();
+	void Camera_Memu();
+	void UI_Memu();
+	void Shader_Memu();
+	void GamgeObject_Memu();
 
 public:
 	virtual void Free() override;

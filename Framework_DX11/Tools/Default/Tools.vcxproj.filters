@@ -548,5 +548,8 @@
     <FxCompile Include="..\Bin\ShaderFiles\Shader_VtxTrail_TwoPoint_Instance.hlsl">
       <Filter>97.ShaderFiles\Effect\Vtx</Filter>
     </FxCompile>
+    <FxCompile Include="..\Bin\ShaderFiles\Shader_UI_Master.hlsl">
+      <Filter>97.ShaderFiles\99.UI_Shader</Filter>
+    </FxCompile>
   </ItemGroup>
 </Project>

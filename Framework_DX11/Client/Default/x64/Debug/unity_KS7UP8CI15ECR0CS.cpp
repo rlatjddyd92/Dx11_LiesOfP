@@ -12,6 +12,9 @@
 #include "D:\GitProject\Dx11_LiesOfP\Framework_DX11\Client\Private\AObj_StampBlast.cpp"
 
 
+#include "D:\GitProject\Dx11_LiesOfP\Framework_DX11\Client\Private\AObj_Wave.cpp"
+
+
 #include "D:\GitProject\Dx11_LiesOfP\Framework_DX11\Client\Private\AttackObject.cpp"
 
 
@@ -37,6 +40,9 @@
 
 
 #include "D:\GitProject\Dx11_LiesOfP\Framework_DX11\Client\Private\LastDoor.cpp"
+
+
+#include "D:\GitProject\Dx11_LiesOfP\Framework_DX11\Client\Private\State_Player_OpenSophiaDoor.cpp"
 
 
 #include "D:\GitProject\Dx11_LiesOfP\Framework_DX11\Client\Private\SpotEffect.cpp"
@@ -118,6 +124,9 @@
 
 
 #include "D:\GitProject\Dx11_LiesOfP\Framework_DX11\Client\Private\State_Player_Lift.cpp"
+
+
+#include "D:\GitProject\Dx11_LiesOfP\Framework_DX11\Client\Private\State_Player_SophiaWalk.cpp"
 
 
 #include "D:\GitProject\Dx11_LiesOfP\Framework_DX11\Client\Private\State_Player_Stargazer.cpp"
@@ -546,6 +555,9 @@
 #include "D:\GitProject\Dx11_LiesOfP\Framework_DX11\Client\Private\UIPage_Equip.cpp"
 
 
+#include "D:\GitProject\Dx11_LiesOfP\Framework_DX11\Client\Private\UIPage_Inform.cpp"
+
+
 #include "D:\GitProject\Dx11_LiesOfP\Framework_DX11\Client\Private\UIPage_Inven.cpp"
 
 
@@ -567,6 +579,9 @@
 #include "D:\GitProject\Dx11_LiesOfP\Framework_DX11\Client\Private\UIPage_Play.cpp"
 
 
+#include "D:\GitProject\Dx11_LiesOfP\Framework_DX11\Client\Private\UIPage_Popup.cpp"
+
+
 #include "D:\GitProject\Dx11_LiesOfP\Framework_DX11\Client\Private\UIPage_Skill.cpp"
 
 
@@ -574,6 +589,9 @@
 
 
 #include "D:\GitProject\Dx11_LiesOfP\Framework_DX11\Client\Private\UIPage_ItemInfo.cpp"
+
+
+#include "D:\GitProject\Dx11_LiesOfP\Framework_DX11\Client\Private\UIPage_Talking.cpp"
 
 
 #include "D:\GitProject\Dx11_LiesOfP\Framework_DX11\Client\Private\UIPage_Test.cpp"

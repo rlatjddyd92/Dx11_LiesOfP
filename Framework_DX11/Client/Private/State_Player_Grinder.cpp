@@ -34,17 +34,15 @@ HRESULT CState_Player_Grinder::Initialize(_uint iStateNum, void* pArg)
 HRESULT CState_Player_Grinder::Start_State(void* pArg)
 {
     if (m_pFsm->Get_PrevState() != CPlayer::OH_RUN && m_pFsm->Get_PrevState() != CPlayer::TH_WALK)
-        m_pPlayer->Change_Animation(m_iAnimation_Grinder[0], false, 0.f);
+        m_pPlayer->Change_Animation(m_iAnimation_Grinder[0], false, 0.1f);
 
-    m_pPlayer->Change_Animation_Boundry(m_iAnimation_Grinder[0], false, 0.f);
+    m_pPlayer->Change_Animation_Boundry(m_iAnimation_Grinder[0], false, 0.1f);
 
     m_pPlayer->Set_MoveSpeed(m_fMoveSpeed);
 
     m_isChange[0] = false;
     m_isChange[1] = false;
     m_isChange[2] = false;
-
-    m_pPlayer->Active_Effect(CPlayer::EFFECT_GRIND);
 
     return S_OK;
 }
@@ -63,6 +61,8 @@ void CState_Player_Grinder::Update(_float fTimeDelta)
             if (m_pPlayer->Get_EndAnim(m_iAnimation_Grinder[0], true)
                 || m_pPlayer->Get_EndAnim(m_iAnimation_Grinder[0]))
             {
+                m_pPlayer->Play_Sound(CPawn::PAWN_SOUND_EFFECT1, TEXT("SE_PC_MT_Item_Grinder_Loop_01.wav"), true);
+                m_pPlayer->Active_Effect(CPlayer::EFFECT_GRIND);
                 m_pPlayer->Change_Animation(m_iAnimation_Grinder[1], true, 0.f, 0, true);
                 m_isChange[0] = true;
             }
@@ -86,6 +86,7 @@ void CState_Player_Grinder::Update(_float fTimeDelta)
 
     if (KEY_AWAY(KEY::R))
     {
+        m_pPlayer->Play_Sound(CPawn::PAWN_SOUND_EFFECT1, TEXT("SE_PC_MT_Item_Grinder_End_01.wav"));
         m_pPlayer->Change_Animation(m_iAnimation_Grinder[2], false, 0.1f);
         m_pPlayer->DeActive_Effect(CPlayer::EFFECT_GRIND);
     }
@@ -110,6 +111,7 @@ void CState_Player_Grinder::Update(_float fTimeDelta)
 
 void CState_Player_Grinder::End_State()
 {
+    m_pPlayer->Stop_Sound(CPawn::PAWN_SOUND_EFFECT1);
     m_pPlayer->DeActive_Effect(CPlayer::EFFECT_GRIND);
 }
 

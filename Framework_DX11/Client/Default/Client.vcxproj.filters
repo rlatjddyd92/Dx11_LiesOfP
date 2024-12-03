@@ -52,15 +52,6 @@
     <Filter Include="03.GameInterface_Controller\00.UIManager\00.UIPage">
       <UniqueIdentifier>{81ccb389-d881-4ead-929f-0b6342fa2797}</UniqueIdentifier>
     </Filter>
-    <Filter Include="03.GameInterface_Controller\00.UIManager\00.UIPage\00.UIPage_Main">
-      <UniqueIdentifier>{00ab63cd-e889-48c6-9ab0-2ba67c8a067b}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="03.GameInterface_Controller\00.UIManager\00.UIPage\01.UIPage_Loading">
-      <UniqueIdentifier>{a81ac6e1-e175-4d29-a4ef-8d19959c8b05}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="03.GameInterface_Controller\00.UIManager\00.UIPage\02.UIPage_Play">
-      <UniqueIdentifier>{0bf63bb1-37d5-4135-837b-20c74ddf9ad5}</UniqueIdentifier>
-    </Filter>
     <Filter Include="05.Fsm">
       <UniqueIdentifier>{4a0e87ac-4260-4525-a5db-96fc69f89d7f}</UniqueIdentifier>
     </Filter>
@@ -93,18 +84,6 @@
     </Filter>
     <Filter Include="05.Fsm\Monster\CarcassBigA\Hit_Fatal">
       <UniqueIdentifier>{3a3180b6-88e0-47d8-a77c-574050019abe}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="03.GameInterface_Controller\00.UIManager\00.UIPage\03.UIPage_Menu">
-      <UniqueIdentifier>{b26954b1-cb30-4587-aded-033de3ff1679}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="03.GameInterface_Controller\00.UIManager\00.UIPage\04.UIPage_Inven">
-      <UniqueIdentifier>{669ca29d-7def-4635-a075-b22a47e7af85}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="03.GameInterface_Controller\00.UIManager\00.UIPage\05.UIPage_Equip">
-      <UniqueIdentifier>{668071d3-f74a-4637-b402-1e95822b2f74}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="03.GameInterface_Controller\00.UIManager\00.UIPage\06.UIPage_Stat">
-      <UniqueIdentifier>{f815fc82-3802-4a2a-8c10-2a59b6325fce}</UniqueIdentifier>
     </Filter>
     <Filter Include="03.GameInterface_Controller\00.UIManager\01.UIRender">
       <UniqueIdentifier>{3e817f4a-1be1-47ef-9123-0a7797cd83c3}</UniqueIdentifier>
@@ -252,9 +231,6 @@
     </Filter>
     <Filter Include="05.Fsm\Player\Common\Heal">
       <UniqueIdentifier>{01bca6de-05e8-46a3-89e2-a924a96ef387}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="03.GameInterface_Controller\00.UIManager\00.UIPage\10.UIPage_Ortho">
-      <UniqueIdentifier>{552aab2a-e554-4f80-96c8-2caa20267ba5}</UniqueIdentifier>
     </Filter>
     <Filter Include="05.Fsm\Player\Common\Change_Weapon">
       <UniqueIdentifier>{ca6f18a0-495c-4980-9a84-1c366e748484}</UniqueIdentifier>
@@ -613,12 +589,6 @@
     <Filter Include="05.Fsm\Monster\SimonManus\P2\HitFatal">
       <UniqueIdentifier>{cfa0a51c-d72a-4dc8-ba57-c8476da79ca9}</UniqueIdentifier>
     </Filter>
-    <Filter Include="03.GameInterface_Controller\00.UIManager\00.UIPage\07.UIPage_Skill">
-      <UniqueIdentifier>{101ea800-761b-49e9-ae2b-58825aebc3f3}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="03.GameInterface_Controller\00.UIManager\00.UIPage\08.UIPage_Option">
-      <UniqueIdentifier>{49687bb1-cd51-47be-b319-ccccb8021b98}</UniqueIdentifier>
-    </Filter>
     <Filter Include="02.GameObjects\02.Pawn\01.Monster\CarcassTail">
       <UniqueIdentifier>{e6447638-0aaa-4897-887b-a642b899134e}</UniqueIdentifier>
     </Filter>
@@ -706,9 +676,6 @@
     <Filter Include="02.GameObjects\10.InteractObj\03.WallDeco\Deco_Collider_Obj">
       <UniqueIdentifier>{de6a80df-b5fc-4917-8178-d30e289d2253}</UniqueIdentifier>
     </Filter>
-    <Filter Include="03.GameInterface_Controller\00.UIManager\00.UIPage\09.UIPage_ItemInfo">
-      <UniqueIdentifier>{d6f0816f-b248-400f-ae9c-070eac27ca42}</UniqueIdentifier>
-    </Filter>
     <Filter Include="05.Fsm\Player\Common\Stargazer">
       <UniqueIdentifier>{866e839e-cf8e-4ca7-b515-93065c4716fc}</UniqueIdentifier>
     </Filter>
@@ -766,12 +733,6 @@
     <Filter Include="02.GameObjects\12.AttackObject\SimonManus\SlideMagic">
       <UniqueIdentifier>{d094a52a-95e5-471b-bd7b-c42456ecf43c}</UniqueIdentifier>
     </Filter>
-    <Filter Include="03.GameInterface_Controller\00.UIManager\00.UIPage\11.UIPage_Test">
-      <UniqueIdentifier>{c242bb98-b03b-45a1-9832-2f75d428ccd0}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="03.GameInterface_Controller\00.UIManager\00.UIPage\12.UIPage_Effect">
-      <UniqueIdentifier>{0410eb84-3479-4cd4-9076-27802a534320}</UniqueIdentifier>
-    </Filter>
     <Filter Include="05.Fsm\Player\OneHand\00.Attack\Rapier\00.FableArts\General">
       <UniqueIdentifier>{9eae6eba-a96e-4f61-bb34-c8bed96e702a}</UniqueIdentifier>
     </Filter>
@@ -797,8 +758,74 @@
     <Filter Include="03.GameInterface_Controller\00.UIManager\00.UIPage\12.UIPage_Effect">
       <UniqueIdentifier>{26ca8006-fabe-45a8-b4ac-6ef7432e9707}</UniqueIdentifier>
     </Filter>
+    <Filter Include="03.GameInterface_Controller\00.UIManager\00.UIPage\08.UIPage_Option %2850%25%29">
+      <UniqueIdentifier>{49687bb1-cd51-47be-b319-ccccb8021b98}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="03.GameInterface_Controller\00.UIManager\00.UIPage\10.UIPage_Ortho %2890%25%29">
+      <UniqueIdentifier>{552aab2a-e554-4f80-96c8-2caa20267ba5}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="03.GameInterface_Controller\00.UIManager\00.UIPage\09.UIPage_ItemInfo %2890%25%29">
+      <UniqueIdentifier>{d6f0816f-b248-400f-ae9c-070eac27ca42}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="03.GameInterface_Controller\00.UIManager\00.UIPage\11.UIPage_Test %280%25%29">
+      <UniqueIdentifier>{c242bb98-b03b-45a1-9832-2f75d428ccd0}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="03.GameInterface_Controller\00.UIManager\00.UIPage\12.UIPage_Effect %2850%25%29">
+      <UniqueIdentifier>{0410eb84-3479-4cd4-9076-27802a534320}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="03.GameInterface_Controller\00.UIManager\00.UIPage\13.UIPage_Talking %280%25%29">
+      <UniqueIdentifier>{94ad924a-4751-4924-aeb7-673aedf1ec24}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="03.GameInterface_Controller\00.UIManager\00.UIPage\14.UIPage_Popup %280%25%29">
+      <UniqueIdentifier>{ce6e605b-1d78-4de4-8391-14576d71d1f1}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="03.GameInterface_Controller\00.UIManager\00.UIPage\15.UIPage_Inform %280%25%29">
+      <UniqueIdentifier>{3024b23f-59c4-4988-a1dd-bf2215e43065}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="03.GameInterface_Controller\00.UIManager\00.UIPage\07.UIPage_Skill %280%25%29">
+      <UniqueIdentifier>{101ea800-761b-49e9-ae2b-58825aebc3f3}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="03.GameInterface_Controller\00.UIManager\00.UIPage\06.UIPage_Stat %280%25%29">
+      <UniqueIdentifier>{f815fc82-3802-4a2a-8c10-2a59b6325fce}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="03.GameInterface_Controller\00.UIManager\00.UIPage\05.UIPage_Equip %2870%25%29">
+      <UniqueIdentifier>{668071d3-f74a-4637-b402-1e95822b2f74}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="03.GameInterface_Controller\00.UIManager\00.UIPage\04.UIPage_Inven %2870%25%29">
+      <UniqueIdentifier>{669ca29d-7def-4635-a075-b22a47e7af85}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="03.GameInterface_Controller\00.UIManager\00.UIPage\03.UIPage_Menu %2870%25%29">
+      <UniqueIdentifier>{b26954b1-cb30-4587-aded-033de3ff1679}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="03.GameInterface_Controller\00.UIManager\00.UIPage\02.UIPage_Play %2870%25%29">
+      <UniqueIdentifier>{0bf63bb1-37d5-4135-837b-20c74ddf9ad5}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="03.GameInterface_Controller\00.UIManager\00.UIPage\01.UIPage_Loading %2890%25%29">
+      <UniqueIdentifier>{a81ac6e1-e175-4d29-a4ef-8d19959c8b05}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="03.GameInterface_Controller\00.UIManager\00.UIPage\00.UIPage_Main %2880%25%29">
+      <UniqueIdentifier>{00ab63cd-e889-48c6-9ab0-2ba67c8a067b}</UniqueIdentifier>
+    </Filter>
     <Filter Include="02.GameObjects\12.AttackObject\SimonManus\Wave">
       <UniqueIdentifier>{3fbe7865-eaf5-4108-95d7-66b4e0d1fc8a}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="05.Fsm\Player\CutScene">
+      <UniqueIdentifier>{690a9148-4f8e-4c89-82d9-db8386a42952}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="05.Fsm\Player\CutScene\Sophia">
+      <UniqueIdentifier>{f5c45fd8-c67e-4f8d-8660-2f0adec9d8f9}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="05.Fsm\Player\CutScene\Sophia\Door">
+      <UniqueIdentifier>{523c375b-4150-4955-9992-725681b84bb3}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="05.Fsm\Player\CutScene\Sophia\Walk">
+      <UniqueIdentifier>{dc6f7b9e-e299-46ce-bf7d-94196ab07a34}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="05.Fsm\Player\CutScene\Sophia\Hand">
+      <UniqueIdentifier>{068b5a22-5213-4848-b9ce-02cf142a3e57}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="05.Fsm\Player\CutScene\Sophia\HandEnd">
+      <UniqueIdentifier>{3e0a6a80-48c4-49d6-8260-d065316ea512}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -869,13 +896,13 @@
       <Filter>03.GameInterface_Controller</Filter>
     </ClInclude>
     <ClInclude Include="..\Public\UIPage_Play.h">
-      <Filter>03.GameInterface_Controller\00.UIManager\00.UIPage\02.UIPage_Play</Filter>
+      <Filter>03.GameInterface_Controller\00.UIManager\00.UIPage\02.UIPage_Play %2870%25%29</Filter>
     </ClInclude>
     <ClInclude Include="..\Public\UIPage_Loading.h">
-      <Filter>03.GameInterface_Controller\00.UIManager\00.UIPage\01.UIPage_Loading</Filter>
+      <Filter>03.GameInterface_Controller\00.UIManager\00.UIPage\01.UIPage_Loading %2890%25%29</Filter>
     </ClInclude>
     <ClInclude Include="..\Public\UIPage_Main.h">
-      <Filter>03.GameInterface_Controller\00.UIManager\00.UIPage\00.UIPage_Main</Filter>
+      <Filter>03.GameInterface_Controller\00.UIManager\00.UIPage\00.UIPage_Main %2880%25%29</Filter>
     </ClInclude>
     <ClInclude Include="..\Public\Item_Manager.h">
       <Filter>03.GameInterface_Controller\01.Item_Manager</Filter>
@@ -980,7 +1007,7 @@
       <Filter>05.Fsm\Player\Common\Heal</Filter>
     </ClInclude>
     <ClInclude Include="..\Public\UIPage_Ortho.h">
-      <Filter>03.GameInterface_Controller\00.UIManager\00.UIPage\10.UIPage_Ortho</Filter>
+      <Filter>03.GameInterface_Controller\00.UIManager\00.UIPage\10.UIPage_Ortho %2890%25%29</Filter>
     </ClInclude>
     <ClInclude Include="UIPage_Ortho_Include.h">
       <Filter>03.GameInterface_Controller\99.GameInterface_Defines\00.Defines%28Data_Instance 전용%29</Filter>
@@ -1022,25 +1049,25 @@
       <Filter>05.Fsm\Player\TwoHand\00.Attack\FlameSword\LAttack01</Filter>
     </ClInclude>
     <ClInclude Include="..\Public\UIPage_Menu.h">
-      <Filter>03.GameInterface_Controller\00.UIManager\00.UIPage\03.UIPage_Menu</Filter>
+      <Filter>03.GameInterface_Controller\00.UIManager\00.UIPage\03.UIPage_Menu %2870%25%29</Filter>
     </ClInclude>
     <ClInclude Include="..\Public\UIPage_Equip.h">
-      <Filter>03.GameInterface_Controller\00.UIManager\00.UIPage\05.UIPage_Equip</Filter>
+      <Filter>03.GameInterface_Controller\00.UIManager\00.UIPage\05.UIPage_Equip %2870%25%29</Filter>
     </ClInclude>
     <ClInclude Include="..\Public\UIPage_Inven.h">
-      <Filter>03.GameInterface_Controller\00.UIManager\00.UIPage\04.UIPage_Inven</Filter>
+      <Filter>03.GameInterface_Controller\00.UIManager\00.UIPage\04.UIPage_Inven %2870%25%29</Filter>
     </ClInclude>
     <ClInclude Include="..\Public\UIPage_Option.h">
-      <Filter>03.GameInterface_Controller\00.UIManager\00.UIPage\08.UIPage_Option</Filter>
+      <Filter>03.GameInterface_Controller\00.UIManager\00.UIPage\08.UIPage_Option %2850%25%29</Filter>
     </ClInclude>
     <ClInclude Include="..\Public\UIPage_Skill.h">
-      <Filter>03.GameInterface_Controller\00.UIManager\00.UIPage\07.UIPage_Skill</Filter>
+      <Filter>03.GameInterface_Controller\00.UIManager\00.UIPage\07.UIPage_Skill %280%25%29</Filter>
     </ClInclude>
     <ClInclude Include="..\Public\UIPage_Stat.h">
-      <Filter>03.GameInterface_Controller\00.UIManager\00.UIPage\06.UIPage_Stat</Filter>
+      <Filter>03.GameInterface_Controller\00.UIManager\00.UIPage\06.UIPage_Stat %280%25%29</Filter>
     </ClInclude>
     <ClInclude Include="..\Public\UIPage_ItemInfo.h">
-      <Filter>03.GameInterface_Controller\00.UIManager\00.UIPage\09.UIPage_ItemInfo</Filter>
+      <Filter>03.GameInterface_Controller\00.UIManager\00.UIPage\09.UIPage_ItemInfo %2890%25%29</Filter>
     </ClInclude>
     <ClInclude Include="..\public\Mesh_Effect.h">
       <Filter>02.GameObjects\05.Effect\Effect_Base\Mesh_Effect</Filter>
@@ -1431,10 +1458,10 @@
       <Filter>02.GameObjects\12.AttackObject\SimonManus\SlideMagic</Filter>
     </ClInclude>
     <ClInclude Include="..\Public\UIPage_Test.h">
-      <Filter>03.GameInterface_Controller\00.UIManager\00.UIPage\11.UIPage_Test</Filter>
+      <Filter>03.GameInterface_Controller\00.UIManager\00.UIPage\11.UIPage_Test %280%25%29</Filter>
     </ClInclude>
     <ClInclude Include="..\Public\UIPage_Effect.h">
-      <Filter>03.GameInterface_Controller\00.UIManager\00.UIPage\12.UIPage_Effect</Filter>
+      <Filter>03.GameInterface_Controller\00.UIManager\00.UIPage\12.UIPage_Effect %2850%25%29</Filter>
     </ClInclude>
     <ClInclude Include="..\Public\State_Player_Rapier_Fablel.h">
       <Filter>05.Fsm\Player\OneHand\00.Attack\Rapier\00.FableArts\General</Filter>
@@ -1454,8 +1481,23 @@
     <ClInclude Include="..\Public\UIPage_Test.h">
       <Filter>03.GameInterface_Controller\00.UIManager\00.UIPage\11.UIPage_Test</Filter>
     </ClInclude>
+    <ClInclude Include="..\Public\UIPage_Popup.h">
+      <Filter>03.GameInterface_Controller\00.UIManager\00.UIPage\14.UIPage_Popup %280%25%29</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Public\UIPage_Talking.h">
+      <Filter>03.GameInterface_Controller\00.UIManager\00.UIPage\13.UIPage_Talking %280%25%29</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Public\UIPage_Inform.h">
+      <Filter>03.GameInterface_Controller\00.UIManager\00.UIPage\15.UIPage_Inform %280%25%29</Filter>
+    </ClInclude>
     <ClInclude Include="..\Public\AObj_Wave.h">
       <Filter>02.GameObjects\12.AttackObject\SimonManus\Wave</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Public\State_Player_OpenSophiaDoor.h">
+      <Filter>05.Fsm\Player\CutScene\Sophia\Door</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Public\State_Player_SophiaWalk.h">
+      <Filter>05.Fsm\Player\CutScene\Sophia\Walk</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -1505,13 +1547,13 @@
       <Filter>03.GameInterface_Controller</Filter>
     </ClCompile>
     <ClCompile Include="..\Private\UIPage_Play.cpp">
-      <Filter>03.GameInterface_Controller\00.UIManager\00.UIPage\02.UIPage_Play</Filter>
+      <Filter>03.GameInterface_Controller\00.UIManager\00.UIPage\02.UIPage_Play %2870%25%29</Filter>
     </ClCompile>
     <ClCompile Include="..\Private\UIPage_Loading.cpp">
-      <Filter>03.GameInterface_Controller\00.UIManager\00.UIPage\01.UIPage_Loading</Filter>
+      <Filter>03.GameInterface_Controller\00.UIManager\00.UIPage\01.UIPage_Loading %2890%25%29</Filter>
     </ClCompile>
     <ClCompile Include="..\Private\UIPage_Main.cpp">
-      <Filter>03.GameInterface_Controller\00.UIManager\00.UIPage\00.UIPage_Main</Filter>
+      <Filter>03.GameInterface_Controller\00.UIManager\00.UIPage\00.UIPage_Main %2880%25%29</Filter>
     </ClCompile>
     <ClCompile Include="..\Private\Item_Manager.cpp">
       <Filter>03.GameInterface_Controller\01.Item_Manager</Filter>
@@ -1607,7 +1649,7 @@
       <Filter>05.Fsm\Player\Common\Heal</Filter>
     </ClCompile>
     <ClCompile Include="..\Private\UIPage_Ortho.cpp">
-      <Filter>03.GameInterface_Controller\00.UIManager\00.UIPage\10.UIPage_Ortho</Filter>
+      <Filter>03.GameInterface_Controller\00.UIManager\00.UIPage\10.UIPage_Ortho %2890%25%29</Filter>
     </ClCompile>
     <ClCompile Include="..\Private\State_Player_OH_Sprint.cpp">
       <Filter>05.Fsm\Player\OneHand\Sprint</Filter>
@@ -1646,25 +1688,25 @@
       <Filter>05.Fsm\Player\TwoHand\00.Attack\FlameSword\LAttack01</Filter>
     </ClCompile>
     <ClCompile Include="..\Private\UIPage_Menu.cpp">
-      <Filter>03.GameInterface_Controller\00.UIManager\00.UIPage\03.UIPage_Menu</Filter>
+      <Filter>03.GameInterface_Controller\00.UIManager\00.UIPage\03.UIPage_Menu %2870%25%29</Filter>
     </ClCompile>
     <ClCompile Include="..\Private\UIPage_Equip.cpp">
-      <Filter>03.GameInterface_Controller\00.UIManager\00.UIPage\05.UIPage_Equip</Filter>
+      <Filter>03.GameInterface_Controller\00.UIManager\00.UIPage\05.UIPage_Equip %2870%25%29</Filter>
     </ClCompile>
     <ClCompile Include="..\Private\UIPage_Inven.cpp">
-      <Filter>03.GameInterface_Controller\00.UIManager\00.UIPage\04.UIPage_Inven</Filter>
+      <Filter>03.GameInterface_Controller\00.UIManager\00.UIPage\04.UIPage_Inven %2870%25%29</Filter>
     </ClCompile>
     <ClCompile Include="..\Private\UIPage_Option.cpp">
-      <Filter>03.GameInterface_Controller\00.UIManager\00.UIPage\08.UIPage_Option</Filter>
+      <Filter>03.GameInterface_Controller\00.UIManager\00.UIPage\08.UIPage_Option %2850%25%29</Filter>
     </ClCompile>
     <ClCompile Include="..\Private\UIPage_Skill.cpp">
-      <Filter>03.GameInterface_Controller\00.UIManager\00.UIPage\07.UIPage_Skill</Filter>
+      <Filter>03.GameInterface_Controller\00.UIManager\00.UIPage\07.UIPage_Skill %280%25%29</Filter>
     </ClCompile>
     <ClCompile Include="..\Private\UIPage_Stat.cpp">
-      <Filter>03.GameInterface_Controller\00.UIManager\00.UIPage\06.UIPage_Stat</Filter>
+      <Filter>03.GameInterface_Controller\00.UIManager\00.UIPage\06.UIPage_Stat %280%25%29</Filter>
     </ClCompile>
     <ClCompile Include="..\Private\UIPage_ItemInfo.cpp">
-      <Filter>03.GameInterface_Controller\00.UIManager\00.UIPage\09.UIPage_ItemInfo</Filter>
+      <Filter>03.GameInterface_Controller\00.UIManager\00.UIPage\09.UIPage_ItemInfo %2890%25%29</Filter>
     </ClCompile>
     <ClCompile Include="..\private\Mesh_Effect.cpp">
       <Filter>02.GameObjects\05.Effect\Effect_Base\Mesh_Effect</Filter>
@@ -2058,10 +2100,10 @@
       <Filter>02.GameObjects\12.AttackObject\SimonManus\SlideMagic</Filter>
     </ClCompile>
     <ClCompile Include="..\Private\UIPage_Test.cpp">
-      <Filter>03.GameInterface_Controller\00.UIManager\00.UIPage\11.UIPage_Test</Filter>
+      <Filter>03.GameInterface_Controller\00.UIManager\00.UIPage\11.UIPage_Test %280%25%29</Filter>
     </ClCompile>
     <ClCompile Include="..\Private\UIPage_Effect.cpp">
-      <Filter>03.GameInterface_Controller\00.UIManager\00.UIPage\12.UIPage_Effect</Filter>
+      <Filter>03.GameInterface_Controller\00.UIManager\00.UIPage\12.UIPage_Effect %2850%25%29</Filter>
     </ClCompile>
     <ClCompile Include="..\Private\State_Player_Rapier_Fablel.cpp">
       <Filter>05.Fsm\Player\OneHand\00.Attack\Rapier\00.FableArts\General</Filter>
@@ -2081,8 +2123,23 @@
     <ClCompile Include="..\Private\UIPage_Test.cpp">
       <Filter>03.GameInterface_Controller\00.UIManager\00.UIPage\11.UIPage_Test</Filter>
     </ClCompile>
+    <ClCompile Include="..\Private\UIPage_Popup.cpp">
+      <Filter>03.GameInterface_Controller\00.UIManager\00.UIPage\14.UIPage_Popup %280%25%29</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Private\UIPage_Talking.cpp">
+      <Filter>03.GameInterface_Controller\00.UIManager\00.UIPage\13.UIPage_Talking %280%25%29</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Private\UIPage_Inform.cpp">
+      <Filter>03.GameInterface_Controller\00.UIManager\00.UIPage\15.UIPage_Inform %280%25%29</Filter>
+    </ClCompile>
     <ClCompile Include="..\Private\AObj_Wave.cpp">
       <Filter>02.GameObjects\12.AttackObject\SimonManus\Wave</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Private\State_Player_OpenSophiaDoor.cpp">
+      <Filter>05.Fsm\Player\CutScene\Sophia\Door</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Private\State_Player_SophiaWalk.cpp">
+      <Filter>05.Fsm\Player\CutScene\Sophia\Walk</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -2156,6 +2213,9 @@
       <Filter>97.ShaderFiles\99.UI_Shader</Filter>
     </FxCompile>
     <FxCompile Include="..\Bin\ShaderFiles\Shader_UI_Normal.hlsl">
+      <Filter>97.ShaderFiles\99.UI_Shader</Filter>
+    </FxCompile>
+    <FxCompile Include="..\Bin\ShaderFiles\Shader_UI_Master.hlsl">
       <Filter>97.ShaderFiles\99.UI_Shader</Filter>
     </FxCompile>
   </ItemGroup>

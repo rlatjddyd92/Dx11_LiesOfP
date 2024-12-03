@@ -35,6 +35,30 @@ public:
 		FONT_END
 	};
 
+	enum class UI_SHADER
+	{
+		SHADER_NORMAL,
+		SHADER_CHANGE_COLOR,
+		SHADER_MULTIPLE_COLOR,
+		SHADER_MASTER,
+		SHADER_END
+	};
+
+	enum class UI_SHADER_PASS
+	{
+		PASS_BASIC,
+		PASS_COLOR_INPUT,
+		PASS_COLOR_MULTI,
+		PASS_RANGE,
+		PASS_ANGLE,
+		PASS_COLOR_INPUT_RANGE,
+		PASS_COLOR_MULTI_RANGE,
+		PASS_COLOR_INPUT_ANGLE,
+		PASS_COLOR_MULTI_ANGLE,
+		PASS_END
+	};
+
+
 	typedef struct UITEXTURE_INFO
 	{
 		_char* strTexturePath = {};
@@ -65,15 +89,12 @@ public:
 		// -1 이면 작동 안함 
 		_float3 fRGB = { -1.f,-1.f,-1.f };
 		_float fAlpah = -1.f;
+
+		_float4 vRange = { -1.f,-1.f,-1.f, -1.f };
+		_float2 vAngle = { 0.f,0.f };
 	}URCOM;
 
-	enum class UI_SHADER
-	{
-		SHADER_NORMAL,
-		SHADER_CHANGE_COLOR,
-		SHADER_MULTIPLE_COLOR,
-		SHADER_END
-	};
+	
 
 
 private:
@@ -90,7 +111,7 @@ public:
 	virtual HRESULT Render() override;
 
 public:
-	void AddRenderUIObject(_int iTextureIndex, _float2 fPosition, _float2 fSize, _float3 fRGB = { -1.f,-1.f,-1.f }, _float fAlpha = -1.f);
+	void AddRenderUIObject(_int iTextureIndex, _float2 fPosition, _float2 fSize, _float3 fRGB = { -1.f,-1.f,-1.f }, _float fAlpha = -1.f, _float4 vRange = { -1.f,-1.f,-1.f, -1.f }, _float2 vAngle = { 0.f,0.f });
 	void AddRenderText(UI_FONT eFont, _bool bIsCenter, _tchar* szText, _float2 fPosition, _float3 fColor = { -1.f,-1.f,-1.f }, _float fAlpha = -1.f);
 
 	const _char* GetTextureTag(_int iIndex) { return m_vecTextureInfo[iIndex]->strTextureTag; }
@@ -102,6 +123,8 @@ public:
 
 	HRESULT BackRender(_int iIndex);
 
+	HRESULT Render_Effect_Tool();
+
 public:
 	class CShader* m_pShaderCom = { nullptr };
 	class CVIBuffer_Rect* m_pVIBufferCom = { nullptr };
@@ -112,6 +135,8 @@ private:
 	void Ready_Font();
 	HRESULT Ready_Texture();
 	HRESULT Ready_Texture_ItemIcon();
+
+	UI_SHADER_PASS Select_Shader(URCOM& Command);
 
 	vector<UTEXTURE*> m_vecTextureInfo;
 	vector<UTEXTURE*> m_vecTextureInfo_ItemIcon;

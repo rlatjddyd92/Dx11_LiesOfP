@@ -44,6 +44,9 @@ HRESULT CUIManager::Initialize_Prototype()
 	if (FAILED(m_pGameInstance->Add_Prototype(LEVEL_STATIC, TEXT("Prototype_Component_Shader_UI_Normal"),
 		CShader::Create(m_pDevice, m_pContext, TEXT("../Bin/ShaderFiles/Shader_UI_Normal.hlsl"), VTXPOSTEX::Elements, VTXPOSTEX::iNumElements))))
 		return E_FAIL;
+	if (FAILED(m_pGameInstance->Add_Prototype(LEVEL_STATIC, TEXT("Prototype_Component_Shader_UI_Master"),
+		CShader::Create(m_pDevice, m_pContext, TEXT("../Bin/ShaderFiles/Shader_UI_Master.hlsl"), VTXPOSTEX::Elements, VTXPOSTEX::iNumElements))))
+		return E_FAIL;
 #pragma endregion
 
 	m_pUIRender_Batching = CUIRender_Batching::Create(m_pDevice, m_pContext);
@@ -115,10 +118,14 @@ void CUIManager::Late_Update(_float fTimeDelta)
 	{
 		if (i == _int(UIPAGE::PAGE_ORTHO))
 			continue;
+		if (i == _int(UIPAGE::PAGE_EFFECT))
+			continue;
 
 		if (m_vecPage[i]->GetUpdate())
 			m_vecPage[i]->Late_Update(fTimeDelta);
 	}
+
+	m_pUIPage_Effect->Late_Update(fTimeDelta);
 
 	m_pGameInstance->Add_RenderObject(CRenderer::RG_UI, this);
 }
@@ -162,6 +169,14 @@ void CUIManager::Update_TestPage(_float fTimeDelta)
 void CUIManager::UIControl_Test(_float fTimeDelta)
 {
 
+}
+
+void CUIManager::UIControl_Talking(_float fTimeDelta)
+{
+}
+
+void CUIManager::UIControl_Popup(_float fTimeDelta)
+{
 }
 
 void CUIManager::UIControl_Common(_float fTimeDelta)
@@ -483,6 +498,21 @@ HRESULT CUIManager::Make_UIPage(_int iIndex)
 		m_pUIPage_Effect = CUIPage_Effect::Create(m_pDevice, m_pContext);
 		m_vecPage[iIndex] = static_cast<CUIPage*>(m_pUIPage_Effect);
 	}
+	else if (iIndex == _int(UIPAGE::PAGE_TALKING))
+	{
+		m_pUIPage_Talking = CUIPage_Talking::Create(m_pDevice, m_pContext);
+		m_vecPage[iIndex] = static_cast<CUIPage*>(m_pUIPage_Talking);
+	}
+	else if (iIndex == _int(UIPAGE::PAGE_POPUP))
+	{
+		m_pUIPage_Popup = CUIPage_Popup::Create(m_pDevice, m_pContext);
+		m_vecPage[iIndex] = static_cast<CUIPage*>(m_pUIPage_Popup);
+	}
+	else if (iIndex == _int(UIPAGE::PAGE_INFORM))
+	{
+		m_pUIPage_Inform = CUIPage_Inform::Create(m_pDevice, m_pContext);
+		m_vecPage[iIndex] = static_cast<CUIPage*>(m_pUIPage_Inform);
+	}
 
 	if (m_vecPage[iIndex] == nullptr)
 		return E_FAIL;
@@ -524,6 +554,9 @@ HRESULT CUIManager::Load_UIDataFile_Part(HANDLE handle, DWORD* dword, _int iInde
 		ReadFile(handle, &pNew->bTexture_Color_Multiple, sizeof(_bool), dword, nullptr);
 		ReadFile(handle, &pNew->fStrash_Alpha, sizeof(_float), dword, nullptr);
 		ReadFile(handle, &pNew->bText_Right, sizeof(_bool), dword, nullptr);
+
+		ReadFile(handle, &pNew->vTexture_Range, sizeof(_Vec4), dword, nullptr);
+		ReadFile(handle, &pNew->vTexture_Angle, sizeof(_Vec2), dword, nullptr);
 
 		if (!pNew->bIsItem)
 			m_pUIRender_Batching->Make_Texture(pNew->iTexture_Index);
