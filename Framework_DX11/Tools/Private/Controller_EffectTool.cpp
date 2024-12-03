@@ -1311,6 +1311,7 @@ void CController_EffectTool::Trail_TP_Check()
 		ImGui::InputInt("Shader Index", (_int*)&m_Trail_TPDesc.DefaultDesc.iShaderIndex);
 		ImGui::InputInt("Trail TP SaveNumInstance", (_int*)&m_Trail_TPDesc.DefaultDesc.iNumInstance);
 		ImGui::InputFloat4("Trail TP Color", (_float*)&m_Trail_TPDesc.DefaultDesc.vColor);
+		ImGui::InputFloat2("Trail TP Tile Repeat", (_float*)&m_Trail_TPDesc.DefaultDesc.vTileRepeat);
 		ImGui::InputFloat("Trail TP Alpha Speed", (_float*)&m_Trail_TPDesc.DefaultDesc.fAlphaSpeed);
 
 		// ±‚≈∏

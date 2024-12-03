@@ -51,7 +51,10 @@ void CTrail_Effect_TP::Update(_float fTimeDelta)
 	}
 
 	if (false == m_DefaultDesc.bLoop)
+	{
 		m_fAlpha += fTimeDelta * m_DefaultDesc.fAlphaSpeed;
+	}
+
 }
 
 void CTrail_Effect_TP::Late_Update(_float fTimeDelta)
@@ -105,6 +108,8 @@ HRESULT CTrail_Effect_TP::Render()
 	if (FAILED(m_pShaderCom->Bind_RawValue("g_vColor", &m_DefaultDesc.vColor, sizeof(m_DefaultDesc.vColor))))
 		return E_FAIL;
 	if (FAILED(m_pShaderCom->Bind_RawValue("g_fRatio", &m_fAlpha, sizeof(m_fAlpha))))
+		return E_FAIL;
+	if (FAILED(m_pShaderCom->Bind_RawValue("g_vTileRepeat", &m_DefaultDesc.vTileRepeat, sizeof(m_DefaultDesc.vTileRepeat))))
 		return E_FAIL;
 
 	if (FAILED(m_pShaderCom->Begin(m_DefaultDesc.iShaderIndex)))

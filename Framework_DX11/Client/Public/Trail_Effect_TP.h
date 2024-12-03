@@ -32,6 +32,8 @@ public:
 		// ±‚≈∏
 		_uint		iShaderIndex = { 0 };
 		_bool		bLoop = { false };
+
+		_Vec2		vTileRepeat = { 1.f, 1.f };
 	} DEFAULT_DESC;
 
 	typedef struct
