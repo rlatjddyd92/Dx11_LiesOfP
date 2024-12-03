@@ -32,12 +32,14 @@ HRESULT CAObj_Wave::Initialize(void* pArg)
 
     m_vMoveDir = pDesc->vDir;
 
+    m_pTransformCom->LookAt_Dir(_Vec4{ m_vMoveDir });
+
     if (FAILED(Ready_Components()))
         return E_FAIL;
 
     m_fDamageAmount = 20.f;
-    m_fLifeDuration = 8.f;
-    m_fSpeed = 6.f;
+    m_fLifeDuration = 3.f;
+    m_fSpeed = 10.f;
 
     m_pColliderCom->IsActive(true);
 
@@ -81,7 +83,7 @@ void CAObj_Wave::Update(_float fTimeDelta)
 void CAObj_Wave::Late_Update(_float fTimeDelta)
 {
     m_pEffect->Late_Update(fTimeDelta);
-    if (m_isDead)
+    if (m_fLifeTime < m_fLifeDuration)
     {
         m_pGameInstance->Add_ColliderList(m_pColliderCom);
         m_pGameInstance->Add_DebugObject(m_pColliderCom);
@@ -142,19 +144,12 @@ HRESULT CAObj_Wave::Ready_Components()
         return E_FAIL;
 
     /* FOR.Com_Collider */
-    //CBounding_OBB::BOUNDING_OBB_DESC      ColliderDesc{};
-    //ColliderDesc.vCenter = _float3(0.f, 0.3f, 0.f);
-    //ColliderDesc.vExtents = _float3{1.f, 1.f, 1.f};
-    //ColliderDesc.vAngles = _float3{0.f, 0.f, 0.f};
-    //
-    //if (FAILED(__super::Add_Component(LEVEL_STATIC, TEXT("Prototype_Component_Collider_OBB"),
-    //    TEXT("Com_Collider"), reinterpret_cast<CComponent**>(&m_pColliderCom), &ColliderDesc)))
-    //    return E_FAIL;
-    CBounding_Sphere::BOUNDING_SPHERE_DESC      ColliderDesc{};
-    ColliderDesc.vCenter = _float3(0.f, 0.f, 0.f);
-    ColliderDesc.fRadius = 1.5f;
+    CBounding_OBB::BOUNDING_OBB_DESC      ColliderDesc{};
+    ColliderDesc.vExtents = _float3(1.f, 0.6f, 1.f);
+    ColliderDesc.vCenter = _float3(0.f, 0.3f, 0.f);
+    ColliderDesc.vAngles = _float3(0.f, 0.f, 0.f);
 
-    if (FAILED(__super::Add_Component(LEVEL_STATIC, TEXT("Prototype_Component_Collider_Sphere"),
+    if (FAILED(__super::Add_Component(LEVEL_STATIC, TEXT("Prototype_Component_Collider_OBB"),
         TEXT("Com_Collider"), reinterpret_cast<CComponent**>(&m_pColliderCom), &ColliderDesc)))
         return E_FAIL;
     m_pColliderCom->Set_Owner(this);
@@ -175,7 +170,7 @@ CAObj_Wave* CAObj_Wave::Create(ID3D11Device* pDevice, ID3D11DeviceContext* pCont
 
     if (FAILED(pInstance->Initialize_Prototype()))
     {
-        MSG_BOX(TEXT("Failed to Created : CAObj_ThunderSpear"));
+        MSG_BOX(TEXT("Failed to Created : CAObj_Wave"));
         Safe_Release(pInstance);
     }
 
