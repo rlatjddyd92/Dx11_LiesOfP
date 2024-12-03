@@ -83,6 +83,9 @@ public:
 		// 스크롤 영역
 		SCROLL_AREA eArea = SCROLL_AREA::SCROLL_END;
 
+		_float4 vRange = { -1.f,-1.f,-1.f, -1.f };
+		_float2 vAngle = { 0.f,0.f };
+
 	}URENDER;
 
 	enum class UI_SHADER
@@ -90,7 +93,22 @@ public:
 		SHADER_NORMAL,
 		SHADER_CHANGE_COLOR,
 		SHADER_MULTIPLE_COLOR,
+		SHADER_MASTER,
 		SHADER_END
+	};
+
+	enum class UI_SHADER_PASS
+	{
+		PASS_BASIC,
+		PASS_COLOR_INPUT,
+		PASS_COLOR_MULTI,
+		PASS_RANGE,
+		PASS_ANGLE,
+		PASS_COLOR_INPUT_RANGE,
+		PASS_COLOR_MULTI_RANGE,
+		PASS_COLOR_INPUT_ANGLE,
+		PASS_COLOR_MULTI_ANGLE,
+		PASS_END
 	};
 
 
@@ -150,6 +168,8 @@ private:
 	HRESULT Ready_Texture_ItemIcon();
 
 	void Ready_Scroll_Adjust_Data();
+
+	UI_SHADER_PASS Select_Shader_Pass(URENDER& Info);
 
 	queue<UIRENDER_INFO*> m_queueRender; // <- 이번 프레임에 그릴 내용, 
 

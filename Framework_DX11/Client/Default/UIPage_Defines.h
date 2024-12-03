@@ -20,6 +20,7 @@
 #include "UIPage_Ortho.h"
 #include "UIPage_Test.h"
 #include "UIPage_Effect.h"
-
-
+#include "UIPage_Talking.h"
+#include "UIPage_Popup.h"
+#include "UIPage_Inform.h"
 

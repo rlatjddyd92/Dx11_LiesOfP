@@ -117,6 +117,7 @@ void CController_UITool::Show_console()
 	ImGui::End();
 }
 
+
 void CController_UITool::UIPage_Edit()
 {
 	if (ImGui::CollapsingHeader("Page Setting"))
@@ -375,7 +376,25 @@ void CController_UITool::UIPart_Edit()
 			ImGui::SliderFloat("Slider", &pNow->fRatio, 0.f, 1.f);
 		}
 
+		// 텍스쳐 조정 
+		ImGui::SeparatorText("Texture_Cut");
+		ImGui::Text("Range");
+		ImGui::SameLine();
+		ImGui::DragFloat("Cut_Left", &pNow->vTexture_Range.x, 0.01f);
+		ImGui::SameLine();
+		ImGui::DragFloat("Cut_Top", &pNow->vTexture_Range.y, 0.01f);
+		ImGui::SameLine();
+		ImGui::DragFloat("Cut_Right", &pNow->vTexture_Range.z, 0.01f);
+		ImGui::SameLine();
+		ImGui::DragFloat("Cut_Bottom", &pNow->vTexture_Range.w, 0.01f);
 
+
+		ImGui::Text("Angle");
+		ImGui::SameLine();
+		ImGui::DragFloat("Cut_Start", &pNow->vTexture_Angle.x);
+		ImGui::SameLine();
+		ImGui::DragFloat("Cut_End", &pNow->vTexture_Angle.y);
+		
 	}
 
 	for (auto& iter : m_vecPageInfo[m_iNowSelectNum]->vecPart)
@@ -396,22 +415,128 @@ void CController_UITool::UIPart_Edit()
 
 }
 
-void CController_UITool::AddNewPage()
+void CController_UITool::UpdateEffect(_float fTimeDelta)
 {
+	if ((m_bFadeOut) && (m_fTime_Fade_Now < m_fTime_Fade_Max))
+	{
+		m_fTime_Fade_Now += fTimeDelta;
+		if (m_fTime_Fade_Now >= m_fTime_Fade_Max)
+			m_fTime_Fade_Now = m_fTime_Fade_Max;
+	}
+	else if ((!m_bFadeOut) && (m_fTime_Fade_Now > 0.f))
+	{
+		m_fTime_Fade_Now -= fTimeDelta;
+		if (m_fTime_Fade_Now <= 0.f)
+		{
+			m_fTime_Fade_Now = 0.f;
+			m_vecPageInfo[_int(UIPAGE::PAGE_EFFECT)]->vecPart[1]->bRender = false;
+			m_vecPageInfo[_int(UIPAGE::PAGE_EFFECT)]->vecPart[2]->bRender = false;
+			m_vecPageInfo[_int(UIPAGE::PAGE_EFFECT)]->vecPart[3]->bRender = false;
+		}
+	}
+
+	_float fFade_Ratio = m_fTime_Fade_Now / m_fTime_Fade_Max;
+
+	m_vecPageInfo[_int(UIPAGE::PAGE_EFFECT)]->vecPart[1]->fTextureColor.w = fFade_Ratio;
+	m_vecPageInfo[_int(UIPAGE::PAGE_EFFECT)]->vecPart[2]->fTextureColor.w = fFade_Ratio;
+	m_vecPageInfo[_int(UIPAGE::PAGE_EFFECT)]->vecPart[3]->fTextureColor.w = fFade_Ratio;
+
+	if (m_fTime_Script_Now < m_fTime_Script_Max)
+		m_fTime_Script_Now += fTimeDelta;
+
+	if (m_fTime_Script_Now >= m_fTime_Script_Max)
+	{
+		m_fTime_Script_Now = 0.f;
+		m_vecPageInfo[_int(UIPAGE::PAGE_EFFECT)]->vecPart[1]->bRender = false;
+		m_vecPageInfo[_int(UIPAGE::PAGE_EFFECT)]->vecPart[2]->bRender = false;
+		m_vecPageInfo[_int(UIPAGE::PAGE_EFFECT)]->vecPart[3]->bRender = false;
+	}
+
+	if ((m_fTime_Fade_Now == 0.f) && (m_fTime_Script_Now == 0.f))
+		m_bEffectOn = false;
+
+	m_pUIRender->Render_Effect_Tool();
 }
 
-
-void CController_UITool::UIPart_Render()
+_bool CController_UITool::Fade_Out(_wstring strTitle, _wstring strDesc, _Vec3 vColor, _float fTime)
 {
+	m_vecPageInfo[_int(UIPAGE::PAGE_EFFECT)]->vecPart[1]->fTextureColor = { vColor.x, vColor.y, vColor.z, 0.f };
 
+	_int iIndex = -1;
 
+	do
+	{
+		++iIndex;
+		m_vecPageInfo[_int(UIPAGE::PAGE_EFFECT)]->vecPart[2]->szText[iIndex] = strTitle[iIndex];
+	} while (m_InputText[iIndex] != '\0');
 
+	 iIndex = -1;
+
+	do
+	{
+		++iIndex;
+		m_vecPageInfo[_int(UIPAGE::PAGE_EFFECT)]->vecPart[3]->szText[iIndex] = strDesc[iIndex];
+	} while (m_InputText[iIndex] != '\0');
+
+	m_fTime_Fade_Now = 0.f;
+	m_fTime_Fade_Max = fTime;
+
+	m_vecPageInfo[_int(UIPAGE::PAGE_EFFECT)]->vecPart[1]->bRender = true;
+	m_vecPageInfo[_int(UIPAGE::PAGE_EFFECT)]->vecPart[2]->bRender = true;
+	m_vecPageInfo[_int(UIPAGE::PAGE_EFFECT)]->vecPart[3]->bRender = true;
+
+	m_bFadeOut = true;
+	m_bEffectOn = true;
+
+	return true;
 }
 
-void CController_UITool::FontTest()
+_bool CController_UITool::Fade_In(_float fTime)
 {
+	m_bEffectOn = true;
+
+	m_fTime_Fade_Now = m_fTime_Fade_Now * (fTime / m_fTime_Fade_Max);
+	m_fTime_Fade_Max = fTime;
+
+	m_bFadeOut = false;
+
+	return true;
+}
+
+void CController_UITool::Show_Script(_wstring strScript0, _wstring strScript1, _float fTime, _Vec3 vColor)
+{
+	m_vecPageInfo[_int(UIPAGE::PAGE_EFFECT)]->vecPart[4]->fTextureColor = { vColor.x, vColor.y, vColor.z, m_vecPageInfo[_int(UIPAGE::PAGE_EFFECT)]->vecPart[4]->fTextureColor.w };
+
+	_int iIndex = -1;
+
+	do
+	{
+		++iIndex;
+		m_vecPageInfo[_int(UIPAGE::PAGE_EFFECT)]->vecPart[5]->szText[iIndex] = strScript0[iIndex];
+	} while (m_InputText[iIndex] != '\0');
+
+	iIndex = -1;
+
+	do
+	{
+		++iIndex;
+		m_vecPageInfo[_int(UIPAGE::PAGE_EFFECT)]->vecPart[6]->szText[iIndex] = strScript1[iIndex];
+	} while (m_InputText[iIndex] != '\0');
+
+	m_vecPageInfo[_int(UIPAGE::PAGE_EFFECT)]->vecPart[4]->bRender = true;
+	m_vecPageInfo[_int(UIPAGE::PAGE_EFFECT)]->vecPart[5]->bRender = true;
 
 
+	if (strScript1 != TEXT("none"))
+	{
+		m_vecPageInfo[_int(UIPAGE::PAGE_EFFECT)]->vecPart[6]->bRender = true;
+		m_vecPageInfo[_int(UIPAGE::PAGE_EFFECT)]->vecPart[4]->fRatio = 1.f;
+	}
+	else 
+		m_vecPageInfo[_int(UIPAGE::PAGE_EFFECT)]->vecPart[4]->fRatio = 0.55f;
+
+	m_fTime_Script_Now = 0.f;
+	m_fTime_Script_Max = fTime;
 }
 
 CController_UITool::CController_UITool()
@@ -589,6 +714,13 @@ HRESULT CController_UITool::SavePart()
 			vecPart.push_back(to_wstring(pNow->fStrash_Alpha));
 			vecPart.push_back(to_wstring(pNow->bText_Right));
 
+			vecPart.push_back(to_wstring(pNow->vTexture_Range.x));
+			vecPart.push_back(to_wstring(pNow->vTexture_Range.y));
+			vecPart.push_back(to_wstring(pNow->vTexture_Range.z));
+			vecPart.push_back(to_wstring(pNow->vTexture_Range.w));
+			vecPart.push_back(to_wstring(pNow->vTexture_Angle.x));
+			vecPart.push_back(to_wstring(pNow->vTexture_Angle.y));
+
 			vecBuffer.push_back(vecPart);
 		}
 	}
@@ -647,6 +779,9 @@ HRESULT CController_UITool::LoadPart()
 		pNew->bTexture_Color_Multiple = stoi(vecBuffer[i][35]);
 		pNew->fStrash_Alpha = stof(vecBuffer[i][36]);
 		pNew->bText_Right = stoi(vecBuffer[i][37]);
+
+		pNew->vTexture_Range = { stof(vecBuffer[i][38]) , stof(vecBuffer[i][39]) , stof(vecBuffer[i][40]) , stof(vecBuffer[i][41]) };
+		pNew->vTexture_Angle = { stof(vecBuffer[i][42]) , stof(vecBuffer[i][43]) };
 
 		pNew->MakeDirec();
 		if (pNew->iParentPart_Index == -1)
@@ -771,6 +906,9 @@ HRESULT CController_UITool::MakeClientData_Part(HANDLE handle, DWORD* dword, vec
 		WriteFile(handle, &iter->bTexture_Color_Multiple, sizeof(_bool), dword, nullptr);
 		WriteFile(handle, &iter->fStrash_Alpha, sizeof(_float), dword, nullptr);
 		WriteFile(handle, &iter->bText_Right, sizeof(_bool), dword, nullptr);
+
+		WriteFile(handle, &iter->vTexture_Range, sizeof(_Vec4), dword, nullptr);
+		WriteFile(handle, &iter->vTexture_Angle, sizeof(_Vec2), dword, nullptr);
 
 		_int iIndexPartName = -1;
 

@@ -165,6 +165,21 @@ void CImGui_Manager::Tool_Effect()
 
 void CImGui_Manager::Tool_UI()
 {
+	// 24-12-01 김성용 
+   // UI 연출 관련 테스트 코드 
+	if (KEY_HOLD(KEY::CTRL))
+	{
+		if (KEY_TAP(KEY::NUM6))
+			m_pController_UITool->Fade_Out(TEXT("FadeOut_Test"), TEXT("FadeOut_Desc"), { 0.f,0.f,0.f }, 2.f);
+		if (KEY_TAP(KEY::NUM7))
+			m_pController_UITool->Fade_In(2.f);
+		/*if (KEY_TAP(KEY::NUM8))
+			m_pController_UITool->Show_Script(TEXT("테스트 대사 2줄 버전"), TEXT("테스트 대사 2줄 버전"), 3.f);
+		if (KEY_TAP(KEY::NUM9))
+			m_pController_UITool->Show_Script(TEXT("테스트 대사 1줄 버전"), TEXT("none"), 3.f);*/
+	}
+
+
 	if (ImGui::BeginTabItem("UI Tool"))
 	{
 		m_pController_UITool->UITool_Edit();
@@ -173,6 +188,9 @@ void CImGui_Manager::Tool_UI()
 
 		m_pController_UITool->UITool_Render();
 	}
+	
+	if (m_pController_UITool->Get_EffectOn())
+		m_pController_UITool->UpdateEffect(m_pGameInstance->Compute_TimeDelta(TEXT("Timer_60")));
 }
 
 void CImGui_Manager::Tool_Animation()

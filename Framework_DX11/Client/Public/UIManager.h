@@ -20,14 +20,7 @@ class CUIManager : public CUIObject
 public:
 	typedef struct TESTDATA
 	{
-		// 직교 UI 테스트용 
-		_float fHP_Now = 500.f;
-		_float fHP_Max = 1000.f;
-
-		_float fHP_Damege = 100.f;
-
 		_bool bFocus = true;
-		_bool bSpecial_Attack = true;
 	}TDATA;
 
 
@@ -148,6 +141,8 @@ private:
 	void UIControl_Option(_float fTimeDelta);
 	void UIControl_Skill(_float fTimeDelta);
 	void UIControl_Test(_float fTimeDelta);
+	void UIControl_Talking(_float fTimeDelta);
+	void UIControl_Popup(_float fTimeDelta);
 
 public:
 #pragma region Page_Main
@@ -291,6 +286,12 @@ private:
 	CUIPage_Test* m_pUIPage_Test = { nullptr };
 	// 효과 UI
 	CUIPage_Effect* m_pUIPage_Effect = { nullptr };
+	// NPC 대화
+	CUIPage_Talking* m_pUIPage_Talking = { nullptr };
+	// 팝업
+	CUIPage_Popup* m_pUIPage_Popup = { nullptr };
+	// 안내
+	CUIPage_Inform* m_pUIPage_Inform = { nullptr };
 
 	CUIRender_Batching* m_pUIRender_Batching = { nullptr };
 
