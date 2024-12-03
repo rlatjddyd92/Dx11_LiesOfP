@@ -176,6 +176,8 @@ void CState_SimonManusP2_SlideMagic::Control_Sound(_double CurTrackPos)
         {
             if ((CurTrackPos >= 30.f && CurTrackPos <= 40.f))
             {
+                m_pMonster->Play_Sound(CPawn::PAWN_SOUND_EFFECT1, TEXT("SE_NPC_SimonManus_SK_PJ_Ergo_Wait_05.wav"));
+                m_bMagicSound = true;
             }
         }
         else

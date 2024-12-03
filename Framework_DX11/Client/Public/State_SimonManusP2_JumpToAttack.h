@@ -34,6 +34,7 @@ private:
 
     _bool               m_bJump = { false };
     _bool               m_bMagic = { false };
+    _bool               m_bMagicSound = { false };
 
     _uint               m_iRouteTrack = {};
 
@@ -41,6 +42,7 @@ private:
     _bool               End_Check();
     void                Collider_Check(_double CurTrackPos);
     void                Effect_Check(_double CurTrackPos);
+    void                Control_Sound(_double CurTrackPos);
 
 public:
     static CState_SimonManusP2_JumpToAttack* Create(class CFsm* pFsm, class CMonster* pMonster, _uint iStateNum, void* pArg = nullptr);

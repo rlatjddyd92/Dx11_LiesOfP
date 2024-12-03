@@ -34,6 +34,7 @@ private:
 
     _bool               m_bResetRim = { false };
     _bool               m_bStampEffect = { false };
+    _bool               m_bStampSound = { false };
     _bool               m_bStartSpot = { true };
 
 private:
@@ -41,6 +42,7 @@ private:
     void                Collider_Check(_double CurTrackPos);
     void                Effect_Check(_double CurTrackPos);
     void                Update_Rimlight();
+    void                Control_Sound(_double CurTrackPos);
 
 public:
     static CState_SimonManusP1_HighJumpFall* Create(class CFsm* pFsm, class CMonster* pMonster, _uint iStateNum, void* pArg = nullptr);

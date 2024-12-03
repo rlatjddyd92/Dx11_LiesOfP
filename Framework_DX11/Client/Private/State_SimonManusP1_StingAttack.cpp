@@ -47,7 +47,7 @@ _bool CState_SimonManusP1_StingAttack::End_Check()
     return m_pMonster->Get_EndAnim(AN_STINGATTACK);
 }
 
-void CState_SimonManusP1_StingAttack::Collider_Check()
+void CState_SimonManusP1_StingAttack::Collider_Check(_double CurTrackPos)
 {
     _double CurTrackPos = m_pMonster->Get_CurrentTrackPos();
 
@@ -59,6 +59,18 @@ void CState_SimonManusP1_StingAttack::Collider_Check()
     else
     {
         m_pMonster->DeActive_CurretnWeaponCollider();
+    }
+}
+
+void CState_SimonManusP1_StingAttack::Control_Sound(_double CurTrackPos)
+{
+    if (!m_bStingSound)
+    {
+        if (CurTrackPos >= 110.f)
+        {
+            m_pMonster->Play_Sound(CPawn::PAWN_SOUND_EFFECT1, TEXT("SE_NPC_SK_FX_Ground_Exp_M_02.wav"));
+            m_bStingSound = true;
+        }
     }
 }
 

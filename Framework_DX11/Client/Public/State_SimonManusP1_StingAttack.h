@@ -26,9 +26,12 @@ public:
 private:
     class CMonster* m_pMonster = { nullptr };
 
+    _bool           m_bStingSound = { false };
+
 private:
     _bool               End_Check();
-    void                Collider_Check();
+    void                Collider_Check(_double CurTrackPos);
+    void                Control_Sound(_double CurTrackPos);
 
 public:
     static CState_SimonManusP1_StingAttack* Create(class CFsm* pFsm, class CMonster* pMonster, _uint iStateNum, void* pArg = nullptr);

@@ -75,6 +75,7 @@ void CState_SimonManusP1_HighJumpFall::Update(_float fTimeDelta)
     Collider_Check(CurTrackPos);
     Effect_Check(CurTrackPos);
     Update_Rimlight();
+    Control_Sound(CurTrackPos);
 
 }
 
@@ -136,6 +137,18 @@ void CState_SimonManusP1_HighJumpFall::Update_Rimlight()
             {
                 m_pMonster->Set_RimLightColor(_Vec4{ 0.f, 0.f, 0.f, 1.f });
             }
+        }
+    }
+}
+
+void CState_SimonManusP1_HighJumpFall::Control_Sound(_double CurTrackPos)
+{
+    if (!m_bStampSound)
+    {
+        if ((CurTrackPos >= 150.f))
+        {
+            m_pMonster->Play_Sound(CPawn::PAWN_SOUND_EFFECT1, TEXT("SE_NPC_SK_FX_Ground_Exp_M_02.wav"));
+            m_bStampSound = true;
         }
     }
 }

@@ -25,7 +25,7 @@ HRESULT CState_SimonManusP1_Charge_SwingDown::Start_State(void* pArg)
     m_pMonster->Change_Animation(AN_CHARGESWINGDOWN, false, 0.1f, 0);
 
     m_bChargeSwing = true;
-    
+    m_bStampSound = false;
     return S_OK;
 }
 
@@ -79,6 +79,18 @@ void CState_SimonManusP1_Charge_SwingDown::Effect_Check(_double CurTrackPos)
             Desc.vPos = _Vec3{ WorldMat._41, WorldMat._42 - 0.2f, WorldMat._43 };
 
             m_pGameInstance->Add_CloneObject_ToLayer(LEVEL_GAMEPLAY, TEXT("Monster_Attack"), TEXT("Prototype_GameObject_ChargeSwing"), &Desc);
+        }
+    }
+}
+
+void CState_SimonManusP1_Charge_SwingDown::Control_Sound(_double CurTrackPos)
+{
+    if (!m_bStampSound)
+    {
+        if (CurTrackPos >= 240.f)
+        {
+            m_pMonster->Play_Sound(CPawn::PAWN_SOUND_EFFECT1, TEXT("SE_NPC_SK_FX_Ground_Exp_M_02.wav"));
+            m_bStampSound = true;
         }
     }
 }

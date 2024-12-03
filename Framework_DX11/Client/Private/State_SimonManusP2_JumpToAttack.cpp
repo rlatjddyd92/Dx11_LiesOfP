@@ -62,6 +62,8 @@ HRESULT CState_SimonManusP2_JumpToAttack::Start_State(void* pArg)
 
     m_bMagic = false;
     m_bJump = false;
+    m_bMagicSound = false;
+
     return S_OK;
 }
 
@@ -101,6 +103,7 @@ void CState_SimonManusP2_JumpToAttack::Update(_float fTimeDelta)
 
     Collider_Check(CurTrackPos);
     Effect_Check(CurTrackPos);
+    Control_Sound(CurTrackPos);
 }
 
 void CState_SimonManusP2_JumpToAttack::End_State()
@@ -221,6 +224,21 @@ void CState_SimonManusP2_JumpToAttack::Effect_Check(_double CurTrackPos)
         }
     }
 
+}
+
+void CState_SimonManusP2_JumpToAttack::Control_Sound(_double CurTrackPos)
+{
+    if (!m_bMagicSound)
+    {
+        if (m_iCurStartAnim == AN_MAGICTO_LEFT || m_iCurStartAnim == AN_MAGICTO_RIGHT)
+        {
+            if ((CurTrackPos >= 40.f && CurTrackPos <= 45.f))
+            {
+                m_pMonster->Play_Sound(CPawn::PAWN_SOUND_EFFECT1, TEXT("SE_NPC_SimonManus_SK_PJ_Ergo_Wide_05.wav"));
+                m_bMagicSound = true;
+            }
+        }
+    }
 }
 
 CState_SimonManusP2_JumpToAttack* CState_SimonManusP2_JumpToAttack::Create(CFsm* pFsm, CMonster* pMonster, _uint iStateNum, void* pArg)
