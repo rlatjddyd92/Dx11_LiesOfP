@@ -483,6 +483,8 @@ HRESULT CSimonManus::Ready_Effects()
 	m_Effects[P2_JUMPMAGIC] = CEffect_Manager::Get_Instance()->Clone_Effect(TEXT("SimonManus_Attack_JumpMagic"), pParetnMatrix,
 		pSocketBoneMatrix, _Vec3(0.f, 0.f, 0.f), _Vec3(0.f, 0.f, 0.f), _Vec3(1.f, 1.f, 1.f));
 	
+	m_Effects;
+
 
 	return S_OK;
 }

@@ -63,7 +63,7 @@ void CState_SimonManusP2_Wave::Projectile_Check(_double CurTrackPos)
 
             _Vec3 vDirection = XMVector3Normalize(m_pMonster->Get_TargetDir());
 
-            Desc.vPos = _Vec3{ vPosition + vLook };
+            Desc.vPos = _Vec3{ vPosition + (vLook * 2.5f ) };
             Desc.vDir = _Vec3{ vDirection };
 
             m_pGameInstance->Add_CloneObject_ToLayer(LEVEL_GAMEPLAY, TEXT("Monster_Attack"), TEXT("Prototype_GameObject_Wave"), &Desc);
