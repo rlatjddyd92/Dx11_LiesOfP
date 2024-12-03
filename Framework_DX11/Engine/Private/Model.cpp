@@ -109,7 +109,7 @@ _uint	CModel::Get_CurrentFrame(_bool isBoundary)
 			return m_tChaneAnimDesc_Boundary.iStartFrame;
 		}
 		else
-			return m_iCurrentFrame;
+			return m_iCurrentFrame_Boundary;
 	}
 }
 

@@ -12,7 +12,6 @@ CState_Player_Ladder::CState_Player_Ladder(CFsm* pFsm, CPlayer* pPlayer)
     , m_pPlayer{ pPlayer }
 {
 }
-
 HRESULT CState_Player_Ladder::Initialize(_uint iStateNum, void* pArg)
 {
     // 올라가유
@@ -97,8 +96,18 @@ void CState_Player_Ladder::Update(_float fTimeDelta)
             m_pPlayer->Change_Animation(m_iAnimation_LadderIdle[m_iHandIndex], true, 0.f);
         }
 
+        // 사운드
+        if (iCurAnim == m_iAnimation_Ladder[LADDER_UP][1] || iCurAnim == m_iAnimation_Ladder[LADDER_UP][2]
+            || iCurAnim == m_iAnimation_Ladder[LADDER_DOWN][1] || iCurAnim == m_iAnimation_Ladder[LADDER_DOWN][2])
+        {
+            Control_Sound();
+        }
+   
         m_isInputW = false;
         m_isInputS = false;
+
+        m_isPlaySound[0] = false;
+        m_isPlaySound[1] = false;
     }
     else if (iCurAnim == m_iAnimation_LadderIdle[0]
         || iCurAnim == m_iAnimation_LadderIdle[1])
@@ -152,6 +161,66 @@ void CState_Player_Ladder::Update(_float fTimeDelta)
             vPlayerPos.y -= 0.95f * fTimeDelta;
 
         m_pPlayer->Get_RigidBody()->Set_GloblePose(vPlayerPos);
+    }
+    else
+    {
+
+        /* 사운드 */
+        _int iFrame = m_pPlayer->Get_Frame();
+
+        if (iCurAnim == m_iAnimation_Ladder[LADDER_UP][0])
+        {
+            if ((iFrame == 26 || iFrame == 27) && !m_isPlaySound[0])
+            {
+                Control_Sound();
+                m_isPlaySound[0] = true;
+            }
+            else if ((iFrame == 44 || iFrame == 45) && !m_isPlaySound[1])
+            {
+                Control_Sound();
+                m_isPlaySound[1] = true;
+            }
+        }
+        else if (iCurAnim == m_iAnimation_Ladder[LADDER_UP][3]
+            || iCurAnim == m_iAnimation_Ladder[LADDER_UP][4])
+        {
+            if ((iFrame == 23 || iFrame == 24) && !m_isPlaySound[0])
+            {
+                Control_Sound();
+                m_isPlaySound[0] = true;
+            }
+            else if ((iFrame == 44 || iFrame == 45) && !m_isPlaySound[1])
+            {
+                Control_Sound();
+                m_isPlaySound[1] = true;
+            }
+        }
+        else if (iCurAnim == m_iAnimation_Ladder[LADDER_DOWN][0])
+        {
+            if ((iFrame == 50 || iFrame == 51) && !m_isPlaySound[0])
+            {
+                Control_Sound();
+                m_isPlaySound[0] = true;
+            }
+            else if ((iFrame == 69 || iFrame == 70) && !m_isPlaySound[1])
+            {
+                Control_Sound();
+                m_isPlaySound[1] = true;
+                m_isPlaySound[0] = false;
+            }
+            else if ((iFrame == 88 || iFrame == 89) && !m_isPlaySound[0])
+            {
+                Control_Sound();
+                m_isPlaySound[0] = true;
+                m_isPlaySound[1] = false;
+            }
+            else if ((iFrame == 110 || iFrame == 111) && !m_isPlaySound[1])
+            {
+                Control_Sound();
+                m_isPlaySound[0] = true;
+                m_isPlaySound[1] = true;
+            }
+        }
     }
 
     if (KEY_TAP(KEY::Q))
@@ -239,17 +308,15 @@ _bool CState_Player_Ladder::End_Check()
 
 void CState_Player_Ladder::Control_Sound()
 {
-    _int iFrame = m_pPlayer->Get_Frame();
+    _wstring strSoundKey = TEXT("SE_PC_FS_Metal_Ladder_0");
+    _wstring strWAV = TEXT(".wav");
+    _tchar szBuffer[10];
 
-    if ((iFrame == m_iSoundFrame || iFrame == m_iSoundFrame + 1) && !m_isPlaySound)
-    {
-        m_pPlayer->Play_CurrentWeaponSound(CWeapon::WEP_SOUND_EFFECT1, TEXT("SE_PC_SK_FX_Rapier_1H_H_FableArts_Parry_01.wav"));
-        m_isPlaySound = true;
-    }
-    else
-    {
-        m_isPlaySound = false;
-    }
+    _int iRand = rand() % 4 + 1;
+    _itow_s(iRand, szBuffer, 10);
+    strSoundKey = strSoundKey + szBuffer + strWAV;
+
+    m_pPlayer->Play_Sound(CPawn::PAWN_SOUND_EFFECT1, strSoundKey.c_str(), false);
 }
 
 CState_Player_Ladder* CState_Player_Ladder::Create(CFsm* pFsm, CPlayer* pPlayer, _uint iStateNum, void* pArg)

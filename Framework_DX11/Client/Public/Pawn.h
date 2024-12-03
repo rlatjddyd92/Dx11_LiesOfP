@@ -74,12 +74,13 @@ public:
     void            Change_Animation_Boundry(_uint iAnimIndex, _bool IsLoop = false, _float fDuration = 0.3f, _uint iStartFrame = 0);
     _uint           Get_CurrentAnimIndex();
     _uint           Get_CurrentAnimIndex_Boundry();
-    _int            Get_Frame();
+    _int            Get_Frame(_bool isBoundry = false);
     _double         Get_CurrentTrackPos();
     _bool           Get_EndAnim(_int iAnimIndex, _bool bIsBoundary = false);
 
-	void		    Play_Sound(const PAWN_SOUND_TYPE eType, const TCHAR* pSoundKey);
+	void		    Play_Sound(const PAWN_SOUND_TYPE eType, const TCHAR* pSoundKey, _bool isLoop = false);
 	void		    PlayRepeat_Sound(const PAWN_SOUND_TYPE eType, const TCHAR* pSoundKey);
+    void            Stop_Sound(const PAWN_SOUND_TYPE eType);
 
     void            Set_Respawn_Cell_Num(_int iNum) { m_iRespawn_Cell_Num = iNum; }
 

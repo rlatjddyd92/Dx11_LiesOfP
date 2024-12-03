@@ -167,9 +167,9 @@ _uint CPawn::Get_CurrentAnimIndex_Boundry()
 	return m_pModelCom->Get_CurrentAnimationIndex_Boundary();
 }
 
-_int CPawn::Get_Frame()
+_int CPawn::Get_Frame(_bool isBoundry)
 {
-	return m_pModelCom->Get_CurrentFrame();
+	return m_pModelCom->Get_CurrentFrame(isBoundry);
 }
 
 _double CPawn::Get_CurrentTrackPos()
@@ -190,7 +190,7 @@ _bool CPawn::Get_EndAnim(_int iAnimIndex, _bool bIsBoundary)
 
 }
 
-void CPawn::Play_Sound(const PAWN_SOUND_TYPE eType, const TCHAR* pSoundKey)
+void CPawn::Play_Sound(const PAWN_SOUND_TYPE eType, const TCHAR* pSoundKey, _bool isLoop)
 {
 	_float* fVolume = {};
 	switch (eType)
@@ -205,7 +205,7 @@ void CPawn::Play_Sound(const PAWN_SOUND_TYPE eType, const TCHAR* pSoundKey)
 	default:
 		return;
 	}
-	m_pSoundCom[eType]->Play2D(pSoundKey, fVolume);
+	m_pSoundCom[eType]->Play2D(pSoundKey, fVolume, isLoop);
 }
 
 void CPawn::PlayRepeat_Sound(const PAWN_SOUND_TYPE eType, const TCHAR* pSoundKey)
@@ -224,6 +224,11 @@ void CPawn::PlayRepeat_Sound(const PAWN_SOUND_TYPE eType, const TCHAR* pSoundKey
 		return;
 	}
 	m_pSoundCom[eType]->Play2D_Repeat(pSoundKey, fVolume);
+}
+
+void CPawn::Stop_Sound(const PAWN_SOUND_TYPE eType)
+{
+	m_pSoundCom[eType]->Stop();
 }
 
 _int CPawn::Get_UFBIndex(_uint UFB_Type)

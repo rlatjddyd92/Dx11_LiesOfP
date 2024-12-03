@@ -88,7 +88,7 @@ void CSound::Play3D_Repeat(const TCHAR* pSoundKey, _float* pVolume)
 	}
 }
 
-void CSound::Play2D(const TCHAR* pSoundKey, _float* pVolume)
+void CSound::Play2D(const TCHAR* pSoundKey, _float* pVolume, _bool isLoop)
 {
 	if (m_isPlaying)
 		m_pChannel->stop();
@@ -115,7 +115,11 @@ void CSound::Play2D(const TCHAR* pSoundKey, _float* pVolume)
 	{
 		return;
 	}
-	m_pChannel->setMode(FMOD_2D);
+	FMOD_MODE eMode = FMOD_2D;
+	if (isLoop)
+		eMode |= FMOD_LOOP_NORMAL;
+
+	m_pChannel->setMode(eMode);
 	m_pChannel->setVolume(*pVolume);
 
 	m_pVolume = pVolume;
@@ -123,7 +127,7 @@ void CSound::Play2D(const TCHAR* pSoundKey, _float* pVolume)
 
 void CSound::Play2D_Repeat(const TCHAR* pSoundKey, _float* pVolume)
 {
-	if (m_isPlaying)
+	if (!m_isPlaying)
 	{
 		Play2D(pSoundKey, pVolume);
 	}

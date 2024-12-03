@@ -671,7 +671,7 @@ HRESULT CPlayer::Ready_Effect()
 
 	pSocketBoneMatrix = m_pModelCom->Get_BoneCombindTransformationMatrix_Ptr("Bn_L_ForeTwist");
 	m_Effects[EFFECT_GRIND] = m_pEffect_Manager->Clone_Effect(TEXT("Player_Grind"), pParetnMatrix,
-		pSocketBoneMatrix, _Vec3(0.f, 0.f, 0.f), _Vec3(0.f, 0.f, 0.f), _Vec3(1.f, 1.f, 1.f));
+		pSocketBoneMatrix, _Vec3(0.f, 0.11f, -0.12f), _Vec3(0.f, 0.f, 0.f), _Vec3(1.f, 1.f, 1.f));
 
 	pSocketBoneMatrix = m_pModelCom->Get_BoneCombindTransformationMatrix_Ptr("BN_Weapon_L");
 	m_Effects[EFFECT_HEAL] = m_pEffect_Manager->Clone_Effect(TEXT("Player_Potion"), pParetnMatrix,
@@ -772,7 +772,9 @@ void CPlayer::Choice_GuardSound(_uint iAttackStrength, _uint iHitType, _bool isP
 
 	if (isPerfect)	// ∆€∆Â∆Æ ∞°µÂ
 	{
-
+		_itow_s(iRand, szBuffer, 10);
+		strSoundKey = TEXT("SE_PC_SK_GetHit_Sword_PerfectGuard_Metal_Fury_0");
+		strSoundKey = strSoundKey + szBuffer + strWAV;
 	}
 	else
 	{
@@ -794,7 +796,13 @@ void CPlayer::Choice_GuardSound(_uint iAttackStrength, _uint iHitType, _bool isP
 
 			case HIT_FIRE:
 				_itow_s(iRand, szBuffer, 10);
-				strSoundKey = TEXT("SE_PC_SK_Hit_Fire_M_0");
+				strSoundKey = TEXT("SE_PC_SK_GetHit_M_Guard_Fire_0");
+				strSoundKey = strSoundKey + szBuffer + strWAV;
+				break;
+
+			case HIT_ELECTRIC:
+				_itow_s(iRand, szBuffer, 10);
+				strSoundKey = TEXT("SE_PC_SK_GetHit_M_Guard_Electric_0");
 				strSoundKey = strSoundKey + szBuffer + strWAV;
 				break;
 
@@ -813,6 +821,7 @@ void CPlayer::Choice_GuardSound(_uint iAttackStrength, _uint iHitType, _bool isP
 				break;
 
 			case HIT_METAL:
+				iRand = rand() % 6 + 1;
 				_itow_s(iRand, szBuffer, 10);
 				strSoundKey = TEXT("SE_PC_SK_GetHit_M_Guard_Metal_0");
 				strSoundKey = strSoundKey + szBuffer + strWAV;
@@ -820,7 +829,13 @@ void CPlayer::Choice_GuardSound(_uint iAttackStrength, _uint iHitType, _bool isP
 
 			case HIT_FIRE:
 				_itow_s(iRand, szBuffer, 10);
-				strSoundKey = TEXT("SE_PC_SK_Hit_Fire_M_0");
+				strSoundKey = TEXT("SE_PC_SK_GetHit_M_Guard_Fire_0");
+				strSoundKey = strSoundKey + szBuffer + strWAV;
+				break;
+
+			case HIT_ELECTRIC:
+				_itow_s(iRand, szBuffer, 10);
+				strSoundKey = TEXT("SE_PC_SK_GetHit_M_Guard_Electric_0");
 				strSoundKey = strSoundKey + szBuffer + strWAV;
 				break;
 
@@ -839,15 +854,18 @@ void CPlayer::Choice_GuardSound(_uint iAttackStrength, _uint iHitType, _bool isP
 				break;
 
 			case HIT_METAL:
-				iRand += 3;
-				_itow_s(iRand, szBuffer, 10);
-				strSoundKey = TEXT("SE_PC_SK_GetHit_M_Guard_Metal_0");
-				strSoundKey = strSoundKey + szBuffer + strWAV;
+				strSoundKey = TEXT("SE_PC_SK_GetHit_S_Guard_Metal_01");
 				break;
 
 			case HIT_FIRE:
 				_itow_s(iRand, szBuffer, 10);
-				strSoundKey = TEXT("SE_PC_SK_Hit_Fire_M_0");
+				strSoundKey = TEXT("SE_PC_SK_GetHit_M_Guard_Fire_0");
+				strSoundKey = strSoundKey + szBuffer + strWAV;
+				break;
+
+			case HIT_ELECTRIC:
+				_itow_s(iRand, szBuffer, 10);
+				strSoundKey = TEXT("SE_PC_SK_GetHit_M_Guard_Electric_0");
 				strSoundKey = strSoundKey + szBuffer + strWAV;
 				break;
 
