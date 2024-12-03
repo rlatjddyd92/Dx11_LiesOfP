@@ -18,7 +18,7 @@ HRESULT CState_Player_SophiaWalk::Initialize(_uint iStateNum, void* pArg)
 
     m_pTrackPos = pDesc->pPrevTrackPos;
 
-    m_iAnimation_SophiaWalk = m_pPlayer->Get_Model()->Find_AnimationIndex("AS_Pino_Walking_SophiaDead_Cine", 4.f);
+    m_iAnimation_SophiaWalk = m_pPlayer->Get_Model()->Find_AnimationIndex("AS_Pino_Walking_SophiaDead_Cine", 2.f);
 
     m_iStateNum = iStateNum;
 
@@ -38,6 +38,7 @@ void CState_Player_SophiaWalk::Update(_float fTimeDelta)
 {
     if (End_Check())
     {
+        m_pPlayer->Get_Model()->ReadyDenyNextTranslate(4);
         m_pPlayer->Change_State(CPlayer::OH_IDLE);
     }
 

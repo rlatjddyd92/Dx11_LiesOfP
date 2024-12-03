@@ -18,8 +18,8 @@ HRESULT CState_Player_Teleport::Initialize(_uint iStateNum, void* pArg)
 
     m_pTrackPos = pDesc->pPrevTrackPos;
 
-    m_iAnimation_TeleportStart = m_pPlayer->Get_Model()->Find_AnimationIndex("AS_Pino_Teleport_Start", 2.5f);
-    m_iAnimation_TeleportEnd = m_pPlayer->Get_Model()->Find_AnimationIndex("AS_Pino_Teleport_End", 2.5f);
+    m_iAnimation_TeleportStart = m_pPlayer->Get_Model()->Find_AnimationIndex("AS_Pino_Teleport_Start", 1.5f);
+    m_iAnimation_TeleportEnd = m_pPlayer->Get_Model()->Find_AnimationIndex("AS_Pino_Teleport_End", 1.5f);
 
     m_iStateNum = iStateNum;
 
@@ -35,6 +35,8 @@ HRESULT CState_Player_Teleport::Start_State(void* pArg)
     m_vRimLightColor = _Vec4(0.f, 0.f, 0.f, 0.5f);
 
     m_isEnd_Teleport = false;
+
+    m_pPlayer->Play_Sound(CPawn::PAWN_SOUND_EFFECT1, TEXT("SE_PC_MT_Teleport_Start.wav"));
 
     return S_OK;
 }
@@ -55,6 +57,8 @@ void CState_Player_Teleport::Update(_float fTimeDelta)
         {
             m_isEnd_Teleport = false;
             m_pPlayer->Change_Animation(m_iAnimation_TeleportEnd, false, 0.3f);
+
+            m_pPlayer->Play_Sound(CPawn::PAWN_SOUND_EFFECT2, TEXT("SE_PC_MT_Teleport_End.wav"));
         }
         else if (iFrame > 80 )
         {

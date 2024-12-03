@@ -30,6 +30,9 @@ private:
 private:
     _bool               End_Check();
 
+private:
+    _bool               m_isPlaySound = {};
+
 public:
     static CState_Player_Lift* Create(class CFsm* pFsm, class CPlayer* pPlayer, _uint iStateNum, void* pArg = nullptr);
     virtual void Free() override;
