@@ -721,6 +721,8 @@ void CController_EffectTool::TE_Check()
 		ImGui::RadioButton("PreRotation", (_int*)&m_TextureDesc.DefaultDesc.eBillboardType, CTexture_Effect::TYPE_PREROTATION);
 		ImGui::SameLine();
 		ImGui::RadioButton("PreDir", (_int*)&m_TextureDesc.DefaultDesc.eBillboardType, CTexture_Effect::TYPE_PREDIR);
+		ImGui::SameLine();
+		ImGui::RadioButton("Non Billboard", (_int*)&m_TextureDesc.DefaultDesc.eBillboardType, CTexture_Effect::TYPE_NONBILLBOARD);
 
 		ImGui::SeparatorText("Loop");
 		ImGui::Checkbox("Texture Loop", &m_TextureDesc.DefaultDesc.bLoop);

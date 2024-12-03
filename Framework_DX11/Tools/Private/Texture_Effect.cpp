@@ -38,6 +38,9 @@ HRESULT CTexture_Effect::Initialize(void* pArg)
 
     m_pTransformCom->Set_Scaled(m_DefaultDesc.vStartScale.x, m_DefaultDesc.vStartScale.y, m_DefaultDesc.vStartScale.z);
 
+    if (TYPE_NONBILLBOARD == m_DefaultDesc.eBillboardType)
+        m_pTransformCom->Rotation(m_DefaultDesc.fStarRotation, 0.f, 0.f);
+    
     m_InitDesc = *pDesc;
 
     return S_OK;
@@ -83,6 +86,10 @@ void CTexture_Effect::Update(_float fTimeDelta)
 
     case TYPE_PREDIR:
         Preserve_Dir_Billboard(vCurrentScale, vLook);
+        break;
+
+    case TYPE_NONBILLBOARD:
+        NonBillboard();
         break;
     }
 
@@ -309,6 +316,13 @@ void CTexture_Effect::Billboard(_Vec3 vCurrentScale, _Vec3 vLook)
     XMStoreFloat3((_float3*)&m_WorldMatrix.m[0][0], vRight * vCurrentScale.x);
     XMStoreFloat3((_float3*)&m_WorldMatrix.m[1][0], vUp * vCurrentScale.y);
     XMStoreFloat3((_float3*)&m_WorldMatrix.m[2][0], vLook * vCurrentScale.z);
+}
+
+void CTexture_Effect::NonBillboard()
+{
+    _float fCurrentRotate = m_DefaultDesc.fRotationPerSecond * m_fAccumulateTime;
+
+    m_pTransformCom->Rotation(m_DefaultDesc.fStarRotation, fCurrentRotate, 0.f);
 }
 
 CTexture_Effect* CTexture_Effect::Create(ID3D11Device* pDevice, ID3D11DeviceContext* pContext)
