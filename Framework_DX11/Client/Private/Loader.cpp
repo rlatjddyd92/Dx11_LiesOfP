@@ -984,6 +984,9 @@ HRESULT CLoader::Ready_Prototype()
 	if (FAILED(m_pGameInstance->Add_Prototype(TEXT("Prototype_GameObject_JumpMagic"),
 		CAObj_JumpMagic::Create(m_pDevice, m_pContext))))
 		return E_FAIL;
+	if (FAILED(m_pGameInstance->Add_Prototype(TEXT("Prototype_GameObject_Wave"),
+		CAObj_Wave::Create(m_pDevice, m_pContext))))
+		return E_FAIL;
 
 	// 특정 위치에 판정 없이 소환되는 이펙트
 	if (FAILED(m_pGameInstance->Add_Prototype(TEXT("Prototype_GameObject_SpotEffect"),

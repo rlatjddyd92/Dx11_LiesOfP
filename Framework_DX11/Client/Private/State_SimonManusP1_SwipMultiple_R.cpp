@@ -163,7 +163,7 @@ void CState_SimonManusP1_SwipMultiple_R::Control_Sound(_double CurTrackPos)
             if ((CurTrackPos >= 80.f && CurTrackPos <= 90.f) ||
                 (CurTrackPos >= 110.f && CurTrackPos <= 120.f))
             {
-                m_pMonster->Play_Sound(CPawn::PAWN_SOUND_EFFECT1, TEXT("SE_NPC_FX_Destruction_Stone_Parts_03"));
+                m_pMonster->Play_Sound(CPawn::PAWN_SOUND_EFFECT1, TEXT("SE_PC_SK_Smash_Crystal_Stone_H_03.wav"));
                 m_bSwing_Sound = true;
             }
         }
@@ -180,7 +180,7 @@ void CState_SimonManusP1_SwipMultiple_R::Control_Sound(_double CurTrackPos)
     {
         if (!m_bSwing_Sound)
         {
-            m_pMonster->Play_Sound(CPawn::PAWN_SOUND_EFFECT1, TEXT("SE_NPC_FX_Destruction_Stone_Parts_03"));
+            m_pMonster->Play_Sound(CPawn::PAWN_SOUND_EFFECT1, TEXT("SE_PC_SK_Smash_Crystal_Stone_H_03.wav"));
             m_bSwing_Sound = true;
         }
     }

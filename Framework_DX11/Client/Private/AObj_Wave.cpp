@@ -1,26 +1,26 @@
 #include "stdafx.h"
-#include "AObj_SlideMagic.h"
+#include "AObj_Wave.h"
 
 #include "GameInstance.h"
 
 #include "Effect_Manager.h"
 
-CAObj_SlideMagic::CAObj_SlideMagic(ID3D11Device* pDevice, ID3D11DeviceContext* pContext)
+CAObj_Wave::CAObj_Wave(ID3D11Device* pDevice, ID3D11DeviceContext* pContext)
     : CAttackObject{ pDevice, pContext }
 {
 }
 
-CAObj_SlideMagic::CAObj_SlideMagic(const CGameObject& Prototype)
+CAObj_Wave::CAObj_Wave(const CGameObject& Prototype)
     : CAttackObject{ Prototype }
 {
 }
 
-HRESULT CAObj_SlideMagic::Initialize_Prototype()
+HRESULT CAObj_Wave::Initialize_Prototype()
 {
     return S_OK;
 }
 
-HRESULT CAObj_SlideMagic::Initialize(void* pArg)
+HRESULT CAObj_Wave::Initialize(void* pArg)
 {
     GAMEOBJECT_DESC GameObjDesc{};
     if (FAILED(__super::Initialize(&GameObjDesc)))
@@ -36,8 +36,8 @@ HRESULT CAObj_SlideMagic::Initialize(void* pArg)
         return E_FAIL;
 
     m_fDamageAmount = 20.f;
-    m_fLifeDuration = 3.f;
-    m_fSpeed = 10.f;
+    m_fLifeDuration = 8.f;
+    m_fSpeed = 6.f;
 
     m_pColliderCom->IsActive(true);
 
@@ -46,12 +46,12 @@ HRESULT CAObj_SlideMagic::Initialize(void* pArg)
     return S_OK;
 }
 
-void CAObj_SlideMagic::Priority_Update(_float fTimeDelta)
+void CAObj_Wave::Priority_Update(_float fTimeDelta)
 {
     m_pEffect->Priority_Update(fTimeDelta);
 }
 
-void CAObj_SlideMagic::Update(_float fTimeDelta)
+void CAObj_Wave::Update(_float fTimeDelta)
 {
     if (m_fLifeTime >= m_fLifeDuration)
     {
@@ -78,17 +78,17 @@ void CAObj_SlideMagic::Update(_float fTimeDelta)
     m_pEffect->Update(fTimeDelta);
 }
 
-void CAObj_SlideMagic::Late_Update(_float fTimeDelta)
+void CAObj_Wave::Late_Update(_float fTimeDelta)
 {
     m_pEffect->Late_Update(fTimeDelta);
-    if (m_fLifeTime < m_fLifeDuration)
+    if (m_isDead)
     {
         m_pGameInstance->Add_ColliderList(m_pColliderCom);
         m_pGameInstance->Add_DebugObject(m_pColliderCom);
     }
 }
 
-HRESULT CAObj_SlideMagic::Render()
+HRESULT CAObj_Wave::Render()
 {
     //if (FAILED(__super::Render()))
     //    return E_FAIL;
@@ -96,7 +96,7 @@ HRESULT CAObj_SlideMagic::Render()
     return S_OK;
 }
 
-HRESULT CAObj_SlideMagic::Render_LightDepth()
+HRESULT CAObj_Wave::Render_LightDepth()
 {
     //if (FAILED(__super::Render_LightDepth()))
     //    return E_FAIL;
@@ -104,7 +104,7 @@ HRESULT CAObj_SlideMagic::Render_LightDepth()
     return S_OK;
 }
 
-void CAObj_SlideMagic::OnCollisionEnter(CGameObject* pOther)
+void CAObj_Wave::OnCollisionEnter(CGameObject* pOther)
 {
     //pOther check
     if (pOther->Get_Tag() == TEXT("Player"))
@@ -128,23 +128,31 @@ void CAObj_SlideMagic::OnCollisionEnter(CGameObject* pOther)
     }
 }
 
-void CAObj_SlideMagic::OnCollisionStay(CGameObject* pOther)
+void CAObj_Wave::OnCollisionStay(CGameObject* pOther)
 {
 }
 
-void CAObj_SlideMagic::OnCollisionExit(CGameObject* pOther)
+void CAObj_Wave::OnCollisionExit(CGameObject* pOther)
 {
 }
 
-HRESULT CAObj_SlideMagic::Ready_Components()
+HRESULT CAObj_Wave::Ready_Components()
 {
     if (FAILED(__super::Ready_Components()))
         return E_FAIL;
 
     /* FOR.Com_Collider */
+    //CBounding_OBB::BOUNDING_OBB_DESC      ColliderDesc{};
+    //ColliderDesc.vCenter = _float3(0.f, 0.3f, 0.f);
+    //ColliderDesc.vExtents = _float3{1.f, 1.f, 1.f};
+    //ColliderDesc.vAngles = _float3{0.f, 0.f, 0.f};
+    //
+    //if (FAILED(__super::Add_Component(LEVEL_STATIC, TEXT("Prototype_Component_Collider_OBB"),
+    //    TEXT("Com_Collider"), reinterpret_cast<CComponent**>(&m_pColliderCom), &ColliderDesc)))
+    //    return E_FAIL;
     CBounding_Sphere::BOUNDING_SPHERE_DESC      ColliderDesc{};
     ColliderDesc.vCenter = _float3(0.f, 0.f, 0.f);
-    ColliderDesc.fRadius = 0.5f;
+    ColliderDesc.fRadius = 1.5f;
 
     if (FAILED(__super::Add_Component(LEVEL_STATIC, TEXT("Prototype_Component_Collider_Sphere"),
         TEXT("Com_Collider"), reinterpret_cast<CComponent**>(&m_pColliderCom), &ColliderDesc)))
@@ -161,9 +169,9 @@ HRESULT CAObj_SlideMagic::Ready_Components()
     return S_OK;
 }
 
-CAObj_SlideMagic* CAObj_SlideMagic::Create(ID3D11Device* pDevice, ID3D11DeviceContext* pContext)
+CAObj_Wave* CAObj_Wave::Create(ID3D11Device* pDevice, ID3D11DeviceContext* pContext)
 {
-    CAObj_SlideMagic* pInstance = new CAObj_SlideMagic(pDevice, pContext);
+    CAObj_Wave* pInstance = new CAObj_Wave(pDevice, pContext);
 
     if (FAILED(pInstance->Initialize_Prototype()))
     {
@@ -174,20 +182,20 @@ CAObj_SlideMagic* CAObj_SlideMagic::Create(ID3D11Device* pDevice, ID3D11DeviceCo
     return pInstance;
 }
 
-CGameObject* CAObj_SlideMagic::Clone(void* pArg)
+CGameObject* CAObj_Wave::Clone(void* pArg)
 {
-    CAObj_SlideMagic* pInstance = new CAObj_SlideMagic(*this);
+    CAObj_Wave* pInstance = new CAObj_Wave(*this);
 
     if (FAILED(pInstance->Initialize(pArg)))
     {
-        MSG_BOX(TEXT("Failed to Cloned : CAObj_SlideMagic"));
+        MSG_BOX(TEXT("Failed to Cloned : CAObj_Wave"));
         Safe_Release(pInstance);
     }
 
     return pInstance;
 }
 
-void CAObj_SlideMagic::Free()
+void CAObj_Wave::Free()
 {
     __super::Free();
 
