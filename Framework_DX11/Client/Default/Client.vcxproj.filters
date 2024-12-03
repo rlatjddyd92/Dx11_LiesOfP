@@ -805,6 +805,9 @@
     </Filter>
     <Filter Include="03.GameInterface_Controller\00.UIManager\00.UIPage\00.UIPage_Main %2880%25%29">
       <UniqueIdentifier>{00ab63cd-e889-48c6-9ab0-2ba67c8a067b}</UniqueIdentifier>
+	</Filter>
+    <Filter Include="02.GameObjects\12.AttackObject\SimonManus\Wave">
+      <UniqueIdentifier>{3fbe7865-eaf5-4108-95d7-66b4e0d1fc8a}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -1468,6 +1471,9 @@
     </ClInclude>
     <ClInclude Include="..\Public\UIPage_Inform.h">
       <Filter>03.GameInterface_Controller\00.UIManager\00.UIPage\15.UIPage_Inform %280%25%29</Filter>
+	</ClInclude>
+    <ClInclude Include="..\Public\AObj_Wave.h">
+      <Filter>02.GameObjects\12.AttackObject\SimonManus\Wave</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -2101,6 +2107,9 @@
     </ClCompile>
     <ClCompile Include="..\Private\UIPage_Inform.cpp">
       <Filter>03.GameInterface_Controller\00.UIManager\00.UIPage\15.UIPage_Inform %280%25%29</Filter>
+	</ClCompile>
+    <ClCompile Include="..\Private\AObj_Wave.cpp">
+      <Filter>02.GameObjects\12.AttackObject\SimonManus\Wave</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

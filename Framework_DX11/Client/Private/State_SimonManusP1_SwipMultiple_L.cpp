@@ -21,6 +21,7 @@ HRESULT CState_SimonManusP1_SwipMultiple_L::Initialize(_uint iStateNum, void* pA
 HRESULT CState_SimonManusP1_SwipMultiple_L::Start_State(void* pArg)
 {
     m_pMonster->Change_Animation(AN_ROUTE_FIRST, false, 0.1f, 0);
+    m_bSwing_Sound = false;
 
     return S_OK;
 }
@@ -33,7 +34,7 @@ void CState_SimonManusP1_SwipMultiple_L::Update(_float fTimeDelta)
         {
         case 0:
             m_pMonster->Change_Animation(AN_ROUTE_LAST, false, 0.2f, 0);
-
+            m_bSwing_Sound = false;
             break;
 
         case 1:
@@ -51,6 +52,7 @@ void CState_SimonManusP1_SwipMultiple_L::Update(_float fTimeDelta)
     _double CurTrackPos = m_pMonster->Get_CurrentTrackPos();
 
     Collider_Check(CurTrackPos);
+    Control_Sound(CurTrackPos);
     Effect_Check(CurTrackPos);
 
 }
@@ -149,6 +151,42 @@ void CState_SimonManusP1_SwipMultiple_L::Effect_Check(_double CurTrackPos)
             m_pMonster->Reset_WeaponOverlapCheck();
             m_bResetCheck = true;
         }
+    }
+}
+
+void CState_SimonManusP1_SwipMultiple_L::Control_Sound(_double CurTrackPos)
+{
+    if (m_iRouteTrack == 0)
+    {
+        if (!m_bSwing_Sound)
+        {
+            if ((CurTrackPos >= 170.f && CurTrackPos <= 180.f))
+            {
+                m_pMonster->Play_Sound(CPawn::PAWN_SOUND_EFFECT1, TEXT("SE_PC_SK_Smash_Crystal_Stone_H_03.wav"));
+                m_bSwing_Sound = true;
+            }
+        }
+        
+    }
+    else
+    {
+        if (!m_bSwing_Sound)
+        {
+            if ((CurTrackPos >= 20.f && CurTrackPos <= 30.f)||
+                (CurTrackPos >= 60.f && CurTrackPos <= 70.f))
+            {
+                m_pMonster->Play_Sound(CPawn::PAWN_SOUND_EFFECT1, TEXT("SE_PC_SK_Smash_Crystal_Stone_H_03.wav"));
+                m_bSwing_Sound = true;
+            }
+        }
+        else
+        {
+            if ((CurTrackPos > 30.f && CurTrackPos <= 50.f))
+            {
+                m_bSwing_Sound = false;
+            }
+        }
+
     }
 }
 

@@ -26,6 +26,7 @@ HRESULT CState_SimonManusP1_SwingDown_Swing_L::Start_State(void* pArg)
 
     m_isSwing = true;
     m_bStampEffect = false;
+    m_bSwing_Sound = false;
 
     return S_OK;
 }
@@ -51,6 +52,7 @@ void CState_SimonManusP1_SwingDown_Swing_L::Update(_float fTimeDelta)
     _double CurTrackPos = m_pMonster->Get_CurrentTrackPos();
 
     Collider_Check(CurTrackPos);
+    Control_Sound(CurTrackPos);
     Effect_Check(CurTrackPos);
 }
 
@@ -90,7 +92,7 @@ void CState_SimonManusP1_SwingDown_Swing_L::Collider_Check(_double CurTrackPos)
 {
     if (m_iRouteTrack == 0)
     {
-        if (CurTrackPos >= 65.f && CurTrackPos <= 80.f)
+        if (CurTrackPos >= 65.f && CurTrackPos <= 75.f)
         {
             m_pMonster->Active_CurrentWeaponCollider(1);
         }
@@ -118,7 +120,7 @@ void CState_SimonManusP1_SwingDown_Swing_L::Effect_Check(_double CurTrackPos)
     {
         if (!m_bStampEffect)
         {
-            if ((CurTrackPos >= 150.f))
+            if ((CurTrackPos >= 75.f))
             {
                 CEffectObject::EFFECTOBJ_DESC Desc{};
                 Desc.fLifeDuration = 1.5f;
@@ -156,17 +158,33 @@ void CState_SimonManusP1_SwingDown_Swing_L::Control_Sound(_double CurTrackPos)
     {
         if (!m_bStampEffect)
         {
-            if (CurTrackPos >= 150.f)
+            if (CurTrackPos >= 75.f)
             {
-                m_pMonster->Play_Sound(CPawn::PAWN_SOUND_EFFECT1, TEXT("SE_NPC_SK_FX_Ground_Exp_L_03"));
+                m_pMonster->Play_Sound(CPawn::PAWN_SOUND_EFFECT1, TEXT("SE_NPC_SK_FX_Ground_Exp_L_03.wav"));
             }
         }
     }
     else
     {
-        if (CurTrackPos >= 40.f)
+        if (!m_bSwing_Sound)
         {
-
+            if (CurTrackPos >= 40.f && CurTrackPos <= 45.f)
+            {
+                m_pMonster->Play_Sound(CPawn::PAWN_SOUND_EFFECT1, TEXT("SE_NPC_SK_FX_Ground_Exp_M_02.wav"));
+                m_bSwing_Sound = true;
+            }
+            if (CurTrackPos >= 70.f)
+            {
+                m_pMonster->Play_Sound(CPawn::PAWN_SOUND_EFFECT1, TEXT("SE_PC_SK_Smash_Crystal_Stone_H_03.wav"));
+                m_bSwing_Sound = true;
+            }
+        }
+        else
+        {
+            if (CurTrackPos > 45.f && CurTrackPos <= 50.f)
+            {
+                m_bSwing_Sound = false;
+            }
         }
     }
 }

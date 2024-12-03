@@ -173,6 +173,11 @@ void CSimonManus::Update(_float fTimeDelta)
 
 	m_pFsmCom->Update(fTimeDelta);
 
+	for (_uint i = 0; i < PAWN_SOUND_END; ++i)
+	{
+		m_pSoundCom[i]->Update(fTimeDelta);
+	}
+
 	for (auto& pEffect : m_Effects)
 	{
 		if (!pEffect->Get_Dead())
@@ -191,8 +196,6 @@ void CSimonManus::Late_Update(_float fTimeDelta)
 
 	m_pRigidBodyCom->Update(fTimeDelta);
 	
-	m_pWeapon->Active_Collider();
-
 	m_pWeapon->Late_Update(fTimeDelta);
 
 	m_pGameInstance->Add_ColliderList(m_pColliderCom);

@@ -4,6 +4,8 @@
 #include "Model.h"
 #include "SimonManus.h"
 
+#include "AttackObject.h"
+
 CState_SimonManusP2_Wave::CState_SimonManusP2_Wave(CFsm* pFsm, CMonster* pMonster)
     :CState{ pFsm }
     , m_pMonster{ pMonster }
@@ -22,6 +24,8 @@ HRESULT CState_SimonManusP2_Wave::Start_State(void* pArg)
 {
     m_pMonster->Change_Animation(AN_MAGICWAVE, false, 0.1f, 0);
 
+    m_bWave = false;
+
     return S_OK;
 }
 
@@ -32,6 +36,8 @@ void CState_SimonManusP2_Wave::Update(_float fTimeDelta)
         m_pMonster->Change_State(CSimonManus::IDLE);
         return;
     }
+    _double CurTrackPos = m_pMonster->Get_CurrentTrackPos();
+    Projectile_Check(CurTrackPos);
 }
 
 void CState_SimonManusP2_Wave::End_State()
@@ -42,6 +48,25 @@ void CState_SimonManusP2_Wave::End_State()
 _bool CState_SimonManusP2_Wave::End_Check()
 {
     return m_pMonster->Get_EndAnim(AN_MAGICWAVE);
+}
+
+void CState_SimonManusP2_Wave::Projectile_Check(_double CurTrackPos)
+{
+    if (!m_bWave)
+    {
+        if (CurTrackPos >= 40.f)
+        {
+            CAttackObject::ATKOBJ_DESC Desc;
+            _float4x4 WorldMat{};
+            XMStoreFloat4x4(&WorldMat, (*m_pMonster->Get_BoneCombinedMat(m_pMonster->Get_UFBIndex(UFB_HAND_LEFT)) * (*m_pMonster->Get_Transform()->Get_WorldMatrix_Ptr())));
+            Desc.vPos = _Vec3{ WorldMat._41, m_pMonster->Get_Transform()->Get_State(CTransform::STATE_POSITION).y + 1.f, WorldMat._43};
+            Desc.vDir = _Vec3{ XMVector3Normalize(m_pMonster->Get_TargetDir()) };
+
+            m_pGameInstance->Add_CloneObject_ToLayer(LEVEL_GAMEPLAY, TEXT("Monster_Attack"), TEXT("Prototype_GameObject_Wave"), &Desc);
+
+            m_bWave = true;
+        }
+    }
 }
 
 CState_SimonManusP2_Wave* CState_SimonManusP2_Wave::Create(CFsm* pFsm, CMonster* pMonster, _uint iStateNum, void* pArg)

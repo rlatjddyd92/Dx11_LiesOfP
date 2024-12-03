@@ -26,8 +26,11 @@ public:
 private:
     class CMonster* m_pMonster = { nullptr };
 
+    _bool           m_bWave = { false };
+
 private:
     _bool               End_Check();
+    void                Projectile_Check(_double CurTrackPos);
 
 public:
     static CState_SimonManusP2_Wave* Create(class CFsm* pFsm, class CMonster* pMonster, _uint iStateNum, void* pArg = nullptr);
