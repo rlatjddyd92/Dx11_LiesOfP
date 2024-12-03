@@ -7,11 +7,11 @@ END
 
 BEGIN(Client)
 
-class CState_Player_SophiaWalk : public CState
+class CState_Player_SophiaHand : public CState
 {
 public:
-    CState_Player_SophiaWalk(class CFsm* pFsm, class CPlayer* pPlayer);
-    virtual ~CState_Player_SophiaWalk() = default;
+    CState_Player_SophiaHand(class CFsm* pFsm, class CPlayer* pPlayer);
+    virtual ~CState_Player_SophiaHand() = default;
 
 public:
     virtual HRESULT Initialize(_uint iStateNum, void* pArg) override;
@@ -22,17 +22,15 @@ public:
 private:
     class CPlayer* m_pPlayer = { nullptr };
 
-    _uint               m_iAnimation_SophiaWalk = {};
+    _uint               m_iAnimation_SophiaHand = {};
 
     _double* m_pTrackPos = { nullptr };
-
-    _Vec3       m_vRootMoveStack{};
 
 private:
     _bool               End_Check();
 
 public:
-    static CState_Player_SophiaWalk* Create(class CFsm* pFsm, class CPlayer* pPlayer, _uint iStateNum, void* pArg = nullptr);
+    static CState_Player_SophiaHand* Create(class CFsm* pFsm, class CPlayer* pPlayer, _uint iStateNum, void* pArg = nullptr);
     virtual void Free() override;
 
 };

@@ -1499,6 +1499,12 @@
     <ClInclude Include="..\Public\State_Player_SophiaWalk.h">
       <Filter>05.Fsm\Player\CutScene\Sophia\Walk</Filter>
     </ClInclude>
+    <ClInclude Include="State_Player_SophiaHand.h">
+      <Filter>05.Fsm\Player\CutScene\Sophia\Hand</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Public\State_Player_SophiaHandEnd.h">
+      <Filter>05.Fsm\Player\CutScene\Sophia\HandEnd</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Client.cpp">
@@ -2140,6 +2146,12 @@
     </ClCompile>
     <ClCompile Include="..\Private\State_Player_SophiaWalk.cpp">
       <Filter>05.Fsm\Player\CutScene\Sophia\Walk</Filter>
+    </ClCompile>
+    <ClCompile Include="State_Player_SophiaHand.cpp">
+      <Filter>05.Fsm\Player\CutScene\Sophia\Hand</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Private\State_Player_SophiaHandEnd.cpp">
+      <Filter>05.Fsm\Player\CutScene\Sophia\HandEnd</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

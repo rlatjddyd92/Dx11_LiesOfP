@@ -126,6 +126,9 @@
 #include "D:\GitProject\Dx11_LiesOfP\Framework_DX11\Client\Private\State_Player_Lift.cpp"
 
 
+#include "D:\GitProject\Dx11_LiesOfP\Framework_DX11\Client\Private\State_Player_SophiaHandEnd.cpp"
+
+
 #include "D:\GitProject\Dx11_LiesOfP\Framework_DX11\Client\Private\State_Player_SophiaWalk.cpp"
 
 
@@ -625,4 +628,7 @@
 
 
 #include "D:\GitProject\Dx11_LiesOfP\Framework_DX11\Client\Default\Client.cpp"
+
+
+#include "D:\GitProject\Dx11_LiesOfP\Framework_DX11\Client\Default\State_Player_SophiaHand.cpp"
 

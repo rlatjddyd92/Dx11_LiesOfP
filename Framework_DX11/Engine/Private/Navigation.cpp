@@ -238,9 +238,9 @@ _float CNavigation::SetUp_OnCell(CTransform* pTransform, _float fOffset, _float 
 	_float x = playerPos.x;
 	_float z = playerPos.z;
 
-	_float y = -(A * x + C * z + D) / B;
+	_float y = -(A * x + C * z + D) / B + fOffset;
 
-	_Vec3 vWorldPos = _Vec3(x, y, z);
+	_Vec3 vWorldPos = _Vec3(x, y + fOffset, z);
 
 	pTransform->Set_State(CTransform::STATE_POSITION, vWorldPos);
 

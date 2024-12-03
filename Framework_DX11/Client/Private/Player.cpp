@@ -72,6 +72,8 @@
 
 #include "State_Player_OpenSophiaDoor.h"
 #include "State_Player_SophiaWalk.h"
+#include "State_Player_SophiaHand.h"
+#include "State_Player_SophiaHandEnd.h"
 
 // 24-11-27 김성용
 // 게임 인터페이스와 연결을 위해 추가 
@@ -198,7 +200,7 @@ void CPlayer::Update(_float fTimeDelta)
 	}
 	if (KEY_TAP(KEY::K))
 	{
-		Change_State(SOPHIA_DOOR_OPEN);
+		Change_State(SOPHIA_WALK);
 		//Calc_DamageGain(5.f, m_pTransformCom->Get_WorldMatrix().Forward() + m_pTransformCom->Get_WorldMatrix().Translation());
 	}
 }
@@ -658,6 +660,8 @@ HRESULT CPlayer::Ready_FSM()
 	/* 소피아 컷신 */
 	m_pFsmCom->Add_State(CState_Player_OpenSophiaDoor::Create(m_pFsmCom, this, SOPHIA_DOOR_OPEN, &Desc));
 	m_pFsmCom->Add_State(CState_Player_SophiaWalk::Create(m_pFsmCom, this, SOPHIA_WALK, &Desc));
+	m_pFsmCom->Add_State(CState_Player_SophiaHand::Create(m_pFsmCom, this, SOPHIA_HAND, &Desc));
+	m_pFsmCom->Add_State(CState_Player_SophiaHandEnd::Create(m_pFsmCom, this, SOPHIA_HANDEND, &Desc));
 
 	m_pFsmCom->Set_State(OH_IDLE);
 

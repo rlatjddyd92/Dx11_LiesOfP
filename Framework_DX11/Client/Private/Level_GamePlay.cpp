@@ -44,8 +44,8 @@ HRESULT CLevel_GamePlay::Initialize()
 	if (FAILED(Ready_Layer_Paticle()))
 		return E_FAIL;	
 
-	//if (FAILED(Read_Map_Data()))
-	//	return E_FAIL;	
+	if (FAILED(Read_Map_Data()))
+		return E_FAIL;	
 
 	// 24-11-19 김성용
 	// 게임 인터페이스를 인게임 모드로 전환
