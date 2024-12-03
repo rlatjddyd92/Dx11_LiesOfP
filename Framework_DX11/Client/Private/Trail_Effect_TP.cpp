@@ -105,6 +105,8 @@ HRESULT CTrail_Effect_TP::Render()
 		return E_FAIL;
 	if (FAILED(m_pShaderCom->Bind_RawValue("g_fRatio", &m_fAlpha, sizeof(m_fAlpha))))
 		return E_FAIL;
+	if (FAILED(m_pShaderCom->Bind_RawValue("g_vTileRepeat", &m_DefaultDesc.vTileRepeat, sizeof(m_DefaultDesc.vTileRepeat))))
+		return E_FAIL;
 
 	if (FAILED(m_pShaderCom->Begin(m_DefaultDesc.iShaderIndex)))
 		return E_FAIL;
