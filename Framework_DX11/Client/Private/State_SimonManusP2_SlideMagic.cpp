@@ -162,8 +162,29 @@ void CState_SimonManusP2_SlideMagic::Effect_Check(_double CurTrackPos)
 
         m_pGameInstance->Add_CloneObject_ToLayer(LEVEL_GAMEPLAY, TEXT("Monster_Attack"), TEXT("Prototype_GameObject_SlideMagic"), &Desc);
 
+        m_pMonster->Play_Sound(CPawn::PAWN_SOUND_EFFECT1, TEXT("SE_NPC_SK_FX_Ground_Exp_L_03.wav"));
+        
     }
 
+}
+
+void CState_SimonManusP2_SlideMagic::Control_Sound(_double CurTrackPos)
+{
+    if (!m_bMagicSound)
+    {
+        if (m_iCurAnim == AN_SLIDE_LEFT)
+        {
+            if ((CurTrackPos >= 30.f && CurTrackPos <= 40.f))
+            {
+            }
+        }
+        else
+        {
+            if ((CurTrackPos >= 15.f && CurTrackPos <= 25.f))
+            {
+            }
+        }
+    }
 }
 
 CState_SimonManusP2_SlideMagic* CState_SimonManusP2_SlideMagic::Create(CFsm* pFsm, CMonster* pMonster, _uint iStateNum, void* pArg)

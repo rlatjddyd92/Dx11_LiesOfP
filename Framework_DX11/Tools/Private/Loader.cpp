@@ -294,7 +294,7 @@ HRESULT CLoader::Ready_Resources_For_ToolLevel()
 	if (FAILED(m_pGameInstance->Add_Prototype(LEVEL_TOOL, TEXT("Prototype_Component_VIBuffer_Rect"),
 		CVIBuffer_Rect::Create(m_pDevice, m_pContext))))
 		return E_FAIL;
-
+	 
 	/* For. Prototype_Component_VIBuffer_Cube */
 	if (FAILED(m_pGameInstance->Add_Prototype(LEVEL_TOOL, TEXT("Prototype_Component_VIBuffer_Cube"),
 		CVIBuffer_Cube::Create(m_pDevice, m_pContext))))
@@ -305,7 +305,6 @@ HRESULT CLoader::Ready_Resources_For_ToolLevel()
 	CModel* pModel = { nullptr };
 	PreTransformMatrix = XMMatrixScaling(0.01f, 0.01f, 0.01f) * XMMatrixRotationY(XMConvertToRadians(270.f));
 
-	int m_iModelCount = { 0 };
 	if (false)
 	{
 		//"../Bin/ModelData/Anim/PlayerExample/PlayerExample.dat"	일반 바이너리

@@ -538,12 +538,23 @@ void CModel::Update_Animation(_float fTimeDelta)
 			{
 				vScale = XMLoadFloat3(&tNextKeyFrame.vScale);
 				vRotation = XMLoadFloat4(&tNextKeyFrame.vRotation);
-				if (m_UFBIndices[UFB_ROOT] == CurrentChannels[i]->Get_BoneIndex())
+				_int iBoneIndex = CurrentChannels[i]->Get_BoneIndex();
+				if (m_UFBIndices[UFB_ROOT] == iBoneIndex)
 				{
 					vTranslation = _vector{ 0, 0, 0, 1 };
 				}
 				else
-					vTranslation = XMVectorSetW(XMLoadFloat3(&tNextKeyFrame.vTranslation), 1.f);
+				{
+					if (m_bDenyTrans && iBoneIndex == m_iDenyBoneIndex)
+					{
+						vTranslation = _vector{ 0, 0, 0, 1 };
+					}
+					else
+					{
+						vTranslation = XMVectorSetW(XMLoadFloat3(&tNextKeyFrame.vTranslation), 1.f);
+					}
+				}
+					
 
 				isChangeEnd = true;
 			}
@@ -558,14 +569,22 @@ void CModel::Update_Animation(_float fTimeDelta)
 				_vector		vSourTranslation{};
 				_vector		vDestTranslation{};
 
-				if (m_UFBIndices[UFB_ROOT] == CurrentChannels[i]->Get_BoneIndex())
+				_int iBoneIndex = CurrentChannels[i]->Get_BoneIndex();
+				if (m_UFBIndices[UFB_ROOT] == iBoneIndex)
 				{
 					vDestTranslation = vSourTranslation = _vector{ 0, 0, 0, 1 };
 				}
 				else
 				{
-					vSourTranslation = XMVectorSetW(XMLoadFloat3(&tCurrentKeyFrame.vTranslation), 1.f);
-					vDestTranslation = XMVectorSetW(XMLoadFloat3(&tNextKeyFrame.vTranslation), 1.f);
+					if (m_bDenyTrans && iBoneIndex == m_iDenyBoneIndex)
+					{
+						vDestTranslation = vSourTranslation = _vector{ 0, 0, 0, 1 };
+					}
+					else
+					{
+						vSourTranslation = XMVectorSetW(XMLoadFloat3(&tCurrentKeyFrame.vTranslation), 1.f);
+						vDestTranslation = XMVectorSetW(XMLoadFloat3(&tNextKeyFrame.vTranslation), 1.f);
+					}
 				}
 
 				_float		fRatio = m_tChaneAnimDesc.fChangeTime / m_tChaneAnimDesc.fChangeDuration;
@@ -593,13 +612,14 @@ void CModel::Update_Animation(_float fTimeDelta)
 			//m_Animations[m_iCurrentAnimIndex]->Reset();
 
 			//m_iCurrentFrame = m_Animations[m_iCurrentAnimIndex].
-			
+			m_bDenyTrans = false;
+
 			m_vRootMoveStack = m_vCurRootMove = _vector{ 0, 0, 0, 1 };
 			m_iCurrentAnimIndex = m_tChaneAnimDesc.iNextAnimIndex;
 			ZeroMemory(&m_tChaneAnimDesc, sizeof(CHANGEANIMATION_DESC));
 
 			m_iCurrentFrame = m_Animations[m_iCurrentAnimIndex]->Update_TransformationMatrices(m_Bones, &m_CurrentTrackPosition, m_KeyFrameIndices[m_iCurrentAnimIndex], m_isLoop, &m_isEnd_Animations[m_iCurrentAnimIndex], 0, false, nullptr, &m_isBoneUpdated);
-
+			
 			m_isChangeAni = false;
 		}
 	}
@@ -655,13 +675,22 @@ void CModel::Update_Animation_Boundary(_float fTimeDelta)
 					vScale = XMLoadFloat3(&tNextKeyFrame.vScale);
 					vRotation = XMLoadFloat4(&tNextKeyFrame.vRotation);
 
-					if (m_UFBIndices[UFB_ROOT] == CurrentChannels[i]->Get_BoneIndex())
+					_int iBoneIndex = CurrentChannels[i]->Get_BoneIndex();
+					if (m_UFBIndices[UFB_ROOT] == iBoneIndex)
 					{
 						vTranslation = _vector{ 0, 0, 0, 1 };
 					}
 					else
-						vTranslation = XMVectorSetW(XMLoadFloat3(&tNextKeyFrame.vTranslation), 1.f);
-
+					{
+						if (m_bDenyTrans && iBoneIndex == m_iDenyBoneIndex)
+						{
+							vTranslation = _vector{ 0, 0, 0, 1 };
+						}
+						else
+						{
+							vTranslation = XMVectorSetW(XMLoadFloat3(&tNextKeyFrame.vTranslation), 1.f);
+						}
+					}
 					isChangeEnd = true;
 				}
 				else
@@ -675,14 +704,22 @@ void CModel::Update_Animation_Boundary(_float fTimeDelta)
 					_vector		vSourTranslation{};
 					_vector		vDestTranslation{};
 
-					if (m_UFBIndices[UFB_ROOT] == CurrentChannels[i]->Get_BoneIndex())
+					_int iBoneIndex = CurrentChannels[i]->Get_BoneIndex();
+					if (m_UFBIndices[UFB_ROOT] == iBoneIndex)
 					{
 						vDestTranslation = vSourTranslation = _vector{ 0, 0, 0, 1 };
 					}
 					else
 					{
-						vSourTranslation = XMVectorSetW(XMLoadFloat3(&tCurrentKeyFrame.vTranslation), 1.f);
-						vDestTranslation = XMVectorSetW(XMLoadFloat3(&tNextKeyFrame.vTranslation), 1.f);
+						if (m_bDenyTrans && iBoneIndex == m_iDenyBoneIndex)
+						{
+							vDestTranslation = vSourTranslation = _vector{ 0, 0, 0, 1 };
+						}
+						else
+						{
+							vSourTranslation = XMVectorSetW(XMLoadFloat3(&tCurrentKeyFrame.vTranslation), 1.f);
+							vDestTranslation = XMVectorSetW(XMLoadFloat3(&tNextKeyFrame.vTranslation), 1.f);
+						}
 					}
 
 					_float		fRatio = m_tChaneAnimDesc_Boundary.fChangeTime / m_tChaneAnimDesc_Boundary.fChangeDuration;
@@ -711,6 +748,8 @@ void CModel::Update_Animation_Boundary(_float fTimeDelta)
 				}
 
 				//m_Animations[m_iCurrentAnimIndex]->Reset();
+				m_bDenyTrans = false;
+
 				m_vRootMoveStack = m_vCurRootMove = _vector{ 0, 0, 0, 1 };
 				m_iCurrentAnimIndex_Boundary = m_tChaneAnimDesc_Boundary.iNextAnimIndex;
 				ZeroMemory(&m_tChaneAnimDesc_Boundary, sizeof(CHANGEANIMATION_DESC));
@@ -1047,6 +1086,12 @@ HRESULT CModel::ReadyModel_To_Binary(HANDLE* pFile)
 	}
 
 	return S_OK;
+}
+
+void CModel::ReadyDenyNextTranslate(_int iBoneIndex)
+{
+	m_bDenyTrans = true;
+	m_iDenyBoneIndex = iBoneIndex;
 }
 
 HRESULT CModel::Bind_Material(CShader* pShader, const _char* pConstantName, TEXTURE_TYPE eMaterialType, _uint iMeshIndex)

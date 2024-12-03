@@ -23,7 +23,7 @@ public:
 	}ATKOBJ_DESC;
 
 public:
-	enum WEP_SOUND_TYPE { WEP_SOUND_WEAPON, WEP_SOUND_EFFECT1, WEP_SOUND_EFFECT2, WEP_SOUND_END };
+	enum EFF_SOUND_TYPE { EFF_SOUND_EFFECT1, EFF_SOUND_END };
 
 protected:
 	CAttackObject(ID3D11Device* pDevice, ID3D11DeviceContext* pContext);
@@ -32,7 +32,7 @@ protected:
 
 public:
 	class CCollider* Get_Collider() { return m_pColliderCom; }
-	class CSound* Get_SoundCom(WEP_SOUND_TYPE eType) { return m_pSoundCom[eType]; }
+	class CSound* Get_SoundCom(EFF_SOUND_TYPE eType) { return m_pSoundCom[eType]; }
 
 public:
 	virtual HRESULT Initialize_Prototype() override;
@@ -54,7 +54,7 @@ public:
 	//virtual _bool is_EndAnim(_int iAnimIndex) { return false; }
 
 public:
-	virtual void Play_Sound(WEP_SOUND_TYPE eType, const TCHAR* pSoundKey, _uint iHandIndex = 1);
+	virtual void Play_Sound(EFF_SOUND_TYPE eType, const TCHAR* pSoundKey, _uint iHandIndex = 1);
 
 public:
 	void Reset_OverLapCheck() { m_DamagedObjects.clear(); }
@@ -63,7 +63,7 @@ protected:
 	CShader*		m_pShaderCom = { nullptr };
 	CModel*			m_pModelCom = { nullptr };
 	CCollider*		m_pColliderCom = { nullptr };
-	class CSound*	m_pSoundCom[WEP_SOUND_END] = { nullptr, };
+	class CSound*	m_pSoundCom[EFF_SOUND_END] = { nullptr, };
 	_float			m_fEmissiveMask = {};
 
 protected:

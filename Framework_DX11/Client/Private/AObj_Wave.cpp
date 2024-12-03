@@ -45,6 +45,8 @@ HRESULT CAObj_Wave::Initialize(void* pArg)
 
     m_strObjectTag = TEXT("MonsterWeapon");
 
+    m_pSoundCom[EFF_SOUND_EFFECT1]->Play2D_Repeat(TEXT("SE_NPC_SimonManus_SK_PJ_Ergo_Retspuken_04.wav"), &g_fEffectVolume);
+
     return S_OK;
 }
 

@@ -42,6 +42,9 @@
 #include "C:\Users\Administrator\Documents\GitHub\Dx11_LiesOfP\Framework_DX11\Client\Private\LastDoor.cpp"
 
 
+#include "C:\Users\Administrator\Documents\GitHub\Dx11_LiesOfP\Framework_DX11\Client\Private\State_Player_OpenSophiaDoor.cpp"
+
+
 #include "C:\Users\Administrator\Documents\GitHub\Dx11_LiesOfP\Framework_DX11\Client\Private\SpotEffect.cpp"
 
 
@@ -121,6 +124,9 @@
 
 
 #include "C:\Users\Administrator\Documents\GitHub\Dx11_LiesOfP\Framework_DX11\Client\Private\State_Player_Lift.cpp"
+
+
+#include "C:\Users\Administrator\Documents\GitHub\Dx11_LiesOfP\Framework_DX11\Client\Private\State_Player_SophiaWalk.cpp"
 
 
 #include "C:\Users\Administrator\Documents\GitHub\Dx11_LiesOfP\Framework_DX11\Client\Private\State_Player_Stargazer.cpp"
@@ -549,6 +555,9 @@
 #include "C:\Users\Administrator\Documents\GitHub\Dx11_LiesOfP\Framework_DX11\Client\Private\UIPage_Equip.cpp"
 
 
+#include "C:\Users\Administrator\Documents\GitHub\Dx11_LiesOfP\Framework_DX11\Client\Private\UIPage_Inform.cpp"
+
+
 #include "C:\Users\Administrator\Documents\GitHub\Dx11_LiesOfP\Framework_DX11\Client\Private\UIPage_Inven.cpp"
 
 
@@ -570,6 +579,9 @@
 #include "C:\Users\Administrator\Documents\GitHub\Dx11_LiesOfP\Framework_DX11\Client\Private\UIPage_Play.cpp"
 
 
+#include "C:\Users\Administrator\Documents\GitHub\Dx11_LiesOfP\Framework_DX11\Client\Private\UIPage_Popup.cpp"
+
+
 #include "C:\Users\Administrator\Documents\GitHub\Dx11_LiesOfP\Framework_DX11\Client\Private\UIPage_Skill.cpp"
 
 
@@ -577,6 +589,9 @@
 
 
 #include "C:\Users\Administrator\Documents\GitHub\Dx11_LiesOfP\Framework_DX11\Client\Private\UIPage_ItemInfo.cpp"
+
+
+#include "C:\Users\Administrator\Documents\GitHub\Dx11_LiesOfP\Framework_DX11\Client\Private\UIPage_Talking.cpp"
 
 
 #include "C:\Users\Administrator\Documents\GitHub\Dx11_LiesOfP\Framework_DX11\Client\Private\UIPage_Test.cpp"
