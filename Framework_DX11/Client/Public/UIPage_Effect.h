@@ -57,6 +57,8 @@ public:
 	void Show_Script(_wstring strScript0, _wstring strScript1 = TEXT("none"), _float fTime = 1.f, _Vec3 vColor = _Vec3{ 0.f,0.f,0.f });
 
 	_float Check_Fade() { return m_fTime_Fade_Now / m_fTime_Fade_Max; }
+	_float Check_Script() { return m_fTime_Script_Now / m_fTime_Script_Max; }
+
 
 private:
 	_float m_fTime_Fade_Now = 0.f;

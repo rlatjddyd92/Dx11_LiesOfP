@@ -199,6 +199,8 @@ protected: // 자체 사용 함수
 
 	void Update_Variable();
 
+	void Exit_Program();
+
 protected:
 	SCROLL* m_pScroll_Option = { nullptr };
 	SCROLL* m_pScroll_DropBox = { nullptr };
@@ -217,6 +219,9 @@ protected:
 	map<_int, _int*> m_mapVariables_DropBox;
 
 	_Vec2 m_vOrigin_Focus_Dest = { 0.f,0.f };
+
+	// 종료 변수 
+	_float m_fExit_Time = -1.f;
 
 	// 그래픽 효과 조절용 
 	_bool m_bGraphic[6] = { true, true, true, false, true, true, };

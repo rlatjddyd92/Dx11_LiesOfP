@@ -132,6 +132,8 @@ HRESULT CUIPage_Play::Ready_UIPart_Group_Control()
 
 	m_iWeapon_Equip_0_Symbol = m_vecPart[m_vec_Group_Ctrl[_int(PART_GROUP::GROUP_WEAPON_EQUIP_NUM)]->PartIndexlist.front()]->iTexture_Index;
 
+	m_fNormal_Weapon_Fx_Alpha_Origin = m_vecPart[m_vec_Group_Ctrl[_int(PART_GROUP::GROUP_WEAPON_NORMAL_BACK_FX)]->PartIndexlist.front()]->fTextureColor.w;
+
 	return S_OK;
 }
 
@@ -217,8 +219,14 @@ void CUIPage_Play::Action_Weapon(_float fTimeDelta)
 
 	if (KEY_TAP(KEY::TAPKEY))
 	{
+		_bool bIsNormal = GET_GAMEINTERFACE->Get_Equip_Item_Info(EQUIP_SLOT::EQUIP_WEAPON_BLADE_0)->bModule_Weapon;
+		if (!bIsNormal)
+			bIsNormal = GET_GAMEINTERFACE->Get_Equip_Item_Info(EQUIP_SLOT::EQUIP_WEAPON_BLADE_1)->bModule_Weapon;
 		GET_GAMEINTERFACE->Change_Weapon();
+		if (bIsNormal)
+			m_vSwitch_Time.x += 0.01f;
 	}
+	
 	
 }
 
@@ -427,7 +435,7 @@ void CUIPage_Play::LD_Arm_Update(_float fTimeDelta)
 		return;
 
 	__super::Get_Front_Part_In_Control(_int(PART_GROUP::GROUP_ARM_NAME))->strText = pNow->strName;
-	__super::Get_Front_Part_In_Control(_int(PART_GROUP::GROUP_ARM_TEX))->iTexture_Index = pNow->iItem_Index;
+	__super::Get_Front_Part_In_Control(_int(PART_GROUP::GROUP_ARM_TEX))->iTexture_Index = pNow->iTexture_Index;
 	__super::Get_Front_Part_In_Control(_int(PART_GROUP::GROUP_ARM_GAUGE_FILL))->fRatio = GET_GAMEINTERFACE->Get_Arm_Gauge_Ratio();
 }
 
@@ -438,6 +446,12 @@ void CUIPage_Play::RU_Coin_Update(_float fTimeDelta)
 
 void CUIPage_Play::RD_Weapon_Update(_float fTimeDelta)
 {
+	if (m_vSwitch_Time.x > 0.f)
+		m_vSwitch_Time.x += fTimeDelta;
+
+	if (m_vSwitch_Time.x >= m_vSwitch_Time.y)
+		m_vSwitch_Time.x = 0.f;
+
 	const CItem_Manager::ITEM* pNowBlade = GET_GAMEINTERFACE->Get_Now_Equip_Weapon_Blade();
 	const CItem_Manager::ITEM* pNowHandle = GET_GAMEINTERFACE->Get_Now_Equip_Weapon_Handle();
 
@@ -465,6 +479,8 @@ void CUIPage_Play::RD_Weapon_Update(_float fTimeDelta)
 	__super::Array_Control(_int(PART_GROUP::GROUP_WEAPON_SPECIAL_BACK), _int(PART_GROUP::GROUP_WEAPON_SPECIAL_TEX), CTRL_COMMAND::COM_RENDER, !bNormal);
 	m_vecPart[m_vec_Group_Ctrl[_int(PART_GROUP::GROUP_WEAPON_EQUIP_NUM)]->PartIndexlist.front()]->iTexture_Index = m_iWeapon_Equip_0_Symbol + iSelect;
 
+	Switch_Weapon_UI_Action(fTimeDelta);
+
 	if (bNormal)
 	{
 		m_vecPart[m_vec_Group_Ctrl[_int(PART_GROUP::GROUP_WEAPON_NORMAL_BLADE)]->PartIndexlist.front()]->iTexture_Index = pNowBlade->iTexture_Index;
@@ -483,6 +499,16 @@ void CUIPage_Play::RD_Weapon_Update(_float fTimeDelta)
 	m_vec_Group_Ctrl[_int(PART_GROUP::GROUP_WEAPON_GAUGE_LEFT_KEYSET_B)]->bRender = !bSingle_Cell_Blade;
 	m_vec_Group_Ctrl[_int(PART_GROUP::GROUP_WEAPON_GAUGE_RIGHT_KEYSET_A)]->bRender = !bSingle_Cell_Blade;
 	m_vec_Group_Ctrl[_int(PART_GROUP::GROUP_WEAPON_GAUGE_RIGHT_KEYSET_B)]->bRender = bSingle_Cell_Blade;
+
+	m_vec_Group_Ctrl[_int(PART_GROUP::GROUP_WEAPON_GAUGE_LEFT_SIDE_WHITE)]->fRatio = 0.f;
+	m_vec_Group_Ctrl[_int(PART_GROUP::GROUP_WEAPON_GAUGE_LEFT_CENTER_WHITE)]->fRatio = 0.f;
+	m_vec_Group_Ctrl[_int(PART_GROUP::GROUP_WEAPON_GAUGE_RIGHT_SIDE_WHITE)]->fRatio = 0.f;
+	m_vec_Group_Ctrl[_int(PART_GROUP::GROUP_WEAPON_GAUGE_RIGHT_CENTER_WHITE)]->fRatio = 0.f;
+
+	m_vec_Group_Ctrl[_int(PART_GROUP::GROUP_WEAPON_GAUGE_LEFT_SIDE_WHITE)]->bRender = false;
+	m_vec_Group_Ctrl[_int(PART_GROUP::GROUP_WEAPON_GAUGE_LEFT_CENTER_WHITE)]->bRender = false;
+	m_vec_Group_Ctrl[_int(PART_GROUP::GROUP_WEAPON_GAUGE_RIGHT_SIDE_WHITE)]->bRender = false;
+	m_vec_Group_Ctrl[_int(PART_GROUP::GROUP_WEAPON_GAUGE_RIGHT_CENTER_WHITE)]->bRender = false;
 }
 
 void CUIPage_Play::Boss_Hp_Update(_float fTimeDelta)
@@ -603,6 +629,34 @@ void CUIPage_Play::Add_Render_Info_BuffInfo(_float fTimeDelta)
 	}
 
 	m_fTopPartMove = fAlpha_Ratio_Origin;
+}
+
+void CUIPage_Play::Switch_Weapon_UI_Action(_float fTimeDelta)
+{
+	if (m_vSwitch_Time.x > 0.f)
+	{
+		m_vecPart[m_vec_Group_Ctrl[_int(PART_GROUP::GROUP_WEAPON_NORMAL_BACK_FX)]->PartIndexlist.front()]->fTextureColor.w = m_fNormal_Weapon_Fx_Alpha_Origin * (m_vSwitch_Time.x / m_vSwitch_Time.y) * 2.f;
+		m_vecPart[m_vec_Group_Ctrl[_int(PART_GROUP::GROUP_WEAPON_NORMAL_BACK_FX)]->PartIndexlist.back()]->fTextureColor.w = m_fNormal_Weapon_Fx_Alpha_Origin * (m_vSwitch_Time.x / m_vSwitch_Time.y) * 2.f;
+	}
+	else
+	{
+		m_vecPart[m_vec_Group_Ctrl[_int(PART_GROUP::GROUP_WEAPON_NORMAL_BACK_FX)]->PartIndexlist.front()]->bRender = false;
+		m_vecPart[m_vec_Group_Ctrl[_int(PART_GROUP::GROUP_WEAPON_NORMAL_BACK_FX)]->PartIndexlist.back()]->bRender = false;
+		m_vecPart[m_vec_Group_Ctrl[_int(PART_GROUP::GROUP_WEAPON_NORMAL_BACK_FX)]->PartIndexlist.front()]->fTextureColor.w = 0.f;
+		m_vecPart[m_vec_Group_Ctrl[_int(PART_GROUP::GROUP_WEAPON_NORMAL_BACK_FX)]->PartIndexlist.back()]->fTextureColor.w = 0.f;
+	}
+}
+
+void CUIPage_Play::Switch_Bag_UI_Action(_float fTimeDelta, _bool bIsOpen)
+{
+}
+
+void CUIPage_Play::Using_Fable_UI_Action(_float fTimeDelta)
+{
+
+
+
+
 }
 
 CUIPage_Play* CUIPage_Play::Create(ID3D11Device* pDevice, ID3D11DeviceContext* pContext)

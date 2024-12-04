@@ -128,6 +128,18 @@ public: // 외부에서 매니저 접근
 	_bool Fade_In(_float fTime = 1.f) { return m_pUIManager->Fade_In(fTime); }
 	void Show_Script(_wstring strScript0, _wstring strScript1 = TEXT("none"), _float fTime = 1.f, _Vec3 vColor = _Vec3{ 0.f,0.f,0.f }) { m_pUIManager->Show_Script(strScript0, strScript1, fTime, vColor); }
 	_float Check_Fade() { return m_pUIManager->Check_Fade(); }
+
+	// NPC 스크립트 
+	void Show_Script(NPC_SCRIPT eNPC, _int iScriptNum = -1) { m_pUIManager->Show_Script_Npc_Talking(eNPC, iScriptNum); }
+	void Next_Script() { m_pUIManager->Next_Script(); }
+	void OFF_Script() { m_pUIManager->OFF_Script(); }
+	void Show_Select_Script(_wstring strLeft, _wstring strRight, _float fTime) { m_pUIManager->Show_Select_Script(strLeft, strRight, fTime); }
+	_bool IsLeft_LastSelect_Result() { return m_pUIManager->IsLeft_LastSelect_Result(); }
+
+	// 안내 표시 
+	void Show_Region_Info(_wstring strName, _wstring strDesc, _float fTime_Emerge = 1.f, _float fTime_Show = 2.f) { m_pUIManager->Show_Region_Info(strName, strDesc, fTime_Emerge, fTime_Show); }
+	void Show_Inform(INFORM_MESSAGE eInform, _float fTime_Emerge = 1.f, _float fTime_Show = 2.f) { m_pUIManager->Show_Inform(eInform, fTime_Emerge, fTime_Show); }
+	void Show_Heart(_wstring strScript, _float fTime_Emerge = 1.f, _float fTime_Show = 2.f) { m_pUIManager->Show_Heart(strScript, fTime_Emerge, fTime_Show); }
 #pragma endregion
 
 
