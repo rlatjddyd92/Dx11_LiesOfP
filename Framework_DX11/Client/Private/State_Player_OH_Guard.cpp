@@ -37,7 +37,7 @@ HRESULT CState_Player_OH_Guard::Start_State(void* pArg)
     m_pPlayer->Set_MoveSpeed(3.f);
 
 
-    m_pPlayer->Chnage_CameraMode(CPlayerCamera::MODE_STATIC);
+    m_pPlayer->Change_CameraMode(CPlayerCamera::MODE_STATIC);
 
     return S_OK;
 }

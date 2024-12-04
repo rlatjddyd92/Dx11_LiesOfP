@@ -38,6 +38,9 @@ private:
     void                Select_DashAnimation();
     _bool               End_Check();
 
+private:
+    void                Control_Invicible();
+
 public:
     static CState_Player_TH_Dash* Create(class CFsm* pFsm, class CPlayer* pPlayer, _uint iStateNum, void* pArg = nullptr);
     virtual void Free() override;

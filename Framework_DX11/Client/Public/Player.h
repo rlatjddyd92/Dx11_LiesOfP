@@ -168,7 +168,7 @@ public:
 	void			Seperate_Scissor();
 	void			Combine_Scissor();
 
-	void			Chnage_CameraMode(CPlayerCamera::CAMERA_MODE eMode);
+	void			Change_CameraMode(CPlayerCamera::CAMERA_MODE eMode);
 
 	void			LockOnOff();
 	CPawn*			Find_TargetMonster();
@@ -185,7 +185,6 @@ public:
 	void			Decrease_Region(_uint iRegionCount = 1);
 	void			Recovery_Region(_float fAmount = 10.f);
 
-	void			Choice_GuardSound(_uint iAttackStrength = ATK_WEAK, _uint iHitType = HIT_END, _bool isPerfect = false);
 	/* Effect */
 private:
 	vector<class CEffect_Container*> m_Effects;
@@ -230,13 +229,18 @@ private:
 	_float				m_fStaminaRecoveryTime = {};
 
 private:
+	void			Damaged(_float fAtkDmg, _Vec3 vHitPos);
+
+	void			Update_Stat(_float fTimeDelta);
+	void			CollisionStay_IntercObj(CGameObject* pGameObject);
+
+	void			Choice_GuardSound(_uint iAttackStrength = ATK_WEAK, _uint iHitType = HIT_END, _bool isPerfect = false);
+
+private:
 	HRESULT Ready_Components();
 	HRESULT Ready_Weapon();
 	HRESULT Ready_FSM();
 	HRESULT Ready_Effect();
-	
-	void Update_Stat(_float fTimeDelta);
-	void CollisionStay_IntercObj(CGameObject* pGameObject);
 
 public:
 	static CPlayer* Create(ID3D11Device* pDevice, ID3D11DeviceContext* pContext);
