@@ -2292,6 +2292,11 @@ void CController_MapTool::Free()
 	}
 	m_Etc_File_Names.clear();
 
+	for (auto& filename : m_Monster_File_Names) {
+		Safe_Delete_Array(filename);
+	}
+	m_Monster_File_Names.clear();
+
 	Safe_Release(m_my_texture);
 	Safe_Release(m_pDevice);
 	Safe_Release(m_pContext);
