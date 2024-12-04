@@ -33,8 +33,10 @@ void CState_SimonManusP2_Sting::Update(_float fTimeDelta)
         return;
     }
 
-    Collider_Check();
+    _double CurTrackPos = m_pMonster->Get_CurrentTrackPos();
 
+    Collider_Check(CurTrackPos);
+    Control_Sound(CurTrackPos);
 }
 
 void CState_SimonManusP2_Sting::End_State()
@@ -47,10 +49,8 @@ _bool CState_SimonManusP2_Sting::End_Check()
     return m_pMonster->Get_EndAnim(AN_STINGATTACK);
 }
 
-void CState_SimonManusP2_Sting::Collider_Check()
+void CState_SimonManusP2_Sting::Collider_Check(_double CurTrackPos)
 {
-    _double CurTrackPos = m_pMonster->Get_CurrentTrackPos();
-
     if ((CurTrackPos >= 75.f && CurTrackPos <= 105.f) ||
         (CurTrackPos >= 175.f && CurTrackPos <= 225.f))
     {
@@ -60,6 +60,10 @@ void CState_SimonManusP2_Sting::Collider_Check()
     {
         m_pMonster->DeActive_CurretnWeaponCollider();
     }
+}
+
+void CState_SimonManusP2_Sting::Control_Sound(_double CurTrackPos)
+{
 }
 
 CState_SimonManusP2_Sting* CState_SimonManusP2_Sting::Create(CFsm* pFsm, CMonster* pMonster, _uint iStateNum, void* pArg)

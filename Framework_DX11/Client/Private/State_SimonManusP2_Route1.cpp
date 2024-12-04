@@ -25,7 +25,8 @@ HRESULT CState_SimonManusP2_Route1::Start_State(void* pArg)
     m_pMonster->Change_Animation(AN_ROUTE_FIRST, false, 0.1f, 0);
 
     m_bStampEffect = false;
-
+    m_bStampSound = false;
+    m_bSwingSound = false;
     return S_OK;
 }
 
@@ -191,6 +192,14 @@ void CState_SimonManusP2_Route1::Effect_Check(_double CurTrackPos)
                 m_bStampEffect = true;
             }
         }
+    }
+}
+
+void CState_SimonManusP2_Route1::Control_Sound(_double CurTrackPos)
+{
+    if (m_iRouteTrack == 0)
+    {
+
     }
 }
 

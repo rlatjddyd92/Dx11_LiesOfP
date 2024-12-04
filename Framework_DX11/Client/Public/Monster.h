@@ -64,6 +64,8 @@ public:
 	virtual const _Matrix* Get_WeaponBoneCombinedMat(_uint iBoneIndex) { return &_Matrix{}; }
 	virtual const _Matrix* Get_WeaponWorldMat() { return &_Matrix{}; }
 
+	virtual void	SetUp_Dead() {};
+
 protected:
 	_Vec4		m_vRootMoveStack{};
 	_Vec3		m_vCurRootMove{};

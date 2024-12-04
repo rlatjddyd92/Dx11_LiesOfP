@@ -22,7 +22,7 @@ HRESULT CState_SimonManusP2_Route0::Start_State(void* pArg)
 {
     m_pMonster->Change_Animation(AN_ROUTE_FIRST, false, 0.1f, 0);
 
-
+    m_bSwingSound = false;
     return S_OK;
 }
 
@@ -34,6 +34,7 @@ void CState_SimonManusP2_Route0::Update(_float fTimeDelta)
         switch (m_iRouteTrack)
         {
         case 0:
+            m_bSwingSound = false;
             m_pMonster->Change_Animation(AN_ROUTE_LAST, false, 0.0f, 0);
             break;
 
@@ -141,6 +142,34 @@ void CState_SimonManusP2_Route0::Effect_Check(_double CurTrackPos)
         else
         {
             m_pMonster->DeActive_Effect(CSimonManus::P1_TRAIL);
+        }
+    }
+}
+
+void CState_SimonManusP2_Route0::Control_Sound(_double CurTrackPos)
+{
+    if (m_iRouteTrack == 0) //AN_ROUTE_FIRST, 쓰러지면서 하는 스윙
+    {
+        if (!m_bSwingSound)
+        {
+            if (CurTrackPos >= 70 && CurTrackPos <= 75.f)
+            {
+                m_pMonster->Play_Sound(CPawn::PAWN_SOUND_EFFECT1, TEXT("SE_PC_SK_Smash_Crystal_Stone_H_03.wav"));
+
+                m_bSwingSound = true;
+            }
+        }
+    }
+    else       //어보이드 스윙
+    {
+        if (!m_bSwingSound)
+        {
+            if (CurTrackPos >= 160 && CurTrackPos <= 165.f)
+            {
+                m_pMonster->Play_Sound(CPawn::PAWN_SOUND_EFFECT1, TEXT("SE_PC_SK_Smash_Crystal_Stone_H_03.wav"));
+
+                m_bSwingSound = true;
+            }
         }
     }
 }

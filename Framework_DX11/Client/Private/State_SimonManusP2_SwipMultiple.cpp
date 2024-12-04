@@ -195,6 +195,10 @@ void CState_SimonManusP2_SwipMultiple::Effect_Check(_double CurTrackPos)
     }
 }
 
+void CState_SimonManusP2_SwipMultiple::Control_Sound(_double CurTrackPos)
+{
+}
+
 CState_SimonManusP2_SwipMultiple* CState_SimonManusP2_SwipMultiple::Create(CFsm* pFsm, CMonster* pMonster, _uint iStateNum, void* pArg)
 {
     CState_SimonManusP2_SwipMultiple* pInstance = new CState_SimonManusP2_SwipMultiple(pFsm, pMonster);

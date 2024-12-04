@@ -77,6 +77,10 @@ void CState_SimonManusP2_AvoidSwing::Effect_Check(_double CurTrackPos)
     }
 }
 
+void CState_SimonManusP2_AvoidSwing::Control_Sound(_double CurTrackPos)
+{
+}
+
 CState_SimonManusP2_AvoidSwing* CState_SimonManusP2_AvoidSwing::Create(CFsm* pFsm, CMonster* pMonster, _uint iStateNum, void* pArg)
 {
     CState_SimonManusP2_AvoidSwing* pInstance = new CState_SimonManusP2_AvoidSwing(pFsm, pMonster);

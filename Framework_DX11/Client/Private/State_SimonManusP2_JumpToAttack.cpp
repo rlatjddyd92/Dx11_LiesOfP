@@ -245,14 +245,17 @@ void CState_SimonManusP2_JumpToAttack::Effect_Check(_double CurTrackPos)
 
 void CState_SimonManusP2_JumpToAttack::Control_Sound(_double CurTrackPos)
 {
-    if (!m_bMagicSound)
+    if (m_iRouteTrack == 0)
     {
-        if (m_iCurStartAnim == AN_MAGICTO_LEFT || m_iCurStartAnim == AN_MAGICTO_RIGHT)
+        if (!m_bMagicSound)
         {
-            if ((CurTrackPos >= 40.f && CurTrackPos <= 45.f))
+            if (m_iCurStartAnim == AN_MAGICTO_LEFT || m_iCurStartAnim == AN_MAGICTO_RIGHT)
             {
-                m_pMonster->Play_Sound(CPawn::PAWN_SOUND_EFFECT1, TEXT("SE_NPC_SimonManus_SK_PJ_Ergo_Wide_05.wav"));
-                m_bMagicSound = true;
+                if ((CurTrackPos >= 40.f && CurTrackPos <= 45.f))
+                {
+                    m_pMonster->Play_Sound(CPawn::PAWN_SOUND_EFFECT1, TEXT("SE_NPC_SimonManus_SK_PJ_Ergo_Wide_05.wav"));
+                    m_bMagicSound = true;
+                }
             }
         }
     }

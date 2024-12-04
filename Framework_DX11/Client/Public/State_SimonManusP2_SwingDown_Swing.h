@@ -34,6 +34,8 @@ private:
 
     _bool               m_isSwing = { false };
     _bool               m_bStampEffect = { false };
+    _bool               m_bSwingSound = { false };
+    _bool               m_bStampSound = { false };
 
     _uint               m_iRouteTrack = {};
 
@@ -41,6 +43,7 @@ private:
     _bool               End_Check();
     void                Collider_Check(_double CurTrackPos);
     void                Effect_Check(_double CurTrackPos);
+    void                Control_Sound(_double CurTrackPos);
 
 public:
     static CState_SimonManusP2_SwingDown_Swing* Create(class CFsm* pFsm, class CMonster* pMonster, _uint iStateNum, void* pArg = nullptr);
