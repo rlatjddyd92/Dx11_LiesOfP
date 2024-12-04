@@ -300,6 +300,8 @@ PS_EFFECT_OUT PS_MAIN(PS_IN In)
     if (In.vLifeTime.y >= In.vLifeTime.x)
         discard;
 
+    vColor.rgb *= In.vColor.rgb;
+    
     Out.vDiffuse = vColor;
     Out.vBlur = vColor;
     

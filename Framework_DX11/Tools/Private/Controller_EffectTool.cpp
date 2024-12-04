@@ -721,6 +721,8 @@ void CController_EffectTool::TE_Check()
 		ImGui::RadioButton("PreRotation", (_int*)&m_TextureDesc.DefaultDesc.eBillboardType, CTexture_Effect::TYPE_PREROTATION);
 		ImGui::SameLine();
 		ImGui::RadioButton("PreDir", (_int*)&m_TextureDesc.DefaultDesc.eBillboardType, CTexture_Effect::TYPE_PREDIR);
+		ImGui::SameLine();
+		ImGui::RadioButton("Non Billboard", (_int*)&m_TextureDesc.DefaultDesc.eBillboardType, CTexture_Effect::TYPE_NONBILLBOARD);
 
 		ImGui::SeparatorText("Loop");
 		ImGui::Checkbox("Texture Loop", &m_TextureDesc.DefaultDesc.bLoop);
@@ -2216,6 +2218,7 @@ HRESULT CController_EffectTool::Load_Model()
 		CModel::Create(m_pDevice, m_pContext, CModel::TYPE_NONANIM, "../Bin/ModelData/NonAnim/Effect/SM_Simon_Wave_01_HJS.dat", PreTransformMatrix))))
 		return E_FAIL;
 	Add_Model_ProtytypeTag(TEXT("Prototype_Component_Model_Effect_Wave"));
+
 
 	return S_OK;
 }
