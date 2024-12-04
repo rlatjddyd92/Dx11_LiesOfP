@@ -86,6 +86,7 @@ void CState_Player_TH_Dash::Select_DashAnimation()
         m_pPlayer->Change_Animation(m_iAnimation_Dash[DASH_B], false, 0.f);
     }
 
+    Control_Invicible();
 }
 
 _bool CState_Player_TH_Dash::End_Check()
@@ -124,6 +125,47 @@ _bool CState_Player_TH_Dash::End_Check()
 
 
     return bEndCheck;
+}
+
+void CState_Player_TH_Dash::Control_Invicible()
+{
+    _uint iCurAnim = m_pPlayer->Get_CurrentAnimIndex();
+    _int iFrame = m_pPlayer->Get_Frame();
+
+    _bool isInviclible = false;
+
+    if (iCurAnim == m_iAnimation_Dash[DASH_F])
+    {
+        if (15 <= iFrame && iFrame <= 40)
+        {
+            isInviclible = true;
+        }
+    }
+    else if (iCurAnim == m_iAnimation_Dash[DASH_B])
+    {
+        if (2 <= iFrame && iFrame <= 30)
+        {
+            isInviclible = true;
+        }
+    }
+    else if (iCurAnim == m_iAnimation_Dash[DASH_FOCUS_F]
+        || iCurAnim == m_iAnimation_Dash[DASH_FOCUS_B])
+    {
+        if (2 <= iFrame && iFrame <= 40)
+        {
+            isInviclible = true;
+        }
+    }
+    else if (iCurAnim == m_iAnimation_Dash[DASH_FOCUS_L]
+        || iCurAnim == m_iAnimation_Dash[DASH_FOCUS_R])
+    {
+        if (2 <= iFrame && iFrame <= 40)
+        {
+            isInviclible = true;
+        }
+    }
+
+    m_pPlayer->Set_IsInvicible(isInviclible);
 }
 
 CState_Player_TH_Dash* CState_Player_TH_Dash::Create(CFsm* pFsm, CPlayer* pPlayer, _uint iStateNum, void* pArg)

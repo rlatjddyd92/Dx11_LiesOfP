@@ -5,6 +5,7 @@
 #include "Layer.h"
 
 #include "Camera.h"
+#include "Monster.h"
 #include "Weapon.h"
 #include "Weapon_Scissor.h"
 
@@ -72,6 +73,8 @@
 
 #include "State_Player_OpenSophiaDoor.h"
 #include "State_Player_SophiaWalk.h"
+#include "State_Player_SophiaHand.h"
+#include "State_Player_SophiaHandEnd.h"
 
 // 24-11-27 김성용
 // 게임 인터페이스와 연결을 위해 추가 
@@ -115,7 +118,7 @@ HRESULT CPlayer::Initialize(void * pArg)
 		return E_FAIL;
 
 	//m_pNavigationCom->Move_to_Cell(m_pRigidBodyCom, 1030); // 계단 옆 별바라기
-	//m_pNavigationCom->Move_to_Cell(m_pRigidBodyCom, 772); //긴사다리
+	m_pNavigationCom->Move_to_Cell(m_pRigidBodyCom, 772); //긴사다리
 	//m_pNavigationCom->Move_to_Cell(m_pRigidBodyCom, 427); //짧은사다리
 	//m_pNavigationCom->Move_to_Cell(m_pRigidBodyCom, 341); //아래엘베
 	//m_pNavigationCom->Move_to_Cell(m_pRigidBodyCom, 440); //상자랑 장애물
@@ -198,7 +201,7 @@ void CPlayer::Update(_float fTimeDelta)
 	}
 	if (KEY_TAP(KEY::K))
 	{
-		Change_State(SOPHIA_DOOR_OPEN);
+		Change_State(SOPHIA_WALK);
 		//Calc_DamageGain(5.f, m_pTransformCom->Get_WorldMatrix().Forward() + m_pTransformCom->Get_WorldMatrix().Translation());
 	}
 }
@@ -380,6 +383,16 @@ void CPlayer::Disappear_Weapon()
 	m_pWeapon[m_eWeaponType]->Disappear();
 }
 
+void CPlayer::Active_CurrentWeaponCollider(_float fDamageRatio, _uint iHandIndex)
+{
+	m_pWeapon[m_eWeaponType]->Active_Collider(fDamageRatio, iHandIndex);
+}
+
+void CPlayer::DeActive_CurretnWeaponCollider(_uint iHandIndex)
+{
+	m_pWeapon[m_eWeaponType]->DeActive_Collider(iHandIndex);
+}
+
 void CPlayer::Seperate_Scissor()
 {
 	if (WEP_SCISSOR != m_eWeaponType)
@@ -396,21 +409,10 @@ void CPlayer::Combine_Scissor()
 	dynamic_cast<CWeapon_Scissor*>(m_pWeapon[WEP_SCISSOR])->Change_CombineMode();
 }
 
-void CPlayer::Active_CurrentWeaponCollider(_float fDamageRatio, _uint iHandIndex)
-{
-	m_pWeapon[m_eWeaponType]->Active_Collider(fDamageRatio, iHandIndex);
-}
-
-void CPlayer::DeActive_CurretnWeaponCollider(_uint iHandIndex)
-{
-	m_pWeapon[m_eWeaponType]->DeActive_Collider(iHandIndex);
-}
-
-void CPlayer::Chnage_CameraMode(CPlayerCamera::CAMERA_MODE eMode)
+void CPlayer::Change_CameraMode(CPlayerCamera::CAMERA_MODE eMode)
 {
 	m_pPlayerCamera->Change_Mode(eMode);
 }
-
 
 void CPlayer::LockOnOff()
 {
@@ -506,195 +508,15 @@ void CPlayer::Active_Effect(const EFFECT_TYPE& eType, _bool isLoop)
 		m_Effects[eType]->Reset_Effects();
 	}
 }
+
 void CPlayer::DeActive_Effect(const EFFECT_TYPE& eType)
 {
 	m_Effects[eType]->Set_Loop(false);
 
 }
 
-HRESULT CPlayer::Ready_Weapon()
-{
-	CWeapon::PLAYER_WAPON_DESC		WeaponDesc{};
-	WeaponDesc.pParentWorldMatrix = m_pTransformCom->Get_WorldMatrix_Ptr();
-	WeaponDesc.pSocketBoneMatrix = m_pModelCom->Get_BoneCombindTransformationMatrix_Ptr("BN_Weapon_R");
-	WeaponDesc.pPlayer = this;
 
-	m_pWeapon[WEP_RAPIER] = dynamic_cast<CWeapon*>(m_pGameInstance->Clone_GameObject(TEXT("Prototype_GameObject_Weapon_Rapier"), &WeaponDesc));
-	if (nullptr == m_pWeapon[WEP_RAPIER])
-		return E_FAIL;
-
-	m_pWeapon[WEP_FLAME] = dynamic_cast<CWeapon*>(m_pGameInstance->Clone_GameObject(TEXT("Prototype_GameObject_Weapon_FlameSword"), &WeaponDesc));
-	if (nullptr == m_pWeapon)
-		return E_FAIL;
-
-	WeaponDesc.pSocketBoneMatrix2 = m_pModelCom->Get_BoneCombindTransformationMatrix_Ptr("BN_Weapon_L");
-	m_pWeapon[WEP_SCISSOR] = dynamic_cast<CWeapon*>(m_pGameInstance->Clone_GameObject(TEXT("Prototype_GameObject_Weapon_Scissor"), &WeaponDesc));
-	if (nullptr == m_pWeapon)
-		return E_FAIL;
-
-	Change_Weapon();
-
-	return S_OK;
-}
-
-HRESULT CPlayer::Ready_Components()
-{
-	if (FAILED(__super::Ready_Components()))
-		return E_FAIL;
-
-	/* FOR.Com_Model */
-	if (FAILED(__super::Add_Component(LEVEL_GAMEPLAY, TEXT("Prototype_Component_Model_Player"),
-		TEXT("Com_Model"), reinterpret_cast<CComponent**>(&m_pModelCom))))
-		return E_FAIL;
-
-	/* FOR.Com_Collider */
-	CBounding_OBB::BOUNDING_OBB_DESC			ColliderDesc{};
-	ColliderDesc.vExtents = _float3(0.3f, 0.9f, 0.3f);
-	ColliderDesc.vCenter = _float3(0.f, ColliderDesc.vExtents.y, 0.f);
-	ColliderDesc.vAngles = _float3(0.f, 0.f, 0.f);
-
-	if (FAILED(__super::Add_Component(LEVEL_STATIC, TEXT("Prototype_Component_Collider_OBB"),
-		TEXT("Com_Collider"), reinterpret_cast<CComponent**>(&m_pColliderCom), &ColliderDesc)))
-		return E_FAIL;
-	m_pColliderCom->Set_Owner(this);
-
-	// 항상 마지막에 생성하기
-	CRigidBody::RIGIDBODY_DESC RigidBodyDesc{};
-	RigidBodyDesc.isStatic = false;
-	RigidBodyDesc.isGravity = false;
-	RigidBodyDesc.pOwnerTransform = m_pTransformCom;
-	RigidBodyDesc.pOwnerNavigation = m_pNavigationCom;
-	RigidBodyDesc.isCapsule = true;
-
-	RigidBodyDesc.pOwner = this;
-	RigidBodyDesc.fStaticFriction = 0.f;
-	RigidBodyDesc.fDynamicFriction = 0.f;
-	RigidBodyDesc.fRestituion = 0.f;
-	RigidBodyDesc.PxLockFlags = PxRigidDynamicLockFlag::eLOCK_ANGULAR_X |
-		PxRigidDynamicLockFlag::eLOCK_ANGULAR_Y |
-		PxRigidDynamicLockFlag::eLOCK_ANGULAR_Z;
-
-	physX::GeometryCapsule CapsuleDesc;
-	CapsuleDesc.fHeight = 1.f;
-	CapsuleDesc.fRadius = 0.25f;
-	RigidBodyDesc.pGeometry = &CapsuleDesc;
-
-	/* FOR.Com_RigidBody */
-	if (FAILED(__super::Add_Component(LEVEL_STATIC, TEXT("Prototype_Component_RigidBody"),
-		TEXT("Com_RigidBody"), reinterpret_cast<CComponent**>(&m_pRigidBodyCom), &RigidBodyDesc)))
-		return E_FAIL;
-
-	return S_OK;
-}
-
-HRESULT CPlayer::Ready_FSM()
-{
-	/* FOR.Com_FSM */
-	if (FAILED(__super::Add_Component(LEVEL_STATIC, TEXT("Prototype_Component_FSM"),
-		TEXT("Com_FSM"), reinterpret_cast<CComponent**>(&m_pFsmCom))))
-		return E_FAIL;
-
-	FSM_INIT_DESC Desc{};
-
-	Desc.pPrevTrackPos = &m_PrevTrackPos;
-
-
-	m_pFsmCom->Add_State(CState_Player_Hit::Create(m_pFsmCom, this, HIT, &Desc));
-	m_pFsmCom->Add_State(CState_Player_Parry::Create(m_pFsmCom, this, PARRY, &Desc));
-	m_pFsmCom->Add_State(CState_Player_Heal::Create(m_pFsmCom, this, HEAL, &Desc));
-	m_pFsmCom->Add_State(CState_Player_ChangeWeapon::Create(m_pFsmCom, this, CHANGEWEP, &Desc)); 
-	m_pFsmCom->Add_State(CState_Player_Ladder::Create(m_pFsmCom, this, LADDER, &Desc));
-	m_pFsmCom->Add_State(CState_Player_Lift::Create(m_pFsmCom, this, LIFT, &Desc));
-	m_pFsmCom->Add_State(CState_Player_Chest::Create(m_pFsmCom, this, CHEST, &Desc));
-	m_pFsmCom->Add_State(CState_Player_ItemGet::Create(m_pFsmCom, this, ITEMGET, &Desc));
-	m_pFsmCom->Add_State(CState_Player_Stargazer::Create(m_pFsmCom, this, STARGAZER, &Desc));
-	m_pFsmCom->Add_State(CState_Player_Teleport::Create(m_pFsmCom, this, TELEPORT, &Desc));
-	m_pFsmCom->Add_State(CState_Player_Grinder::Create(m_pFsmCom, this, GRINDER, &Desc));
-	m_pFsmCom->Add_State(CState_Player_GetUp::Create(m_pFsmCom, this, GETUP, &Desc));
-
-	m_pFsmCom->Add_State(CState_Player_OH_Idle::Create(m_pFsmCom, this, OH_IDLE, &Desc));
-	m_pFsmCom->Add_State(CState_Player_OH_Walk::Create(m_pFsmCom, this, OH_WALK, &Desc)); 
-	m_pFsmCom->Add_State(CState_Player_OH_Run::Create(m_pFsmCom, this, OH_RUN, &Desc));
-	m_pFsmCom->Add_State(CState_Player_OH_Sprint::Create(m_pFsmCom, this, OH_SPRINT, &Desc));
-	m_pFsmCom->Add_State(CState_Player_OH_Guard::Create(m_pFsmCom, this, OH_GUARD, &Desc));
-	m_pFsmCom->Add_State(CState_Player_OH_GuardHit::Create(m_pFsmCom, this, OH_GUARDHIT, &Desc));
-	m_pFsmCom->Add_State(CState_Player_OH_Dash::Create(m_pFsmCom, this, OH_DASH, &Desc));
-
-	m_pFsmCom->Add_State(CState_Player_TH_Idle::Create(m_pFsmCom, this, TH_IDLE, &Desc));
-	m_pFsmCom->Add_State(CState_Player_TH_Walk::Create(m_pFsmCom, this, TH_WALK, &Desc));
-	m_pFsmCom->Add_State(CState_Player_TH_Run::Create(m_pFsmCom, this, TH_RUN, &Desc));
-	m_pFsmCom->Add_State(CState_Player_TH_Sprint::Create(m_pFsmCom, this, TH_SPRINT, &Desc));
-	m_pFsmCom->Add_State(CState_Player_TH_Guard::Create(m_pFsmCom, this, TH_GUARD, &Desc));
-	m_pFsmCom->Add_State(CState_Player_TH_GuardHit::Create(m_pFsmCom, this, TH_GUARDHIT, &Desc));
-	m_pFsmCom->Add_State(CState_Player_TH_Dash::Create(m_pFsmCom, this, TH_DASH, &Desc));
-
-	m_pFsmCom->Add_State(CState_Player_Rapier_LAttack00::Create(m_pFsmCom, this, RAPIER_LATTACK0, &Desc));	// 좌클릭 공격1
-	m_pFsmCom->Add_State(CState_Player_Rapier_LAttack01::Create(m_pFsmCom, this, RAPIER_LATTACK1, &Desc));	// 좌클릭 공격2
-	m_pFsmCom->Add_State(CState_Player_Rapier_RAttack00::Create(m_pFsmCom, this, RAPIER_RATTACK0, &Desc));	// 우클릭 공격
-	m_pFsmCom->Add_State(CState_Player_Rapier_Charge::Create(m_pFsmCom, this, RAPIER_CHARGE, &Desc));	// 우클릭 차지공격
-	m_pFsmCom->Add_State(CState_Player_Rapier_Fable::Create(m_pFsmCom, this, RAPIER_FABALE, &Desc));	// F 페이탈아츠
-	// Shift + F 패리 어택
-
-	m_pFsmCom->Add_State(CState_Player_Flame_LAttack00::Create(m_pFsmCom, this, FLAME_LATTACK0, &Desc));	// 좌클릭 공격1
-	m_pFsmCom->Add_State(CState_Player_Flame_LAttack01::Create(m_pFsmCom, this, FLAME_LATTACK1, &Desc));	// 좌클릭 공격1
-	m_pFsmCom->Add_State(CState_Player_Flame_RAttack00::Create(m_pFsmCom, this, FLAME_RATTACK0, &Desc));	// 우클릭 공격1
-	m_pFsmCom->Add_State(CState_Player_Flame_RAttack01::Create(m_pFsmCom, this, FLAME_RATTACK1, &Desc));	// 우클릭 공격2
-	m_pFsmCom->Add_State(CState_Player_Flame_Charge00::Create(m_pFsmCom, this, FLAME_CHARGE0, &Desc));	// 우클릭 차지 공격1
-	m_pFsmCom->Add_State(CState_Player_Flame_Charge01::Create(m_pFsmCom, this, FLAME_CHARGE1, &Desc));	// 우클릭 차지 공격2
-	//페이탈 아츠
-		// Shift + F 패리 어택
-
-	m_pFsmCom->Add_State(CState_Player_Scissor_LAttack00::Create(m_pFsmCom, this, SCISSOR_LATTACK0, &Desc));	// 좌클릭 공격1
-	m_pFsmCom->Add_State(CState_Player_Scissor_LAttack01::Create(m_pFsmCom, this, SCISSOR_LATTACK1, &Desc));	// 좌클릭 공격2
-	m_pFsmCom->Add_State(CState_Player_Scissor_RAttack00::Create(m_pFsmCom, this, SCISSOR_RATTACK0, &Desc));	// 우클릭 공격1
-	m_pFsmCom->Add_State(CState_Player_Scissor_RAttack01::Create(m_pFsmCom, this, SCISSOR_RATTACK1, &Desc));	// 우클릭 공격2
-	m_pFsmCom->Add_State(CState_Player_Scissor_Charge00::Create(m_pFsmCom, this, SCISSOR_CHARGE0, &Desc));	// 우클릭 공격2
-	m_pFsmCom->Add_State(CState_Player_Scissor_Charge01::Create(m_pFsmCom, this, SCISSOR_CHARGE1, &Desc));	// 우클릭 공격2
-	m_pFsmCom->Add_State(CState_Player_Scissor_Buff::Create(m_pFsmCom, this, SCISSOR_BUFF, &Desc));	// 버프
-	m_pFsmCom->Add_State(CState_Player_Scissor_Fable0::Create(m_pFsmCom, this, SCISSOR_FABAL0, &Desc));	// 콤보1
-	m_pFsmCom->Add_State(CState_Player_Scissor_Fable1::Create(m_pFsmCom, this, SCISSOR_FABAL1, &Desc));	// 콤보2
-	m_pFsmCom->Add_State(CState_Player_Scissor_Fable2::Create(m_pFsmCom, this, SCISSOR_FABAL2, &Desc));	// 콤보3
-
-	/* 소피아 컷신 */
-	m_pFsmCom->Add_State(CState_Player_OpenSophiaDoor::Create(m_pFsmCom, this, SOPHIA_DOOR_OPEN, &Desc));
-	m_pFsmCom->Add_State(CState_Player_SophiaWalk::Create(m_pFsmCom, this, SOPHIA_WALK, &Desc));
-
-	m_pFsmCom->Set_State(OH_IDLE);
-
-	return S_OK;
-}
-
-HRESULT CPlayer::Ready_Effect()
-{
-	m_pEffect_Manager = CEffect_Manager::Get_Instance();
-	if (nullptr == m_pEffect_Manager)
-		return E_FAIL;
-	Safe_AddRef(m_pEffect_Manager);
-
-	m_Effects.resize(EFFECT_END);
-
-	const _Matrix* pParetnMatrix = m_pTransformCom->Get_WorldMatrix_Ptr();
-	const _Matrix* pSocketBoneMatrix = m_pModelCom->Get_BoneCombindTransformationMatrix_Ptr("BN_Weapon_R");
-
-	m_Effects[EFFECT_RAPIER_TRAIL_FIRST] = m_pEffect_Manager->Clone_Effect(TEXT("Player_Attack_Rapier_StormStab_First"), pParetnMatrix,
-		pSocketBoneMatrix, _Vec3(0.f, 0.f, 0.f), _Vec3(0.f, 0.f, 0.f), _Vec3(1.f, 1.f, 1.f));
-
-	m_Effects[EFFECT_RAPIER_TRAIL_SECOND] = m_pEffect_Manager->Clone_Effect(TEXT("Player_Attack_Rapier_StormStab_Second"), pParetnMatrix,
-		pSocketBoneMatrix, _Vec3(0.f, 0.f, 0.f), _Vec3(0.f, 0.f, 0.f), _Vec3(1.f, 1.f, 1.f));
-
-	pSocketBoneMatrix = m_pModelCom->Get_BoneCombindTransformationMatrix_Ptr("Bn_L_ForeTwist");
-	m_Effects[EFFECT_GRIND] = m_pEffect_Manager->Clone_Effect(TEXT("Player_Grind"), pParetnMatrix,
-		pSocketBoneMatrix, _Vec3(0.f, 0.11f, -0.12f), _Vec3(0.f, 0.f, 0.f), _Vec3(1.f, 1.f, 1.f));
-
-	pSocketBoneMatrix = m_pModelCom->Get_BoneCombindTransformationMatrix_Ptr("BN_Weapon_L");
-	m_Effects[EFFECT_HEAL] = m_pEffect_Manager->Clone_Effect(TEXT("Player_Potion"), pParetnMatrix,
-		pSocketBoneMatrix, _Vec3(0.f, 0.f, 0.f), _Vec3(0.f, 0.f, 0.f), _Vec3(1.f, 1.f, 1.f));
-
-
-	return S_OK;
-}
-
-_bool CPlayer::Calc_DamageGain(_float fAtkDmg, _Vec3 vHitPos, _uint iHitType, _uint iAttackStrength)
+_bool CPlayer::Calc_DamageGain(_float fAtkDmg, _Vec3 vHitPos, _uint iHitType, _uint iAttackStrength, CGameObject* pAttacker)
 {
 	if (fAtkDmg <= 0.f)
 		return false;
@@ -702,45 +524,68 @@ _bool CPlayer::Calc_DamageGain(_float fAtkDmg, _Vec3 vHitPos, _uint iHitType, _u
 	const _Matrix* pParetnMatrix = m_pTransformCom->Get_WorldMatrix_Ptr();
 	const _Matrix* pSocketBoneMatrix = m_pModelCom->Get_BoneCombindTransformationMatrix_Ptr("BN_Weapon_R");
 
-	if (m_isGuard)
+	if (m_isInvicible) // 회피 상태
+	{
+		if (ATK_STRONG == iAttackStrength)
+		{
+			Damaged(fAtkDmg, vHitPos);
+		}
+	}
+	else if (m_isGuard)	// 가드 상태
 	{
 		//퍼펙트 가드
 		if (m_fGuardTime < 0.17f)
 		{
+			if (nullptr != pAttacker)
+			{
+				_wstring strObjecTag = pAttacker->Get_Tag();
+
+				if (strObjecTag == TEXT("Monster"))
+				{
+					CMonster* pMonster = dynamic_cast<CMonster*>(pAttacker);
+					pMonster->Increase_GroggyPoint(10.f);
+
+				}
+				else if (strObjecTag == TEXT("MonsterWeapon"))
+				{
+					CWeapon* pWeapon = dynamic_cast<CWeapon*>(pAttacker);
+					CMonster* pMonster = pWeapon->Get_Monster();
+					pMonster->Increase_GroggyPoint(10.f);
+				}
+			}
+
 			m_pEffect_Manager->Add_Effect_ToLayer(LEVEL_GAMEPLAY, TEXT("Player_PerfectGuard"), pParetnMatrix, pSocketBoneMatrix);
 			m_pGameInstance->Start_TimerLack(TEXT("Timer_60"), 0.001f, 0.6f);
 		}
 		else
 		{
-			m_pEffect_Manager->Add_Effect_ToLayer(LEVEL_GAMEPLAY, TEXT("Player_Guard"), pParetnMatrix, pSocketBoneMatrix);
-			m_tPlayer_Stat->vGauge_Hp.x = max(0.f, m_tPlayer_Stat->vGauge_Hp.x - fAtkDmg * 0.7f);
+			if (ATK_STRONG == iAttackStrength)
+			{
+				Damaged(fAtkDmg, vHitPos);
+			}
+			else
+			{
+				m_pEffect_Manager->Add_Effect_ToLayer(LEVEL_GAMEPLAY, TEXT("Player_Guard"), pParetnMatrix, pSocketBoneMatrix);
+				m_tPlayer_Stat->vGauge_Hp.x = max(0.f, m_tPlayer_Stat->vGauge_Hp.x - fAtkDmg * 0.7f);
+				if (m_tPlayer_Stat->vGauge_Hp.y - m_tPlayer_Stat->vGauge_Hp.x > 100.f)
+					m_tPlayer_Stat->vGauge_Hp.y = max(m_tPlayer_Stat->vGauge_Hp.x, m_tPlayer_Stat->vGauge_Hp.y - fAtkDmg * 0.7f);
+			}
 		}
 
-		if (m_eWeaponType < 2)
-			m_pFsmCom->Change_State(OH_GUARDHIT, &vHitPos);
-		else
-			m_pFsmCom->Change_State(TH_GUARDHIT, &vHitPos);
+		if (ATK_STRONG != iAttackStrength)
+		{
+			if (m_eWeaponType < 2)
+				m_pFsmCom->Change_State(OH_GUARDHIT, &vHitPos);
+			else
+				m_pFsmCom->Change_State(TH_GUARDHIT, &vHitPos);
 
-		Choice_GuardSound(0, 0, false);
+			Choice_GuardSound(0, 0, false);
+		}
 	}
-	else
+	else //그냥 맞음
 	{
-		CState_Player_Hit::HIT_DESC HitDesc{};
-		HitDesc.vHitPos = vHitPos;
-		HitDesc.isDown = false;
-
-		if (fAtkDmg >= 30.f)
-			HitDesc.isDown = true;
-
-		m_tPlayer_Stat->vGauge_Hp.x = max(0.f, m_tPlayer_Stat->vGauge_Hp.x - fAtkDmg);
-		m_tPlayer_Stat->vGauge_Hp.y = m_tPlayer_Stat->vGauge_Hp.x;
-		if (fAtkDmg > 0.f)
-			m_pFsmCom->Change_State(HIT, &HitDesc);
-
-		m_pEffect_Manager->Add_Effect_ToLayer(LEVEL_GAMEPLAY, TEXT("Player_Impact"), pParetnMatrix, pSocketBoneMatrix);
+		Damaged(fAtkDmg, vHitPos);
 	}
-	//if (m_eStat.fHp <= 0.f)
-	//	m_pFsmCom->Change_State(HIT);
 
 	return true;
 }
@@ -773,6 +618,155 @@ _bool CPlayer::Check_Region_Fable01()
 		return false;
 
 	return true;
+}
+
+_bool CPlayer::Check_Region_Fable02()
+{
+	_int iRegionCount = 3;
+
+	if (WEP_SCISSOR != m_eWeaponType)
+		iRegionCount = 1;
+
+	_float fCurretnRegion = m_tPlayer_Stat->vGauge_Region.x - m_tPlayer_Stat->fRegion_Interval * iRegionCount;
+
+	if (fCurretnRegion < 0.f)
+		return false;
+
+	return true;
+}
+
+void CPlayer::Decrease_Region(_uint iRegionCount)
+{
+	_float fCurretnRegion = m_tPlayer_Stat->vGauge_Region.x;
+	for (_uint i = 0; i < iRegionCount; ++i)
+	{
+		fCurretnRegion -= m_tPlayer_Stat->fRegion_Interval;
+
+		if (fCurretnRegion < 0.f)
+			return;
+	}
+
+	//m_tPlayer_Stat->vGauge_Region.x = fCurretnRegion;
+	//m_tPlayer_Stat->vGauge_Region.y = m_tPlayer_Stat->vGauge_Region.x;
+}
+
+void CPlayer::Recovery_Region(_float fAmount)
+{
+	m_tPlayer_Stat->vGauge_Region.x = min(m_tPlayer_Stat->vGauge_Region.x + fAmount, m_tPlayer_Stat->vGauge_Region.z);
+	m_tPlayer_Stat->vGauge_Region.y = m_tPlayer_Stat->vGauge_Region.x;
+}
+
+
+void CPlayer::Damaged(_float fAtkDmg, _Vec3 vHitPos)
+{
+	const _Matrix* pParetnMatrix = m_pTransformCom->Get_WorldMatrix_Ptr();
+	const _Matrix* pSocketBoneMatrix = m_pModelCom->Get_BoneCombindTransformationMatrix_Ptr("BN_Weapon_R");
+
+	CState_Player_Hit::HIT_DESC HitDesc{};
+	HitDesc.vHitPos = vHitPos;
+	HitDesc.isDown = false;
+
+	if (fAtkDmg >= 30.f)
+		HitDesc.isDown = true;
+
+	m_tPlayer_Stat->vGauge_Hp.x = max(0.f, m_tPlayer_Stat->vGauge_Hp.x - fAtkDmg);
+	if(m_tPlayer_Stat->vGauge_Hp.y - m_tPlayer_Stat->vGauge_Hp.x > 100.f)
+		m_tPlayer_Stat->vGauge_Hp.y = max(m_tPlayer_Stat->vGauge_Hp.x, m_tPlayer_Stat->vGauge_Hp.y - fAtkDmg);
+
+	if (fAtkDmg > 0.f)
+		m_pFsmCom->Change_State(HIT, &HitDesc);
+
+	m_pEffect_Manager->Add_Effect_ToLayer(LEVEL_GAMEPLAY, TEXT("Player_Impact"), pParetnMatrix, pSocketBoneMatrix);
+}
+
+void CPlayer::Update_Stat(_float fTimeDelta)
+{
+#pragma region 스테미나
+	if (m_fStaminaRecoveryTime > 0.f)
+	{
+		m_fStaminaRecoveryTime -= fTimeDelta;
+	}
+	else if (m_fStaminaRecoveryTime <= 0.f)
+	{
+		m_tPlayer_Stat->vGauge_Stamina.x = min(m_tPlayer_Stat->vGauge_Stamina.x + 10.f * fTimeDelta, m_tPlayer_Stat->vGauge_Stamina.z);
+	}
+#pragma endregion
+
+
+}
+
+void CPlayer::CollisionStay_IntercObj(CGameObject* pGameObject)
+{
+	if (m_pFsmCom->Get_CurrentState() >= 100)
+		return;
+
+	if (pGameObject->Get_Tag() == TEXT("Ladder"))
+	{
+		if (GET_GAMEINTERFACE->Action_InterAction(TEXT("사다리를 탄다")))
+		{
+			m_pFsmCom->Change_State(LADDER, pGameObject);
+		}
+	}
+	else if (pGameObject->Get_Tag() == TEXT("Lift_Controller"))
+	{
+		if (GET_GAMEINTERFACE->Action_InterAction(TEXT("엘리베이터를 동작시킨다")))
+		{
+			m_pFsmCom->Change_State(LIFT, pGameObject);
+		}
+	}
+	else if (pGameObject->Get_Tag() == TEXT("Lift_Floor"))
+	{
+		m_pRigidBodyCom->Set_IsOnCell(false);
+		m_pRigidBodyCom->Set_IsLockCell(false);
+
+		if (dynamic_cast<CLift_Floor*>(pGameObject)->Get_isMoving())
+		{
+			m_pRigidBodyCom->Set_Gravity(true);
+		}
+		else
+		{
+			m_pRigidBodyCom->Set_Gravity(false);
+		}
+	}
+	else if (pGameObject->Get_Tag() == TEXT("TreasureBox"))
+	{
+		CTreasureBox* pTreasureBox = dynamic_cast<CTreasureBox*>(pGameObject);
+
+		if (!pTreasureBox->Get_IsOpen() && GET_GAMEINTERFACE->Action_InterAction(TEXT("상자를 연다")))
+		{
+			dynamic_cast<CTreasureBox*>(pGameObject)->Set_IsOpen(true);
+			m_pFsmCom->Change_State(CHEST, pGameObject);
+		}
+	}
+	else if (pGameObject->Get_Tag() == TEXT("Stargazer"))
+	{
+		CStargazer* pStargazer = dynamic_cast<CStargazer*>(pGameObject);
+
+		if (pStargazer->Get_IsOpend())
+		{
+			if (GET_GAMEINTERFACE->Action_InterAction(TEXT("별바라기를 사용한다")))
+			{
+				/*dynamic_cast<CTreasureBox*>(pGameObject)->Set_IsOpen(true);
+				m_pFsmCom->Change_State(CHEST, pGameObject);*/
+			}
+		}
+		else
+		{
+			if (GET_GAMEINTERFACE->Action_InterAction(TEXT("별바라기를 복구시킨다")))
+			{
+				m_pFsmCom->Change_State(STARGAZER, pGameObject);
+			}
+		}
+
+	}
+	else if (pGameObject->Get_Tag() == TEXT("SteppingStone"))
+	{
+		CSteppingStone* pSteppingStone = dynamic_cast<CSteppingStone*>(pGameObject);
+		if (GET_GAMEINTERFACE->Action_InterAction(TEXT("가자아아아")))
+		{
+			m_pFsmCom->Change_State(TELEPORT, pSteppingStone);
+		}
+	}
 }
 
 void CPlayer::Choice_GuardSound(_uint iAttackStrength, _uint iHitType, _bool isPerfect)
@@ -891,114 +885,189 @@ void CPlayer::Choice_GuardSound(_uint iAttackStrength, _uint iHitType, _bool isP
 	m_pSoundCom[PAWN_SOUND_EFFECT1]->Play2D(strSoundKey.c_str(), &g_fEffectVolume);
 }
 
-_bool CPlayer::Check_Region_Fable02()
+
+HRESULT CPlayer::Ready_Weapon()
 {
-	_int iRegionCount = 3;
+	CWeapon::PLAYER_WAPON_DESC		WeaponDesc{};
+	WeaponDesc.pParentWorldMatrix = m_pTransformCom->Get_WorldMatrix_Ptr();
+	WeaponDesc.pSocketBoneMatrix = m_pModelCom->Get_BoneCombindTransformationMatrix_Ptr("BN_Weapon_R");
+	WeaponDesc.pPlayer = this;
 
-	if (WEP_SCISSOR != m_eWeaponType)
-		iRegionCount = 1;
+	m_pWeapon[WEP_RAPIER] = dynamic_cast<CWeapon*>(m_pGameInstance->Clone_GameObject(TEXT("Prototype_GameObject_Weapon_Rapier"), &WeaponDesc));
+	if (nullptr == m_pWeapon[WEP_RAPIER])
+		return E_FAIL;
 
-	_float fCurretnRegion = m_tPlayer_Stat->vGauge_Region.x - m_tPlayer_Stat->fRegion_Interval * iRegionCount;
+	m_pWeapon[WEP_FLAME] = dynamic_cast<CWeapon*>(m_pGameInstance->Clone_GameObject(TEXT("Prototype_GameObject_Weapon_FlameSword"), &WeaponDesc));
+	if (nullptr == m_pWeapon)
+		return E_FAIL;
 
-	if (fCurretnRegion < 0.f)
-		return false;
+	WeaponDesc.pSocketBoneMatrix2 = m_pModelCom->Get_BoneCombindTransformationMatrix_Ptr("BN_Weapon_L");
+	m_pWeapon[WEP_SCISSOR] = dynamic_cast<CWeapon*>(m_pGameInstance->Clone_GameObject(TEXT("Prototype_GameObject_Weapon_Scissor"), &WeaponDesc));
+	if (nullptr == m_pWeapon)
+		return E_FAIL;
 
-	return true;
+	Change_Weapon();
+
+	return S_OK;
 }
 
-void CPlayer::Decrease_Region(_uint iRegionCount)
+HRESULT CPlayer::Ready_Components()
 {
-	_float fCurretnRegion = m_tPlayer_Stat->vGauge_Region.x;
-	for (_uint i = 0; i < iRegionCount; ++i)
-	{
-		fCurretnRegion -= m_tPlayer_Stat->fRegion_Interval;
+	if (FAILED(__super::Ready_Components()))
+		return E_FAIL;
 
-		if (fCurretnRegion < 0.f)
-			return;
-	}
+	/* FOR.Com_Model */
+	if (FAILED(__super::Add_Component(LEVEL_GAMEPLAY, TEXT("Prototype_Component_Model_Player"),
+		TEXT("Com_Model"), reinterpret_cast<CComponent**>(&m_pModelCom))))
+		return E_FAIL;
 
-	m_tPlayer_Stat->vGauge_Region.x = fCurretnRegion;
-	m_tPlayer_Stat->vGauge_Region.y = m_tPlayer_Stat->vGauge_Region.x;
+	/* FOR.Com_Collider */
+	CBounding_OBB::BOUNDING_OBB_DESC			ColliderDesc{};
+	ColliderDesc.vExtents = _float3(0.3f, 0.9f, 0.3f);
+	ColliderDesc.vCenter = _float3(0.f, ColliderDesc.vExtents.y, 0.f);
+	ColliderDesc.vAngles = _float3(0.f, 0.f, 0.f);
+
+	if (FAILED(__super::Add_Component(LEVEL_STATIC, TEXT("Prototype_Component_Collider_OBB"),
+		TEXT("Com_Collider"), reinterpret_cast<CComponent**>(&m_pColliderCom), &ColliderDesc)))
+		return E_FAIL;
+	m_pColliderCom->Set_Owner(this);
+
+	// 항상 마지막에 생성하기
+	CRigidBody::RIGIDBODY_DESC RigidBodyDesc{};
+	RigidBodyDesc.isStatic = false;
+	RigidBodyDesc.isGravity = false;
+	RigidBodyDesc.pOwnerTransform = m_pTransformCom;
+	RigidBodyDesc.pOwnerNavigation = m_pNavigationCom;
+	RigidBodyDesc.isCapsule = true;
+
+	RigidBodyDesc.pOwner = this;
+	RigidBodyDesc.fStaticFriction = 0.f;
+	RigidBodyDesc.fDynamicFriction = 0.f;
+	RigidBodyDesc.fRestituion = 0.f;
+	RigidBodyDesc.PxLockFlags = PxRigidDynamicLockFlag::eLOCK_ANGULAR_X |
+		PxRigidDynamicLockFlag::eLOCK_ANGULAR_Y |
+		PxRigidDynamicLockFlag::eLOCK_ANGULAR_Z;
+
+	physX::GeometryCapsule CapsuleDesc;
+	CapsuleDesc.fHeight = 1.f;
+	CapsuleDesc.fRadius = 0.25f;
+	RigidBodyDesc.pGeometry = &CapsuleDesc;
+
+	/* FOR.Com_RigidBody */
+	if (FAILED(__super::Add_Component(LEVEL_STATIC, TEXT("Prototype_Component_RigidBody"),
+		TEXT("Com_RigidBody"), reinterpret_cast<CComponent**>(&m_pRigidBodyCom), &RigidBodyDesc)))
+		return E_FAIL;
+
+	return S_OK;
 }
 
-void CPlayer::Recovery_Region(_float fAmount)
+HRESULT CPlayer::Ready_FSM()
 {
-	m_tPlayer_Stat->vGauge_Region.x = min(m_tPlayer_Stat->vGauge_Region.x + fAmount, m_tPlayer_Stat->vGauge_Region.z);
-	m_tPlayer_Stat->vGauge_Region.y = m_tPlayer_Stat->vGauge_Region.x;
+	/* FOR.Com_FSM */
+	if (FAILED(__super::Add_Component(LEVEL_STATIC, TEXT("Prototype_Component_FSM"),
+		TEXT("Com_FSM"), reinterpret_cast<CComponent**>(&m_pFsmCom))))
+		return E_FAIL;
+
+	FSM_INIT_DESC Desc{};
+
+	Desc.pPrevTrackPos = &m_PrevTrackPos;
+
+
+	m_pFsmCom->Add_State(CState_Player_Hit::Create(m_pFsmCom, this, HIT, &Desc));
+	m_pFsmCom->Add_State(CState_Player_Parry::Create(m_pFsmCom, this, PARRY, &Desc));
+	m_pFsmCom->Add_State(CState_Player_Heal::Create(m_pFsmCom, this, HEAL, &Desc));
+	m_pFsmCom->Add_State(CState_Player_ChangeWeapon::Create(m_pFsmCom, this, CHANGEWEP, &Desc));
+	m_pFsmCom->Add_State(CState_Player_Ladder::Create(m_pFsmCom, this, LADDER, &Desc));
+	m_pFsmCom->Add_State(CState_Player_Lift::Create(m_pFsmCom, this, LIFT, &Desc));
+	m_pFsmCom->Add_State(CState_Player_Chest::Create(m_pFsmCom, this, CHEST, &Desc));
+	m_pFsmCom->Add_State(CState_Player_ItemGet::Create(m_pFsmCom, this, ITEMGET, &Desc));
+	m_pFsmCom->Add_State(CState_Player_Stargazer::Create(m_pFsmCom, this, STARGAZER, &Desc));
+	m_pFsmCom->Add_State(CState_Player_Teleport::Create(m_pFsmCom, this, TELEPORT, &Desc));
+	m_pFsmCom->Add_State(CState_Player_Grinder::Create(m_pFsmCom, this, GRINDER, &Desc));
+	m_pFsmCom->Add_State(CState_Player_GetUp::Create(m_pFsmCom, this, GETUP, &Desc));
+
+	m_pFsmCom->Add_State(CState_Player_OH_Idle::Create(m_pFsmCom, this, OH_IDLE, &Desc));
+	m_pFsmCom->Add_State(CState_Player_OH_Walk::Create(m_pFsmCom, this, OH_WALK, &Desc));
+	m_pFsmCom->Add_State(CState_Player_OH_Run::Create(m_pFsmCom, this, OH_RUN, &Desc));
+	m_pFsmCom->Add_State(CState_Player_OH_Sprint::Create(m_pFsmCom, this, OH_SPRINT, &Desc));
+	m_pFsmCom->Add_State(CState_Player_OH_Guard::Create(m_pFsmCom, this, OH_GUARD, &Desc));
+	m_pFsmCom->Add_State(CState_Player_OH_GuardHit::Create(m_pFsmCom, this, OH_GUARDHIT, &Desc));
+	m_pFsmCom->Add_State(CState_Player_OH_Dash::Create(m_pFsmCom, this, OH_DASH, &Desc));
+
+	m_pFsmCom->Add_State(CState_Player_TH_Idle::Create(m_pFsmCom, this, TH_IDLE, &Desc));
+	m_pFsmCom->Add_State(CState_Player_TH_Walk::Create(m_pFsmCom, this, TH_WALK, &Desc));
+	m_pFsmCom->Add_State(CState_Player_TH_Run::Create(m_pFsmCom, this, TH_RUN, &Desc));
+	m_pFsmCom->Add_State(CState_Player_TH_Sprint::Create(m_pFsmCom, this, TH_SPRINT, &Desc));
+	m_pFsmCom->Add_State(CState_Player_TH_Guard::Create(m_pFsmCom, this, TH_GUARD, &Desc));
+	m_pFsmCom->Add_State(CState_Player_TH_GuardHit::Create(m_pFsmCom, this, TH_GUARDHIT, &Desc));
+	m_pFsmCom->Add_State(CState_Player_TH_Dash::Create(m_pFsmCom, this, TH_DASH, &Desc));
+
+	m_pFsmCom->Add_State(CState_Player_Rapier_LAttack00::Create(m_pFsmCom, this, RAPIER_LATTACK0, &Desc));	// 좌클릭 공격1
+	m_pFsmCom->Add_State(CState_Player_Rapier_LAttack01::Create(m_pFsmCom, this, RAPIER_LATTACK1, &Desc));	// 좌클릭 공격2
+	m_pFsmCom->Add_State(CState_Player_Rapier_RAttack00::Create(m_pFsmCom, this, RAPIER_RATTACK0, &Desc));	// 우클릭 공격
+	m_pFsmCom->Add_State(CState_Player_Rapier_Charge::Create(m_pFsmCom, this, RAPIER_CHARGE, &Desc));	// 우클릭 차지공격
+	m_pFsmCom->Add_State(CState_Player_Rapier_Fable::Create(m_pFsmCom, this, RAPIER_FABALE, &Desc));	// F 페이탈아츠
+	// Shift + F 패리 어택
+
+	m_pFsmCom->Add_State(CState_Player_Flame_LAttack00::Create(m_pFsmCom, this, FLAME_LATTACK0, &Desc));	// 좌클릭 공격1
+	m_pFsmCom->Add_State(CState_Player_Flame_LAttack01::Create(m_pFsmCom, this, FLAME_LATTACK1, &Desc));	// 좌클릭 공격1
+	m_pFsmCom->Add_State(CState_Player_Flame_RAttack00::Create(m_pFsmCom, this, FLAME_RATTACK0, &Desc));	// 우클릭 공격1
+	m_pFsmCom->Add_State(CState_Player_Flame_RAttack01::Create(m_pFsmCom, this, FLAME_RATTACK1, &Desc));	// 우클릭 공격2
+	m_pFsmCom->Add_State(CState_Player_Flame_Charge00::Create(m_pFsmCom, this, FLAME_CHARGE0, &Desc));	// 우클릭 차지 공격1
+	m_pFsmCom->Add_State(CState_Player_Flame_Charge01::Create(m_pFsmCom, this, FLAME_CHARGE1, &Desc));	// 우클릭 차지 공격2
+	//페이탈 아츠
+		// Shift + F 패리 어택
+
+	m_pFsmCom->Add_State(CState_Player_Scissor_LAttack00::Create(m_pFsmCom, this, SCISSOR_LATTACK0, &Desc));	// 좌클릭 공격1
+	m_pFsmCom->Add_State(CState_Player_Scissor_LAttack01::Create(m_pFsmCom, this, SCISSOR_LATTACK1, &Desc));	// 좌클릭 공격2
+	m_pFsmCom->Add_State(CState_Player_Scissor_RAttack00::Create(m_pFsmCom, this, SCISSOR_RATTACK0, &Desc));	// 우클릭 공격1
+	m_pFsmCom->Add_State(CState_Player_Scissor_RAttack01::Create(m_pFsmCom, this, SCISSOR_RATTACK1, &Desc));	// 우클릭 공격2
+	m_pFsmCom->Add_State(CState_Player_Scissor_Charge00::Create(m_pFsmCom, this, SCISSOR_CHARGE0, &Desc));	// 우클릭 공격2
+	m_pFsmCom->Add_State(CState_Player_Scissor_Charge01::Create(m_pFsmCom, this, SCISSOR_CHARGE1, &Desc));	// 우클릭 공격2
+	m_pFsmCom->Add_State(CState_Player_Scissor_Buff::Create(m_pFsmCom, this, SCISSOR_BUFF, &Desc));	// 버프
+	m_pFsmCom->Add_State(CState_Player_Scissor_Fable0::Create(m_pFsmCom, this, SCISSOR_FABAL0, &Desc));	// 콤보1
+	m_pFsmCom->Add_State(CState_Player_Scissor_Fable1::Create(m_pFsmCom, this, SCISSOR_FABAL1, &Desc));	// 콤보2
+	m_pFsmCom->Add_State(CState_Player_Scissor_Fable2::Create(m_pFsmCom, this, SCISSOR_FABAL2, &Desc));	// 콤보3
+
+	/* 소피아 컷신 */
+	m_pFsmCom->Add_State(CState_Player_OpenSophiaDoor::Create(m_pFsmCom, this, SOPHIA_DOOR_OPEN, &Desc));
+	m_pFsmCom->Add_State(CState_Player_SophiaWalk::Create(m_pFsmCom, this, SOPHIA_WALK, &Desc));
+	m_pFsmCom->Add_State(CState_Player_SophiaHand::Create(m_pFsmCom, this, SOPHIA_HAND, &Desc));
+	m_pFsmCom->Add_State(CState_Player_SophiaHandEnd::Create(m_pFsmCom, this, SOPHIA_HANDEND, &Desc));
+
+	m_pFsmCom->Set_State(OH_IDLE);
+
+	return S_OK;
 }
 
-void CPlayer::CollisionStay_IntercObj(CGameObject* pGameObject)
+HRESULT CPlayer::Ready_Effect()
 {
-	if (m_pFsmCom->Get_CurrentState() >= 100)
-		return;
+	m_pEffect_Manager = CEffect_Manager::Get_Instance();
+	if (nullptr == m_pEffect_Manager)
+		return E_FAIL;
+	Safe_AddRef(m_pEffect_Manager);
 
-	if (pGameObject->Get_Tag() == TEXT("Ladder"))
-	{
-		if (GET_GAMEINTERFACE->Action_InterAction(TEXT("사다리를 탄다")))
-		{
-			m_pFsmCom->Change_State(LADDER, pGameObject);
-		}
-	}
-	else if (pGameObject->Get_Tag() == TEXT("Lift_Controller"))
-	{
-		if (GET_GAMEINTERFACE->Action_InterAction(TEXT("엘리베이터를 동작시킨다")))
-		{
-			m_pFsmCom->Change_State(LIFT, pGameObject);
-		}
-	}
-	else if (pGameObject->Get_Tag() == TEXT("Lift_Floor"))
-	{
-		m_pRigidBodyCom->Set_IsOnCell(false);
-		m_pRigidBodyCom->Set_IsLockCell(false);
+	m_Effects.resize(EFFECT_END);
 
-		if (dynamic_cast<CLift_Floor*>(pGameObject)->Get_isMoving())
-		{
-			m_pRigidBodyCom->Set_Gravity(true);
-		}
-		else
-		{
-			m_pRigidBodyCom->Set_Gravity(false);
-		}
-	}
-	else if (pGameObject->Get_Tag() == TEXT("TreasureBox"))
-	{
-		CTreasureBox* pTreasureBox = dynamic_cast<CTreasureBox*>(pGameObject);
+	const _Matrix* pParetnMatrix = m_pTransformCom->Get_WorldMatrix_Ptr();
+	const _Matrix* pSocketBoneMatrix = m_pModelCom->Get_BoneCombindTransformationMatrix_Ptr("BN_Weapon_R");
 
-		if (!pTreasureBox->Get_IsOpen() && GET_GAMEINTERFACE->Action_InterAction(TEXT("상자를 연다")))
-		{
-			dynamic_cast<CTreasureBox*>(pGameObject)->Set_IsOpen(true);
-			m_pFsmCom->Change_State(CHEST, pGameObject);
-		}
-	}
-	else if (pGameObject->Get_Tag() == TEXT("Stargazer"))
-	{
-		CStargazer* pStargazer = dynamic_cast<CStargazer*>(pGameObject);
+	m_Effects[EFFECT_RAPIER_TRAIL_FIRST] = m_pEffect_Manager->Clone_Effect(TEXT("Player_Attack_Rapier_StormStab_First"), pParetnMatrix,
+		pSocketBoneMatrix, _Vec3(0.f, 0.f, 0.f), _Vec3(0.f, 0.f, 0.f), _Vec3(1.f, 1.f, 1.f));
 
-		if (pStargazer->Get_IsOpend())
-		{
-			if (GET_GAMEINTERFACE->Action_InterAction(TEXT("별바라기를 사용한다")))
-			{
-				/*dynamic_cast<CTreasureBox*>(pGameObject)->Set_IsOpen(true);
-				m_pFsmCom->Change_State(CHEST, pGameObject);*/
-			}
-		}
-		else
-		{
-			if (GET_GAMEINTERFACE->Action_InterAction(TEXT("별바라기를 복구시킨다")))
-			{
-				m_pFsmCom->Change_State(STARGAZER, pGameObject);
-			}
-		}
+	m_Effects[EFFECT_RAPIER_TRAIL_SECOND] = m_pEffect_Manager->Clone_Effect(TEXT("Player_Attack_Rapier_StormStab_Second"), pParetnMatrix,
+		pSocketBoneMatrix, _Vec3(0.f, 0.f, 0.f), _Vec3(0.f, 0.f, 0.f), _Vec3(1.f, 1.f, 1.f));
 
-	}
-	else if (pGameObject->Get_Tag() == TEXT("SteppingStone"))
-	{
-		CSteppingStone* pSteppingStone = dynamic_cast<CSteppingStone*>(pGameObject);
-		if (GET_GAMEINTERFACE->Action_InterAction(TEXT("가자아아아")))
-		{
-			m_pFsmCom->Change_State(TELEPORT, pSteppingStone);
-		}
-	}
+	pSocketBoneMatrix = m_pModelCom->Get_BoneCombindTransformationMatrix_Ptr("Bn_L_ForeTwist");
+	m_Effects[EFFECT_GRIND] = m_pEffect_Manager->Clone_Effect(TEXT("Player_Grind"), pParetnMatrix,
+		pSocketBoneMatrix, _Vec3(0.f, 0.11f, -0.12f), _Vec3(0.f, 0.f, 0.f), _Vec3(1.f, 1.f, 1.f));
+
+	pSocketBoneMatrix = m_pModelCom->Get_BoneCombindTransformationMatrix_Ptr("BN_Weapon_L");
+	m_Effects[EFFECT_HEAL] = m_pEffect_Manager->Clone_Effect(TEXT("Player_Potion"), pParetnMatrix,
+		pSocketBoneMatrix, _Vec3(0.f, 0.f, 0.f), _Vec3(0.f, 0.f, 0.f), _Vec3(1.f, 1.f, 1.f));
+
+
+	return S_OK;
 }
 
 CPlayer * CPlayer::Create(ID3D11Device * pDevice, ID3D11DeviceContext * pContext)
@@ -1012,22 +1081,6 @@ CPlayer * CPlayer::Create(ID3D11Device * pDevice, ID3D11DeviceContext * pContext
 	}
 
 	return pInstance;
-}
-
-void CPlayer::Update_Stat(_float fTimeDelta)
-{
-#pragma region 스테미나
-	if (m_fStaminaRecoveryTime > 0.f)
-	{
-		m_fStaminaRecoveryTime -= fTimeDelta;
-	}
-	else if (m_fStaminaRecoveryTime <= 0.f)
-	{
-		m_tPlayer_Stat->vGauge_Stamina.x = min(m_tPlayer_Stat->vGauge_Stamina.x + 10.f * fTimeDelta, m_tPlayer_Stat->vGauge_Stamina.z);
-	}
-#pragma endregion
-
-
 }
 
 CPawn* CPlayer::Clone(void * pArg)

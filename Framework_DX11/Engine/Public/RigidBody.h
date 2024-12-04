@@ -53,6 +53,8 @@ public:
     void Set_Gravity(_bool isGravity);
     void Set_Kinematic(_bool isKinematic);
 
+    void Set_NavOffsetY(_float fOffsetY) { m_fNavOffsetY = fOffsetY; }
+
 private:
     class CGameObject* m_pOwner = { nullptr };
     class CTransform* m_pOwnerTransform = { nullptr };
@@ -72,6 +74,8 @@ private:
     _Vec3 m_vVelocity = {};
     _Vec3 m_vForce = {};
     _Vec3 m_vOffset = {};
+
+    _float  m_fNavOffsetY = {};
 
 private:
     HRESULT Add_PxActor(RIGIDBODY_DESC* pDesc);

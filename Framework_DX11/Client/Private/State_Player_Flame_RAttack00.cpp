@@ -31,9 +31,9 @@ HRESULT CState_Player_Flame_RAttack00::Initialize(_uint iStateNum, void* pArg)
 HRESULT CState_Player_Flame_RAttack00::Start_State(void* pArg)
 {
     if (m_pFsm->Get_PrevState() == CPlayer::TH_IDLE)
-        m_pPlayer->Change_Animation(m_iAnimation_FlameSA3, false, 0.3f);
+        m_pPlayer->Change_Animation(m_iAnimation_FlameSA3, false, 0.2f);
     else
-        m_pPlayer->Change_Animation(m_iAnimation_FlameSA3, false, 0.3f);
+        m_pPlayer->Change_Animation(m_iAnimation_FlameSA3, false, 0.2f);
 
     m_isInputLButton = false;
     m_isInputRButton = false;

@@ -181,6 +181,13 @@ void CUIManager::UIControl_Popup(_float fTimeDelta)
 
 void CUIManager::UIControl_Common(_float fTimeDelta)
 {
+	m_bIsPlayPageMaintain = true;
+
+	if (m_pUIPage_Effect->Check_Fade() > 0.f)
+		m_bIsPlayPageMaintain = false;
+	if ((m_pUIPage_Talking->GetPageAction(PAGEACTION::ACTION_ACTIVE)) || (m_pUIPage_Talking->GetPageAction(PAGEACTION::ACTION_OPENING)))
+		m_bIsPlayPageMaintain = false;
+
 	if (m_pUIPage_Main->GetPageAction(PAGEACTION::ACTION_ACTIVE))
 		UIControl_Main(fTimeDelta);
 	else if (m_pUIPage_Loading->GetPageAction(PAGEACTION::ACTION_ACTIVE))
@@ -199,7 +206,7 @@ void CUIManager::UIControl_Common(_float fTimeDelta)
 		UIControl_Option(fTimeDelta);
 	else if ((m_pUIPage_Skill->GetPageAction(PAGEACTION::ACTION_ACTIVE)) || (m_pUIPage_Skill->GetPageAction(PAGEACTION::ACTION_OPENING)))
 		UIControl_Skill(fTimeDelta);
-	else if (m_bIsIngame)
+	else if ((m_bIsIngame) && (m_bIsPlayPageMaintain))
 		OpenPage(UIPAGE::PAGE_PLAY);
 }
 

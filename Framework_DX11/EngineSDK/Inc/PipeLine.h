@@ -23,6 +23,9 @@ public:
 	const _Matrix& Get_Transform(D3DTRANSFORMSTATE eState) const { return m_TransformMatrices[eState]; }
 	const _Matrix& Get_Transform_Inverse(D3DTRANSFORMSTATE eState) const { return m_TransformInverseMatrices[eState]; }
 
+	const _Matrix& Get_OldTransform(D3DTRANSFORMSTATE eState) const { return m_OldTransformMatrices[eState]; }
+	const _Matrix& Get_OldTransform_Inverse(D3DTRANSFORMSTATE eState) const { return m_OldTransformInverseMatrices[eState]; }
+
 	const _Vec4& Get_CamPosition_Vec4() const { return m_vCamPosition; }
 	const _Vec3& Get_CamPosition_Vec3() const { return _Vec3(m_vCamPosition); }
 
@@ -46,6 +49,10 @@ private:
 	_Matrix			m_TransformMatrices[D3DTS_END];
 	_Matrix			m_TransformInverseMatrices[D3DTS_END];
 	_Vec4			m_vCamPosition = {};
+
+	_Matrix			m_OldTransformMatrices[D3DTS_END];
+	_Matrix			m_OldTransformInverseMatrices[D3DTS_END];
+	_Vec4			m_vOldCamPosition = {};
 
 	_float			m_fNear = {};
 	_float			m_fFar = {};

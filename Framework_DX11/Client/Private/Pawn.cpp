@@ -106,7 +106,7 @@ HRESULT CPawn::Render()
 	return S_OK;
 }
 
-_bool CPawn::Calc_DamageGain(_float fAtkDmg, _Vec3 vHitPos, _uint iHitType, _uint iAttackStrength)
+_bool CPawn::Calc_DamageGain(_float fAtkDmg, _Vec3 vHitPos, _uint iHitType, _uint iAttackStrength, CGameObject* pAttacker)
 {
 
 	//if () 피해를 입는지에관한 판단, 무적인지등
@@ -114,8 +114,7 @@ _bool CPawn::Calc_DamageGain(_float fAtkDmg, _Vec3 vHitPos, _uint iHitType, _uin
 	//
 	//}		//피해를 입는다면 true 반환, 
 
-	CEffect_Manager::Get_Instance()->Add_Effect_ToLayer(LEVEL_GAMEPLAY, TEXT("Player_Attack_Step_Normal"),
-		(_Vec3)m_pTransformCom->Get_State(CTransform::STATE_POSITION));
+	
 
 	m_eStat.fHp -= (fAtkDmg * ((100 - m_eStat.fDefence) / 100));
 	m_eStat.fAtkDmg = fAtkDmg;

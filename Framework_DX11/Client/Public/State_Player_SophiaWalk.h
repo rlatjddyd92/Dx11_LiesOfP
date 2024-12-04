@@ -26,6 +26,8 @@ private:
 
     _double* m_pTrackPos = { nullptr };
 
+    _Vec3       m_vRootMoveStack{};
+
 private:
     _bool               End_Check();
 

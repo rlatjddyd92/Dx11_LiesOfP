@@ -2,6 +2,7 @@
 #include "Deco_Collider.h"
 #include "GameInstance.h"
 #include "Player.h"
+#include "WallDeco.h"
 
 CDeco_Collider::CDeco_Collider(ID3D11Device* pDevice, ID3D11DeviceContext* pContext)
     : CGameObject{ pDevice, pContext }
@@ -24,6 +25,7 @@ HRESULT CDeco_Collider::Initialize(void* pArg)
 
     m_pParentWorldMatrix = pDesc->pParentWorldMatrix;
     m_pSoketMatrix = pDesc->pSoketMatrix;
+    m_pWallDeco = pDesc->pWallDeco;
 
     if (FAILED(__super::Initialize(pArg)))
         return E_FAIL;
@@ -99,9 +101,11 @@ void CDeco_Collider::OnCollisionEnter(CGameObject* pOther)
 {
     if (pOther->Get_Tag() == TEXT("Player"))
     {
-        CPlayer* pPlayer = dynamic_cast<CPlayer*>(pOther);
-
-        pPlayer->Calc_DamageGain(30.f, (_Vec3)m_pTransformCom->Get_State(CTransform::STATE_POSITION));
+        if (m_pWallDeco->Get_IsCanHit())
+        {
+            CPlayer* pPlayer = dynamic_cast<CPlayer*>(pOther);
+            pPlayer->Calc_DamageGain(30.f, (_Vec3)m_pTransformCom->Get_State(CTransform::STATE_POSITION));
+        }
     }
   
 }
@@ -145,7 +149,7 @@ HRESULT CDeco_Collider::Ready_Components()
         ;
 
     physX::GeometryBox BoxDesc;
-    BoxDesc.vSize = _Vec3(2.f, 2.f, 2.f);
+    BoxDesc.vSize = _Vec3(1.f, 2.f, 1.f);
     RigidBodyDesc.pGeometry = &BoxDesc;
 
     /* FOR.Com_RigidBody */

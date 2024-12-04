@@ -125,8 +125,10 @@ private:
 private:
 	HRESULT Render_Priority();
 	HRESULT Render_Height();
+
 	HRESULT Render_ShadowObj();
 	HRESULT Render_NonBlend();
+
 	HRESULT Render_Decal();
 	HRESULT Render_Lights();
 

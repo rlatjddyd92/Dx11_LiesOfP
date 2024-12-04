@@ -64,6 +64,7 @@ public:
 	virtual const _Matrix* Get_WeaponBoneCombinedMat(_uint iBoneIndex) { return &_Matrix{}; }
 	virtual const _Matrix* Get_WeaponWorldMat() { return &_Matrix{}; }
 
+	void	Increase_GroggyPoint(_float fGroggy) { m_eStat.fGrogyPoint += fGroggy; }
 	virtual void	SetUp_Dead() {};
 
 	void			Reset_Hp() { m_eStat.fHp = m_eStat.fMaxHp; }

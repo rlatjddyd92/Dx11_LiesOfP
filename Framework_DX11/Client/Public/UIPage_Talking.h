@@ -14,14 +14,98 @@ class CUIPage_Talking : public CUIPage
 public:
 	enum class PART_GROUP
 	{
+		TALKING_Back_Fx,
 
+		TALKING_Name_Text,
+		TALKING_Line,
+		TALKING_Script_0,
+		TALKING_Script_1,
+		TALKING_Script_2,
 
+		TALKING_Select_Clock_Center,
+		TALKING_Select_Clock_Fx,
+		TALKING_Select_Clock_Frame,
+		TALKING_Select_Clock_Progress,
+		TALKING_Select_Clock_Gear_Back,
+		TALKING_Select_Clock_Gear_0,
+		TALKING_Select_Clock_Gear_1,
+		TALKING_Select_Clock_Gear_2,
+		TALKING_Select_Clock_Indicator,
+
+		TALKING_Select_Left_Back,
+		TALKING_Select_Left_L,
+		TALKING_Select_Left_M,
+		TALKING_Select_Left_R,
+		TALKING_Select_Left_Text,
+
+		TALKING_Select_Right_Back,
+		TALKING_Select_Right_L,
+		TALKING_Select_Right_M,
+		TALKING_Select_Right_R,
+		TALKING_Select_Right_Text,
 
 
 
 		GROUP_END
 	};
 
+	
+
+	typedef struct SCRIPT_INFO
+	{
+		_wstring strSpeaker = {}; // <- 말하는 NPC 이름
+		_wstring strScript_A = {};
+		_wstring strScript_B = {};
+		_wstring strScript_C = {};
+
+		_float fAlpha = 0.f; // <- 투명 효과 변수
+	}SCRIPT;
+
+	typedef struct NPC_INFO
+	{
+		NPC_INFO() {}
+		~NPC_INFO() 
+		{
+			for (auto& iter : vecScript)
+				Safe_Delete(iter);
+
+			vecScript.clear();
+		}
+
+		SCRIPT* Get_NowScript()
+		{
+			return vecScript[iScript_Num];
+		}
+
+		_bool Add_ScriptNum()
+		{
+			if (iScript_Num < vecScript.size() - 1)
+			{
+				++iScript_Num;
+				return true;
+			}
+				
+			return false;
+		}
+
+		_bool Set_ScriptNum(_int iIndex)
+		{
+			if ((iIndex < 0) || (iIndex >= vecScript.size()))
+				return false;
+
+			iScript_Num = iIndex;
+
+			return true;
+		}
+
+		_wstring strName = {};
+		
+		_int iScript_Num = 0;
+
+		_bool bIsActive = false;
+
+		vector<SCRIPT*> vecScript;
+	}NPC;
 
 
 
@@ -47,9 +131,21 @@ public:
 	const vector<UPART*>& Get_UIPartInfo() { return m_vecPart; }
 	virtual HRESULT Ready_UIPart_Group_Control() override;
 
+	void Show_Script(NPC_SCRIPT eNPC, _int iScriptNum = -1);
+	void Next_Script();
+	void OFF_Script();
+
+	void Show_Select_Script(_wstring strLeft, _wstring strRight, _float fTime);
+	_bool IsLeft_LastSelect_Result() { return m_bLastSelect_Result_IsLeft; }
+
 protected:
+	void Update_Script();
+	void Update_Select();
 
-
+protected:
+	NPC_SCRIPT m_eNowNpc = NPC_SCRIPT::SCR_END;
+	_bool m_bLastSelect_Result_IsLeft = false;
+	vector<NPC*> m_vecNpc_ScriptInfo;
 
 
 

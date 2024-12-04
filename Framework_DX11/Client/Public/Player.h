@@ -96,9 +96,9 @@ public:
 	void					Set_IsJump(_bool isJump) { m_isJump = isJump; }
 
 	_bool					Get_IsGuard() { return m_isGuard; }
-	void					Set_IsGuard(_bool isGuard) {
+	void					Set_IsGuard(_bool isGuard, _bool isReset = true) {
 		m_isGuard = isGuard;
-		if (m_isGuard)
+		if (m_isGuard && isReset)
 			m_fGuardTime = 0.f;
 	}
 
@@ -168,7 +168,7 @@ public:
 	void			Seperate_Scissor();
 	void			Combine_Scissor();
 
-	void			Chnage_CameraMode(CPlayerCamera::CAMERA_MODE eMode);
+	void			Change_CameraMode(CPlayerCamera::CAMERA_MODE eMode);
 
 	void			LockOnOff();
 	CPawn*			Find_TargetMonster();
@@ -178,14 +178,13 @@ public:
 	void			Active_Effect(const EFFECT_TYPE& eType, _bool isLoop = true);
 	void			DeActive_Effect(const EFFECT_TYPE& eType);
 
-	virtual _bool	Calc_DamageGain(_float fAtkDmg, _Vec3 vHitPos = { 0.f,0.f,0.f }, _uint iHitType = HIT_END, _uint iAttackStrength = ATK_END) override;
+	virtual _bool	Calc_DamageGain(_float fAtkDmg, _Vec3 vHitPos = { 0.f,0.f,0.f }, _uint iHitType = HIT_END, _uint iAttackStrength = ATK_END, CGameObject* pAttacker = nullptr) override;
 	_bool			Decrease_Stamina(_float fAmount);
 	_bool			Check_Region_Fable01();
 	_bool			Check_Region_Fable02();
 	void			Decrease_Region(_uint iRegionCount = 1);
 	void			Recovery_Region(_float fAmount = 10.f);
 
-	void			Choice_GuardSound(_uint iAttackStrength = ATK_WEAK, _uint iHitType = HIT_END, _bool isPerfect = false);
 	/* Effect */
 private:
 	vector<class CEffect_Container*> m_Effects;
@@ -230,13 +229,18 @@ private:
 	_float				m_fStaminaRecoveryTime = {};
 
 private:
+	void			Damaged(_float fAtkDmg, _Vec3 vHitPos);
+
+	void			Update_Stat(_float fTimeDelta);
+	void			CollisionStay_IntercObj(CGameObject* pGameObject);
+
+	void			Choice_GuardSound(_uint iAttackStrength = ATK_WEAK, _uint iHitType = HIT_END, _bool isPerfect = false);
+
+private:
 	HRESULT Ready_Components();
 	HRESULT Ready_Weapon();
 	HRESULT Ready_FSM();
 	HRESULT Ready_Effect();
-	
-	void Update_Stat(_float fTimeDelta);
-	void CollisionStay_IntercObj(CGameObject* pGameObject);
 
 public:
 	static CPlayer* Create(ID3D11Device* pDevice, ID3D11DeviceContext* pContext);

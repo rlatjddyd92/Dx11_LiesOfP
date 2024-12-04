@@ -128,10 +128,28 @@ public: // 외부에서 매니저 접근
 	_bool Fade_In(_float fTime = 1.f) { return m_pUIManager->Fade_In(fTime); }
 	void Show_Script(_wstring strScript0, _wstring strScript1 = TEXT("none"), _float fTime = 1.f, _Vec3 vColor = _Vec3{ 0.f,0.f,0.f }) { m_pUIManager->Show_Script(strScript0, strScript1, fTime, vColor); }
 	_float Check_Fade() { return m_pUIManager->Check_Fade(); }
+
+	// NPC 스크립트 
+	void Show_Script(NPC_SCRIPT eNPC, _int iScriptNum = -1) { m_pUIManager->Show_Script_Npc_Talking(eNPC, iScriptNum); }
+	void Next_Script() { m_pUIManager->Next_Script(); }
+	void OFF_Script() { m_pUIManager->OFF_Script(); }
+	void Show_Select_Script(_wstring strLeft, _wstring strRight, _float fTime) { m_pUIManager->Show_Select_Script(strLeft, strRight, fTime); }
+	_bool IsLeft_LastSelect_Result() { return m_pUIManager->IsLeft_LastSelect_Result(); }
+
+	// 안내 표시 
+	void Show_Region_Info(_wstring strName, _wstring strDesc, _float fTime_Emerge = 1.f, _float fTime_Show = 2.f) { m_pUIManager->Show_Region_Info(strName, strDesc, fTime_Emerge, fTime_Show); }
+	void Show_Inform(INFORM_MESSAGE eInform, _float fTime_Emerge = 1.f, _float fTime_Show = 2.f) { m_pUIManager->Show_Inform(eInform, fTime_Emerge, fTime_Show); }
+	void Show_Heart(_wstring strScript, _float fTime_Emerge = 1.f, _float fTime_Show = 2.f) { m_pUIManager->Show_Heart(strScript, fTime_Emerge, fTime_Show); }
 #pragma endregion
 
 
 #pragma region Item_Manager
+	// 플레이어 참조용 
+	CPlayer::WEAPON_TYPE Get_Weapon_Model_Index() { return m_pItem_Manager->Get_Weapon_Model_Index(); } // 현재 사용 중인 무기의 모델 번호 리턴
+	SPECIAL_ITEM Get_Item_Function() { return m_pItem_Manager->Get_Item_Function(); }
+
+
+
 	// 접근, 수정
 	_bool Is_ItemData_Change() { return m_pItem_Manager->Is_ItemData_Change(); }
 
@@ -151,15 +169,11 @@ public: // 외부에서 매니저 접근
 
 	const CItem_Manager::ITEM* Get_Array_Item_Info(INVEN_ARRAY_TYPE eIndex, _uint iIndex) { return m_pItem_Manager->Get_Array_Item_Info(eIndex, iIndex); } // <- 인벤의 아이템 정보 획득
 
-	CPlayer::WEAPON_TYPE Get_Weapon_Model_Index() { return m_pItem_Manager->Get_Weapon_Model_Index(); } // 현재 사용 중인 무기의 모델 번호 리턴
+	
 
 	const CItem_Manager::ITEM* Get_Equip_Item_Info(EQUIP_SLOT eSlot) { return m_pItem_Manager->Get_Equip_Item_Info(eSlot); } // 현재 장비창에 장착된 아이템의 정보 레퍼런스 획득
 
 	const CItem_Manager::EQUIP* Get_Equip_Slot_Info(EQUIP_SLOT eSlot) { return m_pItem_Manager->Get_Equip_Slot_Info(eSlot); }
-
-	// 코인
-	ITEM_RESULT Add_Coin(_int iAdd, _bool bForce) { return m_pItem_Manager->Add_Coin(iAdd, bForce); }
-	_int Get_Coin() { return m_pItem_Manager->Get_Coin(); }
 
 	// 선택 아이템 조정
 	_int Change_Potion_Select(_bool bNext) { return m_pItem_Manager->Change_Potion_Select(bNext); }

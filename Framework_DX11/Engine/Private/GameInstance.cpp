@@ -482,6 +482,16 @@ const _Matrix& CGameInstance::Get_Transform_Inverse(CPipeLine::D3DTRANSFORMSTATE
 	return m_pPipeLine->Get_Transform_Inverse(eState);
 }
 
+const _Matrix& CGameInstance::Get_OldTransform(CPipeLine::D3DTRANSFORMSTATE eState) const
+{
+	return m_pPipeLine->Get_OldTransform(eState);
+}
+
+const _Matrix& CGameInstance::Get_OldTransform_Inverse(CPipeLine::D3DTRANSFORMSTATE eState) const
+{
+	return m_pPipeLine->Get_OldTransform_Inverse(eState);
+}
+
 const _Vec4& CGameInstance::Get_CamPosition_Vec4() const
 {
 	return m_pPipeLine->Get_CamPosition_Vec4();

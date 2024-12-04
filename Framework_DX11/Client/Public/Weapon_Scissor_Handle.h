@@ -40,8 +40,9 @@ public:
 	virtual void OnCollisionStay(CGameObject* pOther) override;
 	virtual void OnCollisionExit(CGameObject* pOther) override;
 
+	virtual void		Play_HitSound(HIT_TYPE eType) override;
+
 private:
-	class CPlayer* m_pPlayer = { nullptr };
 	class CWeapon_Scissor_Blade*	m_pBlade = { nullptr, };
 
 	SCISSOR_TYPE		m_eType = { SCISSOR_END };

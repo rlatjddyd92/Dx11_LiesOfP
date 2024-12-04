@@ -541,13 +541,14 @@ void CModel::Update_Animation(_float fTimeDelta)
 				_int iBoneIndex = CurrentChannels[i]->Get_BoneIndex();
 				if (m_UFBIndices[UFB_ROOT] == iBoneIndex)
 				{
-					vTranslation = _vector{ 0, 0, 0, 1 };
+					vTranslation = _vector{ 0.f, 0.f, 0.f, 1 };
 				}
 				else
 				{
 					if (m_bDenyTrans && iBoneIndex == m_iDenyBoneIndex)
 					{
-						vTranslation = _vector{ 0, 0, 0, 1 };
+						vTranslation = XMLoadFloat3(&tNextKeyFrame.vTranslation);
+						vTranslation = _vector{ 0.f, 0.f,XMVectorGetZ(vTranslation), 1.f};
 					}
 					else
 					{
@@ -578,7 +579,8 @@ void CModel::Update_Animation(_float fTimeDelta)
 				{
 					if (m_bDenyTrans && iBoneIndex == m_iDenyBoneIndex)
 					{
-						vDestTranslation = vSourTranslation = _vector{ 0, 0, 0, 1 };
+						vTranslation = XMLoadFloat3(&tNextKeyFrame.vTranslation);
+						vDestTranslation = vSourTranslation = _vector{ 0.f, 0.f,XMVectorGetZ(vTranslation), 1.f };
 					}
 					else
 					{

@@ -30,15 +30,26 @@ public:
 		class CPlayer* pPlayer = { nullptr };
 	}PLAYER_WAPON_DESC;
 
+	typedef struct : public WEAPON_DESC
+	{
+		class CMonster* pMonster = { nullptr };
+	}MONSTER_WAPON_DESC;
+
 protected:
 	CWeapon(ID3D11Device* pDevice, ID3D11DeviceContext* pContext);
 	CWeapon(const CWeapon& Prototype);
 	virtual ~CWeapon() = default;
 
 public:
-	class CCollider* Get_Collider() { return m_pColliderCom; }
+	class CCollider*	Get_Collider() { return m_pColliderCom; }
 
-	class CSound* Get_SoundCom(WEP_SOUND_TYPE eType) { return m_pSoundCom[eType]; }
+	class CSound*		Get_SoundCom(WEP_SOUND_TYPE eType) { return m_pSoundCom[eType]; }
+
+	class CPlayer*		Get_Player() { return m_pPlayer; }
+	class CMonster*		Get_Monster() { return m_pMonster; }
+
+	ATTACK_STRENGTH		Get_AttackStrength() { return m_eAttackStrength; }
+	void				Set_AttackStrength(ATTACK_STRENGTH eStrength) { m_eAttackStrength = eStrength; }
 
 public:
 	virtual HRESULT Initialize_Prototype() override;
@@ -63,7 +74,9 @@ public:
 	virtual void Active_Collider(_float fDamageRatio = 1.f, _uint iHandIndex = 0);		//1번 왼손 0번 오른손
 	virtual void DeActive_Collider(_uint iHandIndex = 1);
 
-	virtual void Play_Sound(WEP_SOUND_TYPE eType, const TCHAR* pSoundKey, _uint iHandIndex = 1);
+	virtual void		Play_Sound(WEP_SOUND_TYPE eType, const TCHAR* pSoundKey, _uint iHandIndex = 1);
+
+	virtual void		Play_HitSound(HIT_TYPE eType) {};
 
 public:
 	void Appear();
@@ -82,11 +95,17 @@ protected:
 	class CSound*		m_pSoundCom[WEP_SOUND_END] = {nullptr,};
 	_float				m_fEmissiveMask = {};
 
+
+protected:
+	class CPlayer*		m_pPlayer = { nullptr };
+	class CMonster*		m_pMonster = { nullptr };
+
 protected:
 	const _Matrix*			m_pParentMatrix = { nullptr };
 	const _Matrix*			m_pSocketMatrix = { nullptr };
 	const _Matrix*			m_pSocketMatrix2 = { nullptr };
 	_Matrix					m_WorldMatrix = {};
+	_Matrix					m_OldWroldMatrix = {};
 
 protected:
 	_float					m_fDamageAmount = {};
@@ -96,10 +115,14 @@ protected:
 
 
 	_float*					m_pParentAtk = { nullptr };
+
+	ATTACK_STRENGTH			m_eAttackStrength = { ATK_WEAK };
+
 protected:
 	HRESULT Ready_Components();
 
 	HRESULT Bind_WorldMatrix(class CShader* pShader, const _char* pContantName);
+	HRESULT Bind_OldWorldMatrix(class CShader* pShader, const _char* pContantName);
 
 public:
 	virtual CGameObject* Clone(void* pArg) = 0;

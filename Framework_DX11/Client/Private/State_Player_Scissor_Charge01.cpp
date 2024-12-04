@@ -13,7 +13,7 @@ CState_Player_Scissor_Charge01::CState_Player_Scissor_Charge01(CFsm* pFsm, CPlay
 
 HRESULT CState_Player_Scissor_Charge01::Initialize(_uint iStateNum, void* pArg)
 {
-    m_iAnimation_ScissorCA2 = m_pPlayer->Get_Model()->Find_AnimationIndex("AS_Pino_O_ScissorSword_CA2", 2.5f);
+    m_iAnimation_ScissorCA2 = m_pPlayer->Get_Model()->Find_AnimationIndex("AS_Pino_O_ScissorSword_CA2", 2.6f);
 
     FSM_INIT_DESC* pDesc = static_cast<FSM_INIT_DESC*>(pArg);
 
@@ -40,7 +40,7 @@ HRESULT CState_Player_Scissor_Charge01::Initialize(_uint iStateNum, void* pArg)
 
 HRESULT CState_Player_Scissor_Charge01::Start_State(void* pArg)
 {
-    m_pPlayer->Change_Animation(m_iAnimation_ScissorCA2, false, 0.1f);
+    m_pPlayer->Change_Animation(m_iAnimation_ScissorCA2, false, 0.05f);
 
     m_isInputLButton = false;
     m_isInputRButton = false;
@@ -112,23 +112,27 @@ _bool CState_Player_Scissor_Charge01::End_Check()
 void CState_Player_Scissor_Charge01::Control_Collider()
 {
     _int iFrame = m_pPlayer->Get_Frame();
+    _bool isOnLeftCollider[2] = { false, false };
+    _bool isOnRightCollider[2] = { false, false };
 
     for (_uint i = 0; i < 2; ++i)
     {
         if (m_iColliderStartFrame_Left[i] <= iFrame && iFrame <= m_iColliderEndFrame_Left[i])
         {
+            isOnLeftCollider[i] = true;
             m_pPlayer->Active_CurrentWeaponCollider(3.f, 1);
         }
-        else
+        else if (!isOnLeftCollider[0] && !isOnLeftCollider[1])
         {
             m_pPlayer->DeActive_CurretnWeaponCollider(1);
         }
 
         if (m_iColliderStartFrame_Right[i] <= iFrame && iFrame <= m_iColliderEndFrame_Right[i])
         {
+            isOnRightCollider[i] = true;
             m_pPlayer->Active_CurrentWeaponCollider(3.f, 0);
         }
-        else
+        else if (!isOnRightCollider[0] && !isOnRightCollider[1])
         {
             m_pPlayer->DeActive_CurretnWeaponCollider(0);
         }

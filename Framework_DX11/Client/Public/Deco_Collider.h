@@ -17,6 +17,7 @@ public:
 	{
 		const _float4x4* pSoketMatrix = { nullptr };
 		const _float4x4* pParentWorldMatrix = { nullptr };
+		class CWallDeco* pWallDeco = { nullptr };
 	}DECO_COLLIDER_DESC;
 
 protected:
@@ -44,6 +45,8 @@ private:
 private:
 	const _float4x4* m_pParentWorldMatrix = { nullptr };
 	const _float4x4* m_pSoketMatrix = { nullptr };
+
+	class CWallDeco* m_pWallDeco = { nullptr };
 
 	_Vec3 m_vPrePos = {};
 	_Vec3 m_vVelocity = {};

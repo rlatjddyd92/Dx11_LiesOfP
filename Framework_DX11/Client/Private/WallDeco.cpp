@@ -44,6 +44,7 @@ HRESULT CWallDeco::Initialize(void* pArg)
 	CDeco_Collider::DECO_COLLIDER_DESC Desc = {};
 	Desc.pSoketMatrix = m_pModelCom->Get_BoneCombindTransformationMatrix_Ptr(3);
 	Desc.pParentWorldMatrix = m_pTransformCom->Get_WorldMatrix_Ptr();
+	Desc.pWallDeco = this;
 
 	CGameObject* pColliderObj = m_pGameInstance->Clone_GameObject(TEXT("Prototype_GameObject_Deco_Collider"), &Desc);
 	if (nullptr != pColliderObj)
@@ -62,21 +63,40 @@ void CWallDeco::Priority_Update(_float fTimeDelta)
 
 void CWallDeco::Update(_float fTimeDelta)
 {
+	m_fCoolTime = max(-1.f, m_fCoolTime - fTimeDelta);
+
 	if(m_bDetect)
 	{
-		if(m_pModelCom->Get_CurrentAnimationIndex() == m_iAnim_Deactivate)
-			m_pModelCom->SetUp_NextAnimation(m_iAnim_Activate, false);
+		if (m_pModelCom->Get_CurrentAnimationIndex() == m_iAnim_Deactivate)
+		{
+			m_pModelCom->SetUp_NextAnimation(m_iAnim_Activate, false, 0.f);
+		}
 	}
 	
 	if (m_fPlayActiveAnimTimer > 5.f
 		&& m_pModelCom->Get_IsEndAnimArray())
 	{
 		m_fPlayActiveAnimTimer = 0.f;
-		m_pModelCom->SetUp_NextAnimation(m_iAnim_Deactivate, true);
+		m_pModelCom->SetUp_NextAnimation(m_iAnim_Deactivate, true, 0.2f);
 	}
 
 	if (m_pModelCom->Get_CurrentAnimationIndex() == m_iAnim_Activate)
 	{
+		_int iFrame = m_pModelCom->Get_CurrentFrame();
+		if (!m_isPlayActiveSound && (iFrame == 1 || iFrame == 2))
+		{
+			m_isCanHit = true;
+			m_pSoundCom->Play2D(TEXT("AMB_OJ_TR_Monastery_WallTrap_Activate_02.wav"), &g_fEffectVolume);
+			m_isPlayActiveSound = true;
+		}
+		else if (m_isPlayActiveSound && (iFrame == 53 || iFrame == 52))
+		{
+			m_isCanHit = false;
+			m_fCoolTime = 5.f;
+			m_pSoundCom->Play2D(TEXT("AMB_OJ_TR_Monastery_WallTrap_DeActivate_02.wav"), &g_fEffectVolume);
+			m_isPlayActiveSound = false;
+		}
+
 		m_fPlayActiveAnimTimer += fTimeDelta;
 	}
 
@@ -153,13 +173,24 @@ void CWallDeco::OnCollisionEnter(CGameObject* pOther)
 {
 	if (pOther->Get_Tag() == TEXT("Player"))
 	{
-		m_bDetect = true;
-		
+		if (!m_bDetect)
+		{
+			if (m_fCoolTime < 0.f)
+				m_bDetect = true;
+		}
 	}
 }
 
 void CWallDeco::OnCollisionStay(CGameObject* pOther)
 {
+	if (pOther->Get_Tag() == TEXT("Player"))
+	{
+		if (!m_bDetect)
+		{
+			if(m_fCoolTime < 0.f)
+				m_bDetect = true;
+		}
+	}
 }
 
 void CWallDeco::OnCollisionExit(CGameObject* pOther)
@@ -184,7 +215,7 @@ HRESULT CWallDeco::Ready_Components()
 
 	/* For.Com_Collider */
 	CBounding_OBB::BOUNDING_OBB_DESC			ColliderDesc{};
-	ColliderDesc.vExtents = _float3(3.f, 1.f, 1.8f);
+	ColliderDesc.vExtents = _float3(2.5f, 0.7f, 1.5f);
 	ColliderDesc.vAngles = _float3(0.f, 0.f, 0.f);
 	ColliderDesc.vCenter = _float3(2.5f, 0.f, 0.f);
 
@@ -192,6 +223,12 @@ HRESULT CWallDeco::Ready_Components()
 		TEXT("Com_Collider"), reinterpret_cast<CComponent**>(&m_pColliderCom), &ColliderDesc)))
 		return E_FAIL;
 	m_pColliderCom->Set_Owner(this);
+
+	/* FOR.Com_Sound */
+	if (FAILED(__super::Add_Component(LEVEL_STATIC, TEXT("Prototype_Component_Sound"),
+		TEXT("Com_Sound"), reinterpret_cast<CComponent**>(&m_pSoundCom))))
+		return E_FAIL;
+	m_pSoundCom->Set_Owner(this);
 
 	return S_OK;
 }
@@ -225,6 +262,8 @@ CGameObject* CWallDeco::Clone(void* pArg)
 void CWallDeco::Free()
 {
 	__super::Free();
+
+	Safe_Release(m_pSoundCom);
 	Safe_Release(m_pCollider_Object);
 	Safe_Release(m_pColliderCom);
 	Safe_Release(m_pShaderCom);

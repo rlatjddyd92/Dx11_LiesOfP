@@ -59,10 +59,14 @@ void CUIPage_Inform::Update(_float fTimeDelta)
 
 void CUIPage_Inform::Late_Update(_float fTimeDelta)
 {
-	__super::Late_Update(fTimeDelta);
+	if (fTimeDelta > 0.2f)
+		fTimeDelta = 0.01f;
 
-	for (auto& iter : m_vec_Group_Ctrl)
-		__super::UpdatePart_ByControl(iter);
+	Update_Region(fTimeDelta);
+	Update_Inform(fTimeDelta);
+	Update_Heart(fTimeDelta);
+
+	__super::Late_Update(fTimeDelta);
 }
 
 HRESULT CUIPage_Inform::Render()
@@ -91,12 +95,148 @@ HRESULT CUIPage_Inform::Ready_UIPart_Group_Control()
 {
 	__super::Ready_UIPart_Group_Control();
 
-	
-
-	m_bRender = false;
-	m_bUpdate = false;
-
+	for (auto& iter : m_vecPart)
+		iter->bRender = false;
+	m_bUpdate = true;
+	m_bRender = true;
+	m_fTopPartMove = -1.f;
 	return S_OK;
+}
+
+void CUIPage_Inform::Show_Region_Info(_wstring strName, _wstring strDesc, _float fTime_Emerge, _float fTime_Show)
+{
+	m_vLifeTime_Region = { 0.f, fTime_Emerge , fTime_Show };
+
+	for (_int i = _int(PART_GROUP::INFORM_Region_Fx); i <= _int(PART_GROUP::INFORM_Region_Desc); ++i)
+	{
+		m_vecPart[i]->bRender = true;
+		m_vecPart[i]->fTextureColor.w = 0.f;
+		m_vecPart[i]->fTextColor.w = 0.f;
+	}
+	
+	m_vecPart[_int(PART_GROUP::INFORM_Region_Title)]->strText = strName;
+	m_vecPart[_int(PART_GROUP::INFORM_Region_Desc)]->strText = strDesc;
+}
+
+void CUIPage_Inform::Show_Inform(INFORM_MESSAGE eInform, _float fTime_Emerge, _float fTime_Show)
+{
+	m_vLifeTime_Inform = { 0.f, fTime_Emerge , fTime_Show };
+
+	_int iIndex = _int(PART_GROUP::INFORM_Dead) + _int(eInform);
+
+	for (_int i = _int(PART_GROUP::INFORM_Common_Fx); i <= _int(PART_GROUP::INFORM_Stargazer); ++i)
+	{
+		if ((i == _int(PART_GROUP::INFORM_Common_Fx)) || (i == iIndex))
+		{
+			m_vecPart[i]->bRender = true;
+			m_vecPart[i]->fTextureColor.w = 0.f;
+		}
+	}
+
+	m_vecPart[_int(PART_GROUP::INFORM_Common_Fx)]->bRender = true;
+	m_vecPart[iIndex]->bRender = true;
+}
+
+void CUIPage_Inform::Show_Heart(_wstring strScript, _float fTime_Emerge, _float fTime_Show)
+{
+	m_vLifeTime_Heart = { 0.f, fTime_Emerge , fTime_Show };
+
+	for (_int i = _int(PART_GROUP::INFORM_Heart); i <= _int(PART_GROUP::INFORM_Text_Front); ++i)
+	{
+		m_vecPart[i]->bRender = true;
+		m_vecPart[i]->fTextureColor.w = 0.f;
+		m_vecPart[i]->fTextColor.w = 0.f;
+	}
+	
+	m_vecPart[_int(PART_GROUP::INFORM_Text_Back)]->strText = strScript;
+	m_vecPart[_int(PART_GROUP::INFORM_Text_Front)]->strText = strScript;
+}
+
+void CUIPage_Inform::Update_Region(_float fTimeDelta)
+{
+	_float fRatio = Check_Ratio(&m_vLifeTime_Region, fTimeDelta);
+
+	if (fRatio == -1.f)
+	{
+		for (_int i = _int(PART_GROUP::INFORM_Region_Fx); i <= _int(PART_GROUP::INFORM_Region_Desc); ++i)
+			m_vecPart[i]->bRender = false;
+	}	
+	else
+	{
+		for (_int i = _int(PART_GROUP::INFORM_Region_Fx); i <= _int(PART_GROUP::INFORM_Region_Desc); ++i)
+		{
+			m_vecPart[i]->fTextureColor.w = fRatio;
+			m_vecPart[i]->fTextColor.w = fRatio;
+		}
+	}
+}
+
+void CUIPage_Inform::Update_Inform(_float fTimeDelta)
+{
+	_float fRatio = Check_Ratio(&m_vLifeTime_Inform, fTimeDelta);
+
+	if (fRatio == -1.f)
+	{
+		for (_int i = _int(PART_GROUP::INFORM_Common_Fx); i <= _int(PART_GROUP::INFORM_Stargazer); ++i)
+			m_vecPart[i]->bRender = false;
+	}
+	else
+	{
+		for (_int i = _int(PART_GROUP::INFORM_Common_Fx); i <= _int(PART_GROUP::INFORM_Stargazer); ++i)
+		{
+			m_vecPart[i]->fTextureColor.w = fRatio;
+			m_vecPart[i]->fTextColor.w = fRatio;
+		}
+	}
+}
+
+void CUIPage_Inform::Update_Heart(_float fTimeDelta)
+{
+	_float fRatio = Check_Ratio(&m_vLifeTime_Heart, fTimeDelta);
+
+	if (fRatio == -1.f)
+	{
+		for (_int i = _int(PART_GROUP::INFORM_Heart); i <= _int(PART_GROUP::INFORM_Text_Front); ++i)
+			m_vecPart[i]->bRender = false;
+	}
+	else
+	{
+		for (_int i = _int(PART_GROUP::INFORM_Heart); i <= _int(PART_GROUP::INFORM_Text_Front); ++i)
+		{
+			m_vecPart[i]->fTextureColor.w = fRatio;
+			m_vecPart[i]->fTextColor.w = fRatio;
+			m_vecPart[i]->fRatio = fRatio;
+		}
+	}
+}
+
+_float CUIPage_Inform::Check_Ratio(_Vec3* vLifeTime, _float fTimeDelta)
+{
+	_float fResult = 1.f;
+
+	vLifeTime->x += fTimeDelta;
+
+	if (vLifeTime->x >= vLifeTime->y * 2.f + vLifeTime->z)
+	{
+		fResult = -1.f;
+		*vLifeTime = { 0.f,0.f,0.f };
+	}
+	else if (vLifeTime->x >= vLifeTime->y * 1.f + vLifeTime->z)
+	{
+		fResult = vLifeTime->x - (vLifeTime->y * 1.f + vLifeTime->z);
+		fResult = (vLifeTime->y - fResult) / vLifeTime->y;
+	}
+	else if (vLifeTime->x >= vLifeTime->y)
+	{
+		fResult = 1.f;
+	}
+	else if (vLifeTime->x < vLifeTime->y)
+	{
+		fResult = vLifeTime->x / vLifeTime->y;
+	}
+
+
+	return fResult;
 }
 
 CUIPage_Inform* CUIPage_Inform::Create(ID3D11Device* pDevice, ID3D11DeviceContext* pContext)

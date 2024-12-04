@@ -13,7 +13,7 @@ CState_Player_Flame_Charge00::CState_Player_Flame_Charge00(CFsm* pFsm, CPlayer* 
 
 HRESULT CState_Player_Flame_Charge00::Initialize(_uint iStateNum, void* pArg)
 {
-    m_iAnimation_FlameCA1 = m_pPlayer->Get_Model()->Find_AnimationIndex("AS_Pino_T_FlameSword_CA1", 2.f);
+    m_iAnimation_FlameCA1 = m_pPlayer->Get_Model()->Find_AnimationIndex("AS_Pino_T_FlameSword_CA1", 2.5f);
 
     FSM_INIT_DESC* pDesc = static_cast<FSM_INIT_DESC*>(pArg);
 
@@ -32,7 +32,7 @@ HRESULT CState_Player_Flame_Charge00::Initialize(_uint iStateNum, void* pArg)
 
 HRESULT CState_Player_Flame_Charge00::Start_State(void* pArg)
 {
-    m_pPlayer->Change_Animation(m_iAnimation_FlameCA1, false);
+    m_pPlayer->Change_Animation(m_iAnimation_FlameCA1, false, 0.15f);
 
     m_isInputLButton = false;
     m_isInputRButton = false;

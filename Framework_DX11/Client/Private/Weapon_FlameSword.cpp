@@ -2,6 +2,7 @@
 #include "Weapon_FlameSword.h"
 
 #include "Player.h"
+#include "Monster.h"
 
 #include "GameInstance.h"
 
@@ -95,6 +96,28 @@ HRESULT CWeapon_FlameSword::Render_LightDepth()
 
 void CWeapon_FlameSword::OnCollisionEnter(CGameObject* pOther)
 {
+	if (pOther->Get_Tag() == TEXT("Monster"))
+	{
+		_bool bOverlapCheck = false;
+		for (auto& pObj : m_DamagedObjects)
+		{
+			if (pObj == pOther)
+			{
+				bOverlapCheck = true;
+				break;
+			}
+		}
+
+		if (!bOverlapCheck)
+		{
+			CMonster* pMonster = dynamic_cast<CMonster*>(pOther);
+
+			m_DamagedObjects.push_back(pOther);
+			pOther->Calc_DamageGain(m_fDamageAmount * m_fDamageRatio);
+
+			Play_HitSound(pMonster->Get_HitType());
+		}
+	}
 }
 
 void CWeapon_FlameSword::OnCollisionStay(CGameObject* pOther)
@@ -103,6 +126,31 @@ void CWeapon_FlameSword::OnCollisionStay(CGameObject* pOther)
 
 void CWeapon_FlameSword::OnCollisionExit(CGameObject* pOther)
 {
+}
+
+void CWeapon_FlameSword::Play_HitSound(HIT_TYPE eType)
+{
+	_wstring strSoundKey{};
+	_wstring strWAV = TEXT(".wav");
+	_tchar szBuffer[10];
+
+	_int iRand = rand() % 3 + 1;
+	
+	if (ATK_STRONG == m_eAttackStrength)
+	{
+		_itow_s(iRand, szBuffer, 10);
+		strSoundKey = TEXT("SE_PC_SK_Hit_Fire_Common_0");
+		strSoundKey = strSoundKey + szBuffer + strWAV;
+	}
+	else if (ATK_NORMAL == m_eAttackStrength
+		|| ATK_WEAK == m_eAttackStrength)
+	{
+		_itow_s(iRand, szBuffer, 10);
+		strSoundKey = TEXT("SE_PC_SK_Hit_Fire_M_0");
+		strSoundKey = strSoundKey + szBuffer + strWAV;
+	}
+
+	m_pSoundCom[WEP_SOUND_EFFECT2]->Play2D(strSoundKey.c_str(), &g_fEffectVolume);
 }
 
 HRESULT CWeapon_FlameSword::Ready_Components()

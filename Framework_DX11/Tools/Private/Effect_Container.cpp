@@ -163,6 +163,15 @@ void CEffect_Container::Update(_float fTimeDelta)
 		m_bOrbit = false;
 	}
 
+	if (KEY_HOLD(KEY::K))
+	{
+		m_pTransformCom->Go_Straight(fTimeDelta, 10.f);
+	}
+	else if (KEY_AWAY(KEY::K))
+	{
+		m_pTransformCom->Set_State(CTransform::STATE_POSITION, _Vec3(0.f, 0.f, 0.f));
+	}
+
 	if (KEY_TAP(KEY::RIGHT))
 	{
 		for (auto& Effect : m_Effects)

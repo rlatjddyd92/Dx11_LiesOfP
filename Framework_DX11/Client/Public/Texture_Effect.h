@@ -12,7 +12,7 @@ BEGIN(Client)
 class CTexture_Effect final : public CEffect_Base
 {
 public:
-	enum BILLBOARD_TYPE { TYPE_BILLBOARD, TYPE_PREROTATION, TYPE_PREDIR, TYPE_END };
+	enum BILLBOARD_TYPE { TYPE_BILLBOARD, TYPE_PREROTATION, TYPE_PREDIR, TYPE_NONBILLBOARD, TYPE_END };
 
 	typedef struct
 	{
@@ -94,6 +94,7 @@ private:
 	void Preserve_Rotation_Billboard(_Vec3 vCurrentScale, _Vec3 vLook);
 	void Preserve_Dir_Billboard(_Vec3 vCurrentScale, _Vec3 vLook);
 	void Billboard(_Vec3 vCurrentScale, _Vec3 vLook);
+	void NonBillboard();
 
 public:
 	static CTexture_Effect* Create(ID3D11Device* pDevice, ID3D11DeviceContext* pContext);

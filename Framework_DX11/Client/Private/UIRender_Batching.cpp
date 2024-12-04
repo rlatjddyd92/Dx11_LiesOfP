@@ -495,7 +495,7 @@ CUIRender_Batching::UI_SHADER_PASS CUIRender_Batching::Select_Shader_Pass(URENDE
 		else if (Info.vColor_Texture.w >= 0) bIsChange = true;
 	}
 
-	if ((abs(Info.vAngle.x) <= 180.f) && (abs(Info.vAngle.y) > 180.f))
+	if ((abs(Info.vAngle.x) <= 360.f) && (abs(Info.vAngle.y) <= 360.f))
 		bIsAngle = true;
 
 	if ((Info.vRange.x >= 0.f) && (Info.vRange.y >= 0.f))

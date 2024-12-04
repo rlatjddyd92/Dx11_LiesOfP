@@ -41,11 +41,15 @@ HRESULT CState_Player_Chest::Start_State(void* pArg)
 
     m_pPlayer->Change_Animation(m_iAnimation_Chest, false, 0.f);
 
+    m_isPlaySound = false;
+
     return S_OK;
 }
 
 void CState_Player_Chest::Update(_float fTimeDelta)
 {
+    _int iFrame = m_pPlayer->Get_Frame();
+
     if (End_Check())
     {
         _uint iWeponType = m_pPlayer->Get_WeaponType();
@@ -54,6 +58,12 @@ void CState_Player_Chest::Update(_float fTimeDelta)
             m_pPlayer->Change_State(CPlayer::OH_IDLE);
         else
             m_pPlayer->Change_State(CPlayer::TH_IDLE);
+    }
+
+    if (!m_isPlaySound && iFrame == 87 || iFrame == 88)
+    {
+        m_isPlaySound = true;
+        m_pPlayer->Play_Sound(CPawn::PAWN_SOUND_EFFECT1, TEXT("SE_PC_MT_TreasureChest_Lock_Break_02.wav"));
     }
 }
 

@@ -100,7 +100,7 @@ HRESULT CUIRender::Render()
 				if (rNow.fTextureColor.z < 0) rNow.fTextureColor.z = 1.f;
 				if (rNow.fTextureColor.w < 0) rNow.fTextureColor.w = 1.f;
 
-				if ((abs(rNow.vTexture_Angle.x) <= 180.f) && (abs(rNow.vTexture_Angle.y) > 180.f))
+				if ((abs(rNow.vTexture_Angle.x) <= 360.f) && (abs(rNow.vTexture_Angle.y) <= 360.f))
 					ePass = UI_SHADER_PASS::PASS_COLOR_MULTI_ANGLE;
 				else if ((rNow.vTexture_Range.x >= 0.f) && (rNow.vTexture_Range.y >= 0.f))
 					if ((rNow.vTexture_Range.z >= 0.f) && (rNow.vTexture_Range.w >= 0.f))
@@ -115,7 +115,7 @@ HRESULT CUIRender::Render()
 
 				if (ePass == UI_SHADER_PASS::PASS_COLOR_INPUT)
 				{
-					if ((abs(rNow.vTexture_Angle.x) <= 180.f) && (abs(rNow.vTexture_Angle.y) > 180.f))
+					if ((abs(rNow.vTexture_Angle.x) <= 360.f) && (abs(rNow.vTexture_Angle.y) <= 360.f))
 						ePass = UI_SHADER_PASS::PASS_COLOR_MULTI_ANGLE;
 					else if ((rNow.vTexture_Range.x >= 0.f) && (rNow.vTexture_Range.y >= 0.f))
 						if ((rNow.vTexture_Range.z >= 0.f) && (rNow.vTexture_Range.w >= 0.f))
@@ -123,7 +123,7 @@ HRESULT CUIRender::Render()
 				}
 				else
 				{
-					if ((abs(rNow.vTexture_Angle.x) <= 180.f) && (abs(rNow.vTexture_Angle.y) > 180.f))
+					if ((abs(rNow.vTexture_Angle.x) <= 360.f) && (abs(rNow.vTexture_Angle.y) <= 360.f))
 						ePass = UI_SHADER_PASS::PASS_COLOR_MULTI_ANGLE;
 					else if ((rNow.vTexture_Range.x >= 0.f) && (rNow.vTexture_Range.y >= 0.f))
 						if ((rNow.vTexture_Range.z >= 0.f) && (rNow.vTexture_Range.w >= 0.f))

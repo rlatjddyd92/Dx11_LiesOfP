@@ -141,8 +141,6 @@ public:
 	HRESULT Make_Texture(_int iTextureIndex);
 	HRESULT Make_Texture_Item(_int iTextureIndex);
 
-	HRESULT Render_Part(CUIPage::UPART& pPart, CUIPage& pPage, _bool bTopMove);
-
 	void Set_Scroll_Area(SCROLL_AREA eArea, _Vec2 vPos, _Vec2 vSize);
 	void Select_Scroll_Area(SCROLL_AREA eArea) 
 	{ 

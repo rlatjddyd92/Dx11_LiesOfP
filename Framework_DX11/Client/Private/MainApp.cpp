@@ -65,6 +65,42 @@ void CMainApp::Update(_float fTimeDelta)
 			GET_GAMEINTERFACE->Show_Script(TEXT("테스트 대사 1줄 버전"), TEXT("none"), 3.f);
 	}
 
+	// 24-12-04 김성용 
+	// NPC 대화창 테스트 코드 
+
+	if (KEY_HOLD(KEY::CTRL))
+	{
+		if (KEY_TAP(KEY::NUM1))
+			GET_GAMEINTERFACE->Show_Script(NPC_SCRIPT::SCR_ZEMINI, 0);
+		if (KEY_TAP(KEY::NUM2))
+			GET_GAMEINTERFACE->Show_Script(NPC_SCRIPT::SCR_SOPIA_FIRST, 0);
+		if (KEY_TAP(KEY::NUM3))
+			GET_GAMEINTERFACE->Show_Script(NPC_SCRIPT::SCR_MANUS, 0);
+		if (KEY_TAP(KEY::NUM4))
+			GET_GAMEINTERFACE->Show_Script(NPC_SCRIPT::SCR_SOPIA_DIE, 0);
+		if (KEY_TAP(KEY::NUM5))
+			GET_GAMEINTERFACE->OFF_Script();
+	}
+
+	if (KEY_HOLD(KEY::ALT))
+	{
+		if (KEY_TAP(KEY::F5))
+			GET_GAMEINTERFACE->Show_Region_Info(TEXT("모나스트리"), TEXT("흐린 날씨"));
+		if (KEY_TAP(KEY::F6))
+			GET_GAMEINTERFACE->Show_Inform(INFORM_MESSAGE::INFORM_BOSSKILL);
+		if (KEY_TAP(KEY::F7))
+			GET_GAMEINTERFACE->Show_Inform(INFORM_MESSAGE::INFORM_DEAD);
+		if (KEY_TAP(KEY::F8))
+			GET_GAMEINTERFACE->Show_Inform(INFORM_MESSAGE::INFORM_RECOVERY);
+		if (KEY_TAP(KEY::F9))
+			GET_GAMEINTERFACE->Show_Inform(INFORM_MESSAGE::INFORM_STARGAZER);
+		if (KEY_TAP(KEY::NUM5))
+			GET_GAMEINTERFACE->Show_Heart(TEXT("심장이 고동친다"));
+	}
+
+
+
+	
 	if (KEY_TAP(KEY::M))
 	{
 		g_isHideCursor = !g_isHideCursor;

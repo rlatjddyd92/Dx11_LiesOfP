@@ -180,7 +180,7 @@ PS_OUT_LIGHT PS_MAIN_LIGHT_DIRECTIONAL_PBR(PS_IN In)
 	
     
     float fHalfLambert = saturate(dot(normalize(g_vLightDir.xyz) * -1.f, vNormal) * 0.5f + 0.5f);
-    Out.vShade = g_vLightDiffuse * saturate(fHalfLambert) + (g_vLightAmbient * g_vMtrlAmbient);
+    Out.vShade = g_vLightDiffuse * saturate(saturate(fHalfLambert) + (g_vLightAmbient * g_vMtrlAmbient));
     
     // PBR
     vector      vDiffuse = g_DiffuseTexture.Sample(LinearSampler, In.vTexcoord);
@@ -204,8 +204,8 @@ PS_OUT_LIGHT PS_MAIN_LIGHT_DIRECTIONAL_PBR(PS_IN In)
     {
         float3 vLookToCamera = (normalize(g_vCamPosition - vPosition)).xyz; // 월드 위치에서 카메라 방향
     
+        float fHalfLambert = dot(vNormal, vLookToCamera) * 0.5f + 0.5f;
         float cosLo = max(0.f, fHalfLambert);
-        //float3 Lr = 2.0 * cosLo * vNormal - vLookToCamera;
     
     
         float3 F0 = lerp(0.04f, vAlbedo, fMetallic); // 금속성이라면, albedo와 F0의 값을 선형보간 하고, 아니라면 0.04를 사용한다.
@@ -281,7 +281,7 @@ PS_OUT_LIGHT_POINT PS_MAIN_LIGHT_POINT_PBR(PS_IN In)
     float       fHalfLambert = saturate(dot(normalize(g_vLightDir.xyz) * -1.f, vNormal.xyz) * 0.5f + 0.5f);
 	float		fAtt = saturate((g_fLightRange - length(vLightDir)) / g_fLightRange);
     
-    Out.vShade = g_vLightDiffuse * saturate(max(dot(normalize(vLightDir) * -1.f, vNormal), 0.f) + (g_vLightAmbient * g_vMtrlAmbient)) * fAtt;
+    //Out.vShade = g_vLightDiffuse * saturate(max(dot(normalize(vLightDir) * -1.f, vNormal), 0.f) + (g_vLightAmbient * g_vMtrlAmbient)) * fAtt;
 
     
     // PBR
@@ -306,11 +306,11 @@ PS_OUT_LIGHT_POINT PS_MAIN_LIGHT_POINT_PBR(PS_IN In)
     {
         float3 vLookToCamera = (normalize(g_vCamPosition - vPosition)).xyz; // 월드 위치에서 카메라 방향
     
-        float cosLo = max(0.f, fHalfLambert);
+        float cosLo = max(0.0, dot(vNormal, vLookToCamera));
         //float3 Lr = 2.0 * cosLo * vNormal - vLookToCamera;
     
     
-        float3 F0 = lerp(0.04f, vAlbedo, fMetallic); // 금속성이라면, albedo와 F0의 값을 선형보간 하고, 아니라면 0.04를 사용한다.
+        float3 F0 = lerp(0.04f, vAlbedo, fMetallic);
         float3 radiance = g_vLightDiffuse.xyz;
     
         float3 Li = normalize(-vLightDir.xyz);
@@ -331,7 +331,7 @@ PS_OUT_LIGHT_POINT PS_MAIN_LIGHT_POINT_PBR(PS_IN In)
     
         fAmbietnOcc = pow(fAmbietnOcc, 2.2f);
     
-        Out.vSpecular = float4((((vDiffuseBRDF + vSpecularBRDF) * cosLi * radiance) * fAmbietnOcc), 1.f) * fAtt;
+        Out.vSpecular = float4(((vDiffuseBRDF + vSpecularBRDF) * cosLi * radiance * fAtt), 1.f);
       
     }
 	

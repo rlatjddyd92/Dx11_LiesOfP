@@ -211,6 +211,7 @@
     <ClInclude Include="..\Public\State_Player_OH_GuardHit.h" />
     <ClInclude Include="..\Public\State_Player_Ladder.h" />
     <ClInclude Include="..\Public\State_Player_Lift.h" />
+    <ClInclude Include="..\Public\State_Player_SophiaHandEnd.h" />
     <ClInclude Include="..\Public\State_Player_SophiaWalk.h" />
     <ClInclude Include="..\Public\State_Player_Stargazer.h" />
     <ClInclude Include="..\Public\State_Player_Teleport.h" />
@@ -379,6 +380,7 @@
     <ClInclude Include="..\Public\Weapon_Scissor_Handle.h" />
     <ClInclude Include="..\Public\Weapon_SimonManus_Hammer.h" />
     <ClInclude Include="Client.h" />
+    <ClInclude Include="State_Player_SophiaHand.h" />
     <ClInclude Include="Interface_Enums.h" />
     <ClInclude Include="Item_Defines.h" />
     <ClInclude Include="Item_Enum.h" />
@@ -432,6 +434,7 @@
     <ClCompile Include="..\Private\State_Player_OH_GuardHit.cpp" />
     <ClCompile Include="..\Private\State_Player_Ladder.cpp" />
     <ClCompile Include="..\Private\State_Player_Lift.cpp" />
+    <ClCompile Include="..\Private\State_Player_SophiaHandEnd.cpp" />
     <ClCompile Include="..\Private\State_Player_SophiaWalk.cpp" />
     <ClCompile Include="..\Private\State_Player_Stargazer.cpp" />
     <ClCompile Include="..\Private\State_Player_Teleport.cpp" />
@@ -599,6 +602,7 @@
     <ClCompile Include="..\Private\Weapon_Scissor_Handle.cpp" />
     <ClCompile Include="..\Private\Weapon_SimonManus_Hammer.cpp" />
     <ClCompile Include="Client.cpp" />
+    <ClCompile Include="State_Player_SophiaHand.cpp" />
     <ClCompile Include="stdafx.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Create</PrecompiledHeader>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Create</PrecompiledHeader>

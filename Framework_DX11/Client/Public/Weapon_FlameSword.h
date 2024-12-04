@@ -32,8 +32,7 @@ public:
 	virtual void OnCollisionStay(CGameObject* pOther) override;
 	virtual void OnCollisionExit(CGameObject* pOther) override;
 
-private:
-	class CPlayer* m_pPlayer = { nullptr };
+	virtual void		Play_HitSound(HIT_TYPE eType) override;
 
 private:
 	HRESULT Ready_Components();

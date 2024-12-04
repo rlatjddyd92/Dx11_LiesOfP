@@ -34,9 +34,11 @@ HRESULT CState_Player_OpenSophiaDoor::Start_State(void* pArg)
 
 void CState_Player_OpenSophiaDoor::Update(_float fTimeDelta)
 {
-    if (End_Check())
+    _int iFrame = m_pPlayer->Get_Frame();
+
+    if (iFrame > 545)
     {
-        //m_pPlayer->Change_State(CPlayer::SOPHIA_WALK);
+        m_pPlayer->Change_State(CPlayer::SOPHIA_WALK);
     }
 }
 

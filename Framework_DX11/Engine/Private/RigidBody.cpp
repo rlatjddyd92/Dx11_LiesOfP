@@ -37,6 +37,8 @@ HRESULT CRigidBody::Initialize(void* pArg)
 	m_isLockCell = pDesc->isLockCell;
 	m_isUseClient = pDesc->isUseClient;
 
+	m_fNavOffsetY = 0.f;
+
 	m_PxScene = m_pGameInstance->Get_PhysXScene();
 	m_pOwner = pDesc->pOwner;
 	m_pOwnerTransform = pDesc->pOwnerTransform;
@@ -89,7 +91,7 @@ void CRigidBody::Update(_float fTimeDelta)
 
 		if (m_isOnCell)
 		{
-			vPxPlayerPos.y = m_pOwnerNavigation->SetUp_OnCell(m_pOwnerTransform, 0.f, fTimeDelta);
+			vPxPlayerPos.y = m_pOwnerNavigation->SetUp_OnCell(m_pOwnerTransform, m_fNavOffsetY, fTimeDelta);
 		}
 		pRigidDynamic->setGlobalPose(PlayerPxTransform);
 
