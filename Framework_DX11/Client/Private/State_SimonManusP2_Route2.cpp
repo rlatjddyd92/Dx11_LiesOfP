@@ -190,7 +190,7 @@ void CState_SimonManusP2_Route2::Update_Rimlight()
 
 void CState_SimonManusP2_Route2::Control_Sound(_double CurTrackPos)
 {
-    if (m_iRouteTrack == 1)
+    if (m_iRouteTrack == 0)
     {
         if (!m_bSwingSound)
         {
