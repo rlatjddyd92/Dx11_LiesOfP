@@ -233,7 +233,7 @@ void CState_SimonManusP2_SwingDown_Swing::Control_Sound(_double CurTrackPos)
         }
         else
         {
-            if (CurTrackPos > 45.f && CurTrackPos <= 50.f)
+            if (CurTrackPos > 55.f && CurTrackPos <= 60.f)
             {
                 m_bSwingSound = false;
             }

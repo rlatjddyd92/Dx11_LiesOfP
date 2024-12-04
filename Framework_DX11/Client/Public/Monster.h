@@ -66,6 +66,8 @@ public:
 
 	virtual void	SetUp_Dead() {};
 
+	void			Reset_Hp() { m_eStat.fHp = m_eStat.fMaxHp; }
+
 protected:
 	_Vec4		m_vRootMoveStack{};
 	_Vec3		m_vCurRootMove{};
