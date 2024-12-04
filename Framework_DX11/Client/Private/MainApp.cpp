@@ -56,7 +56,7 @@ void CMainApp::Update(_float fTimeDelta)
 	if (KEY_HOLD(KEY::CTRL))
 	{
 		if (KEY_TAP(KEY::NUM6))
-			
+			GET_GAMEINTERFACE->Fade_Out(TEXT("FadeOut_Test"), TEXT("FadeOut_Desc"), { 0.f,0.f,0.f }, 2.f);
 		if (KEY_TAP(KEY::NUM7))
 			GET_GAMEINTERFACE->Fade_In(2.f);
 		if (KEY_TAP(KEY::NUM8))

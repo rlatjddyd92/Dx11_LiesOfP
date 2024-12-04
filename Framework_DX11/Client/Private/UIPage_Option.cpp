@@ -302,6 +302,8 @@ HRESULT CUIPage_Option::Initialize_Option()
 	m_vecPart[_int(PART_GROUP::OPTION_Calibration_Frame)]->bRender = false;
 	m_vecPart[_int(PART_GROUP::OPTION_Calibration_Image)]->bRender = false;
 	m_vecPart[_int(PART_GROUP::OPTION_Calibration_Text)]->bRender = false;
+
+	return S_OK;
 }
 
 void CUIPage_Option::Update_Tab(_float fTimeDelta)
@@ -934,7 +936,7 @@ void CUIPage_Option::Update_Variable()
 void CUIPage_Option::Exit_Program()
 {
 	m_fExit_Time = 5.f;
-	GET_GAMEINTERFACE->Fade_Out(TEXT("감사합니다!"), TEXT("최종 발표를 기대해주세요"), _Vec3(0.f, 0.f, 0.f), m_fExit_Time);
+	GET_GAMEINTERFACE->Fade_Out(TEXT("감사합니다!"), TEXT("최종 발표를 기대해주세요"), _Vec3(0.f, 0.f, 0.f), 1.f);
 }
 
 

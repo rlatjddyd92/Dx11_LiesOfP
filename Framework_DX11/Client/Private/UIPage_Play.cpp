@@ -187,23 +187,24 @@ void CUIPage_Play::Action_Potion_Tool(_float fTimeDelta)
 			}
 		}
 	}
+
+	if (m_bIsBagOpen)
+	{
+		if (KEY_TAP(KEY::NUM1))
+			GET_GAMEINTERFACE->Use_Bag_Slot(0);
+		if (KEY_TAP(KEY::NUM2))
+			GET_GAMEINTERFACE->Use_Bag_Slot(1);
+		if (KEY_TAP(KEY::NUM3))
+			GET_GAMEINTERFACE->Use_Bag_Slot(2);
+		if (KEY_TAP(KEY::NUM4))
+			GET_GAMEINTERFACE->Use_Bag_Slot(3);
+	}
 	else if (KEY_TAP(KEY::R))
 	{
-		if ((m_bIsBagOpen) && (m_vec_Group_Ctrl[_int(PART_GROUP::GROUP_SELECT_CELL)]->fRatio == 0.f))
+		if ((!m_bIsBagOpen) && (m_vec_Group_Ctrl[_int(PART_GROUP::GROUP_SELECT_CELL)]->fRatio == 0.f))
 			GET_GAMEINTERFACE->Use_Potion_Slot();
-		else if ((m_bIsBagOpen) && (m_vec_Group_Ctrl[_int(PART_GROUP::GROUP_SELECT_CELL)]->fRatio == 0.f))
+		else if ((!m_bIsBagOpen) && (m_vec_Group_Ctrl[_int(PART_GROUP::GROUP_SELECT_CELL)]->fRatio == 1.f))
 			GET_GAMEINTERFACE->Use_Tool_Slot();
-		else
-		{
-			if (KEY_TAP(KEY::NUM1))
-				GET_GAMEINTERFACE->Use_Bag_Slot(0);
-			if (KEY_TAP(KEY::NUM2))
-				GET_GAMEINTERFACE->Use_Bag_Slot(1);
-			if (KEY_TAP(KEY::NUM3))
-				GET_GAMEINTERFACE->Use_Bag_Slot(2);
-			if (KEY_TAP(KEY::NUM4))
-				GET_GAMEINTERFACE->Use_Bag_Slot(3);
-		}
 	}
 }
 
@@ -289,6 +290,8 @@ void CUIPage_Play::LD_Potion_Tool_Update(_float fTimeDelta)
 {
 	if (m_bIsBagOpen)
 		return;
+	m_vec_Group_Ctrl[_int(PART_GROUP::GROUP_POTION_FILL)]->fRatio = 0.f;
+	
 
 	_int iPotion_Select = GET_GAMEINTERFACE->Get_Potion_Select();
 	deque<const CItem_Manager::ITEM*> dequeTexture_Index_Potion;

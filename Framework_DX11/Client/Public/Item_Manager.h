@@ -219,6 +219,8 @@ public:
 
 			Safe_Delete(vecItemInfo[iIndex]);
 			vecItemInfo[iIndex] = new ITEM;
+
+			return ITEM_RESULT::RESULT_SUCCESS;
 		}
 
 		_wstring strInven_Array_Name = {};
@@ -253,6 +255,11 @@ public:
 	// 업데이트
 	void Update_Item(_float fDeltatime);
 
+	// 플레이어 기능 구현
+	CPlayer::WEAPON_TYPE Get_Weapon_Model_Index(); // 현재 사용 중인 무기의 모델 번호 리턴
+	SPECIAL_ITEM Get_Item_Function(); // 이번 프레임에 기능 구현이 필요한 아이템을 사용했는지 확인
+	void Set_Item_Funtion(_int iItem_Index);
+
 	// 접근, 수정
 	_bool Is_ItemData_Change() { return m_bIsChange; }
 	ITEM_RESULT AddNewItem_Inven(_uint iItemIndex, _uint iCount = 1); // <- 새롭게 아이템을 만들어 인벤에 넣는다 
@@ -272,7 +279,7 @@ public:
 
 	ITEM_RESULT Remove_Item_Inven(INVEN_ARRAY_TYPE eIndex, _uint iIndex); // <- 인벤의 아이템 제거
 
-	CPlayer::WEAPON_TYPE Get_Weapon_Model_Index(); // 현재 사용 중인 무기의 모델 번호 리턴
+	
 
 	ITEM_RESULT Get_Array_Info(INVEN_ARRAY_TYPE eIndex, _wstring* strName, _int* iRow)
 	{
@@ -281,6 +288,8 @@ public:
 
 		*strName = m_vecArray_Inven[_int(eIndex)]->strInven_Array_Name;
 		*iRow = m_vecArray_Inven[_int(eIndex)]->Get_Array_Size() / 5;
+
+		return ITEM_RESULT::RESULT_SUCCESS;
 	}
 	const ITEM* Get_Item_Origin_Spec(_uint iIndex)
 	{
@@ -322,19 +331,7 @@ public:
 		return m_vecEquip_ItemInfo[_int(eSlot)];
 	}
 
-	// 코인
-	ITEM_RESULT Add_Coin(_int iAdd, _bool bForce)
-	{
-		if (!bForce)
-			if ((iAdd < 0) && (m_iCoin < abs(iAdd)))
-				return ITEM_RESULT::RESULT_INVALID;
-
-		m_iCoin += iAdd;
-		return ITEM_RESULT::RESULT_SUCCESS;
-	}
-
-	_int Get_Coin() { return m_iCoin; }
-
+	
 	// 선택 아이템 조정
 	_int Change_Potion_Select(_bool bNext)
 	{
@@ -481,7 +478,7 @@ public:
 				if (iterItem->bIsNewMark_Show)
 				{
 					iterItem->bIsNew = false;
-					iterItem->bIsNewMark_Show - false;
+					iterItem->bIsNewMark_Show = false;
 				}
 	}
 
@@ -536,7 +533,7 @@ private:
 		if ((_int(eType) < 0) || (_int(eType) >= _int(INVEN_ARRAY_TYPE::TYPE_END)))
 			return false;
 
-		if (m_vecArray_Inven[_int(eType)]->Get_Array_Size() <= iIndex)
+		if (m_vecArray_Inven[_int(eType)]->Get_Array_Size() <= _uint(iIndex))
 			return false;
 
 		return true;
@@ -584,9 +581,6 @@ private:
 	// 우하단 조작용
 	_uint m_iWeapon_Select = 0;
 
-	// 보유 코인 
-	_int m_iCoin = 10000;
-
 	// 포션 관련 
 	_int m_iNow_Potion_Count = 3;
 	_int m_iMax_Potion_Count = 5;
@@ -595,6 +589,8 @@ private:
 
 	// 아이템 갱신 
 	_bool m_bIsChange = false;
+	_int m_iNow_Using = -1;
+
 
 	// 아이템 액션 조작 
 	_bool m_bItemAction_Active = false;

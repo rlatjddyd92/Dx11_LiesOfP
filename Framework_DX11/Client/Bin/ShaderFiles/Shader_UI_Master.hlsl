@@ -55,7 +55,7 @@ float2 Clamp_Range(float2 vTex)
 }
 
  // 각도 조정
-bool Check_Angle(float2 vTex, float3 vPos)
+bool Check_Angle(float2 vTex, float4 vPos)
 {
     float2 vCenter = { 0.5f, 0.5f };
     float2 vDirec = float2(vTex.x, vTex.y) - vCenter;
