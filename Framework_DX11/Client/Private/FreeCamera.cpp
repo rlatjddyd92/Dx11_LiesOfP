@@ -71,6 +71,7 @@ void CFreeCamera::Priority_Update(_float fTimeDelta)
 
 void CFreeCamera::Update(_float fTimeDelta)
 {
+	Update_Zoom(fTimeDelta);
 }
 
 void CFreeCamera::Late_Update(_float fTimeDelta)

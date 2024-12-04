@@ -3,6 +3,7 @@
 #include "GameInstance.h"
 #include "ImGui_Manager.h"
 #include "Controller_UITool.h"
+#include "Camera.h"
 
 CCutScene::CCutScene(ID3D11Device* pDevice, ID3D11DeviceContext* pContext)
     : CGameObject{ pDevice, pContext }
@@ -26,7 +27,7 @@ HRESULT CCutScene::Initialize(void* pArg)
 	Safe_AddRef(m_pController_UITool);
 
 	m_isActive = false;
-	
+	m_pCamera = m_pGameInstance->Find_Camera(LEVEL_TOOL);
 	return S_OK;
 }
 
@@ -80,6 +81,7 @@ void CCutScene::Play_Keyframes(_float fTimeDelta)
 
 			Active_Shader(iter);
 			Active_UI(iter);
+			Active_Camera(iter);
 		}
 	}
 }
@@ -106,6 +108,30 @@ void CCutScene::Active_UI(CUTSCENE_DESC* pCutSceneDesc)
 	}
 }
 
+void CCutScene::Active_Camera(CUTSCENE_DESC* pCutSceneDesc)
+{
+	if (pCutSceneDesc->Camera_Desc.bTeleport)
+	{
+		m_pCamera->Get_Transform()->Set_WorldMatrix(pCutSceneDesc->Camera_Desc.mCameraWorlMatrix); 
+	}
+	if (pCutSceneDesc->Camera_Desc.bTurn)
+	{
+		m_pCamera->Start_Turn(pCutSceneDesc->Camera_Desc.fTurn_Speed, pCutSceneDesc->Camera_Desc.vPitchTawRoll);
+	}
+	if (pCutSceneDesc->Camera_Desc.bZoomIn)
+	{
+		m_pCamera->ZoomIn(pCutSceneDesc->Camera_Desc.fFovy, pCutSceneDesc->Camera_Desc.fZoomDuration);
+	}
+	if (pCutSceneDesc->Camera_Desc.bZoomOut)
+	{
+		m_pCamera->ZoomOut(pCutSceneDesc->Camera_Desc.fZoomDuration);
+	}
+	if (pCutSceneDesc->Camera_Desc.bLerpMove)
+	{
+		m_pCamera->Start_MoveLerp(pCutSceneDesc->Camera_Desc.vTargetPos, pCutSceneDesc->Camera_Desc.fMoveSpeed);
+	}
+}
+
 void CCutScene::Sort_KeyFrame_TrackPosition()
 {
 	//TrakcPostition에 따라 자동 정렬
@@ -117,6 +143,8 @@ void CCutScene::Sort_KeyFrame_TrackPosition()
 
 void CCutScene::Delete_Selected_Keyframe(_int iIndex)
 {
+	delete m_KeyFrames[iIndex];
+	m_KeyFrames[iIndex] = nullptr;
 	m_KeyFrames.erase(m_KeyFrames.begin() + iIndex);
 	Sort_KeyFrame_TrackPosition();
 }

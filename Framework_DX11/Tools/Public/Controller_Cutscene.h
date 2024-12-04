@@ -29,6 +29,9 @@ private:
 
 private:
     class CCutScene* m_pCurrentCutScene = {};
+	class CCamera * m_pCamera = {};
+
+
     _bool m_bFirst = { true };
     _bool m_bPlay = { true };
     _float* m_fTrackPosition = { nullptr };
@@ -53,6 +56,7 @@ private:
 	void UI_Memu();
 	void Shader_Memu();
 	void GamgeObject_Memu();
+	void Show_CurCamState();
 
 public:
 	virtual void Free() override;

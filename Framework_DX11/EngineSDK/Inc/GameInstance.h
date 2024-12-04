@@ -259,6 +259,8 @@ public:
 		void Change_Active_Octree();
 #pragma endregion
 
+		_float Lerp(_float fSour, _float fDest, _float fRatio);
+
 private:
 	class CGraphic_Device*			m_pGraphic_Device = { nullptr };
 	class CInput_Device*			m_pInput_Device = { nullptr };

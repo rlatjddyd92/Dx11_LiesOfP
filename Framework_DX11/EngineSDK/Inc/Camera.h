@@ -41,8 +41,16 @@ public:
 public:
 	virtual void Start_PosShake(_float fPower, _float fDuration);
 
-	void ZoomIn(_float fFovy, _float fDuration = 1.f);
+	void ZoomIn(_float fFovy, _float fDuration = 1.f);	//라디안으로 넣어야 함
 	void ZoomOut(_float fDuration = 1.f);
+
+	_float Get_FoV() { return m_fFovy; }
+
+	void Start_Turn(_float fSpeed, _Vec3 vPitchYawRoll);
+	_float* Get_FoV_Ptr() { return &m_fFovy; }
+	void Reset_Zoom();
+	void Reset_MoveLerp();
+	void Start_MoveLerp(_Vec3 vTargetPos, _float fSpeed);
 
 protected:
 	_float				m_fFovy = {};
@@ -67,6 +75,16 @@ protected:
 	_bool				m_isZoomIn = { false };
 	_bool				m_isZoomOut = { false };
 
+	//회전
+	_bool				m_bTurn = { false };
+	_float				m_fTurnSpeed = { 0.f };
+	_Vec3				m_vTarget_PitchTawRoll;
+
+	//이동
+	_bool				m_bMoveLerp = { false };
+	_Vec3				m_vTarget_Pos;
+	_float				m_fMoveSpeed;
+
 	// 캐스캐이드용
 	_float				m_fCascadeFarPlanes[4];
 	_Vec3				m_vPrevCenterPos[3];
@@ -75,7 +93,9 @@ protected:
 
 protected:
 	void Calculat_CascadeFrustum();
-
+	void Update_Zoom(_float fTimeDelta);
+	void Update_Turn(_float fTimeDelta);
+	void Update_MoveLerp(_float fTimeDelta);
 public:
 	virtual CGameObject* Clone(void* pArg) = 0;
 	virtual void Free() override;

@@ -36,6 +36,8 @@ HRESULT CController_Cutscene::Initialize(ID3D11Device* pDevice, ID3D11DeviceCont
     }
 
     m_fTrackPosition = &m_fTrackPosition_Zero;
+    m_pCamera = m_pGameInstance->Find_Camera(LEVEL_TOOL);
+
 	return S_OK;
 }
 
@@ -126,6 +128,8 @@ void CController_Cutscene::Menu()
         {
             *m_fTrackPosition = 0.f;
             m_pCurrentCutScene->Keyframe_Actived_Reset();
+            m_pCamera->Reset_Zoom();
+            m_pCamera->Reset_MoveLerp();
         }
 
         ImGui::SliderFloat("TimeLine", m_fTrackPosition, 0.0f, fMaxFrame);
@@ -152,7 +156,6 @@ void CController_Cutscene::Menu()
         static _int iKeyFrameCount = 0;
         if(m_pCurrentCutScene!=nullptr)
             iKeyFrameCount = m_pCurrentCutScene->Get_KeyFrameCount();
-
 
         for (_int i = 0; i < iKeyFrameCount; i++)
         {
@@ -234,7 +237,7 @@ void CController_Cutscene::Menu()
             switch (selected)
             {
             case CCutScene::CAMERA:
-                Show_Camera_State();
+                Camera_Memu();
                 break;
             case CCutScene::UI:
                 UI_Memu();
@@ -273,11 +276,47 @@ void CController_Cutscene::Show_GamgeObject_State()
 
 void CController_Cutscene::Camera_Memu()
 {
+    static bool bShowCurCamState = { false };
+    ImGui::Checkbox("Show CurCamState", &bShowCurCamState);
+    if (bShowCurCamState)
+        Show_CurCamState();
+
     //카메라 이동
-    ImGui::Checkbox("FadeOut", &pCutScene_Desc->Camera_Desc.bTeleport);
-     
+    ImGui::Checkbox("Teleport", &pCutScene_Desc->Camera_Desc.bTeleport);
+    if (pCutScene_Desc->Camera_Desc.bTeleport)
+    {
+        if (ImGui::Button("Save Current CamMatrix"))
+        {
+            pCutScene_Desc->Camera_Desc.mCameraWorlMatrix = m_pGameInstance->Find_Camera(LEVEL_TOOL)->Get_Transform()->Get_WorldMatrix();
+        }
+    }
+    //카메라 보간 이동
+    ImGui::Checkbox("MoveLerp", &pCutScene_Desc->Camera_Desc.bLerpMove);
+    if (pCutScene_Desc->Camera_Desc.bLerpMove)
+    {
+        ImGui::DragFloat3("TargetPos", (_float*)&pCutScene_Desc->Camera_Desc.vTargetPos, 0.1f);
+        ImGui::DragFloat("Move Speed", &pCutScene_Desc->Camera_Desc.fMoveSpeed, 0.01f, 0.f);
+    }
     //카메라 회전
-    ImGui::Checkbox("FadeIn", &pCutScene_Desc->Camera_Desc.bTurn);
+    ImGui::Checkbox("Turn", &pCutScene_Desc->Camera_Desc.bTurn);
+    if (pCutScene_Desc->Camera_Desc.bTurn)
+    {
+        ImGui::DragFloat3("PitchYawRoll", (_float*)&pCutScene_Desc->Camera_Desc.vPitchTawRoll, 0.1f,0.f,360.f);
+        ImGui::DragFloat("Turn Speed", &pCutScene_Desc->Camera_Desc.fTurn_Speed, 0.1f,0.f,10.f);
+    }
+    //줌인
+    ImGui::Checkbox("ZoomnIn", &pCutScene_Desc->Camera_Desc.bZoomIn);
+    if (pCutScene_Desc->Camera_Desc.bZoomIn)
+    {
+        ImGui::DragFloat("Fovy(Degree)", &pCutScene_Desc->Camera_Desc.fFovy, 0.01f, 0.01f, 2.f);
+        ImGui::DragFloat("Duration", &pCutScene_Desc->Camera_Desc.fZoomDuration, 0.05f, 0.f, 10.f);
+    }
+    //줌아웃
+    ImGui::Checkbox("ZoomnOut", &pCutScene_Desc->Camera_Desc.bZoomOut);
+    if (pCutScene_Desc->Camera_Desc.bZoomOut)
+    {
+        ImGui::DragFloat("Duration", &pCutScene_Desc->Camera_Desc.fZoomDuration, 0.1f, 0.f, 10.f);
+    }
 }
 
 void CController_Cutscene::UI_Memu()
@@ -305,6 +344,35 @@ void CController_Cutscene::Shader_Memu()
 
 void CController_Cutscene::GamgeObject_Memu()
 {
+}
+
+void CController_Cutscene::Show_CurCamState()
+{
+    ImGui::Begin("CurrCam_State", NULL, ImGuiWindowFlags_MenuBar | ImGuiWindowFlags_HorizontalScrollbar
+        | ImGuiWindowFlags_AlwaysVerticalScrollbar);
+
+    ImGui::Text("Ori Fov : %f", XMConvertToRadians(60.f));
+    ImGui::DragFloat("FoV", m_pCamera->Get_FoV_Ptr(), 0.01f, 0.01f, 2.f);
+    
+    ////////////////////////////
+    _Vec4 CurrentQuat = XMQuaternionRotationMatrix(m_pCamera->Get_Transform()->Get_WorldMatrix());
+
+    // 쿼터니언 -> 행렬
+    XMMATRIX rotMatrix = XMMatrixRotationQuaternion(CurrentQuat);
+
+    // 행렬 -> Euler 각 (Yaw, Pitch, Roll)
+    float pitch, yaw, roll;
+    pitch = std::atan2(rotMatrix.r[1].m128_f32[2], rotMatrix.r[2].m128_f32[2]);
+    yaw = std::asin(-rotMatrix.r[0].m128_f32[2]);
+    roll = std::atan2(rotMatrix.r[0].m128_f32[1], rotMatrix.r[0].m128_f32[0]);
+
+    //Euler를 Degree로
+    ImGui::Text("Rot : %f, %f, %f", XMConvertToDegrees( pitch), XMConvertToDegrees(yaw), XMConvertToDegrees(roll));
+    
+    _Vec3 vCurPos = m_pCamera->Get_Transform()->Get_State(CTransform::STATE_POSITION);
+    ImGui::Text("Pos: %f, %f, %f", vCurPos.x, vCurPos.y, vCurPos.z);
+
+    ImGui::End();
 }
 
 

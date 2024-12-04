@@ -75,6 +75,9 @@ public:
 
 	void		Orbit(_vector vAxis, _vector vCenter, _float fLimit, _float fDistance, _float fTimeDelta);
 
+	void		Set_isTurning(_bool bTurn) { m_isTurning = bTurn; }
+	_bool		Get_isTurning() { return m_isTurning; }
+
 public:
 	HRESULT Bind_ShaderResource(class CShader* pShader, const _char* pConstantName);
 
@@ -86,6 +89,8 @@ private:
 	_Matrix			m_WorldMatrix = {};
 
 	_Vec3			m_vCurrentRot = {};
+
+	_bool			m_isTurning = { false };
 
 public:
 	static CTransform* Create(ID3D11Device* pDevice, ID3D11DeviceContext* pContext, void* pArg);

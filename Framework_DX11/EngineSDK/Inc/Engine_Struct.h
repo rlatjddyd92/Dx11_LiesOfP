@@ -303,9 +303,20 @@ namespace Engine
 	{
 		_bool bTeleport = { false };
 		_bool bTurn = { false };
-		_Matrix mCameraMatrix;
-		_Vec3 vPitchTawRoll = {};
+		_bool bZoomIn = { false };
+		_bool bZoomOut = { false };
+		_bool bLerpMove = { false };
 
+		_Matrix mCameraWorlMatrix;
+
+		_Vec3 vPitchTawRoll = {};
+		_float fTurn_Speed = {0.f};
+
+		_float fZoomDuration = { 0.f };
+		_float fFovy = { XMConvertToRadians(60.f)};
+
+		_float fMoveSpeed = { 0.f };
+		_Vec3 vTargetPos = {};
 	}SCENE_CAMERA_DESC;
 
 	typedef struct
