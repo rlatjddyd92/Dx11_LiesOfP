@@ -49,7 +49,7 @@ public:
 	class CMonster*		Get_Monster() { return m_pMonster; }
 
 	ATTACK_STRENGTH		Get_AttackStrength() { return m_eAttackStrength; }
-	void				Set_AttackStrength(ATTACK_STRENGTH eStrength) { m_eAttackStrength = eStrength; }
+	virtual void		Set_AttackStrength(ATTACK_STRENGTH eStrength) { m_eAttackStrength = eStrength; }
 
 public:
 	virtual HRESULT Initialize_Prototype() override;

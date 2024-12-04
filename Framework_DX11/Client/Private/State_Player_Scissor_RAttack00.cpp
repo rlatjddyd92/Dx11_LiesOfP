@@ -42,6 +42,8 @@ HRESULT CState_Player_Scissor_RAttack00::Start_State(void* pArg)
     m_isInputRButton = false;
     m_fRButtonTime = 0.f;
 
+    m_pPlayer->Set_WeaponStrength(ATK_NORMAL);
+
     return S_OK;
 }
 

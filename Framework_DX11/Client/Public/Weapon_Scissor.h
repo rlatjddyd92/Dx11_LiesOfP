@@ -38,6 +38,7 @@ public:
 	virtual void		DeActive_Collider(_uint iHandIndex = 1) override;
 	virtual void		Play_Sound(WEP_SOUND_TYPE eType, const TCHAR* pSoundKey, _uint iHandIndex = 1) override;
 	virtual void		Play_HitSound(HIT_TYPE eType) override;
+	virtual void		Set_AttackStrength(ATTACK_STRENGTH eStrength) override;
 
 public:
 	void		Change_SeperateMode();

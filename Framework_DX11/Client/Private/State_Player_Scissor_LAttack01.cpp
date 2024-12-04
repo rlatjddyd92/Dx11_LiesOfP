@@ -39,6 +39,8 @@ HRESULT CState_Player_Scissor_LAttack01::Start_State(void* pArg)
 
     m_isPlaySound = false;
 
+    m_pPlayer->Set_WeaponStrength(ATK_WEAK);
+
     return S_OK;
 }
 

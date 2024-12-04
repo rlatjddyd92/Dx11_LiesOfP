@@ -52,6 +52,7 @@
 #include "State_Player_Rapier_RAttack00.h"
 #include "State_Player_Rapier_Charge.h"
 #include "State_Player_Rapier_Fablel.h"
+#include "State_Player_Rapier_Fatal.h"
 
 #include "State_Player_Flame_LAttack00.h"
 #include "State_Player_Flame_LAttack01.h"
@@ -59,6 +60,7 @@
 #include "State_Player_Flame_RAttack01.h"
 #include "State_Player_Flame_Charge00.h"
 #include "State_Player_Flame_Charge01.h"
+#include "State_Player_Flame_Fatal.h"
 
 #include "State_Player_Scissor_LAttack00.h"
 #include "State_Player_Scissor_LAttack01.h"
@@ -70,6 +72,7 @@
 #include "State_Player_Scissor_Fable0.h"
 #include "State_Player_Scissor_Fable1.h"
 #include "State_Player_Scissor_Fable2.h"
+#include "State_Player_Scissor_Fatal.h"
 
 #include "State_Player_OpenSophiaDoor.h"
 #include "State_Player_SophiaWalk.h"
@@ -196,12 +199,14 @@ void CPlayer::Update(_float fTimeDelta)
 
 	if (KEY_TAP(KEY::L))
 	{
-		Change_State(ITEMGET);
+		Change_State(FLAME_FATAL);
+		//Change_State(ITEMGET);
 		//Calc_DamageGain(5.f, m_pTransformCom->Get_WorldMatrix().Forward() + m_pTransformCom->Get_WorldMatrix().Translation());
 	}
 	if (KEY_TAP(KEY::K))
 	{
-		Change_State(SOPHIA_WALK);
+		Change_State(RAPIER_FATAL);
+		//Change_State(SOPHIA_WALK);
 		//Calc_DamageGain(5.f, m_pTransformCom->Get_WorldMatrix().Forward() + m_pTransformCom->Get_WorldMatrix().Translation());
 	}
 }
@@ -306,6 +311,10 @@ void CPlayer::OnCollisionStay(CGameObject* pOther)
 	}*/
 	if (pOther->Get_Tag() == TEXT("Monster"))
 	{
+		CMonster* pMonster = dynamic_cast<CMonster*>(pOther);
+
+		// 페이탈 어택 여부 정하기
+		
 		m_isCollisionMonster = true;
 	}
 }
@@ -381,6 +390,11 @@ void CPlayer::Appear_Weapon()
 void CPlayer::Disappear_Weapon()
 {
 	m_pWeapon[m_eWeaponType]->Disappear();
+}
+
+void CPlayer::Set_WeaponStrength(ATTACK_STRENGTH eStrength)
+{
+	m_pWeapon[m_eWeaponType]->Set_AttackStrength(eStrength);
 }
 
 void CPlayer::Active_CurrentWeaponCollider(_float fDamageRatio, _uint iHandIndex)
@@ -1006,7 +1020,8 @@ HRESULT CPlayer::Ready_FSM()
 	m_pFsmCom->Add_State(CState_Player_Rapier_LAttack01::Create(m_pFsmCom, this, RAPIER_LATTACK1, &Desc));	// 좌클릭 공격2
 	m_pFsmCom->Add_State(CState_Player_Rapier_RAttack00::Create(m_pFsmCom, this, RAPIER_RATTACK0, &Desc));	// 우클릭 공격
 	m_pFsmCom->Add_State(CState_Player_Rapier_Charge::Create(m_pFsmCom, this, RAPIER_CHARGE, &Desc));	// 우클릭 차지공격
-	m_pFsmCom->Add_State(CState_Player_Rapier_Fable::Create(m_pFsmCom, this, RAPIER_FABALE, &Desc));	// F 페이탈아츠
+	m_pFsmCom->Add_State(CState_Player_Rapier_Fable::Create(m_pFsmCom, this, RAPIER_FABALE, &Desc));	// F 페이블아츠
+	m_pFsmCom->Add_State(CState_Player_Rapier_Fatal::Create(m_pFsmCom, this, RAPIER_FATAL, &Desc));	// 페이탈
 	// Shift + F 패리 어택
 
 	m_pFsmCom->Add_State(CState_Player_Flame_LAttack00::Create(m_pFsmCom, this, FLAME_LATTACK0, &Desc));	// 좌클릭 공격1
@@ -1015,8 +1030,7 @@ HRESULT CPlayer::Ready_FSM()
 	m_pFsmCom->Add_State(CState_Player_Flame_RAttack01::Create(m_pFsmCom, this, FLAME_RATTACK1, &Desc));	// 우클릭 공격2
 	m_pFsmCom->Add_State(CState_Player_Flame_Charge00::Create(m_pFsmCom, this, FLAME_CHARGE0, &Desc));	// 우클릭 차지 공격1
 	m_pFsmCom->Add_State(CState_Player_Flame_Charge01::Create(m_pFsmCom, this, FLAME_CHARGE1, &Desc));	// 우클릭 차지 공격2
-	//페이탈 아츠
-		// Shift + F 패리 어택
+	m_pFsmCom->Add_State(CState_Player_Flame_Fatal::Create(m_pFsmCom, this, FLAME_FATAL, &Desc)); //페이탈
 
 	m_pFsmCom->Add_State(CState_Player_Scissor_LAttack00::Create(m_pFsmCom, this, SCISSOR_LATTACK0, &Desc));	// 좌클릭 공격1
 	m_pFsmCom->Add_State(CState_Player_Scissor_LAttack01::Create(m_pFsmCom, this, SCISSOR_LATTACK1, &Desc));	// 좌클릭 공격2
@@ -1028,12 +1042,17 @@ HRESULT CPlayer::Ready_FSM()
 	m_pFsmCom->Add_State(CState_Player_Scissor_Fable0::Create(m_pFsmCom, this, SCISSOR_FABAL0, &Desc));	// 콤보1
 	m_pFsmCom->Add_State(CState_Player_Scissor_Fable1::Create(m_pFsmCom, this, SCISSOR_FABAL1, &Desc));	// 콤보2
 	m_pFsmCom->Add_State(CState_Player_Scissor_Fable2::Create(m_pFsmCom, this, SCISSOR_FABAL2, &Desc));	// 콤보3
+	m_pFsmCom->Add_State(CState_Player_Scissor_Fatal::Create(m_pFsmCom, this, SCISSOR_FATAL, &Desc));	// 페이탈
 
 	/* 소피아 컷신 */
 	m_pFsmCom->Add_State(CState_Player_OpenSophiaDoor::Create(m_pFsmCom, this, SOPHIA_DOOR_OPEN, &Desc));
 	m_pFsmCom->Add_State(CState_Player_SophiaWalk::Create(m_pFsmCom, this, SOPHIA_WALK, &Desc));
 	m_pFsmCom->Add_State(CState_Player_SophiaHand::Create(m_pFsmCom, this, SOPHIA_HAND, &Desc));
 	m_pFsmCom->Add_State(CState_Player_SophiaHandEnd::Create(m_pFsmCom, this, SOPHIA_HANDEND, &Desc));
+
+	/* 락사시아 컷신 */
+
+	/* 시몬 마누스 컷신 */
 
 	m_pFsmCom->Set_State(OH_IDLE);
 

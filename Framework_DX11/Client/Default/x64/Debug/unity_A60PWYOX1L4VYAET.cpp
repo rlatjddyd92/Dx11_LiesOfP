@@ -39,6 +39,9 @@
 #include "D:\GitProject\Dx11_LiesOfP\Framework_DX11\Client\Private\LastDoor.cpp"
 
 
+#include "D:\GitProject\Dx11_LiesOfP\Framework_DX11\Client\Private\State_Player_Flame_Fatal.cpp"
+
+
 #include "D:\GitProject\Dx11_LiesOfP\Framework_DX11\Client\Private\State_Player_OpenSophiaDoor.cpp"
 
 
@@ -121,6 +124,12 @@
 
 
 #include "D:\GitProject\Dx11_LiesOfP\Framework_DX11\Client\Private\State_Player_Lift.cpp"
+
+
+#include "D:\GitProject\Dx11_LiesOfP\Framework_DX11\Client\Private\State_Player_Rapier_Fatal.cpp"
+
+
+#include "D:\GitProject\Dx11_LiesOfP\Framework_DX11\Client\Private\State_Player_Scissor_Fatal.cpp"
 
 
 #include "D:\GitProject\Dx11_LiesOfP\Framework_DX11\Client\Private\State_Player_SophiaHandEnd.cpp"

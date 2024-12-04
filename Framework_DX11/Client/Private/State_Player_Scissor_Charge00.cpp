@@ -47,6 +47,8 @@ HRESULT CState_Player_Scissor_Charge00::Start_State(void* pArg)
     m_isInputRButton = false;
     m_fRButtonTime = 0.f;
 
+    m_pPlayer->Set_WeaponStrength(ATK_STRONG);
+
     return S_OK;
 }
 

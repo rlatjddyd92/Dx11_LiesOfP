@@ -816,7 +816,7 @@
     </Filter>
     <Filter Include="03.GameInterface_Controller\00.UIManager\00.UIPage\13.UIPage_Talking %2850%25%29">
       <UniqueIdentifier>{94ad924a-4751-4924-aeb7-673aedf1ec24}</UniqueIdentifier>
-	</Filter>
+    </Filter>
     <Filter Include="02.GameObjects\12.AttackObject\SimonManus\GoldBall">
       <UniqueIdentifier>{de88a1cd-d5b9-4174-ab42-21ca9c1bbdf1}</UniqueIdentifier>
     </Filter>
@@ -1441,17 +1441,8 @@
     <ClInclude Include="..\Public\AObj_ThunderSpear.h">
       <Filter>02.GameObjects\12.AttackObject\SimonManus\ThunderSpear</Filter>
     </ClInclude>
-    <ClInclude Include="..\Public\AObj_JumpMagic.h">
-      <Filter>02.GameObjects\12.AttackObject\SimonManus\JumpMagic</Filter>
-    </ClInclude>
-    <ClInclude Include="..\Public\AObj_SlideMagic.h">
-      <Filter>02.GameObjects\12.AttackObject\SimonManus\SlideMagic</Filter>
-	</ClInclude>
     <ClInclude Include="..\Public\UIPage_Test.h">
       <Filter>03.GameInterface_Controller\00.UIManager\00.UIPage\11.UIPage_Test %280%25%29</Filter>
-    </ClInclude>
-    <ClInclude Include="..\Public\UIPage_Effect.h">
-      <Filter>03.GameInterface_Controller\00.UIManager\00.UIPage\12.UIPage_Effect %2850%25%29</Filter>
     </ClInclude>
     <ClInclude Include="..\Public\State_Player_Rapier_Fablel.h">
       <Filter>05.Fsm\Player\OneHand\00.Attack\Rapier\00.FableArts\General</Filter>
@@ -1503,9 +1494,19 @@
     </ClInclude>
     <ClInclude Include="..\Public\UIPage_Effect.h">
       <Filter>03.GameInterface_Controller\00.UIManager\00.UIPage\12.UIPage_Effect</Filter>
-	</ClInclude>
+    </ClInclude>
     <ClInclude Include="..\Public\AObj_GoldBall.h">
       <Filter>02.GameObjects\12.AttackObject\SimonManus\GoldBall</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Public\UIPage_Effect.h" />
+    <ClInclude Include="..\Public\State_Player_Rapier_Fatal.h">
+      <Filter>05.Fsm\Player\OneHand\00.Attack\Rapier\01.Fatal</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Public\State_Player_Flame_Fatal.h">
+      <Filter>05.Fsm\Player\TwoHand\00.Attack\FlameSword\01.Fatal</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Public\State_Player_Scissor_Fatal.h">
+      <Filter>05.Fsm\Player\OneHand\00.Attack\Scissor\01.Fatal</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -2098,17 +2099,8 @@
     <ClCompile Include="..\Private\AObj_ThunderSpear.cpp">
       <Filter>02.GameObjects\12.AttackObject\SimonManus\ThunderSpear</Filter>
     </ClCompile>
-    <ClCompile Include="..\Private\AObj_JumpMagic.cpp">
-      <Filter>02.GameObjects\12.AttackObject\SimonManus\JumpMagic</Filter>
-    </ClCompile>
-    <ClCompile Include="..\Private\AObj_SlideMagic.cpp">
-      <Filter>02.GameObjects\12.AttackObject\SimonManus\SlideMagic</Filter>
-	</ClCompile>
     <ClCompile Include="..\Private\UIPage_Test.cpp">
       <Filter>03.GameInterface_Controller\00.UIManager\00.UIPage\11.UIPage_Test %280%25%29</Filter>
-    </ClCompile>
-    <ClCompile Include="..\Private\UIPage_Effect.cpp">
-      <Filter>03.GameInterface_Controller\00.UIManager\00.UIPage\12.UIPage_Effect %2850%25%29</Filter>
     </ClCompile>
     <ClCompile Include="..\Private\State_Player_Rapier_Fablel.cpp">
       <Filter>05.Fsm\Player\OneHand\00.Attack\Rapier\00.FableArts\General</Filter>
@@ -2160,9 +2152,19 @@
     </ClCompile>
     <ClCompile Include="..\Private\UIPage_Effect.cpp">
       <Filter>03.GameInterface_Controller\00.UIManager\00.UIPage\12.UIPage_Effect</Filter>
-	</ClCompile>
+    </ClCompile>
     <ClCompile Include="..\Private\AObj_GoldBall.cpp">
       <Filter>02.GameObjects\12.AttackObject\SimonManus\GoldBall</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Private\UIPage_Effect.cpp" />
+    <ClCompile Include="..\Private\State_Player_Rapier_Fatal.cpp">
+      <Filter>05.Fsm\Player\OneHand\00.Attack\Rapier\01.Fatal</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Private\State_Player_Flame_Fatal.cpp">
+      <Filter>05.Fsm\Player\TwoHand\00.Attack\FlameSword\01.Fatal</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Private\State_Player_Scissor_Fatal.cpp">
+      <Filter>05.Fsm\Player\OneHand\00.Attack\Scissor\01.Fatal</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

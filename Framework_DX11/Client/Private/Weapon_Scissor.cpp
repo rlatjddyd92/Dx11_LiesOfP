@@ -266,6 +266,14 @@ void CWeapon_Scissor::Play_HitSound(HIT_TYPE eType)
 	m_pSoundCom[WEP_SOUND_EFFECT2]->Play2D(strSoundKey.c_str(), &g_fEffectVolume);
 }
 
+void CWeapon_Scissor::Set_AttackStrength(ATTACK_STRENGTH eStrength)
+{
+	m_eAttackStrength = eStrength;
+
+	m_pScissor_Sperate[0]->Set_AttackStrength(eStrength);
+	m_pScissor_Sperate[1]->Set_AttackStrength(eStrength);
+}
+
 void CWeapon_Scissor::Change_SeperateMode()
 {
 	if (m_isSeperate)

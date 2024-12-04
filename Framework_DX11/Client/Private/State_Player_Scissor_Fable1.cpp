@@ -45,6 +45,8 @@ HRESULT CState_Player_Scissor_Fable1::Start_State(void* pArg)
 
     m_pPlayer->Decrease_Region();
 
+    m_pPlayer->Set_WeaponStrength(ATK_STRONG);
+
     return S_OK;
 }
 

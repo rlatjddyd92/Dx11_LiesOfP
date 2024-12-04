@@ -55,6 +55,8 @@ HRESULT CState_Player_Rapier_Fable::Start_State(void* pArg)
         m_isPlaySound[i] = false;
     }
 
+    m_pPlayer->Set_WeaponStrength(ATK_STRONG);
+
     return S_OK;
 }
 
