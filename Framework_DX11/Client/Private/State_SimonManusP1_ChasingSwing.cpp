@@ -23,6 +23,9 @@ HRESULT CState_SimonManusP1_ChasingSwing::Start_State(void* pArg)
     m_iRouteTrack = 0;
     m_pMonster->Change_Animation(AN_CHASINGSWING_START, false,  0.1f, 0);
 
+    m_bSwingSound = false;
+    m_bStampSound = false;
+
     return S_OK;
 }
 
@@ -176,6 +179,47 @@ void CState_SimonManusP1_ChasingSwing::Effect_Check(_double CurTrackPos)
             m_pMonster->DeActive_Effect(CSimonManus::P1_TRAIL);
         }
     }
+}
+
+void CState_SimonManusP1_ChasingSwing::Control_Sound(_double CurTrackPos)
+{
+    //100 35
+    if (!m_bStampSound)
+    {
+        if (CurTrackPos >= 35.f)
+        {
+            m_pMonster->Play_Sound(CPawn::PAWN_SOUND_EFFECT1, TEXT("SE_NPC_SK_FX_Ground_Exp_L_03.wav"));
+            m_bStampSound = true;
+        }
+    }
+
+    if (m_iRouteTrack == 0)
+    {
+        if (!m_bSwingSound)
+        {
+            if (CurTrackPos >= 140.f && CurTrackPos <= 145.f)
+            {
+                m_pMonster->Play_Sound(CPawn::PAWN_SOUND_EFFECT1, TEXT("SE_NPC_SK_FX_Ground_Exp_M_02.wav"), true);
+                m_bSwingSound = true;
+            }
+        }
+        else if(CurTrackPos >= 147.f)
+        {
+            m_bSwingSound = false;
+        }
+    }
+    else if (m_iRouteTrack == 2)
+    {
+        if (!m_bSwingSound)
+        {
+            if (CurTrackPos >= 100.f)
+            {
+                m_pMonster->Play_Sound(CPawn::PAWN_SOUND_EFFECT1, TEXT("SE_PC_SK_Smash_Crystal_Stone_H_03.wav"));
+                m_bSwingSound = true;
+            }
+        }
+    }
+
 }
 
 CState_SimonManusP1_ChasingSwing* CState_SimonManusP1_ChasingSwing::Create(CFsm* pFsm, CMonster* pMonster, _uint iStateNum, void* pArg)

@@ -22,7 +22,8 @@ HRESULT CState_SimonManusP1_SwipMultiple_L::Start_State(void* pArg)
 {
     m_pMonster->Change_Animation(AN_ROUTE_FIRST, false, 0.1f, 0);
     m_bSwing_Sound = false;
-
+    m_bStamp_Sound = false;
+    m_bResetCheck = false;
     return S_OK;
 }
 
@@ -158,12 +159,33 @@ void CState_SimonManusP1_SwipMultiple_L::Control_Sound(_double CurTrackPos)
 {
     if (m_iRouteTrack == 0)
     {
+        if (!m_bStamp_Sound)
+        {
+            if (CurTrackPos >= 74.f && CurTrackPos <= 80.f)
+            {
+                m_pMonster->Play_Sound(CPawn::PAWN_SOUND_EFFECT1, TEXT("SE_NPC_SK_FX_Ground_Exp_L_03.wav"));
+                m_bStamp_Sound = true;
+            }
+        }
+
         if (!m_bSwing_Sound)
         {
+            if (CurTrackPos >= 80.f && CurTrackPos <= 90.f)
+            {
+                m_pMonster->Play_Sound(CPawn::PAWN_SOUND_EFFECT1, TEXT("SE_NPC_SK_FX_Ground_Exp_M_02.wav"), true);
+                m_bSwing_Sound = true;
+            }
             if ((CurTrackPos >= 170.f && CurTrackPos <= 180.f))
             {
                 m_pMonster->Play_Sound(CPawn::PAWN_SOUND_EFFECT1, TEXT("SE_PC_SK_Smash_Crystal_Stone_H_03.wav"));
                 m_bSwing_Sound = true;
+            }
+        }
+        else
+        {
+            if (CurTrackPos >= 95.f && CurTrackPos <= 100.f)
+            {
+                m_bSwing_Sound = false;
             }
         }
         

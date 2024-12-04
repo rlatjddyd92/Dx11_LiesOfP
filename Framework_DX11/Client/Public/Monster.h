@@ -65,6 +65,7 @@ public:
 	virtual const _Matrix* Get_WeaponWorldMat() { return &_Matrix{}; }
 
 	void	Increase_GroggyPoint(_float fGroggy) { m_eStat.fGrogyPoint += fGroggy; }
+	virtual void	SetUp_Dead() {};
 
 protected:
 	_Vec4		m_vRootMoveStack{};

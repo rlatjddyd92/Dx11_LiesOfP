@@ -23,7 +23,7 @@ public:
 	}ATKOBJ_DESC;
 
 public:
-	enum EFF_SOUND_TYPE { EFF_SOUND_EFFECT1, EFF_SOUND_END };
+	enum EFF_SOUND_TYPE { EFF_SOUND_EFFECT1, EFF_SOUND_EFFECT2, EFF_SOUND_END };
 
 protected:
 	CAttackObject(ID3D11Device* pDevice, ID3D11DeviceContext* pContext);

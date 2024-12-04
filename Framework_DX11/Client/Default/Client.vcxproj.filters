@@ -727,12 +727,6 @@
     <Filter Include="02.GameObjects\12.AttackObject\SimonManus\BlackBall">
       <UniqueIdentifier>{39713752-8c79-4b97-957c-30f68e5c7e25}</UniqueIdentifier>
     </Filter>
-    <Filter Include="02.GameObjects\12.AttackObject\SimonManus\JumpMagic">
-      <UniqueIdentifier>{2bccd402-cdc1-4e0d-98b4-253b5d267fde}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="02.GameObjects\12.AttackObject\SimonManus\SlideMagic">
-      <UniqueIdentifier>{d094a52a-95e5-471b-bd7b-c42456ecf43c}</UniqueIdentifier>
-    </Filter>
     <Filter Include="05.Fsm\Player\OneHand\00.Attack\Rapier\00.FableArts\General">
       <UniqueIdentifier>{9eae6eba-a96e-4f61-bb34-c8bed96e702a}</UniqueIdentifier>
     </Filter>
@@ -822,6 +816,9 @@
     </Filter>
     <Filter Include="03.GameInterface_Controller\00.UIManager\00.UIPage\13.UIPage_Talking %2850%25%29">
       <UniqueIdentifier>{94ad924a-4751-4924-aeb7-673aedf1ec24}</UniqueIdentifier>
+	</Filter>
+    <Filter Include="02.GameObjects\12.AttackObject\SimonManus\GoldBall">
+      <UniqueIdentifier>{de88a1cd-d5b9-4174-ab42-21ca9c1bbdf1}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -1449,6 +1446,12 @@
     </ClInclude>
     <ClInclude Include="..\Public\AObj_SlideMagic.h">
       <Filter>02.GameObjects\12.AttackObject\SimonManus\SlideMagic</Filter>
+	</ClInclude>
+    <ClInclude Include="..\Public\UIPage_Test.h">
+      <Filter>03.GameInterface_Controller\00.UIManager\00.UIPage\11.UIPage_Test %280%25%29</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Public\UIPage_Effect.h">
+      <Filter>03.GameInterface_Controller\00.UIManager\00.UIPage\12.UIPage_Effect %2850%25%29</Filter>
     </ClInclude>
     <ClInclude Include="..\Public\State_Player_Rapier_Fablel.h">
       <Filter>05.Fsm\Player\OneHand\00.Attack\Rapier\00.FableArts\General</Filter>
@@ -1500,6 +1503,9 @@
     </ClInclude>
     <ClInclude Include="..\Public\UIPage_Effect.h">
       <Filter>03.GameInterface_Controller\00.UIManager\00.UIPage\12.UIPage_Effect</Filter>
+	</ClInclude>
+    <ClInclude Include="..\Public\AObj_GoldBall.h">
+      <Filter>02.GameObjects\12.AttackObject\SimonManus\GoldBall</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -2097,6 +2103,12 @@
     </ClCompile>
     <ClCompile Include="..\Private\AObj_SlideMagic.cpp">
       <Filter>02.GameObjects\12.AttackObject\SimonManus\SlideMagic</Filter>
+	</ClCompile>
+    <ClCompile Include="..\Private\UIPage_Test.cpp">
+      <Filter>03.GameInterface_Controller\00.UIManager\00.UIPage\11.UIPage_Test %280%25%29</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Private\UIPage_Effect.cpp">
+      <Filter>03.GameInterface_Controller\00.UIManager\00.UIPage\12.UIPage_Effect %2850%25%29</Filter>
     </ClCompile>
     <ClCompile Include="..\Private\State_Player_Rapier_Fablel.cpp">
       <Filter>05.Fsm\Player\OneHand\00.Attack\Rapier\00.FableArts\General</Filter>
@@ -2148,6 +2160,9 @@
     </ClCompile>
     <ClCompile Include="..\Private\UIPage_Effect.cpp">
       <Filter>03.GameInterface_Controller\00.UIManager\00.UIPage\12.UIPage_Effect</Filter>
+	</ClCompile>
+    <ClCompile Include="..\Private\AObj_GoldBall.cpp">
+      <Filter>02.GameObjects\12.AttackObject\SimonManus\GoldBall</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

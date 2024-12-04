@@ -495,15 +495,20 @@ void CController_AnimationTool::ListUp_Bone()
 		}
 		else
 			ImGui::SetItemDefaultFocus();
-		if (ImGui::Selectable("WEAPON", (m_iBoneTypeIndex == 6)))
+		if (ImGui::Selectable("CHEST", (m_iBoneTypeIndex == 6)))
 		{
 			m_iBoneTypeIndex = 6;
 		}
 		else
-			ImGui::SetItemDefaultFocus();
-		if (ImGui::Selectable("BOUNDARY_UPPER", (m_iBoneTypeIndex == 7)))
+		if (ImGui::Selectable("WEAPON", (m_iBoneTypeIndex == 7)))
 		{
 			m_iBoneTypeIndex = 7;
+		}
+		else
+			ImGui::SetItemDefaultFocus();
+		if (ImGui::Selectable("BOUNDARY_UPPER", (m_iBoneTypeIndex == 8)))
+		{
+			m_iBoneTypeIndex = 8;
 		}
 		else
 			ImGui::SetItemDefaultFocus();
@@ -601,8 +606,9 @@ void CController_AnimationTool::SetUp_Controller_Bone()
 			ImGui::Text("FOOT_LEFT :: %d", m_pCopyModelCom->Get_UFBIndices(3));
 			ImGui::Text("FOOT_RIGHT :: %d", m_pCopyModelCom->Get_UFBIndices(4));
 			ImGui::Text("HEAD :: %d", m_pCopyModelCom->Get_UFBIndices(5));
-			ImGui::Text("WEAPON :: %d", m_pCopyModelCom->Get_UFBIndices(6));
-			ImGui::Text("BOUNDARY_UPPER :: %d", m_pCopyModelCom->Get_UFBIndices(7));
+			ImGui::Text("CHEST :: %d", m_pCopyModelCom->Get_UFBIndices(6));
+			ImGui::Text("WEAPON :: %d", m_pCopyModelCom->Get_UFBIndices(7));
+			ImGui::Text("BOUNDARY_UPPER :: %d", m_pCopyModelCom->Get_UFBIndices(8));
 		}
 
 		ImGui::EndListBox();

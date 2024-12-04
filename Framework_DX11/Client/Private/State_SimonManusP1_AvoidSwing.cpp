@@ -21,7 +21,7 @@ HRESULT CState_SimonManusP1_AvoidSwing::Initialize(_uint iStateNum, void* pArg)
 HRESULT CState_SimonManusP1_AvoidSwing::Start_State(void* pArg)
 {
     m_pMonster->Change_Animation(AN_AVOIDSWING, false, 0.1f, 0);
-
+    m_bSwing_Sound = false;
     return S_OK;
 }
 
@@ -37,6 +37,7 @@ void CState_SimonManusP1_AvoidSwing::Update(_float fTimeDelta)
 
     Collider_Check(CurTrackPos);
     Effect_Check(CurTrackPos);
+    Control_Sound(CurTrackPos);
 }
 
 void CState_SimonManusP1_AvoidSwing::End_State()
@@ -73,6 +74,30 @@ void CState_SimonManusP1_AvoidSwing::Effect_Check(_double CurTrackPos)
     else
     {
         m_pMonster->DeActive_Effect(CSimonManus::P1_TRAIL);
+    }
+}
+
+void CState_SimonManusP1_AvoidSwing::Control_Sound(_double CurTrackPos)
+{
+    if (!m_bSwing_Sound)
+    {
+        if (CurTrackPos >= 80.f && CurTrackPos <= 90.f)
+        {
+            m_pMonster->Play_Sound(CPawn::PAWN_SOUND_EFFECT1, TEXT("SE_NPC_SK_FX_Ground_Exp_L_03.wav"));
+            m_bSwing_Sound = true;
+        }
+        if (CurTrackPos >= 140.f)
+        {
+            m_pMonster->Play_Sound(CPawn::PAWN_SOUND_EFFECT1, TEXT("SE_PC_SK_Smash_Crystal_Stone_H_03.wav"));
+            m_bSwing_Sound = true;
+        }
+    }
+    else
+    {
+        if (CurTrackPos > 90.f && CurTrackPos <= 100.f)
+        {
+            m_bSwing_Sound = false;
+        }
     }
 }
 

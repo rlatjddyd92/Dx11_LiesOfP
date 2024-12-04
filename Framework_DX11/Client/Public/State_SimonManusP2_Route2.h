@@ -46,6 +46,7 @@ private:
     void                Collider_Check(_double CurTrackPos);
     void                Effect_Check(_double CurTrackPos);
     void                Update_Rimlight();
+    void                Control_Sound(_double CurTrackPos);
 
 public:
     static CState_SimonManusP2_Route2* Create(class CFsm* pFsm, class CMonster* pMonster, _uint iStateNum, void* pArg = nullptr);

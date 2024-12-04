@@ -62,7 +62,7 @@ void CState_SimonManusP2_Wave::Projectile_Check(_double CurTrackPos)
             _Vec3 vUp{0.f, 1.f, 0.f};
             
             _Vec3 vDirection = XMVector3Normalize(m_pMonster->Get_TargetDir());
-            vRight = vUp.Cross(vRight) * 2.f;
+            vRight = vUp.Cross(vRight);
 
             Desc.vDir = _Vec3{ vDirection };
 
@@ -71,12 +71,12 @@ void CState_SimonManusP2_Wave::Projectile_Check(_double CurTrackPos)
             m_pGameInstance->Add_CloneObject_ToLayer(LEVEL_GAMEPLAY, TEXT("Monster_Attack"), TEXT("Prototype_GameObject_Wave"), &Desc);
 
 
-            Desc.vPos = _Vec3{ vPosition + vDirection + vRight };
+            Desc.vPos = _Vec3{ vPosition + vDirection + vRight * 2.f };
 
             m_pGameInstance->Add_CloneObject_ToLayer(LEVEL_GAMEPLAY, TEXT("Monster_Attack"), TEXT("Prototype_GameObject_Wave"), &Desc);
 
 
-            Desc.vPos = _Vec3{ vPosition + vDirection - vRight };
+            Desc.vPos = _Vec3{ vPosition + vDirection - vRight * 2.f };
 
             m_pGameInstance->Add_CloneObject_ToLayer(LEVEL_GAMEPLAY, TEXT("Monster_Attack"), TEXT("Prototype_GameObject_Wave"), &Desc);
 

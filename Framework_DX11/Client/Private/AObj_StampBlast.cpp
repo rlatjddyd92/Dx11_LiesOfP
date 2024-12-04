@@ -37,6 +37,8 @@ HRESULT CAObj_StampBlast::Initialize(void* pArg)
     m_fLifeDuration = 0.6f;
     m_pColliderCom->IsActive(true);
 
+    m_pSoundCom[EFF_SOUND_EFFECT1]->Play2D(TEXT("SE_NPC_SK_FX_Ground_Exp_L_03.wav"), &g_fEffectVolume);
+
     m_strObjectTag = TEXT("MonsterWeapon");
 
     return S_OK;

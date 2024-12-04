@@ -24,6 +24,8 @@ HRESULT CState_SimonManusP1_SwingMultiple::Start_State(void* pArg)
 
     m_pMonster->Change_Animation(AN_SWINGMULTIPLE, false, 0.1f, 0);
 
+    m_bStampSound = false;
+    m_bSwipSound = false;
     return S_OK;
 }
 
@@ -72,7 +74,7 @@ void CState_SimonManusP1_SwingMultiple::Collider_Check(_double CurTrackPos)
 void CState_SimonManusP1_SwingMultiple::Effect_Check(_double CurTrackPos)
 {
     if ((CurTrackPos >= 90.f && CurTrackPos <= 116.f) ||
-        (CurTrackPos >= 15.f && CurTrackPos <= 190.f) ||
+        (CurTrackPos >= 150.f && CurTrackPos <= 190.f) ||
         (CurTrackPos >= 180.f && CurTrackPos <= 280.f))
     {
         if (!m_pMonster->Get_EffectsLoop(CSimonManus::P1_TRAIL))
@@ -84,6 +86,44 @@ void CState_SimonManusP1_SwingMultiple::Effect_Check(_double CurTrackPos)
     {
         m_pMonster->DeActive_Effect(CSimonManus::P1_TRAIL);
     }
+}
+void CState_SimonManusP1_SwingMultiple::Control_Sound(_double CurTrackPos)
+{
+    if (!m_bSwipSound)
+    {
+        if ((CurTrackPos >= 100.f && CurTrackPos <= 105.f) ||
+            (CurTrackPos >= 157.f && CurTrackPos <= 162.f) ||
+            (CurTrackPos >= 225.f && CurTrackPos <= 230.f) ||
+            (CurTrackPos >= 240.f && CurTrackPos <= 245.f))
+        {
+            m_pMonster->Play_Sound(CPawn::PAWN_SOUND_EFFECT1, TEXT("SE_PC_SK_Smash_Crystal_Stone_H_03.wav"));
+            m_bSwipSound = true;
+        }
+    }
+    else if((CurTrackPos >= 110.f && CurTrackPos <= 115.f) ||
+        (CurTrackPos > 162.f && CurTrackPos <= 172.f) ||
+        (CurTrackPos >= 235.f && CurTrackPos <= 240.f))
+    {
+       m_bSwipSound = false;
+    }
+
+    if (!m_bStampSound)
+    {
+        if ((CurTrackPos >= 349.f && CurTrackPos <= 354.f) ||
+            (CurTrackPos >= 410.f && CurTrackPos <= 415.f) ||
+            (CurTrackPos >= 567.f && CurTrackPos <= 572.f))
+        {
+            m_pMonster->Play_Sound(CPawn::PAWN_SOUND_EFFECT1, TEXT("SE_NPC_SK_FX_Ground_Exp_L_03.wav"));
+            m_bStampSound = true;
+        }
+        else if ((CurTrackPos >= 355.f && CurTrackPos <= 360.f) ||
+            (CurTrackPos >= 416.f && CurTrackPos <= 420.f))
+        {
+            m_bStampSound = false;
+        }
+
+    }
+
 }
 CState_SimonManusP1_SwingMultiple* CState_SimonManusP1_SwingMultiple::Create(CFsm* pFsm, CMonster* pMonster, _uint iStateNum, void* pArg)
 {

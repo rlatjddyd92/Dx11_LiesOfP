@@ -39,6 +39,7 @@ HRESULT CState_SimonManusP1_Stamp::Start_State(void* pArg)
     m_bWeaponSpin = false;
     m_bStampEffect = false;
     m_bAbsorb = false;
+    m_bStampSound = false;
     return S_OK;
 }
 
@@ -73,6 +74,7 @@ void CState_SimonManusP1_Stamp::Update(_float fTimeDelta)
 
     Collider_Check(CurTrackPos);
     Effect_Check(CurTrackPos);
+    Control_Sound(CurTrackPos);
 }
 
 void CState_SimonManusP1_Stamp::End_State()
@@ -215,6 +217,24 @@ void CState_SimonManusP1_Stamp::Effect_Check(_double CurTrackPos)
                 
                 m_bWeaponSpin = true;
             }
+        }
+    }
+}
+
+void CState_SimonManusP1_Stamp::Control_Sound(_double CurTrackPos)
+{
+    if (!m_bStampSound)
+    {
+        _float fTime{};
+        if (m_iCurStartAnim == AN_STAMP_MOVE)
+            fTime = 94.f;
+        else
+            fTime = 70.f;
+
+        if ((CurTrackPos >= fTime && CurTrackPos <= fTime + 10.f))
+        {
+            m_pMonster->Play_Sound(CPawn::PAWN_SOUND_EFFECT1, TEXT("SE_NPC_SK_FX_Ground_Exp_L_03.wav"));
+            m_bStampSound = true;
         }
     }
 }

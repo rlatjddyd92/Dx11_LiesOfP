@@ -1,26 +1,26 @@
 #include "stdafx.h"
-#include "AObj_SlideMagic.h"
+#include "AObj_GoldBall.h"
 
 #include "GameInstance.h"
 
 #include "Effect_Manager.h"
 
-CAObj_SlideMagic::CAObj_SlideMagic(ID3D11Device* pDevice, ID3D11DeviceContext* pContext)
+CAObj_GoldBall::CAObj_GoldBall(ID3D11Device* pDevice, ID3D11DeviceContext* pContext)
     : CAttackObject{ pDevice, pContext }
 {
 }
 
-CAObj_SlideMagic::CAObj_SlideMagic(const CGameObject& Prototype)
+CAObj_GoldBall::CAObj_GoldBall(const CGameObject& Prototype)
     : CAttackObject{ Prototype }
 {
 }
 
-HRESULT CAObj_SlideMagic::Initialize_Prototype()
+HRESULT CAObj_GoldBall::Initialize_Prototype()
 {
     return S_OK;
 }
 
-HRESULT CAObj_SlideMagic::Initialize(void* pArg)
+HRESULT CAObj_GoldBall::Initialize(void* pArg)
 {
     GAMEOBJECT_DESC GameObjDesc{};
     if (FAILED(__super::Initialize(&GameObjDesc)))
@@ -43,15 +43,17 @@ HRESULT CAObj_SlideMagic::Initialize(void* pArg)
 
     m_strObjectTag = TEXT("MonsterWeapon");
 
+    m_pSoundCom[EFF_SOUND_EFFECT1]->Play2D(TEXT("SE_NPC_SimonManus_SK_PJ_Ergo_Direct_01.wav"), &g_fEffectVolume, true);
+
     return S_OK;
 }
 
-void CAObj_SlideMagic::Priority_Update(_float fTimeDelta)
+void CAObj_GoldBall::Priority_Update(_float fTimeDelta)
 {
     m_pEffect->Priority_Update(fTimeDelta);
 }
 
-void CAObj_SlideMagic::Update(_float fTimeDelta)
+void CAObj_GoldBall::Update(_float fTimeDelta)
 {
     if (m_fLifeTime >= m_fLifeDuration)
     {
@@ -78,7 +80,7 @@ void CAObj_SlideMagic::Update(_float fTimeDelta)
     m_pEffect->Update(fTimeDelta);
 }
 
-void CAObj_SlideMagic::Late_Update(_float fTimeDelta)
+void CAObj_GoldBall::Late_Update(_float fTimeDelta)
 {
     m_pEffect->Late_Update(fTimeDelta);
     if (m_fLifeTime < m_fLifeDuration)
@@ -88,7 +90,7 @@ void CAObj_SlideMagic::Late_Update(_float fTimeDelta)
     }
 }
 
-HRESULT CAObj_SlideMagic::Render()
+HRESULT CAObj_GoldBall::Render()
 {
     //if (FAILED(__super::Render()))
     //    return E_FAIL;
@@ -96,7 +98,7 @@ HRESULT CAObj_SlideMagic::Render()
     return S_OK;
 }
 
-HRESULT CAObj_SlideMagic::Render_LightDepth()
+HRESULT CAObj_GoldBall::Render_LightDepth()
 {
     //if (FAILED(__super::Render_LightDepth()))
     //    return E_FAIL;
@@ -104,7 +106,7 @@ HRESULT CAObj_SlideMagic::Render_LightDepth()
     return S_OK;
 }
 
-void CAObj_SlideMagic::OnCollisionEnter(CGameObject* pOther)
+void CAObj_GoldBall::OnCollisionEnter(CGameObject* pOther)
 {
     //pOther check
     if (pOther->Get_Tag() == TEXT("Player"))
@@ -128,15 +130,15 @@ void CAObj_SlideMagic::OnCollisionEnter(CGameObject* pOther)
     }
 }
 
-void CAObj_SlideMagic::OnCollisionStay(CGameObject* pOther)
+void CAObj_GoldBall::OnCollisionStay(CGameObject* pOther)
 {
 }
 
-void CAObj_SlideMagic::OnCollisionExit(CGameObject* pOther)
+void CAObj_GoldBall::OnCollisionExit(CGameObject* pOther)
 {
 }
 
-HRESULT CAObj_SlideMagic::Ready_Components()
+HRESULT CAObj_GoldBall::Ready_Components()
 {
     if (FAILED(__super::Ready_Components()))
         return E_FAIL;
@@ -161,9 +163,9 @@ HRESULT CAObj_SlideMagic::Ready_Components()
     return S_OK;
 }
 
-CAObj_SlideMagic* CAObj_SlideMagic::Create(ID3D11Device* pDevice, ID3D11DeviceContext* pContext)
+CAObj_GoldBall* CAObj_GoldBall::Create(ID3D11Device* pDevice, ID3D11DeviceContext* pContext)
 {
-    CAObj_SlideMagic* pInstance = new CAObj_SlideMagic(pDevice, pContext);
+    CAObj_GoldBall* pInstance = new CAObj_GoldBall(pDevice, pContext);
 
     if (FAILED(pInstance->Initialize_Prototype()))
     {
@@ -174,20 +176,20 @@ CAObj_SlideMagic* CAObj_SlideMagic::Create(ID3D11Device* pDevice, ID3D11DeviceCo
     return pInstance;
 }
 
-CGameObject* CAObj_SlideMagic::Clone(void* pArg)
+CGameObject* CAObj_GoldBall::Clone(void* pArg)
 {
-    CAObj_SlideMagic* pInstance = new CAObj_SlideMagic(*this);
+    CAObj_GoldBall* pInstance = new CAObj_GoldBall(*this);
 
     if (FAILED(pInstance->Initialize(pArg)))
     {
-        MSG_BOX(TEXT("Failed to Cloned : CAObj_SlideMagic"));
+        MSG_BOX(TEXT("Failed to Cloned : CAObj_GoldBall"));
         Safe_Release(pInstance);
     }
 
     return pInstance;
 }
 
-void CAObj_SlideMagic::Free()
+void CAObj_GoldBall::Free()
 {
     __super::Free();
 

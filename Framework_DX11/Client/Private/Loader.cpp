@@ -25,8 +25,7 @@
 
 #include "AObj_StampBlast.h"
 #include "AObj_ChargeSwing.h"
-#include "AObj_SlideMagic.h"
-#include "AObj_JumpMagic.h"
+#include "AObj_GoldBall.h"
 #pragma endregion
 
 #pragma region EFFECT
@@ -980,11 +979,8 @@ HRESULT CLoader::Ready_Prototype()
 	if (FAILED(m_pGameInstance->Add_Prototype(TEXT("Prototype_GameObject_ChargeSwing"),
 		CAObj_ChargeSwing::Create(m_pDevice, m_pContext))))
 		return E_FAIL;
-	if (FAILED(m_pGameInstance->Add_Prototype(TEXT("Prototype_GameObject_SlideMagic"),
-		CAObj_SlideMagic::Create(m_pDevice, m_pContext))))
-		return E_FAIL;
-	if (FAILED(m_pGameInstance->Add_Prototype(TEXT("Prototype_GameObject_JumpMagic"),
-		CAObj_JumpMagic::Create(m_pDevice, m_pContext))))
+	if (FAILED(m_pGameInstance->Add_Prototype(TEXT("Prototype_GameObject_GoldBall"),
+		CAObj_GoldBall::Create(m_pDevice, m_pContext))))
 		return E_FAIL;
 	if (FAILED(m_pGameInstance->Add_Prototype(TEXT("Prototype_GameObject_Wave"),
 		CAObj_Wave::Create(m_pDevice, m_pContext))))

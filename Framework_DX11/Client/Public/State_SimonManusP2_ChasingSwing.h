@@ -30,12 +30,16 @@ private:
     _float              m_fCurrentTime = { 0.f };
     _float              m_fChaseDuration = { 2.f };
 
+    _bool               m_bStampSound = { false };
+    _bool               m_bSwingSound = { false };
+
     _uint               m_iRouteTrack = {};
 
 private:
     _bool               End_Check();
     void                Collider_Check(_double CurTrackPos);
     void                Effect_Check(_double CurTrackPos);
+    void                Control_Sound(_double CurTrackPos);
 
 public:
     static CState_SimonManusP2_ChasingSwing* Create(class CFsm* pFsm, class CMonster* pMonster, _uint iStateNum, void* pArg = nullptr);

@@ -72,6 +72,7 @@ void CAObj_ThunderSpear::Update(_float fTimeDelta)
     //¿òÁ÷ÀÓ
     m_pTransformCom->Set_State(CTransform::STATE_POSITION, m_pTransformCom->Get_State(CTransform::STATE_POSITION) + m_vMoveDir * m_fSpeed * fTimeDelta);
 
+    m_pSoundCom[EFF_SOUND_EFFECT1]->Play2D(TEXT("SE_NPC_SK_FX_Spark_M_03.wav"), &g_fEffectVolume, true);
 
     m_pColliderCom->Update(m_pTransformCom->Get_WorldMatrix_Ptr());
 
@@ -123,6 +124,8 @@ void CAObj_ThunderSpear::OnCollisionEnter(CGameObject* pOther)
         {
             m_DamagedObjects.push_back(pOther);
             pOther->Calc_DamageGain(m_fDamageAmount * m_fDamageRatio);
+            m_pSoundCom[EFF_SOUND_EFFECT2]->Play2D(TEXT("SE_NPC_SimonManus_SK_PJ_Ergo_Direct_Hit_01.wav"), &g_fEffectVolume);
+
         }
         m_pEffect->Set_Loop(false);
     }

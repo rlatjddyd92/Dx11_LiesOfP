@@ -215,6 +215,7 @@ HRESULT CCarcassTail::Ready_Components()
 	for (_int i = 0; i < TYPE_END; ++i)
 	{
 		m_pColliderObject[i]->DeActive_Collider();
+		//m_pColliderObject[i]->;
 	}
 
 	// 항상 마지막에 생성하기
