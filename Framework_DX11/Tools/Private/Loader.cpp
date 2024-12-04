@@ -1068,7 +1068,6 @@ HRESULT CLoader::Ready_Resources_For_ToolLevel_Monster()
 		if (FAILED(m_pGameInstance->Add_Prototype(LEVEL_TOOL, TEXT("Prototype_NoneAnimModel_RebornerBigA_Weapon"), pModel)))
 			return E_FAIL;
 	}
-
 #pragma endregion
 
 
@@ -1167,6 +1166,16 @@ HRESULT CLoader::Ready_Resources_For_ToolLevel_Monster()
 		if (FAILED(m_pGameInstance->Add_Prototype(LEVEL_TOOL, TEXT("Prototype_AnimModel_SimonManus_Weapon"), pModel)))
 			return E_FAIL;
 		m_pGameInstance->Add_ModelPrototype(LEVEL_TOOL, ("Prototype_AnimModel_SimonManus_Weapon"), pModel);
+	}
+
+	/* For. Prototype_AnimModel_SimonManus_GodHand */
+	PreTransformMatrix = XMMatrixScaling(0.01f, 0.01f, 0.01f);
+	pModel = CModel::Create(m_pDevice, m_pContext, CModel::TYPE_ANIM, "../Bin/ModelData/Anim/Monster/Boss/SimonManus/SimonManus_Hand.dat", PreTransformMatrix, false, CController_AnimationTool::Get_Instance()->Get_StructStack(m_iModelCount++));
+	if (pModel != nullptr)
+	{
+		if (FAILED(m_pGameInstance->Add_Prototype(LEVEL_TOOL, TEXT("Prototype_AnimModel_SimonManus_GodHand"), pModel)))
+			return E_FAIL;
+		m_pGameInstance->Add_ModelPrototype(LEVEL_TOOL, ("Prototype_AnimModel_SimonManus_GodHand"), pModel);
 	}
 
 #pragma endregion

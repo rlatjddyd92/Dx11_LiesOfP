@@ -116,7 +116,7 @@ PS_EFFECT_OUT PS_MAIN(PS_IN In)
         discard;
     
     vColor.rgb *= g_vColor.rgb;
-    vColor.a *= g_fRatio;
+    vColor.rgb *= g_fRatio;
     
     Out.vDiffuse = vColor;
     Out.vBlur = vColor;

@@ -2219,6 +2219,7 @@ HRESULT CController_EffectTool::Load_Model()
 		return E_FAIL;
 	Add_Model_ProtytypeTag(TEXT("Prototype_Component_Model_Effect_Wave"));
 
+
 	return S_OK;
 }
 
