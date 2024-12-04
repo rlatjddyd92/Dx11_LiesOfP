@@ -59,6 +59,10 @@ HRESULT CState_Player_Hit::Start_State(void* pArg)
         m_eHitType = eType;
     }
 
+    
+    m_pPlayer->Change_Weapon();
+    m_pPlayer->Combine_Scissor();
+
     return S_OK;
 }
 

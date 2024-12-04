@@ -106,7 +106,7 @@ HRESULT CPawn::Render()
 	return S_OK;
 }
 
-_bool CPawn::Calc_DamageGain(_float fAtkDmg, _Vec3 vHitPos, _uint iHitType, _uint iAttackStrength)
+_bool CPawn::Calc_DamageGain(_float fAtkDmg, _Vec3 vHitPos, _uint iHitType, _uint iAttackStrength, CGameObject* pAttacker)
 {
 
 	//if () 피해를 입는지에관한 판단, 무적인지등

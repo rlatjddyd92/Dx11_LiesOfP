@@ -277,6 +277,7 @@ HRESULT CLoader::Ready_Resources_For_LogoLevel()
 	m_pGameInstance->LoadSoundFile("Player/Scissor");
 	m_pGameInstance->LoadSoundFile("Player/Guard");
 	m_pGameInstance->LoadSoundFile("Player/Interact");
+	m_pGameInstance->LoadSoundFile("Player/Hit");
 
 	m_pGameInstance->LoadSoundFile("Monster/Effect");
 	m_pGameInstance->LoadSoundFile("Monster/SimonManus");

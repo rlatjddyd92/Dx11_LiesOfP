@@ -1,6 +1,7 @@
 #include "stdafx.h"
 #include "Weapon_Scissor.h"
 #include "Player.h"
+#include "Monster.h"
 
 #include "GameInstance.h"
 
@@ -131,8 +132,12 @@ void CWeapon_Scissor::OnCollisionEnter(CGameObject* pOther)
 
 		if (!bOverlapCheck)
 		{
+			CMonster* pMonster = dynamic_cast<CMonster*>(pOther);
+
 			m_DamagedObjects.push_back(pOther);
 			pOther->Calc_DamageGain(m_fDamageAmount * m_fDamageRatio);
+
+			Play_HitSound(pMonster->Get_HitType());
 		}
 	}
 }
@@ -184,6 +189,81 @@ void CWeapon_Scissor::Play_Sound(WEP_SOUND_TYPE eType, const TCHAR* pSoundKey, _
 	{
 		m_pScissor_Sperate[iHandIndex]->Play_Sound(eType, pSoundKey);
 	}
+}
+
+void CWeapon_Scissor::Play_HitSound(HIT_TYPE eType)
+{
+	_wstring strSoundKey{};
+	_wstring strWAV = TEXT(".wav");
+	_tchar szBuffer[10];
+
+	_int iRand = rand() % 3 + 1;
+
+	if (ATK_STRONG == m_eAttackStrength)
+	{
+		switch (eType)
+		{
+		case HIT_CARCASS:
+			_itow_s(iRand, szBuffer, 10);
+			strSoundKey = TEXT("SE_PC_SK_Hit_Skin_Slice_L_0");
+			strSoundKey = strSoundKey + szBuffer + strWAV;
+			break;
+
+		case HIT_METAL:
+			iRand = rand() % 4 + 16;
+			_itow_s(iRand, szBuffer, 10);
+			strSoundKey = TEXT("SE_PC_SK_Hit_L_Metal_Slice_");
+			strSoundKey = strSoundKey + szBuffer + strWAV;
+			break;
+
+		default:
+			break;
+		}
+	}
+	else if (ATK_NORMAL == m_eAttackStrength)
+	{
+		switch (eType)
+		{
+		case HIT_CARCASS:
+			_itow_s(iRand, szBuffer, 10);
+			strSoundKey = TEXT("SE_PC_SK_Hit_Skin_Slice_M_0");
+			strSoundKey = strSoundKey + szBuffer + strWAV;
+			break;
+
+		case HIT_METAL:
+			iRand = rand() % 4 + 1;
+			_itow_s(iRand, szBuffer, 10);
+			strSoundKey = TEXT("SE_PC_SK_Hit_Metal_Blood_Slice_0");
+			strSoundKey = strSoundKey + szBuffer + strWAV;
+			break;
+
+		default:
+			break;
+		}
+	}
+	else if (ATK_WEAK == m_eAttackStrength)
+	{
+		switch (eType)
+		{
+		case HIT_CARCASS:
+			_itow_s(iRand, szBuffer, 10);
+			strSoundKey = TEXT("SE_PC_SK_Hit_Skin_Slice_S_0");
+			strSoundKey = strSoundKey + szBuffer + strWAV;
+			break;
+
+		case HIT_METAL:
+			iRand = rand() % 4 + 1;
+			_itow_s(iRand, szBuffer, 10);
+			strSoundKey = TEXT("SE_PC_SK_Hit_Metal_Blood_Slice_0");
+			strSoundKey = strSoundKey + szBuffer + strWAV;
+			break;
+
+		default:
+			break;
+		}
+	}
+
+	m_pSoundCom[WEP_SOUND_EFFECT2]->Play2D(strSoundKey.c_str(), &g_fEffectVolume);
 }
 
 void CWeapon_Scissor::Change_SeperateMode()

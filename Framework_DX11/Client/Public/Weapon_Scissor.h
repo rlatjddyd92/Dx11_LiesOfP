@@ -34,17 +34,16 @@ public:
 	virtual void OnCollisionExit(CGameObject* pOther) override;
 
 public:
-	virtual void Active_Collider(_float fDamageRatio = 1.f, _uint iHandIndex = 1) override;
-	virtual void DeActive_Collider(_uint iHandIndex = 1) override;
-	virtual void Play_Sound(WEP_SOUND_TYPE eType, const TCHAR* pSoundKey, _uint iHandIndex = 1) override;
+	virtual void		Active_Collider(_float fDamageRatio = 1.f, _uint iHandIndex = 1) override;
+	virtual void		DeActive_Collider(_uint iHandIndex = 1) override;
+	virtual void		Play_Sound(WEP_SOUND_TYPE eType, const TCHAR* pSoundKey, _uint iHandIndex = 1) override;
+	virtual void		Play_HitSound(HIT_TYPE eType) override;
 
 public:
 	void		Change_SeperateMode();
 	void		Change_CombineMode();
 
 private:
-
-	class CPlayer* m_pPlayer = { nullptr };
 	_bool		m_isSeperate = {};
 
 	CWeapon_Scissor_Handle*		m_pScissor_Sperate[CWeapon_Scissor_Handle::SCISSOR_END] = { nullptr, };

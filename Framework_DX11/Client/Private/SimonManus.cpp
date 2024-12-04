@@ -129,6 +129,8 @@ HRESULT CSimonManus::Initialize(void* pArg)
 	m_eStat.fGrogyPoint = 0.f;
 	m_eStat.fMaxGrogyPoint = 50.f;
 
+	m_eHitType = HIT_CARCASS;
+
 	m_pWeapon->DeActive_Collider();
 
 	// 24-11-26 ±è¼º¿ë

@@ -5,6 +5,7 @@
 #include "Layer.h"
 
 #include "Camera.h"
+#include "Monster.h"
 #include "Weapon.h"
 #include "Weapon_Scissor.h"
 
@@ -120,7 +121,7 @@ HRESULT CPlayer::Initialize(void * pArg)
 	//m_pNavigationCom->Move_to_Cell(m_pRigidBodyCom, 772); //긴사다리
 	//m_pNavigationCom->Move_to_Cell(m_pRigidBodyCom, 427); //짧은사다리
 	//m_pNavigationCom->Move_to_Cell(m_pRigidBodyCom, 341); //아래엘베
-	//m_pNavigationCom->Move_to_Cell(m_pRigidBodyCom, 440); //상자랑 장애물
+	m_pNavigationCom->Move_to_Cell(m_pRigidBodyCom, 440); //상자랑 장애물
 	//m_pNavigationCom->Move_to_Cell(m_pRigidBodyCom, 1068); // 순간이동
 	//m_pNavigationCom->Move_to_Cell(m_pRigidBodyCom, 803); // 소피아 방
 
@@ -515,7 +516,7 @@ void CPlayer::DeActive_Effect(const EFFECT_TYPE& eType)
 }
 
 
-_bool CPlayer::Calc_DamageGain(_float fAtkDmg, _Vec3 vHitPos, _uint iHitType, _uint iAttackStrength)
+_bool CPlayer::Calc_DamageGain(_float fAtkDmg, _Vec3 vHitPos, _uint iHitType, _uint iAttackStrength, CGameObject* pAttacker)
 {
 	if (fAtkDmg <= 0.f)
 		return false;
@@ -535,6 +536,24 @@ _bool CPlayer::Calc_DamageGain(_float fAtkDmg, _Vec3 vHitPos, _uint iHitType, _u
 		//퍼펙트 가드
 		if (m_fGuardTime < 0.17f)
 		{
+			if (nullptr != pAttacker)
+			{
+				_wstring strObjecTag = pAttacker->Get_Tag();
+
+				if (strObjecTag == TEXT("Monster"))
+				{
+					CMonster* pMonster = dynamic_cast<CMonster*>(pAttacker);
+					pMonster->Increase_GroggyPoint(10.f);
+
+				}
+				else if (strObjecTag == TEXT("MonsterWeapon"))
+				{
+					CWeapon* pWeapon = dynamic_cast<CWeapon*>(pAttacker);
+					CMonster* pMonster = pWeapon->Get_Monster();
+					pMonster->Increase_GroggyPoint(10.f);
+				}
+			}
+
 			m_pEffect_Manager->Add_Effect_ToLayer(LEVEL_GAMEPLAY, TEXT("Player_PerfectGuard"), pParetnMatrix, pSocketBoneMatrix);
 			m_pGameInstance->Start_TimerLack(TEXT("Timer_60"), 0.001f, 0.6f);
 		}
@@ -627,8 +646,8 @@ void CPlayer::Decrease_Region(_uint iRegionCount)
 			return;
 	}
 
-	m_tPlayer_Stat->vGauge_Region.x = fCurretnRegion;
-	m_tPlayer_Stat->vGauge_Region.y = m_tPlayer_Stat->vGauge_Region.x;
+	//m_tPlayer_Stat->vGauge_Region.x = fCurretnRegion;
+	//m_tPlayer_Stat->vGauge_Region.y = m_tPlayer_Stat->vGauge_Region.x;
 }
 
 void CPlayer::Recovery_Region(_float fAmount)

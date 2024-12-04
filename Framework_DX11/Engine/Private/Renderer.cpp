@@ -192,9 +192,9 @@ HRESULT CRenderer::Initialize()
 		return E_FAIL;
 
 #ifdef _DEBUG
-	if (FAILED(m_pGameInstance->Ready_RT_Debug(TEXT("Target_LightDepth"), 100.f, 100.f, 200.f, 200.f)))
+	if (FAILED(m_pGameInstance->Ready_RT_Debug(TEXT("Target_Effect_Diffuse"), 100.f, 100.f, 200.f, 200.f)))
 		return E_FAIL;
-	if (FAILED(m_pGameInstance->Ready_RT_Debug(TEXT("Target_Emessive"), 100.f, 300.f, 200.f, 200.f)))
+	if (FAILED(m_pGameInstance->Ready_RT_Debug(TEXT("Target_Effect_Blur"), 100.f, 300.f, 200.f, 200.f)))
 		return E_FAIL;
 	if (FAILED(m_pGameInstance->Ready_RT_Debug(TEXT("Target_CascadeShadow"), 100.f, 500.f, 200.f, 200.f)))
 		return E_FAIL;
@@ -264,11 +264,12 @@ HRESULT CRenderer::Draw()
 	if (FAILED(Render_Effect()))
 		return E_FAIL;
 
+	if (FAILED(Render_Bloom()))	// 다시 고치기
+		return E_FAIL;
+
 	if (FAILED(Render_Blend()))
 		return E_FAIL;
 
-	if (FAILED(Render_Bloom()))	// 다시 고치기
-		return E_FAIL;
 
 	if (FAILED(Render_Distortion()))
 		return E_FAIL;
@@ -389,25 +390,6 @@ HRESULT CRenderer::Render_NonBlend()
 
 	return S_OK;
 }
-
-HRESULT CRenderer::Render_Velocity()
-{
-	if (FAILED(m_pGameInstance->Begin_MRT(TEXT("MRT_Velocity"))))
-		return E_FAIL;
-
-	for (auto& pGameObject : m_RenderObjects[RG_VELOCITY])
-	{
-		if (nullptr != pGameObject)
-			pGameObject->Render();
-
-		Safe_Release(pGameObject);
-	}
-	m_RenderObjects[RG_VELOCITY].clear();
-
-	if (FAILED(m_pGameInstance->End_MRT()))
-		return E_FAIL;
-}
-
 HRESULT CRenderer::Render_Decal()
 {
 	if (FAILED(m_pGameInstance->Begin_MRT(TEXT("MRT_Decal"))))
@@ -1909,7 +1891,7 @@ HRESULT CRenderer::Render_Debug()
 	
 	m_pGameInstance->Render_MRT_Debug(TEXT("MRT_GameObjects"), m_pShader, m_pVIBuffer);
 	m_pGameInstance->Render_MRT_Debug(TEXT("MRT_Lights"), m_pShader, m_pVIBuffer);
-	m_pGameInstance->Render_MRT_Debug(TEXT("MRT_Cascade"), m_pShader, m_pVIBuffer);
+	m_pGameInstance->Render_MRT_Debug(TEXT("MRT_Effect"), m_pShader, m_pVIBuffer);
 	m_pGameInstance->Render_MRT_Debug(TEXT("MRT_Distortion"), m_pShader, m_pVIBuffer);
 
 	return S_OK;

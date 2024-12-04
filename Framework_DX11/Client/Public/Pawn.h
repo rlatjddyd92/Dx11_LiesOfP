@@ -48,6 +48,8 @@ public:
 
     void                Set_RimLightColor(_Vec4 vRimLight) { m_vRimLightColor = vRimLight; }
 
+    HIT_TYPE            Get_HitType() { return m_eHitType; }
+
 public:
     virtual HRESULT Initialize_Prototype();
     virtual HRESULT Initialize(void* pArg = nullptr);
@@ -59,7 +61,7 @@ public:
     virtual HRESULT Render_LightDepth() { return S_OK; }
 
 public:
-    virtual _bool Calc_DamageGain(_float fAtkDmg, _Vec3 vHitPos = { 0.f,0.f,0.f }, _uint iHitType = HIT_END, _uint iAttackStrength = ATK_END) override;
+    virtual _bool Calc_DamageGain(_float fAtkDmg, _Vec3 vHitPos = { 0.f,0.f,0.f }, _uint iHitType = HIT_END, _uint iAttackStrength = ATK_END, CGameObject* pAttacker = nullptr) override;
     virtual void Gain_Grogy_Point(_float fGainGrogyPoint) { m_eStat.fGrogyPoint += fGainGrogyPoint; }
 
 public:
@@ -84,7 +86,7 @@ public:
 
     void            Set_Respawn_Cell_Num(_int iNum) { m_iRespawn_Cell_Num = iNum; }
 
-	PAWN_STATUS* Get_Status() { return &m_eStat; }
+	PAWN_STATUS*    Get_Status() { return &m_eStat; }
 
     _int            Get_UFBIndex(_uint UFB_Type);
 
@@ -107,6 +109,8 @@ protected:
     _Vec4            m_vRimLightColor = {};
 
     _Vec3            m_vVelocity = {};
+
+    HIT_TYPE        m_eHitType = {};
 
     //스테이터스 부분
     PAWN_STATUS         m_eStat{};

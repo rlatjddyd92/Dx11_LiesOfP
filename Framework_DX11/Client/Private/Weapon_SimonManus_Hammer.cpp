@@ -22,8 +22,13 @@ HRESULT CWeapon_SimonManus_Hammer::Initialize_Prototype()
 
 HRESULT CWeapon_SimonManus_Hammer::Initialize(void* pArg)
 {
+	MONSTER_WAPON_DESC* pDesc = static_cast<MONSTER_WAPON_DESC*>(pArg);
+	m_pMonster = pDesc->pMonster;
+	if (nullptr == m_pMonster)
+		return E_FAIL;
+
 	/* 직교퉁여을 위한 데이터들을 모두 셋하낟. */
-	if (FAILED(__super::Initialize(pArg)))
+	if (FAILED(__super::Initialize(pDesc)))
 		return E_FAIL;
 
 	if (FAILED(Ready_Components()))

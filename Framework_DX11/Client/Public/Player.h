@@ -96,9 +96,9 @@ public:
 	void					Set_IsJump(_bool isJump) { m_isJump = isJump; }
 
 	_bool					Get_IsGuard() { return m_isGuard; }
-	void					Set_IsGuard(_bool isGuard) {
+	void					Set_IsGuard(_bool isGuard, _bool isReset = true) {
 		m_isGuard = isGuard;
-		if (m_isGuard)
+		if (m_isGuard && isReset)
 			m_fGuardTime = 0.f;
 	}
 
@@ -178,7 +178,7 @@ public:
 	void			Active_Effect(const EFFECT_TYPE& eType, _bool isLoop = true);
 	void			DeActive_Effect(const EFFECT_TYPE& eType);
 
-	virtual _bool	Calc_DamageGain(_float fAtkDmg, _Vec3 vHitPos = { 0.f,0.f,0.f }, _uint iHitType = HIT_END, _uint iAttackStrength = ATK_END) override;
+	virtual _bool	Calc_DamageGain(_float fAtkDmg, _Vec3 vHitPos = { 0.f,0.f,0.f }, _uint iHitType = HIT_END, _uint iAttackStrength = ATK_END, CGameObject* pAttacker = nullptr) override;
 	_bool			Decrease_Stamina(_float fAmount);
 	_bool			Check_Region_Fable01();
 	_bool			Check_Region_Fable02();

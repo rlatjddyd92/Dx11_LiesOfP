@@ -27,7 +27,7 @@ HRESULT CState_Player_Flame_Charge01::Initialize(_uint iStateNum, void* pArg)
 
 HRESULT CState_Player_Flame_Charge01::Start_State(void* pArg)
 {
-    m_pPlayer->Change_Animation(m_iAnimation_FlameCA2, false, 0.2f, 20);
+    m_pPlayer->Change_Animation(m_iAnimation_FlameCA2, false, 0.15f, 20);
 
     m_isInputLButton = false;
     m_isInputRButton = false;

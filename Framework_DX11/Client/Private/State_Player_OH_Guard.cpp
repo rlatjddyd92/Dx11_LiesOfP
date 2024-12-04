@@ -28,14 +28,22 @@ HRESULT CState_Player_OH_Guard::Initialize(_uint iStateNum, void* pArg)
 
 HRESULT CState_Player_OH_Guard::Start_State(void* pArg)
 {
-    if(m_pFsm->Get_PrevState() != CPlayer::OH_WALK)
+    if (m_pFsm->Get_PrevState() != CPlayer::OH_WALK)
         m_pPlayer->Change_Animation(m_iAnimation_Guard, true, 0.05f, 0, true);
 
     m_pPlayer->Change_Animation_Boundry(m_iAnimation_Guard, true);
 
-    m_pPlayer->Set_IsGuard(true);
-    m_pPlayer->Set_MoveSpeed(3.f);
+    if (m_pFsm->Get_PrevState() == CPlayer::OH_GUARDHIT
+        || m_pFsm->Get_PrevState() == CPlayer::TH_GUARDHIT)
+    {
+        m_pPlayer->Set_IsGuard(true, false);
+    }
+    else
+    {
+        m_pPlayer->Set_IsGuard(true);
+    }
 
+    m_pPlayer->Set_MoveSpeed(3.f);
 
     m_pPlayer->Change_CameraMode(CPlayerCamera::MODE_STATIC);
 

@@ -2,6 +2,7 @@
 #include "Weapon_Rapier.h"
 
 #include "Player.h"
+#include "Monster.h"
 
 #include "GameInstance.h"
 #include "Effect_Manager.h"
@@ -107,8 +108,12 @@ void CWeapon_Rapier::OnCollisionEnter(CGameObject* pOther)
 
 		if (!bOverlapCheck)
 		{
+			CMonster* pMonster = dynamic_cast<CMonster*>(pOther);
+
 			m_DamagedObjects.push_back(pOther);
 			pOther->Calc_DamageGain(m_fDamageAmount * m_fDamageRatio);
+
+			Play_HitSound(pMonster->Get_HitType());
 		}
 	}
 }
@@ -127,6 +132,79 @@ void CWeapon_Rapier::OnCollisionExit(CGameObject* pOther)
 	{
 
 	}
+}
+
+void CWeapon_Rapier::Play_HitSound(HIT_TYPE eType)
+{
+	_wstring strSoundKey{};
+	_wstring strWAV = TEXT(".wav");
+	_tchar szBuffer[10];
+
+	_int iRand = rand() % 3 + 1;
+
+	if (ATK_STRONG == m_eAttackStrength)
+	{
+		switch (eType)
+		{
+		case HIT_CARCASS:
+			_itow_s(iRand, szBuffer, 10);
+			strSoundKey = TEXT("SE_PC_SK_Hit_Skin_Stab_L_0");
+			strSoundKey = strSoundKey + szBuffer + strWAV;
+			break;
+
+		case HIT_METAL:
+			_itow_s(iRand, szBuffer, 10);
+			strSoundKey = TEXT("SE_PC_SK_Hit_L_Metal_Stab_0");
+			strSoundKey = strSoundKey + szBuffer + strWAV;
+			break;
+
+		default:
+			break;
+		}
+	}
+	else if (ATK_NORMAL == m_eAttackStrength)
+	{
+		switch (eType)
+		{
+		case HIT_CARCASS:
+			_itow_s(iRand, szBuffer, 10);
+			strSoundKey = TEXT("SE_PC_SK_Hit_Skin_Stab_M_0");
+			strSoundKey = strSoundKey + szBuffer + strWAV;
+			break;
+
+		case HIT_METAL:
+			iRand = rand() % 4 + 1;
+			_itow_s(iRand, szBuffer, 10);
+			strSoundKey = TEXT("SE_PC_SK_Hit_Metal_Blood_Stab_0");
+			strSoundKey = strSoundKey + szBuffer + strWAV;
+			break;
+
+		default:
+			break;
+		}
+	}
+	else if (ATK_WEAK == m_eAttackStrength)
+	{
+		switch (eType)
+		{
+		case HIT_CARCASS:
+			_itow_s(iRand, szBuffer, 10);
+			strSoundKey = TEXT("SE_PC_SK_Hit_Skin_Stab_S_0");
+			strSoundKey = strSoundKey + szBuffer + strWAV;
+			break;
+
+		case HIT_METAL:
+			_itow_s(iRand, szBuffer, 10);
+			strSoundKey = TEXT("SE_PC_SK_Hit_M_Metal_Stab_0");
+			strSoundKey = strSoundKey + szBuffer + strWAV;
+			break;
+
+		default:
+			break;
+		}
+	}
+
+	m_pSoundCom[WEP_SOUND_EFFECT2]->Play2D(strSoundKey.c_str(), &g_fEffectVolume);
 }
 
 HRESULT CWeapon_Rapier::Ready_Components()

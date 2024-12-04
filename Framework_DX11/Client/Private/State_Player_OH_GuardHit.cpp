@@ -30,18 +30,18 @@ HRESULT CState_Player_OH_GuardHit::Start_State(void* pArg)
     if (m_pPlayer->Get_Player_Stat().vGauge_Stamina.x <= 0)
     {
         m_isBreak = true;
-        m_pPlayer->Change_Animation(m_iAnimation_GuardHit_Break, false, 0.f);
+        m_pPlayer->Change_Animation(m_iAnimation_GuardHit_Break, false, 0.f, 0, true, true);
     }
     else if (isStrong)
     {
-        m_pPlayer->Change_Animation(m_iAnimation_GuardHit_Strong, false, 0.f);
+        m_pPlayer->Change_Animation(m_iAnimation_GuardHit_Strong, false, 0.f, 0, true, true);
     }
     else
     {
-        m_pPlayer->Change_Animation(m_iAnimation_GuardHit_Normal, false, 0.f);
+        m_pPlayer->Change_Animation(m_iAnimation_GuardHit_Normal, false, 0.f, 0, true, true);
     }
 
-    m_pPlayer->Set_IsGuard(true);
+    m_pPlayer->Set_IsGuard(true, false);
 
     return S_OK;
 }
