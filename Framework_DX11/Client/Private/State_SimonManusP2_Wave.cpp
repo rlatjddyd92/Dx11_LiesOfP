@@ -62,7 +62,7 @@ void CState_SimonManusP2_Wave::Projectile_Check(_double CurTrackPos)
             _Vec3 vUp{0.f, 1.f, 0.f};
             
             _Vec3 vDirection = XMVector3Normalize(m_pMonster->Get_TargetDir());
-            vRight = vUp.Cross(vRight);
+            vRight = vUp.Cross(vDirection);
 
             Desc.vDir = _Vec3{ vDirection };
 

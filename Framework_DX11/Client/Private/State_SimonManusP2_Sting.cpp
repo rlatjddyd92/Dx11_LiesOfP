@@ -64,6 +64,22 @@ void CState_SimonManusP2_Sting::Collider_Check(_double CurTrackPos)
 
 void CState_SimonManusP2_Sting::Control_Sound(_double CurTrackPos)
 {
+    if (!m_bStingSound)
+    {
+        if ((CurTrackPos >= 105.f && CurTrackPos <= 110.f) ||
+            (CurTrackPos >= 175.f && CurTrackPos <= 180.f))
+        {
+            m_pMonster->Play_Sound(CPawn::PAWN_SOUND_EFFECT1, TEXT("SE_NPC_SK_FX_Ground_Exp_L_03.wav"));
+            m_bStingSound = true;
+        }
+    }
+    else
+    {
+        if (CurTrackPos > 115.f && CurTrackPos <= 120.f)
+        {
+            m_bStingSound = false;
+        }
+    }
 }
 
 CState_SimonManusP2_Sting* CState_SimonManusP2_Sting::Create(CFsm* pFsm, CMonster* pMonster, _uint iStateNum, void* pArg)

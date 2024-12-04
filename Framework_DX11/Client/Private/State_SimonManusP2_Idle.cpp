@@ -30,20 +30,6 @@ void CState_SimonManusP2_Idle::Update(_float fTimeDelta)
     _float fDist = m_pMonster->Calc_Distance_XZ();
     if (m_fIdleEndDuration <= m_fIdleTime)
     {
-        
-        if (m_bTest)
-        {
-            m_bTest = !m_bTest;
-            m_pMonster->Change_State(CSimonManus::ATKP2_WAVE);
-            return;
-        }
-        else
-        {
-            m_bTest = !m_bTest;
-            m_pMonster->Change_State(CSimonManus::ATKP2_SLIDEMAGIC);
-            return;
-        }
-
         if (m_fIdleTime >= m_fIdleEndDuration + 2.f)
         {
             if (fDist <= 15.f && 9.f < fDist)

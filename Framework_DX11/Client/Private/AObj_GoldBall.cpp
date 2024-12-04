@@ -41,6 +41,8 @@ HRESULT CAObj_GoldBall::Initialize(void* pArg)
 
     m_pColliderCom->IsActive(true);
 
+    m_pColliderCom->Set_Owner(this);
+
     m_strObjectTag = TEXT("MonsterWeapon");
 
     m_pSoundCom[EFF_SOUND_EFFECT1]->Play2D(TEXT("SE_NPC_SimonManus_SK_PJ_Ergo_Direct_01.wav"), &g_fEffectVolume);

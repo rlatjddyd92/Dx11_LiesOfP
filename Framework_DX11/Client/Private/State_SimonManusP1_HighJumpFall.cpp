@@ -39,17 +39,22 @@ HRESULT CState_SimonManusP1_HighJumpFall::Start_State(void* pArg)
 void CState_SimonManusP1_HighJumpFall::Update(_float fTimeDelta)
 {
     _double CurTrackPos = m_pMonster->Get_CurrentTrackPos();
-
+    
     if (CurTrackPos >= 200.f && CurTrackPos < 230.f) //점프 이후 공중 체공 + 플레이어방향 회전
     {
         m_vTargetDir = m_pMonster->Get_TargetDir();
-        m_pMonster->Get_Transform()->LookAt_Lerp_NoHeight(m_vTargetDir, 2.2f, fTimeDelta);
+        m_pMonster->Get_Transform()->LookAt_Lerp_NoHeight(m_vTargetDir, 2.5f, fTimeDelta);
     }
-    else if(CurTrackPos >= 230.f && CurTrackPos <= 245.f) //땅 찍기까지
+    else if (CurTrackPos >= 230.f && CurTrackPos <= 245.f) //땅 찍기까지
     {
         if (m_bStartSpot)
         {
             _float fLength = m_vTargetDir.Length();
+            if (fLength > 12.f)
+            {
+                fLength = 12.f;
+            }
+
             m_vTargetDir = XMVector3Normalize(m_pMonster->Get_Transform()->Get_State(CTransform::STATE_LOOK)) * fLength;
             m_bStartSpot = false;
         }

@@ -21,7 +21,8 @@ HRESULT CState_SimonManusP2_BrutalAttack::Initialize(_uint iStateNum, void* pArg
 HRESULT CState_SimonManusP2_BrutalAttack::Start_State(void* pArg)
 {
     m_pMonster->Change_Animation(AN_BRUTALATTACK, false, 0.1f, 0);
-
+    m_bSwingSound = false;
+    m_bStampSound = false;
     return S_OK;
 }
 
@@ -37,6 +38,7 @@ void CState_SimonManusP2_BrutalAttack::Update(_float fTimeDelta)
 
     Collider_Check(CurTrackPos);
     Effect_Check(CurTrackPos);
+    Control_Sound(CurTrackPos);
 
 }
 
@@ -68,6 +70,47 @@ void CState_SimonManusP2_BrutalAttack::Effect_Check(_double CurTrackPos)
 
 void CState_SimonManusP2_BrutalAttack::Control_Sound(_double CurTrackPos)
 {
+    if (!m_bSwingSound)
+    {
+        if ((CurTrackPos >= 100.f && CurTrackPos <= 105.f) ||
+            (CurTrackPos >= 157.f && CurTrackPos <= 162.f) ||
+            (CurTrackPos >= 222.f && CurTrackPos <= 227.f) ||
+            (CurTrackPos >= 240.f && CurTrackPos <= 245.f))
+        {
+            m_pMonster->Play_Sound(CPawn::PAWN_SOUND_EFFECT1, TEXT("SE_PC_SK_Smash_Crystal_Stone_H_03.wav"));
+
+            m_bSwingSound = true;
+        }
+    }
+    else
+    {
+        if ((CurTrackPos > 105.f && CurTrackPos <= 110.f) ||
+            (CurTrackPos > 162.f && CurTrackPos <= 167.f) ||
+            (CurTrackPos > 227.f && CurTrackPos <= 232.f))
+        {
+            m_bSwingSound = false;
+        }
+    }
+
+    if (!m_bStampSound)
+    {
+        if ((CurTrackPos >= 346.f && CurTrackPos <= 351.f) ||
+            (CurTrackPos >= 410.f && CurTrackPos <= 415.f) ||
+            (CurTrackPos >= 569.f && CurTrackPos <= 574.f))
+        {
+            m_pMonster->Play_Sound(CPawn::PAWN_SOUND_EFFECT1, TEXT("SE_NPC_SK_FX_Ground_Exp_L_03.wav"));
+            m_bStampSound = true;
+        }
+    }
+    else
+    {
+        if ((CurTrackPos > 351.f && CurTrackPos <= 356.f) ||
+            (CurTrackPos > 415.f && CurTrackPos <= 420.f))
+        {
+            m_bSwingSound = false;
+        }
+    }
+
 }
 
 CState_SimonManusP2_BrutalAttack* CState_SimonManusP2_BrutalAttack::Create(CFsm* pFsm, CMonster* pMonster, _uint iStateNum, void* pArg)

@@ -45,9 +45,6 @@ void CState_SimonManusP1_Idle::Update(_float fTimeDelta)
             return;
         }
 
-        m_pMonster->Change_State(CSimonManus::ATK_AVOIDSWING);
-        return;
-
         if (m_iAtkCnt >= 3.f && fDist <= 20.f && 9.f < fDist)   //m_iAtkCnt >= 3.f && fDist <= 15.f && 6.f < fDist
         {
             //하이점프폴

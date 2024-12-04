@@ -72,6 +72,7 @@ void CState_SimonManusP2_SwipMultiple::Update(_float fTimeDelta)
 
     Collider_Check(CurTrackPos);
     Effect_Check(CurTrackPos);
+    Control_Sound(CurTrackPos);
 
 }
 
@@ -204,18 +205,18 @@ void CState_SimonManusP2_SwipMultiple::Control_Sound(_double CurTrackPos)
     {
         _double StampTime{};
         _double SwingTime{};
-        _double TwiceSwingTime{};
+        _double SlideTime{};
         if (m_iCurStartAnim == AN_ROUTE_FIRST_L)
         {
-            StampTime = 100.f;
-            SwingTime = 160.f;
-            TwiceSwingTime = 200.f;
+            StampTime = 58.f;
+            SlideTime = 65.f;
+            SwingTime = 145.f;
         }
         else
         {
-            StampTime = 140.f;
-            SwingTime = 180.f;
-            TwiceSwingTime = 200.f;
+            StampTime = 78.f;
+            SlideTime = 85.f;
+            SwingTime = 182.f;
         }
         if (!m_bStamp_Sound)
         {
@@ -228,12 +229,12 @@ void CState_SimonManusP2_SwipMultiple::Control_Sound(_double CurTrackPos)
 
         if (!m_bSwing_Sound)
         {
-            if (CurTrackPos >= SwingTime && CurTrackPos <= 90.f)
+            if (CurTrackPos >= SlideTime && CurTrackPos <= SlideTime + 5.f)
             {
                 m_pMonster->Play_Sound(CPawn::PAWN_SOUND_EFFECT1, TEXT("SE_NPC_SK_FX_Ground_Exp_M_02.wav"), true);
                 m_bSwing_Sound = true;
             }
-            if ((CurTrackPos >= 170.f && CurTrackPos <= 180.f))
+            if ((CurTrackPos >= SwingTime && CurTrackPos <= SwingTime + 5.f))
             {
                 m_pMonster->Play_Sound(CPawn::PAWN_SOUND_EFFECT1, TEXT("SE_PC_SK_Smash_Crystal_Stone_H_03.wav"));
                 m_bSwing_Sound = true;
@@ -252,8 +253,8 @@ void CState_SimonManusP2_SwipMultiple::Control_Sound(_double CurTrackPos)
     {
         if (!m_bSwing_Sound)
         {
-            if ((CurTrackPos >= 20.f && CurTrackPos <= 30.f) ||
-                (CurTrackPos >= 60.f && CurTrackPos <= 70.f))
+            if ((CurTrackPos >= 27.f && CurTrackPos <= 32.f) ||
+                (CurTrackPos >= 64.f && CurTrackPos <= 69.f))
             {
                 m_pMonster->Play_Sound(CPawn::PAWN_SOUND_EFFECT1, TEXT("SE_PC_SK_Smash_Crystal_Stone_H_03.wav"));
                 m_bSwing_Sound = true;
@@ -261,7 +262,7 @@ void CState_SimonManusP2_SwipMultiple::Control_Sound(_double CurTrackPos)
         }
         else
         {
-            if ((CurTrackPos > 30.f && CurTrackPos <= 50.f))
+            if ((CurTrackPos > 33.f && CurTrackPos <= 40.f))
             {
                 m_bSwing_Sound = false;
             }

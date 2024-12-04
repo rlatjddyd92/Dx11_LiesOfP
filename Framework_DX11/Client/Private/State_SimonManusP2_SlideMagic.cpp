@@ -70,6 +70,7 @@ void CState_SimonManusP2_SlideMagic::Update(_float fTimeDelta)
     }
 
     Effect_Check(CurTrackPos);
+    Control_Sound(CurTrackPos);
 }
 
 void CState_SimonManusP2_SlideMagic::End_State()

@@ -175,7 +175,7 @@ void CState_SimonManusP1_SwipMultiple_L::Control_Sound(_double CurTrackPos)
                 m_pMonster->Play_Sound(CPawn::PAWN_SOUND_EFFECT1, TEXT("SE_NPC_SK_FX_Ground_Exp_M_02.wav"), true);
                 m_bSwing_Sound = true;
             }
-            if ((CurTrackPos >= 170.f && CurTrackPos <= 180.f))
+            if ((CurTrackPos >= 165.f && CurTrackPos <= 170.f))
             {
                 m_pMonster->Play_Sound(CPawn::PAWN_SOUND_EFFECT1, TEXT("SE_PC_SK_Smash_Crystal_Stone_H_03.wav"));
                 m_bSwing_Sound = true;

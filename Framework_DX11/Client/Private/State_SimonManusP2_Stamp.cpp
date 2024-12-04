@@ -84,6 +84,7 @@ void CState_SimonManusP2_Stamp::Update(_float fTimeDelta)
 
     Collider_Check(CurTrackPos);
     Effect_Check(CurTrackPos);
+    Control_Sound(CurTrackPos);
 }
 
 void CState_SimonManusP2_Stamp::End_State()

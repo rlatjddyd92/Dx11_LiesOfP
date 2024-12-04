@@ -4,6 +4,8 @@
 #include "Model.h"
 #include "SimonManus.h"
 
+#include "AttackObject.h"
+
 CState_SimonManusP2_ThunderCalling::CState_SimonManusP2_ThunderCalling(CFsm* pFsm, CMonster* pMonster)
     :CState{ pFsm }
     , m_pMonster{ pMonster }
@@ -32,6 +34,11 @@ void CState_SimonManusP2_ThunderCalling::Update(_float fTimeDelta)
         m_pMonster->Change_State(CSimonManus::IDLE);
         return;
     }
+    
+    _double CurTrackPos = m_pMonster->Get_CurrentTrackPos();
+
+    Effect_Check(CurTrackPos);
+    Control_Sound(CurTrackPos);
 }
 
 void CState_SimonManusP2_ThunderCalling::End_State()
@@ -42,6 +49,22 @@ void CState_SimonManusP2_ThunderCalling::End_State()
 _bool CState_SimonManusP2_ThunderCalling::End_Check()
 {
     return m_pMonster->Get_EndAnim(AN_THUNDERCALLING);
+}
+
+void CState_SimonManusP2_ThunderCalling::Effect_Check(_double CurTrackPos)
+{
+    if (!m_bAttackCheck)
+    {
+        if (CurTrackPos >= 100.f)
+        {
+
+            CAttackObject::ATKOBJ_DESC Desc{};
+            Desc.vPos = _Vec3{ m_pMonster->Get_Transform()->Get_State(CTransform::STATE_POSITION)};
+            
+            m_pGameInstance->Add_CloneObject_ToLayer(LEVEL_GAMEPLAY, TEXT("Monster_Attack"), TEXT("Prototype_GameObject_ThunderCalling"), &Desc);
+            m_bAttackCheck = true;
+        }
+    }
 }
 
 void CState_SimonManusP2_ThunderCalling::Control_Sound(_double CurTrackPos)

@@ -40,12 +40,14 @@ HRESULT CAObj_Wave::Initialize(void* pArg)
     m_fDamageAmount = 20.f;
     m_fLifeDuration = 3.f;
     m_fSpeed = 10.f;
-
+    
     m_pColliderCom->IsActive(true);
+
+    m_pColliderCom->Set_Owner(this);
 
     m_strObjectTag = TEXT("MonsterWeapon");
 
-    m_pSoundCom[EFF_SOUND_EFFECT1]->Play2D(TEXT("SE_NPC_SimonManus_SK_PJ_Ergo_Retspuken_04.wav"), &g_fEffectVolume, true);
+    m_pSoundCom[EFF_SOUND_EFFECT1]->Play2D(TEXT("SE_NPC_SimonManus_SK_PJ_Ergo_Retspuken_04.wav"), &g_fEffectVolume);
 
     return S_OK;
 }
@@ -159,7 +161,7 @@ HRESULT CAObj_Wave::Ready_Components()
 
     const _Matrix* pParetnMatrix = m_pTransformCom->Get_WorldMatrix_Ptr();
 
-    m_pEffect = CEffect_Manager::Get_Instance()->Clone_Effect(TEXT("SimonManus_Attack_GoldBall"), pParetnMatrix,
+    m_pEffect = CEffect_Manager::Get_Instance()->Clone_Effect(TEXT("SimonManus_Attack_Wave"), pParetnMatrix,
         nullptr, _Vec3(0.f, 0.f, 0.f), _Vec3(0.f, 0.f, 0.f), _Vec3(1.f, 1.f, 1.f));
 
     m_pEffect->Set_Loop(true);

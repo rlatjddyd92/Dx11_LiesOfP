@@ -1,26 +1,26 @@
 #include "stdafx.h"
-#include "AObj_StampBlast.h"
+#include "AObj_LightningSpear.h"
 
 #include "GameInstance.h"
 
 #include "Effect_Manager.h"
 
-CAObj_StampBlast::CAObj_StampBlast(ID3D11Device* pDevice, ID3D11DeviceContext* pContext)
+CAObj_LightningSpear::CAObj_LightningSpear(ID3D11Device* pDevice, ID3D11DeviceContext* pContext)
     : CAttackObject{ pDevice, pContext }
 {
 }
 
-CAObj_StampBlast::CAObj_StampBlast(const CGameObject& Prototype)
+CAObj_LightningSpear::CAObj_LightningSpear(const CGameObject& Prototype)
     : CAttackObject{ Prototype }
 {
 }
 
-HRESULT CAObj_StampBlast::Initialize_Prototype()
+HRESULT CAObj_LightningSpear::Initialize_Prototype()
 {
     return S_OK;
 }
 
-HRESULT CAObj_StampBlast::Initialize(void* pArg)
+HRESULT CAObj_LightningSpear::Initialize(void* pArg)
 {
     GAMEOBJECT_DESC GameObjDesc{};
     if (FAILED(__super::Initialize(&GameObjDesc)))
@@ -29,29 +29,33 @@ HRESULT CAObj_StampBlast::Initialize(void* pArg)
     ATKOBJ_DESC* pDesc = static_cast<ATKOBJ_DESC*>(pArg);
 
     m_pTransformCom->Set_State(CTransform::STATE_POSITION, pDesc->vPos);
-    
+
+    m_vMoveDir = pDesc->vDir;
+
+    m_pTransformCom->LookAt_Dir(_Vec4{ pDesc->vDir });
+
     if (FAILED(Ready_Components()))
         return E_FAIL;
 
     m_fDamageAmount = 20.f;
     m_fLifeDuration = 0.6f;
+    m_fSpeed = 7.f;
+    
     m_pColliderCom->IsActive(true);
 
     m_pColliderCom->Set_Owner(this);
-
-    m_pSoundCom[EFF_SOUND_EFFECT1]->Play2D(TEXT("SE_NPC_SK_FX_Ground_Exp_L_03.wav"), &g_fEffectVolume);
 
     m_strObjectTag = TEXT("MonsterWeapon");
 
     return S_OK;
 }
 
-void CAObj_StampBlast::Priority_Update(_float fTimeDelta)
+void CAObj_LightningSpear::Priority_Update(_float fTimeDelta)
 {
     m_pEffect->Priority_Update(fTimeDelta);
 }
 
-void CAObj_StampBlast::Update(_float fTimeDelta)
+void CAObj_LightningSpear::Update(_float fTimeDelta)
 {
     if (m_fLifeTime >= m_fLifeDuration)
     {
@@ -68,13 +72,18 @@ void CAObj_StampBlast::Update(_float fTimeDelta)
     {
         m_fLifeTime += fTimeDelta;
     }
+    
+    //¿òÁ÷ÀÓ
+    m_pTransformCom->Set_State(CTransform::STATE_POSITION, m_pTransformCom->Get_State(CTransform::STATE_POSITION) + m_vMoveDir * m_fSpeed * fTimeDelta);
+
+    m_pSoundCom[EFF_SOUND_EFFECT1]->Play2D(TEXT("SE_NPC_SK_FX_Spark_M_03.wav"), &g_fEffectVolume, true);
 
     m_pColliderCom->Update(m_pTransformCom->Get_WorldMatrix_Ptr());
 
     m_pEffect->Update(fTimeDelta);
 }
 
-void CAObj_StampBlast::Late_Update(_float fTimeDelta)
+void CAObj_LightningSpear::Late_Update(_float fTimeDelta)
 {
     m_pEffect->Late_Update(fTimeDelta);
     if (m_fLifeTime < m_fLifeDuration)
@@ -84,7 +93,7 @@ void CAObj_StampBlast::Late_Update(_float fTimeDelta)
     }
 }
 
-HRESULT CAObj_StampBlast::Render()
+HRESULT CAObj_LightningSpear::Render()
 {
     //if (FAILED(__super::Render()))
     //    return E_FAIL;
@@ -92,7 +101,7 @@ HRESULT CAObj_StampBlast::Render()
     return S_OK;
 }
 
-HRESULT CAObj_StampBlast::Render_LightDepth()
+HRESULT CAObj_LightningSpear::Render_LightDepth()
 {
     //if (FAILED(__super::Render_LightDepth()))
     //    return E_FAIL;
@@ -100,7 +109,7 @@ HRESULT CAObj_StampBlast::Render_LightDepth()
     return S_OK;
 }
 
-void CAObj_StampBlast::OnCollisionEnter(CGameObject* pOther)
+void CAObj_LightningSpear::OnCollisionEnter(CGameObject* pOther)
 {
     //pOther check
     if (pOther->Get_Tag() == TEXT("Player"))
@@ -119,27 +128,31 @@ void CAObj_StampBlast::OnCollisionEnter(CGameObject* pOther)
         {
             m_DamagedObjects.push_back(pOther);
             pOther->Calc_DamageGain(m_fDamageAmount * m_fDamageRatio);
+            m_pSoundCom[EFF_SOUND_EFFECT2]->Play2D(TEXT("SE_NPC_SimonManus_SK_PJ_Ergo_Direct_Hit_01.wav"), &g_fEffectVolume);
+
         }
+        m_pEffect->Set_Loop(false);
     }
 }
 
-void CAObj_StampBlast::OnCollisionStay(CGameObject* pOther)
+void CAObj_LightningSpear::OnCollisionStay(CGameObject* pOther)
 {
 }
 
-void CAObj_StampBlast::OnCollisionExit(CGameObject* pOther)
+void CAObj_LightningSpear::OnCollisionExit(CGameObject* pOther)
 {
 }
 
-HRESULT CAObj_StampBlast::Ready_Components()
+HRESULT CAObj_LightningSpear::Ready_Components()
 {
     if (FAILED(__super::Ready_Components()))
         return E_FAIL;
 
     /* FOR.Com_Collider */
-    CBounding_Sphere::BOUNDING_SPHERE_DESC      ColliderDesc{};
+    CBounding_OBB::BOUNDING_OBB_DESC      ColliderDesc{};
     ColliderDesc.vCenter = _float3(0.f, 0.f, 0.f);
-    ColliderDesc.fRadius = 3.f;
+    ColliderDesc.vExtents = _float3();
+    ColliderDesc.vAngles = _float3();
 
     if (FAILED(__super::Add_Component(LEVEL_STATIC, TEXT("Prototype_Component_Collider_Sphere"),
         TEXT("Com_Collider"), reinterpret_cast<CComponent**>(&m_pColliderCom), &ColliderDesc)))
@@ -148,7 +161,7 @@ HRESULT CAObj_StampBlast::Ready_Components()
 
     const _Matrix* pParetnMatrix = m_pTransformCom->Get_WorldMatrix_Ptr();
 
-    m_pEffect = CEffect_Manager::Get_Instance()->Clone_Effect(TEXT("SimonManus_Attack_ChargeStamp2"), pParetnMatrix,
+    m_pEffect = CEffect_Manager::Get_Instance()->Clone_Effect(TEXT("SimonManus_Attack_LightningSpear"), pParetnMatrix,
         nullptr, _Vec3(0.f, 0.f, 0.f), _Vec3(0.f, 0.f, 0.f), _Vec3(1.f, 1.f, 1.f));
 
     m_pEffect->Set_Loop(true);
@@ -156,33 +169,33 @@ HRESULT CAObj_StampBlast::Ready_Components()
     return S_OK;
 }
 
-CAObj_StampBlast* CAObj_StampBlast::Create(ID3D11Device* pDevice, ID3D11DeviceContext* pContext)
+CAObj_LightningSpear* CAObj_LightningSpear::Create(ID3D11Device* pDevice, ID3D11DeviceContext* pContext)
 {
-    CAObj_StampBlast* pInstance = new CAObj_StampBlast(pDevice, pContext);
+    CAObj_LightningSpear* pInstance = new CAObj_LightningSpear(pDevice, pContext);
 
     if (FAILED(pInstance->Initialize_Prototype()))
     {
-        MSG_BOX(TEXT("Failed to Created : CAObj_StampBlast"));
+        MSG_BOX(TEXT("Failed to Created : CAObj_LightningSpear"));
         Safe_Release(pInstance);
     }
 
     return pInstance;
 }
 
-CGameObject* CAObj_StampBlast::Clone(void* pArg)
+CGameObject* CAObj_LightningSpear::Clone(void* pArg)
 {
-    CAObj_StampBlast* pInstance = new CAObj_StampBlast(*this);
+    CAObj_LightningSpear* pInstance = new CAObj_LightningSpear(*this);
 
     if (FAILED(pInstance->Initialize(pArg)))
     {
-        MSG_BOX(TEXT("Failed to Cloned : CAObj_StampBlast"));
+        MSG_BOX(TEXT("Failed to Cloned : CAObj_LightningSpear"));
         Safe_Release(pInstance);
     }
 
     return pInstance;
 }
 
-void CAObj_StampBlast::Free()
+void CAObj_LightningSpear::Free()
 {
     __super::Free();
 

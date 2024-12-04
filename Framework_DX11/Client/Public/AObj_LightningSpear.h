@@ -3,12 +3,12 @@
 #include "AttackObject.h"
 #include "Effect_Container.h"
 
-class CAObj_ThunderSpear	final : public CAttackObject
+class CAObj_LightningSpear	final : public CAttackObject
 {
 protected:
-	CAObj_ThunderSpear(ID3D11Device* pDevice, ID3D11DeviceContext* pContext);
-	CAObj_ThunderSpear(const CGameObject& Prototype);
-	virtual ~CAObj_ThunderSpear() = default;
+	CAObj_LightningSpear(ID3D11Device* pDevice, ID3D11DeviceContext* pContext);
+	CAObj_LightningSpear(const CGameObject& Prototype);
+	virtual ~CAObj_LightningSpear() = default;
 
 public:
 	virtual HRESULT Initialize_Prototype() override;
@@ -34,7 +34,7 @@ private:
 	HRESULT Ready_Components();
 
 public:
-	static CAObj_ThunderSpear* Create(ID3D11Device* pDevice, ID3D11DeviceContext* pContext);
+	static CAObj_LightningSpear* Create(ID3D11Device* pDevice, ID3D11DeviceContext* pContext);
 	virtual CGameObject* Clone(void* pArg);
 	virtual void Free() override;
 };

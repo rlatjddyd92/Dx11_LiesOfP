@@ -60,6 +60,7 @@ void CState_SimonManusP2_Route1::Update(_float fTimeDelta)
 
     Collider_Check(fTimeDelta, CurTrackPos);
     Effect_Check(CurTrackPos);
+    Control_Sound(CurTrackPos);
 
 }
 
