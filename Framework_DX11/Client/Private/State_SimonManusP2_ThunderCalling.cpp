@@ -44,6 +44,10 @@ _bool CState_SimonManusP2_ThunderCalling::End_Check()
     return m_pMonster->Get_EndAnim(AN_THUNDERCALLING);
 }
 
+void CState_SimonManusP2_ThunderCalling::Control_Sound(_double CurTrackPos)
+{
+}
+
 CState_SimonManusP2_ThunderCalling* CState_SimonManusP2_ThunderCalling::Create(CFsm* pFsm, CMonster* pMonster, _uint iStateNum, void* pArg)
 {
     CState_SimonManusP2_ThunderCalling* pInstance = new CState_SimonManusP2_ThunderCalling(pFsm, pMonster);

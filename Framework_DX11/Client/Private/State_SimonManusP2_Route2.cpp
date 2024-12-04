@@ -186,6 +186,10 @@ void CState_SimonManusP2_Route2::Update_Rimlight()
     }
 }
 
+void CState_SimonManusP2_Route2::Control_Sound(_double CurTrackPos)
+{
+}
+
 CState_SimonManusP2_Route2* CState_SimonManusP2_Route2::Create(CFsm* pFsm, CMonster* pMonster, _uint iStateNum, void* pArg)
 {
     CState_SimonManusP2_Route2* pInstance = new CState_SimonManusP2_Route2(pFsm, pMonster);

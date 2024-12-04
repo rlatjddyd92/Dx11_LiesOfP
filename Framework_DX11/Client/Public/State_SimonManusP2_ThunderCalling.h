@@ -29,6 +29,7 @@ private:
 
 private:
     _bool               End_Check();
+    void                Control_Sound(_double CurTrackPos);
 
 public:
     static CState_SimonManusP2_ThunderCalling* Create(class CFsm* pFsm, class CMonster* pMonster, _uint iStateNum, void* pArg = nullptr);

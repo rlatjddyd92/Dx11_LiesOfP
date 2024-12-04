@@ -139,6 +139,10 @@ void CState_SimonManusP2_HighJumpFall::Update_Rimlight()
     }
 }
 
+void CState_SimonManusP2_HighJumpFall::Control_Sound(_double CurTrackPos)
+{
+}
+
 CState_SimonManusP2_HighJumpFall* CState_SimonManusP2_HighJumpFall::Create(CFsm* pFsm, CMonster* pMonster, _uint iStateNum, void* pArg)
 {
     CState_SimonManusP2_HighJumpFall* pInstance = new CState_SimonManusP2_HighJumpFall(pFsm, pMonster);

@@ -1094,6 +1094,17 @@ void CModel::ReadyDenyNextTranslate(_int iBoneIndex)
 	m_iDenyBoneIndex = iBoneIndex;
 }
 
+_Vec3 CModel::Get_CenterPos(_Vec3 vPos, _Matrix WorldMat)
+{
+	_Matrix FinalMat{};
+	FinalMat = m_Bones[m_UFBIndices[UFB_CHEST]]->Get_CombinedTransformationMatrix() * WorldMat;
+	
+	_Vec3	vOut{};
+	vOut = XMVector2TransformNormal(vPos, FinalMat);
+	
+	return vOut;
+}
+
 HRESULT CModel::Bind_Material(CShader* pShader, const _char* pConstantName, TEXTURE_TYPE eMaterialType, _uint iMeshIndex)
 {
 	_uint iMaterialIndex = m_Meshes[iMeshIndex]->Get_MaterialIndex();

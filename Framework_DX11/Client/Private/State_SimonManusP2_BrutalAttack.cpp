@@ -66,6 +66,10 @@ void CState_SimonManusP2_BrutalAttack::Effect_Check(_double CurTrackPos)
 {
 }
 
+void CState_SimonManusP2_BrutalAttack::Control_Sound(_double CurTrackPos)
+{
+}
+
 CState_SimonManusP2_BrutalAttack* CState_SimonManusP2_BrutalAttack::Create(CFsm* pFsm, CMonster* pMonster, _uint iStateNum, void* pArg)
 {
     CState_SimonManusP2_BrutalAttack* pInstance = new CState_SimonManusP2_BrutalAttack(pFsm, pMonster);
