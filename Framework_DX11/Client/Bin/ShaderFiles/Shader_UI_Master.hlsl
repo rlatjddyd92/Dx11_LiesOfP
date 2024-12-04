@@ -55,14 +55,19 @@ float2 Clamp_Range(float2 vTex)
 }
 
  // 각도 조정
-bool Check_Angle(float2 vTex, float3 vPos)
+bool Check_Angle(float2 vTex, float4 vPos)
 {
     float2 vCenter = { 0.5f, 0.5f };
     float2 vDirec = float2(vTex.x, vTex.y) - vCenter;
     float vRadian = atan2(vDirec.y, vDirec.x);
     
-    if ((vRadian < radians(g_Render_Angle.x)) || (vRadian > radians(g_Render_Angle.y)))
-        return false;
+    if (g_Render_Angle.x <= g_Render_Angle.y)
+        if ((vRadian < radians(g_Render_Angle.x)) || (vRadian > radians(g_Render_Angle.y)))
+            return false;
+        
+    if (g_Render_Angle.x > g_Render_Angle.y)
+        if ((vRadian < radians(g_Render_Angle.x)) && (vRadian > radians(g_Render_Angle.y)))
+            return false;
     
     return true;
 }

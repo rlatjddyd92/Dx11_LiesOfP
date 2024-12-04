@@ -197,6 +197,9 @@ public:
 
 	// 좌하단 포션/도구 
 
+public: 
+
+
 
 private:
 	void Action_Potion_Tool(_float fTimeDelta);
@@ -216,7 +219,9 @@ private:
 	void Add_Render_Info_DropInfo(_float fTimeDelta);
 	void Add_Render_Info_BuffInfo(_float fTimeDelta);
 
-
+	void Switch_Weapon_UI_Action(_float fTimeDelta);
+	void Switch_Bag_UI_Action(_float fTimeDelta, _bool bIsOpen);
+	void Using_Fable_UI_Action(_float fTimeDelta);
 
 private:
 	// 보조 가방
@@ -233,10 +238,12 @@ private:
 	_float m_fEmerge_Effect_Time = 1.f;
 	_float m_fDrop_Item_ShowTime = 3.f;
 
-
 	// 무기 조정 
 	_int m_iWeapon_Equip_0_Symbol = 0;
+	_Vec2 m_vSwitch_Time = { 0.f,0.5f };
+	_float m_fNormal_Weapon_Fx_Alpha_Origin = 0.f;
 
+	_Vec2 m_vFable_Art_ActionTime = { 0.f,0.5f };
 
 	// 보스 체력바 
 	_bool m_bIs_BossHp_Activate = false;

@@ -14,6 +14,7 @@ CItem_Manager::CItem_Manager(CGameInstance* pGameInstance)
 void CItem_Manager::Update_Item(_float fDeltatime)
 {
 	m_bIsChange = false;
+	m_iNow_Using = -1;
 }
 
 ITEM_RESULT CItem_Manager::AddNewItem_Inven(_uint iItemIndex, _uint iCount)
@@ -80,9 +81,9 @@ ITEM_RESULT CItem_Manager::Assemble_Blade_Handle(_int iBladeIndex, _int iHandleI
 ITEM_RESULT CItem_Manager::EquipItem_Inven(INVEN_ARRAY_TYPE eIndex, EQUIP_SLOT eSlot, _uint iIndex)
 {
 	if ((eIndex == INVEN_ARRAY_TYPE::TYPE_WEAPON_NORMAL_BLADE) || (eIndex == INVEN_ARRAY_TYPE::TYPE_WEAPON_NORMAL_HANDLE))
-		EquipWeapon_Inven(eIndex, eSlot, iIndex);
+		return(EquipWeapon_Inven(eIndex, eSlot, iIndex));
 	else if ((eIndex == INVEN_ARRAY_TYPE::TYPE_WEAPON_SPECIAL_BLADE) || (eIndex == INVEN_ARRAY_TYPE::TYPE_WEAPON_SPECIAL_HANDLE))
-		EquipWeapon_Inven(eIndex, eSlot, iIndex);
+		return(EquipWeapon_Inven(eIndex, eSlot, iIndex));
 	else
 	{
 		ITEM& NewItem = *(m_vecArray_Inven[_uint(eIndex)]->vecItemInfo[iIndex]);
@@ -150,7 +151,7 @@ ITEM_RESULT CItem_Manager::UnEquipItem_Inven(EQUIP_SLOT eSlot)
 		return ITEM_RESULT::RESULT_INVALID;
 
 	if ((_int(eSlot) >= _int(EQUIP_SLOT::EQUIP_WEAPON_BLADE_0)) && (_int(eSlot) <= _int(EQUIP_SLOT::EQUIP_WEAPON_HANDLE_1)))
-		UnEquipWeapon_Inven(eSlot);
+		return(UnEquipWeapon_Inven(eSlot));
 	else
 	{
 		IsValid_Inven(m_vecEquip_ItemInfo[_uint(eSlot)]->eType, m_vecEquip_ItemInfo[_uint(eSlot)]->iIndex);
@@ -245,13 +246,18 @@ ITEM_RESULT CItem_Manager::UseItem_Equip(EQUIP_SLOT eSlot, _uint iCount)
 		if (Use_Potion())
 		{
 			m_bIsChange = true;
+			Set_Item_Funtion(m_vecArray_Inven[_uint(eArray)]->Get_Item_Info(iIndex)->iItem_Index);
 			return ITEM_RESULT::RESULT_SUCCESS;
 		}
 		else
 			return ITEM_RESULT::RESULT_INVALID;
 	}
 	else
+	{
+		Set_Item_Funtion(m_vecArray_Inven[_uint(eArray)]->Get_Item_Info(iIndex)->iItem_Index);
 		return m_vecArray_Inven[_uint(eArray)]->Use_Item(iIndex, iCount);
+	}
+		
 }
 
 ITEM_RESULT CItem_Manager::UseItem_Inven(INVEN_ARRAY_TYPE eIndex, _uint iIndex, _uint iCount)
@@ -264,13 +270,17 @@ ITEM_RESULT CItem_Manager::UseItem_Inven(INVEN_ARRAY_TYPE eIndex, _uint iIndex, 
 		if (Use_Potion())
 		{
 			m_bIsChange = true;
+			Set_Item_Funtion(m_vecArray_Inven[_uint(eIndex)]->Get_Item_Info(iIndex)->iItem_Index);
 			return ITEM_RESULT::RESULT_SUCCESS;
 		}
 		else
 			return ITEM_RESULT::RESULT_INVALID;
 	}
 	else
+	{
+		Set_Item_Funtion(m_vecArray_Inven[_uint(eIndex)]->Get_Item_Info(iIndex)->iItem_Index);
 		return m_vecArray_Inven[_uint(eIndex)]->Use_Item(iIndex, iCount);
+	}
 }
 
 ITEM_RESULT CItem_Manager::Remove_Item_Inven(INVEN_ARRAY_TYPE eIndex, _uint iIndex)
@@ -302,6 +312,64 @@ CPlayer::WEAPON_TYPE CItem_Manager::Get_Weapon_Model_Index()
 		return CPlayer::WEAPON_TYPE::WEP_SCISSOR;
 
 	return CPlayer::WEAPON_TYPE::WEP_END;
+}
+
+SPECIAL_ITEM CItem_Manager::Get_Item_Function()
+{
+	// 이건 하드코딩이 나을 듯 
+	if (m_iNow_Using == _int(SPECIAL_ITEM::SP_PULSE_BATTERY))
+		return SPECIAL_ITEM::SP_PULSE_BATTERY;
+	else if (m_iNow_Using == _int(SPECIAL_ITEM::SP_DUSTCAT))
+		return SPECIAL_ITEM::SP_DUSTCAT;
+	else if (m_iNow_Using == _int(SPECIAL_ITEM::SP_GRINDER))
+		return SPECIAL_ITEM::SP_GRINDER;
+	else if (m_iNow_Using == _int(SPECIAL_ITEM::SP_LAMP))
+		return SPECIAL_ITEM::SP_LAMP;
+	else if (m_iNow_Using == _int(SPECIAL_ITEM::SP_TELEPOT))
+		return SPECIAL_ITEM::SP_TELEPOT;
+	else if (m_iNow_Using == _int(SPECIAL_ITEM::SP_RESISTANCE))
+		return SPECIAL_ITEM::SP_RESISTANCE;
+	else if (m_iNow_Using == _int(SPECIAL_ITEM::SP_PURIFICATION))
+		return SPECIAL_ITEM::SP_PURIFICATION;
+	else if (m_iNow_Using == _int(SPECIAL_ITEM::SP_DEAD))
+		return SPECIAL_ITEM::SP_DEAD;
+	else if (m_iNow_Using == _int(SPECIAL_ITEM::SP_GRANADE))
+		return SPECIAL_ITEM::SP_GRANADE;
+	else if (m_iNow_Using == _int(SPECIAL_ITEM::SP_THERMITE))
+		return SPECIAL_ITEM::SP_THERMITE;
+	else if (m_iNow_Using == _int(SPECIAL_ITEM::SP_THROW_BATTERY))
+		return SPECIAL_ITEM::SP_THROW_BATTERY;
+	else
+		return SPECIAL_ITEM::SP_END;
+}
+
+void CItem_Manager::Set_Item_Funtion(_int iItem_Index)
+{
+	// 이건 하드코딩이 나을 듯 
+	if (iItem_Index == _int(SPECIAL_ITEM::SP_PULSE_BATTERY))
+		m_iNow_Using = _int(SPECIAL_ITEM::SP_PULSE_BATTERY);
+	else if (iItem_Index == _int(SPECIAL_ITEM::SP_DUSTCAT))
+		m_iNow_Using = _int(SPECIAL_ITEM::SP_DUSTCAT);
+	else if (iItem_Index == _int(SPECIAL_ITEM::SP_GRINDER))
+		m_iNow_Using = _int(SPECIAL_ITEM::SP_GRINDER);
+	else if (iItem_Index == _int(SPECIAL_ITEM::SP_LAMP))
+		m_iNow_Using = _int(SPECIAL_ITEM::SP_LAMP);
+	else if (iItem_Index == _int(SPECIAL_ITEM::SP_TELEPOT))
+		m_iNow_Using = _int(SPECIAL_ITEM::SP_TELEPOT);
+	else if (iItem_Index == _int(SPECIAL_ITEM::SP_RESISTANCE))
+		m_iNow_Using = _int(SPECIAL_ITEM::SP_RESISTANCE);
+	else if (iItem_Index == _int(SPECIAL_ITEM::SP_PURIFICATION))
+		m_iNow_Using = _int(SPECIAL_ITEM::SP_PURIFICATION);
+	else if (iItem_Index == _int(SPECIAL_ITEM::SP_DEAD))
+		m_iNow_Using = _int(SPECIAL_ITEM::SP_DEAD);
+	else if (iItem_Index == _int(SPECIAL_ITEM::SP_GRANADE))
+		m_iNow_Using = _int(SPECIAL_ITEM::SP_GRANADE);
+	else if (iItem_Index == _int(SPECIAL_ITEM::SP_THERMITE))
+		m_iNow_Using = _int(SPECIAL_ITEM::SP_THERMITE);
+	else if (iItem_Index == _int(SPECIAL_ITEM::SP_THROW_BATTERY))
+		m_iNow_Using = _int(SPECIAL_ITEM::SP_THROW_BATTERY);
+	else
+		m_iNow_Using = -1;
 }
 
 

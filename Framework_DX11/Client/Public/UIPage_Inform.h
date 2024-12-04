@@ -14,6 +14,25 @@ class CUIPage_Inform : public CUIPage
 public:
 	enum class PART_GROUP
 	{
+		INFORM_Pos,
+		INFORM_Region_Fx,
+		INFORM_Region_Title,
+		INFORM_Region_Line,
+		INFORM_Region_Desc,
+
+
+		INFORM_Common_Fx,
+		INFORM_Dead,
+		INFORM_Recovery,
+		INFORM_BossKill,
+		INFORM_Stargazer,
+
+
+		INFORM_Heart,
+		INFORM_Line_L,
+		INFORM_Line_R,
+		INFORM_Text_Back,
+		INFORM_Text_Front,
 
 
 
@@ -47,12 +66,21 @@ public:
 	const vector<UPART*>& Get_UIPartInfo() { return m_vecPart; }
 	virtual HRESULT Ready_UIPart_Group_Control() override;
 
+	void Show_Region_Info(_wstring strName, _wstring strDesc, _float fTime_Emerge = 1.f, _float fTime_Show = 2.f);
+	void Show_Inform(INFORM_MESSAGE eInform, _float fTime_Emerge = 1.f, _float fTime_Show = 2.f);
+	void Show_Heart(_wstring strScript, _float fTime_Emerge = 1.f, _float fTime_Show = 2.f);
+
 protected:
+	void Update_Region(_float fTimeDelta);
+	void Update_Inform(_float fTimeDelta);
+	void Update_Heart(_float fTimeDelta);
 
+protected:
+	_float Check_Ratio(_Vec3* vLifeTime, _float fTimeDelta);
 
-
-
-
+	_Vec3 m_vLifeTime_Region = { 0.f,0.f,0.f }; // now, emerge, show
+	_Vec3 m_vLifeTime_Inform = { 0.f,0.f,0.f };
+	_Vec3 m_vLifeTime_Heart = { 0.f,0.f,0.f };
 
 
 

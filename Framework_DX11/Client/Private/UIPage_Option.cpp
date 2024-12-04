@@ -79,6 +79,13 @@ void CUIPage_Option::Update(_float fTimeDelta)
 
 void CUIPage_Option::Late_Update(_float fTimeDelta)
 {
+	if (m_fExit_Time >= 0.f)
+	{
+		m_fExit_Time -= fTimeDelta;
+		if (m_fExit_Time <= 0.f)
+			DestroyWindow(g_hWnd);
+	}
+
 	if (!m_bRender)
 		return;
 
@@ -295,6 +302,8 @@ HRESULT CUIPage_Option::Initialize_Option()
 	m_vecPart[_int(PART_GROUP::OPTION_Calibration_Frame)]->bRender = false;
 	m_vecPart[_int(PART_GROUP::OPTION_Calibration_Image)]->bRender = false;
 	m_vecPart[_int(PART_GROUP::OPTION_Calibration_Text)]->bRender = false;
+
+	return S_OK;
 }
 
 void CUIPage_Option::Update_Tab(_float fTimeDelta)
@@ -339,10 +348,7 @@ void CUIPage_Option::Update_Tab(_float fTimeDelta)
 		++iNowCheckTap;
 	}
 
-		
-	
-	
-	m_vecPart[_int(PART_GROUP::OPTION_Tap_E_Button)]->fPosition.x = m_vecPart[_int(PART_GROUP::OPTION_Tap_Mouse_Area)]->fPosition.x + m_vecPart[_int(PART_GROUP::OPTION_Tap_Mouse_Area)]->fAdjust.x;
+	m_vecPart[_int(PART_GROUP::OPTION_Tap_E_Button)]->fPosition.x = m_vecPart[_int(PART_GROUP::OPTION_Tap_Mouse_Area)]->fPosition.x;
 
 	Input_Render_Info(*m_vecPart[_int(PART_GROUP::OPTION_Tap_E_Button)]);
 
@@ -375,8 +381,7 @@ void CUIPage_Option::Update_Tab(_float fTimeDelta)
 	{
 		if (iNowCheckTap == m_iNow_Tab)
 		{
-			m_vecPart[_int(PART_GROUP::OPTION_Highlight_Line)]->fPosition = m_vecPart[_int(PART_GROUP::OPTION_Tap_Highlight_Line_Pos)]->fPosition;
-			m_vecPart[_int(PART_GROUP::OPTION_Highlight_Line)]->bRender = true;
+			Change_Highlight_Pos(m_vecPart[_int(PART_GROUP::OPTION_Tap_Highlight_Line_Pos)]->fPosition);
 			m_vecPart[_int(PART_GROUP::OPTION_Tap_Text)]->Set_RedText();
 		}
 		else
@@ -488,7 +493,11 @@ void CUIPage_Option::Update_Line(_float fTimeDelta)
 				{
 					_Vec2 vPos = GET_GAMEINTERFACE->CheckMouse(m_vecPart[_int(PART_GROUP::OPTION_LINE_Area)]->fPosition, m_vecPart[_int(PART_GROUP::OPTION_LINE_Area)]->fSize);
 					if (vPos.x != -1.f)
+					{
+						Change_Focus_Mark_Destination(m_vecPart[_int(PART_GROUP::OPTION_LINE_Focus_Pos)]->fPosition);
 						bMouse = true;
+					}
+						
 				}
 				
 
@@ -500,7 +509,6 @@ void CUIPage_Option::Update_Line(_float fTimeDelta)
 					if (i > _int(PART_GROUP::OPTION_LINE_Focus_Pos))
 						Input_Render_Info(*m_vecPart[i], SCROLL_AREA::SCROLL_OPTION);
 				}
-				Change_Focus_Mark_Destination(m_vecPart[_int(PART_GROUP::OPTION_LINE_Focus_Pos)]->fPosition);
 			}
 
 			if (bFuncion_Render)
@@ -521,7 +529,12 @@ void CUIPage_Option::Update_Line(_float fTimeDelta)
 				}
 				else if (eFunc == OPTION_FUNC::FUNC_BUTTON)
 				{
-					
+					if (m_iNow_Tab == m_vecOption_TabInfo.size() - 1)
+						if (m_iNow_Line == 0)
+						{
+							if ((bMouse) && (KEY_TAP(KEY::LBUTTON)))
+								Exit_Program();
+						}
 				}
 			}
 
@@ -555,7 +568,7 @@ void CUIPage_Option::Update_BoolButton(FUNCTION& NowFunction, _float fTimeDelta,
 	{
 		if (GET_GAMEINTERFACE->CheckMouse(m_vecPart[_int(PART_GROUP::OPTION_FUNC_Bool_Left_Area)]->fPosition, m_vecPart[_int(PART_GROUP::OPTION_FUNC_Bool_Left_Area)]->fSize).x != -1.f)
 		{
-			m_vecPart[_int(PART_GROUP::OPTION_Focus)]->fAdjust_End = m_vecPart[_int(PART_GROUP::OPTION_FUNC_Bool_Left_Focus_Pos)]->fPosition;
+			Change_Focus_Mark_Destination(m_vecPart[_int(PART_GROUP::OPTION_FUNC_Bool_Left_Focus_Pos)]->fPosition);
 			iFocus = -1;
 
 			if (KEY_TAP(KEY::LBUTTON))
@@ -566,7 +579,7 @@ void CUIPage_Option::Update_BoolButton(FUNCTION& NowFunction, _float fTimeDelta,
 		}
 		else if (GET_GAMEINTERFACE->CheckMouse(m_vecPart[_int(PART_GROUP::OPTION_FUNC_Bool_Right_Area)]->fPosition, m_vecPart[_int(PART_GROUP::OPTION_FUNC_Bool_Right_Area)]->fSize).x != -1.f)
 		{
-			m_vecPart[_int(PART_GROUP::OPTION_Focus)]->fAdjust_End = m_vecPart[_int(PART_GROUP::OPTION_FUNC_Bool_Right_Focus_Pos)]->fPosition;
+			Change_Focus_Mark_Destination(m_vecPart[_int(PART_GROUP::OPTION_FUNC_Bool_Right_Focus_Pos)]->fPosition);
 			iFocus = 1;
 
 			if (KEY_TAP(KEY::LBUTTON))
@@ -918,6 +931,12 @@ void CUIPage_Option::Update_Variable()
 
 	if (m_pGameInstance->Get_IsOnShadow() != m_bGraphic[5])
 		m_pGameInstance->Toggle_Shadow();
+}
+
+void CUIPage_Option::Exit_Program()
+{
+	m_fExit_Time = 5.f;
+	GET_GAMEINTERFACE->Fade_Out(TEXT("감사합니다!"), TEXT("최종 발표를 기대해주세요"), _Vec3(0.f, 0.f, 0.f), 1.f);
 }
 
 

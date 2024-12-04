@@ -165,7 +165,18 @@ enum class ABLITY_TYPE
 enum class SPECIAL_ITEM
 {
 	// 특수 기능의 아이템 인덱스 기록 
-	SP_PULSE_BATTERY = 284, // 펄스 전지, 충전 수치 따로 존재하며 사용 시, 체력 회복 
+	SP_PULSE_BATTERY = 284, // 펄스 전지, 충전 수치 따로 존재하며 사용 시, 체력 회복 O
+	SP_DUSTCAT = 238, // 고양이 가루, 기척 감소 
+	SP_GRINDER = 239, // 그라인더, 무기 내구도 증가 O 
+	SP_LAMP = 243, // 모나드의 등불, 주변 밝기 증가 
+	SP_TELEPOT = 244, // 문페이즈 회중시계, 순간이동 O
+	SP_RESISTANCE = 255, // 속성 저항 앰플, 속성 저항 증가 O
+	SP_PURIFICATION = 256, // 속성 정화 앰플, 디버프 제거 O
+	SP_DEAD = 272, // 최후의 수단, 사망 O
+	SP_GRANADE = 275, // 클러스터 수류탄 O
+	SP_THERMITE = 275, // 테르밋 O
+	SP_THROW_BATTERY = 279, // 투척용 전지 O 
+
 	SP_END
 };
 

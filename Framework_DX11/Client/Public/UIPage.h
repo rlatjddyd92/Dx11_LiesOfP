@@ -165,6 +165,8 @@ public:
 
 			bIsBarMoving = true;
 			fMouse_Before_Y = fNow_Y;
+
+			return true;
 		}
 
 		_bool Bar_Moving(_float fNow_Y)
@@ -182,6 +184,8 @@ public:
 			fData_Offset_Y = fData_Height_Max * fScroll_Ratio;
 
 			fMouse_Before_Y = fNow_Y;
+
+			return true;
 		}
 
 		void End_Bar_Moving()

@@ -60,6 +60,7 @@ public:
 	void SetIngame(_bool bTrue)
 	{
 		m_bIsIngame = bTrue;
+		m_bIsPlayPageMaintain = bTrue;
 		if (bTrue)
 		{
 			for (_int i = 0; i < m_vecPage.size(); ++i)
@@ -129,6 +130,8 @@ public:
 		m_pUIPage_ItemInfo->Off_ItemAction();
 	}
 
+	
+
 private:
 	void UIControl_Common(_float fTimeDelta);
 	void UIControl_Main(_float fTimeDelta);
@@ -194,6 +197,40 @@ public:
 
 #pragma endregion
 
+#pragma region Talking, Popup, Inform
+
+	// NPC 스크립트 
+	void Show_Script_Npc_Talking(NPC_SCRIPT eNPC, _int iScriptNum = -1)
+	{
+		if (m_eNowPage != UIPAGE::PAGE_TALKING)
+		{
+			ClosePage(m_eNowPage);
+			m_bIsPlayPageMaintain = false;
+			m_eBeforePage = m_eNowPage;
+		}
+		m_pUIPage_Talking->Show_Script(eNPC, iScriptNum);
+	}
+	void Next_Script() { m_pUIPage_Talking->Next_Script(); }
+	void OFF_Script()
+	{
+		if (m_eBeforePage != UIPAGE::PAGE_TALKING)
+			OpenPage(m_eBeforePage);
+		m_bIsPlayPageMaintain = true;
+		m_pUIPage_Talking->OFF_Script();
+	}
+
+	void Show_Select_Script(_wstring strLeft, _wstring strRight, _float fTime) { m_pUIPage_Talking->Show_Select_Script(strLeft, strRight, fTime); }
+	_bool IsLeft_LastSelect_Result() { return m_pUIPage_Talking->IsLeft_LastSelect_Result(); }
+
+	void Show_Region_Info(_wstring strName, _wstring strDesc, _float fTime_Emerge = 1.f, _float fTime_Show = 2.f) { m_pUIPage_Inform->Show_Region_Info(strName, strDesc, fTime_Emerge, fTime_Show); }
+	void Show_Inform(INFORM_MESSAGE eInform, _float fTime_Emerge = 1.f, _float fTime_Show = 2.f) { m_pUIPage_Inform->Show_Inform(eInform, fTime_Emerge, fTime_Show); }
+	void Show_Heart(_wstring strScript, _float fTime_Emerge = 1.f, _float fTime_Show = 2.f) { m_pUIPage_Inform->Show_Heart(strScript, fTime_Emerge, fTime_Show); }
+
+#pragma endregion
+
+
+#pragma region Test
+
 	TDATA* GetTestData() { return m_pTestData; } // 테스트용 조작을 위한 모든 것을 넣어 두는 함수
 	// 추후 신속한 정리를 위해 테스트용 조작은 모두 여기에 넣고 추후 한번에 제거하기 
 	// 위 함수와 관련된 것은 테스트용 임시 내용을 다루므로 편의성을 중시한 구조로 만들 것임 따라서 정식 내용은 넣으면 안됨 
@@ -213,12 +250,16 @@ public:
 	); // 함수 사용하면 입력 내용 대로 해당 프레임에 창을 띄워 준다, DataNameA: 데이터의 이름, TEST_PAGE_VALUE_TYPE: 자료형(float,int,tchar), ValueA: 값을 받아올 포인터 <- 이렇게 한줄
 	// 매 프레임 마다 함수를 사용해줘야 작동함 (Gameinterface가 외부 정보를 저장/관리하지 않도록 하기 위함)
 
+#pragma endregion
+
+#pragma region Effect
 
 	_bool Fade_Out(_wstring strTitle, _wstring strDesc, _Vec3 vColor = _Vec3{ 0.f,0.f,0.f }, _float fTime = 1.f) 
 	{ 
-		if (m_eNowPage != UIPAGE::PAGE_END)
+		if (m_eNowPage != UIPAGE::PAGE_EFFECT)
 		{
 			ClosePage(m_eNowPage);
+			m_bIsPlayPageMaintain = false;
 			m_eBeforePage = m_eNowPage;
 		}
 		m_pUIPage_Effect->Fade_Out(strTitle, strDesc, vColor, fTime);
@@ -226,8 +267,9 @@ public:
 	}
 	_bool Fade_In(_float fTime = 1.f) 
 	{ 
-		if (m_eBeforePage != UIPAGE::PAGE_END)
+		if (m_eBeforePage != UIPAGE::PAGE_EFFECT)
 			OpenPage(m_eBeforePage);
+		m_bIsPlayPageMaintain = true;
 		m_pUIPage_Effect->Fade_In(fTime);
 		return true;
 	}
@@ -237,6 +279,8 @@ public:
 		m_pUIPage_Effect->Show_Script(strScript0, strScript1, fTime, vColor);
 	}
 	_float Check_Fade() { return m_pUIPage_Effect->Check_Fade(); }
+
+#pragma endregion
 
 private:
 	HRESULT Load_UIDataFile();
@@ -296,6 +340,7 @@ private:
 	CUIRender_Batching* m_pUIRender_Batching = { nullptr };
 
 	_bool m_bIsIngame = false;
+	_bool m_bIsPlayPageMaintain = false;
 
 	ITEM_FUNC m_eNow_Active_Func = ITEM_FUNC::FUNC_END;
 

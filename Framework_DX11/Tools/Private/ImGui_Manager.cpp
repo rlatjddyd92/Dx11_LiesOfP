@@ -170,7 +170,7 @@ void CImGui_Manager::Tool_UI()
 	if (KEY_HOLD(KEY::CTRL))
 	{
 		if (KEY_TAP(KEY::NUM6))
-			m_pController_UITool->Fade_Out(TEXT("FadeOut_Test"), TEXT("FadeOut_Desc"), { 0.f,0.f,0.f }, 2.f);
+			m_pController_UITool->Fade_Out(TEXT(""), TEXT(""), { 0.f,0.f,0.f }, 2.f);
 		if (KEY_TAP(KEY::NUM7))
 			m_pController_UITool->Fade_In(2.f);
 		/*if (KEY_TAP(KEY::NUM8))
