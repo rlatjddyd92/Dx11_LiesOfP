@@ -258,9 +258,9 @@ void CCamera::Update_MoveLerp(_float fTimeDelta)
 	_Vec4 vTarget = { m_vTarget_Pos.x,m_vTarget_Pos.y,m_vTarget_Pos.z, 1.f };
 	_Vec4 vCurPos = m_pTransformCom->Get_State(CTransform::STATE_POSITION);
 
-	if (fabs(XMVectorGetX(vCurPos - vTarget)) <= 0.005f &&
-		fabs(XMVectorGetY(vCurPos - vTarget)) <= 0.005f &&
-		fabs(XMVectorGetZ(vCurPos - vTarget)) <= 0.005f
+	if (fabs(XMVectorGetX(vCurPos - vTarget)) <= 0.01f &&
+		fabs(XMVectorGetY(vCurPos - vTarget)) <= 0.01f &&
+		fabs(XMVectorGetZ(vCurPos - vTarget)) <= 0.01f
 		)
 	{
 		// 회전 완료 처리
