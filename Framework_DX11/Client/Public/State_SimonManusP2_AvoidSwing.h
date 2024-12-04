@@ -30,6 +30,7 @@ private:
     _bool               End_Check();
     void                Collider_Check(_double CurTrackPos);
     void                Effect_Check(_double CurTrackPos);
+    void                Control_Sound(_double CurTrackPos);
 
 public:
     static CState_SimonManusP2_AvoidSwing* Create(class CFsm* pFsm, class CMonster* pMonster, _uint iStateNum, void* pArg = nullptr);

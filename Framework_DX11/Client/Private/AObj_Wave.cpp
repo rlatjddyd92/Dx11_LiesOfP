@@ -45,7 +45,7 @@ HRESULT CAObj_Wave::Initialize(void* pArg)
 
     m_strObjectTag = TEXT("MonsterWeapon");
 
-    m_pSoundCom[EFF_SOUND_EFFECT1]->Play2D_Repeat(TEXT("SE_NPC_SimonManus_SK_PJ_Ergo_Retspuken_04.wav"), &g_fEffectVolume);
+    m_pSoundCom[EFF_SOUND_EFFECT1]->Play2D(TEXT("SE_NPC_SimonManus_SK_PJ_Ergo_Retspuken_04.wav"), &g_fEffectVolume, true);
 
     return S_OK;
 }
@@ -66,6 +66,7 @@ void CAObj_Wave::Update(_float fTimeDelta)
         else if (m_pEffect->Get_Dead())
         {
             m_isDead = true;
+            m_pSoundCom[EFF_SOUND_EFFECT1]->Stop();
         }
     }
     else

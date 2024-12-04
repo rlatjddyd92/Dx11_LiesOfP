@@ -39,6 +39,8 @@ HRESULT CAObj_ChargeSwing::Initialize(void* pArg)
 
     m_strObjectTag = TEXT("MonsterWeapon");
 
+    m_pSoundCom[EFF_SOUND_EFFECT1]->Play2D(TEXT("SE_NPC_SK_FX_Spark_M_03.wav"), &g_fEffectVolume, true);
+
     return S_OK;
 }
 
@@ -51,6 +53,7 @@ void CAObj_ChargeSwing::Update(_float fTimeDelta)
 {
     if (m_fLifeTime >= m_fLifeDuration)
     {
+        m_pSoundCom[EFF_SOUND_EFFECT1]->Stop();
         if (m_pEffect->Get_Active())
         {
             m_pEffect->Set_Loop(false);

@@ -172,7 +172,7 @@ void CState_SimonManusP1_SwingDown_Swing_R::Control_Sound(_double CurTrackPos)
         {
             if (CurTrackPos >= 40.f && CurTrackPos <= 45.f)
             {
-                m_pMonster->Play_Sound(CPawn::PAWN_SOUND_EFFECT1, TEXT("SE_NPC_SK_FX_Ground_Exp_M_02.wav"));
+                m_pMonster->Play_Sound(CPawn::PAWN_SOUND_EFFECT1, TEXT("SE_NPC_SK_FX_Ground_Exp_M_02.wav"), true);
                 m_bSwing_Sound = true;
             }
             if (CurTrackPos >= 70.f)

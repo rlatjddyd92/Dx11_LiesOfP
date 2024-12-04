@@ -81,10 +81,22 @@ void CState_SimonManusP1_AvoidSwing::Control_Sound(_double CurTrackPos)
 {
     if (!m_bSwing_Sound)
     {
-        if ((CurTrackPos >= 140.f))
+        if (CurTrackPos >= 80.f && CurTrackPos <= 90.f)
+        {
+            m_pMonster->Play_Sound(CPawn::PAWN_SOUND_EFFECT1, TEXT("SE_NPC_SK_FX_Ground_Exp_M_02.wav"));
+            m_bSwing_Sound = true;
+        }
+        if (CurTrackPos >= 140.f)
         {
             m_pMonster->Play_Sound(CPawn::PAWN_SOUND_EFFECT1, TEXT("SE_PC_SK_Smash_Crystal_Stone_H_03.wav"));
             m_bSwing_Sound = true;
+        }
+    }
+    else
+    {
+        if (CurTrackPos > 90.f && CurTrackPos <= 100.f)
+        {
+            m_bSwing_Sound = false;
         }
     }
 }

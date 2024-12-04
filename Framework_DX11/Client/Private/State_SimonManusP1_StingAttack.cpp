@@ -22,6 +22,8 @@ HRESULT CState_SimonManusP1_StingAttack::Start_State(void* pArg)
 {
     m_pMonster->Change_Animation(AN_STINGATTACK, false, 0.1f, 0);
 
+    m_bStingSound = false;
+
     return S_OK;
 }
 
@@ -33,8 +35,10 @@ void CState_SimonManusP1_StingAttack::Update(_float fTimeDelta)
         return;
     }
 
-    Collider_Check();
+    _double CurTrackPos = m_pMonster->Get_CurrentTrackPos();
 
+    Collider_Check(CurTrackPos);
+    Control_Sound(CurTrackPos);
 }
 
 void CState_SimonManusP1_StingAttack::End_State()
@@ -49,8 +53,6 @@ _bool CState_SimonManusP1_StingAttack::End_Check()
 
 void CState_SimonManusP1_StingAttack::Collider_Check(_double CurTrackPos)
 {
-    _double CurTrackPos = m_pMonster->Get_CurrentTrackPos();
-
     if ((CurTrackPos >= 80.f && CurTrackPos <= 110.f) ||
         (CurTrackPos >= 175.f && CurTrackPos <= 200.f))
     {
@@ -66,10 +68,18 @@ void CState_SimonManusP1_StingAttack::Control_Sound(_double CurTrackPos)
 {
     if (!m_bStingSound)
     {
-        if (CurTrackPos >= 110.f)
+        if ((CurTrackPos >= 110.f && CurTrackPos <= 115.f) ||
+            (CurTrackPos >= 175.f && CurTrackPos <= 180.f))
         {
             m_pMonster->Play_Sound(CPawn::PAWN_SOUND_EFFECT1, TEXT("SE_NPC_SK_FX_Ground_Exp_M_02.wav"));
             m_bStingSound = true;
+        }
+    }
+    else
+    {
+        if (CurTrackPos > 115.f && CurTrackPos <= 120.f)
+        {
+            m_bStingSound = false;
         }
     }
 }

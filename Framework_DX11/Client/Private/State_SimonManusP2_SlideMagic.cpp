@@ -160,7 +160,7 @@ void CState_SimonManusP2_SlideMagic::Effect_Check(_double CurTrackPos)
         Desc.vPos = _Vec3{ WorldMat._41, WorldMat._42 - 0.2f, WorldMat._43 };
         Desc.vDir = _Vec3{ XMVector3Normalize(m_pMonster->Get_TargetPos() - Desc.vPos) };
 
-        m_pGameInstance->Add_CloneObject_ToLayer(LEVEL_GAMEPLAY, TEXT("Monster_Attack"), TEXT("Prototype_GameObject_SlideMagic"), &Desc);
+        m_pGameInstance->Add_CloneObject_ToLayer(LEVEL_GAMEPLAY, TEXT("Monster_Attack"), TEXT("Prototype_GameObject_GoldBall"), &Desc);
 
         m_pMonster->Play_Sound(CPawn::PAWN_SOUND_EFFECT1, TEXT("SE_NPC_SK_FX_Ground_Exp_L_03.wav"));
         

@@ -3,12 +3,12 @@
 #include "AttackObject.h"
 #include "Effect_Container.h"
 
-class CAObj_JumpMagic	final : public CAttackObject
+class CAObj_GoldBall	final : public CAttackObject
 {
 protected:
-	CAObj_JumpMagic(ID3D11Device* pDevice, ID3D11DeviceContext* pContext);
-	CAObj_JumpMagic(const CGameObject& Prototype);
-	virtual ~CAObj_JumpMagic() = default;
+	CAObj_GoldBall(ID3D11Device* pDevice, ID3D11DeviceContext* pContext);
+	CAObj_GoldBall(const CGameObject& Prototype);
+	virtual ~CAObj_GoldBall() = default;
 
 public:
 	virtual HRESULT Initialize_Prototype() override;
@@ -34,7 +34,7 @@ private:
 	HRESULT Ready_Components();
 
 public:
-	static CAObj_JumpMagic* Create(ID3D11Device* pDevice, ID3D11DeviceContext* pContext);
+	static CAObj_GoldBall* Create(ID3D11Device* pDevice, ID3D11DeviceContext* pContext);
 	virtual CGameObject* Clone(void* pArg);
 	virtual void Free() override;
 };

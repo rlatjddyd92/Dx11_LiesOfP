@@ -89,7 +89,7 @@ void CState_SimonManusP1_Charge_SwingDown::Control_Sound(_double CurTrackPos)
     {
         if (CurTrackPos >= 240.f)
         {
-            m_pMonster->Play_Sound(CPawn::PAWN_SOUND_EFFECT1, TEXT("SE_NPC_SK_FX_Ground_Exp_M_02.wav"));
+            m_pMonster->Play_Sound(CPawn::PAWN_SOUND_EFFECT1, TEXT("SE_NPC_SK_FX_Ground_Exp_L_03.wav"));
             m_bStampSound = true;
         }
     }

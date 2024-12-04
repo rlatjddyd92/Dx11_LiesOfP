@@ -30,6 +30,8 @@ HRESULT CState_SimonManusP1_HighJumpFall::Start_State(void* pArg)
 
     //m_pMonster->Set_RimLightColor(_Vec4{0.9f, 0.f, 0.f, 1.f});
     m_bStartSpot = true;
+    m_bStampSound = false;
+    m_bLandSound = false;
 
     return S_OK;
 }
@@ -149,6 +151,15 @@ void CState_SimonManusP1_HighJumpFall::Control_Sound(_double CurTrackPos)
         {
             m_pMonster->Play_Sound(CPawn::PAWN_SOUND_EFFECT1, TEXT("SE_NPC_SK_FX_Ground_Exp_M_02.wav"));
             m_bStampSound = true;
+        }
+    }
+
+    if (!m_bLandSound)
+    {
+        if (CurTrackPos >= 245.f)
+        {
+            m_pMonster->Play_Sound(CPawn::PAWN_SOUND_EFFECT1, TEXT("SE_NPC_MT_Dust_M_02.wav"));
+            m_bLandSound = true;
         }
     }
 }

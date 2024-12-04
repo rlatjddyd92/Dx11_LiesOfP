@@ -171,8 +171,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\Public\AObj_ChargeSwing.h" />
-    <ClInclude Include="..\Public\AObj_JumpMagic.h" />
-    <ClInclude Include="..\Public\AObj_SlideMagic.h" />
+    <ClInclude Include="..\Public\AObj_GoldBall.h" />
     <ClInclude Include="..\Public\AObj_StampBlast.h" />
     <ClInclude Include="..\Public\AObj_Wave.h" />
     <ClInclude Include="..\Public\AttackObject.h" />
@@ -393,8 +392,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\Private\AObj_ChargeSwing.cpp" />
-    <ClCompile Include="..\Private\AObj_JumpMagic.cpp" />
-    <ClCompile Include="..\Private\AObj_SlideMagic.cpp" />
+    <ClCompile Include="..\Private\AObj_GoldBall.cpp" />
     <ClCompile Include="..\Private\AObj_StampBlast.cpp" />
     <ClCompile Include="..\Private\AObj_Wave.cpp" />
     <ClCompile Include="..\Private\AttackObject.cpp" />

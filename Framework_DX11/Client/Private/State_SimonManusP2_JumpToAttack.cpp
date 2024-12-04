@@ -203,23 +203,40 @@ void CState_SimonManusP2_JumpToAttack::Effect_Check(_double CurTrackPos)
 
                     Desc.vDir = _Vec3{ vMainDir - vRight * 5 };
 
-                    m_pGameInstance->Add_CloneObject_ToLayer(LEVEL_GAMEPLAY, TEXT("Monster_Attack"), TEXT("Prototype_GameObject_JumpMagic"), &Desc);
+                    m_pGameInstance->Add_CloneObject_ToLayer(LEVEL_GAMEPLAY, TEXT("Monster_Attack"), TEXT("Prototype_GameObject_GoldBall"), &Desc);
 
                     Desc.vDir = _Vec3{ vMainDir - vRight };
 
-                    m_pGameInstance->Add_CloneObject_ToLayer(LEVEL_GAMEPLAY, TEXT("Monster_Attack"), TEXT("Prototype_GameObject_JumpMagic"), &Desc);
+                    m_pGameInstance->Add_CloneObject_ToLayer(LEVEL_GAMEPLAY, TEXT("Monster_Attack"), TEXT("Prototype_GameObject_GoldBall"), &Desc);
 
                     Desc.vDir = _Vec3{ vMainDir + vRight * 5 };
 
-                    m_pGameInstance->Add_CloneObject_ToLayer(LEVEL_GAMEPLAY, TEXT("Monster_Attack"), TEXT("Prototype_GameObject_JumpMagic"), &Desc);
+                    m_pGameInstance->Add_CloneObject_ToLayer(LEVEL_GAMEPLAY, TEXT("Monster_Attack"), TEXT("Prototype_GameObject_GoldBall"), &Desc);
 
                     Desc.vDir = _Vec3{ vMainDir + vRight };
 
-                    m_pGameInstance->Add_CloneObject_ToLayer(LEVEL_GAMEPLAY, TEXT("Monster_Attack"), TEXT("Prototype_GameObject_JumpMagic"), &Desc);
+                    m_pGameInstance->Add_CloneObject_ToLayer(LEVEL_GAMEPLAY, TEXT("Monster_Attack"), TEXT("Prototype_GameObject_GoldBall"), &Desc);
 
 
                     m_bMagic = true;
                 }
+            }
+        }
+    }
+    else
+    {
+        if (m_iCurLastAnim == AN_SWING)
+        {
+            if (CurTrackPos >= 35.f && CurTrackPos <= 65.f)
+            {
+                if (!m_pMonster->Get_EffectsLoop(CSimonManus::P1_TRAIL))
+                {
+                    m_pMonster->Active_Effect(CSimonManus::P1_TRAIL);
+                }
+            }
+            else
+            {
+                m_pMonster->DeActive_Effect(CSimonManus::P1_TRAIL);
             }
         }
     }

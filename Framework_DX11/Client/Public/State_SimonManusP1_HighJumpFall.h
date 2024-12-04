@@ -36,6 +36,7 @@ private:
     _bool               m_bStampEffect = { false };
     _bool               m_bStampSound = { false };
     _bool               m_bStartSpot = { true };
+    _bool               m_bLandSound = { false };
 
 private:
     _bool               End_Check();

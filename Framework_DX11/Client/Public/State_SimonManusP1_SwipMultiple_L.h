@@ -6,7 +6,7 @@ class CFsm;
 END
 
 BEGIN(Client)
-
+ 
 class CState_SimonManusP1_SwipMultiple_L :
     public CState
 {
@@ -32,6 +32,7 @@ private:
     _uint               m_iRouteTrack = {};
 
     _bool               m_bResetCheck = { false };
+    _bool               m_bStamp_Sound = { false };
     _bool               m_bSwing_Sound = { false };
 
 private:
