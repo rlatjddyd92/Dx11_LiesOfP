@@ -89,7 +89,7 @@ void CWallDeco::Update(_float fTimeDelta)
 			m_pSoundCom->Play2D(TEXT("AMB_OJ_TR_Monastery_WallTrap_Activate_02.wav"), &g_fEffectVolume);
 			m_isPlayActiveSound = true;
 		}
-		else if (m_isPlayActiveSound && (iFrame == 63 || iFrame == 62))
+		else if (m_isPlayActiveSound && (iFrame == 53 || iFrame == 52))
 		{
 			m_isCanHit = false;
 			m_fCoolTime = 5.f;

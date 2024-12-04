@@ -3,10 +3,7 @@
 #include "D:\GitProject\Dx11_LiesOfP\Framework_DX11\Client\Private\AObj_ChargeSwing.cpp"
 
 
-#include "D:\GitProject\Dx11_LiesOfP\Framework_DX11\Client\Private\AObj_JumpMagic.cpp"
-
-
-#include "D:\GitProject\Dx11_LiesOfP\Framework_DX11\Client\Private\AObj_SlideMagic.cpp"
+#include "D:\GitProject\Dx11_LiesOfP\Framework_DX11\Client\Private\AObj_GoldBall.cpp"
 
 
 #include "D:\GitProject\Dx11_LiesOfP\Framework_DX11\Client\Private\AObj_StampBlast.cpp"

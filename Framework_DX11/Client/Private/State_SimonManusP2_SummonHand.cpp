@@ -44,10 +44,6 @@ _bool CState_SimonManusP2_SummonHand::End_Check()
     return m_pMonster->Get_EndAnim(AN_SUMMONHAND);
 }
 
-void CState_SimonManusP2_SummonHand::Control_Sound(_double CurTrackPos)
-{
-}
-
 CState_SimonManusP2_SummonHand* CState_SimonManusP2_SummonHand::Create(CFsm* pFsm, CMonster* pMonster, _uint iStateNum, void* pArg)
 {
     CState_SimonManusP2_SummonHand* pInstance = new CState_SimonManusP2_SummonHand(pFsm, pMonster);
