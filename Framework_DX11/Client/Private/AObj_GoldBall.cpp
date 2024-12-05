@@ -36,14 +36,16 @@ HRESULT CAObj_GoldBall::Initialize(void* pArg)
         return E_FAIL;
 
     m_fDamageAmount = 20.f;
-    m_fLifeDuration = 3.f;
+    m_fLifeDuration = 2.5f;
     m_fSpeed = 10.f;
 
     m_pColliderCom->IsActive(true);
 
+    m_pColliderCom->Set_Owner(this);
+
     m_strObjectTag = TEXT("MonsterWeapon");
 
-    m_pSoundCom[EFF_SOUND_EFFECT1]->Play2D(TEXT("SE_NPC_SimonManus_SK_PJ_Ergo_Direct_01.wav"), &g_fEffectVolume, true);
+    m_pSoundCom[EFF_SOUND_EFFECT1]->Play2D(TEXT("SE_NPC_SimonManus_SK_PJ_Ergo_Direct_01.wav"), &g_fEffectVolume);
 
     return S_OK;
 }

@@ -26,6 +26,10 @@
 #include "AObj_StampBlast.h"
 #include "AObj_ChargeSwing.h"
 #include "AObj_GoldBall.h"
+#include "AObj_Thunder.h"
+#include "AObj_ThunderCalling.h"
+#include "AObj_LightningSpear.h"
+#include "AObj_LightningBall.h"
 #pragma endregion
 
 #pragma region EFFECT
@@ -957,7 +961,7 @@ HRESULT CLoader::Ready_Prototype()
 
 #pragma region MONSTER
 
-	/* For. Prototype_GameObject_CarcassBigA */
+	/* For. Prototype_GameObject_CarcassTail */
 	if (FAILED(m_pGameInstance->Add_Prototype(TEXT("Prototype_GameObject_CarcassTail"),
 		CCarcassTail::Create(m_pDevice, m_pContext))))
 		return E_FAIL;
@@ -985,6 +989,20 @@ HRESULT CLoader::Ready_Prototype()
 	if (FAILED(m_pGameInstance->Add_Prototype(TEXT("Prototype_GameObject_Wave"),
 		CAObj_Wave::Create(m_pDevice, m_pContext))))
 		return E_FAIL;
+	if (FAILED(m_pGameInstance->Add_Prototype(TEXT("Prototype_GameObject_ThunderCalling"),
+		CAObj_ThunderCalling::Create(m_pDevice, m_pContext))))
+		return E_FAIL;
+	if (FAILED(m_pGameInstance->Add_Prototype(TEXT("Prototype_GameObject_Thunder"),
+		CAObj_Thunder::Create(m_pDevice, m_pContext))))
+		return E_FAIL;
+	if (FAILED(m_pGameInstance->Add_Prototype(TEXT("Prototype_GameObject_LightningBall"),
+		CAObj_LightningBall::Create(m_pDevice, m_pContext))))
+		return E_FAIL;
+	if (FAILED(m_pGameInstance->Add_Prototype(TEXT("Prototype_GameObject_LightningSpear"),
+		CAObj_LightningSpear::Create(m_pDevice, m_pContext))))
+		return E_FAIL;
+
+
 
 	// 특정 위치에 판정 없이 소환되는 이펙트
 	if (FAILED(m_pGameInstance->Add_Prototype(TEXT("Prototype_GameObject_SpotEffect"),

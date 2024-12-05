@@ -172,7 +172,10 @@
   <ItemGroup>
     <ClInclude Include="..\Public\AObj_ChargeSwing.h" />
     <ClInclude Include="..\Public\AObj_GoldBall.h" />
+    <ClInclude Include="..\Public\AObj_LightningBall.h" />
     <ClInclude Include="..\Public\AObj_StampBlast.h" />
+    <ClInclude Include="..\Public\AObj_Thunder.h" />
+    <ClInclude Include="..\Public\AObj_ThunderCalling.h" />
     <ClInclude Include="..\Public\AObj_Wave.h" />
     <ClInclude Include="..\Public\AttackObject.h" />
     <ClInclude Include="..\public\BackGround.h" />
@@ -353,7 +356,7 @@
     <ClInclude Include="..\Public\SteppingStone.h" />
     <ClInclude Include="..\Public\Terrain.h" />
     <ClInclude Include="..\Public\Texture_Effect.h" />
-    <ClInclude Include="..\Public\AObj_ThunderSpear.h" />
+    <ClInclude Include="..\Public\AObj_LightningSpear.h" />
     <ClInclude Include="..\Public\TowerDoor.h" />
     <ClInclude Include="..\Public\Trail_Effect_MP.h" />
     <ClInclude Include="..\Public\Trail_Effect_OP.h" />
@@ -402,7 +405,10 @@
   <ItemGroup>
     <ClCompile Include="..\Private\AObj_ChargeSwing.cpp" />
     <ClCompile Include="..\Private\AObj_GoldBall.cpp" />
+    <ClCompile Include="..\Private\AObj_LightningBall.cpp" />
     <ClCompile Include="..\Private\AObj_StampBlast.cpp" />
+    <ClCompile Include="..\Private\AObj_Thunder.cpp" />
+    <ClCompile Include="..\Private\AObj_ThunderCalling.cpp" />
     <ClCompile Include="..\Private\AObj_Wave.cpp" />
     <ClCompile Include="..\Private\AttackObject.cpp" />
     <ClCompile Include="..\private\BackGround.cpp" />
@@ -582,7 +588,7 @@
     <ClCompile Include="..\Private\SteppingStone.cpp" />
     <ClCompile Include="..\Private\Terrain.cpp" />
     <ClCompile Include="..\Private\Texture_Effect.cpp" />
-    <ClCompile Include="..\Private\AObj_ThunderSpear.cpp" />
+    <ClCompile Include="..\Private\AObj_LightningSpear.cpp" />
     <ClCompile Include="..\Private\TowerDoor.cpp" />
     <ClCompile Include="..\Private\Trail_Effect_MP.cpp" />
     <ClCompile Include="..\Private\Trail_Effect_OP.cpp" />

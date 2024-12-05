@@ -38,6 +38,8 @@ HRESULT CState_SimonManusP2_SwipMultiple::Start_State(void* pArg)
 
     m_pMonster->Change_Animation(m_iCurStartAnim, false, 0.1f, 0);
 
+    m_bSwing_Sound = false;
+    m_bStamp_Sound = false;
 
     return S_OK;
 }
@@ -70,6 +72,7 @@ void CState_SimonManusP2_SwipMultiple::Update(_float fTimeDelta)
 
     Collider_Check(CurTrackPos);
     Effect_Check(CurTrackPos);
+    Control_Sound(CurTrackPos);
 
 }
 
@@ -197,6 +200,75 @@ void CState_SimonManusP2_SwipMultiple::Effect_Check(_double CurTrackPos)
 
 void CState_SimonManusP2_SwipMultiple::Control_Sound(_double CurTrackPos)
 {
+    // ¾Ö´ÔÅø¿¡¼­ ºÁ¾ßÇÔ
+    if (m_iRouteTrack == 0)
+    {
+        _double StampTime{};
+        _double SwingTime{};
+        _double SlideTime{};
+        if (m_iCurStartAnim == AN_ROUTE_FIRST_L)
+        {
+            StampTime = 58.f;
+            SlideTime = 65.f;
+            SwingTime = 145.f;
+        }
+        else
+        {
+            StampTime = 78.f;
+            SlideTime = 85.f;
+            SwingTime = 182.f;
+        }
+        if (!m_bStamp_Sound)
+        {
+            if (CurTrackPos >= StampTime && CurTrackPos <= StampTime + 5.f)
+            {
+                m_pMonster->Play_Sound(CPawn::PAWN_SOUND_EFFECT1, TEXT("SE_NPC_SK_FX_Ground_Exp_L_03.wav"));
+                m_bStamp_Sound = true;
+            }
+        }
+
+        if (!m_bSwing_Sound)
+        {
+            if (CurTrackPos >= SlideTime && CurTrackPos <= SlideTime + 5.f)
+            {
+                m_pMonster->Play_Sound(CPawn::PAWN_SOUND_EFFECT1, TEXT("SE_NPC_SK_FX_Ground_Exp_M_02.wav"), true);
+                m_bSwing_Sound = true;
+            }
+            if ((CurTrackPos >= SwingTime && CurTrackPos <= SwingTime + 5.f))
+            {
+                m_pMonster->Play_Sound(CPawn::PAWN_SOUND_EFFECT1, TEXT("SE_PC_SK_Smash_Crystal_Stone_H_03.wav"));
+                m_bSwing_Sound = true;
+            }
+        }
+        else
+        {
+            if (CurTrackPos >= 95.f && CurTrackPos <= 100.f)
+            {
+                m_bSwing_Sound = false;
+            }
+        }
+
+    }
+    else
+    {
+        if (!m_bSwing_Sound)
+        {
+            if ((CurTrackPos >= 27.f && CurTrackPos <= 32.f) ||
+                (CurTrackPos >= 64.f && CurTrackPos <= 69.f))
+            {
+                m_pMonster->Play_Sound(CPawn::PAWN_SOUND_EFFECT1, TEXT("SE_PC_SK_Smash_Crystal_Stone_H_03.wav"));
+                m_bSwing_Sound = true;
+            }
+        }
+        else
+        {
+            if ((CurTrackPos > 33.f && CurTrackPos <= 40.f))
+            {
+                m_bSwing_Sound = false;
+            }
+        }
+
+    }
 }
 
 CState_SimonManusP2_SwipMultiple* CState_SimonManusP2_SwipMultiple::Create(CFsm* pFsm, CMonster* pMonster, _uint iStateNum, void* pArg)

@@ -35,7 +35,10 @@ HRESULT CAObj_ChargeSwing::Initialize(void* pArg)
 
     m_fDamageAmount = 30.f;
     m_fLifeDuration = 0.6f;
+
     m_pColliderCom->IsActive(true);
+
+    m_pColliderCom->Set_Owner(this);
 
     m_strObjectTag = TEXT("MonsterWeapon");
 

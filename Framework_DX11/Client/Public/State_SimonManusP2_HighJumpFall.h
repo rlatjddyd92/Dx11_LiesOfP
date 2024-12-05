@@ -33,7 +33,9 @@ private:
     _float              m_fGoalRimAlpha = {};
 
     _bool               m_bResetRim = { false };
+    _bool               m_bStampSound = { false };
     _bool               m_bStartSpot = { true };
+    _bool               m_bLandSound = { false };
     _bool               m_bStampEffect = { false };
 
 private:

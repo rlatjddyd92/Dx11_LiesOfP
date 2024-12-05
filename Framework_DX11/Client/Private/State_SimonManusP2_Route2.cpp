@@ -26,6 +26,8 @@ HRESULT CState_SimonManusP2_Route2::Start_State(void* pArg)
     m_fCurtRimAlpha = 1.f;
 
     m_isJump = true;
+    m_bLandSound = false;
+    m_bSwingSound = false;
 
     return S_OK;
 }
@@ -88,6 +90,7 @@ void CState_SimonManusP2_Route2::Update(_float fTimeDelta)
 
     Collider_Check(CurTrackPos);
     Effect_Check(CurTrackPos);
+    Control_Sound(CurTrackPos);
     Update_Rimlight();
 
 }
@@ -181,6 +184,33 @@ void CState_SimonManusP2_Route2::Update_Rimlight()
             if (m_fGoalRimAlpha == 1.f)
             {
                 m_pMonster->Set_RimLightColor(_Vec4{ 0.f, 0.f, 0.f, 1.f });
+            }
+        }
+    }
+}
+
+void CState_SimonManusP2_Route2::Control_Sound(_double CurTrackPos)
+{
+    if (m_iRouteTrack == 0)
+    {
+        if (!m_bSwingSound)
+        {
+            if (CurTrackPos >= 70 && CurTrackPos <= 75.f)
+            {
+                m_pMonster->Play_Sound(CPawn::PAWN_SOUND_EFFECT1, TEXT("SE_PC_SK_Smash_Crystal_Stone_H_03.wav"));
+
+                m_bSwingSound = true;
+            }
+        }
+    }
+    else
+    {
+        if (!m_bLandSound)
+        {
+            if (CurTrackPos >= 245.f)
+            {
+                m_pMonster->Play_Sound(CPawn::PAWN_SOUND_EFFECT1, TEXT("SE_NPC_MT_Dust_M_02.wav"));
+                m_bLandSound = true;
             }
         }
     }

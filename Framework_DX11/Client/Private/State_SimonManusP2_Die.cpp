@@ -30,6 +30,7 @@ void CState_SimonManusP2_Die::Update(_float fTimeDelta)
     if (End_Check())
     {
         //¸ó½ºÅÍ »ç¸Á
+        m_pMonster->Reset_Hp();
         m_pMonster->Change_State(CSimonManus::IDLE);
     }
 

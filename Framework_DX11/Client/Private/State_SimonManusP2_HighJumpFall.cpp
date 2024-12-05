@@ -42,13 +42,18 @@ void CState_SimonManusP2_HighJumpFall::Update(_float fTimeDelta)
     if (CurTrackPos >= 200.f && CurTrackPos < 230.f) //점프 이후 공중 체공 + 플레이어방향 회전
     {
         m_vTargetDir = m_pMonster->Get_TargetDir();
-        m_pMonster->Get_Transform()->LookAt_Lerp_NoHeight(m_vTargetDir, 2.2f, fTimeDelta);
+        m_pMonster->Get_Transform()->LookAt_Lerp_NoHeight(m_vTargetDir, 2.5f, fTimeDelta);
     }
     else if (CurTrackPos >= 230.f && CurTrackPos <= 245.f) //땅 찍기까지
     {
         if (m_bStartSpot)
         {
             _float fLength = m_vTargetDir.Length();
+            if (fLength > 12.f)
+            {
+                fLength = 12.f;
+            }
+
             m_vTargetDir = XMVector3Normalize(m_pMonster->Get_Transform()->Get_State(CTransform::STATE_LOOK)) * fLength;
             m_bStartSpot = false;
         }
@@ -76,6 +81,7 @@ void CState_SimonManusP2_HighJumpFall::Update(_float fTimeDelta)
     Collider_Check(CurTrackPos);
     Effect_Check(CurTrackPos);
     Update_Rimlight();
+    Control_Sound(CurTrackPos);
 
 }
 
@@ -135,6 +141,27 @@ void CState_SimonManusP2_HighJumpFall::Update_Rimlight()
             {
                 m_pMonster->Set_RimLightColor(_Vec4{ 0.f, 0.f, 0.f, 1.f });
             }
+        }
+    }
+}
+
+void CState_SimonManusP2_HighJumpFall::Control_Sound(_double CurTrackPos)
+{
+    if (!m_bStampSound)
+    {
+        if ((CurTrackPos >= 150.f))
+        {
+            m_pMonster->Play_Sound(CPawn::PAWN_SOUND_EFFECT1, TEXT("SE_NPC_SK_FX_Ground_Exp_M_02.wav"));
+            m_bStampSound = true;
+        }
+    }
+
+    if (!m_bLandSound)
+    {
+        if (CurTrackPos >= 245.f)
+        {
+            m_pMonster->Play_Sound(CPawn::PAWN_SOUND_EFFECT1, TEXT("SE_NPC_MT_Dust_M_02.wav"));
+            m_bLandSound = true;
         }
     }
 }

@@ -68,7 +68,7 @@ void CState_SimonManusP1_StingAttack::Control_Sound(_double CurTrackPos)
 {
     if (!m_bStingSound)
     {
-        if ((CurTrackPos >= 110.f && CurTrackPos <= 115.f) ||
+        if ((CurTrackPos >= 100.f && CurTrackPos <= 110.f) ||
             (CurTrackPos >= 175.f && CurTrackPos <= 180.f))
         {
             m_pMonster->Play_Sound(CPawn::PAWN_SOUND_EFFECT1, TEXT("SE_NPC_SK_FX_Ground_Exp_L_03.wav"));

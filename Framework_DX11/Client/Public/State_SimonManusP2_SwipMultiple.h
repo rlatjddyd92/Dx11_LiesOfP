@@ -34,6 +34,9 @@ private:
 
     _uint               m_iRouteTrack = {};
 
+    _bool               m_bSwing_Sound = { false };
+    _bool               m_bStamp_Sound = { false };
+
 private:
     _bool               End_Check();
     void                Collider_Check(_double CurTrackPos);

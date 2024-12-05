@@ -99,6 +99,8 @@ public:
 
 	void		ReadyDenyNextTranslate(_int iBoneIndex);
 
+	_Vec3		Calc_CenterPos(_Matrix WorldMat);
+
 private:
 	TYPE							m_eType = { TYPE_END };
 

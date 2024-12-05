@@ -37,7 +37,7 @@ public:
 	_Vec4		Get_TargetDir();
 
 public:
-	virtual void		Active_Effect(const _uint eType) {};
+	virtual void		Active_Effect(const _uint eType, _bool isLoop = true) {};
 	virtual void		DeActive_Effect(const _uint eType) {};
 
 	virtual _bool		Get_EffectsLoop(const _uint eType) = 0;
@@ -66,6 +66,8 @@ public:
 
 	void	Increase_GroggyPoint(_float fGroggy) { m_eStat.fGrogyPoint += fGroggy; }
 	virtual void	SetUp_Dead() {};
+
+	void			Reset_Hp() { m_eStat.fHp = m_eStat.fMaxHp; }
 
 protected:
 	_Vec4		m_vRootMoveStack{};

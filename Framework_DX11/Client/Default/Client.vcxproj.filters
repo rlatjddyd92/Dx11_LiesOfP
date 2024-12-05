@@ -481,17 +481,8 @@
     <Filter Include="05.Fsm\Monster\SimonManus\P2\Attack\Single\AvoidSwing">
       <UniqueIdentifier>{2187779e-4c75-4ac3-801e-6b4b401bde9d}</UniqueIdentifier>
     </Filter>
-    <Filter Include="05.Fsm\Monster\SimonManus\P2\Attack\Single\ThunderBall">
-      <UniqueIdentifier>{8b883092-bbab-4d18-b414-4009f8cdd9f3}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="05.Fsm\Monster\SimonManus\P2\Attack\Single\SummonHand">
-      <UniqueIdentifier>{5228a653-e17a-44d8-a6f1-66c8fb344bef}</UniqueIdentifier>
-    </Filter>
     <Filter Include="05.Fsm\Monster\SimonManus\P2\Attack\Single\Wave">
       <UniqueIdentifier>{4a6b8ef2-d3b5-46d3-a1d3-971403ccfe29}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="05.Fsm\Monster\SimonManus\P2\Attack\Single\SpreadMagic">
-      <UniqueIdentifier>{927e6e2d-8506-48a0-8258-0c917447cec5}</UniqueIdentifier>
     </Filter>
     <Filter Include="05.Fsm\Monster\SimonManus\P2\Attack\Single\BrutalAttack">
       <UniqueIdentifier>{793dc7b9-6844-491b-8321-61c2537132c5}</UniqueIdentifier>
@@ -691,9 +682,6 @@
     <Filter Include="02.GameObjects\12.AttackObject\SimonManus\StampBlast">
       <UniqueIdentifier>{ccceba3e-2e39-473e-8a58-3e8f8e2816d2}</UniqueIdentifier>
     </Filter>
-    <Filter Include="02.GameObjects\12.AttackObject\SimonManus\ThunderSpear">
-      <UniqueIdentifier>{09315704-54e9-4a45-9f4e-4158f3a83f9a}</UniqueIdentifier>
-    </Filter>
     <Filter Include="97.ShaderFiles\Effect\Compute">
       <UniqueIdentifier>{ede8ee30-c961-464c-89ae-e58d78db771c}</UniqueIdentifier>
     </Filter>
@@ -825,6 +813,27 @@
 	</Filter>
     <Filter Include="02.GameObjects\14.CutScene">
       <UniqueIdentifier>{9c37d23a-9c1b-4b27-a4e0-a4b833b353e4}</UniqueIdentifier>
+	</Filter>
+    <Filter Include="02.GameObjects\12.AttackObject\SimonManus\ThunderCalling">
+      <UniqueIdentifier>{6a300c4f-6744-4bb0-a855-c4c8bcb7461f}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.GameObjects\12.AttackObject\SimonManus\ThunderCalling\Thunder">
+      <UniqueIdentifier>{852ff816-edba-4ba7-a46b-861b911b05b4}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.GameObjects\12.AttackObject\SimonManus\LightningBall">
+      <UniqueIdentifier>{f0a993e7-6c4c-4c57-be39-8dbd132df27c}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.GameObjects\12.AttackObject\SimonManus\LightningBall\LightningSpear">
+      <UniqueIdentifier>{09315704-54e9-4a45-9f4e-4158f3a83f9a}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="05.Fsm\Monster\SimonManus\P2\Attack\Single\SummonHand%2a">
+      <UniqueIdentifier>{5228a653-e17a-44d8-a6f1-66c8fb344bef}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="05.Fsm\Monster\SimonManus\P2\Attack\Single\SpreadMagic%2a">
+      <UniqueIdentifier>{927e6e2d-8506-48a0-8258-0c917447cec5}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="05.Fsm\Monster\SimonManus\P2\Attack\Single\ThunderBall">
+      <UniqueIdentifier>{8b883092-bbab-4d18-b414-4009f8cdd9f3}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -1267,7 +1276,7 @@
       <Filter>05.Fsm\Monster\SimonManus\P2\Run</Filter>
     </ClInclude>
     <ClInclude Include="..\Public\State_SimonManusP2_SpreadMagic.h">
-      <Filter>05.Fsm\Monster\SimonManus\P2\Attack\Single\SpreadMagic</Filter>
+      <Filter>05.Fsm\Monster\SimonManus\P2\Attack\Single\SpreadMagic%2a</Filter>
     </ClInclude>
     <ClInclude Include="..\Public\State_SimonManusP2_Stamp.h">
       <Filter>05.Fsm\Monster\SimonManus\P2\Attack\Route\Stamp</Filter>
@@ -1276,7 +1285,7 @@
       <Filter>05.Fsm\Monster\SimonManus\P2\Attack\Single\Sting</Filter>
     </ClInclude>
     <ClInclude Include="..\Public\State_SimonManusP2_SummonHand.h">
-      <Filter>05.Fsm\Monster\SimonManus\P2\Attack\Single\SummonHand</Filter>
+      <Filter>05.Fsm\Monster\SimonManus\P2\Attack\Single\SummonHand%2a</Filter>
     </ClInclude>
     <ClInclude Include="..\Public\State_SimonManusP2_SwingDown_Swing.h">
       <Filter>05.Fsm\Monster\SimonManus\P2\Attack\Route\SwingDown_Swing</Filter>
@@ -1444,8 +1453,8 @@
     <ClInclude Include="..\Public\FollowedEffect.h">
       <Filter>02.GameObjects\13.EffectObject\Common\Followed</Filter>
     </ClInclude>
-    <ClInclude Include="..\Public\AObj_ThunderSpear.h">
-      <Filter>02.GameObjects\12.AttackObject\SimonManus\ThunderSpear</Filter>
+    <ClInclude Include="..\Public\AObj_LightningSpear.h">
+      <Filter>02.GameObjects\12.AttackObject\SimonManus\LightningBall\LightningSpear</Filter>
     </ClInclude>
     <ClInclude Include="..\Public\UIPage_Test.h">
       <Filter>03.GameInterface_Controller\00.UIManager\00.UIPage\11.UIPage_Test %280%25%29</Filter>
@@ -1525,6 +1534,15 @@
 	</ClInclude>
     <ClInclude Include="..\Public\CutScene.h">
       <Filter>02.GameObjects\14.CutScene</Filter>
+	</ClInclude>
+    <ClInclude Include="..\Public\AObj_ThunderCalling.h">
+      <Filter>02.GameObjects\12.AttackObject\SimonManus\ThunderCalling</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Public\AObj_Thunder.h">
+      <Filter>02.GameObjects\12.AttackObject\SimonManus\ThunderCalling\Thunder</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Public\AObj_LightningBall.h">
+      <Filter>02.GameObjects\12.AttackObject\SimonManus\LightningBall</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -1937,7 +1955,7 @@
       <Filter>05.Fsm\Monster\SimonManus\P2\Run</Filter>
     </ClCompile>
     <ClCompile Include="..\Private\State_SimonManusP2_SpreadMagic.cpp">
-      <Filter>05.Fsm\Monster\SimonManus\P2\Attack\Single\SpreadMagic</Filter>
+      <Filter>05.Fsm\Monster\SimonManus\P2\Attack\Single\SpreadMagic%2a</Filter>
     </ClCompile>
     <ClCompile Include="..\Private\State_SimonManusP2_Stamp.cpp">
       <Filter>05.Fsm\Monster\SimonManus\P2\Attack\Route\Stamp</Filter>
@@ -1946,7 +1964,7 @@
       <Filter>05.Fsm\Monster\SimonManus\P2\Attack\Single\Sting</Filter>
     </ClCompile>
     <ClCompile Include="..\Private\State_SimonManusP2_SummonHand.cpp">
-      <Filter>05.Fsm\Monster\SimonManus\P2\Attack\Single\SummonHand</Filter>
+      <Filter>05.Fsm\Monster\SimonManus\P2\Attack\Single\SummonHand%2a</Filter>
     </ClCompile>
     <ClCompile Include="..\Private\State_SimonManusP2_SwingDown_Swing.cpp">
       <Filter>05.Fsm\Monster\SimonManus\P2\Attack\Route\SwingDown_Swing</Filter>
@@ -2114,8 +2132,8 @@
     <ClCompile Include="..\Private\FollowedEffect.cpp">
       <Filter>02.GameObjects\13.EffectObject\Common\Followed</Filter>
     </ClCompile>
-    <ClCompile Include="..\Private\AObj_ThunderSpear.cpp">
-      <Filter>02.GameObjects\12.AttackObject\SimonManus\ThunderSpear</Filter>
+    <ClCompile Include="..\Private\AObj_LightningSpear.cpp">
+      <Filter>02.GameObjects\12.AttackObject\SimonManus\LightningBall\LightningSpear</Filter>
     </ClCompile>
     <ClCompile Include="..\Private\UIPage_Test.cpp">
       <Filter>03.GameInterface_Controller\00.UIManager\00.UIPage\11.UIPage_Test %280%25%29</Filter>
@@ -2195,6 +2213,15 @@
 	</ClCompile>
     <ClCompile Include="..\Private\CutScene.cpp">
       <Filter>02.GameObjects\14.CutScene</Filter>
+	</ClCompile>
+    <ClCompile Include="..\Private\AObj_ThunderCalling.cpp">
+      <Filter>02.GameObjects\12.AttackObject\SimonManus\ThunderCalling</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Private\AObj_Thunder.cpp">
+      <Filter>02.GameObjects\12.AttackObject\SimonManus\ThunderCalling\Thunder</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Private\AObj_LightningBall.cpp">
+      <Filter>02.GameObjects\12.AttackObject\SimonManus\LightningBall</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
