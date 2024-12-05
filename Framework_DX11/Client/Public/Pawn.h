@@ -78,6 +78,7 @@ public:
     _uint           Get_CurrentAnimIndex_Boundry();
     _int            Get_Frame(_bool isBoundry = false);
     _double         Get_CurrentTrackPos();
+    _float          Get_CurrentTrackEnd();
     _bool           Get_EndAnim(_int iAnimIndex, _bool bIsBoundary = false);
 
 	void		    Play_Sound(const PAWN_SOUND_TYPE eType, const TCHAR* pSoundKey, _bool isLoop = false);

@@ -26,6 +26,10 @@ private:
 
     _int                m_iChangeFrame = {};
 
+    _bool               m_isInputLButton = {};
+    _bool               m_isInputRButton = {};
+    _float              m_fRButtonTime = {};
+
     _double* m_pTrackPos = { nullptr };
 
 private:

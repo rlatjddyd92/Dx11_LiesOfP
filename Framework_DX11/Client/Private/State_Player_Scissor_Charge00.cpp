@@ -75,14 +75,15 @@ void CState_Player_Scissor_Charge00::Update(_float fTimeDelta)
         }
     }
 
-    if (m_iSeperateFrame == iFrame)
+    if (m_iSeperateFrame == iFrame || m_iSeperateFrame + 1 == iFrame)
     {
         m_pPlayer->Seperate_Scissor();
     }
-    else if (m_iCombineFrame == iFrame)
+    else if (m_iCombineFrame == iFrame || m_iCombineFrame + 1 == iFrame)
     {
         m_pPlayer->Combine_Scissor();
     }
+
     if (m_iChangeFrame < iFrame && iFrame < m_iChangeFrame + 15)
     {
         if (m_isInputLButton)
@@ -93,6 +94,13 @@ void CState_Player_Scissor_Charge00::Update(_float fTimeDelta)
                 m_pPlayer->Change_State(CPlayer::SCISSOR_CHARGE1);
             else
             m_pPlayer->Change_State(CPlayer::SCISSOR_RATTACK1);
+        }
+    }
+    else if (iFrame >= 195)
+    {
+        if (KEY_HOLD(KEY::W) || KEY_HOLD(KEY::S) || KEY_HOLD(KEY::D) || KEY_HOLD(KEY::A))
+        {
+            m_pPlayer->Change_State(CPlayer::OH_RUN);
         }
     }
     else if (End_Check())

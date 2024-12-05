@@ -122,9 +122,14 @@ HRESULT CLoader::Ready_Resources_For_GamePlayLevel()
 	// 준호형 전용
 	// if (FAILED(Ready_Resources_GoJunHo()))
 
-	if (FAILED(Ready_Resources_For_Effect()))
+	//if (FAILED(Ready_Resources_For_Effect()))
+	//	return E_FAIL;
+
+		/* For. Prototype_Component_Model_Sophia*/
+	PreTransformMatrix =  XMMatrixRotationY(XMConvertToRadians(180.0f));
+	if (FAILED(m_pGameInstance->Add_Prototype(LEVEL_GAMEPLAY, TEXT("Prototype_Component_Model_Sophia"),
+		CModel::Create(m_pDevice, m_pContext, CModel::TYPE_NONANIM, "../Bin/Resources/Models/Sophia/Sophia_Stoned.fbx","../Bin/ModelData/NonAnim/Map/Etc/Sophia/Tex/", PreTransformMatrix))))
 		return E_FAIL;
-	 
 
 	//우송
 	 //if (FAILED(Ready_Resources_Object()))

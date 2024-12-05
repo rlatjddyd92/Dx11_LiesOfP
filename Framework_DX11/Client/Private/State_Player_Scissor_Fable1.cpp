@@ -83,11 +83,11 @@ void CState_Player_Scissor_Fable1::Update(_float fTimeDelta)
         }
     }
 
-    if (m_iSeperateFrame == iFrame)
+    if (m_iSeperateFrame == iFrame || m_iSeperateFrame + 1 == iFrame)
     {
         m_pPlayer->Seperate_Scissor();
     }
-    else if (m_iCombineFrame == iFrame)
+    else if (m_iCombineFrame == iFrame || m_iCombineFrame + 1 == iFrame)
     {
         m_pPlayer->Combine_Scissor();
     }

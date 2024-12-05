@@ -90,6 +90,13 @@ void CState_Player_Scissor_RAttack01::Update(_float fTimeDelta)
                  m_pPlayer->Change_State(CPlayer::SCISSOR_RATTACK0);
          }
      }
+     else if (iFrame >= 130)
+     {
+         if (KEY_HOLD(KEY::W) || KEY_HOLD(KEY::S) || KEY_HOLD(KEY::D) || KEY_HOLD(KEY::A))
+         {
+             m_pPlayer->Change_State(CPlayer::OH_RUN);
+         }
+     }
      else if (End_Check())
      {
          m_pPlayer->Change_State(CPlayer::OH_IDLE);

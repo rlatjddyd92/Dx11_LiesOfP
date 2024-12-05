@@ -132,7 +132,7 @@ HRESULT CPlayer::Initialize(void * pArg)
 	//m_pNavigationCom->Move_to_Cell(m_pRigidBodyCom, 341); //아래엘베
 	//m_pNavigationCom->Move_to_Cell(m_pRigidBodyCom, 440); //상자랑 장애물
 	//m_pNavigationCom->Move_to_Cell(m_pRigidBodyCom, 1066); // 순간이동 790
-	m_pNavigationCom->Move_to_Cell(m_pRigidBodyCom, 800); // 소피아 방
+	//m_pNavigationCom->Move_to_Cell(m_pRigidBodyCom, 800); // 소피아 방
 
 	m_strObjectTag = TEXT("Player");
 
@@ -310,7 +310,7 @@ void CPlayer::Update(_float fTimeDelta)
 
 	if (KEY_TAP(KEY::L))
 	{
-		Change_State(SCISSOR_FATAL);
+		Change_State(RAPIER_PARRYATTACK);
 		//Change_State(ITEMGET);
 		//Calc_DamageGain(5.f, m_pTransformCom->Get_WorldMatrix().Forward() + m_pTransformCom->Get_WorldMatrix().Translation());
 	}

@@ -64,25 +64,6 @@ void CState_Player_Flame_Charge00::Update(_float fTimeDelta)
         }
     }
 
-    if (iFrame < m_iChangeFrame)
-    {
-        if (KEY_TAP(KEY::LBUTTON))
-        {
-            m_isInputLButton = true;
-            m_isInputRButton = false;
-        }
-        else if (KEY_TAP(KEY::RBUTTON))
-        {
-            m_isInputRButton = true;
-            m_isInputLButton = false;
-            m_fRButtonTime = 0.f;
-        }
-        else if (KEY_HOLD(KEY::RBUTTON))
-        {
-            m_fRButtonTime += fTimeDelta;
-        }
-    }
-
     if (m_iChangeFrame < iFrame && iFrame < m_iChangeFrame + 15)
     {
         if (m_isInputLButton)
@@ -93,6 +74,13 @@ void CState_Player_Flame_Charge00::Update(_float fTimeDelta)
                 m_pPlayer->Change_State(CPlayer::FLAME_CHARGE1);
             else
                 m_pPlayer->Change_State(CPlayer::FLAME_RATTACK1);
+        }
+    }
+    else if (iFrame >= 210)
+    {
+        if (KEY_HOLD(KEY::W) || KEY_HOLD(KEY::S) || KEY_HOLD(KEY::D) || KEY_HOLD(KEY::A))
+        {
+            m_pPlayer->Change_State(CPlayer::OH_RUN);
         }
     }
     else if (End_Check())

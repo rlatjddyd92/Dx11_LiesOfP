@@ -51,14 +51,22 @@ void CState_Player_OH_Sprint::Update(_float fTimeDelta)
     }
     else if (m_fSprintEndTime > 0.1f)
     {
-        m_pPlayer->Change_State(CPlayer::OH_RUN);
+        if (m_pPlayer->Get_IsLockOn())
+        {
+            m_pPlayer->Change_State(CPlayer::OH_WALK);
+        }
+        else
+        {
+            m_pPlayer->Change_State(CPlayer::OH_RUN);
+        }
     }
     /* else if (KEY_TAP(KEY::SPACE))
      {
          m_pPlayer->Change_State(CPlayer::JUMP);
      }*/
 
-    if (!m_isSprintEnd && KEY_NONE(KEY::SPACE))
+    if (!m_isSprintEnd && (KEY_NONE(KEY::SPACE) || 
+        (KEY_NONE(KEY::W) && KEY_NONE(KEY::A) && KEY_NONE(KEY::S) && KEY_NONE(KEY::D))))
     {
         m_isSprintEnd = true;
     }

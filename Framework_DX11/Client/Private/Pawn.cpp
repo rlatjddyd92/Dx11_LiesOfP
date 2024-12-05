@@ -181,6 +181,11 @@ _double CPawn::Get_CurrentTrackPos()
 	return m_pModelCom->Get_CurrentTrackPosition();
 }
 
+_float CPawn::Get_CurrentTrackEnd()
+{
+	return m_pModelCom->Get_CurrentDuration();
+}
+
 _bool CPawn::Get_EndAnim(_int iAnimIndex, _bool bIsBoundary)
 {
 	if (bIsBoundary)

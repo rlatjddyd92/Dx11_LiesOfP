@@ -807,22 +807,22 @@ void CItem_Manager::Update_Defence_info()
 	_int iInput[6] = { 0, };
 
 	if (Get_Equip_Item_Info(EQUIP_SLOT::EQUIP_AMULET_0) != nullptr)
-		iInput[0] = Get_Equip_Item_Info(EQUIP_SLOT::EQUIP_AMULET_0)->iItem_Index;
+		iInput[0] = (_int)Get_Equip_Item_Info(EQUIP_SLOT::EQUIP_AMULET_0)->iItem_Index;
 
 	if (Get_Equip_Item_Info(EQUIP_SLOT::EQUIP_AMULET_1) != nullptr)
-		iInput[1] = Get_Equip_Item_Info(EQUIP_SLOT::EQUIP_AMULET_1)->iItem_Index;
+		iInput[1] = (_int)Get_Equip_Item_Info(EQUIP_SLOT::EQUIP_AMULET_1)->iItem_Index;
 
 	if (Get_Equip_Item_Info(EQUIP_SLOT::EQUIP_DEFENCE_FRAME) != nullptr)
-		iInput[2] = Get_Equip_Item_Info(EQUIP_SLOT::EQUIP_DEFENCE_FRAME)->vecDamege[0];
+		iInput[2] = (_int)Get_Equip_Item_Info(EQUIP_SLOT::EQUIP_DEFENCE_FRAME)->vecDamege[0];
 
 	if (Get_Equip_Item_Info(EQUIP_SLOT::EQUIP_DEFENCE_CONVERTOR) != nullptr)
-		iInput[3] = Get_Equip_Item_Info(EQUIP_SLOT::EQUIP_DEFENCE_CONVERTOR)->vecDefence[0];
+		iInput[3] = (_int)Get_Equip_Item_Info(EQUIP_SLOT::EQUIP_DEFENCE_CONVERTOR)->vecDefence[0];
 	
 	if (Get_Equip_Item_Info(EQUIP_SLOT::EQUIP_DEFENCE_CARTRIGE) != nullptr)
-		iInput[4] = Get_Equip_Item_Info(EQUIP_SLOT::EQUIP_DEFENCE_CARTRIGE)->vecDefence[1];
+		iInput[4] = (_int)Get_Equip_Item_Info(EQUIP_SLOT::EQUIP_DEFENCE_CARTRIGE)->vecDefence[1];
 	
 	if (Get_Equip_Item_Info(EQUIP_SLOT::EQUIP_DEFENCE_RAINER) != nullptr)
-		iInput[5] = Get_Equip_Item_Info(EQUIP_SLOT::EQUIP_DEFENCE_RAINER)->vecDefence[2];
+		iInput[5] = (_int)Get_Equip_Item_Info(EQUIP_SLOT::EQUIP_DEFENCE_RAINER)->vecDefence[2];
 
 	m_pDefence->Set_Defence_Info(iInput[0], iInput[1], iInput[2], iInput[3], iInput[4], iInput[5]);
 }

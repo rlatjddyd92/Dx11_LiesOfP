@@ -1106,6 +1106,11 @@ _Vec3 CModel::Calc_CenterPos(_Matrix WorldMat)
 	return vOut;
 }
 
+_float CModel::Get_CurrentDuration()
+{
+	return (_float)m_Animations[m_iCurrentAnimIndex]->Get_Duration();
+}
+
 HRESULT CModel::Bind_Material(CShader* pShader, const _char* pConstantName, TEXTURE_TYPE eMaterialType, _uint iMeshIndex)
 {
 	_uint iMaterialIndex = m_Meshes[iMeshIndex]->Get_MaterialIndex();

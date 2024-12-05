@@ -164,7 +164,8 @@ void CEffect_Container::Set_EffectDesc(const EFFECT_DESC& desc)
 {
 	m_pTransformCom->Set_State(CTransform::STATE_POSITION, desc.vPos);
 	m_pTransformCom->Set_Scaled(desc.vScale.x, desc.vScale.y, desc.vScale.z);
-	m_pTransformCom->Rotation(desc.vDir.x, desc.vDir.y, desc.vDir.z);
+	if (0.f < desc.vDir.Length())
+		m_pTransformCom->Look_Dir(_Vec4(desc.vDir.x, desc.vDir.y, desc.vDir.z, 0.f));
 
 	m_pParentMatrix = desc.pParentMatrix;
 	m_pSocketMatrix = desc.pSocketMatrix;

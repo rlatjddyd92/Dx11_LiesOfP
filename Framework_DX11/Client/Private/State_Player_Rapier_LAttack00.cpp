@@ -81,7 +81,10 @@ void CState_Player_Rapier_LAttack00::Update(_float fTimeDelta)
             else
                 m_pPlayer->Change_State(CPlayer::RAPIER_RATTACK0);
         }
-        else if (KEY_HOLD(KEY::W) || KEY_HOLD(KEY::S) || KEY_HOLD(KEY::D) || KEY_HOLD(KEY::A))
+    }
+    else if (iFrame >= 85)
+    {
+        if (KEY_HOLD(KEY::W) || KEY_HOLD(KEY::S) || KEY_HOLD(KEY::D) || KEY_HOLD(KEY::A))
         {
             m_pPlayer->Change_State(CPlayer::OH_RUN);
         }

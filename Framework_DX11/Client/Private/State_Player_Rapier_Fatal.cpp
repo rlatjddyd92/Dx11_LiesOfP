@@ -48,6 +48,10 @@ HRESULT CState_Player_Rapier_Fatal::Start_State(void* pArg)
         m_isPlaySound[i] = false;
     }
 
+    m_isInputLButton = false;
+    m_isInputRButton = false;
+    m_fRButtonTime = 0.f;
+
     m_pPlayer->Set_WeaponStrength(ATK_STRONG);
 
     return S_OK;
@@ -57,9 +61,42 @@ void CState_Player_Rapier_Fatal::Update(_float fTimeDelta)
 {
     _int iFrame = m_pPlayer->Get_Frame();
 
-   
+    if (iFrame < m_iChangeFrame)
+    {
+        if (KEY_TAP(KEY::LBUTTON))
+        {
+            m_isInputLButton = true;
+            m_isInputRButton = false;
+        }
+        else if (KEY_TAP(KEY::RBUTTON))
+        {
+            m_isInputRButton = true;
+            m_isInputLButton = false;
+            m_fRButtonTime = 0.f;
+        }
+        else if (KEY_HOLD(KEY::RBUTTON))
+        {
+            m_fRButtonTime += fTimeDelta;
+        }
+    }
 
-    if (End_Check())
+    if (m_iChangeFrame < iFrame && iFrame < m_iChangeFrame + 15)
+    {
+        if (m_isInputLButton)
+            m_pPlayer->Change_State(CPlayer::RAPIER_LATTACK0);
+        else if (m_isInputRButton)
+        {
+            if (m_fRButtonTime > 0.15f)
+                m_pPlayer->Change_State(CPlayer::RAPIER_CHARGE);
+            else
+                m_pPlayer->Change_State(CPlayer::RAPIER_RATTACK0);
+        }
+        else if (KEY_HOLD(KEY::W) || KEY_HOLD(KEY::S) || KEY_HOLD(KEY::D) || KEY_HOLD(KEY::A))
+        {
+            m_pPlayer->Change_State(CPlayer::OH_RUN);
+        }
+    }
+    else if (End_Check())
     {
         m_pPlayer->Change_State(CPlayer::OH_IDLE);
     }

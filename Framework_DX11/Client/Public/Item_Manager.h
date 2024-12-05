@@ -179,9 +179,9 @@ public:
 				fIncrease_Defence = 20.f;
 
 			fIncrease_Defence += iFrame;
-			fResist_Fire = iConvertor;
-			fResist_Electric = iCartridge;
-			fResist_Acid = iliner;
+			fResist_Fire = (_float)iConvertor;
+			fResist_Electric = (_float)iCartridge;
+			fResist_Acid = (_float)iliner;
 		}
 
 		// 아뮬렛 
@@ -198,7 +198,7 @@ public:
 		_float fResist_Fire = 0.f;
 		_float fResist_Electric = 0.f;
 		_float fResist_Acid = 0.f;
-	};
+	}DEFENCE_INFO;
 
 	typedef struct ARRAY_INFO // 인벤에 존재하는 배열의 정보 
 	{
