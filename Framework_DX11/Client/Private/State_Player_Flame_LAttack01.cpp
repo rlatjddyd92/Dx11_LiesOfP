@@ -84,7 +84,7 @@ void CState_Player_Flame_LAttack01::Update(_float fTimeDelta)
      {
          if (KEY_HOLD(KEY::W) || KEY_HOLD(KEY::S) || KEY_HOLD(KEY::D) || KEY_HOLD(KEY::A))
          {
-             m_pPlayer->Change_State(CPlayer::OH_RUN);
+             m_pPlayer->Change_State(CPlayer::TH_RUN);
          }
      }
      else if (End_Check())

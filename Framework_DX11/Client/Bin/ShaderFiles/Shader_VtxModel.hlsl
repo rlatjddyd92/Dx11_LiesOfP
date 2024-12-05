@@ -188,6 +188,29 @@ PS_OUT_MODEL PS_MAIN_NORMAL(PS_IN_NORMAL In)
 	return Out;
 }
 
+PS_OUT_MODEL PS_MAIN_SOPHIA(PS_IN_MODEL In)
+{
+    PS_OUT_MODEL Out = (PS_OUT_MODEL) 0;
+	
+    vector vDiffuse = g_DiffuseTexture.Sample(LinearSampler, In.vTexcoord);
+
+
+    vector vARM = g_ARMTexture.Sample(LinearSampler, In.vTexcoord);
+    if (0.3f >= vARM.r)
+        discard;
+    vector vEmissive = g_EmessiveTexture.Sample(LinearClampSampler, In.vTexcoord) * g_fEmessiveMask;
+	
+    Out.vDiffuse = vDiffuse;
+	/* -1.f ~ 1.f -> 0.f ~ 1.f */
+    Out.vNormal = vector(In.vNormal.xyz * 0.5f + 0.5f, 0.f);
+    Out.vDepth = vector(In.vProjPos.z / In.vProjPos.w, In.vProjPos.w / g_fFar, 0.f, 0.f);
+    Out.vARM = vector(1.f, vARM.g, vARM.b, 1.f);
+    Out.vEmessive = vector(0.f, 0.f, 0.f, 0.f);
+    Out.vRimLight = vector(0.f, 0.f, 0.f, 0.f);
+
+    return Out;
+}
+
 struct PS_IN_CASCADE
 {
     float4 vPosition : SV_POSITION;
@@ -227,7 +250,7 @@ PS_OUT_MOTIONBLUR PS_MAIN_MOTIONBLUR(PS_IN_MOTIONBLUR In)
 
 technique11	DefaultTechnique
 {
-	pass NonAnimModel
+	pass NonAnimModel //0
 	{
 		SetRasterizerState(RS_Default);
 		SetDepthStencilState(DSS_Default, 0);
@@ -238,7 +261,7 @@ technique11	DefaultTechnique
 		PixelShader = compile ps_5_0 PS_MAIN();
 	}
 
-	pass NormalMapping
+	pass NormalMapping //1
 	{
 		SetRasterizerState(RS_Default);
 		SetDepthStencilState(DSS_Default, 0);
@@ -249,7 +272,7 @@ technique11	DefaultTechnique
 		PixelShader = compile ps_5_0 PS_MAIN_NORMAL();
 	}
 
-    pass Cascade
+    pass Cascade //2
     {
         SetRasterizerState(RS_Default);
         SetDepthStencilState(DSS_Default, 0);
@@ -260,7 +283,7 @@ technique11	DefaultTechnique
         PixelShader = compile ps_5_0 PS_MAIN_CASCADE();
     }
 
-    pass MotionBlur
+    pass MotionBlur //3
     {
         SetRasterizerState(RS_Default);
         SetDepthStencilState(DSS_Default, 0);
@@ -269,5 +292,16 @@ technique11	DefaultTechnique
         VertexShader = compile vs_5_0 VS_MAIN_MOTIONBLUR();
         GeometryShader = NULL;
         PixelShader = compile ps_5_0 PS_MAIN_MOTIONBLUR();
+    }
+
+    pass Sophia //4
+    {
+        SetRasterizerState(RS_Default);
+        SetDepthStencilState(DSS_Default, 0);
+        SetBlendState(BS_Default, vector(0.f, 0.f, 0.f, 0.f), 0xffffffff);
+
+        VertexShader = compile vs_5_0 VS_MAIN();
+        GeometryShader = NULL;
+        PixelShader = compile ps_5_0 PS_MAIN_SOPHIA();
     }
 }

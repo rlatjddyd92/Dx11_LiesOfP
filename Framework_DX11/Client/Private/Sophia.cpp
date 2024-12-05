@@ -87,8 +87,16 @@ HRESULT CSophia::Render()
         }
         else
         {
-            if (FAILED(m_pShaderCom->Begin(0)))
-                return E_FAIL;
+            if (i == 0)
+            {
+                if (FAILED(m_pShaderCom->Begin(4)))
+                    return E_FAIL;
+            }
+            else
+            {
+                if (FAILED(m_pShaderCom->Begin(0)))
+                    return E_FAIL;
+            }
         }
 
         if (FAILED(m_pModelCom->Render((_uint)i)))

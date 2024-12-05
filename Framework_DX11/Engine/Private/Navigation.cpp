@@ -242,6 +242,10 @@ _float CNavigation::SetUp_OnCell(CTransform* pTransform, _float fOffset, _float 
 
 	_Vec3 vWorldPos = _Vec3(x, y + fOffset, z);
 
+	_Vec3 vCurrentPos = pTransform->Get_State(CTransform::STATE_POSITION);
+
+	y = m_pGameInstance->Lerp(vCurrentPos.y, y, 0.1f);
+
 	pTransform->Set_State(CTransform::STATE_POSITION, vWorldPos);
 
 	return y;
