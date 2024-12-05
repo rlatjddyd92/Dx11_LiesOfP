@@ -127,7 +127,7 @@ void CState_SimonManusP2_ChasingSwing::Collider_Check(_double CurTrackPos)
     {
         if ((CurTrackPos >= 140.f))
         {
-            m_pMonster->Active_CurrentWeaponCollider(1);
+            m_pMonster->Active_CurrentWeaponCollider(1.2, 0, HIT_TYPE::HIT_METAL, ATTACK_STRENGTH::ATK_WEAK);
         }
         else
         {
@@ -138,7 +138,7 @@ void CState_SimonManusP2_ChasingSwing::Collider_Check(_double CurTrackPos)
     {
         if ((CurTrackPos <= 50.f))
         {
-            m_pMonster->Active_CurrentWeaponCollider(1);
+            m_pMonster->Active_CurrentWeaponCollider(1.4, 0, HIT_TYPE::HIT_METAL, ATTACK_STRENGTH::ATK_NORMAL);
         }
         else
         {

@@ -37,7 +37,7 @@ HRESULT CAObj_GoldBall::Initialize(void* pArg)
     if (FAILED(Ready_Components()))
         return E_FAIL;
 
-    m_fDamageAmount = 20.f;
+    m_fDamageAmount = 200.f;
     m_fLifeDuration = 2.5f;
     m_fSpeed = 10.f;
 
@@ -133,7 +133,7 @@ void CAObj_GoldBall::OnCollisionEnter(CGameObject* pOther)
         if (!bOverlapCheck)
         {
             m_DamagedObjects.push_back(pOther);
-            pOther->Calc_DamageGain(m_fDamageAmount * m_fDamageRatio, _Vec3{}, HIT_TYPE::HIT_METAL, ATTACK_STRENGTH::ATK_NORMAL);
+            pOther->Calc_DamageGain(m_fDamageAmount * m_fDamageRatio, _Vec3{}, HIT_TYPE::HIT_METAL, ATTACK_STRENGTH::ATK_WEAK);
             m_isDead = true;
 
             CEffect_Manager::Get_Instance()->Add_Effect_ToLayer(LEVEL_GAMEPLAY, TEXT("SimonManus_Attack_GoldBall_Impact"), 

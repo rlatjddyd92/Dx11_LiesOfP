@@ -119,7 +119,7 @@ void CState_SimonManusP2_SwipMultiple::Collider_Check(_double CurTrackPos)
         {
             if (CurTrackPos >= 135.f && CurTrackPos <= 165.f)
             {
-                m_pMonster->Active_CurrentWeaponCollider(1);
+                m_pMonster->Active_CurrentWeaponCollider(1.2, 0, HIT_TYPE::HIT_METAL, ATTACK_STRENGTH::ATK_NORMAL);
             }
             else
             {
@@ -130,7 +130,7 @@ void CState_SimonManusP2_SwipMultiple::Collider_Check(_double CurTrackPos)
         {
             if (CurTrackPos >= 170 && CurTrackPos <= 195.f)
             {
-                m_pMonster->Active_CurrentWeaponCollider(1);
+                m_pMonster->Active_CurrentWeaponCollider(1.2, 0, HIT_TYPE::HIT_METAL, ATTACK_STRENGTH::ATK_NORMAL);
             }
             else
             {
@@ -142,7 +142,7 @@ void CState_SimonManusP2_SwipMultiple::Collider_Check(_double CurTrackPos)
     {
         if (CurTrackPos >= 20.f && CurTrackPos <= 80.f)
         {
-            m_pMonster->Active_CurrentWeaponCollider(1);
+            m_pMonster->Active_CurrentWeaponCollider(1.3, 0, HIT_TYPE::HIT_METAL, ATTACK_STRENGTH::ATK_NORMAL);
         }
         else
         {

@@ -105,7 +105,7 @@ void CState_SimonManusP1_HighJumpFall::Collider_Check(_double CurTrackPos)
 
     if ((CurTrackPos >= 140.f && CurTrackPos <= 150.f))
     {
-        m_pMonster->Active_CurrentWeaponCollider(1);
+        m_pMonster->Active_CurrentWeaponCollider(1, 0, HIT_TYPE::HIT_METAL, ATTACK_STRENGTH::ATK_WEAK);
     }
     else
     {
