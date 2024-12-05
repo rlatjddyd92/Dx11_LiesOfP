@@ -179,7 +179,7 @@ PS_OUT_LIGHT PS_MAIN_LIGHT_DIRECTIONAL_PBR(PS_IN In)
 	
     
     float fHalfLambert = saturate(dot(normalize(g_vLightDir.xyz) * -1.f, vNormal) * 0.5f + 0.5f);
-    Out.vShade = g_vLightDiffuse * saturate(saturate(fHalfLambert) + (g_vLightAmbient * g_vMtrlAmbient));
+    Out.vShade = g_vLightDiffuse * saturate(fHalfLambert) + (g_vLightAmbient * g_vMtrlAmbient);
     
     // PBR
     vector      vDiffuse = g_DiffuseTexture.Sample(LinearSampler, In.vTexcoord);

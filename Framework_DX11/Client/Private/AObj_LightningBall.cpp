@@ -229,7 +229,8 @@ void CAObj_LightningBall::Free()
 
     for (auto& pEffect : m_pEffects)
     {
-        pEffect->Set_Cloned(false);
+        if(nullptr != pEffect)
+            pEffect->Set_Cloned(false);
         Safe_Release(pEffect);
     }
 }
