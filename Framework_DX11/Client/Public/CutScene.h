@@ -33,10 +33,13 @@ public:
 	void			Load_KeyFrame(CUTSCENE_KEYFRAME_DESC pDesc);
 
 	void			Start_Play();
+	_bool			Get_isFinished() { return m_bFinished; }
+
 private:
 	_float						m_fMaxFrame = { 50.f };
 	_float						m_fTrackPosition = { 0.f };
 	_bool						m_bPlay = { false };
+	_bool						m_bFinished = { false };
 
 	vector<CUTSCENE_KEYFRAME_DESC*>		m_KeyFrames;
 

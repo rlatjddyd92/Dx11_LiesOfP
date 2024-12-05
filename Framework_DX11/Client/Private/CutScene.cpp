@@ -49,6 +49,7 @@ void CCutScene::Update(_float fTimeDelta)
 	else if (m_fTrackPosition > m_fMaxFrame)
 	{
 		m_bPlay = false;
+		m_bFinished = true;
 		GET_GAMEINTERFACE->Fade_In(0.f);
 		CCamera_Manager::Get_Instance()->Change_Camera(TEXT("Camera_Player"));
 	}
@@ -168,9 +169,9 @@ void CCutScene::Load_KeyFrame(CUTSCENE_KEYFRAME_DESC pDesc)
 
 void CCutScene::Start_Play()
 {
+	CCamera_Manager::Get_Instance()->Change_Camera(TEXT("Camera_Free"));
 	m_isActive = true;
 	m_bPlay = true;
-	CCamera_Manager::Get_Instance()->Change_Camera(TEXT("Camera_Free"));
 }
 
 CCutScene* CCutScene::Create(ID3D11Device* pDevice, ID3D11DeviceContext* pContext)

@@ -18,7 +18,7 @@ HRESULT CState_Player_OpenSophiaDoor::Initialize(_uint iStateNum, void* pArg)
 
     m_pTrackPos = pDesc->pPrevTrackPos;
 
-    m_iAnimation_DoorPush = m_pPlayer->Get_Model()->Find_AnimationIndex("AS_Pino_Prop_DoubleDoor_Push", 1.f);
+    m_iAnimation_DoorPush = m_pPlayer->Get_Model()->Find_AnimationIndex("AS_Pino_Prop_DoubleDoor_Push", 0.9f);
 
     m_iStateNum = iStateNum;
 
@@ -40,7 +40,7 @@ HRESULT CState_Player_OpenSophiaDoor::Start_State(void* pArg)
     vLastDoorRight.Normalize();
     vLastDoorLook.Normalize();
 
-    _Vec3 vInitPos = vLastDoorPos + vLastDoorLook * 0.25f;
+    _Vec3 vInitPos = vLastDoorPos + vLastDoorLook * 1.1f;
     vInitPos.y = vPlayerPos.y;
 
     m_pPlayer->Get_RigidBody()->Set_GloblePose(vInitPos);
