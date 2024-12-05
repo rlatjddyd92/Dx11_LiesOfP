@@ -58,6 +58,8 @@ void CCutScene::Keyframe_Actived_Reset()
 	{
 		iter->bActived = false;
 	}
+
+	m_pController_UITool->Fade_In(0.f);
 }
 
 void CCutScene::Create_KeyFrame()
@@ -73,6 +75,7 @@ void CCutScene::Load_KeyFrame(CUTSCENE_KEYFRAME_DESC pDesc)
 {
 	CUTSCENE_KEYFRAME_DESC* pNewDesc = new CUTSCENE_KEYFRAME_DESC;
 	*pNewDesc = pDesc;
+	pNewDesc->bActived = false;
 
 	m_KeyFrames.push_back(pNewDesc);
 }
