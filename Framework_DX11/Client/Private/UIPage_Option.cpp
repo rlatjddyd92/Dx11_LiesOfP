@@ -937,7 +937,7 @@ void CUIPage_Option::Update_Variable()
 	m_pGameInstance->Set_BloomDesc(m_bGraphic[2]);
 	m_pGameInstance->Set_DOFDesc(m_bGraphic[3]);
 
-	if (m_pGameInstance->Get_IsOnPBR() != m_bGraphic[4])
+	if (*m_pGameInstance->Get_IsOnPBR() != m_bGraphic[4])
 		m_pGameInstance->Toggle_PBR();
 
 	if (m_pGameInstance->Get_IsOnShadow() != m_bGraphic[5])

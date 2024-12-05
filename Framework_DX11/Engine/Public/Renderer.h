@@ -29,7 +29,7 @@ public:
 	void			Set_DOFDesc(_bool bIsUsing) { m_tDOF.isOnDOF = bIsUsing; }
 	void			Set_RadialDesc(_bool bIsUsing) { m_tRadial.isOnRadial = bIsUsing; }
 
-	_bool			Get_IsOnPBR() { return m_isOnPBR; }
+	_bool*			Get_IsOnPBR() { return &m_isOnPBR; }
 	void			Toggle_PBR() { m_isOnPBR = !m_isOnPBR; }
 
 	_bool			Get_IsOnShadow() { return m_isOnShadow; }
