@@ -318,7 +318,8 @@ HRESULT CLoader::Ready_Resources_For_GamePlayLevel()
 	GET_GAMEINTERFACE->Set_Loading_Status(TEXT("이펙트 준비 중"), 0.2f);
 
 	lstrcpy(m_szLoadingText, TEXT("이펙트 매니저를 로딩중입니다."));
-	if(FAILED(CEffect_Manager::Get_Instance()->Initialize(m_pDevice, m_pContext, TEXT("../../Tools/Bin/DataFiles/Effect"), TEXT("../Bin/Resources/Textures/Effect"))))
+	if(FAILED(CEffect_Manager::Get_Instance()->Initialize(m_pDevice, m_pContext, 
+		TEXT("../../Tools/Bin/DataFiles/Effect"), TEXT("../Bin/Resources/Textures/Effect"), TEXT("../Bin/ModelData/NonAnim/Effect"))))
 		return E_FAIL;
 
 	GET_GAMEINTERFACE->Set_Loading_Status(TEXT("이미지 준비 중"), 0.4f);

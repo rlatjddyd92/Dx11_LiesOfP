@@ -17,7 +17,7 @@ CEffect_Manager::CEffect_Manager()
 	Safe_AddRef(m_pGameInstance);
 }
 
-HRESULT CEffect_Manager::Initialize(ID3D11Device* pDevice, ID3D11DeviceContext* pContext, const _wstring& strEffectPath, const _wstring strTexturePath)
+HRESULT CEffect_Manager::Initialize(ID3D11Device* pDevice, ID3D11DeviceContext* pContext, const _wstring& strEffectPath, const _wstring strTexturePath, const _wstring strModelPath)
 {
     m_pDevice = pDevice;
     Safe_AddRef(m_pDevice);
@@ -28,7 +28,7 @@ HRESULT CEffect_Manager::Initialize(ID3D11Device* pDevice, ID3D11DeviceContext* 
     if(FAILED(Load_Textures(strTexturePath)))
         return E_FAIL;
 
-    if(FAILED(Load_Models()))
+    if(FAILED(Load_Models(strModelPath)))
         return E_FAIL;
 
     if(FAILED(Load_Shaders()))
@@ -191,16 +191,59 @@ HRESULT CEffect_Manager::Load_Textures(const _wstring strTexturePath)
     return S_OK;
 }
 
-HRESULT CEffect_Manager::Load_Models()
+HRESULT CEffect_Manager::Load_Models(const _wstring& strEffectPath)
 {
-    //_matrix		PreTransformMatrix = XMMatrixIdentity();
+    _matrix		PreTransformMatrix = XMMatrixIdentity();
 
-    ///* For. Prototype_Component_Model_HalfSphere_1 */
-    //PreTransformMatrix = XMMatrixScaling(0.005f, 0.005f, 0.005f) * XMMatrixRotationX(XMConvertToRadians(90.0f));
-    //if (FAILED(m_pGameInstance->Add_Prototype(LEVEL_GAMEPLAY, TEXT("Prototype_Component_Model_HalfSphere_1"),
-    //    CModel::Create(m_pDevice, m_pContext, CModel::TYPE_NONANIM, "../Bin/ModelData/NonAnim/Effect/SM_HalfSphere_01_GDH.dat", PreTransformMatrix))))
-    //    return E_FAIL;
+    /* For. Prototype_Component_Model_Effect_Crystal_Clouds_01 */
+    PreTransformMatrix = XMMatrixScaling(0.005f, 0.005f, 0.005f);
+    if (FAILED(m_pGameInstance->Add_Prototype(LEVEL_GAMEPLAY, TEXT("Prototype_Component_Model_Effect_Crystal_Clouds_01"),
+        CModel::Create(m_pDevice, m_pContext, CModel::TYPE_NONANIM, "../Bin/ModelData/NonAnim/Effect/Mesh_Crystal_Clouds_01.dat", PreTransformMatrix))))
+        return E_FAIL;
 
+
+    _wstring searchPath = strEffectPath + L"\\*.dat";
+    WIN32_FIND_DATAW findFileData;
+    HANDLE hFind = FindFirstFileW(searchPath.c_str(), &findFileData);
+
+    if (hFind == INVALID_HANDLE_VALUE) {
+        MSG_BOX(TEXT("Folder Open Failed"));
+        return E_FAIL;
+    }
+
+    while (FindNextFileW(hFind, &findFileData))
+    {
+        if (!(findFileData.dwFileAttributes & FILE_ATTRIBUTE_DIRECTORY))
+        {
+            _wstring strFileName = findFileData.cFileName;   // 파일 이름 + 확장자
+            _wstring strFileExtention = Get_FileExtentin(strFileName);   // 확장자
+            _wstring strFileBaseName = Remove_FileExtentin(strFileName);
+
+            _wstring strResultPath = strEffectPath + TEXT('/') + strFileName;
+
+            _wstring strPrototypeTag = TEXT("Prototype_Component_Model_Effect_") + strFileBaseName;
+
+            // 변환 후 필요한 버퍼 크기 계산
+            int bufferSize = WideCharToMultiByte(CP_UTF8, 0, strResultPath.c_str(), -1, nullptr, 0, nullptr, nullptr);
+            if (bufferSize == 0) {
+                throw std::runtime_error("WideCharToMultiByte failed.");
+            }
+
+            // 변환 결과를 저장할 std::string 생성
+            std::string str(bufferSize, '\0');
+            WideCharToMultiByte(CP_UTF8, 0, strResultPath.c_str(), -1, &str[0], bufferSize, nullptr, nullptr);
+
+            /* For. Prototype_Component_Model_Effect_Helix */
+            PreTransformMatrix = XMMatrixScaling(0.005f, 0.005f, 0.005f);
+            if (FAILED(m_pGameInstance->Add_Prototype(LEVEL_GAMEPLAY, strPrototypeTag,
+                CModel::Create(m_pDevice, m_pContext, CModel::TYPE_NONANIM, str.c_str(), PreTransformMatrix))))
+                return E_FAIL;
+        }
+    }
+    // 핸들 닫기
+    FindClose(hFind);
+
+    return S_OK;
     return S_OK;
 }
 
@@ -758,6 +801,15 @@ _wstring CEffect_Manager::Get_FileExtentin(const _wstring& strFileTag)
     }
 
     return strExtention;
+}
+
+_wstring CEffect_Manager::Remove_FileExtentin(const _wstring& strFileTag)
+{
+    size_t dotPosition = strFileTag.find_last_of('.');
+    if (dotPosition != std::string::npos) {
+        return strFileTag.substr(0, dotPosition); // 확장자 제거
+    }
+    return strFileTag; // 확장자가 없으면 그대로 반환
 }
 
 CEffect_Container* CEffect_Manager::Find_PoolingEffect(const _wstring& strECTag, void* pArg)
