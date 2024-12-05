@@ -31,6 +31,8 @@ HRESULT CState_Player_OpenSophiaDoor::Start_State(void* pArg)
 
     m_pPlayer->Change_Animation(m_iAnimation_DoorPush, false, 0.8f, 316);
 
+    m_pPlayer->Disappear_Weapon();
+
     return S_OK;
 }
 
