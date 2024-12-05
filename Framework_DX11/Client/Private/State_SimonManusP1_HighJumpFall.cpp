@@ -5,6 +5,7 @@
 #include "SimonManus.h"
 
 #include "EffectObject.h"
+#include "AttackObject.h"
 
 CState_SimonManusP1_HighJumpFall::CState_SimonManusP1_HighJumpFall(CFsm* pFsm, CMonster* pMonster)
     :CState{ pFsm }
@@ -32,6 +33,8 @@ HRESULT CState_SimonManusP1_HighJumpFall::Start_State(void* pArg)
     m_bStartSpot = true;
     m_bStampSound = false;
     m_bLandSound = false;
+
+    m_bStompAttack = false;
 
     return S_OK;
 }
@@ -108,6 +111,20 @@ void CState_SimonManusP1_HighJumpFall::Collider_Check(_double CurTrackPos)
     {
         m_pMonster->DeActive_CurretnWeaponCollider();
     }
+
+    if (!m_bStompAttack)
+    {
+        if (CurTrackPos >= 245.f)
+        {
+            CAttackObject::ATKOBJ_DESC Desc;
+            Desc.vPos = _Vec3{ m_pMonster->Get_Transform()->Get_State(CTransform::STATE_POSITION) };
+            Desc.vDir = _Vec3{ m_pMonster->Get_Transform()->Get_State(CTransform::STATE_LOOK) };
+
+            m_pGameInstance->Add_CloneObject_ToLayer(LEVEL_GAMEPLAY, TEXT("Monster_Attack"), TEXT("Prototype_GameObject_Stomp"), &Desc);
+            m_bStompAttack = true;
+        }
+    }
+
 }
 
 void CState_SimonManusP1_HighJumpFall::Effect_Check(_double CurTrackPos)

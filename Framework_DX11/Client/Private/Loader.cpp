@@ -34,6 +34,7 @@
 #include "AObj_BlackBall.h"
 #include "AObj_GodHands.h"
 #include "GH_Creater.h"
+#include "AObj_Stomp.h"
 #pragma endregion
 
 #pragma region EFFECT
@@ -1018,6 +1019,9 @@ HRESULT CLoader::Ready_Prototype()
 		return E_FAIL;
 	if (FAILED(m_pGameInstance->Add_Prototype(TEXT("Prototype_GameObject_GodHands"),
 		CAObj_GodHands::Create(m_pDevice, m_pContext))))
+		return E_FAIL;
+	if (FAILED(m_pGameInstance->Add_Prototype(TEXT("Prototype_GameObject_Stomp"),
+		CAObj_Stomp::Create(m_pDevice, m_pContext))))
 		return E_FAIL;
 
 
