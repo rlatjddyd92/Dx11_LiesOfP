@@ -3,6 +3,7 @@
 #include "GameInstance.h"
 #include "GameInterface_Controller.h"
 #include "Camera.h"
+#include "Camera_Manager.h"
 
 CCutScene::CCutScene(ID3D11Device* pDevice, ID3D11DeviceContext* pContext)
 	: CGameObject{ pDevice, pContext }
@@ -23,7 +24,8 @@ HRESULT CCutScene::Initialize_Prototype()
 HRESULT CCutScene::Initialize(void* pArg)
 {
 	m_isActive = false;
-	m_pCamera = m_pGameInstance->Find_Camera(LEVEL_TOOL);
+	m_pCamera = CCamera_Manager::Get_Instance()->Find_Camera(TEXT("Camera_Free"));
+
 	return S_OK;
 }
 

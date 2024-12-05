@@ -447,6 +447,16 @@ void CTransform::Turn_RollPitchYaw_Lerp(_float fPitch, _float fYaw, _float fRoll
 
 	_Matrix rotationMatrix = XMMatrixRotationQuaternion(interpolatedQuat);
 
+
+	if (XMVectorGetX(XMQuaternionLength(interpolatedQuat - targetQuat)) <= 0.01f &&
+		XMVectorGetY(XMQuaternionLength(interpolatedQuat - targetQuat)) <= 0.01f &&
+		XMVectorGetZ(XMQuaternionLength(interpolatedQuat - targetQuat)) <= 0.01f
+		)
+	{
+		// 회전 완료 처리
+		m_isTurning = false;
+	}
+
 	// 월드 행렬에서 변환(위치) 추출
 	_Vec4 position = Get_State(STATE_POSITION); // 행렬의 4번째 행이 위치 정보
 
@@ -455,14 +465,7 @@ void CTransform::Turn_RollPitchYaw_Lerp(_float fPitch, _float fYaw, _float fRoll
 	m_WorldMatrix = newWorldMatrix;
 	Set_State(STATE_POSITION, { position.x, position.y, position.z }); // 위치 유지
 
-	if (XMVectorGetX(XMQuaternionLength(interpolatedQuat - targetQuat)) <= 0.005f &&
-		XMVectorGetY(XMQuaternionLength(interpolatedQuat - targetQuat)) <= 0.005f &&
-		XMVectorGetZ(XMQuaternionLength(interpolatedQuat - targetQuat)) <= 0.005f
-		) 
-	{
-		// 회전 완료 처리
-		m_isTurning = false;
-	}
+
 }
 
 void CTransform::Rotation(const _Vec4& vAxis, _float fRadian)

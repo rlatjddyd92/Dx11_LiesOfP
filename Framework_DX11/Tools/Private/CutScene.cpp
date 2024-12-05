@@ -42,6 +42,7 @@ void CCutScene::Update(_float fTimeDelta)
 		m_fTrackPosition += fTimeDelta;
 		Play_Keyframes(fTimeDelta);
 	}
+
 }
 
 void CCutScene::Late_Update(_float fTimeDelta)
@@ -66,6 +67,14 @@ void CCutScene::Create_KeyFrame()
 
 	m_KeyFrames.push_back(pDesc);
 	Sort_KeyFrame_TrackPosition();
+}
+
+void CCutScene::Load_KeyFrame(CUTSCENE_KEYFRAME_DESC pDesc)
+{
+	CUTSCENE_KEYFRAME_DESC* pNewDesc = new CUTSCENE_KEYFRAME_DESC;
+	*pNewDesc = pDesc;
+
+	m_KeyFrames.push_back(pNewDesc);
 }
 
 void CCutScene::Play_Keyframes(_float fTimeDelta)
