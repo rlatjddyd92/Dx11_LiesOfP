@@ -475,6 +475,28 @@ PS_OUT PS_DISTORTION_TRAIL_MAIN(PS_IN In)
     return Out;
 }
 
+PS_OUT PS_BLOOD_MAIN(PS_IN In)
+{
+    PS_OUT Out = (PS_OUT) 0;
+    
+    float2 vTexcoord = In.vTexcoord * g_vTileRepeat;
+
+    Out.vColor = g_DiffuseTexture.Sample(LinearSampler, In.vTexcoord);
+    vector vMask = g_MaskTexture_1.Sample(LinearSampler, vTexcoord);
+    
+    Out.vColor.a *= Out.vColor.r;
+    vMask.a *= vMask.r;
+    Out.vColor *= vMask;
+    Out.vColor *= g_vColor;
+    Out.vColor.a *= 1.f - (((In.vTexcoord.x + In.fIndex) / (float) g_iNumInstance) + g_fRatio);
+
+    if(Out.vColor.a < 0.1f)
+        discard;
+    
+    
+    return Out;
+}
+
 technique11 DefaultTechnique
 {
 	/* 빛연산 + 림라이트 + ssao + 노멀맵핑 + pbr*/
@@ -575,6 +597,17 @@ technique11 DefaultTechnique
         VertexShader = compile vs_5_0 VS_MAIN();
         GeometryShader = compile gs_5_0 GS_MAIN();
         PixelShader = compile ps_5_0 PS_DISTORTION_TRAIL_MAIN();
+    }
+
+    pass Blood  // 9
+    {
+        SetRasterizerState(RS_Cull_None);
+        SetDepthStencilState(DSS_Default, 0);
+        SetBlendState(BS_Default, vector(0.f, 0.f, 0.f, 0.f), 0xffffffff);
+
+        VertexShader = compile vs_5_0 VS_MAIN();
+        GeometryShader = compile gs_5_0 GS_MAIN();
+        PixelShader = compile ps_5_0 PS_BLOOD_MAIN();
     }
 
 }

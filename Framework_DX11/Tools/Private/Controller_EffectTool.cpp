@@ -32,7 +32,7 @@ HRESULT CController_EffectTool::Initialize(ID3D11Device* pDevice, ID3D11DeviceCo
 	m_RenderDesc.iPpState = 0;
 
 	Load_Texture(strEffectPath);
-	Load_Model();
+	Load_Model(TEXT("../Bin/ModelData/NonAnim/Effect"));
 	Load_Shader();
 
 	return S_OK;
@@ -898,7 +898,7 @@ void CController_EffectTool::Mesh_Check()
 			szItems.emplace_back(str.c_str());
 		}
 
-		ImGui::ListBox("Model List", &m_iSelected_ModelIndex, szItems.data(), (_int)szItems.size(), 5);
+		ImGui::ListBox("Model List", &m_iSelected_ModelIndex, szItems.data(), (_int)szItems.size(), 10);
 
 		ImGui::TreePop();
 	}
@@ -2180,45 +2180,60 @@ HRESULT CController_EffectTool::Load_Texture(const _wstring& strEffectPath)
 	return S_OK;
 }
 
-HRESULT CController_EffectTool::Load_Model()
+HRESULT CController_EffectTool::Load_Model(const _wstring& strEffectPath)
 {
 	_matrix		PreTransformMatrix = XMMatrixIdentity();
 
-	/* For. Prototype_Component_Model_Effect_Helix */
+	/* For. Prototype_Component_Model_Effect_Crystal_Clouds_01 */
 	PreTransformMatrix = XMMatrixScaling(0.005f, 0.005f, 0.005f);
-	if (FAILED(m_pGameInstance->Add_Prototype(LEVEL_TOOL, TEXT("Prototype_Component_Model_Effect_Helix"),
-		CModel::Create(m_pDevice, m_pContext, CModel::TYPE_NONANIM, "../Bin/ModelData/NonAnim/Effect/Mesh_Helix_Single.dat", PreTransformMatrix))))
-		return E_FAIL;
-	Add_Model_ProtytypeTag(TEXT("Prototype_Component_Model_Effect_Helix"));
-
-	/* For. Prototype_Component_Model_Effect_CrystalCloud */
-	PreTransformMatrix = XMMatrixScaling(0.005f, 0.005f, 0.005f);
-	if (FAILED(m_pGameInstance->Add_Prototype(LEVEL_TOOL, TEXT("Prototype_Component_Model_Effect_CrystalCloud"),
+	if (FAILED(m_pGameInstance->Add_Prototype(LEVEL_TOOL, TEXT("Prototype_Component_Model_Effect_Crystal_Clouds_01"),
 		CModel::Create(m_pDevice, m_pContext, CModel::TYPE_NONANIM, "../Bin/ModelData/NonAnim/Effect/Mesh_Crystal_Clouds_01.dat", PreTransformMatrix))))
 		return E_FAIL;
-	Add_Model_ProtytypeTag(TEXT("Prototype_Component_Model_Effect_CrystalCloud"));
+	Add_Model_ProtytypeTag(TEXT("Prototype_Component_Model_Effect_Crystal_Clouds_01"));
 
-	/* For. Prototype_Component_Model_Effect_HalfSphere */
-	PreTransformMatrix = XMMatrixScaling(0.005f, 0.005f, 0.005f) * XMMatrixRotationX(XMConvertToRadians(90.0f));
-	if (FAILED(m_pGameInstance->Add_Prototype(LEVEL_TOOL, TEXT("Prototype_Component_Model_Effect_HalfSphere"),
-		CModel::Create(m_pDevice, m_pContext, CModel::TYPE_NONANIM, "../Bin/ModelData/NonAnim/Effect/Mesh_HalfSphere.dat", PreTransformMatrix))))
+
+	_wstring searchPath = strEffectPath + L"\\*.dat";
+	WIN32_FIND_DATAW findFileData;
+	HANDLE hFind = FindFirstFileW(searchPath.c_str(), &findFileData);
+
+	if (hFind == INVALID_HANDLE_VALUE) {
+		MSG_BOX(TEXT("Folder Open Failed"));
 		return E_FAIL;
-	Add_Model_ProtytypeTag(TEXT("Prototype_Component_Model_Effect_HalfSphere"));
+	}
 
-	/* For. Prototype_Component_Model_Effect_Sphere */
-	PreTransformMatrix = XMMatrixScaling(0.005f, 0.005f, 0.005f) * XMMatrixRotationX(XMConvertToRadians(90.0f));
-	if (FAILED(m_pGameInstance->Add_Prototype(LEVEL_TOOL, TEXT("Prototype_Component_Model_Effect_Sphere"),
-		CModel::Create(m_pDevice, m_pContext, CModel::TYPE_NONANIM, "../Bin/ModelData/NonAnim/Effect/SM_Sphere_02_KMH.dat", PreTransformMatrix))))
-		return E_FAIL;
-	Add_Model_ProtytypeTag(TEXT("Prototype_Component_Model_Effect_Sphere"));
+	while (FindNextFileW(hFind, &findFileData))
+	{
+		if (!(findFileData.dwFileAttributes & FILE_ATTRIBUTE_DIRECTORY))
+		{
+			_wstring strFileName = findFileData.cFileName;   // 파일 이름 + 확장자
+			_wstring strFileExtention = Get_FileExtentin(strFileName);   // 확장자
+			_wstring strFileBaseName = Remove_FileExtentin(strFileName);
 
-	/* For. Prototype_Component_Model_Effect_Wave */
-	PreTransformMatrix = XMMatrixScaling(0.005f, 0.005f, 0.005f);
-	if (FAILED(m_pGameInstance->Add_Prototype(LEVEL_TOOL, TEXT("Prototype_Component_Model_Effect_Wave"),
-		CModel::Create(m_pDevice, m_pContext, CModel::TYPE_NONANIM, "../Bin/ModelData/NonAnim/Effect/SM_Simon_Wave_01_HJS.dat", PreTransformMatrix))))
-		return E_FAIL;
-	Add_Model_ProtytypeTag(TEXT("Prototype_Component_Model_Effect_Wave"));
+			_wstring strResultPath = strEffectPath + TEXT('/') + strFileName;
 
+			_wstring strPrototypeTag = TEXT("Prototype_Component_Model_Effect_") + strFileBaseName;
+
+			// 변환 후 필요한 버퍼 크기 계산
+			int bufferSize = WideCharToMultiByte(CP_UTF8, 0, strResultPath.c_str(), -1, nullptr, 0, nullptr, nullptr);
+			if (bufferSize == 0) {
+				throw std::runtime_error("WideCharToMultiByte failed.");
+			}
+
+			// 변환 결과를 저장할 std::string 생성
+			std::string str(bufferSize, '\0');
+			WideCharToMultiByte(CP_UTF8, 0, strResultPath.c_str(), -1, &str[0], bufferSize, nullptr, nullptr);
+
+
+			/* For. Prototype_Component_Model_Effect_Helix */
+			PreTransformMatrix = XMMatrixScaling(0.005f, 0.005f, 0.005f);
+			if (FAILED(m_pGameInstance->Add_Prototype(LEVEL_TOOL, strPrototypeTag,
+				CModel::Create(m_pDevice, m_pContext, CModel::TYPE_NONANIM, str.c_str(), PreTransformMatrix))))
+				return E_FAIL;
+			Add_Model_ProtytypeTag(strPrototypeTag);
+		}
+	}
+	// 핸들 닫기
+	FindClose(hFind);
 
 	return S_OK;
 }
@@ -2232,7 +2247,7 @@ HRESULT CController_EffectTool::Load_Shader()
 
 	/* For. Prototype_Component_Shader_Effect_Mesh */
 	if (FAILED(m_pGameInstance->Add_Prototype(LEVEL_TOOL, TEXT("Prototype_Component_Shader_Effect_Mesh"),
-		CShader::Create(m_pDevice, m_pContext, TEXT("../Bin/ShaderFiles/Shader_Effect_Mesh.hlsl"), VTXPOSTEX::Elements, VTXPOSTEX::iNumElements))))
+		CShader::Create(m_pDevice, m_pContext, TEXT("../Bin/ShaderFiles/Shader_Effect_Mesh.hlsl"), VTXMESH::Elements, VTXMESH::iNumElements))))
 		return E_FAIL;
 
 	/* For. Prototype_Component_Shader_Trail_OnePoint_Instance */

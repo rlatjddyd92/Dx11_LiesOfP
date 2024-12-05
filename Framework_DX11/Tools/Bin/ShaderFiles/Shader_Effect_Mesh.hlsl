@@ -15,35 +15,43 @@ float2 g_vTileMove;
 
 struct VS_IN
 {
-	float3 vPosition : POSITION;
-	float2 vTexcoord : TEXCOORD0;		
+    float3 vPosition : POSITION;
+    float3 vNormal : NORMAL;
+    float2 vTexcoord : TEXCOORD0;
+    float3 vTangent : TANGENT;
 };
 
 struct VS_OUT
-{	
-	float4 vPosition : SV_POSITION;
-	float2 vTexcoord : TEXCOORD0;	
+{
+    float4 vPosition : SV_POSITION;
+    float4 vNormal : NORMAL;
+    float2 vTexcoord : TEXCOORD0;
+    float4 vProjPos : TEXCOORD1;
 };
 
 VS_OUT VS_MAIN(/*Á¤Á¡*/VS_IN In)
 {
-	VS_OUT		Out = (VS_OUT)0;	
+    VS_OUT Out = (VS_OUT) 0;
 	
-	matrix			matWV, matWVP;
+    matrix matWV, matWVP;
 
-	matWV = mul(g_WorldMatrix, g_ViewMatrix);
-	matWVP = mul(matWV, g_ProjMatrix);
+    matWV = mul(g_WorldMatrix, g_ViewMatrix);
+    matWVP = mul(matWV, g_ProjMatrix);
 
-	Out.vPosition = mul(vector(In.vPosition, 1.f), matWVP);	
-	Out.vTexcoord = In.vTexcoord;
+    Out.vPosition = mul(vector(In.vPosition, 1.f), matWVP);
+    Out.vNormal = normalize(mul(vector(In.vNormal, 0.f), g_WorldMatrix));
+    Out.vTexcoord = In.vTexcoord;
+    Out.vProjPos = Out.vPosition;
 
-	return Out;
+    return Out;
 }
 
 struct PS_IN
 {
-	float4 vPosition : SV_POSITION;
-	float2 vTexcoord : TEXCOORD0;
+    float4 vPosition : SV_POSITION;
+    float4 vNormal : NORMAL;
+    float2 vTexcoord : TEXCOORD0;
+    float4 vProjPos : TEXCOORD1;
 };
 
 struct PS_OUT
@@ -83,6 +91,8 @@ PS_EFFECT_OUT PS_SELF_DISTORTION_MAIN(PS_IN In)
     vColor.rgb *= g_vColor.rgb;
     vColor.a *= g_fAlpha;
 	
+    if(vColor.a < 0.3f)
+        discard;
 	
     Out.vDiffuse = vColor;
     Out.vBlur = vColor;
@@ -100,6 +110,25 @@ PS_OUT PS_BLEND_MAIN(PS_IN In)
     vColor.rgb *= g_vColor.rgb;
     vColor.a *= g_fAlpha;
 	
+    Out.vColor = vColor;
+	
+    return Out;
+}
+
+PS_OUT PS_BLEND_RGBTOA_MAIN(PS_IN In)
+{
+    PS_OUT Out = (PS_OUT) 0;
+    float2 vTexcoord = In.vTexcoord * g_vTileRepeat + g_vTileMove;
+    vector vColor = g_DiffuseTexture.Sample(LinearSampler, vTexcoord);
+	
+    vColor.a = max(vColor.r, max(vColor.g, vColor.b));
+    
+    vColor.rgb *= g_vColor.rgb;
+    vColor.a *= g_fAlpha;
+	
+    if (vColor.a < 0.3f)
+        discard;
+    
     Out.vColor = vColor;
 	
     return Out;
@@ -193,6 +222,17 @@ technique11	DefaultTechnique
         VertexShader = compile vs_5_0 VS_MAIN();
         GeometryShader = NULL;
         PixelShader = compile ps_5_0 PS_DISTORTION_MAIN();
+    }
+
+    pass BLEND_RGBTOA   //5
+    {
+        SetRasterizerState(RS_Cull_None);
+        SetDepthStencilState(DSS_NonWrite, 0);
+        SetBlendState(BS_AlphaBlend, vector(0.f, 0.f, 0.f, 0.f), 0xffffffff);
+
+        VertexShader = compile vs_5_0 VS_MAIN();
+        GeometryShader = NULL;
+        PixelShader = compile ps_5_0 PS_BLEND_RGBTOA_MAIN();
     }
 
 }

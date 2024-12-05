@@ -171,7 +171,7 @@ PS_EFFECT_OUT PS_GLOW_MAIN(PS_IN In)
     
     vector vColor = g_DiffuseTexture.Sample(LinearSampler, Get_SpriteTexcoord(In.vTexcoord));
 
-    if (vColor.a <= 0.3f)
+    if (vColor.a <= 0.1f)
         discard;
     
     vColor.r = 1.f - (1 - g_vColor.r) * (1 - vColor.a);
@@ -192,7 +192,7 @@ PS_EFFECT_OUT PS_GLOW_RGBTOA_MAIN(PS_IN In)
     
     vColor.a = max(vColor.r, max(vColor.g, vColor.b));
     
-    if (vColor.a <= 0.3f)
+    if (vColor.a <= 0.1f)
         discard;
     
     vColor.r = 1.f - (1 - g_vColor.r) * (1 - vColor.a);
@@ -292,6 +292,28 @@ PS_OUT PS_BLEND_RGBTOA_MASK_MAIN(PS_IN In)
     
     return Out;
 }
+
+PS_OUT PS_RGBTOA_MASK_MAIN(PS_IN In)
+{
+    PS_OUT Out = (PS_OUT) 0;
+    
+    Out.vColor = g_DiffuseTexture.Sample(LinearSampler, Get_SpriteTexcoord(In.vTexcoord));
+        
+    float2 vTexcoord = In.vTexcoord * g_vTileRepeat + g_vTileMove;
+    
+    vector vMask = g_MaskTexture_1.Sample(LinearSampler, vTexcoord);
+    
+    Out.vColor.a = max(Out.vColor.r, max(Out.vColor.g, Out.vColor.b));
+    Out.vColor *= vMask;
+    if(Out.vColor.a < 0.1f)
+        discard;
+    
+    Out.vColor.rgb *= g_vColor.rgb;
+    Out.vColor.rgb *= g_fRatio;
+    
+    return Out;
+}
+
 
 PS_OUT PS_POWERGUARD_MAIN(PS_IN In)
 {
@@ -444,6 +466,16 @@ technique11 DefaultTechnique
         PixelShader = compile ps_5_0 PS_BLEND_RGBTOA_MASK_MAIN();
     }
 
+    pass MASK_RGBTOA // 12
+    {
+        SetRasterizerState(RS_Default);
+        SetDepthStencilState(DSS_Default, 0);
+        SetBlendState(BS_Default, vector(0.f, 0.f, 0.f, 0.f), 0xffffffff);
+
+        VertexShader = compile vs_5_0 VS_MAIN();
+        GeometryShader = NULL;
+        PixelShader = compile ps_5_0 PS_RGBTOA_MASK_MAIN();
+    }
 }
 
 

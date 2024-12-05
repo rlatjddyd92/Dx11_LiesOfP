@@ -92,10 +92,10 @@ HRESULT CLoader::Ready_Resources_For_GamePlayLevel()
 	//	return E_FAIL;
 
 	/* For. Prototype_Component_Model_PlayerExample*/
-	PreTransformMatrix = XMMatrixRotationY(XMConvertToRadians(180.0f));
-	if (FAILED(m_pGameInstance->Add_Prototype(LEVEL_GAMEPLAY, TEXT("Prototype_Component_Model_Player"),
-		CModel::Create(m_pDevice, m_pContext, CModel::TYPE_ANIM, "../Bin/Resources/Models/Player/Player.fbx", "../Bin/ModelData/Anim/Player/", PreTransformMatrix))))
-		return E_FAIL;
+	//PreTransformMatrix = XMMatrixRotationY(XMConvertToRadians(180.0f));
+	//if (FAILED(m_pGameInstance->Add_Prototype(LEVEL_GAMEPLAY, TEXT("Prototype_Component_Model_Player"),
+	//	CModel::Create(m_pDevice, m_pContext, CModel::TYPE_ANIM, "../Bin/Resources/Models/Player/Player.fbx", "../Bin/ModelData/Anim/Player/", PreTransformMatrix))))
+	//	return E_FAIL;
 
 	//if (FAILED(m_pGameInstance->Add_Prototype(LEVEL_GAMEPLAY, TEXT("Prototype_Component_Model_Monastery_TowerDoor"),
 	//	CModel::Create(m_pDevice, m_pContext, CModel::TYPE_ANIM, "../Bin/Resources/Models/Monastery_TowerDoor/SK_FO_Monastery_TowerDoor_01.fbx", "../Bin/ModelData/NonAnim/InteractObj/Tex/", PreTransformMatrix))))
@@ -122,8 +122,8 @@ HRESULT CLoader::Ready_Resources_For_GamePlayLevel()
 	// 준호형 전용
 	// if (FAILED(Ready_Resources_GoJunHo()))
 
-	//if (FAILED(Ready_Resources_For_Effect()))
-	//	return E_FAIL;
+	if (FAILED(Ready_Resources_For_Effect()))
+		return E_FAIL;
 	 
 
 	//우송
@@ -348,20 +348,72 @@ HRESULT CLoader::Ready_Resources_For_Effect()
 {
 	_matrix		PreTransformMatrix = XMMatrixIdentity();
 
-	/* For. Prototype_Component_Model_Effect_Helix_03 */
-	if (FAILED(m_pGameInstance->Add_Prototype(LEVEL_GAMEPLAY, TEXT("Prototype_Component_Model_Effect_Crystal_Cloud"),
-		CModel::Create(m_pDevice, m_pContext, CModel::TYPE_NONANIM, "../Bin/Resources/Models/Effect/Mesh_Crystal_Clouds_01.fbx", "../Bin/ModelData/NonAnim/Effect/", PreTransformMatrix))))
-		return E_FAIL;
+	_wstring searchPath = TEXT("../Bin/Resources/Models/Effect/*.fbx");
+	WIN32_FIND_DATAW findFileData;
+	HANDLE hFind = FindFirstFileW(searchPath.c_str(), &findFileData);
 
-	/* For. Prototype_Component_Model_Effect_Helix_04 */
-	if (FAILED(m_pGameInstance->Add_Prototype(LEVEL_GAMEPLAY, TEXT("Prototype_Component_Model_Effect_Helix_Single"),
-		CModel::Create(m_pDevice, m_pContext, CModel::TYPE_NONANIM, "../Bin/Resources/Models/Effect/Mesh_Helix_Single.fbx", "../Bin/ModelData/NonAnim/Effect/", PreTransformMatrix))))
+	if (hFind == INVALID_HANDLE_VALUE) {
+		MSG_BOX(TEXT("Folder Open Failed"));
 		return E_FAIL;
+	}
 
-	/* For. Prototype_Component_Model_Effect_Helix_08 */
-	if (FAILED(m_pGameInstance->Add_Prototype(LEVEL_GAMEPLAY, TEXT("Prototype_Component_Model_Effect_Half_Sphere"),
-		CModel::Create(m_pDevice, m_pContext, CModel::TYPE_NONANIM, "../Bin/Resources/Models/Effect/Mesh_HalfSphere.fbx", "../Bin/ModelData/NonAnim/Effect/", PreTransformMatrix))))
-		return E_FAIL;
+	while (FindNextFileW(hFind, &findFileData))
+	{
+		if (!(findFileData.dwFileAttributes & FILE_ATTRIBUTE_DIRECTORY))
+		{
+			_wstring strFileName = findFileData.cFileName;   // 파일 이름 + 확장자
+
+			_wstring strFileTag = strFileName;
+			size_t dotPos = strFileTag.find_last_of(L'.');
+			if (dotPos == _wstring::npos) {
+				strFileTag = TEXT(""); // 확장자가 없으면 빈 문자열 반환
+			}
+
+			_wstring strExtention = strFileTag.substr(dotPos + 1);
+
+			size_t nullPos = strExtention.find(L'\0');
+			if (nullPos != _wstring::npos) {
+				strExtention.erase(nullPos);
+			}
+
+			_wstring strFileExtention = strExtention;   // 확장자
+
+			strFileTag = strFileName;
+			dotPos = strFileTag.rfind(L'.');
+			if (dotPos == _wstring::npos) {
+				// 확장자가 없으면 원본 반환
+				strFileTag = TEXT(""); // 확장자가 없으면 빈 문자열 반환
+			}
+			_wstring strFileBaseName = strFileTag.substr(0, dotPos);
+
+			_wstring strResultPath = TEXT("../Bin/Resources/Models/Effect/") + strFileName;
+
+			_wstring strPrototypeTag = TEXT("Prototype_Component_Model_Effect_") + strFileBaseName;
+
+
+			strResultPath;
+
+			// 변환 후 필요한 버퍼 크기 계산
+			int bufferSize = WideCharToMultiByte(CP_UTF8, 0, strResultPath.c_str(), -1, nullptr, 0, nullptr, nullptr);
+			if (bufferSize == 0) {
+				throw std::runtime_error("WideCharToMultiByte failed.");
+			}
+
+			// 변환 결과를 저장할 std::string 생성
+			std::string str(bufferSize, '\0');
+			WideCharToMultiByte(CP_UTF8, 0, strResultPath.c_str(), -1, &str[0], bufferSize, nullptr, nullptr);
+
+			if (FAILED(m_pGameInstance->Add_Prototype(LEVEL_GAMEPLAY, strPrototypeTag,
+				CModel::Create(m_pDevice, m_pContext, CModel::TYPE_NONANIM, str.c_str(), "../Bin/ModelData/NonAnim/Effect/", PreTransformMatrix))))
+			{
+				int a = 0;
+				return E_FAIL;
+			}
+		}
+	}
+	// 핸들 닫기
+	FindClose(hFind);
+
 
 	return S_OK;
 }
