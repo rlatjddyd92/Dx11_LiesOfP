@@ -841,6 +841,9 @@
     <Filter Include="02.GameObjects\12.AttackObject\SimonManus\GodHands">
       <UniqueIdentifier>{8f7485cc-d647-4c77-8b7e-5d47d74e71e6}</UniqueIdentifier>
     </Filter>
+    <Filter Include="05.Fsm\Player\CutScene\Simon">
+      <UniqueIdentifier>{a7535373-661b-41f2-b044-6a1180235208}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Client.h">

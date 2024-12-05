@@ -638,7 +638,7 @@ void CTransform::Orbit(_vector vAxis, _vector vCenter, _float fLimit, _float fDi
 	Set_State(STATE_UP, XMVector3TransformNormal(vUp, RotationMatrix));
 	Set_State(STATE_LOOK, XMVector3TransformNormal(vLook, RotationMatrix));
 
-	Set_State(STATE_POSITION, vCenter - XMVector3Normalize(Get_State(STATE_LOOK)) * fDistance);
+	//Set_State(STATE_POSITION, vCenter - XMVector3Normalize(Get_State(STATE_LOOK)) * fDistance);
 
 }
 
