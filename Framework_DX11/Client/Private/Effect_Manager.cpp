@@ -244,7 +244,6 @@ HRESULT CEffect_Manager::Load_Models(const _wstring& strEffectPath)
     FindClose(hFind);
 
     return S_OK;
-    return S_OK;
 }
 
 HRESULT CEffect_Manager::Load_Shaders()
@@ -891,7 +890,6 @@ CEffect_Container* CEffect_Manager::Clone_Effect_From_Prototype(const _wstring& 
         else if (TEXT("ME") == strFileExtention)
         {
             CMesh_Effect* pEffect = Clone_MeshEffect(strEffectName);
-
             if (nullptr == pEffect)
                 return nullptr;
 
