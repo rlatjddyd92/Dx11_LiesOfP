@@ -113,6 +113,13 @@ ITEM_RESULT CItem_Manager::EquipWeapon_Inven(INVEN_ARRAY_TYPE eIndex, EQUIP_SLOT
 	if ((eIndex == INVEN_ARRAY_TYPE::TYPE_WEAPON_SPECIAL_BLADE) || (eIndex == INVEN_ARRAY_TYPE::TYPE_WEAPON_SPECIAL_HANDLE))
 		eIndex = INVEN_ARRAY_TYPE::TYPE_WEAPON_SPECIAL_BLADE;
 
+	// 안전장치 
+	// 지금 들고 있는 무기 조작 금지
+	if ((eSlot == EQUIP_SLOT::EQUIP_WEAPON_BLADE_0) && (m_iWeapon_Select == 0))
+		return ITEM_RESULT::RESULT_INVALID;
+	if ((eSlot == EQUIP_SLOT::EQUIP_WEAPON_BLADE_1) && (m_iWeapon_Select == 1))
+		return ITEM_RESULT::RESULT_INVALID;
+
 	ITEM& Blade = *(m_vecArray_Inven[_uint(eIndex)]->vecItemInfo[iIndex]);
 	ITEM& Handle = *(m_vecArray_Inven[_uint(eIndex) + 1]->vecItemInfo[iIndex]);
 
@@ -139,6 +146,8 @@ ITEM_RESULT CItem_Manager::EquipWeapon_Inven(INVEN_ARRAY_TYPE eIndex, EQUIP_SLOT
 
 		return ITEM_RESULT::RESULT_SUCCESS;
 	}
+
+
 
 	return ITEM_RESULT::RESULT_INVALID;
 }
@@ -177,6 +186,13 @@ ITEM_RESULT CItem_Manager::UnEquipWeapon_Inven(EQUIP_SLOT eSlot)
 		eSlot = EQUIP_SLOT::EQUIP_WEAPON_BLADE_0;
 	if ((_int(eSlot) >= _int(EQUIP_SLOT::EQUIP_WEAPON_BLADE_1)) && (_int(eSlot) <= _int(EQUIP_SLOT::EQUIP_WEAPON_HANDLE_1)))
 		eSlot = EQUIP_SLOT::EQUIP_WEAPON_BLADE_1;
+
+	// 안전장치 
+	// 지금 들고 있는 무기 조작 금지
+	if ((eSlot == EQUIP_SLOT::EQUIP_WEAPON_BLADE_0) && (m_iWeapon_Select == 0))
+		return ITEM_RESULT::RESULT_INVALID;
+	if ((eSlot == EQUIP_SLOT::EQUIP_WEAPON_BLADE_1) && (m_iWeapon_Select == 1))
+		return ITEM_RESULT::RESULT_INVALID;
 
 	if (!IsValid_Inven(m_vecEquip_ItemInfo[_uint(eSlot)]->eType, m_vecEquip_ItemInfo[_uint(eSlot)]->iIndex))
 		return ITEM_RESULT::RESULT_INVALID;
@@ -348,6 +364,16 @@ void CItem_Manager::Set_Item_Funtion(_int iItem_Index)
 
 }
 
+_bool CItem_Manager::Get_CanSwitch_Weapon()
+{
+	if (m_vecEquip_ItemInfo[_int(EQUIP_SLOT::EQUIP_WEAPON_BLADE_0)]->eType == INVEN_ARRAY_TYPE::TYPE_END)
+		return false;
+	if (m_vecEquip_ItemInfo[_int(EQUIP_SLOT::EQUIP_WEAPON_BLADE_1)]->eType == INVEN_ARRAY_TYPE::TYPE_END)
+		return false;
+
+	return true;
+}
+
 
 _bool CItem_Manager::Use_Potion()
 {
@@ -359,8 +385,6 @@ _bool CItem_Manager::Use_Potion()
 	for (_int i = 0; i < 5; ++i)
 		if (m_vecArray_Inven[_int(INVEN_ARRAY_TYPE::TYPE_USING_BASIC)]->Get_Item_Info(i)->iItem_Index == _int(SPECIAL_ITEM::SP_PULSE_BATTERY))
 			m_vecArray_Inven[_int(INVEN_ARRAY_TYPE::TYPE_USING_BASIC)]->Get_Item_Info(i)->iCount = m_iNow_Potion_Count;
-
-	//GET_GAMEINTERFACE->Add_Stat_Normal(STAT_NORMAL::STAT_GAUGE_HP, 100.f);
 
 	return true;
 }
@@ -910,6 +934,8 @@ HRESULT CItem_Manager::Initialize_Item()
 		if (stoi(iter[2]) != -1)
 			EquipItem_Inven(INVEN_ARRAY_TYPE(stoi(iter[2])), EQUIP_SLOT(stoi(iter[0])), stoi(iter[3]));
 	}
+
+	m_iWeapon_Select = 0;
 
 	return S_OK;
 }

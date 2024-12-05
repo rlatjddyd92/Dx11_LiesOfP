@@ -264,6 +264,7 @@ public:
 	CPlayer::WEAPON_TYPE Get_Weapon_Model_Index(); // 현재 사용 중인 무기의 모델 번호 리턴
 	list<SPECIAL_ITEM>& Get_LastFrame_UsingItem_Info(); // 이번 프레임에 기능 구현이 필요한 아이템을 사용했는지 확인
 	void Set_Item_Funtion(_int iItem_Index);
+	_bool Get_CanSwitch_Weapon(); // 무기 슬롯 2개 중 1개만 아이템이 있는 경우 false 반환
 
 	// 접근, 수정
 	_bool Is_ItemData_Change() { return m_bIsChange; }
@@ -397,7 +398,7 @@ public:
 		else
 			return Get_Equip_Item_Info(EQUIP_SLOT::EQUIP_WEAPON_HANDLE_1);
 	}
-
+	
 
 
 
@@ -584,7 +585,7 @@ private:
 	_uint m_iTool_Select = 0;
 
 	// 우하단 조작용
-	_uint m_iWeapon_Select = 0;
+	_uint m_iWeapon_Select = -1;
 
 	// 포션 관련 
 	_int m_iNow_Potion_Count = 3;
@@ -604,7 +605,7 @@ private:
 	INVEN_ARRAY_TYPE m_eNow_ActionArray = INVEN_ARRAY_TYPE::TYPE_END;
 	_int m_iArray_Index = -1;
 	_int m_iActionPopup_Page = 0;
-	
+	_bool m_bInstant_Weapon_Change = false;
 
 public:
 	static CItem_Manager* Create(CGameInstance* pGameInstance);

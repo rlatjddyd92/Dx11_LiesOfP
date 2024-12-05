@@ -43,10 +43,10 @@ public: // 외부에서 매니저 접근
 	void Update_GameInterface(_float fTimeDelta);
 	void Release_GameInterface();
 
-	void Input_Player_Pointer(const CPlayer* pPointer) { m_pPlayer = pPointer; }
+	void Input_Player_Pointer(CPlayer* pPointer) { m_pPlayer = pPointer; }
 
 	// 플레이어 정보 
-	const CPlayer* Get_Player() { return m_pPlayer; }
+	CPlayer* Get_Player() { return m_pPlayer; }
 	//_bool Get_InvenLock() { return m_pPlayer->Get_Player_Stat().m_bInvenLock; }
 
 
@@ -148,6 +148,7 @@ public: // 외부에서 매니저 접근
 	// 플레이어 참조용 
 	CPlayer::WEAPON_TYPE Get_Weapon_Model_Index() { return m_pItem_Manager->Get_Weapon_Model_Index(); } // 현재 사용 중인 무기의 모델 번호 리턴
 	list<SPECIAL_ITEM>& Get_LastFrame_UsingItem_Info() { return m_pItem_Manager->Get_LastFrame_UsingItem_Info(); }
+	_bool Get_CanSwitch_Weapon() { return m_pItem_Manager->Get_CanSwitch_Weapon(); }
 
 	// 접근, 수정
 	_bool Is_ItemData_Change() { return m_pItem_Manager->Is_ItemData_Change(); }
@@ -239,7 +240,7 @@ private:
 	// 플레이어 포인터
 	// 얕은 복사로 사용한다 
 	// 레퍼런스 조정하지 않는다 
-	const CPlayer* m_pPlayer = { nullptr };
+	CPlayer* m_pPlayer = { nullptr };
 
 
 private: // <- 디바이스 
