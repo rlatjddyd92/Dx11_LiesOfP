@@ -213,7 +213,7 @@ HRESULT CEffect_Manager::Load_Shaders()
 
     /* For. Prototype_Component_Shader_Effect_Mesh */
     if (FAILED(m_pGameInstance->Add_Prototype(LEVEL_STATIC, TEXT("Prototype_Component_Shader_Effect_Mesh"),
-        CShader::Create(m_pDevice, m_pContext, TEXT("../Bin/ShaderFiles/Shader_Effect_Mesh.hlsl"), VTXPOSTEX::Elements, VTXPOSTEX::iNumElements))))
+        CShader::Create(m_pDevice, m_pContext, TEXT("../Bin/ShaderFiles/Shader_Effect_Mesh.hlsl"), VTXMESH::Elements, VTXMESH::iNumElements))))
         return E_FAIL;
 
     /* For. Prototype_Component_Shader_VtxPointInstance */

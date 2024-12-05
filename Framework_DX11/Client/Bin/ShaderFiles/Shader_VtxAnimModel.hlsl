@@ -11,7 +11,8 @@ matrix g_CascadeViewMatrix[3], g_CascadeProjMatrix[3];
 texture2D       g_DiffuseTexture;
 texture2D       g_NormalTexture;
 texture2D       g_ARMTexture;
-texture2D		g_EmessiveTexture;
+texture2D       g_EmessiveTexture;
+texture2D       g_DissloveTexture;
 
 float4			g_vRimLight;
 
@@ -165,7 +166,8 @@ PS_OUT_MODEL PS_MAIN_NORMAL(PS_IN_NORMAL In)
     PS_OUT_MODEL Out = (PS_OUT_MODEL) 0;
 
     vector vDiffuse = g_DiffuseTexture.Sample(LinearSampler, In.vTexcoord);
-
+    vector vDisslove = g_DissloveTexture.Sample(LinearSampler, In.vTexcoord);
+    
     vector vNormalDesc = g_NormalTexture.Sample(LinearSampler, In.vTexcoord);
     float3 vNormal = vNormalDesc.xyz * 2.f - 1.f;
 
@@ -254,4 +256,6 @@ technique11 DefaultTechnique
         GeometryShader = compile gs_5_0 GS_MAIN();
         PixelShader = compile ps_5_0 PS_MAIN_CASCADE();
     }
+
+
 }

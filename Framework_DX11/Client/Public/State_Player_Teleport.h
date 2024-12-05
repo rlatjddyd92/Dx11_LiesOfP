@@ -30,6 +30,7 @@ private:
 
     _Vec4               m_vRimLightColor = {};
     _bool               m_isEnd_Teleport = {};
+    _bool               m_isAppearStartEffect = {};
 
     class CSteppingStone*     m_pSteppingStone = { nullptr };
 private:

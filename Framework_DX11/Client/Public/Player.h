@@ -191,6 +191,8 @@ private:
 	vector<class CEffect_Container*> m_Effects;
 	class CEffect_Manager* m_pEffect_Manager = { nullptr };
 
+	CTexture* m_pDissloveTexture = { nullptr };
+
 private:
 	CPlayerCamera*		m_pPlayerCamera = { nullptr };
 

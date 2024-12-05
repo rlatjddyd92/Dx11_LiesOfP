@@ -5,6 +5,7 @@
 #include "Player.h"
 #include "Camera.h"
 #include "SteppingStone.h"
+#include "Effect_Manager.h"
 
 CState_Player_Teleport::CState_Player_Teleport(CFsm* pFsm, CPlayer* pPlayer)
     :CState{ pFsm }
@@ -35,6 +36,7 @@ HRESULT CState_Player_Teleport::Start_State(void* pArg)
     m_vRimLightColor = _Vec4(0.f, 0.f, 0.f, 0.5f);
 
     m_isEnd_Teleport = false;
+    m_isAppearStartEffect = false;
 
     m_pPlayer->Play_Sound(CPawn::PAWN_SOUND_EFFECT1, TEXT("SE_PC_MT_Teleport_Start.wav"));
 
@@ -58,12 +60,19 @@ void CState_Player_Teleport::Update(_float fTimeDelta)
             m_isEnd_Teleport = false;
             m_pPlayer->Change_Animation(m_iAnimation_TeleportEnd, false, 0.3f);
 
+            CEffect_Manager::Get_Instance()->Add_Effect_ToLayer(LEVEL_GAMEPLAY, TEXT("Player_Teleport_Arrive"), (_Vec3)m_pPlayer->Get_Transform()->Get_State(CTransform::STATE_POSITION));
             m_pPlayer->Play_Sound(CPawn::PAWN_SOUND_EFFECT2, TEXT("SE_PC_MT_Teleport_End.wav"));
         }
-        else if (iFrame > 80 )
+        else if (iFrame > 80)
         {
             m_vRimLightColor.z = max(m_vRimLightColor.z + fTimeDelta, 1.f);
             m_vRimLightColor.w = max(m_vRimLightColor.w - 0.6f * fTimeDelta, 0.1f);
+
+            if (!m_isAppearStartEffect)
+            {
+                CEffect_Manager::Get_Instance()->Add_Effect_ToLayer(LEVEL_GAMEPLAY, TEXT("Player_Teleport_Depart"), (_Vec3)m_pPlayer->Get_Transform()->Get_State(CTransform::STATE_POSITION));
+                m_isAppearStartEffect = true;
+            }
         }
     }
     else if (iCurAnim == m_iAnimation_TeleportEnd)
