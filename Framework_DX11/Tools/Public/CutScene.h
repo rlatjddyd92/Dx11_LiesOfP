@@ -33,6 +33,7 @@ public:
 	void			Create_KeyFrame();
 	void			Sort_KeyFrame_TrackPosition();
 	void			Delete_Selected_Keyframe(_int iIndex);
+	void			Load_KeyFrame(CUTSCENE_KEYFRAME_DESC pDesc);
 	_int			Get_KeyFrameCount() { return (_int)m_KeyFrames.size(); }
 	CUTSCENE_KEYFRAME_DESC*	Get_Selected_KeyFrame(_int iIndex) { return m_KeyFrames[iIndex]; }
 

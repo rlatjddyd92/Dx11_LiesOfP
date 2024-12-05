@@ -477,8 +477,9 @@ void CController_Cutscene::Load()
 
         for (int j = 0; j < iKeyFrameCount; ++j)
         {
-            m_CutSceneList[iCutScene_Index]->Create_KeyFrame();
-            fin.read(reinterpret_cast<char*>(m_CutSceneList[iCutScene_Index]->Get_Selected_KeyFrame(j)), sizeof(CUTSCENE_KEYFRAME_DESC));
+            CUTSCENE_KEYFRAME_DESC pDesc = {};
+            fin.read(reinterpret_cast<char*>( &pDesc), sizeof(CUTSCENE_KEYFRAME_DESC));
+            m_CutSceneList[i]->Load_KeyFrame(pDesc);
         }
     }
 

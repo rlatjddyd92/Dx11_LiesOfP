@@ -13,6 +13,7 @@
 #include "BackGround.h"
 #include "StaticObj.h"
 #include "NavDataObj.h"
+#include "CutScene.h"
 
 #pragma region MONSTER
 #include "Monster.h"
@@ -1094,9 +1095,14 @@ HRESULT CLoader::Ready_Prototype()
 		return E_FAIL;
 
 
-	/* For. Prototype_GameObject_StaticObj */
+	/* For. Prototype_GameObject_NavDataObj */
 	if (FAILED(m_pGameInstance->Add_Prototype(TEXT("Prototype_GameObject_NavDataObj"),
 		CNavDataObj::Create(m_pDevice, m_pContext))))
+		return E_FAIL;
+
+	/* For. Prototype_GameObject_CutScene */
+	if (FAILED(m_pGameInstance->Add_Prototype(TEXT("Prototype_GameObject_CutScene"),
+		CCutScene::Create(m_pDevice, m_pContext))))
 		return E_FAIL;
 
 
