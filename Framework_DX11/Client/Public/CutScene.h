@@ -10,7 +10,7 @@ class CCutScene :
 	public CGameObject
 {
 public:
-	enum ActorType { CAMERA, UI, SHADER, GAMEOBJECT, TYPE_END };
+	enum ObjType { PLAYER, BOSS1, BOSS2, TYPE_END };
 
 private:
 	CCutScene(ID3D11Device* pDevice, ID3D11DeviceContext* pContext);
@@ -31,6 +31,7 @@ public:
 	void			Keyframe_Actived_Reset();
 	void			Create_KeyFrame();
 	CUTSCENE_KEYFRAME_DESC* Get_Selected_KeyFrame(_int iIndex) { return m_KeyFrames[iIndex]; }
+	void			Load_KeyFrame(CUTSCENE_KEYFRAME_DESC pDesc);
 
 private:
 	_float						m_fMaxFrame = { 50.f };
@@ -40,11 +41,14 @@ private:
 	vector<CUTSCENE_KEYFRAME_DESC*>		m_KeyFrames;
 
 	class CCamera* m_pCamera = { nullptr };
+	class CPawn*  m_pObjects[3] = { nullptr,nullptr,nullptr };
+
 private:
 	void Play_Keyframes(_float fTimeDelta);
 	void Active_Shader(CUTSCENE_KEYFRAME_DESC* pCutSceneDesc);
 	void Active_UI(CUTSCENE_KEYFRAME_DESC* pCutSceneDesc);
 	void Active_Camera(CUTSCENE_KEYFRAME_DESC* pCutSceneDesc);
+	void Active_Obj(CUTSCENE_KEYFRAME_DESC* pCutSceneDesc);
 public:
 	static CCutScene* Create(ID3D11Device* pDevice, ID3D11DeviceContext* pContext);
 	virtual CGameObject* Clone(void* pArg);

@@ -14,6 +14,7 @@
 #include "StaticObj.h"
 #include "Player.h"
 #include "Ladder.h"
+#include "CutScene.h"
 
 CLevel_GamePlay::CLevel_GamePlay(ID3D11Device* pDevice, ID3D11DeviceContext* pContext)
 	: CLevel{ pDevice, pContext }
@@ -46,6 +47,9 @@ HRESULT CLevel_GamePlay::Initialize()
 
 	if (FAILED(Read_Map_Data()))
 		return E_FAIL;	
+
+	if (FAILED(Ready_CutScene_Data()))
+		return E_FAIL;
 
 	// 24-11-19 김성용
 	// 게임 인터페이스를 인게임 모드로 전환
@@ -217,7 +221,7 @@ HRESULT CLevel_GamePlay::Ready_Layer_Monster()
 	//if (FAILED(m_pGameInstance->Add_CloneObject_ToLayer(LEVEL_GAMEPLAY, TEXT("Layer_Monster"), TEXT("Prototype_GameObject_CarcassTail"))))
 	//	return E_FAIL;
 
-	if (FAILED(m_pGameInstance->Add_CloneObject_ToLayer(LEVEL_GAMEPLAY, TEXT("Layer_Monster"), TEXT("Prototype_GameObject_SimonManus"))))
+	if (FAILED(m_pGameInstance->Add_CloneObject_ToLayer(LEVEL_GAMEPLAY, TEXT("Layer_Boss2"), TEXT("Prototype_GameObject_SimonManus"))))
 		return E_FAIL;
 	
 	return S_OK;
@@ -405,6 +409,50 @@ HRESULT CLevel_GamePlay::Read_Map_Data()
 
 	m_pGameInstance->Create_Octree(vMinPos, vMaxPos);
 
+	return S_OK;
+}
+
+HRESULT CLevel_GamePlay::Ready_CutScene_Data()
+{
+	const char cFile[128] = "../Bin/DataFiles/CutScene_Data.dat";
+	ifstream fin(cFile, ios::in | ios::binary);
+
+	//	fin.open("../Bin/Map_Data.txt");
+	if (!fin.is_open())    // 파일 열었다면
+	{
+		MSG_BOX(TEXT("파일 읽기를 실패했어요.."));
+		return E_FAIL;
+	}
+
+	_uint CutSceneCount = { 0 };
+	fin.read(reinterpret_cast<char*>(&CutSceneCount), sizeof(_uint));
+
+	for (_uint i = 0; i < CutSceneCount; ++i)
+	{
+		CCutScene* pCutScene = dynamic_cast<CCutScene*>(m_pGameInstance->Get_CloneObject_ToLayer(LEVEL_GAMEPLAY, TEXT("Layer_CutScene"), TEXT("Prototype_GameObject_CutScene")));
+
+		//컷신 인덱스
+		_uint iCutScene_Index;
+		fin.read(reinterpret_cast<char*>(&iCutScene_Index), sizeof(_uint));
+
+		//컷신의 전체 프레임 (시간)
+		_float fMaxFrame;
+		fin.read(reinterpret_cast<char*>(&fMaxFrame), sizeof(_float));
+		pCutScene->Set_MaxFrame(fMaxFrame);
+
+		//컷신의 KeyFrame개수(이벤트 개수)
+		_int iKeyFrameCount;
+		fin.read(reinterpret_cast<char*>(&iKeyFrameCount), sizeof(_int));
+
+		for (int j = 0; j < iKeyFrameCount; ++j)
+		{
+			CUTSCENE_KEYFRAME_DESC pDesc = {};
+			fin.read(reinterpret_cast<char*>(&pDesc), sizeof(CUTSCENE_KEYFRAME_DESC));
+			pCutScene->Load_KeyFrame(pDesc);
+		}
+	}
+
+	fin.close();
 	return S_OK;
 }
 

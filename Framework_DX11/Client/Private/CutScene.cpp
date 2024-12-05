@@ -4,6 +4,7 @@
 #include "GameInterface_Controller.h"
 #include "Camera.h"
 #include "Camera_Manager.h"
+#include "Pawn.h"
 
 CCutScene::CCutScene(ID3D11Device* pDevice, ID3D11DeviceContext* pContext)
 	: CGameObject{ pDevice, pContext }
@@ -26,6 +27,9 @@ HRESULT CCutScene::Initialize(void* pArg)
 	m_isActive = false;
 	m_pCamera = CCamera_Manager::Get_Instance()->Find_Camera(TEXT("Camera_Free"));
 
+	m_pObjects[PLAYER] = static_cast<CPawn*>(m_pGameInstance->Find_Player(LEVEL_GAMEPLAY));
+	//m_pObjects[BOSS1]  = static_cast<CPawn*>(m_pGameInstance->Find_Object(LEVEL_GAMEPLAY, TEXT("Layer_Boss1"), 0));
+	m_pObjects[BOSS2]  = static_cast<CPawn*>(m_pGameInstance->Find_Object(LEVEL_GAMEPLAY, TEXT("Layer_Boss2"), 0));
 	return S_OK;
 }
 
@@ -127,6 +131,30 @@ void CCutScene::Active_Camera(CUTSCENE_KEYFRAME_DESC* pCutSceneDesc)
 	{
 		m_pCamera->Start_MoveLerp(pCutSceneDesc->Camera_Desc.vTargetPos, pCutSceneDesc->Camera_Desc.fMoveSpeed);
 	}
+}
+
+void CCutScene::Active_Obj(CUTSCENE_KEYFRAME_DESC* pCutSceneDesc)
+{
+	if (pCutSceneDesc->Obj_Desc.bUseObj[PLAYER])
+	{
+		m_pObjects[PLAYER]->Change_State(*pCutSceneDesc->Obj_Desc.iStateNum);
+	}
+	if (pCutSceneDesc->Obj_Desc.bUseObj[BOSS1])
+	{
+		m_pObjects[BOSS1]->Change_State(*pCutSceneDesc->Obj_Desc.iStateNum);
+	}
+	if (pCutSceneDesc->Obj_Desc.bUseObj[BOSS2])
+	{
+		m_pObjects[BOSS2]->Change_State(*pCutSceneDesc->Obj_Desc.iStateNum);
+	}
+}
+
+void CCutScene::Load_KeyFrame(CUTSCENE_KEYFRAME_DESC pDesc)
+{
+	CUTSCENE_KEYFRAME_DESC* pNewDesc = new CUTSCENE_KEYFRAME_DESC;
+	*pNewDesc = pDesc;
+
+	m_KeyFrames.push_back(pNewDesc);
 }
 
 CCutScene* CCutScene::Create(ID3D11Device* pDevice, ID3D11DeviceContext* pContext)
