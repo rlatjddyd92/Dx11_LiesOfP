@@ -34,7 +34,7 @@ HRESULT CState_Player_Flame_LAttack00::Start_State(void* pArg)
     if (m_pFsm->Get_PrevState() == CPlayer::TH_IDLE)
         m_pPlayer->Change_Animation(m_iAnimation_FlameNA3, false, 0.f);
     else
-        m_pPlayer->Change_Animation(m_iAnimation_FlameNA3, false, 0.2f, 14);
+        m_pPlayer->Change_Animation(m_iAnimation_FlameNA3, false, 0.5f, 7);
 
     m_isInputLButton = false;
     m_isInputRButton = false;

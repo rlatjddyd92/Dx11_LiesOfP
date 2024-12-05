@@ -20,7 +20,7 @@ HRESULT CState_Player_Flame_LAttack01::Initialize(_uint iStateNum, void* pArg)
 
     m_pTrackPos = pDesc->pPrevTrackPos;
 
-    m_iChangeFrame = 55;
+    m_iChangeFrame = 75;
     m_iStateNum = iStateNum;
 
     m_iColliderStartFrame = 25;

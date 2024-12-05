@@ -690,7 +690,7 @@ _bool CPlayer::Calc_DamageGain(_float fAtkDmg, _Vec3 vHitPos, _uint iHitType, _u
 			Decrease_Region();
 			m_pFsmCom->Change_State(RAPIER_PARRYATTACK);
 		}
-		else if (m_eWeaponType == WEP_RAPIER)
+		else if (m_eWeaponType == WEP_FLAME)
 		{
 			Decrease_Region();
 			m_pFsmCom->Change_State(FLAME_PARRYATTACK);
