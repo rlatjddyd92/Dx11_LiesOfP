@@ -20,7 +20,6 @@ HRESULT CState_CarcassTail_Run::Initialize(_uint iStateNum, void* pArg)
 HRESULT CState_CarcassTail_Run::Start_State(void* pArg)
 {
     m_pMonster->Change_Animation(AN_RUN, true, 0.f, 0);
-    m_pMonster->Look_Player();
 
     return S_OK;
 }

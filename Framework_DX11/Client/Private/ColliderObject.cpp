@@ -130,7 +130,7 @@ HRESULT CColliderObject::Ready_Components(CBounding::BOUNDING_DESC* pBoundingDes
 			TEXT("Com_Collider_Sphere"), reinterpret_cast<CComponent**>(&m_pColliderCom), pColliderSphereDesc)))
 			return E_FAIL;
 	}
-
+	m_pColliderCom->Set_Owner(this);
 
 	return S_OK;
 }
