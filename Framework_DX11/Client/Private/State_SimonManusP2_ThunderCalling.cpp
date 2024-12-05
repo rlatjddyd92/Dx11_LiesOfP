@@ -55,7 +55,7 @@ void CState_SimonManusP2_ThunderCalling::Effect_Check(_double CurTrackPos)
 {
     if (!m_bAttackCheck)
     {
-        if (CurTrackPos >= 100.f)
+        if (CurTrackPos >= 180.f)
         {
 
             CAttackObject::ATKOBJ_DESC Desc{};

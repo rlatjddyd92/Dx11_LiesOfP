@@ -28,6 +28,8 @@
 #include "AObj_GoldBall.h"
 #include "AObj_Thunder.h"
 #include "AObj_ThunderCalling.h"
+#include "AObj_LightningSpear.h"
+#include "AObj_LightningBall.h"
 #pragma endregion
 
 #pragma region EFFECT
@@ -829,12 +831,12 @@ HRESULT CLoader::Ready_Resources_For_Monster()
 	//	CModel::Create(m_pDevice, m_pContext, CModel::TYPE_ANIM, "../Bin/ModelData/Anim/CreatedBinFiles/CarcassTail.dat", PreTransformMatrix, true))))
 	//	return E_FAIL;
 
-	////Prototype_Component_Model_CarcassBigA
-	//PreTransformMatrix = XMMatrixScaling(0.01f, 0.01f, 0.01f) * XMMatrixRotationY(XMConvertToRadians(270.0f));
-	//if (FAILED(m_pGameInstance->Add_Prototype(LEVEL_GAMEPLAY, TEXT("Prototype_Component_Model_CarcassBigA"),
-	//	CModel::Create(m_pDevice, m_pContext, CModel::TYPE_ANIM, "../Bin/ModelData/Anim/CreatedBinFiles/CarcassBigA.dat", PreTransformMatrix, true))))
-	//	return E_FAIL;
-	//
+	//Prototype_Component_Model_CarcassBigA
+	PreTransformMatrix = XMMatrixScaling(0.01f, 0.01f, 0.01f) * XMMatrixRotationY(XMConvertToRadians(270.0f));
+	if (FAILED(m_pGameInstance->Add_Prototype(LEVEL_GAMEPLAY, TEXT("Prototype_Component_Model_CarcassBigA"),
+		CModel::Create(m_pDevice, m_pContext, CModel::TYPE_ANIM, "../Bin/ModelData/Anim/CreatedBinFiles/CarcassBigA.dat", PreTransformMatrix, true))))
+		return E_FAIL;
+	
 	//Prototype_Component_Model_SimonManus
 	PreTransformMatrix = XMMatrixScaling(0.01f, 0.01f, 0.01f) * XMMatrixRotationY(XMConvertToRadians(270.0f));
 	if (FAILED(m_pGameInstance->Add_Prototype(LEVEL_GAMEPLAY, TEXT("Prototype_Component_Model_SimonManusP1"),
@@ -959,7 +961,7 @@ HRESULT CLoader::Ready_Prototype()
 
 #pragma region MONSTER
 
-	/* For. Prototype_GameObject_CarcassBigA */
+	/* For. Prototype_GameObject_CarcassTail */
 	if (FAILED(m_pGameInstance->Add_Prototype(TEXT("Prototype_GameObject_CarcassTail"),
 		CCarcassTail::Create(m_pDevice, m_pContext))))
 		return E_FAIL;
@@ -992,6 +994,12 @@ HRESULT CLoader::Ready_Prototype()
 		return E_FAIL;
 	if (FAILED(m_pGameInstance->Add_Prototype(TEXT("Prototype_GameObject_Thunder"),
 		CAObj_Thunder::Create(m_pDevice, m_pContext))))
+		return E_FAIL;
+	if (FAILED(m_pGameInstance->Add_Prototype(TEXT("Prototype_GameObject_LightningBall"),
+		CAObj_LightningBall::Create(m_pDevice, m_pContext))))
+		return E_FAIL;
+	if (FAILED(m_pGameInstance->Add_Prototype(TEXT("Prototype_GameObject_LightningSpear"),
+		CAObj_LightningSpear::Create(m_pDevice, m_pContext))))
 		return E_FAIL;
 
 

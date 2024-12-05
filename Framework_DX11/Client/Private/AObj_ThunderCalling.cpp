@@ -41,11 +41,10 @@ HRESULT CAObj_ThunderCalling::Initialize(void* pArg)
 
     m_strObjectTag = TEXT("MonsterWeapon");
 
-    m_fEffectAliveTime = 2.f;
+    m_fEffectAliveTime = 1.5f;
 
     m_iThunderTime = 5.f;
 
-    m_pColliderCom->IsActive(true);
     return S_OK;
 }
 
@@ -78,10 +77,10 @@ void CAObj_ThunderCalling::Update(_float fTimeDelta)
 
             CAttackObject::ATKOBJ_DESC Desc{};
             Desc.vPos = _Vec3{ m_pCopyPlayerTransformCom->Get_State(CTransform::STATE_POSITION) };
-            
-            m_pGameInstance->Add_CloneObject_ToLayer(LEVEL_GAMEPLAY, TEXT("Monster_Attack"), TEXT("Prototype_GameObject_Thunder"), &Desc);
-            
-            m_iThunderTime = 0.f;
+
+            m_pGameInstance->Add_CloneObject_ToLayer(LEVEL_GAMEPLAY, TEXT("Monster_Attack_Extra"), TEXT("Prototype_GameObject_Thunder"), &Desc);
+
+            m_fLifeTime = 0.f;
             ++m_iThunderCnt;
         }
     }
@@ -97,8 +96,6 @@ void CAObj_ThunderCalling::Update(_float fTimeDelta)
 void CAObj_ThunderCalling::Late_Update(_float fTimeDelta)
 {
     m_pEffect->Late_Update(fTimeDelta);
-    m_pGameInstance->Add_ColliderList(m_pColliderCom);
-    m_pGameInstance->Add_DebugObject(m_pColliderCom);
 }
 
 HRESULT CAObj_ThunderCalling::Render()
@@ -134,15 +131,6 @@ HRESULT CAObj_ThunderCalling::Ready_Components()
     if (FAILED(__super::Ready_Components()))
         return E_FAIL;
 
-    /* FOR.Com_Collider */
-    CBounding_Sphere::BOUNDING_SPHERE_DESC      ColliderDesc{};
-    ColliderDesc.vCenter = _float3(0.f, 0.f, 0.f);
-    ColliderDesc.fRadius = 1.f;
-
-    if (FAILED(__super::Add_Component(LEVEL_STATIC, TEXT("Prototype_Component_Collider_Sphere"),
-        TEXT("Com_Collider"), reinterpret_cast<CComponent**>(&m_pColliderCom), &ColliderDesc)))
-        return E_FAIL;
-    m_pColliderCom->Set_Owner(this);
 
     const _Matrix* pParetnMatrix = m_pTransformCom->Get_WorldMatrix_Ptr();
 

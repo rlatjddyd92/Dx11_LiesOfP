@@ -245,9 +245,16 @@ void CSimonManus::DeActive_CurretnWeaponCollider(_uint iCollIndex)
 	m_pWeapon->DeActive_Collider();
 }
 
-void CSimonManus::Active_Effect(const _uint eType)
+void CSimonManus::Active_Effect(const _uint eType, _bool isLoop)
 {
-	m_Effects[eType]->Set_Loop(true);
+	if (isLoop)
+	{
+		m_Effects[eType]->Set_Loop(true);
+	}
+	else
+	{
+		m_Effects[eType]->Reset_Effects();
+	}
 }
 
 void CSimonManus::DeActive_Effect(const _uint eType)

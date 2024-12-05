@@ -131,6 +131,7 @@ HRESULT CColliderObject::Ready_Components(CBounding::BOUNDING_DESC* pBoundingDes
 			return E_FAIL;
 	}
 
+	m_pColliderCom->Set_Owner(this);
 
 	return S_OK;
 }

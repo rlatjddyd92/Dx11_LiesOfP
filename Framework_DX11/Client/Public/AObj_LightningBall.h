@@ -2,12 +2,12 @@
 #include "AttackObject.h"
 #include "Effect_Container.h"
 
-class CAObj_Thunder	final : public CAttackObject
+class CAObj_LightningBall	final : public CAttackObject
 {
 protected:
-	CAObj_Thunder(ID3D11Device* pDevice, ID3D11DeviceContext* pContext);
-	CAObj_Thunder(const CGameObject& Prototype);
-	virtual ~CAObj_Thunder() = default;
+	CAObj_LightningBall(ID3D11Device* pDevice, ID3D11DeviceContext* pContext);
+	CAObj_LightningBall(const CGameObject& Prototype);
+	virtual ~CAObj_LightningBall() = default;
 
 public:
 	virtual HRESULT Initialize_Prototype() override;
@@ -25,17 +25,29 @@ public:
 
 private:
 	class CEffect_Container* m_pEffect = { nullptr };
-	class CEffect_Container* m_pSignEffect = { nullptr };
 
-	_float					m_fAttackTime = {};
+	CTransform* m_pCopyPlayerTransformCom = { nullptr };
 
-	_bool					m_bAttack = { false };
+	_int			m_iRouteCnt = {};
+
+	_int			m_iThunderCnt = {};
+	_float			m_iThunderTime = {};
+
+	_float			m_fUpSpeed = {};
+	_Vec3			m_vUp{};
+
+	_bool			m_bEffectAlive = { true };
+
+	_bool			m_bChangeState = { false };
+	_float			m_fChangeTime = {};
+
+	_float			m_fUpperTime = {};
 
 private:
 	HRESULT Ready_Components();
 
 public:
-	static CAObj_Thunder* Create(ID3D11Device* pDevice, ID3D11DeviceContext* pContext);
+	static CAObj_LightningBall* Create(ID3D11Device* pDevice, ID3D11DeviceContext* pContext);
 	virtual CGameObject* Clone(void* pArg);
 	virtual void Free() override;
 };

@@ -826,7 +826,7 @@
     <Filter Include="05.Fsm\Monster\SimonManus\P2\Attack\Single\SpreadMagic%2a">
       <UniqueIdentifier>{927e6e2d-8506-48a0-8258-0c917447cec5}</UniqueIdentifier>
     </Filter>
-    <Filter Include="05.Fsm\Monster\SimonManus\P2\Attack\Single\ThunderBall%2a">
+    <Filter Include="05.Fsm\Monster\SimonManus\P2\Attack\Single\ThunderBall">
       <UniqueIdentifier>{8b883092-bbab-4d18-b414-4009f8cdd9f3}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
@@ -1291,7 +1291,7 @@
       <Filter>05.Fsm\Monster\SimonManus\P2\Walk</Filter>
     </ClInclude>
     <ClInclude Include="..\Public\State_SimonManusP2_ThunderBall.h">
-      <Filter>05.Fsm\Monster\SimonManus\P2\Attack\Single\ThunderBall%2a</Filter>
+      <Filter>05.Fsm\Monster\SimonManus\P2\Attack\Single\ThunderBall</Filter>
     </ClInclude>
     <ClInclude Include="..\Public\State_SimonManusP2_ThunderCalling.h">
       <Filter>05.Fsm\Monster\SimonManus\P2\Attack\Single\ThunderCalling</Filter>
@@ -1513,6 +1513,9 @@
     </ClInclude>
     <ClInclude Include="..\Public\AObj_Thunder.h">
       <Filter>02.GameObjects\12.AttackObject\SimonManus\ThunderCalling\Thunder</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Public\AObj_LightningBall.h">
+      <Filter>02.GameObjects\12.AttackObject\SimonManus\LightningBall</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -1946,7 +1949,7 @@
       <Filter>05.Fsm\Monster\SimonManus\P2\Walk</Filter>
     </ClCompile>
     <ClCompile Include="..\Private\State_SimonManusP2_ThunderBall.cpp">
-      <Filter>05.Fsm\Monster\SimonManus\P2\Attack\Single\ThunderBall%2a</Filter>
+      <Filter>05.Fsm\Monster\SimonManus\P2\Attack\Single\ThunderBall</Filter>
     </ClCompile>
     <ClCompile Include="..\Private\State_SimonManusP2_ThunderCalling.cpp">
       <Filter>05.Fsm\Monster\SimonManus\P2\Attack\Single\ThunderCalling</Filter>
@@ -2168,6 +2171,9 @@
     </ClCompile>
     <ClCompile Include="..\Private\AObj_Thunder.cpp">
       <Filter>02.GameObjects\12.AttackObject\SimonManus\ThunderCalling\Thunder</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Private\AObj_LightningBall.cpp">
+      <Filter>02.GameObjects\12.AttackObject\SimonManus\LightningBall</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

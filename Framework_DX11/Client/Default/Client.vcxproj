@@ -172,6 +172,7 @@
   <ItemGroup>
     <ClInclude Include="..\Public\AObj_ChargeSwing.h" />
     <ClInclude Include="..\Public\AObj_GoldBall.h" />
+    <ClInclude Include="..\Public\AObj_LightningBall.h" />
     <ClInclude Include="..\Public\AObj_StampBlast.h" />
     <ClInclude Include="..\Public\AObj_Thunder.h" />
     <ClInclude Include="..\Public\AObj_ThunderCalling.h" />
@@ -397,6 +398,7 @@
   <ItemGroup>
     <ClCompile Include="..\Private\AObj_ChargeSwing.cpp" />
     <ClCompile Include="..\Private\AObj_GoldBall.cpp" />
+    <ClCompile Include="..\Private\AObj_LightningBall.cpp" />
     <ClCompile Include="..\Private\AObj_StampBlast.cpp" />
     <ClCompile Include="..\Private\AObj_Thunder.cpp" />
     <ClCompile Include="..\Private\AObj_ThunderCalling.cpp" />

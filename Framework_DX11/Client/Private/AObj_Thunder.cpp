@@ -50,18 +50,27 @@ HRESULT CAObj_Thunder::Initialize(void* pArg)
 
 void CAObj_Thunder::Priority_Update(_float fTimeDelta)
 {
-    m_pEffect->Priority_Update(fTimeDelta);
+    if (!m_bAttack)
+    {
+        m_pSignEffect->Priority_Update(fTimeDelta);
+    }
+    else
+    {
+        m_pEffect->Priority_Update(fTimeDelta);
+    }
 }
 
 void CAObj_Thunder::Update(_float fTimeDelta)
 {
-    if (m_bAttack)
+    if (!m_bAttack)
     {
         if (m_fLifeTime >= m_fAttackTime)
         {
             m_fLifeTime = 0.f;
-            m_bAttack = false;
+            m_bAttack = true;
             m_pColliderCom->IsActive(true);
+            m_pSignEffect->Set_Loop(false);
+            m_pEffect->Set_Loop(true);
         }
     }
     else
@@ -81,13 +90,26 @@ void CAObj_Thunder::Update(_float fTimeDelta)
 
     m_fLifeTime += fTimeDelta;
     m_pColliderCom->Update(m_pTransformCom->Get_WorldMatrix_Ptr());
-
-    m_pEffect->Update(fTimeDelta);
+    if (!m_bAttack)
+    {
+        m_pSignEffect->Update(fTimeDelta);
+    }
+    else
+    {
+        m_pEffect->Update(fTimeDelta);
+    }
 }
 
 void CAObj_Thunder::Late_Update(_float fTimeDelta)
 {
-    m_pEffect->Late_Update(fTimeDelta);
+    if (!m_bAttack)
+    {
+        m_pSignEffect->Late_Update(fTimeDelta);
+    }
+    else
+    {
+        m_pEffect->Late_Update(fTimeDelta);
+    }
     if (m_fLifeTime < m_fLifeDuration)
     {
         m_pGameInstance->Add_ColliderList(m_pColliderCom);
@@ -159,10 +181,15 @@ HRESULT CAObj_Thunder::Ready_Components()
 
     const _Matrix* pParetnMatrix = m_pTransformCom->Get_WorldMatrix_Ptr();
 
-    m_pEffect = CEffect_Manager::Get_Instance()->Clone_Effect(TEXT("SimonManus_Attack_ChargeStamp2"), pParetnMatrix,
+    m_pEffect = CEffect_Manager::Get_Instance()->Clone_Effect(TEXT("SimonManus_Attack_LightningDown"), pParetnMatrix,
         nullptr, _Vec3(0.f, 0.f, 0.f), _Vec3(0.f, 0.f, 0.f), _Vec3(1.f, 1.f, 1.f));
 
-    m_pEffect->Set_Loop(true);
+    m_pEffect->Set_Loop(false);
+
+    m_pSignEffect = CEffect_Manager::Get_Instance()->Clone_Effect(TEXT("SimonManus_Attack_LightningSign"), pParetnMatrix,
+        nullptr, _Vec3(0.f, 0.f, 0.f), _Vec3(0.f, 0.f, 0.f), _Vec3(1.f, 1.f, 1.f));
+
+    m_pSignEffect->Set_Loop(true);
 
     return S_OK;
 }

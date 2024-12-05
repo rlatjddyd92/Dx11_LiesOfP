@@ -57,10 +57,6 @@ HRESULT CCarcassBigA::Initialize(void* pArg)
 	if (FAILED(__super::Initialize(&Desc)))
 		return E_FAIL;
 
-	m_pTransformCom->Set_State(CTransform::STATE_POSITION,
-		XMVectorSet(0.f, 0.f, 0.f, 1.f));
-	m_pTransformCom->LookAt(_vector{ 0, 0, -1, 0 });
-
 	if (FAILED(Ready_Components()))
 		return E_FAIL;
 
@@ -72,8 +68,8 @@ HRESULT CCarcassBigA::Initialize(void* pArg)
 	m_strObjectTag = TEXT("Monster");
 
 	m_pTransformCom->Set_State(CTransform::STATE_POSITION,
-		XMVectorSet(0.f, 0.f, 0.f, 1.f));
-	m_pTransformCom->LookAt(_vector{ 0, 0, -1, 0 });
+		XMVectorSet(0.f, -5.f, 0.f, 1.f));
+	//m_pTransformCom->LookAt(_vector{ 0, 0, -1, 0 });
 
 
 	m_vRimLightColor = { 0.f, 0.f, 0.f, 0.f };
