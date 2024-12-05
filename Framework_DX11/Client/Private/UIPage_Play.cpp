@@ -227,9 +227,19 @@ void CUIPage_Play::Action_Weapon(_float fTimeDelta)
 
 	if (KEY_TAP(KEY::TAPKEY))
 	{
-		_bool bIsNormal = GET_GAMEINTERFACE->Get_Equip_Item_Info(EQUIP_SLOT::EQUIP_WEAPON_BLADE_0)->bModule_Weapon;
+		_bool bIsNormal = false;
+
+		const CItem_Manager::ITEM* pNow = GET_GAMEINTERFACE->Get_Equip_Item_Info(EQUIP_SLOT::EQUIP_WEAPON_BLADE_0);
+
+		if (pNow != nullptr)
+			_bool bIsNormal = pNow->bModule_Weapon;
+
 		if (!bIsNormal)
-			bIsNormal = GET_GAMEINTERFACE->Get_Equip_Item_Info(EQUIP_SLOT::EQUIP_WEAPON_BLADE_1)->bModule_Weapon;
+		{
+			pNow = GET_GAMEINTERFACE->Get_Equip_Item_Info(EQUIP_SLOT::EQUIP_WEAPON_BLADE_1);
+			bIsNormal = pNow->bModule_Weapon;
+		}
+
 		if (bIsNormal)
 			m_vSwitch_Time.x += 0.01f;
 	}

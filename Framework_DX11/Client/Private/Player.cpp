@@ -446,16 +446,26 @@ _Vec4 CPlayer::Calculate_Direction_Right()
 
 void CPlayer::Change_Weapon()
 {
+	// 24-12-05 김성용
+	// 착용 중인 무기가 1개일 때 무기 변경 관련 기능을 모두 막기 위한 함수
+	// 값이 false면 무기가 1개
+	if (!GET_GAMEINTERFACE->Get_CanSwitch_Weapon())
+		return;
+
 	m_pWeapon[m_eWeaponType]->Appear();
 }
 
 _uint CPlayer::Change_WeaponType()
 {
-	m_pWeapon[m_eWeaponType]->Disappear();
-	
-
 	// 24-12-05 김성용
-	
+	// 착용 중인 무기가 1개일 때 무기 변경 관련 기능을 모두 막기 위한 함수
+	// 값이 false면 무기가 1개
+	if (!GET_GAMEINTERFACE->Get_CanSwitch_Weapon())
+		return m_eWeaponType;
+
+	m_pWeapon[m_eWeaponType]->Disappear();
+
+	// 24-12-05 김성용	
 	// 무기 락 적용 
 	GET_GAMEINTERFACE->SetWeaponLock(true);
 
