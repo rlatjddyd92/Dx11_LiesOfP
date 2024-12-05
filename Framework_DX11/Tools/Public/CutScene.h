@@ -34,22 +34,22 @@ public:
 	void			Sort_KeyFrame_TrackPosition();
 	void			Delete_Selected_Keyframe(_int iIndex);
 	_int			Get_KeyFrameCount() { return (_int)m_KeyFrames.size(); }
-	CUTSCENE_DESC*	Get_Selected_KeyFrame(_int iIndex) { return m_KeyFrames[iIndex]; }
+	CUTSCENE_KEYFRAME_DESC*	Get_Selected_KeyFrame(_int iIndex) { return m_KeyFrames[iIndex]; }
 
 private:
 	_float						m_fMaxFrame = { 50.f };
 	_float						m_fTrackPosition = { 0.f };
 	_bool						m_bPlay = { false };
 
-	vector<CUTSCENE_DESC*>		m_KeyFrames;
+	vector<CUTSCENE_KEYFRAME_DESC*>		m_KeyFrames;
 
 	class CController_UITool*	m_pController_UITool = { nullptr };
 	class CCamera*				m_pCamera = { nullptr };
 private:
 	void Play_Keyframes(_float fTimeDelta);
-	void Active_Shader(CUTSCENE_DESC* pCutSceneDesc);
-	void Active_UI(CUTSCENE_DESC* pCutSceneDesc);
-	void Active_Camera(CUTSCENE_DESC* pCutSceneDesc);
+	void Active_Shader(CUTSCENE_KEYFRAME_DESC* pCutSceneDesc);
+	void Active_UI(CUTSCENE_KEYFRAME_DESC* pCutSceneDesc);
+	void Active_Camera(CUTSCENE_KEYFRAME_DESC* pCutSceneDesc);
 public:
 	static CCutScene* Create(ID3D11Device* pDevice, ID3D11DeviceContext* pContext);
 	virtual CGameObject* Clone(void* pArg);

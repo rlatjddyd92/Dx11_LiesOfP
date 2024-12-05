@@ -61,7 +61,7 @@ void CCutScene::Keyframe_Actived_Reset()
 
 void CCutScene::Create_KeyFrame()
 {
-	CUTSCENE_DESC* pDesc = new CUTSCENE_DESC;
+	CUTSCENE_KEYFRAME_DESC* pDesc = new CUTSCENE_KEYFRAME_DESC;
 	pDesc->fTrackPosition = m_fTrackPosition;
 
 	m_KeyFrames.push_back(pDesc);
@@ -86,7 +86,7 @@ void CCutScene::Play_Keyframes(_float fTimeDelta)
 	}
 }
 
-void CCutScene::Active_Shader(CUTSCENE_DESC* pCutSceneDesc)
+void CCutScene::Active_Shader(CUTSCENE_KEYFRAME_DESC* pCutSceneDesc)
 {
 	DOF_DESC* tDesc = m_pGameInstance->Get_DOFDesc();
 	if (nullptr == tDesc)
@@ -96,7 +96,7 @@ void CCutScene::Active_Shader(CUTSCENE_DESC* pCutSceneDesc)
 	tDesc->fDOF = pCutSceneDesc->ShaderDesc.fDof;
 }
 
-void CCutScene::Active_UI(CUTSCENE_DESC* pCutSceneDesc)
+void CCutScene::Active_UI(CUTSCENE_KEYFRAME_DESC* pCutSceneDesc)
 {
 	if (pCutSceneDesc->UI_DESC.bFadeOut)
 	{
@@ -108,7 +108,7 @@ void CCutScene::Active_UI(CUTSCENE_DESC* pCutSceneDesc)
 	}
 }
 
-void CCutScene::Active_Camera(CUTSCENE_DESC* pCutSceneDesc)
+void CCutScene::Active_Camera(CUTSCENE_KEYFRAME_DESC* pCutSceneDesc)
 {
 	if (pCutSceneDesc->Camera_Desc.bTeleport)
 	{
@@ -135,7 +135,7 @@ void CCutScene::Active_Camera(CUTSCENE_DESC* pCutSceneDesc)
 void CCutScene::Sort_KeyFrame_TrackPosition()
 {
 	//TrakcPostition에 따라 자동 정렬
-	sort(m_KeyFrames.begin(), m_KeyFrames.end(), [](const CUTSCENE_DESC* a, const CUTSCENE_DESC* b)
+	sort(m_KeyFrames.begin(), m_KeyFrames.end(), [](const CUTSCENE_KEYFRAME_DESC* a, const CUTSCENE_KEYFRAME_DESC* b)
 		{
 			return a->fTrackPosition < b->fTrackPosition;
 		});

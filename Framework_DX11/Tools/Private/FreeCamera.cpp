@@ -121,7 +121,7 @@ void CFreeCamera::Update(_float fTimeDelta)
 	Calculat_CascadeFrustum();
 	Update_Zoom(fTimeDelta);
 
-	if(m_pTransformCom->Get_isTurning())
+	if (m_pTransformCom->Get_isTurning())
 	{
 		Update_Turn(fTimeDelta);
 	}
