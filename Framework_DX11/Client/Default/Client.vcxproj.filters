@@ -820,6 +820,9 @@
     <Filter Include="02.GameObjects\12.AttackObject\SimonManus\GoldBall">
       <UniqueIdentifier>{de88a1cd-d5b9-4174-ab42-21ca9c1bbdf1}</UniqueIdentifier>
     </Filter>
+    <Filter Include="05.Fsm\Player\TwoHand\00.Attack\FlameSword\00.FableArts\General">
+      <UniqueIdentifier>{ee6e207b-0b6e-437e-8552-023b6ae90c2a}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Client.h">
@@ -1508,6 +1511,15 @@
     <ClInclude Include="..\Public\State_Player_Scissor_Fatal.h">
       <Filter>05.Fsm\Player\OneHand\00.Attack\Scissor\01.Fatal</Filter>
     </ClInclude>
+    <ClInclude Include="..\Public\State_Player_Flame_Fable.h">
+      <Filter>05.Fsm\Player\TwoHand\00.Attack\FlameSword\00.FableArts\General</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Public\State_Player_Rapier_ParryAttack.h">
+      <Filter>05.Fsm\Player\OneHand\00.Attack\Rapier\00.FableArts\ParryAttack</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Public\State_Player_Flame_ParryAttack.h">
+      <Filter>05.Fsm\Player\TwoHand\00.Attack\FlameSword\00.FableArts\ParryAttack</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Client.cpp">
@@ -2165,6 +2177,15 @@
     </ClCompile>
     <ClCompile Include="..\Private\State_Player_Scissor_Fatal.cpp">
       <Filter>05.Fsm\Player\OneHand\00.Attack\Scissor\01.Fatal</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Private\State_Player_Flame_Fable.cpp">
+      <Filter>05.Fsm\Player\TwoHand\00.Attack\FlameSword\00.FableArts\General</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Private\State_Player_Rapier_ParryAttack.cpp">
+      <Filter>05.Fsm\Player\OneHand\00.Attack\Rapier\00.FableArts\ParryAttack</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Private\State_Player_Flame_ParryAttack.cpp">
+      <Filter>05.Fsm\Player\TwoHand\00.Attack\FlameSword\00.FableArts\ParryAttack</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

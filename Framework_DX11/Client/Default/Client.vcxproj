@@ -183,7 +183,9 @@
     <ClInclude Include="..\Public\EffectObject.h" />
     <ClInclude Include="..\Public\FollowedEffect.h" />
     <ClInclude Include="..\Public\LastDoor.h" />
+    <ClInclude Include="..\Public\State_Player_Flame_Fable.h" />
     <ClInclude Include="..\Public\State_Player_Flame_Fatal.h" />
+    <ClInclude Include="..\Public\State_Player_Flame_ParryAttack.h" />
     <ClInclude Include="..\Public\State_Player_OpenSophiaDoor.h" />
     <ClInclude Include="..\Public\SpotEffect.h" />
     <ClInclude Include="..\Public\State_CarcassBigA_Paralyze.h" />
@@ -213,6 +215,7 @@
     <ClInclude Include="..\Public\State_Player_Ladder.h" />
     <ClInclude Include="..\Public\State_Player_Lift.h" />
     <ClInclude Include="..\Public\State_Player_Rapier_Fatal.h" />
+    <ClInclude Include="..\Public\State_Player_Rapier_ParryAttack.h" />
     <ClInclude Include="..\Public\State_Player_Scissor_Fatal.h" />
     <ClInclude Include="..\Public\State_Player_SophiaHandEnd.h" />
     <ClInclude Include="..\Public\State_Player_SophiaWalk.h" />
@@ -409,7 +412,9 @@
     <ClCompile Include="..\Private\EffectObject.cpp" />
     <ClCompile Include="..\Private\FollowedEffect.cpp" />
     <ClCompile Include="..\Private\LastDoor.cpp" />
+    <ClCompile Include="..\Private\State_Player_Flame_Fable.cpp" />
     <ClCompile Include="..\Private\State_Player_Flame_Fatal.cpp" />
+    <ClCompile Include="..\Private\State_Player_Flame_ParryAttack.cpp" />
     <ClCompile Include="..\Private\State_Player_OpenSophiaDoor.cpp" />
     <ClCompile Include="..\Private\SpotEffect.cpp" />
     <ClCompile Include="..\Private\State_CarcassBigA_Paralyze.cpp" />
@@ -439,6 +444,7 @@
     <ClCompile Include="..\Private\State_Player_Ladder.cpp" />
     <ClCompile Include="..\Private\State_Player_Lift.cpp" />
     <ClCompile Include="..\Private\State_Player_Rapier_Fatal.cpp" />
+    <ClCompile Include="..\Private\State_Player_Rapier_ParryAttack.cpp" />
     <ClCompile Include="..\Private\State_Player_Scissor_Fatal.cpp" />
     <ClCompile Include="..\Private\State_Player_SophiaHandEnd.cpp" />
     <ClCompile Include="..\Private\State_Player_SophiaWalk.cpp" />

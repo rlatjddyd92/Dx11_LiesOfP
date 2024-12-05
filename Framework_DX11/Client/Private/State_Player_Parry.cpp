@@ -39,7 +39,7 @@ void CState_Player_Parry::Update(_float fTimeDelta)
 {
     _int iFrame = m_pPlayer->Get_Frame();
 
-    if (30 <= iFrame && iFrame < 40)
+    if (25 <= iFrame && iFrame < 45)
     {
         m_pPlayer->Set_IsParry(true);
     }
@@ -50,7 +50,12 @@ void CState_Player_Parry::Update(_float fTimeDelta)
 
     if (End_Check())
     {
-        m_pPlayer->Change_State(CPlayer::OH_IDLE);
+        _uint iWeponType = m_pPlayer->Get_WeaponType();
+
+        if (iWeponType < 2)
+            m_pPlayer->Change_State(CPlayer::OH_IDLE);
+        else
+            m_pPlayer->Change_State(CPlayer::TH_IDLE);
     }
 
     Control_Sound();

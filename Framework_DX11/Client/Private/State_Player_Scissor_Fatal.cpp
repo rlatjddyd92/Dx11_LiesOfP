@@ -14,7 +14,7 @@ CState_Player_Scissor_Fatal::CState_Player_Scissor_Fatal(CFsm* pFsm, CPlayer* pP
 
 HRESULT CState_Player_Scissor_Fatal::Initialize(_uint iStateNum, void* pArg)
 {
-    //m_iAnimation_ScissorFatal = m_pPlayer->Get_Model()->Find_AnimationIndex("AS_Pino_Fatal_Light_Swing", 2.5f);
+    m_iAnimation_ScissorFatal = m_pPlayer->Get_Model()->Find_AnimationIndex("AS_Pino_Fatal_Light_Swing", 2.f);
 
     FSM_INIT_DESC* pDesc = static_cast<FSM_INIT_DESC*>(pArg);
 

@@ -14,7 +14,7 @@ CState_Player_Rapier_Fatal::CState_Player_Rapier_Fatal(CFsm* pFsm, CPlayer* pPla
 
 HRESULT CState_Player_Rapier_Fatal::Initialize(_uint iStateNum, void* pArg)
 {
-    //m_iAnimation_RapierFatal = m_pPlayer->Get_Model()->Find_AnimationIndex("AS_Pino_Fatal_Middle_Thrust", 2.5f);
+    m_iAnimation_RapierFatal = m_pPlayer->Get_Model()->Find_AnimationIndex("AS_Pino_Fatal_Middle_Thrust", 2.5f);
 
     FSM_INIT_DESC* pDesc = static_cast<FSM_INIT_DESC*>(pArg);
 

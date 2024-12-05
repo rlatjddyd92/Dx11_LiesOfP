@@ -15,7 +15,7 @@ CState_Player_Rapier_RAttack00::CState_Player_Rapier_RAttack00(CFsm* pFsm, CPlay
 
 HRESULT CState_Player_Rapier_RAttack00::Initialize(_uint iStateNum, void* pArg)
 {
-    m_iAnimation_RapierSA1 = m_pPlayer->Get_Model()->Find_AnimationIndex("AS_Pino_O_Rapier_SA1", 2.5f);
+    m_iAnimation_RapierSA1 = m_pPlayer->Get_Model()->Find_AnimationIndex("AS_Pino_O_Rapier_SA1", 3.f);
 
     FSM_INIT_DESC* pDesc = static_cast<FSM_INIT_DESC*>(pArg);
 

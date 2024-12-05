@@ -13,7 +13,7 @@ CState_Player_Flame_RAttack01::CState_Player_Flame_RAttack01(CFsm* pFsm, CPlayer
 
 HRESULT CState_Player_Flame_RAttack01::Initialize(_uint iStateNum, void* pArg)
 {
-    m_iAnimation_AseaultUp = m_pPlayer->Get_Model()->Find_AnimationIndex("AS_Pino_FableArts_AssaultUp_FlameSword_End", 2.5f);
+    m_iAnimation_AseaultUp = m_pPlayer->Get_Model()->Find_AnimationIndex("AS_Pino_FableArts_AssaultUp_FlameSword_End", 3.f);
 
     FSM_INIT_DESC* pDesc = static_cast<FSM_INIT_DESC*>(pArg);
 
