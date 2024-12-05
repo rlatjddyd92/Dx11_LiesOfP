@@ -18,6 +18,7 @@ float4			g_vRimLight;
 
 float			g_fEmessiveMask;
 float			g_fRimLightMask;
+float           g_fDissolveRatio;
 
 vector g_vLightDir;
 vector g_vLightDiffuse;
@@ -167,6 +168,8 @@ PS_OUT_MODEL PS_MAIN_NORMAL(PS_IN_NORMAL In)
 
     vector vDiffuse = g_DiffuseTexture.Sample(LinearSampler, In.vTexcoord);
     vector vDisslove = g_DissloveTexture.Sample(LinearSampler, In.vTexcoord);
+    if (g_fDissolveRatio >= vDisslove.r)
+        discard;
     
     vector vNormalDesc = g_NormalTexture.Sample(LinearSampler, In.vTexcoord);
     float3 vNormal = vNormalDesc.xyz * 2.f - 1.f;

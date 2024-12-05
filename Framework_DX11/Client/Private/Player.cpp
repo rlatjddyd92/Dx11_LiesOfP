@@ -128,7 +128,7 @@ HRESULT CPlayer::Initialize(void * pArg)
 	//m_pNavigationCom->Move_to_Cell(m_pRigidBodyCom, 427); //짧은사다리
 	//m_pNavigationCom->Move_to_Cell(m_pRigidBodyCom, 341); //아래엘베
 	//m_pNavigationCom->Move_to_Cell(m_pRigidBodyCom, 440); //상자랑 장애물
-	m_pNavigationCom->Move_to_Cell(m_pRigidBodyCom, 1068); // 순간이동
+	m_pNavigationCom->Move_to_Cell(m_pRigidBodyCom, 1066); // 순간이동 790
 	//m_pNavigationCom->Move_to_Cell(m_pRigidBodyCom, 803); // 소피아 방
 
 	m_strObjectTag = TEXT("Player");
@@ -312,7 +312,16 @@ void CPlayer::Late_Update(_float fTimeDelta)
 
 HRESULT CPlayer::Render()
 {
+	if (FAILED(m_pDissloveTexture->Bind_ShadeResource(m_pShaderCom, "g_DissloveTexture", 0)))
+		return E_FAIL;
+	if(FAILED(m_pShaderCom->Bind_RawValue("g_fDissolveRatio", &m_fDissloveRatio, sizeof(_float))))
+		return E_FAIL;
+
 	if (FAILED(__super::Render()))
+		return E_FAIL;
+
+	_float fResetDisslove = -1.f;
+	if (FAILED(m_pShaderCom->Bind_RawValue("g_fDissolveRatio", &fResetDisslove, sizeof(_float))))
 		return E_FAIL;
 
 	//if (nullptr != m_pWeapon[m_eWeaponType])
@@ -1040,6 +1049,8 @@ HRESULT CPlayer::Ready_Components()
 	if (FAILED(__super::Ready_Components()))
 		return E_FAIL;
 
+	m_pDissloveTexture = CTexture::Create(m_pDevice, m_pContext, TEXT("../Bin/ModelData/Anim/Player/T_DissolveMask_A.dds"), 1);
+
 	/* FOR.Com_Model */
 	if (FAILED(__super::Add_Component(LEVEL_GAMEPLAY, TEXT("Prototype_Component_Model_Player"),
 		TEXT("Com_Model"), reinterpret_cast<CComponent**>(&m_pModelCom))))
@@ -1231,6 +1242,8 @@ CPawn* CPlayer::Clone(void * pArg)
 void CPlayer::Free()
 {
 	__super::Free();
+
+	Safe_Release(m_pDissloveTexture);
 
 	for (auto& pEffect : m_Effects)
 	{

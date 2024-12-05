@@ -181,10 +181,10 @@ void CSteppingStone::Change_Player_Pos()
     switch (m_iIndex)
     {
     case 0:
-        static_cast<CNavigation*>(pNavComponenet)->Move_to_Cell(pRigidComponenet, 792);
+        static_cast<CNavigation*>(pNavComponenet)->Move_to_Cell(pRigidComponenet, 790);
         break;
     case 1:
-        static_cast<CNavigation*>(pNavComponenet)->Move_to_Cell(pRigidComponenet, 1068);
+        static_cast<CNavigation*>(pNavComponenet)->Move_to_Cell(pRigidComponenet, 1066);
         break;
     default:
         break;
