@@ -435,37 +435,44 @@ void CTransform::Turn_Lerp(_fvector vDir, _float fTurnSpeed, _float fTimeDelta)
 
 void CTransform::Turn_RollPitchYaw_Lerp(_float fPitch, _float fYaw, _float fRoll, _float fSpeed, _float fTimeDelta)
 {
-	_Vec4 CurrentQuat = XMQuaternionRotationMatrix(m_WorldMatrix);	//현재 회전 값
+	// 1. 현재 월드 행렬에서 회전 쿼터니언 추출
+	_Vec4 currentQuat = XMQuaternionRotationMatrix(m_WorldMatrix);
+	_Vec4 NormalcurrentQuat = XMQuaternionNormalize(currentQuat);
 
-	float targetPitch = XMConvertToRadians(fPitch);	//x
-	float targetYaw = XMConvertToRadians(fYaw);	//y
-	float targetRoll = XMConvertToRadians(fRoll);	//z
+	// 2. 목표 회전값을 쿼터니언으로 생성
+	float targetPitch = XMConvertToRadians(fPitch);
+	float targetYaw = XMConvertToRadians(fYaw);
+	float targetRoll = XMConvertToRadians(fRoll);
 	_Vec4 targetQuat = XMQuaternionRotationRollPitchYaw(targetPitch, targetYaw, targetRoll);
+	_Vec4 NormaltargetQuat = XMQuaternionNormalize(targetQuat);
 
-	_float fLerpSpeed = min(1.0f, fSpeed * fTimeDelta);
-	_Vec4 interpolatedQuat = XMQuaternionSlerp(CurrentQuat, targetQuat, fLerpSpeed);
-
-	_Matrix rotationMatrix = XMMatrixRotationQuaternion(interpolatedQuat);
-
-
-	if (XMVectorGetX(XMQuaternionLength(interpolatedQuat - targetQuat)) <= 0.01f &&
-		XMVectorGetY(XMQuaternionLength(interpolatedQuat - targetQuat)) <= 0.01f &&
-		XMVectorGetZ(XMQuaternionLength(interpolatedQuat - targetQuat)) <= 0.01f
-		)
+	_float fx = XMVectorGetX(XMQuaternionDot(NormalcurrentQuat, NormaltargetQuat));
+	// 3. 목표 쿼터니언 방향 조정 (가장 짧은 경로 보장)
+	if (fx < 0.0f)
 	{
-		// 회전 완료 처리
-		m_isTurning = false;
+		targetQuat = -targetQuat; // 부호 반전
 	}
 
-	// 월드 행렬에서 변환(위치) 추출
-	_Vec4 position = Get_State(STATE_POSITION); // 행렬의 4번째 행이 위치 정보
+	// 4. SLERP로 보간
+	_float fLerpSpeed = min(1.0f, fSpeed * fTimeDelta);
+	_Vec4 interpolatedQuat = XMQuaternionSlerp(currentQuat, targetQuat, fLerpSpeed);
 
-	// 새 월드 행렬 생성
+	// 5. 새 회전 행렬 생성
+	_Matrix rotationMatrix = XMMatrixRotationQuaternion(interpolatedQuat);
+
+	// 6. 기존 위치 정보 유지
+	_Vec4 position = Get_State(STATE_POSITION);
 	_Matrix newWorldMatrix = rotationMatrix;
+
+	// 7. 월드 행렬 업데이트
 	m_WorldMatrix = newWorldMatrix;
 	Set_State(STATE_POSITION, { position.x, position.y, position.z }); // 위치 유지
 
-
+	// 8. 회전 완료 여부 체크
+	if (XMQuaternionLength(interpolatedQuat - targetQuat).m128_f32[0] <= 0.02f)
+	{
+		m_isTurning = false; // 회전 완료 처리
+	}
 }
 
 void CTransform::Rotation(const _Vec4& vAxis, _float fRadian)
