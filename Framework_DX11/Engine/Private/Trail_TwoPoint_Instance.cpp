@@ -17,9 +17,9 @@ HRESULT CTrail_TwoPoint_Instance::Initialize_Prototype(const CVIBuffer_Instancin
 {
 	m_isClient = isClient;
 
-	if(true == m_isClient)
+	if (true == m_isClient)
 	{
-		if(FAILED(Ready_Buffers(Desc)))
+		if (FAILED(Ready_Buffers(Desc)))
 			return E_FAIL;
 	}
 
@@ -108,6 +108,54 @@ _bool CTrail_TwoPoint_Instance::Update_Buffer(_fvector vWorldTopPos, _fvector vW
 
 	m_pContext->Unmap(m_pVBInstance, 0);
 	return m_bOver;
+}
+
+void CTrail_TwoPoint_Instance::Move_Buffer(_Vec3 vMoveDir, _float fSpeed, _float fTimeDelta)
+{
+	D3D11_MAPPED_SUBRESOURCE	SubResource{};
+
+	m_pContext->Map(m_pVBInstance, 0, D3D11_MAP_WRITE_NO_OVERWRITE, 0, &SubResource);
+
+	VTXTRAIL_TWOPOINT_INSTANCE* pVertices = static_cast<VTXTRAIL_TWOPOINT_INSTANCE*>(SubResource.pData);
+
+	vMoveDir.Normalize();
+	vMoveDir *= fSpeed * fTimeDelta;
+	for (size_t i = 0; i < m_iNumInstance; ++i)
+	{
+		_Vec3 vPos = pVertices[i].vFirstBottomPos;
+		vPos += vMoveDir * fSpeed * fTimeDelta;
+		pVertices[i].vFirstBottomPos = vPos;
+
+		vPos = pVertices[i].vFirstTopPos;
+		vPos += vMoveDir * fSpeed * fTimeDelta;
+		pVertices[i].vFirstTopPos = vPos;
+
+		vPos = pVertices[i].vSecondBottomPos;
+		vPos += vMoveDir * fSpeed * fTimeDelta;
+		pVertices[i].vSecondBottomPos = vPos;
+
+		vPos = pVertices[i].vSecondTopPos;
+		vPos += vMoveDir * fSpeed * fTimeDelta;
+		pVertices[i].vSecondTopPos = vPos;
+
+		vPos = pVertices[i].vThirdBottomPos;
+		vPos += vMoveDir * fSpeed * fTimeDelta;
+		pVertices[i].vThirdBottomPos = vPos;
+
+		vPos = pVertices[i].vThirdTopPos;
+		vPos += vMoveDir * fSpeed * fTimeDelta;
+		pVertices[i].vThirdTopPos = vPos;
+
+		vPos = pVertices[i].vForthBottomPos;
+		vPos += vMoveDir * fSpeed * fTimeDelta;
+		pVertices[i].vForthBottomPos = vPos;
+
+		vPos = pVertices[i].vForthTopPos;
+		vPos += vMoveDir * fSpeed * fTimeDelta;
+		pVertices[i].vForthTopPos = vPos;
+	}
+
+	m_pContext->Unmap(m_pVBInstance, 0);
 }
 
 void CTrail_TwoPoint_Instance::Reset()

@@ -330,7 +330,8 @@ struct PS_NORMAL_OUT
     vector vNormal : SV_TARGET1;
     vector vDepth : SV_TARGET2;
     vector vARM : SV_TARGET3;
-    vector vPickDepth : SV_TARGET4;
+    vector vEmessive : SV_TARGET4;
+    vector vRimLight : SV_TARGET5;
 };
 
 
@@ -493,6 +494,24 @@ PS_OUT PS_BLOOD_MAIN(PS_IN In)
     if(Out.vColor.a < 0.1f)
         discard;
     
+    return Out;
+}
+
+PS_NORMAL_OUT PS_BLOOD_NORMAL_MAIN(PS_IN In)
+{
+    PS_NORMAL_OUT Out = (PS_NORMAL_OUT) 0;
+    
+    Out.vDiffuse = g_DiffuseTexture.Sample(LinearSampler, In.vTexcoord);
+    Out.vNormal = g_NormalTexture.Sample(LinearSampler, In.vTexcoord);
+    Out.vARM = g_MaskTexture_1.Sample(LinearSampler, In.vTexcoord);
+    
+    Out.vARM.a *= 1.f - (((In.vTexcoord.x + In.fIndex) / (float) g_iNumInstance) + g_fRatio);
+    if(Out.vARM.a < 0.3f)
+        discard;
+    
+    Out.vEmessive = vector(0.f, 0.f, 0.f, 0.f);
+    Out.vDepth = vector(0.f, 0.f, 0.f, 0.f);
+    Out.vRimLight = vector(0.f, 0.f, 0.f, 0.f);
     
     return Out;
 }
@@ -610,4 +629,14 @@ technique11 DefaultTechnique
         PixelShader = compile ps_5_0 PS_BLOOD_MAIN();
     }
 
+    pass Blood_Normal   // 10
+    {
+        SetRasterizerState(RS_Cull_None);
+        SetDepthStencilState(DSS_Default, 0);
+        SetBlendState(BS_Default, vector(0.f, 0.f, 0.f, 0.f), 0xffffffff);
+
+        VertexShader = compile vs_5_0 VS_MAIN();
+        GeometryShader = compile gs_5_0 GS_MAIN();
+        PixelShader = compile ps_5_0 PS_BLOOD_NORMAL_MAIN();
+    }
 }

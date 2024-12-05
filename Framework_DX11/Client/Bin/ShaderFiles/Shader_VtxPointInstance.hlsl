@@ -23,22 +23,22 @@ struct Particle
 
 StructuredBuffer<Particle> Particle_SRV : register(t0);
 
-matrix			g_WorldMatrix, g_ViewMatrix, g_ProjMatrix;
-texture2D		g_DiffuseTexture;
-texture2D       g_NormalTexture;
-texture2D       g_MaskTexture_1;
-texture2D       g_MaskTexture_2;
-vector			g_vCamPosition;
+matrix g_WorldMatrix, g_ViewMatrix, g_ProjMatrix;
+texture2D g_DiffuseTexture;
+texture2D g_NormalTexture;
+texture2D g_MaskTexture_1;
+texture2D g_MaskTexture_2;
+vector g_vCamPosition;
 
-float2          g_vTexDivide;
+float2 g_vTexDivide;
 
-float2          g_vStartScaling;
-float2          g_vScalingRatio;
+float2 g_vStartScaling;
+float2 g_vScalingRatio;
 
-int             g_iState = 0;
-float           g_fStartRotation = 0.f;
-float           g_fAngle = 0.f;
-float           g_fSpriteSpeed = 0.f;
+int g_iState = 0;
+float g_fStartRotation = 0.f;
+float g_fAngle = 0.f;
+float g_fSpriteSpeed = 0.f;
 
 
 struct VS_OUT
@@ -56,9 +56,9 @@ VS_OUT VS_MAIN(uint instanceID : SV_InstanceID)
     VS_OUT Out = (VS_OUT) 0;
 	
     row_major float4x4 TransformMatrix = float4x4(
-    float4(Particle_SRV[instanceID].vRight), 
-    float4(Particle_SRV[instanceID].vUp), 
-    float4(Particle_SRV[instanceID].vLook), 
+    float4(Particle_SRV[instanceID].vRight),
+    float4(Particle_SRV[instanceID].vUp),
+    float4(Particle_SRV[instanceID].vLook),
     float4(Particle_SRV[instanceID].vTranslation)
     );
     
@@ -108,11 +108,11 @@ struct GS_OUT
 [maxvertexcount(6)]
 void GS_MAIN(point GS_IN In[1], inout TriangleStream<GS_OUT> Container)
 {
-	GS_OUT			Out[4];
+    GS_OUT Out[4];
 
-	float3		vLook = (g_vCamPosition - In[0].vPosition).xyz;
-	float3		vRight = normalize(cross(float3(0.f, 1.f, 0.f), vLook));
-    float3      vUp = normalize(cross(vLook, vRight));
+    float3 vLook = (g_vCamPosition - In[0].vPosition).xyz;
+    float3 vRight = normalize(cross(float3(0.f, 1.f, 0.f), vLook));
+    float3 vUp = normalize(cross(vLook, vRight));
     
     vRight *= In[0].vPSize.x * 0.5f;
     vUp *= In[0].vPSize.y * 0.5f;
@@ -136,7 +136,7 @@ void GS_MAIN(point GS_IN In[1], inout TriangleStream<GS_OUT> Container)
         vUp *= g_vStartScaling.y;
     }
     
-    if(g_iState & STATE_ROTATION)
+    if (g_iState & STATE_ROTATION)
     {
         float fAngle = g_fAngle;
         fAngle *= In[0].vColor.a;
@@ -169,22 +169,22 @@ void GS_MAIN(point GS_IN In[1], inout TriangleStream<GS_OUT> Container)
     Out[3].vColor = In[0].vColor;
 
 
-	matrix		matVP = mul(g_ViewMatrix, g_ProjMatrix);
+    matrix matVP = mul(g_ViewMatrix, g_ProjMatrix);
 
-	Out[0].vPosition = mul(Out[0].vPosition, matVP);
-	Out[1].vPosition = mul(Out[1].vPosition, matVP);
-	Out[2].vPosition = mul(Out[2].vPosition, matVP);
-	Out[3].vPosition = mul(Out[3].vPosition, matVP);
+    Out[0].vPosition = mul(Out[0].vPosition, matVP);
+    Out[1].vPosition = mul(Out[1].vPosition, matVP);
+    Out[2].vPosition = mul(Out[2].vPosition, matVP);
+    Out[3].vPosition = mul(Out[3].vPosition, matVP);
 
-	Container.Append(Out[0]);
-	Container.Append(Out[1]);
-	Container.Append(Out[2]);
-	Container.RestartStrip();
+    Container.Append(Out[0]);
+    Container.Append(Out[1]);
+    Container.Append(Out[2]);
+    Container.RestartStrip();
 
-	Container.Append(Out[0]);
-	Container.Append(Out[2]);
-	Container.Append(Out[3]);
-	Container.RestartStrip();
+    Container.Append(Out[0]);
+    Container.Append(Out[2]);
+    Container.Append(Out[3]);
+    Container.RestartStrip();
 }
 
 [maxvertexcount(6)]
@@ -283,7 +283,8 @@ struct PS_NORMAL_OUT
     vector vNormal : SV_TARGET1;
     vector vDepth : SV_TARGET2;
     vector vARM : SV_TARGET3;
-    vector vPickDepth : SV_TARGET4;
+    vector vEmessive : SV_TARGET4;
+    vector vRimLight : SV_TARGET5;
 };
 
 float2 Get_SpriteTexcoord(float2 vTexcoord, int iTexIndex);
@@ -349,8 +350,9 @@ PS_NORMAL_OUT PS_SPRITE_NORMAL_MAIN(PS_IN In)
     
     Out.vDepth = float4(0.f, 0.f, 0.f, 0.f);
     Out.vARM = float4(0.f, 0.f, 0.f, 0.f);
-    Out.vPickDepth = float4(0.f, 0.f, 0.f, 0.f);
-    
+    Out.vEmessive = float4(0.f, 0.f, 0.f, 0.f);
+    Out.vRimLight = float4(0.f, 0.f, 0.f, 0.f);
+
     return Out;
 }
 
@@ -383,18 +385,19 @@ PS_NORMAL_OUT PS_BLOOD_SPREAD_MAIN(PS_IN In)
 {
     PS_NORMAL_OUT Out = (PS_NORMAL_OUT) 0;
 
-    Out.vDiffuse    = g_DiffuseTexture.Sample(LinearSampler, In.vTexcoord);
-    Out.vNormal     = g_NormalTexture.Sample(LinearSampler, In.vTexcoord) * 2.f - 1.f;
+    Out.vDiffuse = g_DiffuseTexture.Sample(LinearSampler, In.vTexcoord);
+    Out.vNormal = g_NormalTexture.Sample(LinearSampler, In.vTexcoord) * 2.f - 1.f;
 
     Out.vDiffuse.a *= Out.vDiffuse.r * (1.f - (In.vLifeTime.y / In.vLifeTime.x));
-    if(Out.vDiffuse.a < 0.3f)
+    if (Out.vDiffuse.a < 0.3f)
         discard;
     
     Out.vDiffuse.rgb = Out.vDiffuse.r * In.vColor.rgb;
     
-    Out.vARM        = float4(1.f, 1.f, 1.f, 1.f);
+    Out.vARM = float4(1.f, 1.f, 1.f, 1.f);
     Out.vDepth = float4(0.f, 0.f, 0.f, 0.f);
-    Out.vPickDepth = float4(0.f, 0.f, 0.f, 0.f);
+    Out.vEmessive = float4(0.f, 0.f, 0.f, 0.f);
+    Out.vRimLight = float4(0.f, 0.f, 0.f, 0.f);
     
     return Out;
 }
@@ -408,14 +411,15 @@ PS_NORMAL_OUT PS_BLOOD_DROPLETS_MAIN(PS_IN In)
     
     Out.vDiffuse.a = Out.vDiffuse.r;
     
-    if(Out.vDiffuse.a < 0.1f)
+    if (Out.vDiffuse.a < 0.1f)
         discard;
     
     Out.vDiffuse.rgb *= In.vColor.rgb;
     
     Out.vARM = float4(1.f, 1.f, 1.f, 1.f);
     Out.vDepth = float4(0.f, 0.f, 0.f, 0.f);
-    Out.vPickDepth = float4(0.f, 0.f, 0.f, 0.f);
+    Out.vEmessive = float4(0.f, 0.f, 0.f, 0.f);
+    Out.vRimLight = float4(0.f, 0.f, 0.f, 0.f);
     
     return Out;
 }
@@ -438,7 +442,7 @@ PS_NORMAL_OUT PS_INDEX_NORMAL_MAIN(PS_IN In)
 {
     PS_NORMAL_OUT Out = (PS_NORMAL_OUT) 0;
 	
-    int iTexIndex = (int)(In.vColor.a * 16.f);
+    int iTexIndex = (int) (In.vColor.a * 16.f);
     float2 vTexcoord = Get_SpriteTexcoord(In.vTexcoord, iTexIndex);
     Out.vDiffuse = g_DiffuseTexture.Sample(LinearSampler, vTexcoord);
 
@@ -453,7 +457,8 @@ PS_NORMAL_OUT PS_INDEX_NORMAL_MAIN(PS_IN In)
     
     Out.vDepth = float4(0.f, 0.f, 0.f, 0.f);
     Out.vARM = float4(0.f, 0.f, 0.f, 0.f);
-    Out.vPickDepth = float4(0.f, 0.f, 0.f, 0.f);
+    Out.vEmessive = float4(0.f, 0.f, 0.f, 0.f);
+    Out.vRimLight = float4(0.f, 0.f, 0.f, 0.f);
     
     return Out;
 }
@@ -610,18 +615,18 @@ PS_EFFECT_OUT PS_POWERGUARD_MAIN(PS_IN In)
     return Out;
 }
 
-technique11	DefaultTechnique
+technique11 DefaultTechnique
 {
-	pass DEFAULT // 0
-	{
-		SetRasterizerState(RS_Default);
-		SetDepthStencilState(DSS_Default, 0);
-		SetBlendState(BS_Default, vector(0.f, 0.f, 0.f, 0.f), 0xffffffff);
+    pass DEFAULT // 0
+    {
+        SetRasterizerState(RS_Default);
+        SetDepthStencilState(DSS_Default, 0);
+        SetBlendState(BS_Default, vector(0.f, 0.f, 0.f, 0.f), 0xffffffff);
 
-		VertexShader = compile vs_5_0 VS_MAIN();
-		GeometryShader = compile gs_5_0 GS_MAIN();
-		PixelShader = compile ps_5_0 PS_MAIN();
-	}
+        VertexShader = compile vs_5_0 VS_MAIN();
+        GeometryShader = compile gs_5_0 GS_MAIN();
+        PixelShader = compile ps_5_0 PS_MAIN();
+    }
 
     pass PARTICLE_GLOW // 1
     {
@@ -733,7 +738,7 @@ technique11	DefaultTechnique
         PixelShader = compile ps_5_0 PS_FIRE_MAIN();
     }
 
-    pass PARTICLE_DISTORTION    // 11
+    pass PARTICLE_DISTORTION // 11
     {
         SetRasterizerState(RS_Default);
         SetDepthStencilState(DSS_Default, 0);
@@ -744,7 +749,7 @@ technique11	DefaultTechnique
         PixelShader = compile ps_5_0 PS_DISTORTION_MAIN();
     }
 
-    pass PARTICLE_AURA_EFFECT  // 12
+    pass PARTICLE_AURA_EFFECT // 12
     {
         SetRasterizerState(RS_Default);
         SetDepthStencilState(DSS_Default, 0);
@@ -788,7 +793,7 @@ technique11	DefaultTechnique
         PixelShader = compile ps_5_0 PS_POWERGUARD_MAIN();
     }
     
-    pass PARTICLE_GLOW_RGBTOA   // 16
+    pass PARTICLE_GLOW_RGBTOA // 16
     {
         SetRasterizerState(RS_Default);
         SetDepthStencilState(DSS_Default, 0);

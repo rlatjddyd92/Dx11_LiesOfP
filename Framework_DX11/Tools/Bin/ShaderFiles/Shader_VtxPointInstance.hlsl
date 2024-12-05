@@ -283,7 +283,8 @@ struct PS_NORMAL_OUT
     vector vNormal : SV_TARGET1;
     vector vDepth : SV_TARGET2;
     vector vARM : SV_TARGET3;
-    vector vPickDepth : SV_TARGET4;
+    vector vEmessive : SV_TARGET4;
+    vector vRimLight : SV_TARGET5;
 };
 
 float2 Get_SpriteTexcoord(float2 vTexcoord, int iTexIndex);
@@ -349,8 +350,9 @@ PS_NORMAL_OUT PS_SPRITE_NORMAL_MAIN(PS_IN In)
     
     Out.vDepth = float4(0.f, 0.f, 0.f, 0.f);
     Out.vARM = float4(0.f, 0.f, 0.f, 0.f);
-    Out.vPickDepth = float4(0.f, 0.f, 0.f, 0.f);
-    
+    Out.vEmessive = float4(0.f, 0.f, 0.f, 0.f);
+    Out.vRimLight = float4(0.f, 0.f, 0.f, 0.f);
+
     return Out;
 }
 
@@ -394,7 +396,8 @@ PS_NORMAL_OUT PS_BLOOD_SPREAD_MAIN(PS_IN In)
     
     Out.vARM        = float4(1.f, 1.f, 1.f, 1.f);
     Out.vDepth = float4(0.f, 0.f, 0.f, 0.f);
-    Out.vPickDepth = float4(0.f, 0.f, 0.f, 0.f);
+    Out.vEmessive = float4(0.f, 0.f, 0.f, 0.f);
+    Out.vRimLight = float4(0.f, 0.f, 0.f, 0.f);
     
     return Out;
 }
@@ -415,7 +418,8 @@ PS_NORMAL_OUT PS_BLOOD_DROPLETS_MAIN(PS_IN In)
     
     Out.vARM = float4(1.f, 1.f, 1.f, 1.f);
     Out.vDepth = float4(0.f, 0.f, 0.f, 0.f);
-    Out.vPickDepth = float4(0.f, 0.f, 0.f, 0.f);
+    Out.vEmessive = float4(0.f, 0.f, 0.f, 0.f);
+    Out.vRimLight = float4(0.f, 0.f, 0.f, 0.f);
     
     return Out;
 }
@@ -453,7 +457,8 @@ PS_NORMAL_OUT PS_INDEX_NORMAL_MAIN(PS_IN In)
     
     Out.vDepth = float4(0.f, 0.f, 0.f, 0.f);
     Out.vARM = float4(0.f, 0.f, 0.f, 0.f);
-    Out.vPickDepth = float4(0.f, 0.f, 0.f, 0.f);
+    Out.vEmessive = float4(0.f, 0.f, 0.f, 0.f);
+    Out.vRimLight = float4(0.f, 0.f, 0.f, 0.f);
     
     return Out;
 }
