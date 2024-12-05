@@ -1,16 +1,16 @@
 #pragma once
 
-#include "Tools_Defines.h"
+#include "Client_Defines.h"
 #include "GameObject.h"
 
 
-BEGIN(Tools)
+BEGIN(Client)
 
 class CCutScene :
-    public CGameObject
+	public CGameObject
 {
 public:
-	enum ActorType {CAMERA, UI, SHADER,GAMEOBJECT, TYPE_END};
+	enum ActorType { CAMERA, UI, SHADER, GAMEOBJECT, TYPE_END };
 
 private:
 	CCutScene(ID3D11Device* pDevice, ID3D11DeviceContext* pContext);
@@ -26,15 +26,11 @@ public:
 
 public:
 	_float*			Get_CurFrame_Ptr() { return &m_fTrackPosition; }
-	_float			Get_MaxFrame() { return m_fMaxFrame; }
 	void			Set_MaxFrame(_float fFrame) { m_fMaxFrame = fFrame; }
 	void			Set_Play(_bool bPlay) { m_bPlay = bPlay; }
 	void			Keyframe_Actived_Reset();
 	void			Create_KeyFrame();
-	void			Sort_KeyFrame_TrackPosition();
-	void			Delete_Selected_Keyframe(_int iIndex);
-	_int			Get_KeyFrameCount() { return (_int)m_KeyFrames.size(); }
-	CUTSCENE_KEYFRAME_DESC*	Get_Selected_KeyFrame(_int iIndex) { return m_KeyFrames[iIndex]; }
+	CUTSCENE_KEYFRAME_DESC* Get_Selected_KeyFrame(_int iIndex) { return m_KeyFrames[iIndex]; }
 
 private:
 	_float						m_fMaxFrame = { 50.f };
@@ -43,8 +39,7 @@ private:
 
 	vector<CUTSCENE_KEYFRAME_DESC*>		m_KeyFrames;
 
-	class CController_UITool*	m_pController_UITool = { nullptr };
-	class CCamera*				m_pCamera = { nullptr };
+	class CCamera* m_pCamera = { nullptr };
 private:
 	void Play_Keyframes(_float fTimeDelta);
 	void Active_Shader(CUTSCENE_KEYFRAME_DESC* pCutSceneDesc);

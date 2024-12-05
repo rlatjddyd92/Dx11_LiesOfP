@@ -376,7 +376,19 @@ HRESULT CLevel_GamePlay::Read_Map_Data()
 							 return E_FAIL;
 					 }
 				}
-
+				else if (strLayerTag == "Layer_Monster")
+				{
+					if (wcscmp(pDesc.szModelTag, TEXT("Prototype_AnimModel_CarcassTail")) == 0)
+					{
+						if (FAILED(m_pGameInstance->Add_CloneObject_ToLayer(LEVEL_GAMEPLAY, TEXT("Layer_Monster"), TEXT("Prototype_GameObject_CarcassTail"), &pDesc)))
+							return E_FAIL;
+					}
+					if (wcscmp(pDesc.szModelTag, TEXT("Prototype_AnimModel_CarcassBigA")) == 0)
+					{
+						if (FAILED(m_pGameInstance->Add_CloneObject_ToLayer(LEVEL_GAMEPLAY, TEXT("Layer_Monster"), TEXT("Prototype_GameObject_CarcassBigA"), &pDesc)))
+							return E_FAIL;
+					}
+				}
 			}
 			else
 			{

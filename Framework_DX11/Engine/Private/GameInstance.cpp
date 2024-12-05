@@ -887,6 +887,11 @@ void CGameInstance::Change_Active_Octree()
 
 #pragma endregion
 
+_float CGameInstance::Lerp(_float fSour, _float fDest, _float fRatio)
+{
+	return fSour + fRatio * (fDest - fSour);
+}
+
 void CGameInstance::Release_Engine()
 {
 	Safe_Release(m_pKey_Manager);

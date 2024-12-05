@@ -433,6 +433,38 @@ void CTransform::Turn_Lerp(_fvector vDir, _float fTurnSpeed, _float fTimeDelta)
 	Set_State(STATE_LOOK, XMLoadFloat4((_float4*)&World4x4.m[2]));
 }
 
+void CTransform::Turn_RollPitchYaw_Lerp(_float fPitch, _float fYaw, _float fRoll, _float fSpeed, _float fTimeDelta)
+{
+	_Vec4 CurrentQuat = XMQuaternionRotationMatrix(m_WorldMatrix);	//현재 회전 값
+
+	float targetPitch = XMConvertToRadians(fPitch);	//x
+	float targetYaw = XMConvertToRadians(fYaw);	//y
+	float targetRoll = XMConvertToRadians(fRoll);	//z
+	_Vec4 targetQuat = XMQuaternionRotationRollPitchYaw(targetPitch, targetYaw, targetRoll);
+
+	_float fLerpSpeed = min(1.0f, fSpeed * fTimeDelta);
+	_Vec4 interpolatedQuat = XMQuaternionSlerp(CurrentQuat, targetQuat, fLerpSpeed);
+
+	_Matrix rotationMatrix = XMMatrixRotationQuaternion(interpolatedQuat);
+
+	// 월드 행렬에서 변환(위치) 추출
+	_Vec4 position = Get_State(STATE_POSITION); // 행렬의 4번째 행이 위치 정보
+
+	// 새 월드 행렬 생성
+	_Matrix newWorldMatrix = rotationMatrix;
+	m_WorldMatrix = newWorldMatrix;
+	Set_State(STATE_POSITION, { position.x, position.y, position.z }); // 위치 유지
+
+	if (XMVectorGetX(XMQuaternionLength(interpolatedQuat - targetQuat)) <= 0.005f &&
+		XMVectorGetY(XMQuaternionLength(interpolatedQuat - targetQuat)) <= 0.005f &&
+		XMVectorGetZ(XMQuaternionLength(interpolatedQuat - targetQuat)) <= 0.005f
+		) 
+	{
+		// 회전 완료 처리
+		m_isTurning = false;
+	}
+}
+
 void CTransform::Rotation(const _Vec4& vAxis, _float fRadian)
 {
 	_Vec3		vScaled = Get_Scaled();

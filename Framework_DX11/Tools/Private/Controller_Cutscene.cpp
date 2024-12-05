@@ -5,6 +5,11 @@
 #include "Controller_UITool.h"
 #include "GameInstance.h"
 #include "CutScene.h"
+#include "Camera.h"
+#include "AnimModel.h"
+#include <io.h>
+#include<fstream>
+
 IMPLEMENT_SINGLETON(CController_Cutscene)
 
 
@@ -35,6 +40,8 @@ HRESULT CController_Cutscene::Initialize(ID3D11Device* pDevice, ID3D11DeviceCont
     }
 
     m_fTrackPosition = &m_fTrackPosition_Zero;
+    m_pCamera = m_pGameInstance->Find_Camera(LEVEL_TOOL);
+
 	return S_OK;
 }
 
@@ -46,6 +53,7 @@ void CController_Cutscene::Update(_float fTimeDelta)
     {
         m_pCurrentCutScene->Update(fTimeDelta);
     }
+
 }
 
 void CController_Cutscene::Menu()
@@ -83,6 +91,7 @@ void CController_Cutscene::Menu()
     }
 
 #pragma endregion
+
     //새로운 컷신 선텍
     if(m_iPreSelectedCutScene != item_selected_idx)
     {
@@ -125,6 +134,8 @@ void CController_Cutscene::Menu()
         {
             *m_fTrackPosition = 0.f;
             m_pCurrentCutScene->Keyframe_Actived_Reset();
+            m_pCamera->Reset_Zoom();
+            m_pCamera->Reset_MoveLerp();
         }
 
         ImGui::SliderFloat("TimeLine", m_fTrackPosition, 0.0f, fMaxFrame);
@@ -152,7 +163,6 @@ void CController_Cutscene::Menu()
         if(m_pCurrentCutScene!=nullptr)
             iKeyFrameCount = m_pCurrentCutScene->Get_KeyFrameCount();
 
-
         for (_int i = 0; i < iKeyFrameCount; i++)
         {
             _char szText[MAX_PATH] = "KeyFrmae ";
@@ -174,7 +184,7 @@ void CController_Cutscene::Menu()
             m_iPreSelected_KeyFrame = iSelectedKeyframeNum;
             if(iSelectedKeyframeNum != -1)
             {
-                CUTSCENE_DESC* pDesc = m_pCurrentCutScene->Get_Selected_KeyFrame(iSelectedKeyframeNum);
+                CUTSCENE_KEYFRAME_DESC* pDesc = m_pCurrentCutScene->Get_Selected_KeyFrame(iSelectedKeyframeNum);
                 pCutScene_Desc = pDesc;
                 *m_fTrackPosition = pDesc->fTrackPosition;
             }
@@ -233,7 +243,7 @@ void CController_Cutscene::Menu()
             switch (selected)
             {
             case CCutScene::CAMERA:
-                Show_Camera_State();
+                Camera_Memu();
                 break;
             case CCutScene::UI:
                 UI_Memu();
@@ -242,7 +252,7 @@ void CController_Cutscene::Menu()
                 Shader_Memu();
                 break;
             case CCutScene::GAMEOBJECT:
-                Show_GamgeObject_State();
+                GamgeObject_Memu();
                 break;
             default:
                 break;
@@ -251,27 +261,64 @@ void CController_Cutscene::Menu()
    
     }
 #pragma endregion
-}
 
-void CController_Cutscene::Show_Camera_State()
-{
-}
-
-void CController_Cutscene::Show_UI_State()
-{
-}
-
-void CController_Cutscene::Show_Shader_State()
-{
-    
-}
-
-void CController_Cutscene::Show_GamgeObject_State()
-{
+#pragma region 저장, 불러오기
+    ImGui::SeparatorText("Save/Load");
+    if(ImGui::Button("Save"))
+    {
+        Save();
+    }
+    ImGui::SameLine();
+    if (ImGui::Button("Load"))
+    {
+        Load();
+    }
+#pragma endregion
 }
 
 void CController_Cutscene::Camera_Memu()
 {
+    static bool bShowCurCamState = { false };
+    ImGui::Checkbox("Show CurCamState", &bShowCurCamState);
+    if (bShowCurCamState)
+        Show_CurCamState();
+
+    //카메라 이동
+    ImGui::Checkbox("Teleport", &pCutScene_Desc->Camera_Desc.bTeleport);
+    if (pCutScene_Desc->Camera_Desc.bTeleport)
+    {
+        if (ImGui::Button("Save Current CamMatrix"))
+        {
+            pCutScene_Desc->Camera_Desc.mCameraWorlMatrix = m_pGameInstance->Find_Camera(LEVEL_TOOL)->Get_Transform()->Get_WorldMatrix();
+        }
+    }
+    //카메라 보간 이동
+    ImGui::Checkbox("MoveLerp", &pCutScene_Desc->Camera_Desc.bLerpMove);
+    if (pCutScene_Desc->Camera_Desc.bLerpMove)
+    {
+        ImGui::DragFloat3("TargetPos", (_float*)&pCutScene_Desc->Camera_Desc.vTargetPos, 0.1f);
+        ImGui::DragFloat("Move Speed", &pCutScene_Desc->Camera_Desc.fMoveSpeed, 0.01f, 0.f);
+    }
+    //카메라 회전
+    ImGui::Checkbox("Turn", &pCutScene_Desc->Camera_Desc.bTurn);
+    if (pCutScene_Desc->Camera_Desc.bTurn)
+    {
+        ImGui::DragFloat3("PitchYawRoll", (_float*)&pCutScene_Desc->Camera_Desc.vPitchTawRoll, 0.1f,0.f,360.f);
+        ImGui::DragFloat("Turn Speed", &pCutScene_Desc->Camera_Desc.fTurn_Speed, 0.1f,0.f,10.f);
+    }
+    //줌인
+    ImGui::Checkbox("ZoomnIn", &pCutScene_Desc->Camera_Desc.bZoomIn);
+    if (pCutScene_Desc->Camera_Desc.bZoomIn)
+    {
+        ImGui::DragFloat("Fovy(Degree)", &pCutScene_Desc->Camera_Desc.fFovy, 0.01f, 0.01f, 2.f);
+        ImGui::DragFloat("Duration", &pCutScene_Desc->Camera_Desc.fZoomDuration, 0.05f, 0.f, 10.f);
+    }
+    //줌아웃
+    ImGui::Checkbox("ZoomnOut", &pCutScene_Desc->Camera_Desc.bZoomOut);
+    if (pCutScene_Desc->Camera_Desc.bZoomOut)
+    {
+        ImGui::DragFloat("Duration", &pCutScene_Desc->Camera_Desc.fZoomDuration, 0.1f, 0.f, 10.f);
+    }
 }
 
 void CController_Cutscene::UI_Memu()
@@ -299,6 +346,144 @@ void CController_Cutscene::Shader_Memu()
 
 void CController_Cutscene::GamgeObject_Memu()
 {
+    //오브젝트 사용 유무
+    ImGui::Checkbox("Player", &pCutScene_Desc->Obj_Desc.bUseObj[0]); ImGui::SameLine();
+    ImGui::Checkbox("Boss1", &pCutScene_Desc->Obj_Desc.bUseObj[1]); ImGui::SameLine();
+    ImGui::Checkbox("Boss2", &pCutScene_Desc->Obj_Desc.bUseObj[2]);
+
+
+    if(pCutScene_Desc->Obj_Desc.bUseObj[0])
+    {
+        ImGui::Text("Player");
+        //상태 enum 결정
+        ImGui::InputInt("Player State Num", (int*)&pCutScene_Desc->Obj_Desc.iStateNum[0]);
+        ImGui::InputFloat("Player Anim Speed Ratio ", &pCutScene_Desc->Obj_Desc.fAnimSpeedRatio[0]);
+    }
+
+    if (pCutScene_Desc->Obj_Desc.bUseObj[1])
+    {
+        ImGui::Text("Boss1");
+        //상태 enum 결정
+        ImGui::InputInt("Boss1 State Num", (int*)&pCutScene_Desc->Obj_Desc.iStateNum[1]);
+        ImGui::InputFloat("Boss1 Anim Speed Ratio ", &pCutScene_Desc->Obj_Desc.fAnimSpeedRatio[1]);
+    }
+
+    if (pCutScene_Desc->Obj_Desc.bUseObj[2])
+    {
+        ImGui::Text("Boss2");
+        //상태 enum 결정
+        ImGui::InputInt("Boss2 State Num", (int*)&pCutScene_Desc->Obj_Desc.iStateNum[2]);
+        ImGui::InputFloat("Boss2 Speed Ratio ", &pCutScene_Desc->Obj_Desc.fAnimSpeedRatio[2]);
+    }
+    
+}
+
+void CController_Cutscene::Show_CurCamState()
+{
+    ImGui::Begin("CurrCam_State", NULL, ImGuiWindowFlags_MenuBar | ImGuiWindowFlags_HorizontalScrollbar
+        | ImGuiWindowFlags_AlwaysVerticalScrollbar);
+
+    ImGui::Text("Ori Fov : %f", XMConvertToRadians(60.f));
+    ImGui::DragFloat("FoV", m_pCamera->Get_FoV_Ptr(), 0.01f, 0.01f, 2.f);
+    
+    ////////////////////////////
+    _Vec4 CurrentQuat = XMQuaternionRotationMatrix(m_pCamera->Get_Transform()->Get_WorldMatrix());
+
+    // 쿼터니언 -> 행렬
+    XMMATRIX rotMatrix = XMMatrixRotationQuaternion(CurrentQuat);
+
+    // 행렬 -> Euler 각 (Yaw, Pitch, Roll)
+    float pitch, yaw, roll;
+    pitch = std::atan2(rotMatrix.r[1].m128_f32[2], rotMatrix.r[2].m128_f32[2]);
+    yaw = std::asin(-rotMatrix.r[0].m128_f32[2]);
+    roll = std::atan2(rotMatrix.r[0].m128_f32[1], rotMatrix.r[0].m128_f32[0]);
+
+    //Euler를 Degree로
+    ImGui::Text("Rot : %f, %f, %f", XMConvertToDegrees( pitch), XMConvertToDegrees(yaw), XMConvertToDegrees(roll));
+    
+    _Vec3 vCurPos = m_pCamera->Get_Transform()->Get_State(CTransform::STATE_POSITION);
+    ImGui::Text("Pos: %f, %f, %f", vCurPos.x, vCurPos.y, vCurPos.z);
+
+    ImGui::End();
+}
+
+void CController_Cutscene::Save()
+{
+    const char cFile[128] = "../Bin/DataFiles/CutScene_Data.dat";
+    ofstream fout(cFile, ios::out | ios::binary);
+
+    //	fout.open();
+    if (!fout.is_open())    // 파일 열었다면
+    {
+        MSG_BOX(TEXT("파일 쓰기를 실패"));
+        return;
+    }
+
+    //전체 컷신 수 저장
+    fout.write(reinterpret_cast<const char*>(&m_iCutSceneCount), sizeof(_uint));
+
+    for (_uint i = 0; i < m_iCutSceneCount; ++i)
+    {
+        //컷신 인덱스
+        fout.write(reinterpret_cast<const char*>(&i), sizeof(_uint));
+
+        //컷신의 전체 프레임 (시간)
+        _float fMaxFrame = m_CutSceneList[i]->Get_MaxFrame();
+        fout.write(reinterpret_cast<const char*>(&fMaxFrame), sizeof(_float));
+
+        //컷신의 KeyFrame개수(이벤트 개수)
+        _int iKeyFrameCount = m_CutSceneList[i]->Get_KeyFrameCount();
+        fout.write(reinterpret_cast<const char*>(&iKeyFrameCount), sizeof(_int));
+
+        for (_int j = 0; j < iKeyFrameCount; ++j)
+        {
+            fout.write(reinterpret_cast<const char*>(m_CutSceneList[i]->Get_Selected_KeyFrame(j)), sizeof(CUTSCENE_KEYFRAME_DESC));
+        }
+    }
+
+    fout.close();
+    MSG_BOX(TEXT("파일 쓰기를 성공"));
+}
+
+void CController_Cutscene::Load()
+{
+    const char cFile[128] = "../Bin/DataFiles/CutScene_Data.dat";
+    ifstream fin(cFile, ios::in | ios::binary);
+
+    //	fin.open("../Bin/Map_Data.txt");
+    if (!fin.is_open())    // 파일 열었다면
+    {
+        MSG_BOX(TEXT("파일 읽기를 실패했어요.."));
+        return;
+    }
+
+    _uint CutSceneCount = { 0 };
+    fin.read(reinterpret_cast<char*>(&CutSceneCount), sizeof(_uint));
+
+    for(_uint i = 0 ; i < CutSceneCount; ++i)
+    {
+        //컷신 인덱스
+        _uint iCutScene_Index;
+        fin.read(reinterpret_cast<char*>(&iCutScene_Index), sizeof(_uint));
+
+        //컷신의 전체 프레임 (시간)
+        _float fMaxFrame;
+        fin.read(reinterpret_cast<char*>(&fMaxFrame), sizeof(_float));
+        m_CutSceneList[i]->Set_MaxFrame(fMaxFrame);
+
+        //컷신의 KeyFrame개수(이벤트 개수)
+        _int iKeyFrameCount;
+        fin.read(reinterpret_cast<char*>(&iKeyFrameCount), sizeof(_int));
+
+        for (int j = 0; j < iKeyFrameCount; ++j)
+        {
+            m_CutSceneList[iCutScene_Index]->Create_KeyFrame();
+            fin.read(reinterpret_cast<char*>(m_CutSceneList[iCutScene_Index]->Get_Selected_KeyFrame(j)), sizeof(CUTSCENE_KEYFRAME_DESC));
+        }
+    }
+
+    fin.close();
+    MSG_BOX(TEXT("파일 읽기를 성공했습니다.."));
 }
 
 

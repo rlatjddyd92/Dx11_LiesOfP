@@ -29,6 +29,7 @@ HRESULT CCamera::Initialize(void * pArg)
 	m_pTransformCom->LookAt(XMLoadFloat4(&pDesc->vAt));
 
 	m_fFovy = pDesc->fFovy;
+	m_fInitFovy = m_fFovy;
 	m_fAspect = pDesc->fAspect;
 	m_fNear = pDesc->fNear;
 	m_fFar = pDesc->fFar;
@@ -69,12 +70,12 @@ void CCamera::Start_PosShake(_float fPower, _float fDuration)
 	m_isShake = true;
 }
 
-void CCamera::ZoomIn(_float fFovyOffset, _float fDuration)
+void CCamera::ZoomIn(_float fFovy, _float fDuration)
 {
 	if (m_isZoomIn)
 		return;
 
-	m_fTargetFovy = m_fInitFovy + fFovyOffset;
+	m_fTargetFovy = fFovy;
 	m_fZoomDuration = fDuration;
 	m_fZoomTime = 0.f;
 
@@ -91,6 +92,38 @@ void CCamera::ZoomOut(_float fDuration)
 
 	m_isZoomIn = false;
 	m_isZoomOut = true;
+}
+
+void CCamera::Start_Turn(_float fSpeed, _Vec3 vPitchYawRoll)
+{
+	m_bTurn = true;
+
+	m_fTurnSpeed = fSpeed;
+	m_vTarget_PitchTawRoll = vPitchYawRoll;
+	m_pTransformCom->Set_isTurning(true);
+}
+
+void CCamera::Reset_Zoom()
+{
+	m_fFovy = m_fInitFovy;
+	m_fTargetFovy = m_fInitFovy;
+	m_isZoomIn = false;
+	m_isZoomOut = false;
+	m_fZoomDuration = 0.f;
+	m_fZoomTime = 0.f;
+}
+
+void CCamera::Reset_MoveLerp()
+{
+	m_bMoveLerp = false;
+	m_fMoveSpeed = 0.f;
+}
+
+void CCamera::Start_MoveLerp(_Vec3 vTargetPos, _float fSpeed)
+{
+	m_bMoveLerp = true;
+	m_vTarget_Pos = vTargetPos;
+	m_fMoveSpeed = fSpeed;
 }
 
 void CCamera::Calculat_CascadeFrustum()
@@ -179,6 +212,61 @@ void CCamera::Calculat_CascadeFrustum()
 	m_pGameInstance->Set_CascadeViewMatirx(CascadeViewMatrix);
 	m_pGameInstance->Set_CascadeProjMatirx(CascadeProjMatrix);
 	m_pGameInstance->Set_CascadeProjInverseMatirx(CascadeProjInverseMatrix);
+}
+
+void CCamera::Update_Zoom(_float fTimeDelta)
+{
+	if (m_isZoomIn)
+	{
+		m_fZoomTime += fTimeDelta;
+		if (m_fZoomTime >= m_fZoomDuration)
+		{
+			m_fFovy = m_fTargetFovy;
+			m_fZoomTime = m_fZoomDuration;
+		}
+		else
+			m_fFovy = m_pGameInstance->Lerp(m_fInitFovy, m_fTargetFovy, m_fZoomTime / m_fZoomDuration);
+	}
+	else if (m_isZoomOut)
+	{
+		m_fZoomTime += fTimeDelta;
+		if (m_fZoomTime >= m_fZoomDuration)
+		{
+			m_fFovy = m_fTargetFovy;
+			m_fZoomTime = m_fZoomDuration;
+		}
+		else
+		{
+			m_fFovy = m_pGameInstance->Lerp(m_fZoomInFovy, m_fTargetFovy, m_fZoomTime / m_fZoomDuration);
+		}
+	}
+}
+
+void CCamera::Update_Turn(_float fTimeDelta)
+{
+	if (m_bTurn == false)
+		return;
+
+	m_pTransformCom->Turn_RollPitchYaw_Lerp(m_vTarget_PitchTawRoll.x, m_vTarget_PitchTawRoll.y, m_vTarget_PitchTawRoll.z, m_fTurnSpeed, fTimeDelta);
+}
+
+void CCamera::Update_MoveLerp(_float fTimeDelta)
+{
+	if (m_bMoveLerp == false)
+		return;
+
+	_Vec4 vTarget = { m_vTarget_Pos.x,m_vTarget_Pos.y,m_vTarget_Pos.z, 1.f };
+	_Vec4 vCurPos = m_pTransformCom->Get_State(CTransform::STATE_POSITION);
+
+	if (fabs(XMVectorGetX(vCurPos - vTarget)) <= 0.01f &&
+		fabs(XMVectorGetY(vCurPos - vTarget)) <= 0.01f &&
+		fabs(XMVectorGetZ(vCurPos - vTarget)) <= 0.01f
+		)
+	{
+		// 회전 완료 처리
+		m_bMoveLerp = false;
+	}
+	m_pTransformCom->Go_Lerp(m_pTransformCom->Get_State(CTransform::STATE_POSITION), vTarget, m_fMoveSpeed);
 }
 
 void CCamera::Free()

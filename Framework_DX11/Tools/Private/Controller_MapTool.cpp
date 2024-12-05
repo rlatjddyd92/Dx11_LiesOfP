@@ -415,6 +415,76 @@ void CController_MapTool::Select_Map_Model()
 	}
 }
 
+void CController_MapTool::Select_Monster_Model()
+{
+	if(m_Monster_File_Names.size() == 0)
+	{
+		char szFolderFindPath[128] = "../Bin/ModelData/Anim/Monster/*";    // 상대 경로 -> 모든 파일을 돌겠다
+		char szFolderPathReset[128] = "../Bin/ModelData/Anim/Monster/";
+		char szFolderPath[128] = "../Bin/ModelData/Anim/Monster/";
+
+		_finddata_t fd;
+		intptr_t handle = _findfirst(szFolderFindPath, &fd);
+
+		if (handle == -1)
+			return;
+
+		int iResult = 0;
+		int iFolderCount = 0;
+
+		while (iResult != -1)
+		{
+			strcpy_s(szFolderPath, szFolderPathReset);
+			strcat_s(szFolderPath, fd.name);
+
+			_char szDirName[MAX_PATH] = "";
+			_char szFileName[MAX_PATH] = "";
+			_char szExt[MAX_PATH] = "";
+			_splitpath_s(szFolderPath, nullptr, 0, szDirName, MAX_PATH, szFileName, MAX_PATH, szExt, MAX_PATH);
+
+			if (!strcmp(szFileName, ".") || !strcmp(szFileName, "..") || !strcmp(szFileName, ""))
+			{
+				iResult = _findnext(handle, &fd);
+				continue;
+			}
+
+			m_iMonsterListCount++;
+
+			//_strup : 문자열 내용을 복사해 그 주소를 저장-> 주소에 따라 문자열이 바뀌는걸 막아 모두 동일해지는걸 막음
+			m_Monster_File_Names.push_back(_strdup(szFileName));
+
+			//_findnext : <io.h>에서 제공하며 다음 위치의 파일을 찾는 함수, 더이상 없다면 -1을 리턴
+			iResult = _findnext(handle, &fd);
+		}
+	}
+
+	////////////////////////
+
+	static int item_selected_idx = 0; // Here we store our selected data as an index.
+	static bool item_highlight = false;
+	int item_highlighted_idx = -1; // Here we store our highlighted data as an index.	
+
+	if (ImGui::BeginListBox("Interacts"))
+	{
+		for (int n = 0; n < m_iMonsterListCount; n++)
+		{
+			const bool is_selected = (item_selected_idx == n);
+			if (ImGui::Selectable(m_Monster_File_Names[n], is_selected))
+				item_selected_idx = n;
+
+			if (item_highlight && ImGui::IsItemHovered())
+				item_highlighted_idx = n;
+
+			// Set the initial focus when opening the combo (scrolling + keyboard navigation focus)
+			if (is_selected)
+				ImGui::SetItemDefaultFocus();
+
+			m_iListSelectNum = item_selected_idx;
+		}
+		ImGui::EndListBox();
+	}
+}
+
 void CController_MapTool::Select_Interact_Model()
 {
 	//내용물 초기화 (capacity는 그냥 냅둠)
@@ -734,16 +804,10 @@ void CController_MapTool::SaveMap()
 		return;
 	}
 
-	//string strUint = {};
-
 	//전체 레이어 수 저장
-   	_uint iLayerCount = 3;
-	//iLayerCount -= 3;//카메라 레이어, 애니메이션 Tool용 모델 레이어, Background 제외
+	_uint iLayerCount = m_pGameInstance->Get_Object_Layer_Count(LEVEL_TOOL) - 1;
+	iLayerCount -= 3;//카메라 레이어, 애니메이션 Tool용 모델 레이어, Background 제외
 
-	//strUint = to_string(iLayerCount);
-	//fout.write(strUint.c_str(), sizeof(strUint));
-	//fout.write(strUint.c_str(), sizeof(strUint));
-	
 	fout.write(reinterpret_cast<const char*>(&iLayerCount), sizeof(_uint));
 
 	_wstring sLayerTag = {};
@@ -949,6 +1013,11 @@ void CController_MapTool::LoadMap()
 					if (FAILED(m_pGameInstance->Add_CloneObject_ToLayer(LEVEL_TOOL, TEXT("Layer_Etc"), TEXT("Prototype_GameObject_NonAnim"), &nonDesc)))
 						return;
 				}
+				else if (strLayerTag == "Layer_Monster")
+				{
+					if (FAILED(m_pGameInstance->Add_CloneObject_ToLayer(LEVEL_TOOL, TEXT("Layer_Monster"), TEXT("Prototype_GameObject_NonAnim"), &nonDesc)))
+						return;
+				}
 				else
 				{
 					if (FAILED(m_pGameInstance->Add_CloneObject_ToLayer(LEVEL_TOOL, TEXT("Layer_Map"), TEXT("Prototype_GameObject_NonAnim"), &nonDesc)))
@@ -1135,6 +1204,7 @@ void CController_MapTool::Map_Menu()
 		if (ImGui::BeginTabItem("Monster"))
 		{
 			strLayerName = "Layer_Monster";
+			Select_Monster_Model();
 			ImGui::EndTabItem();
 		}
 
@@ -1179,6 +1249,11 @@ void CController_MapTool::Map_Menu()
 
 		if(strLayerName == "Layer_Etc")
 			strcpy_s(Desc.szModelTag, m_Etc_File_Names[m_iListSelectNum]);
+		else if (strLayerName == "Layer_Monster")
+		{
+			strcpy_s(Desc.szModelTag, "Prototype_AnimModel_");
+			strcat_s(Desc.szModelTag, m_Monster_File_Names[m_iListSelectNum]);
+		}
 		else
 			strcpy_s(Desc.szModelTag, m_FileNames[m_iListSelectNum]);
 
@@ -1203,12 +1278,7 @@ void CController_MapTool::Map_Menu()
 		static_cast<CNonAnimModel*>(m_pSelectObject)->Set_Selected(true);
 		m_iPre_Picked_ID = m_iPickObject_ID;
 		m_iPickObject_ID = static_cast<CNonAnimModel*>(m_pSelectObject)->Get_HashId();
-
-
-
 	}
-
-
 }
 
 void CController_MapTool::Nav_Menu()
@@ -2221,6 +2291,11 @@ void CController_MapTool::Free()
 		Safe_Delete_Array(filename);
 	}
 	m_Etc_File_Names.clear();
+
+	for (auto& filename : m_Monster_File_Names) {
+		Safe_Delete_Array(filename);
+	}
+	m_Monster_File_Names.clear();
 
 	Safe_Release(m_my_texture);
 	Safe_Release(m_pDevice);

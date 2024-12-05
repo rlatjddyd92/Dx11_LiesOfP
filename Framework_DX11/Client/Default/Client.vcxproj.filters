@@ -822,6 +822,9 @@
     </Filter>
     <Filter Include="05.Fsm\Player\TwoHand\00.Attack\FlameSword\00.FableArts\General">
       <UniqueIdentifier>{ee6e207b-0b6e-437e-8552-023b6ae90c2a}</UniqueIdentifier>
+	</Filter>
+    <Filter Include="02.GameObjects\14.CutScene">
+      <UniqueIdentifier>{9c37d23a-9c1b-4b27-a4e0-a4b833b353e4}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -1519,6 +1522,9 @@
     </ClInclude>
     <ClInclude Include="..\Public\State_Player_Flame_ParryAttack.h">
       <Filter>05.Fsm\Player\TwoHand\00.Attack\FlameSword\00.FableArts\ParryAttack</Filter>
+	</ClInclude>
+    <ClInclude Include="..\Public\CutScene.h">
+      <Filter>02.GameObjects\14.CutScene</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -2186,6 +2192,9 @@
     </ClCompile>
     <ClCompile Include="..\Private\State_Player_Flame_ParryAttack.cpp">
       <Filter>05.Fsm\Player\TwoHand\00.Attack\FlameSword\00.FableArts\ParryAttack</Filter>
+	</ClCompile>
+    <ClCompile Include="..\Private\CutScene.cpp">
+      <Filter>02.GameObjects\14.CutScene</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

@@ -1,18 +1,17 @@
 #include "stdafx.h"
 #include "CutScene.h"
 #include "GameInstance.h"
-#include "ImGui_Manager.h"
-#include "Controller_UITool.h"
+#include "GameInterface_Controller.h"
 #include "Camera.h"
 
 CCutScene::CCutScene(ID3D11Device* pDevice, ID3D11DeviceContext* pContext)
-    : CGameObject{ pDevice, pContext }
+	: CGameObject{ pDevice, pContext }
 {
-	
+
 }
 
 CCutScene::CCutScene(const CCutScene& Prototype)
-    : CGameObject{ Prototype }
+	: CGameObject{ Prototype }
 {
 }
 
@@ -23,9 +22,6 @@ HRESULT CCutScene::Initialize_Prototype()
 
 HRESULT CCutScene::Initialize(void* pArg)
 {
-	m_pController_UITool = CController_UITool::Get_Instance();
-	Safe_AddRef(m_pController_UITool);
-
 	m_isActive = false;
 	m_pCamera = m_pGameInstance->Find_Camera(LEVEL_TOOL);
 	return S_OK;
@@ -65,7 +61,6 @@ void CCutScene::Create_KeyFrame()
 	pDesc->fTrackPosition = m_fTrackPosition;
 
 	m_KeyFrames.push_back(pDesc);
-	Sort_KeyFrame_TrackPosition();
 }
 
 void CCutScene::Play_Keyframes(_float fTimeDelta)
@@ -100,11 +95,11 @@ void CCutScene::Active_UI(CUTSCENE_KEYFRAME_DESC* pCutSceneDesc)
 {
 	if (pCutSceneDesc->UI_DESC.bFadeOut)
 	{
-		m_pController_UITool->Fade_Out(TEXT(""), TEXT(""), pCutSceneDesc->UI_DESC.fColor, pCutSceneDesc->UI_DESC.fTime);
+		GET_GAMEINTERFACE->Fade_Out(TEXT(""), TEXT(""), pCutSceneDesc->UI_DESC.fColor, pCutSceneDesc->UI_DESC.fTime);
 	}
 	if (pCutSceneDesc->UI_DESC.bFadeIn)
 	{
-		m_pController_UITool->Fade_In(pCutSceneDesc->UI_DESC.fTime);
+		GET_GAMEINTERFACE->Fade_In(pCutSceneDesc->UI_DESC.fTime);
 	}
 }
 
@@ -112,7 +107,7 @@ void CCutScene::Active_Camera(CUTSCENE_KEYFRAME_DESC* pCutSceneDesc)
 {
 	if (pCutSceneDesc->Camera_Desc.bTeleport)
 	{
-		m_pCamera->Get_Transform()->Set_WorldMatrix(pCutSceneDesc->Camera_Desc.mCameraWorlMatrix); 
+		m_pCamera->Get_Transform()->Set_WorldMatrix(pCutSceneDesc->Camera_Desc.mCameraWorlMatrix);
 	}
 	if (pCutSceneDesc->Camera_Desc.bTurn)
 	{
@@ -130,23 +125,6 @@ void CCutScene::Active_Camera(CUTSCENE_KEYFRAME_DESC* pCutSceneDesc)
 	{
 		m_pCamera->Start_MoveLerp(pCutSceneDesc->Camera_Desc.vTargetPos, pCutSceneDesc->Camera_Desc.fMoveSpeed);
 	}
-}
-
-void CCutScene::Sort_KeyFrame_TrackPosition()
-{
-	//TrakcPostition에 따라 자동 정렬
-	sort(m_KeyFrames.begin(), m_KeyFrames.end(), [](const CUTSCENE_KEYFRAME_DESC* a, const CUTSCENE_KEYFRAME_DESC* b)
-		{
-			return a->fTrackPosition < b->fTrackPosition;
-		});
-}
-
-void CCutScene::Delete_Selected_Keyframe(_int iIndex)
-{
-	delete m_KeyFrames[iIndex];
-	m_KeyFrames[iIndex] = nullptr;
-	m_KeyFrames.erase(m_KeyFrames.begin() + iIndex);
-	Sort_KeyFrame_TrackPosition();
 }
 
 CCutScene* CCutScene::Create(ID3D11Device* pDevice, ID3D11DeviceContext* pContext)
@@ -184,6 +162,4 @@ void CCutScene::Free()
 		delete iter;
 		iter = nullptr;
 	}
-
-	Safe_Release(m_pController_UITool);
 }

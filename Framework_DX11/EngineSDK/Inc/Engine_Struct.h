@@ -289,7 +289,7 @@ namespace Engine
 	{
 		_bool bUseDof = { false };
 		_float fDof = { 0.f };
-	}SHADER_DESC;
+	}CUTSCENE_SHADER_DESC;
 
 	typedef struct
 	{
@@ -297,15 +297,45 @@ namespace Engine
 		_bool bFadeIn = { false };
 		_float fTime = { 0.f };
 		_Vec3 fColor = { 0.f,0.f,0.f };
-	}UI_DESC;
+	}CUTSCENE_UI_DESC;
 
 	typedef struct
 	{
-		_float			fTrackPosition;
-		_bool			bActived = false;
-		SHADER_DESC		ShaderDesc;
-		UI_DESC			UI_DESC;
-	}CUTSCENE_DESC;
+		_bool bUseObj[3] = {false,false,false};
+		
+		_uint iStateNum[3] = {0,0,0};
+		_float fAnimSpeedRatio[3] = {1.f,1.f,1.f };
+	}CUTSCENE_OBJECT_DESC;
+
+	typedef struct
+	{
+		_bool bTeleport = { false };
+		_bool bTurn = { false };
+		_bool bZoomIn = { false };
+		_bool bZoomOut = { false };
+		_bool bLerpMove = { false };
+
+		_Matrix mCameraWorlMatrix;
+
+		_Vec3 vPitchTawRoll = {};
+		_float fTurn_Speed = {0.f};
+
+		_float fZoomDuration = { 0.f };
+		_float fFovy = { XMConvertToRadians(60.f)};
+
+		_float fMoveSpeed = { 0.f };
+		_Vec3 vTargetPos = {};
+	}CUTSCENE_CAMERA_DESC;
+
+	typedef struct
+	{
+		_float					fTrackPosition;
+		_bool					bActived = false;
+		CUTSCENE_SHADER_DESC	ShaderDesc;
+		CUTSCENE_UI_DESC		UI_DESC;
+		CUTSCENE_CAMERA_DESC	Camera_Desc;
+		CUTSCENE_OBJECT_DESC	Obj_Desc;
+	}CUTSCENE_KEYFRAME_DESC;
 
 }
 
