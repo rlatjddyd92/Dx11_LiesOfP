@@ -402,25 +402,19 @@ PS_NORMAL_OUT PS_BLOOD_SPREAD_MAIN(PS_IN In)
     return Out;
 }
 
-PS_NORMAL_OUT PS_BLOOD_DROPLETS_MAIN(PS_IN In)
+PS_OUT PS_BLOOD_DROPLETS_MAIN(PS_IN In)
 {
-    PS_NORMAL_OUT Out = (PS_NORMAL_OUT) 0;
+    PS_OUT Out = (PS_OUT) 0;
 
-    Out.vDiffuse = g_DiffuseTexture.Sample(LinearSampler, In.vTexcoord);
-    Out.vNormal = g_NormalTexture.Sample(LinearSampler, In.vTexcoord) * 2.f - 1.f;
+    Out.vColor = g_DiffuseTexture.Sample(LinearSampler, In.vTexcoord);
     
-    Out.vDiffuse.a = Out.vDiffuse.r;
+    Out.vColor.a = Out.vColor.r;
     
-    if (Out.vDiffuse.a < 0.1f)
+    if (Out.vColor.a < 0.1f)
         discard;
     
-    Out.vDiffuse.rgb *= In.vColor.rgb;
-    
-    Out.vARM = float4(1.f, 1.f, 1.f, 1.f);
-    Out.vDepth = float4(0.f, 0.f, 0.f, 0.f);
-    Out.vEmessive = float4(0.f, 0.f, 0.f, 0.f);
-    Out.vRimLight = float4(0.f, 0.f, 0.f, 0.f);
-    
+    Out.vColor.rgb *= In.vColor.rgb;
+
     return Out;
 }
 

@@ -503,7 +503,8 @@ void CS_CONVERGE_MAIN(uint3 DTid : SV_DispatchThreadID)
         {
             float4 vTargetDir = vWorldPivot - HeadParticle.particle.vTranslation;
             float4 vWorldOrbit = mul(float4(vOrbitAxis.x, vOrbitAxis.y, vOrbitAxis.z, 0.f), WorldMatrix);
-            vRotateDir = float4(RotateByAxis(vTargetDir.xyz, vWorldOrbit, radians(fOrbitAngle) * fTimeDelta), 0.f);
+            vRotateDir = float4(RotateByAxis(vTargetDir.xyz, (float3)vWorldOrbit, radians(fOrbitAngle) * fTimeDelta),
+            0.f);
             vRotateDir = vTargetDir - vRotateDir;
         }
     
