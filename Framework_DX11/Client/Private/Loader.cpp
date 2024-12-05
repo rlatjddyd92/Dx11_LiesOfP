@@ -55,6 +55,7 @@
 #include "Weapon_Scissor_Handle.h"
 #include "Weapon_Scissor_Blade.h"
 #include "Weapon_SimonManus_Hammer.h"
+#include "Sophia.h"
 #pragma endregion
 
 #include "GameInstance.h"
@@ -1086,6 +1087,11 @@ HRESULT CLoader::Ready_Prototype()
 	/* For. Prototype_GameObject_LastDoor */
 	if (FAILED(m_pGameInstance->Add_Prototype(TEXT("Prototype_GameObject_LastDoor"),
 		CLastDoor::Create(m_pDevice, m_pContext))))
+		return E_FAIL;
+
+	/* For. Prototype_GameObject_Sophia */
+	if (FAILED(m_pGameInstance->Add_Prototype(TEXT("Prototype_GameObject_Sophia"),
+		CSophia::Create(m_pDevice, m_pContext))))
 		return E_FAIL;
 #pragma endregion
 
