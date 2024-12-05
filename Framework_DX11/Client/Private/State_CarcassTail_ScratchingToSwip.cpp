@@ -132,6 +132,7 @@ void CState_CarcassTail_ScratchingToSwip::Collider_Check()
         if (CurTrackPos >= 110.f && CurTrackPos <= 135.f)
         {
             m_pMonster->Active_CurrentWeaponCollider(1.1, 2, HIT_TYPE::HIT_CARCASS, ATTACK_STRENGTH::ATK_WEAK);
+            m_pMonster->Active_CurrentWeaponCollider(1.1, 4, HIT_TYPE::HIT_CARCASS, ATTACK_STRENGTH::ATK_WEAK);
         }
         else
         {

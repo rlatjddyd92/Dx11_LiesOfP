@@ -38,7 +38,7 @@ void CState_CarcassTail_LeapAttack::Update(_float fTimeDelta)
         if (XMVectorGetX(XMVector3Length(m_vStartingPos - m_pMonster->Get_Transform()->Get_State(CTransform::STATE_POSITION))) >= m_fDistPoint - 5.f)
         {
             ++m_iRouteTrack;
-            m_pMonster->Change_Animation(AN_ROUTE_LAST, false, 0.1f, 0);
+            m_pMonster->Change_Animation(AN_ROUTE_LAST, false, 0.f, 0);
         }
         else
         {

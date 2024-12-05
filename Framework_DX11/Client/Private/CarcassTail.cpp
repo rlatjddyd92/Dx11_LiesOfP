@@ -131,6 +131,7 @@ HRESULT CCarcassTail::Render()
 
 	for (_uint i = 0; i < TYPE_END; ++i)
 	{
+		m_pColliderObject[i]->IsActive(true);
 		m_pColliderObject[i]->Render();
 	}
 #endif
@@ -196,7 +197,7 @@ HRESULT CCarcassTail::Ready_Components()
 	m_pColliderObject[TYPE_RIGHTHAND] = dynamic_cast<CColliderObject*>(m_pGameInstance->Clone_GameObject(TEXT("Prototype_GameObject_ColliderObj"), &Desc));
 
 	//
-	ColliderOBBDesc_Obj.vExtents = _float3(1.4f, 0.3f, 0.3f);
+	ColliderOBBDesc_Obj.vExtents = _float3(1.2f, 0.4f, 0.4f);
 	ColliderOBBDesc_Obj.vCenter = _float3(0.4f, 0.f, 0.f);
 	ColliderOBBDesc_Obj.vAngles = _float3(0.f, 0.f, 0.f);
 
@@ -204,6 +205,7 @@ HRESULT CCarcassTail::Ready_Components()
 	Desc.fDamageAmount = 120.f;
 
 	m_pColliderObject[TYPE_TAIL] = dynamic_cast<CColliderObject*>(m_pGameInstance->Clone_GameObject(TEXT("Prototype_GameObject_ColliderObj"), &Desc));
+
 
 	//
 	ColliderOBBDesc_Obj.vExtents = _float3(0.5f, 0.7f, 1.4f);
@@ -214,6 +216,16 @@ HRESULT CCarcassTail::Ready_Components()
 	Desc.fDamageAmount = 120.f;
 
 	m_pColliderObject[TYPE_IMPACT] = dynamic_cast<CColliderObject*>(m_pGameInstance->Clone_GameObject(TEXT("Prototype_GameObject_ColliderObj"), &Desc));
+
+	//167
+	ColliderOBBDesc_Obj.vExtents = _float3(1.0f, 0.4f, 0.4f);
+	ColliderOBBDesc_Obj.vCenter = _float3(0.4f, 0.f, 0.f);
+	ColliderOBBDesc_Obj.vAngles = _float3(0.f, 0.f, 0.f);
+
+	Desc.pSocketBoneMatrix = m_pModelCom->Get_BoneCombindTransformationMatrix_Ptr(167);
+	Desc.fDamageAmount = 120.f;
+
+	m_pColliderObject[TYPE_TAIL_2] = dynamic_cast<CColliderObject*>(m_pGameInstance->Clone_GameObject(TEXT("Prototype_GameObject_ColliderObj"), &Desc));
 
 	
 
