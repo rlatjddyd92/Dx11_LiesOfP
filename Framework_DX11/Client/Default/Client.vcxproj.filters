@@ -835,6 +835,9 @@
     <Filter Include="05.Fsm\Monster\SimonManus\P2\Attack\Single\ThunderBall">
       <UniqueIdentifier>{8b883092-bbab-4d18-b414-4009f8cdd9f3}</UniqueIdentifier>
     </Filter>
+    <Filter Include="02.GameObjects\12.AttackObject\SimonManus\GodHands">
+      <UniqueIdentifier>{8f7485cc-d647-4c77-8b7e-5d47d74e71e6}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Client.h">
@@ -1547,6 +1550,9 @@
     <ClInclude Include="..\Public\AObj_BlackBall.h">
       <Filter>02.GameObjects\12.AttackObject\SimonManus\BlackBall</Filter>
     </ClInclude>
+    <ClInclude Include="..\Public\AObj_GodHands.h">
+      <Filter>02.GameObjects\12.AttackObject\SimonManus\GodHands</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Client.cpp">
@@ -2228,6 +2234,9 @@
     </ClCompile>
     <ClCompile Include="..\Private\AObj_BlackBall.cpp">
       <Filter>02.GameObjects\12.AttackObject\SimonManus\BlackBall</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Private\AObj_GodHands.cpp">
+      <Filter>02.GameObjects\12.AttackObject\SimonManus\GodHands</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
