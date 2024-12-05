@@ -214,6 +214,7 @@ void CState_SimonManusP2_Stamp::Effect_Check(_double CurTrackPos)
 
                 m_pGameInstance->Add_CloneObject_ToLayer(LEVEL_GAMEPLAY, TEXT("Monster_Attack"), TEXT("Prototype_GameObject_FollowedEffect"), &Desc);
 
+                m_pMonster->Play_Sound(CPawn::PAWN_SOUND_EFFECT1, TEXT("SE_NPC_SK_FX_Ground_Exp_L_03.wav"));
                 m_bAbsorb = true;
             }
         }

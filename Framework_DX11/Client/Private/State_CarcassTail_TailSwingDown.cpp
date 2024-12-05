@@ -34,6 +34,8 @@ void CState_CarcassTail_TailSwingDown::Update(_float fTimeDelta)
         m_pMonster->Change_State(CMonster::IDLE);
     }
 
+    m_pMonster->Get_Transform()->LookAt_Lerp_NoHeight(-m_pMonster->Get_TargetDir(), 1.5f, fTimeDelta);
+
     Collider_Check();
 
 }

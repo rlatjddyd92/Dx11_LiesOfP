@@ -28,6 +28,7 @@ private:
 	class CEffect_Container* m_pEffect = { nullptr };
 
 	_Vec3	m_vMoveDir{};
+	_Vec3	m_vTargetPos{};
 	_float	m_fSpeed{};
 
 private:

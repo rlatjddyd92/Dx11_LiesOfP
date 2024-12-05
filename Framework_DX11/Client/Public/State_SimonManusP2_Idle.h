@@ -31,6 +31,8 @@ private:
 
     _uint               m_iAtkCnt{};
     _bool               m_bTest = false;
+    _bool               m_bPray = false;
+
 private:
     void                Calc_Act_Attack(_float fDist);
 

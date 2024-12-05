@@ -30,6 +30,7 @@ private:
     _float              m_fIdleEndDuration = { 1.f };
 
     _uint               m_iAtkCnt{};
+    _uint               m_iTailAtkCnt{};
 
 private:
     void                Calc_Act_Attack();

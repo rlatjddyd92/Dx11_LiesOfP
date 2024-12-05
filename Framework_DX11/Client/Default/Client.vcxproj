@@ -176,6 +176,7 @@
     <ClInclude Include="..\Public\AObj_GoldBall.h" />
     <ClInclude Include="..\Public\AObj_LightningBall.h" />
     <ClInclude Include="..\Public\AObj_StampBlast.h" />
+    <ClInclude Include="..\Public\AObj_Stomp.h" />
     <ClInclude Include="..\Public\AObj_Thunder.h" />
     <ClInclude Include="..\Public\AObj_ThunderCalling.h" />
     <ClInclude Include="..\Public\AObj_Wave.h" />
@@ -188,6 +189,7 @@
     <ClInclude Include="..\Public\Deco_Collider.h" />
     <ClInclude Include="..\Public\EffectObject.h" />
     <ClInclude Include="..\Public\FollowedEffect.h" />
+    <ClInclude Include="..\Public\GH_Creater.h" />
     <ClInclude Include="..\Public\LastDoor.h" />
     <ClInclude Include="..\Public\Sophia.h" />
     <ClInclude Include="..\Public\State_Player_Flame_Fable.h" />
@@ -412,6 +414,7 @@
     <ClCompile Include="..\Private\AObj_GoldBall.cpp" />
     <ClCompile Include="..\Private\AObj_LightningBall.cpp" />
     <ClCompile Include="..\Private\AObj_StampBlast.cpp" />
+    <ClCompile Include="..\Private\AObj_Stomp.cpp" />
     <ClCompile Include="..\Private\AObj_Thunder.cpp" />
     <ClCompile Include="..\Private\AObj_ThunderCalling.cpp" />
     <ClCompile Include="..\Private\AObj_Wave.cpp" />
@@ -424,6 +427,7 @@
     <ClCompile Include="..\Private\Deco_Collider.cpp" />
     <ClCompile Include="..\Private\EffectObject.cpp" />
     <ClCompile Include="..\Private\FollowedEffect.cpp" />
+    <ClCompile Include="..\Private\GH_Creater.cpp" />
     <ClCompile Include="..\Private\LastDoor.cpp" />
     <ClCompile Include="..\Private\Sophia.cpp" />
     <ClCompile Include="..\Private\State_Player_Flame_Fable.cpp" />

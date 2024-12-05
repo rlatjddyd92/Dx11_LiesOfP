@@ -210,15 +210,15 @@ void CState_SimonManusP2_SwipMultiple::Control_Sound(_double CurTrackPos)
         _double SlideTime{};
         if (m_iCurStartAnim == AN_ROUTE_FIRST_L)
         {
-            StampTime = 58.f;
-            SlideTime = 65.f;
-            SwingTime = 145.f;
+            StampTime = 54.f;
+            SlideTime = 61.f;
+            SwingTime = 141.f;
         }
         else
         {
-            StampTime = 78.f;
-            SlideTime = 85.f;
-            SwingTime = 182.f;
+            StampTime = 74.f;
+            SlideTime = 81.f;
+            SwingTime = 178.f;
         }
         if (!m_bStamp_Sound)
         {

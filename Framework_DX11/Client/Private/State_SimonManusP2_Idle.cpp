@@ -30,21 +30,30 @@ void CState_SimonManusP2_Idle::Update(_float fTimeDelta)
     _float fDist = m_pMonster->Calc_Distance_XZ();
     if (m_fIdleEndDuration <= m_fIdleTime)
     {
-        m_pMonster->Change_State(CSimonManus::ATKP2_SPREADMAGIC);
-        m_bTest = true;
+        m_pMonster->Change_State(CSimonManus::ATKP2_SUMMONHAND);
         return;
-        if (!m_bTest)
+        if (!m_bPray)
         {
-            m_pMonster->Change_State(CSimonManus::ATKP2_THUNDERCALLING);
-            m_bTest = true;
-            return;
+            if (m_pMonster->Get_Status()->fHp <= m_pMonster->Get_Status()->fMaxHp / 2.f)
+            {
+                m_pMonster->Change_State(CSimonManus::ATKP2_SUMMONHAND);
+                return;
+            }
         }
-        else
-        {
-            m_pMonster->Change_State(CSimonManus::ATKP2_AVOIDSWING);
-            //m_bTest = false;
-            return;
-        }
+
+        //if (m_bTest)
+        //{
+        //    m_pMonster->Change_State(CSimonManus::ATKP2_SLIDEMAGIC);
+        //    m_bTest = false;
+        //    return;
+        //}
+        //else
+        //{
+        //    m_pMonster->Change_State(CSimonManus::ATKP2_THUNDERBALL);
+        //    m_bTest = true;
+        //    return;
+        //}
+
 
         if (fDist <= 15.f && 9.f < fDist)
         {

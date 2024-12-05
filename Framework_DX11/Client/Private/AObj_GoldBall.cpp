@@ -5,6 +5,8 @@
 
 #include "Effect_Manager.h"
 
+#include "EffectObject.h"
+
 CAObj_GoldBall::CAObj_GoldBall(ID3D11Device* pDevice, ID3D11DeviceContext* pContext)
     : CAttackObject{ pDevice, pContext }
 {
@@ -59,14 +61,17 @@ void CAObj_GoldBall::Update(_float fTimeDelta)
 {
     if (m_fLifeTime >= m_fLifeDuration)
     {
-        if (m_pEffect->Get_Dead())
+        if (!m_bDelCheck)
         {
             m_pEffect->Set_Loop(false);
+            m_bDelCheck = true;
         }
-        else if (m_pEffect->Get_Dead())
+        if (m_pEffect->Get_Dead())
         {
             m_isDead = true;
         }
+
+
     }
     else
     {
@@ -128,7 +133,11 @@ void CAObj_GoldBall::OnCollisionEnter(CGameObject* pOther)
         if (!bOverlapCheck)
         {
             m_DamagedObjects.push_back(pOther);
-            pOther->Calc_DamageGain(m_fDamageAmount * m_fDamageRatio);
+            pOther->Calc_DamageGain(m_fDamageAmount * m_fDamageRatio, _Vec3{}, HIT_TYPE::HIT_METAL, ATTACK_STRENGTH::ATK_NORMAL);
+            m_isDead = true;
+
+            CEffect_Manager::Get_Instance()->Add_Effect_ToLayer(LEVEL_GAMEPLAY, TEXT("SimonManus_Attack_GoldBall_Impact"), 
+                _Vec3{ m_pTransformCom->Get_State(CTransform::STATE_POSITION) }, _Vec3{ m_pTransformCom->Get_State(CTransform::STATE_LOOK) });
         }
         m_pEffect->Set_Loop(false);
     }

@@ -50,7 +50,7 @@ HRESULT CAObj_BlackBall::Initialize(void* pArg)
 
     m_strObjectTag = TEXT("MonsterWeapon");
 
-    m_pSoundCom[EFF_SOUND_EFFECT1]->Play2D(TEXT("SE_NPC_SK_FX_Spark_M_03.wav"), &g_fEffectVolume);
+    m_pSoundCom[EFF_SOUND_EFFECT1]->Play2D(TEXT("SE_NPC_SimonManus_SK_PJ_Ergo_Direct_01.wav"), &g_fEffectVolume);
 
     return S_OK;
 }

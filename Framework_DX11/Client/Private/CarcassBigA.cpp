@@ -100,7 +100,11 @@ HRESULT CCarcassBigA::Initialize(void* pArg)
 void CCarcassBigA::Priority_Update(_float fTimeDelta)
 {
 	__super::Set_UpTargetPos();
-	
+
+	if (m_eStat.fHp <= 0.f)
+	{
+		m_pFsmCom->Set_State(DIE);
+	}
 }
 
 void CCarcassBigA::Update(_float fTimeDelta)

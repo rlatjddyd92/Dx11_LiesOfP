@@ -33,6 +33,7 @@ HRESULT CColliderObject::Initialize(void* pArg)
 
 	m_fDamageAmount = pDesc->fDamageAmount;
 	m_pColliderCom->IsActive(false);
+	m_pColliderCom->Set_Owner(this);
 
 	return S_OK;
 }

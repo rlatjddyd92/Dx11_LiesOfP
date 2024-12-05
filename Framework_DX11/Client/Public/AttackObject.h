@@ -21,6 +21,8 @@ public:
 		_Vec3 vPos{};
 		_Vec3 vDir{};
 
+		_Vec3 vTargetPos{};
+
 		CGameObject* pOwner = { nullptr };
 	}ATKOBJ_DESC;
 
