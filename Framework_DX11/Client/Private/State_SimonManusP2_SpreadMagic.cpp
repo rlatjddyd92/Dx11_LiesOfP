@@ -16,13 +16,14 @@ HRESULT CState_SimonManusP2_SpreadMagic::Initialize(_uint iStateNum, void* pArg)
 {
     m_iStateNum = iStateNum;
     //CSimonManus::FSMSTATE_DESC* pDesc = static_cast<CSimonManus::FSMSTATE_DESC*>(pArg);
-    m_bMagicSpread = false;
+    
     return S_OK;
 }
 
 HRESULT CState_SimonManusP2_SpreadMagic::Start_State(void* pArg)
 {
     m_pMonster->Change_Animation(AN_STINGATTACK, false, 0.1f, 0);
+    m_bMagicSpread = false;
 
     return S_OK;
 }
@@ -34,6 +35,8 @@ void CState_SimonManusP2_SpreadMagic::Update(_float fTimeDelta)
         m_pMonster->Change_State(CSimonManus::IDLE);
         return;
     }
+
+    m_pMonster->Get_Transform()->LookAt_Lerp_NoHeight(m_pMonster->Get_TargetDir(), 2.5f, fTimeDelta);
 
     _double CurTrackPos = m_pMonster->Get_CurrentTrackPos();
     Effect_Check(CurTrackPos);
@@ -59,7 +62,9 @@ void CState_SimonManusP2_SpreadMagic::Effect_Check(_double CurTrackPos)
 
             CAttackObject::ATKOBJ_DESC Desc;
             _float4x4 WorldMat{};
-            _Vec3 vMainDir = _Vec3{ XMVector3Normalize(m_pMonster->Get_TargetPos() - Desc.vPos) } + _Vec3{ 0.f, 0.2f, 0.f };
+            _Vec3 vMainDir = _Vec3{ XMVector3Normalize(m_pMonster->Get_TargetPos() - 
+                m_pMonster->Get_Transform()->Get_State(CTransform::STATE_POSITION)) } 
+            + _Vec3{ 0.f, 0.2f, 0.f };
             _Vec3 vRight = m_pMonster->Get_Transform()->Get_State(CTransform::STATE_RIGHT);
             vRight.Normalize();
 

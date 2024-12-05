@@ -165,5 +165,6 @@ void CAObj_ThunderCalling::Free()
 {
     __super::Free();
 
+    m_pEffect->Set_Cloned(false);
     Safe_Release(m_pEffect);
 }

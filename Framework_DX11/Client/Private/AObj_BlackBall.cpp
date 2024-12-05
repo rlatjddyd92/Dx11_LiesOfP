@@ -36,20 +36,17 @@ HRESULT CAObj_BlackBall::Initialize(void* pArg)
     m_vMoveDir = pDesc->vDir;
     m_vMoveDir.Normalize();
 
+    m_pTransformCom->Look_Dir(_Vec4{ m_vMoveDir });
+
     m_fDamageAmount = 30.f;
     m_fLifeDuration = 0.6f;
 
-    m_fSpeed = 3.f;
+    m_fSpeed = 4.f;
 
     m_fThrowTime = 2.f;
     m_fDelayTime = 3.f;
 
     m_pCopyPlayerTransformCom = static_cast<CTransform*>(m_pGameInstance->Find_Component(LEVEL_GAMEPLAY, TEXT("Layer_Player"), g_strTransformTag));
-
-
-    m_pColliderCom->IsActive(true);
-
-    m_pColliderCom->Set_Owner(this);
 
     m_strObjectTag = TEXT("MonsterWeapon");
 
@@ -87,19 +84,11 @@ void CAObj_BlackBall::Update(_float fTimeDelta)
 
                 m_pEffects[STATE_START]->Set_Loop(false);
                 m_pEffects[STATE_MIDDLE]->Reset_Effects();
-            }
-            break;
-
-        case 1:
-            if (m_pEffects[STATE_MIDDLE]->Get_Dead())
-            {
-                ++m_iThrowPhase;
-                m_fLifeTime = 0.f;
                 m_pEffects[STATE_LAST]->Set_Loop(true);
             }
             break;
 
-        case 2:
+        case 1:
             if (m_fLifeTime >= m_fDelayTime)
             {
                 m_fLifeTime = 0.f;
@@ -141,8 +130,6 @@ void CAObj_BlackBall::Update(_float fTimeDelta)
         }
     }
 
-    m_pColliderCom->Update(m_pTransformCom->Get_WorldMatrix_Ptr());
-
     for (auto& pEffect : m_pEffects)
     {
         if (!pEffect->Get_Dead())
@@ -152,14 +139,6 @@ void CAObj_BlackBall::Update(_float fTimeDelta)
 
 void CAObj_BlackBall::Late_Update(_float fTimeDelta)
 {
-    if (m_fLifeTime < m_fLifeDuration)
-    {
-        m_pGameInstance->Add_ColliderList(m_pColliderCom);
-#ifdef DEBUG
-        m_pGameInstance->Add_DebugObject(m_pColliderCom);
-#endif // DEBUG
-    }
-
     for (auto& pEffect : m_pEffects)
     {
         if (!pEffect->Get_Dead())
@@ -185,25 +164,6 @@ HRESULT CAObj_BlackBall::Render_LightDepth()
 
 void CAObj_BlackBall::OnCollisionEnter(CGameObject* pOther)
 {
-    //pOther check
-    if (pOther->Get_Tag() == TEXT("Player"))
-    {
-        _bool bOverlapCheck = false;
-        for (auto& pObj : m_DamagedObjects)
-        {
-            if (pObj == pOther)
-            {
-                bOverlapCheck = true;
-                break;
-            }
-        }
-
-        if (!bOverlapCheck)
-        {
-            m_DamagedObjects.push_back(pOther);
-            pOther->Calc_DamageGain(m_fDamageAmount * m_fDamageRatio);
-        }
-    }
 }
 
 void CAObj_BlackBall::OnCollisionStay(CGameObject* pOther)
@@ -219,15 +179,6 @@ HRESULT CAObj_BlackBall::Ready_Components()
     if (FAILED(__super::Ready_Components()))
         return E_FAIL;
 
-    /* FOR.Com_Collider */
-    CBounding_Sphere::BOUNDING_SPHERE_DESC      ColliderDesc{};
-    ColliderDesc.vCenter = _float3(0.f, 0.f, 0.f);
-    ColliderDesc.fRadius = 3.5f;
-
-    if (FAILED(__super::Add_Component(LEVEL_STATIC, TEXT("Prototype_Component_Collider_Sphere"),
-        TEXT("Com_Collider"), reinterpret_cast<CComponent**>(&m_pColliderCom), &ColliderDesc)))
-        return E_FAIL;
-    m_pColliderCom->Set_Owner(this);
 
     const _Matrix* pParetnMatrix = m_pTransformCom->Get_WorldMatrix_Ptr();
     //루프 리셋 루프
@@ -278,6 +229,7 @@ void CAObj_BlackBall::Free()
 
     for (auto& pEffect : m_pEffects)
     {
+        pEffect->Set_Cloned(false);
         Safe_Release(pEffect);
     }
 }

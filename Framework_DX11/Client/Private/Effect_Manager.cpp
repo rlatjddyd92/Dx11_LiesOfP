@@ -63,6 +63,7 @@ CEffect_Container* CEffect_Manager::Clone_Effect(const _wstring& strECTag, const
 
     pContainer->Set_Loop(false);
     pContainer->Set_Dead(true);
+    pContainer->Set_Cloned(true);
 
     return pContainer;
 }
@@ -785,7 +786,7 @@ CEffect_Container* CEffect_Manager::Find_PoolingEffect(const _wstring& strECTag,
     for (auto& pContainer : iter->second)
     {
         // 찾아서 안돌아가는 거 있으면 그거 반환.
-        if (true == pContainer->Get_Dead())
+        if (true == pContainer->Get_Dead() && false == pContainer->Get_Cloned())
         {
             CEffect_Container::EFFECT_DESC* pDesc = static_cast<CEffect_Container::EFFECT_DESC*>(pArg);
             pContainer->Set_EffectDesc(*pDesc);

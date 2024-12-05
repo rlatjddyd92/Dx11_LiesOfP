@@ -638,6 +638,7 @@ void CSimonManus::Free()
 
 	for (auto& pEffect : m_Effects)
 	{
+		pEffect->Set_Cloned(false);
 		Safe_Release(pEffect);
 	}
 	m_Effects.clear();

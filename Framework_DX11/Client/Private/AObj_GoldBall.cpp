@@ -197,5 +197,6 @@ void CAObj_GoldBall::Free()
 {
     __super::Free();
 
+    m_pEffect->Set_Cloned(false);
     Safe_Release(m_pEffect);
 }

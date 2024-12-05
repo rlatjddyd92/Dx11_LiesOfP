@@ -219,5 +219,8 @@ void CAObj_Thunder::Free()
 {
     __super::Free();
 
+    m_pSignEffect->Set_Cloned(false);
+    Safe_Release(m_pSignEffect);
+    m_pEffect->Set_Cloned(false);
     Safe_Release(m_pEffect);
 }

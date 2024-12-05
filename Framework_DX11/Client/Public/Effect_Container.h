@@ -31,6 +31,13 @@ public:
 		return &m_WorldMatrix;
 	}
 
+	void Set_Cloned(_bool isCloned) {
+		m_isCloned = isCloned;
+	}
+	_bool Get_Cloned() {
+		return m_isCloned;
+	}
+
 public:
 	virtual HRESULT Initialize_Prototype();
 	virtual HRESULT Initialize(void* pArg = nullptr);
@@ -46,14 +53,14 @@ public:
 	void Set_Loop(_bool bLoop);
 	void Set_EffectDesc(const EFFECT_DESC& desc);
 
+
 private:
 	vector<class CEffect_Base*> m_Effects;
 	_Matrix m_WorldMatrix = {};
 	const _Matrix* m_pParentMatrix = { nullptr };
 	const _Matrix* m_pSocketMatrix = { nullptr };
 
-	_bool m_bTurn = { false };
-	_bool m_bActive = { false };
+	_bool m_isCloned = { false };
 
 public:
 	static CEffect_Container* Create(ID3D11Device* pDevice, ID3D11DeviceContext* pContext);
