@@ -26,8 +26,14 @@ public:
 private:
     class CMonster* m_pMonster = { nullptr };
 
+    _bool           m_bCharge = { false };
+    _bool           m_bExplosion = { false };
+
+    _bool           m_bCreaterSet = { false };
+
 private:
     _bool               End_Check();
+    void                Effect_Check(_double CurTrackPos);
     void                Control_Sound(_double CurTrackPos);
 
 public:

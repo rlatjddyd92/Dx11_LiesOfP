@@ -188,6 +188,7 @@
     <ClInclude Include="..\Public\Deco_Collider.h" />
     <ClInclude Include="..\Public\EffectObject.h" />
     <ClInclude Include="..\Public\FollowedEffect.h" />
+    <ClInclude Include="..\Public\GH_Creater.h" />
     <ClInclude Include="..\Public\LastDoor.h" />
     <ClInclude Include="..\Public\State_Player_Flame_Fable.h" />
     <ClInclude Include="..\Public\State_Player_Flame_Fatal.h" />
@@ -423,6 +424,7 @@
     <ClCompile Include="..\Private\Deco_Collider.cpp" />
     <ClCompile Include="..\Private\EffectObject.cpp" />
     <ClCompile Include="..\Private\FollowedEffect.cpp" />
+    <ClCompile Include="..\Private\GH_Creater.cpp" />
     <ClCompile Include="..\Private\LastDoor.cpp" />
     <ClCompile Include="..\Private\State_Player_Flame_Fable.cpp" />
     <ClCompile Include="..\Private\State_Player_Flame_Fatal.cpp" />

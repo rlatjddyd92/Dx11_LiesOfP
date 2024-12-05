@@ -35,11 +35,8 @@ HRESULT CAObj_GodHands::Initialize(void* pArg)
 
     m_fDamageAmount = 20.f;
     m_fLifeDuration = 0.6f;
-    m_pColliderCom->IsActive(true);
 
-    m_pColliderCom->Set_Owner(this);
-
-    m_pSoundCom[EFF_SOUND_EFFECT1]->Play2D(TEXT("SE_NPC_SK_FX_Ground_Exp_L_03.wav"), &g_fEffectVolume);
+    m_pSoundCom[EFF_SOUND_EFFECT1]->Play2D(TEXT("SE_NPC_SimonManus_SK_FX_Ergo_GodHand_01.wav"), &g_fEffectVolume);
 
     m_strObjectTag = TEXT("MonsterWeapon");
 
@@ -65,21 +62,12 @@ void CAObj_GodHands::Update(_float fTimeDelta)
         m_fLifeTime += fTimeDelta;
     }
 
-    m_pColliderCom->Update(m_pTransformCom->Get_WorldMatrix_Ptr());
-
     m_pEffect->Update(fTimeDelta);
 }
 
 void CAObj_GodHands::Late_Update(_float fTimeDelta)
 {
     m_pEffect->Late_Update(fTimeDelta);
-    if (m_fLifeTime < m_fLifeDuration)
-    {
-        m_pGameInstance->Add_ColliderList(m_pColliderCom);
-#ifdef DEBUG
-        m_pGameInstance->Add_DebugObject(m_pColliderCom);
-#endif // DEBUG
-    }
 }
 
 HRESULT CAObj_GodHands::Render()
@@ -100,25 +88,6 @@ HRESULT CAObj_GodHands::Render_LightDepth()
 
 void CAObj_GodHands::OnCollisionEnter(CGameObject* pOther)
 {
-    //pOther check
-    if (pOther->Get_Tag() == TEXT("Player"))
-    {
-        _bool bOverlapCheck = false;
-        for (auto& pObj : m_DamagedObjects)
-        {
-            if (pObj == pOther)
-            {
-                bOverlapCheck = true;
-                break;
-            }
-        }
-
-        if (!bOverlapCheck)
-        {
-            m_DamagedObjects.push_back(pOther);
-            pOther->Calc_DamageGain(m_fDamageAmount * m_fDamageRatio);
-        }
-    }
 }
 
 void CAObj_GodHands::OnCollisionStay(CGameObject* pOther)
@@ -134,19 +103,14 @@ HRESULT CAObj_GodHands::Ready_Components()
     if (FAILED(__super::Ready_Components()))
         return E_FAIL;
 
-    /* FOR.Com_Collider */
-    CBounding_Sphere::BOUNDING_SPHERE_DESC      ColliderDesc{};
-    ColliderDesc.vCenter = _float3(0.f, 0.f, 0.f);
-    ColliderDesc.fRadius = 3.f;
-
-    if (FAILED(__super::Add_Component(LEVEL_STATIC, TEXT("Prototype_Component_Collider_Sphere"),
-        TEXT("Com_Collider"), reinterpret_cast<CComponent**>(&m_pColliderCom), &ColliderDesc)))
+    /* FOR.Com_Model */
+    if (FAILED(__super::Add_Component(LEVEL_GAMEPLAY, TEXT("Prototype_Component_Model_SimonManusHand"),
+        TEXT("Com_Model"), reinterpret_cast<CComponent**>(&m_pModelCom))))
         return E_FAIL;
-    m_pColliderCom->Set_Owner(this);
 
     const _Matrix* pParetnMatrix = m_pTransformCom->Get_WorldMatrix_Ptr();
 
-    m_pEffect = CEffect_Manager::Get_Instance()->Clone_Effect(TEXT("SimonManus_Attack_ChargeStamp2"), pParetnMatrix,
+    m_pEffect = CEffect_Manager::Get_Instance()->Clone_Effect(TEXT("SimonManus_Attack_SummonHand_Down"), pParetnMatrix,
         nullptr, _Vec3(0.f, 0.f, 0.f), _Vec3(0.f, 0.f, 0.f), _Vec3(1.f, 1.f, 1.f));
 
     m_pEffect->Reset_Effects();

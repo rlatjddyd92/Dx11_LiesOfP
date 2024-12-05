@@ -192,7 +192,7 @@ HRESULT CCarcassTail::Ready_Components()
 	m_pColliderObject[TYPE_RIGHTHAND] = dynamic_cast<CColliderObject*>(m_pGameInstance->Clone_GameObject(TEXT("Prototype_GameObject_ColliderObj"), &Desc));
 
 	//
-	ColliderOBBDesc_Obj.vExtents = _float3(1.f, 0.2f, 0.2f);
+	ColliderOBBDesc_Obj.vExtents = _float3(1.4f, 0.3f, 0.3f);
 	ColliderOBBDesc_Obj.vCenter = _float3(0.4f, 0.f, 0.f);
 	ColliderOBBDesc_Obj.vAngles = _float3(0.f, 0.f, 0.f);
 

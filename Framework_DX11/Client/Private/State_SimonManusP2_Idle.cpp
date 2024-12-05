@@ -30,7 +30,7 @@ void CState_SimonManusP2_Idle::Update(_float fTimeDelta)
     _float fDist = m_pMonster->Calc_Distance_XZ();
     if (m_fIdleEndDuration <= m_fIdleTime)
     {
-        m_pMonster->Change_State(CSimonManus::ATKP2_SPREADMAGIC);
+        m_pMonster->Change_State(CSimonManus::ATKP2_SUMMONHAND);
         m_bTest = true;
         return;
         if (!m_bTest)

@@ -37,7 +37,8 @@ HRESULT CAObj_ThunderCalling::Initialize(void* pArg)
 
     m_fDamageAmount = 20.f;
 
-    m_pSoundCom[EFF_SOUND_EFFECT1]->Play2D(TEXT("SE_NPC_SK_FX_Ground_Exp_L_03.wav"), &g_fEffectVolume);
+    
+    //m_pSoundCom[EFF_SOUND_EFFECT1]->Play2D(TEXT("SE_NPC_SK_FX_Ground_Exp_L_03.wav"), &g_fEffectVolume);
 
     m_strObjectTag = TEXT("MonsterWeapon");
 
