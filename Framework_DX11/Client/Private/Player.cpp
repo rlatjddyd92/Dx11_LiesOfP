@@ -4,6 +4,8 @@
 #include "GameInstance.h"
 #include "Layer.h"
 
+#include "CutScene.h"
+
 #include "Camera.h"
 #include "Monster.h"
 #include "Weapon.h"
@@ -14,6 +16,7 @@
 #include "TreasureBox.h"
 #include "Stargazer.h"
 #include "SteppingStone.h"
+#include "LastDoor.h"
 
 #include "Effect_Manager.h"
 #include "Effect_Container.h"
@@ -128,8 +131,8 @@ HRESULT CPlayer::Initialize(void * pArg)
 	//m_pNavigationCom->Move_to_Cell(m_pRigidBodyCom, 427); //짧은사다리
 	//m_pNavigationCom->Move_to_Cell(m_pRigidBodyCom, 341); //아래엘베
 	//m_pNavigationCom->Move_to_Cell(m_pRigidBodyCom, 440); //상자랑 장애물
-	m_pNavigationCom->Move_to_Cell(m_pRigidBodyCom, 1066); // 순간이동 790
-	//m_pNavigationCom->Move_to_Cell(m_pRigidBodyCom, 803); // 소피아 방
+	//m_pNavigationCom->Move_to_Cell(m_pRigidBodyCom, 1066); // 순간이동 790
+	m_pNavigationCom->Move_to_Cell(m_pRigidBodyCom, 803); // 소피아 방
 
 	m_strObjectTag = TEXT("Player");
 
@@ -930,9 +933,19 @@ void CPlayer::CollisionStay_IntercObj(CGameObject* pGameObject)
 	else if (pGameObject->Get_Tag() == TEXT("SteppingStone"))
 	{
 		CSteppingStone* pSteppingStone = dynamic_cast<CSteppingStone*>(pGameObject);
-		if (GET_GAMEINTERFACE->Action_InterAction(TEXT("가자아아아")))
+		if (GET_GAMEINTERFACE->Action_InterAction(TEXT("최후의 장소로...")))
 		{
 			m_pFsmCom->Change_State(TELEPORT, pSteppingStone);
+		}
+	}
+	else if (pGameObject->Get_Tag() == TEXT("LastDoor"))
+	{
+		CLastDoor* pLastDoor = dynamic_cast<CLastDoor*>(pGameObject);
+		if (GET_GAMEINTERFACE->Action_InterAction(TEXT("문을 연다.")))
+		{
+			pLastDoor->Set_IsOpen(true);
+			dynamic_cast<CCutScene*>(m_pGameInstance->Find_Object(LEVEL_GAMEPLAY, TEXT("Layer_CutScene"), SOPHIA_ENTER))->Start_Play();
+			m_pFsmCom->Change_State(SOPHIA_DOOR_OPEN, pLastDoor);
 		}
 	}
 }

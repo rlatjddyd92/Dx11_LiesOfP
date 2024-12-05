@@ -39,6 +39,8 @@ HRESULT CLastDoor::Initialize(void* pArg)
 
 	m_strObjectTag = TEXT("LastDoor");
 
+	m_bOpen = false;
+
 	return S_OK;
 }
 void CLastDoor::Priority_Update(_float fTimeDelta)
@@ -48,7 +50,10 @@ void CLastDoor::Priority_Update(_float fTimeDelta)
 void CLastDoor::Update(_float fTimeDelta)
 {
 	if (m_bOpen)
-		m_pModelCom->Update_Animation(fTimeDelta);
+	{
+		m_pRigidBodyCom->Set_Kinematic(true);
+		m_pModelCom->Play_Animation(fTimeDelta);
+	}
 	else
 		m_pModelCom->Update_Bone();
 
@@ -60,7 +65,7 @@ void CLastDoor::Late_Update(_float fTimeDelta)
 {
 	__super::Late_Update(fTimeDelta);
 	m_pGameInstance->Add_RenderObject(CRenderer::RG_NONBLEND, this);
-
+	m_pGameInstance->Add_ColliderList(m_pColliderCom);
 #ifdef _DEBUG
 	if (m_pColliderCom != nullptr)
 		m_pGameInstance->Add_DebugObject(m_pColliderCom);
@@ -133,6 +138,7 @@ HRESULT CLastDoor::Ready_Components()
 	if (FAILED(__super::Add_Component(LEVEL_STATIC, TEXT("Prototype_Component_Collider_OBB"),
 		TEXT("Com_Collider"), reinterpret_cast<CComponent**>(&m_pColliderCom), &ColliderDesc)))
 		return E_FAIL;
+	m_pColliderCom->Set_Owner(this);
 
 	// 항상 마지막에 생성하기
 	CRigidBody::RIGIDBODY_DESC RigidBodyDesc{};

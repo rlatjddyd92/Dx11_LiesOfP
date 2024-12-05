@@ -26,6 +26,7 @@ private:
 
     _double* m_pTrackPos = { nullptr };
 
+    class CLastDoor* m_pLastDoor = { nullptr };
 private:
     _bool               End_Check();
 

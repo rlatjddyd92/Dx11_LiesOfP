@@ -159,6 +159,13 @@ void CCutScene::Load_KeyFrame(CUTSCENE_KEYFRAME_DESC pDesc)
 	m_KeyFrames.push_back(pNewDesc);
 }
 
+void CCutScene::Start_Play()
+{
+	m_isActive = true;
+	m_bPlay = true;
+	CCamera_Manager::Get_Instance()->Change_Camera(TEXT("Camera_Free"));
+}
+
 CCutScene* CCutScene::Create(ID3D11Device* pDevice, ID3D11DeviceContext* pContext)
 {
 	CCutScene* pInstance = new CCutScene(pDevice, pContext);

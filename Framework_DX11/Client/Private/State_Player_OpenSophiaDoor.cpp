@@ -4,7 +4,7 @@
 #include "Model.h"
 #include "Player.h"
 #include "Camera.h"
-#include "TreasureBox.h"
+#include "LastDoor.h"
 
 CState_Player_OpenSophiaDoor::CState_Player_OpenSophiaDoor(CFsm* pFsm, CPlayer* pPlayer)
     :CState{ pFsm }
@@ -27,6 +27,8 @@ HRESULT CState_Player_OpenSophiaDoor::Initialize(_uint iStateNum, void* pArg)
 
 HRESULT CState_Player_OpenSophiaDoor::Start_State(void* pArg)
 {
+    m_pLastDoor = static_cast<CLastDoor*>(pArg);
+
     m_pPlayer->Change_Animation(m_iAnimation_DoorPush, false, 0.8f, 316);
 
     return S_OK;
@@ -44,6 +46,7 @@ void CState_Player_OpenSophiaDoor::Update(_float fTimeDelta)
 
 void CState_Player_OpenSophiaDoor::End_State()
 {
+    m_pLastDoor = nullptr;
 }
 
 _bool CState_Player_OpenSophiaDoor::End_Check()
