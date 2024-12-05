@@ -91,7 +91,7 @@ void CColliderObject::OnCollisionEnter(CGameObject* pOther)
 		if (!bOverlapCheck)
 		{
 			m_DamagedObjects.push_back(pOther);
-			pOther->Calc_DamageGain(m_fDamageAmount * m_fDamageRatio);
+			pOther->Calc_DamageGain(m_fDamageAmount * m_fDamageRatio, _Vec3{}, m_iHitType, m_iAtkStrength);
 		}
 	}
 }

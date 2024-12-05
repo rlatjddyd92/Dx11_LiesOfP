@@ -57,7 +57,7 @@ void CState_CarcassBigA_LTSwingRight::Collider_Check()
 
     if (CurTrackPos >= 75.f && CurTrackPos <= 95.f)
     {
-        m_pMonster->Active_CurrentWeaponCollider(1, 0);
+        m_pMonster->Active_CurrentWeaponCollider(1.6, 0, HIT_TYPE::HIT_CARCASS, ATTACK_STRENGTH::ATK_STRONG);
     }
     else
     {

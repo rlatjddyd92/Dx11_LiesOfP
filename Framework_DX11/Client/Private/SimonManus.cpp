@@ -235,9 +235,9 @@ HRESULT CSimonManus::Render()
 	return S_OK;
 }
 
-void CSimonManus::Active_CurrentWeaponCollider(_float fDamageRatio, _uint iCollIndex)
+void CSimonManus::Active_CurrentWeaponCollider(_float fDamageRatio, _uint iCollIndex, _uint iHitType, _uint iAtkStrength)
 {
-	m_pWeapon->Active_Collider(fDamageRatio);
+	m_pWeapon->Active_Collider(fDamageRatio, iCollIndex, iHitType, iAtkStrength);
 }
 
 void CSimonManus::DeActive_CurretnWeaponCollider(_uint iCollIndex)

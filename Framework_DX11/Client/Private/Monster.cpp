@@ -163,7 +163,7 @@ _float CMonster::Calc_Distance_XZ()
 	return fDist;
 }
 
-void CMonster::Active_CurrentWeaponCollider(_float fDamageRatio, _uint iCollIndex)
+void CMonster::Active_CurrentWeaponCollider(_float fDamageRatio, _uint iCollIndex, _uint iHitType, _uint iAtkStrength)
 {
 }
 

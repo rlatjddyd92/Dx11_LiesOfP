@@ -128,7 +128,7 @@ void CWeapon_SimonManus_Hammer::OnCollisionEnter(CGameObject* pOther)
 		{
 			m_DamagedObjects.push_back(pOther);
 			_Vec3 vPos = m_pTransformCom->Get_State(CTransform::STATE_POSITION);
-			pOther->Calc_DamageGain(m_fDamageAmount * m_fDamageRatio, vPos, HIT_METAL, ATK_NORMAL);
+			pOther->Calc_DamageGain(m_fDamageAmount * m_fDamageRatio, vPos, HIT_METAL, m_iAtkStrength);
 		}
 	}
 }

@@ -119,7 +119,7 @@ void CState_CarcassTail_LeapAttack::Collider_Check()
     {
         if (CurTrackPos >= 230.f)
         {
-            m_pMonster->Active_CurrentWeaponCollider(1, 3);
+            m_pMonster->Active_CurrentWeaponCollider(1.4, 3, HIT_TYPE::HIT_CARCASS, ATTACK_STRENGTH::ATK_NORMAL);
         }
         else
         {
@@ -131,7 +131,7 @@ void CState_CarcassTail_LeapAttack::Collider_Check()
         if ((CurTrackPos <= 40.f)||
             (CurTrackPos <= 60.f && CurTrackPos <= 80.f))
         {
-            m_pMonster->Active_CurrentWeaponCollider(1, 3);
+            m_pMonster->Active_CurrentWeaponCollider(1.4, 3, HIT_TYPE::HIT_CARCASS, ATTACK_STRENGTH::ATK_NORMAL);
         }
         else
         {
