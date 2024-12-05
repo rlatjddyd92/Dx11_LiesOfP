@@ -124,6 +124,8 @@ public:
 
 	CPawn*					Get_TargetMonster() { return m_pTargetMonster; }
 
+	void					Set_DissloveRatio(_float fRatio) { m_fDissloveRatio = fRatio; }
+
 	// 24-11-27 김성용
 	// 플레이어 스탯 구조체 접근 함수 
 	// 외부에서는 레퍼런스로 접근 
@@ -208,6 +210,7 @@ private:
 
 	_float				m_fGuardTime = {};
 	_float				m_fRecoveryStaminaTime = { 0.f };
+	_float				m_fDissloveRatio = {};
 
 	CPawn*				m_pTargetMonster = { nullptr };
 

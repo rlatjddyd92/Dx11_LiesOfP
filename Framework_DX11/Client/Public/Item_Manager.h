@@ -51,6 +51,23 @@ BEGIN(Client)
 
 */
 
+
+
+/*
+아뮬렛, 방어파츠 스펙 간소화 
+
+아뮬렛 : 당장 구현할 수 있는 간단한 것만 넣기
+
+방어파츠 :
+프레임 : 방어력 증가 
+컨버터 : 화염 저항 증가 
+카트리지 : 전기 저항 증가 
+라이너 : 산성 저항 증가 
+
+
+
+*/
+
 class CItem_Manager : public CBase
 {
 public:
@@ -133,6 +150,55 @@ public:
 		_bool bIsNewMark_Show = false;
 
 	}ITEM;
+
+	typedef struct DEFENCE_INFO // 현재 장착한 아뮬렛, 방어파츠 스탯 간소화 하여 저장 
+	{
+		void Reset_Defence_Info()
+		{
+			bAll_Debuff_Ignore = false;
+			fIncrease_Stamina = 0.f;
+			fIncrease_Hp = 0.f; 
+			fHeal = 0.f;
+			fIncrease_Defence = 0.f;
+			fResist_Fire = 0.f;
+			fResist_Electric = 0.f;
+			fResist_Acid = 0.f;
+		}
+
+		void Set_Defence_Info(_int iAmuletA, _int iAmuletB, _int iFrame, _int iConvertor, _int iCartridge, _int iliner)
+		{
+			if ((iAmuletA == 87) || (iAmuletB == 87))
+				bAll_Debuff_Ignore = true;
+			if ((iAmuletA == 88) || (iAmuletB == 88))
+				fIncrease_Stamina = 200.f;
+			if ((iAmuletA == 101) || (iAmuletB == 101))
+				fIncrease_Hp = 200.f;
+			if ((iAmuletA == 111) || (iAmuletB == 111))
+				fHeal = 10.f;
+			if ((iAmuletA == 113) || (iAmuletB == 113))
+				fIncrease_Defence = 20.f;
+
+			fIncrease_Defence += iFrame;
+			fResist_Fire = iConvertor;
+			fResist_Electric = iCartridge;
+			fResist_Acid = iliner;
+		}
+
+		// 아뮬렛 
+		_bool bAll_Debuff_Ignore = false; // 꿰뚫는 증오의 아뮬렛 : 모든 속성 상태이상 면역 
+
+		_float fIncrease_Stamina = 0.f; // 도약의 아뮬렛 : 최대 스태미나 증가 
+		_float fIncrease_Hp = 0.f;  // 생명의 아뮬렛 : 최대 체력 증가 
+		_float fHeal = 0.f; // 재충전의 아뮬렛 : 지속적으로 HP 증가 
+
+		// 아뮬렛 & 방어파츠(프레임)
+		_float fIncrease_Defence = 0.f; // 철벽의 아뮬렛 & 프레임 파츠 : 피해 방어력 증가 
+
+		// 방어 파츠 (프레임 제외)
+		_float fResist_Fire = 0.f;
+		_float fResist_Electric = 0.f;
+		_float fResist_Acid = 0.f;
+	};
 
 	typedef struct ARRAY_INFO // 인벤에 존재하는 배열의 정보 
 	{
@@ -503,6 +569,18 @@ public:
 
 
 
+	// Defence_Info 
+	void Update_Defence_info();
+	DEFENCE_INFO& Get_Defence_Info() { return *m_pDefence; }
+
+
+
+
+
+
+
+
+
 	// 외부에서 아이템 매니저에 필요한 것이 뭐가 있나? 
 	/*
 	0. 새로운 아이템을 만들어 유저 인벤에 넣는다
@@ -606,6 +684,9 @@ private:
 	_int m_iArray_Index = -1;
 	_int m_iActionPopup_Page = 0;
 	_bool m_bInstant_Weapon_Change = false;
+
+	// 아뮬렛 & 방어파츠 정보 
+	DEFENCE_INFO* m_pDefence = { nullptr };
 
 public:
 	static CItem_Manager* Create(CGameInstance* pGameInstance);

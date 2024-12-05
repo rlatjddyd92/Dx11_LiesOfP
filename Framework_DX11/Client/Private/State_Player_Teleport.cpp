@@ -40,6 +40,10 @@ HRESULT CState_Player_Teleport::Start_State(void* pArg)
 
     m_pPlayer->Play_Sound(CPawn::PAWN_SOUND_EFFECT1, TEXT("SE_PC_MT_Teleport_Start.wav"));
 
+    m_fDissloveRatio = 0.f;
+
+    m_pPlayer->Disappear_Weapon();
+
     return S_OK;
 }
 
@@ -52,6 +56,7 @@ void CState_Player_Teleport::Update(_float fTimeDelta)
     {
         if (iFrame >= 150)
         {
+            m_fDissloveRatio = 1.f;
             m_pSteppingStone->Change_Player_Pos();
             m_isEnd_Teleport = true;
         }
@@ -65,6 +70,7 @@ void CState_Player_Teleport::Update(_float fTimeDelta)
         }
         else if (iFrame > 80)
         {
+            m_fDissloveRatio += fTimeDelta;
             m_vRimLightColor.z = max(m_vRimLightColor.z + fTimeDelta, 1.f);
             m_vRimLightColor.w = max(m_vRimLightColor.w - 0.6f * fTimeDelta, 0.1f);
 
@@ -79,6 +85,7 @@ void CState_Player_Teleport::Update(_float fTimeDelta)
     {
         if (iFrame > 10)
         {
+            m_fDissloveRatio -= 1.f * fTimeDelta;
             m_vRimLightColor.z = max(m_vRimLightColor.z - 1.5f * fTimeDelta, 0.f);
             m_vRimLightColor.w = min(m_vRimLightColor.w + 1.5f * fTimeDelta, 0.5f);
         }
@@ -93,11 +100,13 @@ void CState_Player_Teleport::Update(_float fTimeDelta)
         }
     }
 
+    m_pPlayer->Set_DissloveRatio(m_fDissloveRatio);
     m_pPlayer->Set_RimLightColor(m_vRimLightColor);
 }
 
 void CState_Player_Teleport::End_State()
 {
+    m_fDissloveRatio = 0.f;
     m_vRimLightColor = _Vec4(0.f, 0.f, 0.f, 0.f);
     m_pPlayer->Set_RimLightColor(m_vRimLightColor);
 
@@ -106,6 +115,7 @@ void CState_Player_Teleport::End_State()
 
 _bool CState_Player_Teleport::End_Check()
 {
+    m_pPlayer->Appear_Weapon();
     return m_pPlayer->Get_EndAnim(m_iAnimation_TeleportEnd);
 }
 

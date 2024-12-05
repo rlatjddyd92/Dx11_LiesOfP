@@ -4,7 +4,7 @@
 #include "Model.h"
 #include "Player.h"
 #include "Camera.h"
-#include "TreasureBox.h"
+#include "LastDoor.h"
 
 CState_Player_OpenSophiaDoor::CState_Player_OpenSophiaDoor(CFsm* pFsm, CPlayer* pPlayer)
     :CState{ pFsm }
@@ -27,7 +27,27 @@ HRESULT CState_Player_OpenSophiaDoor::Initialize(_uint iStateNum, void* pArg)
 
 HRESULT CState_Player_OpenSophiaDoor::Start_State(void* pArg)
 {
+    m_pLastDoor = static_cast<CLastDoor*>(pArg);
+
     m_pPlayer->Change_Animation(m_iAnimation_DoorPush, false, 0.8f, 316);
+
+    m_pPlayer->Disappear_Weapon();
+
+    _Vec3 vPlayerPos = m_pPlayer->Get_Transform()->Get_State(CTransform::STATE_POSITION);
+    _Vec3 vLastDoorPos = m_pLastDoor->Get_Transform()->Get_State(CTransform::STATE_POSITION);
+    _Vec3 vLastDoorRight = m_pLastDoor->Get_Transform()->Get_State(CTransform::STATE_RIGHT);
+    _Vec3 vLastDoorLook = m_pLastDoor->Get_Transform()->Get_State(CTransform::STATE_LOOK);
+    vLastDoorRight.Normalize();
+    vLastDoorLook.Normalize();
+
+    _Vec3 vInitPos = vLastDoorPos + vLastDoorLook * 0.25f;
+    vInitPos.y = vPlayerPos.y;
+
+    m_pPlayer->Get_RigidBody()->Set_GloblePose(vInitPos);
+    m_pPlayer->Get_Transform()->Set_NewLook(-vLastDoorLook);
+
+
+    m_pGameInstance->Play_BGM(TEXT("MU_MS_Monastery_B_Loop.wav"), 1.f);
 
     return S_OK;
 }
@@ -39,11 +59,13 @@ void CState_Player_OpenSophiaDoor::Update(_float fTimeDelta)
     if (iFrame > 545)
     {
         m_pPlayer->Change_State(CPlayer::SOPHIA_WALK);
+        m_pGameInstance->Play_BGM(TEXT("MU_MS_Monastery_B_Loop.wav"), 1.f);
     }
 }
 
 void CState_Player_OpenSophiaDoor::End_State()
 {
+    m_pLastDoor = nullptr;
 }
 
 _bool CState_Player_OpenSophiaDoor::End_Check()

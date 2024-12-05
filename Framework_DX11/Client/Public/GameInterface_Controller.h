@@ -146,6 +146,7 @@ public: // 외부에서 매니저 접근
 
 #pragma region Item_Manager
 	// 플레이어 참조용 
+	CItem_Manager::DEFENCE_INFO& Get_Defence_Info() { return m_pItem_Manager->Get_Defence_Info(); }
 	CPlayer::WEAPON_TYPE Get_Weapon_Model_Index() { return m_pItem_Manager->Get_Weapon_Model_Index(); } // 현재 사용 중인 무기의 모델 번호 리턴
 	list<SPECIAL_ITEM>& Get_LastFrame_UsingItem_Info() { return m_pItem_Manager->Get_LastFrame_UsingItem_Info(); }
 	_bool Get_CanSwitch_Weapon() { return m_pItem_Manager->Get_CanSwitch_Weapon(); }

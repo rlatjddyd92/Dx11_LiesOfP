@@ -73,6 +73,9 @@ PS_EFFECT_OUT PS_MAIN(PS_IN In)
 	
     vector vColor = g_DiffuseTexture.Sample(LinearSampler, vTexcoord);
 	
+    vColor.rgb *= g_vColor;
+    vColor.a *= g_fAlpha;
+    
     Out.vDiffuse = vColor;
     Out.vBlur = vColor;
 		
@@ -167,6 +170,27 @@ PS_OUT PS_DISTORTION_MAIN(PS_IN In)
     return Out;
 }
 
+PS_EFFECT_OUT PS_GLOW_MAIN(PS_IN In)
+{
+    PS_EFFECT_OUT Out = (PS_EFFECT_OUT) 0;
+    
+    float2 vTexcoord = In.vTexcoord * g_vTileRepeat + g_vTileMove;
+    vector vColor = g_DiffuseTexture.Sample(LinearSampler, vTexcoord);
+
+    vColor.rgb *= g_fAlpha;
+    vColor *= g_vColor;
+    
+    float fMax = max(vColor.r, max(vColor.g, vColor.b));
+    
+    if(fMax < 0.3f)
+        discard;
+    
+    Out.vDiffuse = vColor;
+    Out.vBlur = vColor;
+    
+    return Out;
+}
+
 technique11	DefaultTechnique
 {
 	pass Default //0
@@ -233,6 +257,17 @@ technique11	DefaultTechnique
         VertexShader = compile vs_5_0 VS_MAIN();
         GeometryShader = NULL;
         PixelShader = compile ps_5_0 PS_BLEND_RGBTOA_MAIN();
+    }
+
+    pass GLOW   // 6
+    {
+        SetRasterizerState(RS_Default);
+        SetDepthStencilState(DSS_Default, 0);
+        SetBlendState(BS_Default, vector(0.f, 0.f, 0.f, 0.f), 0xffffffff);
+
+        VertexShader = compile vs_5_0 VS_MAIN();
+        GeometryShader = NULL;
+        PixelShader = compile ps_5_0 PS_GLOW_MAIN();
     }
 
 }

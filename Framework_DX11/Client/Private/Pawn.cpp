@@ -96,6 +96,11 @@ HRESULT CPawn::Render()
 			return E_FAIL;
 	}
 
+	//RimLight ÃÊ±âÈ­
+	_Vec4 vInitRimLight = _Vec4(0.f, 0.f, 0.f, 0.f);
+	if (FAILED(m_pShaderCom->Bind_RawValue("g_vRimLight", &vInitRimLight, sizeof(_float4))))
+		return E_FAIL;
+
 	return S_OK;
 
 #ifdef _DEBUG

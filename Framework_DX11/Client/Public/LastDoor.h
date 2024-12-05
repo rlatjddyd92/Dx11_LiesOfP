@@ -7,6 +7,7 @@ BEGIN(Engine)
 class CCollider;
 class CShader;
 class CModel;
+class CRigidBody;
 END
 
 BEGIN(Client)
@@ -27,12 +28,21 @@ public:
 	virtual void Late_Update(_float fTimeDelta) override;
 	virtual HRESULT Render() override;
 
+public:
+	_bool	Get_IsOpen() { return m_bOpen; }
+	void	Set_IsOpen(_bool isOpen) { m_bOpen = isOpen; }
+
 private:
 	CCollider* m_pColliderCom = { nullptr };
 	CShader* m_pShaderCom = { nullptr };
 	CModel* m_pModelCom = { nullptr };
+	CRigidBody* m_pRigidBodyCom = { nullptr };
+
 private:
 	_bool m_bShadow = false;
+	_bool m_bOpen = false;
+
+	_int m_iAnim_Open = { 0 };
 private:
 	HRESULT Ready_Components();
 

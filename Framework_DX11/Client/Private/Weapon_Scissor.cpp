@@ -4,6 +4,7 @@
 #include "Monster.h"
 
 #include "GameInstance.h"
+#include "Effect_Manager.h"
 
 CWeapon_Scissor::CWeapon_Scissor(ID3D11Device* pDevice, ID3D11DeviceContext* pContext)
 	: CWeapon{ pDevice, pContext }

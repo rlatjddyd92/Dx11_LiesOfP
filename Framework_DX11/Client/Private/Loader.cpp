@@ -13,6 +13,7 @@
 #include "BackGround.h"
 #include "StaticObj.h"
 #include "NavDataObj.h"
+#include "CutScene.h"
 
 #pragma region MONSTER
 #include "Monster.h"
@@ -318,7 +319,8 @@ HRESULT CLoader::Ready_Resources_For_GamePlayLevel()
 	GET_GAMEINTERFACE->Set_Loading_Status(TEXT("이펙트 준비 중"), 0.2f);
 
 	lstrcpy(m_szLoadingText, TEXT("이펙트 매니저를 로딩중입니다."));
-	if(FAILED(CEffect_Manager::Get_Instance()->Initialize(m_pDevice, m_pContext, TEXT("../../Tools/Bin/DataFiles/Effect"), TEXT("../Bin/Resources/Textures/Effect"))))
+	if(FAILED(CEffect_Manager::Get_Instance()->Initialize(m_pDevice, m_pContext, 
+		TEXT("../../Tools/Bin/DataFiles/Effect"), TEXT("../Bin/Resources/Textures/Effect"), TEXT("../Bin/ModelData/NonAnim/Effect"))))
 		return E_FAIL;
 
 	GET_GAMEINTERFACE->Set_Loading_Status(TEXT("이미지 준비 중"), 0.4f);
@@ -1098,9 +1100,14 @@ HRESULT CLoader::Ready_Prototype()
 		return E_FAIL;
 
 
-	/* For. Prototype_GameObject_StaticObj */
+	/* For. Prototype_GameObject_NavDataObj */
 	if (FAILED(m_pGameInstance->Add_Prototype(TEXT("Prototype_GameObject_NavDataObj"),
 		CNavDataObj::Create(m_pDevice, m_pContext))))
+		return E_FAIL;
+
+	/* For. Prototype_GameObject_CutScene */
+	if (FAILED(m_pGameInstance->Add_Prototype(TEXT("Prototype_GameObject_CutScene"),
+		CCutScene::Create(m_pDevice, m_pContext))))
 		return E_FAIL;
 
 

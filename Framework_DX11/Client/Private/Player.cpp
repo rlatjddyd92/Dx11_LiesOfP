@@ -4,6 +4,8 @@
 #include "GameInstance.h"
 #include "Layer.h"
 
+#include "CutScene.h"
+
 #include "Camera.h"
 #include "Monster.h"
 #include "Weapon.h"
@@ -14,6 +16,7 @@
 #include "TreasureBox.h"
 #include "Stargazer.h"
 #include "SteppingStone.h"
+#include "LastDoor.h"
 
 #include "Effect_Manager.h"
 #include "Effect_Container.h"
@@ -128,8 +131,8 @@ HRESULT CPlayer::Initialize(void * pArg)
 	//m_pNavigationCom->Move_to_Cell(m_pRigidBodyCom, 427); //짧은사다리
 	//m_pNavigationCom->Move_to_Cell(m_pRigidBodyCom, 341); //아래엘베
 	//m_pNavigationCom->Move_to_Cell(m_pRigidBodyCom, 440); //상자랑 장애물
-	//m_pNavigationCom->Move_to_Cell(m_pRigidBodyCom, 1068); // 순간이동
-	//m_pNavigationCom->Move_to_Cell(m_pRigidBodyCom, 803); // 소피아 방
+	//m_pNavigationCom->Move_to_Cell(m_pRigidBodyCom, 1066); // 순간이동 790
+	//m_pNavigationCom->Move_to_Cell(m_pRigidBodyCom, 800); // 소피아 방
 
 	m_strObjectTag = TEXT("Player");
 
@@ -214,8 +217,43 @@ void CPlayer::Priority_Update(_float fTimeDelta)
 		GET_GAMEINTERFACE->Show_Script(strTest, TEXT("none"), 1.f);
 	}
 
+	// 아뮬렛, 방어 파츠 스펙 
+	CItem_Manager::DEFENCE_INFO Now_Defence_Info = GET_GAMEINTERFACE->Get_Defence_Info();
 
-	
+	/*
+	Now_Defence_Info.bAll_Debuff_Ignore // 아뮬렛 기능 : 모든 상태이상 해제 
+	Now_Defence_Info.fIncrease_Stamina // 아뮬렛 기능 : 스태미나 최대치 증가량 
+	Now_Defence_Info.fIncrease_Hp // 아뮬렛 기능 : HP 최대치 증가량 
+	Now_Defence_Info.fIncrease_Defence // 아뮬렛 및 프레임 기능 : 방어력 증가량
+
+	Now_Defence_Info.fResist_Fire // 컨버터 기능 : 화염 상태이상 방어 증가 
+	Now_Defence_Info.fResist_Electric // 카트리지 기능 : 전기 상태이상 방어 증가
+	Now_Defence_Info.fResist_Acid // 라이너 기능 : 산성 상태이상 방어 증가
+	*/
+
+	if (KEY_HOLD(KEY::CTRL))
+		if (KEY_TAP(KEY::F5))
+		{
+			_wstring strTest_Defence{};
+			strTest_Defence += to_wstring(_int(Now_Defence_Info.bAll_Debuff_Ignore));
+			strTest_Defence += TEXT(",");
+			strTest_Defence += to_wstring(Now_Defence_Info.fIncrease_Stamina);
+			strTest_Defence += TEXT(",");
+			strTest_Defence += to_wstring(Now_Defence_Info.fIncrease_Hp);
+			strTest_Defence += TEXT(",");
+			strTest_Defence += to_wstring(Now_Defence_Info.fIncrease_Defence);
+			strTest_Defence += TEXT(",");
+			strTest_Defence += to_wstring(Now_Defence_Info.fHeal);
+			strTest_Defence += TEXT(",");
+			strTest_Defence += to_wstring(Now_Defence_Info.fResist_Fire);
+			strTest_Defence += TEXT(",");
+			strTest_Defence += to_wstring(Now_Defence_Info.fResist_Electric);
+			strTest_Defence += TEXT(",");
+			strTest_Defence += to_wstring(Now_Defence_Info.fResist_Acid);
+
+			GET_GAMEINTERFACE->Show_Script(strTest_Defence, TEXT("none"), 1.f);
+		}
+			
 	
 
 	if (m_isGuard)
@@ -312,7 +350,16 @@ void CPlayer::Late_Update(_float fTimeDelta)
 
 HRESULT CPlayer::Render()
 {
+	if (FAILED(m_pDissloveTexture->Bind_ShadeResource(m_pShaderCom, "g_DissloveTexture", 0)))
+		return E_FAIL;
+	if(FAILED(m_pShaderCom->Bind_RawValue("g_fDissolveRatio", &m_fDissloveRatio, sizeof(_float))))
+		return E_FAIL;
+
 	if (FAILED(__super::Render()))
+		return E_FAIL;
+
+	_float fResetDisslove = -1.f;
+	if (FAILED(m_pShaderCom->Bind_RawValue("g_fDissolveRatio", &fResetDisslove, sizeof(_float))))
 		return E_FAIL;
 
 	//if (nullptr != m_pWeapon[m_eWeaponType])
@@ -886,9 +933,19 @@ void CPlayer::CollisionStay_IntercObj(CGameObject* pGameObject)
 	else if (pGameObject->Get_Tag() == TEXT("SteppingStone"))
 	{
 		CSteppingStone* pSteppingStone = dynamic_cast<CSteppingStone*>(pGameObject);
-		if (GET_GAMEINTERFACE->Action_InterAction(TEXT("가자아아아")))
+		if (GET_GAMEINTERFACE->Action_InterAction(TEXT("최후의 장소로...")))
 		{
 			m_pFsmCom->Change_State(TELEPORT, pSteppingStone);
+		}
+	}
+	else if (pGameObject->Get_Tag() == TEXT("LastDoor"))
+	{
+		CLastDoor* pLastDoor = dynamic_cast<CLastDoor*>(pGameObject);
+		if (GET_GAMEINTERFACE->Action_InterAction(TEXT("문을 연다.")))
+		{
+			pLastDoor->Set_IsOpen(true);
+			dynamic_cast<CCutScene*>(m_pGameInstance->Find_Object(LEVEL_GAMEPLAY, TEXT("Layer_CutScene"), SOPHIA_ENTER))->Start_Play();
+			m_pFsmCom->Change_State(SOPHIA_DOOR_OPEN, pLastDoor);
 		}
 	}
 }
@@ -1039,6 +1096,8 @@ HRESULT CPlayer::Ready_Components()
 {
 	if (FAILED(__super::Ready_Components()))
 		return E_FAIL;
+
+	m_pDissloveTexture = CTexture::Create(m_pDevice, m_pContext, TEXT("../Bin/ModelData/Anim/Player/T_DissolveMask_A.dds"), 1);
 
 	/* FOR.Com_Model */
 	if (FAILED(__super::Add_Component(LEVEL_GAMEPLAY, TEXT("Prototype_Component_Model_Player"),
@@ -1231,6 +1290,8 @@ CPawn* CPlayer::Clone(void * pArg)
 void CPlayer::Free()
 {
 	__super::Free();
+
+	Safe_Release(m_pDissloveTexture);
 
 	for (auto& pEffect : m_Effects)
 	{

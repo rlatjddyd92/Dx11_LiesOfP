@@ -27,6 +27,7 @@ private:
 
     _double* m_pTrackPos = { nullptr };
 
+    _float              m_fDissloveRatio = {};
 
     _Vec4               m_vRimLightColor = {};
     _bool               m_isEnd_Teleport = {};
