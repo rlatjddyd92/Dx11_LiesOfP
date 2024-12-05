@@ -181,7 +181,7 @@ void CUIManager::UIControl_Popup(_float fTimeDelta)
 
 void CUIManager::UIControl_Common(_float fTimeDelta)
 {
-	m_bIsPlayPageMaintain = true;
+	//m_bIsPlayPageMaintain = true;
 
 	if (m_pUIPage_Effect->Check_Fade() > 0.f)
 		m_bIsPlayPageMaintain = false;
@@ -267,6 +267,8 @@ void CUIManager::UIControl_Inven(_float fTimeDelta)
 		m_pUIPage_ItemInfo->Set_Active_ItemInfo(true, UIPAGE::PAGE_INVEN);
 		m_pUIPage_ItemInfo->Check_Page_Action(fTimeDelta);
 		m_eNow_Active_Func = m_pUIPage_ItemInfo->Get_Active_Func();
+
+		GET_GAMEINTERFACE->Adjust_Spec();
 	}
 }
 
@@ -286,6 +288,8 @@ void CUIManager::UIControl_Equip(_float fTimeDelta)
 		m_pUIPage_ItemInfo->Set_Active_ItemInfo(true, UIPAGE::PAGE_EQUIP);
 		m_pUIPage_ItemInfo->Check_Page_Action(fTimeDelta);
 		m_eNow_Active_Func = m_pUIPage_ItemInfo->Get_Active_Func();
+
+		GET_GAMEINTERFACE->Adjust_Spec();
 	}
 }
 
@@ -692,12 +696,14 @@ void CUIManager::Open_Close_Page(UIPAGE ePage)
 
 void CUIManager::OpenPage(UIPAGE ePage)
 {
-	m_vecPage[_int(ePage)]->OpenAction();
+	if (ePage != UIPAGE::PAGE_END)
+		m_vecPage[_int(ePage)]->OpenAction();
 }
 
 void CUIManager::ClosePage(UIPAGE ePage)
 {
-	m_vecPage[_int(ePage)]->CloseAction();
+	if (ePage != UIPAGE::PAGE_END)
+		m_vecPage[_int(ePage)]->CloseAction();
 }
 
 _Vec2 CUIManager::CheckMouse(_Vec2 fPos, _Vec2 fSize)

@@ -214,6 +214,9 @@ void CUIPage_Equip::Action_Focus(_float fTimeDelta)
 			m_vFocus_Pos = m_vecPart[iIndex]->fPosition;
 			m_vFocus_Size = m_vecPart[iIndex]->fSize * 1.1f;
 
+			if (pItem != nullptr)
+				GET_GAMEINTERFACE->Show_Tooltip(pItem->eSlot);
+
 			if (KEY_TAP(KEY::RBUTTON))
 			{
 				iItemActionActive = true;

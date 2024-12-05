@@ -130,6 +130,10 @@ HRESULT CPlayer::Initialize(void * pArg)
 	// 24-11-27 김성용
 	// 스탯 구조체 생성 
 	m_tPlayer_Stat = new STAT_INFO;
+	m_tPlayer_Stat_Adjust = new STAT_INFO;
+	m_tPlayer_Ability = new ABILITY_INFO;
+
+	m_tPlayer_Stat_Adjust->Reset_Zero();
 
 	// 24-11-27 김성용
 	// 게임 인터페이스와 연결을 위해 추가 
@@ -208,43 +212,8 @@ void CPlayer::Priority_Update(_float fTimeDelta)
 		GET_GAMEINTERFACE->Show_Script(strTest, TEXT("none"), 1.f);
 	}
 
-	// 아뮬렛, 방어 파츠 스펙 
-	CItem_Manager::DEFENCE_INFO Now_Defence_Info = GET_GAMEINTERFACE->Get_Defence_Info();
-
-	/*
-	Now_Defence_Info.bAll_Debuff_Ignore // 아뮬렛 기능 : 모든 상태이상 해제 
-	Now_Defence_Info.fIncrease_Stamina // 아뮬렛 기능 : 스태미나 최대치 증가량 
-	Now_Defence_Info.fIncrease_Hp // 아뮬렛 기능 : HP 최대치 증가량 
-	Now_Defence_Info.fIncrease_Defence // 아뮬렛 및 프레임 기능 : 방어력 증가량
-
-	Now_Defence_Info.fResist_Fire // 컨버터 기능 : 화염 상태이상 방어 증가 
-	Now_Defence_Info.fResist_Electric // 카트리지 기능 : 전기 상태이상 방어 증가
-	Now_Defence_Info.fResist_Acid // 라이너 기능 : 산성 상태이상 방어 증가
-	*/
-
-	if (KEY_HOLD(KEY::CTRL))
-		if (KEY_TAP(KEY::F5))
-		{
-			_wstring strTest_Defence{};
-			strTest_Defence += to_wstring(_int(Now_Defence_Info.bAll_Debuff_Ignore));
-			strTest_Defence += TEXT(",");
-			strTest_Defence += to_wstring(Now_Defence_Info.fIncrease_Stamina);
-			strTest_Defence += TEXT(",");
-			strTest_Defence += to_wstring(Now_Defence_Info.fIncrease_Hp);
-			strTest_Defence += TEXT(",");
-			strTest_Defence += to_wstring(Now_Defence_Info.fIncrease_Defence);
-			strTest_Defence += TEXT(",");
-			strTest_Defence += to_wstring(Now_Defence_Info.fHeal);
-			strTest_Defence += TEXT(",");
-			strTest_Defence += to_wstring(Now_Defence_Info.fResist_Fire);
-			strTest_Defence += TEXT(",");
-			strTest_Defence += to_wstring(Now_Defence_Info.fResist_Electric);
-			strTest_Defence += TEXT(",");
-			strTest_Defence += to_wstring(Now_Defence_Info.fResist_Acid);
-
-			GET_GAMEINTERFACE->Show_Script(strTest_Defence, TEXT("none"), 1.f);
-		}
-			
+	STAT_INFO* pTest_Adjust = m_tPlayer_Stat_Adjust;
+	ABILITY_INFO* pTest_Ability = m_tPlayer_Ability;
 	
 
 	if (m_isGuard)
@@ -1243,7 +1212,9 @@ void CPlayer::Free()
 	// 24-11-27 김성용
 	// 스탯 구조체 제거 
 	Safe_Delete(m_tPlayer_Stat);
-
+	Safe_Delete(m_tPlayer_Stat_Adjust);
+	Safe_Delete(m_tPlayer_Ability);
+	
 	Safe_Release(m_pColliderCom);
 	Safe_Release(m_pNavigationCom);
 }

@@ -58,11 +58,11 @@ void CMainApp::Update(_float fTimeDelta)
 		if (KEY_TAP(KEY::NUM6))
 			GET_GAMEINTERFACE->Fade_Out(TEXT("FadeOut_Test"), TEXT("FadeOut_Desc"), { 0.f,0.f,0.f }, 2.f);
 		if (KEY_TAP(KEY::NUM7))
-			GET_GAMEINTERFACE->Fade_In(2.f);
+			GET_GAMEINTERFACE->Fade_In(2.f, false);
 		if (KEY_TAP(KEY::NUM8))
 			GET_GAMEINTERFACE->Show_Script(TEXT("테스트 대사 2줄 버전"), TEXT("테스트 대사 2줄 버전"), 3.f);
 		if (KEY_TAP(KEY::NUM9))
-			GET_GAMEINTERFACE->Show_Script(TEXT("테스트 대사 1줄 버전"), TEXT("none"), 3.f);
+			GET_GAMEINTERFACE->UIPart_On();
 	}
 
 	// 24-12-04 김성용 

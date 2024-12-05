@@ -14,7 +14,7 @@ class CUIPage_Popup : public CUIPage
 public:
 	enum class PART_GROUP
 	{
-
+		GROUP_TEST,
 
 
 

@@ -188,6 +188,9 @@ public:
 	}
 	void Off_ItemAction() { m_pUIPage_ItemInfo->Off_ItemAction(); }
 
+	void Show_Tooltip(INVEN_ARRAY_TYPE eType, _int iIndex) { m_pUIPage_ItemInfo->Show_Tooltip(eType, iIndex); }
+	void Show_Tooltip(EQUIP_SLOT eSlot) { m_pUIPage_ItemInfo->Show_Tooltip(eSlot); }
+
 #pragma endregion
 
 
@@ -265,13 +268,22 @@ public:
 		m_pUIPage_Effect->Fade_Out(strTitle, strDesc, vColor, fTime);
 		return true;
 	}
-	_bool Fade_In(_float fTime = 1.f) 
+	_bool Fade_In(_float fTime = 1.f, _bool bIsUIOn = true) 
 	{ 
+		if (bIsUIOn)
+			if (m_eBeforePage != UIPAGE::PAGE_EFFECT)
+			{
+				OpenPage(m_eBeforePage);
+				m_bIsPlayPageMaintain = true;
+			}
+		m_pUIPage_Effect->Fade_In(fTime);
+		return true;
+	}
+	void UIPart_On()
+	{
 		if (m_eBeforePage != UIPAGE::PAGE_EFFECT)
 			OpenPage(m_eBeforePage);
 		m_bIsPlayPageMaintain = true;
-		m_pUIPage_Effect->Fade_In(fTime);
-		return true;
 	}
 
 	void Show_Script(_wstring strScript0, _wstring strScript1 = TEXT("none"), _float fTime = 1.f, _Vec3 vColor = _Vec3{ 0.f,0.f,0.f }) 

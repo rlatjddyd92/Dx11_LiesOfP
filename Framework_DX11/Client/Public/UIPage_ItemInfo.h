@@ -33,6 +33,22 @@ public:
 		ITEMINFO_ACTION_Mouse_3,
 		ITEMINFO_ACTION_Fx_3,
 		ITEMINFO_ACTION_Text_3,
+
+
+		TOOLTIP_Back,
+		TOOLTIP_Fx,
+		TOOLTIP_Left_Deco,
+		TOOLTIP_Item_Frame,
+		TOOLTIP_Item_Blade,
+		TOOLTIP_Item_Cross,
+		TOOLTIP_Item_Handle,
+		TOOLTIP_Item_Heroic,
+		TOOLTIP_Item_Normal,
+		TOOLTIP_Item_Name,
+		TOOLTIP_Item_Desc,
+
+
+
 		GROUP_END
 	};
 
@@ -89,6 +105,13 @@ public:
 			return m_eActive_Func[m_iNow_Func];
 	}
 
+	// 툴팁 관련 사항 
+	void Show_Tooltip(INVEN_ARRAY_TYPE eType, _int iIndex);
+	void Show_Tooltip(EQUIP_SLOT eSlot);
+
+
+
+
 protected:
 	// Focus
 	_bool m_bFocus = false;
@@ -104,6 +127,8 @@ protected:
 	UIPAGE m_eNowPage = UIPAGE::PAGE_END;
 
 	_bool m_bCheck_Active = false;
+
+	_Vec2 m_vToolTip_Pos = { 1000.f,360.f };
 
 public:
 	static CUIPage_ItemInfo* Create(ID3D11Device* pDevice, ID3D11DeviceContext* pContext);
