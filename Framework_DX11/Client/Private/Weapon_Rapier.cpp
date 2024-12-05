@@ -7,6 +7,10 @@
 #include "GameInstance.h"
 #include "Effect_Manager.h"
 
+// 24-12-06 김성용
+// 내구도 조정 함수 연결을 위한 헤더 추가 
+#include "GameInterface_Controller.h"
+
 CWeapon_Rapier::CWeapon_Rapier(ID3D11Device* pDevice, ID3D11DeviceContext* pContext)
 	: CWeapon{ pDevice, pContext }
 {
@@ -121,6 +125,10 @@ void CWeapon_Rapier::OnCollisionEnter(CGameObject* pOther)
 
 				CEffect_Manager::Get_Instance()->Add_Effect_ToLayer(LEVEL_GAMEPLAY, TEXT("Player_Attack_Blood"),
 					m_pParentMatrix, m_pSocketMatrix);
+
+				// 24-12-06 김성용
+				// 무기 사용 시, 내구도 감소 
+				GET_GAMEINTERFACE->Add_Durable_Weapon(-1.f);
 
 				if (pMonster->Get_Status()->fHp > 0.f)
 				{

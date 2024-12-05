@@ -154,6 +154,7 @@ public: // 외부에서 매니저 접근
 	CPlayer::WEAPON_TYPE Get_Weapon_Model_Index() { return m_pItem_Manager->Get_Weapon_Model_Index(); } // 현재 사용 중인 무기의 모델 번호 리턴
 	list<SPECIAL_ITEM>& Get_LastFrame_UsingItem_Info() { return m_pItem_Manager->Get_LastFrame_UsingItem_Info(); }
 	_bool Get_CanSwitch_Weapon() { return m_pItem_Manager->Get_CanSwitch_Weapon(); }
+	void Add_Durable_Weapon(_float fAdd) { return m_pItem_Manager->Add_Durable_Weapon(fAdd); }
 
 	// 접근, 수정
 	_bool Is_ItemData_Change() { return m_pItem_Manager->Is_ItemData_Change(); }

@@ -261,6 +261,9 @@ void CUIPage_Play::Action_Potion_Tool(_float fTimeDelta)
 						if (GET_GAMEINTERFACE->Get_Equip_Item_Info(EQUIP_SLOT(_int(EQUIP_SLOT::EQUIP_USING_BOTTOM_0) + iTool))->iItem_Index == _int(SPECIAL_ITEM::SP_GRINDER))
 							GET_GAMEINTERFACE->Use_Tool_Slot();
 	}
+
+	if (GET_GAMEINTERFACE->Get_LastFrame_UsingItem_Info().back() == SPECIAL_ITEM::SP_GRINDER)
+		GET_GAMEINTERFACE->Add_Durable_Weapon(fTimeDelta * 10.f);
 }
 
 void CUIPage_Play::Action_Arm(_float fTimeDelta)
@@ -577,6 +580,11 @@ void CUIPage_Play::RD_Weapon_Update(_float fTimeDelta)
 
 		return;
 	}
+
+
+	_float fDurable = pNowBlade->fDurable_Now / pNowBlade->fDurable_Max;
+
+	m_vec_Group_Ctrl[_int(PART_GROUP::GROUP_WEAPON_DURABLE_FILL)]->fRatio = fDurable;
 
 	_int iSelect = GET_GAMEINTERFACE->Get_Weapon();
 	_bool bNormal = pNowBlade->bModule_Weapon;
