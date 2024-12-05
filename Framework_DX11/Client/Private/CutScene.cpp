@@ -46,6 +46,12 @@ void CCutScene::Update(_float fTimeDelta)
 		m_fTrackPosition += fTimeDelta;
 		Play_Keyframes(fTimeDelta);
 	}
+	else if (m_fTrackPosition > m_fMaxFrame)
+	{
+		m_bPlay = false;
+		GET_GAMEINTERFACE->Fade_In(0.f);
+		CCamera_Manager::Get_Instance()->Change_Camera(TEXT("Camera_Player"));
+	}
 }
 
 void CCutScene::Late_Update(_float fTimeDelta)
@@ -155,6 +161,7 @@ void CCutScene::Load_KeyFrame(CUTSCENE_KEYFRAME_DESC pDesc)
 {
 	CUTSCENE_KEYFRAME_DESC* pNewDesc = new CUTSCENE_KEYFRAME_DESC;
 	*pNewDesc = pDesc;
+	pNewDesc->bActived = false;
 
 	m_KeyFrames.push_back(pNewDesc);
 }

@@ -34,7 +34,7 @@ HRESULT CLastDoor::Initialize(void* pArg)
 	if (FAILED(Ready_Components()))
 		return E_FAIL;
 
-	m_iAnim_Open = m_pModelCom->Find_AnimationIndex("AS_Open", 2.f);
+	m_iAnim_Open = m_pModelCom->Find_AnimationIndex("AS_Open", 3.5f);
 	m_pModelCom->SetUp_Animation(m_iAnim_Open, false);
 
 	m_strObjectTag = TEXT("LastDoor");
@@ -160,7 +160,7 @@ HRESULT CLastDoor::Ready_Components()
 		;
 
 	physX::GeometryBox BoxDesc;
-	BoxDesc.vSize = _Vec3(0.3f, 3.f, 3.f);
+	BoxDesc.vSize = _Vec3(4.f, 3.f, 0.3f);
 	RigidBodyDesc.pGeometry = &BoxDesc;
 
 	/* FOR.Com_RigidBody */

@@ -30,7 +30,7 @@ HRESULT CState_Player_OpenSophiaDoor::Start_State(void* pArg)
     m_pLastDoor = static_cast<CLastDoor*>(pArg);
 
     m_pPlayer->Change_Animation(m_iAnimation_DoorPush, false, 0.8f, 316);
-
+    m_pGameInstance->Play_BGM(TEXT("MU_MS_Monastery_B_Loop.wav"), 1.f);
     return S_OK;
 }
 
