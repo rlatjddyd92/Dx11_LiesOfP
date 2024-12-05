@@ -123,6 +123,8 @@ _Vec4 CMonster::Get_TargetDir()
 {
 	_Vec4 vDir = m_vPosTarget - m_pTransformCom->Get_State(CTransform::STATE_POSITION);
 
+	vDir.y = 0.f;
+
 	if (vDir.Length() == 0)
 	{
 		return _Vec4{0, 0, -1, 1};

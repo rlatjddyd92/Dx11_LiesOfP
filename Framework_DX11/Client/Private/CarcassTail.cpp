@@ -43,6 +43,9 @@ HRESULT CCarcassTail::Initialize_Prototype()
 
 HRESULT CCarcassTail::Initialize(void* pArg)
 {
+	OBJECT_DEFAULT_DESC* pDefaultDesc = static_cast<OBJECT_DEFAULT_DESC*>(pArg);
+	_float3		vPosition;
+
 	CGameObject::GAMEOBJECT_DESC		Desc{};
 	Desc.fSpeedPerSec = 1.5f;
 	Desc.fRotationPerSec = 30.f;
@@ -50,12 +53,11 @@ HRESULT CCarcassTail::Initialize(void* pArg)
 	if (FAILED(__super::Initialize(&Desc)))
 		return E_FAIL;
 
-	m_pTransformCom->Set_State(CTransform::STATE_POSITION,
-		XMVectorSet(0.f, 0.f, 0.f, 1.f));
 	m_pTransformCom->LookAt(_vector{ 0, 0, -1, 0 });
-
 	if (FAILED(Ready_Components()))
 		return E_FAIL;
+
+	m_pNavigationCom->Move_to_Cell(m_pRigidBodyCom, pDefaultDesc->iCurrentCellNum);
 
 	m_pModelCom->SetUp_Animation(rand() % 20, true);
 
@@ -288,7 +290,7 @@ CCarcassTail* CCarcassTail::Create(ID3D11Device* pDevice, ID3D11DeviceContext* p
 
 	if (FAILED(pInstance->Initialize_Prototype()))
 	{
-		MSG_BOX(TEXT("Failed to Created : CMonster"));
+		MSG_BOX(TEXT("Failed to Created : CCarcassTail"));
 		Safe_Release(pInstance);
 	}
 
@@ -303,7 +305,7 @@ CPawn* CCarcassTail::Clone(void* pArg)
 
 	if (FAILED(pInstance->Initialize(pArg)))
 	{
-		MSG_BOX(TEXT("Failed to Cloned : CMonster"));
+		MSG_BOX(TEXT("Failed to Cloned : CCarcassTail"));
 		Safe_Release(pInstance);
 	}
 

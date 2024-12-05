@@ -23,7 +23,7 @@ HRESULT CCutScene::Initialize_Prototype()
 HRESULT CCutScene::Initialize(void* pArg)
 {
 	m_isActive = false;
-	m_pCamera = m_pGameInstance->Find_Camera(LEVEL_TOOL);
+	//m_pCamera = m_pGameInstance->Find_Camera(LEVEL_TOOL);
 	return S_OK;
 }
 
