@@ -16,6 +16,8 @@ void CItem_Manager::Update_Item(_float fDeltatime)
 	m_bIsChange = false;
 	m_iNow_Using = -1;
 	m_LastFrame_UsingItem.clear();
+
+
 }
 
 ITEM_RESULT CItem_Manager::AddNewItem_Inven(_uint iItemIndex, _uint iCount)
@@ -773,7 +775,7 @@ ITEM_RESULT CItem_Manager::Operate_EquipAction(_Vec2 vPos, _Vec2 vSize)
 		EquipItem_Inven(INVEN_ARRAY_TYPE::TYPE_DEFENCE_RAINER, EQUIP_SLOT::EQUIP_DEFENCE_RAINER, m_iArray_Index);
 	else if (m_eNow_ActionArray == INVEN_ARRAY_TYPE::TYPE_AMULET_COMMON)
 	{
-		if (Get_Equip_Item_Info(EQUIP_SLOT::EQUIP_AMULET_0) != nullptr)
+		if (Get_Equip_Item_Info(EQUIP_SLOT::EQUIP_AMULET_0) == nullptr)
 			EquipItem_Inven(INVEN_ARRAY_TYPE::TYPE_AMULET_COMMON, EQUIP_SLOT::EQUIP_AMULET_0, m_iArray_Index);
 		else if (Get_Equip_Item_Info(EQUIP_SLOT::EQUIP_AMULET_1) == nullptr)
 			EquipItem_Inven(INVEN_ARRAY_TYPE::TYPE_AMULET_COMMON, EQUIP_SLOT::EQUIP_AMULET_1, m_iArray_Index);
@@ -796,6 +798,33 @@ ITEM_RESULT CItem_Manager::Operate_EquipAction(_Vec2 vPos, _Vec2 vSize)
 	Reset_ItemAction();
 
 	return ITEM_RESULT();
+}
+
+void CItem_Manager::Update_Defence_info()
+{
+	m_pDefence->Reset_Defence_Info();
+
+	_int iInput[6] = { 0, };
+
+	if (Get_Equip_Item_Info(EQUIP_SLOT::EQUIP_AMULET_0) != nullptr)
+		iInput[0] = Get_Equip_Item_Info(EQUIP_SLOT::EQUIP_AMULET_0)->iItem_Index;
+
+	if (Get_Equip_Item_Info(EQUIP_SLOT::EQUIP_AMULET_1) != nullptr)
+		iInput[1] = Get_Equip_Item_Info(EQUIP_SLOT::EQUIP_AMULET_1)->iItem_Index;
+
+	if (Get_Equip_Item_Info(EQUIP_SLOT::EQUIP_DEFENCE_FRAME) != nullptr)
+		iInput[2] = Get_Equip_Item_Info(EQUIP_SLOT::EQUIP_DEFENCE_FRAME)->vecDamege[0];
+
+	if (Get_Equip_Item_Info(EQUIP_SLOT::EQUIP_DEFENCE_CONVERTOR) != nullptr)
+		iInput[3] = Get_Equip_Item_Info(EQUIP_SLOT::EQUIP_DEFENCE_CONVERTOR)->vecDefence[0];
+	
+	if (Get_Equip_Item_Info(EQUIP_SLOT::EQUIP_DEFENCE_CARTRIGE) != nullptr)
+		iInput[4] = Get_Equip_Item_Info(EQUIP_SLOT::EQUIP_DEFENCE_CARTRIGE)->vecDefence[1];
+	
+	if (Get_Equip_Item_Info(EQUIP_SLOT::EQUIP_DEFENCE_RAINER) != nullptr)
+		iInput[5] = Get_Equip_Item_Info(EQUIP_SLOT::EQUIP_DEFENCE_RAINER)->vecDefence[2];
+
+	m_pDefence->Set_Defence_Info(iInput[0], iInput[1], iInput[2], iInput[3], iInput[4], iInput[5]);
 }
 
 HRESULT CItem_Manager::Initialize_Item()
@@ -935,6 +964,8 @@ HRESULT CItem_Manager::Initialize_Item()
 			EquipItem_Inven(INVEN_ARRAY_TYPE(stoi(iter[2])), EQUIP_SLOT(stoi(iter[0])), stoi(iter[3]));
 	}
 
+	m_pDefence = new DEFENCE_INFO;
+
 	m_iWeapon_Select = 0;
 
 	return S_OK;
@@ -971,6 +1002,8 @@ void CItem_Manager::Free()
 
 
 	m_LastFrame_UsingItem.clear();
+
+	Safe_Delete(m_pDefence);
 
 	Safe_Release(m_pGameInstance);
 }
