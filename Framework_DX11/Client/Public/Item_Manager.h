@@ -171,12 +171,17 @@ public:
 		ITEM_RESULT Input_Item(ITEM* pNew, _uint iCount)
 		{
 			if (pNew->bStack)
+			{
 				for (auto& iter : vecItemInfo)
 					if (iter->iItem_Index == pNew->iItem_Index)
 					{
 						iter->iCount += iCount;
 						return ITEM_RESULT::RESULT_SUCCESS;
 					}
+
+				pNew->iCount = iCount;
+			}
+				
 
 			if (iNextIndex >= Get_Array_Size())
 				Add_Array();
@@ -257,7 +262,7 @@ public:
 
 	// 플레이어 기능 구현
 	CPlayer::WEAPON_TYPE Get_Weapon_Model_Index(); // 현재 사용 중인 무기의 모델 번호 리턴
-	SPECIAL_ITEM Get_Item_Function(); // 이번 프레임에 기능 구현이 필요한 아이템을 사용했는지 확인
+	list<SPECIAL_ITEM>& Get_LastFrame_UsingItem_Info(); // 이번 프레임에 기능 구현이 필요한 아이템을 사용했는지 확인
 	void Set_Item_Funtion(_int iItem_Index);
 
 	// 접근, 수정
@@ -591,6 +596,7 @@ private:
 	_bool m_bIsChange = false;
 	_int m_iNow_Using = -1;
 
+	list<SPECIAL_ITEM> m_LastFrame_UsingItem;
 
 	// 아이템 액션 조작 
 	_bool m_bItemAction_Active = false;

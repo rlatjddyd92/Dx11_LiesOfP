@@ -15,6 +15,7 @@ void CItem_Manager::Update_Item(_float fDeltatime)
 {
 	m_bIsChange = false;
 	m_iNow_Using = -1;
+	m_LastFrame_UsingItem.clear();
 }
 
 ITEM_RESULT CItem_Manager::AddNewItem_Inven(_uint iItemIndex, _uint iCount)
@@ -304,72 +305,47 @@ CPlayer::WEAPON_TYPE CItem_Manager::Get_Weapon_Model_Index()
 
 	if (pItem == nullptr)
 		return CPlayer::WEAPON_TYPE::WEP_END;
-	else if (pItem->strName == TEXT("겨울의 레이피어 날"))
+	else if (pItem->iItem_Index == 1)
 		return CPlayer::WEAPON_TYPE::WEP_RAPIER;
-	else if (pItem->strName == TEXT("흑철 절삭기 날"))
+	else if (pItem->iItem_Index == 35)
 		return CPlayer::WEAPON_TYPE::WEP_FLAME;
-	else if (pItem->strName == TEXT("인간성의 증거"))
+	else if (pItem->iItem_Index == 56)
 		return CPlayer::WEAPON_TYPE::WEP_SCISSOR;
 
 	return CPlayer::WEAPON_TYPE::WEP_END;
 }
 
-SPECIAL_ITEM CItem_Manager::Get_Item_Function()
+list<SPECIAL_ITEM>& CItem_Manager::Get_LastFrame_UsingItem_Info()
 {
-	// 이건 하드코딩이 나을 듯 
-	if (m_iNow_Using == _int(SPECIAL_ITEM::SP_PULSE_BATTERY))
-		return SPECIAL_ITEM::SP_PULSE_BATTERY;
-	else if (m_iNow_Using == _int(SPECIAL_ITEM::SP_DUSTCAT))
-		return SPECIAL_ITEM::SP_DUSTCAT;
-	else if (m_iNow_Using == _int(SPECIAL_ITEM::SP_GRINDER))
-		return SPECIAL_ITEM::SP_GRINDER;
-	else if (m_iNow_Using == _int(SPECIAL_ITEM::SP_LAMP))
-		return SPECIAL_ITEM::SP_LAMP;
-	else if (m_iNow_Using == _int(SPECIAL_ITEM::SP_TELEPOT))
-		return SPECIAL_ITEM::SP_TELEPOT;
-	else if (m_iNow_Using == _int(SPECIAL_ITEM::SP_RESISTANCE))
-		return SPECIAL_ITEM::SP_RESISTANCE;
-	else if (m_iNow_Using == _int(SPECIAL_ITEM::SP_PURIFICATION))
-		return SPECIAL_ITEM::SP_PURIFICATION;
-	else if (m_iNow_Using == _int(SPECIAL_ITEM::SP_DEAD))
-		return SPECIAL_ITEM::SP_DEAD;
-	else if (m_iNow_Using == _int(SPECIAL_ITEM::SP_GRANADE))
-		return SPECIAL_ITEM::SP_GRANADE;
-	else if (m_iNow_Using == _int(SPECIAL_ITEM::SP_THERMITE))
-		return SPECIAL_ITEM::SP_THERMITE;
-	else if (m_iNow_Using == _int(SPECIAL_ITEM::SP_THROW_BATTERY))
-		return SPECIAL_ITEM::SP_THROW_BATTERY;
-	else
-		return SPECIAL_ITEM::SP_END;
+	return m_LastFrame_UsingItem;
 }
 
 void CItem_Manager::Set_Item_Funtion(_int iItem_Index)
 {
 	// 이건 하드코딩이 나을 듯 
 	if (iItem_Index == _int(SPECIAL_ITEM::SP_PULSE_BATTERY))
-		m_iNow_Using = _int(SPECIAL_ITEM::SP_PULSE_BATTERY);
+		m_LastFrame_UsingItem.push_back(SPECIAL_ITEM::SP_PULSE_BATTERY);
 	else if (iItem_Index == _int(SPECIAL_ITEM::SP_DUSTCAT))
-		m_iNow_Using = _int(SPECIAL_ITEM::SP_DUSTCAT);
+		m_LastFrame_UsingItem.push_back(SPECIAL_ITEM::SP_DUSTCAT);
 	else if (iItem_Index == _int(SPECIAL_ITEM::SP_GRINDER))
-		m_iNow_Using = _int(SPECIAL_ITEM::SP_GRINDER);
+		m_LastFrame_UsingItem.push_back(SPECIAL_ITEM::SP_GRINDER);
 	else if (iItem_Index == _int(SPECIAL_ITEM::SP_LAMP))
-		m_iNow_Using = _int(SPECIAL_ITEM::SP_LAMP);
+		m_LastFrame_UsingItem.push_back(SPECIAL_ITEM::SP_LAMP);
 	else if (iItem_Index == _int(SPECIAL_ITEM::SP_TELEPOT))
-		m_iNow_Using = _int(SPECIAL_ITEM::SP_TELEPOT);
+		m_LastFrame_UsingItem.push_back(SPECIAL_ITEM::SP_TELEPOT);
 	else if (iItem_Index == _int(SPECIAL_ITEM::SP_RESISTANCE))
-		m_iNow_Using = _int(SPECIAL_ITEM::SP_RESISTANCE);
+		m_LastFrame_UsingItem.push_back(SPECIAL_ITEM::SP_RESISTANCE);
 	else if (iItem_Index == _int(SPECIAL_ITEM::SP_PURIFICATION))
-		m_iNow_Using = _int(SPECIAL_ITEM::SP_PURIFICATION);
+		m_LastFrame_UsingItem.push_back(SPECIAL_ITEM::SP_PURIFICATION);
 	else if (iItem_Index == _int(SPECIAL_ITEM::SP_DEAD))
-		m_iNow_Using = _int(SPECIAL_ITEM::SP_DEAD);
+		m_LastFrame_UsingItem.push_back(SPECIAL_ITEM::SP_DEAD);
 	else if (iItem_Index == _int(SPECIAL_ITEM::SP_GRANADE))
-		m_iNow_Using = _int(SPECIAL_ITEM::SP_GRANADE);
+		m_LastFrame_UsingItem.push_back(SPECIAL_ITEM::SP_GRANADE);
 	else if (iItem_Index == _int(SPECIAL_ITEM::SP_THERMITE))
-		m_iNow_Using = _int(SPECIAL_ITEM::SP_THERMITE);
+		m_LastFrame_UsingItem.push_back(SPECIAL_ITEM::SP_THERMITE);
 	else if (iItem_Index == _int(SPECIAL_ITEM::SP_THROW_BATTERY))
-		m_iNow_Using = _int(SPECIAL_ITEM::SP_THROW_BATTERY);
-	else
-		m_iNow_Using = -1;
+		m_LastFrame_UsingItem.push_back(SPECIAL_ITEM::SP_THROW_BATTERY);
+
 }
 
 
@@ -966,6 +942,9 @@ void CItem_Manager::Free()
 	m_vecItem_InvenSlotIndex.clear();
 	m_vecArray_Inven.clear();
 	m_vecEquip_ItemInfo.clear();
+
+
+	m_LastFrame_UsingItem.clear();
 
 	Safe_Release(m_pGameInstance);
 }
