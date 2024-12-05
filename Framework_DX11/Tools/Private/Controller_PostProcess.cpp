@@ -33,6 +33,19 @@ void CCamera_Manager::Update_CameraSetting()
 	m_pGameInstance->Find_Camera(LEVEL_TOOL)->Set_Far(fCameraFar);
 }
 
+void CCamera_Manager::Update_PBR()
+{
+	_bool* pIsPBR = m_pGameInstance->Get_IsOnPBR();
+
+	static _bool isOnPBR = false;
+
+	ImGui::Checkbox("PBR Value", &isOnPBR);
+
+	*pIsPBR = isOnPBR;
+
+	
+}
+
 void CCamera_Manager::Update_SSAO()
 {
 	SSAO_DESC* tDesc = m_pGameInstance->Get_SSAODesc();

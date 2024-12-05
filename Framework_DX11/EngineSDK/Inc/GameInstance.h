@@ -104,7 +104,7 @@ public:
 	void			Set_DOFDesc(_bool bIsUsing);
 	void			Set_RadialDesc(_bool bIsUsing);
 
-	_bool			Get_IsOnPBR();
+	_bool*			Get_IsOnPBR();
 	void			Toggle_PBR();
 
 	_bool			Get_IsOnShadow();

@@ -440,7 +440,7 @@ void CGameInstance::Set_RadialDesc(_bool bIsUsing)
 {
 	m_pRenderer->Set_RadialDesc(bIsUsing);
 }
-_bool CGameInstance::Get_IsOnPBR()
+_bool* CGameInstance::Get_IsOnPBR()
 {
 	return m_pRenderer->Get_IsOnPBR();
 }
