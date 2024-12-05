@@ -30,38 +30,39 @@ void CState_SimonManusP2_Idle::Update(_float fTimeDelta)
     _float fDist = m_pMonster->Calc_Distance_XZ();
     if (m_fIdleEndDuration <= m_fIdleTime)
     {
-        if (m_fIdleTime >= m_fIdleEndDuration + 2.f)
+
+        m_pMonster->Change_State(CSimonManus::ATKP2_THUNDERCALLING);
+        return;
+
+        if (fDist <= 15.f && 9.f < fDist)
         {
-            if (fDist <= 15.f && 9.f < fDist)
+            //하이점프폴
+            if (m_iAtkCnt >= 3.f)
             {
-                //하이점프폴
-                if (m_iAtkCnt >= 3.f)
-                {
-                    m_pMonster->Change_State(CSimonManus::ATKP2_HIGHJUMPFALL);
-                    m_iAtkCnt = 0;
-                    return;
-                }
-                else    //스윙 점프
-                {
-                    m_pMonster->Change_State(CSimonManus::ATKP2_ROUTE_2);
-                    return;
-                }
-            }
-            else if (fDist <= 7.f)
-            {
-                Calc_Act_Attack(fDist);
+                m_pMonster->Change_State(CSimonManus::ATKP2_HIGHJUMPFALL);
+                m_iAtkCnt = 0;
                 return;
             }
-            else if (fDist > 9.f)
+            else    //스윙 점프
             {
-                m_pMonster->Change_State(CSimonManus::RUN);
+                m_pMonster->Change_State(CSimonManus::ATKP2_ROUTE_2);
                 return;
             }
-            else if (fDist > 6.f)
-            {
-                m_pMonster->Change_State(CSimonManus::WALK);
-                return;
-            }
+        }
+        else if (fDist <= 7.f)
+        {
+            Calc_Act_Attack(fDist);
+            return;
+        }
+        else if (fDist > 9.f)
+        {
+            m_pMonster->Change_State(CSimonManus::RUN);
+            return;
+        }
+        else if (fDist > 6.f)
+        {
+            m_pMonster->Change_State(CSimonManus::WALK);
+            return;
         }
         
 

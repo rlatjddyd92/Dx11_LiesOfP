@@ -33,7 +33,7 @@ HRESULT CAObj_ThunderCalling::Initialize(void* pArg)
     if (FAILED(Ready_Components()))
         return E_FAIL;
 
-    m_pCopyPlayerTransformCom = static_cast<CTransform*>(m_pGameInstance->Find_Component(LEVEL_GAMEPLAY, TEXT("Player"), g_strTransformTag));
+    m_pCopyPlayerTransformCom = static_cast<CTransform*>(m_pGameInstance->Find_Component(LEVEL_GAMEPLAY, TEXT("Layer_Player"), g_strTransformTag));
 
     m_fDamageAmount = 20.f;
 
@@ -45,6 +45,7 @@ HRESULT CAObj_ThunderCalling::Initialize(void* pArg)
 
     m_iThunderTime = 5.f;
 
+    m_pColliderCom->IsActive(true);
     return S_OK;
 }
 
@@ -64,6 +65,7 @@ void CAObj_ThunderCalling::Update(_float fTimeDelta)
             {
                 m_pEffect->Set_Loop(false);
                 m_fLifeTime = 0.f;
+                m_bEffectAlive = false;
             }
         }
     }
@@ -95,6 +97,8 @@ void CAObj_ThunderCalling::Update(_float fTimeDelta)
 void CAObj_ThunderCalling::Late_Update(_float fTimeDelta)
 {
     m_pEffect->Late_Update(fTimeDelta);
+    m_pGameInstance->Add_ColliderList(m_pColliderCom);
+    m_pGameInstance->Add_DebugObject(m_pColliderCom);
 }
 
 HRESULT CAObj_ThunderCalling::Render()
@@ -130,12 +134,24 @@ HRESULT CAObj_ThunderCalling::Ready_Components()
     if (FAILED(__super::Ready_Components()))
         return E_FAIL;
 
+    /* FOR.Com_Collider */
+    CBounding_Sphere::BOUNDING_SPHERE_DESC      ColliderDesc{};
+    ColliderDesc.vCenter = _float3(0.f, 0.f, 0.f);
+    ColliderDesc.fRadius = 1.f;
+
+    if (FAILED(__super::Add_Component(LEVEL_STATIC, TEXT("Prototype_Component_Collider_Sphere"),
+        TEXT("Com_Collider"), reinterpret_cast<CComponent**>(&m_pColliderCom), &ColliderDesc)))
+        return E_FAIL;
+    m_pColliderCom->Set_Owner(this);
+
     const _Matrix* pParetnMatrix = m_pTransformCom->Get_WorldMatrix_Ptr();
 
     m_pEffect = CEffect_Manager::Get_Instance()->Clone_Effect(TEXT("SimonManus_Attack_LightningCalling"), pParetnMatrix,
         nullptr, _Vec3(0.f, 0.f, 0.f), _Vec3(0.f, 0.f, 0.f), _Vec3(1.f, 1.f, 1.f));
 
     m_pEffect->Set_Loop(true);
+
+    m_pEffect->Reset_Effects();
 
     return S_OK;
 }
