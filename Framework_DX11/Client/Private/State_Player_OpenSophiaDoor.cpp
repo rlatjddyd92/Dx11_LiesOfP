@@ -33,6 +33,8 @@ HRESULT CState_Player_OpenSophiaDoor::Start_State(void* pArg)
 
     m_pPlayer->Disappear_Weapon();
 
+    m_pGameInstance->Play_BGM(TEXT("MU_MS_Monastery_B_Loop.wav"), 1.f);
+
     return S_OK;
 }
 
