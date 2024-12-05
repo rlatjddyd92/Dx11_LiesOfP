@@ -160,7 +160,7 @@ public:
 	HRESULT Load_EffectContainer();
 
 	HRESULT Load_Texture(const _wstring& strEffectPath);
-	HRESULT Load_Model();
+	HRESULT Load_Model(const _wstring& strEffectPath);
 	HRESULT Load_Shader();
 
 private:

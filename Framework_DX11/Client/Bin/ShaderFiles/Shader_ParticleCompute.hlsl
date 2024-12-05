@@ -71,6 +71,7 @@ void CS_SPREAD_MAIN(uint3 DTid : SV_DispatchThreadID)
         particle.vTranslation = mul(particle.vTranslation, WorldMatrix);
         particle.vRight = vWorldPivot;
         particle.vUp = float4(vOrbitAxis.x, vOrbitAxis.y, vOrbitAxis.z, 0.f);
+        particle.vUp = mul(particle.vUp, WorldMatrix);
     }
     
     float4 vDir = particle.vTranslation - particle.vRight;
@@ -133,6 +134,7 @@ void CS_SPREAD_MAIN(uint3 DTid : SV_DispatchThreadID)
         particle.vTranslation = mul(particle.vTranslation, WorldMatrix);
         particle.vRight = vWorldPivot;
         particle.vUp = float4(vOrbitAxis.x, vOrbitAxis.y, vOrbitAxis.z, 0.f);
+        particle.vUp = mul(particle.vUp, WorldMatrix);
         
         particle.vLook = particle.vTranslation - particle.vRight;
     }
@@ -157,6 +159,7 @@ void CS_MOVE_MAIN(uint3 DTid : SV_DispatchThreadID)
         particle.vTranslation = mul(particle.vTranslation, WorldMatrix);
         particle.vRight = vWorldPivot;
         particle.vUp = float4(vOrbitAxis.x, vOrbitAxis.y, vOrbitAxis.z, 0.f);
+        particle.vUp = mul(particle.vUp, WorldMatrix);
     }
     
     float4 vDir = vMoveDir;
@@ -220,6 +223,7 @@ void CS_MOVE_MAIN(uint3 DTid : SV_DispatchThreadID)
         particle.vTranslation = mul(particle.vTranslation, WorldMatrix);
         particle.vRight = vWorldPivot;
         particle.vUp = float4(vOrbitAxis.x, vOrbitAxis.y, vOrbitAxis.z, 0.f);
+        particle.vUp = mul(particle.vUp, WorldMatrix);
         
         particle.vLook = particle.vTranslation - particle.vRight;
     }
@@ -271,7 +275,9 @@ void CS_CONVERGE_MAIN(uint3 DTid : SV_DispatchThreadID)
     if (iState & STATE_ORBIT)
     {
         float4 vTargetDir = vWorldPivot - particle.vTranslation;
-        vRotateDir = float4(RotateByAxis(vTargetDir.xyz, vOrbitAxis, radians(fOrbitAngle) * fTimeDelta), 0.f);
+        float4 vWorldOrbit = mul(float4(vOrbitAxis.x, vOrbitAxis.y, vOrbitAxis.z, 0.f), WorldMatrix);
+        vRotateDir = float4(RotateByAxis(vTargetDir.xyz, (float3)vWorldOrbit, radians(fOrbitAngle) * fTimeDelta),
+        0.f);
         vRotateDir = vTargetDir - vRotateDir;
     }
     

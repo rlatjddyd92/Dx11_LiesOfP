@@ -787,7 +787,17 @@ technique11	DefaultTechnique
         GeometryShader = compile gs_5_0 GS_DIR_MAIN();
         PixelShader = compile ps_5_0 PS_POWERGUARD_MAIN();
     }
+    
+    pass PARTICLE_GLOW_RGBTOA   // 16
+    {
+        SetRasterizerState(RS_Default);
+        SetDepthStencilState(DSS_Default, 0);
+        SetBlendState(BS_Default, vector(0.f, 0.f, 0.f, 0.f), 0xffffffff);
 
+        VertexShader = compile vs_5_0 VS_MAIN();
+        GeometryShader = compile gs_5_0 GS_MAIN();
+        PixelShader = compile ps_5_0 PS_GLOW_RGBTOA_MAIN();
+    }
 }
 
 float2 Get_SpriteTexcoord(float2 vTexcoord, int iTexIndex)

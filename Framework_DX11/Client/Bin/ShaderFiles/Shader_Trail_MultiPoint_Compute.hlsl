@@ -117,6 +117,7 @@ void CS_SPREAD_MAIN(uint3 DTid : SV_DispatchThreadID)
             HeadParticle.vPreTranslation = HeadParticle.particle.vTranslation;
             HeadParticle.particle.vRight = vWorldPivot;
             HeadParticle.particle.vUp = float4(vOrbitAxis.x, vOrbitAxis.y, vOrbitAxis.z, 0.f);
+            HeadParticle.particle.vUp = mul(HeadParticle.particle.vUp, WorldMatrix);
         }
         
         float4 vDir = HeadParticle.particle.vTranslation - HeadParticle.particle.vRight;
@@ -186,6 +187,8 @@ void CS_SPREAD_MAIN(uint3 DTid : SV_DispatchThreadID)
             HeadParticle.particle.vLifeTime.y = 0.f;
             HeadParticle.particle.vRight = vWorldPivot;
             HeadParticle.particle.vUp = float4(vOrbitAxis.x, vOrbitAxis.y, vOrbitAxis.z, 0.f);
+            HeadParticle.particle.vUp = mul(HeadParticle.particle.vUp, WorldMatrix);
+
         }
         else if (HeadParticle.particle.vLifeTime.y < HeadParticle.particle.vLifeTime.x)
         {
@@ -289,6 +292,8 @@ void CS_MOVE_MAIN(uint3 DTid : SV_DispatchThreadID)
             HeadParticle.vPreTranslation = HeadParticle.particle.vTranslation;
             HeadParticle.particle.vRight = vWorldPivot;
             HeadParticle.particle.vUp = float4(vOrbitAxis.x, vOrbitAxis.y, vOrbitAxis.z, 0.f);
+            HeadParticle.particle.vUp = mul(HeadParticle.particle.vUp, WorldMatrix);
+
         }
     
         float4 vDir = vMoveDir;
@@ -358,6 +363,8 @@ void CS_MOVE_MAIN(uint3 DTid : SV_DispatchThreadID)
             HeadParticle.particle.vLifeTime.y = 0.f;
             HeadParticle.particle.vRight = vWorldPivot;
             HeadParticle.particle.vUp = float4(vOrbitAxis.x, vOrbitAxis.y, vOrbitAxis.z, 0.f);
+            HeadParticle.particle.vUp = mul(HeadParticle.particle.vUp, WorldMatrix);
+
         }
         else if (HeadParticle.particle.vLifeTime.y < HeadParticle.particle.vLifeTime.x)
         {
@@ -495,7 +502,8 @@ void CS_CONVERGE_MAIN(uint3 DTid : SV_DispatchThreadID)
         if (iState & STATE_ORBIT)
         {
             float4 vTargetDir = vWorldPivot - HeadParticle.particle.vTranslation;
-            vRotateDir = float4(RotateByAxis(vTargetDir.xyz, vOrbitAxis, radians(fOrbitAngle) * fTimeDelta), 0.f);
+            float4 vWorldOrbit = mul(float4(vOrbitAxis.x, vOrbitAxis.y, vOrbitAxis.z, 0.f), WorldMatrix);
+            vRotateDir = float4(RotateByAxis(vTargetDir.xyz, vWorldOrbit, radians(fOrbitAngle) * fTimeDelta), 0.f);
             vRotateDir = vTargetDir - vRotateDir;
         }
     
