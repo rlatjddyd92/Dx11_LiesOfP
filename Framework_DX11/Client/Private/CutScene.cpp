@@ -162,7 +162,7 @@ void CCutScene::Load_KeyFrame(CUTSCENE_KEYFRAME_DESC pDesc)
 	CUTSCENE_KEYFRAME_DESC* pNewDesc = new CUTSCENE_KEYFRAME_DESC;
 	*pNewDesc = pDesc;
 	pNewDesc->bActived = false;
-
+	
 	m_KeyFrames.push_back(pNewDesc);
 }
 
