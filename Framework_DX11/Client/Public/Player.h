@@ -276,9 +276,8 @@ private:
 	// 플레이어 스탯 구조체 변수 
 #pragma region PLAYER_STAT
 	STAT_INFO*			m_tPlayer_Stat = { nullptr };
-	STAT_INFO*			m_tPlayer_Stat_Adjust = { nullptr };
+	STAT_INFO*			m_tPlayer_Stat_Adjust = { nullptr };	// 
 	ABILITY_INFO*		m_tPlayer_Ability = { nullptr };
-	_bool				m_bInvenLock = { true };
 #pragma endregion
 
 private:
