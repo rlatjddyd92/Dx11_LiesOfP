@@ -731,13 +731,13 @@ _bool CPlayer::Calc_DamageGain(_float fAtkDmg, _Vec3 vHitPos, _uint iHitType, _u
 
 _bool CPlayer::Decrease_Stamina(_float fAmount)
 {
-	m_tPlayer_Stat->vGauge_Stamina.x -= fAmount;
-	if (m_tPlayer_Stat->vGauge_Stamina.x < 0.f)
+	m_tPlayer_Stat->vGauge_Stamina.x += m_tPlayer_Stat_Adjust->vGauge_Stamina.z - fAmount;
+	if (m_tPlayer_Stat->vGauge_Stamina.x + m_tPlayer_Stat_Adjust->vGauge_Stamina.x < 0.f)
 	{
 		m_tPlayer_Stat->vGauge_Stamina.x = 0.f;
 		return false;
 	}
-	m_tPlayer_Stat->vGauge_Stamina.y = m_tPlayer_Stat->vGauge_Stamina.x;
+	m_tPlayer_Stat->vGauge_Stamina.y = m_tPlayer_Stat->vGauge_Stamina.x + m_tPlayer_Stat_Adjust->vGauge_Stamina.z;
 
 	m_fStaminaRecoveryTime = 1.3f;	// 1.3f초 후에 회복
 
@@ -827,7 +827,7 @@ void CPlayer::Update_Stat(_float fTimeDelta)
 	}
 	else if (m_fStaminaRecoveryTime <= 0.f)
 	{
-		m_tPlayer_Stat->vGauge_Stamina.x = min(m_tPlayer_Stat->vGauge_Stamina.x + 10.f * fTimeDelta, m_tPlayer_Stat->vGauge_Stamina.z);
+		m_tPlayer_Stat->vGauge_Stamina.x = min(m_tPlayer_Stat->vGauge_Stamina.x + 30.f * fTimeDelta, m_tPlayer_Stat->vGauge_Stamina.z + m_tPlayer_Stat_Adjust->vGauge_Stamina.z);
 	}
 #pragma endregion
 
