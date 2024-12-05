@@ -142,6 +142,7 @@ void CTrail_Effect_TP::Reset()
 	m_DefaultDesc = m_InitDesc.DefaultDesc;
 	m_isActive = true;
 	m_fAlpha = 0.f;
+	m_fAccumulateTime = 0.f;
 }
 
 HRESULT CTrail_Effect_TP::Save(_wstring strFilePath)

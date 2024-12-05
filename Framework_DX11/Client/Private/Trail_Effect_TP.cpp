@@ -140,6 +140,7 @@ void CTrail_Effect_TP::Reset()
 	m_DefaultDesc = m_InitDesc;
 	m_isDead = false;
 	m_fAlpha = 0.f;
+	m_fAccumulateTime = 0.f;
 }
 
 

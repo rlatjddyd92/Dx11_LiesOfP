@@ -7,8 +7,8 @@ BEGIN(Client)
 
 class CPawn abstract : public CGameObject
 {
-public :
-	enum PAWN_SOUND_TYPE { PAWN_SOUND_VOICE, PAWN_SOUND_EFFECT1, PAWN_SOUND_EFFECT2, PAWN_SOUND_END };
+public:
+    enum PAWN_SOUND_TYPE { PAWN_SOUND_VOICE, PAWN_SOUND_EFFECT1, PAWN_SOUND_EFFECT2, PAWN_SOUND_END };
 
 public:
     struct PAWN_STATUS
@@ -35,16 +35,16 @@ protected:
     virtual ~CPawn() = default;
 
 public:
-    class CModel*           Get_Model() { return m_pModelCom; }
-    class CRigidBody*       Get_RigidBody() { return m_pRigidBodyCom; }
-    class CCollider*        Get_Collider() { return m_pColliderCom; }
-    class CFsm*             Get_Fsm() { return m_pFsmCom; }
-    class CNavigation*      Get_Navigation() { return m_pNavigationCom; }
+    class CModel* Get_Model() { return m_pModelCom; }
+    class CRigidBody* Get_RigidBody() { return m_pRigidBodyCom; }
+    class CCollider* Get_Collider() { return m_pColliderCom; }
+    class CFsm* Get_Fsm() { return m_pFsmCom; }
+    class CNavigation* Get_Navigation() { return m_pNavigationCom; }
 
-	class CSound*		Get_SoundCom(PAWN_SOUND_TYPE eType) { return m_pSoundCom[eType]; }
+    class CSound* Get_SoundCom(PAWN_SOUND_TYPE eType) { return m_pSoundCom[eType]; }
 
-	_float				Get_MoveSpeed() { return m_fMoveSpeed; }
-	void				Set_MoveSpeed(_float fSpeed) { m_fMoveSpeed = fSpeed; }
+    _float				Get_MoveSpeed() { return m_fMoveSpeed; }
+    void				Set_MoveSpeed(_float fSpeed) { m_fMoveSpeed = fSpeed; }
 
     void                Set_RimLightColor(_Vec4 vRimLight) { m_vRimLightColor = vRimLight; }
 
@@ -81,24 +81,26 @@ public:
     _float          Get_CurrentTrackEnd();
     _bool           Get_EndAnim(_int iAnimIndex, _bool bIsBoundary = false);
 
-	void		    Play_Sound(const PAWN_SOUND_TYPE eType, const TCHAR* pSoundKey, _bool isLoop = false);
-	void		    PlayRepeat_Sound(const PAWN_SOUND_TYPE eType, const TCHAR* pSoundKey);
+    void		    Play_Sound(const PAWN_SOUND_TYPE eType, const TCHAR* pSoundKey, _bool isLoop = false);
+    void		    PlayRepeat_Sound(const PAWN_SOUND_TYPE eType, const TCHAR* pSoundKey);
     void            Stop_Sound(const PAWN_SOUND_TYPE eType);
 
     void            Set_Respawn_Cell_Num(_int iNum) { m_iRespawn_Cell_Num = iNum; }
 
-	PAWN_STATUS*    Get_Status() { return &m_eStat; }
+    PAWN_STATUS* Get_Status() { return &m_eStat; }
 
     _int            Get_UFBIndex(_uint UFB_Type);
 
+    _Vec3            Calc_CenterPos();
+
 protected:
-	class CShader*		m_pShaderCom = { nullptr };
-	class CModel*		m_pModelCom = { nullptr };
-	class CNavigation*	m_pNavigationCom = { nullptr };
-	class CCollider*	m_pColliderCom = { nullptr };
-	class CFsm*			m_pFsmCom = { nullptr };
-	class CRigidBody*	m_pRigidBodyCom = { nullptr };
-	class CSound*		m_pSoundCom[PAWN_SOUND_END] = { nullptr, };
+    class CShader* m_pShaderCom = { nullptr };
+    class CModel* m_pModelCom = { nullptr };
+    class CNavigation* m_pNavigationCom = { nullptr };
+    class CCollider* m_pColliderCom = { nullptr };
+    class CFsm* m_pFsmCom = { nullptr };
+    class CRigidBody* m_pRigidBodyCom = { nullptr };
+    class CSound* m_pSoundCom[PAWN_SOUND_END] = { nullptr, };
 
     _bool            m_isGravity = { false };
 
@@ -107,9 +109,11 @@ protected:
     _float           m_fMoveSpeed = {};
     _float           m_fEmissiveMask = {};
 
+
     _Vec4            m_vRimLightColor = {};
 
     _Vec3            m_vVelocity = {};
+    _Vec3            m_vCenterOffset = {};
 
     HIT_TYPE        m_eHitType = {};
 

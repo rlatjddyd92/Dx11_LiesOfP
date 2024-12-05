@@ -670,7 +670,6 @@ void CPlayer::Active_Effect(const EFFECT_TYPE& eType, _bool isLoop)
 void CPlayer::DeActive_Effect(const EFFECT_TYPE& eType)
 {
 	m_Effects[eType]->Set_Loop(false);
-
 }
 
 
@@ -1295,6 +1294,8 @@ void CPlayer::Free()
 
 	for (auto& pEffect : m_Effects)
 	{
+		if(nullptr != pEffect)
+			pEffect->Set_Cloned(false);
 		Safe_Release(pEffect);
 	}
 	m_Effects.clear();

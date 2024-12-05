@@ -231,6 +231,9 @@ HRESULT CCarcassTail::Ready_Components()
 	RigidBodyDesc.fStaticFriction = 1.0f;
 	RigidBodyDesc.fDynamicFriction = 0.0f;
 	RigidBodyDesc.fRestituion = 0.0f;
+	RigidBodyDesc.PxLockFlags = PxRigidDynamicLockFlag::eLOCK_ANGULAR_X |
+		PxRigidDynamicLockFlag::eLOCK_ANGULAR_Y |
+		PxRigidDynamicLockFlag::eLOCK_ANGULAR_Z;
 
 	physX::GeometryCapsule CapsuleDesc;
 	CapsuleDesc.fHeight = 1.5f;

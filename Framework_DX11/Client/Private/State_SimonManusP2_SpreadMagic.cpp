@@ -75,11 +75,11 @@ void CState_SimonManusP2_SpreadMagic::Effect_Check(_double CurTrackPos)
             Desc.vDir.Normalize();
             m_pGameInstance->Add_CloneObject_ToLayer(LEVEL_GAMEPLAY, TEXT("Monster_Attack"), TEXT("Prototype_GameObject_BlackBall"), &Desc);
 
-            Desc.vDir = vMainDir + vRight * 0.6;
+            Desc.vDir = vMainDir + vRight * 0.6f;
             Desc.vDir.Normalize();
             m_pGameInstance->Add_CloneObject_ToLayer(LEVEL_GAMEPLAY, TEXT("Monster_Attack"), TEXT("Prototype_GameObject_BlackBall"), &Desc);
 
-            Desc.vDir = vMainDir + vRight * 0.2;
+            Desc.vDir = vMainDir + vRight * 0.2f;
             Desc.vDir.Normalize();
             m_pGameInstance->Add_CloneObject_ToLayer(LEVEL_GAMEPLAY, TEXT("Monster_Attack"), TEXT("Prototype_GameObject_BlackBall"), &Desc);
 
@@ -87,11 +87,11 @@ void CState_SimonManusP2_SpreadMagic::Effect_Check(_double CurTrackPos)
             Desc.vDir.Normalize();
             m_pGameInstance->Add_CloneObject_ToLayer(LEVEL_GAMEPLAY, TEXT("Monster_Attack"), TEXT("Prototype_GameObject_BlackBall"), &Desc);
 
-            Desc.vDir = vMainDir - vRight * 0.6;
+            Desc.vDir = vMainDir - vRight * 0.6f;
             Desc.vDir.Normalize();
             m_pGameInstance->Add_CloneObject_ToLayer(LEVEL_GAMEPLAY, TEXT("Monster_Attack"), TEXT("Prototype_GameObject_BlackBall"), &Desc);
 
-            Desc.vDir = vMainDir - vRight * 0.2;
+            Desc.vDir = vMainDir - vRight * 0.2f;
             Desc.vDir.Normalize();
             m_pGameInstance->Add_CloneObject_ToLayer(LEVEL_GAMEPLAY, TEXT("Monster_Attack"), TEXT("Prototype_GameObject_BlackBall"), &Desc);
 

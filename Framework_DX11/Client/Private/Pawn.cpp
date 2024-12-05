@@ -119,8 +119,6 @@ _bool CPawn::Calc_DamageGain(_float fAtkDmg, _Vec3 vHitPos, _uint iHitType, _uin
 	//
 	//}		//피해를 입는다면 true 반환, 
 
-	
-
 	m_eStat.fHp -= (fAtkDmg * ((100 - m_eStat.fDefence) / 100));
 	m_eStat.fAtkDmg = fAtkDmg;
 
@@ -243,6 +241,14 @@ void CPawn::Stop_Sound(const PAWN_SOUND_TYPE eType)
 _int CPawn::Get_UFBIndex(_uint UFB_Type)
 {
 	return m_pModelCom->Get_UFBIndices(UFB_Type);
+}
+
+_Vec3 CPawn::Calc_CenterPos()
+{
+	if (nullptr == m_pModelCom)
+		return m_pTransformCom->Get_State(CTransform::STATE_POSITION);
+
+	return m_pModelCom->Calc_CenterPos(m_pTransformCom->Get_WorldMatrix()) + m_vCenterOffset;
 }
 
 HRESULT CPawn::Bind_WorldViewProj()

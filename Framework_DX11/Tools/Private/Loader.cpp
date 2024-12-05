@@ -147,6 +147,10 @@ HRESULT CLoader::Loading()
 
 	LeaveCriticalSection(&m_CriticalSection_Main);
 
+	if (hr == E_FAIL)
+	{
+		MSG_BOX(TEXT("툴 원본에서 실패함"));
+	}
 
 	return hr;
 }
@@ -167,10 +171,12 @@ HRESULT CLoader::LoadingMapModel0()
 		hr = S_OK;
 	}
 
-	if (hr == E_FAIL)
-		MSG_BOX(TEXT("맵 로드0 에서 터짐"));
-
 	LeaveCriticalSection(&m_CriticalSection_Map0);
+
+	if (hr == E_FAIL)
+	{
+		MSG_BOX(TEXT("맵 로드0 에서 터짐"));
+	}
 
 	return hr;
 }
@@ -191,10 +197,11 @@ HRESULT CLoader::LoadingMapModel1()
 		hr = S_OK;
 	}
 
+	LeaveCriticalSection(&m_CriticalSection_Map1);
+
+
 	if (hr == E_FAIL)
 		MSG_BOX(TEXT("맵 로드1 에서 터짐"));
-
-	LeaveCriticalSection(&m_CriticalSection_Map1);
 
 	return hr;
 }
@@ -215,10 +222,11 @@ HRESULT CLoader::LoadingMonsterModel1()
 		hr = S_OK;
 	}
 
-	if (hr == E_FAIL)
-		MSG_BOX(TEXT("몬스터 로드0 에서 터짐"));
 
 	LeaveCriticalSection(&m_CriticalSection_Monster);
+
+	if (hr == E_FAIL)
+		MSG_BOX(TEXT("몬스터 로드0 에서 터짐"));
 
 	return hr;
 }

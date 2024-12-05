@@ -111,16 +111,27 @@ void CWeapon_Rapier::OnCollisionEnter(CGameObject* pOther)
 			CMonster* pMonster = dynamic_cast<CMonster*>(pOther);
 
 			m_DamagedObjects.push_back(pOther);
-			if (pOther->Calc_DamageGain(m_fDamageAmount * m_fDamageRatio))
+			if (pMonster->Calc_DamageGain(m_fDamageAmount * m_fDamageRatio))
 			{
 				_Vec3 vPlayerLook = (_Vec3)m_pPlayer->Get_Transform()->Get_State(CTransform::STATE_LOOK);
 				vPlayerLook.Normalize();
 
 				CEffect_Manager::Get_Instance()->Add_Effect_ToLayer(LEVEL_GAMEPLAY, TEXT("Player_Attack_Step_Normal"),
-					(_Vec3)pOther->Get_Transform()->Get_State(CTransform::STATE_POSITION), vPlayerLook);				
+					pMonster->Calc_CenterPos(), vPlayerLook);
 
 				CEffect_Manager::Get_Instance()->Add_Effect_ToLayer(LEVEL_GAMEPLAY, TEXT("Player_Attack_Blood"),
 					m_pParentMatrix, m_pSocketMatrix);
+
+				if (pMonster->Get_Status()->fHp > 0.f)
+				{
+					CEffect_Manager::Get_Instance()->Add_Effect_ToLayer(LEVEL_GAMEPLAY, TEXT("Monster_Impact"),
+						pMonster->Calc_CenterPos(), vPlayerLook);
+				}
+				else if (pMonster->Get_Status()->fHp <= 0.f)
+				{
+					CEffect_Manager::Get_Instance()->Add_Effect_ToLayer(LEVEL_GAMEPLAY, TEXT("Monster_Impact_Death"),
+						pMonster->Calc_CenterPos(), vPlayerLook);
+				}
 			}
 
 			Play_HitSound(pMonster->Get_HitType());
