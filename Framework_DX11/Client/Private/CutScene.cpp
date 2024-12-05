@@ -1,0 +1,165 @@
+#include "stdafx.h"
+#include "CutScene.h"
+#include "GameInstance.h"
+#include "GameInterface_Controller.h"
+#include "Camera.h"
+
+CCutScene::CCutScene(ID3D11Device* pDevice, ID3D11DeviceContext* pContext)
+	: CGameObject{ pDevice, pContext }
+{
+
+}
+
+CCutScene::CCutScene(const CCutScene& Prototype)
+	: CGameObject{ Prototype }
+{
+}
+
+HRESULT CCutScene::Initialize_Prototype()
+{
+	return S_OK;
+}
+
+HRESULT CCutScene::Initialize(void* pArg)
+{
+	m_isActive = false;
+	m_pCamera = m_pGameInstance->Find_Camera(LEVEL_TOOL);
+	return S_OK;
+}
+
+void CCutScene::Priority_Update(_float fTimeDelta)
+{
+}
+
+void CCutScene::Update(_float fTimeDelta)
+{
+	if (m_bPlay && m_fTrackPosition < m_fMaxFrame)
+	{
+		m_fTrackPosition += fTimeDelta;
+		Play_Keyframes(fTimeDelta);
+	}
+}
+
+void CCutScene::Late_Update(_float fTimeDelta)
+{
+}
+
+void CCutScene::Keyframe_Actived_Reset()
+{
+	if (m_KeyFrames.size() == 0)
+		return;
+
+	for (auto& iter : m_KeyFrames)
+	{
+		iter->bActived = false;
+	}
+}
+
+void CCutScene::Create_KeyFrame()
+{
+	CUTSCENE_KEYFRAME_DESC* pDesc = new CUTSCENE_KEYFRAME_DESC;
+	pDesc->fTrackPosition = m_fTrackPosition;
+
+	m_KeyFrames.push_back(pDesc);
+}
+
+void CCutScene::Play_Keyframes(_float fTimeDelta)
+{
+	if (m_KeyFrames.size() == 0)
+		return;
+
+	for (auto& iter : m_KeyFrames)
+	{
+		if (m_fTrackPosition >= iter->fTrackPosition && iter->bActived == false)
+		{
+			iter->bActived = true;
+
+			Active_Shader(iter);
+			Active_UI(iter);
+			Active_Camera(iter);
+		}
+	}
+}
+
+void CCutScene::Active_Shader(CUTSCENE_KEYFRAME_DESC* pCutSceneDesc)
+{
+	DOF_DESC* tDesc = m_pGameInstance->Get_DOFDesc();
+	if (nullptr == tDesc)
+		return;
+
+	tDesc->isOnDOF = pCutSceneDesc->ShaderDesc.bUseDof;
+	tDesc->fDOF = pCutSceneDesc->ShaderDesc.fDof;
+}
+
+void CCutScene::Active_UI(CUTSCENE_KEYFRAME_DESC* pCutSceneDesc)
+{
+	if (pCutSceneDesc->UI_DESC.bFadeOut)
+	{
+		GET_GAMEINTERFACE->Fade_Out(TEXT(""), TEXT(""), pCutSceneDesc->UI_DESC.fColor, pCutSceneDesc->UI_DESC.fTime);
+	}
+	if (pCutSceneDesc->UI_DESC.bFadeIn)
+	{
+		GET_GAMEINTERFACE->Fade_In(pCutSceneDesc->UI_DESC.fTime);
+	}
+}
+
+void CCutScene::Active_Camera(CUTSCENE_KEYFRAME_DESC* pCutSceneDesc)
+{
+	if (pCutSceneDesc->Camera_Desc.bTeleport)
+	{
+		m_pCamera->Get_Transform()->Set_WorldMatrix(pCutSceneDesc->Camera_Desc.mCameraWorlMatrix);
+	}
+	if (pCutSceneDesc->Camera_Desc.bTurn)
+	{
+		m_pCamera->Start_Turn(pCutSceneDesc->Camera_Desc.fTurn_Speed, pCutSceneDesc->Camera_Desc.vPitchTawRoll);
+	}
+	if (pCutSceneDesc->Camera_Desc.bZoomIn)
+	{
+		m_pCamera->ZoomIn(pCutSceneDesc->Camera_Desc.fFovy, pCutSceneDesc->Camera_Desc.fZoomDuration);
+	}
+	if (pCutSceneDesc->Camera_Desc.bZoomOut)
+	{
+		m_pCamera->ZoomOut(pCutSceneDesc->Camera_Desc.fZoomDuration);
+	}
+	if (pCutSceneDesc->Camera_Desc.bLerpMove)
+	{
+		m_pCamera->Start_MoveLerp(pCutSceneDesc->Camera_Desc.vTargetPos, pCutSceneDesc->Camera_Desc.fMoveSpeed);
+	}
+}
+
+CCutScene* CCutScene::Create(ID3D11Device* pDevice, ID3D11DeviceContext* pContext)
+{
+	CCutScene* pInstance = new CCutScene(pDevice, pContext);
+
+	if (FAILED(pInstance->Initialize_Prototype()))
+	{
+		MSG_BOX(TEXT("Failed to Created : CCutScene"));
+		Safe_Release(pInstance);
+	}
+
+	return pInstance;
+}
+
+CGameObject* CCutScene::Clone(void* pArg)
+{
+	CCutScene* pInstance = new CCutScene(*this);
+
+	if (FAILED(pInstance->Initialize(pArg)))
+	{
+		MSG_BOX(TEXT("Failed to Cloned : CMonster"));
+		Safe_Release(pInstance);
+	}
+
+	return pInstance;
+}
+
+void CCutScene::Free()
+{
+	__super::Free();
+
+	for (auto& iter : m_KeyFrames)
+	{
+		delete iter;
+		iter = nullptr;
+	}
+}

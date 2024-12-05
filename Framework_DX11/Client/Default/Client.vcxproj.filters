@@ -827,6 +827,9 @@
     <Filter Include="05.Fsm\Player\CutScene\Sophia\HandEnd">
       <UniqueIdentifier>{3e0a6a80-48c4-49d6-8260-d065316ea512}</UniqueIdentifier>
     </Filter>
+    <Filter Include="02.GameObjects\14.CutScene">
+      <UniqueIdentifier>{9c37d23a-9c1b-4b27-a4e0-a4b833b353e4}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Client.h">
@@ -1499,6 +1502,9 @@
     <ClInclude Include="..\Public\State_Player_SophiaWalk.h">
       <Filter>05.Fsm\Player\CutScene\Sophia\Walk</Filter>
     </ClInclude>
+    <ClInclude Include="..\Public\CutScene.h">
+      <Filter>02.GameObjects\14.CutScene</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Client.cpp">
@@ -2140,6 +2146,9 @@
     </ClCompile>
     <ClCompile Include="..\Private\State_Player_SophiaWalk.cpp">
       <Filter>05.Fsm\Player\CutScene\Sophia\Walk</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Private\CutScene.cpp">
+      <Filter>02.GameObjects\14.CutScene</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

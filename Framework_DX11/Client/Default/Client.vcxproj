@@ -180,6 +180,7 @@
     <ClInclude Include="..\Public\Camera_Manager.h" />
     <ClInclude Include="..\Public\CarcassBigA.h" />
     <ClInclude Include="..\Public\CarcassTail.h" />
+    <ClInclude Include="..\Public\CutScene.h" />
     <ClInclude Include="..\Public\Deco_Collider.h" />
     <ClInclude Include="..\Public\EffectObject.h" />
     <ClInclude Include="..\Public\FollowedEffect.h" />
@@ -402,6 +403,7 @@
     <ClCompile Include="..\Private\Camera_Manager.cpp" />
     <ClCompile Include="..\Private\CarcassBigA.cpp" />
     <ClCompile Include="..\Private\CarcassTail.cpp" />
+    <ClCompile Include="..\Private\CutScene.cpp" />
     <ClCompile Include="..\Private\Deco_Collider.cpp" />
     <ClCompile Include="..\Private\EffectObject.cpp" />
     <ClCompile Include="..\Private\FollowedEffect.cpp" />
