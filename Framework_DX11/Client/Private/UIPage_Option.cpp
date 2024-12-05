@@ -370,7 +370,7 @@ void CUIPage_Option::Update_Tab(_float fTimeDelta)
 		}
 
 		m_iNow_Tab = max(m_iNow_Tab, 0);
-		m_iNow_Tab = (_int)min(m_iNow_Tab, m_vecOption_TabInfo.size() - 1);
+		m_iNow_Tab = min(m_iNow_Tab, _int(m_vecOption_TabInfo.size() - 1));
 	}
 
 	m_vecPart[_int(PART_GROUP::OPTION_Tap_Mouse_Area)]->fPosition.x -= (m_vecPart[_int(PART_GROUP::OPTION_Tap_Mouse_Area)]->fSize.x * (m_vecOption_TabInfo.size()));
@@ -405,7 +405,11 @@ void CUIPage_Option::Update_Tab(_float fTimeDelta)
 	m_vecPart[_int(PART_GROUP::OPTION_Tap_Mouse_Area)]->fPosition.x -= (m_vecPart[_int(PART_GROUP::OPTION_Tap_Mouse_Area)]->fSize.x * (m_vecOption_TabInfo.size()));
 
 	if (iTab_Origin != m_iNow_Tab)
+	{
+		m_iDesc_Line = 0;
 		m_bChange_Tab = true;
+	}
+		
 }
 
 void CUIPage_Option::Action_Scroll(_float fTimeDelta)
@@ -494,8 +498,8 @@ void CUIPage_Option::Update_Line(_float fTimeDelta)
 					_Vec2 vPos = GET_GAMEINTERFACE->CheckMouse(m_vecPart[_int(PART_GROUP::OPTION_LINE_Area)]->fPosition, m_vecPart[_int(PART_GROUP::OPTION_LINE_Area)]->fSize);
 					if (vPos.x != -1.f)
 					{
-						Change_Focus_Mark_Destination(m_vecPart[_int(PART_GROUP::OPTION_LINE_Focus_Pos)]->fPosition);
 						bMouse = true;
+						m_iDesc_Line = iLineIndex;
 					}
 						
 				}
@@ -509,6 +513,9 @@ void CUIPage_Option::Update_Line(_float fTimeDelta)
 					if (i > _int(PART_GROUP::OPTION_LINE_Focus_Pos))
 						Input_Render_Info(*m_vecPart[i], SCROLL_AREA::SCROLL_OPTION);
 				}
+
+				if (bMouse)
+					Change_Focus_Mark_Destination(m_vecPart[_int(PART_GROUP::OPTION_LINE_Focus_Pos)]->fPosition);
 			}
 
 			if (bFuncion_Render)
@@ -879,7 +886,7 @@ void CUIPage_Option::Update_Dropbox_SelectBox(FUNCTION& NowFunction, _float fTim
 
 void CUIPage_Option::Update_Right_Side(_float fTimeDelta)
 {
-	m_vecPart[_int(PART_GROUP::OPTION_DESC_Text)]->strText = m_vecOption_TabInfo[m_iNow_Tab]->vecOption_Line[m_iNow_Line]->pFunction->strDescription;
+	m_vecPart[_int(PART_GROUP::OPTION_DESC_Text)]->strText = m_vecOption_TabInfo[m_iNow_Tab]->vecOption_Line[m_iDesc_Line]->pFunction->strDescription;
 
 	Input_Render_Info(*m_vecPart[_int(PART_GROUP::OPTION_DESC_Head)], SCROLL_AREA::SCROLL_NONE);
 	Input_Render_Info(*m_vecPart[_int(PART_GROUP::OPTION_DESC_Deco)], SCROLL_AREA::SCROLL_NONE);
@@ -900,13 +907,17 @@ void CUIPage_Option::Update_Focus_Highlight(_float fTimeDelta)
 
 	// Highlight
 	if (m_vecPart[_int(PART_GROUP::OPTION_Highlight_Line)]->bRender)
-		Input_Render_Info(*m_vecPart[_int(PART_GROUP::OPTION_Focus)], SCROLL_AREA::SCROLL_NONE);
+		Input_Render_Info(*m_vecPart[_int(PART_GROUP::OPTION_Highlight_Line)], SCROLL_AREA::SCROLL_NONE);
 }
 
 void CUIPage_Option::Change_Focus_Mark_Destination(_Vec2 vPos)
 {
 	if (m_vecPart[_int(PART_GROUP::OPTION_Focus)]->fAdjust_End != vPos)
 	{
+		_Vec2 vDirec = m_vecPart[_int(PART_GROUP::OPTION_Focus)]->fAdjust_End - m_vecPart[_int(PART_GROUP::OPTION_Focus)]->fAdjust_Start;
+		m_vecPart[_int(PART_GROUP::OPTION_Focus)]->fPosition = m_vecPart[_int(PART_GROUP::OPTION_Focus)]->fAdjust_Start;
+		m_vecPart[_int(PART_GROUP::OPTION_Focus)]->fPosition += vDirec * m_vecPart[_int(PART_GROUP::OPTION_Focus)]->fRatio;
+
 		m_vecPart[_int(PART_GROUP::OPTION_Focus)]->fAdjust_End = vPos;
 		m_vecPart[_int(PART_GROUP::OPTION_Focus)]->fAdjust_Start = m_vecPart[_int(PART_GROUP::OPTION_Focus)]->fPosition;
 		m_vecPart[_int(PART_GROUP::OPTION_Focus)]->fRatio = 0.f;

@@ -142,13 +142,13 @@ public:
 		GROUP_ST_NUM,
 
 		// ¾Æ¹Ä·¿
-		GROUP_AMULET_STATIC,
-		GROUP_AMULET_ITEM,
-		GROUP_AMULET_NAME,
-		GROUP_AMULET_DESC,
-
-		GROUP_DEFENCE_STATIC,
-		GROUP_DEFENCE_DATA,
+		GROUP_AMULET_DEFENCE_STATIC,
+		GROUP_AMULET_DEFENCE_ITEM,
+		GROUP_AMULET_DEFENCE_NAME,
+		GROUP_AMULET_STAT_ICON,
+		
+		GROUP_AMULET_DEFENCE_DESC,
+		GROUP_AMULET_DEFENCE_STAT,
 
 		GROUP_CTRL,
 
@@ -232,6 +232,8 @@ private:
 	void RU_Coin_Update(_float fTimeDelta);
 	void RD_Weapon_Update(_float fTimeDelta);
 
+	void STAT_Page_Update(_float fTimeDelta);
+
 	void Boss_Hp_Update(_float fTimeDelta);
 
 	void PlayInfo_Update(_float fTimeDelta);
@@ -275,8 +277,9 @@ private:
 	_float m_fBoss_Hp_Now = 0.f;
 	_float m_fBoss_Hp_Max = 0.f;
 
-
-
+	// ½ºÅÈÃ¢ 
+	_bool m_bStat_Open = true;
+	_Vec2 m_vStat_Open_Time = { 0.f,0.5f };
 
 private: // Å×½ºÆ® º¯¼ö
 	_bool m_bWeapon_Top = true;

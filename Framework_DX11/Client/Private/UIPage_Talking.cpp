@@ -158,6 +158,7 @@ void CUIPage_Talking::Next_Script()
 void CUIPage_Talking::OFF_Script()
 {
 	CloseAction();
+	GET_GAMEINTERFACE->UIPart_On();
 }
 
 void CUIPage_Talking::Show_Select_Script(_wstring strLeft, _wstring strRight, _float fTime)

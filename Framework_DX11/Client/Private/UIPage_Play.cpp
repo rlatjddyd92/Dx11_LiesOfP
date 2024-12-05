@@ -68,7 +68,7 @@ void CUIPage_Play::Late_Update(_float fTimeDelta)
 	LD_Arm_Update(fTimeDelta);
 	RU_Coin_Update(fTimeDelta);
 	RD_Weapon_Update(fTimeDelta);
-
+	STAT_Page_Update(fTimeDelta);
 
 	for (auto& iter : m_vec_Group_Ctrl)
 		__super::UpdatePart_ByControl(iter);
@@ -76,6 +76,7 @@ void CUIPage_Play::Late_Update(_float fTimeDelta)
 	Boss_Hp_Update(fTimeDelta);
 	__super::Late_Update(fTimeDelta);
 
+	
 
 
 	PlayInfo_Update(fTimeDelta);
@@ -134,6 +135,13 @@ HRESULT CUIPage_Play::Ready_UIPart_Group_Control()
 	m_iWeapon_Equip_0_Symbol = m_vecPart[m_vec_Group_Ctrl[_int(PART_GROUP::GROUP_WEAPON_EQUIP_NUM)]->PartIndexlist.front()]->iTexture_Index;
 
 	m_fNormal_Weapon_Fx_Alpha_Origin = m_vecPart[m_vec_Group_Ctrl[_int(PART_GROUP::GROUP_WEAPON_NORMAL_BACK_FX)]->PartIndexlist.front()]->fTextureColor.w;
+
+	__super::Get_Front_Part_In_Control(_int(PART_GROUP::GROUP_HP_NUM))->iParentPart_Index = -1;
+	__super::Get_Front_Part_In_Control(_int(PART_GROUP::GROUP_HP_NUM))->fAdjust = __super::Get_Front_Part_In_Control(_int(PART_GROUP::GROUP_HP_NUM))->fPosition - _Vec2{ 640,360 };
+
+
+	__super::Get_Front_Part_In_Control(_int(PART_GROUP::GROUP_ST_NUM))->iParentPart_Index = -1;
+	__super::Get_Front_Part_In_Control(_int(PART_GROUP::GROUP_ST_NUM))->fAdjust = __super::Get_Front_Part_In_Control(_int(PART_GROUP::GROUP_ST_NUM))->fPosition - _Vec2{ 640,360 };
 
 	return S_OK;
 }
@@ -205,6 +213,31 @@ void CUIPage_Play::Action_Potion_Tool(_float fTimeDelta)
 			GET_GAMEINTERFACE->Use_Bag_Slot(2);
 		if (KEY_TAP(KEY::NUM4))
 			GET_GAMEINTERFACE->Use_Bag_Slot(3);
+
+		if (KEY_HOLD(KEY::NUM1))
+		{
+			if (GET_GAMEINTERFACE->Get_Equip_Item_Info(EQUIP_SLOT::EQUIP_USING_BAG_0) != nullptr)
+				if (GET_GAMEINTERFACE->Get_Equip_Item_Info(EQUIP_SLOT::EQUIP_USING_BAG_0)->iItem_Index == _int(SPECIAL_ITEM::SP_GRINDER))
+					GET_GAMEINTERFACE->Use_Bag_Slot(0);
+		}
+		if (KEY_HOLD(KEY::NUM2))
+		{
+			if (GET_GAMEINTERFACE->Get_Equip_Item_Info(EQUIP_SLOT::EQUIP_USING_BAG_1) != nullptr)
+				if (GET_GAMEINTERFACE->Get_Equip_Item_Info(EQUIP_SLOT::EQUIP_USING_BAG_1)->iItem_Index == _int(SPECIAL_ITEM::SP_GRINDER))
+					GET_GAMEINTERFACE->Use_Bag_Slot(1);
+		}
+		if (KEY_HOLD(KEY::NUM3))
+		{
+			if (GET_GAMEINTERFACE->Get_Equip_Item_Info(EQUIP_SLOT::EQUIP_USING_BAG_2) != nullptr)
+				if (GET_GAMEINTERFACE->Get_Equip_Item_Info(EQUIP_SLOT::EQUIP_USING_BAG_2)->iItem_Index == _int(SPECIAL_ITEM::SP_GRINDER))
+					GET_GAMEINTERFACE->Use_Bag_Slot(2);
+		}
+		if (KEY_HOLD(KEY::NUM4))
+		{
+			if (GET_GAMEINTERFACE->Get_Equip_Item_Info(EQUIP_SLOT::EQUIP_USING_BAG_3) != nullptr)
+				if (GET_GAMEINTERFACE->Get_Equip_Item_Info(EQUIP_SLOT::EQUIP_USING_BAG_3)->iItem_Index == _int(SPECIAL_ITEM::SP_GRINDER))
+					GET_GAMEINTERFACE->Use_Bag_Slot(3);
+		}
 	}
 	else if (KEY_TAP(KEY::R))
 	{
@@ -212,6 +245,21 @@ void CUIPage_Play::Action_Potion_Tool(_float fTimeDelta)
 			GET_GAMEINTERFACE->Use_Potion_Slot();
 		else if ((!m_bIsBagOpen) && (m_vec_Group_Ctrl[_int(PART_GROUP::GROUP_SELECT_CELL)]->fRatio == 1.f))
 			GET_GAMEINTERFACE->Use_Tool_Slot();
+	}
+	else if (KEY_HOLD(KEY::R))
+	{
+		_int iPotion = GET_GAMEINTERFACE->Get_Potion_Select();
+		_int iTool = GET_GAMEINTERFACE->Get_Tool_Select();
+
+		if ((!m_bIsBagOpen) && (m_vec_Group_Ctrl[_int(PART_GROUP::GROUP_SELECT_CELL)]->fRatio == 0.f))
+			if (GET_GAMEINTERFACE->Get_Equip_Item_Info(EQUIP_SLOT(_int(EQUIP_SLOT::EQUIP_USING_TOP_0) + iPotion)) != nullptr)
+				if (GET_GAMEINTERFACE->Get_Equip_Item_Info(EQUIP_SLOT(_int(EQUIP_SLOT::EQUIP_USING_TOP_0) + iPotion))->iItem_Index == _int(SPECIAL_ITEM::SP_GRINDER))
+					GET_GAMEINTERFACE->Use_Potion_Slot();
+			
+		else if ((!m_bIsBagOpen) && (m_vec_Group_Ctrl[_int(PART_GROUP::GROUP_SELECT_CELL)]->fRatio == 1.f))
+					if (GET_GAMEINTERFACE->Get_Equip_Item_Info(EQUIP_SLOT(_int(EQUIP_SLOT::EQUIP_USING_BOTTOM_0) + iTool)) != nullptr)
+						if (GET_GAMEINTERFACE->Get_Equip_Item_Info(EQUIP_SLOT(_int(EQUIP_SLOT::EQUIP_USING_BOTTOM_0) + iTool))->iItem_Index == _int(SPECIAL_ITEM::SP_GRINDER))
+							GET_GAMEINTERFACE->Use_Tool_Slot();
 	}
 }
 
@@ -264,14 +312,15 @@ _bool CUIPage_Play::Action_InterAction(_wstring strInterName)
 void CUIPage_Play::LU_Gauge_Update(_float fTimeDelta)
 {
 	const CPlayer::STAT_INFO& Info = GET_GAMEINTERFACE->Get_Player()->Get_Player_Stat();
+	CPlayer::STAT_INFO* pAdjust = GET_GAMEINTERFACE->Get_Player()->Get_Player_Stat_Adjust();
 
-	m_vec_Group_Ctrl[_int(PART_GROUP::GROUP_HP_FRAME)]->fRatio = Info.vGauge_Hp.z / Info.vGauge_Hp.w;
+	m_vec_Group_Ctrl[_int(PART_GROUP::GROUP_HP_FRAME)]->fRatio = (Info.vGauge_Hp.z + pAdjust->vGauge_Hp.z) / Info.vGauge_Hp.w;
 	m_vec_Group_Ctrl[_int(PART_GROUP::GROUP_PLAYER_HP_SECOND)]->fRatio = Info.vGauge_Hp.y / Info.vGauge_Hp.w;
 	m_vec_Group_Ctrl[_int(PART_GROUP::GROUP_HP_FILL)]->fRatio = Info.vGauge_Hp.x / Info.vGauge_Hp.w;
 
-	m_vec_Group_Ctrl[_int(PART_GROUP::GROUP_ST_FRAME)]->fRatio = Info.vGauge_Stamina.z / Info.vGauge_Stamina.w;
+	m_vec_Group_Ctrl[_int(PART_GROUP::GROUP_ST_FRAME)]->fRatio = (Info.vGauge_Stamina.z + pAdjust->vGauge_Stamina.z)/ Info.vGauge_Stamina.w;
 	m_vec_Group_Ctrl[_int(PART_GROUP::GROUP_PLAYER_STAMINA_SECOND)]->fRatio = Info.vGauge_Stamina.y / Info.vGauge_Stamina.w;
-	m_vec_Group_Ctrl[_int(PART_GROUP::GROUP_ST_FILL)]->fRatio = Info.vGauge_Stamina.x / Info.vGauge_Stamina.w;
+	m_vec_Group_Ctrl[_int(PART_GROUP::GROUP_ST_FILL)]->fRatio = Info.vGauge_Stamina.x  / Info.vGauge_Stamina.w;
 
 	_int iSP_Cell_Num = (_int)((_float)Info.vGauge_Region.z / (_float)Info.fRegion_Interval);
 	_int iSP_Cell_Filled = (_int)((_float)Info.vGauge_Region.x / (_float)Info.fRegion_Interval);
@@ -300,6 +349,44 @@ void CUIPage_Play::LU_Gauge_Update(_float fTimeDelta)
 		else
 			m_vec_Group_Ctrl[_int(PART_GROUP::GROUP_SP0_FILL) + i]->fRatio = 0.f;
 	}
+
+	if (m_bStat_Open)
+	{
+		_wstring strHp{};
+		_wstring strSt{};
+
+		strHp += to_wstring(_int(Info.vGauge_Hp.x));
+		strHp += TEXT(" / ");
+		strHp += to_wstring(_int(Info.vGauge_Hp.z));
+
+		if (pAdjust->vGauge_Hp.z > 0.f)
+		{
+			strHp += TEXT(" (+");
+			strHp += to_wstring(_int(pAdjust->vGauge_Hp.z));
+			strHp += TEXT(")");
+		}
+
+		strSt += to_wstring(_int(Info.vGauge_Stamina.x));
+		strSt += TEXT(" / ");
+		strSt += to_wstring(_int(Info.vGauge_Stamina.z));
+
+		if (pAdjust->vGauge_Stamina.z > 0.f)
+		{
+			strSt += TEXT(" (+");
+			strSt += to_wstring(_int(pAdjust->vGauge_Stamina.z));
+			strSt += TEXT(")");
+		}
+
+
+
+		__super::Get_Front_Part_In_Control(_int(PART_GROUP::GROUP_HP_NUM))->strText = strHp;
+		__super::Get_Front_Part_In_Control(_int(PART_GROUP::GROUP_ST_NUM))->strText = strSt;
+		__super::Get_Front_Part_In_Control(_int(PART_GROUP::GROUP_HP_NUM))->bRender = true;
+		__super::Get_Front_Part_In_Control(_int(PART_GROUP::GROUP_ST_NUM))->bRender = true;
+	}
+
+	
+
 }
 
 void CUIPage_Play::LD_Potion_Tool_Update(_float fTimeDelta)
@@ -528,6 +615,186 @@ void CUIPage_Play::RD_Weapon_Update(_float fTimeDelta)
 	m_vec_Group_Ctrl[_int(PART_GROUP::GROUP_WEAPON_GAUGE_LEFT_CENTER_WHITE)]->bRender = false;
 	m_vec_Group_Ctrl[_int(PART_GROUP::GROUP_WEAPON_GAUGE_RIGHT_SIDE_WHITE)]->bRender = false;
 	m_vec_Group_Ctrl[_int(PART_GROUP::GROUP_WEAPON_GAUGE_RIGHT_CENTER_WHITE)]->bRender = false;
+}
+
+void CUIPage_Play::STAT_Page_Update(_float fTimeDelta)
+{
+	if (KEY_TAP(KEY::F3))
+	{
+		m_bStat_Open = !m_bStat_Open;
+	}
+
+	if ((m_bStat_Open) && (m_vStat_Open_Time.x < m_vStat_Open_Time.y))
+	{
+		m_vStat_Open_Time.x += fTimeDelta;
+		m_vStat_Open_Time.x = min(m_vStat_Open_Time.x, m_vStat_Open_Time.y);
+	}
+
+	if ((!m_bStat_Open) && (m_vStat_Open_Time.x > 0.f))
+	{
+		m_vStat_Open_Time.x -= fTimeDelta;
+		m_vStat_Open_Time.x = max(m_vStat_Open_Time.x, 0.f);
+	}
+
+	if (m_vStat_Open_Time.x == 0.f)
+		return;
+
+	vector<const CItem_Manager::ITEM*> vecItem;
+
+	for (_int i = _int(EQUIP_SLOT::EQUIP_AMULET_0); i <= _int(EQUIP_SLOT::EQUIP_DEFENCE_RAINER); ++i)
+	{
+		const CItem_Manager::ITEM* pNow = GET_GAMEINTERFACE->Get_Equip_Item_Info(EQUIP_SLOT(i));
+		vecItem.push_back(pNow);
+	}
+
+	m_vec_Group_Ctrl[_int(PART_GROUP::GROUP_AMULET_DEFENCE_STATIC)]->fRatio = m_vStat_Open_Time.x / m_vStat_Open_Time.y;
+
+	for (auto & iter : m_vec_Group_Ctrl[_int(PART_GROUP::GROUP_AMULET_DEFENCE_STATIC)]->PartIndexlist)
+	{
+		m_vecPart[iter]->bRender = true;
+	}
+
+	_int iIndex = 0;
+
+	for (auto& iter : m_vec_Group_Ctrl[_int(PART_GROUP::GROUP_AMULET_DEFENCE_ITEM)]->PartIndexlist)
+	{
+		if (vecItem[iIndex])
+		{
+			m_vecPart[iter]->bRender = true;
+			m_vecPart[iter]->iTexture_Index = vecItem[iIndex]->iTexture_Index;
+		}
+		else 
+			m_vecPart[iter]->bRender = false;
+
+		++iIndex;
+	}
+
+	iIndex = 0;
+
+	for (auto& iter : m_vec_Group_Ctrl[_int(PART_GROUP::GROUP_AMULET_DEFENCE_NAME)]->PartIndexlist)
+	{
+		if (vecItem[iIndex])
+		{
+			m_vecPart[iter]->bRender = true;
+			m_vecPart[iter]->strText = vecItem[iIndex]->strName;
+		}
+		else
+			m_vecPart[iter]->bRender = false;
+
+		++iIndex;
+	}
+
+	iIndex = 0;
+
+	for (auto& iter : m_vec_Group_Ctrl[_int(PART_GROUP::GROUP_AMULET_STAT_ICON)]->PartIndexlist)
+	{
+		if (vecItem[iIndex])
+		{
+			m_vecPart[iter]->bRender = true;
+		}
+		else
+			m_vecPart[iter]->bRender = false;
+
+		++iIndex;
+	}
+
+	iIndex = 0;
+
+	for (auto& iter : m_vec_Group_Ctrl[_int(PART_GROUP::GROUP_AMULET_DEFENCE_DESC)]->PartIndexlist)
+	{
+		if (vecItem[iIndex])
+		{
+			m_vecPart[iter]->bRender = true;
+			m_vecPart[iter]->strText = vecItem[iIndex]->strItem_Desc;
+		}
+		else
+			m_vecPart[iter]->bRender = false;
+
+		++iIndex;
+	}
+
+	iIndex = 0;
+
+	for (auto& iter : m_vec_Group_Ctrl[_int(PART_GROUP::GROUP_AMULET_DEFENCE_STAT)]->PartIndexlist)
+	{
+		m_vecPart[iter]->bRender = false;
+
+		if (vecItem[iIndex] == nullptr)
+		{
+			m_vecPart[iter]->bRender = false;
+		}
+		else if ((iIndex == 0) || (iIndex == 1))
+		{
+			if (vecItem[iIndex]->iItem_Index == 88)
+			{
+				m_vecPart[iter]->bRender = true;
+				m_vecPart[iter]->strText = TEXT("+ 200");
+			}
+			else if (vecItem[iIndex]->iItem_Index == 101)
+			{
+				m_vecPart[iter]->bRender = true;
+				m_vecPart[iter]->strText = TEXT("+ 200");
+			}
+			else if (vecItem[iIndex]->iItem_Index == 111)
+			{
+				m_vecPart[iter]->bRender = true;
+				m_vecPart[iter]->strText = TEXT("+ 10");
+			}
+			else if (vecItem[iIndex]->iItem_Index == 113)
+			{
+				m_vecPart[iter]->bRender = true;
+				m_vecPart[iter]->strText = TEXT("+ 30");
+			}
+		}
+		else if (iIndex == 2)
+		{
+		m_vecPart[iter]->bRender = true;
+				m_vecPart[iter]->strText = to_wstring(_int(vecItem[iIndex]->vecDamege[0]));
+		}
+		else if (iIndex == 3)
+		{
+			m_vecPart[iter]->bRender = true;
+			m_vecPart[iter]->strText = to_wstring(_int(vecItem[iIndex]->vecDefence[0]));
+		}
+		else if (iIndex == 4)
+		{
+			m_vecPart[iter]->bRender = true;
+			m_vecPart[iter]->strText = to_wstring(_int(vecItem[iIndex]->vecDefence[1]));
+		}
+		else if (iIndex == 5)
+		{
+			m_vecPart[iter]->bRender = true;
+			m_vecPart[iter]->strText = to_wstring(_int(vecItem[iIndex]->vecDefence[2]));
+		}
+		else
+			m_vecPart[iter]->strText = vecItem[iIndex]->strItem_Desc;
+		
+		++iIndex;
+	}
+
+	_int iStart = __super::Get_Front_PartIndex_In_Control(_int(PART_GROUP::GROUP_AMULET_DEFENCE_STATIC));
+	_int iEnd = m_vec_Group_Ctrl[_int(PART_GROUP::GROUP_AMULET_DEFENCE_STAT)]->PartIndexlist.back();
+		
+	for (_int i = iStart; i <= iEnd; ++i)
+	{
+		UpdatePart_ByIndex(i, fTimeDelta);
+
+		if (m_vecPart[i]->bRender)
+		{
+			_float TextOrigin = m_vecPart[i]->fTextColor.w;
+			_float TextureOrigin = m_vecPart[i]->fTextureColor.w;
+
+			m_vecPart[i]->fTextColor.w *= m_vStat_Open_Time.x / m_vStat_Open_Time.y;
+			m_vecPart[i]->fTextureColor.w *= m_vStat_Open_Time.x / m_vStat_Open_Time.y;
+
+			__super::Input_Render_Info(*m_vecPart[i]);
+
+			m_vecPart[i]->fTextColor.w = TextOrigin;
+			m_vecPart[i]->fTextureColor.w = TextureOrigin;
+		}
+	}
+
+	__super::Array_Control(_int(PART_GROUP::GROUP_AMULET_DEFENCE_STATIC), _int(PART_GROUP::GROUP_AMULET_DEFENCE_STAT), CTRL_COMMAND::COM_RENDER, false);
 }
 
 void CUIPage_Play::Boss_Hp_Update(_float fTimeDelta)

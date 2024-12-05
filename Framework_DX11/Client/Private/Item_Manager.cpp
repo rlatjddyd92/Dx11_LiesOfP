@@ -17,7 +17,12 @@ void CItem_Manager::Update_Item(_float fDeltatime)
 	m_iNow_Using = -1;
 	m_LastFrame_UsingItem.clear();
 
-
+	if ((!m_bSpec_Setting) && (GET_GAMEINTERFACE->Get_Player() != nullptr))
+	{
+		Adjust_Spec();
+		m_bSpec_Setting = false;
+	}
+		
 }
 
 ITEM_RESULT CItem_Manager::AddNewItem_Inven(_uint iItemIndex, _uint iCount)
@@ -800,31 +805,72 @@ ITEM_RESULT CItem_Manager::Operate_EquipAction(_Vec2 vPos, _Vec2 vSize)
 	return ITEM_RESULT();
 }
 
-void CItem_Manager::Update_Defence_info()
+void CItem_Manager::Adjust_Spec()
 {
-	m_pDefence->Reset_Defence_Info();
+	CPlayer::STAT_INFO* pAdjust = GET_GAMEINTERFACE->Get_Player()->Get_Player_Stat_Adjust();
+	CPlayer::ABILITY_INFO* pAbility = GET_GAMEINTERFACE->Get_Player()->Get_Player_Ability();
 
-	_int iInput[6] = { 0, };
+	_int iAmulet[2] = { 0, };
+	_float fDefence[4] = { 0.f, };
 
 	if (Get_Equip_Item_Info(EQUIP_SLOT::EQUIP_AMULET_0) != nullptr)
-		iInput[0] = (_int)Get_Equip_Item_Info(EQUIP_SLOT::EQUIP_AMULET_0)->iItem_Index;
+		iAmulet[0] = Get_Equip_Item_Info(EQUIP_SLOT::EQUIP_AMULET_0)->iItem_Index;
 
 	if (Get_Equip_Item_Info(EQUIP_SLOT::EQUIP_AMULET_1) != nullptr)
-		iInput[1] = (_int)Get_Equip_Item_Info(EQUIP_SLOT::EQUIP_AMULET_1)->iItem_Index;
+		iAmulet[1] = Get_Equip_Item_Info(EQUIP_SLOT::EQUIP_AMULET_1)->iItem_Index;
 
 	if (Get_Equip_Item_Info(EQUIP_SLOT::EQUIP_DEFENCE_FRAME) != nullptr)
-		iInput[2] = (_int)Get_Equip_Item_Info(EQUIP_SLOT::EQUIP_DEFENCE_FRAME)->vecDamege[0];
+		fDefence[0] = Get_Equip_Item_Info(EQUIP_SLOT::EQUIP_DEFENCE_FRAME)->vecDamege[0];
 
 	if (Get_Equip_Item_Info(EQUIP_SLOT::EQUIP_DEFENCE_CONVERTOR) != nullptr)
-		iInput[3] = (_int)Get_Equip_Item_Info(EQUIP_SLOT::EQUIP_DEFENCE_CONVERTOR)->vecDefence[0];
-	
-	if (Get_Equip_Item_Info(EQUIP_SLOT::EQUIP_DEFENCE_CARTRIGE) != nullptr)
-		iInput[4] = (_int)Get_Equip_Item_Info(EQUIP_SLOT::EQUIP_DEFENCE_CARTRIGE)->vecDefence[1];
-	
-	if (Get_Equip_Item_Info(EQUIP_SLOT::EQUIP_DEFENCE_RAINER) != nullptr)
-		iInput[5] = (_int)Get_Equip_Item_Info(EQUIP_SLOT::EQUIP_DEFENCE_RAINER)->vecDefence[2];
+		fDefence[1] = Get_Equip_Item_Info(EQUIP_SLOT::EQUIP_DEFENCE_CONVERTOR)->vecDefence[0];
 
-	m_pDefence->Set_Defence_Info(iInput[0], iInput[1], iInput[2], iInput[3], iInput[4], iInput[5]);
+	if (Get_Equip_Item_Info(EQUIP_SLOT::EQUIP_DEFENCE_CARTRIGE) != nullptr)
+		fDefence[2] = Get_Equip_Item_Info(EQUIP_SLOT::EQUIP_DEFENCE_CARTRIGE)->vecDefence[1];
+
+	if (Get_Equip_Item_Info(EQUIP_SLOT::EQUIP_DEFENCE_RAINER) != nullptr)
+		fDefence[3] = Get_Equip_Item_Info(EQUIP_SLOT::EQUIP_DEFENCE_RAINER)->vecDefence[2];
+
+	if ((iAmulet[0] == 87) || (iAmulet[1] == 87)) // ²ç¶Õ´Â Áõ¿ÀÀÇ ¾Æ¹Ä·¿ 
+		pAbility->bDebuff_Fire_Ignore = true;
+	else 
+		pAbility->bDebuff_Fire_Ignore = false;
+
+	if ((iAmulet[0] == 88) || (iAmulet[1] == 88))
+		pAdjust->vGauge_Stamina.z = 200.f;
+	else
+		pAdjust->vGauge_Stamina.z = 0.f;
+
+	if ((iAmulet[0] == 90) || (iAmulet[1] == 90))
+		pAbility->bDebuff_Electric_Ignore = true;
+	else
+		pAbility->bDebuff_Electric_Ignore = false;
+
+
+	if ((iAmulet[0] == 94) || (iAmulet[1] == 94))
+		pAbility->bDebuff_Acid_Ignore = true;
+	else
+		pAbility->bDebuff_Acid_Ignore = false;
+
+	if ((iAmulet[0] == 101) || (iAmulet[1] == 101))
+		pAdjust->vGauge_Hp.z = 200.f;
+	else
+		pAdjust->vGauge_Hp.z = 0.f;
+
+	if ((iAmulet[0] == 111) || (iAmulet[1] == 111))
+		pAbility->fHeal = 10.f;
+	else
+		pAbility->fHeal = 0.f;
+
+	if ((iAmulet[0] == 113) || (iAmulet[1] == 113))
+		pAdjust->iStat_Defence = 30;
+	else
+		pAdjust->iStat_Defence = 0;
+
+	pAdjust->iStat_Defence += _int(fDefence[0]);
+	pAbility->fResist_Fire = fDefence[1];
+	pAbility->bDebuff_Electric_Ignore = fDefence[2];
+	pAbility->bDebuff_Acid_Ignore = fDefence[3];
 }
 
 HRESULT CItem_Manager::Initialize_Item()
@@ -964,8 +1010,6 @@ HRESULT CItem_Manager::Initialize_Item()
 			EquipItem_Inven(INVEN_ARRAY_TYPE(stoi(iter[2])), EQUIP_SLOT(stoi(iter[0])), stoi(iter[3]));
 	}
 
-	m_pDefence = new DEFENCE_INFO;
-
 	m_iWeapon_Select = 0;
 
 	return S_OK;
@@ -1002,8 +1046,6 @@ void CItem_Manager::Free()
 
 
 	m_LastFrame_UsingItem.clear();
-
-	Safe_Delete(m_pDefence);
 
 	Safe_Release(m_pGameInstance);
 }

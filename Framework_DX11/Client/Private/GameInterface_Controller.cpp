@@ -78,7 +78,6 @@ void CGameInterface_Controller::Update_GameInterface(_float fTimeDelta)
 		m_pItem_Manager->Reset_ItemAction(); // 요청 사항 내용이 nullptr은 아니지만 비정상임(장비창, 인벤 둘 중 하나여야 함)-> 리셋 진행 
 
 	// 장비 착용 내용에 따라 장비 스펙 내용 갱신 
-	m_pItem_Manager->Update_Defence_info();
 }
 
 void CGameInterface_Controller::Release_GameInterface()

@@ -133,32 +133,21 @@ private:
 	// 
 
 	// 슬라이드 조정 
-	void Activate_Slide(_float fData_Size_Y);
-	void deActivate_Slide();
+
+
+
+
+
+
+
 	void Change_Data_Y_Size(_float fSize);
 	
 	void Action_Slide(_float fSize);
 	void Update_Slide(_float fSize);
 
 
-
-	_bool m_bSlide_Active = false;
-	_bool m_bSlide_Bar_Move = false; 
-
-	_float m_fSlide_Bar_Y_Max = 0.f; // 이니셜라이즈에서 적용 
-	_float m_fSlide_Bar_Y_Now = 0.f; // 현재 위치 
-
-	_float m_fSlide_Ratio = 0.f;
-
-	_float m_fData_Y_Min = 0.f; 
 	_float m_fData_Adjust_Y_Origin = 0.f;
-	_float m_fData_Y_Max = 0.f;
-	_float m_fData_Y_Now = 0.f;
-
-	_float m_fMouse_Y_Before = 0.f;
-
-	_bool m_bScroll_Setting = false;
-
+	
 	// Focus 조정 
 
 	void Reset_Focus() { m_vFocus_Pos = { -1.f,-1.f }; m_vFocus_Size = { -1.f,-1.f }; }
@@ -182,7 +171,7 @@ private:
 
 	_bool m_IsTab_Change = false;
 
-
+	SCROLL_INFO* m_pScroll = { nullptr };
 
 public:
 	static CUIPage_Inven* Create(ID3D11Device* pDevice, ID3D11DeviceContext* pContext);

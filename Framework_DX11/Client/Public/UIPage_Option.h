@@ -220,6 +220,8 @@ protected:
 
 	_Vec2 m_vOrigin_Focus_Dest = { 0.f,0.f };
 
+	_int m_iDesc_Line = 0;
+
 	// 종료 변수 
 	_float m_fExit_Time = -1.f;
 

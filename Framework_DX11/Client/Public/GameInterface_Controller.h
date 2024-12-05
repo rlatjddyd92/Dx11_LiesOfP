@@ -124,11 +124,15 @@ public: // 외부에서 매니저 접근
 
 	void Off_ItemInfo_UI() { m_pUIManager->Off_ItemInfo_UI(); }
 
+	void Show_Tooltip(INVEN_ARRAY_TYPE eType, _int iIndex) { m_pUIManager->Show_Tooltip(eType, iIndex); }
+	void Show_Tooltip(EQUIP_SLOT eSlot) { m_pUIManager->Show_Tooltip(eSlot); }
+
 	// UI 연출 
 	_bool Fade_Out(_wstring strTitle, _wstring strDesc, _Vec3 vColor = _Vec3{ 0.f,0.f,0.f }, _float fTime = 1.f) { return m_pUIManager->Fade_Out(strTitle, strDesc, vColor, fTime); }
-	_bool Fade_In(_float fTime = 1.f) { return m_pUIManager->Fade_In(fTime); }
+	_bool Fade_In(_float fTime = 1.f, _bool bIsUIOn = true) { return m_pUIManager->Fade_In(fTime, bIsUIOn); }
 	void Show_Script(_wstring strScript0, _wstring strScript1 = TEXT("none"), _float fTime = 1.f, _Vec3 vColor = _Vec3{ 0.f,0.f,0.f }) { m_pUIManager->Show_Script(strScript0, strScript1, fTime, vColor); }
 	_float Check_Fade() { return m_pUIManager->Check_Fade(); }
+	void UIPart_On() { m_pUIManager->UIPart_On(); }
 
 	// NPC 스크립트 
 	void Show_Script(NPC_SCRIPT eNPC, _int iScriptNum = -1) { m_pUIManager->Show_Script_Npc_Talking(eNPC, iScriptNum); }
@@ -146,7 +150,7 @@ public: // 외부에서 매니저 접근
 
 #pragma region Item_Manager
 	// 플레이어 참조용 
-	CItem_Manager::DEFENCE_INFO& Get_Defence_Info() { return m_pItem_Manager->Get_Defence_Info(); }
+	void Adjust_Spec() { m_pItem_Manager->Adjust_Spec(); }
 	CPlayer::WEAPON_TYPE Get_Weapon_Model_Index() { return m_pItem_Manager->Get_Weapon_Model_Index(); } // 현재 사용 중인 무기의 모델 번호 리턴
 	list<SPECIAL_ITEM>& Get_LastFrame_UsingItem_Info() { return m_pItem_Manager->Get_LastFrame_UsingItem_Info(); }
 	_bool Get_CanSwitch_Weapon() { return m_pItem_Manager->Get_CanSwitch_Weapon(); }
