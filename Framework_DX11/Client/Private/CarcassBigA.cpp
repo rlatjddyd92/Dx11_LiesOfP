@@ -190,7 +190,7 @@ HRESULT CCarcassBigA::Ready_Components()
 
 	ColliderOBBDesc_Obj.vAngles = _float3(0.0f, 0.0f, 0.0f);
 	ColliderOBBDesc_Obj.vCenter = _float3(0.2f, 0.f, 0.f);
-	ColliderOBBDesc_Obj.vExtents = _float3(0.7f, 0.35f, 0.35f);
+	ColliderOBBDesc_Obj.vExtents = _float3(0.8f, 0.45f, 0.45f);
 
 	CColliderObject::COLIDEROBJECT_DESC Desc{};
 
@@ -206,7 +206,7 @@ HRESULT CCarcassBigA::Ready_Components()
 	/* FOR.Com_Collider_OBB */
 	ColliderOBBDesc_Obj.vAngles = _float3(0.0f, 0.0f, 0.0f);
 	ColliderOBBDesc_Obj.vCenter = _float3(0.2f, 0.f, 0.f);
-	ColliderOBBDesc_Obj.vExtents = _float3(0.5f, 0.3f, 0.3f);
+	ColliderOBBDesc_Obj.vExtents = _float3(0.7f, 0.4f, 0.4f);
 	
 	Desc.pSocketBoneMatrix = m_pModelCom->Get_BoneCombindTransformationMatrix_Ptr(m_pModelCom->Get_UFBIndices(UFB_HAND_RIGHT));
 	
