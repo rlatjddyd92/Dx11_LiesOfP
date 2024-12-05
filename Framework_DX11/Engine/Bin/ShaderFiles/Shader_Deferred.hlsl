@@ -306,7 +306,7 @@ PS_OUT_LIGHT_POINT PS_MAIN_LIGHT_POINT_PBR(PS_IN In)
     {
         float3 vLookToCamera = (normalize(g_vCamPosition - vPosition)).xyz; // 월드 위치에서 카메라 방향
     
-        float cosLo = max(0.0, dot(vNormal, vLookToCamera));
+        float cosLo = max(0.0, dot(vNormal.xyz, vLookToCamera));
         //float3 Lr = 2.0 * cosLo * vNormal - vLookToCamera;
     
     

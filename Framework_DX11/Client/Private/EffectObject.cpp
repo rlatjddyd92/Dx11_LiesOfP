@@ -20,10 +20,10 @@ HRESULT CEffectObject::Initialize_Prototype()
 
 HRESULT CEffectObject::Initialize(void* pArg)
 {
-    if (FAILED(__super::Initialize(pArg)))
-    {
-        return S_OK;
-    }
+	if (FAILED(__super::Initialize(pArg)))
+		E_FAIL;
+
+	return S_OK;
 }
 
 void CEffectObject::Priority_Update(_float fTimeDelta)

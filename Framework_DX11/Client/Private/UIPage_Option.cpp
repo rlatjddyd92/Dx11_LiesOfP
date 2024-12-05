@@ -370,7 +370,7 @@ void CUIPage_Option::Update_Tab(_float fTimeDelta)
 		}
 
 		m_iNow_Tab = max(m_iNow_Tab, 0);
-		m_iNow_Tab = min(m_iNow_Tab, m_vecOption_TabInfo.size() - 1);
+		m_iNow_Tab = (_int)min(m_iNow_Tab, m_vecOption_TabInfo.size() - 1);
 	}
 
 	m_vecPart[_int(PART_GROUP::OPTION_Tap_Mouse_Area)]->fPosition.x -= (m_vecPart[_int(PART_GROUP::OPTION_Tap_Mouse_Area)]->fSize.x * (m_vecOption_TabInfo.size()));
@@ -874,7 +874,7 @@ void CUIPage_Option::Update_Dropbox_SelectBox(FUNCTION& NowFunction, _float fTim
 		m_vecPart[_int(PART_GROUP::OPTION_FUNC_Dropbox_Select_Area)]->fPosition.y += m_vecPart[_int(PART_GROUP::OPTION_FUNC_Dropbox_Select_Area)]->fSize.y;
 	}
 
-	*m_mapVariables_DropBox.find(NowFunction.iVariable_Key)->second = _float(NowFunction.iSelected_Num);
+	*m_mapVariables_DropBox.find(NowFunction.iVariable_Key)->second = _int(NowFunction.iSelected_Num);
 }
 
 void CUIPage_Option::Update_Right_Side(_float fTimeDelta)

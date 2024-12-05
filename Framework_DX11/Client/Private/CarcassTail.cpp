@@ -44,7 +44,6 @@ HRESULT CCarcassTail::Initialize_Prototype()
 HRESULT CCarcassTail::Initialize(void* pArg)
 {
 	OBJECT_DEFAULT_DESC* pDefaultDesc = static_cast<OBJECT_DEFAULT_DESC*>(pArg);
-	_float3		vPosition;
 
 	CGameObject::GAMEOBJECT_DESC		Desc{};
 	Desc.fSpeedPerSec = 1.5f;

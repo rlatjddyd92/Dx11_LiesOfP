@@ -52,8 +52,10 @@ _bool CWorldOctree_Manager::Is_In_FrustumCulledOctree(vector<_int>& pWorldOctree
 
 void CWorldOctree_Manager::Render()
 {
+#ifdef _DEBUG
 	if (m_pWorldOctree)
 		m_pWorldOctree->Render();
+#endif
 }
 
 CWorldOctree_Manager* CWorldOctree_Manager::Create(ID3D11Device* pDevice, ID3D11DeviceContext* pContext)

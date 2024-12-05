@@ -85,7 +85,10 @@ void CAObj_ThunderSpear::Late_Update(_float fTimeDelta)
     if (m_fLifeTime < m_fLifeDuration)
     {
         m_pGameInstance->Add_ColliderList(m_pColliderCom);
+#ifdef DEBUG
         m_pGameInstance->Add_DebugObject(m_pColliderCom);
+#endif // DEBUG
+
     }
 }
 
