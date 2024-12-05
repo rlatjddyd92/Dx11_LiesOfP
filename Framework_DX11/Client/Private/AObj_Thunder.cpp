@@ -33,7 +33,7 @@ HRESULT CAObj_Thunder::Initialize(void* pArg)
     if (FAILED(Ready_Components()))
         return E_FAIL;
 
-    m_fDamageAmount = 20.f;
+    m_fDamageAmount = 260.f;
     m_fLifeDuration = 0.4f;
     m_fAttackTime = 1.5f;
 
@@ -147,7 +147,7 @@ void CAObj_Thunder::OnCollisionEnter(CGameObject* pOther)
         if (!bOverlapCheck)
         {
             m_DamagedObjects.push_back(pOther);
-            pOther->Calc_DamageGain(m_fDamageAmount * m_fDamageRatio, _Vec3{}, HIT_TYPE::HIT_METAL, ATTACK_STRENGTH::ATK_NORMAL);
+            pOther->Calc_DamageGain(m_fDamageAmount * m_fDamageRatio, _Vec3{}, HIT_TYPE::HIT_ELECTRIC, ATTACK_STRENGTH::ATK_NORMAL);
         }
     }
 }

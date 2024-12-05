@@ -33,7 +33,7 @@ HRESULT CAObj_ChargeSwing::Initialize(void* pArg)
     if (FAILED(Ready_Components()))
         return E_FAIL;
 
-    m_fDamageAmount = 30.f;
+    m_fDamageAmount = 280.f;
     m_fLifeDuration = 0.6f;
 
     m_pColliderCom->IsActive(true);

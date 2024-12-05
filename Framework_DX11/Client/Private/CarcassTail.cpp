@@ -137,9 +137,9 @@ HRESULT CCarcassTail::Render()
 	return S_OK;
 }
 
-void CCarcassTail::Active_CurrentWeaponCollider(_float fDamageRatio, _uint iCollIndex)
+void CCarcassTail::Active_CurrentWeaponCollider(_float fDamageRatio, _uint iCollIndex, _uint iHitType, _uint iAtkStrength)
 {
-	m_pColliderObject[iCollIndex]->Active_Collider(fDamageRatio);
+	m_pColliderObject[iCollIndex]->Active_Collider(fDamageRatio, iCollIndex, iHitType, iAtkStrength);
 }
 
 void CCarcassTail::DeActive_CurretnWeaponCollider(_uint iCollIndex)
@@ -182,7 +182,7 @@ HRESULT CCarcassTail::Ready_Components()
 	Desc.pSocketBoneMatrix = m_pModelCom->Get_BoneCombindTransformationMatrix_Ptr(m_pModelCom->Get_UFBIndices(UFB_HAND_LEFT));
 	Desc.pParentWorldMatrix = m_pTransformCom->Get_WorldMatrix_Ptr();
 	Desc.pSocketBoneMatrix2 = m_pTransformCom->Get_WorldMatrix_Ptr();
-	Desc.fDamageAmount = 2.f;
+	Desc.fDamageAmount = 120.f;
 
 	m_pColliderObject[TYPE_LEFTHAND] = dynamic_cast<CColliderObject*>(m_pGameInstance->Clone_GameObject(TEXT("Prototype_GameObject_ColliderObj"), &Desc));
 
@@ -201,7 +201,7 @@ HRESULT CCarcassTail::Ready_Components()
 	ColliderOBBDesc_Obj.vAngles = _float3(0.f, 0.f, 0.f);
 
 	Desc.pSocketBoneMatrix = m_pModelCom->Get_BoneCombindTransformationMatrix_Ptr(m_pModelCom->Get_UFBIndices(UFB_WEAPON));
-	Desc.fDamageAmount = 3.f;
+	Desc.fDamageAmount = 120.f;
 
 	m_pColliderObject[TYPE_TAIL] = dynamic_cast<CColliderObject*>(m_pGameInstance->Clone_GameObject(TEXT("Prototype_GameObject_ColliderObj"), &Desc));
 
@@ -211,7 +211,7 @@ HRESULT CCarcassTail::Ready_Components()
 	ColliderOBBDesc_Obj.vAngles = _float3(0.f, 0.f, 0.f);
 
 	Desc.pSocketBoneMatrix = m_pModelCom->Get_BoneCombindTransformationMatrix_Ptr(8);
-	Desc.fDamageAmount = 3.f;
+	Desc.fDamageAmount = 120.f;
 
 	m_pColliderObject[TYPE_IMPACT] = dynamic_cast<CColliderObject*>(m_pGameInstance->Clone_GameObject(TEXT("Prototype_GameObject_ColliderObj"), &Desc));
 

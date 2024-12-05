@@ -46,7 +46,7 @@ public:
 	void		Look_Player();
 	_float		Calc_Distance_XZ();
 
-	virtual void	Active_CurrentWeaponCollider(_float fDamageRatio, _uint iCollIndex = 0);
+	virtual void	Active_CurrentWeaponCollider(_float fDamageRatio, _uint iCollIndex = 0, _uint iHitType = 0, _uint iAtkStrength = 0);
 	virtual void	DeActive_CurretnWeaponCollider(_uint iCollIndex = 0);
 
 	void		Set_RimLightColor(_Vec4 vColor) { m_vRimLightColor = vColor; }

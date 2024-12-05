@@ -143,7 +143,8 @@ void CState_SimonManusP2_Idle::Calc_Act_Attack(_float fDist)
             break;
 
         case 5:
-            m_pMonster->Change_State(CSimonManus::ATKP2_LIGHTNINGTOWAVE);
+            m_pMonster->Change_State(CSimonManus::ATKP2_SWIPMULTIPLE);
+            //m_pMonster->Change_State(CSimonManus::ATKP2_LIGHTNINGTOWAVE);
             break;
 
         case 6:

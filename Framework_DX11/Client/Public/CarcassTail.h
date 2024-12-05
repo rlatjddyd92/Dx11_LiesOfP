@@ -44,7 +44,7 @@ private:
 	_bool					m_bColliderCtrs[TYPE_END] = { true,  true, true };
 
 private:
-	virtual void	Active_CurrentWeaponCollider(_float fDamageRatio, _uint iCollIndex = 0);
+	virtual void	Active_CurrentWeaponCollider(_float fDamageRatio, _uint iCollIndex = 0, _uint iHitType = 0, _uint iAtkStrength = 0);
 	virtual void	DeActive_CurretnWeaponCollider(_uint iCollIndex = 0);
 
 	virtual _bool		Get_EffectsLoop(const _uint eType) { return false; };

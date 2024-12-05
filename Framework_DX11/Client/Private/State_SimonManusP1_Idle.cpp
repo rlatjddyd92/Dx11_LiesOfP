@@ -40,7 +40,6 @@ void CState_SimonManusP1_Idle::Update(_float fTimeDelta)
     _float fDist = m_pMonster->Calc_Distance_XZ();
     if (m_fIdleEndDuration <= m_fIdleTime)
     {
-        
         if (fDist >= 30.f)
         {
             return;

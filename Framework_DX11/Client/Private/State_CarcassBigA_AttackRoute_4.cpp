@@ -102,7 +102,7 @@ void CState_CarcassBigA_AttackRoute_4::Collider_Check()
     {
         if (CurTrackPos >= 55.f && CurTrackPos <= 140.f)
         {
-            m_pMonster->Active_CurrentWeaponCollider(1, 2);
+            m_pMonster->Active_CurrentWeaponCollider(1.4, 2, HIT_TYPE::HIT_CARCASS, ATTACK_STRENGTH::ATK_NORMAL);
         }
         else
         {
@@ -113,7 +113,7 @@ void CState_CarcassBigA_AttackRoute_4::Collider_Check()
     {
         if (CurTrackPos >= 90.f && CurTrackPos <= 105.f)
         {
-            m_pMonster->Active_CurrentWeaponCollider(1, 1);
+            m_pMonster->Active_CurrentWeaponCollider(1, 1, HIT_TYPE::HIT_CARCASS, ATTACK_STRENGTH::ATK_WEAK);
         }
         else
         {
