@@ -30,6 +30,7 @@
 #include "AObj_ThunderCalling.h"
 #include "AObj_LightningSpear.h"
 #include "AObj_LightningBall.h"
+#include "AObj_BlackBall.h"
 #pragma endregion
 
 #pragma region EFFECT
@@ -1000,6 +1001,9 @@ HRESULT CLoader::Ready_Prototype()
 		return E_FAIL;
 	if (FAILED(m_pGameInstance->Add_Prototype(TEXT("Prototype_GameObject_LightningSpear"),
 		CAObj_LightningSpear::Create(m_pDevice, m_pContext))))
+		return E_FAIL;
+	if (FAILED(m_pGameInstance->Add_Prototype(TEXT("Prototype_GameObject_BlackBall"),
+		CAObj_BlackBall::Create(m_pDevice, m_pContext))))
 		return E_FAIL;
 
 

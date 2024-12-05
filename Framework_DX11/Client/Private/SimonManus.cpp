@@ -264,7 +264,7 @@ void CSimonManus::DeActive_Effect(const _uint eType)
 
 _bool CSimonManus::Get_EffectsLoop(const _uint eType)
 {
-	return m_Effects[eType]->Get_Active();
+	return m_Effects[eType]->Get_Dead();
 }
 
 void CSimonManus::Reset_WeaponOverlapCheck(_uint iCollIndex)

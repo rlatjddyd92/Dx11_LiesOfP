@@ -62,6 +62,7 @@ CEffect_Container* CEffect_Manager::Clone_Effect(const _wstring& strECTag, const
     CEffect_Container* pContainer = Find_PoolingEffect(strECTag, &desc);
 
     pContainer->Set_Loop(false);
+    pContainer->Set_Dead(true);
 
     return pContainer;
 }

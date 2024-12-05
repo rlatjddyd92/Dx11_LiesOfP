@@ -33,6 +33,8 @@ HRESULT CFollowedEffect::Initialize(void* pArg)
 	FOLLOWEFFOBJ_DESC* pDesc = static_cast<FOLLOWEFFOBJ_DESC*>(pArg);
 	m_pTransformCom->Set_State(CTransform::STATE_POSITION, pDesc->vPos);
 
+	m_isLoop = (pDesc->bLoopCheck);
+
 	if (pDesc->vDir.Length() > 0)
 	{
 		m_pTransformCom->LookAt_Dir(_Vec4{ pDesc->vDir });
@@ -41,7 +43,14 @@ HRESULT CFollowedEffect::Initialize(void* pArg)
 	if (FAILED(Ready_Components(pDesc->strEffectTag)))
 		return E_FAIL;
 
-	m_pEffect->Set_Loop(true);
+	if (m_isLoop)
+	{
+		m_pEffect->Set_Loop(true);
+	}
+	else
+	{
+		m_pEffect->Reset_Effects();
+	}
 
 	if (pDesc->pParentWorldMat == nullptr)
 		return E_FAIL;
@@ -66,13 +75,24 @@ void CFollowedEffect::Update(_float fTimeDelta)
 
 	if (m_fLifeTime >= m_fLifeDuration)
 	{
-		if (m_pEffect->Get_Active())
+		if (m_isLoop)
 		{
-			m_pEffect->Set_Loop(false);
+			if (!m_bEndCheck)
+			{
+				m_pEffect->Set_Loop(false);
+				m_bEndCheck = true;
+			}
+			else if (m_pEffect->Get_Dead())
+			{
+				m_isDead = true;
+			}
 		}
-		else if (m_pEffect->Get_Dead())
+		else
 		{
-			m_isDead = true;
+			if (m_pEffect->Get_Dead())
+			{
+				m_isDead = true;
+			}
 		}
 	}
 	else

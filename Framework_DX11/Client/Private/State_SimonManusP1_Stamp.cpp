@@ -163,6 +163,7 @@ void CState_SimonManusP1_Stamp::Effect_Check(_double CurTrackPos)
                 Desc.fLifeDuration = 1.5f;
                 Desc.strEffectTag = TEXT("SimonManus_Attack_Stamp");
                 _float4x4 WorldMat{};
+                Desc.bLoopCheck = true;
 
                 XMStoreFloat4x4(&WorldMat, (*m_pMonster->Get_WeaponBoneCombinedMat(6) * (*m_pMonster->Get_WeaponWorldMat())));
                 Desc.vPos = _Vec3{ WorldMat._41, WorldMat._42, WorldMat._43 };
@@ -195,6 +196,7 @@ void CState_SimonManusP1_Stamp::Effect_Check(_double CurTrackPos)
             {
                 CFollowedEffect::FOLLOWEFFOBJ_DESC Desc{};
                 Desc.fLifeDuration = 1.5f;
+                Desc.bLoopCheck = true;
                 Desc.strEffectTag = TEXT("SimonManus_Attack_ChargeStamp");
                 _float4x4 WorldMat{};
 

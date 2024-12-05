@@ -43,11 +43,10 @@ HRESULT CAObj_LightningBall::Initialize(void* pArg)
 
     m_fLifeTime = 0.f;
 
-    m_fUpperTime = 2.f;
-    m_iThunderTime = 5.f;
-    m_fChangeTime = 1.f;
+    m_fThunderTime = 0.3f;
+    m_fChangeTime = 3.f;
 
-    m_fUpSpeed = 0.05f;
+    m_fUpSpeed = 0.25f;
     m_vUp = _Vec3{0, 1, 0};
 
     return S_OK;
@@ -55,7 +54,12 @@ HRESULT CAObj_LightningBall::Initialize(void* pArg)
 
 void CAObj_LightningBall::Priority_Update(_float fTimeDelta)
 {
-    m_pEffect->Priority_Update(fTimeDelta);
+    for (auto& pEffect : m_pEffects)
+    {
+        if (!pEffect->Get_Dead())
+            pEffect->Priority_Update(fTimeDelta);
+    }
+
 }
 
 void CAObj_LightningBall::Update(_float fTimeDelta)
@@ -63,73 +67,78 @@ void CAObj_LightningBall::Update(_float fTimeDelta)
     m_fLifeTime += fTimeDelta;
     if (m_bEffectAlive)
     {
-        if (m_fLifeTime >= m_fUpperTime)
+        _Vec3 vPos = { m_pTransformCom->Get_State(CTransform::STATE_POSITION) };
+        m_pTransformCom->Set_State(CTransform::STATE_POSITION, vPos + m_vUp * m_fUpSpeed * fTimeDelta);
+        if (!m_bChangeState)//이펙트 변환
         {
-            if (m_pEffect->Get_Active())
+            if (m_fLifeTime >= m_fChangeTime)
             {
-                m_fLifeTime = 0.f;
-                
-                m_pEffect->Set_Dead(true);
-                const _Matrix* pParetnMatrix = m_pTransformCom->Get_WorldMatrix_Ptr();
-                m_pEffect = CEffect_Manager::Get_Instance()->Clone_Effect(TEXT("SimonManus_Attack_BlackBall_Big"), pParetnMatrix,
-                    nullptr, _Vec3(0.f, 0.f, 0.f), _Vec3(0.f, 0.f, 0.f), _Vec3(1.f, 1.f, 1.f));
-
-                m_pEffect->Set_Loop(true);
-
+                m_pEffects[STATE_MIDDLE]->Reset_Effects();
+                m_pEffects[STATE_LAST]->Set_Loop(true);
                 m_bChangeState = true;
-
                 m_bEffectAlive = false;
-            }
-        }
-        else
-        {
-            _Vec3 vPos = { m_pTransformCom->Get_State(CTransform::STATE_POSITION) };
-            m_pTransformCom->Set_State(CTransform::STATE_POSITION, vPos + m_vUp * m_fUpSpeed);
-            if (!m_bChangeState)//이펙트 변환
-            {
-                if (m_fLifeTime >= m_fChangeTime)
-                {
-                    m_pEffect->Set_Dead(true);
-                    const _Matrix* pParetnMatrix = m_pTransformCom->Get_WorldMatrix_Ptr();
-                    m_pEffect = CEffect_Manager::Get_Instance()->Clone_Effect(TEXT("SimonManus_Attack_BlackBall_Explosion"), pParetnMatrix,
-                        nullptr, _Vec3(0.f, 0.f, 0.f), _Vec3(0.f, 0.f, 0.f), _Vec3(1.f, 1.f, 1.f));
-
-                    m_pEffect->Reset_Effects();
-                    m_bChangeState = true;
-                }
+                m_fLifeTime = 0.f;
             }
         }
     }
     else
     {
-        if (m_fLifeTime >= m_iThunderTime)
+        if (!m_bEnd)
         {
-            //번개 오브젝트 생t성Prototype_GameObject_ThunderCalling
-            //m_pCopyPlayerTransformCom->Get_State(CTransform::STATE_POSITION);
+            if (m_fLifeTime >= m_fThunderTime)
+            {
+                //번개 오브젝트 생t성Prototype_GameObject_ThunderCalling
+                //m_pCopyPlayerTransformCom->Get_State(CTransform::STATE_POSITION);
 
-            CAttackObject::ATKOBJ_DESC Desc{};
-            Desc.vPos = _Vec3{ m_pTransformCom->Get_State(CTransform::STATE_POSITION) };
-            Desc.vDir = _Vec3{ m_pCopyPlayerTransformCom->Get_State(CTransform::STATE_POSITION) } - Desc.vPos;
-            Desc.vDir.Normalize();
+                CAttackObject::ATKOBJ_DESC Desc{};
+                Desc.vPos = _Vec3{ m_pTransformCom->Get_State(CTransform::STATE_POSITION) };
+                Desc.vDir = _Vec3{ m_pCopyPlayerTransformCom->Get_State(CTransform::STATE_POSITION) } - Desc.vPos;
+                Desc.vDir.Normalize();
 
-            m_pGameInstance->Add_CloneObject_ToLayer(LEVEL_GAMEPLAY, TEXT("Monster_Attack_Extra"), TEXT("Prototype_GameObject_LightningSpear"), &Desc);
+                m_pGameInstance->Add_CloneObject_ToLayer(LEVEL_GAMEPLAY, TEXT("Monster_Attack_Extra"), TEXT("Prototype_GameObject_LightningSpear"), &Desc);
 
-            m_fLifeTime = 0.f;
-            ++m_iThunderCnt;
+                m_fLifeTime = 0.f;
+                ++m_iThunderCnt;
+            }
         }
     }
 
-    if (m_iThunderCnt >= 3)
+    if (!m_bEnd)
     {
-        m_isDead = true;
+        if (m_iThunderCnt >= 5)
+        {
+            for (auto& pEffect : m_pEffects)
+            {
+                pEffect->Set_Loop(false);
+            }
+            m_bEnd = true;
+        }
+    }
+    else
+    {
+        if (!(m_pEffects[STATE_START]->Get_Dead()) && !(m_pEffects[STATE_LAST]->Get_Dead()))
+        {
+            m_isDead = true;
+        }
     }
 
-    m_pEffect->Update(fTimeDelta);
+
+    for (auto& pEffect : m_pEffects)
+    {
+        if (!pEffect->Get_Dead())
+            pEffect->Update(fTimeDelta);
+    }
+
 }
 
 void CAObj_LightningBall::Late_Update(_float fTimeDelta)
 {
-    m_pEffect->Late_Update(fTimeDelta);
+    for (auto& pEffect : m_pEffects)
+    {
+        if (!pEffect->Get_Dead())
+            pEffect->Late_Update(fTimeDelta);
+    }
+
 }
 
 HRESULT CAObj_LightningBall::Render()
@@ -168,10 +177,20 @@ HRESULT CAObj_LightningBall::Ready_Components()
 
     const _Matrix* pParetnMatrix = m_pTransformCom->Get_WorldMatrix_Ptr();
 
-    m_pEffect = CEffect_Manager::Get_Instance()->Clone_Effect(TEXT("SimonManus_Attack_BlackBall_Expand"), pParetnMatrix,
+    m_pEffects[STATE_START] = CEffect_Manager::Get_Instance()->Clone_Effect(TEXT("SimonManus_Attack_BlackBall_Expand"), pParetnMatrix,
         nullptr, _Vec3(0.f, 0.f, 0.f), _Vec3(0.f, 0.f, 0.f), _Vec3(1.f, 1.f, 1.f));
 
-    m_pEffect->Set_Loop(true);
+    m_pEffects[STATE_START]->Set_Loop(true);
+
+    pParetnMatrix = m_pTransformCom->Get_WorldMatrix_Ptr();
+    m_pEffects[STATE_MIDDLE] = CEffect_Manager::Get_Instance()->Clone_Effect(TEXT("SimonManus_Attack_BlackBall_Explosion"), pParetnMatrix,
+        nullptr, _Vec3(0.f, 0.f, 0.f), _Vec3(0.f, 0.f, 0.f), _Vec3(1.f, 1.f, 1.f));
+
+    //m_pEffects[STATE_MIDDLE]->Reset_Effects();
+
+    pParetnMatrix = m_pTransformCom->Get_WorldMatrix_Ptr();
+    m_pEffects[STATE_LAST] = CEffect_Manager::Get_Instance()->Clone_Effect(TEXT("SimonManus_Attack_BlackBall_Big"), pParetnMatrix,
+        nullptr, _Vec3(0.f, 0.f, 0.f), _Vec3(0.f, 0.f, 0.f), _Vec3(1.f, 1.f, 1.f));
 
     return S_OK;
 }
@@ -206,5 +225,8 @@ void CAObj_LightningBall::Free()
 {
     __super::Free();
 
-    Safe_Release(m_pEffect);
+    for (auto& pEffect : m_pEffects)
+    {
+        Safe_Release(pEffect);
+    }
 }

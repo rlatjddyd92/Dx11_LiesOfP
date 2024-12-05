@@ -1,16 +1,17 @@
 #pragma once
+
 #include "AttackObject.h"
 #include "Effect_Container.h"
 
-class CAObj_LightningBall	final : public CAttackObject
+class CAObj_BlackBall	final : public CAttackObject
 {
 private:
 	enum ACTIVESTATE { STATE_START, STATE_MIDDLE, STATE_LAST, STATE_END };
 
 protected:
-	CAObj_LightningBall(ID3D11Device* pDevice, ID3D11DeviceContext* pContext);
-	CAObj_LightningBall(const CGameObject& Prototype);
-	virtual ~CAObj_LightningBall() = default;
+	CAObj_BlackBall(ID3D11Device* pDevice, ID3D11DeviceContext* pContext);
+	CAObj_BlackBall(const CGameObject& Prototype);
+	virtual ~CAObj_BlackBall() = default;
 
 public:
 	virtual HRESULT Initialize_Prototype() override;
@@ -31,25 +32,22 @@ private:
 
 	CTransform* m_pCopyPlayerTransformCom = { nullptr };
 
-	_int			m_iRouteCnt = {};
-
-	_int			m_iThunderCnt = {};
-	_float			m_fThunderTime = {};
-
-	_float			m_fUpSpeed = {};
-	_Vec3			m_vUp{};
-
-	_bool			m_bEffectAlive = { true };
+	_bool			m_bShoted = { false };
 	_bool			m_bEnd = { false };
 
-	_bool			m_bChangeState = { false };
-	_float			m_fChangeTime = {};
+	_int	m_iThrowPhase{};
+
+	_Vec3	m_vMoveDir{};
+	_float	m_fSpeed{};
+
+	_float	m_fThrowTime{};
+	_float	m_fDelayTime{};
 
 private:
 	HRESULT Ready_Components();
 
 public:
-	static CAObj_LightningBall* Create(ID3D11Device* pDevice, ID3D11DeviceContext* pContext);
+	static CAObj_BlackBall* Create(ID3D11Device* pDevice, ID3D11DeviceContext* pContext);
 	virtual CGameObject* Clone(void* pArg);
 	virtual void Free() override;
 };

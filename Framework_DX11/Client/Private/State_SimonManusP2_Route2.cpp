@@ -28,6 +28,7 @@ HRESULT CState_SimonManusP2_Route2::Start_State(void* pArg)
     m_isJump = true;
     m_bLandSound = false;
     m_bSwingSound = false;
+    m_bSwing = false;
 
     return S_OK;
 }
@@ -160,9 +161,10 @@ void CState_SimonManusP2_Route2::Effect_Check(_double CurTrackPos)
     {
         if ((CurTrackPos >= 60 && CurTrackPos <= 85.f))
         {
-            if (!m_pMonster->Get_EffectsLoop(CSimonManus::P1_TRAIL))
+            if (!m_bSwing)
             {
                 m_pMonster->Active_Effect(CSimonManus::P1_TRAIL);
+                m_bSwing = true;
             }
         }
         else

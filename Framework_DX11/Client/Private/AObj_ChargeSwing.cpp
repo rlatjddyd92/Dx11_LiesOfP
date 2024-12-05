@@ -57,11 +57,7 @@ void CAObj_ChargeSwing::Update(_float fTimeDelta)
     if (m_fLifeTime >= m_fLifeDuration)
     {
         m_pSoundCom[EFF_SOUND_EFFECT1]->Stop();
-        if (m_pEffect->Get_Active())
-        {
-            m_pEffect->Set_Loop(false);
-        }
-        else if (m_pEffect->Get_Dead())
+        if (m_pEffect->Get_Dead())
         {
             m_isDead = true;
         }
@@ -155,7 +151,7 @@ HRESULT CAObj_ChargeSwing::Ready_Components()
     m_pEffect = CEffect_Manager::Get_Instance()->Clone_Effect(TEXT("SimonManus_Attack_ChargeSwing"), pParetnMatrix,
         nullptr, _Vec3(0.f, 0.f, 0.f), _Vec3(0.f, 0.f, 0.f), _Vec3(1.f, 1.f, 1.f));
 
-    m_pEffect->Set_Loop(true);
+    m_pEffect->Reset_Effects();
 
     return S_OK;
 }

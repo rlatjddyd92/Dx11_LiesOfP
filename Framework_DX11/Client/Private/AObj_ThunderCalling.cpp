@@ -43,7 +43,7 @@ HRESULT CAObj_ThunderCalling::Initialize(void* pArg)
 
     m_fEffectAliveTime = 1.5f;
 
-    m_iThunderTime = 5.f;
+    m_iThunderTime = 3.f;
 
     return S_OK;
 }
@@ -60,21 +60,14 @@ void CAObj_ThunderCalling::Update(_float fTimeDelta)
     {
         if (m_fLifeTime >= m_fEffectAliveTime)
         {
-            if (m_pEffect->Get_Active())
-            {
-                m_pEffect->Set_Loop(false);
-                m_fLifeTime = 0.f;
-                m_bEffectAlive = false;
-            }
+            m_fLifeTime = 0.f;
+            m_bEffectAlive = false;
         }
     }
     else
     {
         if (m_fLifeTime >= m_iThunderTime)
         {
-            //번개 오브젝트 생t성Prototype_GameObject_ThunderCalling
-            //m_pCopyPlayerTransformCom->Get_State(CTransform::STATE_POSITION);
-
             CAttackObject::ATKOBJ_DESC Desc{};
             Desc.vPos = _Vec3{ m_pCopyPlayerTransformCom->Get_State(CTransform::STATE_POSITION) };
 
@@ -136,8 +129,6 @@ HRESULT CAObj_ThunderCalling::Ready_Components()
 
     m_pEffect = CEffect_Manager::Get_Instance()->Clone_Effect(TEXT("SimonManus_Attack_LightningCalling"), pParetnMatrix,
         nullptr, _Vec3(0.f, 0.f, 0.f), _Vec3(0.f, 0.f, 0.f), _Vec3(1.f, 1.f, 1.f));
-
-    m_pEffect->Set_Loop(true);
 
     m_pEffect->Reset_Effects();
 

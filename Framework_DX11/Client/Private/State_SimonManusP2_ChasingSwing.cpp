@@ -23,6 +23,8 @@ HRESULT CState_SimonManusP2_ChasingSwing::Start_State(void* pArg)
     m_iRouteTrack = 0;
     m_pMonster->Change_Animation(AN_CHASINGSWING_START, false, 0.1f, 0);
 
+    m_bSwing = false;
+
     m_bSwingSound = false;
     m_bStampSound = false;
 
@@ -151,9 +153,10 @@ void CState_SimonManusP2_ChasingSwing::Effect_Check(_double CurTrackPos)
     {
         if ((CurTrackPos >= 140.f))
         {
-            if (!m_pMonster->Get_EffectsLoop(CSimonManus::P1_TRAIL))
+            if (!m_bSwing)
             {
                 m_pMonster->Active_Effect(CSimonManus::P1_TRAIL);
+                m_bSwing = true;
             }
         }
         else
@@ -165,9 +168,10 @@ void CState_SimonManusP2_ChasingSwing::Effect_Check(_double CurTrackPos)
     {
         if ((CurTrackPos <= 50.f))
         {
-            if (!m_pMonster->Get_EffectsLoop(CSimonManus::P1_TRAIL))
+            if (!m_bSwing)
             {
                 m_pMonster->Active_Effect(CSimonManus::P1_TRAIL);
+                m_bSwing = true;
             }
         }
         else

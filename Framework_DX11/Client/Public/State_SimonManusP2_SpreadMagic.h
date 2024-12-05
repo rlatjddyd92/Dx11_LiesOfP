@@ -26,8 +26,12 @@ public:
 private:
     class CMonster* m_pMonster = { nullptr };
 
+    _bool           m_bMagicSpread = { false };
+
 private:
     _bool               End_Check();
+    void                Effect_Check(_double CurTrackPos);
+    void                Control_Sound(_double CurTrackPos);
 
 public:
     static CState_SimonManusP2_SpreadMagic* Create(class CFsm* pFsm, class CMonster* pMonster, _uint iStateNum, void* pArg = nullptr);

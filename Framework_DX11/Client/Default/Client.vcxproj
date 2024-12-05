@@ -170,6 +170,7 @@
     <Text Include="ReadMe.txt" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="..\Public\AObj_BlackBall.h" />
     <ClInclude Include="..\Public\AObj_ChargeSwing.h" />
     <ClInclude Include="..\Public\AObj_GoldBall.h" />
     <ClInclude Include="..\Public\AObj_LightningBall.h" />
@@ -403,6 +404,7 @@
     <ClInclude Include="UI_Enum.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="..\Private\AObj_BlackBall.cpp" />
     <ClCompile Include="..\Private\AObj_ChargeSwing.cpp" />
     <ClCompile Include="..\Private\AObj_GoldBall.cpp" />
     <ClCompile Include="..\Private\AObj_LightningBall.cpp" />

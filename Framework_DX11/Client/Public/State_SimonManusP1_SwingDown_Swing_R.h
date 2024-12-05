@@ -30,6 +30,7 @@ private:
     class CMonster* m_pMonster = { nullptr };
     
     _bool               m_isSwing = { false };
+    _bool               m_bSwing = { false };
     _bool               m_bStampEffect = { false };
     _bool               m_bSwing_Sound = { false };
 

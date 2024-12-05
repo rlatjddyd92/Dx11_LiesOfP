@@ -32,6 +32,8 @@ private:
 
     _uint               m_iCurLastAnim = {};
 
+    _bool               m_bSwing = { false };
+
     _bool               m_isSwing = { false };
     _bool               m_bStampEffect = { false };
     _bool               m_bSwingSound = { false };

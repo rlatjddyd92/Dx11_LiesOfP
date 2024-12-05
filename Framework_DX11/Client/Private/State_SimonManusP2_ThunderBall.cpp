@@ -23,7 +23,7 @@ HRESULT CState_SimonManusP2_ThunderBall::Initialize(_uint iStateNum, void* pArg)
 HRESULT CState_SimonManusP2_ThunderBall::Start_State(void* pArg)
 {
     m_pMonster->Change_Animation(AN_THUNDERBALL, false, 0.1f, 0);
-
+    m_bCreateBall = false;
     return S_OK;
 }
 

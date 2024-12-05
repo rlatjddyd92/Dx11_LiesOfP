@@ -32,6 +32,8 @@ private:
     _uint               m_iCurStartAnim = {};
     _uint               m_iCurLastAnim = {};
 
+    _bool               m_bSwing = { false };
+
     _bool               m_bJump = { false };
     _bool               m_bMagic = { false };
     _bool               m_bMagicSound = { false };

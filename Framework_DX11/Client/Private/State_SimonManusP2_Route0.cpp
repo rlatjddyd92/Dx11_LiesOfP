@@ -23,6 +23,8 @@ HRESULT CState_SimonManusP2_Route0::Start_State(void* pArg)
     m_pMonster->Change_Animation(AN_ROUTE_FIRST, false, 0.1f, 0);
 
     m_bSwingSound = false;
+    m_bSwing = false;
+
     return S_OK;
 }
 
@@ -36,6 +38,7 @@ void CState_SimonManusP2_Route0::Update(_float fTimeDelta)
         case 0:
             m_bSwingSound = false;
             m_pMonster->Change_Animation(AN_ROUTE_LAST, false, 0.0f, 0);
+            m_bSwing = false;
             break;
 
         case 1:
@@ -121,9 +124,10 @@ void CState_SimonManusP2_Route0::Effect_Check(_double CurTrackPos)
     {
         if ((CurTrackPos >= 60 && CurTrackPos <= 85.f))
         {
-            if (!m_pMonster->Get_EffectsLoop(CSimonManus::P1_TRAIL))
+            if (!m_bSwing)
             {
                 m_pMonster->Active_Effect(CSimonManus::P1_TRAIL);
+                m_bSwing = true;
             }
         }
         else
@@ -135,9 +139,10 @@ void CState_SimonManusP2_Route0::Effect_Check(_double CurTrackPos)
     {
         if (CurTrackPos >= 120 && CurTrackPos <= 180.f)
         {
-            if (!m_pMonster->Get_EffectsLoop(CSimonManus::P1_TRAIL))
+            if (!m_bSwing)
             {
                 m_pMonster->Active_Effect(CSimonManus::P1_TRAIL);
+                m_bSwing = true;
             }
         }
         else

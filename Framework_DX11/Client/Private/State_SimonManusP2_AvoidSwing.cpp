@@ -21,6 +21,7 @@ HRESULT CState_SimonManusP2_AvoidSwing::Initialize(_uint iStateNum, void* pArg)
 HRESULT CState_SimonManusP2_AvoidSwing::Start_State(void* pArg)
 {
     m_pMonster->Change_Animation(AN_AVOIDSWING, false, 0.1f, 0);
+    m_bSwing = false;
 
     return S_OK;
 }
@@ -67,9 +68,10 @@ void CState_SimonManusP2_AvoidSwing::Effect_Check(_double CurTrackPos)
 {
     if (CurTrackPos >= 120.f && CurTrackPos <= 180.f)
     {
-        if (!m_pMonster->Get_EffectsLoop(CSimonManus::P1_TRAIL))
+        if (!m_bSwing)
         {
             m_pMonster->Active_Effect(CSimonManus::P1_TRAIL);
+            m_bSwing = true;
         }
     }
     else

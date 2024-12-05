@@ -152,8 +152,6 @@ void CEffect_Container::Set_Loop(_bool bLoop)
 	if (true == bLoop)
 		m_isDead = false;
 
-	m_bActive = bLoop;
-
 	for (auto& Effect : m_Effects)
 	{
 		Effect->Set_Loop(bLoop);
