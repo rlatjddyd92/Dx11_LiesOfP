@@ -5,7 +5,7 @@
 
 BEGIN(Client)
 
-class CGH_Creater abstract : public CGameObject
+class CGH_Creater final : public CGameObject
 {
 public:
 	typedef struct
@@ -13,7 +13,7 @@ public:
 		class CMonster* pManus = { nullptr };
 	}CREATER_DESC;
 
-protected:
+private:
 	CGH_Creater(ID3D11Device* pDevice, ID3D11DeviceContext* pContext);
 	CGH_Creater(const CGameObject& Prototype);
 	virtual ~CGH_Creater() = default;

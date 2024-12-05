@@ -32,6 +32,8 @@
 #include "AObj_LightningSpear.h"
 #include "AObj_LightningBall.h"
 #include "AObj_BlackBall.h"
+#include "AObj_GodHands.h"
+#include "GH_Creater.h"
 #pragma endregion
 
 #pragma region EFFECT
@@ -857,6 +859,13 @@ HRESULT CLoader::Ready_Resources_For_Monster()
 	if (FAILED(m_pGameInstance->Add_Prototype(LEVEL_GAMEPLAY, TEXT("Prototype_Component_Model_Weapon_SimonManus_Hammer"),
 		CModel::Create(m_pDevice, m_pContext, CModel::TYPE_ANIM, "../Bin/ModelData/Anim/CreatedBinFiles/SimonManus_Weapon.dat", PreTransformMatrix, true))))
 		return E_FAIL;
+	
+	/* For. Prototype_AnimModel_SimonManus_GodHand */
+	PreTransformMatrix = XMMatrixScaling(0.01f, 0.01f, 0.01f);
+	if (FAILED(m_pGameInstance->Add_Prototype(LEVEL_GAMEPLAY, TEXT("Prototype_Component_Model_SimonManus_GodHand"),
+		CModel::Create(m_pDevice, m_pContext, CModel::TYPE_ANIM, "../Bin/ModelData/Anim/CreatedBinFiles/SimonManus_GodHand.dat", PreTransformMatrix, true))))
+		return E_FAIL;
+	
 
 	return S_OK;
 }
@@ -1007,7 +1016,14 @@ HRESULT CLoader::Ready_Prototype()
 	if (FAILED(m_pGameInstance->Add_Prototype(TEXT("Prototype_GameObject_BlackBall"),
 		CAObj_BlackBall::Create(m_pDevice, m_pContext))))
 		return E_FAIL;
+	if (FAILED(m_pGameInstance->Add_Prototype(TEXT("Prototype_GameObject_GodHands"),
+		CAObj_GodHands::Create(m_pDevice, m_pContext))))
+		return E_FAIL;
 
+
+	if (FAILED(m_pGameInstance->Add_Prototype(TEXT("Prototype_GameObject_GodHandCreater"),
+		CGH_Creater::Create(m_pDevice, m_pContext))))
+		return E_FAIL;
 
 
 	// 특정 위치에 판정 없이 소환되는 이펙트

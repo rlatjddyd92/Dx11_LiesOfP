@@ -85,6 +85,10 @@ void CCarcassTail::Priority_Update(_float fTimeDelta)
 {
 	__super::Set_UpTargetPos();
 
+	if (m_eStat.fHp <= 0.f)
+	{
+		m_pFsmCom->Set_State(DIE);
+	}
 }
 
 void CCarcassTail::Update(_float fTimeDelta)

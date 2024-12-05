@@ -5,6 +5,8 @@
 
 #include "Effect_Manager.h"
 
+#include "EffectObject.h"
+
 CAObj_LightningSpear::CAObj_LightningSpear(ID3D11Device* pDevice, ID3D11DeviceContext* pContext)
     : CAttackObject{ pDevice, pContext }
 {
@@ -31,6 +33,7 @@ HRESULT CAObj_LightningSpear::Initialize(void* pArg)
     m_pTransformCom->Set_State(CTransform::STATE_POSITION, pDesc->vPos);
 
     m_vMoveDir = pDesc->vDir;
+    m_vTargetPos = pDesc->vTargetPos;
 
     m_pTransformCom->Look_Dir(_Vec4{ pDesc->vDir });
 
@@ -47,16 +50,20 @@ HRESULT CAObj_LightningSpear::Initialize(void* pArg)
 
     m_strObjectTag = TEXT("MonsterWeapon");
 
+    m_pSoundCom[EFF_SOUND_EFFECT1]->Play2D(TEXT("SE_NPC_SK_FX_Spark_M_03.wav"), &g_fEffectVolume);
+
     return S_OK;
 }
 
 void CAObj_LightningSpear::Priority_Update(_float fTimeDelta)
 {
     m_pEffect->Priority_Update(fTimeDelta);
+
 }
 
 void CAObj_LightningSpear::Update(_float fTimeDelta)
 {
+
     if (m_fLifeTime >= m_fLifeDuration)
     {
         if (m_pEffect->Get_Dead())
@@ -75,9 +82,15 @@ void CAObj_LightningSpear::Update(_float fTimeDelta)
     
     //¿òÁ÷ÀÓ
     m_pTransformCom->Set_State(CTransform::STATE_POSITION, m_pTransformCom->Get_State(CTransform::STATE_POSITION) + m_vMoveDir * m_fSpeed * fTimeDelta);
+    
+    _Vec3 vPos = m_pTransformCom->Get_State(CTransform::STATE_POSITION);
+    if (vPos.y <= m_vTargetPos.y)
+    {
+        m_isDead = true;
 
-    m_pSoundCom[EFF_SOUND_EFFECT1]->Play2D(TEXT("SE_NPC_SK_FX_Spark_M_03.wav"), &g_fEffectVolume, true);
-
+        CEffect_Manager::Get_Instance()->Add_Effect_ToLayer(LEVEL_GAMEPLAY, TEXT("SimonManus_Attack_LightningSpear_Impact_Ground"),
+            _Vec3{ m_pTransformCom->Get_State(CTransform::STATE_POSITION) }, _Vec3{ m_pTransformCom->Get_State(CTransform::STATE_LOOK) });
+    }
     m_pColliderCom->Update(m_pTransformCom->Get_WorldMatrix_Ptr());
 
     m_pEffect->Update(fTimeDelta);
@@ -130,9 +143,13 @@ void CAObj_LightningSpear::OnCollisionEnter(CGameObject* pOther)
         if (!bOverlapCheck)
         {
             m_DamagedObjects.push_back(pOther);
-            pOther->Calc_DamageGain(m_fDamageAmount * m_fDamageRatio);
+            pOther->Calc_DamageGain(m_fDamageAmount * m_fDamageRatio, _Vec3{}, HIT_TYPE::HIT_ELECTRIC, ATTACK_STRENGTH::ATK_NORMAL);
             m_pSoundCom[EFF_SOUND_EFFECT2]->Play2D(TEXT("SE_NPC_SimonManus_SK_PJ_Ergo_Direct_Hit_01.wav"), &g_fEffectVolume);
 
+            m_isDead = true;
+
+            CEffect_Manager::Get_Instance()->Add_Effect_ToLayer(LEVEL_GAMEPLAY, TEXT("SimonManus_Attack_LightningSpear_Impact_Ground"),
+                _Vec3{ m_pTransformCom->Get_State(CTransform::STATE_POSITION) }, _Vec3{ m_pTransformCom->Get_State(CTransform::STATE_LOOK) });
         }
         m_pEffect->Set_Loop(false);
     }
@@ -152,10 +169,9 @@ HRESULT CAObj_LightningSpear::Ready_Components()
         return E_FAIL;
 
     /* FOR.Com_Collider */
-    CBounding_OBB::BOUNDING_OBB_DESC      ColliderDesc{};
+    CBounding_Sphere::BOUNDING_SPHERE_DESC      ColliderDesc{};
     ColliderDesc.vCenter = _float3(0.f, 0.f, 0.f);
-    ColliderDesc.vExtents = _float3();
-    ColliderDesc.vAngles = _float3();
+    ColliderDesc.fRadius = 0.5f;
 
     if (FAILED(__super::Add_Component(LEVEL_STATIC, TEXT("Prototype_Component_Collider_Sphere"),
         TEXT("Com_Collider"), reinterpret_cast<CComponent**>(&m_pColliderCom), &ColliderDesc)))

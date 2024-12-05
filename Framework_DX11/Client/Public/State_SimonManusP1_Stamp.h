@@ -33,6 +33,7 @@ private:
     _bool               m_bStamp = { false };
     _bool               m_bStampEffect = { false };
     _bool               m_bStampSound = { false };
+    _bool               m_bDrainSound = { false };
     _bool               m_bWeaponSpin = { false };
     _bool               m_bBlast = { false };
     _bool               m_bAbsorb = { false };

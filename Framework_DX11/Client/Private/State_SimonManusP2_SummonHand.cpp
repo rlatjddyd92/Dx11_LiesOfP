@@ -54,10 +54,12 @@ _bool CState_SimonManusP2_SummonHand::End_Check()
 
 void CState_SimonManusP2_SummonHand::Effect_Check(_double CurTrackPos)
 {
-    if (CurTrackPos >= 200.f && CurTrackPos <= 240.f)
+    if (CurTrackPos >= 210.f && CurTrackPos <= 240.f)
     {
         if (!m_bCharge)
         {
+            m_pMonster->Play_Sound(CPawn::PAWN_SOUND_EFFECT1, TEXT("SE_NPC_SimonManus_SK_FX_Ergo_GodHand_Wind_01.wav"));
+
             m_bCharge = true;
             m_pMonster->Active_Effect(CSimonManus::P2_SH_CHARGE);
         }
@@ -86,7 +88,10 @@ void CState_SimonManusP2_SummonHand::Effect_Check(_double CurTrackPos)
         if (CurTrackPos > 420.f)
         {
             m_bCreaterSet = true;
-            //크리에이어 레이어에 추가
+            //크리에이어 레이어에 추가     임시 Prototype_GameObject_GodHands
+
+            m_pGameInstance->Add_CloneObject_ToLayer(LEVEL_GAMEPLAY, TEXT("Monster_Attack"), TEXT("Prototype_GameObject_GodHandCreater"));
+
         }
     }
 }

@@ -95,6 +95,8 @@ void CAObj_LightningBall::Update(_float fTimeDelta)
                 Desc.vDir = _Vec3{ m_pCopyPlayerTransformCom->Get_State(CTransform::STATE_POSITION) } - Desc.vPos;
                 Desc.vDir.Normalize();
 
+                Desc.vTargetPos = _Vec3{ m_pCopyPlayerTransformCom->Get_State(CTransform::STATE_POSITION) };
+
                 m_pGameInstance->Add_CloneObject_ToLayer(LEVEL_GAMEPLAY, TEXT("Monster_Attack_Extra"), TEXT("Prototype_GameObject_LightningSpear"), &Desc);
 
                 m_fLifeTime = 0.f;

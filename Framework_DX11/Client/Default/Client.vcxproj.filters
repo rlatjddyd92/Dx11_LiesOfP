@@ -823,9 +823,6 @@
     <Filter Include="02.GameObjects\12.AttackObject\SimonManus\LightningBall\LightningSpear">
       <UniqueIdentifier>{09315704-54e9-4a45-9f4e-4158f3a83f9a}</UniqueIdentifier>
     </Filter>
-    <Filter Include="05.Fsm\Monster\SimonManus\P2\Attack\Single\SummonHand%2a">
-      <UniqueIdentifier>{5228a653-e17a-44d8-a6f1-66c8fb344bef}</UniqueIdentifier>
-    </Filter>
     <Filter Include="05.Fsm\Monster\SimonManus\P2\Attack\Single\ThunderBall">
       <UniqueIdentifier>{8b883092-bbab-4d18-b414-4009f8cdd9f3}</UniqueIdentifier>
     </Filter>
@@ -838,11 +835,14 @@
     <Filter Include="02.GameObjects\12.AttackObject\SimonManus\GH_Creater\GodHands">
       <UniqueIdentifier>{8f7485cc-d647-4c77-8b7e-5d47d74e71e6}</UniqueIdentifier>
     </Filter>
-    <Filter Include="02.GameObjects\12.AttackObject\SimonManus\GH_Creater\GodHandBlast">
-      <UniqueIdentifier>{6752f990-c43c-4cb9-aad9-bf98c13cd5e5}</UniqueIdentifier>
-    </Filter>
     <Filter Include="05.Fsm\Monster\SimonManus\P2\Attack\Single\SpreadMagic">
       <UniqueIdentifier>{927e6e2d-8506-48a0-8258-0c917447cec5}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="05.Fsm\Monster\SimonManus\P2\Attack\Single\SummonHand">
+      <UniqueIdentifier>{5228a653-e17a-44d8-a6f1-66c8fb344bef}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.GameObjects\12.AttackObject\SimonManus\Stomp">
+      <UniqueIdentifier>{4c93ec4b-622d-4d23-9b30-e71e06b6e88e}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -1294,7 +1294,7 @@
       <Filter>05.Fsm\Monster\SimonManus\P2\Attack\Single\Sting</Filter>
     </ClInclude>
     <ClInclude Include="..\Public\State_SimonManusP2_SummonHand.h">
-      <Filter>05.Fsm\Monster\SimonManus\P2\Attack\Single\SummonHand%2a</Filter>
+      <Filter>05.Fsm\Monster\SimonManus\P2\Attack\Single\SummonHand</Filter>
     </ClInclude>
     <ClInclude Include="..\Public\State_SimonManusP2_SwingDown_Swing.h">
       <Filter>05.Fsm\Monster\SimonManus\P2\Attack\Route\SwingDown_Swing</Filter>
@@ -1561,6 +1561,9 @@
     </ClInclude>
     <ClInclude Include="..\Public\GH_Creater.h">
       <Filter>02.GameObjects\12.AttackObject\SimonManus\GH_Creater</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Public\AObj_Stomp.h">
+      <Filter>02.GameObjects\12.AttackObject\SimonManus\Stomp</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -1982,7 +1985,7 @@
       <Filter>05.Fsm\Monster\SimonManus\P2\Attack\Single\Sting</Filter>
     </ClCompile>
     <ClCompile Include="..\Private\State_SimonManusP2_SummonHand.cpp">
-      <Filter>05.Fsm\Monster\SimonManus\P2\Attack\Single\SummonHand%2a</Filter>
+      <Filter>05.Fsm\Monster\SimonManus\P2\Attack\Single\SummonHand</Filter>
     </ClCompile>
     <ClCompile Include="..\Private\State_SimonManusP2_SwingDown_Swing.cpp">
       <Filter>05.Fsm\Monster\SimonManus\P2\Attack\Route\SwingDown_Swing</Filter>
@@ -2249,6 +2252,9 @@
     </ClCompile>
     <ClCompile Include="..\Private\GH_Creater.cpp">
       <Filter>02.GameObjects\12.AttackObject\SimonManus\GH_Creater</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Private\AObj_Stomp.cpp">
+      <Filter>02.GameObjects\12.AttackObject\SimonManus\Stomp</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
