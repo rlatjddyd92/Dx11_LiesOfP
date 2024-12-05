@@ -27,7 +27,7 @@ HRESULT CState_SimonManusP1_SwingDown_Swing_R::Start_State(void* pArg)
     m_isSwing = true;
     m_bStampEffect = false;
     m_bSwing_Sound = { false };
-
+    m_bSwing = false;
     return S_OK;
 }
 
@@ -142,7 +142,7 @@ void CState_SimonManusP1_SwingDown_Swing_R::Effect_Check(_double CurTrackPos)
     {
         if ((CurTrackPos >= 45.f && CurTrackPos <= 90.f))
         {
-            if (!m_pMonster->Get_EffectsLoop(CSimonManus::P1_TRAIL))
+            if (!m_bSwing)
             {
                 m_pMonster->Active_Effect(CSimonManus::P1_TRAIL);
             }

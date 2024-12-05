@@ -18,19 +18,19 @@ struct VS_IN
 	/* InputSlot : 0 */
     float3 vPosition : POSITION;
 	/* InputSlot : 1 */ 
-    float3 vFirstTopPos     : TEXCOORD0;
-    float3 vFirstBottomPos  : TEXCOORD1;
+    float3 vFirstTopPos : TEXCOORD0;
+    float3 vFirstBottomPos : TEXCOORD1;
     
-    float3 vSecondTopPos    : TEXCOORD2;
+    float3 vSecondTopPos : TEXCOORD2;
     float3 vSecondBottomPos : TEXCOORD3;
     
-    float3 vThirdTopPos     : TEXCOORD4;
-    float3 vThirdBottomPos  : TEXCOORD5;
+    float3 vThirdTopPos : TEXCOORD4;
+    float3 vThirdBottomPos : TEXCOORD5;
     
-    float3 vForthTopPos     : TEXCOORD6;
-    float3 vForthBottomPos  : TEXCOORD7;
+    float3 vForthTopPos : TEXCOORD6;
+    float3 vForthBottomPos : TEXCOORD7;
     
-    float2 vLifeTime        : TEXCOORD8;
+    float2 vLifeTime : TEXCOORD8;
     float fIndex : TEXCOORD9;
 };
 
@@ -65,15 +65,15 @@ VS_OUT VS_MAIN( /*정점*/VS_IN In)
     Out.vPosition = float4(vPosition, 1.f);
     
     Out.vFirstTopPos = In.vFirstTopPos;
-    Out.vFirstBottomPos= In.vFirstBottomPos;
+    Out.vFirstBottomPos = In.vFirstBottomPos;
     
-    Out.vSecondTopPos= In.vSecondTopPos;
-    Out.vSecondBottomPos= In.vSecondBottomPos;
+    Out.vSecondTopPos = In.vSecondTopPos;
+    Out.vSecondBottomPos = In.vSecondBottomPos;
     
-    Out.vThirdTopPos= In.vThirdTopPos;
-    Out.vThirdBottomPos= In.vThirdBottomPos;
+    Out.vThirdTopPos = In.vThirdTopPos;
+    Out.vThirdBottomPos = In.vThirdBottomPos;
     
-    Out.vForthTopPos= In.vForthTopPos;
+    Out.vForthTopPos = In.vForthTopPos;
     Out.vForthBottomPos = In.vForthBottomPos;
     
     Out.vLifeTime = In.vLifeTime;
@@ -153,7 +153,7 @@ void GS_MAIN(point GS_IN In[1], inout TriangleStream<GS_OUT> Container)
         vCurTopPos = CatmullRom(fTop0, fTop1, fTop2, fTop3, t);
         vCurBottomPos = CatmullRom(fBottom0, fBottom1, fBottom2, fBottom3, t);
         
-        if(0 == i)
+        if (0 == i)
         {
             vPreTopPos = vCurTopPos;
             vPreBottomPos = vCurBottomPos;
@@ -168,7 +168,7 @@ void GS_MAIN(point GS_IN In[1], inout TriangleStream<GS_OUT> Container)
         vSaveBottomPos = vCurBottomPos;
         
         
-        if(0 != i)
+        if (0 != i)
         { // 인덱스를 기준으로 텍스처 좌표를 계산합니다.
             float fTexPosX = (In[0].fIndex + t) / (float) (g_iNumInstance);
             float fPreTexPosX = (In[0].fIndex + t + (1.f / 16.f)) / (float) (g_iNumInstance);
@@ -263,9 +263,9 @@ void GS_CONTINUOUS_MAIN(point GS_IN In[1], inout TriangleStream<GS_OUT> Containe
         
         
         if (0 != i)
-        { 
+        {
             Out[0].vPosition = float4(vCurTopPos, 1.f);
-            Out[0].vTexcoord = float2(t + (1.f/16.f), 0.f);
+            Out[0].vTexcoord = float2(t + (1.f / 16.f), 0.f);
             Out[0].vLifeTime = In[0].vLifeTime;
             Out[0].fIndex = In[0].fIndex;
 
@@ -330,7 +330,8 @@ struct PS_NORMAL_OUT
     vector vNormal : SV_TARGET1;
     vector vDepth : SV_TARGET2;
     vector vARM : SV_TARGET3;
-    vector vPickDepth : SV_TARGET4;
+    vector vEmessive : SV_TARGET4;
+    vector vRimLight : SV_TARGET5;
 };
 
 
@@ -490,9 +491,27 @@ PS_OUT PS_BLOOD_MAIN(PS_IN In)
     Out.vColor *= g_vColor;
     Out.vColor.a *= 1.f - (((In.vTexcoord.x + In.fIndex) / (float) g_iNumInstance) + g_fRatio);
 
-    if(Out.vColor.a < 0.1f)
+    if (Out.vColor.a < 0.1f)
         discard;
     
+    return Out;
+}
+
+PS_NORMAL_OUT PS_BLOOD_NORMAL_MAIN(PS_IN In)
+{
+    PS_NORMAL_OUT Out = (PS_NORMAL_OUT) 0;
+    
+    Out.vDiffuse = g_DiffuseTexture.Sample(LinearSampler, In.vTexcoord);
+    Out.vNormal = g_NormalTexture.Sample(LinearSampler, In.vTexcoord);
+    Out.vARM = g_MaskTexture_1.Sample(LinearSampler, In.vTexcoord);
+    
+    Out.vARM.a *= 1.f - (((In.vTexcoord.x + In.fIndex) / (float) g_iNumInstance) + g_fRatio);
+    if (Out.vARM.a < 0.3f)
+        discard;
+    
+    Out.vEmessive = vector(0.f, 0.f, 0.f, 0.f);
+    Out.vDepth = vector(0.f, 0.f, 0.f, 0.f);
+    Out.vRimLight = vector(0.f, 0.f, 0.f, 0.f);
     
     return Out;
 }
@@ -541,7 +560,7 @@ technique11 DefaultTechnique
 
         VertexShader = compile vs_5_0 VS_MAIN();
         GeometryShader = compile gs_5_0 GS_CONTINUOUS_MAIN();
-        PixelShader = compile ps_5_0 PS_CONTINUOUS_MAIN();  // 끝으로 갈수록 사라지는 효과. // 알파로 사라지는 거 아님.
+        PixelShader = compile ps_5_0 PS_CONTINUOUS_MAIN(); // 끝으로 갈수록 사라지는 효과. // 알파로 사라지는 거 아님.
     }
 
     pass Trail_R // 4
@@ -599,7 +618,7 @@ technique11 DefaultTechnique
         PixelShader = compile ps_5_0 PS_DISTORTION_TRAIL_MAIN();
     }
 
-    pass Blood  // 9
+    pass Blood // 9
     {
         SetRasterizerState(RS_Cull_None);
         SetDepthStencilState(DSS_Default, 0);
@@ -610,4 +629,14 @@ technique11 DefaultTechnique
         PixelShader = compile ps_5_0 PS_BLOOD_MAIN();
     }
 
+    pass Blood_Normal // 10
+    {
+        SetRasterizerState(RS_Cull_None);
+        SetDepthStencilState(DSS_Default, 0);
+        SetBlendState(BS_Default, vector(0.f, 0.f, 0.f, 0.f), 0xffffffff);
+
+        VertexShader = compile vs_5_0 VS_MAIN();
+        GeometryShader = compile gs_5_0 GS_MAIN();
+        PixelShader = compile ps_5_0 PS_BLOOD_NORMAL_MAIN();
+    }
 }

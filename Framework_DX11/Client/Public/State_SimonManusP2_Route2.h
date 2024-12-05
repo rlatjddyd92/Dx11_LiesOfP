@@ -38,6 +38,9 @@ private:
     _bool               m_bResetRim = { false };
     _bool               m_isJump = { false };
     _bool               m_bStartSpot = { true };
+
+    _bool               m_bSwing = { false };
+
     _bool               m_bSwingSound = { false };
     _bool               m_bLandSound = { false };
     

@@ -17,6 +17,7 @@ public:
 		_Vec3 vPos{};
 		_Vec3 vDir{};
 		_float fLifeDuration{};
+		_bool bLoopCheck{true};
 		_wstring strEffectTag = TEXT("");
 	}EFFECTOBJ_DESC;
 
@@ -50,6 +51,10 @@ protected:
 protected:
 	_float			m_fLifeTime = {};
 	_float			m_fLifeDuration = {};
+
+	_bool			m_isLoop = { true };
+
+	_bool			m_bEndCheck = { false };
 
 protected:
 	HRESULT Ready_Components();

@@ -118,7 +118,7 @@ void CController_EffectTool::Render()
 	if (ImGui::CollapsingHeader("Texture Effect"))
 	{
 #pragma region TE
-			ImGui::InputText("Texture Name", m_szTextureName, IM_ARRAYSIZE(m_szTextureName));
+		ImGui::InputText("Texture Name", m_szTextureName, IM_ARRAYSIZE(m_szTextureName));
 
 		Select_TE();
 		if (ImGui::Button("Create Texture Effect"))
@@ -341,7 +341,7 @@ void CController_EffectTool::RenderGroup_Selection()
 	switch (m_RenderDesc.iRenderGroup)
 	{
 	case CRenderer::RG_NONBLEND:
-		m_RenderDesc.iPpState = 0;		
+		m_RenderDesc.iPpState = 0;
 		break;
 
 	case CRenderer::RG_EFFECT:
@@ -351,7 +351,7 @@ void CController_EffectTool::RenderGroup_Selection()
 		ImGui::Checkbox("PP_Blur", &m_EffectPP[PP_BLUR]);
 		ImGui::SameLine();
 		ImGui::Checkbox("PP_Distortion", &m_EffectPP[PP_DISTORTION]);
-		
+
 		if (true == m_EffectPP[PP_NONE])
 			m_RenderDesc.iPpState |= CEffect_Base::PP_NONE;
 		else
@@ -411,7 +411,7 @@ void CController_EffectTool::Particle_Check()
 	{
 		ImGui::SeparatorText("Initialize");
 
-		ImGui::InputInt	("Num Instance", (_int*)&m_ParticleDesc.BufferDesc.iNumInstance);
+		ImGui::InputInt("Num Instance", (_int*)&m_ParticleDesc.BufferDesc.iNumInstance);
 		ImGui::InputFloat3("Center Instance", (_float*)&m_ParticleDesc.BufferDesc.vCenter);
 		ImGui::InputFloat3("Range Instance", (_float*)&m_ParticleDesc.BufferDesc.vRange);
 		ImGui::InputFloat3("ExceptRange Instance", (_float*)&m_ParticleDesc.BufferDesc.vExceptRange);
@@ -455,7 +455,7 @@ void CController_EffectTool::Particle_Check()
 		ImGui::InputInt("Shader Index", (_int*)&m_ParticleDesc.DefaultDesc.iShaderIndex);
 
 		Set_ParticleState();
-		
+
 		ImGui::TreePop();
 	}
 	if (ImGui::TreeNode("Particle Additional"))
@@ -469,7 +469,7 @@ void CController_EffectTool::Particle_Check()
 		ImGui::SeparatorText("Duration");
 		ImGui::InputFloat("Duration", &m_ParticleDesc.DefaultDesc.fDuration);
 
-		ImGui::SeparatorText("Particle Action"); 
+		ImGui::SeparatorText("Particle Action");
 		ImGui::InputFloat4("Pivot", (_float*)&m_ParticleDesc.DefaultDesc.vPivot);
 		ImGui::InputFloat("Gravity", (_float*)&m_ParticleDesc.DefaultDesc.fGravity);
 		ImGui::InputFloat4("Move Dir", (_float*)&m_ParticleDesc.DefaultDesc.vMoveDir);
@@ -517,8 +517,8 @@ void CController_EffectTool::Select_Particle()
 	vector<const _char*> Items;
 
 	CLayer* pLayer = m_pGameInstance->Find_Layer(LEVEL_TOOL, TEXT("Layer_Particle"));
-	
-	if (nullptr != pLayer)	
+
+	if (nullptr != pLayer)
 	{
 		for (const auto& elem : pLayer->Get_ObjectList())
 		{
@@ -582,7 +582,7 @@ void CController_EffectTool::Get_Particle()
 		m_ParticleStates[PB_RANDOM] = true;
 	else
 		m_ParticleStates[PB_RANDOM] = false;
-	
+
 	if (CVIBuffer_Point_Instance::STATE_LOOP == (m_ParticleDesc.DefaultDesc.iComputeState & CVIBuffer_Point_Instance::STATE_LOOP))
 		m_ParticleStates[PB_LOOP] = true;
 	else
@@ -657,11 +657,11 @@ void CController_EffectTool::Clear_Particle()
 
 HRESULT CController_EffectTool::Add_TE()
 {
-	m_TextureDesc.fRotationPerSec	= XMConvertToRadians(90.f);
-	m_TextureDesc.fSpeedPerSec		= 1.f;
-	m_TextureDesc.iLevelIndex		= LEVEL_TOOL;
-	m_TextureDesc.RenderDesc		= m_RenderDesc;
-	
+	m_TextureDesc.fRotationPerSec = XMConvertToRadians(90.f);
+	m_TextureDesc.fSpeedPerSec = 1.f;
+	m_TextureDesc.iLevelIndex = LEVEL_TOOL;
+	m_TextureDesc.RenderDesc = m_RenderDesc;
+
 	m_TextureDesc.pParentMatrix = { nullptr };
 	size_t iCharLen = strlen(m_szTextureName);
 	size_t iConvertChars = 0;
@@ -868,7 +868,7 @@ HRESULT CController_EffectTool::Add_Mesh()
 
 	wcsncpy_s(m_MeshDesc.TextDesc.szMaskTextureTag_2, m_Texture_PrototypeTags[m_iSelected_MaskTextureIndex_2].c_str(),
 		sizeof(m_MeshDesc.TextDesc.szMaskTextureTag_2) / sizeof(_tchar));
-	
+
 	wcsncpy_s(m_MeshDesc.TextDesc.szNormalTextureTag, m_Texture_PrototypeTags[m_iSelected_NormalTextureIndex].c_str(),
 		sizeof(m_MeshDesc.TextDesc.szNormalTextureTag) / sizeof(_tchar));
 
@@ -913,8 +913,8 @@ void CController_EffectTool::Mesh_Check()
 		WideCharToMultiByte(CP_UTF8, 0, &strNormalText[0], (int)strNormalText.size(), &strNormalTo[0], iSize, nullptr, nullptr);
 		_char* szNormal = const_cast<_char*>(strNormalTo.data());
 		ImGui::InputText("Model", szNormal, IM_ARRAYSIZE(szNormal));
-		
-		ImGui::SeparatorText("Transform");																	
+
+		ImGui::SeparatorText("Transform");
 		ImGui::InputFloat("Duration ME", (_float*)&m_MeshDesc.DefaultDesc.fDuration);
 		ImGui::InputFloat4("Color ME", (_float*)&m_MeshDesc.DefaultDesc.vColor);
 
@@ -934,7 +934,7 @@ void CController_EffectTool::Mesh_Check()
 		ImGui::SeparatorText("Blending");
 		ImGui::InputFloat("Start Alpha ME", (_float*)&m_MeshDesc.DefaultDesc.fAlpha);
 		ImGui::InputFloat("Alpha Speed ME", (_float*)&m_MeshDesc.DefaultDesc.fAlphaSpeed);
-		
+
 		ImGui::SeparatorText("Shader");
 		ImGui::InputInt("Shader Index", (_int*)&m_MeshDesc.DefaultDesc.iShaderIndex);
 
@@ -1080,7 +1080,7 @@ HRESULT CController_EffectTool::Add_Trail_OP()
 	size_t iCharLen = strlen(m_szTrail_OPName);
 	size_t iConvertChars = 0;
 	mbstowcs_s(&iConvertChars, m_Trail_OPDesc.szEffectName, sizeof(m_Trail_OPDesc.szEffectName) / sizeof(_tchar), m_szTrail_OPName, iCharLen);
-	
+
 	wcsncpy_s(m_Trail_OPDesc.TextDesc.szDiffuseTexturTag, m_Texture_PrototypeTags[m_iSelected_DiffuseTextureIndex].c_str(),
 		sizeof(m_Trail_OPDesc.TextDesc.szDiffuseTexturTag) / sizeof(_tchar));
 
@@ -1104,7 +1104,7 @@ void CController_EffectTool::Trail_OP_Check()
 	if (ImGui::TreeNode("Trail OP Buffer"))
 	{
 		ImGui::InputInt("Trail OP NumInstance", (_int*)&m_Trail_OPDesc.BufferDesc.iNumInstance);
-		ImGui::InputFloat2("Trail OP LifeTime", (_float*) & m_Trail_OPDesc.BufferDesc.vLifeTime);
+		ImGui::InputFloat2("Trail OP LifeTime", (_float*)&m_Trail_OPDesc.BufferDesc.vLifeTime);
 		ImGui::TreePop();
 	}
 	if (ImGui::TreeNode("Trail OP Default"))
@@ -1308,7 +1308,7 @@ void CController_EffectTool::Trail_TP_Check()
 		ImGui::InputFloat3("Trail TP Bottom Offset", (_float*)&m_Trail_TPDesc.DefaultDesc.vBottomOffset);
 
 		ImGui::SeparatorText("Trail TP ToShader");
-		
+
 		// 셰이더
 		ImGui::InputInt("Shader Index", (_int*)&m_Trail_TPDesc.DefaultDesc.iShaderIndex);
 		ImGui::InputInt("Trail TP SaveNumInstance", (_int*)&m_Trail_TPDesc.DefaultDesc.iNumInstance);
@@ -1317,7 +1317,11 @@ void CController_EffectTool::Trail_TP_Check()
 		ImGui::InputFloat("Trail TP Alpha Speed", (_float*)&m_Trail_TPDesc.DefaultDesc.fAlphaSpeed);
 
 		// 기타
+		ImGui::SeparatorText("ETC");
 		ImGui::Checkbox("TP Loop", &m_Trail_TPDesc.DefaultDesc.bLoop);
+		ImGui::InputFloat("TP Duration", &m_Trail_TPDesc.DefaultDesc.fDuration);
+		ImGui::Checkbox("TP Fall", &m_Trail_TPDesc.DefaultDesc.bFall);
+		ImGui::InputFloat("TP FallingSpeed", &m_Trail_TPDesc.DefaultDesc.fFallingSpeed);
 		ImGui::TreePop();
 
 	}
@@ -1484,7 +1488,7 @@ void CController_EffectTool::Trail_MP_Check()
 		ImGui::InputFloat4("MinColor Head Instance", (_float*)&m_Trail_MPDesc.BufferDesc.vMinColor);
 		ImGui::InputFloat4("MaxColor Head Instance", (_float*)&m_Trail_MPDesc.BufferDesc.vMaxColor);
 
-		ImGui::SeparatorText("Tail"); 
+		ImGui::SeparatorText("Tail");
 		ImGui::InputInt("Num Tail Instance", (_int*)&m_Trail_MPDesc.BufferDesc.iTail_NumInstance);
 		ImGui::InputFloat2("Speed Tail Instance", (_float*)&m_Trail_MPDesc.BufferDesc.vTail_Speed);
 		ImGui::InputFloat2("Size Tail Instance", (_float*)&m_Trail_MPDesc.BufferDesc.vTail_Size);
@@ -1860,7 +1864,7 @@ HRESULT CController_EffectTool::Back_EffectContainer()
 	if (nullptr == pEffectContainer)
 		return E_FAIL;
 
-	if(FAILED(pEffectContainer->Add_Effects_To_Layer()))
+	if (FAILED(pEffectContainer->Add_Effects_To_Layer()))
 		return E_FAIL;
 	Delete_EffectContainer();
 	return S_OK;
@@ -1882,7 +1886,7 @@ void CController_EffectTool::Delete_EffectContainer()
 	CLayer* pLayer = m_pGameInstance->Find_Layer(LEVEL_TOOL, TEXT("Layer_Effect"));
 	if (nullptr == pLayer)
 		return;
-	
+
 	if (0 == pLayer->Get_ObjectList().size())
 		return;
 
@@ -1939,20 +1943,20 @@ HRESULT CController_EffectTool::Load_Effect()
 
 			// 마지막 점 이후부터 끝까지의 문자열을 반환합니다.
 			_wstring strExtention = wFilePath.substr(dotPosition + 1);
-			
+
 			size_t nullPos = strExtention.find(TEXT('\0'));
 			if (nullPos != _wstring::npos)
 				strExtention.erase(nullPos);
-			
+
 			if (TEXT("PE") == strExtention)
 			{
 				CParticle_Effect::PARTICLE_EFFECT_DESC TestDesc = {};
 
 				ifstream infile(wFilePath, ios::binary);
-				
+
 				if (!infile.is_open())
-				    return E_FAIL;
-				
+					return E_FAIL;
+
 				TestDesc.pParentMatrix = { nullptr };
 				TestDesc.fRotationPerSec = XMConvertToRadians(90.f);
 				TestDesc.fSpeedPerSec = 1.f;
@@ -1963,7 +1967,7 @@ HRESULT CController_EffectTool::Load_Effect()
 				infile.read(reinterpret_cast<_char*>(&TestDesc.DefaultDesc), sizeof(TestDesc.DefaultDesc));		// 이거 버퍼 초기화에 쓰고
 				infile.read(reinterpret_cast<_char*>(&TestDesc.TextDesc), sizeof(TestDesc.TextDesc));			// 이게 실제로 적용되는 거.
 				infile.read(reinterpret_cast<_char*>(&TestDesc.BufferDesc), sizeof(TestDesc.BufferDesc));			// 이게 실제로 적용되는 거.
-				
+
 				infile.close();
 
 				if (FAILED(m_pGameInstance->Add_CloneObject_ToLayer(LEVEL_TOOL, TEXT("Layer_Particle"), TEXT("Prototype_GameObject_Particle_Effect"), &TestDesc)))
@@ -2114,7 +2118,7 @@ HRESULT CController_EffectTool::Load_EffectContainer()
 
 			string FileName = ImGuiFileDialog::Instance()->GetCurrentFileName();
 			strcpy_s(m_szEffectContainerName, FileName.c_str());
-			
+
 			size_t iCharLen = strlen(m_szEffectContainerName);
 			size_t iConvertChars = 0;
 			mbstowcs_s(&iConvertChars, desc.szEffectContainerName, sizeof(desc.szEffectContainerName) / sizeof(_tchar), m_szEffectContainerName, iCharLen);
@@ -2130,7 +2134,7 @@ HRESULT CController_EffectTool::Load_EffectContainer()
 			int size_needed = MultiByteToWideChar(CP_UTF8, 0, filePath.c_str(), -1, nullptr, 0);
 			_wstring wFilePath(size_needed, 0);
 			MultiByteToWideChar(CP_UTF8, 0, filePath.c_str(), -1, &wFilePath[0], size_needed);
-	
+
 			pEffectContainer->Load_EffectContainer(wFilePath);
 
 			m_pGameInstance->Add_Object_ToLayer(LEVEL_TOOL, TEXT("Layer_Effect"), pEffectContainer);
@@ -2168,7 +2172,7 @@ HRESULT CController_EffectTool::Load_Texture(const _wstring& strEffectPath)
 
 			_wstring strPrototypeTag = TEXT("Prototype_Component_Texture_") + strFileBaseName;
 
-			if (FAILED(m_pGameInstance->Add_Prototype(LEVEL_TOOL, strPrototypeTag, 
+			if (FAILED(m_pGameInstance->Add_Prototype(LEVEL_TOOL, strPrototypeTag,
 				CTexture::Create(m_pDevice, m_pContext, strResultPath.c_str(), 1))))
 				return E_FAIL;
 			Add_Texture_ProtytypeTag(strPrototypeTag);
@@ -2478,7 +2482,7 @@ void CController_EffectTool::Texture_Selection()
 		ImGui::ListBox("Normal Texture List", &m_iSelected_NormalTextureIndex, szTextureArray.data(), (_int)szTextureArray.size(), iHeightInItem);
 		break;
 	}
-	
+
 	_wstring strDiffuseText = m_Texture_PrototypeTags[m_iSelected_DiffuseTextureIndex];
 	int iSize = WideCharToMultiByte(CP_UTF8, 0, &strDiffuseText[0], (int)strDiffuseText.size(), nullptr, 0, nullptr, nullptr);
 	string strDiffuseTo(iSize, 0);

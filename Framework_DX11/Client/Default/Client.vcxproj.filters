@@ -838,6 +838,9 @@
     <Filter Include="02.GameObjects\10.InteractObj\08.Sophia">
       <UniqueIdentifier>{05890b22-ce96-4a7f-97d1-b651cbf8cde5}</UniqueIdentifier>
     </Filter>
+    <Filter Include="02.GameObjects\12.AttackObject\SimonManus\GodHands">
+      <UniqueIdentifier>{8f7485cc-d647-4c77-8b7e-5d47d74e71e6}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Client.h">
@@ -1550,6 +1553,12 @@
     <ClInclude Include="..\Public\Sophia.h">
       <Filter>02.GameObjects\10.InteractObj\08.Sophia</Filter>
     </ClInclude>
+    <ClInclude Include="..\Public\AObj_BlackBall.h">
+      <Filter>02.GameObjects\12.AttackObject\SimonManus\BlackBall</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Public\AObj_GodHands.h">
+      <Filter>02.GameObjects\12.AttackObject\SimonManus\GodHands</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Client.cpp">
@@ -2231,6 +2240,12 @@
     </ClCompile>
     <ClCompile Include="..\Private\Sophia.cpp">
       <Filter>02.GameObjects\10.InteractObj\08.Sophia</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Private\AObj_BlackBall.cpp">
+      <Filter>02.GameObjects\12.AttackObject\SimonManus\BlackBall</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Private\AObj_GodHands.cpp">
+      <Filter>02.GameObjects\12.AttackObject\SimonManus\GodHands</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

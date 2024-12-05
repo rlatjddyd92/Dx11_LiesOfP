@@ -27,6 +27,8 @@ HRESULT CState_SimonManusP2_Route1::Start_State(void* pArg)
     m_bStampEffect = false;
     m_bStampSound = false;
     m_bSwingSound = false;
+    m_bSwing = false;
+
     return S_OK;
 }
 
@@ -151,9 +153,10 @@ void CState_SimonManusP2_Route1::Effect_Check(_double CurTrackPos)
     {
         if ((CurTrackPos >= 60 && CurTrackPos <= 85.f))
         {
-            if (!m_pMonster->Get_EffectsLoop(CSimonManus::P1_TRAIL))
+            if (!m_bSwing)
             {
                 m_pMonster->Active_Effect(CSimonManus::P1_TRAIL);
+                m_bSwing = true;
             }
         }
         else
@@ -165,9 +168,10 @@ void CState_SimonManusP2_Route1::Effect_Check(_double CurTrackPos)
     {
         if ((CurTrackPos >= 120 && CurTrackPos <= 180.f))
         {
-            if (!m_pMonster->Get_EffectsLoop(CSimonManus::P1_TRAIL))
+            if (!m_bSwing)
             {
                 m_pMonster->Active_Effect(CSimonManus::P1_TRAIL);
+                m_bSwing = true;
             }
         }
         else

@@ -34,6 +34,10 @@ public:
 		_bool		bLoop = { false };
 
 		_Vec2		vTileRepeat = { 1.f, 1.f };
+
+		_float		fDuration = { 0.f };
+		_bool		bFall = { false };
+		_float		fFallingSpeed = { 0.f };
 	} DEFAULT_DESC;
 
 	typedef struct
@@ -83,6 +87,8 @@ private:
 	DEFAULT_DESC m_InitDesc = {};
 
 	_float m_fAlpha = 0.f;
+	_float m_fAccumulateTime = { 0.f };
+
 
 private:
 	HRESULT Ready_Components(const TRAIL_TP_DESC& Desc);

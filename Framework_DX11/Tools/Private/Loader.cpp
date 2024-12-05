@@ -1446,6 +1446,8 @@ HRESULT CLoader::Ready_Textures_For_Decal()
 			CTexture::Create(m_pDevice, m_pContext, tchar_Path, 1))))
 			return E_FAIL;
 
+		CController_EffectTool::Get_Instance()->Add_Texture_ProtytypeTag(strPrototypeName);
+
 		//_findnext : <io.h>에서 제공하며 다음 위치의 파일을 찾는 함수, 더이상 없다면 -1을 리턴
 		iResult = _findnext(handle, &fd);
 	}

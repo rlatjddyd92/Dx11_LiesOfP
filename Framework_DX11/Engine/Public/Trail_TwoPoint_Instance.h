@@ -23,6 +23,8 @@ public:
 	virtual HRESULT Initialize(void* pArg) override;
 
 	_bool Update_Buffer(_fvector vWorldTopPos, _fvector vWorldBottomPos, _float fTimeDelta);
+	void Move_Buffer(_Vec3 vMoveDir, _float fSpeed, _float fTimeDelta);
+
 	void Reset();
 
 private:

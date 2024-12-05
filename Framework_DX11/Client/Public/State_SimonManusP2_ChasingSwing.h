@@ -30,6 +30,8 @@ private:
     _float              m_fCurrentTime = { 0.f };
     _float              m_fChaseDuration = { 2.f };
 
+    _bool               m_bSwing = { false };
+
     _bool               m_bStampSound = { false };
     _bool               m_bSwingSound = { false };
 

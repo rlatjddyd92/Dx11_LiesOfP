@@ -59,7 +59,7 @@ void CAObj_GoldBall::Update(_float fTimeDelta)
 {
     if (m_fLifeTime >= m_fLifeDuration)
     {
-        if (m_pEffect->Get_Active())
+        if (m_pEffect->Get_Dead())
         {
             m_pEffect->Set_Loop(false);
         }
@@ -197,5 +197,6 @@ void CAObj_GoldBall::Free()
 {
     __super::Free();
 
+    m_pEffect->Set_Cloned(false);
     Safe_Release(m_pEffect);
 }

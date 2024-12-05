@@ -72,23 +72,6 @@ void CEffect_Container::Update(_float fTimeDelta)
 		}
 	}
 
-	if (KEY_TAP(KEY::H))
-	{
-		m_bTurn = !m_bTurn;
-	}
-
-	if (KEY_TAP(KEY::J))
-		Set_Loop(true);
-
-
-	if (KEY_TAP(KEY::K))
-		Set_Loop(false);
-
-	if (true == m_bTurn)
-	{
-		m_pTransformCom->Turn(_Vec4(0.f, 1.f, 0.f, 0.f), fTimeDelta, 10.f);
-	}
-
 	m_WorldMatrix = m_pTransformCom->Get_WorldMatrix() * SocketMatrix * ParentMatrix;
 
 	for (auto& Effect : m_Effects)
@@ -151,8 +134,6 @@ void CEffect_Container::Set_Loop(_bool bLoop)
 {
 	if (true == bLoop)
 		m_isDead = false;
-
-	m_bActive = bLoop;
 
 	for (auto& Effect : m_Effects)
 	{

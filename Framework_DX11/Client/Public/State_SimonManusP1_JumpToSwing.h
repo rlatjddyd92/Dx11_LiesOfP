@@ -34,6 +34,7 @@ private:
     _uint               m_iRouteTrack = {};
 
     _bool               m_bJump = { false };
+    _bool               m_bSwing = { false };
     _bool               m_bSwingSound = { false };
 
 private:

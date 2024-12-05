@@ -40,25 +40,39 @@ void CTrail_Effect_TP::Priority_Update(_float fTimeDelta)
 
 void CTrail_Effect_TP::Update(_float fTimeDelta)
 {
-	__super::Set_WorldMatrix();
-		
 	if(true== m_DefaultDesc.bLoop)
 	{
+		__super::Set_WorldMatrix();
+
 		m_pVIBufferCom->Update_Buffer(
 			XMLoadFloat4x4(&m_WorldMatrix).r[3] + XMVector3TransformNormal(m_DefaultDesc.vTopOffset, m_WorldMatrix),
 			XMLoadFloat4x4(&m_WorldMatrix).r[3] + XMVector3TransformNormal(m_DefaultDesc.vBottomOffset, m_WorldMatrix),
 			fTimeDelta);
 	}
-
-	if (false == m_DefaultDesc.bLoop)
+	else
 	{
 		m_fAlpha += fTimeDelta * m_DefaultDesc.fAlphaSpeed;
+
+		if (true == m_DefaultDesc.bFall)
+		{
+			m_pVIBufferCom->Move_Buffer(_Vec3(0.f, -1.f, 0.f), m_DefaultDesc.fFallingSpeed, fTimeDelta);
+		}
 	}
 
 }
 
 void CTrail_Effect_TP::Late_Update(_float fTimeDelta)
 {
+	if (0.f < m_DefaultDesc.fDuration)
+	{
+		m_fAccumulateTime += fTimeDelta;
+
+		if (m_DefaultDesc.fDuration < m_fAccumulateTime)
+		{
+			m_DefaultDesc.bLoop = false;
+		}
+	}
+
 	if (false == m_DefaultDesc.bLoop && 1.f < m_fAlpha)
 	{
 		m_isActive = false;

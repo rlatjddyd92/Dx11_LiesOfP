@@ -70,26 +70,21 @@ void CAObj_Thunder::Update(_float fTimeDelta)
             m_bAttack = true;
             m_pColliderCom->IsActive(true);
             m_pSignEffect->Set_Loop(false);
-            m_pEffect->Set_Loop(true);
+            m_pEffect->Reset_Effects();
         }
+        else
+            m_fLifeTime += fTimeDelta;
     }
     else
     {
-        if (m_fLifeTime >= m_fLifeDuration)
+        if (m_pEffect->Get_Dead())
         {
-            if (m_pEffect->Get_Active())
-            {
-                m_pEffect->Set_Loop(false);
-            }
-            else if (m_pEffect->Get_Dead())
-            {
-                m_isDead = true;
-            }
+            m_isDead = true;
         }
     }
 
-    m_fLifeTime += fTimeDelta;
     m_pColliderCom->Update(m_pTransformCom->Get_WorldMatrix_Ptr());
+
     if (!m_bAttack)
     {
         m_pSignEffect->Update(fTimeDelta);
@@ -110,6 +105,7 @@ void CAObj_Thunder::Late_Update(_float fTimeDelta)
     {
         m_pEffect->Late_Update(fTimeDelta);
     }
+
     if (m_fLifeTime < m_fLifeDuration)
     {
         m_pGameInstance->Add_ColliderList(m_pColliderCom);
@@ -184,12 +180,11 @@ HRESULT CAObj_Thunder::Ready_Components()
     m_pEffect = CEffect_Manager::Get_Instance()->Clone_Effect(TEXT("SimonManus_Attack_LightningDown"), pParetnMatrix,
         nullptr, _Vec3(0.f, 0.f, 0.f), _Vec3(0.f, 0.f, 0.f), _Vec3(1.f, 1.f, 1.f));
 
-    m_pEffect->Set_Loop(false);
+    m_pEffect->Reset_Effects();
 
     m_pSignEffect = CEffect_Manager::Get_Instance()->Clone_Effect(TEXT("SimonManus_Attack_LightningSign"), pParetnMatrix,
         nullptr, _Vec3(0.f, 0.f, 0.f), _Vec3(0.f, 0.f, 0.f), _Vec3(1.f, 1.f, 1.f));
 
-    m_pSignEffect->Set_Loop(true);
 
     return S_OK;
 }
@@ -224,5 +219,8 @@ void CAObj_Thunder::Free()
 {
     __super::Free();
 
+    m_pSignEffect->Set_Cloned(false);
+    Safe_Release(m_pSignEffect);
+    m_pEffect->Set_Cloned(false);
     Safe_Release(m_pEffect);
 }

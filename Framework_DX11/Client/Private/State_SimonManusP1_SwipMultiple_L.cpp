@@ -24,6 +24,7 @@ HRESULT CState_SimonManusP1_SwipMultiple_L::Start_State(void* pArg)
     m_bSwing_Sound = false;
     m_bStamp_Sound = false;
     m_bResetCheck = false;
+    m_bSwing = false;
     return S_OK;
 }
 
@@ -35,6 +36,7 @@ void CState_SimonManusP1_SwipMultiple_L::Update(_float fTimeDelta)
         {
         case 0:
             m_pMonster->Change_Animation(AN_ROUTE_LAST, false, 0.2f, 0);
+            m_bSwing = false;
             m_bSwing_Sound = false;
             break;
 
@@ -122,9 +124,10 @@ void CState_SimonManusP1_SwipMultiple_L::Effect_Check(_double CurTrackPos)
     {
         if ((CurTrackPos >= 80.f && CurTrackPos <= 205.f))
         {
-            if (!m_pMonster->Get_EffectsLoop(CSimonManus::P1_TRAIL))
+            if (!m_bSwing)
             {
                 m_pMonster->Active_Effect(CSimonManus::P1_TRAIL);
+                m_bSwing = true;
             }
         }
         else
@@ -136,9 +139,10 @@ void CState_SimonManusP1_SwipMultiple_L::Effect_Check(_double CurTrackPos)
     {
         if ((CurTrackPos >= 20.f && CurTrackPos <= 80.f))
         {
-            if (!m_pMonster->Get_EffectsLoop(CSimonManus::P1_TRAIL))
+            if (!m_bSwing)
             {
                 m_pMonster->Active_Effect(CSimonManus::P1_TRAIL);
+                m_bSwing = true;
             }
         }
         else

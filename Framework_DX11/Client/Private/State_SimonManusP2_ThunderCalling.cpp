@@ -16,13 +16,14 @@ HRESULT CState_SimonManusP2_ThunderCalling::Initialize(_uint iStateNum, void* pA
 {
     m_iStateNum = iStateNum;
     //CSimonManus::FSMSTATE_DESC* pDesc = static_cast<CSimonManus::FSMSTATE_DESC*>(pArg);
-
+   
     return S_OK;
 }
 
 HRESULT CState_SimonManusP2_ThunderCalling::Start_State(void* pArg)
 {
     m_pMonster->Change_Animation(AN_THUNDERCALLING, false, 0.1f, 0);
+    m_bAttackCheck = false;
 
     return S_OK;
 }
@@ -59,7 +60,7 @@ void CState_SimonManusP2_ThunderCalling::Effect_Check(_double CurTrackPos)
         {
 
             CAttackObject::ATKOBJ_DESC Desc{};
-            Desc.vPos = _Vec3{ m_pMonster->Get_Transform()->Get_State(CTransform::STATE_POSITION) + m_pMonster->Get_Transform()->Get_State(CTransform::STATE_LOOK) };
+            Desc.vPos = _Vec3{ m_pMonster->Get_Transform()->Get_State(CTransform::STATE_POSITION) + (m_pMonster->Get_Transform()->Get_State(CTransform::STATE_LOOK) * 2) };
             
             m_pGameInstance->Add_CloneObject_ToLayer(LEVEL_GAMEPLAY, TEXT("Monster_Attack"), TEXT("Prototype_GameObject_ThunderCalling"), &Desc);
             m_bAttackCheck = true;

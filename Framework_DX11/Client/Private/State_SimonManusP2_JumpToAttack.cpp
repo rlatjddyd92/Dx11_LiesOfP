@@ -62,6 +62,7 @@ HRESULT CState_SimonManusP2_JumpToAttack::Start_State(void* pArg)
 
     m_bMagic = false;
     m_bJump = false;
+    m_bSwing = false;
     m_bMagicSound = false;
 
     return S_OK;
@@ -229,9 +230,10 @@ void CState_SimonManusP2_JumpToAttack::Effect_Check(_double CurTrackPos)
         {
             if (CurTrackPos >= 35.f && CurTrackPos <= 65.f)
             {
-                if (!m_pMonster->Get_EffectsLoop(CSimonManus::P1_TRAIL))
+                if (!m_bSwing)
                 {
                     m_pMonster->Active_Effect(CSimonManus::P1_TRAIL);
+                    m_bSwing = true;
                 }
             }
             else

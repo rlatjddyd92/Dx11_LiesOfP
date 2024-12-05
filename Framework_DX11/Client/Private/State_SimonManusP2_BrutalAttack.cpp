@@ -23,6 +23,8 @@ HRESULT CState_SimonManusP2_BrutalAttack::Start_State(void* pArg)
     m_pMonster->Change_Animation(AN_BRUTALATTACK, false, 0.1f, 0);
     m_bSwingSound = false;
     m_bStampSound = false;
+    m_bSwing = false;
+
     return S_OK;
 }
 

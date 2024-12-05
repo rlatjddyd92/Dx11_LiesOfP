@@ -55,11 +55,7 @@ void CAObj_StampBlast::Update(_float fTimeDelta)
 {
     if (m_fLifeTime >= m_fLifeDuration)
     {
-        if (m_pEffect->Get_Active())
-        {
-            m_pEffect->Set_Loop(false);
-        }
-        else if (m_pEffect->Get_Dead())
+        if (m_pEffect->Get_Dead())
         {
             m_isDead = true;
         }
@@ -153,7 +149,7 @@ HRESULT CAObj_StampBlast::Ready_Components()
     m_pEffect = CEffect_Manager::Get_Instance()->Clone_Effect(TEXT("SimonManus_Attack_ChargeStamp2"), pParetnMatrix,
         nullptr, _Vec3(0.f, 0.f, 0.f), _Vec3(0.f, 0.f, 0.f), _Vec3(1.f, 1.f, 1.f));
 
-    m_pEffect->Set_Loop(true);
+    m_pEffect->Reset_Effects();
 
     return S_OK;
 }
@@ -188,5 +184,6 @@ void CAObj_StampBlast::Free()
 {
     __super::Free();
 
+    m_pEffect->Set_Cloned(false);
     Safe_Release(m_pEffect);
 }

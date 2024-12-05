@@ -167,6 +167,7 @@ void CState_SimonManusP2_Stamp::Effect_Check(_double CurTrackPos)
             {
                 CEffectObject::EFFECTOBJ_DESC Desc{};
                 Desc.fLifeDuration = 1.5f;
+                Desc.bLoopCheck = true;
                 Desc.strEffectTag = TEXT("SimonManus_Attack_Stamp");
                 _float4x4 WorldMat{};
 
@@ -201,6 +202,7 @@ void CState_SimonManusP2_Stamp::Effect_Check(_double CurTrackPos)
             {
                 CFollowedEffect::FOLLOWEFFOBJ_DESC Desc{};
                 Desc.fLifeDuration = 1.5f;
+                Desc.bLoopCheck = true;
                 Desc.strEffectTag = TEXT("SimonManus_Attack_ChargeStamp");
                 _float4x4 WorldMat{};
 
