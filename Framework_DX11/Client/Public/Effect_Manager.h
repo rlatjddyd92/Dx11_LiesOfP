@@ -32,7 +32,7 @@ private:
 	virtual ~CEffect_Manager() = default;
 
 public:
-	HRESULT Initialize(ID3D11Device* pDevice, ID3D11DeviceContext* pContext, const _wstring& strEffectPath, const _wstring strTexturePath);
+	HRESULT Initialize(ID3D11Device* pDevice, ID3D11DeviceContext* pContext, const _wstring& strEffectPath, const _wstring strTexturePath, const _wstring strModelPath);
 
 public:
 	class CEffect_Container* Clone_Effect(const _wstring& strECTag, const _Matrix* pParentMatrix, const _Matrix* pSocketMatrix, _Vec3 vPos = {}, _Vec3 vDir = {}, _Vec3 vScale = {1.f, 1.f, 1.f});
@@ -62,7 +62,7 @@ private:
 	HRESULT Load_EffectContainers(const _wstring& strEffectPath);
 
 	HRESULT Load_Textures(const _wstring strTexturePath);
-	HRESULT Load_Models();
+	HRESULT Load_Models(const _wstring& strEffectPath);
 	HRESULT Load_Shaders();
 	HRESULT Load_Objects();
 
@@ -82,6 +82,7 @@ private:
 
 	_wstring Get_FileName(const _wstring& strFileTag);
 	_wstring Get_FileExtentin(const _wstring& strFileTag);
+	_wstring Remove_FileExtentin(const _wstring& strFileTag);
 
 	// 풀링할 오브젝트 만들어서 맵에 추가하고 반환하는 함수.
 	class CEffect_Container* Find_PoolingEffect(const _wstring& strECTag, void* pArg);
