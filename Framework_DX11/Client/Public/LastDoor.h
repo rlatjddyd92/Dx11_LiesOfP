@@ -8,6 +8,7 @@ class CCollider;
 class CShader;
 class CModel;
 class CRigidBody;
+class CSound;
 END
 
 BEGIN(Client)
@@ -37,10 +38,12 @@ private:
 	CShader* m_pShaderCom = { nullptr };
 	CModel* m_pModelCom = { nullptr };
 	CRigidBody* m_pRigidBodyCom = { nullptr };
+	CSound* m_pSoundCom = { nullptr };
 
 private:
 	_bool m_bShadow = false;
 	_bool m_bOpen = false;
+	_bool m_bPlaySound = { false };
 
 	_int m_iAnim_Open = { 0 };
 private:
