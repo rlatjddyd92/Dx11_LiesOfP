@@ -137,6 +137,21 @@ public:
 		GROUP_PLAYER_STAMINA_SECOND,
 		GROUP_BOSS_HP_SECOND,
 
+		// 게이지 폰트 
+		GROUP_HP_NUM,
+		GROUP_ST_NUM,
+
+		// 아뮬렛
+		GROUP_AMULET_STATIC,
+		GROUP_AMULET_ITEM,
+		GROUP_AMULET_NAME,
+		GROUP_AMULET_DESC,
+
+		GROUP_DEFENCE_STATIC,
+		GROUP_DEFENCE_DATA,
+
+		GROUP_CTRL,
+
 		GROUP_END
 	};
 
@@ -192,6 +207,10 @@ public:
 	void Activate_Boss_Hp_Bar(_bool bActive) { m_bIs_BossHp_Activate = bActive; }
 	void Set_Boss_Hp_Bar_Info(_wstring strName, _float HpNow, _float HpMax) { m_strBossName = strName, m_fBoss_Hp_Now = HpNow; m_fBoss_Hp_Max = HpMax; }
 
+	// 무기 락 조정
+	void SetWeaponLock(_bool bIsWeaponLock);
+
+
 	// 좌상단 게이지는 스탯 매니저의 내용을 참조하여 변경 
 	// 외부 -> 스탯 매니저 -> UI 매니저(Page_Play)
 
@@ -223,6 +242,7 @@ private:
 	void Switch_Bag_UI_Action(_float fTimeDelta, _bool bIsOpen);
 	void Using_Fable_UI_Action(_float fTimeDelta);
 
+
 private:
 	// 보조 가방
 	_bool m_bIsBagOpen = false;
@@ -239,6 +259,10 @@ private:
 	_float m_fDrop_Item_ShowTime = 3.f;
 
 	// 무기 조정 
+	_bool m_bIsWeapon_Lock[2] = { false, false }; // <- [0] : UI의 작동을 실제 막는 변수, [1] : 외부에서 요청 들어온 내용 
+	// 만일 [0], [1]이 {false,true}인 경우 무기 전환 후 {true,true}로 바로 맞춘다 
+	// [0], [1]이 {true, false}인 경우 {false,false}로 맞추기만 한다 
+
 	_int m_iWeapon_Equip_0_Symbol = 0;
 	_Vec2 m_vSwitch_Time = { 0.f,0.5f };
 	_float m_fNormal_Weapon_Fx_Alpha_Origin = 0.f;
@@ -250,6 +274,8 @@ private:
 	_wstring m_strBossName = {};
 	_float m_fBoss_Hp_Now = 0.f;
 	_float m_fBoss_Hp_Max = 0.f;
+
+
 
 
 private: // 테스트 변수

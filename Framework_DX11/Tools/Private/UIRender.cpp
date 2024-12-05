@@ -574,6 +574,28 @@ void CUIRender::Ready_Font()
 	m_vecFont_tchar[_int(UI_FONT::FONT_BOLD_32)] = TEXT("Font_Bold_32");
 	m_vecFont_tchar[_int(UI_FONT::FONT_BOLD_40)] = TEXT("Font_Bold_40");
 	m_vecFont_tchar[_int(UI_FONT::FONT_BOLD_48)] = TEXT("Font_Bold_48");
+
+
+	m_pGameInstance->Add_Font(TEXT("Noto_Normal_10"), TEXT("../Bin/Resources/Fonts/Noto_Nomal_10.spritefont"));
+	m_pGameInstance->Add_Font(TEXT("Noto_Medium_10"), TEXT("../Bin/Resources/Fonts/Noto_Medium_10.spritefont"));
+	m_pGameInstance->Add_Font(TEXT("Noto_Black_10"), TEXT("../Bin/Resources/Fonts/Noto_Black_10.spritefont"));
+	m_pGameInstance->Add_Font(TEXT("Noto_ExtraLight_10"), TEXT("../Bin/Resources/Fonts/Noto_ExtraLight_10.spritefont"));
+	m_pGameInstance->Add_Font(TEXT("Noto_Light_10"), TEXT("../Bin/Resources/Fonts/Noto_Light_10.spritefont"));
+	m_pGameInstance->Add_Font(TEXT("Noto_Semiblod_10"), TEXT("../Bin/Resources/Fonts/Noto_SemiBlod_10.spritefont"));
+
+	m_vecFont_char[_int(UI_FONT::NOTO_NORMAL_10)] = "Noto_Normal_10";
+	m_vecFont_char[_int(UI_FONT::NOTO_MEDIUM_10)] = "Noto_Medium_10";
+	m_vecFont_char[_int(UI_FONT::NOTO_BLACK_10)] = "Noto_Black_10";
+	m_vecFont_char[_int(UI_FONT::NOTO_EXTRALIGHT_10)] = "Noto_ExtraLight_10";
+	m_vecFont_char[_int(UI_FONT::NOTO_LIGHT_10)] = "Noto_Light_10";
+	m_vecFont_char[_int(UI_FONT::NOTO_SEMIBLOD_10)] = "Noto_Semiblod_10";
+
+	m_vecFont_tchar[_int(UI_FONT::NOTO_NORMAL_10)] = TEXT("Noto_Normal_10");
+	m_vecFont_tchar[_int(UI_FONT::NOTO_MEDIUM_10)] = TEXT("Noto_Medium_10");
+	m_vecFont_tchar[_int(UI_FONT::NOTO_BLACK_10)] = TEXT("Noto_Black_10");
+	m_vecFont_tchar[_int(UI_FONT::NOTO_EXTRALIGHT_10)] = TEXT("Noto_ExtraLight_10");
+	m_vecFont_tchar[_int(UI_FONT::NOTO_LIGHT_10)] = TEXT("Noto_Light_10");
+	m_vecFont_tchar[_int(UI_FONT::NOTO_SEMIBLOD_10)] = TEXT("Noto_Semiblod_10");
 }
 
 HRESULT CUIRender::Ready_Texture()

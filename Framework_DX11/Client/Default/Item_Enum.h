@@ -174,7 +174,7 @@ enum class SPECIAL_ITEM
 	SP_PURIFICATION = 256, // 속성 정화 앰플, 디버프 제거 O
 	SP_DEAD = 272, // 최후의 수단, 사망 O
 	SP_GRANADE = 275, // 클러스터 수류탄 O
-	SP_THERMITE = 275, // 테르밋 O
+	SP_THERMITE = 276, // 테르밋 O
 	SP_THROW_BATTERY = 279, // 투척용 전지 O 
 
 	SP_END

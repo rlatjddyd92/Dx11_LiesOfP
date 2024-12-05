@@ -148,6 +148,76 @@ HRESULT CPlayer::Initialize(void * pArg)
 
 void CPlayer::Priority_Update(_float fTimeDelta)
 {
+	// 24-12-05 김성용
+	// 아이템 연동 
+	
+	/*
+	UI 및 아이템 작동 시스템 
+	1. UI, 아이템 매니저(인벤,장비) 시스템은 모든 오브젝트보다 나중에 업데이트 진행 
+	2. 이번 프레임에 플레이어에서 조작한 내용에 대한 피드백은 다음 프레임에 받을 수 있음
+	3. 이에 따라 Priority_Update에서 가장 먼저 지난 프레임의 내용을 받아 보도록 코드 작성 
+	*/
+
+
+	// ★ 아래 내용은 지난 프레임의 조작 결과임에 주의 ★
+	// 지난 프레임의 아이템 사용 기록 가져오기 
+	list<SPECIAL_ITEM>& Item_Type_list = GET_GAMEINTERFACE->Get_LastFrame_UsingItem_Info();
+	
+	_wstring strTest{};
+
+	if (!Item_Type_list.empty())
+	{
+		for (auto& iter : Item_Type_list)
+		{
+			switch (iter)
+			{
+			case SPECIAL_ITEM::SP_PULSE_BATTERY: // 펄스 전지, 충전 수치 따로 존재하며 사용 시, 체력 회복 O
+				strTest += TEXT("펄스 전지, ");
+				break;
+			case SPECIAL_ITEM::SP_DUSTCAT: // 고양이 가루, 기척 감소 
+				strTest += TEXT("고양이 가루, ");
+				break;
+			case SPECIAL_ITEM::SP_GRINDER: // 그라인더, 무기 내구도 증가 O 
+				strTest += TEXT("그라인더, ");
+				break;
+			case SPECIAL_ITEM::SP_LAMP: // 모나드의 등불, 주변 밝기 증가 
+				strTest += TEXT("모나드의 등불, ");
+				break;
+			case SPECIAL_ITEM::SP_TELEPOT: // 문페이즈 회중시계, 순간이동 O
+				strTest += TEXT("문페이즈 회중시계, ");
+				break;
+			case SPECIAL_ITEM::SP_RESISTANCE: // 속성 저항 앰플, 속성 저항 증가 O
+				strTest += TEXT("속성 저항 앰플, ");
+				break;
+			case SPECIAL_ITEM::SP_PURIFICATION: // 속성 정화 앰플, 디버프 제거 O
+				strTest += TEXT("속성 정화 앰플, ");
+				break;
+			case SPECIAL_ITEM::SP_DEAD: // 최후의 수단, 사망 O
+				strTest += TEXT("최후의 수단, ");
+				break;
+			case SPECIAL_ITEM::SP_GRANADE: // 클러스터 수류탄 O
+				strTest += TEXT("클러스터 수류탄, ");
+				break;
+			case SPECIAL_ITEM::SP_THERMITE: // 테르밋 O
+				strTest += TEXT("테르밋, ");
+				break;
+			case SPECIAL_ITEM::SP_THROW_BATTERY: // 투척용 전지 O 
+				strTest += TEXT("투척용 전지, ");
+				break;
+			case SPECIAL_ITEM::SP_END: // 특수 기능이 없는 아이템을 사용했거나 사용한 아이템이 없음
+				break;
+			default:
+				break;
+			}
+		}
+
+		GET_GAMEINTERFACE->Show_Script(strTest, TEXT("none"), 1.f);
+	}
+
+
+	
+	
+
 	if (m_isGuard)
 	{
 		m_fGuardTime += fTimeDelta;
@@ -382,7 +452,20 @@ void CPlayer::Change_Weapon()
 _uint CPlayer::Change_WeaponType()
 {
 	m_pWeapon[m_eWeaponType]->Disappear();
-	m_eWeaponType = WEAPON_TYPE((m_eWeaponType + 1) % WEP_END);
+	
+
+	// 24-12-05 김성용
+	
+	// 무기 락 적용 
+	GET_GAMEINTERFACE->SetWeaponLock(true);
+
+	// 인벤과 플레이어 모델 연동 
+	m_eWeaponType = WEAPON_TYPE(GET_GAMEINTERFACE->Get_Weapon_Model_Index());
+
+	// 원래 코드 
+	//m_eWeaponType = WEAPON_TYPE((m_eWeaponType + 1) % WEP_END);
+
+
 	return m_eWeaponType;
 }
 

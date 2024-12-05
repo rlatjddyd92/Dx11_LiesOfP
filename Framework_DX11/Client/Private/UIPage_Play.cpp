@@ -64,6 +64,7 @@ void CUIPage_Play::Late_Update(_float fTimeDelta)
 {
 	LU_Gauge_Update(fTimeDelta);
 	LD_Potion_Tool_Update(fTimeDelta);
+	LD_Bag_Update(fTimeDelta);
 	LD_Arm_Update(fTimeDelta);
 	RU_Coin_Update(fTimeDelta);
 	RD_Weapon_Update(fTimeDelta);
@@ -105,7 +106,7 @@ CHECK_MOUSE CUIPage_Play::Check_Page_Action(_float fTimeDelta)
 	Action_Potion_Tool(fTimeDelta);
 	Action_Arm(fTimeDelta);
 	Action_Weapon(fTimeDelta);
-
+	
 
 
 	return CHECK_MOUSE::MOUSE_NONE;
@@ -142,11 +143,17 @@ HRESULT CUIPage_Play::Render_PlayInfo(CUIRender_Client* pRender_Client)
 	return S_OK;
 }
 
+void CUIPage_Play::SetWeaponLock(_bool bIsWeaponLock)
+{
+	if (m_bIsWeapon_Lock[1] != bIsWeaponLock)
+		m_bIsWeapon_Lock[1] = bIsWeaponLock;
+
+	if (m_bIsWeapon_Lock[1])
+		GET_GAMEINTERFACE->Change_Weapon();
+}
+
 void CUIPage_Play::Action_Potion_Tool(_float fTimeDelta)
 {
-	/*if (GET_GAMEINTERFACE->Get_InvenLock())
-		return;*/
-
 	if ((!m_bIsBagOpen) && (KEY_TAP(KEY::T)))
 	{
 		if (m_vec_Group_Ctrl[_int(PART_GROUP::GROUP_SELECT_CELL)]->fRatio != 0.f)
@@ -215,20 +222,19 @@ void CUIPage_Play::Action_Arm(_float fTimeDelta)
 
 void CUIPage_Play::Action_Weapon(_float fTimeDelta)
 {
-	/*if (GET_GAMEINTERFACE->Get_InvenLock())
-		return;*/
+	if (m_bIsWeapon_Lock[0] + m_bIsWeapon_Lock[1] == 2)
+		return;
 
 	if (KEY_TAP(KEY::TAPKEY))
 	{
 		_bool bIsNormal = GET_GAMEINTERFACE->Get_Equip_Item_Info(EQUIP_SLOT::EQUIP_WEAPON_BLADE_0)->bModule_Weapon;
 		if (!bIsNormal)
 			bIsNormal = GET_GAMEINTERFACE->Get_Equip_Item_Info(EQUIP_SLOT::EQUIP_WEAPON_BLADE_1)->bModule_Weapon;
-		GET_GAMEINTERFACE->Change_Weapon();
 		if (bIsNormal)
 			m_vSwitch_Time.x += 0.01f;
 	}
-	
-	
+
+	m_bIsWeapon_Lock[0] = m_bIsWeapon_Lock[1];
 }
 
 _bool CUIPage_Play::Action_InterAction(_wstring strInterName)

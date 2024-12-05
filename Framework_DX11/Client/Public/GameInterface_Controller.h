@@ -99,8 +99,9 @@ public: // 외부에서 매니저 접근
 	void Set_Boss_Hp_Bar_Info(_wstring strName, _float HpNow, _float HpMax) { m_pUIManager->Set_Boss_Hp_Bar_Info(strName, HpNow, HpMax); }
 
 
-	// 아이템 획득 정보 
+	// 아이템 관련
 	void Input_Drop_Item_Info(_int iIndex, _int iCount) { m_pUIManager->Input_Drop_Item_Info(iIndex, iCount); }
+	void SetWeaponLock(_bool bIsWeaponLock) { m_pUIManager->SetWeaponLock(bIsWeaponLock); }
 
 	// 메인 조정 
 	HRESULT Open_Loading_Page() { return m_pUIManager->Open_Loading_Page(); }
@@ -146,9 +147,7 @@ public: // 외부에서 매니저 접근
 #pragma region Item_Manager
 	// 플레이어 참조용 
 	CPlayer::WEAPON_TYPE Get_Weapon_Model_Index() { return m_pItem_Manager->Get_Weapon_Model_Index(); } // 현재 사용 중인 무기의 모델 번호 리턴
-	SPECIAL_ITEM Get_Item_Function() { return m_pItem_Manager->Get_Item_Function(); }
-
-
+	list<SPECIAL_ITEM>& Get_LastFrame_UsingItem_Info() { return m_pItem_Manager->Get_LastFrame_UsingItem_Info(); }
 
 	// 접근, 수정
 	_bool Is_ItemData_Change() { return m_pItem_Manager->Is_ItemData_Change(); }
@@ -188,7 +187,7 @@ public: // 외부에서 매니저 접근
 	const CItem_Manager::ITEM* Get_Now_Equip_Weapon_Blade() { return m_pItem_Manager->Get_Now_Equip_Weapon_Blade(); }
 	const CItem_Manager::ITEM* Get_Now_Equip_Weapon_Handle() { return m_pItem_Manager->Get_Now_Equip_Weapon_Handle(); }
 
-
+	
 
 	// 포션 관련
 	void Add_Potion_Gauge(_float fAdd) { m_pItem_Manager->Add_Potion_Gauge(fAdd); }

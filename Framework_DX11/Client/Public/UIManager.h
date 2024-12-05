@@ -130,7 +130,7 @@ public:
 		m_pUIPage_ItemInfo->Off_ItemAction();
 	}
 
-	
+	void SetWeaponLock(_bool bIsWeaponLock) { m_pUIPage_Play->SetWeaponLock(bIsWeaponLock); }
 
 private:
 	void UIControl_Common(_float fTimeDelta);

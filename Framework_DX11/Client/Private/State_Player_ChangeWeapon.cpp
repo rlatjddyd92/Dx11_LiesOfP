@@ -4,6 +4,10 @@
 #include "Model.h"
 #include "Player.h"
 
+// 24-12-05 김성용
+// 무기 락 적용 
+#include "GameInterface_Controller.h"
+
 CState_Player_ChangeWeapon::CState_Player_ChangeWeapon(CFsm* pFsm, CPlayer* pPlayer)
     :CState{ pFsm }
     , m_pPlayer{ pPlayer }
@@ -67,6 +71,10 @@ void CState_Player_ChangeWeapon::Update(_float fTimeDelta)
             m_pPlayer->Change_State(CPlayer::OH_IDLE);
         else
             m_pPlayer->Change_State(CPlayer::TH_IDLE);
+
+        // 24-12-05 김성용
+        // 무기 락 적용 
+        GET_GAMEINTERFACE->SetWeaponLock(false);
     }
 }
 
