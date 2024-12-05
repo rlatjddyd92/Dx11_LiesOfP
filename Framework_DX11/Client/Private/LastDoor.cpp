@@ -51,8 +51,16 @@ void CLastDoor::Update(_float fTimeDelta)
 {
 	if (m_bOpen)
 	{
+		if (m_bPlaySound == false)
+		{
+			m_bPlaySound = true;
+			m_pSoundCom->Play2D(TEXT("AMB_OJ_DR_Wood_Gate_M_Open_Cut.wav"), &g_fEffectVolume);
+		}
 		m_pRigidBodyCom->Set_Kinematic(true);
 		m_pModelCom->Play_Animation(fTimeDelta);
+
+		if (m_bPlaySound && m_pModelCom->Get_IsEndAnimArray()[m_iAnim_Open])
+			m_pSoundCom->Stop();
 	}
 	else
 		m_pModelCom->Update_Bone();
@@ -140,6 +148,12 @@ HRESULT CLastDoor::Ready_Components()
 		return E_FAIL;
 	m_pColliderCom->Set_Owner(this);
 
+	/* FOR.Com_Sound */
+	if (FAILED(__super::Add_Component(LEVEL_STATIC, TEXT("Prototype_Component_Sound"),
+		TEXT("Com_Sound"), reinterpret_cast<CComponent**>(&m_pSoundCom))))
+		return E_FAIL;
+	m_pSoundCom->Set_Owner(this);
+
 	// 항상 마지막에 생성하기
 	CRigidBody::RIGIDBODY_DESC RigidBodyDesc{};
 	RigidBodyDesc.isStatic = false;
@@ -201,6 +215,7 @@ void CLastDoor::Free()
 {
 	__super::Free();
 	Safe_Release(m_pRigidBodyCom);
+	Safe_Release(m_pSoundCom);
 	Safe_Release(m_pColliderCom);
 	Safe_Release(m_pShaderCom);
 	Safe_Release(m_pModelCom);

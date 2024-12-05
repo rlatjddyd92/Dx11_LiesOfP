@@ -807,10 +807,10 @@
     </Filter>
     <Filter Include="05.Fsm\Player\TwoHand\00.Attack\FlameSword\00.FableArts\General">
       <UniqueIdentifier>{ee6e207b-0b6e-437e-8552-023b6ae90c2a}</UniqueIdentifier>
-	</Filter>
+    </Filter>
     <Filter Include="02.GameObjects\14.CutScene">
       <UniqueIdentifier>{9c37d23a-9c1b-4b27-a4e0-a4b833b353e4}</UniqueIdentifier>
-	</Filter>
+    </Filter>
     <Filter Include="02.GameObjects\12.AttackObject\SimonManus\ThunderCalling">
       <UniqueIdentifier>{6a300c4f-6744-4bb0-a855-c4c8bcb7461f}</UniqueIdentifier>
     </Filter>
@@ -831,9 +831,12 @@
     </Filter>
     <Filter Include="05.Fsm\Monster\SimonManus\P2\Attack\Single\ThunderBall">
       <UniqueIdentifier>{8b883092-bbab-4d18-b414-4009f8cdd9f3}</UniqueIdentifier>
-	</Filter>
+    </Filter>
     <Filter Include="03.GameInterface_Controller\02.Player_Stat_Manager">
       <UniqueIdentifier>{a1e3baf8-3478-4ec4-89c1-68e0b1ea6bdf}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.GameObjects\10.InteractObj\08.Sophia">
+      <UniqueIdentifier>{05890b22-ce96-4a7f-97d1-b651cbf8cde5}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -1531,10 +1534,10 @@
     </ClInclude>
     <ClInclude Include="..\Public\State_Player_Flame_ParryAttack.h">
       <Filter>05.Fsm\Player\TwoHand\00.Attack\FlameSword\00.FableArts\ParryAttack</Filter>
-	</ClInclude>
+    </ClInclude>
     <ClInclude Include="..\Public\CutScene.h">
       <Filter>02.GameObjects\14.CutScene</Filter>
-	</ClInclude>
+    </ClInclude>
     <ClInclude Include="..\Public\AObj_ThunderCalling.h">
       <Filter>02.GameObjects\12.AttackObject\SimonManus\ThunderCalling</Filter>
     </ClInclude>
@@ -1543,6 +1546,9 @@
     </ClInclude>
     <ClInclude Include="..\Public\AObj_LightningBall.h">
       <Filter>02.GameObjects\12.AttackObject\SimonManus\LightningBall</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Public\Sophia.h">
+      <Filter>02.GameObjects\10.InteractObj\08.Sophia</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -2210,10 +2216,10 @@
     </ClCompile>
     <ClCompile Include="..\Private\State_Player_Flame_ParryAttack.cpp">
       <Filter>05.Fsm\Player\TwoHand\00.Attack\FlameSword\00.FableArts\ParryAttack</Filter>
-	</ClCompile>
+    </ClCompile>
     <ClCompile Include="..\Private\CutScene.cpp">
       <Filter>02.GameObjects\14.CutScene</Filter>
-	</ClCompile>
+    </ClCompile>
     <ClCompile Include="..\Private\AObj_ThunderCalling.cpp">
       <Filter>02.GameObjects\12.AttackObject\SimonManus\ThunderCalling</Filter>
     </ClCompile>
@@ -2222,6 +2228,9 @@
     </ClCompile>
     <ClCompile Include="..\Private\AObj_LightningBall.cpp">
       <Filter>02.GameObjects\12.AttackObject\SimonManus\LightningBall</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Private\Sophia.cpp">
+      <Filter>02.GameObjects\10.InteractObj\08.Sophia</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

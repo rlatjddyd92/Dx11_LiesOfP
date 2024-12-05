@@ -55,6 +55,7 @@
 #include "Weapon_Scissor_Handle.h"
 #include "Weapon_Scissor_Blade.h"
 #include "Weapon_SimonManus_Hammer.h"
+#include "Sophia.h"
 #pragma endregion
 
 #include "GameInstance.h"
@@ -285,6 +286,8 @@ HRESULT CLoader::Ready_Resources_For_LogoLevel()
 
 	m_pGameInstance->LoadSoundFile("Monster/Effect");
 	m_pGameInstance->LoadSoundFile("Monster/SimonManus");
+
+	m_pGameInstance->LoadSoundFile("Scenario/Object");
 
 	lstrcpy(m_szLoadingText, TEXT("객체원형을(를) 로딩중입니다."));
 	/* For. Prototype_GameObject_BackGround */
@@ -1087,6 +1090,11 @@ HRESULT CLoader::Ready_Prototype()
 	/* For. Prototype_GameObject_LastDoor */
 	if (FAILED(m_pGameInstance->Add_Prototype(TEXT("Prototype_GameObject_LastDoor"),
 		CLastDoor::Create(m_pDevice, m_pContext))))
+		return E_FAIL;
+
+	/* For. Prototype_GameObject_Sophia */
+	if (FAILED(m_pGameInstance->Add_Prototype(TEXT("Prototype_GameObject_Sophia"),
+		CSophia::Create(m_pDevice, m_pContext))))
 		return E_FAIL;
 #pragma endregion
 

@@ -303,6 +303,13 @@ HRESULT CLevel_GamePlay::Read_Map_Data()
 						continue;
 					}
 
+					if (wcscmp(pDesc.szModelTag, TEXT("Sophia_Stoned")) == 0)
+					{
+						if (FAILED(m_pGameInstance->Add_CloneObject_ToLayer(LEVEL_GAMEPLAY, TEXT("Layer_Map"), TEXT("Prototype_GameObject_Sophia"), &pDesc)))
+							return E_FAIL;
+						continue;
+					}
+
 					CStaticObj::STATICOBJ_DESC staticObjDesc = {};
 					int bufferSize = WideCharToMultiByte(CP_ACP, 0, pDesc.szModelTag, -1, NULL, 0, NULL, NULL);
 					WideCharToMultiByte(CP_ACP, 0, pDesc.szModelTag, -1, staticObjDesc.szModelTag, bufferSize, NULL, NULL);
