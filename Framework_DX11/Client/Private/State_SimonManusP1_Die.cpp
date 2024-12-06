@@ -29,6 +29,7 @@ void CState_SimonManusP1_Die::Update(_float fTimeDelta)
 {
     if (End_Check())
     {
+        m_pMonster->Reset_Die();
         dynamic_cast<CSimonManus*>(m_pMonster)->ChangePhase();
         return;
     }
