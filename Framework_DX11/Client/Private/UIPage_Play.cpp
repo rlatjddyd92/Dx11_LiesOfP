@@ -854,6 +854,7 @@ void CUIPage_Play::Boss_Hp_Update(_float fTimeDelta)
 	if (!m_bIs_BossHp_Activate)
 	{
 		__super::Array_Control(_int(PART_GROUP::GROUP_BOSS_NAME), _int(PART_GROUP::GROUP_BOSS_HP_FILL), CTRL_COMMAND::COM_RENDER, false);
+		__super::Get_Front_Part_In_Control(_int(PART_GROUP::GROUP_BOSS_HP_SECOND))->iTexture_Index = -1;
 	}
 	else
 	{
@@ -864,6 +865,8 @@ void CUIPage_Play::Boss_Hp_Update(_float fTimeDelta)
 		__super::Get_Front_Part_In_Control(_int(PART_GROUP::GROUP_BOSS_HP_SECOND))->fRatio = 0.f; // <- 임시 수치 
 		__super::Get_Front_Part_In_Control(_int(PART_GROUP::GROUP_BOSS_HP_FILL))->MovePart(__super::Get_Front_Part_In_Control(_int(PART_GROUP::GROUP_BOSS_NAME))->fPosition, fTimeDelta);
 		__super::Get_Front_Part_In_Control(_int(PART_GROUP::GROUP_BOSS_HP_SECOND))->MovePart(__super::Get_Front_Part_In_Control(_int(PART_GROUP::GROUP_BOSS_NAME))->fPosition, fTimeDelta);
+
+		m_bIs_BossHp_Activate = false;
 	}
 }
 

@@ -95,6 +95,7 @@ public: // 외부에서 매니저 접근
 
 	// 직교 UI 요청 
 	void Register_Pointer_Into_OrthoUIPage(UI_ORTHO_OBJ_TYPE eType, void* pObj) { m_pUIManager->Register_Pointer_Into_OrthoUIPage(eType, pObj); }
+	void Set_OnOff_OrthoUI(_bool bIsOn, void* pObj) { m_pUIManager->Set_OnOff_OrthoUI(bIsOn, pObj); }
 
 	// 보스 체력바 
 	void Activate_Boss_Hp_Bar(_bool bActive) { m_pUIManager->Activate_Boss_Hp_Bar(bActive); }

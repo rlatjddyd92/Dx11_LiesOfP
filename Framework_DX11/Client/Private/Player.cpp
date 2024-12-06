@@ -218,11 +218,11 @@ void CPlayer::Priority_Update(_float fTimeDelta)
 			}
 		}
 
-		GET_GAMEINTERFACE->Show_Script(strTest, TEXT("none"), 1.f);
+		//GET_GAMEINTERFACE->Show_Script(strTest, TEXT("none"), 1.f);
 	}
 
-	STAT_INFO* pTest_Adjust = m_tPlayer_Stat_Adjust;
-	ABILITY_INFO* pTest_Ability = m_tPlayer_Ability;
+	//STAT_INFO* pTest_Adjust = m_tPlayer_Stat_Adjust;
+	//ABILITY_INFO* pTest_Ability = m_tPlayer_Ability;
 	
 
 	if (m_isGuard)

@@ -204,7 +204,7 @@ public:
 
 #pragma region Page_Ortho
 	void Register_Pointer_Into_OrthoUIPage(UI_ORTHO_OBJ_TYPE eType, void* pObj) { m_pUIPage_Ortho->Register_Pointer_Into_OrthoUIPage(eType, pObj); }
-
+	void Set_OnOff_OrthoUI(_bool bIsOn, void* pObj) { m_pUIPage_Ortho->Set_OnOff_OrthoUI(bIsOn, pObj); }
 
 #pragma endregion
 

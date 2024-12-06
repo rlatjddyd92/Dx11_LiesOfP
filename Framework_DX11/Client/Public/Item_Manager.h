@@ -423,7 +423,7 @@ public:
 	
 	void Add_Durable_Weapon(_float fAdd)
 	{
-		ITEM* pNowWeapon = m_vecArray_Inven[_int(m_vecEquip_ItemInfo[_int(EQUIP_SLOT::EQUIP_WEAPON_BLADE_0) + m_iWeapon_Select]->eType)]->vecItemInfo[m_vecEquip_ItemInfo[_int(EQUIP_SLOT::EQUIP_WEAPON_BLADE_0) + m_iWeapon_Select]->iIndex];
+		ITEM* pNowWeapon = m_vecArray_Inven[_int(m_vecEquip_ItemInfo[_int(EQUIP_SLOT::EQUIP_WEAPON_BLADE_0) + m_iWeapon_Select * 2]->eType)]->vecItemInfo[m_vecEquip_ItemInfo[_int(EQUIP_SLOT::EQUIP_WEAPON_BLADE_0) + m_iWeapon_Select * 2]->iIndex];
 
 		if (pNowWeapon != nullptr)
 		{

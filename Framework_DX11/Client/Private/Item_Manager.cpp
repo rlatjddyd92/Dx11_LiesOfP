@@ -432,7 +432,7 @@ void CItem_Manager::Set_ItemAction(EQUIP_SLOT eSlot, _Vec2 vPos, _Vec2 vSize, _b
 
 	if ((iArray >= _int(EQUIP_SLOT::EQUIP_WEAPON_BLADE_0)) && (iArray <= _int(EQUIP_SLOT::EQUIP_DEFENCE_RAINER)))
 	{
-		if (m_vecEquip_ItemInfo[iArray]->iIndex == -1)
+		if (m_vecEquip_ItemInfo[iArray]->eType == INVEN_ARRAY_TYPE::TYPE_END)
 			vecFunc.push_back(ITEM_FUNC::FUNC_TO_INVEN);
 		else
 			vecFunc.push_back(ITEM_FUNC::FUNC_UNEQUIP);
@@ -458,7 +458,7 @@ void CItem_Manager::Set_ItemAction(EQUIP_SLOT eSlot, _Vec2 vPos, _Vec2 vSize, _b
 	}
 	else if ((iArray >= _int(EQUIP_SLOT::EQUIP_USING_TOP_0)) && (iArray <= _int(EQUIP_SLOT::EQUIP_USING_TOP_2)))
 	{
-		if (m_vecEquip_ItemInfo[iArray]->iIndex == -1)
+		if (m_vecEquip_ItemInfo[iArray]->eType == INVEN_ARRAY_TYPE::TYPE_END)
 			vecFunc.push_back(ITEM_FUNC::FUNC_TO_INVEN);
 		else
 		{
@@ -469,7 +469,7 @@ void CItem_Manager::Set_ItemAction(EQUIP_SLOT eSlot, _Vec2 vPos, _Vec2 vSize, _b
 	}
 	else if ((iArray >= _int(EQUIP_SLOT::EQUIP_USING_BOTTOM_0)) && (iArray <= _int(EQUIP_SLOT::EQUIP_USING_BOTTOM_2)))
 	{
-		if (m_vecEquip_ItemInfo[iArray]->iIndex == -1)
+		if (m_vecEquip_ItemInfo[iArray]->eType == INVEN_ARRAY_TYPE::TYPE_END)
 			vecFunc.push_back(ITEM_FUNC::FUNC_TO_INVEN);
 		else
 		{
@@ -480,7 +480,7 @@ void CItem_Manager::Set_ItemAction(EQUIP_SLOT eSlot, _Vec2 vPos, _Vec2 vSize, _b
 	}
 	else if ((iArray >= _int(EQUIP_SLOT::EQUIP_USING_BAG_0)) && (iArray <= _int(EQUIP_SLOT::EQUIP_USING_BAG_3)))
 	{
-		if (m_vecEquip_ItemInfo[iArray]->iIndex == -1)
+		if (m_vecEquip_ItemInfo[iArray]->eType == INVEN_ARRAY_TYPE::TYPE_END)
 			vecFunc.push_back(ITEM_FUNC::FUNC_TO_INVEN);
 		else
 		{

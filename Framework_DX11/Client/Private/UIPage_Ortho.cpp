@@ -115,6 +115,8 @@ HRESULT CUIPage_Ortho::Ready_UIPart_Group_Control()
 			m_vec_Group_Ctrl[iGroup]->PartIndexlist.push_back(i);
 	}
 
+	m_vecPart[7]->iTexture_Index = -1;
+
 	return S_OK;
 }
 
@@ -185,6 +187,13 @@ void CUIPage_Ortho::CheckHost(_float fTimeDelta)
 		
 		
 		*/
+		if (!(*iter)->bIsActive)
+		{
+			++iter;
+			continue;
+		}
+			
+
 
 		if (((*iter)->pHost == nullptr) || ((*iter)->pHost->Get_Dead()))
 		{
@@ -197,8 +206,8 @@ void CUIPage_Ortho::CheckHost(_float fTimeDelta)
 			_float fDistnace = Check_Distance_From_Cam((*iter)->pHost);
 
 			Make_Monster_HP_Bar((*iter)->pHost, fTimeDelta, fDistnace);
-			Make_Monster_Focusing((*iter)->pHost, fTimeDelta, fDistnace);
-			Make_Monster_SpecialHit((*iter)->pHost, fTimeDelta, fDistnace);
+			//Make_Monster_Focusing((*iter)->pHost, fTimeDelta, fDistnace);
+			//Make_Monster_SpecialHit((*iter)->pHost, fTimeDelta, fDistnace);
 			++iter;
 		}
 		else if ((*iter)->eType == UI_ORTHO_OBJ_TYPE::ORTHO_BOSS_SIMON)
@@ -209,8 +218,8 @@ void CUIPage_Ortho::CheckHost(_float fTimeDelta)
 
 			GET_GAMEINTERFACE->Activate_Boss_Hp_Bar(true);
 			GET_GAMEINTERFACE->Set_Boss_Hp_Bar_Info(pStat->strName, pStat->fHp, pStat->fMaxHp);
-			Make_Monster_Focusing((*iter)->pHost, fTimeDelta, fDistnace);
-			Make_Monster_SpecialHit((*iter)->pHost, fTimeDelta, fDistnace);
+			//Make_Monster_Focusing((*iter)->pHost, fTimeDelta, fDistnace);
+			//Make_Monster_SpecialHit((*iter)->pHost, fTimeDelta, fDistnace);
 			++iter;
 		}
 	}

@@ -156,6 +156,16 @@ void CSimonManus::Priority_Update(_float fTimeDelta)
 		if (!pEffect->Get_Dead())
 			pEffect->Priority_Update(fTimeDelta);
 	}
+
+
+	// 24-12-06 김성용
+	// 테스트 코드 
+	if (KEY_TAP(KEY::N))
+		GET_GAMEINTERFACE->Set_OnOff_OrthoUI(false, this);
+	if (KEY_TAP(KEY::M))
+		GET_GAMEINTERFACE->Set_OnOff_OrthoUI(true, this);
+
+
 }
 
 void CSimonManus::Update(_float fTimeDelta)
