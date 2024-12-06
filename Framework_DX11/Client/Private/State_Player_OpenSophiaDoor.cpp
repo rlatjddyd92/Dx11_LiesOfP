@@ -47,7 +47,7 @@ HRESULT CState_Player_OpenSophiaDoor::Start_State(void* pArg)
     m_pPlayer->Get_Transform()->Set_NewLook(-vLastDoorLook);
 
 
-    m_pGameInstance->Play_BGM(TEXT("MU_MS_Monastery_B_Loop.wav"), 1.f);
+    m_pGameInstance->Play_BGM(TEXT("MU_MS_Monastery_B_Loop.wav"), &g_fBGMVolume);
 
     return S_OK;
 }
@@ -59,7 +59,8 @@ void CState_Player_OpenSophiaDoor::Update(_float fTimeDelta)
     if (iFrame > 545)
     {
         m_pPlayer->Change_State(CPlayer::SOPHIA_WALK);
-        m_pGameInstance->Play_BGM(TEXT("MU_MS_Monastery_B_Loop.wav"), g_fBGMVolume);
+        m_pGameInstance->Stop_BGM();
+        m_pGameInstance->Play_BGM(TEXT("MU_MS_Monastery_B_Loop.wav"), &g_fBGMVolume);
     }
 }
 

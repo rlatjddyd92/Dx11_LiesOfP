@@ -184,6 +184,7 @@ void CAObj_StampBlast::Free()
 {
     __super::Free();
 
-    m_pEffect->Set_Cloned(false);
+    if(nullptr != m_pEffect)
+        m_pEffect->Set_Cloned(false);
     Safe_Release(m_pEffect);
 }

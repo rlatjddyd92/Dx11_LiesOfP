@@ -31,12 +31,18 @@ public:
 	void	Update();
 
 public:
-	void Play_BGM(const TCHAR* pSoundKey, _float fVolume);
+	void Play_BGM(const TCHAR* pSoundKey, _float* fVolume);
 	void Play_Effect(const TCHAR* pSoundKey, _float fVolume);
 	void Stop_BGM();
 	void Pause_BGM();
 	void SetVolume_BGM(_float fVolume);
 
+public:
+	void Play_ENV(const TCHAR* pSoundKey, _float* fVolume);
+	void Stop_ENV();
+	void Pause_ENV();
+
+public:
 	void LoadSoundFile(const char* pFolderName);
 	void Clear();
 
@@ -51,10 +57,14 @@ private:
 	// FMOD_CHANNEL : 재생하고 있는 사운드를 관리할 객체 
 	FMOD::Channel* m_pBGMChannel;
 	FMOD::Channel* m_pEffectChannel;
+	FMOD::Channel* m_pENVChannel;
 
 	// 사운드 ,채널 객체 및 장치를 관리하는 객체 
 	//FMOD::System* m_pSystem;
 	FMOD::System* m_pSystem = { nullptr };
+
+	_float* m_pBGMVolume = { nullptr };
+	_float* m_pEnvVolume = { nullptr };
 
 	class CGameObject* m_pListenerObject = { nullptr };
 public:

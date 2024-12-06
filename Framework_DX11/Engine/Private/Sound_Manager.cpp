@@ -38,10 +38,16 @@ void CSound_Manager::Update()
 		m_pSystem->set3DListenerAttributes(0, &ListenerPos, 0, 0, 0);
 	}
 
+	if(nullptr != m_pBGMVolume)
+		m_pBGMChannel->setVolume(*m_pBGMVolume);
+
+	if(nullptr != m_pEnvVolume)
+		m_pENVChannel->setVolume(*m_pEnvVolume);
+
 	m_pSystem->update();
 }
 
-void CSound_Manager::Play_BGM(const TCHAR* pSoundKey, _float fVolume)
+void CSound_Manager::Play_BGM(const TCHAR* pSoundKey, _float* fVolume)
 {
 	auto iter = Find_Sound(pSoundKey);
 
@@ -54,7 +60,9 @@ void CSound_Manager::Play_BGM(const TCHAR* pSoundKey, _float fVolume)
 	//FMOD_Channel_SetMode(m_pChannelArr[SOUND_BGM], FMOD_LOOP_NORMAL);
 	m_pBGMChannel->setMode(FMOD_LOOP_NORMAL | FMOD_2D);
 	//FMOD_Channel_SetVolume(m_pChannelArr[SOUND_BGM], fVolume);
-	m_pBGMChannel->setVolume(fVolume);
+	m_pBGMChannel->setVolume(*fVolume);
+
+	m_pBGMVolume = fVolume;
 }
 
 void CSound_Manager::Play_Effect(const TCHAR* pSoundKey, _float fVolume)
@@ -67,6 +75,7 @@ void CSound_Manager::Play_Effect(const TCHAR* pSoundKey, _float fVolume)
 	m_pSystem->playSound(iter->second, 0, false, &m_pEffectChannel);
 	m_pEffectChannel->setMode(FMOD_2D);
 	m_pEffectChannel->setVolume(fVolume);
+
 }
 
 void CSound_Manager::Stop_BGM()
@@ -84,6 +93,33 @@ void CSound_Manager::Pause_BGM()
 void CSound_Manager::SetVolume_BGM(_float fVolume)
 {
 	m_pBGMChannel->setVolume(fVolume);
+}
+
+void CSound_Manager::Play_ENV(const TCHAR* pSoundKey, _float* fVolume)
+{
+	auto iter = Find_Sound(pSoundKey);
+
+	if (iter == m_Sounds.end())
+		return;
+
+	m_pSystem->playSound(iter->second, 0, false, &m_pENVChannel);
+
+	m_pENVChannel->setMode(FMOD_LOOP_NORMAL | FMOD_2D);
+	m_pENVChannel->setVolume(*fVolume);
+
+	m_pEnvVolume = fVolume;
+}
+
+void CSound_Manager::Stop_ENV()
+{
+	m_pENVChannel->stop();
+}
+
+void CSound_Manager::Pause_ENV()
+{
+	_bool isPause;
+	m_pBGMChannel->getPaused(&isPause);
+	m_pBGMChannel->setPaused(!isPause);
 }
 
 void CSound_Manager::LoadSoundFile(const char* pFolderName)
