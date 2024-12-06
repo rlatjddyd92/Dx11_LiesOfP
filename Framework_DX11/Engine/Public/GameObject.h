@@ -79,6 +79,8 @@ protected:
 
 	vector<_int>				m_WorldOctreeIndex;					//물체가 포함된 WorldOctree cube의 인덱스
 
+	_bool						m_isCloned = { false };
+
 protected:
 	map<const _wstring, class CComponent*>			m_Components;
 

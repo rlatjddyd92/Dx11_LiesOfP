@@ -646,12 +646,15 @@ void CSimonManus::Free()
 	Safe_Release(m_pWeapon);
 	Safe_Release(m_pExtraModelCom);
 
-	for (auto& pEffect : m_Effects)
+	if (true == m_isCloned)
 	{
-		pEffect->Set_Cloned(false);
-		Safe_Release(pEffect);
+		for (auto& pEffect : m_Effects)
+		{
+			pEffect->Set_Cloned(false);
+			Safe_Release(pEffect);
+		}
+		m_Effects.clear();
 	}
-	m_Effects.clear();
 
 	if (m_pExtraFsmCom != nullptr)
 	{

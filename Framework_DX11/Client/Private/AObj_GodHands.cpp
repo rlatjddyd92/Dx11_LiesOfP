@@ -338,9 +338,12 @@ void CAObj_GodHands::Free()
 {
     __super::Free();
 
-    for (auto& pEffect : m_pEffects)
+    if (true == m_isCloned)
     {
-        pEffect->Set_Cloned(false);
-        Safe_Release(pEffect);
+        for (auto& pEffect : m_pEffects)
+        {
+            pEffect->Set_Cloned(false);
+            Safe_Release(pEffect);
+        }
     }
 }

@@ -201,6 +201,9 @@ void CAObj_Wave::Free()
 {
     __super::Free();
 
-    m_pEffect->Set_Cloned(false);
-    Safe_Release(m_pEffect);
+    if (true == m_isCloned)
+    {
+        m_pEffect->Set_Cloned(false);
+        Safe_Release(m_pEffect);
+    }
 }
