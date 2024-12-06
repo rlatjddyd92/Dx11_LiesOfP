@@ -813,7 +813,7 @@ void CGameInstance::Clear_Instance()
 
 #pragma region SOUND_MANAGER
 
-void CGameInstance::Play_BGM(const TCHAR* pSoundKey, _float fVolume)
+void CGameInstance::Play_BGM(const TCHAR* pSoundKey, _float* fVolume)
 {
 	m_pSound_Manager->Play_BGM(pSoundKey, fVolume);
 }
@@ -836,6 +836,21 @@ void CGameInstance::Pause_BGM()
 void CGameInstance::SetVolume_BGM(_float fVolume)
 {
 	m_pSound_Manager->SetVolume_BGM(fVolume);
+}
+
+void CGameInstance::Play_ENV(const TCHAR* pSoundKey, _float* fVolume)
+{
+	m_pSound_Manager->Play_ENV(pSoundKey, fVolume);
+}
+
+void CGameInstance::Stop_ENV()
+{
+	m_pSound_Manager->Stop_ENV();
+}
+
+void CGameInstance::Pause_ENV()
+{
+	m_pSound_Manager->Pause_ENV();
 }
 
 void CGameInstance::Set_Listener(CGameObject* pListener)

@@ -58,7 +58,8 @@ HRESULT CLevel_GamePlay::Initialize()
 
 	m_pGameInstance->Set_Listener(m_pPlayer);
 
-	m_pGameInstance->Play_BGM(TEXT("MU_MS_Simon_PH1.wav"), g_fBGMVolume);
+	m_pGameInstance->Play_BGM(TEXT("MU_MS_MonasteryA_YK1_Fix.wav"), &g_fBGMVolume);
+	m_pGameInstance->Play_ENV(TEXT("AMB_SS_Monastery_Inside_01.wav"), &g_fEnvVolume);
 
 	return S_OK;
 }

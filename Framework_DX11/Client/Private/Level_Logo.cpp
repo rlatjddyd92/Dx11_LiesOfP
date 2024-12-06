@@ -22,7 +22,7 @@ HRESULT CLevel_Logo::Initialize()
 	GET_GAMEINTERFACE->SetIngame(false);
 
 
-	m_pGameInstance->Play_BGM(TEXT("MU_MS_Title_Piano_03.wav"), g_fBGMVolume);
+	m_pGameInstance->Play_BGM(TEXT("MU_MS_Title_Piano_03.wav"), &g_fBGMVolume);
 
 	
 

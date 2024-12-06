@@ -243,11 +243,16 @@ public:
 #pragma endregion
 
 #pragma region SOUND_MANAGER
-		void Play_BGM(const TCHAR* pSoundKey, _float fVolume);
+		void Play_BGM(const TCHAR* pSoundKey, _float* fVolume);
 		void Play_Effect(const TCHAR* pSoundKey, _float fVolume);
 		void Stop_BGM();
 		void Pause_BGM();
 		void SetVolume_BGM(_float fVolume);
+
+		void Play_ENV(const TCHAR* pSoundKey, _float* fVolume);
+		void Stop_ENV();
+		void Pause_ENV();
+
 		void	Set_Listener(class CGameObject* pListener);
 		FMOD::System* Get_SoundSystem();
 		map<TCHAR*, FMOD::Sound*>& Get_Sounds();
