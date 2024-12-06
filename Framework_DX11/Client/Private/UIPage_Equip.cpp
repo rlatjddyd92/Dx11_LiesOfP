@@ -188,9 +188,10 @@ void CUIPage_Equip::Action_Focus(_float fTimeDelta)
 	for (_int i = iStart_Index; i <= iEnd_Index; ++i)
 	{
 		const CItem_Manager::ITEM* pItem = GET_GAMEINTERFACE->Get_Equip_Item_Info(EQUIP_SLOT(_int(eStart_Slot) + (i - iStart_Index)));
-		_int iIndex = __super::Get_Front_PartIndex_In_Control(i);
+		list<_int>::iterator iter = m_vec_Group_Ctrl[i]->PartIndexlist.begin();
+		++iter;
 
-		
+		_int iIndex = __super::Get_Front_PartIndex_In_Control(i);		
 
 		if ((pItem != nullptr) && (pItem->bIsNew))
 		{
@@ -211,6 +212,7 @@ void CUIPage_Equip::Action_Focus(_float fTimeDelta)
 		_Vec2 fPos = Check_Mouse_By_Part(*m_vecPart[iIndex]);
 		if (fPos.x != -1.f)
 		{
+			m_vecPart[*iter]->bRender = true;
 			m_vFocus_Pos = m_vecPart[iIndex]->fPosition;
 			m_vFocus_Size = m_vecPart[iIndex]->fSize * 1.1f;
 
@@ -223,6 +225,8 @@ void CUIPage_Equip::Action_Focus(_float fTimeDelta)
 				Set_ItemAction(m_vecPart[iIndex]->fPosition, m_vecPart[iIndex]->fSize, INVEN_ARRAY_TYPE::TYPE_END, EQUIP_SLOT(_int(eStart_Slot) + (i - iStart_Index)), i);
 			}
 		}
+		else 
+			m_vecPart[*iter]->bRender = false;
 
 		if (eStart_Slot == EQUIP_SLOT::EQUIP_WEAPON_BLADE_0)
 			eStart_Slot = EQUIP_SLOT(_int(eStart_Slot) + 1);

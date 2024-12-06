@@ -54,6 +54,8 @@ public: // 외부에서 매니저 접근
 
 
 #pragma region UIManager
+	_bool IsGamePause() { return m_pUIManager->IsGamePause(); }
+
 	void OpenMainPage() { m_pUIManager->OpenMainPage(); }
 	void OpenLoadingPage() { m_pUIManager->OpenLoadingPage(); }
 
@@ -145,6 +147,10 @@ public: // 외부에서 매니저 접근
 	void Show_Region_Info(_wstring strName, _wstring strDesc, _float fTime_Emerge = 1.f, _float fTime_Show = 2.f) { m_pUIManager->Show_Region_Info(strName, strDesc, fTime_Emerge, fTime_Show); }
 	void Show_Inform(INFORM_MESSAGE eInform, _float fTime_Emerge = 1.f, _float fTime_Show = 2.f) { m_pUIManager->Show_Inform(eInform, fTime_Emerge, fTime_Show); }
 	void Show_Heart(_wstring strScript, _float fTime_Emerge = 1.f, _float fTime_Show = 2.f) { m_pUIManager->Show_Heart(strScript, fTime_Emerge, fTime_Show); }
+
+	void Show_Popup(_wstring strTitle, _wstring strDescA, _wstring strDescB = TEXT("none")) { m_pUIManager->Show_Popup(strTitle, strDescA, strDescB); }
+	void Off_Popup() { m_pUIManager->Off_Popup(); }
+
 #pragma endregion
 
 

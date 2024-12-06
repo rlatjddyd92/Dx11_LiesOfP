@@ -262,6 +262,7 @@ void CUIPage_Play::Action_Potion_Tool(_float fTimeDelta)
 							GET_GAMEINTERFACE->Use_Tool_Slot();
 	}
 
+	if (!GET_GAMEINTERFACE->Get_LastFrame_UsingItem_Info().empty())
 	if (GET_GAMEINTERFACE->Get_LastFrame_UsingItem_Info().back() == SPECIAL_ITEM::SP_GRINDER)
 		GET_GAMEINTERFACE->Add_Durable_Weapon(fTimeDelta * 10.f);
 }
@@ -353,7 +354,12 @@ void CUIPage_Play::LU_Gauge_Update(_float fTimeDelta)
 			m_vec_Group_Ctrl[_int(PART_GROUP::GROUP_SP0_FILL) + i]->fRatio = 0.f;
 	}
 
-	if (m_bStat_Open)
+	__super::Get_Front_Part_In_Control(_int(PART_GROUP::GROUP_HP_NUM))->bRender = false;
+	__super::Get_Front_Part_In_Control(_int(PART_GROUP::GROUP_HP_NUM))->strText = {};
+	__super::Get_Front_Part_In_Control(_int(PART_GROUP::GROUP_ST_NUM))->bRender = false;
+	__super::Get_Front_Part_In_Control(_int(PART_GROUP::GROUP_ST_NUM))->strText = {};
+
+	/*if (m_bStat_Open)
 	{
 		_wstring strHp{};
 		_wstring strSt{};
@@ -386,7 +392,7 @@ void CUIPage_Play::LU_Gauge_Update(_float fTimeDelta)
 		__super::Get_Front_Part_In_Control(_int(PART_GROUP::GROUP_ST_NUM))->strText = strSt;
 		__super::Get_Front_Part_In_Control(_int(PART_GROUP::GROUP_HP_NUM))->bRender = true;
 		__super::Get_Front_Part_In_Control(_int(PART_GROUP::GROUP_ST_NUM))->bRender = true;
-	}
+	}*/
 
 	
 
@@ -421,7 +427,7 @@ void CUIPage_Play::LD_Potion_Tool_Update(_float fTimeDelta)
 			{
 				__super::Get_Front_Part_In_Control(_int(PART_GROUP::GROUP_POTION_ITEM))->iTexture_Index = -1;
 				m_vec_Group_Ctrl[_int(PART_GROUP::GROUP_POTION_COUNT)]->bRender = false;
-				//__super::Get_Front_Part_In_Control(_int(PART_GROUP::GROUP_POTION_FILL))
+				
 			}
 			else if (i != 2)
 			{
@@ -434,10 +440,17 @@ void CUIPage_Play::LD_Potion_Tool_Update(_float fTimeDelta)
 
 		if (i == 0)
 		{
-			m_vec_Group_Ctrl[_int(PART_GROUP::GROUP_POTION_COUNT)]->bRender = true;
+			__super::Get_Front_Part_In_Control(_int(PART_GROUP::GROUP_POTION_ITEM))->m_bEmpty_Stack_Item = false;
 			__super::Get_Front_Part_In_Control(_int(PART_GROUP::GROUP_POTION_ITEM))->iTexture_Index = pNow->iTexture_Index;
-			__super::Get_Front_Part_In_Control(_int(PART_GROUP::GROUP_POTION_COUNT))->strText = to_wstring(pNow->iCount);
-			//__super::Get_Front_Part_In_Control(_int(PART_GROUP::GROUP_POTION_FILL))
+			if (pNow->bStack)
+			{
+				m_vec_Group_Ctrl[_int(PART_GROUP::GROUP_POTION_COUNT)]->bRender = true;
+				__super::Get_Front_Part_In_Control(_int(PART_GROUP::GROUP_POTION_COUNT))->strText = to_wstring(pNow->iCount);
+				if (pNow->iCount <= 0)
+					__super::Get_Front_Part_In_Control(_int(PART_GROUP::GROUP_POTION_ITEM))->m_bEmpty_Stack_Item = true;
+			}
+			else
+				m_vec_Group_Ctrl[_int(PART_GROUP::GROUP_POTION_COUNT)]->bRender = false;
 		}
 		else if (i != 2)
 		{
@@ -487,10 +500,18 @@ void CUIPage_Play::LD_Potion_Tool_Update(_float fTimeDelta)
 
 		if (i == 0)
 		{
-			m_vec_Group_Ctrl[_int(PART_GROUP::GROUP_TOOL_COUNT)]->bRender = true;
+			__super::Get_Front_Part_In_Control(_int(PART_GROUP::GROUP_TOOL_ITEM))->m_bEmpty_Stack_Item = false;
 			__super::Get_Front_Part_In_Control(_int(PART_GROUP::GROUP_TOOL_ITEM))->iTexture_Index = pNow->iTexture_Index;
-			__super::Get_Front_Part_In_Control(_int(PART_GROUP::GROUP_TOOL_COUNT))->strText = to_wstring(pNow->iCount);
-			//__super::Get_Front_Part_In_Control(_int(PART_GROUP::GROUP_POTION_FILL))
+			if (pNow->bStack)
+			{
+				m_vec_Group_Ctrl[_int(PART_GROUP::GROUP_TOOL_COUNT)]->bRender = true;
+				__super::Get_Front_Part_In_Control(_int(PART_GROUP::GROUP_TOOL_COUNT))->strText = to_wstring(pNow->iCount);
+				if (pNow->iCount <= 0)
+					__super::Get_Front_Part_In_Control(_int(PART_GROUP::GROUP_TOOL_ITEM))->m_bEmpty_Stack_Item = true;
+			}
+			else
+				m_vec_Group_Ctrl[_int(PART_GROUP::GROUP_TOOL_COUNT)]->bRender = false;
+				
 		}
 		else if (i != 2)
 		{
@@ -521,7 +542,19 @@ void CUIPage_Play::LD_Bag_Update(_float fTimeDelta)
 
 	for (auto& iter : m_vec_Group_Ctrl[_int(PART_GROUP::GROUP_BAG_ITEM)]->PartIndexlist)
 	{
-		m_vecPart[iter]->iTexture_Index = vecItem[iIndex]->iTexture_Index;
+		if (vecItem[iIndex] != nullptr)
+		{
+			m_vecPart[iter]->iTexture_Index = vecItem[iIndex]->iTexture_Index;
+
+			if (vecItem[iIndex]->bStack)
+				if (vecItem[iIndex]->iCount <= 0)
+					m_vecPart[iter]->m_bEmpty_Stack_Item = true;
+			
+			if (!vecItem[iIndex]->bStack)
+				m_vecPart[iter]->bRender = false;
+		}
+		else
+			m_vecPart[iter]->bRender = false;
 		++iIndex;
 	}
 
@@ -529,7 +562,18 @@ void CUIPage_Play::LD_Bag_Update(_float fTimeDelta)
 
 	for (auto& iter : m_vec_Group_Ctrl[_int(PART_GROUP::GROUP_BAG_COUNT)]->PartIndexlist)
 	{
-		m_vecPart[iter]->strText = to_wstring(vecItem[iIndex]->iCount);
+		if (vecItem[iIndex] != nullptr)
+		{
+			if (vecItem[iIndex]->bStack)
+			{
+				m_vecPart[iter]->bRender = true;
+				m_vecPart[iter]->strText = to_wstring(vecItem[iIndex]->iCount);	
+			}
+			m_vecPart[iter]->bRender = false;
+		}
+		else
+			m_vecPart[iter]->bRender = false;
+
 		++iIndex;
 	}
 

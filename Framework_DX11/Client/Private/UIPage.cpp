@@ -194,6 +194,14 @@ void CUIPage::Input_Render_Info(UPART& Part, SCROLL_AREA eArea)
 	if (m_fTopPartMove >= 0.f)
 		pNew->vColor_Texture.w *= m_fTopPartMove;
 
+	if (Part.m_bEmpty_Stack_Item)
+	{
+		pNew->vColor_Texture.x *= 0.1f;
+		pNew->vColor_Texture.y *= 0.1f;
+		pNew->vColor_Texture.z *= 0.1f;
+	}
+		
+
 	pNew->vPosition = Part.fPosition;
 	pNew->vSize = Part.fSize;
 	pNew->fAlpha_Strash = Part.fStrash_Alpha;

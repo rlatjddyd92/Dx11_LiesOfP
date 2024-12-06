@@ -123,9 +123,17 @@ ITEM_RESULT CItem_Manager::EquipWeapon_Inven(INVEN_ARRAY_TYPE eIndex, EQUIP_SLOT
 	// 안전장치 
 	// 지금 들고 있는 무기 조작 금지
 	if ((eSlot == EQUIP_SLOT::EQUIP_WEAPON_BLADE_0) && (m_iWeapon_Select == 0))
+	{
+		GET_GAMEINTERFACE->Show_Popup(TEXT("변경 불가"), TEXT("현재 사용 중인 무기는 교체 불가."));
 		return ITEM_RESULT::RESULT_INVALID;
+	}
+		
 	if ((eSlot == EQUIP_SLOT::EQUIP_WEAPON_BLADE_1) && (m_iWeapon_Select == 1))
+	{
+		GET_GAMEINTERFACE->Show_Popup(TEXT("변경 불가"), TEXT("현재 사용 중인 무기는 교체 불가."));
 		return ITEM_RESULT::RESULT_INVALID;
+	}
+		
 
 	ITEM& Blade = *(m_vecArray_Inven[_uint(eIndex)]->vecItemInfo[iIndex]);
 	ITEM& Handle = *(m_vecArray_Inven[_uint(eIndex) + 1]->vecItemInfo[iIndex]);
@@ -197,9 +205,16 @@ ITEM_RESULT CItem_Manager::UnEquipWeapon_Inven(EQUIP_SLOT eSlot)
 	// 안전장치 
 	// 지금 들고 있는 무기 조작 금지
 	if ((eSlot == EQUIP_SLOT::EQUIP_WEAPON_BLADE_0) && (m_iWeapon_Select == 0))
+	{
+		GET_GAMEINTERFACE->Show_Popup(TEXT("변경 불가"), TEXT("현재 사용 중인 무기는 해제 불가."));
 		return ITEM_RESULT::RESULT_INVALID;
+	}
+		
 	if ((eSlot == EQUIP_SLOT::EQUIP_WEAPON_BLADE_1) && (m_iWeapon_Select == 1))
+	{
+		GET_GAMEINTERFACE->Show_Popup(TEXT("변경 불가"), TEXT("현재 사용 중인 무기는 해제 불가."));
 		return ITEM_RESULT::RESULT_INVALID;
+	}
 
 	if (!IsValid_Inven(m_vecEquip_ItemInfo[_uint(eSlot)]->eType, m_vecEquip_ItemInfo[_uint(eSlot)]->iIndex))
 		return ITEM_RESULT::RESULT_INVALID;
