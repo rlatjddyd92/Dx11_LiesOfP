@@ -92,6 +92,7 @@ void CRigidBody::Update(_float fTimeDelta)
 		if (m_isOnCell)
 		{
 			vPxPlayerPos.y = m_pOwnerNavigation->SetUp_OnCell(m_pOwnerTransform, m_fNavOffsetY, fTimeDelta);
+			PlayerPxTransform.p = vPxPlayerPos;
 		}
 		pRigidDynamic->setGlobalPose(PlayerPxTransform);
 
