@@ -35,6 +35,7 @@ void CState_SimonManusP2_Idle::Update(_float fTimeDelta)
         {
             if (m_pMonster->Get_Status()->fHp <= m_pMonster->Get_Status()->fMaxHp / 2.f)
             {
+                m_bPray = true;
                 m_pMonster->Change_State(CSimonManus::ATKP2_SUMMONHAND);
                 return;
             }

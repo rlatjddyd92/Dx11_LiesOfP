@@ -57,7 +57,7 @@ float ComputeShadow(float4 vPosition, int iCascadeIndex, float4 vNormalDesc)
     vTextCoord.x = vLightProjPos.x * 0.5f + 0.5f;
     vTextCoord.y = vLightProjPos.y * -0.5f + 0.5f;
     
-    float fNormalOffset = 0.0005f;
+    float fNormalOffset = 0.0002f;
     float fDot = saturate(dot(normalize(g_vLightDir.xyz) * -1.f, vNormalDesc.xyz));
     float fBias = max((fNormalOffset * 5.0f) * (1.0f - (fDot * -1.0f)), fNormalOffset);
     
