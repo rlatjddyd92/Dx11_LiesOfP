@@ -437,6 +437,7 @@ HRESULT CLevel_GamePlay::Ready_CutScene_Data()
 		//컷신 인덱스
 		_uint iCutScene_Index;
 		fin.read(reinterpret_cast<char*>(&iCutScene_Index), sizeof(_uint));
+		pCutScene->Set_CutSceneIndex(iCutScene_Index);
 
 		//컷신의 전체 프레임 (시간)
 		_float fMaxFrame;

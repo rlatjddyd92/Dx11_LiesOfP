@@ -25,8 +25,9 @@ public:
 	virtual void	Late_Update(_float fTimeDelta) override;
 
 public:
-	_float*			Get_CurFrame_Ptr() { return &m_fTrackPosition; }
+	_float* Get_CurFrame_Ptr() { return &m_fTrackPosition; }
 	void			Set_MaxFrame(_float fFrame) { m_fMaxFrame = fFrame; }
+	void			Set_CutSceneIndex(_uint iIndex){m_iIndex = iIndex;}
 	void			Keyframe_Actived_Reset();
 	void			Create_KeyFrame();
 	CUTSCENE_KEYFRAME_DESC* Get_Selected_KeyFrame(_int iIndex) { return m_KeyFrames[iIndex]; }
@@ -36,6 +37,7 @@ public:
 	_bool			Get_isFinished() { return m_bFinished; }
 
 private:
+	_uint						m_iIndex = { 0 };
 	_float						m_fMaxFrame = { 50.f };
 	_float						m_fTrackPosition = { 0.f };
 	_bool						m_bPlay = { false };
