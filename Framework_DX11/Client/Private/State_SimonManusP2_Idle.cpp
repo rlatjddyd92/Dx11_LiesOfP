@@ -132,6 +132,8 @@ void CState_SimonManusP2_Idle::Calc_Act_Attack(_float fDist)
                 {
                     iAtkNum = rand() % 11;
                 }
+                else
+                    bReCheck = false;
             }
             else
                 bReCheck = false;
@@ -210,6 +212,8 @@ void CState_SimonManusP2_Idle::Calc_Act_Attack(_float fDist)
                 {
                     iAtkNum = rand() % 10;
                 }
+                else
+                    bReCheck = false;
             }
             else
                 bReCheck = false;

@@ -46,6 +46,9 @@ private:
 	CRigidBody* m_pRigidBodyCom = { nullptr };
 
 private:
+	vector<class CEffect_Container*> m_Effects;
+
+private:
 	_bool m_bShadow = { false };
 	_bool m_bCollison = { false };
 	_bool m_bRestored = { false };
@@ -54,6 +57,7 @@ private:
 	_bool m_isOpening = { false };				//열리는 중
 	_bool m_isOpened = { false };				//작동 완
 	_bool m_bStartRestore = { false };				//작동 완
+	_bool m_isInteractEffect = { false };
 		
 	_int m_iAnim_Broken = { 0 };
 	_int m_iAnim_Restore = { 0 };

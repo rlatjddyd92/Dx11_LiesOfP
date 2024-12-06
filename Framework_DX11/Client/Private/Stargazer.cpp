@@ -2,6 +2,12 @@
 #include "Stargazer.h"
 #include "GameInstance.h"
 #include "Pawn.h"
+
+#include "Stargazer.h"
+
+#include "Effect_Container.h"
+#include "Effect_Manager.h"
+
 CStargazer::CStargazer(ID3D11Device* pDevice, ID3D11DeviceContext* pContext)
 	: CGameObject{ pDevice, pContext }
 {
@@ -48,11 +54,29 @@ HRESULT CStargazer::Initialize(void* pArg)
 
 	m_strObjectTag = TEXT("Stargazer");
 
+	_Vec3 vEffectPos = m_pTransformCom->Get_State(CTransform::STATE_POSITION);
+	vEffectPos.y += 0.9f;
+
+	CEffect_Container* pEffect = CEffect_Manager::Get_Instance()->Clone_Effect(TEXT("StarGazer_Active"), nullptr, nullptr,
+		vEffectPos);
+	m_Effects.push_back(pEffect);
+
+	pEffect = CEffect_Manager::Get_Instance()->Clone_Effect(TEXT("StarGazer_Deactive"), nullptr, nullptr,
+		(_Vec3)m_pTransformCom->Get_State(CTransform::STATE_POSITION));
+	m_Effects.push_back(pEffect);
+
+	m_Effects[1]->Set_Loop(true);
+
 	return S_OK;
 }
 
 void CStargazer::Priority_Update(_float fTimeDelta)
 {
+	for (auto& pEffect : m_Effects)
+	{
+		if (!pEffect->Get_Dead())
+			pEffect->Priority_Update(fTimeDelta);
+	}
 }
 
 void CStargazer::Update(_float fTimeDelta)
@@ -67,6 +91,7 @@ void CStargazer::Update(_float fTimeDelta)
 
 		if (m_bRestored == false)
 		{
+			m_Effects[1]->Set_Loop(false);
 			m_pCurrentModel->SetUp_Animation(m_iAnim_Restore);
 		}
 	}
@@ -101,11 +126,34 @@ void CStargazer::Update(_float fTimeDelta)
 	{
 		m_isOpening = false;
 		m_isOpened = true;
+		m_Effects[0]->Set_Loop(true);
 		m_pCurrentModel->SetUp_NextAnimation(m_iAnim_OpenIdle, true);
 	}
 
 	if(m_pColliderCom != nullptr)
 		m_pColliderCom->Update(m_pTransformCom->Get_WorldMatrix_Ptr());
+
+
+	_uint iFrame = m_pCurrentModel->Get_CurrentFrame();
+	if (m_pCurrentModel == m_pModelCom[BROKEN])
+	{
+		if (m_iAnim_Restore == m_pCurrentModel->Get_CurrentAnimationIndex())
+		{
+			if (iFrame >= 210 && !m_isInteractEffect)
+			{
+				_Vec3 vEffectPos = m_pTransformCom->Get_State(CTransform::STATE_POSITION);
+				vEffectPos.y += 0.9f;
+				CEffect_Manager::Get_Instance()->Add_Effect_ToLayer(LEVEL_GAMEPLAY, TEXT("StarGazer_Interaction"), vEffectPos);
+				m_isInteractEffect = true;
+			}
+		}
+	}
+
+	for (auto& pEffect : m_Effects)
+	{
+		if (!pEffect->Get_Dead())
+			pEffect->Update(fTimeDelta);
+	}
 }
 
 void CStargazer::Late_Update(_float fTimeDelta)
@@ -113,6 +161,12 @@ void CStargazer::Late_Update(_float fTimeDelta)
 	__super::Late_Update(fTimeDelta);
 	m_pGameInstance->Add_RenderObject(CRenderer::RG_NONBLEND, this);
 	m_pGameInstance->Add_ColliderList(m_pColliderCom);
+
+	for (auto& pEffect : m_Effects)
+	{
+		if (!pEffect->Get_Dead())
+			pEffect->Late_Update(fTimeDelta);
+	}
 
 #ifdef _DEBUG
 	if (m_pColliderCom != nullptr)
@@ -306,6 +360,15 @@ CGameObject* CStargazer::Clone(void* pArg)
 void CStargazer::Free()
 {
 	__super::Free();
+
+	for (auto& pEffect : m_Effects)
+	{
+		if (nullptr != pEffect)
+			pEffect->Set_Cloned(false);
+		Safe_Release(pEffect);
+	}
+	m_Effects.clear();
+
 	Safe_Release(m_pColliderCom);
 	Safe_Release(m_pShaderCom);
 

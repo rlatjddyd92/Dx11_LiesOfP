@@ -121,14 +121,16 @@ void CState_SimonManusP1_Idle::Calc_Act_Attack(_float fDist)
         {
             if (iAtkNum == m_iPastNeerAtkNum)
             {
-                iAtkNum = rand() % 10;
+                iAtkNum = rand() % 5;
             }
             else if (iAtkNum <= 1)
             {
                 if (iAtkNum == m_iPastMiddleAtkNum)
                 {
-                    iAtkNum = rand() % 10;
+                    iAtkNum = rand() % 5;
                 }
+                else
+                    bReCheck = false;
             }
             else
                 bReCheck = false;
@@ -174,14 +176,16 @@ void CState_SimonManusP1_Idle::Calc_Act_Attack(_float fDist)
         {
             if (iAtkNum == m_iPastMiddleAtkNum)
             {
-                iAtkNum = rand() % 10;
+                iAtkNum = rand() % 4;
             }
             else if (iAtkNum <= 1)
             {
                 if (iAtkNum == m_iPastNeerAtkNum)
                 {
-                    iAtkNum = rand() % 10;
+                    iAtkNum = rand() % 104;
                 }
+                else
+                    bReCheck = false;
             }
             else
                 bReCheck = false;
@@ -223,7 +227,7 @@ void CState_SimonManusP1_Idle::Calc_Act_Attack(_float fDist)
         {
             if (iAtkNum == m_iPastFarAtkNum)
             {
-                iAtkNum = rand() % 10;
+                iAtkNum = rand() % 3;
             }
             else
                 bReCheck = false;

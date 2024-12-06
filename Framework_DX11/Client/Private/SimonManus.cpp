@@ -174,7 +174,7 @@ void CSimonManus::Update(_float fTimeDelta)
 
 	m_pRigidBodyCom->Set_Velocity(m_vCurRootMove / fTimeDelta);
 
-	//m_pFsmCom->Update(fTimeDelta);
+	m_pFsmCom->Update(fTimeDelta);
 
 	for (_uint i = 0; i < PAWN_SOUND_END; ++i)
 	{
