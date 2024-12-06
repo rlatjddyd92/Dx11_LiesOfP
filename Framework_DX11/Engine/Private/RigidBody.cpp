@@ -189,9 +189,9 @@ HRESULT CRigidBody::Add_PxActor(RIGIDBODY_DESC* pDesc)
 			m_PxActor->setActorFlag(PxActorFlag::eDISABLE_GRAVITY, true);
 		}
 	}
-#ifdef _DEBUG
+
 	m_PxActor->setActorFlag(PxActorFlag::eVISUALIZATION, true);
-#endif
+
 	static_cast<PxRigidDynamic*>(m_PxActor)->setRigidDynamicLockFlags(pDesc->PxLockFlags);
 
 	m_PxMaterial = pPhysx->createMaterial(pDesc->fStaticFriction, pDesc->fDynamicFriction, pDesc->fRestituion);
@@ -205,9 +205,9 @@ HRESULT CRigidBody::Add_PxGeometry(RIGIDBODY_DESC* pDesc)
 
 	PxShapeFlags eShapeFlags = PxShapeFlag::eSIMULATION_SHAPE ;
 
-#ifdef _DEBUG
+
 	eShapeFlags = eShapeFlags | PxShapeFlag::eVISUALIZATION;
-#endif
+
 
 	physX::Geometry* pGeometry = pDesc->pGeometry;
 

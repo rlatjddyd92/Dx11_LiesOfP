@@ -138,6 +138,7 @@ HRESULT CSimonManus::Initialize(void* pArg)
 	// 정식 코드  
 	GET_GAMEINTERFACE->Register_Pointer_Into_OrthoUIPage(UI_ORTHO_OBJ_TYPE::ORTHO_BOSS_SIMON, this);
 
+	GET_GAMEINTERFACE->Set_OnOff_OrthoUI(false, this);
 	return S_OK;
 }
 
@@ -151,6 +152,11 @@ void CSimonManus::Priority_Update(_float fTimeDelta)
 	{
 		m_bDieState = true;
 		m_pFsmCom->Set_State(DIE);
+		if (m_isChanged)
+		{
+			GET_GAMEINTERFACE->Set_OnOff_OrthoUI(false, this);
+		}
+
 	}
 	for (auto& pEffect : m_Effects)
 	{
@@ -158,13 +164,6 @@ void CSimonManus::Priority_Update(_float fTimeDelta)
 			pEffect->Priority_Update(fTimeDelta);
 	}
 
-
-	// 24-12-06 김성용
-	// 테스트 코드 
-	if (KEY_TAP(KEY::N))
-		GET_GAMEINTERFACE->Set_OnOff_OrthoUI(false, this);
-	if (KEY_TAP(KEY::M))
-		GET_GAMEINTERFACE->Set_OnOff_OrthoUI(true, this);
 
 
 }

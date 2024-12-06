@@ -53,6 +53,13 @@ void CCutScene::Update(_float fTimeDelta)
 		GET_GAMEINTERFACE->Fade_In(0.f);
 		CCamera_Manager::Get_Instance()->Change_Camera(TEXT("Camera_Player"));
 	}
+	
+	if (!m_bPlayerWeaponActive && m_bFinished)
+	{
+		CPlayer* pPlayer = dynamic_cast<CPlayer*>(m_pGameInstance->Find_Player(LEVEL_GAMEPLAY));
+		pPlayer->Appear_Weapon();
+		m_bPlayerWeaponActive = true;
+	}
 }
 
 void CCutScene::Late_Update(_float fTimeDelta)

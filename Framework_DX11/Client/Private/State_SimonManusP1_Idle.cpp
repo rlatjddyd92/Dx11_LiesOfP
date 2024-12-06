@@ -4,6 +4,8 @@
 #include "Model.h"
 #include "SimonManus.h"
 
+#include "GameInterface_Controller.h"
+
 CState_SimonManusP1_Idle::CState_SimonManusP1_Idle(CFsm* pFsm, CMonster* pMonster)
     :CState{ pFsm }
     , m_pMonster{ pMonster }
@@ -44,6 +46,7 @@ void CState_SimonManusP1_Idle::Update(_float fTimeDelta)
         _Vec3 vMonsterPos = m_pMonster->Get_Transform()->Get_State(CTransform::STATE_POSITION);
         if (fDist <= 25.f && abs(vTargetPos.y - vMonsterPos.y) <= 5.f)
         {
+            GET_GAMEINTERFACE->Set_OnOff_OrthoUI(true, m_pMonster);
             m_bFirstMeetCheck = true;
         }
         else
@@ -112,6 +115,58 @@ void CState_SimonManusP1_Idle::End_State()
 
 void CState_SimonManusP1_Idle::Calc_Act_Attack(_float fDist)
 {
+    switch (m_iAtkTrack)
+    {
+    case 0:
+        m_pMonster->Change_State(CSimonManus::ATK_SWINGDOWN_L);
+        break;
+
+    case 1:
+        m_pMonster->Change_State(CSimonManus::ATK_SWINGDOWN_R);
+        break;
+
+    case 2:
+        m_pMonster->Change_State(CSimonManus::ATK_AVOIDSWING);
+        break;
+
+    case 3:
+        m_pMonster->Change_State(CSimonManus::ATK_STAMP);
+        break;
+
+    case 4:
+        m_pMonster->Change_State(CSimonManus::ATK_JUMPTOSWING);
+        break;
+
+    case 5:
+        m_pMonster->Change_State(CSimonManus::ATK_STING);
+        break;
+
+    case 6:
+        m_pMonster->Change_State(CSimonManus::ATK_CHARGE_SWINGDOWN);
+        break;
+
+    case 7:
+        m_pMonster->Change_State(CSimonManus::ATK_CHASINGSWING);
+        break;
+
+    case 8:
+        m_pMonster->Change_State(CSimonManus::ATK_SWIPMULT_L);
+        break;
+
+    case 9:
+        m_pMonster->Change_State(CSimonManus::ATK_SWIPMULT_R);
+        break;
+
+    default:
+        break;
+    }
+    m_iAtkTrack++;
+    if (m_iAtkTrack >= 10)
+    {
+        m_iAtkTrack = 0;
+    }
+    return;
+
     if (fDist <= 6.f)
     {
         //어보이드, 점프, 스다 엘알  스탬프, 차지까지 까지

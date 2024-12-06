@@ -37,6 +37,8 @@ private:
 
     _uint               m_iAtkCnt{};
 
+    _uint               m_iAtkTrack{};
+
 private:
     void                Calc_Act_Attack(_float fDist);
 

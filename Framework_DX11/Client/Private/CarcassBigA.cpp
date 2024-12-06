@@ -94,6 +94,7 @@ HRESULT CCarcassBigA::Initialize(void* pArg)
 	// 정식 코드  
 	GET_GAMEINTERFACE->Register_Pointer_Into_OrthoUIPage(UI_ORTHO_OBJ_TYPE::ORTHO_NORMAL_MONSTER, this);
 
+	GET_GAMEINTERFACE->Set_OnOff_OrthoUI(false, this);
 	return S_OK;
 }
 
@@ -103,6 +104,7 @@ void CCarcassBigA::Priority_Update(_float fTimeDelta)
 
 	if (!m_bDieState && m_eStat.fHp <= 0.f)
 	{
+		GET_GAMEINTERFACE->Set_OnOff_OrthoUI(false, this);
 		m_bDieState = true;
 		m_pFsmCom->Set_State(DIE);
 	}
@@ -123,13 +125,6 @@ void CCarcassBigA::Update(_float fTimeDelta)
 			if (m_eStat.bWeakness) m_eStat.bWeakness = false;
 			else m_eStat.bWeakness = true;
 		}
-
-	// 24-12-06 김성용
-	// 테스트 코드 
-	if (KEY_TAP(KEY::N))
-		GET_GAMEINTERFACE->Set_OnOff_OrthoUI(false, this);
-	if (KEY_TAP(KEY::M))
-		GET_GAMEINTERFACE->Set_OnOff_OrthoUI(true, this);
 
 	m_pColliderCom->Update(m_pTransformCom->Get_WorldMatrix_Ptr());
 	m_pGameInstance->Add_ColliderList(m_pColliderCom);
@@ -255,7 +250,7 @@ HRESULT CCarcassBigA::Ready_Components()
 
 	physX::GeometryCapsule CapsuleDesc;
 	CapsuleDesc.fHeight = 1.5f;
-	CapsuleDesc.fRadius = 0.25f;
+	CapsuleDesc.fRadius = 0.5f;
 	RigidBodyDesc.pGeometry = &CapsuleDesc;
 	RigidBodyDesc.PxLockFlags = PxRigidDynamicLockFlag::eLOCK_ANGULAR_X |
 		PxRigidDynamicLockFlag::eLOCK_ANGULAR_Y |

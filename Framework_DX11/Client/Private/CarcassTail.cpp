@@ -5,6 +5,8 @@
 #include "Player.h"
 #include "Fsm.h"
 
+#include "GameInterface_Controller.h"
+
 #include "State_CarcassTail_Idle.h"
 #include "State_CarcassTail_Die.h"
 #include "State_CarcassTail_Grogy.h"
@@ -77,6 +79,9 @@ HRESULT CCarcassTail::Initialize(void* pArg)
 	m_eStat.fDefence = 2.f;
 	m_eStat.fStemina = 30.f;
 
+	GET_GAMEINTERFACE->Register_Pointer_Into_OrthoUIPage(UI_ORTHO_OBJ_TYPE::ORTHO_NORMAL_MONSTER, this);
+
+	GET_GAMEINTERFACE->Set_OnOff_OrthoUI(false, this);
 
 	return S_OK;
 }
@@ -87,6 +92,7 @@ void CCarcassTail::Priority_Update(_float fTimeDelta)
 
 	if (!m_bDieState && m_eStat.fHp <= 0.f)
 	{
+		GET_GAMEINTERFACE->Set_OnOff_OrthoUI(false, this);
 		m_bDieState = true;
 		m_pFsmCom->Set_State(DIE);
 	}

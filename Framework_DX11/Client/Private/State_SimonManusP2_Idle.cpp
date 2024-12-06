@@ -41,35 +41,22 @@ void CState_SimonManusP2_Idle::Update(_float fTimeDelta)
             }
         }
 
-        //if (m_bTest)
-        //{
-        //    m_pMonster->Change_State(CSimonManus::ATKP2_SLIDEMAGIC);
-        //    m_bTest = false;
-        //    return;
-        //}
-        //else
-        //{
-        //    m_pMonster->Change_State(CSimonManus::ATKP2_THUNDERBALL);
-        //    m_bTest = true;
-        //    return;
-        //}
 
-
-        if (fDist <= 15.f && 9.f < fDist)
-        {
-            //하이점프폴
-            if (m_iAtkCnt >= 3.f)
-            {
-                m_pMonster->Change_State(CSimonManus::ATKP2_HIGHJUMPFALL);
-                m_iAtkCnt = 0;
-                return;
-            }
-            else    //스윙 점프
-            {
-                m_pMonster->Change_State(CSimonManus::ATKP2_ROUTE_2);
-                return;
-            }
-        }
+        //if (fDist <= 15.f && 9.f < fDist)
+        //{
+        //    //하이점프폴
+        //    if (m_iAtkCnt >= 3.f)
+        //    {
+        //        m_iAtkCnt = 0;
+        //        m_pMonster->Change_State(CSimonManus::ATKP2_HIGHJUMPFALL);
+        //        return;
+        //    }
+        //    else    //스윙 점프
+        //    {
+        //        m_pMonster->Change_State(CSimonManus::ATKP2_ROUTE_2);
+        //        return;
+        //    }
+        //}
         else if (fDist <= 7.f)
         {
             Calc_Act_Attack(fDist);
@@ -116,6 +103,83 @@ void CState_SimonManusP2_Idle::End_State()
 
 void CState_SimonManusP2_Idle::Calc_Act_Attack(_float fDist)
 {
+    switch (m_iAtkTrack)
+    {
+    case 0:
+        m_pMonster->Change_State(CSimonManus::ATKP2_ROUTE_0);
+        break;
+
+    case 1:
+        m_pMonster->Change_State(CSimonManus::ATKP2_ROUTE_1);
+        break;
+
+    case 2:
+        m_pMonster->Change_State(CSimonManus::ATKP2_SWIPMULTIPLE);
+        break;
+
+    case 3:
+        m_pMonster->Change_State(CSimonManus::ATKP2_WAVE);
+        break;
+
+    case 4:
+        m_pMonster->Change_State(CSimonManus::ATKP2_JUMPTOATTACK);
+        break;
+
+    case 5:
+        m_pMonster->Change_State(CSimonManus::ATKP2_SWIPMULTIPLE);
+        //m_pMonster->Change_State(CSimonManus::ATKP2_LIGHTNINGTOWAVE);
+        break;
+
+    case 6:
+        m_pMonster->Change_State(CSimonManus::ATKP2_AVOIDSWING);
+        break;
+
+    case 7:
+        m_pMonster->Change_State(CSimonManus::ATKP2_BRUTALATTACK);
+        break;
+
+    case 8:
+        m_pMonster->Change_State(CSimonManus::ATKP2_STAMP);
+        break;
+
+    case 9:
+        m_pMonster->Change_State(CSimonManus::ATKP2_SWINGDOWN_SWING);
+        break;
+
+    case 10:
+        m_pMonster->Change_State(CSimonManus::ATKP2_STING);
+        break;
+
+    case 11:
+        m_pMonster->Change_State(CSimonManus::ATKP2_THUNDERCALLING);
+        break;
+
+    case 12:
+        m_pMonster->Change_State(CSimonManus::ATKP2_CHASINGSWING);
+        break;
+
+    case 13:
+        m_pMonster->Change_State(CSimonManus::ATKP2_SPREADMAGIC);
+        break;
+
+    case 14:
+        m_pMonster->Change_State(CSimonManus::ATKP2_ROUTE_2);
+        break;
+
+    case 15:
+        m_pMonster->Change_State(CSimonManus::ATKP2_THUNDERBALL);
+        break;
+
+    default:
+        break;
+    }
+    m_iAtkTrack++;
+    if (m_iAtkTrack >= 17)
+    {
+        m_iAtkTrack = 0;
+    }
+    return;
+
     if (fDist <= 4.f)
     {
         //거리가 짧을때 루트 0,1 웨이브 스윕멀

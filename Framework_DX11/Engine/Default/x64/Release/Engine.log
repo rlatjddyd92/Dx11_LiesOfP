@@ -1,13 +1,73 @@
-﻿FXC : warning X4717: Effects deprecated for D3DCompiler_47
-D:\GitProject\Dx11_LiesOfP\Framework_DX11\Engine\Bin\ShaderFiles\Shader_Deferred.hlsl(176,5-82): warning X3206: implicit truncation of vector type
-D:\GitProject\Dx11_LiesOfP\Framework_DX11\Engine\Bin\ShaderFiles\Shader_Deferred.hlsl(197,27-49): warning X3571: pow(f, e) will not work for negative f, use abs(f) or conditionally handle negative values if you expect them
-D:\GitProject\Dx11_LiesOfP\Framework_DX11\Engine\Bin\ShaderFiles\Shader_Deferred.hlsl(231,23-44): warning X3571: pow(f, e) will not work for negative f, use abs(f) or conditionally handle negative values if you expect them
-D:\GitProject\Dx11_LiesOfP\Framework_DX11\Engine\Bin\ShaderFiles\Shader_Deferred.hlsl(75,34-159): warning X3582: texture access must have literal offset and multisample index, forcing loop to unroll
-D:\GitProject\Dx11_LiesOfP\Framework_DX11\Engine\Bin\ShaderFiles\Shader_Deferred.hlsl(299,22-44): warning X3571: pow(f, e) will not work for negative f, use abs(f) or conditionally handle negative values if you expect them
-D:\GitProject\Dx11_LiesOfP\Framework_DX11\Engine\Bin\ShaderFiles\Shader_Deferred.hlsl(332,23-44): warning X3571: pow(f, e) will not work for negative f, use abs(f) or conditionally handle negative values if you expect them
-D:\GitProject\Dx11_LiesOfP\Framework_DX11\Engine\Bin\ShaderFiles\Shader_Deferred.hlsl(75,34-159): warning X3582: texture access must have literal offset and multisample index, forcing loop to unroll
+﻿  unity_U9S0670OIGRLL1ZG.cpp
+D:\GitProject\Dx11_LiesOfP\Framework_DX11\Engine\private\CustomFont.cpp(53,7): warning C4834: [[nodiscard]] 특성이 포함된 함수의 반환 값을 버리는 중입니다.
+  (소스 파일 'x64/Release/unity_U9S0670OIGRLL1ZG.cpp'을(를) 컴파일하는 중)
   
-  compilation object save succeeded; see D:\GitProject\Dx11_LiesOfP\Framework_DX11\Engine\Bin\Shader_Deferred.cso
+D:\GitProject\Dx11_LiesOfP\Framework_DX11\Engine\private\CustomFont.cpp(54,7): warning C4834: [[nodiscard]] 특성이 포함된 함수의 반환 값을 버리는 중입니다.
+  (소스 파일 'x64/Release/unity_U9S0670OIGRLL1ZG.cpp'을(를) 컴파일하는 중)
+  
+D:\GitProject\Dx11_LiesOfP\Framework_DX11\Engine\private\CustomFont.cpp(73,7): warning C4834: [[nodiscard]] 특성이 포함된 함수의 반환 값을 버리는 중입니다.
+  (소스 파일 'x64/Release/unity_U9S0670OIGRLL1ZG.cpp'을(를) 컴파일하는 중)
+  
+D:\GitProject\Dx11_LiesOfP\Framework_DX11\Engine\private\CustomFont.cpp(74,7): warning C4834: [[nodiscard]] 특성이 포함된 함수의 반환 값을 버리는 중입니다.
+  (소스 파일 'x64/Release/unity_U9S0670OIGRLL1ZG.cpp'을(를) 컴파일하는 중)
+  
+D:\GitProject\Dx11_LiesOfP\Framework_DX11\Engine\private\CustomFont.cpp(95,7): warning C4834: [[nodiscard]] 특성이 포함된 함수의 반환 값을 버리는 중입니다.
+  (소스 파일 'x64/Release/unity_U9S0670OIGRLL1ZG.cpp'을(를) 컴파일하는 중)
+  
+D:\GitProject\Dx11_LiesOfP\Framework_DX11\Engine\private\CustomFont.cpp(96,7): warning C4834: [[nodiscard]] 특성이 포함된 함수의 반환 값을 버리는 중입니다.
+  (소스 파일 'x64/Release/unity_U9S0670OIGRLL1ZG.cpp'을(를) 컴파일하는 중)
+  
+C:\Program Files\Microsoft Visual Studio\2022\Community\VC\Tools\MSVC\14.38.33130\include\filesystem(12): warning STL4038: The contents of <filesystem> are available only with C++17 or later.
+     ..\Bin\Engine.lib 라이브러리 및 ..\Bin\Engine.exp 개체를 생성하고 있습니다.
+  코드를 생성하고 있습니다.
+  6 of 5260 functions ( 0.1%) were compiled, the rest were copied from previous compilation.
+    3 functions were new in current compilation
+    15 functions had inline decision re-evaluated but remain unchanged
+  코드를 생성했습니다.
+Effects11.lib(EffectAPI.obj) : warning LNK4099: '' PDB를 'Effects11.lib(EffectAPI.obj)' 또는 ''에서 찾을 수 없습니다. 디버그 정보가 없는 것처럼 개체를 링크합니다.
+Effects11.lib(EffectNonRuntime.obj) : warning LNK4099: '' PDB를 'Effects11.lib(EffectNonRuntime.obj)' 또는 ''에서 찾을 수 없습니다. 디버그 정보가 없는 것처럼 개체를 링크합니다.
+Effects11.lib(EffectLoad.obj) : warning LNK4099: '' PDB를 'Effects11.lib(EffectLoad.obj)' 또는 ''에서 찾을 수 없습니다. 디버그 정보가 없는 것처럼 개체를 링크합니다.
+Effects11.lib(d3dxGlobal.obj) : warning LNK4099: '' PDB를 'Effects11.lib(d3dxGlobal.obj)' 또는 ''에서 찾을 수 없습니다. 디버그 정보가 없는 것처럼 개체를 링크합니다.
+Effects11.lib(EffectReflection.obj) : warning LNK4099: '' PDB를 'Effects11.lib(EffectReflection.obj)' 또는 ''에서 찾을 수 없습니다. 디버그 정보가 없는 것처럼 개체를 링크합니다.
+Effects11.lib(EffectRuntime.obj) : warning LNK4099: '' PDB를 'Effects11.lib(EffectRuntime.obj)' 또는 ''에서 찾을 수 없습니다. 디버그 정보가 없는 것처럼 개체를 링크합니다.
+DirectXTK.lib(SpriteBatch.obj) : warning LNK4099: '' PDB를 'DirectXTK.lib(SpriteBatch.obj)' 또는 ''에서 찾을 수 없습니다. 디버그 정보가 없는 것처럼 개체를 링크합니다.
+DirectXTK.lib(WICTextureLoader.obj) : warning LNK4099: '' PDB를 'DirectXTK.lib(WICTextureLoader.obj)' 또는 ''에서 찾을 수 없습니다. 디버그 정보가 없는 것처럼 개체를 링크합니다.
+DirectXTK.lib(PrimitiveBatch.obj) : warning LNK4099: '' PDB를 'DirectXTK.lib(PrimitiveBatch.obj)' 또는 ''에서 찾을 수 없습니다. 디버그 정보가 없는 것처럼 개체를 링크합니다.
+DirectXTK.lib(VertexTypes.obj) : warning LNK4099: '' PDB를 'DirectXTK.lib(VertexTypes.obj)' 또는 ''에서 찾을 수 없습니다. 디버그 정보가 없는 것처럼 개체를 링크합니다.
+DirectXTK.lib(SpriteFont.obj) : warning LNK4099: '' PDB를 'DirectXTK.lib(SpriteFont.obj)' 또는 ''에서 찾을 수 없습니다. 디버그 정보가 없는 것처럼 개체를 링크합니다.
+DirectXTK.lib(BasicEffect.obj) : warning LNK4099: '' PDB를 'DirectXTK.lib(BasicEffect.obj)' 또는 ''에서 찾을 수 없습니다. 디버그 정보가 없는 것처럼 개체를 링크합니다.
+DirectXTK.lib(DDSTextureLoader.obj) : warning LNK4099: '' PDB를 'DirectXTK.lib(DDSTextureLoader.obj)' 또는 ''에서 찾을 수 없습니다. 디버그 정보가 없는 것처럼 개체를 링크합니다.
+DirectXTK.lib(CommonStates.obj) : warning LNK4099: '' PDB를 'DirectXTK.lib(CommonStates.obj)' 또는 ''에서 찾을 수 없습니다. 디버그 정보가 없는 것처럼 개체를 링크합니다.
+DirectXTK.lib(pch.obj) : warning LNK4099: '' PDB를 'DirectXTK.lib(pch.obj)' 또는 ''에서 찾을 수 없습니다. 디버그 정보가 없는 것처럼 개체를 링크합니다.
+DirectXTK.lib(BinaryReader.obj) : warning LNK4099: '' PDB를 'DirectXTK.lib(BinaryReader.obj)' 또는 ''에서 찾을 수 없습니다. 디버그 정보가 없는 것처럼 개체를 링크합니다.
+DirectXTK.lib(EffectCommon.obj) : warning LNK4099: '' PDB를 'DirectXTK.lib(EffectCommon.obj)' 또는 ''에서 찾을 수 없습니다. 디버그 정보가 없는 것처럼 개체를 링크합니다.
+PhysXExtensions_static_64.lib(ExtExtensions.obj) : warning LNK4099: '' PDB를 'PhysXExtensions_static_64.lib(ExtExtensions.obj)' 또는 ''에서 찾을 수 없습니다. 디버그 정보가 없는 것처럼 개체를 링크합니다.
+PhysXExtensions_static_64.lib(ExtDefaultCpuDispatcher.obj) : warning LNK4099: '' PDB를 'PhysXExtensions_static_64.lib(ExtDefaultCpuDispatcher.obj)' 또는 ''에서 찾을 수 없습니다. 디버그 정보가 없는 것처럼 개체를 링크합니다.
+PhysXExtensions_static_64.lib(ExtDefaultErrorCallback.obj) : warning LNK4099: '' PDB를 'PhysXExtensions_static_64.lib(ExtDefaultErrorCallback.obj)' 또는 ''에서 찾을 수 없습니다. 디버그 정보가 없는 것처럼 개체를 링크합니다.
+PhysXExtensions_static_64.lib(ExtDefaultSimulationFilterShader.obj) : warning LNK4099: '' PDB를 'PhysXExtensions_static_64.lib(ExtDefaultSimulationFilterShader.obj)' 또는 ''에서 찾을 수 없습니다. 디버그 정보가 없는 것처럼 개체를 링크합니다.
+PhysXExtensions_static_64.lib(ExtDistanceJoint.obj) : warning LNK4099: '' PDB를 'PhysXExtensions_static_64.lib(ExtDistanceJoint.obj)' 또는 ''에서 찾을 수 없습니다. 디버그 정보가 없는 것처럼 개체를 링크합니다.
+PhysXExtensions_static_64.lib(ExtD6Joint.obj) : warning LNK4099: '' PDB를 'PhysXExtensions_static_64.lib(ExtD6Joint.obj)' 또는 ''에서 찾을 수 없습니다. 디버그 정보가 없는 것처럼 개체를 링크합니다.
+PhysXExtensions_static_64.lib(ExtFixedJoint.obj) : warning LNK4099: '' PDB를 'PhysXExtensions_static_64.lib(ExtFixedJoint.obj)' 또는 ''에서 찾을 수 없습니다. 디버그 정보가 없는 것처럼 개체를 링크합니다.
+PhysXExtensions_static_64.lib(ExtPrismaticJoint.obj) : warning LNK4099: '' PDB를 'PhysXExtensions_static_64.lib(ExtPrismaticJoint.obj)' 또는 ''에서 찾을 수 없습니다. 디버그 정보가 없는 것처럼 개체를 링크합니다.
+PhysXExtensions_static_64.lib(ExtRevoluteJoint.obj) : warning LNK4099: '' PDB를 'PhysXExtensions_static_64.lib(ExtRevoluteJoint.obj)' 또는 ''에서 찾을 수 없습니다. 디버그 정보가 없는 것처럼 개체를 링크합니다.
+PhysXExtensions_static_64.lib(ExtSphericalJoint.obj) : warning LNK4099: '' PDB를 'PhysXExtensions_static_64.lib(ExtSphericalJoint.obj)' 또는 ''에서 찾을 수 없습니다. 디버그 정보가 없는 것처럼 개체를 링크합니다.
+PhysXExtensions_static_64.lib(ExtGearJoint.obj) : warning LNK4099: '' PDB를 'PhysXExtensions_static_64.lib(ExtGearJoint.obj)' 또는 ''에서 찾을 수 없습니다. 디버그 정보가 없는 것처럼 개체를 링크합니다.
+PhysXExtensions_static_64.lib(ExtRackAndPinionJoint.obj) : warning LNK4099: '' PDB를 'PhysXExtensions_static_64.lib(ExtRackAndPinionJoint.obj)' 또는 ''에서 찾을 수 없습니다. 디버그 정보가 없는 것처럼 개체를 링크합니다.
+PhysXExtensions_static_64.lib(SnRepXCoreSerializer.obj) : warning LNK4099: '' PDB를 'PhysXExtensions_static_64.lib(SnRepXCoreSerializer.obj)' 또는 ''에서 찾을 수 없습니다. 디버그 정보가 없는 것처럼 개체를 링크합니다.
+PhysXExtensions_static_64.lib(SnJointRepXSerializer.obj) : warning LNK4099: '' PDB를 'PhysXExtensions_static_64.lib(SnJointRepXSerializer.obj)' 또는 ''에서 찾을 수 없습니다. 디버그 정보가 없는 것처럼 개체를 링크합니다.
+PhysXExtensions_static_64.lib(PxExtensionAutoGeneratedMetaDataObjects.obj) : warning LNK4099: '' PDB를 'PhysXExtensions_static_64.lib(PxExtensionAutoGeneratedMetaDataObjects.obj)' 또는 ''에서 찾을 수 없습니다. 디버그 정보가 없는 것처럼 개체를 링크합니다.
+PhysXExtensions_static_64.lib(ExtCpuWorkerThread.obj) : warning LNK4099: '' PDB를 'PhysXExtensions_static_64.lib(ExtCpuWorkerThread.obj)' 또는 ''에서 찾을 수 없습니다. 디버그 정보가 없는 것처럼 개체를 링크합니다.
+PhysXExtensions_static_64.lib(ExtJoint.obj) : warning LNK4099: '' PDB를 'PhysXExtensions_static_64.lib(ExtJoint.obj)' 또는 ''에서 찾을 수 없습니다. 디버그 정보가 없는 것처럼 개체를 링크합니다.
+PhysXExtensions_static_64.lib(ExtContactJoint.obj) : warning LNK4099: '' PDB를 'PhysXExtensions_static_64.lib(ExtContactJoint.obj)' 또는 ''에서 찾을 수 없습니다. 디버그 정보가 없는 것처럼 개체를 링크합니다.
+PhysXPvdSDK_static_64.lib(PxPvd.obj) : warning LNK4099: '' PDB를 'PhysXPvdSDK_static_64.lib(PxPvd.obj)' 또는 ''에서 찾을 수 없습니다. 디버그 정보가 없는 것처럼 개체를 링크합니다.
+PhysXPvdSDK_static_64.lib(PxPvdDefaultSocketTransport.obj) : warning LNK4099: '' PDB를 'PhysXPvdSDK_static_64.lib(PxPvdDefaultSocketTransport.obj)' 또는 ''에서 찾을 수 없습니다. 디버그 정보가 없는 것처럼 개체를 링크합니다.
+PhysXPvdSDK_static_64.lib(PxPvdImpl.obj) : warning LNK4099: '' PDB를 'PhysXPvdSDK_static_64.lib(PxPvdImpl.obj)' 또는 ''에서 찾을 수 없습니다. 디버그 정보가 없는 것처럼 개체를 링크합니다.
+PhysXPvdSDK_static_64.lib(PxPvdDataStream.obj) : warning LNK4099: '' PDB를 'PhysXPvdSDK_static_64.lib(PxPvdDataStream.obj)' 또는 ''에서 찾을 수 없습니다. 디버그 정보가 없는 것처럼 개체를 링크합니다.
+PhysXPvdSDK_static_64.lib(PxPvdObjectModelMetaData.obj) : warning LNK4099: '' PDB를 'PhysXPvdSDK_static_64.lib(PxPvdObjectModelMetaData.obj)' 또는 ''에서 찾을 수 없습니다. 디버그 정보가 없는 것처럼 개체를 링크합니다.
+PhysXPvdSDK_static_64.lib(PxPvdObjectRegistrar.obj) : warning LNK4099: '' PDB를 'PhysXPvdSDK_static_64.lib(PxPvdObjectRegistrar.obj)' 또는 ''에서 찾을 수 없습니다. 디버그 정보가 없는 것처럼 개체를 링크합니다.
+PhysXPvdSDK_static_64.lib(PxPvdMemClient.obj) : warning LNK4099: '' PDB를 'PhysXPvdSDK_static_64.lib(PxPvdMemClient.obj)' 또는 ''에서 찾을 수 없습니다. 디버그 정보가 없는 것처럼 개체를 링크합니다.
+PhysXPvdSDK_static_64.lib(PxProfileEventImpl.obj) : warning LNK4099: '' PDB를 'PhysXPvdSDK_static_64.lib(PxProfileEventImpl.obj)' 또는 ''에서 찾을 수 없습니다. 디버그 정보가 없는 것처럼 개체를 링크합니다.
+PhysXPvdSDK_static_64.lib(PxPvdProfileZoneClient.obj) : warning LNK4099: '' PDB를 'PhysXPvdSDK_static_64.lib(PxPvdProfileZoneClient.obj)' 또는 ''에서 찾을 수 없습니다. 디버그 정보가 없는 것처럼 개체를 링크합니다.
   Engine.vcxproj -> D:\GitProject\Dx11_LiesOfP\Framework_DX11\Engine\Bin\Engine.dll
   ..\Bin\Engine.lib
   1개 파일이 복사되었습니다.

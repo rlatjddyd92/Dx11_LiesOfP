@@ -4,6 +4,8 @@
 #include "Model.h"
 #include "CarcassBigA.h"
 
+#include "GameInterface_Controller.h"
+
 CState_CarcassBigA_Idle::CState_CarcassBigA_Idle(CFsm* pFsm, CMonster* pMonster)
     :CState{ pFsm }
     , m_pMonster{ pMonster }
@@ -35,6 +37,8 @@ void CState_CarcassBigA_Idle::Update(_float fTimeDelta)
         if (fDist <= 15.f && abs(vTargetPos.y - vMonsterPos.y) <= 5.f)
         {
             m_bFirstMeetCheck = true;
+
+            GET_GAMEINTERFACE->Set_OnOff_OrthoUI(true, m_pMonster);
         }
         else
         {

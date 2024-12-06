@@ -68,7 +68,7 @@ void CState_Player_Heal::Update(_float fTimeDelta)
     {
         if (m_fRecoveryAmount >= 200.f)
             m_isRecoveryHP = false;
-        m_pPlayer->Recovery_HP(2.f);
+        m_pPlayer->Recovery_HP(1.f);
     }
 
     if (!Move(fTimeDelta))

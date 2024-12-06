@@ -163,7 +163,7 @@ HRESULT CMainApp::Render()
 
 	/* MakeSpriteFont "³Ø½¼lv1°íµñ Bold" /FontSize:10 /FastPack /CharacterRegion:0x0020-0x00FF /CharacterRegion:0x3131-0x3163 /CharacterRegion:0xAC00-0xD800 /DefaultCharacter:0xAC00 145ex.spritefont */
 	
-//#ifdef _DEBUG
+#ifdef _DEBUG
 	++m_iNumDraw;
 
 	if (m_fTimeAcc >= 1.f)
@@ -174,7 +174,7 @@ HRESULT CMainApp::Render()
 	}
 
 	m_pGameInstance->Render_Text(TEXT("Font_145"), m_szFPS, XMVectorSet(0.f, 0.f, 0.f, 1.f), XMVectorSet(1.f, 0.f, 0.f, 1.f));
-//#endif
+#endif
 
 	m_pGameInstance->Render_End();
 

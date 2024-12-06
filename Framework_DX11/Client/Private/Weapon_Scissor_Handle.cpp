@@ -41,7 +41,7 @@ HRESULT CWeapon_Scissor_Handle::Initialize(void* pArg)
 		return E_FAIL;
 
 	m_strObjectTag = TEXT("PlayerWeapon");
-	m_fDamageAmount = 8.f;
+	m_fDamageAmount = 4.f;
 
 	m_isActive = false;
 	m_pColliderCom->IsActive(false);

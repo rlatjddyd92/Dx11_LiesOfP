@@ -40,6 +40,7 @@ private:
 	_float						m_fTrackPosition = { 0.f };
 	_bool						m_bPlay = { false };
 	_bool						m_bFinished = { false };
+	_bool						m_bPlayerWeaponActive = { false };
 
 	vector<CUTSCENE_KEYFRAME_DESC*>		m_KeyFrames;
 

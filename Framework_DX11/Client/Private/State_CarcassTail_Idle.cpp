@@ -4,6 +4,8 @@
 #include "Model.h"
 #include "CarcassTail.h"
 
+#include "GameInterface_Controller.h"
+
 CState_CarcassTail_Idle::CState_CarcassTail_Idle(CFsm* pFsm, CMonster* pMonster)
     :CState{ pFsm }
     , m_pMonster{ pMonster }
@@ -33,6 +35,7 @@ void CState_CarcassTail_Idle::Update(_float fTimeDelta)
         _Vec3 vMonsterPos = m_pMonster->Get_Transform()->Get_State(CTransform::STATE_POSITION);
         if (fDist <= 15.f && abs(vTargetPos.y - vMonsterPos.y) <= 5.f)
         {
+            GET_GAMEINTERFACE->Set_OnOff_OrthoUI(true, m_pMonster);
             m_bFirstMeetCheck = true;
         }
         else
