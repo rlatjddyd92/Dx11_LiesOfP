@@ -179,11 +179,14 @@ void CWeapon::Active_Collider(_float fDamageRatio, _uint iHandIndex, _uint iHitT
 {
 	if (m_pColliderCom->IsActive())
 		return;
+
 	m_fDamageRatio = fDamageRatio;
 	m_pColliderCom->IsActive(true);
 	m_iHitType = iHitType;
 	m_iAtkStrength = iAtkStrength;
 	m_DamagedObjects.clear();
+
+	m_pPlayer->Decrease_Stamina(10.f);
 }
 
 void CWeapon::DeActive_Collider(_uint iHandIndex)
