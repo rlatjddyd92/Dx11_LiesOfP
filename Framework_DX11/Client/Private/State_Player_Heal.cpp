@@ -53,6 +53,9 @@ HRESULT CState_Player_Heal::Start_State(void* pArg)
     m_pPlayer->Set_MoveSpeed(m_fMoveSpeed);
 
     m_isPlaySound = false;
+    m_isRecoveryHP = false;
+
+    m_fRecoveryAmount = 0.f;
 
     return S_OK;
 }
@@ -60,6 +63,13 @@ HRESULT CState_Player_Heal::Start_State(void* pArg)
 void CState_Player_Heal::Update(_float fTimeDelta)
 {
     _int iFrame = m_pPlayer->Get_Frame(true);
+
+    if (m_isRecoveryHP)
+    {
+        if (m_fRecoveryAmount >= 200.f)
+            m_isRecoveryHP = false;
+        m_pPlayer->Recovery_HP(2.f);
+    }
 
     if (!Move(fTimeDelta))
     {
@@ -69,6 +79,7 @@ void CState_Player_Heal::Update(_float fTimeDelta)
     
     if ((iFrame == 50 || iFrame == 51) && !m_isPlaySound)
     {
+        m_isRecoveryHP = true;
         m_pPlayer->Play_Sound(CPawn::PAWN_SOUND_EFFECT1, TEXT("SE_PC_FX_Item_Ergo_S.wav"));
         m_pPlayer->Active_Effect(CPlayer::EFFECT_HEAL, false);
         m_isPlaySound = true;

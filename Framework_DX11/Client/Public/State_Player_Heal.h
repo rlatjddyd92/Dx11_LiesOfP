@@ -34,8 +34,11 @@ private:
     _Vec4               m_vMoveDir = {};
 
     _float              m_fMoveSpeed = {};
+    _float              m_fRecoveryAmount = {};
 
-    _double*             m_pTrackPos = { nullptr };
+    _double*            m_pTrackPos = { nullptr };
+
+    _bool               m_isRecoveryHP = { false };
 
 private:
     _bool               Move(_float fTimeDelta);

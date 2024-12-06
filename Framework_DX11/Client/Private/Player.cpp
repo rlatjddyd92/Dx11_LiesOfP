@@ -842,6 +842,15 @@ void CPlayer::Update_Stat(_float fTimeDelta)
 
 }
 
+void CPlayer::Recovery_HP(_float fAmount)
+{
+	m_tPlayer_Stat->vGauge_Hp.x += fAmount;
+	if (m_tPlayer_Stat->vGauge_Hp.x >= m_tPlayer_Stat->vGauge_Hp.z + m_tPlayer_Stat_Adjust->vGauge_Hp.z)
+	{
+		m_tPlayer_Stat->vGauge_Hp.x = m_tPlayer_Stat->vGauge_Hp.z + m_tPlayer_Stat_Adjust->vGauge_Hp.z;
+	}
+}
+
 void CPlayer::CollisionStay_IntercObj(CGameObject* pGameObject)
 {
 	if (m_pFsmCom->Get_CurrentState() >= 100)

@@ -236,6 +236,8 @@ public:
 	void			Decrease_Region(_uint iRegionCount = 1);
 	void			Recovery_Region(_float fAmount = 10.f);
 
+	void			Recovery_HP(_float fAmount);
+
 	/* Effect */
 private:
 	vector<class CEffect_Container*> m_Effects;
