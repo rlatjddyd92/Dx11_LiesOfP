@@ -162,6 +162,7 @@ void CState_SimonManusP2_SwipMultiple::Effect_Check(_double CurTrackPos)
                 if (!m_bSwing)
                 {
                     m_pMonster->Active_Effect(CSimonManus::P1_TRAIL);
+                    m_bSwing = true;
                 }
             }
             else
@@ -176,6 +177,7 @@ void CState_SimonManusP2_SwipMultiple::Effect_Check(_double CurTrackPos)
                 if (!m_bSwing)
                 {
                     m_pMonster->Active_Effect(CSimonManus::P1_TRAIL);
+                    m_bSwing = true;
                 }
             }
             else
@@ -191,6 +193,7 @@ void CState_SimonManusP2_SwipMultiple::Effect_Check(_double CurTrackPos)
             if (!m_bSwing)
             {
                 m_pMonster->Active_Effect(CSimonManus::P1_TRAIL);
+                m_bSwing = true;
             }
         }
         else

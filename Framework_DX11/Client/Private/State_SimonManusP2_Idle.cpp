@@ -57,7 +57,8 @@ void CState_SimonManusP2_Idle::Update(_float fTimeDelta)
         //        return;
         //    }
         //}
-        else if (fDist <= 7.f)
+        //else 
+        if (fDist <= 7.f)
         {
             Calc_Act_Attack(fDist);
             return;
@@ -72,7 +73,7 @@ void CState_SimonManusP2_Idle::Update(_float fTimeDelta)
             m_pMonster->Change_State(CSimonManus::WALK);
             return;
         }
-        
+
     }
 
     _int iDir = m_pMonster->Get_Transform()->LookAt_Lerp_NoHeight(m_pMonster->Get_TargetDir(), 3, fTimeDelta);
@@ -103,82 +104,97 @@ void CState_SimonManusP2_Idle::End_State()
 
 void CState_SimonManusP2_Idle::Calc_Act_Attack(_float fDist)
 {
-    switch (m_iAtkTrack)
-    {
-    case 0:
-        m_pMonster->Change_State(CSimonManus::ATKP2_ROUTE_0);
-        break;
-
-    case 1:
-        m_pMonster->Change_State(CSimonManus::ATKP2_ROUTE_1);
-        break;
-
-    case 2:
-        m_pMonster->Change_State(CSimonManus::ATKP2_SWIPMULTIPLE);
-        break;
-
-    case 3:
-        m_pMonster->Change_State(CSimonManus::ATKP2_WAVE);
-        break;
-
-    case 4:
-        m_pMonster->Change_State(CSimonManus::ATKP2_JUMPTOATTACK);
-        break;
-
-    case 5:
-        m_pMonster->Change_State(CSimonManus::ATKP2_SWIPMULTIPLE);
-        //m_pMonster->Change_State(CSimonManus::ATKP2_LIGHTNINGTOWAVE);
-        break;
-
-    case 6:
-        m_pMonster->Change_State(CSimonManus::ATKP2_AVOIDSWING);
-        break;
-
-    case 7:
-        m_pMonster->Change_State(CSimonManus::ATKP2_BRUTALATTACK);
-        break;
-
-    case 8:
-        m_pMonster->Change_State(CSimonManus::ATKP2_STAMP);
-        break;
-
-    case 9:
-        m_pMonster->Change_State(CSimonManus::ATKP2_SWINGDOWN_SWING);
-        break;
-
-    case 10:
-        m_pMonster->Change_State(CSimonManus::ATKP2_STING);
-        break;
-
-    case 11:
-        m_pMonster->Change_State(CSimonManus::ATKP2_THUNDERCALLING);
-        break;
-
-    case 12:
-        m_pMonster->Change_State(CSimonManus::ATKP2_CHASINGSWING);
-        break;
-
-    case 13:
-        m_pMonster->Change_State(CSimonManus::ATKP2_SPREADMAGIC);
-        break;
-
-    case 14:
-        m_pMonster->Change_State(CSimonManus::ATKP2_ROUTE_2);
-        break;
-
-    case 15:
-        m_pMonster->Change_State(CSimonManus::ATKP2_THUNDERBALL);
-        break;
-
-    default:
-        break;
-    }
-    m_iAtkTrack++;
     if (m_iAtkTrack >= 17)
     {
         m_iAtkTrack = 0;
     }
-    return;
+  
+    switch (m_iAtkTrack)
+    {
+    case 0:
+        m_iAtkTrack++;
+        m_pMonster->Change_State(CSimonManus::ATKP2_ROUTE_0);
+        return;
+
+    case 1:
+        m_iAtkTrack++;
+        m_pMonster->Change_State(CSimonManus::ATKP2_ROUTE_1);
+        return;
+
+    case 2:
+        m_iAtkTrack++;
+        m_pMonster->Change_State(CSimonManus::ATKP2_SWIPMULTIPLE);
+        return;
+
+    case 3:
+        m_iAtkTrack++;
+        m_pMonster->Change_State(CSimonManus::ATKP2_WAVE);
+        return;
+
+    case 4:
+        m_iAtkTrack++;
+        m_pMonster->Change_State(CSimonManus::ATKP2_JUMPTOATTACK);
+        return;
+
+    case 5:
+        m_iAtkTrack++;
+        m_pMonster->Change_State(CSimonManus::ATKP2_HIGHJUMPFALL);
+        //m_pMonster->Change_State(CSimonManus::ATKP2_LIGHTNINGTOWAVE);
+        return;
+
+    case 6:
+        m_iAtkTrack++;
+        m_pMonster->Change_State(CSimonManus::ATKP2_AVOIDSWING);
+        return;
+
+    case 7:
+        m_iAtkTrack++;
+        m_pMonster->Change_State(CSimonManus::ATKP2_BRUTALATTACK);
+        return;
+
+    case 8:
+        m_iAtkTrack++;
+        m_pMonster->Change_State(CSimonManus::ATKP2_STAMP);
+        return;
+
+    case 9:
+        m_iAtkTrack++;
+        m_pMonster->Change_State(CSimonManus::ATKP2_SWINGDOWN_SWING);
+        return;
+
+    case 10:
+        m_iAtkTrack++;
+        m_pMonster->Change_State(CSimonManus::ATKP2_STING);
+        return;
+
+    case 11:
+        m_iAtkTrack++;
+        m_pMonster->Change_State(CSimonManus::ATKP2_THUNDERCALLING);
+        return;
+
+    case 12:
+        m_iAtkTrack++;
+        m_pMonster->Change_State(CSimonManus::ATKP2_CHASINGSWING);
+        return;
+
+    case 13:
+        m_iAtkTrack++;
+        m_pMonster->Change_State(CSimonManus::ATKP2_SPREADMAGIC);
+        return;
+
+    case 14:
+        m_iAtkTrack++;
+        m_pMonster->Change_State(CSimonManus::ATKP2_ROUTE_2);
+        return;
+
+    case 15:
+        m_iAtkTrack++;
+        m_pMonster->Change_State(CSimonManus::ATKP2_THUNDERBALL);
+        return;
+
+    default:
+        break;
+    }
 
     if (fDist <= 4.f)
     {

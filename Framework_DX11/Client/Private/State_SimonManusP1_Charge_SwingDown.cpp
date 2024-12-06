@@ -41,6 +41,7 @@ void CState_SimonManusP1_Charge_SwingDown::Update(_float fTimeDelta)
 
     Collider_Check(CurTrackPos);
     Effect_Check(CurTrackPos);
+    Control_Sound(CurTrackPos);
 
 }
 

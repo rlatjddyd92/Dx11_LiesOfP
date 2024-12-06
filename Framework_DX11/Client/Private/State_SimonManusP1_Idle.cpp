@@ -22,7 +22,7 @@ HRESULT CState_SimonManusP1_Idle::Initialize(_uint iStateNum, void* pArg)
 HRESULT CState_SimonManusP1_Idle::Start_State(void* pArg)
 {
     m_pMonster->Change_Animation(AN_IDLE, true, 0.1f, 0);
-    
+
     if (pArg != nullptr)
     {
         m_fIdleTime = *static_cast<_float*>(pArg);
@@ -157,11 +157,15 @@ void CState_SimonManusP1_Idle::Calc_Act_Attack(_float fDist)
         m_pMonster->Change_State(CSimonManus::ATK_SWIPMULT_R);
         break;
 
+    case 10:
+        m_pMonster->Change_State(CSimonManus::ATK_HIGHJUMPFALL);
+        break;
+
     default:
         break;
     }
     m_iAtkTrack++;
-    if (m_iAtkTrack >= 10)
+    if (m_iAtkTrack >= 11)
     {
         m_iAtkTrack = 0;
     }

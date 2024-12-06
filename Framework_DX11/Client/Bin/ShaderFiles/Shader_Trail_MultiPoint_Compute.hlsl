@@ -536,7 +536,9 @@ void CS_CONVERGE_MAIN(uint3 DTid : SV_DispatchThreadID)
         else if (HeadParticle.particle.vLifeTime.y < HeadParticle.particle.vLifeTime.x)
         {
             float4 vPrePos = HeadParticle.vPreTranslation;
-            while (true)
+            
+            int iCount = 0;
+            while (iCount < 10)
             {
                 float3 vCurrentDir = (HeadParticle.particle.vTranslation - vPrePos).xyz;
                 
@@ -588,6 +590,7 @@ void CS_CONVERGE_MAIN(uint3 DTid : SV_DispatchThreadID)
                     HeadParticle.iTailInitIndex = Init_HeadParticles[iHeadIndex].iTailInitIndex;
             
                 HeadParticle.vPreTranslation = vPrePos;
+                iCount += 1;
             }
         }
         

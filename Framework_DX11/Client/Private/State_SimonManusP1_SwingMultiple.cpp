@@ -42,6 +42,7 @@ void CState_SimonManusP1_SwingMultiple::Update(_float fTimeDelta)
 
     Collider_Check(CurTrackPos);
     Effect_Check(CurTrackPos);
+    Control_Sound(CurTrackPos);
 }
 
 void CState_SimonManusP1_SwingMultiple::End_State()

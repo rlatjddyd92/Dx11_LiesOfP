@@ -25,7 +25,6 @@ HRESULT CState_SimonManusP2_Stamp::Initialize(_uint iStateNum, void* pArg)
 
 HRESULT CState_SimonManusP2_Stamp::Start_State(void* pArg)
 {
-    m_iRouteTrack = 0;
     if (m_pMonster->Calc_Distance_XZ() >= 4.f)
     {
         m_pMonster->Change_Animation(AN_STAMP_MOVE, false, 0.1f, 0);
@@ -46,6 +45,8 @@ HRESULT CState_SimonManusP2_Stamp::Start_State(void* pArg)
     else
         m_bStamp = false;
 
+    m_iRouteTrack = 0;
+
     m_bBlast = false;
     m_bWeaponSpin = false;
     m_bStampEffect = false;
@@ -65,11 +66,11 @@ void CState_SimonManusP2_Stamp::Update(_float fTimeDelta)
             fTime = 140.f;
         }
 
-        if (fTime >= m_pMonster->Get_CurrentTrackPos())
+        if (fTime <= m_pMonster->Get_CurrentTrackPos())
         {
             m_pMonster->Change_Animation(AN_SPINBLAST, false, 0, 0);
             ++m_iRouteTrack;
-            m_bStamp = false;
+            m_bStamp = true;
         }
     }
 
