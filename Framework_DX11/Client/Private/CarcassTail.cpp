@@ -254,7 +254,7 @@ HRESULT CCarcassTail::Ready_Components()
 
 	physX::GeometryCapsule CapsuleDesc;
 	CapsuleDesc.fHeight = 1.5f;
-	CapsuleDesc.fRadius = 0.25f;
+	CapsuleDesc.fRadius = 0.5f;
 	RigidBodyDesc.pGeometry = &CapsuleDesc;
 
 	/* FOR.Com_RigidBody */
