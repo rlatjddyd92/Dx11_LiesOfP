@@ -55,7 +55,7 @@ void CGH_Creater::Update(_float fTimeDelta)
 		CAttackObject::ATKOBJ_DESC Desc;
 		Desc.vPos = _Vec3{ m_pCopyPlayerTransformCom->Get_State(CTransform::STATE_POSITION)};
 
-		m_pGameInstance->Add_CloneObject_ToLayer(LEVEL_GAMEPLAY, TEXT("Monster_Attack"), TEXT("Prototype_GameObject_GodHands"), &Desc);
+		m_pGameInstance->Add_CloneObject_ToLayer(LEVEL_GAMEPLAY, TEXT("Monster_Attack_Extra"), TEXT("Prototype_GameObject_GodHands"), &Desc);
 
 	}
 

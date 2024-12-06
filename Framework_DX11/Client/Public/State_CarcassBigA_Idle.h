@@ -22,6 +22,8 @@ public:
 private:
     class CMonster* m_pMonster = { nullptr };
 
+    _bool               m_bFirstMeetCheck = { false };
+
     _float              m_fIdleTime = { 0.f };
     _float              m_fIdleEndDuration = { 1.f };
 

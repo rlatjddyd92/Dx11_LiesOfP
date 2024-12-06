@@ -27,6 +27,19 @@ HRESULT CState_CarcassTail_Idle::Start_State(void* pArg)
 void CState_CarcassTail_Idle::Update(_float fTimeDelta)
 {
     _float fDist = m_pMonster->Calc_Distance_XZ();
+    if (!m_bFirstMeetCheck)
+    {
+        _Vec3 vTargetPos = m_pMonster->Get_TargetPos();
+        _Vec3 vMonsterPos = m_pMonster->Get_Transform()->Get_State(CTransform::STATE_POSITION);
+        if (fDist <= 15.f && abs(vTargetPos.y - vMonsterPos.y) <= 5.f)
+        {
+            m_bFirstMeetCheck = true;
+        }
+        else
+        {
+            return;
+        }
+    }
     _int iDir = 2;
 
     //뒤에있을때 공격도 있어서. 회전을 거리가 멀때만 하게 조정

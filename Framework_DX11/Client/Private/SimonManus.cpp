@@ -147,8 +147,9 @@ void CSimonManus::Priority_Update(_float fTimeDelta)
 	__super::Set_UpTargetPos();
 	m_pWeapon->Priority_Update(fTimeDelta);
 
-	if (m_eStat.fHp <= 0.f)
+	if (!m_bDieState && m_eStat.fHp <= 0.f)
 	{
+		m_bDieState = true;
 		m_pFsmCom->Set_State(DIE);
 	}
 	for (auto& pEffect : m_Effects)

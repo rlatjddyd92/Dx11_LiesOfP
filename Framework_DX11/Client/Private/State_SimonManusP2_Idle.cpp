@@ -28,10 +28,9 @@ void CState_SimonManusP2_Idle::Update(_float fTimeDelta)
 {
     m_fIdleTime += fTimeDelta;
     _float fDist = m_pMonster->Calc_Distance_XZ();
+
     if (m_fIdleEndDuration <= m_fIdleTime)
     {
-        m_pMonster->Change_State(CSimonManus::ATKP2_SUMMONHAND);
-        return;
         if (!m_bPray)
         {
             if (m_pMonster->Get_Status()->fHp <= m_pMonster->Get_Status()->fMaxHp / 2.f)
@@ -118,20 +117,39 @@ void CState_SimonManusP2_Idle::Calc_Act_Attack(_float fDist)
 {
     if (fDist <= 4.f)
     {
-        //거리가 짧을때
+        //거리가 짧을때 루트 0,1 웨이브 스윕멀
         _int iAtkNum = rand() % 11;
+        _bool bReCheck = { true };
+        while (bReCheck)
+        {
+            if (iAtkNum == m_iPastNeerAtkNum)
+            {
+                iAtkNum = rand() % 11;
+            }
+            else if (iAtkNum <= 3)
+            {
+                if (iAtkNum == m_iPastFarAtkNum)
+                {
+                    iAtkNum = rand() % 11;
+                }
+            }
+            else
+                bReCheck = false;
+        }
+
+        m_iPastNeerAtkNum = iAtkNum;
         switch (iAtkNum)
         {
         case 0:
-            m_pMonster->Change_State(CSimonManus::ATKP2_AVOIDSWING);
+            m_pMonster->Change_State(CSimonManus::ATKP2_ROUTE_0);
             break;
 
         case 1:
-            m_pMonster->Change_State(CSimonManus::ATKP2_BRUTALATTACK);
+            m_pMonster->Change_State(CSimonManus::ATKP2_ROUTE_1);
             break;
 
         case 2:
-            m_pMonster->Change_State(CSimonManus::ATKP2_STING);
+            m_pMonster->Change_State(CSimonManus::ATKP2_SWIPMULTIPLE);
             break;
 
         case 3:
@@ -148,11 +166,11 @@ void CState_SimonManusP2_Idle::Calc_Act_Attack(_float fDist)
             break;
 
         case 6:
-            m_pMonster->Change_State(CSimonManus::ATKP2_ROUTE_0);
+            m_pMonster->Change_State(CSimonManus::ATKP2_AVOIDSWING);
             break;
 
         case 7:
-            m_pMonster->Change_State(CSimonManus::ATKP2_ROUTE_1);
+            m_pMonster->Change_State(CSimonManus::ATKP2_BRUTALATTACK);
             break;
 
         case 8:
@@ -164,7 +182,7 @@ void CState_SimonManusP2_Idle::Calc_Act_Attack(_float fDist)
             break;
 
         case 10:
-            m_pMonster->Change_State(CSimonManus::ATKP2_SWIPMULTIPLE);
+            m_pMonster->Change_State(CSimonManus::ATKP2_STING);
             break;
 
         default:
@@ -178,27 +196,46 @@ void CState_SimonManusP2_Idle::Calc_Act_Attack(_float fDist)
         //거리가 긴 기술 스멀 엘알 체이싱 스팅
         //스프레드, 서몬, 볼, 콜링, 웨이브
         //체이싱, 루트 0, 1, 2, 스윕 멀티
-        _int iAtkNum = rand() % 11;
+        _int iAtkNum = rand() % 10;
+        _bool bReCheck = { true };
+        while (bReCheck)
+        {
+            if (iAtkNum == m_iPastFarAtkNum)
+            {
+                iAtkNum = rand() % 10;
+            }
+            else if (iAtkNum <= 3)
+            {
+                if (iAtkNum == m_iPastNeerAtkNum)
+                {
+                    iAtkNum = rand() % 10;
+                }
+            }
+            else
+                bReCheck = false;
+        }
+
+        m_iPastFarAtkNum = iAtkNum;
         switch (iAtkNum)
         {
         case 0:
-            m_pMonster->Change_State(CSimonManus::ATKP2_SPREADMAGIC);
+            m_pMonster->Change_State(CSimonManus::ATKP2_ROUTE_0);
             break;
 
         case 1:
-            m_pMonster->Change_State(CSimonManus::ATKP2_SUMMONHAND);
+            m_pMonster->Change_State(CSimonManus::ATKP2_ROUTE_1);
             break;
 
         case 2:
-            m_pMonster->Change_State(CSimonManus::ATKP2_THUNDERBALL);
+            m_pMonster->Change_State(CSimonManus::ATKP2_SWIPMULTIPLE);
             break;
 
         case 3:
-            m_pMonster->Change_State(CSimonManus::ATKP2_THUNDERCALLING);
+            m_pMonster->Change_State(CSimonManus::ATKP2_WAVE);
             break;
 
         case 4:
-            m_pMonster->Change_State(CSimonManus::ATKP2_WAVE);
+            m_pMonster->Change_State(CSimonManus::ATKP2_THUNDERCALLING);
             break;
 
         case 5:
@@ -206,11 +243,11 @@ void CState_SimonManusP2_Idle::Calc_Act_Attack(_float fDist)
             break;
 
         case 6:
-            m_pMonster->Change_State(CSimonManus::ATKP2_ROUTE_0);
+            m_pMonster->Change_State(CSimonManus::ATKP2_SPREADMAGIC);
             break;
 
         case 7:
-            m_pMonster->Change_State(CSimonManus::ATKP2_ROUTE_1);
+            m_pMonster->Change_State(CSimonManus::ATKP2_SUMMONHAND);
             break;
 
         case 8:
@@ -218,7 +255,7 @@ void CState_SimonManusP2_Idle::Calc_Act_Attack(_float fDist)
             break;
 
         case 9:
-            m_pMonster->Change_State(CSimonManus::ATKP2_SWIPMULTIPLE);
+            m_pMonster->Change_State(CSimonManus::ATKP2_THUNDERBALL);
             break;
 
         default:

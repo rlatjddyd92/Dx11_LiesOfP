@@ -29,6 +29,9 @@ private:
     _float              m_fIdleTime = { 0.f };
     _float              m_fIdleEndDuration = { 1.5f };
 
+    _uint               m_iPastNeerAtkNum{512};
+    _uint               m_iPastFarAtkNum{512};
+
     _uint               m_iAtkCnt{};
     _bool               m_bTest = false;
     _bool               m_bPray = false;

@@ -76,6 +76,8 @@ protected:
 	_bool		m_bResetRootMove{ true };
 	_bool		m_bRootMoveCtr{ true };
 
+	_bool		m_bDieState{ false };
+
 	_float		m_fPrevTrackPos{};
 
 	_Vec4		m_vPosTarget{};

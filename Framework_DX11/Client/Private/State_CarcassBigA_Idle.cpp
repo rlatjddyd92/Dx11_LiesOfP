@@ -28,6 +28,19 @@ void CState_CarcassBigA_Idle::Update(_float fTimeDelta)
 {
     m_fIdleTime += fTimeDelta;
     _float fDist = m_pMonster->Calc_Distance_XZ();
+    if (!m_bFirstMeetCheck)
+    {
+        _Vec3 vTargetPos = m_pMonster->Get_TargetPos();
+        _Vec3 vMonsterPos = m_pMonster->Get_Transform()->Get_State(CTransform::STATE_POSITION);
+        if (fDist <= 15.f && abs(vTargetPos.y - vMonsterPos.y) <= 5.f)
+        {
+            m_bFirstMeetCheck = true;
+        }
+        else
+        {
+            return;
+        }
+    }
     if (m_fIdleEndDuration <= m_fIdleTime)
     {
         if (fDist >= 30.f)

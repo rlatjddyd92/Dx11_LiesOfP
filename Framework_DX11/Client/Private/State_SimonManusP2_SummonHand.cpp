@@ -4,6 +4,8 @@
 #include "Model.h"
 #include "SimonManus.h"
 
+#include "GH_Creater.h"
+
 CState_SimonManusP2_SummonHand::CState_SimonManusP2_SummonHand(CFsm* pFsm, CMonster* pMonster)
     :CState{ pFsm }
     , m_pMonster{ pMonster }
@@ -89,8 +91,10 @@ void CState_SimonManusP2_SummonHand::Effect_Check(_double CurTrackPos)
         {
             m_bCreaterSet = true;
             //크리에이어 레이어에 추가     임시 Prototype_GameObject_GodHands
+            CGH_Creater::CREATER_DESC Desc{};
+            Desc.pManus = m_pMonster;
 
-            m_pGameInstance->Add_CloneObject_ToLayer(LEVEL_GAMEPLAY, TEXT("Monster_Attack"), TEXT("Prototype_GameObject_GodHandCreater"));
+            m_pGameInstance->Add_CloneObject_ToLayer(LEVEL_GAMEPLAY, TEXT("Monster_Attack"), TEXT("Prototype_GameObject_GodHandCreater"), &Desc);
 
         }
     }

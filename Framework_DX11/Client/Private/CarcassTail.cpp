@@ -72,7 +72,7 @@ HRESULT CCarcassTail::Initialize(void* pArg)
 
 	m_vRimLightColor = { 0.f, 0.f, 0.f, 0.f };
 
-	m_eStat.fHp = 500;
+	m_eStat.fHp = 70;
 	m_eStat.fAtk = 4.f;
 	m_eStat.fDefence = 2.f;
 	m_eStat.fStemina = 30.f;
@@ -85,8 +85,9 @@ void CCarcassTail::Priority_Update(_float fTimeDelta)
 {
 	__super::Set_UpTargetPos();
 
-	if (m_eStat.fHp <= 0.f)
+	if (!m_bDieState && m_eStat.fHp <= 0.f)
 	{
+		m_bDieState = true;
 		m_pFsmCom->Set_State(DIE);
 	}
 }
@@ -131,7 +132,7 @@ HRESULT CCarcassTail::Render()
 
 	for (_uint i = 0; i < TYPE_END; ++i)
 	{
-		m_pColliderObject[i]->IsActive(true);
+		//m_pColliderObject[i]->Active_Collider();
 		m_pColliderObject[i]->Render();
 	}
 #endif

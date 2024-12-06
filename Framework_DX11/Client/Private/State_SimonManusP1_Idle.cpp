@@ -38,6 +38,20 @@ void CState_SimonManusP1_Idle::Update(_float fTimeDelta)
 {
     m_fIdleTime += fTimeDelta;
     _float fDist = m_pMonster->Calc_Distance_XZ();
+    if (!m_bFirstMeetCheck)
+    {
+        _Vec3 vTargetPos = m_pMonster->Get_TargetPos();
+        _Vec3 vMonsterPos = m_pMonster->Get_Transform()->Get_State(CTransform::STATE_POSITION);
+        if (fDist <= 25.f && abs(vTargetPos.y - vMonsterPos.y) <= 5.f)
+        {
+            m_bFirstMeetCheck = true;
+        }
+        else
+        {
+            return;
+        }
+    }
+
     if (m_fIdleEndDuration <= m_fIdleTime)
     {
         if (fDist >= 30.f)
@@ -102,18 +116,37 @@ void CState_SimonManusP1_Idle::Calc_Act_Attack(_float fDist)
     {
         //어보이드, 점프, 스다 엘알  스탬프, 차지까지 까지
         _int iAtkNum = rand() % 5;
+        _bool bReCheck = { true };
+        while (bReCheck)
+        {
+            if (iAtkNum == m_iPastNeerAtkNum)
+            {
+                iAtkNum = rand() % 10;
+            }
+            else if (iAtkNum <= 1)
+            {
+                if (iAtkNum == m_iPastMiddleAtkNum)
+                {
+                    iAtkNum = rand() % 10;
+                }
+            }
+            else
+                bReCheck = false;
+        }
+        m_iPastNeerAtkNum = iAtkNum;
+
         switch (iAtkNum)
         {
         case 0:
-            m_pMonster->Change_State(CSimonManus::ATK_AVOIDSWING);
-            break;
-
-        case 1:
             m_pMonster->Change_State(CSimonManus::ATK_SWINGDOWN_L);
             break;
 
-        case 2:
+        case 1:
             m_pMonster->Change_State(CSimonManus::ATK_SWINGDOWN_R);
+            break;
+
+        case 2:
+            m_pMonster->Change_State(CSimonManus::ATK_AVOIDSWING);
             break;
 
         case 3:
@@ -136,18 +169,37 @@ void CState_SimonManusP1_Idle::Calc_Act_Attack(_float fDist)
     {
 
         _int iAtkNum = rand() % 4;
+        _bool bReCheck = { true };
+        while (bReCheck)
+        {
+            if (iAtkNum == m_iPastMiddleAtkNum)
+            {
+                iAtkNum = rand() % 10;
+            }
+            else if (iAtkNum <= 1)
+            {
+                if (iAtkNum == m_iPastNeerAtkNum)
+                {
+                    iAtkNum = rand() % 10;
+                }
+            }
+            else
+                bReCheck = false;
+        }
+        m_iPastMiddleAtkNum = iAtkNum;
+
         switch (iAtkNum)
         {
         case 0:
-            m_pMonster->Change_State(CSimonManus::ATK_STING);
-            break;
-
-        case 1:
             m_pMonster->Change_State(CSimonManus::ATK_SWINGDOWN_L);
             break;
 
-        case 2:
+        case 1:
             m_pMonster->Change_State(CSimonManus::ATK_SWINGDOWN_R);
+            break;
+
+        case 2:
+            m_pMonster->Change_State(CSimonManus::ATK_STING);
             break;
 
         case 3:
@@ -166,6 +218,18 @@ void CState_SimonManusP1_Idle::Calc_Act_Attack(_float fDist)
     {
         //거리가 긴 기술 스멀 엘알 체이싱 스팅
         _int iAtkNum = rand() % 3;
+        _bool bReCheck = { true };
+        while (bReCheck)
+        {
+            if (iAtkNum == m_iPastFarAtkNum)
+            {
+                iAtkNum = rand() % 10;
+            }
+            else
+                bReCheck = false;
+        }
+        m_iPastFarAtkNum = iAtkNum;
+
         switch (iAtkNum)
         {
         case 0:

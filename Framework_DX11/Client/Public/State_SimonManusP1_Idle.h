@@ -26,8 +26,14 @@ public:
 private:
     class CMonster* m_pMonster = { nullptr };
 
+    _bool               m_bFirstMeetCheck = { false };
+
     _float              m_fIdleTime = { 0.f };
     _float              m_fIdleEndDuration = { 1.5f };
+
+    _uint               m_iPastNeerAtkNum{ 512 };
+    _uint               m_iPastMiddleAtkNum{ 512 };
+    _uint               m_iPastFarAtkNum{ 512 };
 
     _uint               m_iAtkCnt{};
 
