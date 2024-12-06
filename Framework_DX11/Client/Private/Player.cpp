@@ -218,11 +218,11 @@ void CPlayer::Priority_Update(_float fTimeDelta)
 			}
 		}
 
-		GET_GAMEINTERFACE->Show_Script(strTest, TEXT("none"), 1.f);
+		//GET_GAMEINTERFACE->Show_Script(strTest, TEXT("none"), 1.f);
 	}
 
-	STAT_INFO* pTest_Adjust = m_tPlayer_Stat_Adjust;
-	ABILITY_INFO* pTest_Ability = m_tPlayer_Ability;
+	//STAT_INFO* pTest_Adjust = m_tPlayer_Stat_Adjust;
+	//ABILITY_INFO* pTest_Ability = m_tPlayer_Ability;
 	
 
 	if (m_isGuard)
@@ -686,6 +686,7 @@ _bool CPlayer::Calc_DamageGain(_float fAtkDmg, _Vec3 vHitPos, _uint iHitType, _u
 		}
 		else
 		{
+			
 			if (ATK_STRONG == iAttackStrength)
 			{
 				Damaged(fAtkDmg, vHitPos);
@@ -693,6 +694,9 @@ _bool CPlayer::Calc_DamageGain(_float fAtkDmg, _Vec3 vHitPos, _uint iHitType, _u
 			}
 			else
 			{
+				// 24-12-06 김성용
+				// 무기 사용 시, 내구도 감소 
+				GET_GAMEINTERFACE->Add_Durable_Weapon(-1.f);
 				m_pEffect_Manager->Add_Effect_ToLayer(LEVEL_GAMEPLAY, TEXT("Player_Guard"), pParetnMatrix, pSocketBoneMatrix);
 				m_tPlayer_Stat->vGauge_Hp.x = max(0.f, m_tPlayer_Stat->vGauge_Hp.x - fAtkDmg * 0.7f);
 				if (m_tPlayer_Stat->vGauge_Hp.y - m_tPlayer_Stat->vGauge_Hp.x > 100.f)

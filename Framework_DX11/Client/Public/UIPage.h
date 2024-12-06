@@ -123,6 +123,8 @@ public:
 		_Vec4 vTexture_Range = { -1.f,-1.f, -1.f, -1.f };
 		_Vec2 vTexture_Angle = { 200.f,200.f };
 
+		_bool m_bEmpty_Stack_Item = false;
+
 	}UPART;
 
 	typedef struct UIPART_GROUP_CONTROL

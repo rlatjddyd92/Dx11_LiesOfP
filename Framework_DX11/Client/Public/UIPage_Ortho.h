@@ -27,6 +27,9 @@ public:
 	{
 		UI_ORTHO_OBJ_TYPE eType = UI_ORTHO_OBJ_TYPE::ORTHO_END;
 		CGameObject* pHost = { nullptr };
+		_bool bIsActive = true;
+
+
 	}OR_HOST;
 
 	
@@ -81,6 +84,13 @@ public:
 	void Register_Pointer_Into_OrthoUIPage(UI_ORTHO_OBJ_TYPE eType, void* pObj);
 
 	HRESULT Render_Ortho_UI();
+
+	void Set_OnOff_OrthoUI(_bool bIsOn, void* pObj)
+	{
+		for (auto& iter : m_Ortho_Host_list)
+			if (iter->pHost == pObj)
+				iter->bIsActive = bIsOn;
+	}
 
 private:
 	void Initialize_Ortho_Info(); // <- 직교 UI 사용을 위한 기본 세팅을 진행한다 

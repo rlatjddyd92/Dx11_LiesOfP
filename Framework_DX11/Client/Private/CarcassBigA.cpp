@@ -124,6 +124,13 @@ void CCarcassBigA::Update(_float fTimeDelta)
 			else m_eStat.bWeakness = true;
 		}
 
+	// 24-12-06 김성용
+	// 테스트 코드 
+	if (KEY_TAP(KEY::N))
+		GET_GAMEINTERFACE->Set_OnOff_OrthoUI(false, this);
+	if (KEY_TAP(KEY::M))
+		GET_GAMEINTERFACE->Set_OnOff_OrthoUI(true, this);
+
 	m_pColliderCom->Update(m_pTransformCom->Get_WorldMatrix_Ptr());
 	m_pGameInstance->Add_ColliderList(m_pColliderCom);
 }

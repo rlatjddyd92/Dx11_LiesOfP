@@ -6,6 +6,10 @@
 #include "GameInstance.h"
 #include "Effect_Manager.h"
 
+// 24-12-06 김성용
+// 내구도 조정 함수 연결을 위한 헤더 추가 
+#include "GameInterface_Controller.h"
+
 CWeapon_Scissor::CWeapon_Scissor(ID3D11Device* pDevice, ID3D11DeviceContext* pContext)
 	: CWeapon{ pDevice, pContext }
 {
@@ -134,6 +138,10 @@ void CWeapon_Scissor::OnCollisionEnter(CGameObject* pOther)
 		if (!bOverlapCheck)
 		{
 			CMonster* pMonster = dynamic_cast<CMonster*>(pOther);
+
+			// 24-12-06 김성용
+				// 무기 사용 시, 내구도 감소 
+			GET_GAMEINTERFACE->Add_Durable_Weapon(-1.f);
 
 			m_DamagedObjects.push_back(pOther);
 			pOther->Calc_DamageGain(m_fDamageAmount * m_fDamageRatio);

@@ -97,6 +97,14 @@ public:
 
 	} // 매니저에 게임 입장 / 나가기 상태 알림
 
+	_bool IsGamePause()
+	{
+		if ((m_pUIPage_Play->GetPageAction(PAGEACTION::ACTION_ACTIVE)) || (m_pUIPage_Play->GetPageAction(PAGEACTION::ACTION_OPENING)))
+			return false;
+		else
+			return true;
+	}
+
 	// 아이템 획득 
 	void Input_Drop_Item_Info(_int iIndex, _int iCount) { m_pUIPage_Play->Input_Drop_Item_Info(iIndex, iCount); }
 
@@ -196,7 +204,7 @@ public:
 
 #pragma region Page_Ortho
 	void Register_Pointer_Into_OrthoUIPage(UI_ORTHO_OBJ_TYPE eType, void* pObj) { m_pUIPage_Ortho->Register_Pointer_Into_OrthoUIPage(eType, pObj); }
-
+	void Set_OnOff_OrthoUI(_bool bIsOn, void* pObj) { m_pUIPage_Ortho->Set_OnOff_OrthoUI(bIsOn, pObj); }
 
 #pragma endregion
 
@@ -228,6 +236,9 @@ public:
 	void Show_Region_Info(_wstring strName, _wstring strDesc, _float fTime_Emerge = 1.f, _float fTime_Show = 2.f) { m_pUIPage_Inform->Show_Region_Info(strName, strDesc, fTime_Emerge, fTime_Show); }
 	void Show_Inform(INFORM_MESSAGE eInform, _float fTime_Emerge = 1.f, _float fTime_Show = 2.f) { m_pUIPage_Inform->Show_Inform(eInform, fTime_Emerge, fTime_Show); }
 	void Show_Heart(_wstring strScript, _float fTime_Emerge = 1.f, _float fTime_Show = 2.f) { m_pUIPage_Inform->Show_Heart(strScript, fTime_Emerge, fTime_Show); }
+
+	void Show_Popup(_wstring strTitle, _wstring strDescA, _wstring strDescB = TEXT("none")) { m_pUIPage_Popup->Show_Popup(strTitle, strDescA, strDescB); }
+	void Off_Popup() { m_pUIPage_Popup->Off_Popup(); }
 
 #pragma endregion
 

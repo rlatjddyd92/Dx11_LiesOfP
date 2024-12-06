@@ -49,7 +49,13 @@ HRESULT CMainApp::Initialize()
 
 void CMainApp::Update(_float fTimeDelta)
 {
-	m_pGameInstance->Update_Engine(fTimeDelta);
+	_float fObject_Time = fTimeDelta;
+
+	if (GET_GAMEINTERFACE->IsGamePause())
+		fObject_Time = 0.f;
+
+
+	m_pGameInstance->Update_Engine(fObject_Time);
 
 	// 24-12-01 김성용 
 	// UI 연출 관련 테스트 코드 
@@ -98,7 +104,7 @@ void CMainApp::Update(_float fTimeDelta)
 			GET_GAMEINTERFACE->Show_Heart(TEXT("심장이 고동친다"));
 	}
 
-
+	
 
 	
 	if (KEY_TAP(KEY::M))

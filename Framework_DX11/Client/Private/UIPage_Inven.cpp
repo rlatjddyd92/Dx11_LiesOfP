@@ -369,7 +369,19 @@ void CUIPage_Inven::Update_Array_Position(_float fTimeDelta)
 				}
 				
 			}
-			
+			else
+				m_vecPart[*iter]->bRender = false;
+
+			if ((pNow != nullptr) && (pNow->eSlot != EQUIP_SLOT::EQUIP_END))
+			{
+				m_vecPart[*iter]->fTextureColor.y = 0.3f;
+				m_vecPart[*iter]->fTextureColor.z = 0.3f;
+			}
+			else 
+			{
+				m_vecPart[*iter]->fTextureColor.y = 1.f;
+				m_vecPart[*iter]->fTextureColor.z = 1.f;
+			}
 
 				++iter;
 				if (pNow == nullptr) m_vecPart[*iter]->iTexture_Index = -1;
@@ -541,6 +553,19 @@ void CUIPage_Inven::Update_Array_Position_Weapon(_float fTimeDelta)
 				}
 			
 			}
+			else
+				m_vecPart[*iter]->bRender = false;
+
+			if ((pNowBlade != nullptr) && (pNowBlade->eSlot != EQUIP_SLOT::EQUIP_END))
+			{
+				m_vecPart[*iter]->fTextureColor.y = 0.3f;
+				m_vecPart[*iter]->fTextureColor.z = 0.3f;
+			}
+			else
+			{
+				m_vecPart[*iter]->fTextureColor.y = 1.f;
+				m_vecPart[*iter]->fTextureColor.z = 1.f;
+			}
 		
 			++iter;
 			if (pNowBlade == nullptr) m_vecPart[*iter]->iTexture_Index = -1;
@@ -687,6 +712,8 @@ void CUIPage_Inven::Update_Array_Position_Weapon_Heroic(_float fTimeDelta, _floa
 			}
 			
 		}
+		else
+			m_vecPart[*iter]->bRender = false;
 		
 			++iter;
 			++iter;

@@ -696,12 +696,16 @@ void CUIManager::Open_Close_Page(UIPAGE ePage)
 
 void CUIManager::OpenPage(UIPAGE ePage)
 {
+	m_pUIPage_Popup->Off_Popup();
+
 	if (ePage != UIPAGE::PAGE_END)
 		m_vecPage[_int(ePage)]->OpenAction();
 }
 
 void CUIManager::ClosePage(UIPAGE ePage)
 {
+	m_pUIPage_Popup->Off_Popup();
+
 	if (ePage != UIPAGE::PAGE_END)
 		m_vecPage[_int(ePage)]->CloseAction();
 }

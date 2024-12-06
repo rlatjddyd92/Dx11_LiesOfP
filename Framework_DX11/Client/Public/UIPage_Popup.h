@@ -14,7 +14,16 @@ class CUIPage_Popup : public CUIPage
 public:
 	enum class PART_GROUP
 	{
-		GROUP_TEST,
+		POPUP_Top,
+		POPUP_Middle,
+		POPUP_Bottom,
+		POPUP_Title,
+		POPUP_Desc_0,
+		POPUP_Desc_1,
+		POPUP_Mouse,
+		POPUP_Space,
+		POPUP_Text,
+
 
 
 
@@ -42,6 +51,10 @@ public:
 	virtual void CloseAction() override;
 
 	virtual CHECK_MOUSE Check_Page_Action(_float fTimeDelta) override;
+
+public: 
+	void Show_Popup(_wstring strTitle, _wstring strDescA, _wstring strDescB = TEXT("none"));
+	void Off_Popup();
 
 public:
 	const vector<UPART*>& Get_UIPartInfo() { return m_vecPart; }
