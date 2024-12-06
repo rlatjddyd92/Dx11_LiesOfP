@@ -53,7 +53,7 @@ void CState_CarcassBigA_WheelWind::Collider_Check()
 
     if (CurTrackPos >= 85.f && CurTrackPos <= 155.f)
     {
-        m_pMonster->Active_CurrentWeaponCollider(1.3, 1, HIT_TYPE::HIT_CARCASS, ATTACK_STRENGTH::ATK_NORMAL);
+        m_pMonster->Active_CurrentWeaponCollider(1.3f, 1, HIT_TYPE::HIT_CARCASS, ATTACK_STRENGTH::ATK_NORMAL);
     }
     else
     {

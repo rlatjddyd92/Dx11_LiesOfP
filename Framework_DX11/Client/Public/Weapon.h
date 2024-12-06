@@ -71,7 +71,7 @@ public:
 	virtual _bool is_EndAnim(_int iAnimIndex) { return false; }
 
 public:
-	virtual void Active_Collider(_float fDamageRatio = 1.f, _uint iHandIndex = 0, _uint iHitType = 0, _uint iAtkStrength = 0);		//1번 왼손 0번 오른손
+	virtual _bool Active_Collider(_float fDamageRatio = 1.f, _uint iHandIndex = 0, _uint iHitType = 0, _uint iAtkStrength = 0);		//1번 왼손 0번 오른손
 	virtual void DeActive_Collider(_uint iHandIndex = 1);
 
 	virtual void		Play_Sound(WEP_SOUND_TYPE eType, const TCHAR* pSoundKey, _uint iHandIndex = 1);

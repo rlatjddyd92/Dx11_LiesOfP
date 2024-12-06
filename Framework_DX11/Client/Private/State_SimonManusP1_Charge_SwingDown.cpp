@@ -58,7 +58,7 @@ void CState_SimonManusP1_Charge_SwingDown::Collider_Check(_double CurTrackPos)
 {
     if ((CurTrackPos >= 225.f && CurTrackPos <= 245.f))
     {
-        m_pMonster->Active_CurrentWeaponCollider(1.2, 0, HIT_TYPE::HIT_METAL, ATTACK_STRENGTH::ATK_NORMAL);
+        m_pMonster->Active_CurrentWeaponCollider(1.2f, 0, HIT_TYPE::HIT_METAL, ATTACK_STRENGTH::ATK_NORMAL);
     }
     else
     {

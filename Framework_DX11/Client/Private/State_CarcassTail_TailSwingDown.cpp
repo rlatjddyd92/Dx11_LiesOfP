@@ -57,8 +57,8 @@ void CState_CarcassTail_TailSwingDown::Collider_Check()
         (CurTrackPos >= 110.f && CurTrackPos <= 115.f) ||
         (CurTrackPos >= 250.f && CurTrackPos <= 258.f))
     {
-        m_pMonster->Active_CurrentWeaponCollider(1.4, 2, HIT_TYPE::HIT_CARCASS, ATTACK_STRENGTH::ATK_NORMAL);
-        m_pMonster->Active_CurrentWeaponCollider(1.4, 4, HIT_TYPE::HIT_CARCASS, ATTACK_STRENGTH::ATK_NORMAL);
+        m_pMonster->Active_CurrentWeaponCollider(1.4f, 2, HIT_TYPE::HIT_CARCASS, ATTACK_STRENGTH::ATK_NORMAL);
+        m_pMonster->Active_CurrentWeaponCollider(1.4f, 4, HIT_TYPE::HIT_CARCASS, ATTACK_STRENGTH::ATK_NORMAL);
     }
     else
     {

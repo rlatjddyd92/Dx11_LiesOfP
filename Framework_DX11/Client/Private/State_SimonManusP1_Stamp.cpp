@@ -119,7 +119,7 @@ void CState_SimonManusP1_Stamp::Collider_Check(_double CurTrackPos)
         {
             if (CurTrackPos >= 40.f && CurTrackPos <= 70.f)
             {
-                m_pMonster->Active_CurrentWeaponCollider(1.1, 0, HIT_TYPE::HIT_METAL, ATTACK_STRENGTH::ATK_WEAK);
+                m_pMonster->Active_CurrentWeaponCollider(1.1f, 0, HIT_TYPE::HIT_METAL, ATTACK_STRENGTH::ATK_WEAK);
             }
             else
             {
@@ -130,7 +130,7 @@ void CState_SimonManusP1_Stamp::Collider_Check(_double CurTrackPos)
         {
             if (CurTrackPos >= 85.f && CurTrackPos <= 95.f)
             {
-                m_pMonster->Active_CurrentWeaponCollider(1.1, 0, HIT_TYPE::HIT_METAL, ATTACK_STRENGTH::ATK_WEAK);
+                m_pMonster->Active_CurrentWeaponCollider(1.1f, 0, HIT_TYPE::HIT_METAL, ATTACK_STRENGTH::ATK_WEAK);
             }
             else
             {

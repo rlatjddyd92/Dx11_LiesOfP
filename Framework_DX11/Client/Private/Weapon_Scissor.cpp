@@ -151,23 +151,27 @@ void CWeapon_Scissor::OnCollisionExit(CGameObject* pOther)
 {
 }
 
-void CWeapon_Scissor::Active_Collider(_float fDamageRatio, _uint iHandIndex, _uint iHitType, _uint iAtkStrength)
+_bool CWeapon_Scissor::Active_Collider(_float fDamageRatio, _uint iHandIndex, _uint iHitType, _uint iAtkStrength)
 {
 	if (!m_isSeperate)
 	{
 		if (m_pColliderCom->IsActive())
-			return;
+			return false;
 
 		m_fDamageRatio = fDamageRatio;
 		m_pColliderCom->IsActive(true);
 		m_iHitType = iHitType;
 		m_iAtkStrength = iAtkStrength;
 		m_DamagedObjects.clear();
+
+		return true;
 	}
 	else
 	{
-		m_pScissor_Sperate[iHandIndex]->Active_Collider(fDamageRatio);
+		return m_pScissor_Sperate[iHandIndex]->Active_Collider(fDamageRatio);
 	}
+
+	return true;
 }
 
 void CWeapon_Scissor::DeActive_Collider(_uint iHandIndex)

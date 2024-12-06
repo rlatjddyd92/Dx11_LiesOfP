@@ -510,9 +510,9 @@ void CPlayer::Set_WeaponStrength(ATTACK_STRENGTH eStrength)
 	m_pWeapon[m_eWeaponType]->Set_AttackStrength(eStrength);
 }
 
-void CPlayer::Active_CurrentWeaponCollider(_float fDamageRatio, _uint iHandIndex)
+_bool CPlayer::Active_CurrentWeaponCollider(_float fDamageRatio, _uint iHandIndex)
 {
-	m_pWeapon[m_eWeaponType]->Active_Collider(fDamageRatio, iHandIndex);
+	return m_pWeapon[m_eWeaponType]->Active_Collider(fDamageRatio, iHandIndex);
 }
 
 void CPlayer::DeActive_CurretnWeaponCollider(_uint iHandIndex)
@@ -680,6 +680,7 @@ _bool CPlayer::Calc_DamageGain(_float fAtkDmg, _Vec3 vHitPos, _uint iHitType, _u
 				}
 			}
 
+			Decrease_Stamina(fAtkDmg * 0.2f);
 			m_pEffect_Manager->Add_Effect_ToLayer(LEVEL_GAMEPLAY, TEXT("Player_PerfectGuard"), pParetnMatrix, pSocketBoneMatrix);
 			m_pGameInstance->Start_TimerLack(TEXT("Timer_60"), 0.001f, 0.6f);
 		}
@@ -688,6 +689,7 @@ _bool CPlayer::Calc_DamageGain(_float fAtkDmg, _Vec3 vHitPos, _uint iHitType, _u
 			if (ATK_STRONG == iAttackStrength)
 			{
 				Damaged(fAtkDmg, vHitPos);
+				return true;
 			}
 			else
 			{
@@ -695,6 +697,8 @@ _bool CPlayer::Calc_DamageGain(_float fAtkDmg, _Vec3 vHitPos, _uint iHitType, _u
 				m_tPlayer_Stat->vGauge_Hp.x = max(0.f, m_tPlayer_Stat->vGauge_Hp.x - fAtkDmg * 0.7f);
 				if (m_tPlayer_Stat->vGauge_Hp.y - m_tPlayer_Stat->vGauge_Hp.x > 100.f)
 					m_tPlayer_Stat->vGauge_Hp.y = max(m_tPlayer_Stat->vGauge_Hp.x, m_tPlayer_Stat->vGauge_Hp.y - fAtkDmg * 0.7f);
+
+				Decrease_Stamina(fAtkDmg * 0.23f);
 			}
 		}
 
@@ -731,13 +735,13 @@ _bool CPlayer::Calc_DamageGain(_float fAtkDmg, _Vec3 vHitPos, _uint iHitType, _u
 
 _bool CPlayer::Decrease_Stamina(_float fAmount)
 {
-	m_tPlayer_Stat->vGauge_Stamina.x += m_tPlayer_Stat_Adjust->vGauge_Stamina.z - fAmount;
-	if (m_tPlayer_Stat->vGauge_Stamina.x + m_tPlayer_Stat_Adjust->vGauge_Stamina.x < 0.f)
+	m_tPlayer_Stat->vGauge_Stamina.x = m_tPlayer_Stat->vGauge_Stamina.x - fAmount;
+	if (m_tPlayer_Stat->vGauge_Stamina.x + m_tPlayer_Stat_Adjust->vGauge_Stamina.z < 0.f)
 	{
 		m_tPlayer_Stat->vGauge_Stamina.x = 0.f;
 		return false;
 	}
-	m_tPlayer_Stat->vGauge_Stamina.y = m_tPlayer_Stat->vGauge_Stamina.x + m_tPlayer_Stat_Adjust->vGauge_Stamina.z;
+	m_tPlayer_Stat->vGauge_Stamina.y = m_tPlayer_Stat->vGauge_Stamina.x;
 
 	m_fStaminaRecoveryTime = 1.3f;	// 1.3f초 후에 회복
 
@@ -827,7 +831,7 @@ void CPlayer::Update_Stat(_float fTimeDelta)
 	}
 	else if (m_fStaminaRecoveryTime <= 0.f)
 	{
-		m_tPlayer_Stat->vGauge_Stamina.x = min(m_tPlayer_Stat->vGauge_Stamina.x + 30.f * fTimeDelta, m_tPlayer_Stat->vGauge_Stamina.z + m_tPlayer_Stat_Adjust->vGauge_Stamina.z);
+		m_tPlayer_Stat->vGauge_Stamina.x = min(m_tPlayer_Stat->vGauge_Stamina.x + 60.f * fTimeDelta, m_tPlayer_Stat->vGauge_Stamina.z + m_tPlayer_Stat_Adjust->vGauge_Stamina.z);
 	}
 #pragma endregion
 

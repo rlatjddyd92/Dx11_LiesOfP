@@ -102,9 +102,14 @@ void CState_Player_Rapier_Charge::Control_Collider()
     }
 
     if (isColliderActive)
-        m_pPlayer->Active_CurrentWeaponCollider();
+    {
+        if (m_pPlayer->Active_CurrentWeaponCollider())
+            m_pPlayer->Decrease_Stamina(20.f);
+    }
     else
+    {
         m_pPlayer->DeActive_CurretnWeaponCollider();
+    }
 }
 
 void CState_Player_Rapier_Charge::Control_Sound()

@@ -54,7 +54,7 @@ void CState_SimonManusP2_Sting::Collider_Check(_double CurTrackPos)
     if ((CurTrackPos >= 75.f && CurTrackPos <= 105.f) ||
         (CurTrackPos >= 175.f && CurTrackPos <= 225.f))
     {
-        m_pMonster->Active_CurrentWeaponCollider(1.1, 0, HIT_TYPE::HIT_METAL, ATTACK_STRENGTH::ATK_WEAK);
+        m_pMonster->Active_CurrentWeaponCollider(1.1f, 0, HIT_TYPE::HIT_METAL, ATTACK_STRENGTH::ATK_WEAK);
     }
     else
     {

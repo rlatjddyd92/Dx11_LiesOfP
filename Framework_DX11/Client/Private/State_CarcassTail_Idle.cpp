@@ -42,7 +42,7 @@ void CState_CarcassTail_Idle::Update(_float fTimeDelta)
 
         case 0:
             m_pMonster->Change_Animation(AN_IDLE, true, 0.1f);
-            m_iTailAtkCnt = 0.f;
+            m_iTailAtkCnt = 0;
             break;
 
         case 1:

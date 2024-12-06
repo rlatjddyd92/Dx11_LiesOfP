@@ -113,9 +113,16 @@ void CState_Player_Rapier_LAttack00::Control_Collider()
     _int iFrame = m_pPlayer->Get_Frame();
 
     if (m_iColliderStartFrame <= iFrame && iFrame <= m_iColliderEndFrame)
-        m_pPlayer->Active_CurrentWeaponCollider();
+    {
+        if (m_pPlayer->Active_CurrentWeaponCollider())
+        {
+            m_pPlayer->Decrease_Stamina(30.f);
+        }
+    }
     else
+    {
         m_pPlayer->DeActive_CurretnWeaponCollider();
+    }
 
 }
 

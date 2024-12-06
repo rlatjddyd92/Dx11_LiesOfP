@@ -213,7 +213,7 @@ public:
 	void			Disappear_Weapon();
 	void			Set_WeaponStrength(ATTACK_STRENGTH eStrength);
 	
-	void			Active_CurrentWeaponCollider(_float fDamageRatio = 1.f, _uint iHandIndex = 1);
+	_bool			Active_CurrentWeaponCollider(_float fDamageRatio = 1.f, _uint iHandIndex = 1);
 	void			DeActive_CurretnWeaponCollider(_uint iHandIndex = 1);
 
 	void			Seperate_Scissor();

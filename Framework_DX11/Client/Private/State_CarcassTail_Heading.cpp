@@ -60,7 +60,7 @@ void CState_CarcassTail_Heading::Collider_Check()
 
     if ((CurTrackPos >= 80.f && CurTrackPos <= 95.f))
     {
-        m_pMonster->Active_CurrentWeaponCollider(1.3, 3, HIT_TYPE::HIT_CARCASS, ATTACK_STRENGTH::ATK_NORMAL);
+        m_pMonster->Active_CurrentWeaponCollider(1.3f, 3, HIT_TYPE::HIT_CARCASS, ATTACK_STRENGTH::ATK_NORMAL);
     }
     else
     {
