@@ -850,6 +850,12 @@
     <Filter Include="02.GameObjects\12.AttackObject\SimonManus\Stomp">
       <UniqueIdentifier>{4c93ec4b-622d-4d23-9b30-e71e06b6e88e}</UniqueIdentifier>
     </Filter>
+    <Filter Include="02.GameObjects\02.Pawn\01.Monster\HoresMan">
+      <UniqueIdentifier>{2a7b97d8-e836-4fee-82c9-aeed32fabee4}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.GameObjects\02.Pawn\01.Monster\RebornerMale">
+      <UniqueIdentifier>{b68070e4-27c6-4ef6-8e82-8c6ce0d9846e}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Client.h">
@@ -1574,6 +1580,7 @@
     <ClInclude Include="..\Public\AObj_Stomp.h">
       <Filter>02.GameObjects\12.AttackObject\SimonManus\Stomp</Filter>
     </ClInclude>
+    <ClInclude Include="..\Public\RebornerMale.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Client.cpp">
@@ -2268,6 +2275,7 @@
     <ClCompile Include="..\Private\AObj_Stomp.cpp">
       <Filter>02.GameObjects\12.AttackObject\SimonManus\Stomp</Filter>
     </ClCompile>
+    <ClCompile Include="..\Private\RebornerMale.cpp" />
   </ItemGroup>
   <ItemGroup>
     <Image Include="Client.ico">
