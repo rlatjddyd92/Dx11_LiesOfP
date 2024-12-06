@@ -67,6 +67,7 @@ public:
 	void	Increase_GroggyPoint(_float fGroggy) { m_eStat.fGrogyPoint += fGroggy; }
 	virtual void	SetUp_Dead() {};
 
+	void			Reset_Die() { m_bDieState = false; }
 	void			Reset_Hp() { m_eStat.fHp = m_eStat.fMaxHp; }
 
 protected:

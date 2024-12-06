@@ -20,19 +20,19 @@ HRESULT CState_SimonManusP2_Die::Initialize(_uint iStateNum, void* pArg)
 
 HRESULT CState_SimonManusP2_Die::Start_State(void* pArg)
 {
-    m_pMonster->Change_Animation(AN_DIE, true, 0.1f, 0);
+    m_pMonster->Change_Animation(AN_DIE, false, 0.1f, 0);
 
     return S_OK;
 }
 
 void CState_SimonManusP2_Die::Update(_float fTimeDelta)
 {
-    if (End_Check())
-    {
-        //¸ó½ºÅÍ »ç¸Á
-        m_pMonster->Reset_Hp();
-        m_pMonster->Change_State(CSimonManus::IDLE);
-    }
+    //if (End_Check())
+    //{
+    //    //¸ó½ºÅÍ »ç¸Á
+    //    m_pMonster->Reset_Hp();
+    //    m_pMonster->Change_State(CSimonManus::IDLE);
+    //}
 
 }
 
