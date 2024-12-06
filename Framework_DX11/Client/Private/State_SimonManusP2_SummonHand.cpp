@@ -54,7 +54,7 @@ _bool CState_SimonManusP2_SummonHand::End_Check()
 
 void CState_SimonManusP2_SummonHand::Effect_Check(_double CurTrackPos)
 {
-    if (CurTrackPos >= 210.f && CurTrackPos <= 240.f)
+    if (CurTrackPos >= 225.f && CurTrackPos <= 240.f)
     {
         if (!m_bCharge)
         {
