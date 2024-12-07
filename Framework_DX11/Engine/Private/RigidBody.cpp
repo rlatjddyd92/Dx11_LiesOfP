@@ -32,6 +32,10 @@ HRESULT CRigidBody::Initialize(void* pArg)
 	if (nullptr == pArg || nullptr == pDesc->pOwner)
 		return E_FAIL;
 
+	m_pPhysX = m_pGameInstance->Get_PhysX();
+	m_PxScene = m_pGameInstance->Get_PhysXScene();
+	m_PxCudaContextManager = m_pGameInstance->Get_PhysXCuda();
+
 	m_isStatic = pDesc->isStatic;
 	m_isOnCell = pDesc->isOnCell;
 	m_isLockCell = pDesc->isLockCell;
@@ -168,9 +172,13 @@ void CRigidBody::Set_Kinematic(_bool isKinematic)
 
 HRESULT CRigidBody::Add_PxActor(RIGIDBODY_DESC* pDesc)
 {
-	PxPhysics* pPhysx = m_pGameInstance->Get_PhysX();
 
 	PxTransform Transform = ConvertToPxTransform((_Vec3)m_pOwnerTransform->Get_State(CTransform::STATE_POSITION), m_pOwnerTransform->Get_Quaternion());
+
+	//pxcloth
+	//PxCudaContextManagerDesc;
+	//PxSoftBody* cloth = m_pPhysX->createSoftBody(*m_PxCudaContextManager);
+	//m_PxScene->addActor(*cloth);
 
 	//if (pDesc->isCapsule)
 	//{
@@ -180,11 +188,11 @@ HRESULT CRigidBody::Add_PxActor(RIGIDBODY_DESC* pDesc)
 
 	if (m_isStatic)
 	{
-		m_PxActor = pPhysx->createRigidStatic(Transform);
+		m_PxActor = m_pPhysX->createRigidStatic(Transform);
 	}
 	else
 	{
-		m_PxActor = pPhysx->createRigidDynamic(Transform);
+		m_PxActor = m_pPhysX->createRigidDynamic(Transform);
 		if (!pDesc->isGravity)
 		{
 			m_PxActor->setActorFlag(PxActorFlag::eDISABLE_GRAVITY, true);
@@ -195,15 +203,13 @@ HRESULT CRigidBody::Add_PxActor(RIGIDBODY_DESC* pDesc)
 
 	static_cast<PxRigidDynamic*>(m_PxActor)->setRigidDynamicLockFlags(pDesc->PxLockFlags);
 
-	m_PxMaterial = pPhysx->createMaterial(pDesc->fStaticFriction, pDesc->fDynamicFriction, pDesc->fRestituion);
+	m_PxMaterial = m_pPhysX->createMaterial(pDesc->fStaticFriction, pDesc->fDynamicFriction, pDesc->fRestituion);
 
 	return S_OK;
 }
 
 HRESULT CRigidBody::Add_PxGeometry(RIGIDBODY_DESC* pDesc)
 {
-	PxPhysics* pPhysx = m_pGameInstance->Get_PhysX();
-
 	PxShapeFlags eShapeFlags = PxShapeFlag::eSIMULATION_SHAPE ;
 
 
@@ -217,7 +223,7 @@ HRESULT CRigidBody::Add_PxGeometry(RIGIDBODY_DESC* pDesc)
 	case physX::PX_CAPSULE:
 	{
 		physX::GeometryCapsule* CapsuleGeometry = static_cast<physX::GeometryCapsule*>(pGeometry);
-		m_PxShape = pPhysx->createShape(PxCapsuleGeometry(CapsuleGeometry->fRadius, CapsuleGeometry->fHeight * 0.5f), *m_PxMaterial, false, eShapeFlags);
+		m_PxShape = m_pPhysX->createShape(PxCapsuleGeometry(CapsuleGeometry->fRadius, CapsuleGeometry->fHeight * 0.5f), *m_PxMaterial, false, eShapeFlags);
 
 		PxVec3 newPosition(CapsuleGeometry->fHeight * 0.5f, 0.f, 0.f); // 캡슐의 새로운 로컬 위치
 		PxQuat newRotation(PxIdentity);        // 기본 회전 (필요에 따라 수정)
@@ -242,14 +248,14 @@ HRESULT CRigidBody::Add_PxGeometry(RIGIDBODY_DESC* pDesc)
 	{
 		//PlayerPxTransform = PxTransformFromSegment(PlayerPxTransform.p, PlayerPxTransform.p + PxVec3(0.f, 1.f, 0.f) * 1.5f);
 		physX::GeometrySphere* SphereGeometry = static_cast<physX::GeometrySphere*>(pGeometry);
-		m_PxShape = pPhysx->createShape(PxSphereGeometry(SphereGeometry->fRadius), *m_PxMaterial, false, eShapeFlags);
+		m_PxShape = m_pPhysX->createShape(PxSphereGeometry(SphereGeometry->fRadius), *m_PxMaterial, false, eShapeFlags);
 
 	}
 	break;
 	case physX::PX_BOX:
 	{
 		physX::GeometryBox* BoxGeometry = static_cast<physX::GeometryBox*>(pGeometry);
-		m_PxShape = pPhysx->createShape(PxBoxGeometry(BoxGeometry->vSize.x * 0.5f, BoxGeometry->vSize.y * 0.5f, BoxGeometry->vSize.z * 0.5f), *m_PxMaterial, false, eShapeFlags);
+		m_PxShape = m_pPhysX->createShape(PxBoxGeometry(BoxGeometry->vSize.x * 0.5f, BoxGeometry->vSize.y * 0.5f, BoxGeometry->vSize.z * 0.5f), *m_PxMaterial, false, eShapeFlags);
 
 		PxVec3 newPosition(pDesc->vOffset.y, pDesc->vOffset.y, pDesc->vOffset.y); // 캡슐의 새로운 로컬 위치
 		PxQuat newRotation(PxIdentity);        // 기본 회전 (필요에 따라 수정)

@@ -23,9 +23,13 @@ HRESULT CPhysX_Manager::Initialize()
     if (m_CudaContextManager)
     {
         if (!m_CudaContextManager->contextIsValid())
+        {
             PX_RELEASE(m_CudaContextManager);
+        }
+        else
+            m_PhysX->se
+           
     }
-
     // PVD(PhysX Visual Debugger) 积己
     m_Pvd = PxCreatePvd(*m_PxFoundation);
     // PVD 家南 楷搬 汲沥

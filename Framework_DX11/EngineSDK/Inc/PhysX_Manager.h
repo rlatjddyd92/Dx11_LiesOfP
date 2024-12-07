@@ -30,6 +30,7 @@ public:
     PxPhysics*      Get_PhysX() const { return m_PhysX; }
     PxScene*        Get_PhysXScene() const { return m_PxScene; }
     PxFoundation*   Get_PhysXFoundation() const { return m_PxFoundation; }
+    PxCudaContextManager* Get_PhysXCuda() const { return m_CudaContextManager; }
 
 public:
     HRESULT Initialize();

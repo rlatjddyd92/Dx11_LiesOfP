@@ -91,7 +91,7 @@ public:
 
     _int            Get_UFBIndex(_uint UFB_Type);
 
-    _Vec3            Calc_CenterPos();
+    _Vec4            Calc_CenterPos();
 
 protected:
     class CShader* m_pShaderCom = { nullptr };

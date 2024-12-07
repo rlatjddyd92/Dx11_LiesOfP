@@ -217,6 +217,7 @@ public:
 		PxPhysics* Get_PhysX() const;
 		PxScene* Get_PhysXScene() const;
 		PxFoundation* Get_PhysXFoundation() const;
+		PxCudaContextManager* Get_PhysXCuda() const;
 		_bool   RayCast_PhysX(_vector vRayPos, _vector vRayDir, _vector* vHitPos, _vector* vNormal, _float* fHitDistance);
 #pragma endregion
 

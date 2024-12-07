@@ -434,7 +434,7 @@ void CPlayer::OnCollisionExit(CGameObject* pOther)
 void CPlayer::Move_Dir(_Vec4 vDir, _float fTimeDelta, _bool isTurn)
 {
 	if(isTurn)
-		m_pTransformCom->LookAt_Lerp_NoHeight(vDir, 30.0f, fTimeDelta);
+		m_pTransformCom->LookAt_Lerp_NoHeight(vDir, 10.0f, fTimeDelta);
 
 	m_pRigidBodyCom->Set_Velocity((_Vec3(vDir * m_fMoveSpeed)));
 }

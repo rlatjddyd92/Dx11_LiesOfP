@@ -1096,14 +1096,14 @@ void CModel::ReadyDenyNextTranslate(_int iBoneIndex)
 	m_iDenyBoneIndex = iBoneIndex;
 }
 
-_Vec3 CModel::Calc_CenterPos(_Matrix WorldMat)
+_Vec4 CModel::Calc_CenterPos(_Matrix WorldMat)
 {
 	_Matrix FinalMat{};
 	FinalMat = m_Bones[m_UFBIndices[UFB_CHEST]]->Get_CombinedTransformationMatrix() * WorldMat;
 	
 	_Vec3	vOut{ FinalMat._41, FinalMat._42 , FinalMat._43 };
 	
-	return vOut;
+	return FinalMat.Translation();
 }
 
 _float CModel::Get_CurrentDuration()

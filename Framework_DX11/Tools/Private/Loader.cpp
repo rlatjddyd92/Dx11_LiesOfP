@@ -313,7 +313,7 @@ HRESULT CLoader::Ready_Resources_For_ToolLevel()
 	CModel* pModel = { nullptr };
 	PreTransformMatrix = XMMatrixScaling(0.01f, 0.01f, 0.01f) * XMMatrixRotationY(XMConvertToRadians(270.f));
 
-	if (true)
+	if (false)
 	{
 		//"../Bin/ModelData/Anim/PlayerExample/PlayerExample.dat"	일반 바이너리
 		pModel = CModel::Create(m_pDevice, m_pContext, CModel::TYPE_ANIM, "../Bin/ModelData/Anim/Player/Player.dat", PreTransformMatrix, false, CController_AnimationTool::Get_Instance()->Get_StructStack(m_iModelCount++));

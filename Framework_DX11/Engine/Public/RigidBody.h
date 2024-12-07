@@ -66,9 +66,12 @@ private:
     _bool           m_isLockCell = { true };
     _bool           m_isUseClient = { false };
 
+    PxPhysics*      m_pPhysX = { nullptr };
+    PxScene*        m_PxScene = { nullptr };
+    PxCudaContextManager* m_PxCudaContextManager = { nullptr };
+
     PxRigidActor* m_PxActor = { nullptr };
     PxMaterial* m_PxMaterial = { nullptr };
-    PxScene* m_PxScene = { nullptr };
     PxShape* m_PxShape = { nullptr };  //여러개 붙일 수도 있음
 
     _Vec3 m_vVelocity = {};

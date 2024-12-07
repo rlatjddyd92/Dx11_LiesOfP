@@ -102,19 +102,19 @@ void CPlayerCamera::PlayerLockOn(_float fTimeDelta)
 	if (nullptr == m_pPlayer->Get_TargetMonster())
 		return;
 
-	m_pTransformCom->LookAt(m_pPlayer->Get_TargetMonster()->Get_Transform()->Get_State(CTransform::STATE_POSITION));
+	m_pTransformCom->LookAt(m_pPlayer->Get_TargetMonster()->Calc_CenterPos());
 
 	_long      MouseMove = { 0 };
 
 	_vector vPlayerPos = m_pPlayer->Get_Transform()->Get_State(CTransform::STATE_POSITION);
 
-	vPlayerPos.m128_f32[1] += 1.95f;
+	vPlayerPos.m128_f32[1] += 2.2f;
 
 	_vector vTargetPos = vPlayerPos - XMVector3Normalize(m_pTransformCom->Get_State(CTransform::STATE_LOOK)) * 3.f;
 
 	// Lerp로 카메라 위치를 부드럽게 이동
 	_vector vCurrentPos = m_pTransformCom->Get_State(CTransform::STATE_POSITION);
-	_vector vNewPos = XMVectorLerp(vCurrentPos, vTargetPos, 0.1f); // 보간 비율 0.1
+	_vector vNewPos = XMVectorLerp(vCurrentPos, vTargetPos, 0.3f); // 보간 비율 0.1
 
 	m_pTransformCom->Set_State(CTransform::STATE_POSITION, vNewPos);
 }

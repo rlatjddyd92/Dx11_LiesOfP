@@ -121,7 +121,7 @@ void CWeapon_Rapier::OnCollisionEnter(CGameObject* pOther)
 				vPlayerLook.Normalize();
 
 				CEffect_Manager::Get_Instance()->Add_Effect_ToLayer(LEVEL_GAMEPLAY, TEXT("Player_Attack_Step_Normal"),
-					pMonster->Calc_CenterPos(), vPlayerLook);
+					(_Vec3)pMonster->Calc_CenterPos(), vPlayerLook);
 
 				CEffect_Manager::Get_Instance()->Add_Effect_ToLayer(LEVEL_GAMEPLAY, TEXT("Player_Attack_Blood_Rapier"),
 					m_pParentMatrix, m_pSocketMatrix);
@@ -133,12 +133,12 @@ void CWeapon_Rapier::OnCollisionEnter(CGameObject* pOther)
 				if (pMonster->Get_Status()->fHp > 0.f)
 				{
 					CEffect_Manager::Get_Instance()->Add_Effect_ToLayer(LEVEL_GAMEPLAY, TEXT("Monster_Impact"),
-						pMonster->Calc_CenterPos(), vPlayerLook);
+						(_Vec3)pMonster->Calc_CenterPos(), vPlayerLook);
 				}
 				else if (pMonster->Get_Status()->fHp <= 0.f)
 				{
 					CEffect_Manager::Get_Instance()->Add_Effect_ToLayer(LEVEL_GAMEPLAY, TEXT("Monster_Impact_Death"),
-						pMonster->Calc_CenterPos(), vPlayerLook);
+						(_Vec3)pMonster->Calc_CenterPos(), vPlayerLook);
 				}
 			}
 

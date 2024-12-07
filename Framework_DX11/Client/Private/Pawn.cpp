@@ -243,7 +243,7 @@ _int CPawn::Get_UFBIndex(_uint UFB_Type)
 	return m_pModelCom->Get_UFBIndices(UFB_Type);
 }
 
-_Vec3 CPawn::Calc_CenterPos()
+_Vec4 CPawn::Calc_CenterPos()
 {
 	if (nullptr == m_pModelCom)
 		return m_pTransformCom->Get_State(CTransform::STATE_POSITION);
