@@ -50,6 +50,8 @@ private:
 	HRESULT Ready_Resources_GoJunHo();
 	HRESULT Ready_Resources_Object();
 
+	HRESULT Ready_Resources_CutScene();
+
 public:
 	static CLoader* Create(ID3D11Device* pDevice, ID3D11DeviceContext* pContext, LEVELID eNextLevelID);
 	virtual void Free() override;
