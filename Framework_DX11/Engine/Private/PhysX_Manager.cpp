@@ -26,8 +26,6 @@ HRESULT CPhysX_Manager::Initialize()
         {
             PX_RELEASE(m_CudaContextManager);
         }
-        else
-            m_PhysX->se
            
     }
     // PVD(PhysX Visual Debugger) »ý¼º

@@ -68,6 +68,7 @@ private:
 
     PxPhysics*      m_pPhysX = { nullptr };
     PxScene*        m_PxScene = { nullptr };
+    PxCudaContextManager* m_PxCudaContextManager = { nullptr };
 
     PxRigidActor* m_PxActor = { nullptr };
     PxMaterial* m_PxMaterial = { nullptr };

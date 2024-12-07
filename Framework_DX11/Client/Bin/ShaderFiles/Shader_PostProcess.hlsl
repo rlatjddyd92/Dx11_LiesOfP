@@ -31,6 +31,13 @@ texture2D g_EffectTexture;
 texture2D g_EffectBlur;
 
 
+static const float SampleWeights[13] =
+{
+    0.0561f, 0.1353f, 0.278f, 0.4868f, 0.7261f, 0.9231f, 1.f, 0.9231f, 0.7261f, 0.4868f, 0.278f, 0.1353f, 0.0561f
+    //0.002216, 0.008764, 0.026995, 0.064759, 0.120985, 0.176033, 0.199471, 0.176033, 0.120985, 0.064759, 0.026995, 0.008764, 0.002216,
+};
+
+
 struct VS_IN
 {
 	float3 vPosition : POSITION;	
@@ -153,29 +160,67 @@ PS_OUT PS_MAIN_RADIALBLUR(PS_IN In)
 {
     PS_OUT Out = (PS_OUT) 0;
    
-    vector vBack = g_BackTexture.Sample(LinearSampler, In.vTexcoord);
+    //vector vBack = g_BackTexture.Sample(LinearSampler, In.vTexcoord);
     vector vBlur = g_DofBlurTexture.Sample(LinearSampler, In.vTexcoord);
     
     float fBlurStart = 1.f;
     
-    float2 vBlurCenter = g_vRadialCenterPos;
-    
     // 중심에서부터의 거리 구하기
-    float2 vDistance = In.vTexcoord.xy - vBlurCenter;
+    float2 vDirection = In.vTexcoord.xy - g_vRadialCenterPos;
     
-    vector vColor = vBack;
+    vector vColor = float4(0.f, 0.f, 0.f, 0.f);
     
-    float fDistance = length(vDistance);
-    if (fDistance >= g_fRadius)
+    //for (uint i = 0; i < 13; ++i)
+    //{
+    //    // 각도 조정 (회전 방향 계산)
+    //    float angle = g_RadialPower * i / 13; // 점진적으로 증가
+    //    float s = sin(angle);
+    //    float c = cos(angle);
+        
+    //    // 회전 행렬을 이용해 좌표 변환
+    //    float2 rotatedUV = float2(
+    //        c * vDirection.x - s * vDirection.y,
+    //        s * vDirection.x + c * vDirection.y
+    //    );
+
+    //    // 샘플링 좌표 계산 (중심점 기준)
+    //    float2 sampleUV = saturate(g_vRadialCenterPos + rotatedUV);
+
+    //    // 텍스처 샘플링 및 누적
+    //    vColor += g_BackTexture.Sample(LinearClampSampler, sampleUV);
+    //}
+    
+    //int iDivision = 0;
+    //for (uint i = 0; i < 20; ++i)
+    //{
+    //    float fScale = 1.f + ((float) i * (g_RadialPower * (1.0f / 19.f)));
+    //    float2 UV = vDirection * fScale + g_vRadialCenterPos;
+		
+    //    if (0.f > UV.x || 1.f < UV.x || 0.f > UV.y || 1.f < UV.y)
+    //        continue;
+
+    //    vColor += g_BackTexture.Sample(LinearClampSampler, UV);
+    //    ++iDivision;
+    //}
+
+    float2 vDiff = ((In.vTexcoord - g_vRadialCenterPos) * 0.5f);
+    float2 vUV = In.vTexcoord;
+
+    for (uint i = 1; i <= 10; ++i)
     {
-        vColor = lerp(vBack, vBlur, saturate(g_RadialPower * fDistance));
+        vUV += vDiff * g_RadialPower * i;
+        
+        vUV.x = saturate(vUV.x);
+        float4 currentColor = g_BackTexture.Sample(LinearClampSampler, vUV);
+        vColor += currentColor;
     }
     
+    vColor /= 10.f;
     Out.vColor = vColor;
     
     return Out;
 
-}
+} 
 
 PS_OUT PS_MAIN_EFFECT(PS_IN In)
 {
