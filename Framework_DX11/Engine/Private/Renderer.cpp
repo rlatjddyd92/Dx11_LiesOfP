@@ -1146,7 +1146,14 @@ HRESULT CRenderer::Render_DOF()
 
 	m_pPostProcessShader->Bind_RawValue("g_fFocus", &m_tDOF.fDOF, sizeof(_float));
 
-	m_pPostProcessShader->Begin(0);
+	if (m_tDOF.isInverse)
+	{
+		m_pPostProcessShader->Begin(5);
+	}
+	else
+	{
+		m_pPostProcessShader->Begin(0);
+	}
 	m_pVIBuffer->Bind_Buffers();
 	m_pVIBuffer->Render();
 
@@ -1660,8 +1667,8 @@ HRESULT CRenderer::Ready_HDR()
 		return E_FAIL;
 
 	m_tHDR.isOnHDR = true;
-	m_tHDR.fMiddleGrey = 0.35f;
-	m_tHDR.fLumWhiteSqr = 0.35f;
+	m_tHDR.fMiddleGrey = 0.4f;
+	m_tHDR.fLumWhiteSqr = 0.2f;
 
 	return S_OK;
 }

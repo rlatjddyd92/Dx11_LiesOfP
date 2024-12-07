@@ -102,6 +102,7 @@ namespace Engine
 	typedef struct
 	{
 		_bool isOnDOF = false;
+		_bool isInverse = false;
 		_float fDOF = 10.f;
 	}DOF_DESC;
 

@@ -58,7 +58,9 @@ void CBone::Update_CombinedTransformationMatrix(const vector<CBone*>& Bones, _fm
 	if(-1 == m_iParentBoneIndex)
 		XMStoreFloat4x4(&m_CombinedTransformationMatrix, m_TransformationMatrix * PreTransformMatrix);
 	else
+	{
 		XMStoreFloat4x4(&m_CombinedTransformationMatrix, m_TransformationMatrix * Bones[m_iParentBoneIndex]->Get_CombinedTransformationMatrix());
+	}
 }
 
 void CBone::Setting_ParentBoneName(CModel* pModel)

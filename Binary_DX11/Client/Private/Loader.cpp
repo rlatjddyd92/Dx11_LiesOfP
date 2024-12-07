@@ -91,11 +91,11 @@ HRESULT CLoader::Ready_Resources_For_GamePlayLevel()
 	//	CModel::Create(m_pDevice, m_pContext, CModel::TYPE_ANIM, "../Bin/Resources/Models/Fiona/Fiona.fbx", "../Bin/ModelData/Anim/Fiona/", PreTransformMatrix))))
 	//	return E_FAIL;
 
-	/* For. Prototype_Component_Model_PlayerExample*/
-	//PreTransformMatrix = XMMatrixRotationY(XMConvertToRadians(180.0f));
-	//if (FAILED(m_pGameInstance->Add_Prototype(LEVEL_GAMEPLAY, TEXT("Prototype_Component_Model_Player"),
-	//	CModel::Create(m_pDevice, m_pContext, CModel::TYPE_ANIM, "../Bin/Resources/Models/Player/Player.fbx", "../Bin/ModelData/Anim/Player/", PreTransformMatrix))))
-	//	return E_FAIL;
+	/* For. Prototype_Component_Model_Player*/
+	PreTransformMatrix = XMMatrixRotationY(XMConvertToRadians(180.0f));
+	if (FAILED(m_pGameInstance->Add_Prototype(LEVEL_GAMEPLAY, TEXT("Prototype_Component_Model_Player"),
+		CModel::Create(m_pDevice, m_pContext, CModel::TYPE_ANIM, "../Bin/Resources/Models/Player/Player.fbx", "../Bin/ModelData/Anim/Player/", PreTransformMatrix))))
+		return E_FAIL;
 
 	//if (FAILED(m_pGameInstance->Add_Prototype(LEVEL_GAMEPLAY, TEXT("Prototype_Component_Model_Monastery_TowerDoor"),
 	//	CModel::Create(m_pDevice, m_pContext, CModel::TYPE_ANIM, "../Bin/Resources/Models/Monastery_TowerDoor/SK_FO_Monastery_TowerDoor_01.fbx", "../Bin/ModelData/NonAnim/InteractObj/Tex/", PreTransformMatrix))))
@@ -125,11 +125,11 @@ HRESULT CLoader::Ready_Resources_For_GamePlayLevel()
 	//if (FAILED(Ready_Resources_For_Effect()))
 	//	return E_FAIL;
 
-		/* For. Prototype_Component_Model_Sophia*/
-	PreTransformMatrix =  XMMatrixRotationY(XMConvertToRadians(180.0f));
-	if (FAILED(m_pGameInstance->Add_Prototype(LEVEL_GAMEPLAY, TEXT("Prototype_Component_Model_Sophia"),
-		CModel::Create(m_pDevice, m_pContext, CModel::TYPE_NONANIM, "../Bin/Resources/Models/Sophia/Sophia_Stoned.fbx","../Bin/ModelData/NonAnim/Map/Etc/Sophia/Tex/", PreTransformMatrix))))
-		return E_FAIL;
+	//	/* For. Prototype_Component_Model_Sophia*/
+	//PreTransformMatrix =  XMMatrixRotationY(XMConvertToRadians(180.0f));
+	//if (FAILED(m_pGameInstance->Add_Prototype(LEVEL_GAMEPLAY, TEXT("Prototype_Component_Model_Sophia"),
+	//	CModel::Create(m_pDevice, m_pContext, CModel::TYPE_NONANIM, "../Bin/Resources/Models/Sophia/Sophia_Stoned.fbx","../Bin/ModelData/NonAnim/Map/Etc/Sophia/Tex/", PreTransformMatrix))))
+	//	return E_FAIL;
 
 	//¿ì¼Û
 	 //if (FAILED(Ready_Resources_Object()))

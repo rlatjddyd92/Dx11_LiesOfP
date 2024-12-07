@@ -17,6 +17,7 @@ texture2D g_BloomTexture;
 texture2D g_DofBlurTexture;
 float g_fFocus; // 초점
 
+
 /* Motion Blur */
 float g_fMotionBlurPower;
 
@@ -83,14 +84,14 @@ PS_OUT PS_MAIN_DOF(PS_IN In)
 {
     PS_OUT Out = (PS_OUT) 0;
     
-    float fDepth = g_DepthTexture.Sample(PointSampler, In.vTexcoord).y * g_fFar;
+    float fDepth = g_DepthTexture.Sample(PointSampler, In.vTexcoord).y;
     vector vBack = g_BackTexture.Sample(LinearSampler, In.vTexcoord);
     vector vBlur = g_DofBlurTexture.Sample(LinearSampler, In.vTexcoord);
     
     vector vColor = vBack;
     
     // 깊이가 클수록 더 블러를 먹음
-    if(fDepth >= g_fFocus)
+    if(fDepth > g_fFocus)
     {
         float fFocusRatio = saturate(abs(fDepth - g_fFocus) / g_fFocus);
     
@@ -224,6 +225,30 @@ PS_OUT PS_MAIN_MOTIONBLUR(PS_IN In)
     return Out;
 }
 
+PS_OUT PS_MAIN_DOF_INVERSE(PS_IN In)
+{
+    PS_OUT Out = (PS_OUT) 0;
+    
+    float fDepth = g_DepthTexture.Sample(PointSampler, In.vTexcoord).y;
+    vector vBack = g_BackTexture.Sample(LinearSampler, In.vTexcoord);
+    vector vBlur = g_DofBlurTexture.Sample(LinearSampler, In.vTexcoord);
+    
+    vector vColor = vBack;
+    
+    // 깊이가 작을수록 더 블러를 먹음
+    if (fDepth < g_fFocus)
+    {
+        float fFocusRatio = saturate(abs(fDepth - g_fFocus) / g_fFocus);
+    
+        vColor = lerp(vBack, vBlur, fFocusRatio);
+    }
+   
+    Out.vColor = vColor;
+    
+    return Out;
+
+}
+
 technique11	DefaultTechnique
 {	
     // 0 
@@ -284,5 +309,17 @@ technique11	DefaultTechnique
         VertexShader = compile vs_5_0 VS_MAIN();
         GeometryShader = NULL;
         PixelShader = compile ps_5_0 PS_MAIN_BLOOM();
+    }
+
+    // 5
+    pass DOF_Inverse
+    {
+        SetRasterizerState(RS_Default);
+        SetDepthStencilState(DSS_None, 0);
+        SetBlendState(BS_Default, vector(0.f, 0.f, 0.f, 0.f), 0xffffffff);
+
+        VertexShader = compile vs_5_0 VS_MAIN();
+        GeometryShader = NULL;
+        PixelShader = compile ps_5_0 PS_MAIN_DOF_INVERSE();
     }
 }

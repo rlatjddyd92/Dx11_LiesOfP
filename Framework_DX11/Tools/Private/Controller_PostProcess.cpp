@@ -124,6 +124,7 @@ void CCamera_Manager::Update_DOF()
 		return;
 
 	static _bool isOnDof = false;
+	static _bool isInverse = false;
 	static _float fDOF = tDesc->fDOF;
 
 	ImGui::Checkbox("DOF Value", &isOnDof);
@@ -131,10 +132,12 @@ void CCamera_Manager::Update_DOF()
 
 	if (tDesc->isOnDOF)
 	{
-		ImGui::DragFloat("DOF", &fDOF, 0.02f);
+		ImGui::Checkbox("DOF Inverse", &isInverse);
+		ImGui::DragFloat("DOF", &fDOF, 0.001f);
 	}
 
 	tDesc->isOnDOF = isOnDof;
+	tDesc->isInverse = isInverse;
 	tDesc->fDOF = fDOF;
 }
 

@@ -48,6 +48,7 @@ private:
 
 	/* 부모 기준으로 표현된 이 뼈만의 상태행렬. */
 	_Matrix		m_TransformationMatrix = {};
+	_Matrix		m_PrevTransformationMatrix = {};
 
 	/* 이 뼈의 최종적인 상태 행렬 ( 내 상태 행렬 * 부모의 최종상태행렬 ) */
 	/* m_TransformationMatrix * Parent's m_CombinedTransformationMatrix */
