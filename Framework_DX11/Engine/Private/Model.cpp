@@ -137,6 +137,14 @@ _double CModel::Get_CurrentTrackPosition(_bool isBoundary)
 
 }
 
+void CModel::Set_RemoteTuning(_bool bState)
+{
+	for (_int i = 0; i < m_RemoteTuningIndices.size(); i++)
+	{
+		m_Bones[m_RemoteTuningIndices[i]]->SetUp_isNeedTuning(bState);
+	}
+}
+
 CTexture* CModel::Find_Texture(_uint iMeshNum, TEXTURE_TYPE eMaterialType)
 {
 	_uint iMaterialIndex = m_Meshes[iMeshNum]->Get_MaterialIndex();
@@ -201,6 +209,8 @@ HRESULT CModel::Initialize_Prototype(TYPE eType, const _char * pModelFilePath, _
 	}
 	else			//추가되기 전 일반 바이너리 파일로 불러오는
 	{
+		m_RemoteTuningIndices.reserve(100);
+
 		if (FAILED(Ready_Bones(&hFile, -1)))
 			return E_FAIL;
 
