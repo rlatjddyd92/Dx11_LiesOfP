@@ -442,7 +442,7 @@ void CPlayer::Move_Dir(_Vec4 vDir, _float fTimeDelta, _bool isTurn)
 _bool CPlayer::Turn_Lerp(_Vec4 vDir, _float fTimeDelta)
 {
 	_int iTurn;
-	iTurn = m_pTransformCom->LookAt_Lerp_NoHeight(vDir, 30.f, fTimeDelta);
+	iTurn = m_pTransformCom->LookAt_Lerp_NoHeight(vDir, 26.f, fTimeDelta);
 
 	return !iTurn;
 }

@@ -111,25 +111,25 @@ _bool CState_Player_OH_Run::Move(_float fTimeDelta)
     vCameraLook.Normalize();
     vCameraRight.Normalize();
 
-    if (KEY_HOLD(KEY::W) || KEY_TAP(KEY::W))
+    if (KEY_HOLD(KEY::W) || KEY_TAP(KEY::W) || KEY_AWAY(KEY::W))
     {
         m_vMoveDir += vCameraLook;
         isMoving = true;
     }
-    else if (KEY_HOLD(KEY::S) || KEY_TAP(KEY::S))
+    else if (KEY_HOLD(KEY::S) || KEY_TAP(KEY::S) || KEY_AWAY(KEY::S))
     {
         m_vMoveDir -= vCameraLook;
         isMoving = true;
     }
 
-    if (KEY_HOLD(KEY::D) || KEY_TAP(KEY::D))
+    if (KEY_HOLD(KEY::D) || KEY_TAP(KEY::D) || KEY_AWAY(KEY::D))
     {
         m_vMoveDir += vCameraRight;
 
         isMoving = true;
     }
 
-    if (KEY_HOLD(KEY::A) || KEY_TAP(KEY::A))
+    if (KEY_HOLD(KEY::A) || KEY_TAP(KEY::A) || KEY_AWAY(KEY::A))
     {
         m_vMoveDir -= vCameraRight;
 
@@ -145,33 +145,6 @@ _bool CState_Player_OH_Run::Move(_float fTimeDelta)
 
     _Vec4 vLocalMoveDir = { m_vMoveDir.Dot(vCameraRight), 0.f, m_vMoveDir.Dot(vCameraLook), 0.f };
     vLocalMoveDir.Normalize();
-
-    //// 방향을 기반으로 애니메이션 선정
-    //if (vLocalMoveDir.z > 0.5f)
-    //{
-    //    if (vLocalMoveDir.x > 0.5f)
-    //        m_pPlayer->Change_Animation(m_iAnimation_RUN[RUN_FR], true, false);
-    //    else if (vLocalMoveDir.x < 0)
-    //        m_pPlayer->Change_Animation(m_iAnimation_RUN[RUN_FL], true, false);
-    //    else
-    //        m_pPlayer->Change_Animation(m_iAnimation_RUN[RUN_F], true, false);
-    //}
-    //else if (vLocalMoveDir.z < 0.5f)
-    //{
-    //    if (vLocalMoveDir.x > 0.5f)
-    //        m_pPlayer->Change_Animation(m_iAnimation_RUN[RUN_BR], true, false);
-    //    else if (vLocalMoveDir.x < 0)
-    //        m_pPlayer->Change_Animation(m_iAnimation_RUN[RUN_BL], true, false);
-    //    else
-    //        m_pPlayer->Change_Animation(m_iAnimation_RUN[RUN_B], true, false);
-    //}
-    //else
-    //{
-    //    if (vLocalMoveDir.x > 0.5f)
-    //        m_pPlayer->Change_Animation(m_iAnimation_RUN[RUN_R], true, false);
-    //    else if (vLocalMoveDir.x < 0.5f)
-    //        m_pPlayer->Change_Animation(m_iAnimation_RUN[RUN_L], true, false);
-    //}
 
     if(!m_isTurnOver)
         m_isTurnOver = m_pPlayer->Turn_Lerp(m_vFirstMoveDir, fTimeDelta);

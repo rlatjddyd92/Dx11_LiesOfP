@@ -116,8 +116,8 @@ HRESULT CLoader::Ready_Resources_For_GamePlayLevel()
 	//if (FAILED(Ready_Resources_For_BasicMonster()))
 	//	return E_FAIL;
 	// 
-	//if (FAILED(Ready_Resources_For_BossMonster()))
-	//	return E_FAIL;
+	if (FAILED(Ready_Resources_For_BossMonster()))
+		return E_FAIL;
 
 	// 준호형 전용
 	// if (FAILED(Ready_Resources_GoJunHo()))
@@ -135,11 +135,11 @@ HRESULT CLoader::Ready_Resources_For_GamePlayLevel()
 	 //if (FAILED(Ready_Resources_Object()))
 		//return E_FAIL;
 
-	//if (FAILED(Ready_Resources_For_Weapon()))
-	//	return E_FAIL;
-
-	if (FAILED(Ready_Resources_CutScene()))
+	if (FAILED(Ready_Resources_For_Weapon()))
 		return E_FAIL;
+
+	//if (FAILED(Ready_Resources_CutScene()))
+	//	return E_FAIL;
 
 	lstrcpy(m_szLoadingText, TEXT("변환 완료"));
 
@@ -155,37 +155,37 @@ HRESULT CLoader::Ready_Resources_For_BossMonster()
 {
 	_matrix		PreTransformMatrix = XMMatrixIdentity();
 
-//#pragma region Raxasia
-//	/* For. Prototype_Component_Model_Monster_Raxasia_P1 */
-//	if (FAILED(m_pGameInstance->Add_Prototype(LEVEL_GAMEPLAY, TEXT("Prototype_Component_Model_Monster_Raxasia_P1"),
-//		CModel::Create(m_pDevice, m_pContext, CModel::TYPE_ANIM, "../Bin/Resources/Models/Monster/Boss/Raxasia/Raxasia_P1.fbx", "../Bin/ModelData/Anim/Monster/Boss/Raxasia/", PreTransformMatrix))))
-//		return E_FAIL;
-//
-//	/* For. Prototype_Component_Model_Monster_Raxasia_P2 */
-//	if (FAILED(m_pGameInstance->Add_Prototype(LEVEL_GAMEPLAY, TEXT("Prototype_Component_Model_Monster_Raxasia_P2"),
-//		CModel::Create(m_pDevice, m_pContext, CModel::TYPE_ANIM, "../Bin/Resources/Models/Monster/Boss/Raxasia/Raxasia_P2.fbx", "../Bin/ModelData/Anim/Monster/Boss/Raxasia/", PreTransformMatrix))))
-//		return E_FAIL;
-//
-//	/* For. Prototype_Component_Model_Monster_Raxasia_Shield01 */
-//	if (FAILED(m_pGameInstance->Add_Prototype(LEVEL_GAMEPLAY, TEXT("Prototype_Component_Model_Monster_Raxasia_Shield01"),
-//		CModel::Create(m_pDevice, m_pContext, CModel::TYPE_NONANIM, "../Bin/Resources/Models/Monster/Boss/Raxasia/Raxasia_Shield01.fbx", "../Bin/ModelData/Anim/Monster/Boss/Raxasia/", PreTransformMatrix))))
-//		return E_FAIL;
-//
-//	/* For. Prototype_Component_Model_Monster_Raxasia_Shield02 */
-//	if (FAILED(m_pGameInstance->Add_Prototype(LEVEL_GAMEPLAY, TEXT("Prototype_Component_Model_Monster_Raxasia_Shield02"),
-//		CModel::Create(m_pDevice, m_pContext, CModel::TYPE_NONANIM, "../Bin/Resources/Models/Monster/Boss/Raxasia/Raxasia_Shield02.fbx", "../Bin/ModelData/Anim/Monster/Boss/Raxasia/", PreTransformMatrix))))
-//		return E_FAIL;
-//
-//	/* For. Prototype_Component_Model_Monster_Raxasia_Sword01 */
-//	if (FAILED(m_pGameInstance->Add_Prototype(LEVEL_GAMEPLAY, TEXT("Prototype_Component_Model_Monster_Raxasia_Sword01"),
-//		CModel::Create(m_pDevice, m_pContext, CModel::TYPE_NONANIM, "../Bin/Resources/Models/Monster/Boss/Raxasia/Raxasia_Sword01.fbx", "../Bin/ModelData/Anim/Monster/Boss/Raxasia/", PreTransformMatrix))))
-//		return E_FAIL;
-//
-//	/* For. Prototype_Component_Model_Monster_Raxasia_Sword02 */
-//	if (FAILED(m_pGameInstance->Add_Prototype(LEVEL_GAMEPLAY, TEXT("Prototype_Component_Model_Monster_Raxasia_Sword02"),
-//		CModel::Create(m_pDevice, m_pContext, CModel::TYPE_NONANIM, "../Bin/Resources/Models/Monster/Boss/Raxasia/Raxasia_Sword02.fbx", "../Bin/ModelData/Anim/Monster/Boss/Raxasia/", PreTransformMatrix))))
-//		return E_FAIL;
-//#pragma endregion
+#pragma region Raxasia
+	///* For. Prototype_Component_Model_Monster_Raxasia_P1 */
+	//if (FAILED(m_pGameInstance->Add_Prototype(LEVEL_GAMEPLAY, TEXT("Prototype_Component_Model_Monster_Raxasia_P1"),
+	//	CModel::Create(m_pDevice, m_pContext, CModel::TYPE_ANIM, "../Bin/Resources/Models/Monster/Boss/Raxasia/Raxasia_P1.fbx", "../Bin/ModelData/Anim/Monster/Boss/Raxasia/", PreTransformMatrix))))
+	//	return E_FAIL;
+
+	///* For. Prototype_Component_Model_Monster_Raxasia_P2 */
+	//if (FAILED(m_pGameInstance->Add_Prototype(LEVEL_GAMEPLAY, TEXT("Prototype_Component_Model_Monster_Raxasia_P2"),
+	//	CModel::Create(m_pDevice, m_pContext, CModel::TYPE_ANIM, "../Bin/Resources/Models/Monster/Boss/Raxasia/Raxasia_P2.fbx", "../Bin/ModelData/Anim/Monster/Boss/Raxasia/", PreTransformMatrix))))
+	//	return E_FAIL;
+
+	/* For. Prototype_Component_Model_Monster_Raxasia_Shield01 */
+	if (FAILED(m_pGameInstance->Add_Prototype(LEVEL_GAMEPLAY, TEXT("Prototype_Component_Model_Monster_Raxasia_Shield01"),
+		CModel::Create(m_pDevice, m_pContext, CModel::TYPE_ANIM, "../Bin/Resources/Models/Monster/Boss/Raxasia/Raxasia_Shield01.fbx", "../Bin/ModelData/Anim/Monster/Boss/Raxasia/", PreTransformMatrix))))
+		return E_FAIL;
+
+	/* For. Prototype_Component_Model_Monster_Raxasia_Shield02 */
+	if (FAILED(m_pGameInstance->Add_Prototype(LEVEL_GAMEPLAY, TEXT("Prototype_Component_Model_Monster_Raxasia_Shield02"),
+		CModel::Create(m_pDevice, m_pContext, CModel::TYPE_ANIM, "../Bin/Resources/Models/Monster/Boss/Raxasia/Raxasia_Shield02.fbx", "../Bin/ModelData/Anim/Monster/Boss/Raxasia/", PreTransformMatrix))))
+		return E_FAIL;
+
+	/* For. Prototype_Component_Model_Monster_Raxasia_Sword01 */
+	if (FAILED(m_pGameInstance->Add_Prototype(LEVEL_GAMEPLAY, TEXT("Prototype_Component_Model_Monster_Raxasia_Sword01"),
+		CModel::Create(m_pDevice, m_pContext, CModel::TYPE_ANIM, "../Bin/Resources/Models/Monster/Boss/Raxasia/Raxasia_Sword01.fbx", "../Bin/ModelData/Anim/Monster/Boss/Raxasia/", PreTransformMatrix))))
+		return E_FAIL;
+
+	/* For. Prototype_Component_Model_Monster_Raxasia_Sword02 */
+	if (FAILED(m_pGameInstance->Add_Prototype(LEVEL_GAMEPLAY, TEXT("Prototype_Component_Model_Monster_Raxasia_Sword02"),
+		CModel::Create(m_pDevice, m_pContext, CModel::TYPE_ANIM, "../Bin/Resources/Models/Monster/Boss/Raxasia/Raxasia_Sword02.fbx", "../Bin/ModelData/Anim/Monster/Boss/Raxasia/", PreTransformMatrix))))
+		return E_FAIL;
+#pragma endregion
 
 #pragma region SimonManus
 	///* For. Prototype_Component_Model_Monster_SimonManus_P1 */
@@ -203,10 +203,10 @@ HRESULT CLoader::Ready_Resources_For_BossMonster()
 	//	CModel::Create(m_pDevice, m_pContext, CModel::TYPE_ANIM, "../Bin/Resources/Models/Monster/Boss/SimonManus/SimonMaus_Weapon.fbx", "../Bin/ModelData/Anim/Monster/Boss/SimonManus/", PreTransformMatrix))))
 	//	return E_FAIL;
 
-	/* For. Prototype_Component_Model_Monster_SimonMaus_Hand */
-	if (FAILED(m_pGameInstance->Add_Prototype(LEVEL_GAMEPLAY, TEXT("Prototype_Component_Model_Monster_SimonMaus_Hand"),
-		CModel::Create(m_pDevice, m_pContext, CModel::TYPE_ANIM, "../Bin/Resources/Models/Monster/Boss/SimonManus/SimonManus_Hand.fbx", "../Bin/ModelData/Anim/Monster/Boss/SimonManus/", PreTransformMatrix))))
-		return E_FAIL;
+	///* For. Prototype_Component_Model_Monster_SimonMaus_Hand */
+	//if (FAILED(m_pGameInstance->Add_Prototype(LEVEL_GAMEPLAY, TEXT("Prototype_Component_Model_Monster_SimonMaus_Hand"),
+	//	CModel::Create(m_pDevice, m_pContext, CModel::TYPE_ANIM, "../Bin/Resources/Models/Monster/Boss/SimonManus/SimonManus_Hand.fbx", "../Bin/ModelData/Anim/Monster/Boss/SimonManus/", PreTransformMatrix))))
+	//	return E_FAIL;
 #pragma endregion
 
 	return S_OK;
