@@ -193,7 +193,9 @@ void CS_SPREAD_MAIN(uint3 DTid : SV_DispatchThreadID)
         else if (HeadParticle.particle.vLifeTime.y < HeadParticle.particle.vLifeTime.x)
         {
             float4 vPrePos = HeadParticle.vPreTranslation;
-            while (true) 
+            
+            int iCount = 0;
+            while (iCount < 10)
             {
                 float3 vCurrentDir = (HeadParticle.particle.vTranslation - vPrePos).xyz;
                 
@@ -243,6 +245,8 @@ void CS_SPREAD_MAIN(uint3 DTid : SV_DispatchThreadID)
                     HeadParticle.iTailInitIndex = Init_HeadParticles[iHeadIndex].iTailInitIndex;
             
                 HeadParticle.vPreTranslation = vPrePos;
+                
+                ++iCount;
             }
         }
         
@@ -369,7 +373,8 @@ void CS_MOVE_MAIN(uint3 DTid : SV_DispatchThreadID)
         else if (HeadParticle.particle.vLifeTime.y < HeadParticle.particle.vLifeTime.x)
         {
             float4 vPrePos = HeadParticle.vPreTranslation;
-            while (true)
+            int iCount = 0;
+            while (iCount < 10)
             {
                 float3 vCurrentDir = (HeadParticle.particle.vTranslation - vPrePos).xyz;
                 
@@ -419,6 +424,8 @@ void CS_MOVE_MAIN(uint3 DTid : SV_DispatchThreadID)
                     HeadParticle.iTailInitIndex = Init_HeadParticles[iHeadIndex].iTailInitIndex;
             
                 HeadParticle.vPreTranslation = vPrePos;
+                
+                ++iCount;
             }
         }
         
@@ -503,7 +510,8 @@ void CS_CONVERGE_MAIN(uint3 DTid : SV_DispatchThreadID)
         {
             float4 vTargetDir = vWorldPivot - HeadParticle.particle.vTranslation;
             float4 vWorldOrbit = mul(float4(vOrbitAxis.x, vOrbitAxis.y, vOrbitAxis.z, 0.f), WorldMatrix);
-            vRotateDir = float4(RotateByAxis(vTargetDir.xyz, (float3) vWorldOrbit, radians(fOrbitAngle) * fTimeDelta), 0.f);
+            vRotateDir = float4(RotateByAxis(vTargetDir.xyz, (float3) vWorldOrbit, radians(fOrbitAngle) * fTimeDelta),
+            0.f);
             vRotateDir = vTargetDir - vRotateDir;
         }
     
@@ -590,7 +598,8 @@ void CS_CONVERGE_MAIN(uint3 DTid : SV_DispatchThreadID)
                     HeadParticle.iTailInitIndex = Init_HeadParticles[iHeadIndex].iTailInitIndex;
             
                 HeadParticle.vPreTranslation = vPrePos;
-                iCount += 1;
+                
+                ++iCount;
             }
         }
         
@@ -641,7 +650,9 @@ void CS_FOLLOW_MAIN(uint3 DTid : SV_DispatchThreadID)
         float fTime = fmod(HeadParticle.particle.vLifeTime.y, fTimeInterval);
         float4 vPrePos = HeadParticle.vPreTranslation;
         
-        while (iState & STATE_LOOP)
+        int iCount = 0;
+        
+        while (iState & STATE_LOOP && iCount < 10)
         {
             float3 vCurrentDir = (HeadParticle.particle.vTranslation - vPrePos).xyz;
             
@@ -688,6 +699,7 @@ void CS_FOLLOW_MAIN(uint3 DTid : SV_DispatchThreadID)
                 HeadParticle.iTailInitIndex = Init_HeadParticles[iHeadIndex].iTailInitIndex;
             
             HeadParticle.vPreTranslation = vPrePos;
+            ++iCount;
         }
         
         HeadParticle.particle.vLook = HeadParticle.particle.vTranslation - HeadParticle.vPreTranslation;

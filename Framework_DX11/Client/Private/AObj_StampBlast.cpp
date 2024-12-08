@@ -33,7 +33,7 @@ HRESULT CAObj_StampBlast::Initialize(void* pArg)
     if (FAILED(Ready_Components()))
         return E_FAIL;
 
-    m_fDamageAmount = 280.f;
+    m_fDamageAmount = 20.f;
     m_fLifeDuration = 0.6f;
     m_pColliderCom->IsActive(true);
 
@@ -184,7 +184,9 @@ void CAObj_StampBlast::Free()
 {
     __super::Free();
 
-    if(nullptr != m_pEffect)
+    if (true == m_isCloned)
+    {
         m_pEffect->Set_Cloned(false);
-    Safe_Release(m_pEffect);
+        Safe_Release(m_pEffect);
+    }
 }

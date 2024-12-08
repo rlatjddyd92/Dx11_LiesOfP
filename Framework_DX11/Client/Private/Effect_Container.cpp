@@ -185,7 +185,9 @@ void CEffect_Container::Free()
 	__super::Free();
 
 	for (auto& elem : m_Effects)
+	{
 		Safe_Release(elem);
+	}
 	
 	m_Effects.clear();
 }

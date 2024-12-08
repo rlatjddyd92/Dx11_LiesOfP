@@ -40,7 +40,7 @@ HRESULT CAObj_LightningSpear::Initialize(void* pArg)
     if (FAILED(Ready_Components()))
         return E_FAIL;
 
-    m_fDamageAmount = 200.f;
+    m_fDamageAmount = 20.f;
     m_fLifeDuration = 0.6f;
     m_fSpeed = 13.f;
     
@@ -143,7 +143,7 @@ void CAObj_LightningSpear::OnCollisionEnter(CGameObject* pOther)
         if (!bOverlapCheck)
         {
             m_DamagedObjects.push_back(pOther);
-            pOther->Calc_DamageGain(m_fDamageAmount * m_fDamageRatio, _Vec3{}, HIT_TYPE::HIT_ELECTRIC, ATTACK_STRENGTH::ATK_WEAK);
+            pOther->Calc_DamageGain(m_fDamageAmount * m_fDamageRatio, _Vec3{}, HIT_TYPE::HIT_ELECTRIC, ATTACK_STRENGTH::ATK_NORMAL);
             m_pSoundCom[EFF_SOUND_EFFECT2]->Play2D(TEXT("SE_NPC_SimonManus_SK_PJ_Ergo_Direct_Hit_01.wav"), &g_fEffectVolume);
 
             m_isDead = true;
@@ -218,7 +218,9 @@ void CAObj_LightningSpear::Free()
 {
     __super::Free();
 
-    if (nullptr != m_pEffect)
+    if (true == m_isCloned)
+    {
         m_pEffect->Set_Cloned(false);
-    Safe_Release(m_pEffect);
+        Safe_Release(m_pEffect);
+    }
 }

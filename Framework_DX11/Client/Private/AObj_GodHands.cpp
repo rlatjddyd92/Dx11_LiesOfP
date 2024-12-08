@@ -35,7 +35,7 @@ HRESULT CAObj_GodHands::Initialize(void* pArg)
     if (FAILED(Ready_Components()))
         return E_FAIL;
 
-    m_fDamageAmount = 340.f;
+    m_fDamageAmount = 20.f;
     m_fLifeDuration = 0.6f;
     m_fHandActTime = 3.9f;
     m_fSpeed = 2.2f;
@@ -338,10 +338,12 @@ void CAObj_GodHands::Free()
 {
     __super::Free();
 
-    for (auto& pEffect : m_pEffects)
+    if (true == m_isCloned)
     {
-        if(nullptr != pEffect)
+        for (auto& pEffect : m_pEffects)
+        {
             pEffect->Set_Cloned(false);
-        Safe_Release(pEffect);
+            Safe_Release(pEffect);
+        }
     }
 }

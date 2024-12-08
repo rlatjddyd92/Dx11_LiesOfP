@@ -876,7 +876,10 @@ CEffect_Container* CEffect_Manager::Clone_Effect_From_Prototype(const _wstring& 
             CParticle_Effect* pEffect = Clone_ParticleEffect(strEffectName);
 
             if (nullptr == pEffect)
+            {
+                Safe_Release(pEffectContainer);
                 return nullptr;
+            }
 
             pEffectContainer->Add_Effect(pEffect);
         }
@@ -885,16 +888,20 @@ CEffect_Container* CEffect_Manager::Clone_Effect_From_Prototype(const _wstring& 
             CTexture_Effect* pEffect = Clone_TextureEffect(strEffectName);
 
             if (nullptr == pEffect)
+            {
+                Safe_Release(pEffectContainer);
                 return nullptr;
-
+            }
             pEffectContainer->Add_Effect(pEffect);
         }
         else if (TEXT("ME") == strFileExtention)
         {
             CMesh_Effect* pEffect = Clone_MeshEffect(strEffectName);
             if (nullptr == pEffect)
+            {
+                Safe_Release(pEffectContainer);
                 return nullptr;
-
+            }
             pEffectContainer->Add_Effect(pEffect);
         }
         else if (TEXT("TOP") == strFileExtention)
@@ -902,8 +909,10 @@ CEffect_Container* CEffect_Manager::Clone_Effect_From_Prototype(const _wstring& 
             CTrail_Effect_OP* pEffect = Clone_TrailOP_Effect(strEffectName);
 
             if (nullptr == pEffect)
+            {
+                Safe_Release(pEffectContainer);
                 return nullptr;
-
+            }
             pEffectContainer->Add_Effect(pEffect);
         }
         else if (TEXT("TTP") == strFileExtention)
@@ -911,8 +920,10 @@ CEffect_Container* CEffect_Manager::Clone_Effect_From_Prototype(const _wstring& 
             CTrail_Effect_TP* pEffect = Clone_TrailTP_Effect(strEffectName);
 
             if (nullptr == pEffect)
+            {
+                Safe_Release(pEffectContainer);
                 return nullptr;
-
+            }
             pEffectContainer->Add_Effect(pEffect);
         }
         else if (TEXT("TMP") == strFileExtention)
@@ -920,8 +931,10 @@ CEffect_Container* CEffect_Manager::Clone_Effect_From_Prototype(const _wstring& 
             CTrail_Effect_MP* pEffect = Clone_TrailMP_Effect(strEffectName);
 
             if (nullptr == pEffect)
+            {
+                Safe_Release(pEffectContainer);
                 return nullptr;
-
+            }
             pEffectContainer->Add_Effect(pEffect);
         }
     }
@@ -983,5 +996,7 @@ void CEffect_Manager::Free()
         {
             Safe_Release(Effect);
         }
+        Pair.second.clear();
     }
+    m_EffectPooling.clear();
 }

@@ -33,7 +33,7 @@ HRESULT CAObj_Thunder::Initialize(void* pArg)
     if (FAILED(Ready_Components()))
         return E_FAIL;
 
-    m_fDamageAmount = 260.f;
+    m_fDamageAmount = 20.f;
     m_fLifeDuration = 0.4f;
     m_fAttackTime = 1.5f;
 
@@ -109,9 +109,7 @@ void CAObj_Thunder::Late_Update(_float fTimeDelta)
     if (m_fLifeTime < m_fLifeDuration)
     {
         m_pGameInstance->Add_ColliderList(m_pColliderCom);
-#ifdef _DEBUG
         m_pGameInstance->Add_DebugObject(m_pColliderCom);
-#endif
     }
 }
 
@@ -149,7 +147,7 @@ void CAObj_Thunder::OnCollisionEnter(CGameObject* pOther)
         if (!bOverlapCheck)
         {
             m_DamagedObjects.push_back(pOther);
-            pOther->Calc_DamageGain(m_fDamageAmount * m_fDamageRatio, _Vec3{}, HIT_TYPE::HIT_ELECTRIC, ATTACK_STRENGTH::ATK_NORMAL);
+            pOther->Calc_DamageGain(m_fDamageAmount * m_fDamageRatio, _Vec3{}, HIT_TYPE::HIT_METAL, ATTACK_STRENGTH::ATK_NORMAL);
         }
     }
 }
@@ -221,11 +219,11 @@ void CAObj_Thunder::Free()
 {
     __super::Free();
 
-    if(nullptr != m_pSignEffect)
+    if (true == m_isCloned)
+    {
         m_pSignEffect->Set_Cloned(false);
-    Safe_Release(m_pSignEffect);
-
-    if (nullptr != m_pEffect)
+        Safe_Release(m_pSignEffect);
         m_pEffect->Set_Cloned(false);
-    Safe_Release(m_pEffect);
+        Safe_Release(m_pEffect);
+    }
 }

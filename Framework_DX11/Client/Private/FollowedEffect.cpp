@@ -149,5 +149,9 @@ void CFollowedEffect::Free()
 {
 	__super::Free();
 
-	Safe_Release(m_pEffect);
+	if (true == m_isCloned)
+	{
+		m_pEffect->Set_Cloned(false);
+		Safe_Release(m_pEffect);
+	}
 }

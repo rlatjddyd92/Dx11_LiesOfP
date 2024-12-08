@@ -39,6 +39,8 @@ HRESULT CGameObject::Initialize(void* pArg)
 
 	Safe_AddRef(m_pTransformCom);
 
+	m_isCloned = true;
+
 	return S_OK;
 }
 

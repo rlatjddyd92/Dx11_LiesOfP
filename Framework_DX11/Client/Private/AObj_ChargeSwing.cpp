@@ -186,7 +186,9 @@ void CAObj_ChargeSwing::Free()
 {
     __super::Free();
 
-    if(nullptr != m_pEffect)
+    if (true == m_isCloned)
+    {
         m_pEffect->Set_Cloned(false);
-    Safe_Release(m_pEffect);
+        Safe_Release(m_pEffect);
+    }
 }

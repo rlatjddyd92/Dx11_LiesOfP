@@ -1278,14 +1278,16 @@ void CPlayer::Free()
 
 	Safe_Release(m_pDissloveTexture);
 
-	for (auto& pEffect : m_Effects)
+	if(true == m_isCloned)
 	{
-		if(nullptr != pEffect)
+		for (auto& pEffect : m_Effects)
+		{
 			pEffect->Set_Cloned(false);
-		Safe_Release(pEffect);
+			Safe_Release(pEffect);
+		}
+		m_Effects.clear();
+		Safe_Release(m_pEffect_Manager);
 	}
-	m_Effects.clear();
-	Safe_Release(m_pEffect_Manager);
 
 	for (_uint i = 0; i < WEP_END; ++i)
 	{

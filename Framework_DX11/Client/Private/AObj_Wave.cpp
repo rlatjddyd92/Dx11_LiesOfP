@@ -37,7 +37,7 @@ HRESULT CAObj_Wave::Initialize(void* pArg)
     if (FAILED(Ready_Components()))
         return E_FAIL;
 
-    m_fDamageAmount = 260.f;
+    m_fDamageAmount = 20.f;
     m_fLifeDuration = 3.f;
     m_fSpeed = 10.f;
     
@@ -201,7 +201,9 @@ void CAObj_Wave::Free()
 {
     __super::Free();
 
-    if(nullptr != m_pEffect)
+    if (true == m_isCloned)
+    {
         m_pEffect->Set_Cloned(false);
-    Safe_Release(m_pEffect);
+        Safe_Release(m_pEffect);
+    }
 }
