@@ -35,6 +35,11 @@
 #include "AObj_GodHands.h"
 #include "GH_Creater.h"
 #include "AObj_Stomp.h"
+
+#include "Raxasia.h"
+
+#include "Weapon_Raxasia_P1_Sword.h"
+
 #pragma endregion
 
 #pragma region EFFECT
@@ -870,7 +875,18 @@ HRESULT CLoader::Ready_Resources_For_Monster()
 	if (FAILED(m_pGameInstance->Add_Prototype(LEVEL_GAMEPLAY, TEXT("Prototype_Component_Model_SimonManus_GodHand"),
 		CModel::Create(m_pDevice, m_pContext, CModel::TYPE_ANIM, "../Bin/ModelData/Anim/CreatedBinFiles/SimonManus_GodHand.dat", PreTransformMatrix, true))))
 		return E_FAIL;
-	
+
+	//Prototype_Component_Model_RaxasiaP1
+	PreTransformMatrix = XMMatrixScaling(0.01f, 0.01f, 0.01f) * XMMatrixRotationY(XMConvertToRadians(270.0f));
+	if (FAILED(m_pGameInstance->Add_Prototype(LEVEL_GAMEPLAY, TEXT("Prototype_Component_Model_RaxasiaP1"),
+		CModel::Create(m_pDevice, m_pContext, CModel::TYPE_ANIM, "../Bin/ModelData/Anim/CreatedBinFiles/Raxasia_P1.dat", PreTransformMatrix, true))))
+		return E_FAIL;
+
+	//Prototype_Component_Model_RaxasiaP1_Sword
+	PreTransformMatrix = XMMatrixScaling(0.01f, 0.01f, 0.01f);
+	if (FAILED(m_pGameInstance->Add_Prototype(LEVEL_GAMEPLAY, TEXT("Prototype_Component_Model_RaxasiaP1_Sword"),
+		CModel::Create(m_pDevice, m_pContext, CModel::TYPE_ANIM, "../Bin/ModelData/Anim/Monster/Boss/Raxasia/Raxasia_Sword01.dat", PreTransformMatrix, false))))
+		return E_FAIL;
 
 	return S_OK;
 }
@@ -1033,6 +1049,23 @@ HRESULT CLoader::Ready_Prototype()
 		CGH_Creater::Create(m_pDevice, m_pContext))))
 		return E_FAIL;
 
+	/* For. Prototype_GameObject_Weapon_SimonManus_Hammer */
+	if (FAILED(m_pGameInstance->Add_Prototype(TEXT("Prototype_GameObject_Weapon_SimonManus_Hammer"),
+		CWeapon_SimonManus_Hammer::Create(m_pDevice, m_pContext))))
+		return E_FAIL;
+
+
+	/* For. Prototype_GameObject_Raxasia */
+	if (FAILED(m_pGameInstance->Add_Prototype(TEXT("Prototype_GameObject_Raxasia"),
+		CRaxasia::Create(m_pDevice, m_pContext))))
+		return E_FAIL;
+
+	/* For. Prototype_GameObject_Weapon__Raxasia_P1_Sword */
+	if (FAILED(m_pGameInstance->Add_Prototype(TEXT("Prototype_GameObject_Weapon__Raxasia_P1_Sword"),
+		CWeapon_Raxasia_P1_Sword::Create(m_pDevice, m_pContext))))
+		return E_FAIL;
+
+
 
 	// 특정 위치에 판정 없이 소환되는 이펙트
 	if (FAILED(m_pGameInstance->Add_Prototype(TEXT("Prototype_GameObject_SpotEffect"),
@@ -1043,10 +1076,6 @@ HRESULT CLoader::Ready_Prototype()
 		CFollowedEffect::Create(m_pDevice, m_pContext))))
 		return E_FAIL;
 
-	/* For. Prototype_GameObject_Weapon_SimonManus_Hammer */
-	if (FAILED(m_pGameInstance->Add_Prototype(TEXT("Prototype_GameObject_Weapon_SimonManus_Hammer"),
-		CWeapon_SimonManus_Hammer::Create(m_pDevice, m_pContext))))
-		return E_FAIL;
 #pragma endregion
 
 #pragma region Collider

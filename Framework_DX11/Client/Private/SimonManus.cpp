@@ -99,8 +99,6 @@ HRESULT CSimonManus::Initialize(void* pArg)
 	if (FAILED(Ready_Components()))
 		return E_FAIL;
 
-	m_pModelCom->SetUp_Animation(rand() % 20, true);
-
 	if (FAILED(Ready_FSM()))
 		return E_FAIL;
 
@@ -132,7 +130,7 @@ HRESULT CSimonManus::Initialize(void* pArg)
 	m_eHitType = HIT_CARCASS;
 
 	m_pWeapon->DeActive_Collider();
-
+	//m_pModelCom->SetUp_NextAnimation(12);
 	// 24-11-26 김성용
 	// 몬스터 직교 UI 접근 코드 
 	// 정식 코드  
@@ -475,7 +473,7 @@ HRESULT CSimonManus::Ready_Weapon()
 {
 	CWeapon::WEAPON_DESC		WeaponDesc{};
 	WeaponDesc.pParentWorldMatrix = m_pTransformCom->Get_WorldMatrix_Ptr();
-	WeaponDesc.pSocketBoneMatrix = m_pModelCom->Get_BoneCombindTransformationMatrix_Ptr(66);	//Weapon_R
+	WeaponDesc.pSocketBoneMatrix = m_pModelCom->Get_BoneCombindTransformationMatrix_Ptr(66);	//Weapon_R 66
 
 	WeaponDesc.pParentAtk = &m_eStat.fAtk;
 
