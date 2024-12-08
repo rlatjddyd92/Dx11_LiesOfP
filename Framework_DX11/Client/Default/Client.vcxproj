@@ -191,6 +191,8 @@
     <ClInclude Include="..\Public\FollowedEffect.h" />
     <ClInclude Include="..\Public\GH_Creater.h" />
     <ClInclude Include="..\Public\LastDoor.h" />
+    <ClInclude Include="..\Public\Raxasia.h" />
+    <ClInclude Include="..\Public\Weapon_Raxasia_P1_Sword.h" />
     <ClInclude Include="..\Public\Sophia.h" />
     <ClInclude Include="..\Public\State_Player_Flame_Fable.h" />
     <ClInclude Include="..\Public\State_Player_Flame_Fatal.h" />
@@ -431,6 +433,8 @@
     <ClCompile Include="..\Private\FollowedEffect.cpp" />
     <ClCompile Include="..\Private\GH_Creater.cpp" />
     <ClCompile Include="..\Private\LastDoor.cpp" />
+    <ClCompile Include="..\Private\Raxasia.cpp" />
+    <ClCompile Include="..\Private\Weapon_Raxasia_P1_Sword.cpp" />
     <ClCompile Include="..\Private\Sophia.cpp" />
     <ClCompile Include="..\Private\State_Player_Flame_Fable.cpp" />
     <ClCompile Include="..\Private\State_Player_Flame_Fatal.cpp" />

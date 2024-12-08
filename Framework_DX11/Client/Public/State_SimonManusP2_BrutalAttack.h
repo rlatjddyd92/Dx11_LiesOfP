@@ -27,10 +27,14 @@ private:
     class CMonster* m_pMonster = { nullptr };
 
     _bool               m_bSwing = { false };
-
+    _bool               m_bStamp = { false };
+    
     _bool               m_bSwingSound = { false };
     _bool               m_bStampSound = { false };
-     
+    
+    _int                m_iColliderResetCheckCnt = {};
+
+
 private:
     _bool               End_Check();
     void                Collider_Check(_double CurTrackPos);

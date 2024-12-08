@@ -162,7 +162,7 @@ HRESULT CWeapon_SimonManus_Hammer::Ready_Components()
 
 	/* FOR.Com_Collider */
 	CBounding_OBB::BOUNDING_OBB_DESC			ColliderDesc{};
-	ColliderDesc.vExtents = _float3(1.f, 1.f, 4.0f);
+	ColliderDesc.vExtents = _float3(1.f, 1.f, 4.f);
 	ColliderDesc.vCenter = _float3(0.f, 0.0f, 0.f);
 	ColliderDesc.vAngles = _float3(0.f, 0.f, 0.f);
 

@@ -858,6 +858,30 @@
     </Filter>
     <Filter Include="05.Fsm\Monster\SimonManus\CutScene\Phase2">
       <UniqueIdentifier>{516433e5-47f1-4197-b298-cdaba0eb38e7}</UniqueIdentifier>
+	</Filter>
+    <Filter Include="02.GameObjects\02.Pawn\01.Monster\HoresMan">
+      <UniqueIdentifier>{2a7b97d8-e836-4fee-82c9-aeed32fabee4}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.GameObjects\02.Pawn\01.Monster\RebornerMale">
+      <UniqueIdentifier>{b68070e4-27c6-4ef6-8e82-8c6ce0d9846e}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.GameObjects\02.Pawn\01.Monster\Raxasia">
+      <UniqueIdentifier>{f57ad993-eab1-4040-8e32-f758a798764d}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.GameObjects\06.Weapon\02.Raxasia">
+      <UniqueIdentifier>{686b6fc9-f25f-4429-83b5-c02d738f1171}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.GameObjects\06.Weapon\02.Raxasia\P1_Sword">
+      <UniqueIdentifier>{9985106b-fb61-4a24-86b7-af0eae9fb517}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.GameObjects\06.Weapon\02.Raxasia\P2_Sword">
+      <UniqueIdentifier>{a8365d9a-8bf7-4c94-967a-b573a951a944}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.GameObjects\06.Weapon\02.Raxasia\P1_Shield">
+      <UniqueIdentifier>{653b6f92-d257-47d5-bc33-90fea2091084}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.GameObjects\06.Weapon\02.Raxasia\P2_Shield">
+      <UniqueIdentifier>{ddd84955-3d67-4917-a233-376b93e3416e}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -1588,6 +1612,12 @@
     </ClInclude>
     <ClInclude Include="..\Public\State_SimonManus_CutScene_Phase2.h">
       <Filter>05.Fsm\Monster\SimonManus\CutScene\Phase2</Filter>
+	</ClInclude>
+    <ClInclude Include="..\Public\Raxasia.h">
+      <Filter>02.GameObjects\02.Pawn\01.Monster\Raxasia</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Public\Weapon_Raxasia_P1_Sword.h">
+      <Filter>02.GameObjects\06.Weapon\02.Raxasia\P1_Sword</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -2288,6 +2318,12 @@
     </ClCompile>
     <ClCompile Include="..\Private\State_SimonManus_CutScene_Phase2.cpp">
       <Filter>05.Fsm\Monster\SimonManus\CutScene\Phase2</Filter>
+	</ClCompile>
+    <ClCompile Include="..\Private\Raxasia.cpp">
+      <Filter>02.GameObjects\02.Pawn\01.Monster\Raxasia</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Private\Weapon_Raxasia_P1_Sword.cpp">
+      <Filter>02.GameObjects\06.Weapon\02.Raxasia\P1_Sword</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
