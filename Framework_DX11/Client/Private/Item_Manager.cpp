@@ -413,6 +413,11 @@ _bool CItem_Manager::Use_Potion()
 
 void CItem_Manager::Set_ItemAction(EQUIP_SLOT eSlot, _Vec2 vPos, _Vec2 vSize, _bool bMainTainPage)
 {
+	if (eSlot == EQUIP_SLOT::EQUIP_WEAPON_HANDLE_0)
+		eSlot = EQUIP_SLOT::EQUIP_WEAPON_BLADE_0;
+	else if (eSlot == EQUIP_SLOT::EQUIP_WEAPON_HANDLE_1)
+		eSlot = EQUIP_SLOT::EQUIP_WEAPON_BLADE_1;
+
 	_int iArray = _int(eSlot);
 
 	if (!bMainTainPage)
@@ -422,11 +427,6 @@ void CItem_Manager::Set_ItemAction(EQUIP_SLOT eSlot, _Vec2 vPos, _Vec2 vSize, _b
 	m_eNow_ActionSlot = eSlot;
 	m_eNow_ActionArray = INVEN_ARRAY_TYPE::TYPE_END;
 	m_iArray_Index = -1;
-
-	if (eSlot == EQUIP_SLOT::EQUIP_WEAPON_HANDLE_0)
-		eSlot = EQUIP_SLOT::EQUIP_WEAPON_BLADE_0;
-	else if (eSlot == EQUIP_SLOT::EQUIP_WEAPON_HANDLE_0)
-		eSlot = EQUIP_SLOT::EQUIP_WEAPON_HANDLE_1;
 
 	vector<ITEM_FUNC> vecFunc;
 

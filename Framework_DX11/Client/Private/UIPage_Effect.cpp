@@ -74,7 +74,11 @@ void CUIPage_Effect::Update(_float fTimeDelta)
 		}
 	}
 
+	
 	_float fFade_Ratio = m_fTime_Fade_Now / m_fTime_Fade_Max;
+
+	if (isnan(fFade_Ratio))
+		fFade_Ratio = 0.01f;
 
 	m_vecPart[_int(PART_GROUP::EFFECT_FIFO_Screen)]->fTextureColor.w = fFade_Ratio;
 	m_vecPart[_int(PART_GROUP::EFFECT_FIFO_Title)]->fTextColor.w = fFade_Ratio;
