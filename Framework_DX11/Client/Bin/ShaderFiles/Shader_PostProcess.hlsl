@@ -261,9 +261,9 @@ PS_OUT PS_MAIN_DOF_INVERSE(PS_IN In)
     vector vColor = vBack;
     
     // 깊이가 작을수록 더 블러를 먹음
-    if (fDepth < g_fFocus)
+    if (fDepth < (1.f - g_fFocus))
     {
-        float fFocusRatio = saturate(abs(fDepth - g_fFocus) / g_fFocus);
+        float fFocusRatio = saturate(abs(fDepth - (1.f - g_fFocus)) / (1.f - g_fFocus));
     
         vColor = lerp(vBack, vBlur, fFocusRatio);
     }

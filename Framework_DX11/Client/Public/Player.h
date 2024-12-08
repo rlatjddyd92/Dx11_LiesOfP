@@ -204,6 +204,8 @@ public:
 
 public:
 	void			Move_Dir(_Vec4 vDir, _float fTimeDelta, _bool isTurn = true);
+	_bool			Turn_Lerp(_Vec4 vDir, _float fTimeDelta);
+
 	_Vec4			Calculate_Direction_Straight();
 	_Vec4			Calculate_Direction_Right();
 

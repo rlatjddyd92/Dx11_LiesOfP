@@ -357,6 +357,8 @@
     <ClInclude Include="..\Public\State_SimonManusP2_ThunderCalling.h" />
     <ClInclude Include="..\Public\State_SimonManusP2_Walk.h" />
     <ClInclude Include="..\Public\State_SimonManusP2_Wave.h" />
+    <ClInclude Include="..\Public\State_SimonManus_CutScene_Meet.h" />
+    <ClInclude Include="..\Public\State_SimonManus_CutScene_Phase2.h" />
     <ClInclude Include="..\Public\StaticObj.h" />
     <ClInclude Include="..\Public\SteppingStone.h" />
     <ClInclude Include="..\Public\Terrain.h" />
@@ -594,6 +596,8 @@
     <ClCompile Include="..\Private\State_SimonManusP2_ThunderCalling.cpp" />
     <ClCompile Include="..\Private\State_SimonManusP2_Walk.cpp" />
     <ClCompile Include="..\Private\State_SimonManusP2_Wave.cpp" />
+    <ClCompile Include="..\Private\State_SimonManus_CutScene_Meet.cpp" />
+    <ClCompile Include="..\Private\State_SimonManus_CutScene_Phase2.cpp" />
     <ClCompile Include="..\Private\StaticObj.cpp" />
     <ClCompile Include="..\Private\SteppingStone.cpp" />
     <ClCompile Include="..\Private\Terrain.cpp" />

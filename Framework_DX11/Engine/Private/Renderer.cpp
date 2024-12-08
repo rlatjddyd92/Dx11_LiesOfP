@@ -1144,7 +1144,21 @@ HRESULT CRenderer::Render_DOF()
 	if (FAILED(m_pGameInstance->Bind_RT_ShaderResource(m_pPostProcessShader, TEXT("Target_DOF2"), "g_DofBlurTexture")))
 		return E_FAIL;
 
+
+	if (m_tDOF.fDOF < 0.f)
+	{
+		m_tDOF.fDOF -= 0.3f;
+		m_tDOF.fDOF *= -1.f;
+		m_tDOF.fDOF *= 2.f;
+		m_tDOF.isInverse = true;
+	}
+	else
+	{
+		m_tDOF.isInverse = false;
+	}
+
 	m_pPostProcessShader->Bind_RawValue("g_fFocus", &m_tDOF.fDOF, sizeof(_float));
+	
 
 	if (m_tDOF.isInverse)
 	{

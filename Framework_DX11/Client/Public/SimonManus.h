@@ -29,6 +29,8 @@ public:
 public:
 	enum COLLIDERTYPE { CT_UPPERBODY, CT_LOWERBODY, CT_LEG_LEFT, CT_LEG_RIGHT, CT_END };
 	enum EXCOLLIDER { LEG_LEFT, LEG_RIGHT, LOWERBODY, COLLTYPE_END };
+	enum CUTSCENE_MODEL { MODEL_PHASE1, MODEL_PHASE2, MODEL_END };
+	enum CUTSCENE_TYPE { CUTSCENE_MEET, CUTSCENE_P2, CUTSCENE_DIE, CUTSCENE_END };
 
 public:
 	enum SIMONMANUS_P1_STATE {
@@ -43,6 +45,10 @@ public:
 		, ATKP2_BRUTALATTACK, ATKP2_CHASINGSWING, ATKP2_JUMPTOATTACK, ATKP2_STAMP
 		, ATKP2_LIGHTNINGTOWAVE, ATKP2_SWINGDOWN_SWING, ATKP2_SWIPMULTIPLE
 		, ATKP2_ROUTE_0, ATKP2_ROUTE_1, ATKP2_ROUTE_2
+	};
+
+	enum SIMONMANUS_CUTSCENE_MEET_STATE {
+		STATE_MEET, STATE_P2, STATE_DIE, STATE_END
 	};
 
 	enum EFFECT_TYPE
@@ -88,18 +94,28 @@ public:
 	virtual const _Matrix* Get_WeaponBoneCombinedMat(_uint iBoneIndex) override;
 	virtual const _Matrix* Get_WeaponWorldMat() override;
 
+	virtual void    Start_CutScene(_uint iCutSceneNum) override;
+	virtual void    End_CutScene(_uint iCutSceneNum) override;
+	virtual void    Change_Model(_uint iModelNum) override;
+
 private:
 	vector<CGameObject*>	CollObjRenderP{};
 	vector<class CEffect_Container*> m_Effects;
 
+
 	class CWeapon*			m_pWeapon = { nullptr };
 	class CFsm*				m_pExtraFsmCom = { nullptr };	//2페이즈 fsm
+	class CModel*			m_pP1ModelCom = { nullptr };	//2페이즈 model
 	class CModel*			m_pExtraModelCom = { nullptr };	//2페이즈 model
 	
+	class CModel*			m_pCutSceneModelCom[CUTSCENE_END] = { nullptr, };
+	class CFsm*				m_pCutSceneFsmCom = { nullptr };
+
 	class CCollider*		m_EXCollider[COLLTYPE_END] = { nullptr, nullptr };
 
 	_bool					m_isChanged = { false };
-
+	_bool					m_isCutScene = { false };
+	
 	const _Matrix*			m_pColliderBindMatrix[CT_END] = { nullptr, nullptr, nullptr};
 
 

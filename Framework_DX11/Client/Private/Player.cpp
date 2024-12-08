@@ -131,8 +131,8 @@ HRESULT CPlayer::Initialize(void * pArg)
 	//m_pNavigationCom->Move_to_Cell(m_pRigidBodyCom, 427); //짧은사다리
 	//m_pNavigationCom->Move_to_Cell(m_pRigidBodyCom, 341); //아래엘베
 	//m_pNavigationCom->Move_to_Cell(m_pRigidBodyCom, 440); //상자랑 장애물
-	m_pNavigationCom->Move_to_Cell(m_pRigidBodyCom, 1066); // 순간이동 790
-	//m_pNavigationCom->Move_to_Cell(m_pRigidBodyCom, 800); // 소피아 방
+	//m_pNavigationCom->Move_to_Cell(m_pRigidBodyCom, 1066); // 순간이동 790
+	m_pNavigationCom->Move_to_Cell(m_pRigidBodyCom, 800); // 소피아 방
 
 	m_strObjectTag = TEXT("Player");
 
@@ -433,10 +433,18 @@ void CPlayer::OnCollisionExit(CGameObject* pOther)
 
 void CPlayer::Move_Dir(_Vec4 vDir, _float fTimeDelta, _bool isTurn)
 {
-	if(isTurn)
+	if (isTurn)
 		m_pTransformCom->LookAt_Lerp_NoHeight(vDir, 10.0f, fTimeDelta);
 
 	m_pRigidBodyCom->Set_Velocity((_Vec3(vDir * m_fMoveSpeed)));
+}
+
+_bool CPlayer::Turn_Lerp(_Vec4 vDir, _float fTimeDelta)
+{
+	_int iTurn;
+	iTurn = m_pTransformCom->LookAt_Lerp_NoHeight(vDir, 30.f, fTimeDelta);
+
+	return !iTurn;
 }
 
 _Vec4 CPlayer::Calculate_Direction_Straight()

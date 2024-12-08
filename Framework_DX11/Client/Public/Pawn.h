@@ -50,6 +50,8 @@ public:
 
     HIT_TYPE            Get_HitType() { return m_eHitType; }
 
+    void                Play_Animation() { m_isPlayAnimation = true; }
+    void                Stop_Animation() { m_isPlayAnimation = false; }
 public:
     virtual HRESULT Initialize_Prototype();
     virtual HRESULT Initialize(void* pArg = nullptr);
@@ -61,8 +63,12 @@ public:
     virtual HRESULT Render_LightDepth() { return S_OK; }
 
 public:
-    virtual _bool Calc_DamageGain(_float fAtkDmg, _Vec3 vHitPos = { 0.f,0.f,0.f }, _uint iHitType = HIT_END, _uint iAttackStrength = ATK_END, CGameObject* pAttacker = nullptr) override;
-    virtual void Gain_Grogy_Point(_float fGainGrogyPoint) { m_eStat.fGrogyPoint += fGainGrogyPoint; }
+    virtual _bool   Calc_DamageGain(_float fAtkDmg, _Vec3 vHitPos = { 0.f,0.f,0.f }, _uint iHitType = HIT_END, _uint iAttackStrength = ATK_END, CGameObject* pAttacker = nullptr) override;
+    virtual void    Gain_Grogy_Point(_float fGainGrogyPoint) { m_eStat.fGrogyPoint += fGainGrogyPoint; }
+
+    virtual void    Start_CutScene(_uint iCutSceneNum) {};
+    virtual void    End_CutScene(_uint iCutSceneNum) {};
+    virtual void    Change_Model(_uint iModelNum) {};
 
 public:
     virtual void OnCollisionEnter(CGameObject* pOther) override;
@@ -103,6 +109,8 @@ protected:
     class CSound* m_pSoundCom[PAWN_SOUND_END] = { nullptr, };
 
     _bool            m_isGravity = { false };
+    _bool            m_isPlayAnimation = { true };
+    _bool            m_isCutScene = { false };
 
     _int             m_iRespawn_Cell_Num = { -1 };
 

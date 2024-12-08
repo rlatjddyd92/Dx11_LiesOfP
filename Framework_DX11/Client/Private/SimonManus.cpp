@@ -14,6 +14,8 @@
 #include "Effect_Container.h"
 //전부 수정하기
 
+#include "Weapon.h"
+
 #pragma region Phase1
 #include "State_SimonManusP1_Idle.h"
 #include "State_SimonManusP1_Die.h"
@@ -66,7 +68,10 @@
 #include "State_SimonManusP2_SlideMagic.h"
 #pragma endregion
 
-#include "Weapon.h"
+#pragma region CutScene
+#include "State_SimonManus_CutScene_Meet.h"
+#include "State_SimonManus_CutScene_Phase2.h"
+#pragma endregion
 
 CSimonManus::CSimonManus(ID3D11Device * pDevice, ID3D11DeviceContext * pContext)
 	: CMonster{ pDevice, pContext }
@@ -139,6 +144,9 @@ HRESULT CSimonManus::Initialize(void* pArg)
 	GET_GAMEINTERFACE->Register_Pointer_Into_OrthoUIPage(UI_ORTHO_OBJ_TYPE::ORTHO_BOSS_SIMON, this);
 
 	GET_GAMEINTERFACE->Set_OnOff_OrthoUI(false, this);
+
+	Start_CutScene(CUTSCENE_P2);
+
 	return S_OK;
 }
 
@@ -163,9 +171,6 @@ void CSimonManus::Priority_Update(_float fTimeDelta)
 		if (!pEffect->Get_Dead())
 			pEffect->Priority_Update(fTimeDelta);
 	}
-
-
-
 }
 
 void CSimonManus::Update(_float fTimeDelta)
@@ -179,11 +184,22 @@ void CSimonManus::Update(_float fTimeDelta)
 	//	m_Effects[P2_JUMPMAGIC]->Set_Loop(true);
 	//}
 
-	m_vCurRootMove = XMVector3TransformNormal(m_pModelCom->Play_Animation(fTimeDelta), m_pTransformCom->Get_WorldMatrix());
+	if (m_isPlayAnimation)
+	{
+		m_vCurRootMove = XMVector3TransformNormal(m_pModelCom->Play_Animation(fTimeDelta), m_pTransformCom->Get_WorldMatrix());
+	}
+	else
+	{
+		m_vCurRootMove = _Vec3(0.f, 0.f, 0.f);
+	}
 
 	m_pRigidBodyCom->Set_Velocity(m_vCurRootMove / fTimeDelta);
 
-	m_pFsmCom->Update(fTimeDelta);
+	if(!m_isCutScene)
+		m_pFsmCom->Update(fTimeDelta);
+	else
+		m_pCutSceneFsmCom->Update(fTimeDelta);
+
 
 	for (_uint i = 0; i < PAWN_SOUND_END; ++i)
 	{
@@ -302,6 +318,44 @@ const _Matrix* CSimonManus::Get_WeaponWorldMat()
 	return m_pWeapon->Get_WorldMatrix_Ptr();
 }
 
+void CSimonManus::Start_CutScene(_uint iCutSceneNum)
+{
+	switch (iCutSceneNum)
+	{
+	case CUTSCENE_MEET :
+		m_pModelCom = m_pCutSceneModelCom[MODEL_PHASE1];
+		m_pCutSceneFsmCom->Set_State(STATE_MEET);
+		break;
+	case CUTSCENE_P2:
+		m_pModelCom = m_pCutSceneModelCom[MODEL_PHASE1];
+		m_pCutSceneFsmCom->Set_State(STATE_P2);
+		break;
+	case CUTSCENE_DIE:
+		m_pModelCom = m_pCutSceneModelCom[MODEL_PHASE2];
+		break;
+	}
+
+	m_isCutScene = true;
+}
+
+void CSimonManus::End_CutScene(_uint iCutSceneNum)
+{
+	if (m_pCutSceneFsmCom->Get_CurrentState() == STATE_MEET)
+	{
+		m_pModelCom = m_pP1ModelCom;
+	}
+	else if (m_pCutSceneFsmCom->Get_CurrentState() == STATE_P2)
+	{
+		ChangePhase();
+	}
+	m_isCutScene = false;
+}
+
+void CSimonManus::Change_Model(_uint iModelNum)	// 컷신 2페이즈로 바꾸는 용도
+{
+	m_pModelCom = m_pCutSceneModelCom[1];
+}
+
 HRESULT CSimonManus::Ready_Components()
 {
 	if (FAILED(__super::Ready_Components()))
@@ -309,13 +363,26 @@ HRESULT CSimonManus::Ready_Components()
 
 	/* FOR.Com_Model */
 	if (FAILED(__super::Add_Component(LEVEL_GAMEPLAY, TEXT("Prototype_Component_Model_SimonManusP1"),
-		TEXT("Com_Model"), reinterpret_cast<CComponent**>(&m_pModelCom))))
+		TEXT("Com_P1Model"), reinterpret_cast<CComponent**>(&m_pP1ModelCom))))
 		return E_FAIL;
 
 	/* FOR.Com_ExtraModel */
 	if (FAILED(__super::Add_Component(LEVEL_GAMEPLAY, TEXT("Prototype_Component_Model_SimonManusP2"),
 		TEXT("Com_ExtraModel"), reinterpret_cast<CComponent**>(&m_pExtraModelCom))))
 		return E_FAIL;
+
+#pragma region 컷신용
+	/* FOR.Com_Model_CustScene01 */
+	if (FAILED(__super::Add_Component(LEVEL_GAMEPLAY, TEXT("Prototype_Component_Model_SimonManus_CutScene_P1"),
+		TEXT("Com_Model_CustScene01"), reinterpret_cast<CComponent**>(&m_pCutSceneModelCom[MODEL_PHASE1]))))
+		return E_FAIL;
+
+	/* FOR.Com_Model_CustScene02 */
+	if (FAILED(__super::Add_Component(LEVEL_GAMEPLAY, TEXT("Prototype_Component_Model_SimonManus_CutScene_P2"),
+		TEXT("Com_Model_CustScene02"), reinterpret_cast<CComponent**>(&m_pCutSceneModelCom[MODEL_PHASE2]))))
+		return E_FAIL;
+#pragma endregion
+	m_pModelCom = m_pP1ModelCom;
 
 	/* FOR.Com_Collider */		//Body
 	CBounding_OBB::BOUNDING_OBB_DESC			ColliderDesc{};
@@ -467,6 +534,15 @@ HRESULT CSimonManus::Ready_FSM()
 	//m_pExtraFsmCom->Set_State(IDLE);
 #pragma endregion
 
+#pragma region CutScene_Fsm
+	/* FOR.Com_FSM */
+	if (FAILED(__super::Add_Component(LEVEL_STATIC, TEXT("Prototype_Component_FSM"),
+		TEXT("Com_CutSCeneFSM"), reinterpret_cast<CComponent**>(&m_pCutSceneFsmCom))))
+		return E_FAIL;
+
+	m_pCutSceneFsmCom->Add_State(CState_SimonManus_CutScene_Meet::Create(m_pCutSceneFsmCom, this, STATE_MEET, &Desc));
+	m_pCutSceneFsmCom->Add_State(CState_SimonManus_CutScene_Phase2::Create(m_pCutSceneFsmCom, this, STATE_P2, &Desc));
+#pragma endregion
 	return S_OK;
 }
 
@@ -654,7 +730,10 @@ void CSimonManus::Free()
 		Safe_Release(m_EXCollider[i]);
 	}
 	Safe_Release(m_pWeapon);
+	Safe_Release(m_pP1ModelCom);
 	Safe_Release(m_pExtraModelCom);
+	Safe_Release(m_pCutSceneModelCom[0]);
+	Safe_Release(m_pCutSceneModelCom[1]);
 
 	if (true == m_isCloned)
 	{
@@ -671,6 +750,13 @@ void CSimonManus::Free()
 		m_pExtraFsmCom->Release_States();
 	}
 	Safe_Release(m_pExtraFsmCom);
+
+	if (m_pCutSceneFsmCom != nullptr)
+	{
+		m_pCutSceneFsmCom->Release_States();
+	}
+	Safe_Release(m_pCutSceneFsmCom);
+
 	__super::Free();
 
 }

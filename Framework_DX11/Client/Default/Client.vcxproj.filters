@@ -850,6 +850,15 @@
     <Filter Include="02.GameObjects\12.AttackObject\SimonManus\Stomp">
       <UniqueIdentifier>{4c93ec4b-622d-4d23-9b30-e71e06b6e88e}</UniqueIdentifier>
     </Filter>
+    <Filter Include="05.Fsm\Monster\SimonManus\CutScene">
+      <UniqueIdentifier>{e3588bfa-170a-4bd9-9b5d-035396eb3e43}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="05.Fsm\Monster\SimonManus\CutScene\Meet">
+      <UniqueIdentifier>{d02063f9-0347-402f-8dd9-67e60e09b689}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="05.Fsm\Monster\SimonManus\CutScene\Phase2">
+      <UniqueIdentifier>{516433e5-47f1-4197-b298-cdaba0eb38e7}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Client.h">
@@ -1574,6 +1583,12 @@
     <ClInclude Include="..\Public\AObj_Stomp.h">
       <Filter>02.GameObjects\12.AttackObject\SimonManus\Stomp</Filter>
     </ClInclude>
+    <ClInclude Include="..\Public\State_SimonManus_CutScene_Meet.h">
+      <Filter>05.Fsm\Monster\SimonManus\CutScene\Meet</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Public\State_SimonManus_CutScene_Phase2.h">
+      <Filter>05.Fsm\Monster\SimonManus\CutScene\Phase2</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Client.cpp">
@@ -2267,6 +2282,12 @@
     </ClCompile>
     <ClCompile Include="..\Private\AObj_Stomp.cpp">
       <Filter>02.GameObjects\12.AttackObject\SimonManus\Stomp</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Private\State_SimonManus_CutScene_Meet.cpp">
+      <Filter>05.Fsm\Monster\SimonManus\CutScene\Meet</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Private\State_SimonManus_CutScene_Phase2.cpp">
+      <Filter>05.Fsm\Monster\SimonManus\CutScene\Phase2</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

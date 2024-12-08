@@ -32,7 +32,6 @@ HRESULT CState_Player_OH_Run::Initialize(_uint iStateNum, void* pArg)
 
 HRESULT CState_Player_OH_Run::Start_State(void* pArg)
 {
-    m_pPlayer->Change_Animation(m_iAnimation_Run[RUN_F], true, 0.1f);
 
     m_pPlayer->Set_MoveSpeed(3.5f);
 
@@ -40,6 +39,11 @@ HRESULT CState_Player_OH_Run::Start_State(void* pArg)
     m_fSpaceTime = 0.f;
 
     m_isPlaySound = false;
+
+    m_isTurnOver = false;
+
+    m_vFirstMoveDir = _Vec4(0.f, 0.f, 0.f, 0.f);
+
 
     return S_OK;
 }
@@ -53,7 +57,8 @@ void CState_Player_OH_Run::Update(_float fTimeDelta)
 
     if (false == Move(fTimeDelta))
     {
-        m_pPlayer->Change_State(CPlayer::OH_IDLE);
+        if (m_isTurnOver)
+            m_pPlayer->Change_State(CPlayer::OH_IDLE);
         return;
     }
 
@@ -61,21 +66,25 @@ void CState_Player_OH_Run::Update(_float fTimeDelta)
     {
         if (KEY_NONE(KEY::SPACE))
         {
-            m_pPlayer->Change_State(CPlayer::OH_DASH);
+            if (m_isTurnOver)
+                m_pPlayer->Change_State(CPlayer::OH_DASH);
         }
 
         if (KEY_HOLD(KEY::SPACE))
         {
-            m_pPlayer->Change_State(CPlayer::OH_SPRINT);
+            if (m_isTurnOver)
+                m_pPlayer->Change_State(CPlayer::OH_SPRINT);
         }
     }
     else if (KEY_HOLD(KEY::LSHIFT))
     {
-        m_pPlayer->Change_State(CPlayer::OH_GUARD);
+        if (m_isTurnOver)
+            m_pPlayer->Change_State(CPlayer::OH_GUARD);
     }
     else if (KEY_TAP(KEY::R))
     {
-        m_pPlayer->Change_State(CPlayer::GRINDER);
+        if (m_isTurnOver)
+            m_pPlayer->Change_State(CPlayer::GRINDER);
         //m_pPlayer->Change_State(CPlayer::HEAL);
     }
 
@@ -102,25 +111,25 @@ _bool CState_Player_OH_Run::Move(_float fTimeDelta)
     vCameraLook.Normalize();
     vCameraRight.Normalize();
 
-    if (KEY_HOLD(KEY::W))
+    if (KEY_HOLD(KEY::W) || KEY_TAP(KEY::W))
     {
         m_vMoveDir += vCameraLook;
         isMoving = true;
     }
-    else if (KEY_HOLD(KEY::S))
+    else if (KEY_HOLD(KEY::S) || KEY_TAP(KEY::S))
     {
         m_vMoveDir -= vCameraLook;
         isMoving = true;
     }
 
-    if (KEY_HOLD(KEY::D))
+    if (KEY_HOLD(KEY::D) || KEY_TAP(KEY::D))
     {
         m_vMoveDir += vCameraRight;
 
         isMoving = true;
     }
 
-    if (KEY_HOLD(KEY::A))
+    if (KEY_HOLD(KEY::A) || KEY_TAP(KEY::A))
     {
         m_vMoveDir -= vCameraRight;
 
@@ -128,6 +137,11 @@ _bool CState_Player_OH_Run::Move(_float fTimeDelta)
     }
 
     m_vMoveDir.Normalize();
+
+    if (m_vFirstMoveDir.Length() == 0.f && isMoving)
+    {
+        m_vFirstMoveDir = m_vMoveDir;
+    }
 
     _Vec4 vLocalMoveDir = { m_vMoveDir.Dot(vCameraRight), 0.f, m_vMoveDir.Dot(vCameraLook), 0.f };
     vLocalMoveDir.Normalize();
@@ -159,10 +173,13 @@ _bool CState_Player_OH_Run::Move(_float fTimeDelta)
     //        m_pPlayer->Change_Animation(m_iAnimation_RUN[RUN_L], true, false);
     //}
 
+    if(!m_isTurnOver)
+        m_isTurnOver = m_pPlayer->Turn_Lerp(m_vFirstMoveDir, fTimeDelta);
 
-    if (m_vMoveDir.Length() > 0.f)
+    if (m_vMoveDir.Length() > 0.f && m_isTurnOver)
     {
-        m_pPlayer->Move_Dir(m_vMoveDir, fTimeDelta);
+        m_pPlayer->Move_Dir(m_vMoveDir, fTimeDelta, m_isTurnOver);
+        m_pPlayer->Change_Animation(m_iAnimation_Run[RUN_F], true, 0.2f);
     }
 
     return isMoving;

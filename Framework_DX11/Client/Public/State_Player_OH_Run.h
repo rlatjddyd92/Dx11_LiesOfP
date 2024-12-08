@@ -30,11 +30,13 @@ private:
     _uint               m_iAnimation_Run[RUN_END] = {};
 
     _Vec4               m_vMoveDir = {};
+    _Vec4               m_vFirstMoveDir = {};
     
     _float              m_fSpaceTime = {};
 
     _bool               m_isInputSpace = {};
 
+    _bool               m_isTurnOver = {};
 private:
     _bool               Move(_float fTimeDelta);
 
