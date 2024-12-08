@@ -10,7 +10,7 @@ class CCutScene :
     public CGameObject
 {
 public:
-	enum ActorType {CAMERA, UI, SHADER,GAMEOBJECT, TYPE_END};
+	enum ActorType {CAMERA, UI, SHADER,GAMEOBJECT, SOUND, TYPE_END};
 
 private:
 	CCutScene(ID3D11Device* pDevice, ID3D11DeviceContext* pContext);
@@ -48,7 +48,7 @@ private:
 	class CCamera*				m_pCamera = { nullptr };
 private:
 	void Play_Keyframes(_float fTimeDelta);
-	void Active_Shader(CUTSCENE_KEYFRAME_DESC* pCutSceneDesc);
+	void Active_Shader(CUTSCENE_KEYFRAME_DESC* pCutSceneDesc, _float fTimeDelta);
 	void Active_UI(CUTSCENE_KEYFRAME_DESC* pCutSceneDesc);
 	void Active_Camera(CUTSCENE_KEYFRAME_DESC* pCutSceneDesc);
 public:

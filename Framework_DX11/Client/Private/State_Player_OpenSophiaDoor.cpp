@@ -27,7 +27,8 @@ HRESULT CState_Player_OpenSophiaDoor::Initialize(_uint iStateNum, void* pArg)
 
 HRESULT CState_Player_OpenSophiaDoor::Start_State(void* pArg)
 {
-    m_pLastDoor = static_cast<CLastDoor*>(pArg);
+    if(m_pLastDoor == nullptr)
+         m_pLastDoor = static_cast<CLastDoor*>(m_pGameInstance->Find_Object(LEVEL_GAMEPLAY,TEXT("Layer_LastDoor"),0));
 
     m_pPlayer->Change_Animation(m_iAnimation_DoorPush, false, 0.8f, 316);
 
@@ -46,9 +47,6 @@ HRESULT CState_Player_OpenSophiaDoor::Start_State(void* pArg)
     m_pPlayer->Get_RigidBody()->Set_GloblePose(vInitPos);
     m_pPlayer->Get_Transform()->Set_NewLook(-vLastDoorLook);
 
-
-    m_pGameInstance->Play_BGM(TEXT("MU_MS_Monastery_B_Loop.wav"), &g_fBGMVolume);
-
     return S_OK;
 }
 
@@ -59,8 +57,8 @@ void CState_Player_OpenSophiaDoor::Update(_float fTimeDelta)
     if (iFrame > 545)
     {
         m_pPlayer->Change_State(CPlayer::SOPHIA_WALK);
-        m_pGameInstance->Stop_BGM();
-        m_pGameInstance->Play_BGM(TEXT("MU_MS_Monastery_B_Loop.wav"), &g_fBGMVolume);
+       // m_pGameInstance->Stop_BGM();
+     //   m_pGameInstance->Play_BGM(TEXT("MU_MS_Monastery_B_Loop.wav"), &g_fBGMVolume);
     }
 }
 

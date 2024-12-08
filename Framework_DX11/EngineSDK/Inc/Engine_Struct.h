@@ -286,10 +286,15 @@ namespace Engine
 	}VTXMODELINSTANCE;
 
 	//¿ì¼Û ÄÆ½Å
+
 	typedef struct
 	{
 		_bool bUseDof = { false };
+		_bool bUseDof_Inverse = { false };
+		_bool bDof_Increase= { false };
+		_bool bDof_Decrease= { false };
 		_float fDof = { 0.f };
+		_float fSpeed = { 1.f };
 	}CUTSCENE_SHADER_DESC;
 
 	typedef struct
@@ -330,13 +335,20 @@ namespace Engine
 
 	typedef struct
 	{
-		_float					fTrackPosition;
-		_bool					bActived = false;
-		CUTSCENE_SHADER_DESC	ShaderDesc;
-		CUTSCENE_UI_DESC		UI_DESC;
-		CUTSCENE_CAMERA_DESC	Camera_Desc;
-		CUTSCENE_OBJECT_DESC	Obj_Desc;
-	}CUTSCENE_KEYFRAME_DESC;
+		_bool bStopBGM = { false };
+		_bool bChangeBGM = { false };
 
+	}CUTSCENE_SOUND_DESC;
+
+	typedef struct
+	{
+		_float					fTrackPosition = { 0.f };
+		_bool					bActived = { false };
+		CUTSCENE_SHADER_DESC	ShaderDesc = {};
+		CUTSCENE_UI_DESC		UI_DESC = {};
+		CUTSCENE_CAMERA_DESC	Camera_Desc = {};
+		CUTSCENE_OBJECT_DESC	Obj_Desc = {};
+		CUTSCENE_SOUND_DESC		Sound_Desc = {};
+	}CUTSCENE_KEYFRAME_DESC;
 }
 

@@ -36,11 +36,11 @@ HRESULT CState_Player_SophiaWalk::Start_State(void* pArg)
 
 void CState_Player_SophiaWalk::Update(_float fTimeDelta)
 {
-    if (End_Check())
+   /* if (End_Check())
     {
         m_pPlayer->Get_Model()->ReadyDenyNextTranslate(4);
         m_pPlayer->Change_State(CPlayer::OH_IDLE);
-    }
+    }*/
 
     _Vec3 vMove = m_pPlayer->Get_Model()->Get_BoneCombindTransformationMatrix_Ptr(4)->Translation();
     _float4x4 TransMat;

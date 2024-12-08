@@ -254,6 +254,9 @@ void CController_Cutscene::Menu()
             case CCutScene::GAMEOBJECT:
                 GamgeObject_Memu();
                 break;
+            case CCutScene::SOUND:
+                Sound_Memu();
+                break;
             default:
                 break;
             }
@@ -339,7 +342,11 @@ void CController_Cutscene::UI_Memu()
 void CController_Cutscene::Shader_Memu()
 {
     //Dof사용 유무
-    ImGui::Checkbox("Use Dof", &pCutScene_Desc->ShaderDesc.bUseDof);
+    ImGui::Checkbox("Use Dof", &pCutScene_Desc->ShaderDesc.bUseDof); ImGui::SameLine();
+    ImGui::Checkbox("Inverse Dof", &pCutScene_Desc->ShaderDesc.bUseDof_Inverse);
+    //Dof수치 증가 방향
+    ImGui::Checkbox("Increase", &pCutScene_Desc->ShaderDesc.bDof_Increase);
+    ImGui::Checkbox("Decrease", &pCutScene_Desc->ShaderDesc.bDof_Decrease);
     //Dof 사용 수치
     ImGui::DragFloat("DOF", &pCutScene_Desc->ShaderDesc.fDof, 0.02f, 0.f);
 }
@@ -376,6 +383,14 @@ void CController_Cutscene::GamgeObject_Memu()
         ImGui::InputFloat("Boss2 Speed Ratio ", &pCutScene_Desc->Obj_Desc.fAnimSpeedRatio[2]);
     }
     
+}
+
+void CController_Cutscene::Sound_Memu()
+{
+    //BGM 멈추기
+    ImGui::Checkbox("Stop BGM", &pCutScene_Desc->Sound_Desc.bStopBGM);
+    //BGM 바꾸기
+    ImGui::Checkbox("Change BGM", &pCutScene_Desc->Sound_Desc.bChangeBGM);
 }
 
 void CController_Cutscene::Show_CurCamState()

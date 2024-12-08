@@ -74,6 +74,17 @@ void CCutScene::Create_KeyFrame()
 void CCutScene::Load_KeyFrame(CUTSCENE_KEYFRAME_DESC pDesc)
 {
 	CUTSCENE_KEYFRAME_DESC* pNewDesc = new CUTSCENE_KEYFRAME_DESC;
+	//pNewDesc->fTrackPosition = pDesc.fTrackPosition;
+	//pNewDesc->bActived = pDesc.bActived;
+	//pNewDesc->UI_DESC = pDesc.UI_DESC;
+	//pNewDesc->Camera_Desc = pDesc.Camera_Desc;
+	//pNewDesc->Obj_Desc = pDesc.Obj_Desc;
+	//pNewDesc->Sound_Desc = pDesc.Sound_Desc;
+	//pNewDesc->ShaderDesc.bUseDof = pDesc.ShaderDesc.bUseDof;
+	//pNewDesc->ShaderDesc.fDof = pDesc.ShaderDesc.fDof;
+	//pNewDesc->ShaderDesc.bUseDof_Inverse = pDesc.ShaderDesc.bUseDof_Inverse;
+	//pNewDesc->ShaderDesc.bDof_Increase = pDesc.ShaderDesc.bDof_Increase;
+	//pNewDesc->ShaderDesc.bDof_Decrease = pDesc.ShaderDesc.bDof_Decrease;
 	*pNewDesc = pDesc;
 	pNewDesc->bActived = false;
 
@@ -91,21 +102,33 @@ void CCutScene::Play_Keyframes(_float fTimeDelta)
 		{
 			iter->bActived = true;
 
-			Active_Shader(iter);
+			Active_Shader(iter, fTimeDelta);
 			Active_UI(iter);
 			Active_Camera(iter);
 		}
 	}
 }
 
-void CCutScene::Active_Shader(CUTSCENE_KEYFRAME_DESC* pCutSceneDesc)
+void CCutScene::Active_Shader(CUTSCENE_KEYFRAME_DESC* pCutSceneDesc, _float fTimeDelta)
 {
 	DOF_DESC* tDesc = m_pGameInstance->Get_DOFDesc();
 	if (nullptr == tDesc)
 		return;
 
 	tDesc->isOnDOF = pCutSceneDesc->ShaderDesc.bUseDof;
+	tDesc->isInverse = pCutSceneDesc->ShaderDesc.bUseDof_Inverse;
 	tDesc->fDOF = pCutSceneDesc->ShaderDesc.fDof;
+	if (pCutSceneDesc->ShaderDesc.bDof_Increase && pCutSceneDesc->ShaderDesc.fDof < 1.f)
+	{
+		pCutSceneDesc->ShaderDesc.fDof += fTimeDelta * pCutSceneDesc->ShaderDesc.fSpeed;
+	}
+	else if (pCutSceneDesc->ShaderDesc.bDof_Decrease && pCutSceneDesc->ShaderDesc.fDof  > 0.f)
+	{
+		pCutSceneDesc->ShaderDesc.fDof -= fTimeDelta * pCutSceneDesc->ShaderDesc.fSpeed;
+	}
+
+
+
 }
 
 void CCutScene::Active_UI(CUTSCENE_KEYFRAME_DESC* pCutSceneDesc)
