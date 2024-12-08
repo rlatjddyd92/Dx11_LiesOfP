@@ -40,6 +40,7 @@ public:
 private:
 	_float						m_fMaxFrame = { 50.f };
 	_float						m_fTrackPosition = { 0.f };
+	_float						m_fActiveDofValue = { 0.f };
 	_bool						m_bPlay = { false };
 
 	vector<CUTSCENE_KEYFRAME_DESC*>		m_KeyFrames;

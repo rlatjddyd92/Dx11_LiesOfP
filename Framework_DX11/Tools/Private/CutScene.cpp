@@ -101,11 +101,25 @@ void CCutScene::Play_Keyframes(_float fTimeDelta)
 		if (m_fTrackPosition >= iter->fTrackPosition && iter->bActived == false)
 		{
 			iter->bActived = true;
-
 			Active_Shader(iter, fTimeDelta);
 			Active_UI(iter);
 			Active_Camera(iter);
 		}
+
+		DOF_DESC* tDesc = m_pGameInstance->Get_DOFDesc();
+		if (nullptr == tDesc)
+			return;
+
+		if (iter->ShaderDesc.bDof_Increase && iter->ShaderDesc.fDof < 1.f)
+		{
+			m_fActiveDofValue += fTimeDelta * iter->ShaderDesc.fSpeed;
+		}
+		else if (iter->ShaderDesc.bDof_Decrease && iter->ShaderDesc.fDof > 0.f)
+		{
+			m_fActiveDofValue -= fTimeDelta * iter->ShaderDesc.fSpeed;
+		}
+
+		tDesc->fDOF = m_fActiveDofValue;
 	}
 }
 
@@ -118,17 +132,19 @@ void CCutScene::Active_Shader(CUTSCENE_KEYFRAME_DESC* pCutSceneDesc, _float fTim
 	tDesc->isOnDOF = pCutSceneDesc->ShaderDesc.bUseDof;
 	tDesc->isInverse = pCutSceneDesc->ShaderDesc.bUseDof_Inverse;
 	tDesc->fDOF = pCutSceneDesc->ShaderDesc.fDof;
-	if (pCutSceneDesc->ShaderDesc.bDof_Increase && pCutSceneDesc->ShaderDesc.fDof < 1.f)
+	
+
+	if (pCutSceneDesc->ShaderDesc.bDof_Increase )
 	{
-		pCutSceneDesc->ShaderDesc.fDof += fTimeDelta * pCutSceneDesc->ShaderDesc.fSpeed;
+		if (pCutSceneDesc->ShaderDesc.bUseDof_Inverse)
+			m_fActiveDofValue = tDesc->fDOF;
+		else
+			m_fActiveDofValue = 0.f;
 	}
-	else if (pCutSceneDesc->ShaderDesc.bDof_Decrease && pCutSceneDesc->ShaderDesc.fDof  > 0.f)
+	else if (pCutSceneDesc->ShaderDesc.bDof_Decrease)
 	{
-		pCutSceneDesc->ShaderDesc.fDof -= fTimeDelta * pCutSceneDesc->ShaderDesc.fSpeed;
+		m_fActiveDofValue = tDesc->fDOF;;
 	}
-
-
-
 }
 
 void CCutScene::Active_UI(CUTSCENE_KEYFRAME_DESC* pCutSceneDesc)

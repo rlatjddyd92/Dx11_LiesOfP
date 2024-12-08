@@ -345,10 +345,11 @@ void CController_Cutscene::Shader_Memu()
     ImGui::Checkbox("Use Dof", &pCutScene_Desc->ShaderDesc.bUseDof); ImGui::SameLine();
     ImGui::Checkbox("Inverse Dof", &pCutScene_Desc->ShaderDesc.bUseDof_Inverse);
     //Dof수치 증가 방향
-    ImGui::Checkbox("Increase", &pCutScene_Desc->ShaderDesc.bDof_Increase);
+    ImGui::Checkbox("Increase", &pCutScene_Desc->ShaderDesc.bDof_Increase); ImGui::SameLine();
     ImGui::Checkbox("Decrease", &pCutScene_Desc->ShaderDesc.bDof_Decrease);
     //Dof 사용 수치
     ImGui::DragFloat("DOF", &pCutScene_Desc->ShaderDesc.fDof, 0.02f, 0.f);
+    ImGui::DragFloat("Speed", &pCutScene_Desc->ShaderDesc.fSpeed, 0.02f, 0.f);
 }
 
 void CController_Cutscene::GamgeObject_Memu()
