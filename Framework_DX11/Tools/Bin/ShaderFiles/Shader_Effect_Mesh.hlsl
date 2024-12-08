@@ -76,6 +76,11 @@ PS_EFFECT_OUT PS_MAIN(PS_IN In)
     vColor.rgb *= g_vColor;
     vColor.a *= g_fAlpha;
     
+    float fMax = max(vColor.r, max(vColor.g, vColor.b));
+    
+    if (fMax < 0.3f)
+        discard;
+    
     Out.vDiffuse = vColor;
     Out.vBlur = vColor;
 		
@@ -170,7 +175,15 @@ PS_OUT PS_DISTORTION_MAIN(PS_IN In)
     return Out;
 }
 
-PS_EFFECT_OUT PS_GLOW_MAIN(PS_IN In)
+float AdaptiveValue(float fValue)
+{
+    if(fValue <= 0.5f)
+        return pow(fValue, 2.f);
+    else
+        return 1.f - pow(1.f - fValue, 2.f);
+}
+
+PS_EFFECT_OUT PS_POW_MAIN(PS_IN In)
 {
     PS_EFFECT_OUT Out = (PS_EFFECT_OUT) 0;
     
@@ -180,9 +193,13 @@ PS_EFFECT_OUT PS_GLOW_MAIN(PS_IN In)
     vColor.rgb *= g_fAlpha;
     vColor *= g_vColor;
     
+    vColor.r = AdaptiveValue(saturate(vColor.r));
+    vColor.g = AdaptiveValue(saturate(vColor.g));
+    vColor.b = AdaptiveValue(saturate(vColor.b));
+    
     float fMax = max(vColor.r, max(vColor.g, vColor.b));
     
-    if(fMax < 0.3f)
+    if (fMax < 0.3f)
         discard;
     
     Out.vDiffuse = vColor;
@@ -259,7 +276,7 @@ technique11	DefaultTechnique
         PixelShader = compile ps_5_0 PS_BLEND_RGBTOA_MAIN();
     }
 
-    pass GLOW   // 6
+    pass POW_EFFECT // 6
     {
         SetRasterizerState(RS_Default);
         SetDepthStencilState(DSS_Default, 0);
@@ -267,7 +284,7 @@ technique11	DefaultTechnique
 
         VertexShader = compile vs_5_0 VS_MAIN();
         GeometryShader = NULL;
-        PixelShader = compile ps_5_0 PS_GLOW_MAIN();
+        PixelShader = compile ps_5_0 PS_POW_MAIN();
     }
 
 }

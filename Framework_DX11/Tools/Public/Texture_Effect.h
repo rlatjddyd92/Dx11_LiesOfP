@@ -27,6 +27,7 @@ public:
 		_Vec3				vStartScale			= { 1.f, 1.f, 1.f };
 		_Vec3				vScalingSpeed		= {};
 
+		_Vec4				vPreDirAxis			= { 0.f, 1.f, 0.f, 0.f };
 		_float				fStarRotation		= { 0.f };
 		_float				fRotationPerSecond	= { 0.f };
 
@@ -103,6 +104,8 @@ private:
 	_Vec2	m_vCurrentTileMove = {};
 
 	TEXTURE_EFFECT_DESC m_InitDesc = {};
+
+	_bool m_isReset = { false };
 
 private:
 	HRESULT Ready_Components(const TEXT_DESC& Desc);

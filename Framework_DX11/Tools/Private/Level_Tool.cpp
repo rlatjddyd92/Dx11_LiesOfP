@@ -39,14 +39,14 @@ HRESULT CLevel_GamePlay::Initialize()
 	if (FAILED(m_pImGui_Manager->Initialize(m_pDevice, m_pContext)))
 		return E_FAIL;
 
-	//CNonAnimModel::NONMODEL_DESC Desc{};
-	//Desc.vPosition = { 0.f, 0.f, 0.f };
-	//Desc.vScale = { 1.f,1.f,1.f };
-	//Desc.vRotation = { 0.f,0.f,0.f };
-	//Desc.iRenderGroupID = 0;
-	//strcpy_s(Desc.szModelTag, "Prototype_AnimModel_SimonManus_GodHand");
-	//if (FAILED(m_pGameInstance->Add_CloneObject_ToLayer(LEVEL_TOOL, TEXT("Layer_Weapon"), TEXT("Prototype_GameObject_NonAnim"), &Desc)))
-	//	return E_FAIL;
+	CNonAnimModel::NONMODEL_DESC Desc{};
+	Desc.vPosition = { 0.f, 0.f, 0.f };
+	Desc.vScale = { 1.f,1.f,1.f };
+	Desc.vRotation = { 0.f,0.f,0.f };
+	Desc.iRenderGroupID = 0;
+	strcpy_s(Desc.szModelTag, "Prototype_NoneAnimModel_Raxasia_Sword01");
+	if (FAILED(m_pGameInstance->Add_CloneObject_ToLayer(LEVEL_TOOL, TEXT("Layer_Weapon"), TEXT("Prototype_GameObject_NonAnim"), &Desc)))
+		return E_FAIL;
 
 
 
