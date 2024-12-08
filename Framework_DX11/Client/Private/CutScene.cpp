@@ -60,6 +60,8 @@ void CCutScene::Update(_float fTimeDelta)
 		pPlayer->Appear_Weapon();
 		m_bPlayerWeaponActive = true;
 	}
+
+	//컷신 소피아 엔터 끝나면 플레이어 이동(1178), 시작 시 무기 끄기 여기서 실행하자
 }
 
 void CCutScene::Late_Update(_float fTimeDelta)
