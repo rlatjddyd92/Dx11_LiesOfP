@@ -53,7 +53,7 @@ HRESULT CRaxasia::Initialize(void* pArg)
 	if (FAILED(Ready_Components()))
 		return E_FAIL;
 
-	m_pModelCom->SetUp_Animation(rand() % 20, true);
+	m_pModelCom->SetUp_Animation(8, true);
 
 	//if (FAILED(Ready_FSM()))
 	//	return E_FAIL;
