@@ -360,14 +360,16 @@ CGameObject* CStargazer::Clone(void* pArg)
 void CStargazer::Free()
 {
 	__super::Free();
-
-	for (auto& pEffect : m_Effects)
+	
+	if (m_isCloned)
 	{
-		if (nullptr != pEffect)
+		for (auto& pEffect : m_Effects)
+		{
 			pEffect->Set_Cloned(false);
-		Safe_Release(pEffect);
+			Safe_Release(pEffect);
+		}
+		m_Effects.clear();
 	}
-	m_Effects.clear();
 
 	Safe_Release(m_pColliderCom);
 	Safe_Release(m_pShaderCom);
