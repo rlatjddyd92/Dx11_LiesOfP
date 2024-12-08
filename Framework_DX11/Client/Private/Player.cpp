@@ -747,7 +747,7 @@ _bool CPlayer::Decrease_Stamina(_float fAmount)
 	}
 	m_tPlayer_Stat->vGauge_Stamina.y = m_tPlayer_Stat->vGauge_Stamina.x;
 
-	m_fStaminaRecoveryTime = 1.3f;	// 1.3f초 후에 회복
+	m_fStaminaRecoveryTime = 0.3f;	// 1.3f초 후에 회복
 
 	return true;
 }
@@ -835,7 +835,7 @@ void CPlayer::Update_Stat(_float fTimeDelta)
 	}
 	else if (m_fStaminaRecoveryTime <= 0.f)
 	{
-		m_tPlayer_Stat->vGauge_Stamina.x = min(m_tPlayer_Stat->vGauge_Stamina.x + 60.f * fTimeDelta, m_tPlayer_Stat->vGauge_Stamina.z + m_tPlayer_Stat_Adjust->vGauge_Stamina.z);
+		m_tPlayer_Stat->vGauge_Stamina.x = min(m_tPlayer_Stat->vGauge_Stamina.x + 100.f * fTimeDelta, m_tPlayer_Stat->vGauge_Stamina.z + m_tPlayer_Stat_Adjust->vGauge_Stamina.z);
 	}
 #pragma endregion
 
