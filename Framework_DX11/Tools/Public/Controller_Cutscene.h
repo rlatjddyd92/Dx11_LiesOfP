@@ -46,7 +46,7 @@ private:
 
 	class CCutScene* m_CutSceneList[8] = {nullptr,};
     const char* m_CutSceneNameList[8] = { "Boss1_Meet", "Boss1_Phase2", "Boss1_Dead", "Sophia_EnterRoom", "Boss2_Meet",  "Boss2_Phase2",  "Boss2_Defeat", "Sophia_Dead" };
-    const char* m_ActorTypeNameList[5] = { "Camera", "UI", "Shader", "GameObject"};
+    const char* m_ActorTypeNameList[5] = { "Camera", "UI", "Shader", "GameObject", "Sound"};
 	class CGameObject* m_pObjects[3] = { nullptr, };
 
 private:
@@ -55,6 +55,7 @@ private:
 	void UI_Memu();
 	void Shader_Memu();
 	void GamgeObject_Memu();
+	void Sound_Memu();
 	void Show_CurCamState();
 	void Save();
 	void Load();

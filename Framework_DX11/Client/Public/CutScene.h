@@ -42,7 +42,7 @@ private:
 	_float						m_fTrackPosition = { 0.f };
 	_bool						m_bPlay = { false };
 	_bool						m_bFinished = { false };
-	_bool						m_bPlayerWeaponActive = { false };
+	_bool						m_bFinishe_Setting = { false };
 
 	vector<CUTSCENE_KEYFRAME_DESC*>		m_KeyFrames;
 
@@ -55,6 +55,7 @@ private:
 	void Active_UI(CUTSCENE_KEYFRAME_DESC* pCutSceneDesc);
 	void Active_Camera(CUTSCENE_KEYFRAME_DESC* pCutSceneDesc);
 	void Active_Obj(CUTSCENE_KEYFRAME_DESC* pCutSceneDesc);
+	void Active_Sound(CUTSCENE_KEYFRAME_DESC* pCutSceneDesc);
 public:
 	static CCutScene* Create(ID3D11Device* pDevice, ID3D11DeviceContext* pContext);
 	virtual CGameObject* Clone(void* pArg);

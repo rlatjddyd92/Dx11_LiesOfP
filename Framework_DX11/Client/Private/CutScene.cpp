@@ -30,7 +30,7 @@ HRESULT CCutScene::Initialize(void* pArg)
 
 	m_pObjects[PLAYER] = static_cast<CPawn*>(m_pGameInstance->Find_Player(LEVEL_GAMEPLAY));
 	//m_pObjects[BOSS1]  = static_cast<CPawn*>(m_pGameInstance->Find_Object(LEVEL_GAMEPLAY, TEXT("Layer_Boss1"), 0));
-	m_pObjects[BOSS2]  = static_cast<CPawn*>(m_pGameInstance->Find_Object(LEVEL_GAMEPLAY, TEXT("Layer_Boss2"), 0));
+	//m_pObjects[BOSS2]  = static_cast<CPawn*>(m_pGameInstance->Find_Object(LEVEL_GAMEPLAY, TEXT("Layer_Boss2"), 0));
 
 	return S_OK;
 }
@@ -50,18 +50,24 @@ void CCutScene::Update(_float fTimeDelta)
 	{
 		m_bPlay = false;
 		m_bFinished = true;
-		GET_GAMEINTERFACE->Fade_In(0.f);
-		CCamera_Manager::Get_Instance()->Change_Camera(TEXT("Camera_Player"));
 	}
 	
-	if (!m_bPlayerWeaponActive && m_bFinished)
+	if(m_bFinished && m_bFinishe_Setting == false)
 	{
-		CPlayer* pPlayer = dynamic_cast<CPlayer*>(m_pGameInstance->Find_Player(LEVEL_GAMEPLAY));
-		pPlayer->Appear_Weapon();
-		m_bPlayerWeaponActive = true;
-	}
+		m_bFinishe_Setting = true;
 
-	//컷신 소피아 엔터 끝나면 플레이어 이동(1178), 시작 시 무기 끄기 여기서 실행하자
+		//UI 살려야 함
+		GET_GAMEINTERFACE->Fade_In(0.f);
+		CCamera_Manager::Get_Instance()->Change_Camera(TEXT("Camera_Player"));
+
+		if (m_iIndex == SOPHIA_ENTER)
+		{
+			CPlayer* pPlayer = dynamic_cast<CPlayer*>(m_pGameInstance->Find_Player(LEVEL_GAMEPLAY));
+			pPlayer->Appear_Weapon();
+			pPlayer->Change_State(CPlayer::OH_IDLE);
+			pPlayer->Get_Navigation()->Move_to_Cell(pPlayer->Get_RigidBody(),1178);
+		}
+	}
 }
 
 void CCutScene::Late_Update(_float fTimeDelta)
@@ -101,6 +107,8 @@ void CCutScene::Play_Keyframes(_float fTimeDelta)
 			Active_Shader(iter);
 			Active_UI(iter);
 			Active_Camera(iter);
+			Active_Obj(iter);
+			Active_Sound(iter);
 		}
 	}
 }
@@ -117,6 +125,7 @@ void CCutScene::Active_Shader(CUTSCENE_KEYFRAME_DESC* pCutSceneDesc)
 
 void CCutScene::Active_UI(CUTSCENE_KEYFRAME_DESC* pCutSceneDesc)
 {
+	//UI 숨겨야 함
 	if (pCutSceneDesc->UI_DESC.bFadeOut)
 	{
 		GET_GAMEINTERFACE->Fade_Out(TEXT(""), TEXT(""), pCutSceneDesc->UI_DESC.fColor, pCutSceneDesc->UI_DESC.fTime);
@@ -164,6 +173,24 @@ void CCutScene::Active_Obj(CUTSCENE_KEYFRAME_DESC* pCutSceneDesc)
 	if (pCutSceneDesc->Obj_Desc.bUseObj[BOSS2])
 	{
 		m_pObjects[BOSS2]->Change_State(*pCutSceneDesc->Obj_Desc.iStateNum);
+	}
+}
+
+void CCutScene::Active_Sound(CUTSCENE_KEYFRAME_DESC* pCutSceneDesc)
+{	
+	if (pCutSceneDesc->Sound_Desc.bStopBGM)
+		m_pGameInstance->Stop_BGM();
+
+	if(pCutSceneDesc->Sound_Desc.bChangeBGM)
+	{
+		switch (m_iIndex)
+		{
+		case SOPHIA_ENTER:
+			m_pGameInstance->Play_BGM(TEXT("MU_MS_Monastery_B_Loop.wav"), &g_fBGMVolume);
+			break;
+		default:
+			break;
+		}
 	}
 }
 
