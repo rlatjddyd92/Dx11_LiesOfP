@@ -50,7 +50,7 @@ void CCutScene::Update(_float fTimeDelta)
 	{
 		m_bPlay = false;
 		m_bFinished = true;
-		GET_GAMEINTERFACE->Fade_In(0.f);
+		GET_GAMEINTERFACE->Fade_In(0.f, true);
 		CCamera_Manager::Get_Instance()->Change_Camera(TEXT("Camera_Player"));
 	}
 }
@@ -114,7 +114,7 @@ void CCutScene::Active_UI(CUTSCENE_KEYFRAME_DESC* pCutSceneDesc)
 	}
 	if (pCutSceneDesc->UI_DESC.bFadeIn)
 	{
-		GET_GAMEINTERFACE->Fade_In(pCutSceneDesc->UI_DESC.fTime);
+		GET_GAMEINTERFACE->Fade_In(pCutSceneDesc->UI_DESC.fTime, false);
 	}
 }
 

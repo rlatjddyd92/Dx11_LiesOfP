@@ -166,9 +166,13 @@ _bool CUIPage_Effect::Fade_Out(_wstring strTitle, _wstring strDesc, _Vec3 vColor
 
 _bool CUIPage_Effect::Fade_In(_float fTime)
 {
+	if (!m_bFadeOut)
+		return false;
+
 	m_bUpdate = true;
 
-	m_fTime_Fade_Now = m_fTime_Fade_Now * (fTime / m_fTime_Fade_Max);
+	if (fTime > 0.f)
+		m_fTime_Fade_Now = m_fTime_Fade_Now * (fTime / m_fTime_Fade_Max);
 	m_fTime_Fade_Max = fTime;
 
 	m_bFadeOut = false;

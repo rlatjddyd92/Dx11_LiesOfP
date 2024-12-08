@@ -99,10 +99,16 @@ public:
 
 	_bool IsGamePause()
 	{
-		if ((m_pUIPage_Play->GetPageAction(PAGEACTION::ACTION_ACTIVE)) || (m_pUIPage_Play->GetPageAction(PAGEACTION::ACTION_OPENING)))
-			return false;
-		else
+		if ((m_pUIPage_Option->GetPageAction(PAGEACTION::ACTION_ACTIVE)) || (m_pUIPage_Option->GetPageAction(PAGEACTION::ACTION_OPENING)))
 			return true;
+		else if ((m_pUIPage_Inven->GetPageAction(PAGEACTION::ACTION_ACTIVE)) || (m_pUIPage_Inven->GetPageAction(PAGEACTION::ACTION_OPENING)))
+			return true;
+		else if ((m_pUIPage_Equip->GetPageAction(PAGEACTION::ACTION_ACTIVE)) || (m_pUIPage_Equip->GetPageAction(PAGEACTION::ACTION_OPENING)))
+			return true;
+		else if ((m_pUIPage_Menu->GetPageAction(PAGEACTION::ACTION_ACTIVE)) || (m_pUIPage_Menu->GetPageAction(PAGEACTION::ACTION_OPENING)))
+			return true;
+
+		return false;
 	}
 
 	// ¾ÆÀÌÅÛ È¹µæ 
@@ -281,19 +287,20 @@ public:
 	}
 	_bool Fade_In(_float fTime = 1.f, _bool bIsUIOn = true) 
 	{ 
+		if(!m_pUIPage_Effect->Fade_In(fTime))
+			return false;
+
 		if (bIsUIOn)
-			if (m_eBeforePage != UIPAGE::PAGE_EFFECT)
-			{
-				OpenPage(m_eBeforePage);
-				m_bIsPlayPageMaintain = true;
-			}
-		m_pUIPage_Effect->Fade_In(fTime);
+		{
+			OpenPage(UIPAGE::PAGE_PLAY);
+			m_bIsPlayPageMaintain = true;
+		}
+		
 		return true;
 	}
 	void UIPart_On()
 	{
-		if (m_eBeforePage != UIPAGE::PAGE_EFFECT)
-			OpenPage(m_eBeforePage);
+		OpenPage(UIPAGE::PAGE_PLAY);
 		m_bIsPlayPageMaintain = true;
 	}
 
