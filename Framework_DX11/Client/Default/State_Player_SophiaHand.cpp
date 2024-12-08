@@ -27,6 +27,7 @@ HRESULT CState_Player_SophiaHand::Initialize(_uint iStateNum, void* pArg)
 
 HRESULT CState_Player_SophiaHand::Start_State(void* pArg)
 {
+    m_pPlayer->Get_Model()->ReadyDenyNextTranslate(4);
     m_pPlayer->Change_Animation(m_iAnimation_SophiaHand, false, 0.3f);
 
     return S_OK;

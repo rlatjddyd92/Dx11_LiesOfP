@@ -41,6 +41,9 @@ void CCutScene::Priority_Update(_float fTimeDelta)
 
 void CCutScene::Update(_float fTimeDelta)
 {
+	if (m_bFirstStart)
+		First_Setting();
+
 	if (m_bPlay && m_fTrackPosition < m_fMaxFrame)
 	{
 		m_fTrackPosition += fTimeDelta;
@@ -64,8 +67,14 @@ void CCutScene::Update(_float fTimeDelta)
 		{
 			CPlayer* pPlayer = dynamic_cast<CPlayer*>(m_pGameInstance->Find_Player(LEVEL_GAMEPLAY));
 			pPlayer->Appear_Weapon();
+			pPlayer->Get_Model()->ReadyDenyNextTranslate(4);
 			pPlayer->Change_State(CPlayer::OH_IDLE);
 			pPlayer->Get_Navigation()->Move_to_Cell(pPlayer->Get_RigidBody(),1178);
+		}
+		else if (m_iIndex == SOPHIA_DEAD)
+		{
+			CPlayer* pPlayer = dynamic_cast<CPlayer*>(m_pGameInstance->Find_Player(LEVEL_GAMEPLAY));
+			pPlayer->Appear_Weapon();
 		}
 	}
 }
@@ -188,9 +197,25 @@ void CCutScene::Active_Sound(CUTSCENE_KEYFRAME_DESC* pCutSceneDesc)
 		case SOPHIA_ENTER:
 			m_pGameInstance->Play_BGM(TEXT("MU_MS_Monastery_B_Loop.wav"), &g_fBGMVolume);
 			break;
+		case SOPHIA_DEAD:
+			m_pGameInstance->Play_BGM(TEXT("MU_MS_Monastery_B_Loop.wav"), &g_fBGMVolume);
+			break;
 		default:
 			break;
 		}
+	}
+}
+
+void CCutScene::First_Setting()
+{
+	CPlayer* pPlayer = dynamic_cast<CPlayer*>(m_pGameInstance->Find_Player(LEVEL_GAMEPLAY));
+
+	switch (m_iIndex)
+	{
+	case SOPHIA_DEAD:
+		pPlayer->Disappear_Weapon();
+		break;
+
 	}
 }
 
