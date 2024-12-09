@@ -785,6 +785,16 @@ technique11	DefaultTechnique
         PixelShader = compile ps_5_0 PS_THUNDER_MAIN();
     }
 
+    pass PS_THUNDER_NONDIR_MAIN // 13
+    {
+        SetRasterizerState(RS_Default);
+        SetDepthStencilState(DSS_Default, 0);
+        SetBlendState(BS_Default, vector(0.f, 0.f, 0.f, 0.f), 0xffffffff);
+
+        VertexShader = compile vs_5_0 VS_MAIN();
+        GeometryShader = compile gs_5_0 GS_MAIN();
+        PixelShader = compile ps_5_0 PS_THUNDER_MAIN();
+    }
 }
 
 float2 Get_SpriteTexcoord(float2 vTexcoord, int iTexIndex)
