@@ -332,6 +332,15 @@ HRESULT CLoader::Ready_Resources_For_ToolLevel()
 		m_pGameInstance->Add_ModelPrototype(LEVEL_TOOL, ("Prototype_AnimModel_Player"), pModel);
 	}
 
+	pModel = CModel::Create(m_pDevice, m_pContext, CModel::TYPE_ANIM, "../Bin/ModelData/Anim/Player/Player_Test01.dat", PreTransformMatrix, false, CController_AnimationTool::Get_Instance()->Get_StructStack(m_iModelCount++));
+	if (FAILED(m_pGameInstance->Add_Prototype(LEVEL_TOOL, TEXT("Prototype_AnimModel_Player_Test1"), pModel)))
+		return E_FAIL;
+	m_pGameInstance->Add_ModelPrototype(LEVEL_TOOL, ("Prototype_AnimModel_Player_Test1"), pModel);
+
+	pModel = CModel::Create(m_pDevice, m_pContext, CModel::TYPE_ANIM, "../Bin/ModelData/Anim/Player/Player_Test02.dat", PreTransformMatrix, false, CController_AnimationTool::Get_Instance()->Get_StructStack(m_iModelCount++));
+	if (FAILED(m_pGameInstance->Add_Prototype(LEVEL_TOOL, TEXT("Prototype_AnimModel_Player_Test2"), pModel)))
+		return E_FAIL;
+	m_pGameInstance->Add_ModelPrototype(LEVEL_TOOL, ("Prototype_AnimModel_Player_Test2"), pModel);
 
 
 	CVIBuffer_Instancing::INSTANCE_DESC ParticleDesc = {};
@@ -1008,8 +1017,8 @@ HRESULT CLoader::Ready_Resources_For_ToolLevel_Monster()
 	//	m_pGameInstance->Add_ModelPrototype(LEVEL_TOOL, ("Prototype_AnimModel_CracassNormal"), pModel);
 	//}
 
-	//pModel = CModel::Create(m_pDevice, m_pContext, CModel::TYPE_ANIM, "../Bin/ModelData/Anim/CreatedBinFiles/CarcassTail.dat", PreTransformMatrix, true, CController_AnimationTool::Get_Instance()->Get_StructStack(m_iModelCount++));
-	pModel = CModel::Create(m_pDevice, m_pContext, CModel::TYPE_ANIM, "../Bin/ModelData/Anim/Monster/CarcassTail/CarcassTail.dat", PreTransformMatrix, false, CController_AnimationTool::Get_Instance()->Get_StructStack(m_iModelCount++));
+	pModel = CModel::Create(m_pDevice, m_pContext, CModel::TYPE_ANIM, "../Bin/ModelData/Anim/CreatedBinFiles/CarcassTail.dat", PreTransformMatrix, true, CController_AnimationTool::Get_Instance()->Get_StructStack(m_iModelCount++));
+	//pModel = CModel::Create(m_pDevice, m_pContext, CModel::TYPE_ANIM, "../Bin/ModelData/Anim/Monster/CarcassTail/CarcassTail.dat", PreTransformMatrix, false, CController_AnimationTool::Get_Instance()->Get_StructStack(m_iModelCount++));
 	if (pModel != nullptr)
 	{
 		if (FAILED(m_pGameInstance->Add_Prototype(LEVEL_TOOL, TEXT("Prototype_AnimModel_CarcassTail"), pModel)))
@@ -1149,7 +1158,31 @@ HRESULT CLoader::Ready_Resources_For_ToolLevel_Monster()
 	//		return E_FAIL;
 	//	m_pGameInstance->Add_ModelPrototype(LEVEL_TOOL, ("Prototype_NoneAnimModel_Raxasia_Sword02"), pModel);
 	//}
-
+	// 
+	//pModel = CModel::Create(m_pDevice, m_pContext, CModel::TYPE_ANIM, "../Bin/ModelData/Anim/Monster/Boss/Raxasia/Raxasia_CutScene_P1.dat", PreTransformMatrix, false, CController_AnimationTool::Get_Instance()->Get_StructStack(m_iModelCount++));
+	//if (pModel != nullptr)
+	//{
+	//	if (FAILED(m_pGameInstance->Add_Prototype(LEVEL_TOOL, TEXT("Prototype_AnimModel_Raxasia_CurSceneP1"), pModel)))
+	//		return E_FAIL;
+	//	m_pGameInstance->Add_ModelPrototype(LEVEL_TOOL, ("Prototype_AnimModel_Raxasia_CurSceneP1"), pModel);
+	//}
+	//
+	//pModel = CModel::Create(m_pDevice, m_pContext, CModel::TYPE_ANIM, "../Bin/ModelData/Anim/Monster/Boss/Raxasia/Raxasia_CutScene_P2.dat", PreTransformMatrix, false, CController_AnimationTool::Get_Instance()->Get_StructStack(m_iModelCount++));
+	//if (pModel != nullptr)
+	//{
+	//	if (FAILED(m_pGameInstance->Add_Prototype(LEVEL_TOOL, TEXT("Prototype_AnimModel_Raxasia_CurSceneP2"), pModel)))
+	//		return E_FAIL;
+	//	m_pGameInstance->Add_ModelPrototype(LEVEL_TOOL, ("Prototype_AnimModel_Raxasia_CurSceneP2"), pModel);
+	//}
+	//
+	//pModel = CModel::Create(m_pDevice, m_pContext, CModel::TYPE_ANIM, "../Bin/ModelData/Anim/Monster/Boss/Raxasia/Raxasia_CutScene_P2Die.dat", PreTransformMatrix, false, CController_AnimationTool::Get_Instance()->Get_StructStack(m_iModelCount++));
+	//if (pModel != nullptr)
+	//{
+	//	if (FAILED(m_pGameInstance->Add_Prototype(LEVEL_TOOL, TEXT("Prototype_AnimModel_Raxasia_CurSceneP2_Die"), pModel)))
+	//		return E_FAIL;
+	//	m_pGameInstance->Add_ModelPrototype(LEVEL_TOOL, ("Prototype_AnimModel_Raxasia_CurSceneP2_Die"), pModel);
+	//}
+	//"../Bin/ModelData/Anim/Monster/Boss/Raxasia/Raxasia_CutScene_P2.dat"
 #pragma endregion
 
 #pragma region SimonManus //CreatedBinFiles

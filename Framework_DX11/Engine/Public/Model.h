@@ -36,6 +36,9 @@ public:
 	void					Set_CurrentTrackPosition(_double TrackPos) { m_CurrentTrackPosition = TrackPos; }
 	void					Set_CurrentTrackPosition_Boundary(_double TrackPos) { m_CurrentTrackPosition_Boundary = TrackPos; }
 
+	vector<_uint>*			Get_RemoteTuningIndices_Ptr() { return &m_RemoteTuningIndices; }
+	void					Set_RemoteTuning(_bool bState);
+
 	void					Set_UFBIndices(_uint eCount, _uint iIndex) { m_UFBIndices[eCount] = iIndex; }
 	_uint					Get_UFBIndices(_uint eCount) { return m_UFBIndices[eCount]; }
 
@@ -181,6 +184,7 @@ private:
 
 private:
 	vector<_uint>					m_UFBIndices;
+	vector<_uint>					m_RemoteTuningIndices;
 	//바이너리화 용도
 	FilePathStructStack*			m_FilePaths = { nullptr };
 

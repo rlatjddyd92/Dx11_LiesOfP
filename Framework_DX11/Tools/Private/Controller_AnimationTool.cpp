@@ -578,11 +578,104 @@ void CController_AnimationTool::SetUp_Controller_Bone()
 	{
 		m_pCopyModelCom->SetUp_isNeedTuning(m_iSelected_Index_Bone, true);
 	}
+	//키 설정
+	if (KEY_TAP(KEY::T))
+	{
+		m_pCopyModelCom->SetUp_isNeedTuning(m_iSelected_Index_Bone, true);
+	}
 	ImGui::SameLine();
 	if (ImGui::Button("DiscardTuning"))
 	{
 		m_pCopyModelCom->SetUp_isNeedTuning(m_iSelected_Index_Bone, false);
 	}
+	//키 설정
+	if (KEY_TAP(KEY::Y))
+	{
+		m_pCopyModelCom->SetUp_isNeedTuning(m_iSelected_Index_Bone, false);
+	}
+
+	vector<_uint>* pTuningIndices = nullptr;
+
+	if (m_pCopyModelCom != nullptr)
+	{
+		pTuningIndices = m_pCopyModelCom->Get_RemoteTuningIndices_Ptr();
+	}
+
+
+	ImGui::Text("\n");
+
+	if (ImGui::Button("AddRemoteTuning"))
+	{
+		if (pTuningIndices != nullptr)
+		{
+			pTuningIndices->push_back(m_iSelected_Index_Bone);
+			m_pCopyModelCom->SetUp_isNeedTuning(m_iSelected_Index_Bone, true);
+		}
+	}
+	//키 설정
+	if (KEY_TAP(KEY::G))
+	{
+		if (pTuningIndices != nullptr)
+		{
+			pTuningIndices->push_back(m_iSelected_Index_Bone);
+			m_pCopyModelCom->SetUp_isNeedTuning(m_iSelected_Index_Bone, true);
+		}
+	}
+	ImGui::SameLine();
+	if (ImGui::Button("PopBackRemoteTuning"))
+	{
+		if (pTuningIndices != nullptr)
+		{
+			if (pTuningIndices->size() > 0)
+			{
+				m_pCopyModelCom->SetUp_isNeedTuning(((*pTuningIndices)[pTuningIndices->size() - 1]), false);
+				pTuningIndices->pop_back();
+			}
+		}
+	}
+	//키 설정
+	if (KEY_TAP(KEY::H))
+	{
+		if (pTuningIndices != nullptr)
+		{
+			if (pTuningIndices->size() > 0)
+			{
+				m_pCopyModelCom->SetUp_isNeedTuning(((*pTuningIndices)[pTuningIndices->size() - 1]), false);
+				pTuningIndices->pop_back();
+			}
+		}
+	}
+
+
+	ImGui::PushItemWidth(300); // 크기조정
+	if (ImGui::BeginListBox("RemoteTuning List"))
+	{
+		if (pTuningIndices != nullptr)
+		{
+			bool is_selected{ false };
+			for (int i = 0; i < pTuningIndices->size(); i++)
+			{
+				if (m_iSelected_Index_Bone == i)
+				{
+					is_selected = true;
+				}
+
+				if (ImGui::Selectable((*m_pCopyBoneVec)[(*pTuningIndices)[i]]->Get_Name(), is_selected))
+				{
+					m_iSelected_Index_Bone = i;
+				}
+
+				if (!is_selected)
+					ImGui::SetItemDefaultFocus();
+				is_selected = false;
+				// 반복문으로 리스트박스의 선택된 객체 찾기
+			}
+		}
+
+		ImGui::EndListBox();
+	}
+	ImGui::PopItemWidth();
+
 
 	ImGui::Text("Pos_X   %f", XMVectorGetX(vPos));
 	ImGui::Text("Pos_Y   %f", XMVectorGetY(vPos));
@@ -593,6 +686,7 @@ void CController_AnimationTool::SetUp_Controller_Bone()
 	matWorld *= m_pGameInstance->Find_Object(LEVEL_TOOL, TEXT("Layer_AnimationTool_Test"), 0)->Get_Transform()->Get_WorldMatrix();
 
 	m_vPos = XMVector3TransformCoord(vPos, matWorld);
+
 
 	ImGui::PushItemWidth(300); // 크기조정
 	if (ImGui::BeginListBox("USEFULLBONE Vec"))
