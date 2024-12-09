@@ -71,7 +71,8 @@ void CState_Player_SophiaWalk::Update(_float fTimeDelta)
     
     vMove.y = 0;
 
-    m_pPlayer->Get_RigidBody()->Set_Velocity((vMove - m_vRootMoveStack) / fTimeDelta);
+   
+    //m_pPlayer->Get_RigidBody()->Set_Velocity((vMove - m_vRootMoveStack) / fTimeDelta);
 
     m_vRootMoveStack = vMove;
 
