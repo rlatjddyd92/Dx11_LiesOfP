@@ -130,11 +130,15 @@ _bool CState_Player_Grinder::Move(_float fTimeDelta)
 
     _Vec4 vCameraLook = m_pPlayer->Get_Camera()->Get_Transform()->Get_State(CTransform::STATE_LOOK);
     _Vec4 vCameraRight = m_pPlayer->Get_Camera()->Get_Transform()->Get_State(CTransform::STATE_RIGHT);
-    vCameraLook.y = 0.f;
-    vCameraRight.y = 0.f;
-
+    vCameraLook.y = vCameraRight.y = 0.f;
     vCameraLook.Normalize();
     vCameraRight.Normalize();
+
+    _Vec4 vPlayerLook = m_pPlayer->Get_Transform()->Get_State(CTransform::STATE_LOOK);
+    _Vec4 vPlayerRight = m_pPlayer->Get_Transform()->Get_State(CTransform::STATE_RIGHT);
+    vPlayerLook.y = vPlayerRight.y = 0.f;
+    vPlayerLook.Normalize();
+    vPlayerRight.Normalize();
 
     _bool isForward = KEY_HOLD(KEY::W);
     _bool isBackward = KEY_HOLD(KEY::S);
@@ -142,45 +146,70 @@ _bool CState_Player_Grinder::Move(_float fTimeDelta)
     _bool isLeft = KEY_HOLD(KEY::A);
 
     if (isForward)
-    {
         m_vMoveDir += vCameraLook;
-    }
 
     if (isBackward)
-    {
         m_vMoveDir -= vCameraLook;
-    }
 
     if (isRight)
-    {
         m_vMoveDir += vCameraRight;
-    }
 
     if (isLeft)
-    {
         m_vMoveDir -= vCameraRight;
-    }
+    m_vMoveDir.Normalize();
+
     _Vec4 vRight = _Vec4(1.f, 0.f, 0.f, 0.f);
 
-    _float fForwardDot = m_vMoveDir.Dot(vCameraLook);
-    _float fBackwardDot = m_vMoveDir.Dot(-vCameraLook);
+    _float fForwardDirDot = vPlayerLook.Dot(m_vMoveDir);
 
     if (m_vMoveDir.Length() > 0.f)
     {
-        if (fForwardDot > 0.7f)
+        // 캐릭터의 전방 벡터와 이동 방향의 Dot값을 기반으로 전후 이동 처리
+        if (fForwardDirDot > 0.7f) // 전진
         {
-            m_pPlayer->Change_Animation(m_iAnimation_Walk[WALK_F], true, 0.2f, 0, false);
+            m_pPlayer->Change_Animation(m_iAnimation_Walk[WALK_F], true, 0.2f);
         }
-        else if (fBackwardDot > 0.7f)
+        else if (fForwardDirDot < -0.7f) // 후진
         {
-            m_pPlayer->Change_Animation(m_iAnimation_Walk[WALK_B], true, 0.2f, 0, false);
+            m_pPlayer->Change_Animation(m_iAnimation_Walk[WALK_B], true, 0.2f);
         }
         else
         {
+            // 카메라와 플레이어의 전방 벡터 Dot값을 기반으로 좌우 이동 처리
+            _float fForwardCameraDot = vPlayerLook.Dot(vCameraLook);
+            bool isCameraAlignedForward = (fForwardCameraDot > 0.f);
+
             if (isLeft)
-                m_pPlayer->Change_Animation(m_iAnimation_Walk[WALK_L], true, 0.2f, 0, false);
+            {
+                m_pPlayer->Change_Animation(
+                    m_iAnimation_Walk[isCameraAlignedForward ? WALK_L : WALK_R], true, 0.2f
+                );
+            }
             else if (isRight)
-                m_pPlayer->Change_Animation(m_iAnimation_Walk[WALK_R], true, 0.2f, 0, false);
+            {
+                m_pPlayer->Change_Animation(
+                    m_iAnimation_Walk[isCameraAlignedForward ? WALK_R : WALK_L], true, 0.2f
+                );
+            }
+            else
+            {
+                // 카메라와 플레이어의 우측 벡터 Dot값을 기반으로 전후 좌우 혼합 이동 처리
+                _float fRightCameraDot = vPlayerRight.Dot(vCameraLook);
+                bool isCameraAlignedRight = (fRightCameraDot > 0.f);
+
+                if (isForward)
+                {
+                    m_pPlayer->Change_Animation(
+                        m_iAnimation_Walk[isCameraAlignedRight ? WALK_R : WALK_L], true, 0.2f
+                    );
+                }
+                else if (isBackward)
+                {
+                    m_pPlayer->Change_Animation(
+                        m_iAnimation_Walk[isCameraAlignedRight ? WALK_L : WALK_R], true, 0.2f
+                    );
+                }
+            }
         }
 
         if (m_vMoveDir.Length() > 0.f)
@@ -188,9 +217,9 @@ _bool CState_Player_Grinder::Move(_float fTimeDelta)
             // 가드 상태에서는 회전 안 함
             m_pPlayer->Move_Dir(m_vMoveDir, fTimeDelta, false);
         }
+
         isMoving = true;
     }
-
 
     return isMoving;
 }

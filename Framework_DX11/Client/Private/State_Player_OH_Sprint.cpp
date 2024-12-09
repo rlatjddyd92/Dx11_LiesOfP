@@ -33,8 +33,6 @@ HRESULT CState_Player_OH_Sprint::Start_State(void* pArg)
     m_isSprintEnd = false;
     m_fSprintEndTime = 0.f;
 
-    m_isPlaySound = false;
-
     return S_OK;
 }
 
@@ -161,19 +159,20 @@ void CState_Player_OH_Sprint::Control_Sound()
 {
     _int iFrame = m_pPlayer->Get_Frame();
 
-    if (iFrame == m_iFootStepFrame[0] && !m_isPlaySound)
+    if ((iFrame == m_iFootStepFrame[0] || iFrame == m_iFootStepFrame[0] + 1) && !m_isPlaySound[0])
     {
         m_pPlayer->Play_Sound(CPlayer::PAWN_SOUND_EFFECT1, TEXT("SE_PC_FS_Stone_Run_01.wav"));
-        m_isPlaySound = true;
+        m_isPlaySound[0] = true;
     }
-    else if (iFrame == m_iFootStepFrame[1] && !m_isPlaySound)
+    else if ((iFrame == m_iFootStepFrame[1] || iFrame == m_iFootStepFrame[1] + 1) && !m_isPlaySound[1])
     {
         m_pPlayer->Play_Sound(CPlayer::PAWN_SOUND_EFFECT1, TEXT("SE_PC_FS_Stone_Run_02.wav"));
-        m_isPlaySound = true;
+        m_isPlaySound[1] = true;
     }
-    else
+    else if (iFrame < 5)
     {
-        m_isPlaySound = false;
+        m_isPlaySound[0] = false;
+        m_isPlaySound[1] = false;
     }
 }
 

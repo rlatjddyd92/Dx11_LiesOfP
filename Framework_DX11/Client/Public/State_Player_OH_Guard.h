@@ -34,9 +34,15 @@ private:
 
     _float              m_fMoveSpeed = {};
 
-    _bool               m_bTempTest = {false};
+    WALK                m_eWalkState = { WALK_END };
+
 private:
     _bool               Move(_float fTimeDelta);
+
+private:
+    _int                m_iFootStepFrame[WALK_END][2] = {};
+    _bool               m_isPlaySound[2] = { false, };
+    void                Control_Sound();
 
 public:
     static CState_Player_OH_Guard* Create(class CFsm* pFsm, class CPlayer* pPlayer, _uint iStateNum, void* pArg = nullptr);

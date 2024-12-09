@@ -42,7 +42,7 @@ private:
 
 private:
     _int                m_iFootStepFrame[2] = {};
-    _bool               m_isPlaySound = { false };
+    _bool               m_isPlaySound[2] = {false, };
     void                Control_Sound();
 
 public:
