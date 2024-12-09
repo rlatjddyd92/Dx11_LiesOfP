@@ -75,6 +75,9 @@ void CCutScene::Update(_float fTimeDelta)
 		{
 			CPlayer* pPlayer = dynamic_cast<CPlayer*>(m_pGameInstance->Find_Player(LEVEL_GAMEPLAY));
 			pPlayer->Appear_Weapon();
+			pPlayer->Get_Model()->ReadyDenyNextTranslate(4);
+			pPlayer->Change_State(CPlayer::OH_IDLE);
+			pPlayer->Get_Navigation()->Move_to_Cell(pPlayer->Get_RigidBody(), 1178);
 		}
 	}
 }
