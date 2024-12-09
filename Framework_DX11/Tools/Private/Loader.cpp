@@ -1159,6 +1159,8 @@ HRESULT CLoader::Ready_Resources_For_ToolLevel_Monster()
 	//	m_pGameInstance->Add_ModelPrototype(LEVEL_TOOL, ("Prototype_NoneAnimModel_Raxasia_Sword02"), pModel);
 	//}
 	// 
+	
+	//ÄÆ¾À
 	//pModel = CModel::Create(m_pDevice, m_pContext, CModel::TYPE_ANIM, "../Bin/ModelData/Anim/Monster/Boss/Raxasia/Raxasia_CutScene_P1.dat", PreTransformMatrix, false, CController_AnimationTool::Get_Instance()->Get_StructStack(m_iModelCount++));
 	//if (pModel != nullptr)
 	//{

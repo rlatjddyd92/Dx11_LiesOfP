@@ -227,6 +227,18 @@ void CController_AnimationTool::ListUp_Anim()
 		m_pGameInstance->Find_Object(LEVEL_TOOL, TEXT("Layer_AnimationTool_Test"), 0)->Get_Transform()->Set_State(CTransform::STATE_POSITION, _vector{ m_fPosXModel, m_fPosYModel, m_fPosZModel });
 	}
 
+	ImGui::Text("\t X \t\t Y \t\t Z");
+	ImGui::PushItemWidth(80); // 크기조정
+	ImGui::DragFloat("##TurnXModel", &m_fTurnXModel);	ImGui::SameLine();
+	ImGui::DragFloat("##TurnYModel", &m_fTurnYModel);	ImGui::SameLine();
+	ImGui::DragFloat("##TurnZModel", &m_fTurnZModel);
+	ImGui::PopItemWidth();
+
+	if (ImGui::Button("SetModelTurn"))
+	{
+		m_pGameInstance->Find_Object(LEVEL_TOOL, TEXT("Layer_AnimationTool_Test"), 0)->Get_Transform()->Rotation(m_fTurnXModel, m_fTurnYModel, m_fTurnZModel);
+	}
+
 	ImGui::Text("\n");
 
 	if (ImGui::Button("SaveBinFile_AllModels"))
