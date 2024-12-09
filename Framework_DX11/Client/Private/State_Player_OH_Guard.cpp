@@ -24,13 +24,13 @@ HRESULT CState_Player_OH_Guard::Initialize(_uint iStateNum, void* pArg)
     m_iStateNum = iStateNum;
 
     m_iFootStepFrame[WALK_B][0] = 28;
-    m_iFootStepFrame[WALK_B][1] = 64;
-    m_iFootStepFrame[WALK_F][0] = 4;
-    m_iFootStepFrame[WALK_F][1] = 37;
-    m_iFootStepFrame[WALK_L][0] = 9;
-    m_iFootStepFrame[WALK_L][1] = 48;
-    m_iFootStepFrame[WALK_R][0] = 12;
-    m_iFootStepFrame[WALK_R][1] = 51;
+    m_iFootStepFrame[WALK_B][1] = 62;
+    m_iFootStepFrame[WALK_F][0] = 30;
+    m_iFootStepFrame[WALK_F][1] = 66;
+    m_iFootStepFrame[WALK_L][0] = 30;
+    m_iFootStepFrame[WALK_L][1] = 66;
+    m_iFootStepFrame[WALK_R][0] = 34;
+    m_iFootStepFrame[WALK_R][1] = 65;
 
     return S_OK;
 }
@@ -76,7 +76,7 @@ void CState_Player_OH_Guard::Update(_float fTimeDelta)
         }
         if (!Move(fTimeDelta))
         {
-            m_pPlayer->Change_Animation(m_iAnimation_Guard, true, 0.05f);
+            m_pPlayer->Change_Animation(m_iAnimation_Guard, true, 0.15f);
         }
         m_pPlayer->Change_Animation_Boundry(m_iAnimation_Guard, true, 0.05f);
     }
@@ -85,6 +85,8 @@ void CState_Player_OH_Guard::Update(_float fTimeDelta)
     {
         m_pPlayer->Change_State(CPlayer::OH_IDLE);
     }
+
+    Control_Sound();
 }
     
 
@@ -216,6 +218,22 @@ void CState_Player_OH_Guard::Control_Sound()
     else if (m_pPlayer->Get_CurrentAnimIndex() == m_iAnimation_Walk[WALK_R])
     {
         eWalk = WALK_R;
+    }
+
+    if ((iFrame == m_iFootStepFrame[eWalk][0] || iFrame == m_iFootStepFrame[eWalk][0] + 1) && !m_isPlaySound[0])
+    {
+        m_pPlayer->Play_Sound(CPlayer::PAWN_SOUND_EFFECT1, TEXT("SE_PC_FS_Stone_Walk_01.wav"));
+        m_isPlaySound[0] = true;
+    }
+    else if ((iFrame == m_iFootStepFrame[eWalk][1] || iFrame == m_iFootStepFrame[eWalk][1] + 1) && !m_isPlaySound[1])
+    {
+        m_pPlayer->Play_Sound(CPlayer::PAWN_SOUND_EFFECT1, TEXT("SE_PC_FS_Stone_Walk_02.wav"));
+        m_isPlaySound[1] = true;
+    }
+    else if (iFrame < 4)
+    {
+        m_isPlaySound[0] = false;
+        m_isPlaySound[1] = false;
     }
 }
 

@@ -24,6 +24,9 @@ HRESULT CState_Player_TH_Run::Initialize(_uint iStateNum, void* pArg)
 
     m_iStateNum = iStateNum;
 
+    m_iFootStepFrame[0] = 13;
+    m_iFootStepFrame[1] = 39;
+
     return S_OK;
 }
 
@@ -80,6 +83,7 @@ void CState_Player_TH_Run::Update(_float fTimeDelta)
     if (KEY_TAP(KEY::SPACE))
         m_isInputSpace = true;
 
+    Control_Sound();
 }
 
 void CState_Player_TH_Run::End_State()
@@ -144,6 +148,27 @@ _bool CState_Player_TH_Run::Move(_float fTimeDelta)
     }
 
     return isMoving;
+}
+
+void CState_Player_TH_Run::Control_Sound()
+{
+    _int iFrame = m_pPlayer->Get_Frame();
+
+    if ((iFrame == m_iFootStepFrame[0] || iFrame == m_iFootStepFrame[0] + 1) && !m_isPlaySound[0])
+    {
+        m_pPlayer->Play_Sound(CPlayer::PAWN_SOUND_EFFECT1, TEXT("SE_PC_FS_Stone_Run_01.wav"));
+        m_isPlaySound[0] = true;
+    }
+    else if ((iFrame == m_iFootStepFrame[1] || iFrame == m_iFootStepFrame[1] + 1) && !m_isPlaySound[1])
+    {
+        m_pPlayer->Play_Sound(CPlayer::PAWN_SOUND_EFFECT1, TEXT("SE_PC_FS_Stone_Run_02.wav"));
+        m_isPlaySound[1] = true;
+    }
+    else if (iFrame < 5)
+    {
+        m_isPlaySound[0] = false;
+        m_isPlaySound[1] = false;
+    }
 }
 
 CState_Player_TH_Run* CState_Player_TH_Run::Create(CFsm* pFsm, CPlayer* pPlayer, _uint iStateNum, void* pArg)

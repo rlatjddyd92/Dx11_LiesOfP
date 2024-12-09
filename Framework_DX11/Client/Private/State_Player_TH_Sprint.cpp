@@ -18,6 +18,9 @@ HRESULT CState_Player_TH_Sprint::Initialize(_uint iStateNum, void* pArg)
 
     m_iStateNum = iStateNum;
 
+    m_iFootStepFrame[0] = 12;
+    m_iFootStepFrame[1] = 27;
+
     return S_OK;
 }
 
@@ -61,6 +64,7 @@ void CState_Player_TH_Sprint::Update(_float fTimeDelta)
         m_isSprintEnd = true;
     }
 
+    Control_Sound();
 }
 
 void CState_Player_TH_Sprint::End_State()
@@ -110,40 +114,33 @@ _bool CState_Player_TH_Sprint::Move(_float fTimeDelta)
     _Vec4 vLocalMoveDir = { m_vMoveDir.Dot(vCameraRight), 0.f, m_vMoveDir.Dot(vCameraLook), 0.f };
     vLocalMoveDir.Normalize();
 
-    //// 방향을 기반으로 애니메이션 선정
-    //if (vLocalMoveDir.z > 0.5f)
-    //{
-    //    if (vLocalMoveDir.x > 0.5f)
-    //        m_pPlayer->Change_Animation(m_iAnimation_RUN[RUN_FR], true, false);
-    //    else if (vLocalMoveDir.x < 0)
-    //        m_pPlayer->Change_Animation(m_iAnimation_RUN[RUN_FL], true, false);
-    //    else
-    //        m_pPlayer->Change_Animation(m_iAnimation_RUN[RUN_F], true, false);
-    //}
-    //else if (vLocalMoveDir.z < 0.5f)
-    //{
-    //    if (vLocalMoveDir.x > 0.5f)
-    //        m_pPlayer->Change_Animation(m_iAnimation_RUN[RUN_BR], true, false);
-    //    else if (vLocalMoveDir.x < 0)
-    //        m_pPlayer->Change_Animation(m_iAnimation_RUN[RUN_BL], true, false);
-    //    else
-    //        m_pPlayer->Change_Animation(m_iAnimation_RUN[RUN_B], true, false);
-    //}
-    //else
-    //{
-    //    if (vLocalMoveDir.x > 0.5f)
-    //        m_pPlayer->Change_Animation(m_iAnimation_RUN[RUN_R], true, false);
-    //    else if (vLocalMoveDir.x < 0.5f)
-    //        m_pPlayer->Change_Animation(m_iAnimation_RUN[RUN_L], true, false);
-    //}
-
-
     if (m_vMoveDir.Length() > 0.f)
     {
         m_pPlayer->Move_Dir(m_vMoveDir, fTimeDelta);
     }
 
     return isMoving;
+}
+
+void CState_Player_TH_Sprint::Control_Sound()
+{
+    _int iFrame = m_pPlayer->Get_Frame();
+
+    if ((iFrame == m_iFootStepFrame[0] || iFrame == m_iFootStepFrame[0] + 1) && !m_isPlaySound[0])
+    {
+        m_pPlayer->Play_Sound(CPlayer::PAWN_SOUND_EFFECT1, TEXT("SE_PC_FS_Stone_Run_01.wav"));
+        m_isPlaySound[0] = true;
+    }
+    else if ((iFrame == m_iFootStepFrame[1] || iFrame == m_iFootStepFrame[1] + 1) && !m_isPlaySound[1])
+    {
+        m_pPlayer->Play_Sound(CPlayer::PAWN_SOUND_EFFECT1, TEXT("SE_PC_FS_Stone_Run_02.wav"));
+        m_isPlaySound[1] = true;
+    }
+    else if (iFrame < 5)
+    {
+        m_isPlaySound[0] = false;
+        m_isPlaySound[1] = false;
+    }
 }
 
 CState_Player_TH_Sprint* CState_Player_TH_Sprint::Create(CFsm* pFsm, CPlayer* pPlayer, _uint iStateNum, void* pArg)
