@@ -18,7 +18,7 @@ HRESULT CState_Player_SophiaHandEnd::Initialize(_uint iStateNum, void* pArg)
 
     m_pTrackPos = pDesc->pPrevTrackPos;
 
-    m_iAnimation_SophiaHandEnd = m_pPlayer->Get_Model()->Find_AnimationIndex("AS_Pino_Idle_SophiaDead_Cine", 2.f);
+    m_iAnimation_SophiaHandEnd = m_pPlayer->Get_Model()->Find_AnimationIndex("AS_Pino_Idle_SophiaDead_Cine", 1.f);
 
     m_iStateNum = iStateNum;
 
@@ -27,7 +27,7 @@ HRESULT CState_Player_SophiaHandEnd::Initialize(_uint iStateNum, void* pArg)
 
 HRESULT CState_Player_SophiaHandEnd::Start_State(void* pArg)
 {
-    m_pPlayer->Change_Animation(m_iAnimation_SophiaHandEnd, false, 0.1f);
+    m_pPlayer->Change_Animation(m_iAnimation_SophiaHandEnd, false, 0.5f);
 
     return S_OK;
 }
