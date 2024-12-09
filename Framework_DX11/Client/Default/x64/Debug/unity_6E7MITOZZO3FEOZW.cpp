@@ -63,6 +63,12 @@
 #include "C:\Users\olivi\GitHub\Dx11_LiesOfP\Framework_DX11\Client\Private\LastDoor.cpp"
 
 
+#include "C:\Users\olivi\GitHub\Dx11_LiesOfP\Framework_DX11\Client\Private\Raxasia.cpp"
+
+
+#include "C:\Users\olivi\GitHub\Dx11_LiesOfP\Framework_DX11\Client\Private\Weapon_Raxasia_P1_Sword.cpp"
+
+
 #include "C:\Users\olivi\GitHub\Dx11_LiesOfP\Framework_DX11\Client\Private\Sophia.cpp"
 
 

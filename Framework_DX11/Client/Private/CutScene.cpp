@@ -212,6 +212,7 @@ void CCutScene::Active_Sound(CUTSCENE_KEYFRAME_DESC* pCutSceneDesc)
 
 void CCutScene::First_Setting()
 {
+	m_bFirstStart = false;
 	CPlayer* pPlayer = dynamic_cast<CPlayer*>(m_pGameInstance->Find_Player(LEVEL_GAMEPLAY));
 
 	switch (m_iIndex)

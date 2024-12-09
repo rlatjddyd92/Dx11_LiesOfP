@@ -18,7 +18,7 @@ HRESULT CState_Player_SophiaWalk::Initialize(_uint iStateNum, void* pArg)
 
     m_pTrackPos = pDesc->pPrevTrackPos;
 
-    m_iAnimation_SophiaWalk = m_pPlayer->Get_Model()->Find_AnimationIndex("AS_Pino_Walking_SophiaDead_Cine",1.f);
+    m_iAnimation_SophiaWalk = m_pPlayer->Get_Model()->Find_AnimationIndex("AS_Pino_Walking_SophiaDead_Cine", 1.f);
 
     m_iStateNum = iStateNum;
 
