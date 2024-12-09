@@ -34,6 +34,7 @@ CModel::CModel(const CModel & Prototype)
 	, m_isEnd_Animations{ nullptr }
 	, m_isEnd_Animations_Boundary{ nullptr }
 	, m_eType{ Prototype.m_eType }
+	, m_RemoteTuningIndices{ Prototype.m_RemoteTuningIndices }
 {
 	for (auto& pAnimation : m_Animations)
 		Safe_AddRef(pAnimation);
