@@ -71,6 +71,12 @@ void CAnimModel::Update(_float fTimeDelta)
 	if (KEY_HOLD(KEY::I))
 		m_pTransformCom->Go_Straight(fTimeDelta);//m_pTransformCom->Set_State(CTransform::STATE_POSITION, XMVectorSetX(vPos, XMVectorGetX(vPos) + 0.1f));
 	
+	if (KEY_TAP(KEY::E))
+	{
+		m_bRemoteTuning = !m_bRemoteTuning;
+		m_pModelCom->Set_RemoteTuning(m_bRemoteTuning);
+	}
+
 	_bool	bEndCheck{false};
 	_vector vRootMove = m_pModelCom->Play_Animation(fTimeDelta);
 	

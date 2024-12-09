@@ -38,6 +38,7 @@ public:
 
 	_bool				Get_isNeedTuning() { return m_isNeedTuning; }
 	void				SetUp_isNeedTuning(_bool bState);
+	void				SetUp_TuningState(_bool bState);
 
 	void				Apply_Tuning() { m_TransformationMatrix = m_TuningMatrix; }
 

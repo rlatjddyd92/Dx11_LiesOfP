@@ -141,7 +141,7 @@ void CModel::Set_RemoteTuning(_bool bState)
 {
 	for (_int i = 0; i < m_RemoteTuningIndices.size(); i++)
 	{
-		m_Bones[m_RemoteTuningIndices[i]]->SetUp_isNeedTuning(bState);
+		m_Bones[m_RemoteTuningIndices[i]]->SetUp_TuningState(bState);
 	}
 }
 
@@ -882,6 +882,17 @@ HRESULT CModel::Create_BinaryFile(const _char* ModelTag)
 	//상하체 분리 여부
 	WriteFile(hFile, &m_isUseBoundary, sizeof(_bool), &dwByte, nullptr);
 
+	//리모트 튜닝 벡터 저장
+	//_int VecSize = m_RemoteTuningIndices.size();
+	//
+	//WriteFile(hFile, &VecSize, sizeof(_int), &dwByte, nullptr);
+	//
+	//for (_int i = 0; i < VecSize; ++i)
+	//{
+	//	WriteFile(hFile, &m_RemoteTuningIndices[i], sizeof(_uint), &dwByte, nullptr);
+	//}
+
+
 	//사용하려고 저장한 뼈
 	for (_int i = 0; i < UFB_END; ++i)
 	{
@@ -1000,6 +1011,18 @@ HRESULT CModel::ReadyModel_To_Binary(HANDLE* pFile)
 	_ulong dwByte = 0;
 
 	ReadFile(*pFile, &m_isUseBoundary, sizeof(_bool), &dwByte, nullptr);
+
+	//리모트 튜닝 벡터 저장
+	//_int VecSize;
+	// 
+	// ReadFile(*pFile, &VecSize, sizeof(_int), &dwByte, nullptr);
+	//
+	//m_RemoteTuningIndices.resize(VecSize);
+	//for (_int i = 0; i < VecSize; ++i)
+	//{
+	//	ReadFile(*pFile, &m_RemoteTuningIndices[i], sizeof(_uint), &dwByte, nullptr);
+	//}
+
 
 	m_UFBIndices.resize(UFB_END);
 

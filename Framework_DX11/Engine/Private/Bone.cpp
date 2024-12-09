@@ -131,6 +131,11 @@ void CBone::SetUp_isNeedTuning(_bool bState)
 	m_isNeedTuning = bState;
 }
 
+void CBone::SetUp_TuningState(_bool bState)
+{
+	m_isNeedTuning = bState;
+}
+
 CBone* CBone::Create(HANDLE* pFile, _int iParentBoneIndex)
 {
 	CBone* pInstance = new CBone();
