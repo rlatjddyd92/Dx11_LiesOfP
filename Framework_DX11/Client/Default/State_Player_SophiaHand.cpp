@@ -30,7 +30,7 @@ HRESULT CState_Player_SophiaHand::Start_State(void* pArg)
     m_pPlayer->Get_Model()->ReadyDenyNextTranslate(4);
     m_pPlayer->Change_Animation(m_iAnimation_SophiaHand, false, 0.f);
 
-    m_pPlayer->Get_RigidBody()->Set_GloblePose(_Vec3(15.955,-88.788,12.195));
+    m_pPlayer->Get_RigidBody()->Set_GloblePose(_Vec3(15.955f, -88.788f, 12.195f));
 
     return S_OK;
 }
