@@ -349,7 +349,7 @@ HRESULT CRaxasia::Ready_Weapon()
 {
 	CWeapon::WEAPON_DESC		WeaponDesc{};
 	WeaponDesc.pParentWorldMatrix = m_pTransformCom->Get_WorldMatrix_Ptr();
-	WeaponDesc.pSocketBoneMatrix = m_pModelCom->Get_BoneCombindTransformationMatrix_Ptr(93);	//Weapon_R
+	WeaponDesc.pSocketBoneMatrix = m_pModelCom->Get_BoneCombindTransformationMatrix_Ptr(62);	//Weapon_R
 
 	WeaponDesc.pParentAtk = &m_eStat.fAtk;
 

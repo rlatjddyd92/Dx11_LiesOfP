@@ -578,8 +578,18 @@ void CController_AnimationTool::SetUp_Controller_Bone()
 	{
 		m_pCopyModelCom->SetUp_isNeedTuning(m_iSelected_Index_Bone, true);
 	}
+	//키 설정
+	if (KEY_TAP(KEY::T))
+	{
+		m_pCopyModelCom->SetUp_isNeedTuning(m_iSelected_Index_Bone, true);
+	}
 	ImGui::SameLine();
 	if (ImGui::Button("DiscardTuning"))
+	{
+		m_pCopyModelCom->SetUp_isNeedTuning(m_iSelected_Index_Bone, false);
+	}
+	//키 설정
+	if (KEY_TAP(KEY::Y))
 	{
 		m_pCopyModelCom->SetUp_isNeedTuning(m_iSelected_Index_Bone, false);
 	}
@@ -602,8 +612,29 @@ void CController_AnimationTool::SetUp_Controller_Bone()
 			m_pCopyModelCom->SetUp_isNeedTuning(m_iSelected_Index_Bone, true);
 		}
 	}
+	//키 설정
+	if (KEY_TAP(KEY::G))
+	{
+		if (pTuningIndices != nullptr)
+		{
+			pTuningIndices->push_back(m_iSelected_Index_Bone);
+			m_pCopyModelCom->SetUp_isNeedTuning(m_iSelected_Index_Bone, true);
+		}
+	}
 	ImGui::SameLine();
 	if (ImGui::Button("PopBackRemoteTuning"))
+	{
+		if (pTuningIndices != nullptr)
+		{
+			if (pTuningIndices->size() > 0)
+			{
+				m_pCopyModelCom->SetUp_isNeedTuning(((*pTuningIndices)[pTuningIndices->size() - 1]), false);
+				pTuningIndices->pop_back();
+			}
+		}
+	}
+	//키 설정
+	if (KEY_TAP(KEY::H))
 	{
 		if (pTuningIndices != nullptr)
 		{

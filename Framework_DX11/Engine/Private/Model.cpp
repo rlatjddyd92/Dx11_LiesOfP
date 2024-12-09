@@ -883,14 +883,14 @@ HRESULT CModel::Create_BinaryFile(const _char* ModelTag)
 	WriteFile(hFile, &m_isUseBoundary, sizeof(_bool), &dwByte, nullptr);
 
 	//¸®¸ðÆ® Æ©´× º¤ÅÍ ÀúÀå
-	//_int VecSize = m_RemoteTuningIndices.size();
-	//
-	//WriteFile(hFile, &VecSize, sizeof(_int), &dwByte, nullptr);
-	//
-	//for (_int i = 0; i < VecSize; ++i)
-	//{
-	//	WriteFile(hFile, &m_RemoteTuningIndices[i], sizeof(_uint), &dwByte, nullptr);
-	//}
+	_int VecSize = m_RemoteTuningIndices.size();
+	
+	WriteFile(hFile, &VecSize, sizeof(_int), &dwByte, nullptr);
+	
+	for (_int i = 0; i < VecSize; ++i)
+	{
+		WriteFile(hFile, &m_RemoteTuningIndices[i], sizeof(_uint), &dwByte, nullptr);
+	}
 
 
 	//»ç¿ëÇÏ·Á°í ÀúÀåÇÑ »À
@@ -1012,16 +1012,16 @@ HRESULT CModel::ReadyModel_To_Binary(HANDLE* pFile)
 
 	ReadFile(*pFile, &m_isUseBoundary, sizeof(_bool), &dwByte, nullptr);
 
-	//¸®¸ðÆ® Æ©´× º¤ÅÍ ÀúÀå
-	//_int VecSize;
-	// 
-	// ReadFile(*pFile, &VecSize, sizeof(_int), &dwByte, nullptr);
-	//
-	//m_RemoteTuningIndices.resize(VecSize);
-	//for (_int i = 0; i < VecSize; ++i)
-	//{
-	//	ReadFile(*pFile, &m_RemoteTuningIndices[i], sizeof(_uint), &dwByte, nullptr);
-	//}
+	//¸®¸ðÆ® Æ©´× º¤ÅÍ
+	_int VecSize;
+	 
+	 ReadFile(*pFile, &VecSize, sizeof(_int), &dwByte, nullptr);
+	
+	m_RemoteTuningIndices.resize(VecSize);
+	for (_int i = 0; i < VecSize; ++i)
+	{
+		ReadFile(*pFile, &m_RemoteTuningIndices[i], sizeof(_uint), &dwByte, nullptr);
+	}
 
 
 	m_UFBIndices.resize(UFB_END);
