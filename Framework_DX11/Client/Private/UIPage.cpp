@@ -84,9 +84,9 @@ void CUIPage::Late_Update(_float fTimeDelta)
 			iter->MovePart(m_vecPart[iter->iParentPart_Index]->fPosition, fTimeDelta);
 		}
 
-		if ((m_fTopPartMove > 0.f) && (m_bRender))
-			if (iter->bRender)
-				Input_Render_Info(*iter);
+			if (m_bRender)
+				if (iter->bRender)
+					Input_Render_Info(*iter);
 	}
 
 	if ((m_fTopPartMove == 0.f) || (m_fTopPartMove == -1.f))
@@ -186,12 +186,12 @@ void CUIPage::Input_Render_Info(UPART& Part, SCROLL_AREA eArea)
 	pNew->strText = Part.strText;
 	pNew->vColor_Text = Part.fTextColor;
 
-	if (m_fTopPartMove > 0.f)
+	if (m_fTopPartMove >= 0.f)
 		pNew->vColor_Text.w *= m_fTopPartMove;
 
 	pNew->vColor_Texture = Part.fTextureColor;
 
-	if (m_fTopPartMove > 0.f)
+	if (m_fTopPartMove >= 0.f)
 		pNew->vColor_Texture.w *= m_fTopPartMove;
 
 	if (Part.m_bEmpty_Stack_Item)
