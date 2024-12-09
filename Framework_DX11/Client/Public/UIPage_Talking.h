@@ -139,8 +139,8 @@ public:
 	_bool IsLeft_LastSelect_Result() { return m_bLastSelect_Result_IsLeft; }
 
 protected:
-	void Update_Script();
-	void Update_Select();
+	void Update_Script(_float fTimeDelta);
+	void Update_Select(_float fTimeDelta);
 
 protected:
 	NPC_SCRIPT m_eNowNpc = NPC_SCRIPT::SCR_END;
@@ -148,7 +148,7 @@ protected:
 	vector<NPC*> m_vecNpc_ScriptInfo;
 
 
-
+	_Vec2 m_vSelectTime = { -1.f,5.f };
 
 
 

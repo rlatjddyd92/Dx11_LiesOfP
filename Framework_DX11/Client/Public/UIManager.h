@@ -219,21 +219,14 @@ public:
 	// NPC 스크립트 
 	void Show_Script_Npc_Talking(NPC_SCRIPT eNPC, _int iScriptNum = -1)
 	{
-		if (m_eNowPage != UIPAGE::PAGE_TALKING)
-		{
-			ClosePage(m_eNowPage);
-			m_bIsPlayPageMaintain = false;
-			m_eBeforePage = m_eNowPage;
-		}
 		m_pUIPage_Talking->Show_Script(eNPC, iScriptNum);
+		UIPart_Off();
 	}
 	void Next_Script() { m_pUIPage_Talking->Next_Script(); }
 	void OFF_Script()
 	{
-		if (m_eBeforePage != UIPAGE::PAGE_TALKING)
-			OpenPage(m_eBeforePage);
-		m_bIsPlayPageMaintain = true;
 		m_pUIPage_Talking->OFF_Script();
+		UIPart_On();
 	}
 
 	void Show_Select_Script(_wstring strLeft, _wstring strRight, _float fTime) { m_pUIPage_Talking->Show_Select_Script(strLeft, strRight, fTime); }
@@ -289,9 +282,19 @@ public:
 	}
 	void UIPart_Off()
 	{
-		for (auto& iter : m_vecPage)
-			if ((iter->GetPageAction(PAGEACTION::ACTION_ACTIVE)) || (iter->GetPageAction(PAGEACTION::ACTION_OPENING)))
-				iter->CloseAction();
+		for (_int i = 0; i < _int(UIPAGE::PAGE_END); ++i)
+		{
+			if (i == _int(UIPAGE::PAGE_ORTHO))
+				continue;
+
+			if (i == _int(UIPAGE::PAGE_TALKING))
+				continue;
+
+			if (i == _int(UIPAGE::PAGE_EFFECT))
+				continue;
+
+			m_vecPage[i]->CloseAction();
+		}
 
 		m_bIsPlayPageMaintain = false;
 	}
