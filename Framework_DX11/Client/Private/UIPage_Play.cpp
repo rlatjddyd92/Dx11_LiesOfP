@@ -265,6 +265,8 @@ void CUIPage_Play::Action_Potion_Tool(_float fTimeDelta)
 	if (!GET_GAMEINTERFACE->Get_LastFrame_UsingItem_Info().empty())
 	if (GET_GAMEINTERFACE->Get_LastFrame_UsingItem_Info().back() == SPECIAL_ITEM::SP_GRINDER)
 		GET_GAMEINTERFACE->Add_Durable_Weapon(fTimeDelta * 10.f);
+
+	GET_GAMEINTERFACE->Set_Select(!_bool(m_vec_Group_Ctrl[_int(PART_GROUP::GROUP_SELECT_CELL)]->fRatio));
 }
 
 void CUIPage_Play::Action_Arm(_float fTimeDelta)

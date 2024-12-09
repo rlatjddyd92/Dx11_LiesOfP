@@ -198,8 +198,13 @@ HRESULT CUIRender_Batching::Render()
 			if (FAILED(m_vecShader_UI[_int(eShader)]->Bind_RawValue("g_Alpha_Strash", &pNow->fAlpha_Strash, sizeof(_float))))
 				return E_FAIL;
 
-
 			if (FAILED(m_vecShader_UI[_int(eShader)]->Bind_RawValue("g_Color", &pNow->vColor_Texture, sizeof(_Vec4))))
+				return E_FAIL;
+
+			if (FAILED(m_vecShader_UI[_int(eShader)]->Bind_RawValue("g_Render_Area", &pNow->vRange, sizeof(_Vec4))))
+				return E_FAIL;
+
+			if (FAILED(m_vecShader_UI[_int(eShader)]->Bind_RawValue("g_Render_Angle", &pNow->vAngle, sizeof(_Vec2))))
 				return E_FAIL;
 
 			if (FAILED(m_vecShader_UI[_int(eShader)]->Begin(_int(ePass))))

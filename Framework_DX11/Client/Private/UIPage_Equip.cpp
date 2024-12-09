@@ -230,8 +230,7 @@ void CUIPage_Equip::Action_Focus(_float fTimeDelta)
 
 		if (eStart_Slot == EQUIP_SLOT::EQUIP_WEAPON_BLADE_0)
 			eStart_Slot = EQUIP_SLOT(_int(eStart_Slot) + 1);
-
-		if (eStart_Slot == EQUIP_SLOT::EQUIP_WEAPON_HANDLE_0)
+		else if (eStart_Slot == EQUIP_SLOT::EQUIP_WEAPON_HANDLE_0)
 			eStart_Slot = EQUIP_SLOT(_int(eStart_Slot) + 1);
 	}
 
