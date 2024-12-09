@@ -509,7 +509,7 @@ HRESULT CRenderer::Render_Deferred()
 	if(m_isOnPBR)
 		m_pShader->Begin(3);
 	else
-		m_pShader->Begin(7);
+		m_pShader->Begin(8);
 
 	m_pVIBuffer->Bind_Buffers();
 
