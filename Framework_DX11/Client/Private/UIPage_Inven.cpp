@@ -376,6 +376,7 @@ void CUIPage_Inven::Update_Array_Position(_float fTimeDelta)
 			{
 				m_vecPart[*iter]->fTextureColor.y = 0.3f;
 				m_vecPart[*iter]->fTextureColor.z = 0.3f;
+				m_vecPart[*iter]->bRender = true;
 			}
 			else 
 			{

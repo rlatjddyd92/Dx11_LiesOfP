@@ -296,6 +296,10 @@ void CPlayer::Update(_float fTimeDelta)
 
 	if (KEY_TAP(KEY::Q))
 	{
+		// 테스트 코드 - UI 제거
+
+		GET_GAMEINTERFACE->All_UIPart_Off();
+
 		dynamic_cast<CCutScene*>(m_pGameInstance->Find_Object(LEVEL_GAMEPLAY, TEXT("Layer_CutScene"), SOPHIA_DEAD))->Start_Play();
 	}
 }

@@ -49,27 +49,33 @@ HRESULT CUIPage_Stat::Initialize(void* pArg)
 
 void CUIPage_Stat::Priority_Update(_float fTimeDelta)
 {
-	// 안전 코드 
-	return;
+
 
 	__super::Priority_Update(fTimeDelta);
 }
 
 void CUIPage_Stat::Update(_float fTimeDelta)
 {
-	// 안전 코드 
-	return;
+
 	__super::Update(fTimeDelta);
 }
 
 void CUIPage_Stat::Late_Update(_float fTimeDelta)
 {
-	// 안전 코드 
-	return;
-	__super::Late_Update(fTimeDelta);
+	Update_Point(fTimeDelta);
+	Update_LevelUp(fTimeDelta);
+	Update_Focus(fTimeDelta);
+	Update_SpecData(fTimeDelta);
+	Update_StarChart(fTimeDelta);
+
 
 	for (auto& iter : m_vec_Group_Ctrl)
 		__super::UpdatePart_ByControl(iter);
+
+	__super::Late_Update(fTimeDelta);
+
+	
+	
 }
 
 HRESULT CUIPage_Stat::Render()
@@ -92,6 +98,10 @@ CHECK_MOUSE CUIPage_Stat::Check_Page_Action(_float fTimeDelta)
 {
 	__super::Check_Page_Action(fTimeDelta);
 
+	Action_Point(fTimeDelta);
+	Action_LevelUp(fTimeDelta);
+	Action_Focus(fTimeDelta);
+
 	return CHECK_MOUSE::MOUSE_NONE;
 }
 
@@ -109,7 +119,7 @@ HRESULT CUIPage_Stat::Ready_UIPart_Group_Control()
 		if (m_vecPart[i]->iGroupIndex != -1)
 			m_vec_Group_Ctrl[m_vecPart[i]->iGroupIndex]->PartIndexlist.push_back(i);
 	}
-
+	Get_Front_Part_In_Control(_int(PART_GROUP::GROUP_SELECT_FIRE))->iMoveType = 1;
 	m_bRender = false;
 
 	return S_OK;
@@ -127,8 +137,8 @@ void CUIPage_Stat::Action_Point(_float fTimeDelta)
 
 	for (_int i = 0; i < 5; ++i)
 	{
-		_Vec2 vMouseFront = GET_GAMEINTERFACE->CheckMouse(m_vecPart[m_vec_Group_Ctrl[_int(PART_GROUP::GROUP_POINT_NUM_0) + i]->PartIndexlist.front()]->fPosition, m_vecPart[m_vec_Group_Ctrl[_int(PART_GROUP::GROUP_POINT_NUM_0) + i]->PartIndexlist.front()]->fSize);
-		_Vec2 vMouseBack = GET_GAMEINTERFACE->CheckMouse(m_vecPart[m_vec_Group_Ctrl[_int(PART_GROUP::GROUP_POINT_NUM_0) + i]->PartIndexlist.back()]->fPosition, m_vecPart[m_vec_Group_Ctrl[_int(PART_GROUP::GROUP_POINT_NUM_0) + i]->PartIndexlist.back()]->fSize);
+		_Vec2 vMouseFront = GET_GAMEINTERFACE->CheckMouse(m_vecPart[m_vec_Group_Ctrl[_int(PART_GROUP::GROUP_POINT_BUTTON_0) + i]->PartIndexlist.front()]->fPosition, m_vecPart[m_vec_Group_Ctrl[_int(PART_GROUP::GROUP_POINT_BUTTON_0) + i]->PartIndexlist.front()]->fSize);
+		_Vec2 vMouseBack = GET_GAMEINTERFACE->CheckMouse(m_vecPart[m_vec_Group_Ctrl[_int(PART_GROUP::GROUP_POINT_BUTTON_0) + i]->PartIndexlist.back()]->fPosition, m_vecPart[m_vec_Group_Ctrl[_int(PART_GROUP::GROUP_POINT_BUTTON_0) + i]->PartIndexlist.back()]->fSize);
 
 		if (vMouseFront.x != -1.f)
 		{
@@ -162,22 +172,21 @@ void CUIPage_Stat::Action_LevelUp(_float fTimeDelta)
 {
 	const CPlayer::PLAYER_STAT_INFO pOrigin = GET_GAMEINTERFACE->Get_Player()->Get_Player_Stat();
 
+	m_bActive_LevelUp_Button = false;
+
 	if (m_iUsing_Point_Now == pOrigin.iPoint_Per_Level)
 		if (pOrigin.iErgo >= pOrigin.iErgo_LevelUp)
 			m_bActive_LevelUp_Button = true;
 
-	_bool bClick = (GET_GAMEINTERFACE->CheckMouse(__super::Get_Front_Part_In_Control(_int(PART_GROUP::GROUP_LEVELUP_BUTTON))->fPosition, __super::Get_Front_Part_In_Control(_int(PART_GROUP::GROUP_LEVELUP_BUTTON))->fSize).x != -1.f);
-	bClick = KEY_TAP(KEY::LBUTTON);
-
-	if (!bClick)
-	{
-		m_bActive_LevelUp_Button = false;
-		return;
-	}
-	else if (m_iUsing_Point_Now < pOrigin.iPoint_Per_Level)
-		GET_GAMEINTERFACE->Show_Popup(TEXT("레벨 업 불가"), TEXT("분배하지 않은 포인트가 있습니다."));
-	else if (pOrigin.iErgo < pOrigin.iErgo_LevelUp)
-		GET_GAMEINTERFACE->Show_Popup(TEXT("레벨 업 불가"), TEXT("에르고가 부족합니다."));
+	if (KEY_TAP(KEY::LBUTTON))
+		if (GET_GAMEINTERFACE->CheckMouse(__super::Get_Front_Part_In_Control(_int(PART_GROUP::GROUP_LEVELUP_BUTTON))->fPosition, __super::Get_Front_Part_In_Control(_int(PART_GROUP::GROUP_LEVELUP_BUTTON))->fSize).x != -1.f)
+		{
+			if (m_iUsing_Point_Now < pOrigin.iPoint_Per_Level)
+				GET_GAMEINTERFACE->Show_Popup(TEXT("레벨 업 불가"), TEXT("분배하지 않은 포인트가 있습니다."));
+			else if (pOrigin.iErgo < pOrigin.iErgo_LevelUp)
+				GET_GAMEINTERFACE->Show_Popup(TEXT("레벨 업 불가"), TEXT("에르고가 부족합니다."));
+		}
+		
 }
 
 void CUIPage_Stat::Action_Focus(_float fTimeDelta)
@@ -212,7 +221,11 @@ void CUIPage_Stat::Action_Focus(_float fTimeDelta)
 		Get_Front_Part_In_Control(_int(PART_GROUP::GROUP_SELECT_FIRE))->fRatio = 0.f;
 	}
 
-	Get_Front_Part_In_Control(_int(PART_GROUP::GROUP_SELECT_FIRE))->fRatio += fTimeDelta;
+	if (fTimeDelta > 0.1f)
+		Get_Front_Part_In_Control(_int(PART_GROUP::GROUP_SELECT_FIRE))->fRatio += 0.01f;
+	else
+		Get_Front_Part_In_Control(_int(PART_GROUP::GROUP_SELECT_FIRE))->fRatio += fTimeDelta;
+
 	if (Get_Front_Part_In_Control(_int(PART_GROUP::GROUP_SELECT_FIRE))->fRatio > 1.f)
 		Get_Front_Part_In_Control(_int(PART_GROUP::GROUP_SELECT_FIRE))->fRatio = 1.f;
 }
@@ -223,16 +236,16 @@ void CUIPage_Stat::Update_Point(_float fTimeDelta)
 	CPlayer::PLAYER_STAT_INFO* pAdjust = GET_GAMEINTERFACE->Get_Player()->Get_Player_Stat_Adjust();
 	CPlayer::PLAYER_ABILITY_INFO* pAblity = GET_GAMEINTERFACE->Get_Player()->Get_Player_Ability();
 
-	m_vecPart[m_vec_Group_Ctrl[_int(PART_GROUP::GROUP_POINT_NUM_0)]->PartIndexlist.front()]->strText = to_wstring(pAdjust->iPoint_HP / 10 + pOrigin.iPoint_HP / 10);
-	m_vecPart[m_vec_Group_Ctrl[_int(PART_GROUP::GROUP_POINT_NUM_0)]->PartIndexlist.back()]->strText = to_wstring(pAdjust->iPoint_HP % 10 + pOrigin.iPoint_HP % 10);
-	m_vecPart[m_vec_Group_Ctrl[_int(PART_GROUP::GROUP_POINT_NUM_1)]->PartIndexlist.front()]->strText = to_wstring(pAdjust->iPoint_Stamina / 10 + pOrigin.iPoint_Stamina / 10);
-	m_vecPart[m_vec_Group_Ctrl[_int(PART_GROUP::GROUP_POINT_NUM_1)]->PartIndexlist.back()]->strText = to_wstring(pAdjust->iPoint_Stamina % 10 + pOrigin.iPoint_Stamina % 10);
-	m_vecPart[m_vec_Group_Ctrl[_int(PART_GROUP::GROUP_POINT_NUM_2)]->PartIndexlist.front()]->strText = to_wstring(pAdjust->iPoint_Attack / 10 + pOrigin.iPoint_Attack / 10);
-	m_vecPart[m_vec_Group_Ctrl[_int(PART_GROUP::GROUP_POINT_NUM_2)]->PartIndexlist.back()]->strText = to_wstring(pAdjust->iPoint_Attack % 10 + pOrigin.iPoint_Attack % 10);
-	m_vecPart[m_vec_Group_Ctrl[_int(PART_GROUP::GROUP_POINT_NUM_3)]->PartIndexlist.front()]->strText = to_wstring(pAdjust->iPoint_Defence / 10 + pOrigin.iPoint_Defence / 10);
-	m_vecPart[m_vec_Group_Ctrl[_int(PART_GROUP::GROUP_POINT_NUM_3)]->PartIndexlist.back()]->strText = to_wstring(pAdjust->iPoint_Defence % 10 + pOrigin.iPoint_Defence % 10);
-	m_vecPart[m_vec_Group_Ctrl[_int(PART_GROUP::GROUP_POINT_NUM_4)]->PartIndexlist.front()]->strText = to_wstring(pAdjust->iPoint_Heal / 10 + pOrigin.iPoint_Heal / 10);
-	m_vecPart[m_vec_Group_Ctrl[_int(PART_GROUP::GROUP_POINT_NUM_4)]->PartIndexlist.back()]->strText = to_wstring(pAdjust->iPoint_Heal % 10 + pOrigin.iPoint_Heal % 10);
+	m_vecPart[m_vec_Group_Ctrl[_int(PART_GROUP::GROUP_POINT_NUM_0)]->PartIndexlist.front()]->strText = to_wstring((m_iLevelUp_Buffer_Point[0] + pOrigin.iPoint_HP) / 10);
+	m_vecPart[m_vec_Group_Ctrl[_int(PART_GROUP::GROUP_POINT_NUM_0)]->PartIndexlist.back()]->strText = to_wstring((m_iLevelUp_Buffer_Point[0] + pOrigin.iPoint_HP) % 10);
+	m_vecPart[m_vec_Group_Ctrl[_int(PART_GROUP::GROUP_POINT_NUM_1)]->PartIndexlist.front()]->strText = to_wstring((m_iLevelUp_Buffer_Point[1] + pOrigin.iPoint_Stamina) / 10);
+	m_vecPart[m_vec_Group_Ctrl[_int(PART_GROUP::GROUP_POINT_NUM_1)]->PartIndexlist.back()]->strText = to_wstring((m_iLevelUp_Buffer_Point[1] + pOrigin.iPoint_Stamina) % 10);
+	m_vecPart[m_vec_Group_Ctrl[_int(PART_GROUP::GROUP_POINT_NUM_2)]->PartIndexlist.front()]->strText = to_wstring((m_iLevelUp_Buffer_Point[2] + pOrigin.iPoint_Attack) / 10);
+	m_vecPart[m_vec_Group_Ctrl[_int(PART_GROUP::GROUP_POINT_NUM_2)]->PartIndexlist.back()]->strText = to_wstring((m_iLevelUp_Buffer_Point[2] + pOrigin.iPoint_Attack) % 10);
+	m_vecPart[m_vec_Group_Ctrl[_int(PART_GROUP::GROUP_POINT_NUM_3)]->PartIndexlist.front()]->strText = to_wstring((m_iLevelUp_Buffer_Point[3] + pOrigin.iPoint_Defence) / 10);
+	m_vecPart[m_vec_Group_Ctrl[_int(PART_GROUP::GROUP_POINT_NUM_3)]->PartIndexlist.back()]->strText = to_wstring((m_iLevelUp_Buffer_Point[3] + pOrigin.iPoint_Defence) % 10);
+	m_vecPart[m_vec_Group_Ctrl[_int(PART_GROUP::GROUP_POINT_NUM_4)]->PartIndexlist.front()]->strText = to_wstring((m_iLevelUp_Buffer_Point[4] + pOrigin.iPoint_Heal) / 10);
+	m_vecPart[m_vec_Group_Ctrl[_int(PART_GROUP::GROUP_POINT_NUM_4)]->PartIndexlist.back()]->strText = to_wstring((m_iLevelUp_Buffer_Point[4] + pOrigin.iPoint_Heal) % 10);
 }
 
 void CUIPage_Stat::Update_LevelUp(_float fTimeDelta)
@@ -251,8 +264,10 @@ void CUIPage_Stat::Update_LevelUp(_float fTimeDelta)
 
 void CUIPage_Stat::Update_Focus(_float fTimeDelta)
 {
-	if (m_iFocus_Point > 0)
+	if (m_iFocus_Point > -1)
 	{
+
+		_int iIndex = Get_Front_PartIndex_In_Control(_int(PART_GROUP::GROUP_POINT_RECT_0) + m_iFocus_Point);
 		Get_Front_Part_In_Control(_int(PART_GROUP::GROUP_SELECT_RECT))->iParentPart_Index = Get_Front_PartIndex_In_Control(_int(PART_GROUP::GROUP_POINT_RECT_0) + m_iFocus_Point);
 		Get_Front_Part_In_Control(_int(PART_GROUP::GROUP_SELECT_FIRE))->iParentPart_Index = Get_Front_PartIndex_In_Control(_int(PART_GROUP::GROUP_POINT_RECT_0) + m_iFocus_Point);
 		Get_Front_Part_In_Control(_int(PART_GROUP::GROUP_SELECT_RECT))->bRender = true;
@@ -352,14 +367,14 @@ void CUIPage_Stat::Update_SpecData(_float fTimeDelta)
 			m_vecPart[*iter]->fTextureColor = { 0.2f,0.2f,0.2f,0.2f };
 
 		++iter;
-		m_vecPart[*iter]->strText = to_wstring(pOrigin_Stat[i]);
+		m_vecPart[*iter]->strText = to_wstring(_int(pOrigin_Stat[i]));
 
 		if (m_iLevelUp_Buffer_Stat[i] > 0.f)
 		{
 			m_vecPart[*iter]->fRatio = 0.f;
 			++iter;
 			m_vecPart[*iter]->strText = TEXT("(+");
-			m_vecPart[*iter]->strText += to_wstring(m_iLevelUp_Buffer_Stat[i]);
+			m_vecPart[*iter]->strText += to_wstring(_int(m_iLevelUp_Buffer_Stat[i]));
 			m_vecPart[*iter]->strText += TEXT(")");
 		}
 		else
@@ -370,10 +385,10 @@ void CUIPage_Stat::Update_SpecData(_float fTimeDelta)
 		}
 
 		++iter;
-		m_vecPart[*iter]->strText = to_wstring(pAdjust_Stat[i]);
+		m_vecPart[*iter]->strText = to_wstring(_int(pAdjust_Stat[i]));
 
 		++iter;
-		m_vecPart[*iter]->strText = to_wstring(pOrigin_Stat[i] + m_iLevelUp_Buffer_Stat[i] + pAdjust_Stat[i]);
+		m_vecPart[*iter]->strText = to_wstring(_int(pOrigin_Stat[i] + m_iLevelUp_Buffer_Stat[i] + pAdjust_Stat[i]));
 	}
 
 	Safe_Delete_Array(pOrigin_Stat); 
