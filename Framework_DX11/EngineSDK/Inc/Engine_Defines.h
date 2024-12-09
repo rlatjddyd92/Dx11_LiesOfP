@@ -56,7 +56,7 @@ using namespace std;
 namespace Engine
 {
 	const _wstring		g_strTransformTag = TEXT("Com_Transform");
-	const _uint			g_iMaxMeshBones = 650;
+	const _uint			g_iMaxMeshBones = 660;
 }
 
 using namespace Engine;

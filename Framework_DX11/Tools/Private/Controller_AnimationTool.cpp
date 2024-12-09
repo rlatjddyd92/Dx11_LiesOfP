@@ -140,7 +140,7 @@ void CController_AnimationTool::ListUp_Anim()
 {
 
 	m_iCurSelected_Index_Model = m_iSelected_Index_Model;
-	ImGui::PushItemWidth(200); // 크기조정
+	ImGui::PushItemWidth(400); // 크기조정
 	if (ImGui::BeginListBox("Model List"))
 	{
 		bool is_selected{ false };

@@ -26,7 +26,7 @@ vector			g_vMtrlSpecular = vector(1.f, 1.f, 1.f, 1.f);
 vector			g_vCamPosition;
 
 /* 뼈행렬들(내 모델 전체의 뼈행렬들(x), 현재 그리는 메시에게 영향을 주는 뼈행렬들(o) */
-matrix			g_BoneMatrices[650];
+matrix			g_BoneMatrices[660];
 
 
 struct VS_IN

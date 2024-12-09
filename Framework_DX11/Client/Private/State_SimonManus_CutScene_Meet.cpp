@@ -30,6 +30,8 @@ HRESULT CState_SimonManus_CutScene_Meet::Start_State(void* pArg)
 
     m_pMonster->Change_Animation(m_iAnimation_Turn, false, 0.f, 0);
 
+    //y축  4도 정도 회전(Rotation)
+
     return S_OK;
 }
 
