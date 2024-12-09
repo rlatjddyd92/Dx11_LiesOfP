@@ -39,6 +39,7 @@ public:
 		SCISSOR_LATTACK0, SCISSOR_LATTACK1, SCISSOR_RATTACK0, SCISSOR_RATTACK1, SCISSOR_CHARGE0, SCISSOR_CHARGE1, SCISSOR_FATAL,
 		SCISSOR_FABAL0, SCISSOR_FABAL1, SCISSOR_FABAL2, SCISSOR_BUFF,
 
+		ARM_START, ARM_LOOP, ARM_END, ARM_HIT, ARM_HIT_HARD, ARM_COUNTER,
 
 		LADDER = 100, LIFT, CHEST, ITEMGET, STARGAZER, TELEPORT,
 
@@ -167,6 +168,9 @@ public:
 			m_fGuardTime = 0.f;
 	}
 
+	_bool					Get_IsArm() { return m_isArm; }
+	void					Set_IsArm(_bool isArm) { m_isArm = isArm; }
+
 	_bool					Get_IsParry() { return m_isParry; }
 	void					Set_IsParry(_bool isParry) { m_isParry = isParry; }
 
@@ -273,6 +277,7 @@ private:
 
 	_bool				m_isJump = { false };
 	_bool				m_isGuard = { false };
+	_bool				m_isArm = { false };
 	_bool				m_isParry = { false };
 	_bool				m_isLockOn = { false };
 	_bool				m_isInvicible = { false };

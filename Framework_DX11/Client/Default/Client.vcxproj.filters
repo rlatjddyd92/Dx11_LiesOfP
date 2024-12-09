@@ -883,6 +883,18 @@
     <Filter Include="03.GameInterface_Controller\00.UIManager\00.UIPage\12.UIPage_Effect %2880%25%29">
       <UniqueIdentifier>{26ca8006-fabe-45a8-b4ac-6ef7432e9707}</UniqueIdentifier>
     </Filter>
+    <Filter Include="05.Fsm\Player\Arm">
+      <UniqueIdentifier>{e3c926a2-c401-4fdb-ae2e-9a5af6934d77}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="05.Fsm\Player\Arm\Start">
+      <UniqueIdentifier>{2ddfc373-61e5-4cb9-bc62-2de255cc7609}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="05.Fsm\Player\Arm\End">
+      <UniqueIdentifier>{58fb7fbc-ec6c-46dc-934a-443473931ea6}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="05.Fsm\Player\Arm\Loop">
+      <UniqueIdentifier>{2d2235b5-d663-4950-8f4d-98355841bd38}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Client.h">
@@ -1619,6 +1631,12 @@
     <ClInclude Include="..\Public\UIPage_Effect.h">
       <Filter>03.GameInterface_Controller\00.UIManager\00.UIPage\12.UIPage_Effect</Filter>
     </ClInclude>
+    <ClInclude Include="..\Public\State_Player_Arm_Start.h">
+      <Filter>05.Fsm\Player\Arm\Start</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Public\State_Player_Arm_Loop.h">
+      <Filter>05.Fsm\Player\Arm\Loop</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Client.cpp">
@@ -2324,6 +2342,12 @@
     </ClCompile>
     <ClCompile Include="..\Private\UIPage_Effect.cpp">
       <Filter>03.GameInterface_Controller\00.UIManager\00.UIPage\12.UIPage_Effect</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Private\State_Player_Arm_Start.cpp">
+      <Filter>05.Fsm\Player\Arm\Start</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Private\State_Player_Arm_Loop.cpp">
+      <Filter>05.Fsm\Player\Arm\Loop</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

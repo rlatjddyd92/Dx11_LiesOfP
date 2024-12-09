@@ -80,6 +80,9 @@
 #include "State_Player_Scissor_Fable2.h"
 #include "State_Player_Scissor_Fatal.h"
 
+#include "State_Player_Arm_Start.h"
+#include "State_Player_Arm_Loop.h"
+
 #include "State_Player_OpenSophiaDoor.h"
 #include "State_Player_SophiaWalk.h"
 #include "State_Player_SophiaHand.h"
@@ -1220,6 +1223,10 @@ HRESULT CPlayer::Ready_FSM()
 	m_pFsmCom->Add_State(CState_Player_Scissor_Fable1::Create(m_pFsmCom, this, SCISSOR_FABAL1, &Desc));	// ÄÞº¸2
 	m_pFsmCom->Add_State(CState_Player_Scissor_Fable2::Create(m_pFsmCom, this, SCISSOR_FABAL2, &Desc));	// ÄÞº¸3
 	m_pFsmCom->Add_State(CState_Player_Scissor_Fatal::Create(m_pFsmCom, this, SCISSOR_FATAL, &Desc));	// ÆäÀÌÅ»
+	
+	/* ÆÈ ±â¼ú */
+	m_pFsmCom->Add_State(CState_Player_Arm_Start::Create(m_pFsmCom, this, ARM_START, &Desc));	
+	m_pFsmCom->Add_State(CState_Player_Arm_Loop::Create(m_pFsmCom, this, ARM_LOOP, &Desc));
 
 	/* ¼ÒÇÇ¾Æ ÄÆ½Å */
 	m_pFsmCom->Add_State(CState_Player_OpenSophiaDoor::Create(m_pFsmCom, this, SOPHIA_DOOR_OPEN, &Desc));

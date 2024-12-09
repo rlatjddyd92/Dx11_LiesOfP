@@ -66,6 +66,12 @@
 #include "D:\GitProject\Dx11_LiesOfP\Framework_DX11\Client\Private\Raxasia.cpp"
 
 
+#include "D:\GitProject\Dx11_LiesOfP\Framework_DX11\Client\Private\State_Player_Arm_Loop.cpp"
+
+
+#include "D:\GitProject\Dx11_LiesOfP\Framework_DX11\Client\Private\State_Player_Arm_Start.cpp"
+
+
 #include "D:\GitProject\Dx11_LiesOfP\Framework_DX11\Client\Private\Weapon_Raxasia_P1_Sword.cpp"
 
 

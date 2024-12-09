@@ -97,7 +97,12 @@ void CState_Player_Grinder::Update(_float fTimeDelta)
             if (m_pPlayer->Get_EndAnim(m_iAnimation_Grinder[2], true) || m_pPlayer->Get_EndAnim(m_iAnimation_Grinder[2]))
             {
                 m_pPlayer->DeActive_Effect(CPlayer::EFFECT_GRIND);
-                m_pPlayer->Change_State(CPlayer::OH_IDLE);
+                _uint iWeponType = m_pPlayer->Get_WeaponType();
+
+                if (iWeponType < 2)
+                    m_pPlayer->Change_State(CPlayer::OH_IDLE);
+                else
+                    m_pPlayer->Change_State(CPlayer::TH_IDLE);
                 return;
             }
             else if (!Move(fTimeDelta))

@@ -91,6 +91,10 @@ void CState_Player_OH_Idle::Update(_float fTimeDelta)
     {
         m_pPlayer->Change_State(CPlayer::CHANGEWEP);
     }
+    else if (KEY_HOLD(KEY::CTRL))
+    {
+        m_pPlayer->Change_State(CPlayer::ARM_START);
+    }
     
     if (KEY_AWAY(KEY::RBUTTON))
     {
