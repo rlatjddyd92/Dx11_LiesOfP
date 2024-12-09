@@ -57,13 +57,13 @@ void CState_Player_SophiaWalk::Update(_float fTimeDelta)
         m_pPlayer->Change_State(CPlayer::OH_IDLE);
     }*/
 
-    _Vec3 vMove = m_pPlayer->Get_Model()->Get_BoneCombindTransformationMatrix_Ptr(4)->Translation();
+    _Vec3 vMove = m_pPlayer->Get_Model()->Get_BoneCombindTransformationMatrix_Ptr(5)->Translation();
     _float4x4 TransMat;
-    XMStoreFloat4x4(&TransMat, m_pPlayer->Get_Model()->Get_Bones()[4]->Get_TransformationMatrix());
+    XMStoreFloat4x4(&TransMat, m_pPlayer->Get_Model()->Get_Bones()[5]->Get_TransformationMatrix());
     //TransMat._43 = TransMat._42 = TransMat._41 = 0.f;
     TransMat._41 = 0.f;
 
-    m_pPlayer->Get_Model()->Get_Bones()[4]->Set_TransformationMatrix(TransMat);;
+    m_pPlayer->Get_Model()->Get_Bones()[5]->Set_TransformationMatrix(TransMat);;
 
     m_pPlayer->Get_Model()->Update_Bone();
 
@@ -72,7 +72,7 @@ void CState_Player_SophiaWalk::Update(_float fTimeDelta)
     vMove.y = 0;
 
    
-    //m_pPlayer->Get_RigidBody()->Set_Velocity((vMove - m_vRootMoveStack) / fTimeDelta);
+    m_pPlayer->Get_RigidBody()->Set_Velocity((vMove - m_vRootMoveStack) / fTimeDelta);
 
     m_vRootMoveStack = vMove;
 

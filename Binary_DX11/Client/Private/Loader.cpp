@@ -92,10 +92,10 @@ HRESULT CLoader::Ready_Resources_For_GamePlayLevel()
 	//	return E_FAIL;
 
 	/* For. Prototype_Component_Model_Player*/
-	PreTransformMatrix = XMMatrixRotationY(XMConvertToRadians(180.0f));
-	if (FAILED(m_pGameInstance->Add_Prototype(LEVEL_GAMEPLAY, TEXT("Prototype_Component_Model_Player"),
-		CModel::Create(m_pDevice, m_pContext, CModel::TYPE_ANIM, "../Bin/Resources/Models/Player/Player.fbx", "../Bin/ModelData/Anim/Player/", PreTransformMatrix))))
-		return E_FAIL;
+	//PreTransformMatrix = XMMatrixRotationY(XMConvertToRadians(180.0f));
+	//if (FAILED(m_pGameInstance->Add_Prototype(LEVEL_GAMEPLAY, TEXT("Prototype_Component_Model_Player"),
+	//	CModel::Create(m_pDevice, m_pContext, CModel::TYPE_ANIM, "../Bin/Resources/Models/Player/Player.fbx", "../Bin/ModelData/Anim/Player/", PreTransformMatrix))))
+	//	return E_FAIL;
 
 	//if (FAILED(m_pGameInstance->Add_Prototype(LEVEL_GAMEPLAY, TEXT("Prototype_Component_Model_Player_Test01"),
 	//	CModel::Create(m_pDevice, m_pContext, CModel::TYPE_ANIM, "../Bin/Resources/Models/Player/Player_Test01.fbx", "../Bin/ModelData/Anim/Player/", PreTransformMatrix))))
@@ -144,11 +144,11 @@ HRESULT CLoader::Ready_Resources_For_GamePlayLevel()
 	 //if (FAILED(Ready_Resources_Object()))
 		//return E_FAIL;
 
-	if (FAILED(Ready_Resources_For_Weapon()))
-		return E_FAIL;
-
-	//if (FAILED(Ready_Resources_CutScene()))
+	//if (FAILED(Ready_Resources_For_Weapon()))
 	//	return E_FAIL;
+
+	if (FAILED(Ready_Resources_CutScene()))
+		return E_FAIL;
 
 	lstrcpy(m_szLoadingText, TEXT("변환 완료"));
 
@@ -383,15 +383,15 @@ HRESULT CLoader::Ready_Resources_CutScene()
 #pragma endregion
 
 #pragma region SimonManus
-	/* For. Prototype_Component_Model_Monster_SimonManus_CutScene_P1 */
-	if (FAILED(m_pGameInstance->Add_Prototype(LEVEL_GAMEPLAY, TEXT("Prototype_Component_Model_Monster_SimonManus_CutScene_P1"),
-		CModel::Create(m_pDevice, m_pContext, CModel::TYPE_ANIM, "../Bin/Resources/Models/Monster/Boss/SimonManus/SimonManus_CutScene_P1.fbx", "../Bin/ModelData/Anim/Monster/Boss/SimonManus/", PreTransformMatrix))))
-		return E_FAIL;
+	///* For. Prototype_Component_Model_Monster_SimonManus_CutScene_P1 */
+	//if (FAILED(m_pGameInstance->Add_Prototype(LEVEL_GAMEPLAY, TEXT("Prototype_Component_Model_Monster_SimonManus_CutScene_P1"),
+	//	CModel::Create(m_pDevice, m_pContext, CModel::TYPE_ANIM, "../Bin/Resources/Models/Monster/Boss/SimonManus/SimonManus_CutScene_P1.fbx", "../Bin/ModelData/Anim/Monster/Boss/SimonManus/", PreTransformMatrix))))
+	//	return E_FAIL;
 
-	/* For. Prototype_Component_Model_Monster_SimonManus_CutScene_P1 */
-	if (FAILED(m_pGameInstance->Add_Prototype(LEVEL_GAMEPLAY, TEXT("Prototype_Component_Model_Monster_SimonManus_CutScene_P2"),
-		CModel::Create(m_pDevice, m_pContext, CModel::TYPE_ANIM, "../Bin/Resources/Models/Monster/Boss/SimonManus/SimonManus_CutScene_P2.fbx", "../Bin/ModelData/Anim/Monster/Boss/SimonManus/", PreTransformMatrix))))
-		return E_FAIL;
+	///* For. Prototype_Component_Model_Monster_SimonManus_CutScene_P1 */
+	//if (FAILED(m_pGameInstance->Add_Prototype(LEVEL_GAMEPLAY, TEXT("Prototype_Component_Model_Monster_SimonManus_CutScene_P2"),
+	//	CModel::Create(m_pDevice, m_pContext, CModel::TYPE_ANIM, "../Bin/Resources/Models/Monster/Boss/SimonManus/SimonManus_CutScene_P2.fbx", "../Bin/ModelData/Anim/Monster/Boss/SimonManus/", PreTransformMatrix))))
+	//	return E_FAIL;
 #pragma endregion
 	return S_OK;
 }

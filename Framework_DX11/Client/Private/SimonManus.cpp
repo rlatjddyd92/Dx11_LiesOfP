@@ -143,7 +143,7 @@ HRESULT CSimonManus::Initialize(void* pArg)
 
 	GET_GAMEINTERFACE->Set_OnOff_OrthoUI(false, this);
 
-	Start_CutScene(CUTSCENE_P2);
+	//Start_CutScene(CUTSCENE_P2);
 
 	return S_OK;
 }
@@ -322,11 +322,11 @@ void CSimonManus::Start_CutScene(_uint iCutSceneNum)
 	{
 	case CUTSCENE_MEET :
 		m_pModelCom = m_pCutSceneModelCom[MODEL_PHASE1];
-		m_pCutSceneFsmCom->Set_State(STATE_MEET);
+		//m_pCutSceneFsmCom->Set_State(STATE_MEET);
 		break;
 	case CUTSCENE_P2:
 		m_pModelCom = m_pCutSceneModelCom[MODEL_PHASE1];
-		m_pCutSceneFsmCom->Set_State(STATE_P2);
+		//m_pCutSceneFsmCom->Set_State(STATE_P2);
 		break;
 	case CUTSCENE_DIE:
 		m_pModelCom = m_pCutSceneModelCom[MODEL_PHASE2];

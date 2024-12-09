@@ -32,8 +32,8 @@ private:
     _bool               End_Check();
 
 private:
-    _int                m_iFootStepFrame[2] = {};
-    _bool               m_isPlaySound[2] = { false, };
+    _int                m_iFootStepFrame[14] = {};
+    _bool               m_isPlaySound[14] = { false, };
     void                Control_Sound();
 
 public:

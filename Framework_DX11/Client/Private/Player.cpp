@@ -1319,8 +1319,5 @@ void CPlayer::Free()
 	Safe_Delete(m_tPlayer_Stat);
 	Safe_Delete(m_tPlayer_Stat_Adjust);
 	Safe_Delete(m_tPlayer_Ability);
-	
-	Safe_Release(m_pColliderCom);
-	Safe_Release(m_pNavigationCom);
 }
 
