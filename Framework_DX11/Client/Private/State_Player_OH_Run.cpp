@@ -5,6 +5,8 @@
 #include "Player.h"
 #include "Camera.h"
 
+#include "GameInterface_Controller.h"
+
 CState_Player_OH_Run::CState_Player_OH_Run(CFsm* pFsm, CPlayer* pPlayer)
     :CState{ pFsm }
     , m_pPlayer{ pPlayer }
@@ -82,8 +84,17 @@ void CState_Player_OH_Run::Update(_float fTimeDelta)
     else if (KEY_TAP(KEY::R))
     {
         if (m_isTurnOver)
-            m_pPlayer->Change_State(CPlayer::GRINDER);
-        //m_pPlayer->Change_State(CPlayer::HEAL);
+        {
+            SPECIAL_ITEM eNow = GET_GAMEINTERFACE->Get_Now_Select_Item();
+            if (SPECIAL_ITEM::SP_PULSE_BATTERY == eNow)
+            {
+                m_pPlayer->Change_State(CPlayer::HEAL);
+            }
+            else if (SPECIAL_ITEM::SP_GRINDER == eNow)
+            {
+                m_pPlayer->Change_State(CPlayer::GRINDER);
+            }
+        }
     }
 
     if (KEY_TAP(KEY::SPACE))

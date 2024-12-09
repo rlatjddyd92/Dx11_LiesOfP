@@ -165,14 +165,12 @@ _bool CState_Player_Heal::Move(_float fTimeDelta)
             if (isLeft)
             {
                 m_pPlayer->Change_Animation(
-                    m_iAnimation_Walk[iWalkType][isCameraAlignedForward ? WALK_L : WALK_R], true, 0.2f
-                );
+                    m_iAnimation_Walk[iWalkType][isCameraAlignedForward ? WALK_L : WALK_R], true, 0.2f, 0, false);
             }
             else if (isRight)
             {
                 m_pPlayer->Change_Animation(
-                    m_iAnimation_Walk[iWalkType][isCameraAlignedForward ? WALK_R : WALK_L], true, 0.2f
-                );
+                    m_iAnimation_Walk[iWalkType][isCameraAlignedForward ? WALK_R : WALK_L], true, 0.2f, 0, false);
             }
             else
             {
@@ -183,14 +181,12 @@ _bool CState_Player_Heal::Move(_float fTimeDelta)
                 if (isForward)
                 {
                     m_pPlayer->Change_Animation(
-                        m_iAnimation_Walk[iWalkType][isCameraAlignedRight ? WALK_R : WALK_L], true, 0.2f
-                    );
+                        m_iAnimation_Walk[iWalkType][isCameraAlignedRight ? WALK_R : WALK_L], true, 0.2f, 0, false);
                 }
                 else if (isBackward)
                 {
                     m_pPlayer->Change_Animation(
-                        m_iAnimation_Walk[iWalkType][isCameraAlignedRight ? WALK_L : WALK_R], true, 0.2f
-                    );
+                        m_iAnimation_Walk[iWalkType][isCameraAlignedRight ? WALK_L : WALK_R], true, 0.2f, 0, false);
                 }
             }
         }
