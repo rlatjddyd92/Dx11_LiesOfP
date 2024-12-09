@@ -558,6 +558,12 @@
 #include "C:\Users\olivi\GitHub\Dx11_LiesOfP\Framework_DX11\Client\Private\State_SimonManusP2_Wave.cpp"
 
 
+#include "C:\Users\olivi\GitHub\Dx11_LiesOfP\Framework_DX11\Client\Private\State_SimonManus_CutScene_Meet.cpp"
+
+
+#include "C:\Users\olivi\GitHub\Dx11_LiesOfP\Framework_DX11\Client\Private\State_SimonManus_CutScene_Phase2.cpp"
+
+
 #include "C:\Users\olivi\GitHub\Dx11_LiesOfP\Framework_DX11\Client\Private\StaticObj.cpp"
 
 

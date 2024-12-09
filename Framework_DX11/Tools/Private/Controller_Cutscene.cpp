@@ -349,7 +349,7 @@ void CController_Cutscene::Shader_Memu()
     ImGui::Checkbox("Decrease", &pCutScene_Desc->ShaderDesc.bDof_Decrease);
     //Dof 사용 수치
     ImGui::DragFloat("DOF", &pCutScene_Desc->ShaderDesc.fDof, 0.02f, 0.f);
-    ImGui::DragFloat("Speed", &pCutScene_Desc->ShaderDesc.fSpeed, 0.02f, 0.f);
+    ImGui::DragFloat("Speed", &pCutScene_Desc->ShaderDesc.fSpeed, 0.02f, 0.f, 10.f, "%4f");
 }
 
 void CController_Cutscene::GamgeObject_Memu()

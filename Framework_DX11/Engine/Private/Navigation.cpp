@@ -260,7 +260,7 @@ void CNavigation::Move_to_Cell(CRigidBody* pRigidBody, _int iIndex)
 	m_iCurrentCellIndex = iIndex;
 }
 
-void CNavigation::Research_Cell(_Vec3 vNewPos)
+void CNavigation::Research_Cell(_Vec3 vNewPos, _uint* iIndex)
 {
 	if (m_Cells.size() <= 0) //Cell이 없는 경우
 	{
@@ -292,6 +292,7 @@ void CNavigation::Research_Cell(_Vec3 vNewPos)
 			if (vNewPos.y <= fCellBigY + 1.f && vNewPos.y >= fCellSmallY - 1.f)
 			{
 				m_iCurrentCellIndex = i;
+				*iIndex = i;
 				return;
 			}
 			else
@@ -300,6 +301,7 @@ void CNavigation::Research_Cell(_Vec3 vNewPos)
 	}
 
 	m_iCurrentCellIndex = -1;
+	*iIndex = -1;
 }
 
 
