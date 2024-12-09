@@ -27,6 +27,7 @@ public:
 		_Vec3				vStartScale = { 1.f, 1.f, 1.f };
 		_Vec3				vScalingSpeed = {};
 
+		_Vec4				vPreDirAxis = { 0.f, 1.f, 0.f, 0.f };
 		_float				fStarRotation = { 0.f };
 		_float				fRotationPerSecond = { 0.f };
 
@@ -40,6 +41,7 @@ public:
 		BILLBOARD_TYPE		eBillboardType = { TYPE_BILLBOARD };
 		_bool				bLoop = { false };
 	}DEFAULT_DESC;
+
 	typedef struct
 	{
 		_tchar		szDiffuseTexturTag[MAX_PATH] = L"";
@@ -88,6 +90,8 @@ private:
 	_float	m_fAccumulateTime = { 0.f };
 	_float	m_fCurrenrtIndex = { 0.f };
 	_Vec2	m_vCurrentTileMove = {};
+
+	_bool m_isReset = { false };
 
 private:
 	HRESULT Ready_Components(const TEXT_DESC& Desc);

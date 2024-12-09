@@ -701,6 +701,7 @@ void CController_EffectTool::TE_Check()
 		ImGui::InputFloat3("Pos TE", (_float*)&m_TextureDesc.DefaultDesc.vPos);
 		ImGui::InputFloat3("Start Scale TE", (_float*)&m_TextureDesc.DefaultDesc.vStartScale);
 		ImGui::InputFloat3("Scaling Speed TE", (_float*)&m_TextureDesc.DefaultDesc.vScalingSpeed);
+		ImGui::InputFloat4("PreDir Axis TE", (_float*)&m_TextureDesc.DefaultDesc.vPreDirAxis);
 		ImGui::InputFloat("Start Rotation TE", &m_TextureDesc.DefaultDesc.fStarRotation);
 		ImGui::InputFloat("Rotation Per Second TE", &m_TextureDesc.DefaultDesc.fRotationPerSecond);
 
@@ -2189,7 +2190,7 @@ HRESULT CController_EffectTool::Load_Model(const _wstring& strEffectPath)
 	_matrix		PreTransformMatrix = XMMatrixIdentity();
 
 	/* For. Prototype_Component_Model_Effect_Crystal_Clouds_01 */
-	PreTransformMatrix = XMMatrixScaling(0.005f, 0.005f, 0.005f);
+	PreTransformMatrix = XMMatrixScaling(0.01f, 0.01f, 0.01f);
 	if (FAILED(m_pGameInstance->Add_Prototype(LEVEL_TOOL, TEXT("Prototype_Component_Model_Effect_Crystal_Clouds_01"),
 		CModel::Create(m_pDevice, m_pContext, CModel::TYPE_NONANIM, "../Bin/ModelData/NonAnim/Effect/Mesh_Crystal_Clouds_01.dat", PreTransformMatrix))))
 		return E_FAIL;
@@ -2229,7 +2230,7 @@ HRESULT CController_EffectTool::Load_Model(const _wstring& strEffectPath)
 
 
 			/* For. Prototype_Component_Model_Effect_Helix */
-			PreTransformMatrix = XMMatrixScaling(0.005f, 0.005f, 0.005f);
+			PreTransformMatrix = XMMatrixScaling(0.01f, 0.01f, 0.01f);
 			if (FAILED(m_pGameInstance->Add_Prototype(LEVEL_TOOL, strPrototypeTag,
 				CModel::Create(m_pDevice, m_pContext, CModel::TYPE_NONANIM, str.c_str(), PreTransformMatrix))))
 				return E_FAIL;

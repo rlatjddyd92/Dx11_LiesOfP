@@ -665,6 +665,11 @@ void CS_FOLLOW_MAIN(uint3 DTid : SV_DispatchThreadID)
             vPrePos += float4(normalize(vCurrentDir) * fTailInterval, 0.f);
             TailParticle.particle.vTranslation = vPrePos;
             
+            if (iState & STATE_TAILSPREAD)
+                vCurrentDir = float4(normalize(vCurrentDir), 0.f);
+            else
+                vCurrentDir = float4(0.f, 0.f, 0.f, 0.f);
+            
             if (iState & STATE_RANDOM)
             {
                 vCurrentDir += normalize(TailParticle.particle.vCurrenrRandomDir) * fRandomRatio;
@@ -676,7 +681,7 @@ void CS_FOLLOW_MAIN(uint3 DTid : SV_DispatchThreadID)
             
             }
             
-            if (iState & STATE_TAILSPREAD)
+            if (0.f < length(vCurrentDir))
                 TailParticle.vMoveDir = float4(normalize(vCurrentDir), 0.f);
             else
                 TailParticle.vMoveDir = float4(0.f, 0.f, 0.f, 0.f);

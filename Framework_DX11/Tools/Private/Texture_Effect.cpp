@@ -52,6 +52,12 @@ void CTexture_Effect::Priority_Update(_float fTimeDelta)
 
 void CTexture_Effect::Update(_float fTimeDelta)
 {
+    if (true == m_isReset)
+    {
+        Reset();
+        m_isReset = false; 
+    }
+
     m_DefaultDesc.fAlpha += fTimeDelta * m_DefaultDesc.fAlphaSpeed;
 
     _Vec3 vScale = m_pTransformCom->Get_Scaled();
@@ -64,7 +70,7 @@ void CTexture_Effect::Update(_float fTimeDelta)
         m_fCurrenrtIndex += fTimeDelta * m_DefaultDesc.fSpriteSpeed;
 
     if (TYPE_PREDIR == m_DefaultDesc.eBillboardType)
-        m_pTransformCom->Rotation(XMVectorSet(0.f, 1.f, 0.f, 0.f), XMConvertToRadians(m_DefaultDesc.fStarRotation));
+        m_pTransformCom->Rotation(m_DefaultDesc.vPreDirAxis, XMConvertToRadians(m_DefaultDesc.fStarRotation));
 
     __super::Set_WorldMatrix();
 
@@ -103,7 +109,7 @@ void CTexture_Effect::Late_Update(_float fTimeDelta)
     if (m_DefaultDesc.fDuration < m_fAccumulateTime || (m_DefaultDesc.vDivide.x * m_DefaultDesc.vDivide.y - 1.f) < m_fCurrenrtIndex)
     {
         if (true == m_DefaultDesc.bLoop)
-            Reset();
+            m_isReset = true;
         else
         {
             m_isActive = false;
@@ -295,7 +301,6 @@ void CTexture_Effect::Preserve_Dir_Billboard(_Vec3 vCurrentScale, _Vec3 vLook)
 
     _Vec3 vUp = vLook.Cross(vRight);
     vUp.Normalize();
-
 
     m_WorldMatrix.Right(vRight * vCurrentScale.x);
     m_WorldMatrix.Up(vUp * vCurrentScale.y);

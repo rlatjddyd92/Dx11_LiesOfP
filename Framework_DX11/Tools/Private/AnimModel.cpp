@@ -68,9 +68,12 @@ void CAnimModel::Update(_float fTimeDelta)
 		return;
 	}
 
-	if (KEY_HOLD(KEY::I))
-		m_pTransformCom->Go_Straight(fTimeDelta);//m_pTransformCom->Set_State(CTransform::STATE_POSITION, XMVectorSetX(vPos, XMVectorGetX(vPos) + 0.1f));
-	
+	//if (KEY_HOLD(KEY::I))
+	//	m_pTransformCom->Go_Straight(fTimeDelta);//m_pTransformCom->Set_State(CTransform::STATE_POSITION, XMVectorSetX(vPos, XMVectorGetX(vPos) + 0.1f));
+
+	if (KEY_TAP(KEY::R))
+		m_bRender = !m_bRender;
+
 	_bool	bEndCheck{false};
 	_vector vRootMove = m_pModelCom->Play_Animation(fTimeDelta);
 	
@@ -93,6 +96,7 @@ void CAnimModel::Late_Update(_float fTimeDelta)
 	/* 직교투영을 위한 월드행렬까지 셋팅하게 된다. */
 	__super::Late_Update(fTimeDelta);
 
+	if(true == m_bRender)
 		m_pGameInstance->Add_RenderObject(CRenderer::RG_NONBLEND, this);
 }
 

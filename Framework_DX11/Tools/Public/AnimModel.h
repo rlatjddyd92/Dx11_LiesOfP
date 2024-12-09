@@ -55,6 +55,8 @@ public:
 	_float		m_fEmissive = {};
 	_float		m_fRimLight = {};
 
+	_bool		m_bRender = { false };
+
 private:
 	HRESULT Ready_Components(ANIMMODEL_DESC* pNonAnimDesc);
 	virtual class CComponent* Change_Component(const _wstring& strComponentTag, CComponent* pComponent, _uint iPartObjIndex = 0);//받아온 컴포넌트로 교체하고 이전의 컴포넌트를 반환
