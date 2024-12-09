@@ -214,6 +214,8 @@ void CCutScene::First_Setting()
 {
 	CPlayer* pPlayer = dynamic_cast<CPlayer*>(m_pGameInstance->Find_Player(LEVEL_GAMEPLAY));
 
+	GET_GAMEINTERFACE->All_UIPart_Off();
+
 	switch (m_iIndex)
 	{
 	case SOPHIA_DEAD:

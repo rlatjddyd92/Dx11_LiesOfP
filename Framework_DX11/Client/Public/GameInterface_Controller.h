@@ -54,6 +54,10 @@ public: // 외부에서 매니저 접근
 
 
 #pragma region UIManager
+	void All_UIPart_Off(_bool bIsSlow = true) {  m_pUIManager->All_UIPart_Off(bIsSlow); }
+	void All_UIPart_On(_bool bIsSlow = true) { m_pUIManager->All_UIPart_On(bIsSlow); }
+
+
 	_bool IsGamePause() { return m_pUIManager->IsGamePause(); }
 
 	void OpenMainPage() { m_pUIManager->OpenMainPage(); }
