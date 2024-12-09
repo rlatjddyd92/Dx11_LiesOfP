@@ -358,32 +358,40 @@ list<SPECIAL_ITEM>& CItem_Manager::Get_LastFrame_UsingItem_Info()
 	return m_LastFrame_UsingItem;
 }
 
-void CItem_Manager::Set_Item_Funtion(_int iItem_Index)
+SPECIAL_ITEM CItem_Manager::Check_Item_Special_Enum(_int iIndex)
 {
 	// 이건 하드코딩이 나을 듯 
-	if (iItem_Index == _int(SPECIAL_ITEM::SP_PULSE_BATTERY))
-		m_LastFrame_UsingItem.push_back(SPECIAL_ITEM::SP_PULSE_BATTERY);
-	else if (iItem_Index == _int(SPECIAL_ITEM::SP_DUSTCAT))
-		m_LastFrame_UsingItem.push_back(SPECIAL_ITEM::SP_DUSTCAT);
-	else if (iItem_Index == _int(SPECIAL_ITEM::SP_GRINDER))
-		m_LastFrame_UsingItem.push_back(SPECIAL_ITEM::SP_GRINDER);
-	else if (iItem_Index == _int(SPECIAL_ITEM::SP_LAMP))
-		m_LastFrame_UsingItem.push_back(SPECIAL_ITEM::SP_LAMP);
-	else if (iItem_Index == _int(SPECIAL_ITEM::SP_TELEPOT))
-		m_LastFrame_UsingItem.push_back(SPECIAL_ITEM::SP_TELEPOT);
-	else if (iItem_Index == _int(SPECIAL_ITEM::SP_RESISTANCE))
-		m_LastFrame_UsingItem.push_back(SPECIAL_ITEM::SP_RESISTANCE);
-	else if (iItem_Index == _int(SPECIAL_ITEM::SP_PURIFICATION))
-		m_LastFrame_UsingItem.push_back(SPECIAL_ITEM::SP_PURIFICATION);
-	else if (iItem_Index == _int(SPECIAL_ITEM::SP_DEAD))
-		m_LastFrame_UsingItem.push_back(SPECIAL_ITEM::SP_DEAD);
-	else if (iItem_Index == _int(SPECIAL_ITEM::SP_GRANADE))
-		m_LastFrame_UsingItem.push_back(SPECIAL_ITEM::SP_GRANADE);
-	else if (iItem_Index == _int(SPECIAL_ITEM::SP_THERMITE))
-		m_LastFrame_UsingItem.push_back(SPECIAL_ITEM::SP_THERMITE);
-	else if (iItem_Index == _int(SPECIAL_ITEM::SP_THROW_BATTERY))
-		m_LastFrame_UsingItem.push_back(SPECIAL_ITEM::SP_THROW_BATTERY);
+	if (iIndex == _int(SPECIAL_ITEM::SP_PULSE_BATTERY))
+		return SPECIAL_ITEM::SP_PULSE_BATTERY;
+	else if (iIndex == _int(SPECIAL_ITEM::SP_DUSTCAT))
+		return SPECIAL_ITEM::SP_DUSTCAT;
+	else if (iIndex == _int(SPECIAL_ITEM::SP_GRINDER))
+		return SPECIAL_ITEM::SP_GRINDER;
+	else if (iIndex == _int(SPECIAL_ITEM::SP_LAMP))
+		return SPECIAL_ITEM::SP_LAMP;
+	else if (iIndex == _int(SPECIAL_ITEM::SP_TELEPOT))
+		return SPECIAL_ITEM::SP_TELEPOT;
+	else if (iIndex == _int(SPECIAL_ITEM::SP_RESISTANCE))
+		return SPECIAL_ITEM::SP_RESISTANCE;
+	else if (iIndex == _int(SPECIAL_ITEM::SP_PURIFICATION))
+		return SPECIAL_ITEM::SP_PURIFICATION;
+	else if (iIndex == _int(SPECIAL_ITEM::SP_DEAD))
+		return SPECIAL_ITEM::SP_DEAD;
+	else if (iIndex == _int(SPECIAL_ITEM::SP_GRANADE))
+		return SPECIAL_ITEM::SP_GRANADE;
+	else if (iIndex == _int(SPECIAL_ITEM::SP_THERMITE))
+		return SPECIAL_ITEM::SP_THERMITE;
+	else if (iIndex == _int(SPECIAL_ITEM::SP_THROW_BATTERY))
+		return SPECIAL_ITEM::SP_THROW_BATTERY;
 
+	return SPECIAL_ITEM::SP_END;
+}
+
+void CItem_Manager::Set_Item_Funtion(_int iItem_Index)
+{
+	SPECIAL_ITEM eNow = Check_Item_Special_Enum(iItem_Index);
+	if (eNow != SPECIAL_ITEM::SP_END)
+		m_LastFrame_UsingItem.push_back(eNow);
 }
 
 _bool CItem_Manager::Get_CanSwitch_Weapon()

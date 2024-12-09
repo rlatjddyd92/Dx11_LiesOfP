@@ -224,6 +224,8 @@ void CPlayer::Priority_Update(_float fTimeDelta)
 	//STAT_INFO* pTest_Adjust = m_tPlayer_Stat_Adjust;
 	//ABILITY_INFO* pTest_Ability = m_tPlayer_Ability;
 	
+	SPECIAL_ITEM eNow = GET_GAMEINTERFACE->Get_Now_Select_Item();
+
 
 	if (m_isGuard)
 	{

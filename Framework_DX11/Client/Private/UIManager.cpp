@@ -183,6 +183,8 @@ void CUIManager::UIControl_Common(_float fTimeDelta)
 {
 	//m_bIsPlayPageMaintain = true;
 
+
+
 	if (m_pUIPage_Effect->Check_Fade() > 0.f)
 		m_bIsPlayPageMaintain = false;
 	if ((m_pUIPage_Talking->GetPageAction(PAGEACTION::ACTION_ACTIVE)) || (m_pUIPage_Talking->GetPageAction(PAGEACTION::ACTION_OPENING)))

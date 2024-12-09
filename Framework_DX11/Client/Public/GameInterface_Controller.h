@@ -162,6 +162,7 @@ public: // 외부에서 매니저 접근
 	list<SPECIAL_ITEM>& Get_LastFrame_UsingItem_Info() { return m_pItem_Manager->Get_LastFrame_UsingItem_Info(); }
 	_bool Get_CanSwitch_Weapon() { return m_pItem_Manager->Get_CanSwitch_Weapon(); }
 	void Add_Durable_Weapon(_float fAdd) { return m_pItem_Manager->Add_Durable_Weapon(fAdd); }
+	SPECIAL_ITEM Get_Now_Select_Item() { return m_pItem_Manager->Get_Now_Select_Item(); }
 
 	// 접근, 수정
 	_bool Is_ItemData_Change() { return m_pItem_Manager->Is_ItemData_Change(); }
@@ -193,6 +194,7 @@ public: // 외부에서 매니저 접근
 	_int Change_Tool_Select(_bool bNext) { return m_pItem_Manager->Change_Tool_Select(bNext); }
 	_int Get_Potion_Select() { return m_pItem_Manager->Get_Potion_Select(); }
 	_int Get_Tool_Select() { return m_pItem_Manager->Get_Tool_Select(); }
+	void Set_Select(_bool bIsPotion) { m_pItem_Manager->Set_Select(bIsPotion); }
 
 	// 무기 관련
 	_int Change_Weapon() { return m_pItem_Manager->Change_Weapon(); }

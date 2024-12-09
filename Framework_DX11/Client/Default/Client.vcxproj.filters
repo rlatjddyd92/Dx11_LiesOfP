@@ -745,17 +745,8 @@
     <Filter Include="03.GameInterface_Controller\00.UIManager\00.UIPage\11.UIPage_Test %280%25%29">
       <UniqueIdentifier>{c242bb98-b03b-45a1-9832-2f75d428ccd0}</UniqueIdentifier>
     </Filter>
-    <Filter Include="03.GameInterface_Controller\00.UIManager\00.UIPage\14.UIPage_Popup %280%25%29">
-      <UniqueIdentifier>{ce6e605b-1d78-4de4-8391-14576d71d1f1}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="03.GameInterface_Controller\00.UIManager\00.UIPage\15.UIPage_Inform %280%25%29">
-      <UniqueIdentifier>{3024b23f-59c4-4988-a1dd-bf2215e43065}</UniqueIdentifier>
-    </Filter>
     <Filter Include="03.GameInterface_Controller\00.UIManager\00.UIPage\07.UIPage_Skill %280%25%29">
       <UniqueIdentifier>{101ea800-761b-49e9-ae2b-58825aebc3f3}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="03.GameInterface_Controller\00.UIManager\00.UIPage\06.UIPage_Stat %280%25%29">
-      <UniqueIdentifier>{f815fc82-3802-4a2a-8c10-2a59b6325fce}</UniqueIdentifier>
     </Filter>
     <Filter Include="03.GameInterface_Controller\00.UIManager\00.UIPage\05.UIPage_Equip %2870%25%29">
       <UniqueIdentifier>{668071d3-f74a-4637-b402-1e95822b2f74}</UniqueIdentifier>
@@ -843,6 +834,15 @@
     </Filter>
     <Filter Include="05.Fsm\Player\CutScene\Simon">
       <UniqueIdentifier>{a7535373-661b-41f2-b044-6a1180235208}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="03.GameInterface_Controller\00.UIManager\00.UIPage\06.UIPage_Stat %2850%25%29">
+      <UniqueIdentifier>{f815fc82-3802-4a2a-8c10-2a59b6325fce}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="03.GameInterface_Controller\00.UIManager\00.UIPage\14.UIPage_Popup %2850%25%29">
+      <UniqueIdentifier>{ce6e605b-1d78-4de4-8391-14576d71d1f1}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="03.GameInterface_Controller\00.UIManager\00.UIPage\15.UIPage_Inform %2850%25%29">
+      <UniqueIdentifier>{3024b23f-59c4-4988-a1dd-bf2215e43065}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -1081,7 +1081,7 @@
       <Filter>03.GameInterface_Controller\00.UIManager\00.UIPage\07.UIPage_Skill %280%25%29</Filter>
     </ClInclude>
     <ClInclude Include="..\Public\UIPage_Stat.h">
-      <Filter>03.GameInterface_Controller\00.UIManager\00.UIPage\06.UIPage_Stat %280%25%29</Filter>
+      <Filter>03.GameInterface_Controller\00.UIManager\00.UIPage\06.UIPage_Stat %2850%25%29</Filter>
     </ClInclude>
     <ClInclude Include="..\Public\UIPage_ItemInfo.h">
       <Filter>03.GameInterface_Controller\00.UIManager\00.UIPage\09.UIPage_ItemInfo %2890%25%29</Filter>
@@ -1484,13 +1484,13 @@
       <Filter>03.GameInterface_Controller\00.UIManager\00.UIPage\11.UIPage_Test</Filter>
     </ClInclude>
     <ClInclude Include="..\Public\UIPage_Popup.h">
-      <Filter>03.GameInterface_Controller\00.UIManager\00.UIPage\14.UIPage_Popup %280%25%29</Filter>
+      <Filter>03.GameInterface_Controller\00.UIManager\00.UIPage\14.UIPage_Popup %2850%25%29</Filter>
     </ClInclude>
     <ClInclude Include="..\Public\UIPage_Talking.h">
       <Filter>03.GameInterface_Controller\00.UIManager\00.UIPage\13.UIPage_Talking %2850%25%29</Filter>
     </ClInclude>
     <ClInclude Include="..\Public\UIPage_Inform.h">
-      <Filter>03.GameInterface_Controller\00.UIManager\00.UIPage\15.UIPage_Inform %280%25%29</Filter>
+      <Filter>03.GameInterface_Controller\00.UIManager\00.UIPage\15.UIPage_Inform %2850%25%29</Filter>
     </ClInclude>
     <ClInclude Include="..\Public\AObj_Wave.h">
       <Filter>02.GameObjects\12.AttackObject\SimonManus\Wave</Filter>
@@ -1766,7 +1766,7 @@
       <Filter>03.GameInterface_Controller\00.UIManager\00.UIPage\07.UIPage_Skill %280%25%29</Filter>
     </ClCompile>
     <ClCompile Include="..\Private\UIPage_Stat.cpp">
-      <Filter>03.GameInterface_Controller\00.UIManager\00.UIPage\06.UIPage_Stat %280%25%29</Filter>
+      <Filter>03.GameInterface_Controller\00.UIManager\00.UIPage\06.UIPage_Stat %2850%25%29</Filter>
     </ClCompile>
     <ClCompile Include="..\Private\UIPage_ItemInfo.cpp">
       <Filter>03.GameInterface_Controller\00.UIManager\00.UIPage\09.UIPage_ItemInfo %2890%25%29</Filter>
@@ -2172,13 +2172,13 @@
       <Filter>03.GameInterface_Controller\00.UIManager\00.UIPage\11.UIPage_Test</Filter>
     </ClCompile>
     <ClCompile Include="..\Private\UIPage_Popup.cpp">
-      <Filter>03.GameInterface_Controller\00.UIManager\00.UIPage\14.UIPage_Popup %280%25%29</Filter>
+      <Filter>03.GameInterface_Controller\00.UIManager\00.UIPage\14.UIPage_Popup %2850%25%29</Filter>
     </ClCompile>
     <ClCompile Include="..\Private\UIPage_Talking.cpp">
       <Filter>03.GameInterface_Controller\00.UIManager\00.UIPage\13.UIPage_Talking %2850%25%29</Filter>
     </ClCompile>
     <ClCompile Include="..\Private\UIPage_Inform.cpp">
-      <Filter>03.GameInterface_Controller\00.UIManager\00.UIPage\15.UIPage_Inform %280%25%29</Filter>
+      <Filter>03.GameInterface_Controller\00.UIManager\00.UIPage\15.UIPage_Inform %2850%25%29</Filter>
     </ClCompile>
     <ClCompile Include="..\Private\AObj_Wave.cpp">
       <Filter>02.GameObjects\12.AttackObject\SimonManus\Wave</Filter>
