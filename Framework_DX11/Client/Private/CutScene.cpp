@@ -29,8 +29,8 @@ HRESULT CCutScene::Initialize(void* pArg)
 	m_pCamera = CCamera_Manager::Get_Instance()->Find_Camera(TEXT("Camera_Free"));
 
 	m_pObjects[PLAYER] = static_cast<CPawn*>(m_pGameInstance->Find_Player(LEVEL_GAMEPLAY));
-	//m_pObjects[BOSS1]  = static_cast<CPawn*>(m_pGameInstance->Find_Object(LEVEL_GAMEPLAY, TEXT("Layer_Boss1"), 0));
-	//m_pObjects[BOSS2]  = static_cast<CPawn*>(m_pGameInstance->Find_Object(LEVEL_GAMEPLAY, TEXT("Layer_Boss2"), 0));
+//	m_pObjects[BOSS1]  = static_cast<CPawn*>(m_pGameInstance->Find_Object(LEVEL_GAMEPLAY, TEXT("Layer_Raxasia"), 0));
+	m_pObjects[BOSS2]  = static_cast<CPawn*>(m_pGameInstance->Find_Object(LEVEL_GAMEPLAY, TEXT("Layer_SimonManus"), 0));
 
 	return S_OK;
 }
@@ -64,9 +64,10 @@ void CCutScene::Update(_float fTimeDelta)
 
 		CCamera_Manager::Get_Instance()->Change_Camera(TEXT("Camera_Player"));
 
+		CPlayer* pPlayer = dynamic_cast<CPlayer*>(m_pGameInstance->Find_Player(LEVEL_GAMEPLAY));
+
 		if (m_iIndex == SOPHIA_ENTER)
 		{
-			CPlayer* pPlayer = dynamic_cast<CPlayer*>(m_pGameInstance->Find_Player(LEVEL_GAMEPLAY));
 			pPlayer->Appear_Weapon();
 			pPlayer->Get_Model()->ReadyDenyNextTranslate(4);
 			pPlayer->Change_State(CPlayer::OH_IDLE);
@@ -74,9 +75,13 @@ void CCutScene::Update(_float fTimeDelta)
 		}
 		else if (m_iIndex == SOPHIA_DEAD)
 		{
-			CPlayer* pPlayer = dynamic_cast<CPlayer*>(m_pGameInstance->Find_Player(LEVEL_GAMEPLAY));
 			pPlayer->Appear_Weapon();
 			pPlayer->Get_Model()->ReadyDenyNextTranslate(4);
+			pPlayer->Change_State(CPlayer::OH_IDLE);
+			pPlayer->Get_Navigation()->Move_to_Cell(pPlayer->Get_RigidBody(), 1178);
+		}
+		else if (m_iIndex == BOSS2_MEET)
+		{
 			pPlayer->Change_State(CPlayer::OH_IDLE);
 			pPlayer->Get_Navigation()->Move_to_Cell(pPlayer->Get_RigidBody(), 1178);
 		}
