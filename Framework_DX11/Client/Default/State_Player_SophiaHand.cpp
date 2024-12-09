@@ -18,7 +18,7 @@ HRESULT CState_Player_SophiaHand::Initialize(_uint iStateNum, void* pArg)
 
     m_pTrackPos = pDesc->pPrevTrackPos;
 
-    m_iAnimation_SophiaHand = m_pPlayer->Get_Model()->Find_AnimationIndex("AS_Pino_Hand_SophiaDead_Cine", 1.f);
+    m_iAnimation_SophiaHand = m_pPlayer->Get_Model()->Find_AnimationIndex("AS_Pino_Hand_SophiaDead_Cine", 2.5f);
 
     m_iStateNum = iStateNum;
 
