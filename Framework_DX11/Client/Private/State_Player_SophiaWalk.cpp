@@ -22,6 +22,21 @@ HRESULT CState_Player_SophiaWalk::Initialize(_uint iStateNum, void* pArg)
 
     m_iStateNum = iStateNum;
 
+    m_iFootStepFrame[0] = 79;
+    m_iFootStepFrame[1] = 103;
+    m_iFootStepFrame[2] = 125;
+    m_iFootStepFrame[3] = 147;
+    m_iFootStepFrame[4] = 167;
+    m_iFootStepFrame[5] = 189;
+    m_iFootStepFrame[6] = 212;
+    m_iFootStepFrame[7] = 232;
+    m_iFootStepFrame[8] = 248;
+    m_iFootStepFrame[9] = 272;
+    m_iFootStepFrame[10] = 293;
+    m_iFootStepFrame[11] = 313;
+    m_iFootStepFrame[12] = 333;
+    m_iFootStepFrame[13] = 356;
+
     return S_OK;
 }
 
@@ -69,6 +84,10 @@ void CState_Player_SophiaWalk::End_State()
 _bool CState_Player_SophiaWalk::End_Check()
 {
     return m_pPlayer->Get_EndAnim(m_iAnimation_SophiaWalk);
+}
+
+void CState_Player_SophiaWalk::Control_Sound()
+{
 }
 
 CState_Player_SophiaWalk* CState_Player_SophiaWalk::Create(CFsm* pFsm, CPlayer* pPlayer, _uint iStateNum, void* pArg)
