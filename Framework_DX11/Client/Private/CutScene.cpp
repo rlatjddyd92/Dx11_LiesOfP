@@ -60,7 +60,8 @@ void CCutScene::Update(_float fTimeDelta)
 		m_bFinishe_Setting = true;
 
 		//UI 살려야 함
-		GET_GAMEINTERFACE->Fade_In(0.f, true);
+		GET_GAMEINTERFACE->Fade_In(0.f);
+		GET_GAMEINTERFACE->UIPart_On();
 
 		CCamera_Manager::Get_Instance()->Change_Camera(TEXT("Camera_Player"));
 
@@ -145,7 +146,8 @@ void CCutScene::Active_UI(CUTSCENE_KEYFRAME_DESC* pCutSceneDesc)
 	}
 	if (pCutSceneDesc->UI_DESC.bFadeIn)
 	{
-		GET_GAMEINTERFACE->Fade_In(pCutSceneDesc->UI_DESC.fTime, false);
+		GET_GAMEINTERFACE->Fade_In(pCutSceneDesc->UI_DESC.fTime);
+		GET_GAMEINTERFACE->UIPart_Off();
 	}
 }
 
@@ -215,7 +217,7 @@ void CCutScene::First_Setting()
 	m_bFirstStart = false;
 	CPlayer* pPlayer = dynamic_cast<CPlayer*>(m_pGameInstance->Find_Player(LEVEL_GAMEPLAY));
 
-	GET_GAMEINTERFACE->All_UIPart_Off();
+	GET_GAMEINTERFACE->UIPart_Off();
 
 	switch (m_iIndex)
 	{

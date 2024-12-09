@@ -90,8 +90,7 @@ HRESULT CUIManager::Initialize(void* pArg)
 
 void CUIManager::Priority_Update(_float fTimeDelta)
 {
-	if (m_bAllUIPartUpdate_Stop)
-		return;
+	
 
 	for (auto& iter : m_vecPage)
 		if (iter->GetUpdate())
@@ -100,9 +99,7 @@ void CUIManager::Priority_Update(_float fTimeDelta)
 
 void CUIManager::Update(_float fTimeDelta)
 {
-	if (m_bAllUIPartUpdate_Stop)
-		return;
-
+	
 	for (auto& iter : m_vecPage)
 		if (iter->GetUpdate())
 			iter->Update(fTimeDelta);
@@ -110,21 +107,6 @@ void CUIManager::Update(_float fTimeDelta)
 
 void CUIManager::Late_Update(_float fTimeDelta)
 {
-	if (m_bAllUIPartUpdate_Stop)
-	{
-		m_pUIPage_Effect->SetUpdate(true);
-		m_pUIPage_Effect->Late_Update(fTimeDelta);
-		return;
-	}
-		
-
-	if (m_bWait_Off_UIPart)
-		if (m_vecPage[_int(m_eNowPage)]->GetPageAction(PAGEACTION::ACTION_INACTIVE))
-		{
-			All_UIPart_Off(false);
-			return;
-		}
-
 	// 렌더 최종 결정 
 	_int iCountOpen = 0;
 

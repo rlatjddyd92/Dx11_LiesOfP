@@ -100,6 +100,8 @@ void CUIPage_Effect::Update(_float fTimeDelta)
 
 void CUIPage_Effect::Late_Update(_float fTimeDelta)
 {
+	m_fTopPartMove = -1.f;
+
 	__super::Late_Update(fTimeDelta);
 }
 

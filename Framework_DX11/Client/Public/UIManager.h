@@ -274,49 +274,26 @@ public:
 
 #pragma region Effect
 
-	_bool Fade_Out(_wstring strTitle, _wstring strDesc, _Vec3 vColor = _Vec3{ 0.f,0.f,0.f }, _float fTime = 1.f) 
+	void Fade_Out(_wstring strTitle, _wstring strDesc, _Vec3 vColor = _Vec3{ 0.f,0.f,0.f }, _float fTime = 1.f) 
 	{ 
-		All_UIPart_Off();
 		m_pUIPage_Effect->Fade_Out(strTitle, strDesc, vColor, fTime);
-		return true;
 	}
-	_bool Fade_In(_float fTime = 1.f, _bool bIsUIOn = true) 
+	void Fade_In(_float fTime = 1.f)
 	{ 
-		if(!m_pUIPage_Effect->Fade_In(fTime))
-			return false;
-
-		if (bIsUIOn)
-			All_UIPart_On();
-	
-		return true;
+		m_pUIPage_Effect->Fade_In(fTime);
 	}
 	void UIPart_On()
 	{
 		OpenPage(UIPAGE::PAGE_PLAY);
 		m_bIsPlayPageMaintain = true;
 	}
-	void All_UIPart_Off(_bool bIsSlow = true)
+	void UIPart_Off()
 	{
-		if (bIsSlow)
-		{
-			m_vecPage[_int(m_eNowPage)]->CloseAction();
-			m_bWait_Off_UIPart = true;
-			m_bIsPlayPageMaintain = false;
-		}
-		else
-		{
-			m_bIsPlayPageMaintain = false;
-			m_bAllUIPartRender_Stop = true;
-			m_bAllUIPartUpdate_Stop = true;
-			m_bWait_Off_UIPart = false;
-		}
-	}
-	void All_UIPart_On(_bool bIsSlow = true)
-	{
-		m_vecPage[_int(UIPAGE::PAGE_PLAY)]->OpenAction();
-		m_bAllUIPartRender_Stop = false;
-		m_bAllUIPartUpdate_Stop = false;
-		m_bIsPlayPageMaintain = true;
+		for (auto& iter : m_vecPage)
+			if ((iter->GetPageAction(PAGEACTION::ACTION_ACTIVE)) || (iter->GetPageAction(PAGEACTION::ACTION_OPENING)))
+				iter->CloseAction();
+
+		m_bIsPlayPageMaintain = false;
 	}
 
 	void Show_Script(_wstring strScript0, _wstring strScript1 = TEXT("none"), _float fTime = 1.f, _Vec3 vColor = _Vec3{ 0.f,0.f,0.f }) 
@@ -386,10 +363,6 @@ private:
 
 	_bool m_bIsIngame = false;
 	_bool m_bIsPlayPageMaintain = false;
-
-	_bool m_bWait_Off_UIPart = false;
-	_bool m_bAllUIPartRender_Stop = false;
-	_bool m_bAllUIPartUpdate_Stop = false;
 
 	ITEM_FUNC m_eNow_Active_Func = ITEM_FUNC::FUNC_END;
 
