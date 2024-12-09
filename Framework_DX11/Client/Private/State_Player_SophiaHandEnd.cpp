@@ -27,7 +27,7 @@ HRESULT CState_Player_SophiaHandEnd::Initialize(_uint iStateNum, void* pArg)
 
 HRESULT CState_Player_SophiaHandEnd::Start_State(void* pArg)
 {
-    m_pPlayer->Change_Animation(m_iAnimation_SophiaHandEnd, false, 1.5f);
+    m_pPlayer->Change_Animation(m_iAnimation_SophiaHandEnd, false, 2.5f);
 
     return S_OK;
 }
