@@ -136,6 +136,7 @@ void CController_Cutscene::Menu()
             m_pCurrentCutScene->Keyframe_Actived_Reset();
             m_pCamera->Reset_Zoom();
             m_pCamera->Reset_MoveLerp();
+            m_pCamera->Stop_Turn();
         }
 
         ImGui::SliderFloat("TimeLine", m_fTrackPosition, 0.0f, fMaxFrame);
