@@ -120,6 +120,8 @@ void CUIManager::Late_Update(_float fTimeDelta)
 			continue;
 		if (i == _int(UIPAGE::PAGE_EFFECT))
 			continue;
+		if (m_vecPage[i]->GetPageAction(PAGEACTION::ACTION_INACTIVE))
+			continue;
 
 		if (m_vecPage[i]->GetUpdate())
 			m_vecPage[i]->Late_Update(fTimeDelta);

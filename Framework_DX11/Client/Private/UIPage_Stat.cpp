@@ -304,7 +304,20 @@ void CUIPage_Stat::Update_SpecData(_float fTimeDelta)
 	m_iLevelUp_Buffer_Stat[7] = m_iLevelUp_Buffer_Point[2] * 10.f;
 	m_iLevelUp_Buffer_Stat[8] = m_iLevelUp_Buffer_Point[3] * 10.f;
 
+	for (_int i = 0; i < 9; ++i)
+	{
+		pOrigin_Stat[i] *= 100.f;
+		round(pOrigin_Stat[i]);
+		pOrigin_Stat[i] /= 100.f;
 
+		pAdjust_Stat[i] *= 100.f;
+		round(pAdjust_Stat[i]);
+		pAdjust_Stat[i] /= 100.f;
+
+		m_iLevelUp_Buffer_Stat[i] *= 100.f;
+		round(m_iLevelUp_Buffer_Stat[i]);
+		m_iLevelUp_Buffer_Stat[i] /= 100.f;
+	}
 
 	if (pAblity->bDebuff_Fire_Ignore)
 		m_iLevelUp_Buffer_Stat[6] = -1.f;
