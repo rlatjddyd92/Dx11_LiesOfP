@@ -323,6 +323,13 @@ void CController_Cutscene::Camera_Memu()
     {
         ImGui::DragFloat("Duration", &pCutScene_Desc->Camera_Desc.fZoomDuration, 0.1f, 0.f, 10.f);
     }
+    //¼ÎÀÌÅ·
+    ImGui::Checkbox("Shake", &pCutScene_Desc->Camera_Desc.bShake);
+    if (pCutScene_Desc->Camera_Desc.bShake)
+    {
+        ImGui::DragFloat("Duration", &pCutScene_Desc->Camera_Desc.fShakeDuration, 0.1f, 0.f);
+        ImGui::DragFloat("Duration", &pCutScene_Desc->Camera_Desc.fShakePower, 0.1f, 0.f);
+    }
 }
 
 void CController_Cutscene::UI_Memu()
