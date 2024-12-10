@@ -33,6 +33,7 @@
 #include "State_Player_Teleport.h"
 #include "State_Player_Grinder.h"
 #include "State_Player_GetUp.h"
+#include "State_Player_ThrowItem.h"
 
 #include "State_Player_OH_Idle.h"
 #include "State_Player_OH_Walk.h"
@@ -167,9 +168,6 @@ HRESULT CPlayer::Initialize(void * pArg)
 
 void CPlayer::Priority_Update(_float fTimeDelta)
 {
-	// 24-12-05 김성용
-	// 아이템 연동 
-	
 	/*
 	UI 및 아이템 작동 시스템 
 	1. UI, 아이템 매니저(인벤,장비) 시스템은 모든 오브젝트보다 나중에 업데이트 진행 
@@ -177,11 +175,9 @@ void CPlayer::Priority_Update(_float fTimeDelta)
 	3. 이에 따라 Priority_Update에서 가장 먼저 지난 프레임의 내용을 받아 보도록 코드 작성 
 	*/
 
-
 	// ★ 아래 내용은 지난 프레임의 조작 결과임에 주의 ★
 	// 지난 프레임의 아이템 사용 기록 가져오기 
 	list<SPECIAL_ITEM>& Item_Type_list = GET_GAMEINTERFACE->Get_LastFrame_UsingItem_Info();
-	
 	_wstring strTest{};
 
 	if (!Item_Type_list.empty())
@@ -233,12 +229,6 @@ void CPlayer::Priority_Update(_float fTimeDelta)
 		//GET_GAMEINTERFACE->Show_Script(strTest, TEXT("none"), 1.f);
 	}
 
-	//STAT_INFO* pTest_Adjust = m_tPlayer_Stat_Adjust;
-	//ABILITY_INFO* pTest_Ability = m_tPlayer_Ability;
-	
-	SPECIAL_ITEM eNow = GET_GAMEINTERFACE->Get_Now_Select_Item();
-
-
 	if (m_isGuard)
 	{
 		m_fGuardTime += fTimeDelta;
@@ -249,8 +239,19 @@ void CPlayer::Priority_Update(_float fTimeDelta)
 	if (KEY_TAP(KEY::WHEELBUTTON))
 		LockOnOff();
 
+	if (m_isLockOn)
+	{
+		if (m_pTargetMonster->Get_Dead())
+		{
+			m_pTargetMonster = nullptr;
+			m_isLockOn = false;
+		}
+	}
+
 	if(nullptr != m_pWeapon[m_eWeaponType])
 		m_pWeapon[m_eWeaponType]->Priority_Update(fTimeDelta);
+	if(nullptr != m_pWeapon_Arm)
+		m_pWeapon_Arm->Priority_Update(fTimeDelta);
 
 	for (auto& pEffect : m_Effects)
 	{
@@ -309,6 +310,8 @@ void CPlayer::Update(_float fTimeDelta)
 
 	if (nullptr != m_pWeapon[m_eWeaponType])
 		m_pWeapon[m_eWeaponType]->Update(fTimeDelta);
+	if (nullptr != m_pWeapon_Arm)
+		m_pWeapon_Arm->Update(fTimeDelta);
 
 	if (KEY_TAP(KEY::L))
 	{
@@ -317,15 +320,6 @@ void CPlayer::Update(_float fTimeDelta)
 	if (KEY_TAP(KEY::K))
 	{
 		Change_State(RAPIER_FATAL);
-	}
-
-	if (KEY_TAP(KEY::Q))
-	{
-		// 테스트 코드 - UI 제거
-
-		GET_GAMEINTERFACE->UIPart_Off();
-
-		dynamic_cast<CCutScene*>(m_pGameInstance->Find_Object(LEVEL_GAMEPLAY, TEXT("Layer_CutScene"), SOPHIA_DEAD))->Start_Play();
 	}
 }
 
@@ -336,6 +330,8 @@ void CPlayer::Late_Update(_float fTimeDelta)
 
 	if (nullptr != m_pWeapon[m_eWeaponType])
 		m_pWeapon[m_eWeaponType]->Late_Update(fTimeDelta);
+	if (nullptr != m_pWeapon_Arm)
+		m_pWeapon_Arm->Late_Update(fTimeDelta);
 
 	//업데이트에서 생성하니 업데이트 이전에 비우기
 	for (auto& pEffect : m_Effects)
@@ -567,6 +563,24 @@ void CPlayer::DeActive_CurretnWeaponCollider(_uint iHandIndex)
 	m_pWeapon[m_eWeaponType]->DeActive_Collider(iHandIndex);
 }
 
+_bool CPlayer::Active_Arm()
+{
+	if (m_pWeapon_Arm->IsActive())
+		return false;
+
+	m_pWeapon_Arm->IsActive(true);
+	return m_pWeapon_Arm->Active_Collider(1.f, 0, HIT_METAL, ATK_STRONG);
+}
+
+void CPlayer::DeActive_Arm()
+{
+	if (!m_pWeapon_Arm->IsActive())
+		return;
+
+	m_pWeapon_Arm->IsActive(false);
+	m_pWeapon_Arm->DeActive_Collider();
+}
+
 void CPlayer::Seperate_Scissor()
 {
 	if (WEP_SCISSOR != m_eWeaponType)
@@ -620,7 +634,7 @@ void CPlayer::LockOnOff()
 	}
 }
 
-CPawn* CPlayer::Find_TargetMonster()
+CMonster* CPlayer::Find_TargetMonster()
 {
 	if (nullptr == m_pGameInstance->Find_Layer(LEVEL_GAMEPLAY, TEXT("Layer_Monster")))
 		return nullptr;
@@ -663,7 +677,7 @@ CPawn* CPlayer::Find_TargetMonster()
 		}
 	}
 
-	return dynamic_cast<CPawn*>(pNearObject);
+	return dynamic_cast<CMonster*>(pNearObject);
 }
 
 void CPlayer::Play_CurrentWeaponSound(const _uint iType, const TCHAR* pSoundKey, _uint iHandIndex)
@@ -706,8 +720,10 @@ _bool CPlayer::Calc_DamageGain(_float fAtkDmg, _Vec3 vHitPos, _uint iHitType, _u
 	}
 	else if (m_isArm)	//리전암 작동 상태
 	{
+		pSocketBoneMatrix = m_pModelCom->Get_BoneCombindTransformationMatrix_Ptr("BN_Aegis_All");
+
 		//퍼펙트 가드
-		if (m_isGuard && m_fGuardTime < 0.17f)
+		if (m_isGuard && m_fGuardTime < 0.19f)
 		{
 			if (nullptr != pAttacker)
 			{
@@ -727,13 +743,14 @@ _bool CPlayer::Calc_DamageGain(_float fAtkDmg, _Vec3 vHitPos, _uint iHitType, _u
 				}
 			}
 
+			m_pFsmCom->Change_State(ARM_GURAD_HARD);
 			Decrease_Stamina(fAtkDmg * 0.2f);
 			m_pEffect_Manager->Add_Effect_ToLayer(LEVEL_GAMEPLAY, TEXT("Player_PerfectGuard"), pParetnMatrix, pSocketBoneMatrix);
 			m_pGameInstance->Start_TimerLack(TEXT("Timer_60"), 0.001f, 0.6f);
 		}
-
-		if (m_isParry)
+		else if (m_isParry)
 		{
+			// 데미지 주기
 			m_pFsmCom->Change_State(ARM_BOMB);
 		}
 		else if (ATK_WEAK == iAttackStrength)
@@ -950,6 +967,9 @@ void CPlayer::Update_Stat(_float fTimeDelta)
 void CPlayer::Recovery_HP(_float fAmount)
 {
 	m_tPlayer_Stat->vGauge_Hp.x += fAmount;
+	if (m_tPlayer_Stat->vGauge_Hp.x > m_tPlayer_Stat->vGauge_Hp.y)
+		m_tPlayer_Stat->vGauge_Hp.y = m_tPlayer_Stat->vGauge_Hp.x;
+
 	if (m_tPlayer_Stat->vGauge_Hp.x >= m_tPlayer_Stat->vGauge_Hp.z + m_tPlayer_Stat_Adjust->vGauge_Hp.z)
 	{
 		m_tPlayer_Stat->vGauge_Hp.x = m_tPlayer_Stat->vGauge_Hp.z + m_tPlayer_Stat_Adjust->vGauge_Hp.z;
@@ -1179,6 +1199,13 @@ HRESULT CPlayer::Ready_Weapon()
 
 	Change_Weapon();
 
+	WeaponDesc.pParentWorldMatrix = m_pTransformCom->Get_WorldMatrix_Ptr();
+	WeaponDesc.pSocketBoneMatrix = m_pModelCom->Get_BoneCombindTransformationMatrix_Ptr("BN_Aegis_All");
+	WeaponDesc.pPlayer = this;
+	m_pWeapon_Arm = dynamic_cast<CWeapon*>(m_pGameInstance->Clone_GameObject(TEXT("Prototype_GameObject_Weapon_PlayerArm"), &WeaponDesc));
+	if (nullptr == m_pWeapon_Arm)
+		return E_FAIL;
+
 	return S_OK;
 }
 
@@ -1258,6 +1285,7 @@ HRESULT CPlayer::Ready_FSM()
 	m_pFsmCom->Add_State(CState_Player_Teleport::Create(m_pFsmCom, this, TELEPORT, &Desc));
 	m_pFsmCom->Add_State(CState_Player_Grinder::Create(m_pFsmCom, this, GRINDER, &Desc));
 	m_pFsmCom->Add_State(CState_Player_GetUp::Create(m_pFsmCom, this, GETUP, &Desc));
+	m_pFsmCom->Add_State(CState_Player_ThrowItem::Create(m_pFsmCom, this, THROW_ITEM, &Desc));
 
 	m_pFsmCom->Add_State(CState_Player_OH_Idle::Create(m_pFsmCom, this, OH_IDLE, &Desc));
 	m_pFsmCom->Add_State(CState_Player_OH_Walk::Create(m_pFsmCom, this, OH_WALK, &Desc));
@@ -1410,6 +1438,8 @@ void CPlayer::Free()
 	{
 		Safe_Release(m_pWeapon[i]);
 	}
+
+	Safe_Release(m_pWeapon_Arm);
 
 	// 24-11-27 김성용
 	// 스탯 구조체 제거 

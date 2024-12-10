@@ -23,7 +23,7 @@ HRESULT CState_Player_Arm_Start::Initialize(_uint iStateNum, void* pArg)
     m_iAnimation_Walk[WALK_L] = m_pPlayer->Get_Model()->Find_AnimationIndex("AS_Pino_O_Walk_L", 2.5f);
     m_iAnimation_Walk[WALK_R] = m_pPlayer->Get_Model()->Find_AnimationIndex("AS_Pino_O_Walk_R", 2.5f);
 
-    m_iAnimation_ArmStart = m_pPlayer->Get_Model()->Find_AnimationIndex("AS_Pino_Arm_GuardEx_Start", 2.5f);
+    m_iAnimation_ArmStart = m_pPlayer->Get_Model()->Find_AnimationIndex("AS_Pino_Arm_GuardEx_Start", 4.f);
 
     m_iStateNum = iStateNum;
 

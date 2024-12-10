@@ -24,10 +24,15 @@ private:
 
     _uint               m_iAnimation_Arm_Counter = {};
 
-    _double* m_pTrackPos = { nullptr };
+    _double*            m_pTrackPos = { nullptr };
 
 private:
     _bool               End_Check();
+
+private:
+    _int                m_iColliderStartFrame = {};
+    _int                m_iColliderEndFrame = {};
+    void                Control_Collider();
 
 public:
     static CState_Player_Arm_Counter* Create(class CFsm* pFsm, class CPlayer* pPlayer, _uint iStateNum, void* pArg = nullptr);

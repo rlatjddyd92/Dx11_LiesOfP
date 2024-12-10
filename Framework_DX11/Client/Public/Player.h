@@ -26,7 +26,7 @@ public:
 
 	enum PLAYER_STATE
 	{
-		HIT, PARRY, HEAL, CHANGEWEP, GRINDER, GETUP,
+		HIT, PARRY, HEAL, CHANGEWEP, GRINDER, GETUP, THROW_ITEM,
 
 		OH_IDLE, OH_WALK, OH_RUN, OH_SPRINT, OH_GUARD, OH_GUARDHIT, OH_JUMP, OH_DASH,
 
@@ -191,7 +191,7 @@ public:
 
 	void					Reset_Root() { m_vCurRootMove = m_vRootMoveStack = _vector{0,0,0,0}; }
 
-	CPawn*					Get_TargetMonster() { return m_pTargetMonster; }
+	CMonster*					Get_TargetMonster() { return m_pTargetMonster; }
 
 	void					Set_DissloveRatio(_float fRatio) { m_fDissloveRatio = fRatio; }
 
@@ -243,13 +243,16 @@ public:
 	_bool			Active_CurrentWeaponCollider(_float fDamageRatio = 1.f, _uint iHandIndex = 1);
 	void			DeActive_CurretnWeaponCollider(_uint iHandIndex = 1);
 
+	_bool			Active_Arm();
+	void			DeActive_Arm();
+
 	void			Seperate_Scissor();
 	void			Combine_Scissor();
 
 	void			Change_CameraMode(CPlayerCamera::CAMERA_MODE eMode);
 
 	void			LockOnOff();
-	CPawn*			Find_TargetMonster();
+	CMonster*		Find_TargetMonster();
 
 	void			Play_CurrentWeaponSound(const _uint iType, const TCHAR* pSoundKey, _uint iHandIndex = 1);
 
@@ -290,11 +293,13 @@ private:
 	_float				m_fRecoveryStaminaTime = { 0.f };
 	_float				m_fDissloveRatio = {};
 
-	CPawn*				m_pTargetMonster = { nullptr };
-	CPawn*				m_pIntersectMonster = { nullptr };
+	CMonster*			m_pTargetMonster = { nullptr };
+	CMonster*			m_pIntersectMonster = { nullptr };
 
 	class CWeapon*		m_pWeapon[WEP_END] = { nullptr, };
 	WEAPON_TYPE			m_eWeaponType = { WEP_RAPIER };
+
+	class CWeapon*		m_pWeapon_Arm = { nullptr };
 
 private:
 	_vector		m_vRootMoveStack = {};

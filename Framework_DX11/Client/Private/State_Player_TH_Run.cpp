@@ -55,29 +55,36 @@ void CState_Player_TH_Run::Update(_float fTimeDelta)
 
     if (false == Move(fTimeDelta))
     {
-        m_pPlayer->Change_State(CPlayer::TH_IDLE);
-        return;
+        if (m_isTurnOver)
+        {
+            m_pPlayer->Change_State(CPlayer::TH_IDLE);
+            return;
+        }
     }
 
     if (m_fSpaceTime > 0.1f)
     {
         if (KEY_NONE(KEY::SPACE))
         {
-            m_pPlayer->Change_State(CPlayer::TH_DASH);
+            if (m_isTurnOver)
+                m_pPlayer->Change_State(CPlayer::TH_DASH);
         }
 
         if (KEY_HOLD(KEY::SPACE))
         {
-            m_pPlayer->Change_State(CPlayer::TH_SPRINT);
+            if (m_isTurnOver)
+                m_pPlayer->Change_State(CPlayer::TH_SPRINT);
         }
     }
     else if (KEY_HOLD(KEY::LSHIFT))
     {
-        m_pPlayer->Change_State(CPlayer::TH_GUARD);
+        if (m_isTurnOver)
+            m_pPlayer->Change_State(CPlayer::TH_GUARD);
     }
     else if (KEY_TAP(KEY::R))
     {
-        m_pPlayer->Change_State(CPlayer::HEAL);
+        if (m_isTurnOver)
+            m_pPlayer->Change_State(CPlayer::HEAL);
     }
 
     if (KEY_TAP(KEY::SPACE))

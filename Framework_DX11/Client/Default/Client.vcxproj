@@ -202,6 +202,8 @@
     <ClInclude Include="..\Public\State_Player_Arm_Start.h" />
     <ClInclude Include="..\Public\State_Player_Arm_Swing.h" />
     <ClInclude Include="..\Public\State_Player_Arm_Thrust.h" />
+    <ClInclude Include="..\Public\State_Player_ThrowItem.h" />
+    <ClInclude Include="..\Public\Weapon_PlayerArm.h" />
     <ClInclude Include="..\Public\Weapon_Raxasia_P1_Sword.h" />
     <ClInclude Include="..\Public\Sophia.h" />
     <ClInclude Include="..\Public\State_Player_Flame_Fable.h" />
@@ -454,6 +456,8 @@
     <ClCompile Include="..\Private\State_Player_Arm_Start.cpp" />
     <ClCompile Include="..\Private\State_Player_Arm_Swing.cpp" />
     <ClCompile Include="..\Private\State_Player_Arm_Thrust.cpp" />
+    <ClCompile Include="..\Private\State_Player_ThrowItem.cpp" />
+    <ClCompile Include="..\Private\Weapon_PlayerArm.cpp" />
     <ClCompile Include="..\Private\Weapon_Raxasia_P1_Sword.cpp" />
     <ClCompile Include="..\Private\Sophia.cpp" />
     <ClCompile Include="..\Private\State_Player_Flame_Fable.cpp" />

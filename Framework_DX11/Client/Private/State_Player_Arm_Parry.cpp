@@ -21,7 +21,7 @@ HRESULT CState_Player_Arm_Parry::Initialize(_uint iStateNum, void* pArg)
 
     m_iStateNum = iStateNum;
 
-    m_iSoundFrame = 30;
+    m_iSoundFrame = 25;
 
     return S_OK;
 }
@@ -37,7 +37,7 @@ void CState_Player_Arm_Parry::Update(_float fTimeDelta)
 {
     _int iFrame = m_pPlayer->Get_Frame();
 
-    if (18 <= iFrame && iFrame < 30)
+    if (25 <= iFrame && iFrame < 45)
     {
         m_pPlayer->Set_IsParry(true);
     }
