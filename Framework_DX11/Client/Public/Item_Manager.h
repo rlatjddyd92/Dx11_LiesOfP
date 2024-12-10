@@ -280,8 +280,28 @@ public:
 	// 플레이어 기능 구현
 	CPlayer::WEAPON_TYPE Get_Weapon_Model_Index(); // 현재 사용 중인 무기의 모델 번호 리턴
 	list<SPECIAL_ITEM>& Get_LastFrame_UsingItem_Info(); // 이번 프레임에 기능 구현이 필요한 아이템을 사용했는지 확인
+	SPECIAL_ITEM Check_Item_Special_Enum(_int iIndex);
 	void Set_Item_Funtion(_int iItem_Index);
 	_bool Get_CanSwitch_Weapon(); // 무기 슬롯 2개 중 1개만 아이템이 있는 경우 false 반환
+
+	SPECIAL_ITEM Get_Now_Select_Item()
+	{
+		_int iIndex = -1;
+		if (m_bIsPotion)
+		{
+			const ITEM* pItem = Get_Equip_Item_Info(EQUIP_SLOT(_int(EQUIP_SLOT::EQUIP_USING_TOP_0) + m_iPotion_Select));
+			if (pItem != nullptr)
+				iIndex = pItem->iItem_Index;
+		}
+		else 
+		{
+			const ITEM* pItem = Get_Equip_Item_Info(EQUIP_SLOT(_int(EQUIP_SLOT::EQUIP_USING_BOTTOM_0) + m_iTool_Select));
+			if (pItem != nullptr)
+				iIndex = pItem->iItem_Index;
+		}
+
+		return Check_Item_Special_Enum(iIndex);
+	}
 
 	// 접근, 수정
 	_bool Is_ItemData_Change() { return m_bIsChange; }
@@ -393,6 +413,8 @@ public:
 	}
 	_int Get_Potion_Select() { return m_iPotion_Select; }
 	_int Get_Tool_Select() { return m_iTool_Select; }
+	void Set_Select(_bool bIsPotion) { m_bIsPotion = bIsPotion; }
+	
 
 	// 무기 관련
 	_int Change_Weapon()
@@ -625,6 +647,7 @@ private:
 	// 좌하단 조작용
 	_uint m_iPotion_Select = 0;
 	_uint m_iTool_Select = 0;
+	_bool m_bIsPotion = false;
 
 	// 우하단 조작용
 	_uint m_iWeapon_Select = -1;

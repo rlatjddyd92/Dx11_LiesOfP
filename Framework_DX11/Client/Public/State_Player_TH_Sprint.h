@@ -34,6 +34,11 @@ private:
 private:
     _bool               Move(_float fTimeDelta);
 
+private:
+    _int                m_iFootStepFrame[2] = {};
+    _bool               m_isPlaySound[2] = { false, };
+    void                Control_Sound();
+
 public:
     static CState_Player_TH_Sprint* Create(class CFsm* pFsm, class CPlayer* pPlayer, _uint iStateNum, void* pArg = nullptr);
     virtual void Free() override;

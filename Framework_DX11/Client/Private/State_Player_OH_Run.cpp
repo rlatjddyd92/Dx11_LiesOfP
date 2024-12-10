@@ -5,6 +5,8 @@
 #include "Player.h"
 #include "Camera.h"
 
+#include "GameInterface_Controller.h"
+
 CState_Player_OH_Run::CState_Player_OH_Run(CFsm* pFsm, CPlayer* pPlayer)
     :CState{ pFsm }
     , m_pPlayer{ pPlayer }
@@ -37,8 +39,6 @@ HRESULT CState_Player_OH_Run::Start_State(void* pArg)
 
     m_isInputSpace = false;
     m_fSpaceTime = 0.f;
-
-    m_isPlaySound = false;
 
     m_isTurnOver = false;
 
@@ -84,8 +84,17 @@ void CState_Player_OH_Run::Update(_float fTimeDelta)
     else if (KEY_TAP(KEY::R))
     {
         if (m_isTurnOver)
-            m_pPlayer->Change_State(CPlayer::GRINDER);
-        //m_pPlayer->Change_State(CPlayer::HEAL);
+        {
+            SPECIAL_ITEM eNow = GET_GAMEINTERFACE->Get_Now_Select_Item();
+            if (SPECIAL_ITEM::SP_PULSE_BATTERY == eNow)
+            {
+                m_pPlayer->Change_State(CPlayer::HEAL);
+            }
+            else if (SPECIAL_ITEM::SP_GRINDER == eNow)
+            {
+                m_pPlayer->Change_State(CPlayer::GRINDER);
+            }
+        }
     }
 
     if (KEY_TAP(KEY::SPACE))
@@ -162,19 +171,20 @@ void CState_Player_OH_Run::Control_Sound()
 {
     _int iFrame = m_pPlayer->Get_Frame();
 
-    if ((iFrame == m_iFootStepFrame[0] || iFrame == m_iFootStepFrame[0] + 1) && !m_isPlaySound)
+    if ((iFrame == m_iFootStepFrame[0] || iFrame == m_iFootStepFrame[0] + 1) && !m_isPlaySound[0])
     {
         m_pPlayer->Play_Sound(CPlayer::PAWN_SOUND_EFFECT1, TEXT("SE_PC_FS_Stone_Run_01.wav"));
-        m_isPlaySound = true;
+        m_isPlaySound[0] = true;
     }
-    else if ((iFrame == m_iFootStepFrame[1] || iFrame == m_iFootStepFrame[1] + 1) && !m_isPlaySound)
+    else if ((iFrame == m_iFootStepFrame[1] || iFrame == m_iFootStepFrame[1] + 1) && !m_isPlaySound[1])
     {
         m_pPlayer->Play_Sound(CPlayer::PAWN_SOUND_EFFECT1, TEXT("SE_PC_FS_Stone_Run_02.wav"));
-        m_isPlaySound = true;
+        m_isPlaySound[1] = true;
     }
-    else
+    else if (iFrame < 5)
     {
-        m_isPlaySound = false;
+        m_isPlaySound[0] = false;
+        m_isPlaySound[1] = false;
     }
 
 }

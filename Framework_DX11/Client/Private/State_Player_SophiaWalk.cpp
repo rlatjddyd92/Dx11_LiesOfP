@@ -18,9 +18,24 @@ HRESULT CState_Player_SophiaWalk::Initialize(_uint iStateNum, void* pArg)
 
     m_pTrackPos = pDesc->pPrevTrackPos;
 
-    m_iAnimation_SophiaWalk = m_pPlayer->Get_Model()->Find_AnimationIndex("AS_Pino_Walking_SophiaDead_Cine",1.f);
+    m_iAnimation_SophiaWalk = m_pPlayer->Get_Model()->Find_AnimationIndex("AS_Pino_Walking_SophiaDead_Cine", 1.f);
 
     m_iStateNum = iStateNum;
+
+    m_iFootStepFrame[0] = 79;
+    m_iFootStepFrame[1] = 103;
+    m_iFootStepFrame[2] = 125;
+    m_iFootStepFrame[3] = 147;
+    m_iFootStepFrame[4] = 167;
+    m_iFootStepFrame[5] = 189;
+    m_iFootStepFrame[6] = 212;
+    m_iFootStepFrame[7] = 232;
+    m_iFootStepFrame[8] = 248;
+    m_iFootStepFrame[9] = 272;
+    m_iFootStepFrame[10] = 293;
+    m_iFootStepFrame[11] = 313;
+    m_iFootStepFrame[12] = 333;
+    m_iFootStepFrame[13] = 356;
 
     return S_OK;
 }
@@ -30,6 +45,11 @@ HRESULT CState_Player_SophiaWalk::Start_State(void* pArg)
     m_pPlayer->Change_Animation(m_iAnimation_SophiaWalk, false, 0.f);
 
     m_vRootMoveStack = _Vec3(0.f, 0.f, 0.f);
+
+    for (_uint i = 0; i < 14; ++i)
+    {
+        m_isPlaySound[i] = false;
+    }
 
     return S_OK;
 }
@@ -42,24 +62,25 @@ void CState_Player_SophiaWalk::Update(_float fTimeDelta)
         m_pPlayer->Change_State(CPlayer::OH_IDLE);
     }*/
 
-    _Vec3 vMove = m_pPlayer->Get_Model()->Get_BoneCombindTransformationMatrix_Ptr(4)->Translation();
+    _Vec3 vMove = m_pPlayer->Get_Model()->Get_BoneCombindTransformationMatrix_Ptr(5)->Translation();
     _float4x4 TransMat;
-    XMStoreFloat4x4(&TransMat, m_pPlayer->Get_Model()->Get_Bones()[4]->Get_TransformationMatrix());
+    XMStoreFloat4x4(&TransMat, m_pPlayer->Get_Model()->Get_Bones()[5]->Get_TransformationMatrix());
     //TransMat._43 = TransMat._42 = TransMat._41 = 0.f;
     TransMat._41 = 0.f;
 
-    m_pPlayer->Get_Model()->Get_Bones()[4]->Set_TransformationMatrix(TransMat);;
+    m_pPlayer->Get_Model()->Get_Bones()[5]->Set_TransformationMatrix(TransMat);;
 
     m_pPlayer->Get_Model()->Update_Bone();
 
     vMove = XMVector3TransformNormal(vMove, m_pPlayer->Get_Transform()->Get_WorldMatrix());
     
     vMove.y = 0;
-
+   
     m_pPlayer->Get_RigidBody()->Set_Velocity((vMove - m_vRootMoveStack) / fTimeDelta);
 
     m_vRootMoveStack = vMove;
 
+    Control_Sound();
 }
 
 void CState_Player_SophiaWalk::End_State()
@@ -69,6 +90,20 @@ void CState_Player_SophiaWalk::End_State()
 _bool CState_Player_SophiaWalk::End_Check()
 {
     return m_pPlayer->Get_EndAnim(m_iAnimation_SophiaWalk);
+}
+
+void CState_Player_SophiaWalk::Control_Sound()
+{
+    _int iFrame = m_pPlayer->Get_Frame();
+
+    for (_uint i = 0; i < 14; ++i)
+    {
+        if ((iFrame == m_iFootStepFrame[i] || iFrame == m_iFootStepFrame[i] + 1) && !m_isPlaySound[i])
+        {
+            m_pPlayer->Play_Sound(CPlayer::PAWN_SOUND_EFFECT1, TEXT("SE_PC_FS_Stone_Walk_01.wav"));
+            m_isPlaySound[i] = true;
+        }
+    }
 }
 
 CState_Player_SophiaWalk* CState_Player_SophiaWalk::Create(CFsm* pFsm, CPlayer* pPlayer, _uint iStateNum, void* pArg)

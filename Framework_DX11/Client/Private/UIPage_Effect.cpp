@@ -74,7 +74,11 @@ void CUIPage_Effect::Update(_float fTimeDelta)
 		}
 	}
 
+	
 	_float fFade_Ratio = m_fTime_Fade_Now / m_fTime_Fade_Max;
+
+	if (isnan(fFade_Ratio))
+		fFade_Ratio = 0.01f;
 
 	m_vecPart[_int(PART_GROUP::EFFECT_FIFO_Screen)]->fTextureColor.w = fFade_Ratio;
 	m_vecPart[_int(PART_GROUP::EFFECT_FIFO_Title)]->fTextColor.w = fFade_Ratio;
@@ -96,6 +100,8 @@ void CUIPage_Effect::Update(_float fTimeDelta)
 
 void CUIPage_Effect::Late_Update(_float fTimeDelta)
 {
+	m_fTopPartMove = -1.f;
+
 	__super::Late_Update(fTimeDelta);
 }
 
@@ -166,9 +172,13 @@ _bool CUIPage_Effect::Fade_Out(_wstring strTitle, _wstring strDesc, _Vec3 vColor
 
 _bool CUIPage_Effect::Fade_In(_float fTime)
 {
+	if (!m_bFadeOut)
+		return false;
+
 	m_bUpdate = true;
 
-	m_fTime_Fade_Now = m_fTime_Fade_Now * (fTime / m_fTime_Fade_Max);
+	if (fTime > 0.f)
+		m_fTime_Fade_Now = m_fTime_Fade_Now * (fTime / m_fTime_Fade_Max);
 	m_fTime_Fade_Max = fTime;
 
 	m_bFadeOut = false;

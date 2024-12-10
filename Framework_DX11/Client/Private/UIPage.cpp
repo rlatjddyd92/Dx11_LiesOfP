@@ -84,9 +84,9 @@ void CUIPage::Late_Update(_float fTimeDelta)
 			iter->MovePart(m_vecPart[iter->iParentPart_Index]->fPosition, fTimeDelta);
 		}
 
-		if (m_bRender)
-			if (iter->bRender)
-				Input_Render_Info(*iter);
+			if (m_bRender)
+				if (iter->bRender)
+					Input_Render_Info(*iter);
 	}
 
 	if ((m_fTopPartMove == 0.f) || (m_fTopPartMove == -1.f))

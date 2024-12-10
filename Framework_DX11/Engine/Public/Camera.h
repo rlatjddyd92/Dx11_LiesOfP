@@ -51,7 +51,7 @@ public:
 	void Reset_Zoom();
 	void Reset_MoveLerp();
 	void Start_MoveLerp(_Vec3 vTargetPos, _float fSpeed);
-
+	void Stop_Turn() { m_bTurn = false; }
 protected:
 	_float				m_fFovy = {};
 	_float				m_fAspect = {};

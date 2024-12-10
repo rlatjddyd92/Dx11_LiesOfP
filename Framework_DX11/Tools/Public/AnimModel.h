@@ -55,6 +55,8 @@ public:
 	_float		m_fEmissive = {};
 	_float		m_fRimLight = {};
 
+	_bool		m_bRender = { false };
+
 	_bool		m_bRemoteTuning = true;
 
 private:

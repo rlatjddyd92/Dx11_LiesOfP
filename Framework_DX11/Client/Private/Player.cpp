@@ -80,6 +80,9 @@
 #include "State_Player_Scissor_Fable2.h"
 #include "State_Player_Scissor_Fatal.h"
 
+#include "State_Player_Arm_Start.h"
+#include "State_Player_Arm_Loop.h"
+
 #include "State_Player_OpenSophiaDoor.h"
 #include "State_Player_SophiaWalk.h"
 #include "State_Player_SophiaHand.h"
@@ -133,6 +136,7 @@ HRESULT CPlayer::Initialize(void * pArg)
 	//m_pNavigationCom->Move_to_Cell(m_pRigidBodyCom, 440); //상자랑 장애물
 	//m_pNavigationCom->Move_to_Cell(m_pRigidBodyCom, 1066); // 순간이동 790
 	//m_pNavigationCom->Move_to_Cell(m_pRigidBodyCom, 801); // 소피아 방
+	m_pNavigationCom->Move_to_Cell(m_pRigidBodyCom, 1178); // 소피아 방 내부
 
 	m_strObjectTag = TEXT("Player");
 
@@ -224,6 +228,8 @@ void CPlayer::Priority_Update(_float fTimeDelta)
 	//STAT_INFO* pTest_Adjust = m_tPlayer_Stat_Adjust;
 	//ABILITY_INFO* pTest_Ability = m_tPlayer_Ability;
 	
+	SPECIAL_ITEM eNow = GET_GAMEINTERFACE->Get_Now_Select_Item();
+
 
 	if (m_isGuard)
 	{
@@ -289,6 +295,15 @@ void CPlayer::Update(_float fTimeDelta)
 		Change_State(RAPIER_FATAL);
 		//Change_State(SOPHIA_WALK);
 		//Calc_DamageGain(5.f, m_pTransformCom->Get_WorldMatrix().Forward() + m_pTransformCom->Get_WorldMatrix().Translation());
+	}
+
+	if (KEY_TAP(KEY::Q))
+	{
+		// 테스트 코드 - UI 제거
+
+		GET_GAMEINTERFACE->UIPart_Off();
+
+		dynamic_cast<CCutScene*>(m_pGameInstance->Find_Object(LEVEL_GAMEPLAY, TEXT("Layer_CutScene"), SOPHIA_DEAD))->Start_Play();
 	}
 }
 
@@ -1208,6 +1223,10 @@ HRESULT CPlayer::Ready_FSM()
 	m_pFsmCom->Add_State(CState_Player_Scissor_Fable1::Create(m_pFsmCom, this, SCISSOR_FABAL1, &Desc));	// 콤보2
 	m_pFsmCom->Add_State(CState_Player_Scissor_Fable2::Create(m_pFsmCom, this, SCISSOR_FABAL2, &Desc));	// 콤보3
 	m_pFsmCom->Add_State(CState_Player_Scissor_Fatal::Create(m_pFsmCom, this, SCISSOR_FATAL, &Desc));	// 페이탈
+	
+	/* 팔 기술 */
+	m_pFsmCom->Add_State(CState_Player_Arm_Start::Create(m_pFsmCom, this, ARM_START, &Desc));	
+	m_pFsmCom->Add_State(CState_Player_Arm_Loop::Create(m_pFsmCom, this, ARM_LOOP, &Desc));
 
 	/* 소피아 컷신 */
 	m_pFsmCom->Add_State(CState_Player_OpenSophiaDoor::Create(m_pFsmCom, this, SOPHIA_DOOR_OPEN, &Desc));
@@ -1307,8 +1326,5 @@ void CPlayer::Free()
 	Safe_Delete(m_tPlayer_Stat);
 	Safe_Delete(m_tPlayer_Stat_Adjust);
 	Safe_Delete(m_tPlayer_Ability);
-	
-	Safe_Release(m_pColliderCom);
-	Safe_Release(m_pNavigationCom);
 }
 

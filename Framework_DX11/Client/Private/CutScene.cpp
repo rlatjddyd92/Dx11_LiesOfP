@@ -29,8 +29,8 @@ HRESULT CCutScene::Initialize(void* pArg)
 	m_pCamera = CCamera_Manager::Get_Instance()->Find_Camera(TEXT("Camera_Free"));
 
 	m_pObjects[PLAYER] = static_cast<CPawn*>(m_pGameInstance->Find_Player(LEVEL_GAMEPLAY));
-	//m_pObjects[BOSS1]  = static_cast<CPawn*>(m_pGameInstance->Find_Object(LEVEL_GAMEPLAY, TEXT("Layer_Boss1"), 0));
-	//m_pObjects[BOSS2]  = static_cast<CPawn*>(m_pGameInstance->Find_Object(LEVEL_GAMEPLAY, TEXT("Layer_Boss2"), 0));
+//	m_pObjects[BOSS1]  = static_cast<CPawn*>(m_pGameInstance->Find_Object(LEVEL_GAMEPLAY, TEXT("Layer_Raxasia"), 0));
+	m_pObjects[BOSS2]  = static_cast<CPawn*>(m_pGameInstance->Find_Object(LEVEL_GAMEPLAY, TEXT("Layer_SimonManus"), 0));
 
 	return S_OK;
 }
@@ -41,6 +41,9 @@ void CCutScene::Priority_Update(_float fTimeDelta)
 
 void CCutScene::Update(_float fTimeDelta)
 {
+	if (m_bFirstStart)
+		First_Setting();
+
 	if (m_bPlay && m_fTrackPosition < m_fMaxFrame)
 	{
 		m_fTrackPosition += fTimeDelta;
@@ -58,14 +61,30 @@ void CCutScene::Update(_float fTimeDelta)
 
 		//UI 살려야 함
 		GET_GAMEINTERFACE->Fade_In(0.f);
+		GET_GAMEINTERFACE->UIPart_On();
+
 		CCamera_Manager::Get_Instance()->Change_Camera(TEXT("Camera_Player"));
+
+		CPlayer* pPlayer = dynamic_cast<CPlayer*>(m_pGameInstance->Find_Player(LEVEL_GAMEPLAY));
 
 		if (m_iIndex == SOPHIA_ENTER)
 		{
-			CPlayer* pPlayer = dynamic_cast<CPlayer*>(m_pGameInstance->Find_Player(LEVEL_GAMEPLAY));
 			pPlayer->Appear_Weapon();
+			pPlayer->Get_Model()->ReadyDenyNextTranslate(4);
 			pPlayer->Change_State(CPlayer::OH_IDLE);
 			pPlayer->Get_Navigation()->Move_to_Cell(pPlayer->Get_RigidBody(),1178);
+		}
+		else if (m_iIndex == SOPHIA_DEAD)
+		{
+			pPlayer->Appear_Weapon();
+			pPlayer->Get_Model()->ReadyDenyNextTranslate(4);
+			pPlayer->Change_State(CPlayer::OH_IDLE);
+			pPlayer->Get_Navigation()->Move_to_Cell(pPlayer->Get_RigidBody(), 1178);
+		}
+		else if (m_iIndex == BOSS2_MEET)
+		{
+			pPlayer->Change_State(CPlayer::OH_IDLE);
+			pPlayer->Get_Navigation()->Move_to_Cell(pPlayer->Get_RigidBody(), 1178);
 		}
 	}
 }
@@ -133,6 +152,7 @@ void CCutScene::Active_UI(CUTSCENE_KEYFRAME_DESC* pCutSceneDesc)
 	if (pCutSceneDesc->UI_DESC.bFadeIn)
 	{
 		GET_GAMEINTERFACE->Fade_In(pCutSceneDesc->UI_DESC.fTime);
+		GET_GAMEINTERFACE->UIPart_Off();
 	}
 }
 
@@ -188,9 +208,28 @@ void CCutScene::Active_Sound(CUTSCENE_KEYFRAME_DESC* pCutSceneDesc)
 		case SOPHIA_ENTER:
 			m_pGameInstance->Play_BGM(TEXT("MU_MS_Monastery_B_Loop.wav"), &g_fBGMVolume);
 			break;
+		case SOPHIA_DEAD:
+			m_pGameInstance->Play_BGM(TEXT("MU_MS_Monastery_B_Loop.wav"), &g_fBGMVolume);
+			break;
 		default:
 			break;
 		}
+	}
+}
+
+void CCutScene::First_Setting()
+{
+	m_bFirstStart = false;
+	CPlayer* pPlayer = dynamic_cast<CPlayer*>(m_pGameInstance->Find_Player(LEVEL_GAMEPLAY));
+
+	GET_GAMEINTERFACE->UIPart_Off();
+
+	switch (m_iIndex)
+	{
+	case SOPHIA_DEAD:
+		pPlayer->Disappear_Weapon();
+		break;
+
 	}
 }
 

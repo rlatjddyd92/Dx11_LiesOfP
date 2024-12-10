@@ -39,6 +39,7 @@ public:
 		SCISSOR_LATTACK0, SCISSOR_LATTACK1, SCISSOR_RATTACK0, SCISSOR_RATTACK1, SCISSOR_CHARGE0, SCISSOR_CHARGE1, SCISSOR_FATAL,
 		SCISSOR_FABAL0, SCISSOR_FABAL1, SCISSOR_FABAL2, SCISSOR_BUFF,
 
+		ARM_START, ARM_LOOP, ARM_END, ARM_HIT, ARM_HIT_HARD, ARM_COUNTER,
 
 		LADDER = 100, LIFT, CHEST, ITEMGET, STARGAZER, TELEPORT,
 
@@ -56,11 +57,16 @@ public:
 	{
 		void Reset_Zero()
 		{
-			iStat_HP = 0;
-			iStat_Stamina = 0;
+			iPlayer_Level = 0;
+
+			iPoint_HP = 0;
+			iPoint_Stamina = 0;
+			iPoint_Attack = 0;
+			iPoint_Defence = 0;
+			iPoint_Heal = 0;
+
 			iStat_Attack = 0;
 			iStat_Defence = 0;
-			iStat_Heal = 0;
 
 			vGauge_Hp = { 0.f,0.f,0.f,0.f };
 			vGauge_Stamina = { 0.f,0.f,0.f,0.f };
@@ -69,18 +75,28 @@ public:
 			fRegion_Interval = 0.f;
 
 			iErgo = 0;
+			iErgo_LevelUp = 0;
+			iPoint_Per_Level = 0;
 
 			fDebuff_Fire = { 0.f,0.f };
 			fDebuff_Electric = { 0.f,0.f };
 			fDebuff_Acid = { 0.f,0.f };
 		};
 
-		// 스탯 
-		_int iStat_HP = 1;
-		_int iStat_Stamina = 1;
-		_int iStat_Attack = 1;
-		_int iStat_Defence = 1;
-		_int iStat_Heal = 1;
+		// 유저 레벨 
+		_int iPlayer_Level = 1;
+
+		// 스탯 포인트 (레벨 업 때 찍는 포인트)
+		_int iPoint_HP = 1;
+		_int iPoint_Stamina = 1;
+		_int iPoint_Attack = 1;
+		_int iPoint_Defence = 1;
+		_int iPoint_Heal = 1;
+
+		// 능력치 
+		_float iStat_Attack = 0.f;
+		_float iStat_Defence = 0.f;
+
 
 		// 게이지 수치 
 		// x : 현재 수치
@@ -99,6 +115,12 @@ public:
 		// 에르고 
 		_int iErgo = 1000;
 
+		// 레벨 업에 필요한 에르고 
+		_int iErgo_LevelUp = 100;
+
+		// 레벨 1 상승 시, 사용 가능한 스탯 포인트 
+		_int iPoint_Per_Level = 5;
+
 		// 상태이상 
 		// x : 현재 수치 
 		// y : 최대치 
@@ -113,16 +135,16 @@ public:
 	typedef struct PLAYER_ABILITY_INFO
 	{
 		// 아뮬렛 
-		_bool bDebuff_Fire_Ignore = false; // 꿰뚫는 증오의 아뮬렛 : 모든 속성 상태이상 면역 
-		_bool bDebuff_Electric_Ignore = false; // 불굴의 아뮬렛 : 모든 속성 상태이상 면역 
-		_bool bDebuff_Acid_Ignore = false; // 베테랑의 아뮬렛 : 모든 속성 상태이상 면역 
+		_bool bDebuff_Fire_Ignore = false; // 꿰뚫는 증오의 아뮬렛 : 화염 상태이상 면역 
+		_bool bDebuff_Electric_Ignore = false; // 불굴의 아뮬렛 : 전격 상태이상 면역 
+		_bool bDebuff_Acid_Ignore = false; // 베테랑의 아뮬렛 : 산성 상태이상 면역 
 
 		_float fIncrease_Stamina = 0.f; // 도약의 아뮬렛 : 최대 스태미나 증가 
 		_float fIncrease_Hp = 0.f;  // 생명의 아뮬렛 : 최대 체력 증가 
 		_float fHeal = 0.f; // 재충전의 아뮬렛 : 지속적으로 HP 증가 
 
 		// 아뮬렛 || 방어파츠(프레임)
-		_float fIncrease_Defence = 0.f; // 철벽의 아뮬렛 || 프레임 파츠 : 피해 방어력 증가 
+		//_float fIncrease_Defence = 0.f; // 철벽의 아뮬렛 || 프레임 파츠 : 피해 방어력 증가 
 
 		// 방어 파츠 (프레임 제외)
 		_float fResist_Fire = 0.f;
@@ -145,6 +167,9 @@ public:
 		if (m_isGuard && isReset)
 			m_fGuardTime = 0.f;
 	}
+
+	_bool					Get_IsArm() { return m_isArm; }
+	void					Set_IsArm(_bool isArm) { m_isArm = isArm; }
 
 	_bool					Get_IsParry() { return m_isParry; }
 	void					Set_IsParry(_bool isParry) { m_isParry = isParry; }
@@ -252,6 +277,7 @@ private:
 
 	_bool				m_isJump = { false };
 	_bool				m_isGuard = { false };
+	_bool				m_isArm = { false };
 	_bool				m_isParry = { false };
 	_bool				m_isLockOn = { false };
 	_bool				m_isInvicible = { false };

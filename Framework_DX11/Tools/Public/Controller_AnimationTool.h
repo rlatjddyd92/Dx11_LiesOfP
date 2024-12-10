@@ -105,6 +105,7 @@ private:
 	_char	m_szCurrentModelText[MAX_PATH] = { "" };
 
 	_float	m_fPosXModel{}, m_fPosYModel{}, m_fPosZModel{};
+	_float	m_fTurnXModel{}, m_fTurnYModel{}, m_fTurnZModel{};
 	//조건 적용용 불변수
 	_bool	m_bDivide_Boundary { false };
 	_bool	m_bObjRenderCtr {true};

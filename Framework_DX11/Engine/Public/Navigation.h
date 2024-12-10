@@ -25,8 +25,9 @@ public:
 	_bool isMove(_Vec3 vPosition);
 	_float SetUp_OnCell(class CTransform* pTransform, _float fOffset, _float fTimeDelta);
 	void Move_to_Cell(class CRigidBody* pRigidBody, _int iIndex);
-	void Research_Cell(_Vec3 vNewPos);
-	
+	void Research_Cell(_Vec3 vNewPos, _uint* iIndex = nullptr);
+	void Change_CurrentCellIndex(_int iIndex) { m_iCurrentCellIndex = iIndex; };
+
 #ifdef _DEBUG
 public:
 	virtual HRESULT Render() override;

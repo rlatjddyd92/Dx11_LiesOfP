@@ -131,11 +131,12 @@ public: // 외부에서 매니저 접근
 	void Show_Tooltip(EQUIP_SLOT eSlot) { m_pUIManager->Show_Tooltip(eSlot); }
 
 	// UI 연출 
-	_bool Fade_Out(_wstring strTitle, _wstring strDesc, _Vec3 vColor = _Vec3{ 0.f,0.f,0.f }, _float fTime = 1.f) { return m_pUIManager->Fade_Out(strTitle, strDesc, vColor, fTime); }
-	_bool Fade_In(_float fTime = 1.f, _bool bIsUIOn = true) { return m_pUIManager->Fade_In(fTime, bIsUIOn); }
+	void Fade_Out(_wstring strTitle, _wstring strDesc, _Vec3 vColor = _Vec3{ 0.f,0.f,0.f }, _float fTime = 1.f) {  m_pUIManager->Fade_Out(strTitle, strDesc, vColor, fTime); }
+	void Fade_In(_float fTime = 1.f) {  m_pUIManager->Fade_In(fTime); }
 	void Show_Script(_wstring strScript0, _wstring strScript1 = TEXT("none"), _float fTime = 1.f, _Vec3 vColor = _Vec3{ 0.f,0.f,0.f }) { m_pUIManager->Show_Script(strScript0, strScript1, fTime, vColor); }
 	_float Check_Fade() { return m_pUIManager->Check_Fade(); }
 	void UIPart_On() { m_pUIManager->UIPart_On(); }
+	void UIPart_Off() { m_pUIManager->UIPart_Off(); }
 
 	// NPC 스크립트 
 	void Show_Script(NPC_SCRIPT eNPC, _int iScriptNum = -1) { m_pUIManager->Show_Script_Npc_Talking(eNPC, iScriptNum); }
@@ -162,6 +163,7 @@ public: // 외부에서 매니저 접근
 	list<SPECIAL_ITEM>& Get_LastFrame_UsingItem_Info() { return m_pItem_Manager->Get_LastFrame_UsingItem_Info(); }
 	_bool Get_CanSwitch_Weapon() { return m_pItem_Manager->Get_CanSwitch_Weapon(); }
 	void Add_Durable_Weapon(_float fAdd) { return m_pItem_Manager->Add_Durable_Weapon(fAdd); }
+	SPECIAL_ITEM Get_Now_Select_Item() { return m_pItem_Manager->Get_Now_Select_Item(); }
 
 	// 접근, 수정
 	_bool Is_ItemData_Change() { return m_pItem_Manager->Is_ItemData_Change(); }
@@ -193,6 +195,7 @@ public: // 외부에서 매니저 접근
 	_int Change_Tool_Select(_bool bNext) { return m_pItem_Manager->Change_Tool_Select(bNext); }
 	_int Get_Potion_Select() { return m_pItem_Manager->Get_Potion_Select(); }
 	_int Get_Tool_Select() { return m_pItem_Manager->Get_Tool_Select(); }
+	void Set_Select(_bool bIsPotion) { m_pItem_Manager->Set_Select(bIsPotion); }
 
 	// 무기 관련
 	_int Change_Weapon() { return m_pItem_Manager->Change_Weapon(); }

@@ -12,6 +12,8 @@ vector			g_vLightDir;
 vector			g_vLightPos;
 float			g_fLightRange;
 
+float           g_fCutOff, g_fOuterCutOff;
+
 float           g_fFar;
 bool            g_isShadow = true;
 
@@ -57,7 +59,7 @@ float ComputeShadow(float4 vPosition, int iCascadeIndex, float4 vNormalDesc)
     vTextCoord.x = vLightProjPos.x * 0.5f + 0.5f;
     vTextCoord.y = vLightProjPos.y * -0.5f + 0.5f;
     
-    float fNormalOffset = 0.0002f;
+    float fNormalOffset = 0.0001f;
     float fDot = saturate(dot(normalize(g_vLightDir.xyz) * -1.f, vNormalDesc.xyz));
     float fBias = max((fNormalOffset * 5.0f) * (1.0f - (fDot * -1.0f)), fNormalOffset);
     
@@ -279,6 +281,10 @@ PS_OUT_LIGHT_POINT PS_MAIN_LIGHT_POINT_PBR(PS_IN In)
 
 	vector		vLightDir = vPosition - g_vLightPos;
     
+    float fDenom = length(vLightDir) / g_fLightRange;
+    //float fAtt = 1.f / (fDenom * fDenom);
+    //float fAtt = 1.f / (1.f + (fDenom * fDenom * 2.0f));
+    
 	float		fAtt = saturate((g_fLightRange - length(vLightDir)) / g_fLightRange);
     
     Out.vShade = g_vLightDiffuse * saturate(max(dot(normalize(vLightDir) * -1.f, vNormal), 0.f) + (g_vLightAmbient * g_vMtrlAmbient)) * fAtt;
@@ -336,6 +342,94 @@ PS_OUT_LIGHT_POINT PS_MAIN_LIGHT_POINT_PBR(PS_IN In)
     }
 	
 	return Out;
+}
+
+
+PS_OUT_LIGHT_POINT PS_MAIN_LIGHT_SPOT_PBR(PS_IN In)
+{
+    PS_OUT_LIGHT_POINT Out = (PS_OUT_LIGHT_POINT) 0;
+
+    vector vDepthDesc = g_DepthTexture.Sample(PointSampler, In.vTexcoord);
+    vector vNormalDesc = g_NormalTexture.Sample(PointSampler, In.vTexcoord);
+    
+    vector vDecalDiffuse = g_DecalDiffuseTexture.Sample(LinearSampler, In.vTexcoord);
+    vector vDecalNormalDesc = g_DecalNormalTexture.Sample(PointSampler, In.vTexcoord);
+	
+    float fViewZ = vDepthDesc.y * g_fFar;
+    vector vNormal = float4(vNormalDesc * 2.f - 1.f);
+    float3 vDecalNormal = float3(vDecalNormalDesc.xyz * 2.f - 1.f);
+	
+    vNormal = normalize(vector(lerp(vNormal.xyz, vDecalNormal, vDecalDiffuse.a), 0.f)); // 알파 값에 따라 혼합
+    
+    vector vPosition = Compute_WorldPos(In.vTexcoord, vDepthDesc.x, fViewZ);
+
+    vector vLightDir = vPosition - g_vLightPos;
+    
+    float fDenom = length(vLightDir) / g_fLightRange;
+    float fAtt = 1.f / (1.f + fDenom * fDenom);
+    //float fAtt = 1.f / (1.f + (fDenom * fDenom * 2.0f));
+    //float		fAtt = saturate((g_fLightRange - length(vLightDir)) / g_fLightRange);
+    
+    /* 각도 기반 감쇠 */
+    float fTheta = dot(vLightDir, normalize(g_vLightDir)); // 빛의 방향과 픽셀 방향의 코사인
+    float fEpsilon = max(0.f, g_fCutOff - g_fOuterCutOff); // cuttoff  값이 outercutoff보다 높은 값을 가지게 됨
+    float fSpotFactor = saturate((fTheta - g_fOuterCutOff) / fEpsilon); // 선형 감쇠
+    fAtt *= fSpotFactor;
+    
+    Out.vShade = g_vLightDiffuse * saturate(max(dot(normalize(vLightDir) * -1.f, vNormal), 0.f) + (g_vLightAmbient * g_vMtrlAmbient)) * fAtt;
+    
+    // PBR
+    vector vDiffuse = g_DiffuseTexture.Sample(LinearSampler, In.vTexcoord);
+    
+    vector vARM = g_ARMTexture.Sample(LinearSampler, In.vTexcoord);
+    vector vDecalARM = g_DecalARMTexture.Sample(LinearSampler, In.vTexcoord);
+    
+    vARM = vector(lerp(vARM, vDecalARM, vDecalDiffuse.a)); // 알파 값에 따라 혼합
+    
+    float fAmbietnOcc = vARM.r;
+    float fRoughness = vARM.g;
+    float fMetallic = vARM.b;
+    
+    float3 vAlbedo = pow(vDiffuse.xyz, 2.2f);
+    
+    if ((0.f == fAmbietnOcc && 0.f == fRoughness && 0.f == fMetallic))
+    {
+        Out.vSpecular = float4(0.f, 0.f, 0.f, 0.f);
+    }
+    else
+    {
+        float3 vLookToCamera = (normalize(g_vCamPosition - vPosition)).xyz; // 월드 위치에서 카메라 방향
+    
+        float cosLo = max(0.0, dot(vNormal.xyz, vLookToCamera));
+        //float3 Lr = 2.0 * cosLo * vNormal - vLookToCamera;
+    
+    
+        float3 F0 = lerp(0.04f, vAlbedo, fMetallic);
+        float3 radiance = g_vLightDiffuse.xyz;
+    
+        float3 Li = normalize(-vLightDir.xyz);
+    
+        float3 Lh = normalize(Li + vLookToCamera);
+        float cosLi = max(0.f, dot(vNormal.xyz, Li));
+        float cosLh = max(0.f, dot(vNormal.xyz, Lh));
+    
+        float3 F = FresnelSchlick(max(0.f, dot(Lh, vLookToCamera)), F0);
+        float D = ndfGGX(cosLh, fRoughness); //Diffuse BRDF
+        float G = gaSchlickGGX(cosLi, cosLo, fRoughness);
+
+        //비금속 - 알베도값에 의존
+        //금속- Fresnel 값 F가 중요
+        float3 kd = lerp(float3(1.f, 1.f, 1.f) - F, float3(0.f, 0.f, 0.f), fMetallic);
+        float3 vDiffuseBRDF = kd * vAlbedo;
+        float3 vSpecularBRDF = (F * D * G) / max(0.00001f, 4.0 * cosLi * cosLo);
+    
+        fAmbietnOcc = pow(fAmbietnOcc, 2.2f);
+    
+        Out.vSpecular = float4(((vDiffuseBRDF + vSpecularBRDF) * cosLi * radiance * fAtt), 1.f);
+      
+    }
+	
+    return Out;
 }
 
 PS_OUT PS_MAIN_DEFERRED_PBR(PS_IN In)
@@ -400,22 +494,7 @@ PS_OUT_LIGHT PS_MAIN_LIGHT_DIRECTIONAL(PS_IN In)
 
     vector vReflect = reflect(normalize(g_vLightDir), normalize(vNormal));
 
-    vector vPosition = (vector) 0;
-
-	/* 투영공간상의 화면에 그려지는 픽셀의 위치를 구한다. */
-	/* 로컬위치 * 월드행렬 * 뷰행렬 * 투영행렬 / w */
-    vPosition.x = In.vTexcoord.x * 2.f - 1.f;
-    vPosition.y = In.vTexcoord.y * -2.f + 1.f;
-    vPosition.z = vDepthDesc.x;
-    vPosition.w = 1.f;
-
-	/* 뷰스페이스 상의 화면에 그려지는 픽셀의 위치를 구한다.*/
-	/* 로컬위치 * 월드행렬 * 뷰행렬  */
-    vPosition = vPosition * fViewZ;
-    vPosition = mul(vPosition, g_ProjMatrixInv);
-
-	/* 월드 상의 화면에 그려지는 픽셀의 위치를 구한다.*/
-    vPosition = mul(vPosition, g_ViewMatrixInv);
+    vector vPosition = Compute_WorldPos(In.vTexcoord, vDepthDesc.x, fViewZ);
 
     vector vLook = vPosition - g_vCamPosition;
 
@@ -456,28 +535,49 @@ PS_OUT_LIGHT_POINT PS_MAIN_LIGHT_POINT(PS_IN In)
 
     vector vNormalDesc = g_NormalTexture.Sample(PointSampler, In.vTexcoord);
     vector vNormal = float4(vNormalDesc.xyz * 2.f - 1.f, 0.f);
+    
+    vector vPosition = Compute_WorldPos(In.vTexcoord, vDepthDesc.x, fViewZ);
 
-    vector vPosition = (vector) 0;
+    vector vLightDir = vPosition - g_vLightPos;
+    
+    float fDenom = length(vLightDir) / g_fLightRange;
+    //float fAtt = 1.f / (1.f + fDenom * fDenom);
+    float fAtt = 1.f / (1.f + (fDenom * fDenom * 2.0f));
 
-	/* 투영공간상의 화면에 그려지는 픽셀의 위치를 구한다. */
-	/* 로컬위치 * 월드행렬 * 뷰행렬 * 투영행렬 / w */
-    vPosition.x = In.vTexcoord.x * 2.f - 1.f;
-    vPosition.y = In.vTexcoord.y * -2.f + 1.f;
-    vPosition.z = vDepthDesc.x;
-    vPosition.w = 1.f;
+    //float fAtt = saturate((g_fLightRange - length(vLightDir)) / g_fLightRange);
 
-	/* 뷰스페이스 상의 화면에 그려지는 픽셀의 위치를 구한다.*/
-	/* 로컬위치 * 월드행렬 * 뷰행렬  */
-    vPosition = vPosition * fViewZ;
-    vPosition = mul(vPosition, g_ProjMatrixInv);
+    Out.vShade = g_vLightDiffuse * saturate(max(dot(normalize(vLightDir) * -1.f, vNormal), 0.f) + (g_vLightAmbient * g_vMtrlAmbient)) * fAtt;
 
-	/* 월드 상의 화면에 그려지는 픽셀의 위치를 구한다.*/
-    vPosition = mul(vPosition, g_ViewMatrixInv);
+    vector vReflect = reflect(normalize(vLightDir), normalize(vNormal));
+    vector vLook = vPosition - g_vCamPosition;
+
+    Out.vSpecular = (g_vLightSpecular * g_vMtrlSpecular) * pow(max(dot(normalize(vReflect) * -1.f, normalize(vLook)), 0.f), 50.f) * fAtt;
+    
+    return Out;
+}
+
+PS_OUT_LIGHT_POINT PS_MAIN_LIGHT_SPOT(PS_IN In)
+{
+    PS_OUT_LIGHT_POINT Out = (PS_OUT_LIGHT_POINT) 0;
+
+    vector vDepthDesc = g_DepthTexture.Sample(PointSampler, In.vTexcoord);
+    float fViewZ = vDepthDesc.y * g_fFar;
+
+    vector vNormalDesc = g_NormalTexture.Sample(PointSampler, In.vTexcoord);
+    vector vNormal = float4(vNormalDesc.xyz * 2.f - 1.f, 0.f);
+
+    vector vPosition = Compute_WorldPos(In.vTexcoord, vDepthDesc.x, fViewZ);
 
     vector vLightDir = vPosition - g_vLightPos;
 
     float fAtt = saturate((g_fLightRange - length(vLightDir)) / g_fLightRange);
 
+    /* 각도 기반 감쇠 */
+    float fTheta = dot(vLightDir, normalize(g_vLightDir)); // 빛의 방향과 픽셀 방향의 코사인
+    float fEpsilon = max(0.f, g_fCutOff - g_fOuterCutOff); // cuttoff  값이 outercutoff보다 높은 값을 가지게 됨
+    float fSpotFactor = saturate((fTheta - g_fOuterCutOff) / fEpsilon); // 선형 감쇠
+    fAtt *= fSpotFactor;
+    
     Out.vShade = g_vLightDiffuse * saturate(max(dot(normalize(vLightDir) * -1.f, vNormal), 0.f) + (g_vLightAmbient * g_vMtrlAmbient)) * fAtt;
 
     vector vReflect = reflect(normalize(vLightDir), normalize(vNormal));
@@ -608,7 +708,19 @@ technique11	DefaultTechnique
         PixelShader = compile ps_5_0 PS_MAIN_LIGHT_POINT();
     }
 
-    pass Deferred //7
+    pass Light_Spot //7
+    {
+        SetRasterizerState(RS_Default);
+        SetDepthStencilState(DSS_None, 0);
+        SetBlendState(BS_OnebyOne, vector(0.f, 0.f, 0.f, 0.f), 0xffffffff);
+
+
+        VertexShader = compile vs_5_0 VS_MAIN();
+        GeometryShader = NULL;
+        PixelShader = compile ps_5_0 PS_MAIN_LIGHT_SPOT();
+    }
+
+    pass Deferred //8
     {
         SetRasterizerState(RS_Default);
         SetDepthStencilState(DSS_None, 0);

@@ -18,7 +18,7 @@ HRESULT CState_Player_SophiaHand::Initialize(_uint iStateNum, void* pArg)
 
     m_pTrackPos = pDesc->pPrevTrackPos;
 
-    m_iAnimation_SophiaHand = m_pPlayer->Get_Model()->Find_AnimationIndex("AS_Pino_Hand_SophiaDead_Cine", 4.f);
+    m_iAnimation_SophiaHand = m_pPlayer->Get_Model()->Find_AnimationIndex("AS_Pino_Hand_SophiaDead_Cine", 2.5f);
 
     m_iStateNum = iStateNum;
 
@@ -27,7 +27,10 @@ HRESULT CState_Player_SophiaHand::Initialize(_uint iStateNum, void* pArg)
 
 HRESULT CState_Player_SophiaHand::Start_State(void* pArg)
 {
-    m_pPlayer->Change_Animation(m_iAnimation_SophiaHand, false, 0.3f);
+    m_pPlayer->Get_Model()->ReadyDenyNextTranslate(4);
+    m_pPlayer->Change_Animation(m_iAnimation_SophiaHand, false, 0.f);
+
+    m_pPlayer->Get_RigidBody()->Set_GloblePose(_Vec3(15.955f, -88.788f, 12.195f));
 
     return S_OK;
 }

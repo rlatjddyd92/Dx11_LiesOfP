@@ -109,7 +109,6 @@ public:
 			return true;
 
 		return false;
-
 	}
 
 	// ¾ÆÀÌÅÛ È¹µæ 
@@ -275,33 +274,26 @@ public:
 
 #pragma region Effect
 
-	_bool Fade_Out(_wstring strTitle, _wstring strDesc, _Vec3 vColor = _Vec3{ 0.f,0.f,0.f }, _float fTime = 1.f) 
+	void Fade_Out(_wstring strTitle, _wstring strDesc, _Vec3 vColor = _Vec3{ 0.f,0.f,0.f }, _float fTime = 1.f) 
 	{ 
-		if (m_eNowPage != UIPAGE::PAGE_EFFECT)
-		{
-			ClosePage(m_eNowPage);
-			m_bIsPlayPageMaintain = false;
-			m_eBeforePage = m_eNowPage;
-		}
 		m_pUIPage_Effect->Fade_Out(strTitle, strDesc, vColor, fTime);
-		return true;
 	}
-	_bool Fade_In(_float fTime = 1.f, _bool bIsUIOn = true) 
+	void Fade_In(_float fTime = 1.f)
 	{ 
-		if (bIsUIOn)
-			if (m_eBeforePage != UIPAGE::PAGE_EFFECT)
-			{
-				OpenPage(m_eBeforePage);
-				m_bIsPlayPageMaintain = true;
-			}
 		m_pUIPage_Effect->Fade_In(fTime);
-		return true;
 	}
 	void UIPart_On()
 	{
-		if (m_eBeforePage != UIPAGE::PAGE_EFFECT)
-			OpenPage(m_eBeforePage);
+		OpenPage(UIPAGE::PAGE_PLAY);
 		m_bIsPlayPageMaintain = true;
+	}
+	void UIPart_Off()
+	{
+		for (auto& iter : m_vecPage)
+			if ((iter->GetPageAction(PAGEACTION::ACTION_ACTIVE)) || (iter->GetPageAction(PAGEACTION::ACTION_OPENING)))
+				iter->CloseAction();
+
+		m_bIsPlayPageMaintain = false;
 	}
 
 	void Show_Script(_wstring strScript0, _wstring strScript1 = TEXT("none"), _float fTime = 1.f, _Vec3 vColor = _Vec3{ 0.f,0.f,0.f }) 

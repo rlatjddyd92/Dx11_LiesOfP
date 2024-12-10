@@ -82,7 +82,12 @@ void CState_Player_Ladder::Update(_float fTimeDelta)
         if (iCurAnim == m_iAnimation_Ladder[LADDER_UP][3] || iCurAnim == m_iAnimation_Ladder[LADDER_UP][4]
             || iCurAnim == m_iAnimation_Ladder[LADDER_DOWN][3] || iCurAnim == m_iAnimation_Ladder[LADDER_DOWN][4])
         {
-            m_pPlayer->Change_State(CPlayer::OH_IDLE);
+            _uint iWeponType = m_pPlayer->Get_WeaponType();
+
+            if (iWeponType < 2)
+                m_pPlayer->Change_State(CPlayer::OH_IDLE);
+            else
+                m_pPlayer->Change_State(CPlayer::TH_IDLE);
         }
         else
         {

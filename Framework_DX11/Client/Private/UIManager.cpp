@@ -99,6 +99,7 @@ void CUIManager::Priority_Update(_float fTimeDelta)
 
 void CUIManager::Update(_float fTimeDelta)
 {
+	
 	for (auto& iter : m_vecPage)
 		if (iter->GetUpdate())
 			iter->Update(fTimeDelta);
@@ -119,6 +120,8 @@ void CUIManager::Late_Update(_float fTimeDelta)
 		if (i == _int(UIPAGE::PAGE_ORTHO))
 			continue;
 		if (i == _int(UIPAGE::PAGE_EFFECT))
+			continue;
+		if (m_vecPage[i]->GetPageAction(PAGEACTION::ACTION_INACTIVE))
 			continue;
 
 		if (m_vecPage[i]->GetUpdate())
@@ -182,6 +185,8 @@ void CUIManager::UIControl_Popup(_float fTimeDelta)
 void CUIManager::UIControl_Common(_float fTimeDelta)
 {
 	//m_bIsPlayPageMaintain = true;
+
+
 
 	if (m_pUIPage_Effect->Check_Fade() > 0.f)
 		m_bIsPlayPageMaintain = false;

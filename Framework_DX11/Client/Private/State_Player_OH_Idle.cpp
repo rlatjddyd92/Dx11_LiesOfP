@@ -4,6 +4,8 @@
 #include "Model.h"
 #include "Player.h"
 
+#include "GameInterface_Controller.h"
+
 CState_Player_OH_Idle::CState_Player_OH_Idle(CFsm* pFsm, CPlayer* pPlayer)
     :CState{ pFsm }
     , m_pPlayer{ pPlayer }
@@ -75,12 +77,23 @@ void CState_Player_OH_Idle::Update(_float fTimeDelta)
     }
     else if (KEY_TAP(KEY::R))
     {
-        m_pPlayer->Change_State(CPlayer::HEAL);
-        //m_pPlayer->Change_State(CPlayer::GRINDER);
+        SPECIAL_ITEM eNow = GET_GAMEINTERFACE->Get_Now_Select_Item();
+        if (SPECIAL_ITEM::SP_PULSE_BATTERY == eNow)
+        {
+            m_pPlayer->Change_State(CPlayer::HEAL);
+        }
+        else if (SPECIAL_ITEM::SP_GRINDER == eNow)
+        {
+            m_pPlayer->Change_State(CPlayer::GRINDER);
+        }
     }
     else if (KEY_TAP(KEY::TAPKEY))
     {
         m_pPlayer->Change_State(CPlayer::CHANGEWEP);
+    }
+    else if (KEY_HOLD(KEY::CTRL))
+    {
+        m_pPlayer->Change_State(CPlayer::ARM_START);
     }
     
     if (KEY_AWAY(KEY::RBUTTON))

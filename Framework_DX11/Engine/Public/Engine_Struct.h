@@ -18,6 +18,8 @@ namespace Engine
 		XMFLOAT4	vDirection;
 		XMFLOAT4	vPosition;
 		float		fRange;
+		//float		fOuterAngle;
+		//float		fInnerAngle;
 
 		XMFLOAT4	vDiffuse;
 		XMFLOAT4	vAmbient;

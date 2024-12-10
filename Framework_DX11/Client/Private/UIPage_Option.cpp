@@ -86,8 +86,12 @@ void CUIPage_Option::Late_Update(_float fTimeDelta)
 			DestroyWindow(g_hWnd);
 	}
 
-	if (!m_bRender)
+	if (!m_bRender) 
 		return;
+
+	if (!m_vecPageAction[_int(PAGEACTION::ACTION_ACTIVE)] && !m_vecPageAction[_int(PAGEACTION::ACTION_OPENING)])
+		if (!m_vecPageAction[_int(PAGEACTION::ACTION_CLOSING)])
+			return;
 
 	__super::Late_Update(fTimeDelta);
 	m_vecPart[_int(PART_GROUP::OPTION_Focus)]->bRender = false;
