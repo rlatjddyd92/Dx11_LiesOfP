@@ -182,6 +182,10 @@ void CCutScene::Active_Camera(CUTSCENE_KEYFRAME_DESC* pCutSceneDesc)
 	{
 		m_pCamera->Start_MoveLerp(pCutSceneDesc->Camera_Desc.vTargetPos, pCutSceneDesc->Camera_Desc.fMoveSpeed);
 	}
+	if (pCutSceneDesc->Camera_Desc.bShake)
+	{
+		m_pCamera->Start_PosShake(pCutSceneDesc->Camera_Desc.fShakePower, pCutSceneDesc->Camera_Desc.fShakeDuration);
+	}
 }
 
 void CCutScene::Sort_KeyFrame_TrackPosition()

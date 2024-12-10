@@ -323,27 +323,6 @@ namespace Engine
 		_bool bZoomIn = { false };
 		_bool bZoomOut = { false };
 		_bool bLerpMove = { false };
-
-		_Matrix mCameraWorlMatrix;
-
-		_Vec3 vPitchTawRoll = {};
-		_float fTurn_Speed = {0.f};
-
-		_float fZoomDuration = { 0.f };
-		_float fFovy = { XMConvertToRadians(60.f)};
-
-		_float fMoveSpeed = { 0.f };
-		_Vec3 vTargetPos = {};
-	}CUTSCENE_CAMERA_DESC_OLD;
-
-
-	typedef struct
-	{
-		_bool bTeleport = { false };
-		_bool bTurn = { false };
-		_bool bZoomIn = { false };
-		_bool bZoomOut = { false };
-		_bool bLerpMove = { false };
 		_bool bShake = { false };
 
 		_Matrix mCameraWorlMatrix;
@@ -367,18 +346,7 @@ namespace Engine
 		_bool bStopBGM = { false };
 		_bool bChangeBGM = { false };
 
-	}CUTSCENE_SOUND_DESC;
-
-	typedef struct
-	{
-		_float					fTrackPosition = { 0.f };
-		_bool					bActived = { false };
-		CUTSCENE_SHADER_DESC	ShaderDesc = {};
-		CUTSCENE_UI_DESC		UI_DESC = {};
-		CUTSCENE_CAMERA_DESC_OLD	Camera_Desc = {};
-		CUTSCENE_OBJECT_DESC	Obj_Desc = {};
-		CUTSCENE_SOUND_DESC		Sound_Desc = {};
-	}CUTSCENE_KEYFRAME_DESC_OLD;	
+	}CUTSCENE_SOUND_DESC;	
 	
 	typedef struct
 	{
