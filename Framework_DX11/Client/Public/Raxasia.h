@@ -27,18 +27,29 @@ public:
 	}FSMSTATE_DESC;
 
 public:
-	enum COLLIDERTYPE { CT_UPPERBODY, CT_LOWERBODY, CT_UPPERLEG_LEFT, CT_UPPERLEG_RIGHT
-		, CT_LOWERLEG_LEFT, CT_LOWERLEG_RIGHT, CT_UPPERARM_LEFT, CT_UPPERARM_RIGHT
+	enum COLLIDERTYPE { CT_UPPERBODY, CT_LOWERBODY
+		, CT_UPPERLEG_LEFT, CT_UPPERLEG_RIGHT
+		, CT_LOWERLEG_LEFT, CT_LOWERLEG_RIGHT
+		, CT_UPPERARM_LEFT, CT_UPPERARM_RIGHT
 		, CT_LOWERARM_LEFT, CT_LOWERARM_RIGHT, CT_END };
-	enum EXCOLLIDER { LEG_LEFT, LEG_RIGHT, LOWERBODY, COLLTYPE_END };
+	enum EXCOLLIDER { LOWERBODY, U_LEG_LEFT, U_LEG_RIGHT, L_LEG_LEFT, L_LEG_RIGHT
+		, U_ARM_LEFT, U_ARM_RIGHT, L_ARM_LEFT, L_ARM_RIGHT, COLLTYPE_END };
+	enum CUTSCENE_MODEL { MODEL_PHASE1, MODEL_PHASE2, MODEL_END };
+	enum CUTSCENE_TYPE { CUTSCENE_MEET, CUTSCENE_P2, CUTSCENE_DIE, CUTSCENE_END };
 
 public:
-	enum SIMONMANUS_P1_STATE {
-		ATK_AVOIDSWING = MONSTER_STATE_END,
+	enum RAXASIA_P1_STATE {
+		ATK_DASHUPPER = MONSTER_STATE_END, ATK_GROUNDSLASH, ATK_LINKEDATTACK, ATK_REPETUPPERSLASH
+		,ATK_KICKSTING, ATK_TRIPLESTING
+		,ATK_DISCHARGE, ATK_JUMPATTACK, ATK_SWINGDOWN_MULTIPLE
 	};
 
-	enum SIMONMANUS_P2_STATE {
+	enum RAXASIA_P2_STATE {
 		ATKP2_AVOIDSWING = MONSTER_STATE_END,
+	};
+
+	enum RAXASIA_CUTSCENE_MEET_STATE {
+		STATE_MEET, STATE_P2, STATE_DIE, STATE_END
 	};
 
 	enum EFFECT_TYPE
@@ -77,17 +88,29 @@ public:
 	virtual const _Matrix* Get_WeaponBoneCombinedMat(_uint iBoneIndex) override;
 	virtual const _Matrix* Get_WeaponWorldMat() override;
 
+	virtual void    Start_CutScene(_uint iCutSceneNum) override;
+	virtual void    End_CutScene(_uint iCutSceneNum) override;
+	virtual void    Change_Model(_uint iModelNum) override;
+
 private:
 	vector<CGameObject*>	CollObjRenderP{};
 	vector<class CEffect_Container*> m_Effects;
 
+	CColliderObject* m_pKickCollObj = { nullptr };
+
 	class CWeapon* m_pWeapon = { nullptr };
+	class CWeapon* m_pWeaponShield = { nullptr };
 	class CFsm* m_pExtraFsmCom = { nullptr };	//2페이즈 fsm
+	class CModel* m_pP1ModelCom = { nullptr };	//1페이즈 model
 	class CModel* m_pExtraModelCom = { nullptr };	//2페이즈 model
+
+	class CModel* m_pCutSceneModelCom[CUTSCENE_END] = { nullptr, };
+	class CFsm* m_pCutSceneFsmCom = { nullptr };
 
 	class CCollider* m_EXCollider[COLLTYPE_END] = { nullptr, nullptr };
 
 	_bool					m_isChanged = { false };
+	_bool					m_isCutScene = { false };
 
 	const _Matrix* m_pColliderBindMatrix[CT_END] = { nullptr, nullptr, nullptr };
 

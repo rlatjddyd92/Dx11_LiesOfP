@@ -98,7 +98,7 @@ private:
 
 	class CWeapon*			m_pWeapon = { nullptr };
 	class CFsm*				m_pExtraFsmCom = { nullptr };	//2페이즈 fsm
-	class CModel*			m_pP1ModelCom = { nullptr };	//2페이즈 model
+	class CModel*			m_pP1ModelCom = { nullptr };	//1페이즈 model
 	class CModel*			m_pExtraModelCom = { nullptr };	//2페이즈 model
 	
 	class CModel*			m_pCutSceneModelCom[CUTSCENE_END] = { nullptr, };

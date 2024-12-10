@@ -152,6 +152,11 @@ CTexture* CModel::Find_Texture(_uint iMeshNum, TEXTURE_TYPE eMaterialType)
 	return m_Materials[iMaterialIndex].pMaterialTextures[eMaterialType];
 }
 
+void CModel::Set_SpeedRatio(_uint iAnimIndex, _double SpeedRatio)
+{
+	m_Animations[iAnimIndex]->Set_SpeedRatio(SpeedRatio);
+}
+
 HRESULT CModel::Update_Boundary()
 {
 	_int iBoundaryBoneIndex = m_UFBIndices[UFB_BOUNDARY_UPPER];

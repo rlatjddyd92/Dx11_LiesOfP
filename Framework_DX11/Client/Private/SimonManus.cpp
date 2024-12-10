@@ -409,6 +409,7 @@ HRESULT CSimonManus::Ready_Components()
 	if (FAILED(__super::Add_Component(LEVEL_STATIC, TEXT("Prototype_Component_Collider_OBB"),
 		TEXT("Com_Collider_RL"), reinterpret_cast<CComponent**>(&m_EXCollider[LEG_RIGHT]), &ColliderDesc)))
 		return E_FAIL;
+
 	//LowerBody
 	ColliderDesc.vExtents = _float3(0.6f, 1.f, 0.8f);
 	ColliderDesc.vCenter = _float3(0.f, -0.1f, 0.f);
@@ -418,7 +419,6 @@ HRESULT CSimonManus::Ready_Components()
 		TEXT("Com_Collider_LowerBody"), reinterpret_cast<CComponent**>(&m_EXCollider[LOWERBODY]), &ColliderDesc)))
 		return E_FAIL;
 
-	m_pColliderBindMatrix[CT_LEG_LEFT] = m_pModelCom->Get_BoneCombindTransformationMatrix_Ptr(112);
 	m_pColliderBindMatrix[CT_LEG_LEFT] = m_pModelCom->Get_BoneCombindTransformationMatrix_Ptr(112);
 	m_pColliderBindMatrix[CT_LEG_RIGHT] = m_pModelCom->Get_BoneCombindTransformationMatrix_Ptr(126);
 	m_pColliderBindMatrix[CT_UPPERBODY] = m_pModelCom->Get_BoneCombindTransformationMatrix_Ptr(6);
