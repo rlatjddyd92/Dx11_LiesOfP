@@ -120,6 +120,8 @@ HRESULT CMesh_Effect::Render()
 		return E_FAIL;
 	if (FAILED(m_pShaderCom->Bind_RawValue("g_fAlpha", &m_DefaultDesc.fAlpha, sizeof m_DefaultDesc.fAlpha)))
 		return E_FAIL;
+	if (FAILED(m_pShaderCom->Bind_RawValue("g_fAccumulateTime", &m_fAccumulateTime, sizeof m_fAccumulateTime)))
+		return E_FAIL;
 
 	_uint		iNumMeshes = m_pModelCom->Get_NumMeshes();
 

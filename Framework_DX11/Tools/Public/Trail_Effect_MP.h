@@ -134,6 +134,8 @@ private:
 	DEFAULT_DESC m_DefaultDesc = {};
 	TRAIL_MP_DESC m_InitDesc = {};
 
+	_uint m_iNumTailInstance = 0;
+
 private:
 	HRESULT Ready_Components(const TRAIL_MP_DESC& Desc);
 

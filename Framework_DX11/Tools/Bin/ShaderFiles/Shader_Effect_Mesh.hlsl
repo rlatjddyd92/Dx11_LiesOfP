@@ -13,6 +13,8 @@ float g_fAlpha;
 float2 g_vTileRepeat;
 float2 g_vTileMove;
 
+float g_fAccumulateTime;
+
 struct VS_IN
 {
     float3 vPosition : POSITION;
@@ -29,6 +31,8 @@ struct VS_OUT
     float4 vProjPos : TEXCOORD1;
 };
 
+float rand(float seed);
+
 VS_OUT VS_MAIN(/*정점*/VS_IN In)
 {
     VS_OUT Out = (VS_OUT) 0;
@@ -40,6 +44,29 @@ VS_OUT VS_MAIN(/*정점*/VS_IN In)
 
     Out.vPosition = mul(vector(In.vPosition, 1.f), matWVP);
     Out.vNormal = normalize(mul(vector(In.vNormal, 0.f), g_WorldMatrix));
+    Out.vTexcoord = In.vTexcoord;
+    Out.vProjPos = Out.vPosition;
+
+    return Out;
+}
+
+VS_OUT VS_ELECTRIC_MAIN( /*정점*/VS_IN In)
+{
+    VS_OUT Out = (VS_OUT) 0;
+	
+    matrix matWV, matWVP;
+
+    matWV = mul(g_WorldMatrix, g_ViewMatrix);
+    matWVP = mul(matWV, g_ProjMatrix);
+    
+    Out.vNormal = normalize(mul(vector(In.vNormal, 0.f), g_WorldMatrix));
+    
+    vector vPosition = vector(In.vPosition, 1.f);
+    float fOffset = rand(vPosition.x * vPosition.y * vPosition.z * g_fAccumulateTime);
+    
+    vPosition += Out.vNormal * fOffset * 0.025f;
+    
+    Out.vPosition = mul(vPosition, matWVP);
     Out.vTexcoord = In.vTexcoord;
     Out.vProjPos = Out.vPosition;
 
@@ -74,7 +101,7 @@ PS_EFFECT_OUT PS_MAIN(PS_IN In)
     vector vColor = g_DiffuseTexture.Sample(LinearSampler, vTexcoord);
 	
     vColor.rgb *= g_vColor;
-    vColor.a *= g_fAlpha;
+    vColor.rgb *= g_fAlpha;
     
     float fMax = max(vColor.r, max(vColor.g, vColor.b));
     
@@ -134,7 +161,7 @@ PS_OUT PS_BLEND_RGBTOA_MAIN(PS_IN In)
     vColor.rgb *= g_vColor.rgb;
     vColor.a *= g_fAlpha;
 	
-    if (vColor.a < 0.3f)
+    if (vColor.a < 0.1f)
         discard;
     
     Out.vColor = vColor;
@@ -198,7 +225,7 @@ PS_EFFECT_OUT PS_POW_MAIN(PS_IN In)
     vColor.b = AdaptiveValue(saturate(vColor.b));
     
     float fMax = max(vColor.r, max(vColor.g, vColor.b));
-    
+
     if (fMax < 0.3f)
         discard;
     
@@ -287,4 +314,21 @@ technique11	DefaultTechnique
         PixelShader = compile ps_5_0 PS_POW_MAIN();
     }
 
+    pass THUNDER_EFFECT // 7
+    {
+        SetRasterizerState(RS_Default);
+        SetDepthStencilState(DSS_Default, 0);
+        SetBlendState(BS_Default, vector(0.f, 0.f, 0.f, 0.f), 0xffffffff);
+
+        VertexShader = compile vs_5_0 VS_ELECTRIC_MAIN();
+        GeometryShader = NULL;
+        PixelShader = compile ps_5_0 PS_POW_MAIN();
+    }
+
+}
+
+float rand(float seed)
+{
+    float fRandom = frac(sin(seed) * 43758.5453123);
+    return fRandom * 2.f - 1.f;
 }
