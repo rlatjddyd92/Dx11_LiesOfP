@@ -395,6 +395,25 @@ void CController_UITool::UIPart_Edit()
 		ImGui::SameLine();
 		ImGui::DragFloat("Cut_End", &pNow->vTexture_Angle.y);
 		
+		// 8°¢Çü
+		ImGui::Text("2D_Polygon");
+		ImGui::SameLine();
+		ImGui::Checkbox("Is2DPolygon", &pNow->bIs_TwoDPolygon);
+		ImGui::DragFloat("Point0", &pNow->fRatio_TwoDPolygon[0], 0.01f);
+		ImGui::SameLine();
+		ImGui::DragFloat("Point1", &pNow->fRatio_TwoDPolygon[1], 0.01f);
+		ImGui::SameLine();
+		ImGui::DragFloat("Point2", &pNow->fRatio_TwoDPolygon[2], 0.01f);
+		ImGui::SameLine();
+		ImGui::DragFloat("Point3", &pNow->fRatio_TwoDPolygon[3], 0.01f);
+		
+		ImGui::DragFloat("Point4", &pNow->fRatio_TwoDPolygon[4], 0.01f);
+		ImGui::SameLine();
+		ImGui::DragFloat("Point5", &pNow->fRatio_TwoDPolygon[5], 0.01f);
+		ImGui::SameLine();
+		ImGui::DragFloat("Point6", &pNow->fRatio_TwoDPolygon[6], 0.01f);
+		ImGui::SameLine();
+		ImGui::DragFloat("Point7", &pNow->fRatio_TwoDPolygon[7], 0.01f);
 	}
 
 	for (auto& iter : m_vecPageInfo[m_iNowSelectNum]->vecPart)

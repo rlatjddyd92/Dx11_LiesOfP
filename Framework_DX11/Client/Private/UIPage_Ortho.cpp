@@ -145,7 +145,13 @@ HRESULT CUIPage_Ortho::Render_Ortho_UI()
 			m_vecPart[m_vec_Group_Ctrl[_int(eType)]->PartIndexlist.front()]->strText = pRender->strText;
 
 		if (eType == PART_GROUP::GROUP_HP_FILL)
+		{
 			m_vecPart[m_vec_Group_Ctrl[_int(eType)]->PartIndexlist.front()]->fRatio = pRender->fRatio;
+			if (pRender->bIsWeakness)
+				m_vecPart[m_vec_Group_Ctrl[_int(eType)]->PartIndexlist.back()]->bRender = true;
+			else 
+				m_vecPart[m_vec_Group_Ctrl[_int(eType)]->PartIndexlist.back()]->bRender = false;
+		}
 
 		for (auto& iter : m_vec_Group_Ctrl[_int(eType)]->PartIndexlist)
 		{
@@ -173,8 +179,8 @@ void CUIPage_Ortho::Initialize_Ortho_Info()
 	m_vecOrtho_Adjust[_int(PART_GROUP::GROUP_HP_FRAME)] = { 0.f,3.f,0.f }; // 몬스터 체력바 (프레임, Fill 모두 적용됨)
 	m_vecOrtho_Adjust[_int(PART_GROUP::GROUP_HP_FILL)] = { 0.f,3.f,0.f }; // 몬스터 체력바 (프레임, Fill 모두 적용됨)
 	m_vecOrtho_Adjust[_int(PART_GROUP::GROUP_HP_COUNT)] = { 0.f,3.f,0.f }; // 몬스터 데미지 (프레임, Fill 모두 적용됨)
-	m_vecOrtho_Adjust[_int(PART_GROUP::GROUP_FOCUS)] = { 0.f,1.f,0.f }; // 몬스터 포커싱
-	m_vecOrtho_Adjust[_int(PART_GROUP::GROUP_SPECIAL_HIT)] = { 0.f,1.f,0.f }; // 몬스터 특수공격
+	m_vecOrtho_Adjust[_int(PART_GROUP::GROUP_FOCUS)] = { 0.f,2.f,0.f }; // 몬스터 포커싱
+	m_vecOrtho_Adjust[_int(PART_GROUP::GROUP_SPECIAL_HIT)] = { 0.f,2.f,0.f }; // 몬스터 특수공격
 }
 
 void CUIPage_Ortho::CheckHost(_float fTimeDelta)
@@ -206,8 +212,8 @@ void CUIPage_Ortho::CheckHost(_float fTimeDelta)
 			_float fDistnace = Check_Distance_From_Cam((*iter)->pHost);
 
 			Make_Monster_HP_Bar((*iter)->pHost, fTimeDelta, fDistnace);
-			//Make_Monster_Focusing((*iter)->pHost, fTimeDelta, fDistnace);
-			//Make_Monster_SpecialHit((*iter)->pHost, fTimeDelta, fDistnace);
+			Make_Monster_Focusing((*iter)->pHost, fTimeDelta, fDistnace);
+			Make_Monster_SpecialHit((*iter)->pHost, fTimeDelta, fDistnace);
 			++iter;
 		}
 		else if ((*iter)->eType == UI_ORTHO_OBJ_TYPE::ORTHO_BOSS_SIMON)
@@ -218,8 +224,8 @@ void CUIPage_Ortho::CheckHost(_float fTimeDelta)
 
 			GET_GAMEINTERFACE->Activate_Boss_Hp_Bar(true);
 			GET_GAMEINTERFACE->Set_Boss_Hp_Bar_Info(pStat->strName, pStat->fHp, pStat->fMaxHp);
-			//Make_Monster_Focusing((*iter)->pHost, fTimeDelta, fDistnace);
-			//Make_Monster_SpecialHit((*iter)->pHost, fTimeDelta, fDistnace);
+			Make_Monster_Focusing((*iter)->pHost, fTimeDelta, fDistnace);
+			Make_Monster_SpecialHit((*iter)->pHost, fTimeDelta, fDistnace);
 			++iter;
 		}
 	}
@@ -243,6 +249,7 @@ void CUIPage_Ortho::Make_Monster_HP_Bar(CGameObject* pHost, _float fTimeDelta, _
 	*pRender_HP_Frame = { fDistance ,fPosition,  PART_GROUP::GROUP_HP_FRAME, fRatio, {}, -1 };
 	OR_RENDER* pRender_HP_Fill = new OR_RENDER;
 	*pRender_HP_Fill = { fDistance ,fPosition,  PART_GROUP::GROUP_HP_FILL, fRatio, {}, -1 };
+	pRender_HP_Fill->bIsWeakness = pStat->bWeakness;
 
 	m_queue_Ortho_Render_Ctrl.push(pRender_HP_Frame);
 	m_queue_Ortho_Render_Ctrl.push(pRender_HP_Fill);
@@ -258,10 +265,12 @@ void CUIPage_Ortho::Make_Monster_HP_Bar(CGameObject* pHost, _float fTimeDelta, _
 
 void CUIPage_Ortho::Make_Monster_Focusing(CGameObject* pHost, _float fTimeDelta, _float fDistance)
 {
-	// 여기에 고정 대상 띄우는 논리가 필요함 
+	CPawn* pTarget = GET_GAMEINTERFACE->Get_Player()->Find_TargetMonster();
 
-		// 테스트 수치 
-	if (!GET_GAMEINTERFACE->GetTestData()->bFocus)
+	if (pTarget == nullptr)
+		return;
+
+	if (pTarget != pHost)
 		return;
 
 	_Vec2 fPosition = { 0.f,0.f };
@@ -276,10 +285,7 @@ void CUIPage_Ortho::Make_Monster_Focusing(CGameObject* pHost, _float fTimeDelta,
 
 void CUIPage_Ortho::Make_Monster_SpecialHit(CGameObject* pHost, _float fTimeDelta, _float fDistance)
 {
-	// 여기에 특수 공격 가능 상태 띄우는 논리가 필요함 
-
-	// 테스트 수치 
-	if (static_cast<CPawn*>(pHost)->Get_Status()->bWeakness)
+	if (!static_cast<CPawn*>(pHost)->Get_Status()->bFatalAttack)
 		return;
 
 	_Vec2 fPosition = { 0.f,0.f };

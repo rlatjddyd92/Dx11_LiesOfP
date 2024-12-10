@@ -883,6 +883,12 @@
     <Filter Include="03.GameInterface_Controller\00.UIManager\00.UIPage\12.UIPage_Effect %2880%25%29">
       <UniqueIdentifier>{26ca8006-fabe-45a8-b4ac-6ef7432e9707}</UniqueIdentifier>
     </Filter>
+    <Filter Include="03.GameInterface_Controller\00.UIManager\00.UIPage\17.UIPage_Chest">
+      <UniqueIdentifier>{b9789187-f1ad-4213-9cb0-9f158043cd13}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="03.GameInterface_Controller\00.UIManager\00.UIPage\16.UIPage_Shop %2850%25%29">
+      <UniqueIdentifier>{9e52ec52-1fa3-4985-8f37-acaa40a8f2fd}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Client.h">
@@ -1552,9 +1558,6 @@
     <ClInclude Include="..\Public\UIPage_Test.h">
       <Filter>03.GameInterface_Controller\00.UIManager\00.UIPage\11.UIPage_Test %280%25%29</Filter>
     </ClInclude>
-    <ClInclude Include="..\Public\UIPage_Effect.h">
-      <Filter>03.GameInterface_Controller\00.UIManager\00.UIPage\12.UIPage_Effect %2880%25%29</Filter>
-    </ClInclude>
     <ClInclude Include="..\Public\AObj_GoldBall.h">
       <Filter>02.GameObjects\12.AttackObject\SimonManus\GoldBall</Filter>
     </ClInclude>
@@ -1618,6 +1621,15 @@
     </ClInclude>
     <ClInclude Include="..\Public\UIPage_Effect.h">
       <Filter>03.GameInterface_Controller\00.UIManager\00.UIPage\12.UIPage_Effect</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Public\UIPage_Shop.h">
+      <Filter>03.GameInterface_Controller\00.UIManager\00.UIPage\16.UIPage_Shop %2850%25%29</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Public\UIPage_Effect.h">
+      <Filter>03.GameInterface_Controller\00.UIManager\00.UIPage\12.UIPage_Effect %2880%25%29</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Public\UIPage_Chest.h">
+      <Filter>03.GameInterface_Controller\00.UIManager\00.UIPage\17.UIPage_Chest</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -2258,9 +2270,6 @@
     <ClCompile Include="..\Private\UIPage_Test.cpp">
       <Filter>03.GameInterface_Controller\00.UIManager\00.UIPage\11.UIPage_Test %280%25%29</Filter>
     </ClCompile>
-    <ClCompile Include="..\Private\UIPage_Effect.cpp">
-      <Filter>03.GameInterface_Controller\00.UIManager\00.UIPage\12.UIPage_Effect %2880%25%29</Filter>
-    </ClCompile>
     <ClCompile Include="..\Private\AObj_GoldBall.cpp">
       <Filter>02.GameObjects\12.AttackObject\SimonManus\GoldBall</Filter>
     </ClCompile>
@@ -2324,6 +2333,15 @@
     </ClCompile>
     <ClCompile Include="..\Private\UIPage_Effect.cpp">
       <Filter>03.GameInterface_Controller\00.UIManager\00.UIPage\12.UIPage_Effect</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Private\UIPage_Shop.cpp">
+      <Filter>03.GameInterface_Controller\00.UIManager\00.UIPage\16.UIPage_Shop %2850%25%29</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Private\UIPage_Effect.cpp">
+      <Filter>03.GameInterface_Controller\00.UIManager\00.UIPage\12.UIPage_Effect %2880%25%29</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Private\UIPage_Chest.cpp">
+      <Filter>03.GameInterface_Controller\00.UIManager\00.UIPage\17.UIPage_Chest</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

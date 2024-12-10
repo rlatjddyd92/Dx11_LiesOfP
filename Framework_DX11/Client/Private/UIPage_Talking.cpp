@@ -126,9 +126,16 @@ HRESULT CUIPage_Talking::Ready_UIPart_Group_Control()
 		pNewScript->strSpeaker = iter[2];
 		pNewScript->strScript_A = iter[3];
 		if (iter[4][0] != 'x')
-		pNewScript->strScript_B = iter[4];
+			pNewScript->strScript_B = iter[4];
 		if (iter[5][0] != 'x')
-		pNewScript->strScript_C = iter[5];
+			pNewScript->strScript_C = iter[5];
+
+		if (iter[6][0] != 'x')
+			pNewScript->strFunction_A = iter[6];
+		if (iter[7][0] != 'x')
+			pNewScript->strFunction_B = iter[7];
+		if (iter[8][0] != 'x')
+			pNewScript->strFunction_C = iter[8];
 
 		m_vecNpc_ScriptInfo.back()->vecScript.push_back(pNewScript);
 	}
@@ -172,47 +179,125 @@ void CUIPage_Talking::Update_Script(_float fTimeDelta)
 	if (m_eNowNpc == NPC_SCRIPT::SCR_END)
 		return;
 
-	if (KEY_TAP(KEY::LBUTTON))
-		if (m_vecNpc_ScriptInfo[_int(m_eNowNpc)]->Add_ScriptNum() == false)
-		{
-			CloseAction();
-			return;
-		}
+	for (_int i = _int(PART_GROUP::TALKING_Function_Top_Center); i <= _int(PART_GROUP::TALKING_Function_Rect_Right); ++i)
+		m_vecPart[i]->bRender = false;
 
 	SCRIPT* pNow = m_vecNpc_ScriptInfo[_int(m_eNowNpc)]->Get_NowScript();
 
-	if (pNow->strSpeaker[0] == 'S')
+	if (pNow->strFunction_A.empty())
 	{
-		Update_Select(fTimeDelta);
-
-		m_vecPart[_int(PART_GROUP::TALKING_Name_Text)]->bRender = false;
-		m_vecPart[_int(PART_GROUP::TALKING_Script_0)]->bRender = false;
-		m_vecPart[_int(PART_GROUP::TALKING_Script_1)]->bRender = false;
-		m_vecPart[_int(PART_GROUP::TALKING_Script_2)]->bRender = false;
+		if (KEY_TAP(KEY::LBUTTON))
+			if (m_vecNpc_ScriptInfo[_int(m_eNowNpc)]->Add_ScriptNum() == false)
+			{
+				CloseAction();
+				return;
+			}
 	}
 	else
 	{
-		for (_int i = _int(PART_GROUP::TALKING_Select_Clock_Center); i <= _int(PART_GROUP::TALKING_Select_Right_Text); ++i)
-			m_vecPart[i]->bRender = false;
+		_bool bIsClick = KEY_TAP(KEY::LBUTTON);
+		m_iFunction = -1;
 
-		m_vSelectTime.x = -1.f;
-		 
-		m_vecPart[_int(PART_GROUP::TALKING_Name_Text)]->strText = pNow->strSpeaker;
-		m_vecPart[_int(PART_GROUP::TALKING_Script_0)]->strText = pNow->strScript_A;
-		m_vecPart[_int(PART_GROUP::TALKING_Script_1)]->strText = pNow->strScript_B;
-		m_vecPart[_int(PART_GROUP::TALKING_Script_2)]->strText = pNow->strScript_C;
+		if (!pNow->strFunction_A.empty())
+		{
+			m_vecPart[_int(PART_GROUP::TALKING_Function_Back_0)]->bRender = true;
+			m_vecPart[_int(PART_GROUP::TALKING_Function_Fx_0)]->bRender = true;
+			m_vecPart[_int(PART_GROUP::TALKING_Function_Text_0)]->bRender = true;
+			m_vecPart[_int(PART_GROUP::TALKING_Function_Text_0)]->strText = pNow->strFunction_A;
 
-		m_vecPart[_int(PART_GROUP::TALKING_Name_Text)]->bRender = true;
-		m_vecPart[_int(PART_GROUP::TALKING_Script_0)]->bRender = true;
-		m_vecPart[_int(PART_GROUP::TALKING_Script_1)]->bRender = true;
-		m_vecPart[_int(PART_GROUP::TALKING_Script_2)]->bRender = true;
-	}
+			if (GET_GAMEINTERFACE->CheckMouse(m_vecPart[_int(PART_GROUP::TALKING_Function_Back_0)]->fPosition, m_vecPart[_int(PART_GROUP::TALKING_Function_Back_0)]->fSize).x != -1.f)
+			{
+				m_vecPart[_int(PART_GROUP::TALKING_Function_Rect_Left)]->iParentPart_Index = _int(PART_GROUP::TALKING_Function_Back_0);
+				m_iFunction = 0;
+			}
+		}
+		if (!pNow->strFunction_B.empty())
+		{
+			m_vecPart[_int(PART_GROUP::TALKING_Function_Back_1)]->bRender = true;
+			m_vecPart[_int(PART_GROUP::TALKING_Function_Fx_1)]->bRender = true;
+			m_vecPart[_int(PART_GROUP::TALKING_Function_Text_1)]->bRender = true;
+			m_vecPart[_int(PART_GROUP::TALKING_Function_Text_1)]->strText = pNow->strFunction_B;
+
+			if (GET_GAMEINTERFACE->CheckMouse(m_vecPart[_int(PART_GROUP::TALKING_Function_Text_1)]->fPosition, m_vecPart[_int(PART_GROUP::TALKING_Function_Text_1)]->fSize).x != -1.f)
+			{
+				m_vecPart[_int(PART_GROUP::TALKING_Function_Rect_Left)]->iParentPart_Index = _int(PART_GROUP::TALKING_Function_Text_1);
+				m_iFunction = 1;
+			}
+		}
+		if (!pNow->strFunction_C.empty())
+		{
+			m_vecPart[_int(PART_GROUP::TALKING_Function_Back_2)]->bRender = true;
+			m_vecPart[_int(PART_GROUP::TALKING_Function_Fx_2)]->bRender = true;
+			m_vecPart[_int(PART_GROUP::TALKING_Function_Text_2)]->bRender = true;
+			m_vecPart[_int(PART_GROUP::TALKING_Function_Text_2)]->strText = pNow->strFunction_C;
+
+			if (GET_GAMEINTERFACE->CheckMouse(m_vecPart[_int(PART_GROUP::TALKING_Function_Back_2)]->fPosition, m_vecPart[_int(PART_GROUP::TALKING_Function_Back_2)]->fSize).x != -1.f)
+			{
+				m_vecPart[_int(PART_GROUP::TALKING_Function_Rect_Left)]->iParentPart_Index = _int(PART_GROUP::TALKING_Function_Back_2);
+				m_iFunction = 2;
+			}
+		}
 	
-	m_vecPart[_int(PART_GROUP::TALKING_Back_Fx)]->bRender = true;
-	m_vecPart[_int(PART_GROUP::TALKING_Line)]->bRender = true;
+
+	if (bIsClick)
+	{
+		if (m_iFunction == -1)
+		{
+			if (m_vecNpc_ScriptInfo[_int(m_eNowNpc)]->Add_ScriptNum() == false)
+			{
+				CloseAction();
+				return;
+			}
+		}
+		else if (m_iFunction == 0)
+		{
+			// 별바라기 순간이동 메뉴
+		}
+		else if (m_iFunction == 0)
+		{
+			GET_GAMEINTERFACE->SwicthPage(UIPAGE::PAGE_TALKING, UIPAGE::PAGE_SHOP);
+		}
+		else if (m_iFunction == 0)
+		{
+			// 보관함 
+		}
+
+	}
 }
 
-void CUIPage_Talking::Update_Select(_float fTimeDelta)
+		if (pNow->strSpeaker[0] == 'S')
+		{
+			Update_Select(fTimeDelta);
+
+			m_vecPart[_int(PART_GROUP::TALKING_Name_Text)]->bRender = false;
+			m_vecPart[_int(PART_GROUP::TALKING_Script_0)]->bRender = false;
+			m_vecPart[_int(PART_GROUP::TALKING_Script_1)]->bRender = false;
+			m_vecPart[_int(PART_GROUP::TALKING_Script_2)]->bRender = false;
+		}
+		else
+		{
+			for (_int i = _int(PART_GROUP::TALKING_Select_Clock_Center); i <= _int(PART_GROUP::TALKING_Select_Right_Text); ++i)
+				m_vecPart[i]->bRender = false;
+
+			m_vSelectTime.x = -1.f;
+
+			m_vecPart[_int(PART_GROUP::TALKING_Name_Text)]->strText = pNow->strSpeaker;
+			m_vecPart[_int(PART_GROUP::TALKING_Script_0)]->strText = pNow->strScript_A;
+			m_vecPart[_int(PART_GROUP::TALKING_Script_1)]->strText = pNow->strScript_B;
+			m_vecPart[_int(PART_GROUP::TALKING_Script_2)]->strText = pNow->strScript_C;
+
+			m_vecPart[_int(PART_GROUP::TALKING_Name_Text)]->bRender = true;
+			m_vecPart[_int(PART_GROUP::TALKING_Script_0)]->bRender = true;
+			m_vecPart[_int(PART_GROUP::TALKING_Script_1)]->bRender = true;
+			m_vecPart[_int(PART_GROUP::TALKING_Script_2)]->bRender = true;
+		}
+
+		m_vecPart[_int(PART_GROUP::TALKING_Back_Fx)]->bRender = true;
+		m_vecPart[_int(PART_GROUP::TALKING_Line)]->bRender = true;
+	
+}
+
+	void CUIPage_Talking::Update_Select(_float fTimeDelta)
 {
 	// 중간 발표 이후로 진행
 	if (m_vSelectTime.x == -1.f)

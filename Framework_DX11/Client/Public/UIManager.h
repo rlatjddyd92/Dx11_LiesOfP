@@ -160,6 +160,8 @@ private:
 	void UIControl_Test(_float fTimeDelta);
 	void UIControl_Talking(_float fTimeDelta);
 	void UIControl_Popup(_float fTimeDelta);
+	void UIControl_Shop(_float fTimeDelta);
+	void UIControl_Chest(_float fTimeDelta);
 
 public:
 #pragma region Page_Main
@@ -238,6 +240,10 @@ public:
 
 	void Show_Popup(_wstring strTitle, _wstring strDescA, _wstring strDescB = TEXT("none")) { m_pUIPage_Popup->Show_Popup(strTitle, strDescA, strDescB); }
 	void Off_Popup() { m_pUIPage_Popup->Off_Popup(); }
+	void Show_ItemPopup(_wstring strTitle, _wstring strInputTitle = TEXT("none"), _int iMin = 0, _int* pNow_Input = nullptr, _int iMax = 0, _wstring strCountTitle = TEXT("none"), _int iInterval = 0, _int* pNow_Count = nullptr)
+	{
+		m_pUIPage_Popup->Show_ItemPopup(strTitle, strInputTitle, iMin, pNow_Input, iMax, strCountTitle, iInterval, pNow_Count);
+	}
 
 #pragma endregion
 
@@ -361,7 +367,11 @@ private:
 	CUIPage_Popup* m_pUIPage_Popup = { nullptr };
 	// 안내
 	CUIPage_Inform* m_pUIPage_Inform = { nullptr };
-
+	// 상점
+	CUIPage_Shop* m_pUIPage_Shop = { nullptr };
+	// 보관함
+	CUIPage_Chest* m_pUIPage_Chest = { nullptr };
+	
 	CUIRender_Batching* m_pUIRender_Batching = { nullptr };
 
 	_bool m_bIsIngame = false;

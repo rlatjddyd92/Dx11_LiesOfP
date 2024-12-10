@@ -152,6 +152,10 @@ public: // 외부에서 매니저 접근
 
 	void Show_Popup(_wstring strTitle, _wstring strDescA, _wstring strDescB = TEXT("none")) { m_pUIManager->Show_Popup(strTitle, strDescA, strDescB); }
 	void Off_Popup() { m_pUIManager->Off_Popup(); }
+	void Show_ItemPopup(_wstring strTitle, _wstring strInputTitle = TEXT("none"), _int iMin = 0, _int* pNow_Input = nullptr, _int iMax = 0, _wstring strCountTitle = TEXT("none"), _int iInterval = 0.f, _int* pNow_Count = nullptr)
+	{
+		m_pUIManager->Show_ItemPopup(strTitle, strInputTitle, iMin, pNow_Input, iMax, strCountTitle, iInterval, pNow_Count);
+	}
 
 #pragma endregion
 

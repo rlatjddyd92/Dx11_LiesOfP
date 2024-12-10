@@ -896,6 +896,22 @@ void CItem_Manager::Adjust_Spec()
 	pAbility->bDebuff_Acid_Ignore = fDefence[3];
 }
 
+void CItem_Manager::Buy_ShopItem(_int iIndex)
+{
+}
+
+void CItem_Manager::Sell_ShopItem(INVEN_ARRAY_TYPE eType, _int iIndex)
+{
+}
+
+void CItem_Manager::ChestItem_To_Inven(_int iIndex)
+{
+}
+
+void CItem_Manager::InvenItem_To_Chest(INVEN_ARRAY_TYPE eType, _int iIndex)
+{
+}
+
 HRESULT CItem_Manager::Initialize_Item()
 {
 	m_vecArray_Inven.resize(_uint(INVEN_ARRAY_TYPE::TYPE_END));
@@ -990,6 +1006,28 @@ HRESULT CItem_Manager::Initialize_Item()
 			m_vecEquip_ItemInfo.back()->vecValid_InvenArray[j - iStartRow] = stoi(vecBuffer_EquipSlot[j][i]);
 	}
 
+	// 상점 초기 세팅
+	vector<vector<_wstring>> vecBuffer_Shop;
+	if (FAILED(m_pGameInstance->LoadDataByFile("../Bin/DataFiles/Shop_Info.csv", &vecBuffer_Shop)))
+		return E_FAIL;
+
+	iStartRow = 1;
+
+	for (_uint i = iStartRow; i < vecBuffer_Shop.size(); ++i)
+	{
+		SHOP* pNew = new SHOP;
+
+		pNew->iIndex = stoi(vecBuffer_Shop[i][0]);
+
+		m_vecItem_BasicSpec[pNew->iIndex]->bIsAvailable_Shop = true;
+		m_vecItem_BasicSpec[pNew->iIndex]->bIsAvailable_Chest = true;
+
+		pNew->iCount = stoi(vecBuffer_Shop[i][2]);
+		pNew->iPrice_Buy = stoi(vecBuffer_Shop[i][3]);
+
+		m_vecShop_Item.push_back(pNew);
+	}
+
 	// 플레이어 아이템 초기 세팅
 	vector<vector<_wstring>> vecBuffer_ItemInitialze;
 	if (FAILED(m_pGameInstance->LoadDataByFile("../Bin/DataFiles/Item_Initialize_Data.csv", &vecBuffer_ItemInitialze)))
@@ -1035,6 +1073,13 @@ HRESULT CItem_Manager::Initialize_Item()
 
 	m_iWeapon_Select = 0;
 
+	
+
+
+
+
+
+
 	return S_OK;
 }
 
@@ -1061,12 +1106,17 @@ void CItem_Manager::Free()
 		Safe_Delete(iter);
 	for (auto& iter : m_vecEquip_ItemInfo)
 		Safe_Delete(iter);
+	for (auto& iter : m_vecShop_Item)
+		Safe_Delete(iter);
+	for (auto& iter : m_vecChest_Item)
+		Safe_Delete(iter);
 
 	m_vecItem_BasicSpec.clear();
 	m_vecItem_InvenSlotIndex.clear();
 	m_vecArray_Inven.clear();
 	m_vecEquip_ItemInfo.clear();
-
+	m_vecShop_Item.clear();
+	m_vecChest_Item.clear();
 
 	m_LastFrame_UsingItem.clear();
 

@@ -44,6 +44,19 @@ public:
 		TALKING_Select_Right_R,
 		TALKING_Select_Right_Text,
 
+		TALKING_Function_Top_Center,
+		TALKING_Function_Back_0,
+		TALKING_Function_Back_1,
+		TALKING_Function_Back_2,
+		TALKING_Function_Fx_0,
+		TALKING_Function_Fx_1,
+		TALKING_Function_Fx_2,
+		TALKING_Function_Text_0,
+		TALKING_Function_Text_1,
+		TALKING_Function_Text_2,
+		TALKING_Function_Rect_Left,
+		TALKING_Function_Rect_Middle,
+		TALKING_Function_Rect_Right,
 
 
 		GROUP_END
@@ -57,6 +70,10 @@ public:
 		_wstring strScript_A = {};
 		_wstring strScript_B = {};
 		_wstring strScript_C = {};
+
+		_wstring strFunction_A = {};
+		_wstring strFunction_B = {};
+		_wstring strFunction_C = {};
 
 		_float fAlpha = 0.f; // <- 투명 효과 변수
 	}SCRIPT;
@@ -149,7 +166,7 @@ protected:
 
 
 	_Vec2 m_vSelectTime = { -1.f,5.f };
-
+	_int m_iFunction = -1;
 
 
 public:

@@ -149,6 +149,10 @@ public:
 		_bool bIsNew = false;
 		_bool bIsNewMark_Show = false;
 
+		// 상점, 보관함
+		_bool bIsAvailable_Shop = false;
+		_bool bIsAvailable_Chest = false;
+
 	}ITEM;
 
 	typedef struct ARRAY_INFO // 인벤에 존재하는 배열의 정보 
@@ -266,6 +270,13 @@ public:
 		_uint iIndex = 0; // <- 아이템이 위치한 인덱스 
 		vector<_bool> vecValid_InvenArray; // 해당 장착슬롯에 연결될 수 있는 인벤 Array의 목록
 	}EQUIP;
+
+	typedef struct SHOP_INFO
+	{
+		_int iIndex = -1;
+		_int iCount = 0;
+		_int iPrice_Buy = 0;
+	}SHOP;
 
 
 private:
@@ -562,8 +573,13 @@ public:
 	void Adjust_Spec();
 
 
-
-
+	// 상점, 보관함
+	vector<SHOP*>& Get_ShopData() { return m_vecShop_Item; }
+	vector<ITEM*>& Get_ChestData() { return m_vecChest_Item; }
+	void Buy_ShopItem(_int iIndex);
+	void Sell_ShopItem(INVEN_ARRAY_TYPE eType, _int iIndex);
+	void ChestItem_To_Inven(_int iIndex);
+	void InvenItem_To_Chest(INVEN_ARRAY_TYPE eType, _int iIndex);
 
 
 
@@ -641,6 +657,9 @@ private:
 
 	vector<ARRAY*> m_vecArray_Inven; // 인벤토리 정보 모음 (행 단위)
 	vector<EQUIP*> m_vecEquip_ItemInfo; // 현재 어떤 장비 장착 중인 지 확인 
+
+	vector<SHOP*> m_vecShop_Item; // 상점 아이템 목록
+	vector<ITEM*> m_vecChest_Item; // 보관함 아이템 목록
 
 	_uint m_iInven_Array_Col_Count = 5; // <- 인벤 한 줄에 몇 개의 셀이 들어가는 지
 
