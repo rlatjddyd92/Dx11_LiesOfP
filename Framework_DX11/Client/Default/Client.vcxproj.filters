@@ -892,8 +892,35 @@
     <Filter Include="05.Fsm\Player\Arm\End">
       <UniqueIdentifier>{58fb7fbc-ec6c-46dc-934a-443473931ea6}</UniqueIdentifier>
     </Filter>
+    <Filter Include="05.Fsm\Player\Arm\Counter">
+      <UniqueIdentifier>{9b4f5bce-81c3-47ff-991c-468ef638168f}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="05.Fsm\Player\Arm\Parry">
+      <UniqueIdentifier>{d44fa125-992d-4432-aa92-7c0a65e5a6af}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="05.Fsm\Player\Arm\Guard_Heavy">
+      <UniqueIdentifier>{6c344b3e-e795-41fb-a481-126e5f050968}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="05.Fsm\Player\Arm\Guard_Hard">
+      <UniqueIdentifier>{2ecb8c88-e2e1-4a77-b669-7fcd2d067f27}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="05.Fsm\Player\Arm\Guard_Weak">
+      <UniqueIdentifier>{cbc0f36f-1fa1-428a-92a9-05353fa18a86}</UniqueIdentifier>
+    </Filter>
     <Filter Include="05.Fsm\Player\Arm\Loop">
       <UniqueIdentifier>{2d2235b5-d663-4950-8f4d-98355841bd38}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="05.Fsm\Player\Arm\Thrust">
+      <UniqueIdentifier>{34d0309e-5b7c-4601-bfcf-b783ee920a69}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="05.Fsm\Player\Arm\Swing">
+      <UniqueIdentifier>{301bd96f-06f1-41bb-8f7e-07061252f405}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="05.Fsm\Player\Arm\ParryBomb">
+      <UniqueIdentifier>{7d8f6927-6c8e-4997-a3e1-b9fda5b1cbdf}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.GameObjects\06.Weapon\00.PlayerWeapon\03.Arm">
+      <UniqueIdentifier>{da8fff6e-776b-48f5-87cc-a79755f50244}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -1637,6 +1664,30 @@
     <ClInclude Include="..\Public\State_Player_Arm_Loop.h">
       <Filter>05.Fsm\Player\Arm\Loop</Filter>
     </ClInclude>
+    <ClInclude Include="..\Public\State_Player_Arm_Swing.h">
+      <Filter>05.Fsm\Player\Arm\Swing</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Public\State_Player_Arm_Thrust.h">
+      <Filter>05.Fsm\Player\Arm\Thrust</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Public\State_Player_Arm_Guard_Weak.h">
+      <Filter>05.Fsm\Player\Arm\Guard_Weak</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Public\State_Player_Arm_Guard_Hard.h">
+      <Filter>05.Fsm\Player\Arm\Guard_Hard</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Public\State_Player_Arm_Counter.h">
+      <Filter>05.Fsm\Player\Arm\Counter</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Public\State_Player_Arm_Guard_Heavy.h">
+      <Filter>05.Fsm\Player\Arm\Guard_Heavy</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Public\State_Player_Arm_Parry.h">
+      <Filter>05.Fsm\Player\Arm\Parry</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Public\State_Player_Arm_ParryBomb.h">
+      <Filter>05.Fsm\Player\Arm\ParryBomb</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Client.cpp">
@@ -2348,6 +2399,30 @@
     </ClCompile>
     <ClCompile Include="..\Private\State_Player_Arm_Loop.cpp">
       <Filter>05.Fsm\Player\Arm\Loop</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Private\State_Player_Arm_Swing.cpp">
+      <Filter>05.Fsm\Player\Arm\Swing</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Private\State_Player_Arm_Thrust.cpp">
+      <Filter>05.Fsm\Player\Arm\Thrust</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Private\State_Player_Arm_Guard_Weak.cpp">
+      <Filter>05.Fsm\Player\Arm\Guard_Weak</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Private\State_Player_Arm_Guard_Hard.cpp">
+      <Filter>05.Fsm\Player\Arm\Guard_Hard</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Private\State_Player_Arm_Counter.cpp">
+      <Filter>05.Fsm\Player\Arm\Counter</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Private\State_Player_Arm_Guard_Heavy.cpp">
+      <Filter>05.Fsm\Player\Arm\Guard_Heavy</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Private\State_Player_Arm_Parry.cpp">
+      <Filter>05.Fsm\Player\Arm\Parry</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Private\State_Player_Arm_ParryBomb.cpp">
+      <Filter>05.Fsm\Player\Arm\ParryBomb</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

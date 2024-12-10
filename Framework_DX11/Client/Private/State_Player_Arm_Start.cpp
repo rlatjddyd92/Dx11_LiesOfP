@@ -18,10 +18,10 @@ HRESULT CState_Player_Arm_Start::Initialize(_uint iStateNum, void* pArg)
 
     m_pTrackPos = pDesc->pPrevTrackPos;
 
-    m_iAnimation_Walk[WALK_B] = m_pPlayer->Get_Model()->Find_AnimationIndex("AS_Pino_O_Guard_Walk_B", 2.5f);
-    m_iAnimation_Walk[WALK_F] = m_pPlayer->Get_Model()->Find_AnimationIndex("AS_Pino_O_Guard_Walk_F", 2.5f);
-    m_iAnimation_Walk[WALK_L] = m_pPlayer->Get_Model()->Find_AnimationIndex("AS_Pino_O_Guard_Walk_L", 2.5f);
-    m_iAnimation_Walk[WALK_R] = m_pPlayer->Get_Model()->Find_AnimationIndex("AS_Pino_O_Guard_Walk_R", 2.5f);
+    m_iAnimation_Walk[WALK_B] = m_pPlayer->Get_Model()->Find_AnimationIndex("AS_Pino_O_Walk_B", 2.5f);
+    m_iAnimation_Walk[WALK_F] = m_pPlayer->Get_Model()->Find_AnimationIndex("AS_Pino_O_Walk_F", 2.5f);
+    m_iAnimation_Walk[WALK_L] = m_pPlayer->Get_Model()->Find_AnimationIndex("AS_Pino_O_Walk_L", 2.5f);
+    m_iAnimation_Walk[WALK_R] = m_pPlayer->Get_Model()->Find_AnimationIndex("AS_Pino_O_Walk_R", 2.5f);
 
     m_iAnimation_ArmStart = m_pPlayer->Get_Model()->Find_AnimationIndex("AS_Pino_Arm_GuardEx_Start", 2.5f);
 
@@ -41,7 +41,7 @@ HRESULT CState_Player_Arm_Start::Start_State(void* pArg)
 
     m_pPlayer->Change_CameraMode(CPlayerCamera::MODE_STATIC);
 
-    //m_pPlayer->Get_Model()->Set_RemoteTuning(false);
+    m_pPlayer->Get_Model()->Set_RemoteTuning(false);
 
     return S_OK;
 }

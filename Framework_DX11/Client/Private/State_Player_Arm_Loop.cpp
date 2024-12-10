@@ -18,10 +18,10 @@ HRESULT CState_Player_Arm_Loop::Initialize(_uint iStateNum, void* pArg)
 
     m_pTrackPos = pDesc->pPrevTrackPos;
 
-    m_iAnimation_Walk[WALK_B] = m_pPlayer->Get_Model()->Find_AnimationIndex("AS_Pino_O_Guard_Walk_B", 2.5f);
-    m_iAnimation_Walk[WALK_F] = m_pPlayer->Get_Model()->Find_AnimationIndex("AS_Pino_O_Guard_Walk_F", 2.5f);
-    m_iAnimation_Walk[WALK_L] = m_pPlayer->Get_Model()->Find_AnimationIndex("AS_Pino_O_Guard_Walk_L", 2.5f);
-    m_iAnimation_Walk[WALK_R] = m_pPlayer->Get_Model()->Find_AnimationIndex("AS_Pino_O_Guard_Walk_R", 2.5f);
+    m_iAnimation_Walk[WALK_B] = m_pPlayer->Get_Model()->Find_AnimationIndex("AS_Pino_O_Walk_B", 2.5f);
+    m_iAnimation_Walk[WALK_F] = m_pPlayer->Get_Model()->Find_AnimationIndex("AS_Pino_O_Walk_F", 2.5f);
+    m_iAnimation_Walk[WALK_L] = m_pPlayer->Get_Model()->Find_AnimationIndex("AS_Pino_O_Walk_L", 2.5f);
+    m_iAnimation_Walk[WALK_R] = m_pPlayer->Get_Model()->Find_AnimationIndex("AS_Pino_O_Walk_R", 2.5f);
 
     m_iAnimation_ArmLoop = m_pPlayer->Get_Model()->Find_AnimationIndex("AS_Pino_Arm_GuardEx_Loop", 2.f);
 
@@ -32,11 +32,10 @@ HRESULT CState_Player_Arm_Loop::Initialize(_uint iStateNum, void* pArg)
 
 HRESULT CState_Player_Arm_Loop::Start_State(void* pArg)
 {
-    m_pPlayer->Change_Animation(m_iAnimation_ArmLoop, true, 0.f, 0, true);
+    //m_pPlayer->Change_Animation(m_iAnimation_ArmLoop, true, 0.f, 0, true);
 
-    //m_pPlayer->Change_Animation_Boundry(m_iAnimation_ArmLoop, true, 0.f);
+    m_pPlayer->Change_Animation_Boundry(m_iAnimation_ArmLoop, true, 0.f);
 
-    m_pPlayer->Set_IsGuard(true);
     m_pPlayer->Set_IsArm(true);
 
     return S_OK;
@@ -46,15 +45,42 @@ void CState_Player_Arm_Loop::Update(_float fTimeDelta)
 {
     if (KEY_HOLD(KEY::CTRL))
     {
-        //if (!Move(fTimeDelta))
-        //{
-        //    //m_pPlayer->Change_Animation(m_iAnimation_ArmLoop, true, 0.15f);
-        //}
-        //m_pPlayer->Change_Animation_Boundry(m_iAnimation_ArmLoop, true, 0.05f);
+        // shift 연타하면 퍼펙트 가드 가능인 사기템
+        if (KEY_TAP(KEY::LSHIFT))
+        {
+            m_pPlayer->Set_IsGuard(true);
+        }
+        else if (KEY_NONE(KEY::LSHIFT) || KEY_AWAY(KEY::LSHIFT))
+        {
+            m_pPlayer->Set_IsGuard(false);
+        }
+
+        if (!Move(fTimeDelta))
+        {
+            m_pPlayer->Change_Animation(m_iAnimation_ArmLoop, true, 0.15f);
+        }
+        m_pPlayer->Change_Animation_Boundry(m_iAnimation_ArmLoop, true, 0.05f);
+
+        if (KEY_TAP(KEY::LBUTTON))
+        {
+            _uint iWeponType = m_pPlayer->Get_WeaponType();
+
+            if (iWeponType > 0)
+                m_pPlayer->Change_State(CPlayer::ARM_SWING);
+            else
+                m_pPlayer->Change_State(CPlayer::ARM_THRUST);
+                return;
+        }
+        else if (KEY_TAP(KEY::F))
+        {
+            m_pPlayer->Change_State(CPlayer::ARM_PARRY);
+        }
     }
     else
     {
+        m_pPlayer->Set_IsArm(false);
         _uint iWeponType = m_pPlayer->Get_WeaponType();
+        m_pPlayer->Get_Model()->Set_RemoteTuning(true);
 
         if (iWeponType < 2)
             m_pPlayer->Change_State(CPlayer::OH_IDLE);
@@ -65,6 +91,7 @@ void CState_Player_Arm_Loop::Update(_float fTimeDelta)
 
 void CState_Player_Arm_Loop::End_State()
 {
+    m_pPlayer->Set_IsGuard(false);
 }
 
 _bool CState_Player_Arm_Loop::End_Check()

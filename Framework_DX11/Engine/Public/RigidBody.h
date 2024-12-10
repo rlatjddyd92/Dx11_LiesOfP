@@ -36,8 +36,9 @@ private:
     virtual ~CRigidBody() = default;
 
 public:
-    void    Set_IsOnCell(_bool isOnCell) { m_isOnCell = isOnCell; }
-    void    Set_IsLockCell(_bool isLockCell) { m_isLockCell = isLockCell; }
+    void        Set_IsOnCell(_bool isOnCell) { m_isOnCell = isOnCell; }
+    void        Set_IsLockCell(_bool isLockCell) { m_isLockCell = isLockCell; }
+    _Vec3&      Get_Velocity() { return m_vVelocity; }
 
 public:
     virtual HRESULT Initialize_Prototype();

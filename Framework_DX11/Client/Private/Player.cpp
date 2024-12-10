@@ -82,6 +82,14 @@
 
 #include "State_Player_Arm_Start.h"
 #include "State_Player_Arm_Loop.h"
+#include "State_Player_Arm_Swing.h"
+#include "State_Player_Arm_Thrust.h"
+#include "State_Player_Arm_Guard_Weak.h"
+#include "State_Player_Arm_Guard_Hard.h"
+#include "State_Player_Arm_Guard_Heavy.h"
+#include "State_Player_Arm_Counter.h"
+#include "State_Player_Arm_Parry.h"
+#include "State_Player_Arm_ParryBomb.h"
 
 #include "State_Player_OpenSophiaDoor.h"
 #include "State_Player_SophiaWalk.h"
@@ -134,9 +142,9 @@ HRESULT CPlayer::Initialize(void * pArg)
 	//m_pNavigationCom->Move_to_Cell(m_pRigidBodyCom, 427); //짧은사다리
 	//m_pNavigationCom->Move_to_Cell(m_pRigidBodyCom, 341); //아래엘베
 	//m_pNavigationCom->Move_to_Cell(m_pRigidBodyCom, 440); //상자랑 장애물
-	//m_pNavigationCom->Move_to_Cell(m_pRigidBodyCom, 1066); // 순간이동 790
+	m_pNavigationCom->Move_to_Cell(m_pRigidBodyCom, 1066); // 순간이동 790
 	//m_pNavigationCom->Move_to_Cell(m_pRigidBodyCom, 801); // 소피아 방
-	m_pNavigationCom->Move_to_Cell(m_pRigidBodyCom, 1178); // 소피아 방 내부
+	//m_pNavigationCom->Move_to_Cell(m_pRigidBodyCom, 1178); // 소피아 방 내부
 
 	m_strObjectTag = TEXT("Player");
 
@@ -254,14 +262,34 @@ void CPlayer::Priority_Update(_float fTimeDelta)
 void CPlayer::Update(_float fTimeDelta)
 {
 	m_vCurRootMove = XMVector3TransformNormal(m_pModelCom->Play_Animation(fTimeDelta), m_pTransformCom->Get_WorldMatrix());
-	if (m_isCollisionMonster)
-	{
-		m_vCurRootMove = _Vec3(0.f, 0.f, 0.f);
-	}
 
 	m_pRigidBodyCom->Set_Velocity(m_vCurRootMove / fTimeDelta);
 
+	if (m_pIntersectMonster)
+	{
+		_Vec3 vVelocityDir = m_pRigidBodyCom->Get_Velocity();
+		vVelocityDir.Normalize();
+
+		_Vec3 vMonsterDir = m_pIntersectMonster->Get_Transform()->Get_State(CTransform::STATE_POSITION) - m_pTransformCom->Get_State(CTransform::STATE_POSITION);
+		vMonsterDir.Normalize();
+
+		if (vVelocityDir.Dot(vMonsterDir) > 0.7f)
+			m_vCurRootMove = _Vec3(0.f, 0.f, 0.f);
+	}
+
 	m_pFsmCom->Update(fTimeDelta);
+
+	if (m_pIntersectMonster)
+	{
+		_Vec3 vVelocityDir = m_pRigidBodyCom->Get_Velocity();
+		vVelocityDir.Normalize();
+
+		_Vec3 vMonsterDir = m_pIntersectMonster->Get_Transform()->Get_State(CTransform::STATE_POSITION) - m_pTransformCom->Get_State(CTransform::STATE_POSITION);
+		vMonsterDir.Normalize();
+
+		if(vVelocityDir.Dot(vMonsterDir) > 0.7f)
+			m_vCurRootMove = _Vec3(0.f, 0.f, 0.f);
+	}
 
 	m_pRigidBodyCom->Update(fTimeDelta);
 
@@ -285,15 +313,10 @@ void CPlayer::Update(_float fTimeDelta)
 	if (KEY_TAP(KEY::L))
 	{
 		Change_State(RAPIER_PARRYATTACK);
-		//Change_State(ITEMGET);
-		//Calc_DamageGain(5.f, m_pTransformCom->Get_WorldMatrix().Forward() + m_pTransformCom->Get_WorldMatrix().Translation());
 	}
 	if (KEY_TAP(KEY::K))
 	{
-		//Change_State(RAPIER_PARRYATTACK);
 		Change_State(RAPIER_FATAL);
-		//Change_State(SOPHIA_WALK);
-		//Calc_DamageGain(5.f, m_pTransformCom->Get_WorldMatrix().Forward() + m_pTransformCom->Get_WorldMatrix().Translation());
 	}
 
 	if (KEY_TAP(KEY::Q))
@@ -343,10 +366,6 @@ HRESULT CPlayer::Render()
 
 	_float fResetDisslove = -1.f;
 	if (FAILED(m_pShaderCom->Bind_RawValue("g_fDissolveRatio", &fResetDisslove, sizeof(_float))))
-		return E_FAIL;
-
-	//if (nullptr != m_pWeapon[m_eWeaponType])
-	//	if (FAILED(m_pWeapon[m_eWeaponType]->Render()))
 		return E_FAIL;
 
 	return S_OK;
@@ -417,6 +436,7 @@ void CPlayer::OnCollisionStay(CGameObject* pOther)
 	{
 		CMonster* pMonster = dynamic_cast<CMonster*>(pOther);
 
+		m_pIntersectMonster = pMonster;
 		// 페이탈 어택 여부 정하기
 		
 		m_isCollisionMonster = true;
@@ -441,6 +461,11 @@ void CPlayer::OnCollisionExit(CGameObject* pOther)
 	}
 	if (pOther->Get_Tag() == TEXT("Monster"))
 	{
+		if (m_pIntersectMonster == pOther)
+		{
+			m_pIntersectMonster = nullptr;
+		}
+
 		m_isCollisionMonster = false;
 	}
 }
@@ -677,6 +702,64 @@ _bool CPlayer::Calc_DamageGain(_float fAtkDmg, _Vec3 vHitPos, _uint iHitType, _u
 		if (ATK_STRONG == iAttackStrength)
 		{
 			Damaged(fAtkDmg, vHitPos);
+		}
+	}
+	else if (m_isArm)	//리전암 작동 상태
+	{
+		//퍼펙트 가드
+		if (m_isGuard && m_fGuardTime < 0.17f)
+		{
+			if (nullptr != pAttacker)
+			{
+				_wstring strObjecTag = pAttacker->Get_Tag();
+
+				if (strObjecTag == TEXT("Monster"))
+				{
+					CMonster* pMonster = dynamic_cast<CMonster*>(pAttacker);
+					pMonster->Increase_GroggyPoint(10.f);
+
+				}
+				else if (strObjecTag == TEXT("MonsterWeapon"))
+				{
+					CWeapon* pWeapon = dynamic_cast<CWeapon*>(pAttacker);
+					CMonster* pMonster = pWeapon->Get_Monster();
+					pMonster->Increase_GroggyPoint(10.f);
+				}
+			}
+
+			Decrease_Stamina(fAtkDmg * 0.2f);
+			m_pEffect_Manager->Add_Effect_ToLayer(LEVEL_GAMEPLAY, TEXT("Player_PerfectGuard"), pParetnMatrix, pSocketBoneMatrix);
+			m_pGameInstance->Start_TimerLack(TEXT("Timer_60"), 0.001f, 0.6f);
+		}
+
+		if (m_isParry)
+		{
+			m_pFsmCom->Change_State(ARM_BOMB);
+		}
+		else if (ATK_WEAK == iAttackStrength)
+		{
+			m_pFsmCom->Change_State(ARM_GURAD_WEAK);
+		}
+		else if (ATK_NORMAL == iAttackStrength)
+		{
+			m_pFsmCom->Change_State(ARM_GURAD_HARD);
+		}
+		else if (ATK_STRONG == iAttackStrength)
+		{
+			m_pFsmCom->Change_State(ARM_GURAD_HEAVY);
+		}
+	}
+	else if (m_isParry) // 패링 상태
+	{
+		if (m_eWeaponType == WEP_RAPIER)
+		{
+			Decrease_Region();
+			m_pFsmCom->Change_State(RAPIER_PARRYATTACK);
+		}
+		else if (m_eWeaponType == WEP_FLAME)
+		{
+			Decrease_Region();
+			m_pFsmCom->Change_State(FLAME_PARRYATTACK);
 		}
 	}
 	else if (m_isGuard)	// 가드 상태
@@ -1226,6 +1309,14 @@ HRESULT CPlayer::Ready_FSM()
 	/* 팔 기술 */
 	m_pFsmCom->Add_State(CState_Player_Arm_Start::Create(m_pFsmCom, this, ARM_START, &Desc));	
 	m_pFsmCom->Add_State(CState_Player_Arm_Loop::Create(m_pFsmCom, this, ARM_LOOP, &Desc));
+	m_pFsmCom->Add_State(CState_Player_Arm_Swing::Create(m_pFsmCom, this, ARM_SWING, &Desc));
+	m_pFsmCom->Add_State(CState_Player_Arm_Thrust::Create(m_pFsmCom, this, ARM_THRUST, &Desc));
+	m_pFsmCom->Add_State(CState_Player_Arm_Guard_Weak::Create(m_pFsmCom, this, ARM_GURAD_WEAK, &Desc));
+	m_pFsmCom->Add_State(CState_Player_Arm_Guard_Hard::Create(m_pFsmCom, this, ARM_GURAD_HARD, &Desc));
+	m_pFsmCom->Add_State(CState_Player_Arm_Guard_Heavy::Create(m_pFsmCom, this, ARM_GURAD_HEAVY, &Desc));
+	m_pFsmCom->Add_State(CState_Player_Arm_Counter::Create(m_pFsmCom, this, ARM_COUNTER, &Desc));
+	m_pFsmCom->Add_State(CState_Player_Arm_Parry::Create(m_pFsmCom, this, ARM_PARRY, &Desc));
+	m_pFsmCom->Add_State(CState_Player_Arm_ParryBomb::Create(m_pFsmCom, this, ARM_BOMB, &Desc));
 
 	/* 소피아 컷신 */
 	m_pFsmCom->Add_State(CState_Player_OpenSophiaDoor::Create(m_pFsmCom, this, SOPHIA_DOOR_OPEN, &Desc));
