@@ -18,12 +18,13 @@ namespace Engine
 		XMFLOAT4	vDirection;
 		XMFLOAT4	vPosition;
 		float		fRange;
-		//float		fOuterAngle;
-		//float		fInnerAngle;
 
 		XMFLOAT4	vDiffuse;
 		XMFLOAT4	vAmbient;
 		XMFLOAT4	vSpecular;
+
+		float		fCutOff;
+		float		fOuterCutOff;
 	}LIGHT_DESC;
 
 	typedef struct

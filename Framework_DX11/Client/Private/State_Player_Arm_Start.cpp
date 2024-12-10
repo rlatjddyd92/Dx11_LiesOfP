@@ -53,12 +53,13 @@ void CState_Player_Arm_Start::Update(_float fTimeDelta)
         if (End_Check())
         {
             m_pPlayer->Change_State(CPlayer::ARM_LOOP);
+            return;
         }
         else if (!Move(fTimeDelta))
         {
-            m_pPlayer->Change_Animation(m_iAnimation_ArmStart, true, 0.15f);
+            m_pPlayer->Change_Animation(m_iAnimation_ArmStart, false, 0.15f);
         }
-        m_pPlayer->Change_Animation_Boundry(m_iAnimation_ArmStart, true, 0.05f);
+        m_pPlayer->Change_Animation_Boundry(m_iAnimation_ArmStart, false, 0.05f);
     }
     else
     {

@@ -1539,6 +1539,8 @@ void CController_MapTool::Light_Create()
 	static _Vec4 vDiffuse = { 1.f,1.f,1.f,1.f };
 	static _Vec4 vAmbient = { 1.f,1.f,1.f,1.f };
 	static _Vec4 vSpecular = { 1.f,1.f,1.f,1.f };
+	static _float fCutOff = 1.f;
+	static _float fOuterCutOff = 1.f;
 
 	vPosition.x = m_vPickPos.x;
 	vPosition.y = m_vPickPos.y;
@@ -1561,6 +1563,12 @@ void CController_MapTool::Light_Create()
 	ImGui::DragFloat4("Ambient", (_float*)&vAmbient, 0.05f, 0.f, 1.f);
 	ImGui::DragFloat4("Specular", (_float*)&vSpecular, 0.05f, 0.f, 1.f);
 
+	if (iLightType == Light_Spot)
+	{
+		ImGui::DragFloat("CutOff", &fCutOff, 0.05f, 0.f, 1.f);
+		ImGui::DragFloat("OuterCutOff", &fOuterCutOff, 0.05f, 0.f, fCutOff);
+	}
+	
 	//렌더타겟 아이디 설정 가능
 	static int i0 = 0;
 	ImGui::InputInt("ID", &i0);
@@ -1597,6 +1605,8 @@ void CController_MapTool::Light_Create()
 		newLightDesc.vDiffuse = vDiffuse;
 		newLightDesc.vAmbient = vAmbient;
 		newLightDesc.vSpecular = vSpecular;
+		newLightDesc.fCutOff = fCutOff;
+		newLightDesc.fOuterCutOff = fOuterCutOff;
 
 		if (FAILED(m_pGameInstance->Add_Light(newLightDesc)))
 			return ;
@@ -1641,6 +1651,8 @@ void CController_MapTool::Light_Modify()
 	static _Vec4 vDiffuse = { 1.f,1.f,1.f,1.f };
 	static _Vec4 vAmbient = { 1.f,1.f,1.f,1.f };
 	static _Vec4 vSpecular = { 1.f,1.f,1.f,1.f };
+	static _float fCutOff = 1.f;
+	static _float fOuterCutOff = 1.f;
 
 	pDesc = m_pGameInstance->Get_LightDesc(m_iSelectedLightIndex);
 
@@ -1653,6 +1665,8 @@ void CController_MapTool::Light_Modify()
 		vDiffuse = pDesc->vDiffuse;
 		vAmbient = pDesc->vAmbient;
 		vSpecular = pDesc->vSpecular;
+		fCutOff = pDesc->fCutOff;
+		fOuterCutOff = pDesc->fOuterCutOff;
 
 		m_iPreSelectedLightIndex = m_iSelectedLightIndex;
 	}
@@ -1664,6 +1678,8 @@ void CController_MapTool::Light_Modify()
 		pDesc->vDiffuse = vDiffuse;
 		pDesc->vAmbient = vAmbient;
 		pDesc->vSpecular = vSpecular;
+		pDesc->fCutOff = fCutOff;
+		pDesc->fOuterCutOff = fOuterCutOff;
 	}
 
 	//방향, 위치, 범위
@@ -1683,6 +1699,12 @@ void CController_MapTool::Light_Modify()
 
 	ImGui::DragFloat4("Ambient", (_float*)&vAmbient, 0.05f, 0.f, 1.f);
 	ImGui::DragFloat4("Specular", (_float*)&vSpecular, 0.05f, 0.f, 1.f);
+
+	if (pDesc->eType == LIGHT_DESC::TYPE_SPOT)
+	{
+		ImGui::DragFloat("CutOff", &fCutOff, 0.05f, 0.f, 1.f);
+		ImGui::DragFloat("OuterCutOff", &fOuterCutOff, 0.05f, 0.f, fCutOff);
+	}
 }
 
 void CController_MapTool::Decal_Create()

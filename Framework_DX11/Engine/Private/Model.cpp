@@ -884,7 +884,7 @@ HRESULT CModel::Create_BinaryFile(const _char* ModelTag)
 	WriteFile(hFile, &m_isUseBoundary, sizeof(_bool), &dwByte, nullptr);
 
 	//¸®¸ðÆ® Æ©´× º¤ÅÍ ÀúÀå
-	_int VecSize = m_RemoteTuningIndices.size();
+	_int VecSize = (_int)m_RemoteTuningIndices.size();
 	
 	WriteFile(hFile, &VecSize, sizeof(_int), &dwByte, nullptr);
 	

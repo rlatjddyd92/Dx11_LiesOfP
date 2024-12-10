@@ -70,7 +70,7 @@ void CState_Player_Grinder::Update(_float fTimeDelta)
             {
                 if (!Move(fTimeDelta) && !m_isChange[0])
                 {
-                    m_pPlayer->Change_Animation(m_iAnimation_Grinder[0], true, 0.1f);
+                    m_pPlayer->Change_Animation(m_iAnimation_Grinder[0], false, 0.1f);
                 }
             }
         }
@@ -107,7 +107,7 @@ void CState_Player_Grinder::Update(_float fTimeDelta)
             }
             else if (!Move(fTimeDelta))
             {
-                m_pPlayer->Change_Animation(m_iAnimation_Grinder[2], true, 0.1f, 0,false);
+                m_pPlayer->Change_Animation(m_iAnimation_Grinder[2], false, 0.1f, 0,false);
             }
 
         }

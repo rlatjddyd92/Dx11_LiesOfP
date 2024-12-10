@@ -32,10 +32,9 @@ HRESULT CState_Player_Arm_Loop::Initialize(_uint iStateNum, void* pArg)
 
 HRESULT CState_Player_Arm_Loop::Start_State(void* pArg)
 {
-    if (m_pFsm->Get_PrevState() != CPlayer::OH_WALK)
-        m_pPlayer->Change_Animation(m_iAnimation_ArmLoop, true, 0.f, 0, true);
+    m_pPlayer->Change_Animation(m_iAnimation_ArmLoop, true, 0.f, 0, true);
 
-    m_pPlayer->Change_Animation_Boundry(m_iAnimation_ArmLoop, true, 0.f);
+    //m_pPlayer->Change_Animation_Boundry(m_iAnimation_ArmLoop, true, 0.f);
 
     m_pPlayer->Set_IsGuard(true);
     m_pPlayer->Set_IsArm(true);
@@ -47,11 +46,11 @@ void CState_Player_Arm_Loop::Update(_float fTimeDelta)
 {
     if (KEY_HOLD(KEY::CTRL))
     {
-        if (!Move(fTimeDelta))
-        {
-            m_pPlayer->Change_Animation(m_iAnimation_ArmLoop, true, 0.15f);
-        }
-        m_pPlayer->Change_Animation_Boundry(m_iAnimation_ArmLoop, true, 0.05f);
+        //if (!Move(fTimeDelta))
+        //{
+        //    //m_pPlayer->Change_Animation(m_iAnimation_ArmLoop, true, 0.15f);
+        //}
+        //m_pPlayer->Change_Animation_Boundry(m_iAnimation_ArmLoop, true, 0.05f);
     }
     else
     {

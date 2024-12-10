@@ -259,7 +259,6 @@ void CPlayer::Update(_float fTimeDelta)
 		m_vCurRootMove = _Vec3(0.f, 0.f, 0.f);
 	}
 
-
 	m_pRigidBodyCom->Set_Velocity(m_vCurRootMove / fTimeDelta);
 
 	m_pFsmCom->Update(fTimeDelta);

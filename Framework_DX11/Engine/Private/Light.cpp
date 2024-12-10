@@ -41,13 +41,21 @@ HRESULT CLight::Render(CShader* pShader, CVIBuffer_Rect* pVIBuffer, _bool isOnPB
 	}
 	else if (LIGHT_DESC::TYPE_SPOT == m_LightDesc.eType)
 	{
+		if (FAILED(pShader->Bind_RawValue("g_vLightDir", &m_LightDesc.vDirection, sizeof(_float4))))
+			return E_FAIL;
+		
 		if (FAILED(pShader->Bind_RawValue("g_vLightPos", &m_LightDesc.vPosition, sizeof(_float4))))
 			return E_FAIL;
 		if (FAILED(pShader->Bind_RawValue("g_fLightRange", &m_LightDesc.fRange, sizeof(_float))))
 			return E_FAIL;
 
+		//if (FAILED(pShader->Bind_RawValue("g_fCutOff", &m_LightDesc.fCutOff, sizeof(_float))))
+		//	return E_FAIL;
+		//if (FAILED(pShader->Bind_RawValue("g_fOuterCutOff", &m_LightDesc.fOuterCutOff, sizeof(_float))))
+		//	return E_FAIL;
+
 		if (isOnPBR)
-			iPassIndex = 7;
+			iPassIndex = 9;
 		else
 			iPassIndex = 7;
 	}

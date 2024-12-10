@@ -283,12 +283,11 @@ PS_OUT_LIGHT_POINT PS_MAIN_LIGHT_POINT_PBR(PS_IN In)
     
     float fDenom = length(vLightDir) / g_fLightRange;
     //float fAtt = 1.f / (fDenom * fDenom);
-    //float fAtt = 1.f / (1.f + (fDenom * fDenom * 2.0f));
+    float fAtt = 1.f / (1.f + (fDenom * fDenom * 2.0f));
     
-	float		fAtt = saturate((g_fLightRange - length(vLightDir)) / g_fLightRange);
+	//float		fAtt = saturate((g_fLightRange - length(vLightDir)) / g_fLightRange);
     
     Out.vShade = g_vLightDiffuse * saturate(max(dot(normalize(vLightDir) * -1.f, vNormal), 0.f) + (g_vLightAmbient * g_vMtrlAmbient)) * fAtt;
-
     
     // PBR
     vector vDiffuse = g_DiffuseTexture.Sample(LinearSampler, In.vTexcoord);
@@ -344,7 +343,6 @@ PS_OUT_LIGHT_POINT PS_MAIN_LIGHT_POINT_PBR(PS_IN In)
 	return Out;
 }
 
-
 PS_OUT_LIGHT_POINT PS_MAIN_LIGHT_SPOT_PBR(PS_IN In)
 {
     PS_OUT_LIGHT_POINT Out = (PS_OUT_LIGHT_POINT) 0;
@@ -366,14 +364,14 @@ PS_OUT_LIGHT_POINT PS_MAIN_LIGHT_SPOT_PBR(PS_IN In)
     vector vLightDir = vPosition - g_vLightPos;
     
     float fDenom = length(vLightDir) / g_fLightRange;
-    float fAtt = 1.f / (1.f + fDenom * fDenom);
-    //float fAtt = 1.f / (1.f + (fDenom * fDenom * 2.0f));
-    //float		fAtt = saturate((g_fLightRange - length(vLightDir)) / g_fLightRange);
+    //float fAtt = 1.f / (1.f + fDenom * fDenom);
+    float fAtt = 1.f / (1.f + (fDenom * fDenom * 2.0f));
+    //float fAtt = saturate((g_fLightRange - length(vLightDir)) / g_fLightRange);
     
     /* 각도 기반 감쇠 */
-    float fTheta = dot(vLightDir, normalize(g_vLightDir)); // 빛의 방향과 픽셀 방향의 코사인
-    float fEpsilon = max(0.f, g_fCutOff - g_fOuterCutOff); // cuttoff  값이 outercutoff보다 높은 값을 가지게 됨
-    float fSpotFactor = saturate((fTheta - g_fOuterCutOff) / fEpsilon); // 선형 감쇠
+    float fTheta = dot(normalize(vLightDir), normalize(g_vLightDir)); // 빛의 방향과 픽셀 방향의 코사인
+    float fEpsilon = g_fCutOff - g_fOuterCutOff; // cuttoff  값이 outercutoff보다 높은 값을 가지게 됨
+    float fSpotFactor = max(0.0001f, saturate((fTheta - g_fOuterCutOff) / fEpsilon)); // 선형 감쇠
     fAtt *= fSpotFactor;
     
     Out.vShade = g_vLightDiffuse * saturate(max(dot(normalize(vLightDir) * -1.f, vNormal), 0.f) + (g_vLightAmbient * g_vMtrlAmbient)) * fAtt;
@@ -573,8 +571,8 @@ PS_OUT_LIGHT_POINT PS_MAIN_LIGHT_SPOT(PS_IN In)
     float fAtt = saturate((g_fLightRange - length(vLightDir)) / g_fLightRange);
 
     /* 각도 기반 감쇠 */
-    float fTheta = dot(vLightDir, normalize(g_vLightDir)); // 빛의 방향과 픽셀 방향의 코사인
-    float fEpsilon = max(0.f, g_fCutOff - g_fOuterCutOff); // cuttoff  값이 outercutoff보다 높은 값을 가지게 됨
+    float fTheta = dot(normalize(vLightDir), normalize(g_vLightDir)); // 빛의 방향과 픽셀 방향의 코사인
+    float fEpsilon = max(0.0001f, g_fCutOff - g_fOuterCutOff); // cuttoff  값이 outercutoff보다 높은 값을 가지게 됨
     float fSpotFactor = saturate((fTheta - g_fOuterCutOff) / fEpsilon); // 선형 감쇠
     fAtt *= fSpotFactor;
     
@@ -730,5 +728,17 @@ technique11	DefaultTechnique
         VertexShader = compile vs_5_0 VS_MAIN();
         GeometryShader = NULL;
         PixelShader = compile ps_5_0 PS_MAIN_DEFERRED();
+    }
+
+    pass Light_Spot_PBR //9
+    {
+        SetRasterizerState(RS_Default);
+        SetDepthStencilState(DSS_None, 0);
+        SetBlendState(BS_OnebyOne, vector(0.f, 0.f, 0.f, 0.f), 0xffffffff);
+
+
+        VertexShader = compile vs_5_0 VS_MAIN();
+        GeometryShader = NULL;
+        PixelShader = compile ps_5_0 PS_MAIN_LIGHT_SPOT_PBR();
     }
 }
