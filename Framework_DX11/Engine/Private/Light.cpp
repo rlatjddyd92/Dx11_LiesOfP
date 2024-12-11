@@ -49,10 +49,10 @@ HRESULT CLight::Render(CShader* pShader, CVIBuffer_Rect* pVIBuffer, _bool isOnPB
 		if (FAILED(pShader->Bind_RawValue("g_fLightRange", &m_LightDesc.fRange, sizeof(_float))))
 			return E_FAIL;
 
-		//if (FAILED(pShader->Bind_RawValue("g_fCutOff", &m_LightDesc.fCutOff, sizeof(_float))))
-		//	return E_FAIL;
-		//if (FAILED(pShader->Bind_RawValue("g_fOuterCutOff", &m_LightDesc.fOuterCutOff, sizeof(_float))))
-		//	return E_FAIL;
+		if (FAILED(pShader->Bind_RawValue("g_fCutOff", &m_LightDesc.fCutOff, sizeof(_float))))
+			return E_FAIL;
+		if (FAILED(pShader->Bind_RawValue("g_fOuterCutOff", &m_LightDesc.fOuterCutOff, sizeof(_float))))
+			return E_FAIL;
 
 		if (isOnPBR)
 			iPassIndex = 9;
