@@ -16,6 +16,13 @@ CAnimModel::CAnimModel(const CAnimModel& Prototype)
 {
 }
 
+void CAnimModel::ChangeAnim(_int iAnimIndex)
+{
+	m_pModelCom->ReadyDenyNextTranslate(m_iSubRootBone);
+	m_vSubRootMoveStack = _Vec3{ 0, 0, 0 };
+	m_pModelCom->SetUp_NextAnimation(iAnimIndex, true);
+}
+
 HRESULT CAnimModel::Initialize_Prototype()
 {
 	return S_OK;
@@ -73,7 +80,10 @@ void CAnimModel::Update(_float fTimeDelta)
 
 	if (KEY_HOLD(KEY::I))
 		m_pTransformCom->Go_Straight(fTimeDelta);//m_pTransformCom->Set_State(CTransform::STATE_POSITION, XMVectorSetX(vPos, XMVectorGetX(vPos) + 0.1f));
-	
+
+	if (KEY_TAP(KEY::C))
+		m_bSubRootMove = !m_bSubRootMove;
+
 	if (KEY_TAP(KEY::E))
 	{
 		m_bRemoteTuning = !m_bRemoteTuning;
@@ -87,8 +97,35 @@ void CAnimModel::Update(_float fTimeDelta)
 	_vector vPos = m_pTransformCom->Get_State(CTransform::STATE_POSITION);
 
 	vRootMove = XMVector3TransformNormal(vRootMove, m_pTransformCom->Get_WorldMatrix());
-	
+
+	if (m_bSubRootMove && !m_pModelCom->Get_isChangeAni())
+	{
+		_Vec3 vMove = m_pModelCom->Get_BoneCombindTransformationMatrix_Ptr(m_iSubRootBone)->Translation();
+		_float4x4 TransMat;
+		XMStoreFloat4x4(&TransMat, m_pModelCom->Get_Bones()[m_iSubRootBone]->Get_TransformationMatrix());
+		//TransMat._43 = TransMat._42 = TransMat._41 = 0.f;
+		TransMat._41 = 0.f;
+
+		m_pModelCom->Get_Bones()[m_iSubRootBone]->Set_TransformationMatrix(TransMat);;
+
+		m_pModelCom->Update_Bone();
+
+		vMove = XMVector3TransformNormal(vMove, m_pTransformCom->Get_WorldMatrix());
+
+		vMove.y = 0;
+
+		//m_pRigidBody->Set_Velocity((vMove - m_vRootMoveStack) / fTimeDelta);
+
+		m_pTransformCom->Set_State(CTransform::STATE_POSITION, _Vec3{ vPos } + (vMove - _Vec3{ m_vSubRootMoveStack }));
+
+		m_vSubRootMoveStack = vMove;
+	}
+
+	_vector vPos = m_pTransformCom->Get_State(CTransform::STATE_POSITION);
+
 	m_pTransformCom->Set_State(CTransform::STATE_POSITION, vPos + vRootMove - m_vRootMoveStack);
+
+
 
 }
 

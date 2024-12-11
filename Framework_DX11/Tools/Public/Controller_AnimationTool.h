@@ -101,6 +101,7 @@ private:
 
 	_int	m_iBoneIndex_forEvKey{};
 	_int	m_iEffect_Num{};
+	_int	m_iSubRoot_Num{};
 
 	_char	m_szCurrentModelText[MAX_PATH] = { "" };
 

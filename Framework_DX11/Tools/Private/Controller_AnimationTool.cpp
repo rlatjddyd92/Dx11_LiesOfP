@@ -241,6 +241,16 @@ void CController_AnimationTool::ListUp_Anim()
 
 	ImGui::Text("\n");
 
+	ImGui::Text("SubRoot");
+	ImGui::PushItemWidth(80); // 크기조정
+	ImGui::InputInt("##PosXModel", &m_iSubRoot_Num);	ImGui::SameLine();
+	ImGui::PopItemWidth();
+
+	if (ImGui::Button("Set_SubRootBone"))
+	{
+		static_cast<CAnimModel*>(m_pGameInstance->Find_Object(LEVEL_TOOL, TEXT("Layer_AnimationTool_Test"), 0))->Set_SubRootBone(m_iSubRoot_Num);
+	}
+
 	if (ImGui::Button("SaveBinFile_AllModels"))
 	{
 		if (m_Models.size() > 0)
@@ -309,7 +319,7 @@ void CController_AnimationTool::ListUp_Anim()
 	{
 		if (m_iSelected_Index_Anim != m_iCurSelected_Index_Anim)
 		{
-			m_pCopyModelCom->SetUp_NextAnimation(m_iSelected_Index_Anim, true);
+			static_cast<CAnimModel*>(m_pGameInstance->Find_Object(LEVEL_TOOL, TEXT("Layer_AnimationTool_Test"), 0))->ChangeAnim(m_iSelected_Index_Anim);
 			m_AnimSpeedPS = (*m_pCopyAnimVec)[m_iSelected_Index_Anim]->Get_SpeedPerSec();
 			m_AnimDuration = (*m_pCopyAnimVec)[m_iSelected_Index_Anim]->Get_Duration();
 		}
