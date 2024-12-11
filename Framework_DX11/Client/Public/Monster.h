@@ -46,6 +46,9 @@ public:
 	void		Look_Player();
 	_float		Calc_Distance_XZ();
 
+	virtual void	Active_Weapon() {};
+	virtual void	Deactiave_Weapon() {};
+
 	virtual void	Active_CurrentWeaponCollider(_float fDamageRatio, _uint iCollIndex = 0, _uint iHitType = 0, _uint iAtkStrength = 0);
 	virtual void	DeActive_CurretnWeaponCollider(_uint iCollIndex = 0);
 

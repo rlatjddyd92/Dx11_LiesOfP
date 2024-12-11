@@ -72,6 +72,9 @@ public:
 
 	void	ChangePhase();
 
+	virtual void	Active_Weapon() { m_pWeapon->IsActive(true); }
+	virtual void	Deactiave_Weapon() { m_pWeapon->IsActive(false); };
+
 	virtual void	Active_CurrentWeaponCollider(_float fDamageRatio, _uint iCollIndex = 0, _uint iHitType = 0, _uint iAtkStrength = 0) override;
 	virtual void	DeActive_CurretnWeaponCollider(_uint iCollIndex = 0) override;
 

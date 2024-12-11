@@ -232,7 +232,7 @@ void CCutScene::First_Setting()
 	case BOSS2_MEET:
 		if (FAILED(m_pGameInstance->Add_CloneObject_ToLayer(LEVEL_GAMEPLAY, TEXT("Layer_SimonManus"), TEXT("Prototype_GameObject_SimonManus"))))
 			return;
-		pPlayer->Get_RigidBody()->Set_GloblePose(_Vec3(16.606,0.104,16.498));
+		pPlayer->Get_RigidBody()->Set_GloblePose(_Vec3(16.606f, 0.104f, 16.498f));
 		m_pObjects[BOSS2] = static_cast<CPawn*>(m_pGameInstance->Find_Object(LEVEL_GAMEPLAY, TEXT("Layer_SimonManus"), 0));
 		break;
 

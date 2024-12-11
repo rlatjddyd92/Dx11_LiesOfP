@@ -27,7 +27,6 @@ private:
     _uint               m_iAnimation_Hand = {};
     _uint               m_iAnimation_End = {};
 
-
 public:
     static CState_SimonManus_CutScene_Meet* Create(class CFsm* pFsm, class CMonster* pMonster, _uint iStateNum, void* pArg = nullptr);
     virtual void Free() override;

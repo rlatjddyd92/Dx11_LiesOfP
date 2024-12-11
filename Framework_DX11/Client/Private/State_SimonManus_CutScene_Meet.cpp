@@ -53,6 +53,16 @@ void CState_SimonManus_CutScene_Meet::Update(_float fTimeDelta)
     {
         m_pMonster->End_CutScene(0);
     }
+
+    _uint iCurAnim = m_pMonster->Get_CurrentAnimIndex();
+    if (iCurAnim == m_iAnimation_Hand)
+    {
+        _int iFrame = m_pMonster->Get_Frame();
+        if (iFrame > 230)
+        {
+            m_pMonster->Active_Weapon();
+        }
+    }
 }
 
 void CState_SimonManus_CutScene_Meet::End_State()

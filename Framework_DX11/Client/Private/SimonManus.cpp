@@ -318,11 +318,16 @@ const _Matrix* CSimonManus::Get_WeaponWorldMat()
 
 void CSimonManus::Start_CutScene(_uint iCutSceneNum)
 {
+	const _Matrix* pNewSocketMatrix = { nullptr };
+
 	switch (iCutSceneNum)
 	{
 	case CUTSCENE_MEET :
 		m_pModelCom = m_pCutSceneModelCom[MODEL_PHASE1];
-		//m_pCutSceneFsmCom->Set_State(STATE_MEET);
+		pNewSocketMatrix = m_pModelCom->Get_BoneCombindTransformationMatrix_Ptr("Bn_Weapon_R");
+		m_pWeapon->ChangeSocketMatrix(pNewSocketMatrix);
+		m_pCutSceneFsmCom->Set_State(STATE_MEET);
+		Deactiave_Weapon();
 		break;
 	case CUTSCENE_P2:
 		m_pModelCom = m_pCutSceneModelCom[MODEL_PHASE1];
