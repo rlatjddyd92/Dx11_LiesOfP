@@ -1,6 +1,6 @@
 ﻿_Title,_Name,_Role_0,_Role_1,_Role_0
-팀장,정승현,FRAMEWORK,MAIN SHADER,x
+팀장,정승현,FRAMEWORK,MAIN SHADER,PLAYER
 x,고준호,EFFECT,x,x
-x,김성용,UI,x,x
-x,양우송,MAP,x,x
-x,이봉준,ANIMATION,x,x
+x,김성용,GAMEPLAY UI,x,x
+x,양우송,MAP SYSTEM,CUT SCENE,x
+x,이봉준,ANIMATION,BOSS MONSTER,x

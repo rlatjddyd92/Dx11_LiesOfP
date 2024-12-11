@@ -59,17 +59,67 @@ void CUIPage_Popup::Update(_float fTimeDelta)
 
 void CUIPage_Popup::Late_Update(_float fTimeDelta)
 {
-	if (m_vecPart[int(PART_GROUP::POPUP_Mouse)]->bRender)
+	if (m_pItemPopup_Info->bIsActive = false)
+	{
+		if (m_vecPart[int(PART_GROUP::POPUP_Mouse_0)]->bRender)
+			if (KEY_TAP(KEY::LBUTTON))
+			{
+				if (GET_GAMEINTERFACE->CheckMouse(m_vecPart[int(PART_GROUP::POPUP_Mouse_0)]->fPosition, m_vecPart[int(PART_GROUP::POPUP_Mouse_0)]->fSize).x != -1.f)
+					Off_Popup();
+			}
+	}
+	else
+	{
 		if (KEY_TAP(KEY::LBUTTON))
 		{
-			if (GET_GAMEINTERFACE->CheckMouse(m_vecPart[int(PART_GROUP::POPUP_Mouse)]->fPosition, m_vecPart[int(PART_GROUP::POPUP_Mouse)]->fSize).x != -1.f)
+			_int iAdd = 0;
+
+			if (m_pItemPopup_Info->pNow_Input != nullptr)
+			{
+				if (GET_GAMEINTERFACE->CheckMouse(m_vecPart[int(PART_GROUP::POPUP_Input_Count_Decrease)]->fPosition, m_vecPart[int(PART_GROUP::POPUP_Input_Count_Decrease)]->fSize).x != -1.f)
+				{
+					if (m_pItemPopup_Info->iNow > m_pItemPopup_Info->iMin)
+					{
+						--m_pItemPopup_Info->iNow;
+						iAdd = -1;
+					}
+				}
+				else if (GET_GAMEINTERFACE->CheckMouse(m_vecPart[int(PART_GROUP::POPUP_Input_Count_Increase)]->fPosition, m_vecPart[int(PART_GROUP::POPUP_Input_Count_Increase)]->fSize).x != -1.f)
+				{
+					if (m_pItemPopup_Info->iNow < m_pItemPopup_Info->iMax)
+					{
+						++m_pItemPopup_Info->iNow;
+						iAdd = 1;
+					}
+				}
+
+				m_vecPart[int(PART_GROUP::POPUP_Input_Count_Num)]->strText = m_pItemPopup_Info->iNow;
+			}
+
+			if (m_pItemPopup_Info->pNow_Count != nullptr)
+			{
+				m_pItemPopup_Info->iNow_Count += m_pItemPopup_Info->iInterval * iAdd;
+				m_vecPart[int(PART_GROUP::POPUP_Count_Num)]->strText = m_pItemPopup_Info->iNow_Count;
+			}
+			
+			if (GET_GAMEINTERFACE->CheckMouse(m_vecPart[int(PART_GROUP::POPUP_Mouse_0)]->fPosition, m_vecPart[int(PART_GROUP::POPUP_Mouse_0)]->fSize).x != -1.f)
+			{
+				if (m_pItemPopup_Info->pNow_Input != nullptr)
+					*m_pItemPopup_Info->pNow_Input = m_pItemPopup_Info->iNow;
+
+				if (m_pItemPopup_Info->pNow_Count != nullptr)
+					*m_pItemPopup_Info->pNow_Count = m_pItemPopup_Info->iNow_Count;
+
 				Off_Popup();
+			}
+			else if (GET_GAMEINTERFACE->CheckMouse(m_vecPart[int(PART_GROUP::POPUP_Mouse_1)]->fPosition, m_vecPart[int(PART_GROUP::POPUP_Mouse_1)]->fSize).x != -1.f)
+			{
+				Off_Popup();
+			}
 		}
-
-
+	}
 
 	__super::Late_Update(fTimeDelta);
-
 }
 
 HRESULT CUIPage_Popup::Render()
@@ -96,15 +146,15 @@ CHECK_MOUSE CUIPage_Popup::Check_Page_Action(_float fTimeDelta)
 
 void CUIPage_Popup::Show_Popup(_wstring strTitle, _wstring strDescA, _wstring strDescB)
 {
-	for (_int i = _int(PART_GROUP::POPUP_Top); i <= _int(PART_GROUP::POPUP_Text); ++i)
+	for (_int i = _int(PART_GROUP::POPUP_Top); i <= _int(PART_GROUP::POPUP_Text_0); ++i)
 	{
 		m_vecPart[i]->bRender = true;
 		m_vecPart[i]->fTextColor = { 1.f,1.f,1.f,1.f };
 	}
-		
 
 	m_vecPart[int(PART_GROUP::POPUP_Title)]->strText = strTitle;
 	m_vecPart[int(PART_GROUP::POPUP_Desc_0)]->strText = strDescA;
+	m_vecPart[int(PART_GROUP::POPUP_Mouse_0)]->fRatio = 0.5f;
 
 	if (strDescB == TEXT("none"))
 		m_vecPart[int(PART_GROUP::POPUP_Desc_1)]->bRender = false;
@@ -114,8 +164,84 @@ void CUIPage_Popup::Show_Popup(_wstring strTitle, _wstring strDescA, _wstring st
 
 void CUIPage_Popup::Off_Popup()
 {
-	for (_int i = _int(PART_GROUP::POPUP_Top); i <= _int(PART_GROUP::POPUP_Text); ++i)
+	for (_int i = _int(PART_GROUP::POPUP_Top); i <= _int(PART_GROUP::POPUP_Count_Num); ++i)
 		m_vecPart[i]->bRender = false;
+
+	m_pItemPopup_Info->bIsActive = false;
+	m_pItemPopup_Info->iMax = 0;
+	m_pItemPopup_Info->iMin = 0;
+	m_pItemPopup_Info->iNow = 0;
+	m_pItemPopup_Info->iNow_Count = 0;
+	m_pItemPopup_Info->iInterval = 0;
+	m_pItemPopup_Info->pNow_Count = nullptr;
+	m_pItemPopup_Info->pNow_Input = nullptr;
+}
+
+void CUIPage_Popup::Show_ItemPopup(_wstring strTitle, _wstring strInputTitle, _int iMin, _int* pNow_Input, _int iMax, _wstring strCountTitle, _int iInterval, _int* pNow_Count)
+{
+	if ((pNow_Input == nullptr) && (pNow_Count == nullptr))
+		return;
+
+	m_pItemPopup_Info->bIsActive = true;
+
+	for (_int i = _int(PART_GROUP::POPUP_Top); i <= _int(PART_GROUP::POPUP_Text_0); ++i)
+	{
+		m_vecPart[i]->bRender = true;
+		m_vecPart[i]->fTextColor = { 1.f,1.f,1.f,1.f };
+	}
+
+	m_vecPart[int(PART_GROUP::POPUP_Desc_0)]->bRender = false;
+	m_vecPart[int(PART_GROUP::POPUP_Desc_1)]->bRender = false;
+	
+	m_vecPart[int(PART_GROUP::POPUP_Title)]->strText = strTitle;
+	m_vecPart[int(PART_GROUP::POPUP_Text_0)]->strText = TEXT("확인");
+	m_vecPart[int(PART_GROUP::POPUP_Text_1)]->strText = TEXT("취소");
+	m_vecPart[int(PART_GROUP::POPUP_Mouse_0)]->fRatio = 0.f;
+	m_vecPart[int(PART_GROUP::POPUP_Mouse_1)]->fRatio = 1.f;
+	
+
+	
+	if (pNow_Input != nullptr)
+	{
+		m_pItemPopup_Info->iMin = iMin;
+		m_pItemPopup_Info->iNow = *pNow_Input;
+		m_pItemPopup_Info->pNow_Input = pNow_Input;
+		m_pItemPopup_Info->iInterval = iInterval;
+		m_pItemPopup_Info->iMax = iMax;
+
+		for (_int i = _int(PART_GROUP::POPUP_Input_Count_Back); i <= _int(PART_GROUP::POPUP_Input_Count_Increase); ++i)
+			m_vecPart[i]->bRender = true;
+
+		m_vecPart[int(PART_GROUP::POPUP_Input_Count_Text)]->strText = strInputTitle;
+		m_vecPart[int(PART_GROUP::POPUP_Input_Count_Num)]->strText = to_wstring(m_pItemPopup_Info->iNow);
+	}
+		
+	if (pNow_Count != nullptr)
+	{
+		m_pItemPopup_Info->iNow_Count = *pNow_Count;
+		m_pItemPopup_Info->pNow_Count = pNow_Count;
+		m_pItemPopup_Info->iInterval = iInterval;
+
+		for (_int i = _int(PART_GROUP::POPUP_Count_Back); i <= _int(PART_GROUP::POPUP_Count_Num); ++i)
+			m_vecPart[i]->bRender = true;
+
+		m_vecPart[int(PART_GROUP::POPUP_Count_Text)]->strText = strCountTitle;
+		m_vecPart[int(PART_GROUP::POPUP_Count_Num)]->strText = to_wstring(m_pItemPopup_Info->iNow_Count);
+	}
+	
+	if ((pNow_Input != nullptr) && (pNow_Count != nullptr))
+	{
+		m_vecPart[int(PART_GROUP::POPUP_Input_Count_Back)]->fRatio = 0.f;
+		m_vecPart[int(PART_GROUP::POPUP_Count_Back)]->fRatio = 1.f;
+	}
+	else if (pNow_Input != nullptr)
+	{
+		m_vecPart[int(PART_GROUP::POPUP_Input_Count_Back)]->fRatio = 0.5f;
+	}
+	else if (pNow_Count != nullptr)
+	{
+		m_vecPart[int(PART_GROUP::POPUP_Count_Back)]->fRatio = 0.5f;
+	}
 }
 
 HRESULT CUIPage_Popup::Ready_UIPart_Group_Control()
@@ -133,12 +259,14 @@ HRESULT CUIPage_Popup::Ready_UIPart_Group_Control()
 			m_vec_Group_Ctrl[m_vecPart[i]->iGroupIndex]->PartIndexlist.push_back(i);
 	}
 
-	for (_int i = _int(PART_GROUP::POPUP_Top); i <= _int(PART_GROUP::POPUP_Text); ++i)
+	for (_int i = _int(PART_GROUP::POPUP_Top); i <= _int(PART_GROUP::POPUP_Count_Num); ++i)
 		m_vecPart[i]->bRender = false;
 
-	__super::Array_Control(_int(PART_GROUP::POPUP_Top), _int(PART_GROUP::POPUP_Text), CTRL_COMMAND::COM_RENDER, true);
+	__super::Array_Control(_int(PART_GROUP::POPUP_Top), _int(PART_GROUP::POPUP_Text_0), CTRL_COMMAND::COM_RENDER, true);
 
 	m_bRender = true;
+
+	m_pItemPopup_Info = new ITEMPOPUP_INFO;
 
 	return S_OK;
 }
@@ -179,4 +307,6 @@ void CUIPage_Popup::Free()
 	}
 
 	m_vecPart.clear();
+
+	Safe_Delete(m_pItemPopup_Info);
 }

@@ -20,9 +20,26 @@ public:
 		POPUP_Title,
 		POPUP_Desc_0,
 		POPUP_Desc_1,
-		POPUP_Mouse,
+
+		POPUP_Mouse_0,
 		POPUP_Space,
-		POPUP_Text,
+		POPUP_Text_0,
+
+		POPUP_Mouse_1,
+		POPUP_R,
+		POPUP_Text_1,
+
+		POPUP_Input_Count_Back,
+		POPUP_Input_Count_Text,
+		POPUP_Input_Count_Decrease,
+		POPUP_Input_Count_Num,
+		POPUP_Input_Count_Increase,
+
+		POPUP_Count_Back,
+		POPUP_Count_Text,
+		POPUP_Count_Icon,
+		POPUP_Count_Num,
+
 
 
 
@@ -31,7 +48,21 @@ public:
 		GROUP_END
 	};
 
+	typedef struct ITEMPOPUP_INFO
+	{
+		_bool bIsActive = false;
 
+		_int iMin = 0;
+		_int iNow = 0;
+		_int iMax = 0;
+
+		_int* pNow_Input = { nullptr };
+
+		_int iInterval = 0;
+		_int iNow_Count = 0;
+		
+		_int* pNow_Count = { nullptr };
+	}ITEMPOPUP;
 
 
 protected:
@@ -56,13 +87,18 @@ public:
 	void Show_Popup(_wstring strTitle, _wstring strDescA, _wstring strDescB = TEXT("none"));
 	void Off_Popup();
 
+	void Show_ItemPopup(_wstring strTitle, _wstring strInputTitle = TEXT("none"), _int iMin = 0, _int* pNow_Input = nullptr, _int iMax = 0, _wstring strCountTitle = TEXT("none"), _int iInterval = 0, _int* pNow_Count = nullptr);
+
+
+
+
+
 public:
 	const vector<UPART*>& Get_UIPartInfo() { return m_vecPart; }
 	virtual HRESULT Ready_UIPart_Group_Control() override;
 
 protected:
-
-
+	ITEMPOPUP_INFO* m_pItemPopup_Info = { nullptr };
 
 
 

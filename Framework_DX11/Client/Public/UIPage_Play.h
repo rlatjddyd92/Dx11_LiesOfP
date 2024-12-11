@@ -281,6 +281,9 @@ private:
 	_bool m_bStat_Open = true;
 	_Vec2 m_vStat_Open_Time = { 0.f,0.5f };
 
+	// 그라인더 
+	_Vec2 m_vGrinder_Wait = { 0.f,2.f };
+
 private: // 테스트 변수
 	_bool m_bWeapon_Top = true;
 
