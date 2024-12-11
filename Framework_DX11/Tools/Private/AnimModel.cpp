@@ -121,7 +121,7 @@ void CAnimModel::Update(_float fTimeDelta)
 		m_vSubRootMoveStack = vMove;
 	}
 
-	_vector vPos = m_pTransformCom->Get_State(CTransform::STATE_POSITION);
+	vPos = m_pTransformCom->Get_State(CTransform::STATE_POSITION);
 
 	m_pTransformCom->Set_State(CTransform::STATE_POSITION, vPos + vRootMove - m_vRootMoveStack);
 
