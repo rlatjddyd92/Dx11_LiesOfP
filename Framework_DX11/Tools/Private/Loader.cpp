@@ -303,13 +303,13 @@ HRESULT CLoader::Ready_Resources_For_ToolLevel()
 		CVIBuffer_Rect::Create(m_pDevice, m_pContext))))
 		return E_FAIL;
 
-	/*CVIBuffer_2DPolygon::UIPOLIGON_DESC tDesc{};
+	CVIBuffer_2DPolygon::UIPOLIGON_DESC tDesc{};
 	tDesc.iPoint = 8;
 	tDesc.fAngle = 0.f;
 	 
 	if (FAILED(m_pGameInstance->Add_Prototype(LEVEL_STATIC, TEXT("Prototype_Component_VIBuffer_2DPolygon"),
 		CVIBuffer_2DPolygon::Create(m_pDevice, m_pContext, tDesc))))
-		return E_FAIL;*/
+		return E_FAIL;
 
 	
 	/* For. Prototype_Component_VIBuffer_Cube */

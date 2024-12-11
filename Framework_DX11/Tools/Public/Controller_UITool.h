@@ -142,7 +142,8 @@ public:
 
 		// 다각형 관련 변수 
 		_bool bIs_TwoDPolygon = false;
-		_float fRatio_TwoDPolygon[8] = { 1.f, };
+		_int iTwoPolygon_Buffer_Num = 0;
+		_float fRatio_TwoDPolygon[8] = { 1.f, 1.f, 1.f, 1.f, 1.f, 1.f, 1.f, 1.f };
 
 
 

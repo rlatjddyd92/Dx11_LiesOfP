@@ -59,16 +59,7 @@ void CUIPage_Popup::Update(_float fTimeDelta)
 
 void CUIPage_Popup::Late_Update(_float fTimeDelta)
 {
-	if (m_pItemPopup_Info->bIsActive = false)
-	{
-		if (m_vecPart[int(PART_GROUP::POPUP_Mouse_0)]->bRender)
-			if (KEY_TAP(KEY::LBUTTON))
-			{
-				if (GET_GAMEINTERFACE->CheckMouse(m_vecPart[int(PART_GROUP::POPUP_Mouse_0)]->fPosition, m_vecPart[int(PART_GROUP::POPUP_Mouse_0)]->fSize).x != -1.f)
-					Off_Popup();
-			}
-	}
-	else
+	if (m_pItemPopup_Info->bIsActive == true)
 	{
 		if (KEY_TAP(KEY::LBUTTON))
 		{
@@ -118,6 +109,31 @@ void CUIPage_Popup::Late_Update(_float fTimeDelta)
 			}
 		}
 	}
+	else if (m_bItemUsePopUp = false)
+	{
+		if (m_vecPart[int(PART_GROUP::POPUP_Mouse_0)]->bRender)
+			if (KEY_TAP(KEY::LBUTTON))
+			{
+				if (GET_GAMEINTERFACE->CheckMouse(m_vecPart[int(PART_GROUP::POPUP_Mouse_0)]->fPosition, m_vecPart[int(PART_GROUP::POPUP_Mouse_0)]->fSize).x != -1.f)
+					Off_Popup();
+			}
+	}
+	else if (m_bItemUsePopUp = true)
+	{
+			if (KEY_TAP(KEY::LBUTTON))
+			{
+				if (GET_GAMEINTERFACE->CheckMouse(m_vecPart[int(PART_GROUP::POPUP_Mouse_1)]->fPosition, m_vecPart[int(PART_GROUP::POPUP_Mouse_1)]->fSize).x != -1.f)
+					Off_Popup();
+				else if (GET_GAMEINTERFACE->CheckMouse(m_vecPart[int(PART_GROUP::POPUP_Mouse_0)]->fPosition, m_vecPart[int(PART_GROUP::POPUP_Mouse_0)]->fSize).x != -1.f)
+				{
+					if (m_bTopBelt)
+						GET_GAMEINTERFACE->Use_Potion_Slot();
+					else 
+						GET_GAMEINTERFACE->Use_Tool_Slot();
+					Off_Popup();
+				}
+			}
+	}
 
 	__super::Late_Update(fTimeDelta);
 }
@@ -160,6 +176,9 @@ void CUIPage_Popup::Show_Popup(_wstring strTitle, _wstring strDescA, _wstring st
 		m_vecPart[int(PART_GROUP::POPUP_Desc_1)]->bRender = false;
 	else
 		m_vecPart[int(PART_GROUP::POPUP_Desc_1)]->strText = strDescB;
+
+	for (_int i = _int(PART_GROUP::POPUP_Top); i <= _int(PART_GROUP::POPUP_Text_0); ++i)
+		__super::UpdatePart_ByIndex(i, 1.f);
 }
 
 void CUIPage_Popup::Off_Popup()
@@ -175,6 +194,8 @@ void CUIPage_Popup::Off_Popup()
 	m_pItemPopup_Info->iInterval = 0;
 	m_pItemPopup_Info->pNow_Count = nullptr;
 	m_pItemPopup_Info->pNow_Input = nullptr;
+	m_bItemUsePopUp = false;
+	m_bTopBelt = false;
 }
 
 void CUIPage_Popup::Show_ItemPopup(_wstring strTitle, _wstring strInputTitle, _int iMin, _int* pNow_Input, _int iMax, _wstring strCountTitle, _int iInterval, _int* pNow_Count)
@@ -242,6 +263,37 @@ void CUIPage_Popup::Show_ItemPopup(_wstring strTitle, _wstring strInputTitle, _i
 	{
 		m_vecPart[int(PART_GROUP::POPUP_Count_Back)]->fRatio = 0.5f;
 	}
+
+	for (_int i = _int(PART_GROUP::POPUP_Top); i <= _int(PART_GROUP::POPUP_Text_0); ++i)
+		__super::UpdatePart_ByIndex(i, 1.f);
+}
+
+void CUIPage_Popup::Show_ItemUsePopup(_wstring strTitle, _wstring strDescA, _bool bIsTop)
+{
+	for (_int i = _int(PART_GROUP::POPUP_Top); i <= _int(PART_GROUP::POPUP_Text_1); ++i)
+	{
+		m_vecPart[i]->bRender = true;
+		m_vecPart[i]->fTextColor = { 1.f,1.f,1.f,1.f };
+	}
+
+	m_vecPart[int(PART_GROUP::POPUP_Title)]->strText = strTitle;
+	m_vecPart[int(PART_GROUP::POPUP_Desc_0)]->strText = strDescA;
+	m_vecPart[int(PART_GROUP::POPUP_Desc_1)]->strText = {};
+
+
+	m_vecPart[int(PART_GROUP::POPUP_Mouse_0)]->fRatio = 0.f;
+	m_vecPart[int(PART_GROUP::POPUP_Mouse_1)]->fRatio = 1.f;
+
+	m_vecPart[int(PART_GROUP::POPUP_Text_0)]->strText = TEXT("사용");
+	m_vecPart[int(PART_GROUP::POPUP_Text_1)]->strText = TEXT("취소");
+
+	m_bItemUsePopUp = true;
+	m_bTopBelt = bIsTop;
+
+	
+
+	for (_int i = _int(PART_GROUP::POPUP_Top); i <= _int(PART_GROUP::POPUP_Text_1); ++i)
+		__super::UpdatePart_ByIndex(i, 1.f);
 }
 
 HRESULT CUIPage_Popup::Ready_UIPart_Group_Control()

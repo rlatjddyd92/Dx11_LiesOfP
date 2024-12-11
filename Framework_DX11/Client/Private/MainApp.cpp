@@ -83,7 +83,7 @@ void CMainApp::Update(_float fTimeDelta)
 		if (KEY_TAP(KEY::NUM3))
 			GET_GAMEINTERFACE->Show_Script_Npc_Talking(NPC_SCRIPT::SCR_MANUS, 0);
 		if (KEY_TAP(KEY::NUM4))
-			GET_GAMEINTERFACE->Show_Script_Npc_Talking(NPC_SCRIPT::SCR_SOPIA_DIE, 0);
+			GET_GAMEINTERFACE->Show_Script_Npc_Talking(NPC_SCRIPT::SCR_STARGAZER, 0);
 		if (KEY_TAP(KEY::NUM5))
 			GET_GAMEINTERFACE->OFF_Script();
 	}
@@ -326,6 +326,14 @@ HRESULT CMainApp::Ready_Prototype_Component_Static()
 	/* For. Prototype_Component_VIBuffer_Rect */
 	if (FAILED(m_pGameInstance->Add_Prototype(LEVEL_STATIC, TEXT("Prototype_Component_VIBuffer_Rect"),
 		CVIBuffer_Rect::Create(m_pDevice, m_pContext))))
+		return E_FAIL;
+
+	CVIBuffer_2DPolygon::UIPOLIGON_DESC tDesc{};
+	tDesc.iPoint = 8;
+	tDesc.fAngle = 0.f;
+
+	if (FAILED(m_pGameInstance->Add_Prototype(LEVEL_STATIC, TEXT("Prototype_Component_VIBuffer_2DPolygon"),
+		CVIBuffer_2DPolygon::Create(m_pDevice, m_pContext, tDesc))))
 		return E_FAIL;
 #pragma endregion
 

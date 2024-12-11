@@ -399,6 +399,12 @@ void CController_UITool::UIPart_Edit()
 		ImGui::Text("2D_Polygon");
 		ImGui::SameLine();
 		ImGui::Checkbox("Is2DPolygon", &pNow->bIs_TwoDPolygon);
+		ImGui::SameLine();
+		ImGui::InputInt("SelectBuffer", &pNow->iTwoPolygon_Buffer_Num);
+
+		if (!pNow->bIs_TwoDPolygon)
+			pNow->iTwoPolygon_Buffer_Num = -1;
+
 		ImGui::DragFloat("Point0", &pNow->fRatio_TwoDPolygon[0], 0.01f);
 		ImGui::SameLine();
 		ImGui::DragFloat("Point1", &pNow->fRatio_TwoDPolygon[1], 0.01f);
@@ -740,6 +746,8 @@ HRESULT CController_UITool::SavePart()
 			vecPart.push_back(to_wstring(pNow->vTexture_Angle.x));
 			vecPart.push_back(to_wstring(pNow->vTexture_Angle.y));
 
+			vecPart.push_back(to_wstring(pNow->iTwoPolygon_Buffer_Num));
+
 			vecBuffer.push_back(vecPart);
 		}
 	}
@@ -801,6 +809,13 @@ HRESULT CController_UITool::LoadPart()
 
 		pNew->vTexture_Range = { stof(vecBuffer[i][38]) , stof(vecBuffer[i][39]) , stof(vecBuffer[i][40]) , stof(vecBuffer[i][41]) };
 		pNew->vTexture_Angle = { stof(vecBuffer[i][42]) , stof(vecBuffer[i][43]) };
+
+		pNew->iTwoPolygon_Buffer_Num = stoi(vecBuffer[i][44]);
+
+		if (pNew->iTwoPolygon_Buffer_Num != -1)
+			pNew->bIs_TwoDPolygon = true;
+		else
+			pNew->bIs_TwoDPolygon = false;
 
 		pNew->MakeDirec();
 		if (pNew->iParentPart_Index == -1)
@@ -928,6 +943,8 @@ HRESULT CController_UITool::MakeClientData_Part(HANDLE handle, DWORD* dword, vec
 
 		WriteFile(handle, &iter->vTexture_Range, sizeof(_Vec4), dword, nullptr);
 		WriteFile(handle, &iter->vTexture_Angle, sizeof(_Vec2), dword, nullptr);
+
+		WriteFile(handle, &iter->iTwoPolygon_Buffer_Num, sizeof(_int), dword, nullptr);
 
 		_int iIndexPartName = -1;
 

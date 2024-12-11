@@ -266,9 +266,36 @@ void CUIPage_Play::Action_Potion_Tool(_float fTimeDelta)
 	else if (KEY_TAP(KEY::R))
 	{
 		if ((!m_bIsBagOpen) && (m_vec_Group_Ctrl[_int(PART_GROUP::GROUP_SELECT_CELL)]->fRatio == 0.f))
-			GET_GAMEINTERFACE->Use_Potion_Slot();
+		{
+			_int iPotion = GET_GAMEINTERFACE->Get_Potion_Select();
+			if (GET_GAMEINTERFACE->Get_Equip_Item_Info(EQUIP_SLOT(_int(EQUIP_SLOT::EQUIP_USING_TOP_0) + iPotion)) != nullptr)
+			{
+				if (GET_GAMEINTERFACE->Get_Equip_Item_Info(EQUIP_SLOT(_int(EQUIP_SLOT::EQUIP_USING_TOP_0) + iPotion))->iItem_Index == _int(SPECIAL_ITEM::SP_TELEPOT))
+				{
+					GET_GAMEINTERFACE->Show_ItemUsePopup(TEXT("문페이즈 회중시계"), TEXT("순간 이동을 진행합니다."), true);
+				}
+				else 
+					GET_GAMEINTERFACE->Use_Potion_Slot();
+			}
+			else
+				GET_GAMEINTERFACE->Use_Potion_Slot();
+		}
 		else if ((!m_bIsBagOpen) && (m_vec_Group_Ctrl[_int(PART_GROUP::GROUP_SELECT_CELL)]->fRatio == 1.f))
-			GET_GAMEINTERFACE->Use_Tool_Slot();
+		{
+			_int iTool = GET_GAMEINTERFACE->Get_Tool_Select();
+			if (GET_GAMEINTERFACE->Get_Equip_Item_Info(EQUIP_SLOT(_int(EQUIP_SLOT::EQUIP_USING_BOTTOM_0) + iTool)) != nullptr)
+			{
+				if (GET_GAMEINTERFACE->Get_Equip_Item_Info(EQUIP_SLOT(_int(EQUIP_SLOT::EQUIP_USING_BOTTOM_0) + iTool))->iItem_Index == _int(SPECIAL_ITEM::SP_TELEPOT))
+				{
+					GET_GAMEINTERFACE->Show_ItemUsePopup(TEXT("문페이즈 회중시계"), TEXT("순간 이동을 진행합니다."), false);
+				}
+				else
+					GET_GAMEINTERFACE->Use_Tool_Slot();
+			}
+			else
+				GET_GAMEINTERFACE->Use_Tool_Slot();
+		}
+			
 	}
 	else if (KEY_HOLD(KEY::R))
 	{
