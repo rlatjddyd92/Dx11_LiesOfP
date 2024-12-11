@@ -62,6 +62,26 @@ void CPlayerCamera::Update(_float fTimeDelta)
 		PlayerMove(fTimeDelta);
 	}
 
+	if (m_isShake)
+	{
+		m_fShakeTime += fTimeDelta;
+		if (m_fShakeTime >= m_fShakeDuration)
+		{
+			m_fShakeTime = 0.f;
+			m_isShake = false;
+		}
+
+		// 쉐이크 계산 (랜덤 값 생성)
+		_float xOffset = (rand() % 100 / 100.0f) * m_fShakePower - (m_fShakePower / 2);
+		_float yOffset = (rand() % 100 / 100.0f) * m_fShakePower - (m_fShakePower / 2);
+		_vector shakeOffset = XMVectorSet(xOffset, yOffset, 0.f, 0.f);
+
+		// 카메라 위치에 쉐이크 오프셋 추가
+		_vector currentPos = m_pTransformCom->Get_State(CTransform::STATE_POSITION);
+		currentPos += shakeOffset;
+		m_pTransformCom->Set_State(CTransform::STATE_POSITION, currentPos);
+	}
+
 	Calculat_CascadeFrustum();
 }
 

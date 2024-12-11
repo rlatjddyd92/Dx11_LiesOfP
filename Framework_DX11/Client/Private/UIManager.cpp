@@ -182,6 +182,29 @@ void CUIManager::UIControl_Popup(_float fTimeDelta)
 {
 }
 
+void CUIManager::UIControl_Shop(_float fTimeDelta)
+{
+	if (KEY_TAP(KEY::ESC))
+		SwicthPage(UIPAGE::PAGE_SHOP, UIPAGE::PAGE_PLAY);
+	else
+	{
+		m_eNowPage = UIPAGE::PAGE_SHOP;
+		m_pUIPage_Shop->Check_Page_Action(fTimeDelta);
+	}
+
+}
+
+void CUIManager::UIControl_Chest(_float fTimeDelta)
+{
+	if (KEY_TAP(KEY::ESC))
+		SwicthPage(UIPAGE::PAGE_CHEST, UIPAGE::PAGE_PLAY);
+	else
+	{
+		m_eNowPage = UIPAGE::PAGE_CHEST;
+		m_pUIPage_Chest->Check_Page_Action(fTimeDelta);
+	}
+}
+
 void CUIManager::UIControl_Common(_float fTimeDelta)
 {
 	//m_bIsPlayPageMaintain = true;
@@ -211,6 +234,10 @@ void CUIManager::UIControl_Common(_float fTimeDelta)
 		UIControl_Option(fTimeDelta);
 	else if ((m_pUIPage_Skill->GetPageAction(PAGEACTION::ACTION_ACTIVE)) || (m_pUIPage_Skill->GetPageAction(PAGEACTION::ACTION_OPENING)))
 		UIControl_Skill(fTimeDelta);
+	else if ((m_pUIPage_Shop->GetPageAction(PAGEACTION::ACTION_ACTIVE)) || (m_pUIPage_Shop->GetPageAction(PAGEACTION::ACTION_OPENING)))
+		UIControl_Shop(fTimeDelta);
+	else if ((m_pUIPage_Chest->GetPageAction(PAGEACTION::ACTION_ACTIVE)) || (m_pUIPage_Chest->GetPageAction(PAGEACTION::ACTION_OPENING)))
+		UIControl_Chest(fTimeDelta);
 	else if ((m_bIsIngame) && (m_bIsPlayPageMaintain))
 		OpenPage(UIPAGE::PAGE_PLAY);
 }
@@ -527,6 +554,16 @@ HRESULT CUIManager::Make_UIPage(_int iIndex)
 	else if (iIndex == _int(UIPAGE::PAGE_INFORM))
 	{
 		m_pUIPage_Inform = CUIPage_Inform::Create(m_pDevice, m_pContext);
+		m_vecPage[iIndex] = static_cast<CUIPage*>(m_pUIPage_Inform);
+	}
+	else if (iIndex == _int(UIPAGE::PAGE_SHOP))
+	{
+		m_pUIPage_Shop = CUIPage_Shop::Create(m_pDevice, m_pContext);
+		m_vecPage[iIndex] = static_cast<CUIPage*>(m_pUIPage_Inform);
+	}
+	else if (iIndex == _int(UIPAGE::PAGE_CHEST))
+	{
+		m_pUIPage_Chest = CUIPage_Chest::Create(m_pDevice, m_pContext);
 		m_vecPage[iIndex] = static_cast<CUIPage*>(m_pUIPage_Inform);
 	}
 

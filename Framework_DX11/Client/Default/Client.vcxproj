@@ -192,8 +192,18 @@
     <ClInclude Include="..\Public\GH_Creater.h" />
     <ClInclude Include="..\Public\LastDoor.h" />
     <ClInclude Include="..\Public\Raxasia.h" />
+    <ClInclude Include="..\Public\State_Player_Arm_Counter.h" />
+    <ClInclude Include="..\Public\State_Player_Arm_Guard_Hard.h" />
+    <ClInclude Include="..\Public\State_Player_Arm_Guard_Heavy.h" />
+    <ClInclude Include="..\Public\State_Player_Arm_Guard_Weak.h" />
     <ClInclude Include="..\Public\State_Player_Arm_Loop.h" />
+    <ClInclude Include="..\Public\State_Player_Arm_Parry.h" />
+    <ClInclude Include="..\Public\State_Player_Arm_ParryBomb.h" />
     <ClInclude Include="..\Public\State_Player_Arm_Start.h" />
+    <ClInclude Include="..\Public\State_Player_Arm_Swing.h" />
+    <ClInclude Include="..\Public\State_Player_Arm_Thrust.h" />
+    <ClInclude Include="..\Public\State_Player_Die.h" />
+    <ClInclude Include="..\Public\State_Player_ThrowItem.h" />
     <ClInclude Include="..\Public\State_RaxasiaP1_DashUpper.h" />
     <ClInclude Include="..\Public\State_RaxasiaP1_Die.h" />
     <ClInclude Include="..\Public\State_RaxasiaP1_Discharge.h" />
@@ -209,6 +219,9 @@
     <ClInclude Include="..\Public\State_RaxasiaP1_SwingDown_Multiple.h" />
     <ClInclude Include="..\Public\State_RaxasiaP1_TripleSting.h" />
     <ClInclude Include="..\Public\State_RaxasiaP1_Walk.h" />
+    <ClInclude Include="..\Public\UIPage_Chest.h" />
+    <ClInclude Include="..\Public\UIPage_Shop.h" />
+    <ClInclude Include="..\Public\Weapon_PlayerArm.h" />
     <ClInclude Include="..\Public\Weapon_Raxasia_P1_Sword.h" />
     <ClInclude Include="..\Public\Sophia.h" />
     <ClInclude Include="..\Public\State_Player_Flame_Fable.h" />
@@ -450,8 +463,19 @@
     <ClCompile Include="..\Private\FollowedEffect.cpp" />
     <ClCompile Include="..\Private\GH_Creater.cpp" />
     <ClCompile Include="..\Private\LastDoor.cpp" />
+    <ClCompile Include="..\Private\Raxasia.cpp" />
+    <ClCompile Include="..\Private\State_Player_Arm_Counter.cpp" />
+    <ClCompile Include="..\Private\State_Player_Arm_Guard_Hard.cpp" />
+    <ClCompile Include="..\Private\State_Player_Arm_Guard_Heavy.cpp" />
+    <ClCompile Include="..\Private\State_Player_Arm_Guard_Weak.cpp" />
     <ClCompile Include="..\Private\State_Player_Arm_Loop.cpp" />
+    <ClCompile Include="..\Private\State_Player_Arm_Parry.cpp" />
+    <ClCompile Include="..\Private\State_Player_Arm_ParryBomb.cpp" />
     <ClCompile Include="..\Private\State_Player_Arm_Start.cpp" />
+    <ClCompile Include="..\Private\State_Player_Arm_Swing.cpp" />
+    <ClCompile Include="..\Private\State_Player_Arm_Thrust.cpp" />
+    <ClCompile Include="..\Private\State_Player_Die.cpp" />
+    <ClCompile Include="..\Private\State_Player_ThrowItem.cpp" />
     <ClCompile Include="..\Private\State_RaxasiaP1_DashUpper.cpp" />
     <ClCompile Include="..\Private\State_RaxasiaP1_Die.cpp" />
     <ClCompile Include="..\Private\State_RaxasiaP1_Discharge.cpp" />
@@ -467,6 +491,9 @@
     <ClCompile Include="..\Private\State_RaxasiaP1_SwingDown_Multiple.cpp" />
     <ClCompile Include="..\Private\State_RaxasiaP1_TripleSting.cpp" />
     <ClCompile Include="..\Private\State_RaxasiaP1_Walk.cpp" />
+    <ClCompile Include="..\Private\UIPage_Chest.cpp" />
+    <ClCompile Include="..\Private\UIPage_Shop.cpp" />
+    <ClCompile Include="..\Private\Weapon_PlayerArm.cpp" />
     <ClCompile Include="..\Private\Weapon_Raxasia_P1_Sword.cpp" />
     <ClCompile Include="..\Private\Sophia.cpp" />
     <ClCompile Include="..\Private\State_Player_Flame_Fable.cpp" />
@@ -673,7 +700,6 @@
     <ClCompile Include="..\Private\Weapon_Scissor_Handle.cpp" />
     <ClCompile Include="..\Private\Weapon_SimonManus_Hammer.cpp" />
     <ClCompile Include="Client.cpp" />
-    <ClCompile Include="Raxasia.cpp" />
     <ClCompile Include="State_Player_SophiaHand.cpp" />
     <ClCompile Include="stdafx.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Create</PrecompiledHeader>

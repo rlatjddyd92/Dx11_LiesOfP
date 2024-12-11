@@ -48,8 +48,8 @@ HRESULT CLevel_GamePlay::Initialize()
 	//if (FAILED(Read_Map_Data()))
 	//	return E_FAIL;	
 
-	if (FAILED(Ready_CutScene_Data()))
-		return E_FAIL;
+	//if (FAILED(Ready_CutScene_Data()))
+	//	return E_FAIL;
 
 	// 24-11-19 김성용
 	// 게임 인터페이스를 인게임 모드로 전환
@@ -107,7 +107,7 @@ HRESULT CLevel_GamePlay::Ready_Lights()
 	LightDesc.eType = LIGHT_DESC::TYPE_DIRECTIONAL;
 	LightDesc.vDirection = _float4(-1.f, -1.f, 1.f, 0.f);
 	LightDesc.vDiffuse = _float4(0.6f, 0.6f, 0.6f, 1.f);
-	LightDesc.vAmbient = _float4(0.5f, 0.5f, 0.5f, 1.f);
+	LightDesc.vAmbient = _float4(0.3f, 0.3f, 0.3f, 1.f);
 	LightDesc.vSpecular = _float4(0.5f, 0.5f, 0.5f, 1.f);
 
 	if (FAILED(m_pGameInstance->Add_Light(LightDesc)))
@@ -124,16 +124,16 @@ HRESULT CLevel_GamePlay::Ready_Lights()
 	//if (FAILED(m_pGameInstance->Add_Light(LightDesc)))
 	//	return E_FAIL;
 
-	ZeroMemory(&LightDesc, sizeof LightDesc);
-	LightDesc.eType = LIGHT_DESC::TYPE_POINT;
-	LightDesc.vPosition = _float4(0.f, 10.f, 0.f, 1.f);
-	LightDesc.fRange = 60.f;
-	LightDesc.vDiffuse = _float4(1.f, 1.f, 1.f, 1.f);
-	LightDesc.vAmbient = /*_float4(0.2f, 0.4f, 0.2f, 1.f);*/_float4(0.f, 0.f, 0.f, 0.f);
-	LightDesc.vSpecular = LightDesc.vDiffuse;
+	//ZeroMemory(&LightDesc, sizeof LightDesc);
+	//LightDesc.eType = LIGHT_DESC::TYPE_POINT;
+	//LightDesc.vPosition = _float4(0.f, 10.f, 0.f, 1.f);
+	//LightDesc.fRange = 60.f;
+	//LightDesc.vDiffuse = _float4(1.f, 1.f, 1.f, 1.f);
+	//LightDesc.vAmbient = /*_float4(0.2f, 0.4f, 0.2f, 1.f);*/_float4(0.f, 0.f, 0.f, 0.f);
+	//LightDesc.vSpecular = LightDesc.vDiffuse;
 
-	if (FAILED(m_pGameInstance->Add_Light(LightDesc)))
-		return E_FAIL;
+	//if (FAILED(m_pGameInstance->Add_Light(LightDesc)))
+	//	return E_FAIL;
 
 
 	return S_OK;
@@ -340,7 +340,7 @@ HRESULT CLevel_GamePlay::Read_Map_Data()
 				{
 					 if (wcscmp(pDesc.szModelTag, TEXT("SK_DLV_Stargazer_01")) == 0)
 					 {
-						 if (FAILED(m_pGameInstance->Add_CloneObject_ToLayer(LEVEL_GAMEPLAY, TEXT("Layer_InteractObj"), TEXT("Prototype_GameObject_Stargazer"), &pDesc)))
+						 if (FAILED(m_pGameInstance->Add_CloneObject_ToLayer(LEVEL_GAMEPLAY, TEXT("Layer_Stargazer"), TEXT("Prototype_GameObject_Stargazer"), &pDesc)))
 							 return E_FAIL;
 					 }
 					 else if (wcscmp(pDesc.szModelTag, TEXT("SK_FO_Monastery_Lift_01_Controller")) == 0)

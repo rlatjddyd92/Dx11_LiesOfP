@@ -8,6 +8,7 @@ BEGIN(Engine)
 class CShader;
 class CTexture;
 class CVIBuffer_Rect;
+class CVIBuffer_2DPolygon;
 END
 
 BEGIN(Tools)
@@ -137,6 +138,7 @@ public:
 public:
 	class CShader* m_pShaderCom = { nullptr };
 	class CVIBuffer_Rect* m_pVIBufferCom = { nullptr };
+	//class CVIBuffer_2DPolygon* m_pVIBuffer_2DPolygon_Com = { nullptr };
 
 private:
 	HRESULT Ready_Components();

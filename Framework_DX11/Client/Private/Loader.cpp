@@ -63,6 +63,7 @@
 #include "Weapon_Scissor.h"
 #include "Weapon_Scissor_Handle.h"
 #include "Weapon_Scissor_Blade.h"
+#include "Weapon_PlayerArm.h"
 #include "Weapon_SimonManus_Hammer.h"
 #include "Sophia.h"
 #pragma endregion
@@ -1023,6 +1024,11 @@ HRESULT CLoader::Ready_Prototype()
 	/* For. Prototype_GameObject_Weapon_Scissor_Blade */
 	if (FAILED(m_pGameInstance->Add_Prototype(TEXT("Prototype_GameObject_Weapon_Scissor_Blade"),
 		CWeapon_Scissor_Blade::Create(m_pDevice, m_pContext))))
+		return E_FAIL;
+
+	/* For. Prototype_GameObject_Weapon_Scissor_Blade */
+	if (FAILED(m_pGameInstance->Add_Prototype(TEXT("Prototype_GameObject_Weapon_PlayerArm"),
+		CWeapon_PlayerArm::Create(m_pDevice, m_pContext))))
 		return E_FAIL;
 #pragma endregion
 

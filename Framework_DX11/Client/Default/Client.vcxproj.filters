@@ -52,39 +52,6 @@
     <Filter Include="03.GameInterface_Controller\00.UIManager\00.UIPage">
       <UniqueIdentifier>{81ccb389-d881-4ead-929f-0b6342fa2797}</UniqueIdentifier>
     </Filter>
-    <Filter Include="05.Fsm">
-      <UniqueIdentifier>{4a0e87ac-4260-4525-a5db-96fc69f89d7f}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="05.Fsm\Monster">
-      <UniqueIdentifier>{8f4502de-4c7f-46e7-b10f-56157e66c9fd}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="05.Fsm\Monster\CarcassBigA">
-      <UniqueIdentifier>{15fa6f93-8453-4f21-9402-009d172ae390}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="05.Fsm\Monster\CarcassBigA\Idle">
-      <UniqueIdentifier>{038e2271-19e3-4a16-8829-285cc54e6336}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="05.Fsm\Monster\CarcassBigA\Die">
-      <UniqueIdentifier>{f843a418-0ba0-4001-b576-f04fd913ffd8}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="05.Fsm\Monster\CarcassBigA\Attack">
-      <UniqueIdentifier>{d16914b3-bb02-4db1-906c-3c6601661207}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="05.Fsm\Monster\CarcassBigA\Paralize">
-      <UniqueIdentifier>{7a808f3d-2504-4269-911e-bb92c1dd6ee0}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="05.Fsm\Monster\CarcassBigA\Walk">
-      <UniqueIdentifier>{8cca3e2d-28bf-401e-afd3-0ec774007eac}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="05.Fsm\Monster\CarcassBigA\Grogy">
-      <UniqueIdentifier>{0075ae76-a3eb-419f-9be1-a9900494ebb6}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="05.Fsm\Monster\CarcassBigA\Run">
-      <UniqueIdentifier>{88fbca0c-fbc5-4331-902b-31f81e9e8c39}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="05.Fsm\Monster\CarcassBigA\Hit_Fatal">
-      <UniqueIdentifier>{3a3180b6-88e0-47d8-a77c-574050019abe}</UniqueIdentifier>
-    </Filter>
     <Filter Include="03.GameInterface_Controller\00.UIManager\01.UIRender">
       <UniqueIdentifier>{3e817f4a-1be1-47ef-9123-0a7797cd83c3}</UniqueIdentifier>
     </Filter>
@@ -130,132 +97,6 @@
     <Filter Include="02.GameObjects\09.NavDataObj">
       <UniqueIdentifier>{10f4a515-95de-41fc-9f6e-fae8782b0344}</UniqueIdentifier>
     </Filter>
-    <Filter Include="02.GameObjects\10.InteractObj">
-      <UniqueIdentifier>{2d3adcbb-33e9-455d-a954-c1b0e6eef0bb}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="02.GameObjects\10.InteractObj\00.Stargazer">
-      <UniqueIdentifier>{eb7fe278-8f63-4c37-bd1e-af98a5ca1a5e}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="05.Fsm\Player">
-      <UniqueIdentifier>{720bc44b-de33-49d7-8bc6-83c06d66d2b5}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="05.Fsm\Player\OneHand">
-      <UniqueIdentifier>{26cc42dd-90bd-4724-8c7e-f396c36f1f2f}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="05.Fsm\Player\OneHand\Idle">
-      <UniqueIdentifier>{9718fa83-978b-4b88-9e49-c9b2ea513efe}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="05.Fsm\Player\OneHand\Walk">
-      <UniqueIdentifier>{1215856d-0c56-4228-975e-055cbf55f4e3}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="05.Fsm\Player\OneHand\Run">
-      <UniqueIdentifier>{5d648734-4993-4c07-beb0-c0c60a489760}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="05.Fsm\Player\OneHand\Guard">
-      <UniqueIdentifier>{f37a500e-cc18-4f8c-885f-54a69887a659}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="05.Fsm\Player\OneHand\Jump">
-      <UniqueIdentifier>{af57f400-71a8-4fe5-afe2-58f8a47cd93a}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="05.Fsm\Player\OneHand\Dash">
-      <UniqueIdentifier>{cfb8bd19-9cd4-4314-9f05-f97a593299ec}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="05.Fsm\Player\OneHand\00.Attack">
-      <UniqueIdentifier>{41bf1b34-a55b-403f-93f2-cf413f595075}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="05.Fsm\Player\OneHand\00.Attack\Rapier">
-      <UniqueIdentifier>{ed1f5465-6653-410e-9e08-79c2e8fe998c}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="05.Fsm\Player\OneHand\00.Attack\Scissor">
-      <UniqueIdentifier>{f37f4081-2382-4504-88a9-aef53e8fbf35}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="05.Fsm\Player\TwoHand">
-      <UniqueIdentifier>{cd7302ea-8432-40bf-af91-9cd19f874b53}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="05.Fsm\Player\Common">
-      <UniqueIdentifier>{7e6b40a1-4b89-45b6-81f2-6e54b4c861b2}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="05.Fsm\Player\Common\Ladder">
-      <UniqueIdentifier>{871c5e9d-956e-4372-903f-937a97e29ccb}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="05.Fsm\Player\Common\Hit">
-      <UniqueIdentifier>{6fe21237-ed2f-4577-82d9-d063e362a9a9}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="05.Fsm\Player\Common\Groggy">
-      <UniqueIdentifier>{52055d8d-e516-4646-8fde-a42a1c9f1453}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="05.Fsm\Player\Common\Dead">
-      <UniqueIdentifier>{bd30e2d5-25fb-4905-bacd-c5625c31e943}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="05.Fsm\Monster\SimonManus">
-      <UniqueIdentifier>{52ec9403-e7cc-4dda-857e-4376e9606cb8}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="05.Fsm\Player\OneHand\00.Attack\Rapier\00.FableArts">
-      <UniqueIdentifier>{1f5b0ce1-9e6a-4bff-9f5e-183471e7c135}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="05.Fsm\Player\OneHand\00.Attack\Rapier\00.FableArts\ParryAttack">
-      <UniqueIdentifier>{80eb0dfe-35b3-4ed2-905b-9da585b9da6a}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="05.Fsm\Player\OneHand\00.Attack\Rapier\01.Fatal">
-      <UniqueIdentifier>{2e09a965-6398-40b0-b8b5-a30da0923e63}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="05.Fsm\Player\TwoHand\00.Attack">
-      <UniqueIdentifier>{4dd86f00-dc2d-4774-9b2b-52fa164b942c}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="05.Fsm\Player\TwoHand\00.Attack\FlameSword">
-      <UniqueIdentifier>{a927d621-aeae-4a65-b50b-58b6186e38d5}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="05.Fsm\Player\TwoHand\Dash">
-      <UniqueIdentifier>{6d51f311-bc28-4eb0-8773-86c72d78f3d9}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="05.Fsm\Player\TwoHand\Guard">
-      <UniqueIdentifier>{b774ff71-4c6a-48b0-bf02-ec836d7791e7}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="05.Fsm\Player\TwoHand\Idle">
-      <UniqueIdentifier>{20c7ed81-8b8b-4d24-9b87-e9de78ce4273}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="05.Fsm\Player\TwoHand\Run">
-      <UniqueIdentifier>{8326ef6d-1381-4f94-8c1b-de33d5972cd1}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="05.Fsm\Player\TwoHand\Walk">
-      <UniqueIdentifier>{b02a41b8-7218-44da-b2b8-37c9c3e8087a}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="05.Fsm\Player\TwoHand\Jump">
-      <UniqueIdentifier>{e1cf3f66-98a7-4608-8663-96ab290a2554}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="05.Fsm\Player\Common\Parry">
-      <UniqueIdentifier>{6f478c04-42e3-4487-8f42-ce122fd61b3d}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="05.Fsm\Player\Common\Heal">
-      <UniqueIdentifier>{01bca6de-05e8-46a3-89e2-a924a96ef387}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="05.Fsm\Player\Common\Change_Weapon">
-      <UniqueIdentifier>{ca6f18a0-495c-4980-9a84-1c366e748484}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="05.Fsm\Player\OneHand\Sprint">
-      <UniqueIdentifier>{f12a6c40-0a17-4283-8554-ff531875a91a}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="05.Fsm\Player\TwoHand\Sprint">
-      <UniqueIdentifier>{99b3c7b5-3bdc-4f92-8936-234c92524826}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="05.Fsm\Player\TwoHand\00.Attack\FlameSword\RAttack00">
-      <UniqueIdentifier>{ec50ef6f-ac18-4d70-ba52-0f3d52aa0abc}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="05.Fsm\Player\TwoHand\00.Attack\FlameSword\LAttack00">
-      <UniqueIdentifier>{436fd4d0-9dce-4745-9f18-52d28f3a81a6}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="05.Fsm\Player\TwoHand\00.Attack\FlameSword\LAttack01">
-      <UniqueIdentifier>{c30bff56-87a8-45e5-b8d7-68f00bdaba62}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="05.Fsm\Player\OneHand\00.Attack\Rapier\LAttack00">
-      <UniqueIdentifier>{2d32d55d-f91c-470b-abd2-462b897ad152}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="05.Fsm\Player\OneHand\00.Attack\Rapier\LAttack01">
-      <UniqueIdentifier>{ed048a41-07c1-46ea-8ff3-b3c25282200f}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="05.Fsm\Player\OneHand\00.Attack\Rapier\RAttack00">
-      <UniqueIdentifier>{c45a6618-f69d-43d6-a2f9-edd908511d3c}</UniqueIdentifier>
-    </Filter>
     <Filter Include="02.GameObjects\05.Effect\Effect_Base\Mesh_Effect">
       <UniqueIdentifier>{6950edf6-b86b-4f5f-bcf2-800c147433d6}</UniqueIdentifier>
     </Filter>
@@ -274,53 +115,11 @@
     <Filter Include="02.GameObjects\06.Weapon\00.PlayerWeapon\02.Scissor">
       <UniqueIdentifier>{ac08be87-0bfa-4f42-b7d1-2208db11d953}</UniqueIdentifier>
     </Filter>
-    <Filter Include="05.Fsm\Player\OneHand\00.Attack\Rapier\ChargeAttack">
-      <UniqueIdentifier>{da07eebc-8583-4bcc-9fb3-22ea92aad7a8}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="05.Fsm\Player\TwoHand\00.Attack\FlameSword\ChargeAttack00">
-      <UniqueIdentifier>{28d4472f-f0dc-45ad-b435-be85d446c75b}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="05.Fsm\Player\TwoHand\00.Attack\FlameSword\RAttack01">
-      <UniqueIdentifier>{23dd7535-7c21-41bc-817c-6591ffb6801a}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="05.Fsm\Player\TwoHand\00.Attack\FlameSword\00.FableArts">
-      <UniqueIdentifier>{a4384797-e19d-4fd9-954f-92b259e0d346}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="05.Fsm\Player\TwoHand\00.Attack\FlameSword\00.FableArts\ParryAttack">
-      <UniqueIdentifier>{c9f490cf-084c-40ee-b614-183c9081cadc}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="05.Fsm\Player\TwoHand\00.Attack\FlameSword\01.Fatal">
-      <UniqueIdentifier>{cd5300e1-30e0-46d8-bbee-a4590107ed4b}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="05.Fsm\Player\OneHand\00.Attack\Scissor\00.FableArts">
-      <UniqueIdentifier>{4cb18c50-57be-4e3f-9310-34d67c8bf07b}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="05.Fsm\Player\OneHand\00.Attack\Scissor\01.Fatal">
-      <UniqueIdentifier>{25ff8a5b-627c-4047-bfa6-45ca227b1a5f}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="05.Fsm\Player\OneHand\00.Attack\Scissor\LAttack00">
-      <UniqueIdentifier>{ece837e8-efe3-4ef7-a45a-4319bd162b0c}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="05.Fsm\Player\OneHand\00.Attack\Scissor\LAttack01">
-      <UniqueIdentifier>{9c6322bb-0102-4966-a54e-2954f3e8b2d8}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="05.Fsm\Player\OneHand\00.Attack\Scissor\RAttack00">
-      <UniqueIdentifier>{ee0ee3c3-b4e1-4f20-8607-b6b8ae6c61c0}</UniqueIdentifier>
-    </Filter>
     <Filter Include="02.GameObjects\06.Weapon\00.PlayerWeapon\02.Scissor\Blade">
       <UniqueIdentifier>{60b617f6-edb9-4e0a-8161-849d96c22f80}</UniqueIdentifier>
     </Filter>
     <Filter Include="02.GameObjects\06.Weapon\00.PlayerWeapon\02.Scissor\Handle">
       <UniqueIdentifier>{9f7e1067-c599-4797-8af4-5a3f8617b1f7}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="05.Fsm\Player\OneHand\00.Attack\Scissor\RAttack01">
-      <UniqueIdentifier>{e2b74cb5-cbdd-48a0-a352-5fa47ae83956}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="05.Fsm\Player\OneHand\00.Attack\Scissor\ChargeAttack00">
-      <UniqueIdentifier>{deaebf7b-aa0c-4ecd-a860-ae3a92ca8929}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="05.Fsm\Player\OneHand\00.Attack\Scissor\ChargeAttack01">
-      <UniqueIdentifier>{b20bc638-0a11-4e42-9d52-3e774b51d960}</UniqueIdentifier>
     </Filter>
     <Filter Include="02.GameObjects\05.Effect\Effect_Base\Trail_Effect">
       <UniqueIdentifier>{c39bba8f-a580-41a3-85a9-6a605b39a77c}</UniqueIdentifier>
@@ -337,30 +136,6 @@
     <Filter Include="97.ShaderFiles\Effect">
       <UniqueIdentifier>{d8ef4e91-7c16-4dfd-848d-d1187ed851d1}</UniqueIdentifier>
     </Filter>
-    <Filter Include="02.GameObjects\10.InteractObj\02.TowerDoor">
-      <UniqueIdentifier>{6a4c1bfe-f554-4c72-afe7-d738b5f5b17d}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="02.GameObjects\10.InteractObj\03.WallDeco">
-      <UniqueIdentifier>{2357c91a-00b1-43ca-a995-b5b7786cca00}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="02.GameObjects\10.InteractObj\04.TreasureBox">
-      <UniqueIdentifier>{10feda96-2bd2-4b3f-b93b-a7f41fa6a6a0}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="02.GameObjects\10.InteractObj\05.Ladder">
-      <UniqueIdentifier>{e8519a58-814e-4542-a269-73a3f6a8b500}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="02.GameObjects\10.InteractObj\01.Lift">
-      <UniqueIdentifier>{eedb6a56-cfff-4c91-be75-a434d7f66169}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="02.GameObjects\10.InteractObj\01.Lift\Lift_Door">
-      <UniqueIdentifier>{e5181690-86ed-43fc-9e24-583e915d9f03}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="02.GameObjects\10.InteractObj\01.Lift\Lift_Controller">
-      <UniqueIdentifier>{7e6674de-29fd-41f9-9f96-c34e1ba9bbb6}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="02.GameObjects\10.InteractObj\01.Lift\Lift_Floor">
-      <UniqueIdentifier>{d4ddd60e-a386-46e3-a60e-8bdf3759786c}</UniqueIdentifier>
-    </Filter>
     <Filter Include="02.GameObjects\99.Camera\FreeCamera">
       <UniqueIdentifier>{ee85d7d1-ce2e-4a78-b654-5d3a87c7a472}</UniqueIdentifier>
     </Filter>
@@ -370,179 +145,11 @@
     <Filter Include="02.GameObjects\99.Camera\00.Manager">
       <UniqueIdentifier>{26c9c449-baa9-42b6-bafb-bd80360f756b}</UniqueIdentifier>
     </Filter>
-    <Filter Include="05.Fsm\Monster\CarcassBigA\Attack\Route">
-      <UniqueIdentifier>{defc5ddf-41fa-4d35-a731-88c238c47ef0}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="05.Fsm\Monster\CarcassBigA\Attack\Single">
-      <UniqueIdentifier>{7b8bc9ae-1ba3-40d2-8817-267320289cb3}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="05.Fsm\Monster\CarcassBigA\Attack\Single\WheelWind">
-      <UniqueIdentifier>{097b35f4-fd5a-4d44-854f-d76fd17f4a9b}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="05.Fsm\Monster\CarcassBigA\Attack\Single\RageAttack">
-      <UniqueIdentifier>{f1ee5c3e-d827-4577-bba8-eef840b6dbae}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="05.Fsm\Monster\CarcassBigA\Attack\Single\LTSwingRight">
-      <UniqueIdentifier>{9f86f057-9d7b-4a09-857e-95c619e902fe}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="05.Fsm\Monster\CarcassBigA\Attack\Single\LOSwingRight">
-      <UniqueIdentifier>{fd51b5e4-23a9-4085-9f7e-9abbe6de9f02}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="05.Fsm\Monster\CarcassBigA\Attack\Route\AttackRoute_0">
-      <UniqueIdentifier>{3aa6a256-937b-4f1c-8b46-1888ac52205c}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="05.Fsm\Monster\CarcassBigA\Attack\Route\AttackRoute_1">
-      <UniqueIdentifier>{11326689-9b56-489f-aabe-90494d95ebfc}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="05.Fsm\Monster\CarcassBigA\Attack\Route\AttackRoute_2">
-      <UniqueIdentifier>{c04fac58-2352-4546-b506-3b3a84479df1}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="05.Fsm\Monster\CarcassBigA\Attack\Route\AttackRoute_3">
-      <UniqueIdentifier>{de0f89ed-e0cc-4a00-8120-a518ea964014}</UniqueIdentifier>
-    </Filter>
     <Filter Include="02.GameObjects\10.ColliderObject">
       <UniqueIdentifier>{e0ad8f06-a0d8-4d14-8a84-d74eacc4032c}</UniqueIdentifier>
     </Filter>
     <Filter Include="02.GameObjects\06.Weapon\01.SimonManusWeapon">
       <UniqueIdentifier>{150ce1ea-449b-4851-b9d4-f1eb2fde699a}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="05.Fsm\Monster\SimonManus\P1">
-      <UniqueIdentifier>{32f3e718-abe1-480e-8923-f053354399b7}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="05.Fsm\Monster\SimonManus\P1\Idle">
-      <UniqueIdentifier>{25ad1422-a156-4c4e-a523-177d6bc141d5}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="05.Fsm\Monster\SimonManus\P1\Attck">
-      <UniqueIdentifier>{3b6b4621-a5c8-4d90-b412-56d73fffa644}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="05.Fsm\Monster\SimonManus\P1\Attck\Single">
-      <UniqueIdentifier>{66d90f26-f279-4151-b69b-acdf215d1b9f}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="05.Fsm\Monster\SimonManus\P1\Attck\Single\Sting">
-      <UniqueIdentifier>{6237cc31-566e-4238-9cc0-842b6d5a1659}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="05.Fsm\Monster\SimonManus\P1\Attck\Single\AvoidSwing">
-      <UniqueIdentifier>{5020c6ac-0497-4710-95db-fa739b2c22b6}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="05.Fsm\Monster\SimonManus\P1\Attck\Single\SwingMultiple">
-      <UniqueIdentifier>{22542ba6-c808-4c9e-bf31-284b1ebc3d03}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="05.Fsm\Monster\SimonManus\P1\Attck\Single\HighJumpFall">
-      <UniqueIdentifier>{0204ee7d-1724-4ff0-8340-f74ce4cf84f2}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="05.Fsm\Monster\SimonManus\P1\Die">
-      <UniqueIdentifier>{1ca82e15-8b8c-4a48-9c88-a5f24fc38858}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="05.Fsm\Monster\SimonManus\P1\Grogy">
-      <UniqueIdentifier>{a74852b7-6ec6-4435-8b00-ac5ff4e6935b}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="05.Fsm\Monster\SimonManus\P1\HitFatal">
-      <UniqueIdentifier>{cebe0b82-9fc4-4388-b4fb-be9fcda771b7}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="05.Fsm\Monster\SimonManus\P1\Run">
-      <UniqueIdentifier>{f083c0cc-f7b0-4013-adf6-27165c3074a4}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="05.Fsm\Monster\SimonManus\P2">
-      <UniqueIdentifier>{2679afad-ec99-46ef-bfc7-e4ea23aaad12}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="05.Fsm\Monster\SimonManus\P2\Idle">
-      <UniqueIdentifier>{668c14b0-8cf5-45c9-8190-6da55179d975}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="05.Fsm\Monster\SimonManus\P2\Walk">
-      <UniqueIdentifier>{ca124187-bf32-47b1-80f7-98f9d7fdfb2a}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="05.Fsm\Monster\SimonManus\P2\Die">
-      <UniqueIdentifier>{2aaf1b2f-69fc-469f-b4c2-753a79e5e2c9}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="05.Fsm\Monster\SimonManus\P2\Grogy">
-      <UniqueIdentifier>{a5413b70-31ca-4e29-a6d4-3452229d0e7c}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="05.Fsm\Monster\SimonManus\P2\Run">
-      <UniqueIdentifier>{a48d1fcb-7534-41f5-ba75-dab05be2f373}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="05.Fsm\Monster\SimonManus\P2\Attack">
-      <UniqueIdentifier>{948752c6-1189-49a5-a229-89ef31810e34}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="05.Fsm\Monster\SimonManus\P2\Attack\Route">
-      <UniqueIdentifier>{54c4c60d-1494-4770-bf1a-ebfdfdc8ecef}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="05.Fsm\Monster\SimonManus\P2\Attack\Single">
-      <UniqueIdentifier>{7e832bcc-ebc5-4987-8be1-dbc62a76a58e}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="05.Fsm\Monster\SimonManus\P2\Attack\Single\Sting">
-      <UniqueIdentifier>{bc69c929-ae81-402e-8a05-46e3481d4988}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="05.Fsm\Monster\SimonManus\P2\Attack\Single\HighJumpFall">
-      <UniqueIdentifier>{9d26d286-bc68-46cd-9a2a-003813a3bd73}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="05.Fsm\Monster\SimonManus\P2\Attack\Single\AvoidSwing">
-      <UniqueIdentifier>{2187779e-4c75-4ac3-801e-6b4b401bde9d}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="05.Fsm\Monster\SimonManus\P2\Attack\Single\Wave">
-      <UniqueIdentifier>{4a6b8ef2-d3b5-46d3-a1d3-971403ccfe29}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="05.Fsm\Monster\SimonManus\P2\Attack\Single\BrutalAttack">
-      <UniqueIdentifier>{793dc7b9-6844-491b-8321-61c2537132c5}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="05.Fsm\Monster\SimonManus\P2\Attack\Single\ThunderCalling">
-      <UniqueIdentifier>{c534f025-5164-46b2-bd30-4e813cb4bed1}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="05.Fsm\Monster\SimonManus\P1\Attck\Route">
-      <UniqueIdentifier>{fe5d8cc9-5204-4605-9b50-c3021fabb842}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="05.Fsm\Monster\SimonManus\P1\Attck\Route\ChasingSwing">
-      <UniqueIdentifier>{8d36650d-2580-4ce0-8926-bb9c616f1bdc}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="05.Fsm\Monster\SimonManus\P1\Attck\Route\JumpToSwing">
-      <UniqueIdentifier>{2def39bb-8155-4fb6-8739-272b8c5b856c}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="05.Fsm\Monster\SimonManus\P1\Attck\Route\SwipMultiple_L">
-      <UniqueIdentifier>{b4d6a51f-333f-494c-878e-e9ab94ac77d0}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="05.Fsm\Monster\SimonManus\P1\Attck\Route\SwipMultiple_R">
-      <UniqueIdentifier>{f0d6030b-a350-4749-b4c4-c3acc6c59444}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="05.Fsm\Monster\SimonManus\P1\Attck\Route\SwingDown_Swing_R">
-      <UniqueIdentifier>{b575aa31-8fc8-439c-b7c9-cfcb748540a0}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="05.Fsm\Monster\SimonManus\P1\Attck\Route\SwingDown_Swing_L">
-      <UniqueIdentifier>{2ef440b2-3dd3-4b83-88a0-8d955e36bd3c}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="05.Fsm\Monster\SimonManus\P2\Attack\Route\ChasingSwing">
-      <UniqueIdentifier>{9fca7200-91e9-4f1a-995d-4b8ee1f3cbb3}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="05.Fsm\Monster\CarcassBigA\Attack\Single\Impact">
-      <UniqueIdentifier>{4bc0bea3-c446-4d60-9852-a813d7be6342}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="05.Fsm\Monster\SimonManus\P2\Attack\Route\SwipMultiple">
-      <UniqueIdentifier>{e417e7fa-1188-43d8-b4cd-4b21ddb676d4}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="05.Fsm\Monster\SimonManus\P2\Attack\Route\Stamp">
-      <UniqueIdentifier>{da7d2547-96c3-433f-976d-177660af0b99}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="05.Fsm\Monster\SimonManus\P2\Attack\Route\SwingDown_Swing">
-      <UniqueIdentifier>{e4017f7a-df12-469b-a6f4-a93eb0af6524}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="05.Fsm\Monster\SimonManus\P2\Attack\Route\JumpToAttack">
-      <UniqueIdentifier>{e534a47a-1113-4d6c-848d-832d77482ffa}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="05.Fsm\Monster\SimonManus\P2\Attack\Route\LightningToWave">
-      <UniqueIdentifier>{36fc1f37-9fa8-4bcb-9bd8-eb43b4acc6b1}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="05.Fsm\Monster\SimonManus\P2\Attack\Route\Route0">
-      <UniqueIdentifier>{57e7b286-635d-48c5-bffc-666a38b621a5}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="05.Fsm\Monster\SimonManus\P2\Attack\Route\Route1">
-      <UniqueIdentifier>{6467109c-1f2c-49c7-99be-29881975b050}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="05.Fsm\Monster\SimonManus\P2\Attack\Route\Route2">
-      <UniqueIdentifier>{0c443aba-e819-493a-b1d5-b0477bdc89c1}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="05.Fsm\Monster\SimonManus\P1\Attck\Route\Stamp">
-      <UniqueIdentifier>{29d16570-4bed-4aa6-b8ef-4624cab0bdf3}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="05.Fsm\Monster\SimonManus\P1\Walk">
-      <UniqueIdentifier>{fe395b30-26dd-4e7d-9184-bb5c5d694b6b}</UniqueIdentifier>
     </Filter>
     <Filter Include="02.GameObjects\02.Pawn">
       <UniqueIdentifier>{a51c24d7-a10f-438d-8dc2-c2f87467615b}</UniqueIdentifier>
@@ -562,113 +169,8 @@
     <Filter Include="97.ShaderFiles\99.UI_Shader">
       <UniqueIdentifier>{b83c9fd9-a108-45c5-8e6f-296e8b63c2da}</UniqueIdentifier>
     </Filter>
-    <Filter Include="05.Fsm\Monster\CarcassBigA\Attack\Route\AttackRoute_4">
-      <UniqueIdentifier>{12670bf0-76fd-432d-9278-b73ac8212e84}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="05.Fsm\Monster\SimonManus\P1\Attck\Single\Charge_SwingDown">
-      <UniqueIdentifier>{05fe4e4d-e39d-4f03-82ea-5b72b6f9b0ac}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="02.GameObjects\10.InteractObj\06.LastDoor">
-      <UniqueIdentifier>{aeb4b197-05c3-42e8-a202-3c07322bc3ad}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="02.GameObjects\10.InteractObj\07.SteppingStone">
-      <UniqueIdentifier>{eac03529-5428-443d-9fef-537ceca54b74}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="05.Fsm\Monster\SimonManus\P2\HitFatal">
-      <UniqueIdentifier>{cfa0a51c-d72a-4dc8-ba57-c8476da79ca9}</UniqueIdentifier>
-    </Filter>
     <Filter Include="02.GameObjects\02.Pawn\01.Monster\CarcassTail">
       <UniqueIdentifier>{e6447638-0aaa-4897-887b-a642b899134e}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="05.Fsm\Monster\CarcassTail">
-      <UniqueIdentifier>{294ef219-6700-4441-acb8-5f4368999759}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="05.Fsm\Monster\CarcassTail\Attack">
-      <UniqueIdentifier>{0d002725-6e97-4b57-a9d6-5ed638726932}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="05.Fsm\Monster\CarcassTail\Die">
-      <UniqueIdentifier>{186f6f27-a6cd-4f1c-8966-1d267014745d}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="05.Fsm\Monster\CarcassTail\Grogy">
-      <UniqueIdentifier>{f566fc2b-43db-46f6-a995-f427b2b910cd}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="05.Fsm\Monster\CarcassTail\HitFatal">
-      <UniqueIdentifier>{e9eb7ceb-1896-44d4-bb3a-a789f2b319ca}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="05.Fsm\Monster\CarcassTail\Idle">
-      <UniqueIdentifier>{b09b699c-63c3-496c-8b7c-87d17ebb1c8f}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="05.Fsm\Monster\CarcassTail\Run">
-      <UniqueIdentifier>{889f9f2f-9aa7-43e5-a6c9-3bfc6b63911d}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="05.Fsm\Monster\CarcassTail\Walk">
-      <UniqueIdentifier>{4ffefbf0-da3c-4da0-9440-7196dd9408f0}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="05.Fsm\Monster\CarcassTail\Attack\Single">
-      <UniqueIdentifier>{8e725ebb-d395-4cb9-bf69-4e54017cea7e}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="05.Fsm\Monster\CarcassTail\Attack\Route">
-      <UniqueIdentifier>{a141140e-b60b-46ca-8301-070a74d2cd55}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="05.Fsm\Monster\CarcassTail\Attack\Route\HeadingMultiple">
-      <UniqueIdentifier>{a4a9d1f2-c722-4e92-bfa2-5cc1f1bbb898}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="05.Fsm\Monster\CarcassTail\Attack\Route\LeapAttack">
-      <UniqueIdentifier>{912858f5-c399-4f19-8864-2ebf741af1cd}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="05.Fsm\Monster\CarcassTail\Attack\Route\LeapToAttack">
-      <UniqueIdentifier>{4256e3b0-3a1f-4e5c-9fac-955a21e1f082}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="05.Fsm\Monster\CarcassTail\Attack\Route\ScratchingToSwip">
-      <UniqueIdentifier>{a9510d49-db18-497d-82cc-1033e2a4c031}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="05.Fsm\Monster\CarcassTail\Attack\Route\ScratchingMultiple">
-      <UniqueIdentifier>{c9e7ebe0-a596-40cb-841a-eb9f2b1ba738}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="05.Fsm\Monster\CarcassTail\Attack\Single\MultyHittingDown">
-      <UniqueIdentifier>{2872a704-fd93-4d85-be8b-bef06fd7677e}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="05.Fsm\Monster\CarcassTail\Attack\Single\Heading">
-      <UniqueIdentifier>{85d4fcdf-b7e6-496f-9d37-e22af1168e0b}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="05.Fsm\Monster\CarcassTail\Attack\Single\Scratching">
-      <UniqueIdentifier>{3e641e79-dd30-4777-a8d3-0472677edbe3}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="05.Fsm\Monster\CarcassTail\Attack\Single\Leap">
-      <UniqueIdentifier>{1698a62c-7b7e-45af-b4a5-8e74ec7555ce}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="05.Fsm\Monster\CarcassTail\Attack\Single\TailSwip">
-      <UniqueIdentifier>{e3b8b2b9-99c7-4ee4-9754-9b2edc53c90e}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="05.Fsm\Monster\CarcassTail\Attack\Single\TailSwipMultiple">
-      <UniqueIdentifier>{98ea0a72-a20e-4108-903f-7c9db7f588d1}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="05.Fsm\Monster\CarcassTail\Attack\Single\TailSwingDown">
-      <UniqueIdentifier>{8a11709a-37a7-4065-8439-01f82a11e519}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="05.Fsm\Player\Common\Lift">
-      <UniqueIdentifier>{cdbc26ed-3d4d-42ff-a1bb-7938a82a3abe}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="05.Fsm\Player\OneHand\GuardHit">
-      <UniqueIdentifier>{b20b41ad-0ddc-43a2-a360-b833295b592a}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="05.Fsm\Player\TwoHand\GuardHit">
-      <UniqueIdentifier>{e86527f3-22d4-4603-8ccb-dd54068f1212}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="05.Fsm\Player\Common\Chest">
-      <UniqueIdentifier>{ae7bc7a2-3c6b-4dac-88a8-80e89620b1a7}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="05.Fsm\Player\Common\ItemGet">
-      <UniqueIdentifier>{bab6dc0c-4bf4-4770-aa28-7517dc2be5af}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="02.GameObjects\10.InteractObj\03.WallDeco\Deco_Collider_Obj">
-      <UniqueIdentifier>{de6a80df-b5fc-4917-8178-d30e289d2253}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="05.Fsm\Player\Common\Stargazer">
-      <UniqueIdentifier>{866e839e-cf8e-4ca7-b515-93065c4716fc}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="05.Fsm\Player\Common\Teleport">
-      <UniqueIdentifier>{fa57377f-b82c-4b4a-9495-aca98d90a783}</UniqueIdentifier>
     </Filter>
     <Filter Include="02.GameObjects\12.AttackObject">
       <UniqueIdentifier>{ce4ea603-046b-4d4c-bb5e-c2d7a15acc70}</UniqueIdentifier>
@@ -685,17 +187,8 @@
     <Filter Include="97.ShaderFiles\Effect\Vtx">
       <UniqueIdentifier>{9ab855b2-1a6b-463a-9090-dda8739cec69}</UniqueIdentifier>
     </Filter>
-    <Filter Include="05.Fsm\Player\Common\Grinder">
-      <UniqueIdentifier>{fb4067e2-a5e2-47fe-bae7-ead4bdc7b9f0}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="05.Fsm\Monster\SimonManus\P2\Attack\Single\SlideMagic">
-      <UniqueIdentifier>{98ea13ef-4526-4f97-a1fc-776b66a793b8}</UniqueIdentifier>
-    </Filter>
     <Filter Include="02.GameObjects\12.AttackObject\SimonManus\ChargeSwing">
       <UniqueIdentifier>{8f3085a2-11c3-46f3-b3de-5e5066470893}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="05.Fsm\Player\Common\GetUp">
-      <UniqueIdentifier>{b0e3396b-88a4-497b-b596-2f41d05ca314}</UniqueIdentifier>
     </Filter>
     <Filter Include="02.GameObjects\13.EffectObject">
       <UniqueIdentifier>{edc44b0e-2a87-427c-9788-298454cb51b7}</UniqueIdentifier>
@@ -711,24 +204,6 @@
     </Filter>
     <Filter Include="02.GameObjects\12.AttackObject\SimonManus\BlackBall">
       <UniqueIdentifier>{39713752-8c79-4b97-957c-30f68e5c7e25}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="05.Fsm\Player\OneHand\00.Attack\Rapier\00.FableArts\General">
-      <UniqueIdentifier>{9eae6eba-a96e-4f61-bb34-c8bed96e702a}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="05.Fsm\Player\OneHand\00.Attack\Scissor\00.FableArts\Buff">
-      <UniqueIdentifier>{6e18fff2-d0c5-46c1-9545-a6b3090c815e}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="05.Fsm\Player\OneHand\00.Attack\Scissor\00.FableArts\Combo">
-      <UniqueIdentifier>{d0435873-4641-4b14-a9a6-10f523ede889}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="05.Fsm\Player\OneHand\00.Attack\Scissor\00.FableArts\Combo\Combo1">
-      <UniqueIdentifier>{8d346d05-1e98-4dd1-ab27-e2ce295982d4}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="05.Fsm\Player\OneHand\00.Attack\Scissor\00.FableArts\Combo\Combo2">
-      <UniqueIdentifier>{b1c16933-63f3-4774-bd38-3116501640d3}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="05.Fsm\Player\OneHand\00.Attack\Scissor\00.FableArts\Combo\Combo3">
-      <UniqueIdentifier>{e7fed8a5-7833-4ce7-96cc-5a511f3a8f89}</UniqueIdentifier>
     </Filter>
     <Filter Include="03.GameInterface_Controller\00.UIManager\00.UIPage\08.UIPage_Option %2850%25%29">
       <UniqueIdentifier>{49687bb1-cd51-47be-b319-ccccb8021b98}</UniqueIdentifier>
@@ -766,35 +241,11 @@
     <Filter Include="02.GameObjects\12.AttackObject\SimonManus\Wave">
       <UniqueIdentifier>{3fbe7865-eaf5-4108-95d7-66b4e0d1fc8a}</UniqueIdentifier>
     </Filter>
-    <Filter Include="05.Fsm\Player\CutScene">
-      <UniqueIdentifier>{690a9148-4f8e-4c89-82d9-db8386a42952}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="05.Fsm\Player\CutScene\Sophia">
-      <UniqueIdentifier>{f5c45fd8-c67e-4f8d-8660-2f0adec9d8f9}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="05.Fsm\Player\CutScene\Sophia\Door">
-      <UniqueIdentifier>{523c375b-4150-4955-9992-725681b84bb3}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="05.Fsm\Player\CutScene\Sophia\Walk">
-      <UniqueIdentifier>{dc6f7b9e-e299-46ce-bf7d-94196ab07a34}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="05.Fsm\Player\CutScene\Sophia\Hand">
-      <UniqueIdentifier>{068b5a22-5213-4848-b9ce-02cf142a3e57}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="05.Fsm\Player\CutScene\Sophia\HandEnd">
-      <UniqueIdentifier>{3e0a6a80-48c4-49d6-8260-d065316ea512}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="05.Fsm\Player\TwoHand\00.Attack\FlameSword\ChargeAttack01">
-      <UniqueIdentifier>{3e2279c1-e58e-4c57-8e40-df000692747b}</UniqueIdentifier>
-    </Filter>
     <Filter Include="03.GameInterface_Controller\00.UIManager\00.UIPage\13.UIPage_Talking %2850%25%29">
       <UniqueIdentifier>{94ad924a-4751-4924-aeb7-673aedf1ec24}</UniqueIdentifier>
     </Filter>
     <Filter Include="02.GameObjects\12.AttackObject\SimonManus\GoldBall">
       <UniqueIdentifier>{de88a1cd-d5b9-4174-ab42-21ca9c1bbdf1}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="05.Fsm\Player\TwoHand\00.Attack\FlameSword\00.FableArts\General">
-      <UniqueIdentifier>{ee6e207b-0b6e-437e-8552-023b6ae90c2a}</UniqueIdentifier>
     </Filter>
     <Filter Include="02.GameObjects\14.CutScene">
       <UniqueIdentifier>{9c37d23a-9c1b-4b27-a4e0-a4b833b353e4}</UniqueIdentifier>
@@ -811,17 +262,8 @@
     <Filter Include="02.GameObjects\12.AttackObject\SimonManus\LightningBall\LightningSpear">
       <UniqueIdentifier>{09315704-54e9-4a45-9f4e-4158f3a83f9a}</UniqueIdentifier>
     </Filter>
-    <Filter Include="05.Fsm\Monster\SimonManus\P2\Attack\Single\ThunderBall">
-      <UniqueIdentifier>{8b883092-bbab-4d18-b414-4009f8cdd9f3}</UniqueIdentifier>
-    </Filter>
     <Filter Include="03.GameInterface_Controller\02.Player_Stat_Manager">
       <UniqueIdentifier>{a1e3baf8-3478-4ec4-89c1-68e0b1ea6bdf}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="02.GameObjects\10.InteractObj\08.Sophia">
-      <UniqueIdentifier>{05890b22-ce96-4a7f-97d1-b651cbf8cde5}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="05.Fsm\Player\CutScene\Simon">
-      <UniqueIdentifier>{a7535373-661b-41f2-b044-6a1180235208}</UniqueIdentifier>
     </Filter>
     <Filter Include="02.GameObjects\12.AttackObject\SimonManus\GH_Creater">
       <UniqueIdentifier>{37ed73ea-0466-4018-9b66-8c9743635a9f}</UniqueIdentifier>
@@ -829,23 +271,8 @@
     <Filter Include="02.GameObjects\12.AttackObject\SimonManus\GH_Creater\GodHands">
       <UniqueIdentifier>{8f7485cc-d647-4c77-8b7e-5d47d74e71e6}</UniqueIdentifier>
     </Filter>
-    <Filter Include="05.Fsm\Monster\SimonManus\P2\Attack\Single\SpreadMagic">
-      <UniqueIdentifier>{927e6e2d-8506-48a0-8258-0c917447cec5}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="05.Fsm\Monster\SimonManus\P2\Attack\Single\SummonHand">
-      <UniqueIdentifier>{5228a653-e17a-44d8-a6f1-66c8fb344bef}</UniqueIdentifier>
-    </Filter>
     <Filter Include="02.GameObjects\12.AttackObject\SimonManus\Stomp">
       <UniqueIdentifier>{4c93ec4b-622d-4d23-9b30-e71e06b6e88e}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="05.Fsm\Monster\SimonManus\CutScene">
-      <UniqueIdentifier>{e3588bfa-170a-4bd9-9b5d-035396eb3e43}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="05.Fsm\Monster\SimonManus\CutScene\Meet">
-      <UniqueIdentifier>{d02063f9-0347-402f-8dd9-67e60e09b689}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="05.Fsm\Monster\SimonManus\CutScene\Phase2">
-      <UniqueIdentifier>{516433e5-47f1-4197-b298-cdaba0eb38e7}</UniqueIdentifier>
     </Filter>
     <Filter Include="02.GameObjects\02.Pawn\01.Monster\HoresMan">
       <UniqueIdentifier>{2a7b97d8-e836-4fee-82c9-aeed32fabee4}</UniqueIdentifier>
@@ -883,6 +310,537 @@
     <Filter Include="03.GameInterface_Controller\00.UIManager\00.UIPage\12.UIPage_Effect %2880%25%29">
       <UniqueIdentifier>{26ca8006-fabe-45a8-b4ac-6ef7432e9707}</UniqueIdentifier>
     </Filter>
+    <Filter Include="02.GameObjects\06.Weapon\00.PlayerWeapon\03.Arm">
+      <UniqueIdentifier>{da8fff6e-776b-48f5-87cc-a79755f50244}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="05.Fsm">
+      <UniqueIdentifier>{4a0e87ac-4260-4525-a5db-96fc69f89d7f}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="05.Fsm\Monster">
+      <UniqueIdentifier>{8f4502de-4c7f-46e7-b10f-56157e66c9fd}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="05.Fsm\Monster\CarcassBigA">
+      <UniqueIdentifier>{15fa6f93-8453-4f21-9402-009d172ae390}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="05.Fsm\Monster\CarcassBigA\Idle">
+      <UniqueIdentifier>{038e2271-19e3-4a16-8829-285cc54e6336}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="05.Fsm\Monster\CarcassBigA\Die">
+      <UniqueIdentifier>{f843a418-0ba0-4001-b576-f04fd913ffd8}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="05.Fsm\Monster\CarcassBigA\Attack">
+      <UniqueIdentifier>{d16914b3-bb02-4db1-906c-3c6601661207}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="05.Fsm\Monster\CarcassBigA\Attack\Route">
+      <UniqueIdentifier>{defc5ddf-41fa-4d35-a731-88c238c47ef0}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="05.Fsm\Monster\CarcassBigA\Attack\Route\AttackRoute_0">
+      <UniqueIdentifier>{3aa6a256-937b-4f1c-8b46-1888ac52205c}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="05.Fsm\Monster\CarcassBigA\Attack\Route\AttackRoute_1">
+      <UniqueIdentifier>{11326689-9b56-489f-aabe-90494d95ebfc}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="05.Fsm\Monster\CarcassBigA\Attack\Route\AttackRoute_2">
+      <UniqueIdentifier>{c04fac58-2352-4546-b506-3b3a84479df1}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="05.Fsm\Monster\CarcassBigA\Attack\Route\AttackRoute_3">
+      <UniqueIdentifier>{de0f89ed-e0cc-4a00-8120-a518ea964014}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="05.Fsm\Monster\CarcassBigA\Attack\Route\AttackRoute_4">
+      <UniqueIdentifier>{12670bf0-76fd-432d-9278-b73ac8212e84}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="05.Fsm\Monster\CarcassBigA\Attack\Single">
+      <UniqueIdentifier>{7b8bc9ae-1ba3-40d2-8817-267320289cb3}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="05.Fsm\Monster\CarcassBigA\Attack\Single\WheelWind">
+      <UniqueIdentifier>{097b35f4-fd5a-4d44-854f-d76fd17f4a9b}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="05.Fsm\Monster\CarcassBigA\Attack\Single\RageAttack">
+      <UniqueIdentifier>{f1ee5c3e-d827-4577-bba8-eef840b6dbae}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="05.Fsm\Monster\CarcassBigA\Attack\Single\LTSwingRight">
+      <UniqueIdentifier>{9f86f057-9d7b-4a09-857e-95c619e902fe}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="05.Fsm\Monster\CarcassBigA\Attack\Single\LOSwingRight">
+      <UniqueIdentifier>{fd51b5e4-23a9-4085-9f7e-9abbe6de9f02}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="05.Fsm\Monster\CarcassBigA\Attack\Single\Impact">
+      <UniqueIdentifier>{4bc0bea3-c446-4d60-9852-a813d7be6342}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="05.Fsm\Monster\CarcassBigA\Paralize">
+      <UniqueIdentifier>{7a808f3d-2504-4269-911e-bb92c1dd6ee0}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="05.Fsm\Monster\CarcassBigA\Walk">
+      <UniqueIdentifier>{8cca3e2d-28bf-401e-afd3-0ec774007eac}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="05.Fsm\Monster\CarcassBigA\Grogy">
+      <UniqueIdentifier>{0075ae76-a3eb-419f-9be1-a9900494ebb6}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="05.Fsm\Monster\CarcassBigA\Run">
+      <UniqueIdentifier>{88fbca0c-fbc5-4331-902b-31f81e9e8c39}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="05.Fsm\Monster\CarcassBigA\Hit_Fatal">
+      <UniqueIdentifier>{3a3180b6-88e0-47d8-a77c-574050019abe}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="05.Fsm\Monster\SimonManus">
+      <UniqueIdentifier>{52ec9403-e7cc-4dda-857e-4376e9606cb8}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="05.Fsm\Monster\SimonManus\P1">
+      <UniqueIdentifier>{32f3e718-abe1-480e-8923-f053354399b7}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="05.Fsm\Monster\SimonManus\P1\Idle">
+      <UniqueIdentifier>{25ad1422-a156-4c4e-a523-177d6bc141d5}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="05.Fsm\Monster\SimonManus\P1\Attck">
+      <UniqueIdentifier>{3b6b4621-a5c8-4d90-b412-56d73fffa644}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="05.Fsm\Monster\SimonManus\P1\Attck\Single">
+      <UniqueIdentifier>{66d90f26-f279-4151-b69b-acdf215d1b9f}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="05.Fsm\Monster\SimonManus\P1\Attck\Single\Sting">
+      <UniqueIdentifier>{6237cc31-566e-4238-9cc0-842b6d5a1659}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="05.Fsm\Monster\SimonManus\P1\Attck\Single\AvoidSwing">
+      <UniqueIdentifier>{5020c6ac-0497-4710-95db-fa739b2c22b6}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="05.Fsm\Monster\SimonManus\P1\Attck\Single\SwingMultiple">
+      <UniqueIdentifier>{22542ba6-c808-4c9e-bf31-284b1ebc3d03}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="05.Fsm\Monster\SimonManus\P1\Attck\Single\HighJumpFall">
+      <UniqueIdentifier>{0204ee7d-1724-4ff0-8340-f74ce4cf84f2}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="05.Fsm\Monster\SimonManus\P1\Attck\Single\Charge_SwingDown">
+      <UniqueIdentifier>{05fe4e4d-e39d-4f03-82ea-5b72b6f9b0ac}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="05.Fsm\Monster\SimonManus\P1\Attck\Route">
+      <UniqueIdentifier>{fe5d8cc9-5204-4605-9b50-c3021fabb842}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="05.Fsm\Monster\SimonManus\P1\Attck\Route\ChasingSwing">
+      <UniqueIdentifier>{8d36650d-2580-4ce0-8926-bb9c616f1bdc}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="05.Fsm\Monster\SimonManus\P1\Attck\Route\JumpToSwing">
+      <UniqueIdentifier>{2def39bb-8155-4fb6-8739-272b8c5b856c}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="05.Fsm\Monster\SimonManus\P1\Attck\Route\SwipMultiple_L">
+      <UniqueIdentifier>{b4d6a51f-333f-494c-878e-e9ab94ac77d0}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="05.Fsm\Monster\SimonManus\P1\Attck\Route\SwipMultiple_R">
+      <UniqueIdentifier>{f0d6030b-a350-4749-b4c4-c3acc6c59444}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="05.Fsm\Monster\SimonManus\P1\Attck\Route\SwingDown_Swing_R">
+      <UniqueIdentifier>{b575aa31-8fc8-439c-b7c9-cfcb748540a0}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="05.Fsm\Monster\SimonManus\P1\Attck\Route\SwingDown_Swing_L">
+      <UniqueIdentifier>{2ef440b2-3dd3-4b83-88a0-8d955e36bd3c}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="05.Fsm\Monster\SimonManus\P1\Attck\Route\Stamp">
+      <UniqueIdentifier>{29d16570-4bed-4aa6-b8ef-4624cab0bdf3}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="05.Fsm\Monster\SimonManus\P1\Die">
+      <UniqueIdentifier>{1ca82e15-8b8c-4a48-9c88-a5f24fc38858}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="05.Fsm\Monster\SimonManus\P1\Grogy">
+      <UniqueIdentifier>{a74852b7-6ec6-4435-8b00-ac5ff4e6935b}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="05.Fsm\Monster\SimonManus\P1\HitFatal">
+      <UniqueIdentifier>{cebe0b82-9fc4-4388-b4fb-be9fcda771b7}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="05.Fsm\Monster\SimonManus\P1\Run">
+      <UniqueIdentifier>{f083c0cc-f7b0-4013-adf6-27165c3074a4}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="05.Fsm\Monster\SimonManus\P1\Walk">
+      <UniqueIdentifier>{fe395b30-26dd-4e7d-9184-bb5c5d694b6b}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="05.Fsm\Monster\SimonManus\P2">
+      <UniqueIdentifier>{2679afad-ec99-46ef-bfc7-e4ea23aaad12}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="05.Fsm\Monster\SimonManus\P2\Idle">
+      <UniqueIdentifier>{668c14b0-8cf5-45c9-8190-6da55179d975}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="05.Fsm\Monster\SimonManus\P2\Walk">
+      <UniqueIdentifier>{ca124187-bf32-47b1-80f7-98f9d7fdfb2a}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="05.Fsm\Monster\SimonManus\P2\Die">
+      <UniqueIdentifier>{2aaf1b2f-69fc-469f-b4c2-753a79e5e2c9}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="05.Fsm\Monster\SimonManus\P2\Grogy">
+      <UniqueIdentifier>{a5413b70-31ca-4e29-a6d4-3452229d0e7c}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="05.Fsm\Monster\SimonManus\P2\Run">
+      <UniqueIdentifier>{a48d1fcb-7534-41f5-ba75-dab05be2f373}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="05.Fsm\Monster\SimonManus\P2\Attack">
+      <UniqueIdentifier>{948752c6-1189-49a5-a229-89ef31810e34}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="05.Fsm\Monster\SimonManus\P2\Attack\Route">
+      <UniqueIdentifier>{54c4c60d-1494-4770-bf1a-ebfdfdc8ecef}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="05.Fsm\Monster\SimonManus\P2\Attack\Route\ChasingSwing">
+      <UniqueIdentifier>{9fca7200-91e9-4f1a-995d-4b8ee1f3cbb3}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="05.Fsm\Monster\SimonManus\P2\Attack\Route\SwipMultiple">
+      <UniqueIdentifier>{e417e7fa-1188-43d8-b4cd-4b21ddb676d4}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="05.Fsm\Monster\SimonManus\P2\Attack\Route\Stamp">
+      <UniqueIdentifier>{da7d2547-96c3-433f-976d-177660af0b99}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="05.Fsm\Monster\SimonManus\P2\Attack\Route\SwingDown_Swing">
+      <UniqueIdentifier>{e4017f7a-df12-469b-a6f4-a93eb0af6524}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="05.Fsm\Monster\SimonManus\P2\Attack\Route\JumpToAttack">
+      <UniqueIdentifier>{e534a47a-1113-4d6c-848d-832d77482ffa}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="05.Fsm\Monster\SimonManus\P2\Attack\Route\LightningToWave">
+      <UniqueIdentifier>{36fc1f37-9fa8-4bcb-9bd8-eb43b4acc6b1}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="05.Fsm\Monster\SimonManus\P2\Attack\Route\Route0">
+      <UniqueIdentifier>{57e7b286-635d-48c5-bffc-666a38b621a5}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="05.Fsm\Monster\SimonManus\P2\Attack\Route\Route1">
+      <UniqueIdentifier>{6467109c-1f2c-49c7-99be-29881975b050}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="05.Fsm\Monster\SimonManus\P2\Attack\Route\Route2">
+      <UniqueIdentifier>{0c443aba-e819-493a-b1d5-b0477bdc89c1}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="05.Fsm\Monster\SimonManus\P2\Attack\Single">
+      <UniqueIdentifier>{7e832bcc-ebc5-4987-8be1-dbc62a76a58e}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="05.Fsm\Monster\SimonManus\P2\Attack\Single\Sting">
+      <UniqueIdentifier>{bc69c929-ae81-402e-8a05-46e3481d4988}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="05.Fsm\Monster\SimonManus\P2\Attack\Single\HighJumpFall">
+      <UniqueIdentifier>{9d26d286-bc68-46cd-9a2a-003813a3bd73}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="05.Fsm\Monster\SimonManus\P2\Attack\Single\AvoidSwing">
+      <UniqueIdentifier>{2187779e-4c75-4ac3-801e-6b4b401bde9d}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="05.Fsm\Monster\SimonManus\P2\Attack\Single\Wave">
+      <UniqueIdentifier>{4a6b8ef2-d3b5-46d3-a1d3-971403ccfe29}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="05.Fsm\Monster\SimonManus\P2\Attack\Single\BrutalAttack">
+      <UniqueIdentifier>{793dc7b9-6844-491b-8321-61c2537132c5}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="05.Fsm\Monster\SimonManus\P2\Attack\Single\ThunderCalling">
+      <UniqueIdentifier>{c534f025-5164-46b2-bd30-4e813cb4bed1}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="05.Fsm\Monster\SimonManus\P2\Attack\Single\SlideMagic">
+      <UniqueIdentifier>{98ea13ef-4526-4f97-a1fc-776b66a793b8}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="05.Fsm\Monster\SimonManus\P2\Attack\Single\ThunderBall">
+      <UniqueIdentifier>{8b883092-bbab-4d18-b414-4009f8cdd9f3}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="05.Fsm\Monster\SimonManus\P2\Attack\Single\SpreadMagic">
+      <UniqueIdentifier>{927e6e2d-8506-48a0-8258-0c917447cec5}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="05.Fsm\Monster\SimonManus\P2\Attack\Single\SummonHand">
+      <UniqueIdentifier>{5228a653-e17a-44d8-a6f1-66c8fb344bef}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="05.Fsm\Monster\SimonManus\P2\HitFatal">
+      <UniqueIdentifier>{cfa0a51c-d72a-4dc8-ba57-c8476da79ca9}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="05.Fsm\Monster\SimonManus\CutScene">
+      <UniqueIdentifier>{e3588bfa-170a-4bd9-9b5d-035396eb3e43}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="05.Fsm\Monster\SimonManus\CutScene\Meet">
+      <UniqueIdentifier>{d02063f9-0347-402f-8dd9-67e60e09b689}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="05.Fsm\Monster\SimonManus\CutScene\Phase2">
+      <UniqueIdentifier>{516433e5-47f1-4197-b298-cdaba0eb38e7}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="05.Fsm\Monster\CarcassTail">
+      <UniqueIdentifier>{294ef219-6700-4441-acb8-5f4368999759}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="05.Fsm\Monster\CarcassTail\Attack">
+      <UniqueIdentifier>{0d002725-6e97-4b57-a9d6-5ed638726932}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="05.Fsm\Monster\CarcassTail\Attack\Single">
+      <UniqueIdentifier>{8e725ebb-d395-4cb9-bf69-4e54017cea7e}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="05.Fsm\Monster\CarcassTail\Attack\Single\MultyHittingDown">
+      <UniqueIdentifier>{2872a704-fd93-4d85-be8b-bef06fd7677e}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="05.Fsm\Monster\CarcassTail\Attack\Single\Heading">
+      <UniqueIdentifier>{85d4fcdf-b7e6-496f-9d37-e22af1168e0b}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="05.Fsm\Monster\CarcassTail\Attack\Single\Scratching">
+      <UniqueIdentifier>{3e641e79-dd30-4777-a8d3-0472677edbe3}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="05.Fsm\Monster\CarcassTail\Attack\Single\Leap">
+      <UniqueIdentifier>{1698a62c-7b7e-45af-b4a5-8e74ec7555ce}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="05.Fsm\Monster\CarcassTail\Attack\Single\TailSwip">
+      <UniqueIdentifier>{e3b8b2b9-99c7-4ee4-9754-9b2edc53c90e}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="05.Fsm\Monster\CarcassTail\Attack\Single\TailSwipMultiple">
+      <UniqueIdentifier>{98ea0a72-a20e-4108-903f-7c9db7f588d1}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="05.Fsm\Monster\CarcassTail\Attack\Single\TailSwingDown">
+      <UniqueIdentifier>{8a11709a-37a7-4065-8439-01f82a11e519}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="05.Fsm\Monster\CarcassTail\Attack\Route">
+      <UniqueIdentifier>{a141140e-b60b-46ca-8301-070a74d2cd55}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="05.Fsm\Monster\CarcassTail\Attack\Route\HeadingMultiple">
+      <UniqueIdentifier>{a4a9d1f2-c722-4e92-bfa2-5cc1f1bbb898}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="05.Fsm\Monster\CarcassTail\Attack\Route\LeapAttack">
+      <UniqueIdentifier>{912858f5-c399-4f19-8864-2ebf741af1cd}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="05.Fsm\Monster\CarcassTail\Attack\Route\LeapToAttack">
+      <UniqueIdentifier>{4256e3b0-3a1f-4e5c-9fac-955a21e1f082}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="05.Fsm\Monster\CarcassTail\Attack\Route\ScratchingToSwip">
+      <UniqueIdentifier>{a9510d49-db18-497d-82cc-1033e2a4c031}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="05.Fsm\Monster\CarcassTail\Attack\Route\ScratchingMultiple">
+      <UniqueIdentifier>{c9e7ebe0-a596-40cb-841a-eb9f2b1ba738}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="05.Fsm\Monster\CarcassTail\Die">
+      <UniqueIdentifier>{186f6f27-a6cd-4f1c-8966-1d267014745d}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="05.Fsm\Monster\CarcassTail\Grogy">
+      <UniqueIdentifier>{f566fc2b-43db-46f6-a995-f427b2b910cd}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="05.Fsm\Monster\CarcassTail\HitFatal">
+      <UniqueIdentifier>{e9eb7ceb-1896-44d4-bb3a-a789f2b319ca}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="05.Fsm\Monster\CarcassTail\Idle">
+      <UniqueIdentifier>{b09b699c-63c3-496c-8b7c-87d17ebb1c8f}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="05.Fsm\Monster\CarcassTail\Run">
+      <UniqueIdentifier>{889f9f2f-9aa7-43e5-a6c9-3bfc6b63911d}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="05.Fsm\Monster\CarcassTail\Walk">
+      <UniqueIdentifier>{4ffefbf0-da3c-4da0-9440-7196dd9408f0}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="05.Fsm\Player">
+      <UniqueIdentifier>{720bc44b-de33-49d7-8bc6-83c06d66d2b5}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="05.Fsm\Player\OneHand">
+      <UniqueIdentifier>{26cc42dd-90bd-4724-8c7e-f396c36f1f2f}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="05.Fsm\Player\OneHand\Idle">
+      <UniqueIdentifier>{9718fa83-978b-4b88-9e49-c9b2ea513efe}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="05.Fsm\Player\OneHand\Walk">
+      <UniqueIdentifier>{1215856d-0c56-4228-975e-055cbf55f4e3}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="05.Fsm\Player\OneHand\Run">
+      <UniqueIdentifier>{5d648734-4993-4c07-beb0-c0c60a489760}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="05.Fsm\Player\OneHand\Guard">
+      <UniqueIdentifier>{f37a500e-cc18-4f8c-885f-54a69887a659}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="05.Fsm\Player\OneHand\Jump">
+      <UniqueIdentifier>{af57f400-71a8-4fe5-afe2-58f8a47cd93a}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="05.Fsm\Player\OneHand\Dash">
+      <UniqueIdentifier>{cfb8bd19-9cd4-4314-9f05-f97a593299ec}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="05.Fsm\Player\OneHand\00.Attack">
+      <UniqueIdentifier>{41bf1b34-a55b-403f-93f2-cf413f595075}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="05.Fsm\Player\OneHand\00.Attack\Rapier">
+      <UniqueIdentifier>{ed1f5465-6653-410e-9e08-79c2e8fe998c}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="05.Fsm\Player\OneHand\00.Attack\Rapier\00.FableArts">
+      <UniqueIdentifier>{1f5b0ce1-9e6a-4bff-9f5e-183471e7c135}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="05.Fsm\Player\OneHand\00.Attack\Rapier\00.FableArts\ParryAttack">
+      <UniqueIdentifier>{80eb0dfe-35b3-4ed2-905b-9da585b9da6a}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="05.Fsm\Player\OneHand\00.Attack\Rapier\00.FableArts\General">
+      <UniqueIdentifier>{9eae6eba-a96e-4f61-bb34-c8bed96e702a}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="05.Fsm\Player\OneHand\00.Attack\Rapier\01.Fatal">
+      <UniqueIdentifier>{2e09a965-6398-40b0-b8b5-a30da0923e63}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="05.Fsm\Player\OneHand\00.Attack\Rapier\LAttack00">
+      <UniqueIdentifier>{2d32d55d-f91c-470b-abd2-462b897ad152}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="05.Fsm\Player\OneHand\00.Attack\Rapier\LAttack01">
+      <UniqueIdentifier>{ed048a41-07c1-46ea-8ff3-b3c25282200f}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="05.Fsm\Player\OneHand\00.Attack\Rapier\RAttack00">
+      <UniqueIdentifier>{c45a6618-f69d-43d6-a2f9-edd908511d3c}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="05.Fsm\Player\OneHand\00.Attack\Rapier\ChargeAttack">
+      <UniqueIdentifier>{da07eebc-8583-4bcc-9fb3-22ea92aad7a8}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="05.Fsm\Player\OneHand\00.Attack\Scissor">
+      <UniqueIdentifier>{f37f4081-2382-4504-88a9-aef53e8fbf35}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="05.Fsm\Player\OneHand\00.Attack\Scissor\00.FableArts">
+      <UniqueIdentifier>{4cb18c50-57be-4e3f-9310-34d67c8bf07b}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="05.Fsm\Player\OneHand\00.Attack\Scissor\00.FableArts\Buff">
+      <UniqueIdentifier>{6e18fff2-d0c5-46c1-9545-a6b3090c815e}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="05.Fsm\Player\OneHand\00.Attack\Scissor\00.FableArts\Combo">
+      <UniqueIdentifier>{d0435873-4641-4b14-a9a6-10f523ede889}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="05.Fsm\Player\OneHand\00.Attack\Scissor\00.FableArts\Combo\Combo1">
+      <UniqueIdentifier>{8d346d05-1e98-4dd1-ab27-e2ce295982d4}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="05.Fsm\Player\OneHand\00.Attack\Scissor\00.FableArts\Combo\Combo2">
+      <UniqueIdentifier>{b1c16933-63f3-4774-bd38-3116501640d3}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="05.Fsm\Player\OneHand\00.Attack\Scissor\00.FableArts\Combo\Combo3">
+      <UniqueIdentifier>{e7fed8a5-7833-4ce7-96cc-5a511f3a8f89}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="05.Fsm\Player\OneHand\00.Attack\Scissor\01.Fatal">
+      <UniqueIdentifier>{25ff8a5b-627c-4047-bfa6-45ca227b1a5f}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="05.Fsm\Player\OneHand\00.Attack\Scissor\LAttack00">
+      <UniqueIdentifier>{ece837e8-efe3-4ef7-a45a-4319bd162b0c}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="05.Fsm\Player\OneHand\00.Attack\Scissor\LAttack01">
+      <UniqueIdentifier>{9c6322bb-0102-4966-a54e-2954f3e8b2d8}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="05.Fsm\Player\OneHand\00.Attack\Scissor\RAttack00">
+      <UniqueIdentifier>{ee0ee3c3-b4e1-4f20-8607-b6b8ae6c61c0}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="05.Fsm\Player\OneHand\00.Attack\Scissor\RAttack01">
+      <UniqueIdentifier>{e2b74cb5-cbdd-48a0-a352-5fa47ae83956}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="05.Fsm\Player\OneHand\00.Attack\Scissor\ChargeAttack00">
+      <UniqueIdentifier>{deaebf7b-aa0c-4ecd-a860-ae3a92ca8929}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="05.Fsm\Player\OneHand\00.Attack\Scissor\ChargeAttack01">
+      <UniqueIdentifier>{b20bc638-0a11-4e42-9d52-3e774b51d960}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="05.Fsm\Player\OneHand\Sprint">
+      <UniqueIdentifier>{f12a6c40-0a17-4283-8554-ff531875a91a}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="05.Fsm\Player\OneHand\GuardHit">
+      <UniqueIdentifier>{b20b41ad-0ddc-43a2-a360-b833295b592a}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="05.Fsm\Player\TwoHand">
+      <UniqueIdentifier>{cd7302ea-8432-40bf-af91-9cd19f874b53}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="05.Fsm\Player\TwoHand\00.Attack">
+      <UniqueIdentifier>{4dd86f00-dc2d-4774-9b2b-52fa164b942c}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="05.Fsm\Player\TwoHand\00.Attack\FlameSword">
+      <UniqueIdentifier>{a927d621-aeae-4a65-b50b-58b6186e38d5}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="05.Fsm\Player\TwoHand\00.Attack\FlameSword\RAttack00">
+      <UniqueIdentifier>{ec50ef6f-ac18-4d70-ba52-0f3d52aa0abc}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="05.Fsm\Player\TwoHand\00.Attack\FlameSword\LAttack00">
+      <UniqueIdentifier>{436fd4d0-9dce-4745-9f18-52d28f3a81a6}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="05.Fsm\Player\TwoHand\00.Attack\FlameSword\LAttack01">
+      <UniqueIdentifier>{c30bff56-87a8-45e5-b8d7-68f00bdaba62}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="05.Fsm\Player\TwoHand\00.Attack\FlameSword\ChargeAttack00">
+      <UniqueIdentifier>{28d4472f-f0dc-45ad-b435-be85d446c75b}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="05.Fsm\Player\TwoHand\00.Attack\FlameSword\RAttack01">
+      <UniqueIdentifier>{23dd7535-7c21-41bc-817c-6591ffb6801a}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="05.Fsm\Player\TwoHand\00.Attack\FlameSword\00.FableArts">
+      <UniqueIdentifier>{a4384797-e19d-4fd9-954f-92b259e0d346}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="05.Fsm\Player\TwoHand\00.Attack\FlameSword\00.FableArts\ParryAttack">
+      <UniqueIdentifier>{c9f490cf-084c-40ee-b614-183c9081cadc}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="05.Fsm\Player\TwoHand\00.Attack\FlameSword\00.FableArts\General">
+      <UniqueIdentifier>{ee6e207b-0b6e-437e-8552-023b6ae90c2a}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="05.Fsm\Player\TwoHand\00.Attack\FlameSword\01.Fatal">
+      <UniqueIdentifier>{cd5300e1-30e0-46d8-bbee-a4590107ed4b}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="05.Fsm\Player\TwoHand\00.Attack\FlameSword\ChargeAttack01">
+      <UniqueIdentifier>{3e2279c1-e58e-4c57-8e40-df000692747b}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="05.Fsm\Player\TwoHand\Dash">
+      <UniqueIdentifier>{6d51f311-bc28-4eb0-8773-86c72d78f3d9}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="05.Fsm\Player\TwoHand\Guard">
+      <UniqueIdentifier>{b774ff71-4c6a-48b0-bf02-ec836d7791e7}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="05.Fsm\Player\TwoHand\Idle">
+      <UniqueIdentifier>{20c7ed81-8b8b-4d24-9b87-e9de78ce4273}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="05.Fsm\Player\TwoHand\Run">
+      <UniqueIdentifier>{8326ef6d-1381-4f94-8c1b-de33d5972cd1}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="05.Fsm\Player\TwoHand\Walk">
+      <UniqueIdentifier>{b02a41b8-7218-44da-b2b8-37c9c3e8087a}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="05.Fsm\Player\TwoHand\Jump">
+      <UniqueIdentifier>{e1cf3f66-98a7-4608-8663-96ab290a2554}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="05.Fsm\Player\TwoHand\Sprint">
+      <UniqueIdentifier>{99b3c7b5-3bdc-4f92-8936-234c92524826}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="05.Fsm\Player\TwoHand\GuardHit">
+      <UniqueIdentifier>{e86527f3-22d4-4603-8ccb-dd54068f1212}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="05.Fsm\Player\Common">
+      <UniqueIdentifier>{7e6b40a1-4b89-45b6-81f2-6e54b4c861b2}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="05.Fsm\Player\Common\Ladder">
+      <UniqueIdentifier>{871c5e9d-956e-4372-903f-937a97e29ccb}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="05.Fsm\Player\Common\Hit">
+      <UniqueIdentifier>{6fe21237-ed2f-4577-82d9-d063e362a9a9}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="05.Fsm\Player\Common\Groggy">
+      <UniqueIdentifier>{52055d8d-e516-4646-8fde-a42a1c9f1453}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="05.Fsm\Player\Common\Parry">
+      <UniqueIdentifier>{6f478c04-42e3-4487-8f42-ce122fd61b3d}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="05.Fsm\Player\Common\Heal">
+      <UniqueIdentifier>{01bca6de-05e8-46a3-89e2-a924a96ef387}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="05.Fsm\Player\Common\Change_Weapon">
+      <UniqueIdentifier>{ca6f18a0-495c-4980-9a84-1c366e748484}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="05.Fsm\Player\Common\Lift">
+      <UniqueIdentifier>{cdbc26ed-3d4d-42ff-a1bb-7938a82a3abe}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="05.Fsm\Player\Common\Chest">
+      <UniqueIdentifier>{ae7bc7a2-3c6b-4dac-88a8-80e89620b1a7}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="05.Fsm\Player\Common\ItemGet">
+      <UniqueIdentifier>{bab6dc0c-4bf4-4770-aa28-7517dc2be5af}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="05.Fsm\Player\Common\Stargazer">
+      <UniqueIdentifier>{866e839e-cf8e-4ca7-b515-93065c4716fc}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="05.Fsm\Player\Common\Teleport">
+      <UniqueIdentifier>{fa57377f-b82c-4b4a-9495-aca98d90a783}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="05.Fsm\Player\Common\Grinder">
+      <UniqueIdentifier>{fb4067e2-a5e2-47fe-bae7-ead4bdc7b9f0}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="05.Fsm\Player\Common\GetUp">
+      <UniqueIdentifier>{b0e3396b-88a4-497b-b596-2f41d05ca314}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="05.Fsm\Player\CutScene">
+      <UniqueIdentifier>{690a9148-4f8e-4c89-82d9-db8386a42952}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="05.Fsm\Player\CutScene\Sophia">
+      <UniqueIdentifier>{f5c45fd8-c67e-4f8d-8660-2f0adec9d8f9}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="05.Fsm\Player\CutScene\Sophia\Door">
+      <UniqueIdentifier>{523c375b-4150-4955-9992-725681b84bb3}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="05.Fsm\Player\CutScene\Sophia\Walk">
+      <UniqueIdentifier>{dc6f7b9e-e299-46ce-bf7d-94196ab07a34}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="05.Fsm\Player\CutScene\Sophia\Hand">
+      <UniqueIdentifier>{068b5a22-5213-4848-b9ce-02cf142a3e57}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="05.Fsm\Player\CutScene\Sophia\HandEnd">
+      <UniqueIdentifier>{3e0a6a80-48c4-49d6-8260-d065316ea512}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="05.Fsm\Player\CutScene\Simon">
+      <UniqueIdentifier>{a7535373-661b-41f2-b044-6a1180235208}</UniqueIdentifier>
+    </Filter>
     <Filter Include="05.Fsm\Player\Arm">
       <UniqueIdentifier>{e3c926a2-c401-4fdb-ae2e-9a5af6934d77}</UniqueIdentifier>
     </Filter>
@@ -892,8 +850,89 @@
     <Filter Include="05.Fsm\Player\Arm\End">
       <UniqueIdentifier>{58fb7fbc-ec6c-46dc-934a-443473931ea6}</UniqueIdentifier>
     </Filter>
+    <Filter Include="05.Fsm\Player\Arm\Counter">
+      <UniqueIdentifier>{9b4f5bce-81c3-47ff-991c-468ef638168f}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="05.Fsm\Player\Arm\Parry">
+      <UniqueIdentifier>{d44fa125-992d-4432-aa92-7c0a65e5a6af}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="05.Fsm\Player\Arm\Guard_Heavy">
+      <UniqueIdentifier>{6c344b3e-e795-41fb-a481-126e5f050968}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="05.Fsm\Player\Arm\Guard_Hard">
+      <UniqueIdentifier>{2ecb8c88-e2e1-4a77-b669-7fcd2d067f27}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="05.Fsm\Player\Arm\Guard_Weak">
+      <UniqueIdentifier>{cbc0f36f-1fa1-428a-92a9-05353fa18a86}</UniqueIdentifier>
+    </Filter>
     <Filter Include="05.Fsm\Player\Arm\Loop">
       <UniqueIdentifier>{2d2235b5-d663-4950-8f4d-98355841bd38}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="05.Fsm\Player\Arm\Thrust">
+      <UniqueIdentifier>{34d0309e-5b7c-4601-bfcf-b783ee920a69}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="05.Fsm\Player\Arm\Swing">
+      <UniqueIdentifier>{301bd96f-06f1-41bb-8f7e-07061252f405}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="05.Fsm\Player\Arm\ParryBomb">
+      <UniqueIdentifier>{7d8f6927-6c8e-4997-a3e1-b9fda5b1cbdf}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="05.Fsm\Player\Common\Throw">
+      <UniqueIdentifier>{6927f66b-8d01-4af5-8b3c-34df47767809}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="05.Fsm\Player\Common\Die">
+      <UniqueIdentifier>{bd30e2d5-25fb-4905-bacd-c5625c31e943}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.GameObjects\11.InteractObj">
+      <UniqueIdentifier>{2d3adcbb-33e9-455d-a954-c1b0e6eef0bb}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.GameObjects\11.InteractObj\00.Stargazer">
+      <UniqueIdentifier>{eb7fe278-8f63-4c37-bd1e-af98a5ca1a5e}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.GameObjects\11.InteractObj\02.TowerDoor">
+      <UniqueIdentifier>{6a4c1bfe-f554-4c72-afe7-d738b5f5b17d}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.GameObjects\11.InteractObj\03.WallDeco">
+      <UniqueIdentifier>{2357c91a-00b1-43ca-a995-b5b7786cca00}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.GameObjects\11.InteractObj\03.WallDeco\Deco_Collider_Obj">
+      <UniqueIdentifier>{de6a80df-b5fc-4917-8178-d30e289d2253}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.GameObjects\11.InteractObj\04.TreasureBox">
+      <UniqueIdentifier>{10feda96-2bd2-4b3f-b93b-a7f41fa6a6a0}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.GameObjects\11.InteractObj\05.Ladder">
+      <UniqueIdentifier>{e8519a58-814e-4542-a269-73a3f6a8b500}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.GameObjects\11.InteractObj\01.Lift">
+      <UniqueIdentifier>{eedb6a56-cfff-4c91-be75-a434d7f66169}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.GameObjects\11.InteractObj\01.Lift\Lift_Door">
+      <UniqueIdentifier>{e5181690-86ed-43fc-9e24-583e915d9f03}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.GameObjects\11.InteractObj\01.Lift\Lift_Controller">
+      <UniqueIdentifier>{7e6674de-29fd-41f9-9f96-c34e1ba9bbb6}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.GameObjects\11.InteractObj\01.Lift\Lift_Floor">
+      <UniqueIdentifier>{d4ddd60e-a386-46e3-a60e-8bdf3759786c}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.GameObjects\11.InteractObj\06.LastDoor">
+      <UniqueIdentifier>{aeb4b197-05c3-42e8-a202-3c07322bc3ad}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.GameObjects\11.InteractObj\07.SteppingStone">
+      <UniqueIdentifier>{eac03529-5428-443d-9fef-537ceca54b74}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.GameObjects\11.InteractObj\08.Sophia">
+      <UniqueIdentifier>{05890b22-ce96-4a7f-97d1-b651cbf8cde5}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.GameObjects\15.Item">
+      <UniqueIdentifier>{dd5201b5-c013-4b44-b8bc-823d92d1d746}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="03.GameInterface_Controller\00.UIManager\00.UIPage\17.UIPage_Chest">
+      <UniqueIdentifier>{b9789187-f1ad-4213-9cb0-9f158043cd13}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="03.GameInterface_Controller\00.UIManager\00.UIPage\16.UIPage_Shop %2850%25%29">
+      <UniqueIdentifier>{9e52ec52-1fa3-4985-8f37-acaa40a8f2fd}</UniqueIdentifier>
     </Filter>
     <Filter Include="05.Fsm\Monster\Raxasia">
       <UniqueIdentifier>{989e5c91-89fc-4fcc-8223-7354e094e836}</UniqueIdentifier>
@@ -1099,7 +1138,7 @@
       <Filter>02.GameObjects\09.NavDataObj</Filter>
     </ClInclude>
     <ClInclude Include="..\Public\Stargazer.h">
-      <Filter>02.GameObjects\10.InteractObj\00.Stargazer</Filter>
+      <Filter>02.GameObjects\11.InteractObj\00.Stargazer</Filter>
     </ClInclude>
     <ClInclude Include="..\Public\State_Player_OH_Idle.h">
       <Filter>05.Fsm\Player\OneHand\Idle</Filter>
@@ -1255,13 +1294,13 @@
       <Filter>02.GameObjects\05.Effect\Effect_Base\Trail_Effect\Trail_Effect_OP</Filter>
     </ClInclude>
     <ClInclude Include="..\Public\Lift_Controller.h">
-      <Filter>02.GameObjects\10.InteractObj\01.Lift\Lift_Controller</Filter>
+      <Filter>02.GameObjects\11.InteractObj\01.Lift\Lift_Controller</Filter>
     </ClInclude>
     <ClInclude Include="..\Public\Lift_Floor.h">
-      <Filter>02.GameObjects\10.InteractObj\01.Lift\Lift_Floor</Filter>
+      <Filter>02.GameObjects\11.InteractObj\01.Lift\Lift_Floor</Filter>
     </ClInclude>
     <ClInclude Include="..\Public\Lift_Door.h">
-      <Filter>02.GameObjects\10.InteractObj\01.Lift\Lift_Door</Filter>
+      <Filter>02.GameObjects\11.InteractObj\01.Lift\Lift_Door</Filter>
     </ClInclude>
     <ClInclude Include="..\public\FreeCamera.h">
       <Filter>02.GameObjects\99.Camera\FreeCamera</Filter>
@@ -1438,16 +1477,16 @@
       <Filter>02.GameObjects\02.Pawn</Filter>
     </ClInclude>
     <ClInclude Include="..\Public\TowerDoor.h">
-      <Filter>02.GameObjects\10.InteractObj\02.TowerDoor</Filter>
+      <Filter>02.GameObjects\11.InteractObj\02.TowerDoor</Filter>
     </ClInclude>
     <ClInclude Include="..\Public\WallDeco.h">
-      <Filter>02.GameObjects\10.InteractObj\03.WallDeco</Filter>
+      <Filter>02.GameObjects\11.InteractObj\03.WallDeco</Filter>
     </ClInclude>
     <ClInclude Include="..\Public\TreasureBox.h">
-      <Filter>02.GameObjects\10.InteractObj\04.TreasureBox</Filter>
+      <Filter>02.GameObjects\11.InteractObj\04.TreasureBox</Filter>
     </ClInclude>
     <ClInclude Include="..\Public\Ladder.h">
-      <Filter>02.GameObjects\10.InteractObj\05.Ladder</Filter>
+      <Filter>02.GameObjects\11.InteractObj\05.Ladder</Filter>
     </ClInclude>
     <ClInclude Include="..\Public\ColliderObject.h">
       <Filter>02.GameObjects\10.ColliderObject</Filter>
@@ -1457,10 +1496,10 @@
       <Filter>05.Fsm\Monster\SimonManus\P1\Attck\Single\Charge_SwingDown</Filter>
     </ClInclude>
     <ClInclude Include="..\Public\LastDoor.h">
-      <Filter>02.GameObjects\10.InteractObj\06.LastDoor</Filter>
+      <Filter>02.GameObjects\11.InteractObj\06.LastDoor</Filter>
     </ClInclude>
     <ClInclude Include="..\Public\SteppingStone.h">
-      <Filter>02.GameObjects\10.InteractObj\07.SteppingStone</Filter>
+      <Filter>02.GameObjects\11.InteractObj\07.SteppingStone</Filter>
     </ClInclude>
     <ClInclude Include="..\Public\ColliderObject.h">
       <Filter>02.GameObjects\10.ColliderObject</Filter>
@@ -1544,7 +1583,7 @@
       <Filter>05.Fsm\Player\Common\ItemGet</Filter>
     </ClInclude>
     <ClInclude Include="..\Public\Deco_Collider.h">
-      <Filter>02.GameObjects\10.InteractObj\03.WallDeco\Deco_Collider_Obj</Filter>
+      <Filter>02.GameObjects\11.InteractObj\03.WallDeco\Deco_Collider_Obj</Filter>
     </ClInclude>
     <ClInclude Include="..\Public\State_Player_Stargazer.h">
       <Filter>05.Fsm\Player\Common\Stargazer</Filter>
@@ -1630,9 +1669,6 @@
     <ClInclude Include="..\Public\UIPage_Test.h">
       <Filter>03.GameInterface_Controller\00.UIManager\00.UIPage\11.UIPage_Test %280%25%29</Filter>
     </ClInclude>
-    <ClInclude Include="..\Public\UIPage_Effect.h">
-      <Filter>03.GameInterface_Controller\00.UIManager\00.UIPage\12.UIPage_Effect %2880%25%29</Filter>
-    </ClInclude>
     <ClInclude Include="..\Public\AObj_GoldBall.h">
       <Filter>02.GameObjects\12.AttackObject\SimonManus\GoldBall</Filter>
     </ClInclude>
@@ -1668,7 +1704,7 @@
       <Filter>02.GameObjects\12.AttackObject\SimonManus\LightningBall</Filter>
     </ClInclude>
     <ClInclude Include="..\Public\Sophia.h">
-      <Filter>02.GameObjects\10.InteractObj\08.Sophia</Filter>
+      <Filter>02.GameObjects\11.InteractObj\08.Sophia</Filter>
     </ClInclude>
     <ClInclude Include="..\Public\AObj_BlackBall.h">
       <Filter>02.GameObjects\12.AttackObject\SimonManus\BlackBall</Filter>
@@ -1703,50 +1739,92 @@
     <ClInclude Include="..\Public\State_Player_Arm_Loop.h">
       <Filter>05.Fsm\Player\Arm\Loop</Filter>
     </ClInclude>
-    <ClInclude Include="..\Public\State_RaxasiaP1_Idle.h">
-      <Filter>05.Fsm\Monster\Raxasia\P1\Idle</Filter>
+    <ClInclude Include="..\Public\State_Player_Arm_Swing.h">
+      <Filter>05.Fsm\Player\Arm\Swing</Filter>
     </ClInclude>
-    <ClInclude Include="..\Public\State_RaxasiaP1_HitFatal.h">
-      <Filter>05.Fsm\Monster\Raxasia\P1\HitFatal</Filter>
+    <ClInclude Include="..\Public\State_Player_Arm_Thrust.h">
+      <Filter>05.Fsm\Player\Arm\Thrust</Filter>
     </ClInclude>
-    <ClInclude Include="..\Public\State_RaxasiaP1_Grogy.h">
-      <Filter>05.Fsm\Monster\Raxasia\P1\Grogy</Filter>
+    <ClInclude Include="..\Public\State_Player_Arm_Guard_Weak.h">
+      <Filter>05.Fsm\Player\Arm\Guard_Weak</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Public\State_Player_Arm_Guard_Hard.h">
+      <Filter>05.Fsm\Player\Arm\Guard_Hard</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Public\State_Player_Arm_Counter.h">
+      <Filter>05.Fsm\Player\Arm\Counter</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Public\State_Player_Arm_Guard_Heavy.h">
+      <Filter>05.Fsm\Player\Arm\Guard_Heavy</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Public\State_Player_Arm_Parry.h">
+      <Filter>05.Fsm\Player\Arm\Parry</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Public\State_Player_Arm_ParryBomb.h">
+      <Filter>05.Fsm\Player\Arm\ParryBomb</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Public\Weapon_PlayerArm.h">
+      <Filter>02.GameObjects\06.Weapon\00.PlayerWeapon\03.Arm</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Public\State_Player_ThrowItem.h">
+      <Filter>05.Fsm\Player\Common\Throw</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Public\State_Player_Die.h">
+      <Filter>05.Fsm\Player\Common\Die</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Public\UIPage_Effect.h">
+      <Filter>03.GameInterface_Controller\00.UIManager\00.UIPage\12.UIPage_Effect %2880%25%29</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Public\UIPage_Shop.h">
+      <Filter>03.GameInterface_Controller\00.UIManager\00.UIPage\16.UIPage_Shop %2850%25%29</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Public\UIPage_Chest.h">
+      <Filter>03.GameInterface_Controller\00.UIManager\00.UIPage\17.UIPage_Chest</Filter>
     </ClInclude>
     <ClInclude Include="..\Public\State_RaxasiaP1_Die.h">
       <Filter>05.Fsm\Monster\Raxasia\P1\Die</Filter>
     </ClInclude>
-    <ClInclude Include="..\Public\State_RaxasiaP1_Run.h">
-      <Filter>05.Fsm\Monster\Raxasia\P1\Run</Filter>
-    </ClInclude>
-    <ClInclude Include="..\Public\State_RaxasiaP1_Walk.h">
-      <Filter>05.Fsm\Monster\Raxasia\P1\Walk</Filter>
-    </ClInclude>
-    <ClInclude Include="..\Public\State_RaxasiaP1_LinkedAttack.h">
-      <Filter>05.Fsm\Monster\Raxasia\P1\Attack\Route\LinkedAttack</Filter>
-    </ClInclude>
-    <ClInclude Include="..\Public\State_RaxasiaP1_GroundSlash.h">
-      <Filter>05.Fsm\Monster\Raxasia\P1\Attack\Route\GroundSlash</Filter>
-    </ClInclude>
     <ClInclude Include="..\Public\State_RaxasiaP1_DashUpper.h">
       <Filter>05.Fsm\Monster\Raxasia\P1\Attack\Route\DashUpper</Filter>
-    </ClInclude>
-    <ClInclude Include="..\Public\State_RaxasiaP1_RepetUpperSlash.h">
-      <Filter>05.Fsm\Monster\Raxasia\P1\Attack\Route\RepetUpperSlash</Filter>
-    </ClInclude>
-    <ClInclude Include="..\Public\State_RaxasiaP1_KickSting.h">
-      <Filter>05.Fsm\Monster\Raxasia\P1\Attack\Route\KickSting</Filter>
-    </ClInclude>
-    <ClInclude Include="..\Public\State_RaxasiaP1_TripleSting.h">
-      <Filter>05.Fsm\Monster\Raxasia\P1\Attack\Route\TripleSting</Filter>
     </ClInclude>
     <ClInclude Include="..\Public\State_RaxasiaP1_Discharge.h">
       <Filter>05.Fsm\Monster\Raxasia\P1\Attack\RouteParts\Discharge</Filter>
     </ClInclude>
+    <ClInclude Include="..\Public\State_RaxasiaP1_Grogy.h">
+      <Filter>05.Fsm\Monster\Raxasia\P1\Grogy</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Public\State_RaxasiaP1_GroundSlash.h">
+      <Filter>05.Fsm\Monster\Raxasia\P1\Attack\Route\GroundSlash</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Public\State_RaxasiaP1_HitFatal.h">
+      <Filter>05.Fsm\Monster\Raxasia\P1\HitFatal</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Public\State_RaxasiaP1_Idle.h">
+      <Filter>05.Fsm\Monster\Raxasia\P1\Idle</Filter>
+    </ClInclude>
     <ClInclude Include="..\Public\State_RaxasiaP1_JumpAttack.h">
       <Filter>05.Fsm\Monster\Raxasia\P1\Attack\RouteParts\JumpAttack</Filter>
     </ClInclude>
+    <ClInclude Include="..\Public\State_RaxasiaP1_KickSting.h">
+      <Filter>05.Fsm\Monster\Raxasia\P1\Attack\Route\KickSting</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Public\State_RaxasiaP1_LinkedAttack.h">
+      <Filter>05.Fsm\Monster\Raxasia\P1\Attack\Route\LinkedAttack</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Public\State_RaxasiaP1_RepetUpperSlash.h">
+      <Filter>05.Fsm\Monster\Raxasia\P1\Attack\Route\RepetUpperSlash</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Public\State_RaxasiaP1_Run.h">
+      <Filter>05.Fsm\Monster\Raxasia\P1\Run</Filter>
+    </ClInclude>
     <ClInclude Include="..\Public\State_RaxasiaP1_SwingDown_Multiple.h">
       <Filter>05.Fsm\Monster\Raxasia\P1\Attack\RouteParts\SwingDown_Multiple</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Public\State_RaxasiaP1_TripleSting.h">
+      <Filter>05.Fsm\Monster\Raxasia\P1\Attack\Route\TripleSting</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Public\State_RaxasiaP1_Walk.h">
+      <Filter>05.Fsm\Monster\Raxasia\P1\Walk</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -1856,7 +1934,7 @@
       <Filter>02.GameObjects\09.NavDataObj</Filter>
     </ClCompile>
     <ClCompile Include="..\Private\Stargazer.cpp">
-      <Filter>02.GameObjects\10.InteractObj\00.Stargazer</Filter>
+      <Filter>02.GameObjects\11.InteractObj\00.Stargazer</Filter>
     </ClCompile>
     <ClCompile Include="..\Private\State_Player_OH_Idle.cpp">
       <Filter>05.Fsm\Player\OneHand\Idle</Filter>
@@ -2009,13 +2087,13 @@
       <Filter>02.GameObjects\05.Effect\Effect_Base\Trail_Effect\Trail_Effect_OP</Filter>
     </ClCompile>
     <ClCompile Include="..\Private\Lift_Door.cpp">
-      <Filter>02.GameObjects\10.InteractObj\01.Lift\Lift_Door</Filter>
+      <Filter>02.GameObjects\11.InteractObj\01.Lift\Lift_Door</Filter>
     </ClCompile>
     <ClCompile Include="..\Private\Lift_Controller.cpp">
-      <Filter>02.GameObjects\10.InteractObj\01.Lift\Lift_Controller</Filter>
+      <Filter>02.GameObjects\11.InteractObj\01.Lift\Lift_Controller</Filter>
     </ClCompile>
     <ClCompile Include="..\Private\Lift_Floor.cpp">
-      <Filter>02.GameObjects\10.InteractObj\01.Lift\Lift_Floor</Filter>
+      <Filter>02.GameObjects\11.InteractObj\01.Lift\Lift_Floor</Filter>
     </ClCompile>
     <ClCompile Include="..\private\FreeCamera.cpp">
       <Filter>02.GameObjects\99.Camera\FreeCamera</Filter>
@@ -2195,16 +2273,16 @@
       <Filter>02.GameObjects\02.Pawn</Filter>
     </ClCompile>
     <ClCompile Include="..\Private\TowerDoor.cpp">
-      <Filter>02.GameObjects\10.InteractObj\02.TowerDoor</Filter>
+      <Filter>02.GameObjects\11.InteractObj\02.TowerDoor</Filter>
     </ClCompile>
     <ClCompile Include="..\Private\WallDeco.cpp">
-      <Filter>02.GameObjects\10.InteractObj\03.WallDeco</Filter>
+      <Filter>02.GameObjects\11.InteractObj\03.WallDeco</Filter>
     </ClCompile>
     <ClCompile Include="..\Private\TreasureBox.cpp">
-      <Filter>02.GameObjects\10.InteractObj\04.TreasureBox</Filter>
+      <Filter>02.GameObjects\11.InteractObj\04.TreasureBox</Filter>
     </ClCompile>
     <ClCompile Include="..\Private\Ladder.cpp">
-      <Filter>02.GameObjects\10.InteractObj\05.Ladder</Filter>
+      <Filter>02.GameObjects\11.InteractObj\05.Ladder</Filter>
     </ClCompile>
     <ClCompile Include="..\Private\ColliderObject.cpp">
       <Filter>02.GameObjects\10.ColliderObject</Filter>
@@ -2214,10 +2292,10 @@
       <Filter>05.Fsm\Monster\SimonManus\P1\Attck\Single\Charge_SwingDown</Filter>
     </ClCompile>
     <ClCompile Include="..\Private\LastDoor.cpp">
-      <Filter>02.GameObjects\10.InteractObj\06.LastDoor</Filter>
+      <Filter>02.GameObjects\11.InteractObj\06.LastDoor</Filter>
     </ClCompile>
     <ClCompile Include="..\Private\SteppingStone.cpp">
-      <Filter>02.GameObjects\10.InteractObj\07.SteppingStone</Filter>
+      <Filter>02.GameObjects\11.InteractObj\07.SteppingStone</Filter>
     </ClCompile>
     <ClCompile Include="..\Private\ColliderObject.cpp">
       <Filter>02.GameObjects\10.ColliderObject</Filter>
@@ -2301,7 +2379,7 @@
       <Filter>05.Fsm\Player\Common\ItemGet</Filter>
     </ClCompile>
     <ClCompile Include="..\Private\Deco_Collider.cpp">
-      <Filter>02.GameObjects\10.InteractObj\03.WallDeco\Deco_Collider_Obj</Filter>
+      <Filter>02.GameObjects\11.InteractObj\03.WallDeco\Deco_Collider_Obj</Filter>
     </ClCompile>
     <ClCompile Include="..\Private\State_Player_Stargazer.cpp">
       <Filter>05.Fsm\Player\Common\Stargazer</Filter>
@@ -2387,9 +2465,6 @@
     <ClCompile Include="..\Private\UIPage_Test.cpp">
       <Filter>03.GameInterface_Controller\00.UIManager\00.UIPage\11.UIPage_Test %280%25%29</Filter>
     </ClCompile>
-    <ClCompile Include="..\Private\UIPage_Effect.cpp">
-      <Filter>03.GameInterface_Controller\00.UIManager\00.UIPage\12.UIPage_Effect %2880%25%29</Filter>
-    </ClCompile>
     <ClCompile Include="..\Private\AObj_GoldBall.cpp">
       <Filter>02.GameObjects\12.AttackObject\SimonManus\GoldBall</Filter>
     </ClCompile>
@@ -2425,7 +2500,7 @@
       <Filter>02.GameObjects\12.AttackObject\SimonManus\LightningBall</Filter>
     </ClCompile>
     <ClCompile Include="..\Private\Sophia.cpp">
-      <Filter>02.GameObjects\10.InteractObj\08.Sophia</Filter>
+      <Filter>02.GameObjects\11.InteractObj\08.Sophia</Filter>
     </ClCompile>
     <ClCompile Include="..\Private\AObj_BlackBall.cpp">
       <Filter>02.GameObjects\12.AttackObject\SimonManus\BlackBall</Filter>
@@ -2457,53 +2532,95 @@
     <ClCompile Include="..\Private\State_Player_Arm_Loop.cpp">
       <Filter>05.Fsm\Player\Arm\Loop</Filter>
     </ClCompile>
-    <ClCompile Include="..\Private\State_RaxasiaP1_Idle.cpp">
-      <Filter>05.Fsm\Monster\Raxasia\P1\Idle</Filter>
+    <ClCompile Include="..\Private\State_Player_Arm_Swing.cpp">
+      <Filter>05.Fsm\Player\Arm\Swing</Filter>
     </ClCompile>
-    <ClCompile Include="..\Private\State_RaxasiaP1_HitFatal.cpp">
-      <Filter>05.Fsm\Monster\Raxasia\P1\HitFatal</Filter>
+    <ClCompile Include="..\Private\State_Player_Arm_Thrust.cpp">
+      <Filter>05.Fsm\Player\Arm\Thrust</Filter>
     </ClCompile>
-    <ClCompile Include="..\Private\State_RaxasiaP1_Grogy.cpp">
-      <Filter>05.Fsm\Monster\Raxasia\P1\Grogy</Filter>
+    <ClCompile Include="..\Private\State_Player_Arm_Guard_Weak.cpp">
+      <Filter>05.Fsm\Player\Arm\Guard_Weak</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Private\State_Player_Arm_Guard_Hard.cpp">
+      <Filter>05.Fsm\Player\Arm\Guard_Hard</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Private\State_Player_Arm_Counter.cpp">
+      <Filter>05.Fsm\Player\Arm\Counter</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Private\State_Player_Arm_Guard_Heavy.cpp">
+      <Filter>05.Fsm\Player\Arm\Guard_Heavy</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Private\State_Player_Arm_Parry.cpp">
+      <Filter>05.Fsm\Player\Arm\Parry</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Private\State_Player_Arm_ParryBomb.cpp">
+      <Filter>05.Fsm\Player\Arm\ParryBomb</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Private\Weapon_PlayerArm.cpp">
+      <Filter>02.GameObjects\06.Weapon\00.PlayerWeapon\03.Arm</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Private\State_Player_ThrowItem.cpp">
+      <Filter>05.Fsm\Player\Common\Throw</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Private\State_Player_Die.cpp">
+      <Filter>05.Fsm\Player\Common\Die</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Private\UIPage_Effect.cpp">
+      <Filter>03.GameInterface_Controller\00.UIManager\00.UIPage\12.UIPage_Effect %2880%25%29</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Private\Raxasia.cpp">
+      <Filter>02.GameObjects\02.Pawn\01.Monster\Raxasia</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Private\UIPage_Shop.cpp">
+      <Filter>03.GameInterface_Controller\00.UIManager\00.UIPage\16.UIPage_Shop %2850%25%29</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Private\UIPage_Chest.cpp">
+      <Filter>03.GameInterface_Controller\00.UIManager\00.UIPage\17.UIPage_Chest</Filter>
     </ClCompile>
     <ClCompile Include="..\Private\State_RaxasiaP1_Die.cpp">
       <Filter>05.Fsm\Monster\Raxasia\P1\Die</Filter>
     </ClCompile>
-    <ClCompile Include="..\Private\State_RaxasiaP1_Run.cpp">
-      <Filter>05.Fsm\Monster\Raxasia\P1\Run</Filter>
-    </ClCompile>
-    <ClCompile Include="..\Private\State_RaxasiaP1_Walk.cpp">
-      <Filter>05.Fsm\Monster\Raxasia\P1\Walk</Filter>
-    </ClCompile>
-    <ClCompile Include="..\Private\State_RaxasiaP1_LinkedAttack.cpp">
-      <Filter>05.Fsm\Monster\Raxasia\P1\Attack\Route\LinkedAttack</Filter>
-    </ClCompile>
-    <ClCompile Include="..\Private\State_RaxasiaP1_GroundSlash.cpp">
-      <Filter>05.Fsm\Monster\Raxasia\P1\Attack\Route\GroundSlash</Filter>
-    </ClCompile>
     <ClCompile Include="..\Private\State_RaxasiaP1_DashUpper.cpp">
       <Filter>05.Fsm\Monster\Raxasia\P1\Attack\Route\DashUpper</Filter>
-    </ClCompile>
-    <ClCompile Include="..\Private\State_RaxasiaP1_RepetUpperSlash.cpp">
-      <Filter>05.Fsm\Monster\Raxasia\P1\Attack\Route\RepetUpperSlash</Filter>
-    </ClCompile>
-    <ClCompile Include="Raxasia.cpp">
-      <Filter>02.GameObjects\02.Pawn\01.Monster\Raxasia</Filter>
-    </ClCompile>
-    <ClCompile Include="..\Private\State_RaxasiaP1_KickSting.cpp">
-      <Filter>05.Fsm\Monster\Raxasia\P1\Attack\Route\KickSting</Filter>
-    </ClCompile>
-    <ClCompile Include="..\Private\State_RaxasiaP1_TripleSting.cpp">
-      <Filter>05.Fsm\Monster\Raxasia\P1\Attack\Route\TripleSting</Filter>
     </ClCompile>
     <ClCompile Include="..\Private\State_RaxasiaP1_Discharge.cpp">
       <Filter>05.Fsm\Monster\Raxasia\P1\Attack\RouteParts\Discharge</Filter>
     </ClCompile>
+    <ClCompile Include="..\Private\State_RaxasiaP1_Grogy.cpp">
+      <Filter>05.Fsm\Monster\Raxasia\P1\Grogy</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Private\State_RaxasiaP1_GroundSlash.cpp">
+      <Filter>05.Fsm\Monster\Raxasia\P1\Attack\Route\GroundSlash</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Private\State_RaxasiaP1_HitFatal.cpp">
+      <Filter>05.Fsm\Monster\Raxasia\P1\HitFatal</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Private\State_RaxasiaP1_Idle.cpp">
+      <Filter>05.Fsm\Monster\Raxasia\P1\Idle</Filter>
+    </ClCompile>
     <ClCompile Include="..\Private\State_RaxasiaP1_JumpAttack.cpp">
       <Filter>05.Fsm\Monster\Raxasia\P1\Attack\RouteParts\JumpAttack</Filter>
     </ClCompile>
+    <ClCompile Include="..\Private\State_RaxasiaP1_KickSting.cpp">
+      <Filter>05.Fsm\Monster\Raxasia\P1\Attack\Route\KickSting</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Private\State_RaxasiaP1_LinkedAttack.cpp">
+      <Filter>05.Fsm\Monster\Raxasia\P1\Attack\Route\LinkedAttack</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Private\State_RaxasiaP1_RepetUpperSlash.cpp">
+      <Filter>05.Fsm\Monster\Raxasia\P1\Attack\Route\RepetUpperSlash</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Private\State_RaxasiaP1_Run.cpp">
+      <Filter>05.Fsm\Monster\Raxasia\P1\Run</Filter>
+    </ClCompile>
     <ClCompile Include="..\Private\State_RaxasiaP1_SwingDown_Multiple.cpp">
       <Filter>05.Fsm\Monster\Raxasia\P1\Attack\RouteParts\SwingDown_Multiple</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Private\State_RaxasiaP1_TripleSting.cpp">
+      <Filter>05.Fsm\Monster\Raxasia\P1\Attack\Route\TripleSting</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Private\State_RaxasiaP1_Walk.cpp">
+      <Filter>05.Fsm\Monster\Raxasia\P1\Walk</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

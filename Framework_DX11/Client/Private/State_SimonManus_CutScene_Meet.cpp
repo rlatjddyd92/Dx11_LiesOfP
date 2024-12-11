@@ -22,13 +22,15 @@ HRESULT CState_SimonManus_CutScene_Meet::Initialize(_uint iStateNum, void* pArg)
 HRESULT CState_SimonManus_CutScene_Meet::Start_State(void* pArg)
 {
     // 모델이 달라서 여기서 해주기
-    m_iAnimation_Turn = m_pMonster->Get_Model()->Find_AnimationIndex("AS_MOB_Manus_Turn_Cine", 2.f);
-    m_iAnimation_Talk = m_pMonster->Get_Model()->Find_AnimationIndex("AS_MOB_Manus_Talk_Cine", 2.f);
-    m_iAnimation_Hand = m_pMonster->Get_Model()->Find_AnimationIndex("AS_MOB_Manus_Hand_Cine", 2.f);
+    m_iAnimation_Turn = m_pMonster->Get_Model()->Find_AnimationIndex("AS_MOB_Manus_Turn_Cine", 1.f);
+    m_iAnimation_Talk = m_pMonster->Get_Model()->Find_AnimationIndex("AS_MOB_Manus_Talk_Cine", 1.5f);
+    m_iAnimation_Hand = m_pMonster->Get_Model()->Find_AnimationIndex("AS_MOB_Manus_Hand_Cine", 1.f);
     m_iAnimation_End = m_pMonster->Get_Model()->Find_AnimationIndex("AS_MOB_Manus_End_Cine", 2.f);
 
 
     m_pMonster->Change_Animation(m_iAnimation_Turn, false, 0.f, 0);
+
+    //y축  4도 정도 회전(Rotation)
 
     return S_OK;
 }

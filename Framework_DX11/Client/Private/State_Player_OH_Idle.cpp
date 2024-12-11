@@ -84,7 +84,13 @@ void CState_Player_OH_Idle::Update(_float fTimeDelta)
         }
         else if (SPECIAL_ITEM::SP_GRINDER == eNow)
         {
-            m_pPlayer->Change_State(CPlayer::GRINDER);
+            m_pPlayer->Change_State(CPlayer::GRINDER); 
+        }
+        else if (SPECIAL_ITEM::SP_GRANADE == eNow 
+            || SPECIAL_ITEM::SP_THERMITE == eNow
+            || SPECIAL_ITEM::SP_THROW_BATTERY == eNow)
+        {
+            m_pPlayer->Change_State(CPlayer::THROW_ITEM);
         }
     }
     else if (KEY_TAP(KEY::TAPKEY))

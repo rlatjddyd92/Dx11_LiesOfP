@@ -44,6 +44,8 @@ public:
 		PAGE_TALKING,
 		PAGE_POPUP,
 		PAGE_INFORM,
+		PAGE_SHOP,
+		PAGE_CHEST,
 		PAGE_END
 	};
 
@@ -137,6 +139,14 @@ public:
 
 		_Vec4 vTexture_Range = { -1.f,-1.f, -1.f, -1.f };
 		_Vec2 vTexture_Angle = { 200.f,200.f };
+
+		// 다각형 관련 변수 
+		_bool bIs_TwoDPolygon = false;
+		_float fRatio_TwoDPolygon[8] = { 1.f, };
+
+
+
+
 	}UPART;
 
 

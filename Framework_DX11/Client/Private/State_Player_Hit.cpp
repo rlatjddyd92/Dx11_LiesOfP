@@ -1,5 +1,6 @@
 #include "stdafx.h"
 #include "State_Player_Hit.h"
+#include "State_Player_Die.h"
 #include "GameInstance.h"
 #include "Model.h"
 #include "Player.h"
@@ -72,8 +73,24 @@ void CState_Player_Hit::Update(_float fTimeDelta)
     {
         if (End_Check())
         {
-            _int iType = m_eDownType / 2;
-            m_pPlayer->Change_State(CPlayer::GETUP, &iType);
+            if (m_pPlayer->Get_Player_Stat().vGauge_Hp.x <= 0.f)
+            {
+                _uint iCurAnim = m_pPlayer->Get_CurrentAnimIndex();
+                CState_Player_Die::DIE_DESC Desc{};
+                Desc.isFront = true;
+
+                if (m_iAnimation_Down[DOWN_DRAG_B] == iCurAnim
+                    || m_iAnimation_Down[DOWN_STAMP_B] == iCurAnim)
+                {
+                    Desc.isFront = false;
+                }
+                m_pPlayer->Change_State(CPlayer::DIE, &Desc);
+            }
+            else
+            {
+                _int iType = m_eDownType / 2;
+                m_pPlayer->Change_State(CPlayer::GETUP, &iType);
+            }
         }
     }
     else

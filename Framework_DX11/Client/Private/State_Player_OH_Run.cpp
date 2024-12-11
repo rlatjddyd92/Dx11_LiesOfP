@@ -96,6 +96,14 @@ void CState_Player_OH_Run::Update(_float fTimeDelta)
             }
         }
     }
+    else if (KEY_TAP(KEY::TAPKEY))
+    {
+        m_pPlayer->Change_State(CPlayer::CHANGEWEP);
+    }
+    else if (KEY_HOLD(KEY::CTRL))
+    {
+        m_pPlayer->Change_State(CPlayer::ARM_START);
+    }
 
     if (KEY_TAP(KEY::SPACE))
         m_isInputSpace = true;

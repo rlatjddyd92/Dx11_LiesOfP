@@ -36,6 +36,8 @@ private:
 public:
 	ANIMMODEL_DESC Get_NonAniModelDesc() { return m_tDesc; }
 	void Set_NonAniModelDesc(ANIMMODEL_DESC* Desc) { memcpy(&m_tDesc, Desc, sizeof(ANIMMODEL_DESC)); }
+	void Set_SubRootBone(_int iBoneIndex) { m_iSubRootBone = iBoneIndex; }
+	void ChangeAnim(_int iAnimIndex);
 
 public:
 	virtual HRESULT Initialize_Prototype() override;
@@ -58,6 +60,10 @@ public:
 	_bool		m_bRender = { false };
 
 	_bool		m_bRemoteTuning = true;
+
+	_bool		m_bSubRootMove = false;
+	_int		m_iSubRootBone{};
+	_vector		m_vSubRootMoveStack{};
 
 private:
 	HRESULT Ready_Components(ANIMMODEL_DESC* pNonAnimDesc);

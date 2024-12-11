@@ -26,7 +26,7 @@ public:
 
 	enum PLAYER_STATE
 	{
-		HIT, PARRY, HEAL, CHANGEWEP, GRINDER, GETUP,
+		HIT, PARRY, HEAL, CHANGEWEP, GRINDER, GETUP, THROW_ITEM, DIE,
 
 		OH_IDLE, OH_WALK, OH_RUN, OH_SPRINT, OH_GUARD, OH_GUARDHIT, OH_JUMP, OH_DASH,
 
@@ -39,7 +39,7 @@ public:
 		SCISSOR_LATTACK0, SCISSOR_LATTACK1, SCISSOR_RATTACK0, SCISSOR_RATTACK1, SCISSOR_CHARGE0, SCISSOR_CHARGE1, SCISSOR_FATAL,
 		SCISSOR_FABAL0, SCISSOR_FABAL1, SCISSOR_FABAL2, SCISSOR_BUFF,
 
-		ARM_START, ARM_LOOP, ARM_END, ARM_HIT, ARM_HIT_HARD, ARM_COUNTER,
+		ARM_START, ARM_LOOP, ARM_END, ARM_GURAD_WEAK, ARM_GURAD_HARD, ARM_GURAD_HEAVY, ARM_COUNTER, ARM_SWING, ARM_THRUST, ARM_PARRY, ARM_BOMB,
 
 		LADDER = 100, LIFT, CHEST, ITEMGET, STARGAZER, TELEPORT,
 
@@ -191,7 +191,7 @@ public:
 
 	void					Reset_Root() { m_vCurRootMove = m_vRootMoveStack = _vector{0,0,0,0}; }
 
-	CPawn*					Get_TargetMonster() { return m_pTargetMonster; }
+	class CMonster*			Get_TargetMonster() { return m_pTargetMonster; }
 
 	void					Set_DissloveRatio(_float fRatio) { m_fDissloveRatio = fRatio; }
 
@@ -200,7 +200,7 @@ public:
 	// 외부에서는 레퍼런스로 접근 
 	// 수치 조정은 반드시 플레이어에서만 진행 
 #pragma region PLAYER_STAT
-	const STAT_INFO&		Get_Player_Stat() const { return *m_tPlayer_Stat; }
+	STAT_INFO&		Get_Player_Stat() { return *m_tPlayer_Stat; }
 	// 24-12-05 김성용
 	// UI 매니저 수정용 함수
 	STAT_INFO*				Get_Player_Stat_Adjust() { return m_tPlayer_Stat_Adjust; }
@@ -243,13 +243,16 @@ public:
 	_bool			Active_CurrentWeaponCollider(_float fDamageRatio = 1.f, _uint iHandIndex = 1);
 	void			DeActive_CurretnWeaponCollider(_uint iHandIndex = 1);
 
+	_bool			Active_Arm();
+	void			DeActive_Arm();
+
 	void			Seperate_Scissor();
 	void			Combine_Scissor();
 
 	void			Change_CameraMode(CPlayerCamera::CAMERA_MODE eMode);
 
 	void			LockOnOff();
-	CPawn*			Find_TargetMonster();
+	CMonster*		Find_TargetMonster();
 
 	void			Play_CurrentWeaponSound(const _uint iType, const TCHAR* pSoundKey, _uint iHandIndex = 1);
 
@@ -262,8 +265,9 @@ public:
 	_bool			Check_Region_Fable02();
 	void			Decrease_Region(_uint iRegionCount = 1);
 	void			Recovery_Region(_float fAmount = 10.f);
-
 	void			Recovery_HP(_float fAmount);
+
+	class CStargazer* Find_Stargazer();
 
 	/* Effect */
 private:
@@ -290,10 +294,13 @@ private:
 	_float				m_fRecoveryStaminaTime = { 0.f };
 	_float				m_fDissloveRatio = {};
 
-	CPawn*				m_pTargetMonster = { nullptr };
+	CMonster*			m_pTargetMonster = { nullptr };
+	CMonster*			m_pIntersectMonster = { nullptr };
 
 	class CWeapon*		m_pWeapon[WEP_END] = { nullptr, };
 	WEAPON_TYPE			m_eWeaponType = { WEP_RAPIER };
+
+	class CWeapon*		m_pWeapon_Arm = { nullptr };
 
 private:
 	_vector		m_vRootMoveStack = {};

@@ -18,12 +18,13 @@ namespace Engine
 		XMFLOAT4	vDirection;
 		XMFLOAT4	vPosition;
 		float		fRange;
-		//float		fOuterAngle;
-		//float		fInnerAngle;
 
 		XMFLOAT4	vDiffuse;
 		XMFLOAT4	vAmbient;
 		XMFLOAT4	vSpecular;
+
+		float		fCutOff;
+		float		fOuterCutOff;
 	}LIGHT_DESC;
 
 	typedef struct
@@ -322,17 +323,22 @@ namespace Engine
 		_bool bZoomIn = { false };
 		_bool bZoomOut = { false };
 		_bool bLerpMove = { false };
+		_bool bShake = { false };
 
 		_Matrix mCameraWorlMatrix;
 
 		_Vec3 vPitchTawRoll = {};
-		_float fTurn_Speed = {0.f};
+		_float fTurn_Speed = { 0.f };
 
 		_float fZoomDuration = { 0.f };
-		_float fFovy = { XMConvertToRadians(60.f)};
+		_float fFovy = { XMConvertToRadians(60.f) };
 
 		_float fMoveSpeed = { 0.f };
 		_Vec3 vTargetPos = {};
+
+		_float fShakePower = { 0.f };
+		_float fShakeDuration= { 0.f };
+
 	}CUTSCENE_CAMERA_DESC;
 
 	typedef struct
@@ -340,8 +346,8 @@ namespace Engine
 		_bool bStopBGM = { false };
 		_bool bChangeBGM = { false };
 
-	}CUTSCENE_SOUND_DESC;
-
+	}CUTSCENE_SOUND_DESC;	
+	
 	typedef struct
 	{
 		_float					fTrackPosition = { 0.f };

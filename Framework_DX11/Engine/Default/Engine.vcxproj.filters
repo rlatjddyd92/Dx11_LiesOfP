@@ -232,6 +232,9 @@
     <Filter Include="01.Utility\14.WorldOctree\WorldOctree_Manager">
       <UniqueIdentifier>{6263c43f-efb2-42e8-a988-b3eaa5e7d0de}</UniqueIdentifier>
     </Filter>
+    <Filter Include="01.Utility\03.Components\VIBuffer\2DPolygon">
+      <UniqueIdentifier>{153c9b9a-b045-4323-bace-aa9a7b697195}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\Private\Base.cpp">
@@ -444,6 +447,9 @@
     </ClCompile>
     <ClCompile Include="..\Private\WorldOctree_Manager.cpp">
       <Filter>01.Utility\14.WorldOctree\WorldOctree_Manager</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Private\VIBuffer_2DPolygon.cpp">
+      <Filter>01.Utility\03.Components\VIBuffer\2DPolygon</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -678,6 +684,9 @@
     </ClInclude>
     <ClInclude Include="..\Public\WorldOctree_Manager.h">
       <Filter>01.Utility\14.WorldOctree\WorldOctree_Manager</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Public\VIBuffer_2DPolygon.h">
+      <Filter>01.Utility\03.Components\VIBuffer\2DPolygon</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

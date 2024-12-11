@@ -6,6 +6,7 @@
 #include "VIBuffer_Terrain.h"
 #include "VIBuffer_Rect.h"
 #include "VIBuffer_Cube.h"
+#include "VIBuffer_2DPolygon.h"
 
 #include "Trail_OnePoint_Instance.h"
 #include "Trail_TwoPoint_Instance.h"

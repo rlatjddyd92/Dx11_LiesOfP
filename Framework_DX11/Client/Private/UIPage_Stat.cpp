@@ -132,6 +132,8 @@ void CUIPage_Stat::Action_Point(_float fTimeDelta)
 	const CPlayer::PLAYER_STAT_INFO pOrigin = GET_GAMEINTERFACE->Get_Player()->Get_Player_Stat();
 	CPlayer::PLAYER_STAT_INFO* pAdjust = GET_GAMEINTERFACE->Get_Player()->Get_Player_Stat_Adjust();
 
+	m_iUsing_Point_Now = 0;
+
 	for (_int i = 0; i < 5; ++i)
 		m_iUsing_Point_Now += m_iLevelUp_Buffer_Point[i];
 
@@ -319,6 +321,9 @@ void CUIPage_Stat::Update_SpecData(_float fTimeDelta)
 	m_iLevelUp_Buffer_Stat[7] = m_iLevelUp_Buffer_Point[2] * 10.f;
 	m_iLevelUp_Buffer_Stat[8] = m_iLevelUp_Buffer_Point[3] * 10.f;
 
+	
+
+
 	for (_int i = 0; i < 9; ++i)
 	{
 		pOrigin_Stat[i] *= 100.f;
@@ -361,10 +366,34 @@ void CUIPage_Stat::Update_SpecData(_float fTimeDelta)
 
 		list<_int>::iterator iter = m_vec_Group_Ctrl[_int(PART_GROUP::GROUP_SPEC_0) + i]->PartIndexlist.begin();
 
-		if (m_iLevelUp_Buffer_Stat[i] > 0.f)
-			m_vecPart[*iter]->fTextureColor = { 0.5f,1.f,0.9f,0.7f };
-		else 
-			m_vecPart[*iter]->fTextureColor = { 0.2f,0.2f,0.2f,0.2f };
+		m_vecPart[*iter]->fTextureColor = { 0.2f,0.2f,0.2f,0.2f };
+
+
+		if (m_iFocus_Point == 0)
+			if (i == 0)
+				m_vecPart[*iter]->fTextureColor = { 0.5f,1.f,0.9f,0.7f };
+
+		if (m_iFocus_Point == 1)
+			if ((i == 1) || (i == 5))
+				m_vecPart[*iter]->fTextureColor = { 0.5f,1.f,0.9f,0.7f };
+
+		if (m_iFocus_Point == 2)
+			if ((i == 2) || (i == 7))
+				m_vecPart[*iter]->fTextureColor = { 0.5f,1.f,0.9f,0.7f };
+			
+		if (m_iFocus_Point == 3)
+		{
+			if ((i == 3) || (i == 6))
+				m_vecPart[*iter]->fTextureColor = { 0.5f,1.f,0.9f,0.7f };
+			if (i == 8)
+				m_vecPart[*iter]->fTextureColor = { 0.5f,1.f,0.9f,0.7f };
+		}
+			
+		if (m_iFocus_Point == 4)
+			if (i == 4)
+				m_vecPart[*iter]->fTextureColor = { 0.5f,1.f,0.9f,0.7f };
+
+
 
 		++iter;
 		m_vecPart[*iter]->strText = to_wstring(_int(pOrigin_Stat[i]));

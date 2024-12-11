@@ -29,7 +29,7 @@ HRESULT CController_Cutscene::Initialize(ID3D11Device* pDevice, ID3D11DeviceCont
     if (m_CutSceneList[0] == nullptr)
     {
         CGameObject* pCutScene = nullptr;
-        for (int i = 0; i < 8; ++i)
+        for (int i = 0; i < m_iCutSceneCount; ++i)
         {
             pCutScene = m_pGameInstance->Get_CloneObject_ToLayer(LEVEL_TOOL, TEXT("Layer_CutScene"), TEXT("Prototype_GameObject_CutScene"));
             if (nullptr != pCutScene)
@@ -72,7 +72,7 @@ void CController_Cutscene::Menu()
         ImGui::PushItemWidth(180);  //사이즈 고정
         if (ImGui::BeginListBox("Name"))
         {
-            for (int n = 0; n < 8; n++)
+            for (int n = 0; n < m_iCutSceneCount; n++)
             {
                 const bool is_selected = (item_selected_idx == n);
                 if (ImGui::Selectable(m_CutSceneNameList[n], is_selected))
@@ -323,6 +323,13 @@ void CController_Cutscene::Camera_Memu()
     {
         ImGui::DragFloat("Duration", &pCutScene_Desc->Camera_Desc.fZoomDuration, 0.1f, 0.f, 10.f);
     }
+    //셰이킹
+    ImGui::Checkbox("Shake", &pCutScene_Desc->Camera_Desc.bShake);
+    if (pCutScene_Desc->Camera_Desc.bShake)
+    {
+        ImGui::DragFloat("ShakeDuration", &pCutScene_Desc->Camera_Desc.fShakeDuration, 0.1f, 0.f);
+        ImGui::DragFloat("ShakePower", &pCutScene_Desc->Camera_Desc.fShakePower, 0.1f, 0.f);
+    }
 }
 
 void CController_Cutscene::UI_Memu()
@@ -420,6 +427,17 @@ void CController_Cutscene::Show_CurCamState()
     
     _Vec3 vCurPos = m_pCamera->Get_Transform()->Get_State(CTransform::STATE_POSITION);
     ImGui::Text("Pos: %f, %f, %f", vCurPos.x, vCurPos.y, vCurPos.z);
+
+    static _bool bTurnCamera = { false };
+    //회전 적용하기
+    ImGui::Checkbox("Turn Camera", &bTurnCamera);
+
+    if (bTurnCamera)
+    {
+        static _float vNewTurn[3] = {};
+        ImGui::DragFloat3("Camera Test Turn: ", vNewTurn);
+        m_pCamera->Get_Transform()->Turn_RollPitchYaw_Lerp(vNewTurn[0], vNewTurn[1], vNewTurn[2], 1.f, 1.f );
+    }
 
     ImGui::End();
 }

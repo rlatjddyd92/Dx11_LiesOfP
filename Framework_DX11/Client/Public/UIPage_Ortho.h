@@ -42,7 +42,7 @@ public:
 		_float fRatio = 0.f;
 		_wstring strText = {};
 		_int iTexture = -1;
-
+		_bool bIsWeakness = false;
 
 
 	}OR_RENDER;

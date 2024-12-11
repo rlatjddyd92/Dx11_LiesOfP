@@ -44,7 +44,8 @@ void CWeapon::Priority_Update(_float fTimeDelta)
 
 void CWeapon::Update(_float fTimeDelta)
 {
-	m_pModelCom->Update_Bone();
+	if (nullptr != m_pModelCom)
+		m_pModelCom->Update_Bone();	
 
 	_matrix		SocketMatrix = *m_pSocketMatrix;
 

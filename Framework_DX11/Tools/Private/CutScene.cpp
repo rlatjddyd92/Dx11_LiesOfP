@@ -74,17 +74,26 @@ void CCutScene::Create_KeyFrame()
 void CCutScene::Load_KeyFrame(CUTSCENE_KEYFRAME_DESC pDesc)
 {
 	CUTSCENE_KEYFRAME_DESC* pNewDesc = new CUTSCENE_KEYFRAME_DESC;
-	//pNewDesc->fTrackPosition = pDesc.fTrackPosition;
-	//pNewDesc->bActived = pDesc.bActived;
-	//pNewDesc->UI_DESC = pDesc.UI_DESC;
-	//pNewDesc->Camera_Desc = pDesc.Camera_Desc;
-	//pNewDesc->Obj_Desc = pDesc.Obj_Desc;
-	//pNewDesc->Sound_Desc = pDesc.Sound_Desc;
-	//pNewDesc->ShaderDesc.bUseDof = pDesc.ShaderDesc.bUseDof;
-	//pNewDesc->ShaderDesc.fDof = pDesc.ShaderDesc.fDof;
-	//pNewDesc->ShaderDesc.bUseDof_Inverse = pDesc.ShaderDesc.bUseDof_Inverse;
-	//pNewDesc->ShaderDesc.bDof_Increase = pDesc.ShaderDesc.bDof_Increase;
-	//pNewDesc->ShaderDesc.bDof_Decrease = pDesc.ShaderDesc.bDof_Decrease;
+	/*pNewDesc->fTrackPosition = pDesc.fTrackPosition;
+	pNewDesc->bActived = pDesc.bActived;
+	pNewDesc->ShaderDesc = pDesc.ShaderDesc;
+	pNewDesc->UI_DESC = pDesc.UI_DESC;
+	pNewDesc->Obj_Desc = pDesc.Obj_Desc;
+	pNewDesc->Sound_Desc = pDesc.Sound_Desc;
+
+	pNewDesc->Camera_Desc.bTeleport = pDesc.Camera_Desc.bTeleport;
+	pNewDesc->Camera_Desc.bTurn = pDesc.Camera_Desc.bTurn;
+	pNewDesc->Camera_Desc.bZoomIn = pDesc.Camera_Desc.bZoomIn;
+	pNewDesc->Camera_Desc.bZoomOut = pDesc.Camera_Desc.bZoomOut;
+	pNewDesc->Camera_Desc.bLerpMove = pDesc.Camera_Desc.bLerpMove;
+	pNewDesc->Camera_Desc.mCameraWorlMatrix = pDesc.Camera_Desc.mCameraWorlMatrix;
+	pNewDesc->Camera_Desc.vPitchTawRoll = pDesc.Camera_Desc.vPitchTawRoll;
+	pNewDesc->Camera_Desc.fTurn_Speed = pDesc.Camera_Desc.fTurn_Speed;
+	pNewDesc->Camera_Desc.fZoomDuration = pDesc.Camera_Desc.fZoomDuration;
+	pNewDesc->Camera_Desc.fFovy = pDesc.Camera_Desc.fFovy;
+	pNewDesc->Camera_Desc.fMoveSpeed = pDesc.Camera_Desc.fMoveSpeed;
+	pNewDesc->Camera_Desc.vTargetPos = pDesc.Camera_Desc.vTargetPos;*/
+
 	*pNewDesc = pDesc;
 	pNewDesc->bActived = false;
 
@@ -172,6 +181,10 @@ void CCutScene::Active_Camera(CUTSCENE_KEYFRAME_DESC* pCutSceneDesc)
 	if (pCutSceneDesc->Camera_Desc.bLerpMove)
 	{
 		m_pCamera->Start_MoveLerp(pCutSceneDesc->Camera_Desc.vTargetPos, pCutSceneDesc->Camera_Desc.fMoveSpeed);
+	}
+	if (pCutSceneDesc->Camera_Desc.bShake)
+	{
+		m_pCamera->Start_PosShake(pCutSceneDesc->Camera_Desc.fShakePower, pCutSceneDesc->Camera_Desc.fShakeDuration);
 	}
 }
 
