@@ -7,6 +7,7 @@
 #include "SteppingStone.h"
 #include "Stargazer.h"
 #include "Effect_Manager.h"
+#include "GameInterface_Controller.h"
 
 CState_Player_Teleport::CState_Player_Teleport(CFsm* pFsm, CPlayer* pPlayer)
     :CState{ pFsm }
@@ -106,6 +107,12 @@ void CState_Player_Teleport::Update_SteppingStone(_float fTimeDelta)
 
     if (iCurAnim == m_iAnimation_TeleportStart)
     {
+        if (!m_isFadeOut && iFrame >= 130)
+        {
+            GET_GAMEINTERFACE->Fade_Out(TEXT(""), TEXT(""));
+            m_isFadeOut = true;
+        }
+
         if (iFrame >= 150)
         {
             m_fDissloveRatio = 1.f;
@@ -116,6 +123,9 @@ void CState_Player_Teleport::Update_SteppingStone(_float fTimeDelta)
         {
             m_isEnd_Teleport = false;
             m_pPlayer->Change_Animation(m_iAnimation_TeleportEnd, false, 0.3f);
+
+            GET_GAMEINTERFACE->Fade_In(0.7f);
+            m_isFadeOut = true;
 
             CEffect_Manager::Get_Instance()->Add_Effect_ToLayer(LEVEL_GAMEPLAY, TEXT("Player_Teleport_Arrive"), (_Vec3)m_pPlayer->Get_Transform()->Get_State(CTransform::STATE_POSITION));
             m_pPlayer->Play_Sound(CPawn::PAWN_SOUND_EFFECT2, TEXT("SE_PC_MT_Teleport_End.wav"));
