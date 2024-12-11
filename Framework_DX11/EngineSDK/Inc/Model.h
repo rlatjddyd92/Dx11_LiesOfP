@@ -54,6 +54,8 @@ public:
 	_bool					Get_isChangeAni() { return m_isChangeAni; }
 	_bool					Get_isChangeAni_Boundary() { return m_isChangeAni_Boundary; }
 
+	void					Set_SpeedRatio(_uint iAnimIndex, _double SpeedRatio);
+
 	HRESULT					Update_Boundary();
 
 	void					Set_PreTranformMatrix(_matrix PreTranfromMatrix) { XMStoreFloat4x4(&m_PreTransformMatrix, PreTranfromMatrix); }

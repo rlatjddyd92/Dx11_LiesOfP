@@ -65,7 +65,6 @@ void CState_Player_SophiaWalk::Update(_float fTimeDelta)
     _Vec3 vMove = m_pPlayer->Get_Model()->Get_BoneCombindTransformationMatrix_Ptr(5)->Translation();
     _float4x4 TransMat;
     XMStoreFloat4x4(&TransMat, m_pPlayer->Get_Model()->Get_Bones()[5]->Get_TransformationMatrix());
-    //TransMat._43 = TransMat._42 = TransMat._41 = 0.f;
     TransMat._41 = 0.f;
 
     m_pPlayer->Get_Model()->Get_Bones()[5]->Set_TransformationMatrix(TransMat);;

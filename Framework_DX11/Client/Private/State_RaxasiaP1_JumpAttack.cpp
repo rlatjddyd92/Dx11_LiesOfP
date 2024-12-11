@@ -1,0 +1,171 @@
+#include "stdafx.h"
+#include "State_RaxasiaP1_JumpAttack.h"
+#include "GameInstance.h"
+#include "Model.h"
+#include "Raxasia.h"
+
+CState_RaxasiaP1_JumpAttack::CState_RaxasiaP1_JumpAttack(CFsm* pFsm, CMonster* pMonster)
+    :CState{ pFsm }
+    , m_pMonster{ pMonster }
+{
+}
+
+HRESULT CState_RaxasiaP1_JumpAttack::Initialize(_uint iStateNum, void* pArg)
+{
+    m_iStateNum = iStateNum;
+    //CSimonManus::FSMSTATE_DESC* pDesc = static_cast<CSimonManus::FSMSTATE_DESC*>(pArg);
+
+    return S_OK;
+}
+
+HRESULT CState_RaxasiaP1_JumpAttack::Start_State(void* pArg)
+{
+    m_iRouteTrack = 0;
+    _int iCnt = rand() % 2;
+    if (iCnt == 0)
+    {
+        m_iCurAnimIndex = AN_JUMPATTACK_L;
+        m_pMonster->Change_Animation(AN_JUMPATTACK_L, false, 0.1f, 0);
+    }
+    else
+    {
+        m_iCurAnimIndex = AN_JUMPATTACK_R;
+        m_pMonster->Change_Animation(AN_JUMPATTACK_R, false, 0.1f, 0);
+    }
+
+    m_bSwingSound = false;
+
+    m_bSwing = false;
+    return S_OK;
+}
+
+void CState_RaxasiaP1_JumpAttack::Update(_float fTimeDelta)
+{
+    _double CurTrackPos = m_pMonster->Get_CurrentTrackPos();
+
+    switch (m_iRouteTrack)
+    {
+    case 0:
+
+        _float fTime = 0;
+        if (m_iCurAnimIndex == AN_JUMPATTACK_L)
+        {
+            fTime = 170.f;
+            if (CurTrackPos >= 50.f && CurTrackPos <= 60.f)
+            {
+                m_pMonster->Get_Transform()->LookAt_Lerp_NoHeight(m_pMonster->Get_TargetDir(), 1.f, fTimeDelta);
+            }
+        }
+        else
+        {
+            fTime = 140.f;
+            if (CurTrackPos >= 55.f && CurTrackPos <= 65.f)
+            {
+                m_pMonster->Get_Transform()->LookAt_Lerp_NoHeight(m_pMonster->Get_TargetDir(), 1.f, fTimeDelta);
+            }
+        }
+
+        if (CurTrackPos >= fTime)
+        {
+            ++m_iRouteTrack;
+            m_bSwing = false;
+            m_pMonster->Change_Animation(AN_SLASH, false, 0.1f, 0);
+        }
+
+        break;
+
+    case 1:
+        if (End_Check())
+        {
+            m_iRouteTrack = 0;
+            m_pMonster->Change_State(CRaxasia::IDLE);
+            return;
+        }
+
+        break;
+
+    default:
+        break;
+    }
+
+    Collider_Check(CurTrackPos);
+    Effect_Check(CurTrackPos);
+    Control_Sound(CurTrackPos);
+
+}
+
+void CState_RaxasiaP1_JumpAttack::End_State()
+{
+}
+
+_bool CState_RaxasiaP1_JumpAttack::End_Check()
+{
+    return false;
+}
+
+void CState_RaxasiaP1_JumpAttack::Collider_Check(_double CurTrackPos)
+{
+    if (m_iRouteTrack == 0)
+    {
+        if (m_iCurAnimIndex == AN_JUMPATTACK_L)
+        {
+            if ((CurTrackPos >= 60.f && CurTrackPos <= 75.f))
+            {
+                m_pMonster->Active_CurrentWeaponCollider(1.2f, 0, HIT_TYPE::HIT_METAL, ATTACK_STRENGTH::ATK_WEAK);
+            }
+            else
+            {
+                m_pMonster->DeActive_CurretnWeaponCollider();
+            }
+        }
+        else
+        {
+            if ((CurTrackPos >= 65.f && CurTrackPos <= 80.f))
+            {
+                m_pMonster->Active_CurrentWeaponCollider(1.2f, 0, HIT_TYPE::HIT_METAL, ATTACK_STRENGTH::ATK_WEAK);
+            }
+            else
+            {
+                m_pMonster->DeActive_CurretnWeaponCollider();
+            }
+        }
+    }
+    else if (m_iRouteTrack == 1)
+    {
+        if ((CurTrackPos >= 45.f && CurTrackPos <= 60.f))
+        {
+            m_pMonster->Active_CurrentWeaponCollider(1.3f, 0, HIT_TYPE::HIT_METAL, ATTACK_STRENGTH::ATK_NORMAL);
+        }
+        else
+        {
+            m_pMonster->DeActive_CurretnWeaponCollider();
+        }
+    }
+}
+
+void CState_RaxasiaP1_JumpAttack::Effect_Check(_double CurTrackPos)
+{
+}
+
+void CState_RaxasiaP1_JumpAttack::Control_Sound(_double CurTrackPos)
+{
+
+}
+
+CState_RaxasiaP1_JumpAttack* CState_RaxasiaP1_JumpAttack::Create(CFsm* pFsm, CMonster* pMonster, _uint iStateNum, void* pArg)
+{
+    CState_RaxasiaP1_JumpAttack* pInstance = new CState_RaxasiaP1_JumpAttack(pFsm, pMonster);
+
+    if (FAILED(pInstance->Initialize(iStateNum, pArg)))
+    {
+        MSG_BOX(TEXT("Failed to Created : CState_RaxasiaP1_JumpAttack"));
+        Safe_Release(pInstance);
+    }
+
+    return pInstance;
+}
+
+void CState_RaxasiaP1_JumpAttack::Free()
+{
+    __super::Free();
+}
