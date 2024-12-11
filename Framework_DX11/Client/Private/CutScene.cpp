@@ -30,7 +30,7 @@ HRESULT CCutScene::Initialize(void* pArg)
 
 	m_pObjects[PLAYER] = static_cast<CPawn*>(m_pGameInstance->Find_Player(LEVEL_GAMEPLAY));
 //	m_pObjects[BOSS1]  = static_cast<CPawn*>(m_pGameInstance->Find_Object(LEVEL_GAMEPLAY, TEXT("Layer_Raxasia"), 0));
-	m_pObjects[BOSS2]  = static_cast<CPawn*>(m_pGameInstance->Find_Object(LEVEL_GAMEPLAY, TEXT("Layer_SimonManus"), 0));
+	
 
 	return S_OK;
 }
@@ -228,6 +228,12 @@ void CCutScene::First_Setting()
 	{
 	case SOPHIA_DEAD:
 		pPlayer->Disappear_Weapon();
+		break;
+	case BOSS2_MEET:
+		if (FAILED(m_pGameInstance->Add_CloneObject_ToLayer(LEVEL_GAMEPLAY, TEXT("Layer_SimonManus"), TEXT("Prototype_GameObject_SimonManus"))))
+			return;
+		pPlayer->Get_RigidBody()->Set_GloblePose(_Vec3(16.606,0.104,16.498));
+		m_pObjects[BOSS2] = static_cast<CPawn*>(m_pGameInstance->Find_Object(LEVEL_GAMEPLAY, TEXT("Layer_SimonManus"), 0));
 		break;
 
 	}
