@@ -20,7 +20,7 @@ public:
 		class CWallDeco* pWallDeco = { nullptr };
 	}DECO_COLLIDER_DESC;
 
-protected:
+private:
 	CDeco_Collider(ID3D11Device* pDevice, ID3D11DeviceContext* pContext);
 	CDeco_Collider(const CDeco_Collider& Prototype);
 	virtual ~CDeco_Collider() = default;

@@ -14,7 +14,7 @@ BEGIN(Client)
 class CTowerDoor :
 	public CGameObject
 {
-protected:
+private:
 	CTowerDoor(ID3D11Device* pDevice, ID3D11DeviceContext* pContext);
 	CTowerDoor(const CTowerDoor& Prototype);
 	virtual ~CTowerDoor() = default;

@@ -5,6 +5,8 @@
 #include "Player.h"
 #include "Camera.h"
 
+#include "GameInterface_Controller.h"
+
 CState_Player_ThrowItem::CState_Player_ThrowItem(CFsm* pFsm, CPlayer* pPlayer)
     :CState{ pFsm }
     , m_pPlayer{ pPlayer }
@@ -36,10 +38,11 @@ HRESULT CState_Player_ThrowItem::Start_State(void* pArg)
 
     m_pPlayer->Set_MoveSpeed(m_fMoveSpeed);
 
-    m_pPlayer->Disappear_Weapon();
+    //m_pPlayer->Disappear_Weapon();
 
     m_isCreateItem = false;
     m_isPlaySound = false;
+    m_isThrowItem = false;
 
     return S_OK;
 }
@@ -50,11 +53,15 @@ void CState_Player_ThrowItem::Update(_float fTimeDelta)
 
     if (!m_isCreateItem && iFrame > 10)
     {
-        // 아이템 나타나기
+        SPECIAL_ITEM eNow = GET_GAMEINTERFACE->Get_Now_Select_Item();
+        m_pPlayer->Create_ThrowItem(eNow);
+
+        m_isCreateItem = true;
     }
-    else if (iFrame == 39 || iFrame == 40)
+    else if ((iFrame == 39 || iFrame == 40) && !m_isThrowItem)
     {
-        // 던지기
+        m_pPlayer->Throw_ITem();
+        m_isThrowItem = true;
     }
     else if (End_Check())
     {

@@ -1826,6 +1826,9 @@
     <ClInclude Include="..\Public\State_RaxasiaP1_Walk.h">
       <Filter>05.Fsm\Monster\Raxasia\P1\Walk</Filter>
     </ClInclude>
+    <ClInclude Include="..\Public\Item_Throw.h">
+      <Filter>02.GameObjects\15.Item</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Client.cpp">
@@ -2621,6 +2624,9 @@
     </ClCompile>
     <ClCompile Include="..\Private\State_RaxasiaP1_Walk.cpp">
       <Filter>05.Fsm\Monster\Raxasia\P1\Walk</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Private\Item_Throw.cpp">
+      <Filter>02.GameObjects\15.Item</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

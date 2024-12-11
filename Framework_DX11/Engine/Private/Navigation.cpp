@@ -306,6 +306,45 @@ void CNavigation::Research_Cell(_Vec3 vNewPos, _uint* iIndex)
 		*iIndex = -1;
 }
 
+_float CNavigation::Get_CellPosY(CTransform* pTransform, _float fOffset)
+{
+	if (m_iCurrentCellIndex < 0 || m_iCurrentCellIndex >= m_Cells.size())
+		return 100.f;
+
+	_vector      vLocalPos = XMVector3TransformCoord(pTransform->Get_State(CTransform::STATE_POSITION), XMMatrixInverse(nullptr, XMLoadFloat4x4(&m_WorldMatrix)));
+
+	_vector vPointA = m_Cells[m_iCurrentCellIndex]->Get_Point(CCell::POINT_A);
+	_vector vPointB = m_Cells[m_iCurrentCellIndex]->Get_Point(CCell::POINT_B);
+	_vector vPointC = m_Cells[m_iCurrentCellIndex]->Get_Point(CCell::POINT_C);
+
+	XMFLOAT3 pA, pB, pC;
+	XMStoreFloat3(&pA, vPointA);
+	XMStoreFloat3(&pB, vPointB);
+	XMStoreFloat3(&pC, vPointC);
+
+	XMFLOAT3 v1 = { pB.x - pA.x, pB.y - pA.y, pB.z - pA.z };
+	XMFLOAT3 v2 = { pC.x - pA.x, pC.y - pA.y, pC.z - pA.z };
+
+	XMFLOAT3 normal;
+	normal.x = v1.y * v2.z - v1.z * v2.y;
+	normal.y = v1.z * v2.x - v1.x * v2.z;
+	normal.z = v1.x * v2.y - v1.y * v2.x;
+
+	_float A = normal.x;
+	_float B = normal.y;
+	_float C = normal.z;
+	_float D = -(A * pA.x + B * pA.y + C * pA.z);
+
+	XMFLOAT3 playerPos;
+	XMStoreFloat3(&playerPos, vLocalPos);
+	_float x = playerPos.x;
+	_float z = playerPos.z;
+
+	_float y = -(A * x + C * z + D) / B + fOffset;
+
+	return y;
+}
+
 
 #ifdef _DEBUG
 

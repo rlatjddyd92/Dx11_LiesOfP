@@ -14,7 +14,7 @@ BEGIN(Client)
 class CLift_Door :
     public CGameObject
 {
-protected:
+private:
 	CLift_Door(ID3D11Device* pDevice, ID3D11DeviceContext* pContext);
 	CLift_Door(const CLift_Door& Prototype);
 	virtual ~CLift_Door() = default;

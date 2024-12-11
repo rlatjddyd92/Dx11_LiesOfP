@@ -15,7 +15,7 @@ BEGIN(Client)
 class CTreasureBox :
 	public CGameObject
 {
-protected:
+private:
 	CTreasureBox(ID3D11Device* pDevice, ID3D11DeviceContext* pContext);
 	CTreasureBox(const CTreasureBox& Prototype);
 	virtual ~CTreasureBox() = default;

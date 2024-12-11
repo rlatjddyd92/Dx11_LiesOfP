@@ -37,6 +37,7 @@ private:
     _double*            m_pTrackPos = { nullptr };
 
     _bool               m_isCreateItem = { false };
+    _bool               m_isThrowItem = { false };
 
 private:
     _bool               Move(_float fTimeDelta);

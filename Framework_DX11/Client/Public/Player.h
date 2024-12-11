@@ -3,6 +3,7 @@
 #include "Client_Defines.h"
 #include "Pawn.h"
 #include "PlayerCamera.h"
+#include "Item_Enum.h"
 
 BEGIN(Engine)
 class CNavigation;
@@ -273,6 +274,9 @@ public:
 
 	class CStargazer* Find_Stargazer();
 
+	void			Create_ThrowItem(SPECIAL_ITEM eItemType);
+	void			Throw_ITem();
+
 	/* Effect */
 private:
 	vector<class CEffect_Container*> m_Effects;
@@ -305,6 +309,8 @@ private:
 	WEAPON_TYPE			m_eWeaponType = { WEP_RAPIER };
 
 	class CWeapon*		m_pWeapon_Arm = { nullptr };
+
+	class CItem_Throw* m_pThrowItem = { nullptr };
 
 private:
 	_vector		m_vRootMoveStack = {};
