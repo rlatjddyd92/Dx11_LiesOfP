@@ -57,35 +57,7 @@ void CCutScene::Update(_float fTimeDelta)
 	
 	if(m_bFinished && m_bFinishe_Setting == false)
 	{
-		m_bFinishe_Setting = true;
-
-		//UI 살려야 함
-		GET_GAMEINTERFACE->Fade_In(0.f);
-		GET_GAMEINTERFACE->UIPart_On();
-
-		CCamera_Manager::Get_Instance()->Change_Camera(TEXT("Camera_Player"));
-
-		CPlayer* pPlayer = dynamic_cast<CPlayer*>(m_pGameInstance->Find_Player(LEVEL_GAMEPLAY));
-
-		if (m_iIndex == SOPHIA_ENTER)
-		{
-			pPlayer->Appear_Weapon();
-			pPlayer->Get_Model()->ReadyDenyNextTranslate(4);
-			pPlayer->Change_State(CPlayer::OH_IDLE);
-			pPlayer->Get_Navigation()->Move_to_Cell(pPlayer->Get_RigidBody(),1178);
-		}
-		else if (m_iIndex == SOPHIA_DEAD)
-		{
-			pPlayer->Appear_Weapon();
-			pPlayer->Get_Model()->ReadyDenyNextTranslate(4);
-			pPlayer->Change_State(CPlayer::OH_IDLE);
-			pPlayer->Get_Navigation()->Move_to_Cell(pPlayer->Get_RigidBody(), 1178);
-		}
-		else if (m_iIndex == BOSS2_MEET)
-		{
-			pPlayer->Change_State(CPlayer::OH_IDLE);
-			pPlayer->Get_Navigation()->Move_to_Cell(pPlayer->Get_RigidBody(), 1178);
-		}
+		End_Setting();
 	}
 }
 
@@ -232,10 +204,46 @@ void CCutScene::First_Setting()
 	case BOSS2_MEET:
 		if (FAILED(m_pGameInstance->Add_CloneObject_ToLayer(LEVEL_GAMEPLAY, TEXT("Layer_SimonManus"), TEXT("Prototype_GameObject_SimonManus"))))
 			return;
+
 		pPlayer->Get_RigidBody()->Set_GloblePose(_Vec3(16.606f, 0.104f, 16.498f));
+		pPlayer->Get_Transform()->Rotation(0.f, -45.f, 0.f);
+
 		m_pObjects[BOSS2] = static_cast<CPawn*>(m_pGameInstance->Find_Object(LEVEL_GAMEPLAY, TEXT("Layer_SimonManus"), 0));
 		break;
 
+	}
+}
+
+void CCutScene::End_Setting()
+{
+	m_bFinishe_Setting = true;
+
+	//UI 살려야 함
+	GET_GAMEINTERFACE->Fade_In(0.f);
+	GET_GAMEINTERFACE->UIPart_On();
+
+	CCamera_Manager::Get_Instance()->Change_Camera(TEXT("Camera_Player"));
+
+	CPlayer* pPlayer = dynamic_cast<CPlayer*>(m_pGameInstance->Find_Player(LEVEL_GAMEPLAY));
+
+	if (m_iIndex == SOPHIA_ENTER)
+	{
+		pPlayer->Appear_Weapon();
+		pPlayer->Get_Model()->ReadyDenyNextTranslate(4);
+		pPlayer->Change_State(CPlayer::OH_IDLE);
+		pPlayer->Get_Navigation()->Move_to_Cell(pPlayer->Get_RigidBody(), 1178);
+	}
+	else if (m_iIndex == SOPHIA_DEAD)
+	{
+		pPlayer->Appear_Weapon();
+		pPlayer->Get_Model()->ReadyDenyNextTranslate(4);
+		pPlayer->Change_State(CPlayer::OH_IDLE);
+		pPlayer->Get_Navigation()->Move_to_Cell(pPlayer->Get_RigidBody(), 1178);
+	}
+	else if (m_iIndex == BOSS2_MEET2)
+	{
+		pPlayer->Change_State(CPlayer::OH_IDLE);
+		pPlayer->Get_Navigation()->Move_to_Cell(pPlayer->Get_RigidBody(), 117);
 	}
 }
 
