@@ -58,6 +58,7 @@ private:
 	void Active_Obj(CUTSCENE_KEYFRAME_DESC* pCutSceneDesc);
 	void Active_Sound(CUTSCENE_KEYFRAME_DESC* pCutSceneDesc);
 	void First_Setting();
+	void End_Setting();
 public:
 	static CCutScene* Create(ID3D11Device* pDevice, ID3D11DeviceContext* pContext);
 	virtual CGameObject* Clone(void* pArg);

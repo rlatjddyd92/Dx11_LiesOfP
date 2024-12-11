@@ -322,7 +322,7 @@ void CSimonManus::Start_CutScene(_uint iCutSceneNum)
 	{
 	case CUTSCENE_MEET :
 		m_pModelCom = m_pCutSceneModelCom[MODEL_PHASE1];
-		//m_pCutSceneFsmCom->Set_State(STATE_MEET);
+		m_pCutSceneFsmCom->Set_State(STATE_MEET);
 		break;
 	case CUTSCENE_P2:
 		m_pModelCom = m_pCutSceneModelCom[MODEL_PHASE1];
