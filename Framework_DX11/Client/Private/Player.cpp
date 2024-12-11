@@ -324,6 +324,13 @@ void CPlayer::Update(_float fTimeDelta)
 	{
 		Change_State(RAPIER_FATAL);
 	}
+
+	//마누스 컷신 실행부분
+	if (m_pNavigationCom->Get_CurrentCellIndex() == 208 && m_bActivated_ManusCutScene == false)
+	{
+		m_bActivated_ManusCutScene = true;
+		dynamic_cast<CCutScene*>(m_pGameInstance->Find_Object(LEVEL_GAMEPLAY, TEXT("Layer_CutScene"), BOSS2_MEET))->Start_Play();
+	}
 }
 
 void CPlayer::Late_Update(_float fTimeDelta)

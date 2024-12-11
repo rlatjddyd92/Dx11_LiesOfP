@@ -243,7 +243,7 @@ void CController_AnimationTool::ListUp_Anim()
 
 	ImGui::Text("SubRoot");
 	ImGui::PushItemWidth(80); // 크기조정
-	ImGui::InputInt("##PosXModel", &m_iSubRoot_Num);	ImGui::SameLine();
+	ImGui::InputInt("##SubRoot", &m_iSubRoot_Num);	ImGui::SameLine();
 	ImGui::PopItemWidth();
 
 	if (ImGui::Button("Set_SubRootBone"))

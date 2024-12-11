@@ -27,7 +27,7 @@ public:
 	void Move_to_Cell(class CRigidBody* pRigidBody, _int iIndex);
 	void Research_Cell(_Vec3 vNewPos, _uint* iIndex = nullptr);
 	void Change_CurrentCellIndex(_int iIndex) { m_iCurrentCellIndex = iIndex; };
-
+	_int Get_CurrentCellIndex() { return m_iCurrentCellIndex; }
 #ifdef _DEBUG
 public:
 	virtual HRESULT Render() override;
