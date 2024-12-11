@@ -72,6 +72,9 @@ void CItem_Throw::Update(_float fTimeDelta)
 			XMStoreFloat4x4(&m_WorldMatrix, XMMatrixIdentity() * SocketMatrix * XMLoadFloat4x4(m_pParentMatrix));
 
 			m_pTransformCom->Set_WorldMatrix(m_WorldMatrix);
+
+			_Vec3 vCurrentPos = m_pTransformCom->Get_State(CTransform::STATE_POSITION);
+			m_pRigidBodyCom->Set_GloblePose(vCurrentPos);
 		}
 		else if (m_isThrow)
 		{
@@ -82,14 +85,12 @@ void CItem_Throw::Update(_float fTimeDelta)
 			_Vec3 vCurrentPos = m_pTransformCom->Get_State(CTransform::STATE_POSITION);
 			_float fGroundY = m_pNavigationCom->Get_CellPosY(m_pTransformCom);
 
-			//m_pNavigationCom->isMove(vCurrentPos);
+			m_pNavigationCom->isMove(vCurrentPos);
 			
 			if (vCurrentPos.y <= fGroundY || m_fThrowTime > 2.f)
 			{
-				Explosion();
+				//Explosion();
 			}
-
-			m_pRigidBodyCom->Set_Velocity(m_vThrowDir * 100.f);
 			
 
 			m_pRigidBodyCom->Update(fTimeDelta);
@@ -195,6 +196,14 @@ void CItem_Throw::Throw()
 	vPos.y = m_pParentMatrix->Translation().y;
 
 	m_pNavigationCom->Research_Cell(vPos);
+
+	m_vThrowDir.Normalize();
+
+	m_vThrowDir *= 100.f;
+	m_vThrowDir.y *= 100.f;
+
+	m_pRigidBodyCom->Add_Force(m_vThrowDir);
+
 	m_isThrow = true;
 }
 
@@ -238,7 +247,7 @@ HRESULT CItem_Throw::Ready_Components()
 	// 항상 마지막에 생성하기
 	CRigidBody::RIGIDBODY_DESC RigidBodyDesc{};
 	RigidBodyDesc.isStatic = false;
-	RigidBodyDesc.isGravity = false;
+	RigidBodyDesc.isGravity = true;
 	RigidBodyDesc.isUseClient = false;
 	RigidBodyDesc.pOwnerTransform = m_pTransformCom;
 	RigidBodyDesc.pOwnerNavigation = nullptr;
@@ -260,8 +269,7 @@ HRESULT CItem_Throw::Ready_Components()
 	if (FAILED(__super::Add_Component(LEVEL_STATIC, TEXT("Prototype_Component_RigidBody"),
 		TEXT("Com_RigidBody"), reinterpret_cast<CComponent**>(&m_pRigidBodyCom), &RigidBodyDesc)))
 		return E_FAIL;
-
-	m_pRigidBodyCom->Set_Gravity(true);
+	m_pRigidBodyCom->Set_Mass(1.f);
 
 	return S_OK;
 }

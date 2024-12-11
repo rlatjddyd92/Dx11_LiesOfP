@@ -116,7 +116,17 @@ void CRigidBody::Update(_float fTimeDelta)
 			m_PxActor->setGlobalPose(Transform);
 		}
 
-		pRigidDynamic->setLinearVelocity(PxVec3(m_vVelocity.x, m_vVelocity.y, m_vVelocity.z));
+		if (m_vForce.Length() > 0.f)
+		{
+			PxVec3 vForce = ConvertToPxVec3(m_vForce);
+			pRigidDynamic->addForce(vForce);
+			m_vForce = g_XMZero;
+		}
+		else
+		{
+			//PxVec3 vpRigidDynamic->getLinearVelocity()
+			//pRigidDynamic->setLinearVelocity(PxVec3(m_vVelocity.x, m_vVelocity.y, m_vVelocity.z));
+		}
 
 		Transform = pRigidDynamic->getGlobalPose();
 		PxVec3 vPxPos = Transform.p;

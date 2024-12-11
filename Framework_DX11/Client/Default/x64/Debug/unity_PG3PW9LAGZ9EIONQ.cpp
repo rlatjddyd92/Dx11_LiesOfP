@@ -60,6 +60,9 @@
 #include "D:\GitProject\Dx11_LiesOfP\Framework_DX11\Client\Private\GH_Creater.cpp"
 
 
+#include "D:\GitProject\Dx11_LiesOfP\Framework_DX11\Client\Private\Item_Throw.cpp"
+
+
 #include "D:\GitProject\Dx11_LiesOfP\Framework_DX11\Client\Private\LastDoor.cpp"
 
 
