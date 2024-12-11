@@ -23,6 +23,12 @@ protected:
 	virtual ~CStargazer() = default;
 
 public:
+	_bool	Get_IsOpend() { return m_isOpened; }
+	void	Start_Restore() { m_bStartRestore = true; }
+
+	_int	Get_CellNum() { return m_iCurrnetCellNum; }
+
+public:
 	virtual HRESULT Initialize_Prototype() override;
 	virtual HRESULT Initialize(void* pArg) override;
 	virtual void Priority_Update(_float fTimeDelta) override;
@@ -34,10 +40,6 @@ public:
 	virtual void OnCollisionEnter(CGameObject* pOther) override;
 	virtual void OnCollisionStay(CGameObject* pOther) override;
 	virtual void OnCollisionExit(CGameObject* pOther) override;
-
-public:
-	_bool Get_IsOpend() { return m_isOpened; }
-	void Start_Restore() { m_bStartRestore = true; }
 
 private:
 	CCollider* m_pColliderCom = { nullptr};

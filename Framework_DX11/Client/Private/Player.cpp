@@ -147,6 +147,8 @@ HRESULT CPlayer::Initialize(void * pArg)
 	//m_pNavigationCom->Move_to_Cell(m_pRigidBodyCom, 801); // 소피아 방
 	//m_pNavigationCom->Move_to_Cell(m_pRigidBodyCom, 1178); // 소피아 방 내부
 
+	m_iRespawn_Cell_Num = 772;
+
 	m_strObjectTag = TEXT("Player");
 
 	// 24-11-27 김성용
@@ -961,7 +963,6 @@ void CPlayer::Update_Stat(_float fTimeDelta)
 	}
 #pragma endregion
 
-
 }
 
 void CPlayer::Recovery_HP(_float fAmount)
@@ -974,6 +975,27 @@ void CPlayer::Recovery_HP(_float fAmount)
 	{
 		m_tPlayer_Stat->vGauge_Hp.x = m_tPlayer_Stat->vGauge_Hp.z + m_tPlayer_Stat_Adjust->vGauge_Hp.z;
 	}
+}
+
+CStargazer* CPlayer::Find_Stargazer()
+{
+	CLayer* pStargzzerLayer = m_pGameInstance->Find_Layer(LEVEL_GAMEPLAY, TEXT("Layer_Stargazer"));
+
+	if (nullptr == pStargzzerLayer)
+		return nullptr;
+
+	vector<class CGameObject*> Stargazers = pStargzzerLayer->Get_ObjectList();
+
+	for (_uint i = 0; i < Stargazers.size(); ++i)
+	{
+		CStargazer* pStargazer = dynamic_cast<CStargazer*>(Stargazers[i]);
+		if (m_iRespawn_Cell_Num == pStargazer->Get_CellNum())
+		{
+			return pStargazer;
+		}
+	}
+
+	return nullptr;
 }
 
 void CPlayer::CollisionStay_IntercObj(CGameObject* pGameObject)
@@ -1045,6 +1067,10 @@ void CPlayer::CollisionStay_IntercObj(CGameObject* pGameObject)
 		CSteppingStone* pSteppingStone = dynamic_cast<CSteppingStone*>(pGameObject);
 		if (GET_GAMEINTERFACE->Action_InterAction(TEXT("최후의 장소로...")))
 		{
+			CState_Player_Teleport::TELEPORT_DESC Desc{};
+			Desc.isDie = false;
+			Desc.pSteppingStone = pSteppingStone;
+
 			m_pFsmCom->Change_State(TELEPORT, pSteppingStone);
 		}
 	}

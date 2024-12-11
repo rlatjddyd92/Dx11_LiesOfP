@@ -10,6 +10,13 @@ BEGIN(Client)
 class CState_Player_Teleport : public CState
 {
 public:
+    typedef struct
+    {
+        _bool isDie = false;
+        class CSteppingStone* pSteppingStone = { nullptr };
+    }TELEPORT_DESC;
+
+public:
     CState_Player_Teleport(class CFsm* pFsm, class CPlayer* pPlayer);
     virtual ~CState_Player_Teleport() = default;
 
@@ -32,10 +39,19 @@ private:
     _Vec4               m_vRimLightColor = {};
     _bool               m_isEnd_Teleport = {};
     _bool               m_isAppearStartEffect = {};
+    _bool               m_isFadeOut = {};
+    _bool               m_isFadeIn = {};
 
-    class CSteppingStone*     m_pSteppingStone = { nullptr };
+    _bool               m_isDieTeleport = { false };
+
+    class CSteppingStone*   m_pSteppingStone = { nullptr };
+    class CStargazer*       m_pStarGazer = { nullptr };
 private:
     _bool               End_Check();
+
+    void                Update_SteppingStone(_float fTimeDelta);
+    void                Update_Stargazer(_float fTimeDelta);
+    void                Update_Die(_float fTimeDelta);
 
 public:
     static CState_Player_Teleport* Create(class CFsm* pFsm, class CPlayer* pPlayer, _uint iStateNum, void* pArg = nullptr);

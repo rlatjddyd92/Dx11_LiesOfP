@@ -191,7 +191,7 @@ public:
 
 	void					Reset_Root() { m_vCurRootMove = m_vRootMoveStack = _vector{0,0,0,0}; }
 
-	CMonster*					Get_TargetMonster() { return m_pTargetMonster; }
+	class CMonster*			Get_TargetMonster() { return m_pTargetMonster; }
 
 	void					Set_DissloveRatio(_float fRatio) { m_fDissloveRatio = fRatio; }
 
@@ -200,7 +200,7 @@ public:
 	// 외부에서는 레퍼런스로 접근 
 	// 수치 조정은 반드시 플레이어에서만 진행 
 #pragma region PLAYER_STAT
-	const STAT_INFO&		Get_Player_Stat() const { return *m_tPlayer_Stat; }
+	STAT_INFO&		Get_Player_Stat() { return *m_tPlayer_Stat; }
 	// 24-12-05 김성용
 	// UI 매니저 수정용 함수
 	STAT_INFO*				Get_Player_Stat_Adjust() { return m_tPlayer_Stat_Adjust; }
@@ -265,8 +265,9 @@ public:
 	_bool			Check_Region_Fable02();
 	void			Decrease_Region(_uint iRegionCount = 1);
 	void			Recovery_Region(_float fAmount = 10.f);
-
 	void			Recovery_HP(_float fAmount);
+
+	class CStargazer* Find_Stargazer();
 
 	/* Effect */
 private:

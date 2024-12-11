@@ -97,12 +97,6 @@
     <Filter Include="02.GameObjects\09.NavDataObj">
       <UniqueIdentifier>{10f4a515-95de-41fc-9f6e-fae8782b0344}</UniqueIdentifier>
     </Filter>
-    <Filter Include="02.GameObjects\10.InteractObj">
-      <UniqueIdentifier>{2d3adcbb-33e9-455d-a954-c1b0e6eef0bb}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="02.GameObjects\10.InteractObj\00.Stargazer">
-      <UniqueIdentifier>{eb7fe278-8f63-4c37-bd1e-af98a5ca1a5e}</UniqueIdentifier>
-    </Filter>
     <Filter Include="02.GameObjects\05.Effect\Effect_Base\Mesh_Effect">
       <UniqueIdentifier>{6950edf6-b86b-4f5f-bcf2-800c147433d6}</UniqueIdentifier>
     </Filter>
@@ -142,30 +136,6 @@
     <Filter Include="97.ShaderFiles\Effect">
       <UniqueIdentifier>{d8ef4e91-7c16-4dfd-848d-d1187ed851d1}</UniqueIdentifier>
     </Filter>
-    <Filter Include="02.GameObjects\10.InteractObj\02.TowerDoor">
-      <UniqueIdentifier>{6a4c1bfe-f554-4c72-afe7-d738b5f5b17d}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="02.GameObjects\10.InteractObj\03.WallDeco">
-      <UniqueIdentifier>{2357c91a-00b1-43ca-a995-b5b7786cca00}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="02.GameObjects\10.InteractObj\04.TreasureBox">
-      <UniqueIdentifier>{10feda96-2bd2-4b3f-b93b-a7f41fa6a6a0}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="02.GameObjects\10.InteractObj\05.Ladder">
-      <UniqueIdentifier>{e8519a58-814e-4542-a269-73a3f6a8b500}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="02.GameObjects\10.InteractObj\01.Lift">
-      <UniqueIdentifier>{eedb6a56-cfff-4c91-be75-a434d7f66169}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="02.GameObjects\10.InteractObj\01.Lift\Lift_Door">
-      <UniqueIdentifier>{e5181690-86ed-43fc-9e24-583e915d9f03}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="02.GameObjects\10.InteractObj\01.Lift\Lift_Controller">
-      <UniqueIdentifier>{7e6674de-29fd-41f9-9f96-c34e1ba9bbb6}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="02.GameObjects\10.InteractObj\01.Lift\Lift_Floor">
-      <UniqueIdentifier>{d4ddd60e-a386-46e3-a60e-8bdf3759786c}</UniqueIdentifier>
-    </Filter>
     <Filter Include="02.GameObjects\99.Camera\FreeCamera">
       <UniqueIdentifier>{ee85d7d1-ce2e-4a78-b654-5d3a87c7a472}</UniqueIdentifier>
     </Filter>
@@ -199,17 +169,8 @@
     <Filter Include="97.ShaderFiles\99.UI_Shader">
       <UniqueIdentifier>{b83c9fd9-a108-45c5-8e6f-296e8b63c2da}</UniqueIdentifier>
     </Filter>
-    <Filter Include="02.GameObjects\10.InteractObj\06.LastDoor">
-      <UniqueIdentifier>{aeb4b197-05c3-42e8-a202-3c07322bc3ad}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="02.GameObjects\10.InteractObj\07.SteppingStone">
-      <UniqueIdentifier>{eac03529-5428-443d-9fef-537ceca54b74}</UniqueIdentifier>
-    </Filter>
     <Filter Include="02.GameObjects\02.Pawn\01.Monster\CarcassTail">
       <UniqueIdentifier>{e6447638-0aaa-4897-887b-a642b899134e}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="02.GameObjects\10.InteractObj\03.WallDeco\Deco_Collider_Obj">
-      <UniqueIdentifier>{de6a80df-b5fc-4917-8178-d30e289d2253}</UniqueIdentifier>
     </Filter>
     <Filter Include="02.GameObjects\12.AttackObject">
       <UniqueIdentifier>{ce4ea603-046b-4d4c-bb5e-c2d7a15acc70}</UniqueIdentifier>
@@ -303,9 +264,6 @@
     </Filter>
     <Filter Include="03.GameInterface_Controller\02.Player_Stat_Manager">
       <UniqueIdentifier>{a1e3baf8-3478-4ec4-89c1-68e0b1ea6bdf}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="02.GameObjects\10.InteractObj\08.Sophia">
-      <UniqueIdentifier>{05890b22-ce96-4a7f-97d1-b651cbf8cde5}</UniqueIdentifier>
     </Filter>
     <Filter Include="02.GameObjects\12.AttackObject\SimonManus\GH_Creater">
       <UniqueIdentifier>{37ed73ea-0466-4018-9b66-8c9743635a9f}</UniqueIdentifier>
@@ -832,9 +790,6 @@
     <Filter Include="05.Fsm\Player\Common\Groggy">
       <UniqueIdentifier>{52055d8d-e516-4646-8fde-a42a1c9f1453}</UniqueIdentifier>
     </Filter>
-    <Filter Include="05.Fsm\Player\Common\Dead">
-      <UniqueIdentifier>{bd30e2d5-25fb-4905-bacd-c5625c31e943}</UniqueIdentifier>
-    </Filter>
     <Filter Include="05.Fsm\Player\Common\Parry">
       <UniqueIdentifier>{6f478c04-42e3-4487-8f42-ce122fd61b3d}</UniqueIdentifier>
     </Filter>
@@ -924,6 +879,54 @@
     </Filter>
     <Filter Include="05.Fsm\Player\Common\Throw">
       <UniqueIdentifier>{6927f66b-8d01-4af5-8b3c-34df47767809}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="05.Fsm\Player\Common\Die">
+      <UniqueIdentifier>{bd30e2d5-25fb-4905-bacd-c5625c31e943}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.GameObjects\11.InteractObj">
+      <UniqueIdentifier>{2d3adcbb-33e9-455d-a954-c1b0e6eef0bb}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.GameObjects\11.InteractObj\00.Stargazer">
+      <UniqueIdentifier>{eb7fe278-8f63-4c37-bd1e-af98a5ca1a5e}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.GameObjects\11.InteractObj\02.TowerDoor">
+      <UniqueIdentifier>{6a4c1bfe-f554-4c72-afe7-d738b5f5b17d}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.GameObjects\11.InteractObj\03.WallDeco">
+      <UniqueIdentifier>{2357c91a-00b1-43ca-a995-b5b7786cca00}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.GameObjects\11.InteractObj\03.WallDeco\Deco_Collider_Obj">
+      <UniqueIdentifier>{de6a80df-b5fc-4917-8178-d30e289d2253}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.GameObjects\11.InteractObj\04.TreasureBox">
+      <UniqueIdentifier>{10feda96-2bd2-4b3f-b93b-a7f41fa6a6a0}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.GameObjects\11.InteractObj\05.Ladder">
+      <UniqueIdentifier>{e8519a58-814e-4542-a269-73a3f6a8b500}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.GameObjects\11.InteractObj\01.Lift">
+      <UniqueIdentifier>{eedb6a56-cfff-4c91-be75-a434d7f66169}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.GameObjects\11.InteractObj\01.Lift\Lift_Door">
+      <UniqueIdentifier>{e5181690-86ed-43fc-9e24-583e915d9f03}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.GameObjects\11.InteractObj\01.Lift\Lift_Controller">
+      <UniqueIdentifier>{7e6674de-29fd-41f9-9f96-c34e1ba9bbb6}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.GameObjects\11.InteractObj\01.Lift\Lift_Floor">
+      <UniqueIdentifier>{d4ddd60e-a386-46e3-a60e-8bdf3759786c}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.GameObjects\11.InteractObj\06.LastDoor">
+      <UniqueIdentifier>{aeb4b197-05c3-42e8-a202-3c07322bc3ad}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.GameObjects\11.InteractObj\07.SteppingStone">
+      <UniqueIdentifier>{eac03529-5428-443d-9fef-537ceca54b74}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.GameObjects\11.InteractObj\08.Sophia">
+      <UniqueIdentifier>{05890b22-ce96-4a7f-97d1-b651cbf8cde5}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.GameObjects\15.Item">
+      <UniqueIdentifier>{dd5201b5-c013-4b44-b8bc-823d92d1d746}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -1063,7 +1066,7 @@
       <Filter>02.GameObjects\09.NavDataObj</Filter>
     </ClInclude>
     <ClInclude Include="..\Public\Stargazer.h">
-      <Filter>02.GameObjects\10.InteractObj\00.Stargazer</Filter>
+      <Filter>02.GameObjects\11.InteractObj\00.Stargazer</Filter>
     </ClInclude>
     <ClInclude Include="..\Public\State_Player_OH_Idle.h">
       <Filter>05.Fsm\Player\OneHand\Idle</Filter>
@@ -1219,13 +1222,13 @@
       <Filter>02.GameObjects\05.Effect\Effect_Base\Trail_Effect\Trail_Effect_OP</Filter>
     </ClInclude>
     <ClInclude Include="..\Public\Lift_Controller.h">
-      <Filter>02.GameObjects\10.InteractObj\01.Lift\Lift_Controller</Filter>
+      <Filter>02.GameObjects\11.InteractObj\01.Lift\Lift_Controller</Filter>
     </ClInclude>
     <ClInclude Include="..\Public\Lift_Floor.h">
-      <Filter>02.GameObjects\10.InteractObj\01.Lift\Lift_Floor</Filter>
+      <Filter>02.GameObjects\11.InteractObj\01.Lift\Lift_Floor</Filter>
     </ClInclude>
     <ClInclude Include="..\Public\Lift_Door.h">
-      <Filter>02.GameObjects\10.InteractObj\01.Lift\Lift_Door</Filter>
+      <Filter>02.GameObjects\11.InteractObj\01.Lift\Lift_Door</Filter>
     </ClInclude>
     <ClInclude Include="..\public\FreeCamera.h">
       <Filter>02.GameObjects\99.Camera\FreeCamera</Filter>
@@ -1402,16 +1405,16 @@
       <Filter>02.GameObjects\02.Pawn</Filter>
     </ClInclude>
     <ClInclude Include="..\Public\TowerDoor.h">
-      <Filter>02.GameObjects\10.InteractObj\02.TowerDoor</Filter>
+      <Filter>02.GameObjects\11.InteractObj\02.TowerDoor</Filter>
     </ClInclude>
     <ClInclude Include="..\Public\WallDeco.h">
-      <Filter>02.GameObjects\10.InteractObj\03.WallDeco</Filter>
+      <Filter>02.GameObjects\11.InteractObj\03.WallDeco</Filter>
     </ClInclude>
     <ClInclude Include="..\Public\TreasureBox.h">
-      <Filter>02.GameObjects\10.InteractObj\04.TreasureBox</Filter>
+      <Filter>02.GameObjects\11.InteractObj\04.TreasureBox</Filter>
     </ClInclude>
     <ClInclude Include="..\Public\Ladder.h">
-      <Filter>02.GameObjects\10.InteractObj\05.Ladder</Filter>
+      <Filter>02.GameObjects\11.InteractObj\05.Ladder</Filter>
     </ClInclude>
     <ClInclude Include="..\Public\ColliderObject.h">
       <Filter>02.GameObjects\10.ColliderObject</Filter>
@@ -1421,10 +1424,10 @@
       <Filter>05.Fsm\Monster\SimonManus\P1\Attck\Single\Charge_SwingDown</Filter>
     </ClInclude>
     <ClInclude Include="..\Public\LastDoor.h">
-      <Filter>02.GameObjects\10.InteractObj\06.LastDoor</Filter>
+      <Filter>02.GameObjects\11.InteractObj\06.LastDoor</Filter>
     </ClInclude>
     <ClInclude Include="..\Public\SteppingStone.h">
-      <Filter>02.GameObjects\10.InteractObj\07.SteppingStone</Filter>
+      <Filter>02.GameObjects\11.InteractObj\07.SteppingStone</Filter>
     </ClInclude>
     <ClInclude Include="..\Public\ColliderObject.h">
       <Filter>02.GameObjects\10.ColliderObject</Filter>
@@ -1508,7 +1511,7 @@
       <Filter>05.Fsm\Player\Common\ItemGet</Filter>
     </ClInclude>
     <ClInclude Include="..\Public\Deco_Collider.h">
-      <Filter>02.GameObjects\10.InteractObj\03.WallDeco\Deco_Collider_Obj</Filter>
+      <Filter>02.GameObjects\11.InteractObj\03.WallDeco\Deco_Collider_Obj</Filter>
     </ClInclude>
     <ClInclude Include="..\Public\State_Player_Stargazer.h">
       <Filter>05.Fsm\Player\Common\Stargazer</Filter>
@@ -1632,7 +1635,7 @@
       <Filter>02.GameObjects\12.AttackObject\SimonManus\LightningBall</Filter>
     </ClInclude>
     <ClInclude Include="..\Public\Sophia.h">
-      <Filter>02.GameObjects\10.InteractObj\08.Sophia</Filter>
+      <Filter>02.GameObjects\11.InteractObj\08.Sophia</Filter>
     </ClInclude>
     <ClInclude Include="..\Public\AObj_BlackBall.h">
       <Filter>02.GameObjects\12.AttackObject\SimonManus\BlackBall</Filter>
@@ -1696,6 +1699,9 @@
     </ClInclude>
     <ClInclude Include="..\Public\State_Player_ThrowItem.h">
       <Filter>05.Fsm\Player\Common\Throw</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Public\State_Player_Die.h">
+      <Filter>05.Fsm\Player\Common\Die</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -1805,7 +1811,7 @@
       <Filter>02.GameObjects\09.NavDataObj</Filter>
     </ClCompile>
     <ClCompile Include="..\Private\Stargazer.cpp">
-      <Filter>02.GameObjects\10.InteractObj\00.Stargazer</Filter>
+      <Filter>02.GameObjects\11.InteractObj\00.Stargazer</Filter>
     </ClCompile>
     <ClCompile Include="..\Private\State_Player_OH_Idle.cpp">
       <Filter>05.Fsm\Player\OneHand\Idle</Filter>
@@ -1958,13 +1964,13 @@
       <Filter>02.GameObjects\05.Effect\Effect_Base\Trail_Effect\Trail_Effect_OP</Filter>
     </ClCompile>
     <ClCompile Include="..\Private\Lift_Door.cpp">
-      <Filter>02.GameObjects\10.InteractObj\01.Lift\Lift_Door</Filter>
+      <Filter>02.GameObjects\11.InteractObj\01.Lift\Lift_Door</Filter>
     </ClCompile>
     <ClCompile Include="..\Private\Lift_Controller.cpp">
-      <Filter>02.GameObjects\10.InteractObj\01.Lift\Lift_Controller</Filter>
+      <Filter>02.GameObjects\11.InteractObj\01.Lift\Lift_Controller</Filter>
     </ClCompile>
     <ClCompile Include="..\Private\Lift_Floor.cpp">
-      <Filter>02.GameObjects\10.InteractObj\01.Lift\Lift_Floor</Filter>
+      <Filter>02.GameObjects\11.InteractObj\01.Lift\Lift_Floor</Filter>
     </ClCompile>
     <ClCompile Include="..\private\FreeCamera.cpp">
       <Filter>02.GameObjects\99.Camera\FreeCamera</Filter>
@@ -2144,16 +2150,16 @@
       <Filter>02.GameObjects\02.Pawn</Filter>
     </ClCompile>
     <ClCompile Include="..\Private\TowerDoor.cpp">
-      <Filter>02.GameObjects\10.InteractObj\02.TowerDoor</Filter>
+      <Filter>02.GameObjects\11.InteractObj\02.TowerDoor</Filter>
     </ClCompile>
     <ClCompile Include="..\Private\WallDeco.cpp">
-      <Filter>02.GameObjects\10.InteractObj\03.WallDeco</Filter>
+      <Filter>02.GameObjects\11.InteractObj\03.WallDeco</Filter>
     </ClCompile>
     <ClCompile Include="..\Private\TreasureBox.cpp">
-      <Filter>02.GameObjects\10.InteractObj\04.TreasureBox</Filter>
+      <Filter>02.GameObjects\11.InteractObj\04.TreasureBox</Filter>
     </ClCompile>
     <ClCompile Include="..\Private\Ladder.cpp">
-      <Filter>02.GameObjects\10.InteractObj\05.Ladder</Filter>
+      <Filter>02.GameObjects\11.InteractObj\05.Ladder</Filter>
     </ClCompile>
     <ClCompile Include="..\Private\ColliderObject.cpp">
       <Filter>02.GameObjects\10.ColliderObject</Filter>
@@ -2163,10 +2169,10 @@
       <Filter>05.Fsm\Monster\SimonManus\P1\Attck\Single\Charge_SwingDown</Filter>
     </ClCompile>
     <ClCompile Include="..\Private\LastDoor.cpp">
-      <Filter>02.GameObjects\10.InteractObj\06.LastDoor</Filter>
+      <Filter>02.GameObjects\11.InteractObj\06.LastDoor</Filter>
     </ClCompile>
     <ClCompile Include="..\Private\SteppingStone.cpp">
-      <Filter>02.GameObjects\10.InteractObj\07.SteppingStone</Filter>
+      <Filter>02.GameObjects\11.InteractObj\07.SteppingStone</Filter>
     </ClCompile>
     <ClCompile Include="..\Private\ColliderObject.cpp">
       <Filter>02.GameObjects\10.ColliderObject</Filter>
@@ -2250,7 +2256,7 @@
       <Filter>05.Fsm\Player\Common\ItemGet</Filter>
     </ClCompile>
     <ClCompile Include="..\Private\Deco_Collider.cpp">
-      <Filter>02.GameObjects\10.InteractObj\03.WallDeco\Deco_Collider_Obj</Filter>
+      <Filter>02.GameObjects\11.InteractObj\03.WallDeco\Deco_Collider_Obj</Filter>
     </ClCompile>
     <ClCompile Include="..\Private\State_Player_Stargazer.cpp">
       <Filter>05.Fsm\Player\Common\Stargazer</Filter>
@@ -2374,7 +2380,7 @@
       <Filter>02.GameObjects\12.AttackObject\SimonManus\LightningBall</Filter>
     </ClCompile>
     <ClCompile Include="..\Private\Sophia.cpp">
-      <Filter>02.GameObjects\10.InteractObj\08.Sophia</Filter>
+      <Filter>02.GameObjects\11.InteractObj\08.Sophia</Filter>
     </ClCompile>
     <ClCompile Include="..\Private\AObj_BlackBall.cpp">
       <Filter>02.GameObjects\12.AttackObject\SimonManus\BlackBall</Filter>
@@ -2438,6 +2444,9 @@
     </ClCompile>
     <ClCompile Include="..\Private\State_Player_ThrowItem.cpp">
       <Filter>05.Fsm\Player\Common\Throw</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Private\State_Player_Die.cpp">
+      <Filter>05.Fsm\Player\Common\Die</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
