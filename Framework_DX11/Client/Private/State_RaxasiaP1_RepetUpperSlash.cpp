@@ -75,7 +75,7 @@ void CState_RaxasiaP1_RepetUpperSlash::Route_Controll(_double CurTrackPos, _floa
         {
             ++m_iRouteTrack;
             m_bSwing = false;
-            m_pMonster->Change_Animation(AN_UPPERTWICE, false, 0.1f, 0);
+            m_pMonster->Change_Animation(AN_UPPERTWICE, false, 0.02f, 0);
         }
 
         if (CurTrackPos >= 120.f)
@@ -90,7 +90,7 @@ void CState_RaxasiaP1_RepetUpperSlash::Route_Controll(_double CurTrackPos, _floa
         {
             ++m_iRouteTrack;
             m_bSwing = false;
-            m_pMonster->Change_Animation(AN_UPPERTWICE, false, 0.1f, 0, true, true);
+            m_pMonster->Change_Animation(AN_UPPERTWICE, false, 0.02f, 0, true, true);
         }
 
         if (!m_bSpeedController)
@@ -114,7 +114,7 @@ void CState_RaxasiaP1_RepetUpperSlash::Route_Controll(_double CurTrackPos, _floa
         {
             ++m_iRouteTrack;
             m_bSwing = false;
-            m_pMonster->Change_Animation(AN_UPPERTWICE, false, 0.1f, 0, true, true);
+            m_pMonster->Change_Animation(AN_UPPERTWICE, false, 0.02f, 0, true, true);
         }
 
         if (!m_bSpeedController)
@@ -138,7 +138,7 @@ void CState_RaxasiaP1_RepetUpperSlash::Route_Controll(_double CurTrackPos, _floa
         {
             ++m_iRouteTrack;
             m_bSwing = false;
-            m_pMonster->Change_Animation(AN_UPPERTWICE, false, 0.1f, 0, true, true);
+            m_pMonster->Change_Animation(AN_UPPERTWICE, false, 0.02f, 0, true, true);
         }
 
         break;
@@ -148,7 +148,7 @@ void CState_RaxasiaP1_RepetUpperSlash::Route_Controll(_double CurTrackPos, _floa
         {
             ++m_iRouteTrack;
             m_bSwing = false;
-            m_pMonster->Change_Animation(AN_UPPERTWICE, false, 0.1f, 0, true, true);
+            m_pMonster->Change_Animation(AN_UPPERTWICE, false, 0.02f, 0, true, true);
         }
 
         break;
@@ -158,7 +158,7 @@ void CState_RaxasiaP1_RepetUpperSlash::Route_Controll(_double CurTrackPos, _floa
         {
             ++m_iRouteTrack;
             m_bSwing = false;
-            m_pMonster->Change_Animation(AN_LINKED_LAST, false, 0.1f, 0, true, true);
+            m_pMonster->Change_Animation(AN_LINKED_LAST, false, 0.02f, 0, true, true);
         }
 
         if (!m_bSpeedController)

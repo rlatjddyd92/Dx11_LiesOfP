@@ -43,6 +43,11 @@ void CState_RaxasiaP1_KickSting::Update(_float fTimeDelta)
             m_pMonster->Change_Animation(AN_JUMPATTACK, false, 0.1f, 0);
         }
 
+        if (CurTrackPos >= 150.f)
+        {
+            m_pMonster->Get_Transform()->LookAt_Lerp_NoHeight(m_pMonster->Get_TargetDir(), 1.f, fTimeDelta);
+        }
+
         break;
 
     case 1:
@@ -71,7 +76,7 @@ void CState_RaxasiaP1_KickSting::End_State()
 
 _bool CState_RaxasiaP1_KickSting::End_Check()
 {
-    return false;
+    return m_pMonster->Get_EndAnim(AN_JUMPATTACK);;
 }
 
 void CState_RaxasiaP1_KickSting::Collider_Check(_double CurTrackPos)

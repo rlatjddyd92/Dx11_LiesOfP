@@ -52,6 +52,10 @@ void CState_RaxasiaP1_SwingDown_Multiple::Update(_float fTimeDelta)
             m_pMonster->Change_Animation(AN_SWINGDOWN_R, false, 0.1f, 0);
             m_iCurAnimIndex = AN_SWINGDOWN_R;
         }
+        if (CurTrackPos >= 60.f)
+        {
+            m_pMonster->Get_Transform()->LookAt_Lerp_NoHeight(m_pMonster->Get_TargetDir(), 1.f, fTimeDelta);
+        }
     }
     else if (m_iRouteTrack >= 1 && m_iRouteTrack <= 7)
     {
@@ -83,6 +87,11 @@ void CState_RaxasiaP1_SwingDown_Multiple::Update(_float fTimeDelta)
             }
             m_pMonster->Change_Animation(m_iCurAnimIndex, false, 0.1f, 0);
         }
+
+        if (CurTrackPos >= 60.f)
+        {
+            m_pMonster->Get_Transform()->LookAt_Lerp_NoHeight(m_pMonster->Get_TargetDir(), 1.f, fTimeDelta);
+        }
     }
     else if (m_iRouteTrack = 8)
     {
@@ -97,6 +106,11 @@ void CState_RaxasiaP1_SwingDown_Multiple::Update(_float fTimeDelta)
         {
             m_pMonster->Change_State(CRaxasia::IDLE);
             return;
+        }
+
+        if (CurTrackPos <= 30.f)
+        {
+            m_pMonster->Get_Transform()->LookAt_Lerp_NoHeight(m_pMonster->Get_TargetDir(), 1.f, fTimeDelta);
         }
     }
 
@@ -121,7 +135,7 @@ void CState_RaxasiaP1_SwingDown_Multiple::End_State()
 
 _bool CState_RaxasiaP1_SwingDown_Multiple::End_Check()
 {
-    return false;
+    return m_pMonster->Get_EndAnim(m_iCurAnimIndex);;
 }
 
 void CState_RaxasiaP1_SwingDown_Multiple::Collider_Check(_double CurTrackPos)

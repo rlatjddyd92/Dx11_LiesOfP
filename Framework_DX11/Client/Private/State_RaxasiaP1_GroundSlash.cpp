@@ -35,29 +35,33 @@ void CState_RaxasiaP1_GroundSlash::Update(_float fTimeDelta)
 
     if (End_Check())
     {
-        ++m_iRouteTrack;
-        if (m_iRouteTrack >= 3)
-        {
-            m_iRouteTrack = 0;
-        }
+        //++m_iRouteTrack;
+        //if (m_iRouteTrack >= 3)
+        //{
+        //    m_iRouteTrack = 0;
+        //}
+        m_pMonster->Change_State(CRaxasia::ATK_DISCHARGE);
+        return;
+
+        m_iRouteTrack = 0;
+
         switch (m_iRouteTrack)
         {
         case 0:
             m_pMonster->Change_State(CRaxasia::ATK_DISCHARGE);
-            break;
+            return;
 
         case 1:
             m_pMonster->Change_State(CRaxasia::ATK_JUMPATTACK);
-            break;
+            return;
 
         case 2:
             m_pMonster->Change_State(CRaxasia::ATK_SWINGDOWN_MULTIPLE);
-            break;
+            return;
 
         default:
             break;
         }
-        return;
     }
 
     Collider_Check(CurTrackPos);

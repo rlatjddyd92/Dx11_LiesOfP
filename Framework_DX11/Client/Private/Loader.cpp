@@ -39,6 +39,9 @@
 #include "Raxasia.h"
 
 #include "Weapon_Raxasia_P1_Sword.h"
+#include "Weapon_Raxasia_P2_Sword.h"
+#include "Weapon_Raxasia_P1_Shield.h"
+#include "Weapon_Raxasia_P2_Shield.h"
 
 #pragma endregion
 
@@ -889,7 +892,23 @@ HRESULT CLoader::Ready_Resources_For_Monster()
 		CModel::Create(m_pDevice, m_pContext, CModel::TYPE_ANIM, "../Bin/ModelData/Anim/Monster/Boss/Raxasia/Raxasia_Sword01.dat", PreTransformMatrix, false))))
 		return E_FAIL;
 
+	//Prototype_Component_Model_RaxasiaP1_Shield
+	PreTransformMatrix = XMMatrixScaling(0.01f, 0.01f, 0.01f) * XMMatrixRotationX(XMConvertToRadians(270.0f));
+	if (FAILED(m_pGameInstance->Add_Prototype(LEVEL_GAMEPLAY, TEXT("Prototype_Component_Model_RaxasiaP1_Shield"),
+		CModel::Create(m_pDevice, m_pContext, CModel::TYPE_ANIM, "../Bin/ModelData/Anim/Monster/Boss/Raxasia/Raxasia_Shield01.dat", PreTransformMatrix, false))))
+		return E_FAIL;
 
+	//Prototype_Component_Model_RaxasiaP2_Sword
+	PreTransformMatrix = XMMatrixScaling(0.01f, 0.01f, 0.01f) * XMMatrixRotationX(XMConvertToRadians(270.0f));
+	if (FAILED(m_pGameInstance->Add_Prototype(LEVEL_GAMEPLAY, TEXT("Prototype_Component_Model_RaxasiaP2_Sword"),
+		CModel::Create(m_pDevice, m_pContext, CModel::TYPE_ANIM, "../Bin/ModelData/Anim/Monster/Boss/Raxasia/Raxasia_Sword02.dat", PreTransformMatrix, false))))
+		return E_FAIL;
+
+	//Prototype_Component_Model_RaxasiaP2_Shield
+	PreTransformMatrix = XMMatrixScaling(0.01f, 0.01f, 0.01f) * XMMatrixRotationX(XMConvertToRadians(270.0f));
+	if (FAILED(m_pGameInstance->Add_Prototype(LEVEL_GAMEPLAY, TEXT("Prototype_Component_Model_RaxasiaP2_Shield"),
+		CModel::Create(m_pDevice, m_pContext, CModel::TYPE_ANIM, "../Bin/ModelData/Anim/Monster/Boss/Raxasia/Raxasia_Shield02.dat", PreTransformMatrix, false))))
+		return E_FAIL;
 
 #pragma region 컷신용 모델들
 	//Prototype_Component_Model_SimonManus_CutScene_P1
@@ -1101,10 +1120,24 @@ HRESULT CLoader::Ready_Prototype()
 		return E_FAIL;
 
 	/* For. Prototype_GameObject_Weapon__Raxasia_P1_Sword */
-	if (FAILED(m_pGameInstance->Add_Prototype(TEXT("Prototype_GameObject_Weapon__Raxasia_P1_Sword"),
+	if (FAILED(m_pGameInstance->Add_Prototype(TEXT("Prototype_GameObject_Weapon_Raxasia_P1_Sword"),
 		CWeapon_Raxasia_P1_Sword::Create(m_pDevice, m_pContext))))
 		return E_FAIL;
 
+	/* For. Prototype_GameObject_Weapon__Raxasia_P1_Sword */
+	if (FAILED(m_pGameInstance->Add_Prototype(TEXT("Prototype_GameObject_Weapon_Raxasia_P2_Sword"),
+		CWeapon_Raxasia_P2_Sword::Create(m_pDevice, m_pContext))))
+		return E_FAIL;
+
+	/* For. Prototype_GameObject_Weapon__Raxasia_P1_Sword */
+	if (FAILED(m_pGameInstance->Add_Prototype(TEXT("Prototype_GameObject_Weapon_Raxasia_P1_Shield"),
+		CWeapon_Raxasia_P1_Shield::Create(m_pDevice, m_pContext))))
+		return E_FAIL;
+
+	/* For. Prototype_GameObject_Weapon__Raxasia_P1_Sword */
+	if (FAILED(m_pGameInstance->Add_Prototype(TEXT("Prototype_GameObject_Weapon_Raxasia_P2_Shield"),
+		CWeapon_Raxasia_P2_Shield::Create(m_pDevice, m_pContext))))
+		return E_FAIL;
 
 
 	// 특정 위치에 판정 없이 소환되는 이펙트

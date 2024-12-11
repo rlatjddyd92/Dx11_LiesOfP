@@ -5,6 +5,10 @@
 #include "Player.h"
 #include "Fsm.h"
 
+#include "GameInterface_Controller.h"
+
+#include "Effect_Manager.h"
+#include "Effect_Container.h"
 
 #pragma region Phase1
 
@@ -22,19 +26,23 @@
 #include "State_RaxasiaP1_KickSting.h"
 #include "State_RaxasiaP1_TripleSting.h"
 
+#include "State_RaxasiaP1_Discharge.h"
+#include "State_RaxasiaP1_JumpAttack.h"
+#include "State_RaxasiaP1_SwingDown_Multiple.h"
 
-
-#pragma endregion
-
-#include "GameInterface_Controller.h"
-
-#include "Effect_Manager.h"
-#include "Effect_Container.h"
-
-#pragma region Phase1
 #pragma endregion
 
 #pragma region Phase2
+
+#include "State_RaxasiaP2_Idle.h"
+#include "State_RaxasiaP2_Die.h"
+#include "State_RaxasiaP2_Grogy.h"
+#include "State_RaxasiaP2_HitFatal.h"
+#include "State_RaxasiaP2_Walk.h"
+#include "State_RaxasiaP2_Run.h"
+
+
+
 #pragma endregion
 
 #include "Weapon.h"
@@ -96,9 +104,10 @@ HRESULT CRaxasia::Initialize(void* pArg)
 	m_eHitType = HIT_METAL;
 
 	m_pWeapon->DeActive_Collider();
+	m_pWeaponShield->DeActive_Collider();
 	//m_pModelCom->SetUp_NextAnimation(12);
 
-	GET_GAMEINTERFACE->Register_Pointer_Into_OrthoUIPage(UI_ORTHO_OBJ_TYPE::ORTHO_BOSS_1, this);
+	GET_GAMEINTERFACE->Register_Pointer_Into_OrthoUIPage(UI_ORTHO_OBJ_TYPE::ORTHO_BOSS_RAXASIA, this);
 
 	GET_GAMEINTERFACE->Set_OnOff_OrthoUI(false, this);
 
@@ -110,6 +119,7 @@ void CRaxasia::Priority_Update(_float fTimeDelta)
 
 	__super::Set_UpTargetPos();
 	m_pWeapon->Priority_Update(fTimeDelta);
+	m_pWeaponShield->Priority_Update(fTimeDelta);
 
 	if (!m_bDieState && m_eStat.fHp <= 0.f)
 	{
@@ -173,6 +183,7 @@ void CRaxasia::Update(_float fTimeDelta)
 	Update_Collider();
 
 	m_pWeapon->Update(fTimeDelta);
+	m_pWeaponShield->Update(fTimeDelta);
 
 }
 
@@ -183,6 +194,7 @@ void CRaxasia::Late_Update(_float fTimeDelta)
 	m_pRigidBodyCom->Update(fTimeDelta);
 
 	m_pWeapon->Late_Update(fTimeDelta);
+	m_pWeaponShield->Late_Update(fTimeDelta);
 
 	m_pGameInstance->Add_ColliderList(m_pColliderCom);
 
@@ -205,8 +217,6 @@ HRESULT CRaxasia::Render()
 {
 	if (FAILED(__super::Render()))
 		return E_FAIL;
-
-	m_pWeapon->Active_Collider();
 
 	if (FAILED(m_pWeapon->Render()))
 		return E_FAIL;
@@ -553,17 +563,20 @@ HRESULT CRaxasia::Ready_FSM()
 	m_pFsmCom->Add_State(CState_RaxasiaP1_KickSting::Create(m_pFsmCom, this, ATK_KICKSTING, &Desc));
 	m_pFsmCom->Add_State(CState_RaxasiaP1_TripleSting::Create(m_pFsmCom, this, ATK_TRIPLESTING, &Desc));
 
+	m_pFsmCom->Add_State(CState_RaxasiaP1_Discharge::Create(m_pFsmCom, this, ATK_DISCHARGE, &Desc));
+	m_pFsmCom->Add_State(CState_RaxasiaP1_JumpAttack::Create(m_pFsmCom, this, ATK_JUMPATTACK, &Desc));
+	m_pFsmCom->Add_State(CState_RaxasiaP1_SwingDown_Multiple::Create(m_pFsmCom, this, ATK_SWINGDOWN_MULTIPLE, &Desc));
+
 
 	m_pFsmCom->Set_State(IDLE);
 #pragma endregion
 
 #pragma region Phase2_Fsm
-	//2Phase FSM
 
 	/* FOR.Com_FSM */
-	//if (FAILED(__super::Add_Component(LEVEL_STATIC, TEXT("Prototype_Component_FSM"),
-	//	TEXT("Com_ExtraFSM"), reinterpret_cast<CComponent**>(&m_pExtraFsmCom))))
-	//	return E_FAIL;
+	if (FAILED(__super::Add_Component(LEVEL_STATIC, TEXT("Prototype_Component_FSM"),
+		TEXT("Com_ExtraFSM"), reinterpret_cast<CComponent**>(&m_pExtraFsmCom))))
+		return E_FAIL;
 
 #pragma endregion
 
@@ -578,7 +591,7 @@ HRESULT CRaxasia::Ready_Weapon()
 
 	WeaponDesc.pParentAtk = &m_eStat.fAtk;
 
-	m_pWeapon = dynamic_cast<CWeapon*>(m_pGameInstance->Clone_GameObject(TEXT("Prototype_GameObject_Weapon__Raxasia_P1_Sword"), &WeaponDesc));
+	m_pWeapon = dynamic_cast<CWeapon*>(m_pGameInstance->Clone_GameObject(TEXT("Prototype_GameObject_Weapon_Raxasia_P1_Sword"), &WeaponDesc));
 	if (nullptr == m_pWeapon)
 		return E_FAIL;
 
@@ -589,10 +602,10 @@ HRESULT CRaxasia::Ready_Weapon()
 
 	WeaponDesc.pParentAtk = &m_eStat.fAtk;
 
-	m_pWeaponShield = dynamic_cast<CWeapon*>(m_pGameInstance->Clone_GameObject(TEXT("Prototype_GameObject_Weapon__Raxasia_P1_Shield"), &WeaponDesc));
-	if (nullptr == m_pWeapon)
+	m_pWeaponShield = dynamic_cast<CWeapon*>(m_pGameInstance->Clone_GameObject(TEXT("Prototype_GameObject_Weapon_Raxasia_P1_Shield"), &WeaponDesc));
+	if (nullptr == m_pWeaponShield)
 		return E_FAIL;
-
+	
 	m_pWeaponShield->Appear();
 
 
@@ -687,39 +700,39 @@ void CRaxasia::Update_Collider()
 void CRaxasia::ChangePhase()
 {
 
-	if (m_pExtraModelCom == nullptr || m_pExtraFsmCom == nullptr)
-	{
-		return;
-	}
-	m_pFsmCom->Release_States();
+	//if (m_pExtraModelCom == nullptr || m_pExtraFsmCom == nullptr)
+	//{
+	//	return;
+	//}
+	//m_pFsmCom->Release_States();
 
-	Safe_Release(m_pModelCom);
-	Safe_Release(m_pFsmCom);
+	//Safe_Release(m_pModelCom);
+	//Safe_Release(m_pFsmCom);
 
-	m_pModelCom = m_pExtraModelCom;
-	m_pFsmCom = m_pExtraFsmCom;
+	//m_pModelCom = m_pExtraModelCom;
+	//m_pFsmCom = m_pExtraFsmCom;
 
-	m_pExtraModelCom = nullptr;
-	m_pExtraFsmCom = nullptr;
+	//m_pExtraModelCom = nullptr;
+	//m_pExtraFsmCom = nullptr;
 
-	m_pModelCom->SetUp_Animation(8, true);//P2 Idle
-	m_pFsmCom->Set_State(IDLE);
+	//m_pModelCom->SetUp_Animation(8, true);//P2 Idle
+	//m_pFsmCom->Set_State(IDLE);
 
-	m_pModelCom->Play_Animation(0);
+	//m_pModelCom->Play_Animation(0);
 
 
-	m_pWeapon->ChangeSocketMatrix(m_pModelCom->Get_BoneCombindTransformationMatrix_Ptr(93));
+	//m_pWeapon->ChangeSocketMatrix(m_pModelCom->Get_BoneCombindTransformationMatrix_Ptr(93));
 
-	m_eStat.fHp = 200.f;
-	m_eStat.fMaxHp = 200.f;
-	m_eStat.fAtk = 15.f;
-	m_eStat.fDefence = 8.f;
-	m_eStat.fStemina = 100.f;
-	m_eStat.fMaxGrogyPoint = 50.f;
-	m_eStat.fGrogyPoint = 0.f;
+	//m_eStat.fHp = 200.f;
+	//m_eStat.fMaxHp = 200.f;
+	//m_eStat.fAtk = 15.f;
+	//m_eStat.fDefence = 8.f;
+	//m_eStat.fStemina = 100.f;
+	//m_eStat.fMaxGrogyPoint = 50.f;
+	//m_eStat.fGrogyPoint = 0.f;
 
-	m_isDead = false;
-	m_isChanged = true;
+	//m_isDead = false;
+	//m_isChanged = true;
 }
 
 CRaxasia* CRaxasia::Create(ID3D11Device* pDevice, ID3D11DeviceContext* pContext)
@@ -757,6 +770,7 @@ void CRaxasia::Free()
 		Safe_Release(m_EXCollider[i]);
 	}
 	Safe_Release(m_pWeapon);
+	Safe_Release(m_pWeaponShield);
 	Safe_Release(m_pP1ModelCom);
 	Safe_Release(m_pExtraModelCom);
 	Safe_Release(m_pCutSceneModelCom[0]);

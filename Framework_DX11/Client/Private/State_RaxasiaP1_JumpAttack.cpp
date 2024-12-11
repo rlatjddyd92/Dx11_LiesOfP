@@ -101,7 +101,7 @@ void CState_RaxasiaP1_JumpAttack::End_State()
 
 _bool CState_RaxasiaP1_JumpAttack::End_Check()
 {
-    return false;
+    return m_pMonster->Get_EndAnim(AN_SLASH);;
 }
 
 void CState_RaxasiaP1_JumpAttack::Collider_Check(_double CurTrackPos)

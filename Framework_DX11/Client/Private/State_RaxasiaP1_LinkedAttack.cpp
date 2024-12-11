@@ -58,6 +58,11 @@ void CState_RaxasiaP1_LinkedAttack::Update(_float fTimeDelta)
             m_pMonster->Change_Animation(AN_LINKEDATTACK_LAST, false, 0.1f, 0);
         }
 
+        if (CurTrackPos >= 115.f)
+        {
+            m_pMonster->Get_Transform()->LookAt_Lerp_NoHeight(m_pMonster->Get_TargetDir(), 1.f, fTimeDelta);
+        }
+
         break;
 
     case 2:
