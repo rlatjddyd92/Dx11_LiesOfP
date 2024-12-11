@@ -17,6 +17,10 @@ private:
 	virtual ~CNavigation() = default;
 
 public:
+	void	Change_CurrentCellIndex(_int iIndex) { m_iCurrentCellIndex = iIndex; };
+	_int	Get_CurrentCellIndex() { return m_iCurrentCellIndex; }
+
+public:
 	virtual HRESULT Initialize_Prototype(const _wstring& strNavigationDataFile);
 	virtual HRESULT Initialize(void* pArg) override; 
 
@@ -26,8 +30,8 @@ public:
 	_float SetUp_OnCell(class CTransform* pTransform, _float fOffset, _float fTimeDelta);
 	void Move_to_Cell(class CRigidBody* pRigidBody, _int iIndex);
 	void Research_Cell(_Vec3 vNewPos, _uint* iIndex = nullptr);
-	void Change_CurrentCellIndex(_int iIndex) { m_iCurrentCellIndex = iIndex; };
-	_int Get_CurrentCellIndex() { return m_iCurrentCellIndex; }
+	_float Get_CellPosY(class CTransform* pTransform, _float fOffset = 0.f);
+
 #ifdef _DEBUG
 public:
 	virtual HRESULT Render() override;

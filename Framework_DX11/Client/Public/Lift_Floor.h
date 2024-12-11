@@ -17,7 +17,7 @@ class CLift_Floor :
 public:
 	enum MOVEDIR { UP,DOWN,DIR_END };
 
-protected:
+private:
 	CLift_Floor(ID3D11Device* pDevice, ID3D11DeviceContext* pContext);
 	CLift_Floor(const CLift_Floor& Prototype);
 	virtual ~CLift_Floor() = default;

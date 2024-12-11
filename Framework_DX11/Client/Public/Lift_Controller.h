@@ -14,7 +14,7 @@ BEGIN(Client)
 class CLift_Controller :
     public CGameObject
 {
-protected:
+private:
 	CLift_Controller(ID3D11Device* pDevice, ID3D11DeviceContext* pContext);
 	CLift_Controller(const CLift_Controller& Prototype);
 	virtual ~CLift_Controller() = default;

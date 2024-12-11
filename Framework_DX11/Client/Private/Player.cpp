@@ -17,6 +17,7 @@
 #include "Stargazer.h"
 #include "SteppingStone.h"
 #include "LastDoor.h"
+#include "Item_Throw.h"
 
 #include "Effect_Manager.h"
 #include "Effect_Container.h"
@@ -1018,6 +1019,40 @@ CStargazer* CPlayer::Find_Stargazer()
 	return dynamic_cast<CStargazer*>(Stargazers[0]);
 }
 
+void CPlayer::Create_ThrowItem(SPECIAL_ITEM eItemType)
+{
+	if (nullptr != m_pThrowItem)
+		return;
+
+	CItem_Throw::THROWITEM_DESC Desc{};
+	Desc.eType = eItemType;
+	Desc.pParentWorldMatrix = m_pTransformCom->Get_WorldMatrix_Ptr();
+	Desc.pSocketBoneMatrix = m_pModelCom->Get_BoneCombindTransformationMatrix_Ptr("BN_Weapon_R");
+
+	_Vec3 vLook = m_pTransformCom->Get_State(CTransform::STATE_LOOK);
+	vLook.Normalize();
+
+	_Vec3 vUp = m_pTransformCom->Get_State(CTransform::STATE_UP);
+	vUp.Normalize();
+
+	Desc.vThrowDir = vLook + vUp;
+	
+	m_pThrowItem = dynamic_cast<CItem_Throw*>(m_pGameInstance->Get_CloneObject_ToLayer(LEVEL_GAMEPLAY, TEXT("Layer_Item"), TEXT("Prototype_GameObject_ThrowItem"), &Desc));
+	Safe_AddRef(m_pThrowItem);
+
+}
+
+void CPlayer::Throw_ITem()
+{
+	if (nullptr == m_pThrowItem)
+		return;
+
+	m_pThrowItem->Throw();
+
+	Safe_Release(m_pThrowItem);
+	m_pThrowItem = nullptr;
+}
+
 void CPlayer::CollisionStay_IntercObj(CGameObject* pGameObject)
 {
 	if (m_pFsmCom->Get_CurrentState() >= 100)
@@ -1467,6 +1502,9 @@ CPawn* CPlayer::Clone(void * pArg)
 void CPlayer::Free()
 {
 	__super::Free();
+
+	if (nullptr != m_pThrowItem)
+		Safe_Release(m_pThrowItem);
 
 	Safe_Release(m_pDissloveTexture);
 

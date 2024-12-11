@@ -14,7 +14,7 @@ BEGIN(Client)
 class CSteppingStone :
 	public CGameObject
 {
-protected:
+private:
 	CSteppingStone(ID3D11Device* pDevice, ID3D11DeviceContext* pContext);
 	CSteppingStone(const CSteppingStone& Prototype);
 	virtual ~CSteppingStone() = default;

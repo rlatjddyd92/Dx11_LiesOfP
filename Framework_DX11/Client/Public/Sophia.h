@@ -14,7 +14,7 @@ BEGIN(Client)
 class CSophia :
 	public CGameObject
 {
-protected:
+private:
 	CSophia(ID3D11Device* pDevice, ID3D11DeviceContext* pContext);
 	CSophia(const CSophia& Prototype);
 	virtual ~CSophia() = default;

@@ -26,7 +26,8 @@ public:
 	}LADDER_DESC;
 
 	enum COLLIDERTYPE { UP, DOWN, COLLIDER_END };
-protected:
+
+private:
 	CLadder(ID3D11Device* pDevice, ID3D11DeviceContext* pContext);
 	CLadder(const CLadder& Prototype);
 	virtual ~CLadder() = default;

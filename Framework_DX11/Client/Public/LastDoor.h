@@ -16,7 +16,7 @@ BEGIN(Client)
 class CLastDoor :
 	public CGameObject
 {
-protected:
+private:
 	CLastDoor(ID3D11Device* pDevice, ID3D11DeviceContext* pContext);
 	CLastDoor(const CLastDoor& Prototype);
 	virtual ~CLastDoor() = default;
