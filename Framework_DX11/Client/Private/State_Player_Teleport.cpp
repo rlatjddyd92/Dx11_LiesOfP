@@ -277,7 +277,7 @@ void CState_Player_Teleport::Update_Die(_float fTimeDelta)
         {
             if (!m_isFadeIn)
             {
-                GET_GAMEINTERFACE->Fade_In(0.7f);
+                GET_GAMEINTERFACE->Fade_In(0.9f);
                 CEffect_Manager::Get_Instance()->Add_Effect_ToLayer(LEVEL_GAMEPLAY, TEXT("Player_Teleport_Arrive"), (_Vec3)m_pPlayer->Get_Transform()->Get_State(CTransform::STATE_POSITION));
                 m_pPlayer->Play_Sound(CPawn::PAWN_SOUND_EFFECT2, TEXT("SE_PC_MT_Teleport_End.wav"));
                 m_isFadeIn = true;

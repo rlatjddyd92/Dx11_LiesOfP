@@ -261,6 +261,9 @@ public:
 	void			DeActive_Effect(const EFFECT_TYPE& eType);
 
 	virtual _bool	Calc_DamageGain(_float fAtkDmg, _Vec3 vHitPos = { 0.f,0.f,0.f }, _uint iHitType = HIT_END, _uint iAttackStrength = ATK_END, CGameObject* pAttacker = nullptr) override;
+	void			Damaged(_float fAtkDmg); 
+	void			Damaged_Guard(_float fAtkDmg, const _Matrix* pSocketBoneMatrix = nullptr);
+	void			Change_HitState(_float fAtkDmg, _Vec3 vHitPos);
 	_bool			Decrease_Stamina(_float fAmount);
 	_bool			Check_Region_Fable01();
 	_bool			Check_Region_Fable02();
@@ -322,7 +325,6 @@ private:
 	_float				m_fStaminaRecoveryTime = {};
 
 private:
-	void			Damaged(_float fAtkDmg, _Vec3 vHitPos);
 
 	void			Update_Stat(_float fTimeDelta);
 	void			CollisionStay_IntercObj(CGameObject* pGameObject);

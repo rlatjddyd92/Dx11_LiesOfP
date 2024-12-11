@@ -38,7 +38,7 @@ HRESULT CState_Player_Die::Start_State(void* pArg)
     _int iAnim = Choice_DieAnim(pDesc);
 
     m_pPlayer->Change_Animation(m_iAnimation_Die[iAnim], false, 0.1f);
-    m_pPlayer->Get_Player_Stat().vGauge_Hp.x = 0.f;
+    m_pPlayer->Damaged(9999999.f);
 
     m_pPlayer->Change_Weapon();
     m_pPlayer->Combine_Scissor();
@@ -98,7 +98,7 @@ void CState_Player_Die::Update(_float fTimeDelta)
 
 void CState_Player_Die::End_State()
 {
-
+    m_pPlayer->Recovery_HP(9999999.f);
     m_pPlayer->Set_IsGuard(false);
 }
 

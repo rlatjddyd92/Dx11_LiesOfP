@@ -725,7 +725,9 @@ _bool CPlayer::Calc_DamageGain(_float fAtkDmg, _Vec3 vHitPos, _uint iHitType, _u
 	{
 		if (ATK_STRONG == iAttackStrength)
 		{
-			Damaged(fAtkDmg, vHitPos);
+			Damaged(fAtkDmg);
+			Change_HitState(fAtkDmg, vHitPos);
+			return true;
 		}
 	}
 	else if (m_isArm)	//리전암 작동 상태
@@ -757,6 +759,8 @@ _bool CPlayer::Calc_DamageGain(_float fAtkDmg, _Vec3 vHitPos, _uint iHitType, _u
 			Decrease_Stamina(fAtkDmg * 0.2f);
 			m_pEffect_Manager->Add_Effect_ToLayer(LEVEL_GAMEPLAY, TEXT("Player_PerfectGuard"), pParetnMatrix, pSocketBoneMatrix);
 			m_pGameInstance->Start_TimerLack(TEXT("Timer_60"), 0.001f, 0.6f);
+
+			return false;
 		}
 		else if (m_isParry)
 		{
@@ -775,6 +779,9 @@ _bool CPlayer::Calc_DamageGain(_float fAtkDmg, _Vec3 vHitPos, _uint iHitType, _u
 		{
 			m_pFsmCom->Change_State(ARM_GURAD_HEAVY);
 		}
+
+		Damaged_Guard(fAtkDmg, pSocketBoneMatrix);
+		return false;
 	}
 	else if (m_isParry) // 패링 상태
 	{
@@ -788,6 +795,8 @@ _bool CPlayer::Calc_DamageGain(_float fAtkDmg, _Vec3 vHitPos, _uint iHitType, _u
 			Decrease_Region();
 			m_pFsmCom->Change_State(FLAME_PARRYATTACK);
 		}
+
+		return false;
 	}
 	else if (m_isGuard)	// 가드 상태
 	{
@@ -818,22 +827,15 @@ _bool CPlayer::Calc_DamageGain(_float fAtkDmg, _Vec3 vHitPos, _uint iHitType, _u
 		}
 		else
 		{
-			
 			if (ATK_STRONG == iAttackStrength)
 			{
-				Damaged(fAtkDmg, vHitPos);
+				Damaged(fAtkDmg);
+				Change_HitState(fAtkDmg, vHitPos);
 				return true;
 			}
 			else
 			{
-				// 24-12-06 김성용
-				// 무기 사용 시, 내구도 감소 
-				GET_GAMEINTERFACE->Add_Durable_Weapon(-1.f);
-				m_pEffect_Manager->Add_Effect_ToLayer(LEVEL_GAMEPLAY, TEXT("Player_Guard"), pParetnMatrix, pSocketBoneMatrix);
-				m_tPlayer_Stat->vGauge_Hp.x = max(0.f, m_tPlayer_Stat->vGauge_Hp.x - fAtkDmg * 0.7f);
-				if (m_tPlayer_Stat->vGauge_Hp.y - m_tPlayer_Stat->vGauge_Hp.x > 100.f)
-					m_tPlayer_Stat->vGauge_Hp.y = max(m_tPlayer_Stat->vGauge_Hp.x, m_tPlayer_Stat->vGauge_Hp.y - fAtkDmg * 0.7f);
-
+				Damaged_Guard(fAtkDmg, pSocketBoneMatrix);
 				Decrease_Stamina(fAtkDmg * 0.23f);
 			}
 		}
@@ -846,24 +848,13 @@ _bool CPlayer::Calc_DamageGain(_float fAtkDmg, _Vec3 vHitPos, _uint iHitType, _u
 				m_pFsmCom->Change_State(TH_GUARDHIT, &vHitPos);
 
 			Choice_GuardSound(0, 0, false);
-		}
-	}
-	else if (m_isParry)
-	{
-		if (m_eWeaponType == WEP_RAPIER)
-		{
-			Decrease_Region();
-			m_pFsmCom->Change_State(RAPIER_PARRYATTACK);
-		}
-		else if (m_eWeaponType == WEP_FLAME)
-		{
-			Decrease_Region();
-			m_pFsmCom->Change_State(FLAME_PARRYATTACK);
+			return false;
 		}
 	}
 	else //그냥 맞음
 	{
-		Damaged(fAtkDmg, vHitPos);
+		Damaged(fAtkDmg);
+		Change_HitState(fAtkDmg, vHitPos);
 	}
 
 	return true;
@@ -936,21 +927,41 @@ void CPlayer::Recovery_Region(_float fAmount)
 }
 
 
-void CPlayer::Damaged(_float fAtkDmg, _Vec3 vHitPos)
+void CPlayer::Damaged(_float fAtkDmg)
+{
+	m_tPlayer_Stat->vGauge_Hp.x = max(0.f, m_tPlayer_Stat->vGauge_Hp.x - fAtkDmg);
+	if(m_tPlayer_Stat->vGauge_Hp.y - m_tPlayer_Stat->vGauge_Hp.x > 100.f)
+		m_tPlayer_Stat->vGauge_Hp.y = max(m_tPlayer_Stat->vGauge_Hp.x, m_tPlayer_Stat->vGauge_Hp.y - fAtkDmg);
+
+}
+
+void CPlayer::Damaged_Guard(_float fAtkDmg, const _Matrix* pSocketBoneMatrix)
+{
+	const _Matrix* pParetnMatrix = m_pTransformCom->Get_WorldMatrix_Ptr();
+
+	if(nullptr == pSocketBoneMatrix)
+		pSocketBoneMatrix = m_pModelCom->Get_BoneCombindTransformationMatrix_Ptr("BN_Weapon_R");
+
+	GET_GAMEINTERFACE->Add_Durable_Weapon(-1.f);
+	m_pEffect_Manager->Add_Effect_ToLayer(LEVEL_GAMEPLAY, TEXT("Player_Guard"), pParetnMatrix, pSocketBoneMatrix);
+	m_tPlayer_Stat->vGauge_Hp.x = max(0.f, m_tPlayer_Stat->vGauge_Hp.x - fAtkDmg * 0.7f);
+	if (m_tPlayer_Stat->vGauge_Hp.y - m_tPlayer_Stat->vGauge_Hp.x > 100.f)
+		m_tPlayer_Stat->vGauge_Hp.y = max(m_tPlayer_Stat->vGauge_Hp.x, m_tPlayer_Stat->vGauge_Hp.y - fAtkDmg * 0.7f);
+
+	Decrease_Stamina(fAtkDmg * 0.23f);
+}
+
+void CPlayer::Change_HitState(_float fAtkDmg, _Vec3 vHitPos)
 {
 	const _Matrix* pParetnMatrix = m_pTransformCom->Get_WorldMatrix_Ptr();
 	const _Matrix* pSocketBoneMatrix = m_pModelCom->Get_BoneCombindTransformationMatrix_Ptr("BN_Weapon_R");
-
+	
 	CState_Player_Hit::HIT_DESC HitDesc{};
 	HitDesc.vHitPos = vHitPos;
 	HitDesc.isDown = false;
 
-	if (fAtkDmg >= 30.f)
+	if (fAtkDmg >= 80.f)
 		HitDesc.isDown = true;
-
-	m_tPlayer_Stat->vGauge_Hp.x = max(0.f, m_tPlayer_Stat->vGauge_Hp.x - fAtkDmg);
-	if(m_tPlayer_Stat->vGauge_Hp.y - m_tPlayer_Stat->vGauge_Hp.x > 100.f)
-		m_tPlayer_Stat->vGauge_Hp.y = max(m_tPlayer_Stat->vGauge_Hp.x, m_tPlayer_Stat->vGauge_Hp.y - fAtkDmg);
 
 	if (fAtkDmg > 0.f)
 		m_pFsmCom->Change_State(HIT, &HitDesc);
