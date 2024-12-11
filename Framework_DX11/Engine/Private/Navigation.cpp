@@ -292,7 +292,8 @@ void CNavigation::Research_Cell(_Vec3 vNewPos, _uint* iIndex)
 			if (vNewPos.y <= fCellBigY + 1.f && vNewPos.y >= fCellSmallY - 1.f)
 			{
 				m_iCurrentCellIndex = i;
-				*iIndex = i;
+				if(iIndex != nullptr)
+					*iIndex = i;
 				return;
 			}
 			else
@@ -301,7 +302,8 @@ void CNavigation::Research_Cell(_Vec3 vNewPos, _uint* iIndex)
 	}
 
 	m_iCurrentCellIndex = -1;
-	*iIndex = -1;
+	if (iIndex != nullptr)
+		*iIndex = -1;
 }
 
 

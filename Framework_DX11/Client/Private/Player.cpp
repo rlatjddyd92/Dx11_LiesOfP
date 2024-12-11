@@ -34,6 +34,7 @@
 #include "State_Player_Grinder.h"
 #include "State_Player_GetUp.h"
 #include "State_Player_ThrowItem.h"
+#include "State_Player_Die.h"
 
 #include "State_Player_OH_Idle.h"
 #include "State_Player_OH_Walk.h"
@@ -995,7 +996,7 @@ CStargazer* CPlayer::Find_Stargazer()
 		}
 	}
 
-	return nullptr;
+	return dynamic_cast<CStargazer*>(Stargazers[0]);
 }
 
 void CPlayer::CollisionStay_IntercObj(CGameObject* pGameObject)
@@ -1071,7 +1072,7 @@ void CPlayer::CollisionStay_IntercObj(CGameObject* pGameObject)
 			Desc.isDie = false;
 			Desc.pSteppingStone = pSteppingStone;
 
-			m_pFsmCom->Change_State(TELEPORT, pSteppingStone);
+			m_pFsmCom->Change_State(TELEPORT, &Desc);
 		}
 	}
 	else if (pGameObject->Get_Tag() == TEXT("LastDoor"))
@@ -1312,6 +1313,7 @@ HRESULT CPlayer::Ready_FSM()
 	m_pFsmCom->Add_State(CState_Player_Grinder::Create(m_pFsmCom, this, GRINDER, &Desc));
 	m_pFsmCom->Add_State(CState_Player_GetUp::Create(m_pFsmCom, this, GETUP, &Desc));
 	m_pFsmCom->Add_State(CState_Player_ThrowItem::Create(m_pFsmCom, this, THROW_ITEM, &Desc));
+	m_pFsmCom->Add_State(CState_Player_Die::Create(m_pFsmCom, this, DIE, &Desc));
 
 	m_pFsmCom->Add_State(CState_Player_OH_Idle::Create(m_pFsmCom, this, OH_IDLE, &Desc));
 	m_pFsmCom->Add_State(CState_Player_OH_Walk::Create(m_pFsmCom, this, OH_WALK, &Desc));

@@ -1,9 +1,12 @@
 #include "stdafx.h"
 #include "State_Player_Die.h"
+#include "State_Player_Teleport.h"
 #include "GameInstance.h"
 #include "Model.h"
 #include "Player.h"
 #include "Camera.h"
+#include "GameInterface_Controller.h"
+#include "Effect_Manager.h"
 
 CState_Player_Die::CState_Player_Die(CFsm* pFsm, CPlayer* pPlayer)
     :CState{ pFsm }
@@ -13,11 +16,11 @@ CState_Player_Die::CState_Player_Die(CFsm* pFsm, CPlayer* pPlayer)
 
 HRESULT CState_Player_Die::Initialize(_uint iStateNum, void* pArg)
 {
-    m_iAnimation_Die[HIT_B] = m_pPlayer->Get_Model()->Find_AnimationIndex("AS_Pino_Hit_Dead_B", 2.f);
-    m_iAnimation_Die[HIT_F] = m_pPlayer->Get_Model()->Find_AnimationIndex("AS_Pino_Hit_Dead_F", 2.f);
-    m_iAnimation_Die[DOWN_B] = m_pPlayer->Get_Model()->Find_AnimationIndex("AS_Pino_Down_Dead_B", 2.f);
-    m_iAnimation_Die[DOWN_F] = m_pPlayer->Get_Model()->Find_AnimationIndex("AS_Pino_Down_Dead_F", 2.f);
-    m_iAnimation_Die[CURSE] = m_pPlayer->Get_Model()->Find_AnimationIndex("AS_Pino_Curse_Dead", 2.f);
+    m_iAnimation_Die[HIT_B] = m_pPlayer->Get_Model()->Find_AnimationIndex("AS_Pino_Hit_Dead_B", 2.5f);
+    m_iAnimation_Die[HIT_F] = m_pPlayer->Get_Model()->Find_AnimationIndex("AS_Pino_Hit_Dead_F", 2.5f);
+    m_iAnimation_Die[DOWN_B] = m_pPlayer->Get_Model()->Find_AnimationIndex("AS_Pino_Down_Dead_B", 2.5f);
+    m_iAnimation_Die[DOWN_F] = m_pPlayer->Get_Model()->Find_AnimationIndex("AS_Pino_Down_Dead_F", 2.5f);
+    m_iAnimation_Die[CURSE] = m_pPlayer->Get_Model()->Find_AnimationIndex("AS_Pino_Curse_Dead", 2.5f);
 
     FSM_INIT_DESC* pDesc = static_cast<FSM_INIT_DESC*>(pArg);
 
@@ -40,48 +43,97 @@ HRESULT CState_Player_Die::Start_State(void* pArg)
     m_pPlayer->Change_Weapon();
     m_pPlayer->Combine_Scissor();
 
+    m_isDeadEnd = false;
+    m_isFadeOut = false;
+    m_isAppearStartEffect = false;
+
+    m_vRimLightColor = _Vec4(0.f, 0.f, 0.f, 0.5f);
+
+    m_fDieTime = 0.f;
+    m_fDissloveRatio = 0.f;
+
     return S_OK;
 }
 
 void CState_Player_Die::Update(_float fTimeDelta)
 {
+    if (m_isDeadEnd)
+    {
+        if(m_isAppearStartEffect)
+        {
+            m_fDissloveRatio += fTimeDelta;
+            m_vRimLightColor.z = max(m_vRimLightColor.z + fTimeDelta, 1.f);
+            m_vRimLightColor.w = max(m_vRimLightColor.w - 0.6f * fTimeDelta, 0.1f);
+        }
+
+        m_fDieTime += fTimeDelta;
+        if (!m_isAppearStartEffect)
+        {
+            CEffect_Manager::Get_Instance()->Add_Effect_ToLayer(LEVEL_GAMEPLAY, TEXT("Player_Teleport_Depart"), (_Vec3)m_pPlayer->Get_Transform()->Get_State(CTransform::STATE_POSITION));
+            m_isAppearStartEffect = true;
+        }
+        else if (m_fDieTime > 0.4f && !m_isFadeOut)
+        {
+            GET_GAMEINTERFACE->Fade_Out(TEXT(""), TEXT(""));
+            m_isFadeOut = true;
+        }
+        else if (m_fDieTime > 1.5f && m_isFadeOut)
+        {
+            CState_Player_Teleport::TELEPORT_DESC Desc{};
+            Desc.isDie = true;
+
+            m_pPlayer->Change_State(CPlayer::TELEPORT, &Desc);
+        }
+    }
+
     //죽으면 이전 별바라기로
+    if (End_Check())
+    {
+        m_isDeadEnd = true;
+    }
+
+    m_pPlayer->Set_DissloveRatio(m_fDissloveRatio);
+    m_pPlayer->Set_RimLightColor(m_vRimLightColor);
 }
 
 void CState_Player_Die::End_State()
 {
+
     m_pPlayer->Set_IsGuard(false);
 }
 
 _uint CState_Player_Die::Choice_DieAnim(DIE_DESC* pDesc)
 {  
-    // 넘어져 있다는 상태임
-    if (m_pFsm->Get_PrevState() == CPlayer::HIT)
+    if (nullptr != pDesc)
     {
-        if (pDesc->isFront)
+        // 넘어져 있다는 상태임
+        if (m_pFsm->Get_PrevState() == CPlayer::HIT)
         {
-            return DOWN_F;
+            if (pDesc->isFront)
+            {
+                return DOWN_F;
+            }
+            else
+            {
+                return DOWN_B;
+            }
         }
-        else
+        else if (pDesc->vHitPos.Length() > 0.f)
         {
-            return DOWN_B;
-        }
-    }
-    else if(pDesc->vHitPos.Length() > 0.f)
-    {
-        _Matrix PlayerWorldMatrix = m_pPlayer->Get_Transform()->Get_WorldMatrix();
-        _Vec3 vHitDir = pDesc->vHitPos - PlayerWorldMatrix.Translation();
-        vHitDir.Normalize();
+            _Matrix PlayerWorldMatrix = m_pPlayer->Get_Transform()->Get_WorldMatrix();
+            _Vec3 vHitDir = pDesc->vHitPos - PlayerWorldMatrix.Translation();
+            vHitDir.Normalize();
 
-        _float fForwardDot = vHitDir.Dot(PlayerWorldMatrix.Forward()); // 앞뒤 방향
+            _float fForwardDot = vHitDir.Dot(PlayerWorldMatrix.Forward()); // 앞뒤 방향
 
-        if (fForwardDot > 0.f)
-        {
-            return HIT_F;
-        }
-        else if (fForwardDot < -0.f)
-        {
-            return HIT_B;  // 뒤쪽
+            if (fForwardDot > 0.f)
+            {
+                return HIT_F;
+            }
+            else if (fForwardDot < -0.f)
+            {
+                return HIT_B;  // 뒤쪽
+            }
         }
     }
 

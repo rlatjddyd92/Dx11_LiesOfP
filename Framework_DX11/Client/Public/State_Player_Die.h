@@ -36,7 +36,18 @@ private:
 
     _uint               m_iAnimation_Die[DIE_END] = {};
 
-    _double* m_pTrackPos = { nullptr };
+    _double*            m_pTrackPos = { nullptr };
+
+    _bool               m_isDeadEnd = {};
+    _float              m_fDieTime = {};
+
+
+    _bool               m_isAppearStartEffect = {};
+    _bool               m_isFadeOut = {};
+
+    _float              m_fDissloveRatio = {};
+
+    _Vec4               m_vRimLightColor = {};
 
 private:
     _uint               Choice_DieAnim(DIE_DESC* pDesc);

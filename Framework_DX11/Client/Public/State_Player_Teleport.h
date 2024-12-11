@@ -53,6 +53,8 @@ private:
     void                Update_Stargazer(_float fTimeDelta);
     void                Update_Die(_float fTimeDelta);
 
+    void                Move_To_Stargazer();
+
 public:
     static CState_Player_Teleport* Create(class CFsm* pFsm, class CPlayer* pPlayer, _uint iStateNum, void* pArg = nullptr);
     virtual void Free() override;

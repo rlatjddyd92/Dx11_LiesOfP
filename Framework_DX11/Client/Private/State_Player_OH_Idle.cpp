@@ -92,6 +92,16 @@ void CState_Player_OH_Idle::Update(_float fTimeDelta)
         {
             m_pPlayer->Change_State(CPlayer::THROW_ITEM);
         }
+        else if (SPECIAL_ITEM::SP_TELEPOT == eNow)
+        {
+            //UI¸¦ ¶ç¿ìÀÚ
+            m_pPlayer->Change_State(CPlayer::TELEPORT );
+        }
+        else if (SPECIAL_ITEM::SP_DEAD == eNow)
+        {
+            //UI¸¦ ¶ç¿ìÀÚ
+            m_pPlayer->Change_State(CPlayer::DIE);
+        }
     }
     else if (KEY_TAP(KEY::TAPKEY))
     {
