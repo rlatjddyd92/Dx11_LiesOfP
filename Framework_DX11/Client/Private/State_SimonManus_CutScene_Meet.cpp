@@ -47,7 +47,6 @@ void CState_SimonManus_CutScene_Meet::Update(_float fTimeDelta)
     }
     else if (m_pMonster->Get_EndAnim(m_iAnimation_Hand))
     {
-        m_pMonster->
         m_pMonster->Change_Animation(m_iAnimation_End, false, 0.2f, 0);
     }
     else if (m_pMonster->Get_EndAnim(m_iAnimation_End))

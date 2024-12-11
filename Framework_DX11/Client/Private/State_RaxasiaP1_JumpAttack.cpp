@@ -46,7 +46,7 @@ void CState_RaxasiaP1_JumpAttack::Update(_float fTimeDelta)
     switch (m_iRouteTrack)
     {
     case 0:
-
+    {
         _float fTime = 0;
         if (m_iCurAnimIndex == AN_JUMPATTACK_L)
         {
@@ -73,6 +73,7 @@ void CState_RaxasiaP1_JumpAttack::Update(_float fTimeDelta)
         }
 
         break;
+    }
 
     case 1:
         if (End_Check())

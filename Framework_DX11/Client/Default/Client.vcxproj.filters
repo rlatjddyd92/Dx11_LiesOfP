@@ -927,13 +927,13 @@
     </Filter>
     <Filter Include="02.GameObjects\15.Item">
       <UniqueIdentifier>{dd5201b5-c013-4b44-b8bc-823d92d1d746}</UniqueIdentifier>
-	</Filter>
+    </Filter>
     <Filter Include="03.GameInterface_Controller\00.UIManager\00.UIPage\17.UIPage_Chest">
       <UniqueIdentifier>{b9789187-f1ad-4213-9cb0-9f158043cd13}</UniqueIdentifier>
     </Filter>
     <Filter Include="03.GameInterface_Controller\00.UIManager\00.UIPage\16.UIPage_Shop %2850%25%29">
       <UniqueIdentifier>{9e52ec52-1fa3-4985-8f37-acaa40a8f2fd}</UniqueIdentifier>
-	</Filter>
+    </Filter>
     <Filter Include="05.Fsm\Monster\Raxasia">
       <UniqueIdentifier>{989e5c91-89fc-4fcc-8223-7354e094e836}</UniqueIdentifier>
     </Filter>
@@ -1771,60 +1771,60 @@
     </ClInclude>
     <ClInclude Include="..\Public\State_Player_Die.h">
       <Filter>05.Fsm\Player\Common\Die</Filter>
-	</ClInclude>
-    <ClInclude Include="..\Public\UIPage_Shop.h">
-      <Filter>03.GameInterface_Controller\00.UIManager\00.UIPage\16.UIPage_Shop %2850%25%29</Filter>
     </ClInclude>
     <ClInclude Include="..\Public\UIPage_Effect.h">
       <Filter>03.GameInterface_Controller\00.UIManager\00.UIPage\12.UIPage_Effect %2880%25%29</Filter>
     </ClInclude>
+    <ClInclude Include="..\Public\UIPage_Shop.h">
+      <Filter>03.GameInterface_Controller\00.UIManager\00.UIPage\16.UIPage_Shop %2850%25%29</Filter>
+    </ClInclude>
     <ClInclude Include="..\Public\UIPage_Chest.h">
       <Filter>03.GameInterface_Controller\00.UIManager\00.UIPage\17.UIPage_Chest</Filter>
-	</ClInclude>
-    <ClInclude Include="..\Public\State_RaxasiaP1_Idle.h">
-      <Filter>05.Fsm\Monster\Raxasia\P1\Idle</Filter>
-    </ClInclude>
-    <ClInclude Include="..\Public\State_RaxasiaP1_HitFatal.h">
-      <Filter>05.Fsm\Monster\Raxasia\P1\HitFatal</Filter>
-    </ClInclude>
-    <ClInclude Include="..\Public\State_RaxasiaP1_Grogy.h">
-      <Filter>05.Fsm\Monster\Raxasia\P1\Grogy</Filter>
     </ClInclude>
     <ClInclude Include="..\Public\State_RaxasiaP1_Die.h">
       <Filter>05.Fsm\Monster\Raxasia\P1\Die</Filter>
     </ClInclude>
-    <ClInclude Include="..\Public\State_RaxasiaP1_Run.h">
-      <Filter>05.Fsm\Monster\Raxasia\P1\Run</Filter>
-    </ClInclude>
-    <ClInclude Include="..\Public\State_RaxasiaP1_Walk.h">
-      <Filter>05.Fsm\Monster\Raxasia\P1\Walk</Filter>
-    </ClInclude>
-    <ClInclude Include="..\Public\State_RaxasiaP1_LinkedAttack.h">
-      <Filter>05.Fsm\Monster\Raxasia\P1\Attack\Route\LinkedAttack</Filter>
-    </ClInclude>
-    <ClInclude Include="..\Public\State_RaxasiaP1_GroundSlash.h">
-      <Filter>05.Fsm\Monster\Raxasia\P1\Attack\Route\GroundSlash</Filter>
-    </ClInclude>
     <ClInclude Include="..\Public\State_RaxasiaP1_DashUpper.h">
       <Filter>05.Fsm\Monster\Raxasia\P1\Attack\Route\DashUpper</Filter>
-    </ClInclude>
-    <ClInclude Include="..\Public\State_RaxasiaP1_RepetUpperSlash.h">
-      <Filter>05.Fsm\Monster\Raxasia\P1\Attack\Route\RepetUpperSlash</Filter>
-    </ClInclude>
-    <ClInclude Include="..\Public\State_RaxasiaP1_KickSting.h">
-      <Filter>05.Fsm\Monster\Raxasia\P1\Attack\Route\KickSting</Filter>
-    </ClInclude>
-    <ClInclude Include="..\Public\State_RaxasiaP1_TripleSting.h">
-      <Filter>05.Fsm\Monster\Raxasia\P1\Attack\Route\TripleSting</Filter>
     </ClInclude>
     <ClInclude Include="..\Public\State_RaxasiaP1_Discharge.h">
       <Filter>05.Fsm\Monster\Raxasia\P1\Attack\RouteParts\Discharge</Filter>
     </ClInclude>
+    <ClInclude Include="..\Public\State_RaxasiaP1_Grogy.h">
+      <Filter>05.Fsm\Monster\Raxasia\P1\Grogy</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Public\State_RaxasiaP1_GroundSlash.h">
+      <Filter>05.Fsm\Monster\Raxasia\P1\Attack\Route\GroundSlash</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Public\State_RaxasiaP1_HitFatal.h">
+      <Filter>05.Fsm\Monster\Raxasia\P1\HitFatal</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Public\State_RaxasiaP1_Idle.h">
+      <Filter>05.Fsm\Monster\Raxasia\P1\Idle</Filter>
+    </ClInclude>
     <ClInclude Include="..\Public\State_RaxasiaP1_JumpAttack.h">
       <Filter>05.Fsm\Monster\Raxasia\P1\Attack\RouteParts\JumpAttack</Filter>
     </ClInclude>
+    <ClInclude Include="..\Public\State_RaxasiaP1_KickSting.h">
+      <Filter>05.Fsm\Monster\Raxasia\P1\Attack\Route\KickSting</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Public\State_RaxasiaP1_LinkedAttack.h">
+      <Filter>05.Fsm\Monster\Raxasia\P1\Attack\Route\LinkedAttack</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Public\State_RaxasiaP1_RepetUpperSlash.h">
+      <Filter>05.Fsm\Monster\Raxasia\P1\Attack\Route\RepetUpperSlash</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Public\State_RaxasiaP1_Run.h">
+      <Filter>05.Fsm\Monster\Raxasia\P1\Run</Filter>
+    </ClInclude>
     <ClInclude Include="..\Public\State_RaxasiaP1_SwingDown_Multiple.h">
       <Filter>05.Fsm\Monster\Raxasia\P1\Attack\RouteParts\SwingDown_Multiple</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Public\State_RaxasiaP1_TripleSting.h">
+      <Filter>05.Fsm\Monster\Raxasia\P1\Attack\Route\TripleSting</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Public\State_RaxasiaP1_Walk.h">
+      <Filter>05.Fsm\Monster\Raxasia\P1\Walk</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -2564,63 +2564,63 @@
     </ClCompile>
     <ClCompile Include="..\Private\State_Player_Die.cpp">
       <Filter>05.Fsm\Player\Common\Die</Filter>
-	</ClCompile>
-    <ClCompile Include="..\Private\UIPage_Shop.cpp">
-      <Filter>03.GameInterface_Controller\00.UIManager\00.UIPage\16.UIPage_Shop %2850%25%29</Filter>
     </ClCompile>
     <ClCompile Include="..\Private\UIPage_Effect.cpp">
       <Filter>03.GameInterface_Controller\00.UIManager\00.UIPage\12.UIPage_Effect %2880%25%29</Filter>
     </ClCompile>
+    <ClCompile Include="..\Private\Raxasia.cpp">
+      <Filter>02.GameObjects\02.Pawn\01.Monster\Raxasia</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Private\UIPage_Shop.cpp">
+      <Filter>03.GameInterface_Controller\00.UIManager\00.UIPage\16.UIPage_Shop %2850%25%29</Filter>
+    </ClCompile>
     <ClCompile Include="..\Private\UIPage_Chest.cpp">
       <Filter>03.GameInterface_Controller\00.UIManager\00.UIPage\17.UIPage_Chest</Filter>
-	</ClCompile>
-    <ClCompile Include="..\Private\State_RaxasiaP1_Idle.cpp">
-      <Filter>05.Fsm\Monster\Raxasia\P1\Idle</Filter>
-    </ClCompile>
-    <ClCompile Include="..\Private\State_RaxasiaP1_HitFatal.cpp">
-      <Filter>05.Fsm\Monster\Raxasia\P1\HitFatal</Filter>
-    </ClCompile>
-    <ClCompile Include="..\Private\State_RaxasiaP1_Grogy.cpp">
-      <Filter>05.Fsm\Monster\Raxasia\P1\Grogy</Filter>
     </ClCompile>
     <ClCompile Include="..\Private\State_RaxasiaP1_Die.cpp">
       <Filter>05.Fsm\Monster\Raxasia\P1\Die</Filter>
     </ClCompile>
-    <ClCompile Include="..\Private\State_RaxasiaP1_Run.cpp">
-      <Filter>05.Fsm\Monster\Raxasia\P1\Run</Filter>
-    </ClCompile>
-    <ClCompile Include="..\Private\State_RaxasiaP1_Walk.cpp">
-      <Filter>05.Fsm\Monster\Raxasia\P1\Walk</Filter>
-    </ClCompile>
-    <ClCompile Include="..\Private\State_RaxasiaP1_LinkedAttack.cpp">
-      <Filter>05.Fsm\Monster\Raxasia\P1\Attack\Route\LinkedAttack</Filter>
-    </ClCompile>
-    <ClCompile Include="..\Private\State_RaxasiaP1_GroundSlash.cpp">
-      <Filter>05.Fsm\Monster\Raxasia\P1\Attack\Route\GroundSlash</Filter>
-    </ClCompile>
     <ClCompile Include="..\Private\State_RaxasiaP1_DashUpper.cpp">
       <Filter>05.Fsm\Monster\Raxasia\P1\Attack\Route\DashUpper</Filter>
-    </ClCompile>
-    <ClCompile Include="..\Private\State_RaxasiaP1_RepetUpperSlash.cpp">
-      <Filter>05.Fsm\Monster\Raxasia\P1\Attack\Route\RepetUpperSlash</Filter>
-    </ClCompile>
-    <ClCompile Include="Raxasia.cpp">
-      <Filter>02.GameObjects\02.Pawn\01.Monster\Raxasia</Filter>
-    </ClCompile>
-    <ClCompile Include="..\Private\State_RaxasiaP1_KickSting.cpp">
-      <Filter>05.Fsm\Monster\Raxasia\P1\Attack\Route\KickSting</Filter>
-    </ClCompile>
-    <ClCompile Include="..\Private\State_RaxasiaP1_TripleSting.cpp">
-      <Filter>05.Fsm\Monster\Raxasia\P1\Attack\Route\TripleSting</Filter>
     </ClCompile>
     <ClCompile Include="..\Private\State_RaxasiaP1_Discharge.cpp">
       <Filter>05.Fsm\Monster\Raxasia\P1\Attack\RouteParts\Discharge</Filter>
     </ClCompile>
+    <ClCompile Include="..\Private\State_RaxasiaP1_Grogy.cpp">
+      <Filter>05.Fsm\Monster\Raxasia\P1\Grogy</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Private\State_RaxasiaP1_GroundSlash.cpp">
+      <Filter>05.Fsm\Monster\Raxasia\P1\Attack\Route\GroundSlash</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Private\State_RaxasiaP1_HitFatal.cpp">
+      <Filter>05.Fsm\Monster\Raxasia\P1\HitFatal</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Private\State_RaxasiaP1_Idle.cpp">
+      <Filter>05.Fsm\Monster\Raxasia\P1\Idle</Filter>
+    </ClCompile>
     <ClCompile Include="..\Private\State_RaxasiaP1_JumpAttack.cpp">
       <Filter>05.Fsm\Monster\Raxasia\P1\Attack\RouteParts\JumpAttack</Filter>
     </ClCompile>
+    <ClCompile Include="..\Private\State_RaxasiaP1_KickSting.cpp">
+      <Filter>05.Fsm\Monster\Raxasia\P1\Attack\Route\KickSting</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Private\State_RaxasiaP1_LinkedAttack.cpp">
+      <Filter>05.Fsm\Monster\Raxasia\P1\Attack\Route\LinkedAttack</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Private\State_RaxasiaP1_RepetUpperSlash.cpp">
+      <Filter>05.Fsm\Monster\Raxasia\P1\Attack\Route\RepetUpperSlash</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Private\State_RaxasiaP1_Run.cpp">
+      <Filter>05.Fsm\Monster\Raxasia\P1\Run</Filter>
+    </ClCompile>
     <ClCompile Include="..\Private\State_RaxasiaP1_SwingDown_Multiple.cpp">
       <Filter>05.Fsm\Monster\Raxasia\P1\Attack\RouteParts\SwingDown_Multiple</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Private\State_RaxasiaP1_TripleSting.cpp">
+      <Filter>05.Fsm\Monster\Raxasia\P1\Attack\Route\TripleSting</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Private\State_RaxasiaP1_Walk.cpp">
+      <Filter>05.Fsm\Monster\Raxasia\P1\Walk</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

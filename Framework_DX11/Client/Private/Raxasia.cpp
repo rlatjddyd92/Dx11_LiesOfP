@@ -256,6 +256,18 @@ const _Matrix* CRaxasia::Get_WeaponWorldMat()
 	return m_pWeapon->Get_WorldMatrix_Ptr();
 }
 
+void CRaxasia::Start_CutScene(_uint iCutSceneNum)
+{
+}
+
+void CRaxasia::End_CutScene(_uint iCutSceneNum)
+{
+}
+
+void CRaxasia::Change_Model(_uint iModelNum)	// 컷신 2페이즈로 바꾸는 용도
+{
+}
+
 HRESULT CRaxasia::Ready_Components()
 {
 	if (FAILED(__super::Ready_Components()))
@@ -404,7 +416,6 @@ void CRaxasia::Update_Collider()
 
 void CRaxasia::ChangePhase()
 {
-	//모델, fsm 정리 후 엑스트라에 있던 컴포넌트들을 소유하도록, 그 후 초기화 작업까지
 	if (m_pExtraModelCom == nullptr || m_pExtraFsmCom == nullptr)
 	{
 		return;
@@ -423,43 +434,10 @@ void CRaxasia::ChangePhase()
 	m_pModelCom->SetUp_Animation(8, true);//P2 Idle
 	m_pFsmCom->Set_State(IDLE);
 
-	m_pModelCom->Play_Animation(0);		//업데이트만 한번
+	m_pModelCom->Play_Animation(0);
 
 
-	CBounding_OBB::BOUNDING_OBB_DESC			ColliderDesc{};
-
-	ColliderDesc.vExtents = _float3(0.6f, 0.3f, 0.3f);
-	ColliderDesc.vCenter = _float3(0.4f, 0.f, 0.f);
-	ColliderDesc.vAngles = _float3(0.f, 0.f, 0.f);
-
-	(m_EXCollider[LEG_LEFT])->Change_BoundingDesc(&ColliderDesc);
-	(m_EXCollider[LEG_RIGHT])->Change_BoundingDesc(&ColliderDesc);
-
-	//m_pColliderBindMatrix[CT_LEG_LEFT] = m_pModelCom->Get_BoneCombindTransformationMatrix_Ptr(173);
-	//m_pColliderBindMatrix[CT_LEG_RIGHT] = m_pModelCom->Get_BoneCombindTransformationMatrix_Ptr(187);
-
-	ColliderDesc.vExtents = _float3(0.8f, 0.7f, 0.7f);
-	ColliderDesc.vCenter = _float3(0.f, 0.f, 0.2f);
-	ColliderDesc.vAngles = _float3(0.f, -0.3f, 0.f);
-
-	(m_EXCollider[LOWERBODY])->Change_BoundingDesc(&ColliderDesc);
-
-	m_pColliderBindMatrix[CT_LOWERBODY] = m_pModelCom->Get_BoneCombindTransformationMatrix_Ptr(6);
-
-	ColliderDesc.vExtents = _float3(1.5f, 1.5f, 1.5f);
-	ColliderDesc.vCenter = _float3(0.f, 0.f, 0.f);
-	ColliderDesc.vAngles = _float3(0.2f, -0.2f, -0.1f);
-
-	(m_pColliderCom)->Change_BoundingDesc(&ColliderDesc);
-
-	m_pColliderBindMatrix[CT_UPPERBODY] = m_pModelCom->Get_BoneCombindTransformationMatrix_Ptr(72);
-
-	m_pWeapon->ChangeSocketMatrix(m_pModelCom->Get_BoneCombindTransformationMatrix_Ptr(46));
-
-	CEffect_Container::EFFECT_DESC Desc;
-	Desc.pParentMatrix = m_pTransformCom->Get_WorldMatrix_Ptr();
-	Desc.pSocketMatrix = m_pModelCom->Get_BoneCombindTransformationMatrix_Ptr(m_pModelCom->Get_UFBIndices(UFB_HAND_RIGHT));
-	//m_Effects[P1_TRAIL]->Set_EffectDesc(Desc);
+	m_pWeapon->ChangeSocketMatrix(m_pModelCom->Get_BoneCombindTransformationMatrix_Ptr(93));
 
 	m_eStat.fHp = 200.f;
 	m_eStat.fMaxHp = 200.f;
