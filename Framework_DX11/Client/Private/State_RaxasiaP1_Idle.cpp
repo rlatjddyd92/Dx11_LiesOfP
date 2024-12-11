@@ -62,10 +62,9 @@ void CState_RaxasiaP1_Idle::Update(_float fTimeDelta)
             return;
         }
 
-        if (fDist <= 10.f)
+        if (fDist <= 15.f)
         {
-            //Calc_Act_Attack(fDist);
-            //m_pMonster->Change_State(CRaxasia::ATK_REPETUPPERSLASH);
+            Calc_Act_Attack(fDist);
             return;
         }
         //else if (fDist > 14.f)
@@ -109,6 +108,36 @@ void CState_RaxasiaP1_Idle::End_State()
 
 void CState_RaxasiaP1_Idle::Calc_Act_Attack(_float fDist)
 {
+    switch (m_iAtkTrack)
+    {
+    case 0:
+        m_pMonster->Change_State(CRaxasia::ATK_DASHUPPER);
+        break;
+
+    case 1:
+        m_pMonster->Change_State(CRaxasia::ATK_GROUNDSLASH);
+        break;
+
+    case 2:
+        m_pMonster->Change_State(CRaxasia::ATK_KICKSTING);
+        break;
+
+    case 3:
+        m_pMonster->Change_State(CRaxasia::ATK_LINKEDATTACK);
+        break;
+
+    case 4:
+        m_pMonster->Change_State(CRaxasia::ATK_REPETUPPERSLASH);
+        break;
+
+    case 5:
+        m_pMonster->Change_State(CRaxasia::ATK_TRIPLESTING);
+        break;
+
+    default:
+        break;
+    }
+    ++m_iAtkTrack;
 }
 
 CState_RaxasiaP1_Idle* CState_RaxasiaP1_Idle::Create(CFsm* pFsm, CMonster* pMonster, _uint iStateNum, void* pArg)

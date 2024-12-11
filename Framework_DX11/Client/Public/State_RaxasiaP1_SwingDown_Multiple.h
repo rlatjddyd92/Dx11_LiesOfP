@@ -32,6 +32,8 @@ private:
 
     _int                m_iCurAnimIndex = {};
 
+    _bool               m_bSpeedController = { false };
+
     _bool               m_bSwing = { false };
 
     _bool               m_bSwingSound = { false };

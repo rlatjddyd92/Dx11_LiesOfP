@@ -24,8 +24,10 @@ HRESULT CState_RaxasiaP1_SwingDown_Multiple::Start_State(void* pArg)
     m_pMonster->Change_Animation(AN_SWINGDOWN, false, 0.1f, 0);
     m_iCurAnimIndex = AN_SWINGDOWN;
 
-    m_bSwingSound = false;
+    m_pMonster->Get_Model()->Set_SpeedRatio(m_iCurAnimIndex, (double)0.5);
 
+    m_bSwingSound = false;
+    m_bSpeedController = true;
     m_bSwing = false;
     return S_OK;
 }
@@ -37,6 +39,12 @@ void CState_RaxasiaP1_SwingDown_Multiple::Update(_float fTimeDelta)
 
     if (m_iRouteTrack == 0)
     {
+        if (m_bSpeedController && CurTrackPos >= 35.f)
+        {
+            m_bSpeedController = false;
+            m_pMonster->Get_Model()->Set_SpeedRatio(m_iCurAnimIndex, (double)1);
+
+        }
         if (CurTrackPos >= 80.f)
         {
             ++m_iRouteTrack;
@@ -54,20 +62,36 @@ void CState_RaxasiaP1_SwingDown_Multiple::Update(_float fTimeDelta)
             if (m_iRouteTrack == 7)
             {
                 m_iCurAnimIndex = AN_SWINGDOWN;
+                m_pMonster->Get_Model()->Set_SpeedRatio(m_iCurAnimIndex, (double)0.5f);
+                m_bSpeedController = true;
             }
             else if (m_iCurAnimIndex == AN_SWINGDOWN_L)
             {
                 m_iCurAnimIndex = AN_SWINGDOWN_R;
+                _double SpeedRatio = m_iRouteTrack * 0.2f;
+                if (SpeedRatio >= 2.f)
+                    SpeedRatio = 2.f;
+                m_pMonster->Get_Model()->Set_SpeedRatio(m_iCurAnimIndex, (double)1 + SpeedRatio);
             }
             else
             {
                 m_iCurAnimIndex = AN_SWINGDOWN_L;
+                _double SpeedRatio = m_iRouteTrack * 0.2f;
+                if (SpeedRatio >= 2.f)
+                    SpeedRatio = 2.f;
+                m_pMonster->Get_Model()->Set_SpeedRatio(m_iCurAnimIndex, (double)1 + SpeedRatio);
             }
             m_pMonster->Change_Animation(m_iCurAnimIndex, false, 0.1f, 0);
         }
     }
     else if (m_iRouteTrack = 8)
     {
+        if (m_bSpeedController && CurTrackPos >= 35.f)
+        {
+            m_bSpeedController = false;
+            m_pMonster->Get_Model()->Set_SpeedRatio(m_iCurAnimIndex, (double)1);
+
+        }
         //림라이트?
         if (End_Check())
         {
