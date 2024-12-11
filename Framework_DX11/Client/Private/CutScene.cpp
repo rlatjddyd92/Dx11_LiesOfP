@@ -150,6 +150,10 @@ void CCutScene::Active_Camera(CUTSCENE_KEYFRAME_DESC* pCutSceneDesc)
 	{
 		m_pCamera->Start_MoveLerp(pCutSceneDesc->Camera_Desc.vTargetPos, pCutSceneDesc->Camera_Desc.fMoveSpeed);
 	}
+	if (pCutSceneDesc->Camera_Desc.bShake)
+	{
+		m_pCamera->Start_PosShake(pCutSceneDesc->Camera_Desc.fShakePower, pCutSceneDesc->Camera_Desc.fShakeDuration);
+	}
 }
 
 void CCutScene::Active_Obj(CUTSCENE_KEYFRAME_DESC* pCutSceneDesc)
@@ -242,7 +246,15 @@ void CCutScene::End_Setting()
 		pPlayer->Change_State(CPlayer::OH_IDLE);
 		pPlayer->Get_Navigation()->Move_to_Cell(pPlayer->Get_RigidBody(), 1178);
 	}
+	else if (m_iIndex == BOSS2_MEET)
+	{
+		dynamic_cast<CCutScene*>(m_pGameInstance->Find_Object(LEVEL_GAMEPLAY, TEXT("Layer_CutScene"), BOSS2_MEET2))->Start_Play();
+	}
 	else if (m_iIndex == BOSS2_MEET2)
+	{
+		dynamic_cast<CCutScene*>(m_pGameInstance->Find_Object(LEVEL_GAMEPLAY, TEXT("Layer_CutScene"), BOSS2_MEET3))->Start_Play();
+	}
+	else if (m_iIndex == BOSS2_MEET3)
 	{
 		pPlayer->Change_State(CPlayer::OH_IDLE);
 		pPlayer->Get_Navigation()->Move_to_Cell(pPlayer->Get_RigidBody(), 117);

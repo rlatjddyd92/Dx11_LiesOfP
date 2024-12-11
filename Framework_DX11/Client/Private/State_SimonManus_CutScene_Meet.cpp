@@ -27,7 +27,7 @@ HRESULT CState_SimonManus_CutScene_Meet::Start_State(void* pArg)
     m_iAnimation_Hand = m_pMonster->Get_Model()->Find_AnimationIndex("AS_MOB_Manus_Hand_Cine", 1.f);
     m_iAnimation_End = m_pMonster->Get_Model()->Find_AnimationIndex("AS_MOB_Manus_End_Cine", 1.f);
 
-    m_pMonster->Get_Transform()->Rotation(0.f, 50.f, 0.f);
+    m_pMonster->Change_Animation(m_iAnimation_Turn, false, 0.f, 0);
 
     m_isStartCutScene = false;
     m_fDelay = 0.f;
@@ -39,26 +39,28 @@ HRESULT CState_SimonManus_CutScene_Meet::Start_State(void* pArg)
 void CState_SimonManus_CutScene_Meet::Update(_float fTimeDelta)
 {
     m_fDelay += fTimeDelta;
-    if (m_fDelay >= 5.f && !m_isStartCutScene)
+    if (m_fDelay >= 16.f && !m_isStartCutScene)
     {
-        m_pMonster->Change_Animation(m_iAnimation_Turn, false, 0.f, 0);
+        m_pMonster->Play_Animation();
         m_isStartCutScene = true;
+    }
+    else if(m_fDelay < 16.f)
+    {
+        m_pMonster->Stop_Animation();
     }
 
     if(m_isStartCutScene)
 
     if (m_pMonster->Get_EndAnim(m_iAnimation_Turn))
     {
-        dynamic_cast<CCutScene*>(m_pGameInstance->Find_Object(LEVEL_GAMEPLAY, TEXT("Layer_CutScene"), BOSS2_MEET2))->Start_Play();
-        m_pMonster->Change_Animation(m_iAnimation_Talk, false, 0.1f, 0);
+        m_pMonster->Change_Animation(m_iAnimation_Talk, false, 0.1f, 0.5f);
     }
     else if (m_pMonster->Get_EndAnim(m_iAnimation_Talk))
     {
-        m_pMonster->Change_Animation(m_iAnimation_Hand, false, 0.1f, 0);
+        m_pMonster->Change_Animation(m_iAnimation_Hand, false, 0.2f, 65);
     }
     else if (m_pMonster->Get_EndAnim(m_iAnimation_Hand))
     {
-        dynamic_cast<CCutScene*>(m_pGameInstance->Find_Object(LEVEL_GAMEPLAY, TEXT("Layer_CutScene"), BOSS2_MEET3))->Start_Play();
         m_pMonster->Change_Animation(m_iAnimation_End, false, 0.2f, 0);
     }
     else if (m_pMonster->Get_EndAnim(m_iAnimation_End))

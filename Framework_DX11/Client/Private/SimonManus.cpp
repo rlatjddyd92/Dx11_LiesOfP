@@ -101,6 +101,7 @@ HRESULT CSimonManus::Initialize(void* pArg)
 		XMVectorSet(0.f, 0.f, 0.f, 1.f));
 	m_pTransformCom->LookAt(_vector{ 0, 0, -1, 0 });
 
+
 	if (FAILED(Ready_Components()))
 		return E_FAIL;
 
@@ -135,6 +136,9 @@ HRESULT CSimonManus::Initialize(void* pArg)
 	m_eHitType = HIT_CARCASS;
 
 	m_pWeapon->DeActive_Collider();
+
+	m_pTransformCom->Rotation(0.f, 50.f, 0.f);
+
 	//m_pModelCom->SetUp_NextAnimation(12);
 	// 24-11-26 김성용
 	// 몬스터 직교 UI 접근 코드 
