@@ -86,11 +86,12 @@ HRESULT CRaxasia::Initialize(void* pArg)
 	m_eHitType = HIT_METAL;
 
 	m_pWeapon->DeActive_Collider();
-	//m_pModelCom->SetUp_NextAnimation(12);
-	// 24-11-26 김성용
+	// 24-12-11 김성용
 	// 몬스터 직교 UI 접근 코드 
 	// 정식 코드  
-	GET_GAMEINTERFACE->Register_Pointer_Into_OrthoUIPage(UI_ORTHO_OBJ_TYPE::ORTHO_BOSS_SIMON, this);
+	GET_GAMEINTERFACE->Register_Pointer_Into_OrthoUIPage(UI_ORTHO_OBJ_TYPE::ORTHO_BOSS_RAXASIA, this);
+
+	GET_GAMEINTERFACE->Set_OnOff_OrthoUI(false, this);
 
 	return S_OK;
 }
@@ -105,21 +106,19 @@ void CRaxasia::Priority_Update(_float fTimeDelta)
 	{
 		m_bDieState = true;
 		m_pFsmCom->Set_State(DIE);
+		if (m_isChanged)
+		{
+			// 24-12-11 김성용
+			// 몬스터 직교 UI OFF 코드 
+			// 정식 코드  
+			GET_GAMEINTERFACE->Set_OnOff_OrthoUI(false, this);
+		}
 	}
 	for (auto& pEffect : m_Effects)
 	{
 		if (!pEffect->Get_Dead())
 			pEffect->Priority_Update(fTimeDelta);
 	}
-
-
-	// 24-12-06 김성용
-	// 테스트 코드 
-	if (KEY_TAP(KEY::N))
-		GET_GAMEINTERFACE->Set_OnOff_OrthoUI(false, this);
-	if (KEY_TAP(KEY::M))
-		GET_GAMEINTERFACE->Set_OnOff_OrthoUI(true, this);
-
 
 }
 

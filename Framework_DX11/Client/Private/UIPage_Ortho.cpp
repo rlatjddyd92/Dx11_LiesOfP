@@ -228,6 +228,18 @@ void CUIPage_Ortho::CheckHost(_float fTimeDelta)
 			Make_Monster_SpecialHit((*iter)->pHost, fTimeDelta, fDistnace);
 			++iter;
 		}
+		else if ((*iter)->eType == UI_ORTHO_OBJ_TYPE::ORTHO_BOSS_RAXASIA)
+		{
+			const CPawn::PAWN_STATUS* pStat = static_cast<CPawn*>((*iter)->pHost)->Get_Status();
+
+			_float fDistnace = Check_Distance_From_Cam((*iter)->pHost);
+
+			GET_GAMEINTERFACE->Activate_Boss_Hp_Bar(true);
+			GET_GAMEINTERFACE->Set_Boss_Hp_Bar_Info(pStat->strName, pStat->fHp, pStat->fMaxHp);
+			Make_Monster_Focusing((*iter)->pHost, fTimeDelta, fDistnace);
+			Make_Monster_SpecialHit((*iter)->pHost, fTimeDelta, fDistnace);
+			++iter;
+		}
 	}
 }
 
