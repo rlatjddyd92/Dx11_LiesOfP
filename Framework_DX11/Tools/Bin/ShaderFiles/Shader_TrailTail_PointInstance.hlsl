@@ -48,6 +48,8 @@ float           g_fSpriteSpeed = 0.f;
 
 float           g_fInterval = 0.f;
 
+uint            g_iNumTailInstance = 0;
+
 struct VS_OUT
 {
     float4 vPosition : POSITION;
@@ -56,6 +58,7 @@ struct VS_OUT
     float4 vColor : COLOR1;
     float3 vLook : TEXCOORD0;
     float4 vPreTranslation : TEXCOORD1;
+    float fIndex : TEXCOORD2;
 };
 
 
@@ -80,6 +83,7 @@ VS_OUT VS_MAIN(uint instanceID : SV_InstanceID)
     Out.vColor = Particle_SRV[instanceID].particle.vColor;
     Out.vLook = Particle_SRV[instanceID].particle.vLook;
     Out.vPreTranslation = Particle_SRV[instanceID].vPreTranslation;
+    Out.fIndex = instanceID % g_iNumTailInstance;
     
     return Out;
 }
@@ -105,6 +109,7 @@ struct GS_IN
     float4 vColor : COLOR1;
     float3 vLook : TEXCOORD0;
     float4 vPreTranslation : TEXCOORD1;
+    float fIndex : TEXCOORD2;
 };
 
 struct GS_OUT
@@ -302,23 +307,33 @@ void GS_TRAIL_MAIN(point GS_IN In[1], inout TriangleStream<GS_OUT> Container)
         vUp *= g_vStartScaling.y;
     }
     
+    float fStartTexX = 0.f;
+    float fEndTexX = 0.f;
+    
+    if(0.f < In[0].fIndex)
+    {
+        fStartTexX = In[0].fIndex / g_iNumTailInstance;
+        fEndTexX = (In[0].fIndex - 1.f) / g_iNumTailInstance;
+    }
+    
+    
     Out[0].vPosition = float4(vPosition.xyz - vLook + vUp, 1.f);
-    Out[0].vTexcoord = float2(0.f, 0.0f);
+    Out[0].vTexcoord = float2(fEndTexX, 0.f);
     Out[0].vLifeTime = In[0].vLifeTime;
     Out[0].vColor = In[0].vColor;
 
     Out[1].vPosition = float4(vPosition.xyz + vLook + vUp, 1.f);
-    Out[1].vTexcoord = float2(1.f, 0.0f);
+    Out[1].vTexcoord = float2(fStartTexX, 0.f);
     Out[1].vLifeTime = In[0].vLifeTime;
     Out[1].vColor = In[0].vColor;
 
     Out[2].vPosition = float4(vPosition.xyz + vLook - vUp, 1.f);
-    Out[2].vTexcoord = float2(1.f, 1.f);
+    Out[2].vTexcoord = float2(fStartTexX, 1.f);
     Out[2].vLifeTime = In[0].vLifeTime;
     Out[2].vColor = In[0].vColor;
 
     Out[3].vPosition = float4(vPosition.xyz - vLook - vUp, 1.f);
-    Out[3].vTexcoord = float2(0.f, 1.f);
+    Out[3].vTexcoord = float2(fEndTexX, 1.f);
     Out[3].vLifeTime = In[0].vLifeTime;
     Out[3].vColor = In[0].vColor;
 
@@ -559,7 +574,7 @@ PS_EFFECT_OUT PS_TRAIL_MAIN(PS_IN In)
     if (In.vLifeTime.y >= In.vLifeTime.x)
         discard;
 
-    vector vColor = g_DiffuseTexture.Sample(LinearSampler, In.vTexcoord);
+    vector vColor = g_DiffuseTexture.Sample(LinearSampler, In.vTexcoord * g_vTexDivide);
     
     vColor *= In.vColor;
     
@@ -617,21 +632,21 @@ PS_OUT PS_AURA_BLEND_MAIN(PS_IN In)
 PS_EFFECT_OUT PS_THUNDER_MAIN(PS_IN In)
 {
     PS_EFFECT_OUT Out = (PS_EFFECT_OUT) 0;
-	
+		
+    if (In.vLifeTime.y >= In.vLifeTime.x)
+        discard;
+
     int iTexIndex = (int) ((In.vLifeTime.y / In.vLifeTime.x) * (g_vTexDivide.x * g_vTexDivide.y - 1.f) * g_fSpriteSpeed);
     vector vColor = g_DiffuseTexture.Sample(LinearSampler, Get_SpriteTexcoord(In.vTexcoord, iTexIndex));
-    
+        
     vColor.a = max(vColor.r, max(vColor.g, vColor.b));
+    vColor.a *= 1.f - (In.vLifeTime.y / In.vLifeTime.x);
     
     if (vColor.a <= 0.1f)
         discard;
 
-    if (In.vLifeTime.y >= In.vLifeTime.x)
-        discard;
-    
-    vColor.rgb *= 3.f;
     vColor.rgb *= In.vColor.rgb;
-    //vColor.rgb *= 1.f - (In.vLifeTime.y / In.vLifeTime.x);
+    
     
     Out.vDiffuse = vColor;
     Out.vBlur = vColor;

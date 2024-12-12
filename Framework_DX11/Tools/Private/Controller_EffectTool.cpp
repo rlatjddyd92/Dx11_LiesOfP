@@ -1570,7 +1570,7 @@ void CController_EffectTool::Trail_MP_Check()
 		ImGui::InputFloat4("Tail MoveDir", (_float*)&m_Trail_MPDesc.DefaultDesc.vTailMoveDir);
 
 		ImGui::SeparatorText("TrailMP Shader");
-		ImGui::InputFloat2("Tex Devide", (_float*)&m_Trail_MPDesc.DefaultDesc.vTexDevide);
+		ImGui::InputFloat2("Tex Devide/Repeat", (_float*)&m_Trail_MPDesc.DefaultDesc.vTexDevide);
 		ImGui::InputFloat("Sprite Speed", &m_Trail_MPDesc.DefaultDesc.fSpriteSpeed);
 
 		ImGui::InputFloat2("Tail Start Scaling", (_float*)&m_Trail_MPDesc.DefaultDesc.vStartScaling);
