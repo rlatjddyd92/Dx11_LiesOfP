@@ -57,13 +57,34 @@ void CUIPage_Shop::Update(_float fTimeDelta)
 	if (m_pScroll_Shop == nullptr)
 	{
 		SCROLL* pScroll_Shop = new SCROLL;
-		pScroll_Shop->Initialize_Scroll(m_vecPart[_int(PART_GROUP::SHOP_Data_Area)], m_vecPart[_int(PART_GROUP::SHOP_Scroll_Bar)], SCROLL_AREA::SCROLL_SHOP);
+		pScroll_Shop->Initialize_Scroll(__super::Get_Front_Part_In_Control(_int(PART_GROUP::SHOP_Data_Area)), __super::Get_Front_Part_In_Control(_int(PART_GROUP::SHOP_Scroll_Bar)), SCROLL_AREA::SCROLL_SHOP);
 		m_pScroll_Shop = pScroll_Shop;
 	}
 }
 
 void CUIPage_Shop::Late_Update(_float fTimeDelta)
 {
+	if ((m_vecPageAction[_int(PAGEACTION::ACTION_CLOSING)]) && (!m_vecPageAction[_int(PAGEACTION::ACTION_OPENING)]))
+	{
+		m_fTopPartMove -= m_fTopPartMove_Excel * fTimeDelta;
+		if (m_fTopPartMove < 0.f)
+		{
+			m_fTopPartMove = 0.f;
+			m_vecPageAction[_int(PAGEACTION::ACTION_CLOSING)] = false;
+			m_vecPageAction[_int(PAGEACTION::ACTION_INACTIVE)] = true;
+		}
+	}
+	else if ((!m_vecPageAction[_int(PAGEACTION::ACTION_CLOSING)]) && (m_vecPageAction[_int(PAGEACTION::ACTION_OPENING)]))
+	{
+		m_fTopPartMove += m_fTopPartMove_Excel * fTimeDelta;
+		if (m_fTopPartMove > 1.f)
+		{
+			m_fTopPartMove = 1.f;
+			m_vecPageAction[_int(PAGEACTION::ACTION_OPENING)] = false;
+			m_vecPageAction[_int(PAGEACTION::ACTION_ACTIVE)] = true;
+		}
+	}
+
 	Update_Tab(fTimeDelta);
 
 	if (m_pScroll_Shop->bIsActive)
@@ -98,7 +119,9 @@ CHECK_MOUSE CUIPage_Shop::Check_Page_Action(_float fTimeDelta)
 	__super::Check_Page_Action(fTimeDelta);
 
 	Action_Tab(fTimeDelta);
-	Action_Scroll(fTimeDelta);
+
+	if (m_pScroll_Shop->bIsActive)
+		Action_Scroll(fTimeDelta);
 
 	if (!m_bIsItem_Popup)
 		Action_Cell(fTimeDelta);
@@ -165,42 +188,31 @@ void CUIPage_Shop::Action_Tab(_float fTimeDelta)
 
 void CUIPage_Shop::Action_Scroll(_float fTimeDelta)
 {
-	if (!m_vecPageAction[_int(PAGEACTION::ACTION_ACTIVE)])
+	if (m_pScroll_Shop->bIsBarMoving)
 	{
-		if (m_pScroll_Shop->bIsBarMoving)
+		if (KEY_HOLD(KEY::LBUTTON))
 		{
-			if (KEY_HOLD(KEY::LBUTTON))
-			{
-				POINT			ptMouse{};
-				GetCursorPos(&ptMouse);
-				ScreenToClient(g_hWnd, &ptMouse);
-				m_pScroll_Shop->Bar_Moving(_float(ptMouse.y));
-			}
-			else
-				m_pScroll_Shop->End_Bar_Moving();
+			POINT			ptMouse{};
+			GetCursorPos(&ptMouse);
+			ScreenToClient(g_hWnd, &ptMouse);
+			m_pScroll_Shop->Bar_Moving(_float(ptMouse.y));
 		}
 		else
-		{
-			_Vec2 vMouse = GET_GAMEINTERFACE->CheckMouse(__super::Get_Front_Part_In_Control(_int(PART_GROUP::SHOP_Scroll_Bar))->fPosition, __super::Get_Front_Part_In_Control(_int(PART_GROUP::SHOP_Scroll_Bar))->fSize);
+			m_pScroll_Shop->End_Bar_Moving();
+	}
+	else
+	{
+		_Vec2 vMouse = GET_GAMEINTERFACE->CheckMouse(__super::Get_Front_Part_In_Control(_int(PART_GROUP::SHOP_Scroll_Bar))->fPosition, __super::Get_Front_Part_In_Control(_int(PART_GROUP::SHOP_Scroll_Bar))->fSize);
 
-			if (vMouse.x != -1.f)
-				if (KEY_TAP(KEY::LBUTTON))
-				{
-					m_pScroll_Shop->Start_Bar_Moving(vMouse.y);
-				}
-		}
+		if (vMouse.x != -1.f)
+			if (KEY_TAP(KEY::LBUTTON))
+			{
+				m_pScroll_Shop->Start_Bar_Moving(vMouse.y);
+			}
 	}
 
-	if (m_iNowTab == 0)
-		for (auto& iter : m_vecBuy_RenderInfo)
-			iter->vPos.y -= m_pScroll_Shop->fData_Offset_Y;
-
-	if (m_iNowTab == 1)
-		for (auto& iter : m_vecSell_RenderInfo)
-			iter->vPos.y -= m_pScroll_Shop->fData_Offset_Y;
-
 	__super::Get_Front_Part_In_Control(_int(PART_GROUP::SHOP_Scroll_Bar))->fRatio = m_pScroll_Shop->fScroll_Ratio;
-	__super::UpdatePart_ByIndex(__super::Get_Front_PartIndex_In_Control(_int(PART_GROUP::SHOP_Scroll_Bar)), fTimeDelta);
+	__super::UpdatePart_ByIndex(__super::Get_Front_PartIndex_In_Control(_int(PART_GROUP::SHOP_Scroll_Bar)), 1.f);
 }
 
 void CUIPage_Shop::Action_Cell(_float fTimeDelta)
@@ -311,7 +323,7 @@ void CUIPage_Shop::Action_Popup(_float fTimeDelta)
 
 void CUIPage_Shop::Update_Tab(_float fTimeDelta)
 {
-	for (_int i = 0; i < _int(PART_GROUP::SHOP_Coin_Num);++i)
+	for (_int i = 0; i <= _int(PART_GROUP::SHOP_Coin_Num);++i)
 		for(auto& iter : m_vec_Group_Ctrl[i]->PartIndexlist)
 			if (m_vecPart[iter]->bRender == true)
 				__super::Input_Render_Info(*m_vecPart[iter]);
@@ -319,7 +331,7 @@ void CUIPage_Shop::Update_Tab(_float fTimeDelta)
 
 void CUIPage_Shop::Update_Scroll(_float fTimeDelta)
 {
-	for (_int i = _int(PART_GROUP::SHOP_Scroll_Line); i < _int(PART_GROUP::SHOP_Scroll_Bar); ++i)
+	for (_int i = _int(PART_GROUP::SHOP_Scroll_Line); i <= _int(PART_GROUP::SHOP_Scroll_Bar); ++i)
 		for (auto& iter : m_vec_Group_Ctrl[i]->PartIndexlist)
 			if (m_vecPart[iter]->bRender == true)
 				__super::Input_Render_Info(*m_vecPart[iter]);
@@ -333,14 +345,24 @@ void CUIPage_Shop::Update_Cell(_float fTimeDelta)
 
 	if (m_iNowTab == 1)
 	{
-		for (_int i = _int(PART_GROUP::SHOP_Title_Text); i < _int(PART_GROUP::SHOP_Title_Line); ++i)
+		_bool bRoot = true;
+
+		for (_int i = _int(PART_GROUP::SHOP_Title_Text); i <= _int(PART_GROUP::SHOP_Title_Line); ++i)
 			for (auto& iterPart : m_vec_Group_Ctrl[i]->PartIndexlist)
 			{
-				m_vecPart[iterPart]->fPosition = m_Title_Bag->vPos;
+				if (bRoot)
+				{
+					m_vecPart[iterPart]->fPosition = m_Title_Bag->vPos;
+					bRoot = false;
+				}
+				else 
+					__super::UpdatePart_ByIndex(iterPart, 1.f);
+				
 
 				if (i == _int(PART_GROUP::SHOP_Title_Text))
 					m_vecPart[iterPart]->strText = m_Title_Bag->strTitle;
 
+				
 				__super::Input_Render_Info(*m_vecPart[iterPart], SCROLL_AREA::SCROLL_SHOP);
 			}
 	}
@@ -348,16 +370,25 @@ void CUIPage_Shop::Update_Cell(_float fTimeDelta)
 	for (auto& iter : NowInfo)
 	{
 		++iNowIndex;
+		_bool bRoot = true;
 
-		for (_int i = _int(PART_GROUP::SHOP_Cell_Static); i < _int(PART_GROUP::SHOP_Cell_Cost_Num); ++i)
+		for (_int i = _int(PART_GROUP::SHOP_Cell_Static); i <= _int(PART_GROUP::SHOP_Cell_Cost_Num); ++i)
 			for (auto& iterPart : m_vec_Group_Ctrl[i]->PartIndexlist)
 			{
-				m_vecPart[iterPart]->fPosition = iter->vPos;
+				if (bRoot)
+				{
+					m_vecPart[iterPart]->fPosition = iter->vPos;
+					bRoot = false;
+				}
+				else
+					__super::UpdatePart_ByIndex(iterPart, 1.f);
 
 				if (i == _int(PART_GROUP::SHOP_Cell_Fx))
 				{
 					if (iNowIndex == m_iNowCell)
+					{
 						__super::Input_Render_Info(*m_vecPart[iterPart], SCROLL_AREA::SCROLL_SHOP);
+					}
 
 					continue;
 				}
@@ -373,20 +404,28 @@ void CUIPage_Shop::Update_Cell(_float fTimeDelta)
 				{
 					m_vecPart[iterPart]->strText = to_wstring(iter->pInven->iPrice);
 				}
+
 				__super::Input_Render_Info(*m_vecPart[iterPart], SCROLL_AREA::SCROLL_SHOP);
 			}
 	}
 	
 	if (m_iNowTab == 1)
 	{
-		for (_int i = _int(PART_GROUP::SHOP_Title_Text); i < _int(PART_GROUP::SHOP_Title_Line); ++i)
+		_bool bRoot = true;
+
+		for (_int i = _int(PART_GROUP::SHOP_Title_Text); i <= _int(PART_GROUP::SHOP_Title_Line); ++i)
 			for (auto& iterPart : m_vec_Group_Ctrl[i]->PartIndexlist)
 			{
-				m_vecPart[iterPart]->fPosition = m_Title_Chest->vPos;
+				if (bRoot)
+				{
+					m_vecPart[iterPart]->fPosition = m_Title_Chest->vPos;
+					bRoot = false;
+				}
+				else
+					__super::UpdatePart_ByIndex(iterPart, 1.f);
 
 				if (i == _int(PART_GROUP::SHOP_Title_Text))
 					m_vecPart[iterPart]->strText = m_Title_Chest->strTitle;
-
 				__super::Input_Render_Info(*m_vecPart[iterPart], SCROLL_AREA::SCROLL_SHOP);
 			}
 	}
@@ -408,7 +447,7 @@ void CUIPage_Shop::Update_Focus(_float fTimeDelta)
 
 void CUIPage_Shop::Update_BagInfo(_float fTimeDelta)
 {
-	for (_int i = _int(PART_GROUP::SHOP_BoxInfo_Bag_Count_0); i < _int(PART_GROUP::SHOP_BoxInfo_Bag_Count_1); ++i)
+	for (_int i = _int(PART_GROUP::SHOP_BoxInfo_Bag_Count_0); i <= _int(PART_GROUP::SHOP_BoxInfo_Bag_Count_1); ++i)
 		for (auto& iterPart : m_vec_Group_Ctrl[i]->PartIndexlist)
 		{
 			__super::Input_Render_Info(*m_vecPart[iterPart], SCROLL_AREA::SCROLL_SHOP);
@@ -419,10 +458,11 @@ void CUIPage_Shop::Setting_SellTab()
 {
 	for (auto& iter : m_vecSell_RenderInfo)
 		Safe_Delete(iter);
-
+	
 	m_vecSell_RenderInfo.clear();
 
 	_float fStartY = __super::Get_Front_Part_In_Control(_int(PART_GROUP::SHOP_Data_Area))->fPosition.y - __super::Get_Front_Part_In_Control(_int(PART_GROUP::SHOP_Data_Area))->fSize.y * 0.5f;
+	fStartY -= m_pScroll_Shop->fData_Offset_Y;
 	_float fAdjustY = 0.f;
 
 	if (m_Title_Bag == nullptr)
@@ -431,17 +471,17 @@ void CUIPage_Shop::Setting_SellTab()
 		m_Title_Bag->bIsTitle = true;
 		m_Title_Bag->strTitle = TEXT("가방");
 		
-		fAdjustY += __super::Get_Front_Part_In_Control(_int(PART_GROUP::SHOP_Title_Text))->fSize.y * 0.5f;
+		fAdjustY += __super::Get_Front_Part_In_Control(_int(PART_GROUP::SHOP_Title_Line))->fAdjust.y * 1.f;
 		m_Title_Bag->vPos = __super::Get_Front_Part_In_Control(_int(PART_GROUP::SHOP_Title_Text))->fPosition;
 		m_Title_Bag->vPos.y = fStartY + fAdjustY;
-		fAdjustY += __super::Get_Front_Part_In_Control(_int(PART_GROUP::SHOP_Title_Text))->fSize.y * 0.5f;
+		fAdjustY += __super::Get_Front_Part_In_Control(_int(PART_GROUP::SHOP_Title_Line))->fAdjust.y * 1.f;
 	}
 
-	fAdjustY += __super::Get_Front_Part_In_Control(_int(PART_GROUP::SHOP_Cell_Array))->fSize.y * 0.5f;
+	fAdjustY += __super::Get_Front_Part_In_Control(_int(PART_GROUP::SHOP_Cell_Static))->fSize.y * 0.5f;
 	__super::Get_Front_Part_In_Control(_int(PART_GROUP::SHOP_Cell_Array))->fPosition.y = fStartY + fAdjustY;
 	_int iArraynum = 0;
 	
-	for (_int i = 0; i > _int(INVEN_ARRAY_TYPE::TYPE_END); ++i)
+	for (_int i = 0; i < _int(INVEN_ARRAY_TYPE::TYPE_END); ++i)
 	{
 		_int iMax = 0;
 		_wstring strName = {};
@@ -460,12 +500,12 @@ void CUIPage_Shop::Setting_SellTab()
 				pNewRender->eArray = INVEN_ARRAY_TYPE(i);
 				pNewRender->iInven_Index = j;
 				m_vecSell_RenderInfo.push_back(pNewRender);
-				__super::Get_Front_Part_In_Control(_int(PART_GROUP::SHOP_Cell_Static))->fRatio = (m_vecSell_RenderInfo.size() % 4) * 0.333f;
+				__super::Get_Front_Part_In_Control(_int(PART_GROUP::SHOP_Cell_Static))->fRatio = ((m_vecSell_RenderInfo.size() - 1) % 4) * 0.333f;
 
 				if (((m_vecSell_RenderInfo.size() / 4) > iArraynum) && ((m_vecSell_RenderInfo.size() % 4) > 0))
 				{
 					++iArraynum;
-					fAdjustY += __super::Get_Front_Part_In_Control(_int(PART_GROUP::SHOP_Cell_Array))->fSize.y;
+					fAdjustY += __super::Get_Front_Part_In_Control(_int(PART_GROUP::SHOP_Cell_Static))->fSize.y * 1.1f;
 					__super::Get_Front_Part_In_Control(_int(PART_GROUP::SHOP_Cell_Array))->fPosition.y = fStartY + fAdjustY;
 				}
 
@@ -475,7 +515,7 @@ void CUIPage_Shop::Setting_SellTab()
 		}
 	}
 
-	fAdjustY += __super::Get_Front_Part_In_Control(_int(PART_GROUP::SHOP_Cell_Array))->fSize.y * 0.5f;
+	fAdjustY += __super::Get_Front_Part_In_Control(_int(PART_GROUP::SHOP_Cell_Static))->fSize.y * 0.5f;
 
 	if (m_Title_Chest == nullptr)
 	{
@@ -483,10 +523,10 @@ void CUIPage_Shop::Setting_SellTab()
 		m_Title_Chest->bIsTitle = true;
 		m_Title_Chest->strTitle = TEXT("보관함");
 
-		fAdjustY += __super::Get_Front_Part_In_Control(_int(PART_GROUP::SHOP_Title_Text))->fSize.y * 0.5f;
+		fAdjustY += __super::Get_Front_Part_In_Control(_int(PART_GROUP::SHOP_Title_Line))->fAdjust.y * 1.f;
 		m_Title_Chest->vPos = __super::Get_Front_Part_In_Control(_int(PART_GROUP::SHOP_Title_Text))->fPosition;
 		m_Title_Chest->vPos.y = fStartY + fAdjustY;
-		fAdjustY += __super::Get_Front_Part_In_Control(_int(PART_GROUP::SHOP_Title_Text))->fSize.y * 0.5f;
+		fAdjustY += __super::Get_Front_Part_In_Control(_int(PART_GROUP::SHOP_Title_Line))->fAdjust.y * 1.f;
 	}
 
 	// 보관함 관련 내용 필요 
@@ -509,23 +549,23 @@ void CUIPage_Shop::Setting_BuyTab()
 	_float fStartY = __super::Get_Front_Part_In_Control(_int(PART_GROUP::SHOP_Data_Area))->fPosition.y - __super::Get_Front_Part_In_Control(_int(PART_GROUP::SHOP_Data_Area))->fSize.y * 0.5f;
 	_float fAdjustY = 0.f;
 
-	fAdjustY += __super::Get_Front_Part_In_Control(_int(PART_GROUP::SHOP_Cell_Array))->fSize.y * 0.5f;
+	fAdjustY += __super::Get_Front_Part_In_Control(_int(PART_GROUP::SHOP_Cell_Static))->fSize.y * 0.5f;
 	__super::Get_Front_Part_In_Control(_int(PART_GROUP::SHOP_Cell_Array))->fPosition.y = fStartY + fAdjustY;
 	_int iArraynum = 0;
 
 	vector<CItem_Manager::SHOP*>& ShopInfo = GET_GAMEINTERFACE->Get_ShopData();
 
-	for (_int i = 0; i > ShopInfo.size(); ++i)
+	for (_int i = 0; i < ShopInfo.size(); ++i)
 	{
 		CELL_RENDER* pNewRender = new CELL_RENDER;
 		pNewRender->iIndexShop = i;
 		pNewRender->pInven = GET_GAMEINTERFACE->Get_Item_Origin_Spec(ShopInfo[i]->iIndex);
 		m_vecBuy_RenderInfo.push_back(pNewRender);
-		__super::Get_Front_Part_In_Control(_int(PART_GROUP::SHOP_Cell_Static))->fRatio = (m_vecSell_RenderInfo.size() % 4) * 0.333f;
+		__super::Get_Front_Part_In_Control(_int(PART_GROUP::SHOP_Cell_Static))->fRatio = ((m_vecBuy_RenderInfo.size() - 1) % 4) * 0.333f;
 		if (((m_vecBuy_RenderInfo.size() / 4) > iArraynum) && ((m_vecBuy_RenderInfo.size() % 4) > 0))
 		{
 			++iArraynum;
-			fAdjustY += __super::Get_Front_Part_In_Control(_int(PART_GROUP::SHOP_Cell_Array))->fSize.y;
+			fAdjustY += __super::Get_Front_Part_In_Control(_int(PART_GROUP::SHOP_Cell_Static))->fSize.y * 1.1f;
 			__super::Get_Front_Part_In_Control(_int(PART_GROUP::SHOP_Cell_Array))->fPosition.y = fStartY + fAdjustY;
 		}
 		__super::UpdatePart_ByIndex(__super::Get_Front_PartIndex_In_Control(_int(PART_GROUP::SHOP_Cell_Static)), 1.f);

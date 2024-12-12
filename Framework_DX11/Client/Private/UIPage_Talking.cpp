@@ -218,9 +218,9 @@ void CUIPage_Talking::Update_Script(_float fTimeDelta)
 			m_vecPart[_int(PART_GROUP::TALKING_Function_Text_1)]->bRender = true;
 			m_vecPart[_int(PART_GROUP::TALKING_Function_Text_1)]->strText = pNow->strFunction_B;
 
-			if (GET_GAMEINTERFACE->CheckMouse(m_vecPart[_int(PART_GROUP::TALKING_Function_Text_1)]->fPosition, m_vecPart[_int(PART_GROUP::TALKING_Function_Text_1)]->fSize).x != -1.f)
+			if (GET_GAMEINTERFACE->CheckMouse(m_vecPart[_int(PART_GROUP::TALKING_Function_Back_1)]->fPosition, m_vecPart[_int(PART_GROUP::TALKING_Function_Back_1)]->fSize).x != -1.f)
 			{
-				m_vecPart[_int(PART_GROUP::TALKING_Function_Rect_Left)]->iParentPart_Index = _int(PART_GROUP::TALKING_Function_Text_1);
+				m_vecPart[_int(PART_GROUP::TALKING_Function_Rect_Left)]->iParentPart_Index = _int(PART_GROUP::TALKING_Function_Back_1);
 				m_iFunction = 1;
 			}
 		}

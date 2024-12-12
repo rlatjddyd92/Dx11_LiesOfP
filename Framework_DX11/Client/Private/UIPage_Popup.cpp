@@ -109,7 +109,7 @@ void CUIPage_Popup::Late_Update(_float fTimeDelta)
 			}
 		}
 	}
-	else if (m_bItemUsePopUp = false)
+	else if (m_bItemUsePopUp == false)
 	{
 		if (m_vecPart[int(PART_GROUP::POPUP_Mouse_0)]->bRender)
 			if (KEY_TAP(KEY::LBUTTON))
@@ -118,7 +118,7 @@ void CUIPage_Popup::Late_Update(_float fTimeDelta)
 					Off_Popup();
 			}
 	}
-	else if (m_bItemUsePopUp = true)
+	else if (m_bItemUsePopUp == true)
 	{
 			if (KEY_TAP(KEY::LBUTTON))
 			{
@@ -163,6 +163,8 @@ CHECK_MOUSE CUIPage_Popup::Check_Page_Action(_float fTimeDelta)
 void CUIPage_Popup::Show_Popup(_wstring strTitle, _wstring strDescA, _wstring strDescB)
 {
 	Off_Popup();
+	m_vecPageAction[_int(PAGEACTION::ACTION_ACTIVE)] = true;
+	m_vecPageAction[_int(PAGEACTION::ACTION_INACTIVE)] = false;
 
 	for (_int i = _int(PART_GROUP::POPUP_Top); i <= _int(PART_GROUP::POPUP_Text_0); ++i)
 	{
@@ -188,6 +190,9 @@ void CUIPage_Popup::Off_Popup()
 	for (_int i = _int(PART_GROUP::POPUP_Top); i <= _int(PART_GROUP::POPUP_Count_Num); ++i)
 		m_vecPart[i]->bRender = false;
 
+	m_vecPageAction[_int(PAGEACTION::ACTION_ACTIVE)] = false;
+	m_vecPageAction[_int(PAGEACTION::ACTION_INACTIVE)] = true;
+
 	m_pItemPopup_Info->bIsActive = false;
 	m_pItemPopup_Info->iMax = 0;
 	m_pItemPopup_Info->iMin = 0;
@@ -206,6 +211,9 @@ void CUIPage_Popup::Show_ItemPopup(_wstring strTitle, _wstring strInputTitle, _i
 		return;
 
 	Off_Popup();
+
+	m_vecPageAction[_int(PAGEACTION::ACTION_ACTIVE)] = true;
+	m_vecPageAction[_int(PAGEACTION::ACTION_INACTIVE)] = false;
 
 	m_pItemPopup_Info->bIsActive = true;
 
@@ -275,7 +283,8 @@ void CUIPage_Popup::Show_ItemPopup(_wstring strTitle, _wstring strInputTitle, _i
 void CUIPage_Popup::Show_ItemUsePopup(_wstring strTitle, _wstring strDescA, _bool bIsTop)
 {
 	Off_Popup();
-
+	m_vecPageAction[_int(PAGEACTION::ACTION_ACTIVE)] = true;
+	m_vecPageAction[_int(PAGEACTION::ACTION_INACTIVE)] = false;
 	for (_int i = _int(PART_GROUP::POPUP_Top); i <= _int(PART_GROUP::POPUP_Text_1); ++i)
 	{
 		m_vecPart[i]->bRender = true;

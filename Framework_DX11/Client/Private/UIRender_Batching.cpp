@@ -129,7 +129,7 @@ HRESULT CUIRender_Batching::Render()
 				pNow->vPosition.x -= fStartX;
 				pNow->vPosition.y -= fStartY;
 
-				if (m_eNow_Area == SCROLL_AREA::SCROLL_OPTION)
+				if (m_eNow_Area == SCROLL_AREA::SCROLL_SHOP)
 				if (KEY_HOLD(KEY::ALT))
 				{
 					if (KEY_HOLD(KEY::NUM1))
