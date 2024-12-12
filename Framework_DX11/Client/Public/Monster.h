@@ -25,6 +25,10 @@ protected:
 	virtual ~CMonster() = default;
 
 public:
+	void			Reset_Hp() { m_eStat.fHp = m_eStat.fMaxHp; }
+
+
+public:
 	virtual HRESULT Initialize_Prototype() override;
 	virtual HRESULT Initialize(void* pArg) override;
 	virtual void Priority_Update(_float fTimeDelta) override;
@@ -70,17 +74,12 @@ public:
 	void	Increase_GroggyPoint(_float fGroggy) { m_eStat.fGrogyPoint += fGroggy; }
 	virtual void	SetUp_Dead() {};
 
-	void			Reset_Die() { m_bDieState = false; }
-	void			Reset_Hp() { m_eStat.fHp = m_eStat.fMaxHp; }
-
 protected:
 	_Vec4		m_vRootMoveStack{};
 	_Vec3		m_vCurRootMove{};
 	_bool		m_bEndAnim{ false };
 	_bool		m_bResetRootMove{ true };
 	_bool		m_bRootMoveCtr{ true };
-
-	_bool		m_bDieState{ false };
 
 	_float		m_fPrevTrackPos{};
 

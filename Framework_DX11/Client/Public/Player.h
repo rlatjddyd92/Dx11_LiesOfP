@@ -17,6 +17,8 @@ class CPlayer final : public CPawn
 public:
 	enum WEAPON_TYPE { WEP_RAPIER, WEP_SCISSOR, WEP_FLAME, WEP_END };
 
+	enum DEBUFF_TYPE { DEBUFF_FIRE, DEBUFF_ELEC, DEBUFF_ACID, DEBUFF_END };
+
 	enum EFFECT_TYPE 
 	{
 		EFFECT_RAPIER_TRAIL_FIRST, EFFECT_RAPIER_TRAIL_SECOND,
@@ -196,10 +198,6 @@ public:
 
 	void					Set_DissloveRatio(_float fRatio) { m_fDissloveRatio = fRatio; }
 
-	// 24-11-27 김성용
-	// 플레이어 스탯 구조체 접근 함수 
-	// 외부에서는 레퍼런스로 접근 
-	// 수치 조정은 반드시 플레이어에서만 진행 
 #pragma region PLAYER_STAT
 	STAT_INFO&		Get_Player_Stat() { return *m_tPlayer_Stat; }
 	// 24-12-05 김성용
@@ -262,6 +260,7 @@ public:
 	void			DeActive_Effect(const EFFECT_TYPE& eType);
 
 	virtual _bool	Calc_DamageGain(_float fAtkDmg, _Vec3 vHitPos = { 0.f,0.f,0.f }, _uint iHitType = HIT_END, _uint iAttackStrength = ATK_END, CGameObject* pAttacker = nullptr) override;
+	void			Calc_DebuffGain(DEBUFF_TYPE eDebuffType, _float fAmount);
 	void			Damaged(_float fAtkDmg); 
 	void			Damaged_Guard(_float fAtkDmg, const _Matrix* pSocketBoneMatrix = nullptr);
 	void			Change_HitState(_float fAtkDmg, _Vec3 vHitPos);
@@ -276,6 +275,11 @@ public:
 
 	void			Create_ThrowItem(SPECIAL_ITEM eItemType);
 	void			Throw_ITem();
+
+	void			Use_DebuffReduceItem();
+	void			Use_DebuffResetItem();
+
+	void			Init_PlayerCamera();
 
 	/* Effect */
 private:
@@ -330,6 +334,9 @@ private:
 private:
 	_float				m_fStaminaRecoveryTime = {};
 
+	_float				m_fDebuffReduceTime = {};
+	_float				m_fDebuffRecoveryTime[DEBUFF_END] = {};
+
 private:
 
 	void			Update_Stat(_float fTimeDelta);
@@ -337,6 +344,7 @@ private:
 
 	void			Choice_GuardSound(_uint iAttackStrength = ATK_WEAK, _uint iHitType = HIT_END, _bool isPerfect = false);
 
+	void			Update_PrevItemInfo();
 private:
 	HRESULT Ready_Components();
 	HRESULT Ready_Weapon();
