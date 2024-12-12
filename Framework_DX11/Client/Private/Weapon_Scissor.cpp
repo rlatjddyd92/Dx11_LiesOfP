@@ -68,6 +68,7 @@ void CWeapon_Scissor::Update(_float fTimeDelta)
 		__super::Update(fTimeDelta);
 
 		m_pColliderCom->Update(&m_WorldMatrix);
+		m_pGameInstance->Add_ColliderList(m_pColliderCom);
 	}
 	else if (m_isSeperate)
 	{
@@ -91,8 +92,6 @@ void CWeapon_Scissor::Late_Update(_float fTimeDelta)
 #endif
 		m_pGameInstance->Add_RenderObject(CRenderer::RG_NONBLEND, this);
 		m_pGameInstance->Add_RenderObject(CRenderer::RG_SHADOWOBJ, this);
-
-		m_pGameInstance->Add_ColliderList(m_pColliderCom);
 
 	}
 	else if (m_isSeperate)

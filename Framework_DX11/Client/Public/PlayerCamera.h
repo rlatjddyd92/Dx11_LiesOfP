@@ -35,13 +35,9 @@ public:
 public:
 	void PlayerMove(_float fTimeDelta);
 	void PlayerLockOn(_float fTimeDelta);
-	void Control_Camera(_float fTimeDelta);
+	void PlayerInitMove(_float fTimeDelta);
 
-	void Setting_CameraControl(_float3 vStartPos, _float3 vEndPos, _float3 vCameraAt, _float fFovy = 0.f, _bool isKeepAt = true);
-	void Setting_CameraControl(_fvector vStartPos, _fvector vEndPos, _fvector vCameraAt, _float fFovy = 0.f, _bool isKeepAt = true);
-	void Start_CameraControl();
-	void Start_CameraLerp(_float fLerpDuration);
-	void End_CameraControl();
+	void Move_PlayerBackPos();
 
 private:
 	HRESULT					Ready_Components();
@@ -55,16 +51,20 @@ private:
 	_float					m_fCurrentRotationX = {};
 	_float					m_fCurrentRotationY = {};
 
+	_Vec3					m_vTargetPos = {};
 	_Vec3					m_vOffset = {};
 
 	POINT					m_ptOldMousePos = {};
+
+private:
+	_bool					m_isMoveInitPos = { false };
+	_Vec4					m_vInitMovePos = {};
 
 private:
 	_bool					m_isControl = { false };
 	_bool					m_isLerp = { false };
 	_bool					m_isLerpEnd = { false };
 	_bool					m_isKeepAt = { false };
-
 
 	CAMERA_MODE				m_eCameraMode = { MODE_LERP };
 

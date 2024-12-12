@@ -510,7 +510,7 @@ void CS_CONVERGE_MAIN(uint3 DTid : SV_DispatchThreadID)
         {
             float4 vTargetDir = vWorldPivot - HeadParticle.particle.vTranslation;
             float4 vWorldOrbit = mul(float4(vOrbitAxis.x, vOrbitAxis.y, vOrbitAxis.z, 0.f), WorldMatrix);
-            vRotateDir = float4(RotateByAxis(vTargetDir.xyz, (float3) vWorldOrbit, radians(fOrbitAngle) * fTimeDelta),
+            vRotateDir = float4(RotateByAxis(vTargetDir.xyz, (float3)vWorldOrbit, radians(fOrbitAngle) * fTimeDelta),
             0.f);
             vRotateDir = vTargetDir - vRotateDir;
         }
@@ -681,7 +681,7 @@ void CS_FOLLOW_MAIN(uint3 DTid : SV_DispatchThreadID)
             
             }
             
-            if (0.f < length(vCurrentDir))
+            if(0.f < length(vCurrentDir))
                 TailParticle.vMoveDir = float4(normalize(vCurrentDir), 0.f);
             else
                 TailParticle.vMoveDir = float4(0.f, 0.f, 0.f, 0.f);

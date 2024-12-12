@@ -42,6 +42,7 @@ HRESULT CState_Player_Die::Start_State(void* pArg)
 
     m_pPlayer->Change_Weapon();
     m_pPlayer->Combine_Scissor();
+    m_pPlayer->SetUp_Die();
 
     m_isDeadEnd = false;
     m_isFadeOut = false;
@@ -99,7 +100,11 @@ void CState_Player_Die::Update(_float fTimeDelta)
 void CState_Player_Die::End_State()
 {
     m_pPlayer->Recovery_HP(9999999.f);
+    m_pPlayer->SetUp_Die();
+
     m_pPlayer->Set_IsGuard(false);
+    m_pPlayer->Set_IsArm(false);
+    m_pPlayer->Set_IsParry(false);
 }
 
 _uint CState_Player_Die::Choice_DieAnim(DIE_DESC* pDesc)

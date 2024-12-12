@@ -755,6 +755,11 @@ PxCudaContextManager* CGameInstance::Get_PhysXCuda() const
 	return m_pPhysX_Manager->Get_PhysXCuda();
 }
 
+void CGameInstance::Set_Gravity(_float fY)
+{
+	m_pPhysX_Manager->Set_Gravity(fY);
+}
+
 _bool CGameInstance::RayCast_PhysX(_vector vRayPos, _vector vRayDir, _vector* vHitPos, _vector* vNormal, _float* fHitDistance)
 {
 	return m_pPhysX_Manager->RayCast(vRayPos, vRayDir, vHitPos, vNormal, fHitDistance);

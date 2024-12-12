@@ -145,8 +145,8 @@ HRESULT CPlayer::Initialize(void * pArg)
 	//m_pNavigationCom->Move_to_Cell(m_pRigidBodyCom, 427); //짧은사다리
 	//m_pNavigationCom->Move_to_Cell(m_pRigidBodyCom, 341); //아래엘베
 	//m_pNavigationCom->Move_to_Cell(m_pRigidBodyCom, 440); //상자랑 장애물
-	//m_pNavigationCom->Move_to_Cell(m_pRigidBodyCom, 1066); // 순간이동 790
-	m_pNavigationCom->Move_to_Cell(m_pRigidBodyCom, 790); // 순간이동 1066
+	m_pNavigationCom->Move_to_Cell(m_pRigidBodyCom, 1066); // 순간이동 790
+	//m_pNavigationCom->Move_to_Cell(m_pRigidBodyCom, 790); // 순간이동 1066
 	//m_pNavigationCom->Move_to_Cell(m_pRigidBodyCom, 801); // 소피아 방
 	//m_pNavigationCom->Move_to_Cell(m_pRigidBodyCom, 1178); // 소피아 방 내부
 
@@ -154,7 +154,6 @@ HRESULT CPlayer::Initialize(void * pArg)
 
 	m_strObjectTag = TEXT("Player");
 
-	// 24-11-27 김성용
 	// 스탯 구조체 생성 
 	m_tPlayer_Stat = new STAT_INFO;
 	m_tPlayer_Stat_Adjust = new STAT_INFO;
@@ -162,8 +161,6 @@ HRESULT CPlayer::Initialize(void * pArg)
 
 	m_tPlayer_Stat_Adjust->Reset_Zero();
 
-	// 24-11-27 김성용
-	// 게임 인터페이스와 연결을 위해 추가 
 	GET_GAMEINTERFACE->Input_Player_Pointer(this);
 
 	m_vRimLightColor = _Vec4(0.f, 0.f, 0.f, 0.f);
@@ -173,80 +170,21 @@ HRESULT CPlayer::Initialize(void * pArg)
 
 void CPlayer::Priority_Update(_float fTimeDelta)
 {
-	/*
-	UI 및 아이템 작동 시스템 
-	1. UI, 아이템 매니저(인벤,장비) 시스템은 모든 오브젝트보다 나중에 업데이트 진행 
-	2. 이번 프레임에 플레이어에서 조작한 내용에 대한 피드백은 다음 프레임에 받을 수 있음
-	3. 이에 따라 Priority_Update에서 가장 먼저 지난 프레임의 내용을 받아 보도록 코드 작성 
-	*/
+	Update_PrevItemInfo();
 
-	// ★ 아래 내용은 지난 프레임의 조작 결과임에 주의 ★
-	// 지난 프레임의 아이템 사용 기록 가져오기 
-	list<SPECIAL_ITEM>& Item_Type_list = GET_GAMEINTERFACE->Get_LastFrame_UsingItem_Info();
-	_wstring strTest{};
-
-	if (!Item_Type_list.empty())
-	{
-		for (auto& iter : Item_Type_list)
-		{
-			switch (iter)
-			{
-			case SPECIAL_ITEM::SP_PULSE_BATTERY: // 펄스 전지, 충전 수치 따로 존재하며 사용 시, 체력 회복 O
-				strTest += TEXT("펄스 전지, ");
-				break;
-			case SPECIAL_ITEM::SP_DUSTCAT: // 고양이 가루, 기척 감소 
-				strTest += TEXT("고양이 가루, ");
-				break;
-			case SPECIAL_ITEM::SP_GRINDER: // 그라인더, 무기 내구도 증가 O 
-				strTest += TEXT("그라인더, ");
-				break;
-			case SPECIAL_ITEM::SP_LAMP: // 모나드의 등불, 주변 밝기 증가 
-				strTest += TEXT("모나드의 등불, ");
-				break;
-			case SPECIAL_ITEM::SP_TELEPOT: // 문페이즈 회중시계, 순간이동 O
-				strTest += TEXT("문페이즈 회중시계, ");
-				break;
-			case SPECIAL_ITEM::SP_RESISTANCE: // 속성 저항 앰플, 속성 저항 증가 O
-				strTest += TEXT("속성 저항 앰플, ");
-				break;
-			case SPECIAL_ITEM::SP_PURIFICATION: // 속성 정화 앰플, 디버프 제거 O
-				strTest += TEXT("속성 정화 앰플, ");
-				break;
-			case SPECIAL_ITEM::SP_DEAD: // 최후의 수단, 사망 O
-				strTest += TEXT("최후의 수단, ");
-				break;
-			case SPECIAL_ITEM::SP_GRANADE: // 클러스터 수류탄 O
-				strTest += TEXT("클러스터 수류탄, ");
-				break;
-			case SPECIAL_ITEM::SP_THERMITE: // 테르밋 O
-				strTest += TEXT("테르밋, ");
-				break;
-			case SPECIAL_ITEM::SP_THROW_BATTERY: // 투척용 전지 O 
-				strTest += TEXT("투척용 전지, ");
-				break;
-			case SPECIAL_ITEM::SP_END: // 특수 기능이 없는 아이템을 사용했거나 사용한 아이템이 없음
-				break;
-			default:
-				break;
-			}
-		}
-
-		//GET_GAMEINTERFACE->Show_Script(strTest, TEXT("none"), 1.f);
-	}
+	Update_Stat(fTimeDelta);
 
 	if (m_isGuard)
 	{
 		m_fGuardTime += fTimeDelta;
 	}
 
-	Update_Stat(fTimeDelta);
-
 	if (KEY_TAP(KEY::WHEELBUTTON))
 		LockOnOff();
 
 	if (m_isLockOn)
 	{
-		if (m_pTargetMonster->Get_Dead())
+		if (m_pTargetMonster->Get_IsDieState() || m_pFsmCom->Get_CurrentState() == DIE)
 		{
 			m_pTargetMonster = nullptr;
 			m_isLockOn = false;
@@ -285,18 +223,6 @@ void CPlayer::Update(_float fTimeDelta)
 
 	m_pFsmCom->Update(fTimeDelta);
 
-	if (m_pIntersectMonster)
-	{
-		_Vec3 vVelocityDir = m_pRigidBodyCom->Get_Velocity();
-		vVelocityDir.Normalize();
-
-		_Vec3 vMonsterDir = m_pIntersectMonster->Get_Transform()->Get_State(CTransform::STATE_POSITION) - m_pTransformCom->Get_State(CTransform::STATE_POSITION);
-		vMonsterDir.Normalize();
-
-		if(vVelocityDir.Dot(vMonsterDir) > 0.7f)
-			m_vCurRootMove = _Vec3(0.f, 0.f, 0.f);
-	}
-
 	m_pRigidBodyCom->Update(fTimeDelta);
 
 	for (_uint i = 0; i < PAWN_SOUND_END; ++i)
@@ -324,7 +250,8 @@ void CPlayer::Update(_float fTimeDelta)
 	}
 	if (KEY_TAP(KEY::K))
 	{
-		Change_State(RAPIER_FATAL);
+		Init_PlayerCamera();
+		//Change_State(RAPIER_FATAL);
 	}
 
 	//마누스 컷신 실행부분
@@ -345,7 +272,6 @@ void CPlayer::Late_Update(_float fTimeDelta)
 	if (nullptr != m_pWeapon_Arm)
 		m_pWeapon_Arm->Late_Update(fTimeDelta);
 
-	//업데이트에서 생성하니 업데이트 이전에 비우기
 	for (auto& pEffect : m_Effects)
 	{
 		if (!pEffect->Get_Dead())
@@ -354,11 +280,6 @@ void CPlayer::Late_Update(_float fTimeDelta)
 
 	m_pGameInstance->Add_RenderObject(CRenderer::RG_NONBLEND, this);
 	m_pGameInstance->Add_RenderObject(CRenderer::RG_SHADOWOBJ, this);
-
-#ifdef _DEBUG
-	m_pGameInstance->Add_DebugObject(m_pColliderCom);
-	m_pGameInstance->Add_DebugObject(m_pNavigationCom);
-#endif
 
 }
 
@@ -375,6 +296,13 @@ HRESULT CPlayer::Render()
 	_float fResetDisslove = -1.f;
 	if (FAILED(m_pShaderCom->Bind_RawValue("g_fDissolveRatio", &fResetDisslove, sizeof(_float))))
 		return E_FAIL;
+
+
+
+#ifdef _DEBUG
+	m_pGameInstance->Add_DebugObject(m_pColliderCom);
+	m_pGameInstance->Add_DebugObject(m_pNavigationCom);
+#endif
 
 	return S_OK;
 }
@@ -717,7 +645,7 @@ void CPlayer::DeActive_Effect(const EFFECT_TYPE& eType)
 
 _bool CPlayer::Calc_DamageGain(_float fAtkDmg, _Vec3 vHitPos, _uint iHitType, _uint iAttackStrength, CGameObject* pAttacker)
 {
-	if (fAtkDmg <= 0.f)
+	if (fAtkDmg <= 0.f || m_bDieState)
 		return false;
 
 	const _Matrix* pParetnMatrix = m_pTransformCom->Get_WorldMatrix_Ptr();
@@ -862,6 +790,30 @@ _bool CPlayer::Calc_DamageGain(_float fAtkDmg, _Vec3 vHitPos, _uint iHitType, _u
 	return true;
 }
 
+void CPlayer::Calc_DebuffGain(DEBUFF_TYPE eDebuffType, _float fAmount)
+{
+	if (m_fDebuffReduceTime > 0.f)
+		fAmount *= 0.7f;
+
+	switch (eDebuffType)
+	{
+	case Client::CPlayer::DEBUFF_FIRE:
+		m_tPlayer_Stat->fDebuff_Fire.x = min(m_tPlayer_Stat->fDebuff_Fire.x + fAmount, m_tPlayer_Stat->fDebuff_Fire.y);
+		m_fDebuffRecoveryTime[eDebuffType] = 0.15f;
+		break;
+
+	case Client::CPlayer::DEBUFF_ELEC:
+		m_tPlayer_Stat->fDebuff_Electric.x = min(m_tPlayer_Stat->fDebuff_Electric.x + fAmount, m_tPlayer_Stat->fDebuff_Electric.y);
+		m_fDebuffRecoveryTime[eDebuffType] = 0.15f;
+		break;
+
+	case Client::CPlayer::DEBUFF_ACID:
+		m_tPlayer_Stat->fDebuff_Acid.x = min(m_tPlayer_Stat->fDebuff_Acid.x + fAmount, m_tPlayer_Stat->fDebuff_Acid.y);
+		m_fDebuffRecoveryTime[eDebuffType] = 0.15f;
+		break;
+	}
+}
+
 _bool CPlayer::Decrease_Stamina(_float fAmount)
 {
 	m_tPlayer_Stat->vGauge_Stamina.x = m_tPlayer_Stat->vGauge_Stamina.x - fAmount;
@@ -872,7 +824,7 @@ _bool CPlayer::Decrease_Stamina(_float fAmount)
 	}
 	m_tPlayer_Stat->vGauge_Stamina.y = m_tPlayer_Stat->vGauge_Stamina.x;
 
-	m_fStaminaRecoveryTime = 0.3f;	// 1.3f초 후에 회복
+	m_fStaminaRecoveryTime = 0.3f;	// 0.3초 후에 회복
 
 	return true;
 }
@@ -984,6 +936,28 @@ void CPlayer::Update_Stat(_float fTimeDelta)
 	}
 #pragma endregion
 
+#pragma region 디버프
+	for (_uint i = 0; i < DEBUFF_END; ++i)
+	{
+		if (m_fDebuffRecoveryTime[i] > 0.f)
+			m_fDebuffRecoveryTime[i] -= fTimeDelta;
+	}
+
+	if (m_fDebuffRecoveryTime[DEBUFF_FIRE] <= 0.f)
+	{
+		m_tPlayer_Stat->fDebuff_Fire.x = max(m_tPlayer_Stat->fDebuff_Fire.x - 2.f * fTimeDelta, 0.f);
+	}
+	
+	if (m_fDebuffRecoveryTime[DEBUFF_ELEC] <= 0.f)
+	{
+		m_tPlayer_Stat->fDebuff_Electric.x = max(m_tPlayer_Stat->fDebuff_Electric.x - 2.f * fTimeDelta, 0.f);
+	}
+	
+	if (m_fDebuffRecoveryTime[DEBUFF_ACID] <= 0.f)
+	{
+		m_tPlayer_Stat->fDebuff_Acid.x = max(m_tPlayer_Stat->fDebuff_Acid.x - 2.f * fTimeDelta, 0.f);
+	}
+#pragma endregion
 }
 
 void CPlayer::Recovery_HP(_float fAmount)
@@ -1064,6 +1038,24 @@ void CPlayer::Throw_ITem()
 	m_pThrowItem = nullptr;
 }
 
+void CPlayer::Use_DebuffReduceItem()
+{
+	m_fDebuffReduceTime = 120.f;
+}
+
+void CPlayer::Use_DebuffResetItem()
+{
+	m_tPlayer_Stat->fDebuff_Fire.x = 0.f;
+	m_tPlayer_Stat->fDebuff_Electric.x = 0.f;
+	m_tPlayer_Stat->fDebuff_Acid.x = 0.f;
+
+}
+
+void CPlayer::Init_PlayerCamera()
+{
+	m_pPlayerCamera->Move_PlayerBackPos();
+}
+
 void CPlayer::CollisionStay_IntercObj(CGameObject* pGameObject)
 {
 	if (m_pFsmCom->Get_CurrentState() >= 100)
@@ -1085,15 +1077,22 @@ void CPlayer::CollisionStay_IntercObj(CGameObject* pGameObject)
 	}
 	else if (pGameObject->Get_Tag() == TEXT("Lift_Floor"))
 	{
+		CLift_Floor* pLiftFloor = dynamic_cast<CLift_Floor*>(pGameObject);
 		m_pRigidBodyCom->Set_IsOnCell(false);
 		m_pRigidBodyCom->Set_IsLockCell(false);
 
-		if (dynamic_cast<CLift_Floor*>(pGameObject)->Get_isMoving())
+		if (pLiftFloor->Get_isMoving())
 		{
+			if (pLiftFloor->Get_IsDown())
+			{
+				m_pGameInstance->Set_Gravity(-9.81f * 50.f);
+			}
+
 			m_pRigidBodyCom->Set_Gravity(true);
 		}
 		else
 		{
+			m_pGameInstance->Set_Gravity(-9.81f);
 			m_pRigidBodyCom->Set_Gravity(false);
 		}
 	}
@@ -1269,6 +1268,70 @@ void CPlayer::Choice_GuardSound(_uint iAttackStrength, _uint iHitType, _bool isP
 }
 
 
+
+void CPlayer::Update_PrevItemInfo()
+{/*
+	UI 및 아이템 작동 시스템
+	1. UI, 아이템 매니저(인벤,장비) 시스템은 모든 오브젝트보다 나중에 업데이트 진행
+	2. 이번 프레임에 플레이어에서 조작한 내용에 대한 피드백은 다음 프레임에 받을 수 있음
+	3. 이에 따라 Priority_Update에서 가장 먼저 지난 프레임의 내용을 받아 보도록 코드 작성
+	*/
+
+	// ★ 아래 내용은 지난 프레임의 조작 결과임에 주의 ★
+	// 지난 프레임의 아이템 사용 기록 가져오기 
+	list<SPECIAL_ITEM>& Item_Type_list = GET_GAMEINTERFACE->Get_LastFrame_UsingItem_Info();
+	_wstring strTest{};
+
+	if (!Item_Type_list.empty())
+	{
+		for (auto& iter : Item_Type_list)
+		{
+			switch (iter)
+			{
+			case SPECIAL_ITEM::SP_PULSE_BATTERY: // 펄스 전지, 충전 수치 따로 존재하며 사용 시, 체력 회복 O
+				strTest += TEXT("펄스 전지, ");
+				break;
+				//case SPECIAL_ITEM::SP_DUSTCAT: // 고양이 가루, 기척 감소 
+				//	strTest += TEXT("고양이 가루, ");
+				//	break;
+			case SPECIAL_ITEM::SP_GRINDER: // 그라인더, 무기 내구도 증가 O 
+				strTest += TEXT("그라인더, ");
+				break;
+				//case SPECIAL_ITEM::SP_LAMP: // 모나드의 등불, 주변 밝기 증가 
+				//	strTest += TEXT("모나드의 등불, ");
+				//	break;
+			case SPECIAL_ITEM::SP_TELEPOT: // 문페이즈 회중시계, 순간이동 O
+				strTest += TEXT("문페이즈 회중시계, ");
+				break;
+			case SPECIAL_ITEM::SP_RESISTANCE: // 속성 저항 앰플, 속성 저항 증가 O
+				strTest += TEXT("속성 저항 앰플, ");
+				break;
+			case SPECIAL_ITEM::SP_PURIFICATION: // 속성 정화 앰플, 디버프 제거 O
+				strTest += TEXT("속성 정화 앰플, ");
+				break;
+			case SPECIAL_ITEM::SP_DEAD: // 최후의 수단, 사망 O
+				strTest += TEXT("최후의 수단, ");
+				break;
+			case SPECIAL_ITEM::SP_GRANADE: // 클러스터 수류탄 O
+				strTest += TEXT("클러스터 수류탄, ");
+				break;
+			case SPECIAL_ITEM::SP_THERMITE: // 테르밋 O
+				strTest += TEXT("테르밋, ");
+				break;
+			case SPECIAL_ITEM::SP_THROW_BATTERY: // 투척용 전지 O 
+				strTest += TEXT("투척용 전지, ");
+				break;
+			case SPECIAL_ITEM::SP_END: // 특수 기능이 없는 아이템을 사용했거나 사용한 아이템이 없음
+				break;
+			default:
+				break;
+			}
+		}
+
+		//GET_GAMEINTERFACE->Show_Script(strTest, TEXT("none"), 1.f);
+	}
+}
+
 HRESULT CPlayer::Ready_Weapon()
 {
 	CWeapon::PLAYER_WAPON_DESC		WeaponDesc{};
@@ -1349,6 +1412,7 @@ HRESULT CPlayer::Ready_Components()
 	if (FAILED(__super::Add_Component(LEVEL_STATIC, TEXT("Prototype_Component_RigidBody"),
 		TEXT("Com_RigidBody"), reinterpret_cast<CComponent**>(&m_pRigidBodyCom), &RigidBodyDesc)))
 		return E_FAIL;
+	m_pRigidBodyCom->Set_Mass(1.f);
 
 	return S_OK;
 }

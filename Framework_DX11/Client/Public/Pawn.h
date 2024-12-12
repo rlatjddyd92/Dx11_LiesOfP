@@ -44,6 +44,7 @@ public:
 
     class CSound* Get_SoundCom(PAWN_SOUND_TYPE eType) { return m_pSoundCom[eType]; }
 
+public:
     _float				Get_MoveSpeed() { return m_fMoveSpeed; }
     void				Set_MoveSpeed(_float fSpeed) { m_fMoveSpeed = fSpeed; }
 
@@ -53,6 +54,11 @@ public:
 
     void                Play_Animation() { m_isPlayAnimation = true; }
     void                Stop_Animation() { m_isPlayAnimation = false; }
+
+    void                SetUp_Die() { m_bDieState = true; }
+    void			    Reset_Die() { m_bDieState = false; }
+    _bool			    Get_IsDieState() { return m_bDieState; }
+
 public:
     virtual HRESULT Initialize_Prototype();
     virtual HRESULT Initialize(void* pArg = nullptr);
@@ -112,6 +118,8 @@ protected:
     _bool            m_isGravity = { false };
     _bool            m_isPlayAnimation = { true };
     _bool            m_isCutScene = { false };
+
+    _bool		     m_bDieState = { false };
 
     _int             m_iRespawn_Cell_Num = { -1 };
 

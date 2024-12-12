@@ -121,6 +121,7 @@ private:
 	DEFAULT_DESC m_InitDesc = {};
 
 	_float m_fAccumulateTime = { 0.f };
+	_uint m_iNumTailInstance = 0;
 
 private:
 	HRESULT Ready_Components(const TRAIL_MP_DESC& Desc);

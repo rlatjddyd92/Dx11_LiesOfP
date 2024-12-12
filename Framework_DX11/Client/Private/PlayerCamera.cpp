@@ -4,6 +4,7 @@
 #include "GameInstance.h"
 
 #include "Player.h"
+#include "Monster.h"
 #include "Fsm.h"
 
 CPlayerCamera::CPlayerCamera(ID3D11Device* pDevice, ID3D11DeviceContext* pContext)
@@ -52,8 +53,11 @@ void CPlayerCamera::Update(_float fTimeDelta)
 	if (!m_isActive)
 		return;
 
-
-	if (m_pPlayer->Get_IsLockOn())
+	if (m_isMoveInitPos)
+	{
+		PlayerInitMove(fTimeDelta);
+	}
+	else if (m_pPlayer->Get_IsLockOn())
 	{
 		PlayerLockOn(fTimeDelta);
 	}
@@ -110,9 +114,9 @@ void CPlayerCamera::PlayerMove(_float fTimeDelta)
 	{
 		m_pTransformCom->Orbit(m_pTransformCom->Get_State(CTransform::STATE_RIGHT), vPlayerPos, 0.6f, 2.5f, fTimeDelta * MouseMove * 0.1f);
 	}
-	_vector vTargetPos = vPlayerPos - XMVector3Normalize(m_pTransformCom->Get_State(CTransform::STATE_LOOK)) * 2.5f;
+	m_vTargetPos = vPlayerPos - XMVector3Normalize(m_pTransformCom->Get_State(CTransform::STATE_LOOK)) * 2.5f;
 
-	m_pTransformCom->Set_State(CTransform::STATE_POSITION, vTargetPos);
+	m_pTransformCom->Set_State(CTransform::STATE_POSITION, m_vTargetPos);
 
 	m_pTransformCom->LookAt(vPlayerPos);
 }
@@ -130,43 +134,53 @@ void CPlayerCamera::PlayerLockOn(_float fTimeDelta)
 
 	vPlayerPos.m128_f32[1] += 2.2f;
 
-	_vector vTargetPos = vPlayerPos - XMVector3Normalize(m_pTransformCom->Get_State(CTransform::STATE_LOOK)) * 3.f;
+	m_vTargetPos = vPlayerPos - XMVector3Normalize(m_pTransformCom->Get_State(CTransform::STATE_LOOK)) * 3.f;
 
 	// Lerp로 카메라 위치를 부드럽게 이동
 	_vector vCurrentPos = m_pTransformCom->Get_State(CTransform::STATE_POSITION);
-	_vector vNewPos = XMVectorLerp(vCurrentPos, vTargetPos, 0.3f); // 보간 비율 0.1
+	_vector vNewPos = XMVectorLerp(vCurrentPos, m_vTargetPos, 0.3f); // 보간 비율 0.1
 
 	m_pTransformCom->Set_State(CTransform::STATE_POSITION, vNewPos);
 }
 
-void CPlayerCamera::Control_Camera(_float fTimeDelta)
+void CPlayerCamera::PlayerInitMove(_float fTimeDelta)
 {
+	_vector vPlayerPos = m_pPlayer->Get_Transform()->Get_State(CTransform::STATE_POSITION);
+
+	vPlayerPos.m128_f32[1] += 1.65f;
+
+	_vector vCurrentPos = m_pTransformCom->Get_State(CTransform::STATE_POSITION);
+	_Vec3 vNewPos = XMVectorLerp(vCurrentPos, m_vTargetPos, 0.05f); 
+
+	m_pTransformCom->Set_State(CTransform::STATE_POSITION, vNewPos);
+
+	m_pTransformCom->LookAt(vPlayerPos);
+
+	if ((vNewPos - m_vTargetPos).Length() < 0.01f)
+	{
+		m_isMoveInitPos = false;
+	}
 }
 
-void CPlayerCamera::Setting_CameraControl(_float3 vStartPos, _float3 vEndPos, _float3 vCameraAt, _float fFovy, _bool isKeepAt)
+void CPlayerCamera::Move_PlayerBackPos()
 {
-}
+	if (!m_isMoveInitPos)
+	{
+		m_isMoveInitPos = true;
 
-void CPlayerCamera::Setting_CameraControl(_fvector vStartPos, _fvector vEndPos, _fvector vCameraAt, _float fFovy, _bool isKeepAt)
-{
-}
+		_Vec3 vPlayerPos = m_pPlayer->Get_Transform()->Get_State(CTransform::STATE_POSITION);
+		vPlayerPos.y += 1.65;
 
-void CPlayerCamera::Start_CameraControl()
-{
-	m_isControl = true;
-}
+		_Vec3 vPlayerLook = m_pPlayer->Get_Transform()->Get_State(CTransform::STATE_LOOK);
+		vPlayerLook.y = 0.f;
+		vPlayerLook.Normalize();
 
-void CPlayerCamera::Start_CameraLerp(_float fLerpDuration)
-{
-	m_isLerp = true;
-	m_isLerpEnd = false;
-}
+		_Vec3 vInitPos = vPlayerPos - vPlayerLook * 5.f;
+		vInitPos.y += 3.f;
+		m_pTransformCom->Set_State(CTransform::STATE_POSITION, vInitPos);
 
-void CPlayerCamera::End_CameraControl()
-{
-	m_isControl = false;
-	m_isLerp = false;
-	m_isLerpEnd = false;
+		m_vTargetPos = vPlayerPos - m_pTransformCom->Get_State(CTransform::STATE_LOOK) * 2.5f;
+	}
 }
 
 HRESULT CPlayerCamera::Ready_Components()

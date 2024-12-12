@@ -67,6 +67,15 @@ private:
 	virtual ~CTrail_MultiPoint_Instance() = default;
 
 public:
+	_uint Get_TailInstance() {
+		return m_iNumTailInstance;
+	}
+
+	_uint Get_HeadInstance() {
+		return m_iNumInstance;
+	}
+
+public:
 	virtual HRESULT Initialize_Prototype(const TRAIL_MP_INSTANCE_DESC& Desc, _bool isClient);
 	virtual HRESULT Initialize(void* pArg) override;
 	virtual HRESULT Bind_HeadBuffer(class CShader_NonVTX* pShader, const _char* pConstantName);

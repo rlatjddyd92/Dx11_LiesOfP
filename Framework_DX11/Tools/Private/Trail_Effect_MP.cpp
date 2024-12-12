@@ -37,6 +37,8 @@ HRESULT CTrail_Effect_MP::Initialize(void* pArg)
 	m_pTransformCom->Set_Scaled(m_DefaultDesc.vScale.x, m_DefaultDesc.vScale.y, m_DefaultDesc.vScale.z);
 	m_pTransformCom->Rotation(m_DefaultDesc.vRotation.x, m_DefaultDesc.vRotation.y, m_DefaultDesc.vRotation.z);
 
+	m_iNumTailInstance = m_pVIBufferCom->Get_TailInstance();
+
 	return S_OK;
 }
 
@@ -164,7 +166,8 @@ HRESULT CTrail_Effect_MP::Render()
 		return E_FAIL;
 	if (FAILED(m_pShaderCom->Bind_RawValue("g_fInterval", &m_DefaultDesc.fTailInterval, sizeof(_float))))
 		return E_FAIL;
-
+	if (FAILED(m_pShaderCom->Bind_RawValue("g_iNumTailInstance", &m_iNumTailInstance, sizeof(_uint))))
+		return E_FAIL;
 
 	if (FAILED(m_pVIBufferCom->Bind_TailBuffer(m_pShaderCom, "Particle_SRV")))
 		return E_FAIL;
@@ -236,7 +239,7 @@ void CTrail_Effect_MP::Set_Loop(_bool bLoop)
 	else
 	{
 		m_DefaultDesc.iComputeState &= ~CVIBuffer_Instancing::STATE_LOOP;
-		m_InitDesc.DefaultDesc.iComputeState &= CVIBuffer_Instancing::STATE_LOOP;
+		m_InitDesc.DefaultDesc.iComputeState &= ~CVIBuffer_Instancing::STATE_LOOP;
 	}
 }
 

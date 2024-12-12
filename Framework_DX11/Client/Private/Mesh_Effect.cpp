@@ -52,6 +52,12 @@ void CMesh_Effect::Update(_float fTimeDelta)
 	if (true == m_isDead)
 		return;
 
+	if (true == m_isReset)
+	{
+		Reset();
+		m_isReset = false;
+	}
+
 	m_DefaultDesc.fAlpha += fTimeDelta * m_DefaultDesc.fAlphaSpeed;
 
 	m_pTransformCom->Turn(m_DefaultDesc.vRotationAxis, fTimeDelta * m_DefaultDesc.fRotationSpeed);
@@ -76,7 +82,7 @@ void CMesh_Effect::Late_Update(_float fTimeDelta)
 	{
 		if (true == m_DefaultDesc.bLoop)
 		{
-			Reset();
+			m_isReset = true;
 		}
 		else
 			m_isDead = true;
@@ -126,6 +132,9 @@ HRESULT CMesh_Effect::Render()
 		return E_FAIL;
 	if (FAILED(m_pShaderCom->Bind_RawValue("g_fAlpha", &m_DefaultDesc.fAlpha, sizeof m_DefaultDesc.fAlpha)))
 		return E_FAIL;
+	if (FAILED(m_pShaderCom->Bind_RawValue("g_fAccumulateTime", &m_fAccumulateTime, sizeof m_fAccumulateTime)))
+		return E_FAIL;
+
 
 	_uint		iNumMeshes = m_pModelCom->Get_NumMeshes();
 

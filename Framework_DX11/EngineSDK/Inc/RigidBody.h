@@ -40,6 +40,8 @@ public:
     void        Set_IsLockCell(_bool isLockCell) { m_isLockCell = isLockCell; }
     _Vec3&      Get_Velocity() { return m_vVelocity; }
 
+    void        Set_IsUseForce(_bool isUseForce) { m_isUseForce = isUseForce; }
+
 public:
     virtual HRESULT Initialize_Prototype();
     virtual HRESULT Initialize(void* pArg) override;
@@ -66,6 +68,7 @@ private:
     _bool           m_isOnCell = { true };
     _bool           m_isLockCell = { true };
     _bool           m_isUseClient = { false };
+    _bool           m_isUseForce = { false };
 
     PxPhysics*      m_pPhysX = { nullptr };
     PxScene*        m_PxScene = { nullptr };

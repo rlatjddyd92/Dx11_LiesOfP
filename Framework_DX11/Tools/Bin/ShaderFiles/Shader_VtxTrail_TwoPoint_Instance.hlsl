@@ -452,7 +452,10 @@ PS_OUT PS_BLEND_RGBTOA_MAIN(PS_IN In)
     float2 vTexcoord = In.vTexcoord * g_vTileRepeat;
     Out.vColor = g_DiffuseTexture.Sample(LinearSampler, vTexcoord);
     
+    Out.vColor.rgb *= g_vColor.rgb;
+    
     Out.vColor.a = max(Out.vColor.r, max(Out.vColor.g, Out.vColor.b));
+    
     Out.vColor.a *= 1.f - (((In.vTexcoord.x + In.fIndex) / (float) g_iNumInstance) + g_fRatio);
         
     return Out;
@@ -515,6 +518,39 @@ PS_NORMAL_OUT PS_BLOOD_NORMAL_MAIN(PS_IN In)
     
     return Out;
 }
+
+PS_OUT PS_TRAIL_BLEND_R_MAIN(PS_IN In)
+{
+    PS_OUT Out = (PS_OUT) 0;
+
+    float2 vTexcoord = In.vTexcoord * g_vTileRepeat;
+    vector vColor = g_DiffuseTexture.Sample(LinearSampler, vTexcoord);
+    
+    vColor.gb = vColor.r;
+    vColor.rgb *= g_vColor.rgb;
+    vColor.rgb *= 1.f - ((In.vTexcoord.x + In.fIndex) / (float) g_iNumInstance + g_fRatio);
+
+    Out.vColor = vColor;
+    
+    return Out;
+}
+
+PS_OUT PS_TRAIL_BLEND_G_MAIN(PS_IN In)
+{
+    PS_OUT Out = (PS_OUT) 0;
+
+    float2 vTexcoord = In.vTexcoord * g_vTileRepeat;
+    vector vColor = g_DiffuseTexture.Sample(LinearSampler, vTexcoord);
+    
+    vColor.rb = vColor.g;
+    vColor.rgb *= g_vColor.rgb;
+    vColor.rgb *= 1.f - ((In.vTexcoord.x + In.fIndex) / (float) g_iNumInstance + g_fRatio);
+
+    Out.vColor = vColor;
+    
+    return Out;
+}
+
 
 technique11 DefaultTechnique
 {
@@ -638,5 +674,27 @@ technique11 DefaultTechnique
         VertexShader = compile vs_5_0 VS_MAIN();
         GeometryShader = compile gs_5_0 GS_MAIN();
         PixelShader = compile ps_5_0 PS_BLOOD_NORMAL_MAIN();
+    }
+
+    pass Blend_R    // 11
+    {
+        SetRasterizerState(RS_Cull_None);
+        SetDepthStencilState(DSS_NonWrite, 0);
+        SetBlendState(BS_AlphaBlend, vector(0.f, 0.f, 0.f, 0.f), 0xffffffff);
+
+        VertexShader = compile vs_5_0 VS_MAIN();
+        GeometryShader = compile gs_5_0 GS_MAIN();
+        PixelShader = compile ps_5_0 PS_TRAIL_BLEND_R_MAIN();
+    }
+
+    pass Blend_G    // 12
+    {
+        SetRasterizerState(RS_Cull_None);
+        SetDepthStencilState(DSS_NonWrite, 0);
+        SetBlendState(BS_AlphaBlend, vector(0.f, 0.f, 0.f, 0.f), 0xffffffff);
+
+        VertexShader = compile vs_5_0 VS_MAIN();
+        GeometryShader = compile gs_5_0 GS_MAIN();
+        PixelShader = compile ps_5_0 PS_TRAIL_BLEND_G_MAIN();
     }
 }

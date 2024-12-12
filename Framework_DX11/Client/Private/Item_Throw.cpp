@@ -89,26 +89,25 @@ void CItem_Throw::Update(_float fTimeDelta)
 			
 			if (vCurrentPos.y <= fGroundY || m_fThrowTime > 2.f)
 			{
-				//Explosion();
+				Explosion();
 			}
 			
-			//m_pRigidBodyCom->Set_Velocity(m_vThrowDir * 500.f);
 			m_pRigidBodyCom->Update(fTimeDelta);
+
+			if (m_pColliderCom != nullptr)
+			{
+				m_pColliderCom->Update(m_pTransformCom->Get_WorldMatrix_Ptr());
+				m_pGameInstance->Add_ColliderList(m_pColliderCom);
+			}
 		}
 	}
-	else
-	{
-	}
 
-	if (m_pColliderCom != nullptr)
-		m_pColliderCom->Update(m_pTransformCom->Get_WorldMatrix_Ptr());
 }
 
 void CItem_Throw::Late_Update(_float fTimeDelta)
 {
 	__super::Late_Update(fTimeDelta);
 	m_pGameInstance->Add_RenderObject(CRenderer::RG_NONBLEND, this);
-	m_pGameInstance->Add_ColliderList(m_pColliderCom);
 
 #ifdef _DEBUG
 	if (m_pColliderCom != nullptr)
@@ -222,18 +221,34 @@ HRESULT CItem_Throw::Ready_Components()
 		TEXT("Com_Shader"), reinterpret_cast<CComponent**>(&m_pShaderCom))))
 		return E_FAIL;
 
+	_wstring strModelTag{};
+
+	switch (m_eType)
+	{
+	case SPECIAL_ITEM::SP_GRANADE:
+		strModelTag = TEXT("Prototype_Component_Model_Throw_Cluster");
+		break;
+	case SPECIAL_ITEM::SP_THERMITE:
+		strModelTag = TEXT("Prototype_Component_Model_Throw_Thermite");
+		break;
+	case SPECIAL_ITEM::SP_THROW_BATTERY:
+		strModelTag = TEXT("Prototype_Component_Model_Throw_Battery");
+		break;
+	default:
+		return E_FAIL;
+	}
+
 	/* FOR.Com_Model */
-	if (FAILED(__super::Add_Component(LEVEL_GAMEPLAY, TEXT("SM_FurnitureA_lilies"),
+	if (FAILED(__super::Add_Component(LEVEL_GAMEPLAY, strModelTag,
 		TEXT("Com_Model"), reinterpret_cast<CComponent**>(&m_pModelCom))))
 		return E_FAIL;
 
 	/* For.Com_Collider */
-	CBounding_OBB::BOUNDING_OBB_DESC			ColliderDesc{};
-	ColliderDesc.vExtents = _float3(2.5f, 0.7f, 1.5f);
-	ColliderDesc.vAngles = _float3(0.f, 0.f, 0.f);
-	ColliderDesc.vCenter = _float3(2.5f, 0.f, 0.f);
+	CBounding_Sphere::BOUNDING_SPHERE_DESC			ColliderDesc{};
+	ColliderDesc.vCenter = _float3(0.f, 0.f, 0.f);
+	ColliderDesc.fRadius = 0.5f;
 
-	if (FAILED(__super::Add_Component(LEVEL_STATIC, TEXT("Prototype_Component_Collider_OBB"),
+	if (FAILED(__super::Add_Component(LEVEL_STATIC, TEXT("Prototype_Component_Collider_Sphere"),
 		TEXT("Com_Collider"), reinterpret_cast<CComponent**>(&m_pColliderCom), &ColliderDesc)))
 		return E_FAIL;
 	m_pColliderCom->Set_Owner(this);
