@@ -632,21 +632,21 @@ PS_OUT PS_AURA_BLEND_MAIN(PS_IN In)
 PS_EFFECT_OUT PS_THUNDER_MAIN(PS_IN In)
 {
     PS_EFFECT_OUT Out = (PS_EFFECT_OUT) 0;
-	
+		
+    if (In.vLifeTime.y >= In.vLifeTime.x)
+        discard;
+
     int iTexIndex = (int) ((In.vLifeTime.y / In.vLifeTime.x) * (g_vTexDivide.x * g_vTexDivide.y - 1.f) * g_fSpriteSpeed);
     vector vColor = g_DiffuseTexture.Sample(LinearSampler, Get_SpriteTexcoord(In.vTexcoord, iTexIndex));
-    
+        
     vColor.a = max(vColor.r, max(vColor.g, vColor.b));
+    vColor.a *= 1.f - (In.vLifeTime.y / In.vLifeTime.x);
     
     if (vColor.a <= 0.1f)
         discard;
 
-    if (In.vLifeTime.y >= In.vLifeTime.x)
-        discard;
-    
-    vColor.rgb *= 3.f;
     vColor.rgb *= In.vColor.rgb;
-    //vColor.rgb *= 1.f - (In.vLifeTime.y / In.vLifeTime.x);
+    
     
     Out.vDiffuse = vColor;
     Out.vBlur = vColor;

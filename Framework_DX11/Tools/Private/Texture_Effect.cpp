@@ -52,7 +52,7 @@ void CTexture_Effect::Priority_Update(_float fTimeDelta)
 
 void CTexture_Effect::Update(_float fTimeDelta)
 {
-    if (true == m_isReset)
+    if (true == m_isReset && true == m_DefaultDesc.bLoop)
     {
         Reset();
         m_isReset = false; 

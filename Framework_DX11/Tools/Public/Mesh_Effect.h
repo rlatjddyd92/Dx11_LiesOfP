@@ -91,6 +91,7 @@ private:
 
 	_Vec2	m_vCurrentTileMove = {};
 	_float	m_fAccumulateTime = { 0.f };
+	_bool	m_isReset = { false };
 
 private:
 	HRESULT Ready_Components(const TEXT_DESC& Desc);

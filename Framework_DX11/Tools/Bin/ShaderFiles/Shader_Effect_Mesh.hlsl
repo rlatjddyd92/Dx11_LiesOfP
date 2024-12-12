@@ -226,7 +226,36 @@ PS_EFFECT_OUT PS_POW_MAIN(PS_IN In)
     
     float fMax = max(vColor.r, max(vColor.g, vColor.b));
 
-    if (fMax < 0.3f)
+    if (fMax < 0.1f)
+        discard;
+    
+    Out.vDiffuse = vColor;
+    Out.vBlur = vColor;
+    
+    return Out;
+}
+
+PS_EFFECT_OUT PS_POW_MASK_MAIN(PS_IN In)
+{
+    PS_EFFECT_OUT Out = (PS_EFFECT_OUT) 0;
+    
+    
+    vector vColor = g_DiffuseTexture.Sample(LinearSampler, In.vTexcoord);
+
+    float2 vTexcoord = In.vTexcoord * g_vTileRepeat + g_vTileMove;
+    vector vMask = g_MaskTexture_1.Sample(LinearSampler, vTexcoord);
+    
+    vColor.rgb *= g_fAlpha;
+    vColor *= g_vColor;
+    vColor *= vMask;
+    
+    vColor.r = AdaptiveValue(saturate(vColor.r));
+    vColor.g = AdaptiveValue(saturate(vColor.g));
+    vColor.b = AdaptiveValue(saturate(vColor.b));
+    
+    float fMax = max(vColor.r, max(vColor.g, vColor.b));
+
+    if (fMax < 0.1f)
         discard;
     
     Out.vDiffuse = vColor;
@@ -325,6 +354,16 @@ technique11	DefaultTechnique
         PixelShader = compile ps_5_0 PS_POW_MAIN();
     }
 
+    pass POW_MASK_EFFECT // 8
+    {
+        SetRasterizerState(RS_Default);
+        SetDepthStencilState(DSS_Default, 0);
+        SetBlendState(BS_Default, vector(0.f, 0.f, 0.f, 0.f), 0xffffffff);
+
+        VertexShader = compile vs_5_0 VS_MAIN();
+        GeometryShader = NULL;
+        PixelShader = compile ps_5_0 PS_POW_MASK_MAIN();
+    }
 }
 
 float rand(float seed)

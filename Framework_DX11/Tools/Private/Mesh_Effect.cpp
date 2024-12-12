@@ -47,6 +47,12 @@ void CMesh_Effect::Priority_Update(_float fTimeDelta)
 
 void CMesh_Effect::Update(_float fTimeDelta)
 {
+	if (true == m_isReset)
+	{
+		Reset();
+		m_isReset = false;
+	}
+
 	m_DefaultDesc.fAlpha += fTimeDelta * m_DefaultDesc.fAlphaSpeed;
 
 	m_pTransformCom->Turn(m_DefaultDesc.vRotationAxis, fTimeDelta * m_DefaultDesc.fRotationSpeed);
@@ -67,7 +73,7 @@ void CMesh_Effect::Late_Update(_float fTimeDelta)
 	if (m_DefaultDesc.fDuration < m_fAccumulateTime)
 	{
 		if (true == m_DefaultDesc.bLoop)
-			Reset();
+			m_isReset = true;
 		else
 		{
 			m_isActive = false;
