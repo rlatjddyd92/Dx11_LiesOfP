@@ -116,13 +116,13 @@ void CRigidBody::Update(_float fTimeDelta)
 			m_PxActor->setGlobalPose(Transform);
 		}
 
-		if (m_vForce.Length() > 0.f)
+		if (m_isUseForce && m_vForce.Length() > 0.f)
 		{
 			PxVec3 vForce = ConvertToPxVec3(m_vForce);
 			pRigidDynamic->addForce(vForce);
 			m_vForce = g_XMZero;
 		}
-		else
+		else if(!m_isUseForce)
 		{
 			pRigidDynamic->setLinearVelocity(PxVec3(m_vVelocity.x, m_vVelocity.y, m_vVelocity.z));
 		}
@@ -147,6 +147,7 @@ void CRigidBody::Add_Velocity(const _Vec3& vVelocity)
 void CRigidBody::Add_Force(const _Vec3& vForce, PxForceMode::Enum _eMode)
 {
 	m_vForce = vForce;
+	m_isUseForce = true;
 	//static_cast<PxRigidDynamic*>(m_PxActor)->addForce(_vForce, _eMode, _isAutowake);
 }
 

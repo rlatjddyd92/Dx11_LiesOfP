@@ -89,10 +89,9 @@ void CItem_Throw::Update(_float fTimeDelta)
 			
 			if (vCurrentPos.y <= fGroundY || m_fThrowTime > 2.f)
 			{
-				//Explosion();
+				Explosion();
 			}
 			
-			//m_pRigidBodyCom->Set_Velocity(m_vThrowDir * 500.f);
 			m_pRigidBodyCom->Update(fTimeDelta);
 		}
 	}
