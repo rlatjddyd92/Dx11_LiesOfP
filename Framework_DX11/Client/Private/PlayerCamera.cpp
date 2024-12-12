@@ -169,7 +169,7 @@ void CPlayerCamera::Move_PlayerBackPos()
 		m_isMoveInitPos = true;
 
 		_Vec3 vPlayerPos = m_pPlayer->Get_Transform()->Get_State(CTransform::STATE_POSITION);
-		vPlayerPos.y += 1.65;
+		vPlayerPos.y += 1.65f;
 
 		_Vec3 vPlayerLook = m_pPlayer->Get_Transform()->Get_State(CTransform::STATE_LOOK);
 		vPlayerLook.y = 0.f;

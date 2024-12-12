@@ -98,7 +98,7 @@ void CState_SimonManus_CutScene_Meet::End_Check()
 {
     if (m_pMonster->Get_EndAnim(m_iAnimation_Turn))
     {
-        m_pMonster->Change_Animation(m_iAnimation_Talk, false, 0.1f, 0.5f);
+        m_pMonster->Change_Animation(m_iAnimation_Talk, false, 0.1f, 0);
     }
     else if (m_pMonster->Get_EndAnim(m_iAnimation_Talk))
     {
@@ -106,7 +106,7 @@ void CState_SimonManus_CutScene_Meet::End_Check()
     }
     else if (m_pMonster->Get_EndAnim(m_iAnimation_Hand))
     {
-        m_pMonster->Change_Animation(m_iAnimation_End, false, 0.5f, 51);
+        m_pMonster->Change_Animation(m_iAnimation_End, false, 0.f, 0);
     }
     else if (m_pMonster->Get_EndAnim(m_iAnimation_End))
     {
