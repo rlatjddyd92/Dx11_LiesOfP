@@ -152,6 +152,7 @@ public:
 		// 상점, 보관함
 		_bool bIsAvailable_Shop = false;
 		_bool bIsAvailable_Chest = false;
+		_int iPrice = 0;
 
 	}ITEM;
 

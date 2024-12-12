@@ -221,6 +221,7 @@
     <ClInclude Include="..\Public\State_RaxasiaP1_Walk.h" />
     <ClInclude Include="..\Public\UIPage_Chest.h" />
     <ClInclude Include="..\Public\UIPage_Shop.h" />
+    <ClInclude Include="..\Public\UIPage_Telepot.h" />
     <ClInclude Include="..\Public\Weapon_PlayerArm.h" />
     <ClInclude Include="..\Public\Weapon_Raxasia_P1_Sword.h" />
     <ClInclude Include="..\Public\Sophia.h" />
@@ -493,6 +494,7 @@
     <ClCompile Include="..\Private\State_RaxasiaP1_Walk.cpp" />
     <ClCompile Include="..\Private\UIPage_Chest.cpp" />
     <ClCompile Include="..\Private\UIPage_Shop.cpp" />
+    <ClCompile Include="..\Private\UIPage_Telepot.cpp" />
     <ClCompile Include="..\Private\Weapon_PlayerArm.cpp" />
     <ClCompile Include="..\Private\Weapon_Raxasia_P1_Sword.cpp" />
     <ClCompile Include="..\Private\Sophia.cpp" />

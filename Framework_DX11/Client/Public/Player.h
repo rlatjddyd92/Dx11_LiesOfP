@@ -94,8 +94,8 @@ public:
 		_int iPoint_Heal = 1;
 
 		// 능력치 
-		_float iStat_Attack = 0.f;
-		_float iStat_Defence = 0.f;
+		_float iStat_Attack = 20.f;
+		_float iStat_Defence = 20.f;
 
 
 		// 게이지 수치 
@@ -113,7 +113,7 @@ public:
 		_float fRegion_Interval = 200.f;
 		
 		// 에르고 
-		_int iErgo = 1000;
+		_int iErgo = 10000;
 
 		// 레벨 업에 필요한 에르고 
 		_int iErgo_LevelUp = 100;

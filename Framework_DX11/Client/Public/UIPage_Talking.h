@@ -166,7 +166,7 @@ protected:
 
 
 	_Vec2 m_vSelectTime = { -1.f,5.f };
-	_int m_iFunction = -1;
+	_int m_iFunction = 0;
 
 
 public:

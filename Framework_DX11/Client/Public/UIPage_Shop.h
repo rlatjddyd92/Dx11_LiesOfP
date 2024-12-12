@@ -2,6 +2,7 @@
 
 #include "Client_Defines.h"
 #include "UIPage.h"
+#include "Item_Manager.h"
 
 BEGIN(Engine)
 
@@ -52,6 +53,19 @@ public:
 		GROUP_END
 	};
 
+	typedef struct SHOP_CELL_RENDER_INFO
+	{
+		_bool bIsTitle = false;
+		_wstring strTitle = {};
+		_Vec2 vPos = { 0.f,0.f };
+
+		const CItem_Manager::ITEM* pInven = { nullptr };
+		INVEN_ARRAY_TYPE eArray = INVEN_ARRAY_TYPE::TYPE_END;
+		_int iInven_Index = 0;
+
+		_int iIndexShop = -1;
+	}CELL_RENDER;
+
 
 
 
@@ -83,22 +97,34 @@ protected:
 	void Action_Tab(_float fTimeDelta);
 	void Action_Scroll(_float fTimeDelta);
 	void Action_Cell(_float fTimeDelta);
-	void Action_Focus(_float fTimeDelta);
+	void Action_Focus(_float fTimeDelta, _Vec2 vPos);
+	void Action_Popup(_float fTimeDelta);
 
 	void Update_Tab(_float fTimeDelta);
 	void Update_Scroll(_float fTimeDelta);
 	void Update_Cell(_float fTimeDelta);
 	void Update_Focus(_float fTimeDelta);
+	void Update_BagInfo(_float fTimeDelta);
+
+	void Setting_SellTab();
+	void Setting_BuyTab();
+
+	void Reset_PopupInfo();
 
 	_int m_iNowTab = 0;
 	_int m_iNowCell = 0;
 	_int m_iNowCount = 0;
 	_int m_iNowPrice = 0;
 
+	_bool m_bIsItem_Popup = false;
 
+	CELL_RENDER* m_Title_Bag = { nullptr };
+	CELL_RENDER* m_Title_Chest = { nullptr };
 
+	SCROLL* m_pScroll_Shop = { nullptr };
 
-
+	vector<CELL_RENDER*> m_vecSell_RenderInfo;
+	vector<CELL_RENDER*> m_vecBuy_RenderInfo;
 
 
 public:

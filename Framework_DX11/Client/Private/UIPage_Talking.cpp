@@ -237,67 +237,75 @@ void CUIPage_Talking::Update_Script(_float fTimeDelta)
 				m_iFunction = 2;
 			}
 		}
-	
-
-	if (bIsClick)
-	{
-		if (m_iFunction == -1)
+		
+		if (m_iFunction != -1)
 		{
-			if (m_vecNpc_ScriptInfo[_int(m_eNowNpc)]->Add_ScriptNum() == false)
+			m_vecPart[_int(PART_GROUP::TALKING_Function_Rect_Left)]->iParentPart_Index = _int(PART_GROUP::TALKING_Function_Back_0) + m_iFunction;
+
+			m_vecPart[_int(PART_GROUP::TALKING_Function_Rect_Left)]->bRender = true;
+			m_vecPart[_int(PART_GROUP::TALKING_Function_Rect_Middle)]->bRender = true;
+			m_vecPart[_int(PART_GROUP::TALKING_Function_Rect_Right)]->bRender = true;
+		}
+		
+		
+		if (bIsClick)
+		{
+			if (m_iFunction == -1)
 			{
-				CloseAction();
-				return;
+				if (m_vecNpc_ScriptInfo[_int(m_eNowNpc)]->Add_ScriptNum() == false)
+				{
+					CloseAction();
+					return;
+				}
+			}
+			else if (m_iFunction == 0)
+			{
+				// 별바라기 순간이동 메뉴
+			}
+			else if (m_iFunction == 1)
+			{
+				GET_GAMEINTERFACE->SwicthPage(UIPAGE::PAGE_TALKING, UIPAGE::PAGE_SHOP);
+			}
+			else if (m_iFunction == 2)
+			{
+				// 보관함 
 			}
 		}
-		else if (m_iFunction == 0)
-		{
-			// 별바라기 순간이동 메뉴
-		}
-		else if (m_iFunction == 0)
-		{
-			GET_GAMEINTERFACE->SwicthPage(UIPAGE::PAGE_TALKING, UIPAGE::PAGE_SHOP);
-		}
-		else if (m_iFunction == 0)
-		{
-			// 보관함 
-		}
-
 	}
-}
 
-		if (pNow->strSpeaker[0] == 'S')
-		{
-			Update_Select(fTimeDelta);
+	if (pNow->strSpeaker[0] == 'S')
+	{
+		Update_Select(fTimeDelta);
 
-			m_vecPart[_int(PART_GROUP::TALKING_Name_Text)]->bRender = false;
-			m_vecPart[_int(PART_GROUP::TALKING_Script_0)]->bRender = false;
-			m_vecPart[_int(PART_GROUP::TALKING_Script_1)]->bRender = false;
-			m_vecPart[_int(PART_GROUP::TALKING_Script_2)]->bRender = false;
-		}
-		else
-		{
-			for (_int i = _int(PART_GROUP::TALKING_Select_Clock_Center); i <= _int(PART_GROUP::TALKING_Select_Right_Text); ++i)
-				m_vecPart[i]->bRender = false;
+		m_vecPart[_int(PART_GROUP::TALKING_Name_Text)]->bRender = false;
+		m_vecPart[_int(PART_GROUP::TALKING_Script_0)]->bRender = false;
+		m_vecPart[_int(PART_GROUP::TALKING_Script_1)]->bRender = false;
+		m_vecPart[_int(PART_GROUP::TALKING_Script_2)]->bRender = false;
+	}
+	else
+	{
+		for (_int i = _int(PART_GROUP::TALKING_Select_Clock_Center); i <= _int(PART_GROUP::TALKING_Select_Right_Text); ++i)
+			m_vecPart[i]->bRender = false;
 
-			m_vSelectTime.x = -1.f;
+		m_vSelectTime.x = -1.f;
 
-			m_vecPart[_int(PART_GROUP::TALKING_Name_Text)]->strText = pNow->strSpeaker;
-			m_vecPart[_int(PART_GROUP::TALKING_Script_0)]->strText = pNow->strScript_A;
-			m_vecPart[_int(PART_GROUP::TALKING_Script_1)]->strText = pNow->strScript_B;
-			m_vecPart[_int(PART_GROUP::TALKING_Script_2)]->strText = pNow->strScript_C;
+		m_vecPart[_int(PART_GROUP::TALKING_Name_Text)]->strText = pNow->strSpeaker;
+		m_vecPart[_int(PART_GROUP::TALKING_Script_0)]->strText = pNow->strScript_A;
+		m_vecPart[_int(PART_GROUP::TALKING_Script_1)]->strText = pNow->strScript_B;
+		m_vecPart[_int(PART_GROUP::TALKING_Script_2)]->strText = pNow->strScript_C;
 
-			m_vecPart[_int(PART_GROUP::TALKING_Name_Text)]->bRender = true;
-			m_vecPart[_int(PART_GROUP::TALKING_Script_0)]->bRender = true;
-			m_vecPart[_int(PART_GROUP::TALKING_Script_1)]->bRender = true;
-			m_vecPart[_int(PART_GROUP::TALKING_Script_2)]->bRender = true;
-		}
+		m_vecPart[_int(PART_GROUP::TALKING_Name_Text)]->bRender = true;
+		m_vecPart[_int(PART_GROUP::TALKING_Script_0)]->bRender = true;
+		m_vecPart[_int(PART_GROUP::TALKING_Script_1)]->bRender = true;
+		m_vecPart[_int(PART_GROUP::TALKING_Script_2)]->bRender = true;
+	}
 
-		m_vecPart[_int(PART_GROUP::TALKING_Back_Fx)]->bRender = true;
-		m_vecPart[_int(PART_GROUP::TALKING_Line)]->bRender = true;
+	m_vecPart[_int(PART_GROUP::TALKING_Back_Fx)]->bRender = true;
+	m_vecPart[_int(PART_GROUP::TALKING_Line)]->bRender = true;
 	
 }
 
-	void CUIPage_Talking::Update_Select(_float fTimeDelta)
+void CUIPage_Talking::Update_Select(_float fTimeDelta)
 {
 	// 중간 발표 이후로 진행
 	if (m_vSelectTime.x == -1.f)

@@ -1021,6 +1021,7 @@ HRESULT CItem_Manager::Initialize_Item()
 
 		m_vecItem_BasicSpec[pNew->iIndex]->bIsAvailable_Shop = true;
 		m_vecItem_BasicSpec[pNew->iIndex]->bIsAvailable_Chest = true;
+		m_vecItem_BasicSpec[pNew->iIndex]->iPrice = pNew->iPrice_Buy;
 
 		pNew->iCount = stoi(vecBuffer_Shop[i][2]);
 		pNew->iPrice_Buy = stoi(vecBuffer_Shop[i][3]);

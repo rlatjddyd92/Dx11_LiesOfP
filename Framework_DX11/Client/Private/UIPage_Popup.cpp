@@ -162,6 +162,8 @@ CHECK_MOUSE CUIPage_Popup::Check_Page_Action(_float fTimeDelta)
 
 void CUIPage_Popup::Show_Popup(_wstring strTitle, _wstring strDescA, _wstring strDescB)
 {
+	Off_Popup();
+
 	for (_int i = _int(PART_GROUP::POPUP_Top); i <= _int(PART_GROUP::POPUP_Text_0); ++i)
 	{
 		m_vecPart[i]->bRender = true;
@@ -202,6 +204,8 @@ void CUIPage_Popup::Show_ItemPopup(_wstring strTitle, _wstring strInputTitle, _i
 {
 	if ((pNow_Input == nullptr) && (pNow_Count == nullptr))
 		return;
+
+	Off_Popup();
 
 	m_pItemPopup_Info->bIsActive = true;
 
@@ -270,6 +274,8 @@ void CUIPage_Popup::Show_ItemPopup(_wstring strTitle, _wstring strInputTitle, _i
 
 void CUIPage_Popup::Show_ItemUsePopup(_wstring strTitle, _wstring strDescA, _bool bIsTop)
 {
+	Off_Popup();
+
 	for (_int i = _int(PART_GROUP::POPUP_Top); i <= _int(PART_GROUP::POPUP_Text_1); ++i)
 	{
 		m_vecPart[i]->bRender = true;

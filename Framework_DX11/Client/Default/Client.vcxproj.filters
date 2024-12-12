@@ -1000,6 +1000,9 @@
     <Filter Include="05.Fsm\Monster\Raxasia\P1\Attack\RouteParts\Discharge">
       <UniqueIdentifier>{e5adac13-4069-48d1-b81c-5f212e5650e1}</UniqueIdentifier>
     </Filter>
+    <Filter Include="03.GameInterface_Controller\00.UIManager\00.UIPage\18.UIPage_Telepot">
+      <UniqueIdentifier>{8d2c85a1-e53e-4e3f-b451-241e3aa1bf15}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Client.h">
@@ -1826,6 +1829,9 @@
     <ClInclude Include="..\Public\State_RaxasiaP1_Walk.h">
       <Filter>05.Fsm\Monster\Raxasia\P1\Walk</Filter>
     </ClInclude>
+    <ClInclude Include="..\Public\UIPage_Telepot.h">
+      <Filter>03.GameInterface_Controller\00.UIManager\00.UIPage\18.UIPage_Telepot</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Client.cpp">
@@ -2621,6 +2627,9 @@
     </ClCompile>
     <ClCompile Include="..\Private\State_RaxasiaP1_Walk.cpp">
       <Filter>05.Fsm\Monster\Raxasia\P1\Walk</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Private\UIPage_Telepot.cpp">
+      <Filter>03.GameInterface_Controller\00.UIManager\00.UIPage\18.UIPage_Telepot</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

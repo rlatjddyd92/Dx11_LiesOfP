@@ -46,6 +46,7 @@ public:
 		PAGE_INFORM,
 		PAGE_SHOP,
 		PAGE_CHEST,
+		PAGE_TELEPOT,
 		PAGE_END
 	};
 

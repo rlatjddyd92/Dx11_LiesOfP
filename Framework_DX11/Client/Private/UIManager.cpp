@@ -205,6 +205,10 @@ void CUIManager::UIControl_Chest(_float fTimeDelta)
 	}
 }
 
+void CUIManager::UIControl_Telepot(_float fTimeDelta)
+{
+}
+
 void CUIManager::UIControl_Common(_float fTimeDelta)
 {
 	//m_bIsPlayPageMaintain = true;
@@ -238,6 +242,8 @@ void CUIManager::UIControl_Common(_float fTimeDelta)
 		UIControl_Shop(fTimeDelta);
 	else if ((m_pUIPage_Chest->GetPageAction(PAGEACTION::ACTION_ACTIVE)) || (m_pUIPage_Chest->GetPageAction(PAGEACTION::ACTION_OPENING)))
 		UIControl_Chest(fTimeDelta);
+	else if ((m_pUIPage_Telepot->GetPageAction(PAGEACTION::ACTION_ACTIVE)) || (m_pUIPage_Telepot->GetPageAction(PAGEACTION::ACTION_OPENING)))
+		UIControl_Telepot(fTimeDelta);
 	else if ((m_bIsIngame) && (m_bIsPlayPageMaintain))
 		OpenPage(UIPAGE::PAGE_PLAY);
 }
@@ -565,6 +571,11 @@ HRESULT CUIManager::Make_UIPage(_int iIndex)
 	{
 		m_pUIPage_Chest = CUIPage_Chest::Create(m_pDevice, m_pContext);
 		m_vecPage[iIndex] = static_cast<CUIPage*>(m_pUIPage_Chest);
+	}
+	else if (iIndex == _int(UIPAGE::PAGE_TELEPOT))
+	{
+		m_pUIPage_Telepot = CUIPage_Telepot::Create(m_pDevice, m_pContext);
+		m_vecPage[iIndex] = static_cast<CUIPage*>(m_pUIPage_Telepot);
 	}
 
 	if (m_vecPage[iIndex] == nullptr)
