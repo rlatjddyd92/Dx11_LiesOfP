@@ -382,7 +382,7 @@ HRESULT CRaxasia::Ready_Components()
 		return E_FAIL;
 
 	/* FOR.Com_ExtraModel */
-	if (FAILED(__super::Add_Component(LEVEL_GAMEPLAY, TEXT("Prototype_Component_Model_SimonManusP2"),
+	if (FAILED(__super::Add_Component(LEVEL_GAMEPLAY, TEXT("Prototype_Component_Model_RaxasiaP2"),
 		TEXT("Com_ExtraModel"), reinterpret_cast<CComponent**>(&m_pExtraModelCom))))
 		return E_FAIL;
 
@@ -578,6 +578,14 @@ HRESULT CRaxasia::Ready_FSM()
 		TEXT("Com_ExtraFSM"), reinterpret_cast<CComponent**>(&m_pExtraFsmCom))))
 		return E_FAIL;
 
+	m_pExtraFsmCom->Add_State(CState_RaxasiaP2_Idle::Create(m_pExtraFsmCom, this, IDLE, &Desc));
+	m_pExtraFsmCom->Add_State(CState_RaxasiaP2_Walk::Create(m_pExtraFsmCom, this, WALK, &Desc));
+	m_pExtraFsmCom->Add_State(CState_RaxasiaP2_Run::Create(m_pExtraFsmCom, this, RUN, &Desc));
+	m_pExtraFsmCom->Add_State(CState_RaxasiaP2_Grogy::Create(m_pExtraFsmCom, this, GROGY, &Desc));
+	m_pExtraFsmCom->Add_State(CState_RaxasiaP2_HitFatal::Create(m_pExtraFsmCom, this, HITFATAL, &Desc));
+	m_pExtraFsmCom->Add_State(CState_RaxasiaP2_Die::Create(m_pExtraFsmCom, this, DIE, &Desc));
+
+	m_pExtraFsmCom->Set_State(IDLE);
 #pragma endregion
 
 	return S_OK;
@@ -598,7 +606,7 @@ HRESULT CRaxasia::Ready_Weapon()
 	m_pWeapon->Appear();
 
 
-	WeaponDesc.pSocketBoneMatrix = m_pModelCom->Get_BoneCombindTransformationMatrix_Ptr(36);	//Weapon_R UFB L
+	WeaponDesc.pSocketBoneMatrix = m_pModelCom->Get_BoneCombindTransformationMatrix_Ptr(76);	//
 
 	WeaponDesc.pParentAtk = &m_eStat.fAtk;
 
@@ -626,7 +634,6 @@ HRESULT CRaxasia::Ready_Weapon()
 	Desc.fDamageAmount = 100.f;
 
 	m_pKickCollObj = dynamic_cast<CColliderObject*>(m_pGameInstance->Clone_GameObject(TEXT("Prototype_GameObject_ColliderObj"), &Desc));
-
 
 
 
@@ -700,39 +707,65 @@ void CRaxasia::Update_Collider()
 void CRaxasia::ChangePhase()
 {
 
-	//if (m_pExtraModelCom == nullptr || m_pExtraFsmCom == nullptr)
-	//{
-	//	return;
-	//}
-	//m_pFsmCom->Release_States();
+	if (m_pExtraModelCom == nullptr || m_pExtraFsmCom == nullptr)
+	{
+		return;
+	}
 
-	//Safe_Release(m_pModelCom);
-	//Safe_Release(m_pFsmCom);
+	m_pFsmCom->Release_States();
 
-	//m_pModelCom = m_pExtraModelCom;
-	//m_pFsmCom = m_pExtraFsmCom;
+	Safe_Release(m_pModelCom);
+	Safe_Release(m_pFsmCom);
 
-	//m_pExtraModelCom = nullptr;
-	//m_pExtraFsmCom = nullptr;
+	m_pModelCom = m_pExtraModelCom;
+	m_pFsmCom = m_pExtraFsmCom;
 
-	//m_pModelCom->SetUp_Animation(8, true);//P2 Idle
-	//m_pFsmCom->Set_State(IDLE);
+	m_pExtraModelCom = nullptr;
+	m_pExtraFsmCom = nullptr;
 
-	//m_pModelCom->Play_Animation(0);
+	m_pModelCom->SetUp_Animation(8, true);//P2 Idle
+	m_pFsmCom->Set_State(IDLE);
+
+	m_pModelCom->Play_Animation(0);
 
 
-	//m_pWeapon->ChangeSocketMatrix(m_pModelCom->Get_BoneCombindTransformationMatrix_Ptr(93));
+	//P2
 
-	//m_eStat.fHp = 200.f;
-	//m_eStat.fMaxHp = 200.f;
-	//m_eStat.fAtk = 15.f;
-	//m_eStat.fDefence = 8.f;
-	//m_eStat.fStemina = 100.f;
-	//m_eStat.fMaxGrogyPoint = 50.f;
-	//m_eStat.fGrogyPoint = 0.f;
+	CWeapon::WEAPON_DESC		WeaponDesc{};
+	WeaponDesc.pParentWorldMatrix = m_pTransformCom->Get_WorldMatrix_Ptr();
+	WeaponDesc.pSocketBoneMatrix = m_pModelCom->Get_BoneCombindTransformationMatrix_Ptr(62);	//Weapon_R
 
-	//m_isDead = false;
-	//m_isChanged = true;
+	WeaponDesc.pParentAtk = &m_eStat.fAtk;
+
+	m_pWeapon = dynamic_cast<CWeapon*>(m_pGameInstance->Clone_GameObject(TEXT("Prototype_GameObject_Weapon_Raxasia_P2_Sword"), &WeaponDesc));
+	if (nullptr == m_pWeapon)
+		return;
+
+	m_pWeapon->Appear();
+
+
+	WeaponDesc.pSocketBoneMatrix = m_pModelCom->Get_BoneCombindTransformationMatrix_Ptr(36);	//Weapon_R UFB L
+
+	WeaponDesc.pParentAtk = &m_eStat.fAtk;
+
+	m_pWeaponShield = dynamic_cast<CWeapon*>(m_pGameInstance->Clone_GameObject(TEXT("Prototype_GameObject_Weapon_Raxasia_P1_Shield"), &WeaponDesc));
+	if (nullptr == m_pWeaponShield)
+		return;
+
+	m_pWeaponShield->Appear();
+
+	m_pWeapon->ChangeSocketMatrix(m_pModelCom->Get_BoneCombindTransformationMatrix_Ptr(93));
+
+	m_eStat.fHp = 200.f;
+	m_eStat.fMaxHp = 200.f;
+	m_eStat.fAtk = 15.f;
+	m_eStat.fDefence = 8.f;
+	m_eStat.fStemina = 100.f;
+	m_eStat.fMaxGrogyPoint = 50.f;
+	m_eStat.fGrogyPoint = 0.f;
+
+	m_isDead = false;
+	m_isChanged = true;
 }
 
 CRaxasia* CRaxasia::Create(ID3D11Device* pDevice, ID3D11DeviceContext* pContext)

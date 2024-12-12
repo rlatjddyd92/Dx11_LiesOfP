@@ -249,6 +249,9 @@ HRESULT CModel::Initialize(void * pArg)
 	m_isEnd_Animations_Boundary = new _bool[m_iNumAnimations];
 	ZeroMemory(m_isEnd_Animations, m_iNumAnimations * sizeof(_bool));
 	ZeroMemory(m_isEnd_Animations_Boundary, m_iNumAnimations * sizeof(_bool));
+	
+	m_ChangeKeyFrame = new KEYFRAME[m_Bones.size()];
+	m_ChangeKeyFrame_Boundary = new KEYFRAME[m_Bones.size()];
 
 	m_isInstance = (_bool*)pArg;
 
@@ -367,24 +370,48 @@ HRESULT CModel::SetUp_NextAnimation(_uint iNextAnimationIndex, _bool isLoop, _fl
 		m_bSameChange = true;
 	}
 
-	m_tChaneAnimDesc.iNextAnimIndex = iNextAnimationIndex;
-	if (iNextAnimationIndex == m_iCurrentAnimIndex_Boundary && !m_isChangeAni_Boundary && !bSameChange)
+	m_ChangeTrackPosition = 0.0;
+
+	if (m_isChangeAni == true)
 	{
-		m_tChaneAnimDesc.iStartFrame = (_uint)m_CurrentTrackPosition_Boundary;
+		m_bChange_Changed = true;
+	}
+	else
+	{
+		m_bChange_Changed = false;
+	}
+
+	m_tChaneAnimDesc.iNextAnimIndex = iNextAnimationIndex;
+	_bool	bTrackCheck = { false };
+	if (iNextAnimationIndex == m_iCurrentAnimIndex_Boundary  && !bSameChange)
+	{
+		if (!m_isChangeAni_Boundary)
+		{
+			m_tChaneAnimDesc.iStartFrame = (_uint)m_CurrentTrackPosition_Boundary;
+		}
+		else
+		{
+			m_ChangeTrackPosition = m_ChangeTrackPosition_Boundary + m_tChaneAnimDesc_Boundary.fChangeTime + fChangeDuration;
+			bTrackCheck = true;
+		}
 	}
 	else
 	{
 		m_tChaneAnimDesc.iStartFrame = iStartFrame;
 	}
-	m_ChangeTrackPosition = 0.0;
+	
+	
+	if (!bTrackCheck)
+	{
+		if (iStartFrame > 0)
+			m_ChangeTrackPosition = m_Animations[m_tChaneAnimDesc.iNextAnimIndex]->Get_WideChannel()->Get_KeyFrame(iStartFrame).TrackPosition;
+	}
 
-	if(iStartFrame > 0)
-		m_ChangeTrackPosition = m_Animations[m_tChaneAnimDesc.iNextAnimIndex]->Get_WideChannel()->Get_KeyFrame(iStartFrame).TrackPosition;
-
-	m_vRootMoveStack = m_vCurRootMove = _vector{ 0, 0, 0, 1 };
 
 	m_tChaneAnimDesc.fChangeDuration = fChangeDuration;
 	m_tChaneAnimDesc.fChangeTime = 0.f;
+
+	m_vRootMoveStack = m_vCurRootMove = _vector{ 0, 0, 0, 1 };
 
 	m_isEnd_Animations[iNextAnimationIndex] = false;
 	m_isEnd_Animations[m_iCurrentAnimIndex] = false;
@@ -428,19 +455,40 @@ HRESULT CModel::SetUp_NextAnimation_Boundary(_uint iNextAnimationIndex, _bool is
 
 	m_ChangeTrackPosition_Boundary = 0.0;
 
-	m_tChaneAnimDesc_Boundary.iNextAnimIndex = iNextAnimationIndex;
-	if (iNextAnimationIndex == m_iCurrentAnimIndex && !m_isChangeAni && !bSameChange)
+	if (m_isChangeAni_Boundary == true)
 	{
-		m_tChaneAnimDesc_Boundary.iStartFrame = (_uint)m_CurrentTrackPosition;
+		m_bChange_Changed_Boundary = true;
+	}
+	else
+	{
+		m_bChange_Changed_Boundary = false;
+	}
+
+	m_tChaneAnimDesc_Boundary.iNextAnimIndex = iNextAnimationIndex;
+	_bool	bTrackCheck = { false };
+	if (iNextAnimationIndex == m_iCurrentAnimIndex  && !bSameChange)
+	{
+		if (!m_isChangeAni)
+		{
+			m_tChaneAnimDesc_Boundary.iStartFrame = (_uint)m_CurrentTrackPosition;
+		}
+		else
+		{
+			m_ChangeTrackPosition_Boundary = m_CurrentTrackPosition - m_tChaneAnimDesc.fChangeTime + fChangeDuration;
+			bTrackCheck = true;
+		}
 	}
 	else
 	{
 		m_tChaneAnimDesc_Boundary.iStartFrame = iStartFrame;
 	}
 
-	if (iStartFrame > 0)
-		m_ChangeTrackPosition_Boundary = m_Animations[m_tChaneAnimDesc_Boundary.iNextAnimIndex]->Get_WideChannel()->Get_KeyFrame(iStartFrame).TrackPosition;
-
+	
+	if (!bTrackCheck)
+	{
+		if (iStartFrame > 0)
+			m_ChangeTrackPosition_Boundary = m_Animations[m_tChaneAnimDesc_Boundary.iNextAnimIndex]->Get_WideChannel()->Get_KeyFrame(iStartFrame).TrackPosition;
+	}
 	m_vRootMoveStack = m_vCurRootMove = _vector{ 0, 0, 0, 1 };
 
 	m_tChaneAnimDesc_Boundary.fChangeDuration = fChangeDuration;
@@ -542,8 +590,15 @@ void CModel::Update_Animation(_float fTimeDelta)
 				continue;
 			}
 
-
-			KEYFRAME tCurrentKeyFrame = CurrentChannels[i]->Find_KeyFrameIndex(&m_KeyFrameIndices[m_iCurrentAnimIndex][i], m_CurrentTrackPosition); // 여기서부터
+			KEYFRAME tCurrentKeyFrame{};
+			if (m_bChange_Changed)
+			{
+				tCurrentKeyFrame = m_ChangeKeyFrame[CurrentChannels[i]->Get_BoneIndex()];
+			}
+			else
+			{
+				tCurrentKeyFrame = CurrentChannels[i]->Find_KeyFrameIndex(&m_KeyFrameIndices[m_iCurrentAnimIndex][i], m_CurrentTrackPosition); // 여기서부터
+			}
 			KEYFRAME tNextKeyFrame = NextChannels[i]->Find_KeyFrameIndex(&m_KeyFrameIndices[m_tChaneAnimDesc.iNextAnimIndex][i], m_ChangeTrackPosition); // 여기로 보간
 
 
@@ -610,6 +665,13 @@ void CModel::Update_Animation(_float fTimeDelta)
 				vScale = XMVectorLerp(vSourScale, vDestScale, (_float)fRatio);
 				vRotation = XMQuaternionSlerp(vSourRotation, vDestRotation, (_float)fRatio);
 				vTranslation = XMVectorLerp(vSourTranslation, vDestTranslation, (_float)fRatio);
+				
+				if (!m_bChange_Changed)
+				{
+					XMStoreFloat3(&(m_ChangeKeyFrame[iBoneIndex].vScale), vScale);
+					XMStoreFloat4(&(m_ChangeKeyFrame[iBoneIndex].vRotation), vRotation);
+					XMStoreFloat3(&(m_ChangeKeyFrame[iBoneIndex].vTranslation), vTranslation);
+				}
 			}
 
 			_matrix	TransformationMatrix = XMMatrixAffineTransformation(vScale, XMVectorSet(0.f, 0.f, 0.f, 1.f), vRotation, vTranslation);
@@ -631,7 +693,7 @@ void CModel::Update_Animation(_float fTimeDelta)
 
 			//m_iCurrentFrame = m_Animations[m_iCurrentAnimIndex].
 			m_bDenyTrans = false;
-
+			m_bChange_Changed = false;
 			m_vRootMoveStack = m_vCurRootMove = _vector{ 0, 0, 0, 1 };
 			m_iCurrentAnimIndex = m_tChaneAnimDesc.iNextAnimIndex;
 			ZeroMemory(&m_tChaneAnimDesc, sizeof(CHANGEANIMATION_DESC));
@@ -682,7 +744,15 @@ void CModel::Update_Animation_Boundary(_float fTimeDelta)
 					continue;
 				}
 
-				KEYFRAME tCurrentKeyFrame = CurrentChannels[i]->Find_KeyFrameIndex(&m_KeyFrameIndices[m_iCurrentAnimIndex_Boundary][i], m_CurrentTrackPosition_Boundary); // 여기서부터
+				KEYFRAME tCurrentKeyFrame{}; 
+				if (m_bChange_Changed_Boundary)
+				{
+					tCurrentKeyFrame = m_ChangeKeyFrame_Boundary[CurrentChannels[i]->Get_BoneIndex()];
+				}
+				else
+				{
+					tCurrentKeyFrame = CurrentChannels[i]->Find_KeyFrameIndex(&m_KeyFrameIndices[m_iCurrentAnimIndex_Boundary][i], m_CurrentTrackPosition_Boundary); // 여기서부터
+				}
 				KEYFRAME tNextKeyFrame = NextChannels[i]->Find_KeyFrameIndex(&m_KeyFrameIndices[m_tChaneAnimDesc_Boundary.iNextAnimIndex][i], m_ChangeTrackPosition_Boundary); // 여기로 보간
 
 				_vector vScale, vRotation, vTranslation;
@@ -746,6 +816,13 @@ void CModel::Update_Animation_Boundary(_float fTimeDelta)
 					vScale = XMVectorLerp(vSourScale, vDestScale, (_float)fRatio);
 					vRotation = XMQuaternionSlerp(vSourRotation, vDestRotation, (_float)fRatio);
 					vTranslation = XMVectorLerp(vSourTranslation, vDestTranslation, (_float)fRatio);
+
+					if (!m_bChange_Changed_Boundary)
+					{
+						XMStoreFloat3(&(m_ChangeKeyFrame_Boundary[iBoneIndex].vScale), vScale);
+						XMStoreFloat4(&(m_ChangeKeyFrame_Boundary[iBoneIndex].vRotation), vRotation);
+						XMStoreFloat3(&(m_ChangeKeyFrame_Boundary[iBoneIndex].vTranslation), vTranslation);
+					}
 				}
 
 				_matrix	TransformationMatrix = XMMatrixAffineTransformation(vScale, XMVectorSet(0.f, 0.f, 0.f, 1.f), vRotation, vTranslation);
@@ -758,6 +835,7 @@ void CModel::Update_Animation_Boundary(_float fTimeDelta)
 				if (m_tChaneAnimDesc_Boundary.iNextAnimIndex == m_iCurrentAnimIndex && !m_isChangeAni && !m_bSameChange)
 				{
 					m_CurrentTrackPosition_Boundary = m_CurrentTrackPosition;
+					m_isLoop_Boundary = m_isLoop;
 				}
 				else
 				{
@@ -767,8 +845,7 @@ void CModel::Update_Animation_Boundary(_float fTimeDelta)
 
 				//m_Animations[m_iCurrentAnimIndex]->Reset();
 				m_bDenyTrans = false;
-
-				m_vRootMoveStack = m_vCurRootMove = _vector{ 0, 0, 0, 1 };
+				m_bChange_Changed_Boundary = false;
 				m_iCurrentAnimIndex_Boundary = m_tChaneAnimDesc_Boundary.iNextAnimIndex;
 				ZeroMemory(&m_tChaneAnimDesc_Boundary, sizeof(CHANGEANIMATION_DESC));
 
@@ -780,14 +857,8 @@ void CModel::Update_Animation_Boundary(_float fTimeDelta)
 		else
 		{
 			//if 상하체 애니메이션이 같으면 시간누적 없는 업데이트 하체 변수로 호출
-			if (m_iCurrentAnimIndex == m_iCurrentAnimIndex_Boundary && !m_isChangeAni)
-			{
-				m_iCurrentFrame_Boundary = m_Animations[m_iCurrentAnimIndex_Boundary]->Update_TransformationMatrices(m_Bones, &m_CurrentTrackPosition, m_KeyFrameIndices[m_iCurrentAnimIndex_Boundary], m_isLoop, &m_isEnd_Animations_Boundary[m_iCurrentAnimIndex_Boundary], fTimeDelta, true, &m_isBoneUpdated, true);
-			}
-			else
-			{
-				m_iCurrentFrame_Boundary = m_Animations[m_iCurrentAnimIndex_Boundary]->Update_TransformationMatrices(m_Bones, &m_CurrentTrackPosition_Boundary, m_KeyFrameIndices[m_iCurrentAnimIndex_Boundary], m_isLoop_Boundary, &m_isEnd_Animations_Boundary[m_iCurrentAnimIndex_Boundary], fTimeDelta, true, &m_isBoneUpdated, false);
-			}
+
+			m_iCurrentFrame_Boundary = m_Animations[m_iCurrentAnimIndex_Boundary]->Update_TransformationMatrices(m_Bones, &m_CurrentTrackPosition_Boundary, m_KeyFrameIndices[m_iCurrentAnimIndex_Boundary], m_isLoop_Boundary, &m_isEnd_Animations_Boundary[m_iCurrentAnimIndex_Boundary], fTimeDelta, true, &m_isBoneUpdated, false);
 		}
 
 	}
@@ -1335,6 +1406,9 @@ void CModel::Free()
 	{
 		Safe_Delete_Array(m_isEnd_Animations);
 		Safe_Delete_Array(m_isEnd_Animations_Boundary);
+
+		Safe_Delete_Array(m_ChangeKeyFrame);
+		Safe_Delete_Array(m_ChangeKeyFrame_Boundary);
 
 		if (m_isInstance)
 		{

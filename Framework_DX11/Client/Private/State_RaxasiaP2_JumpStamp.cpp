@@ -24,7 +24,7 @@ HRESULT CState_RaxasiaP2_JumpStamp::Start_State(void* pArg)
     m_pMonster->Change_Animation(AN_JUMPSTAMP_START, false, 0.1f, 0);
 
     m_bSwingSound = false;
-
+    m_bStartSpot = true;
     m_bSwing = false;
     return S_OK;
 }
@@ -52,11 +52,19 @@ void CState_RaxasiaP2_JumpStamp::Update(_float fTimeDelta)
             m_bSwing = false;
             m_pMonster->Change_Animation(AN_JUMPSTAMP_MIDDLE, false, 0.1f, 0);
         }
-
-        if (CurTrackPos >= 110.f)
+        if (m_bStartSpot)
         {
-            m_pMonster->Get_Transform()->LookAt_Lerp_NoHeight(m_pMonster->Get_TargetDir(), 1.f, fTimeDelta);
+            if (CurTrackPos >= 40.f)
+            {
+                m_bStartSpot = false;
+                m_vTargetDir = m_pMonster->Get_TargetDir();
+            }
         }
+        if (CurTrackPos <= 40.f)
+        {
+            m_pMonster->Get_Transform()->LookAt_Lerp_NoHeight(m_pMonster->Get_TargetDir(), 2.f, fTimeDelta);
+        }
+
         break;
 
     case 2:
@@ -65,6 +73,12 @@ void CState_RaxasiaP2_JumpStamp::Update(_float fTimeDelta)
             m_iRouteTrack = 0;
             m_pMonster->Change_State(CRaxasia::IDLE);
             return;
+        }
+        if (CurTrackPos <= 15.f)
+        {
+            _Vec3 vMove = m_vTargetDir * ((_float)CurTrackPos / 15.f);
+            m_pMonster->Get_RigidBody()->Set_Velocity((vMove - m_vFlyMoveStack) / fTimeDelta);
+            m_vFlyMoveStack = vMove;
         }
 
         break;
@@ -145,9 +159,9 @@ void CState_RaxasiaP2_JumpStamp::Collider_Check(_double CurTrackPos)
 
 void CState_RaxasiaP2_JumpStamp::Effect_Check(_double CurTrackPos)
 {
-    if (CurTrackPos >= 35.f)
+    if (CurTrackPos >= 97.f)
     {
-        //방전
+        //점프
     }
 }
 

@@ -91,7 +91,14 @@ void CAnimModel::Update(_float fTimeDelta)
 	}
 
 	_bool	bEndCheck{false};
-	_vector vRootMove = m_pModelCom->Play_Animation(fTimeDelta);
+	_vector vRootMove{};
+	if (m_pModelCom != nullptr)
+	{
+		if (m_pModelCom->Get_Animations().size() > 0)
+		{
+			vRootMove = m_pModelCom->Play_Animation(fTimeDelta);
+		}
+	}
 	
 
 	_vector vPos = m_pTransformCom->Get_State(CTransform::STATE_POSITION);

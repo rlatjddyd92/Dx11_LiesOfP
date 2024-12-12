@@ -24,7 +24,7 @@ HRESULT CState_RaxasiaP2_Tele::Start_State(void* pArg)
     m_pMonster->Change_Animation(AN_RUN, false, 0.1f, 0);
 
     m_bSwingSound = false;
-
+    m_bTele = false;
     m_bSwing = false;
     return S_OK;
 }

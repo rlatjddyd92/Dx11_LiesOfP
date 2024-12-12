@@ -27,11 +27,14 @@ public:
 private:
     class CMonster* m_pMonster = { nullptr };
 
+    _Vec4               m_vTargetDir{};
+    _Vec3               m_vFlyMoveStack{};
+
     _float              m_fCurrentTime = { 0.f };
     _float              m_fChaseDuration = { 1.5f };
 
+    _bool               m_bStartSpot = { true };
     _bool               m_bSwing = { false };
-
     _bool               m_bSwingSound = { false };
 
     _uint               m_iRouteTrack = {};

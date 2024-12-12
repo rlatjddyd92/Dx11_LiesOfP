@@ -886,6 +886,12 @@ HRESULT CLoader::Ready_Resources_For_Monster()
 		CModel::Create(m_pDevice, m_pContext, CModel::TYPE_ANIM, "../Bin/ModelData/Anim/CreatedBinFiles/Raxasia_P1.dat", PreTransformMatrix, true))))
 		return E_FAIL;
 
+	//Prototype_Component_Model_RaxasiaP2
+	PreTransformMatrix = XMMatrixScaling(0.01f, 0.01f, 0.01f) * XMMatrixRotationY(XMConvertToRadians(270.0f));
+	if (FAILED(m_pGameInstance->Add_Prototype(LEVEL_GAMEPLAY, TEXT("Prototype_Component_Model_RaxasiaP2"),
+		CModel::Create(m_pDevice, m_pContext, CModel::TYPE_ANIM, "../Bin/ModelData/Anim/CreatedBinFiles/Raxasia_P2.dat", PreTransformMatrix, true))))
+		return E_FAIL;
+
 	//Prototype_Component_Model_RaxasiaP1_Sword
 	PreTransformMatrix = XMMatrixScaling(0.01f, 0.01f, 0.01f) * XMMatrixRotationX(XMConvertToRadians(270.0f));
 	if (FAILED(m_pGameInstance->Add_Prototype(LEVEL_GAMEPLAY, TEXT("Prototype_Component_Model_RaxasiaP1_Sword"),

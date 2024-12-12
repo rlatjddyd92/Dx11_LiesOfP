@@ -1069,6 +1069,9 @@
     <Filter Include="05.Fsm\Monster\Raxasia\P2\Attack\Route\Running\Running_Linked">
       <UniqueIdentifier>{47c1624c-2f8b-4471-bcb0-6ac74430fe14}</UniqueIdentifier>
     </Filter>
+    <Filter Include="05.Fsm\Monster\Raxasia\P2\Attack\Route\TeleportAttack">
+      <UniqueIdentifier>{24cf9139-e9e1-4e76-bc28-5f260328ee93}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Client.h">
@@ -1937,6 +1940,18 @@
     <ClInclude Include="..\Public\State_RaxasiaP2_Tele_LinkedTel.h">
       <Filter>05.Fsm\Monster\Raxasia\P2\Attack\Route\TELE\Tele_LinkedTel</Filter>
     </ClInclude>
+    <ClInclude Include="..\Public\State_RaxasiaP2_WaveSting.h">
+      <Filter>05.Fsm\Monster\Raxasia\P2\Attack\Route\WaveSting</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Public\State_RaxasiaP2_TeleportAttack.h">
+      <Filter>05.Fsm\Monster\Raxasia\P2\Attack\Route\TeleportAttack</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Public\State_RaxasiaP2_Running.h">
+      <Filter>05.Fsm\Monster\Raxasia\P2\Attack\Route\Running</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Public\State_RaxasiaP2_Running_Linked.h">
+      <Filter>05.Fsm\Monster\Raxasia\P2\Attack\Route\Running\Running_Linked</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Client.cpp">
@@ -2774,6 +2789,18 @@
     </ClCompile>
     <ClCompile Include="..\Private\State_RaxasiaP2_Tele_LinkedTel.cpp">
       <Filter>05.Fsm\Monster\Raxasia\P2\Attack\Route\TELE\Tele_LinkedTel</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Private\State_RaxasiaP2_WaveSting.cpp">
+      <Filter>05.Fsm\Monster\Raxasia\P2\Attack\Route\WaveSting</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Private\State_RaxasiaP2_TeleportAttack.cpp">
+      <Filter>05.Fsm\Monster\Raxasia\P2\Attack\Route\TeleportAttack</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Private\State_RaxasiaP2_Running.cpp">
+      <Filter>05.Fsm\Monster\Raxasia\P2\Attack\Route\Running</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Private\State_RaxasiaP2_Running_Linked.cpp">
+      <Filter>05.Fsm\Monster\Raxasia\P2\Attack\Route\Running\Running_Linked</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

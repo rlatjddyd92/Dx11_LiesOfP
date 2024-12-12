@@ -88,9 +88,12 @@ void CController_AnimationTool::SetUp_AnimTool()
 		{
 			m_pCopyAnimVec = &m_pCopyModelCom->Get_Animations();
 
-			m_AnimSpeedPS = (*m_pCopyAnimVec)[m_iSelected_Index_Anim]->Get_SpeedPerSec();
+			if (m_pCopyAnimVec->size() > 0)
+			{
+				m_AnimSpeedPS = (*m_pCopyAnimVec)[m_iSelected_Index_Anim]->Get_SpeedPerSec();
 
-			m_AnimDuration = (*m_pCopyAnimVec)[m_iSelected_Index_Anim]->Get_Duration();
+				m_AnimDuration = (*m_pCopyAnimVec)[m_iSelected_Index_Anim]->Get_Duration();
+			}
 		}
 
 		if (m_pCopyBoneVec == nullptr)
@@ -185,7 +188,7 @@ void CController_AnimationTool::ListUp_Anim()
 				pOut = m_pGameInstance->Find_Object(LEVEL_TOOL, TEXT("Layer_AnimationTool_Test"), 0)->Change_Component(TEXT("Com_Model"), pComponent);
 			}
 			else
-			{
+			{                         
 				pOut = m_pGameInstance->Find_Object(LEVEL_TOOL, TEXT("Layer_AnimationTool_Test"), 0)->Change_Component(TEXT("Com_Model"), iter->second);
 				
 			}
@@ -320,8 +323,11 @@ void CController_AnimationTool::ListUp_Anim()
 		if (m_iSelected_Index_Anim != m_iCurSelected_Index_Anim)
 		{
 			static_cast<CAnimModel*>(m_pGameInstance->Find_Object(LEVEL_TOOL, TEXT("Layer_AnimationTool_Test"), 0))->ChangeAnim(m_iSelected_Index_Anim);
-			m_AnimSpeedPS = (*m_pCopyAnimVec)[m_iSelected_Index_Anim]->Get_SpeedPerSec();
-			m_AnimDuration = (*m_pCopyAnimVec)[m_iSelected_Index_Anim]->Get_Duration();
+			if (m_pCopyAnimVec->size() > 0)
+			{
+				m_AnimSpeedPS = (*m_pCopyAnimVec)[m_iSelected_Index_Anim]->Get_SpeedPerSec();
+				m_AnimDuration = (*m_pCopyAnimVec)[m_iSelected_Index_Anim]->Get_Duration();
+			}
 		}
 	}
 	
@@ -395,7 +401,10 @@ void CController_AnimationTool::SetUp_Controller_Anim()
 	{
 		if (m_pCopyModelCom != nullptr)
 		{
-			(*m_pCopyAnimVec)[m_iSelected_Index_Anim]->Set_SpeedPerSec(m_AnimSpeedPS);
+			if (m_pCopyAnimVec->size() > 0)
+			{
+				(*m_pCopyAnimVec)[m_iSelected_Index_Anim]->Set_SpeedPerSec(m_AnimSpeedPS);
+			}
 		}
 	}
 

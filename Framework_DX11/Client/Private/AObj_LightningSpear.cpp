@@ -91,6 +91,7 @@ void CAObj_LightningSpear::Update(_float fTimeDelta)
         CEffect_Manager::Get_Instance()->Add_Effect_ToLayer(LEVEL_GAMEPLAY, TEXT("SimonManus_Attack_LightningSpear_Impact_Ground"),
             _Vec3{ m_pTransformCom->Get_State(CTransform::STATE_POSITION) }, _Vec3{ m_pTransformCom->Get_State(CTransform::STATE_LOOK) });
     }
+
     m_pColliderCom->Update(m_pTransformCom->Get_WorldMatrix_Ptr());
 
     m_pEffect->Update(fTimeDelta);

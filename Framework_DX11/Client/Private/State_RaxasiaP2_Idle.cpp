@@ -65,7 +65,7 @@ void CState_RaxasiaP2_Idle::Update(_float fTimeDelta)
         if (fDist <= 15.f)
         {
             ++m_iAtkTrack;
-            Calc_Act_Attack(fDist);
+            //Calc_Act_Attack(fDist);
             return;
         }
         //else if (fDist > 14.f)
@@ -112,23 +112,18 @@ void CState_RaxasiaP2_Idle::Calc_Act_Attack(_float fDist)
     switch (m_iAtkTrack)
     {
     case 0:
-        m_pMonster->Change_State(CRaxasia::ATK_DASHUPPER);
         return;
 
     case 1:
-        m_pMonster->Change_State(CRaxasia::ATK_GROUNDSLASH);
         return;
 
     case 2:
-        m_pMonster->Change_State(CRaxasia::ATK_KICKSTING);
         return;
 
     case 3:
-        m_pMonster->Change_State(CRaxasia::ATK_LINKEDATTACK);
         return;
 
     case 4:
-        m_pMonster->Change_State(CRaxasia::ATK_REPETUPPERSLASH);
         return;
 
     case 5:
