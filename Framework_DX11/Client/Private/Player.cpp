@@ -143,10 +143,10 @@ HRESULT CPlayer::Initialize(void * pArg)
 	//m_pNavigationCom->Move_to_Cell(m_pRigidBodyCom, 1030); // 계단 옆 별바라기
 	//m_pNavigationCom->Move_to_Cell(m_pRigidBodyCom, 772); //긴사다리
 	//m_pNavigationCom->Move_to_Cell(m_pRigidBodyCom, 427); //짧은사다리
-	//m_pNavigationCom->Move_to_Cell(m_pRigidBodyCom, 341); //아래엘베
+	m_pNavigationCom->Move_to_Cell(m_pRigidBodyCom, 341); //아래엘베
 	//m_pNavigationCom->Move_to_Cell(m_pRigidBodyCom, 440); //상자랑 장애물
 	//m_pNavigationCom->Move_to_Cell(m_pRigidBodyCom, 1066); // 순간이동 790
-	m_pNavigationCom->Move_to_Cell(m_pRigidBodyCom, 790); // 순간이동 1066
+	//m_pNavigationCom->Move_to_Cell(m_pRigidBodyCom, 790); // 순간이동 1066
 	//m_pNavigationCom->Move_to_Cell(m_pRigidBodyCom, 801); // 소피아 방
 	//m_pNavigationCom->Move_to_Cell(m_pRigidBodyCom, 1178); // 소피아 방 내부
 
@@ -1085,15 +1085,22 @@ void CPlayer::CollisionStay_IntercObj(CGameObject* pGameObject)
 	}
 	else if (pGameObject->Get_Tag() == TEXT("Lift_Floor"))
 	{
+		CLift_Floor* pLiftFloor = dynamic_cast<CLift_Floor*>(pGameObject);
 		m_pRigidBodyCom->Set_IsOnCell(false);
 		m_pRigidBodyCom->Set_IsLockCell(false);
 
-		if (dynamic_cast<CLift_Floor*>(pGameObject)->Get_isMoving())
+		if (pLiftFloor->Get_isMoving())
 		{
+			if (pLiftFloor->Get_IsDown())
+			{
+				m_pGameInstance->Set_Gravity(-9.81f * 50.f);
+			}
+
 			m_pRigidBodyCom->Set_Gravity(true);
 		}
 		else
 		{
+			m_pGameInstance->Set_Gravity(-9.81f);
 			m_pRigidBodyCom->Set_Gravity(false);
 		}
 	}
@@ -1349,6 +1356,7 @@ HRESULT CPlayer::Ready_Components()
 	if (FAILED(__super::Add_Component(LEVEL_STATIC, TEXT("Prototype_Component_RigidBody"),
 		TEXT("Com_RigidBody"), reinterpret_cast<CComponent**>(&m_pRigidBodyCom), &RigidBodyDesc)))
 		return E_FAIL;
+	m_pRigidBodyCom->Set_Mass(1.f);
 
 	return S_OK;
 }

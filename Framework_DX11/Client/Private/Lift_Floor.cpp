@@ -188,10 +188,12 @@ void CLift_Floor::Set_Move_Dir(_int iDir)
 	{
 	case UP:
 		m_fMoveDir = 13.f;
+		m_isDown = false;
 		m_vTargetPos.y = m_vTargetPosList[UP];
 		break;
 	case DOWN:
 		m_fMoveDir = -3.f;
+		m_isDown = true;
 		m_vTargetPos.y = m_vTargetPosList[DOWN];
 		break;
 	}

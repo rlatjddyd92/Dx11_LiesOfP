@@ -218,6 +218,7 @@ public:
 		PxScene* Get_PhysXScene() const;
 		PxFoundation* Get_PhysXFoundation() const;
 		PxCudaContextManager* Get_PhysXCuda() const;
+		void Set_Gravity(_float fY);
 		_bool   RayCast_PhysX(_vector vRayPos, _vector vRayDir, _vector* vHitPos, _vector* vNormal, _float* fHitDistance);
 #pragma endregion
 

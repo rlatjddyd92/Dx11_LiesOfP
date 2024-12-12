@@ -32,6 +32,8 @@ public:
     PxFoundation*   Get_PhysXFoundation() const { return m_PxFoundation; }
     PxCudaContextManager* Get_PhysXCuda() const { return m_CudaContextManager; }
 
+    void                Set_Gravity(_float fY) { m_PxScene->setGravity(PxVec3(0.f, fY, 0.f)); }
+
 public:
     HRESULT Initialize();
     void    PhysX_Update(_float fTimeDelta);

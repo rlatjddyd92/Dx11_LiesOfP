@@ -58,7 +58,7 @@ void CState_Player_ThrowItem::Update(_float fTimeDelta)
 
         m_isCreateItem = true;
     }
-    else if ((iFrame == 39 || iFrame == 40) && !m_isThrowItem)
+    else if ((iFrame == 40 || iFrame == 41) && !m_isThrowItem)
     {
         m_pPlayer->Throw_ITem();
         m_isThrowItem = true;

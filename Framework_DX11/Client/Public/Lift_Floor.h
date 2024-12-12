@@ -39,6 +39,8 @@ public:
 	_bool Get_isMoving() { return m_isMoving; }
 	void Set_Move_Dir(_int iDir);
 
+	_bool Get_IsDown() { return m_isDown; }
+
 private:
 	CCollider* m_pColliderCom = { nullptr};
 	CShader* m_pShaderCom = { nullptr };
@@ -51,6 +53,7 @@ private:
 	_bool m_bMove = { false };		//이동 할 건지
 	_bool m_bArrive = { false };		//이동 할 건지
 	_bool m_bCollid = { false };		//이동 할 건지
+	_bool m_isDown = { false };
 
 	_int m_iPreDir = { DIR_END };
 
