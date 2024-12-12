@@ -213,8 +213,8 @@ void CCutScene::First_Setting()
 		pPlayer->Get_RigidBody()->Set_GloblePose(vInitPos);
 		pPlayer->Get_Navigation()->Research_Cell(vInitPos);
 		pPlayer->Get_Transform()->Rotation(0.f, -45.f, 0.f);
-
-		m_pObjects[BOSS2] = static_cast<CPawn*>(m_pGameInstance->Find_Object(LEVEL_GAMEPLAY, TEXT("Layer_SimonManus"), 0));
+		pPlayer->Disappear_Weapon();
+		//m_pObjects[BOSS2] = static_cast<CPawn*>(m_pGameInstance->Find_Object(LEVEL_GAMEPLAY, TEXT("Layer_SimonManus"), 0));
 		break;
 
 	}
@@ -257,7 +257,9 @@ void CCutScene::End_Setting()
 	else if (m_iIndex == BOSS2_MEET3)
 	{
 		pPlayer->Change_State(CPlayer::OH_IDLE);
-		pPlayer->Get_Navigation()->Move_to_Cell(pPlayer->Get_RigidBody(), 117);
+		pPlayer->Get_Navigation()->Move_to_Cell(pPlayer->Get_RigidBody(), 119);
+		pPlayer->Appear_Weapon();
+		static_cast<CPawn*>(m_pGameInstance->Find_Object(LEVEL_GAMEPLAY, TEXT("Layer_SimonManus"), 0))->End_CutScene(0);
 	}
 }
 

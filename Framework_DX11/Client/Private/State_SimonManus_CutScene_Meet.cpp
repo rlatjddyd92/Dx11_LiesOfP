@@ -32,25 +32,70 @@ HRESULT CState_SimonManus_CutScene_Meet::Start_State(void* pArg)
     m_isStartCutScene = false;
     m_fDelay = 0.f;
 
-
     return S_OK;
 }
 
 void CState_SimonManus_CutScene_Meet::Update(_float fTimeDelta)
 {
+    _uint iCurAnim = m_pMonster->Get_CurrentAnimIndex();
+
     m_fDelay += fTimeDelta;
     if (m_fDelay >= 16.f && !m_isStartCutScene)
     {
         m_pMonster->Play_Animation();
         m_isStartCutScene = true;
     }
-    else if(m_fDelay < 16.f)
+    else if (m_fDelay < 16.f)
     {
         m_pMonster->Stop_Animation();
     }
 
-    if(m_isStartCutScene)
 
+    _Vec3 vMove = m_pMonster->Get_Model()->Get_BoneCombindTransformationMatrix_Ptr(5)->Translation();
+    _float4x4 TransMat;
+    XMStoreFloat4x4(&TransMat, m_pMonster->Get_Model()->Get_Bones()[5]->Get_TransformationMatrix());
+    TransMat._41 = 0.f;
+
+    m_pMonster->Get_Model()->Get_Bones()[5]->Set_TransformationMatrix(TransMat);;
+
+    m_pMonster->Get_Model()->Update_Bone();
+
+    vMove = XMVector3TransformNormal(vMove, m_pMonster->Get_Transform()->Get_WorldMatrix());
+
+    vMove.y = 0;
+
+    if (iCurAnim != m_iAnimation_End)
+    {
+        vMove.x = vMove.z = 0.f;
+    }
+    else
+    {
+        vMove.x *= 0.3f;
+        vMove.z *= 0.3f;
+    }
+
+    m_pMonster->Get_RigidBody()->Set_Velocity((vMove - m_vRootMoveStack) / fTimeDelta);
+
+    m_vRootMoveStack = vMove;
+   
+    if (iCurAnim == m_iAnimation_Hand)
+    {
+        _int iFrame = m_pMonster->Get_Frame();
+        if (iFrame > 230)
+        {
+            m_pMonster->Active_Weapon();
+        }
+    }
+
+    End_Check();
+}
+
+void CState_SimonManus_CutScene_Meet::End_State()
+{
+}
+
+void CState_SimonManus_CutScene_Meet::End_Check()
+{
     if (m_pMonster->Get_EndAnim(m_iAnimation_Turn))
     {
         m_pMonster->Change_Animation(m_iAnimation_Talk, false, 0.1f, 0.5f);
@@ -61,26 +106,12 @@ void CState_SimonManus_CutScene_Meet::Update(_float fTimeDelta)
     }
     else if (m_pMonster->Get_EndAnim(m_iAnimation_Hand))
     {
-        m_pMonster->Change_Animation(m_iAnimation_End, false, 0.2f, 0);
+        m_pMonster->Change_Animation(m_iAnimation_End, false, 0.5f, 51);
     }
     else if (m_pMonster->Get_EndAnim(m_iAnimation_End))
     {
-        m_pMonster->End_CutScene(0);
+       // m_pMonster->End_CutScene(0);
     }
-
-    _uint iCurAnim = m_pMonster->Get_CurrentAnimIndex();
-    if (iCurAnim == m_iAnimation_Hand)
-    {
-        _int iFrame = m_pMonster->Get_Frame();
-        if (iFrame > 230)
-        {
-            m_pMonster->Active_Weapon();
-        }
-    }
-}
-
-void CState_SimonManus_CutScene_Meet::End_State()
-{
 }
 
 CState_SimonManus_CutScene_Meet* CState_SimonManus_CutScene_Meet::Create(CFsm* pFsm, CMonster* pMonster, _uint iStateNum, void* pArg)

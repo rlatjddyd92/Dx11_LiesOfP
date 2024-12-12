@@ -30,6 +30,11 @@ private:
     _bool               m_isStartCutScene = {};
     _float              m_fDelay = {};
 
+    _Vec3               m_vRootMoveStack{};
+
+private:
+    void                End_Check();
+
 public:
     static CState_SimonManus_CutScene_Meet* Create(class CFsm* pFsm, class CMonster* pMonster, _uint iStateNum, void* pArg = nullptr);
     virtual void Free() override;
