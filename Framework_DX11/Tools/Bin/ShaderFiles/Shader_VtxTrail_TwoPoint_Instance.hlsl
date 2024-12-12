@@ -405,6 +405,11 @@ PS_EFFECT_OUT PS_TRAIL_R_MAIN(PS_IN In)
     vColor.rgb *= g_vColor.rgb;
     vColor.rgb *= 1.f - ((In.vTexcoord.x + In.fIndex) / (float) g_iNumInstance + g_fRatio);
 
+    float fMax = max(vColor.r, max(vColor.g, vColor.b));
+    
+    if(fMax < 0.1f)
+        discard;
+    
     Out.vDiffuse = vColor;
     Out.vBlur = vColor;
     
@@ -421,7 +426,12 @@ PS_EFFECT_OUT PS_TRAIL_G_MAIN(PS_IN In)
     vColor.rb = vColor.g;
     vColor.rgb *= g_vColor.rgb;
     vColor.rgb *= 1.f - ((In.vTexcoord.x + In.fIndex) / (float) g_iNumInstance + g_fRatio);
-
+    
+    float fMax = max(vColor.r, max(vColor.g, vColor.b));
+    
+    if (fMax < 0.1f)
+        discard;
+    
     Out.vDiffuse = vColor;
     Out.vBlur = vColor;
     
@@ -438,7 +448,12 @@ PS_EFFECT_OUT PS_TRAIL_B_MAIN(PS_IN In)
     vColor.rg = vColor.b;
     vColor.rgb *= g_vColor.rgb;
     vColor.rgb *= 1.f - ((In.vTexcoord.x + In.fIndex) / (float) g_iNumInstance + g_fRatio);
-
+    
+    float fMax = max(vColor.r, max(vColor.g, vColor.b));
+    
+    if (fMax < 0.1f)
+        discard;
+    
     Out.vDiffuse = vColor;
     Out.vBlur = vColor;
     
@@ -547,6 +562,33 @@ PS_OUT PS_TRAIL_BLEND_G_MAIN(PS_IN In)
     vColor.rgb *= 1.f - ((In.vTexcoord.x + In.fIndex) / (float) g_iNumInstance + g_fRatio);
 
     Out.vColor = vColor;
+    
+    return Out;
+}
+
+PS_EFFECT_OUT PS_RGBTOA_MASK_MAIN(PS_IN In)
+{
+    PS_EFFECT_OUT Out = (PS_EFFECT_OUT) 0;
+    
+    vector vColor = g_DiffuseTexture.Sample(LinearSampler, In.vTexcoord);
+        
+    float2 vTexcoord = In.vTexcoord * g_vTileRepeat;
+    
+    vector vMask = g_MaskTexture_1.Sample(LinearSampler, vTexcoord);
+    
+    vColor.a = max(vColor.r, max(vColor.g, vColor.b));
+    vMask.a = max(vMask.r, max(vMask.g, vMask.b));
+    
+    vColor *= vMask;
+    vColor.a *= 1.f - (((In.vTexcoord.x + In.fIndex) / (float) g_iNumInstance) + g_fRatio);
+    
+    if (vColor.a < 0.1f)
+        discard;
+    
+    vColor.rgb *= g_vColor.rgb;
+    
+    Out.vDiffuse = vColor;
+    Out.vBlur = vColor;
     
     return Out;
 }
@@ -696,5 +738,16 @@ technique11 DefaultTechnique
         VertexShader = compile vs_5_0 VS_MAIN();
         GeometryShader = compile gs_5_0 GS_MAIN();
         PixelShader = compile ps_5_0 PS_TRAIL_BLEND_G_MAIN();
+    }
+
+    pass RGBTOA_MASK // 13
+    {
+        SetRasterizerState(RS_Cull_None);
+        SetDepthStencilState(DSS_Default, 0);
+        SetBlendState(BS_Default, vector(0.f, 0.f, 0.f, 0.f), 0xffffffff);
+
+        VertexShader = compile vs_5_0 VS_MAIN();
+        GeometryShader = compile gs_5_0 GS_MAIN();
+        PixelShader = compile ps_5_0 PS_RGBTOA_MASK_MAIN();
     }
 }

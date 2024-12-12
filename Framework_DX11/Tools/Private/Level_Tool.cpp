@@ -44,7 +44,7 @@ HRESULT CLevel_GamePlay::Initialize()
 	Desc.vScale = { 1.f,1.f,1.f };
 	Desc.vRotation = { 0.f,0.f,0.f };
 	Desc.iRenderGroupID = 0;
-	strcpy_s(Desc.szModelTag, "Prototype_NoneAnimModel_Raxasia_Sword01");
+	strcpy_s(Desc.szModelTag, "Prototype_Component_Model_FlameSword");
 	if (FAILED(m_pGameInstance->Add_CloneObject_ToLayer(LEVEL_TOOL, TEXT("Layer_Weapon"), TEXT("Prototype_GameObject_NonAnim"), &Desc)))
 		return E_FAIL;
 

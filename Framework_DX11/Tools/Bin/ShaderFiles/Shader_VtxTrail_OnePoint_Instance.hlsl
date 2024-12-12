@@ -190,10 +190,56 @@ PS_OUT PS_BLEND_MAIN(PS_IN In)
     return Out;
 }
 
+PS_EFFECT_OUT PS_FIRE_EFFECT_MAIN(PS_IN In)
+{
+    PS_EFFECT_OUT Out = (PS_EFFECT_OUT) 0;
+
+    if (In.vLifeTime.x < In.vLifeTime.y)
+        discard;
+    
+    int iTexIndex = (int) ((In.vLifeTime.y / In.vLifeTime.x) * (g_vTexDivide.x * g_vTexDivide.y - 1.f) * g_fSpriteSpeed);
+
+    vector vColor = g_DiffuseTexture.Sample(LinearSampler, Get_SpriteTexcoord(In.vTexcoord, iTexIndex));
+    
+    vColor.rgb *= g_vColor.rgb;
+    vColor.rgb *= 1.f - (In.vLifeTime.y / In.vLifeTime.x);
+    
+    vColor.a = max(vColor.r, max(vColor.g, vColor.b));
+    
+    if (vColor.a < 0.1f)
+        discard;
+    
+    Out.vDiffuse = vColor;
+    Out.vBlur = vColor;
+    
+    return Out;
+}
+
+PS_OUT PS_FIRE_BLEND_MAIN(PS_IN In)
+{
+    PS_OUT Out = (PS_OUT) 0;
+    
+    if (In.vLifeTime.x < In.vLifeTime.y)
+        discard;
+    
+    int iTexIndex = (int) ((In.vLifeTime.y / In.vLifeTime.x) * (g_vTexDivide.x * g_vTexDivide.y - 1.f) * g_fSpriteSpeed);
+
+    Out.vColor = g_DiffuseTexture.Sample(LinearSampler, Get_SpriteTexcoord(In.vTexcoord, iTexIndex));
+    
+    Out.vColor.rgb *= g_vColor.rgb;
+
+    Out.vColor.a = max(Out.vColor.r, max(Out.vColor.g, Out.vColor.b));
+    Out.vColor.a *= 1.f - (In.vLifeTime.y / In.vLifeTime.x);
+
+    if (Out.vColor.a < 0.1f)
+        discard;
+    
+    return Out;
+}
 
 technique11 DefaultTechnique
 {
-    pass Default
+    pass Default // 0
     {
         SetRasterizerState(RS_Cull_None);
         SetDepthStencilState(DSS_Default, 0);
@@ -204,7 +250,7 @@ technique11 DefaultTechnique
         PixelShader = compile ps_5_0 PS_MAIN();
     }
 
-    pass Blend
+    pass Blend // 1
     {
         SetRasterizerState(RS_Cull_None);
         SetDepthStencilState(DSS_NonWrite, 0);
@@ -215,6 +261,27 @@ technique11 DefaultTechnique
         PixelShader = compile ps_5_0 PS_BLEND_MAIN();
     }
 
+    pass FIRE_EFFECT // 2
+    {
+        SetRasterizerState(RS_Cull_None);
+        SetDepthStencilState(DSS_Default, 0);
+        SetBlendState(BS_Default, vector(0.f, 0.f, 0.f, 0.f), 0xffffffff);
+
+        VertexShader = compile vs_5_0 VS_MAIN();
+        GeometryShader = compile gs_5_0 GS_MAIN();
+        PixelShader = compile ps_5_0 PS_FIRE_EFFECT_MAIN();
+    }
+
+    pass FIRE_BLEND // 3
+    {
+        SetRasterizerState(RS_Cull_None);
+        SetDepthStencilState(DSS_NonWrite, 0);
+        SetBlendState(BS_AlphaBlend, vector(0.f, 0.f, 0.f, 0.f), 0xffffffff);
+
+        VertexShader = compile vs_5_0 VS_MAIN();
+        GeometryShader = compile gs_5_0 GS_MAIN();
+        PixelShader = compile ps_5_0 PS_FIRE_BLEND_MAIN();
+    }
 }
 
 
