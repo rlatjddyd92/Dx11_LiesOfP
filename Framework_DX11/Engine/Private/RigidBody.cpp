@@ -124,8 +124,7 @@ void CRigidBody::Update(_float fTimeDelta)
 		}
 		else
 		{
-			//PxVec3 vpRigidDynamic->getLinearVelocity()
-			//pRigidDynamic->setLinearVelocity(PxVec3(m_vVelocity.x, m_vVelocity.y, m_vVelocity.z));
+			pRigidDynamic->setLinearVelocity(PxVec3(m_vVelocity.x, m_vVelocity.y, m_vVelocity.z));
 		}
 
 		Transform = pRigidDynamic->getGlobalPose();

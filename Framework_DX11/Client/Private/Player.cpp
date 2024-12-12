@@ -144,8 +144,8 @@ HRESULT CPlayer::Initialize(void * pArg)
 	//m_pNavigationCom->Move_to_Cell(m_pRigidBodyCom, 772); //긴사다리
 	//m_pNavigationCom->Move_to_Cell(m_pRigidBodyCom, 427); //짧은사다리
 	//m_pNavigationCom->Move_to_Cell(m_pRigidBodyCom, 341); //아래엘베
-	//m_pNavigationCom->Move_to_Cell(m_pRigidBodyCom, 440); //상자랑 장애물
-	m_pNavigationCom->Move_to_Cell(m_pRigidBodyCom, 1066); // 순간이동 790
+	m_pNavigationCom->Move_to_Cell(m_pRigidBodyCom, 440); //상자랑 장애물
+	//m_pNavigationCom->Move_to_Cell(m_pRigidBodyCom, 1066); // 순간이동 790
 	//m_pNavigationCom->Move_to_Cell(m_pRigidBodyCom, 801); // 소피아 방
 	//m_pNavigationCom->Move_to_Cell(m_pRigidBodyCom, 1178); // 소피아 방 내부
 
@@ -1029,13 +1029,23 @@ void CPlayer::Create_ThrowItem(SPECIAL_ITEM eItemType)
 	Desc.pParentWorldMatrix = m_pTransformCom->Get_WorldMatrix_Ptr();
 	Desc.pSocketBoneMatrix = m_pModelCom->Get_BoneCombindTransformationMatrix_Ptr("BN_Weapon_R");
 
-	_Vec3 vLook = m_pTransformCom->Get_State(CTransform::STATE_LOOK);
-	vLook.Normalize();
+	if (0/*m_pTargetMonster*/)
+	{
+		_Vec3 vPlayerPos = m_pTransformCom->Get_State(CTransform::STATE_POSITION);
+		_Vec3 vTargetPos = m_pTargetMonster->Get_Transform()->Get_State(CTransform::STATE_POSITION);
 
-	_Vec3 vUp = m_pTransformCom->Get_State(CTransform::STATE_UP);
-	vUp.Normalize();
+		Desc.vThrowDir = vTargetPos - vPlayerPos;
+	}
+	else
+	{
+		_Vec3 vLook = m_pTransformCom->Get_State(CTransform::STATE_LOOK);
+		vLook.Normalize();
 
-	Desc.vThrowDir = vLook + vUp;
+		_Vec3 vUp = m_pTransformCom->Get_State(CTransform::STATE_UP);
+		vUp.Normalize();
+
+		Desc.vThrowDir = vLook + vUp;
+	}
 	
 	m_pThrowItem = dynamic_cast<CItem_Throw*>(m_pGameInstance->Get_CloneObject_ToLayer(LEVEL_GAMEPLAY, TEXT("Layer_Item"), TEXT("Prototype_GameObject_ThrowItem"), &Desc));
 	Safe_AddRef(m_pThrowItem);

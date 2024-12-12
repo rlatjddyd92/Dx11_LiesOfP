@@ -104,7 +104,7 @@ void CDeco_Collider::OnCollisionEnter(CGameObject* pOther)
         if (m_pWallDeco->Get_IsCanHit())
         {
             CPlayer* pPlayer = dynamic_cast<CPlayer*>(pOther);
-            pPlayer->Calc_DamageGain(30.f, (_Vec3)m_pTransformCom->Get_State(CTransform::STATE_POSITION));
+            pPlayer->Calc_DamageGain(81.f, (_Vec3)m_pTransformCom->Get_State(CTransform::STATE_POSITION));
         }
     }
   

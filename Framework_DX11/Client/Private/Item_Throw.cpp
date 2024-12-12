@@ -92,7 +92,7 @@ void CItem_Throw::Update(_float fTimeDelta)
 				//Explosion();
 			}
 			
-
+			//m_pRigidBodyCom->Set_Velocity(m_vThrowDir * 500.f);
 			m_pRigidBodyCom->Update(fTimeDelta);
 		}
 	}
@@ -199,8 +199,8 @@ void CItem_Throw::Throw()
 
 	m_vThrowDir.Normalize();
 
-	m_vThrowDir *= 100.f;
-	m_vThrowDir.y *= 100.f;
+	m_vThrowDir *= 1000.f;
+	//m_vThrowDir.y *= 100.f;
 
 	m_pRigidBodyCom->Add_Force(m_vThrowDir);
 
@@ -269,7 +269,6 @@ HRESULT CItem_Throw::Ready_Components()
 	if (FAILED(__super::Add_Component(LEVEL_STATIC, TEXT("Prototype_Component_RigidBody"),
 		TEXT("Com_RigidBody"), reinterpret_cast<CComponent**>(&m_pRigidBodyCom), &RigidBodyDesc)))
 		return E_FAIL;
-	m_pRigidBodyCom->Set_Mass(1.f);
 
 	return S_OK;
 }
