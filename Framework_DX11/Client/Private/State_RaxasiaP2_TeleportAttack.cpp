@@ -117,7 +117,7 @@ _bool CState_RaxasiaP2_TeleportAttack::End_Check()
         }
         break;
 
-    case 2:
+    case 1:
         if ((AN_JUMPATTACK) == iCurAnim)
         {
             bEndCheck = m_pMonster->Get_EndAnim(AN_JUMPATTACK);

@@ -44,6 +44,7 @@ HRESULT CWeapon_Raxasia_P2_Sword::Initialize(void* pArg)
 	m_strObjectTag = TEXT("MonsterWeapon");
 
 	m_fDamageAmount = 160.f;
+	m_fDamageAmount = 10.f;
 
 	return S_OK;
 }

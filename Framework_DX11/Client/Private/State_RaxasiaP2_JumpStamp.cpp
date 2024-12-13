@@ -50,7 +50,7 @@ void CState_RaxasiaP2_JumpStamp::Update(_float fTimeDelta)
         {
             ++m_iRouteTrack;
             m_bSwing = false;
-            m_pMonster->Change_Animation(AN_JUMPSTAMP_MIDDLE, false, 0.1f, 0);
+            m_pMonster->Change_Animation(AN_JUMPSTAMP_END, false, 0.1f, 0);
         }
         if (m_bStartSpot)
         {

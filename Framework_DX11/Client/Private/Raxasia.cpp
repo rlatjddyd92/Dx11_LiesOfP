@@ -41,7 +41,23 @@
 #include "State_RaxasiaP2_Walk.h"
 #include "State_RaxasiaP2_Run.h"
 
+#include "State_RaxasiaP2_JumpStamp.h"
+#include "State_RaxasiaP2_Running.h"
+#include "State_RaxasiaP2_StepJump.h"
+#include "State_RaxasiaP2_Tele.h"
+#include "State_RaxasiaP2_TeleportAttack.h"
+#include "State_RaxasiaP2_WaveSting.h"
+#include "State_RaxasiaP2_Guard.h"
+#include "State_RaxasiaP2_ChargeRush.h"
+#include "State_RaxasiaP2_Declare_War.h"
+#include "State_RaxasiaP2_ShieldRush.h"
+#include "State_RaxasiaP2_ShieldLinked.h"
 
+
+#include "State_RaxasiaP2_Running_Linked.h"
+#include "State_RaxasiaP2_Running_Fury.h"
+#include "State_RaxasiaP2_Tele_JumpLightning.h"
+#include "State_RaxasiaP2_Tele_LinkedTel.h"
 
 #pragma endregion
 
@@ -585,6 +601,23 @@ HRESULT CRaxasia::Ready_FSM()
 	m_pExtraFsmCom->Add_State(CState_RaxasiaP2_HitFatal::Create(m_pExtraFsmCom, this, HITFATAL, &Desc));
 	m_pExtraFsmCom->Add_State(CState_RaxasiaP2_Die::Create(m_pExtraFsmCom, this, DIE, &Desc));
 
+	m_pExtraFsmCom->Add_State(CState_RaxasiaP2_JumpStamp::Create(m_pExtraFsmCom, this, ATKP2_JUMPSTAMP, &Desc));
+	m_pExtraFsmCom->Add_State(CState_RaxasiaP2_StepJump::Create(m_pExtraFsmCom, this, ATKP2_STEPJUMP, &Desc));
+	m_pExtraFsmCom->Add_State(CState_RaxasiaP2_Running::Create(m_pExtraFsmCom, this, ATKP2_RUNNING, &Desc));
+	m_pExtraFsmCom->Add_State(CState_RaxasiaP2_Tele::Create(m_pExtraFsmCom, this, ATKP2_TELE, &Desc));
+	m_pExtraFsmCom->Add_State(CState_RaxasiaP2_TeleportAttack::Create(m_pExtraFsmCom, this, ATKP2_TELEPORTATTACK, &Desc));
+	m_pExtraFsmCom->Add_State(CState_RaxasiaP2_WaveSting::Create(m_pExtraFsmCom, this, ATKP2_WAVESTING, &Desc));
+	m_pExtraFsmCom->Add_State(CState_RaxasiaP2_Guard::Create(m_pExtraFsmCom, this, ATKP2_GUARD, &Desc));
+	m_pExtraFsmCom->Add_State(CState_RaxasiaP2_ChargeRush::Create(m_pExtraFsmCom, this, ATKP2_CHARGERUSH, &Desc));
+	m_pExtraFsmCom->Add_State(CState_RaxasiaP2_Declare_War::Create(m_pExtraFsmCom, this, ATKP2_DECLAREWAR, &Desc));
+	m_pExtraFsmCom->Add_State(CState_RaxasiaP2_ShieldRush::Create(m_pExtraFsmCom, this, ATKP2_SHIELDRUSH, &Desc));
+	m_pExtraFsmCom->Add_State(CState_RaxasiaP2_ShieldLinked::Create(m_pExtraFsmCom, this, ATKP2_SHIELDLINKED, &Desc));
+
+	m_pExtraFsmCom->Add_State(CState_RaxasiaP2_Running_Linked::Create(m_pExtraFsmCom, this, ATKP2_RUNNING_LINKED, &Desc));
+	m_pExtraFsmCom->Add_State(CState_RaxasiaP2_Running_Fury::Create(m_pExtraFsmCom, this, ATKP2_RUNNING_FURY, &Desc));
+	m_pExtraFsmCom->Add_State(CState_RaxasiaP2_Tele_LinkedTel::Create(m_pExtraFsmCom, this, ATKP2_TELE_LINKEDTEL, &Desc));
+	m_pExtraFsmCom->Add_State(CState_RaxasiaP2_Tele_JumpLightning::Create(m_pExtraFsmCom, this, ATKP2_TELE_JUMPLIGHTNING, &Desc));
+
 	m_pExtraFsmCom->Set_State(IDLE);
 #pragma endregion
 
@@ -606,7 +639,7 @@ HRESULT CRaxasia::Ready_Weapon()
 	m_pWeapon->Appear();
 
 
-	WeaponDesc.pSocketBoneMatrix = m_pModelCom->Get_BoneCombindTransformationMatrix_Ptr(76);	//
+	WeaponDesc.pSocketBoneMatrix = m_pModelCom->Get_BoneCombindTransformationMatrix_Ptr(36);	//
 
 	WeaponDesc.pParentAtk = &m_eStat.fAtk;
 
@@ -733,7 +766,7 @@ void CRaxasia::ChangePhase()
 
 	CWeapon::WEAPON_DESC		WeaponDesc{};
 	WeaponDesc.pParentWorldMatrix = m_pTransformCom->Get_WorldMatrix_Ptr();
-	WeaponDesc.pSocketBoneMatrix = m_pModelCom->Get_BoneCombindTransformationMatrix_Ptr(62);	//Weapon_R
+	WeaponDesc.pSocketBoneMatrix = m_pModelCom->Get_BoneCombindTransformationMatrix_Ptr(93);	//Weapon_R
 
 	WeaponDesc.pParentAtk = &m_eStat.fAtk;
 
@@ -748,13 +781,25 @@ void CRaxasia::ChangePhase()
 
 	WeaponDesc.pParentAtk = &m_eStat.fAtk;
 
-	m_pWeaponShield = dynamic_cast<CWeapon*>(m_pGameInstance->Clone_GameObject(TEXT("Prototype_GameObject_Weapon_Raxasia_P1_Shield"), &WeaponDesc));
+	m_pWeaponShield = dynamic_cast<CWeapon*>(m_pGameInstance->Clone_GameObject(TEXT("Prototype_GameObject_Weapon_Raxasia_P2_Shield"), &WeaponDesc));
 	if (nullptr == m_pWeaponShield)
 		return;
 
 	m_pWeaponShield->Appear();
 
-	m_pWeapon->ChangeSocketMatrix(m_pModelCom->Get_BoneCombindTransformationMatrix_Ptr(93));
+
+	m_pColliderBindMatrix[CT_UPPERBODY] = m_pModelCom->Get_BoneCombindTransformationMatrix_Ptr(8);//Spine 2
+	m_pColliderBindMatrix[CT_LOWERBODY] = m_pModelCom->Get_BoneCombindTransformationMatrix_Ptr(6);//Spine
+
+	m_pColliderBindMatrix[CT_UPPERLEG_LEFT] = m_pModelCom->Get_BoneCombindTransformationMatrix_Ptr(124);//Tight
+	m_pColliderBindMatrix[CT_UPPERLEG_RIGHT] = m_pModelCom->Get_BoneCombindTransformationMatrix_Ptr(129);
+	m_pColliderBindMatrix[CT_LOWERLEG_LEFT] = m_pModelCom->Get_BoneCombindTransformationMatrix_Ptr(125);//Calf
+	m_pColliderBindMatrix[CT_LOWERLEG_RIGHT] = m_pModelCom->Get_BoneCombindTransformationMatrix_Ptr(130);
+
+	m_pColliderBindMatrix[CT_UPPERARM_LEFT] = m_pModelCom->Get_BoneCombindTransformationMatrix_Ptr(23);//UpperArm
+	m_pColliderBindMatrix[CT_UPPERARM_RIGHT] = m_pModelCom->Get_BoneCombindTransformationMatrix_Ptr(70);
+	m_pColliderBindMatrix[CT_LOWERARM_LEFT] = m_pModelCom->Get_BoneCombindTransformationMatrix_Ptr(24);//ForeArm
+	m_pColliderBindMatrix[CT_LOWERARM_RIGHT] = m_pModelCom->Get_BoneCombindTransformationMatrix_Ptr(71);
 
 	m_eStat.fHp = 200.f;
 	m_eStat.fMaxHp = 200.f;

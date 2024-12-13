@@ -43,7 +43,9 @@ void CState_RaxasiaP1_KickSting::Update(_float fTimeDelta)
             m_pMonster->Change_Animation(AN_JUMPATTACK, false, 0.1f, 0);
         }
 
-        if (CurTrackPos >= 150.f)
+        if (CurTrackPos <= 25.f ||
+            (CurTrackPos <= 35.f && CurTrackPos <= 70.f) ||
+            CurTrackPos >= 120.f)
         {
             m_pMonster->Get_Transform()->LookAt_Lerp_NoHeight(m_pMonster->Get_TargetDir(), 1.f, fTimeDelta);
         }
@@ -56,6 +58,12 @@ void CState_RaxasiaP1_KickSting::Update(_float fTimeDelta)
             m_iRouteTrack = 0;
             m_pMonster->Change_State(CRaxasia::IDLE);
             return;
+        }
+
+        if (CurTrackPos <= 40.f ||
+            (CurTrackPos <= 80.f && CurTrackPos <= 100.f))
+        {
+            m_pMonster->Get_Transform()->LookAt_Lerp_NoHeight(m_pMonster->Get_TargetDir(), 1.f, fTimeDelta);
         }
 
         break;
@@ -85,7 +93,7 @@ void CState_RaxasiaP1_KickSting::Collider_Check(_double CurTrackPos)
     {
         if ((CurTrackPos >= 30.f && CurTrackPos <= 35.f))
         {
-            m_pMonster->Active_CurrentWeaponCollider(1.f, 0, HIT_TYPE::HIT_METAL, ATTACK_STRENGTH::ATK_WEAK);
+            m_pMonster->Active_CurrentWeaponCollider(1.f, 1, HIT_TYPE::HIT_METAL, ATTACK_STRENGTH::ATK_WEAK);
         }
         else
         {
@@ -94,7 +102,7 @@ void CState_RaxasiaP1_KickSting::Collider_Check(_double CurTrackPos)
 
         if ((CurTrackPos >= 50.f && CurTrackPos <= 85.f))
         {
-            m_pMonster->Active_CurrentWeaponCollider(1.f, 1, HIT_TYPE::HIT_METAL, ATTACK_STRENGTH::ATK_WEAK);
+            m_pMonster->Active_CurrentWeaponCollider(1.f, 0, HIT_TYPE::HIT_METAL, ATTACK_STRENGTH::ATK_WEAK);
         }
         else
         {

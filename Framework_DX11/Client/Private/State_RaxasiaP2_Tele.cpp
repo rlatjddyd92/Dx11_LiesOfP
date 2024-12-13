@@ -56,7 +56,7 @@ void CState_RaxasiaP2_Tele::Update(_float fTimeDelta)
                 m_pMonster->Get_RigidBody()->Set_GloblePose(vPos - (vDir * 2));
             }
         }
-
+        m_pMonster->Get_Transform()->LookAt_Lerp_NoHeight(m_pMonster->Get_TargetDir(), 1.f, fTimeDelta);
         //바꾸기 직전에 플레이어 방향으로 도약
         break;
 
@@ -76,6 +76,11 @@ void CState_RaxasiaP2_Tele::Update(_float fTimeDelta)
                 return;
             }
         }
+        if (CurTrackPos <= 15.f)
+        {
+            m_pMonster->Get_Transform()->LookAt_Lerp_NoHeight(m_pMonster->Get_TargetDir(), 1.f, fTimeDelta);
+        }
+
         break;
 
 
@@ -113,7 +118,7 @@ void CState_RaxasiaP2_Tele::Collider_Check(_double CurTrackPos)
     }
     else if (m_iRouteTrack == 1)
     {
-        if ((CurTrackPos >= 105.f && CurTrackPos <= 120.f))
+        if ((CurTrackPos >= 15.f && CurTrackPos <= 40.f))
         {
             m_pMonster->Active_CurrentWeaponCollider(1.6f, 0, HIT_TYPE::HIT_METAL, ATTACK_STRENGTH::ATK_STRONG);
         }

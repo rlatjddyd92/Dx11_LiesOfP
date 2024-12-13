@@ -1120,7 +1120,8 @@ HRESULT CLoader::Ready_Resources_For_ToolLevel_Monster()
 
 #pragma region Raxasia
 
-	pModel = CModel::Create(m_pDevice, m_pContext, CModel::TYPE_ANIM, "../Bin/ModelData/Anim/Monster/Boss/Raxasia/Raxasia_P1.dat", PreTransformMatrix, false, CController_AnimationTool::Get_Instance()->Get_StructStack(m_iModelCount++));
+	pModel = CModel::Create(m_pDevice, m_pContext, CModel::TYPE_ANIM, "../Bin/ModelData/Anim/CreatedBinFiles/Raxasia_P1.dat", PreTransformMatrix, true, CController_AnimationTool::Get_Instance()->Get_StructStack(m_iModelCount++));
+	//pModel = CModel::Create(m_pDevice, m_pContext, CModel::TYPE_ANIM, "../Bin/ModelData/Anim/Monster/Boss/Raxasia/Raxasia_P1.dat", PreTransformMatrix, false, CController_AnimationTool::Get_Instance()->Get_StructStack(m_iModelCount++));
 	if (pModel != nullptr)
 	{
 		if (FAILED(m_pGameInstance->Add_Prototype(LEVEL_TOOL, TEXT("Prototype_AnimModel_Raxasia_P1"), pModel)))
@@ -1128,7 +1129,8 @@ HRESULT CLoader::Ready_Resources_For_ToolLevel_Monster()
 		m_pGameInstance->Add_ModelPrototype(LEVEL_TOOL, ("Prototype_AnimModel_Raxasia_P1"), pModel);
 	}
 
-	pModel = CModel::Create(m_pDevice, m_pContext, CModel::TYPE_ANIM, "../Bin/ModelData/Anim/Monster/Boss/Raxasia/Raxasia_P2.dat", PreTransformMatrix, false, CController_AnimationTool::Get_Instance()->Get_StructStack(m_iModelCount++));
+	pModel = CModel::Create(m_pDevice, m_pContext, CModel::TYPE_ANIM, "../Bin/ModelData/Anim/CreatedBinFiles/Raxasia_P2.dat", PreTransformMatrix, true, CController_AnimationTool::Get_Instance()->Get_StructStack(m_iModelCount++));
+	//pModel = CModel::Create(m_pDevice, m_pContext, CModel::TYPE_ANIM, "../Bin/ModelData/Anim/Monster/Boss/Raxasia/Raxasia_P2.dat", PreTransformMatrix, false, CController_AnimationTool::Get_Instance()->Get_StructStack(m_iModelCount++));
 	if (pModel != nullptr)
 	{
 		if (FAILED(m_pGameInstance->Add_Prototype(LEVEL_TOOL, TEXT("Prototype_AnimModel_Raxasia_P2"), pModel)))

@@ -1048,17 +1048,8 @@
     <Filter Include="05.Fsm\Monster\Raxasia\P2\Attack\Route\Guard">
       <UniqueIdentifier>{dc500d27-cd7e-46e4-83fb-153428376054}</UniqueIdentifier>
     </Filter>
-    <Filter Include="05.Fsm\Monster\Raxasia\P2\Attack\Route\Guard\Guard_Linked">
-      <UniqueIdentifier>{c51d05cd-9213-4e20-8a47-bd04480999bf}</UniqueIdentifier>
-    </Filter>
     <Filter Include="05.Fsm\Monster\Raxasia\P2\Attack\Route\Guard\Guard_Push">
       <UniqueIdentifier>{e8903933-a7d3-4d3e-a68f-8edad605a07c}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="05.Fsm\Monster\Raxasia\P2\Attack\Route\Guard\Guard_Rush">
-      <UniqueIdentifier>{e448e3ec-74ff-4ecb-bd7f-8e67337f8d36}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="05.Fsm\Monster\Raxasia\P2\Attack\Route\Guard\Guard_Charge">
-      <UniqueIdentifier>{38feeb64-f113-4175-a5bc-1ff308427000}</UniqueIdentifier>
     </Filter>
     <Filter Include="05.Fsm\Monster\Raxasia\P2\Attack\Route\Running">
       <UniqueIdentifier>{77c0f679-b30b-40bf-a5a6-782f2247e539}</UniqueIdentifier>
@@ -1071,6 +1062,15 @@
     </Filter>
     <Filter Include="05.Fsm\Monster\Raxasia\P2\Attack\Route\TeleportAttack">
       <UniqueIdentifier>{24cf9139-e9e1-4e76-bc28-5f260328ee93}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="05.Fsm\Monster\Raxasia\P2\Attack\Route\ChargeRush">
+      <UniqueIdentifier>{38feeb64-f113-4175-a5bc-1ff308427000}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="05.Fsm\Monster\Raxasia\P2\Attack\Route\ShieldRush">
+      <UniqueIdentifier>{e448e3ec-74ff-4ecb-bd7f-8e67337f8d36}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="05.Fsm\Monster\Raxasia\P2\Attack\Route\ShieldLinked">
+      <UniqueIdentifier>{c51d05cd-9213-4e20-8a47-bd04480999bf}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -1952,6 +1952,27 @@
     <ClInclude Include="..\Public\State_RaxasiaP2_Running_Linked.h">
       <Filter>05.Fsm\Monster\Raxasia\P2\Attack\Route\Running\Running_Linked</Filter>
     </ClInclude>
+    <ClInclude Include="..\Public\State_RaxasiaP2_Running_Fury.h">
+      <Filter>05.Fsm\Monster\Raxasia\P2\Attack\Route\Running\Running_Fury</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Public\State_RaxasiaP2_Declare_War.h">
+      <Filter>05.Fsm\Monster\Raxasia\P2\Attack\Route\Declare_War</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Public\State_RaxasiaP2_Guard.h">
+      <Filter>05.Fsm\Monster\Raxasia\P2\Attack\Route\Guard</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Public\State_RaxasiaP2_Guard_Push.h">
+      <Filter>05.Fsm\Monster\Raxasia\P2\Attack\Route\Guard\Guard_Push</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Public\State_RaxasiaP2_ChargeRush.h">
+      <Filter>05.Fsm\Monster\Raxasia\P2\Attack\Route\ChargeRush</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Public\State_RaxasiaP2_ShieldLinked.h">
+      <Filter>05.Fsm\Monster\Raxasia\P2\Attack\Route\ShieldLinked</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Public\State_RaxasiaP2_ShieldRush.h">
+      <Filter>05.Fsm\Monster\Raxasia\P2\Attack\Route\ShieldRush</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Client.cpp">
@@ -2801,6 +2822,27 @@
     </ClCompile>
     <ClCompile Include="..\Private\State_RaxasiaP2_Running_Linked.cpp">
       <Filter>05.Fsm\Monster\Raxasia\P2\Attack\Route\Running\Running_Linked</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Private\State_RaxasiaP2_Running_Fury.cpp">
+      <Filter>05.Fsm\Monster\Raxasia\P2\Attack\Route\Running\Running_Fury</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Private\State_RaxasiaP2_Declare_War.cpp">
+      <Filter>05.Fsm\Monster\Raxasia\P2\Attack\Route\Declare_War</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Private\State_RaxasiaP2_Guard.cpp">
+      <Filter>05.Fsm\Monster\Raxasia\P2\Attack\Route\Guard</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Private\State_RaxasiaP2_Guard_Push.cpp">
+      <Filter>05.Fsm\Monster\Raxasia\P2\Attack\Route\Guard\Guard_Push</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Private\State_RaxasiaP2_ChargeRush.cpp">
+      <Filter>05.Fsm\Monster\Raxasia\P2\Attack\Route\ChargeRush</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Private\State_RaxasiaP2_ShieldLinked.cpp">
+      <Filter>05.Fsm\Monster\Raxasia\P2\Attack\Route\ShieldLinked</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Private\State_RaxasiaP2_ShieldRush.cpp">
+      <Filter>05.Fsm\Monster\Raxasia\P2\Attack\Route\ShieldRush</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

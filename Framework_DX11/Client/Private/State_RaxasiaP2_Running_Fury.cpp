@@ -1,0 +1,222 @@
+#include "stdafx.h"
+#include "State_RaxasiaP2_Running_Fury.h"
+#include "GameInstance.h"
+#include "Model.h"
+#include "Raxasia.h"
+
+CState_RaxasiaP2_Running_Fury::CState_RaxasiaP2_Running_Fury(CFsm* pFsm, CMonster* pMonster)
+    :CState{ pFsm }
+    , m_pMonster{ pMonster }
+{
+}
+
+HRESULT CState_RaxasiaP2_Running_Fury::Initialize(_uint iStateNum, void* pArg)
+{
+    m_iStateNum = iStateNum;
+    //CSimonManus::FSMSTATE_DESC* pDesc = static_cast<CSimonManus::FSMSTATE_DESC*>(pArg);
+
+    return S_OK;
+}
+
+HRESULT CState_RaxasiaP2_Running_Fury::Start_State(void* pArg)
+{
+    m_iRouteTrack = 0;
+
+    m_pMonster->Change_Animation(AN_RUNNING, false, 0.1f, 50);
+
+    m_bSwingSound = false;
+    m_bSpeedController = false;
+    m_bSwing = false;
+    return S_OK;
+}
+
+void CState_RaxasiaP2_Running_Fury::Update(_float fTimeDelta)
+{
+    _double CurTrackPos = m_pMonster->Get_CurrentTrackPos();
+
+    switch (m_iRouteTrack)
+    {
+    case 0:
+    {
+        if (End_Check())
+        {
+            ++m_iRouteTrack;
+            m_bSwing = false;
+            m_pMonster->Change_Animation(AN_STING, false, 0.2f, 50);
+            return;
+        }
+
+        if (CurTrackPos <= 120.f)
+        {
+            _Vec3 vTargetPos = m_pMonster->Get_TargetPos();
+
+            _Vec3 vDir = m_pMonster->Get_TargetDir();
+            _Vec3 vUp{ 0, 1, 0 };
+
+            _Vec3 vRight = vUp.Cross(vDir);
+            vRight.Normalize();
+            _Vec3 vPos = m_pMonster->Get_Transform()->Get_State(CTransform::STATE_POSITION);
+
+            _float vVeloSpeed = m_pMonster->Get_RigidBody()->Get_Velocity().Length();
+
+            if (m_bRunningWise)
+            {
+                vPos += (vRight * vVeloSpeed * fTimeDelta);
+                m_pMonster->Get_Transform()->LookAt_Lerp_NoHeight(_Vec4{ vRight }, 10.f, fTimeDelta);
+            }
+            else
+            {
+                vPos -= (vRight * vVeloSpeed * fTimeDelta);
+                m_pMonster->Get_Transform()->LookAt_Lerp_NoHeight(_Vec4{ -vRight }, 10.f, fTimeDelta);
+            }
+
+            vDir = vTargetPos - vPos;
+            vDir.Normalize();
+
+            vDir *= m_fDistance;
+            m_pMonster->Get_RigidBody()->Set_Velocity(_Vec3{});
+            m_pMonster->Get_RigidBody()->Set_GloblePose(vTargetPos - vDir);
+        }
+        else if (CurTrackPos <= 160)
+        {
+            if (!m_bSpeedController)
+            {
+                if (CurTrackPos >= 135)
+                {
+                    m_bSpeedController = true;
+                    m_pMonster->Get_Model()->Set_SpeedRatio(AN_RUNNING, (_double)0.5);
+                }
+            }
+            else
+            {
+                if (CurTrackPos >= 155)
+                {
+                    m_bSpeedController = false;
+                    m_pMonster->Get_Model()->Set_SpeedRatio(AN_RUNNING, (_double)1);
+                }
+            }
+            m_pMonster->Get_Transform()->LookAt_Lerp_NoHeight(m_pMonster->Get_TargetDir(), 2.f, fTimeDelta);
+        }
+        if (CurTrackPos >= 150 && CurTrackPos <= 170)
+        {
+            _Vec3 vLook = m_pMonster->Get_Transform()->Get_State(CTransform::STATE_LOOK);
+            vLook.Normalize();
+            m_pMonster->Get_RigidBody()->Set_Velocity(vLook * 30);
+        }
+        break;
+    }
+
+    case 1:
+    {
+        //Ç»¸®
+        if (End_Check())
+        {
+            m_pMonster->Change_State(CRaxasia::IDLE);
+            return;
+        }
+
+        if (CurTrackPos >= 165 && CurTrackPos <= 175.f)
+        {
+            _Vec3 vLook = m_pMonster->Get_Transform()->Get_State(CTransform::STATE_LOOK);
+            vLook.Normalize();
+            m_pMonster->Get_RigidBody()->Set_Velocity(vLook * 30);
+        }
+
+        break;
+    }
+
+    default:
+        break;
+    }
+
+    Collider_Check(CurTrackPos);
+    Effect_Check(CurTrackPos);
+    Control_Sound(CurTrackPos);
+
+}
+
+void CState_RaxasiaP2_Running_Fury::End_State()
+{
+}
+
+_bool CState_RaxasiaP2_Running_Fury::End_Check()
+{
+    _uint iCurAnim = m_pMonster->Get_CurrentAnimIndex();
+    _bool bEndCheck{ false };
+    switch (m_iRouteTrack)
+    {
+    case 0:
+        if ((AN_RUNNING) == iCurAnim)
+        {
+            bEndCheck = m_pMonster->Get_EndAnim(AN_RUNNING);
+        }
+        break;
+
+    case 1:
+        if ((AN_STING) == iCurAnim)
+        {
+            bEndCheck = m_pMonster->Get_EndAnim(AN_STING);
+        }
+        break;
+
+    default:
+        break;
+    }
+
+    return bEndCheck;
+}
+
+void CState_RaxasiaP2_Running_Fury::Collider_Check(_double CurTrackPos)
+{
+    if (m_iRouteTrack == 1)
+    {
+        if ((CurTrackPos >= 60.f && CurTrackPos <= 90.f) ||
+            (CurTrackPos >= 110.f && CurTrackPos <= 135.f))
+        {
+            m_pMonster->Active_CurrentWeaponCollider(1.3f, 0, HIT_TYPE::HIT_METAL, ATTACK_STRENGTH::ATK_NORMAL);
+        }
+        else
+        {
+            m_pMonster->DeActive_CurretnWeaponCollider();
+        }
+    }
+    else if (m_iRouteTrack == 2)
+    {
+        if ((CurTrackPos >= 160.f && CurTrackPos <= 170.f))
+        {
+            m_pMonster->Active_CurrentWeaponCollider(1.6f, 0, HIT_TYPE::HIT_METAL, ATTACK_STRENGTH::ATK_STRONG);
+        }
+        else
+        {
+            m_pMonster->DeActive_CurretnWeaponCollider();
+        }
+    }
+}
+
+void CState_RaxasiaP2_Running_Fury::Effect_Check(_double CurTrackPos)
+{
+
+}
+
+void CState_RaxasiaP2_Running_Fury::Control_Sound(_double CurTrackPos)
+{
+
+}
+
+CState_RaxasiaP2_Running_Fury* CState_RaxasiaP2_Running_Fury::Create(CFsm* pFsm, CMonster* pMonster, _uint iStateNum, void* pArg)
+{
+    CState_RaxasiaP2_Running_Fury* pInstance = new CState_RaxasiaP2_Running_Fury(pFsm, pMonster);
+
+    if (FAILED(pInstance->Initialize(iStateNum, pArg)))
+    {
+        MSG_BOX(TEXT("Failed to Created : CState_RaxasiaP2_Running_Fury"));
+        Safe_Release(pInstance);
+    }
+
+    return pInstance;
+}
+
+void CState_RaxasiaP2_Running_Fury::Free()
+{
+    __super::Free();
+}

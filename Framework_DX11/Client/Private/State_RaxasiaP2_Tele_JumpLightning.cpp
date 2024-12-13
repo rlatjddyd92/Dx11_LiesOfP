@@ -41,6 +41,12 @@ void CState_RaxasiaP2_Tele_JumpLightning::Update(_float fTimeDelta)
             ++m_iRouteTrack;
             m_bSwing = false;
             m_pMonster->Change_Animation(AN_LINKED_FIRST, false, 0.1f, 55);
+            return;
+        }
+
+        if (CurTrackPos <= 80.f)
+        {
+            m_pMonster->Get_Transform()->LookAt_Lerp_NoHeight(m_pMonster->Get_TargetDir(), 2.f, fTimeDelta);
         }
 
         break;
@@ -51,11 +57,12 @@ void CState_RaxasiaP2_Tele_JumpLightning::Update(_float fTimeDelta)
             ++m_iRouteTrack;
             m_bSwing = false;
             m_pMonster->Change_Animation(AN_LINKED_SECOND, false, 0.1f, 0);
+            return;
         }
 
-        if (CurTrackPos >= 110.f)
+        if (CurTrackPos >= 70.f)
         {
-            m_pMonster->Get_Transform()->LookAt_Lerp_NoHeight(m_pMonster->Get_TargetDir(), 1.f, fTimeDelta);
+            m_pMonster->Get_Transform()->LookAt_Lerp_NoHeight(m_pMonster->Get_TargetDir(), 2.f, fTimeDelta);
         }
         break;
 
@@ -65,6 +72,12 @@ void CState_RaxasiaP2_Tele_JumpLightning::Update(_float fTimeDelta)
             ++m_iRouteTrack;
             m_bSwing = false;
             m_pMonster->Change_Animation(AN_JUMPLIGHTNING, false, 0.1f, 0);
+            return;
+        }
+
+        if (CurTrackPos <= 80.f)
+        {
+            m_pMonster->Get_Transform()->LookAt_Lerp_NoHeight(m_pMonster->Get_TargetDir(), 2.f, fTimeDelta);
         }
 
         break;
@@ -73,8 +86,9 @@ void CState_RaxasiaP2_Tele_JumpLightning::Update(_float fTimeDelta)
         if (End_Check())
         {
             m_pMonster->Change_State(CRaxasia::IDLE);
+            return;
         }
-
+        m_pMonster->Get_Transform()->LookAt_Lerp_NoHeight(m_pMonster->Get_TargetDir(), 1.f, fTimeDelta);
         break;
 
     default:

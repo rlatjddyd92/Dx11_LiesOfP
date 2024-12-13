@@ -22,6 +22,8 @@ HRESULT CState_RaxasiaP2_Running_Linked::Start_State(void* pArg)
     m_iRouteTrack = 0;
     m_pMonster->Change_Animation(AN_LINKED_FIRST, false, 0.1f, 0);
     
+    m_bRunningWise = *static_cast<_bool*>(pArg);
+
     m_bSpeedController = false;
     m_bSwingSound = false;
 
@@ -40,7 +42,8 @@ void CState_RaxasiaP2_Running_Linked::Update(_float fTimeDelta)
         {
             ++m_iRouteTrack;
             m_bSwing = false;
-            m_pMonster->Change_Animation(AN_LINKED_SECOND, false, 0.1f, 0);
+            m_bSpeedController = false;
+            m_pMonster->Change_Animation(AN_LINKED_SECOND, false, 0.2f, 45);
         }
 
         if (!m_bSpeedController)
@@ -75,6 +78,22 @@ void CState_RaxasiaP2_Running_Linked::Update(_float fTimeDelta)
             m_pMonster->Get_Transform()->LookAt_Lerp_NoHeight(m_pMonster->Get_TargetDir(), 1.f, fTimeDelta);
         }
 
+        if (!m_bSpeedController)
+        {
+            if (CurTrackPos >= 70)
+            {
+                m_bSpeedController = true;
+                m_pMonster->Get_Model()->Set_SpeedRatio(AN_LINKED_SECOND, (_double)0.5);
+            }
+        }
+        else
+        {
+            if (CurTrackPos >= 75)
+            {
+                m_bSpeedController = false;
+                m_pMonster->Get_Model()->Set_SpeedRatio(AN_LINKED_SECOND, (_double)1);
+            }
+        }
         break;
 
     case 2:
@@ -107,27 +126,20 @@ _bool CState_RaxasiaP2_Running_Linked::End_Check()
     switch (m_iRouteTrack)
     {
     case 0:
-        if ((AN_LINKED_SECOND) == iCurAnim)
-        {
-            bEndCheck = m_pMonster->Get_EndAnim(AN_LINKED_SECOND);
-        }
-        break;
-
-    case 1:
         if ((AN_LINKED_FIRST) == iCurAnim)
         {
             bEndCheck = m_pMonster->Get_EndAnim(AN_LINKED_FIRST);
         }
         break;
 
-    case 2:
+    case 1:
         if ((AN_LINKED_SECOND) == iCurAnim)
         {
             bEndCheck = m_pMonster->Get_EndAnim(AN_LINKED_SECOND);
         }
         break;
 
-    case 3:
+    case 2:
         if ((AN_JUMPLIGHTNING) == iCurAnim)
         {
             bEndCheck = m_pMonster->Get_EndAnim(AN_JUMPLIGHTNING);

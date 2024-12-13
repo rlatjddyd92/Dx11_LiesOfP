@@ -79,8 +79,9 @@ void CState_RaxasiaP2_StepJump::Update(_float fTimeDelta)
             m_pMonster->Change_State(CRaxasia::IDLE);
             return;
         }
-        
-        if (CurTrackPos >= 115.f && CurTrackPos <= 145.f)
+
+        if (CurTrackPos <= 45.f || 
+            (CurTrackPos >= 105.f && CurTrackPos <= 180.f))
         {
             m_pMonster->Get_Transform()->LookAt_Lerp_NoHeight(m_vTargetDir, 3.f, fTimeDelta);
         }

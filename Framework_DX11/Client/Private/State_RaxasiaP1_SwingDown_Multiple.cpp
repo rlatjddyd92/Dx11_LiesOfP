@@ -52,7 +52,7 @@ void CState_RaxasiaP1_SwingDown_Multiple::Update(_float fTimeDelta)
             m_pMonster->Change_Animation(AN_SWINGDOWN_R, false, 0.1f, 0);
             m_iCurAnimIndex = AN_SWINGDOWN_R;
         }
-        if (CurTrackPos >= 60.f)
+        if (CurTrackPos <= 25.f || CurTrackPos >= 60.f)
         {
             m_pMonster->Get_Transform()->LookAt_Lerp_NoHeight(m_pMonster->Get_TargetDir(), 1.f, fTimeDelta);
         }
@@ -88,7 +88,7 @@ void CState_RaxasiaP1_SwingDown_Multiple::Update(_float fTimeDelta)
             m_pMonster->Change_Animation(m_iCurAnimIndex, false, 0.1f, 0);
         }
 
-        if (CurTrackPos >= 60.f)
+        if (CurTrackPos <= 30.f ||CurTrackPos >= 55.f)
         {
             m_pMonster->Get_Transform()->LookAt_Lerp_NoHeight(m_pMonster->Get_TargetDir(), 1.f, fTimeDelta);
         }

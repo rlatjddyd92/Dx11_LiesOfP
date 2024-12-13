@@ -31,7 +31,6 @@ HRESULT CState_RaxasiaP2_Idle::Start_State(void* pArg)
     {
         m_fIdleTime = 0;
     }
-    m_iAtkTrack = 4;
 
     return S_OK;
 }
@@ -65,19 +64,19 @@ void CState_RaxasiaP2_Idle::Update(_float fTimeDelta)
         if (fDist <= 15.f)
         {
             ++m_iAtkTrack;
-            //Calc_Act_Attack(fDist);
+            Calc_Act_Attack(fDist);
             return;
         }
-        //else if (fDist > 14.f)
-        //{
-        //    m_pMonster->Change_State(CRaxasia::RUN);
-        //    return;
-        //}
-        //else if (fDist > 9.f)
-        //{
-        //    m_pMonster->Change_State(CRaxasia::WALK);
-        //    return;
-        //}
+        else if (fDist > 25.f)
+        {
+            m_pMonster->Change_State(CRaxasia::RUN);
+            return;
+        }
+        else if (fDist > 15.f)
+        {
+            m_pMonster->Change_State(CRaxasia::WALK);
+            return;
+        }
 
         return;
     }
@@ -109,25 +108,54 @@ void CState_RaxasiaP2_Idle::End_State()
 
 void CState_RaxasiaP2_Idle::Calc_Act_Attack(_float fDist)
 {
+    if (m_iAtkTrack >= 11)
+    {
+        m_iAtkTrack = 0.f;
+    }
     switch (m_iAtkTrack)
     {
     case 0:
+        m_pMonster->Change_State(CRaxasia::ATKP2_JUMPSTAMP);
         return;
 
     case 1:
+        m_pMonster->Change_State(CRaxasia::ATKP2_RUNNING);
         return;
 
     case 2:
+        m_pMonster->Change_State(CRaxasia::ATKP2_STEPJUMP);
         return;
 
     case 3:
+        m_pMonster->Change_State(CRaxasia::ATKP2_TELE);
         return;
 
     case 4:
+        m_pMonster->Change_State(CRaxasia::ATKP2_TELEPORTATTACK);
         return;
 
     case 5:
-        m_pMonster->Change_State(CRaxasia::ATK_TRIPLESTING);
+        m_pMonster->Change_State(CRaxasia::ATKP2_WAVESTING);
+        return;
+
+    case 6:
+        m_pMonster->Change_State(CRaxasia::ATKP2_GUARD);
+        return;
+
+    case 7:
+        m_pMonster->Change_State(CRaxasia::ATKP2_CHARGERUSH);
+        return;
+
+    case 8:
+        m_pMonster->Change_State(CRaxasia::ATKP2_DECLAREWAR);
+        return;
+
+    case 9:
+        m_pMonster->Change_State(CRaxasia::ATKP2_SHIELDRUSH);
+        return;
+
+    case 10:
+        m_pMonster->Change_State(CRaxasia::ATKP2_SHIELDLINKED);
         return;
 
     default:

@@ -58,7 +58,10 @@ void CState_RaxasiaP1_TripleSting::Update(_float fTimeDelta)
             m_pMonster->Change_Animation(m_iDashAnimIndex, false, 0.2f, 0, true, true);
             return;
         }
-
+        if (CurTrackPos <= 100.f)
+        {
+            m_pMonster->Get_Transform()->LookAt_Lerp_NoHeight(m_pMonster->Get_TargetDir(), 1.f, fTimeDelta);
+        }
         break;
 
         //대쉬 
@@ -81,6 +84,10 @@ void CState_RaxasiaP1_TripleSting::Update(_float fTimeDelta)
             m_pMonster->Change_Animation(m_iDashAnimIndex, false, 0.2f, 0, true, true);
             return;
         }
+        if (CurTrackPos <= 100.f)
+        {
+            m_pMonster->Get_Transform()->LookAt_Lerp_NoHeight(m_pMonster->Get_TargetDir(), 1.f, fTimeDelta);
+        }
 
         break;
         //대쉬
@@ -102,6 +109,10 @@ void CState_RaxasiaP1_TripleSting::Update(_float fTimeDelta)
             m_bSting = false;
             m_pMonster->Change_State(CRaxasia::IDLE);
             return;
+        }
+        if (CurTrackPos <= 100.f)
+        {
+            m_pMonster->Get_Transform()->LookAt_Lerp_NoHeight(m_pMonster->Get_TargetDir(), 1.f, fTimeDelta);
         }
 
         break;

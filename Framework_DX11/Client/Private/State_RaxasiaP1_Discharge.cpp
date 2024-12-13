@@ -43,7 +43,8 @@ void CState_RaxasiaP1_Discharge::Update(_float fTimeDelta)
             m_pMonster->Change_Animation(AN_DISCHARGE, false, 0.1f, 0);
         }
 
-        if (CurTrackPos >= 110.f)
+        if (CurTrackPos <= 30.f ||
+            CurTrackPos >= 100.f)
         {
             m_pMonster->Get_Transform()->LookAt_Lerp_NoHeight(m_pMonster->Get_TargetDir(), 1.f, fTimeDelta);
         }
@@ -58,6 +59,12 @@ void CState_RaxasiaP1_Discharge::Update(_float fTimeDelta)
             return;
         }
 
+        if (CurTrackPos <= 30.f ||
+           (CurTrackPos >= 60.f && CurTrackPos <= 100.f))
+        {
+            m_pMonster->Get_Transform()->LookAt_Lerp_NoHeight(m_pMonster->Get_TargetDir(), 1.f, fTimeDelta);
+        }
+        //60프레임 이후쯤부터 퓨리
         break;
 
     default:
