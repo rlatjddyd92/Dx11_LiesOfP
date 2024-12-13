@@ -34,7 +34,8 @@ void CState_SimonManus_CutScene_Phase2::Update(_float fTimeDelta)
 {
     if (!m_isChangePhase2)
     {
-        if (m_pMonster->Get_EndAnim(m_iAnimation_Change))
+        //if (m_pMonster->Get_EndAnim(m_iAnimation_Change))
+        if (m_pMonster->Get_Frame() > 900)
         {
             m_pMonster->Change_Model(0);
 
@@ -49,6 +50,8 @@ void CState_SimonManus_CutScene_Phase2::Update(_float fTimeDelta)
     {
         if (m_pMonster->Get_EndAnim(m_iAnimation_Connectgod))
         {
+            //if(m_pMonster->Get_Frame() > 900)
+            
             m_pMonster->Change_Animation(m_iAnimation_Begod, false, 0.1f, 0);
         }
         else if (m_pMonster->Get_EndAnim(m_iAnimation_Begod))
@@ -60,6 +63,7 @@ void CState_SimonManus_CutScene_Phase2::Update(_float fTimeDelta)
 
 void CState_SimonManus_CutScene_Phase2::End_State()
 {
+    m_pMonster->Active_Weapon();
 }
 
 CState_SimonManus_CutScene_Phase2* CState_SimonManus_CutScene_Phase2::Create(CFsm* pFsm, CMonster* pMonster, _uint iStateNum, void* pArg)
