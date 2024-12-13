@@ -1,9 +1,11 @@
 #include "stdafx.h"
 #include "..\Public\Weapon.h"
+#include "GameInstance.h"
 
 #include "Player.h"
 
-#include "GameInstance.h"
+#include "Effect_Container.h"
+#include "Effect_Manager.h"
 
 CWeapon::CWeapon(ID3D11Device * pDevice, ID3D11DeviceContext * pContext)
 	: CGameObject{ pDevice, pContext }
@@ -40,6 +42,11 @@ HRESULT CWeapon::Initialize(void * pArg)
 
 void CWeapon::Priority_Update(_float fTimeDelta)
 {
+	for (auto& pEffect : m_Effects)
+	{
+		if (!pEffect->Get_Dead())
+			pEffect->Priority_Update(fTimeDelta);
+	}
 }
 
 void CWeapon::Update(_float fTimeDelta)
@@ -56,9 +63,20 @@ void CWeapon::Update(_float fTimeDelta)
 	m_OldWroldMatrix = m_WorldMatrix;
 	XMStoreFloat4x4(&m_WorldMatrix, XMLoadFloat4x4(m_pTransformCom->Get_WorldMatrix_Ptr()) * SocketMatrix * XMLoadFloat4x4(m_pParentMatrix));
 
+	m_vVelocity = m_WorldMatrix.Translation() - m_OldWroldMatrix.Translation();
+	m_vAttackDir = m_vVelocity;
+	m_vAttackDir.Normalize();
+
+
 	for (_uint i = 0; i < WEP_SOUND_END; ++i)
 	{
 		m_pSoundCom[i]->Update(fTimeDelta);
+	}
+
+	for (auto& pEffect : m_Effects)
+	{
+		if (!pEffect->Get_Dead())
+			pEffect->Update(fTimeDelta);
 	}
 }
 
@@ -69,6 +87,13 @@ void CWeapon::Late_Update(_float fTimeDelta)
 
 	/*if (nullptr != m_pColliderCom)
 		m_pGameInstance->Add_ColliderList(m_pColliderCom);*/
+
+
+	for (auto& pEffect : m_Effects)
+	{
+		if (!pEffect->Get_Dead())
+			pEffect->Late_Update(fTimeDelta);
+	}
 }
 
 HRESULT CWeapon::Render()
@@ -216,6 +241,24 @@ void CWeapon::Play_Sound(WEP_SOUND_TYPE eType, const TCHAR* pSoundKey, _uint iHa
 	m_pSoundCom[eType]->Play2D(pSoundKey, &g_fEffectVolume);
 }
 
+void CWeapon::Active_Effect(const _uint& iType, _bool isLoop)
+{
+	if (isLoop)
+	{
+		if (!m_Effects[iType]->Get_Loop())
+			m_Effects[iType]->Set_Loop(true);
+	}
+	else
+	{
+		m_Effects[iType]->Reset_Effects();
+	}
+}
+
+void CWeapon::DeActive_Effect(_uint iType)
+{
+	m_Effects[iType]->Set_Loop(false);
+}
+
 void CWeapon::Appear()
 {
 	m_pModelCom->Update_Bone();
@@ -236,6 +279,19 @@ void CWeapon::Disappear()
 {
 	m_pGameInstance->Add_ColliderList(m_pColliderCom);
 	m_isActive = false;
+}
+
+void CWeapon::Set_AttackType(_uint iType)
+{
+	m_iAttackType = iType;
+	if (iType == ATK_EFFECT_NOTHING)
+	{
+		for (auto& pEffect : m_Effects)
+		{
+			pEffect->Set_Loop(false);
+		}
+
+	}
 }
 
 const _Matrix* CWeapon::Get_BoneCombinedMatrix(_uint iBoneIndex)
@@ -271,6 +327,16 @@ HRESULT CWeapon::Ready_Components()
 	return S_OK;
 }
 
+HRESULT CWeapon::Ready_Effect()
+{
+	m_pEffect_Manager = CEffect_Manager::Get_Instance();
+	if (nullptr == m_pEffect_Manager)
+		return E_FAIL;
+	Safe_AddRef(m_pEffect_Manager);
+
+	return S_OK;
+}
+
 HRESULT CWeapon::Bind_WorldMatrix(CShader* pShader, const _char* pContantName)
 {
 	return pShader->Bind_Matrix(pContantName, &m_WorldMatrix);
@@ -284,6 +350,17 @@ HRESULT CWeapon::Bind_OldWorldMatrix(CShader* pShader, const _char* pContantName
 void CWeapon::Free()
 {
 	__super::Free();
+
+	if (true == m_isCloned)
+	{
+		for (auto& pEffect : m_Effects)
+		{
+			pEffect->Set_Cloned(false);
+			Safe_Release(pEffect);
+		}
+		m_Effects.clear();
+		Safe_Release(m_pEffect_Manager);
+	}
 
 	Safe_Release(m_pColliderCom);
 	Safe_Release(m_pShaderCom);	

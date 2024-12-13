@@ -162,6 +162,7 @@ private:
 	void UIControl_Popup(_float fTimeDelta);
 	void UIControl_Shop(_float fTimeDelta);
 	void UIControl_Chest(_float fTimeDelta);
+	void UIControl_Telepot(_float fTimeDelta);
 
 public:
 #pragma region Page_Main
@@ -244,6 +245,8 @@ public:
 	{
 		m_pUIPage_Popup->Show_ItemPopup(strTitle, strInputTitle, iMin, pNow_Input, iMax, strCountTitle, iInterval, pNow_Count);
 	}
+
+	void Show_ItemUsePopup(_wstring strTitle, _wstring strDescA, _bool bIsTop) { m_pUIPage_Popup->Show_ItemUsePopup(strTitle, strDescA, bIsTop); }
 
 #pragma endregion
 
@@ -371,6 +374,8 @@ private:
 	CUIPage_Shop* m_pUIPage_Shop = { nullptr };
 	// 보관함
 	CUIPage_Chest* m_pUIPage_Chest = { nullptr };
+	// 텔레포트(별바라기)
+	CUIPage_Telepot* m_pUIPage_Telepot = { nullptr };
 	
 	CUIRender_Batching* m_pUIRender_Batching = { nullptr };
 

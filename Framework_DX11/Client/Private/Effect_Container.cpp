@@ -132,6 +132,8 @@ HRESULT CEffect_Container::Reset_Effects()
 
 void CEffect_Container::Set_Loop(_bool bLoop)
 {
+	m_isLoop = bLoop;
+
 	if (true == bLoop)
 		m_isDead = false;
 

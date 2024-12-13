@@ -2189,12 +2189,12 @@ HRESULT CController_EffectTool::Load_Model(const _wstring& strEffectPath)
 {
 	_matrix		PreTransformMatrix = XMMatrixIdentity();
 
-	/* For. Prototype_Component_Model_Effect_Crystal_Clouds_01 */
+	/* For. Prototype_Component_Model_Effect_Lily */
 	PreTransformMatrix = XMMatrixScaling(0.01f, 0.01f, 0.01f);
-	if (FAILED(m_pGameInstance->Add_Prototype(LEVEL_TOOL, TEXT("Prototype_Component_Model_Effect_Crystal_Clouds_01"),
-		CModel::Create(m_pDevice, m_pContext, CModel::TYPE_NONANIM, "../Bin/ModelData/NonAnim/Effect/Mesh_Crystal_Clouds_01.dat", PreTransformMatrix))))
+	if (FAILED(m_pGameInstance->Add_Prototype(LEVEL_TOOL, TEXT("Prototype_Component_Model_Effect_Lily"),
+		CModel::Create(m_pDevice, m_pContext, CModel::TYPE_NONANIM, "../Bin/ModelData/NonAnim/Effect/Lily.dat", PreTransformMatrix))))
 		return E_FAIL;
-	Add_Model_ProtytypeTag(TEXT("Prototype_Component_Model_Effect_Crystal_Clouds_01"));
+	Add_Model_ProtytypeTag(TEXT("Prototype_Component_Model_Effect_Lily"));
 
 
 	_wstring searchPath = strEffectPath + L"\\*.dat";
@@ -2228,8 +2228,6 @@ HRESULT CController_EffectTool::Load_Model(const _wstring& strEffectPath)
 			std::string str(bufferSize, '\0');
 			WideCharToMultiByte(CP_UTF8, 0, strResultPath.c_str(), -1, &str[0], bufferSize, nullptr, nullptr);
 
-
-			/* For. Prototype_Component_Model_Effect_Helix */
 			PreTransformMatrix = XMMatrixScaling(0.01f, 0.01f, 0.01f);
 			if (FAILED(m_pGameInstance->Add_Prototype(LEVEL_TOOL, strPrototypeTag,
 				CModel::Create(m_pDevice, m_pContext, CModel::TYPE_NONANIM, str.c_str(), PreTransformMatrix))))

@@ -8,6 +8,8 @@ CVIBuffer_2DPolygon::CVIBuffer_2DPolygon(ID3D11Device* pDevice, ID3D11DeviceCont
 CVIBuffer_2DPolygon::CVIBuffer_2DPolygon(const CVIBuffer_2DPolygon& Prototype)
 	: CVIBuffer{ Prototype }
 {
+	for (auto& iter : Prototype.m_vecOrigin_Vertex)
+		m_vecOrigin_Vertex.push_back(iter);
 }
 
 HRESULT CVIBuffer_2DPolygon::Initialize_Prototype(const UIPOLIGON_DESC& Desc)
@@ -18,8 +20,22 @@ HRESULT CVIBuffer_2DPolygon::Initialize_Prototype(const UIPOLIGON_DESC& Desc)
 	if (m_iPoint < 3)
 		return E_FAIL;
 
-	m_iNumVertexBuffers = 1;
-	m_iNumVertices = m_iPoint + 1;
+	
+
+	return S_OK;
+}
+
+HRESULT CVIBuffer_2DPolygon::Initialize(void* pArg)
+{
+	CVIBuffer_2DPolygon::UIPOLIGON_DESC* pDesc = static_cast<UIPOLIGON_DESC*>(pArg);
+
+	m_iPoint = pDesc->iPoint;
+	m_fTurn = pDesc->fAngle;
+
+
+
+ 	m_iNumVertexBuffers = 1;
+	m_iNumVertices = m_iPoint + 2;
 	m_iVertexStride = sizeof(VTXPOSTEX);
 	m_iNumIndices = m_iPoint * 3;
 	m_iIndexStride = 2;
@@ -31,7 +47,7 @@ HRESULT CVIBuffer_2DPolygon::Initialize_Prototype(const UIPOLIGON_DESC& Desc)
 	m_BufferDesc.ByteWidth = m_iVertexStride * m_iNumVertices;
 	m_BufferDesc.Usage = D3D11_USAGE_DYNAMIC; /* 동적버퍼로 생성한다. */
 	m_BufferDesc.BindFlags = D3D11_BIND_VERTEX_BUFFER;
-	m_BufferDesc.CPUAccessFlags = 0;
+	m_BufferDesc.CPUAccessFlags = D3D11_CPU_ACCESS_WRITE;
 	m_BufferDesc.MiscFlags = 0;
 	m_BufferDesc.StructureByteStride = m_iVertexStride;
 
@@ -43,14 +59,12 @@ HRESULT CVIBuffer_2DPolygon::Initialize_Prototype(const UIPOLIGON_DESC& Desc)
 
 	_Vec4 vVertices = Make_Vertices(m_fTurn);
 
-	pVertices[0].vPosition = _float3(vVertices.x, vVertices.y, 0.f);
-	pVertices[0].vTexcoord = _float2(vVertices.z, vVertices.x);
-
-	m_vecOrigin_Vertex.push_back(vVertices);
+	pVertices[0].vPosition = _float3(0.f, 0.f, 0.f);
+	pVertices[0].vTexcoord = _float2(0.5f, 0.5f);
 
 	for (_int i = 1; i < m_iNumVertices; ++i)
 	{
-		vVertices = Make_Vertices(m_fTurn + (fInterval_Angle * i));
+		vVertices = Make_Vertices(m_fTurn + (fInterval_Angle * (i - 1)));
 
 		pVertices[i].vPosition = _float3(vVertices.x, vVertices.y, 0.f);
 		pVertices[i].vTexcoord = _float2(vVertices.z, vVertices.x);
@@ -82,7 +96,7 @@ HRESULT CVIBuffer_2DPolygon::Initialize_Prototype(const UIPOLIGON_DESC& Desc)
 	_ushort* pIndices = new _ushort[m_iNumIndices];
 	ZeroMemory(pIndices, sizeof(_ushort) * m_iNumIndices);
 
-	for (_int i = 0; i < m_iNumVertices; ++i)
+	for (_int i = 0; i < m_iPoint; ++i)
 	{
 		pIndices[(i * 3) + 0] = 0;
 		pIndices[(i * 3) + 1] = i + 1;
@@ -103,18 +117,16 @@ HRESULT CVIBuffer_2DPolygon::Initialize_Prototype(const UIPOLIGON_DESC& Desc)
 	return S_OK;
 }
 
-HRESULT CVIBuffer_2DPolygon::Initialize(void* pArg)
-{
-	return S_OK;
-}
-
 void CVIBuffer_2DPolygon::Set_Point_Ratio(_float fRatio, _int iIndex)
 {
 	if ((iIndex < 0) || (iIndex >= m_vecOrigin_Vertex.size()))
 		return;
 
-	if ((fRatio < 0.f) || (fRatio > 1.f))
-		return;
+	if (fRatio < 0.f)
+		fRatio = 0.f;
+
+	if (fRatio > 1.f)
+		fRatio = 1.f;
 
 	D3D11_MAPPED_SUBRESOURCE	SubResource{};
 	m_pContext->Map(m_pVB, 0, D3D11_MAP_WRITE_NO_OVERWRITE, 0, &SubResource);
@@ -124,10 +136,18 @@ void CVIBuffer_2DPolygon::Set_Point_Ratio(_float fRatio, _int iIndex)
 	vNewVertex *= fRatio;
 	vNewVertex += _Vec4{ 0.f,0.f,0.5f,0.5f };
 
-	pVertices[iIndex].vPosition.x = vNewVertex.x;
-	pVertices[iIndex].vPosition.y = vNewVertex.y;
-	pVertices[iIndex].vTexcoord.x = vNewVertex.z;
-	pVertices[iIndex].vTexcoord.y = vNewVertex.w;
+	pVertices[iIndex + 1].vPosition.x = vNewVertex.x;
+	pVertices[iIndex + 1].vPosition.y = vNewVertex.y;
+	pVertices[iIndex + 1].vTexcoord.x = vNewVertex.z;
+	pVertices[iIndex + 1].vTexcoord.y = vNewVertex.w;
+
+	if (iIndex == 0)
+	{
+		pVertices[m_vecOrigin_Vertex.size()].vPosition.x = vNewVertex.x;
+		pVertices[m_vecOrigin_Vertex.size()].vPosition.y = vNewVertex.y;
+		pVertices[m_vecOrigin_Vertex.size()].vTexcoord.x = vNewVertex.z;
+		pVertices[m_vecOrigin_Vertex.size()].vTexcoord.y = vNewVertex.w;
+	}
 
 	m_pContext->Unmap(m_pVB, 0);
 }

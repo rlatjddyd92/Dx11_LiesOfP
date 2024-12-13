@@ -21,10 +21,15 @@ HRESULT CState_RaxasiaP1_TripleSting::Initialize(_uint iStateNum, void* pArg)
 HRESULT CState_RaxasiaP1_TripleSting::Start_State(void* pArg)
 {
     m_iRouteTrack = 0;
-    m_pMonster->Change_Animation(AN_READY, false, 0.1f, 0);
+    m_pMonster->Change_Animation(AN_READY, false, 0.05f, 0);
 
     m_bSwingSound = false;
 
+    _int iCnt = rand() % 2;
+    if (iCnt == 0)
+        m_iDashAnimIndex = AN_DASH_L;
+    else
+        m_iDashAnimIndex = AN_DASH_R;
     m_bSting = false;
     return S_OK;
 }
@@ -40,40 +45,74 @@ void CState_RaxasiaP1_TripleSting::Update(_float fTimeDelta)
         {
             ++m_iRouteTrack;
             m_bSting = false;
-            m_pMonster->Change_Animation(AN_STING, false, 0.1f, 0);
+            m_pMonster->Change_Animation(AN_STING, false, 0.1f, 80);
         }
-
+        m_pMonster->Get_Transform()->LookAt_Lerp_NoHeight(m_pMonster->Get_TargetDir(), 3, fTimeDelta);
         break;
 
     case 1:
-        if (CurTrackPos >= 230.f)
+        if (CurTrackPos >= 252.f)
         {
-            m_iRouteTrack = 0;
+            ++m_iRouteTrack;
             m_bSting = false;
-            m_pMonster->Change_Animation(AN_STING, false, 0.1f, 0);
+            m_pMonster->Change_Animation(m_iDashAnimIndex, false, 0.2f, 0, true, true);
             return;
         }
-
+        if (CurTrackPos <= 100.f)
+        {
+            m_pMonster->Get_Transform()->LookAt_Lerp_NoHeight(m_pMonster->Get_TargetDir(), 1.f, fTimeDelta);
+        }
         break;
 
+        //대쉬 
     case 2:
-        if (CurTrackPos >= 230.f)
+        if (CurTrackPos >= 41.f)
         {
-            m_iRouteTrack = 0;
+            ++m_iRouteTrack;
             m_bSting = false;
-            m_pMonster->Change_Animation(AN_STING, false, 0.1f, 0);
+            m_pMonster->Change_Animation(AN_STING, false, 0.4f, 40, true, true);
             return;
         }
-
+        m_pMonster->Get_Transform()->LookAt_Lerp_NoHeight(m_pMonster->Get_TargetDir(), 3, fTimeDelta);
         break;
 
     case 3:
+        if (CurTrackPos >= 252.f)
+        {
+            ++m_iRouteTrack;
+            m_bSting = false;
+            m_pMonster->Change_Animation(m_iDashAnimIndex, false, 0.2f, 0, true, true);
+            return;
+        }
+        if (CurTrackPos <= 100.f)
+        {
+            m_pMonster->Get_Transform()->LookAt_Lerp_NoHeight(m_pMonster->Get_TargetDir(), 1.f, fTimeDelta);
+        }
+
+        break;
+        //대쉬
+    case 4:
+        if (CurTrackPos >= 41.f)
+        {
+            ++m_iRouteTrack;
+            m_bSting = false;
+            m_pMonster->Change_Animation(AN_STING, false, 0.4f, 40, true, true);
+            return;
+        }
+        m_pMonster->Get_Transform()->LookAt_Lerp_NoHeight(m_pMonster->Get_TargetDir(), 3, fTimeDelta);
+        break;
+
+    case 5:
         if (End_Check())
         {
             m_iRouteTrack = 0;
             m_bSting = false;
             m_pMonster->Change_State(CRaxasia::IDLE);
             return;
+        }
+        if (CurTrackPos <= 100.f)
+        {
+            m_pMonster->Get_Transform()->LookAt_Lerp_NoHeight(m_pMonster->Get_TargetDir(), 1.f, fTimeDelta);
         }
 
         break;
@@ -94,7 +133,29 @@ void CState_RaxasiaP1_TripleSting::End_State()
 
 _bool CState_RaxasiaP1_TripleSting::End_Check()
 {
-    return false;
+    _uint iCurAnim = m_pMonster->Get_CurrentAnimIndex();
+    _bool bEndCheck{ false };
+    switch (m_iRouteTrack)
+    {
+    case 0:
+        if ((AN_READY) == iCurAnim)
+        {
+            bEndCheck = m_pMonster->Get_EndAnim(AN_READY);
+        }
+        break;
+
+    case 5:
+        if ((AN_STING) == iCurAnim)
+        {
+            bEndCheck = m_pMonster->Get_EndAnim(AN_STING);
+        }
+        break;
+
+    default:
+        break;
+
+    }
+    return  bEndCheck;
 }
 
 void CState_RaxasiaP1_TripleSting::Collider_Check(_double CurTrackPos)

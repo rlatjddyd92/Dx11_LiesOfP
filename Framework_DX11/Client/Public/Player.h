@@ -21,7 +21,10 @@ public:
 
 	enum EFFECT_TYPE 
 	{
-		EFFECT_RAPIER_TRAIL_FIRST, EFFECT_RAPIER_TRAIL_SECOND,
+		/*EFFECT_RAPIER_TRAIL_FIRST, EFFECT_RAPIER_TRAIL_SECOND,*/
+
+		EFFECT_FLAME_BASE, EFFECT_FLAME_SLASH, EFFECT_FLAME_STORMSLASH_FIRST, EFFECT_FLAME_STORMSLASH_SECOND,
+
 		EFFECT_GRIND, EFFECT_HEAL,
 
 		EFFECT_END
@@ -97,8 +100,8 @@ public:
 		_int iPoint_Heal = 1;
 
 		// 능력치 
-		_float iStat_Attack = 0.f;
-		_float iStat_Defence = 0.f;
+		_float iStat_Attack = 20.f;
+		_float iStat_Defence = 20.f;
 
 
 		// 게이지 수치 
@@ -116,7 +119,7 @@ public:
 		_float fRegion_Interval = 200.f;
 		
 		// 에르고 
-		_int iErgo = 1000;
+		_int iErgo = 10000;
 
 		// 레벨 업에 필요한 에르고 
 		_int iErgo_LevelUp = 100;
@@ -239,6 +242,7 @@ public:
 	void			Appear_Weapon();
 	void			Disappear_Weapon();
 	void			Set_WeaponStrength(ATTACK_STRENGTH eStrength);
+	void			Set_WeaponEffectType(_uint iAttackEffectType);
 	
 	_bool			Active_CurrentWeaponCollider(_float fDamageRatio = 1.f, _uint iHandIndex = 1);
 	void			DeActive_CurretnWeaponCollider(_uint iHandIndex = 1);

@@ -99,7 +99,7 @@ PS_OUT PS_MAIN_DOWNSAMPLE(PS_IN In)
         {
             float2 vTexcoord = In.vTexcoord + float2(1.f / g_vScreenSize.x * x, 1.f / g_vScreenSize.y * y);
             vector vSampleColor = g_DownSampleTexture.Sample(LinearClampSampler, vTexcoord);
-            vector vEmessiveTexture = g_EmessiveTexture.Sample(LinearClampSampler, vTexcoord);
+            vector vEmessiveTexture = g_EmessiveTexture.Sample(LinearClampSampler, vTexcoord) * 0.8f;
             
             
             vColor += vSampleColor + vEmessiveTexture;

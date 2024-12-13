@@ -20,7 +20,7 @@ HRESULT CState_RaxasiaP1_GroundSlash::Initialize(_uint iStateNum, void* pArg)
 
 HRESULT CState_RaxasiaP1_GroundSlash::Start_State(void* pArg)
 {
-    m_pMonster->Change_Animation(AN_GROUNDSLASH, false, 0.1f, 1);
+    m_pMonster->Change_Animation(AN_GROUNDSLASH, false, 0.1f, 3);
 
     m_bSwingSound = false;
 
@@ -35,30 +35,34 @@ void CState_RaxasiaP1_GroundSlash::Update(_float fTimeDelta)
 
     if (End_Check())
     {
-        m_iRouteTrack;
+        ++m_iRouteTrack;
         if (m_iRouteTrack >= 3)
         {
             m_iRouteTrack = 0;
         }
+
+        m_iRouteTrack = 0;
+
         switch (m_iRouteTrack)
         {
         case 0:
             m_pMonster->Change_State(CRaxasia::ATK_DISCHARGE);
-            break;
+            return;
 
         case 1:
             m_pMonster->Change_State(CRaxasia::ATK_JUMPATTACK);
-            break;
+            return;
 
         case 2:
             m_pMonster->Change_State(CRaxasia::ATK_SWINGDOWN_MULTIPLE);
-            break;
+            return;
 
         default:
             break;
         }
-        return;
     }
+
+    m_pMonster->Get_Transform()->LookAt_Lerp_NoHeight(m_pMonster->Get_TargetDir(), 0.6f, fTimeDelta);
 
     Collider_Check(CurTrackPos);
     Effect_Check(CurTrackPos);

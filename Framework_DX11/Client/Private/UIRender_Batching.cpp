@@ -129,7 +129,7 @@ HRESULT CUIRender_Batching::Render()
 				pNow->vPosition.x -= fStartX;
 				pNow->vPosition.y -= fStartY;
 
-				if (m_eNow_Area == SCROLL_AREA::SCROLL_OPTION)
+				if (m_eNow_Area == SCROLL_AREA::SCROLL_SHOP)
 				if (KEY_HOLD(KEY::ALT))
 				{
 					if (KEY_HOLD(KEY::NUM1))
@@ -210,11 +210,30 @@ HRESULT CUIRender_Batching::Render()
 			if (FAILED(m_vecShader_UI[_int(eShader)]->Begin(_int(ePass))))
 				return E_FAIL;
 
-			if (FAILED(m_pVIBufferCom->Bind_Buffers()))
-				return E_FAIL;
+			if (pNow->bIs_TwoDPolygon)
+			{
+				pNow->iTwoPolygon_Buffer_Num = max(pNow->iTwoPolygon_Buffer_Num, 0);
+				pNow->iTwoPolygon_Buffer_Num = min(pNow->iTwoPolygon_Buffer_Num, m_vecVIBuffer_2DPolygon_Com.size() - 1);
 
-			if (FAILED(m_pVIBufferCom->Render()))
-				return E_FAIL;
+				for (_int i = 0; i < 7; ++i)
+				{
+					m_vecVIBuffer_2DPolygon_Com[pNow->iTwoPolygon_Buffer_Num]->Set_Point_Ratio(pNow->fRatio_TwoDPolygon[i], i);
+				}
+				if (FAILED(m_vecVIBuffer_2DPolygon_Com[pNow->iTwoPolygon_Buffer_Num]->Bind_Buffers()))
+					return E_FAIL;
+
+				if (FAILED(m_vecVIBuffer_2DPolygon_Com[pNow->iTwoPolygon_Buffer_Num]->Render()))
+					return E_FAIL;
+			}
+			else
+			{
+				if (FAILED(m_pVIBufferCom->Bind_Buffers()))
+					return E_FAIL;
+
+				if (FAILED(m_pVIBufferCom->Render()))
+					return E_FAIL;
+			}
+
 		}
 		else
 		{
@@ -354,25 +373,31 @@ HRESULT CUIRender_Batching::Ready_Components()
 		TEXT("Com_Shader_Master"), reinterpret_cast<CComponent**>(&m_vecShader_UI[_int(UI_SHADER::SHADER_MASTER)]))))
 		return E_FAIL;
 
-	///* FOR.Com_Texture */
-	//if (FAILED(__super::Add_Component(LEVEL_TOOL, TEXT("Prototype_Component_Texture_UIRender_Batching"),
-	//	TEXT("Com_Texture"), reinterpret_cast<CComponent**>(&m_pTextureCom))))
-	//	return E_FAIL;
-
 	/* FOR.Com_VIBuffer */
 	if (FAILED(__super::Add_Component(LEVEL_STATIC, TEXT("Prototype_Component_VIBuffer_Rect"),
 		TEXT("Com_VIBuffer"), reinterpret_cast<CComponent**>(&m_pVIBufferCom))))
 		return E_FAIL;
 
-	///* FOR.Com_VIBuffer */
-	//if (FAILED(__super::Add_Component(LEVEL_STATIC, TEXT("Prototype_Component_VIBuffer_Rect"),
-	//	TEXT("Com_VIBuffer_Fullscreen"), reinterpret_cast<CComponent**>(&m_pVIBufferCom_FullScreen))))
-	//	return E_FAIL;
+	m_vecVIBuffer_2DPolygon_Com.resize(3);
 
-	///* FOR.Com_VIBuffer */
-	//if (FAILED(__super::Add_Component(LEVEL_STATIC, TEXT("Prototype_Component_VIBuffer_Rect"),
-	//	TEXT("Com_VIBuffer_Scroll"), reinterpret_cast<CComponent**>(&m_pVIBufferCom_Scroll))))
-	//	return E_FAIL;
+	CVIBuffer_2DPolygon::UIPOLIGON_DESC tDesc{};
+	tDesc.iPoint = 8;
+	tDesc.fAngle = 0.f;
+
+	/* FOR.Com_VIBuffer */
+	if (FAILED(__super::Add_Component(LEVEL_STATIC, TEXT("Prototype_Component_VIBuffer_2DPolygon"),
+		TEXT("Com_VIBuffer_2DPolygon"), reinterpret_cast<CComponent**>(&m_vecVIBuffer_2DPolygon_Com[0]), &tDesc)))
+		return E_FAIL;
+
+	/* FOR.Com_VIBuffer */
+	if (FAILED(__super::Add_Component(LEVEL_STATIC, TEXT("Prototype_Component_VIBuffer_2DPolygon"),
+		TEXT("Com_VIBuffer_2DPolygon_LevelUp"), reinterpret_cast<CComponent**>(&m_vecVIBuffer_2DPolygon_Com[1]), &tDesc)))
+		return E_FAIL;
+
+	/* FOR.Com_VIBuffer */
+	if (FAILED(__super::Add_Component(LEVEL_STATIC, TEXT("Prototype_Component_VIBuffer_2DPolygon"),
+		TEXT("Com_VIBuffer_2DPolygon_Origin"), reinterpret_cast<CComponent**>(&m_vecVIBuffer_2DPolygon_Com[2]), &tDesc)))
+		return E_FAIL;
 
 	m_vecViewPort.resize(_int(SCROLL_AREA::SCROLL_END));
 	for (auto& iter : m_vecViewPort)
@@ -622,6 +647,11 @@ void CUIRender_Batching::Free()
 	m_vecViewPort.clear();
 
 	m_vecfScrollY_Offset_Max.clear();
+
+	for (auto& iter : m_vecVIBuffer_2DPolygon_Com)
+		Safe_Release(iter);
+
+	m_vecVIBuffer_2DPolygon_Com.clear();
 
 	m_vecViewPort_Adjust.clear();
 }

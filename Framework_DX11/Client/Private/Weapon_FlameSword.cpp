@@ -5,6 +5,7 @@
 #include "Monster.h"
 
 #include "GameInstance.h"
+#include "Effect_Manager.h"
 
 // 24-12-06 김성용
 // 내구도 조정 함수 연결을 위한 헤더 추가 
@@ -119,9 +120,30 @@ void CWeapon_FlameSword::OnCollisionEnter(CGameObject* pOther)
 			m_DamagedObjects.push_back(pOther);
 			pOther->Calc_DamageGain(m_fDamageAmount * m_fDamageRatio);
 
-			// 24-12-06 김성용
+			if (pMonster->Calc_DamageGain(m_fDamageAmount * m_fDamageRatio))
+			{
+
+				CEffect_Manager::Get_Instance()->Add_Effect_ToLayer(LEVEL_GAMEPLAY, TEXT("Player_Attack_Slash_FlameSword_Normal"),
+					(_Vec3)pMonster->Calc_CenterPos(), m_vAttackDir);
+
+				CEffect_Manager::Get_Instance()->Add_Effect_ToLayer(LEVEL_GAMEPLAY, TEXT("Player_Attack_Blood_FlameSword"),
+					m_pParentMatrix, m_pSocketMatrix);
+
+				// 24-12-06 김성용
 				// 무기 사용 시, 내구도 감소 
-			GET_GAMEINTERFACE->Add_Durable_Weapon(-1.f);
+				GET_GAMEINTERFACE->Add_Durable_Weapon(-3.f);
+
+				if (pMonster->Get_Status()->fHp > 0.f)
+				{
+					CEffect_Manager::Get_Instance()->Add_Effect_ToLayer(LEVEL_GAMEPLAY, TEXT("Monster_Impact"),
+						(_Vec3)pMonster->Calc_CenterPos(), m_vAttackDir);
+				}
+				else if (pMonster->Get_Status()->fHp <= 0.f)
+				{
+					CEffect_Manager::Get_Instance()->Add_Effect_ToLayer(LEVEL_GAMEPLAY, TEXT("Monster_Impact_Death"),
+						(_Vec3)pMonster->Calc_CenterPos(), m_vAttackDir);
+				}
+			}
 
 			Play_HitSound(pMonster->Get_HitType());
 		}

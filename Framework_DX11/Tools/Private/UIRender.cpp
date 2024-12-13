@@ -194,15 +194,18 @@ HRESULT CUIRender::Render()
 
 			if (rNow.bIs_TwoDPolygon)
 			{
-				/*for (_int i = 0; i < 8; ++i)
+				rNow.iTwoPolygon_Buffer_Num = max(rNow.iTwoPolygon_Buffer_Num, 0);
+				rNow.iTwoPolygon_Buffer_Num = min(rNow.iTwoPolygon_Buffer_Num, m_vecVIBuffer_2DPolygon_Com.size() - 1);
+
+				for (_int i = 0; i < 8; ++i)
 				{
-					m_pVIBuffer_2DPolygon_Com->Set_Point_Ratio(i, rNow.fRatio_TwoDPolygon[i]);
+					m_vecVIBuffer_2DPolygon_Com[rNow.iTwoPolygon_Buffer_Num]->Set_Point_Ratio(rNow.fRatio_TwoDPolygon[i], i);
 				}
-				if (FAILED(m_pVIBuffer_2DPolygon_Com->Bind_Buffers()))
+				if (FAILED(m_vecVIBuffer_2DPolygon_Com[rNow.iTwoPolygon_Buffer_Num]->Bind_Buffers()))
 					return E_FAIL;
 
-				if (FAILED(m_pVIBuffer_2DPolygon_Com->Render()))
-					return E_FAIL;*/
+				if (FAILED(m_vecVIBuffer_2DPolygon_Com[rNow.iTwoPolygon_Buffer_Num]->Render()))
+					return E_FAIL;
 			}
 			else
 			{
@@ -538,10 +541,26 @@ HRESULT CUIRender::Ready_Components()
 		TEXT("Com_VIBuffer"), reinterpret_cast<CComponent**>(&m_pVIBufferCom))))
 		return E_FAIL;
 
-	///* FOR.Com_VIBuffer */
-	//if (FAILED(__super::Add_Component(LEVEL_STATIC, TEXT("Prototype_Component_VIBuffer_2DPolygon"),
-	//	TEXT("Com_VIBuffer_2DPolygon"), reinterpret_cast<CComponent**>(&m_pVIBuffer_2DPolygon_Com))))
-	//	return E_FAIL;
+	m_vecVIBuffer_2DPolygon_Com.resize(3);
+
+	CVIBuffer_2DPolygon::UIPOLIGON_DESC tDesc{};
+	tDesc.iPoint = 8;
+	tDesc.fAngle = 0.f;
+
+	/* FOR.Com_VIBuffer */
+	if (FAILED(__super::Add_Component(LEVEL_STATIC, TEXT("Prototype_Component_VIBuffer_2DPolygon"),
+		TEXT("Com_VIBuffer_2DPolygon"), reinterpret_cast<CComponent**>(&m_vecVIBuffer_2DPolygon_Com[0]), &tDesc)))
+		return E_FAIL;
+
+	/* FOR.Com_VIBuffer */
+	if (FAILED(__super::Add_Component(LEVEL_STATIC, TEXT("Prototype_Component_VIBuffer_2DPolygon"),
+		TEXT("Com_VIBuffer_2DPolygon_LevelUp"), reinterpret_cast<CComponent**>(&m_vecVIBuffer_2DPolygon_Com[1]), &tDesc)))
+		return E_FAIL;
+
+	/* FOR.Com_VIBuffer */
+	if (FAILED(__super::Add_Component(LEVEL_STATIC, TEXT("Prototype_Component_VIBuffer_2DPolygon"),
+		TEXT("Com_VIBuffer_2DPolygon_Origin"), reinterpret_cast<CComponent**>(&m_vecVIBuffer_2DPolygon_Com[2]), &tDesc)))
+		return E_FAIL;
 
 	return S_OK;
 }
@@ -768,7 +787,10 @@ void CUIRender::Free()
 
 	m_vecShader_UI.clear();
 
-	//Safe_Release(m_pVIBuffer_2DPolygon_Com);
+	for (auto& iter : m_vecVIBuffer_2DPolygon_Com)
+		Safe_Release(iter);
+
+	m_vecVIBuffer_2DPolygon_Com.clear();
 
 	m_UIRenderlist.clear();
 

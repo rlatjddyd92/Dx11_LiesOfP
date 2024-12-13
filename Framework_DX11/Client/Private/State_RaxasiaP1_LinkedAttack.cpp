@@ -43,7 +43,8 @@ void CState_RaxasiaP1_LinkedAttack::Update(_float fTimeDelta)
             m_pMonster->Change_Animation(AN_LINKEDATTACK_SECOND, false, 0.1f, 0);
         }
 
-        if (CurTrackPos >= 130.f)
+        if (CurTrackPos <= 50.f || 
+            CurTrackPos >= 130.f)
         {
             m_pMonster->Get_Transform()->LookAt_Lerp_NoHeight(m_pMonster->Get_TargetDir(), 1.f, fTimeDelta);
         }
@@ -58,6 +59,13 @@ void CState_RaxasiaP1_LinkedAttack::Update(_float fTimeDelta)
             m_pMonster->Change_Animation(AN_LINKEDATTACK_LAST, false, 0.1f, 0);
         }
 
+        if (CurTrackPos <= 30.f ||
+            (CurTrackPos >= 80.f && CurTrackPos <= 90.f) ||
+            CurTrackPos >= 115.f)
+        {
+            m_pMonster->Get_Transform()->LookAt_Lerp_NoHeight(m_pMonster->Get_TargetDir(), 1.f, fTimeDelta);
+        }
+
         break;
 
     case 2:
@@ -69,6 +77,10 @@ void CState_RaxasiaP1_LinkedAttack::Update(_float fTimeDelta)
         }
         break;
 
+        if (CurTrackPos <= 60.f)
+        {
+            m_pMonster->Get_Transform()->LookAt_Lerp_NoHeight(m_pMonster->Get_TargetDir(), 1.f, fTimeDelta);
+        }
     default:
         break;
     }

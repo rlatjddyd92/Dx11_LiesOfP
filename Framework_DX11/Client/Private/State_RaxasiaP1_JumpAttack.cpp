@@ -25,12 +25,12 @@ HRESULT CState_RaxasiaP1_JumpAttack::Start_State(void* pArg)
     if (iCnt == 0)
     {
         m_iCurAnimIndex = AN_JUMPATTACK_L;
-        m_pMonster->Change_Animation(AN_JUMPATTACK_L, false, 0.1f, 0);
+        m_pMonster->Change_Animation(AN_JUMPATTACK_L, false, 0.1f, 3);
     }
     else
     {
         m_iCurAnimIndex = AN_JUMPATTACK_R;
-        m_pMonster->Change_Animation(AN_JUMPATTACK_R, false, 0.1f, 0);
+        m_pMonster->Change_Animation(AN_JUMPATTACK_R, false, 0.1f, 3);
     }
 
     m_bSwingSound = false;
@@ -65,11 +65,16 @@ void CState_RaxasiaP1_JumpAttack::Update(_float fTimeDelta)
             }
         }
 
+        if ((CurTrackPos >= 85.f && CurTrackPos <= 140.f))
+        {
+            m_pMonster->Get_Transform()->LookAt_Lerp_NoHeight(m_pMonster->Get_TargetDir(), 1.f, fTimeDelta);
+        }
+
         if (CurTrackPos >= fTime)
         {
             ++m_iRouteTrack;
             m_bSwing = false;
-            m_pMonster->Change_Animation(AN_SLASH, false, 0.1f, 0);
+            m_pMonster->Change_Animation(AN_SLASH, false, 0.1f, 3);
         }
 
         break;
@@ -83,6 +88,10 @@ void CState_RaxasiaP1_JumpAttack::Update(_float fTimeDelta)
             return;
         }
 
+        if (CurTrackPos <= 40.f || CurTrackPos >= 70.f)
+        {
+            m_pMonster->Get_Transform()->LookAt_Lerp_NoHeight(m_pMonster->Get_TargetDir(), 1.f, fTimeDelta);
+        }
         break;
 
     default:
@@ -101,7 +110,7 @@ void CState_RaxasiaP1_JumpAttack::End_State()
 
 _bool CState_RaxasiaP1_JumpAttack::End_Check()
 {
-    return false;
+    return m_pMonster->Get_EndAnim(AN_SLASH);;
 }
 
 void CState_RaxasiaP1_JumpAttack::Collider_Check(_double CurTrackPos)

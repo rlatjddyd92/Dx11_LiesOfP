@@ -44,6 +44,7 @@ private:
     _bool               m_isPlaySound[5] = {};
     void                Control_Sound(_int iFrame);
 
+
 private:
     _int                m_iEffectFrame[2] = {};
     _bool               m_isActiveEffect[2] = {};

@@ -39,6 +39,9 @@ HRESULT CWeapon_Rapier::Initialize(void* pArg)
 	if (FAILED(Ready_Components()))
 		return E_FAIL;
 
+	if (FAILED(Ready_Effect()))
+		return E_FAIL;
+
 	m_strObjectTag = TEXT("PlayerWeapon");
 	m_pColliderCom->Set_Owner(this);
 	m_fDamageAmount = 5.f;
@@ -53,6 +56,8 @@ void CWeapon_Rapier::Priority_Update(_float fTimeDelta)
 	if (!m_isActive)
 		return;
 
+
+	__super::Priority_Update(fTimeDelta);
 }
 
 void CWeapon_Rapier::Update(_float fTimeDelta)
@@ -61,6 +66,27 @@ void CWeapon_Rapier::Update(_float fTimeDelta)
 		return;
 
 	__super::Update(fTimeDelta);
+
+	if (m_iAttackType != ATK_EFFECT_NOTHING)
+	{
+		if (m_vVelocity.Length() > 0.005f)
+		{
+			if (m_iAttackType == ATK_EFFECT_SPECIAL1)
+			{
+				Active_Effect(EFFECT_STORMSTAB1, true);
+			}
+			else if (m_iAttackType == ATK_EFFECT_SPECIAL2)
+			{
+				DeActive_Effect(EFFECT_STORMSTAB1);
+				Active_Effect(EFFECT_STORMSTAB2, true);
+			}
+		}
+		else
+		{
+			DeActive_Effect(EFFECT_STORMSTAB1);
+			DeActive_Effect(EFFECT_STORMSTAB2);
+		}
+	}
 
 	m_pColliderCom->Update(&m_WorldMatrix);
 }
@@ -121,7 +147,7 @@ void CWeapon_Rapier::OnCollisionEnter(CGameObject* pOther)
 				vPlayerLook.Normalize();
 
 				CEffect_Manager::Get_Instance()->Add_Effect_ToLayer(LEVEL_GAMEPLAY, TEXT("Player_Attack_Step_Normal"),
-					(_Vec3)pMonster->Calc_CenterPos(), vPlayerLook);
+					(_Vec3)pMonster->Calc_CenterPos(), m_vAttackDir);
 
 				CEffect_Manager::Get_Instance()->Add_Effect_ToLayer(LEVEL_GAMEPLAY, TEXT("Player_Attack_Blood_Rapier"),
 					m_pParentMatrix, m_pSocketMatrix);
@@ -256,6 +282,22 @@ HRESULT CWeapon_Rapier::Ready_Components()
 		TEXT("Com_Collider"), reinterpret_cast<CComponent**>(&m_pColliderCom), &ColliderDesc)))
 		return E_FAIL;
 	m_pColliderCom->Set_Owner(this);
+
+	return S_OK;
+}
+
+HRESULT CWeapon_Rapier::Ready_Effect()
+{
+	if(FAILED(__super::Ready_Effect()))
+		return E_FAIL;
+
+	m_Effects.resize(EFFECT_END);
+
+	m_Effects[EFFECT_STORMSTAB1] = m_pEffect_Manager->Clone_Effect(TEXT("Player_Attack_Rapier_StormStab_First"), m_pParentMatrix,
+		m_pSocketMatrix, _Vec3(0.f, 0.f, 0.f), _Vec3(0.f, 0.f, 0.f), _Vec3(1.f, 1.f, 1.f));
+
+	m_Effects[EFFECT_STORMSTAB2] = m_pEffect_Manager->Clone_Effect(TEXT("Player_Attack_Rapier_StormStab_Second"), m_pParentMatrix,
+		m_pSocketMatrix, _Vec3(0.f, 0.f, 0.f), _Vec3(0.f, 0.f, 0.f), _Vec3(1.f, 1.f, 1.f));
 
 	return S_OK;
 }
