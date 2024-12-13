@@ -224,6 +224,11 @@ HRESULT CLevel_GamePlay::Ready_Layer_Monster()
 	//if (FAILED(m_pGameInstance->Add_CloneObject_ToLayer(LEVEL_GAMEPLAY, TEXT("Layer_Raxasia"), TEXT("Prototype_GameObject_Raxasia"))))
 		//return E_FAIL;
 
+	for (_uint i = 1; i < 2; ++i)
+	{
+		if (FAILED(m_pGameInstance->Add_CloneObject_ToLayer(LEVEL_GAMEPLAY, TEXT("Layer_Monster"), TEXT("Prototype_GameObject_CutScene_SimonManus_EnvHand"), &i)))
+			return E_FAIL;
+	}
 	return S_OK;
 }
 

@@ -129,8 +129,8 @@ HRESULT CLoader::Ready_Resources_For_GamePlayLevel()
 	//	return E_FAIL;
 
 	// 준호형 전용
-	if (FAILED(Ready_Resources_GoJunHo()))
-		return E_FAIL;
+	//if (FAILED(Ready_Resources_GoJunHo()))
+	//	return E_FAIL;
 
 	//if (FAILED(Ready_Resources_For_Effect()))
 	//	return E_FAIL;
@@ -148,8 +148,8 @@ HRESULT CLoader::Ready_Resources_For_GamePlayLevel()
 	//if (FAILED(Ready_Resources_For_Weapon()))
 	//	return E_FAIL;
 
-	//if (FAILED(Ready_Resources_CutScene()))
-	//	return E_FAIL;
+	if (FAILED(Ready_Resources_CutScene()))
+		return E_FAIL;
 
 	lstrcpy(m_szLoadingText, TEXT("변환 완료"));
 
@@ -402,9 +402,14 @@ HRESULT CLoader::Ready_Resources_CutScene()
 	//	CModel::Create(m_pDevice, m_pContext, CModel::TYPE_ANIM, "../Bin/Resources/Models/Monster/Boss/SimonManus/SimonManus_CutScene_P2.fbx", "../Bin/ModelData/Anim/Monster/Boss/SimonManus/", PreTransformMatrix))))
 	//	return E_FAIL;
 
-	/* For. Prototype_Component_Model_Monster_SimonManus_GodHand */
-	if (FAILED(m_pGameInstance->Add_Prototype(LEVEL_GAMEPLAY, TEXT("Prototype_Component_Model_Monster_SimonManus_GodHand"),
-		CModel::Create(m_pDevice, m_pContext, CModel::TYPE_ANIM, "../Bin/Resources/Models/Monster/Boss/SimonManus/GodHand.fbx", "../Bin/ModelData/Anim/Monster/Boss/SimonManus/", PreTransformMatrix))))
+	///* For. Prototype_Component_Model_Monster_SimonManus_GodHand */
+	//if (FAILED(m_pGameInstance->Add_Prototype(LEVEL_GAMEPLAY, TEXT("Prototype_Component_Model_Monster_SimonManus_GodHand"),
+	//	CModel::Create(m_pDevice, m_pContext, CModel::TYPE_ANIM, "../Bin/Resources/Models/Monster/Boss/SimonManus/GodHand.fbx", "../Bin/ModelData/Anim/Monster/Boss/SimonManus/", PreTransformMatrix))))
+	//	return E_FAIL;
+
+	/* For. Prototype_Component_Model_Monster_SimonManus_EnvHand */
+	if (FAILED(m_pGameInstance->Add_Prototype(LEVEL_GAMEPLAY, TEXT("Prototype_Component_Model_Monster_SimonManus_EnvHand"),
+		CModel::Create(m_pDevice, m_pContext, CModel::TYPE_ANIM, "../Bin/Resources/Models/Monster/Boss/SimonManus/EnvHand.fbx", "../Bin/ModelData/Anim/Monster/Boss/SimonManus/", PreTransformMatrix))))
 		return E_FAIL;
 #pragma endregion
 	return S_OK;

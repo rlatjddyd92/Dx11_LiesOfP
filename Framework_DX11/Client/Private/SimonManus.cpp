@@ -335,7 +335,8 @@ void CSimonManus::Start_CutScene(_uint iCutSceneNum)
 		break;
 	case CUTSCENE_P2:
 		m_pModelCom = m_pCutSceneModelCom[MODEL_PHASE1];
-		//m_pCutSceneFsmCom->Set_State(STATE_P2);
+		//Deactiave_Weapon();
+		m_pCutSceneFsmCom->Change_State(STATE_P2);
 		break;
 	case CUTSCENE_DIE:
 		m_pModelCom = m_pCutSceneModelCom[MODEL_PHASE2];

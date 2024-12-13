@@ -1000,6 +1000,9 @@
     <Filter Include="05.Fsm\Player\Common\Grinder">
       <UniqueIdentifier>{fb4067e2-a5e2-47fe-bae7-ead4bdc7b9f0}</UniqueIdentifier>
     </Filter>
+    <Filter Include="02.GameObjects\02.Pawn\01.Monster\SimonManus\EnvHand">
+      <UniqueIdentifier>{198e4125-b11e-41b7-b2a8-104e7a6d3cba}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Client.h">
@@ -1829,6 +1832,9 @@
     <ClInclude Include="..\Public\Item_Throw.h">
       <Filter>02.GameObjects\15.Item</Filter>
     </ClInclude>
+    <ClInclude Include="..\Public\SimonManus_EnvHand.h">
+      <Filter>02.GameObjects\02.Pawn\01.Monster\SimonManus\EnvHand</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Client.cpp">
@@ -2627,6 +2633,9 @@
     </ClCompile>
     <ClCompile Include="..\Private\Item_Throw.cpp">
       <Filter>02.GameObjects\15.Item</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Private\SimonManus_EnvHand.cpp">
+      <Filter>02.GameObjects\02.Pawn\01.Monster\SimonManus\EnvHand</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

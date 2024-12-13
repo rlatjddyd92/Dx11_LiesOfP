@@ -193,6 +193,7 @@
     <ClInclude Include="..\Public\Item_Throw.h" />
     <ClInclude Include="..\Public\LastDoor.h" />
     <ClInclude Include="..\Public\Raxasia.h" />
+    <ClInclude Include="..\Public\SimonManus_EnvHand.h" />
     <ClInclude Include="..\Public\State_Player_Arm_Counter.h" />
     <ClInclude Include="..\Public\State_Player_Arm_Guard_Hard.h" />
     <ClInclude Include="..\Public\State_Player_Arm_Guard_Heavy.h" />
@@ -466,6 +467,7 @@
     <ClCompile Include="..\Private\Item_Throw.cpp" />
     <ClCompile Include="..\Private\LastDoor.cpp" />
     <ClCompile Include="..\Private\Raxasia.cpp" />
+    <ClCompile Include="..\Private\SimonManus_EnvHand.cpp" />
     <ClCompile Include="..\Private\State_Player_Arm_Counter.cpp" />
     <ClCompile Include="..\Private\State_Player_Arm_Guard_Hard.cpp" />
     <ClCompile Include="..\Private\State_Player_Arm_Guard_Heavy.cpp" />

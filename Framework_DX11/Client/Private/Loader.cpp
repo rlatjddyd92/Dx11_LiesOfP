@@ -40,6 +40,7 @@
 
 #include "Weapon_Raxasia_P1_Sword.h"
 
+#include "SimonManus_EnvHand.h"
 #pragma endregion
 
 #pragma region EFFECT
@@ -908,6 +909,18 @@ HRESULT CLoader::Ready_Resources_For_Monster()
 		CModel::Create(m_pDevice, m_pContext, CModel::TYPE_ANIM, "../Bin/ModelData/Anim/Monster/Boss/SimonManus/SimonManus_CutScene_P2.dat", PreTransformMatrix, false))))
 		return E_FAIL;
 
+	//Prototype_Component_Model_SimonManus_CutScene_EnvHand
+	PreTransformMatrix = XMMatrixScaling(0.01f, 0.01f, 0.01f);
+	if (FAILED(m_pGameInstance->Add_Prototype(LEVEL_GAMEPLAY, TEXT("Prototype_Component_Model_SimonManus_CutScene_EnvHand"),
+		CModel::Create(m_pDevice, m_pContext, CModel::TYPE_ANIM, "../Bin/ModelData/Anim/CreatedBinFiles/SimonManus_CutScene_EnvHand.dat", PreTransformMatrix, true))))
+		return E_FAIL;
+
+	//Prototype_Component_Model_SimonManus_CutScene_GodHand
+	PreTransformMatrix = XMMatrixScaling(0.01f, 0.01f, 0.01f);
+	if (FAILED(m_pGameInstance->Add_Prototype(LEVEL_GAMEPLAY, TEXT("Prototype_Component_Model_SimonManus_CutScene_GodHand"),
+		CModel::Create(m_pDevice, m_pContext, CModel::TYPE_ANIM, "../Bin/ModelData/Anim/Monster/Boss/SimonManus/CutScene_GodHand.dat", PreTransformMatrix, false))))
+		return E_FAIL;
+
 	//Prototype_Component_Model_Raxasia_CutScene_P1
 	PreTransformMatrix = XMMatrixScaling(0.01f, 0.01f, 0.01f);
 	if (FAILED(m_pGameInstance->Add_Prototype(LEVEL_GAMEPLAY, TEXT("Prototype_Component_Model_Raxasia_CutScene_P1"),
@@ -1123,7 +1136,10 @@ HRESULT CLoader::Ready_Prototype()
 		CWeapon_Raxasia_P1_Sword::Create(m_pDevice, m_pContext))))
 		return E_FAIL;
 
-
+	/* For. Prototype_GameObject_Weapon__Raxasia_P1_Sword */
+	if (FAILED(m_pGameInstance->Add_Prototype(TEXT("Prototype_GameObject_CutScene_SimonManus_EnvHand"),
+		CSimonManus_EnvHand::Create(m_pDevice, m_pContext))))
+		return E_FAIL;
 
 	// 특정 위치에 판정 없이 소환되는 이펙트
 	if (FAILED(m_pGameInstance->Add_Prototype(TEXT("Prototype_GameObject_SpotEffect"),
