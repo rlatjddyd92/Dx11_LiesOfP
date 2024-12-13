@@ -1003,6 +1003,9 @@
     <Filter Include="02.GameObjects\02.Pawn\01.Monster\SimonManus\EnvHand">
       <UniqueIdentifier>{198e4125-b11e-41b7-b2a8-104e7a6d3cba}</UniqueIdentifier>
     </Filter>
+    <Filter Include="02.GameObjects\02.Pawn\01.Monster\SimonManus\GodHand">
+      <UniqueIdentifier>{8d2b04ee-e8f1-46c4-ae87-5c07b49fbf95}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Client.h">
@@ -1835,6 +1838,9 @@
     <ClInclude Include="..\Public\SimonManus_EnvHand.h">
       <Filter>02.GameObjects\02.Pawn\01.Monster\SimonManus\EnvHand</Filter>
     </ClInclude>
+    <ClInclude Include="..\Public\SimonManus_CutScene_GodHand.h">
+      <Filter>02.GameObjects\02.Pawn\01.Monster\SimonManus\GodHand</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Client.cpp">
@@ -2636,6 +2642,9 @@
     </ClCompile>
     <ClCompile Include="..\Private\SimonManus_EnvHand.cpp">
       <Filter>02.GameObjects\02.Pawn\01.Monster\SimonManus\EnvHand</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Private\SimonManus_CutScene_GodHand.cpp">
+      <Filter>02.GameObjects\02.Pawn\01.Monster\SimonManus\GodHand</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

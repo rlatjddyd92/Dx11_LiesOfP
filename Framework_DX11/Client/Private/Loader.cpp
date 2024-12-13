@@ -41,6 +41,7 @@
 #include "Weapon_Raxasia_P1_Sword.h"
 
 #include "SimonManus_EnvHand.h"
+#include "SimonManus_CutScene_GodHand.h"
 #pragma endregion
 
 #pragma region EFFECT
@@ -1136,9 +1137,14 @@ HRESULT CLoader::Ready_Prototype()
 		CWeapon_Raxasia_P1_Sword::Create(m_pDevice, m_pContext))))
 		return E_FAIL;
 
-	/* For. Prototype_GameObject_Weapon__Raxasia_P1_Sword */
+	/* For. Prototype_GameObject_CutScene_SimonManus_EnvHand */
 	if (FAILED(m_pGameInstance->Add_Prototype(TEXT("Prototype_GameObject_CutScene_SimonManus_EnvHand"),
 		CSimonManus_EnvHand::Create(m_pDevice, m_pContext))))
+		return E_FAIL;
+
+	/* For. Prototype_GameObject_CutScene_SimonManus_GodHand */
+	if (FAILED(m_pGameInstance->Add_Prototype(TEXT("Prototype_GameObject_CutScene_SimonManus_GodHand"),
+		CSimonManus_CutScene_GodHand::Create(m_pDevice, m_pContext))))
 		return E_FAIL;
 
 	// 특정 위치에 판정 없이 소환되는 이펙트

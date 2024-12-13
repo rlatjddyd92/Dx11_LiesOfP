@@ -10,12 +10,12 @@ END
 
 BEGIN(Client)
 
-class CSimonManus_EnvHand final : public CGameObject
+class CSimonManus_CutScene_GodHand final : public CGameObject
 {
 private:
-	CSimonManus_EnvHand(ID3D11Device* pDevice, ID3D11DeviceContext* pContext);
-	CSimonManus_EnvHand(const CSimonManus_EnvHand& Prototype);
-	virtual ~CSimonManus_EnvHand() = default;
+	CSimonManus_CutScene_GodHand(ID3D11Device* pDevice, ID3D11DeviceContext* pContext);
+	CSimonManus_CutScene_GodHand(const CSimonManus_CutScene_GodHand& Prototype);
+	virtual ~CSimonManus_CutScene_GodHand() = default;
 
 public:
 	virtual HRESULT Initialize_Prototype() override;
@@ -39,7 +39,7 @@ private:
 
 
 public:
-	static CSimonManus_EnvHand* Create(ID3D11Device* pDevice, ID3D11DeviceContext* pContext);
+	static CSimonManus_CutScene_GodHand* Create(ID3D11Device* pDevice, ID3D11DeviceContext* pContext);
 	virtual CGameObject* Clone(void* pArg);
 	virtual void Free() override;
 
