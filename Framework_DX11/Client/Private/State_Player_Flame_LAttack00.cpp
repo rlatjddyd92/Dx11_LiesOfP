@@ -40,9 +40,6 @@ HRESULT CState_Player_Flame_LAttack00::Start_State(void* pArg)
     m_isInputRButton = false;
     m_fRButtonTime = 0.f;
 
-    m_iColliderStartFrame = 33;
-    m_iColliderEndFrame = 38;
-
     m_isPlaySound = false;
 
 
