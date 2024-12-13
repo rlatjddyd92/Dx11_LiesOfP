@@ -49,6 +49,7 @@
     <ClInclude Include="..\public\Effect_Container.h" />
     <ClInclude Include="..\public\Effect_Base.h" />
     <ClInclude Include="..\Public\FreeCamera.h" />
+    <ClInclude Include="..\Public\GodHand_CutScene.h" />
     <ClInclude Include="..\Public\ImGui_Manager.h" />
     <ClInclude Include="..\Public\Level_Tool.h" />
     <ClInclude Include="..\Public\Level_Loading.h" />
@@ -59,6 +60,7 @@
     <ClInclude Include="..\Public\NavigationController.h" />
     <ClInclude Include="..\Public\NonAnimModel.h" />
     <ClInclude Include="..\public\Particle_Effect.h" />
+    <ClInclude Include="..\Public\Scissor_Handle.h" />
     <ClInclude Include="..\Public\Sky.h" />
     <ClInclude Include="..\Public\stb_image.h" />
     <ClInclude Include="..\Public\TargetBall.h" />
@@ -107,6 +109,7 @@
     <ClCompile Include="..\private\Effect_Container.cpp" />
     <ClCompile Include="..\private\Effect_Base.cpp" />
     <ClCompile Include="..\Private\FreeCamera.cpp" />
+    <ClCompile Include="..\Private\GodHand_CutScene.cpp" />
     <ClCompile Include="..\Private\ImGui_Manager.cpp" />
     <ClCompile Include="..\Private\Level_Tool.cpp" />
     <ClCompile Include="..\Private\Level_Loading.cpp" />
@@ -117,6 +120,7 @@
     <ClCompile Include="..\Private\NavigationController.cpp" />
     <ClCompile Include="..\Private\NonAnimModel.cpp" />
     <ClCompile Include="..\private\Particle_Effect.cpp" />
+    <ClCompile Include="..\Private\Scissor_Handle.cpp" />
     <ClCompile Include="..\Private\Sky.cpp" />
     <ClCompile Include="..\Private\TargetBall.cpp" />
     <ClCompile Include="..\Private\Terrain.cpp" />

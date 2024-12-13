@@ -32,11 +32,12 @@ public:
 	virtual void Late_Update(_float fTimeDelta) override;
 	virtual HRESULT Render() override;
 
-public:
+private:
 	void PlayerMove(_float fTimeDelta);
 	void PlayerLockOn(_float fTimeDelta);
 	void PlayerInitMove(_float fTimeDelta);
 
+public:
 	void Move_PlayerBackPos();
 
 private:

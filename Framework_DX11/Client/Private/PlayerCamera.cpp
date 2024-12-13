@@ -150,7 +150,7 @@ void CPlayerCamera::PlayerInitMove(_float fTimeDelta)
 	vPlayerPos.m128_f32[1] += 1.65f;
 
 	_vector vCurrentPos = m_pTransformCom->Get_State(CTransform::STATE_POSITION);
-	_Vec3 vNewPos = XMVectorLerp(vCurrentPos, m_vTargetPos, 0.05f); 
+	_Vec3 vNewPos = XMVectorLerp(vCurrentPos, m_vTargetPos, 0.02f); 
 
 	m_pTransformCom->Set_State(CTransform::STATE_POSITION, vNewPos);
 
@@ -168,18 +168,19 @@ void CPlayerCamera::Move_PlayerBackPos()
 	{
 		m_isMoveInitPos = true;
 
-		_Vec3 vPlayerPos = m_pPlayer->Get_Transform()->Get_State(CTransform::STATE_POSITION);
+		_Vec4 vPlayerPos = m_pPlayer->Get_Transform()->Get_State(CTransform::STATE_POSITION);
 		vPlayerPos.y += 1.65f;
 
 		_Vec3 vPlayerLook = m_pPlayer->Get_Transform()->Get_State(CTransform::STATE_LOOK);
 		vPlayerLook.y = 0.f;
 		vPlayerLook.Normalize();
 
-		_Vec3 vInitPos = vPlayerPos - vPlayerLook * 5.f;
+		_Vec3 vInitPos = vPlayerPos - vPlayerLook * 7.f;
 		vInitPos.y += 3.f;
 		m_pTransformCom->Set_State(CTransform::STATE_POSITION, vInitPos);
+		m_pTransformCom->LookAt(vPlayerPos);
 
-		m_vTargetPos = vPlayerPos - m_pTransformCom->Get_State(CTransform::STATE_LOOK) * 2.5f;
+		m_vTargetPos = (_Vec3)vPlayerPos - m_pTransformCom->Get_State(CTransform::STATE_LOOK) * 2.5f;
 	}
 }
 

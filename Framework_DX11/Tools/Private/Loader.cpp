@@ -10,6 +10,7 @@
 #include "ThreadPool.h"
 
 #include "AnimModel.h"
+#include "GodHand_CutScene.h"
 #include "NonAnimModel.h"
 #include "FreeCamera.h"
 
@@ -433,9 +434,14 @@ HRESULT CLoader::Ready_Resources_For_ToolLevel()
 		CNonAnimModel::Create(m_pDevice, m_pContext))))
 		return E_FAIL;
 
-	/* For. Prototype_GameObject_Monster */
+	/* For. Prototype_GameObject_Anim */
 	if (FAILED(m_pGameInstance->Add_Prototype(TEXT("Prototype_GameObject_Anim"),
 		CAnimModel::Create(m_pDevice, m_pContext))))
+		return E_FAIL;
+
+	/* For. Prototype_GameObject_CutSceneodHand */
+	if (FAILED(m_pGameInstance->Add_Prototype(TEXT("Prototype_GameObject_CutSceneodHand"),
+		CGodHand_CutScene::Create(m_pDevice, m_pContext))))
 		return E_FAIL;
 
 	/* For. Prototype_GameObject_FreeCamera */
