@@ -13,6 +13,12 @@ BEGIN(Client)
 
 class CWeapon_Rapier : public CWeapon
 {
+public:
+	enum EFFECT_TYPE
+	{
+		EFFECT_STORMSTAB1, EFFECT_STORMSTAB2, EFFECT_END
+	};
+
 private:
 	CWeapon_Rapier(ID3D11Device* pDevice, ID3D11DeviceContext* pContext);
 	CWeapon_Rapier(const CWeapon_Rapier& Prototype);
@@ -37,6 +43,7 @@ public:
 
 private:
 	HRESULT Ready_Components();
+	HRESULT Ready_Effect();
 
 public:
 	static CWeapon_Rapier* Create(ID3D11Device* pDevice, ID3D11DeviceContext* pContext);

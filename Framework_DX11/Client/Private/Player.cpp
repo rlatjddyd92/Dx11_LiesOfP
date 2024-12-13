@@ -145,8 +145,8 @@ HRESULT CPlayer::Initialize(void * pArg)
 	//m_pNavigationCom->Move_to_Cell(m_pRigidBodyCom, 427); //짧은사다리
 	//m_pNavigationCom->Move_to_Cell(m_pRigidBodyCom, 341); //아래엘베
 	//m_pNavigationCom->Move_to_Cell(m_pRigidBodyCom, 440); //상자랑 장애물
-	//m_pNavigationCom->Move_to_Cell(m_pRigidBodyCom, 1066); // 순간이동 790
-	m_pNavigationCom->Move_to_Cell(m_pRigidBodyCom, 790); // 순간이동 1066
+	m_pNavigationCom->Move_to_Cell(m_pRigidBodyCom, 1066); // 순간이동 790
+	//m_pNavigationCom->Move_to_Cell(m_pRigidBodyCom, 790); // 순간이동 1066
 	//m_pNavigationCom->Move_to_Cell(m_pRigidBodyCom, 801); // 소피아 방
 	//m_pNavigationCom->Move_to_Cell(m_pRigidBodyCom, 1178); // 소피아 방 내부
 	//m_pNavigationCom->Move_to_Cell(m_pRigidBodyCom, 0); 
@@ -458,7 +458,12 @@ void CPlayer::Change_Weapon()
 	if (!GET_GAMEINTERFACE->Get_CanSwitch_Weapon())
 		return;
 
-	m_pWeapon[m_eWeaponType]->Appear();
+	Appear_Weapon();
+
+	if (m_eWeaponType == WEP_FLAME)
+	{
+
+	}
 }
 
 _uint CPlayer::Change_WeaponType()
@@ -469,7 +474,7 @@ _uint CPlayer::Change_WeaponType()
 	if (!GET_GAMEINTERFACE->Get_CanSwitch_Weapon())
 		return m_eWeaponType;
 
-	m_pWeapon[m_eWeaponType]->Disappear();
+	Disappear_Weapon();
 
 	// 24-12-05 김성용	
 	// 무기 락 적용 
@@ -481,23 +486,43 @@ _uint CPlayer::Change_WeaponType()
 	// 원래 코드 
 	//m_eWeaponType = WEAPON_TYPE((m_eWeaponType + 1) % WEP_END);
 
-
 	return m_eWeaponType;
 }
 
 void CPlayer::Appear_Weapon()
 {
+	if (m_pWeapon[m_eWeaponType]->IsActive())
+		return;
+
 	m_pWeapon[m_eWeaponType]->Appear();
+
+	if (m_eWeaponType == WEP_FLAME)
+	{
+		Active_Effect(EFFECT_FLAME_BASE);
+	}
 }
 
 void CPlayer::Disappear_Weapon()
 {
+	if (!m_pWeapon[m_eWeaponType]->IsActive())
+		return;
+
 	m_pWeapon[m_eWeaponType]->Disappear();
+
+	if (m_eWeaponType == WEP_FLAME)
+	{
+		DeActive_Effect(EFFECT_FLAME_BASE);
+	}
 }
 
 void CPlayer::Set_WeaponStrength(ATTACK_STRENGTH eStrength)
 {
 	m_pWeapon[m_eWeaponType]->Set_AttackStrength(eStrength);
+}
+
+void CPlayer::Set_WeaponEffectType(_uint iAttackEffectType)
+{
+	m_pWeapon[m_eWeaponType]->Set_AttackType(iAttackEffectType);
 }
 
 _bool CPlayer::Active_CurrentWeaponCollider(_float fDamageRatio, _uint iHandIndex)
@@ -636,7 +661,8 @@ void CPlayer::Active_Effect(const EFFECT_TYPE& eType, _bool isLoop)
 {
 	if (isLoop)
 	{
-		m_Effects[eType]->Set_Loop(true);
+		if(m_Effects[eType]->Get_Dead())
+			m_Effects[eType]->Set_Loop(true);
 	}
 	else
 	{
@@ -1537,11 +1563,11 @@ HRESULT CPlayer::Ready_Effect()
 	const _Matrix* pParetnMatrix = m_pTransformCom->Get_WorldMatrix_Ptr();
 	const _Matrix* pSocketBoneMatrix = m_pModelCom->Get_BoneCombindTransformationMatrix_Ptr("BN_Weapon_R");
 
-	m_Effects[EFFECT_RAPIER_TRAIL_FIRST] = m_pEffect_Manager->Clone_Effect(TEXT("Player_Attack_Rapier_StormStab_First"), pParetnMatrix,
-		pSocketBoneMatrix, _Vec3(0.f, 0.f, 0.f), _Vec3(0.f, 0.f, 0.f), _Vec3(1.f, 1.f, 1.f));
+	//m_Effects[EFFECT_RAPIER_TRAIL_FIRST] = m_pEffect_Manager->Clone_Effect(TEXT("Player_Attack_Rapier_StormStab_First"), pParetnMatrix,
+	//	pSocketBoneMatrix, _Vec3(0.f, 0.f, 0.f), _Vec3(0.f, 0.f, 0.f), _Vec3(1.f, 1.f, 1.f));
 
-	m_Effects[EFFECT_RAPIER_TRAIL_SECOND] = m_pEffect_Manager->Clone_Effect(TEXT("Player_Attack_Rapier_StormStab_Second"), pParetnMatrix,
-		pSocketBoneMatrix, _Vec3(0.f, 0.f, 0.f), _Vec3(0.f, 0.f, 0.f), _Vec3(1.f, 1.f, 1.f));
+	//m_Effects[EFFECT_RAPIER_TRAIL_SECOND] = m_pEffect_Manager->Clone_Effect(TEXT("Player_Attack_Rapier_StormStab_Second"), pParetnMatrix,
+	//	pSocketBoneMatrix, _Vec3(0.f, 0.f, 0.f), _Vec3(0.f, 0.f, 0.f), _Vec3(1.f, 1.f, 1.f));
 
 	pSocketBoneMatrix = m_pModelCom->Get_BoneCombindTransformationMatrix_Ptr("Bn_L_ForeTwist");
 	m_Effects[EFFECT_GRIND] = m_pEffect_Manager->Clone_Effect(TEXT("Player_Grind"), pParetnMatrix,
@@ -1551,6 +1577,18 @@ HRESULT CPlayer::Ready_Effect()
 	m_Effects[EFFECT_HEAL] = m_pEffect_Manager->Clone_Effect(TEXT("Player_Potion"), pParetnMatrix,
 		pSocketBoneMatrix, _Vec3(0.f, 0.f, 0.f), _Vec3(0.f, 0.f, 0.f), _Vec3(1.f, 1.f, 1.f));
 
+	pSocketBoneMatrix = m_pModelCom->Get_BoneCombindTransformationMatrix_Ptr("BN_Weapon_R");
+	m_Effects[EFFECT_FLAME_BASE] = m_pEffect_Manager->Clone_Effect(TEXT("Player_FlameSword_Default"), pParetnMatrix,
+		pSocketBoneMatrix, _Vec3(0.f, 0.f, 0.f), _Vec3(0.f, 0.f, 0.f), _Vec3(1.f, 1.f, 1.f));
+
+	m_Effects[EFFECT_FLAME_SLASH] = m_pEffect_Manager->Clone_Effect(TEXT("Player_Attack_FlameSword_Normal"), pParetnMatrix,
+		pSocketBoneMatrix, _Vec3(0.f, 0.f, 0.f), _Vec3(0.f, 0.f, 0.f), _Vec3(1.f, 1.f, 1.f));
+
+	m_Effects[EFFECT_FLAME_STORMSLASH_FIRST] = m_pEffect_Manager->Clone_Effect(TEXT("Player_Attack_FlameSword_StormSlash_First"), pParetnMatrix,
+		pSocketBoneMatrix, _Vec3(0.f, 0.f, 0.f), _Vec3(0.f, 0.f, 0.f), _Vec3(1.f, 1.f, 1.f));
+
+	m_Effects[EFFECT_FLAME_STORMSLASH_SECOND] = m_pEffect_Manager->Clone_Effect(TEXT("Player_Attack_FlameSword_StormSlash_Second"), pParetnMatrix,
+		pSocketBoneMatrix, _Vec3(0.f, 0.f, 0.f), _Vec3(0.f, 0.f, 0.f), _Vec3(1.f, 1.f, 1.f));
 
 	return S_OK;
 }

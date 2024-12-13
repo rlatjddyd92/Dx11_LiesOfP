@@ -21,7 +21,10 @@ public:
 
 	enum EFFECT_TYPE 
 	{
-		EFFECT_RAPIER_TRAIL_FIRST, EFFECT_RAPIER_TRAIL_SECOND,
+		/*EFFECT_RAPIER_TRAIL_FIRST, EFFECT_RAPIER_TRAIL_SECOND,*/
+
+		EFFECT_FLAME_BASE, EFFECT_FLAME_SLASH, EFFECT_FLAME_STORMSLASH_FIRST, EFFECT_FLAME_STORMSLASH_SECOND,
+
 		EFFECT_GRIND, EFFECT_HEAL,
 
 		EFFECT_END
@@ -239,6 +242,7 @@ public:
 	void			Appear_Weapon();
 	void			Disappear_Weapon();
 	void			Set_WeaponStrength(ATTACK_STRENGTH eStrength);
+	void			Set_WeaponEffectType(_uint iAttackEffectType);
 	
 	_bool			Active_CurrentWeaponCollider(_float fDamageRatio = 1.f, _uint iHandIndex = 1);
 	void			DeActive_CurretnWeaponCollider(_uint iHandIndex = 1);

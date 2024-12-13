@@ -115,9 +115,15 @@ void CState_Player_Flame_LAttack00::Control_Collider()
     _int iFrame = m_pPlayer->Get_Frame();
 
     if (m_iColliderStartFrame <= iFrame && iFrame <= m_iColliderEndFrame)
+    {
+        m_pPlayer->Active_Effect(CPlayer::EFFECT_FLAME_SLASH);
         m_pPlayer->Active_CurrentWeaponCollider();
+    }
     else
+    {
+        m_pPlayer->DeActive_Effect(CPlayer::EFFECT_FLAME_SLASH);
         m_pPlayer->DeActive_CurretnWeaponCollider();
+    }
 }
 
 void CState_Player_Flame_LAttack00::Control_Sound()

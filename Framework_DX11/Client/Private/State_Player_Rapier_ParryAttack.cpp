@@ -114,7 +114,6 @@ void CState_Player_Rapier_ParryAttack::Update(_float fTimeDelta)
 
 void CState_Player_Rapier_ParryAttack::End_State()
 {
-    m_pPlayer->DeActive_Effect(CPlayer::EFFECT_RAPIER_TRAIL_SECOND);
     m_pPlayer->DeActive_CurretnWeaponCollider();
 }
 
@@ -178,13 +177,10 @@ void CState_Player_Rapier_ParryAttack::Control_Effect(_int iFrame)
 
     if (!m_isActiveEffect[0] && iCurAnim == m_iAnimation_RapierParryAtk[0] && (iFrame == m_iColliderStartFrame[0] || iFrame == m_iColliderStartFrame[0] + 1))
     {
-        m_pPlayer->Active_Effect(CPlayer::EFFECT_RAPIER_TRAIL_FIRST);
         m_isActiveEffect[0] = true;
     }
     else if (!m_isActiveEffect[1] && iCurAnim == m_iAnimation_RapierParryAtk[1] && (iFrame == m_iColliderStartFrame[3] || iFrame == m_iColliderStartFrame[3] + 1))
     {
-        m_pPlayer->DeActive_Effect(CPlayer::EFFECT_RAPIER_TRAIL_FIRST);
-        m_pPlayer->Active_Effect(CPlayer::EFFECT_RAPIER_TRAIL_SECOND);
         m_isActiveEffect[1] = true;
     }
 }

@@ -16,6 +16,8 @@ class CWeapon abstract : public CGameObject
 public:
 	enum WEP_SOUND_TYPE { WEP_SOUND_WEAPON, WEP_SOUND_EFFECT1, WEP_SOUND_EFFECT2, WEP_SOUND_END };
 
+	enum WEP_ATTACKEFFECT_TYPE { ATK_EFFECT_NOTHING, ATK_EFFECT_GENERAL, ATK_EFFECT_SPECIAL1, ATK_EFFECT_SPECIAL2, ATK_END };
+
 	typedef struct
 	{
 		const _Matrix*	pParentWorldMatrix = { nullptr };
@@ -78,9 +80,15 @@ public:
 
 	virtual void		Play_HitSound(HIT_TYPE eType) {};
 
+	virtual void		Active_Effect(const _uint& iType, _bool isLoop = true);
+	virtual void		DeActive_Effect(_uint iType);
+
+	virtual void		Set_AttackType(_uint iType);
+
 public:
 	void Appear();
 	void Disappear();
+
 
 	void ChangeSocketMatrix(const _Matrix* pMat) { m_pSocketMatrix = pMat; }
 	void Reset_OverLapCheck() { m_DamagedObjects.clear(); }
@@ -88,6 +96,7 @@ public:
 	const _Matrix* Get_BoneCombinedMatrix(_uint iBoneIndex);
 	const _Matrix* Get_WorldMatrix_Ptr() { return &m_WorldMatrix; }
 
+	
 protected:
 	CShader*			m_pShaderCom = { nullptr };	
 	CModel*				m_pModelCom = { nullptr };
@@ -95,6 +104,9 @@ protected:
 	class CSound*		m_pSoundCom[WEP_SOUND_END] = {nullptr,};
 	_float				m_fEmissiveMask = {};
 
+protected:
+	vector<class CEffect_Container*> m_Effects;
+	class CEffect_Manager* m_pEffect_Manager = { nullptr };
 
 protected:
 	class CPlayer*		m_pPlayer = { nullptr };
@@ -113,10 +125,13 @@ protected:
 	
 	_uint					m_iHitType{};
 	_uint					m_iAtkStrength{};
+	_uint					m_iAttackType{};
 
 
 	list<CGameObject*>			m_DamagedObjects;
 
+	_Vec3					m_vVelocity = {};
+	_Vec3					m_vAttackDir = {};
 
 	_float*					m_pParentAtk = { nullptr };
 
@@ -124,6 +139,7 @@ protected:
 
 protected:
 	HRESULT Ready_Components();
+	HRESULT Ready_Effect();
 
 	HRESULT Bind_WorldMatrix(class CShader* pShader, const _char* pContantName);
 	HRESULT Bind_OldWorldMatrix(class CShader* pShader, const _char* pContantName);

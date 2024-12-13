@@ -44,6 +44,11 @@ private:
     _bool               m_isPlaySound = {};
     void                Control_Sound();
 
+private:
+    _int                m_iEffectFrame[2] = {};
+    _bool               m_isActiveEffect[2] = {};
+    void                Control_Effect();
+
 public:
     static CState_Player_Rapier_LAttack00* Create(class CFsm* pFsm, class CPlayer* pPlayer, _uint iStateNum, void* pArg = nullptr);
     virtual void Free() override;

@@ -53,6 +53,8 @@ HRESULT CState_Player_Flame_Fable::Start_State(void* pArg)
 
     m_pPlayer->Set_WeaponStrength(ATK_STRONG);
 
+    m_pPlayer->Active_Effect(CPlayer::EFFECT_FLAME_STORMSLASH_FIRST);
+
     return S_OK;
 }
 
@@ -93,17 +95,17 @@ void CState_Player_Flame_Fable::Update(_float fTimeDelta)
     }
     else if (End_Check())
     {
-        m_pPlayer->Change_State(CPlayer::OH_IDLE);
+        m_pPlayer->Change_State(CPlayer::TH_IDLE);
     }
 
     Control_Collider(iFrame);
     Control_Sound(iFrame);
-    Control_Effect(iFrame);
+    //Control_Effect(iFrame);
 }
 
 void CState_Player_Flame_Fable::End_State()
 {
-    m_pPlayer->DeActive_Effect(CPlayer::EFFECT_RAPIER_TRAIL_SECOND);
+    m_pPlayer->DeActive_Effect(CPlayer::EFFECT_FLAME_STORMSLASH_FIRST);
     m_pPlayer->DeActive_CurretnWeaponCollider();
 }
 
@@ -123,9 +125,13 @@ void CState_Player_Flame_Fable::Control_Collider(_int iFrame)
     }
 
     if (isColliderActive)
+    {
         m_pPlayer->Active_CurrentWeaponCollider();
+    }
     else
+    {
         m_pPlayer->DeActive_CurretnWeaponCollider();
+    }
 
 }
 
@@ -150,17 +156,17 @@ void CState_Player_Flame_Fable::Control_Sound(_int iFrame)
 
 void CState_Player_Flame_Fable::Control_Effect(_int iFrame)
 {
-    if (!m_isActiveEffect[0] && (iFrame == m_iColliderStartFrame[0] || iFrame == m_iColliderStartFrame[0] + 1))
-    {
-        m_pPlayer->Active_Effect(CPlayer::EFFECT_RAPIER_TRAIL_FIRST);
-        m_isActiveEffect[0] = true;
-    }
-    else if (!m_isActiveEffect[1] && (iFrame == m_iColliderStartFrame[2] || iFrame == m_iColliderStartFrame[2] + 1))
-    {
-        m_pPlayer->DeActive_Effect(CPlayer::EFFECT_RAPIER_TRAIL_FIRST);
-        m_pPlayer->Active_Effect(CPlayer::EFFECT_RAPIER_TRAIL_SECOND);
-        m_isActiveEffect[1] = true;
-    }
+    //if (!m_isActiveEffect[0] && (iFrame == m_iColliderStartFrame[0] || iFrame == m_iColliderStartFrame[0] + 1))
+    //{
+    //    m_pPlayer->Active_Effect(CPlayer::EFFECT_RAPIER_TRAIL_FIRST);
+    //    m_isActiveEffect[0] = true;
+    //}
+    //else if (!m_isActiveEffect[1] && (iFrame == m_iColliderStartFrame[2] || iFrame == m_iColliderStartFrame[2] + 1))
+    //{
+    //    m_pPlayer->DeActive_Effect(CPlayer::EFFECT_RAPIER_TRAIL_FIRST);
+    //    m_pPlayer->Active_Effect(CPlayer::EFFECT_RAPIER_TRAIL_SECOND);
+    //    m_isActiveEffect[1] = true;
+    //}
 }
 
 CState_Player_Flame_Fable* CState_Player_Flame_Fable::Create(CFsm* pFsm, CPlayer* pPlayer, _uint iStateNum, void* pArg)
