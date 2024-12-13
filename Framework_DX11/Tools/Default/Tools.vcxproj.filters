@@ -139,6 +139,9 @@
     <Filter Include="02.GameObjects\09.CutScene">
       <UniqueIdentifier>{a7c3de8f-92f9-4d60-b449-ab0da6ef9193}</UniqueIdentifier>
     </Filter>
+    <Filter Include="02.GameObjects\03.AnimModel\GodHand_CutScene">
+      <UniqueIdentifier>{458f6429-0f8d-4e3d-bb6d-9a00197580ff}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="framework.h">
@@ -309,6 +312,9 @@
     <ClInclude Include="..\Public\CutScene.h">
       <Filter>02.GameObjects\09.CutScene</Filter>
     </ClInclude>
+    <ClInclude Include="..\Public\GodHand_CutScene.h">
+      <Filter>02.GameObjects\03.AnimModel\GodHand_CutScene</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <Image Include="small.ico">
@@ -459,6 +465,9 @@
     </ClCompile>
     <ClCompile Include="..\Private\CutScene.cpp">
       <Filter>02.GameObjects\09.CutScene</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Private\GodHand_CutScene.cpp">
+      <Filter>02.GameObjects\03.AnimModel\GodHand_CutScene</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

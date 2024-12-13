@@ -261,6 +261,8 @@ void CCutScene::End_Setting()
 		pPlayer->Appear_Weapon();
 		static_cast<CPawn*>(m_pGameInstance->Find_Object(LEVEL_GAMEPLAY, TEXT("Layer_SimonManus"), 0))->End_CutScene(0);
 	}
+
+	pPlayer->Get_Camera()->Move_PlayerBackPos();
 }
 
 void CCutScene::Load_KeyFrame(CUTSCENE_KEYFRAME_DESC pDesc)

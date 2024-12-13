@@ -49,6 +49,7 @@
     <ClInclude Include="..\public\Effect_Container.h" />
     <ClInclude Include="..\public\Effect_Base.h" />
     <ClInclude Include="..\Public\FreeCamera.h" />
+    <ClInclude Include="..\Public\GodHand_CutScene.h" />
     <ClInclude Include="..\Public\ImGui_Manager.h" />
     <ClInclude Include="..\Public\Level_Tool.h" />
     <ClInclude Include="..\Public\Level_Loading.h" />
@@ -107,6 +108,7 @@
     <ClCompile Include="..\private\Effect_Container.cpp" />
     <ClCompile Include="..\private\Effect_Base.cpp" />
     <ClCompile Include="..\Private\FreeCamera.cpp" />
+    <ClCompile Include="..\Private\GodHand_CutScene.cpp" />
     <ClCompile Include="..\Private\ImGui_Manager.cpp" />
     <ClCompile Include="..\Private\Level_Tool.cpp" />
     <ClCompile Include="..\Private\Level_Loading.cpp" />
