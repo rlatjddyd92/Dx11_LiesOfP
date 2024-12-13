@@ -1005,6 +1005,9 @@
     </Filter>
     <Filter Include="02.GameObjects\02.Pawn\01.Monster\SimonManus\GodHand">
       <UniqueIdentifier>{8d2b04ee-e8f1-46c4-ae87-5c07b49fbf95}</UniqueIdentifier>
+	</Filter>
+    <Filter Include="03.GameInterface_Controller\00.UIManager\00.UIPage\18.UIPage_Telepot">
+      <UniqueIdentifier>{8d2c85a1-e53e-4e3f-b451-241e3aa1bf15}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -1840,6 +1843,9 @@
     </ClInclude>
     <ClInclude Include="..\Public\SimonManus_CutScene_GodHand.h">
       <Filter>02.GameObjects\02.Pawn\01.Monster\SimonManus\GodHand</Filter>
+	</ClInclude>
+    <ClInclude Include="..\Public\UIPage_Telepot.h">
+      <Filter>03.GameInterface_Controller\00.UIManager\00.UIPage\18.UIPage_Telepot</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -2645,6 +2651,9 @@
     </ClCompile>
     <ClCompile Include="..\Private\SimonManus_CutScene_GodHand.cpp">
       <Filter>02.GameObjects\02.Pawn\01.Monster\SimonManus\GodHand</Filter>
+	</ClCompile>
+    <ClCompile Include="..\Private\UIPage_Telepot.cpp">
+      <Filter>03.GameInterface_Controller\00.UIManager\00.UIPage\18.UIPage_Telepot</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

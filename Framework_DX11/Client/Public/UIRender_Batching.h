@@ -86,6 +86,11 @@ public:
 		_float4 vRange = { -1.f,-1.f,-1.f, -1.f };
 		_float2 vAngle = { 0.f,0.f };
 
+		// ´Ù°¢Çü
+		_bool bIs_TwoDPolygon = false;
+		_int iTwoPolygon_Buffer_Num = -1;
+		_float fRatio_TwoDPolygon[8] = { 1.f, 1.f, 1.f, 1.f, 1.f, 1.f, 1.f, 1.f };
+
 	}URENDER;
 
 	enum class UI_SHADER
@@ -153,7 +158,7 @@ public:
 public:
 	class CShader* m_pShaderCom = { nullptr };
 	class CVIBuffer_Rect* m_pVIBufferCom = { nullptr };
-
+	vector<CVIBuffer_2DPolygon*> m_vecVIBuffer_2DPolygon_Com;
 
 
 	class CVIBuffer_Rect* m_pVIBufferCom_FullScreen = { nullptr };

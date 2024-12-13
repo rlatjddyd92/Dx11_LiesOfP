@@ -205,6 +205,10 @@ void CUIManager::UIControl_Chest(_float fTimeDelta)
 	}
 }
 
+void CUIManager::UIControl_Telepot(_float fTimeDelta)
+{
+}
+
 void CUIManager::UIControl_Common(_float fTimeDelta)
 {
 	//m_bIsPlayPageMaintain = true;
@@ -238,6 +242,8 @@ void CUIManager::UIControl_Common(_float fTimeDelta)
 		UIControl_Shop(fTimeDelta);
 	else if ((m_pUIPage_Chest->GetPageAction(PAGEACTION::ACTION_ACTIVE)) || (m_pUIPage_Chest->GetPageAction(PAGEACTION::ACTION_OPENING)))
 		UIControl_Chest(fTimeDelta);
+	else if ((m_pUIPage_Telepot->GetPageAction(PAGEACTION::ACTION_ACTIVE)) || (m_pUIPage_Telepot->GetPageAction(PAGEACTION::ACTION_OPENING)))
+		UIControl_Telepot(fTimeDelta);
 	else if ((m_bIsIngame) && (m_bIsPlayPageMaintain))
 		OpenPage(UIPAGE::PAGE_PLAY);
 }
@@ -559,12 +565,17 @@ HRESULT CUIManager::Make_UIPage(_int iIndex)
 	else if (iIndex == _int(UIPAGE::PAGE_SHOP))
 	{
 		m_pUIPage_Shop = CUIPage_Shop::Create(m_pDevice, m_pContext);
-		m_vecPage[iIndex] = static_cast<CUIPage*>(m_pUIPage_Inform);
+		m_vecPage[iIndex] = static_cast<CUIPage*>(m_pUIPage_Shop);
 	}
 	else if (iIndex == _int(UIPAGE::PAGE_CHEST))
 	{
 		m_pUIPage_Chest = CUIPage_Chest::Create(m_pDevice, m_pContext);
-		m_vecPage[iIndex] = static_cast<CUIPage*>(m_pUIPage_Inform);
+		m_vecPage[iIndex] = static_cast<CUIPage*>(m_pUIPage_Chest);
+	}
+	else if (iIndex == _int(UIPAGE::PAGE_TELEPOT))
+	{
+		m_pUIPage_Telepot = CUIPage_Telepot::Create(m_pDevice, m_pContext);
+		m_vecPage[iIndex] = static_cast<CUIPage*>(m_pUIPage_Telepot);
 	}
 
 	if (m_vecPage[iIndex] == nullptr)
@@ -610,6 +621,13 @@ HRESULT CUIManager::Load_UIDataFile_Part(HANDLE handle, DWORD* dword, _int iInde
 
 		ReadFile(handle, &pNew->vTexture_Range, sizeof(_Vec4), dword, nullptr);
 		ReadFile(handle, &pNew->vTexture_Angle, sizeof(_Vec2), dword, nullptr);
+
+		ReadFile(handle, &pNew->iTwoPolygon_Buffer_Num, sizeof(_int), dword, nullptr);
+
+		if (pNew->iTwoPolygon_Buffer_Num != -1)
+			pNew->bIs_TwoDPolygon = true;
+		else 
+			pNew->bIs_TwoDPolygon = false;
 
 		if (!pNew->bIsItem)
 			m_pUIRender_Batching->Make_Texture(pNew->iTexture_Index);

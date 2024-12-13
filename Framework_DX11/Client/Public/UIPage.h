@@ -125,6 +125,10 @@ public:
 
 		_bool m_bEmpty_Stack_Item = false;
 
+		_bool bIs_TwoDPolygon = false;
+		_int iTwoPolygon_Buffer_Num = 0;
+		_float fRatio_TwoDPolygon[8] = { 1.f, 1.f, 1.f, 1.f, 1.f, 1.f, 1.f, 1.f };
+
 	}UPART;
 
 	typedef struct UIPART_GROUP_CONTROL

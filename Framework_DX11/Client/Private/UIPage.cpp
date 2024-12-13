@@ -210,6 +210,15 @@ void CUIPage::Input_Render_Info(UPART& Part, SCROLL_AREA eArea)
 	pNew->vRange = Part.vTexture_Range;
 	pNew->vAngle = Part.vTexture_Angle;
 
+	if (Part.bIs_TwoDPolygon)
+	{
+		pNew->bIs_TwoDPolygon = true;
+		pNew->iTwoPolygon_Buffer_Num = Part.iTwoPolygon_Buffer_Num;
+		memcpy(pNew->fRatio_TwoDPolygon, Part.fRatio_TwoDPolygon, sizeof(_float) * 8);
+	}
+	else 
+		pNew->bIs_TwoDPolygon = false;
+
 	if (Part.iMoveType == _int(MOVETYPE::TYPE_BAR))
 		pNew->vSize = Part.GetBarSize();
 

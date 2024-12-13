@@ -157,6 +157,8 @@ public: // 외부에서 매니저 접근
 		m_pUIManager->Show_ItemPopup(strTitle, strInputTitle, iMin, pNow_Input, iMax, strCountTitle, iInterval, pNow_Count);
 	}
 
+	void Show_ItemUsePopup(_wstring strTitle, _wstring strDescA, _bool bIsTop) { m_pUIManager->Show_ItemUsePopup(strTitle, strDescA, bIsTop); }
+
 #pragma endregion
 
 
@@ -224,6 +226,14 @@ public: // 외부에서 매니저 접근
 	void Set_IsNew(INVEN_ARRAY_TYPE eType, _int iIndex, _bool IsNew) { m_pItem_Manager->Set_IsNew(eType, iIndex, IsNew); }
 	void Set_IsNew_Show(INVEN_ARRAY_TYPE eType, _int iIndex) { m_pItem_Manager->Set_IsNew_Show(eType, iIndex); }
 	void Set_Show_NewMark_Off() { m_pItem_Manager->Set_Show_NewMark_Off(); }
+
+	// 상점, 보관함
+	vector<CItem_Manager::SHOP*>& Get_ShopData() { return m_pItem_Manager->Get_ShopData(); }
+	vector<CItem_Manager::ITEM*>& Get_ChestData() { return m_pItem_Manager->Get_ChestData(); }
+	void Buy_ShopItem(_int iIndex, _int iCount = 0) { m_pItem_Manager->Buy_ShopItem(iIndex, iCount); }
+	void Sell_ShopItem(INVEN_ARRAY_TYPE eType, _int iIndex, _int iCount = 0) { m_pItem_Manager->Sell_ShopItem(eType, iIndex, iCount); }
+	void ChestItem_To_Inven(_int iIndex, _int iCount = 0) { m_pItem_Manager->ChestItem_To_Inven(iIndex, iCount); }
+	void InvenItem_To_Chest(INVEN_ARRAY_TYPE eType, _int iIndex, _int iCount = 0) { m_pItem_Manager->InvenItem_To_Chest(eType, iIndex, iCount); }
 
 #pragma endregion
 

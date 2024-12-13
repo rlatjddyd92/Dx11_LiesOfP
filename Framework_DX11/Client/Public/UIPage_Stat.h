@@ -59,6 +59,10 @@ public:
 		GROUP_POINT_RECT_3,
 		GROUP_POINT_RECT_4,
 
+		GROUP_STARCHART_STATIC,
+		GROUP_STARCHART_LEVELUP,
+		GROUP_STARCHART_ORIGIN,
+
 		GROUP_END
 	};
 
@@ -96,6 +100,8 @@ protected:
 	void Update_Focus(_float fTimeDelta);
 	void Update_SpecData(_float fTimeDelta);
 	void Update_StarChart(_float fTimeDelta);
+
+	void Input_LevelUp_Result();
 
 private:
 	_int m_iFocus_Point = -1;

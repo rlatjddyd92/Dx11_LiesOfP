@@ -138,7 +138,7 @@ public:
 public:
 	class CShader* m_pShaderCom = { nullptr };
 	class CVIBuffer_Rect* m_pVIBufferCom = { nullptr };
-	//class CVIBuffer_2DPolygon* m_pVIBuffer_2DPolygon_Com = { nullptr };
+	vector<CVIBuffer_2DPolygon*> m_vecVIBuffer_2DPolygon_Com;
 
 private:
 	HRESULT Ready_Components();

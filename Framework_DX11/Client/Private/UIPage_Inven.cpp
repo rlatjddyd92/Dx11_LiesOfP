@@ -267,7 +267,8 @@ void CUIPage_Inven::Update_Top_Part(_float fTimeDelta)
 		++iTap;
 	}
 
-	__super::Get_Front_Part_In_Control(_int(PART_GROUP::GROUP_COIN_COUNT))->strText = to_wstring(GET_GAMEINTERFACE->Get_Player()->Get_Player_Stat().iErgo);
+	_int iErgo = GET_GAMEINTERFACE->Get_Player()->Get_Player_Stat().iErgo + GET_GAMEINTERFACE->Get_Player()->Get_Player_Stat_Adjust()->iErgo;
+	__super::Get_Front_Part_In_Control(_int(PART_GROUP::GROUP_COIN_COUNT))->strText = to_wstring(iErgo);
 
 
 

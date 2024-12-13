@@ -89,9 +89,7 @@ public:
 
 	void Show_ItemPopup(_wstring strTitle, _wstring strInputTitle = TEXT("none"), _int iMin = 0, _int* pNow_Input = nullptr, _int iMax = 0, _wstring strCountTitle = TEXT("none"), _int iInterval = 0, _int* pNow_Count = nullptr);
 
-
-
-
+	void Show_ItemUsePopup(_wstring strTitle, _wstring strDescA, _bool bIsTop);
 
 public:
 	const vector<UPART*>& Get_UIPartInfo() { return m_vecPart; }
@@ -100,8 +98,8 @@ public:
 protected:
 	ITEMPOPUP_INFO* m_pItemPopup_Info = { nullptr };
 
-
-
+	_bool m_bItemUsePopUp = false;
+	_bool m_bTopBelt = false;
 
 
 

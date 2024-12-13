@@ -262,7 +262,8 @@ void CUIPage_Equip::Update_Equip_Page(_float fTimeDelta)
 		m_vec_Group_Ctrl[_int(PART_GROUP::GROUP_TOP_TAP_HIGHLIGHT_LINE)]->fRatio = 1.f;
 	}
 
-	__super::Get_Front_Part_In_Control(_int(PART_GROUP::GROUP_TOP_COIN_COUNT))->strText = to_wstring(GET_GAMEINTERFACE->Get_Player()->Get_Player_Stat().iErgo);
+	_int iErgo = GET_GAMEINTERFACE->Get_Player()->Get_Player_Stat().iErgo + GET_GAMEINTERFACE->Get_Player()->Get_Player_Stat_Adjust()->iErgo;
+	__super::Get_Front_Part_In_Control(_int(PART_GROUP::GROUP_TOP_COIN_COUNT))->strText = to_wstring(iErgo);
 
 	Update_Item_Cell(fTimeDelta);
 }
