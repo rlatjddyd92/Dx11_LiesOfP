@@ -112,12 +112,10 @@ void CState_Player_Flame_LAttack01::Control_Collider()
 
     if (m_iColliderStartFrame <= iFrame && iFrame <= m_iColliderEndFrame)
     {
-        m_pPlayer->Active_Effect(CPlayer::EFFECT_FLAME_SLASH);
         m_pPlayer->Active_CurrentWeaponCollider();
     }
     else
     {
-        m_pPlayer->DeActive_Effect(CPlayer::EFFECT_FLAME_SLASH);
         m_pPlayer->DeActive_CurretnWeaponCollider();
     }
 }

@@ -55,6 +55,7 @@ HRESULT CState_Player_Rapier_Fable::Start_State(void* pArg)
         m_isPlaySound[i] = false;
     }
 
+    m_pPlayer->Set_WeaponEffectType(CWeapon::ATK_EFFECT_SPECIAL1);
     m_pPlayer->Set_WeaponStrength(ATK_STRONG);
 
     return S_OK;
@@ -166,7 +167,6 @@ void CState_Player_Rapier_Fable::Control_Effect(_int iFrame)
 {
     if (!m_isActiveEffect[0] && (iFrame == m_iColliderStartFrame[0] || iFrame == m_iColliderStartFrame[0] + 1))
     {
-        m_pPlayer->Set_WeaponEffectType(CWeapon::ATK_EFFECT_SPECIAL1);
         //m_pPlayer->Active_Effect(CPlayer::EFFECT_RAPIER_TRAIL_FIRST);
         m_isActiveEffect[0] = true;
     }

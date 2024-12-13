@@ -6,6 +6,7 @@
 
 #include "GameInstance.h"
 #include "Effect_Manager.h"
+#include "Effect_Container.h"
 
 // 24-12-06 김성용
 // 내구도 조정 함수 연결을 위한 헤더 추가 
@@ -39,6 +40,9 @@ HRESULT CWeapon_FlameSword::Initialize(void* pArg)
 	if (FAILED(Ready_Components()))
 		return E_FAIL;
 
+	if (FAILED(Ready_Effect()))
+
+		return E_FAIL;
 	m_strObjectTag = TEXT("PlayerWeapon");
 	m_fDamageAmount = 10.f;
 
@@ -53,6 +57,33 @@ void CWeapon_FlameSword::Priority_Update(_float fTimeDelta)
 	if (!m_isActive)
 		return;
 
+	__super::Update(fTimeDelta);
+
+	if (m_iAttackType != ATK_EFFECT_NOTHING)
+	{
+		if (m_vVelocity.Length() > 0.005f)
+		{
+			if (m_iAttackType == ATK_EFFECT_SPECIAL1)
+			{
+				Active_Effect(EFFECT_STORMSLASH1, true);
+			}
+			else if (m_iAttackType == ATK_EFFECT_SPECIAL2)
+			{
+				DeActive_Effect(EFFECT_STORMSLASH1);
+				Active_Effect(EFFECT_STORMSLASH2, true);
+			}
+			else if (m_iAttackType == ATK_EFFECT_GENERAL)
+			{
+				Active_Effect(EFFECT_BASE, true);
+			}
+		}
+		else
+		{
+			DeActive_Effect(EFFECT_STORMSLASH1);
+			DeActive_Effect(EFFECT_STORMSLASH2);
+		}
+	}
+
 }
 
 void CWeapon_FlameSword::Update(_float fTimeDelta)
@@ -61,6 +92,27 @@ void CWeapon_FlameSword::Update(_float fTimeDelta)
 		return;
 
 	__super::Update(fTimeDelta);
+
+	if (m_iAttackType != ATK_EFFECT_NOTHING)
+	{
+		if (m_vVelocity.Length() > 0.005f)
+		{
+			if (m_iAttackType == ATK_EFFECT_SPECIAL1)
+			{
+				Active_Effect(EFFECT_STORMSLASH1, true);
+			}
+			else if (m_iAttackType == ATK_EFFECT_SPECIAL2)
+			{
+				DeActive_Effect(EFFECT_STORMSLASH1);
+				Active_Effect(EFFECT_STORMSLASH2, true);
+			}
+		}
+		else
+		{
+			DeActive_Effect(EFFECT_STORMSLASH1);
+			DeActive_Effect(EFFECT_STORMSLASH2);
+		}
+	}
 
 	m_pColliderCom->Update(&m_WorldMatrix);
 }
@@ -206,6 +258,28 @@ HRESULT CWeapon_FlameSword::Ready_Components()
 
 
 	return S_OK;
+}
+
+HRESULT CWeapon_FlameSword::Ready_Effect()
+{
+	if (FAILED(__super::Ready_Effect()))
+		return E_FAIL;
+
+	m_Effects.resize(EFFECT_END);
+
+	m_Effects[EFFECT_DEFAULT] = m_pEffect_Manager->Clone_Effect(TEXT("Player_FlameSword_Default"), m_pParentMatrix,
+		m_pSocketMatrix, _Vec3(0.f, 0.f, 0.f), _Vec3(0.f, 0.f, 0.f), _Vec3(1.f, 1.f, 1.f));
+
+	m_Effects[EFFECT_BASE] = m_pEffect_Manager->Clone_Effect(TEXT("Player_Attack_FlameSword_Slash"), m_pParentMatrix,
+		m_pSocketMatrix, _Vec3(0.f, 0.f, 0.f), _Vec3(0.f, 0.f, 0.f), _Vec3(1.f, 1.f, 1.f));
+
+	m_Effects[EFFECT_STORMSLASH1] = m_pEffect_Manager->Clone_Effect(TEXT("Player_Attack_FlameSword_StormSlash_First"), m_pParentMatrix,
+		m_pSocketMatrix, _Vec3(0.f, 0.f, 0.f), _Vec3(0.f, 0.f, 0.f), _Vec3(1.f, 1.f, 1.f));
+
+	m_Effects[EFFECT_STORMSLASH2] = m_pEffect_Manager->Clone_Effect(TEXT("Player_Attack_FlameSword_StormSlash_Second"), m_pParentMatrix,
+		m_pSocketMatrix, _Vec3(0.f, 0.f, 0.f), _Vec3(0.f, 0.f, 0.f), _Vec3(1.f, 1.f, 1.f));
+
+	return E_NOTIMPL;
 }
 
 CWeapon_FlameSword* CWeapon_FlameSword::Create(ID3D11Device* pDevice, ID3D11DeviceContext* pContext)
