@@ -71,6 +71,9 @@
 #include "C:\Users\olivi\GitHub\Dx11_LiesOfP\Framework_DX11\Tools\private\Particle_Effect.cpp"
 
 
+#include "C:\Users\olivi\GitHub\Dx11_LiesOfP\Framework_DX11\Tools\Private\Scissor_Handle.cpp"
+
+
 #include "C:\Users\olivi\GitHub\Dx11_LiesOfP\Framework_DX11\Tools\Private\Sky.cpp"
 
 

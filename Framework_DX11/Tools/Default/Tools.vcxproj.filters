@@ -142,6 +142,15 @@
     <Filter Include="02.GameObjects\03.AnimModel\GodHand_CutScene">
       <UniqueIdentifier>{458f6429-0f8d-4e3d-bb6d-9a00197580ff}</UniqueIdentifier>
     </Filter>
+    <Filter Include="02.GameObjects\03.AnimModel\Scissor">
+      <UniqueIdentifier>{d9ba96c0-9376-461b-acf3-7e6053ecd5be}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.GameObjects\03.AnimModel\Scissor\Handle">
+      <UniqueIdentifier>{90ff61d1-ee54-4a66-b0ba-911d4ba3a9e2}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.GameObjects\03.AnimModel\Scissor\Blade">
+      <UniqueIdentifier>{103bbdf4-1022-4cc8-bb6d-6a41b23d18d3}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="framework.h">
@@ -315,6 +324,9 @@
     <ClInclude Include="..\Public\GodHand_CutScene.h">
       <Filter>02.GameObjects\03.AnimModel\GodHand_CutScene</Filter>
     </ClInclude>
+    <ClInclude Include="..\Public\Scissor_Handle.h">
+      <Filter>02.GameObjects\03.AnimModel\Scissor\Handle</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <Image Include="small.ico">
@@ -468,6 +480,9 @@
     </ClCompile>
     <ClCompile Include="..\Private\GodHand_CutScene.cpp">
       <Filter>02.GameObjects\03.AnimModel\GodHand_CutScene</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Private\Scissor_Handle.cpp">
+      <Filter>02.GameObjects\03.AnimModel\Scissor\Handle</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
