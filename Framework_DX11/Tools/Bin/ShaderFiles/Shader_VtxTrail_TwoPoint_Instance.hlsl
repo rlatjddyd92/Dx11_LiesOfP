@@ -541,10 +541,13 @@ PS_OUT PS_TRAIL_BLEND_R_MAIN(PS_IN In)
     float2 vTexcoord = In.vTexcoord * g_vTileRepeat;
     vector vColor = g_DiffuseTexture.Sample(LinearSampler, vTexcoord);
     
-    vColor.gb = vColor.r;
+    vColor.gba = vColor.r;
     vColor.rgb *= g_vColor.rgb;
-    vColor.rgb *= 1.f - ((In.vTexcoord.x + In.fIndex) / (float) g_iNumInstance + g_fRatio);
+    vColor.a *= 1.f - ((In.vTexcoord.x + In.fIndex) / (float) g_iNumInstance + g_fRatio);
 
+    if(vColor.a < 0.1f)
+        discard;
+    
     Out.vColor = vColor;
     
     return Out;
@@ -557,10 +560,13 @@ PS_OUT PS_TRAIL_BLEND_G_MAIN(PS_IN In)
     float2 vTexcoord = In.vTexcoord * g_vTileRepeat;
     vector vColor = g_DiffuseTexture.Sample(LinearSampler, vTexcoord);
     
-    vColor.rb = vColor.g;
+    vColor.rba = vColor.g;
     vColor.rgb *= g_vColor.rgb;
-    vColor.rgb *= 1.f - ((In.vTexcoord.x + In.fIndex) / (float) g_iNumInstance + g_fRatio);
-
+    vColor.a *= 1.f - ((In.vTexcoord.x + In.fIndex) / (float) g_iNumInstance + g_fRatio);
+    
+    if (vColor.a < 0.1f)
+        discard;
+    
     Out.vColor = vColor;
     
     return Out;
