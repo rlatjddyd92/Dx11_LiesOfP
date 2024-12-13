@@ -39,13 +39,21 @@ HRESULT CLevel_GamePlay::Initialize()
 	if (FAILED(m_pImGui_Manager->Initialize(m_pDevice, m_pContext)))
 		return E_FAIL;
 
-	//CNonAnimModel::NONMODEL_DESC Desc{};
-	//Desc.vPosition = { 0.f, 0.f, 0.f };
-	//Desc.vScale = { 1.f,1.f,1.f };
-	//Desc.vRotation = { 0.f,0.f,0.f };
-	//Desc.iRenderGroupID = 0;
-	//strcpy_s(Desc.szModelTag, "Prototype_NoneAnimModel_Raxasia_Sword01");
-	//if (FAILED(m_pGameInstance->Add_CloneObject_ToLayer(LEVEL_TOOL, TEXT("Layer_Weapon"), TEXT("Prototype_GameObject_NonAnim"), &Desc)))
+
+	CNonAnimModel::NONMODEL_DESC Desc{};
+	Desc.vPosition = { 0.f, 0.f, 0.f };
+	Desc.vScale = { 1.f,1.f,1.f };
+	Desc.vRotation = { 0.f,0.f,0.f };
+	Desc.iRenderGroupID = 0;
+	strcpy_s(Desc.szModelTag, "Prototype_Component_Model_FlameSword");
+	if (FAILED(m_pGameInstance->Add_CloneObject_ToLayer(LEVEL_TOOL, TEXT("Layer_Weapon"), TEXT("Prototype_GameObject_NonAnim"), &Desc)))
+		return E_FAIL;
+
+
+	if (FAILED(m_pGameInstance->Add_CloneObject_ToLayer(LEVEL_TOOL, TEXT("Layer_BackGround"), TEXT("Prototype_GameObject_CutSceneodHand"))))
+		return E_FAIL;
+
+	//if (FAILED(m_pGameInstance->Add_CloneObject_ToLayer(LEVEL_TOOL, TEXT("Layer_BackGround"), TEXT("Prototype_GameObject_ScissorHandle"))))
 	//	return E_FAIL;
 
 	return S_OK;
@@ -118,12 +126,6 @@ HRESULT CLevel_GamePlay::Ready_Layer_Camera()
 HRESULT CLevel_GamePlay::Ready_Layer_BackGround()
 {
 	if (FAILED(m_pGameInstance->Add_CloneObject_ToLayer(LEVEL_TOOL, TEXT("Layer_BackGround"), TEXT("Prototype_GameObject_Sky"))))
-		return E_FAIL;
- 
-	if (FAILED(m_pGameInstance->Add_CloneObject_ToLayer(LEVEL_TOOL, TEXT("Layer_BackGround"), TEXT("Prototype_GameObject_CutSceneodHand"))))
-		return E_FAIL;
-
-	if (FAILED(m_pGameInstance->Add_CloneObject_ToLayer(LEVEL_TOOL, TEXT("Layer_BackGround"), TEXT("Prototype_GameObject_ScissorHandle"))))
 		return E_FAIL;
 
 	/*if (FAILED(m_pGameInstance->Add_CloneObject_ToLayer(LEVEL_TOOL, TEXT("Layer_BackGround"), TEXT("Prototype_GameObject_Terrain"))))
