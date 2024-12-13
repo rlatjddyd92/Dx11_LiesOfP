@@ -245,7 +245,7 @@ void CWeapon::Active_Effect(const _uint& iType, _bool isLoop)
 {
 	if (isLoop)
 	{
-		if (m_Effects[iType]->Get_Dead())
+		if (!m_Effects[iType]->Get_Loop())
 			m_Effects[iType]->Set_Loop(true);
 	}
 	else

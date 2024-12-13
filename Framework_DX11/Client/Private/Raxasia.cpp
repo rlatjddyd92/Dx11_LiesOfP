@@ -853,6 +853,7 @@ void CRaxasia::Free()
 	Safe_Release(m_pExtraModelCom);
 	Safe_Release(m_pCutSceneModelCom[0]);
 	Safe_Release(m_pCutSceneModelCom[1]);
+	Safe_Release(m_pKickCollObj);
 
 	if (true == m_isCloned)
 	{

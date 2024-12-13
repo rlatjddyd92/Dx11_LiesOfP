@@ -145,7 +145,7 @@ HRESULT CPlayer::Initialize(void * pArg)
 	//m_pNavigationCom->Move_to_Cell(m_pRigidBodyCom, 427); //짧은사다리
 	//m_pNavigationCom->Move_to_Cell(m_pRigidBodyCom, 341); //아래엘베
 	//m_pNavigationCom->Move_to_Cell(m_pRigidBodyCom, 440); //상자랑 장애물
-	m_pNavigationCom->Move_to_Cell(m_pRigidBodyCom, 1066); // 순간이동 790
+	//m_pNavigationCom->Move_to_Cell(m_pRigidBodyCom, 1066); // 순간이동 790
 	//m_pNavigationCom->Move_to_Cell(m_pRigidBodyCom, 790); // 순간이동 1066
 	//m_pNavigationCom->Move_to_Cell(m_pRigidBodyCom, 1066); // 순간이동 790
 	//m_pNavigationCom->Move_to_Cell(m_pRigidBodyCom, 801); // 소피아 방
@@ -662,7 +662,7 @@ void CPlayer::Active_Effect(const EFFECT_TYPE& eType, _bool isLoop)
 {
 	if (isLoop)
 	{
-		if(m_Effects[eType]->Get_Dead())
+		if(!m_Effects[eType]->Get_Loop())
 			m_Effects[eType]->Set_Loop(true);
 	}
 	else
@@ -1582,7 +1582,7 @@ HRESULT CPlayer::Ready_Effect()
 	m_Effects[EFFECT_FLAME_BASE] = m_pEffect_Manager->Clone_Effect(TEXT("Player_FlameSword_Default"), pParetnMatrix,
 		pSocketBoneMatrix, _Vec3(0.f, 0.f, 0.f), _Vec3(0.f, 0.f, 0.f), _Vec3(1.f, 1.f, 1.f));
 
-	m_Effects[EFFECT_FLAME_SLASH] = m_pEffect_Manager->Clone_Effect(TEXT("Player_Attack_FlameSword_Normal"), pParetnMatrix,
+	m_Effects[EFFECT_FLAME_SLASH] = m_pEffect_Manager->Clone_Effect(TEXT("Player_Attack_FlameSword_Slash"), pParetnMatrix,
 		pSocketBoneMatrix, _Vec3(0.f, 0.f, 0.f), _Vec3(0.f, 0.f, 0.f), _Vec3(1.f, 1.f, 1.f));
 
 	m_Effects[EFFECT_FLAME_STORMSLASH_FIRST] = m_pEffect_Manager->Clone_Effect(TEXT("Player_Attack_FlameSword_StormSlash_First"), pParetnMatrix,

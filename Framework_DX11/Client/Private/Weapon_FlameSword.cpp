@@ -123,7 +123,7 @@ void CWeapon_FlameSword::OnCollisionEnter(CGameObject* pOther)
 			if (pMonster->Calc_DamageGain(m_fDamageAmount * m_fDamageRatio))
 			{
 
-				CEffect_Manager::Get_Instance()->Add_Effect_ToLayer(LEVEL_GAMEPLAY, TEXT("Player_Attack_FlameSword_Slash"),
+				CEffect_Manager::Get_Instance()->Add_Effect_ToLayer(LEVEL_GAMEPLAY, TEXT("Player_Attack_Slash_FlameSword_Normal"),
 					(_Vec3)pMonster->Calc_CenterPos(), m_vAttackDir);
 
 				CEffect_Manager::Get_Instance()->Add_Effect_ToLayer(LEVEL_GAMEPLAY, TEXT("Player_Attack_Blood_FlameSword"),

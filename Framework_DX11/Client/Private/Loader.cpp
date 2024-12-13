@@ -1193,6 +1193,7 @@ HRESULT CLoader::Ready_Prototype()
 	/* For. Prototype_GameObject_CutScene_SimonManus_EnvHand */
 	if (FAILED(m_pGameInstance->Add_Prototype(TEXT("Prototype_GameObject_CutScene_SimonManus_EnvHand"),
 		CSimonManus_EnvHand::Create(m_pDevice, m_pContext))))
+		return E_FAIL;
 
 
 #pragma endregion
