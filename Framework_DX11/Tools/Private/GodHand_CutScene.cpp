@@ -182,7 +182,7 @@ HRESULT CGodHand_CutScene::Render()
 		// EMISSIVE
 		if (nullptr != m_pModelCom->Find_Texture((_uint)i, TEXTURE_TYPE::EMISSIVE))
 		{
-			m_fEmissive = 0.3f;
+			m_fEmissive = 1.f;
 			if (FAILED(m_pModelCom->Bind_Material(m_pShaderCom, "g_EmessiveTexture", EMISSIVE, (_uint)i)))
 				return E_FAIL;
 		}

@@ -29,7 +29,7 @@ HRESULT CController_Cutscene::Initialize(ID3D11Device* pDevice, ID3D11DeviceCont
     if (m_CutSceneList[0] == nullptr)
     {
         CGameObject* pCutScene = nullptr;
-        for (int i = 0; i < m_iCutSceneCount; ++i)
+        for (_uint i = 0; i < m_iCutSceneCount; ++i)
         {
             pCutScene = m_pGameInstance->Get_CloneObject_ToLayer(LEVEL_TOOL, TEXT("Layer_CutScene"), TEXT("Prototype_GameObject_CutScene"));
             if (nullptr != pCutScene)
@@ -72,7 +72,7 @@ void CController_Cutscene::Menu()
         ImGui::PushItemWidth(180);  //사이즈 고정
         if (ImGui::BeginListBox("Name"))
         {
-            for (int n = 0; n < m_iCutSceneCount; n++)
+            for (_uint n = 0; n < m_iCutSceneCount; n++)
             {
                 const bool is_selected = (item_selected_idx == n);
                 if (ImGui::Selectable(m_CutSceneNameList[n], is_selected))

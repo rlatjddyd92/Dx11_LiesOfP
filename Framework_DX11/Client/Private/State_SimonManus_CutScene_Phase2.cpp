@@ -37,7 +37,7 @@ void CState_SimonManus_CutScene_Phase2::Update(_float fTimeDelta)
         if (m_pMonster->Get_EndAnim(m_iAnimation_Change))
         {
             m_pMonster->Change_Model(0);
-            m_iAnimation_Connectgod = m_pMonster->Get_Model()->Find_AnimationIndex("AS_Manus_Phase_2_P2_Connect_God", 2.f);
+            m_iAnimation_Connectgod = m_pMonster->Get_Model()->Find_AnimationIndex("AS_Manus_Phase_2_P2_Connect_God", 1.5f);
             m_iAnimation_Begod = m_pMonster->Get_Model()->Find_AnimationIndex("AS_Manus_Phase_2_P2_be_God", 2.f);
             m_pMonster->Change_Animation(m_iAnimation_Connectgod, false, 0.1f, 0);
             m_isChangePhase2 = true;

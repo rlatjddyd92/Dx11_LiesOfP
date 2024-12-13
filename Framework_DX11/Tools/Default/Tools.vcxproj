@@ -60,6 +60,7 @@
     <ClInclude Include="..\Public\NavigationController.h" />
     <ClInclude Include="..\Public\NonAnimModel.h" />
     <ClInclude Include="..\public\Particle_Effect.h" />
+    <ClInclude Include="..\Public\Scissor_Blade.h" />
     <ClInclude Include="..\Public\Scissor_Handle.h" />
     <ClInclude Include="..\Public\Sky.h" />
     <ClInclude Include="..\Public\stb_image.h" />
@@ -120,6 +121,7 @@
     <ClCompile Include="..\Private\NavigationController.cpp" />
     <ClCompile Include="..\Private\NonAnimModel.cpp" />
     <ClCompile Include="..\private\Particle_Effect.cpp" />
+    <ClCompile Include="..\Private\Scissor_Blade.cpp" />
     <ClCompile Include="..\Private\Scissor_Handle.cpp" />
     <ClCompile Include="..\Private\Sky.cpp" />
     <ClCompile Include="..\Private\TargetBall.cpp" />

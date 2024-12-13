@@ -327,6 +327,9 @@
     <ClInclude Include="..\Public\Scissor_Handle.h">
       <Filter>02.GameObjects\03.AnimModel\Scissor\Handle</Filter>
     </ClInclude>
+    <ClInclude Include="..\Public\Scissor_Blade.h">
+      <Filter>02.GameObjects\03.AnimModel\Scissor\Blade</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <Image Include="small.ico">
@@ -483,6 +486,9 @@
     </ClCompile>
     <ClCompile Include="..\Private\Scissor_Handle.cpp">
       <Filter>02.GameObjects\03.AnimModel\Scissor\Handle</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Private\Scissor_Blade.cpp">
+      <Filter>02.GameObjects\03.AnimModel\Scissor\Blade</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

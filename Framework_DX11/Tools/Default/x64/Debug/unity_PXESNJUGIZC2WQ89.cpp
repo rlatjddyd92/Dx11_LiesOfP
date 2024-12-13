@@ -38,6 +38,9 @@
 #include "D:\GitProject\Dx11_LiesOfP\Framework_DX11\Tools\Private\FreeCamera.cpp"
 
 
+#include "D:\GitProject\Dx11_LiesOfP\Framework_DX11\Tools\Private\GodHand_CutScene.cpp"
+
+
 #include "D:\GitProject\Dx11_LiesOfP\Framework_DX11\Tools\Private\ImGui_Manager.cpp"
 
 
@@ -66,6 +69,12 @@
 
 
 #include "D:\GitProject\Dx11_LiesOfP\Framework_DX11\Tools\private\Particle_Effect.cpp"
+
+
+#include "D:\GitProject\Dx11_LiesOfP\Framework_DX11\Tools\Private\Scissor_Blade.cpp"
+
+
+#include "D:\GitProject\Dx11_LiesOfP\Framework_DX11\Tools\Private\Scissor_Handle.cpp"
 
 
 #include "D:\GitProject\Dx11_LiesOfP\Framework_DX11\Tools\Private\Sky.cpp"

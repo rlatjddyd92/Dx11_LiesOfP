@@ -4,6 +4,8 @@
 #include "GameInstance.h"
 #include "ImGui_Manager.h"
 
+#include "Scissor_Blade.h"
+
 #include "Controller_EffectTool.h"
 
 CScissor_Handle::CScissor_Handle(ID3D11Device* pDevice, ID3D11DeviceContext* pContext)
@@ -32,123 +34,42 @@ HRESULT CScissor_Handle::Initialize(void* pArg)
 	if (FAILED(Ready_Components()))
 		return E_FAIL;
 
-	m_pTransformCom->Set_Scaled(10.f, 10.f, 10.f);
-	m_pTransformCom->Set_State(CTransform::STATE_POSITION, _Vec3(0.3f, 17.45f, 0.7f));
-	m_pTransformCom->Rotation(_vector{ 0, 1, 0, 0 }, XMConvertToRadians(50.f));
+	if (FAILED(Ready_Blade()))
+		return E_FAIL;
+	//m_pTransformCom->Set_Scaled(10.f, 10.f, 10.f);
+	//m_pTransformCom->Set_State(CTransform::STATE_POSITION, _Vec3(0.3f, 17.45f, 0.7f));
+	//m_pTransformCom->Rotation(_vector{ 0, 1, 0, 0 }, XMConvertToRadians(50.f));
 
-
-	m_pModelCom->SetUp_Animation(0, false);
+	m_bRender = true;
 
 	return S_OK;
 }
 
 void CScissor_Handle::Priority_Update(_float fTimeDelta)
 {
+	Change_ScissorType();
+
+	if(m_pBlade != nullptr)
+		m_pBlade->Priority_Update(fTimeDelta);
 }
 
 void CScissor_Handle::Update(_float fTimeDelta)
 {
-	/*if ((GetKeyState(VK_LBUTTON) & 0x8000) &&
-		true == m_pVIBufferCom->isPicking(m_pTransformCom->Get_WorldMatrix(), &vPickPos))
-	{
-		if (CImGui_Manager::Get_Instance()->Get_IsPicking())
-		{
-			CImGui_Manager::Get_Instance()->Set_ModelPos(vPickPos);
-		}
-	}*/
-
-	static _float fX = 0.3f;
-	static _float fY = 17.45f;
-	static _float fZ = 0.7f;
-
-	if (KEY_TAP(KEY::NUM1))
-	{
-		fX -= 0.05f;
-	}
-	else if (KEY_TAP(KEY::NUM4))
-	{
-		fX += 0.05f;
-	}
-
-	if (KEY_TAP(KEY::NUM2))
-	{
-		fY -= 0.05f;
-	}
-	else if (KEY_TAP(KEY::NUM5))
-	{
-		fY += 0.05f;
-	}
-
-	if (KEY_TAP(KEY::NUM3))
-	{
-		fZ -= 0.05f;
-	}
-	else if (KEY_TAP(KEY::NUM6))
-	{
-		fZ += 0.05f;
-	}
-
-	_Vec3 vNewPos = _Vec3(fX, fY, fZ);
-	m_pTransformCom->Set_State(CTransform::STATE_POSITION, vNewPos);
-
-
-	if (KEY_TAP(KEY::R))
-		m_bRender = !m_bRender;
-
-	if (KEY_TAP(KEY::C))
-		m_bSubRootMove = !m_bSubRootMove;
-
-	if (KEY_TAP(KEY::E))
-	{
-		m_bRemoteTuning = !m_bRemoteTuning;
-		m_pModelCom->Set_RemoteTuning(m_bRemoteTuning);
-	}
-
-	_bool	bEndCheck{ false };
-	_vector vRootMove = m_pModelCom->Play_Animation(fTimeDelta);
-
-
-	_vector vPos = m_pTransformCom->Get_State(CTransform::STATE_POSITION);
-
-	vRootMove = XMVector3TransformNormal(vRootMove, m_pTransformCom->Get_WorldMatrix());
-
-	if (m_bSubRootMove && !m_pModelCom->Get_isChangeAni())
-	{
-		_Vec3 vMove = m_pModelCom->Get_BoneCombindTransformationMatrix_Ptr(m_iSubRootBone)->Translation();
-		_float4x4 TransMat;
-		XMStoreFloat4x4(&TransMat, m_pModelCom->Get_Bones()[m_iSubRootBone]->Get_TransformationMatrix());
-		//TransMat._43 = TransMat._42 = TransMat._41 = 0.f;
-		TransMat._41 = 0.f;
-
-		m_pModelCom->Get_Bones()[m_iSubRootBone]->Set_TransformationMatrix(TransMat);;
-
+	if (nullptr != m_pModelCom)
 		m_pModelCom->Update_Bone();
 
-		vMove = XMVector3TransformNormal(vMove, m_pTransformCom->Get_WorldMatrix());
-
-		vMove.y = 0;
-
-		//m_pRigidBody->Set_Velocity((vMove - m_vRootMoveStack) / fTimeDelta);
-
-		m_pTransformCom->Set_State(CTransform::STATE_POSITION, _Vec3{ vPos } + (vMove - _Vec3{ m_vSubRootMoveStack }));
-
-		m_vSubRootMoveStack = vMove;
-	}
-
-	vPos = m_pTransformCom->Get_State(CTransform::STATE_POSITION);
-
-	m_pTransformCom->Set_State(CTransform::STATE_POSITION, vPos + vRootMove - m_vRootMoveStack);
-
-
-
+	if (m_pBlade != nullptr)
+		m_pBlade->Update(fTimeDelta);
 }
 
 void CScissor_Handle::Late_Update(_float fTimeDelta)
 {
 	__super::Late_Update(fTimeDelta);
 
-	if (true == m_bRender)
-		m_pGameInstance->Add_RenderObject(CRenderer::RG_NONBLEND, this);
+	if (m_pBlade != nullptr)
+		m_pBlade->Late_Update(fTimeDelta);
+
+	m_pGameInstance->Add_RenderObject(CRenderer::RG_NONBLEND, this);
 }
 
 HRESULT CScissor_Handle::Render()
@@ -211,6 +132,9 @@ HRESULT CScissor_Handle::Render()
 			return E_FAIL;
 	}
 
+	if (m_pBlade != nullptr)
+		m_pBlade->Render();
+
 	return S_OK;
 }
 
@@ -222,31 +146,74 @@ HRESULT CScissor_Handle::Ready_Components()
 		return E_FAIL;
 
 	/* FOR.Com_Model */
-	if (FAILED(__super::Add_Component(LEVEL_TOOL, TEXT("Prototype_AnimModel_SimonManus_CutSceneGodHand"),
+	if (FAILED(__super::Add_Component(LEVEL_TOOL, TEXT("Prototype_Component_Model_Scissor_Left_Hnd"),
 		TEXT("Com_Model"), reinterpret_cast<CComponent**>(&m_pModelCom))))
+		return E_FAIL;
+
+	m_eType = SCISSOR_LEFT;
+
+	return S_OK;
+}
+
+HRESULT CScissor_Handle::Ready_Blade()
+{
+	CScissor_Blade::BLADE_DESC ScissorDesc;
+	ScissorDesc.pParentWorldMatrix = m_pTransformCom->Get_WorldMatrix_Ptr();
+	ScissorDesc.pSocketBoneMatrix = m_pModelCom->Get_BoneCombindTransformationMatrix_Ptr("BN_Blade");
+
+	if (m_eType == SCISSOR_LEFT)
+	{
+		ScissorDesc.iWeaponType = SCISSOR_LEFT;
+		m_pBlade = dynamic_cast<CScissor_Blade*>(m_pGameInstance->Clone_GameObject(TEXT("Prototype_GameObject_ScissorBlade"), &ScissorDesc));
+	}
+	else if (m_eType == SCISSOR_RIGHT)
+	{
+		ScissorDesc.iWeaponType = SCISSOR_RIGHT;
+		m_pBlade = dynamic_cast<CScissor_Blade*>(m_pGameInstance->Clone_GameObject(TEXT("Prototype_GameObject_ScissorBlade"), &ScissorDesc));
+		if (nullptr == m_pBlade)
+			return E_FAIL;
+	}
+
+	if (nullptr == m_pBlade)
 		return E_FAIL;
 
 	return S_OK;
 }
 
-CComponent* CScissor_Handle::Change_Component(const _wstring& strComponentTag, CComponent* pComponent, _uint iPartObjIndex)
+HRESULT CScissor_Handle::Change_ScissorType()
 {
-	CComponent* pOut = __super::Find_Component(strComponentTag);
-	if (pOut != nullptr)
+	if (KEY_TAP(KEY::Z))
 	{
-		Safe_Release(pOut);
-		m_Components.erase(strComponentTag);
-	}
-	m_Components.emplace(strComponentTag, pComponent);
+		if (m_eType == SCISSOR_LEFT)
+			return S_OK;
 
-	if (strComponentTag == TEXT("Com_Model"))
+		Safe_Release(m_pModelCom);
+		Safe_Release(m_pBlade);
+
+		m_pModelCom = static_cast<CModel*>(m_pGameInstance->Clone_Component(LEVEL_TOOL, TEXT("Prototype_Component_Model_Scissor_Left_Hnd")));
+
+		m_eType = SCISSOR_LEFT;
+
+		if (FAILED(Ready_Blade()))
+			return E_FAIL;
+	}
+	else if (KEY_TAP(KEY::X))
 	{
-		m_pModelCom = dynamic_cast<CModel*>(pComponent);
+		if (m_eType == SCISSOR_RIGHT)
+			return S_OK;
+
+		Safe_Release(m_pModelCom);
+		Safe_Release(m_pBlade);
+
+		m_pModelCom = static_cast<CModel*>(m_pGameInstance->Clone_Component(LEVEL_TOOL, TEXT("Prototype_Component_Model_Scissor_Right_Hnd")));
+
+		m_eType = SCISSOR_RIGHT;
+
+		if (FAILED(Ready_Blade()))
+			return E_FAIL;
 	}
 
-	Safe_AddRef(pComponent);
-
-	return pOut;
+	return S_OK;
 }
 
 CScissor_Handle* CScissor_Handle::Create(ID3D11Device* pDevice, ID3D11DeviceContext* pContext)
@@ -281,6 +248,7 @@ void CScissor_Handle::Free()
 {
 	__super::Free();
 
+	Safe_Release(m_pBlade);
 	Safe_Release(m_pShaderCom);
 	Safe_Release(m_pModelCom);
 }
