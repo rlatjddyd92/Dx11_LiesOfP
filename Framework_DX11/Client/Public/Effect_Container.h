@@ -34,8 +34,13 @@ public:
 	void Set_Cloned(_bool isCloned) {
 		m_isCloned = isCloned;
 	}
+
 	_bool Get_Cloned() {
 		return m_isCloned;
+	}
+
+	_bool Get_Loop() {
+		return m_isLoop;
 	}
 
 public:
@@ -61,6 +66,7 @@ private:
 	const _Matrix* m_pSocketMatrix = { nullptr };
 
 	_bool m_isCloned = { false };
+	_bool m_isLoop = { false };
 
 public:
 	static CEffect_Container* Create(ID3D11Device* pDevice, ID3D11DeviceContext* pContext);
