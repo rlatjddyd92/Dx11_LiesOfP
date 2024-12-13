@@ -37,7 +37,7 @@ HRESULT CGodHand_CutScene::Initialize(void* pArg)
 	m_pTransformCom->Rotation(_vector{ 0, 1, 0, 0 }, XMConvertToRadians(50.f));
 
 
-	m_pModelCom->SetUp_Animation(0, false);
+	m_pModelCom->SetUp_Animation(0, true);
 
 	return S_OK;
 }
