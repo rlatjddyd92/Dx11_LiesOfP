@@ -156,7 +156,7 @@ PS_OUT_MODEL PS_MAIN(PS_IN_ANIMODEL In)
     Out.vNormal = vector(In.vNormal.xyz * 0.5f + 0.5f, 0.f);
     Out.vDepth = vector(In.vProjPos.z / In.vProjPos.w, In.vProjPos.w / g_fFar, 0.f, 0.f); // 0~F사이의 깊이, 정규화된 Z값
     Out.vARM = g_ARMTexture.Sample(LinearSampler, In.vTexcoord);
-    Out.vEmessive = vEmissive * g_fEmessiveMask;
+    Out.vEmessive = vEmissive * g_fEmessiveMask * 0.5f;
     Out.vRimLight = g_vRimLight;
 
     return Out;
@@ -187,7 +187,7 @@ PS_OUT_MODEL PS_MAIN_NORMAL(PS_IN_NORMAL In)
     Out.vNormal = vector(vNormal.xyz * 0.5f + 0.5f, 0.f);
     Out.vDepth = vector(In.vProjPos.z / In.vProjPos.w, In.vProjPos.w / g_fFar, 0.f, 0.f);
     Out.vARM = g_ARMTexture.Sample(LinearSampler, In.vTexcoord);
-    Out.vEmessive = vEmissive * g_fEmessiveMask;
+    Out.vEmessive = vEmissive * g_fEmessiveMask * 0.5f;
     Out.vRimLight = g_vRimLight;
 
     return Out;
