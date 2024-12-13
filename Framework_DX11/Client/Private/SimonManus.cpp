@@ -335,7 +335,11 @@ void CSimonManus::Start_CutScene(_uint iCutSceneNum)
 		break;
 	case CUTSCENE_P2:
 		m_pModelCom = m_pCutSceneModelCom[MODEL_PHASE1];
-		//m_pCutSceneFsmCom->Set_State(STATE_P2);
+		pNewSocketMatrix = m_pModelCom->Get_BoneCombindTransformationMatrix_Ptr("Bn_Weapon_R");
+		m_pWeapon->ChangeSocketMatrix(pNewSocketMatrix);
+		m_pCutSceneFsmCom->Set_State(STATE_P2);
+		m_isPlayAnimation = true;
+		Deactiave_Weapon();
 		break;
 	case CUTSCENE_DIE:
 		m_pModelCom = m_pCutSceneModelCom[MODEL_PHASE2];
@@ -361,6 +365,7 @@ void CSimonManus::End_CutScene(_uint iCutSceneNum)
 void CSimonManus::Change_Model(_uint iModelNum)	// 컷신 2페이즈로 바꾸는 용도
 {
 	m_pModelCom = m_pCutSceneModelCom[1];
+	Deactiave_Weapon();
 }
 
 HRESULT CSimonManus::Ready_Components()

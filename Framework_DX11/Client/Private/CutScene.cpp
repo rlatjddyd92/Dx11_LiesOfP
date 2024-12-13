@@ -5,6 +5,7 @@
 #include "Camera.h"
 #include "Camera_Manager.h"
 #include "Pawn.h"
+#include "SimonManus.h"
 
 CCutScene::CCutScene(ID3D11Device* pDevice, ID3D11DeviceContext* pContext)
 	: CGameObject{ pDevice, pContext }
@@ -200,6 +201,8 @@ void CCutScene::First_Setting()
 
 	GET_GAMEINTERFACE->UIPart_Off();
 
+	_Vec3 vInitPos = {};
+
 	switch (m_iIndex)
 	{
 	case SOPHIA_DEAD:
@@ -209,14 +212,17 @@ void CCutScene::First_Setting()
 		if (FAILED(m_pGameInstance->Add_CloneObject_ToLayer(LEVEL_GAMEPLAY, TEXT("Layer_SimonManus"), TEXT("Prototype_GameObject_SimonManus"))))
 			return;
 
-		_Vec3 vInitPos = _Vec3(16.606f, 0.104f, -16.498f);
+		vInitPos = _Vec3(16.606f, 0.104f, -16.498f);
 		pPlayer->Get_RigidBody()->Set_GloblePose(vInitPos);
 		pPlayer->Get_Navigation()->Research_Cell(vInitPos);
 		pPlayer->Get_Transform()->Rotation(0.f, -45.f, 0.f);
 		pPlayer->Disappear_Weapon();
 		//m_pObjects[BOSS2] = static_cast<CPawn*>(m_pGameInstance->Find_Object(LEVEL_GAMEPLAY, TEXT("Layer_SimonManus"), 0));
 		break;
-
+	case BOSS2_PHASE2:
+		pPlayer->IsActive(false);
+		static_cast<CSimonManus*>(m_pGameInstance->Find_Object(LEVEL_GAMEPLAY, TEXT("Layer_SimonManus"), 0))->Start_CutScene(1);
+		break;
 	}
 }
 
@@ -261,7 +267,11 @@ void CCutScene::End_Setting()
 		pPlayer->Appear_Weapon();
 		static_cast<CPawn*>(m_pGameInstance->Find_Object(LEVEL_GAMEPLAY, TEXT("Layer_SimonManus"), 0))->End_CutScene(0);
 	}
-
+	else if (m_iIndex == BOSS2_PHASE2)
+	{
+		pPlayer->IsActive(true);
+		//static_cast<CPawn*>(m_pGameInstance->Find_Object(LEVEL_GAMEPLAY, TEXT("Layer_SimonManus"), 0))->End_CutScene(1);
+	}
 	pPlayer->Get_Camera()->Move_PlayerBackPos();
 }
 
