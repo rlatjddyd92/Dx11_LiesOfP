@@ -91,7 +91,14 @@ void CAnimModel::Update(_float fTimeDelta)
 	}
 
 	_bool	bEndCheck{false};
-	_vector vRootMove = m_pModelCom->Play_Animation(fTimeDelta);
+	_vector vRootMove{};
+	if (m_pModelCom != nullptr)
+	{
+		if (m_pModelCom->Get_Animations().size() > 0)
+		{
+			vRootMove = m_pModelCom->Play_Animation(fTimeDelta);
+		}
+	}
 	
 
 	_vector vPos = m_pTransformCom->Get_State(CTransform::STATE_POSITION);
@@ -121,7 +128,7 @@ void CAnimModel::Update(_float fTimeDelta)
 		m_vSubRootMoveStack = vMove;
 	}
 
-	 vPos = m_pTransformCom->Get_State(CTransform::STATE_POSITION);
+	vPos = m_pTransformCom->Get_State(CTransform::STATE_POSITION);
 
 	m_pTransformCom->Set_State(CTransform::STATE_POSITION, vPos + vRootMove - m_vRootMoveStack);
 

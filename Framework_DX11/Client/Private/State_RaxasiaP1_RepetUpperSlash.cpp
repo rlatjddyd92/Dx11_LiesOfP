@@ -75,10 +75,11 @@ void CState_RaxasiaP1_RepetUpperSlash::Route_Controll(_double CurTrackPos, _floa
         {
             ++m_iRouteTrack;
             m_bSwing = false;
-            m_pMonster->Change_Animation(AN_UPPERTWICE, false, 0.1f, 0);
+            m_pMonster->Change_Animation(AN_UPPERTWICE, false, 0.02f, 0);
         }
 
-        if (CurTrackPos >= 120.f)
+        if (CurTrackPos <= 90.f ||
+            CurTrackPos >= 130.f)
         {
             m_pMonster->Get_Transform()->LookAt_Lerp_NoHeight(m_pMonster->Get_TargetDir(), 1.f, fTimeDelta);
         }
@@ -90,7 +91,7 @@ void CState_RaxasiaP1_RepetUpperSlash::Route_Controll(_double CurTrackPos, _floa
         {
             ++m_iRouteTrack;
             m_bSwing = false;
-            m_pMonster->Change_Animation(AN_UPPERTWICE, false, 0.1f, 0, true, true);
+            m_pMonster->Change_Animation(AN_UPPERTWICE, false, 0.02f, 0, true, true);
         }
 
         if (!m_bSpeedController)
@@ -114,7 +115,7 @@ void CState_RaxasiaP1_RepetUpperSlash::Route_Controll(_double CurTrackPos, _floa
         {
             ++m_iRouteTrack;
             m_bSwing = false;
-            m_pMonster->Change_Animation(AN_UPPERTWICE, false, 0.1f, 0, true, true);
+            m_pMonster->Change_Animation(AN_UPPERTWICE, false, 0.02f, 0, true, true);
         }
 
         if (!m_bSpeedController)
@@ -138,7 +139,7 @@ void CState_RaxasiaP1_RepetUpperSlash::Route_Controll(_double CurTrackPos, _floa
         {
             ++m_iRouteTrack;
             m_bSwing = false;
-            m_pMonster->Change_Animation(AN_UPPERTWICE, false, 0.1f, 0, true, true);
+            m_pMonster->Change_Animation(AN_UPPERTWICE, false, 0.02f, 0, true, true);
         }
 
         break;
@@ -148,7 +149,7 @@ void CState_RaxasiaP1_RepetUpperSlash::Route_Controll(_double CurTrackPos, _floa
         {
             ++m_iRouteTrack;
             m_bSwing = false;
-            m_pMonster->Change_Animation(AN_UPPERTWICE, false, 0.1f, 0, true, true);
+            m_pMonster->Change_Animation(AN_UPPERTWICE, false, 0.02f, 0, true, true);
         }
 
         break;
@@ -158,7 +159,7 @@ void CState_RaxasiaP1_RepetUpperSlash::Route_Controll(_double CurTrackPos, _floa
         {
             ++m_iRouteTrack;
             m_bSwing = false;
-            m_pMonster->Change_Animation(AN_LINKED_LAST, false, 0.1f, 0, true, true);
+            m_pMonster->Change_Animation(AN_LINKED_LAST, false, 0.02f, 0, true, true);
         }
 
         if (!m_bSpeedController)
@@ -178,11 +179,29 @@ void CState_RaxasiaP1_RepetUpperSlash::Route_Controll(_double CurTrackPos, _floa
             m_pMonster->Change_State(CRaxasia::IDLE);
         }
 
+        if (CurTrackPos <= 25.f ||
+            (CurTrackPos <= 65.f && CurTrackPos <= 75.f) ||
+            CurTrackPos >= 100.f)
+        {
+            m_pMonster->Get_Transform()->LookAt_Lerp_NoHeight(m_pMonster->Get_TargetDir(), 1.f, fTimeDelta);
+        }
+
         break;
 
     default:
         break;
     }
+    if (m_iRouteTrack >= 1 && m_iRouteTrack <= 5)
+    {
+        if (CurTrackPos <= 15.f ||
+            (CurTrackPos <= 50.f && CurTrackPos <= 60.f) ||
+            CurTrackPos >= 95.f)
+        {
+            m_pMonster->Get_Transform()->LookAt_Lerp_NoHeight(m_pMonster->Get_TargetDir(), 1.f, fTimeDelta);
+        }
+
+    }
+
 }
 
 void CState_RaxasiaP1_RepetUpperSlash::Collider_Check(_double CurTrackPos)

@@ -60,9 +60,10 @@ void CState_RaxasiaP1_DashUpper::Update(_float fTimeDelta)
                     m_pMonster->Change_Animation(AN_DASHUPPER_ATTACK, false, 0.1f, 0);
                 }
             }
-
-            m_pMonster->Get_Transform()->LookAt_Lerp_NoHeight(m_pMonster->Get_TargetDir(), 2.f, fTimeDelta);
         }
+
+        m_pMonster->Get_Transform()->LookAt_Lerp_NoHeight(m_pMonster->Get_TargetDir(), 2.f, fTimeDelta);
+
         break;
 
     case 1:
@@ -71,6 +72,12 @@ void CState_RaxasiaP1_DashUpper::Update(_float fTimeDelta)
             ++m_iRouteTrack;
             m_bSwing = false;
             m_pMonster->Change_Animation(AN_TRIPLELINK_FIRST, false, 0.1f, 0);
+        }
+
+        if (CurTrackPos <= 30.f ||
+            CurTrackPos >= 100.f)
+        {
+            m_pMonster->Get_Transform()->LookAt_Lerp_NoHeight(m_pMonster->Get_TargetDir(), 2.f, fTimeDelta);
         }
         break;
 
@@ -81,6 +88,12 @@ void CState_RaxasiaP1_DashUpper::Update(_float fTimeDelta)
             m_bSwing = false;
             m_pMonster->Change_Animation(AN_TRIPLELINK_SECOND, false, 0.1f, 0);
         }
+
+        if (CurTrackPos <= 30.f||
+            CurTrackPos >= 60.f)
+        {
+            m_pMonster->Get_Transform()->LookAt_Lerp_NoHeight(m_pMonster->Get_TargetDir(), 1.f, fTimeDelta);
+        }
         break;
 
     case 3:
@@ -88,11 +101,30 @@ void CState_RaxasiaP1_DashUpper::Update(_float fTimeDelta)
         {
             ++m_iRouteTrack;
             m_bSwing = false;
-            m_pMonster->Change_Animation(AN_TRIPLELINK_LAST, false, 0.1f, 0);
+            m_pMonster->Change_Animation(AN_TRIPLELINK_FIRST, false, 0.1f, 0);
+            m_pMonster->Get_Model()->Set_SpeedRatio(AN_TRIPLELINK_FIRST, (double)0.5f);
+            m_bSpeedController = true;
+        }
+        if (CurTrackPos <= 25.f ||
+            CurTrackPos >= 60.f)
+        {
+            m_pMonster->Get_Transform()->LookAt_Lerp_NoHeight(m_pMonster->Get_TargetDir(), 1.f, fTimeDelta);
         }
         break;
 
     case 4:
+        if (m_bSpeedController)
+        {
+            if (CurTrackPos >= 40.f)
+            {
+                m_bSpeedController = false;
+                m_pMonster->Get_Model()->Set_SpeedRatio(AN_TRIPLELINK_FIRST, (double)1);
+            }
+            else
+            {
+                m_pMonster->Get_Transform()->LookAt_Lerp_NoHeight(m_pMonster->Get_TargetDir(), 1.f, fTimeDelta);
+            }
+        }
         if (End_Check())
         {
             m_bSwing = false;
@@ -129,9 +161,9 @@ _bool CState_RaxasiaP1_DashUpper::End_Check()
         break;
 
     case 4:
-        if ((AN_TRIPLELINK_LAST) == iCurAnim)
+        if ((AN_TRIPLELINK_FIRST) == iCurAnim)
         {
-            bEndCheck = m_pMonster->Get_EndAnim(AN_TRIPLELINK_LAST);
+            bEndCheck = m_pMonster->Get_EndAnim(AN_TRIPLELINK_FIRST);
         }
         break;
 

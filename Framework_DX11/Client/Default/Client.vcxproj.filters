@@ -1008,6 +1008,78 @@
 	</Filter>
     <Filter Include="03.GameInterface_Controller\00.UIManager\00.UIPage\18.UIPage_Telepot">
       <UniqueIdentifier>{8d2c85a1-e53e-4e3f-b451-241e3aa1bf15}</UniqueIdentifier>
+	</Filter>
+    <Filter Include="05.Fsm\Monster\Raxasia\P2\Walk">
+      <UniqueIdentifier>{c4cceff3-bc6b-4cd1-916f-799d6004797c}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="05.Fsm\Monster\Raxasia\P2\Run">
+      <UniqueIdentifier>{ba88d7a1-a821-4741-b7ce-446e07300ca1}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="05.Fsm\Monster\Raxasia\P2\Idle">
+      <UniqueIdentifier>{54441157-50ad-4848-98e0-69055b5fe2b6}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="05.Fsm\Monster\Raxasia\P2\HitFatal">
+      <UniqueIdentifier>{29b7dd9f-a2cc-4f11-b4a4-6c1fba800926}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="05.Fsm\Monster\Raxasia\P2\Die">
+      <UniqueIdentifier>{b948ea54-cff2-4b3f-9805-fd8d647411c3}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="05.Fsm\Monster\Raxasia\P2\Grogy">
+      <UniqueIdentifier>{aeb5bdcd-e5dd-4f4d-abd2-4e68d12100ce}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="05.Fsm\Monster\Raxasia\P2\Attack">
+      <UniqueIdentifier>{695fbb4e-bac2-446e-948e-a54594d9a8ee}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="05.Fsm\Monster\Raxasia\P2\Attack\Route">
+      <UniqueIdentifier>{8441ce33-d5e6-43e5-899e-addc3f730011}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="05.Fsm\Monster\Raxasia\P2\Attack\Route\Declare_War">
+      <UniqueIdentifier>{90b15e76-1d71-433a-a2af-7f3f04690d4c}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="05.Fsm\Monster\Raxasia\P2\Attack\Route\JumpStamp">
+      <UniqueIdentifier>{5e789cbd-3b09-4259-a0e8-b2c7f13184fe}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="05.Fsm\Monster\Raxasia\P2\Attack\Route\StepJump">
+      <UniqueIdentifier>{e69b3a6d-c599-4dae-99d7-026242305355}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="05.Fsm\Monster\Raxasia\P2\Attack\Route\WaveSting">
+      <UniqueIdentifier>{5b0fc0e1-3191-4770-9ca3-8c9140759ce9}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="05.Fsm\Monster\Raxasia\P2\Attack\Route\TELE">
+      <UniqueIdentifier>{de1aa832-dc4a-43a8-b205-5e69d00dd9f6}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="05.Fsm\Monster\Raxasia\P2\Attack\Route\TELE\Tele_JumpLightning">
+      <UniqueIdentifier>{c5500ba7-f1c8-48d8-a94e-7fe90c355c85}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="05.Fsm\Monster\Raxasia\P2\Attack\Route\TELE\Tele_LinkedTel">
+      <UniqueIdentifier>{8d6416ed-86c5-43ab-b39b-94425fafb257}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="05.Fsm\Monster\Raxasia\P2\Attack\Route\Guard">
+      <UniqueIdentifier>{dc500d27-cd7e-46e4-83fb-153428376054}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="05.Fsm\Monster\Raxasia\P2\Attack\Route\Guard\Guard_Push">
+      <UniqueIdentifier>{e8903933-a7d3-4d3e-a68f-8edad605a07c}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="05.Fsm\Monster\Raxasia\P2\Attack\Route\Running">
+      <UniqueIdentifier>{77c0f679-b30b-40bf-a5a6-782f2247e539}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="05.Fsm\Monster\Raxasia\P2\Attack\Route\Running\Running_Fury">
+      <UniqueIdentifier>{a17b2975-1585-4460-abfb-6bf328972d69}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="05.Fsm\Monster\Raxasia\P2\Attack\Route\Running\Running_Linked">
+      <UniqueIdentifier>{47c1624c-2f8b-4471-bcb0-6ac74430fe14}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="05.Fsm\Monster\Raxasia\P2\Attack\Route\TeleportAttack">
+      <UniqueIdentifier>{24cf9139-e9e1-4e76-bc28-5f260328ee93}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="05.Fsm\Monster\Raxasia\P2\Attack\Route\ChargeRush">
+      <UniqueIdentifier>{38feeb64-f113-4175-a5bc-1ff308427000}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="05.Fsm\Monster\Raxasia\P2\Attack\Route\ShieldRush">
+      <UniqueIdentifier>{e448e3ec-74ff-4ecb-bd7f-8e67337f8d36}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="05.Fsm\Monster\Raxasia\P2\Attack\Route\ShieldLinked">
+      <UniqueIdentifier>{c51d05cd-9213-4e20-8a47-bd04480999bf}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -1846,6 +1918,81 @@
 	</ClInclude>
     <ClInclude Include="..\Public\UIPage_Telepot.h">
       <Filter>03.GameInterface_Controller\00.UIManager\00.UIPage\18.UIPage_Telepot</Filter>
+	</ClInclude>
+    <ClInclude Include="..\Public\Weapon_Raxasia_P1_Shield.h">
+      <Filter>02.GameObjects\06.Weapon\02.Raxasia\P1_Shield</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Public\Weapon_Raxasia_P2_Shield.h">
+      <Filter>02.GameObjects\06.Weapon\02.Raxasia\P2_Shield</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Public\Weapon_Raxasia_P2_Sword.h">
+      <Filter>02.GameObjects\06.Weapon\02.Raxasia\P2_Sword</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Public\State_RaxasiaP2_Idle.h">
+      <Filter>05.Fsm\Monster\Raxasia\P2\Idle</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Public\State_RaxasiaP2_HitFatal.h">
+      <Filter>05.Fsm\Monster\Raxasia\P2\HitFatal</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Public\State_RaxasiaP2_Die.h">
+      <Filter>05.Fsm\Monster\Raxasia\P2\Die</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Public\State_RaxasiaP2_Grogy.h">
+      <Filter>05.Fsm\Monster\Raxasia\P2\Grogy</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Public\State_RaxasiaP2_Run.h">
+      <Filter>05.Fsm\Monster\Raxasia\P2\Run</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Public\State_RaxasiaP2_Walk.h">
+      <Filter>05.Fsm\Monster\Raxasia\P2\Walk</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Public\State_RaxasiaP2_JumpStamp.h">
+      <Filter>05.Fsm\Monster\Raxasia\P2\Attack\Route\JumpStamp</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Public\State_RaxasiaP2_StepJump.h">
+      <Filter>05.Fsm\Monster\Raxasia\P2\Attack\Route\StepJump</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Public\State_RaxasiaP2_Tele_JumpLightning.h">
+      <Filter>05.Fsm\Monster\Raxasia\P2\Attack\Route\TELE\Tele_JumpLightning</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Public\State_RaxasiaP2_Tele.h">
+      <Filter>05.Fsm\Monster\Raxasia\P2\Attack\Route\TELE</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Public\State_RaxasiaP2_Tele_LinkedTel.h">
+      <Filter>05.Fsm\Monster\Raxasia\P2\Attack\Route\TELE\Tele_LinkedTel</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Public\State_RaxasiaP2_WaveSting.h">
+      <Filter>05.Fsm\Monster\Raxasia\P2\Attack\Route\WaveSting</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Public\State_RaxasiaP2_TeleportAttack.h">
+      <Filter>05.Fsm\Monster\Raxasia\P2\Attack\Route\TeleportAttack</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Public\State_RaxasiaP2_Running.h">
+      <Filter>05.Fsm\Monster\Raxasia\P2\Attack\Route\Running</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Public\State_RaxasiaP2_Running_Linked.h">
+      <Filter>05.Fsm\Monster\Raxasia\P2\Attack\Route\Running\Running_Linked</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Public\State_RaxasiaP2_Running_Fury.h">
+      <Filter>05.Fsm\Monster\Raxasia\P2\Attack\Route\Running\Running_Fury</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Public\State_RaxasiaP2_Declare_War.h">
+      <Filter>05.Fsm\Monster\Raxasia\P2\Attack\Route\Declare_War</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Public\State_RaxasiaP2_Guard.h">
+      <Filter>05.Fsm\Monster\Raxasia\P2\Attack\Route\Guard</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Public\State_RaxasiaP2_Guard_Push.h">
+      <Filter>05.Fsm\Monster\Raxasia\P2\Attack\Route\Guard\Guard_Push</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Public\State_RaxasiaP2_ChargeRush.h">
+      <Filter>05.Fsm\Monster\Raxasia\P2\Attack\Route\ChargeRush</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Public\State_RaxasiaP2_ShieldLinked.h">
+      <Filter>05.Fsm\Monster\Raxasia\P2\Attack\Route\ShieldLinked</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Public\State_RaxasiaP2_ShieldRush.h">
+      <Filter>05.Fsm\Monster\Raxasia\P2\Attack\Route\ShieldRush</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -2654,6 +2801,81 @@
 	</ClCompile>
     <ClCompile Include="..\Private\UIPage_Telepot.cpp">
       <Filter>03.GameInterface_Controller\00.UIManager\00.UIPage\18.UIPage_Telepot</Filter>
+	</ClCompile>
+    <ClCompile Include="..\Private\Weapon_Raxasia_P1_Shield.cpp">
+      <Filter>02.GameObjects\06.Weapon\02.Raxasia\P1_Shield</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Private\Weapon_Raxasia_P2_Shield.cpp">
+      <Filter>02.GameObjects\06.Weapon\02.Raxasia\P2_Shield</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Private\Weapon_Raxasia_P2_Sword.cpp">
+      <Filter>02.GameObjects\06.Weapon\02.Raxasia\P2_Sword</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Private\State_RaxasiaP2_Idle.cpp">
+      <Filter>05.Fsm\Monster\Raxasia\P2\Idle</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Private\State_RaxasiaP2_HitFatal.cpp">
+      <Filter>05.Fsm\Monster\Raxasia\P2\HitFatal</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Private\State_RaxasiaP2_Die.cpp">
+      <Filter>05.Fsm\Monster\Raxasia\P2\Die</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Private\State_RaxasiaP2_Grogy.cpp">
+      <Filter>05.Fsm\Monster\Raxasia\P2\Grogy</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Private\State_RaxasiaP2_Run.cpp">
+      <Filter>05.Fsm\Monster\Raxasia\P2\Run</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Private\State_RaxasiaP2_Walk.cpp">
+      <Filter>05.Fsm\Monster\Raxasia\P2\Walk</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Private\State_RaxasiaP2_JumpStamp.cpp">
+      <Filter>05.Fsm\Monster\Raxasia\P2\Attack\Route\JumpStamp</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Private\State_RaxasiaP2_StepJump.cpp">
+      <Filter>05.Fsm\Monster\Raxasia\P2\Attack\Route\StepJump</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Private\State_RaxasiaP2_Tele_JumpLightning.cpp">
+      <Filter>05.Fsm\Monster\Raxasia\P2\Attack\Route\TELE\Tele_JumpLightning</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Private\State_RaxasiaP2_Tele.cpp">
+      <Filter>05.Fsm\Monster\Raxasia\P2\Attack\Route\TELE</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Private\State_RaxasiaP2_Tele_LinkedTel.cpp">
+      <Filter>05.Fsm\Monster\Raxasia\P2\Attack\Route\TELE\Tele_LinkedTel</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Private\State_RaxasiaP2_WaveSting.cpp">
+      <Filter>05.Fsm\Monster\Raxasia\P2\Attack\Route\WaveSting</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Private\State_RaxasiaP2_TeleportAttack.cpp">
+      <Filter>05.Fsm\Monster\Raxasia\P2\Attack\Route\TeleportAttack</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Private\State_RaxasiaP2_Running.cpp">
+      <Filter>05.Fsm\Monster\Raxasia\P2\Attack\Route\Running</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Private\State_RaxasiaP2_Running_Linked.cpp">
+      <Filter>05.Fsm\Monster\Raxasia\P2\Attack\Route\Running\Running_Linked</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Private\State_RaxasiaP2_Running_Fury.cpp">
+      <Filter>05.Fsm\Monster\Raxasia\P2\Attack\Route\Running\Running_Fury</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Private\State_RaxasiaP2_Declare_War.cpp">
+      <Filter>05.Fsm\Monster\Raxasia\P2\Attack\Route\Declare_War</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Private\State_RaxasiaP2_Guard.cpp">
+      <Filter>05.Fsm\Monster\Raxasia\P2\Attack\Route\Guard</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Private\State_RaxasiaP2_Guard_Push.cpp">
+      <Filter>05.Fsm\Monster\Raxasia\P2\Attack\Route\Guard\Guard_Push</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Private\State_RaxasiaP2_ChargeRush.cpp">
+      <Filter>05.Fsm\Monster\Raxasia\P2\Attack\Route\ChargeRush</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Private\State_RaxasiaP2_ShieldLinked.cpp">
+      <Filter>05.Fsm\Monster\Raxasia\P2\Attack\Route\ShieldLinked</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Private\State_RaxasiaP2_ShieldRush.cpp">
+      <Filter>05.Fsm\Monster\Raxasia\P2\Attack\Route\ShieldRush</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

@@ -36,6 +36,8 @@ HRESULT CState_SimonManusP1_HighJumpFall::Start_State(void* pArg)
 
     m_bStompAttack = false;
 
+    m_vFlyMoveStack = _Vec3{};
+
     return S_OK;
 }
 

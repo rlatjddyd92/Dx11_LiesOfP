@@ -125,6 +125,8 @@ private:
 
 private:
 	_bool							m_bSameChange = { false };	// 동일 애니메이션 체크
+	_bool							m_bChange_Changed = { false };	// 변환중 변환 체크
+	_bool							m_bChange_Changed_Boundary = { false };
 	_bool							m_bDenyTrans = { false };	// 특정 뼈 이동값 제거용
 	_bool							m_isLoop = { false };
 	_bool							m_isLoop_Boundary = { false };		//상하체 분리
@@ -166,6 +168,9 @@ private:
 	_bool							m_isSameAnimCheck = { false };
 	_vector							m_vCurRootMove = {};			//이전에 사용한 루트본에의한 움직임
 	_vector							m_vRootMoveStack = {};
+
+	KEYFRAME*						m_ChangeKeyFrame{};
+	KEYFRAME*						m_ChangeKeyFrame_Boundary{};
 
 	// 정승현 모델 인스턴스
 	ID3D11Buffer*					m_pVBInstance = { nullptr };
