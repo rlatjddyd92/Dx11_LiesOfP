@@ -63,9 +63,29 @@ void CWeapon::Update(_float fTimeDelta)
 	m_OldWroldMatrix = m_WorldMatrix;
 	XMStoreFloat4x4(&m_WorldMatrix, XMLoadFloat4x4(m_pTransformCom->Get_WorldMatrix_Ptr()) * SocketMatrix * XMLoadFloat4x4(m_pParentMatrix));
 
-	m_vVelocity = m_WorldMatrix.Translation() - m_OldWroldMatrix.Translation();
-	m_vAttackDir = m_vVelocity;
-	m_vAttackDir.Normalize();
+
+	if (nullptr != m_pBladeMatrix)
+	{
+		SocketMatrix = *m_pBladeMatrix;
+		for (size_t i = 0; i < 3; i++)
+		{
+			SocketMatrix.r[i] = XMVector3Normalize(SocketMatrix.r[i]);
+		}
+
+		m_BladeOldWroldMatrix = m_BladeWorldMatrix;
+		XMStoreFloat4x4(&m_BladeWorldMatrix, XMLoadFloat4x4(m_pTransformCom->Get_WorldMatrix_Ptr()) * SocketMatrix * XMLoadFloat4x4(m_pParentMatrix));
+
+
+		m_vVelocity = m_BladeWorldMatrix.Translation() - m_BladeOldWroldMatrix.Translation();
+		m_vAttackDir = m_vVelocity;
+		m_vAttackDir.Normalize();
+	}
+	else
+	{
+		m_vVelocity = m_WorldMatrix.Translation() - m_OldWroldMatrix.Translation();
+		m_vAttackDir = m_vVelocity;
+		m_vAttackDir.Normalize();
+	}
 
 
 	for (_uint i = 0; i < WEP_SOUND_END; ++i)

@@ -48,6 +48,8 @@ HRESULT CWeapon_Rapier::Initialize(void* pArg)
 
 	m_pColliderCom->IsActive(false);
 
+	m_pBladeMatrix = m_pModelCom->Get_BoneCombindTransformationMatrix_Ptr("BN_Blade_B");
+
 	return S_OK;
 }
 
@@ -69,7 +71,7 @@ void CWeapon_Rapier::Update(_float fTimeDelta)
 
 	if (m_iAttackType != ATK_EFFECT_NOTHING)
 	{
-		if (m_vVelocity.Length() > 0.005f)
+		if (m_vVelocity.Length() > 0.001f)
 		{
 			if (m_iAttackType == ATK_EFFECT_SPECIAL1)
 			{

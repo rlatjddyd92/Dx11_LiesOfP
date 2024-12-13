@@ -41,13 +41,15 @@ HRESULT CWeapon_FlameSword::Initialize(void* pArg)
 		return E_FAIL;
 
 	if (FAILED(Ready_Effect()))
-
 		return E_FAIL;
+
 	m_strObjectTag = TEXT("PlayerWeapon");
 	m_fDamageAmount = 10.f;
 
 	m_isActive = false;
 	m_pColliderCom->IsActive(false);
+
+	m_pBladeMatrix = m_pModelCom->Get_BoneCombindTransformationMatrix_Ptr("BN_Blade_B");
 
 	return S_OK;
 }
@@ -61,7 +63,7 @@ void CWeapon_FlameSword::Priority_Update(_float fTimeDelta)
 
 	if (m_iAttackType != ATK_EFFECT_NOTHING)
 	{
-		if (m_vVelocity.Length() > 0.005f)
+		if (m_vVelocity.Length() > 0.0000001f)
 		{
 			if (m_iAttackType == ATK_EFFECT_SPECIAL1)
 			{
@@ -279,7 +281,10 @@ HRESULT CWeapon_FlameSword::Ready_Effect()
 	m_Effects[EFFECT_STORMSLASH2] = m_pEffect_Manager->Clone_Effect(TEXT("Player_Attack_FlameSword_StormSlash_Second"), m_pParentMatrix,
 		m_pSocketMatrix, _Vec3(0.f, 0.f, 0.f), _Vec3(0.f, 0.f, 0.f), _Vec3(1.f, 1.f, 1.f));
 
-	return E_NOTIMPL;
+
+	Active_Effect(EFFECT_DEFAULT, true);
+
+	return S_OK;
 }
 
 CWeapon_FlameSword* CWeapon_FlameSword::Create(ID3D11Device* pDevice, ID3D11DeviceContext* pContext)

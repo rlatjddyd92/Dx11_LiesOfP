@@ -119,6 +119,11 @@ protected:
 	_Matrix					m_WorldMatrix = {};
 	_Matrix					m_OldWroldMatrix = {};
 
+	const _Matrix*			m_pBladeMatrix = { nullptr };
+
+	_Matrix					m_BladeWorldMatrix = {};
+	_Matrix					m_BladeOldWroldMatrix = {};
+
 protected:
 	_float					m_fDamageAmount = {};
 	_float					m_fDamageRatio = { 1.f };
