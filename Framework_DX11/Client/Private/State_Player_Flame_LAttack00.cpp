@@ -45,6 +45,9 @@ HRESULT CState_Player_Flame_LAttack00::Start_State(void* pArg)
 
     m_isPlaySound = false;
 
+
+    m_pPlayer->Set_WeaponEffectType(CWeapon::ATK_EFFECT_GENERAL);
+
     return S_OK;
 }
 
@@ -116,12 +119,10 @@ void CState_Player_Flame_LAttack00::Control_Collider()
 
     if (m_iColliderStartFrame <= iFrame && iFrame <= m_iColliderEndFrame)
     {
-        m_pPlayer->Active_Effect(CPlayer::EFFECT_FLAME_SLASH);
         m_pPlayer->Active_CurrentWeaponCollider();
     }
     else
     {
-        m_pPlayer->DeActive_Effect(CPlayer::EFFECT_FLAME_SLASH);
         m_pPlayer->DeActive_CurretnWeaponCollider();
     }
 }

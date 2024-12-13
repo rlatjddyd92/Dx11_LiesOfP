@@ -496,11 +496,6 @@ void CPlayer::Appear_Weapon()
 		return;
 
 	m_pWeapon[m_eWeaponType]->Appear();
-
-	if (m_eWeaponType == WEP_FLAME)
-	{
-		Active_Effect(EFFECT_FLAME_BASE);
-	}
 }
 
 void CPlayer::Disappear_Weapon()
@@ -509,11 +504,6 @@ void CPlayer::Disappear_Weapon()
 		return;
 
 	m_pWeapon[m_eWeaponType]->Disappear();
-
-	if (m_eWeaponType == WEP_FLAME)
-	{
-		DeActive_Effect(EFFECT_FLAME_BASE);
-	}
 }
 
 void CPlayer::Set_WeaponStrength(ATTACK_STRENGTH eStrength)
@@ -1576,19 +1566,6 @@ HRESULT CPlayer::Ready_Effect()
 
 	pSocketBoneMatrix = m_pModelCom->Get_BoneCombindTransformationMatrix_Ptr("BN_Weapon_L");
 	m_Effects[EFFECT_HEAL] = m_pEffect_Manager->Clone_Effect(TEXT("Player_Potion"), pParetnMatrix,
-		pSocketBoneMatrix, _Vec3(0.f, 0.f, 0.f), _Vec3(0.f, 0.f, 0.f), _Vec3(1.f, 1.f, 1.f));
-
-	pSocketBoneMatrix = m_pModelCom->Get_BoneCombindTransformationMatrix_Ptr("BN_Weapon_R");
-	m_Effects[EFFECT_FLAME_BASE] = m_pEffect_Manager->Clone_Effect(TEXT("Player_FlameSword_Default"), pParetnMatrix,
-		pSocketBoneMatrix, _Vec3(0.f, 0.f, 0.f), _Vec3(0.f, 0.f, 0.f), _Vec3(1.f, 1.f, 1.f));
-
-	m_Effects[EFFECT_FLAME_SLASH] = m_pEffect_Manager->Clone_Effect(TEXT("Player_Attack_FlameSword_Slash"), pParetnMatrix,
-		pSocketBoneMatrix, _Vec3(0.f, 0.f, 0.f), _Vec3(0.f, 0.f, 0.f), _Vec3(1.f, 1.f, 1.f));
-
-	m_Effects[EFFECT_FLAME_STORMSLASH_FIRST] = m_pEffect_Manager->Clone_Effect(TEXT("Player_Attack_FlameSword_StormSlash_First"), pParetnMatrix,
-		pSocketBoneMatrix, _Vec3(0.f, 0.f, 0.f), _Vec3(0.f, 0.f, 0.f), _Vec3(1.f, 1.f, 1.f));
-
-	m_Effects[EFFECT_FLAME_STORMSLASH_SECOND] = m_pEffect_Manager->Clone_Effect(TEXT("Player_Attack_FlameSword_StormSlash_Second"), pParetnMatrix,
 		pSocketBoneMatrix, _Vec3(0.f, 0.f, 0.f), _Vec3(0.f, 0.f, 0.f), _Vec3(1.f, 1.f, 1.f));
 
 	return S_OK;

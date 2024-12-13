@@ -13,6 +13,12 @@ BEGIN(Client)
 
 class CWeapon_FlameSword : public CWeapon
 {
+public:
+	enum EFFECT_TYPE
+	{
+		EFFECT_DEFAULT, EFFECT_BASE, EFFECT_STORMSLASH1, EFFECT_STORMSLASH2, EFFECT_END
+	};
+
 private:
 	CWeapon_FlameSword(ID3D11Device* pDevice, ID3D11DeviceContext* pContext);
 	CWeapon_FlameSword(const CWeapon_FlameSword& Prototype);
@@ -36,6 +42,7 @@ public:
 
 private:
 	HRESULT Ready_Components();
+	HRESULT Ready_Effect();
 
 public:
 	static CWeapon_FlameSword* Create(ID3D11Device* pDevice, ID3D11DeviceContext* pContext);

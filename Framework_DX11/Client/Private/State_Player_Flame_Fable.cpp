@@ -52,8 +52,7 @@ HRESULT CState_Player_Flame_Fable::Start_State(void* pArg)
     }
 
     m_pPlayer->Set_WeaponStrength(ATK_STRONG);
-
-    m_pPlayer->Active_Effect(CPlayer::EFFECT_FLAME_STORMSLASH_FIRST);
+    m_pPlayer->Set_WeaponEffectType(CWeapon::ATK_EFFECT_SPECIAL1);
 
     return S_OK;
 }
@@ -105,7 +104,7 @@ void CState_Player_Flame_Fable::Update(_float fTimeDelta)
 
 void CState_Player_Flame_Fable::End_State()
 {
-    m_pPlayer->DeActive_Effect(CPlayer::EFFECT_FLAME_STORMSLASH_FIRST);
+    m_pPlayer->Set_WeaponEffectType(CWeapon::ATK_EFFECT_NOTHING);
     m_pPlayer->DeActive_CurretnWeaponCollider();
 }
 
