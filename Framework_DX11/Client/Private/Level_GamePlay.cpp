@@ -231,8 +231,8 @@ HRESULT CLevel_GamePlay::Ready_Layer_Monster()
 	//		return E_FAIL;
 	//}
 
-	if (FAILED(m_pGameInstance->Add_CloneObject_ToLayer(LEVEL_GAMEPLAY, TEXT("Layer_Monster"), TEXT("Prototype_GameObject_CutScene_SimonManus_GodHand"))))
-		return E_FAIL;
+	/*if (FAILED(m_pGameInstance->Add_CloneObject_ToLayer(LEVEL_GAMEPLAY, TEXT("Layer_Monster"), TEXT("Prototype_GameObject_CutScene_SimonManus_GodHand"))))
+		return E_FAIL;*/
 
 	return S_OK;
 }

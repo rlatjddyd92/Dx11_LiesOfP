@@ -69,6 +69,12 @@
 #include "D:\GitProject\Dx11_LiesOfP\Framework_DX11\Client\Private\Raxasia.cpp"
 
 
+#include "D:\GitProject\Dx11_LiesOfP\Framework_DX11\Client\Private\SimonManus_CutScene_GodHand.cpp"
+
+
+#include "D:\GitProject\Dx11_LiesOfP\Framework_DX11\Client\Private\SimonManus_EnvHand.cpp"
+
+
 #include "D:\GitProject\Dx11_LiesOfP\Framework_DX11\Client\Private\State_Player_Arm_Counter.cpp"
 
 

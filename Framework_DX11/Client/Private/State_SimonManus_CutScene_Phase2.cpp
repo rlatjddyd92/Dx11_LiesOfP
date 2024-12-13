@@ -48,10 +48,18 @@ void CState_SimonManus_CutScene_Phase2::Update(_float fTimeDelta)
     }
     if (m_isChangePhase2)
     {
+        if (m_pMonster->Get_CurrentAnimIndex() == m_iAnimation_Connectgod
+            && m_isCreatedHand == false
+            && m_pMonster->Get_Frame() > 11500 )
+        {
+            m_isCreatedHand = true;
+
+            if (FAILED(m_pGameInstance->Add_CloneObject_ToLayer(LEVEL_GAMEPLAY, TEXT("Layer_CutScene_GodHand"), TEXT("Prototype_GameObject_CutScene_SimonManus_GodHand"))))
+                return;
+        }
         if (m_pMonster->Get_EndAnim(m_iAnimation_Connectgod))
         {
-            //if(m_pMonster->Get_Frame() > 900)
-            
+            m_pGameInstance->Find_Object(LEVEL_GAMEPLAY, TEXT("Layer_CutScene_GodHand"), 0)->Set_Dead(true);
             m_pMonster->Change_Animation(m_iAnimation_Begod, false, 0.1f, 0);
         }
         else if (m_pMonster->Get_EndAnim(m_iAnimation_Begod))
