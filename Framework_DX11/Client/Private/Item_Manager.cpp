@@ -896,19 +896,54 @@ void CItem_Manager::Adjust_Spec()
 	pAbility->bDebuff_Acid_Ignore = fDefence[3];
 }
 
-void CItem_Manager::Buy_ShopItem(_int iIndex)
+void CItem_Manager::Buy_ShopItem(_int iIndex, _int iCount)
+{
+	if (m_vecItem_BasicSpec[iIndex]->bIsAvailable_Shop == false)
+		return;
+	
+	_int iErgo = GET_GAMEINTERFACE->Get_Player()->Get_Player_Stat().iErgo;
+	iErgo += GET_GAMEINTERFACE->Get_Player()->Get_Player_Stat_Adjust()->iErgo;
+	
+	if (iErgo < m_vecItem_BasicSpec[iIndex]->iPrice * iCount)
+		return;
+
+	AddNewItem_Inven(iIndex, iCount);
+
+	_wstring strItem = m_vecItem_BasicSpec[iIndex]->strName;
+	strItem += TEXT(" -> 구입수량 : ");
+	strItem += to_wstring(iCount);
+
+	GET_GAMEINTERFACE->Show_Popup(TEXT("구매 성공"), strItem);
+	GET_GAMEINTERFACE->Get_Player()->Get_Player_Stat_Adjust()->iErgo -= m_vecItem_BasicSpec[iIndex]->iPrice * iCount;
+}
+
+void CItem_Manager::Sell_ShopItem(INVEN_ARRAY_TYPE eType, _int iIndex, _int iCount)
+{
+	if (m_vecItem_BasicSpec[iIndex]->bIsAvailable_Shop == false)
+		return;
+
+	_int iCountNow = m_vecArray_Inven[_int(eType)]->vecItemInfo[iIndex]->iCount;
+
+	if(iCount > iCountNow)
+		return;
+
+	m_vecArray_Inven[_int(eType)]->vecItemInfo[iIndex]->iCount -= iCount;
+
+	if (m_vecArray_Inven[_int(eType)]->vecItemInfo[iIndex]->iCount == 0)
+		Remove_Item_Inven(eType, iIndex);
+
+	_wstring strItem = m_vecItem_BasicSpec[iIndex]->strName;
+	strItem += TEXT(" -> 판매수량 : ");
+	strItem += to_wstring(iCount);
+
+	GET_GAMEINTERFACE->Get_Player()->Get_Player_Stat_Adjust()->iErgo += m_vecArray_Inven[_int(eType)]->vecItemInfo[iIndex]->iPrice * iCount;
+}
+
+void CItem_Manager::ChestItem_To_Inven(_int iIndex, _int iCount)
 {
 }
 
-void CItem_Manager::Sell_ShopItem(INVEN_ARRAY_TYPE eType, _int iIndex)
-{
-}
-
-void CItem_Manager::ChestItem_To_Inven(_int iIndex)
-{
-}
-
-void CItem_Manager::InvenItem_To_Chest(INVEN_ARRAY_TYPE eType, _int iIndex)
+void CItem_Manager::InvenItem_To_Chest(INVEN_ARRAY_TYPE eType, _int iIndex, _int iCount)
 {
 }
 
@@ -1021,10 +1056,11 @@ HRESULT CItem_Manager::Initialize_Item()
 
 		m_vecItem_BasicSpec[pNew->iIndex]->bIsAvailable_Shop = true;
 		m_vecItem_BasicSpec[pNew->iIndex]->bIsAvailable_Chest = true;
-		m_vecItem_BasicSpec[pNew->iIndex]->iPrice = pNew->iPrice_Buy;
-
+		
 		pNew->iCount = stoi(vecBuffer_Shop[i][2]);
 		pNew->iPrice_Buy = stoi(vecBuffer_Shop[i][3]);
+
+		m_vecItem_BasicSpec[pNew->iIndex]->iPrice = pNew->iPrice_Buy;
 
 		m_vecShop_Item.push_back(pNew);
 	}

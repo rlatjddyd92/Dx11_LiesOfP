@@ -158,13 +158,8 @@ void CUIPage_Stat::Action_Point(_float fTimeDelta)
 			m_iFocus_Point = i;
 			if (bClick)
 			{
-				if (m_iUsing_Point_Now < pOrigin.iPoint_Per_Level)
-				{
-					++m_iLevelUp_Buffer_Point[i];
-					++m_iUsing_Point_Now;
-				}
-				else 
-					GET_GAMEINTERFACE->Show_Popup(TEXT("포인트 분배 불가"), TEXT("사용할 수 있는 포인트가 없습니다."));
+				++m_iLevelUp_Buffer_Point[i];
+				++m_iUsing_Point_Now;
 			}
 		}
 	}
@@ -173,21 +168,28 @@ void CUIPage_Stat::Action_Point(_float fTimeDelta)
 void CUIPage_Stat::Action_LevelUp(_float fTimeDelta)
 {
 	const CPlayer::PLAYER_STAT_INFO pOrigin = GET_GAMEINTERFACE->Get_Player()->Get_Player_Stat();
+	CPlayer::PLAYER_STAT_INFO* pAdjust = GET_GAMEINTERFACE->Get_Player()->Get_Player_Stat_Adjust();
+
+	_int iErgo = pOrigin.iErgo + pAdjust->iErgo;
+
+	__super::Get_Front_Part_In_Control(_int(PART_GROUP::GROUP_ERGO_NEED))->strText = to_wstring(pOrigin.iErgo_LevelUp * m_iUsing_Point_Now);
+	__super::Get_Front_Part_In_Control(_int(PART_GROUP::GROUP_ERGO_NOW))->strText = to_wstring(iErgo);
 
 	m_bActive_LevelUp_Button = false;
-	__super::Get_Front_Part_In_Control(_int(PART_GROUP::GROUP_ERGO_NEED))->strText = to_wstring(pOrigin.iErgo_LevelUp * m_iUsing_Point_Now);
-	__super::Get_Front_Part_In_Control(_int(PART_GROUP::GROUP_ERGO_NOW))->strText = to_wstring(pOrigin.iErgo);
+
 	if (m_iUsing_Point_Now > 0)
-		if (pOrigin.iErgo >= pOrigin.iErgo_LevelUp * m_iUsing_Point_Now)
+		if (iErgo >= pOrigin.iErgo_LevelUp * m_iUsing_Point_Now)
 			m_bActive_LevelUp_Button = true;
 
-	if (KEY_TAP(KEY::LBUTTON))
-		if (GET_GAMEINTERFACE->CheckMouse(__super::Get_Front_Part_In_Control(_int(PART_GROUP::GROUP_LEVELUP_BUTTON))->fPosition, __super::Get_Front_Part_In_Control(_int(PART_GROUP::GROUP_LEVELUP_BUTTON))->fSize).x != -1.f)
-		{
-			if (pOrigin.iErgo < pOrigin.iErgo_LevelUp)
-				GET_GAMEINTERFACE->Show_Popup(TEXT("레벨 업 불가"), TEXT("에르고가 부족합니다."));
-		}
-		
+	if (m_bActive_LevelUp_Button)
+	{
+		if (KEY_TAP(KEY::LBUTTON))
+			if (GET_GAMEINTERFACE->CheckMouse(__super::Get_Front_Part_In_Control(_int(PART_GROUP::GROUP_LEVELUP_BUTTON))->fPosition, __super::Get_Front_Part_In_Control(_int(PART_GROUP::GROUP_LEVELUP_BUTTON))->fSize).x != -1.f)
+			{
+				if (iErgo < pOrigin.iErgo_LevelUp)
+					GET_GAMEINTERFACE->Show_Popup(TEXT("레벨 업 불가"), TEXT("에르고가 부족합니다."));
+			}
+	}
 }
 
 void CUIPage_Stat::Action_Focus(_float fTimeDelta)
@@ -454,6 +456,12 @@ void CUIPage_Stat::Update_StarChart(_float fTimeDelta)
 	pLevelUpPart->fRatio_TwoDPolygon[5] = pOriginPart->fRatio_TwoDPolygon[5] + (m_iLevelUp_Buffer_Stat[8] / pOrigin.fDebuff_Acid.y);
 	pLevelUpPart->fRatio_TwoDPolygon[6] = pOriginPart->fRatio_TwoDPolygon[6] + (m_iLevelUp_Buffer_Stat[0] / pOrigin.vGauge_Hp.w);
 	pLevelUpPart->fRatio_TwoDPolygon[7] = pOriginPart->fRatio_TwoDPolygon[7] + (m_iLevelUp_Buffer_Stat[1] / pOrigin.vGauge_Stamina.w);
+}
+
+void CUIPage_Stat::Input_LevelUp_Result()
+{
+	
+
 }
 
 CUIPage_Stat* CUIPage_Stat::Create(ID3D11Device* pDevice, ID3D11DeviceContext* pContext)

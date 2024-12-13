@@ -183,7 +183,9 @@ void CUIPage_Shop::Action_Tab(_float fTimeDelta)
 				Setting_SellTab();
 			}
 	}
-	__super::Get_Front_Part_In_Control(_int(PART_GROUP::SHOP_Coin_Num))->strText = to_wstring(GET_GAMEINTERFACE->Get_Player()->Get_Player_Stat().iErgo);
+
+	_int iErgo = GET_GAMEINTERFACE->Get_Player()->Get_Player_Stat().iErgo + GET_GAMEINTERFACE->Get_Player()->Get_Player_Stat_Adjust()->iErgo;
+	__super::Get_Front_Part_In_Control(_int(PART_GROUP::SHOP_Coin_Num))->strText = to_wstring(iErgo);
 }
 
 void CUIPage_Shop::Action_Scroll(_float fTimeDelta)
@@ -219,6 +221,7 @@ void CUIPage_Shop::Action_Cell(_float fTimeDelta)
 {
 	_bool bClick = KEY_TAP(KEY::RBUTTON);
 
+
 	_int iNowIndex = -1;
 
 	if (m_iNowTab == 0)
@@ -226,7 +229,9 @@ void CUIPage_Shop::Action_Cell(_float fTimeDelta)
 		for (auto& iter : m_vecBuy_RenderInfo)
 		{
 			++iNowIndex;
-			_Vec2 vMouse = GET_GAMEINTERFACE->CheckMouse(iter->vPos, __super::Get_Front_Part_In_Control(_int(PART_GROUP::SHOP_Cell_Static))->fSize);
+			_Vec2 vOffset = { 0.f, m_pScroll_Shop->fData_Offset_Y };
+			
+			_Vec2 vMouse = GET_GAMEINTERFACE->CheckMouse(iter->vPos - vOffset, __super::Get_Front_Part_In_Control(_int(PART_GROUP::SHOP_Cell_Static))->fSize);
 			if (vMouse.x != -1.f)
 			{
 				Action_Focus(fTimeDelta, iter->vPos);
@@ -252,7 +257,9 @@ void CUIPage_Shop::Action_Cell(_float fTimeDelta)
 		for (auto& iter : m_vecSell_RenderInfo)
 		{
 			++iNowIndex;
-			_Vec2 vMouse = GET_GAMEINTERFACE->CheckMouse(iter->vPos, __super::Get_Front_Part_In_Control(_int(PART_GROUP::SHOP_Cell_Static))->fSize);
+			_Vec2 vOffset = { 0.f, m_pScroll_Shop->fData_Offset_Y };
+
+			_Vec2 vMouse = GET_GAMEINTERFACE->CheckMouse(iter->vPos - vOffset, __super::Get_Front_Part_In_Control(_int(PART_GROUP::SHOP_Cell_Static))->fSize);
 			if (vMouse.x != -1.f)
 			{
 				Action_Focus(fTimeDelta, iter->vPos);
@@ -292,12 +299,13 @@ void CUIPage_Shop::Action_Popup(_float fTimeDelta)
 		CItem_Manager::SHOP* pShop = GET_GAMEINTERFACE->Get_ShopData()[m_vecBuy_RenderInfo[m_iNowCell]->iIndexShop];
 		const CItem_Manager::ITEM* pItem = GET_GAMEINTERFACE->Get_Item_Origin_Spec(pShop->iIndex);
 		const CPlayer::PLAYER_STAT_INFO pOrigin = GET_GAMEINTERFACE->Get_Player()->Get_Player_Stat();
+		CPlayer::PLAYER_STAT_INFO* pAdjust = GET_GAMEINTERFACE->Get_Player()->Get_Player_Stat_Adjust();
 
 		if ((m_iNowCount != 0) || (m_iNowPrice != 0))
 		{
 			if (m_iNowCount > pShop->iCount)
 				GET_GAMEINTERFACE->Show_Popup(TEXT("구매 불가"), TEXT("구매 가능한 수량을 초과하였습니다."));
-			if (m_iNowPrice > pOrigin.iErgo)
+			else if (m_iNowPrice > pOrigin.iErgo + pAdjust->iErgo)
 				GET_GAMEINTERFACE->Show_Popup(TEXT("구매 불가"), TEXT("보유한 에르고가 충분하지 않습니다."));
 			else
 				GET_GAMEINTERFACE->Buy_ShopItem(m_iNowCell);
@@ -353,6 +361,8 @@ void CUIPage_Shop::Update_Cell(_float fTimeDelta)
 				if (bRoot)
 				{
 					m_vecPart[iterPart]->fPosition = m_Title_Bag->vPos;
+					m_vecPart[iterPart]->fPosition.y -= m_pScroll_Shop->fData_Offset_Y;
+
 					bRoot = false;
 				}
 				else 
@@ -378,6 +388,8 @@ void CUIPage_Shop::Update_Cell(_float fTimeDelta)
 				if (bRoot)
 				{
 					m_vecPart[iterPart]->fPosition = iter->vPos;
+					m_vecPart[iterPart]->fPosition.y -= m_pScroll_Shop->fData_Offset_Y;
+
 					bRoot = false;
 				}
 				else
@@ -419,6 +431,8 @@ void CUIPage_Shop::Update_Cell(_float fTimeDelta)
 				if (bRoot)
 				{
 					m_vecPart[iterPart]->fPosition = m_Title_Chest->vPos;
+					m_vecPart[iterPart]->fPosition.y -= m_pScroll_Shop->fData_Offset_Y;
+
 					bRoot = false;
 				}
 				else
@@ -440,9 +454,15 @@ void CUIPage_Shop::Update_Focus(_float fTimeDelta)
 	fRatio += fTimeDelta;
 	__super::Get_Front_Part_In_Control(_int(PART_GROUP::SHOP_SELECT_Fire))->fRatio = min(fRatio, 1.f);
 	__super::Get_Front_Part_In_Control(_int(PART_GROUP::SHOP_SELECT_Fire))->fPosition = vStart + ((vEnd - vStart) * fRatio);
+
+	__super::Get_Front_Part_In_Control(_int(PART_GROUP::SHOP_SELECT_Rect))->fPosition.y -= m_pScroll_Shop->fData_Offset_Y;
+	__super::Get_Front_Part_In_Control(_int(PART_GROUP::SHOP_SELECT_Fire))->fPosition.y -= m_pScroll_Shop->fData_Offset_Y;
 	
 	__super::Input_Render_Info(*__super::Get_Front_Part_In_Control(_int(PART_GROUP::SHOP_SELECT_Rect)), SCROLL_AREA::SCROLL_SHOP);
 	__super::Input_Render_Info(*__super::Get_Front_Part_In_Control(_int(PART_GROUP::SHOP_SELECT_Fire)), SCROLL_AREA::SCROLL_SHOP);
+
+	__super::Get_Front_Part_In_Control(_int(PART_GROUP::SHOP_SELECT_Rect))->fPosition.y += m_pScroll_Shop->fData_Offset_Y;
+	__super::Get_Front_Part_In_Control(_int(PART_GROUP::SHOP_SELECT_Fire))->fPosition.y += m_pScroll_Shop->fData_Offset_Y;
 }
 
 void CUIPage_Shop::Update_BagInfo(_float fTimeDelta)
@@ -460,9 +480,10 @@ void CUIPage_Shop::Setting_SellTab()
 		Safe_Delete(iter);
 	
 	m_vecSell_RenderInfo.clear();
+	Safe_Delete(m_Title_Bag);
+	Safe_Delete(m_Title_Chest);
 
 	_float fStartY = __super::Get_Front_Part_In_Control(_int(PART_GROUP::SHOP_Data_Area))->fPosition.y - __super::Get_Front_Part_In_Control(_int(PART_GROUP::SHOP_Data_Area))->fSize.y * 0.5f;
-	fStartY -= m_pScroll_Shop->fData_Offset_Y;
 	_float fAdjustY = 0.f;
 
 	if (m_Title_Bag == nullptr)
@@ -474,7 +495,7 @@ void CUIPage_Shop::Setting_SellTab()
 		fAdjustY += __super::Get_Front_Part_In_Control(_int(PART_GROUP::SHOP_Title_Line))->fAdjust.y * 1.f;
 		m_Title_Bag->vPos = __super::Get_Front_Part_In_Control(_int(PART_GROUP::SHOP_Title_Text))->fPosition;
 		m_Title_Bag->vPos.y = fStartY + fAdjustY;
-		fAdjustY += __super::Get_Front_Part_In_Control(_int(PART_GROUP::SHOP_Title_Line))->fAdjust.y * 1.f;
+		fAdjustY += __super::Get_Front_Part_In_Control(_int(PART_GROUP::SHOP_Title_Line))->fAdjust.y * 1.2f;
 	}
 
 	fAdjustY += __super::Get_Front_Part_In_Control(_int(PART_GROUP::SHOP_Cell_Static))->fSize.y * 0.5f;
@@ -526,7 +547,7 @@ void CUIPage_Shop::Setting_SellTab()
 		fAdjustY += __super::Get_Front_Part_In_Control(_int(PART_GROUP::SHOP_Title_Line))->fAdjust.y * 1.f;
 		m_Title_Chest->vPos = __super::Get_Front_Part_In_Control(_int(PART_GROUP::SHOP_Title_Text))->fPosition;
 		m_Title_Chest->vPos.y = fStartY + fAdjustY;
-		fAdjustY += __super::Get_Front_Part_In_Control(_int(PART_GROUP::SHOP_Title_Line))->fAdjust.y * 1.f;
+		fAdjustY += __super::Get_Front_Part_In_Control(_int(PART_GROUP::SHOP_Title_Line))->fAdjust.y * 1.2f;
 	}
 
 	// 보관함 관련 내용 필요 
@@ -571,6 +592,8 @@ void CUIPage_Shop::Setting_BuyTab()
 		__super::UpdatePart_ByIndex(__super::Get_Front_PartIndex_In_Control(_int(PART_GROUP::SHOP_Cell_Static)), 1.f);
 		pNewRender->vPos = __super::Get_Front_Part_In_Control(_int(PART_GROUP::SHOP_Cell_Static))->fPosition;
 	}
+
+	fAdjustY += __super::Get_Front_Part_In_Control(_int(PART_GROUP::SHOP_Cell_Static))->fSize.y * 0.5f;
 
 	m_pScroll_Shop->Activate_Scroll(fAdjustY);
 }
@@ -621,8 +644,11 @@ void CUIPage_Shop::Free()
 	m_vecPart.clear();
 
 
+	
+
 	Safe_Delete(m_Title_Bag);
 	Safe_Delete(m_Title_Chest);
+	Safe_Delete(m_pScroll_Shop);
 
 	for (auto& iter : m_vecSell_RenderInfo)
 		Safe_Delete(iter);

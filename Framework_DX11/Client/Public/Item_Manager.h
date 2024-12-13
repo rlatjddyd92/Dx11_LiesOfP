@@ -232,6 +232,9 @@ public:
 			{
 				vecItemInfo[iIndex]->iCount -= iCount;
 
+				if (vecItemInfo[iIndex]->iCount <= 0)
+					Remove_Item(iIndex);
+
 				return ITEM_RESULT::RESULT_SUCCESS;
 			}
 			else
@@ -577,10 +580,10 @@ public:
 	// 상점, 보관함
 	vector<SHOP*>& Get_ShopData() { return m_vecShop_Item; }
 	vector<ITEM*>& Get_ChestData() { return m_vecChest_Item; }
-	void Buy_ShopItem(_int iIndex);
-	void Sell_ShopItem(INVEN_ARRAY_TYPE eType, _int iIndex);
-	void ChestItem_To_Inven(_int iIndex);
-	void InvenItem_To_Chest(INVEN_ARRAY_TYPE eType, _int iIndex);
+	void Buy_ShopItem(_int iIndex, _int iCount = 1);
+	void Sell_ShopItem(INVEN_ARRAY_TYPE eType, _int iIndex, _int iCount = 1);
+	void ChestItem_To_Inven(_int iIndex, _int iCount = 1);
+	void InvenItem_To_Chest(INVEN_ARRAY_TYPE eType, _int iIndex, _int iCount = 1);
 
 
 

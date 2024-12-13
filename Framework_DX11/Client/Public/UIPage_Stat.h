@@ -101,6 +101,8 @@ protected:
 	void Update_SpecData(_float fTimeDelta);
 	void Update_StarChart(_float fTimeDelta);
 
+	void Input_LevelUp_Result();
+
 private:
 	_int m_iFocus_Point = -1;
 	_int m_iLevelUp_Buffer_Point[5] = { 0, };

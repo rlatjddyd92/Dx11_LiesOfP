@@ -425,44 +425,6 @@ void CUIPage_Play::LU_Gauge_Update(_float fTimeDelta)
 	__super::Get_Front_Part_In_Control(_int(PART_GROUP::GROUP_HP_NUM))->strText = {};
 	__super::Get_Front_Part_In_Control(_int(PART_GROUP::GROUP_ST_NUM))->bRender = false;
 	__super::Get_Front_Part_In_Control(_int(PART_GROUP::GROUP_ST_NUM))->strText = {};
-
-	/*if (m_bStat_Open)
-	{
-		_wstring strHp{};
-		_wstring strSt{};
-
-		strHp += to_wstring(_int(Info.vGauge_Hp.x));
-		strHp += TEXT(" / ");
-		strHp += to_wstring(_int(Info.vGauge_Hp.z));
-
-		if (pAdjust->vGauge_Hp.z > 0.f)
-		{
-			strHp += TEXT(" (+");
-			strHp += to_wstring(_int(pAdjust->vGauge_Hp.z));
-			strHp += TEXT(")");
-		}
-
-		strSt += to_wstring(_int(Info.vGauge_Stamina.x));
-		strSt += TEXT(" / ");
-		strSt += to_wstring(_int(Info.vGauge_Stamina.z));
-
-		if (pAdjust->vGauge_Stamina.z > 0.f)
-		{
-			strSt += TEXT(" (+");
-			strSt += to_wstring(_int(pAdjust->vGauge_Stamina.z));
-			strSt += TEXT(")");
-		}
-
-
-
-		__super::Get_Front_Part_In_Control(_int(PART_GROUP::GROUP_HP_NUM))->strText = strHp;
-		__super::Get_Front_Part_In_Control(_int(PART_GROUP::GROUP_ST_NUM))->strText = strSt;
-		__super::Get_Front_Part_In_Control(_int(PART_GROUP::GROUP_HP_NUM))->bRender = true;
-		__super::Get_Front_Part_In_Control(_int(PART_GROUP::GROUP_ST_NUM))->bRender = true;
-	}*/
-
-	
-
 }
 
 void CUIPage_Play::LD_Potion_Tool_Update(_float fTimeDelta)
