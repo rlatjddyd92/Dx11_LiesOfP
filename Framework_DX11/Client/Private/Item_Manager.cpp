@@ -831,7 +831,6 @@ ITEM_RESULT CItem_Manager::Operate_EquipAction(_Vec2 vPos, _Vec2 vSize)
 void CItem_Manager::Adjust_Spec()
 {
 	CPlayer::STAT_INFO* pAdjust = GET_GAMEINTERFACE->Get_Player()->Get_Player_Stat_Adjust();
-	CPlayer::ABILITY_INFO* pAbility = GET_GAMEINTERFACE->Get_Player()->Get_Player_Ability();
 
 	_int iAmulet[2] = { 0, };
 	_float fDefence[4] = { 0.f, };
@@ -855,9 +854,9 @@ void CItem_Manager::Adjust_Spec()
 		fDefence[3] = Get_Equip_Item_Info(EQUIP_SLOT::EQUIP_DEFENCE_RAINER)->vecDefence[2];
 
 	if ((iAmulet[0] == 87) || (iAmulet[1] == 87)) // ²ç¶Õ´Â Áõ¿ÀÀÇ ¾Æ¹Ä·¿ 
-		pAbility->bDebuff_Fire_Ignore = true;
+		pAdjust->bDebuff_Fire_Ignore = true;
 	else 
-		pAbility->bDebuff_Fire_Ignore = false;
+		pAdjust->bDebuff_Fire_Ignore = false;
 
 	if ((iAmulet[0] == 88) || (iAmulet[1] == 88))
 		pAdjust->vGauge_Stamina.z = 200.f;
@@ -865,15 +864,15 @@ void CItem_Manager::Adjust_Spec()
 		pAdjust->vGauge_Stamina.z = 0.f;
 
 	if ((iAmulet[0] == 90) || (iAmulet[1] == 90))
-		pAbility->bDebuff_Electric_Ignore = true;
+		pAdjust->bDebuff_Electric_Ignore = true;
 	else
-		pAbility->bDebuff_Electric_Ignore = false;
+		pAdjust->bDebuff_Electric_Ignore = false;
 
 
 	if ((iAmulet[0] == 94) || (iAmulet[1] == 94))
-		pAbility->bDebuff_Acid_Ignore = true;
+		pAdjust->bDebuff_Acid_Ignore = true;
 	else
-		pAbility->bDebuff_Acid_Ignore = false;
+		pAdjust->bDebuff_Acid_Ignore = false;
 
 	if ((iAmulet[0] == 101) || (iAmulet[1] == 101))
 		pAdjust->vGauge_Hp.z = 200.f;
@@ -881,9 +880,9 @@ void CItem_Manager::Adjust_Spec()
 		pAdjust->vGauge_Hp.z = 0.f;
 
 	if ((iAmulet[0] == 111) || (iAmulet[1] == 111))
-		pAbility->fHeal = 10.f;
+		pAdjust->fHeal = 10.f;
 	else
-		pAbility->fHeal = 0.f;
+		pAdjust->fHeal = 0.f;
 
 	if ((iAmulet[0] == 113) || (iAmulet[1] == 113))
 		pAdjust->iStat_Defence = 30;
@@ -891,9 +890,9 @@ void CItem_Manager::Adjust_Spec()
 		pAdjust->iStat_Defence = 0;
 
 	pAdjust->iStat_Defence += _int(fDefence[0]);
-	pAbility->fResist_Fire = fDefence[1];
-	pAbility->bDebuff_Electric_Ignore = fDefence[2];
-	pAbility->bDebuff_Acid_Ignore = fDefence[3];
+	pAdjust->fResist_Fire = fDefence[1];
+	pAdjust->bDebuff_Electric_Ignore = fDefence[2];
+	pAdjust->bDebuff_Acid_Ignore = fDefence[3];
 }
 
 void CItem_Manager::Buy_ShopItem(_int iIndex, _int iCount)

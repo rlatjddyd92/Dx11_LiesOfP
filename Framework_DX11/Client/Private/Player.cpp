@@ -155,7 +155,6 @@ HRESULT CPlayer::Initialize(void * pArg)
 	// 스탯 구조체 생성 
 	m_tPlayer_Stat = new STAT_INFO;
 	m_tPlayer_Stat_Adjust = new STAT_INFO;
-	m_tPlayer_Ability = new ABILITY_INFO;
 
 	m_tPlayer_Stat_Adjust->Reset_Zero();
 
@@ -998,6 +997,28 @@ CStargazer* CPlayer::Find_Stargazer()
 	return nullptr;
 }
 
+void CPlayer::Input_Level_UP_Stat(_int iPoint[5], _float pLevelUpStat[9])
+{
+	m_tPlayer_Stat->vGauge_Hp.z += pLevelUpStat[0];
+	m_tPlayer_Stat->vGauge_Stamina.z += pLevelUpStat[1];
+	m_tPlayer_Stat->iStat_Attack += pLevelUpStat[2];
+	m_tPlayer_Stat->iStat_Defence += pLevelUpStat[3];
+	m_tPlayer_Stat->fHeal += pLevelUpStat[4];
+	m_tPlayer_Stat->vGauge_Region.z += pLevelUpStat[5];
+	m_tPlayer_Stat->fResist_Fire += pLevelUpStat[6];
+	m_tPlayer_Stat->fResist_Electric += pLevelUpStat[7];
+	m_tPlayer_Stat->fResist_Acid += pLevelUpStat[8];
+
+	m_tPlayer_Stat->iPoint_HP += iPoint[0];
+	m_tPlayer_Stat->iPoint_Stamina += iPoint[1];
+	m_tPlayer_Stat->iPoint_Attack += iPoint[2];
+	m_tPlayer_Stat->iPoint_Defence += iPoint[3];
+	m_tPlayer_Stat->iPoint_Heal += iPoint[4];
+
+	for (_int i = 0; i < 5; ++i)
+		m_tPlayer_Stat->iPlayer_Level += iPoint[i];
+}
+
 void CPlayer::CollisionStay_IntercObj(CGameObject* pGameObject)
 {
 	if (m_pFsmCom->Get_CurrentState() >= 100)
@@ -1471,6 +1492,5 @@ void CPlayer::Free()
 	// 스탯 구조체 제거 
 	Safe_Delete(m_tPlayer_Stat);
 	Safe_Delete(m_tPlayer_Stat_Adjust);
-	Safe_Delete(m_tPlayer_Ability);
 }
 

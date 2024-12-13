@@ -387,6 +387,8 @@ private:
 	UIPAGE m_eNowPage = UIPAGE::PAGE_END;
 	UIPAGE m_eBeforePage = UIPAGE::PAGE_END;
 
+	vector<UIPAGE> m_vecPageRender_Order;
+
 	// test code
 #ifdef _DEBUG
 	_int m_iFonttest = 0; // -1 : 영어, 0 : off, 1 : 한글

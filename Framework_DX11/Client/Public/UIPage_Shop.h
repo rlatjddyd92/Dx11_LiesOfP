@@ -126,7 +126,6 @@ protected:
 	vector<CELL_RENDER*> m_vecSell_RenderInfo;
 	vector<CELL_RENDER*> m_vecBuy_RenderInfo;
 
-
 public:
 	static CUIPage_Shop* Create(ID3D11Device* pDevice, ID3D11DeviceContext* pContext);
 	virtual CGameObject* Clone(void* pArg);

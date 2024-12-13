@@ -188,6 +188,8 @@ void CUIPage_Stat::Action_LevelUp(_float fTimeDelta)
 			{
 				if (iErgo < pOrigin.iErgo_LevelUp)
 					GET_GAMEINTERFACE->Show_Popup(TEXT("레벨 업 불가"), TEXT("에르고가 부족합니다."));
+				else
+					Input_LevelUp_Stat();
 			}
 	}
 }
@@ -222,12 +224,13 @@ void CUIPage_Stat::Action_Focus(_float fTimeDelta)
 		Get_Front_Part_In_Control(_int(PART_GROUP::GROUP_SELECT_FIRE))->fAdjust_Start = Get_Front_Part_In_Control(_int(PART_GROUP::GROUP_SELECT_FIRE))->fPosition - vPos;
 		Get_Front_Part_In_Control(_int(PART_GROUP::GROUP_SELECT_FIRE))->fAdjust_End = { 0.f,0.f };
 		Get_Front_Part_In_Control(_int(PART_GROUP::GROUP_SELECT_FIRE))->fRatio = 0.f;
+		m_vec_Group_Ctrl[(_int(PART_GROUP::GROUP_SELECT_FIRE))]->fRatio = 0.f;
 	}
 
-	if (fTimeDelta > 0.1f)
-		Get_Front_Part_In_Control(_int(PART_GROUP::GROUP_SELECT_FIRE))->fRatio += 0.01f;
+	if (fTimeDelta > 1.f)
+		Get_Front_Part_In_Control(_int(PART_GROUP::GROUP_SELECT_FIRE))->fRatio += 0.1f;
 	else
-		Get_Front_Part_In_Control(_int(PART_GROUP::GROUP_SELECT_FIRE))->fRatio += fTimeDelta;
+		Get_Front_Part_In_Control(_int(PART_GROUP::GROUP_SELECT_FIRE))->fRatio += fTimeDelta * 5.f;
 
 	if (Get_Front_Part_In_Control(_int(PART_GROUP::GROUP_SELECT_FIRE))->fRatio > 1.f)
 		Get_Front_Part_In_Control(_int(PART_GROUP::GROUP_SELECT_FIRE))->fRatio = 1.f;
@@ -237,7 +240,6 @@ void CUIPage_Stat::Update_Point(_float fTimeDelta)
 {
 	const CPlayer::PLAYER_STAT_INFO pOrigin = GET_GAMEINTERFACE->Get_Player()->Get_Player_Stat();
 	CPlayer::PLAYER_STAT_INFO* pAdjust = GET_GAMEINTERFACE->Get_Player()->Get_Player_Stat_Adjust();
-	CPlayer::PLAYER_ABILITY_INFO* pAblity = GET_GAMEINTERFACE->Get_Player()->Get_Player_Ability();
 
 	m_vecPart[m_vec_Group_Ctrl[_int(PART_GROUP::GROUP_POINT_NUM_0)]->PartIndexlist.front()]->strText = to_wstring((m_iLevelUp_Buffer_Point[0] + pOrigin.iPoint_HP) / 10);
 	m_vecPart[m_vec_Group_Ctrl[_int(PART_GROUP::GROUP_POINT_NUM_0)]->PartIndexlist.back()]->strText = to_wstring((m_iLevelUp_Buffer_Point[0] + pOrigin.iPoint_HP) % 10);
@@ -275,6 +277,8 @@ void CUIPage_Stat::Update_Focus(_float fTimeDelta)
 		Get_Front_Part_In_Control(_int(PART_GROUP::GROUP_SELECT_FIRE))->iParentPart_Index = Get_Front_PartIndex_In_Control(_int(PART_GROUP::GROUP_POINT_RECT_0) + m_iFocus_Point);
 		Get_Front_Part_In_Control(_int(PART_GROUP::GROUP_SELECT_RECT))->bRender = true;
 		Get_Front_Part_In_Control(_int(PART_GROUP::GROUP_SELECT_FIRE))->bRender = true;
+
+		m_vec_Group_Ctrl[(_int(PART_GROUP::GROUP_SELECT_FIRE))]->fRatio += fTimeDelta;
 	}
 	else
 	{
@@ -287,7 +291,6 @@ void CUIPage_Stat::Update_SpecData(_float fTimeDelta)
 {
 	const CPlayer::PLAYER_STAT_INFO pOrigin = GET_GAMEINTERFACE->Get_Player()->Get_Player_Stat();
 	CPlayer::PLAYER_STAT_INFO* pAdjust = GET_GAMEINTERFACE->Get_Player()->Get_Player_Stat_Adjust();
-	CPlayer::PLAYER_ABILITY_INFO* pAblity = GET_GAMEINTERFACE->Get_Player()->Get_Player_Ability();
 
 	_float* pOrigin_Stat = new _float[9];
 	_float* pAdjust_Stat = new _float[9];
@@ -296,21 +299,21 @@ void CUIPage_Stat::Update_SpecData(_float fTimeDelta)
 	pOrigin_Stat[1] = pOrigin.vGauge_Stamina.z;
 	pOrigin_Stat[2] = pOrigin.iStat_Attack;
 	pOrigin_Stat[3] = pOrigin.iStat_Defence;
-	pOrigin_Stat[4] = 0.f;
+	pOrigin_Stat[4] = pOrigin.fHeal;
 	pOrigin_Stat[5] = pOrigin.vGauge_Region.z;
-	pOrigin_Stat[6] = 0.f;
-	pOrigin_Stat[7] = 0.f;
-	pOrigin_Stat[8] = 0.f;
+	pOrigin_Stat[6] = pOrigin.fResist_Fire;
+	pOrigin_Stat[7] = pOrigin.fResist_Electric;
+	pOrigin_Stat[8] = pOrigin.fResist_Acid;
 
 	pAdjust_Stat[0] = pAdjust->vGauge_Hp.z;
 	pAdjust_Stat[1] = pAdjust->vGauge_Stamina.z;
 	pAdjust_Stat[2] = pAdjust->iStat_Attack;
 	pAdjust_Stat[3] = pAdjust->iStat_Defence;
-	pAdjust_Stat[4] = pAblity->fIncrease_Hp;
+	pAdjust_Stat[4] = pAdjust->fHeal;
 	pAdjust_Stat[5] = pAdjust->vGauge_Region.z;
-	pAdjust_Stat[6] = pAblity->fResist_Fire;
-	pAdjust_Stat[7] = pAblity->fResist_Electric;
-	pAdjust_Stat[8] = pAblity->fResist_Acid;
+	pAdjust_Stat[6] = pAdjust->fResist_Fire;
+	pAdjust_Stat[7] = pAdjust->fResist_Electric;
+	pAdjust_Stat[8] = pAdjust->fResist_Acid;
 
 	m_iLevelUp_Buffer_Stat[0] = m_iLevelUp_Buffer_Point[0] * 50.f;
 	m_iLevelUp_Buffer_Stat[1] = m_iLevelUp_Buffer_Point[1] * 50.f;
@@ -340,11 +343,11 @@ void CUIPage_Stat::Update_SpecData(_float fTimeDelta)
 		m_iLevelUp_Buffer_Stat[i] /= 100.f;
 	}
 
-	if (pAblity->bDebuff_Fire_Ignore)
+	if (pAdjust->bDebuff_Fire_Ignore)
 		m_iLevelUp_Buffer_Stat[6] = -1.f;
-	if (pAblity->bDebuff_Electric_Ignore)
+	if (pAdjust->bDebuff_Electric_Ignore)
 		m_iLevelUp_Buffer_Stat[7] = -1.f;
-	if (pAblity->bDebuff_Acid_Ignore)
+	if (pAdjust->bDebuff_Acid_Ignore)
 		m_iLevelUp_Buffer_Stat[8] = -1.f;
 
 	m_vec_Group_Ctrl[_int(PART_GROUP::GROUP_ABILITY_6)]->bRender = false;
@@ -436,14 +439,13 @@ void CUIPage_Stat::Update_StarChart(_float fTimeDelta)
 
 	const CPlayer::PLAYER_STAT_INFO pOrigin = GET_GAMEINTERFACE->Get_Player()->Get_Player_Stat();
 	CPlayer::PLAYER_STAT_INFO* pAdjust = GET_GAMEINTERFACE->Get_Player()->Get_Player_Stat_Adjust();
-	CPlayer::PLAYER_ABILITY_INFO* pAblity = GET_GAMEINTERFACE->Get_Player()->Get_Player_Ability();
 
 	pOriginPart->fRatio_TwoDPolygon[0] = _float(pAdjust->iStat_Attack + pOrigin.iStat_Attack) / 100.f;
 	pOriginPart->fRatio_TwoDPolygon[1] = _float(pAdjust->iStat_Defence + pOrigin.iStat_Defence) / 100.f;
-	pOriginPart->fRatio_TwoDPolygon[2] = _float(pAblity->fHeal) / 20.f;
-	pOriginPart->fRatio_TwoDPolygon[3] = (pAdjust->fDebuff_Fire.x + pOrigin.fDebuff_Fire.x) / pOrigin.fDebuff_Fire.y;
-	pOriginPart->fRatio_TwoDPolygon[4] = (pAdjust->fDebuff_Electric.x + pOrigin.fDebuff_Electric.x) / pOrigin.fDebuff_Electric.y;
-	pOriginPart->fRatio_TwoDPolygon[5] = (pAdjust->fDebuff_Acid.x + pOrigin.fDebuff_Acid.x) / pOrigin.fDebuff_Acid.y;
+	pOriginPart->fRatio_TwoDPolygon[2] = _float(pAdjust->fHeal) / 20.f;
+	pOriginPart->fRatio_TwoDPolygon[3] = (pAdjust->fResist_Fire + pOrigin.fResist_Fire) / 100.f;
+	pOriginPart->fRatio_TwoDPolygon[4] = (pAdjust->fResist_Electric + pOrigin.fResist_Electric) / 100.f;
+	pOriginPart->fRatio_TwoDPolygon[5] = (pAdjust->fResist_Acid + pOrigin.fResist_Acid) / 100.f;
 	pOriginPart->fRatio_TwoDPolygon[6] = (pAdjust->vGauge_Hp.z + pOrigin.vGauge_Hp.z) / pOrigin.vGauge_Hp.w;
 	pOriginPart->fRatio_TwoDPolygon[7] = (pAdjust->vGauge_Stamina.z + pOrigin.vGauge_Stamina.z) / pOrigin.vGauge_Stamina.w;
 
@@ -451,17 +453,29 @@ void CUIPage_Stat::Update_StarChart(_float fTimeDelta)
 	pLevelUpPart->fRatio_TwoDPolygon[0] = pOriginPart->fRatio_TwoDPolygon[0] + (m_iLevelUp_Buffer_Stat[2] / 100.f);
 	pLevelUpPart->fRatio_TwoDPolygon[1] = pOriginPart->fRatio_TwoDPolygon[1] + (m_iLevelUp_Buffer_Stat[3] / 100.f);
 	pLevelUpPart->fRatio_TwoDPolygon[2] = pOriginPart->fRatio_TwoDPolygon[2] + (m_iLevelUp_Buffer_Stat[4] / 20.f);
-	pLevelUpPart->fRatio_TwoDPolygon[3] = pOriginPart->fRatio_TwoDPolygon[3] + (m_iLevelUp_Buffer_Stat[6] / pOrigin.fDebuff_Fire.y);
-	pLevelUpPart->fRatio_TwoDPolygon[4] = pOriginPart->fRatio_TwoDPolygon[4] + (m_iLevelUp_Buffer_Stat[7] / pOrigin.fDebuff_Electric.y);
-	pLevelUpPart->fRatio_TwoDPolygon[5] = pOriginPart->fRatio_TwoDPolygon[5] + (m_iLevelUp_Buffer_Stat[8] / pOrigin.fDebuff_Acid.y);
+	pLevelUpPart->fRatio_TwoDPolygon[3] = pOriginPart->fRatio_TwoDPolygon[3] + (m_iLevelUp_Buffer_Stat[6] / 100.f);
+	pLevelUpPart->fRatio_TwoDPolygon[4] = pOriginPart->fRatio_TwoDPolygon[4] + (m_iLevelUp_Buffer_Stat[7] / 100.f);
+	pLevelUpPart->fRatio_TwoDPolygon[5] = pOriginPart->fRatio_TwoDPolygon[5] + (m_iLevelUp_Buffer_Stat[8] / 100.f);
 	pLevelUpPart->fRatio_TwoDPolygon[6] = pOriginPart->fRatio_TwoDPolygon[6] + (m_iLevelUp_Buffer_Stat[0] / pOrigin.vGauge_Hp.w);
 	pLevelUpPart->fRatio_TwoDPolygon[7] = pOriginPart->fRatio_TwoDPolygon[7] + (m_iLevelUp_Buffer_Stat[1] / pOrigin.vGauge_Stamina.w);
 }
 
-void CUIPage_Stat::Input_LevelUp_Result()
+void CUIPage_Stat::Input_LevelUp_Stat()
 {
-	
+	GET_GAMEINTERFACE->Get_Player()->Input_Level_UP_Stat(m_iLevelUp_Buffer_Point, m_iLevelUp_Buffer_Stat);
 
+	for (_int i = 0; i < 5; ++i)
+		m_iLevelUp_Buffer_Point[i] = 0;
+
+	for (_int i = 0; i < 9; ++i)
+		m_iLevelUp_Buffer_Stat[i] = 0.f;
+
+	_wstring strErgo_Spend_Inform = TEXT("에르고 사용량 : ");
+	strErgo_Spend_Inform += to_wstring(m_iUsing_Point_Now);
+
+	m_iUsing_Point_Now = 0;
+
+	GET_GAMEINTERFACE->Show_Popup(TEXT("레벨 업 성공"), strErgo_Spend_Inform);
 }
 
 CUIPage_Stat* CUIPage_Stat::Create(ID3D11Device* pDevice, ID3D11DeviceContext* pContext)
