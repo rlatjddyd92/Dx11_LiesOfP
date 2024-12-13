@@ -156,13 +156,85 @@
 #include "C:\Users\olivi\GitHub\Dx11_LiesOfP\Framework_DX11\Client\Private\State_RaxasiaP1_Walk.cpp"
 
 
+#include "C:\Users\olivi\GitHub\Dx11_LiesOfP\Framework_DX11\Client\Private\State_RaxasiaP2_ChargeRush.cpp"
+
+
+#include "C:\Users\olivi\GitHub\Dx11_LiesOfP\Framework_DX11\Client\Private\State_RaxasiaP2_Declare_War.cpp"
+
+
+#include "C:\Users\olivi\GitHub\Dx11_LiesOfP\Framework_DX11\Client\Private\State_RaxasiaP2_Die.cpp"
+
+
+#include "C:\Users\olivi\GitHub\Dx11_LiesOfP\Framework_DX11\Client\Private\State_RaxasiaP2_Grogy.cpp"
+
+
+#include "C:\Users\olivi\GitHub\Dx11_LiesOfP\Framework_DX11\Client\Private\State_RaxasiaP2_Guard.cpp"
+
+
+#include "C:\Users\olivi\GitHub\Dx11_LiesOfP\Framework_DX11\Client\Private\State_RaxasiaP2_Guard_Push.cpp"
+
+
+#include "C:\Users\olivi\GitHub\Dx11_LiesOfP\Framework_DX11\Client\Private\State_RaxasiaP2_HitFatal.cpp"
+
+
+#include "C:\Users\olivi\GitHub\Dx11_LiesOfP\Framework_DX11\Client\Private\State_RaxasiaP2_Idle.cpp"
+
+
+#include "C:\Users\olivi\GitHub\Dx11_LiesOfP\Framework_DX11\Client\Private\State_RaxasiaP2_JumpStamp.cpp"
+
+
+#include "C:\Users\olivi\GitHub\Dx11_LiesOfP\Framework_DX11\Client\Private\State_RaxasiaP2_Run.cpp"
+
+
+#include "C:\Users\olivi\GitHub\Dx11_LiesOfP\Framework_DX11\Client\Private\State_RaxasiaP2_Running.cpp"
+
+
+#include "C:\Users\olivi\GitHub\Dx11_LiesOfP\Framework_DX11\Client\Private\State_RaxasiaP2_Running_Fury.cpp"
+
+
+#include "C:\Users\olivi\GitHub\Dx11_LiesOfP\Framework_DX11\Client\Private\State_RaxasiaP2_Running_Linked.cpp"
+
+
+#include "C:\Users\olivi\GitHub\Dx11_LiesOfP\Framework_DX11\Client\Private\State_RaxasiaP2_ShieldLinked.cpp"
+
+
+#include "C:\Users\olivi\GitHub\Dx11_LiesOfP\Framework_DX11\Client\Private\State_RaxasiaP2_ShieldRush.cpp"
+
+
+#include "C:\Users\olivi\GitHub\Dx11_LiesOfP\Framework_DX11\Client\Private\State_RaxasiaP2_StepJump.cpp"
+
+
+#include "C:\Users\olivi\GitHub\Dx11_LiesOfP\Framework_DX11\Client\Private\State_RaxasiaP2_Tele.cpp"
+
+
+#include "C:\Users\olivi\GitHub\Dx11_LiesOfP\Framework_DX11\Client\Private\State_RaxasiaP2_TeleportAttack.cpp"
+
+
+#include "C:\Users\olivi\GitHub\Dx11_LiesOfP\Framework_DX11\Client\Private\State_RaxasiaP2_Tele_JumpLightning.cpp"
+
+
+#include "C:\Users\olivi\GitHub\Dx11_LiesOfP\Framework_DX11\Client\Private\State_RaxasiaP2_Tele_LinkedTel.cpp"
+
+
+#include "C:\Users\olivi\GitHub\Dx11_LiesOfP\Framework_DX11\Client\Private\State_RaxasiaP2_Walk.cpp"
+
+
+#include "C:\Users\olivi\GitHub\Dx11_LiesOfP\Framework_DX11\Client\Private\State_RaxasiaP2_WaveSting.cpp"
+
+
 #include "C:\Users\olivi\GitHub\Dx11_LiesOfP\Framework_DX11\Client\Private\UIPage_Chest.cpp"
 
 
 #include "C:\Users\olivi\GitHub\Dx11_LiesOfP\Framework_DX11\Client\Private\UIPage_Shop.cpp"
 
 
+#include "C:\Users\olivi\GitHub\Dx11_LiesOfP\Framework_DX11\Client\Private\UIPage_Telepot.cpp"
+
+
 #include "C:\Users\olivi\GitHub\Dx11_LiesOfP\Framework_DX11\Client\Private\Weapon_PlayerArm.cpp"
+
+
+#include "C:\Users\olivi\GitHub\Dx11_LiesOfP\Framework_DX11\Client\Private\Weapon_Raxasia_P1_Shield.cpp"
 
 
 #include "C:\Users\olivi\GitHub\Dx11_LiesOfP\Framework_DX11\Client\Private\Weapon_Raxasia_P1_Sword.cpp"
@@ -766,6 +838,12 @@
 
 
 #include "C:\Users\olivi\GitHub\Dx11_LiesOfP\Framework_DX11\Client\Private\Weapon_Rapier.cpp"
+
+
+#include "C:\Users\olivi\GitHub\Dx11_LiesOfP\Framework_DX11\Client\Private\Weapon_Raxasia_P2_Shield.cpp"
+
+
+#include "C:\Users\olivi\GitHub\Dx11_LiesOfP\Framework_DX11\Client\Private\Weapon_Raxasia_P2_Sword.cpp"
 
 
 #include "C:\Users\olivi\GitHub\Dx11_LiesOfP\Framework_DX11\Client\Private\Weapon_Scissor.cpp"
