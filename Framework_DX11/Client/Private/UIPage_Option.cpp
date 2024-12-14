@@ -117,11 +117,13 @@ HRESULT CUIPage_Option::Render()
 void CUIPage_Option::OpenAction()
 {
 	__super::OpenAction();
+	m_pSoundCom->Play2D(TEXT("SE_UI_OpenMenu_04.wav"), &g_fUIVolume);
 }
 
 void CUIPage_Option::CloseAction()
 {
 	__super::CloseAction();
+	m_pSoundCom->Play2D(TEXT("SE_UI_CloseWindow_01.wav"), &g_fUIVolume);
 }
 
 CHECK_MOUSE CUIPage_Option::Check_Page_Action(_float fTimeDelta)

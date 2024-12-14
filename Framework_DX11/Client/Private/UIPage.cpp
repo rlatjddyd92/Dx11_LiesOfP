@@ -23,6 +23,13 @@ HRESULT CUIPage::Initialize(void* pArg)
 {
 	m_pItemaction = new ITEMACTION;
 
+	/* FOR.Com_VoiceSound */
+	if (FAILED(__super::Add_Component(LEVEL_STATIC, TEXT("Prototype_Component_Sound"),
+		TEXT("Com_VoiceSound"), reinterpret_cast<CComponent**>(&m_pSoundCom))))
+		return E_FAIL;
+
+	m_pSoundCom->Set_Owner(this);
+
 	/* 직교퉁여을 위한 데이터들을 모두 셋하낟. */
 	if (FAILED(__super::Initialize(&pArg)))
 		return E_FAIL;
@@ -40,6 +47,7 @@ void CUIPage::Update(_float fTimeDelta)
 {
 	// 여기까지 각 페이지의 개별 적용 사항을 끝내야 함 
 	__super::Update(fTimeDelta);
+	m_pSoundCom->Update(fTimeDelta);
 }
 
 void CUIPage::Late_Update(_float fTimeDelta)
@@ -273,6 +281,8 @@ void CUIPage::Free()
 	m_vec_Group_Ctrl.clear();
 
 	Safe_Delete(m_pItemaction);
+
+	Safe_Release(m_pSoundCom);
 }
 
 void CUIPage::SCROLL_INFO::Initialize_Scroll(UPART* pData, UPART* pBar, SCROLL_AREA eArea)

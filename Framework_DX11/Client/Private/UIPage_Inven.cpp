@@ -35,8 +35,6 @@ HRESULT CUIPage_Inven::Initialize_Prototype()
 	if (FAILED(__super::Initialize(&Desc)))
 		return E_FAIL;
 
-
-
 	return S_OK;
 }
 
@@ -55,8 +53,6 @@ void CUIPage_Inven::Priority_Update(_float fTimeDelta)
 void CUIPage_Inven::Update(_float fTimeDelta)
 {
 	__super::Update(fTimeDelta);
-
-	
 }
 
 void CUIPage_Inven::Late_Update(_float fTimeDelta)
@@ -110,6 +106,7 @@ void CUIPage_Inven::OpenAction()
 	__super::OpenAction();
 	m_IsTab_Change = true;
 	GET_GAMEINTERFACE->Off_ItemInfo_UI();
+	m_pSoundCom->Play2D(TEXT("SE_UI_OpenMenu_04.wav"), &g_fUIVolume);
 	Reset_ItemAction();
 }
 
@@ -118,6 +115,7 @@ void CUIPage_Inven::CloseAction()
 	__super::CloseAction();
 	GET_GAMEINTERFACE->Set_Show_NewMark_Off();
 	GET_GAMEINTERFACE->Off_ItemInfo_UI();
+	m_pSoundCom->Play2D(TEXT("SE_UI_CloseWindow_01.wav"), &g_fUIVolume);
 	Reset_ItemAction();
 }
 
@@ -231,6 +229,10 @@ void CUIPage_Inven::Action_Inven_Page(_float fTimeDelta)
 		m_vFocus_Pos = { -1.f,-1.f };
 		GET_GAMEINTERFACE->Off_Focus();
 		Reset_ItemAction();
+
+		m_pSoundCom->Play2D(TEXT("SE_UI_TutorialChangePage_01.wav"), &g_fUIVolume);
+
+		m_iNowCell = 0;
 	}
 }
 
@@ -361,6 +363,11 @@ void CUIPage_Inven::Update_Array_Position(_float fTimeDelta)
 			if (vCheck.x != -1)
 			{
 				GET_GAMEINTERFACE->Show_Tooltip(INVEN_ARRAY_TYPE(i), j);
+
+				if (m_iNowCell != j)
+					m_pSoundCom->Play2D(TEXT("SE_UI_ToggleChange_01.wav"), &g_fUIVolume);
+
+				m_iNowCell = j;
 
 				m_vecPart[*iter]->bRender = true;  bIsFocus = true;
 				if (KEY_TAP(KEY::RBUTTON))
@@ -545,6 +552,11 @@ void CUIPage_Inven::Update_Array_Position_Weapon(_float fTimeDelta)
 		
 			if (vCheck.x != -1)
 			{
+				if (m_iNowCell != j)
+					m_pSoundCom->Play2D(TEXT("SE_UI_ToggleChange_01.wav"), &g_fUIVolume);
+
+				m_iNowCell = j;
+
 				if (pNowBlade != nullptr)
 					GET_GAMEINTERFACE->Show_Tooltip(INVEN_ARRAY_TYPE::TYPE_WEAPON_NORMAL_BLADE, j);
 				m_vecPart[*iter]->bRender = true;  bIsFocus = true;
@@ -704,6 +716,11 @@ void CUIPage_Inven::Update_Array_Position_Weapon_Heroic(_float fTimeDelta, _floa
 		
 		if (vCheck.x != -1)
 		{
+			if (m_iNowCell != j)
+				m_pSoundCom->Play2D(TEXT("SE_UI_ToggleChange_01.wav"), &g_fUIVolume);
+
+			m_iNowCell = j;
+
 			if (pNowBlade != nullptr)
 				GET_GAMEINTERFACE->Show_Tooltip(INVEN_ARRAY_TYPE::TYPE_WEAPON_SPECIAL_BLADE, j);
 

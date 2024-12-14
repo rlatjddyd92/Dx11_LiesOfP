@@ -247,6 +247,8 @@ void CUIPage_ItemInfo::Show_NewMark(_Vec2 vItemCellPos, _Vec2 vItemCellSize)
 
 void CUIPage_ItemInfo::Show_ItemAction(_Vec2 vItemCellPos, _Vec2 vItemCellSize, ITEM_FUNC eFunc0, ITEM_FUNC eFunc1, ITEM_FUNC eFunc2, ITEM_FUNC eFunc3)
 {
+	m_pSoundCom->Play2D(TEXT("SE_UI_OpenWindow_01.wav"), &g_fUIVolume);
+
 	m_bIsActive_Func = true;
 	m_vecPart[_int(PART_GROUP::ITEMINFO_ACTION_Header)]->fPosition = vItemCellPos + (m_vecPart[_int(PART_GROUP::ITEMINFO_ACTION_Header)]->fSize * 0.5f) + (vItemCellSize * 0.5f);
 	m_vecPart[_int(PART_GROUP::ITEMINFO_ACTION_Back)]->bRender = true;

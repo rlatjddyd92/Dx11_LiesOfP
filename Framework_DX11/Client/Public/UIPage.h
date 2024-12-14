@@ -5,7 +5,7 @@
 #include "Interface_Enums.h"
 
 BEGIN(Engine)
-
+class CSound;
 END
 
 BEGIN(Client)
@@ -360,6 +360,9 @@ protected: // 그룹 컨트롤 모음 -> 여기 있는 건 전체 업데이트 + 전체 릴리즈 용도�
 
 protected: // ItemAction 
 	ITEMACTION* m_pItemaction = { nullptr };
+
+protected: // Sound
+	class CSound* m_pSoundCom = { nullptr };
 
 public:
 	static CUIPage* Create(ID3D11Device* pDevice, ID3D11DeviceContext* pContext);

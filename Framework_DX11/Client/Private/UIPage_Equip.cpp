@@ -82,6 +82,7 @@ void CUIPage_Equip::OpenAction()
 {
 	__super::OpenAction();
 	GET_GAMEINTERFACE->Off_ItemInfo_UI();
+	m_pSoundCom->Play2D(TEXT("SE_UI_OpenMenu_04.wav"), &g_fUIVolume);
 	Reset_ItemAction();
 }
 
@@ -90,6 +91,7 @@ void CUIPage_Equip::CloseAction()
 	__super::CloseAction();
 	GET_GAMEINTERFACE->Set_Show_NewMark_Off();
 	GET_GAMEINTERFACE->Off_ItemInfo_UI();
+	m_pSoundCom->Play2D(TEXT("SE_UI_CloseWindow_01.wav"), &g_fUIVolume);
 	Reset_ItemAction();
 }
 
@@ -155,6 +157,9 @@ void CUIPage_Equip::Action_Equip_Page(_float fTimeDelta)
 		Reset_Focus();
 		GET_GAMEINTERFACE->Off_Focus();
 		Reset_ItemAction();
+		m_pSoundCom->Play2D(TEXT("SE_UI_TutorialChangePage_01.wav"), &g_fUIVolume);
+
+		m_iNowCell = 0;
 	}
 }
 
@@ -218,6 +223,11 @@ void CUIPage_Equip::Action_Focus(_float fTimeDelta)
 
 			if (pItem != nullptr)
 				GET_GAMEINTERFACE->Show_Tooltip(pItem->eSlot);
+
+			if (m_iNowCell != i)
+				m_pSoundCom->Play2D(TEXT("SE_UI_ToggleChange_01.wav"), &g_fUIVolume);
+
+			m_iNowCell = i;
 
 			if (KEY_TAP(KEY::RBUTTON))
 			{

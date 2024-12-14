@@ -86,12 +86,14 @@ HRESULT CUIPage_Stat::Render()
 void CUIPage_Stat::OpenAction()
 {
 	__super::OpenAction();
+	m_pSoundCom->Play2D(TEXT("SE_UI_OpenMenu_04.wav"), &g_fUIVolume);
 	m_iFocus_Point = 0;
 }
 
 void CUIPage_Stat::CloseAction()
 {
 	__super::CloseAction();
+	m_pSoundCom->Play2D(TEXT("SE_UI_CloseWindow_01.wav"), &g_fUIVolume);
 }
 
 CHECK_MOUSE CUIPage_Stat::Check_Page_Action(_float fTimeDelta)
