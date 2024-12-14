@@ -109,7 +109,7 @@ void CState_Player_Scissor_RAttack00::Update(_float fTimeDelta)
 
 void CState_Player_Scissor_RAttack00::End_State()
 {
-    m_pPlayer->Set_WeaponEffectType(CWeapon::ATK_EFFECT_NOTHING);
+   // m_pPlayer->Set_WeaponEffectType(CWeapon::ATK_EFFECT_NOTHING);
     m_pPlayer->Combine_Scissor(true);
 }
 

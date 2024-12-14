@@ -59,7 +59,7 @@ void CWeapon_FlameSword::Priority_Update(_float fTimeDelta)
 	if (!m_isActive)
 		return;
 
-	__super::Update(fTimeDelta);
+	__super::Priority_Update(fTimeDelta);
 
 	
 

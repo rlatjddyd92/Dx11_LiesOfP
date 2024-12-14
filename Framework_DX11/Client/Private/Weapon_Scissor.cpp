@@ -61,6 +61,8 @@ void CWeapon_Scissor::Priority_Update(_float fTimeDelta)
 {
 	if (!m_isActive)
 		return;
+
+	__super::Priority_Update(fTimeDelta);
 }
 
 void CWeapon_Scissor::Update(_float fTimeDelta)

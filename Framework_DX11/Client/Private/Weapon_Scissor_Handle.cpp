@@ -59,8 +59,11 @@ HRESULT CWeapon_Scissor_Handle::Initialize(void* pArg)
 
 void CWeapon_Scissor_Handle::Priority_Update(_float fTimeDelta)
 {
+
 	if (!m_isActive)
 		return;
+
+	__super::Priority_Update(fTimeDelta);
 }
 
 void CWeapon_Scissor_Handle::Update(_float fTimeDelta)
@@ -69,7 +72,7 @@ void CWeapon_Scissor_Handle::Update(_float fTimeDelta)
 		return;
 
 
-	//Active_Effect(EFFECT_BUFF, true);
+	Active_Effect(EFFECT_BUFF, true);
 	__super::Update(fTimeDelta);
 
 	m_pBlade->Update(fTimeDelta);
@@ -324,7 +327,7 @@ HRESULT CWeapon_Scissor_Handle::Ready_Effect()
 
 	m_Effects.resize(EFFECT_END);
 
-	if (m_eType == SCISSOR_LEFT)
+	if (0/*m_eType == SCISSOR_RIGHT*/)
 	{
 		m_Effects[EFFECT_BASE] = m_pEffect_Manager->Clone_Effect(TEXT("Player_Attack_Scissor_Slash"), m_pParentMatrix,
 			m_pSocketMatrix, _Vec3(0.f, 0.f, 0.f), _Vec3(0.f, 0.f, 0.f), _Vec3(1.f, 1.f, 1.f));

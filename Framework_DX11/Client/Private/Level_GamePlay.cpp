@@ -45,8 +45,8 @@ HRESULT CLevel_GamePlay::Initialize()
 	if (FAILED(Ready_Layer_Paticle()))
 		return E_FAIL;	
 
-	//if (FAILED(Read_Map_Data()))
-	//	return E_FAIL;	
+	if (FAILED(Read_Map_Data()))
+		return E_FAIL;	
 
 	if (FAILED(Ready_CutScene_Data()))
 		return E_FAIL;
