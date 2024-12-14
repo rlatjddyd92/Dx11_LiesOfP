@@ -219,6 +219,7 @@
     <ClInclude Include="..\Public\State_RaxasiaP1_LinkedAttack.h" />
     <ClInclude Include="..\Public\State_RaxasiaP1_RepetUpperSlash.h" />
     <ClInclude Include="..\Public\State_RaxasiaP1_Run.h" />
+    <ClInclude Include="..\Public\State_RaxasiaP1_Sting_Spread.h" />
     <ClInclude Include="..\Public\State_RaxasiaP1_SwingDown_Multiple.h" />
     <ClInclude Include="..\Public\State_RaxasiaP1_TripleSting.h" />
     <ClInclude Include="..\Public\State_RaxasiaP1_Walk.h" />
@@ -520,6 +521,7 @@
     <ClCompile Include="..\Private\State_RaxasiaP1_LinkedAttack.cpp" />
     <ClCompile Include="..\Private\State_RaxasiaP1_RepetUpperSlash.cpp" />
     <ClCompile Include="..\Private\State_RaxasiaP1_Run.cpp" />
+    <ClCompile Include="..\Private\State_RaxasiaP1_Sting_Spread.cpp" />
     <ClCompile Include="..\Private\State_RaxasiaP1_SwingDown_Multiple.cpp" />
     <ClCompile Include="..\Private\State_RaxasiaP1_TripleSting.cpp" />
     <ClCompile Include="..\Private\State_RaxasiaP1_Walk.cpp" />

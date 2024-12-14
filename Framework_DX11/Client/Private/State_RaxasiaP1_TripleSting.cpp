@@ -4,6 +4,8 @@
 #include "Model.h"
 #include "Raxasia.h"
 
+#include "Effect_Manager.h"
+
 CState_RaxasiaP1_TripleSting::CState_RaxasiaP1_TripleSting(CFsm* pFsm, CMonster* pMonster)
     :CState{ pFsm }
     , m_pMonster{ pMonster }
@@ -24,6 +26,7 @@ HRESULT CState_RaxasiaP1_TripleSting::Start_State(void* pArg)
     m_pMonster->Change_Animation(AN_READY, false, 0.05f, 0);
 
     m_bSwingSound = false;
+    m_bCharge = false;
 
     _int iCnt = rand() % 2;
     if (iCnt == 0)
@@ -37,7 +40,6 @@ HRESULT CState_RaxasiaP1_TripleSting::Start_State(void* pArg)
 void CState_RaxasiaP1_TripleSting::Update(_float fTimeDelta)
 {
     _double CurTrackPos = m_pMonster->Get_CurrentTrackPos();
-    //18, 20, 21, 24
     switch (m_iRouteTrack)
     {
     case 0:
@@ -129,6 +131,7 @@ void CState_RaxasiaP1_TripleSting::Update(_float fTimeDelta)
 
 void CState_RaxasiaP1_TripleSting::End_State()
 {
+    m_pMonster->DeActive_Effect(CRaxasia::EFFECT_INCHENTSWORD);
 }
 
 _bool CState_RaxasiaP1_TripleSting::End_Check()
@@ -176,6 +179,33 @@ void CState_RaxasiaP1_TripleSting::Collider_Check(_double CurTrackPos)
 
 void CState_RaxasiaP1_TripleSting::Effect_Check(_double CurTrackPos)
 {
+    if (m_iRouteTrack == 0)
+    {
+        if (!m_bCharge)
+        {
+            if (CurTrackPos >= 20.f)
+            {
+                _float4x4 WorldMat{};
+                _Vec3 vPos = { 0.f, 0.f, 0.f };
+                XMStoreFloat4x4(&WorldMat, (*m_pMonster->Get_BoneCombinedMat(m_pMonster->Get_UFBIndex(UFB_HAND_RIGHT))));
+                vPos = XMVector3TransformCoord(vPos, XMLoadFloat4x4(&WorldMat));
+
+                CEffect_Manager::Get_Instance()->Add_Effect_ToLayer(LEVEL_GAMEPLAY, TEXT("Raxasia_Attack_ThunderInchent"),
+                    vPos, _Vec3{ m_pMonster->Get_TargetDir() });
+
+                m_pMonster->Active_Effect(CRaxasia::EFFECT_INCHENTSWORD, true);
+                m_bCharge = true;
+            }
+        }
+    }
+    else if (m_iRouteTrack == 5)
+    {
+
+        if (CurTrackPos >= 20.f)
+        {
+            m_pMonster->DeActive_Effect(CRaxasia::EFFECT_INCHENTSWORD);
+        }
+    }
 }
 
 void CState_RaxasiaP1_TripleSting::Control_Sound(_double CurTrackPos)

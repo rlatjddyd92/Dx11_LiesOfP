@@ -242,13 +242,13 @@ void CState_RaxasiaP1_DashUpper::Effect_Check(_double CurTrackPos)
     {
         if (!m_bDash)
         {
-            if ((CurTrackPos >= 140.f && CurTrackPos <= 255.f))
+            if ((CurTrackPos >= 140.f && CurTrackPos <= 250.f))
             {
-                m_pMonster->Active_Effect(CRaxasia::EFFECT_DASH);
+                m_pMonster->Active_Effect(CRaxasia::EFFECT_DASH, true);
                 m_bDash = true;
             }
         }
-        else if (CurTrackPos >= 255.f)
+        else if (CurTrackPos >= 250.f)
         {
             m_pMonster->DeActive_Effect(CRaxasia::EFFECT_DASH);
         }
@@ -293,7 +293,7 @@ void CState_RaxasiaP1_DashUpper::Effect_Check(_double CurTrackPos)
                 vPos = XMVector3TransformCoord(vPos, XMLoadFloat4x4(&WorldMat));
 
                 CEffect_Manager::Get_Instance()->Add_Effect_ToLayer(LEVEL_GAMEPLAY, TEXT("Raxasia_Attack_Stamp"),
-                    _Vec3{ WorldMat._41,WorldMat._42, WorldMat._43 }, _Vec3{ m_pMonster->Get_TargetDir()});
+                    vPos, _Vec3{ m_pMonster->Get_TargetDir()});
                 m_bStamp = true;
             }
         }
@@ -323,7 +323,7 @@ void CState_RaxasiaP1_DashUpper::Effect_Check(_double CurTrackPos)
                 vPos = XMVector3TransformCoord(vPos, XMLoadFloat4x4(&WorldMat));
 
                 CEffect_Manager::Get_Instance()->Add_Effect_ToLayer(LEVEL_GAMEPLAY, TEXT("Raxasia_Attack_Stamp"),
-                    _Vec3{ WorldMat._41,WorldMat._42, WorldMat._43 }, _Vec3{ m_pMonster->Get_TargetDir() });
+                    vPos, _Vec3{ m_pMonster->Get_TargetDir() });
                 m_bStamp = true;
             }
         }
@@ -353,7 +353,7 @@ void CState_RaxasiaP1_DashUpper::Effect_Check(_double CurTrackPos)
                 vPos = XMVector3TransformCoord(vPos, XMLoadFloat4x4(&WorldMat));
 
                 CEffect_Manager::Get_Instance()->Add_Effect_ToLayer(LEVEL_GAMEPLAY, TEXT("Raxasia_Attack_Stamp"),
-                    _Vec3{ WorldMat._41,WorldMat._42, WorldMat._43 }, _Vec3{ m_pMonster->Get_TargetDir() });
+                    vPos, _Vec3{ m_pMonster->Get_TargetDir() });
                 m_bStamp = true;
             }
         }

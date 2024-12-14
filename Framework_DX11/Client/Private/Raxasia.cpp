@@ -25,6 +25,7 @@
 #include "State_RaxasiaP1_RepetUpperSlash.h"
 #include "State_RaxasiaP1_KickSting.h"
 #include "State_RaxasiaP1_TripleSting.h"
+#include "State_RaxasiaP1_Sting_Spread.h"
 
 #include "State_RaxasiaP1_Discharge.h"
 #include "State_RaxasiaP1_JumpAttack.h"
@@ -579,6 +580,7 @@ HRESULT CRaxasia::Ready_FSM()
 	m_pFsmCom->Add_State(CState_RaxasiaP1_RepetUpperSlash::Create(m_pFsmCom, this, ATK_REPETUPPERSLASH, &Desc));
 	m_pFsmCom->Add_State(CState_RaxasiaP1_KickSting::Create(m_pFsmCom, this, ATK_KICKSTING, &Desc));
 	m_pFsmCom->Add_State(CState_RaxasiaP1_TripleSting::Create(m_pFsmCom, this, ATK_TRIPLESTING, &Desc));
+	m_pFsmCom->Add_State(CState_RaxasiaP1_Sting_Spread::Create(m_pFsmCom, this, ATK_STING_ANDSPREAD, &Desc));
 
 	m_pFsmCom->Add_State(CState_RaxasiaP1_Discharge::Create(m_pFsmCom, this, ATK_DISCHARGE, &Desc));
 	m_pFsmCom->Add_State(CState_RaxasiaP1_JumpAttack::Create(m_pFsmCom, this, ATK_JUMPATTACK, &Desc));
@@ -683,7 +685,7 @@ HRESULT CRaxasia::Ready_Effects()
 	const _Matrix* pSocketBoneMatrix = m_pModelCom->Get_BoneCombindTransformationMatrix_Ptr(m_pModelCom->Get_UFBIndices(UFB_ROOT));
 
 	m_Effects[EFFECT_DASH] = CEffect_Manager::Get_Instance()->Clone_Effect(TEXT("Raxasia_Attack_Dash"), pParetnMatrix,
-		pSocketBoneMatrix, _Vec3(0.f, 0.5f, 0.f), _Vec3(0.f, 0.f, 0.f), _Vec3(1.f, 1.f, 1.f));
+		nullptr, _Vec3(0.f, 1.f, 0.f), _Vec3(0.f, 0.f, 1.f), _Vec3(1.f, 1.f, 1.f));
 
 	m_Effects[EFFECT_THUNDERDISCHARGE] = CEffect_Manager::Get_Instance()->Clone_Effect(TEXT("Raxasia_Attack_ThunderDischarge"), pParetnMatrix,
 		pSocketBoneMatrix, _Vec3(0.f, 0.f, 0.f), _Vec3(0.f, 0.f, 0.f), _Vec3(1.f, 1.f, 1.f));
