@@ -337,7 +337,7 @@ void CSimonManus::Start_CutScene(_uint iCutSceneNum)
 		m_pModelCom = m_pCutSceneModelCom[MODEL_PHASE1];
 		pNewSocketMatrix = m_pModelCom->Get_BoneCombindTransformationMatrix_Ptr("Bn_Weapon_R");
 		m_pWeapon->ChangeSocketMatrix(pNewSocketMatrix);
-		m_pCutSceneFsmCom->Set_State(STATE_P2);
+		m_pCutSceneFsmCom->Change_State(STATE_P2);
 		m_isPlayAnimation = true;
 		Deactiave_Weapon();
 		break;
