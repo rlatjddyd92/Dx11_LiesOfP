@@ -54,6 +54,9 @@
 #include "D:\GitProject\Dx11_LiesOfP\Framework_DX11\Client\Private\EffectObject.cpp"
 
 
+#include "D:\GitProject\Dx11_LiesOfP\Framework_DX11\Client\Private\FirePot.cpp"
+
+
 #include "D:\GitProject\Dx11_LiesOfP\Framework_DX11\Client\Private\FollowedEffect.cpp"
 
 
@@ -220,6 +223,9 @@
 
 
 #include "D:\GitProject\Dx11_LiesOfP\Framework_DX11\Client\Private\State_RaxasiaP2_WaveSting.cpp"
+
+
+#include "D:\GitProject\Dx11_LiesOfP\Framework_DX11\Client\Private\TorchDeck.cpp"
 
 
 #include "D:\GitProject\Dx11_LiesOfP\Framework_DX11\Client\Private\UIPage_Chest.cpp"

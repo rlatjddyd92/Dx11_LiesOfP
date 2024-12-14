@@ -188,6 +188,7 @@
     <ClInclude Include="..\Public\CutScene.h" />
     <ClInclude Include="..\Public\Deco_Collider.h" />
     <ClInclude Include="..\Public\EffectObject.h" />
+    <ClInclude Include="..\Public\FirePot.h" />
     <ClInclude Include="..\Public\FollowedEffect.h" />
     <ClInclude Include="..\Public\GH_Creater.h" />
     <ClInclude Include="..\Public\Item_Throw.h" />
@@ -244,6 +245,7 @@
     <ClInclude Include="..\Public\State_RaxasiaP2_Tele_LinkedTel.h" />
     <ClInclude Include="..\Public\State_RaxasiaP2_Walk.h" />
     <ClInclude Include="..\Public\State_RaxasiaP2_WaveSting.h" />
+    <ClInclude Include="..\Public\TorchDeck.h" />
     <ClInclude Include="..\Public\UIPage_Chest.h" />
     <ClInclude Include="..\Public\UIPage_Shop.h" />
     <ClInclude Include="..\Public\UIPage_Telepot.h" />
@@ -489,6 +491,7 @@
     <ClCompile Include="..\Private\CutScene.cpp" />
     <ClCompile Include="..\Private\Deco_Collider.cpp" />
     <ClCompile Include="..\Private\EffectObject.cpp" />
+    <ClCompile Include="..\Private\FirePot.cpp" />
     <ClCompile Include="..\Private\FollowedEffect.cpp" />
     <ClCompile Include="..\Private\GH_Creater.cpp" />
     <ClCompile Include="..\Private\Item_Throw.cpp" />
@@ -545,6 +548,7 @@
     <ClCompile Include="..\Private\State_RaxasiaP2_Tele_LinkedTel.cpp" />
     <ClCompile Include="..\Private\State_RaxasiaP2_Walk.cpp" />
     <ClCompile Include="..\Private\State_RaxasiaP2_WaveSting.cpp" />
+    <ClCompile Include="..\Private\TorchDeck.cpp" />
     <ClCompile Include="..\Private\UIPage_Chest.cpp" />
     <ClCompile Include="..\Private\UIPage_Shop.cpp" />
     <ClCompile Include="..\Private\UIPage_Telepot.cpp" />

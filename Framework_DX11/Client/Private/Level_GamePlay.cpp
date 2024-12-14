@@ -308,17 +308,27 @@ HRESULT CLevel_GamePlay::Read_Map_Data()
 							return E_FAIL;
 						continue;
 					}
-
-					if (wcscmp(pDesc.szModelTag, TEXT("SM_Monastery_SteppingStone_01")) == 0)
+					else if (wcscmp(pDesc.szModelTag, TEXT("SM_Monastery_SteppingStone_01")) == 0)
 					{
 						if (FAILED(m_pGameInstance->Add_CloneObject_ToLayer(LEVEL_GAMEPLAY, TEXT("Layer_SteppingStone"), TEXT("Prototype_GameObject_SteppingStone"), &pDesc)))
 							return E_FAIL;
 						continue;
 					}
-
-					if (wcscmp(pDesc.szModelTag, TEXT("Sophia_Stoned")) == 0)
+					else if (wcscmp(pDesc.szModelTag, TEXT("Sophia_Stoned")) == 0)
 					{
 						if (FAILED(m_pGameInstance->Add_CloneObject_ToLayer(LEVEL_GAMEPLAY, TEXT("Layer_Map"), TEXT("Prototype_GameObject_Sophia"), &pDesc)))
+							return E_FAIL;
+						continue;
+					}
+					else if (wcscmp(pDesc.szModelTag, TEXT("SM_Monastery_WallDeco_01_TorchDeck01")) == 0)
+					{
+						if (FAILED(m_pGameInstance->Add_CloneObject_ToLayer(LEVEL_GAMEPLAY, TEXT("Layer_Map"), TEXT("Prototype_GameObject_TorchDeck"), &pDesc)))
+							return E_FAIL;
+						continue;
+					}
+					else if (wcscmp(pDesc.szModelTag, TEXT("SM_Cathedral_FirePot_02")) == 0)
+					{
+						if (FAILED(m_pGameInstance->Add_CloneObject_ToLayer(LEVEL_GAMEPLAY, TEXT("Layer_Map"), TEXT("Prototype_GameObject_FirePot"), &pDesc)))
 							return E_FAIL;
 						continue;
 					}
