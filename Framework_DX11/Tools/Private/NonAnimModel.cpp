@@ -82,7 +82,7 @@ void CNonAnimModel::Late_Update(_float fTimeDelta)
 	__super::Late_Update(fTimeDelta);
 
 	_float fCullDistance = 0.f;
-	if (wcscmp(m_szModelTag, TEXT("SM_Monastery_Floor_06")) == 0)
+	if (wcscmp(m_szModelTag, TEXT("SM_Monstery_Machine_01B")) == 0)
 		fCullDistance = 150.f;
 	else
 		fCullDistance = 40.f;
