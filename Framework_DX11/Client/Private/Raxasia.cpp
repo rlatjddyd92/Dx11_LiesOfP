@@ -62,6 +62,10 @@
 
 #pragma endregion
 
+#pragma region
+#include "State_Raxasia_CutScene_Meet.h"
+#pragma endregion
+
 #include "Weapon.h"
 
 CRaxasia::CRaxasia(ID3D11Device* pDevice, ID3D11DeviceContext* pContext)
@@ -128,6 +132,8 @@ HRESULT CRaxasia::Initialize(void* pArg)
 
 	GET_GAMEINTERFACE->Set_OnOff_OrthoUI(false, this);
 
+	Start_CutScene(CUTSCENE_MEET);
+
 	return S_OK;
 }
 
@@ -182,8 +188,8 @@ void CRaxasia::Update(_float fTimeDelta)
 
 	if (!m_isCutScene)
 		m_pFsmCom->Update(fTimeDelta);
-	//else
-	//	m_pCutSceneFsmCom->Update(fTimeDelta);
+	else
+		m_pCutSceneFsmCom->Update(fTimeDelta);
 
 
 	for (_uint i = 0; i < PAWN_SOUND_END; ++i)
@@ -352,11 +358,15 @@ const _Matrix* CRaxasia::Get_WeaponWorldMat()
 
 void CRaxasia::Start_CutScene(_uint iCutSceneNum)
 {
+	const _Matrix* pNewSocketMatrix = { nullptr };
+
 	switch (iCutSceneNum)
 	{
 	case CUTSCENE_MEET:
 		m_pModelCom = m_pCutSceneModelCom[MODEL_PHASE1];
-		//m_pCutSceneFsmCom->Set_State(STATE_MEET);
+		pNewSocketMatrix = m_pModelCom->Get_BoneCombindTransformationMatrix_Ptr("weapon0_l");
+		m_pWeapon->ChangeSocketMatrix(pNewSocketMatrix);
+		m_pCutSceneFsmCom->Set_State(STATE_MEET);
 		break;
 	case CUTSCENE_P2:
 		m_pModelCom = m_pCutSceneModelCom[MODEL_PHASE1];
@@ -380,6 +390,7 @@ void CRaxasia::End_CutScene(_uint iCutSceneNum)
 	{
 		ChangePhase();
 	}
+
 	m_isCutScene = false;
 }
 
@@ -405,12 +416,12 @@ HRESULT CRaxasia::Ready_Components()
 
 #pragma region CutScene
 	/* FOR.Com_Model_CustScene01 */
-	if (FAILED(__super::Add_Component(LEVEL_GAMEPLAY, TEXT("Prototype_Component_Model_SimonManus_CutScene_P1"),
+	if (FAILED(__super::Add_Component(LEVEL_GAMEPLAY, TEXT("Prototype_Component_Model_Raxasia_CutScene_P1"),
 		TEXT("Com_Model_CustScene01"), reinterpret_cast<CComponent**>(&m_pCutSceneModelCom[MODEL_PHASE1]))))
 		return E_FAIL;
 
 	/* FOR.Com_Model_CustScene02 */
-	if (FAILED(__super::Add_Component(LEVEL_GAMEPLAY, TEXT("Prototype_Component_Model_SimonManus_CutScene_P2"),
+	if (FAILED(__super::Add_Component(LEVEL_GAMEPLAY, TEXT("Prototype_Component_Model_Raxasia_CutScene_P2_Die"),
 		TEXT("Com_Model_CustScene02"), reinterpret_cast<CComponent**>(&m_pCutSceneModelCom[MODEL_PHASE2]))))
 		return E_FAIL;
 #pragma endregion
@@ -621,6 +632,16 @@ HRESULT CRaxasia::Ready_FSM()
 	m_pExtraFsmCom->Add_State(CState_RaxasiaP2_Tele_JumpLightning::Create(m_pExtraFsmCom, this, ATKP2_TELE_JUMPLIGHTNING, &Desc));
 
 	m_pExtraFsmCom->Set_State(IDLE);
+#pragma endregion
+
+#pragma region CutScene_Fsm
+	/* FOR.Com_FSM */
+	if (FAILED(__super::Add_Component(LEVEL_STATIC, TEXT("Prototype_Component_FSM"),
+		TEXT("Com_CutSCeneFSM"), reinterpret_cast<CComponent**>(&m_pCutSceneFsmCom))))
+		return E_FAIL;
+
+	m_pCutSceneFsmCom->Add_State(CState_Raxasia_CutScene_Meet::Create(m_pCutSceneFsmCom, this, STATE_MEET, &Desc));
+	//m_pCutSceneFsmCom->Add_State(CState_SimonManus_CutScene_Phase2::Create(m_pCutSceneFsmCom, this, STATE_P2, &Desc));
 #pragma endregion
 
 	return S_OK;

@@ -61,6 +61,43 @@ void CWeapon_Raxasia_P1_Sword::Update(_float fTimeDelta)
 	if (!m_isActive)
 		return;
 
+	static _float fX = 210.f;
+	static _float fY = 210.f;
+	static _float fZ = 90.f;
+	_matrix		PreTransformMatrix = XMMatrixIdentity();	
+	
+	if (KEY_TAP(KEY::NUM1))
+	{
+		fX -= 1.f;
+	}
+	else if (KEY_TAP(KEY::NUM2))
+	{
+		fX += 1.f;
+	}
+
+	if (KEY_TAP(KEY::NUM3))
+	{
+		fY -= 1.f;
+	}
+	else if (KEY_TAP(KEY::NUM4))
+	{
+		fY += 1.f;
+	}
+
+	if (KEY_TAP(KEY::NUM5))
+	{
+		fZ -= 1.f;
+	}
+	else if (KEY_TAP(KEY::NUM6))
+	{
+		fZ += 1.f;
+	}
+
+
+	PreTransformMatrix = XMMatrixScaling(0.01f, 0.01f, 0.01f) * XMMatrixRotationX(XMConvertToRadians(fX)) * XMMatrixRotationZ(XMConvertToRadians(fZ));
+
+	m_pModelCom->Set_PreTranformMatrix(PreTransformMatrix);
+
 	__super::Update(fTimeDelta);
 
 

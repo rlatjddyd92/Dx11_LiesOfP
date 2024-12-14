@@ -85,11 +85,6 @@ void CLevel_GamePlay::Update(_float fTimeDelta)
 		tDesc->isOnHDR = !tDesc->isOnHDR;
 
 	}
-
-	if (KEY_TAP(KEY::F5))
-	{
-		CEffect_Manager::Get_Instance()->Add_Effect_ToLayer(LEVEL_GAMEPLAY, TEXT("Player_Attack_Rapier_StormStab_First"),_Vec3(0.f, 5.f, 0.f), _Vec3(0.f, 0.f, 0.f), _Vec3(1.f, 1.f, 1.f));
-	}
 }
 
 HRESULT CLevel_GamePlay::Render()
@@ -221,8 +216,8 @@ HRESULT CLevel_GamePlay::Ready_Layer_Monster()
 	//if (FAILED(m_pGameInstance->Add_CloneObject_ToLayer(LEVEL_GAMEPLAY, TEXT("Layer_SimonManus"), TEXT("Prototype_GameObject_SimonManus"))))
 	//	return E_FAIL;
 
-	//if (FAILED(m_pGameInstance->Add_CloneObject_ToLayer(LEVEL_GAMEPLAY, TEXT("Layer_Raxasia"), TEXT("Prototype_GameObject_Raxasia"))))
-	//	return E_FAIL;
+	if (FAILED(m_pGameInstance->Add_CloneObject_ToLayer(LEVEL_GAMEPLAY, TEXT("Layer_Raxasia"), TEXT("Prototype_GameObject_Raxasia"))))
+		return E_FAIL;
 
 	/* qqqqqq
 

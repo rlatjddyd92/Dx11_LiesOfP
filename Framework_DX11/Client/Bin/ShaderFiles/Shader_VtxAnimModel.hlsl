@@ -31,7 +31,7 @@ vector g_vMtrlSpecular = vector(1.f, 1.f, 1.f, 1.f);
 vector g_vCamPosition;
 
 /* 그리는 메시에게 영향을 주는 뼈행렬들(o) */
-matrix g_BoneMatrices[650];
+matrix g_BoneMatrices[660];
 
 VS_OUT_ANIMODEL VS_MAIN(VS_IN_ANIMODEL In)
 {

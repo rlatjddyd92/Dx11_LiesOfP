@@ -1056,7 +1056,7 @@
     </Filter>
     <Filter Include="02.GameObjects\11.InteractObj\10.FirePot">
       <UniqueIdentifier>{e888a4b1-58ff-4eea-8dba-eafdbd83c448}</UniqueIdentifier>
-	</Filter>
+    </Filter>
     <Filter Include="02.GameObjects\02.Pawn\01.Monster">
       <UniqueIdentifier>{0083e25f-5f57-4f81-8604-c0d79a304e39}</UniqueIdentifier>
     </Filter>
@@ -1086,6 +1086,9 @@
     </Filter>
     <Filter Include="03.GameInterface_Controller\00.UIManager\00.UIPage\00.UIPage_Main %28100%25%29">
       <UniqueIdentifier>{00ab63cd-e889-48c6-9ab0-2ba67c8a067b}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="05.Fsm\Monster\Raxasia\CutScene\Meet">
+      <UniqueIdentifier>{d622711a-38aa-424f-bda2-df758fcfded3}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -2006,6 +2009,9 @@
     <ClInclude Include="..\Public\FirePot.h">
       <Filter>02.GameObjects\11.InteractObj\10.FirePot</Filter>
     </ClInclude>
+    <ClInclude Include="..\Public\State_Raxasia_CutScene_Meet.h">
+      <Filter>05.Fsm\Monster\Raxasia\CutScene\Meet</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Client.cpp">
@@ -2894,6 +2900,9 @@
     </ClCompile>
     <ClCompile Include="..\Private\FirePot.cpp">
       <Filter>02.GameObjects\11.InteractObj\10.FirePot</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Private\State_Raxasia_CutScene_Meet.cpp">
+      <Filter>05.Fsm\Monster\Raxasia\CutScene\Meet</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
