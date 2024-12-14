@@ -194,6 +194,7 @@
     <ClInclude Include="..\Public\Item_Throw.h" />
     <ClInclude Include="..\Public\LastDoor.h" />
     <ClInclude Include="..\Public\Raxasia.h" />
+    <ClInclude Include="..\Public\Raxasia_Sword_CutScene.h" />
     <ClInclude Include="..\Public\SimonManus_CutScene_GodHand.h" />
     <ClInclude Include="..\Public\SimonManus_EnvHand.h" />
     <ClInclude Include="..\Public\State_Player_Arm_Counter.h" />
@@ -246,6 +247,7 @@
     <ClInclude Include="..\Public\State_RaxasiaP2_Walk.h" />
     <ClInclude Include="..\Public\State_RaxasiaP2_WaveSting.h" />
     <ClInclude Include="..\Public\State_Raxasia_CutScene_Meet.h" />
+    <ClInclude Include="..\Public\State_Raxasia_CutScene_Phase2.h" />
     <ClInclude Include="..\Public\TorchDeck.h" />
     <ClInclude Include="..\Public\UIPage_Chest.h" />
     <ClInclude Include="..\Public\UIPage_Shop.h" />
@@ -498,6 +500,7 @@
     <ClCompile Include="..\Private\Item_Throw.cpp" />
     <ClCompile Include="..\Private\LastDoor.cpp" />
     <ClCompile Include="..\Private\Raxasia.cpp" />
+    <ClCompile Include="..\Private\Raxasia_Sword_CutScene.cpp" />
     <ClCompile Include="..\Private\SimonManus_CutScene_GodHand.cpp" />
     <ClCompile Include="..\Private\SimonManus_EnvHand.cpp" />
     <ClCompile Include="..\Private\State_Player_Arm_Counter.cpp" />
@@ -550,6 +553,7 @@
     <ClCompile Include="..\Private\State_RaxasiaP2_Walk.cpp" />
     <ClCompile Include="..\Private\State_RaxasiaP2_WaveSting.cpp" />
     <ClCompile Include="..\Private\State_Raxasia_CutScene_Meet.cpp" />
+    <ClCompile Include="..\Private\State_Raxasia_CutScene_Phase2.cpp" />
     <ClCompile Include="..\Private\TorchDeck.cpp" />
     <ClCompile Include="..\Private\UIPage_Chest.cpp" />
     <ClCompile Include="..\Private\UIPage_Shop.cpp" />

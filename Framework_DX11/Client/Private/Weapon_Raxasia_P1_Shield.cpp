@@ -64,6 +64,45 @@ void CWeapon_Raxasia_P1_Shield::Update(_float fTimeDelta)
 
 	__super::Update(fTimeDelta);
 
+	static _float fX = 0.f;
+	static _float fY = 0.1f;
+	static _float fZ = 0.175f;
+	_matrix		PreTransformMatrix = XMMatrixIdentity();
+
+	if (KEY_TAP(KEY::NUM1))
+	{
+		fX -= 0.025f;
+	}
+	else if (KEY_TAP(KEY::NUM2))
+	{
+		fX += 0.025f;
+	}
+
+	if (KEY_TAP(KEY::NUM3))
+	{
+		fY -= 0.025f;
+	}
+	else if (KEY_TAP(KEY::NUM4))
+	{
+		fY += 0.025f;
+	}
+
+	if (KEY_TAP(KEY::NUM5))
+	{
+		fZ -= 0.025f;
+	}
+	else if (KEY_TAP(KEY::NUM6))
+	{
+		fZ += 0.025f;
+	}
+
+
+	PreTransformMatrix = XMMatrixScaling(0.01f, 0.01f, 0.01f) * XMMatrixRotationX(XMConvertToRadians(180.f));
+
+	m_pModelCom->Set_PreTranformMatrix(PreTransformMatrix);
+
+	_Vec3 vv = _Vec3(fX, fY, fZ);
+	m_pTransformCom->Set_State(CTransform::STATE_POSITION, vv);
 
 	m_pColliderCom->Update(&m_WorldMatrix);
 }

@@ -2,7 +2,7 @@
 #include "State_Raxasia_CutScene_Meet.h"
 #include "GameInstance.h"
 #include "Model.h"
-#include "SimonManus.h"
+#include "Raxasia.h"
 #include "CutScene.h"
 
 CState_Raxasia_CutScene_Meet::CState_Raxasia_CutScene_Meet(CFsm* pFsm, CMonster* pMonster)
@@ -35,18 +35,44 @@ HRESULT CState_Raxasia_CutScene_Meet::Start_State(void* pArg)
 
 void CState_Raxasia_CutScene_Meet::Update(_float fTimeDelta)
 {
-  /*  _uint iCurAnim = m_pMonster->Get_CurrentAnimIndex();
+    _int iFrame = m_pMonster->Get_Frame();
 
-    m_fDelay += fTimeDelta;
-    if (m_fDelay >= 0.1f && !m_isStartCutScene)
+    if (!m_isMoveDown && iFrame > 230)
     {
-        m_pMonster->Play_Animation();
-        m_isStartCutScene = true;
+        _matrix PreTransformMatrix = XMMatrixScaling(0.01f, 0.01f, 0.01f) * XMMatrixRotationX(XMConvertToRadians(243.f)) * XMMatrixRotationY(XMConvertToRadians(-5.f)) * XMMatrixRotationZ(XMConvertToRadians(30.f));
+        dynamic_cast<CModel*>(dynamic_cast<CRaxasia*>(m_pMonster)->Get_CutSceneWeapon()->Find_Component(MODEL))->Set_PreTranformMatrix(PreTransformMatrix);
+
+        _Vec3 vNewPos = m_pMonster->Get_Transform()->Get_State(CTransform::STATE_POSITION);
+
+        vNewPos.x -= 5.93f;
+        vNewPos.y -= -0.8f;
+        vNewPos.z -= 1.f;
+
+
+        m_pMonster->Get_RigidBody()->Set_GloblePose(vNewPos);
+
+        m_isMoveDown = true;
     }
-    else if (m_fDelay < 16.f)
+    else if (iFrame > 1000)
     {
-        m_pMonster->Stop_Animation();
+        _matrix PreTransformMatrix = XMMatrixScaling(0.01f, 0.01f, 0.01f) * XMMatrixRotationX(XMConvertToRadians(210.f)) * XMMatrixRotationY(XMConvertToRadians(-40.f)) * XMMatrixRotationZ(XMConvertToRadians(30.f)); 
+        dynamic_cast<CModel*>(dynamic_cast<CRaxasia*>(m_pMonster)->Get_CutSceneWeapon()->Find_Component(MODEL))->Set_PreTranformMatrix(PreTransformMatrix);
+        
+        m_pMonster->Get_RigidBody()->Set_GloblePose(XMVectorSet(-28.716f, -81.264f, -14.860 , 1.f));
     }
+
+    _uint iCurAnim = m_pMonster->Get_CurrentAnimIndex();
+
+    //m_fDelay += fTimeDelta;
+    //if (m_fDelay >= 0.1f && !m_isStartCutScene)
+    //{
+    //    m_pMonster->Play_Animation();
+    //    m_isStartCutScene = true;
+    //}
+    //else if (m_fDelay < 16.f)
+    //{
+    //    m_pMonster->Stop_Animation();
+    //}
 
 
     _Vec3 vMove = m_pMonster->Get_Model()->Get_BoneCombindTransformationMatrix_Ptr(5)->Translation();
@@ -60,9 +86,8 @@ void CState_Raxasia_CutScene_Meet::Update(_float fTimeDelta)
 
     vMove = XMVector3TransformNormal(vMove, m_pMonster->Get_Transform()->Get_WorldMatrix());
 
-    vMove.y = 0;*/
+    vMove.y = 0;
 
-    m_pMonster->Stop_Animation();
 
 }
 

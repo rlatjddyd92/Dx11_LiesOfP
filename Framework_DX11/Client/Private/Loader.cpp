@@ -45,6 +45,8 @@
 
 #include "SimonManus_EnvHand.h"
 #include "SimonManus_CutScene_GodHand.h"
+
+#include "Raxasia_Sword_CutScene.h"
 #pragma endregion
 
 #pragma region EFFECT
@@ -952,7 +954,7 @@ HRESULT CLoader::Ready_Resources_For_Monster()
 	//Prototype_Component_Model_Raxasia_CutScene_P1
 	PreTransformMatrix = XMMatrixScaling(0.01f, 0.01f, 0.01f);
 	if (FAILED(m_pGameInstance->Add_Prototype(LEVEL_GAMEPLAY, TEXT("Prototype_Component_Model_Raxasia_CutScene_P1"),
-		CModel::Create(m_pDevice, m_pContext, CModel::TYPE_ANIM, "../Bin/ModelData/Anim/Monster/Boss/Raxasia/Raxasia_CutScene_P1.dat", PreTransformMatrix, false))))
+		CModel::Create(m_pDevice, m_pContext, CModel::TYPE_ANIM, "../Bin/ModelData/Anim/CreatedBinFiles/Raxasia_CutScene_P1.dat", PreTransformMatrix, true))))
 		return E_FAIL;
 
 	//Prototype_Component_Model_Raxasia_CutScene_P2
@@ -965,6 +967,12 @@ HRESULT CLoader::Ready_Resources_For_Monster()
 	PreTransformMatrix = XMMatrixScaling(0.01f, 0.01f, 0.01f);
 	if (FAILED(m_pGameInstance->Add_Prototype(LEVEL_GAMEPLAY, TEXT("Prototype_Component_Model_Raxasia_CutScene_P2_Die"),
 		CModel::Create(m_pDevice, m_pContext, CModel::TYPE_ANIM, "../Bin/ModelData/Anim/Monster/Boss/Raxasia/Raxasia_CutScene_P2Die.dat", PreTransformMatrix, false))))
+		return E_FAIL;
+
+	//Prototype_Component_Model_Raxasia_Sword_CutScene
+	PreTransformMatrix = XMMatrixScaling(0.01f, 0.01f, 0.01f) * XMMatrixRotationX(XMConvertToRadians(210.f)) * XMMatrixRotationY(XMConvertToRadians(-40.f)) * XMMatrixRotationZ(XMConvertToRadians(30.f));
+	if (FAILED(m_pGameInstance->Add_Prototype(LEVEL_GAMEPLAY, TEXT("Prototype_Component_Model_Raxasia_Sword_CutScene"),
+		CModel::Create(m_pDevice, m_pContext, CModel::TYPE_ANIM, "../Bin/ModelData/Anim/Monster/Boss/Raxasia/Raxasia_Sword_CutScene.dat", PreTransformMatrix, false))))
 		return E_FAIL;
 #pragma endregion
 
@@ -1181,6 +1189,11 @@ HRESULT CLoader::Ready_Prototype()
 	/* For. Prototype_GameObject_CutScene_SimonManus_GodHand */
 	if (FAILED(m_pGameInstance->Add_Prototype(TEXT("Prototype_GameObject_CutScene_SimonManus_GodHand"),
 		CSimonManus_CutScene_GodHand::Create(m_pDevice, m_pContext))))
+		return E_FAIL;
+
+	/* For. Prototype_GameObject_Weapon_Raxasia_Sword_CutScene */
+	if (FAILED(m_pGameInstance->Add_Prototype(TEXT("Prototype_GameObject_Weapon_Raxasia_Sword_CutScene"),
+		CRaxasia_Sword_CutScene::Create(m_pDevice, m_pContext))))
 		return E_FAIL;
 
 	// 특정 위치에 판정 없이 소환되는 이펙트

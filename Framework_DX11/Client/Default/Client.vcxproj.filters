@@ -1090,6 +1090,12 @@
     <Filter Include="05.Fsm\Monster\Raxasia\CutScene\Meet">
       <UniqueIdentifier>{d622711a-38aa-424f-bda2-df758fcfded3}</UniqueIdentifier>
     </Filter>
+    <Filter Include="02.GameObjects\02.Pawn\01.Monster\Raxasia\CutSceneSword">
+      <UniqueIdentifier>{70d4c3d2-d9d8-46f4-975c-1b6547791ccc}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="05.Fsm\Monster\Raxasia\CutScene\Phase2">
+      <UniqueIdentifier>{95d368c5-a0af-4b47-a9c1-93cf75de38ca}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Client.h">
@@ -2012,6 +2018,12 @@
     <ClInclude Include="..\Public\State_Raxasia_CutScene_Meet.h">
       <Filter>05.Fsm\Monster\Raxasia\CutScene\Meet</Filter>
     </ClInclude>
+    <ClInclude Include="..\Public\Raxasia_Sword_CutScene.h">
+      <Filter>02.GameObjects\02.Pawn\01.Monster\Raxasia\CutSceneSword</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Public\State_Raxasia_CutScene_Phase2.h">
+      <Filter>05.Fsm\Monster\Raxasia\CutScene\Phase2</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Client.cpp">
@@ -2903,6 +2915,12 @@
     </ClCompile>
     <ClCompile Include="..\Private\State_Raxasia_CutScene_Meet.cpp">
       <Filter>05.Fsm\Monster\Raxasia\CutScene\Meet</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Private\Raxasia_Sword_CutScene.cpp">
+      <Filter>02.GameObjects\02.Pawn\01.Monster\Raxasia\CutSceneSword</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Private\State_Raxasia_CutScene_Phase2.cpp">
+      <Filter>05.Fsm\Monster\Raxasia\CutScene\Phase2</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

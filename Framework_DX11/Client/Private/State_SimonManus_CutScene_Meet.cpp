@@ -37,6 +37,7 @@ HRESULT CState_SimonManus_CutScene_Meet::Start_State(void* pArg)
 
 void CState_SimonManus_CutScene_Meet::Update(_float fTimeDelta)
 {
+    _int iFrame = m_pMonster->Get_Frame();
     _uint iCurAnim = m_pMonster->Get_CurrentAnimIndex();
 
     m_fDelay += fTimeDelta;

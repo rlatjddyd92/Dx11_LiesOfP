@@ -25,6 +25,8 @@ private:
     _uint               m_iAnimation_Meet = {};
 
     _bool               m_isStartCutScene = {};
+    _bool               m_isMoveDown = {};
+
     _float              m_fDelay = {};
 
     _Vec3               m_vRootMoveStack{};

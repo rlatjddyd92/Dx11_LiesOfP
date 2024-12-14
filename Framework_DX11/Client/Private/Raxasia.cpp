@@ -63,6 +63,7 @@
 #pragma endregion
 
 #pragma region
+#include "Raxasia_Sword_CutScene.h"
 #include "State_Raxasia_CutScene_Meet.h"
 #pragma endregion
 
@@ -91,10 +92,7 @@ HRESULT CRaxasia::Initialize(void* pArg)
 
 	if (FAILED(__super::Initialize(&Desc)))
 		return E_FAIL;
-
-	m_pTransformCom->Set_State(CTransform::STATE_POSITION,
-		XMVectorSet(0.f, 0.f, 0.f, 1.f));
-	m_pTransformCom->LookAt(_vector{ 0, 0, -1, 0 });
+	
 
 	if (FAILED(Ready_Components()))
 		return E_FAIL;
@@ -133,6 +131,12 @@ HRESULT CRaxasia::Initialize(void* pArg)
 	GET_GAMEINTERFACE->Set_OnOff_OrthoUI(false, this);
 
 	Start_CutScene(CUTSCENE_MEET);
+
+	m_pRigidBodyCom->Set_IsLockCell(false);
+	m_pRigidBodyCom->Set_IsOnCell(false);
+
+	m_pTransformCom->Rotation(_vector{ 0, 1, 0, 0 }, XMConvertToRadians(150.f));
+	m_pRigidBodyCom->Set_GloblePose(XMVectorSet(-28.716f, -81.264f, -14.860, 1.f));
 
 	return S_OK;
 }
@@ -363,10 +367,18 @@ void CRaxasia::Start_CutScene(_uint iCutSceneNum)
 	switch (iCutSceneNum)
 	{
 	case CUTSCENE_MEET:
+	{
 		m_pModelCom = m_pCutSceneModelCom[MODEL_PHASE1];
-		pNewSocketMatrix = m_pModelCom->Get_BoneCombindTransformationMatrix_Ptr("weapon0_l");
-		m_pWeapon->ChangeSocketMatrix(pNewSocketMatrix);
+		Deactiave_Weapon();
+
+		CRaxasia_Sword_CutScene::WEAPON_DESC Desc{};
+		Desc.pParentWorldMatrix = m_pTransformCom->Get_WorldMatrix_Ptr();
+		Desc.pSocketBoneMatrix = m_pModelCom->Get_BoneCombindTransformationMatrix_Ptr("weapon0_l");
+		m_pCutSceneWeapon = m_pGameInstance->Get_CloneObject_ToLayer(LEVEL_GAMEPLAY, TEXT("Layer_CutSceneWeapon"), TEXT("Prototype_GameObject_Weapon_Raxasia_Sword_CutScene"), &Desc);
+
+		m_pWeaponShield->ChangeSocketMatrix(m_pModelCom->Get_BoneCombindTransformationMatrix_Ptr("upperArmorBack_02_spine_03"));
 		m_pCutSceneFsmCom->Set_State(STATE_MEET);
+	}
 		break;
 	case CUTSCENE_P2:
 		m_pModelCom = m_pCutSceneModelCom[MODEL_PHASE1];

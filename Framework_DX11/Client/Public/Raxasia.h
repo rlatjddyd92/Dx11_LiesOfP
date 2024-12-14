@@ -67,12 +67,18 @@ private:
 	virtual ~CRaxasia() = default;
 
 public:
+	CGameObject* Get_CutSceneWeapon() { return m_pCutSceneWeapon; }
+
+public:
 	virtual HRESULT Initialize_Prototype() override;
 	virtual HRESULT Initialize(void* pArg) override;
 	virtual void Priority_Update(_float fTimeDelta) override;
 	virtual void Update(_float fTimeDelta) override;
 	virtual void Late_Update(_float fTimeDelta) override;
 	virtual HRESULT Render() override;
+
+	virtual void	Active_Weapon() { m_pWeapon->IsActive(true); }
+	virtual void	Deactiave_Weapon() { m_pWeapon->IsActive(false); };
 
 	void	ChangePhase();
 
@@ -117,6 +123,7 @@ private:
 
 	const _Matrix* m_pColliderBindMatrix[CT_END] = { nullptr, nullptr, nullptr };
 
+	CGameObject*			m_pCutSceneWeapon = { nullptr };
 
 private:
 
