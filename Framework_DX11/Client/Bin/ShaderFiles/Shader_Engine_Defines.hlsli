@@ -27,6 +27,13 @@ sampler LinearBorderSampler = sampler_state
     AddressV = BORDER;
 };
 
+sampler LinearYClampSampler = sampler_state
+{
+    Filter = MIN_MAG_MIP_LINEAR;
+    AddressU = wrap;
+    AddressV = clamp;
+};
+
 // 비교 샘플러
 // 깊이 텍스쳐 샘플링
 SamplerComparisonState DepthComparisonSampler = sampler_state
