@@ -48,6 +48,7 @@
 #include "State_RaxasiaP2_TeleportAttack.h"
 #include "State_RaxasiaP2_WaveSting.h"
 #include "State_RaxasiaP2_Guard.h"
+#include "State_RaxasiaP2_Guard_Push.h"
 #include "State_RaxasiaP2_ChargeRush.h"
 #include "State_RaxasiaP2_Declare_War.h"
 #include "State_RaxasiaP2_ShieldRush.h"
@@ -612,6 +613,7 @@ HRESULT CRaxasia::Ready_FSM()
 	m_pExtraFsmCom->Add_State(CState_RaxasiaP2_Declare_War::Create(m_pExtraFsmCom, this, ATKP2_DECLAREWAR, &Desc));
 	m_pExtraFsmCom->Add_State(CState_RaxasiaP2_ShieldRush::Create(m_pExtraFsmCom, this, ATKP2_SHIELDRUSH, &Desc));
 	m_pExtraFsmCom->Add_State(CState_RaxasiaP2_ShieldLinked::Create(m_pExtraFsmCom, this, ATKP2_SHIELDLINKED, &Desc));
+	m_pExtraFsmCom->Add_State(CState_RaxasiaP2_Guard_Push::Create(m_pExtraFsmCom, this, ATKP2_GUARD_PUSH, &Desc));
 
 	m_pExtraFsmCom->Add_State(CState_RaxasiaP2_Running_Linked::Create(m_pExtraFsmCom, this, ATKP2_RUNNING_LINKED, &Desc));
 	m_pExtraFsmCom->Add_State(CState_RaxasiaP2_Running_Fury::Create(m_pExtraFsmCom, this, ATKP2_RUNNING_FURY, &Desc));

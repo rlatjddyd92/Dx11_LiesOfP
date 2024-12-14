@@ -72,11 +72,6 @@ void CState_RaxasiaP2_Running::Update(_float fTimeDelta)
         vDir.Normalize();
         m_pMonster->Get_Transform()->LookAt_Lerp_NoHeight(_Vec4{ vDir }, 2.f, fTimeDelta);
 
-        if (m_pMonster->Calc_Distance_XZ() >= 3.f)
-        {
-            _Vec3 vVelo = m_pMonster->Get_RigidBody()->Get_Velocity();
-            m_pMonster->Get_RigidBody()->Set_Velocity(vVelo + vDir);
-        }
         break;
     }
 
@@ -129,15 +124,23 @@ void CState_RaxasiaP2_Running::Update(_float fTimeDelta)
             vDir.Normalize();
 
             vDir *= m_fDistance;
-            if (m_pMonster->Calc_Distance_XZ() >= 3.f)
+            if (m_pMonster->Calc_Distance_XZ() >= 0.5f)
             {
                 _Vec3 vVelo = m_pMonster->Get_RigidBody()->Get_Velocity();
-                m_pMonster->Get_RigidBody()->Set_Velocity(vVelo + vDir);
+                m_pMonster->Get_RigidBody()->Set_Velocity(vVelo + vDir * 2);
             }
             m_pMonster->Get_RigidBody()->Set_GloblePose(vTargetPos - vDir);
         }
         else if (CurTrackPos <= 160)
         {
+            _Vec3 vDir = m_pMonster->Get_TargetDir();
+            vDir.Normalize();
+
+            if (m_pMonster->Calc_Distance_XZ() >= 0.5f)
+            {
+                _Vec3 vVelo = m_pMonster->Get_RigidBody()->Get_Velocity();
+                m_pMonster->Get_RigidBody()->Set_Velocity(vVelo + vDir * 2);
+            }
             m_pMonster->Get_Transform()->LookAt_Lerp_NoHeight(m_pMonster->Get_TargetDir(), 3.f, fTimeDelta);
         }
         break;
@@ -188,22 +191,22 @@ void CState_RaxasiaP2_Running::Collider_Check(_double CurTrackPos)
 {
     if (m_iRouteTrack == 1)
     {
-        if ((CurTrackPos >= 150.f && CurTrackPos <= 160.f))
+        if ((CurTrackPos >= 145.f && CurTrackPos <= 160.f))
         {
-            m_pMonster->Active_CurrentWeaponCollider(1.3f, 0, HIT_TYPE::HIT_METAL, ATTACK_STRENGTH::ATK_NORMAL);
+            m_pMonster->Active_CurrentWeaponCollider(1.3f, 0, HIT_TYPE::HIT_METAL, ATTACK_STRENGTH::ATK_WEAK);
         }
         else
         {
             m_pMonster->DeActive_CurretnWeaponCollider();
         }
 
-        if ((CurTrackPos >= 170.f && CurTrackPos <= 180.f))
+        if ((CurTrackPos >= 165.f && CurTrackPos <= 185.f))
         {
             m_pMonster->Active_CurrentWeaponCollider(1.3f, 1, HIT_TYPE::HIT_METAL, ATTACK_STRENGTH::ATK_NORMAL);
         }
         else
         {
-            m_pMonster->DeActive_CurretnWeaponCollider();
+            m_pMonster->DeActive_CurretnWeaponCollider(1);
         }
     }
 }

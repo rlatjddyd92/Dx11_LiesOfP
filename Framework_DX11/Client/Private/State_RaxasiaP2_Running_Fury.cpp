@@ -22,7 +22,7 @@ HRESULT CState_RaxasiaP2_Running_Fury::Start_State(void* pArg)
 {
     m_iRouteTrack = 0;
 
-    m_pMonster->Change_Animation(AN_RUNNING, false, 0.1f, 50);
+    m_pMonster->Change_Animation(AN_RUNNING, false, 0.1f, 0, true, true);
 
     m_bSwingSound = false;
     m_bSpeedController = false;
@@ -168,19 +168,27 @@ _bool CState_RaxasiaP2_Running_Fury::End_Check()
 
 void CState_RaxasiaP2_Running_Fury::Collider_Check(_double CurTrackPos)
 {
-    if (m_iRouteTrack == 1)
+    if (m_iRouteTrack == 0)
     {
-        if ((CurTrackPos >= 60.f && CurTrackPos <= 90.f) ||
-            (CurTrackPos >= 110.f && CurTrackPos <= 135.f))
+        if ((CurTrackPos >= 145.f && CurTrackPos <= 160.f))
         {
-            m_pMonster->Active_CurrentWeaponCollider(1.3f, 0, HIT_TYPE::HIT_METAL, ATTACK_STRENGTH::ATK_NORMAL);
+            m_pMonster->Active_CurrentWeaponCollider(1.3f, 0, HIT_TYPE::HIT_METAL, ATTACK_STRENGTH::ATK_WEAK);
         }
         else
         {
             m_pMonster->DeActive_CurretnWeaponCollider();
         }
+
+        if ((CurTrackPos >= 165.f && CurTrackPos <= 185.f))
+        {
+            m_pMonster->Active_CurrentWeaponCollider(1.3f, 1, HIT_TYPE::HIT_METAL, ATTACK_STRENGTH::ATK_NORMAL);
+        }
+        else
+        {
+            m_pMonster->DeActive_CurretnWeaponCollider(1);
+        }
     }
-    else if (m_iRouteTrack == 2)
+    else if (m_iRouteTrack == 1)
     {
         if ((CurTrackPos >= 160.f && CurTrackPos <= 170.f))
         {

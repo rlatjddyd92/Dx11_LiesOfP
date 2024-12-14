@@ -100,7 +100,7 @@ void CState_RaxasiaP1_KickSting::Collider_Check(_double CurTrackPos)
             m_pMonster->DeActive_CurretnWeaponCollider();
         }
 
-        if ((CurTrackPos >= 50.f && CurTrackPos <= 85.f))
+        if ((CurTrackPos >= 80.f && CurTrackPos <= 85.f))
         {
             m_pMonster->Active_CurrentWeaponCollider(1.f, 0, HIT_TYPE::HIT_METAL, ATTACK_STRENGTH::ATK_WEAK);
         }
