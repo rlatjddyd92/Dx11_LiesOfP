@@ -50,7 +50,7 @@ void CState_SimonManus_CutScene_Phase2::Update(_float fTimeDelta)
     {
         if (m_pMonster->Get_CurrentAnimIndex() == m_iAnimation_Connectgod
             && m_isCreatedHand == false
-            && m_pMonster->Get_Frame() > 11500 )
+            && m_pMonster->Get_Frame() > 1150 )
         {
             m_isCreatedHand = true;
 

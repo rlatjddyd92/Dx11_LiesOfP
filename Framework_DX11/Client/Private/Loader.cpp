@@ -72,6 +72,8 @@
 #include "Weapon_SimonManus_Hammer.h"
 #include "Sophia.h"
 #include "Item_Throw.h"
+#include "TorchDeck.h"
+#include "FirePot.h"
 #pragma endregion
 
 #include "GameInstance.h"
@@ -1274,6 +1276,16 @@ HRESULT CLoader::Ready_Prototype()
 	/* For. Prototype_GameObject_ThrowItem */
 	if (FAILED(m_pGameInstance->Add_Prototype(TEXT("Prototype_GameObject_ThrowItem"),
 		CItem_Throw::Create(m_pDevice, m_pContext))))
+		return E_FAIL;	
+	
+	/* For. Prototype_GameObject_TorchDeck */
+	if (FAILED(m_pGameInstance->Add_Prototype(TEXT("Prototype_GameObject_TorchDeck"),
+		CTorchDeck::Create(m_pDevice, m_pContext))))
+		return E_FAIL;
+
+	/* For. Prototype_GameObject_FirePot */
+	if (FAILED(m_pGameInstance->Add_Prototype(TEXT("Prototype_GameObject_FirePot"),
+		CFirePot::Create(m_pDevice, m_pContext))))
 		return E_FAIL;
 #pragma endregion
 
