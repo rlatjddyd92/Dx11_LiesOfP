@@ -245,6 +245,7 @@
     <ClInclude Include="..\Public\State_RaxasiaP2_Tele_LinkedTel.h" />
     <ClInclude Include="..\Public\State_RaxasiaP2_Walk.h" />
     <ClInclude Include="..\Public\State_RaxasiaP2_WaveSting.h" />
+    <ClInclude Include="..\Public\State_SimonManusP2_Die_Talking.h" />
     <ClInclude Include="..\Public\TorchDeck.h" />
     <ClInclude Include="..\Public\UIPage_Chest.h" />
     <ClInclude Include="..\Public\UIPage_Shop.h" />
@@ -548,6 +549,7 @@
     <ClCompile Include="..\Private\State_RaxasiaP2_Tele_LinkedTel.cpp" />
     <ClCompile Include="..\Private\State_RaxasiaP2_Walk.cpp" />
     <ClCompile Include="..\Private\State_RaxasiaP2_WaveSting.cpp" />
+    <ClCompile Include="..\Private\State_SimonManusP2_Die_Talking.cpp" />
     <ClCompile Include="..\Private\TorchDeck.cpp" />
     <ClCompile Include="..\Private\UIPage_Chest.cpp" />
     <ClCompile Include="..\Private\UIPage_Shop.cpp" />

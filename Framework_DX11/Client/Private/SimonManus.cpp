@@ -15,6 +15,7 @@
 //전부 수정하기
 
 #include "Weapon.h"
+#include "CutScene.h"
 
 #pragma region Phase1
 #include "State_SimonManusP1_Idle.h"
@@ -66,6 +67,8 @@
 #include "State_SimonManusP2_Wave.h"
 #include "State_SimonManusP2_SpreadMagic.h"
 #include "State_SimonManusP2_SlideMagic.h"
+
+#include "State_SimonManusP2_Die_Talking.h"
 #pragma endregion
 
 #pragma region CutScene
@@ -161,7 +164,12 @@ void CSimonManus::Priority_Update(_float fTimeDelta)
 	if (!m_bDieState && m_eStat.fHp <= 0.f)
 	{
 		m_bDieState = true;
-		m_pFsmCom->Set_State(DIE);
+
+		if(m_isChanged)
+			dynamic_cast<CCutScene*>(m_pGameInstance->Find_Object(LEVEL_GAMEPLAY, TEXT("Layer_CutScene"), BOSS2_DEFEAT))->Start_Play();
+		else
+			dynamic_cast<CCutScene*>(m_pGameInstance->Find_Object(LEVEL_GAMEPLAY, TEXT("Layer_CutScene"), BOSS2_PHASE2))->Start_Play();
+
 		if (m_isChanged)
 		{
 			GET_GAMEINTERFACE->Set_OnOff_OrthoUI(false, this);
@@ -340,6 +348,8 @@ void CSimonManus::Start_CutScene(_uint iCutSceneNum)
 		m_pCutSceneFsmCom->Change_State(STATE_P2);
 		m_isPlayAnimation = true;
 		Deactiave_Weapon();
+		m_pRigidBodyCom->Set_GloblePose(_Vec3(0.f, 0.f, 0.f));
+		m_pTransformCom->Rotation(0.f, 50.f, 0.f);
 		break;
 	case CUTSCENE_DIE:
 		m_pModelCom = m_pCutSceneModelCom[MODEL_PHASE2];
@@ -542,6 +552,8 @@ HRESULT CSimonManus::Ready_FSM()
 	m_pExtraFsmCom->Add_State(CState_SimonManusP2_Route0::Create(m_pExtraFsmCom, this, ATKP2_ROUTE_0, &Desc));
 	m_pExtraFsmCom->Add_State(CState_SimonManusP2_Route1::Create(m_pExtraFsmCom, this, ATKP2_ROUTE_1, &Desc));
 	m_pExtraFsmCom->Add_State(CState_SimonManusP2_Route2::Create(m_pExtraFsmCom, this, ATKP2_ROUTE_2, &Desc));
+
+	m_pExtraFsmCom->Add_State(CState_SimonManusP2_Die_Talking::Create(m_pExtraFsmCom, this, DIE_TALKING, &Desc));
 
 	//m_pExtraFsmCom->Set_State(IDLE);
 #pragma endregion

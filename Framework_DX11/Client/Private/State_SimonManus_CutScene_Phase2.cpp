@@ -64,7 +64,7 @@ void CState_SimonManus_CutScene_Phase2::Update(_float fTimeDelta)
         }
         else if (m_pMonster->Get_EndAnim(m_iAnimation_Begod))
         {
-            m_pMonster->End_CutScene(0);
+           // m_pMonster->End_CutScene(0);
         }
     }
 }

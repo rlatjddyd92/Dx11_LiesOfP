@@ -44,7 +44,7 @@ HRESULT CWeapon_Rapier::Initialize(void* pArg)
 
 	m_strObjectTag = TEXT("PlayerWeapon");
 	m_pColliderCom->Set_Owner(this);
-	m_fDamageAmount = 5.f;
+	m_fDamageAmount = 500.f;
 
 	m_pColliderCom->IsActive(false);
 

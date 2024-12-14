@@ -1087,6 +1087,9 @@
     <Filter Include="02.GameObjects\11.InteractObj\10.FirePot">
       <UniqueIdentifier>{e888a4b1-58ff-4eea-8dba-eafdbd83c448}</UniqueIdentifier>
     </Filter>
+    <Filter Include="05.Fsm\Monster\SimonManus\P2\Die_Talking">
+      <UniqueIdentifier>{8f69d69b-43bc-49a5-8605-e02f119e89ec}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Client.h">
@@ -2006,6 +2009,9 @@
     <ClInclude Include="..\Public\FirePot.h">
       <Filter>02.GameObjects\11.InteractObj\10.FirePot</Filter>
     </ClInclude>
+    <ClInclude Include="..\Public\State_SimonManusP2_Die_Talking.h">
+      <Filter>05.Fsm\Monster\SimonManus\P2\Die_Talking</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Client.cpp">
@@ -2894,6 +2900,9 @@
     </ClCompile>
     <ClCompile Include="..\Private\FirePot.cpp">
       <Filter>02.GameObjects\11.InteractObj\10.FirePot</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Private\State_SimonManusP2_Die_Talking.cpp">
+      <Filter>05.Fsm\Monster\SimonManus\P2\Die_Talking</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

@@ -161,7 +161,7 @@ void CCutScene::Active_Obj(CUTSCENE_KEYFRAME_DESC* pCutSceneDesc)
 {
 	if (pCutSceneDesc->Obj_Desc.bUseObj[PLAYER])
 	{
-		m_pObjects[PLAYER]->Change_State(*pCutSceneDesc->Obj_Desc.iStateNum);
+		m_pObjects[PLAYER]->Change_State(pCutSceneDesc->Obj_Desc.iStateNum[PLAYER]);
 	}
 	if (pCutSceneDesc->Obj_Desc.bUseObj[BOSS1])
 	{
@@ -169,7 +169,7 @@ void CCutScene::Active_Obj(CUTSCENE_KEYFRAME_DESC* pCutSceneDesc)
 	}
 	if (pCutSceneDesc->Obj_Desc.bUseObj[BOSS2])
 	{
-		m_pObjects[BOSS2]->Change_State(*pCutSceneDesc->Obj_Desc.iStateNum);
+		m_pObjects[BOSS2]->Change_State(pCutSceneDesc->Obj_Desc.iStateNum[BOSS2]);
 	}
 }
 
@@ -223,6 +223,10 @@ void CCutScene::First_Setting()
 		pPlayer->IsActive(false);
 		static_cast<CSimonManus*>(m_pGameInstance->Find_Object(LEVEL_GAMEPLAY, TEXT("Layer_SimonManus"), 0))->Start_CutScene(1);
 		break;
+	case BOSS2_DEFEAT:
+		pPlayer->IsActive(false);
+		m_pObjects[BOSS2] = static_cast<CPawn*>(m_pGameInstance->Find_Object(LEVEL_GAMEPLAY, TEXT("Layer_SimonManus"), 0));
+		break;
 	}
 }
 
@@ -263,15 +267,26 @@ void CCutScene::End_Setting()
 	else if (m_iIndex == BOSS2_MEET3)
 	{
 		pPlayer->Change_State(CPlayer::OH_IDLE);
-		pPlayer->Get_Navigation()->Move_to_Cell(pPlayer->Get_RigidBody(), 119);
+		pPlayer->Get_Navigation()->Move_to_Cell(pPlayer->Get_RigidBody(), 118);
 		pPlayer->Appear_Weapon();
 		static_cast<CPawn*>(m_pGameInstance->Find_Object(LEVEL_GAMEPLAY, TEXT("Layer_SimonManus"), 0))->End_CutScene(0);
 	}
 	else if (m_iIndex == BOSS2_PHASE2)
 	{
 		pPlayer->IsActive(true);
-		//static_cast<CPawn*>(m_pGameInstance->Find_Object(LEVEL_GAMEPLAY, TEXT("Layer_SimonManus"), 0))->End_CutScene(1);
+		pPlayer->Get_Navigation()->Move_to_Cell(pPlayer->Get_RigidBody(), 118);
+		static_cast<CPawn*>(m_pGameInstance->Find_Object(LEVEL_GAMEPLAY, TEXT("Layer_SimonManus"), 0))->End_CutScene(1);
+		static_cast<CPawn*>(m_pGameInstance->Find_Object(LEVEL_GAMEPLAY, TEXT("Layer_SimonManus"), 0))->Reset_Die();
 	}
+	else if (m_iIndex == BOSS2_DEFEAT)
+	{
+		pPlayer->IsActive(true);
+		pPlayer->Get_Navigation()->Move_to_Cell(pPlayer->Get_RigidBody(), 40);
+		static_cast<CPawn*>(m_pGameInstance->Find_Object(LEVEL_GAMEPLAY, TEXT("Layer_SimonManus"), 0))->Change_State(CSimonManus::DIE_TALKING);
+	}
+	m_pCamera->Reset_MoveLerp();
+	m_pCamera->Reset_Zoom();
+
 	pPlayer->Get_Camera()->Move_PlayerBackPos();
 }
 
