@@ -84,13 +84,13 @@ void CUIPage_Popup::Late_Update(_float fTimeDelta)
 					}
 				}
 
-				m_vecPart[int(PART_GROUP::POPUP_Input_Count_Num)]->strText = m_pItemPopup_Info->iNow;
+				m_vecPart[int(PART_GROUP::POPUP_Input_Count_Num)]->strText = to_wstring(m_pItemPopup_Info->iNow);
 			}
 
 			if (m_pItemPopup_Info->pNow_Count != nullptr)
 			{
 				m_pItemPopup_Info->iNow_Count += m_pItemPopup_Info->iInterval * iAdd;
-				m_vecPart[int(PART_GROUP::POPUP_Count_Num)]->strText = m_pItemPopup_Info->iNow_Count;
+				m_vecPart[int(PART_GROUP::POPUP_Count_Num)]->strText = to_wstring(m_pItemPopup_Info->iNow_Count);
 			}
 			
 			if (GET_GAMEINTERFACE->CheckMouse(m_vecPart[int(PART_GROUP::POPUP_Mouse_0)]->fPosition, m_vecPart[int(PART_GROUP::POPUP_Mouse_0)]->fSize).x != -1.f)
@@ -105,6 +105,12 @@ void CUIPage_Popup::Late_Update(_float fTimeDelta)
 			}
 			else if (GET_GAMEINTERFACE->CheckMouse(m_vecPart[int(PART_GROUP::POPUP_Mouse_1)]->fPosition, m_vecPart[int(PART_GROUP::POPUP_Mouse_1)]->fSize).x != -1.f)
 			{
+				if (m_pItemPopup_Info->pNow_Input != nullptr)
+					*m_pItemPopup_Info->pNow_Input = -1;
+
+				if (m_pItemPopup_Info->pNow_Count != nullptr)
+					*m_pItemPopup_Info->pNow_Count = -1;
+
 				Off_Popup();
 			}
 		}
@@ -134,7 +140,7 @@ void CUIPage_Popup::Late_Update(_float fTimeDelta)
 				}
 			}
 	}
-
+	m_fTopPartMove = -1;
 	__super::Late_Update(fTimeDelta);
 }
 
@@ -217,7 +223,7 @@ void CUIPage_Popup::Show_ItemPopup(_wstring strTitle, _wstring strInputTitle, _i
 
 	m_pItemPopup_Info->bIsActive = true;
 
-	for (_int i = _int(PART_GROUP::POPUP_Top); i <= _int(PART_GROUP::POPUP_Text_0); ++i)
+	for (_int i = _int(PART_GROUP::POPUP_Top); i <= _int(PART_GROUP::POPUP_Count_Num); ++i)
 	{
 		m_vecPart[i]->bRender = true;
 		m_vecPart[i]->fTextColor = { 1.f,1.f,1.f,1.f };
@@ -237,7 +243,7 @@ void CUIPage_Popup::Show_ItemPopup(_wstring strTitle, _wstring strInputTitle, _i
 	if (pNow_Input != nullptr)
 	{
 		m_pItemPopup_Info->iMin = iMin;
-		m_pItemPopup_Info->iNow = *pNow_Input;
+		m_pItemPopup_Info->iNow = iMin;
 		m_pItemPopup_Info->pNow_Input = pNow_Input;
 		m_pItemPopup_Info->iInterval = iInterval;
 		m_pItemPopup_Info->iMax = iMax;
@@ -251,7 +257,7 @@ void CUIPage_Popup::Show_ItemPopup(_wstring strTitle, _wstring strInputTitle, _i
 		
 	if (pNow_Count != nullptr)
 	{
-		m_pItemPopup_Info->iNow_Count = *pNow_Count;
+		m_pItemPopup_Info->iNow_Count = iInterval * iMin;
 		m_pItemPopup_Info->pNow_Count = pNow_Count;
 		m_pItemPopup_Info->iInterval = iInterval;
 
@@ -294,7 +300,6 @@ void CUIPage_Popup::Show_ItemUsePopup(_wstring strTitle, _wstring strDescA, _boo
 	m_vecPart[int(PART_GROUP::POPUP_Title)]->strText = strTitle;
 	m_vecPart[int(PART_GROUP::POPUP_Desc_0)]->strText = strDescA;
 	m_vecPart[int(PART_GROUP::POPUP_Desc_1)]->strText = {};
-
 
 	m_vecPart[int(PART_GROUP::POPUP_Mouse_0)]->fRatio = 0.f;
 	m_vecPart[int(PART_GROUP::POPUP_Mouse_1)]->fRatio = 1.f;

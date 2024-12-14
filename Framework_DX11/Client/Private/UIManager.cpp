@@ -74,9 +74,33 @@ HRESULT CUIManager::Initialize_Prototype()
 
 	m_pTestData = new TESTDATA;
 
+	m_vecPageRender_Order.push_back(UIPAGE::PAGE_MAIN);
+	m_vecPageRender_Order.push_back(UIPAGE::PAGE_LOADING);
 
+	m_vecPageRender_Order.push_back(UIPAGE::PAGE_ORTHO);
 
+	m_vecPageRender_Order.push_back(UIPAGE::PAGE_PLAY);
 
+	m_vecPageRender_Order.push_back(UIPAGE::PAGE_MENU);
+
+	m_vecPageRender_Order.push_back(UIPAGE::PAGE_INVEN);
+	m_vecPageRender_Order.push_back(UIPAGE::PAGE_EQUIP);
+	m_vecPageRender_Order.push_back(UIPAGE::PAGE_STAT);
+	m_vecPageRender_Order.push_back(UIPAGE::PAGE_SKILL);
+	m_vecPageRender_Order.push_back(UIPAGE::PAGE_OPTION);
+
+	m_vecPageRender_Order.push_back(UIPAGE::PAGE_TALKING);
+
+	m_vecPageRender_Order.push_back(UIPAGE::PAGE_SHOP);
+	m_vecPageRender_Order.push_back(UIPAGE::PAGE_CHEST);
+	m_vecPageRender_Order.push_back(UIPAGE::PAGE_TELEPOT);
+
+	m_vecPageRender_Order.push_back(UIPAGE::PAGE_ITEMINFO);
+	m_vecPageRender_Order.push_back(UIPAGE::PAGE_INFORM);
+
+	m_vecPageRender_Order.push_back(UIPAGE::PAGE_POPUP);
+	m_vecPageRender_Order.push_back(UIPAGE::PAGE_EFFECT);
+	m_vecPageRender_Order.push_back(UIPAGE::PAGE_TEST);
 
 	return S_OK;
 }
@@ -92,17 +116,17 @@ void CUIManager::Priority_Update(_float fTimeDelta)
 {
 	
 
-	for (auto& iter : m_vecPage)
-		if (iter->GetUpdate())
-			iter->Priority_Update(fTimeDelta);
+	for (auto& iter : m_vecPageRender_Order)
+		if (m_vecPage[_int(iter)]->GetUpdate())
+			m_vecPage[_int(iter)]->Priority_Update(fTimeDelta);
 }
 
 void CUIManager::Update(_float fTimeDelta)
 {
 	
-	for (auto& iter : m_vecPage)
-		if (iter->GetUpdate())
-			iter->Update(fTimeDelta);
+	for (auto& iter : m_vecPageRender_Order)
+		if (m_vecPage[_int(iter)]->GetUpdate())
+			m_vecPage[_int(iter)]->Update(fTimeDelta);
 }
 
 void CUIManager::Late_Update(_float fTimeDelta)
@@ -111,24 +135,15 @@ void CUIManager::Late_Update(_float fTimeDelta)
 	_int iCountOpen = 0;
 
 	if (m_pUIPage_Play->GetRender())
-		m_pUIPage_Ortho->Late_Update(fTimeDelta);
+		m_pUIPage_Ortho->SetUpdate(true);
+	else 
+		m_pUIPage_Ortho->SetUpdate(false);
 
 	m_pUIPage_Effect->SetUpdate(true);
 
-	for (_int i = 0; i < _int(UIPAGE::PAGE_END); ++i)
-	{
-		if (i == _int(UIPAGE::PAGE_ORTHO))
-			continue;
-		if (i == _int(UIPAGE::PAGE_EFFECT))
-			continue;
-		if (m_vecPage[i]->GetPageAction(PAGEACTION::ACTION_INACTIVE))
-			continue;
-
-		if (m_vecPage[i]->GetUpdate())
-			m_vecPage[i]->Late_Update(fTimeDelta);
-	}
-
-	m_pUIPage_Effect->Late_Update(fTimeDelta);
+	for (auto& iter : m_vecPageRender_Order)
+		if ((m_vecPage[_int(iter)]->GetUpdate()) && (!m_vecPage[_int(iter)]->GetPageAction(PAGEACTION::ACTION_INACTIVE)))
+			m_vecPage[_int(iter)]->Late_Update(fTimeDelta);
 
 	m_pGameInstance->Add_RenderObject(CRenderer::RG_UI, this);
 }
@@ -840,6 +855,8 @@ void CUIManager::Free()
 	Safe_Release(m_pGameInstance);
 
 	m_vecTestPageInfo.clear();
+
+	m_vecPageRender_Order.clear();
 
 	Safe_Delete(m_pTestData);
 }

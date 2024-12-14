@@ -831,7 +831,6 @@ ITEM_RESULT CItem_Manager::Operate_EquipAction(_Vec2 vPos, _Vec2 vSize)
 void CItem_Manager::Adjust_Spec()
 {
 	CPlayer::STAT_INFO* pAdjust = GET_GAMEINTERFACE->Get_Player()->Get_Player_Stat_Adjust();
-	CPlayer::ABILITY_INFO* pAbility = GET_GAMEINTERFACE->Get_Player()->Get_Player_Ability();
 
 	_int iAmulet[2] = { 0, };
 	_float fDefence[4] = { 0.f, };
@@ -855,9 +854,9 @@ void CItem_Manager::Adjust_Spec()
 		fDefence[3] = Get_Equip_Item_Info(EQUIP_SLOT::EQUIP_DEFENCE_RAINER)->vecDefence[2];
 
 	if ((iAmulet[0] == 87) || (iAmulet[1] == 87)) // ²ç¶Õ´Â Áõ¿ÀÀÇ ¾Æ¹Ä·¿ 
-		pAbility->bDebuff_Fire_Ignore = true;
+		pAdjust->bDebuff_Fire_Ignore = true;
 	else 
-		pAbility->bDebuff_Fire_Ignore = false;
+		pAdjust->bDebuff_Fire_Ignore = false;
 
 	if ((iAmulet[0] == 88) || (iAmulet[1] == 88))
 		pAdjust->vGauge_Stamina.z = 200.f;
@@ -865,15 +864,15 @@ void CItem_Manager::Adjust_Spec()
 		pAdjust->vGauge_Stamina.z = 0.f;
 
 	if ((iAmulet[0] == 90) || (iAmulet[1] == 90))
-		pAbility->bDebuff_Electric_Ignore = true;
+		pAdjust->bDebuff_Electric_Ignore = true;
 	else
-		pAbility->bDebuff_Electric_Ignore = false;
+		pAdjust->bDebuff_Electric_Ignore = false;
 
 
 	if ((iAmulet[0] == 94) || (iAmulet[1] == 94))
-		pAbility->bDebuff_Acid_Ignore = true;
+		pAdjust->bDebuff_Acid_Ignore = true;
 	else
-		pAbility->bDebuff_Acid_Ignore = false;
+		pAdjust->bDebuff_Acid_Ignore = false;
 
 	if ((iAmulet[0] == 101) || (iAmulet[1] == 101))
 		pAdjust->vGauge_Hp.z = 200.f;
@@ -881,9 +880,9 @@ void CItem_Manager::Adjust_Spec()
 		pAdjust->vGauge_Hp.z = 0.f;
 
 	if ((iAmulet[0] == 111) || (iAmulet[1] == 111))
-		pAbility->fHeal = 10.f;
+		pAdjust->fHeal = 10.f;
 	else
-		pAbility->fHeal = 0.f;
+		pAdjust->fHeal = 0.f;
 
 	if ((iAmulet[0] == 113) || (iAmulet[1] == 113))
 		pAdjust->iStat_Defence = 30;
@@ -891,14 +890,32 @@ void CItem_Manager::Adjust_Spec()
 		pAdjust->iStat_Defence = 0;
 
 	pAdjust->iStat_Defence += _int(fDefence[0]);
-	pAbility->fResist_Fire = fDefence[1];
-	pAbility->bDebuff_Electric_Ignore = fDefence[2];
-	pAbility->bDebuff_Acid_Ignore = fDefence[3];
+	pAdjust->fResist_Fire = fDefence[1];
+	pAdjust->bDebuff_Electric_Ignore = fDefence[2];
+	pAdjust->bDebuff_Acid_Ignore = fDefence[3];
 }
 
 void CItem_Manager::Buy_ShopItem(_int iIndex, _int iCount)
 {
 	if (m_vecItem_BasicSpec[iIndex]->bIsAvailable_Shop == false)
+		return;
+
+	if (iCount <= 0)
+		return;
+
+	_int iNowShop = -1;
+
+	for (auto& iter : m_vecShop_Item)
+	{
+		++iNowShop;
+		if (iter->iIndex == iIndex)
+			break;
+	}
+		
+	if ((iNowShop == -1) || (iNowShop >= m_vecShop_Item.size()))
+		return;
+
+	if (m_vecShop_Item[iNowShop]->iCount < iCount)
 		return;
 	
 	_int iErgo = GET_GAMEINTERFACE->Get_Player()->Get_Player_Stat().iErgo;
@@ -907,6 +924,7 @@ void CItem_Manager::Buy_ShopItem(_int iIndex, _int iCount)
 	if (iErgo < m_vecItem_BasicSpec[iIndex]->iPrice * iCount)
 		return;
 
+	m_vecShop_Item[iNowShop]->iCount -= iCount;
 	AddNewItem_Inven(iIndex, iCount);
 
 	_wstring strItem = m_vecItem_BasicSpec[iIndex]->strName;
@@ -919,7 +937,10 @@ void CItem_Manager::Buy_ShopItem(_int iIndex, _int iCount)
 
 void CItem_Manager::Sell_ShopItem(INVEN_ARRAY_TYPE eType, _int iIndex, _int iCount)
 {
-	if (m_vecItem_BasicSpec[iIndex]->bIsAvailable_Shop == false)
+	if (!IsValid_Inven(eType, iIndex))
+		return;
+
+	if (m_vecArray_Inven[_int(eType)]->vecItemInfo[iIndex]->bIsAvailable_Shop == false)
 		return;
 
 	_int iCountNow = m_vecArray_Inven[_int(eType)]->vecItemInfo[iIndex]->iCount;
@@ -927,16 +948,13 @@ void CItem_Manager::Sell_ShopItem(INVEN_ARRAY_TYPE eType, _int iIndex, _int iCou
 	if(iCount > iCountNow)
 		return;
 
-	m_vecArray_Inven[_int(eType)]->vecItemInfo[iIndex]->iCount -= iCount;
+	GET_GAMEINTERFACE->Get_Player()->Get_Player_Stat_Adjust()->iErgo += m_vecArray_Inven[_int(eType)]->vecItemInfo[iIndex]->iPrice * iCount;
 
-	if (m_vecArray_Inven[_int(eType)]->vecItemInfo[iIndex]->iCount == 0)
-		Remove_Item_Inven(eType, iIndex);
+	m_vecArray_Inven[_int(eType)]->Use_Item(iIndex, iCount);
 
-	_wstring strItem = m_vecItem_BasicSpec[iIndex]->strName;
+	_wstring strItem = m_vecArray_Inven[_int(eType)]->vecItemInfo[iIndex]->strName;
 	strItem += TEXT(" -> ÆÇ¸Å¼ö·® : ");
 	strItem += to_wstring(iCount);
-
-	GET_GAMEINTERFACE->Get_Player()->Get_Player_Stat_Adjust()->iErgo += m_vecArray_Inven[_int(eType)]->vecItemInfo[iIndex]->iPrice * iCount;
 }
 
 void CItem_Manager::ChestItem_To_Inven(_int iIndex, _int iCount)

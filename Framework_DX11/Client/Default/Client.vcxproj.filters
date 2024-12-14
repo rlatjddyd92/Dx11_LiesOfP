@@ -154,23 +154,11 @@
     <Filter Include="02.GameObjects\02.Pawn">
       <UniqueIdentifier>{a51c24d7-a10f-438d-8dc2-c2f87467615b}</UniqueIdentifier>
     </Filter>
-    <Filter Include="02.GameObjects\02.Pawn\01.Monster">
-      <UniqueIdentifier>{0083e25f-5f57-4f81-8604-c0d79a304e39}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="02.GameObjects\02.Pawn\01.Monster\CarcassBigA">
-      <UniqueIdentifier>{f6168eed-c521-4165-b051-0becd723a0a2}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="02.GameObjects\02.Pawn\01.Monster\SimonManus">
-      <UniqueIdentifier>{57195b03-ed04-4599-966f-cd38e86fb16d}</UniqueIdentifier>
-    </Filter>
     <Filter Include="02.GameObjects\02.Pawn\00.Player">
       <UniqueIdentifier>{a04ca2a0-1907-4180-8363-482efb3255f2}</UniqueIdentifier>
     </Filter>
     <Filter Include="97.ShaderFiles\99.UI_Shader">
       <UniqueIdentifier>{b83c9fd9-a108-45c5-8e6f-296e8b63c2da}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="02.GameObjects\02.Pawn\01.Monster\CarcassTail">
-      <UniqueIdentifier>{e6447638-0aaa-4897-887b-a642b899134e}</UniqueIdentifier>
     </Filter>
     <Filter Include="02.GameObjects\12.AttackObject">
       <UniqueIdentifier>{ce4ea603-046b-4d4c-bb5e-c2d7a15acc70}</UniqueIdentifier>
@@ -232,12 +220,6 @@
     <Filter Include="03.GameInterface_Controller\00.UIManager\00.UIPage\02.UIPage_Play %2870%25%29">
       <UniqueIdentifier>{0bf63bb1-37d5-4135-837b-20c74ddf9ad5}</UniqueIdentifier>
     </Filter>
-    <Filter Include="03.GameInterface_Controller\00.UIManager\00.UIPage\01.UIPage_Loading %2890%25%29">
-      <UniqueIdentifier>{a81ac6e1-e175-4d29-a4ef-8d19959c8b05}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="03.GameInterface_Controller\00.UIManager\00.UIPage\00.UIPage_Main %2880%25%29">
-      <UniqueIdentifier>{00ab63cd-e889-48c6-9ab0-2ba67c8a067b}</UniqueIdentifier>
-    </Filter>
     <Filter Include="02.GameObjects\12.AttackObject\SimonManus\Wave">
       <UniqueIdentifier>{3fbe7865-eaf5-4108-95d7-66b4e0d1fc8a}</UniqueIdentifier>
     </Filter>
@@ -274,15 +256,6 @@
     <Filter Include="02.GameObjects\12.AttackObject\SimonManus\Stomp">
       <UniqueIdentifier>{4c93ec4b-622d-4d23-9b30-e71e06b6e88e}</UniqueIdentifier>
     </Filter>
-    <Filter Include="02.GameObjects\02.Pawn\01.Monster\HoresMan">
-      <UniqueIdentifier>{2a7b97d8-e836-4fee-82c9-aeed32fabee4}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="02.GameObjects\02.Pawn\01.Monster\RebornerMale">
-      <UniqueIdentifier>{b68070e4-27c6-4ef6-8e82-8c6ce0d9846e}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="02.GameObjects\02.Pawn\01.Monster\Raxasia">
-      <UniqueIdentifier>{f57ad993-eab1-4040-8e32-f758a798764d}</UniqueIdentifier>
-    </Filter>
     <Filter Include="02.GameObjects\06.Weapon\02.Raxasia">
       <UniqueIdentifier>{686b6fc9-f25f-4429-83b5-c02d738f1171}</UniqueIdentifier>
     </Filter>
@@ -297,9 +270,6 @@
     </Filter>
     <Filter Include="02.GameObjects\06.Weapon\02.Raxasia\P2_Shield">
       <UniqueIdentifier>{ddd84955-3d67-4917-a233-376b93e3416e}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="03.GameInterface_Controller\00.UIManager\00.UIPage\06.UIPage_Stat %2850%25%29">
-      <UniqueIdentifier>{f815fc82-3802-4a2a-8c10-2a59b6325fce}</UniqueIdentifier>
     </Filter>
     <Filter Include="03.GameInterface_Controller\00.UIManager\00.UIPage\14.UIPage_Popup %2850%25%29">
       <UniqueIdentifier>{ce6e605b-1d78-4de4-8391-14576d71d1f1}</UniqueIdentifier>
@@ -1086,6 +1056,36 @@
     </Filter>
     <Filter Include="02.GameObjects\11.InteractObj\10.FirePot">
       <UniqueIdentifier>{e888a4b1-58ff-4eea-8dba-eafdbd83c448}</UniqueIdentifier>
+	</Filter>
+    <Filter Include="02.GameObjects\02.Pawn\01.Monster">
+      <UniqueIdentifier>{0083e25f-5f57-4f81-8604-c0d79a304e39}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.GameObjects\02.Pawn\01.Monster\CarcassBigA">
+      <UniqueIdentifier>{f6168eed-c521-4165-b051-0becd723a0a2}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.GameObjects\02.Pawn\01.Monster\SimonManus">
+      <UniqueIdentifier>{57195b03-ed04-4599-966f-cd38e86fb16d}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.GameObjects\02.Pawn\01.Monster\CarcassTail">
+      <UniqueIdentifier>{e6447638-0aaa-4897-887b-a642b899134e}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.GameObjects\02.Pawn\01.Monster\HoresMan">
+      <UniqueIdentifier>{2a7b97d8-e836-4fee-82c9-aeed32fabee4}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.GameObjects\02.Pawn\01.Monster\RebornerMale">
+      <UniqueIdentifier>{b68070e4-27c6-4ef6-8e82-8c6ce0d9846e}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.GameObjects\02.Pawn\01.Monster\Raxasia">
+      <UniqueIdentifier>{f57ad993-eab1-4040-8e32-f758a798764d}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="03.GameInterface_Controller\00.UIManager\00.UIPage\06.UIPage_Stat %2890%25%29">
+      <UniqueIdentifier>{f815fc82-3802-4a2a-8c10-2a59b6325fce}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="03.GameInterface_Controller\00.UIManager\00.UIPage\01.UIPage_Loading %28100%25%29">
+      <UniqueIdentifier>{a81ac6e1-e175-4d29-a4ef-8d19959c8b05}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="03.GameInterface_Controller\00.UIManager\00.UIPage\00.UIPage_Main %28100%25%29">
+      <UniqueIdentifier>{00ab63cd-e889-48c6-9ab0-2ba67c8a067b}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -1159,10 +1159,10 @@
       <Filter>03.GameInterface_Controller\00.UIManager\00.UIPage\02.UIPage_Play %2870%25%29</Filter>
     </ClInclude>
     <ClInclude Include="..\Public\UIPage_Loading.h">
-      <Filter>03.GameInterface_Controller\00.UIManager\00.UIPage\01.UIPage_Loading %2890%25%29</Filter>
+      <Filter>03.GameInterface_Controller\00.UIManager\00.UIPage\01.UIPage_Loading %28100%25%29</Filter>
     </ClInclude>
     <ClInclude Include="..\Public\UIPage_Main.h">
-      <Filter>03.GameInterface_Controller\00.UIManager\00.UIPage\00.UIPage_Main %2880%25%29</Filter>
+      <Filter>03.GameInterface_Controller\00.UIManager\00.UIPage\00.UIPage_Main %28100%25%29</Filter>
     </ClInclude>
     <ClInclude Include="..\Public\Item_Manager.h">
       <Filter>03.GameInterface_Controller\01.Item_Manager</Filter>
@@ -1324,7 +1324,7 @@
       <Filter>03.GameInterface_Controller\00.UIManager\00.UIPage\07.UIPage_Skill %280%25%29</Filter>
     </ClInclude>
     <ClInclude Include="..\Public\UIPage_Stat.h">
-      <Filter>03.GameInterface_Controller\00.UIManager\00.UIPage\06.UIPage_Stat %2850%25%29</Filter>
+      <Filter>03.GameInterface_Controller\00.UIManager\00.UIPage\06.UIPage_Stat %2890%25%29</Filter>
     </ClInclude>
     <ClInclude Include="..\Public\UIPage_ItemInfo.h">
       <Filter>03.GameInterface_Controller\00.UIManager\00.UIPage\09.UIPage_ItemInfo %2890%25%29</Filter>
@@ -2057,10 +2057,10 @@
       <Filter>03.GameInterface_Controller\00.UIManager\00.UIPage\02.UIPage_Play %2870%25%29</Filter>
     </ClCompile>
     <ClCompile Include="..\Private\UIPage_Loading.cpp">
-      <Filter>03.GameInterface_Controller\00.UIManager\00.UIPage\01.UIPage_Loading %2890%25%29</Filter>
+      <Filter>03.GameInterface_Controller\00.UIManager\00.UIPage\01.UIPage_Loading %28100%25%29</Filter>
     </ClCompile>
     <ClCompile Include="..\Private\UIPage_Main.cpp">
-      <Filter>03.GameInterface_Controller\00.UIManager\00.UIPage\00.UIPage_Main %2880%25%29</Filter>
+      <Filter>03.GameInterface_Controller\00.UIManager\00.UIPage\00.UIPage_Main %28100%25%29</Filter>
     </ClCompile>
     <ClCompile Include="..\Private\Item_Manager.cpp">
       <Filter>03.GameInterface_Controller\01.Item_Manager</Filter>
@@ -2210,7 +2210,7 @@
       <Filter>03.GameInterface_Controller\00.UIManager\00.UIPage\07.UIPage_Skill %280%25%29</Filter>
     </ClCompile>
     <ClCompile Include="..\Private\UIPage_Stat.cpp">
-      <Filter>03.GameInterface_Controller\00.UIManager\00.UIPage\06.UIPage_Stat %2850%25%29</Filter>
+      <Filter>03.GameInterface_Controller\00.UIManager\00.UIPage\06.UIPage_Stat %2890%25%29</Filter>
     </ClCompile>
     <ClCompile Include="..\Private\UIPage_ItemInfo.cpp">
       <Filter>03.GameInterface_Controller\00.UIManager\00.UIPage\09.UIPage_ItemInfo %2890%25%29</Filter>

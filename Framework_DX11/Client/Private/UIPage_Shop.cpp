@@ -157,23 +157,25 @@ void CUIPage_Shop::Action_Tab(_float fTimeDelta)
 	_Vec2 vMouse = GET_GAMEINTERFACE->CheckMouse(__super::Get_Front_Part_In_Control(_int(PART_GROUP::SHOP_Mouse_0))->fPosition, __super::Get_Front_Part_In_Control(_int(PART_GROUP::SHOP_Mouse_0))->fSize);
 	_bool bClick = KEY_TAP(KEY::LBUTTON);
 
+	__super::Get_Front_Part_In_Control(_int(PART_GROUP::SHOP_Fx_0))->bRender = false;
+	__super::Get_Front_Part_In_Control(_int(PART_GROUP::SHOP_Fx_1))->bRender = false;
+
 	if (vMouse.x != -1.f)
 	{
 		__super::Get_Front_Part_In_Control(_int(PART_GROUP::SHOP_Fx_0))->bRender = true;
-		__super::Get_Front_Part_In_Control(_int(PART_GROUP::SHOP_Fx_1))->bRender = false;
-
+		
 		if (bClick)
 			if (m_iNowTab != 0)
 			{
 				m_iNowTab = 0;
 				Setting_BuyTab();
+				Reset_PopupInfo();
 			}
 	}
 
 	vMouse = GET_GAMEINTERFACE->CheckMouse(__super::Get_Front_Part_In_Control(_int(PART_GROUP::SHOP_Mouse_1))->fPosition, __super::Get_Front_Part_In_Control(_int(PART_GROUP::SHOP_Mouse_1))->fSize);
 	if (vMouse.x != -1.f)
 	{
-		__super::Get_Front_Part_In_Control(_int(PART_GROUP::SHOP_Fx_0))->bRender = false;
 		__super::Get_Front_Part_In_Control(_int(PART_GROUP::SHOP_Fx_1))->bRender = true;
 
 		if (bClick)
@@ -181,6 +183,7 @@ void CUIPage_Shop::Action_Tab(_float fTimeDelta)
 			{
 				m_iNowTab = 1;
 				Setting_SellTab();
+				Reset_PopupInfo();
 			}
 	}
 
@@ -234,7 +237,8 @@ void CUIPage_Shop::Action_Cell(_float fTimeDelta)
 			_Vec2 vMouse = GET_GAMEINTERFACE->CheckMouse(iter->vPos - vOffset, __super::Get_Front_Part_In_Control(_int(PART_GROUP::SHOP_Cell_Static))->fSize);
 			if (vMouse.x != -1.f)
 			{
-				Action_Focus(fTimeDelta, iter->vPos);
+				if (m_iNowCell != iNowIndex)
+					Action_Focus(fTimeDelta, iter->vPos);
 				m_iNowCell = iNowIndex;
 				if (bClick)
 				{
@@ -243,9 +247,9 @@ void CUIPage_Shop::Action_Cell(_float fTimeDelta)
 
 					if (pShop != nullptr)
 					{
+						GET_GAMEINTERFACE->Show_ItemPopup(TEXT("상점 구매"), pItem->strName, 1, &m_iNowCount, pShop->iCount, TEXT("소모 에르고"), pShop->iPrice_Buy, &m_iNowPrice);
 						m_iNowCount = 0;
 						m_iNowPrice = 0;
-						GET_GAMEINTERFACE->Show_ItemPopup(TEXT("상점 구매"), pItem->strName, 1, &m_iNowCount, pShop->iCount, TEXT("소모 에르고"), pShop->iPrice_Buy, &m_iNowPrice);
 						m_bIsItem_Popup = true;
 					}
 				}
@@ -262,17 +266,16 @@ void CUIPage_Shop::Action_Cell(_float fTimeDelta)
 			_Vec2 vMouse = GET_GAMEINTERFACE->CheckMouse(iter->vPos - vOffset, __super::Get_Front_Part_In_Control(_int(PART_GROUP::SHOP_Cell_Static))->fSize);
 			if (vMouse.x != -1.f)
 			{
-				Action_Focus(fTimeDelta, iter->vPos);
+				if (m_iNowCell != iNowIndex)
+					Action_Focus(fTimeDelta, iter->vPos);
 				m_iNowCell = iNowIndex;
 				if (bClick)
 				{
-					CItem_Manager::SHOP* pShop = GET_GAMEINTERFACE->Get_ShopData()[iter->iIndexShop];
-
 					if (iter->pInven != nullptr)
 					{
+						GET_GAMEINTERFACE->Show_ItemPopup(TEXT("상점 판매"), iter->pInven->strName, 1, &m_iNowCount, iter->pInven->iCount, TEXT("획득 에르고"), iter->pInven->iPrice, &m_iNowPrice);
 						m_iNowCount = 0;
 						m_iNowPrice = 0;
-						GET_GAMEINTERFACE->Show_ItemPopup(TEXT("상점 판매"), iter->pInven->strName, 1, &m_iNowCount, iter->pInven->iCount, TEXT("획득 에르고"), iter->pInven->iPrice, &m_iNowPrice);
 						m_bIsItem_Popup = true;
 					}
 				}
@@ -289,6 +292,7 @@ void CUIPage_Shop::Action_Focus(_float fTimeDelta, _Vec2 vPos)
 		__super::Get_Front_Part_In_Control(_int(PART_GROUP::SHOP_SELECT_Fire))->fAdjust_Start = __super::Get_Front_Part_In_Control(_int(PART_GROUP::SHOP_SELECT_Fire))->fPosition;
 		__super::Get_Front_Part_In_Control(_int(PART_GROUP::SHOP_SELECT_Fire))->fAdjust_End = vPos + __super::Get_Front_Part_In_Control(_int(PART_GROUP::SHOP_SELECT_Fire))->fAdjust;
 		__super::Get_Front_Part_In_Control(_int(PART_GROUP::SHOP_SELECT_Fire))->fRatio = 0.f;
+		m_vec_Group_Ctrl[(_int(PART_GROUP::SHOP_SELECT_Fire))]->fRatio = 0.f;
 	}
 }
 
@@ -308,7 +312,7 @@ void CUIPage_Shop::Action_Popup(_float fTimeDelta)
 			else if (m_iNowPrice > pOrigin.iErgo + pAdjust->iErgo)
 				GET_GAMEINTERFACE->Show_Popup(TEXT("구매 불가"), TEXT("보유한 에르고가 충분하지 않습니다."));
 			else
-				GET_GAMEINTERFACE->Buy_ShopItem(m_iNowCell);
+				GET_GAMEINTERFACE->Buy_ShopItem(pShop->iIndex, m_iNowCount);
 
 			Reset_PopupInfo();
 		}
@@ -322,7 +326,10 @@ void CUIPage_Shop::Action_Popup(_float fTimeDelta)
 			if (m_iNowCount > pItem->iCount)
 				GET_GAMEINTERFACE->Show_Popup(TEXT("판매 불가"), TEXT("판매 가능한 수량을 초과하였습니다."));
 			else
-				GET_GAMEINTERFACE->Sell_ShopItem(m_vecSell_RenderInfo[m_iNowCell]->eArray, m_vecSell_RenderInfo[m_iNowCell]->iInven_Index);
+			{
+				GET_GAMEINTERFACE->Sell_ShopItem(m_vecSell_RenderInfo[m_iNowCell]->eArray, m_vecSell_RenderInfo[m_iNowCell]->iInven_Index, m_iNowCount);
+				Setting_SellTab();
+			}
 
 			Reset_PopupInfo();
 		}
@@ -382,43 +389,62 @@ void CUIPage_Shop::Update_Cell(_float fTimeDelta)
 		++iNowIndex;
 		_bool bRoot = true;
 
-		for (_int i = _int(PART_GROUP::SHOP_Cell_Static); i <= _int(PART_GROUP::SHOP_Cell_Cost_Num); ++i)
-			for (auto& iterPart : m_vec_Group_Ctrl[i]->PartIndexlist)
+		_int iStart = m_vec_Group_Ctrl[_int(PART_GROUP::SHOP_Cell_Static)]->PartIndexlist.front();
+		_int iEnd = m_vec_Group_Ctrl[_int(PART_GROUP::SHOP_Cell_Cost_Num)]->PartIndexlist.back();
+
+		for (_int i = iStart; i <= iEnd; ++i)
+		{
+			if (bRoot)
 			{
-				if (bRoot)
-				{
-					m_vecPart[iterPart]->fPosition = iter->vPos;
-					m_vecPart[iterPart]->fPosition.y -= m_pScroll_Shop->fData_Offset_Y;
+				m_vecPart[i]->fPosition = iter->vPos;
+				m_vecPart[i]->fPosition.y -= m_pScroll_Shop->fData_Offset_Y;
 
-					bRoot = false;
-				}
-				else
-					__super::UpdatePart_ByIndex(iterPart, 1.f);
-
-				if (i == _int(PART_GROUP::SHOP_Cell_Fx))
-				{
-					if (iNowIndex == m_iNowCell)
-					{
-						__super::Input_Render_Info(*m_vecPart[iterPart], SCROLL_AREA::SCROLL_SHOP);
-					}
-
-					continue;
-				}
-				else if (i == _int(PART_GROUP::SHOP_Cell_Item))
-				{
-					m_vecPart[iterPart]->iTexture_Index = iter->pInven->iTexture_Index;
-				}
-				else if (i == _int(PART_GROUP::SHOP_Cell_Count))
-				{
-					m_vecPart[iterPart]->strText = to_wstring(iter->pInven->iCount);
-				}
-				else if (i == _int(PART_GROUP::SHOP_Cell_Cost_Num))
-				{
-					m_vecPart[iterPart]->strText = to_wstring(iter->pInven->iPrice);
-				}
-
-				__super::Input_Render_Info(*m_vecPart[iterPart], SCROLL_AREA::SCROLL_SHOP);
+				bRoot = false;
 			}
+			else
+				__super::UpdatePart_ByIndex(i, 1.f);
+			
+			if (i == m_vec_Group_Ctrl[_int(PART_GROUP::SHOP_Cell_Fx)]->PartIndexlist.front())
+			{
+				if ((m_iNowTab == 0) && (GET_GAMEINTERFACE->Get_ShopData()[iter->iIndexShop]->iCount <= 0))
+				{
+					m_vecPart[i]->fTextureColor.y = 0.3f;
+					m_vecPart[i]->fTextureColor.z = 0.3f;
+					__super::Input_Render_Info(*m_vecPart[i], SCROLL_AREA::SCROLL_SHOP);
+				}
+				else if ((m_iNowTab == 1) && (iter->pInven->iCount <= 0))
+				{
+					m_vecPart[i]->fTextureColor.y = 0.3f;
+					m_vecPart[i]->fTextureColor.z = 0.3f;
+					__super::Input_Render_Info(*m_vecPart[i], SCROLL_AREA::SCROLL_SHOP);
+				}
+				else if (iNowIndex == m_iNowCell)
+				{
+					m_vecPart[i]->fTextureColor.y = 0.8f;
+					m_vecPart[i]->fTextureColor.z = 0.8f;
+					__super::Input_Render_Info(*m_vecPart[i], SCROLL_AREA::SCROLL_SHOP);
+				}
+
+				continue;
+			}
+			else if (i == m_vec_Group_Ctrl[_int(PART_GROUP::SHOP_Cell_Item)]->PartIndexlist.front())
+			{
+				m_vecPart[i]->iTexture_Index = iter->pInven->iTexture_Index;
+			}
+			else if (i == m_vec_Group_Ctrl[_int(PART_GROUP::SHOP_Cell_Count)]->PartIndexlist.front())
+			{
+				if (m_iNowTab == 0)
+					m_vecPart[i]->strText = to_wstring(GET_GAMEINTERFACE->Get_ShopData()[iter->iIndexShop]->iCount);
+				else
+					m_vecPart[i]->strText = to_wstring(iter->pInven->iCount);
+			}
+			else if (i == m_vec_Group_Ctrl[_int(PART_GROUP::SHOP_Cell_Cost_Num)]->PartIndexlist.front())
+			{
+				m_vecPart[i]->strText = to_wstring(iter->pInven->iPrice);
+			}
+
+			__super::Input_Render_Info(*m_vecPart[i], SCROLL_AREA::SCROLL_SHOP);
+		}
 	}
 	
 	if (m_iNowTab == 1)
@@ -447,13 +473,23 @@ void CUIPage_Shop::Update_Cell(_float fTimeDelta)
 
 void CUIPage_Shop::Update_Focus(_float fTimeDelta)
 {
-	_float fRatio = __super::Get_Front_Part_In_Control(_int(PART_GROUP::SHOP_SELECT_Fire))->fRatio;
+	_float fRatio = m_vec_Group_Ctrl[(_int(PART_GROUP::SHOP_SELECT_Fire))]->fRatio + fTimeDelta * 5.f;
+	_Vec2 vNow = __super::Get_Front_Part_In_Control(_int(PART_GROUP::SHOP_SELECT_Fire))->fPosition;
 	_Vec2 vEnd = __super::Get_Front_Part_In_Control(_int(PART_GROUP::SHOP_SELECT_Fire))->fAdjust_End;
 	_Vec2 vStart = __super::Get_Front_Part_In_Control(_int(PART_GROUP::SHOP_SELECT_Fire))->fAdjust_Start;
 
-	fRatio += fTimeDelta;
-	__super::Get_Front_Part_In_Control(_int(PART_GROUP::SHOP_SELECT_Fire))->fRatio = min(fRatio, 1.f);
-	__super::Get_Front_Part_In_Control(_int(PART_GROUP::SHOP_SELECT_Fire))->fPosition = vStart + ((vEnd - vStart) * fRatio);
+	if (fRatio > 1.f)
+	{
+		m_vec_Group_Ctrl[(_int(PART_GROUP::SHOP_SELECT_Fire))]->fRatio = 1.f;
+		__super::Get_Front_Part_In_Control(_int(PART_GROUP::SHOP_SELECT_Fire))->fPosition = vEnd;
+	}
+	else
+	{
+		m_vec_Group_Ctrl[(_int(PART_GROUP::SHOP_SELECT_Fire))]->fRatio = fRatio;
+		__super::Get_Front_Part_In_Control(_int(PART_GROUP::SHOP_SELECT_Fire))->fPosition = vStart + ((vEnd - vStart) * m_vec_Group_Ctrl[(_int(PART_GROUP::SHOP_SELECT_Fire))]->fRatio);
+	}
+
+	vNow = __super::Get_Front_Part_In_Control(_int(PART_GROUP::SHOP_SELECT_Fire))->fPosition;
 
 	__super::Get_Front_Part_In_Control(_int(PART_GROUP::SHOP_SELECT_Rect))->fPosition.y -= m_pScroll_Shop->fData_Offset_Y;
 	__super::Get_Front_Part_In_Control(_int(PART_GROUP::SHOP_SELECT_Fire))->fPosition.y -= m_pScroll_Shop->fData_Offset_Y;
@@ -554,8 +590,8 @@ void CUIPage_Shop::Setting_SellTab()
 
 
 
-
-
+	if (m_vecSell_RenderInfo.empty() == false)
+		Action_Focus(1.f, m_vecSell_RenderInfo[0]->vPos);
 
 	m_pScroll_Shop->Activate_Scroll(fAdjustY);
 }
@@ -592,6 +628,9 @@ void CUIPage_Shop::Setting_BuyTab()
 		__super::UpdatePart_ByIndex(__super::Get_Front_PartIndex_In_Control(_int(PART_GROUP::SHOP_Cell_Static)), 1.f);
 		pNewRender->vPos = __super::Get_Front_Part_In_Control(_int(PART_GROUP::SHOP_Cell_Static))->fPosition;
 	}
+	
+	if (m_vecSell_RenderInfo.empty() == false)
+		Action_Focus(1.f, m_vecBuy_RenderInfo[0]->vPos);
 
 	fAdjustY += __super::Get_Front_Part_In_Control(_int(PART_GROUP::SHOP_Cell_Static))->fSize.y * 0.5f;
 

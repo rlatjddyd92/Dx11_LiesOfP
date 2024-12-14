@@ -134,31 +134,20 @@ public:
 		_Vec2 fDebuff_Fire = { 0.f, 100.f };
 		_Vec2 fDebuff_Electric = { 0.f, 100.f };
 		_Vec2 fDebuff_Acid = { 0.f, 100.f };
-	}STAT_INFO;
-#pragma endregion
 
-#pragma region PLAYER_ABILITY
-	typedef struct PLAYER_ABILITY_INFO
-	{
 		// 아뮬렛 
 		_bool bDebuff_Fire_Ignore = false; // 꿰뚫는 증오의 아뮬렛 : 화염 상태이상 면역 
 		_bool bDebuff_Electric_Ignore = false; // 불굴의 아뮬렛 : 전격 상태이상 면역 
 		_bool bDebuff_Acid_Ignore = false; // 베테랑의 아뮬렛 : 산성 상태이상 면역 
 
-		_float fIncrease_Stamina = 0.f; // 도약의 아뮬렛 : 최대 스태미나 증가 
-		_float fIncrease_Hp = 0.f;  // 생명의 아뮬렛 : 최대 체력 증가 
-		_float fHeal = 0.f; // 재충전의 아뮬렛 : 지속적으로 HP 증가 
+		_float fHeal = 0.f; // 지속적으로 HP 증가 -> 재충전의 아뮬렛
 
-		// 아뮬렛 || 방어파츠(프레임)
-		//_float fIncrease_Defence = 0.f; // 철벽의 아뮬렛 || 프레임 파츠 : 피해 방어력 증가 
-
-		// 방어 파츠 (프레임 제외)
 		_float fResist_Fire = 0.f;
 		_float fResist_Electric = 0.f;
 		_float fResist_Acid = 0.f;
-	}ABILITY_INFO;
-#pragma endregion
 
+	}STAT_INFO;
+#pragma endregion
 
 public:
 	CPlayerCamera*			Get_Camera() { return m_pPlayerCamera; }
@@ -206,7 +195,6 @@ public:
 	// 24-12-05 김성용
 	// UI 매니저 수정용 함수
 	STAT_INFO*				Get_Player_Stat_Adjust() { return m_tPlayer_Stat_Adjust; }
-	ABILITY_INFO*			Get_Player_Ability() { return m_tPlayer_Ability; }
 
 #pragma endregion
 
@@ -284,6 +272,7 @@ public:
 	void			Use_DebuffResetItem();
 
 	void			Init_PlayerCamera();
+	void			Input_Level_UP_Stat(_int iPoint[5], _float pLevelUpStat[9]);
 
 	/* Effect */
 private:
@@ -332,7 +321,6 @@ private:
 #pragma region PLAYER_STAT
 	STAT_INFO*			m_tPlayer_Stat = { nullptr };
 	STAT_INFO*			m_tPlayer_Stat_Adjust = { nullptr };	// 
-	ABILITY_INFO*		m_tPlayer_Ability = { nullptr };
 #pragma endregion
 
 private:
