@@ -552,12 +552,12 @@ void CPlayer::Seperate_Scissor()
 	dynamic_cast<CWeapon_Scissor*>(m_pWeapon[WEP_SCISSOR])->Change_SeperateMode();
 }
 
-void CPlayer::Combine_Scissor()
+void CPlayer::Combine_Scissor(_bool isForce)
 {
 	if (WEP_SCISSOR != m_eWeaponType)
 		return;
 
-	dynamic_cast<CWeapon_Scissor*>(m_pWeapon[WEP_SCISSOR])->Change_CombineMode();
+	dynamic_cast<CWeapon_Scissor*>(m_pWeapon[WEP_SCISSOR])->Change_CombineMode(isForce);
 }
 
 void CPlayer::Change_CameraMode(CPlayerCamera::CAMERA_MODE eMode)
@@ -1553,12 +1553,6 @@ HRESULT CPlayer::Ready_Effect()
 
 	const _Matrix* pParetnMatrix = m_pTransformCom->Get_WorldMatrix_Ptr();
 	const _Matrix* pSocketBoneMatrix = m_pModelCom->Get_BoneCombindTransformationMatrix_Ptr("BN_Weapon_R");
-
-	//m_Effects[EFFECT_RAPIER_TRAIL_FIRST] = m_pEffect_Manager->Clone_Effect(TEXT("Player_Attack_Rapier_StormStab_First"), pParetnMatrix,
-	//	pSocketBoneMatrix, _Vec3(0.f, 0.f, 0.f), _Vec3(0.f, 0.f, 0.f), _Vec3(1.f, 1.f, 1.f));
-
-	//m_Effects[EFFECT_RAPIER_TRAIL_SECOND] = m_pEffect_Manager->Clone_Effect(TEXT("Player_Attack_Rapier_StormStab_Second"), pParetnMatrix,
-	//	pSocketBoneMatrix, _Vec3(0.f, 0.f, 0.f), _Vec3(0.f, 0.f, 0.f), _Vec3(1.f, 1.f, 1.f));
 
 	pSocketBoneMatrix = m_pModelCom->Get_BoneCombindTransformationMatrix_Ptr("Bn_L_ForeTwist");
 	m_Effects[EFFECT_GRIND] = m_pEffect_Manager->Clone_Effect(TEXT("Player_Grind"), pParetnMatrix,

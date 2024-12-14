@@ -21,6 +21,11 @@ public:
 		SCISSOR_TYPE eScissorType;
 	}SCISSOR_DESC;
 
+	enum EFFECT_TYPE
+	{
+		EFFECT_BASE, EFFECT_LINKSLASH1, EFFECT_BUFF, EFFECT_END
+	};
+
 private:
 	CWeapon_Scissor_Handle(ID3D11Device* pDevice, ID3D11DeviceContext* pContext);
 	CWeapon_Scissor_Handle(const CWeapon_Scissor_Handle& Prototype);
@@ -50,6 +55,7 @@ private:
 private:
 	HRESULT Ready_Components();
 	HRESULT Ready_Blade();
+	HRESULT Ready_Effect();
 	
 public:
 	static CWeapon_Scissor_Handle* Create(ID3D11Device* pDevice, ID3D11DeviceContext* pContext);

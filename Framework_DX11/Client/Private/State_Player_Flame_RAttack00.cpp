@@ -3,7 +3,7 @@
 #include "GameInstance.h"
 #include "Model.h"
 #include "Player.h"
-#include "Camera.h"
+#include "Weapon.h"
 
 CState_Player_Flame_RAttack00::CState_Player_Flame_RAttack00(CFsm* pFsm, CPlayer* pPlayer)
     :CState{ pFsm }
@@ -38,6 +38,8 @@ HRESULT CState_Player_Flame_RAttack00::Start_State(void* pArg)
     m_isInputLButton = false;
     m_isInputRButton = false;
     m_fRButtonTime = 0.f;
+
+    m_pPlayer->Set_WeaponEffectType(CWeapon::ATK_EFFECT_GENERAL);
 
     return S_OK;
 }
@@ -94,6 +96,7 @@ void CState_Player_Flame_RAttack00::Update(_float fTimeDelta)
 
 void CState_Player_Flame_RAttack00::End_State()
 {
+    m_pPlayer->Set_WeaponEffectType(CWeapon::ATK_EFFECT_NOTHING);
     m_pPlayer->DeActive_CurretnWeaponCollider();
 }
 

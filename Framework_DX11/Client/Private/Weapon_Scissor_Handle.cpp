@@ -5,6 +5,9 @@
 
 #include "GameInstance.h"
 
+#include "Effect_Manager.h"
+#include "Effect_Container.h"
+
 CWeapon_Scissor_Handle::CWeapon_Scissor_Handle(ID3D11Device* pDevice, ID3D11DeviceContext* pContext)
 	: CWeapon{ pDevice, pContext }
 {
@@ -40,11 +43,16 @@ HRESULT CWeapon_Scissor_Handle::Initialize(void* pArg)
 	if (FAILED(Ready_Blade()))
 		return E_FAIL;
 
+	if (FAILED(Ready_Effect()))
+		return E_FAIL;
+
 	m_strObjectTag = TEXT("PlayerWeapon");
 	m_fDamageAmount = 4.f;
 
 	m_isActive = false;
 	m_pColliderCom->IsActive(false);
+
+	m_pBladeMatrix = m_pModelCom->Get_BoneCombindTransformationMatrix_Ptr("BN_Blade_B");
 
 	return S_OK;
 }
@@ -61,9 +69,33 @@ void CWeapon_Scissor_Handle::Update(_float fTimeDelta)
 		return;
 
 
+	//Active_Effect(EFFECT_BUFF, true);
 	__super::Update(fTimeDelta);
 
 	m_pBlade->Update(fTimeDelta);
+
+	if (m_iAttackType != ATK_EFFECT_NOTHING)
+	{
+		if (m_vVelocity.Length() > 0.25f)
+		{
+			if (m_iAttackType == ATK_EFFECT_SPECIAL1 || m_iAttackType == ATK_EFFECT_SPECIAL1)
+			{
+				Active_Effect(EFFECT_LINKSLASH1, true);
+			}
+			else if (m_iAttackType == ATK_EFFECT_GENERAL)
+			{
+				Active_Effect(EFFECT_BASE, true);
+			}
+		}
+		else
+		{
+		}
+	}
+	
+	if (m_iAttackType == ATK_EFFECT_SPECIAL3)
+	{
+		Active_Effect(EFFECT_BUFF, true);
+	}
 
 	m_pColliderCom->Update(&m_WorldMatrix);
 }
@@ -281,6 +313,40 @@ HRESULT CWeapon_Scissor_Handle::Ready_Blade()
 
 	if (nullptr == m_pBlade)
 		return E_FAIL;
+
+	return S_OK;
+}
+
+HRESULT CWeapon_Scissor_Handle::Ready_Effect()
+{
+	if (FAILED(__super::Ready_Effect()))
+		return E_FAIL;
+
+	m_Effects.resize(EFFECT_END);
+
+	if (m_eType == SCISSOR_LEFT)
+	{
+		m_Effects[EFFECT_BASE] = m_pEffect_Manager->Clone_Effect(TEXT("Player_Attack_Scissor_Slash"), m_pParentMatrix,
+			m_pSocketMatrix, _Vec3(0.f, 0.f, 0.f), _Vec3(0.f, 0.f, 0.f), _Vec3(1.f, 1.f, 1.f));
+
+		m_Effects[EFFECT_LINKSLASH1] = m_pEffect_Manager->Clone_Effect(TEXT("Player_Attack_Scissor_Left_LinkSlash_First"), m_pParentMatrix,
+			m_pSocketMatrix, _Vec3(0.f, 0.f, 0.f), _Vec3(0.f, 0.f, 0.f), _Vec3(1.f, 1.f, 1.f));
+
+		m_Effects[EFFECT_BUFF] = m_pEffect_Manager->Clone_Effect(TEXT("Player_Grind_Scissor_Left"), m_pParentMatrix,
+			m_pSocketMatrix, _Vec3(0.f, 0.f, 0.f), _Vec3(0.f, 0.f, 0.f), _Vec3(1.f, 1.f, 1.f));
+	}
+	else
+	{
+		m_Effects[EFFECT_BASE] = m_pEffect_Manager->Clone_Effect(TEXT("Player_Attack_Scissor_Right_Slash"), m_pParentMatrix,
+			m_pSocketMatrix, _Vec3(0.f, 0.f, 0.f), _Vec3(0.f, 0.f, 0.f), _Vec3(1.f, 1.f, 1.f));
+
+		m_Effects[EFFECT_LINKSLASH1] = m_pEffect_Manager->Clone_Effect(TEXT("Player_Attack_Scissor_Right_LinkSlash_First"), m_pParentMatrix,
+			m_pSocketMatrix, _Vec3(0.f, 0.f, 0.f), _Vec3(0.f, 0.f, 0.f), _Vec3(1.f, 1.f, 1.f));
+
+		m_Effects[EFFECT_BUFF] = m_pEffect_Manager->Clone_Effect(TEXT("Player_Grind_Scissor_Right"), m_pParentMatrix,
+			m_pSocketMatrix, _Vec3(0.f, 0.f, 0.f), _Vec3(0.f, 0.f, 0.f), _Vec3(1.f, 1.f, 1.f));
+	}
+
 
 	return S_OK;
 }

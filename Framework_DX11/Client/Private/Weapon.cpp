@@ -73,12 +73,20 @@ void CWeapon::Update(_float fTimeDelta)
 		}
 
 		m_BladeOldWroldMatrix = m_BladeWorldMatrix;
-		XMStoreFloat4x4(&m_BladeWorldMatrix, XMLoadFloat4x4(m_pTransformCom->Get_WorldMatrix_Ptr()) * SocketMatrix * XMLoadFloat4x4(m_pParentMatrix));
+		XMStoreFloat4x4(&m_BladeWorldMatrix, XMLoadFloat4x4(m_pTransformCom->Get_WorldMatrix_Ptr()) * SocketMatrix * XMLoadFloat4x4(&m_WorldMatrix));
 
-
-		m_vVelocity = m_BladeWorldMatrix.Translation() - m_BladeOldWroldMatrix.Translation();
-		m_vAttackDir = m_vVelocity;
-		m_vAttackDir.Normalize();
+		_Vec3 vVelocity = m_BladeWorldMatrix.Translation() - m_BladeOldWroldMatrix.Translation();
+		_float fVelocity = vVelocity.Length();
+		if (fVelocity > 0.f)
+		{
+			m_vVelocity = m_BladeWorldMatrix.Translation() - m_BladeOldWroldMatrix.Translation();
+			m_vAttackDir = m_vVelocity;
+			m_vAttackDir.Normalize();
+		}
+		else
+		{
+			int a = 0;
+		}
 	}
 	else
 	{
@@ -86,7 +94,6 @@ void CWeapon::Update(_float fTimeDelta)
 		m_vAttackDir = m_vVelocity;
 		m_vAttackDir.Normalize();
 	}
-
 
 	for (_uint i = 0; i < WEP_SOUND_END; ++i)
 	{

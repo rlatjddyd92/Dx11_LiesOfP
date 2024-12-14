@@ -14,6 +14,12 @@ BEGIN(Client)
 
 class CWeapon_Scissor : public CWeapon
 {
+public:
+	enum EFFECT_TYPE
+	{
+		EFFECT_BASE, EFFECT_COMBINE, EFFECT_LINKSLASH, EFFECT_END
+	};
+
 private:
 	CWeapon_Scissor(ID3D11Device* pDevice, ID3D11DeviceContext* pContext);
 	CWeapon_Scissor(const CWeapon_Scissor& Prototype);
@@ -39,10 +45,11 @@ public:
 	virtual void		Play_Sound(WEP_SOUND_TYPE eType, const TCHAR* pSoundKey, _uint iHandIndex = 1) override;
 	virtual void		Play_HitSound(HIT_TYPE eType) override;
 	virtual void		Set_AttackStrength(ATTACK_STRENGTH eStrength) override;
+	virtual void		Set_AttackType(_uint iType) override;
 
 public:
 	void		Change_SeperateMode();
-	void		Change_CombineMode();
+	void		Change_CombineMode(_bool isForce = false);
 
 private:
 	_bool		m_isSeperate = {};
@@ -52,6 +59,7 @@ private:
 private:
 	HRESULT Ready_Components();
 	HRESULT Ready_Seperate();
+	HRESULT Ready_Effect();
 
 public:
 	static CWeapon_Scissor* Create(ID3D11Device* pDevice, ID3D11DeviceContext* pContext);

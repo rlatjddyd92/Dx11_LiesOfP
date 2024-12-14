@@ -5,6 +5,7 @@
 
 #include "GameInstance.h"
 #include "Effect_Manager.h"
+#include "Effect_Container.h"
 
 // 24-12-06 김성용
 // 내구도 조정 함수 연결을 위한 헤더 추가 
@@ -41,6 +42,9 @@ HRESULT CWeapon_Scissor::Initialize(void* pArg)
 	if (FAILED(Ready_Seperate()))
 		return E_FAIL;
 
+	if (FAILED(Ready_Effect()))
+		return E_FAIL;
+
 	m_strObjectTag = TEXT("PlayerWeapon");
 	m_fDamageAmount = 10.f;
 
@@ -48,6 +52,7 @@ HRESULT CWeapon_Scissor::Initialize(void* pArg)
 	m_isSeperate = false;
 	m_pColliderCom->IsActive(false);
 
+	m_pBladeMatrix = m_pModelCom->Get_BoneCombindTransformationMatrix_Ptr("BN_Blade_B");
 
 	return S_OK;
 }
@@ -69,6 +74,28 @@ void CWeapon_Scissor::Update(_float fTimeDelta)
 
 		m_pColliderCom->Update(&m_WorldMatrix);
 		m_pGameInstance->Add_ColliderList(m_pColliderCom);
+
+
+		if (m_iAttackType != ATK_EFFECT_NOTHING)
+		{
+			if (m_vVelocity.Length() > 0.25f)
+			{
+				if (m_iAttackType == ATK_EFFECT_SPECIAL1 || m_iAttackType == ATK_EFFECT_SPECIAL2)
+				{
+					Active_Effect(EFFECT_LINKSLASH, true);
+				}
+				else if (m_iAttackType == ATK_EFFECT_GENERAL)
+				{
+					Active_Effect(EFFECT_BASE, true);
+				}
+			}
+			else
+			{
+				DeActive_Effect(EFFECT_BASE);
+				DeActive_Effect(EFFECT_BASE);
+			}
+		}
+
 	}
 	else if (m_isSeperate)
 	{
@@ -288,6 +315,22 @@ void CWeapon_Scissor::Set_AttackStrength(ATTACK_STRENGTH eStrength)
 	m_pScissor_Sperate[1]->Set_AttackStrength(eStrength);
 }
 
+void CWeapon_Scissor::Set_AttackType(_uint iType)
+{
+	m_iAttackType = iType;
+
+	m_pScissor_Sperate[0]->Set_AttackType(m_iAttackType);
+	m_pScissor_Sperate[1]->Set_AttackType(m_iAttackType);
+
+	if (iType == ATK_EFFECT_NOTHING)
+	{
+		for (auto& pEffect : m_Effects)
+		{
+			pEffect->Set_Loop(false);
+		}
+	}
+}
+
 void CWeapon_Scissor::Change_SeperateMode()
 {
 	if (m_isSeperate)
@@ -301,7 +344,7 @@ void CWeapon_Scissor::Change_SeperateMode()
 	m_isSeperate = true;
 }
 
-void CWeapon_Scissor::Change_CombineMode()
+void CWeapon_Scissor::Change_CombineMode(_bool isForce)
 {
 	if (!m_isSeperate)
 		return;
@@ -309,7 +352,11 @@ void CWeapon_Scissor::Change_CombineMode()
 	m_pScissor_Sperate[0]->IsActive(false);
 	m_pScissor_Sperate[1]->IsActive(false);
 
-	m_pSoundCom[WEP_SOUND_WEAPON]->Play2D(TEXT("SE_PC_SK_Spark_Metal_07.wav"), &g_fEffectVolume);
+	if (!isForce)
+	{
+		Active_Effect(EFFECT_COMBINE, false);
+		m_pSoundCom[WEP_SOUND_WEAPON]->Play2D(TEXT("SE_PC_SK_Spark_Metal_07.wav"), &g_fEffectVolume);
+	}
 
 	m_isSeperate = false;
 }
@@ -357,6 +404,25 @@ HRESULT CWeapon_Scissor::Ready_Seperate()
 	m_pScissor_Sperate[CWeapon_Scissor_Handle::SCISSOR_RIGHT] = dynamic_cast<CWeapon_Scissor_Handle*>(m_pGameInstance->Clone_GameObject(TEXT("Prototype_GameObject_Weapon_Scissor_Handle"), &ScissorDesc));
 	if (nullptr == m_pScissor_Sperate[CWeapon_Scissor_Handle::SCISSOR_RIGHT])
 		return E_FAIL;
+
+	return S_OK;
+}
+
+HRESULT CWeapon_Scissor::Ready_Effect()
+{
+	if (FAILED(__super::Ready_Effect()))
+		return E_FAIL;
+
+	m_Effects.resize(EFFECT_END);
+
+	m_Effects[EFFECT_BASE] = m_pEffect_Manager->Clone_Effect(TEXT("Player_Attack_Scissor_Slash"), m_pParentMatrix,
+		m_pSocketMatrix, _Vec3(0.f, 0.f, 0.f), _Vec3(0.f, 0.f, 0.f), _Vec3(1.f, 1.f, 1.f));
+
+	m_Effects[EFFECT_COMBINE] = m_pEffect_Manager->Clone_Effect(TEXT("Player_Attack_Scissor_Combine"), m_pParentMatrix,
+		m_pSocketMatrix, _Vec3(0.f, 0.f, 0.f), _Vec3(0.f, 0.f, 0.f), _Vec3(1.f, 1.f, 1.f));
+
+	m_Effects[EFFECT_LINKSLASH] = m_pEffect_Manager->Clone_Effect(TEXT("Player_Attack_Scissor_Left_LinkSlash_Second"), m_pParentMatrix,
+		m_pSocketMatrix, _Vec3(0.f, 0.f, 0.f), _Vec3(0.f, 0.f, 0.f), _Vec3(1.f, 1.f, 1.f));
 
 	return S_OK;
 }

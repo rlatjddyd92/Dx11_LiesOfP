@@ -251,7 +251,7 @@ public:
 	void			DeActive_Arm();
 
 	void			Seperate_Scissor();
-	void			Combine_Scissor();
+	void			Combine_Scissor(_bool isForce = false);
 
 	void			Change_CameraMode(CPlayerCamera::CAMERA_MODE eMode);
 

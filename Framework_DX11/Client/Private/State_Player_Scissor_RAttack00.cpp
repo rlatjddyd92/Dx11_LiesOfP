@@ -3,7 +3,7 @@
 #include "GameInstance.h"
 #include "Model.h"
 #include "Player.h"
-#include "Camera.h"
+#include "Weapon.h"
 
 CState_Player_Scissor_RAttack00::CState_Player_Scissor_RAttack00(CFsm* pFsm, CPlayer* pPlayer)
     :CState{ pFsm }
@@ -43,6 +43,7 @@ HRESULT CState_Player_Scissor_RAttack00::Start_State(void* pArg)
     m_fRButtonTime = 0.f;
 
     m_pPlayer->Set_WeaponStrength(ATK_NORMAL);
+    m_pPlayer->Set_WeaponEffectType(CWeapon::ATK_EFFECT_GENERAL);
 
     return S_OK;
 }
@@ -108,6 +109,8 @@ void CState_Player_Scissor_RAttack00::Update(_float fTimeDelta)
 
 void CState_Player_Scissor_RAttack00::End_State()
 {
+    m_pPlayer->Set_WeaponEffectType(CWeapon::ATK_EFFECT_NOTHING);
+    m_pPlayer->Combine_Scissor(true);
 }
 
 _bool CState_Player_Scissor_RAttack00::End_Check()

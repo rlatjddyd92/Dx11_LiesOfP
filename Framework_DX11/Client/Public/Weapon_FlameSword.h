@@ -39,6 +39,7 @@ public:
 	virtual void OnCollisionExit(CGameObject* pOther) override;
 
 	virtual void		Play_HitSound(HIT_TYPE eType) override;
+	virtual void		Set_AttackType(_uint iType) override;
 
 private:
 	HRESULT Ready_Components();
