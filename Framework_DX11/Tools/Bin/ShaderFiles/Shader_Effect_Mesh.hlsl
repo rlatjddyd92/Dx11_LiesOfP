@@ -272,29 +272,34 @@ PS_OUT PS_2P_HALFSPHERE_MAIN(PS_IN In)
     // 아우라 텍스처 : Mask1
     // 그 선 좌자작 그어진 텍스처 : Mask2
     // 반구 자르기 용 텍스처 : Normal
-    
+    float2 vTexcoord = In.vTexcoord * g_vTileRepeat;
+
     float2 vCutCoord = In.vTexcoord;
     vCutCoord.y += g_fAlpha;
-    vCutCoord.x *= g_vColor.a;
+    vCutCoord.x *= g_vColor.a + g_vTileMove.x * 10.f;
     vector vCut = g_NormalTexture.Sample(LinearYClampSampler, vCutCoord);
-    vCut.r *= 2.f;
     if (vCut.r < 0.1f)
         discard;
     
-    
-    vector vColor = g_DiffuseTexture.Sample(LinearSampler, In.vTexcoord);
-    
-    float2 vTexcoord = In.vTexcoord * g_vTileRepeat;
-    
-    float2 vMask1TexMove = float2(g_vTileMove.x, 0.f);
+    float2 vMask1TexMove = float2(g_vTileMove.x * 0.5f, 0.f);
     float2 vMask2TexMove = float2(0.f, g_vTileMove.y);
     vector vMask_1 = g_MaskTexture_1.Sample(LinearSampler, vTexcoord + vMask1TexMove);
     vector vMask_2 = g_MaskTexture_2.Sample(LinearSampler, vTexcoord + vMask2TexMove);
     
+    vector vNoise_Mask = g_DiffuseTexture.Sample(LinearSampler, vTexcoord + (g_vTileMove * 2.f));
+    vMask_1 *= vNoise_Mask;
+    
+    float fElse = fmod((vTexcoord.x + vMask2TexMove).x, 1.f);
+    vMask_2.rgb *= abs(fElse - 0.5f) * 2.f;
+    
+    vector vColor = g_DiffuseTexture.Sample(LinearSampler, vTexcoord);
     vColor.rgb *= g_vColor.rgb;
     
     vMask_1 *= 0.1f;
     vMask_2 *= 0.1f;
+    
+    vMask_1.r *= 0.3f;
+    vMask_2.r *= 0.3f;
     
     vColor += vMask_1 + vMask_2;
     
