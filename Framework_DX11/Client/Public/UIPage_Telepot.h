@@ -14,11 +14,24 @@ class CUIPage_Telepot : public CUIPage
 public:
 	enum class PART_GROUP
 	{
-		GROUP_FRAME,
-
-
-
-
+		TELEPOT_Back,
+		TELEPOT_Fx_Cloud,
+		TELEPOT_Fx_Grid,
+		TELEPOT_List_Area,
+		TELEPOT_Scroll_Line,
+		TELEPOT_Scroll_Bar,
+		TELEPOT_Dest_Frame,
+		TELEPOT_Dest_Deco_LT,
+		TELEPOT_Dest_Deco_Middle,
+		TELEPOT_Dest_Deco_RB,
+		TELEPOT_Dest_Picture_Start,
+		TELEPOT_Dest_Picture_Rax,
+		TELEPOT_Dest_Picture_Stair,
+		TELEPOT_Dest_Picture_Manus,
+		TELEPOT_Dest_Fx_Select,
+		TELEPOT_Dest_Text_Now,
+		TELEPOT_Dest_Text_Inactive,
+		TELEPOT_Dest_Text_Name,
 		GROUP_END
 	};
 
@@ -48,8 +61,25 @@ public:
 	virtual HRESULT Ready_UIPart_Group_Control() override;
 
 protected:
+	_Vec4 m_vDestination_Now = { -1.f,-1.f,-1.f,-1.f };
 
+	_Vec4 m_vDestination_Origin[4] =
+	{
+		{ -1.f,-1.f,-1.f,-1.f }, // 모나스트리 입구
+		{ -1.f,-1.f,-1.f,-1.f }, // 락사시아 보스전 
+		{ -1.f,-1.f,-1.f,-1.f }, // 원형계단
+		{ -1.f,-1.f,-1.f,-1.f } // 마누스 보스전
+	};
 
+	_wstring m_strDest_Name[4] =
+	{
+		TEXT("아르케 대수도원 입구"),
+		TEXT("전투 : 락사시아"),
+		TEXT("대수도원 원형계단"),
+		TEXT("전투 : 마누스")
+	};
+
+	SCROLL* m_pScroll_Telepot = { nullptr };
 
 
 

@@ -61,6 +61,12 @@ void CUIPage_Telepot::Late_Update(_float fTimeDelta)
 {
 	__super::Late_Update(fTimeDelta);
 
+	if (m_pScroll_Telepot == nullptr)
+	{
+		m_pScroll_Telepot = new SCROLL;
+		m_pScroll_Telepot->Initialize_Scroll(m_vecPart[_int(PART_GROUP::TELEPOT_List_Area)], m_vecPart[_int(PART_GROUP::TELEPOT_Scroll_Bar)], )
+	}
+
 	for (auto& iter : m_vec_Group_Ctrl)
 		__super::UpdatePart_ByControl(iter);
 }
@@ -141,6 +147,8 @@ void CUIPage_Telepot::Free()
 	{
 		Safe_Delete(iter);
 	}
+
+	Safe_Delete(m_pScroll_Telepot);
 
 	m_vecPart.clear();
 }
