@@ -273,10 +273,11 @@ void CCutScene::End_Setting()
 	}
 	else if (m_iIndex == BOSS2_PHASE2)
 	{
+		CPawn* pBoss2 = static_cast<CPawn*>(m_pGameInstance->Find_Object(LEVEL_GAMEPLAY, TEXT("Layer_SimonManus"), 0));
 		pPlayer->IsActive(true);
 		pPlayer->Get_Navigation()->Move_to_Cell(pPlayer->Get_RigidBody(), 118);
-		static_cast<CPawn*>(m_pGameInstance->Find_Object(LEVEL_GAMEPLAY, TEXT("Layer_SimonManus"), 0))->End_CutScene(1);
-		static_cast<CPawn*>(m_pGameInstance->Find_Object(LEVEL_GAMEPLAY, TEXT("Layer_SimonManus"), 0))->Reset_Die();
+		pBoss2->End_CutScene(1);
+		pBoss2->Reset_Die();
 	}
 	else if (m_iIndex == BOSS2_DEFEAT)
 	{
