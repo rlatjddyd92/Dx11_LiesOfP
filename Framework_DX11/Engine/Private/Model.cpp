@@ -7,30 +7,30 @@
 
 #include "GameInstance.h"
 
-CModel::CModel(ID3D11Device * pDevice, ID3D11DeviceContext * pContext)
-	: CComponent { pDevice, pContext }
-	, m_isEnd_Animations	{ nullptr }
-	, m_isEnd_Animations_Boundary { nullptr }
+CModel::CModel(ID3D11Device* pDevice, ID3D11DeviceContext* pContext)
+	: CComponent{ pDevice, pContext }
+	, m_isEnd_Animations{ nullptr }
+	, m_isEnd_Animations_Boundary{ nullptr }
 {
 	m_isCloned = false;
 	m_eComponentType = MODEL;
 }
 
-CModel::CModel(const CModel & Prototype)
+CModel::CModel(const CModel& Prototype)
 	: CComponent{ Prototype }
-	, m_iNumMeshes { Prototype.m_iNumMeshes } 
+	, m_iNumMeshes{ Prototype.m_iNumMeshes }
 	, m_Meshes{ Prototype.m_Meshes }
 	, m_iNumMaterials{ Prototype.m_iNumMaterials }
-	, m_Materials { Prototype.m_Materials}
-	, m_PreTransformMatrix { Prototype.m_PreTransformMatrix }
-	, m_iCurrentAnimIndex { Prototype.m_iCurrentAnimIndex }
-	, m_iNumAnimations { Prototype.m_iNumAnimations }
-	, m_Animations { Prototype.m_Animations }
-	, m_CurrentTrackPosition { Prototype.m_CurrentTrackPosition }
-	, m_KeyFrameIndices {Prototype.m_KeyFrameIndices }
-	, m_FilePaths { Prototype.m_FilePaths }
-	, m_isUseBoundary { Prototype.m_isUseBoundary }
-	, m_UFBIndices { Prototype.m_UFBIndices }
+	, m_Materials{ Prototype.m_Materials }
+	, m_PreTransformMatrix{ Prototype.m_PreTransformMatrix }
+	, m_iCurrentAnimIndex{ Prototype.m_iCurrentAnimIndex }
+	, m_iNumAnimations{ Prototype.m_iNumAnimations }
+	, m_Animations{ Prototype.m_Animations }
+	, m_CurrentTrackPosition{ Prototype.m_CurrentTrackPosition }
+	, m_KeyFrameIndices{ Prototype.m_KeyFrameIndices }
+	, m_FilePaths{ Prototype.m_FilePaths }
+	, m_isUseBoundary{ Prototype.m_isUseBoundary }
+	, m_UFBIndices{ Prototype.m_UFBIndices }
 	, m_isEnd_Animations{ nullptr }
 	, m_isEnd_Animations_Boundary{ nullptr }
 	, m_eType{ Prototype.m_eType }
@@ -40,16 +40,16 @@ CModel::CModel(const CModel & Prototype)
 		Safe_AddRef(pAnimation);
 
 	for (auto& pPrototypeBone : Prototype.m_Bones)
-		m_Bones.emplace_back(pPrototypeBone->Clone());	
+		m_Bones.emplace_back(pPrototypeBone->Clone());
 
 	for (auto& Material : m_Materials)
 	{
 		for (auto& pTexture : Material.pMaterialTextures)
 			Safe_AddRef(pTexture);
 	}
-		
 
-	for (auto& pMesh : m_Meshes)	
+
+	for (auto& pMesh : m_Meshes)
 	{
 		CalculateBoundingBox_Model(pMesh, m_vMinPos, m_vMaxPos);
 		Safe_AddRef(pMesh);
@@ -66,19 +66,19 @@ CModel::CModel(const CModel & Prototype)
 	m_eComponentType = MODEL;
 }
 
-_int CModel::Get_BoneIndex(const _char * pBoneName) const
+_int CModel::Get_BoneIndex(const _char* pBoneName) const
 {
 	_Vec3							m_vMinPos = { FLT_MAX ,FLT_MAX ,FLT_MAX };	//물체의 최소 좌표 , 최대한 크게 초기화
 	_Vec3							m_vMaxPos = { -FLT_MAX ,-FLT_MAX ,-FLT_MAX };	//물체의 최대 좌표, 최대한 작게 초기화
 
 	_uint	iBoneIndex = { 0 };
 	auto	iter = find_if(m_Bones.begin(), m_Bones.end(), [&](CBone* pBone)->_bool
-	{
-		if (0 == strcmp(pBone->Get_Name(), pBoneName))
-			return true;
-		++iBoneIndex;
-		return false;
-	});
+		{
+			if (0 == strcmp(pBone->Get_Name(), pBoneName))
+				return true;
+			++iBoneIndex;
+			return false;
+		});
 
 	if (iter == m_Bones.end())
 		MSG_BOX(TEXT("뼈 정보 잘못됐음"));
@@ -174,7 +174,7 @@ HRESULT CModel::Update_Boundary()
 		m_isUseBoundary = false;
 		return E_FAIL;
 	}
-	
+
 	return S_OK;
 }
 
@@ -183,15 +183,15 @@ void CModel::SetUp_isNeedTuning(_int iBoneIndex, _bool bState)
 	m_Bones[iBoneIndex]->SetUp_isNeedTuning(bState);
 }
 
-HRESULT CModel::Initialize_Prototype(TYPE eType, const _char * pModelFilePath, _fmatrix PreTransformMatrix, _bool isBinaryAnimModel, FilePathStructStack* pStructStack)
+HRESULT CModel::Initialize_Prototype(TYPE eType, const _char* pModelFilePath, _fmatrix PreTransformMatrix, _bool isBinaryAnimModel, FilePathStructStack* pStructStack)
 {
 	if (pStructStack != nullptr)
 	{
 		m_FilePaths = pStructStack;
 	}
 
-	_uint		iFlag = { 0 };	
-	
+	_uint		iFlag = { 0 };
+
 	/* 이전 : 모든 메시가 다 원점을 기준으로 그렺니다. */
 	/* 이후 : 모델을 구성하는 모든 메시들을 각각 정해진 상태(메시를 배치하기위한 뼈대의 위치에 맞춰서)대로 미리 변환해준다.*/
 
@@ -243,15 +243,12 @@ HRESULT CModel::Initialize_Prototype(TYPE eType, const _char * pModelFilePath, _
 	return S_OK;
 }
 
-HRESULT CModel::Initialize(void * pArg)
+HRESULT CModel::Initialize(void* pArg)
 {
 	m_isEnd_Animations = new _bool[m_iNumAnimations];
 	m_isEnd_Animations_Boundary = new _bool[m_iNumAnimations];
 	ZeroMemory(m_isEnd_Animations, m_iNumAnimations * sizeof(_bool));
 	ZeroMemory(m_isEnd_Animations_Boundary, m_iNumAnimations * sizeof(_bool));
-	
-	m_ChangeKeyFrame = new KEYFRAME[m_Bones.size()];
-	m_ChangeKeyFrame_Boundary = new KEYFRAME[m_Bones.size()];
 
 	m_isInstance = (_bool*)pArg;
 
@@ -288,7 +285,7 @@ HRESULT CModel::Initialize(void * pArg)
 		if (FAILED(m_pDevice->CreateBuffer(&m_InstanceBufferDesc, &m_InstanceInitialData, &m_pVBInstance)))
 			return E_FAIL;
 	}
-	
+
 
 	return S_OK;
 }
@@ -296,7 +293,7 @@ HRESULT CModel::Initialize(void * pArg)
 HRESULT CModel::Render(_uint iMeshIndex)
 {
 	m_Meshes[iMeshIndex]->Bind_Buffers();
-	m_Meshes[iMeshIndex]->Render();	
+	m_Meshes[iMeshIndex]->Render();
 
 	return S_OK;
 }
@@ -363,55 +360,31 @@ HRESULT CModel::SetUp_NextAnimation(_uint iNextAnimationIndex, _bool isLoop, _fl
 	// 이미 같은걸로 바꾸고 있어
 	if (m_isChangeAni == true && iNextAnimationIndex == m_tChaneAnimDesc.iNextAnimIndex && !bSameChange)
 		return S_OK;
-	
-	if ((bSameChange && m_iCurrentAnimIndex == iNextAnimationIndex) || 
+
+	if ((bSameChange && m_iCurrentAnimIndex == iNextAnimationIndex) ||
 		(m_isChangeAni && m_iCurrentAnimIndex == iNextAnimationIndex))
 	{
 		m_bSameChange = true;
 	}
 
-	m_ChangeTrackPosition = 0.0;
-
-	if (m_isChangeAni == true)
-	{
-		m_bChange_Changed = true;
-	}
-	else
-	{
-		m_bChange_Changed = false;
-	}
-
 	m_tChaneAnimDesc.iNextAnimIndex = iNextAnimationIndex;
-	_bool	bTrackCheck = { false };
-	if (iNextAnimationIndex == m_iCurrentAnimIndex_Boundary  && !bSameChange)
+	if (iNextAnimationIndex == m_iCurrentAnimIndex_Boundary && !m_isChangeAni_Boundary && !bSameChange)
 	{
-		if (!m_isChangeAni_Boundary)
-		{
-			m_tChaneAnimDesc.iStartFrame = (_uint)m_CurrentTrackPosition_Boundary;
-		}
-		else
-		{
-			m_ChangeTrackPosition = m_ChangeTrackPosition_Boundary + m_tChaneAnimDesc_Boundary.fChangeTime + fChangeDuration;
-			bTrackCheck = true;
-		}
+		m_tChaneAnimDesc.iStartFrame = (_uint)m_CurrentTrackPosition_Boundary;
 	}
 	else
 	{
 		m_tChaneAnimDesc.iStartFrame = iStartFrame;
 	}
-	
-	
-	if (!bTrackCheck)
-	{
-		if (iStartFrame > 0)
-			m_ChangeTrackPosition = m_Animations[m_tChaneAnimDesc.iNextAnimIndex]->Get_WideChannel()->Get_KeyFrame(iStartFrame).TrackPosition;
-	}
+	m_ChangeTrackPosition = 0.0;
 
+	if (iStartFrame > 0)
+		m_ChangeTrackPosition = m_Animations[m_tChaneAnimDesc.iNextAnimIndex]->Get_WideChannel()->Get_KeyFrame(iStartFrame).TrackPosition;
+
+	m_vRootMoveStack = m_vCurRootMove = _vector{ 0, 0, 0, 1 };
 
 	m_tChaneAnimDesc.fChangeDuration = fChangeDuration;
 	m_tChaneAnimDesc.fChangeTime = 0.f;
-
-	m_vRootMoveStack = m_vCurRootMove = _vector{ 0, 0, 0, 1 };
 
 	m_isEnd_Animations[iNextAnimationIndex] = false;
 	m_isEnd_Animations[m_iCurrentAnimIndex] = false;
@@ -455,45 +428,24 @@ HRESULT CModel::SetUp_NextAnimation_Boundary(_uint iNextAnimationIndex, _bool is
 
 	m_ChangeTrackPosition_Boundary = 0.0;
 
-	if (m_isChangeAni_Boundary == true)
-	{
-		m_bChange_Changed_Boundary = true;
-	}
-	else
-	{
-		m_bChange_Changed_Boundary = false;
-	}
-
 	m_tChaneAnimDesc_Boundary.iNextAnimIndex = iNextAnimationIndex;
-	_bool	bTrackCheck = { false };
-	if (iNextAnimationIndex == m_iCurrentAnimIndex  && !bSameChange)
+	if (iNextAnimationIndex == m_iCurrentAnimIndex && !m_isChangeAni && !bSameChange)
 	{
-		if (!m_isChangeAni)
-		{
-			m_tChaneAnimDesc_Boundary.iStartFrame = (_uint)m_CurrentTrackPosition;
-		}
-		else
-		{
-			m_ChangeTrackPosition_Boundary = m_CurrentTrackPosition - m_tChaneAnimDesc.fChangeTime + fChangeDuration;
-			bTrackCheck = true;
-		}
+		m_tChaneAnimDesc_Boundary.iStartFrame = (_uint)m_CurrentTrackPosition;
 	}
 	else
 	{
 		m_tChaneAnimDesc_Boundary.iStartFrame = iStartFrame;
 	}
 
-	
-	if (!bTrackCheck)
-	{
-		if (iStartFrame > 0)
-			m_ChangeTrackPosition_Boundary = m_Animations[m_tChaneAnimDesc_Boundary.iNextAnimIndex]->Get_WideChannel()->Get_KeyFrame(iStartFrame).TrackPosition;
-	}
+	if (iStartFrame > 0)
+		m_ChangeTrackPosition_Boundary = m_Animations[m_tChaneAnimDesc_Boundary.iNextAnimIndex]->Get_WideChannel()->Get_KeyFrame(iStartFrame).TrackPosition;
+
 	m_vRootMoveStack = m_vCurRootMove = _vector{ 0, 0, 0, 1 };
 
 	m_tChaneAnimDesc_Boundary.fChangeDuration = fChangeDuration;
 	m_tChaneAnimDesc_Boundary.fChangeTime = 0.f;
-	
+
 
 	m_isEnd_Animations_Boundary[iNextAnimationIndex] = false;
 	m_isEnd_Animations_Boundary[m_iCurrentAnimIndex_Boundary] = false;
@@ -539,7 +491,7 @@ void CModel::Update_Bone()
 
 _Vec3 CModel::Play_Animation(_float fTimeDelta)
 {
-	_bool	bRootCheck{false};
+	_bool	bRootCheck{ false };
 	if (m_UFBIndices[UFB_ROOT] != 1024)
 	{
 		bRootCheck = true;
@@ -561,7 +513,7 @@ _Vec3 CModel::Play_Animation(_float fTimeDelta)
 
 	//루트본에 의한 이동값을 루트본에서 제거하고 이동량만큼 바깥으로 배출
 	_vector vRootMove = Finish_Update_Anim();
-	
+
 	return vRootMove;
 }
 
@@ -590,15 +542,8 @@ void CModel::Update_Animation(_float fTimeDelta)
 				continue;
 			}
 
-			KEYFRAME tCurrentKeyFrame{};
-			if (m_bChange_Changed)
-			{
-				tCurrentKeyFrame = m_ChangeKeyFrame[CurrentChannels[i]->Get_BoneIndex()];
-			}
-			else
-			{
-				tCurrentKeyFrame = CurrentChannels[i]->Find_KeyFrameIndex(&m_KeyFrameIndices[m_iCurrentAnimIndex][i], m_CurrentTrackPosition); // 여기서부터
-			}
+
+			KEYFRAME tCurrentKeyFrame = CurrentChannels[i]->Find_KeyFrameIndex(&m_KeyFrameIndices[m_iCurrentAnimIndex][i], m_CurrentTrackPosition); // 여기서부터
 			KEYFRAME tNextKeyFrame = NextChannels[i]->Find_KeyFrameIndex(&m_KeyFrameIndices[m_tChaneAnimDesc.iNextAnimIndex][i], m_ChangeTrackPosition); // 여기로 보간
 
 
@@ -619,14 +564,14 @@ void CModel::Update_Animation(_float fTimeDelta)
 					if (m_bDenyTrans && iBoneIndex == m_iDenyBoneIndex)
 					{
 						vTranslation = XMLoadFloat3(&tNextKeyFrame.vTranslation);
-						vTranslation = _vector{ 0.f, 0.f,XMVectorGetZ(vTranslation), 1.f};
+						vTranslation = _vector{ 0.f, 0.f,XMVectorGetZ(vTranslation), 1.f };
 					}
 					else
 					{
 						vTranslation = XMVectorSetW(XMLoadFloat3(&tNextKeyFrame.vTranslation), 1.f);
 					}
 				}
-					
+
 
 				isChangeEnd = true;
 			}
@@ -665,13 +610,6 @@ void CModel::Update_Animation(_float fTimeDelta)
 				vScale = XMVectorLerp(vSourScale, vDestScale, (_float)fRatio);
 				vRotation = XMQuaternionSlerp(vSourRotation, vDestRotation, (_float)fRatio);
 				vTranslation = XMVectorLerp(vSourTranslation, vDestTranslation, (_float)fRatio);
-				
-				if (!m_bChange_Changed)
-				{
-					XMStoreFloat3(&(m_ChangeKeyFrame[iBoneIndex].vScale), vScale);
-					XMStoreFloat4(&(m_ChangeKeyFrame[iBoneIndex].vRotation), vRotation);
-					XMStoreFloat3(&(m_ChangeKeyFrame[iBoneIndex].vTranslation), vTranslation);
-				}
 			}
 
 			_matrix	TransformationMatrix = XMMatrixAffineTransformation(vScale, XMVectorSet(0.f, 0.f, 0.f, 1.f), vRotation, vTranslation);
@@ -693,13 +631,13 @@ void CModel::Update_Animation(_float fTimeDelta)
 
 			//m_iCurrentFrame = m_Animations[m_iCurrentAnimIndex].
 			m_bDenyTrans = false;
-			m_bChange_Changed = false;
+
 			m_vRootMoveStack = m_vCurRootMove = _vector{ 0, 0, 0, 1 };
 			m_iCurrentAnimIndex = m_tChaneAnimDesc.iNextAnimIndex;
 			ZeroMemory(&m_tChaneAnimDesc, sizeof(CHANGEANIMATION_DESC));
 
 			m_iCurrentFrame = m_Animations[m_iCurrentAnimIndex]->Update_TransformationMatrices(m_Bones, &m_CurrentTrackPosition, m_KeyFrameIndices[m_iCurrentAnimIndex], m_isLoop, &m_isEnd_Animations[m_iCurrentAnimIndex], 0, false, nullptr, &m_isBoneUpdated);
-			
+
 			m_isChangeAni = false;
 		}
 	}
@@ -744,15 +682,7 @@ void CModel::Update_Animation_Boundary(_float fTimeDelta)
 					continue;
 				}
 
-				KEYFRAME tCurrentKeyFrame{}; 
-				if (m_bChange_Changed_Boundary)
-				{
-					tCurrentKeyFrame = m_ChangeKeyFrame_Boundary[CurrentChannels[i]->Get_BoneIndex()];
-				}
-				else
-				{
-					tCurrentKeyFrame = CurrentChannels[i]->Find_KeyFrameIndex(&m_KeyFrameIndices[m_iCurrentAnimIndex_Boundary][i], m_CurrentTrackPosition_Boundary); // 여기서부터
-				}
+				KEYFRAME tCurrentKeyFrame = CurrentChannels[i]->Find_KeyFrameIndex(&m_KeyFrameIndices[m_iCurrentAnimIndex_Boundary][i], m_CurrentTrackPosition_Boundary); // 여기서부터
 				KEYFRAME tNextKeyFrame = NextChannels[i]->Find_KeyFrameIndex(&m_KeyFrameIndices[m_tChaneAnimDesc_Boundary.iNextAnimIndex][i], m_ChangeTrackPosition_Boundary); // 여기로 보간
 
 				_vector vScale, vRotation, vTranslation;
@@ -816,13 +746,6 @@ void CModel::Update_Animation_Boundary(_float fTimeDelta)
 					vScale = XMVectorLerp(vSourScale, vDestScale, (_float)fRatio);
 					vRotation = XMQuaternionSlerp(vSourRotation, vDestRotation, (_float)fRatio);
 					vTranslation = XMVectorLerp(vSourTranslation, vDestTranslation, (_float)fRatio);
-
-					if (!m_bChange_Changed_Boundary)
-					{
-						XMStoreFloat3(&(m_ChangeKeyFrame_Boundary[iBoneIndex].vScale), vScale);
-						XMStoreFloat4(&(m_ChangeKeyFrame_Boundary[iBoneIndex].vRotation), vRotation);
-						XMStoreFloat3(&(m_ChangeKeyFrame_Boundary[iBoneIndex].vTranslation), vTranslation);
-					}
 				}
 
 				_matrix	TransformationMatrix = XMMatrixAffineTransformation(vScale, XMVectorSet(0.f, 0.f, 0.f, 1.f), vRotation, vTranslation);
@@ -835,7 +758,6 @@ void CModel::Update_Animation_Boundary(_float fTimeDelta)
 				if (m_tChaneAnimDesc_Boundary.iNextAnimIndex == m_iCurrentAnimIndex && !m_isChangeAni && !m_bSameChange)
 				{
 					m_CurrentTrackPosition_Boundary = m_CurrentTrackPosition;
-					m_isLoop_Boundary = m_isLoop;
 				}
 				else
 				{
@@ -845,7 +767,8 @@ void CModel::Update_Animation_Boundary(_float fTimeDelta)
 
 				//m_Animations[m_iCurrentAnimIndex]->Reset();
 				m_bDenyTrans = false;
-				m_bChange_Changed_Boundary = false;
+
+				m_vRootMoveStack = m_vCurRootMove = _vector{ 0, 0, 0, 1 };
 				m_iCurrentAnimIndex_Boundary = m_tChaneAnimDesc_Boundary.iNextAnimIndex;
 				ZeroMemory(&m_tChaneAnimDesc_Boundary, sizeof(CHANGEANIMATION_DESC));
 
@@ -857,8 +780,14 @@ void CModel::Update_Animation_Boundary(_float fTimeDelta)
 		else
 		{
 			//if 상하체 애니메이션이 같으면 시간누적 없는 업데이트 하체 변수로 호출
-
-			m_iCurrentFrame_Boundary = m_Animations[m_iCurrentAnimIndex_Boundary]->Update_TransformationMatrices(m_Bones, &m_CurrentTrackPosition_Boundary, m_KeyFrameIndices[m_iCurrentAnimIndex_Boundary], m_isLoop_Boundary, &m_isEnd_Animations_Boundary[m_iCurrentAnimIndex_Boundary], fTimeDelta, true, &m_isBoneUpdated, false);
+			if (m_iCurrentAnimIndex == m_iCurrentAnimIndex_Boundary && !m_isChangeAni)
+			{
+				m_iCurrentFrame_Boundary = m_Animations[m_iCurrentAnimIndex_Boundary]->Update_TransformationMatrices(m_Bones, &m_CurrentTrackPosition, m_KeyFrameIndices[m_iCurrentAnimIndex_Boundary], m_isLoop, &m_isEnd_Animations_Boundary[m_iCurrentAnimIndex_Boundary], fTimeDelta, true, &m_isBoneUpdated, true);
+			}
+			else
+			{
+				m_iCurrentFrame_Boundary = m_Animations[m_iCurrentAnimIndex_Boundary]->Update_TransformationMatrices(m_Bones, &m_CurrentTrackPosition_Boundary, m_KeyFrameIndices[m_iCurrentAnimIndex_Boundary], m_isLoop_Boundary, &m_isEnd_Animations_Boundary[m_iCurrentAnimIndex_Boundary], fTimeDelta, true, &m_isBoneUpdated, false);
+			}
 		}
 
 	}
@@ -885,7 +814,7 @@ _vector CModel::Finish_Update_Anim()
 
 	if (m_isEnd_Animations[m_iCurrentAnimIndex])
 	{
-		m_vRootMoveStack = m_vCurRootMove = _vector{0, 0, 0, 1};
+		m_vRootMoveStack = m_vCurRootMove = _vector{ 0, 0, 0, 1 };
 
 		if (m_iCurrentAnimIndex == m_iCurrentAnimIndex_Boundary)
 		{
@@ -894,7 +823,7 @@ _vector CModel::Finish_Update_Anim()
 	}
 
 	if (XMVectorGetX(XMVector3Length(m_vRootMoveStack)) == 0
-		 || XMVectorGetX(XMVector3Length(m_vCurRootMove)) == 0)
+		|| XMVectorGetX(XMVector3Length(m_vCurRootMove)) == 0)
 	{
 		vRootMove = _vector{ 0, 0, 0, 1 };
 		m_vRootMoveStack = m_vCurRootMove;
@@ -961,9 +890,9 @@ HRESULT CModel::Create_BinaryFile(const _char* ModelTag)
 
 	//리모트 튜닝 벡터 저장
 	_int VecSize = (_int)m_RemoteTuningIndices.size();
-	
+
 	WriteFile(hFile, &VecSize, sizeof(_int), &dwByte, nullptr);
-	
+
 	for (_int i = 0; i < VecSize; ++i)
 	{
 		WriteFile(hFile, &m_RemoteTuningIndices[i], sizeof(_uint), &dwByte, nullptr);
@@ -987,13 +916,13 @@ HRESULT CModel::Create_BinaryFile(const _char* ModelTag)
 		CloseHandle(hFile);
 		return E_FAIL;
 	}
-		
+
 	if (FAILED(Create_Bin_Materials(&hFile)))
 	{
 		CloseHandle(hFile);
 		return E_FAIL;
 	}
-	
+
 	if (FAILED(Create_Bin_Animations(&hFile)))
 	{
 		CloseHandle(hFile);
@@ -1040,7 +969,7 @@ HRESULT CModel::Create_Bin_Materials(HANDLE* pFile)
 	WriteFile(*pFile, &m_iNumMaterials, sizeof(_uint), &dwByte, nullptr);
 
 	_int iMaterialNum{};
-	for (auto & pMaterialSet : m_Materials)
+	for (auto& pMaterialSet : m_Materials)
 	{//머티리얼 저장 수 가 최대 수만큼 반복
 
 		_int iTextureNum{};
@@ -1091,9 +1020,9 @@ HRESULT CModel::ReadyModel_To_Binary(HANDLE* pFile)
 
 	//리모트 튜닝 벡터
 	_int VecSize;
-	 
-	 ReadFile(*pFile, &VecSize, sizeof(_int), &dwByte, nullptr);
-	
+
+	ReadFile(*pFile, &VecSize, sizeof(_int), &dwByte, nullptr);
+
 	m_RemoteTuningIndices.resize(VecSize);
 	for (_int i = 0; i < VecSize; ++i)
 	{
@@ -1106,17 +1035,17 @@ HRESULT CModel::ReadyModel_To_Binary(HANDLE* pFile)
 	for (_int i = 0; i < UFB_END; ++i)
 	{
 		ReadFile(*pFile, &m_UFBIndices[i], sizeof(_uint), &dwByte, nullptr);
-	}	
+	}
 
 	_uint iNumBone = {};
 	ReadFile(*pFile, &iNumBone, sizeof(_uint), &dwByte, nullptr);
 
-	for (_uint i = 0; i < iNumBone; ++ i)
+	for (_uint i = 0; i < iNumBone; ++i)
 	{
 		CBone* pBone = CBone::Create_To_Binary(pFile, m_isUseBoundary, m_eType);
 		if (pBone == nullptr)
 			return E_FAIL;
-		
+
 		m_Bones.emplace_back(pBone);
 	}
 	//여기까지 뼈
@@ -1137,7 +1066,7 @@ HRESULT CModel::ReadyModel_To_Binary(HANDLE* pFile)
 
 
 	ReadFile(*pFile, &m_iNumMaterials, sizeof(_uint), &dwByte, nullptr);
-	
+
 	if (m_FilePaths != nullptr)
 	{
 		m_FilePaths->pStruct.resize(m_iNumMaterials);
@@ -1146,7 +1075,7 @@ HRESULT CModel::ReadyModel_To_Binary(HANDLE* pFile)
 	for (_uint i = 0; i < m_iNumMaterials; ++i)
 	{
 		MESH_MATERIAL		MeshMaterial{};
-		
+
 		for (_uint j = 0; j < TEXTURE_TYPE_MAX; ++j)
 		{
 			_bool	isHaveTextures = true;
@@ -1159,7 +1088,7 @@ HRESULT CModel::ReadyModel_To_Binary(HANDLE* pFile)
 			_char				szTexturePath[MAX_PATH] = "";
 
 			ReadFile(*pFile, szTexturePath, MAX_PATH, &dwByte, nullptr);
-			
+
 			if (m_FilePaths != nullptr)
 			{
 				string strTextureFilePath;
@@ -1210,9 +1139,9 @@ _Vec4 CModel::Calc_CenterPos(_Matrix WorldMat)
 {
 	_Matrix FinalMat{};
 	FinalMat = m_Bones[m_UFBIndices[UFB_CHEST]]->Get_CombinedTransformationMatrix() * WorldMat;
-	
+
 	_Vec3	vOut{ FinalMat._41, FinalMat._42 , FinalMat._43 };
-	
+
 	return FinalMat.Translation();
 }
 
@@ -1225,10 +1154,10 @@ HRESULT CModel::Bind_Material(CShader* pShader, const _char* pConstantName, TEXT
 {
 	_uint iMaterialIndex = m_Meshes[iMeshIndex]->Get_MaterialIndex();
 
-	return m_Materials[iMaterialIndex].pMaterialTextures[eMaterialType]->Bind_ShadeResource(pShader, pConstantName, 0);	
+	return m_Materials[iMaterialIndex].pMaterialTextures[eMaterialType]->Bind_ShadeResource(pShader, pConstantName, 0);
 }
 
-HRESULT CModel::Bind_MeshBoneMatrices(CShader * pShader, const _char * pConstantName, _uint iMeshIndex)
+HRESULT CModel::Bind_MeshBoneMatrices(CShader* pShader, const _char* pConstantName, _uint iMeshIndex)
 {
 	m_Meshes[iMeshIndex]->Bind_BoneMatrices(this, pShader, pConstantName);
 
@@ -1371,9 +1300,9 @@ void CModel::CalculateBoundingBox_Model(CMesh* pMesh, _Vec3& minPos, _Vec3& maxP
 }
 
 
-CModel * CModel::Create(ID3D11Device * pDevice, ID3D11DeviceContext * pContext, TYPE eType, const _char * pModelFilePath, _fmatrix PreTransformMatrix, _bool isBinaryAnimModel, FilePathStructStack* pStructStack)
+CModel* CModel::Create(ID3D11Device* pDevice, ID3D11DeviceContext* pContext, TYPE eType, const _char* pModelFilePath, _fmatrix PreTransformMatrix, _bool isBinaryAnimModel, FilePathStructStack* pStructStack)
 {
-	CModel*		pInstance = new CModel(pDevice, pContext);
+	CModel* pInstance = new CModel(pDevice, pContext);
 
 	if (FAILED(pInstance->Initialize_Prototype(eType, pModelFilePath, PreTransformMatrix, isBinaryAnimModel, pStructStack)))
 	{
@@ -1384,9 +1313,9 @@ CModel * CModel::Create(ID3D11Device * pDevice, ID3D11DeviceContext * pContext, 
 	return pInstance;
 }
 
-CComponent * CModel::Clone(void * pArg)
+CComponent* CModel::Clone(void* pArg)
 {
-	CModel*		pInstance = new CModel(*this);
+	CModel* pInstance = new CModel(*this);
 
 	if (FAILED(pInstance->Initialize(pArg)))
 	{
@@ -1406,9 +1335,6 @@ void CModel::Free()
 	{
 		Safe_Delete_Array(m_isEnd_Animations);
 		Safe_Delete_Array(m_isEnd_Animations_Boundary);
-
-		Safe_Delete_Array(m_ChangeKeyFrame);
-		Safe_Delete_Array(m_ChangeKeyFrame_Boundary);
 
 		if (m_isInstance)
 		{

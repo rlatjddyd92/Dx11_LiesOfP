@@ -15,41 +15,41 @@ private:
 	virtual ~CModel() = default;
 
 public:
-	vector<class CMesh*>&	Get_Meshes() { return m_Meshes; }
+	vector<class CMesh*>& Get_Meshes() { return m_Meshes; }
 	_uint					Get_NumMeshes() const { return m_iNumMeshes; }
 
 	TYPE					Get_ModelType() const { return m_eType; }
 
-	vector<class CBone*>&	Get_Bones() { return m_Bones; }
+	vector<class CBone*>& Get_Bones() { return m_Bones; }
 	_int					Get_BoneIndex(const _char* pBoneName) const;
 	_matrix					Get_BoneCombindTransformationMatrix(_uint iBoneIndex) const { return m_Bones[iBoneIndex]->Get_CombinedTransformationMatrix(); }
-	const _Matrix*			Get_BoneCombindTransformationMatrix_Ptr(const _char* pBoneName) const { return m_Bones[Get_BoneIndex(pBoneName)]->Get_CombinedTransformationMatrix_Ptr(); }
-	const _Matrix*			Get_BoneCombindTransformationMatrix_Ptr(_uint iBoneIndex) const { return m_Bones[iBoneIndex]->Get_CombinedTransformationMatrix_Ptr(); }
+	const _Matrix* Get_BoneCombindTransformationMatrix_Ptr(const _char* pBoneName) const { return m_Bones[Get_BoneIndex(pBoneName)]->Get_CombinedTransformationMatrix_Ptr(); }
+	const _Matrix* Get_BoneCombindTransformationMatrix_Ptr(_uint iBoneIndex) const { return m_Bones[iBoneIndex]->Get_CombinedTransformationMatrix_Ptr(); }
 
 	vector<class CAnimation*>& Get_Animations() { return m_Animations; }
-          	_uint					Get_CurrentAnimationIndex() { return m_iCurrentAnimIndex; }
+	_uint					Get_CurrentAnimationIndex() { return m_iCurrentAnimIndex; }
 	_uint					Get_CurrentAnimationIndex_Boundary() { return m_iCurrentAnimIndex_Boundary; }
-	_char*					Get_CurrentAnimationName();
+	_char* Get_CurrentAnimationName();
 
 	_uint					Get_CurrentFrame(_bool isBoundary = false);
 	_double					Get_CurrentTrackPosition(_bool isBoundary = false);
 	void					Set_CurrentTrackPosition(_double TrackPos) { m_CurrentTrackPosition = TrackPos; }
 	void					Set_CurrentTrackPosition_Boundary(_double TrackPos) { m_CurrentTrackPosition_Boundary = TrackPos; }
 
-	vector<_uint>*			Get_RemoteTuningIndices_Ptr() { return &m_RemoteTuningIndices; }
+	vector<_uint>* Get_RemoteTuningIndices_Ptr() { return &m_RemoteTuningIndices; }
 	void					Set_RemoteTuning(_bool bState);
 
 	void					Set_UFBIndices(_uint eCount, _uint iIndex) { m_UFBIndices[eCount] = iIndex; }
 	_uint					Get_UFBIndices(_uint eCount) { return m_UFBIndices[eCount]; }
 
-	class CTexture*			Find_Texture(_uint iMeshNum, TEXTURE_TYPE eMaterialType);
+	class CTexture* Find_Texture(_uint iMeshNum, TEXTURE_TYPE eMaterialType);
 
 	void					Set_AnimPlay(_bool bCtrAnim) { m_bPlayAnimCtr = bCtrAnim; }
 
-	_bool					Get_IsUseBoundary()				{ return m_isUseBoundary; }
+	_bool					Get_IsUseBoundary() { return m_isUseBoundary; }
 
-	_bool*					Get_IsEndAnimArray()			{ return m_isEnd_Animations; }
-	_bool*					Get_IsEndAnimArray_Boundary()	{ return m_isEnd_Animations_Boundary; }
+	_bool* Get_IsEndAnimArray() { return m_isEnd_Animations; }
+	_bool* Get_IsEndAnimArray_Boundary() { return m_isEnd_Animations_Boundary; }
 
 	_bool					Get_isChangeAni() { return m_isChangeAni; }
 	_bool					Get_isChangeAni_Boundary() { return m_isChangeAni_Boundary; }
@@ -125,8 +125,6 @@ private:
 
 private:
 	_bool							m_bSameChange = { false };	// 동일 애니메이션 체크
-	_bool							m_bChange_Changed = { false };	// 변환중 변환 체크
-	_bool							m_bChange_Changed_Boundary = { false };
 	_bool							m_bDenyTrans = { false };	// 특정 뼈 이동값 제거용
 	_bool							m_isLoop = { false };
 	_bool							m_isLoop_Boundary = { false };		//상하체 분리
@@ -150,8 +148,8 @@ private:
 
 	_int							m_iCurrentFrame = { 0 };
 	_int							m_iCurrentFrame_Boundary = { 0 };		//상하체 분리
-	_bool*							m_isEnd_Animations;
-	_bool*							m_isEnd_Animations_Boundary;			//상하체 분리
+	_bool* m_isEnd_Animations;
+	_bool* m_isEnd_Animations_Boundary;			//상하체 분리
 	_bool							m_isChangeAni = { false };	// 바꾸는중?
 	_bool							m_isChangeAni_Boundary = { false };		//상하체 분리
 
@@ -169,11 +167,8 @@ private:
 	_vector							m_vCurRootMove = {};			//이전에 사용한 루트본에의한 움직임
 	_vector							m_vRootMoveStack = {};
 
-	KEYFRAME*						m_ChangeKeyFrame{};
-	KEYFRAME*						m_ChangeKeyFrame_Boundary{};
-
 	// 정승현 모델 인스턴스
-	ID3D11Buffer*					m_pVBInstance = { nullptr };
+	ID3D11Buffer* m_pVBInstance = { nullptr };
 	D3D11_BUFFER_DESC				m_InstanceBufferDesc = {};
 	D3D11_SUBRESOURCE_DATA			m_InstanceInitialData = {};
 
@@ -183,7 +178,7 @@ private:
 	_bool							m_isInstance = {};
 
 	vector<INSTANCE_DATA>			m_InstanceDatas;
-	void*							m_pInstanceVertices = { nullptr };
+	void* m_pInstanceVertices = { nullptr };
 
 	//우송 최적화 (모델단위)
 	_Vec3							m_vMinPos = { FLT_MAX ,FLT_MAX ,FLT_MAX };	//물체의 최소 좌표 , 최대한 크게 초기화
@@ -193,7 +188,7 @@ private:
 	vector<_uint>					m_UFBIndices;
 	vector<_uint>					m_RemoteTuningIndices;
 	//바이너리화 용도
-	FilePathStructStack*			m_FilePaths = { nullptr };
+	FilePathStructStack* m_FilePaths = { nullptr };
 
 public:
 	HRESULT	Ready_Meshes(HANDLE* pFile);
@@ -205,7 +200,7 @@ public:
 	void Culling(_Matrix worldMatrix);
 
 private:
-	void CalculateBoundingBox_Model(CMesh* pMesh, _Vec3& minPos, _Vec3& maxPos ); //모델 최대, 최소 사이즈 구하기
+	void CalculateBoundingBox_Model(CMesh* pMesh, _Vec3& minPos, _Vec3& maxPos); //모델 최대, 최소 사이즈 구하기
 
 public:
 	static CModel* Create(ID3D11Device* pDevice, ID3D11DeviceContext* pContext, TYPE eType, const _char* pModelFilePath, _fmatrix PreTransformMatrix = XMMatrixIdentity(), _bool isBinaryAnimModel = false, FilePathStructStack* pStructStack = nullptr);

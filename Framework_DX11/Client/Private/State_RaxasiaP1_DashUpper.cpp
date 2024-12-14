@@ -46,7 +46,7 @@ void CState_RaxasiaP1_DashUpper::Update(_float fTimeDelta)
         {
             _float fDist = m_pMonster->Calc_Distance_XZ();
 
-            if (fDist <= 5.f)
+            if (fDist <= 3.f)
             {
                 _Vec3 vUp = XMVector3Normalize(m_pMonster->Get_Transform()->Get_State(CTransform::STATE_UP));
                 _Vec3 vLook = XMVector3Normalize(m_pMonster->Get_Transform()->Get_State(CTransform::STATE_LOOK));
@@ -211,7 +211,7 @@ void CState_RaxasiaP1_DashUpper::Collider_Check(_double CurTrackPos)
     }
     else if (m_iRouteTrack == 4)
     {
-        if ((CurTrackPos >= 35.f && CurTrackPos <= 44.f))
+        if ((CurTrackPos >= 35.f && CurTrackPos <= 48.f))
         {
             m_pMonster->Active_CurrentWeaponCollider(1.3f, 0, HIT_TYPE::HIT_METAL, ATTACK_STRENGTH::ATK_NORMAL);
         }
