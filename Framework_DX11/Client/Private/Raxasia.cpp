@@ -101,8 +101,8 @@ HRESULT CRaxasia::Initialize(void* pArg)
 	if (FAILED(Ready_Weapon()))
 		return E_FAIL;
 
-	//if (FAILED(Ready_Effects()))
-	//	return E_FAIL;
+	if (FAILED(Ready_Effects()))
+		return E_FAIL;
 
 	m_strObjectTag = TEXT("Monster");
 	m_pColliderCom->Set_Owner(this);
@@ -680,7 +680,27 @@ HRESULT CRaxasia::Ready_Effects()
 	m_Effects.resize(EFFECT_END);
 
 	const _Matrix* pParetnMatrix = m_pTransformCom->Get_WorldMatrix_Ptr();
-	const _Matrix* pSocketBoneMatrix = m_pModelCom->Get_BoneCombindTransformationMatrix_Ptr(m_pModelCom->Get_UFBIndices(UFB_HAND_RIGHT));
+	const _Matrix* pSocketBoneMatrix = m_pModelCom->Get_BoneCombindTransformationMatrix_Ptr(m_pModelCom->Get_UFBIndices(UFB_ROOT));
+
+	m_Effects[EFFECT_DASH] = CEffect_Manager::Get_Instance()->Clone_Effect(TEXT("Raxasia_Attack_Dash"), pParetnMatrix,
+		pSocketBoneMatrix, _Vec3(0.f, 0.5f, 0.f), _Vec3(0.f, 0.f, 0.f), _Vec3(1.f, 1.f, 1.f));
+
+	m_Effects[EFFECT_THUNDERDISCHARGE] = CEffect_Manager::Get_Instance()->Clone_Effect(TEXT("Raxasia_Attack_ThunderDischarge"), pParetnMatrix,
+		pSocketBoneMatrix, _Vec3(0.f, 0.f, 0.f), _Vec3(0.f, 0.f, 0.f), _Vec3(1.f, 1.f, 1.f));
+
+	pSocketBoneMatrix = m_pModelCom->Get_BoneCombindTransformationMatrix_Ptr(m_pModelCom->Get_UFBIndices(UFB_HAND_RIGHT));
+
+	m_Effects[EFFECT_SWING] = CEffect_Manager::Get_Instance()->Clone_Effect(TEXT("Raxasia_Attack_Swing"), pParetnMatrix,
+		pSocketBoneMatrix, _Vec3(0.f, 0.f, 0.f), _Vec3(0.f, 0.f, 0.f), _Vec3(1.f, 1.f, 1.f));
+
+	m_Effects[EFFECT_DRAG] = CEffect_Manager::Get_Instance()->Clone_Effect(TEXT("Raxasia_Attack_Drag"), pParetnMatrix,
+		pSocketBoneMatrix, _Vec3(0.f, 0.f, 0.f), _Vec3(0.f, 0.f, 0.f), _Vec3(1.f, 1.f, 1.f));
+
+	m_Effects[EFFECT_INCHENTSWORD] = CEffect_Manager::Get_Instance()->Clone_Effect(TEXT("Raxasia_Attack_Drag"), pParetnMatrix,
+		pSocketBoneMatrix, _Vec3(0.f, 0.f, 0.f), _Vec3(0.f, 0.f, 0.f), _Vec3(1.f, 1.f, 1.f));
+
+	m_Effects[EFFECT_THUNDERDRAG] = CEffect_Manager::Get_Instance()->Clone_Effect(TEXT("Raxasia_Attack_ThunderDrag"), pParetnMatrix,
+		pSocketBoneMatrix, _Vec3(0.f, 0.f, 0.f), _Vec3(0.f, 0.f, 0.f), _Vec3(1.f, 1.f, 1.f));
 
 
 	//for (auto& pEffect : m_Effects)

@@ -33,6 +33,9 @@ private:
     _bool               m_bSwing = { false };
     _bool               m_bSwingSound = { false };
     _bool               m_bSpeedController = { false };
+    _bool               m_bLockOn = { false };
+
+    _Vec3               m_vLockVec = {};
 
     _uint               m_iRouteTrack = {};
 

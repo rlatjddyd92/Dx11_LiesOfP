@@ -24,6 +24,11 @@ HRESULT CState_RaxasiaP2_Running_Fury::Start_State(void* pArg)
 
     m_pMonster->Change_Animation(AN_RUNNING, false, 0.1f, 0, true, true);
 
+    m_bRunningWise = *static_cast<_bool*>(pArg);
+
+    m_fDistance = m_pMonster->Calc_Distance_XZ();
+
+    m_bLockOn = false;
     m_bSwingSound = false;
     m_bSpeedController = false;
     m_bSwing = false;
@@ -42,6 +47,7 @@ void CState_RaxasiaP2_Running_Fury::Update(_float fTimeDelta)
         {
             ++m_iRouteTrack;
             m_bSwing = false;
+            m_bLockOn = false;
             m_pMonster->Change_Animation(AN_STING, false, 0.2f, 50);
             return;
         }
@@ -73,15 +79,31 @@ void CState_RaxasiaP2_Running_Fury::Update(_float fTimeDelta)
             vDir = vTargetPos - vPos;
             vDir.Normalize();
 
+            m_fDistance = m_pMonster->Calc_Distance_XZ();
+
             vDir *= m_fDistance;
-            m_pMonster->Get_RigidBody()->Set_Velocity(_Vec3{});
-            m_pMonster->Get_RigidBody()->Set_GloblePose(vTargetPos - vDir);
+            _Vec3 vTemp{};
+            if (CurTrackPos >= 30.f)
+            {
+                vTemp = vDir;
+                vTemp.Normalize();
+                if (m_fDistance < 2.5f)
+                {
+                    vTemp *= -3.f;
+                }
+                else
+                {
+                    vTemp *= 3.f;
+                }
+            }
+
+            m_pMonster->Get_RigidBody()->Set_GloblePose(vTargetPos - vDir + (vTemp * fTimeDelta));
         }
         else if (CurTrackPos <= 160)
         {
             if (!m_bSpeedController)
             {
-                if (CurTrackPos >= 135)
+                if (CurTrackPos >= 135 && CurTrackPos <= 145.f)
                 {
                     m_bSpeedController = true;
                     m_pMonster->Get_Model()->Set_SpeedRatio(AN_RUNNING, (_double)0.5);
@@ -89,7 +111,7 @@ void CState_RaxasiaP2_Running_Fury::Update(_float fTimeDelta)
             }
             else
             {
-                if (CurTrackPos >= 155)
+                if (CurTrackPos >= 150)
                 {
                     m_bSpeedController = false;
                     m_pMonster->Get_Model()->Set_SpeedRatio(AN_RUNNING, (_double)1);
@@ -97,12 +119,18 @@ void CState_RaxasiaP2_Running_Fury::Update(_float fTimeDelta)
             }
             m_pMonster->Get_Transform()->LookAt_Lerp_NoHeight(m_pMonster->Get_TargetDir(), 2.f, fTimeDelta);
         }
-        if (CurTrackPos >= 150 && CurTrackPos <= 170)
+
+        if (CurTrackPos >= 150 && CurTrackPos <= 155)
         {
-            _Vec3 vLook = m_pMonster->Get_Transform()->Get_State(CTransform::STATE_LOOK);
-            vLook.Normalize();
-            m_pMonster->Get_RigidBody()->Set_Velocity(vLook * 30);
+            if (!m_bLockOn)
+            {
+                m_vLockVec = { m_pMonster->Get_Transform()->Get_State(CTransform::STATE_LOOK) };
+                m_vLockVec.Normalize();
+                m_bLockOn = true;
+            }
+            m_pMonster->Get_RigidBody()->Set_Velocity(m_vLockVec * 60);
         }
+
         break;
     }
 
@@ -114,12 +142,19 @@ void CState_RaxasiaP2_Running_Fury::Update(_float fTimeDelta)
             m_pMonster->Change_State(CRaxasia::IDLE);
             return;
         }
-
-        if (CurTrackPos >= 165 && CurTrackPos <= 175.f)
+        if (CurTrackPos <= 150.f)
         {
-            _Vec3 vLook = m_pMonster->Get_Transform()->Get_State(CTransform::STATE_LOOK);
-            vLook.Normalize();
-            m_pMonster->Get_RigidBody()->Set_Velocity(vLook * 30);
+            m_pMonster->Get_Transform()->LookAt_Lerp_NoHeight(m_pMonster->Get_TargetDir(), 2.f, fTimeDelta);
+        }
+        if (CurTrackPos >= 165 && CurTrackPos <= 170.f)
+        {
+            if (!m_bLockOn)
+            {
+                m_vLockVec = { m_pMonster->Get_Transform()->Get_State(CTransform::STATE_LOOK) };
+                m_vLockVec.Normalize();
+                m_bLockOn = true;
+            }
+            m_pMonster->Get_RigidBody()->Set_Velocity(m_vLockVec * 60);
         }
 
         break;

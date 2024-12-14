@@ -4,6 +4,8 @@
 #include "Model.h"
 #include "Raxasia.h"
 
+#include "Effect_Manager.h"
+
 CState_RaxasiaP1_DashUpper::CState_RaxasiaP1_DashUpper(CFsm* pFsm, CMonster* pMonster)
     :CState{ pFsm }
     , m_pMonster{ pMonster }
@@ -26,6 +28,10 @@ HRESULT CState_RaxasiaP1_DashUpper::Start_State(void* pArg)
     m_bSwingSound = false;
 
     m_bSwing = false;
+    m_bStamp = false;
+    m_bDash = false;
+    m_bDrag = false;
+
     return S_OK;
 }
 
@@ -38,11 +44,12 @@ void CState_RaxasiaP1_DashUpper::Update(_float fTimeDelta)
     case 0:
         if (End_Check())
         {
+            m_pMonster->DeActive_Effect(CRaxasia::EFFECT_DASH);
             m_pMonster->Change_State(CRaxasia::IDLE);
             return;
         }
 
-        if (CurTrackPos >= 30.f)
+        if (CurTrackPos >= 30.f && CurTrackPos <= 255.f)
         {
             _float fDist = m_pMonster->Calc_Distance_XZ();
 
@@ -57,7 +64,9 @@ void CState_RaxasiaP1_DashUpper::Update(_float fTimeDelta)
                 if (fabs(vUp.Dot(vCrossUp)) <= 0.3f)
                 {
                     ++m_iRouteTrack;
+                    m_pMonster->DeActive_Effect(CRaxasia::EFFECT_DASH);
                     m_pMonster->Change_Animation(AN_DASHUPPER_ATTACK, false, 0.1f, 0);
+                    return;
                 }
             }
         }
@@ -71,7 +80,9 @@ void CState_RaxasiaP1_DashUpper::Update(_float fTimeDelta)
         {
             ++m_iRouteTrack;
             m_bSwing = false;
+            m_bStamp = false;
             m_pMonster->Change_Animation(AN_TRIPLELINK_FIRST, false, 0.1f, 0);
+            return;
         }
 
         if (CurTrackPos <= 30.f ||
@@ -86,7 +97,9 @@ void CState_RaxasiaP1_DashUpper::Update(_float fTimeDelta)
         {
             ++m_iRouteTrack;
             m_bSwing = false;
+            m_bStamp = false;
             m_pMonster->Change_Animation(AN_TRIPLELINK_SECOND, false, 0.1f, 0);
+            return;
         }
 
         if (CurTrackPos <= 30.f||
@@ -101,9 +114,11 @@ void CState_RaxasiaP1_DashUpper::Update(_float fTimeDelta)
         {
             ++m_iRouteTrack;
             m_bSwing = false;
+            m_bStamp = false;
+            m_bSpeedController = true;
             m_pMonster->Change_Animation(AN_TRIPLELINK_FIRST, false, 0.1f, 0);
             m_pMonster->Get_Model()->Set_SpeedRatio(AN_TRIPLELINK_FIRST, (double)0.5f);
-            m_bSpeedController = true;
+            return;
         }
         if (CurTrackPos <= 25.f ||
             CurTrackPos >= 60.f)
@@ -127,7 +142,6 @@ void CState_RaxasiaP1_DashUpper::Update(_float fTimeDelta)
         }
         if (End_Check())
         {
-            m_bSwing = false;
             m_pMonster->Change_State(CRaxasia::IDLE);
             return;
         }
@@ -224,6 +238,126 @@ void CState_RaxasiaP1_DashUpper::Collider_Check(_double CurTrackPos)
 
 void CState_RaxasiaP1_DashUpper::Effect_Check(_double CurTrackPos)
 {
+    if (m_iRouteTrack == 0)
+    {
+        if (!m_bDash)
+        {
+            if ((CurTrackPos >= 140.f && CurTrackPos <= 255.f))
+            {
+                m_pMonster->Active_Effect(CRaxasia::EFFECT_DASH);
+                m_bDash = true;
+            }
+        }
+        else if (CurTrackPos >= 255.f)
+        {
+            m_pMonster->DeActive_Effect(CRaxasia::EFFECT_DASH);
+        }
+    }
+    else if (m_iRouteTrack == 1)
+    {
+        if ((CurTrackPos >= 30.f && CurTrackPos <= 50.f))
+        {
+            if (!m_bSwing)
+            {
+                m_pMonster->Active_Effect(CRaxasia::EFFECT_SWING);
+                m_bSwing = true;
+            }
+        }
+        else
+        {
+            m_pMonster->DeActive_Effect(CRaxasia::EFFECT_SWING);
+        }
+    }
+    else if (m_iRouteTrack == 2)
+    {
+        if ((CurTrackPos >= 40.f && CurTrackPos <= 48.f))
+        {
+            if (!m_bSwing)
+            {
+                m_pMonster->Active_Effect(CRaxasia::EFFECT_SWING);
+                m_bSwing = true;
+            }
+        }
+        else
+        {
+            m_pMonster->DeActive_Effect(CRaxasia::EFFECT_SWING);
+        }
+
+        if (!m_bStamp)
+        {
+            if ((CurTrackPos >= 48.f))
+            { 
+                _float4x4 WorldMat{};
+                _Vec3 vPos = {0.f, 0.f, -4.25f};
+                XMStoreFloat4x4(&WorldMat, (*m_pMonster->Get_WeaponBoneCombinedMat(0) * (*m_pMonster->Get_WeaponWorldMat())));
+                vPos = XMVector3TransformCoord(vPos, XMLoadFloat4x4(&WorldMat));
+
+                CEffect_Manager::Get_Instance()->Add_Effect_ToLayer(LEVEL_GAMEPLAY, TEXT("Raxasia_Attack_Stamp"),
+                    _Vec3{ WorldMat._41,WorldMat._42, WorldMat._43 }, _Vec3{ m_pMonster->Get_TargetDir()});
+                m_bStamp = true;
+            }
+        }
+    }
+    else if (m_iRouteTrack == 3)
+    {
+        if ((CurTrackPos >= 35.f && CurTrackPos <= 44.f))
+        {
+            if (!m_bSwing)
+            {
+                m_pMonster->Active_Effect(CRaxasia::EFFECT_SWING);
+                m_bSwing = true;
+            }
+        }
+        else
+        {
+            m_pMonster->DeActive_Effect(CRaxasia::EFFECT_SWING);
+        }
+
+        if (!m_bStamp)
+        {
+            if ((CurTrackPos >= 44.f))
+            {
+                _float4x4 WorldMat{};
+                _Vec3 vPos = { 0.f, 0.f, -4.25f };
+                XMStoreFloat4x4(&WorldMat, (*m_pMonster->Get_WeaponBoneCombinedMat(0) * (*m_pMonster->Get_WeaponWorldMat())));
+                vPos = XMVector3TransformCoord(vPos, XMLoadFloat4x4(&WorldMat));
+
+                CEffect_Manager::Get_Instance()->Add_Effect_ToLayer(LEVEL_GAMEPLAY, TEXT("Raxasia_Attack_Stamp"),
+                    _Vec3{ WorldMat._41,WorldMat._42, WorldMat._43 }, _Vec3{ m_pMonster->Get_TargetDir() });
+                m_bStamp = true;
+            }
+        }
+    }
+    else if (m_iRouteTrack == 4)
+    {
+        if ((CurTrackPos >= 35.f && CurTrackPos <= 48.f))
+        {
+            if (!m_bSwing)
+            {
+                m_pMonster->Active_Effect(CRaxasia::EFFECT_SWING);
+                m_bSwing = true;
+            }
+        }
+        else
+        {
+            m_pMonster->DeActive_Effect(CRaxasia::EFFECT_SWING);
+        }
+
+        if (!m_bStamp)
+        {
+            if ((CurTrackPos >= 48.f))
+            {
+                _float4x4 WorldMat{};
+                _Vec3 vPos = { 0.f, 0.f, -4.25f };
+                XMStoreFloat4x4(&WorldMat, (*m_pMonster->Get_WeaponBoneCombinedMat(0) * (*m_pMonster->Get_WeaponWorldMat())));
+                vPos = XMVector3TransformCoord(vPos, XMLoadFloat4x4(&WorldMat));
+
+                CEffect_Manager::Get_Instance()->Add_Effect_ToLayer(LEVEL_GAMEPLAY, TEXT("Raxasia_Attack_Stamp"),
+                    _Vec3{ WorldMat._41,WorldMat._42, WorldMat._43 }, _Vec3{ m_pMonster->Get_TargetDir() });
+                m_bStamp = true;
+            }
+        }
+    }
 }
 
 void CState_RaxasiaP1_DashUpper::Control_Sound(_double CurTrackPos)

@@ -110,8 +110,9 @@ void CState_RaxasiaP1_Idle::Calc_Act_Attack(_float fDist)
 {
     if (m_iAtkTrack >= 6)
     {
-        m_iAtkTrack = 0.f;
+        m_iAtkTrack = 0;
     }
+    m_iAtkTrack = 0;
     switch (m_iAtkTrack)
     {
     case 0:

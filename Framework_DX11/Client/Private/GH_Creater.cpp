@@ -38,7 +38,7 @@ void CGH_Creater::Priority_Update(_float fTimeDelta)
 
 void CGH_Creater::Update(_float fTimeDelta)
 {
-	if (m_pManus->Get_Dead())	//사망상태인지 확인
+	if (m_pManus->Get_IsDieState())	//사망상태인지 확인
 	{
 		m_isDead = true;
 		return;
