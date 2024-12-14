@@ -157,23 +157,25 @@ void CUIPage_Shop::Action_Tab(_float fTimeDelta)
 	_Vec2 vMouse = GET_GAMEINTERFACE->CheckMouse(__super::Get_Front_Part_In_Control(_int(PART_GROUP::SHOP_Mouse_0))->fPosition, __super::Get_Front_Part_In_Control(_int(PART_GROUP::SHOP_Mouse_0))->fSize);
 	_bool bClick = KEY_TAP(KEY::LBUTTON);
 
+	__super::Get_Front_Part_In_Control(_int(PART_GROUP::SHOP_Fx_0))->bRender = false;
+	__super::Get_Front_Part_In_Control(_int(PART_GROUP::SHOP_Fx_1))->bRender = false;
+
 	if (vMouse.x != -1.f)
 	{
 		__super::Get_Front_Part_In_Control(_int(PART_GROUP::SHOP_Fx_0))->bRender = true;
-		__super::Get_Front_Part_In_Control(_int(PART_GROUP::SHOP_Fx_1))->bRender = false;
-
+		
 		if (bClick)
 			if (m_iNowTab != 0)
 			{
 				m_iNowTab = 0;
 				Setting_BuyTab();
+				Reset_PopupInfo();
 			}
 	}
 
 	vMouse = GET_GAMEINTERFACE->CheckMouse(__super::Get_Front_Part_In_Control(_int(PART_GROUP::SHOP_Mouse_1))->fPosition, __super::Get_Front_Part_In_Control(_int(PART_GROUP::SHOP_Mouse_1))->fSize);
 	if (vMouse.x != -1.f)
 	{
-		__super::Get_Front_Part_In_Control(_int(PART_GROUP::SHOP_Fx_0))->bRender = false;
 		__super::Get_Front_Part_In_Control(_int(PART_GROUP::SHOP_Fx_1))->bRender = true;
 
 		if (bClick)
@@ -181,6 +183,7 @@ void CUIPage_Shop::Action_Tab(_float fTimeDelta)
 			{
 				m_iNowTab = 1;
 				Setting_SellTab();
+				Reset_PopupInfo();
 			}
 	}
 

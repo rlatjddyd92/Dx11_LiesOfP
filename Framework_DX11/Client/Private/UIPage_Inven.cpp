@@ -375,13 +375,13 @@ void CUIPage_Inven::Update_Array_Position(_float fTimeDelta)
 
 			if ((pNow != nullptr) && (pNow->eSlot != EQUIP_SLOT::EQUIP_END))
 			{
-				m_vecPart[*iter]->fTextureColor.y = 0.3f;
+				m_vecPart[*iter]->fTextureColor.x = 0.3f;
 				m_vecPart[*iter]->fTextureColor.z = 0.3f;
 				m_vecPart[*iter]->bRender = true;
 			}
 			else 
 			{
-				m_vecPart[*iter]->fTextureColor.y = 1.f;
+				m_vecPart[*iter]->fTextureColor.x = 1.f;
 				m_vecPart[*iter]->fTextureColor.z = 1.f;
 			}
 
@@ -560,12 +560,13 @@ void CUIPage_Inven::Update_Array_Position_Weapon(_float fTimeDelta)
 
 			if ((pNowBlade != nullptr) && (pNowBlade->eSlot != EQUIP_SLOT::EQUIP_END))
 			{
-				m_vecPart[*iter]->fTextureColor.y = 0.3f;
+				m_vecPart[*iter]->fTextureColor.x = 0.3f;
 				m_vecPart[*iter]->fTextureColor.z = 0.3f;
+				m_vecPart[*iter]->bRender = true;
 			}
 			else
 			{
-				m_vecPart[*iter]->fTextureColor.y = 1.f;
+				m_vecPart[*iter]->fTextureColor.x = 1.f;
 				m_vecPart[*iter]->fTextureColor.z = 1.f;
 			}
 		
@@ -716,32 +717,43 @@ void CUIPage_Inven::Update_Array_Position_Weapon_Heroic(_float fTimeDelta, _floa
 		}
 		else
 			m_vecPart[*iter]->bRender = false;
-		
-			++iter;
-			++iter;
-			++iter;
-			++iter;
-			if (pNowBlade == nullptr) m_vecPart[*iter]->iTexture_Index = -1;
-			else m_vecPart[*iter]->iTexture_Index = pNowBlade->iTexture_Index;
+
+		if ((pNowBlade != nullptr) && (pNowBlade->eSlot != EQUIP_SLOT::EQUIP_END))
+		{
+			m_vecPart[*iter]->fTextureColor.x = 0.3f;
+			m_vecPart[*iter]->fTextureColor.z = 0.3f;
 			m_vecPart[*iter]->bRender = true;
-			++iter;
-			++iter;
-			m_vecPart[*iter]->bRender = false;
-			if (pNowBlade != nullptr)
-			{
-				EQUIP_SLOT eSlot = pNowBlade->eSlot;
-				if (eSlot == EQUIP_SLOT::EQUIP_WEAPON_BLADE_0)
-				{
-					m_vecPart[*iter]->bRender = true;
-					m_vecPart[*iter]->iTexture_Index = 381;
-				}
-				else if (eSlot == EQUIP_SLOT::EQUIP_WEAPON_BLADE_1)
-				{
-					m_vecPart[*iter]->bRender = true;
-					m_vecPart[*iter]->iTexture_Index = 382;
-				}
-			}
+		}
+		else
+		{
+			m_vecPart[*iter]->fTextureColor.x = 1.f;
+			m_vecPart[*iter]->fTextureColor.z = 1.f;
+		}
 		
+		++iter;
+		++iter;
+		++iter;
+		++iter;
+		if (pNowBlade == nullptr) m_vecPart[*iter]->iTexture_Index = -1;
+		else m_vecPart[*iter]->iTexture_Index = pNowBlade->iTexture_Index;
+		m_vecPart[*iter]->bRender = true;
+		++iter;
+		++iter;
+		m_vecPart[*iter]->bRender = false;
+		if (pNowBlade != nullptr)
+		{
+			EQUIP_SLOT eSlot = pNowBlade->eSlot;
+			if (eSlot == EQUIP_SLOT::EQUIP_WEAPON_BLADE_0)
+			{
+				m_vecPart[*iter]->bRender = true;
+				m_vecPart[*iter]->iTexture_Index = 381;
+			}
+			else if (eSlot == EQUIP_SLOT::EQUIP_WEAPON_BLADE_1)
+			{
+				m_vecPart[*iter]->bRender = true;
+				m_vecPart[*iter]->iTexture_Index = 382;
+			}
+		}
 		
 
 		iter = m_vec_Group_Ctrl[_int(PART_GROUP::GROUP_CELL_0) + (j % 5)]->PartIndexlist.begin();

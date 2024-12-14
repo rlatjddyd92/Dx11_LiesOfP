@@ -227,10 +227,7 @@ void CUIPage_Stat::Action_Focus(_float fTimeDelta)
 		m_vec_Group_Ctrl[(_int(PART_GROUP::GROUP_SELECT_FIRE))]->fRatio = 0.f;
 	}
 
-	if (fTimeDelta > 1.f)
-		Get_Front_Part_In_Control(_int(PART_GROUP::GROUP_SELECT_FIRE))->fRatio += 0.1f;
-	else
-		Get_Front_Part_In_Control(_int(PART_GROUP::GROUP_SELECT_FIRE))->fRatio += fTimeDelta * 5.f;
+	Get_Front_Part_In_Control(_int(PART_GROUP::GROUP_SELECT_FIRE))->fRatio += fTimeDelta * 5.f;
 
 	if (Get_Front_Part_In_Control(_int(PART_GROUP::GROUP_SELECT_FIRE))->fRatio > 1.f)
 		Get_Front_Part_In_Control(_int(PART_GROUP::GROUP_SELECT_FIRE))->fRatio = 1.f;
@@ -343,11 +340,11 @@ void CUIPage_Stat::Update_SpecData(_float fTimeDelta)
 		m_iLevelUp_Buffer_Stat[i] /= 100.f;
 	}
 
-	if (pAdjust->bDebuff_Fire_Ignore)
+	if (pAdjust->bDebuff_Fire_Ignore == true)
 		m_iLevelUp_Buffer_Stat[6] = -1.f;
-	if (pAdjust->bDebuff_Electric_Ignore)
+	if (pAdjust->bDebuff_Electric_Ignore == true)
 		m_iLevelUp_Buffer_Stat[7] = -1.f;
-	if (pAdjust->bDebuff_Acid_Ignore)
+	if (pAdjust->bDebuff_Acid_Ignore == true)
 		m_iLevelUp_Buffer_Stat[8] = -1.f;
 
 	m_vec_Group_Ctrl[_int(PART_GROUP::GROUP_ABILITY_6)]->bRender = false;
@@ -357,17 +354,6 @@ void CUIPage_Stat::Update_SpecData(_float fTimeDelta)
 
 	for (_int i = 0; i < 9; ++i)
 	{
-		if (m_iLevelUp_Buffer_Stat[i] < 0.f)
-		{
-			m_vec_Group_Ctrl[_int(PART_GROUP::GROUP_SPEC_0) + i]->bRender = false;
-
-			if (i >= _int(PART_GROUP::GROUP_ABILITY_6))
-				m_vec_Group_Ctrl[_int(PART_GROUP::GROUP_ABILITY_6) + i]->bRender = true;
-
-			continue;
-		}
-		
-
 		list<_int>::iterator iter = m_vec_Group_Ctrl[_int(PART_GROUP::GROUP_SPEC_0) + i]->PartIndexlist.begin();
 
 		m_vecPart[*iter]->fTextureColor = { 0.2f,0.2f,0.2f,0.2f };
@@ -397,13 +383,10 @@ void CUIPage_Stat::Update_SpecData(_float fTimeDelta)
 			if (i == 4)
 				m_vecPart[*iter]->fTextureColor = { 0.5f,1.f,0.9f,0.7f };
 
-
-
-		++iter;
-		m_vecPart[*iter]->strText = to_wstring(_int(pOrigin_Stat[i]));
-
 		if (m_iLevelUp_Buffer_Stat[i] > 0.f)
 		{
+			++iter;
+			m_vecPart[*iter]->strText = to_wstring(_int(pOrigin_Stat[i]));
 			m_vec_Group_Ctrl[_int(PART_GROUP::GROUP_SPEC_0) + i]->fRatio = 0.f;
 			m_vecPart[*iter]->fRatio = 0.f;
 			m_vecPart[*iter]->fPosition = m_vecPart[*iter]->fAdjust_Start;
@@ -412,13 +395,28 @@ void CUIPage_Stat::Update_SpecData(_float fTimeDelta)
 			m_vecPart[*iter]->strText += to_wstring(_int(m_iLevelUp_Buffer_Stat[i]));
 			m_vecPart[*iter]->strText += TEXT(")");
 		}
-		else
+		else if (m_iLevelUp_Buffer_Stat[i] == 0.f)
 		{
+			++iter;
+			m_vecPart[*iter]->strText = to_wstring(_int(pOrigin_Stat[i]));
 			m_vec_Group_Ctrl[_int(PART_GROUP::GROUP_SPEC_0) + i]->fRatio = 1.f;
 			m_vecPart[*iter]->fRatio = 1.f;
 			m_vecPart[*iter]->fPosition = m_vecPart[*iter]->fAdjust_End;
 			++iter;
 			m_vecPart[*iter]->strText = {};
+		}
+		else if (m_iLevelUp_Buffer_Stat[i] < 0.f)
+		{
+			for (_int j = 0; j < 4; ++j)
+			{
+				++iter;
+				m_vecPart[*iter]->strText = {};
+			}
+			m_vec_Group_Ctrl[_int(PART_GROUP::GROUP_SPEC_0) + i]->bRender = false;
+			if (i >= _int(PART_GROUP::GROUP_ABILITY_6))
+				m_vec_Group_Ctrl[_int(PART_GROUP::GROUP_ABILITY_6) + i]->bRender = true;
+
+			continue;
 		}
 
 		++iter;
@@ -442,7 +440,7 @@ void CUIPage_Stat::Update_StarChart(_float fTimeDelta)
 
 	pOriginPart->fRatio_TwoDPolygon[0] = _float(pAdjust->iStat_Attack + pOrigin.iStat_Attack) / 100.f;
 	pOriginPart->fRatio_TwoDPolygon[1] = _float(pAdjust->iStat_Defence + pOrigin.iStat_Defence) / 100.f;
-	pOriginPart->fRatio_TwoDPolygon[2] = _float(pAdjust->fHeal) / 20.f;
+	pOriginPart->fRatio_TwoDPolygon[2] = _float(pAdjust->fHeal + pOrigin.fHeal) / 20.f;
 	pOriginPart->fRatio_TwoDPolygon[3] = (pAdjust->fResist_Fire + pOrigin.fResist_Fire) / 100.f;
 	pOriginPart->fRatio_TwoDPolygon[4] = (pAdjust->fResist_Electric + pOrigin.fResist_Electric) / 100.f;
 	pOriginPart->fRatio_TwoDPolygon[5] = (pAdjust->fResist_Acid + pOrigin.fResist_Acid) / 100.f;
@@ -463,6 +461,8 @@ void CUIPage_Stat::Update_StarChart(_float fTimeDelta)
 void CUIPage_Stat::Input_LevelUp_Stat()
 {
 	GET_GAMEINTERFACE->Get_Player()->Input_Level_UP_Stat(m_iLevelUp_Buffer_Point, m_iLevelUp_Buffer_Stat);
+	_int iCost = GET_GAMEINTERFACE->Get_Player()->Get_Player_Stat().iErgo_LevelUp;
+	GET_GAMEINTERFACE->Get_Player()->Get_Player_Stat_Adjust()->iErgo -= m_iUsing_Point_Now * iCost;
 
 	for (_int i = 0; i < 5; ++i)
 		m_iLevelUp_Buffer_Point[i] = 0;
@@ -470,10 +470,10 @@ void CUIPage_Stat::Input_LevelUp_Stat()
 	for (_int i = 0; i < 9; ++i)
 		m_iLevelUp_Buffer_Stat[i] = 0.f;
 
-	_wstring strErgo_Spend_Inform = TEXT("에르고 사용량 : ");
-	strErgo_Spend_Inform += to_wstring(m_iUsing_Point_Now);
-
 	m_iUsing_Point_Now = 0;
+
+	_wstring strErgo_Spend_Inform = TEXT("에르고 사용량 : ");
+	strErgo_Spend_Inform += to_wstring(m_iUsing_Point_Now * iCost);
 
 	GET_GAMEINTERFACE->Show_Popup(TEXT("레벨 업 성공"), strErgo_Spend_Inform);
 }
