@@ -899,6 +899,24 @@ void CItem_Manager::Buy_ShopItem(_int iIndex, _int iCount)
 {
 	if (m_vecItem_BasicSpec[iIndex]->bIsAvailable_Shop == false)
 		return;
+
+	if (iCount <= 0)
+		return;
+
+	_int iNowShop = -1;
+
+	for (auto& iter : m_vecShop_Item)
+	{
+		++iNowShop;
+		if (iter->iIndex == iIndex)
+			break;
+	}
+		
+	if ((iNowShop == -1) || (iNowShop >= m_vecShop_Item.size()))
+		return;
+
+	if (m_vecShop_Item[iNowShop]->iCount < iCount)
+		return;
 	
 	_int iErgo = GET_GAMEINTERFACE->Get_Player()->Get_Player_Stat().iErgo;
 	iErgo += GET_GAMEINTERFACE->Get_Player()->Get_Player_Stat_Adjust()->iErgo;
@@ -906,6 +924,7 @@ void CItem_Manager::Buy_ShopItem(_int iIndex, _int iCount)
 	if (iErgo < m_vecItem_BasicSpec[iIndex]->iPrice * iCount)
 		return;
 
+	m_vecShop_Item[iNowShop]->iCount -= iCount;
 	AddNewItem_Inven(iIndex, iCount);
 
 	_wstring strItem = m_vecItem_BasicSpec[iIndex]->strName;
@@ -918,7 +937,10 @@ void CItem_Manager::Buy_ShopItem(_int iIndex, _int iCount)
 
 void CItem_Manager::Sell_ShopItem(INVEN_ARRAY_TYPE eType, _int iIndex, _int iCount)
 {
-	if (m_vecItem_BasicSpec[iIndex]->bIsAvailable_Shop == false)
+	if (!IsValid_Inven(eType, iIndex))
+		return;
+
+	if (m_vecArray_Inven[_int(eType)]->vecItemInfo[iIndex]->bIsAvailable_Shop == false)
 		return;
 
 	_int iCountNow = m_vecArray_Inven[_int(eType)]->vecItemInfo[iIndex]->iCount;
@@ -926,16 +948,13 @@ void CItem_Manager::Sell_ShopItem(INVEN_ARRAY_TYPE eType, _int iIndex, _int iCou
 	if(iCount > iCountNow)
 		return;
 
-	m_vecArray_Inven[_int(eType)]->vecItemInfo[iIndex]->iCount -= iCount;
+	GET_GAMEINTERFACE->Get_Player()->Get_Player_Stat_Adjust()->iErgo += m_vecArray_Inven[_int(eType)]->vecItemInfo[iIndex]->iPrice * iCount;
 
-	if (m_vecArray_Inven[_int(eType)]->vecItemInfo[iIndex]->iCount == 0)
-		Remove_Item_Inven(eType, iIndex);
+	m_vecArray_Inven[_int(eType)]->Use_Item(iIndex, iCount);
 
-	_wstring strItem = m_vecItem_BasicSpec[iIndex]->strName;
+	_wstring strItem = m_vecArray_Inven[_int(eType)]->vecItemInfo[iIndex]->strName;
 	strItem += TEXT(" -> 판매수량 : ");
 	strItem += to_wstring(iCount);
-
-	GET_GAMEINTERFACE->Get_Player()->Get_Player_Stat_Adjust()->iErgo += m_vecArray_Inven[_int(eType)]->vecItemInfo[iIndex]->iPrice * iCount;
 }
 
 void CItem_Manager::ChestItem_To_Inven(_int iIndex, _int iCount)

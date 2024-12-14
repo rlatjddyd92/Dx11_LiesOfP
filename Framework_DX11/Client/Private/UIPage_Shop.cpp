@@ -247,9 +247,9 @@ void CUIPage_Shop::Action_Cell(_float fTimeDelta)
 
 					if (pShop != nullptr)
 					{
+						GET_GAMEINTERFACE->Show_ItemPopup(TEXT("상점 구매"), pItem->strName, 1, &m_iNowCount, pShop->iCount, TEXT("소모 에르고"), pShop->iPrice_Buy, &m_iNowPrice);
 						m_iNowCount = 0;
 						m_iNowPrice = 0;
-						GET_GAMEINTERFACE->Show_ItemPopup(TEXT("상점 구매"), pItem->strName, 1, &m_iNowCount, pShop->iCount, TEXT("소모 에르고"), pShop->iPrice_Buy, &m_iNowPrice);
 						m_bIsItem_Popup = true;
 					}
 				}
@@ -273,9 +273,9 @@ void CUIPage_Shop::Action_Cell(_float fTimeDelta)
 				{
 					if (iter->pInven != nullptr)
 					{
+						GET_GAMEINTERFACE->Show_ItemPopup(TEXT("상점 판매"), iter->pInven->strName, 1, &m_iNowCount, iter->pInven->iCount, TEXT("획득 에르고"), iter->pInven->iPrice, &m_iNowPrice);
 						m_iNowCount = 0;
 						m_iNowPrice = 0;
-						GET_GAMEINTERFACE->Show_ItemPopup(TEXT("상점 판매"), iter->pInven->strName, 1, &m_iNowCount, iter->pInven->iCount, TEXT("획득 에르고"), iter->pInven->iPrice, &m_iNowPrice);
 						m_bIsItem_Popup = true;
 					}
 				}
@@ -312,7 +312,7 @@ void CUIPage_Shop::Action_Popup(_float fTimeDelta)
 			else if (m_iNowPrice > pOrigin.iErgo + pAdjust->iErgo)
 				GET_GAMEINTERFACE->Show_Popup(TEXT("구매 불가"), TEXT("보유한 에르고가 충분하지 않습니다."));
 			else
-				GET_GAMEINTERFACE->Buy_ShopItem(m_iNowCell);
+				GET_GAMEINTERFACE->Buy_ShopItem(pShop->iIndex, m_iNowCount);
 
 			Reset_PopupInfo();
 		}
@@ -326,7 +326,10 @@ void CUIPage_Shop::Action_Popup(_float fTimeDelta)
 			if (m_iNowCount > pItem->iCount)
 				GET_GAMEINTERFACE->Show_Popup(TEXT("판매 불가"), TEXT("판매 가능한 수량을 초과하였습니다."));
 			else
-				GET_GAMEINTERFACE->Sell_ShopItem(m_vecSell_RenderInfo[m_iNowCell]->eArray, m_vecSell_RenderInfo[m_iNowCell]->iInven_Index);
+			{
+				GET_GAMEINTERFACE->Sell_ShopItem(m_vecSell_RenderInfo[m_iNowCell]->eArray, m_vecSell_RenderInfo[m_iNowCell]->iInven_Index, m_iNowCount);
+				Setting_SellTab();
+			}
 
 			Reset_PopupInfo();
 		}
@@ -403,8 +406,22 @@ void CUIPage_Shop::Update_Cell(_float fTimeDelta)
 			
 			if (i == m_vec_Group_Ctrl[_int(PART_GROUP::SHOP_Cell_Fx)]->PartIndexlist.front())
 			{
-				if (iNowIndex == m_iNowCell)
+				if ((m_iNowTab == 0) && (GET_GAMEINTERFACE->Get_ShopData()[iter->iIndexShop]->iCount <= 0))
 				{
+					m_vecPart[i]->fTextureColor.y = 0.3f;
+					m_vecPart[i]->fTextureColor.z = 0.3f;
+					__super::Input_Render_Info(*m_vecPart[i], SCROLL_AREA::SCROLL_SHOP);
+				}
+				else if ((m_iNowTab == 1) && (iter->pInven->iCount <= 0))
+				{
+					m_vecPart[i]->fTextureColor.y = 0.3f;
+					m_vecPart[i]->fTextureColor.z = 0.3f;
+					__super::Input_Render_Info(*m_vecPart[i], SCROLL_AREA::SCROLL_SHOP);
+				}
+				else if (iNowIndex == m_iNowCell)
+				{
+					m_vecPart[i]->fTextureColor.y = 0.8f;
+					m_vecPart[i]->fTextureColor.z = 0.8f;
 					__super::Input_Render_Info(*m_vecPart[i], SCROLL_AREA::SCROLL_SHOP);
 				}
 

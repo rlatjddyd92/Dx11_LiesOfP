@@ -301,7 +301,6 @@ void CUIPage_Popup::Show_ItemUsePopup(_wstring strTitle, _wstring strDescA, _boo
 	m_vecPart[int(PART_GROUP::POPUP_Desc_0)]->strText = strDescA;
 	m_vecPart[int(PART_GROUP::POPUP_Desc_1)]->strText = {};
 
-
 	m_vecPart[int(PART_GROUP::POPUP_Mouse_0)]->fRatio = 0.f;
 	m_vecPart[int(PART_GROUP::POPUP_Mouse_1)]->fRatio = 1.f;
 
