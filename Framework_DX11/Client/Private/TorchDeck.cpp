@@ -1,6 +1,8 @@
 #include "stdafx.h"
 #include "TorchDeck.h"
 #include "GameInstance.h"
+#include "Effect_Manager.h"
+#include "Effect_Container.h"
 
 CTorchDeck::CTorchDeck(ID3D11Device* pDevice, ID3D11DeviceContext* pContext)
 	: CGameObject{ pDevice, pContext }
@@ -32,15 +34,20 @@ HRESULT CTorchDeck::Initialize(void* pArg)
     if (FAILED(Ready_Components(pDesc)))
         return E_FAIL;
 
+    m_Effect = CEffect_Manager::Get_Instance()->Clone_Effect(TEXT("Map_Torch"), m_pTransformCom->Get_WorldMatrix_Ptr(),nullptr,_Vec3(0.f,0.f,0.f),_Vec3(0.f,0.f,1.f));
+    m_Effect->Set_Loop(true);
+
     return S_OK;
 }
 
 void CTorchDeck::Priority_Update(_float fTimeDelta)
 {
+    m_Effect->Priority_Update(fTimeDelta);
 }
 
 void CTorchDeck::Update(_float fTimeDelta)
 {
+    m_Effect->Update(fTimeDelta);
 }
 
 void CTorchDeck::Late_Update(_float fTimeDelta)
@@ -49,6 +56,7 @@ void CTorchDeck::Late_Update(_float fTimeDelta)
     {
         __super::Late_Update(fTimeDelta);
         m_pGameInstance->Add_RenderObject(CRenderer::RG_NONBLEND, this);
+        m_Effect->Late_Update(fTimeDelta);
     }
 }
 
@@ -141,6 +149,13 @@ CGameObject* CTorchDeck::Clone(void* pArg)
 void CTorchDeck::Free()
 {
     __super::Free();
+
+    if (true == m_isCloned)
+    {
+         m_Effect->Set_Cloned(false);
+         Safe_Release(m_Effect);
+    }
+
     Safe_Release(m_pShaderCom);
     Safe_Release(m_pModelCom);
 }

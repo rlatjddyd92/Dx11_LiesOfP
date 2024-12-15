@@ -29,6 +29,7 @@ public:
 private:
 	CShader* m_pShaderCom = { nullptr };
 	CModel* m_pModelCom = { nullptr };
+	class CEffect_Container* m_Effect = { nullptr };
 
 private:
 	_bool m_bShadow = { false };
