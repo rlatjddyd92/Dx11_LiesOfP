@@ -1095,6 +1095,9 @@
     </Filter>
     <Filter Include="05.Fsm\Monster\Raxasia\CutScene\Phase2">
       <UniqueIdentifier>{95d368c5-a0af-4b47-a9c1-93cf75de38ca}</UniqueIdentifier>
+	</Filter>
+    <Filter Include="05.Fsm\Monster\SimonManus\P2\Die_Talking">
+      <UniqueIdentifier>{8f69d69b-43bc-49a5-8605-e02f119e89ec}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -2023,6 +2026,9 @@
     </ClInclude>
     <ClInclude Include="..\Public\State_Raxasia_CutScene_Phase2.h">
       <Filter>05.Fsm\Monster\Raxasia\CutScene\Phase2</Filter>
+	</ClInclude>
+    <ClInclude Include="..\Public\State_SimonManusP2_Die_Talking.h">
+      <Filter>05.Fsm\Monster\SimonManus\P2\Die_Talking</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -2921,6 +2927,9 @@
     </ClCompile>
     <ClCompile Include="..\Private\State_Raxasia_CutScene_Phase2.cpp">
       <Filter>05.Fsm\Monster\Raxasia\CutScene\Phase2</Filter>
+	</ClCompile>
+    <ClCompile Include="..\Private\State_SimonManusP2_Die_Talking.cpp">
+      <Filter>05.Fsm\Monster\SimonManus\P2\Die_Talking</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

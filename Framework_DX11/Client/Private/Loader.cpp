@@ -617,6 +617,17 @@ HRESULT CLoader::Ready_Resources_For_GamePlayLevel_Map0()
 
 	if (FAILED(m_pGameInstance->Add_Prototype(LEVEL_GAMEPLAY, TEXT("Sophia_Stoned"),
 		CModel::Create(m_pDevice, m_pContext, CModel::TYPE_NONANIM, "../Bin/ModelData/NonAnim/Map/Etc/Sophia/Sophia_Stoned.dat", PreTransformMatrix))))
+		return E_FAIL;	
+	
+	PreTransformMatrix = XMMatrixIdentity();
+	PreTransformMatrix = XMMatrixScaling(0.005f, 0.005f, 0.005f);
+
+	if (FAILED(m_pGameInstance->Add_Prototype(LEVEL_GAMEPLAY, TEXT("SM_LightProp_Chandelier_05"),
+		CModel::Create(m_pDevice, m_pContext, CModel::TYPE_NONANIM, "../Bin/ModelData/NonAnim/Map/Etc/Light/SM_LightProp_Chandelier_05.dat", PreTransformMatrix))))
+		return E_FAIL;
+	
+	if (FAILED(m_pGameInstance->Add_Prototype(LEVEL_GAMEPLAY, TEXT("SM_LightProp_SpotLight_02"),
+		CModel::Create(m_pDevice, m_pContext, CModel::TYPE_NONANIM, "../Bin/ModelData/NonAnim/Map/Etc/Light/SM_LightProp_SpotLight_02.dat", PreTransformMatrix))))
 		return E_FAIL;
 
 	m_isFinished_Map0 = true;
