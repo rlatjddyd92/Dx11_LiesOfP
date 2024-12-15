@@ -1474,12 +1474,6 @@ HRESULT CLoader::Ready_Resources_For_ToolLevel_Monster()
 		pModel)))
 		return E_FAIL;
 	m_pGameInstance->Add_ModelPrototype(LEVEL_TOOL, ("Prototype_AnimModel_Raxasia_CutScene_P2"), pModel);
-
-	pModel = CModel::Create(m_pDevice, m_pContext, CModel::TYPE_ANIM, "../Bin/ModelData/Anim/Monster/Boss/Raxasia/Raxasia_CutScene_P2Die.dat", PreTransformMatrix, false, CController_AnimationTool::Get_Instance()->Get_StructStack(m_iModelCount++));
-	if (FAILED(m_pGameInstance->Add_Prototype(LEVEL_TOOL, TEXT("Prototype_AnimModel_Raxasia_CutScene_P2_Die"),
-		pModel)))
-		return E_FAIL;
-	m_pGameInstance->Add_ModelPrototype(LEVEL_TOOL, ("Prototype_AnimModel_Raxasia_CutScene_P2_Die"), pModel);
 #pragma endregion
 
 
