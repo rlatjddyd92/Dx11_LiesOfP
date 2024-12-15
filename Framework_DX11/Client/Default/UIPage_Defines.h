@@ -15,7 +15,7 @@
 #include "UIPage_Equip.h"
 #include "UIPage_Stat.h"
 #include "UIPage_Option.h"
-#include "UIPage_Skill.h"
+#include "UIPage_Common.h"
 #include "UIPage_ItemInfo.h"
 #include "UIPage_Ortho.h"
 #include "UIPage_Test.h"

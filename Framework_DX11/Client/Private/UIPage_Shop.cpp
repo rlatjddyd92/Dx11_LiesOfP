@@ -87,7 +87,7 @@ void CUIPage_Shop::Late_Update(_float fTimeDelta)
 
 	Update_Tab(fTimeDelta);
 
-	if (m_pScroll_Shop->bIsActive)
+	if (m_pScroll_Shop->bIsActive_Y)
 		Update_Scroll(fTimeDelta);
 
 	Update_Cell(fTimeDelta);
@@ -120,7 +120,7 @@ CHECK_MOUSE CUIPage_Shop::Check_Page_Action(_float fTimeDelta)
 
 	Action_Tab(fTimeDelta);
 
-	if (m_pScroll_Shop->bIsActive)
+	if (m_pScroll_Shop->bIsActive_Y)
 		Action_Scroll(fTimeDelta);
 
 	if (!m_bIsItem_Popup)
@@ -193,17 +193,17 @@ void CUIPage_Shop::Action_Tab(_float fTimeDelta)
 
 void CUIPage_Shop::Action_Scroll(_float fTimeDelta)
 {
-	if (m_pScroll_Shop->bIsBarMoving)
+	if (m_pScroll_Shop->bIsBarMoving_Y)
 	{
 		if (KEY_HOLD(KEY::LBUTTON))
 		{
 			POINT			ptMouse{};
 			GetCursorPos(&ptMouse);
 			ScreenToClient(g_hWnd, &ptMouse);
-			m_pScroll_Shop->Bar_Moving(_float(ptMouse.y));
+			m_pScroll_Shop->Bar_Moving_Y(_float(ptMouse.y));
 		}
 		else
-			m_pScroll_Shop->End_Bar_Moving();
+			m_pScroll_Shop->End_Bar_Moving_Y();
 	}
 	else
 	{
@@ -212,11 +212,11 @@ void CUIPage_Shop::Action_Scroll(_float fTimeDelta)
 		if (vMouse.x != -1.f)
 			if (KEY_TAP(KEY::LBUTTON))
 			{
-				m_pScroll_Shop->Start_Bar_Moving(vMouse.y);
+				m_pScroll_Shop->Start_Bar_Moving_Y(vMouse.y);
 			}
 	}
 
-	__super::Get_Front_Part_In_Control(_int(PART_GROUP::SHOP_Scroll_Bar))->fRatio = m_pScroll_Shop->fScroll_Ratio;
+	__super::Get_Front_Part_In_Control(_int(PART_GROUP::SHOP_Scroll_Bar))->fRatio = m_pScroll_Shop->fScroll_Ratio_Y;
 	__super::UpdatePart_ByIndex(__super::Get_Front_PartIndex_In_Control(_int(PART_GROUP::SHOP_Scroll_Bar)), 1.f);
 }
 
@@ -593,7 +593,7 @@ void CUIPage_Shop::Setting_SellTab()
 	if (m_vecSell_RenderInfo.empty() == false)
 		Action_Focus(1.f, m_vecSell_RenderInfo[0]->vPos);
 
-	m_pScroll_Shop->Activate_Scroll(fAdjustY);
+	m_pScroll_Shop->Activate_Scroll(fAdjustY, 0.f);
 }
 
 void CUIPage_Shop::Setting_BuyTab()
@@ -634,7 +634,7 @@ void CUIPage_Shop::Setting_BuyTab()
 
 	fAdjustY += __super::Get_Front_Part_In_Control(_int(PART_GROUP::SHOP_Cell_Static))->fSize.y * 0.5f;
 
-	m_pScroll_Shop->Activate_Scroll(fAdjustY);
+	m_pScroll_Shop->Activate_Scroll(fAdjustY, 0.f);
 }
 
 void CUIPage_Shop::Reset_PopupInfo()

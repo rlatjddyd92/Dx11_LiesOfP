@@ -152,52 +152,94 @@ public:
 
 	typedef struct SCROLL_INFO
 	{
-		void Initialize_Scroll(UPART* pData, UPART* pBar, SCROLL_AREA eArea);
+		void Initialize_Scroll(UPART* pData, UPART* pBar, SCROLL_AREA eArea, _bool bIsX = false, _bool bIsY = true);
 
-		void Activate_Scroll(_float fData_Height_New, _Vec2 vPos = { -1.f,-1.f }, _Vec2 vSize = { -1.f,-1.f });
+		void Activate_Scroll(_float fData_Height_New, _float fData_Width_New, _Vec2 vPos = { -1.f,-1.f }, _Vec2 vSize = { -1.f,-1.f });
 
-		void DeActivate_Scroll()
+		void DeActivate_Scroll_Y()
 		{
-			bIsActive = false;
-			fScroll_Ratio = 0.f;
+			bIsActive_Y = false;
+			fScroll_Ratio_Y = 0.f;
 			fData_Offset_Y = -1.f;
-
 		}
 
-		_bool Start_Bar_Moving(_float fNow_Y)
+		void DeActivate_Scroll_X()
 		{
-			if (bIsBarMoving)
+			bIsActive_X = false;
+			fScroll_Ratio_X = 0.f;
+			fData_Offset_X = -1.f;
+		}
+
+		_bool Start_Bar_Moving_Y(_float fNow_Y)
+		{
+			if (bIsBarMoving_Y)
 				return false;
 
-			bIsBarMoving = true;
+			bIsBarMoving_Y = true;
 			fMouse_Before_Y = fNow_Y;
 
 			return true;
 		}
 
-		_bool Bar_Moving(_float fNow_Y)
+		_bool Start_Bar_Moving_X(_float fNow_X)
 		{
-			if (!bIsBarMoving)
+			if (bIsBarMoving_X)
+				return false;
+
+			bIsBarMoving_X = true;
+			fMouse_Before_X = fNow_X;
+
+			return true;
+		}
+
+		_bool Bar_Moving_Y(_float fNow_Y)
+		{
+			if (!bIsBarMoving_Y)
 				return false;
 
 			_float fMove_Y = fNow_Y - fMouse_Before_Y;
 
-			fScroll_Ratio += fMove_Y / fBar_Move_Max_Length;
+			fScroll_Ratio_Y += fMove_Y / fBar_Move_Max_Length_Y;
 
-			fScroll_Ratio = max(fScroll_Ratio, 0.f);
-			fScroll_Ratio = min(fScroll_Ratio, 1.f);
+			fScroll_Ratio_Y = max(fScroll_Ratio_Y, 0.f);
+			fScroll_Ratio_Y = min(fScroll_Ratio_Y, 1.f);
 
-			fData_Offset_Y = fData_Height_Max * fScroll_Ratio;
+			fData_Offset_Y = fData_Height_Max * fScroll_Ratio_Y;
 
 			fMouse_Before_Y = fNow_Y;
 
 			return true;
 		}
 
-		void End_Bar_Moving()
+		_bool Bar_Moving_X(_float fNow_X)
 		{
-			bIsBarMoving = false;
+			if (!bIsBarMoving_X)
+				return false;
+
+			_float fMove_X = fNow_X - fMouse_Before_X;
+
+			fScroll_Ratio_Y += fMove_X / fBar_Move_Max_Length_X;
+
+			fScroll_Ratio_Y = max(fScroll_Ratio_Y, 0.f);
+			fScroll_Ratio_Y = min(fScroll_Ratio_Y, 1.f);
+
+			fData_Offset_X = fData_Height_Max * fScroll_Ratio_Y;
+
+			fMouse_Before_X = fNow_X;
+
+			return true;
+		}
+
+		void End_Bar_Moving_Y()
+		{
+			bIsBarMoving_Y = false;
 			fMouse_Before_Y = -1.0;
+		}
+
+		void End_Bar_Moving_X()
+		{
+			bIsBarMoving_X = false;
+			fMouse_Before_X = -1.0;
 		}
 
 		_bool Check_Is_Render_Y(_float Pos_Y, _float Size_Y)
@@ -210,29 +252,50 @@ public:
 			return true;
 		}
 
+		_bool Check_Is_Render_X(_float Pos_X, _float Size_X)
+		{
+			if (Pos_X + Size_X * 0.5f < fRender_Left_X)
+				return false;
+			else if (Pos_X - Size_X * 0.5f > fRender_Right_X)
+				return false;
+
+			return true;
+		}
+
 
 		// Scroll
-		_bool bIsActive = false;
-		_float fScroll_Ratio = 0.f; // <- 스크롤 관련 조정치 
+		_bool bIsActive_Y = false;
+		_bool bIsActive_X = false;
+		_float fScroll_Ratio_Y = 0.f; // <- 스크롤 관련 조정치 
+		_float fScroll_Ratio_X = 0.f; // <- 스크롤 관련 조정치 
 
 		// BAR
-		_float fBar_Move_Max_Length = 0.f; // <- 바가 움직일 수 있는 최대 거리 (end - start)
+		_float fBar_Move_Max_Length_Y = 0.f; // <- 바가 움직일 수 있는 최대 거리 (end - start)
+		_float fBar_Move_Max_Length_X = 0.f; // <- 바가 움직일 수 있는 최대 거리 (end - start)
 
 		// Data_Area
 		_Vec2 vPos_Render = { 0.f,0.f }; // <- 그려지는 위치 
 		_Vec2 vSize_Render = { 0.f,0.f }; // <- 그려지는 사이즈 
+
+		// Direc_Y
 		_float fRender_Top_Y = 0.f; // <- 그려지는 가장 높은 위치 
 		_float fRender_Bottom_Y = 0.f; // <- 그려지는 가장 낮은 위치 
-
 		_float fData_Height_Origin = 0.f; // <- 스크롤 영역의 크기 == 스크롤 작동을 위한 최소 크기 
 		_float fData_Offset_Y = 0.f; // <- 스크롤 영역의 최종 보정치 
 		_float fData_Height_Max = 0.f; // <- 스크롤 영역의 최대 보정치 
 
-		
+		// Direc_X
+		_float fRender_Left_X = 0.f; // <- 그려지는 가장 높은 위치 
+		_float fRender_Right_X = 0.f; // <- 그려지는 가장 낮은 위치 
+		_float fData_Width_Origin = 0.f; // <- 스크롤 영역의 크기 == 스크롤 작동을 위한 최소 크기 
+		_float fData_Offset_X = 0.f; // <- 스크롤 영역의 최종 보정치 
+		_float fData_Width_Max = 0.f; // <- 스크롤 영역의 최대 보정치 
 
 		// Mouse 
-		_bool bIsBarMoving = false;
+		_bool bIsBarMoving_Y = false;
+		_bool bIsBarMoving_X = false;
 		_float fMouse_Before_Y = -1.0; // <- 바 클릭 유지 중, 이전 프레임의 마우스 Y 좌표 
+		_float fMouse_Before_X = -1.0; // <- 바 클릭 유지 중, 이전 프레임의 마우스 X 좌표 
 
 		// Scroll_Area
 		SCROLL_AREA eScroll_Area = SCROLL_AREA::SCROLL_END;

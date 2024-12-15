@@ -86,7 +86,6 @@ HRESULT CUIManager::Initialize_Prototype()
 	m_vecPageRender_Order.push_back(UIPAGE::PAGE_INVEN);
 	m_vecPageRender_Order.push_back(UIPAGE::PAGE_EQUIP);
 	m_vecPageRender_Order.push_back(UIPAGE::PAGE_STAT);
-	m_vecPageRender_Order.push_back(UIPAGE::PAGE_SKILL);
 	m_vecPageRender_Order.push_back(UIPAGE::PAGE_OPTION);
 
 	m_vecPageRender_Order.push_back(UIPAGE::PAGE_TALKING);
@@ -95,6 +94,7 @@ HRESULT CUIManager::Initialize_Prototype()
 	m_vecPageRender_Order.push_back(UIPAGE::PAGE_CHEST);
 	m_vecPageRender_Order.push_back(UIPAGE::PAGE_TELEPOT);
 
+	m_vecPageRender_Order.push_back(UIPAGE::PAGE_COMMON);
 	m_vecPageRender_Order.push_back(UIPAGE::PAGE_ITEMINFO);
 	m_vecPageRender_Order.push_back(UIPAGE::PAGE_INFORM);
 
@@ -222,6 +222,13 @@ void CUIManager::UIControl_Chest(_float fTimeDelta)
 
 void CUIManager::UIControl_Telepot(_float fTimeDelta)
 {
+	if (KEY_TAP(KEY::ESC))
+		SwicthPage(UIPAGE::PAGE_TELEPOT, UIPAGE::PAGE_PLAY);
+	else
+	{
+		m_eNowPage = UIPAGE::PAGE_TELEPOT;
+		m_pUIPage_Telepot->Check_Page_Action(fTimeDelta);
+	}
 }
 
 void CUIManager::UIControl_Common(_float fTimeDelta)
@@ -251,7 +258,7 @@ void CUIManager::UIControl_Common(_float fTimeDelta)
 		UIControl_Stat(fTimeDelta);
 	else if ((m_pUIPage_Option->GetPageAction(PAGEACTION::ACTION_ACTIVE)) || (m_pUIPage_Option->GetPageAction(PAGEACTION::ACTION_OPENING)))
 		UIControl_Option(fTimeDelta);
-	else if ((m_pUIPage_Skill->GetPageAction(PAGEACTION::ACTION_ACTIVE)) || (m_pUIPage_Skill->GetPageAction(PAGEACTION::ACTION_OPENING)))
+	else if ((m_pUIPage_Common->GetPageAction(PAGEACTION::ACTION_ACTIVE)) || (m_pUIPage_Common->GetPageAction(PAGEACTION::ACTION_OPENING)))
 		UIControl_Skill(fTimeDelta);
 	else if ((m_pUIPage_Shop->GetPageAction(PAGEACTION::ACTION_ACTIVE)) || (m_pUIPage_Shop->GetPageAction(PAGEACTION::ACTION_OPENING)))
 		UIControl_Shop(fTimeDelta);
@@ -371,11 +378,11 @@ void CUIManager::UIControl_Option(_float fTimeDelta)
 void CUIManager::UIControl_Skill(_float fTimeDelta)
 {
 	if (KEY_TAP(KEY::ESC))
-		SwicthPage(UIPAGE::PAGE_SKILL, UIPAGE::PAGE_MENU);
+		SwicthPage(UIPAGE::PAGE_COMMON, UIPAGE::PAGE_MENU);
 	else
 	{
-		m_eNowPage = UIPAGE::PAGE_SKILL;
-		m_pUIPage_Skill->Check_Page_Action(fTimeDelta);
+		m_eNowPage = UIPAGE::PAGE_COMMON;
+		m_pUIPage_Common->Check_Page_Action(fTimeDelta);
 	}
 }
 
@@ -532,10 +539,10 @@ HRESULT CUIManager::Make_UIPage(_int iIndex)
 		m_pUIPage_Stat = CUIPage_Stat::Create(m_pDevice, m_pContext);
 		m_vecPage[iIndex] = static_cast<CUIPage*>(m_pUIPage_Stat);
 	}
-	else if (iIndex == _int(UIPAGE::PAGE_SKILL))
+	else if (iIndex == _int(UIPAGE::PAGE_COMMON))
 	{
-		m_pUIPage_Skill = CUIPage_Skill::Create(m_pDevice, m_pContext);
-		m_vecPage[iIndex] = static_cast<CUIPage*>(m_pUIPage_Skill);
+		m_pUIPage_Common = CUIPage_Common::Create(m_pDevice, m_pContext);
+		m_vecPage[iIndex] = static_cast<CUIPage*>(m_pUIPage_Common);
 	}
 	else if (iIndex == _int(UIPAGE::PAGE_OPTION))
 	{

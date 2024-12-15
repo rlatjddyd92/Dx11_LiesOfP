@@ -35,6 +35,16 @@ public:
 		GROUP_END
 	};
 
+	typedef struct TELEPOT_DEST_INFO
+	{
+		_uint iDestination_Navi_Index = -1;
+		_wstring strDest_Name = {};
+		_Vec2 vUICell_Pos = { 0.f,0.f };
+
+		_bool bIsNow = false; // <- 현재 상호작용 중인 텔레포트
+		_bool bIsInactive = false; // <- 비활성화 
+
+	}DEST_INFO;
 
 
 
@@ -60,40 +70,31 @@ public:
 	const vector<UPART*>& Get_UIPartInfo() { return m_vecPart; }
 	virtual HRESULT Ready_UIPart_Group_Control() override;
 
+	_int Get_Telepot_Destination() { return m_vecTelepot_Dest[m_iNowActive]->iDestination_Navi_Index; }
+
 protected:
-	_Vec4 m_vDestination_Now = { -1.f,-1.f,-1.f,-1.f };
+	void Page_Setting();
+	
+	void Action_Scroll(_float fTimeDelta);
+	void Action_Telepot(_float fTimeDelta);
 
-	_Vec4 m_vDestination_Origin[4] =
-	{
-		{ -1.f,-1.f,-1.f,-1.f }, // 모나스트리 입구
-		{ -1.f,-1.f,-1.f,-1.f }, // 락사시아 보스전 
-		{ -1.f,-1.f,-1.f,-1.f }, // 원형계단
-		{ -1.f,-1.f,-1.f,-1.f } // 마누스 보스전
-	};
+	void Update_Telepot_Cell(_float fTimeDelta);
 
-	_wstring m_strDest_Name[4] =
-	{
-		TEXT("아르케 대수도원 입구"),
-		TEXT("전투 : 락사시아"),
-		TEXT("대수도원 원형계단"),
-		TEXT("전투 : 마누스")
-	};
 
+protected:
+	_int m_iNowFocus = 0; 
+	_int m_iNowActive = -1; // -1이면 작동하지 않은 상태
+
+	vector<TELEPOT_DEST_INFO*> m_vecTelepot_Dest;
+
+	_int m_iDest_Num = 4;
 	SCROLL* m_pScroll_Telepot = { nullptr };
-
-
-
-
-
+	_uint m_iNowNavi = -1;
 
 public:
 	static CUIPage_Telepot* Create(ID3D11Device* pDevice, ID3D11DeviceContext* pContext);
 	virtual CGameObject* Clone(void* pArg);
 	virtual void Free() override;
-
-
-
-
 };
 
 END

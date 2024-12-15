@@ -355,7 +355,7 @@ private:
 	// 옵션
 	CUIPage_Option* m_pUIPage_Option = { nullptr };
 	// 스킬트리
-	CUIPage_Skill* m_pUIPage_Skill = { nullptr };
+	CUIPage_Common* m_pUIPage_Common = { nullptr };
 	// 아이템 조작 
 	CUIPage_ItemInfo* m_pUIPage_ItemInfo = { nullptr };
 	// 직교

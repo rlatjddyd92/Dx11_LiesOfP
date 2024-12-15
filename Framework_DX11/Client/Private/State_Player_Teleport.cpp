@@ -75,7 +75,7 @@ HRESULT CState_Player_Teleport::Start_State(void* pArg)
     }
     else
     {
-        m_pStarGazer = m_pPlayer->Find_Stargazer();
+        m_pStarGazer = m_pPlayer->Find_Stargazer(-1);
         if (nullptr != m_pStarGazer)
             Safe_AddRef(m_pStarGazer);
 

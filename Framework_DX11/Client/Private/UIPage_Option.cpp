@@ -99,7 +99,7 @@ void CUIPage_Option::Late_Update(_float fTimeDelta)
 
 	Update_Tab(fTimeDelta);
 
-	if (m_pScroll_Option->bIsActive)
+	if (m_pScroll_Option->bIsActive_Y)
 		Action_Scroll(fTimeDelta);
 
 	Update_Line(fTimeDelta);
@@ -422,18 +422,18 @@ void CUIPage_Option::Action_Scroll(_float fTimeDelta)
 {
 	if (!m_vecPageAction[_int(PAGEACTION::ACTION_ACTIVE)])
 	{
-		if (m_pScroll_Option->bIsBarMoving)
+		if (m_pScroll_Option->bIsBarMoving_Y)
 		{
 			if (KEY_HOLD(KEY::LBUTTON))
 			{
 				POINT			ptMouse{};
 				GetCursorPos(&ptMouse);
 				ScreenToClient(g_hWnd, &ptMouse);
-				m_pScroll_Option->Bar_Moving(_float(ptMouse.y));
+				m_pScroll_Option->Bar_Moving_Y(_float(ptMouse.y));
 				m_bIsCloseAction_DropBox = true;
 			}
 			else
-				m_pScroll_Option->End_Bar_Moving();
+				m_pScroll_Option->End_Bar_Moving_Y();
 		}
 		else
 		{
@@ -442,7 +442,7 @@ void CUIPage_Option::Action_Scroll(_float fTimeDelta)
 			if (vMouse.x != -1.f)
 				if (KEY_TAP(KEY::LBUTTON))
 				{
-					m_pScroll_Option->Start_Bar_Moving(vMouse.y);
+					m_pScroll_Option->Start_Bar_Moving_Y(vMouse.y);
 					m_bIsCloseAction_DropBox = true;
 				}
 
@@ -451,7 +451,7 @@ void CUIPage_Option::Action_Scroll(_float fTimeDelta)
 
 	
 
-	m_vecPart[_int(PART_GROUP::OPTION_Main_Scroll_Bar)]->fRatio = m_pScroll_Option->fScroll_Ratio;
+	m_vecPart[_int(PART_GROUP::OPTION_Main_Scroll_Bar)]->fRatio = m_pScroll_Option->fScroll_Ratio_Y;
 
 	for (_int i = _int(PART_GROUP::OPTION_Main_Scroll_Bar_Line); i <= _int(PART_GROUP::OPTION_Main_Scroll_Bar); ++i)
 	{
@@ -563,7 +563,7 @@ void CUIPage_Option::Update_Line(_float fTimeDelta)
 	{
 		m_iNow_Line = 0;
 		m_bIsCloseAction_DropBox = true;
-		m_pScroll_Option->Activate_Scroll(fAdjustY);
+		m_pScroll_Option->Activate_Scroll(fAdjustY, 0.f);
 	}
 }
 
@@ -772,7 +772,7 @@ void CUIPage_Option::Open_Dropbox_SelectBox(FUNCTION& NowFunction, _float fTimeD
 
 	_float fScroll_Size = m_vecPart[_int(PART_GROUP::OPTION_FUNC_Dropbox_Select_Area)]->fSize.y * NowFunction.iSize_Select_Button;
 
-	m_pScroll_DropBox->Activate_Scroll(fScroll_Size, m_vecPart[_int(PART_GROUP::OPTION_FUNC_Dropbox_Box_Area)]->fPosition, m_vecPart[_int(PART_GROUP::OPTION_FUNC_Dropbox_Box_Area)]->fSize);
+	m_pScroll_DropBox->Activate_Scroll(fScroll_Size, 0.f, m_vecPart[_int(PART_GROUP::OPTION_FUNC_Dropbox_Box_Area)]->fPosition, m_vecPart[_int(PART_GROUP::OPTION_FUNC_Dropbox_Box_Area)]->fSize);
 	NowFunction.bDropBox_On = true;
 	m_bIsCloseAction_DropBox = false;
 }
@@ -780,7 +780,7 @@ void CUIPage_Option::Open_Dropbox_SelectBox(FUNCTION& NowFunction, _float fTimeD
 
 void CUIPage_Option::Close_Dropbox_SelectBox(FUNCTION& NowFunction, _float fTimeDelta)
 {
-	m_pScroll_DropBox->DeActivate_Scroll();
+	m_pScroll_DropBox->DeActivate_Scroll_Y();
 	NowFunction.bDropBox_On = false;
 }
 
@@ -796,11 +796,11 @@ void CUIPage_Option::Update_Dropbox_SelectBox(FUNCTION& NowFunction, _float fTim
 	_float fOffset = 0.f;
 	SCROLL_AREA eArea = SCROLL_AREA::SCROLL_END;
 
-	if (m_pScroll_DropBox->bIsActive)
+	if (m_pScroll_DropBox->bIsActive_Y)
 	{
 		eArea = SCROLL_AREA::SCROLL_OPTION_DROPBOX;
 
-		if (m_pScroll_DropBox->bIsBarMoving)
+		if (m_pScroll_DropBox->bIsBarMoving_Y)
 		{
 			if (KEY_HOLD(KEY::LBUTTON))
 			{
@@ -808,10 +808,10 @@ void CUIPage_Option::Update_Dropbox_SelectBox(FUNCTION& NowFunction, _float fTim
 				GetCursorPos(&ptMouse);
 				ScreenToClient(g_hWnd, &ptMouse);
 
-				m_pScroll_DropBox->Bar_Moving(_float(ptMouse.y));
+				m_pScroll_DropBox->Bar_Moving_Y(_float(ptMouse.y));
 				bIsBoxClick = true;
 			}
-			m_pScroll_DropBox->End_Bar_Moving();
+			m_pScroll_DropBox->End_Bar_Moving_Y();
 		}
 		else if (bIsClick)
 		{
@@ -820,11 +820,11 @@ void CUIPage_Option::Update_Dropbox_SelectBox(FUNCTION& NowFunction, _float fTim
 			if (vMouse.y != -1.f)
 			{
 				bIsBoxClick = true;
-				m_pScroll_DropBox->Start_Bar_Moving(vMouse.y);
+				m_pScroll_DropBox->Start_Bar_Moving_Y(vMouse.y);
 			}
 		}
 
-		m_vecPart[_int(PART_GROUP::OPTION_FUNC_Dropbox_Scroll_Bar)]->fRatio = m_pScroll_Option->fScroll_Ratio;
+		m_vecPart[_int(PART_GROUP::OPTION_FUNC_Dropbox_Scroll_Bar)]->fRatio = m_pScroll_Option->fScroll_Ratio_Y;
 		fOffset = m_pScroll_Option->fData_Offset_Y;
 
 		for (_int i = _int(PART_GROUP::OPTION_FUNC_Dropbox_Scroll_Line); i <= _int(PART_GROUP::OPTION_FUNC_Dropbox_Scroll_Bar); ++i)

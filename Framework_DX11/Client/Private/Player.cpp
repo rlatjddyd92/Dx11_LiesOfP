@@ -996,7 +996,7 @@ void CPlayer::Recovery_HP(_float fAmount)
 		m_tPlayer_Stat->vGauge_Hp.y = m_tPlayer_Stat->vGauge_Hp.x;
 }
 
-CStargazer* CPlayer::Find_Stargazer()
+CStargazer* CPlayer::Find_Stargazer(_int iCellNumber)
 {
 	CLayer* pStargzzerLayer = m_pGameInstance->Find_Layer(LEVEL_GAMEPLAY, TEXT("Layer_Stargazer"));
 
@@ -1005,17 +1005,32 @@ CStargazer* CPlayer::Find_Stargazer()
 
 	vector<class CGameObject*> Stargazers = pStargzzerLayer->Get_ObjectList();
 
-	for (_uint i = 0; i < Stargazers.size(); ++i)
+	if (iCellNumber >= 0)
 	{
-		CStargazer* pStargazer = dynamic_cast<CStargazer*>(Stargazers[i]);
-		if (m_iRespawn_Cell_Num == pStargazer->Get_CellNum())
+		for (_uint i = 0; i < Stargazers.size(); ++i)
 		{
-			return pStargazer;
+			CStargazer* pStargazer = dynamic_cast<CStargazer*>(Stargazers[i]);
+			if (iCellNumber == pStargazer->Get_CellNum())
+			{
+				return pStargazer;
+			}
+		}
+	}
+	else
+	{
+		for (_uint i = 0; i < Stargazers.size(); ++i)
+		{
+			CStargazer* pStargazer = dynamic_cast<CStargazer*>(Stargazers[i]);
+			if (m_iRespawn_Cell_Num == pStargazer->Get_CellNum())
+			{
+				return pStargazer;
+			}
 		}
 	}
 
 	return dynamic_cast<CStargazer*>(Stargazers[0]);
 }
+
 
 void CPlayer::Create_ThrowItem(SPECIAL_ITEM eItemType)
 {
