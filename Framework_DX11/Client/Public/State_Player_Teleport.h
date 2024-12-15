@@ -13,6 +13,7 @@ public:
     typedef struct
     {
         _bool isDie = false;
+        _int iCellNum = -1;
         class CSteppingStone* pSteppingStone = { nullptr };
     }TELEPORT_DESC;
 
@@ -31,6 +32,8 @@ private:
 
     _uint               m_iAnimation_TeleportStart = {};
     _uint               m_iAnimation_TeleportEnd = {};
+
+    _int                m_iStargazerCellNum = {  };
 
     _double* m_pTrackPos = { nullptr };
 

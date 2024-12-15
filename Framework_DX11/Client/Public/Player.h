@@ -263,7 +263,7 @@ public:
 	void			Recovery_Region(_float fAmount = 10.f);
 	void			Recovery_HP(_float fAmount);
 
-	class CStargazer* Find_Stargazer();
+	class CStargazer* Find_Stargazer(_int iCellNumber = -1);
 
 	void			Create_ThrowItem(SPECIAL_ITEM eItemType);
 	void			Throw_ITem();

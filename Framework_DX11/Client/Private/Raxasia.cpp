@@ -411,7 +411,7 @@ void CRaxasia::End_CutScene(_uint iCutSceneNum)
 
 		Active_Weapon();
 
-		_matrix PreTransformMatrix = XMMatrixScaling(0.01f, 0.01f, 0.01f) * XMMatrixRotationX(XMConvertToRadians(270.0f));
+		_matrix PreTransformMatrix = XMMatrixScaling(0.01f, 0.01f, 0.01f) /** XMMatrixRotationX(XMConvertToRadians(270.0f))*/;
 		m_pWeaponShield->ChangeSocketMatrix(m_pModelCom->Get_BoneCombindTransformationMatrix_Ptr(36));
 		m_pWeaponShield->Get_Model()->Set_PreTranformMatrix(PreTransformMatrix);
 	}

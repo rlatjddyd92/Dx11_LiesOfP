@@ -36,6 +36,7 @@ HRESULT CState_Player_Teleport::Start_State(void* pArg)
     {
         m_pSteppingStone = nullptr;
         m_isDieTeleport = false;
+        m_iStargazerCellNum = -1;
     }
     else
     {
@@ -44,6 +45,7 @@ HRESULT CState_Player_Teleport::Start_State(void* pArg)
             Safe_AddRef(m_pSteppingStone);
 
         m_isDieTeleport = pDesc->isDie;
+        m_iStargazerCellNum = pDesc->iCellNum;
     }
 
     if (m_pSteppingStone)
@@ -75,7 +77,7 @@ HRESULT CState_Player_Teleport::Start_State(void* pArg)
     }
     else
     {
-        m_pStarGazer = m_pPlayer->Find_Stargazer();
+        m_pStarGazer = m_pPlayer->Find_Stargazer(m_iStargazerCellNum);
         if (nullptr != m_pStarGazer)
             Safe_AddRef(m_pStarGazer);
 
