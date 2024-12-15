@@ -327,7 +327,7 @@ HRESULT CWeapon_Scissor_Handle::Ready_Effect()
 
 	m_Effects.resize(EFFECT_END);
 
-	if (0/*m_eType == SCISSOR_RIGHT*/)
+	if (m_eType == SCISSOR_RIGHT)
 	{
 		m_Effects[EFFECT_BASE] = m_pEffect_Manager->Clone_Effect(TEXT("Player_Attack_Scissor_Slash"), m_pParentMatrix,
 			m_pSocketMatrix, _Vec3(0.f, 0.f, 0.f), _Vec3(0.f, 0.f, 0.f), _Vec3(1.f, 1.f, 1.f));
