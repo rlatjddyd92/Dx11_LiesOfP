@@ -66,42 +66,42 @@ void CRaxasia_Sword_CutScene::Update(_float fTimeDelta)
 		m_pModelCom->Update_Bone();
 
 
-	static _float fX = -90.f;
-	static _float fY = 0.f;
-	static _float fZ = 0.f;
+	static _float fX = 200;
+	static _float fY = -40.f;
+	static _float fZ = 30.f;
 	_matrix		PreTransformMatrix = XMMatrixIdentity();	
 	
 	if (KEY_TAP(KEY::NUM1))
 	{
-		fX -= 10.f;
+		fX -= 5.f;
 	}
 	else if (KEY_TAP(KEY::NUM2))
 	{
-		fX += 10.f;
+		fX += 5.f;
 	}
 
 	if (KEY_TAP(KEY::NUM3))
 	{
-		fY -= 10.f;
+		fY -= 5.f;
 	}
 	else if (KEY_TAP(KEY::NUM4))
 	{
-		fY += 10.f;
+		fY += 5.f;
 	}
 
 	if (KEY_TAP(KEY::NUM5))
 	{
-		fZ -= 10.f;
+		fZ -= 5.f;
 	}
 	else if (KEY_TAP(KEY::NUM6))
 	{
-		fZ += 10.f;
+		fZ += 5.f;
 	}
 
 
 	PreTransformMatrix = XMMatrixScaling(0.015f, 0.015f, 0.015f) * XMMatrixRotationX(XMConvertToRadians(fX)) * XMMatrixRotationY(XMConvertToRadians(fY)) * XMMatrixRotationZ(XMConvertToRadians(fZ));
 
-	m_pModelCom->Set_PreTranformMatrix(PreTransformMatrix);
+	//m_pModelCom->Set_PreTranformMatrix(PreTransformMatrix);
 
 	if (m_isUpdatePos)
 	{

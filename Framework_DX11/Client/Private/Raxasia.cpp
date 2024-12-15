@@ -378,7 +378,7 @@ void CRaxasia::Start_CutScene(_uint iCutSceneNum)
 		m_pRigidBodyCom->Set_IsOnCell(false);
 
 		m_pTransformCom->Rotation(_vector{ 0, 1, 0, 0 }, XMConvertToRadians(150.f));
-		m_pRigidBodyCom->Set_GloblePose(XMVectorSet(-28.716f, -81.264f, -14.860f, 1.f));
+		m_pRigidBodyCom->Set_GloblePose(XMVectorSet(-28.716f, -80.964f, -14.860f, 1.f));
 
 		_matrix PreTransformMatrix = XMMatrixScaling(0.015f, 0.015f, 0.015f) * XMMatrixRotationX(XMConvertToRadians(180.f));
 		_Vec3 vShieldOffset = _Vec3(0.f, 0.1f, 0.175f);
@@ -409,7 +409,7 @@ void CRaxasia::Start_CutScene(_uint iCutSceneNum)
 		_Vec3 vCurrentPos = m_pTransformCom->Get_State(CTransform::STATE_POSITION);
 		//vCurrentPos.y += 0.1f;
 
-		vCurrentPos = _Vec3(-59.119f, -97.872f, -27.848f);
+		vCurrentPos = _Vec3(-59.119f, -97.802f, -27.848f);
 
 		m_pRigidBodyCom->Set_GloblePose(vCurrentPos);
 

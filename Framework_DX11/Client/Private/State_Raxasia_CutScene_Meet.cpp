@@ -42,12 +42,12 @@ void CState_Raxasia_CutScene_Meet::Update(_float fTimeDelta)
 
     if (!m_isMoveDown && iFrame > 230)
     {
-        _matrix PreTransformMatrix = XMMatrixScaling(0.01f, 0.01f, 0.01f) * XMMatrixRotationX(XMConvertToRadians(243.f)) * XMMatrixRotationY(XMConvertToRadians(-5.f)) * XMMatrixRotationZ(XMConvertToRadians(30.f));
+        _matrix PreTransformMatrix = XMMatrixScaling(0.015f, 0.015f, 0.015f) * XMMatrixRotationX(XMConvertToRadians(243.f)) * XMMatrixRotationY(XMConvertToRadians(-5.f)) * XMMatrixRotationZ(XMConvertToRadians(30.f));
         m_pCutSceneWeapon->Get_Model()->Set_PreTranformMatrix(PreTransformMatrix);
 
         _Vec3 vNewPos = m_pMonster->Get_Transform()->Get_State(CTransform::STATE_POSITION);
         vNewPos.x -= 14.7f;
-        //vNewPos.y -= 1.816f;
+        vNewPos.y += 1.146f;
         vNewPos.z -= 4.5f;
 
         m_pMonster->Get_RigidBody()->Set_GloblePose(vNewPos);
@@ -61,6 +61,10 @@ void CState_Raxasia_CutScene_Meet::Update(_float fTimeDelta)
         m_isPlayWeaponAni = true;
     }
 
+    //if (iFrame > 50)
+    //{
+    //    m_pMonster->Stop_Animation();
+    //}
     _uint iCurAnim = m_pMonster->Get_CurrentAnimIndex();
 
     //m_fDelay += fTimeDelta;
@@ -84,8 +88,8 @@ void CState_Raxasia_CutScene_Meet::Update(_float fTimeDelta)
 
     m_pMonster->Get_Model()->Update_Bone();
 
-    vMove = XMVector3TransformNormal(vMove, m_pMonster->Get_Transform()->Get_WorldMatrix());
-
+    vMove = XMVector3TransformNormal(vMove, m_pMonster->Get_Transform()->Get_WorldMatrix()) * 0.8f;
+    //vMove.y = 0.f;
     m_pMonster->Get_RigidBody()->Set_Velocity((vMove - m_vRootMoveStack) / fTimeDelta);
 
     m_vRootMoveStack = vMove;
