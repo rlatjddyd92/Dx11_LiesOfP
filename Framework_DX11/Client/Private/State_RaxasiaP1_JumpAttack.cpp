@@ -155,6 +155,42 @@ void CState_RaxasiaP1_JumpAttack::Collider_Check(_double CurTrackPos)
 
 void CState_RaxasiaP1_JumpAttack::Effect_Check(_double CurTrackPos)
 {
+    if (m_iRouteTrack == 0)
+    {
+        if (m_iCurAnimIndex == AN_JUMPATTACK_L)
+        {
+            if ((CurTrackPos >= 60.f && CurTrackPos <= 75.f))
+            {
+                m_pMonster->Active_Effect(CRaxasia::EFFECT_SWING, true);
+            }
+            else
+            {
+                m_pMonster->DeActive_Effect(CRaxasia::EFFECT_SWING);
+            }
+        }
+        else
+        {
+            if ((CurTrackPos >= 65.f && CurTrackPos <= 80.f))
+            {
+                m_pMonster->Active_Effect(CRaxasia::EFFECT_SWING, true);
+            }
+            else
+            {
+                m_pMonster->DeActive_Effect(CRaxasia::EFFECT_SWING);
+            }
+        }
+    }
+    else if (m_iRouteTrack == 1)
+    {
+        if ((CurTrackPos >= 45.f && CurTrackPos <= 60.f))
+        {
+            m_pMonster->Active_Effect(CRaxasia::EFFECT_SWING, true);
+        }
+        else
+        {
+            m_pMonster->DeActive_Effect(CRaxasia::EFFECT_SWING);
+        }
+    }
 }
 
 void CState_RaxasiaP1_JumpAttack::Control_Sound(_double CurTrackPos)

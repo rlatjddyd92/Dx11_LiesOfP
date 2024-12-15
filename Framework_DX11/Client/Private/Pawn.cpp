@@ -146,6 +146,16 @@ void CPawn::Set_Animation(_uint iAnimIndex, _bool IsLoop)
 	m_pModelCom->SetUp_Animation(iAnimIndex, IsLoop);
 }
 
+void CPawn::SetUp_Animation(_uint iAnimIndex, _bool IsLoop, _uint iStartFrame, _bool bEitherBoundary)
+{
+	m_pModelCom->SetUp_Animation(iAnimIndex, IsLoop, iStartFrame, bEitherBoundary);
+}
+
+void CPawn::SetUp_Animation_Boundry(_uint iAnimIndex, _bool IsLoop, _uint iStartFrame)
+{
+	m_pModelCom->SetUp_Animation(iAnimIndex, IsLoop, iStartFrame);
+}
+
 void CPawn::Change_Animation(_uint iAnimIndex, _bool IsLoop, _float fDuration, _uint iStartFrame, _bool bEitherBoundary, _bool bSameChange)
 {
 	m_pModelCom->SetUp_NextAnimation(iAnimIndex, IsLoop, fDuration, iStartFrame, bEitherBoundary, bSameChange);

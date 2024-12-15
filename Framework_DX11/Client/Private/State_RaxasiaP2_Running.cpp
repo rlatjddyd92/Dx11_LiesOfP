@@ -123,23 +123,39 @@ void CState_RaxasiaP2_Running::Update(_float fTimeDelta)
             vDir = vTargetPos - vPos;
             vDir.Normalize();
 
+            m_fDistance = m_pMonster->Calc_Distance_XZ();
+
             vDir *= m_fDistance;
-            if (m_pMonster->Calc_Distance_XZ() >= 0.5f)
+            _Vec3 vTemp{};
+            if (CurTrackPos >= 30.f)
             {
-                _Vec3 vVelo = m_pMonster->Get_RigidBody()->Get_Velocity();
-                m_pMonster->Get_RigidBody()->Set_Velocity(vVelo + vDir * 2);
+                vTemp = vDir;
+                vTemp.Normalize();
+                if (m_fDistance < 2.5f)
+                {
+                    vTemp *= -3.f;
+                }
+                else
+                {
+                    vTemp *= 3.f;
+                }
             }
-            m_pMonster->Get_RigidBody()->Set_GloblePose(vTargetPos - vDir);
+
+            m_pMonster->Get_RigidBody()->Set_GloblePose(vTargetPos - vDir + (vTemp * fTimeDelta));
+
         }
         else if (CurTrackPos <= 160)
         {
             _Vec3 vDir = m_pMonster->Get_TargetDir();
             vDir.Normalize();
 
-            if (m_pMonster->Calc_Distance_XZ() >= 0.5f)
+            if (m_pMonster->Calc_Distance_XZ() >= 2.f)
             {
-                _Vec3 vVelo = m_pMonster->Get_RigidBody()->Get_Velocity();
-                m_pMonster->Get_RigidBody()->Set_Velocity(vVelo + vDir * 2);
+                m_pMonster->Get_RigidBody()->Set_Velocity(vDir * 2);
+            }
+            else
+            {
+                m_pMonster->Get_RigidBody()->Set_Velocity(-(vDir * 2));
             }
             m_pMonster->Get_Transform()->LookAt_Lerp_NoHeight(m_pMonster->Get_TargetDir(), 3.f, fTimeDelta);
         }

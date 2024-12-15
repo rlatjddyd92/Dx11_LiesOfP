@@ -25,7 +25,9 @@ HRESULT CState_RaxasiaP1_LinkedAttack::Start_State(void* pArg)
 
     m_bSwingSound = false;
 
+    m_vRootMoveStack = _Vec3(0.f, 0.f, 0.f);
     m_bSwing = false;
+    m_bInchent = false;
     return S_OK;
 }
 
@@ -40,7 +42,9 @@ void CState_RaxasiaP1_LinkedAttack::Update(_float fTimeDelta)
         {
             ++m_iRouteTrack;
             m_bSwing = false;
-            m_pMonster->Change_Animation(AN_LINKEDATTACK_SECOND, false, 0.1f, 0);
+            m_vRootMoveStack = _Vec3(0.f, 0.f, 0.f);
+            m_pMonster->SetUp_Animation(AN_LINKEDATTACK_SECOND, false, 0);
+            
         }
 
         if (CurTrackPos <= 50.f || 
@@ -56,7 +60,8 @@ void CState_RaxasiaP1_LinkedAttack::Update(_float fTimeDelta)
         {
             ++m_iRouteTrack;
             m_bSwing = false;
-            m_pMonster->Change_Animation(AN_LINKEDATTACK_LAST, false, 0.1f, 0);
+            m_vRootMoveStack = _Vec3(0.f, 0.f, 0.f);
+            m_pMonster->SetUp_Animation(AN_LINKEDATTACK_LAST, false, 0);
         }
 
         if (CurTrackPos <= 30.f ||
@@ -75,7 +80,6 @@ void CState_RaxasiaP1_LinkedAttack::Update(_float fTimeDelta)
             m_pMonster->Change_State(CRaxasia::IDLE);
             return;
         }
-        break;
 
         if (CurTrackPos <= 60.f)
         {
@@ -84,6 +88,7 @@ void CState_RaxasiaP1_LinkedAttack::Update(_float fTimeDelta)
     default:
         break;
     }
+
 
     Collider_Check(CurTrackPos);
     Effect_Check(CurTrackPos);
@@ -116,7 +121,7 @@ void CState_RaxasiaP1_LinkedAttack::Collider_Check(_double CurTrackPos)
     else if (m_iRouteTrack == 1)
     {
         if ((CurTrackPos >= 40.f && CurTrackPos <= 65.f) ||
-            (CurTrackPos >= 105.f && CurTrackPos <= 130.f))
+            (CurTrackPos >= 105.f && CurTrackPos <= 129.f))
         {
             m_pMonster->Active_CurrentWeaponCollider(1.3f, 0, HIT_TYPE::HIT_METAL, ATTACK_STRENGTH::ATK_WEAK);
         }
@@ -140,53 +145,53 @@ void CState_RaxasiaP1_LinkedAttack::Collider_Check(_double CurTrackPos)
 
 void CState_RaxasiaP1_LinkedAttack::Effect_Check(_double CurTrackPos)
 {
-    //if (m_iRouteTrack == 0)
-    //{
-    //    if ((CurTrackPos >= 110.f && CurTrackPos <= 220.f))
-    //    {
-    //        if (!m_bSwing)
-    //        {
-    //            m_pMonster->Active_Effect(CSimonManus::P1_TRAIL);
-    //            m_bSwing = true;
-    //        }
-    //    }
-    //    else
-    //    {
-    //        m_pMonster->DeActive_Effect(CSimonManus::P1_TRAIL);
-    //    }
-    //}
-    //else if (m_iRouteTrack == 1)
-    //{
-    //    if ((CurTrackPos >= 40.f && CurTrackPos <= 65.f) ||
-    //        (CurTrackPos >= 105.f && CurTrackPos <= 130.f))
-    //    {
-    //        if (!m_bSwing)
-    //        {
-    //            m_pMonster->Active_Effect(CSimonManus::P1_TRAIL);
-    //            m_bSwing = true;
-    //        }
-    //    }
-    //    else
-    //    {
-    //        m_bSwing = false;
-    //        m_pMonster->DeActive_Effect(CSimonManus::P1_TRAIL);
-    //    }
-    //}
-    //else if (m_iRouteTrack == 2)
-    //{
-    //    if ((CurTrackPos >= 70.f && CurTrackPos <= 100.f))
-    //    {
-    //        if (!m_bSwing)
-    //        {
-    //            m_pMonster->Active_Effect(CSimonManus::P1_TRAIL);
-    //            m_bSwing = true;
-    //        }
-    //    }
-    //    else
-    //    {
-    //        m_pMonster->DeActive_Effect(CSimonManus::P1_TRAIL);
-    //    }
-    //}
+    if (m_iRouteTrack == 0)
+    {
+        if ((CurTrackPos >= 70.f && CurTrackPos <= 110.f))
+        {
+            if (!m_bSwing)
+            {
+                m_pMonster->Active_Effect(CRaxasia::EFFECT_SWING, true);
+                m_bSwing = true;
+            }
+        }
+        else
+        {
+            m_pMonster->DeActive_Effect(CRaxasia::EFFECT_SWING);
+        }
+    }
+    else if (m_iRouteTrack == 1)
+    {
+        if ((CurTrackPos >= 40.f && CurTrackPos <= 65.f) ||
+            (CurTrackPos >= 105.f && CurTrackPos <= 127.f))
+        {
+            if (!m_bSwing)
+            {
+                m_pMonster->Active_Effect(CRaxasia::EFFECT_SWING, true);
+                m_bSwing = true;
+            }
+        }
+        else
+        {
+            m_pMonster->DeActive_Effect(CRaxasia::EFFECT_SWING);
+            m_bSwing = false;
+        }
+    }
+    else if (m_iRouteTrack == 2)
+    {
+        if ((CurTrackPos >= 70.f && CurTrackPos <= 100.f))
+        {
+            if (!m_bInchent)
+            {
+                m_pMonster->Active_Effect(CRaxasia::EFFECT_INCHENTSWORD, true);
+            }
+        }
+        else
+        {
+            m_pMonster->DeActive_Effect(CRaxasia::EFFECT_INCHENTSWORD);
+        }
+    }
+
 }
 
 void CState_RaxasiaP1_LinkedAttack::Control_Sound(_double CurTrackPos)

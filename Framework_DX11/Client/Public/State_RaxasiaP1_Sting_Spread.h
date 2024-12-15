@@ -7,16 +7,16 @@ END
 
 BEGIN(Client)
 
-class CState_RaxasiaP1_LinkedAttack : public CState
+class CState_RaxasiaP1_Sting_Spread : public CState
 {
 private:
     typedef enum {
-        AN_LINKEDATTACK_FIRST = 15, AN_LINKEDATTACK_SECOND = 16, AN_LINKEDATTACK_LAST = 17
+        AN_STING = 31, AN_BACKJUMP = 11, AN_SWING_ANDSPREAD = 33
     }ANIMNUM;
 
 public:
-    CState_RaxasiaP1_LinkedAttack(class CFsm* pFsm, class CMonster* pMonster);
-    virtual ~CState_RaxasiaP1_LinkedAttack() = default;
+    CState_RaxasiaP1_Sting_Spread(class CFsm* pFsm, class CMonster* pMonster);
+    virtual ~CState_RaxasiaP1_Sting_Spread() = default;
 
 public:
     virtual HRESULT Initialize(_uint iStateNum, void* pArg) override;
@@ -27,14 +27,21 @@ public:
 private:
     class CMonster* m_pMonster = { nullptr };
 
-    _Vec3       m_vRootMoveStack{};
     _float              m_fCurrentTime = { 0.f };
     _float              m_fChaseDuration = { 1.5f };
 
     _bool               m_bSwing = { false };
-    _bool               m_bInchent = { false };
-    
+    _bool               m_bStamp = { false };
+    _bool               m_bSpread = { false };
+
+    _bool               m_bSpeedController = { false };
+
     _bool               m_bSwingSound = { false };
+    _bool               m_bLockOn = { false };
+    _bool               m_bCharge = { false };
+    _bool               m_bResetAtkList = { false };
+
+    _Vec3               m_vLockVec = {};
 
     _uint               m_iRouteTrack = {};
 
@@ -45,7 +52,7 @@ private:
     void                Control_Sound(_double CurTrackPos);
 
 public:
-    static CState_RaxasiaP1_LinkedAttack* Create(class CFsm* pFsm, class CMonster* pMonster, _uint iStateNum, void* pArg = nullptr);
+    static CState_RaxasiaP1_Sting_Spread* Create(class CFsm* pFsm, class CMonster* pMonster, _uint iStateNum, void* pArg = nullptr);
     virtual void Free() override;
 
 };

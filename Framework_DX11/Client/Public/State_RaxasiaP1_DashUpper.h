@@ -32,6 +32,9 @@ private:
     _float              m_fChaseDuration = { 1.5f };
 
     _bool               m_bSwing = { false };
+    _bool               m_bStamp = { false };
+    _bool               m_bDash = { false };
+    _bool               m_bDrag = { false };
 
     _bool               m_bSwingSound = { false };
 

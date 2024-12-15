@@ -108,10 +108,11 @@ void CState_RaxasiaP1_Idle::End_State()
 
 void CState_RaxasiaP1_Idle::Calc_Act_Attack(_float fDist)
 {
-    if (m_iAtkTrack >= 6)
+    if (m_iAtkTrack >= 7)
     {
-        m_iAtkTrack = 0.f;
+        m_iAtkTrack = 0;
     }
+    m_iAtkTrack = 1;
     switch (m_iAtkTrack)
     {
     case 0:
@@ -136,6 +137,10 @@ void CState_RaxasiaP1_Idle::Calc_Act_Attack(_float fDist)
 
     case 5:
         m_pMonster->Change_State(CRaxasia::ATK_TRIPLESTING);
+        return;
+
+    case 6:
+        m_pMonster->Change_State(CRaxasia::ATK_STING_ANDSPREAD);
         return;
 
     default:

@@ -4,6 +4,8 @@
 #include "Model.h"
 #include "Raxasia.h"
 
+#include "Effect_Manager.h"
+
 CState_RaxasiaP1_SwingDown_Multiple::CState_RaxasiaP1_SwingDown_Multiple(CFsm* pFsm, CMonster* pMonster)
     :CState{ pFsm }
     , m_pMonster{ pMonster }
@@ -29,6 +31,8 @@ HRESULT CState_RaxasiaP1_SwingDown_Multiple::Start_State(void* pArg)
     m_bSwingSound = false;
     m_bSpeedController = true;
     m_bSwing = false;
+    m_bStamp = false;
+
     return S_OK;
 }
 
@@ -49,6 +53,7 @@ void CState_RaxasiaP1_SwingDown_Multiple::Update(_float fTimeDelta)
         {
             ++m_iRouteTrack;
             m_bSwing = false;
+            m_bStamp = false;
             m_pMonster->Change_Animation(AN_SWINGDOWN_R, false, 0.1f, 0);
             m_iCurAnimIndex = AN_SWINGDOWN_R;
         }
@@ -63,6 +68,7 @@ void CState_RaxasiaP1_SwingDown_Multiple::Update(_float fTimeDelta)
         {
             ++m_iRouteTrack;
             m_bSwing = false;
+            m_bStamp = false;
             if (m_iRouteTrack == 7)
             {
                 m_iCurAnimIndex = AN_SWINGDOWN;
@@ -180,6 +186,100 @@ void CState_RaxasiaP1_SwingDown_Multiple::Collider_Check(_double CurTrackPos)
 
 void CState_RaxasiaP1_SwingDown_Multiple::Effect_Check(_double CurTrackPos)
 {
+    if (m_iRouteTrack == 0 || m_iRouteTrack == 8)
+    {
+        if ((CurTrackPos >= 35.f && CurTrackPos <= 44.f))
+        {
+            if (!m_bSwing)
+            {
+                m_pMonster->Active_Effect(CRaxasia::EFFECT_SWING, true);
+                m_bSwing = true;
+            }
+        }
+        else
+        {
+            m_pMonster->DeActive_Effect(CRaxasia::EFFECT_SWING);
+            m_bSwing = false;
+        }
+        
+        if (!m_bStamp)
+        {
+            if (CurTrackPos >= 44.f)
+            {
+                _float4x4 WorldMat{};
+                _Vec3 vPos = { 0.f, 0.f, -4.25f };
+                XMStoreFloat4x4(&WorldMat, (*m_pMonster->Get_WeaponBoneCombinedMat(0) * (*m_pMonster->Get_WeaponWorldMat())));
+                vPos = XMVector3TransformCoord(vPos, XMLoadFloat4x4(&WorldMat));
+
+                CEffect_Manager::Get_Instance()->Add_Effect_ToLayer(LEVEL_GAMEPLAY, TEXT("Raxasia_Attack_Stamp"),
+                    vPos, _Vec3{ m_pMonster->Get_TargetDir() });
+                m_bStamp = true;
+            }
+        }
+    }
+    else if (m_iRouteTrack >= 1 && m_iRouteTrack <= 7)
+    {
+        if (m_iCurAnimIndex == AN_SWINGDOWN_L)
+        {
+            if ((CurTrackPos >= 35.f && CurTrackPos <= 44.f))
+            {
+                if (!m_bSwing)
+                {
+                    m_pMonster->Active_Effect(CRaxasia::EFFECT_SWING, true);
+                    m_bSwing = true;
+                }
+            }
+            else
+            {
+                m_pMonster->DeActive_Effect(CRaxasia::EFFECT_SWING);
+                m_bSwing = false;
+            }
+            if (!m_bStamp)
+            {
+                if (CurTrackPos >= 44.f)
+                {
+                    _float4x4 WorldMat{};
+                    _Vec3 vPos = { 0.f, 0.f, -4.25f };
+                    XMStoreFloat4x4(&WorldMat, (*m_pMonster->Get_WeaponBoneCombinedMat(0) * (*m_pMonster->Get_WeaponWorldMat())));
+                    vPos = XMVector3TransformCoord(vPos, XMLoadFloat4x4(&WorldMat));
+
+                    CEffect_Manager::Get_Instance()->Add_Effect_ToLayer(LEVEL_GAMEPLAY, TEXT("Raxasia_Attack_Stamp"),
+                        vPos, _Vec3{ m_pMonster->Get_TargetDir() });
+                    m_bStamp = true;
+                }
+            }
+        }
+        else
+        {
+            if ((CurTrackPos >= 40.f && CurTrackPos <= 48.f))
+            {
+                if (!m_bSwing)
+                {
+                    m_pMonster->Active_Effect(CRaxasia::EFFECT_SWING, true);
+                    m_bSwing = true;
+                }
+            }
+            else
+            {
+                m_pMonster->DeActive_Effect(CRaxasia::EFFECT_SWING);
+                m_bSwing = false;
+            }
+            if (!m_bStamp)
+            {
+                if (CurTrackPos >= 48.f)
+                {
+                    _float4x4 WorldMat{};
+                    _Vec3 vPos = { 0.f, 0.f, -4.25f };
+                    XMStoreFloat4x4(&WorldMat, (*m_pMonster->Get_WeaponBoneCombinedMat(0) * (*m_pMonster->Get_WeaponWorldMat())));
+                    vPos = XMVector3TransformCoord(vPos, XMLoadFloat4x4(&WorldMat));
+
+                    CEffect_Manager::Get_Instance()->Add_Effect_ToLayer(LEVEL_GAMEPLAY, TEXT("Raxasia_Attack_Stamp"),
+                        vPos, _Vec3{ m_pMonster->Get_TargetDir() });
+                    m_bStamp = true;
+                }
+            }
+        }
+    }
 }
 
 void CState_RaxasiaP1_SwingDown_Multiple::Control_Sound(_double CurTrackPos)

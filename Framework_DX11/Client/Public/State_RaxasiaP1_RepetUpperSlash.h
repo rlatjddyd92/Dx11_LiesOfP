@@ -33,6 +33,7 @@ private:
     _bool               m_bSpeedController = { false };
 
     _bool               m_bSwing = { false };
+    _bool               m_bDrag = { false };
 
     _bool               m_bSwingSound = { false };
 

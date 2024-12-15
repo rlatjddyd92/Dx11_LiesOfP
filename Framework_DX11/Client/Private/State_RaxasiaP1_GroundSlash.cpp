@@ -25,6 +25,9 @@ HRESULT CState_RaxasiaP1_GroundSlash::Start_State(void* pArg)
     m_bSwingSound = false;
 
     m_bSwing = false;
+    m_bResetList = false;
+    m_bAddMark = false;
+    m_bInchent = false;
 
     return S_OK;
 }
@@ -72,6 +75,7 @@ void CState_RaxasiaP1_GroundSlash::Update(_float fTimeDelta)
 
 void CState_RaxasiaP1_GroundSlash::End_State()
 {
+    m_pMonster->DeActive_Effect(CRaxasia::EFFECT_INCHENTSWORD);
 }
 
 _bool CState_RaxasiaP1_GroundSlash::End_Check()
@@ -81,30 +85,65 @@ _bool CState_RaxasiaP1_GroundSlash::End_Check()
 
 void CState_RaxasiaP1_GroundSlash::Collider_Check(_double CurTrackPos)
 {
-    if (m_iRouteTrack == 0)
+    if ((CurTrackPos >= 110.f && CurTrackPos <= 220.f))
     {
-        if ((CurTrackPos >= 110.f && CurTrackPos <= 220.f))
+        m_pMonster->Active_CurrentWeaponCollider(1.f, 0, HIT_TYPE::HIT_METAL, ATTACK_STRENGTH::ATK_WEAK);
+    }
+    else
+    {
+        m_pMonster->DeActive_CurretnWeaponCollider();
+    }
+
+    if (!m_bResetList)
+    {
+        if (CurTrackPos >= 185.f)
         {
-            m_pMonster->Active_CurrentWeaponCollider(1.f, 0, HIT_TYPE::HIT_METAL, ATTACK_STRENGTH::ATK_WEAK);
-        }
-        else
-        {
-            m_pMonster->DeActive_CurretnWeaponCollider();
+            m_bResetList = true;
+            m_pMonster->Reset_WeaponOverlapCheck();
         }
     }
 }
 
 void CState_RaxasiaP1_GroundSlash::Effect_Check(_double CurTrackPos)
 {
-    if (m_iRouteTrack == 0)
+    if ((CurTrackPos >= 110.f && CurTrackPos <= 220.f))
     {
-        if ((CurTrackPos >= 110.f && CurTrackPos <= 220.f))
+        if (!m_bSwing)
         {
-
-            //일정 간격으로 이펙트 설치
-
+            m_pMonster->Active_Effect(CRaxasia::EFFECT_SWING, true);
+            m_bSwing = true;
         }
     }
+    else
+    {
+        m_pMonster->DeActive_Effect(CRaxasia::EFFECT_SWING);
+    }
+
+    if (!m_bInchent)
+    {
+        if (CurTrackPos >= 60.f)
+        {
+            m_pMonster->Active_Effect(CRaxasia::EFFECT_INCHENTSWORD, true);
+            m_bInchent = true;
+        }
+    }
+
+    if ((CurTrackPos >= 120.f && CurTrackPos <= 125.f) ||
+        (CurTrackPos >= 150.f && CurTrackPos <= 155.f) ||
+        (CurTrackPos >= 175.f && CurTrackPos <= 180.f) ||
+        (CurTrackPos >= 195.f && CurTrackPos <= 200.f) ||
+        (CurTrackPos >= 205.f && CurTrackPos <= 210.f))
+    {
+        if (!m_bAddMark)
+        {
+            //어택오브젝트로 잠시 있다 터지는 번개 생성
+        }
+    }
+    else
+    {
+        m_bAddMark = false;
+    }
+
 }
 
 void CState_RaxasiaP1_GroundSlash::Control_Sound(_double CurTrackPos)

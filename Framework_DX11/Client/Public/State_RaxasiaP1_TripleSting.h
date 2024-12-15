@@ -11,7 +11,7 @@ class CState_RaxasiaP1_TripleSting : public CState
 {
 private:
     typedef enum {
-        AN_READY = 30, AN_STING = 31, AN_DASH_L = 12, AN_DASH_R = 13
+        AN_READY = 30, AN_STING = 31, AN_DASH_L = 13, AN_DASH_R = 14
     }ANIMNUM;
 
 public:
@@ -33,6 +33,7 @@ private:
     _int                m_iDashAnimIndex = {};
 
     _bool               m_bSting = { false };
+    _bool               m_bCharge = { false };
 
     _bool               m_bSwingSound = { false };
 

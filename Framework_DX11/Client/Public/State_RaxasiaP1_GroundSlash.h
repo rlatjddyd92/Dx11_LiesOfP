@@ -37,6 +37,10 @@ private:
     _bool               m_bSwing = { false };
 
     _bool               m_bSwingSound = { false };
+    _bool               m_bResetList = { false };
+    _bool               m_bInchent = { false };
+
+    _bool               m_bAddMark = { false };
 
     _uint               m_iRouteTrack = {};
 
