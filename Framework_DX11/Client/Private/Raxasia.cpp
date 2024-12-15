@@ -130,13 +130,8 @@ HRESULT CRaxasia::Initialize(void* pArg)
 
 	GET_GAMEINTERFACE->Set_OnOff_OrthoUI(false, this);
 
+
 	Start_CutScene(CUTSCENE_MEET);
-
-	m_pRigidBodyCom->Set_IsLockCell(false);
-	m_pRigidBodyCom->Set_IsOnCell(false);
-
-	m_pTransformCom->Rotation(_vector{ 0, 1, 0, 0 }, XMConvertToRadians(150.f));
-	m_pRigidBodyCom->Set_GloblePose(XMVectorSet(-28.716f, -81.264f, -14.860, 1.f));
 
 	return S_OK;
 }
@@ -376,6 +371,12 @@ void CRaxasia::Start_CutScene(_uint iCutSceneNum)
 		Desc.pSocketBoneMatrix = m_pModelCom->Get_BoneCombindTransformationMatrix_Ptr("weapon0_l");
 		m_pCutSceneWeapon = m_pGameInstance->Get_CloneObject_ToLayer(LEVEL_GAMEPLAY, TEXT("Layer_CutSceneWeapon"), TEXT("Prototype_GameObject_Weapon_Raxasia_Sword_CutScene"), &Desc);
 
+		m_pRigidBodyCom->Set_IsLockCell(false);
+		m_pRigidBodyCom->Set_IsOnCell(false);
+
+		m_pTransformCom->Rotation(_vector{ 0, 1, 0, 0 }, XMConvertToRadians(150.f));
+		m_pRigidBodyCom->Set_GloblePose(XMVectorSet(-28.716f, -81.264f, -14.860f, 1.f));
+
 		m_pWeaponShield->ChangeSocketMatrix(m_pModelCom->Get_BoneCombindTransformationMatrix_Ptr("upperArmorBack_02_spine_03"));
 		m_pCutSceneFsmCom->Set_State(STATE_MEET);
 	}
@@ -397,6 +398,22 @@ void CRaxasia::End_CutScene(_uint iCutSceneNum)
 	if (m_pCutSceneFsmCom->Get_CurrentState() == STATE_MEET)
 	{
 		m_pModelCom = m_pP1ModelCom;
+
+		_Vec3 vCurrentPos = m_pTransformCom->Get_State(CTransform::STATE_POSITION);
+		vCurrentPos.y -= 0.4f;
+		m_pRigidBodyCom->Set_GloblePose(vCurrentPos);
+		m_pNavigationCom->Research_Cell(vCurrentPos);
+		m_pRigidBodyCom->Set_IsLockCell(true);
+		m_pRigidBodyCom->Set_IsOnCell(true);
+
+		m_pCutSceneWeapon->Set_Dead(true);
+		m_pCutSceneWeapon = nullptr;
+
+		Active_Weapon();
+
+		_matrix PreTransformMatrix = XMMatrixScaling(0.01f, 0.01f, 0.01f) * XMMatrixRotationX(XMConvertToRadians(270.0f));
+		m_pWeaponShield->ChangeSocketMatrix(m_pModelCom->Get_BoneCombindTransformationMatrix_Ptr(36));
+		m_pWeaponShield->Get_Model()->Set_PreTranformMatrix(PreTransformMatrix);
 	}
 	else if (m_pCutSceneFsmCom->Get_CurrentState() == STATE_P2)
 	{

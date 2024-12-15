@@ -25,7 +25,7 @@ HRESULT CState_Raxasia_CutScene_Meet::Start_State(void* pArg)
     // 모델이 달라서 여기서 해주기
     m_iAnimation_Meet = m_pMonster->Get_Model()->Find_AnimationIndex("AS_Raxasia_Raxasia_Phase1_C06_Renew_CINE", 1.f);
 
-    m_pMonster->Change_Animation(m_iAnimation_Meet, true, 0.f, 0);
+    m_pMonster->Change_Animation(m_iAnimation_Meet, false, 0.f, 0);
 
     m_isStartCutScene = false;
     m_fDelay = 0.f;
@@ -43,22 +43,13 @@ void CState_Raxasia_CutScene_Meet::Update(_float fTimeDelta)
         dynamic_cast<CModel*>(dynamic_cast<CRaxasia*>(m_pMonster)->Get_CutSceneWeapon()->Find_Component(MODEL))->Set_PreTranformMatrix(PreTransformMatrix);
 
         _Vec3 vNewPos = m_pMonster->Get_Transform()->Get_State(CTransform::STATE_POSITION);
-
-        vNewPos.x -= 5.93f;
-        vNewPos.y -= -0.8f;
-        vNewPos.z -= 1.f;
-
+        vNewPos.x -= 14.7f;
+        vNewPos.y -= 1.8f;
+        vNewPos.z -= 4.5f;
 
         m_pMonster->Get_RigidBody()->Set_GloblePose(vNewPos);
 
         m_isMoveDown = true;
-    }
-    else if (iFrame > 1000)
-    {
-        _matrix PreTransformMatrix = XMMatrixScaling(0.01f, 0.01f, 0.01f) * XMMatrixRotationX(XMConvertToRadians(210.f)) * XMMatrixRotationY(XMConvertToRadians(-40.f)) * XMMatrixRotationZ(XMConvertToRadians(30.f)); 
-        dynamic_cast<CModel*>(dynamic_cast<CRaxasia*>(m_pMonster)->Get_CutSceneWeapon()->Find_Component(MODEL))->Set_PreTranformMatrix(PreTransformMatrix);
-        
-        m_pMonster->Get_RigidBody()->Set_GloblePose(XMVectorSet(-28.716f, -81.264f, -14.860 , 1.f));
     }
 
     _uint iCurAnim = m_pMonster->Get_CurrentAnimIndex();
@@ -75,20 +66,22 @@ void CState_Raxasia_CutScene_Meet::Update(_float fTimeDelta)
     //}
 
 
-    _Vec3 vMove = m_pMonster->Get_Model()->Get_BoneCombindTransformationMatrix_Ptr(5)->Translation();
+    _Vec3 vMove = m_pMonster->Get_Model()->Get_BoneCombindTransformationMatrix_Ptr(3)->Translation();
     _float4x4 TransMat;
-    XMStoreFloat4x4(&TransMat, m_pMonster->Get_Model()->Get_Bones()[5]->Get_TransformationMatrix());
-    TransMat._41 = 0.f;
+    XMStoreFloat4x4(&TransMat, m_pMonster->Get_Model()->Get_Bones()[3]->Get_TransformationMatrix());
+    TransMat._41 = TransMat._42 = TransMat._43 = 0.f;
 
-    m_pMonster->Get_Model()->Get_Bones()[5]->Set_TransformationMatrix(TransMat);;
+    m_pMonster->Get_Model()->Get_Bones()[3]->Set_TransformationMatrix(TransMat);;
 
     m_pMonster->Get_Model()->Update_Bone();
 
     vMove = XMVector3TransformNormal(vMove, m_pMonster->Get_Transform()->Get_WorldMatrix());
 
-    vMove.y = 0;
+    m_pMonster->Get_RigidBody()->Set_Velocity((vMove - m_vRootMoveStack) / fTimeDelta);
 
+    m_vRootMoveStack = vMove;
 
+    End_Check();
 }
 
 void CState_Raxasia_CutScene_Meet::End_State()
@@ -97,6 +90,10 @@ void CState_Raxasia_CutScene_Meet::End_State()
 
 void CState_Raxasia_CutScene_Meet::End_Check()
 {
+    if (m_pMonster->Get_EndAnim(m_iAnimation_Meet))
+    {
+        m_pMonster->End_CutScene(CRaxasia::CUTSCENE_MEET);
+    }
 }
 
 CState_Raxasia_CutScene_Meet* CState_Raxasia_CutScene_Meet::Create(CFsm* pFsm, CMonster* pMonster, _uint iStateNum, void* pArg)

@@ -43,6 +43,7 @@ protected:
 	virtual ~CWeapon() = default;
 
 public:
+	class CModel*		Get_Model() { return m_pModelCom; }
 	class CCollider*	Get_Collider() { return m_pColliderCom; }
 
 	class CSound*		Get_SoundCom(WEP_SOUND_TYPE eType) { return m_pSoundCom[eType]; }
