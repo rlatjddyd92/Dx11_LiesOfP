@@ -1,6 +1,8 @@
 #include "stdafx.h"
 #include "FirePot.h"
 #include "GameInstance.h"
+#include "Effect_Manager.h"
+#include "Effect_Container.h"
 
 CFirePot::CFirePot(ID3D11Device* pDevice, ID3D11DeviceContext* pContext)
     : CGameObject{ pDevice, pContext }
@@ -33,16 +35,22 @@ HRESULT CFirePot::Initialize(void* pArg)
     if (FAILED(Ready_Components(pDesc)))
         return E_FAIL;
 
+    m_Effect = CEffect_Manager::Get_Instance()->Clone_Effect(TEXT("Map_FirePot"), m_pTransformCom->Get_WorldMatrix_Ptr(), nullptr);
+    m_Effect->Set_Loop(true);
+
     return S_OK;
 }
 
 void CFirePot::Priority_Update(_float fTimeDelta)
 {
+    m_Effect->Priority_Update(fTimeDelta);
 }
 
 void CFirePot::Update(_float fTimeDelta)
 {
+    m_Effect->Update(fTimeDelta);
 }
+
 
 void CFirePot::Late_Update(_float fTimeDelta)
 {
@@ -50,6 +58,7 @@ void CFirePot::Late_Update(_float fTimeDelta)
     {
         __super::Late_Update(fTimeDelta);
         m_pGameInstance->Add_RenderObject(CRenderer::RG_NONBLEND, this);
+        m_Effect->Late_Update(fTimeDelta);
     }
 }
 
@@ -142,6 +151,12 @@ CGameObject* CFirePot::Clone(void* pArg)
 void CFirePot::Free()
 {
     __super::Free();
+
+    if (true == m_isCloned)
+    {
+        m_Effect->Set_Cloned(false);
+        Safe_Release(m_Effect);
+    }
     Safe_Release(m_pShaderCom);
     Safe_Release(m_pModelCom);
 }

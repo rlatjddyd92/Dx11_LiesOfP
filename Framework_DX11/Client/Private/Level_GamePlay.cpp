@@ -433,6 +433,7 @@ HRESULT CLevel_GamePlay::Read_Map_Data()
 
 	m_pGameInstance->Create_Octree(vMinPos, vMaxPos);
 
+	CEffect_Manager::Get_Instance()->Add_Effect_ToLayer(LEVEL_GAMEPLAY, TEXT("Map_Raxasia"));
 	return S_OK;
 }
 
