@@ -42,7 +42,7 @@ public:
 		_Vec2 vUICell_Pos = { 0.f,0.f };
 
 		_bool bIsNow = false; // <- 현재 상호작용 중인 텔레포트
-		_bool bIsInactive = false; // <- 비활성화 
+		_bool bIsInactive = true; // <- 비활성화 
 
 	}DEST_INFO;
 
@@ -72,6 +72,8 @@ public:
 
 	_int Get_Telepot_Destination() { return m_vecTelepot_Dest[m_iNowActive]->iDestination_Navi_Index; }
 
+	void Set_Now_Interact_Stargezer(_int iNaviIndex);
+
 protected:
 	void Page_Setting();
 	
@@ -84,6 +86,7 @@ protected:
 protected:
 	_int m_iNowFocus = 0; 
 	_int m_iNowActive = -1; // -1이면 작동하지 않은 상태
+	_int m_iIsStartTelepot = 0; // -1 : 작동 취소, 0 : 입력 대기, 1 : 텔레포트 진행 
 
 	vector<TELEPOT_DEST_INFO*> m_vecTelepot_Dest;
 

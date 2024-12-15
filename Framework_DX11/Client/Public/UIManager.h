@@ -107,7 +107,15 @@ public:
 			return true;
 		else if ((m_pUIPage_Menu->GetPageAction(PAGEACTION::ACTION_ACTIVE)) || (m_pUIPage_Menu->GetPageAction(PAGEACTION::ACTION_OPENING)))
 			return true;
-
+		else if ((m_pUIPage_Stat->GetPageAction(PAGEACTION::ACTION_ACTIVE)) || (m_pUIPage_Stat->GetPageAction(PAGEACTION::ACTION_OPENING)))
+			return true;
+		else if ((m_pUIPage_Shop->GetPageAction(PAGEACTION::ACTION_ACTIVE)) || (m_pUIPage_Shop->GetPageAction(PAGEACTION::ACTION_OPENING)))
+			return true;
+		else if ((m_pUIPage_Chest->GetPageAction(PAGEACTION::ACTION_ACTIVE)) || (m_pUIPage_Chest->GetPageAction(PAGEACTION::ACTION_OPENING)))
+			return true;
+		else if ((m_pUIPage_Telepot->GetPageAction(PAGEACTION::ACTION_ACTIVE)) || (m_pUIPage_Telepot->GetPageAction(PAGEACTION::ACTION_OPENING)))
+			return true;
+		
 		return false;
 	}
 
@@ -246,7 +254,13 @@ public:
 		m_pUIPage_Popup->Show_ItemPopup(strTitle, strInputTitle, iMin, pNow_Input, iMax, strCountTitle, iInterval, pNow_Count);
 	}
 
+	_bool IsPopupOn() { return !m_pUIPage_Popup->GetPageAction(PAGEACTION::ACTION_INACTIVE); }
+
 	void Show_ItemUsePopup(_wstring strTitle, _wstring strDescA, _bool bIsTop) { m_pUIPage_Popup->Show_ItemUsePopup(strTitle, strDescA, bIsTop); }
+	void Show_TrueFalsePopup(_wstring strTitle, _wstring strDescA, _int* iResult) { m_pUIPage_Popup->Show_TrueFalsePopup(strTitle, strDescA, iResult); } // true,false,none 3개 상태 표현 위해 _int 사용
+
+	// 텔레포트
+	void Set_Now_Interact_Stargezer(_int iNaviIndex) { return m_pUIPage_Telepot->Set_Now_Interact_Stargezer(iNaviIndex); }
 
 #pragma endregion
 

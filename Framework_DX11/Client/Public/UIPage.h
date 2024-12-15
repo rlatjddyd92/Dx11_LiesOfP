@@ -223,7 +223,7 @@ public:
 			fScroll_Ratio_X = max(fScroll_Ratio_X, 0.f);
 			fScroll_Ratio_X = min(fScroll_Ratio_X, 1.f);
 
-			fData_Offset_X = fData_Width_Max * fScroll_Ratio_Y;
+			fData_Offset_X = fData_Width_Max * fScroll_Ratio_X;
 
 			fMouse_Before_X = fNow_X;
 

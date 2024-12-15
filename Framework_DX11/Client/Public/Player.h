@@ -191,7 +191,7 @@ public:
 	void					Set_DissloveRatio(_float fRatio) { m_fDissloveRatio = fRatio; }
 
 #pragma region PLAYER_STAT
-	STAT_INFO&		Get_Player_Stat() { return *m_tPlayer_Stat; }
+	STAT_INFO&				Get_Player_Stat() { return *m_tPlayer_Stat; }
 	// 24-12-05 김성용
 	// UI 매니저 수정용 함수
 	STAT_INFO*				Get_Player_Stat_Adjust() { return m_tPlayer_Stat_Adjust; }

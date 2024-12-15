@@ -140,7 +140,7 @@ HRESULT CPlayer::Initialize(void * pArg)
 	if (FAILED(Ready_Effect()))
 		return E_FAIL;
 
-	//m_pNavigationCom->Move_to_Cell(m_pRigidBodyCom, 1030); // 계단 옆 별바라기
+	m_pNavigationCom->Move_to_Cell(m_pRigidBodyCom, 1030); // 계단 옆 별바라기
 	//m_pNavigationCom->Move_to_Cell(m_pRigidBodyCom, 772); //긴사다리
 	//m_pNavigationCom->Move_to_Cell(m_pRigidBodyCom, 427); //짧은사다리
 	//m_pNavigationCom->Move_to_Cell(m_pRigidBodyCom, 341); //아래엘베
@@ -151,7 +151,7 @@ HRESULT CPlayer::Initialize(void * pArg)
 	//m_pNavigationCom->Move_to_Cell(m_pRigidBodyCom, 801); // 소피아 방
 	//m_pNavigationCom->Move_to_Cell(m_pRigidBodyCom, 1178); // 소피아 방 내부
 	//m_pNavigationCom->Move_to_Cell(m_pRigidBodyCom, 0); 
-	m_pNavigationCom->Move_to_Cell(m_pRigidBodyCom, 268); // 락사시아 보스전
+	//m_pNavigationCom->Move_to_Cell(m_pRigidBodyCom, 268); // 락사시아 보스전
 
 	m_iRespawn_Cell_Num = 772;
 
@@ -1181,6 +1181,11 @@ void CPlayer::CollisionStay_IntercObj(CGameObject* pGameObject)
 			{
 				/*dynamic_cast<CTreasureBox*>(pGameObject)->Set_IsOpen(true);
 				m_pFsmCom->Change_State(CHEST, pGameObject);*/
+
+				// 12-15 김성용 추가 
+				// 별바라기 상호작용 화면
+				GET_GAMEINTERFACE->Show_Script_Npc_Talking(NPC_SCRIPT::SCR_STARGAZER, 0); // 별바라기 화면 열기 
+				GET_GAMEINTERFACE->Set_Now_Interact_Stargezer(pStargazer->Get_CellNum());
 			}
 		}
 		else

@@ -59,7 +59,7 @@ void CUIPage_Popup::Update(_float fTimeDelta)
 
 void CUIPage_Popup::Late_Update(_float fTimeDelta)
 {
-	if (m_pItemPopup_Info->bIsActive == true)
+	if (m_pItemPopup_Info->bIsActive == true) // 아이템 구매/판매/보관함 이용 팝업 
 	{
 		if (KEY_TAP(KEY::LBUTTON))
 		{
@@ -115,16 +115,7 @@ void CUIPage_Popup::Late_Update(_float fTimeDelta)
 			}
 		}
 	}
-	else if (m_bItemUsePopUp == false)
-	{
-		if (m_vecPart[int(PART_GROUP::POPUP_Mouse_0)]->bRender)
-			if (KEY_TAP(KEY::LBUTTON))
-			{
-				if (GET_GAMEINTERFACE->CheckMouse(m_vecPart[int(PART_GROUP::POPUP_Mouse_0)]->fPosition, m_vecPart[int(PART_GROUP::POPUP_Mouse_0)]->fSize).x != -1.f)
-					Off_Popup();
-			}
-	}
-	else if (m_bItemUsePopUp == true)
+	else if (m_bItemUsePopUp == true) // 아이템 사용 여부 팝업 
 	{
 			if (KEY_TAP(KEY::LBUTTON))
 			{
@@ -140,6 +131,32 @@ void CUIPage_Popup::Late_Update(_float fTimeDelta)
 				}
 			}
 	}
+	else if (m_pTrueFalsePopup_Result != nullptr) // 확인 취소 팝업 
+	{
+		if (KEY_TAP(KEY::LBUTTON))
+		{
+			if (GET_GAMEINTERFACE->CheckMouse(m_vecPart[int(PART_GROUP::POPUP_Mouse_1)]->fPosition, m_vecPart[int(PART_GROUP::POPUP_Mouse_1)]->fSize).x != -1.f)
+			{
+				*m_pTrueFalsePopup_Result = -1;
+				Off_Popup();
+			}
+			else if (GET_GAMEINTERFACE->CheckMouse(m_vecPart[int(PART_GROUP::POPUP_Mouse_0)]->fPosition, m_vecPart[int(PART_GROUP::POPUP_Mouse_0)]->fSize).x != -1.f)
+			{
+				*m_pTrueFalsePopup_Result = 1; 
+				Off_Popup();
+			}
+		}
+	}
+	else // 일반 확인 팝업 
+	{
+		if (m_vecPart[int(PART_GROUP::POPUP_Mouse_0)]->bRender)
+			if (KEY_TAP(KEY::LBUTTON))
+			{
+				if (GET_GAMEINTERFACE->CheckMouse(m_vecPart[int(PART_GROUP::POPUP_Mouse_0)]->fPosition, m_vecPart[int(PART_GROUP::POPUP_Mouse_0)]->fSize).x != -1.f)
+					Off_Popup();
+			}
+	}
+
 	m_fTopPartMove = -1;
 	__super::Late_Update(fTimeDelta);
 }
@@ -210,6 +227,7 @@ void CUIPage_Popup::Off_Popup()
 	m_pItemPopup_Info->pNow_Input = nullptr;
 	m_bItemUsePopUp = false;
 	m_bTopBelt = false;
+	m_pTrueFalsePopup_Result = nullptr;
 }
 
 void CUIPage_Popup::Show_ItemPopup(_wstring strTitle, _wstring strInputTitle, _int iMin, _int* pNow_Input, _int iMax, _wstring strCountTitle, _int iInterval, _int* pNow_Count)
@@ -317,6 +335,35 @@ void CUIPage_Popup::Show_ItemUsePopup(_wstring strTitle, _wstring strDescA, _boo
 
 	for (_int i = _int(PART_GROUP::POPUP_Top); i <= _int(PART_GROUP::POPUP_Text_1); ++i)
 		__super::UpdatePart_ByIndex(i, 1.f);
+}
+
+void CUIPage_Popup::Show_TrueFalsePopup(_wstring strTitle, _wstring strDescA, _int* iResult)
+{
+	m_pSoundCom->Play2D(TEXT("SE_UI_OpenWindow_01.wav"), &g_fUIVolume);
+	Off_Popup();
+	m_vecPageAction[_int(PAGEACTION::ACTION_ACTIVE)] = true;
+	m_vecPageAction[_int(PAGEACTION::ACTION_INACTIVE)] = false;
+
+	for (_int i = _int(PART_GROUP::POPUP_Top); i <= _int(PART_GROUP::POPUP_Text_1); ++i)
+	{
+		m_vecPart[i]->bRender = true;
+		m_vecPart[i]->fTextColor = { 1.f,1.f,1.f,1.f };
+	}
+
+	m_vecPart[int(PART_GROUP::POPUP_Title)]->strText = strTitle;
+	m_vecPart[int(PART_GROUP::POPUP_Desc_0)]->strText = strDescA;
+	m_vecPart[int(PART_GROUP::POPUP_Desc_1)]->strText = {};
+
+	m_vecPart[int(PART_GROUP::POPUP_Mouse_0)]->fRatio = 0.f;
+	m_vecPart[int(PART_GROUP::POPUP_Mouse_1)]->fRatio = 1.f;
+
+	m_vecPart[int(PART_GROUP::POPUP_Text_0)]->strText = TEXT("확인");
+	m_vecPart[int(PART_GROUP::POPUP_Text_1)]->strText = TEXT("취소");
+
+	for (_int i = _int(PART_GROUP::POPUP_Top); i <= _int(PART_GROUP::POPUP_Text_1); ++i)
+		__super::UpdatePart_ByIndex(i, 1.f);
+
+	m_pTrueFalsePopup_Result = iResult;
 }
 
 HRESULT CUIPage_Popup::Ready_UIPart_Group_Control()

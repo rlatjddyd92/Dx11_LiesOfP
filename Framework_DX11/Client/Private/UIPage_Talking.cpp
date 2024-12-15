@@ -254,7 +254,7 @@ void CUIPage_Talking::Update_Script(_float fTimeDelta)
 			{
 				if (m_vecNpc_ScriptInfo[_int(m_eNowNpc)]->Add_ScriptNum() == false)
 				{
-					CloseAction();
+					GET_GAMEINTERFACE->SwicthPage(UIPAGE::PAGE_TALKING, UIPAGE::PAGE_PLAY);
 					return;
 				}
 			}
