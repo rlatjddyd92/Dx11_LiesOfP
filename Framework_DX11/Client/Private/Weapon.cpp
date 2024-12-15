@@ -99,12 +99,6 @@ void CWeapon::Update(_float fTimeDelta)
 	{
 		m_pSoundCom[i]->Update(fTimeDelta);
 	}
-
-	for (auto& pEffect : m_Effects)
-	{
-		if (!pEffect->Get_Dead())
-			pEffect->Update(fTimeDelta);
-	}
 }
 
 void CWeapon::Late_Update(_float fTimeDelta)

@@ -34,7 +34,7 @@ HRESULT CTorchDeck::Initialize(void* pArg)
     if (FAILED(Ready_Components(pDesc)))
         return E_FAIL;
 
-    m_Effect = CEffect_Manager::Get_Instance()->Clone_Effect(TEXT("Map_Torch"), m_pTransformCom->Get_WorldMatrix_Ptr(),nullptr,_Vec3(0.f,0.f,0.f),_Vec3(0.f,0.f,1.f));
+    m_Effect = CEffect_Manager::Get_Instance()->Clone_Effect(TEXT("Map_Torch"), m_pTransformCom->Get_WorldMatrix_Ptr(), nullptr, _Vec3(0.f, 0.f, 0.15f));
     m_Effect->Set_Loop(true);
 
     return S_OK;

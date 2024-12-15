@@ -18,7 +18,7 @@ public:
 
 		_Vec3 vPos = {};
 		_Vec3 vScale = { 1.f, 1.f, 1.f };
-		_Vec3 vDir = {};
+		_Vec3 vDir = { 0.f, 0.f, 1.f };
 	} EFFECT_DESC;
 
 private:
@@ -67,6 +67,8 @@ private:
 
 	_bool m_isCloned = { false };
 	_bool m_isLoop = { false };
+
+	_Matrix m_PreWorldMatrix = {};
 
 public:
 	static CEffect_Container* Create(ID3D11Device* pDevice, ID3D11DeviceContext* pContext);

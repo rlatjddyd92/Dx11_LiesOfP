@@ -36,8 +36,10 @@ HRESULT CEffect_Container::Initialize(void* pArg)
 	m_pTransformCom->Set_State(CTransform::STATE_POSITION, pDesc->vPos);
 	m_pTransformCom->Set_Scaled(pDesc->vScale.x, pDesc->vScale.y, pDesc->vScale.z);
 
-	if(0.f < pDesc->vDir.Length())
-		m_pTransformCom->Look_Dir(_Vec4(pDesc->vDir.x, pDesc->vDir.y, pDesc->vDir.z, 0.f));
+	if (pDesc->vDir.Length() <= 0.f)
+		pDesc->vDir = _Vec3(0.f, 0.f, 1.f);
+
+	m_pTransformCom->Look_Dir(_Vec4(pDesc->vDir.x, pDesc->vDir.y, pDesc->vDir.z, 0.f));
 
 	return S_OK;
 }
@@ -71,7 +73,7 @@ void CEffect_Container::Update(_float fTimeDelta)
 			}
 		}
 	}
-
+	
 	m_WorldMatrix = m_pTransformCom->Get_WorldMatrix() * SocketMatrix * ParentMatrix;
 
 	for (auto& Effect : m_Effects)
@@ -82,6 +84,8 @@ void CEffect_Container::Update(_float fTimeDelta)
 		if(false== Effect->Get_Dead())
 			Effect->Update(fTimeDelta);
 	}
+
+	m_PreWorldMatrix = m_WorldMatrix;
 }
 
 void CEffect_Container::Late_Update(_float fTimeDelta)
@@ -147,8 +151,13 @@ void CEffect_Container::Set_EffectDesc(const EFFECT_DESC& desc)
 {
 	m_pTransformCom->Set_State(CTransform::STATE_POSITION, desc.vPos);
 	m_pTransformCom->Set_Scaled(desc.vScale.x, desc.vScale.y, desc.vScale.z);
-	if (0.f < desc.vDir.Length())
-		m_pTransformCom->Look_Dir(_Vec4(desc.vDir.x, desc.vDir.y, desc.vDir.z, 0.f));
+
+	_Vec3 vDir = desc.vDir;
+
+	if (vDir.Length() <= 0.f)
+		vDir = _Vec3(0.f, 0.f, 1.f);
+
+	m_pTransformCom->Look_Dir(_Vec4(vDir.x, vDir.y, vDir.z, 0.f));
 
 	m_pParentMatrix = desc.pParentMatrix;
 	m_pSocketMatrix = desc.pSocketMatrix;
