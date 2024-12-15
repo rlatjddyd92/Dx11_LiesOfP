@@ -41,11 +41,11 @@ private:
     _int m_iPreSelectedCutScene = { -1 };
     _int m_iPreSelected_KeyFrame = { -1 };
 
-	_uint m_iCutSceneCount = { 10 };
+	_uint m_iCutSceneCount = { 11 };
 	CUTSCENE_KEYFRAME_DESC* pCutScene_Desc = { nullptr };
 
-	class CCutScene* m_CutSceneList[10] = {nullptr,};
-    const char* m_CutSceneNameList[10] = { "Boss1_Meet", "Boss1_Phase2", "Boss1_Dead", "Sophia_EnterRoom", "Boss2_Meet",  "Boss2_Phase2",  "Boss2_Defeat", "Sophia_Dead", "Boss2_Meet2", "Boss2_Meet3" };
+	class CCutScene* m_CutSceneList[11] = {nullptr,};
+    const char* m_CutSceneNameList[11] = { "Boss1_Meet1", "Boss1_Phase2", "Boss1_Dead", "Sophia_EnterRoom", "Boss2_Meet",  "Boss2_Phase2",  "Boss2_Defeat", "Sophia_Dead", "Boss2_Meet2", "Boss2_Meet3","Boss1_Meet2"};
     const char* m_ActorTypeNameList[5] = { "Camera", "UI", "Shader", "GameObject", "Sound"};
 	class CGameObject* m_pObjects[3] = { nullptr, };
 
