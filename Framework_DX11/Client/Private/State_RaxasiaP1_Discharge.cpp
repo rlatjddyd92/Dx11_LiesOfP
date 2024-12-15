@@ -30,6 +30,8 @@ HRESULT CState_RaxasiaP1_Discharge::Start_State(void* pArg)
     m_bStampBlast = false;
 
     m_bSwing = false;
+    m_bStamp = false;
+
     return S_OK;
 }
 
@@ -45,6 +47,7 @@ void CState_RaxasiaP1_Discharge::Update(_float fTimeDelta)
             ++m_iRouteTrack;
             m_bSwing = false;
             m_pMonster->Change_Animation(AN_DISCHARGE, false, 0.1f, 0);
+            return;
         }
 
         if (CurTrackPos <= 30.f ||
@@ -83,6 +86,7 @@ void CState_RaxasiaP1_Discharge::Update(_float fTimeDelta)
 
 void CState_RaxasiaP1_Discharge::End_State()
 {
+    m_pMonster->DeActive_Effect(CRaxasia::EFFECT_INCHENTSWORD);
 }
 
 _bool CState_RaxasiaP1_Discharge::End_Check()
@@ -118,31 +122,54 @@ void CState_RaxasiaP1_Discharge::Collider_Check(_double CurTrackPos)
 
 void CState_RaxasiaP1_Discharge::Effect_Check(_double CurTrackPos)
 {
-    if (!m_bChargeActive)
+    if (m_iRouteTrack == 0)
     {
-        if (CurTrackPos >= 35.f)
+        if (!m_bStamp)
         {
-            m_pMonster->Active_Effect(CRaxasia::EFFECT_INCHENTSWORD, true);
-            m_pMonster->Active_Effect(CRaxasia::EFFECT_THUNDERDISCHARGE, false);
-            m_bChargeActive = true;
+            if (CurTrackPos >= 44.f)
+            {
+                _float4x4 WorldMat{};
+                _Vec3 vPos = { 0.f, 0.f, -4.25f };
+                XMStoreFloat4x4(&WorldMat, (*m_pMonster->Get_WeaponBoneCombinedMat(0) * (*m_pMonster->Get_WeaponWorldMat())));
+                vPos = XMVector3TransformCoord(vPos, XMLoadFloat4x4(&WorldMat));
+
+                CEffect_Manager::Get_Instance()->Add_Effect_ToLayer(LEVEL_GAMEPLAY, TEXT("Raxasia_Attack_Stamp"),
+                    vPos, _Vec3{ 0.f, 0.f, 1.f });
+
+                m_bStamp = true;
+            }
         }
     }
-
-    if(!m_bStampBlast)
+    else
     {
-        if (CurTrackPos >= 220.f)
+        if (!m_bChargeActive)
         {
-            _float4x4 WorldMat{};
-            _Vec3 vPos = { 0.f, 0.f, -4.25f };
-            XMStoreFloat4x4(&WorldMat, (*m_pMonster->Get_WeaponBoneCombinedMat(0) * (*m_pMonster->Get_WeaponWorldMat())));
-            vPos = XMVector3TransformCoord(vPos, XMLoadFloat4x4(&WorldMat));
+            if (CurTrackPos >= 35.f)
+            {
+                m_pMonster->Active_Effect(CRaxasia::EFFECT_INCHENTSWORD, true);
+                m_pMonster->Active_Effect(CRaxasia::EFFECT_THUNDERDISCHARGE, false);
+                m_bChargeActive = true;
+            }
+        }
 
-            CEffect_Manager::Get_Instance()->Add_Effect_ToLayer(LEVEL_GAMEPLAY, TEXT("Raxasia_Attack_ThunderStamp_Small"),
-                vPos, _Vec3{ 0.f, 0.f, 1.f });
-            
-            //어택오브젝트 생성 마크 후 폭발
-            
-            m_bStampBlast = true;
+        if (!m_bStampBlast)
+        {
+            if (CurTrackPos >= 120.f)
+            {
+                _float4x4 WorldMat{};
+                _Vec3 vPos = { 0.f, 0.f, -4.25f };
+                XMStoreFloat4x4(&WorldMat, (*m_pMonster->Get_WeaponBoneCombinedMat(0) * (*m_pMonster->Get_WeaponWorldMat())));
+                vPos = XMVector3TransformCoord(vPos, XMLoadFloat4x4(&WorldMat));
+
+                vPos.y -= 1.f;
+
+                CEffect_Manager::Get_Instance()->Add_Effect_ToLayer(LEVEL_GAMEPLAY, TEXT("Raxasia_Attack_ThunderStamp_Small"),
+                    vPos, _Vec3{ 0.f, 0.f, 1.f });
+
+                //어택오브젝트 생성 마크 후 폭발
+
+                m_bStampBlast = true;
+            }
         }
     }
 }

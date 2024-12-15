@@ -54,8 +54,9 @@ void CState_RaxasiaP1_SwingDown_Multiple::Update(_float fTimeDelta)
             ++m_iRouteTrack;
             m_bSwing = false;
             m_bStamp = false;
-            m_pMonster->Change_Animation(AN_SWINGDOWN_R, false, 0.1f, 0);
             m_iCurAnimIndex = AN_SWINGDOWN_R;
+            m_pMonster->Change_Animation(m_iCurAnimIndex, false, 0.1f, 0);
+            return;
         }
         if (CurTrackPos <= 25.f || CurTrackPos >= 60.f)
         {
@@ -92,6 +93,7 @@ void CState_RaxasiaP1_SwingDown_Multiple::Update(_float fTimeDelta)
                 m_pMonster->Get_Model()->Set_SpeedRatio(m_iCurAnimIndex, (double)1 + SpeedRatio);
             }
             m_pMonster->Change_Animation(m_iCurAnimIndex, false, 0.1f, 0);
+            return;
         }
 
         if (CurTrackPos <= 30.f ||CurTrackPos >= 55.f)
@@ -204,7 +206,7 @@ void CState_RaxasiaP1_SwingDown_Multiple::Effect_Check(_double CurTrackPos)
         
         if (!m_bStamp)
         {
-            if (CurTrackPos >= 44.f)
+            if (CurTrackPos >= 43.5f)
             {
                 _float4x4 WorldMat{};
                 _Vec3 vPos = { 0.f, 0.f, -4.25f };
@@ -236,7 +238,7 @@ void CState_RaxasiaP1_SwingDown_Multiple::Effect_Check(_double CurTrackPos)
             }
             if (!m_bStamp)
             {
-                if (CurTrackPos >= 44.f)
+                if (CurTrackPos >= 43.5f)
                 {
                     _float4x4 WorldMat{};
                     _Vec3 vPos = { 0.f, 0.f, -4.25f };
@@ -266,7 +268,7 @@ void CState_RaxasiaP1_SwingDown_Multiple::Effect_Check(_double CurTrackPos)
             }
             if (!m_bStamp)
             {
-                if (CurTrackPos >= 48.f)
+                if (CurTrackPos >= 47.5f)
                 {
                     _float4x4 WorldMat{};
                     _Vec3 vPos = { 0.f, 0.f, -4.25f };
