@@ -4,6 +4,7 @@
 #include "Model.h"
 #include "Raxasia.h"
 #include "CutScene.h"
+#include "Raxasia_Sword_CutScene.h"
 
 CState_Raxasia_CutScene_Meet::CState_Raxasia_CutScene_Meet(CFsm* pFsm, CMonster* pMonster)
     :CState{ pFsm }
@@ -30,6 +31,8 @@ HRESULT CState_Raxasia_CutScene_Meet::Start_State(void* pArg)
     m_isStartCutScene = false;
     m_fDelay = 0.f;
 
+    m_pCutSceneWeapon = dynamic_cast<CRaxasia*>(m_pMonster)->Get_CutSceneWeapon();
+
     return S_OK;
 }
 
@@ -40,7 +43,7 @@ void CState_Raxasia_CutScene_Meet::Update(_float fTimeDelta)
     if (!m_isMoveDown && iFrame > 230)
     {
         _matrix PreTransformMatrix = XMMatrixScaling(0.01f, 0.01f, 0.01f) * XMMatrixRotationX(XMConvertToRadians(243.f)) * XMMatrixRotationY(XMConvertToRadians(-5.f)) * XMMatrixRotationZ(XMConvertToRadians(30.f));
-        dynamic_cast<CModel*>(dynamic_cast<CRaxasia*>(m_pMonster)->Get_CutSceneWeapon()->Find_Component(MODEL))->Set_PreTranformMatrix(PreTransformMatrix);
+        m_pCutSceneWeapon->Get_Model()->Set_PreTranformMatrix(PreTransformMatrix);
 
         _Vec3 vNewPos = m_pMonster->Get_Transform()->Get_State(CTransform::STATE_POSITION);
         vNewPos.x -= 14.7f;
@@ -50,6 +53,12 @@ void CState_Raxasia_CutScene_Meet::Update(_float fTimeDelta)
         m_pMonster->Get_RigidBody()->Set_GloblePose(vNewPos);
 
         m_isMoveDown = true;
+    }
+
+    if (!m_isPlayWeaponAni && iFrame > 350)
+    {
+        m_pCutSceneWeapon->Play_Animation("AS_WP_MOB_Raxasia_01_Sword_Cine_Change__Anim", 1.f);
+        m_isPlayWeaponAni = true;
     }
 
     _uint iCurAnim = m_pMonster->Get_CurrentAnimIndex();
@@ -86,6 +95,7 @@ void CState_Raxasia_CutScene_Meet::Update(_float fTimeDelta)
 
 void CState_Raxasia_CutScene_Meet::End_State()
 {
+    m_pCutSceneWeapon = nullptr;
 }
 
 void CState_Raxasia_CutScene_Meet::End_Check()

@@ -26,10 +26,13 @@ private:
 
     _bool               m_isStartCutScene = {};
     _bool               m_isMoveDown = {};
+    _bool               m_isPlayWeaponAni = {};
 
     _float              m_fDelay = {};
 
     _Vec3               m_vRootMoveStack{};
+
+    class CRaxasia_Sword_CutScene* m_pCutSceneWeapon = { nullptr };
 
 private:
     void                End_Check();

@@ -19,6 +19,9 @@ public:
 		const _Matrix* pSocketBoneMatrix = { nullptr };
 	}WEAPON_DESC;
 
+public:
+	class CModel* Get_Model() { return m_pModelCom; }
+
 private:
 	CRaxasia_Sword_CutScene(ID3D11Device* pDevice, ID3D11DeviceContext* pContext);
 	CRaxasia_Sword_CutScene(const CRaxasia_Sword_CutScene& Prototype);

@@ -369,7 +369,8 @@ void CRaxasia::Start_CutScene(_uint iCutSceneNum)
 		CRaxasia_Sword_CutScene::WEAPON_DESC Desc{};
 		Desc.pParentWorldMatrix = m_pTransformCom->Get_WorldMatrix_Ptr();
 		Desc.pSocketBoneMatrix = m_pModelCom->Get_BoneCombindTransformationMatrix_Ptr("weapon0_l");
-		m_pCutSceneWeapon = m_pGameInstance->Get_CloneObject_ToLayer(LEVEL_GAMEPLAY, TEXT("Layer_CutSceneWeapon"), TEXT("Prototype_GameObject_Weapon_Raxasia_Sword_CutScene"), &Desc);
+		m_pCutSceneWeapon = dynamic_cast<CRaxasia_Sword_CutScene*>(m_pGameInstance->Get_CloneObject_ToLayer(LEVEL_GAMEPLAY, TEXT("Layer_CutSceneWeapon"), 
+			TEXT("Prototype_GameObject_Weapon_Raxasia_Sword_CutScene"), &Desc));
 
 		m_pRigidBodyCom->Set_IsLockCell(false);
 		m_pRigidBodyCom->Set_IsOnCell(false);

@@ -67,7 +67,7 @@ private:
 	virtual ~CRaxasia() = default;
 
 public:
-	CGameObject* Get_CutSceneWeapon() { return m_pCutSceneWeapon; }
+	class CRaxasia_Sword_CutScene* Get_CutSceneWeapon() { return m_pCutSceneWeapon; }
 
 public:
 	virtual HRESULT Initialize_Prototype() override;
@@ -123,7 +123,7 @@ private:
 
 	const _Matrix* m_pColliderBindMatrix[CT_END] = { nullptr, nullptr, nullptr };
 
-	CGameObject*			m_pCutSceneWeapon = { nullptr };
+	class CRaxasia_Sword_CutScene*			m_pCutSceneWeapon = { nullptr };
 
 private:
 
