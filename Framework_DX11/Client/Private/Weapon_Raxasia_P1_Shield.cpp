@@ -97,12 +97,12 @@ void CWeapon_Raxasia_P1_Shield::Update(_float fTimeDelta)
 	}
 
 
-	PreTransformMatrix = XMMatrixScaling(0.01f, 0.01f, 0.01f) * XMMatrixRotationX(XMConvertToRadians(180.f));
+	//PreTransformMatrix = XMMatrixScaling(0.01f, 0.01f, 0.01f) * XMMatrixRotationX(XMConvertToRadians(180.f));
 
-	m_pModelCom->Set_PreTranformMatrix(PreTransformMatrix);
+	//m_pModelCom->Set_PreTranformMatrix(PreTransformMatrix);
 
-	_Vec3 vv = _Vec3(fX, fY, fZ);
-	m_pTransformCom->Set_State(CTransform::STATE_POSITION, vv);
+	//_Vec3 vv = _Vec3(fX, fY, fZ);
+	//m_pTransformCom->Set_State(CTransform::STATE_POSITION, vv);
 
 	m_pColliderCom->Update(&m_WorldMatrix);
 }

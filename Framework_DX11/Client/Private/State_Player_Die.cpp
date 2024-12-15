@@ -111,19 +111,7 @@ _uint CState_Player_Die::Choice_DieAnim(DIE_DESC* pDesc)
 {  
     if (nullptr != pDesc)
     {
-        // 넘어져 있다는 상태임
-        if (m_pFsm->Get_PrevState() == CPlayer::HIT)
-        {
-            if (pDesc->isFront)
-            {
-                return DOWN_F;
-            }
-            else
-            {
-                return DOWN_B;
-            }
-        }
-        else if (pDesc->vHitPos.Length() > 0.f)
+        if (pDesc->vHitPos.Length() > 0.f)
         {
             _Matrix PlayerWorldMatrix = m_pPlayer->Get_Transform()->Get_WorldMatrix();
             _Vec3 vHitDir = pDesc->vHitPos - PlayerWorldMatrix.Translation();
@@ -138,6 +126,18 @@ _uint CState_Player_Die::Choice_DieAnim(DIE_DESC* pDesc)
             else if (fForwardDot < -0.f)
             {
                 return HIT_B;  // 뒤쪽
+            }
+        }
+        // 넘어져 있다는 상태임
+        else if (m_pFsm->Get_PrevState() == CPlayer::HIT)
+        {
+            if (pDesc->isFront)
+            {
+                return DOWN_F;
+            }
+            else
+            {
+                return DOWN_B;
             }
         }
     }

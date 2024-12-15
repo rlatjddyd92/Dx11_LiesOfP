@@ -928,15 +928,25 @@ void CPlayer::Change_HitState(_float fAtkDmg, _Vec3 vHitPos)
 	const _Matrix* pParetnMatrix = m_pTransformCom->Get_WorldMatrix_Ptr();
 	const _Matrix* pSocketBoneMatrix = m_pModelCom->Get_BoneCombindTransformationMatrix_Ptr("BN_Weapon_R");
 	
-	CState_Player_Hit::HIT_DESC HitDesc{};
-	HitDesc.vHitPos = vHitPos;
-	HitDesc.isDown = false;
+	if (m_tPlayer_Stat->vGauge_Hp.x <= 0.f)
+	{
+		CState_Player_Die::DIE_DESC DieDesc{};
+		DieDesc.vHitPos = vHitPos;
 
-	if (fAtkDmg >= 80.f)
-		HitDesc.isDown = true;
+		m_pFsmCom->Change_State(DIE, &DieDesc);
+	}
+	else
+	{
+		CState_Player_Hit::HIT_DESC HitDesc{};
+		HitDesc.vHitPos = vHitPos;
+		HitDesc.isDown = false;
 
-	if (fAtkDmg > 0.f)
-		m_pFsmCom->Change_State(HIT, &HitDesc);
+		if (fAtkDmg >= 80.f)
+			HitDesc.isDown = true;
+
+		if (fAtkDmg > 0.f)
+			m_pFsmCom->Change_State(HIT, &HitDesc);
+	}
 
 	m_pEffect_Manager->Add_Effect_ToLayer(LEVEL_GAMEPLAY, TEXT("Player_Impact"), pParetnMatrix, pSocketBoneMatrix);
 }
