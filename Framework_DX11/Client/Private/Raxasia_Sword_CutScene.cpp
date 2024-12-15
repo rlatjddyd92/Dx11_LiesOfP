@@ -66,42 +66,44 @@ void CRaxasia_Sword_CutScene::Update(_float fTimeDelta)
 		m_pModelCom->Update_Bone();
 
 
-	static _float fX = 200;
-	static _float fY = -40.f;
-	static _float fZ = 30.f;
+	static _float fX = -0.8f;
+	static _float fY = 0.4f;
+	static _float fZ = -1.f;
 	_matrix		PreTransformMatrix = XMMatrixIdentity();	
 	
 	if (KEY_TAP(KEY::NUM1))
 	{
-		fX -= 5.f;
+		fX -= 0.1f;
 	}
 	else if (KEY_TAP(KEY::NUM2))
 	{
-		fX += 5.f;
+		fX += 0.1f;
 	}
 
 	if (KEY_TAP(KEY::NUM3))
 	{
-		fY -= 5.f;
+		fY -= 0.1f;
 	}
 	else if (KEY_TAP(KEY::NUM4))
 	{
-		fY += 5.f;
+		fY += 0.1f;
 	}
 
 	if (KEY_TAP(KEY::NUM5))
 	{
-		fZ -= 5.f;
+		fZ -= 0.1f;
 	}
 	else if (KEY_TAP(KEY::NUM6))
 	{
-		fZ += 5.f;
+		fZ += 0.1f;
 	}
 
 
 	PreTransformMatrix = XMMatrixScaling(0.015f, 0.015f, 0.015f) * XMMatrixRotationX(XMConvertToRadians(fX)) * XMMatrixRotationY(XMConvertToRadians(fY)) * XMMatrixRotationZ(XMConvertToRadians(fZ));
 
 	//m_pModelCom->Set_PreTranformMatrix(PreTransformMatrix);
+
+	static _Matrix WWW;
 
 	if (m_isUpdatePos)
 	{
@@ -112,7 +114,13 @@ void CRaxasia_Sword_CutScene::Update(_float fTimeDelta)
 			SocketMatrix.r[i] = XMVector3Normalize(SocketMatrix.r[i]);
 		}
 		XMStoreFloat4x4(&m_WorldMatrix, XMLoadFloat4x4(m_pTransformCom->Get_WorldMatrix_Ptr()) * SocketMatrix * XMLoadFloat4x4(m_pParentMatrix));
+
+		WWW = m_WorldMatrix;
 	}
+
+	m_WorldMatrix._41 = WWW._41 + fX;
+	m_WorldMatrix._42 = WWW._42 + fY;
+	m_WorldMatrix._43 = WWW._43 + fZ;
 
 }
 
