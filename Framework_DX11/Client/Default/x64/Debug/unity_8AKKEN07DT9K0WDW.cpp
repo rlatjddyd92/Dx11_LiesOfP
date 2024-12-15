@@ -828,7 +828,7 @@
 #include "D:\GitProject\Dx11_LiesOfP\Framework_DX11\Client\Private\UIPage_Popup.cpp"
 
 
-#include "D:\GitProject\Dx11_LiesOfP\Framework_DX11\Client\Private\UIPage_Skill.cpp"
+#include "D:\GitProject\Dx11_LiesOfP\Framework_DX11\Client\Private\UIPage_Common.cpp"
 
 
 #include "D:\GitProject\Dx11_LiesOfP\Framework_DX11\Client\Private\UIPage_Stat.cpp"

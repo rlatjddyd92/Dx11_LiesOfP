@@ -227,6 +227,13 @@ void CCutScene::First_Setting()
 		pPlayer->IsActive(false);
 		m_pObjects[BOSS2] = static_cast<CPawn*>(m_pGameInstance->Find_Object(LEVEL_GAMEPLAY, TEXT("Layer_SimonManus"), 0));
 		break;
+	case BOSS1_MEET2:
+		if (FAILED(m_pGameInstance->Add_CloneObject_ToLayer(LEVEL_GAMEPLAY, TEXT("Layer_Raxasia"), TEXT("Prototype_GameObject_Raxasia"))))
+			return;
+		m_pObjects[BOSS1] = static_cast<CPawn*>(m_pGameInstance->Find_Object(LEVEL_GAMEPLAY, TEXT("Layer_Raxasia"), 0));
+		m_pObjects[BOSS1]->Start_CutScene(0);
+
+		break;
 	}
 }
 
