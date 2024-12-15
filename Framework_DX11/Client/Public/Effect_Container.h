@@ -68,6 +68,8 @@ private:
 	_bool m_isCloned = { false };
 	_bool m_isLoop = { false };
 
+	_Matrix m_PreWorldMatrix = {};
+
 public:
 	static CEffect_Container* Create(ID3D11Device* pDevice, ID3D11DeviceContext* pContext);
 	virtual CGameObject* Clone(void* pArg);

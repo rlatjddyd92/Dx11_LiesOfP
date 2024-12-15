@@ -11,6 +11,8 @@
 // 내구도 조정 함수 연결을 위한 헤더 추가 
 #include "GameInterface_Controller.h"
 
+#include "Effect_Container.h"
+
 CWeapon_Rapier::CWeapon_Rapier(ID3D11Device* pDevice, ID3D11DeviceContext* pContext)
 	: CWeapon{ pDevice, pContext }
 {
@@ -88,6 +90,12 @@ void CWeapon_Rapier::Update(_float fTimeDelta)
 			DeActive_Effect(EFFECT_STORMSTAB1);
 			DeActive_Effect(EFFECT_STORMSTAB2);
 		}
+	}
+
+	for (auto& pEffect : m_Effects)
+	{
+		if (!pEffect->Get_Dead())
+			pEffect->Update(fTimeDelta);
 	}
 
 	m_pColliderCom->Update(&m_WorldMatrix);

@@ -59,7 +59,6 @@ HRESULT CWeapon_Scissor_Handle::Initialize(void* pArg)
 
 void CWeapon_Scissor_Handle::Priority_Update(_float fTimeDelta)
 {
-
 	if (!m_isActive)
 		return;
 
@@ -101,6 +100,12 @@ void CWeapon_Scissor_Handle::Update(_float fTimeDelta)
 		Active_Effect(EFFECT_BUFF, true);
 	}
 
+	for (auto& pEffect : m_Effects)
+	{
+		if (!pEffect->Get_Dead())
+			pEffect->Update(fTimeDelta);
+	}
+
 	m_pColliderCom->Update(&m_WorldMatrix);
 }
 
@@ -109,6 +114,7 @@ void CWeapon_Scissor_Handle::Late_Update(_float fTimeDelta)
 	if (!m_isActive)
 		return;
 
+	__super::Late_Update(fTimeDelta);
 
 	m_pBlade->Late_Update(fTimeDelta);
 
@@ -331,26 +337,25 @@ HRESULT CWeapon_Scissor_Handle::Ready_Effect()
 	if (m_eType == SCISSOR_LEFT)
 	{
 		m_Effects[EFFECT_BASE] = m_pEffect_Manager->Clone_Effect(TEXT("Player_Attack_Scissor_Slash"), m_pParentMatrix,
-			m_pSocketMatrix, _Vec3(0.f, 0.f, 0.f), _Vec3(0.f, 0.f, 0.f), _Vec3(1.f, 1.f, 1.f));
+			m_pSocketMatrix);
 
 		m_Effects[EFFECT_LINKSLASH1] = m_pEffect_Manager->Clone_Effect(TEXT("Player_Attack_Scissor_Left_LinkSlash_First"), m_pParentMatrix,
-			m_pSocketMatrix, _Vec3(0.f, 0.f, 0.f), _Vec3(0.f, 0.f, 0.f), _Vec3(1.f, 1.f, 1.f));
+			m_pSocketMatrix);
 
 		m_Effects[EFFECT_BUFF] = m_pEffect_Manager->Clone_Effect(TEXT("Player_Grind_Scissor_Left"), m_pParentMatrix,
-			m_pSocketMatrix, _Vec3(0.f, 0.f, 0.f), _Vec3(0.f, 0.f, 0.f), _Vec3(1.f, 1.f, 1.f));
+			m_pSocketMatrix);
 	}
 	else
 	{
 		m_Effects[EFFECT_BASE] = m_pEffect_Manager->Clone_Effect(TEXT("Player_Attack_Scissor_Right_Slash"), m_pParentMatrix,
-			m_pSocketMatrix, _Vec3(0.f, 0.f, 0.f), _Vec3(0.f, 0.f, 0.f), _Vec3(1.f, 1.f, 1.f));
+			m_pSocketMatrix);
 
 		m_Effects[EFFECT_LINKSLASH1] = m_pEffect_Manager->Clone_Effect(TEXT("Player_Attack_Scissor_Right_LinkSlash_First"), m_pParentMatrix,
-			m_pSocketMatrix, _Vec3(0.f, 0.f, 0.f), _Vec3(0.f, 0.f, 0.f), _Vec3(1.f, 1.f, 1.f));
+			m_pSocketMatrix);
 
 		m_Effects[EFFECT_BUFF] = m_pEffect_Manager->Clone_Effect(TEXT("Player_Grind_Scissor_Right"), m_pParentMatrix,
-			m_pSocketMatrix, _Vec3(0.f, 0.f, 0.f), _Vec3(0.f, 0.f, 0.f), _Vec3(1.f, 1.f, 1.f));
+			m_pSocketMatrix);
 	}
-
 
 	return S_OK;
 }

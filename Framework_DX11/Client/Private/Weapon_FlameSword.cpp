@@ -97,6 +97,12 @@ void CWeapon_FlameSword::Update(_float fTimeDelta)
 		}
 	}
 
+	for (auto& pEffect : m_Effects)
+	{
+		if (!pEffect->Get_Dead())
+			pEffect->Update(fTimeDelta);
+	}
+
 	m_pColliderCom->Update(&m_WorldMatrix);
 }
 

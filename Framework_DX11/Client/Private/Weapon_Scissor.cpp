@@ -98,12 +98,18 @@ void CWeapon_Scissor::Update(_float fTimeDelta)
 			}
 		}
 
+		for (auto& pEffect : m_Effects)
+		{
+			if (!pEffect->Get_Dead())
+				pEffect->Update(fTimeDelta);
+		}
 	}
 	else if (m_isSeperate)
 	{
 		m_pScissor_Sperate[0]->Update(fTimeDelta);
 		m_pScissor_Sperate[1]->Update(fTimeDelta);
 	}
+
 }
 
 void CWeapon_Scissor::Late_Update(_float fTimeDelta)
