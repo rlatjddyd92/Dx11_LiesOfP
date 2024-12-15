@@ -37,7 +37,9 @@ HRESULT CRaxasia_Sword_CutScene::Initialize(void* pArg)
 	if (FAILED(Ready_Components()))
 		return E_FAIL;
 
-	m_pModelCom->SetUp_NextAnimation(1, false, 0.f);
+
+	_uint iAnimIndex = m_pModelCom->Find_AnimationIndex("AS_WP_MOB_Raxasia_01_Sword_Cine_Change__Anim", 1.f);
+	m_pModelCom->SetUp_NextAnimation(iAnimIndex, false, 0.f, 1);
 
 	m_pModelCom->Play_Animation(1.f);
 	m_isPlayAnimation = false;
@@ -45,6 +47,8 @@ HRESULT CRaxasia_Sword_CutScene::Initialize(void* pArg)
 	/*	static _float fX = 243.f;
 	static _float fY = -5.f;
 	static _float fZ = 30.f;*/
+
+	m_isUpdatePos = true;
 
 	return S_OK;
 }
@@ -62,50 +66,54 @@ void CRaxasia_Sword_CutScene::Update(_float fTimeDelta)
 		m_pModelCom->Update_Bone();
 
 
-	/*static _float fX = 243.f;
-	static _float fY = -5.f;
-	static _float fZ = 30.f;
+	static _float fX = -90.f;
+	static _float fY = 0.f;
+	static _float fZ = 0.f;
 	_matrix		PreTransformMatrix = XMMatrixIdentity();	
 	
 	if (KEY_TAP(KEY::NUM1))
 	{
-		fX -= 1.f;
+		fX -= 10.f;
 	}
 	else if (KEY_TAP(KEY::NUM2))
 	{
-		fX += 1.f;
+		fX += 10.f;
 	}
 
 	if (KEY_TAP(KEY::NUM3))
 	{
-		fY -= 1.f;
+		fY -= 10.f;
 	}
 	else if (KEY_TAP(KEY::NUM4))
 	{
-		fY += 1.f;
+		fY += 10.f;
 	}
 
 	if (KEY_TAP(KEY::NUM5))
 	{
-		fZ -= 1.f;
+		fZ -= 10.f;
 	}
 	else if (KEY_TAP(KEY::NUM6))
 	{
-		fZ += 1.f;
+		fZ += 10.f;
 	}
 
 
-	PreTransformMatrix = XMMatrixScaling(0.01f, 0.01f, 0.01f) * XMMatrixRotationX(XMConvertToRadians(fX)) * XMMatrixRotationY(XMConvertToRadians(fY)) * XMMatrixRotationZ(XMConvertToRadians(fZ));
+	PreTransformMatrix = XMMatrixScaling(0.015f, 0.015f, 0.015f) * XMMatrixRotationX(XMConvertToRadians(fX)) * XMMatrixRotationY(XMConvertToRadians(fY)) * XMMatrixRotationZ(XMConvertToRadians(fZ));
 
-	m_pModelCom->Set_PreTranformMatrix(PreTransformMatrix);*/
+	m_pModelCom->Set_PreTranformMatrix(PreTransformMatrix);
 
-	_matrix		SocketMatrix = *m_pSocketMatrix;
-
-	for (size_t i = 0; i < 3; i++)
+	if (m_isUpdatePos)
 	{
-		SocketMatrix.r[i] = XMVector3Normalize(SocketMatrix.r[i]);
+		_matrix		SocketMatrix = *m_pSocketMatrix;
+
+		for (size_t i = 0; i < 3; i++)
+		{
+			SocketMatrix.r[i] = XMVector3Normalize(SocketMatrix.r[i]);
+		}
+		XMStoreFloat4x4(&m_WorldMatrix, XMLoadFloat4x4(m_pTransformCom->Get_WorldMatrix_Ptr()) * SocketMatrix * XMLoadFloat4x4(m_pParentMatrix));
 	}
-	XMStoreFloat4x4(&m_WorldMatrix, XMLoadFloat4x4(m_pTransformCom->Get_WorldMatrix_Ptr()) * SocketMatrix * XMLoadFloat4x4(m_pParentMatrix));
+
 }
 
 void CRaxasia_Sword_CutScene::Late_Update(_float fTimeDelta)
@@ -185,6 +193,21 @@ void CRaxasia_Sword_CutScene::Play_Animation(_char* szAnimationName, _float fSpe
 void CRaxasia_Sword_CutScene::Stop_Animation()
 {
 	m_isPlayAnimation = false;
+}
+
+void CRaxasia_Sword_CutScene::Change_SocketMatrix(const _Matrix* pSocketMatrix)
+{
+	m_pSocketMatrix = pSocketMatrix;
+}
+
+void CRaxasia_Sword_CutScene::Start_UpdatePos()
+{
+	m_isUpdatePos = true;
+}
+
+void CRaxasia_Sword_CutScene::Stop_UpdatePos()
+{
+	m_isUpdatePos = false;
 }
 
 HRESULT CRaxasia_Sword_CutScene::Ready_Components()

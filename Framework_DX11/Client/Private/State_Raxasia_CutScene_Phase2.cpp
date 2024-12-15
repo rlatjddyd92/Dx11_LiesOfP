@@ -2,8 +2,9 @@
 #include "State_Raxasia_CutScene_Phase2.h"
 #include "GameInstance.h"
 #include "Model.h"
-#include "SimonManus.h"
+#include "Raxasia.h"
 #include "CutScene.h"
+#include "Raxasia_Sword_CutScene.h"
 
 CState_Raxasia_CutScene_Phase2::CState_Raxasia_CutScene_Phase2(CFsm* pFsm, CMonster* pMonster)
     :CState{ pFsm }
@@ -23,12 +24,15 @@ HRESULT CState_Raxasia_CutScene_Phase2::Initialize(_uint iStateNum, void* pArg)
 HRESULT CState_Raxasia_CutScene_Phase2::Start_State(void* pArg)
 {
     // 모델이 달라서 여기서 해주기
-    m_iAnimation_Phase2 = m_pMonster->Get_Model()->Find_AnimationIndex("AS_Raxasia_Raxasia_Phase1_C06_Renew_CINE", 1.f);
+    m_iAnimation_Phase2 = m_pMonster->Get_Model()->Find_AnimationIndex("AS_Raxasia_Raxasia_Phase2_C00_CINE", 1.f);
 
-    m_pMonster->Change_Animation(m_iAnimation_Phase2, true, 0.f, 0);
+    m_pMonster->Change_Animation(m_iAnimation_Phase2, false, 0.f, 0);
 
     m_isStartCutScene = false;
     m_fDelay = 0.f;
+
+    m_pCutSceneWeapon = dynamic_cast<CRaxasia*>(m_pMonster)->Get_CutSceneWeapon();
+    //m_pCutSceneWeapon->Play_Animation("AS_Sword_Raxasia_Phase2_C01_CINE");
 
     return S_OK;
 }
@@ -37,42 +41,60 @@ void CState_Raxasia_CutScene_Phase2::Update(_float fTimeDelta)
 {
     _int iFrame = m_pMonster->Get_Frame();
 
-    /*  _uint iCurAnim = m_pMonster->Get_CurrentAnimIndex();
+    _uint iCurAnim = m_pMonster->Get_CurrentAnimIndex();
 
-      m_fDelay += fTimeDelta;
-      if (m_fDelay >= 0.1f && !m_isStartCutScene)
-      {
-          m_pMonster->Play_Animation();
-          m_isStartCutScene = true;
-      }
-      else if (m_fDelay < 16.f)
-      {
-          m_pMonster->Stop_Animation();
-      }
+    if (!m_isChangePhase2Model && iFrame > 599)
+    {
+        m_pMonster->Change_Model(1);
+        m_isChangePhase2Model = true;
+    }
 
-
-      _Vec3 vMove = m_pMonster->Get_Model()->Get_BoneCombindTransformationMatrix_Ptr(5)->Translation();
-      _float4x4 TransMat;
-      XMStoreFloat4x4(&TransMat, m_pMonster->Get_Model()->Get_Bones()[5]->Get_TransformationMatrix());
-      TransMat._41 = 0.f;
-
-      m_pMonster->Get_Model()->Get_Bones()[5]->Set_TransformationMatrix(TransMat);;
-
-      m_pMonster->Get_Model()->Update_Bone();
-
-      vMove = XMVector3TransformNormal(vMove, m_pMonster->Get_Transform()->Get_WorldMatrix());
-
-      vMove.y = 0;*/
+    if (!m_isOnGroundWeapon && iFrame > 100)
+    {
+        m_pCutSceneWeapon->Stop_UpdatePos();
+        m_isOnGroundWeapon = true;
+    }
+    //m_fDelay += fTimeDelta;
+    //if (m_fDelay >= 0.1f && !m_isStartCutScene)
+    //{
+    //    m_pMonster->Play_Animation();
+    //    m_isStartCutScene = true;
+    //}
+    //else if (m_fDelay < 16.f)
+    //{
+    //    m_pMonster->Stop_Animation();
+    //}
 
 
+    _Vec3 vMove = m_pMonster->Get_Model()->Get_BoneCombindTransformationMatrix_Ptr(3)->Translation();
+    _float4x4 TransMat;
+    XMStoreFloat4x4(&TransMat, m_pMonster->Get_Model()->Get_Bones()[3]->Get_TransformationMatrix());
+    TransMat._41 = TransMat._42 = TransMat._43 = 0.f;
+
+    m_pMonster->Get_Model()->Get_Bones()[3]->Set_TransformationMatrix(TransMat);;
+
+    m_pMonster->Get_Model()->Update_Bone();
+
+    vMove = XMVector3TransformNormal(vMove, m_pMonster->Get_Transform()->Get_WorldMatrix());
+
+    m_pMonster->Get_RigidBody()->Set_Velocity((vMove - m_vRootMoveStack) / fTimeDelta);
+
+    m_vRootMoveStack = vMove;
+
+    //End_Check();
 }
 
 void CState_Raxasia_CutScene_Phase2::End_State()
 {
+    m_pCutSceneWeapon = nullptr;
 }
 
 void CState_Raxasia_CutScene_Phase2::End_Check()
 {
+    if (m_pMonster->Get_EndAnim(m_iAnimation_Phase2))
+    {
+        m_pMonster->End_CutScene(CRaxasia::CUTSCENE_MEET);
+    }
 }
 
 CState_Raxasia_CutScene_Phase2* CState_Raxasia_CutScene_Phase2::Create(CFsm* pFsm, CMonster* pMonster, _uint iStateNum, void* pArg)

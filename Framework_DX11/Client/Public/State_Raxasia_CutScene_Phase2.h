@@ -25,9 +25,14 @@ private:
     _uint               m_iAnimation_Phase2 = {};
 
     _bool               m_isStartCutScene = {};
+    _bool               m_isChangePhase2Model = {};
+    _bool               m_isOnGroundWeapon = {};
+
     _float              m_fDelay = {};
 
     _Vec3               m_vRootMoveStack{};
+
+    class CRaxasia_Sword_CutScene* m_pCutSceneWeapon = { nullptr };
 
 private:
     void                End_Check();

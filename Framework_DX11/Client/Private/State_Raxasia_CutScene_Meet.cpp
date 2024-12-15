@@ -47,7 +47,7 @@ void CState_Raxasia_CutScene_Meet::Update(_float fTimeDelta)
 
         _Vec3 vNewPos = m_pMonster->Get_Transform()->Get_State(CTransform::STATE_POSITION);
         vNewPos.x -= 14.7f;
-        vNewPos.y -= 1.8f;
+        //vNewPos.y -= 1.816f;
         vNewPos.z -= 4.5f;
 
         m_pMonster->Get_RigidBody()->Set_GloblePose(vNewPos);
@@ -55,7 +55,7 @@ void CState_Raxasia_CutScene_Meet::Update(_float fTimeDelta)
         m_isMoveDown = true;
     }
 
-    if (!m_isPlayWeaponAni && iFrame > 350)
+    if (!m_isPlayWeaponAni && iFrame > 400)
     {
         m_pCutSceneWeapon->Play_Animation("AS_WP_MOB_Raxasia_01_Sword_Cine_Change__Anim", 1.f);
         m_isPlayWeaponAni = true;
@@ -103,6 +103,8 @@ void CState_Raxasia_CutScene_Meet::End_Check()
     if (m_pMonster->Get_EndAnim(m_iAnimation_Meet))
     {
         m_pMonster->End_CutScene(CRaxasia::CUTSCENE_MEET);
+
+        m_pMonster->Start_CutScene(CRaxasia::CUTSCENE_P2);
     }
 }
 

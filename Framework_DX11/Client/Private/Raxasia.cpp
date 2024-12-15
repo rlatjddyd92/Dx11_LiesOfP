@@ -65,6 +65,7 @@
 #pragma region
 #include "Raxasia_Sword_CutScene.h"
 #include "State_Raxasia_CutScene_Meet.h"
+#include "State_Raxasia_CutScene_Phase2.h"
 #pragma endregion
 
 #include "Weapon.h"
@@ -378,7 +379,7 @@ void CRaxasia::Start_CutScene(_uint iCutSceneNum)
 		m_pTransformCom->Rotation(_vector{ 0, 1, 0, 0 }, XMConvertToRadians(150.f));
 		m_pRigidBodyCom->Set_GloblePose(XMVectorSet(-28.716f, -81.264f, -14.860f, 1.f));
 
-		_matrix PreTransformMatrix = XMMatrixScaling(0.01f, 0.01f, 0.01f) * XMMatrixRotationX(XMConvertToRadians(180.f));
+		_matrix PreTransformMatrix = XMMatrixScaling(0.015f, 0.015f, 0.015f) * XMMatrixRotationX(XMConvertToRadians(180.f));
 		_Vec3 vShieldOffset = _Vec3(0.f, 0.1f, 0.175f);
 
 		m_pWeaponShield->Get_Transform()->Set_State(CTransform::STATE_POSITION, vShieldOffset);
@@ -388,8 +389,39 @@ void CRaxasia::Start_CutScene(_uint iCutSceneNum)
 	}
 		break;
 	case CUTSCENE_P2:
+	{
 		m_pModelCom = m_pCutSceneModelCom[MODEL_PHASE1];
-		//m_pCutSceneFsmCom->Set_State(STATE_P2);
+		Deactiave_Weapon();
+
+		_matrix PreTransformMatrix = XMMatrixScaling(0.015f, 0.015f, 0.015f) * XMMatrixRotationX(XMConvertToRadians(-90.f));
+
+		m_pCutSceneWeapon->Get_Model()->Set_PreTranformMatrix(PreTransformMatrix);
+		m_pCutSceneWeapon->Change_SocketMatrix(m_pModelCom->Get_BoneCombindTransformationMatrix_Ptr("weapon0_r"));
+		m_pCutSceneWeapon->IsActive(true);
+
+		m_pRigidBodyCom->Set_IsLockCell(false);
+		m_pRigidBodyCom->Set_IsOnCell(false);
+
+		m_pTransformCom->Rotation(_vector{ 0, 1, 0, 0 }, XMConvertToRadians(150.f));
+		
+
+		_Vec3 vCurrentPos = m_pTransformCom->Get_State(CTransform::STATE_POSITION);
+		//vCurrentPos.y += 0.1f;
+
+		vCurrentPos = _Vec3(-59.119f, -97.872f, -27.848f);
+
+		m_pRigidBodyCom->Set_GloblePose(vCurrentPos);
+
+		PreTransformMatrix = XMMatrixScaling(0.01f, 0.01f, 0.01f) * XMMatrixRotationX(XMConvertToRadians(180.f));
+		_Vec3 vShieldOffset = _Vec3(0.f, 0.1f, 0.175f);
+
+		m_pWeaponShield->Get_Transform()->Set_State(CTransform::STATE_POSITION, vShieldOffset);
+		m_pWeaponShield->Get_Model()->Set_PreTranformMatrix(PreTransformMatrix);
+		m_pWeaponShield->ChangeSocketMatrix(m_pModelCom->Get_BoneCombindTransformationMatrix_Ptr("upperArmorBack_02_spine_03"));
+		m_pCutSceneFsmCom->Set_State(STATE_MEET);
+
+		m_pCutSceneFsmCom->Change_State(STATE_P2);
+	}
 		break;
 	case CUTSCENE_DIE:
 		m_pModelCom = m_pCutSceneModelCom[MODEL_PHASE2];
@@ -407,14 +439,13 @@ void CRaxasia::End_CutScene(_uint iCutSceneNum)
 
 		_Vec3 vCurrentPos = m_pTransformCom->Get_State(CTransform::STATE_POSITION);
 		vCurrentPos.y -= 0.4f;
+
 		m_pRigidBodyCom->Set_GloblePose(vCurrentPos);
 		m_pNavigationCom->Research_Cell(vCurrentPos);
 		m_pRigidBodyCom->Set_IsLockCell(true);
 		m_pRigidBodyCom->Set_IsOnCell(true);
 
-		m_pCutSceneWeapon->Set_Dead(true);
-		m_pCutSceneWeapon = nullptr;
-
+		m_pCutSceneWeapon->IsActive(false);
 		Active_Weapon();
 
 		_matrix PreTransformMatrix = XMMatrixScaling(0.01f, 0.01f, 0.01f) *XMMatrixRotationX(XMConvertToRadians(270.0f));
@@ -435,6 +466,16 @@ void CRaxasia::End_CutScene(_uint iCutSceneNum)
 void CRaxasia::Change_Model(_uint iModelNum)
 {
 	m_pModelCom = m_pCutSceneModelCom[1];
+
+	_uint iAnimation_Phase2 = m_pModelCom->Find_AnimationIndex("AS_Raxasia_Raxasia_Phase2_C00_CINE", 1.f);
+	m_pModelCom->SetUp_NextAnimation(iAnimation_Phase2, false, 0.f, 600);
+	m_pModelCom->Play_Animation(0.01f);
+
+	m_pCutSceneWeapon->Change_SocketMatrix(m_pModelCom->Get_BoneCombindTransformationMatrix_Ptr("weapon0_r"));
+	m_pWeaponShield->ChangeSocketMatrix(m_pModelCom->Get_BoneCombindTransformationMatrix_Ptr("upperArmorBack_02_spine_03")); // ³ªÁß¿¡ ¹Ù²ã¾ßÇÔ
+
+	//¿©±â¼­ Çï¸ä »ý¼º
+	m_pModelCom->Get_BoneCombindTransformationMatrix_Ptr("helmet_01");
 }
 
 HRESULT CRaxasia::Ready_Components()
@@ -679,7 +720,7 @@ HRESULT CRaxasia::Ready_FSM()
 		return E_FAIL;
 
 	m_pCutSceneFsmCom->Add_State(CState_Raxasia_CutScene_Meet::Create(m_pCutSceneFsmCom, this, STATE_MEET, &Desc));
-	//m_pCutSceneFsmCom->Add_State(CState_SimonManus_CutScene_Phase2::Create(m_pCutSceneFsmCom, this, STATE_P2, &Desc));
+	m_pCutSceneFsmCom->Add_State(CState_Raxasia_CutScene_Phase2::Create(m_pCutSceneFsmCom, this, STATE_P2, &Desc));
 #pragma endregion
 
 	return S_OK;
@@ -800,7 +841,6 @@ void CRaxasia::Update_Collider()
 
 void CRaxasia::ChangePhase()
 {
-
 	if (m_pExtraModelCom == nullptr || m_pExtraFsmCom == nullptr)
 	{
 		return;

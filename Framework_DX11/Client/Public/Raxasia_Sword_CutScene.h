@@ -40,6 +40,11 @@ public:
 	void Play_Animation(_char* szAnimationName, _float fSpeedRation = 1.f);
 	void Stop_Animation();
 
+	void Change_SocketMatrix(const _Matrix* pSocketMatrix);
+
+	void Start_UpdatePos();
+	void Stop_UpdatePos();
+
 private:
 	class CShader* m_pShaderCom = { nullptr };
 	class CModel* m_pModelCom = { nullptr };
@@ -49,6 +54,7 @@ private:
 	_Vec4            m_vRimLightColor = {};
 
 	_bool			m_isPlayAnimation = {};
+	_bool			m_isUpdatePos = {};
 
 	_Matrix					m_WorldMatrix = {};
 	const _Matrix*			m_pParentMatrix = { nullptr };
