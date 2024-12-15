@@ -31,6 +31,7 @@ private:
     _float              m_fChaseDuration = { 1.5f };
 
     _bool               m_bSwing = { false };
+    _bool               m_bStamp = { false };
 
     _bool               m_bChargeActive = { false };
     _bool               m_bStampBlast = { false };

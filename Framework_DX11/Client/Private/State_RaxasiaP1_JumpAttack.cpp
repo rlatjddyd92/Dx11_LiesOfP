@@ -75,6 +75,7 @@ void CState_RaxasiaP1_JumpAttack::Update(_float fTimeDelta)
             ++m_iRouteTrack;
             m_bSwing = false;
             m_pMonster->Change_Animation(AN_SLASH, false, 0.1f, 3);
+            return;
         }
 
         break;
