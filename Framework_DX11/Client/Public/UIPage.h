@@ -218,12 +218,12 @@ public:
 
 			_float fMove_X = fNow_X - fMouse_Before_X;
 
-			fScroll_Ratio_Y += fMove_X / fBar_Move_Max_Length_X;
+			fScroll_Ratio_X += fMove_X / fBar_Move_Max_Length_X;
 
-			fScroll_Ratio_Y = max(fScroll_Ratio_Y, 0.f);
-			fScroll_Ratio_Y = min(fScroll_Ratio_Y, 1.f);
+			fScroll_Ratio_X = max(fScroll_Ratio_X, 0.f);
+			fScroll_Ratio_X = min(fScroll_Ratio_X, 1.f);
 
-			fData_Offset_X = fData_Height_Max * fScroll_Ratio_Y;
+			fData_Offset_X = fData_Width_Max * fScroll_Ratio_Y;
 
 			fMouse_Before_X = fNow_X;
 
@@ -264,6 +264,9 @@ public:
 
 
 		// Scroll
+		_bool bIsSetting_Y = false;
+		_bool bIsSetting_X = false;
+
 		_bool bIsActive_Y = false;
 		_bool bIsActive_X = false;
 		_float fScroll_Ratio_Y = 0.f; // <- 스크롤 관련 조정치 

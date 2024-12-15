@@ -92,7 +92,8 @@ CHECK_MOUSE CUIPage_Telepot::Check_Page_Action(_float fTimeDelta)
 {
 	__super::Check_Page_Action(fTimeDelta);
 
-	Action_Scroll(fTimeDelta);
+	if (m_pScroll_Telepot->bIsActive_X)
+		Action_Scroll(fTimeDelta);
 	Action_Telepot(fTimeDelta);
 
 	return CHECK_MOUSE::MOUSE_NONE;
