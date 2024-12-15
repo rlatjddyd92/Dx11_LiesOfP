@@ -1084,6 +1084,15 @@
     <Filter Include="05.Fsm\Monster\Raxasia\P1\Attack\Route\Sting_Spread">
       <UniqueIdentifier>{4522db70-50b3-4c3b-90f9-e88ef3b8bc0c}</UniqueIdentifier>
     </Filter>
+    <Filter Include="02.GameObjects\12.AttackObject\Raxasia">
+      <UniqueIdentifier>{dfc59883-117b-4770-8849-f5ae3b3c80ab}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.GameObjects\12.AttackObject\Raxasia\ThunderMark">
+      <UniqueIdentifier>{8107f50c-2e8a-4ca7-8188-c1096eb9639f}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.GameObjects\12.AttackObject\Raxasia\ThunderBlast">
+      <UniqueIdentifier>{7dc222b7-f853-4f65-8a39-500e8e478b14}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Client.h">
