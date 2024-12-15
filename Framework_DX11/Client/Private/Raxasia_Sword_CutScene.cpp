@@ -37,7 +37,7 @@ HRESULT CRaxasia_Sword_CutScene::Initialize(void* pArg)
 	if (FAILED(Ready_Components()))
 		return E_FAIL;
 
-	m_pModelCom->SetUp_NextAnimation(0, false, 0.f);
+	m_pModelCom->SetUp_NextAnimation(1, false, 0.f);
 
 	m_pModelCom->Play_Animation(1.f);
 
@@ -50,13 +50,18 @@ HRESULT CRaxasia_Sword_CutScene::Initialize(void* pArg)
 
 void CRaxasia_Sword_CutScene::Priority_Update(_float fTimeDelta)
 {
-
+	if (m_pModelCom->Get_IsEndAnimArray())
+		m_isPlayAnimation = false;
 
 }
 
 void CRaxasia_Sword_CutScene::Update(_float fTimeDelta)
 {
-	m_pModelCom->Play_Animation(fTimeDelta);
+	if (m_isPlayAnimation)
+		m_pModelCom->Play_Animation(fTimeDelta);
+	else
+		m_pModelCom->Update_Bone();
+
 
 	/*static _float fX = 243.f;
 	static _float fY = -5.f;
@@ -167,6 +172,20 @@ HRESULT CRaxasia_Sword_CutScene::Render()
 
 
 	return S_OK;
+}
+
+void CRaxasia_Sword_CutScene::Play_Animation(_char* szAnimationName, _float fSpeedRation)
+{
+	_uint iAnimationIndex = m_pModelCom->Find_AnimationIndex(szAnimationName, fSpeedRation);
+
+	m_pModelCom->SetUp_NextAnimation(iAnimationIndex, false, 0.f);
+
+	m_isPlayAnimation = true;
+}
+
+void CRaxasia_Sword_CutScene::Stop_Animation()
+{
+	m_isPlayAnimation = false;
 }
 
 HRESULT CRaxasia_Sword_CutScene::Ready_Components()

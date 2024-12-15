@@ -32,6 +32,11 @@ public:
 	virtual void Late_Update(_float fTimeDelta) override;
 	virtual HRESULT Render() override;
 
+
+public:
+	void Play_Animation(_char* szAnimationName, _float fSpeedRation = 1.f);
+	void Stop_Animation();
+
 private:
 	class CShader* m_pShaderCom = { nullptr };
 	class CModel* m_pModelCom = { nullptr };
@@ -40,6 +45,7 @@ private:
 
 	_Vec4            m_vRimLightColor = {};
 
+	_bool			m_isPlayAnimation = {};
 
 	_Matrix					m_WorldMatrix = {};
 	const _Matrix*			m_pParentMatrix = { nullptr };

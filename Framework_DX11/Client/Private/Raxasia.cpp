@@ -458,7 +458,7 @@ HRESULT CRaxasia::Ready_Components()
 		return E_FAIL;
 
 	/* FOR.Com_Model_CustScene02 */
-	if (FAILED(__super::Add_Component(LEVEL_GAMEPLAY, TEXT("Prototype_Component_Model_Raxasia_CutScene_P2_Die"),
+	if (FAILED(__super::Add_Component(LEVEL_GAMEPLAY, TEXT("Prototype_Component_Model_Raxasia_CutScene_P2"),
 		TEXT("Com_Model_CustScene02"), reinterpret_cast<CComponent**>(&m_pCutSceneModelCom[MODEL_PHASE2]))))
 		return E_FAIL;
 #pragma endregion

@@ -632,17 +632,6 @@ HRESULT CLoader::Ready_Resources_For_GamePlayLevel_Map0()
 		CModel::Create(m_pDevice, m_pContext, CModel::TYPE_NONANIM, "../Bin/ModelData/NonAnim/Map/Etc/Light/SM_LightProp_SpotLight_02.dat", PreTransformMatrix))))
 		return E_FAIL;
 
-	PreTransformMatrix = XMMatrixIdentity();
-	PreTransformMatrix = XMMatrixScaling(0.005f, 0.005f, 0.005f);
-
-	if (FAILED(m_pGameInstance->Add_Prototype(LEVEL_GAMEPLAY, TEXT("SM_LightProp_Chandelier_05"),
-		CModel::Create(m_pDevice, m_pContext, CModel::TYPE_NONANIM, "../Bin/ModelData/NonAnim/Map/Etc/Light/SM_LightProp_Chandelier_05.dat", PreTransformMatrix))))
-		return E_FAIL;
-
-	if (FAILED(m_pGameInstance->Add_Prototype(LEVEL_GAMEPLAY, TEXT("SM_LightProp_SpotLight_02"),
-		CModel::Create(m_pDevice, m_pContext, CModel::TYPE_NONANIM, "../Bin/ModelData/NonAnim/Map/Etc/Light/SM_LightProp_SpotLight_02.dat", PreTransformMatrix))))
-		return E_FAIL;
-
 	m_isFinished_Map0 = true;
 
 	return S_OK;
@@ -984,13 +973,7 @@ HRESULT CLoader::Ready_Resources_For_Monster()
 	//Prototype_Component_Model_Raxasia_CutScene_P2
 	PreTransformMatrix = XMMatrixScaling(0.01f, 0.01f, 0.01f);
 	if (FAILED(m_pGameInstance->Add_Prototype(LEVEL_GAMEPLAY, TEXT("Prototype_Component_Model_Raxasia_CutScene_P2"),
-		CModel::Create(m_pDevice, m_pContext, CModel::TYPE_ANIM, "../Bin/ModelData/Anim/Monster/Boss/Raxasia/Raxasia_CutScene_P2.dat", PreTransformMatrix, false))))
-		return E_FAIL;
-
-	//Prototype_Component_Model_Raxasia_CutScene_P2_Die
-	PreTransformMatrix = XMMatrixScaling(0.01f, 0.01f, 0.01f);
-	if (FAILED(m_pGameInstance->Add_Prototype(LEVEL_GAMEPLAY, TEXT("Prototype_Component_Model_Raxasia_CutScene_P2_Die"),
-		CModel::Create(m_pDevice, m_pContext, CModel::TYPE_ANIM, "../Bin/ModelData/Anim/Monster/Boss/Raxasia/Raxasia_CutScene_P2Die.dat", PreTransformMatrix, false))))
+		CModel::Create(m_pDevice, m_pContext, CModel::TYPE_ANIM, "../Bin/ModelData/Anim/CreatedBinFiles/Raxasia_CutScene_P2.dat", PreTransformMatrix, true))))
 		return E_FAIL;
 
 	//Prototype_Component_Model_Raxasia_Sword_CutScene
