@@ -341,11 +341,38 @@ _uint CModel::Find_AnimationIndex(const _char* pAnimationmName, _float fSpeedRat
 	return iAnimationIndex;
 }
 
-void CModel::SetUp_Animation(_uint iAnimationIndex, _bool isLoop)
+void CModel::SetUp_Animation(_uint iAnimationIndex, _bool isLoop, _uint iStartFrame, _bool bEitherBoundary)
 {
+	m_isEnd_Animations[iAnimationIndex] = false;
+	m_isEnd_Animations[m_iCurrentAnimIndex] = false;
+
 	m_iCurrentAnimIndex = iAnimationIndex;
 	m_isLoop = isLoop;
-	m_CurrentTrackPosition = 0.0;
+	m_isChangeAni = false;
+
+	m_vRootMoveStack = m_vCurRootMove = _vector{ 0, 0, 0, 1 };
+
+	m_CurrentTrackPosition = m_Animations[m_iCurrentAnimIndex]->Get_WideChannel()->Get_KeyFrame(iStartFrame).TrackPosition;
+	m_iCurrentFrame = m_Animations[m_iCurrentAnimIndex]->Update_TransformationMatrices(m_Bones, &m_CurrentTrackPosition, m_KeyFrameIndices[m_iCurrentAnimIndex], m_isLoop, &m_isEnd_Animations[m_iCurrentAnimIndex], 0, false, nullptr, &m_isBoneUpdated);
+	if (bEitherBoundary)
+	{
+		SetUp_Animation_Boundary(iAnimationIndex, isLoop, iStartFrame);
+	}
+
+}
+
+void CModel::SetUp_Animation_Boundary(_uint iAnimationIndex, _bool isLoop, _uint iStartFrame)
+{
+	m_isEnd_Animations_Boundary[iAnimationIndex] = false;
+	m_isEnd_Animations_Boundary[m_iCurrentAnimIndex_Boundary] = false;
+
+	m_iCurrentAnimIndex_Boundary = iAnimationIndex;
+	m_isLoop_Boundary = isLoop;
+	m_isChangeAni_Boundary = false;
+
+	m_CurrentTrackPosition_Boundary = m_Animations[m_iCurrentAnimIndex_Boundary]->Get_WideChannel()->Get_KeyFrame(iStartFrame).TrackPosition;
+	m_iCurrentFrame_Boundary = m_Animations[m_iCurrentAnimIndex_Boundary]->Update_TransformationMatrices(m_Bones, &m_CurrentTrackPosition_Boundary, m_KeyFrameIndices[m_CurrentTrackPosition_Boundary], m_isLoop_Boundary, &m_isEnd_Animations_Boundary[m_iCurrentAnimIndex_Boundary], 0, false, nullptr, &m_isBoneUpdated);
+	
 }
 
 HRESULT CModel::SetUp_NextAnimation(_uint iNextAnimationIndex, _bool isLoop, _float fChangeDuration, _uint iStartFrame, _bool bEitherBoundary, _bool bSameChange)

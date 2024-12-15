@@ -174,7 +174,7 @@ void CState_RaxasiaP1_Sting_Spread::Effect_Check(_double CurTrackPos)
             {
                 _float4x4 WorldMat{};
                 _Vec3 vPos = { 0.f, 0.f, 0.f };
-                XMStoreFloat4x4(&WorldMat, (*m_pMonster->Get_BoneCombinedMat(m_pMonster->Get_UFBIndex(UFB_HAND_RIGHT))));
+                XMStoreFloat4x4(&WorldMat, (*m_pMonster->Get_BoneCombinedMat(m_pMonster->Get_UFBIndex(UFB_HAND_RIGHT)) * m_pMonster->Get_Transform()->Get_WorldMatrix()));
                 vPos = XMVector3TransformCoord(vPos, XMLoadFloat4x4(&WorldMat));
 
                 CEffect_Manager::Get_Instance()->Add_Effect_ToLayer(LEVEL_GAMEPLAY, TEXT("Raxasia_Attack_ThunderInchent"),
@@ -248,15 +248,15 @@ void CState_RaxasiaP1_Sting_Spread::Effect_Check(_double CurTrackPos)
         {
             if (CurTrackPos >= 250.f)
             {
-                _float4x4 WorldMat{};
-                _Vec3 vPos = { 0.f, 0.f, -4.25f };
-                XMStoreFloat4x4(&WorldMat, (*m_pMonster->Get_WeaponBoneCombinedMat(0) * (*m_pMonster->Get_WeaponWorldMat())));
-                vPos = XMVector3TransformCoord(vPos, XMLoadFloat4x4(&WorldMat));
-
-                CEffect_Manager::Get_Instance()->Add_Effect_ToLayer(LEVEL_GAMEPLAY, TEXT("Raxasia_Attack_ThunderStamp"),
-                    vPos, _Vec3{ m_pMonster->Get_TargetDir() });
-
-                m_bSpread = true;
+                //_float4x4 WorldMat{};
+                //_Vec3 vPos = { 0.f, 0.f, -4.25f };
+                //XMStoreFloat4x4(&WorldMat, (*m_pMonster->Get_WeaponBoneCombinedMat(0) * (*m_pMonster->Get_WeaponWorldMat())));
+                //vPos = XMVector3TransformCoord(vPos, XMLoadFloat4x4(&WorldMat));
+                //
+                //CEffect_Manager::Get_Instance()->Add_Effect_ToLayer(LEVEL_GAMEPLAY, TEXT("Raxasia_Attack_ThunderSpread"),
+                //    vPos, _Vec3{ m_pMonster->Get_TargetDir() });
+                //
+                //m_bSpread = true;
             }
         }
 

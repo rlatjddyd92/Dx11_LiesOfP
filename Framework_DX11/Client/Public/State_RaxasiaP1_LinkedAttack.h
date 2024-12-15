@@ -27,10 +27,12 @@ public:
 private:
     class CMonster* m_pMonster = { nullptr };
 
+    _Vec3       m_vRootMoveStack{};
     _float              m_fCurrentTime = { 0.f };
     _float              m_fChaseDuration = { 1.5f };
 
     _bool               m_bSwing = { false };
+    _bool               m_bInchent = { false };
     
     _bool               m_bSwingSound = { false };
 

@@ -39,6 +39,8 @@ HRESULT CState_RaxasiaP1_TripleSting::Start_State(void* pArg)
 
 void CState_RaxasiaP1_TripleSting::Update(_float fTimeDelta)
 {
+    //찌르기 115부터 한 10프나 5프동안 조금 이동시키기
+
     _double CurTrackPos = m_pMonster->Get_CurrentTrackPos();
     switch (m_iRouteTrack)
     {
@@ -50,6 +52,7 @@ void CState_RaxasiaP1_TripleSting::Update(_float fTimeDelta)
             m_pMonster->Change_Animation(AN_STING, false, 0.1f, 80);
         }
         m_pMonster->Get_Transform()->LookAt_Lerp_NoHeight(m_pMonster->Get_TargetDir(), 3, fTimeDelta);
+
         break;
 
     case 1:
@@ -63,6 +66,13 @@ void CState_RaxasiaP1_TripleSting::Update(_float fTimeDelta)
         if (CurTrackPos <= 100.f)
         {
             m_pMonster->Get_Transform()->LookAt_Lerp_NoHeight(m_pMonster->Get_TargetDir(), 1.f, fTimeDelta);
+        }
+
+        if (CurTrackPos >= 115.f && CurTrackPos <= 120.f)
+        {
+            _Vec3 vLook = { m_pMonster->Get_Transform()->Get_State(CTransform::STATE_LOOK) };
+
+            m_pMonster->Get_RigidBody()->Set_Velocity(m_pMonster->Get_RigidBody()->Get_Velocity() + (vLook * 3.f));
         }
         break;
 
@@ -91,6 +101,13 @@ void CState_RaxasiaP1_TripleSting::Update(_float fTimeDelta)
             m_pMonster->Get_Transform()->LookAt_Lerp_NoHeight(m_pMonster->Get_TargetDir(), 1.f, fTimeDelta);
         }
 
+        if (CurTrackPos >= 115.f && CurTrackPos <= 120.f)
+        {
+            _Vec3 vLook = { m_pMonster->Get_Transform()->Get_State(CTransform::STATE_LOOK) };
+
+            m_pMonster->Get_RigidBody()->Set_Velocity(m_pMonster->Get_RigidBody()->Get_Velocity() + (vLook * 3.f));
+        }
+
         break;
         //대쉬
     case 4:
@@ -115,6 +132,13 @@ void CState_RaxasiaP1_TripleSting::Update(_float fTimeDelta)
         if (CurTrackPos <= 100.f)
         {
             m_pMonster->Get_Transform()->LookAt_Lerp_NoHeight(m_pMonster->Get_TargetDir(), 1.f, fTimeDelta);
+        }
+
+        if (CurTrackPos >= 115.f && CurTrackPos <= 120.f)
+        {
+            _Vec3 vLook = { m_pMonster->Get_Transform()->Get_State(CTransform::STATE_LOOK) };
+
+            m_pMonster->Get_RigidBody()->Set_Velocity(m_pMonster->Get_RigidBody()->Get_Velocity() + (vLook * 3.f));
         }
 
         break;
@@ -179,7 +203,7 @@ void CState_RaxasiaP1_TripleSting::Collider_Check(_double CurTrackPos)
 
 void CState_RaxasiaP1_TripleSting::Effect_Check(_double CurTrackPos)
 {
-    if (m_iRouteTrack == 0)
+    if (m_iRouteTrack == 1)
     {
         if (!m_bCharge)
         {
@@ -187,7 +211,7 @@ void CState_RaxasiaP1_TripleSting::Effect_Check(_double CurTrackPos)
             {
                 _float4x4 WorldMat{};
                 _Vec3 vPos = { 0.f, 0.f, 0.f };
-                XMStoreFloat4x4(&WorldMat, (*m_pMonster->Get_BoneCombinedMat(m_pMonster->Get_UFBIndex(UFB_HAND_RIGHT))));
+                XMStoreFloat4x4(&WorldMat, (*m_pMonster->Get_BoneCombinedMat(m_pMonster->Get_UFBIndex(UFB_HAND_RIGHT)) * m_pMonster->Get_Transform()->Get_WorldMatrix()));
                 vPos = XMVector3TransformCoord(vPos, XMLoadFloat4x4(&WorldMat));
 
                 CEffect_Manager::Get_Instance()->Add_Effect_ToLayer(LEVEL_GAMEPLAY, TEXT("Raxasia_Attack_ThunderInchent"),
@@ -201,7 +225,7 @@ void CState_RaxasiaP1_TripleSting::Effect_Check(_double CurTrackPos)
     else if (m_iRouteTrack == 5)
     {
 
-        if (CurTrackPos >= 20.f)
+        if (CurTrackPos >= 150.f)
         {
             m_pMonster->DeActive_Effect(CRaxasia::EFFECT_INCHENTSWORD);
         }
