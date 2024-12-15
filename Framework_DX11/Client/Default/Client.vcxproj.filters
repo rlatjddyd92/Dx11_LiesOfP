@@ -205,9 +205,6 @@
     <Filter Include="03.GameInterface_Controller\00.UIManager\00.UIPage\11.UIPage_Test %280%25%29">
       <UniqueIdentifier>{c242bb98-b03b-45a1-9832-2f75d428ccd0}</UniqueIdentifier>
     </Filter>
-    <Filter Include="03.GameInterface_Controller\00.UIManager\00.UIPage\07.UIPage_Skill %280%25%29">
-      <UniqueIdentifier>{101ea800-761b-49e9-ae2b-58825aebc3f3}</UniqueIdentifier>
-    </Filter>
     <Filter Include="03.GameInterface_Controller\00.UIManager\00.UIPage\05.UIPage_Equip %2870%25%29">
       <UniqueIdentifier>{668071d3-f74a-4637-b402-1e95822b2f74}</UniqueIdentifier>
     </Filter>
@@ -1098,6 +1095,9 @@
     </Filter>
     <Filter Include="05.Fsm\Monster\SimonManus\P2\Die_Talking">
       <UniqueIdentifier>{8f69d69b-43bc-49a5-8605-e02f119e89ec}</UniqueIdentifier>
+	</Filter>
+    <Filter Include="03.GameInterface_Controller\00.UIManager\00.UIPage\07.UIPage_Common">
+      <UniqueIdentifier>{101ea800-761b-49e9-ae2b-58825aebc3f3}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -1332,8 +1332,8 @@
     <ClInclude Include="..\Public\UIPage_Option.h">
       <Filter>03.GameInterface_Controller\00.UIManager\00.UIPage\08.UIPage_Option %2850%25%29</Filter>
     </ClInclude>
-    <ClInclude Include="..\Public\UIPage_Skill.h">
-      <Filter>03.GameInterface_Controller\00.UIManager\00.UIPage\07.UIPage_Skill %280%25%29</Filter>
+    <ClInclude Include="..\Public\UIPage_Common.h">
+      <Filter>03.GameInterface_Controller\00.UIManager\00.UIPage\07.UIPage_Common</Filter>
     </ClInclude>
     <ClInclude Include="..\Public\UIPage_Stat.h">
       <Filter>03.GameInterface_Controller\00.UIManager\00.UIPage\06.UIPage_Stat %2890%25%29</Filter>
@@ -2230,8 +2230,8 @@
     <ClCompile Include="..\Private\UIPage_Option.cpp">
       <Filter>03.GameInterface_Controller\00.UIManager\00.UIPage\08.UIPage_Option %2850%25%29</Filter>
     </ClCompile>
-    <ClCompile Include="..\Private\UIPage_Skill.cpp">
-      <Filter>03.GameInterface_Controller\00.UIManager\00.UIPage\07.UIPage_Skill %280%25%29</Filter>
+    <ClCompile Include="..\Private\UIPage_Common.cpp">
+      <Filter>03.GameInterface_Controller\00.UIManager\00.UIPage\07.UIPage_Common</Filter>
     </ClCompile>
     <ClCompile Include="..\Private\UIPage_Stat.cpp">
       <Filter>03.GameInterface_Controller\00.UIManager\00.UIPage\06.UIPage_Stat %2890%25%29</Filter>

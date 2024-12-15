@@ -158,7 +158,8 @@ private:
 	// ItemActionInfo 
 	_bool m_bReset_ItemAction_Info = false;
 	
-
+	// Sound ฐüทร 
+	_int m_iNowCell = -1;
 
 private:
 	INVEN_UI_TAP m_eNow_Tap = INVEN_UI_TAP::TAP_NORMAL_ITEM;

@@ -35,8 +35,6 @@ HRESULT CUIPage_Inven::Initialize_Prototype()
 	if (FAILED(__super::Initialize(&Desc)))
 		return E_FAIL;
 
-
-
 	return S_OK;
 }
 
@@ -55,8 +53,6 @@ void CUIPage_Inven::Priority_Update(_float fTimeDelta)
 void CUIPage_Inven::Update(_float fTimeDelta)
 {
 	__super::Update(fTimeDelta);
-
-	
 }
 
 void CUIPage_Inven::Late_Update(_float fTimeDelta)
@@ -84,7 +80,7 @@ void CUIPage_Inven::Late_Update(_float fTimeDelta)
 
 	if (m_bRender)
 		Update_Array_Position(fTimeDelta);
-	if (m_pScroll->bIsActive)
+	if (m_pScroll->bIsActive_Y)
 		Update_Slide(fTimeDelta);
 
 	if (m_vFocus_Pos.x != -1)
@@ -110,6 +106,7 @@ void CUIPage_Inven::OpenAction()
 	__super::OpenAction();
 	m_IsTab_Change = true;
 	GET_GAMEINTERFACE->Off_ItemInfo_UI();
+	m_pSoundCom->Play2D(TEXT("SE_UI_OpenMenu_04.wav"), &g_fUIVolume);
 	Reset_ItemAction();
 }
 
@@ -118,6 +115,7 @@ void CUIPage_Inven::CloseAction()
 	__super::CloseAction();
 	GET_GAMEINTERFACE->Set_Show_NewMark_Off();
 	GET_GAMEINTERFACE->Off_ItemInfo_UI();
+	m_pSoundCom->Play2D(TEXT("SE_UI_CloseWindow_01.wav"), &g_fUIVolume);
 	Reset_ItemAction();
 }
 
@@ -127,7 +125,7 @@ CHECK_MOUSE CUIPage_Inven::Check_Page_Action(_float fTimeDelta)
 
 	Action_Inven_Page(fTimeDelta);
 	Action_Focus(fTimeDelta);
-	if (m_pScroll->bIsActive)
+	if (m_pScroll->bIsActive_Y)
 		Action_Slide(fTimeDelta);
 
 	return CHECK_MOUSE::MOUSE_NONE;
@@ -175,6 +173,7 @@ HRESULT CUIPage_Inven::Ready_UIPart_Group_Control()
 	m_fData_Adjust_Y_Origin = m_vecPart[__super::Get_Front_PartIndex_In_Control(_int(PART_GROUP::GROUP_ITEMINFO_FRAME))]->fAdjust.y;
 
 	__super::Array_Control(_int(PART_GROUP::GROUP_CELL_0), _int(PART_GROUP::GROUP_CELL_4), CTRL_COMMAND::COM_RATIO, 0.5f);
+	m_vec_Group_Ctrl[_int(PART_GROUP::GROUP_ITEMINFO_SLIDE_BAR)]->fRatio = 0.f;
 	m_vecPart[__super::Get_Front_PartIndex_In_Control(_int(PART_GROUP::GROUP_ITEMINFO_SLIDE_BAR))]->fRatio = 0.f;
 	UpdatePart_ByIndex(__super::Get_Front_PartIndex_In_Control(_int(PART_GROUP::GROUP_ITEMINFO_SLIDE_BAR)), 1.f);
 	
@@ -231,6 +230,10 @@ void CUIPage_Inven::Action_Inven_Page(_float fTimeDelta)
 		m_vFocus_Pos = { -1.f,-1.f };
 		GET_GAMEINTERFACE->Off_Focus();
 		Reset_ItemAction();
+
+		m_pSoundCom->Play2D(TEXT("SE_UI_TutorialChangePage_01.wav"), &g_fUIVolume);
+
+		m_iNowCell = 0;
 	}
 }
 
@@ -362,6 +365,11 @@ void CUIPage_Inven::Update_Array_Position(_float fTimeDelta)
 			{
 				GET_GAMEINTERFACE->Show_Tooltip(INVEN_ARRAY_TYPE(i), j);
 
+				if (m_iNowCell != j)
+					m_pSoundCom->Play2D(TEXT("SE_UI_ToggleChange_01.wav"), &g_fUIVolume);
+
+				m_iNowCell = j;
+
 				m_vecPart[*iter]->bRender = true;  bIsFocus = true;
 				if (KEY_TAP(KEY::RBUTTON))
 				{
@@ -475,8 +483,8 @@ void CUIPage_Inven::Update_Array_Position(_float fTimeDelta)
 	_float fEndY = 0.f;
 	fEndY = m_vecPart[m_vec_Group_Ctrl[_int(PART_GROUP::GROUP_CELL_0)]->PartIndexlist.front()]->fPosition.y + m_vecPart[m_vec_Group_Ctrl[_int(PART_GROUP::GROUP_CELL_0)]->PartIndexlist.front()]->fSize.y * 0.5f;
 
-	if ((!m_pScroll->bIsActive) || (m_IsTab_Change))
-		m_pScroll->Activate_Scroll(fEndY - fStartY);
+	if ((!m_pScroll->bIsActive_Y) || (m_IsTab_Change))
+		m_pScroll->Activate_Scroll(fEndY - fStartY, 0.f);
 }
 
 void CUIPage_Inven::Update_Array_Position_Weapon(_float fTimeDelta)
@@ -545,6 +553,11 @@ void CUIPage_Inven::Update_Array_Position_Weapon(_float fTimeDelta)
 		
 			if (vCheck.x != -1)
 			{
+				if (m_iNowCell != j)
+					m_pSoundCom->Play2D(TEXT("SE_UI_ToggleChange_01.wav"), &g_fUIVolume);
+
+				m_iNowCell = j;
+
 				if (pNowBlade != nullptr)
 					GET_GAMEINTERFACE->Show_Tooltip(INVEN_ARRAY_TYPE::TYPE_WEAPON_NORMAL_BLADE, j);
 				m_vecPart[*iter]->bRender = true;  bIsFocus = true;
@@ -704,6 +717,11 @@ void CUIPage_Inven::Update_Array_Position_Weapon_Heroic(_float fTimeDelta, _floa
 		
 		if (vCheck.x != -1)
 		{
+			if (m_iNowCell != j)
+				m_pSoundCom->Play2D(TEXT("SE_UI_ToggleChange_01.wav"), &g_fUIVolume);
+
+			m_iNowCell = j;
+
 			if (pNowBlade != nullptr)
 				GET_GAMEINTERFACE->Show_Tooltip(INVEN_ARRAY_TYPE::TYPE_WEAPON_SPECIAL_BLADE, j);
 
@@ -788,8 +806,8 @@ void CUIPage_Inven::Update_Array_Position_Weapon_Heroic(_float fTimeDelta, _floa
 	_float fEndY = 0.f;
 	fEndY = m_vecPart[m_vec_Group_Ctrl[_int(PART_GROUP::GROUP_CELL_0)]->PartIndexlist.front()]->fPosition.y + m_vecPart[m_vec_Group_Ctrl[_int(PART_GROUP::GROUP_CELL_0)]->PartIndexlist.front()]->fSize.y * 0.5f;
 
-	if ((!m_pScroll->bIsActive) || (m_IsTab_Change))
-		m_pScroll->Activate_Scroll(fEndY - fStart);
+	if ((!m_pScroll->bIsActive_Y) || (m_IsTab_Change))
+		m_pScroll->Activate_Scroll(fEndY - fStart, 0.f);
 }
 
 void CUIPage_Inven::Update_BoxInfo(_float fTimeDelta)
@@ -839,7 +857,7 @@ void CUIPage_Inven::Change_Data_Y_Size(_float fSize)
 
 void CUIPage_Inven::Action_Slide(_float fSize)
 {
-	if ((m_pScroll->bIsBarMoving) && (KEY_HOLD(KEY::LBUTTON)))
+	if ((m_pScroll->bIsBarMoving_Y) && (KEY_HOLD(KEY::LBUTTON)))
 	{
 		POINT			ptMouse{};
 		GetCursorPos(&ptMouse);
@@ -847,14 +865,14 @@ void CUIPage_Inven::Action_Slide(_float fSize)
 
 		_float fOffset_Before = m_pScroll->fData_Offset_Y;
 
-		m_pScroll->Bar_Moving(_float(ptMouse.y));
+		m_pScroll->Bar_Moving_Y(_float(ptMouse.y));
 
-		m_vec_Group_Ctrl[_int(PART_GROUP::GROUP_ITEMINFO_SLIDE_BAR)]->fRatio = m_pScroll->fScroll_Ratio;
+		m_vec_Group_Ctrl[_int(PART_GROUP::GROUP_ITEMINFO_SLIDE_BAR)]->fRatio = m_pScroll->fScroll_Ratio_Y;
 		m_vecPart[__super::Get_Front_PartIndex_In_Control(_int(PART_GROUP::GROUP_ITEMINFO_FRAME))]->fAdjust.y = m_fData_Adjust_Y_Origin - m_pScroll->fData_Offset_Y;
 
 		m_vFocus_Pos.y -= (m_pScroll->fData_Offset_Y - fOffset_Before);
 	}
-	else if ((!m_pScroll->bIsBarMoving) && (KEY_TAP(KEY::LBUTTON)))
+	else if ((!m_pScroll->bIsBarMoving_Y) && (KEY_TAP(KEY::LBUTTON)))
 	{
 		_int iBar = __super::Get_Front_PartIndex_In_Control(_int(PART_GROUP::GROUP_ITEMINFO_SLIDE_BAR));
 		_Vec2 vCheck = GET_GAMEINTERFACE->CheckMouse(m_vecPart[iBar]->fPosition, m_vecPart[iBar]->fSize);
@@ -862,18 +880,18 @@ void CUIPage_Inven::Action_Slide(_float fSize)
 		if (vCheck.x != -1.f)
 			if (KEY_TAP(KEY::LBUTTON))
 			{
-				m_pScroll->Start_Bar_Moving(vCheck.y);
+				m_pScroll->Start_Bar_Moving_Y(vCheck.y);
 			}
 	}
 	else
 	{
-		m_pScroll->End_Bar_Moving();
+		m_pScroll->End_Bar_Moving_Y();
 	}
 }
 
 void CUIPage_Inven::Update_Slide(_float fSize)
 {
-	if (m_pScroll->bIsActive)
+	if (m_pScroll->bIsActive_Y)
 	{
 		for (_int i = _int(PART_GROUP::GROUP_ITEMINFO_FRAME); i <= _int(PART_GROUP::GROUP_ITEMINFO_SLIDE_BAR); ++i)
 		{

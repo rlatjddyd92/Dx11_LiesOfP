@@ -78,6 +78,8 @@ void CUIPage_Menu::OpenAction()
 {
 	__super::OpenAction();
 
+	m_pSoundCom->Play2D(TEXT("SE_UI_OpenMenu_04.wav"), &g_fUIVolume);
+
 	if ((m_eFocus_Group < PART_GROUP::GROUP_MENU_EQUIP) || (m_eFocus_Group > PART_GROUP::GROUP_MENU_OPTION))
 		m_eFocus_Group = PART_GROUP::GROUP_MENU_EQUIP;
 
@@ -91,6 +93,8 @@ void CUIPage_Menu::OpenAction()
 void CUIPage_Menu::CloseAction()
 {
 	__super::CloseAction();
+
+	m_pSoundCom->Play2D(TEXT("SE_UI_OpenMenu_04.wav"), &g_fUIVolume);
 
 	__super::Array_Control(_int(PART_GROUP::GROUP_DESC_BACK), _int(PART_GROUP::GROUP_DESC_MOUSE), CTRL_COMMAND::COM_RENDER, false);
 	__super::Array_Control(_int(PART_GROUP::GROUP_ITEM_DESC_MOUSE_0), _int(PART_GROUP::GROUP_ITEM_DESC_FUNC_1), CTRL_COMMAND::COM_RENDER, false);
@@ -154,7 +158,7 @@ void CUIPage_Menu::Focus_Update(_float fTimeDelta)
 					GET_GAMEINTERFACE->SwicthPage(UIPAGE::PAGE_MENU, UIPAGE::PAGE_STAT);
 					break;
 				/*case _int(PART_GROUP::GROUP_MENU_HEART):
-					GET_GAMEINTERFACE->SwicthPage(UIPAGE::PAGE_MENU, UIPAGE::PAGE_SKILL);
+					GET_GAMEINTERFACE->SwicthPage(UIPAGE::PAGE_MENU, UIPAGE::PAGE_COMMON);
 					break;*/
 				case _int(PART_GROUP::GROUP_MENU_OPTION):
 					GET_GAMEINTERFACE->SwicthPage(UIPAGE::PAGE_MENU, UIPAGE::PAGE_OPTION);

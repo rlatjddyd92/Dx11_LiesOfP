@@ -1036,6 +1036,7 @@ CStargazer* CPlayer::Find_Stargazer(_int iCellNumber)
 	return dynamic_cast<CStargazer*>(Stargazers[0]);
 }
 
+
 void CPlayer::Create_ThrowItem(SPECIAL_ITEM eItemType)
 {
 	if (nullptr != m_pThrowItem)

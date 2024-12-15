@@ -168,6 +168,7 @@ CHECK_MOUSE CUIPage_Popup::Check_Page_Action(_float fTimeDelta)
 
 void CUIPage_Popup::Show_Popup(_wstring strTitle, _wstring strDescA, _wstring strDescB)
 {
+	m_pSoundCom->Play2D(TEXT("SE_UI_OpenWindow_01.wav"), &g_fUIVolume);
 	Off_Popup();
 	m_vecPageAction[_int(PAGEACTION::ACTION_ACTIVE)] = true;
 	m_vecPageAction[_int(PAGEACTION::ACTION_INACTIVE)] = false;
@@ -213,9 +214,10 @@ void CUIPage_Popup::Off_Popup()
 
 void CUIPage_Popup::Show_ItemPopup(_wstring strTitle, _wstring strInputTitle, _int iMin, _int* pNow_Input, _int iMax, _wstring strCountTitle, _int iInterval, _int* pNow_Count)
 {
+
 	if ((pNow_Input == nullptr) && (pNow_Count == nullptr))
 		return;
-
+	m_pSoundCom->Play2D(TEXT("SE_UI_OpenWindow_01.wav"), &g_fUIVolume);
 	Off_Popup();
 
 	m_vecPageAction[_int(PAGEACTION::ACTION_ACTIVE)] = true;
@@ -289,6 +291,7 @@ void CUIPage_Popup::Show_ItemPopup(_wstring strTitle, _wstring strInputTitle, _i
 void CUIPage_Popup::Show_ItemUsePopup(_wstring strTitle, _wstring strDescA, _bool bIsTop)
 {
 	Off_Popup();
+	m_pSoundCom->Play2D(TEXT("SE_UI_OpenWindow_01.wav"), &g_fUIVolume);
 	m_vecPageAction[_int(PAGEACTION::ACTION_ACTIVE)] = true;
 	m_vecPageAction[_int(PAGEACTION::ACTION_INACTIVE)] = false;
 	for (_int i = _int(PART_GROUP::POPUP_Top); i <= _int(PART_GROUP::POPUP_Text_1); ++i)

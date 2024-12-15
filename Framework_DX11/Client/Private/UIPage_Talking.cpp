@@ -260,7 +260,7 @@ void CUIPage_Talking::Update_Script(_float fTimeDelta)
 			}
 			else if (m_iFunction == 0)
 			{
-				// 별바라기 순간이동 메뉴
+				GET_GAMEINTERFACE->SwicthPage(UIPAGE::PAGE_TALKING, UIPAGE::PAGE_TELEPOT);
 			}
 			else if (m_iFunction == 1)
 			{

@@ -143,7 +143,8 @@ protected:
 	PART_GROUP m_eFocus_Group = PART_GROUP::GROUP_END; // 현재 마우스가 가리키는 아이템 칸
 
 
-	
+	// Sound 관련 
+	_int m_iNowCell = -1;
 
 
 	// Focus 조정 

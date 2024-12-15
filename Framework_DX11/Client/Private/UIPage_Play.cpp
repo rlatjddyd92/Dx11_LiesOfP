@@ -157,7 +157,10 @@ void CUIPage_Play::SetWeaponLock(_bool bIsWeaponLock)
 		m_bIsWeapon_Lock[1] = bIsWeaponLock;
 
 	if (m_bIsWeapon_Lock[1])
+	{
+		m_pSoundCom->Play2D(TEXT("SE_UI_WeaponChange_04.wav"), &g_fUIVolume);
 		GET_GAMEINTERFACE->Change_Weapon();
+	}
 }
 
 void CUIPage_Play::Action_Potion_Tool(_float fTimeDelta)
@@ -166,6 +169,8 @@ void CUIPage_Play::Action_Potion_Tool(_float fTimeDelta)
 
 	if ((!m_bIsBagOpen) && (KEY_TAP(KEY::T)))
 	{
+		m_pSoundCom->Play2D(TEXT("SE_UI_Tap_01.wav"), &g_fUIVolume);
+
 		if (m_vec_Group_Ctrl[_int(PART_GROUP::GROUP_SELECT_CELL)]->fRatio != 0.f)
 		{
 			m_vec_Group_Ctrl[_int(PART_GROUP::GROUP_SELECT_CELL)]->fRatio = 0.f;
@@ -176,6 +181,8 @@ void CUIPage_Play::Action_Potion_Tool(_float fTimeDelta)
 	}
 	else if ((!m_bIsBagOpen) && (KEY_TAP(KEY::G)))
 	{
+		m_pSoundCom->Play2D(TEXT("SE_UI_Tap_01.wav"), &g_fUIVolume);
+
 		if (m_vec_Group_Ctrl[_int(PART_GROUP::GROUP_SELECT_CELL)]->fRatio != 1.f)
 		{
 			m_vec_Group_Ctrl[_int(PART_GROUP::GROUP_SELECT_CELL)]->fRatio = 1.f;
@@ -190,6 +197,9 @@ void CUIPage_Play::Action_Potion_Tool(_float fTimeDelta)
 		if (m_fBag_Open_Waiting_Now >= m_fBag_Open_Waiting_Limit)
 		{
 			m_fBag_Open_Waiting_Now = 0.f;
+		
+			m_pSoundCom->Play2D(TEXT("SE_UI_Move_04.wav"), &g_fUIVolume);
+			
 			if (m_bIsBagOpen)
 			{
 				m_bIsBagOpen = false;
@@ -303,6 +313,7 @@ void CUIPage_Play::Action_Potion_Tool(_float fTimeDelta)
 		_int iTool = GET_GAMEINTERFACE->Get_Tool_Select();
 
 		if ((!m_bIsBagOpen) && (m_vec_Group_Ctrl[_int(PART_GROUP::GROUP_SELECT_CELL)]->fRatio == 0.f))
+		{
 			if (GET_GAMEINTERFACE->Get_Equip_Item_Info(EQUIP_SLOT(_int(EQUIP_SLOT::EQUIP_USING_TOP_0) + iPotion)) != nullptr)
 				if (GET_GAMEINTERFACE->Get_Equip_Item_Info(EQUIP_SLOT(_int(EQUIP_SLOT::EQUIP_USING_TOP_0) + iPotion))->iItem_Index == _int(SPECIAL_ITEM::SP_GRINDER))
 				{
@@ -311,17 +322,19 @@ void CUIPage_Play::Action_Potion_Tool(_float fTimeDelta)
 					if (m_vGrinder_Wait.x > m_vGrinder_Wait.y)
 						GET_GAMEINTERFACE->Use_Potion_Slot();
 				}
-					
-			
+		}
 		else if ((!m_bIsBagOpen) && (m_vec_Group_Ctrl[_int(PART_GROUP::GROUP_SELECT_CELL)]->fRatio == 1.f))
-					if (GET_GAMEINTERFACE->Get_Equip_Item_Info(EQUIP_SLOT(_int(EQUIP_SLOT::EQUIP_USING_BOTTOM_0) + iTool)) != nullptr)
-						if (GET_GAMEINTERFACE->Get_Equip_Item_Info(EQUIP_SLOT(_int(EQUIP_SLOT::EQUIP_USING_BOTTOM_0) + iTool))->iItem_Index == _int(SPECIAL_ITEM::SP_GRINDER))
-						{
-							m_vGrinder_Wait.x += fTimeDelta;
-							bUseGrinder = true;
-							if (m_vGrinder_Wait.x > m_vGrinder_Wait.y)
-								GET_GAMEINTERFACE->Use_Tool_Slot();
-						}
+		{
+			if (GET_GAMEINTERFACE->Get_Equip_Item_Info(EQUIP_SLOT(_int(EQUIP_SLOT::EQUIP_USING_BOTTOM_0) + iTool)) != nullptr)
+				if (GET_GAMEINTERFACE->Get_Equip_Item_Info(EQUIP_SLOT(_int(EQUIP_SLOT::EQUIP_USING_BOTTOM_0) + iTool))->iItem_Index == _int(SPECIAL_ITEM::SP_GRINDER))
+				{
+					m_vGrinder_Wait.x += fTimeDelta;
+					bUseGrinder = true;
+					if (m_vGrinder_Wait.x > m_vGrinder_Wait.y)
+						GET_GAMEINTERFACE->Use_Tool_Slot();
+				}
+		}
+					
 	}
 
 	if (!GET_GAMEINTERFACE->Get_LastFrame_UsingItem_Info().empty())

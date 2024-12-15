@@ -1068,6 +1068,12 @@ HRESULT CItem_Manager::Initialize_Item()
 
 	for (_uint i = iStartRow; i < vecBuffer_Shop.size(); ++i)
 	{
+		if (stoi(vecBuffer_Shop[i][2]) == -1)
+		{
+			m_vecItem_BasicSpec[stoi(vecBuffer_Shop[i][0])]->bIsAvailable_Chest = true;
+			continue;
+		}
+
 		SHOP* pNew = new SHOP;
 
 		pNew->iIndex = stoi(vecBuffer_Shop[i][0]);

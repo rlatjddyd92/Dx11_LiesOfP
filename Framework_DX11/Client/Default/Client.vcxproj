@@ -447,7 +447,7 @@
     <ClInclude Include="..\Public\UIPage_Ortho.h" />
     <ClInclude Include="..\Public\UIPage_Play.h" />
     <ClInclude Include="..\Public\UIPage_Popup.h" />
-    <ClInclude Include="..\Public\UIPage_Skill.h" />
+    <ClInclude Include="..\Public\UIPage_Common.h" />
     <ClInclude Include="..\Public\UIPage_Stat.h" />
     <ClInclude Include="..\Public\UIPage_ItemInfo.h" />
     <ClInclude Include="..\Public\UIPage_Talking.h" />
@@ -753,7 +753,7 @@
     <ClCompile Include="..\Private\UIPage_Ortho.cpp" />
     <ClCompile Include="..\Private\UIPage_Play.cpp" />
     <ClCompile Include="..\Private\UIPage_Popup.cpp" />
-    <ClCompile Include="..\Private\UIPage_Skill.cpp" />
+    <ClCompile Include="..\Private\UIPage_Common.cpp" />
     <ClCompile Include="..\Private\UIPage_Stat.cpp" />
     <ClCompile Include="..\Private\UIPage_ItemInfo.cpp" />
     <ClCompile Include="..\Private\UIPage_Talking.cpp" />
