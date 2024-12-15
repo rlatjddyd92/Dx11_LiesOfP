@@ -32,6 +32,7 @@ HRESULT CState_Raxasia_CutScene_Phase2::Start_State(void* pArg)
     m_fDelay = 0.f;
 
     m_pCutSceneWeapon = dynamic_cast<CRaxasia*>(m_pMonster)->Get_CutSceneWeapon();
+    m_pShieldWeapon = dynamic_cast<CRaxasia*>(m_pMonster)->Get_ShieldWeapon();
     //m_pCutSceneWeapon->Play_Animation("AS_Sword_Raxasia_Phase2_C01_CINE");
 
     return S_OK;
@@ -53,6 +54,35 @@ void CState_Raxasia_CutScene_Phase2::Update(_float fTimeDelta)
     {
         m_pCutSceneWeapon->Stop_UpdatePos();
         m_isOnGroundWeapon = true;
+    }
+
+    if (!m_isChangeWeaponPos && iFrame > 500)
+    {
+        _Vec3 vPos = _Vec3(-59.28147f, -96.39721f, -27.10989f);
+        m_pCutSceneWeapon->Set_Pos(vPos);
+
+        m_isChangeWeaponPos = true;
+    }
+
+    if (!m_isReConnetWeaponBone && iFrame > 786)
+    {
+        _Vec3 vOffset = _Vec3(0.f, 0.f, 0.f);
+        m_pCutSceneWeapon->Set_Offset(vOffset);
+
+        m_pCutSceneWeapon->Start_UpdatePos();
+        m_isReConnetWeaponBone = true;
+    }
+
+    if(!m_isPlayWeaponChangeAnim && iFrame > 915)
+    {
+        m_pCutSceneWeapon->Play_Animation("AS_Sword_Raxasia_Phase2_C06_CINE");
+        m_isPlayWeaponChangeAnim = true;
+    }
+
+    if (!m_isConneectLeftHandShield && iFrame > 430)
+    {
+        m_pShieldWeapon->ChangeSocketMatrix(m_pMonster->Get_Model()->Get_BoneCombindTransformationMatrix_Ptr(36));
+        m_isConneectLeftHandShield = true;
     }
     //m_fDelay += fTimeDelta;
     //if (m_fDelay >= 0.1f && !m_isStartCutScene)

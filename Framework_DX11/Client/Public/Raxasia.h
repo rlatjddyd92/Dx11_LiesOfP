@@ -70,7 +70,9 @@ private:
 	virtual ~CRaxasia() = default;
 
 public:
-	class CRaxasia_Sword_CutScene* Get_CutSceneWeapon() { return m_pCutSceneWeapon; }
+	class CRaxasia_Sword_CutScene*	Get_CutSceneWeapon() { return m_pCutSceneWeapon; }
+
+	class CWeapon*					Get_ShieldWeapon() { return m_pWeaponShield; }
 
 public:
 	virtual HRESULT Initialize_Prototype() override;

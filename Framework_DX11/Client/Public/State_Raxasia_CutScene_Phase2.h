@@ -27,13 +27,17 @@ private:
     _bool               m_isStartCutScene = {};
     _bool               m_isChangePhase2Model = {};
     _bool               m_isOnGroundWeapon = {};
+    _bool               m_isChangeWeaponPos = {};
+    _bool               m_isReConnetWeaponBone = {};
+    _bool               m_isPlayWeaponChangeAnim = {};
+    _bool               m_isConneectLeftHandShield = {};
 
     _float              m_fDelay = {};
 
     _Vec3               m_vRootMoveStack{};
 
-    class CRaxasia_Sword_CutScene* m_pCutSceneWeapon = { nullptr };
-
+    class CRaxasia_Sword_CutScene*  m_pCutSceneWeapon = { nullptr };
+    class CWeapon*                  m_pShieldWeapon = { nullptr };
 private:
     void                End_Check();
 

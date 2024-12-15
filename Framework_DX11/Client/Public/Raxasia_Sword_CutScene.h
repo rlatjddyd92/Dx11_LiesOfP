@@ -22,6 +22,14 @@ public:
 public:
 	class CModel* Get_Model() { return m_pModelCom; }
 
+	void	Set_Offset(_Vec3 vOffset) { m_vOffset = vOffset; }
+
+	void	Set_Pos(_Vec3 vPos) {
+		m_WorldMatrix._41 = vPos.x;
+		m_WorldMatrix._42 = vPos.y;
+		m_WorldMatrix._43 = vPos.z;
+	}
+
 private:
 	CRaxasia_Sword_CutScene(ID3D11Device* pDevice, ID3D11DeviceContext* pContext);
 	CRaxasia_Sword_CutScene(const CRaxasia_Sword_CutScene& Prototype);
@@ -59,6 +67,8 @@ private:
 	_Matrix					m_WorldMatrix = {};
 	const _Matrix*			m_pParentMatrix = { nullptr };
 	const _Matrix*			m_pSocketMatrix = { nullptr };
+
+	_Vec3					m_vOffset = {};
 
 private:
 
