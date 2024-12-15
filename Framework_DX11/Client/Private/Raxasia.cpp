@@ -133,7 +133,7 @@ HRESULT CRaxasia::Initialize(void* pArg)
 	GET_GAMEINTERFACE->Set_OnOff_OrthoUI(false, this);
 
 
-	Start_CutScene(CUTSCENE_MEET);
+	//Start_CutScene(CUTSCENE_MEET);
 
 	return S_OK;
 }
@@ -204,7 +204,10 @@ void CRaxasia::Update(_float fTimeDelta)
 			pEffect->Update(fTimeDelta);
 	}
 
-	Update_Collider();
+	if (!m_isCutScene)
+	{
+		Update_Collider();
+	}
 
 	m_pWeapon->Update(fTimeDelta);
 	m_pWeaponShield->Update(fTimeDelta);

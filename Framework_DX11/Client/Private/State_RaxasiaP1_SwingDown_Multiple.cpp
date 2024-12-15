@@ -67,9 +67,6 @@ void CState_RaxasiaP1_SwingDown_Multiple::Update(_float fTimeDelta)
     {
         if (CurTrackPos >= 70.f)
         {
-            ++m_iRouteTrack;
-            m_bSwing = false;
-            m_bStamp = false;
             if (m_iRouteTrack == 7)
             {
                 m_iCurAnimIndex = AN_SWINGDOWN;
@@ -92,6 +89,9 @@ void CState_RaxasiaP1_SwingDown_Multiple::Update(_float fTimeDelta)
                     SpeedRatio = 2.f;
                 m_pMonster->Get_Model()->Set_SpeedRatio(m_iCurAnimIndex, (double)1 + SpeedRatio);
             }
+            ++m_iRouteTrack;
+            m_bSwing = false;
+            m_bStamp = false;
             m_pMonster->Change_Animation(m_iCurAnimIndex, false, 0.1f, 0);
             return;
         }
@@ -212,6 +212,7 @@ void CState_RaxasiaP1_SwingDown_Multiple::Effect_Check(_double CurTrackPos)
                 _Vec3 vPos = { 0.f, 0.f, -4.25f };
                 XMStoreFloat4x4(&WorldMat, (*m_pMonster->Get_WeaponBoneCombinedMat(0) * (*m_pMonster->Get_WeaponWorldMat())));
                 vPos = XMVector3TransformCoord(vPos, XMLoadFloat4x4(&WorldMat));
+                vPos.y -= 1.f;
 
                 CEffect_Manager::Get_Instance()->Add_Effect_ToLayer(LEVEL_GAMEPLAY, TEXT("Raxasia_Attack_Stamp"),
                     vPos, _Vec3{ m_pMonster->Get_TargetDir() });
@@ -244,6 +245,7 @@ void CState_RaxasiaP1_SwingDown_Multiple::Effect_Check(_double CurTrackPos)
                     _Vec3 vPos = { 0.f, 0.f, -4.25f };
                     XMStoreFloat4x4(&WorldMat, (*m_pMonster->Get_WeaponBoneCombinedMat(0) * (*m_pMonster->Get_WeaponWorldMat())));
                     vPos = XMVector3TransformCoord(vPos, XMLoadFloat4x4(&WorldMat));
+                    vPos.y -= 1.f;
 
                     CEffect_Manager::Get_Instance()->Add_Effect_ToLayer(LEVEL_GAMEPLAY, TEXT("Raxasia_Attack_Stamp"),
                         vPos, _Vec3{ m_pMonster->Get_TargetDir() });
@@ -274,6 +276,7 @@ void CState_RaxasiaP1_SwingDown_Multiple::Effect_Check(_double CurTrackPos)
                     _Vec3 vPos = { 0.f, 0.f, -4.25f };
                     XMStoreFloat4x4(&WorldMat, (*m_pMonster->Get_WeaponBoneCombinedMat(0) * (*m_pMonster->Get_WeaponWorldMat())));
                     vPos = XMVector3TransformCoord(vPos, XMLoadFloat4x4(&WorldMat));
+                    vPos.y -= 1.f;
 
                     CEffect_Manager::Get_Instance()->Add_Effect_ToLayer(LEVEL_GAMEPLAY, TEXT("Raxasia_Attack_Stamp"),
                         vPos, _Vec3{ m_pMonster->Get_TargetDir() });

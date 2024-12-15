@@ -54,6 +54,9 @@
 #include "C:\Users\Administrator\Documents\GitHub\Dx11_LiesOfP\Framework_DX11\Client\Private\EffectObject.cpp"
 
 
+#include "C:\Users\Administrator\Documents\GitHub\Dx11_LiesOfP\Framework_DX11\Client\Private\FirePot.cpp"
+
+
 #include "C:\Users\Administrator\Documents\GitHub\Dx11_LiesOfP\Framework_DX11\Client\Private\FollowedEffect.cpp"
 
 
@@ -67,6 +70,9 @@
 
 
 #include "C:\Users\Administrator\Documents\GitHub\Dx11_LiesOfP\Framework_DX11\Client\Private\Raxasia.cpp"
+
+
+#include "C:\Users\Administrator\Documents\GitHub\Dx11_LiesOfP\Framework_DX11\Client\Private\Raxasia_Sword_CutScene.cpp"
 
 
 #include "C:\Users\Administrator\Documents\GitHub\Dx11_LiesOfP\Framework_DX11\Client\Private\SimonManus_CutScene_GodHand.cpp"
@@ -223,6 +229,18 @@
 
 
 #include "C:\Users\Administrator\Documents\GitHub\Dx11_LiesOfP\Framework_DX11\Client\Private\State_RaxasiaP2_WaveSting.cpp"
+
+
+#include "C:\Users\Administrator\Documents\GitHub\Dx11_LiesOfP\Framework_DX11\Client\Private\State_Raxasia_CutScene_Meet.cpp"
+
+
+#include "C:\Users\Administrator\Documents\GitHub\Dx11_LiesOfP\Framework_DX11\Client\Private\State_Raxasia_CutScene_Phase2.cpp"
+
+
+#include "C:\Users\Administrator\Documents\GitHub\Dx11_LiesOfP\Framework_DX11\Client\Private\State_SimonManusP2_Die_Talking.cpp"
+
+
+#include "C:\Users\Administrator\Documents\GitHub\Dx11_LiesOfP\Framework_DX11\Client\Private\TorchDeck.cpp"
 
 
 #include "C:\Users\Administrator\Documents\GitHub\Dx11_LiesOfP\Framework_DX11\Client\Private\UIPage_Chest.cpp"
@@ -813,7 +831,7 @@
 #include "C:\Users\Administrator\Documents\GitHub\Dx11_LiesOfP\Framework_DX11\Client\Private\UIPage_Popup.cpp"
 
 
-#include "C:\Users\Administrator\Documents\GitHub\Dx11_LiesOfP\Framework_DX11\Client\Private\UIPage_Skill.cpp"
+#include "C:\Users\Administrator\Documents\GitHub\Dx11_LiesOfP\Framework_DX11\Client\Private\UIPage_Common.cpp"
 
 
 #include "C:\Users\Administrator\Documents\GitHub\Dx11_LiesOfP\Framework_DX11\Client\Private\UIPage_Stat.cpp"
