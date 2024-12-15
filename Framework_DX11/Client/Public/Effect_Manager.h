@@ -35,7 +35,7 @@ public:
 	HRESULT Initialize(ID3D11Device* pDevice, ID3D11DeviceContext* pContext, const _wstring& strEffectPath, const _wstring strTexturePath, const _wstring strModelPath);
 
 public:
-	class CEffect_Container* Clone_Effect(const _wstring& strECTag, const _Matrix* pParentMatrix, const _Matrix* pSocketMatrix, _Vec3 vPos = {}, _Vec3 vDir = {}, _Vec3 vScale = {1.f, 1.f, 1.f});
+	class CEffect_Container* Clone_Effect(const _wstring& strECTag, const _Matrix* pParentMatrix, const _Matrix* pSocketMatrix, _Vec3 vPos = {}, _Vec3 vDir = { 0.f, 0.f, 1.f }, _Vec3 vScale = { 1.f, 1.f, 1.f });
 
 	HRESULT Add_Effect_ToLayer(_uint iLevelID, const _wstring& strECTag, _Vec3 vPos = {}, _Vec3 vDir = {}, _Vec3 vScale = { 1.f, 1.f, 1.f });
 	HRESULT Add_Effect_ToLayer(_uint iLevelID, const _wstring& strECTag, const _Matrix* pParentMatrix, const _Matrix* pSocketMatrix, _Vec3 vPos = {}, _Vec3 vDir = {}, _Vec3 vScale = { 1.f, 1.f, 1.f });
@@ -45,7 +45,7 @@ private:
 	class CGameInstance* m_pGameInstance = { nullptr };
 	ID3D11Device* m_pDevice = { nullptr };
 	ID3D11DeviceContext* m_pContext = { nullptr };
-	
+
 	map<const _wstring, CParticle_Effect::PARTICLE_EFFECT_DESC> m_PEDescs;
 	map<const _wstring, CTexture_Effect::TEXTURE_EFFECT_DESC> m_TEDescs;
 	map<const _wstring, CMesh_Effect::MESH_EFFECT_DESC> m_MEDescs;
@@ -73,12 +73,12 @@ private:
 	HRESULT Load_TrailTP_Effect(const _wstring strResultPath);
 	HRESULT Load_TrailMP_Effect(const _wstring strResultPath);
 
-	CParticle_Effect*	Clone_ParticleEffect(const _wstring& strEffectTag);
-	CTexture_Effect*	Clone_TextureEffect(const _wstring& strEffectTag);
-	CMesh_Effect*		Clone_MeshEffect(const _wstring& strEffectTag);
-	CTrail_Effect_OP*	Clone_TrailOP_Effect(const _wstring strEffectTag);
-	CTrail_Effect_TP*	Clone_TrailTP_Effect(const _wstring strEffectTag);
-	CTrail_Effect_MP*	Clone_TrailMP_Effect(const _wstring strEffectTag);
+	CParticle_Effect* Clone_ParticleEffect(const _wstring& strEffectTag);
+	CTexture_Effect* Clone_TextureEffect(const _wstring& strEffectTag);
+	CMesh_Effect* Clone_MeshEffect(const _wstring& strEffectTag);
+	CTrail_Effect_OP* Clone_TrailOP_Effect(const _wstring strEffectTag);
+	CTrail_Effect_TP* Clone_TrailTP_Effect(const _wstring strEffectTag);
+	CTrail_Effect_MP* Clone_TrailMP_Effect(const _wstring strEffectTag);
 
 	_wstring Get_FileName(const _wstring& strFileTag);
 	_wstring Get_FileExtentin(const _wstring& strFileTag);
@@ -87,7 +87,7 @@ private:
 	// 풀링할 오브젝트 만들어서 맵에 추가하고 반환하는 함수.
 	class CEffect_Container* Find_PoolingEffect(const _wstring& strECTag, void* pArg);
 	class CEffect_Container* Clone_Effect_From_Prototype(const _wstring& strECTag, void* pArg);
-	
+
 	HRESULT Effect_Pooling(const _wstring& strECTag, void* pArg, size_t iSize);
 
 public:

@@ -238,7 +238,7 @@ void CTransform::Look_Dir(_Vec4 vDir)
 
 	_Vec4		vPosition = Get_State(STATE_POSITION);
 
-	_Vec4		vLook = vDir;
+	_Vec4		vLook = XMVector3Normalize(vDir);
 
 	_Vec4		vRight = XMVector3Cross(XMVectorSet(0.f, 1.f, 0.f, 0.f), vLook);
 
