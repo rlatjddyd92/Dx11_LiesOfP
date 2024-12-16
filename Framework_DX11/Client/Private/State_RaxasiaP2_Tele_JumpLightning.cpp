@@ -4,6 +4,8 @@
 #include "Model.h"
 #include "Raxasia.h"
 
+#include "Effect_Manager.h"
+
 CState_RaxasiaP2_Tele_JumpLightning::CState_RaxasiaP2_Tele_JumpLightning(CFsm* pFsm, CMonster* pMonster)
     :CState{ pFsm }
     , m_pMonster{ pMonster }
@@ -174,9 +176,50 @@ void CState_RaxasiaP2_Tele_JumpLightning::Collider_Check(_double CurTrackPos)
 
 void CState_RaxasiaP2_Tele_JumpLightning::Effect_Check(_double CurTrackPos)
 {
-    if (CurTrackPos >= 35.f)
+    if (m_iRouteTrack == 0 || m_iRouteTrack == 2)
     {
-        //¹æÀü
+        if ((CurTrackPos >= 90.f && CurTrackPos <= 100.f))
+        {
+            if (!m_bSwing)
+            {
+                m_pMonster->Active_Effect(CRaxasia::EFFECT_SWING, true);
+            }
+        }
+        else
+        {
+            m_pMonster->DeActive_Effect(CRaxasia::EFFECT_SWING);
+        }
+    }
+    else if (m_iRouteTrack == 1)
+    {
+        if ((CurTrackPos >= 80.f && CurTrackPos <= 90.f))
+        {
+            m_pMonster->Active_Effect(CRaxasia::EFFECT_SWING, true);
+        }
+        else
+        {
+            m_pMonster->DeActive_Effect(CRaxasia::EFFECT_SWING);
+        }
+        //Àü±â ÂªÅÚ ÀÌÆåÆ®
+    }
+    else
+    {
+        if (!m_bJump)
+        {
+            if (CurTrackPos >= 100.f)
+            {
+                _float4x4 WorldMat{};
+                _Vec3 vPos = { 0.f, 0.f, 0.f };
+                XMStoreFloat4x4(&WorldMat, m_pMonster->Get_Transform()->Get_WorldMatrix());
+                vPos = XMVector3TransformCoord(vPos, XMLoadFloat4x4(&WorldMat));
+
+                CEffect_Manager::Get_Instance()->Add_Effect_ToLayer(LEVEL_GAMEPLAY, TEXT("Raxasia_Jump"),
+                    vPos, _Vec3{ m_pMonster->Get_TargetDir() });
+
+                m_pMonster->Active_Effect(CRaxasia::EFFECT_INCHENTSWORD, true);
+                m_bJump = true;
+            }
+        }
     }
 }
 

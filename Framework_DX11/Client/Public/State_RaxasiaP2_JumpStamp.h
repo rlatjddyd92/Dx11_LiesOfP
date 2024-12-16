@@ -11,7 +11,7 @@ class CState_RaxasiaP2_JumpStamp : public CState
 {
 private:
     typedef enum {
-        AN_JUMPSTAMP_START = 36, AN_JUMPSTAMP_MIDDLE = 35, AN_JUMPSTAMP_END = 34
+        AN_INCHENT = 24, AN_JUMPSTAMP_START = 36, AN_JUMPSTAMP_MIDDLE = 35, AN_JUMPSTAMP_END = 34
     }ANIMNUM;
 
 public:
@@ -36,6 +36,11 @@ private:
     _bool               m_bStartSpot = { true };
     _bool               m_bSwing = { false };
     _bool               m_bSwingSound = { false };
+    
+    _bool               m_bInchent = { false };
+    _bool               m_bEnvelop = { false };
+    _bool               m_bStomp = { false };
+    _bool               m_bAccel = { false };
 
     _uint               m_iRouteTrack = {};
 

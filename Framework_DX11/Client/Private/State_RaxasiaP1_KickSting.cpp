@@ -142,8 +142,8 @@ void CState_RaxasiaP1_KickSting::Effect_Check(_double CurTrackPos)
             if (CurTrackPos >= 65.f)
             {
                 _float4x4 WorldMat{};
-                _Vec3 vPos = { 0.f, 0.f, -4.25f };
-                XMStoreFloat4x4(&WorldMat, (*m_pMonster->Get_WeaponBoneCombinedMat(0) * (*m_pMonster->Get_WeaponWorldMat())));
+                _Vec3 vPos = { 1.f, 0.f, 0.f };
+                XMStoreFloat4x4(&WorldMat, (*m_pMonster->Get_WeaponBoneCombinedMat(1) * (*m_pMonster->Get_WeaponWorldMat())));
                 vPos = XMVector3TransformCoord(vPos, XMLoadFloat4x4(&WorldMat));
 
                 vPos.y -= 1.f;

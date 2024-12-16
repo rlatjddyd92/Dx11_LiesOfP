@@ -234,17 +234,17 @@ void CRaxasia::Late_Update(_float fTimeDelta)
 	m_pGameInstance->Add_RenderObject(CRenderer::RG_NONBLEND, this);
 	m_pGameInstance->Add_RenderObject(CRenderer::RG_SHADOWOBJ, this);
 
-	//for (_uint i = 0; i < EXCOLLIDER::COLLTYPE_END; ++i)
-	//{
-	//	m_pGameInstance->Add_ColliderList(m_EXCollider[i]);
-	//}
+	for (_uint i = 0; i < EXCOLLIDER::COLLTYPE_END; ++i)
+	{
+		m_pGameInstance->Add_ColliderList(m_EXCollider[i]);
+	}
 }
 
 HRESULT CRaxasia::Render()
 {
 	if (FAILED(__super::Render()))
 		return E_FAIL;
-
+	m_pWeapon->Active_Collider();
 	if (FAILED(m_pWeapon->Render()))
 		return E_FAIL;
 
@@ -793,6 +793,24 @@ HRESULT CRaxasia::Ready_Effects()
 	m_Effects[EFFECT_THUNDERDISCHARGE] = CEffect_Manager::Get_Instance()->Clone_Effect(TEXT("Raxasia_Attack_ThunderDischarge"), pParetnMatrix,
 		nullptr, _Vec3(0.f, 0.f, 0.f), _Vec3(0.f, 0.f, 1.f), _Vec3(1.f, 1.f, 1.f));
 
+	m_Effects[EFFECT_HOWLING] = CEffect_Manager::Get_Instance()->Clone_Effect(TEXT("Raxasia_Attack_Howling"), pParetnMatrix,
+		nullptr, _Vec3(0.f, 0.f, 0.f), _Vec3(0.f, 0.f, 1.f), _Vec3(1.f, 1.f, 1.f));
+
+	m_Effects[EFFECT_THUNDERCHARGE_GROUND] = CEffect_Manager::Get_Instance()->Clone_Effect(TEXT("Raxasia_Attack_ThunderCharge_Ground"), pParetnMatrix,
+		nullptr, _Vec3(0.f, 0.f, 0.f), _Vec3(0.f, 0.f, 1.f), _Vec3(1.f, 1.f, 1.f));
+
+	m_Effects[EFFECT_THUNDERENVELOP_BIG] = CEffect_Manager::Get_Instance()->Clone_Effect(TEXT("Raxasia_Attack_ThunderEnvelop_Big"), pParetnMatrix,
+		nullptr, _Vec3(0.f, 0.f, 0.f), _Vec3(0.f, 0.f, 1.f), _Vec3(1.f, 1.f, 1.f));
+
+	m_Effects[EFFECT_THUNDERACCEL] = CEffect_Manager::Get_Instance()->Clone_Effect(TEXT("Raxasia_Attack_ThunderAccel"), pParetnMatrix,
+		nullptr, _Vec3(0.f, 0.1f, 0.f), _Vec3(0.f, 0.f, 1.f), _Vec3(1.f, 1.f, 1.f));
+
+	m_Effects[EFFECT_SHIELDDASH] = CEffect_Manager::Get_Instance()->Clone_Effect(TEXT("Raxasia_Attack_ShieldDash"), pParetnMatrix,
+		nullptr, _Vec3(0.f, 0.f, 0.f), _Vec3(0.f, 0.f, 1.f), _Vec3(1.f, 1.f, 1.f));
+
+	m_Effects[EFFECT_SHIELDCHARGE_GROUND] = CEffect_Manager::Get_Instance()->Clone_Effect(TEXT("Raxasia_Attack_ShieldCharge_Ground"), pParetnMatrix,
+		nullptr, _Vec3(0.f, 0.f, 0.f), _Vec3(0.f, 0.f, 1.f), _Vec3(1.f, 1.f, 1.f));
+
 	pSocketBoneMatrix = m_pModelCom->Get_BoneCombindTransformationMatrix_Ptr(m_pModelCom->Get_UFBIndices(UFB_HAND_RIGHT));
 
 	m_Effects[EFFECT_SWING] = CEffect_Manager::Get_Instance()->Clone_Effect(TEXT("Raxasia_Attack_Swing"), pParetnMatrix,
@@ -809,13 +827,14 @@ HRESULT CRaxasia::Ready_Effects()
 	m_Effects[EFFECT_INCHENTSWORD] = CEffect_Manager::Get_Instance()->Clone_Effect(TEXT("Raxasia_Attack_InchentedSword"), pParetnMatrix,
 		pSocketBoneMatrix, _Vec3(0.f, 0.f, 0.f), _Vec3(0.f, 0.f, 1.f), _Vec3(1.f, 1.f, 1.f));
 
+	m_Effects[EFFECT_INCHENTSWORD_P2] = CEffect_Manager::Get_Instance()->Clone_Effect(TEXT("Raxasia_Attack_InchentedSword_2P"), pParetnMatrix,
+		pSocketBoneMatrix, _Vec3(0.f, 0.f, 0.f), _Vec3(0.f, 0.f, 1.f), _Vec3(1.f, 1.f, 1.f));
 
-	//for (auto& pEffect : m_Effects)
-	//{
-	//	pEffect->Set_Loop(false);
-	//	pEffect->Set_Dead(true);
-	//}
 
+	pSocketBoneMatrix = m_pModelCom->Get_BoneCombindTransformationMatrix_Ptr(m_pModelCom->Get_UFBIndices(UFB_CHEST));
+
+	m_Effects[EFFECT_THUNDERENVELOP_SMALL] = CEffect_Manager::Get_Instance()->Clone_Effect(TEXT("Raxasia_Attack_ThunderEnvelop_Small"), pParetnMatrix,
+		pSocketBoneMatrix, _Vec3(0.f, 0.f, 0.f), _Vec3(0.f, 0.f, 1.f), _Vec3(1.f, 1.f, 1.f));
 
 	return S_OK;
 }

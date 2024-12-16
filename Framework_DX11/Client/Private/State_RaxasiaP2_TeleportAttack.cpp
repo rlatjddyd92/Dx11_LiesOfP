@@ -27,6 +27,10 @@ HRESULT CState_RaxasiaP2_TeleportAttack::Start_State(void* pArg)
     m_bTeleport = false;
 
     m_bSwing = false;
+    m_bStart = false;
+    m_bEnvelop = false;
+    m_bAccel = false;
+
     return S_OK;
 }
 
@@ -41,6 +45,7 @@ void CState_RaxasiaP2_TeleportAttack::Update(_float fTimeDelta)
         {
             ++m_iRouteTrack;
             m_bTeleport = false;
+            m_pMonster->DeActive_Effect(CRaxasia::EFFECT_THUNDERENVELOP_SMALL);
             m_pMonster->Change_Animation(AN_JUMPATTACK, false, 0.2f, 50);
             return;
         }
@@ -158,7 +163,42 @@ void CState_RaxasiaP2_TeleportAttack::Collider_Check(_double CurTrackPos)
 
 void CState_RaxasiaP2_TeleportAttack::Effect_Check(_double CurTrackPos)
 {
+    if (m_iRouteTrack == 0)
+    {
+        if (!m_bStart)
+        {
+            m_bStart = true;
+            m_pMonster->Active_Effect(CRaxasia::EFFECT_THUNDERENVELOP_SMALL, true);
+        }
+    }
+    else
+    {
+        if (!m_bEnvelop)
+        {
+            if (CurTrackPos >= 40.f)
+            {
+                m_pMonster->Active_Effect(CRaxasia::EFFECT_THUNDERENVELOP_SMALL, true);
+            }
+        }
+        else if (CurTrackPos >= 165.f)
+        {
+            m_pMonster->DeActive_Effect(CRaxasia::EFFECT_THUNDERENVELOP_SMALL);
+        }
 
+        if (CurTrackPos >= 39.f && CurTrackPos <= 42.f)
+        {
+            if (!m_bAccel)
+            {
+                m_bAccel = true;
+                m_pMonster->Active_Effect(CRaxasia::EFFECT_THUNDERACCEL, true);
+            }
+        }
+        else
+        {
+            m_pMonster->DeActive_Effect(CRaxasia::EFFECT_THUNDERACCEL);
+        }
+
+    }
 }
 
 void CState_RaxasiaP2_TeleportAttack::Control_Sound(_double CurTrackPos)

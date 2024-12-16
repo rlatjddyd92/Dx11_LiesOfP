@@ -27,11 +27,17 @@ public:
 private:
     class CMonster* m_pMonster = { nullptr };
 
+    _float              m_fDistance = {};
+    _float              m_fAccelSpeed = {50.f};
     _float              m_fCurrentTime = { 0.f };
     _float              m_fChaseDuration = { 1.5f };
 
     _bool               m_bSpeedController = { false };
     _bool               m_bSwing = { false };
+    _bool               m_bEnvelop = { false };
+    _bool               m_bAccel = { false };
+    _bool               m_bJump = { false };
+
 
     _bool               m_bRunningWise = { false }; //방향 구분용으로 사용. false면 왼, true면 오른
     _bool               m_bSwingSound = { false };

@@ -31,6 +31,8 @@ private:
     _float              m_fChaseDuration = { 1.5f };
 
     _bool               m_bSwing = { false };
+    _bool               m_bTeleEffect = { false };
+    _bool               m_bEnvelop = { false };
 
     _bool               m_bSwingSound = { false };
 
