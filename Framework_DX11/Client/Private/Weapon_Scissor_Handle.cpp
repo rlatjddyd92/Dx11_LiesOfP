@@ -123,6 +123,34 @@ HRESULT CWeapon_Scissor_Handle::Render_LightDepth()
 	return S_OK;
 }
 
+void CWeapon_Scissor_Handle::Effect_Priority_Update(_float fTimeDelta)
+{
+	for (auto& pEffect : m_Effects)
+	{
+		if (!pEffect->Get_Dead())
+			pEffect->Priority_Update(fTimeDelta);
+	}
+}
+
+void CWeapon_Scissor_Handle::Effect_Update(_float fTimeDelta)
+{
+	for (auto& pEffect : m_Effects)
+	{
+		if (!pEffect->Get_Dead())
+			pEffect->Update(fTimeDelta);
+	}
+}
+
+void CWeapon_Scissor_Handle::Effect_Late_Update(_float fTimeDelta)
+{
+
+	for (auto& pEffect : m_Effects)
+	{
+		if (!pEffect->Get_Dead())
+			pEffect->Late_Update(fTimeDelta);
+	}
+}
+
 void CWeapon_Scissor_Handle::OnCollisionEnter(CGameObject* pOther)
 {
 	if (pOther->Get_Tag() == TEXT("Monster"))

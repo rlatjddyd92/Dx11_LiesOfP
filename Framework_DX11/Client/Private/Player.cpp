@@ -1619,6 +1619,13 @@ HRESULT CPlayer::Ready_Effect()
 	m_Effects[EFFECT_HEAL] = m_pEffect_Manager->Clone_Effect(TEXT("Player_Potion"), pParetnMatrix,
 		pSocketBoneMatrix, _Vec3(0.f, 0.f, 0.f), _Vec3(0.f, 0.f, 0.f), _Vec3(1.f, 1.f, 1.f));
 
+	pSocketBoneMatrix = m_pModelCom->Get_BoneCombindTransformationMatrix_Ptr("Bip001-L-UpperArm");
+	//pSocketBoneMatrix = m_pModelCom->Get_BoneCombindTransformationMatrix_Ptr("Root");
+	m_Effects[EFFECT_ARM_SKILL] = m_pEffect_Manager->Clone_Effect(TEXT("Player_Attack_ArmSkill"), pParetnMatrix,
+		pSocketBoneMatrix, _Vec3(0.f, 0.f, 0.f), _Vec3(0.f, 0.f, 0.f), _Vec3(1.f, 1.f, 1.f));
+
+	//Active_Effect(EFFECT_ARM_SKILL);
+
 	return S_OK;
 }
 

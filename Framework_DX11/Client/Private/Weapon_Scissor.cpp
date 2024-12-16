@@ -63,6 +63,15 @@ void CWeapon_Scissor::Priority_Update(_float fTimeDelta)
 		return;
 
 	__super::Priority_Update(fTimeDelta);
+
+	for (auto& pEffect : m_Effects)
+	{
+		if (!pEffect->Get_Dead())
+			pEffect->Priority_Update(fTimeDelta);
+	}
+
+	m_pScissor_Sperate[0]->Effect_Priority_Update(fTimeDelta);
+	m_pScissor_Sperate[1]->Effect_Priority_Update(fTimeDelta);
 }
 
 void CWeapon_Scissor::Update(_float fTimeDelta)
@@ -76,12 +85,6 @@ void CWeapon_Scissor::Update(_float fTimeDelta)
 
 		m_pColliderCom->Update(&m_WorldMatrix);
 		m_pGameInstance->Add_ColliderList(m_pColliderCom);
-
-		for (auto& pEffect : m_Effects)
-		{
-			if (!pEffect->Get_Dead())
-				pEffect->Update(fTimeDelta);
-		}
 	}
 	else if (m_isSeperate)
 	{
@@ -89,6 +92,14 @@ void CWeapon_Scissor::Update(_float fTimeDelta)
 		m_pScissor_Sperate[1]->Update(fTimeDelta);
 	}
 
+	for (auto& pEffect : m_Effects)
+	{
+		if (!pEffect->Get_Dead())
+			pEffect->Update(fTimeDelta);
+	}
+
+	m_pScissor_Sperate[0]->Effect_Update(fTimeDelta);
+	m_pScissor_Sperate[1]->Effect_Update(fTimeDelta);
 }
 
 void CWeapon_Scissor::Late_Update(_float fTimeDelta)
@@ -113,6 +124,15 @@ void CWeapon_Scissor::Late_Update(_float fTimeDelta)
 		m_pScissor_Sperate[0]->Late_Update(fTimeDelta);
 		m_pScissor_Sperate[1]->Late_Update(fTimeDelta);
 	}
+
+	for (auto& pEffect : m_Effects)
+	{
+		if (!pEffect->Get_Dead())
+			pEffect->Late_Update(fTimeDelta);
+	}
+
+	m_pScissor_Sperate[0]->Effect_Late_Update(fTimeDelta);
+	m_pScissor_Sperate[1]->Effect_Late_Update(fTimeDelta);
 }
 
 HRESULT CWeapon_Scissor::Render()

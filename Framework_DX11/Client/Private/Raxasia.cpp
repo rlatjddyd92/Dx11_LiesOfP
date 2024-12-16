@@ -132,7 +132,7 @@ HRESULT CRaxasia::Initialize(void* pArg)
 
 	GET_GAMEINTERFACE->Set_OnOff_OrthoUI(false, this);
 
-	Start_CutScene(CUTSCENE_P2);
+	Start_CutScene(CUTSCENE_MEET);
 
 	return S_OK;
 }

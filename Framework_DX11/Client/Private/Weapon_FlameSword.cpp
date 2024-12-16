@@ -61,8 +61,11 @@ void CWeapon_FlameSword::Priority_Update(_float fTimeDelta)
 
 	__super::Priority_Update(fTimeDelta);
 
-	
-
+	for (auto& pEffect : m_Effects)
+	{
+		if (!pEffect->Get_Dead())
+			pEffect->Priority_Update(fTimeDelta);
+	}
 }
 
 void CWeapon_FlameSword::Update(_float fTimeDelta)
@@ -88,6 +91,12 @@ void CWeapon_FlameSword::Late_Update(_float fTimeDelta)
 
 	/* 직교투영을 위한 월드행렬까지 셋팅하게 된다. */
 	__super::Late_Update(fTimeDelta);
+
+	for (auto& pEffect : m_Effects)
+	{
+		if (!pEffect->Get_Dead())
+			pEffect->Late_Update(fTimeDelta);
+	}
 
 #ifdef _DEBUG
 	m_pGameInstance->Add_DebugObject(m_pColliderCom);

@@ -42,11 +42,6 @@ HRESULT CWeapon::Initialize(void * pArg)
 
 void CWeapon::Priority_Update(_float fTimeDelta)
 {
-	for (auto& pEffect : m_Effects)
-	{
-		if (!pEffect->Get_Dead())
-			pEffect->Priority_Update(fTimeDelta);
-	}
 }
 
 void CWeapon::Update(_float fTimeDelta)
@@ -83,10 +78,6 @@ void CWeapon::Update(_float fTimeDelta)
 			m_vAttackDir = m_vVelocity;
 			m_vAttackDir.Normalize();
 		}
-		else
-		{
-			int a = 0;
-		}
 	}
 	else
 	{
@@ -108,13 +99,6 @@ void CWeapon::Late_Update(_float fTimeDelta)
 
 	/*if (nullptr != m_pColliderCom)
 		m_pGameInstance->Add_ColliderList(m_pColliderCom);*/
-
-
-	for (auto& pEffect : m_Effects)
-	{
-		if (!pEffect->Get_Dead())
-			pEffect->Late_Update(fTimeDelta);
-	}
 }
 
 HRESULT CWeapon::Render()

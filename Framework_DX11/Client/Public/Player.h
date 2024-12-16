@@ -27,6 +27,8 @@ public:
 
 		EFFECT_GRIND, EFFECT_HEAL,
 
+		EFFECT_ARM_SKILL,
+
 		EFFECT_END
 	};
 
