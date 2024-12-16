@@ -243,10 +243,6 @@ HRESULT CRaxasia::Render()
 	if (FAILED(__super::Render()))
 		return E_FAIL;
 
-	m_pWeapon->Active_Collider();
-	if (FAILED(m_pWeapon->Render()))
-		return E_FAIL;
-
 #ifdef _DEBUG
 	m_pColliderCom->Render();
 
