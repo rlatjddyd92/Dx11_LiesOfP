@@ -250,6 +250,9 @@ public:
 	void			Active_Effect(const EFFECT_TYPE& eType, _bool isLoop = true);
 	void			DeActive_Effect(const EFFECT_TYPE& eType);
 
+	void			Active_WeaponEffect(_uint iEffectType, _bool isLoop = true, _uint iHandIndex = 0);
+	void			DeActive_WeaponEffect(_uint iEffectType, _uint iHandIndex = 0);
+
 	virtual _bool	Calc_DamageGain(_float fAtkDmg, _Vec3 vHitPos = { 0.f,0.f,0.f }, _uint iHitType = HIT_END, _uint iAttackStrength = ATK_END, CGameObject* pAttacker = nullptr) override;
 	void			Calc_DebuffGain(DEBUFF_TYPE eDebuffType, _float fAmount);
 	void			Damaged(_float fAtkDmg); 

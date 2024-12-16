@@ -77,29 +77,6 @@ void CWeapon_Scissor_Handle::Update(_float fTimeDelta)
 	
 	m_pBlade->Update(fTimeDelta);
 
-	if (m_iAttackType != ATK_EFFECT_NOTHING)
-	{
-		if (m_vVelocity.Length() > 0.5f)
-		{
-			if (m_iAttackType == ATK_EFFECT_SPECIAL1 || m_iAttackType == ATK_EFFECT_SPECIAL1)
-			{
-				Active_Effect(EFFECT_LINKSLASH1, true);
-			}
-			else if (m_iAttackType == ATK_EFFECT_GENERAL)
-			{
-				Active_Effect(EFFECT_BASE, true);
-			}
-		}
-		else
-		{
-		}
-	}
-	
-	if (m_iAttackType == ATK_EFFECT_SPECIAL3)
-	{
-		Active_Effect(EFFECT_BUFF, true);
-	}
-
 	for (auto& pEffect : m_Effects)
 	{
 		if (!pEffect->Get_Dead())

@@ -244,7 +244,7 @@ HRESULT CWeapon_FlameSword::Ready_Effect()
 		m_pSocketMatrix, _Vec3(0.f, 0.f, 0.f), _Vec3(0.f, 0.f, 0.f), _Vec3(1.f, 1.f, 1.f));
 
 
-	Active_Effect(EFFECT_DEFAULT, true);
+	Active_Effect(EFFECT_DEFAULT, true); // 항상 켜둘것
 
 	return S_OK;
 }
