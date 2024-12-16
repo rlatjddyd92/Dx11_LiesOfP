@@ -311,6 +311,7 @@ HRESULT CLoader::Ready_Resources_For_LogoLevel()
 	m_pGameInstance->LoadSoundFile("Monster/SimonManus");
 
 	m_pGameInstance->LoadSoundFile("Scenario/Object");
+	m_pGameInstance->LoadSoundFile("Scenario/CutScene");
 
 	lstrcpy(m_szLoadingText, TEXT("객체원형을(를) 로딩중입니다."));
 	/* For. Prototype_GameObject_BackGround */

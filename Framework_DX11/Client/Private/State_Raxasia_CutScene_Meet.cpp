@@ -28,6 +28,7 @@ HRESULT CState_Raxasia_CutScene_Meet::Start_State(void* pArg)
     m_pMonster->Get_Model()->Set_SpeedPerSec(m_iAnimation_Meet, 19.0);
     
     m_pMonster->Change_Animation(m_iAnimation_Meet, false, 0.f, 0);
+    m_pMonster->Stop_Animation();
 
     m_isStartCutScene = false;
     m_fDelay = 0.f;
@@ -39,6 +40,11 @@ HRESULT CState_Raxasia_CutScene_Meet::Start_State(void* pArg)
 
 void CState_Raxasia_CutScene_Meet::Update(_float fTimeDelta)
 {
+    m_fDelay += fTimeDelta;
+
+    if (m_fDelay > 0.3f)
+        m_pMonster->Play_Animation();
+
     _int iFrame = m_pMonster->Get_Frame();
 
     if (!m_isMoveDown && iFrame > 230)
