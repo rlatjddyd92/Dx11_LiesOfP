@@ -71,27 +71,6 @@ void CWeapon_Rapier::Update(_float fTimeDelta)
 
 	__super::Update(fTimeDelta);
 
-	if (m_iAttackType != ATK_EFFECT_NOTHING)
-	{
-		if (m_vVelocity.Length() > 0.001f)
-		{
-			if (m_iAttackType == ATK_EFFECT_SPECIAL1)
-			{
-				Active_Effect(EFFECT_STORMSTAB1, true);
-			}
-			else if (m_iAttackType == ATK_EFFECT_SPECIAL2)
-			{
-				DeActive_Effect(EFFECT_STORMSTAB1);
-				Active_Effect(EFFECT_STORMSTAB2, true);
-			}
-		}
-		else
-		{
-			DeActive_Effect(EFFECT_STORMSTAB1);
-			DeActive_Effect(EFFECT_STORMSTAB2);
-		}
-	}
-
 	for (auto& pEffect : m_Effects)
 	{
 		if (!pEffect->Get_Dead())

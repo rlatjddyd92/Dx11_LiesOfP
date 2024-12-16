@@ -77,27 +77,6 @@ void CWeapon_Scissor::Update(_float fTimeDelta)
 		m_pColliderCom->Update(&m_WorldMatrix);
 		m_pGameInstance->Add_ColliderList(m_pColliderCom);
 
-
-		if (m_iAttackType != ATK_EFFECT_NOTHING)
-		{
-			if (m_vVelocity.Length() > 0.25f)
-			{
-				if (m_iAttackType == ATK_EFFECT_SPECIAL1 || m_iAttackType == ATK_EFFECT_SPECIAL2)
-				{
-					Active_Effect(EFFECT_LINKSLASH, true);
-				}
-				else if (m_iAttackType == ATK_EFFECT_GENERAL)
-				{
-					Active_Effect(EFFECT_BASE, true);
-				}
-			}
-			else
-			{
-				DeActive_Effect(EFFECT_BASE);
-				DeActive_Effect(EFFECT_BASE);
-			}
-		}
-
 		for (auto& pEffect : m_Effects)
 		{
 			if (!pEffect->Get_Dead())
@@ -323,19 +302,27 @@ void CWeapon_Scissor::Set_AttackStrength(ATTACK_STRENGTH eStrength)
 	m_pScissor_Sperate[1]->Set_AttackStrength(eStrength);
 }
 
-void CWeapon_Scissor::Set_AttackType(_uint iType)
+void CWeapon_Scissor::Active_Effect(const _uint& iType, _bool isLoop, _uint iHandIndex)
 {
-	m_iAttackType = iType;
-
-	m_pScissor_Sperate[0]->Set_AttackType(m_iAttackType);
-	m_pScissor_Sperate[1]->Set_AttackType(m_iAttackType);
-
-	if (iType == ATK_EFFECT_NOTHING)
+	if (!m_isSeperate)
 	{
-		for (auto& pEffect : m_Effects)
-		{
-			pEffect->Set_Loop(false);
-		}
+		__super::Active_Effect(iType, isLoop);
+	}
+	else
+	{
+		m_pScissor_Sperate[iHandIndex]->Active_Effect(iType, isLoop);
+	}
+}
+
+void CWeapon_Scissor::DeActive_Effect(_uint iType, _uint iHandIndex)
+{
+	if (!m_isSeperate)
+	{
+		__super::DeActive_Effect(iType);
+	}
+	else
+	{
+		m_pScissor_Sperate[iHandIndex]->DeActive_Effect (iType);
 	}
 }
 

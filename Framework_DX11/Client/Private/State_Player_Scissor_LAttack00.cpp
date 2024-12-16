@@ -43,7 +43,6 @@ HRESULT CState_Player_Scissor_LAttack00::Start_State(void* pArg)
     m_isPlaySound = false;
 
     m_pPlayer->Set_WeaponStrength(ATK_WEAK);
-    m_pPlayer->Set_WeaponEffectType(CWeapon::ATK_EFFECT_GENERAL);
 
     return S_OK;
 }
@@ -101,7 +100,7 @@ void CState_Player_Scissor_LAttack00::Update(_float fTimeDelta)
 
 void CState_Player_Scissor_LAttack00::End_State()
 {
-    m_pPlayer->Set_WeaponEffectType(CWeapon::ATK_EFFECT_NOTHING);
+
     m_pPlayer->DeActive_CurretnWeaponCollider();
 }
 

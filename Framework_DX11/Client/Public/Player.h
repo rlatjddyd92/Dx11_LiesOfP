@@ -230,7 +230,6 @@ public:
 	void			Appear_Weapon();
 	void			Disappear_Weapon();
 	void			Set_WeaponStrength(ATTACK_STRENGTH eStrength);
-	void			Set_WeaponEffectType(_uint iAttackEffectType);
 	
 	_bool			Active_CurrentWeaponCollider(_float fDamageRatio = 1.f, _uint iHandIndex = 1);
 	void			DeActive_CurretnWeaponCollider(_uint iHandIndex = 1);

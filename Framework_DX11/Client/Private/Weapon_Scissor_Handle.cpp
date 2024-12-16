@@ -79,7 +79,7 @@ void CWeapon_Scissor_Handle::Update(_float fTimeDelta)
 
 	if (m_iAttackType != ATK_EFFECT_NOTHING)
 	{
-		if (m_vVelocity.Length() > 0.25f)
+		if (m_vVelocity.Length() > 0.5f)
 		{
 			if (m_iAttackType == ATK_EFFECT_SPECIAL1 || m_iAttackType == ATK_EFFECT_SPECIAL1)
 			{

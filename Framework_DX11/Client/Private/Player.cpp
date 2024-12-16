@@ -511,11 +511,6 @@ void CPlayer::Set_WeaponStrength(ATTACK_STRENGTH eStrength)
 	m_pWeapon[m_eWeaponType]->Set_AttackStrength(eStrength);
 }
 
-void CPlayer::Set_WeaponEffectType(_uint iAttackEffectType)
-{
-	m_pWeapon[m_eWeaponType]->Set_AttackType(iAttackEffectType);
-}
-
 _bool CPlayer::Active_CurrentWeaponCollider(_float fDamageRatio, _uint iHandIndex)
 {
 	return m_pWeapon[m_eWeaponType]->Active_Collider(fDamageRatio, iHandIndex);

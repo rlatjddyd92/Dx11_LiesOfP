@@ -72,31 +72,6 @@ void CWeapon_FlameSword::Update(_float fTimeDelta)
 
 	__super::Update(fTimeDelta);
 
-	if (m_iAttackType != ATK_EFFECT_NOTHING)
-	{
-		if (m_vVelocity.Length() > 0.f)
-		{
-			if (m_iAttackType == ATK_EFFECT_SPECIAL1)
-			{
-				Active_Effect(EFFECT_STORMSLASH1, true);
-			}
-			else if (m_iAttackType == ATK_EFFECT_SPECIAL2)
-			{
-				DeActive_Effect(EFFECT_STORMSLASH1);
-				Active_Effect(EFFECT_STORMSLASH2, true);
-			}
-			else if (m_iAttackType == ATK_EFFECT_GENERAL)
-			{
-				Active_Effect(EFFECT_BASE, true);
-			}
-		}
-		else
-		{
-			DeActive_Effect(EFFECT_STORMSLASH1);
-			DeActive_Effect(EFFECT_STORMSLASH2);
-		}
-	}
-
 	for (auto& pEffect : m_Effects)
 	{
 		if (!pEffect->Get_Dead())
@@ -222,22 +197,6 @@ void CWeapon_FlameSword::Play_HitSound(HIT_TYPE eType)
 	}
 
 	m_pSoundCom[WEP_SOUND_EFFECT2]->Play2D(strSoundKey.c_str(), &g_fEffectVolume);
-}
-
-void CWeapon_FlameSword::Set_AttackType(_uint iType)
-{
-	m_iAttackType = iType;
-
-	if (iType == ATK_EFFECT_NOTHING)
-	{
-		for (auto& pEffect : m_Effects)
-		{
-			pEffect->Set_Loop(false);
-		}
-
-	}
-
-	Active_Effect(EFFECT_DEFAULT);
 }
 
 HRESULT CWeapon_FlameSword::Ready_Components()
