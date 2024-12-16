@@ -103,13 +103,6 @@ void CState_Raxasia_CutScene_Meet::Update(_float fTimeDelta)
 
     m_vRootMoveStack = vMove;
 
-    if (iFrame > 380)
-    {
-        m_pMonster->Stop_Animation();
-        //dynamic_cast<CWeapon_Raxasia_P2_Shield*>(m_pShieldWeapon)->Set_Test();
-
-    }
-
     End_Check();
 }
 
