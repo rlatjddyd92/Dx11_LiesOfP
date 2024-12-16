@@ -133,7 +133,7 @@ HRESULT CRaxasia::Initialize(void* pArg)
 	GET_GAMEINTERFACE->Set_OnOff_OrthoUI(false, this);
 
 
-	Start_CutScene(CUTSCENE_P2);
+	//Start_CutScene(CUTSCENE_P2);
 
 	return S_OK;
 }
@@ -239,9 +239,6 @@ void CRaxasia::Late_Update(_float fTimeDelta)
 HRESULT CRaxasia::Render()
 {
 	if (FAILED(__super::Render()))
-		return E_FAIL;
-
-	if (FAILED(m_pWeapon->Render()))
 		return E_FAIL;
 
 #ifdef _DEBUG
@@ -386,8 +383,9 @@ void CRaxasia::Start_CutScene(_uint iCutSceneNum)
 		m_pWeaponShield->Get_Model()->Set_PreTranformMatrix(PreTransformMatrix);
 		m_pWeaponShield->ChangeSocketMatrix(m_pModelCom->Get_BoneCombindTransformationMatrix_Ptr("upperArmorBack_02_spine_03"));
 		m_pCutSceneFsmCom->Set_State(STATE_MEET);
-	}
+
 		break;
+	}
 	case CUTSCENE_P2:
 	{
 		m_pModelCom = m_pCutSceneModelCom[MODEL_PHASE1];
@@ -395,11 +393,11 @@ void CRaxasia::Start_CutScene(_uint iCutSceneNum)
 
 		_matrix PreTransformMatrix = XMMatrixScaling(0.015f, 0.015f, 0.015f) * XMMatrixRotationX(XMConvertToRadians(-90.f));
 
-		CRaxasia_Sword_CutScene::WEAPON_DESC Desc{};
+	/*	CRaxasia_Sword_CutScene::WEAPON_DESC Desc{};
 		Desc.pParentWorldMatrix = m_pTransformCom->Get_WorldMatrix_Ptr();
 		Desc.pSocketBoneMatrix = m_pModelCom->Get_BoneCombindTransformationMatrix_Ptr("weapon0_l");
 		m_pCutSceneWeapon = dynamic_cast<CRaxasia_Sword_CutScene*>(m_pGameInstance->Get_CloneObject_ToLayer(LEVEL_GAMEPLAY, TEXT("Layer_CutSceneWeapon"),
-			TEXT("Prototype_GameObject_Weapon_Raxasia_Sword_CutScene"), &Desc));
+			TEXT("Prototype_GameObject_Weapon_Raxasia_Sword_CutScene"), &Desc));*/
 
 		m_pCutSceneWeapon->Get_Model()->Set_PreTranformMatrix(PreTransformMatrix);
 		m_pCutSceneWeapon->Change_SocketMatrix(m_pModelCom->Get_BoneCombindTransformationMatrix_Ptr("weapon0_r"));
