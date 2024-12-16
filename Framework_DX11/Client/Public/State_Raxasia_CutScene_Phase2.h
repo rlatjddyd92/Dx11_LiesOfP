@@ -36,6 +36,7 @@ private:
 
     _Vec3               m_vRootMoveStack{};
 
+    class CRaxasia_Helmet_CutScene* m_pCutSceneHelmet = { nullptr };
     class CRaxasia_Sword_CutScene*  m_pCutSceneWeapon = { nullptr };
     class CWeapon*                  m_pShieldWeapon = { nullptr };
 private:

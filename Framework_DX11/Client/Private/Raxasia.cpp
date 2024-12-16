@@ -133,7 +133,7 @@ HRESULT CRaxasia::Initialize(void* pArg)
 	GET_GAMEINTERFACE->Set_OnOff_OrthoUI(false, this);
 
 
-	Start_CutScene(CUTSCENE_P2);
+	Start_CutScene(CUTSCENE_MEET);
 
 	return S_OK;
 }
@@ -364,6 +364,8 @@ void CRaxasia::Start_CutScene(_uint iCutSceneNum)
 	{
 	case CUTSCENE_MEET:
 	{
+		_Vec3 vOffset = _Vec3(0.07f, 0.f, 0.f);
+
 		m_pModelCom = m_pCutSceneModelCom[MODEL_PHASE1];
 		Deactiave_Weapon();
 
@@ -373,6 +375,8 @@ void CRaxasia::Start_CutScene(_uint iCutSceneNum)
 		m_pCutSceneWeapon = dynamic_cast<CRaxasia_Sword_CutScene*>(m_pGameInstance->Get_CloneObject_ToLayer(LEVEL_GAMEPLAY, TEXT("Layer_CutSceneWeapon"), 
 			TEXT("Prototype_GameObject_Weapon_Raxasia_Sword_CutScene"), &Desc));
 
+		m_pCutSceneWeapon->Get_Transform()->Set_State(CTransform::STATE_POSITION, vOffset);
+
 		m_pRigidBodyCom->Set_IsLockCell(false);
 		m_pRigidBodyCom->Set_IsOnCell(false);
 
@@ -380,9 +384,9 @@ void CRaxasia::Start_CutScene(_uint iCutSceneNum)
 		m_pRigidBodyCom->Set_GloblePose(XMVectorSet(-28.716f, -80.964f, -14.860f, 1.f));
 
 		_matrix PreTransformMatrix = XMMatrixScaling(0.015f, 0.015f, 0.015f) * XMMatrixRotationX(XMConvertToRadians(180.f));
-		_Vec3 vShieldOffset = _Vec3(0.f, 0.1f, 0.175f);
+		vOffset = _Vec3(0.f, 0.1f, 0.175f);
 
-		m_pWeaponShield->Get_Transform()->Set_State(CTransform::STATE_POSITION, vShieldOffset);
+		m_pWeaponShield->Get_Transform()->Set_State(CTransform::STATE_POSITION, vOffset);
 		m_pWeaponShield->Get_Model()->Set_PreTranformMatrix(PreTransformMatrix);
 		m_pWeaponShield->ChangeSocketMatrix(m_pModelCom->Get_BoneCombindTransformationMatrix_Ptr("upperArmorBack_02_spine_03"));
 		m_pCutSceneFsmCom->Set_State(STATE_MEET);
@@ -390,6 +394,8 @@ void CRaxasia::Start_CutScene(_uint iCutSceneNum)
 		break;
 	case CUTSCENE_P2:
 	{
+		_Vec3 vOffset = _Vec3(0.f, 0.f, 0.f);
+
 		m_pModelCom = m_pCutSceneModelCom[MODEL_PHASE1];
 		Deactiave_Weapon();
 
@@ -402,6 +408,7 @@ void CRaxasia::Start_CutScene(_uint iCutSceneNum)
 			TEXT("Prototype_GameObject_Weapon_Raxasia_Sword_CutScene"), &Desc));
 
 		m_pCutSceneWeapon->Get_Model()->Set_PreTranformMatrix(PreTransformMatrix);
+		m_pCutSceneWeapon->Get_Transform()->Set_State(CTransform::STATE_POSITION, vOffset);
 		m_pCutSceneWeapon->Change_SocketMatrix(m_pModelCom->Get_BoneCombindTransformationMatrix_Ptr("weapon0_r"));
 		m_pCutSceneWeapon->IsActive(true);
 
@@ -430,10 +437,10 @@ void CRaxasia::Start_CutScene(_uint iCutSceneNum)
 		if (nullptr == m_pWeaponShield)
 			return;
 
-		_Vec3 vShieldOffset = _Vec3(0.025f, 0.325f, 0.275f);
+		vOffset = _Vec3(0.025f, 0.325f, 0.275f);
 		PreTransformMatrix = XMMatrixScaling(0.015f, 0.015f, 0.015f) * XMMatrixRotationX(XMConvertToRadians(180.f));
 
-		m_pWeaponShield->Get_Transform()->Set_State(CTransform::STATE_POSITION, vShieldOffset);
+		m_pWeaponShield->Get_Transform()->Set_State(CTransform::STATE_POSITION, vOffset);
 		m_pWeaponShield->Get_Model()->Set_PreTranformMatrix(PreTransformMatrix);
 		m_pWeaponShield->Appear();
 #pragma endregion

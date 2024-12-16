@@ -1095,10 +1095,10 @@
     </Filter>
     <Filter Include="05.Fsm\Monster\SimonManus\P2\Die_Talking">
       <UniqueIdentifier>{8f69d69b-43bc-49a5-8605-e02f119e89ec}</UniqueIdentifier>
-	</Filter>
+    </Filter>
     <Filter Include="03.GameInterface_Controller\00.UIManager\00.UIPage\07.UIPage_Common">
       <UniqueIdentifier>{101ea800-761b-49e9-ae2b-58825aebc3f3}</UniqueIdentifier>
-	</Filter>
+    </Filter>
     <Filter Include="05.Fsm\Monster\Raxasia\P1\Attack\Route\Sting_Spread">
       <UniqueIdentifier>{4522db70-50b3-4c3b-90f9-e88ef3b8bc0c}</UniqueIdentifier>
     </Filter>
@@ -1110,6 +1110,9 @@
     </Filter>
     <Filter Include="02.GameObjects\12.AttackObject\Raxasia\ThunderBlast">
       <UniqueIdentifier>{7dc222b7-f853-4f65-8a39-500e8e478b14}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.GameObjects\02.Pawn\01.Monster\Raxasia\CutSceneHelmet">
+      <UniqueIdentifier>{1d65a508-3da4-4c20-a1f4-28ecd56229f7}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -2041,9 +2044,12 @@
     </ClInclude>
     <ClInclude Include="..\Public\State_SimonManusP2_Die_Talking.h">
       <Filter>05.Fsm\Monster\SimonManus\P2\Die_Talking</Filter>
-	</ClInclude>
+    </ClInclude>
     <ClInclude Include="..\Public\State_RaxasiaP1_Sting_Spread.h">
       <Filter>05.Fsm\Monster\Raxasia\P1\Attack\Route\Sting_Spread</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Public\Raxasia_Helmet_CutScene.h">
+      <Filter>02.GameObjects\02.Pawn\01.Monster\Raxasia\CutSceneHelmet</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -2945,9 +2951,12 @@
     </ClCompile>
     <ClCompile Include="..\Private\State_SimonManusP2_Die_Talking.cpp">
       <Filter>05.Fsm\Monster\SimonManus\P2\Die_Talking</Filter>
-	</ClCompile>
+    </ClCompile>
     <ClCompile Include="..\Private\State_RaxasiaP1_Sting_Spread.cpp">
       <Filter>05.Fsm\Monster\Raxasia\P1\Attack\Route\Sting_Spread</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Private\Raxasia_Helmet_CutScene.cpp">
+      <Filter>02.GameObjects\02.Pawn\01.Monster\Raxasia\CutSceneHelmet</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

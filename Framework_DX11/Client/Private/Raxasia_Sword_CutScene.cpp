@@ -65,47 +65,84 @@ void CRaxasia_Sword_CutScene::Update(_float fTimeDelta)
 	else
 		m_pModelCom->Update_Bone();
 
+	static _float fXPos = 0.03f;
+	static _float fYPos = -0.03f;
+	static _float fZPos = 0.f;
 
-	static _float fX = -90.f;
-	static _float fY = 0.f;
-	static _float fZ = 65.f;
+	static _float fXRot = 240.f;
+	static _float fYRot = -6.5f;
+	static _float fZRot = 31.f;
 
-	_matrix		PreTransformMatrix = XMMatrixIdentity();	
-	
-	if (KEY_TAP(KEY::NUM1))
+	_matrix		PreTransformMatrix = XMMatrixIdentity();
+
+	if (KEY_HOLD(KEY::CTRL))
 	{
-		fX -= 5.f;
+		if (KEY_TAP(KEY::NUM1))
+		{
+			fXRot -= 1.f;
+		}
+		else if (KEY_TAP(KEY::NUM2))
+		{
+			fXRot += 1.f;
+		}
+
+		if (KEY_TAP(KEY::NUM3))
+		{
+			fYRot -= 1.f;
+		}
+		else if (KEY_TAP(KEY::NUM4))
+		{
+			fYRot += 1.f;
+		}
+
+		if (KEY_TAP(KEY::NUM5))
+		{
+			fZRot -= 1.f;
+		}
+		else if (KEY_TAP(KEY::NUM6))
+		{
+			fZRot += 1.f;
+		}
 	}
-	else if (KEY_TAP(KEY::NUM2))
+	else
 	{
-		fX += 5.f;
+		if (KEY_TAP(KEY::NUM1))
+		{
+			fXPos -= 0.01f;
+		}
+		else if (KEY_TAP(KEY::NUM2))
+		{
+			fXPos += 0.01f;
+		}
+
+		if (KEY_TAP(KEY::NUM3))
+		{
+			fYPos -= 0.01f;
+		}
+		else if (KEY_TAP(KEY::NUM4))
+		{
+			fYPos += 0.01f;
+		}
+		if (KEY_TAP(KEY::NUM5))
+		{
+			fZPos -= 0.01f;
+		}
+		else if (KEY_TAP(KEY::NUM6))
+		{
+			fZPos += 0.01f;
+		}
 	}
 
-	if (KEY_TAP(KEY::NUM3))
-	{
-		fY -= 5.f;
-	}
-	else if (KEY_TAP(KEY::NUM4))
-	{
-		fY += 5.f;
-	}
-
-	if (KEY_TAP(KEY::NUM5))
-	{
-		fZ -= 5.f;
-	}
-	else if (KEY_TAP(KEY::NUM6))
-	{
-		fZ += 5.f;
-	}
-
-
-	PreTransformMatrix = XMMatrixScaling(0.015f, 0.015f, 0.015f) * XMMatrixRotationX(XMConvertToRadians(fX)) * XMMatrixRotationY(XMConvertToRadians(fY)) * XMMatrixRotationZ(XMConvertToRadians(fZ));
+	PreTransformMatrix = XMMatrixScaling(0.015f, 0.015f, 0.015f) * XMMatrixRotationX(XMConvertToRadians(fXRot)) * XMMatrixRotationY(XMConvertToRadians(fYRot)) * XMMatrixRotationZ(XMConvertToRadians(fZRot));
 
 	//m_pModelCom->Set_PreTranformMatrix(PreTransformMatrix);
 
+	_Vec3 vv = _Vec3(fXPos, fYPos, fZPos);
+	//m_pTransformCom->Set_State(CTransform::STATE_POSITION, vv);
+
+
 	static _Matrix WorldMatrix;
-	
+
 	if (m_isUpdatePos)
 	{
 		_matrix		SocketMatrix = *m_pSocketMatrix;
@@ -118,10 +155,6 @@ void CRaxasia_Sword_CutScene::Update(_float fTimeDelta)
 
 		WorldMatrix = m_WorldMatrix;
 	}
-
-	//m_WorldMatrix._41 = WorldMatrix._41 + m_vOffset.x;
-	//m_WorldMatrix._42 = WorldMatrix._42 + m_vOffset.y;
-	//m_WorldMatrix._43 = WorldMatrix._43 + m_vOffset.z;
 }
 
 void CRaxasia_Sword_CutScene::Late_Update(_float fTimeDelta)

@@ -47,6 +47,7 @@
 #include "SimonManus_CutScene_GodHand.h"
 
 #include "Raxasia_Sword_CutScene.h"
+#include "Raxasia_Helmet_CutScene.h"
 #pragma endregion
 
 #pragma region EFFECT
@@ -978,9 +979,15 @@ HRESULT CLoader::Ready_Resources_For_Monster()
 		return E_FAIL;
 
 	//Prototype_Component_Model_Raxasia_Sword_CutScene
-	PreTransformMatrix = XMMatrixScaling(0.015f, 0.015f, 0.015f) * XMMatrixRotationX(XMConvertToRadians(200.f)) * XMMatrixRotationY(XMConvertToRadians(-40.f)) * XMMatrixRotationZ(XMConvertToRadians(30.f));
+	PreTransformMatrix = XMMatrixScaling(0.015f, 0.015f, 0.015f) * XMMatrixRotationX(XMConvertToRadians(215.f)) * XMMatrixRotationY(XMConvertToRadians(-50.f)) * XMMatrixRotationZ(XMConvertToRadians(15.f));
 	if (FAILED(m_pGameInstance->Add_Prototype(LEVEL_GAMEPLAY, TEXT("Prototype_Component_Model_Raxasia_Sword_CutScene"),
 		CModel::Create(m_pDevice, m_pContext, CModel::TYPE_ANIM, "../Bin/ModelData/Anim/Monster/Boss/Raxasia/Raxasia_Sword_CutScene.dat", PreTransformMatrix, false))))
+		return E_FAIL;
+
+	//Prototype_Component_Model_Raxasia_Helmet_CutScene
+	PreTransformMatrix = XMMatrixScaling(0.015f, 0.015f, 0.015f) * XMMatrixRotationY(XMConvertToRadians(90.f));
+	if (FAILED(m_pGameInstance->Add_Prototype(LEVEL_GAMEPLAY, TEXT("Prototype_Component_Model_Raxasia_Helmet_CutScene"),
+		CModel::Create(m_pDevice, m_pContext, CModel::TYPE_ANIM, "../Bin/ModelData/Anim/Monster/Boss/Raxasia/Raxasia_CutScene_Helmet.dat", PreTransformMatrix, false))))
 		return E_FAIL;
 #pragma endregion
 
@@ -1203,6 +1210,12 @@ HRESULT CLoader::Ready_Prototype()
 	if (FAILED(m_pGameInstance->Add_Prototype(TEXT("Prototype_GameObject_Weapon_Raxasia_Sword_CutScene"),
 		CRaxasia_Sword_CutScene::Create(m_pDevice, m_pContext))))
 		return E_FAIL;
+
+	/* For. Prototype_GameObject_Weapon_Raxasia_Helmet_CutScene */
+	if (FAILED(m_pGameInstance->Add_Prototype(TEXT("Prototype_GameObject_Weapon_Raxasia_Helmet_CutScene"),
+		CRaxasia_Helmet_CutScene::Create(m_pDevice, m_pContext))))
+		return E_FAIL;
+
 
 	// 특정 위치에 판정 없이 소환되는 이펙트
 	if (FAILED(m_pGameInstance->Add_Prototype(TEXT("Prototype_GameObject_SpotEffect"),

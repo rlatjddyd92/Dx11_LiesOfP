@@ -194,6 +194,7 @@
     <ClInclude Include="..\Public\Item_Throw.h" />
     <ClInclude Include="..\Public\LastDoor.h" />
     <ClInclude Include="..\Public\Raxasia.h" />
+    <ClInclude Include="..\Public\Raxasia_Helmet_CutScene.h" />
     <ClInclude Include="..\Public\Raxasia_Sword_CutScene.h" />
     <ClInclude Include="..\Public\SimonManus_CutScene_GodHand.h" />
     <ClInclude Include="..\Public\SimonManus_EnvHand.h" />
@@ -493,6 +494,7 @@
     <ClCompile Include="..\Private\Camera_Manager.cpp" />
     <ClCompile Include="..\Private\CarcassBigA.cpp" />
     <ClCompile Include="..\Private\CarcassTail.cpp" />
+    <ClCompile Include="..\Private\Raxasia_Helmet_CutScene.cpp" />
     <ClCompile Include="..\Private\CutScene.cpp" />
     <ClCompile Include="..\Private\Deco_Collider.cpp" />
     <ClCompile Include="..\Private\EffectObject.cpp" />

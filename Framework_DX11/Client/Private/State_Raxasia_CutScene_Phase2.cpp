@@ -6,6 +6,7 @@
 #include "CutScene.h"
 #include "Raxasia_Sword_CutScene.h"
 #include "Weapon_Raxasia_P2_Shield.h"
+#include "Raxasia_Helmet_CutScene.h"
 
 CState_Raxasia_CutScene_Phase2::CState_Raxasia_CutScene_Phase2(CFsm* pFsm, CMonster* pMonster)
     :CState{ pFsm }
@@ -72,12 +73,20 @@ void CState_Raxasia_CutScene_Phase2::Update(_float fTimeDelta)
 
         m_isChangeWeaponPos = true;
     }
-    else if (!m_isChangePhase2Model && iFrame > 599)      // 2 페이즈 모델로 바꾸기 
+    else if (!m_isChangePhase2Model && iFrame > 599)      // 2 페이즈 모델로 바꾸고 헬멧 생성하기
     {
         m_pMonster->Change_Model(1);
+
+        CRaxasia_Helmet_CutScene::WEAPON_DESC Desc{};
+        Desc.pParentWorldMatrix = m_pMonster->Get_Transform()->Get_WorldMatrix_Ptr();
+        Desc.pSocketBoneMatrix = m_pMonster->Get_Model()->Get_BoneCombindTransformationMatrix_Ptr("helmet_01");
+        m_pCutSceneHelmet = dynamic_cast<CRaxasia_Helmet_CutScene*>(m_pGameInstance->Get_CloneObject_ToLayer(LEVEL_GAMEPLAY, TEXT("Layer_CutScene"),
+            TEXT("Prototype_GameObject_Weapon_Raxasia_Helmet_CutScene"), &Desc));
+        Safe_AddRef(m_pCutSceneHelmet);
+
         m_isChangePhase2Model = true;
     }
-    else if (!m_isReConnetWeaponBone && iFrame > 786)      // 다시 검 들고 방패 뼈 다시 세팅하기
+    else if (!m_isReConnetWeaponBone && iFrame > 786)      // 다시 검 들고 방패 뼈 다시 세팅하기, 헬멧 지우기
     {
         _Vec3 vOffset = _Vec3(0.f, 0.f, 0.f);
         _matrix PreTransformMatrix = XMMatrixScaling(0.015f, 0.015f, 0.015f) * XMMatrixRotationX(XMConvertToRadians(-90.f));
@@ -92,6 +101,8 @@ void CState_Raxasia_CutScene_Phase2::Update(_float fTimeDelta)
         m_pShieldWeapon->Get_Transform()->Set_State(CTransform::STATE_POSITION, vShieldOffset);
         m_pShieldWeapon->Get_Model()->Set_PreTranformMatrix(PreTransformMatrix);
 
+        m_pCutSceneHelmet->Set_Dead(true);
+        Safe_Release(m_pCutSceneHelmet);
 
         m_isReConnetWeaponBone = true;
     }
@@ -103,9 +114,9 @@ void CState_Raxasia_CutScene_Phase2::Update(_float fTimeDelta)
 
     
 
-    if (iFrame > 1032)
+    if (iFrame > 15)
     {
-        //m_pMonster->Stop_Animation();
+        m_pMonster->Stop_Animation();
         //dynamic_cast<CWeapon_Raxasia_P2_Shield*>(m_pShieldWeapon)->Set_Test();
     }
      
