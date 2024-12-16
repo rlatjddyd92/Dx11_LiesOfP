@@ -107,6 +107,54 @@ HRESULT CUIPage_Chest::Ready_UIPart_Group_Control()
 	return S_OK;
 }
 
+void CUIPage_Chest::Action_Tab(_float fTimeDelta)
+{
+}
+
+void CUIPage_Chest::Action_Scroll(_float fTimeDelta)
+{
+}
+
+void CUIPage_Chest::Action_Cell(_float fTimeDelta)
+{
+}
+
+void CUIPage_Chest::Action_Focus(_float fTimeDelta, _Vec2 vPos)
+{
+}
+
+void CUIPage_Chest::Action_Popup(_float fTimeDelta)
+{
+}
+
+void CUIPage_Chest::Update_Tab(_float fTimeDelta)
+{
+}
+
+void CUIPage_Chest::Update_Scroll(_float fTimeDelta)
+{
+}
+
+void CUIPage_Chest::Update_Cell(_float fTimeDelta)
+{
+}
+
+void CUIPage_Chest::Update_Focus(_float fTimeDelta)
+{
+}
+
+void CUIPage_Chest::Update_BagInfo(_float fTimeDelta)
+{
+}
+
+void CUIPage_Chest::Setting_Cell()
+{
+}
+
+void CUIPage_Chest::Reset_PopupInfo()
+{
+}
+
 CUIPage_Chest* CUIPage_Chest::Create(ID3D11Device* pDevice, ID3D11DeviceContext* pContext)
 {
 	CUIPage_Chest* pInstance = new CUIPage_Chest(pDevice, pContext);

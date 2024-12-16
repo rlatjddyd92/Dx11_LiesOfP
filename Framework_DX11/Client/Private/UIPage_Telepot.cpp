@@ -3,6 +3,10 @@
 
 #include "GameInstance.h"
 #include "GameInterface_Controller.h"
+#include "Stargazer.h"
+#include "Layer.h"
+
+#include "State_Player_Teleport.h"
 
 CUIPage_Telepot::CUIPage_Telepot(ID3D11Device* pDevice, ID3D11DeviceContext* pContext)
 	: CUIPage{ pDevice, pContext }
@@ -55,7 +59,6 @@ void CUIPage_Telepot::Priority_Update(_float fTimeDelta)
 void CUIPage_Telepot::Update(_float fTimeDelta)
 {
 	__super::Update(fTimeDelta);
-	m_iNowActive = -1;
 
 	if (m_pScroll_Telepot == nullptr)
 	{
@@ -63,7 +66,7 @@ void CUIPage_Telepot::Update(_float fTimeDelta)
 		m_pScroll_Telepot->Initialize_Scroll(m_vecPart[_int(PART_GROUP::TELEPOT_List_Area)], m_vecPart[_int(PART_GROUP::TELEPOT_Scroll_Bar)], SCROLL_AREA::SCROLL_TELEPOT, true, false);
 		Page_Setting();
 	}
-		
+	
 }
 
 void CUIPage_Telepot::Late_Update(_float fTimeDelta)
@@ -92,7 +95,8 @@ CHECK_MOUSE CUIPage_Telepot::Check_Page_Action(_float fTimeDelta)
 {
 	__super::Check_Page_Action(fTimeDelta);
 
-	Action_Scroll(fTimeDelta);
+	if (m_pScroll_Telepot->bIsActive_X)
+		Action_Scroll(fTimeDelta);
 	Action_Telepot(fTimeDelta);
 
 	return CHECK_MOUSE::MOUSE_NONE;
@@ -123,10 +127,22 @@ HRESULT CUIPage_Telepot::Ready_UIPart_Group_Control()
 	return S_OK;
 }
 
+void CUIPage_Telepot::Set_Now_Interact_Stargezer(_int iNaviIndex)
+{
+	for (_int i = 0; i < m_vecTelepot_Dest.size(); ++i)
+	{
+		if (m_vecTelepot_Dest[i]->iDestination_Navi_Index == iNaviIndex)
+			m_vecTelepot_Dest[i]->bIsNow = true;
+		else 
+			m_vecTelepot_Dest[i]->bIsNow = false;
+	}
+}
+
 void CUIPage_Telepot::Page_Setting()
 {
-	_float fInterval = m_vecPart[_int(PART_GROUP::TELEPOT_Dest_Frame)]->fAdjust.x;
-	_float fDataSizeX = m_iDest_Num * fInterval;
+	_float fInterval = m_vecPart[_int(PART_GROUP::TELEPOT_List_Area)]->fSize.x * 0.5f;
+	fInterval += m_vecPart[_int(PART_GROUP::TELEPOT_Dest_Frame)]->fAdjust.x;
+	_float fDataSizeX = m_iDest_Num * (fInterval * 2.f);
 	m_pScroll_Telepot->Activate_Scroll(0.f, fDataSizeX);
 
 	_Vec2 vFirst = m_vecPart[_int(PART_GROUP::TELEPOT_Dest_Frame)]->fPosition;
@@ -135,7 +151,7 @@ void CUIPage_Telepot::Page_Setting()
 	{
 		DEST_INFO* pNewDest = new DEST_INFO;
 		pNewDest->vUICell_Pos = vFirst;
-		vFirst.x += fInterval;
+		vFirst.x += fInterval * 2.f;
 		m_vecTelepot_Dest.push_back(pNewDest);
 	}
 
@@ -145,25 +161,25 @@ void CUIPage_Telepot::Page_Setting()
 	m_vecTelepot_Dest[3]->iDestination_Navi_Index = 227; // 마누스 보스전
 
 	m_vecTelepot_Dest[0]->strDest_Name = TEXT("아르케 대수도원 입구"); 
-	m_vecTelepot_Dest[1]->strDest_Name = TEXT("전투 : 락사시아");
+	m_vecTelepot_Dest[1]->strDest_Name = TEXT("결전 : 락사시아");
 	m_vecTelepot_Dest[2]->strDest_Name = TEXT("대수도원 원형계단");
-	m_vecTelepot_Dest[3]->strDest_Name = TEXT("전투 : 마누스");
+	m_vecTelepot_Dest[3]->strDest_Name = TEXT("결전 : 마누스");
 }
 
 void CUIPage_Telepot::Action_Scroll(_float fTimeDelta)
 {
-	if (m_pScroll_Telepot->bIsActive_X == false)
+	if (m_pScroll_Telepot->bIsBarMoving_X == false)
 	{
 		if (KEY_TAP(KEY::LBUTTON))
 		{
-			_Vec2 vMouse = GET_GAMEINTERFACE->CheckMouse(m_vecPart[_int(PART_GROUP::TELEPOT_Scroll_Bar)]->fPosition, m_vecPart[_int(PART_GROUP::TELEPOT_Scroll_Bar)]->fSize);
+			_Vec2 vMouse = GET_GAMEINTERFACE->CheckMouse(m_vecPart[_int(PART_GROUP::TELEPOT_Scroll_Bar)]->fPosition, _Vec2{ m_vecPart[_int(PART_GROUP::TELEPOT_Scroll_Bar)]->fSize.y,m_vecPart[_int(PART_GROUP::TELEPOT_Scroll_Bar)]->fSize.x });
 			if (vMouse.x != -1.f)
 			{
 				m_pScroll_Telepot->Start_Bar_Moving_X(vMouse.x);
 			}
 		}
 	}
-	else if (m_pScroll_Telepot->bIsActive_X == true)
+	else if (m_pScroll_Telepot->bIsBarMoving_X == true)
 	{
 		if (KEY_HOLD(KEY::LBUTTON))
 		{
@@ -185,22 +201,75 @@ void CUIPage_Telepot::Action_Scroll(_float fTimeDelta)
 
 void CUIPage_Telepot::Action_Telepot(_float fTimeDelta)
 {
-	for (_int i = 0; i < m_iDest_Num; ++i)
+	if (m_iNowActive == -1)
 	{
-		_Vec2 vMouse = GET_GAMEINTERFACE->CheckMouse(m_vecTelepot_Dest[i]->vUICell_Pos - _Vec2{m_pScroll_Telepot->fData_Offset_X, 0.f}, m_vecPart[_int(PART_GROUP::TELEPOT_Dest_Frame)]->fSize);
-		if (vMouse.x != -1.f)
+		for (_int i = 0; i < m_iDest_Num; ++i)
 		{
-			m_iNowFocus = i;
-			if (KEY_TAP(KEY::LBUTTON))
-				m_iNowActive = i;
+			_Vec2 vMouse = GET_GAMEINTERFACE->CheckMouse(m_vecTelepot_Dest[i]->vUICell_Pos - _Vec2{ m_pScroll_Telepot->fData_Offset_X, 0.f }, m_vecPart[_int(PART_GROUP::TELEPOT_Dest_Frame)]->fSize);
+			if (vMouse.x != -1.f)
+			{
+				m_iNowFocus = i;
+				if (KEY_TAP(KEY::LBUTTON))
+				{
+					if (m_vecTelepot_Dest[i]->bIsNow == true)
+					{
+						m_iNowActive = 4;
+						GET_GAMEINTERFACE->Show_Popup(TEXT("위치 이동 불가"), TEXT("선택한 위치는 현재 위치입니다."));
+					}
+					else if (m_vecTelepot_Dest[i]->bIsInactive == true)
+					{
+						m_iNowActive = 4;
+						GET_GAMEINTERFACE->Show_Popup(TEXT("위치 이동 불가"), TEXT("해당 위치의 별바라기가 활성화되지 않았습니다."));
+					}
+					else
+					{
+						_wstring strDest = TEXT("이동 위치 -> ");
+						strDest += m_vecTelepot_Dest[i]->strDest_Name;
+						m_iNowActive = i;
+						m_iIsStartTelepot = 0;
+						GET_GAMEINTERFACE->Show_TrueFalsePopup(TEXT("다른 위치로 이동"), strDest, &m_iIsStartTelepot);
+					}
+				}
+			}
 		}
-	}	
+	}
+	else if (m_iNowActive == 4)
+	{
+		if (GET_GAMEINTERFACE->IsPopupOn() == false)
+		{
+			m_iNowActive = -1;
+			m_iIsStartTelepot = 0;
+		}
+	}
+	else if (m_iNowActive != -1)
+	{
+		if (m_iIsStartTelepot != 0)
+		{
+			if (m_iIsStartTelepot == 1) // 텔레포트 진행 
+			{
+				// 텔레포트 기능 구현 
+				CState_Player_Teleport::TELEPORT_DESC TeleportDesc{};
+				TeleportDesc.iCellNum = m_vecTelepot_Dest[m_iNowActive]->iDestination_Navi_Index;
+				GET_GAMEINTERFACE->Get_Player()->Change_State(CPlayer::TELEPORT, &TeleportDesc);	
+				GET_GAMEINTERFACE->SwicthPage(UIPAGE::PAGE_TELEPOT, UIPAGE::PAGE_PLAY);
+			}
+
+			m_iNowActive = -1;
+			m_iIsStartTelepot = 0;
+		}
+	}
+
+	if (GET_GAMEINTERFACE->IsPopupOn() == false)
+	{
+		m_iNowActive = -1;
+		m_iIsStartTelepot = 0;
+	}
 }
 
 void CUIPage_Telepot::Update_Telepot_Cell(_float fTimeDelta)
 {
 	// Common
-	for (_int i = _int(PART_GROUP::TELEPOT_Back); i < _int(PART_GROUP::TELEPOT_Fx_Grid); ++i)
+	for (_int i = _int(PART_GROUP::TELEPOT_Back); i <= _int(PART_GROUP::TELEPOT_ESC_Text); ++i)
 	{
 		Input_Render_Info(*m_vecPart[i]);
 	}
@@ -208,7 +277,7 @@ void CUIPage_Telepot::Update_Telepot_Cell(_float fTimeDelta)
 	// Scroll
 	if (m_pScroll_Telepot->bIsActive_X == true)
 	{
-		for (_int i = _int(PART_GROUP::TELEPOT_Scroll_Line); i < _int(PART_GROUP::TELEPOT_Scroll_Bar); ++i)
+		for (_int i = _int(PART_GROUP::TELEPOT_Scroll_Line); i <= _int(PART_GROUP::TELEPOT_Scroll_Bar); ++i)
 		{
 			UpdatePart_ByIndex(i, fTimeDelta);
 			Input_Render_Info(*m_vecPart[i]);
@@ -216,41 +285,81 @@ void CUIPage_Telepot::Update_Telepot_Cell(_float fTimeDelta)
 	}
 
 	// Cell
+	CLayer* pStargzzerLayer = m_pGameInstance->Find_Layer(LEVEL_GAMEPLAY, TEXT("Layer_Stargazer"));
+	vector<class CGameObject*> Stargazers = pStargzzerLayer->Get_ObjectList();
+
+	for (auto& iter : Stargazers)
 	{
-		for (_int i = 0; i < m_iDest_Num; ++i)
-		{
-			m_vecPart[_int(PART_GROUP::TELEPOT_Dest_Frame)]->fPosition = m_vecTelepot_Dest[i]->vUICell_Pos - _Vec2{ m_pScroll_Telepot->fData_Offset_X, 0.f };
-			Input_Render_Info(*m_vecPart[i]);
+		_int iNowIndex = static_cast<CStargazer*>(iter)->Get_CellNum();
 
-			_int iPicture = _int(PART_GROUP::TELEPOT_Dest_Picture_Start) + i;
+		for (auto& iterUI : m_vecTelepot_Dest)
+			if (iterUI->iDestination_Navi_Index == iNowIndex)
+				iterUI->bIsInactive = !static_cast<CStargazer*>(iter)->Get_IsOpend();
+	}
+
+	for (_int i = 0; i < m_iDest_Num; ++i)
+	{
+		m_vecPart[_int(PART_GROUP::TELEPOT_Dest_Frame)]->fPosition = m_vecTelepot_Dest[i]->vUICell_Pos - _Vec2{ m_pScroll_Telepot->fData_Offset_X, 0.f };
+		Input_Render_Info(*m_vecPart[i], SCROLL_AREA::SCROLL_TELEPOT);
+
+		_int iPicture = _int(PART_GROUP::TELEPOT_Dest_Picture_Start) + i;
+		_int iNowIndex = m_vecTelepot_Dest[i]->iDestination_Navi_Index;
 				
-			for (_int j = _int(PART_GROUP::TELEPOT_Dest_Deco_LT); j < _int(PART_GROUP::TELEPOT_Dest_Text_Name); ++j)
-			{
-				UpdatePart_ByIndex(j, fTimeDelta);
+		for (_int j = _int(PART_GROUP::TELEPOT_Dest_Deco_LT); j <= _int(PART_GROUP::TELEPOT_Dest_X); ++j)
+		{
+			UpdatePart_ByIndex(j, fTimeDelta);
 
-				if (j == _int(PART_GROUP::TELEPOT_Dest_Fx_Select))
+			if (j == _int(PART_GROUP::TELEPOT_Dest_Fx_Select))
+			{
+				if (m_vecTelepot_Dest[i]->bIsNow)
 				{
-					if (j == m_iNowFocus)
-						Input_Render_Info(*m_vecPart[j]);
+					m_vecPart[j]->fTextureColor.x = 0.4f;
+					m_vecPart[j]->fTextureColor.y = 0.6f;
+					m_vecPart[j]->fTextureColor.z = 0.4f;
+					Input_Render_Info(*m_vecPart[j], SCROLL_AREA::SCROLL_TELEPOT);
 				}
-				else if ((j >= _int(PART_GROUP::TELEPOT_Dest_Picture_Start)) && (j <= _int(PART_GROUP::TELEPOT_Dest_Picture_Manus)))
+				else if (m_vecTelepot_Dest[i]->bIsInactive)
 				{
-					if (j == iPicture)
-						Input_Render_Info(*m_vecPart[j]);
+					m_vecPart[j]->fTextureColor.x = 0.6f;
+					m_vecPart[j]->fTextureColor.y = 0.4f;
+					m_vecPart[j]->fTextureColor.z = 0.4f;
+					Input_Render_Info(*m_vecPart[j], SCROLL_AREA::SCROLL_TELEPOT);
 				}
-				else if (j == _int(PART_GROUP::TELEPOT_Dest_Text_Now))
+				else if (i == m_iNowFocus)
 				{
-					if (m_vecTelepot_Dest[i]->bIsNow)
-						Input_Render_Info(*m_vecPart[j]);
+					m_vecPart[j]->fTextureColor.x = 0.4f;
+					m_vecPart[j]->fTextureColor.y = 0.4f;
+					m_vecPart[j]->fTextureColor.z = 0.4f;
+					Input_Render_Info(*m_vecPart[j], SCROLL_AREA::SCROLL_TELEPOT);
 				}
-				else if (j == _int(PART_GROUP::TELEPOT_Dest_Text_Inactive))
-				{
-					if (m_vecTelepot_Dest[i]->bIsInactive)
-						Input_Render_Info(*m_vecPart[j]);
-				}
-				else
-					Input_Render_Info(*m_vecPart[j]);
 			}
+			else if ((j >= _int(PART_GROUP::TELEPOT_Dest_Picture_Start)) && (j <= _int(PART_GROUP::TELEPOT_Dest_Picture_Manus)))
+			{
+				if (j == iPicture)
+					Input_Render_Info(*m_vecPart[j], SCROLL_AREA::SCROLL_TELEPOT);
+			}
+			else if (j == _int(PART_GROUP::TELEPOT_Dest_Text_Now))
+			{
+				if (m_vecTelepot_Dest[i]->bIsNow)
+					Input_Render_Info(*m_vecPart[j], SCROLL_AREA::SCROLL_TELEPOT);
+			}
+			else if (j == _int(PART_GROUP::TELEPOT_Dest_Text_Inactive))
+			{
+				if ((m_vecTelepot_Dest[i]->bIsNow == false) && (m_vecTelepot_Dest[i]->bIsInactive))
+					Input_Render_Info(*m_vecPart[j], SCROLL_AREA::SCROLL_TELEPOT);
+			}
+			else if (j == _int(PART_GROUP::TELEPOT_Dest_Text_Name))
+			{
+				m_vecPart[j]->strText = m_vecTelepot_Dest[i]->strDest_Name;
+				Input_Render_Info(*m_vecPart[j], SCROLL_AREA::SCROLL_TELEPOT);
+			}
+			else if ((j == _int(PART_GROUP::TELEPOT_Dest_Black_Cover)) || (j == _int(PART_GROUP::TELEPOT_Dest_X)))
+			{
+				if ((m_vecTelepot_Dest[i]->bIsNow == false) && (m_vecTelepot_Dest[i]->bIsInactive))
+					Input_Render_Info(*m_vecPart[j], SCROLL_AREA::SCROLL_TELEPOT);
+			}
+			else
+				Input_Render_Info(*m_vecPart[j], SCROLL_AREA::SCROLL_TELEPOT);
 		}
 	}
 }

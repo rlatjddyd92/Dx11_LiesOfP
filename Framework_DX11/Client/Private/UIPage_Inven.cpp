@@ -234,6 +234,8 @@ void CUIPage_Inven::Action_Inven_Page(_float fTimeDelta)
 		m_pSoundCom->Play2D(TEXT("SE_UI_TutorialChangePage_01.wav"), &g_fUIVolume);
 
 		m_iNowCell = 0;
+
+		m_pScroll->DeActivate_Scroll_Y();
 	}
 }
 

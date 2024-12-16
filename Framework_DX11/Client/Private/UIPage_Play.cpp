@@ -92,6 +92,12 @@ HRESULT CUIPage_Play::Render()
 void CUIPage_Play::OpenAction()
 {
 	__super::OpenAction();
+
+	if (m_bIsStart == true)
+	{
+		m_bIsStart = false;
+		GET_GAMEINTERFACE->Show_Region_Info(TEXT("아르케 대수도원"), TEXT("흐린 날씨"));
+	}
 }
 
 void CUIPage_Play::CloseAction()

@@ -268,6 +268,7 @@ HRESULT CUIPage_Option::Initialize_Option()
 	Input_Variable_Pointer_Into_Option(10, &g_fVoiceVolume);
 	Input_Variable_Pointer_Into_Option(11, &g_fEnvVolume);
 	Input_Variable_Pointer_Into_Option(12, &g_fUIVolume);
+	Input_Variable_Pointer_Into_Option(13, &g_fCutSceneVolume);
 
 
 	for (_int i = 0; i < m_vecOption_TabInfo.size(); ++i)

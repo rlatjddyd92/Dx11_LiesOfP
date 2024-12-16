@@ -229,7 +229,7 @@ void CUIPage_Stat::Action_Focus(_float fTimeDelta)
 		m_vec_Group_Ctrl[(_int(PART_GROUP::GROUP_SELECT_FIRE))]->fRatio = 0.f;
 	}
 
-	Get_Front_Part_In_Control(_int(PART_GROUP::GROUP_SELECT_FIRE))->fRatio += fTimeDelta * 5.f;
+	Get_Front_Part_In_Control(_int(PART_GROUP::GROUP_SELECT_FIRE))->fRatio += fTimeDelta * 30.f;
 
 	if (Get_Front_Part_In_Control(_int(PART_GROUP::GROUP_SELECT_FIRE))->fRatio > 1.f)
 		Get_Front_Part_In_Control(_int(PART_GROUP::GROUP_SELECT_FIRE))->fRatio = 1.f;

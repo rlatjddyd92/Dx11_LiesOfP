@@ -134,6 +134,9 @@ void CUIManager::Late_Update(_float fTimeDelta)
 	// 렌더 최종 결정 
 	_int iCountOpen = 0;
 
+	if (m_bMute == false)
+		m_fVolume_Origin = g_fUIVolume;
+
 	if (m_pUIPage_Play->GetRender())
 		m_pUIPage_Ortho->SetUpdate(true);
 	else 
@@ -297,6 +300,9 @@ void CUIManager::UIControl_Play(_float fTimeDelta)
 	{
 		m_eNowPage = UIPAGE::PAGE_PLAY;
 		m_pUIPage_Play->Check_Page_Action(fTimeDelta);
+
+		if ((m_pUIPage_Play->GetPageAction(PAGEACTION::ACTION_ACTIVE) == true) && (m_iReservated_Region != -1))
+			GET_GAMEINTERFACE->Show_Reservate_Region_Info();
 	}
 }
 
@@ -407,6 +413,25 @@ void CUIManager::SwicthPage(UIPAGE ePageA, UIPAGE ePageB)
 {
 	Open_Close_Page(ePageA);
 	Open_Close_Page(ePageB);
+}
+
+void CUIManager::Reservate_Region_Info(_int iCellnum)
+{
+	if (iCellnum != -1)
+		m_iReservated_Region = iCellnum;
+}
+
+void CUIManager::Show_Reservate_Region_Info()
+{
+	if (m_iReservated_Region == 747)
+		GET_GAMEINTERFACE->Show_Region_Info(TEXT("아르케 대수도원 입구"), TEXT("흐린 날씨"));
+	else if (m_iReservated_Region == 280)
+		GET_GAMEINTERFACE->Show_Region_Info(TEXT("결전 : 락사시아"), TEXT("대수도원 기도실"));
+	else if (m_iReservated_Region == 1008)
+		GET_GAMEINTERFACE->Show_Region_Info(TEXT("대수도원 원형계단"), TEXT("흐린 날씨"));
+	else if (m_iReservated_Region == 227)
+		GET_GAMEINTERFACE->Show_Region_Info(TEXT("결전 : 시몬 마누스"), TEXT("신의 요람"));
+	m_iReservated_Region = -1;
 }
 
 void CUIManager::ShowTestPage(TEST_PAGE_NAME eName, _wstring DataNameA, TEST_PAGE_VALUE_TYPE eTypeA, const void* ValueA, _wstring DataNameB, TEST_PAGE_VALUE_TYPE eTypeB, const void* ValueB, _wstring DataNameC, TEST_PAGE_VALUE_TYPE eTypeC, const void* ValueC, _wstring DataNameD, TEST_PAGE_VALUE_TYPE eTypeD, const void* ValueD, _wstring DataNameE, TEST_PAGE_VALUE_TYPE eTypeE, const void* ValueE, _wstring DataNameF, TEST_PAGE_VALUE_TYPE eTypeF, const void* ValueF, _wstring DataNameG, TEST_PAGE_VALUE_TYPE eTypeG, const void* ValueG, _wstring DataNameH, TEST_PAGE_VALUE_TYPE eTypeH, const void* ValueH, _wstring DataNameI, TEST_PAGE_VALUE_TYPE eTypeI, const void* ValueI, _wstring DataNameJ, TEST_PAGE_VALUE_TYPE eTypeJ, const void* ValueJ)

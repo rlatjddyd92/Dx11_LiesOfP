@@ -290,23 +290,31 @@ void CUIPage::SCROLL_INFO::Initialize_Scroll(UPART* pData, UPART* pBar, SCROLL_A
 	vPos_Render = pData->fPosition;
 	vSize_Render = pData->fSize;
 	eScroll_Area = eArea;
+	bIsSetting_Y = bIsY;
+	bIsSetting_X = bIsX;
 
 	// Y
-	fData_Height_Origin = vSize_Render.y;
+	if (bIsY == true)
+	{
+		fData_Height_Origin = vSize_Render.y;
 
-	fBar_Move_Max_Length_Y = pBar->fAdjust_End.y - pBar->fAdjust_Start.y;
+		fBar_Move_Max_Length_Y = pBar->fAdjust_End.y - pBar->fAdjust_Start.y;
 
-	fRender_Top_Y = vPos_Render.y - vSize_Render.y * 0.5f; // <- 그려지는 가장 높은 위치 
-	fRender_Bottom_Y = vPos_Render.y + vSize_Render.y * 0.5f; // <- 그려지는 가장 낮은 위치 
-
+		fRender_Top_Y = vPos_Render.y - vSize_Render.y * 0.5f; // <- 그려지는 가장 높은 위치 
+		fRender_Bottom_Y = vPos_Render.y + vSize_Render.y * 0.5f; // <- 그려지는 가장 낮은 위치 
+	}
+	
 	// X
-	fData_Height_Origin = vSize_Render.x;
+	if (bIsX == true)
+	{
+		fData_Width_Origin = vSize_Render.x;
 
-	fBar_Move_Max_Length_X = pBar->fAdjust_End.x - pBar->fAdjust_Start.x;
+		fBar_Move_Max_Length_X = pBar->fAdjust_End.x - pBar->fAdjust_Start.x;
 
-	fRender_Left_X = vPos_Render.x - vSize_Render.x * 0.5f; // <- 그려지는 가장 높은 위치 
-	fRender_Right_X = vPos_Render.x + vSize_Render.x * 0.5f; // <- 그려지는 가장 낮은 위치 
-
+		fRender_Left_X = vPos_Render.x - vSize_Render.x * 0.5f; // <- 그려지는 가장 높은 위치 
+		fRender_Right_X = vPos_Render.x + vSize_Render.x * 0.5f; // <- 그려지는 가장 낮은 위치 
+	}
+	
 	GET_GAMEINTERFACE->Set_Scroll_Area(eScroll_Area, pData->fPosition, pData->fSize);
 }
 
@@ -315,43 +323,67 @@ void CUIPage::SCROLL_INFO::Activate_Scroll(_float fData_Height_New, _float fData
 	bIsActive_X = true;
 	bIsActive_Y = true;
 
-	if (fData_Height_Origin >= fData_Height_New)
+	if (bIsSetting_Y)
 	{
-		DeActivate_Scroll_Y();
-		bIsActive_Y = false;
+		if (fData_Height_Origin >= fData_Height_New)
+		{
+			DeActivate_Scroll_Y();
+			bIsActive_Y = false;
+		}
+		else
+			bIsActive_Y = true;
 	}
-
-	if (fData_Height_Origin >= fData_Width_New)
+	
+	if (bIsSetting_X)
 	{
-		DeActivate_Scroll_X();
-		bIsActive_X = false;
+		if (fData_Width_Origin >= fData_Width_New)
+		{
+			DeActivate_Scroll_X();
+			bIsActive_X = false;
+		}
+		else
+			bIsActive_X = true;
 	}
 
 	if ((!bIsActive_X) && (!bIsActive_Y))
 		return;
 
-	vPos_Render = vPos;
-	vSize_Render = vSize;
-
-	if ((vPos.x >= 0.f) && (vSize.x >= 0.f))
+	if (bIsSetting_Y)
 	{
-		fData_Height_Origin = vSize_Render.y;
+		if ((vPos.y >= 0.f) && (vSize.y >= 0.f))
+		{
+			vPos_Render = vPos;
+			vSize_Render = vSize;
 
-		fRender_Top_Y = vPos_Render.y - vSize_Render.y * 0.5f; // <- 그려지는 가장 높은 위치 
-		fRender_Bottom_Y = vPos_Render.y + vSize_Render.y * 0.5f; // <- 그려지는 가장 낮은 위치 
+			fData_Height_Origin = vSize_Render.y;
+
+			fRender_Top_Y = vPos_Render.y - vSize_Render.y * 0.5f; // <- 그려지는 가장 높은 위치 
+			fRender_Bottom_Y = vPos_Render.y + vSize_Render.y * 0.5f; // <- 그려지는 가장 낮은 위치 
+		}
 
 		fData_Height_Max = fData_Height_New - fData_Height_Origin;
 	}
 
-	if ((vPos.x >= 0.f) && (vSize.x >= 0.f))
+	if (bIsSetting_X)
 	{
-		fData_Width_Origin = vSize_Render.x;
+		if ((vPos.x >= 0.f) && (vSize.x >= 0.f))
+		{
+			vPos_Render = vPos;
+			vSize_Render = vSize;
 
-		fRender_Left_X = vPos_Render.x - vSize_Render.x * 0.5f; // <- 그려지는 가장 높은 위치 
-		fRender_Right_X = vPos_Render.x + vSize_Render.x * 0.5f; // <- 그려지는 가장 낮은 위치 
+			fData_Width_Origin = vSize_Render.x;
+
+			fRender_Left_X = vPos_Render.x - vSize_Render.x * 0.5f; // <- 그려지는 가장 높은 위치 
+			fRender_Right_X = vPos_Render.x + vSize_Render.x * 0.5f; // <- 그려지는 가장 낮은 위치 
+
+			
+		}
 
 		fData_Width_Max = fData_Width_New - fData_Width_Origin;
 	}
 
-	GET_GAMEINTERFACE->Set_Scroll_Area(eScroll_Area, vPos, vSize);
+	if ((vPos.y >= 0.f) && (vSize.y >= 0.f))
+	{
+		GET_GAMEINTERFACE->Set_Scroll_Area(eScroll_Area, vPos, vSize);
+	}
 }

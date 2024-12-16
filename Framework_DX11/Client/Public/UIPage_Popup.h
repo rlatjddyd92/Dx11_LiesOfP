@@ -91,6 +91,8 @@ public:
 
 	void Show_ItemUsePopup(_wstring strTitle, _wstring strDescA, _bool bIsTop);
 
+	void Show_TrueFalsePopup(_wstring strTitle, _wstring strDescA, _int* iResult); // true,false,none 3개 상태 표현 위해 _int 사용
+
 public:
 	const vector<UPART*>& Get_UIPartInfo() { return m_vecPart; }
 	virtual HRESULT Ready_UIPart_Group_Control() override;
@@ -101,7 +103,8 @@ protected:
 	_bool m_bItemUsePopUp = false;
 	_bool m_bTopBelt = false;
 
-
+	_int* m_pTrueFalsePopup_Result = { nullptr };
+	
 
 public:
 	static CUIPage_Popup* Create(ID3D11Device* pDevice, ID3D11DeviceContext* pContext);
