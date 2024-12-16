@@ -39,11 +39,15 @@ HRESULT CTrail_Effect_OP::Initialize(void* pArg)
 
 void CTrail_Effect_OP::Priority_Update(_float fTimeDelta)
 {
-	
+	if (false == m_isActive)
+		m_isActive = true;
 }
 
 void CTrail_Effect_OP::Update(_float fTimeDelta)
 {
+	if (false == m_isActive)
+		return;
+
 	__super::Set_WorldMatrix();
 
 	if(TYPE_UPDATE == m_DefaultDesc.eType)
@@ -51,6 +55,7 @@ void CTrail_Effect_OP::Update(_float fTimeDelta)
 		if (true == m_pVIBufferCom->Update_Buffer(XMLoadFloat4x4(&m_WorldMatrix).r[3], m_DefaultDesc.fTrailInterval, m_DefaultDesc.bLoop, fTimeDelta))
 		{
 			m_isDead = true;
+			m_isActive = false;
 		}
 	}
 	else if (TYPE_SPREAD == m_DefaultDesc.eType)
@@ -58,12 +63,16 @@ void CTrail_Effect_OP::Update(_float fTimeDelta)
 		if (true == m_pVIBufferCom->Spread_Buffer(XMLoadFloat4x4(&m_WorldMatrix).r[3], m_DefaultDesc.fTrailInterval, m_DefaultDesc.fSpreadSpeed, m_DefaultDesc.bLoop, fTimeDelta))
 		{
 			m_isDead = true;
+			m_isActive = false;
 		}
 	}
 }
 
 void CTrail_Effect_OP::Late_Update(_float fTimeDelta)
 {
+	if (false == m_isActive)
+		return;
+
 	m_pGameInstance->Add_RenderObject((CRenderer::RENDERGROUP)m_RenderDesc.iRenderGroup, this);
 }
 
@@ -128,6 +137,8 @@ void CTrail_Effect_OP::Reset()
 	m_pVIBufferCom->Reset();
 	m_DefaultDesc = m_InitDesc;
 	m_isDead = false;
+	m_isActive = false;
+
 }
 
 

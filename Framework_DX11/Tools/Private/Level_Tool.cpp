@@ -48,7 +48,7 @@ HRESULT CLevel_GamePlay::Initialize()
 	//strcpy_s(Desc.szModelTag, "Prototype_Component_Model_Raxasia_Sword_CutScene");
 	//if (FAILED(m_pGameInstance->Add_CloneObject_ToLayer(LEVEL_TOOL, TEXT("Layer_Torch"), TEXT("Prototype_GameObject_NonAnim"), &Desc)))
 	//	return E_FAIL;
-	strcpy_s(Desc.szModelTag, "Prototype_AnimModel_Raxasia_Sword01");
+	strcpy_s(Desc.szModelTag, "Prototype_Component_Model_Player_Arm");
 	if (FAILED(m_pGameInstance->Add_CloneObject_ToLayer(LEVEL_TOOL, TEXT("Layer_Torch"), TEXT("Prototype_GameObject_NonAnim"), &Desc)))
 		return E_FAIL;
 	
