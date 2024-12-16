@@ -45,6 +45,9 @@
 #include "D:\GitProject\Dx11_LiesOfP\Framework_DX11\Client\Private\CarcassTail.cpp"
 
 
+#include "D:\GitProject\Dx11_LiesOfP\Framework_DX11\Client\Private\Raxasia_Helmet_CutScene.cpp"
+
+
 #include "D:\GitProject\Dx11_LiesOfP\Framework_DX11\Client\Private\CutScene.cpp"
 
 
