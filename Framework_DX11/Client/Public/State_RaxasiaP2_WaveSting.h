@@ -11,7 +11,7 @@ class CState_RaxasiaP2_WaveSting : public CState
 {
 private:
     typedef enum {
-        AN_CHARGE = 28, AN_WAVE = 25, AN_STING = 20
+        AN_CHARGE = 28, AN_RUN = 10, AN_WAVE = 25, AN_STING = 20
     }ANIMNUM;
 
 public:
@@ -29,8 +29,13 @@ private:
 
 
     _bool               m_bSwing = { false };
+    _bool               m_bWave = { false };
+
+    _bool               m_bAccel = { false };
+    _bool               m_bEnvelop = { false };
 
     _bool               m_bSwingSound = { false };
+    _bool               m_bCharge = { false };
 
     _uint               m_iRouteTrack = {};
 

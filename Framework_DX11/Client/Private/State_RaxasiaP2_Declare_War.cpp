@@ -88,7 +88,7 @@ _bool CState_RaxasiaP2_Declare_War::End_Check()
         }
         break;
 
-    case 2:
+    case 1:
         if ((AN_DECLARE_WAR) == iCurAnim)
         {
             bEndCheck = m_pMonster->Get_EndAnim(AN_DECLARE_WAR);

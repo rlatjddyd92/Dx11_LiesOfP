@@ -24,7 +24,9 @@ HRESULT CState_RaxasiaP2_ShieldLinked::Start_State(void* pArg)
 
     m_bSwingSound = false;
 
+    m_bCharge = false;
     m_bSwing = false;
+
     return S_OK;
 }
 
@@ -194,7 +196,17 @@ void CState_RaxasiaP2_ShieldLinked::Collider_Check(_double CurTrackPos)
 
 void CState_RaxasiaP2_ShieldLinked::Effect_Check(_double CurTrackPos)
 {
-
+    if (m_iRouteTrack == 0)
+    {
+        if (!m_bCharge)
+        {
+            if (CurTrackPos >= 35.f)
+            {
+                m_pMonster->Active_Effect(CRaxasia::EFFECT_INCHENTSWORD_P2, true);
+                m_bCharge = true;
+            }
+        }
+    }
 }
 
 void CState_RaxasiaP2_ShieldLinked::Control_Sound(_double CurTrackPos)

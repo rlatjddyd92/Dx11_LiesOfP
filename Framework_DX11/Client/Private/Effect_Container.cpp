@@ -163,6 +163,29 @@ void CEffect_Container::Set_EffectDesc(const EFFECT_DESC& desc)
 	m_pSocketMatrix = desc.pSocketMatrix;
 
 	Reset_Effects();
+
+	_matrix ParentMatrix = XMMatrixIdentity();
+	_matrix SocketMatrix = XMMatrixIdentity();
+
+	if (nullptr != m_pParentMatrix)
+	{
+		ParentMatrix = *m_pParentMatrix;
+		if (nullptr != m_pSocketMatrix)
+		{
+			SocketMatrix = *m_pSocketMatrix;
+			for (size_t i = 0; i < 3; ++i)
+			{
+				SocketMatrix.r[i] = XMVector3Normalize(SocketMatrix.r[i]);
+			}
+		}
+	}
+
+	m_WorldMatrix = m_pTransformCom->Get_WorldMatrix() * SocketMatrix * ParentMatrix;
+
+	for (auto& Effect : m_Effects)
+	{
+		Effect->Set_WorldMatrix();
+	}
 }
 
 CEffect_Container* CEffect_Container::Create(ID3D11Device* pDevice, ID3D11DeviceContext* pContext)
