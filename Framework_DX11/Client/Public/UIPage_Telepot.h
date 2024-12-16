@@ -18,6 +18,12 @@ public:
 		TELEPOT_Fx_Cloud,
 		TELEPOT_Fx_Grid,
 		TELEPOT_List_Area,
+		TELEPOT_Title_Text,
+		TELEPOT_Title_Line,
+		TELEPOT_LButton,
+		TELEPOT_Lbutton_Text,
+		TELEPOT_ESC_Key,
+		TELEPOT_ESC_Text,
 		TELEPOT_Scroll_Line,
 		TELEPOT_Scroll_Bar,
 		TELEPOT_Dest_Frame,
@@ -32,6 +38,10 @@ public:
 		TELEPOT_Dest_Text_Now,
 		TELEPOT_Dest_Text_Inactive,
 		TELEPOT_Dest_Text_Name,
+		TELEPOT_Dest_Black_Cover,
+		TELEPOT_Dest_X,
+
+
 		GROUP_END
 	};
 

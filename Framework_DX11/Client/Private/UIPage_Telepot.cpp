@@ -274,7 +274,7 @@ void CUIPage_Telepot::Action_Telepot(_float fTimeDelta)
 void CUIPage_Telepot::Update_Telepot_Cell(_float fTimeDelta)
 {
 	// Common
-	for (_int i = _int(PART_GROUP::TELEPOT_Back); i <= _int(PART_GROUP::TELEPOT_Fx_Grid); ++i)
+	for (_int i = _int(PART_GROUP::TELEPOT_Back); i <= _int(PART_GROUP::TELEPOT_ESC_Text); ++i)
 	{
 		Input_Render_Info(*m_vecPart[i]);
 	}
@@ -310,7 +310,7 @@ void CUIPage_Telepot::Update_Telepot_Cell(_float fTimeDelta)
 		_int iPicture = _int(PART_GROUP::TELEPOT_Dest_Picture_Start) + i;
 		_int iNowIndex = m_vecTelepot_Dest[i]->iDestination_Navi_Index;
 				
-		for (_int j = _int(PART_GROUP::TELEPOT_Dest_Deco_LT); j <= _int(PART_GROUP::TELEPOT_Dest_Text_Name); ++j)
+		for (_int j = _int(PART_GROUP::TELEPOT_Dest_Deco_LT); j <= _int(PART_GROUP::TELEPOT_Dest_X); ++j)
 		{
 			UpdatePart_ByIndex(j, fTimeDelta);
 
@@ -318,26 +318,25 @@ void CUIPage_Telepot::Update_Telepot_Cell(_float fTimeDelta)
 			{
 				if (m_vecTelepot_Dest[i]->bIsNow)
 				{
-					m_vecPart[j]->fTextureColor.x = 0.5f;
-					m_vecPart[j]->fTextureColor.y = 0.8f;
-					m_vecPart[j]->fTextureColor.z = 0.5f;
+					m_vecPart[j]->fTextureColor.x = 0.4f;
+					m_vecPart[j]->fTextureColor.y = 0.6f;
+					m_vecPart[j]->fTextureColor.z = 0.4f;
 					Input_Render_Info(*m_vecPart[j], SCROLL_AREA::SCROLL_TELEPOT);
 				}
 				else if (m_vecTelepot_Dest[i]->bIsInactive)
 				{
-					m_vecPart[j]->fTextureColor.x = 0.8f;
-					m_vecPart[j]->fTextureColor.y = 0.5f;
-					m_vecPart[j]->fTextureColor.z = 0.5f;
+					m_vecPart[j]->fTextureColor.x = 0.6f;
+					m_vecPart[j]->fTextureColor.y = 0.4f;
+					m_vecPart[j]->fTextureColor.z = 0.4f;
 					Input_Render_Info(*m_vecPart[j], SCROLL_AREA::SCROLL_TELEPOT);
 				}
 				else if (i == m_iNowFocus)
 				{
-					m_vecPart[j]->fTextureColor.x = 0.5f;
-					m_vecPart[j]->fTextureColor.y = 0.5f;
-					m_vecPart[j]->fTextureColor.z = 0.5f;
+					m_vecPart[j]->fTextureColor.x = 0.4f;
+					m_vecPart[j]->fTextureColor.y = 0.4f;
+					m_vecPart[j]->fTextureColor.z = 0.4f;
 					Input_Render_Info(*m_vecPart[j], SCROLL_AREA::SCROLL_TELEPOT);
 				}
-
 			}
 			else if ((j >= _int(PART_GROUP::TELEPOT_Dest_Picture_Start)) && (j <= _int(PART_GROUP::TELEPOT_Dest_Picture_Manus)))
 			{
@@ -359,11 +358,15 @@ void CUIPage_Telepot::Update_Telepot_Cell(_float fTimeDelta)
 				m_vecPart[j]->strText = m_vecTelepot_Dest[i]->strDest_Name;
 				Input_Render_Info(*m_vecPart[j], SCROLL_AREA::SCROLL_TELEPOT);
 			}
+			else if ((j == _int(PART_GROUP::TELEPOT_Dest_Black_Cover)) || (j == _int(PART_GROUP::TELEPOT_Dest_X)))
+			{
+				if ((m_vecTelepot_Dest[i]->bIsNow == false) && (m_vecTelepot_Dest[i]->bIsInactive))
+					Input_Render_Info(*m_vecPart[j], SCROLL_AREA::SCROLL_TELEPOT);
+			}
 			else
 				Input_Render_Info(*m_vecPart[j], SCROLL_AREA::SCROLL_TELEPOT);
 		}
 	}
-	
 }
 
 CUIPage_Telepot* CUIPage_Telepot::Create(ID3D11Device* pDevice, ID3D11DeviceContext* pContext)

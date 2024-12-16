@@ -66,6 +66,9 @@ void CUIPage_ItemInfo::Late_Update(_float fTimeDelta)
 	if (m_eNowPage == UIPAGE::PAGE_INVEN)
 		eArea = SCROLL_AREA::SCROLL_INVEN;
 
+	if (m_eNowPage == UIPAGE::PAGE_TELEPOT)
+		eArea = SCROLL_AREA::SCROLL_TELEPOT;
+
 	// focus 
 	if (m_bFocus)
 	{

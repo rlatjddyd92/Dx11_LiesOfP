@@ -93,9 +93,7 @@ void CUIPage_Menu::OpenAction()
 void CUIPage_Menu::CloseAction()
 {
 	__super::CloseAction();
-
 	m_pSoundCom->Play2D(TEXT("SE_UI_OpenMenu_04.wav"), &g_fUIVolume);
-
 	__super::Array_Control(_int(PART_GROUP::GROUP_DESC_BACK), _int(PART_GROUP::GROUP_DESC_MOUSE), CTRL_COMMAND::COM_RENDER, false);
 	__super::Array_Control(_int(PART_GROUP::GROUP_ITEM_DESC_MOUSE_0), _int(PART_GROUP::GROUP_ITEM_DESC_FUNC_1), CTRL_COMMAND::COM_RENDER, false);
 	m_vec_Group_Ctrl[_int(PART_GROUP::GROUP_SELECT_MARK)]->bRender = false;

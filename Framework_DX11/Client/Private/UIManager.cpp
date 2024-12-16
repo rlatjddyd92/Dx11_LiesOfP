@@ -134,6 +134,9 @@ void CUIManager::Late_Update(_float fTimeDelta)
 	// 렌더 최종 결정 
 	_int iCountOpen = 0;
 
+	if (m_bMute == false)
+		m_fVolume_Origin = g_fUIVolume;
+
 	if (m_pUIPage_Play->GetRender())
 		m_pUIPage_Ortho->SetUpdate(true);
 	else 

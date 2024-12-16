@@ -268,7 +268,7 @@ void CUIPage_Talking::Update_Script(_float fTimeDelta)
 			}
 			else if (m_iFunction == 2)
 			{
-				// º¸°üÇÔ 
+				GET_GAMEINTERFACE->SwicthPage(UIPAGE::PAGE_TALKING, UIPAGE::PAGE_CHEST);
 			}
 		}
 	}

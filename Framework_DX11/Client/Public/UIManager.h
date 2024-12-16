@@ -119,6 +119,17 @@ public:
 		return false;
 	}
 
+	// UI º¼·ý
+	void Mute_UI_Volume(_bool IsMute)
+	{
+		m_bMute = IsMute;
+
+		if (m_bMute == true)
+			g_fUIVolume = 0.f;
+		else
+			g_fUIVolume = m_fVolume_Origin;
+	}
+
 	// ¾ÆÀÌÅÛ È¹µæ 
 	void Input_Drop_Item_Info(_int iIndex, _int iCount) { m_pUIPage_Play->Input_Drop_Item_Info(iIndex, iCount); }
 
@@ -292,19 +303,23 @@ public:
 
 	void Fade_Out(_wstring strTitle, _wstring strDesc, _Vec3 vColor = _Vec3{ 0.f,0.f,0.f }, _float fTime = 1.f) 
 	{ 
+		Mute_UI_Volume(true);
 		m_pUIPage_Effect->Fade_Out(strTitle, strDesc, vColor, fTime);
 	}
 	void Fade_In(_float fTime = 1.f)
 	{ 
+		Mute_UI_Volume(true);
 		m_pUIPage_Effect->Fade_In(fTime);
 	}
 	void UIPart_On()
 	{
+		Mute_UI_Volume(false);
 		OpenPage(UIPAGE::PAGE_PLAY);
 		m_bIsPlayPageMaintain = true;
 	}
 	void UIPart_Off()
 	{
+		Mute_UI_Volume(true);
 		for (_int i = 0; i < _int(UIPAGE::PAGE_END); ++i)
 		{
 			if (i == _int(UIPAGE::PAGE_ORTHO))
@@ -402,6 +417,9 @@ private:
 	UIPAGE m_eBeforePage = UIPAGE::PAGE_END;
 
 	vector<UIPAGE> m_vecPageRender_Order;
+
+	_bool m_bMute = false;
+	_float m_fVolume_Origin = 0.f;
 
 	// test code
 #ifdef _DEBUG
