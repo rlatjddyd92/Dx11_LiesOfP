@@ -39,6 +39,7 @@ extern float g_fEffectVolume;
 extern float g_fVoiceVolume;
 extern float g_fEnvVolume;
 extern float g_fUIVolume;
+extern float g_fCutSceneVolume;
 extern bool g_isHideCursor;
 
 using namespace Client;

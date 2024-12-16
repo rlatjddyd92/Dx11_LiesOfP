@@ -188,6 +188,9 @@ void CCutScene::Active_Sound(CUTSCENE_KEYFRAME_DESC* pCutSceneDesc)
 		case SOPHIA_DEAD:
 			m_pGameInstance->Play_BGM(TEXT("MU_MS_Monastery_B_Loop.wav"), &g_fBGMVolume);
 			break;
+		case BOSS1_MEET2:
+			m_pGameInstance->Play_BGM(TEXT("CutScene_Raxasia_Meet2.wav"), &g_fCutSceneVolume);
+			break;
 		default:
 			break;
 		}

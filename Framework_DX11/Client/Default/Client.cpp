@@ -18,6 +18,7 @@ float g_fEffectVolume = 1.f;
 float g_fVoiceVolume = 1.f;
 float g_fEnvVolume = 1.f;
 float g_fUIVolume = 1.f;
+float g_fCutSceneVolume = 1.f;
 bool g_isHideCursor = true;
 
 
