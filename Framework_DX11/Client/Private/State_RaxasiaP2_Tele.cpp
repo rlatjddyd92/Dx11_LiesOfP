@@ -26,6 +26,9 @@ HRESULT CState_RaxasiaP2_Tele::Start_State(void* pArg)
     m_bSwingSound = false;
     m_bTele = false;
     m_bSwing = false;
+    m_bEnvelop = false;
+    m_bTeleEffect = false;
+
     return S_OK;
 }
 
@@ -45,7 +48,7 @@ void CState_RaxasiaP2_Tele::Update(_float fTimeDelta)
 
         if (!m_bTele)
         {
-            if (CurTrackPos >= 60.f)
+            if (CurTrackPos >= 20.f)
             {
                 m_bTele = true;
 
@@ -96,6 +99,7 @@ void CState_RaxasiaP2_Tele::Update(_float fTimeDelta)
 
 void CState_RaxasiaP2_Tele::End_State()
 {
+    m_pMonster->DeActive_Effect(CRaxasia::EFFECT_THUNDERENVELOP_SMALL);
 }
 
 _bool CState_RaxasiaP2_Tele::End_Check()
@@ -105,18 +109,7 @@ _bool CState_RaxasiaP2_Tele::End_Check()
 
 void CState_RaxasiaP2_Tele::Collider_Check(_double CurTrackPos)
 {
-    if (m_iRouteTrack == 0)
-    {
-        if ((CurTrackPos >= 35.f && CurTrackPos <= 44.f))
-        {
-            m_pMonster->Active_CurrentWeaponCollider(1.3f, 0, HIT_TYPE::HIT_METAL, ATTACK_STRENGTH::ATK_NORMAL);
-        }
-        else
-        {
-            m_pMonster->DeActive_CurretnWeaponCollider();
-        }
-    }
-    else if (m_iRouteTrack == 1)
+    if (m_iRouteTrack == 1)
     {
         if ((CurTrackPos >= 15.f && CurTrackPos <= 40.f))
         {
@@ -131,9 +124,46 @@ void CState_RaxasiaP2_Tele::Collider_Check(_double CurTrackPos)
 
 void CState_RaxasiaP2_Tele::Effect_Check(_double CurTrackPos)
 {
-    if (CurTrackPos >= 35.f)
+    if (m_iRouteTrack == 1)
     {
-        //¹æÀü
+        if ((CurTrackPos >= 15.f && CurTrackPos <= 40.f))
+        {
+            if (!m_bSwing)
+            {
+                m_pMonster->Active_Effect(CRaxasia::EFFECT_SWING, true);
+            }
+        }
+        else
+        {
+            m_pMonster->DeActive_Effect(CRaxasia::EFFECT_SWING);
+        }
+
+    }
+    else
+    {
+        if (!m_bEnvelop)
+        {
+            if (CurTrackPos >= 10.f)
+            {
+                m_bEnvelop = false;
+                m_pMonster->Active_Effect(CRaxasia::EFFECT_THUNDERENVELOP_SMALL, true);
+            }
+        }
+
+        if (!m_bTeleEffect)
+        {
+            if (CurTrackPos >= 15.f)
+            {
+                m_bTeleEffect = false;
+                m_pMonster->Active_Effect(CRaxasia::EFFECT_THUNDERACCEL, true);
+            }
+        }
+        
+        if (CurTrackPos >= 25.f)
+        {
+            m_pMonster->DeActive_Effect(CRaxasia::EFFECT_THUNDERACCEL);
+        }
+
     }
 }
 

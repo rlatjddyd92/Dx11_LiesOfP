@@ -65,7 +65,8 @@ void CState_RaxasiaP1_JumpAttack::Update(_float fTimeDelta)
             }
         }
 
-        if ((CurTrackPos >= 85.f && CurTrackPos <= 140.f))
+        if ((CurTrackPos >= 5.f && CurTrackPos <= 45.f) ||
+            (CurTrackPos >= 85.f && CurTrackPos <= 140.f))
         {
             m_pMonster->Get_Transform()->LookAt_Lerp_NoHeight(m_pMonster->Get_TargetDir(), 1.f, fTimeDelta);
         }

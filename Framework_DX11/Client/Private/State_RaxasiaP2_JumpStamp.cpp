@@ -4,6 +4,8 @@
 #include "Model.h"
 #include "Raxasia.h"
 
+#include "Effect_Manager.h"
+
 CState_RaxasiaP2_JumpStamp::CState_RaxasiaP2_JumpStamp(CFsm* pFsm, CMonster* pMonster)
     :CState{ pFsm }
     , m_pMonster{ pMonster }
@@ -21,11 +23,18 @@ HRESULT CState_RaxasiaP2_JumpStamp::Initialize(_uint iStateNum, void* pArg)
 HRESULT CState_RaxasiaP2_JumpStamp::Start_State(void* pArg)
 {
     m_iRouteTrack = 0;
-    m_pMonster->Change_Animation(AN_JUMPSTAMP_START, false, 0.1f, 0);
+    m_pMonster->Change_Animation(AN_INCHENT, false, 0.1f, 0);
 
     m_bSwingSound = false;
     m_bStartSpot = true;
     m_bSwing = false;
+
+    m_bStomp = false;
+    m_bAccel = false;
+    m_bEnvelop = false;
+    m_bInchent = false;
+
+
     return S_OK;
 }
 
@@ -40,12 +49,21 @@ void CState_RaxasiaP2_JumpStamp::Update(_float fTimeDelta)
         {
             ++m_iRouteTrack;
             m_bSwing = false;
+            m_pMonster->Change_Animation(AN_JUMPSTAMP_START, false, 0.1f, 0);
+        }
+
+        break;
+    case 1:
+        if (End_Check())
+        {
+            ++m_iRouteTrack;
+            m_bSwing = false;
             m_pMonster->Change_Animation(AN_JUMPSTAMP_MIDDLE, false, 0.1f, 0);
         }
 
         break;
 
-    case 1:
+    case 2:
         if (End_Check())
         {
             ++m_iRouteTrack;
@@ -67,7 +85,7 @@ void CState_RaxasiaP2_JumpStamp::Update(_float fTimeDelta)
 
         break;
 
-    case 2:
+    case 3:
         if (End_Check())
         {
             m_iRouteTrack = 0;
@@ -104,20 +122,26 @@ _bool CState_RaxasiaP2_JumpStamp::End_Check()
     switch (m_iRouteTrack)
     {
     case 0:
+        if ((AN_INCHENT) == iCurAnim)
+        {
+            bEndCheck = m_pMonster->Get_EndAnim(AN_INCHENT);
+        }
+        break;
+    case 1:
         if ((AN_JUMPSTAMP_START) == iCurAnim)
         {
             bEndCheck = m_pMonster->Get_EndAnim(AN_JUMPSTAMP_START);
         }
         break;
 
-    case 1:
+    case 2:
         if ((AN_JUMPSTAMP_MIDDLE) == iCurAnim)
         {
             bEndCheck = m_pMonster->Get_EndAnim(AN_JUMPSTAMP_MIDDLE);
         }
         break;
 
-    case 2:
+    case 3:
         if ((AN_JUMPSTAMP_END) == iCurAnim)
         {
             bEndCheck = m_pMonster->Get_EndAnim(AN_JUMPSTAMP_END);
@@ -133,35 +157,63 @@ _bool CState_RaxasiaP2_JumpStamp::End_Check()
 
 void CState_RaxasiaP2_JumpStamp::Collider_Check(_double CurTrackPos)
 {
-    if (m_iRouteTrack == 0)
-    {
-        if ((CurTrackPos >= 35.f && CurTrackPos <= 44.f))
-        {
-            m_pMonster->Active_CurrentWeaponCollider(1.3f, 0, HIT_TYPE::HIT_METAL, ATTACK_STRENGTH::ATK_NORMAL);
-        }
-        else
-        {
-            m_pMonster->DeActive_CurretnWeaponCollider();
-        }
-    }
-    else if (m_iRouteTrack == 1)
-    {
-        if ((CurTrackPos >= 105.f && CurTrackPos <= 120.f))
-        {
-            m_pMonster->Active_CurrentWeaponCollider(1.6f, 0, HIT_TYPE::HIT_METAL, ATTACK_STRENGTH::ATK_STRONG);
-        }
-        else
-        {
-            m_pMonster->DeActive_CurretnWeaponCollider();
-        }
-    }
 }
 
 void CState_RaxasiaP2_JumpStamp::Effect_Check(_double CurTrackPos)
 {
-    if (CurTrackPos >= 97.f)
+    if (m_iRouteTrack == 0)
     {
-        //점프
+        if (!m_bInchent)
+        {
+            if (CurTrackPos >= 45.f)
+            {
+                m_bInchent = true;
+                m_pMonster->Active_Effect(CRaxasia::EFFECT_INCHENTSWORD_P2, true);
+            }
+        }
+    }
+    else if (m_iRouteTrack == 1)
+    {
+        if (!m_bEnvelop)
+        {
+            if (CurTrackPos >= 97.f)
+            {
+                m_bEnvelop = true;
+                m_pMonster->Active_Effect(CRaxasia::EFFECT_THUNDERENVELOP_SMALL, true);
+
+                _float4x4 WorldMat{};
+                _Vec3 vPos = { 0.f, 0.f, 0.f };
+                XMStoreFloat4x4(&WorldMat, (*m_pMonster->Get_BoneCombinedMat(m_pMonster->Get_UFBIndex(UFB_ROOT))
+                  * (m_pMonster->Get_Transform()->Get_WorldMatrix())));
+                vPos = XMVector3TransformCoord(vPos, XMLoadFloat4x4(&WorldMat));
+
+                CEffect_Manager::Get_Instance()->Add_Effect_ToLayer(LEVEL_GAMEPLAY, TEXT("Raxasia_Jump"),
+                    vPos, _Vec3{ m_pMonster->Get_TargetDir() });
+                
+            }
+        }
+    }
+    else if (m_iRouteTrack == 3)
+    {
+        if (!m_bStomp)
+        {
+            if (CurTrackPos >= 15.f)
+            {
+
+                _float4x4 WorldMat{};
+                _Vec3 vPos = { 0.8f, 0.f, 0.f };
+                XMStoreFloat4x4(&WorldMat, (*m_pMonster->Get_WeaponBoneCombinedMat(1) * (*m_pMonster->Get_WeaponWorldMat())));
+                vPos = XMVector3TransformCoord(vPos, XMLoadFloat4x4(&WorldMat));
+
+                CEffect_Manager::Get_Instance()->Add_Effect_ToLayer(LEVEL_GAMEPLAY, TEXT("Raxasia_Attack_ThunderStamp_Mark_Explositon"),
+                    vPos, _Vec3{ m_pMonster->Get_TargetDir() });
+
+                m_bStomp = true;
+
+            }
+        }
+
+        //일정간격두고 마크 3개 터트리기
     }
 }
 

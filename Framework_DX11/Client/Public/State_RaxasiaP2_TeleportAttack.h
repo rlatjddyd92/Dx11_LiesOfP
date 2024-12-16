@@ -32,7 +32,10 @@ private:
 
     _bool               m_bSwingSound = { false };
     _bool               m_bTeleport = { false };
+    _bool               m_bEnvelop = { false };
+    _bool               m_bAccel = { false };
 
+    _bool               m_bStart = { false };
     _uint               m_iRouteTrack = {};
 
 private:

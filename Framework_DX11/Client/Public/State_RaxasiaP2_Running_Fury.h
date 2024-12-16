@@ -31,6 +31,8 @@ private:
 
     _bool               m_bRunningWise = { false }; //방향 구분용으로 사용. false면 왼, true면 오른
     _bool               m_bSwing = { false };
+    _bool               m_bShieldAttack = { false };
+    _bool               m_bStart = { false };
     _bool               m_bSwingSound = { false };
     _bool               m_bSpeedController = { false };
     _bool               m_bLockOn = { false };

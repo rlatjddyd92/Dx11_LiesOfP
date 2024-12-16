@@ -11,7 +11,7 @@ class CState_RaxasiaP2_StepJump : public CState
 {
 private:
     typedef enum {
-        AN_JUMPSTAMP_START = 41, AN_JUMPSTAMP_MIDDLE = 45
+        AN_INCHENT = 24, AN_JUMPSTAMP_START = 41, AN_JUMPSTAMP_MIDDLE = 45
     }ANIMNUM;
 
 public:
@@ -37,6 +37,13 @@ private:
     _bool               m_bStartSpot = { true };
     _bool               m_bSwing = { false };
     _bool               m_bSwingSound = { false };
+
+    _bool               m_bInchent = { false };
+    _bool               m_bEnvelop = { false };
+    _bool               m_bStomp = { false };
+    _bool               m_bSWingDown = { false };
+    _bool               m_bSpread = { false };
+    
 
     _uint               m_iRouteTrack = {};
 

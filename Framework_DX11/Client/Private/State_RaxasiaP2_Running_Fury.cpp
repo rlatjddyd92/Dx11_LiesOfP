@@ -4,6 +4,8 @@
 #include "Model.h"
 #include "Raxasia.h"
 
+#include "Effect_Manager.h"
+
 CState_RaxasiaP2_Running_Fury::CState_RaxasiaP2_Running_Fury(CFsm* pFsm, CMonster* pMonster)
     :CState{ pFsm }
     , m_pMonster{ pMonster }
@@ -32,6 +34,9 @@ HRESULT CState_RaxasiaP2_Running_Fury::Start_State(void* pArg)
     m_bSwingSound = false;
     m_bSpeedController = false;
     m_bSwing = false;
+    m_bShieldAttack = false;
+    m_bStart = false;
+
     return S_OK;
 }
 
@@ -87,13 +92,13 @@ void CState_RaxasiaP2_Running_Fury::Update(_float fTimeDelta)
             {
                 vTemp = vDir;
                 vTemp.Normalize();
-                if (m_fDistance < 2.5f)
+                if (m_fDistance < 4.f)
                 {
-                    vTemp *= -3.f;
+                    vTemp *= -5.f;
                 }
                 else
                 {
-                    vTemp *= 3.f;
+                    vTemp *= 5.f;
                 }
             }
 
@@ -117,6 +122,10 @@ void CState_RaxasiaP2_Running_Fury::Update(_float fTimeDelta)
                     m_pMonster->Get_Model()->Set_SpeedRatio(AN_RUNNING, (_double)1);
                 }
             }
+        }
+        if (CurTrackPos <= 150.f ||
+            CurTrackPos >= 160.f)
+        {
             m_pMonster->Get_Transform()->LookAt_Lerp_NoHeight(m_pMonster->Get_TargetDir(), 2.f, fTimeDelta);
         }
 
@@ -146,7 +155,7 @@ void CState_RaxasiaP2_Running_Fury::Update(_float fTimeDelta)
         {
             m_pMonster->Get_Transform()->LookAt_Lerp_NoHeight(m_pMonster->Get_TargetDir(), 2.f, fTimeDelta);
         }
-        if (CurTrackPos >= 165 && CurTrackPos <= 170.f)
+        if (CurTrackPos >= 165 && CurTrackPos <= 172.f)
         {
             if (!m_bLockOn)
             {
@@ -238,7 +247,55 @@ void CState_RaxasiaP2_Running_Fury::Collider_Check(_double CurTrackPos)
 
 void CState_RaxasiaP2_Running_Fury::Effect_Check(_double CurTrackPos)
 {
+    if (m_iRouteTrack == 0)
+    {
+        if(!m_bStart)
+        {
+            if (CurTrackPos <= 10.f)
+            {
+                m_bStart = true;
+                m_pMonster->Active_Effect(CRaxasia::EFFECT_THUNDERENVELOP_SMALL, true);
+                m_pMonster->Active_Effect(CRaxasia::EFFECT_THUNDERACCEL, true);
+            }
+        }
+        else
+        {
+            if (CurTrackPos >= 145.f)
+            {
+                m_bStart = false;
+                m_pMonster->DeActive_Effect(CRaxasia::EFFECT_THUNDERENVELOP_SMALL);
+                m_pMonster->DeActive_Effect(CRaxasia::EFFECT_THUNDERACCEL);
+            }
+        }
 
+        if (!m_bSwing)
+        {
+            if ((CurTrackPos >= 145.f && CurTrackPos <= 160.f))
+            {
+                m_bSwing = true;
+                m_pMonster->Active_Effect(CRaxasia::EFFECT_SWING, true);
+            }
+        }
+        else
+        {
+            m_pMonster->DeActive_Effect(CRaxasia::EFFECT_SWING);
+        }
+
+        if ((CurTrackPos >= 165.f && CurTrackPos <= 185.f))
+        {
+            if (!m_bShieldAttack)
+            {
+                _float4x4 WorldMat{};
+                _Vec3 vPos = { 0.f, 0.f, 0.f };
+                XMStoreFloat4x4(&WorldMat, (*m_pMonster->Get_BoneCombinedMat(m_pMonster->Get_UFBIndex(UFB_HAND_RIGHT)) * m_pMonster->Get_Transform()->Get_WorldMatrix()));
+                vPos = XMVector3TransformCoord(vPos, XMLoadFloat4x4(&WorldMat));
+
+                CEffect_Manager::Get_Instance()->Add_Effect_ToLayer(LEVEL_GAMEPLAY, TEXT("Raxasia_Attack_ThunderInchent"),
+                    vPos, _Vec3{ m_pMonster->Get_TargetDir() });
+                m_bShieldAttack = true;
+            }
+        }
+    }
 }
 
 void CState_RaxasiaP2_Running_Fury::Control_Sound(_double CurTrackPos)

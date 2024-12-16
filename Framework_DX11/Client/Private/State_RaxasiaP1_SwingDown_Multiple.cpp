@@ -67,9 +67,6 @@ void CState_RaxasiaP1_SwingDown_Multiple::Update(_float fTimeDelta)
     {
         if (CurTrackPos >= 70.f)
         {
-            ++m_iRouteTrack;
-            m_bSwing = false;
-            m_bStamp = false;
             if (m_iRouteTrack == 7)
             {
                 m_iCurAnimIndex = AN_SWINGDOWN;
@@ -92,6 +89,9 @@ void CState_RaxasiaP1_SwingDown_Multiple::Update(_float fTimeDelta)
                     SpeedRatio = 2.f;
                 m_pMonster->Get_Model()->Set_SpeedRatio(m_iCurAnimIndex, (double)1 + SpeedRatio);
             }
+            ++m_iRouteTrack;
+            m_bSwing = false;
+            m_bStamp = false;
             m_pMonster->Change_Animation(m_iCurAnimIndex, false, 0.1f, 0);
             return;
         }
@@ -161,27 +161,13 @@ void CState_RaxasiaP1_SwingDown_Multiple::Collider_Check(_double CurTrackPos)
     }
     else if (m_iRouteTrack >= 1 && m_iRouteTrack <= 7)
     {
-        if (m_iCurAnimIndex == AN_SWINGDOWN_L)
+        if ((CurTrackPos >= 40.f && CurTrackPos <= 48.f))
         {
-            if ((CurTrackPos >= 35.f && CurTrackPos <= 44.f))
-            {
-                m_pMonster->Active_CurrentWeaponCollider(1.3f, 0, HIT_TYPE::HIT_METAL, ATTACK_STRENGTH::ATK_WEAK);
-            }
-            else
-            {
-                m_pMonster->DeActive_CurretnWeaponCollider();
-            }
+            m_pMonster->Active_CurrentWeaponCollider(1.3f, 0, HIT_TYPE::HIT_METAL, ATTACK_STRENGTH::ATK_WEAK);
         }
         else
         {
-            if ((CurTrackPos >= 40.f && CurTrackPos <= 48.f))
-            {
-                m_pMonster->Active_CurrentWeaponCollider(1.3f, 0, HIT_TYPE::HIT_METAL, ATTACK_STRENGTH::ATK_WEAK);
-            }
-            else
-            {
-                m_pMonster->DeActive_CurretnWeaponCollider();
-            }
+            m_pMonster->DeActive_CurretnWeaponCollider();
         }
     }
 }
@@ -206,13 +192,13 @@ void CState_RaxasiaP1_SwingDown_Multiple::Effect_Check(_double CurTrackPos)
         
         if (!m_bStamp)
         {
-            if (CurTrackPos >= 43.5f)
+            if (CurTrackPos >= 44.f)
             {
                 _float4x4 WorldMat{};
-                _Vec3 vPos = { 0.f, 0.f, -4.25f };
-                XMStoreFloat4x4(&WorldMat, (*m_pMonster->Get_WeaponBoneCombinedMat(0) * (*m_pMonster->Get_WeaponWorldMat())));
+                _Vec3 vPos = { 1.f, 0.f, 0.f };
+                XMStoreFloat4x4(&WorldMat, (*m_pMonster->Get_WeaponBoneCombinedMat(1) * (*m_pMonster->Get_WeaponWorldMat())));
                 vPos = XMVector3TransformCoord(vPos, XMLoadFloat4x4(&WorldMat));
-
+                
                 CEffect_Manager::Get_Instance()->Add_Effect_ToLayer(LEVEL_GAMEPLAY, TEXT("Raxasia_Attack_Stamp"),
                     vPos, _Vec3{ m_pMonster->Get_TargetDir() });
                 m_bStamp = true;
@@ -221,64 +207,32 @@ void CState_RaxasiaP1_SwingDown_Multiple::Effect_Check(_double CurTrackPos)
     }
     else if (m_iRouteTrack >= 1 && m_iRouteTrack <= 7)
     {
-        if (m_iCurAnimIndex == AN_SWINGDOWN_L)
+        if ((CurTrackPos >= 40.f && CurTrackPos <= 48.f))
         {
-            if ((CurTrackPos >= 35.f && CurTrackPos <= 44.f))
+            if (!m_bSwing)
             {
-                if (!m_bSwing)
-                {
-                    m_pMonster->Active_Effect(CRaxasia::EFFECT_SWING, true);
-                    m_bSwing = true;
-                }
-            }
-            else
-            {
-                m_pMonster->DeActive_Effect(CRaxasia::EFFECT_SWING);
-                m_bSwing = false;
-            }
-            if (!m_bStamp)
-            {
-                if (CurTrackPos >= 43.5f)
-                {
-                    _float4x4 WorldMat{};
-                    _Vec3 vPos = { 0.f, 0.f, -4.25f };
-                    XMStoreFloat4x4(&WorldMat, (*m_pMonster->Get_WeaponBoneCombinedMat(0) * (*m_pMonster->Get_WeaponWorldMat())));
-                    vPos = XMVector3TransformCoord(vPos, XMLoadFloat4x4(&WorldMat));
-
-                    CEffect_Manager::Get_Instance()->Add_Effect_ToLayer(LEVEL_GAMEPLAY, TEXT("Raxasia_Attack_Stamp"),
-                        vPos, _Vec3{ m_pMonster->Get_TargetDir() });
-                    m_bStamp = true;
-                }
+                m_pMonster->Active_Effect(CRaxasia::EFFECT_SWING, true);
+                m_bSwing = true;
             }
         }
         else
         {
-            if ((CurTrackPos >= 40.f && CurTrackPos <= 48.f))
-            {
-                if (!m_bSwing)
-                {
-                    m_pMonster->Active_Effect(CRaxasia::EFFECT_SWING, true);
-                    m_bSwing = true;
-                }
-            }
-            else
-            {
-                m_pMonster->DeActive_Effect(CRaxasia::EFFECT_SWING);
-                m_bSwing = false;
-            }
-            if (!m_bStamp)
-            {
-                if (CurTrackPos >= 47.5f)
-                {
-                    _float4x4 WorldMat{};
-                    _Vec3 vPos = { 0.f, 0.f, -4.25f };
-                    XMStoreFloat4x4(&WorldMat, (*m_pMonster->Get_WeaponBoneCombinedMat(0) * (*m_pMonster->Get_WeaponWorldMat())));
-                    vPos = XMVector3TransformCoord(vPos, XMLoadFloat4x4(&WorldMat));
+            m_pMonster->DeActive_Effect(CRaxasia::EFFECT_SWING);
+            m_bSwing = false;
+        }
 
-                    CEffect_Manager::Get_Instance()->Add_Effect_ToLayer(LEVEL_GAMEPLAY, TEXT("Raxasia_Attack_Stamp"),
-                        vPos, _Vec3{ m_pMonster->Get_TargetDir() });
-                    m_bStamp = true;
-                }
+        if (!m_bStamp)
+        {
+            if (CurTrackPos >= 48.f)
+            {
+                _float4x4 WorldMat{};
+                _Vec3 vPos = { 1.f, 0.f, 0.f };
+                XMStoreFloat4x4(&WorldMat, (*m_pMonster->Get_WeaponBoneCombinedMat(1) * (*m_pMonster->Get_WeaponWorldMat())));
+                vPos = XMVector3TransformCoord(vPos, XMLoadFloat4x4(&WorldMat));
+
+                CEffect_Manager::Get_Instance()->Add_Effect_ToLayer(LEVEL_GAMEPLAY, TEXT("Raxasia_Attack_Stamp"),
+                    vPos, _Vec3{ m_pMonster->Get_TargetDir() });
+                m_bStamp = true;
             }
         }
     }

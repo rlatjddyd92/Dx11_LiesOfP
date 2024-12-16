@@ -155,9 +155,41 @@ void CState_RaxasiaP2_Tele_LinkedTel::Collider_Check(_double CurTrackPos)
 
 void CState_RaxasiaP2_Tele_LinkedTel::Effect_Check(_double CurTrackPos)
 {
-    if (CurTrackPos >= 35.f)
+    if (m_iRouteTrack == 0)
     {
-        //¹æÀü
+        if ((CurTrackPos >= 90.f && CurTrackPos <= 100.f))
+        {
+            m_pMonster->Active_Effect(CRaxasia::EFFECT_SWING, true);
+        }
+        else
+        {
+            m_pMonster->DeActive_Effect(CRaxasia::EFFECT_SWING);
+        }
+    }
+    else if (m_iRouteTrack == 1)
+    {
+        if ((CurTrackPos >= 80.f && CurTrackPos <= 90.f))
+        {
+            m_pMonster->Active_Effect(CRaxasia::EFFECT_SWING, true);
+        }
+        else
+        {
+            m_pMonster->DeActive_Effect(CRaxasia::EFFECT_SWING);
+        }
+    }
+    else
+    {
+        if ((CurTrackPos >= 15.f && CurTrackPos <= 40.f))
+        {
+            if (!m_bSwing)
+            {
+                m_pMonster->Active_Effect(CRaxasia::EFFECT_SWING, true);
+            }
+        }
+        else
+        {
+            m_pMonster->DeActive_Effect(CRaxasia::EFFECT_SWING);
+        }
     }
 }
 

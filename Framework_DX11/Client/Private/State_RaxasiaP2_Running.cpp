@@ -4,6 +4,8 @@
 #include "Model.h"
 #include "Raxasia.h"
 
+#include "Effect_Manager.h"
+
 CState_RaxasiaP2_Running::CState_RaxasiaP2_Running(CFsm* pFsm, CMonster* pMonster)
     :CState{ pFsm }
     , m_pMonster{ pMonster }
@@ -46,8 +48,9 @@ HRESULT CState_RaxasiaP2_Running::Start_State(void* pArg)
     }
 
     m_bSwingSound = false;
-
+    m_bShieldAttack = false;
     m_bSwing = false;
+
     return S_OK;
 }
 
@@ -81,6 +84,7 @@ void CState_RaxasiaP2_Running::Update(_float fTimeDelta)
         {
             if (End_Check())
             {
+                m_pMonster->Active_Effect(CRaxasia::EFFECT_THUNDERENVELOP_SMALL, true);
                 m_pMonster->Change_State(CRaxasia::ATKP2_RUNNING_LINKED, &m_bRunningWise);
                 return;
             }
@@ -131,13 +135,13 @@ void CState_RaxasiaP2_Running::Update(_float fTimeDelta)
             {
                 vTemp = vDir;
                 vTemp.Normalize();
-                if (m_fDistance < 2.5f)
+                if (m_fDistance < 3.f)
                 {
-                    vTemp *= -3.f;
+                    vTemp *= -5.f;
                 }
                 else
                 {
-                    vTemp *= 3.f;
+                    vTemp *= 5.f;
                 }
             }
 
@@ -147,15 +151,16 @@ void CState_RaxasiaP2_Running::Update(_float fTimeDelta)
         else if (CurTrackPos <= 160)
         {
             _Vec3 vDir = m_pMonster->Get_TargetDir();
+            _Vec3 vVelo = m_pMonster->Get_RigidBody()->Get_Velocity();
             vDir.Normalize();
 
-            if (m_pMonster->Calc_Distance_XZ() >= 2.f)
+            if (m_pMonster->Calc_Distance_XZ() >= 1.5f)
             {
-                m_pMonster->Get_RigidBody()->Set_Velocity(vDir * 2);
+                m_pMonster->Get_RigidBody()->Set_Velocity(vVelo + vDir * 3);
             }
             else
             {
-                m_pMonster->Get_RigidBody()->Set_Velocity(-(vDir * 2));
+                m_pMonster->Get_RigidBody()->Set_Velocity(vVelo - ( vDir * 3));
             }
             m_pMonster->Get_Transform()->LookAt_Lerp_NoHeight(m_pMonster->Get_TargetDir(), 3.f, fTimeDelta);
         }
@@ -229,6 +234,37 @@ void CState_RaxasiaP2_Running::Collider_Check(_double CurTrackPos)
 
 void CState_RaxasiaP2_Running::Effect_Check(_double CurTrackPos)
 {
+
+    if (m_iRouteTrack == 1)
+    {
+        if (!m_bSwing)
+        {
+            if ((CurTrackPos >= 145.f && CurTrackPos <= 160.f))
+            {
+                m_bSwing = true;
+                m_pMonster->Active_Effect(CRaxasia::EFFECT_SWING);
+            }
+        }
+        else
+        {
+            m_pMonster->DeActive_Effect(CRaxasia::EFFECT_SWING);
+        }
+
+        if ((CurTrackPos >= 165.f && CurTrackPos <= 185.f))
+        {
+            if (!m_bShieldAttack)
+            {
+                _float4x4 WorldMat{};
+                _Vec3 vPos = { 0.f, 0.f, 0.f };
+                XMStoreFloat4x4(&WorldMat, (*m_pMonster->Get_BoneCombinedMat(m_pMonster->Get_UFBIndex(UFB_HAND_RIGHT)) * m_pMonster->Get_Transform()->Get_WorldMatrix()));
+                vPos = XMVector3TransformCoord(vPos, XMLoadFloat4x4(&WorldMat));
+
+                CEffect_Manager::Get_Instance()->Add_Effect_ToLayer(LEVEL_GAMEPLAY, TEXT("Raxasia_Attack_ThunderInchent"),
+                    vPos, _Vec3{ m_pMonster->Get_TargetDir() });
+                m_bShieldAttack = true;
+            }
+        }
+    }
 
 }
 

@@ -26,6 +26,8 @@ HRESULT CState_RaxasiaP2_Declare_War::Start_State(void* pArg)
     m_bSwingSound = false;
 
     m_bSwing = false;
+    m_bStart = false;
+
     return S_OK;
 }
 
@@ -106,6 +108,29 @@ void CState_RaxasiaP2_Declare_War::Collider_Check(_double CurTrackPos)
 
 void CState_RaxasiaP2_Declare_War::Effect_Check(_double CurTrackPos)
 {
+    if (m_iRouteTrack == 0)
+    {
+        if (!m_bStart)
+        {
+            if (CurTrackPos >= 50.f)
+            {
+                m_bStart = true;
+                m_pMonster->Active_Effect(CRaxasia::EFFECT_INCHENTSWORD_P2, true);
+                m_pMonster->Active_Effect(CRaxasia::EFFECT_HOWLING, true);
+            }
+        }
+        else
+        {
+            if (CurTrackPos >= 300.f)
+            {
+                m_pMonster->DeActive_Effect(CRaxasia::EFFECT_HOWLING);
+            }
+        }
+    }
+    else
+    {
+
+    }
 
 }
 

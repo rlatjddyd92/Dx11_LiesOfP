@@ -4,6 +4,8 @@
 #include "Model.h"
 #include "Raxasia.h"
 
+#include "Effect_Manager.h"
+
 CState_RaxasiaP1_KickSting::CState_RaxasiaP1_KickSting(CFsm* pFsm, CMonster* pMonster)
     :CState{ pFsm }
     , m_pMonster{ pMonster }
@@ -124,6 +126,37 @@ void CState_RaxasiaP1_KickSting::Collider_Check(_double CurTrackPos)
 
 void CState_RaxasiaP1_KickSting::Effect_Check(_double CurTrackPos)
 {
+    if (m_iRouteTrack == 1)
+    {
+        if (!m_bChargeActive)
+        {
+            if (CurTrackPos >= 40.f)
+            {
+                m_pMonster->Active_Effect(CRaxasia::EFFECT_INCHENTSWORD, true);
+                m_bChargeActive = true;
+            }
+        }
+
+        if (!m_bStampBlast)
+        {
+            if (CurTrackPos >= 65.f)
+            {
+                _float4x4 WorldMat{};
+                _Vec3 vPos = { 1.f, 0.f, 0.f };
+                XMStoreFloat4x4(&WorldMat, (*m_pMonster->Get_WeaponBoneCombinedMat(1) * (*m_pMonster->Get_WeaponWorldMat())));
+                vPos = XMVector3TransformCoord(vPos, XMLoadFloat4x4(&WorldMat));
+
+                vPos.y -= 1.f;
+
+                CEffect_Manager::Get_Instance()->Add_Effect_ToLayer(LEVEL_GAMEPLAY, TEXT("Raxasia_Attack_ThunderStamp_Small"),
+                    vPos, _Vec3{ 0.f, 0.f, 1.f });
+
+                //어택오브젝트 생성 마크 후 폭발
+
+                m_bStampBlast = true;
+            }
+        }
+    }
 }
 
 void CState_RaxasiaP1_KickSting::Control_Sound(_double CurTrackPos)

@@ -4,6 +4,8 @@
 #include "Model.h"
 #include "Raxasia.h"
 
+#include "Effect_Manager.h"
+
 CState_RaxasiaP2_StepJump::CState_RaxasiaP2_StepJump(CFsm* pFsm, CMonster* pMonster)
     :CState{ pFsm }
     , m_pMonster{ pMonster }
@@ -21,12 +23,18 @@ HRESULT CState_RaxasiaP2_StepJump::Initialize(_uint iStateNum, void* pArg)
 HRESULT CState_RaxasiaP2_StepJump::Start_State(void* pArg)
 {
     m_iRouteTrack = 0;
-    m_pMonster->Change_Animation(AN_JUMPSTAMP_START, false, 0.1f, 0);
+    m_pMonster->Change_Animation(AN_INCHENT, false, 0.1f, 0);
 
     m_bSwingSound = false;
     m_bStartSpot = true;
     m_vFlyMoveStack = _Vec3{};
     m_bSwing = false;
+    m_bInchent = false;
+    m_bEnvelop = false;
+    m_bStomp = false;
+    m_bSWingDown = false;
+    m_bSpread = false;
+
     return S_OK;
 }
 
@@ -37,6 +45,14 @@ void CState_RaxasiaP2_StepJump::Update(_float fTimeDelta)
     switch (m_iRouteTrack)
     {
     case 0:
+        if (End_Check())
+        {
+            ++m_iRouteTrack;
+            m_bSwing = false;
+            m_pMonster->Change_Animation(AN_JUMPSTAMP_START, false, 0.1f, 0);
+        }
+        break;
+    case 1:
         if (End_Check())
         {
             ++m_iRouteTrack;
@@ -71,7 +87,7 @@ void CState_RaxasiaP2_StepJump::Update(_float fTimeDelta)
 
         break;
 
-    case 1:
+    case 2:
         //림라이트
         if (End_Check())
         {
@@ -109,13 +125,19 @@ _bool CState_RaxasiaP2_StepJump::End_Check()
     switch (m_iRouteTrack)
     {
     case 0:
+        if ((AN_INCHENT) == iCurAnim)
+        {
+            bEndCheck = m_pMonster->Get_EndAnim(AN_INCHENT);
+        }
+        break;
+    case 1:
         if ((AN_JUMPSTAMP_START) == iCurAnim)
         {
             bEndCheck = m_pMonster->Get_EndAnim(AN_JUMPSTAMP_START);
         }
         break;
 
-    case 1:
+    case 2:
         if ((AN_JUMPSTAMP_MIDDLE) == iCurAnim)
         {
             bEndCheck = m_pMonster->Get_EndAnim(AN_JUMPSTAMP_MIDDLE);
@@ -132,16 +154,16 @@ _bool CState_RaxasiaP2_StepJump::End_Check()
 
 void CState_RaxasiaP2_StepJump::Collider_Check(_double CurTrackPos)
 {
-    if (m_iRouteTrack == 0)
+    if (m_iRouteTrack == 1)
     {
     }
-    else if (m_iRouteTrack == 1)
+    else if (m_iRouteTrack == 2)
     {
         if ((CurTrackPos >= 90.f && CurTrackPos <= 105.f) ||
             (CurTrackPos >= 110.f && CurTrackPos <= 130.f) ||
             (CurTrackPos >= 200.f && CurTrackPos <= 206.f))
         {
-            m_pMonster->Active_CurrentWeaponCollider(1.6f, 0, HIT_TYPE::HIT_METAL, ATTACK_STRENGTH::ATK_STRONG);
+            m_pMonster->Active_CurrentWeaponCollider(1.2f, 0, HIT_TYPE::HIT_METAL, ATTACK_STRENGTH::ATK_WEAK);
         }
         else
         {
@@ -154,17 +176,106 @@ void CState_RaxasiaP2_StepJump::Effect_Check(_double CurTrackPos)
 {
     if (m_iRouteTrack == 0)
     {
-
-        if (CurTrackPos >= 220.f)
+        if (!m_bInchent)
         {
-            //검에서 전기 폭발
+            if (CurTrackPos >= 45.f && CurTrackPos <= 55.f)
+            {
+                m_bInchent = true;
+                m_pMonster->Active_Effect(CRaxasia::EFFECT_INCHENTSWORD_P2, true);
+            }
+        }
+    }
+    if (m_iRouteTrack == 1)
+    {
+        if (!m_bEnvelop)
+        {
+            if (CurTrackPos >= 87.f)
+            {
+                m_bEnvelop = true;
+            }
+        }
+
+        if (!m_bStomp)
+        {
+            if (CurTrackPos >= 175.f && CurTrackPos <= 211.f)
+            {
+                m_bStomp = true;
+                _float4x4 WorldMat{};
+                _Vec3 vPos = { 1.f, 0.f, 0.f };
+                XMStoreFloat4x4(&WorldMat, (*m_pMonster->Get_WeaponBoneCombinedMat(1) * (*m_pMonster->Get_WeaponWorldMat())));
+                vPos = XMVector3TransformCoord(vPos, XMLoadFloat4x4(&WorldMat));
+
+                CEffect_Manager::Get_Instance()->Add_Effect_ToLayer(LEVEL_GAMEPLAY, TEXT("Raxasia_Attack_ThunderStamp_Small"),
+                    vPos, _Vec3{ m_pMonster->Get_TargetDir() });
+
+                //찍으면서 마크 생성 후 폭발
+            }
+        }
+        else if (CurTrackPos >= 220.f)
+        {
+            m_pMonster->DeActive_Effect(CRaxasia::EFFECT_INCHENTSWORD_P2);
+            m_bInchent = false;
         }
     }
     else
     {
-        if (CurTrackPos >= 20.f)
+        if ((CurTrackPos >= 90.f && CurTrackPos <= 130.f) ||
+            (CurTrackPos >= 200.f && CurTrackPos <= 206.f))
         {
-            //부채꼴 전기 방출
+            if (!m_bSwing)
+            {
+                m_pMonster->Active_Effect(CRaxasia::EFFECT_SWING, true);
+                m_bSwing = true;
+            }
+        }
+        else
+        {
+            m_pMonster->DeActive_Effect(CRaxasia::EFFECT_SWING);
+        }
+
+        if (!m_bInchent)
+        {
+            if ((CurTrackPos >= 190.f))
+            {
+                _float4x4 WorldMat{};
+                _Vec3 vPos = { 0.f, 0.f, 0.f };
+                XMStoreFloat4x4(&WorldMat, (*m_pMonster->Get_BoneCombinedMat(m_pMonster->Get_UFBIndex(UFB_HAND_RIGHT)) * m_pMonster->Get_Transform()->Get_WorldMatrix()));
+                vPos = XMVector3TransformCoord(vPos, XMLoadFloat4x4(&WorldMat));
+
+                CEffect_Manager::Get_Instance()->Add_Effect_ToLayer(LEVEL_GAMEPLAY, TEXT("Raxasia_Attack_ThunderInchent"),
+                    vPos, _Vec3{ m_pMonster->Get_TargetDir() });
+
+                m_pMonster->Active_Effect(CRaxasia::EFFECT_INCHENTSWORD_P2, true);
+                //내려찍기
+            }
+        }
+        else if (CurTrackPos >= 230.f)
+        {
+            m_pMonster->DeActive_Effect(CRaxasia::EFFECT_INCHENTSWORD_P2);
+        }
+
+        if (!m_bSWingDown)
+        {
+            if ((CurTrackPos >= 206.f && CurTrackPos <= 211.f))
+            {
+                m_bSWingDown = true;
+                _float4x4 WorldMat{};
+                _Vec3 vPos = { 1.f, 0.f, 0.f };
+                XMStoreFloat4x4(&WorldMat, (*m_pMonster->Get_WeaponBoneCombinedMat(1) * (*m_pMonster->Get_WeaponWorldMat())));
+                vPos = XMVector3TransformCoord(vPos, XMLoadFloat4x4(&WorldMat));
+
+                CEffect_Manager::Get_Instance()->Add_Effect_ToLayer(LEVEL_GAMEPLAY, TEXT("Raxasia_Attack_ThunderStamp"),
+                    vPos, _Vec3{ m_pMonster->Get_TargetDir() });
+
+            }
+        }
+
+        if (!m_bSpread)
+        {
+            if ((CurTrackPos >= 200.f && CurTrackPos <= 206.f))
+            {
+                m_bSpread = true;
+            }
         }
 
     }

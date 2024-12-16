@@ -104,19 +104,6 @@ void CState_RaxasiaP1_GroundSlash::Collider_Check(_double CurTrackPos)
 
 void CState_RaxasiaP1_GroundSlash::Effect_Check(_double CurTrackPos)
 {
-    if ((CurTrackPos >= 110.f && CurTrackPos <= 220.f))
-    {
-        if (!m_bSwing)
-        {
-            m_pMonster->Active_Effect(CRaxasia::EFFECT_SWING, true);
-            m_bSwing = true;
-        }
-    }
-    else
-    {
-        m_pMonster->DeActive_Effect(CRaxasia::EFFECT_SWING);
-    }
-
     if (!m_bInchent)
     {
         if (CurTrackPos >= 60.f)
