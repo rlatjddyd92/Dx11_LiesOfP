@@ -55,6 +55,7 @@ public:
 	_bool					Get_isChangeAni_Boundary() { return m_isChangeAni_Boundary; }
 
 	void					Set_SpeedRatio(_uint iAnimIndex, _double SpeedRatio);
+	void					Set_SpeedPerSec(_uint iAnimIndex, _double SpeedPerSec);
 
 	HRESULT					Update_Boundary();
 

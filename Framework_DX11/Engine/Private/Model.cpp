@@ -157,6 +157,11 @@ void CModel::Set_SpeedRatio(_uint iAnimIndex, _double SpeedRatio)
 	m_Animations[iAnimIndex]->Set_SpeedRatio(SpeedRatio);
 }
 
+void CModel::Set_SpeedPerSec(_uint iAnimIndex, _double SpeedPerSec)
+{
+	m_Animations[iAnimIndex]->Set_SpeedPerSec(SpeedPerSec);
+}
+
 HRESULT CModel::Update_Boundary()
 {
 	_int iBoundaryBoneIndex = m_UFBIndices[UFB_BOUNDARY_UPPER];
