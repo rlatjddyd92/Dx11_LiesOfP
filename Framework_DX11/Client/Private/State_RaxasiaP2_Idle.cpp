@@ -56,6 +56,12 @@ void CState_RaxasiaP2_Idle::Update(_float fTimeDelta)
 
     if (m_fIdleEndDuration <= m_fIdleTime)
     {
+        if (m_bFirstAct)
+        {
+            m_bFirstAct = false;
+            m_pMonster->Change_State(CRaxasia::ATKP2_DECLAREWAR);
+            return;
+        }
         if (fDist >= 30.f)
         {
             return;
@@ -63,6 +69,7 @@ void CState_RaxasiaP2_Idle::Update(_float fTimeDelta)
 
         if (fDist <= 15.f)
         {
+
             ++m_iAtkTrack;
             Calc_Act_Attack(fDist);
             return;
@@ -108,7 +115,7 @@ void CState_RaxasiaP2_Idle::End_State()
 
 void CState_RaxasiaP2_Idle::Calc_Act_Attack(_float fDist)
 {
-    if (m_iAtkTrack >= 11)
+    if (m_iAtkTrack >= 10)
     {
         m_iAtkTrack = 0.f;
     }
@@ -148,14 +155,10 @@ void CState_RaxasiaP2_Idle::Calc_Act_Attack(_float fDist)
         return;
 
     case 8:
-        m_pMonster->Change_State(CRaxasia::ATKP2_DECLAREWAR);
-        return;
-
-    case 9:
         m_pMonster->Change_State(CRaxasia::ATKP2_SHIELDRUSH);
         return;
 
-    case 10:
+    case 9:
         m_pMonster->Change_State(CRaxasia::ATKP2_SHIELDLINKED);
         return;
 

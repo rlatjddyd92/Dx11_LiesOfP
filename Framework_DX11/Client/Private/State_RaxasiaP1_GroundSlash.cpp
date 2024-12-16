@@ -43,7 +43,7 @@ void CState_RaxasiaP1_GroundSlash::Update(_float fTimeDelta)
         {
             m_iRouteTrack = 0;
         }
-
+        m_iRouteTrack = 2;
         switch (m_iRouteTrack)
         {
         case 0:

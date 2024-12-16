@@ -29,6 +29,8 @@ private:
 
 
     _bool               m_bSwing = { false };
+    _bool               m_bCharge = { false };
+    _bool               m_bRush = { false };
 
     _bool               m_bSwingSound = { false };
 

@@ -25,6 +25,9 @@ HRESULT CState_RaxasiaP2_ShieldRush::Start_State(void* pArg)
     m_bSwingSound = false;
 
     m_bSwing = false;
+    m_bCharge = false;
+    m_bRush = false;
+
     return S_OK;
 }
 
@@ -70,6 +73,7 @@ void CState_RaxasiaP2_ShieldRush::Update(_float fTimeDelta)
 
 void CState_RaxasiaP2_ShieldRush::End_State()
 {
+    m_pMonster->DeActive_Effect(CRaxasia::EFFECT_INCHENTSWORD_P2);
 }
 
 _bool CState_RaxasiaP2_ShieldRush::End_Check()
@@ -116,7 +120,31 @@ void CState_RaxasiaP2_ShieldRush::Collider_Check(_double CurTrackPos)
 
 void CState_RaxasiaP2_ShieldRush::Effect_Check(_double CurTrackPos)
 {
-
+    if (m_iRouteTrack == 0)
+    {
+        if (!m_bCharge)
+        {
+            if (CurTrackPos >= 35.f)
+            {
+                m_pMonster->Active_Effect(CRaxasia::EFFECT_INCHENTSWORD_P2, true);
+                m_bCharge = true;
+            }
+        }
+    }
+    else if (m_iRouteTrack == 1)
+    {
+        if (CurTrackPos >= 7.f && CurTrackPos <= 100.f)
+        {
+            if (!m_bRush)
+            {
+                m_pMonster->Active_Effect(CRaxasia::EFFECT_SHIELDDASH, true);
+            }
+        }
+        else
+        {
+            m_pMonster->DeActive_Effect(CRaxasia::EFFECT_SHIELDDASH);
+        }
+    }
 }
 
 void CState_RaxasiaP2_ShieldRush::Control_Sound(_double CurTrackPos)
