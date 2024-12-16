@@ -26,7 +26,6 @@ HRESULT CState_Raxasia_CutScene_Meet::Start_State(void* pArg)
     // 모델이 달라서 여기서 해주기
     m_iAnimation_Meet = m_pMonster->Get_Model()->Find_AnimationIndex("AS_Raxasia_Raxasia_Phase1_C06_Renew_CINE", 1.f);
     m_pMonster->Get_Model()->Set_SpeedPerSec(m_iAnimation_Meet, 19.0);
-
     
     m_pMonster->Change_Animation(m_iAnimation_Meet, false, 0.f, 0);
 

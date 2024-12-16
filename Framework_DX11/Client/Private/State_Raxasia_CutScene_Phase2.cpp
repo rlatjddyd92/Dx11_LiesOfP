@@ -84,6 +84,11 @@ void CState_Raxasia_CutScene_Phase2::Update(_float fTimeDelta)
         m_pShieldWeapon->ChangeSocketMatrix(m_pMonster->Get_Model()->Get_BoneCombindTransformationMatrix_Ptr(36));
         m_isConneectLeftHandShield = true;
     }
+
+    if (iFrame > 431)
+    {
+        m_pMonster->Stop_Animation();
+    }
     //m_fDelay += fTimeDelta;
     //if (m_fDelay >= 0.1f && !m_isStartCutScene)
     //{

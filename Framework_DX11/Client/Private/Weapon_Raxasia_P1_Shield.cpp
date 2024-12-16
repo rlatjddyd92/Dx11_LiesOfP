@@ -101,8 +101,8 @@ void CWeapon_Raxasia_P1_Shield::Update(_float fTimeDelta)
 
 	//m_pModelCom->Set_PreTranformMatrix(PreTransformMatrix);
 
-	//_Vec3 vv = _Vec3(fX, fY, fZ);
-	//m_pTransformCom->Set_State(CTransform::STATE_POSITION, vv);
+	_Vec3 vv = _Vec3(fX, fY, fZ);
+	m_pTransformCom->Set_State(CTransform::STATE_POSITION, vv);
 
 	m_pColliderCom->Update(&m_WorldMatrix);
 }
