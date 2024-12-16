@@ -66,7 +66,7 @@ void CUIPage_Telepot::Update(_float fTimeDelta)
 		m_pScroll_Telepot->Initialize_Scroll(m_vecPart[_int(PART_GROUP::TELEPOT_List_Area)], m_vecPart[_int(PART_GROUP::TELEPOT_Scroll_Bar)], SCROLL_AREA::SCROLL_TELEPOT, true, false);
 		Page_Setting();
 	}
-		
+	
 }
 
 void CUIPage_Telepot::Late_Update(_float fTimeDelta)
@@ -161,14 +161,9 @@ void CUIPage_Telepot::Page_Setting()
 	m_vecTelepot_Dest[3]->iDestination_Navi_Index = 227; // 마누스 보스전
 
 	m_vecTelepot_Dest[0]->strDest_Name = TEXT("아르케 대수도원 입구"); 
-	m_vecTelepot_Dest[1]->strDest_Name = TEXT("전투 : 락사시아");
+	m_vecTelepot_Dest[1]->strDest_Name = TEXT("결전 : 락사시아");
 	m_vecTelepot_Dest[2]->strDest_Name = TEXT("대수도원 원형계단");
-	m_vecTelepot_Dest[3]->strDest_Name = TEXT("전투 : 마누스");
-
-	//Test
-	//m_vecTelepot_Dest[0]->bIsInactive = true;
-	//m_vecTelepot_Dest[1]->bIsNow = true;
-
+	m_vecTelepot_Dest[3]->strDest_Name = TEXT("결전 : 마누스");
 }
 
 void CUIPage_Telepot::Action_Scroll(_float fTimeDelta)

@@ -147,6 +147,9 @@ public: // 외부에서 매니저 접근
 
 	// 안내 표시 
 	void Show_Region_Info(_wstring strName, _wstring strDesc, _float fTime_Emerge = 1.f, _float fTime_Show = 2.f) { m_pUIManager->Show_Region_Info(strName, strDesc, fTime_Emerge, fTime_Show); }
+	void Reservate_Region_Info(_int iCellnum) { m_pUIManager->Reservate_Region_Info(iCellnum); }
+	void Show_Reservate_Region_Info() { m_pUIManager->Show_Reservate_Region_Info(); }
+
 	void Show_Inform(INFORM_MESSAGE eInform, _float fTime_Emerge = 1.f, _float fTime_Show = 2.f) { m_pUIManager->Show_Inform(eInform, fTime_Emerge, fTime_Show); }
 	void Show_Heart(_wstring strScript, _float fTime_Emerge = 1.f, _float fTime_Show = 2.f) { m_pUIManager->Show_Heart(strScript, fTime_Emerge, fTime_Show); }
 

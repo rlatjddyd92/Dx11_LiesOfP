@@ -8,6 +8,8 @@
 #include "Effect_Container.h"
 #include "Effect_Manager.h"
 
+#include "GameInterface_Controller.h"
+
 CStargazer::CStargazer(ID3D11Device* pDevice, ID3D11DeviceContext* pContext)
 	: CGameObject{ pDevice, pContext }
 {
@@ -126,6 +128,7 @@ void CStargazer::Update(_float fTimeDelta)
 	{
 		m_isOpening = false;
 		m_isOpened = true;
+		GET_GAMEINTERFACE->Show_Inform(INFORM_MESSAGE::INFORM_STARGAZER);
 		m_Effects[0]->Set_Loop(true);
 		m_pCurrentModel->SetUp_NextAnimation(m_iAnim_OpenIdle, true);
 	}

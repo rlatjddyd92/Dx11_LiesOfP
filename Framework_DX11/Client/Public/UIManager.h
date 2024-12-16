@@ -255,6 +255,9 @@ public:
 	_bool IsLeft_LastSelect_Result() { return m_pUIPage_Talking->IsLeft_LastSelect_Result(); }
 
 	void Show_Region_Info(_wstring strName, _wstring strDesc, _float fTime_Emerge = 1.f, _float fTime_Show = 2.f) { m_pUIPage_Inform->Show_Region_Info(strName, strDesc, fTime_Emerge, fTime_Show); }
+	void Reservate_Region_Info(_int iCellnum);
+	void Show_Reservate_Region_Info();
+
 	void Show_Inform(INFORM_MESSAGE eInform, _float fTime_Emerge = 1.f, _float fTime_Show = 2.f) { m_pUIPage_Inform->Show_Inform(eInform, fTime_Emerge, fTime_Show); }
 	void Show_Heart(_wstring strScript, _float fTime_Emerge = 1.f, _float fTime_Show = 2.f) { m_pUIPage_Inform->Show_Heart(strScript, fTime_Emerge, fTime_Show); }
 
@@ -420,6 +423,8 @@ private:
 
 	_bool m_bMute = false;
 	_float m_fVolume_Origin = 0.f;
+
+	_int m_iReservated_Region = -1;
 
 	// test code
 #ifdef _DEBUG

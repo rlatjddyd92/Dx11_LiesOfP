@@ -105,6 +105,10 @@ HRESULT CUIPage_Inform::Ready_UIPart_Group_Control()
 
 void CUIPage_Inform::Show_Region_Info(_wstring strName, _wstring strDesc, _float fTime_Emerge, _float fTime_Show)
 {
+	m_vecPageAction[_int(PAGEACTION::ACTION_ACTIVE)] = true;
+	m_vecPageAction[_int(PAGEACTION::ACTION_INACTIVE)] = false;
+	m_bUpdate = true;
+	m_fTopPartMove = -1.f;
 	m_vLifeTime_Region = { 0.f, fTime_Emerge , fTime_Show };
 
 	for (_int i = _int(PART_GROUP::INFORM_Region_Fx); i <= _int(PART_GROUP::INFORM_Region_Desc); ++i)
@@ -120,6 +124,10 @@ void CUIPage_Inform::Show_Region_Info(_wstring strName, _wstring strDesc, _float
 
 void CUIPage_Inform::Show_Inform(INFORM_MESSAGE eInform, _float fTime_Emerge, _float fTime_Show)
 {
+	m_vecPageAction[_int(PAGEACTION::ACTION_ACTIVE)] = true;
+	m_vecPageAction[_int(PAGEACTION::ACTION_INACTIVE)] = false;
+	m_bUpdate = true;
+	m_fTopPartMove = -1.f;
 	m_vLifeTime_Inform = { 0.f, fTime_Emerge , fTime_Show };
 
 	_int iIndex = _int(PART_GROUP::INFORM_Dead) + _int(eInform);
@@ -139,6 +147,10 @@ void CUIPage_Inform::Show_Inform(INFORM_MESSAGE eInform, _float fTime_Emerge, _f
 
 void CUIPage_Inform::Show_Heart(_wstring strScript, _float fTime_Emerge, _float fTime_Show)
 {
+	m_vecPageAction[_int(PAGEACTION::ACTION_ACTIVE)] = true;
+	m_vecPageAction[_int(PAGEACTION::ACTION_INACTIVE)] = false;
+	m_bUpdate = true;
+	m_fTopPartMove = -1.f;
 	m_vLifeTime_Heart = { 0.f, fTime_Emerge , fTime_Show };
 
 	for (_int i = _int(PART_GROUP::INFORM_Heart); i <= _int(PART_GROUP::INFORM_Text_Front); ++i)
@@ -160,6 +172,7 @@ void CUIPage_Inform::Update_Region(_float fTimeDelta)
 	{
 		for (_int i = _int(PART_GROUP::INFORM_Region_Fx); i <= _int(PART_GROUP::INFORM_Region_Desc); ++i)
 			m_vecPart[i]->bRender = false;
+
 	}	
 	else
 	{
@@ -179,6 +192,7 @@ void CUIPage_Inform::Update_Inform(_float fTimeDelta)
 	{
 		for (_int i = _int(PART_GROUP::INFORM_Common_Fx); i <= _int(PART_GROUP::INFORM_Stargazer); ++i)
 			m_vecPart[i]->bRender = false;
+
 	}
 	else
 	{
@@ -198,6 +212,7 @@ void CUIPage_Inform::Update_Heart(_float fTimeDelta)
 	{
 		for (_int i = _int(PART_GROUP::INFORM_Heart); i <= _int(PART_GROUP::INFORM_Text_Front); ++i)
 			m_vecPart[i]->bRender = false;
+
 	}
 	else
 	{

@@ -153,6 +153,8 @@ void CState_Player_Teleport::Update_SteppingStone(_float fTimeDelta)
         if (!m_isFadeOut && iFrame >= 110)
         {
             GET_GAMEINTERFACE->Fade_Out(TEXT(""), TEXT(""));
+            GET_GAMEINTERFACE->UIPart_Off();
+            GET_GAMEINTERFACE->Reservate_Region_Info(m_iStargazerCellNum);
             m_isFadeOut = true;
         }
         else if (iFrame >= 150)
@@ -167,6 +169,7 @@ void CState_Player_Teleport::Update_SteppingStone(_float fTimeDelta)
             m_pPlayer->Change_Animation(m_iAnimation_TeleportEnd, false, 0.3f);
 
             GET_GAMEINTERFACE->Fade_In(0.7f);
+            GET_GAMEINTERFACE->UIPart_On();
             m_isFadeOut = true;
 
             CEffect_Manager::Get_Instance()->Add_Effect_ToLayer(LEVEL_GAMEPLAY, TEXT("Player_Teleport_Arrive"), (_Vec3)m_pPlayer->Get_Transform()->Get_State(CTransform::STATE_POSITION));
@@ -215,6 +218,9 @@ void CState_Player_Teleport::Update_Stargazer(_float fTimeDelta)
         if (!m_isFadeOut && iFrame >= 110)
         {
             GET_GAMEINTERFACE->Fade_Out(TEXT(""), TEXT(""));
+            GET_GAMEINTERFACE->UIPart_Off();
+            GET_GAMEINTERFACE->Reservate_Region_Info(m_iStargazerCellNum);
+
             m_isFadeOut = true;
         }
         if (iFrame >= 150)
@@ -230,6 +236,9 @@ void CState_Player_Teleport::Update_Stargazer(_float fTimeDelta)
             m_pPlayer->Change_Animation(m_iAnimation_TeleportEnd, false, 0.3f);
 
             GET_GAMEINTERFACE->Fade_In(0.7f);
+            GET_GAMEINTERFACE->UIPart_On();
+            
+
             m_isFadeOut = true;
 
             CEffect_Manager::Get_Instance()->Add_Effect_ToLayer(LEVEL_GAMEPLAY, TEXT("Player_Teleport_Arrive"), (_Vec3)m_pPlayer->Get_Transform()->Get_State(CTransform::STATE_POSITION));

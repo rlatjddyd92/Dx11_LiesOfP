@@ -284,6 +284,8 @@ private:
 	// 그라인더 
 	_Vec2 m_vGrinder_Wait = { 0.f,2.f };
 
+	_bool m_bIsStart = true;
+
 private: // 테스트 변수
 	_bool m_bWeapon_Top = true;
 
