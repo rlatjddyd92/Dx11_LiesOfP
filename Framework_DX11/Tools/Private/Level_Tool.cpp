@@ -45,9 +45,12 @@ HRESULT CLevel_GamePlay::Initialize()
 	Desc.vRotation = { 0.f,0.f,0.f };
 	Desc.iRenderGroupID = 0;
 
-	strcpy_s(Desc.szModelTag, "SM_Monastery_WallDeco_01_TorchDeck01");
+	//strcpy_s(Desc.szModelTag, "Prototype_Component_Model_Raxasia_Sword_CutScene");
 	//if (FAILED(m_pGameInstance->Add_CloneObject_ToLayer(LEVEL_TOOL, TEXT("Layer_Torch"), TEXT("Prototype_GameObject_NonAnim"), &Desc)))
 	//	return E_FAIL;
+	strcpy_s(Desc.szModelTag, "Prototype_AnimModel_Raxasia_Sword01");
+	if (FAILED(m_pGameInstance->Add_CloneObject_ToLayer(LEVEL_TOOL, TEXT("Layer_Torch"), TEXT("Prototype_GameObject_NonAnim"), &Desc)))
+		return E_FAIL;
 	
 	//strcpy_s(Desc.szModelTag, "Prototype_Component_Model_FlameSword");
 	//if (FAILED(m_pGameInstance->Add_CloneObject_ToLayer(LEVEL_TOOL, TEXT("Layer_Weapon"), TEXT("Prototype_GameObject_NonAnim"), &Desc)))
@@ -56,8 +59,8 @@ HRESULT CLevel_GamePlay::Initialize()
 	//if (FAILED(m_pGameInstance->Add_CloneObject_ToLayer(LEVEL_TOOL, TEXT("Layer_BackGround"), TEXT("Prototype_GameObject_CutSceneodHand"))))
 	//	return E_FAIL;
 
-	if (FAILED(m_pGameInstance->Add_CloneObject_ToLayer(LEVEL_TOOL, TEXT("Layer_BackGround"), TEXT("Prototype_GameObject_ScissorHandle"))))
-		return E_FAIL;
+	//if (FAILED(m_pGameInstance->Add_CloneObject_ToLayer(LEVEL_TOOL, TEXT("Layer_BackGround"), TEXT("Prototype_GameObject_ScissorHandle"))))
+	//	return E_FAIL;
 
 	return S_OK;
 }

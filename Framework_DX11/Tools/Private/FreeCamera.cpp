@@ -44,28 +44,30 @@ void CFreeCamera::Priority_Update(_float fTimeDelta)
 
 	if (true == CController_EffectTool::Get_Instance()->Get_JunhoCamera())
 	{
+		_float fAccel = 0.05f;
 		if(KEY_HOLD(KEY::LSHIFT))
 		{
-			if (KEY_HOLD(KEY::W))
-				m_pTransformCom->Go_Straight(fTimeDelta * 0.25f);
-			if (KEY_HOLD(KEY::S))
-				m_pTransformCom->Go_Backward(fTimeDelta * 0.25f);
-			if (KEY_HOLD(KEY::A))
-				m_pTransformCom->Go_Left(fTimeDelta * 0.25f);
-			if (KEY_HOLD(KEY::D))
-				m_pTransformCom->Go_Right(fTimeDelta * 0.25f);
+			fAccel = 0.25f;
 		}
+		if (KEY_HOLD(KEY::W))
+			m_pTransformCom->Go_Straight(fTimeDelta * fAccel);
+		if (KEY_HOLD(KEY::S))
+			m_pTransformCom->Go_Backward(fTimeDelta * fAccel);
+		if (KEY_HOLD(KEY::A))
+			m_pTransformCom->Go_Left(fTimeDelta * fAccel);
+		if (KEY_HOLD(KEY::D))
+			m_pTransformCom->Go_Right(fTimeDelta * fAccel);
 
 		if (KEY_HOLD(KEY::CTRL))
 		{
 			_Vec3 vPos = _Vec3(m_pTransformCom->Get_State(CTransform::STATE_POSITION));
-			vPos.y -= 10.f * fTimeDelta;
+			vPos.y -= fTimeDelta * 30.f * fAccel;
 			m_pTransformCom->Set_State(CTransform::STATE_POSITION, vPos);
 		}
 		if (KEY_HOLD(KEY::SPACE))
 		{
 			_Vec3 vPos = _Vec3(m_pTransformCom->Get_State(CTransform::STATE_POSITION));
-			vPos.y += 10.f * fTimeDelta;
+			vPos.y += fTimeDelta * 30.f * fAccel;
 			m_pTransformCom->Set_State(CTransform::STATE_POSITION, vPos);
 		}
 
@@ -75,7 +77,6 @@ void CFreeCamera::Priority_Update(_float fTimeDelta)
 			{
 				m_pTransformCom->Turn(XMVectorSet(0.f, 1.f, 0.f, 0.f), fTimeDelta * MouseMove * 0.1f);
 			}
-
 			if (MouseMove = ptMouse.y - m_ptOldMousePos.y)
 			{
 				m_pTransformCom->Turn(m_pTransformCom->Get_State(CTransform::STATE_RIGHT), fTimeDelta * MouseMove * 0.1f);
