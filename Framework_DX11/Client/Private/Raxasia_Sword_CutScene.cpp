@@ -66,36 +66,37 @@ void CRaxasia_Sword_CutScene::Update(_float fTimeDelta)
 		m_pModelCom->Update_Bone();
 
 
-	static _float fX = -0.4f;
-	static _float fY = 0.3f;
-	static _float fZ = -0.8f;
+	static _float fX = -90.f;
+	static _float fY = 0.f;
+	static _float fZ = 65.f;
+
 	_matrix		PreTransformMatrix = XMMatrixIdentity();	
 	
 	if (KEY_TAP(KEY::NUM1))
 	{
-		fX -= 0.05f;
+		fX -= 5.f;
 	}
 	else if (KEY_TAP(KEY::NUM2))
 	{
-		fX += 0.05f;
+		fX += 5.f;
 	}
 
 	if (KEY_TAP(KEY::NUM3))
 	{
-		fY -= 0.05f;
+		fY -= 5.f;
 	}
 	else if (KEY_TAP(KEY::NUM4))
 	{
-		fY += 0.05f;
+		fY += 5.f;
 	}
 
 	if (KEY_TAP(KEY::NUM5))
 	{
-		fZ -= 0.05f;
+		fZ -= 5.f;
 	}
 	else if (KEY_TAP(KEY::NUM6))
 	{
-		fZ += 0.05f;
+		fZ += 5.f;
 	}
 
 

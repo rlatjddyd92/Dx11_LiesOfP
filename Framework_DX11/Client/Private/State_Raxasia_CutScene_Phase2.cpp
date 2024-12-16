@@ -26,6 +26,7 @@ HRESULT CState_Raxasia_CutScene_Phase2::Start_State(void* pArg)
 {
     // 모델이 달라서 여기서 해주기
     m_iAnimation_Phase2 = m_pMonster->Get_Model()->Find_AnimationIndex("AS_Raxasia_Raxasia_Phase2_C00_CINE", 1.f);
+    m_pMonster->Get_Model()->Set_SpeedPerSec(m_iAnimation_Phase2, 29.4);
 
     m_pMonster->Change_Animation(m_iAnimation_Phase2, false, 0.f, 0);
 
@@ -45,8 +46,6 @@ void CState_Raxasia_CutScene_Phase2::Update(_float fTimeDelta)
 
     _uint iCurAnim = m_pMonster->Get_CurrentAnimIndex();
 
-
-
     if (!m_isOnGroundWeapon && iFrame > 100)    // 검 위치 땅에 고정하기
     {
         m_pCutSceneWeapon->Stop_UpdatePos();
@@ -54,7 +53,7 @@ void CState_Raxasia_CutScene_Phase2::Update(_float fTimeDelta)
     }
     else if (!m_isConneectLeftHandShield && iFrame > 430)   // 방패 분리하기
     {
-        _Vec3 vShieldOffset = _Vec3(0.225f, -0.325f, 0.155f);
+        _Vec3 vShieldOffset = _Vec3(0.225f, -0.325f, 0.145f);
         _matrix PreTransformMatrix = XMMatrixScaling(0.015f, 0.015f, 0.015f) * XMMatrixRotationX(XMConvertToRadians(195.f)) * XMMatrixRotationY(XMConvertToRadians(-180.f)) * XMMatrixRotationZ(XMConvertToRadians(15.f));
 
         m_pShieldWeapon->ChangeSocketMatrix(m_pMonster->Get_Model()->Get_BoneCombindTransformationMatrix_Ptr(36));
@@ -66,6 +65,9 @@ void CState_Raxasia_CutScene_Phase2::Update(_float fTimeDelta)
     else if (!m_isChangeWeaponPos && iFrame > 500)      // 검 위치 나중을 위해 위치 바꾸기
     {
         _Vec3 vPos = _Vec3(-59.28147f, -96.39721f, -27.10989f);
+        _matrix PreTransformMatrix = XMMatrixScaling(0.015f, 0.015f, 0.015f) * XMMatrixRotationX(XMConvertToRadians(-90.f)) * XMMatrixRotationZ(XMConvertToRadians(58.f));
+
+        m_pCutSceneWeapon->Get_Model()->Set_PreTranformMatrix(PreTransformMatrix);
         m_pCutSceneWeapon->Set_Pos(vPos);
 
         m_isChangeWeaponPos = true;
@@ -78,11 +80,14 @@ void CState_Raxasia_CutScene_Phase2::Update(_float fTimeDelta)
     else if (!m_isReConnetWeaponBone && iFrame > 786)      // 다시 검 들고 방패 뼈 다시 세팅하기
     {
         _Vec3 vOffset = _Vec3(0.f, 0.f, 0.f);
+        _matrix PreTransformMatrix = XMMatrixScaling(0.015f, 0.015f, 0.015f) * XMMatrixRotationX(XMConvertToRadians(-90.f));
+
         m_pCutSceneWeapon->Set_Offset(vOffset);
+        m_pCutSceneWeapon->Get_Model()->Set_PreTranformMatrix(PreTransformMatrix);
         m_pCutSceneWeapon->Start_UpdatePos();
 
         _Vec3 vShieldOffset = _Vec3(0.66f, -0.39f, 0.21f);
-        _matrix PreTransformMatrix = XMMatrixScaling(0.015f, 0.015f, 0.015f) * XMMatrixRotationX(XMConvertToRadians(280.f)) * XMMatrixRotationY(XMConvertToRadians(-190.f)) * XMMatrixRotationZ(XMConvertToRadians(100.f));
+       PreTransformMatrix = XMMatrixScaling(0.015f, 0.015f, 0.015f) * XMMatrixRotationX(XMConvertToRadians(280.f)) * XMMatrixRotationY(XMConvertToRadians(-190.f)) * XMMatrixRotationZ(XMConvertToRadians(100.f));
 
         m_pShieldWeapon->Get_Transform()->Set_State(CTransform::STATE_POSITION, vShieldOffset);
         m_pShieldWeapon->Get_Model()->Set_PreTranformMatrix(PreTransformMatrix);
@@ -90,9 +95,9 @@ void CState_Raxasia_CutScene_Phase2::Update(_float fTimeDelta)
 
         m_isReConnetWeaponBone = true;
     }
-    else if(!m_isPlayWeaponChangeAnim && iFrame > 925)      // 검 애니메이션 재생하기
+    else if(!m_isPlayWeaponChangeAnim && iFrame > 905)      // 검 애니메이션 재생하기
     {
-        m_pCutSceneWeapon->Play_Animation("AS_Sword_Raxasia_Phase2_C06_CINE");
+        m_pCutSceneWeapon->Play_Animation("AS_Sword_Raxasia_Phase2_C06_CINE", 1.6f);
         m_isPlayWeaponChangeAnim = true;
     }
 
