@@ -46,14 +46,14 @@ HRESULT CTexture_Effect::Initialize(void* pArg)
 
 void CTexture_Effect::Priority_Update(_float fTimeDelta)
 {
-    if (true == m_isDead)
-        return;
+    if (false == m_isActive)
+        m_isActive = true;
 
 }
 
 void CTexture_Effect::Update(_float fTimeDelta)
 {
-    if (true == m_isDead)
+    if (false == m_isActive)
         return;
 
     if (true == m_isReset && true == m_DefaultDesc.bLoop)
@@ -110,7 +110,7 @@ void CTexture_Effect::Update(_float fTimeDelta)
 
 void CTexture_Effect::Late_Update(_float fTimeDelta)
 {
-    if (true == m_isDead)
+    if (false == m_isActive)
         return;
 
     m_fAccumulateTime += fTimeDelta;
@@ -120,7 +120,10 @@ void CTexture_Effect::Late_Update(_float fTimeDelta)
         if (true == m_DefaultDesc.bLoop)
             m_isReset = true;
         else
+        {
             m_isDead = true;
+            m_isActive = false;
+        }
     }
 
     if (CRenderer::RG_END <= m_RenderDesc.iRenderGroup)
@@ -194,6 +197,7 @@ void CTexture_Effect::Reset()
     m_vCurrentTileMove = { 0.f, 0.f };
 
     m_DefaultDesc = m_InitDesc;
+    m_isActive = false;
     m_isDead = false;
 
     m_pTransformCom->Set_State(CTransform::STATE_POSITION, m_DefaultDesc.vPos);

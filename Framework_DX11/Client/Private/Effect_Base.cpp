@@ -27,11 +27,14 @@ HRESULT CEffect_Base::Initialize(void* pArg)
     m_pParentMatrix = pDesc->pParentMatrix;
     m_RenderDesc = pDesc->RenderDesc;
 
+    m_isActive = false;
+
     return S_OK;
 }
 
 void CEffect_Base::Priority_Update(_float fTimeDelta)
 {
+
 }
 
 void CEffect_Base::Update(_float fTimeDelta)
@@ -40,6 +43,7 @@ void CEffect_Base::Update(_float fTimeDelta)
 
 void CEffect_Base::Late_Update(_float fTimeDelta)
 {
+
 }
 
 HRESULT CEffect_Base::Render()

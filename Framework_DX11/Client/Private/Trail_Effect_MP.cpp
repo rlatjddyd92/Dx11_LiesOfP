@@ -43,10 +43,15 @@ HRESULT CTrail_Effect_MP::Initialize(void* pArg)
 
 void CTrail_Effect_MP::Priority_Update(_float fTimeDelta)
 {
+	if (false == m_isActive)
+		m_isActive = true;
 }
 
 void CTrail_Effect_MP::Update(_float fTimeDelta)
 {
+	if (false == m_isActive)
+		return;
+
 	__super::Set_WorldMatrix();
 
 	// 값 제대로 안채우면 컴퓨트셰이더에서 무한루프 돌아감.
@@ -67,10 +72,11 @@ void CTrail_Effect_MP::Update(_float fTimeDelta)
 	Movement.fTimeDelta = fTimeDelta;
 	Movement.WorldMatrix = m_WorldMatrix;
 
-	
-
 	if (true == m_pVIBufferCom->DispatchCS(m_pActionCS, Movement))
+	{
 		m_isDead = true;
+		m_isActive = false;
+	}
 
 	if (0.f < m_DefaultDesc.fDuration && m_DefaultDesc.fDuration < m_fAccumulateTime)
 		m_DefaultDesc.iComputeState &= ~CVIBuffer_Instancing::STATE_LOOP;
@@ -79,6 +85,9 @@ void CTrail_Effect_MP::Update(_float fTimeDelta)
 
 void CTrail_Effect_MP::Late_Update(_float fTimeDelta)
 {
+	if (false == m_isActive)
+		return;
+
 	m_fAccumulateTime += fTimeDelta;
 
 	m_pGameInstance->Add_RenderObject((CRenderer::RENDERGROUP)m_RenderDesc.iRenderGroup, this);
@@ -158,6 +167,7 @@ void CTrail_Effect_MP::Reset()
 {
 	m_DefaultDesc = m_InitDesc;
 	m_isDead = false;
+	m_isActive = false;
 	m_fAccumulateTime = 0.f;
 
 	m_pTransformCom->Set_State(CTransform::STATE_POSITION, m_DefaultDesc.vPos);
