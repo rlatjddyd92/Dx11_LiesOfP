@@ -26,8 +26,8 @@ HRESULT CState_Player_Scissor_LAttack01::Initialize(_uint iStateNum, void* pArg)
     m_iColliderStartFrame = 27;
     m_iColliderEndFrame = 32;
 
-    m_iEffectStartFrame = 27;
-    m_iEffectEndFrame = 32;
+    m_iEffectStartFrame = 25;
+    m_iEffectEndFrame = 34;
 
     return S_OK;
 }
@@ -134,12 +134,12 @@ void CState_Player_Scissor_LAttack01::Control_Sound()
 
 void CState_Player_Scissor_LAttack01::Control_Effect(_int iFrame)
 {
-    if (!m_isActiveEffect && (m_iEffectStartFrame <= iFrame && iFrame == m_iEffectEndFrame))
+    if (!m_isActiveEffect && m_iEffectStartFrame <= iFrame)
     {
         m_pPlayer->Active_WeaponEffect(CWeapon_Scissor::EFFECT_BASE);
         m_isActiveEffect = true;
     }
-    else
+    else if (m_isActiveEffect && m_iEffectEndFrame < iFrame)
     {
         m_pPlayer->DeActive_WeaponEffect(CWeapon_Scissor::EFFECT_BASE);
     }

@@ -3,7 +3,7 @@
 #include "GameInstance.h"
 #include "Model.h"
 #include "Player.h"
-#include "Weapon.h"
+#include "Weapon_Scissor.h"
 
 CState_Player_Scissor_RAttack01::CState_Player_Scissor_RAttack01(CFsm* pFsm, CPlayer* pPlayer)
     :CState{ pFsm }
@@ -27,9 +27,13 @@ HRESULT CState_Player_Scissor_RAttack01::Initialize(_uint iStateNum, void* pArg)
 
     m_iColliderStartFrameLeft = 33;
     m_iColliderEndFrameLeft = 40;
-
     m_iColliderStartFrameRight = 10;
     m_iColliderEndFrameRight = 17;
+
+    m_iLeftEffectStartFrame = 27;
+    m_iLeftEffectEndFrame = 44;
+    m_iRightEffectStartFrame = 2;
+    m_iRightEffectEndFrame = 15;
 
     return S_OK;
 }
@@ -43,6 +47,9 @@ HRESULT CState_Player_Scissor_RAttack01::Start_State(void* pArg)
     m_fRButtonTime = 0.f;
 
     m_pPlayer->Set_WeaponStrength(ATK_NORMAL);
+
+    m_isLeftActiveEffect = false;
+    m_isRightActiveEffect = false;
 
     return S_OK;
 }
@@ -103,6 +110,7 @@ void CState_Player_Scissor_RAttack01::Update(_float fTimeDelta)
      }
 
      Control_Collider();
+     Control_Effect(iFrame);
 }
 
 void CState_Player_Scissor_RAttack01::End_State()
@@ -138,6 +146,29 @@ void CState_Player_Scissor_RAttack01::Control_Collider()
         {
             m_pPlayer->DeActive_CurretnWeaponCollider(0);
         }
+    }
+}
+
+void CState_Player_Scissor_RAttack01::Control_Effect(_int iFrame)
+{
+    if (!m_isLeftActiveEffect && m_iLeftEffectStartFrame <= iFrame)
+    {
+        m_pPlayer->Active_WeaponEffect(CWeapon_Scissor::EFFECT_BASE, true, 1);
+        m_isLeftActiveEffect = true;
+    }
+    else if (m_isLeftActiveEffect && m_iLeftEffectEndFrame < iFrame)
+    {
+        m_pPlayer->DeActive_WeaponEffect(CWeapon_Scissor::EFFECT_BASE, 1);
+    }
+
+    if (!m_isRightActiveEffect && m_iRightEffectStartFrame <= iFrame)
+    {
+        m_pPlayer->Active_WeaponEffect(CWeapon_Scissor::EFFECT_BASE, true, 0);
+        m_isRightActiveEffect = true;
+    }
+    else if (m_isRightActiveEffect && m_iRightEffectEndFrame < iFrame)
+    {
+        m_pPlayer->DeActive_WeaponEffect(CWeapon_Scissor::EFFECT_BASE, 0);
     }
 }
 

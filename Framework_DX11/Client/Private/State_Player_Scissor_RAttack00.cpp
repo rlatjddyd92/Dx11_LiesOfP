@@ -30,10 +30,10 @@ HRESULT CState_Player_Scissor_RAttack00::Initialize(_uint iStateNum, void* pArg)
     m_iColliderStartFrameRight = 30;
     m_iColliderEndFrameRight = 35;
 
-    m_iLeftEffectStartFrame = 15;
-    m_iLeftEffectEndFrame = 20;
-    m_iRightEffectStartFrame = 30;
-    m_iRightEffectEndFrame = 35;
+    m_iLeftEffectStartFrame = 11;
+    m_iLeftEffectEndFrame = 24;
+    m_iRightEffectStartFrame = 26;
+    m_iRightEffectEndFrame = 39;
 
     return S_OK;
 }
@@ -152,24 +152,25 @@ void CState_Player_Scissor_RAttack00::Control_Collider()
 
 void CState_Player_Scissor_RAttack00::Control_Effect(_int iFrame)
 {
-    if (m_iLeftEffectStartFrame <= iFrame && iFrame <= m_iLeftEffectEndFrame)
+    if (!m_isLeftActiveEffect && m_iLeftEffectStartFrame <= iFrame)
     {
         m_pPlayer->Active_WeaponEffect(CWeapon_Scissor::EFFECT_BASE, true, 1);
+        m_isLeftActiveEffect = true;
     }
-    else
+    else if (m_isLeftActiveEffect && m_iLeftEffectEndFrame < iFrame)
     {
-        //m_pPlayer->DeActive_WeaponEffect(CWeapon_Scissor::EFFECT_BASE, 1);
+        m_pPlayer->DeActive_WeaponEffect(CWeapon_Scissor::EFFECT_BASE, 1);
     }
 
-    if (m_iColliderStartFrameRight <= iFrame && iFrame <= m_iColliderEndFrameRight)
+    if (!m_isRightActiveEffect && m_iRightEffectStartFrame <= iFrame)
     {
         m_pPlayer->Active_WeaponEffect(CWeapon_Scissor::EFFECT_BASE, true, 0);
+        m_isRightActiveEffect = true;
     }
-    else
+    else if (m_isRightActiveEffect && m_iRightEffectEndFrame < iFrame)
     {
-        //m_pPlayer->DeActive_WeaponEffect(CWeapon_Scissor::EFFECT_BASE, 0);
+        m_pPlayer->DeActive_WeaponEffect(CWeapon_Scissor::EFFECT_BASE, 0);
     }
-
 }
 
 CState_Player_Scissor_RAttack00* CState_Player_Scissor_RAttack00::Create(CFsm* pFsm, CPlayer* pPlayer, _uint iStateNum, void* pArg)
