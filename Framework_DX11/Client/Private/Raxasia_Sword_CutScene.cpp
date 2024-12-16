@@ -192,7 +192,7 @@ void CRaxasia_Sword_CutScene::Play_Animation(_char* szAnimationName, _float fSpe
 {
 	_uint iAnimationIndex = m_pModelCom->Find_AnimationIndex(szAnimationName, fSpeedRation);
 
-	m_pModelCom->SetUp_NextAnimation(iAnimationIndex, false, 0.f, 1, true, true);
+	m_pModelCom->SetUp_NextAnimation(iAnimationIndex, false, 0.f, 0, true, true);
 
 	m_isPlayAnimation = true;
 }

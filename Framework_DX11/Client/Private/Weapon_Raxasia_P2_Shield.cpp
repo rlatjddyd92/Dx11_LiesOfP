@@ -60,9 +60,87 @@ void CWeapon_Raxasia_P2_Shield::Update(_float fTimeDelta)
 	if (!m_isActive)
 		return;
 
+	static _float fXPos = 0.66f;
+	static _float fYPos = -0.39f;
+	static _float fZPos = 0.21f;
+
+	static _float fXRot = 280.f;
+	static _float fYRot = -190.f;
+	static _float fZRot = 100.f;
+
+	_matrix		PreTransformMatrix = XMMatrixIdentity();
+
+	if (KEY_HOLD(KEY::CTRL))
+	{
+		if (KEY_TAP(KEY::NUM1))
+		{
+			fXRot -= 5.f;
+		}
+		else if (KEY_TAP(KEY::NUM2))
+		{
+			fXRot += 5.f;
+		}
+
+		if (KEY_TAP(KEY::NUM3))
+		{
+			fYRot -= 5.f;
+		}
+		else if (KEY_TAP(KEY::NUM4))
+		{
+			fYRot += 5.f;
+		}
+
+		if (KEY_TAP(KEY::NUM5))
+		{
+			fZRot -= 5.f;
+		}
+		else if (KEY_TAP(KEY::NUM6))
+		{
+			fZRot += 5.f;
+		}
+	}
+	else
+	{
+		if (KEY_TAP(KEY::NUM1))
+		{
+			fXPos -= 0.01f;
+		}
+		else if (KEY_TAP(KEY::NUM2))
+		{
+			fXPos += 0.01f;
+		}
+
+		if (KEY_TAP(KEY::NUM3))
+		{
+			fYPos -= 0.01f;
+		}
+		else if (KEY_TAP(KEY::NUM4))
+		{
+			fYPos += 0.01f;
+		}
+		if (KEY_TAP(KEY::NUM5))
+		{
+			fZPos -= 0.01f;
+		}
+		else if (KEY_TAP(KEY::NUM6))
+		{
+			fZPos += 0.01f;
+		}
+	}
+
+	if (m_Test)
+	{
+		PreTransformMatrix = XMMatrixScaling(0.015f, 0.015f, 0.015f) * XMMatrixRotationX(XMConvertToRadians(fXRot)) * XMMatrixRotationY(XMConvertToRadians(fYRot)) * XMMatrixRotationZ(XMConvertToRadians(fZRot));
+
+		m_pModelCom->Set_PreTranformMatrix(PreTransformMatrix);
+
+		_Vec3 vv = _Vec3(fXPos, fYPos, fZPos);
+		m_pTransformCom->Set_State(CTransform::STATE_POSITION, vv);
+	}
+
 	__super::Update(fTimeDelta);
 
-
+	
 	m_pColliderCom->Update(&m_WorldMatrix);
 }
 
@@ -141,7 +219,7 @@ HRESULT CWeapon_Raxasia_P2_Shield::Ready_Components()
 		return E_FAIL;
 
 	/* FOR.Com_Model */
-	if (FAILED(__super::Add_Component(LEVEL_GAMEPLAY, TEXT("Prototype_Component_Model_RaxasiaP1_Shield"),
+	if (FAILED(__super::Add_Component(LEVEL_GAMEPLAY, TEXT("Prototype_Component_Model_RaxasiaP2_Shield"),
 		TEXT("Com_Model"), reinterpret_cast<CComponent**>(&m_pModelCom))))
 		return E_FAIL;
 

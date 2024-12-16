@@ -18,6 +18,9 @@ private:
 	CWeapon_Raxasia_P2_Shield(const CWeapon_Raxasia_P2_Shield& Prototype);
 	virtual ~CWeapon_Raxasia_P2_Shield() = default;
 
+public :
+	void Set_Test() { m_Test = true; }
+
 public:
 	virtual HRESULT Initialize_Prototype() override;
 	virtual HRESULT Initialize(void* pArg) override;
@@ -40,6 +43,8 @@ private:
 
 private:
 	_bool   m_bStoppedSpin = { true };
+
+	_bool	m_Test = {};
 
 public:
 	static CWeapon_Raxasia_P2_Shield* Create(ID3D11Device* pDevice, ID3D11DeviceContext* pContext);
