@@ -43,7 +43,6 @@ HRESULT CState_Player_Scissor_RAttack01::Start_State(void* pArg)
     m_fRButtonTime = 0.f;
 
     m_pPlayer->Set_WeaponStrength(ATK_NORMAL);
-    m_pPlayer->Set_WeaponEffectType(CWeapon::ATK_EFFECT_GENERAL);
 
     return S_OK;
 }
@@ -108,7 +107,6 @@ void CState_Player_Scissor_RAttack01::Update(_float fTimeDelta)
 
 void CState_Player_Scissor_RAttack01::End_State()
 {
-    m_pPlayer->Set_WeaponEffectType(CWeapon::ATK_EFFECT_NOTHING);
     m_pPlayer->Combine_Scissor(true);
 }
 

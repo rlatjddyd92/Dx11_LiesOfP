@@ -4,7 +4,7 @@
 #include "Model.h"
 #include "Player.h"
 #include "Camera.h"
-#include "Weapon.h"
+#include "Weapon_Scissor.h"
 
 CState_Player_Scissor_LAttack01::CState_Player_Scissor_LAttack01(CFsm* pFsm, CPlayer* pPlayer)
     :CState{ pFsm }
@@ -26,6 +26,9 @@ HRESULT CState_Player_Scissor_LAttack01::Initialize(_uint iStateNum, void* pArg)
     m_iColliderStartFrame = 27;
     m_iColliderEndFrame = 32;
 
+    m_iEffectStartFrame = 27;
+    m_iEffectEndFrame = 32;
+
     return S_OK;
 }
 
@@ -38,9 +41,9 @@ HRESULT CState_Player_Scissor_LAttack01::Start_State(void* pArg)
     m_fRButtonTime = 0.f;
 
     m_isPlaySound = false;
+    m_isActiveEffect = false;
 
     m_pPlayer->Set_WeaponStrength(ATK_WEAK);
-    m_pPlayer->Set_WeaponEffectType(CWeapon::ATK_EFFECT_GENERAL);
 
     return S_OK;
 }
@@ -94,12 +97,12 @@ void CState_Player_Scissor_LAttack01::Update(_float fTimeDelta)
 
     Control_Collider();
     Control_Sound();
+    Control_Effect(iFrame);
 
 }
 
 void CState_Player_Scissor_LAttack01::End_State()
 {
-    m_pPlayer->Set_WeaponEffectType(CWeapon::ATK_EFFECT_NOTHING);
     m_pPlayer->DeActive_CurretnWeaponCollider();
 }
 
@@ -126,6 +129,19 @@ void CState_Player_Scissor_LAttack01::Control_Sound()
     {
         m_pPlayer->Play_CurrentWeaponSound(CWeapon::WEP_SOUND_EFFECT1, TEXT("SE_PC_SK_WS_Glaive_P_B_SS_02.wav"));
         m_isPlaySound = true;
+    }
+}
+
+void CState_Player_Scissor_LAttack01::Control_Effect(_int iFrame)
+{
+    if (!m_isActiveEffect && (m_iEffectStartFrame <= iFrame && iFrame == m_iEffectEndFrame))
+    {
+        m_pPlayer->Active_WeaponEffect(CWeapon_Scissor::EFFECT_BASE);
+        m_isActiveEffect = true;
+    }
+    else
+    {
+        m_pPlayer->DeActive_WeaponEffect(CWeapon_Scissor::EFFECT_BASE);
     }
 }
 

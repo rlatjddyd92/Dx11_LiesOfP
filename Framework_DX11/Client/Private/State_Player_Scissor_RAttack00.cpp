@@ -3,7 +3,7 @@
 #include "GameInstance.h"
 #include "Model.h"
 #include "Player.h"
-#include "Weapon.h"
+#include "Weapon_Scissor.h"
 
 CState_Player_Scissor_RAttack00::CState_Player_Scissor_RAttack00(CFsm* pFsm, CPlayer* pPlayer)
     :CState{ pFsm }
@@ -27,9 +27,13 @@ HRESULT CState_Player_Scissor_RAttack00::Initialize(_uint iStateNum, void* pArg)
 
     m_iColliderStartFrameLeft = 15;
     m_iColliderEndFrameLeft = 20;
-
     m_iColliderStartFrameRight = 30;
     m_iColliderEndFrameRight = 35;
+
+    m_iLeftEffectStartFrame = 15;
+    m_iLeftEffectEndFrame = 20;
+    m_iRightEffectStartFrame = 30;
+    m_iRightEffectEndFrame = 35;
 
     return S_OK;
 }
@@ -43,7 +47,9 @@ HRESULT CState_Player_Scissor_RAttack00::Start_State(void* pArg)
     m_fRButtonTime = 0.f;
 
     m_pPlayer->Set_WeaponStrength(ATK_NORMAL);
-    m_pPlayer->Set_WeaponEffectType(CWeapon::ATK_EFFECT_GENERAL);
+
+    m_isLeftActiveEffect = false;
+    m_isRightActiveEffect = false;
 
     return S_OK;
 }
@@ -105,11 +111,11 @@ void CState_Player_Scissor_RAttack00::Update(_float fTimeDelta)
     }
 
     Control_Collider();
+    Control_Effect(iFrame);
 }
 
 void CState_Player_Scissor_RAttack00::End_State()
 {
-   // m_pPlayer->Set_WeaponEffectType(CWeapon::ATK_EFFECT_NOTHING);
     m_pPlayer->Combine_Scissor(true);
 }
 
@@ -142,6 +148,28 @@ void CState_Player_Scissor_RAttack00::Control_Collider()
                 m_pPlayer->DeActive_CurretnWeaponCollider(0);
             }
     }
+}
+
+void CState_Player_Scissor_RAttack00::Control_Effect(_int iFrame)
+{
+    if (m_iLeftEffectStartFrame <= iFrame && iFrame <= m_iLeftEffectEndFrame)
+    {
+        m_pPlayer->Active_WeaponEffect(CWeapon_Scissor::EFFECT_BASE, true, 1);
+    }
+    else
+    {
+        //m_pPlayer->DeActive_WeaponEffect(CWeapon_Scissor::EFFECT_BASE, 1);
+    }
+
+    if (m_iColliderStartFrameRight <= iFrame && iFrame <= m_iColliderEndFrameRight)
+    {
+        m_pPlayer->Active_WeaponEffect(CWeapon_Scissor::EFFECT_BASE, true, 0);
+    }
+    else
+    {
+        //m_pPlayer->DeActive_WeaponEffect(CWeapon_Scissor::EFFECT_BASE, 0);
+    }
+
 }
 
 CState_Player_Scissor_RAttack00* CState_Player_Scissor_RAttack00::Create(CFsm* pFsm, CPlayer* pPlayer, _uint iStateNum, void* pArg)

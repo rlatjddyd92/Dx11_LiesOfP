@@ -384,6 +384,11 @@ HRESULT CLoader::Ready_Resources_For_ToolLevel()
 		CModel::Create(m_pDevice, m_pContext, CModel::TYPE_ANIM, "../Bin/ModelData/NonAnim/Weapon/Scissor_Right_Blade.dat", PreTransformMatrix, false))))
 		return E_FAIL;
 
+	PreTransformMatrix = XMMatrixIdentity();
+	if (FAILED(m_pGameInstance->Add_Prototype(LEVEL_TOOL, TEXT("Prototype_Component_Model_Player_Arm"),
+		CModel::Create(m_pDevice, m_pContext, CModel::TYPE_ANIM, "../Bin/ModelData/Anim/Player/Player_Arm.dat", PreTransformMatrix, false))))
+		return E_FAIL;
+
 	CVIBuffer_Instancing::INSTANCE_DESC ParticleDesc = {};
 	/* For. Prototype_Component_VIBuffer_Point_Instance */
 	if (FAILED(m_pGameInstance->Add_Prototype(LEVEL_TOOL, TEXT("Prototype_Component_VIBuffer_Point_Instance"),

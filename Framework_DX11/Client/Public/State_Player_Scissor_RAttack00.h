@@ -44,6 +44,15 @@ private:
     _int                m_iColliderEndFrameRight = {};
     void                Control_Collider();
 
+private:
+    _int                m_iLeftEffectStartFrame = {};
+    _int                m_iLeftEffectEndFrame = {};
+    _int                m_iRightEffectStartFrame = {};
+    _int                m_iRightEffectEndFrame = {};
+    _bool               m_isLeftActiveEffect = {};
+    _bool               m_isRightActiveEffect = {};
+    void                Control_Effect(_int iFrame);
+
 public:
     static CState_Player_Scissor_RAttack00* Create(class CFsm* pFsm, class CPlayer* pPlayer, _uint iStateNum, void* pArg = nullptr);
     virtual void Free() override;

@@ -116,7 +116,7 @@ void CState_Raxasia_CutScene_Phase2::Update(_float fTimeDelta)
 
     if (iFrame > 15)
     {
-        m_pMonster->Stop_Animation();
+        //m_pMonster->Stop_Animation();
         //dynamic_cast<CWeapon_Raxasia_P2_Shield*>(m_pShieldWeapon)->Set_Test();
     }
      

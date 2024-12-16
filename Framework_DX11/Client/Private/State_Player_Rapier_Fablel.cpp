@@ -4,7 +4,7 @@
 #include "Model.h"
 #include "Player.h"
 #include "Camera.h"
-#include "Weapon.h"
+#include "Weapon_Rapier.h"
 
 CState_Player_Rapier_Fable::CState_Player_Rapier_Fable(CFsm* pFsm, CPlayer* pPlayer)
     :CState{ pFsm }
@@ -55,7 +55,6 @@ HRESULT CState_Player_Rapier_Fable::Start_State(void* pArg)
         m_isPlaySound[i] = false;
     }
 
-    m_pPlayer->Set_WeaponEffectType(CWeapon::ATK_EFFECT_SPECIAL1);
     m_pPlayer->Set_WeaponStrength(ATK_STRONG);
 
     return S_OK;
@@ -108,7 +107,7 @@ void CState_Player_Rapier_Fable::Update(_float fTimeDelta)
 
 void CState_Player_Rapier_Fable::End_State()
 {
-    m_pPlayer->Set_WeaponEffectType(CWeapon::ATK_EFFECT_NOTHING);
+    m_pPlayer->DeActive_WeaponEffect(CWeapon_Rapier::EFFECT_STORMSTAB2);
     m_pPlayer->DeActive_CurretnWeaponCollider();
 }
 
@@ -167,14 +166,13 @@ void CState_Player_Rapier_Fable::Control_Effect(_int iFrame)
 {
     if (!m_isActiveEffect[0] && (iFrame == m_iColliderStartFrame[0] || iFrame == m_iColliderStartFrame[0] + 1))
     {
-        //m_pPlayer->Active_Effect(CPlayer::EFFECT_RAPIER_TRAIL_FIRST);
+        m_pPlayer->Active_WeaponEffect(CWeapon_Rapier::EFFECT_STORMSTAB1);
         m_isActiveEffect[0] = true;
     }
     else if (!m_isActiveEffect[1] && (iFrame == m_iColliderStartFrame[3] || iFrame == m_iColliderStartFrame[3] + 1))
     {
-        m_pPlayer->Set_WeaponEffectType(CWeapon::ATK_EFFECT_SPECIAL2);
-        //m_pPlayer->DeActive_Effect(CPlayer::EFFECT_RAPIER_TRAIL_FIRST);
-        //m_pPlayer->Active_Effect(CPlayer::EFFECT_RAPIER_TRAIL_SECOND);
+        m_pPlayer->DeActive_WeaponEffect(CWeapon_Rapier::EFFECT_STORMSTAB1);
+        m_pPlayer->Active_WeaponEffect(CWeapon_Rapier::EFFECT_STORMSTAB2);
         m_isActiveEffect[1] = true;
     }
 }

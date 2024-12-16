@@ -42,11 +42,6 @@ HRESULT CWeapon::Initialize(void * pArg)
 
 void CWeapon::Priority_Update(_float fTimeDelta)
 {
-	for (auto& pEffect : m_Effects)
-	{
-		if (!pEffect->Get_Dead())
-			pEffect->Priority_Update(fTimeDelta);
-	}
 }
 
 void CWeapon::Update(_float fTimeDelta)
@@ -83,10 +78,6 @@ void CWeapon::Update(_float fTimeDelta)
 			m_vAttackDir = m_vVelocity;
 			m_vAttackDir.Normalize();
 		}
-		else
-		{
-			int a = 0;
-		}
 	}
 	else
 	{
@@ -108,13 +99,6 @@ void CWeapon::Late_Update(_float fTimeDelta)
 
 	/*if (nullptr != m_pColliderCom)
 		m_pGameInstance->Add_ColliderList(m_pColliderCom);*/
-
-
-	for (auto& pEffect : m_Effects)
-	{
-		if (!pEffect->Get_Dead())
-			pEffect->Late_Update(fTimeDelta);
-	}
 }
 
 HRESULT CWeapon::Render()
@@ -262,7 +246,7 @@ void CWeapon::Play_Sound(WEP_SOUND_TYPE eType, const TCHAR* pSoundKey, _uint iHa
 	m_pSoundCom[eType]->Play2D(pSoundKey, &g_fEffectVolume);
 }
 
-void CWeapon::Active_Effect(const _uint& iType, _bool isLoop)
+void CWeapon::Active_Effect(const _uint& iType, _bool isLoop, _uint iHandIndex)
 {
 	if (isLoop)
 	{
@@ -275,7 +259,7 @@ void CWeapon::Active_Effect(const _uint& iType, _bool isLoop)
 	}
 }
 
-void CWeapon::DeActive_Effect(_uint iType)
+void CWeapon::DeActive_Effect(_uint iType, _uint iHandIndex)
 {
 	m_Effects[iType]->Set_Loop(false);
 }
@@ -300,19 +284,6 @@ void CWeapon::Disappear()
 {
 	m_pGameInstance->Add_ColliderList(m_pColliderCom);
 	m_isActive = false;
-}
-
-void CWeapon::Set_AttackType(_uint iType)
-{
-	m_iAttackType = iType;
-	if (iType == ATK_EFFECT_NOTHING)
-	{
-		for (auto& pEffect : m_Effects)
-		{
-			pEffect->Set_Loop(false);
-		}
-
-	}
 }
 
 const _Matrix* CWeapon::Get_BoneCombinedMatrix(_uint iBoneIndex)

@@ -61,8 +61,11 @@ void CWeapon_FlameSword::Priority_Update(_float fTimeDelta)
 
 	__super::Priority_Update(fTimeDelta);
 
-	
-
+	for (auto& pEffect : m_Effects)
+	{
+		if (!pEffect->Get_Dead())
+			pEffect->Priority_Update(fTimeDelta);
+	}
 }
 
 void CWeapon_FlameSword::Update(_float fTimeDelta)
@@ -71,31 +74,6 @@ void CWeapon_FlameSword::Update(_float fTimeDelta)
 		return;
 
 	__super::Update(fTimeDelta);
-
-	if (m_iAttackType != ATK_EFFECT_NOTHING)
-	{
-		if (m_vVelocity.Length() > 0.f)
-		{
-			if (m_iAttackType == ATK_EFFECT_SPECIAL1)
-			{
-				Active_Effect(EFFECT_STORMSLASH1, true);
-			}
-			else if (m_iAttackType == ATK_EFFECT_SPECIAL2)
-			{
-				DeActive_Effect(EFFECT_STORMSLASH1);
-				Active_Effect(EFFECT_STORMSLASH2, true);
-			}
-			else if (m_iAttackType == ATK_EFFECT_GENERAL)
-			{
-				Active_Effect(EFFECT_BASE, true);
-			}
-		}
-		else
-		{
-			DeActive_Effect(EFFECT_STORMSLASH1);
-			DeActive_Effect(EFFECT_STORMSLASH2);
-		}
-	}
 
 	for (auto& pEffect : m_Effects)
 	{
@@ -113,6 +91,12 @@ void CWeapon_FlameSword::Late_Update(_float fTimeDelta)
 
 	/* 직교투영을 위한 월드행렬까지 셋팅하게 된다. */
 	__super::Late_Update(fTimeDelta);
+
+	for (auto& pEffect : m_Effects)
+	{
+		if (!pEffect->Get_Dead())
+			pEffect->Late_Update(fTimeDelta);
+	}
 
 #ifdef _DEBUG
 	m_pGameInstance->Add_DebugObject(m_pColliderCom);
@@ -224,22 +208,6 @@ void CWeapon_FlameSword::Play_HitSound(HIT_TYPE eType)
 	m_pSoundCom[WEP_SOUND_EFFECT2]->Play2D(strSoundKey.c_str(), &g_fEffectVolume);
 }
 
-void CWeapon_FlameSword::Set_AttackType(_uint iType)
-{
-	m_iAttackType = iType;
-
-	if (iType == ATK_EFFECT_NOTHING)
-	{
-		for (auto& pEffect : m_Effects)
-		{
-			pEffect->Set_Loop(false);
-		}
-
-	}
-
-	Active_Effect(EFFECT_DEFAULT);
-}
-
 HRESULT CWeapon_FlameSword::Ready_Components()
 {
 	if (FAILED(__super::Ready_Components()))
@@ -285,7 +253,7 @@ HRESULT CWeapon_FlameSword::Ready_Effect()
 		m_pSocketMatrix, _Vec3(0.f, 0.f, 0.f), _Vec3(0.f, 0.f, 0.f), _Vec3(1.f, 1.f, 1.f));
 
 
-	Active_Effect(EFFECT_DEFAULT, true);
+	Active_Effect(EFFECT_DEFAULT, true); // 항상 켜둘것
 
 	return S_OK;
 }

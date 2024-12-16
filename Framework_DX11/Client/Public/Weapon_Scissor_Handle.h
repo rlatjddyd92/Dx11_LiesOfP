@@ -41,6 +41,11 @@ public:
 	virtual HRESULT Render_LightDepth() override;
 
 public:
+	void Effect_Priority_Update(_float fTimeDelta);
+	void Effect_Update(_float fTimeDelta);
+	void Effect_Late_Update(_float fTimeDelta);
+
+public:
 	virtual void OnCollisionEnter(CGameObject* pOther) override;
 	virtual void OnCollisionStay(CGameObject* pOther) override;
 	virtual void OnCollisionExit(CGameObject* pOther) override;

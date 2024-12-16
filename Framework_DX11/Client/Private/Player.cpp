@@ -511,11 +511,6 @@ void CPlayer::Set_WeaponStrength(ATTACK_STRENGTH eStrength)
 	m_pWeapon[m_eWeaponType]->Set_AttackStrength(eStrength);
 }
 
-void CPlayer::Set_WeaponEffectType(_uint iAttackEffectType)
-{
-	m_pWeapon[m_eWeaponType]->Set_AttackType(iAttackEffectType);
-}
-
 _bool CPlayer::Active_CurrentWeaponCollider(_float fDamageRatio, _uint iHandIndex)
 {
 	return m_pWeapon[m_eWeaponType]->Active_Collider(fDamageRatio, iHandIndex);
@@ -664,6 +659,16 @@ void CPlayer::Active_Effect(const EFFECT_TYPE& eType, _bool isLoop)
 void CPlayer::DeActive_Effect(const EFFECT_TYPE& eType)
 {
 	m_Effects[eType]->Set_Loop(false);
+}
+
+void CPlayer::Active_WeaponEffect(_uint iEffectType, _bool isLoop, _uint iHandIndex)
+{
+	m_pWeapon[m_eWeaponType]->Active_Effect(iEffectType, isLoop, iHandIndex);
+}
+
+void CPlayer::DeActive_WeaponEffect(_uint iEffectType, _uint iHandIndex)
+{
+	m_pWeapon[m_eWeaponType]->DeActive_Effect(iEffectType, iHandIndex);
 }
 
 
@@ -1613,6 +1618,13 @@ HRESULT CPlayer::Ready_Effect()
 	pSocketBoneMatrix = m_pModelCom->Get_BoneCombindTransformationMatrix_Ptr("BN_Weapon_L");
 	m_Effects[EFFECT_HEAL] = m_pEffect_Manager->Clone_Effect(TEXT("Player_Potion"), pParetnMatrix,
 		pSocketBoneMatrix, _Vec3(0.f, 0.f, 0.f), _Vec3(0.f, 0.f, 0.f), _Vec3(1.f, 1.f, 1.f));
+
+	pSocketBoneMatrix = m_pModelCom->Get_BoneCombindTransformationMatrix_Ptr("Bip001-L-UpperArm");
+	//pSocketBoneMatrix = m_pModelCom->Get_BoneCombindTransformationMatrix_Ptr("Root");
+	m_Effects[EFFECT_ARM_SKILL] = m_pEffect_Manager->Clone_Effect(TEXT("Player_Attack_ArmSkill"), pParetnMatrix,
+		pSocketBoneMatrix, _Vec3(0.f, 0.f, 0.f), _Vec3(0.f, 0.f, 0.f), _Vec3(1.f, 1.f, 1.f));
+
+	//Active_Effect(EFFECT_ARM_SKILL);
 
 	return S_OK;
 }
