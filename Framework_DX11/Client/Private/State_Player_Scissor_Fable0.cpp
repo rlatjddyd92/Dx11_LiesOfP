@@ -3,7 +3,8 @@
 #include "GameInstance.h"
 #include "Model.h"
 #include "Player.h"
-#include "Camera.h"
+#include "Weapon_Scissor.h"
+#include "Weapon_Scissor_Handle.h"
 
 CState_Player_Scissor_Fable0::CState_Player_Scissor_Fable0(CFsm* pFsm, CPlayer* pPlayer)
     :CState{ pFsm }
@@ -29,6 +30,9 @@ HRESULT CState_Player_Scissor_Fable0::Initialize(_uint iStateNum, void* pArg)
 
     m_iStateNum = iStateNum;
 
+    m_iEffectStartFrame = 10;
+    m_iEffectEndFrame = 27;
+
     return S_OK;
 }
 
@@ -44,6 +48,8 @@ HRESULT CState_Player_Scissor_Fable0::Start_State(void* pArg)
     m_pPlayer->Decrease_Region();
 
     m_pPlayer->Set_WeaponStrength(ATK_STRONG);
+
+    m_isActiveEffect = false;
 
     return S_OK;
 }
@@ -119,6 +125,7 @@ void CState_Player_Scissor_Fable0::Update(_float fTimeDelta)
     }
 
     Control_Collider();
+    Control_Effect(iFrame);
 }
 
 void CState_Player_Scissor_Fable0::End_State()
@@ -144,6 +151,21 @@ void CState_Player_Scissor_Fable0::Control_Collider()
     {
         m_pPlayer->DeActive_CurretnWeaponCollider(0);
         m_pPlayer->DeActive_CurretnWeaponCollider(1);
+    }
+}
+
+void CState_Player_Scissor_Fable0::Control_Effect(_int iFrame)
+{
+    if (!m_isActiveEffect && m_iEffectStartFrame <= iFrame)
+    {
+        m_pPlayer->Active_WeaponEffect(CWeapon_Scissor_Handle::EFFECT_LINKSLASH1, true, 0);
+        m_pPlayer->Active_WeaponEffect(CWeapon_Scissor_Handle::EFFECT_LINKSLASH1, true, 1);
+        m_isActiveEffect = true;
+    }
+    else if (m_isActiveEffect && m_iEffectEndFrame < iFrame)
+    {
+        m_pPlayer->DeActive_WeaponEffect(CWeapon_Scissor_Handle::EFFECT_LINKSLASH1, 0);
+        m_pPlayer->DeActive_WeaponEffect(CWeapon_Scissor_Handle::EFFECT_LINKSLASH1, 1);
     }
 }
 

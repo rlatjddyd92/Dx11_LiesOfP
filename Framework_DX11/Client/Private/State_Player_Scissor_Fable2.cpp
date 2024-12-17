@@ -3,7 +3,8 @@
 #include "GameInstance.h"
 #include "Model.h"
 #include "Player.h"
-#include "Camera.h"
+#include "Weapon_Scissor.h"
+#include "Weapon_Scissor_Handle.h"
 
 CState_Player_Scissor_Fable2::CState_Player_Scissor_Fable2(CFsm* pFsm, CPlayer* pPlayer)
     :CState{ pFsm }
@@ -38,6 +39,11 @@ HRESULT CState_Player_Scissor_Fable2::Initialize(_uint iStateNum, void* pArg)
 
     m_iStateNum = iStateNum;
 
+    m_iEffectSeperateStartFrame = 19;
+    m_iEffectSeperateEndFrame = 47;
+    m_iEffectCombineStartFrame = 53;
+    m_iEffectCombineEndFrame = 63;
+
     return S_OK;
 }
 
@@ -54,6 +60,8 @@ HRESULT CState_Player_Scissor_Fable2::Start_State(void* pArg)
     m_pPlayer->Decrease_Region();
 
     m_pPlayer->Set_WeaponStrength(ATK_STRONG);
+
+    m_isActiveSeperateEffect = m_isActiveCombineEffect = false;
 
     return S_OK;
 }
@@ -109,7 +117,7 @@ void CState_Player_Scissor_Fable2::Update(_float fTimeDelta)
     }
 
     Control_Collider();
-
+    Control_Effect(iFrame);
 }
 
 
@@ -133,22 +141,28 @@ void CState_Player_Scissor_Fable2::Control_Collider()
 
     if (m_iCombineFrame >= iFrame)
     {
+        _bool isOnLeftCollider[2] = { false, false };
+        _bool isOnRightCollider[2] = { false, false };
+
         for (_uint i = 0; i < 2; ++i)
         {
+
             if (m_iColliderStartFrame_Left[i] <= iFrame && iFrame <= m_iColliderEndFrame_Left[i])
             {
+                isOnLeftCollider[i] = true;
                 m_pPlayer->Active_CurrentWeaponCollider(3.f, 1);
             }
-            else
+            else if (!isOnLeftCollider[0] && !isOnLeftCollider[1])
             {
                 m_pPlayer->DeActive_CurretnWeaponCollider(1);
             }
 
             if (m_iColliderStartFrame_Right[i] <= iFrame && iFrame <= m_iColliderEndFrame_Right[i])
             {
+                isOnRightCollider[i] = true;
                 m_pPlayer->Active_CurrentWeaponCollider(3.f, 0);
             }
-            else
+            else if (!isOnRightCollider[0] && !isOnRightCollider[1])
             {
                 m_pPlayer->DeActive_CurretnWeaponCollider(0);
             }
@@ -164,6 +178,31 @@ void CState_Player_Scissor_Fable2::Control_Collider()
         {
             m_pPlayer->DeActive_CurretnWeaponCollider();
         }
+    }
+}
+
+void CState_Player_Scissor_Fable2::Control_Effect(_int iFrame)
+{
+    if (!m_isActiveSeperateEffect && m_iEffectSeperateStartFrame <= iFrame)
+    {
+        m_pPlayer->Active_WeaponEffect(CWeapon_Scissor_Handle::EFFECT_LINKSLASH1, true, 0);
+        m_pPlayer->Active_WeaponEffect(CWeapon_Scissor_Handle::EFFECT_LINKSLASH1, true, 1);
+        m_isActiveSeperateEffect = true;
+    }
+    else if (m_isActiveSeperateEffect && m_iEffectSeperateEndFrame < iFrame)
+    {
+        m_pPlayer->DeActive_WeaponEffect(CWeapon_Scissor_Handle::EFFECT_LINKSLASH1, 0);
+        m_pPlayer->DeActive_WeaponEffect(CWeapon_Scissor_Handle::EFFECT_LINKSLASH1, 1);
+    }
+
+    if (!m_isActiveCombineEffect && m_iEffectCombineStartFrame <= iFrame)
+    {
+        m_pPlayer->Active_WeaponEffect(CWeapon_Scissor::EFFECT_LINKSLASH);
+        m_isActiveCombineEffect = true;
+    }
+    else if (m_isActiveCombineEffect && m_iEffectCombineEndFrame < iFrame)
+    {
+        m_pPlayer->DeActive_WeaponEffect(CWeapon_Scissor::EFFECT_LINKSLASH);
     }
 }
 

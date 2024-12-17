@@ -47,6 +47,12 @@ private:
     _int                m_iColliderEndFrame = {};
     void                Control_Collider();
 
+private:
+    _int                m_iEffectStartFrame = {};
+    _int                m_iEffectEndFrame = {};
+    _bool               m_isActiveEffect = {};
+    void                Control_Effect(_int iFrame);
+
 public:
     static CState_Player_Scissor_Fable0* Create(class CFsm* pFsm, class CPlayer* pPlayer, _uint iStateNum, void* pArg = nullptr);
     virtual void Free() override;

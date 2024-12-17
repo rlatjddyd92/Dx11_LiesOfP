@@ -47,6 +47,17 @@ private:
 
     void                Control_Collider();
 
+private:
+    _int                m_iLeftEffectStartFrame[2] = {};
+    _int                m_iLeftEffectEndFrame[2] = {};
+    _int                m_iRightEffectStartFrame[2] = {};
+    _int                m_iRightEffectEndFrame[2] = {};
+    _bool               m_isLeftActiveEffect[2] = {};
+    _bool               m_isRightActiveEffect[2] = {};
+    _bool               m_isLeftDeActiveEffect[2] = {};
+    _bool               m_isRightDeActiveEffect[2] = {};
+    void                Control_Effect(_int iFrame);
+
 public:
     static CState_Player_Scissor_Charge00* Create(class CFsm* pFsm, class CPlayer* pPlayer, _uint iStateNum, void* pArg = nullptr);
     virtual void Free() override;

@@ -3,7 +3,7 @@
 #include "GameInstance.h"
 #include "Model.h"
 #include "Player.h"
-#include "Weapon.h"
+#include "Weapon_Scissor.h"
 
 CState_Player_Scissor_Charge01::CState_Player_Scissor_Charge01(CFsm* pFsm, CPlayer* pPlayer)
     :CState{ pFsm }
@@ -35,6 +35,16 @@ HRESULT CState_Player_Scissor_Charge01::Initialize(_uint iStateNum, void* pArg)
     m_iColliderStartFrame_Right[1] = 132;
     m_iColliderEndFrame_Right[1] = 139;
 
+    m_iLeftEffectStartFrame[0] = 90;
+    m_iLeftEffectEndFrame[0] = 102;
+    m_iRightEffectStartFrame[0] = 90;
+    m_iRightEffectEndFrame[0] = 102;
+
+    m_iLeftEffectStartFrame[1] = 130;
+    m_iLeftEffectEndFrame[1] = 143;
+    m_iRightEffectStartFrame[1] = 130;
+    m_iRightEffectEndFrame[1] = 142;
+
     return S_OK;
 }
 
@@ -48,6 +58,10 @@ HRESULT CState_Player_Scissor_Charge01::Start_State(void* pArg)
 
     m_pPlayer->Set_WeaponStrength(ATK_STRONG);
 
+    m_isLeftActiveEffect[0] = m_isLeftActiveEffect[1] = false;
+    m_isRightActiveEffect[0] = m_isRightActiveEffect[1] = false;
+    m_isLeftDeActiveEffect[0] = m_isLeftDeActiveEffect[1] = false;
+    m_isRightDeActiveEffect[0] = m_isRightDeActiveEffect[1] = false;
 
     return S_OK;
 }
@@ -109,6 +123,7 @@ void CState_Player_Scissor_Charge01::Update(_float fTimeDelta)
     }
 
     Control_Collider();
+    Control_Effect(iFrame);
 }
 
 void CState_Player_Scissor_Charge01::End_State()
@@ -151,6 +166,34 @@ void CState_Player_Scissor_Charge01::Control_Collider()
         }
     }
 
+}
+
+void CState_Player_Scissor_Charge01::Control_Effect(_int iFrame)
+{
+    for (_uint i = 0; i < 2; ++i)
+    {
+        if (!m_isLeftActiveEffect[i] && m_iLeftEffectStartFrame[i] <= iFrame)
+        {
+            m_pPlayer->Active_WeaponEffect(CWeapon_Scissor::EFFECT_BASE, true, 1);
+            m_isLeftActiveEffect[i] = true;
+        }
+        else if (m_isLeftActiveEffect[i] && !m_isLeftDeActiveEffect[i] && m_iLeftEffectEndFrame[i] < iFrame)
+        {
+            m_pPlayer->DeActive_WeaponEffect(CWeapon_Scissor::EFFECT_BASE, 1);
+            m_isLeftDeActiveEffect[i] = true;
+        }
+
+        if (!m_isRightActiveEffect[i] && m_iRightEffectStartFrame[i] <= iFrame)
+        {
+            m_pPlayer->Active_WeaponEffect(CWeapon_Scissor::EFFECT_BASE, true, 0);
+            m_isRightActiveEffect[i] = true;
+        }
+        else if (m_isRightActiveEffect[i] && !m_isRightDeActiveEffect[i] && m_iRightEffectEndFrame[i] < iFrame)
+        {
+            m_pPlayer->DeActive_WeaponEffect(CWeapon_Scissor::EFFECT_BASE, 0);
+            m_isRightDeActiveEffect[i] = true;
+        }
+    }
 }
 
 CState_Player_Scissor_Charge01* CState_Player_Scissor_Charge01::Create(CFsm* pFsm, CPlayer* pPlayer, _uint iStateNum, void* pArg)

@@ -3,7 +3,7 @@
 #include "GameInstance.h"
 #include "Model.h"
 #include "Player.h"
-#include "Camera.h"
+#include "Weapon_Scissor_Handle.h"
 
 CState_Player_Scissor_Buff::CState_Player_Scissor_Buff(CFsm* pFsm, CPlayer* pPlayer)
     :CState{ pFsm }
@@ -24,6 +24,9 @@ HRESULT CState_Player_Scissor_Buff::Initialize(_uint iStateNum, void* pArg)
     m_iCombineFrame = 130;
     m_iStateNum = iStateNum;
 
+    m_iEffectStartFrame = 35;
+    m_iEffectEndFrame = 100;
+
     return S_OK;
 }
 
@@ -34,6 +37,8 @@ HRESULT CState_Player_Scissor_Buff::Start_State(void* pArg)
     m_isInputLButton = false;
     m_isInputRButton = false;
     m_fRButtonTime = 0.f;
+
+    m_isActiveEffect = false;
 
     return S_OK;
 }
@@ -86,6 +91,8 @@ void CState_Player_Scissor_Buff::Update(_float fTimeDelta)
     {
         m_pPlayer->Change_State(CPlayer::OH_IDLE);
     }
+
+    Control_Effect(iFrame);
 }
 
 void CState_Player_Scissor_Buff::End_State()
@@ -95,6 +102,21 @@ void CState_Player_Scissor_Buff::End_State()
 _bool CState_Player_Scissor_Buff::End_Check()
 {
     return m_pPlayer->Get_EndAnim(m_iAnimation_ScissorBuff);
+}
+
+void CState_Player_Scissor_Buff::Control_Effect(_int iFrame)
+{
+    if (!m_isActiveEffect && m_iEffectStartFrame <= iFrame)
+    {
+        m_pPlayer->Active_WeaponEffect(CWeapon_Scissor_Handle::EFFECT_BUFF, true, 0);
+        m_pPlayer->Active_WeaponEffect(CWeapon_Scissor_Handle::EFFECT_BUFF, true, 1);
+        m_isActiveEffect = true;
+    }
+    else if (m_isActiveEffect && m_iEffectEndFrame < iFrame)
+    {
+        m_pPlayer->DeActive_WeaponEffect(CWeapon_Scissor_Handle::EFFECT_BUFF, 0);
+        m_pPlayer->DeActive_WeaponEffect(CWeapon_Scissor_Handle::EFFECT_BUFF, 1);
+    }
 }
 
 CState_Player_Scissor_Buff* CState_Player_Scissor_Buff::Create(CFsm* pFsm, CPlayer* pPlayer, _uint iStateNum, void* pArg)

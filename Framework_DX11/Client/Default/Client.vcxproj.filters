@@ -754,9 +754,6 @@
     <Filter Include="05.Fsm\Player\Common\Hit">
       <UniqueIdentifier>{6fe21237-ed2f-4577-82d9-d063e362a9a9}</UniqueIdentifier>
     </Filter>
-    <Filter Include="05.Fsm\Player\Common\Groggy">
-      <UniqueIdentifier>{52055d8d-e516-4646-8fde-a42a1c9f1453}</UniqueIdentifier>
-    </Filter>
     <Filter Include="05.Fsm\Player\Common\Parry">
       <UniqueIdentifier>{6f478c04-42e3-4487-8f42-ce122fd61b3d}</UniqueIdentifier>
     </Filter>
@@ -793,17 +790,11 @@
     <Filter Include="05.Fsm\Player\CutScene\Sophia\Door">
       <UniqueIdentifier>{523c375b-4150-4955-9992-725681b84bb3}</UniqueIdentifier>
     </Filter>
-    <Filter Include="05.Fsm\Player\CutScene\Sophia\Walk">
-      <UniqueIdentifier>{dc6f7b9e-e299-46ce-bf7d-94196ab07a34}</UniqueIdentifier>
-    </Filter>
     <Filter Include="05.Fsm\Player\CutScene\Sophia\Hand">
       <UniqueIdentifier>{068b5a22-5213-4848-b9ce-02cf142a3e57}</UniqueIdentifier>
     </Filter>
     <Filter Include="05.Fsm\Player\CutScene\Sophia\HandEnd">
       <UniqueIdentifier>{3e0a6a80-48c4-49d6-8260-d065316ea512}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="05.Fsm\Player\CutScene\Simon">
-      <UniqueIdentifier>{a7535373-661b-41f2-b044-6a1180235208}</UniqueIdentifier>
     </Filter>
     <Filter Include="05.Fsm\Player\Arm">
       <UniqueIdentifier>{e3c926a2-c401-4fdb-ae2e-9a5af6934d77}</UniqueIdentifier>
@@ -1113,6 +1104,15 @@
     </Filter>
     <Filter Include="02.GameObjects\02.Pawn\01.Monster\Raxasia\CutSceneHelmet">
       <UniqueIdentifier>{1d65a508-3da4-4c20-a1f4-28ecd56229f7}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="05.Fsm\Player\CutScene\Walk">
+      <UniqueIdentifier>{dc6f7b9e-e299-46ce-bf7d-94196ab07a34}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="05.Fsm\Player\CutScene\Raxasia">
+      <UniqueIdentifier>{95371554-83d5-46cf-8c5e-7cfbaa55497a}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="05.Fsm\Player\CutScene\Raxasia\Door">
+      <UniqueIdentifier>{cbb6172d-1ec7-4c49-806d-5c800b7e2de5}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -1769,7 +1769,7 @@
       <Filter>05.Fsm\Player\CutScene\Sophia\Door</Filter>
     </ClInclude>
     <ClInclude Include="..\Public\State_Player_SophiaWalk.h">
-      <Filter>05.Fsm\Player\CutScene\Sophia\Walk</Filter>
+      <Filter>05.Fsm\Player\CutScene\Walk</Filter>
     </ClInclude>
     <ClInclude Include="State_Player_SophiaHand.h">
       <Filter>05.Fsm\Player\CutScene\Sophia\Hand</Filter>
@@ -2050,6 +2050,9 @@
     </ClInclude>
     <ClInclude Include="..\Public\Raxasia_Helmet_CutScene.h">
       <Filter>02.GameObjects\02.Pawn\01.Monster\Raxasia\CutSceneHelmet</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Public\State_Player_OpenRaxasiaDoor.h">
+      <Filter>05.Fsm\Player\CutScene\Raxasia\Door</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -2676,7 +2679,7 @@
       <Filter>05.Fsm\Player\CutScene\Sophia\Door</Filter>
     </ClCompile>
     <ClCompile Include="..\Private\State_Player_SophiaWalk.cpp">
-      <Filter>05.Fsm\Player\CutScene\Sophia\Walk</Filter>
+      <Filter>05.Fsm\Player\CutScene\Walk</Filter>
     </ClCompile>
     <ClCompile Include="State_Player_SophiaHand.cpp">
       <Filter>05.Fsm\Player\CutScene\Sophia\Hand</Filter>
@@ -2957,6 +2960,9 @@
     </ClCompile>
     <ClCompile Include="..\Private\Raxasia_Helmet_CutScene.cpp">
       <Filter>02.GameObjects\02.Pawn\01.Monster\Raxasia\CutSceneHelmet</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Private\State_Player_OpenRaxasiaDoor.cpp">
+      <Filter>05.Fsm\Player\CutScene\Raxasia\Door</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

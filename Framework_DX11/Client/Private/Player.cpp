@@ -98,6 +98,7 @@
 #include "State_Player_SophiaWalk.h"
 #include "State_Player_SophiaHand.h"
 #include "State_Player_SophiaHandEnd.h"
+#include "State_Player_OpenRaxasiaDoor.h"
 
 // 24-11-27 김성용
 // 게임 인터페이스와 연결을 위해 추가 
@@ -1589,6 +1590,7 @@ HRESULT CPlayer::Ready_FSM()
 	m_pFsmCom->Add_State(CState_Player_SophiaWalk::Create(m_pFsmCom, this, SOPHIA_WALK, &Desc));
 	m_pFsmCom->Add_State(CState_Player_SophiaHand::Create(m_pFsmCom, this, SOPHIA_HAND, &Desc));
 	m_pFsmCom->Add_State(CState_Player_SophiaHandEnd::Create(m_pFsmCom, this, SOPHIA_HANDEND, &Desc));
+	//m_pFsmCom->Add_State(CState_Player_OpenRaxasiaDoor::Create(m_pFsmCom, this, RAXASIA_DOOR_OPEN, &Desc));
 
 	/* 락사시아 컷신 */
 

@@ -48,6 +48,7 @@ public:
 
 	virtual void		Active_Effect(const _uint& iType, _bool isLoop = true, _uint iHandIndex = 0) override;  
 	virtual void		DeActive_Effect(_uint iType, _uint iHandIndex = 0) override;
+	virtual void		DeActive_AllEffect(_uint iHandIndex = 0);
 
 public:
 	void		Change_SeperateMode();

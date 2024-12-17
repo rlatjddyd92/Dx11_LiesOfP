@@ -209,6 +209,7 @@
     <ClInclude Include="..\Public\State_Player_Arm_Swing.h" />
     <ClInclude Include="..\Public\State_Player_Arm_Thrust.h" />
     <ClInclude Include="..\Public\State_Player_Die.h" />
+    <ClInclude Include="..\Public\State_Player_OpenRaxasiaDoor.h" />
     <ClInclude Include="..\Public\State_Player_ThrowItem.h" />
     <ClInclude Include="..\Public\State_RaxasiaP1_DashUpper.h" />
     <ClInclude Include="..\Public\State_RaxasiaP1_Die.h" />
@@ -518,6 +519,7 @@
     <ClCompile Include="..\Private\State_Player_Arm_Swing.cpp" />
     <ClCompile Include="..\Private\State_Player_Arm_Thrust.cpp" />
     <ClCompile Include="..\Private\State_Player_Die.cpp" />
+    <ClCompile Include="..\Private\State_Player_OpenRaxasiaDoor.cpp" />
     <ClCompile Include="..\Private\State_Player_ThrowItem.cpp" />
     <ClCompile Include="..\Private\State_RaxasiaP1_DashUpper.cpp" />
     <ClCompile Include="..\Private\State_RaxasiaP1_Die.cpp" />

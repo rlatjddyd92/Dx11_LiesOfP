@@ -264,6 +264,14 @@ void CWeapon::DeActive_Effect(_uint iType, _uint iHandIndex)
 	m_Effects[iType]->Set_Loop(false);
 }
 
+void CWeapon::DeActive_AllEffect(_uint iHandIndex)
+{
+	for (auto& Effect : m_Effects)
+	{
+		Effect->Set_Loop(false);
+	}
+}
+
 void CWeapon::Appear()
 {
 	m_pModelCom->Update_Bone();

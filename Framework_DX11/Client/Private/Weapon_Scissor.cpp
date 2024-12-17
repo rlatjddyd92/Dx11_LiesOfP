@@ -346,6 +346,13 @@ void CWeapon_Scissor::DeActive_Effect(_uint iType, _uint iHandIndex)
 	}
 }
 
+void CWeapon_Scissor::DeActive_AllEffect(_uint iHandIndex)
+{
+	__super::DeActive_AllEffect();
+	m_pScissor_Sperate[0]->DeActive_AllEffect();
+	m_pScissor_Sperate[0]->DeActive_AllEffect();
+}
+
 void CWeapon_Scissor::Change_SeperateMode()
 {
 	if (m_isSeperate)
@@ -367,13 +374,16 @@ void CWeapon_Scissor::Change_CombineMode(_bool isForce)
 	m_pScissor_Sperate[0]->IsActive(false);
 	m_pScissor_Sperate[1]->IsActive(false);
 
+	m_isSeperate = false;
+
 	if (!isForce)
 	{
 		Active_Effect(EFFECT_COMBINE, false);
 		m_pSoundCom[WEP_SOUND_WEAPON]->Play2D(TEXT("SE_PC_SK_Spark_Metal_07.wav"), &g_fEffectVolume);
 	}
 
-	m_isSeperate = false;
+	m_pScissor_Sperate[0]->DeActive_AllEffect();
+	m_pScissor_Sperate[1]->DeActive_AllEffect();
 }
 
 HRESULT CWeapon_Scissor::Ready_Components()
