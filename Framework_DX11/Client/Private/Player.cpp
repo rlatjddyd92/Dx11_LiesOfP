@@ -264,10 +264,10 @@ void CPlayer::Update(_float fTimeDelta)
 	}
 
 	////ÄÆ½Å Å×½ºÆ®
-	//if (KEY_TAP(KEY::Q))
-	//{
-		//dynamic_cast<CCutScene*>(m_pGameInstance->Find_Object(LEVEL_GAMEPLAY, TEXT("Layer_CutScene"), BOSS1_PHASE2))->Start_Play();
-	//}
+	if (KEY_TAP(KEY::Q))
+	{
+		dynamic_cast<CCutScene*>(m_pGameInstance->Find_Object(LEVEL_GAMEPLAY, TEXT("Layer_CutScene"), BOSS1_PHASE2))->Start_Play();
+	}
 }
 
 void CPlayer::Late_Update(_float fTimeDelta)

@@ -207,11 +207,6 @@ void CRaxasia::Update(_float fTimeDelta)
 
 	m_pWeapon->Update(fTimeDelta);
 	m_pWeaponShield->Update(fTimeDelta);
-
-	if (KEY_TAP(KEY::Q))
-	{
-		Start_CutScene(1);
-	}
 }
 
 void CRaxasia::Late_Update(_float fTimeDelta)

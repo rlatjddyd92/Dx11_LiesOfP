@@ -108,7 +108,7 @@ void CState_Raxasia_CutScene_Phase2::Update(_float fTimeDelta)
 
         m_isReConnetWeaponBone = true;
     }
-    else if(!m_isPlayWeaponChangeAnim && iFrame > 905)      // 검 애니메이션 재생하기
+    else if(!m_isPlayWeaponChangeAnim && iFrame > 912)      // 검 애니메이션 재생하기
     {
         m_pCutSceneWeapon->Play_Animation("AS_Sword_Raxasia_Phase2_C06_CINE", 1.6f);
         m_isPlayWeaponChangeAnim = true;
