@@ -255,10 +255,119 @@ void CSimonManus::Late_Update(_float fTimeDelta)
 
 HRESULT CSimonManus::Render()
 {
-	if (FAILED(__super::Render()))
+	_bool isCutSceneRender = false;
+
+	if (m_pModelCom == m_pCutSceneModelCom[0] || m_pModelCom == m_pCutSceneModelCom[1])
+	{
+		isCutSceneRender = true;
+	}
+
+	if (FAILED(Bind_WorldViewProj()))
 		return E_FAIL;
 
-	if (FAILED(m_pWeapon->Render()))
+	_uint		iNumMeshes = m_pModelCom->Get_NumMeshes();
+
+	for (size_t i = 0; i < iNumMeshes; i++)
+	{
+		m_pModelCom->Bind_MeshBoneMatrices(m_pShaderCom, "g_BoneMatrices", (_uint)i);
+
+		if (FAILED(m_pModelCom->Bind_Material(m_pShaderCom, "g_DiffuseTexture", DIFFUSE, (_uint)i)))
+			return E_FAIL;
+
+		if (m_pModelCom == m_pCutSceneModelCom[0] && (i == 8 || i == 10))
+		{
+			if (FAILED(m_pShaderCom->Begin(5)))
+				return E_FAIL;
+		}
+		else if (m_pModelCom == m_pCutSceneModelCom[1] && (i == 2 || i == 3))
+		{
+			if (FAILED(m_pShaderCom->Begin(5)))
+				return E_FAIL;
+		}
+		else
+		{
+			if (nullptr != m_pModelCom->Find_Texture((_uint)i, TEXTURE_TYPE::ROUGHNESS))
+			{
+				if (FAILED(m_pModelCom->Bind_Material(m_pShaderCom, "g_ARMTexture", ROUGHNESS, (_uint)i)))
+					return E_FAIL;
+			}
+
+			// EMISSIVE
+			if (nullptr != m_pModelCom->Find_Texture((_uint)i, TEXTURE_TYPE::EMISSIVE))
+			{
+				m_fEmissiveMask = 1.f;
+				if (FAILED(m_pModelCom->Bind_Material(m_pShaderCom, "g_EmessiveTexture", EMISSIVE, (_uint)i)))
+					return E_FAIL;
+			}
+			else
+			{
+				m_fEmissiveMask = 0.f;
+			}
+			if (FAILED(m_pShaderCom->Bind_RawValue("g_fEmessiveMask", &m_fEmissiveMask, sizeof(_float))))
+				return E_FAIL;
+
+			//RimLight
+			if (FAILED(m_pShaderCom->Bind_RawValue("g_vRimLight", &m_vRimLightColor, sizeof(_float4))))
+				return E_FAIL;
+
+
+			if (m_isChanged)
+			{
+				if (!isCutSceneRender &&(i == 1 || i == 2))
+				{
+					if (FAILED(m_pShaderCom->Begin(5)))
+						return E_FAIL;
+				}
+				else
+				{
+					if (nullptr != m_pModelCom->Find_Texture((_uint)i, TEXTURE_TYPE::NORMALS))
+					{
+						if (FAILED(m_pModelCom->Bind_Material(m_pShaderCom, "g_NormalTexture", NORMALS, (_uint)i)))
+							return E_FAIL;
+
+						if (FAILED(m_pShaderCom->Begin(2)))
+							return E_FAIL;
+					}
+					else
+					{
+						if (FAILED(m_pShaderCom->Begin(0)))
+							return E_FAIL;
+					}
+				}
+			}
+			else
+			{
+				if (!isCutSceneRender && (i == 3 || i == 5))
+				{
+					if (FAILED(m_pShaderCom->Begin(5)))
+						return E_FAIL;
+				}
+				else
+				{
+					if (nullptr != m_pModelCom->Find_Texture((_uint)i, TEXTURE_TYPE::NORMALS))
+					{
+						if (FAILED(m_pModelCom->Bind_Material(m_pShaderCom, "g_NormalTexture", NORMALS, (_uint)i)))
+							return E_FAIL;
+
+						if (FAILED(m_pShaderCom->Begin(2)))
+							return E_FAIL;
+					}
+					else
+					{
+						if (FAILED(m_pShaderCom->Begin(0)))
+							return E_FAIL;
+					}
+				}
+			}
+		}
+
+		if (FAILED(m_pModelCom->Render((_uint)i)))
+			return E_FAIL;
+	}
+
+	//RimLight ÃÊ±âÈ­
+	_Vec4 vInitRimLight = _Vec4(0.f, 0.f, 0.f, 0.f);
+	if (FAILED(m_pShaderCom->Bind_RawValue("g_vRimLight", &vInitRimLight, sizeof(_float4))))
 		return E_FAIL;
 
 #ifdef _DEBUG

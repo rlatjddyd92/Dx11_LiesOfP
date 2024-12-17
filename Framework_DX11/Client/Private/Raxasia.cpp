@@ -132,7 +132,7 @@ HRESULT CRaxasia::Initialize(void* pArg)
 
 	GET_GAMEINTERFACE->Set_OnOff_OrthoUI(false, this);
 
-	Start_CutScene(CUTSCENE_MEET);
+	//Start_CutScene(CUTSCENE_MEET);
 
 	return S_OK;
 }
@@ -240,7 +240,79 @@ void CRaxasia::Late_Update(_float fTimeDelta)
 
 HRESULT CRaxasia::Render()
 {
-	if (FAILED(__super::Render()))
+	if (FAILED(Bind_WorldViewProj()))
+		return E_FAIL;
+
+	_uint		iNumMeshes = m_pModelCom->Get_NumMeshes();
+
+	for (size_t i = 0; i < iNumMeshes; i++)
+	{
+		m_pModelCom->Bind_MeshBoneMatrices(m_pShaderCom, "g_BoneMatrices", (_uint)i);
+
+		if (FAILED(m_pModelCom->Bind_Material(m_pShaderCom, "g_DiffuseTexture", DIFFUSE, (_uint)i)))
+			return E_FAIL;
+
+
+		if (nullptr != m_pModelCom->Find_Texture((_uint)i, TEXTURE_TYPE::ROUGHNESS))
+		{
+			if (FAILED(m_pModelCom->Bind_Material(m_pShaderCom, "g_ARMTexture", ROUGHNESS, (_uint)i)))
+				return E_FAIL;
+		}
+
+		// EMISSIVE
+		if (nullptr != m_pModelCom->Find_Texture((_uint)i, TEXTURE_TYPE::EMISSIVE))
+		{
+			m_fEmissiveMask = 1.f;
+			if (FAILED(m_pModelCom->Bind_Material(m_pShaderCom, "g_EmessiveTexture", EMISSIVE, (_uint)i)))
+				return E_FAIL;
+		}
+		else
+		{
+			m_fEmissiveMask = 0.f;
+		}
+		if (FAILED(m_pShaderCom->Bind_RawValue("g_fEmessiveMask", &m_fEmissiveMask, sizeof(_float))))
+			return E_FAIL;
+
+		//RimLight
+		if (FAILED(m_pShaderCom->Bind_RawValue("g_vRimLight", &m_vRimLightColor, sizeof(_float4))))
+			return E_FAIL;
+
+		if (i == 4)	// 머리카락
+		{
+			if (FAILED(m_pDouTexture->Bind_ShadeResource(m_pShaderCom, "g_MaskTexture", 0)))
+				return E_FAIL;
+
+			if (FAILED(m_pModelCom->Bind_Material(m_pShaderCom, "g_NormalTexture", NORMALS, (_uint)i)))
+				return E_FAIL;
+
+			if (FAILED(m_pShaderCom->Begin(4)))
+				return E_FAIL;
+		}
+		else
+		{
+			if (nullptr != m_pModelCom->Find_Texture((_uint)i, TEXTURE_TYPE::NORMALS))
+			{
+				if (FAILED(m_pModelCom->Bind_Material(m_pShaderCom, "g_NormalTexture", NORMALS, (_uint)i)))
+					return E_FAIL;
+
+				if (FAILED(m_pShaderCom->Begin(2)))
+					return E_FAIL;
+			}
+			else
+			{
+				if (FAILED(m_pShaderCom->Begin(0)))
+					return E_FAIL;
+			}
+		}
+
+		if (FAILED(m_pModelCom->Render((_uint)i)))
+			return E_FAIL;
+	}
+	
+
+	//RimLight 초기화
+	_Vec4 vInitRimLight = _Vec4(0.f, 0.f, 0.f, 0.f);
+	if (FAILED(m_pShaderCom->Bind_RawValue("g_vRimLight", &vInitRimLight, sizeof(_float4))))
 		return E_FAIL;
 
 #ifdef _DEBUG
@@ -665,8 +737,12 @@ HRESULT CRaxasia::Ready_Components()
 	if (FAILED(__super::Add_Component(LEVEL_STATIC, TEXT("Prototype_Component_RigidBody"),
 		TEXT("Com_RigidBody"), reinterpret_cast<CComponent**>(&m_pRigidBodyCom), &RigidBodyDesc)))
 		return E_FAIL;
-	return S_OK;
+
 	m_pRigidBodyCom->Set_Mass(100000.f);
+
+	if (FAILED(__super::Add_Component(LEVEL_GAMEPLAY, TEXT("Prototype_Component_Texture_RaxasiaDOU"), 
+		TEXT("Com_DouTexture"), reinterpret_cast<CComponent**>(&m_pDouTexture))))
+		return E_FAIL;
 
 	return S_OK;
 }

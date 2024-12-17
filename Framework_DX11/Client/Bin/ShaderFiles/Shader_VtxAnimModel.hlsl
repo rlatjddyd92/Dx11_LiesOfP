@@ -13,6 +13,7 @@ texture2D       g_NormalTexture;
 texture2D       g_ARMTexture;
 texture2D       g_EmessiveTexture;
 texture2D       g_DissloveTexture;
+texture2D       g_MaskTexture;
 
 float4			g_vRimLight;
 
@@ -171,15 +172,15 @@ PS_OUT_MODEL PS_MAIN_NORMAL(PS_IN_NORMAL In)
     if (g_fDissolveRatio >= vDisslove.r)
         discard;
     
+    if (0.3f >= vDiffuse.a)
+        discard;
+	
     vector vNormalDesc = g_NormalTexture.Sample(LinearSampler, In.vTexcoord);
     float3 vNormal = vNormalDesc.xyz * 2.f - 1.f;
 
     float3x3 WorldMatrix = float3x3(In.vTangent, In.vBinormal, In.vNormal);
     vNormal = normalize(mul(vNormal, WorldMatrix));
-
-    if (0.3f >= vDiffuse.a)
-        discard;
-	
+    
     vector vEmissive = g_EmessiveTexture.Sample(LinearClampSampler, In.vTexcoord) * g_fEmessiveMask;
 	
     Out.vDiffuse = vDiffuse + vEmissive;
@@ -214,9 +215,53 @@ float4 PS_MAIN_CASCADE(PS_IN_CASCADE In) : SV_Target0
     return float4(In.vPosition.z, 0.f, 0.f, 1.f);
 }
 
+PS_OUT_MODEL PS_MAIN_FUR_MAGENTA(PS_IN_NORMAL In)
+{
+    PS_OUT_MODEL Out = (PS_OUT_MODEL) 0;
+	
+    vector vDiffuse = g_DiffuseTexture.Sample(LinearSampler, In.vTexcoord);
+    vector vMask = g_MaskTexture.Sample(LinearSampler, In.vTexcoord);
+
+    if (vMask.r >= 1.f && vMask.b >= 1.f)
+        discard;
+	
+    vector vNormalDesc = g_NormalTexture.Sample(LinearSampler, In.vTexcoord);
+    float3 vNormal = vNormalDesc.xyz * 2.f - 1.f;
+
+    float3x3 WorldMatrix = float3x3(In.vTangent, In.vBinormal, In.vNormal);
+    vNormal = normalize(mul(vNormal, WorldMatrix));
+    
+    Out.vDiffuse = vDiffuse;
+    Out.vNormal = vector(vNormal.xyz * 0.5f + 0.5f, 0.f);
+    Out.vDepth = vector(In.vProjPos.z / In.vProjPos.w, In.vProjPos.w / g_fFar, 0.f, 0.f);
+    Out.vARM = vector(0.f, 0.f, 0.f, 1.f);
+    Out.vEmessive = vector(0.f, 0.f, 0.f, 0.f);
+    Out.vRimLight = vector(0.f, 0.f, 0.f, 0.f);
+
+    return Out;
+}
+
+PS_OUT_MODEL PS_MAIN_FUR_BLACK(PS_IN_ANIMODEL In)
+{
+    PS_OUT_MODEL Out = (PS_OUT_MODEL) 0;
+	
+    vector vDiffuse = g_DiffuseTexture.Sample(LinearSampler, In.vTexcoord);
+    if(vDiffuse.r < 0.05f)
+        discard;
+    
+    Out.vDiffuse = vDiffuse;
+    Out.vNormal = vector(In.vNormal.xyz * 0.5f + 0.5f, 0.f);
+    Out.vDepth = vector(In.vProjPos.z / In.vProjPos.w, In.vProjPos.w / g_fFar, 0.f, 0.f);
+    Out.vARM = vector(0.f, 0.f, 0.f, 1.f);
+    Out.vEmessive = vector(0.f, 0.f, 0.f, 0.f);
+    Out.vRimLight = vector(0.f, 0.f, 0.f, 0.f);
+
+    return Out;
+}
+
 technique11 DefaultTechnique
 {
-    pass AnimModel
+    pass AnimModel // 0
     {
         SetRasterizerState(RS_Default);
         SetDepthStencilState(DSS_Default, 0);
@@ -227,7 +272,7 @@ technique11 DefaultTechnique
         PixelShader = compile ps_5_0 PS_MAIN();
     }
 
-    pass LightDepth
+    pass LightDepth // 1
     {
         SetRasterizerState(RS_Default);
         SetDepthStencilState(DSS_Default, 0);
@@ -238,7 +283,7 @@ technique11 DefaultTechnique
         PixelShader = compile ps_5_0 PS_MAIN_LIGHTDEPTH();
     }
 
-    pass AnimModel_Normal
+    pass AnimModel_Normal // 2
     {
         SetRasterizerState(RS_Default);
         SetDepthStencilState(DSS_Default, 0);
@@ -249,7 +294,7 @@ technique11 DefaultTechnique
         PixelShader = compile ps_5_0 PS_MAIN_NORMAL();
     }
 
-    pass Cascade
+    pass Cascade // 3
     {
         SetRasterizerState(RS_Default);
         SetDepthStencilState(DSS_Default, 0);
@@ -260,5 +305,25 @@ technique11 DefaultTechnique
         PixelShader = compile ps_5_0 PS_MAIN_CASCADE();
     }
 
+    pass Fur_Magenta // 4
+    {
+        SetRasterizerState(RS_Default);
+        SetDepthStencilState(DSS_Default, 0);
+        SetBlendState(BS_Default, vector(0.f, 0.f, 0.f, 0.f), 0xffffffff);
 
+        VertexShader = compile vs_5_0 VS_MAIN_NORMAL();
+        GeometryShader = NULL;
+        PixelShader = compile ps_5_0 PS_MAIN_FUR_MAGENTA();
+    }
+
+    pass Fur_Black // 5
+    {
+        SetRasterizerState(RS_Default);
+        SetDepthStencilState(DSS_Default, 0);
+        SetBlendState(BS_Default, vector(0.f, 0.f, 0.f, 0.f), 0xffffffff);
+
+        VertexShader = compile vs_5_0 VS_MAIN();
+        GeometryShader = NULL;
+        PixelShader = compile ps_5_0 PS_MAIN_FUR_BLACK();
+    }
 }
