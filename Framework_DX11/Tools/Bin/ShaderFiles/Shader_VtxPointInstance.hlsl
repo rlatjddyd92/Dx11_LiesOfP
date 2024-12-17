@@ -262,7 +262,7 @@ void GS_DIR_MAIN(point GS_IN In[1], inout TriangleStream<GS_OUT> Container)
 void GS_DIR_CENTERSCALING_MAIN(point GS_IN In[1], inout TriangleStream<GS_OUT> Container)
 {
     GS_OUT Out[4];
-
+    
     float3 vCamDir = normalize(g_vCamPosition - In[0].vPosition).xyz;
 	// ºôº¸µå¿ë. : ·è ¹æÇâÀ¸·Î Á¡À» ÂïÀ½.
     float3 vLook = normalize(In[0].vLook);
@@ -393,7 +393,7 @@ PS_EFFECT_OUT PS_GLOW_MAIN(PS_IN In)
 
     if (In.vLifeTime.y >= In.vLifeTime.x)
         discard;
-
+    
     vColor.r = 1.f - (1 - In.vColor.r) * (1 - vColor.a);
     vColor.g = 1.f - (1 - In.vColor.g) * (1 - vColor.a);
     vColor.b = 1.f - (1 - In.vColor.b) * (1 - vColor.a);

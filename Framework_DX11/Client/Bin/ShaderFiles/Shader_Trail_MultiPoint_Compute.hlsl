@@ -652,7 +652,7 @@ void CS_FOLLOW_MAIN(uint3 DTid : SV_DispatchThreadID)
         
         int iCount = 0;
         
-        while ((iState & STATE_LOOP) && iCount < 100)
+        while (iState & STATE_LOOP && iCount < 100)
         {
             float3 vCurrentDir = (HeadParticle.particle.vTranslation - vPrePos).xyz;
             

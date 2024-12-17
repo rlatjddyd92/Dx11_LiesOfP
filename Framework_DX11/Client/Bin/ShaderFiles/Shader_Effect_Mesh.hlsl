@@ -264,6 +264,51 @@ PS_EFFECT_OUT PS_POW_MASK_MAIN(PS_IN In)
     return Out;
 }
 
+PS_OUT PS_2P_HALFSPHERE_MAIN(PS_IN In)
+{
+    PS_OUT Out = (PS_OUT) 0;
+    
+    // 반구 전체적인 색을 정할 텍스처 : Diffuse
+    // 아우라 텍스처 : Mask1
+    // 그 선 좌자작 그어진 텍스처 : Mask2
+    // 반구 자르기 용 텍스처 : Normal
+    float2 vTexcoord = In.vTexcoord * g_vTileRepeat;
+
+    float2 vCutCoord = In.vTexcoord;
+    vCutCoord.y += g_fAlpha;
+    vCutCoord.x *= g_vColor.a + g_vTileMove.x * 10.f;
+    vector vCut = g_NormalTexture.Sample(LinearYClampSampler, vCutCoord);
+    if (vCut.r < 0.1f)
+        discard;
+    
+    float2 vMask1TexMove = float2(g_vTileMove.x * 0.5f, 0.f);
+    float2 vMask2TexMove = float2(0.f, g_vTileMove.y);
+    vector vMask_1 = g_MaskTexture_1.Sample(LinearSampler, vTexcoord + vMask1TexMove);
+    vector vMask_2 = g_MaskTexture_2.Sample(LinearSampler, vTexcoord + vMask2TexMove);
+    
+    vector vNoise_Mask = g_DiffuseTexture.Sample(LinearSampler, vTexcoord + (g_vTileMove * 2.f));
+    vMask_1 *= vNoise_Mask;
+    
+    float fElse = fmod((vTexcoord.x + vMask2TexMove).x, 1.f);
+    vMask_2.rgb *= abs(fElse - 0.5f) * 2.f;
+    
+    vector vColor = g_DiffuseTexture.Sample(LinearSampler, vTexcoord);
+    vColor.rgb *= g_vColor.rgb;
+    
+    vMask_1 *= 0.1f;
+    vMask_2 *= 0.1f;
+    
+    vMask_1.r *= 0.3f;
+    vMask_2.r *= 0.3f;
+    
+    vColor += vMask_1 + vMask_2;
+    
+    Out.vColor = vColor;
+	
+    return Out;
+}
+
+
 technique11	DefaultTechnique
 {
 	pass Default //0
@@ -363,6 +408,17 @@ technique11	DefaultTechnique
         VertexShader = compile vs_5_0 VS_MAIN();
         GeometryShader = NULL;
         PixelShader = compile ps_5_0 PS_POW_MASK_MAIN();
+    }
+
+    pass HALFSPHERE_MAP // 9
+    {
+        SetRasterizerState(RS_Cull_CW);
+        SetDepthStencilState(DSS_Default, 0);
+        SetBlendState(BS_Default, vector(0.f, 0.f, 0.f, 0.f), 0xffffffff);
+
+        VertexShader = compile vs_5_0 VS_MAIN();
+        GeometryShader = NULL;
+        PixelShader = compile ps_5_0 PS_2P_HALFSPHERE_MAIN();
     }
 }
 
