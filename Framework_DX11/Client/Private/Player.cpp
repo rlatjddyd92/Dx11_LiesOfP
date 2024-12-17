@@ -17,6 +17,7 @@
 #include "Stargazer.h"
 #include "SteppingStone.h"
 #include "LastDoor.h"
+#include "TowerDoor.h"
 #include "Item_Throw.h"
 
 #include "Effect_Manager.h"
@@ -146,13 +147,13 @@ HRESULT CPlayer::Initialize(void * pArg)
 	//m_pNavigationCom->Move_to_Cell(m_pRigidBodyCom, 427); //짧은사다리
 	//m_pNavigationCom->Move_to_Cell(m_pRigidBodyCom, 341); //아래엘베
 	//m_pNavigationCom->Move_to_Cell(m_pRigidBodyCom, 440); //상자랑 장애물
-	m_pNavigationCom->Move_to_Cell(m_pRigidBodyCom, 1066); // 순간이동 790
+	//m_pNavigationCom->Move_to_Cell(m_pRigidBodyCom, 1066); // 순간이동 790
 	//m_pNavigationCom->Move_to_Cell(m_pRigidBodyCom, 790); // 순간이동 1066
 	//m_pNavigationCom->Move_to_Cell(m_pRigidBodyCom, 1066); // 순간이동 790
 	//m_pNavigationCom->Move_to_Cell(m_pRigidBodyCom, 801); // 소피아 방
 	//m_pNavigationCom->Move_to_Cell(m_pRigidBodyCom, 1178); // 소피아 방 내부
 	//m_pNavigationCom->Move_to_Cell(m_pRigidBodyCom, 0); 
-	//m_pNavigationCom->Move_to_Cell(m_pRigidBodyCom, 268); // 락사시아 보스전
+	m_pNavigationCom->Move_to_Cell(m_pRigidBodyCom, 268); // 락사시아 보스전
 
 	m_iRespawn_Cell_Num = 772;
 
@@ -1225,6 +1226,15 @@ void CPlayer::CollisionStay_IntercObj(CGameObject* pGameObject)
 			//m_pFsmCom->Change_State(SOPHIA_DOOR_OPEN, pLastDoor);
 		}
 	}
+	else if (pGameObject->Get_Tag() == TEXT("TowerDoor"))
+	{
+		CTowerDoor* pTowerDoor = dynamic_cast<CTowerDoor*>(pGameObject);
+		if (GET_GAMEINTERFACE->Action_InterAction(TEXT("문을 연다.")))
+		{
+			pTowerDoor->Set_IsOpen(true);
+			m_pFsmCom->Change_State(RAXASIA_DOOR_OPEN, pTowerDoor);
+		}
+	}
 }
 
 void CPlayer::Choice_GuardSound(_uint iAttackStrength, _uint iHitType, _bool isPerfect)
@@ -1584,7 +1594,7 @@ HRESULT CPlayer::Ready_FSM()
 	m_pFsmCom->Add_State(CState_Player_SophiaWalk::Create(m_pFsmCom, this, SOPHIA_WALK, &Desc));
 	m_pFsmCom->Add_State(CState_Player_SophiaHand::Create(m_pFsmCom, this, SOPHIA_HAND, &Desc));
 	m_pFsmCom->Add_State(CState_Player_SophiaHandEnd::Create(m_pFsmCom, this, SOPHIA_HANDEND, &Desc));
-	//m_pFsmCom->Add_State(CState_Player_OpenRaxasiaDoor::Create(m_pFsmCom, this, RAXASIA_DOOR_OPEN, &Desc));
+	m_pFsmCom->Add_State(CState_Player_OpenRaxasiaDoor::Create(m_pFsmCom, this, RAXASIA_DOOR_OPEN, &Desc));
 
 	/* 락사시아 컷신 */
 
@@ -1620,7 +1630,7 @@ HRESULT CPlayer::Ready_Effect()
 	m_Effects[EFFECT_ARM_SKILL] = m_pEffect_Manager->Clone_Effect(TEXT("Player_Attack_ArmSkill"), pParetnMatrix,
 		pSocketBoneMatrix, _Vec3(0.f, 0.f, 0.f), _Vec3(0.f, 0.f, 0.f), _Vec3(1.f, 1.f, 1.f));
 
-	//Active_Effect(EFFECT_ARM_SKILL);
+	Active_Effect(EFFECT_ARM_SKILL);
 
 	return S_OK;
 }

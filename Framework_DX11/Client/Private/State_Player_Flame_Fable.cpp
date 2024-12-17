@@ -29,7 +29,7 @@ HRESULT CState_Player_Flame_Fable::Initialize(_uint iStateNum, void* pArg)
     m_iColliderStartFrame[2] = 80;
     m_iColliderEndFrame[2] = 90;
 
-    m_iEffectStartFrame[0] = 35;
+    m_iEffectStartFrame[0] = 25;
     m_iEffectEndFrame[0] = 68;
     m_iEffectStartFrame[1] = 78;
     m_iEffectEndFrame[1] = 93;

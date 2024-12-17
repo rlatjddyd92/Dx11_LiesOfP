@@ -32,7 +32,8 @@ HRESULT CTowerDoor::Initialize(void* pArg)
 	if (FAILED(Ready_Components()))
 		return E_FAIL;
 
-	m_pModelCom->SetUp_Animation(0, true);
+	m_iAnim_Open = m_pModelCom->Find_AnimationIndex("AS_Open_Slide", 3.1f);
+	m_pModelCom->SetUp_Animation(m_iAnim_Open, false);
 
 	m_strObjectTag = TEXT("TowerDoor");
 
@@ -45,7 +46,21 @@ void CTowerDoor::Priority_Update(_float fTimeDelta)
 
 void CTowerDoor::Update(_float fTimeDelta)
 {
-	m_pModelCom->Update_Bone();
+	if (m_bOpen)
+	{
+		if (m_bPlaySound == false)
+		{
+			m_bPlaySound = true;
+			m_pSoundCom->Play2D(TEXT("AMB_OJ_DR_Monastery_Stone_Slide.wav"), &g_fEffectVolume);
+		}
+		m_pRigidBodyCom->Set_Kinematic(true);
+		m_pModelCom->Play_Animation(fTimeDelta);
+
+		if (m_bPlaySound && m_pModelCom->Get_IsEndAnimArray()[m_iAnim_Open])
+			m_pSoundCom->Stop();
+	}
+	else
+		m_pModelCom->Update_Bone();
 
 	if (m_pColliderCom != nullptr)
 		m_pColliderCom->Update(m_pTransformCom->Get_WorldMatrix_Ptr());
@@ -54,7 +69,9 @@ void CTowerDoor::Update(_float fTimeDelta)
 void CTowerDoor::Late_Update(_float fTimeDelta)
 {
 	__super::Late_Update(fTimeDelta);
+
 	m_pGameInstance->Add_RenderObject(CRenderer::RG_NONBLEND, this);
+	m_pGameInstance->Add_ColliderList(m_pColliderCom);
 
 #ifdef _DEBUG
 	if (m_pColliderCom != nullptr)
@@ -128,6 +145,41 @@ HRESULT CTowerDoor::Ready_Components()
 	if (FAILED(__super::Add_Component(LEVEL_STATIC, TEXT("Prototype_Component_Collider_OBB"),
 		TEXT("Com_Collider"), reinterpret_cast<CComponent**>(&m_pColliderCom), &ColliderDesc)))
 		return E_FAIL;
+	m_pColliderCom->Set_Owner(this);
+
+	/* FOR.Com_Sound */
+	if (FAILED(__super::Add_Component(LEVEL_STATIC, TEXT("Prototype_Component_Sound"),
+		TEXT("Com_Sound"), reinterpret_cast<CComponent**>(&m_pSoundCom))))
+		return E_FAIL;
+	m_pSoundCom->Set_Owner(this);
+
+	// 항상 마지막에 생성하기
+	CRigidBody::RIGIDBODY_DESC RigidBodyDesc{};
+	RigidBodyDesc.isStatic = false;
+	RigidBodyDesc.isGravity = false;
+	RigidBodyDesc.pOwnerTransform = m_pTransformCom;
+	RigidBodyDesc.pOwnerNavigation = nullptr;
+
+	RigidBodyDesc.pOwner = this;
+	RigidBodyDesc.fStaticFriction = 0.f;
+	RigidBodyDesc.fDynamicFriction = 0.f;
+	RigidBodyDesc.fRestituion = 0.f;
+	RigidBodyDesc.PxLockFlags = PxRigidDynamicLockFlag::eLOCK_ANGULAR_X |
+		PxRigidDynamicLockFlag::eLOCK_ANGULAR_Y |
+		PxRigidDynamicLockFlag::eLOCK_ANGULAR_Z |
+		PxRigidDynamicLockFlag::eLOCK_LINEAR_X |
+		PxRigidDynamicLockFlag::eLOCK_LINEAR_Y |
+		PxRigidDynamicLockFlag::eLOCK_LINEAR_Z
+		;
+
+	physX::GeometryBox BoxDesc;
+	BoxDesc.vSize = _Vec3(4.f, 3.f, 0.3f);
+	RigidBodyDesc.pGeometry = &BoxDesc;
+
+	/* FOR.Com_RigidBody */
+	if (FAILED(__super::Add_Component(LEVEL_STATIC, TEXT("Prototype_Component_RigidBody"),
+		TEXT("Com_RigidBody"), reinterpret_cast<CComponent**>(&m_pRigidBodyCom), &RigidBodyDesc)))
+		return E_FAIL;
 
 	return S_OK;
 }
@@ -161,6 +213,9 @@ CGameObject* CTowerDoor::Clone(void* pArg)
 void CTowerDoor::Free()
 {
 	__super::Free();
+
+	Safe_Release(m_pSoundCom);
+	Safe_Release(m_pRigidBodyCom);
 	Safe_Release(m_pColliderCom);
 	Safe_Release(m_pShaderCom);
 	Safe_Release(m_pModelCom);

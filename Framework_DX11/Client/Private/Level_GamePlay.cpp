@@ -372,7 +372,7 @@ HRESULT CLevel_GamePlay::Read_Map_Data()
 					 }
 					 else if (wcscmp(pDesc.szModelTag, TEXT("SK_FO_Monastery_TowerDoor_01")) == 0)
 					 {
-						 if (FAILED(m_pGameInstance->Add_CloneObject_ToLayer(LEVEL_GAMEPLAY, TEXT("Layer_InteractObj"), TEXT("Prototype_GameObject_TowerDoor"), &pDesc)))
+						 if (FAILED(m_pGameInstance->Add_CloneObject_ToLayer(LEVEL_GAMEPLAY, TEXT("Layer_TowerDoor"), TEXT("Prototype_GameObject_TowerDoor"), &pDesc)))
 							 return E_FAIL;
 					 }	 
 					 else if (wcscmp(pDesc.szModelTag, TEXT("SK_FO_Monastery_WallDeco_01_Scupture04")) == 0)
