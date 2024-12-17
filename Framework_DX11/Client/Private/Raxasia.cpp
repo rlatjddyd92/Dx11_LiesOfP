@@ -208,6 +208,10 @@ void CRaxasia::Update(_float fTimeDelta)
 	m_pWeapon->Update(fTimeDelta);
 	m_pWeaponShield->Update(fTimeDelta);
 
+	if (KEY_TAP(KEY::Q))
+	{
+		Start_CutScene(1);
+	}
 }
 
 void CRaxasia::Late_Update(_float fTimeDelta)
@@ -424,10 +428,11 @@ void CRaxasia::Start_CutScene(_uint iCutSceneNum)
 		m_pRigidBodyCom->Set_GloblePose(vCurrentPos);
 
 #pragma region 방패 교체
-		CWeapon::WEAPON_DESC		WeaponDesc{};
+		CWeapon::MONSTER_WAPON_DESC		WeaponDesc{};
 		WeaponDesc.pParentWorldMatrix = m_pTransformCom->Get_WorldMatrix_Ptr();
 		WeaponDesc.pSocketBoneMatrix = m_pModelCom->Get_BoneCombindTransformationMatrix_Ptr("upperArmorBack_02_spine_03");	//Weapon_R UFB L
 		WeaponDesc.pParentAtk = &m_eStat.fAtk;
+		WeaponDesc.pMonster = this;
 
 		Safe_Release(m_pWeaponShield);
 
@@ -491,8 +496,9 @@ void CRaxasia::Change_Model(_uint iModelNum)
 	m_pModelCom = m_pCutSceneModelCom[1];
 
 	_uint iAnimation_Phase2 = m_pModelCom->Find_AnimationIndex("AS_Raxasia_Raxasia_Phase2_C00_CINE", 1.f);
-	m_pModelCom->SetUp_NextAnimation(iAnimation_Phase2, false, 0.f, 600);
-	m_pModelCom->Play_Animation(0.01f);
+	m_pModelCom->Set_SpeedPerSec(iAnimation_Phase2, 31.5f);
+	m_pModelCom->SetUp_Animation(iAnimation_Phase2, false, 599);
+	//m_pModelCom->Play_Animation(0.001f);
 
 	m_pCutSceneWeapon->Change_SocketMatrix(m_pModelCom->Get_BoneCombindTransformationMatrix_Ptr("weapon0_r"));
 	m_pWeaponShield->ChangeSocketMatrix(m_pModelCom->Get_BoneCombindTransformationMatrix_Ptr("upperArmorBack_02_spine_03")); // 나중에 바꿔야함

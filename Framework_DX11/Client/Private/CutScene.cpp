@@ -6,6 +6,7 @@
 #include "Camera_Manager.h"
 #include "Pawn.h"
 #include "SimonManus.h"
+#include "Raxasia.h"
 
 CCutScene::CCutScene(ID3D11Device* pDevice, ID3D11DeviceContext* pContext)
 	: CGameObject{ pDevice, pContext }
@@ -165,7 +166,8 @@ void CCutScene::Active_Obj(CUTSCENE_KEYFRAME_DESC* pCutSceneDesc)
 	}
 	if (pCutSceneDesc->Obj_Desc.bUseObj[BOSS1])
 	{
-		m_pObjects[BOSS1]->Change_State(*pCutSceneDesc->Obj_Desc.iStateNum);
+		if(m_iIndex == BOSS1_PHASE2)
+			static_cast<CRaxasia*>(m_pGameInstance->Find_Object(LEVEL_GAMEPLAY, TEXT("Layer_Raxasia"), 0))->Start_CutScene(1);
 	}
 	if (pCutSceneDesc->Obj_Desc.bUseObj[BOSS2])
 	{

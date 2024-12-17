@@ -263,11 +263,11 @@ void CPlayer::Update(_float fTimeDelta)
 		dynamic_cast<CCutScene*>(m_pGameInstance->Find_Object(LEVEL_GAMEPLAY, TEXT("Layer_CutScene"), BOSS2_MEET))->Start_Play();
 	}
 
-	//ÄÆ½Å Å×½ºÆ®
-	if (KEY_TAP(KEY::Q))
-	{
-		dynamic_cast<CCutScene*>(m_pGameInstance->Find_Object(LEVEL_GAMEPLAY, TEXT("Layer_CutScene"), BOSS1_MEET2))->Start_Play();
-	}
+	////ÄÆ½Å Å×½ºÆ®
+	//if (KEY_TAP(KEY::Q))
+	//{
+		//dynamic_cast<CCutScene*>(m_pGameInstance->Find_Object(LEVEL_GAMEPLAY, TEXT("Layer_CutScene"), BOSS1_PHASE2))->Start_Play();
+	//}
 }
 
 void CPlayer::Late_Update(_float fTimeDelta)

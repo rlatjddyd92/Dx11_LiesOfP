@@ -376,7 +376,7 @@ void CModel::SetUp_Animation_Boundary(_uint iAnimationIndex, _bool isLoop, _uint
 	m_isChangeAni_Boundary = false;
 
 	m_CurrentTrackPosition_Boundary = m_Animations[m_iCurrentAnimIndex_Boundary]->Get_WideChannel()->Get_KeyFrame(iStartFrame).TrackPosition;
-	m_iCurrentFrame_Boundary = m_Animations[m_iCurrentAnimIndex_Boundary]->Update_TransformationMatrices(m_Bones, &m_CurrentTrackPosition_Boundary, m_KeyFrameIndices[m_CurrentTrackPosition_Boundary], m_isLoop_Boundary, &m_isEnd_Animations_Boundary[m_iCurrentAnimIndex_Boundary], 0, false, nullptr, &m_isBoneUpdated);
+	m_iCurrentFrame_Boundary = m_Animations[m_iCurrentAnimIndex_Boundary]->Update_TransformationMatrices(m_Bones, &m_CurrentTrackPosition_Boundary, m_KeyFrameIndices[m_iCurrentAnimIndex_Boundary], m_isLoop_Boundary, &m_isEnd_Animations_Boundary[m_iCurrentAnimIndex_Boundary], 0, false, nullptr, &m_isBoneUpdated);
 	
 }
 
