@@ -4,6 +4,7 @@
 #include "Model.h"
 #include "Raxasia.h"
 
+#include "AttackObject.h"
 #include "Effect_Manager.h"
 
 CState_RaxasiaP1_Sting_Spread::CState_RaxasiaP1_Sting_Spread(CFsm* pFsm, CMonster* pMonster)
@@ -211,7 +212,7 @@ void CState_RaxasiaP1_Sting_Spread::Effect_Check(_double CurTrackPos)
         }
         else
         {
-            if (CurTrackPos>= 175 && CurTrackPos <= 180.f)
+            if (CurTrackPos >= 175 && CurTrackPos <= 180.f)
             {
                 m_bCharge = true;
                 m_bSpeedController = true;
@@ -234,9 +235,12 @@ void CState_RaxasiaP1_Sting_Spread::Effect_Check(_double CurTrackPos)
             if (CurTrackPos >= 219.f)
             {
                 _float4x4 WorldMat{};
-                _Vec3 vPos = { 1.f, 0.f, 0.f };
-                XMStoreFloat4x4(&WorldMat, (*m_pMonster->Get_WeaponBoneCombinedMat(1) * (*m_pMonster->Get_WeaponWorldMat())));
+                _Vec3 vPos = { 0.f, 0.f, -1.75f };
+                XMStoreFloat4x4(&WorldMat,
+                    (*m_pMonster->Get_BoneCombinedMat(m_pMonster->Get_Model()->Get_UFBIndices(UFB_WEAPON))
+                        * (m_pMonster->Get_Transform()->Get_WorldMatrix())));
                 vPos = XMVector3TransformCoord(vPos, XMLoadFloat4x4(&WorldMat));
+                vPos.y = m_pMonster->Get_Transform()->Get_State(CTransform::STATE_POSITION).y;
 
                 CEffect_Manager::Get_Instance()->Add_Effect_ToLayer(LEVEL_GAMEPLAY, TEXT("Raxasia_Attack_ThunderStamp"),
                     vPos, _Vec3{ m_pMonster->Get_TargetDir() });
@@ -248,19 +252,50 @@ void CState_RaxasiaP1_Sting_Spread::Effect_Check(_double CurTrackPos)
         {
             if (CurTrackPos >= 250.f)
             {
-                //_float4x4 WorldMat{};
-                //_Vec3 vPos = { 0.f, 0.f, -4.25f };
-                //XMStoreFloat4x4(&WorldMat, (*m_pMonster->Get_WeaponBoneCombinedMat(0) * (*m_pMonster->Get_WeaponWorldMat())));
-                //vPos = XMVector3TransformCoord(vPos, XMLoadFloat4x4(&WorldMat));
-                //
-                //CEffect_Manager::Get_Instance()->Add_Effect_ToLayer(LEVEL_GAMEPLAY, TEXT("Raxasia_Attack_ThunderSpread"),
-                //    vPos, _Vec3{ m_pMonster->Get_TargetDir() });
-                //
-                //m_bSpread = true;
+                CAttackObject::ATKOBJ_DESC Desc;
+
+                _float4x4 WorldMat{};
+                _Vec3 vPos = { 0.f, 0.f, -1.75f };
+                XMStoreFloat4x4(&WorldMat,
+                    (*m_pMonster->Get_BoneCombinedMat(m_pMonster->Get_Model()->Get_UFBIndices(UFB_WEAPON))
+                        * (m_pMonster->Get_Transform()->Get_WorldMatrix())));
+                vPos = XMVector3TransformCoord(vPos, XMLoadFloat4x4(&WorldMat));
+                vPos.y = m_pMonster->Get_Transform()->Get_State(CTransform::STATE_POSITION).y;
+
+                _Vec3 vTargetDir = m_pMonster->Get_TargetPos() - vPos;
+                vTargetDir.Normalize();
+                _Vec3 vRight = vTargetDir.Cross(_Vec3{ 0.f, 1.f, 0.f });
+                vRight.Normalize();
+
+
+                Desc.vPos = vPos;
+                Desc.vDir = vTargetDir;
+                m_pGameInstance->Add_CloneObject_ToLayer(LEVEL_GAMEPLAY, TEXT("Monster_Attack"), TEXT("Prototype_GameObject_ThunderSpread"), &Desc);
+
+                Desc.vPos = vPos;
+                Desc.vDir = vTargetDir + vRight * 0.3f;
+                Desc.vDir.Normalize();
+                m_pGameInstance->Add_CloneObject_ToLayer(LEVEL_GAMEPLAY, TEXT("Monster_Attack"), TEXT("Prototype_GameObject_ThunderSpread"), &Desc);
+
+                Desc.vPos = vPos;
+                Desc.vDir = vTargetDir - vRight * 0.3f;
+                Desc.vDir.Normalize();
+                m_pGameInstance->Add_CloneObject_ToLayer(LEVEL_GAMEPLAY, TEXT("Monster_Attack"), TEXT("Prototype_GameObject_ThunderSpread"), &Desc);
+
+                Desc.vPos = vPos;
+                Desc.vDir = vTargetDir + vRight * 0.6f;
+                Desc.vDir.Normalize();
+                m_pGameInstance->Add_CloneObject_ToLayer(LEVEL_GAMEPLAY, TEXT("Monster_Attack"), TEXT("Prototype_GameObject_ThunderSpread"), &Desc);
+
+                Desc.vPos = vPos;
+                Desc.vDir = vTargetDir - vRight * 0.6;
+                Desc.vDir.Normalize();
+                m_pGameInstance->Add_CloneObject_ToLayer(LEVEL_GAMEPLAY, TEXT("Monster_Attack"), TEXT("Prototype_GameObject_ThunderSpread"), &Desc);
+
+
             }
+            //m_bSpread = true;
         }
-
-
     }
 }
 

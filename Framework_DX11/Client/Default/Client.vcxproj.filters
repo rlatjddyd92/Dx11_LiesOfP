@@ -1066,9 +1066,6 @@
     <Filter Include="02.GameObjects\02.Pawn\01.Monster\CarcassTail">
       <UniqueIdentifier>{e6447638-0aaa-4897-887b-a642b899134e}</UniqueIdentifier>
     </Filter>
-    <Filter Include="02.GameObjects\02.Pawn\01.Monster\HoresMan">
-      <UniqueIdentifier>{2a7b97d8-e836-4fee-82c9-aeed32fabee4}</UniqueIdentifier>
-    </Filter>
     <Filter Include="02.GameObjects\02.Pawn\01.Monster\RebornerMale">
       <UniqueIdentifier>{b68070e4-27c6-4ef6-8e82-8c6ce0d9846e}</UniqueIdentifier>
     </Filter>
@@ -1113,6 +1110,66 @@
     </Filter>
     <Filter Include="02.GameObjects\02.Pawn\01.Monster\Raxasia\CutSceneHelmet">
       <UniqueIdentifier>{1d65a508-3da4-4c20-a1f4-28ecd56229f7}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.GameObjects\12.AttackObject\Raxasia\ThunderSpread">
+      <UniqueIdentifier>{17abbeb9-fd4e-46bb-abaf-b28fe80ad541}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.GameObjects\12.AttackObject\Raxasia\ThunderStamp">
+      <UniqueIdentifier>{9828ed59-03f5-4eba-8281-0708f9de8453}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.GameObjects\12.AttackObject\Raxasia\ThunderBolt">
+      <UniqueIdentifier>{c9cb8f31-b95b-4de1-9c95-d26f9bcc814f}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.GameObjects\12.AttackObject\Raxasia\ThunderLanding">
+      <UniqueIdentifier>{f261e074-745b-4cb3-beee-c9db38cc05ca}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.GameObjects\12.AttackObject\Raxasia\ThunderWave">
+      <UniqueIdentifier>{5b4d3dba-dc37-475f-925f-28ef39f22066}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.GameObjects\12.AttackObject\Raxasia\ThunderStampMark">
+      <UniqueIdentifier>{77dace17-07fa-459c-8365-865c87cf129f}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.GameObjects\02.Pawn\01.Monster\CurruptedStrongArm_Puppet">
+      <UniqueIdentifier>{2a7b97d8-e836-4fee-82c9-aeed32fabee4}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="05.Fsm\Monster\CurruptedStrongArm_Puppet">
+      <UniqueIdentifier>{b61a1f13-8a0f-45e8-9428-8852f8e82b01}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="05.Fsm\Monster\CurruptedStrongArm_Puppet\Idle">
+      <UniqueIdentifier>{36f5f2c2-3cc6-4135-8945-4d947dc2c2fb}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="05.Fsm\Monster\CurruptedStrongArm_Puppet\Attack">
+      <UniqueIdentifier>{f2660a4a-a5cd-463d-9315-e2738909a7d1}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="05.Fsm\Monster\CurruptedStrongArm_Puppet\Die">
+      <UniqueIdentifier>{6426821e-acbd-427c-ad99-5317d3c88cd6}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="05.Fsm\Monster\CurruptedStrongArm_Puppet\Grogy">
+      <UniqueIdentifier>{bfa60d45-7420-4b0e-a2f2-2f929ca41bf0}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="05.Fsm\Monster\CurruptedStrongArm_Puppet\HitFatal">
+      <UniqueIdentifier>{8c9e9f3f-78b5-4fa0-84cc-4ff8ac228b68}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="05.Fsm\Monster\CurruptedStrongArm_Puppet\Run">
+      <UniqueIdentifier>{bbf5a482-30bb-47d1-8648-4b44ffefaed1}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="05.Fsm\Monster\CurruptedStrongArm_Puppet\Walk">
+      <UniqueIdentifier>{c5c0917a-32e3-472f-94a2-620893575654}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="05.Fsm\Monster\CurruptedStrongArm_Puppet\Attack\Route">
+      <UniqueIdentifier>{6142570d-2223-46cf-879e-5adc5d3810e4}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="05.Fsm\Monster\CurruptedStrongArm_Puppet\Attack\Single">
+      <UniqueIdentifier>{0a8c0af4-c328-4f7d-8960-b9fcae2a77c1}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="05.Fsm\Monster\CurruptedStrongArm_Puppet\Attack\Route\Jump_Punch">
+      <UniqueIdentifier>{704d8b7a-ed06-407f-9e7b-128016a17d3d}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="05.Fsm\Monster\CurruptedStrongArm_Puppet\Attack\Single\StingTwice">
+      <UniqueIdentifier>{e2f52e92-7941-4d11-8df3-4e9d8dcb5fb2}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="05.Fsm\Monster\CurruptedStrongArm_Puppet\Attack\Single\SwipAttack">
+      <UniqueIdentifier>{e3100ded-c639-4f5c-9495-c59404957501}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -2051,6 +2108,48 @@
     <ClInclude Include="..\Public\Raxasia_Helmet_CutScene.h">
       <Filter>02.GameObjects\02.Pawn\01.Monster\Raxasia\CutSceneHelmet</Filter>
     </ClInclude>
+    <ClInclude Include="..\Public\AObj_ThunderStamp.h">
+      <Filter>02.GameObjects\12.AttackObject\Raxasia\ThunderStamp</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Public\AObj_ThunderSpread.h">
+      <Filter>02.GameObjects\12.AttackObject\Raxasia\ThunderSpread</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Public\AObj_ThunderMark.h">
+      <Filter>02.GameObjects\12.AttackObject\Raxasia\ThunderMark</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Public\AObj_ThunderLanding.h">
+      <Filter>02.GameObjects\12.AttackObject\Raxasia\ThunderLanding</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Public\AObj_ThunderBlast.h">
+      <Filter>02.GameObjects\12.AttackObject\Raxasia\ThunderBlast</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Public\AObj_ThunderStampMark.h">
+      <Filter>02.GameObjects\12.AttackObject\Raxasia\ThunderStampMark</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Public\AObj_ThunderWave.h">
+      <Filter>02.GameObjects\12.AttackObject\Raxasia\ThunderWave</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Public\CurruptedStrongArm_Puppet.h">
+      <Filter>02.GameObjects\02.Pawn\01.Monster\CurruptedStrongArm_Puppet</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Public\State_CurruptedStrongArm_Idle.h">
+      <Filter>05.Fsm\Monster\CurruptedStrongArm_Puppet\Idle</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Public\State_CurruptedStrongArm_HitFatal.h">
+      <Filter>05.Fsm\Monster\CurruptedStrongArm_Puppet\HitFatal</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Public\State_CurruptedStrongArm_Walk.h">
+      <Filter>05.Fsm\Monster\CurruptedStrongArm_Puppet\Walk</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Public\State_CurruptedStrongArm_Run.h">
+      <Filter>05.Fsm\Monster\CurruptedStrongArm_Puppet\Run</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Public\State_CurruptedStrongArm_Grogy.h">
+      <Filter>05.Fsm\Monster\CurruptedStrongArm_Puppet\Grogy</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Public\State_CurruptedStrongArm_Die.h">
+      <Filter>05.Fsm\Monster\CurruptedStrongArm_Puppet\Die</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Client.cpp">
@@ -2957,6 +3056,48 @@
     </ClCompile>
     <ClCompile Include="..\Private\Raxasia_Helmet_CutScene.cpp">
       <Filter>02.GameObjects\02.Pawn\01.Monster\Raxasia\CutSceneHelmet</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Private\AObj_ThunderStamp.cpp">
+      <Filter>02.GameObjects\12.AttackObject\Raxasia\ThunderStamp</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Private\AObj_ThunderSpread.cpp">
+      <Filter>02.GameObjects\12.AttackObject\Raxasia\ThunderSpread</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Private\AObj_ThunderMark.cpp">
+      <Filter>02.GameObjects\12.AttackObject\Raxasia\ThunderMark</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Private\AObj_ThunderLanding.cpp">
+      <Filter>02.GameObjects\12.AttackObject\Raxasia\ThunderLanding</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Private\AObj_ThunderBlast.cpp">
+      <Filter>02.GameObjects\12.AttackObject\Raxasia\ThunderBlast</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Private\AObj_ThunderStampMark.cpp">
+      <Filter>02.GameObjects\12.AttackObject\Raxasia\ThunderStampMark</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Private\AObj_ThunderWave.cpp">
+      <Filter>02.GameObjects\12.AttackObject\Raxasia\ThunderWave</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Private\CurruptedStrongArm_Puppet.cpp">
+      <Filter>02.GameObjects\02.Pawn\01.Monster\CurruptedStrongArm_Puppet</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Private\State_CurruptedStrongArm_Idle.cpp">
+      <Filter>05.Fsm\Monster\CurruptedStrongArm_Puppet\Idle</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Private\State_CurruptedStrongArm_HitFatal.cpp">
+      <Filter>05.Fsm\Monster\CurruptedStrongArm_Puppet\HitFatal</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Private\State_CurruptedStrongArm_Walk.cpp">
+      <Filter>05.Fsm\Monster\CurruptedStrongArm_Puppet\Walk</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Private\State_CurruptedStrongArm_Run.cpp">
+      <Filter>05.Fsm\Monster\CurruptedStrongArm_Puppet\Run</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Private\State_CurruptedStrongArm_Grogy.cpp">
+      <Filter>05.Fsm\Monster\CurruptedStrongArm_Puppet\Grogy</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Private\State_CurruptedStrongArm_Die.cpp">
+      <Filter>05.Fsm\Monster\CurruptedStrongArm_Puppet\Die</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

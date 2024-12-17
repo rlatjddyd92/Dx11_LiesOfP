@@ -150,7 +150,7 @@ void CState_RaxasiaP1_SwingDown_Multiple::Collider_Check(_double CurTrackPos)
 {
     if (m_iRouteTrack == 0 || m_iRouteTrack == 8)
     {
-        if ((CurTrackPos >= 35.f && CurTrackPos <= 44.f))
+        if ((CurTrackPos >= 35.f && CurTrackPos <= 44.4f))
         {
             m_pMonster->Active_CurrentWeaponCollider(1.f, 0, HIT_TYPE::HIT_METAL, ATTACK_STRENGTH::ATK_WEAK);
         }
@@ -161,7 +161,7 @@ void CState_RaxasiaP1_SwingDown_Multiple::Collider_Check(_double CurTrackPos)
     }
     else if (m_iRouteTrack >= 1 && m_iRouteTrack <= 7)
     {
-        if ((CurTrackPos >= 40.f && CurTrackPos <= 48.f))
+        if ((CurTrackPos >= 40.f && CurTrackPos <= 48.5f))
         {
             m_pMonster->Active_CurrentWeaponCollider(1.3f, 0, HIT_TYPE::HIT_METAL, ATTACK_STRENGTH::ATK_WEAK);
         }
@@ -176,7 +176,7 @@ void CState_RaxasiaP1_SwingDown_Multiple::Effect_Check(_double CurTrackPos)
 {
     if (m_iRouteTrack == 0 || m_iRouteTrack == 8)
     {
-        if ((CurTrackPos >= 35.f && CurTrackPos <= 44.f))
+        if ((CurTrackPos >= 35.f && CurTrackPos <= 44.4f))
         {
             if (!m_bSwing)
             {
@@ -192,13 +192,16 @@ void CState_RaxasiaP1_SwingDown_Multiple::Effect_Check(_double CurTrackPos)
         
         if (!m_bStamp)
         {
-            if (CurTrackPos >= 44.f)
+            if (CurTrackPos > 44.4f)
             {
                 _float4x4 WorldMat{};
-                _Vec3 vPos = { 1.f, 0.f, 0.f };
-                XMStoreFloat4x4(&WorldMat, (*m_pMonster->Get_WeaponBoneCombinedMat(1) * (*m_pMonster->Get_WeaponWorldMat())));
+                _Vec3 vPos = { 0.f, 0.f, -1.75f };
+                XMStoreFloat4x4(&WorldMat, 
+                    (*m_pMonster->Get_BoneCombinedMat(m_pMonster->Get_Model()->Get_UFBIndices(UFB_WEAPON))
+                    * (m_pMonster->Get_Transform()->Get_WorldMatrix())));
                 vPos = XMVector3TransformCoord(vPos, XMLoadFloat4x4(&WorldMat));
-                
+                vPos.y = m_pMonster->Get_Transform()->Get_State(CTransform::STATE_POSITION).y;
+
                 CEffect_Manager::Get_Instance()->Add_Effect_ToLayer(LEVEL_GAMEPLAY, TEXT("Raxasia_Attack_Stamp"),
                     vPos, _Vec3{ m_pMonster->Get_TargetDir() });
                 m_bStamp = true;
@@ -207,7 +210,7 @@ void CState_RaxasiaP1_SwingDown_Multiple::Effect_Check(_double CurTrackPos)
     }
     else if (m_iRouteTrack >= 1 && m_iRouteTrack <= 7)
     {
-        if ((CurTrackPos >= 40.f && CurTrackPos <= 48.f))
+        if ((CurTrackPos >= 40.f && CurTrackPos <= 48.5f))
         {
             if (!m_bSwing)
             {
@@ -223,12 +226,15 @@ void CState_RaxasiaP1_SwingDown_Multiple::Effect_Check(_double CurTrackPos)
 
         if (!m_bStamp)
         {
-            if (CurTrackPos >= 48.f)
+            if (CurTrackPos > 49.f)
             {
                 _float4x4 WorldMat{};
-                _Vec3 vPos = { 1.f, 0.f, 0.f };
-                XMStoreFloat4x4(&WorldMat, (*m_pMonster->Get_WeaponBoneCombinedMat(1) * (*m_pMonster->Get_WeaponWorldMat())));
+                _Vec3 vPos = { 0.f, 0.f, -1.75f };
+                XMStoreFloat4x4(&WorldMat,
+                    (*m_pMonster->Get_BoneCombinedMat(m_pMonster->Get_Model()->Get_UFBIndices(UFB_WEAPON))
+                        * (m_pMonster->Get_Transform()->Get_WorldMatrix())));
                 vPos = XMVector3TransformCoord(vPos, XMLoadFloat4x4(&WorldMat));
+                vPos.y = m_pMonster->Get_Transform()->Get_State(CTransform::STATE_POSITION).y;
 
                 CEffect_Manager::Get_Instance()->Add_Effect_ToLayer(LEVEL_GAMEPLAY, TEXT("Raxasia_Attack_Stamp"),
                     vPos, _Vec3{ m_pMonster->Get_TargetDir() });

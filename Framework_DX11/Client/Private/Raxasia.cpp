@@ -810,6 +810,7 @@ HRESULT CRaxasia::Ready_Effects()
 	const _Matrix* pParetnMatrix = m_pTransformCom->Get_WorldMatrix_Ptr();
 	const _Matrix* pSocketBoneMatrix = m_pModelCom->Get_BoneCombindTransformationMatrix_Ptr(m_pModelCom->Get_UFBIndices(UFB_ROOT));
 
+	
 	m_Effects[EFFECT_DASH] = CEffect_Manager::Get_Instance()->Clone_Effect(TEXT("Raxasia_Attack_Dash"), pParetnMatrix,
 		nullptr, _Vec3(0.f, 1.f, 0.f), _Vec3(0.f, 0.f, 1.f), _Vec3(1.f, 1.f, 1.f));
 

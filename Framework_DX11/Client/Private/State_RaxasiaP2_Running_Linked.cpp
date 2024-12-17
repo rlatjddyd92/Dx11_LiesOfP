@@ -248,6 +248,33 @@ _bool CState_RaxasiaP2_Running_Linked::End_Check()
 
 void CState_RaxasiaP2_Running_Linked::Collider_Check(_double CurTrackPos)
 {
+    if (m_iRouteTrack == 0 || m_iRouteTrack == 2)
+    {
+        if ((CurTrackPos >= 90.f && CurTrackPos <= 100.f))
+        {
+            m_pMonster->Active_CurrentWeaponCollider(1.3f, 0, HIT_TYPE::HIT_METAL, ATTACK_STRENGTH::ATK_NORMAL);
+        }
+        else
+        {
+            m_pMonster->DeActive_CurretnWeaponCollider();
+        }
+    }
+    else if (m_iRouteTrack == 1)
+    {
+        if ((CurTrackPos >= 80.f && CurTrackPos <= 90.f))
+        {
+            m_pMonster->Active_CurrentWeaponCollider(1.6f, 0, HIT_TYPE::HIT_METAL, ATTACK_STRENGTH::ATK_STRONG);
+        }
+        else
+        {
+            m_pMonster->DeActive_CurretnWeaponCollider();
+        }
+    }
+    
+}
+
+void CState_RaxasiaP2_Running_Linked::Effect_Check(_double CurTrackPos)
+{
     if (m_iRouteTrack == 0)
     {
         if ((CurTrackPos >= 90.f && CurTrackPos <= 100.f))
@@ -257,7 +284,7 @@ void CState_RaxasiaP2_Running_Linked::Collider_Check(_double CurTrackPos)
                 m_pMonster->Active_Effect(CRaxasia::EFFECT_SWING, true);
                 m_bSwing = true;
             }
-            
+
         }
         else
         {
@@ -324,35 +351,9 @@ void CState_RaxasiaP2_Running_Linked::Collider_Check(_double CurTrackPos)
             }
         }
 
-        if(CurTrackPos >= 230.f)
+        if (CurTrackPos >= 230.f)
         {
             m_pMonster->DeActive_Effect(CRaxasia::EFFECT_THUNDERENVELOP_BIG);
-        }
-    }
-}
-
-void CState_RaxasiaP2_Running_Linked::Effect_Check(_double CurTrackPos)
-{
-    if (m_iRouteTrack == 0 || m_iRouteTrack == 2)
-    {
-        if ((CurTrackPos >= 90.f && CurTrackPos <= 100.f))
-        {
-            m_pMonster->Active_CurrentWeaponCollider(1.3f, 0, HIT_TYPE::HIT_METAL, ATTACK_STRENGTH::ATK_NORMAL);
-        }
-        else
-        {
-            m_pMonster->DeActive_CurretnWeaponCollider();
-        }
-    }
-    else if (m_iRouteTrack == 1)
-    {
-        if ((CurTrackPos >= 80.f && CurTrackPos <= 90.f))
-        {
-            m_pMonster->Active_CurrentWeaponCollider(1.6f, 0, HIT_TYPE::HIT_METAL, ATTACK_STRENGTH::ATK_STRONG);
-        }
-        else
-        {
-            m_pMonster->DeActive_CurretnWeaponCollider();
         }
     }
 }

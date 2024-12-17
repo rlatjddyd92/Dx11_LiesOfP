@@ -4,6 +4,8 @@
 #include "Model.h"
 #include "Raxasia.h"
 
+#include "AttackObject.h"
+
 CState_RaxasiaP2_WaveSting::CState_RaxasiaP2_WaveSting(CFsm* pFsm, CMonster* pMonster)
     :CState{ pFsm }
     , m_pMonster{ pMonster }
@@ -182,6 +184,24 @@ void CState_RaxasiaP2_WaveSting::Effect_Check(_double CurTrackPos)
                 (CurTrackPos >= 115.f && CurTrackPos <= 120.f))
             {
                 //웨이브 공격 생성
+                _float4x4 WorldMat{};
+                _Vec3 vPos = { 0.f, 0.f, -1.75f };
+                XMStoreFloat4x4(&WorldMat,
+                    (*m_pMonster->Get_BoneCombinedMat(m_pMonster->Get_Model()->Get_UFBIndices(UFB_WEAPON))
+                        * (m_pMonster->Get_Transform()->Get_WorldMatrix())));
+                vPos = XMVector3TransformCoord(vPos, XMLoadFloat4x4(&WorldMat));
+                vPos.y = m_pMonster->Get_Transform()->Get_State(CTransform::STATE_POSITION).y;
+                //어택오브젝트 생성 마크 후 폭발
+
+                CAttackObject::ATKOBJ_DESC Desc;
+
+                _Vec3 vTargetDir = m_pMonster->Get_TargetPos() - vPos;
+
+                Desc.vPos = vPos;
+                Desc.vDir = vTargetDir;
+
+                m_pGameInstance->Add_CloneObject_ToLayer(LEVEL_GAMEPLAY, TEXT("Monster_Attack"), TEXT("Prototype_GameObject_ThunderWave"), &Desc);
+
             }
         }
         else
