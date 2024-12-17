@@ -32,7 +32,7 @@ HRESULT CTowerDoor::Initialize(void* pArg)
 	if (FAILED(Ready_Components()))
 		return E_FAIL;
 
-	m_iAnim_Open = m_pModelCom->Find_AnimationIndex("AS_Open_Slide", 3.1f);
+	m_iAnim_Open = m_pModelCom->Find_AnimationIndex("AS_Open_Slide", 1.4f);
 	m_pModelCom->SetUp_Animation(m_iAnim_Open, false);
 
 	m_strObjectTag = TEXT("TowerDoor");
@@ -46,12 +46,17 @@ void CTowerDoor::Priority_Update(_float fTimeDelta)
 
 void CTowerDoor::Update(_float fTimeDelta)
 {
+	_int iFrame = m_pModelCom->Get_CurrentFrame();
+
 	if (m_bOpen)
 	{
 		if (m_bPlaySound == false)
 		{
-			m_bPlaySound = true;
-			m_pSoundCom->Play2D(TEXT("AMB_OJ_DR_Monastery_Stone_Slide.wav"), &g_fEffectVolume);
+			if (iFrame >= 1)
+			{
+				m_bPlaySound = true;
+				m_pSoundCom->Play2D(TEXT("AMB_OJ_DR_Monastery_Stone_Slide.wav"), &g_fEffectVolume);
+			}
 		}
 		m_pRigidBodyCom->Set_Kinematic(true);
 		m_pModelCom->Play_Animation(fTimeDelta);

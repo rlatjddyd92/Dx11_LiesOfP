@@ -18,7 +18,7 @@ HRESULT CState_Player_OpenRaxasiaDoor::Initialize(_uint iStateNum, void* pArg)
 
     m_pTrackPos = pDesc->pPrevTrackPos;
 
-    m_iAnimation_DoorPush = m_pPlayer->Get_Model()->Find_AnimationIndex("AS_Pino_Prop_DoubleDoor_Slide", 0.5f);
+    m_iAnimation_DoorPush = m_pPlayer->Get_Model()->Find_AnimationIndex("AS_Pino_Prop_DoubleDoor_Slide", 1.42f);
 
     m_iStateNum = iStateNum;
 
@@ -30,7 +30,7 @@ HRESULT CState_Player_OpenRaxasiaDoor::Start_State(void* pArg)
     if (m_pTowerDoor == nullptr)
         m_pTowerDoor = static_cast<CTowerDoor*>(m_pGameInstance->Find_Object(LEVEL_GAMEPLAY, TEXT("Layer_TowerDoor"), 0));
 
-    m_pPlayer->Change_Animation(m_iAnimation_DoorPush, false, 0.8f, 316);
+    m_pPlayer->Change_Animation(m_iAnimation_DoorPush, false, 0.f);
 
     m_pPlayer->Disappear_Weapon();
 
@@ -41,7 +41,7 @@ HRESULT CState_Player_OpenRaxasiaDoor::Start_State(void* pArg)
     vTowerDoorRight.Normalize();
     vTowerDoorLook.Normalize();
 
-    _Vec3 vInitPos = vTowerDoorPos + vTowerDoorLook * 0.9f;
+    _Vec3 vInitPos = vTowerDoorPos + vTowerDoorLook * 0.8f;
     vInitPos.y = vPlayerPos.y;
 
     m_pPlayer->Get_RigidBody()->Set_GloblePose(vInitPos);
@@ -56,7 +56,7 @@ void CState_Player_OpenRaxasiaDoor::Update(_float fTimeDelta)
 
     if (iFrame > 50)
     {
-        m_pPlayer->Get_Model()->Find_AnimationIndex("AS_Pino_Prop_DoubleDoor_Slide", 1.F);
+        //m_pPlayer->Get_Model()->Find_AnimationIndex("AS_Pino_Prop_DoubleDoor_Slide", 0.1f);
         //m_pPlayer->Change_State(CPlayer::SOPHIA_WALK);
         // m_pGameInstance->Stop_BGM();
       //   m_pGameInstance->Play_BGM(TEXT("MU_MS_Monastery_B_Loop.wav"), &g_fBGMVolume);
