@@ -835,7 +835,7 @@ HRESULT CRaxasia::Ready_Effects()
 	m_Effects[EFFECT_SHIELDCHARGE_GROUND] = CEffect_Manager::Get_Instance()->Clone_Effect(TEXT("Raxasia_Attack_ShieldCharge_Ground"), pParetnMatrix,
 		nullptr, _Vec3(0.f, 0.f, 0.f), _Vec3(0.f, 0.f, 1.f), _Vec3(1.f, 1.f, 1.f));
 
-	pSocketBoneMatrix = m_pModelCom->Get_BoneCombindTransformationMatrix_Ptr(m_pModelCom->Get_UFBIndices(UFB_HAND_RIGHT));
+	pSocketBoneMatrix = m_pModelCom->Get_BoneCombindTransformationMatrix_Ptr(m_pModelCom->Get_UFBIndices(UFB_WEAPON));
 
 	m_Effects[EFFECT_SWING] = CEffect_Manager::Get_Instance()->Clone_Effect(TEXT("Raxasia_Attack_Swing"), pParetnMatrix,
 		pSocketBoneMatrix, _Vec3(0.f, 0.f, 0.f), _Vec3(0.f, 0.f, 1.f), _Vec3(1.f, 1.f, 1.f));
@@ -845,8 +845,6 @@ HRESULT CRaxasia::Ready_Effects()
 
 	m_Effects[EFFECT_THUNDERDRAG] = CEffect_Manager::Get_Instance()->Clone_Effect(TEXT("Raxasia_Attack_ThunderDrag"), pParetnMatrix,
 		pSocketBoneMatrix, _Vec3(0.f, 0.f, 0.f), _Vec3(0.f, 0.f, 1.f), _Vec3(1.f, 1.f, 1.f));
-
-	pSocketBoneMatrix = m_pModelCom->Get_BoneCombindTransformationMatrix_Ptr(m_pModelCom->Get_UFBIndices(UFB_WEAPON));
 
 	m_Effects[EFFECT_INCHENTSWORD] = CEffect_Manager::Get_Instance()->Clone_Effect(TEXT("Raxasia_Attack_InchentedSword"), pParetnMatrix,
 		pSocketBoneMatrix, _Vec3(0.f, 0.f, 0.f), _Vec3(0.f, 0.f, 1.f), _Vec3(1.f, 1.f, 1.f));
@@ -934,7 +932,28 @@ void CRaxasia::ChangePhase()
 	m_pFsmCom->Set_State(IDLE);
 
 	m_pModelCom->Play_Animation(0);
+	
+	//이펙트 재조정
 
+	const _Matrix* pParetnMatrix = m_pTransformCom->Get_WorldMatrix_Ptr();
+	const _Matrix* pSocketBoneMatrix = m_pModelCom->Get_BoneCombindTransformationMatrix_Ptr(m_pModelCom->Get_UFBIndices(UFB_WEAPON));
+
+	Safe_Release(m_Effects[EFFECT_SWING]);
+	Safe_Release(m_Effects[EFFECT_DRAG]);
+	Safe_Release(m_Effects[EFFECT_THUNDERDRAG]);
+	Safe_Release(m_Effects[EFFECT_INCHENTSWORD]);
+
+	m_Effects[EFFECT_SWING] = CEffect_Manager::Get_Instance()->Clone_Effect(TEXT("Raxasia_Attack_Swing"), pParetnMatrix,
+		pSocketBoneMatrix, _Vec3(0.f, 0.f, 0.f), _Vec3(0.f, 0.f, 1.f), _Vec3(1.f, 1.f, 1.f));
+
+	m_Effects[EFFECT_DRAG] = CEffect_Manager::Get_Instance()->Clone_Effect(TEXT("Raxasia_Attack_Drag"), pParetnMatrix,
+		pSocketBoneMatrix, _Vec3(0.f, 0.f, 0.f), _Vec3(0.f, 0.f, 1.f), _Vec3(1.f, 1.f, 1.f));
+
+	m_Effects[EFFECT_THUNDERDRAG] = CEffect_Manager::Get_Instance()->Clone_Effect(TEXT("Raxasia_Attack_ThunderDrag"), pParetnMatrix,
+		pSocketBoneMatrix, _Vec3(0.f, 0.f, 0.f), _Vec3(0.f, 0.f, 1.f), _Vec3(1.f, 1.f, 1.f));
+
+	m_Effects[EFFECT_INCHENTSWORD] = CEffect_Manager::Get_Instance()->Clone_Effect(TEXT("Raxasia_Attack_InchentedSword"), pParetnMatrix,
+		pSocketBoneMatrix, _Vec3(0.f, 0.f, 0.f), _Vec3(0.f, 0.f, 1.f), _Vec3(1.f, 1.f, 1.f));
 
 	//P2
 
