@@ -4,6 +4,8 @@
 #include "Model.h"
 #include "Raxasia.h"
 
+#include "AttackObject.h"
+
 CState_RaxasiaP1_GroundSlash::CState_RaxasiaP1_GroundSlash(CFsm* pFsm, CMonster* pMonster)
     :CState{ pFsm }
     , m_pMonster{ pMonster }
@@ -109,6 +111,7 @@ void CState_RaxasiaP1_GroundSlash::Effect_Check(_double CurTrackPos)
         if (CurTrackPos >= 60.f)
         {
             m_pMonster->Active_Effect(CRaxasia::EFFECT_INCHENTSWORD, true);
+            m_pMonster->Active_Effect(CRaxasia::EFFECT_DRAG, true);
             m_bInchent = true;
         }
     }
@@ -121,7 +124,21 @@ void CState_RaxasiaP1_GroundSlash::Effect_Check(_double CurTrackPos)
     {
         if (!m_bAddMark)
         {
+            m_bAddMark = true;
             //어택오브젝트로 잠시 있다 터지는 번개 생성
+            CAttackObject::ATKOBJ_DESC Desc;
+
+            _float4x4 WorldMat{};
+            _Vec3 vPos = { 0.f, 0.f, -1.75f };
+            XMStoreFloat4x4(&WorldMat,
+                (*m_pMonster->Get_BoneCombinedMat(m_pMonster->Get_Model()->Get_UFBIndices(UFB_WEAPON))
+                    * (m_pMonster->Get_Transform()->Get_WorldMatrix())));
+            vPos = XMVector3TransformCoord(vPos, XMLoadFloat4x4(&WorldMat));
+            vPos.y = m_pMonster->Get_Transform()->Get_State(CTransform::STATE_POSITION).y;
+
+            Desc.vPos = vPos;
+
+            m_pGameInstance->Add_CloneObject_ToLayer(LEVEL_GAMEPLAY, TEXT("Monster_Attack"), TEXT("Prototype_GameObject_ThunderMark"), &Desc);
         }
     }
     else

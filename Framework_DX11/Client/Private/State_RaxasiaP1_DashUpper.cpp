@@ -286,11 +286,14 @@ void CState_RaxasiaP1_DashUpper::Effect_Check(_double CurTrackPos)
         if (!m_bStamp)
         {
             if ((CurTrackPos >= 48.f))
-            { 
+            {
                 _float4x4 WorldMat{};
-                _Vec3 vPos = {1.f, 0.f, 0.f};
-                XMStoreFloat4x4(&WorldMat, (*m_pMonster->Get_WeaponBoneCombinedMat(1) * (*m_pMonster->Get_WeaponWorldMat())));
+                _Vec3 vPos = { 0.f, 0.f, -1.75f };
+                XMStoreFloat4x4(&WorldMat,
+                    (*m_pMonster->Get_BoneCombinedMat(m_pMonster->Get_Model()->Get_UFBIndices(UFB_WEAPON))
+                        * (m_pMonster->Get_Transform()->Get_WorldMatrix())));
                 vPos = XMVector3TransformCoord(vPos, XMLoadFloat4x4(&WorldMat));
+                vPos.y = m_pMonster->Get_Transform()->Get_State(CTransform::STATE_POSITION).y;
 
                 CEffect_Manager::Get_Instance()->Add_Effect_ToLayer(LEVEL_GAMEPLAY, TEXT("Raxasia_Attack_Stamp"),
                     vPos, _Vec3{ m_pMonster->Get_TargetDir()});
@@ -318,9 +321,12 @@ void CState_RaxasiaP1_DashUpper::Effect_Check(_double CurTrackPos)
             if ((CurTrackPos >= 44.f))
             {
                 _float4x4 WorldMat{};
-                _Vec3 vPos = { 1.f, 0.f, 0.f };
-                XMStoreFloat4x4(&WorldMat, (*m_pMonster->Get_WeaponBoneCombinedMat(1) * (*m_pMonster->Get_WeaponWorldMat())));
+                _Vec3 vPos = { 0.f, 0.f, -1.75f };
+                XMStoreFloat4x4(&WorldMat,
+                    (*m_pMonster->Get_BoneCombinedMat(m_pMonster->Get_Model()->Get_UFBIndices(UFB_WEAPON))
+                        * (m_pMonster->Get_Transform()->Get_WorldMatrix())));
                 vPos = XMVector3TransformCoord(vPos, XMLoadFloat4x4(&WorldMat));
+                vPos.y = m_pMonster->Get_Transform()->Get_State(CTransform::STATE_POSITION).y;
 
                 CEffect_Manager::Get_Instance()->Add_Effect_ToLayer(LEVEL_GAMEPLAY, TEXT("Raxasia_Attack_Stamp"),
                     vPos, _Vec3{ m_pMonster->Get_TargetDir() });
@@ -348,9 +354,12 @@ void CState_RaxasiaP1_DashUpper::Effect_Check(_double CurTrackPos)
             if ((CurTrackPos >= 48.f))
             {
                 _float4x4 WorldMat{};
-                _Vec3 vPos = { 1.f, 0.f, 0.f };
-                XMStoreFloat4x4(&WorldMat, (*m_pMonster->Get_WeaponBoneCombinedMat(1) * (*m_pMonster->Get_WeaponWorldMat())));
+                _Vec3 vPos = { 0.f, 0.f, -1.75f };
+                XMStoreFloat4x4(&WorldMat,
+                    (*m_pMonster->Get_BoneCombinedMat(m_pMonster->Get_Model()->Get_UFBIndices(UFB_WEAPON))
+                        * (m_pMonster->Get_Transform()->Get_WorldMatrix())));
                 vPos = XMVector3TransformCoord(vPos, XMLoadFloat4x4(&WorldMat));
+                vPos.y = m_pMonster->Get_Transform()->Get_State(CTransform::STATE_POSITION).y;
 
                 CEffect_Manager::Get_Instance()->Add_Effect_ToLayer(LEVEL_GAMEPLAY, TEXT("Raxasia_Attack_Stamp"),
                     vPos, _Vec3{ m_pMonster->Get_TargetDir() });

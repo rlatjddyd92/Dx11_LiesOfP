@@ -20,7 +20,7 @@ HRESULT CState_RaxasiaP2_ChargeRush::Initialize(_uint iStateNum, void* pArg)
 HRESULT CState_RaxasiaP2_ChargeRush::Start_State(void* pArg)
 {
     m_iRouteTrack = 0;
-    m_pMonster->Change_Animation(AN_START, false, 0.1f, 0);
+    m_pMonster->Change_Animation(AN_CHARGE, false, 0.1f, 0);
 
     m_bSwingSound = false;
 
@@ -38,6 +38,7 @@ void CState_RaxasiaP2_ChargeRush::Update(_float fTimeDelta)
         {
             ++m_iRouteTrack;
             m_bSwing = false;
+            m_bCharge = false;
             m_pMonster->Change_Animation(AN_CHARGE, false, 0.02f, 0);
             return;
         }
@@ -50,8 +51,10 @@ void CState_RaxasiaP2_ChargeRush::Update(_float fTimeDelta)
         {
             ++m_iRouteTrack;
             m_bSwing = false;
+            m_bCharge = false;
             if (m_iRouteTrack == 3)
             {
+                m_pMonster->DeActive_Effect(CRaxasia::EFFECT_SHIELDCHARGE_GROUND);
                 m_pMonster->Change_Animation(AN_SHIELDRUSH, false, 0.2f, 0);
                 return;
             }
@@ -92,6 +95,8 @@ void CState_RaxasiaP2_ChargeRush::Update(_float fTimeDelta)
 
 void CState_RaxasiaP2_ChargeRush::End_State()
 {
+    m_pMonster->DeActive_Effect(CRaxasia::EFFECT_INCHENTSWORD_P2);
+    m_pMonster->DeActive_Effect(CRaxasia::EFFECT_THUNDERENVELOP_SMALL);
 }
 
 _bool CState_RaxasiaP2_ChargeRush::End_Check()
@@ -101,9 +106,9 @@ _bool CState_RaxasiaP2_ChargeRush::End_Check()
     switch (m_iRouteTrack)
     {
     case 0:
-        if ((AN_START) == iCurAnim)
+        if ((AN_CHARGE) == iCurAnim)
         {
-            bEndCheck = m_pMonster->Get_EndAnim(AN_START);
+            bEndCheck = m_pMonster->Get_EndAnim(AN_CHARGE);
         }
         break;
 
@@ -138,6 +143,46 @@ void CState_RaxasiaP2_ChargeRush::Collider_Check(_double CurTrackPos)
 
 void CState_RaxasiaP2_ChargeRush::Effect_Check(_double CurTrackPos)
 {
+    if (m_iRouteTrack == 0)
+    {
+        if (!m_bCharge)
+        {
+            if (CurTrackPos >= 35.f)
+            {
+                m_pMonster->Active_Effect(CRaxasia::EFFECT_INCHENTSWORD_P2, true);
+                m_pMonster->Active_Effect(CRaxasia::EFFECT_SHIELDCHARGE_GROUND, true);
+                m_pMonster->Active_Effect(CRaxasia::EFFECT_THUNDERENVELOP_SMALL, true);
+                m_bCharge = true;
+            }
+        }
+    }
+    else if (m_iRouteTrack >= 1 && m_iRouteTrack <= 2)
+    {
+        if (CurTrackPos >= 60.f && CurTrackPos <= 70.f)
+        {
+            if (!m_bCharge)
+            {
+                m_pMonster->Active_Effect(CRaxasia::EFFECT_THUNDERDISCHARGE, false);
+                m_bCharge = true;
+            }
+        }
+    }
+    else if (m_iRouteTrack >= 3 && m_iRouteTrack <= 5)
+    {
+        if (CurTrackPos >= 7.f && CurTrackPos <= 100.f)
+        {
+            if (!m_bRush)
+            {
+                m_pMonster->Active_Effect(CRaxasia::EFFECT_SHIELDDASH, true);
+                m_pMonster->Active_Effect(CRaxasia::EFFECT_THUNDERACCEL, true);
+            }
+        }
+        else
+        {
+            m_pMonster->DeActive_Effect(CRaxasia::EFFECT_SHIELDDASH);
+            m_pMonster->DeActive_Effect(CRaxasia::EFFECT_THUNDERACCEL);
+        }
+    }
 
 }
 

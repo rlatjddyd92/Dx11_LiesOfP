@@ -4,6 +4,7 @@
 #include "Model.h"
 #include "Raxasia.h"
 
+#include "AttackObject.h"
 #include "Effect_Manager.h"
 
 CState_RaxasiaP2_StepJump::CState_RaxasiaP2_StepJump(CFsm* pFsm, CMonster* pMonster)
@@ -209,6 +210,15 @@ void CState_RaxasiaP2_StepJump::Effect_Check(_double CurTrackPos)
                     vPos, _Vec3{ m_pMonster->Get_TargetDir() });
 
                 //찍으면서 마크 생성 후 폭발
+
+                CAttackObject::ATKOBJ_DESC Desc;
+
+                _Vec3 vTargetDir = m_pMonster->Get_TargetPos() - vPos;
+
+                Desc.vPos = vPos;
+                Desc.vDir = vTargetDir;
+                m_pGameInstance->Add_CloneObject_ToLayer(LEVEL_GAMEPLAY, TEXT("Monster_Attack"), TEXT("Prototype_GameObject_ThunderStampMark"), &Desc);
+
             }
         }
         else if (CurTrackPos >= 220.f)
@@ -258,14 +268,48 @@ void CState_RaxasiaP2_StepJump::Effect_Check(_double CurTrackPos)
         {
             if ((CurTrackPos >= 206.f && CurTrackPos <= 211.f))
             {
-                m_bSWingDown = true;
                 _float4x4 WorldMat{};
-                _Vec3 vPos = { 1.f, 0.f, 0.f };
-                XMStoreFloat4x4(&WorldMat, (*m_pMonster->Get_WeaponBoneCombinedMat(1) * (*m_pMonster->Get_WeaponWorldMat())));
+                _Vec3 vPos = { 0.f, 0.f, -1.75f };
+                XMStoreFloat4x4(&WorldMat,
+                    (*m_pMonster->Get_BoneCombinedMat(m_pMonster->Get_Model()->Get_UFBIndices(UFB_WEAPON))
+                        * (m_pMonster->Get_Transform()->Get_WorldMatrix())));
                 vPos = XMVector3TransformCoord(vPos, XMLoadFloat4x4(&WorldMat));
+                vPos.y = m_pMonster->Get_Transform()->Get_State(CTransform::STATE_POSITION).y;
 
                 CEffect_Manager::Get_Instance()->Add_Effect_ToLayer(LEVEL_GAMEPLAY, TEXT("Raxasia_Attack_ThunderStamp"),
                     vPos, _Vec3{ m_pMonster->Get_TargetDir() });
+
+                CAttackObject::ATKOBJ_DESC Desc;
+
+                _Vec3 vTargetDir = m_pMonster->Get_TargetPos() - vPos;
+                vTargetDir.Normalize();
+                _Vec3 vRight = vTargetDir.Cross(_Vec3{ 0.f, 1.f, 0.f });
+                vRight.Normalize();
+
+
+                Desc.vPos = vPos;
+                Desc.vDir = vTargetDir;
+                m_pGameInstance->Add_CloneObject_ToLayer(LEVEL_GAMEPLAY, TEXT("Monster_Attack"), TEXT("Prototype_GameObject_ThunderSpread"), &Desc);
+
+                Desc.vPos = vPos;
+                Desc.vDir = vTargetDir + vRight * 0.3f;
+                Desc.vDir.Normalize();
+                m_pGameInstance->Add_CloneObject_ToLayer(LEVEL_GAMEPLAY, TEXT("Monster_Attack"), TEXT("Prototype_GameObject_ThunderSpread"), &Desc);
+
+                Desc.vPos = vPos;
+                Desc.vDir = vTargetDir - vRight * 0.3f;
+                Desc.vDir.Normalize();
+                m_pGameInstance->Add_CloneObject_ToLayer(LEVEL_GAMEPLAY, TEXT("Monster_Attack"), TEXT("Prototype_GameObject_ThunderSpread"), &Desc);
+
+                Desc.vPos = vPos;
+                Desc.vDir = vTargetDir + vRight * 0.6f;
+                Desc.vDir.Normalize();
+                m_pGameInstance->Add_CloneObject_ToLayer(LEVEL_GAMEPLAY, TEXT("Monster_Attack"), TEXT("Prototype_GameObject_ThunderSpread"), &Desc);
+
+                Desc.vPos = vPos;
+                Desc.vDir = vTargetDir - vRight * 0.6;
+                Desc.vDir.Normalize();
+                m_pGameInstance->Add_CloneObject_ToLayer(LEVEL_GAMEPLAY, TEXT("Monster_Attack"), TEXT("Prototype_GameObject_ThunderSpread"), &Desc);
 
             }
         }

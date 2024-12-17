@@ -80,11 +80,11 @@ _bool CState_CarcassBigA_Die::End_Check()
     }
     else if ((AN_DIE_END_F) == iCurAnim)
     {
-        bEndCheck = m_pMonster->Get_EndAnim(AN_DIE_LOOP_F);
+        bEndCheck = m_pMonster->Get_EndAnim(AN_DIE_END_F);
     }
-    else if ((AN_DIE_LOOP_B) == iCurAnim)
+    else if ((AN_DIE_END_B) == iCurAnim)
     {
-        bEndCheck = m_pMonster->Get_EndAnim(AN_DIE_LOOP_B);
+        bEndCheck = m_pMonster->Get_EndAnim(AN_DIE_END_B);
     }
     else
     {

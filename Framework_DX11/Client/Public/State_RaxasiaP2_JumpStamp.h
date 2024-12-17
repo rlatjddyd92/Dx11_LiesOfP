@@ -42,6 +42,8 @@ private:
     _bool               m_bStomp = { false };
     _bool               m_bAccel = { false };
 
+    _bool               m_bOnMark = { false };
+
     _uint               m_iRouteTrack = {};
 
 private:

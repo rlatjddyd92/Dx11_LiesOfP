@@ -56,6 +56,8 @@ public:
 		m_pParentMatrix = pParentMatrix;
 	}
 
+	void Set_WorldMatrix();
+
 public:
 	virtual HRESULT Initialize_Prototype();
 	virtual HRESULT Initialize(void* pArg = nullptr);
@@ -70,7 +72,6 @@ public:
 
 protected:
 	HRESULT Bind_WorldMatrix(class CShader* pShader, const _char* pConstantName);
-	void Set_WorldMatrix();
 
 protected:
 	EFFECT_TYPE		m_eEffectType = { TYPE_END };

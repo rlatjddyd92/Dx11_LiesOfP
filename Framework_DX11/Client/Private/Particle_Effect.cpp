@@ -40,14 +40,14 @@ HRESULT CParticle_Effect::Initialize(void* pArg)
 
 void CParticle_Effect::Priority_Update(_float fTimeDelta)
 {
-    if (true == m_isDead)
-        return;
+    if (false == m_isActive)
+        m_isActive = true;
 
 }
 
 void CParticle_Effect::Update(_float fTimeDelta)
 {
-    if (true == m_isDead)
+    if (false == m_isActive)
         return;
 
     _Vec3 vScale = m_pTransformCom->Get_Scaled();
@@ -72,7 +72,10 @@ void CParticle_Effect::Update(_float fTimeDelta)
     Movement.WorldMatrix = m_WorldMatrix;
 
     if(true == m_pVIBufferCom->DispatchCS(m_pActionCS, Movement))
+    {
         m_isDead = true;
+        m_isActive = false;
+    }
 
     if (0.f < m_DefaultDesc.fDuration && m_DefaultDesc.fDuration < m_fAccumulateTime)
         m_DefaultDesc.iComputeState &= ~CVIBuffer_Instancing::STATE_LOOP;
@@ -81,7 +84,7 @@ void CParticle_Effect::Update(_float fTimeDelta)
 
 void CParticle_Effect::Late_Update(_float fTimeDelta)
 {
-    if (true == m_isDead)
+    if (false == m_isActive)
         return;
 
     m_fAccumulateTime += fTimeDelta;
@@ -162,6 +165,7 @@ void CParticle_Effect::Reset()
 {
     m_DefaultDesc = m_InitDesc;
     m_isDead = false;
+    m_isActive = false;
     m_fAccumulateTime = 0.f;
 
     m_pTransformCom->Set_State(CTransform::STATE_POSITION, m_DefaultDesc.vPos);

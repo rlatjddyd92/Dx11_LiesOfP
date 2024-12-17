@@ -5,6 +5,8 @@
 
 #include "GameInstance.h"
 
+#include "Effect_Manager.h"
+
 CWeapon_Raxasia_P1_Shield::CWeapon_Raxasia_P1_Shield(ID3D11Device* pDevice, ID3D11DeviceContext* pContext)
 	: CWeapon{ pDevice, pContext }
 {
@@ -115,6 +117,9 @@ void CWeapon_Raxasia_P1_Shield::OnCollisionEnter(CGameObject* pOther)
 			m_DamagedObjects.push_back(pOther);
 			_Vec3 vPos = m_pTransformCom->Get_State(CTransform::STATE_POSITION);
 			pOther->Calc_DamageGain(m_fDamageAmount * m_fDamageRatio, vPos, HIT_METAL, m_iAtkStrength);
+
+			CEffect_Manager::Get_Instance()->Add_Effect_ToLayer(LEVEL_GAMEPLAY, TEXT("Raxasia_Attack_ThunderInchent"),
+				vPos, _Vec3{ m_pMonster->Get_TargetDir() });
 		}
 	}
 }
