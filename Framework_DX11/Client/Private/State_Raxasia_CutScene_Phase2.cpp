@@ -75,7 +75,7 @@ void CState_Raxasia_CutScene_Phase2::Update(_float fTimeDelta)
 
         m_isChangeWeaponPos = true;
     }
-    else if (!m_isChangePhase2Model && iFrame > 599)      // 2 페이즈 모델로 바꾸고 헬멧 생성하기
+    else if (!m_isChangePhase2Model && iFrame > 599)      // 2 페이즈 모델로 바꾸고 헬멧 생성하기, 방패 비활성화 하기
     {
         m_pMonster->Change_Model(1);
 
@@ -85,6 +85,8 @@ void CState_Raxasia_CutScene_Phase2::Update(_float fTimeDelta)
         m_pCutSceneHelmet = dynamic_cast<CRaxasia_Helmet_CutScene*>(m_pGameInstance->Get_CloneObject_ToLayer(LEVEL_GAMEPLAY, TEXT("Layer_CutScene"),
             TEXT("Prototype_GameObject_Weapon_Raxasia_Helmet_CutScene"), &Desc));
         Safe_AddRef(m_pCutSceneHelmet);
+
+        m_pShieldWeapon->IsActive(false);
 
         m_isChangePhase2Model = true;
     }
@@ -111,6 +113,9 @@ void CState_Raxasia_CutScene_Phase2::Update(_float fTimeDelta)
     else if(!m_isPlayWeaponChangeAnim && iFrame > 912)      // 검 애니메이션 재생하기
     {
         m_pCutSceneWeapon->Play_Animation("AS_Sword_Raxasia_Phase2_C06_CINE", 1.6f);
+
+        m_pShieldWeapon->IsActive(true);
+
         m_isPlayWeaponChangeAnim = true;
     }
 

@@ -473,6 +473,10 @@ void CSimonManus::End_CutScene(_uint iCutSceneNum)
 	if (m_pCutSceneFsmCom->Get_CurrentState() == STATE_MEET)
 	{
 		m_pModelCom = m_pP1ModelCom;
+
+		const _Matrix* pNewSocketMatrix = { nullptr };
+		pNewSocketMatrix = m_pModelCom->Get_BoneCombindTransformationMatrix_Ptr("Bn_Weapon_R");
+		m_pWeapon->ChangeSocketMatrix(pNewSocketMatrix);
 	}
 	else if (m_pCutSceneFsmCom->Get_CurrentState() == STATE_P2)
 	{

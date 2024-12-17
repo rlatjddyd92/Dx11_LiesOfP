@@ -150,13 +150,13 @@ void CPlayerCamera::PlayerInitMove(_float fTimeDelta)
 	vPlayerPos.m128_f32[1] += 1.65f;
 
 	_vector vCurrentPos = m_pTransformCom->Get_State(CTransform::STATE_POSITION);
-	_Vec3 vNewPos = XMVectorLerp(vCurrentPos, m_vTargetPos, 0.02f); 
+	_Vec3 vNewPos = XMVectorLerp(vCurrentPos, m_vTargetPos, 0.07f); 
 
 	m_pTransformCom->Set_State(CTransform::STATE_POSITION, vNewPos);
 
 	m_pTransformCom->LookAt(vPlayerPos);
 
-	if ((vNewPos - m_vTargetPos).Length() < 0.01f)
+	if ((vNewPos - m_vTargetPos).Length() < 0.05f)
 	{
 		m_isMoveInitPos = false;
 	}

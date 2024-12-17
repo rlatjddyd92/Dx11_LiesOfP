@@ -1,46 +1,55 @@
-﻿  unity_3C000WIZDZUF149A.cpp
-D:\GitProject\Dx11_LiesOfP\Framework_DX11\Client\Private\State_RaxasiaP1_Sting_Spread.cpp(88,70): warning C4927: 변환이 잘못되었습니다. 사용자 정의 변환이 암시적으로 두 번 이상 적용되었습니다.
-  (소스 파일 '/x64/Release/unity_3C000WIZDZUF149A.cpp'을(를) 컴파일하는 중)
-  D:\GitProject\Dx11_LiesOfP\Framework_DX11\Client\Private\State_RaxasiaP1_Sting_Spread.cpp(88,70):
-  'DirectX::SimpleMath::Vector3::Vector3(DirectX::FXMVECTOR) noexcept' 생성자를 호출하는 동안
-  D:\GitProject\Dx11_LiesOfP\Framework_DX11\EngineSDK\Inc\DirectXTK\SimpleMath.h(232,13):
-  'DirectX::SimpleMath::Vector3::Vector3' 선언을 참조하십시오.
+﻿  unity_X22ZBT8LXUIREFH9.cpp
+C:\Users\olivi\GitHub\Dx11_LiesOfP\Framework_DX11\Client\Private\State_CurruptedStrongArm_Idle.cpp(113,9): warning C4065: switch문에 'default'가 있으나 'case' 레이블이 없습니다.
+  (소스 파일 '/x64/Release/unity_X22ZBT8LXUIREFH9.cpp'을(를) 컴파일하는 중)
   
-D:\GitProject\Dx11_LiesOfP\Framework_DX11\Client\Private\State_RaxasiaP2_Idle.cpp(113,23): warning C4244: '=': 'float'에서 'Engine::_uint'(으)로 변환하면서 데이터가 손실될 수 있습니다.
-  (소스 파일 '/x64/Release/unity_3C000WIZDZUF149A.cpp'을(를) 컴파일하는 중)
+C:\Users\olivi\GitHub\Dx11_LiesOfP\Framework_DX11\Client\Private\State_RaxasiaP1_Sting_Spread.cpp(89,70): warning C4927: 변환이 잘못되었습니다. 사용자 정의 변환이 암시적으로 두 번 이상 적용되었습니다.
+  (소스 파일 '/x64/Release/unity_X22ZBT8LXUIREFH9.cpp'을(를) 컴파일하는 중)
+      C:\Users\olivi\GitHub\Dx11_LiesOfP\Framework_DX11\Client\Private\State_RaxasiaP1_Sting_Spread.cpp(89,70):
+      'DirectX::SimpleMath::Vector3::Vector3(DirectX::FXMVECTOR) noexcept' 생성자를 호출하는 동안
+      C:\Users\olivi\GitHub\Dx11_LiesOfP\Framework_DX11\EngineSDK\Inc\DirectXTK\SimpleMath.h(232,13):
+      'DirectX::SimpleMath::Vector3::Vector3' 선언을 참조하십시오.
   
-D:\GitProject\Dx11_LiesOfP\Framework_DX11\Client\Private\State_RaxasiaP2_Running_Fury.cpp(136,70): warning C4927: 변환이 잘못되었습니다. 사용자 정의 변환이 암시적으로 두 번 이상 적용되었습니다.
-  (소스 파일 '/x64/Release/unity_3C000WIZDZUF149A.cpp'을(를) 컴파일하는 중)
-  D:\GitProject\Dx11_LiesOfP\Framework_DX11\Client\Private\State_RaxasiaP2_Running_Fury.cpp(136,70):
-  'DirectX::SimpleMath::Vector3::Vector3(DirectX::FXMVECTOR) noexcept' 생성자를 호출하는 동안
-  D:\GitProject\Dx11_LiesOfP\Framework_DX11\EngineSDK\Inc\DirectXTK\SimpleMath.h(232,13):
-  'DirectX::SimpleMath::Vector3::Vector3' 선언을 참조하십시오.
+C:\Users\olivi\GitHub\Dx11_LiesOfP\Framework_DX11\Client\Private\State_RaxasiaP1_Sting_Spread.cpp(291,51): warning C4305: '인수': 'double'에서 'float'(으)로 잘립니다.
+  (소스 파일 '/x64/Release/unity_X22ZBT8LXUIREFH9.cpp'을(를) 컴파일하는 중)
   
-D:\GitProject\Dx11_LiesOfP\Framework_DX11\Client\Private\State_RaxasiaP2_Running_Fury.cpp(162,70): warning C4927: 변환이 잘못되었습니다. 사용자 정의 변환이 암시적으로 두 번 이상 적용되었습니다.
-  (소스 파일 '/x64/Release/unity_3C000WIZDZUF149A.cpp'을(를) 컴파일하는 중)
-  D:\GitProject\Dx11_LiesOfP\Framework_DX11\Client\Private\State_RaxasiaP2_Running_Fury.cpp(162,70):
-  'DirectX::SimpleMath::Vector3::Vector3(DirectX::FXMVECTOR) noexcept' 생성자를 호출하는 동안
-  D:\GitProject\Dx11_LiesOfP\Framework_DX11\EngineSDK\Inc\DirectXTK\SimpleMath.h(232,13):
-  'DirectX::SimpleMath::Vector3::Vector3' 선언을 참조하십시오.
+C:\Users\olivi\GitHub\Dx11_LiesOfP\Framework_DX11\Client\Private\State_RaxasiaP2_Idle.cpp(120,23): warning C4244: '=': 'float'에서 'Engine::_uint'(으)로 변환하면서 데이터가 손실될 수 있습니다.
+  (소스 파일 '/x64/Release/unity_X22ZBT8LXUIREFH9.cpp'을(를) 컴파일하는 중)
   
-D:\GitProject\Dx11_LiesOfP\Framework_DX11\Client\Private\UIPage_Shop.cpp(326,20): warning C4018: '>': signed 또는 unsigned가 일치하지 않습니다.
-  (소스 파일 '/x64/Release/unity_3C000WIZDZUF149A.cpp'을(를) 컴파일하는 중)
+C:\Users\olivi\GitHub\Dx11_LiesOfP\Framework_DX11\Client\Private\State_RaxasiaP2_Running_Fury.cpp(136,70): warning C4927: 변환이 잘못되었습니다. 사용자 정의 변환이 암시적으로 두 번 이상 적용되었습니다.
+  (소스 파일 '/x64/Release/unity_X22ZBT8LXUIREFH9.cpp'을(를) 컴파일하는 중)
+      C:\Users\olivi\GitHub\Dx11_LiesOfP\Framework_DX11\Client\Private\State_RaxasiaP2_Running_Fury.cpp(136,70):
+      'DirectX::SimpleMath::Vector3::Vector3(DirectX::FXMVECTOR) noexcept' 생성자를 호출하는 동안
+      C:\Users\olivi\GitHub\Dx11_LiesOfP\Framework_DX11\EngineSDK\Inc\DirectXTK\SimpleMath.h(232,13):
+      'DirectX::SimpleMath::Vector3::Vector3' 선언을 참조하십시오.
   
-D:\GitProject\Dx11_LiesOfP\Framework_DX11\Client\Private\UIPage_Stat.cpp(333,8): warning C4834: [[nodiscard]] 특성이 포함된 함수의 반환 값을 버리는 중입니다.
-  (소스 파일 '/x64/Release/unity_3C000WIZDZUF149A.cpp'을(를) 컴파일하는 중)
+C:\Users\olivi\GitHub\Dx11_LiesOfP\Framework_DX11\Client\Private\State_RaxasiaP2_Running_Fury.cpp(162,70): warning C4927: 변환이 잘못되었습니다. 사용자 정의 변환이 암시적으로 두 번 이상 적용되었습니다.
+  (소스 파일 '/x64/Release/unity_X22ZBT8LXUIREFH9.cpp'을(를) 컴파일하는 중)
+      C:\Users\olivi\GitHub\Dx11_LiesOfP\Framework_DX11\Client\Private\State_RaxasiaP2_Running_Fury.cpp(162,70):
+      'DirectX::SimpleMath::Vector3::Vector3(DirectX::FXMVECTOR) noexcept' 생성자를 호출하는 동안
+      C:\Users\olivi\GitHub\Dx11_LiesOfP\Framework_DX11\EngineSDK\Inc\DirectXTK\SimpleMath.h(232,13):
+      'DirectX::SimpleMath::Vector3::Vector3' 선언을 참조하십시오.
   
-D:\GitProject\Dx11_LiesOfP\Framework_DX11\Client\Private\UIPage_Stat.cpp(337,8): warning C4834: [[nodiscard]] 특성이 포함된 함수의 반환 값을 버리는 중입니다.
-  (소스 파일 '/x64/Release/unity_3C000WIZDZUF149A.cpp'을(를) 컴파일하는 중)
+C:\Users\olivi\GitHub\Dx11_LiesOfP\Framework_DX11\Client\Private\State_RaxasiaP2_StepJump.cpp(310,51): warning C4305: '인수': 'double'에서 'float'(으)로 잘립니다.
+  (소스 파일 '/x64/Release/unity_X22ZBT8LXUIREFH9.cpp'을(를) 컴파일하는 중)
   
-D:\GitProject\Dx11_LiesOfP\Framework_DX11\Client\Private\UIPage_Stat.cpp(341,8): warning C4834: [[nodiscard]] 특성이 포함된 함수의 반환 값을 버리는 중입니다.
-  (소스 파일 '/x64/Release/unity_3C000WIZDZUF149A.cpp'을(를) 컴파일하는 중)
+C:\Users\olivi\GitHub\Dx11_LiesOfP\Framework_DX11\Client\Private\UIPage_Shop.cpp(326,20): warning C4018: '>': signed 또는 unsigned가 일치하지 않습니다.
+  (소스 파일 '/x64/Release/unity_X22ZBT8LXUIREFH9.cpp'을(를) 컴파일하는 중)
   
-D:\GitProject\Dx11_LiesOfP\Framework_DX11\Client\Private\UIRender_Batching.cpp(216,36): warning C4267: '=': 'size_t'에서 'Engine::_int'(으)로 변환하면서 데이터가 손실될 수 있습니다.
-  (소스 파일 '/x64/Release/unity_3C000WIZDZUF149A.cpp'을(를) 컴파일하는 중)
+C:\Users\olivi\GitHub\Dx11_LiesOfP\Framework_DX11\Client\Private\UIPage_Stat.cpp(333,8): warning C4834: [[nodiscard]] 특성이 포함된 함수의 반환 값을 버리는 중입니다.
+  (소스 파일 '/x64/Release/unity_X22ZBT8LXUIREFH9.cpp'을(를) 컴파일하는 중)
+  
+C:\Users\olivi\GitHub\Dx11_LiesOfP\Framework_DX11\Client\Private\UIPage_Stat.cpp(337,8): warning C4834: [[nodiscard]] 특성이 포함된 함수의 반환 값을 버리는 중입니다.
+  (소스 파일 '/x64/Release/unity_X22ZBT8LXUIREFH9.cpp'을(를) 컴파일하는 중)
+  
+C:\Users\olivi\GitHub\Dx11_LiesOfP\Framework_DX11\Client\Private\UIPage_Stat.cpp(341,8): warning C4834: [[nodiscard]] 특성이 포함된 함수의 반환 값을 버리는 중입니다.
+  (소스 파일 '/x64/Release/unity_X22ZBT8LXUIREFH9.cpp'을(를) 컴파일하는 중)
+  
+C:\Users\olivi\GitHub\Dx11_LiesOfP\Framework_DX11\Client\Private\UIRender_Batching.cpp(216,36): warning C4267: '=': 'size_t'에서 'Engine::_int'(으)로 변환하면서 데이터가 손실될 수 있습니다.
+  (소스 파일 '/x64/Release/unity_X22ZBT8LXUIREFH9.cpp'을(를) 컴파일하는 중)
   
   코드를 생성하고 있습니다.
-  1 of 9144 functions (<0.1%) were compiled, the rest were copied from previous compilation.
+  425 of 9369 functions ( 4.5%) were compiled, the rest were copied from previous compilation.
     0 functions were new in current compilation
-    16 functions had inline decision re-evaluated but remain unchanged
+    148 functions had inline decision re-evaluated but remain unchanged
   코드를 생성했습니다.
-  Client.vcxproj -> D:\GitProject\Dx11_LiesOfP\Framework_DX11\Client\Bin\Client.exe
+  Client.vcxproj -> C:\Users\olivi\GitHub\Dx11_LiesOfP\Framework_DX11\Client\Bin\Client.exe

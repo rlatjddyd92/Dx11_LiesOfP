@@ -442,6 +442,7 @@ HRESULT CLoader::Ready_Resources_For_GamePlayLevel_Map0()
 	//if (handle == -1)
 	//	return E_FAIL;
 
+
 	int iResult = 0;
 
 	_wstring strPrototype = TEXT("");
