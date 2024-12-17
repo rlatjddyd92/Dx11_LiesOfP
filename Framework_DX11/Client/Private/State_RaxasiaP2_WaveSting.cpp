@@ -26,6 +26,10 @@ HRESULT CState_RaxasiaP2_WaveSting::Start_State(void* pArg)
     m_bSwingSound = false;
 
     m_bSwing = false;
+    m_bWave = false;
+    m_bEnvelop = false;
+    m_bAccel = false;
+
     return S_OK;
 }
 
@@ -56,13 +60,32 @@ void CState_RaxasiaP2_WaveSting::Update(_float fTimeDelta)
         {
             ++m_iRouteTrack;
             m_bSwing = false;
-            m_pMonster->Change_Animation(AN_STING, false, 0.02f, 115);
+            m_pMonster->Change_Animation(AN_RUN, false, 0.02f, 115);
+            m_pMonster->Get_Model()->Set_SpeedRatio(AN_RUN, (double)1.5);
             return;
         }
 
         break;
 
     case 2:
+    {
+        _float fDist = m_pMonster->Calc_Distance_XZ();
+        if (fDist <= 4.f)
+        {
+            ++m_iRouteTrack;
+            m_bSwing = false;
+            m_pMonster->DeActive_Effect(CRaxasia::EFFECT_THUNDERENVELOP_SMALL);
+            m_pMonster->Get_Model()->Set_SpeedRatio(AN_RUN, (double)1);
+            m_pMonster->Change_Animation(AN_STING, false, 0.02f, 50);
+            return;
+        }
+
+        m_pMonster->Get_Transform()->LookAt_Lerp_NoHeight(m_pMonster->Get_TargetDir(), 2.f, fTimeDelta);
+
+        break;
+    }
+
+    case 3:
         if (End_Check())
         {
             m_pMonster->Change_State(CRaxasia::IDLE);
@@ -97,7 +120,7 @@ _bool CState_RaxasiaP2_WaveSting::End_Check()
         }
         break;
 
-    case 2:
+    case 3:
         if ((AN_STING) == iCurAnim)
         {
             bEndCheck = m_pMonster->Get_EndAnim(AN_STING);
@@ -125,7 +148,7 @@ void CState_RaxasiaP2_WaveSting::Collider_Check(_double CurTrackPos)
             m_pMonster->DeActive_CurretnWeaponCollider();
         }
     }
-    else if (m_iRouteTrack == 2)
+    else if (m_iRouteTrack == 3)
     {
         if ((CurTrackPos >= 160.f && CurTrackPos <= 170.f))
         {
@@ -140,7 +163,60 @@ void CState_RaxasiaP2_WaveSting::Collider_Check(_double CurTrackPos)
 
 void CState_RaxasiaP2_WaveSting::Effect_Check(_double CurTrackPos)
 {
+    if (m_iRouteTrack == 0)
+    {
+        if (!m_bCharge)
+        {
+            if (CurTrackPos >= 35.f)
+            {
+                m_pMonster->Active_Effect(CRaxasia::EFFECT_INCHENTSWORD_P2, true);
+                m_bCharge = true;
+            }
+        }
+    }
+    else if (m_iRouteTrack == 1)
+    {
+        if (!m_bWave)
+        {
+            if ((CurTrackPos >= 80.f && CurTrackPos <= 85.f) ||
+                (CurTrackPos >= 115.f && CurTrackPos <= 120.f))
+            {
+                //웨이브 공격 생성
+            }
+        }
+        else
+        {
+            if (CurTrackPos >= 95.f && CurTrackPos <= 105.f)
+            {
+                m_bWave = false;
+            }
 
+        }
+    }
+    else if (m_iRouteTrack == 2)
+    {
+        if (!m_bEnvelop)
+        {
+            if (CurTrackPos >= 15.f)
+            {
+                m_bEnvelop = true;
+                m_pMonster->Active_Effect(CRaxasia::EFFECT_THUNDERENVELOP_SMALL, true);
+            }
+        }
+
+        if (CurTrackPos >= 19.f && CurTrackPos <= 21.f)
+        {
+            if (!m_bAccel)
+            {
+                m_bAccel = true;
+                m_pMonster->Active_Effect(CRaxasia::EFFECT_THUNDERACCEL, true);
+            }
+        }
+        else
+        {
+            m_pMonster->DeActive_Effect(CRaxasia::EFFECT_THUNDERACCEL);
+        }
+    }
 }
 
 void CState_RaxasiaP2_WaveSting::Control_Sound(_double CurTrackPos)

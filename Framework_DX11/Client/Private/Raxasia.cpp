@@ -945,6 +945,10 @@ void CRaxasia::ChangePhase()
 	m_pWeapon->Appear();
 
 
+	WeaponDesc.pSocketBoneMatrix = m_pModelCom->Get_BoneCombindTransformationMatrix_Ptr(46);
+
+	m_pWeaponShield->ChangeSocketMatrix(WeaponDesc.pSocketBoneMatrix);
+
 	m_pColliderBindMatrix[CT_UPPERBODY] = m_pModelCom->Get_BoneCombindTransformationMatrix_Ptr(8);//Spine 2
 	m_pColliderBindMatrix[CT_LOWERBODY] = m_pModelCom->Get_BoneCombindTransformationMatrix_Ptr(6);//Spine
 

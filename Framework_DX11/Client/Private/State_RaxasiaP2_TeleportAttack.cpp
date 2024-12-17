@@ -52,16 +52,15 @@ void CState_RaxasiaP2_TeleportAttack::Update(_float fTimeDelta)
 
         if (!m_bTeleport)
         {
-            if (CurTrackPos >= 40.f)
+            if (CurTrackPos >= 40.f && CurTrackPos <= 42.f)
             {
                 m_bTeleport = true;
                 // 텔
                 _Vec3 vDir = m_pMonster->Get_TargetDir();
-                _Vec3 vPos = m_pMonster->Get_TargetPos();
 
                 vDir.Normalize();
 
-                m_pMonster->Get_RigidBody()->Set_GloblePose(vPos - (vDir * 15.f));
+                m_pMonster->Get_RigidBody()->Set_Velocity(-(vDir * 80.f));
             }
         }
 
@@ -72,7 +71,7 @@ void CState_RaxasiaP2_TeleportAttack::Update(_float fTimeDelta)
     case 1:
         if (End_Check())
         {
-            m_pMonster->Change_State(CRaxasia::IDLE);//개전으로 연결
+            m_pMonster->Change_State(CRaxasia::ATKP2_DECLAREWAR);//개전으로 연결
             return;
         }
 

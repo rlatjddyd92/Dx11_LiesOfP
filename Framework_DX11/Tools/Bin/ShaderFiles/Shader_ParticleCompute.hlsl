@@ -225,7 +225,7 @@ void CS_MOVE_MAIN(uint3 DTid : SV_DispatchThreadID)
         particle.vUp = float4(vOrbitAxis.x, vOrbitAxis.y, vOrbitAxis.z, 0.f);
         particle.vUp = mul(particle.vUp, WorldMatrix);
         
-        particle.vLook = particle.vTranslation - particle.vRight;
+        particle.vLook = vMoveDir;
     }
     
     

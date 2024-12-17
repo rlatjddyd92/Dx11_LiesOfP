@@ -37,10 +37,15 @@ HRESULT CTrail_Effect_TP::Initialize(void* pArg)
 
 void CTrail_Effect_TP::Priority_Update(_float fTimeDelta)
 {
+	if (false == m_isActive)
+		m_isActive = true;
 }
 
 void CTrail_Effect_TP::Update(_float fTimeDelta)
 {
+	if (false == m_isActive)
+		return;
+
 	if (true == m_DefaultDesc.bLoop)
 	{
 		__super::Set_WorldMatrix();
@@ -63,6 +68,9 @@ void CTrail_Effect_TP::Update(_float fTimeDelta)
 
 void CTrail_Effect_TP::Late_Update(_float fTimeDelta)
 {
+	if (false == m_isActive)
+		return;
+
 	if (0.f < m_DefaultDesc.fDuration)
 	{
 		m_fAccumulateTime += fTimeDelta;
@@ -76,6 +84,7 @@ void CTrail_Effect_TP::Late_Update(_float fTimeDelta)
 	if (false == m_DefaultDesc.bLoop && 1.f < m_fAlpha)
 	{
 		m_isDead = true;
+		m_isActive = false;
 	}
 
 	m_pGameInstance->Add_RenderObject((CRenderer::RENDERGROUP)m_RenderDesc.iRenderGroup, this);
@@ -139,6 +148,7 @@ void CTrail_Effect_TP::Reset()
 	m_pVIBufferCom->Reset();
 	m_DefaultDesc = m_InitDesc;
 	m_isDead = false;
+	m_isActive = false;
 	m_fAlpha = 0.f;
 	m_fAccumulateTime = 0.f;
 }

@@ -42,14 +42,14 @@ HRESULT CMesh_Effect::Initialize(void* pArg)
 
 void CMesh_Effect::Priority_Update(_float fTimeDelta)
 {
-	if (true == m_isDead)
-		return;
+	if (false == m_isActive)
+		m_isActive = true;
 
 }
 
 void CMesh_Effect::Update(_float fTimeDelta)
 {
-	if (true == m_isDead)
+	if (false == m_isActive)
 		return;
 
 	if (true == m_isReset)
@@ -73,7 +73,7 @@ void CMesh_Effect::Update(_float fTimeDelta)
 
 void CMesh_Effect::Late_Update(_float fTimeDelta)
 {
-	if (true == m_isDead)
+	if (false == m_isActive)
 		return;
 
 	m_fAccumulateTime += fTimeDelta;
@@ -85,7 +85,10 @@ void CMesh_Effect::Late_Update(_float fTimeDelta)
 			m_isReset = true;
 		}
 		else
+		{
 			m_isDead = true;
+			m_isActive = false;
+		}
 	}
 
 	m_pGameInstance->Add_RenderObject((CRenderer::RENDERGROUP)m_RenderDesc.iRenderGroup, this);
@@ -156,6 +159,7 @@ void CMesh_Effect::Reset()
 
 	m_DefaultDesc = m_InitDesc;
 	m_isDead = false;
+	m_isActive = false;
 
 	m_pTransformCom->Set_State(CTransform::STATE_POSITION, m_DefaultDesc.vPos);
 	m_pTransformCom->Rotation(m_DefaultDesc.vStartRotation.x, m_DefaultDesc.vStartRotation.y, m_DefaultDesc.vStartRotation.z);
