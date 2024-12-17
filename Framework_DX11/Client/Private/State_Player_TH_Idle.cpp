@@ -36,7 +36,10 @@ void CState_Player_TH_Idle::Update(_float fTimeDelta)
     }
     else if (KEY_HOLD(KEY::W) || KEY_HOLD(KEY::S) || KEY_HOLD(KEY::D) || KEY_HOLD(KEY::A))
     {
-        m_pPlayer->Change_State(CPlayer::TH_RUN);
+        if (m_pPlayer->Get_IsLockOn())
+            m_pPlayer->Change_State(CPlayer::TH_WALK);
+        else
+            m_pPlayer->Change_State(CPlayer::TH_RUN);
     }
     else if (KEY_TAP(KEY::SPACE))
     {
@@ -66,6 +69,10 @@ void CState_Player_TH_Idle::Update(_float fTimeDelta)
     else if (KEY_TAP(KEY::TAPKEY))
     {
         m_pPlayer->Change_State(CPlayer::CHANGEWEP);
+    }
+    else if (KEY_HOLD(KEY::CTRL))
+    {
+        m_pPlayer->Change_State(CPlayer::ARM_START);
     }
     
     if (KEY_AWAY(KEY::RBUTTON))

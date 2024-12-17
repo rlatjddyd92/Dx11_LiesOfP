@@ -3,8 +3,7 @@
 #include "GameInstance.h"
 #include "Model.h"
 #include "Player.h"
-#include "Camera.h"
-#include "Weapon.h"
+#include "Weapon_FlameSword.h"
 
 CState_Player_Flame_Fable::CState_Player_Flame_Fable(CFsm* pFsm, CPlayer* pPlayer)
     :CState{ pFsm }
@@ -30,6 +29,11 @@ HRESULT CState_Player_Flame_Fable::Initialize(_uint iStateNum, void* pArg)
     m_iColliderStartFrame[2] = 80;
     m_iColliderEndFrame[2] = 90;
 
+    m_iEffectStartFrame[0] = 35;
+    m_iEffectEndFrame[0] = 68;
+    m_iEffectStartFrame[1] = 78;
+    m_iEffectEndFrame[1] = 93;
+
     return S_OK;
 }
 
@@ -52,6 +56,9 @@ HRESULT CState_Player_Flame_Fable::Start_State(void* pArg)
     }
 
     m_pPlayer->Set_WeaponStrength(ATK_STRONG);
+
+    m_isActiveEffect[0] = m_isDeActiveEffect[0] = false;
+    m_isActiveEffect[1] = m_isDeActiveEffect[1] = false;
 
     return S_OK;
 }
@@ -98,7 +105,7 @@ void CState_Player_Flame_Fable::Update(_float fTimeDelta)
 
     Control_Collider(iFrame);
     Control_Sound(iFrame);
-    //Control_Effect(iFrame);
+    Control_Effect(iFrame);
 }
 
 void CState_Player_Flame_Fable::End_State()
@@ -108,7 +115,14 @@ void CState_Player_Flame_Fable::End_State()
 
 _bool CState_Player_Flame_Fable::End_Check()
 {
-    return m_pPlayer->Get_EndAnim(m_iAnimation_FlameFable);
+    _int iFrame = m_pPlayer->Get_Frame();
+
+    if (iFrame > 181)
+    {
+        return true;
+    }
+
+    return false;
 }
 
 void CState_Player_Flame_Fable::Control_Collider(_int iFrame)
@@ -153,17 +167,27 @@ void CState_Player_Flame_Fable::Control_Sound(_int iFrame)
 
 void CState_Player_Flame_Fable::Control_Effect(_int iFrame)
 {
-    //if (!m_isActiveEffect[0] && (iFrame == m_iColliderStartFrame[0] || iFrame == m_iColliderStartFrame[0] + 1))
-    //{
-    //    m_pPlayer->Active_Effect(CPlayer::EFFECT_RAPIER_TRAIL_FIRST);
-    //    m_isActiveEffect[0] = true;
-    //}
-    //else if (!m_isActiveEffect[1] && (iFrame == m_iColliderStartFrame[2] || iFrame == m_iColliderStartFrame[2] + 1))
-    //{
-    //    m_pPlayer->DeActive_Effect(CPlayer::EFFECT_RAPIER_TRAIL_FIRST);
-    //    m_pPlayer->Active_Effect(CPlayer::EFFECT_RAPIER_TRAIL_SECOND);
-    //    m_isActiveEffect[1] = true;
-    //}
+    if (!m_isActiveEffect[0] && m_iEffectStartFrame[0] <= iFrame)
+    {
+        m_pPlayer->Active_WeaponEffect(CWeapon_FlameSword::EFFECT_STORMSLASH1);
+        m_isActiveEffect[0] = true;
+    }
+    else if (m_isActiveEffect[0] && !m_isDeActiveEffect[0] && m_iEffectEndFrame[0] < iFrame)
+    {
+        m_pPlayer->DeActive_WeaponEffect(CWeapon_FlameSword::EFFECT_STORMSLASH1);
+        m_isDeActiveEffect[0] = true;
+    }
+
+    if (!m_isActiveEffect[1] && m_iEffectStartFrame[1] <= iFrame)
+    {
+        m_pPlayer->Active_WeaponEffect(CWeapon_FlameSword::EFFECT_STORMSLASH2);
+        m_isActiveEffect[1] = true;
+    }
+    else if (m_isActiveEffect[1] && !m_isDeActiveEffect[1] && m_iEffectEndFrame[1] < iFrame)
+    {
+        m_pPlayer->DeActive_WeaponEffect(CWeapon_FlameSword::EFFECT_STORMSLASH2);
+        m_isDeActiveEffect[1] = true;
+    }
 }
 
 CState_Player_Flame_Fable* CState_Player_Flame_Fable::Create(CFsm* pFsm, CPlayer* pPlayer, _uint iStateNum, void* pArg)

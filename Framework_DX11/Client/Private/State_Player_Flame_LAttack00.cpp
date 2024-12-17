@@ -3,8 +3,7 @@
 #include "GameInstance.h"
 #include "Model.h"
 #include "Player.h"
-#include "Camera.h"
-#include "Weapon.h"
+#include "Weapon_FlameSword.h"
 
 CState_Player_Flame_LAttack00::CState_Player_Flame_LAttack00(CFsm* pFsm, CPlayer* pPlayer)
     :CState{ pFsm }
@@ -26,6 +25,9 @@ HRESULT CState_Player_Flame_LAttack00::Initialize(_uint iStateNum, void* pArg)
     m_iColliderStartFrame = 33;
     m_iColliderEndFrame = 38;
 
+    m_iEffectStartFrame = 30;
+    m_iEffectEndFrame = 42;
+
     return S_OK;
 }
 
@@ -34,7 +36,7 @@ HRESULT CState_Player_Flame_LAttack00::Start_State(void* pArg)
     if (m_pFsm->Get_PrevState() == CPlayer::TH_IDLE)
         m_pPlayer->Change_Animation(m_iAnimation_FlameNA3, false, 0.f);
     else
-        m_pPlayer->Change_Animation(m_iAnimation_FlameNA3, false, 0.5f, 7);
+        m_pPlayer->Change_Animation(m_iAnimation_FlameNA3, false, 0.1f, 7);
 
     m_isInputLButton = false;
     m_isInputRButton = false;
@@ -42,6 +44,7 @@ HRESULT CState_Player_Flame_LAttack00::Start_State(void* pArg)
 
     m_isPlaySound = false;
 
+    m_isActiveEffect = false;
 
     return S_OK;
 }
@@ -95,6 +98,7 @@ void CState_Player_Flame_LAttack00::Update(_float fTimeDelta)
 
     Control_Collider();
     Control_Sound();
+    Control_Effect(iFrame);
 }
 
 void CState_Player_Flame_LAttack00::End_State()
@@ -130,6 +134,19 @@ void CState_Player_Flame_LAttack00::Control_Sound()
     {
         m_pPlayer->Play_CurrentWeaponSound(CWeapon::WEP_SOUND_EFFECT1, TEXT("SE_PC_SK_WS_Glaive_P_B_M_01.wav"));
         m_isPlaySound = true;
+    }
+}
+
+void CState_Player_Flame_LAttack00::Control_Effect(_int iFrame)
+{
+    if (!m_isActiveEffect && m_iEffectStartFrame <= iFrame)
+    {
+        m_pPlayer->Active_WeaponEffect(CWeapon_FlameSword::EFFECT_BASE);
+        m_isActiveEffect = true;
+    }
+    else if (m_isActiveEffect && m_iEffectEndFrame < iFrame)
+    {
+        m_pPlayer->DeActive_WeaponEffect(CWeapon_FlameSword::EFFECT_BASE);
     }
 }
 

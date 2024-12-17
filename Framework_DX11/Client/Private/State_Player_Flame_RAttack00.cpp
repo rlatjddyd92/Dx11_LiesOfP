@@ -3,7 +3,7 @@
 #include "GameInstance.h"
 #include "Model.h"
 #include "Player.h"
-#include "Weapon.h"
+#include "Weapon_FlameSword.h"
 
 CState_Player_Flame_RAttack00::CState_Player_Flame_RAttack00(CFsm* pFsm, CPlayer* pPlayer)
     :CState{ pFsm }
@@ -25,6 +25,9 @@ HRESULT CState_Player_Flame_RAttack00::Initialize(_uint iStateNum, void* pArg)
     m_iColliderStartFrame = 58;
     m_iColliderEndFrame = 66;
 
+    m_iEffectStartFrame = 52;
+    m_iEffectEndFrame = 67;
+
     return S_OK;
 }
 
@@ -38,6 +41,8 @@ HRESULT CState_Player_Flame_RAttack00::Start_State(void* pArg)
     m_isInputLButton = false;
     m_isInputRButton = false;
     m_fRButtonTime = 0.f;
+
+    m_isActiveEffect = false;
 
     return S_OK;
 }
@@ -90,6 +95,7 @@ void CState_Player_Flame_RAttack00::Update(_float fTimeDelta)
     }
 
     Control_Collider();
+    Control_Effect(iFrame);
 }
 
 void CState_Player_Flame_RAttack00::End_State()
@@ -110,6 +116,19 @@ void CState_Player_Flame_RAttack00::Control_Collider()
         m_pPlayer->Active_CurrentWeaponCollider();
     else
         m_pPlayer->DeActive_CurretnWeaponCollider();
+}
+
+void CState_Player_Flame_RAttack00::Control_Effect(_int iFrame)
+{
+    if (!m_isActiveEffect && m_iEffectStartFrame <= iFrame)
+    {
+        m_pPlayer->Active_WeaponEffect(CWeapon_FlameSword::EFFECT_BASE);
+        m_isActiveEffect = true;
+    }
+    else if (m_isActiveEffect && m_iEffectEndFrame < iFrame)
+    {
+        m_pPlayer->DeActive_WeaponEffect(CWeapon_FlameSword::EFFECT_BASE);
+    }
 }
 
 CState_Player_Flame_RAttack00* CState_Player_Flame_RAttack00::Create(CFsm* pFsm, CPlayer* pPlayer, _uint iStateNum, void* pArg)
