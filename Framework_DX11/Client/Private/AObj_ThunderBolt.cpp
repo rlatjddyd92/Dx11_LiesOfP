@@ -1,26 +1,26 @@
 #include "stdafx.h"
-#include "AObj_ThunderSpread.h"
+#include "AObj_ThunderBolt.h"
 
 #include "GameInstance.h"
 
 #include "Effect_Manager.h"
 
-CAObj_ThunderSpread::CAObj_ThunderSpread(ID3D11Device* pDevice, ID3D11DeviceContext* pContext)
+CAObj_ThunderBolt::CAObj_ThunderBolt(ID3D11Device* pDevice, ID3D11DeviceContext* pContext)
     : CAttackObject{ pDevice, pContext }
 {
 }
 
-CAObj_ThunderSpread::CAObj_ThunderSpread(const CGameObject& Prototype)
+CAObj_ThunderBolt::CAObj_ThunderBolt(const CGameObject& Prototype)
     : CAttackObject{ Prototype }
 {
 }
 
-HRESULT CAObj_ThunderSpread::Initialize_Prototype()
+HRESULT CAObj_ThunderBolt::Initialize_Prototype()
 {
     return S_OK;
 }
 
-HRESULT CAObj_ThunderSpread::Initialize(void* pArg)
+HRESULT CAObj_ThunderBolt::Initialize(void* pArg)
 {
     GAMEOBJECT_DESC GameObjDesc{};
     if (FAILED(__super::Initialize(&GameObjDesc)))
@@ -36,7 +36,7 @@ HRESULT CAObj_ThunderSpread::Initialize(void* pArg)
 
     if (FAILED(Ready_Components()))
         return E_FAIL;
-
+    
     m_fDamageAmount = 20.f;
     m_fLifeDuration = 0.3f;
     m_fSpeed = 20.f;
@@ -52,12 +52,12 @@ HRESULT CAObj_ThunderSpread::Initialize(void* pArg)
     return S_OK;
 }
 
-void CAObj_ThunderSpread::Priority_Update(_float fTimeDelta)
+void CAObj_ThunderBolt::Priority_Update(_float fTimeDelta)
 {
     m_pEffect->Priority_Update(fTimeDelta);
 }
 
-void CAObj_ThunderSpread::Update(_float fTimeDelta)
+void CAObj_ThunderBolt::Update(_float fTimeDelta)
 {
     if (m_fLifeTime >= m_fLifeDuration)
     {
@@ -85,7 +85,7 @@ void CAObj_ThunderSpread::Update(_float fTimeDelta)
     m_pEffect->Update(fTimeDelta);
 }
 
-void CAObj_ThunderSpread::Late_Update(_float fTimeDelta)
+void CAObj_ThunderBolt::Late_Update(_float fTimeDelta)
 {
     m_pEffect->Late_Update(fTimeDelta);
     if (m_fLifeTime < m_fLifeDuration)
@@ -97,17 +97,17 @@ void CAObj_ThunderSpread::Late_Update(_float fTimeDelta)
     }
 }
 
-HRESULT CAObj_ThunderSpread::Render()
+HRESULT CAObj_ThunderBolt::Render()
 {
     return S_OK;
 }
 
-HRESULT CAObj_ThunderSpread::Render_LightDepth()
+HRESULT CAObj_ThunderBolt::Render_LightDepth()
 {
     return S_OK;
 }
 
-void CAObj_ThunderSpread::OnCollisionEnter(CGameObject* pOther)
+void CAObj_ThunderBolt::OnCollisionEnter(CGameObject* pOther)
 {
     //pOther check
     if (pOther->Get_Tag() == TEXT("Player"))
@@ -131,15 +131,15 @@ void CAObj_ThunderSpread::OnCollisionEnter(CGameObject* pOther)
     }
 }
 
-void CAObj_ThunderSpread::OnCollisionStay(CGameObject* pOther)
+void CAObj_ThunderBolt::OnCollisionStay(CGameObject* pOther)
 {
 }
 
-void CAObj_ThunderSpread::OnCollisionExit(CGameObject* pOther)
+void CAObj_ThunderBolt::OnCollisionExit(CGameObject* pOther)
 {
 }
 
-HRESULT CAObj_ThunderSpread::Ready_Components()
+HRESULT CAObj_ThunderBolt::Ready_Components()
 {
     if (FAILED(__super::Ready_Components()))
         return E_FAIL;
@@ -165,33 +165,33 @@ HRESULT CAObj_ThunderSpread::Ready_Components()
     return S_OK;
 }
 
-CAObj_ThunderSpread* CAObj_ThunderSpread::Create(ID3D11Device* pDevice, ID3D11DeviceContext* pContext)
+CAObj_ThunderBolt* CAObj_ThunderBolt::Create(ID3D11Device* pDevice, ID3D11DeviceContext* pContext)
 {
-    CAObj_ThunderSpread* pInstance = new CAObj_ThunderSpread(pDevice, pContext);
+    CAObj_ThunderBolt* pInstance = new CAObj_ThunderBolt(pDevice, pContext);
 
     if (FAILED(pInstance->Initialize_Prototype()))
     {
-        MSG_BOX(TEXT("Failed to Created : CAObj_ThunderSpread"));
+        MSG_BOX(TEXT("Failed to Created : CAObj_ThunderBolt"));
         Safe_Release(pInstance);
     }
 
     return pInstance;
 }
 
-CGameObject* CAObj_ThunderSpread::Clone(void* pArg)
+CGameObject* CAObj_ThunderBolt::Clone(void* pArg)
 {
-    CAObj_ThunderSpread* pInstance = new CAObj_ThunderSpread(*this);
+    CAObj_ThunderBolt* pInstance = new CAObj_ThunderBolt(*this);
 
     if (FAILED(pInstance->Initialize(pArg)))
     {
-        MSG_BOX(TEXT("Failed to Cloned : CAObj_ThunderSpread"));
+        MSG_BOX(TEXT("Failed to Cloned : CAObj_ThunderBolt"));
         Safe_Release(pInstance);
     }
 
     return pInstance;
 }
 
-void CAObj_ThunderSpread::Free()
+void CAObj_ThunderBolt::Free()
 {
     __super::Free();
 

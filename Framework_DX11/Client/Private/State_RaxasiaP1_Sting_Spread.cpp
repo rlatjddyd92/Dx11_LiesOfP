@@ -292,7 +292,7 @@ void CState_RaxasiaP1_Sting_Spread::Effect_Check(_double CurTrackPos)
                 Desc.vDir.Normalize();
                 m_pGameInstance->Add_CloneObject_ToLayer(LEVEL_GAMEPLAY, TEXT("Monster_Attack"), TEXT("Prototype_GameObject_ThunderSpread"), &Desc);
 
-
+                m_bSpread = true;
             }
             //m_bSpread = true;
         }

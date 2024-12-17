@@ -210,6 +210,7 @@ void CState_RaxasiaP2_Running_Linked::Update(_float fTimeDelta)
 
 void CState_RaxasiaP2_Running_Linked::End_State()
 {
+    m_pMonster->DeActive_Effect(CRaxasia::EFFECT_THUNDERENVELOP_BIG);
 }
 
 _bool CState_RaxasiaP2_Running_Linked::End_Check()
