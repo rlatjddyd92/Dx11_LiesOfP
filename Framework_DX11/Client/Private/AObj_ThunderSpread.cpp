@@ -38,7 +38,7 @@ HRESULT CAObj_ThunderSpread::Initialize(void* pArg)
         return E_FAIL;
 
     m_fDamageAmount = 20.f;
-    m_fLifeDuration = 0.4f;
+    m_fLifeDuration = 0.3f;
     m_fSpeed = 20.f;
 
     m_pColliderCom->IsActive(true);

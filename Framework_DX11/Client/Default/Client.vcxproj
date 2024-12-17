@@ -179,6 +179,7 @@
     <ClInclude Include="..\Public\AObj_Stomp.h" />
     <ClInclude Include="..\Public\AObj_Thunder.h" />
     <ClInclude Include="..\Public\AObj_ThunderBlast.h" />
+    <ClInclude Include="..\Public\AObj_ThunderBolt.h" />
     <ClInclude Include="..\Public\AObj_ThunderCalling.h" />
     <ClInclude Include="..\Public\AObj_ThunderLanding.h" />
     <ClInclude Include="..\Public\AObj_ThunderMark.h" />
@@ -503,6 +504,7 @@
     <ClCompile Include="..\Private\AObj_Stomp.cpp" />
     <ClCompile Include="..\Private\AObj_Thunder.cpp" />
     <ClCompile Include="..\Private\AObj_ThunderBlast.cpp" />
+    <ClCompile Include="..\Private\AObj_ThunderBolt.cpp" />
     <ClCompile Include="..\Private\AObj_ThunderCalling.cpp" />
     <ClCompile Include="..\Private\AObj_ThunderLanding.cpp" />
     <ClCompile Include="..\Private\AObj_ThunderMark.cpp" />

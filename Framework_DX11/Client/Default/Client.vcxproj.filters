@@ -1110,7 +1110,7 @@
     </Filter>
     <Filter Include="05.Fsm\Player\CutScene\Raxasia\Door">
       <UniqueIdentifier>{cbb6172d-1ec7-4c49-806d-5c800b7e2de5}</UniqueIdentifier>
-	</Filter>
+    </Filter>
     <Filter Include="02.GameObjects\12.AttackObject\Raxasia\ThunderSpread">
       <UniqueIdentifier>{17abbeb9-fd4e-46bb-abaf-b28fe80ad541}</UniqueIdentifier>
     </Filter>
@@ -2110,7 +2110,7 @@
     </ClInclude>
     <ClInclude Include="..\Public\State_Player_OpenRaxasiaDoor.h">
       <Filter>05.Fsm\Player\CutScene\Raxasia\Door</Filter>
-	</ClInclude>
+    </ClInclude>
     <ClInclude Include="..\Public\AObj_ThunderStamp.h">
       <Filter>02.GameObjects\12.AttackObject\Raxasia\ThunderStamp</Filter>
     </ClInclude>
@@ -2152,6 +2152,9 @@
     </ClInclude>
     <ClInclude Include="..\Public\State_CurruptedStrongArm_Die.h">
       <Filter>05.Fsm\Monster\CurruptedStrongArm_Puppet\Die</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Public\AObj_ThunderBolt.h">
+      <Filter>02.GameObjects\12.AttackObject\Raxasia\ThunderBolt</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -3062,7 +3065,7 @@
     </ClCompile>
     <ClCompile Include="..\Private\State_Player_OpenRaxasiaDoor.cpp">
       <Filter>05.Fsm\Player\CutScene\Raxasia\Door</Filter>
-	</ClCompile>
+    </ClCompile>
     <ClCompile Include="..\Private\AObj_ThunderStamp.cpp">
       <Filter>02.GameObjects\12.AttackObject\Raxasia\ThunderStamp</Filter>
     </ClCompile>
@@ -3104,6 +3107,9 @@
     </ClCompile>
     <ClCompile Include="..\Private\State_CurruptedStrongArm_Die.cpp">
       <Filter>05.Fsm\Monster\CurruptedStrongArm_Puppet\Die</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Private\AObj_ThunderBolt.cpp">
+      <Filter>02.GameObjects\12.AttackObject\Raxasia\ThunderBolt</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
