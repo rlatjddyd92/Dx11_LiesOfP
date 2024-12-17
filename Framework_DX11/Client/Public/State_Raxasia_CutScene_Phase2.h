@@ -33,6 +33,8 @@ private:
     _bool               m_isConneectLeftHandShield = {};
 
     _float              m_fDelay = {};
+    _float              m_fAnimationStopTimer = {};
+    _float              m_fAnimationStopTimer2 = {};
 
     _Vec3               m_vRootMoveStack{};
 
@@ -41,7 +43,7 @@ private:
     class CWeapon*                  m_pShieldWeapon = { nullptr };
 private:
     void                End_Check();
-
+    void                Stop_Play_Animation(_int iFrame, _float fTimeDelta);
 public:
     static CState_Raxasia_CutScene_Phase2* Create(class CFsm* pFsm, class CMonster* pMonster, _uint iStateNum, void* pArg = nullptr);
     virtual void Free() override;

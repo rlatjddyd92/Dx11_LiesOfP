@@ -1,0 +1,101 @@
+﻿  GraphEditor.cpp
+D:\GitProject\Dx11_LiesOfP\Framework_DX11\ImGuizmo\GraphEditor.cpp(28,10): error C1083: 포함 파일을 열 수 없습니다. 'imgui.h': No such file or directory
+  ImCurveEdit.cpp
+D:\GitProject\Dx11_LiesOfP\Framework_DX11\ImGuizmo\ImCurveEdit.h(28,10): error C1083: 포함 파일을 열 수 없습니다. 'imgui.h': No such file or directory
+  (소스 파일 '../../ImGuizmo/ImCurveEdit.cpp'을(를) 컴파일하는 중)
+  
+  ImGradient.cpp
+D:\GitProject\Dx11_LiesOfP\Framework_DX11\ImGuizmo\ImGradient.cpp(27,10): error C1083: 포함 파일을 열 수 없습니다. 'imgui.h': No such file or directory
+  ImGuizmo.cpp
+D:\GitProject\Dx11_LiesOfP\Framework_DX11\ImGuizmo\ImGuizmo.cpp(30,10): error C1083: 포함 파일을 열 수 없습니다. 'imgui.h': No such file or directory
+  ImSequencer.cpp
+D:\GitProject\Dx11_LiesOfP\Framework_DX11\ImGuizmo\ImSequencer.cpp(27,10): error C1083: 포함 파일을 열 수 없습니다. 'imgui.h': No such file or directory
+  imgui.cpp
+D:\GitProject\Dx11_LiesOfP\Framework_DX11\imgui\imgui.cpp(1,10): error C1083: 포함 파일을 열 수 없습니다. 'stdafx.h': No such file or directory
+  ImGuiFileDialog.cpp
+  imgui_demo.cpp
+D:\GitProject\Dx11_LiesOfP\Framework_DX11\imgui\imgui_demo.cpp(1,10): error C1083: 포함 파일을 열 수 없습니다. 'stdafx.h': No such file or directory
+  imgui_draw.cpp
+D:\GitProject\Dx11_LiesOfP\Framework_DX11\imgui\imgui_draw.cpp(1,10): error C1083: 포함 파일을 열 수 없습니다. 'stdafx.h': No such file or directory
+  imgui_impl_dx11.cpp
+D:\GitProject\Dx11_LiesOfP\Framework_DX11\imgui\imgui_impl_dx11.cpp(1,10): error C1083: 포함 파일을 열 수 없습니다. 'stdafx.h': No such file or directory
+  imgui_impl_win32.cpp
+D:\GitProject\Dx11_LiesOfP\Framework_DX11\imgui\imgui_impl_win32.cpp(1,10): error C1083: 포함 파일을 열 수 없습니다. 'stdafx.h': No such file or directory
+  imgui_tables.cpp
+D:\GitProject\Dx11_LiesOfP\Framework_DX11\imgui\imgui_tables.cpp(1,10): error C1083: 포함 파일을 열 수 없습니다. 'stdafx.h': No such file or directory
+  imgui_widgets.cpp
+D:\GitProject\Dx11_LiesOfP\Framework_DX11\imgui\imgui_widgets.cpp(1,10): error C1083: 포함 파일을 열 수 없습니다. 'stdafx.h': No such file or directory
+  AnimModel.cpp
+D:\GitProject\Dx11_LiesOfP\Framework_DX11\Tools\Private\AnimModel.cpp(1,10): error C1083: 포함 파일을 열 수 없습니다. 'stdafx.h': No such file or directory
+  BackGround.cpp
+D:\GitProject\Dx11_LiesOfP\Framework_DX11\Tools\Private\BackGround.cpp(1,10): error C1083: 포함 파일을 열 수 없습니다. 'stdafx.h': No such file or directory
+  Controller_Cutscene.cpp
+D:\GitProject\Dx11_LiesOfP\Framework_DX11\Tools\Private\Controller_Cutscene.cpp(3,10): error C1083: 포함 파일을 열 수 없습니다. 'stdafx.h': No such file or directory
+  Controller_AnimationTool.cpp
+D:\GitProject\Dx11_LiesOfP\Framework_DX11\Tools\Private\Controller_AnimationTool.cpp(1,10): error C1083: 포함 파일을 열 수 없습니다. 'stdafx.h': No such file or directory
+  Controller_EffectTool.cpp
+D:\GitProject\Dx11_LiesOfP\Framework_DX11\Tools\Private\Controller_EffectTool.cpp(1,10): error C1083: 포함 파일을 열 수 없습니다. 'stdafx.h': No such file or directory
+  Controller_MapTool.cpp
+D:\GitProject\Dx11_LiesOfP\Framework_DX11\Tools\Private\Controller_MapTool.cpp(1,10): error C1083: 포함 파일을 열 수 없습니다. 'stdafx.h': No such file or directory
+  Controller_PostProcess.cpp
+D:\GitProject\Dx11_LiesOfP\Framework_DX11\Tools\Private\Controller_PostProcess.cpp(1,10): error C1083: 포함 파일을 열 수 없습니다. 'stdafx.h': No such file or directory
+  컴파일하고 있습니다...
+  Controller_UITool.cpp
+D:\GitProject\Dx11_LiesOfP\Framework_DX11\Tools\Private\Controller_UITool.cpp(1,10): error C1083: 포함 파일을 열 수 없습니다. 'stdafx.h': No such file or directory
+  CutScene.cpp
+D:\GitProject\Dx11_LiesOfP\Framework_DX11\Tools\Private\CutScene.cpp(1,10): error C1083: 포함 파일을 열 수 없습니다. 'stdafx.h': No such file or directory
+  Decal.cpp
+D:\GitProject\Dx11_LiesOfP\Framework_DX11\Tools\Private\Decal.cpp(1,10): error C1083: 포함 파일을 열 수 없습니다. 'stdafx.h': No such file or directory
+  Effect_Container.cpp
+D:\GitProject\Dx11_LiesOfP\Framework_DX11\Tools\private\Effect_Container.cpp(1,10): error C1083: 포함 파일을 열 수 없습니다. 'stdafx.h': No such file or directory
+  Effect_Base.cpp
+D:\GitProject\Dx11_LiesOfP\Framework_DX11\Tools\private\Effect_Base.cpp(1,10): error C1083: 포함 파일을 열 수 없습니다. 'stdafx.h': No such file or directory
+  FreeCamera.cpp
+D:\GitProject\Dx11_LiesOfP\Framework_DX11\Tools\Private\FreeCamera.cpp(1,10): error C1083: 포함 파일을 열 수 없습니다. 'stdafx.h': No such file or directory
+  GodHand_CutScene.cpp
+D:\GitProject\Dx11_LiesOfP\Framework_DX11\Tools\Private\GodHand_CutScene.cpp(1,10): error C1083: 포함 파일을 열 수 없습니다. 'stdafx.h': No such file or directory
+  ImGui_Manager.cpp
+D:\GitProject\Dx11_LiesOfP\Framework_DX11\Tools\Private\ImGui_Manager.cpp(1,10): error C1083: 포함 파일을 열 수 없습니다. 'stdafx.h': No such file or directory
+  Level_Tool.cpp
+D:\GitProject\Dx11_LiesOfP\Framework_DX11\Tools\Private\Level_Tool.cpp(1,10): error C1083: 포함 파일을 열 수 없습니다. 'stdafx.h': No such file or directory
+  Level_Loading.cpp
+D:\GitProject\Dx11_LiesOfP\Framework_DX11\Tools\Private\Level_Loading.cpp(1,10): error C1083: 포함 파일을 열 수 없습니다. 'stdafx.h': No such file or directory
+  Level_Logo.cpp
+D:\GitProject\Dx11_LiesOfP\Framework_DX11\Tools\Private\Level_Logo.cpp(1,10): error C1083: 포함 파일을 열 수 없습니다. 'stdafx.h': No such file or directory
+  Loader.cpp
+D:\GitProject\Dx11_LiesOfP\Framework_DX11\Tools\Private\Loader.cpp(1,10): error C1083: 포함 파일을 열 수 없습니다. 'stdafx.h': No such file or directory
+  MainApp.cpp
+D:\GitProject\Dx11_LiesOfP\Framework_DX11\Tools\Private\MainApp.cpp(1,10): error C1083: 포함 파일을 열 수 없습니다. 'stdafx.h': No such file or directory
+  Mesh_Effect.cpp
+D:\GitProject\Dx11_LiesOfP\Framework_DX11\Tools\private\Mesh_Effect.cpp(1,10): error C1083: 포함 파일을 열 수 없습니다. 'stdafx.h': No such file or directory
+  NavigationController.cpp
+D:\GitProject\Dx11_LiesOfP\Framework_DX11\Tools\Private\NavigationController.cpp(1,10): error C1083: 포함 파일을 열 수 없습니다. 'stdafx.h': No such file or directory
+  NonAnimModel.cpp
+D:\GitProject\Dx11_LiesOfP\Framework_DX11\Tools\Private\NonAnimModel.cpp(1,10): error C1083: 포함 파일을 열 수 없습니다. 'stdafx.h': No such file or directory
+  Particle_Effect.cpp
+D:\GitProject\Dx11_LiesOfP\Framework_DX11\Tools\private\Particle_Effect.cpp(1,10): error C1083: 포함 파일을 열 수 없습니다. 'stdafx.h': No such file or directory
+  Scissor_Blade.cpp
+D:\GitProject\Dx11_LiesOfP\Framework_DX11\Tools\Private\Scissor_Blade.cpp(1,10): error C1083: 포함 파일을 열 수 없습니다. 'stdafx.h': No such file or directory
+  Scissor_Handle.cpp
+D:\GitProject\Dx11_LiesOfP\Framework_DX11\Tools\Private\Scissor_Handle.cpp(1,10): error C1083: 포함 파일을 열 수 없습니다. 'stdafx.h': No such file or directory
+  Sky.cpp
+D:\GitProject\Dx11_LiesOfP\Framework_DX11\Tools\Private\Sky.cpp(1,10): error C1083: 포함 파일을 열 수 없습니다. 'stdafx.h': No such file or directory
+  컴파일하고 있습니다...
+  TargetBall.cpp
+D:\GitProject\Dx11_LiesOfP\Framework_DX11\Tools\Private\TargetBall.cpp(1,10): error C1083: 포함 파일을 열 수 없습니다. 'stdafx.h': No such file or directory
+  Terrain.cpp
+D:\GitProject\Dx11_LiesOfP\Framework_DX11\Tools\Private\Terrain.cpp(1,10): error C1083: 포함 파일을 열 수 없습니다. 'stdafx.h': No such file or directory
+  Texture_Effect.cpp
+D:\GitProject\Dx11_LiesOfP\Framework_DX11\Tools\private\Texture_Effect.cpp(1,10): error C1083: 포함 파일을 열 수 없습니다. 'stdafx.h': No such file or directory
+  ThreadPool.cpp
+D:\GitProject\Dx11_LiesOfP\Framework_DX11\Tools\Private\ThreadPool.cpp(1,10): error C1083: 포함 파일을 열 수 없습니다. 'stdafx.h': No such file or directory
+  Trail_Effect_MP.cpp
+D:\GitProject\Dx11_LiesOfP\Framework_DX11\Tools\private\Trail_Effect_MP.cpp(1,10): error C1083: 포함 파일을 열 수 없습니다. 'stdafx.h': No such file or directory
+  Trail_Effect_OP.cpp
+D:\GitProject\Dx11_LiesOfP\Framework_DX11\Tools\private\Trail_Effect_OP.cpp(1,10): error C1083: 포함 파일을 열 수 없습니다. 'stdafx.h': No such file or directory
+  Trail_Effect_TP.cpp
+D:\GitProject\Dx11_LiesOfP\Framework_DX11\Tools\private\Trail_Effect_TP.cpp(1,10): error C1083: 포함 파일을 열 수 없습니다. 'stdafx.h': No such file or directory
+  UIRender.cpp
+D:\GitProject\Dx11_LiesOfP\Framework_DX11\Tools\Private\UIRender.cpp(1,10): error C1083: 포함 파일을 열 수 없습니다. 'UIRender.h': No such file or directory
+  Tools.cpp
+D:\GitProject\Dx11_LiesOfP\Framework_DX11\Tools\Default\Tools.cpp(7,10): error C1083: 포함 파일을 열 수 없습니다. 'imgui_impl_win32.h': No such file or directory

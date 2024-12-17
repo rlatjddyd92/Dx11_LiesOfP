@@ -5,6 +5,7 @@
 #include "Raxasia.h"
 
 #include "Effect_Manager.h"
+#include "AttackObject.h"
 
 CState_RaxasiaP2_JumpStamp::CState_RaxasiaP2_JumpStamp(CFsm* pFsm, CMonster* pMonster)
     :CState{ pFsm }
@@ -33,6 +34,7 @@ HRESULT CState_RaxasiaP2_JumpStamp::Start_State(void* pArg)
     m_bAccel = false;
     m_bEnvelop = false;
     m_bInchent = false;
+    m_bOnMark = false;
 
 
     return S_OK;
@@ -199,21 +201,52 @@ void CState_RaxasiaP2_JumpStamp::Effect_Check(_double CurTrackPos)
         {
             if (CurTrackPos >= 15.f)
             {
-
                 _float4x4 WorldMat{};
-                _Vec3 vPos = { 0.8f, 0.f, 0.f };
-                XMStoreFloat4x4(&WorldMat, (*m_pMonster->Get_WeaponBoneCombinedMat(1) * (*m_pMonster->Get_WeaponWorldMat())));
+                _Vec3 vPos = { 0.f, 0.f, -1.75f };
+                XMStoreFloat4x4(&WorldMat,
+                    (*m_pMonster->Get_BoneCombinedMat(m_pMonster->Get_Model()->Get_UFBIndices(UFB_WEAPON))
+                        * (m_pMonster->Get_Transform()->Get_WorldMatrix())));
                 vPos = XMVector3TransformCoord(vPos, XMLoadFloat4x4(&WorldMat));
+                vPos.y = m_pMonster->Get_Transform()->Get_State(CTransform::STATE_POSITION).y;
 
                 CEffect_Manager::Get_Instance()->Add_Effect_ToLayer(LEVEL_GAMEPLAY, TEXT("Raxasia_Attack_ThunderStamp_Mark_Explositon"),
                     vPos, _Vec3{ m_pMonster->Get_TargetDir() });
 
                 m_bStomp = true;
+            }
+        }
+        //일정간격두고 마크 3개 터트리기
+        if ((CurTrackPos >= 15.f && CurTrackPos >= 17.f) ||
+            (CurTrackPos >= 18.f && CurTrackPos >= 20.f) || 
+            (CurTrackPos >= 21.f && CurTrackPos >= 23.f))
+        {
+            if (!m_bOnMark)
+            {
+                m_bOnMark = true;
+
+                _float4x4 WorldMat{};
+                _Vec3 vPos = { 0.f, 0.f, 0.f };
+                vPos = XMVector3TransformCoord(vPos, m_pMonster->Get_Transform()->Get_WorldMatrix());
+                
+                _float fvariableX = m_pGameInstance->Get_Random(0.f, 4.f) - 2.f;
+                _float fvariableZ = m_pGameInstance->Get_Random(0.f, 4.f) - 2.f;
+                
+                vPos.x += fvariableX;
+                vPos.z += fvariableZ;
+
+                CAttackObject::ATKOBJ_DESC Desc;
+
+                Desc.vPos = vPos;
+
+                m_pGameInstance->Add_CloneObject_ToLayer(LEVEL_GAMEPLAY, TEXT("Monster_Attack"), TEXT("Prototype_GameObject_ThunderMark"), &Desc);
 
             }
         }
+        else
+        {
+            m_bOnMark = false;
+        }
 
-        //일정간격두고 마크 3개 터트리기
     }
 }
 

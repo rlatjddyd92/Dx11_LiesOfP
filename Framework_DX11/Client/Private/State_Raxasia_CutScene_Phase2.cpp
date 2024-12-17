@@ -27,7 +27,7 @@ HRESULT CState_Raxasia_CutScene_Phase2::Start_State(void* pArg)
 {
     // 모델이 달라서 여기서 해주기
     m_iAnimation_Phase2 = m_pMonster->Get_Model()->Find_AnimationIndex("AS_Raxasia_Raxasia_Phase2_C00_CINE", 1.f);
-    m_pMonster->Get_Model()->Set_SpeedPerSec(m_iAnimation_Phase2, 29.4);
+    m_pMonster->Get_Model()->Set_SpeedPerSec(m_iAnimation_Phase2, 31.5);
 
     m_pMonster->Change_Animation(m_iAnimation_Phase2, false, 0.f, 0);
 
@@ -37,7 +37,8 @@ HRESULT CState_Raxasia_CutScene_Phase2::Start_State(void* pArg)
     m_pCutSceneWeapon = dynamic_cast<CRaxasia*>(m_pMonster)->Get_CutSceneWeapon();
     m_pShieldWeapon = dynamic_cast<CRaxasia*>(m_pMonster)->Get_ShieldWeapon();
     //m_pCutSceneWeapon->Play_Animation("AS_Sword_Raxasia_Phase2_C01_CINE");
-
+    m_pGameInstance->Stop_BGM();
+    m_pGameInstance->Play_BGM(TEXT("CutScene_Raxasia_Phase2.wav"), &g_fCutSceneVolume);
     return S_OK;
 }
 
@@ -46,6 +47,7 @@ void CState_Raxasia_CutScene_Phase2::Update(_float fTimeDelta)
     _int iFrame = m_pMonster->Get_Frame();
 
     _uint iCurAnim = m_pMonster->Get_CurrentAnimIndex();
+
 
     if (!m_isOnGroundWeapon && iFrame > 100)    // 검 위치 땅에 고정하기
     {
@@ -106,7 +108,7 @@ void CState_Raxasia_CutScene_Phase2::Update(_float fTimeDelta)
 
         m_isReConnetWeaponBone = true;
     }
-    else if(!m_isPlayWeaponChangeAnim && iFrame > 905)      // 검 애니메이션 재생하기
+    else if(!m_isPlayWeaponChangeAnim && iFrame > 912)      // 검 애니메이션 재생하기
     {
         m_pCutSceneWeapon->Play_Animation("AS_Sword_Raxasia_Phase2_C06_CINE", 1.6f);
         m_isPlayWeaponChangeAnim = true;
@@ -133,6 +135,7 @@ void CState_Raxasia_CutScene_Phase2::Update(_float fTimeDelta)
     //    m_pMonster->Stop_Animation();
     //}
 
+    Stop_Play_Animation(iFrame, fTimeDelta);
 
     _Vec3 vMove = m_pMonster->Get_Model()->Get_BoneCombindTransformationMatrix_Ptr(3)->Translation();
     _float4x4 TransMat;
@@ -163,6 +166,73 @@ void CState_Raxasia_CutScene_Phase2::End_Check()
     {
         m_pMonster->End_CutScene(CRaxasia::CUTSCENE_MEET);
     }
+}
+
+void CState_Raxasia_CutScene_Phase2::Stop_Play_Animation(_int iFrame, _float fTimeDelta)
+{
+    static bool bStopped1 = false;
+    static bool bStopped2 = false;
+    static bool bSpeedChanged = false;
+    static bool bChangedSpeed = false;
+    static bool bChangedSpeedOri = false;
+    static bool bChangedSpeedOri2 = false;
+    static bool bPlayAnim1 = false;
+    static bool bPlayAnim2 = false;
+
+
+    if (iFrame > 507 && bSpeedChanged == false)
+    {
+        bSpeedChanged = true;
+        m_pMonster->Get_Model()->Set_SpeedPerSec(m_iAnimation_Phase2 , 20);
+    }
+    else if (iFrame > 650 && bChangedSpeedOri2 == false)
+    {
+        bChangedSpeedOri2 = true;
+        m_pMonster->Get_Model()->Set_SpeedPerSec(m_iAnimation_Phase2 - 1, 31.5);
+    }
+   if (iFrame > 679 && bStopped1 == false)
+    {
+        bStopped1 = true;
+        m_pMonster->Stop_Animation();
+    }
+    else if(iFrame > 830 && bChangedSpeed == false)
+    {
+        bChangedSpeed = true;
+        m_pMonster->Get_Model()->Set_SpeedPerSec(m_iAnimation_Phase2-1, 42);
+    }
+    else if(iFrame > 920 && bChangedSpeedOri == false)
+    {
+        bChangedSpeedOri = true;
+        m_pMonster->Get_Model()->Set_SpeedPerSec(m_iAnimation_Phase2-1, 31.5);
+    }  
+    else if(iFrame > 1041 && bStopped2 == false)
+    {
+        bStopped2 = true;
+        m_pMonster->Stop_Animation();
+    }
+
+    if (bStopped1)
+    {
+        m_fAnimationStopTimer += fTimeDelta;
+    } 
+    if (bStopped2)
+    {
+        m_fAnimationStopTimer2 += fTimeDelta;
+    }
+
+    if (bPlayAnim1 == false && m_fAnimationStopTimer > 1.f)
+    {
+        bPlayAnim1 = true;
+        m_fAnimationStopTimer = 0.f;
+        m_pMonster->Play_Animation();
+    }
+    else if (bPlayAnim2 == false && m_fAnimationStopTimer2 > 1.9f)
+    {
+        bPlayAnim2 = true;
+        m_fAnimationStopTimer = 0.f;
+        m_pMonster->Play_Animation();
+    }
+
 }
 
 CState_Raxasia_CutScene_Phase2* CState_Raxasia_CutScene_Phase2::Create(CFsm* pFsm, CMonster* pMonster, _uint iStateNum, void* pArg)

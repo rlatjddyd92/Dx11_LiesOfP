@@ -6,6 +6,7 @@
 #include "Camera_Manager.h"
 #include "Pawn.h"
 #include "SimonManus.h"
+#include "Raxasia.h"
 
 CCutScene::CCutScene(ID3D11Device* pDevice, ID3D11DeviceContext* pContext)
 	: CGameObject{ pDevice, pContext }
@@ -165,7 +166,8 @@ void CCutScene::Active_Obj(CUTSCENE_KEYFRAME_DESC* pCutSceneDesc)
 	}
 	if (pCutSceneDesc->Obj_Desc.bUseObj[BOSS1])
 	{
-		m_pObjects[BOSS1]->Change_State(*pCutSceneDesc->Obj_Desc.iStateNum);
+		if(m_iIndex == BOSS1_PHASE2)
+			static_cast<CRaxasia*>(m_pGameInstance->Find_Object(LEVEL_GAMEPLAY, TEXT("Layer_Raxasia"), 0))->Start_CutScene(1);
 	}
 	if (pCutSceneDesc->Obj_Desc.bUseObj[BOSS2])
 	{
@@ -252,36 +254,33 @@ void CCutScene::End_Setting()
 
 	CPlayer* pPlayer = dynamic_cast<CPlayer*>(m_pGameInstance->Find_Player(LEVEL_GAMEPLAY));
 
-	if (m_iIndex == SOPHIA_ENTER)
+	switch (m_iIndex)
 	{
+	case SOPHIA_ENTER:
 		pPlayer->Appear_Weapon();
 		pPlayer->Get_Model()->ReadyDenyNextTranslate(4);
 		pPlayer->Change_State(CPlayer::OH_IDLE);
 		pPlayer->Get_Navigation()->Move_to_Cell(pPlayer->Get_RigidBody(), 1178);
-	}
-	else if (m_iIndex == SOPHIA_DEAD)
-	{
+		break;
+	case SOPHIA_DEAD:
 		pPlayer->Appear_Weapon();
 		pPlayer->Get_Model()->ReadyDenyNextTranslate(4);
 		pPlayer->Change_State(CPlayer::OH_IDLE);
 		pPlayer->Get_Navigation()->Move_to_Cell(pPlayer->Get_RigidBody(), 1178);
-	}
-	else if (m_iIndex == BOSS2_MEET)
-	{
+		break;	
+	case BOSS1_MEET2:
+		m_pGameInstance->Stop_BGM();
+		break;	
+	case BOSS2_MEET:
 		dynamic_cast<CCutScene*>(m_pGameInstance->Find_Object(LEVEL_GAMEPLAY, TEXT("Layer_CutScene"), BOSS2_MEET2))->Start_Play();
-	}
-	else if (m_iIndex == BOSS2_MEET2)
-	{
-		dynamic_cast<CCutScene*>(m_pGameInstance->Find_Object(LEVEL_GAMEPLAY, TEXT("Layer_CutScene"), BOSS2_MEET3))->Start_Play();
-	}
-	else if (m_iIndex == BOSS2_MEET3)
-	{
+		break;	
+	case BOSS2_MEET3:
 		pPlayer->Change_State(CPlayer::OH_IDLE);
 		pPlayer->Get_Navigation()->Move_to_Cell(pPlayer->Get_RigidBody(), 118);
 		pPlayer->Appear_Weapon();
 		static_cast<CPawn*>(m_pGameInstance->Find_Object(LEVEL_GAMEPLAY, TEXT("Layer_SimonManus"), 0))->End_CutScene(0);
-	}
-	else if (m_iIndex == BOSS2_PHASE2)
+		break;	
+	case BOSS2_PHASE2:
 	{
 		CPawn* pBoss2 = static_cast<CPawn*>(m_pGameInstance->Find_Object(LEVEL_GAMEPLAY, TEXT("Layer_SimonManus"), 0));
 		pPlayer->IsActive(true);
@@ -289,12 +288,16 @@ void CCutScene::End_Setting()
 		pBoss2->End_CutScene(1);
 		pBoss2->Reset_Die();
 	}
-	else if (m_iIndex == BOSS2_DEFEAT)
-	{
+		break;
+	case BOSS2_DEFEAT:
 		pPlayer->IsActive(true);
 		pPlayer->Get_Navigation()->Move_to_Cell(pPlayer->Get_RigidBody(), 40);
 		static_cast<CPawn*>(m_pGameInstance->Find_Object(LEVEL_GAMEPLAY, TEXT("Layer_SimonManus"), 0))->Change_State(CSimonManus::DIE_TALKING);
+		break;
+	default:
+		break;
 	}
+
 	m_pCamera->Reset_MoveLerp();
 	m_pCamera->Reset_Zoom();
 

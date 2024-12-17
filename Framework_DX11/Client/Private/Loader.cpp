@@ -19,6 +19,7 @@
 #include "Monster.h"
 #include "CarcassBigA.h"
 #include "CarcassTail.h"
+#include "CurruptedStrongArm_Puppet.h"
 #include "SimonManus.h"
 
 #include "SpotEffect.h"
@@ -37,6 +38,13 @@
 #include "AObj_Stomp.h"
 
 #include "Raxasia.h"
+#include "AObj_ThunderBlast.h"
+#include "AObj_ThunderLanding.h"
+#include "AObj_ThunderMark.h"
+#include "AObj_ThunderStampMark.h"
+#include "AObj_ThunderSpread.h"
+#include "AObj_ThunderStamp.h"
+#include "AObj_ThunderWave.h"
 
 #include "Weapon_Raxasia_P1_Sword.h"
 #include "Weapon_Raxasia_P2_Sword.h"
@@ -878,6 +886,12 @@ HRESULT CLoader::Ready_Resources_For_Monster()
 		CModel::Create(m_pDevice, m_pContext, CModel::TYPE_ANIM, "../Bin/ModelData/Anim/CreatedBinFiles/CarcassBigA.dat", PreTransformMatrix, true))))
 		return E_FAIL;
 
+	//Prototype_Component_Model_CurruptedStrongArm
+	PreTransformMatrix = XMMatrixScaling(0.01f, 0.01f, 0.01f) * XMMatrixRotationY(XMConvertToRadians(270.0f));
+	if (FAILED(m_pGameInstance->Add_Prototype(LEVEL_GAMEPLAY, TEXT("Prototype_Component_Model_Horesman"),
+		CModel::Create(m_pDevice, m_pContext, CModel::TYPE_ANIM, "../Bin/ModelData/Anim/CreatedBinFiles/Horesman.dat", PreTransformMatrix, true))))
+		return E_FAIL;
+
 	//Prototype_Component_Model_SimonManus
 	PreTransformMatrix = XMMatrixScaling(0.01f, 0.01f, 0.01f) * XMMatrixRotationY(XMConvertToRadians(270.0f));
 	if (FAILED(m_pGameInstance->Add_Prototype(LEVEL_GAMEPLAY, TEXT("Prototype_Component_Model_SimonManusP1"),
@@ -1134,6 +1148,11 @@ HRESULT CLoader::Ready_Prototype()
 		CCarcassBigA::Create(m_pDevice, m_pContext))))
 		return E_FAIL;
 
+	/* For. Prototype_GameObject_CurruptedStrongArm */
+	if (FAILED(m_pGameInstance->Add_Prototype(TEXT("Prototype_GameObject_CurruptedStrongArm"),
+		CCurruptedStrongArm_Puppet::Create(m_pDevice, m_pContext))))
+		return E_FAIL;
+
 	/* For. Prototype_GameObject_SimonManus */
 	if (FAILED(m_pGameInstance->Add_Prototype(TEXT("Prototype_GameObject_SimonManus"),
 		CSimonManus::Create(m_pDevice, m_pContext))))
@@ -1208,6 +1227,34 @@ HRESULT CLoader::Ready_Prototype()
 	if (FAILED(m_pGameInstance->Add_Prototype(TEXT("Prototype_GameObject_Weapon_Raxasia_P2_Shield"),
 		CWeapon_Raxasia_P2_Shield::Create(m_pDevice, m_pContext))))
 		return E_FAIL;
+
+	// 이펙트 있는 공격 오브젝트
+
+	if (FAILED(m_pGameInstance->Add_Prototype(TEXT("Prototype_GameObject_ThunderBlast"),
+		CAObj_ThunderBlast::Create(m_pDevice, m_pContext))))
+		return E_FAIL;
+	if (FAILED(m_pGameInstance->Add_Prototype(TEXT("Prototype_GameObject_ThunderLanding"),
+		CAObj_ThunderLanding::Create(m_pDevice, m_pContext))))
+		return E_FAIL;
+	if (FAILED(m_pGameInstance->Add_Prototype(TEXT("Prototype_GameObject_ThunderMark"),
+		CAObj_ThunderMark::Create(m_pDevice, m_pContext))))
+		return E_FAIL;
+	if (FAILED(m_pGameInstance->Add_Prototype(TEXT("Prototype_GameObject_ThunderStampMark"),
+		CAObj_ThunderStampMark::Create(m_pDevice, m_pContext))))
+		return E_FAIL;
+	if (FAILED(m_pGameInstance->Add_Prototype(TEXT("Prototype_GameObject_ThunderSpread"),
+		CAObj_ThunderSpread::Create(m_pDevice, m_pContext))))
+		return E_FAIL;
+	if (FAILED(m_pGameInstance->Add_Prototype(TEXT("Prototype_GameObject_ThunderStamp"),
+		CAObj_ThunderStamp::Create(m_pDevice, m_pContext))))
+		return E_FAIL;
+	if (FAILED(m_pGameInstance->Add_Prototype(TEXT("Prototype_GameObject_ThunderWave"),
+		CAObj_ThunderWave::Create(m_pDevice, m_pContext))))
+		return E_FAIL;
+
+
+
+
 
 	/* For. Prototype_GameObject_CutScene_SimonManus_GodHand */
 	if (FAILED(m_pGameInstance->Add_Prototype(TEXT("Prototype_GameObject_CutScene_SimonManus_GodHand"),

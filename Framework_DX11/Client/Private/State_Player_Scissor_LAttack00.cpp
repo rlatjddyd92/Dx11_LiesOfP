@@ -26,8 +26,8 @@ HRESULT CState_Player_Scissor_LAttack00::Initialize(_uint iStateNum, void* pArg)
     m_iColliderStartFrame = 29;
     m_iColliderEndFrame = 33;
 
-    m_iEffectStartFrame = 25;
-    m_iEffectEndFrame = 33;
+    m_iEffectStartFrame = 29;
+    m_iEffectEndFrame = 36;
 
     return S_OK;
 }

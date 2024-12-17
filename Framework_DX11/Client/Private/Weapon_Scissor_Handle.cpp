@@ -73,7 +73,7 @@ void CWeapon_Scissor_Handle::Update(_float fTimeDelta)
 
 	//Active_Effect(EFFECT_BUFF, true);
 	__super::Update(fTimeDelta);
-	
+
 	m_pBlade->Update(fTimeDelta);
 
 	m_pColliderCom->Update(&m_WorldMatrix);

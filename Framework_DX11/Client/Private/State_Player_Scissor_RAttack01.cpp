@@ -27,7 +27,6 @@ HRESULT CState_Player_Scissor_RAttack01::Initialize(_uint iStateNum, void* pArg)
 
     m_iColliderStartFrameLeft = 33;
     m_iColliderEndFrameLeft = 40;
-
     m_iColliderStartFrameRight = 10;
     m_iColliderEndFrameRight = 17;
 
