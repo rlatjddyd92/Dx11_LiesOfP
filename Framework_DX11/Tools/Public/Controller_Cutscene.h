@@ -59,6 +59,7 @@ private:
 	void Show_CurCamState();
 	void Save();
 	void Load();
+	void Load_Old();
 
 public:
 	virtual void Free() override;

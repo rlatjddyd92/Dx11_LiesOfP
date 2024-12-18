@@ -100,6 +100,15 @@ void CCutScene::Load_KeyFrame(CUTSCENE_KEYFRAME_DESC pDesc)
 	m_KeyFrames.push_back(pNewDesc);
 }
 
+void CCutScene::Change_NewKeyFrame(CUTSCENE_KEYFRAME_DESC pDesc, _int iIndex)
+{
+	CUTSCENE_KEYFRAME_DESC* pNewDesc = new CUTSCENE_KEYFRAME_DESC;
+	*pNewDesc = pDesc;
+	pNewDesc->bActived = false;
+
+	m_KeyFrames[iIndex] = pNewDesc;
+}
+
 void CCutScene::Play_Keyframes(_float fTimeDelta)
 {
 	if (m_KeyFrames.size() == 0)
