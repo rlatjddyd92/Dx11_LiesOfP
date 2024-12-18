@@ -211,7 +211,10 @@
     <ClInclude Include="..\Public\State_CurruptedStrongArm_Grogy.h" />
     <ClInclude Include="..\Public\State_CurruptedStrongArm_HitFatal.h" />
     <ClInclude Include="..\Public\State_CurruptedStrongArm_Idle.h" />
+    <ClInclude Include="..\Public\State_CurruptedStrongArm_JumpPunch.h" />
     <ClInclude Include="..\Public\State_CurruptedStrongArm_Run.h" />
+    <ClInclude Include="..\Public\State_CurruptedStrongArm_StingTwice.h" />
+    <ClInclude Include="..\Public\State_CurruptedStrongArm_SwipAttack.h" />
     <ClInclude Include="..\Public\State_CurruptedStrongArm_Walk.h" />
     <ClInclude Include="..\Public\State_Player_Arm_Counter.h" />
     <ClInclude Include="..\Public\State_Player_Arm_Guard_Hard.h" />
@@ -536,7 +539,10 @@
     <ClCompile Include="..\Private\State_CurruptedStrongArm_Grogy.cpp" />
     <ClCompile Include="..\Private\State_CurruptedStrongArm_HitFatal.cpp" />
     <ClCompile Include="..\Private\State_CurruptedStrongArm_Idle.cpp" />
+    <ClCompile Include="..\Private\State_CurruptedStrongArm_JumpPunch.cpp" />
     <ClCompile Include="..\Private\State_CurruptedStrongArm_Run.cpp" />
+    <ClCompile Include="..\Private\State_CurruptedStrongArm_StingTwice.cpp" />
+    <ClCompile Include="..\Private\State_CurruptedStrongArm_SwipAttack.cpp" />
     <ClCompile Include="..\Private\State_CurruptedStrongArm_Walk.cpp" />
     <ClCompile Include="..\Private\State_Player_Arm_Counter.cpp" />
     <ClCompile Include="..\Private\State_Player_Arm_Guard_Hard.cpp" />

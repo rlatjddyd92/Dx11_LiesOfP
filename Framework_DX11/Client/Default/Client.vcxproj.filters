@@ -2156,6 +2156,15 @@
     <ClInclude Include="..\Public\AObj_ThunderBolt.h">
       <Filter>02.GameObjects\12.AttackObject\Raxasia\ThunderBolt</Filter>
     </ClInclude>
+    <ClInclude Include="..\Public\State_CurruptedStrongArm_StingTwice.h">
+      <Filter>05.Fsm\Monster\CurruptedStrongArm_Puppet\Attack\Single\StingTwice</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Public\State_CurruptedStrongArm_SwipAttack.h">
+      <Filter>05.Fsm\Monster\CurruptedStrongArm_Puppet\Attack\Single\SwipAttack</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Public\State_CurruptedStrongArm_JumpPunch.h">
+      <Filter>05.Fsm\Monster\CurruptedStrongArm_Puppet\Attack\Route\Jump_Punch</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Client.cpp">
@@ -3110,6 +3119,15 @@
     </ClCompile>
     <ClCompile Include="..\Private\AObj_ThunderBolt.cpp">
       <Filter>02.GameObjects\12.AttackObject\Raxasia\ThunderBolt</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Private\State_CurruptedStrongArm_SwipAttack.cpp">
+      <Filter>05.Fsm\Monster\CurruptedStrongArm_Puppet\Attack\Single\SwipAttack</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Private\State_CurruptedStrongArm_StingTwice.cpp">
+      <Filter>05.Fsm\Monster\CurruptedStrongArm_Puppet\Attack\Single\StingTwice</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Private\State_CurruptedStrongArm_JumpPunch.cpp">
+      <Filter>05.Fsm\Monster\CurruptedStrongArm_Puppet\Attack\Route\Jump_Punch</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

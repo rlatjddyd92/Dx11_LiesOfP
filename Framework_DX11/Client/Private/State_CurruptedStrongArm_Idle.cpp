@@ -98,34 +98,25 @@ void CState_CurruptedStrongArm_Idle::End_State()
 
 void CState_CurruptedStrongArm_Idle::Calc_Act_Attack()
 {
-    if (false)//이후 체력이 일정 이하일때 어택카운트 제서 나오도록
+    _int iAtkNum = rand() % 3;
+    switch (iAtkNum)
     {
-        return;
+    case 0:
+        m_pMonster->Change_State(CCurruptedStrongArm_Puppet::SWIPATTACK);
+        break;
+
+    case 1:
+        m_pMonster->Change_State(CCurruptedStrongArm_Puppet::STINGTWICE);
+        break;
+
+    case 2:
+        m_pMonster->Change_State(CCurruptedStrongArm_Puppet::JUMP_PUNCH);
+        break;
+
+    default:
+        break;
     }
-    if (m_iAtkCnt < 3.f)
-    {
-        _int iAtkNum = rand() % 6;
-        switch (iAtkNum)
-        {
-
-        default:
-            break;
-        }
-        ++m_iAtkCnt;
-
-    }
-    else
-    {
-        //신체가 붉게 변하며 나오는 기술
-
-        _int iAtkNum = rand() % 2;
-
-        if (iAtkNum)
-        {
-        }
-        m_iAtkCnt = 0;
-
-    }
+    ++m_iAtkCnt;
 }
 
 CState_CurruptedStrongArm_Idle* CState_CurruptedStrongArm_Idle::Create(CFsm* pFsm, CMonster* pMonster, _uint iStateNum, void* pArg)
