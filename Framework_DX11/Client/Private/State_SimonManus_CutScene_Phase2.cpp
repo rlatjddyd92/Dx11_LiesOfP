@@ -79,7 +79,7 @@ void CState_SimonManus_CutScene_Phase2::Update(_float fTimeDelta)
             m_isCreateDome = true;
         }
 
-        if (!m_isDistortionHand && iFrame > 1657)
+        if (!m_isDistortionHand && iFrame > 1658)
         {
             CEffect_Manager::Get_Instance()->Add_Effect_ToLayer(LEVEL_GAMEPLAY, TEXT("SimonManus_ConnectGod"), _Vec3(0.f, 2.73f, 0.f));
             m_isDistortionHand = true;
