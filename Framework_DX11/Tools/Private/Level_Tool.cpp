@@ -46,9 +46,9 @@ HRESULT CLevel_GamePlay::Initialize()
 	Desc.iRenderGroupID = 0;
 
 	//strcpy_s(Desc.szModelTag, "Prototype_Component_Model_FlameSword");
-	strcpy_s(Desc.szModelTag, "Prototype_Component_Model_Player_Arm");
+	//strcpy_s(Desc.szModelTag, "Prototype_Component_Model_Player_Arm");
 	//strcpy_s(Desc.szModelTag, "Prototype_Component_Model_Raxasia_Sword_CutScene");
-	//strcpy_s(Desc.szModelTag, "Prototype_NoneAnimModel_Raxasia_Sword02");
+	strcpy_s(Desc.szModelTag, "Prototype_NoneAnimModel_Raxasia_Sword01");
 	if (FAILED(m_pGameInstance->Add_CloneObject_ToLayer(LEVEL_TOOL, TEXT("Layer_Offset"), TEXT("Prototype_GameObject_NonAnim"), &Desc)))
 		return E_FAIL;
 

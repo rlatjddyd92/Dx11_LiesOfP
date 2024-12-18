@@ -129,8 +129,8 @@ HRESULT CLoader::Ready_Resources_For_GamePlayLevel()
 	//	return E_FAIL;
 
 	// 준호형 전용
-	//if (FAILED(Ready_Resources_GoJunHo()))
-	//	return E_FAIL;
+	if (FAILED(Ready_Resources_GoJunHo()))
+		return E_FAIL;
 
 	//if (FAILED(Ready_Resources_For_Effect()))
 	//	return E_FAIL;
@@ -292,9 +292,14 @@ HRESULT CLoader::Ready_Resources_For_BasicMonster()
 
 HRESULT CLoader::Ready_Resources_GoJunHo()
 {
-	/* For. Prototype_Component_Model_Lily */
-	if (FAILED(m_pGameInstance->Add_Prototype(LEVEL_GAMEPLAY, TEXT("Prototype_Component_Model_Lily"),
-		CModel::Create(m_pDevice, m_pContext, CModel::TYPE_NONANIM, "../Bin/Resources/Models/Item/Lily.fbx", "../Bin/ModelData/NonAnim/Item/"))))
+	///* For. Prototype_Component_Model_Lily */
+	//if (FAILED(m_pGameInstance->Add_Prototype(LEVEL_GAMEPLAY, TEXT("Prototype_Component_Model_Lily"),
+	//	CModel::Create(m_pDevice, m_pContext, CModel::TYPE_NONANIM, "../Bin/Resources/Models/Item/Lily.fbx", "../Bin/ModelData/NonAnim/Item/"))))
+	//	return E_FAIL;
+
+	/* For. Prototype_Component_Model_Player_Arm */
+	if (FAILED(m_pGameInstance->Add_Prototype(LEVEL_GAMEPLAY, TEXT("Prototype_Component_Model_Player_Arm"),
+		CModel::Create(m_pDevice, m_pContext, CModel::TYPE_ANIM, "../Bin/Resources/Models/Player/Player_Arm.fbx", "../Bin/ModelData/Anim/Player/"))))
 		return E_FAIL;
 
 	return S_OK;
