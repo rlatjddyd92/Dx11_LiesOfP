@@ -119,7 +119,7 @@ void CState_RaxasiaP2_Idle::Calc_Act_Attack(_float fDist)
     {
         m_iAtkTrack = 0.f;
     }
-
+    m_iAtkTrack = 1.f;
     switch (m_iAtkTrack)
     {
     case 0:
