@@ -4,6 +4,9 @@
 #include "Model.h"
 #include "Raxasia.h"
 
+#include "Effect_Manager.h"
+#include "AttackObject.h"
+
 CState_RaxasiaP2_Declare_War::CState_RaxasiaP2_Declare_War(CFsm* pFsm, CMonster* pMonster)
     :CState{ pFsm }
     , m_pMonster{ pMonster }
@@ -24,9 +27,20 @@ HRESULT CState_RaxasiaP2_Declare_War::Start_State(void* pArg)
     m_pMonster->Change_Animation(AN_HOWLLING, false, 0.1f, 50);
 
     m_bSwingSound = false;
-
     m_bSwing = false;
+    m_bJump = false;
     m_bStart = false;
+    m_bEnvelop = false;
+    m_bDive = false;
+    m_bLanding = false;
+    m_bHovering = false;
+
+    m_iThunderCnt = 0.f;
+    m_fTimeStack_ThunderBolt = 0.f;
+    m_fTimeStack_Lightning = 0.f;
+
+    m_vFogSpot = {};
+    m_fHeight = {};
 
     return S_OK;
 }
@@ -42,6 +56,7 @@ void CState_RaxasiaP2_Declare_War::Update(_float fTimeDelta)
         {
             ++m_iRouteTrack;
             m_bSwing = false;
+            m_bStart = false;
             m_pMonster->Change_Animation(AN_DECLARE_WAR, false, 0.1f, 0);
             return;
         }
@@ -66,7 +81,7 @@ void CState_RaxasiaP2_Declare_War::Update(_float fTimeDelta)
     }
 
     Collider_Check(CurTrackPos);
-    Effect_Check(CurTrackPos);
+    Effect_Check(CurTrackPos, fTimeDelta);
     Control_Sound(CurTrackPos);
 
 }
@@ -106,7 +121,7 @@ void CState_RaxasiaP2_Declare_War::Collider_Check(_double CurTrackPos)
 {
 }
 
-void CState_RaxasiaP2_Declare_War::Effect_Check(_double CurTrackPos)
+void CState_RaxasiaP2_Declare_War::Effect_Check(_double CurTrackPos, _float fTimeDelta)
 {
     if (m_iRouteTrack == 0)
     {
@@ -129,6 +144,180 @@ void CState_RaxasiaP2_Declare_War::Effect_Check(_double CurTrackPos)
     }
     else
     {
+        if (!m_bStart)
+        {
+            m_fHeight = m_pMonster->Get_Transform()->Get_State(CTransform::STATE_POSITION).y;
+            m_bStart = true;
+            m_pMonster->Active_Effect(CRaxasia::EFFECT_THUNDERCHARGE_GROUND, true);
+        }
+
+        if (!m_bJump)
+        {
+            if (CurTrackPos >= 68.f)
+            {
+                _float4x4 WorldMat{};
+                _Vec3 vPos = { 0.f, 0.f, 0.f };
+                XMStoreFloat4x4(&WorldMat, m_pMonster->Get_Transform()->Get_WorldMatrix());
+                vPos = XMVector3TransformCoord(vPos, XMLoadFloat4x4(&WorldMat));
+
+                CEffect_Manager::Get_Instance()->Add_Effect_ToLayer(LEVEL_GAMEPLAY, TEXT("Raxasia_Attack_SuperJump"),
+                    vPos, _Vec3{ m_pMonster->Get_TargetDir() });
+
+                vPos.y += 15.f;
+
+                m_vFogSpot = vPos;
+                m_vFogSpot.y -= 2.f;
+
+                CEffect_Manager::Get_Instance()->Add_Effect_ToLayer(LEVEL_GAMEPLAY, TEXT("Raxasia_Attack_Fog"),
+                    vPos, _Vec3{ m_pMonster->Get_TargetDir() });
+
+                m_pMonster->Active_Effect(CRaxasia::EFFECT_INCHENTSWORD, true);
+                m_bJump = true;
+                m_pMonster->Active_Effect(CRaxasia::EFFECT_THUNDERCHARGE_GROUND, true);
+            }
+        }
+        else if (!m_bDive)
+        {
+            if (m_fLightningTime <= m_fTimeStack_Lightning)
+            {
+                m_fTimeStack_Lightning -= m_fLightningTime;
+
+                CAttackObject::ATKOBJ_DESC Desc;
+
+                Desc.vPos = { m_pMonster->Get_Transform()->Get_State(CTransform::STATE_POSITION) };
+                Desc.vPos.y = m_fHeight;
+
+                _float fvariableX = m_pGameInstance->Get_Random(0.f, 7.f) - 3.5f;
+                _float fvariableZ = m_pGameInstance->Get_Random(0.f, 7.f) - 3.5f;
+                
+                Desc.vPos.x += fvariableX;
+                Desc.vPos.z += fvariableZ;
+
+                //vPos로 드래그 마크
+                m_pGameInstance->Add_CloneObject_ToLayer(LEVEL_GAMEPLAY, TEXT("Monster_Attack"), TEXT("Prototype_GameObject_ThunderMark"), &Desc);
+
+            }
+            else
+            {
+                m_fTimeStack_Lightning += fTimeDelta;
+            }
+        }
+
+        if (!m_bHovering)
+        {
+            if (CurTrackPos >= 170.f && CurTrackPos <= 250.f)
+            {
+                m_bHovering = true;
+            }
+        }
+        else
+        {
+            if (m_fThunderBoltTime <= m_fTimeStack_ThunderBolt)
+            {
+                m_fTimeStack_ThunderBolt -= m_fThunderBoltTime;
+                //썬더볼트 생성
+
+                _float4x4 WorldMat{};
+                _Vec3 vPos = m_vFogSpot;
+                
+                _Vec3 vTargetDir = m_pMonster->Get_TargetDir();
+                vTargetDir.Normalize();
+
+                _Vec3 vRight = vTargetDir.Cross(_Vec3{0.f, 1.f, 0.f});
+
+                _float fvariableX = m_pGameInstance->Get_Random(0.f, 7.f) - 3.5f;
+                _float fvariableZ = m_pGameInstance->Get_Random(0.f, 2.f) - 1.f;
+
+                vPos += vRight * fvariableX;
+                vPos += vTargetDir * fvariableZ;
+                vPos += _Vec3{0.f, -0.5f, 0.f} * fvariableZ;
+
+
+                CAttackObject::ATKOBJ_DESC Desc{};
+                Desc.vPos = vPos;
+
+                fvariableX = m_pGameInstance->Get_Random(0.f, 2.f) - 1.f;
+                _float fvariableY = m_pGameInstance->Get_Random(0.f, 2.f) - 1.f;
+
+                _Vec3 vTargetPos = m_pMonster->Get_TargetPos();
+                _Vec3 vDir = vTargetPos - m_pMonster->Get_Transform()->Get_State(CTransform::STATE_POSITION);
+                vDir.Normalize();
+
+                _Vec3 vUp = { 0.f, 1.f, 0.f };
+                vRight = vUp.Cross(vDir);
+                vUp = vDir.Cross(vRight);
+
+                vDir += (vUp * fvariableY);
+                vDir.Normalize();
+                vDir += (vRight * fvariableX);
+                vDir.Normalize();
+
+                Desc.vDir = vDir;
+                Desc.vDir.Normalize();
+
+                Desc.vTargetPos = _Vec3{ m_pMonster->Get_TargetPos() };
+                Desc.pOwner = m_pMonster;
+
+                m_pGameInstance->Add_CloneObject_ToLayer(LEVEL_GAMEPLAY, TEXT("Monster_Attack"), TEXT("Prototype_GameObject_ThunderBolt"), &Desc);
+
+                ++m_iThunderCnt;
+            }
+            else
+            {
+                m_fTimeStack_ThunderBolt += fTimeDelta;
+            }
+
+            if (m_iThunderCnt < 6.f)
+            {
+                if (CurTrackPos >= 250.f)
+                {
+                    m_pMonster->Get_Model()->Set_CurrentTrackPosition((_double)170.f);
+                    m_pMonster->Get_Model()->Set_CurrentTrackPosition_Boundary((_double)170.f);
+                    m_bHovering = false;
+                }
+            }
+        }
+
+
+        if (!m_bEnvelop)
+        {
+            if (CurTrackPos >= 150.f)
+            {
+                m_pMonster->Active_Effect(CRaxasia::EFFECT_THUNDERENVELOP_BIG, true);
+                m_bEnvelop = true;
+            }
+        }
+
+        if (!m_bDive)
+        {
+            if (CurTrackPos >= 255.f)
+            {
+                m_pMonster->DeActive_Effect(CRaxasia::EFFECT_THUNDERENVELOP_BIG);
+                m_pMonster->Active_Effect(CRaxasia::EFFECT_THUNDERENVELOP_SMALL);
+                m_pMonster->Active_Effect(CRaxasia::EFFECT_THUNDERACCEL);
+                m_bDive = true;
+            }
+        }
+        else
+        {
+            if (!m_bLanding)
+            {
+                if (CurTrackPos >= 320.f)
+                {
+                    _float4x4 WorldMat{};
+                    _Vec3 vPos = { 0.f, 0.f, 0.f };
+                    XMStoreFloat4x4(&WorldMat, m_pMonster->Get_Transform()->Get_WorldMatrix());
+                    vPos = XMVector3TransformCoord(vPos, XMLoadFloat4x4(&WorldMat));
+
+                    CEffect_Manager::Get_Instance()->Add_Effect_ToLayer(LEVEL_GAMEPLAY, TEXT("Raxasia_Attack_ThunderLanding"),
+                        vPos, _Vec3{ m_pMonster->Get_TargetDir() });
+
+                    m_pMonster->DeActive_Effect(CRaxasia::EFFECT_THUNDERENVELOP_SMALL);
+                    m_pMonster->DeActive_Effect(CRaxasia::EFFECT_THUNDERACCEL);
+                    m_bLanding = true;
+                }
+            }
+        }
 
     }
 

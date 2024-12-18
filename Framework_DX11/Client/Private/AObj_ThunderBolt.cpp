@@ -1,6 +1,7 @@
 #include "stdafx.h"
 #include "AObj_ThunderBolt.h"
 
+#include "Raxasia.h"
 #include "GameInstance.h"
 
 #include "Effect_Manager.h"
@@ -30,7 +31,11 @@ HRESULT CAObj_ThunderBolt::Initialize(void* pArg)
 
     m_pTransformCom->Set_State(CTransform::STATE_POSITION, pDesc->vPos);
 
+    m_pCopyRaxasia = static_cast<CRaxasia*>(pDesc->pOwner);
+
     m_vMoveDir = pDesc->vDir;
+    m_vTargetPos = pDesc->vTargetPos;
+
 
     m_pTransformCom->LookAt_Dir(_Vec4{ m_vMoveDir });
 
@@ -40,7 +45,8 @@ HRESULT CAObj_ThunderBolt::Initialize(void* pArg)
     m_fDamageAmount = 20.f;
     m_fLifeDuration = 0.3f;
     m_fSpeed = 20.f;
-
+    m_iStateTrack = 0;
+    m_bCounter = false;
     m_pColliderCom->IsActive(true);
 
     m_pColliderCom->Set_Owner(this);
@@ -54,41 +60,98 @@ HRESULT CAObj_ThunderBolt::Initialize(void* pArg)
 
 void CAObj_ThunderBolt::Priority_Update(_float fTimeDelta)
 {
-    m_pEffect->Priority_Update(fTimeDelta);
+    for (auto& pEffect : m_pEffects)
+    {
+        if (!pEffect->Get_Dead())
+            pEffect->Priority_Update(fTimeDelta);
+    }
 }
 
 void CAObj_ThunderBolt::Update(_float fTimeDelta)
 {
-    if (m_fLifeTime >= m_fLifeDuration)
+    switch (m_iStateTrack)
     {
-        if (m_pEffect->Get_Loop())
+    case 0:
+    {
+        m_fTimer += fTimeDelta;
+        if (m_fTimer >= 0.5f)
         {
-            m_pEffect->Set_Loop(false);
+            m_pEffects[m_iStateTrack]->Set_Loop(false);
+            ++m_iStateTrack;
+            m_pEffects[m_iStateTrack]->Reset_Effects();
+            return;
         }
-        else if (m_pEffect->Get_Dead())
+        break;
+    }
+
+    case 1:
+    {
+        if (!m_pEffects[m_iStateTrack]->Get_Loop())
+        {
+            ++m_iStateTrack;
+            m_pEffects[m_iStateTrack]->Set_Loop(true);
+            return;
+        }
+        break;
+    }
+
+    case 2:
+    {
+        _Vec3 vTargetPos = {};
+        if (m_bCounter)
+        {
+            vTargetPos = { m_pCopyRaxasia->Get_Transform()->Get_State(CTransform::STATE_POSITION) };
+        }
+        else
+        {
+            vTargetPos = { m_pCopyRaxasia->Get_TargetPos() };
+        }
+        _Vec3 vPos = m_pTransformCom->Get_State(CTransform::STATE_POSITION);
+
+        m_pTransformCom->LookAt_Lerp(_Vec4{vTargetPos - vPos}, 3.f, fTimeDelta);
+        _Vec3 vLook = m_pTransformCom->Get_State(CTransform::STATE_LOOK);
+        
+        m_pTransformCom->Set_State(CTransform::STATE_POSITION, vPos + (vLook * m_fSpeed * fTimeDelta));
+        
+        break;
+    }
+    case 3:
+        if (!m_pEffects[m_iStateTrack]->Get_Loop())
         {
             m_isDead = true;
-            m_pSoundCom[EFF_SOUND_EFFECT1]->Stop();
+            return;
         }
+        break;
+
+    default:
+        break;
     }
-    else
+        
+    _Vec3 vPos = m_pTransformCom->Get_State(CTransform::STATE_POSITION);
+    if (vPos.y <= m_vTargetPos.y)
     {
-        m_fLifeTime += fTimeDelta;
+        m_isDead = true;
+        CEffect_Manager::Get_Instance()->Add_Effect_ToLayer(LEVEL_GAMEPLAY, TEXT("Raxasia_Attack_ThunderBolt_Impact_Ground "),
+            _Vec3{ m_pTransformCom->Get_State(CTransform::STATE_POSITION) }, _Vec3{ m_pTransformCom->Get_State(CTransform::STATE_LOOK) });
     }
-
-    //움직임
-    m_pTransformCom->Set_State(CTransform::STATE_POSITION, m_pTransformCom->Get_State(CTransform::STATE_POSITION) + m_vMoveDir * m_fSpeed * fTimeDelta);
-
 
     m_pColliderCom->Update(m_pTransformCom->Get_WorldMatrix_Ptr());
 
-    m_pEffect->Update(fTimeDelta);
+    for (auto& pEffect : m_pEffects)
+    {
+        if (!pEffect->Get_Dead())
+            pEffect->Update(fTimeDelta);
+    }
 }
 
 void CAObj_ThunderBolt::Late_Update(_float fTimeDelta)
 {
-    m_pEffect->Late_Update(fTimeDelta);
-    if (m_fLifeTime < m_fLifeDuration)
+    for (auto& pEffect : m_pEffects)
+    {
+        if (!pEffect->Get_Dead())
+            pEffect->Late_Update(fTimeDelta);
+    }
+    if (m_fLifeTime < m_fLifeDuration && !m_bImpact)
     {
         m_pGameInstance->Add_ColliderList(m_pColliderCom);
 #ifdef DEBUG
@@ -125,9 +188,51 @@ void CAObj_ThunderBolt::OnCollisionEnter(CGameObject* pOther)
         if (!bOverlapCheck)
         {
             m_DamagedObjects.push_back(pOther);
-            pOther->Calc_DamageGain(m_fDamageAmount * m_fDamageRatio, _Vec3{}, HIT_TYPE::HIT_METAL, ATTACK_STRENGTH::ATK_NORMAL);
+            _bool bAttackCheck = pOther->Calc_DamageGain(m_fDamageAmount * m_fDamageRatio, _Vec3{}, HIT_TYPE::HIT_METAL, ATTACK_STRENGTH::ATK_NORMAL);
+
+            if (bAttackCheck)
+            {
+                //적중시
+                m_pEffects[m_iStateTrack]->Set_Loop(false);
+                m_iStateTrack = STATE_IMPACT;
+                m_pEffects[STATE_IMPACT]->Set_Loop(true);
+                m_bImpact = true;
+            }
+            else
+            {
+                //패링시
+                m_bCounter = true;//노말이랑 임팩트 카운터로 변경시키기 룩 방향도 돌려야 함
+
+                _float fvariableX = m_pGameInstance->Get_Random(0.f, 2.f) - 1.f;
+                _float fvariableY = m_pGameInstance->Get_Random(0.f, 2.f) - 1.f;
+
+                _Vec3 vTargetPos = m_pCopyRaxasia->Get_Transform()->Get_State(CTransform::STATE_POSITION);
+                _Vec3 vDir = vTargetPos - m_pTransformCom->Get_State(CTransform::STATE_POSITION);
+                vDir.Normalize();
+
+                _Vec3 vUp = { 0.f, 1.f, 0.f };
+                _Vec3 vRight = vUp.Cross(vDir);
+                vUp = vDir.Cross(vRight);
+                
+                vDir += (vUp * fvariableY) + (vRight * fvariableX);
+                vDir.Normalize();
+
+                m_pTransformCom->Look_Dir(_Vec4{ vDir });
+
+                m_pEffects[STATE_NORMAL]->Set_Cloned(false);
+                Safe_Release(m_pEffects[STATE_NORMAL]);
+
+                m_pEffects[STATE_IMPACT]->Set_Cloned(false);
+                Safe_Release(m_pEffects[STATE_IMPACT]);
+
+                m_pEffects[STATE_NORMAL] = CEffect_Manager::Get_Instance()->Clone_Effect(TEXT("Raxasia_Attack_ThunderBolt_Counter"), m_pTransformCom->Get_WorldMatrix_Ptr(),
+                    nullptr, _Vec3(0.f, 0.f, 0.f), _Vec3(0.f, 0.f, 1.f), _Vec3(1.f, 1.f, 1.f));
+
+                m_pEffects[STATE_IMPACT] = CEffect_Manager::Get_Instance()->Clone_Effect(TEXT("Raxasia_Attack_ThunderBolt_Counter_Impact"), m_pTransformCom->Get_WorldMatrix_Ptr(),
+                    nullptr, _Vec3(0.f, 0.f, 0.f), _Vec3(0.f, 0.f, 1.f), _Vec3(1.f, 1.f, 1.f));
+
+            }
         }
-        m_pEffect->Set_Loop(false);
     }
 }
 
@@ -145,22 +250,31 @@ HRESULT CAObj_ThunderBolt::Ready_Components()
         return E_FAIL;
 
     /* FOR.Com_Collider */
-    CBounding_OBB::BOUNDING_OBB_DESC      ColliderDesc{};
-    ColliderDesc.vExtents = _float3(1.f, 0.6f, 1.f);
-    ColliderDesc.vCenter = _float3(0.f, 0.3f, 0.f);
-    ColliderDesc.vAngles = _float3(0.f, 0.f, 0.f);
+    CBounding_Sphere::BOUNDING_SPHERE_DESC      ColliderDesc{};
+    ColliderDesc.vCenter = _float3(0.f, 0.f, 0.f);
+    ColliderDesc.fRadius = 2.f;
 
-    if (FAILED(__super::Add_Component(LEVEL_STATIC, TEXT("Prototype_Component_Collider_OBB"),
+    if (FAILED(__super::Add_Component(LEVEL_STATIC, TEXT("Prototype_Component_Collider_Sphere"),
         TEXT("Com_Collider"), reinterpret_cast<CComponent**>(&m_pColliderCom), &ColliderDesc)))
         return E_FAIL;
     m_pColliderCom->Set_Owner(this);
 
     const _Matrix* pParetnMatrix = m_pTransformCom->Get_WorldMatrix_Ptr();
 
-    m_pEffect = CEffect_Manager::Get_Instance()->Clone_Effect(TEXT("Raxasia_Attack_ThunderSpread"), pParetnMatrix,
-        nullptr, _Vec3(0.f, 0.f, 0.f), _Vec3(0.f, 0.f, 1.f), _Vec3(1.f, 0.5f, 1.f));
+    m_pEffects[STATE_SIGN] = CEffect_Manager::Get_Instance()->Clone_Effect(TEXT("Raxasia_Attack_ThunderBolt_Sign"), pParetnMatrix,
+        nullptr, _Vec3(0.f, 0.f, 0.f), _Vec3(0.f, 0.f, 1.f), _Vec3(1.f, 1.f, 1.f));
 
-    m_pEffect->Set_Loop(true);
+    m_pEffects[STATE_CREATE] = CEffect_Manager::Get_Instance()->Clone_Effect(TEXT("Raxasia_Attack_ThunderBolt_Create"), pParetnMatrix,
+        nullptr, _Vec3(0.f, 0.f, 0.f), _Vec3(0.f, 0.f, 1.f), _Vec3(1.f, 1.f, 1.f));
+
+    m_pEffects[STATE_NORMAL] = CEffect_Manager::Get_Instance()->Clone_Effect(TEXT("Raxasia_Attack_ThunderBolt"), m_pTransformCom->Get_WorldMatrix_Ptr(),
+        nullptr, _Vec3(0.f, 0.f, 0.f), _Vec3(0.f, 0.f, 1.f), _Vec3(1.f, 1.f, 1.f));
+
+    m_pEffects[STATE_IMPACT] = CEffect_Manager::Get_Instance()->Clone_Effect(TEXT("Raxasia_Attack_ThunderBolt_Impact"), m_pTransformCom->Get_WorldMatrix_Ptr(),
+        nullptr, _Vec3(0.f, 0.f, 0.f), _Vec3(0.f, 0.f, 1.f), _Vec3(1.f, 1.f, 1.f));
+
+
+    m_pEffects[STATE_SIGN]->Set_Loop(true);
 
     return S_OK;
 }
@@ -197,7 +311,10 @@ void CAObj_ThunderBolt::Free()
 
     if (true == m_isCloned)
     {
-        m_pEffect->Set_Cloned(false);
-        Safe_Release(m_pEffect);
+        for (_int i = 0; i < STATE_END; ++i)
+        {
+            m_pEffects[i]->Set_Cloned(false);
+            Safe_Release(m_pEffects[i]);
+        }
     }
 }

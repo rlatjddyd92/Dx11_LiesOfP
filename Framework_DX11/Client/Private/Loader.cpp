@@ -45,6 +45,7 @@
 #include "AObj_ThunderSpread.h"
 #include "AObj_ThunderStamp.h"
 #include "AObj_ThunderWave.h"
+#include "AObj_ThunderBolt.h"
 
 #include "Weapon_Raxasia_P1_Sword.h"
 #include "Weapon_Raxasia_P2_Sword.h"
@@ -1251,6 +1252,9 @@ HRESULT CLoader::Ready_Prototype()
 		return E_FAIL;
 	if (FAILED(m_pGameInstance->Add_Prototype(TEXT("Prototype_GameObject_ThunderWave"),
 		CAObj_ThunderWave::Create(m_pDevice, m_pContext))))
+		return E_FAIL;
+	if (FAILED(m_pGameInstance->Add_Prototype(TEXT("Prototype_GameObject_ThunderBolt"),
+		CAObj_ThunderBolt::Create(m_pDevice, m_pContext))))
 		return E_FAIL;
 
 

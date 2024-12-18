@@ -58,7 +58,7 @@ void CState_RaxasiaP2_Idle::Update(_float fTimeDelta)
     {
         if (m_bFirstAct)
         {
-            m_bFirstAct = false;
+            //m_bFirstAct = false;
             m_pMonster->Change_State(CRaxasia::ATKP2_DECLAREWAR);
             return;
         }

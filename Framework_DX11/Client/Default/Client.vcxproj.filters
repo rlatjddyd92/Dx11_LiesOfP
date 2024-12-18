@@ -1012,12 +1012,6 @@
     <Filter Include="05.Fsm\Monster\Raxasia\P2\Attack\Route\TELE\Tele_LinkedTel">
       <UniqueIdentifier>{8d6416ed-86c5-43ab-b39b-94425fafb257}</UniqueIdentifier>
     </Filter>
-    <Filter Include="05.Fsm\Monster\Raxasia\P2\Attack\Route\Guard">
-      <UniqueIdentifier>{dc500d27-cd7e-46e4-83fb-153428376054}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="05.Fsm\Monster\Raxasia\P2\Attack\Route\Guard\Guard_Push">
-      <UniqueIdentifier>{e8903933-a7d3-4d3e-a68f-8edad605a07c}</UniqueIdentifier>
-    </Filter>
     <Filter Include="05.Fsm\Monster\Raxasia\P2\Attack\Route\Running">
       <UniqueIdentifier>{77c0f679-b30b-40bf-a5a6-782f2247e539}</UniqueIdentifier>
     </Filter>
@@ -1170,6 +1164,12 @@
     </Filter>
     <Filter Include="05.Fsm\Monster\CurruptedStrongArm_Puppet\Attack\Single\SwipAttack">
       <UniqueIdentifier>{e3100ded-c639-4f5c-9495-c59404957501}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="05.Fsm\Monster\Raxasia\P2\Attack\Route\Guard">
+      <UniqueIdentifier>{dc500d27-cd7e-46e4-83fb-153428376054}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="05.Fsm\Monster\Raxasia\P2\Attack\Route\Guard\Guard_Push">
+      <UniqueIdentifier>{e8903933-a7d3-4d3e-a68f-8edad605a07c}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -2066,9 +2066,6 @@
     <ClInclude Include="..\Public\State_RaxasiaP2_Running_Fury.h">
       <Filter>05.Fsm\Monster\Raxasia\P2\Attack\Route\Running\Running_Fury</Filter>
     </ClInclude>
-    <ClInclude Include="..\Public\State_RaxasiaP2_Declare_War.h">
-      <Filter>05.Fsm\Monster\Raxasia\P2\Attack\Route\Declare_War</Filter>
-    </ClInclude>
     <ClInclude Include="..\Public\State_RaxasiaP2_Guard.h">
       <Filter>05.Fsm\Monster\Raxasia\P2\Attack\Route\Guard</Filter>
     </ClInclude>
@@ -2164,6 +2161,9 @@
     </ClInclude>
     <ClInclude Include="..\Public\State_CurruptedStrongArm_JumpPunch.h">
       <Filter>05.Fsm\Monster\CurruptedStrongArm_Puppet\Attack\Route\Jump_Punch</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Public\State_RaxasiaP2_Declare_War.h">
+      <Filter>05.Fsm\Monster\Raxasia\P2\Attack\Route\Declare_War</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -3030,9 +3030,6 @@
     <ClCompile Include="..\Private\State_RaxasiaP2_Running_Fury.cpp">
       <Filter>05.Fsm\Monster\Raxasia\P2\Attack\Route\Running\Running_Fury</Filter>
     </ClCompile>
-    <ClCompile Include="..\Private\State_RaxasiaP2_Declare_War.cpp">
-      <Filter>05.Fsm\Monster\Raxasia\P2\Attack\Route\Declare_War</Filter>
-    </ClCompile>
     <ClCompile Include="..\Private\State_RaxasiaP2_Guard.cpp">
       <Filter>05.Fsm\Monster\Raxasia\P2\Attack\Route\Guard</Filter>
     </ClCompile>
@@ -3128,6 +3125,9 @@
     </ClCompile>
     <ClCompile Include="..\Private\State_CurruptedStrongArm_JumpPunch.cpp">
       <Filter>05.Fsm\Monster\CurruptedStrongArm_Puppet\Attack\Route\Jump_Punch</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Private\State_RaxasiaP2_Declare_War.cpp">
+      <Filter>05.Fsm\Monster\Raxasia\P2\Attack\Route\Declare_War</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
