@@ -52,19 +52,51 @@ void CState_Player_TH_Idle::Update(_float fTimeDelta)
     else if (m_pPlayer->Key_Hold(KEY::RBUTTON))
     {
         m_fRButtonTime += fTimeDelta;
-        if(m_fRButtonTime > 0.15f)
-            m_pPlayer->Change_State(CPlayer::FLAME_CHARGE0);
+        if (m_fRButtonTime > 0.15f)
+        {
+            if (m_pPlayer->Get_WeaponType() == CPlayer::WEP_RAPIER)
+                m_pPlayer->Change_State(CPlayer::RAPIER_CHARGE);
+            else if (m_pPlayer->Get_WeaponType() == CPlayer::WEP_SCISSOR)
+                m_pPlayer->Change_State(CPlayer::SCISSOR_CHARGE0);
+        }
     }
     else if (m_pPlayer->Key_Tab(KEY::F))
     {
         if (m_pPlayer->Check_Region_Fable01())
         {
-            m_pPlayer->Change_State(CPlayer::FLAME_FABLE);
+            if (m_pPlayer->Get_WeaponType() == CPlayer::WEP_RAPIER)
+                m_pPlayer->Change_State(CPlayer::RAPIER_FABALE);
+            else if (m_pPlayer->Get_WeaponType() == CPlayer::WEP_SCISSOR)
+                m_pPlayer->Change_State(CPlayer::SCISSOR_FABAL0);
         }
     }
     else if (m_pPlayer->Key_Tab(KEY::R))
     {
-        m_pPlayer->Change_State(CPlayer::HEAL);
+        SPECIAL_ITEM eNow = GET_GAMEINTERFACE->Get_Now_Select_Item();
+        if (SPECIAL_ITEM::SP_PULSE_BATTERY == eNow)
+        {
+            m_pPlayer->Change_State(CPlayer::HEAL);
+        }
+        else if (SPECIAL_ITEM::SP_GRINDER == eNow)
+        {
+            m_pPlayer->Change_State(CPlayer::GRINDER);
+        }
+        else if (SPECIAL_ITEM::SP_GRANADE == eNow
+            || SPECIAL_ITEM::SP_THERMITE == eNow
+            || SPECIAL_ITEM::SP_THROW_BATTERY == eNow)
+        {
+            m_pPlayer->Change_State(CPlayer::THROW_ITEM);
+        }
+        else if (SPECIAL_ITEM::SP_TELEPOT == eNow)
+        {
+            //UI¸¦ ¶ç¿ìÀÚ
+            m_pPlayer->Change_State(CPlayer::TELEPORT);
+        }
+        else if (SPECIAL_ITEM::SP_DEAD == eNow)
+        {
+            //UI¸¦ ¶ç¿ìÀÚ
+            m_pPlayer->Change_State(CPlayer::DIE);
+        }
     }
     else if (m_pPlayer->Key_Tab(KEY::TAPKEY))
     {
@@ -74,11 +106,14 @@ void CState_Player_TH_Idle::Update(_float fTimeDelta)
     {
         m_pPlayer->Change_State(CPlayer::ARM_START);
     }
-    
+
     if (m_pPlayer->Key_Away(KEY::RBUTTON))
     {
         m_fRButtonTime = 0.f;
-        m_pPlayer->Change_State(CPlayer::FLAME_RATTACK0);
+        if (m_pPlayer->Get_WeaponType() == CPlayer::WEP_RAPIER)
+            m_pPlayer->Change_State(CPlayer::RAPIER_RATTACK0);
+        else if (m_pPlayer->Get_WeaponType() == CPlayer::WEP_SCISSOR)
+            m_pPlayer->Change_State(CPlayer::SCISSOR_RATTACK0);
     }
 }
 

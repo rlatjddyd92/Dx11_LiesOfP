@@ -51,7 +51,7 @@ HRESULT CState_Player_OH_Walk::Start_State(void* pArg)
 {
     //m_pPlayer->Change_Animation(m_iAnimation_Walk[WALK_F], true);
 
-    m_pPlayer->Set_MoveSpeed(2.f);
+    m_pPlayer->Set_MoveSpeed(1.5f);
 
     m_fSpaceTime = 0.f;
     m_isInputSpace = false;
@@ -79,7 +79,7 @@ void CState_Player_OH_Walk::Update(_float fTimeDelta)
             m_pPlayer->Change_State(CPlayer::OH_DASH);
         }
 
-        if (m_pPlayer->Key_Hold(KEY::SPACE))
+        if (m_pPlayer->Key_Hold(KEY::SPACE) && m_pPlayer->Get_Player_Stat().vGauge_Stamina.x > 10.f)
         {
             m_pPlayer->Change_State(CPlayer::OH_SPRINT);
         }
@@ -99,12 +99,6 @@ void CState_Player_OH_Walk::Update(_float fTimeDelta)
 
 void CState_Player_OH_Walk::End_State()
 {
-}
-
-void CState_Player_OH_Walk::Select_WalkAnimation()
-{
-    
-
 }
 
 _bool CState_Player_OH_Walk::Move(_float fTimeDelta)

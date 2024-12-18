@@ -35,9 +35,9 @@ private:
 
     _bool               m_isInputSpace = {};
 
+    WALK                m_eWalkState = { WALK_END };
+    
 private:
-    void                Select_WalkAnimation();
-
     _bool               Move(_float fTimeDelta);
 
 public:

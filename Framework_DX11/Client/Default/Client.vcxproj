@@ -224,6 +224,8 @@
     <ClInclude Include="..\Public\State_Player_Arm_Start.h" />
     <ClInclude Include="..\Public\State_Player_Arm_Swing.h" />
     <ClInclude Include="..\Public\State_Player_Arm_Thrust.h" />
+    <ClInclude Include="..\Public\State_Player_DebuffReset.h" />
+    <ClInclude Include="..\Public\State_Player_DebuffResistance.h" />
     <ClInclude Include="..\Public\State_Player_Die.h" />
     <ClInclude Include="..\Public\State_Player_OpenRaxasiaDoor.h" />
     <ClInclude Include="..\Public\State_Player_ThrowItem.h" />
@@ -550,6 +552,8 @@
     <ClCompile Include="..\Private\State_Player_Arm_Start.cpp" />
     <ClCompile Include="..\Private\State_Player_Arm_Swing.cpp" />
     <ClCompile Include="..\Private\State_Player_Arm_Thrust.cpp" />
+    <ClCompile Include="..\Private\State_Player_DebuffReset.cpp" />
+    <ClCompile Include="..\Private\State_Player_DebuffResistance.cpp" />
     <ClCompile Include="..\Private\State_Player_Die.cpp" />
     <ClCompile Include="..\Private\State_Player_OpenRaxasiaDoor.cpp" />
     <ClCompile Include="..\Private\State_Player_ThrowItem.cpp" />

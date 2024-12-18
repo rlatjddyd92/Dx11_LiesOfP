@@ -5,6 +5,8 @@
 #include "Player.h"
 #include "Camera.h"
 
+#include "GameInterface_Controller.h"
+
 CState_Player_TH_Run::CState_Player_TH_Run(CFsm* pFsm, CPlayer* pPlayer)
     :CState{ pFsm }
     , m_pPlayer{ pPlayer }
@@ -53,16 +55,19 @@ void CState_Player_TH_Run::Update(_float fTimeDelta)
         m_fSpaceTime += fTimeDelta;
     }
 
+    if (m_pPlayer->Get_IsLockOn())
+    {
+        m_pPlayer->Change_State(CPlayer::TH_WALK);
+    }
+
     if (false == Move(fTimeDelta))
     {
         if (m_isTurnOver)
-        {
             m_pPlayer->Change_State(CPlayer::TH_IDLE);
-            return;
-        }
+        return;
     }
 
-    if (m_fSpaceTime > 0.1f)
+    if (m_fSpaceTime > 0.15f)
     {
         if (m_pPlayer->Key_None(KEY::SPACE))
         {
@@ -70,7 +75,7 @@ void CState_Player_TH_Run::Update(_float fTimeDelta)
                 m_pPlayer->Change_State(CPlayer::TH_DASH);
         }
 
-        if (m_pPlayer->Key_Hold(KEY::SPACE))
+        if (m_pPlayer->Key_Hold(KEY::SPACE) && m_pPlayer->Get_Player_Stat().vGauge_Stamina.x > 10.f)
         {
             if (m_isTurnOver)
                 m_pPlayer->Change_State(CPlayer::TH_SPRINT);
@@ -84,7 +89,25 @@ void CState_Player_TH_Run::Update(_float fTimeDelta)
     else if (m_pPlayer->Key_Tab(KEY::R))
     {
         if (m_isTurnOver)
-            m_pPlayer->Change_State(CPlayer::HEAL);
+        {
+            SPECIAL_ITEM eNow = GET_GAMEINTERFACE->Get_Now_Select_Item();
+            if (SPECIAL_ITEM::SP_PULSE_BATTERY == eNow)
+            {
+                m_pPlayer->Change_State(CPlayer::HEAL);
+            }
+            else if (SPECIAL_ITEM::SP_GRINDER == eNow)
+            {
+                m_pPlayer->Change_State(CPlayer::GRINDER);
+            }
+        }
+    }
+    else if (m_pPlayer->Key_Tab(KEY::TAPKEY))
+    {
+        m_pPlayer->Change_State(CPlayer::CHANGEWEP);
+    }
+    else if (m_pPlayer->Key_Hold(KEY::CTRL))
+    {
+        m_pPlayer->Change_State(CPlayer::ARM_START);
     }
 
     if (m_pPlayer->Key_Tab(KEY::SPACE))

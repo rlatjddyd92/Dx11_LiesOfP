@@ -38,8 +38,6 @@ private:
     WALK                m_eWalkState = { WALK_END };
 
 private:
-    void                Select_WalkAnimation();
-
     _bool               Move(_float fTimeDelta);
 
 private:

@@ -38,7 +38,7 @@ HRESULT CState_Player_ThrowItem::Start_State(void* pArg)
 
     m_pPlayer->Set_MoveSpeed(m_fMoveSpeed);
 
-    //m_pPlayer->Disappear_Weapon();
+    m_pPlayer->Disappear_Weapon();
 
     m_isCreateItem = false;
     m_isPlaySound = false;

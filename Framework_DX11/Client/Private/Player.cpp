@@ -36,6 +36,8 @@
 #include "State_Player_Grinder.h"
 #include "State_Player_GetUp.h"
 #include "State_Player_ThrowItem.h"
+#include "State_Player_DebuffResistance.h"
+#include "State_Player_DebuffReset.h"
 #include "State_Player_Die.h"
 
 #include "State_Player_OH_Idle.h"
@@ -149,7 +151,7 @@ HRESULT CPlayer::Initialize(void * pArg)
 	//m_pNavigationCom->Move_to_Cell(m_pRigidBodyCom, 440); //상자랑 장애물
 	//m_pNavigationCom->Move_to_Cell(m_pRigidBodyCom, 1066); // 순간이동 790
 	//m_pNavigationCom->Move_to_Cell(m_pRigidBodyCom, 790); // 순간이동 1066
-	//m_pNavigationCom->Move_to_Cell(m_pRigidBodyCom, 1066); // 순간이동 790
+	m_pNavigationCom->Move_to_Cell(m_pRigidBodyCom, 1066); // 순간이동 790
 	//m_pNavigationCom->Move_to_Cell(m_pRigidBodyCom, 801); // 소피아 방
 	//m_pNavigationCom->Move_to_Cell(m_pRigidBodyCom, 1178); // 소피아 방 내부
 	//m_pNavigationCom->Move_to_Cell(m_pRigidBodyCom, 0); 
@@ -183,7 +185,7 @@ void CPlayer::Priority_Update(_float fTimeDelta)
 		m_fGuardTime += fTimeDelta;
 	}
 
-	if (Key_Hold(KEY::WHEELBUTTON))
+	if (Key_Tab(KEY::WHEELBUTTON))
 		LockOnOff();
 
 	if (m_isLockOn)
@@ -255,6 +257,7 @@ void CPlayer::Update(_float fTimeDelta)
 	if (KEY_TAP(KEY::K))
 	{
 		Init_PlayerCamera();
+		Calc_DebuffGain(DEBUFF_ELEC, 30.f);
 		//Change_State(RAPIER_FATAL);
 	}
 
@@ -269,7 +272,7 @@ void CPlayer::Update(_float fTimeDelta)
 	if (KEY_TAP(KEY::Q))
 	{
 		dynamic_cast<CCutScene*>(m_pGameInstance->Find_Object(LEVEL_GAMEPLAY, TEXT("Layer_CutScene"), BOSS2_PHASE2))->Start_Play();
-		//dynamic_cast<CCutScene*>(m_pGameInstance->Find_Object(LEVEL_GAMEPLAY, TEXT("Layer_CutScene"), BOSS1_PHASE2))->Start_Play();
+		//dynamic_cast<CCutScene*>(m_pGameInstance->Find_Object(LEVEL_GAMEPLAY, TEXT("Layer_CutScene"), BOSS1_MEET2))->Start_Play();
 	}
 }
 
@@ -454,7 +457,7 @@ void CPlayer::Move_Dir(_Vec4 vDir, _float fTimeDelta, _bool isTurn)
 	if (isTurn)
 		m_pTransformCom->LookAt_Lerp_NoHeight(vDir, 10.0f, fTimeDelta);
 
-	m_pRigidBodyCom->Set_Velocity((_Vec3(vDir * m_fMoveSpeed)));
+	m_pRigidBodyCom->Set_Velocity((_Vec3(vDir * m_fMoveSpeed) * m_fDebuffSpeedRatio));
 }
 
 _bool CPlayer::Turn_Lerp(_Vec4 vDir, _float fTimeDelta)
@@ -889,7 +892,7 @@ _bool CPlayer::Calc_DamageGain(_float fAtkDmg, _Vec3 vHitPos, _uint iHitType, _u
 void CPlayer::Calc_DebuffGain(DEBUFF_TYPE eDebuffType, _float fAmount)
 {
 	if (m_fDebuffReduceTime > 0.f)
-		fAmount *= 0.7f;
+		fAmount *= 0.4f;
 
 	switch (eDebuffType)
 	{
@@ -1062,6 +1065,37 @@ void CPlayer::Update_Stat(_float fTimeDelta)
 	if (m_fDebuffRecoveryTime[DEBUFF_ACID] <= 0.f)
 	{
 		m_tPlayer_Stat->fDebuff_Acid.x = max(m_tPlayer_Stat->fDebuff_Acid.x - 2.f * fTimeDelta, 0.f);
+	}
+
+	// 불 상태면 지속 데미지
+	if (m_tPlayer_Stat->fDebuff_Fire.x > m_tPlayer_Stat->fDebuff_Fire.y * 0.5f)
+	{
+		Damaged(0.05f);
+	}
+
+	// 전기 상태면 이동 속도 감소
+	if (m_tPlayer_Stat->fDebuff_Electric.x > m_tPlayer_Stat->fDebuff_Electric.y * 0.5f)
+	{
+		m_fDebuffSpeedRatio = 0.8f;
+	}
+	else
+	{
+		m_fDebuffSpeedRatio = 1.f;
+	}
+
+	// 독 상태면 일정 시간마다 데미지
+	if (m_tPlayer_Stat->fDebuff_Acid.x > m_tPlayer_Stat->fDebuff_Acid.y * 0.5f)
+	{
+		m_fDebuffAcidDamageTime -= fTimeDelta;
+		if (m_fDebuffAcidDamageTime <= 0.f)
+		{
+			m_fDebuffAcidDamageTime = 1.5f;
+			Damaged(50.f);
+		}
+	}
+	else
+	{
+		m_fDebuffAcidDamageTime = 1.5f;
 	}
 #pragma endregion
 }
@@ -1599,6 +1633,8 @@ HRESULT CPlayer::Ready_FSM()
 	m_pFsmCom->Add_State(CState_Player_Grinder::Create(m_pFsmCom, this, GRINDER, &Desc));
 	m_pFsmCom->Add_State(CState_Player_GetUp::Create(m_pFsmCom, this, GETUP, &Desc));
 	m_pFsmCom->Add_State(CState_Player_ThrowItem::Create(m_pFsmCom, this, THROW_ITEM, &Desc));
+	m_pFsmCom->Add_State(CState_Player_DebuffResistance::Create(m_pFsmCom, this, DEBUFF_RESISTANCE, &Desc));
+	m_pFsmCom->Add_State(CState_Player_DebuffReset::Create(m_pFsmCom, this, DEBUFF_RESET, &Desc));
 	m_pFsmCom->Add_State(CState_Player_Die::Create(m_pFsmCom, this, DIE, &Desc));
 
 	m_pFsmCom->Add_State(CState_Player_OH_Idle::Create(m_pFsmCom, this, OH_IDLE, &Desc));

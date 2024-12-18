@@ -181,7 +181,7 @@ PS_OUT_LIGHT PS_MAIN_LIGHT_DIRECTIONAL_PBR(PS_IN In)
 	
     
     float fHalfLambert = saturate(dot(normalize(g_vLightDir.xyz) * -1.f, vNormal) * 0.5f + 0.5f);
-    //Out.vShade = g_vLightDiffuse * saturate(saturate(fHalfLambert) + (g_vLightAmbient * g_vMtrlAmbient));
+    //Out.vShade = g_vLightDiffuse * saturate(fHalfLambert + (g_vLightAmbient * g_vMtrlAmbient));
     Out.vShade = g_vLightDiffuse *  (g_vLightAmbient * g_vMtrlAmbient);
     
     // PBR
@@ -239,15 +239,15 @@ PS_OUT_LIGHT PS_MAIN_LIGHT_DIRECTIONAL_PBR(PS_IN In)
     if (g_isShadow)
     {
         float fShadowPower = 1.f;
-        if (fViewZ <= 15.f)
+        if (fViewZ <= 10.f)
         {
             fShadowPower = ComputeShadow(vPosition, 0, vNormalDesc);
         }
-        else if (fViewZ > 15.f && fViewZ <= 30.f)
+        else if (fViewZ > 10.f && fViewZ <= 25.f)
         {
             fShadowPower = ComputeShadow(vPosition, 1, vNormalDesc);
         }
-        else if (fViewZ > 30.f && fViewZ <= 300.f)
+        else if (fViewZ > 25.f && fViewZ <= 280.f)
         {
             fShadowPower = ComputeShadow(vPosition, 2, vNormalDesc);
         }

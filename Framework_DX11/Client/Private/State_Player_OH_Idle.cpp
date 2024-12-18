@@ -92,6 +92,14 @@ void CState_Player_OH_Idle::Update(_float fTimeDelta)
         {
             m_pPlayer->Change_State(CPlayer::THROW_ITEM);
         }
+        else if (SPECIAL_ITEM::SP_RESISTANCE == eNow)
+        {
+            m_pPlayer->Change_State(CPlayer::DEBUFF_RESISTANCE);
+        }
+        else if (SPECIAL_ITEM::SP_PURIFICATION == eNow)
+        {
+            m_pPlayer->Change_State(CPlayer::DEBUFF_RESET);
+        }
         else if (SPECIAL_ITEM::SP_TELEPOT == eNow)
         {
             //UI¸¦ ¶ç¿ìÀÚ

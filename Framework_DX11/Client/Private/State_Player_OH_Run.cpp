@@ -55,6 +55,11 @@ void CState_Player_OH_Run::Update(_float fTimeDelta)
         m_fSpaceTime += fTimeDelta;
     }
 
+    if (m_pPlayer->Get_IsLockOn())
+    {
+        m_pPlayer->Change_State(CPlayer::OH_WALK);
+    }
+
     if (false == Move(fTimeDelta))
     {
         if (m_isTurnOver)
@@ -70,7 +75,7 @@ void CState_Player_OH_Run::Update(_float fTimeDelta)
                 m_pPlayer->Change_State(CPlayer::OH_DASH);
         }
 
-        if (m_pPlayer->Key_Hold(KEY::SPACE))
+        if (m_pPlayer->Key_Hold(KEY::SPACE) && m_pPlayer->Get_Player_Stat().vGauge_Stamina.x > 10.f)
         {
             if (m_isTurnOver)
                 m_pPlayer->Change_State(CPlayer::OH_SPRINT);

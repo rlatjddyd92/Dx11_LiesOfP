@@ -41,13 +41,13 @@ void CState_Player_OH_Sprint::Update(_float fTimeDelta)
     if (m_isSprintEnd)
         m_fSprintEndTime += fTimeDelta;
 
-    m_pPlayer->Decrease_Stamina(2.f);
+    m_pPlayer->Decrease_Stamina(1.5f);
 
     if (false == Move(fTimeDelta) && m_fSprintEndTime > 0.1f)
     {
         m_pPlayer->Change_State(CPlayer::OH_IDLE);
     }
-    else if (m_fSprintEndTime > 0.1f)
+    else if (m_fSprintEndTime > 0.1f || m_pPlayer->Get_Player_Stat().vGauge_Stamina.x <= 0.f)
     {
         if (m_pPlayer->Get_IsLockOn())
         {

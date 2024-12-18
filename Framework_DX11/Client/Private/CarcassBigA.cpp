@@ -261,6 +261,8 @@ HRESULT CCarcassBigA::Ready_Components()
 		TEXT("Com_RigidBody"), reinterpret_cast<CComponent**>(&m_pRigidBodyCom), &RigidBodyDesc)))
 		return E_FAIL;
 
+	m_pRigidBodyCom->Set_Mass(1000.f);
+
 	return S_OK;
 }
 

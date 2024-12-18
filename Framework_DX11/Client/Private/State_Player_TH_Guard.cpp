@@ -38,7 +38,7 @@ HRESULT CState_Player_TH_Guard::Start_State(void* pArg)
     m_pPlayer->Change_Animation_Boundry(m_iAnimation_Guard, true, 0.05f);
 
     m_pPlayer->Set_IsGuard(true);
-    m_pPlayer->Set_MoveSpeed(3.f);
+    m_pPlayer->Set_MoveSpeed(m_fMoveSpeed);
 
     return S_OK;
 }

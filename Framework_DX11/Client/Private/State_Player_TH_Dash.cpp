@@ -74,6 +74,10 @@ void CState_Player_TH_Dash::Select_DashAnimation()
         {
             m_pPlayer->Change_Animation(m_iAnimation_Dash[DASH_FOCUS_R], false, 0.f);
         }
+        else
+        {
+            m_pPlayer->Change_Animation(m_iAnimation_Dash[DASH_FOCUS_B], false, 0.f);
+        }
     }
     else
     {

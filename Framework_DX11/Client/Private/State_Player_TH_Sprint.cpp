@@ -35,11 +35,7 @@ HRESULT CState_Player_TH_Sprint::Start_State(void* pArg)
 
     return S_OK;
 }
-/*        if (KEY_TAP(KEY::SPACE))
-        {
-            m_pPlayer->Change_State(CPlayer::JUMP);
-        }
-        else */
+
 void CState_Player_TH_Sprint::Update(_float fTimeDelta)
 {
     if (m_isSprintEnd)

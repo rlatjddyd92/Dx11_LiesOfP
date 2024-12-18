@@ -34,7 +34,7 @@ public:
 
 	enum PLAYER_STATE
 	{
-		HIT, PARRY, HEAL, CHANGEWEP, GRINDER, GETUP, THROW_ITEM, DIE,
+		HIT, PARRY, HEAL, CHANGEWEP, GRINDER, GETUP, THROW_ITEM, DEBUFF_RESISTANCE, DEBUFF_RESET, DIE,
 
 		OH_IDLE, OH_WALK, OH_RUN, OH_SPRINT, OH_GUARD, OH_GUARDHIT, OH_JUMP, OH_DASH,
 
@@ -306,6 +306,8 @@ private:
 	_bool				m_isCollisionMonster = { false };
 
 	_float				m_fGuardTime = {};
+	_float				m_fDebuffSpeedRatio = { 1.f };
+	_float				m_fDebuffAcidDamageTime = {};
 	_float				m_fRecoveryStaminaTime = { 0.f };
 	_float				m_fDissloveRatio = {};
 

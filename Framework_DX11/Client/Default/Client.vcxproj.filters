@@ -952,12 +952,6 @@
     <Filter Include="05.Fsm\Monster\Raxasia\P1\Attack\RouteParts\Discharge">
       <UniqueIdentifier>{e5adac13-4069-48d1-b81c-5f212e5650e1}</UniqueIdentifier>
     </Filter>
-    <Filter Include="05.Fsm\Player\Common\Throw">
-      <UniqueIdentifier>{6927f66b-8d01-4af5-8b3c-34df47767809}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="05.Fsm\Player\Common\Grinder">
-      <UniqueIdentifier>{fb4067e2-a5e2-47fe-bae7-ead4bdc7b9f0}</UniqueIdentifier>
-    </Filter>
     <Filter Include="02.GameObjects\02.Pawn\01.Monster\SimonManus\EnvHand">
       <UniqueIdentifier>{198e4125-b11e-41b7-b2a8-104e7a6d3cba}</UniqueIdentifier>
     </Filter>
@@ -1173,6 +1167,21 @@
     </Filter>
     <Filter Include="02.GameObjects\05.Effect\Obejct">
       <UniqueIdentifier>{c1cd3960-691f-4b1d-9d51-6ee5614afa74}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="05.Fsm\Player\Item">
+      <UniqueIdentifier>{117ac9d9-e65f-4228-b9cb-4c9d53cb3bed}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="05.Fsm\Player\Item\DeubffReduce">
+      <UniqueIdentifier>{0b44cbb2-c559-4f66-a96f-26c1f74abc7d}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="05.Fsm\Player\Item\DebuffReset">
+      <UniqueIdentifier>{d3d0ebc3-f9c4-493a-bc01-65a55bcebf1f}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="05.Fsm\Player\Item\Throw">
+      <UniqueIdentifier>{6927f66b-8d01-4af5-8b3c-34df47767809}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="05.Fsm\Player\Item\Grinder">
+      <UniqueIdentifier>{fb4067e2-a5e2-47fe-bae7-ead4bdc7b9f0}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -1772,7 +1781,7 @@
       <Filter>02.GameObjects\12.AttackObject\SimonManus\StampBlast</Filter>
     </ClInclude>
     <ClInclude Include="..\Public\State_Player_Grinder.h">
-      <Filter>05.Fsm\Player\Common\Grinder</Filter>
+      <Filter>05.Fsm\Player\Item\Grinder</Filter>
     </ClInclude>
     <ClInclude Include="..\Public\State_SimonManusP2_SlideMagic.h">
       <Filter>05.Fsm\Monster\SimonManus\P2\Attack\Single\SlideMagic</Filter>
@@ -1941,7 +1950,7 @@
       <Filter>02.GameObjects\06.Weapon\00.PlayerWeapon\03.Arm</Filter>
     </ClInclude>
     <ClInclude Include="..\Public\State_Player_ThrowItem.h">
-      <Filter>05.Fsm\Player\Common\Throw</Filter>
+      <Filter>05.Fsm\Player\Item\Throw</Filter>
     </ClInclude>
     <ClInclude Include="..\Public\State_Player_Die.h">
       <Filter>05.Fsm\Player\Common\Die</Filter>
@@ -2161,6 +2170,12 @@
     </ClInclude>
     <ClInclude Include="..\Public\Machine_EffectObj.h">
       <Filter>02.GameObjects\05.Effect\Obejct</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Public\State_Player_DebuffResistance.h">
+      <Filter>05.Fsm\Player\Item\DeubffReduce</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Public\State_Player_DebuffReset.h">
+      <Filter>05.Fsm\Player\Item\DebuffReset</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -2730,7 +2745,7 @@
       <Filter>02.GameObjects\12.AttackObject\SimonManus\StampBlast</Filter>
     </ClCompile>
     <ClCompile Include="..\Private\State_Player_Grinder.cpp">
-      <Filter>05.Fsm\Player\Common\Grinder</Filter>
+      <Filter>05.Fsm\Player\Item\Grinder</Filter>
     </ClCompile>
     <ClCompile Include="..\Private\State_SimonManusP2_SlideMagic.cpp">
       <Filter>05.Fsm\Monster\SimonManus\P2\Attack\Single\SlideMagic</Filter>
@@ -2896,7 +2911,7 @@
       <Filter>02.GameObjects\06.Weapon\00.PlayerWeapon\03.Arm</Filter>
     </ClCompile>
     <ClCompile Include="..\Private\State_Player_ThrowItem.cpp">
-      <Filter>05.Fsm\Player\Common\Throw</Filter>
+      <Filter>05.Fsm\Player\Item\Throw</Filter>
     </ClCompile>
     <ClCompile Include="..\Private\State_Player_Die.cpp">
       <Filter>05.Fsm\Player\Common\Die</Filter>
@@ -3119,6 +3134,12 @@
     </ClCompile>
     <ClCompile Include="..\Private\Machine_EffectObj.cpp">
       <Filter>02.GameObjects\05.Effect\Obejct</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Private\State_Player_DebuffResistance.cpp">
+      <Filter>05.Fsm\Player\Item\DeubffReduce</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Private\State_Player_DebuffReset.cpp">
+      <Filter>05.Fsm\Player\Item\DebuffReset</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
