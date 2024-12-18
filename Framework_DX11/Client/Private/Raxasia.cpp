@@ -69,6 +69,7 @@
 #include "State_Raxasia_CutScene_Phase2.h"
 #pragma endregion
 
+#include "CutScene.h"
 #include "Weapon.h"
 
 CRaxasia::CRaxasia(ID3D11Device* pDevice, ID3D11DeviceContext* pContext)
@@ -152,6 +153,13 @@ void CRaxasia::Priority_Update(_float fTimeDelta)
 		{
 			GET_GAMEINTERFACE->Set_OnOff_OrthoUI(false, this);
 		}
+
+		if (m_isChanged)
+		{
+			//dynamic_cast<CCutScene*>(m_pGameInstance->Find_Object(LEVEL_GAMEPLAY, TEXT("Layer_CutScene"), BOSS1_DEAD))->Start_Play();
+		}
+		else
+			dynamic_cast<CCutScene*>(m_pGameInstance->Find_Object(LEVEL_GAMEPLAY, TEXT("Layer_CutScene"), BOSS1_PHASE2))->Start_Play();
 
 	}
 
