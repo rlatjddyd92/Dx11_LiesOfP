@@ -42,10 +42,12 @@ HRESULT CState_Player_OpenRaxasiaDoor::Start_State(void* pArg)
     vTowerDoorLook.Normalize();
 
     _Vec3 vInitPos = vTowerDoorPos + vTowerDoorLook * 0.8f;
-    vInitPos.y = vPlayerPos.y;
+    vInitPos.y = vTowerDoorPos.y;
 
     m_pPlayer->Get_RigidBody()->Set_GloblePose(vInitPos);
     m_pPlayer->Get_Transform()->Set_NewLook(-vTowerDoorLook);
+    m_pPlayer->Get_Navigation()->Research_Cell(vInitPos);
+    m_pTowerDoor->Set_IsOpen(true);
 
     return S_OK;
 }

@@ -213,6 +213,13 @@ void CCutScene::First_Setting()
 	case SOPHIA_DEAD:
 		pPlayer->Disappear_Weapon();
 		break;
+	case BOSS1_MEET2:
+		pPlayer->IsActive(false);
+		if (FAILED(m_pGameInstance->Add_CloneObject_ToLayer(LEVEL_GAMEPLAY, TEXT("Layer_Raxasia"), TEXT("Prototype_GameObject_Raxasia"))))
+			return;
+		m_pObjects[BOSS1] = static_cast<CPawn*>(m_pGameInstance->Find_Object(LEVEL_GAMEPLAY, TEXT("Layer_Raxasia"), 0));
+		m_pObjects[BOSS1]->Start_CutScene(0);
+		break;
 	case BOSS2_MEET:
 		if (FAILED(m_pGameInstance->Add_CloneObject_ToLayer(LEVEL_GAMEPLAY, TEXT("Layer_SimonManus"), TEXT("Prototype_GameObject_SimonManus"))))
 			return;
@@ -232,12 +239,7 @@ void CCutScene::First_Setting()
 		pPlayer->IsActive(false);
 		m_pObjects[BOSS2] = static_cast<CPawn*>(m_pGameInstance->Find_Object(LEVEL_GAMEPLAY, TEXT("Layer_SimonManus"), 0));
 		break;
-	case BOSS1_MEET2:
-		if (FAILED(m_pGameInstance->Add_CloneObject_ToLayer(LEVEL_GAMEPLAY, TEXT("Layer_Raxasia"), TEXT("Prototype_GameObject_Raxasia"))))
-			return;
-		m_pObjects[BOSS1] = static_cast<CPawn*>(m_pGameInstance->Find_Object(LEVEL_GAMEPLAY, TEXT("Layer_Raxasia"), 0));
-		m_pObjects[BOSS1]->Start_CutScene(0);
-
+	default:
 		break;
 	}
 }
@@ -268,8 +270,16 @@ void CCutScene::End_Setting()
 		pPlayer->Change_State(CPlayer::OH_IDLE);
 		pPlayer->Get_Navigation()->Move_to_Cell(pPlayer->Get_RigidBody(), 1178);
 		break;	
+	case BOSS1_MEET1:
+		dynamic_cast<CCutScene*>(m_pGameInstance->Find_Object(LEVEL_GAMEPLAY, TEXT("Layer_CutScene"), BOSS1_MEET2))->Start_Play();
+		break;
 	case BOSS1_MEET2:
 		m_pGameInstance->Stop_BGM();
+		pPlayer->IsActive(true);
+		pPlayer->Appear_Weapon();
+		pPlayer->Change_State(CPlayer::OH_IDLE);
+		pPlayer-> Get_Navigation()->Move_to_Cell(pPlayer->Get_RigidBody(), 268);
+		m_pObjects[BOSS1]->End_CutScene(0);
 		break;	
 	case BOSS2_MEET:
 		dynamic_cast<CCutScene*>(m_pGameInstance->Find_Object(LEVEL_GAMEPLAY, TEXT("Layer_CutScene"), BOSS2_MEET2))->Start_Play();

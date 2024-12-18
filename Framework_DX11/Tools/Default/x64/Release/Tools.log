@@ -1,10 +1,21 @@
-﻿  GraphEditor.cpp
-D:\GitProject\Dx11_LiesOfP\Framework_DX11\ImGuizmo\GraphEditor.cpp(28,10): error C1083: 포함 파일을 열 수 없습니다. 'imgui.h': No such file or directory
+﻿FXC : warning X4717: Effects deprecated for D3DCompiler_47
+D:\GitProject\Dx11_LiesOfP\Framework_DX11\Tools\Bin\ShaderFiles\Shader_ParticleCompute.hlsl(324,9-30): warning X3203: signed/unsigned mismatch, unsigned assumed
+  
+  compilation object save succeeded; see D:\GitProject\Dx11_LiesOfP\Framework_DX11\x64\Release\Shader_ParticleCompute.cso
+FXC : warning X4717: Effects deprecated for D3DCompiler_47
+  
+  compilation object save succeeded; see D:\GitProject\Dx11_LiesOfP\Framework_DX11\x64\Release\Shader_Effect_Texture.cso
+FXC : warning X4717: Effects deprecated for D3DCompiler_47
+D:\GitProject\Dx11_LiesOfP\Framework_DX11\Tools\Bin\ShaderFiles\Shader_VtxPointInstance.hlsl(73,5-66): warning X3206: implicit truncation of vector type
+  
+  compilation object save succeeded; see D:\GitProject\Dx11_LiesOfP\Framework_DX11\x64\Release\Shader_VtxPointInstance.cso
+  GraphEditor.cpp
   ImCurveEdit.cpp
+  ImGradient.cpp
+D:\GitProject\Dx11_LiesOfP\Framework_DX11\ImGuizmo\GraphEditor.cpp(28,10): error C1083: 포함 파일을 열 수 없습니다. 'imgui.h': No such file or directory
 D:\GitProject\Dx11_LiesOfP\Framework_DX11\ImGuizmo\ImCurveEdit.h(28,10): error C1083: 포함 파일을 열 수 없습니다. 'imgui.h': No such file or directory
   (소스 파일 '../../ImGuizmo/ImCurveEdit.cpp'을(를) 컴파일하는 중)
   
-  ImGradient.cpp
 D:\GitProject\Dx11_LiesOfP\Framework_DX11\ImGuizmo\ImGradient.cpp(27,10): error C1083: 포함 파일을 열 수 없습니다. 'imgui.h': No such file or directory
   ImGuizmo.cpp
 D:\GitProject\Dx11_LiesOfP\Framework_DX11\ImGuizmo\ImGuizmo.cpp(30,10): error C1083: 포함 파일을 열 수 없습니다. 'imgui.h': No such file or directory
