@@ -325,7 +325,7 @@ void CCutScene::Load_KeyFrame(CUTSCENE_KEYFRAME_DESC pDesc)
 
 void CCutScene::Start_Play()
 {
-	CCamera_Manager::Get_Instance()->Change_Camera(TEXT("Camera_Free"));
+	CCamera_Manager::Get_Instance()->Change_Camera(TEXT("Camera_Free"), true);
 	m_isActive = true;
 	m_bPlay = true;
 }

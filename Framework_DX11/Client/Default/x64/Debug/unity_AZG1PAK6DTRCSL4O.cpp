@@ -72,6 +72,9 @@
 #include "D:\GitProject\Dx11_LiesOfP\Framework_DX11\Client\Private\CurruptedStrongArm_Puppet.cpp"
 
 
+#include "D:\GitProject\Dx11_LiesOfP\Framework_DX11\Client\Private\Machine_EffectObj.cpp"
+
+
 #include "D:\GitProject\Dx11_LiesOfP\Framework_DX11\Client\Private\Raxasia_Helmet_CutScene.cpp"
 
 
@@ -157,6 +160,12 @@
 
 
 #include "D:\GitProject\Dx11_LiesOfP\Framework_DX11\Client\Private\State_Player_Arm_Thrust.cpp"
+
+
+#include "D:\GitProject\Dx11_LiesOfP\Framework_DX11\Client\Private\State_Player_DebuffReset.cpp"
+
+
+#include "D:\GitProject\Dx11_LiesOfP\Framework_DX11\Client\Private\State_Player_DebuffResistance.cpp"
 
 
 #include "D:\GitProject\Dx11_LiesOfP\Framework_DX11\Client\Private\State_Player_Die.cpp"
