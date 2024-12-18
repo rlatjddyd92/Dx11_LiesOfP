@@ -32,6 +32,10 @@ private:
     _bool               m_isCreateDome = { false };
     _bool               m_isDistortionHand = { false };
 
+private:
+    _bool               m_isMaxEmissive = {};
+    void                Contorl_Emissive(_float fTimeDelta);
+
 public:
     static CState_SimonManus_CutScene_Phase2* Create(class CFsm* pFsm, class CMonster* pMonster, _uint iStateNum, void* pArg = nullptr);
     virtual void Free() override;

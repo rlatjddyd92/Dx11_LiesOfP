@@ -59,6 +59,9 @@ public:
     void			    Reset_Die() { m_bDieState = false; }
     _bool			    Get_IsDieState() { return m_bDieState; }
 
+    _float              Get_EmissiveMask() { return m_fEmissiveMask; }
+    void                Set_EmissiveMask(_float fEmissive) { m_fEmissiveMask = fEmissive; }
+
 public:
     virtual HRESULT Initialize_Prototype();
     virtual HRESULT Initialize(void* pArg = nullptr);

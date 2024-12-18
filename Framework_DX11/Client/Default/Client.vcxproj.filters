@@ -1183,6 +1183,9 @@
     <Filter Include="02.GameObjects\13.EffectObject\Machine">
       <UniqueIdentifier>{c1cd3960-691f-4b1d-9d51-6ee5614afa74}</UniqueIdentifier>
     </Filter>
+    <Filter Include="05.Fsm\Monster\Raxasia\CutScene\Die">
+      <UniqueIdentifier>{80716756-08fe-4729-85f6-929b429ac1c5}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Client.h">
@@ -2177,6 +2180,9 @@
     <ClInclude Include="..\Public\State_Player_DebuffReset.h">
       <Filter>05.Fsm\Player\Item\DebuffReset</Filter>
     </ClInclude>
+    <ClInclude Include="..\Public\State_Raxasia_CutScene_Die.h">
+      <Filter>05.Fsm\Monster\Raxasia\CutScene\Die</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Client.cpp">
@@ -3140,6 +3146,9 @@
     </ClCompile>
     <ClCompile Include="..\Private\State_Player_DebuffReset.cpp">
       <Filter>05.Fsm\Player\Item\DebuffReset</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Private\State_Raxasia_CutScene_Die.cpp">
+      <Filter>05.Fsm\Monster\Raxasia\CutScene\Die</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

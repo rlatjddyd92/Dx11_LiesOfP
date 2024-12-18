@@ -267,6 +267,7 @@
     <ClInclude Include="..\Public\State_RaxasiaP2_Tele_LinkedTel.h" />
     <ClInclude Include="..\Public\State_RaxasiaP2_Walk.h" />
     <ClInclude Include="..\Public\State_RaxasiaP2_WaveSting.h" />
+    <ClInclude Include="..\Public\State_Raxasia_CutScene_Die.h" />
     <ClInclude Include="..\Public\State_Raxasia_CutScene_Meet.h" />
     <ClInclude Include="..\Public\State_Raxasia_CutScene_Phase2.h" />
     <ClInclude Include="..\Public\State_SimonManusP2_Die_Talking.h" />
@@ -595,6 +596,7 @@
     <ClCompile Include="..\Private\State_RaxasiaP2_Tele_LinkedTel.cpp" />
     <ClCompile Include="..\Private\State_RaxasiaP2_Walk.cpp" />
     <ClCompile Include="..\Private\State_RaxasiaP2_WaveSting.cpp" />
+    <ClCompile Include="..\Private\State_Raxasia_CutScene_Die.cpp" />
     <ClCompile Include="..\Private\State_Raxasia_CutScene_Meet.cpp" />
     <ClCompile Include="..\Private\State_Raxasia_CutScene_Phase2.cpp" />
     <ClCompile Include="..\Private\State_SimonManusP2_Die_Talking.cpp" />

@@ -292,18 +292,16 @@ HRESULT CSimonManus::Render()
 					return E_FAIL;
 			}
 
+			_float fEmissiveMaks = 0.f;
 			// EMISSIVE
 			if (nullptr != m_pModelCom->Find_Texture((_uint)i, TEXTURE_TYPE::EMISSIVE))
 			{
-				m_fEmissiveMask = 1.f;
+				fEmissiveMaks = m_fEmissiveMask;
 				if (FAILED(m_pModelCom->Bind_Material(m_pShaderCom, "g_EmessiveTexture", EMISSIVE, (_uint)i)))
 					return E_FAIL;
 			}
-			else
-			{
-				m_fEmissiveMask = 0.f;
-			}
-			if (FAILED(m_pShaderCom->Bind_RawValue("g_fEmessiveMask", &m_fEmissiveMask, sizeof(_float))))
+
+			if (FAILED(m_pShaderCom->Bind_RawValue("g_fEmessiveMask", &fEmissiveMaks, sizeof(_float))))
 				return E_FAIL;
 
 			//RimLight

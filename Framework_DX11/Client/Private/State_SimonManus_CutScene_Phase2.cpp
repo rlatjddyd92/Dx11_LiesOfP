@@ -30,6 +30,8 @@ HRESULT CState_SimonManus_CutScene_Phase2::Start_State(void* pArg)
 
     m_isChangePhase2 = false;
 
+    m_pMonster->Set_EmissiveMask(0.f);
+
     return S_OK;
 }
 
@@ -73,23 +75,59 @@ void CState_SimonManus_CutScene_Phase2::Update(_float fTimeDelta)
            // m_pMonster->End_CutScene(0);
         }
 
+        if (650 < iFrame && iFrame < 1650)
+        {
+            Contorl_Emissive(fTimeDelta);
+        }
+
         if (!m_isCreateDome && iFrame > 1225)
         {
             CEffect_Manager::Get_Instance()->Add_Effect_ToLayer(LEVEL_GAMEPLAY, TEXT("Map_SimonManus_2P"));
             m_isCreateDome = true;
         }
 
-        if (!m_isDistortionHand && iFrame > 1658)
+        if (!m_isDistortionHand && iFrame > 1659)
         {
             CEffect_Manager::Get_Instance()->Add_Effect_ToLayer(LEVEL_GAMEPLAY, TEXT("SimonManus_ConnectGod"), _Vec3(0.f, 2.73f, 0.f));
             m_isDistortionHand = true;
+
+            m_pMonster->Set_EmissiveMask(0.5f);
         }
+
+
     }
 }
 
 void CState_SimonManus_CutScene_Phase2::End_State()
 {
     m_pMonster->Active_Weapon();
+}
+
+void CState_SimonManus_CutScene_Phase2::Contorl_Emissive(_float fTimeDelta)
+{
+    _float fEmissive = m_pMonster->Get_EmissiveMask();
+
+    if (fEmissive >= 0.5f)
+    {
+        m_isMaxEmissive = true;
+        fEmissive = 0.5f;
+    }
+    else if (fEmissive <= 0.1f)
+    {
+        m_isMaxEmissive = false;
+        fEmissive = 0.1f;
+    }
+
+    if (m_isMaxEmissive)
+    {
+        fEmissive -= 0.3f * fTimeDelta;
+    }
+    else
+    {
+        fEmissive += 0.3f * fTimeDelta;
+    }
+
+    m_pMonster->Set_EmissiveMask(fEmissive);
 }
 
 CState_SimonManus_CutScene_Phase2* CState_SimonManus_CutScene_Phase2::Create(CFsm* pFsm, CMonster* pMonster, _uint iStateNum, void* pArg)

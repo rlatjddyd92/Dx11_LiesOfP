@@ -67,6 +67,7 @@
 #include "Raxasia_Sword_CutScene.h"
 #include "State_Raxasia_CutScene_Meet.h"
 #include "State_Raxasia_CutScene_Phase2.h"
+#include "State_Raxasia_CutScene_Die.h"
 #pragma endregion
 
 #include "Weapon.h"
@@ -132,7 +133,7 @@ HRESULT CRaxasia::Initialize(void* pArg)
 
 	GET_GAMEINTERFACE->Set_OnOff_OrthoUI(false, this);
 
-	//Start_CutScene(CUTSCENE_MEET);
+	Start_CutScene(CUTSCENE_DIE);
 
 	return S_OK;
 }
@@ -440,7 +441,7 @@ void CRaxasia::Start_CutScene(_uint iCutSceneNum)
 		CRaxasia_Sword_CutScene::WEAPON_DESC Desc{};
 		Desc.pParentWorldMatrix = m_pTransformCom->Get_WorldMatrix_Ptr();
 		Desc.pSocketBoneMatrix = m_pModelCom->Get_BoneCombindTransformationMatrix_Ptr("weapon0_l");
-		m_pCutSceneWeapon = dynamic_cast<CRaxasia_Sword_CutScene*>(m_pGameInstance->Get_CloneObject_ToLayer(LEVEL_GAMEPLAY, TEXT("Layer_CutSceneWeapon"), 
+		m_pCutSceneWeapon = dynamic_cast<CRaxasia_Sword_CutScene*>(m_pGameInstance->Get_CloneObject_ToLayer(LEVEL_GAMEPLAY, TEXT("Layer_CutSceneWeapon"),
 			TEXT("Prototype_GameObject_Weapon_Raxasia_Sword_CutScene"), &Desc));
 
 		m_pCutSceneWeapon->Get_Transform()->Set_State(CTransform::STATE_POSITION, vOffset);
@@ -461,6 +462,7 @@ void CRaxasia::Start_CutScene(_uint iCutSceneNum)
 
 		break;
 	}
+
 	case CUTSCENE_P2:
 	{
 		_Vec3 vOffset = _Vec3(0.f, 0.f, 0.f);
@@ -485,12 +487,8 @@ void CRaxasia::Start_CutScene(_uint iCutSceneNum)
 		m_pRigidBodyCom->Set_IsOnCell(false);
 
 		m_pTransformCom->Rotation(_vector{ 0, 1, 0, 0 }, XMConvertToRadians(150.f));
-		
 
-		_Vec3 vCurrentPos = m_pTransformCom->Get_State(CTransform::STATE_POSITION);
-		//vCurrentPos.y += 0.1f;
-
-		vCurrentPos = _Vec3(-59.119f, -97.802f, -27.848f);
+		_Vec3 vCurrentPos = _Vec3(-59.119f, -97.802f, -27.848f);
 
 		m_pRigidBodyCom->Set_GloblePose(vCurrentPos);
 
@@ -516,11 +514,30 @@ void CRaxasia::Start_CutScene(_uint iCutSceneNum)
 #pragma endregion
 
 		m_pCutSceneFsmCom->Set_State(STATE_P2);
+
+		break;
 	}
-		break;
+
 	case CUTSCENE_DIE:
+	{
 		m_pModelCom = m_pCutSceneModelCom[MODEL_PHASE2];
+
+		Deactiave_Weapon();
+		m_pWeaponShield->IsActive(false);
+
+		m_pRigidBodyCom->Set_IsLockCell(false);
+		m_pRigidBodyCom->Set_IsOnCell(false);
+
+		m_pTransformCom->Rotation(_vector{ 0, 1, 0, 0 }, XMConvertToRadians(50.f));
+
+		_Vec3 vCurrentPos = _Vec3(-59.119f, -97.767f, -27.848f);
+
+		m_pRigidBodyCom->Set_GloblePose(vCurrentPos);
+
+		m_pCutSceneFsmCom->Set_State(STATE_DIE);
+
 		break;
+	}
 	}
 
 	m_isCutScene = true;
@@ -822,6 +839,7 @@ HRESULT CRaxasia::Ready_FSM()
 
 	m_pCutSceneFsmCom->Add_State(CState_Raxasia_CutScene_Meet::Create(m_pCutSceneFsmCom, this, STATE_MEET, &Desc));
 	m_pCutSceneFsmCom->Add_State(CState_Raxasia_CutScene_Phase2::Create(m_pCutSceneFsmCom, this, STATE_P2, &Desc));
+	m_pCutSceneFsmCom->Add_State(CState_Raxasia_CutScene_Die::Create(m_pCutSceneFsmCom, this, STATE_DIE, &Desc));
 #pragma endregion
 
 	return S_OK;
