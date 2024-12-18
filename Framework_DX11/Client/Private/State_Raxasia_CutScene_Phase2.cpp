@@ -79,6 +79,8 @@ void CState_Raxasia_CutScene_Phase2::Update(_float fTimeDelta)
     {
         m_pMonster->Change_Model(1);
 
+        m_iAnimation_Phase2 = m_pMonster->Get_Model()->Find_AnimationIndex("AS_Raxasia_Raxasia_Phase2_C00_CINE", 1.f);
+
         CRaxasia_Helmet_CutScene::WEAPON_DESC Desc{};
         Desc.pParentWorldMatrix = m_pMonster->Get_Transform()->Get_WorldMatrix_Ptr();
         Desc.pSocketBoneMatrix = m_pMonster->Get_Model()->Get_BoneCombindTransformationMatrix_Ptr("helmet_01");
@@ -157,7 +159,7 @@ void CState_Raxasia_CutScene_Phase2::Update(_float fTimeDelta)
 
     m_vRootMoveStack = vMove;
 
-    //End_Check();
+    End_Check();
 }
 
 void CState_Raxasia_CutScene_Phase2::End_State()
@@ -167,9 +169,9 @@ void CState_Raxasia_CutScene_Phase2::End_State()
 
 void CState_Raxasia_CutScene_Phase2::End_Check()
 {
-    if (m_pMonster->Get_EndAnim(m_iAnimation_Phase2))
+    if (m_pMonster->Get_EndAnim(m_iAnimation_Phase2) && m_isPlayWeaponChangeAnim)
     {
-        m_pMonster->End_CutScene(CRaxasia::CUTSCENE_MEET);
+        m_pMonster->End_CutScene(CRaxasia::CUTSCENE_P2);
     }
 }
 

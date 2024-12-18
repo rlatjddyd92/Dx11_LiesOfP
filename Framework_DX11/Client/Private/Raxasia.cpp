@@ -134,7 +134,7 @@ HRESULT CRaxasia::Initialize(void* pArg)
 
 	GET_GAMEINTERFACE->Set_OnOff_OrthoUI(false, this);
 
-	Start_CutScene(CUTSCENE_DIE);
+	//Start_CutScene(CUTSCENE_MEET);
 
 	return S_OK;
 }
@@ -183,12 +183,8 @@ void CRaxasia::Update(_float fTimeDelta)
 	//}
 
 
-		m_vCurRootMove = XMVector3TransformNormal(m_pModelCom->Play_Animation(fTimeDelta * m_isPlayAnimation), m_pTransformCom->Get_WorldMatrix());
-	
-	//else
-	//{
-	//	m_vCurRootMove = _Vec3(0.f, 0.f, 0.f);
-	//}
+	m_vCurRootMove = XMVector3TransformNormal(m_pModelCom->Play_Animation(fTimeDelta * m_isPlayAnimation), m_pTransformCom->Get_WorldMatrix());
+
 
 	m_pRigidBodyCom->Set_Velocity(m_vCurRootMove / fTimeDelta);
 
@@ -558,7 +554,7 @@ void CRaxasia::End_CutScene(_uint iCutSceneNum)
 		m_pModelCom = m_pP1ModelCom;
 
 		_Vec3 vCurrentPos = m_pTransformCom->Get_State(CTransform::STATE_POSITION);
-		vCurrentPos.y -= 0.4f;
+		vCurrentPos.y -= 1.2f;
 
 		m_pRigidBodyCom->Set_GloblePose(vCurrentPos);
 		m_pNavigationCom->Research_Cell(vCurrentPos);
@@ -577,6 +573,23 @@ void CRaxasia::End_CutScene(_uint iCutSceneNum)
 	}
 	else if (m_pCutSceneFsmCom->Get_CurrentState() == STATE_P2)
 	{
+		_Vec3 vCurrentPos = m_pTransformCom->Get_State(CTransform::STATE_POSITION);
+		vCurrentPos.y -= 1.3f;
+
+		m_pRigidBodyCom->Set_GloblePose(vCurrentPos);
+		m_pNavigationCom->Research_Cell(vCurrentPos);
+		m_pRigidBodyCom->Set_IsLockCell(true);
+		m_pRigidBodyCom->Set_IsOnCell(true);
+
+		m_pCutSceneWeapon->IsActive(false);
+
+		_matrix PreTransformMatrix = XMMatrixScaling(0.01f, 0.01f, 0.01f) * XMMatrixRotationX(XMConvertToRadians(270.0f));
+		_Vec3 vShieldOffset = _Vec3(0.f, 0.f, 0.f);
+
+		m_pWeaponShield->Get_Transform()->Set_State(CTransform::STATE_POSITION, vShieldOffset);
+		m_pWeaponShield->ChangeSocketMatrix(m_pModelCom->Get_BoneCombindTransformationMatrix_Ptr(36));
+		m_pWeaponShield->Get_Model()->Set_PreTranformMatrix(PreTransformMatrix);
+
 		ChangePhase();
 	}
 
@@ -1098,6 +1111,7 @@ void CRaxasia::ChangePhase()
 	m_eStat.fMaxGrogyPoint = 50.f;
 	m_eStat.fGrogyPoint = 0.f;
 
+	m_bDieState = false;
 	m_isDead = false;
 	m_isChanged = true;
 }

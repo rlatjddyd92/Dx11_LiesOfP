@@ -117,7 +117,7 @@ void CState_Raxasia_CutScene_Meet::End_Check()
     {
         m_pMonster->End_CutScene(CRaxasia::CUTSCENE_MEET);
 
-        m_pMonster->Start_CutScene(CRaxasia::CUTSCENE_P2);
+        //m_pMonster->Start_CutScene(CRaxasia::CUTSCENE_P2);
     }
 }
 
