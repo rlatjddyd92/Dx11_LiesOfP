@@ -15,6 +15,9 @@ C:\Users\olivi\GitHub\Dx11_LiesOfP\Framework_DX11\Client\Private\State_RaxasiaP1
 C:\Users\olivi\GitHub\Dx11_LiesOfP\Framework_DX11\Client\Private\State_RaxasiaP2_Idle.cpp(120,23): warning C4244: '=': 'float'에서 'Engine::_uint'(으)로 변환하면서 데이터가 손실될 수 있습니다.
   (소스 파일 '/x64/Release/unity_SFMFWNB9ITN4RY40.cpp'을(를) 컴파일하는 중)
   
+C:\Users\olivi\GitHub\Dx11_LiesOfP\Framework_DX11\Client\Private\State_RaxasiaP2_Idle.cpp(122,19): warning C4244: '=': 'float'에서 'Engine::_uint'(으)로 변환하면서 데이터가 손실될 수 있습니다.
+  (소스 파일 '/x64/Release/unity_SFMFWNB9ITN4RY40.cpp'을(를) 컴파일하는 중)
+  
 C:\Users\olivi\GitHub\Dx11_LiesOfP\Framework_DX11\Client\Private\State_RaxasiaP2_Running_Fury.cpp(136,70): warning C4927: 변환이 잘못되었습니다. 사용자 정의 변환이 암시적으로 두 번 이상 적용되었습니다.
   (소스 파일 '/x64/Release/unity_SFMFWNB9ITN4RY40.cpp'을(를) 컴파일하는 중)
       C:\Users\olivi\GitHub\Dx11_LiesOfP\Framework_DX11\Client\Private\State_RaxasiaP2_Running_Fury.cpp(136,70):
@@ -48,8 +51,8 @@ C:\Users\olivi\GitHub\Dx11_LiesOfP\Framework_DX11\Client\Private\UIRender_Batchi
   (소스 파일 '/x64/Release/unity_SFMFWNB9ITN4RY40.cpp'을(를) 컴파일하는 중)
   
   코드를 생성하고 있습니다.
-  520 of 9405 functions ( 5.5%) were compiled, the rest were copied from previous compilation.
+  857 of 9418 functions ( 9.1%) were compiled, the rest were copied from previous compilation.
     0 functions were new in current compilation
-    156 functions had inline decision re-evaluated but remain unchanged
+    189 functions had inline decision re-evaluated but remain unchanged
   코드를 생성했습니다.
   Client.vcxproj -> C:\Users\olivi\GitHub\Dx11_LiesOfP\Framework_DX11\Client\Bin\Client.exe

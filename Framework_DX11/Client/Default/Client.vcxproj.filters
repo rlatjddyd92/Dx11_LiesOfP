@@ -1165,9 +1165,6 @@
     <Filter Include="05.Fsm\Monster\CurruptedStrongArm_Puppet\Attack\Single\SwipAttack">
       <UniqueIdentifier>{e3100ded-c639-4f5c-9495-c59404957501}</UniqueIdentifier>
     </Filter>
-    <Filter Include="02.GameObjects\05.Effect\Obejct">
-      <UniqueIdentifier>{c1cd3960-691f-4b1d-9d51-6ee5614afa74}</UniqueIdentifier>
-    </Filter>
     <Filter Include="05.Fsm\Player\Item">
       <UniqueIdentifier>{117ac9d9-e65f-4228-b9cb-4c9d53cb3bed}</UniqueIdentifier>
     </Filter>
@@ -1182,6 +1179,9 @@
     </Filter>
     <Filter Include="05.Fsm\Player\Item\Grinder">
       <UniqueIdentifier>{fb4067e2-a5e2-47fe-bae7-ead4bdc7b9f0}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.GameObjects\13.EffectObject\Machine">
+      <UniqueIdentifier>{c1cd3960-691f-4b1d-9d51-6ee5614afa74}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -2169,7 +2169,7 @@
       <Filter>02.GameObjects\12.AttackObject\Raxasia\ThunderBolt</Filter>
     </ClInclude>
     <ClInclude Include="..\Public\Machine_EffectObj.h">
-      <Filter>02.GameObjects\05.Effect\Obejct</Filter>
+      <Filter>02.GameObjects\13.EffectObject\Machine</Filter>
     </ClInclude>
     <ClInclude Include="..\Public\State_Player_DebuffResistance.h">
       <Filter>05.Fsm\Player\Item\DeubffReduce</Filter>
@@ -3133,7 +3133,7 @@
       <Filter>02.GameObjects\12.AttackObject\Raxasia\ThunderBolt</Filter>
     </ClCompile>
     <ClCompile Include="..\Private\Machine_EffectObj.cpp">
-      <Filter>02.GameObjects\05.Effect\Obejct</Filter>
+      <Filter>02.GameObjects\13.EffectObject\Machine</Filter>
     </ClCompile>
     <ClCompile Include="..\Private\State_Player_DebuffResistance.cpp">
       <Filter>05.Fsm\Player\Item\DeubffReduce</Filter>

@@ -29,6 +29,9 @@ private:
 
     _bool               m_isChangePhase2 = { false };
     _bool               m_isCreatedHand= { false };
+    _bool               m_isCreateDome = { false };
+    _bool               m_isDistortionHand = { false };
+
 public:
     static CState_SimonManus_CutScene_Phase2* Create(class CFsm* pFsm, class CMonster* pMonster, _uint iStateNum, void* pArg = nullptr);
     virtual void Free() override;

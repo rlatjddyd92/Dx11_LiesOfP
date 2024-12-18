@@ -87,6 +87,8 @@
 #include "FirePot.h"
 #pragma endregion
 
+#include "Machine_EffectObj.h"
+
 #include "GameInstance.h"
 #include "GameInterface_Controller.h"
 
@@ -1395,6 +1397,11 @@ HRESULT CLoader::Ready_Prototype()
 		CCutScene::Create(m_pDevice, m_pContext))))
 		return E_FAIL;
 
+
+	/* For. Prototype_GameObject_CutScene */
+	if (FAILED(m_pGameInstance->Add_Prototype(TEXT("Prototype_GameObject_MachineEffect"),
+		CMachine_EffectObj::Create(m_pDevice, m_pContext))))
+		return E_FAIL;
 
 	return S_OK;
 }

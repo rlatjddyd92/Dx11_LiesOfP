@@ -3,7 +3,7 @@
 #include "Machine_EffectObj.h"
 #include "GameInstance.h"
 #include "Effect_Container.h"
-
+#include "Effect_Manager.h"
 
 CMachine_EffectObj::CMachine_EffectObj(ID3D11Device* pDevice, ID3D11DeviceContext* pContext)
 	:CGameObject{ pDevice , pContext }
@@ -22,7 +22,15 @@ HRESULT CMachine_EffectObj::Initialize_Prototype()
 
 HRESULT CMachine_EffectObj::Initialize(void* pArg)
 {
-    return S_OK;
+	if (FAILED(__super::Initialize(pArg)))
+		return E_FAIL;
+
+	m_pMachineEffect = CEffect_Manager::Get_Instance()->Clone_Effect(TEXT("MonsteryMachine_Active"), m_pTransformCom->Get_WorldMatrix_Ptr(),
+		nullptr, _Vec3(0.f, 0.f, 0.f), _Vec3(0.f, 0.f, 0.f), _Vec3(1.f, 1.f, 1.f));
+
+	m_pMachineEffect->Set_Loop(true);
+
+	return S_OK;
 }
 
 void CMachine_EffectObj::Priority_Update(_float fTimeDelta)
@@ -46,6 +54,7 @@ void CMachine_EffectObj::Late_Update(_float fTimeDelta)
 			isEffectRender = true;
 		}
 	}
+
 	m_pMachineEffect->Late_Update(fTimeDelta);
 }
 
@@ -83,4 +92,10 @@ CGameObject* CMachine_EffectObj::Clone(void* pArg)
 void CMachine_EffectObj::Free()
 {
 	__super::Free();
+
+	if (true == m_isCloned)
+	{
+		m_pMachineEffect->Set_Cloned(false);
+		Safe_Release(m_pMachineEffect);
+	}
 }
