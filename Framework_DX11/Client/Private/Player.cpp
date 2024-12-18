@@ -155,7 +155,7 @@ HRESULT CPlayer::Initialize(void * pArg)
 	//m_pNavigationCom->Move_to_Cell(m_pRigidBodyCom, 801); // 소피아 방
 	//m_pNavigationCom->Move_to_Cell(m_pRigidBodyCom, 1178); // 소피아 방 내부
 	//m_pNavigationCom->Move_to_Cell(m_pRigidBodyCom, 0); 
-	//m_pNavigationCom->Move_to_Cell(m_pRigidBodyCom, 268); // 락사시아 보스전
+	m_pNavigationCom->Move_to_Cell(m_pRigidBodyCom, 268); // 락사시아 보스전
 
 	m_iRespawn_Cell_Num = 772;
 
@@ -1336,8 +1336,8 @@ void CPlayer::CollisionStay_IntercObj(CGameObject* pGameObject)
 		CTowerDoor* pTowerDoor = dynamic_cast<CTowerDoor*>(pGameObject);
 		if (GET_GAMEINTERFACE->Action_InterAction(TEXT("문을 연다.")))
 		{
-			pTowerDoor->Set_IsOpen(true);
-			m_pFsmCom->Change_State(RAXASIA_DOOR_OPEN, pTowerDoor);
+			dynamic_cast<CCutScene*>(m_pGameInstance->Find_Object(LEVEL_GAMEPLAY, TEXT("Layer_CutScene"), BOSS1_MEET1))->Start_Play();
+			//m_pFsmCom->Change_State(RAXASIA_DOOR_OPEN, pTowerDoor);
 		}
 	}
 }

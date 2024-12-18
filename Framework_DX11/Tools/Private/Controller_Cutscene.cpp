@@ -277,6 +277,10 @@ void CController_Cutscene::Menu()
     {
         Load();
     }
+    if (ImGui::Button("Load Old"))
+    {
+        Load();
+    }
 #pragma endregion
 }
 
@@ -522,7 +526,47 @@ void CController_Cutscene::Load()
     MSG_BOX(TEXT("파일 읽기를 성공했습니다.."));
 }
 
+void CController_Cutscene::Load_Old()
+{
+    const char cFile[128] = "../Bin/DataFiles/CutScene_Data.dat";
+    ifstream fin(cFile, ios::in | ios::binary);
 
+    //	fin.open("../Bin/Map_Data.txt");
+    if (!fin.is_open())    // 파일 열었다면
+    {
+        MSG_BOX(TEXT("파일 읽기를 실패했어요.."));
+        return;
+    }
+
+    _uint CutSceneCount = { 0 };
+    fin.read(reinterpret_cast<char*>(&CutSceneCount), sizeof(_uint));
+
+    for (_uint i = 0; i < CutSceneCount; ++i)
+    {
+        //컷신 인덱스
+        _uint iCutScene_Index;
+        fin.read(reinterpret_cast<char*>(&iCutScene_Index), sizeof(_uint));
+
+        //컷신의 전체 프레임 (시간)
+        _float fMaxFrame;
+        fin.read(reinterpret_cast<char*>(&fMaxFrame), sizeof(_float));
+        m_CutSceneList[i]->Set_MaxFrame(fMaxFrame);
+
+        //컷신의 KeyFrame개수(이벤트 개수)
+        _int iKeyFrameCount;
+        fin.read(reinterpret_cast<char*>(&iKeyFrameCount), sizeof(_int));
+
+        for (int j = 0; j < iKeyFrameCount; ++j)
+        {
+            CUTSCENE_KEYFRAME_DESC pDesc = {};
+            fin.read(reinterpret_cast<char*>(&pDesc), sizeof(CUTSCENE_KEYFRAME_DESC));
+            m_CutSceneList[i]->Load_KeyFrame(pDesc);
+        }
+    }
+
+    fin.close();
+    MSG_BOX(TEXT("파일 읽기를 성공했습니다.."));
+}
 
 
 void CController_Cutscene::Free()
