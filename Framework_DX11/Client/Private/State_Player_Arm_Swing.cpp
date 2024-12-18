@@ -39,7 +39,7 @@ HRESULT CState_Player_Arm_Swing::Start_State(void* pArg)
 
 void CState_Player_Arm_Swing::Update(_float fTimeDelta)
 {
-    if (KEY_HOLD(KEY::CTRL))
+    if (m_pPlayer->Key_Hold(KEY::CTRL))
     {
         if (End_Check())
         {

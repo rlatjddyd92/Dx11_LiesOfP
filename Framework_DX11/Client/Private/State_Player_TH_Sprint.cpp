@@ -85,25 +85,25 @@ _bool CState_Player_TH_Sprint::Move(_float fTimeDelta)
     vCameraLook.Normalize();
     vCameraRight.Normalize();
 
-    if (KEY_HOLD(KEY::W))
+    if (m_pPlayer->Key_Hold(KEY::W))
     {
         m_vMoveDir += vCameraLook;
         isMoving = true;
     }
-    else if (KEY_HOLD(KEY::S))
+    else if (m_pPlayer->Key_Hold(KEY::S))
     {
         m_vMoveDir -= vCameraLook;
         isMoving = true;
     }
 
-    if (KEY_HOLD(KEY::D))
+    if (m_pPlayer->Key_Hold(KEY::D))
     {
         m_vMoveDir += vCameraRight;
 
         isMoving = true;
     }
 
-    if (KEY_HOLD(KEY::A))
+    if (m_pPlayer->Key_Hold(KEY::A))
     {
         m_vMoveDir -= vCameraRight;
 

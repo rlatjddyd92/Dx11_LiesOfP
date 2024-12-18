@@ -477,10 +477,13 @@ void CSimonManus::End_CutScene(_uint iCutSceneNum)
 		const _Matrix* pNewSocketMatrix = { nullptr };
 		pNewSocketMatrix = m_pModelCom->Get_BoneCombindTransformationMatrix_Ptr("Bn_Weapon_R");
 		m_pWeapon->ChangeSocketMatrix(pNewSocketMatrix);
+
+		Active_Weapon();
 	}
 	else if (m_pCutSceneFsmCom->Get_CurrentState() == STATE_P2)
 	{
 		ChangePhase();
+		Active_Weapon();
 	}
 	m_isCutScene = false;
 }

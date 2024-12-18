@@ -32,29 +32,29 @@ HRESULT CState_Player_OH_Idle::Start_State(void* pArg)
 
 void CState_Player_OH_Idle::Update(_float fTimeDelta)
 {
-    if (KEY_HOLD(KEY::LSHIFT))
+    if (m_pPlayer->Key_Hold(KEY::LSHIFT))
     {
         m_pPlayer->Change_State(CPlayer::OH_GUARD);
     }
-    else if (KEY_HOLD(KEY::W) || KEY_HOLD(KEY::S) || KEY_HOLD(KEY::D) || KEY_HOLD(KEY::A))
+    else if (m_pPlayer->Key_Hold(KEY::W) || m_pPlayer->Key_Hold(KEY::S) || m_pPlayer->Key_Hold(KEY::D) || m_pPlayer->Key_Hold(KEY::A))
     {
         if(m_pPlayer->Get_IsLockOn())
             m_pPlayer->Change_State(CPlayer::OH_WALK);
         else
             m_pPlayer->Change_State(CPlayer::OH_RUN);
     }
-    else if (KEY_TAP(KEY::SPACE))
+    else if (m_pPlayer->Key_Tab(KEY::SPACE))
     {
         m_pPlayer->Change_State(CPlayer::OH_DASH);
     }
-    else if (KEY_TAP(KEY::LBUTTON))
+    else if (m_pPlayer->Key_Tab(KEY::LBUTTON))
     {
         if(m_pPlayer->Get_WeaponType() == CPlayer::WEP_RAPIER)
             m_pPlayer->Change_State(CPlayer::RAPIER_LATTACK0);
         else if (m_pPlayer->Get_WeaponType() == CPlayer::WEP_SCISSOR)
             m_pPlayer->Change_State(CPlayer::SCISSOR_LATTACK0);
     }
-    else if (KEY_HOLD(KEY::RBUTTON))
+    else if (m_pPlayer->Key_Hold(KEY::RBUTTON))
     {
         m_fRButtonTime += fTimeDelta;
         if (m_fRButtonTime > 0.15f)
@@ -65,7 +65,7 @@ void CState_Player_OH_Idle::Update(_float fTimeDelta)
                 m_pPlayer->Change_State(CPlayer::SCISSOR_CHARGE0);
         }
     }
-    else if (KEY_TAP(KEY::F))
+    else if (m_pPlayer->Key_Tab(KEY::F))
     {
         if (m_pPlayer->Check_Region_Fable01())
         {
@@ -75,7 +75,7 @@ void CState_Player_OH_Idle::Update(_float fTimeDelta)
                 m_pPlayer->Change_State(CPlayer::SCISSOR_FABAL0);
         }
     }
-    else if (KEY_TAP(KEY::R))
+    else if (m_pPlayer->Key_Tab(KEY::R))
     {
         SPECIAL_ITEM eNow = GET_GAMEINTERFACE->Get_Now_Select_Item();
         if (SPECIAL_ITEM::SP_PULSE_BATTERY == eNow)
@@ -103,16 +103,16 @@ void CState_Player_OH_Idle::Update(_float fTimeDelta)
             m_pPlayer->Change_State(CPlayer::DIE);
         }
     }
-    else if (KEY_TAP(KEY::TAPKEY))
+    else if (m_pPlayer->Key_Tab(KEY::TAPKEY))
     {
         m_pPlayer->Change_State(CPlayer::CHANGEWEP);
     }
-    else if (KEY_HOLD(KEY::CTRL))
+    else if (m_pPlayer->Key_Hold(KEY::CTRL))
     {
         m_pPlayer->Change_State(CPlayer::ARM_START);
     }
     
-    if (KEY_AWAY(KEY::RBUTTON))
+    if (m_pPlayer->Key_Away(KEY::RBUTTON))
     {
         m_fRButtonTime = 0.f;
         if (m_pPlayer->Get_WeaponType() == CPlayer::WEP_RAPIER)

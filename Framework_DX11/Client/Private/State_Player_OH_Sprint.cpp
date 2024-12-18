@@ -63,8 +63,8 @@ void CState_Player_OH_Sprint::Update(_float fTimeDelta)
          m_pPlayer->Change_State(CPlayer::JUMP);
      }*/
 
-    if (!m_isSprintEnd && (KEY_NONE(KEY::SPACE) || 
-        (KEY_NONE(KEY::W) && KEY_NONE(KEY::A) && KEY_NONE(KEY::S) && KEY_NONE(KEY::D))))
+    if (!m_isSprintEnd && (m_pPlayer->Key_None(KEY::SPACE) ||
+        (m_pPlayer->Key_None(KEY::W) && m_pPlayer->Key_None(KEY::A) && m_pPlayer->Key_None(KEY::S) && m_pPlayer->Key_None(KEY::D))))
     {
         m_isSprintEnd = true;
     }
@@ -89,25 +89,25 @@ _bool CState_Player_OH_Sprint::Move(_float fTimeDelta)
     vCameraLook.Normalize();
     vCameraRight.Normalize();
 
-    if (KEY_HOLD(KEY::W))
+    if (m_pPlayer->Key_Hold(KEY::W))
     {
         m_vMoveDir += vCameraLook;
         isMoving = true;
     }
-    else if (KEY_HOLD(KEY::S))
+    else if (m_pPlayer->Key_Hold(KEY::S))
     {
         m_vMoveDir -= vCameraLook;
         isMoving = true;
     }
 
-    if (KEY_HOLD(KEY::D))
+    if (m_pPlayer->Key_Hold(KEY::D))
     {
         m_vMoveDir += vCameraRight;
 
         isMoving = true;
     }
 
-    if (KEY_HOLD(KEY::A))
+    if (m_pPlayer->Key_Hold(KEY::A))
     {
         m_vMoveDir -= vCameraRight;
 

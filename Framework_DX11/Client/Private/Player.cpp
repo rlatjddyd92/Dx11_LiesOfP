@@ -183,7 +183,7 @@ void CPlayer::Priority_Update(_float fTimeDelta)
 		m_fGuardTime += fTimeDelta;
 	}
 
-	if (KEY_TAP(KEY::WHEELBUTTON))
+	if (Key_Hold(KEY::WHEELBUTTON))
 		LockOnOff();
 
 	if (m_isLockOn)
@@ -268,7 +268,8 @@ void CPlayer::Update(_float fTimeDelta)
 	////ÄÆ½Å Å×½ºÆ®
 	if (KEY_TAP(KEY::Q))
 	{
-		dynamic_cast<CCutScene*>(m_pGameInstance->Find_Object(LEVEL_GAMEPLAY, TEXT("Layer_CutScene"), BOSS1_PHASE2))->Start_Play();
+		dynamic_cast<CCutScene*>(m_pGameInstance->Find_Object(LEVEL_GAMEPLAY, TEXT("Layer_CutScene"), BOSS2_PHASE2))->Start_Play();
+		//dynamic_cast<CCutScene*>(m_pGameInstance->Find_Object(LEVEL_GAMEPLAY, TEXT("Layer_CutScene"), BOSS1_PHASE2))->Start_Play();
 	}
 }
 
@@ -414,6 +415,38 @@ void CPlayer::OnCollisionExit(CGameObject* pOther)
 
 		m_isCollisionMonster = false;
 	}
+}
+
+_bool CPlayer::Key_Tab(KEY eKey)
+{
+	if (GET_GAMEINTERFACE->IsGamePause())
+		return false;
+
+	return KEY_TAP(eKey);
+}
+
+_bool CPlayer::Key_Hold(KEY eKey)
+{
+	if (GET_GAMEINTERFACE->IsGamePause())
+		return false;
+
+	return KEY_HOLD(eKey);
+}
+
+_bool CPlayer::Key_Away(KEY eKey)
+{
+	if (GET_GAMEINTERFACE->IsGamePause())
+		return false;
+
+	return KEY_AWAY(eKey);
+}
+
+_bool CPlayer::Key_None(KEY eKey)
+{
+	if (GET_GAMEINTERFACE->IsGamePause())
+		return false;
+
+	return KEY_NONE(eKey);
 }
 
 void CPlayer::Move_Dir(_Vec4 vDir, _float fTimeDelta, _bool isTurn)
@@ -598,9 +631,12 @@ CMonster* CPlayer::Find_TargetMonster()
 	if (ObjectList.size() <= 0)
 		return nullptr;
 
+	_Vec3 vOwnerPos = m_pTransformCom->Get_State(CTransform::STATE_POSITION);
+
 	CGameObject* pNearObject = { nullptr };
 
-	_vector vDistance = XMVectorSet(0.f, 0.f, 0.f, 0.f);
+	_Vec3 vDistance = _Vec3{ 0.f,0.f,0.f };
+
 	_float  fDistance = -1.f;
 
 	for (auto& Object : ObjectList)
@@ -608,8 +644,7 @@ CMonster* CPlayer::Find_TargetMonster()
 		if (!Object->IsActive())
 			continue;
 
-		_vector vOwnerPos = m_pTransformCom->Get_State(CTransform::STATE_POSITION);
-		_vector vFindObjPos = Object->Get_Transform()->Get_State(CTransform::STATE_POSITION);
+		_Vec3 vFindObjPos = Object->Get_Transform()->Get_State(CTransform::STATE_POSITION);
 
 		vDistance = (vOwnerPos - vFindObjPos);
 
@@ -630,6 +665,42 @@ CMonster* CPlayer::Find_TargetMonster()
 			fDistance = fNewDistance;
 		}
 	}
+
+	if (nullptr != m_pGameInstance->Find_Layer(LEVEL_GAMEPLAY, TEXT("Layer_Raxasia")))
+	{
+		CGameObject* pRaxasia =  m_pGameInstance->Find_Layer(LEVEL_GAMEPLAY, TEXT("Layer_Raxasia"))->Get_ObjectList().front();
+
+		_Vec3 vNearObjPos = pNearObject->Get_Transform()->Get_State(CTransform::STATE_POSITION);
+		_Vec3 vRaxasiaPos = pRaxasia->Get_Transform()->Get_State(CTransform::STATE_POSITION);
+
+		vDistance = (vOwnerPos - vRaxasiaPos);
+
+		_float fNewDistance;
+		XMStoreFloat(&fNewDistance, XMVector3Length(vDistance));
+
+		if (fNewDistance < fDistance)
+		{
+			pNearObject = pRaxasia;
+		}
+	}
+	else if (nullptr != m_pGameInstance->Find_Layer(LEVEL_GAMEPLAY, TEXT("Layer_SimonManus")))
+	{
+		CGameObject* pSimon = m_pGameInstance->Find_Layer(LEVEL_GAMEPLAY, TEXT("Layer_SimonManus"))->Get_ObjectList().front();
+
+		_Vec3 vNearObjPos = pNearObject->Get_Transform()->Get_State(CTransform::STATE_POSITION);
+		_Vec3 vRaxasiaPos = pSimon->Get_Transform()->Get_State(CTransform::STATE_POSITION);
+
+		vDistance = (vOwnerPos - vRaxasiaPos);
+
+		_float fNewDistance;
+		XMStoreFloat(&fNewDistance, XMVector3Length(vDistance));
+
+		if (fNewDistance < fDistance)
+		{
+			pNearObject = pSimon;
+		}
+	}
+
 
 	return dynamic_cast<CMonster*>(pNearObject);
 }

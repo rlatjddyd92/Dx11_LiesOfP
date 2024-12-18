@@ -57,18 +57,18 @@ void CState_Player_Scissor_LAttack00::Update(_float fTimeDelta)
 
     if (iFrame < m_iChangeFrame)
     {
-        if (KEY_TAP(KEY::LBUTTON))
+        if (m_pPlayer->Key_Tab(KEY::LBUTTON))
         {
             m_isInputLButton = true;
             m_isInputRButton = false;
         }
-        else if (KEY_TAP(KEY::RBUTTON))
+        else if (m_pPlayer->Key_Tab(KEY::RBUTTON))
         {
             m_isInputRButton = true;
             m_isInputLButton = false;
             m_fRButtonTime = 0.f;
         }
-        else if (KEY_HOLD(KEY::RBUTTON))
+        else if (m_pPlayer->Key_Hold(KEY::RBUTTON))
         {
             m_fRButtonTime += fTimeDelta;
         }
@@ -88,7 +88,7 @@ void CState_Player_Scissor_LAttack00::Update(_float fTimeDelta)
     }
     else if (iFrame >= 115)
     {
-        if (KEY_HOLD(KEY::W) || KEY_HOLD(KEY::S) || KEY_HOLD(KEY::D) || KEY_HOLD(KEY::A))
+        if (m_pPlayer->Key_Hold(KEY::W) || m_pPlayer->Key_Hold(KEY::S) || m_pPlayer->Key_Hold(KEY::D) || m_pPlayer->Key_Hold(KEY::A))
         {
             m_pPlayer->Change_State(CPlayer::OH_RUN);
         }

@@ -1171,6 +1171,9 @@
     <Filter Include="05.Fsm\Monster\CurruptedStrongArm_Puppet\Attack\Single\SwipAttack">
       <UniqueIdentifier>{e3100ded-c639-4f5c-9495-c59404957501}</UniqueIdentifier>
     </Filter>
+    <Filter Include="02.GameObjects\05.Effect\Obejct">
+      <UniqueIdentifier>{c1cd3960-691f-4b1d-9d51-6ee5614afa74}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Client.h">
@@ -2156,6 +2159,9 @@
     <ClInclude Include="..\Public\AObj_ThunderBolt.h">
       <Filter>02.GameObjects\12.AttackObject\Raxasia\ThunderBolt</Filter>
     </ClInclude>
+    <ClInclude Include="..\Public\Machine_EffectObj.h">
+      <Filter>02.GameObjects\05.Effect\Obejct</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Client.cpp">
@@ -3110,6 +3116,9 @@
     </ClCompile>
     <ClCompile Include="..\Private\AObj_ThunderBolt.cpp">
       <Filter>02.GameObjects\12.AttackObject\Raxasia\ThunderBolt</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Private\Machine_EffectObj.cpp">
+      <Filter>02.GameObjects\05.Effect\Obejct</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

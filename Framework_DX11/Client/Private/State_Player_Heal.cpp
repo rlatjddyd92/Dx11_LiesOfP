@@ -117,10 +117,10 @@ _bool CState_Player_Heal::Move(_float fTimeDelta)
     vPlayerLook.Normalize();
     vPlayerRight.Normalize();
 
-    _bool isForward = KEY_HOLD(KEY::W);
-    _bool isBackward = KEY_HOLD(KEY::S);
-    _bool isRight = KEY_HOLD(KEY::D);
-    _bool isLeft = KEY_HOLD(KEY::A);
+    _bool isForward = m_pPlayer->Key_Hold(KEY::W);
+    _bool isBackward = m_pPlayer->Key_Hold(KEY::S);
+    _bool isRight = m_pPlayer->Key_Hold(KEY::D);
+    _bool isLeft = m_pPlayer->Key_Hold(KEY::A);
 
     _uint iWalkType = m_pPlayer->Get_WeaponType();
     if (iWalkType <= 1)

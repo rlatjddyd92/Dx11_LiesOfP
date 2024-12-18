@@ -58,19 +58,19 @@ void CState_Player_TH_Dash::Select_DashAnimation()
 {
     if (m_pPlayer->Get_IsLockOn())
     {
-        if (KEY_HOLD(KEY::W))
+        if (m_pPlayer->Key_Hold(KEY::W))
         {
             m_pPlayer->Change_Animation(m_iAnimation_Dash[DASH_FOCUS_F], false, 0.f);
         }
-        else if (KEY_HOLD(KEY::S))
+        else if (m_pPlayer->Key_Hold(KEY::S))
         {
             m_pPlayer->Change_Animation(m_iAnimation_Dash[DASH_FOCUS_B], false, 0.f);
         }
-        else if (KEY_HOLD(KEY::A))
+        else if (m_pPlayer->Key_Hold(KEY::A))
         {
             m_pPlayer->Change_Animation(m_iAnimation_Dash[DASH_FOCUS_L], false, 0.f);
         }
-        else if (KEY_HOLD(KEY::D))
+        else if (m_pPlayer->Key_Hold(KEY::D))
         {
             m_pPlayer->Change_Animation(m_iAnimation_Dash[DASH_FOCUS_R], false, 0.f);
         }

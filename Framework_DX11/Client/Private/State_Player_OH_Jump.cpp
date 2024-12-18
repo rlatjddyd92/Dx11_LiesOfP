@@ -30,13 +30,13 @@ HRESULT CState_Player_OH_Jump::Start_State(void* pArg)
 
 void CState_Player_OH_Jump::Update(_float fTimeDelta)
 {
-    if (KEY_HOLD(KEY::LSHIFT))
+    if (m_pPlayer->Key_Hold(KEY::LSHIFT))
     {
         m_pPlayer->Change_State(CPlayer::OH_GUARD);
     }
-    else if (KEY_HOLD(KEY::W) || KEY_HOLD(KEY::S) || KEY_HOLD(KEY::D) || KEY_HOLD(KEY::A))
+    else if (m_pPlayer->Key_Hold(KEY::W) || m_pPlayer->Key_Hold(KEY::S) || m_pPlayer->Key_Hold(KEY::D) || m_pPlayer->Key_Hold(KEY::A))
     {
-        if (KEY_HOLD(KEY::SPACE))
+        if (m_pPlayer->Key_Hold(KEY::SPACE))
         {
             m_pPlayer->Change_State(CPlayer::OH_RUN);
         }

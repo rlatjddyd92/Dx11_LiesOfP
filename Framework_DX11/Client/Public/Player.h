@@ -221,6 +221,12 @@ public:
 	virtual void OnCollisionExit(CGameObject* pOther) override;
 
 public:
+	_bool			Key_Tab(KEY eKey);
+	_bool			Key_Hold(KEY eKey);
+	_bool			Key_Away(KEY eKey);
+	_bool			Key_None(KEY eKey);
+
+
 	void			Move_Dir(_Vec4 vDir, _float fTimeDelta, _bool isTurn = true);
 	_bool			Turn_Lerp(_Vec4 vDir, _float fTimeDelta);
 

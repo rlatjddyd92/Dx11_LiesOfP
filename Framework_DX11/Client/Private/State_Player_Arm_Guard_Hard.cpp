@@ -42,12 +42,12 @@ void CState_Player_Arm_Guard_Hard::Update(_float fTimeDelta)
 {
     _int iFrame = m_pPlayer->Get_Frame();
 
-    if (KEY_AWAY(KEY::CTRL) || KEY_NONE(KEY::CTRL))
+    if (m_pPlayer->Key_Away(KEY::CTRL) || m_pPlayer->Key_None(KEY::CTRL))
     {
         m_isAwayCtrlKey = true;
         m_fCtrlKeyTime = 0.f;
     }
-    else if (KEY_HOLD(KEY::CTRL))
+    else if (m_pPlayer->Key_Hold(KEY::CTRL))
     {
         m_fCtrlKeyTime += fTimeDelta;
     }

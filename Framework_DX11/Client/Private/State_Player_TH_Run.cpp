@@ -64,30 +64,30 @@ void CState_Player_TH_Run::Update(_float fTimeDelta)
 
     if (m_fSpaceTime > 0.1f)
     {
-        if (KEY_NONE(KEY::SPACE))
+        if (m_pPlayer->Key_None(KEY::SPACE))
         {
             if (m_isTurnOver)
                 m_pPlayer->Change_State(CPlayer::TH_DASH);
         }
 
-        if (KEY_HOLD(KEY::SPACE))
+        if (m_pPlayer->Key_Hold(KEY::SPACE))
         {
             if (m_isTurnOver)
                 m_pPlayer->Change_State(CPlayer::TH_SPRINT);
         }
     }
-    else if (KEY_HOLD(KEY::LSHIFT))
+    else if (m_pPlayer->Key_Hold(KEY::LSHIFT))
     {
         if (m_isTurnOver)
             m_pPlayer->Change_State(CPlayer::TH_GUARD);
     }
-    else if (KEY_TAP(KEY::R))
+    else if (m_pPlayer->Key_Tab(KEY::R))
     {
         if (m_isTurnOver)
             m_pPlayer->Change_State(CPlayer::HEAL);
     }
 
-    if (KEY_TAP(KEY::SPACE))
+    if (m_pPlayer->Key_Tab(KEY::SPACE))
         m_isInputSpace = true;
 
     Control_Sound();
@@ -110,25 +110,25 @@ _bool CState_Player_TH_Run::Move(_float fTimeDelta)
     vCameraLook.Normalize();
     vCameraRight.Normalize();
 
-    if (KEY_HOLD(KEY::W) || KEY_TAP(KEY::W) || KEY_AWAY(KEY::W))
+    if (m_pPlayer->Key_Hold(KEY::W) || m_pPlayer->Key_Tab(KEY::W) || m_pPlayer->Key_Away(KEY::W))
     {
         m_vMoveDir += vCameraLook;
         isMoving = true;
     }
-    else if (KEY_HOLD(KEY::S) || KEY_TAP(KEY::S) || KEY_AWAY(KEY::S))
+    else if (m_pPlayer->Key_Hold(KEY::S) || m_pPlayer->Key_Tab(KEY::S) || m_pPlayer->Key_Away(KEY::S))
     {
         m_vMoveDir -= vCameraLook;
         isMoving = true;
     }
 
-    if (KEY_HOLD(KEY::D) || KEY_TAP(KEY::D) || KEY_AWAY(KEY::D))
+    if (m_pPlayer->Key_Hold(KEY::D) || m_pPlayer->Key_Tab(KEY::D) || m_pPlayer->Key_Away(KEY::D))
     {
         m_vMoveDir += vCameraRight;
 
         isMoving = true;
     }
 
-    if (KEY_HOLD(KEY::A) || KEY_TAP(KEY::A) || KEY_AWAY(KEY::A))
+    if (m_pPlayer->Key_Hold(KEY::A) || m_pPlayer->Key_Tab(KEY::A) || m_pPlayer->Key_Away(KEY::A))
     {
         m_vMoveDir -= vCameraRight;
 

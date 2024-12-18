@@ -53,7 +53,7 @@ void CState_Player_Grinder::Update(_float fTimeDelta)
     _uint iCurAnim_Boundry = m_pPlayer->Get_CurrentAnimIndex_Boundry();
     _int iFrame = m_pPlayer->Get_Frame();
 
-    if (KEY_HOLD(KEY::R))
+    if (m_pPlayer->Key_Hold(KEY::R))
     {
         if (iCurAnim_Boundry == m_iAnimation_Grinder[0] 
             || iCurAnim == m_iAnimation_Grinder[0])
@@ -84,13 +84,13 @@ void CState_Player_Grinder::Update(_float fTimeDelta)
         }
     }
 
-    if (KEY_AWAY(KEY::R))
+    if (m_pPlayer->Key_Away(KEY::R))
     {
         m_pPlayer->Play_Sound(CPawn::PAWN_SOUND_EFFECT1, TEXT("SE_PC_MT_Item_Grinder_End_01.wav"));
         m_pPlayer->Change_Animation(m_iAnimation_Grinder[2], false, 0.1f);
         m_pPlayer->DeActive_Effect(CPlayer::EFFECT_GRIND);
     }
-    else if (KEY_NONE(KEY::R))
+    else if (m_pPlayer->Key_None(KEY::R))
     {
         if (iCurAnim_Boundry == m_iAnimation_Grinder[2])
         {
@@ -146,10 +146,10 @@ _bool CState_Player_Grinder::Move(_float fTimeDelta)
     vPlayerLook.Normalize();
     vPlayerRight.Normalize();
 
-    _bool isForward = KEY_HOLD(KEY::W);
-    _bool isBackward = KEY_HOLD(KEY::S);
-    _bool isRight = KEY_HOLD(KEY::D);
-    _bool isLeft = KEY_HOLD(KEY::A);
+    _bool isForward = m_pPlayer->Key_Hold(KEY::W);
+    _bool isBackward = m_pPlayer->Key_Hold(KEY::S);
+    _bool isRight = m_pPlayer->Key_Hold(KEY::D);
+    _bool isLeft = m_pPlayer->Key_Hold(KEY::A);
 
     if (isForward)
         m_vMoveDir += vCameraLook;

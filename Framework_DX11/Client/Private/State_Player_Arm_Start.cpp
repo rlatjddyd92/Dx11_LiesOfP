@@ -48,7 +48,7 @@ HRESULT CState_Player_Arm_Start::Start_State(void* pArg)
 
 void CState_Player_Arm_Start::Update(_float fTimeDelta)
 {
-    if (KEY_HOLD(KEY::CTRL))
+    if (m_pPlayer->Key_Hold(KEY::CTRL))
     {
         if (End_Check())
         {
@@ -99,10 +99,10 @@ _bool CState_Player_Arm_Start::Move(_float fTimeDelta)
     vPlayerLook.Normalize();
     vPlayerRight.Normalize();
 
-    _bool isForward = KEY_HOLD(KEY::W);
-    _bool isBackward = KEY_HOLD(KEY::S);
-    _bool isRight = KEY_HOLD(KEY::D);
-    _bool isLeft = KEY_HOLD(KEY::A);
+    _bool isForward = m_pPlayer->Key_Hold(KEY::W);
+    _bool isBackward = m_pPlayer->Key_Hold(KEY::S);
+    _bool isRight = m_pPlayer->Key_Hold(KEY::D);
+    _bool isLeft = m_pPlayer->Key_Hold(KEY::A);
 
     if (isForward)
         m_vMoveDir += vCameraLook;

@@ -30,52 +30,52 @@ HRESULT CState_Player_TH_Idle::Start_State(void* pArg)
 
 void CState_Player_TH_Idle::Update(_float fTimeDelta)
 {
-    if (KEY_HOLD(KEY::LSHIFT))
+    if (m_pPlayer->Key_Hold(KEY::LSHIFT))
     {
         m_pPlayer->Change_State(CPlayer::TH_GUARD);
     }
-    else if (KEY_HOLD(KEY::W) || KEY_HOLD(KEY::S) || KEY_HOLD(KEY::D) || KEY_HOLD(KEY::A))
+    else if (m_pPlayer->Key_Hold(KEY::W) || m_pPlayer->Key_Hold(KEY::S) || m_pPlayer->Key_Hold(KEY::D) || m_pPlayer->Key_Hold(KEY::A))
     {
         if (m_pPlayer->Get_IsLockOn())
             m_pPlayer->Change_State(CPlayer::TH_WALK);
         else
             m_pPlayer->Change_State(CPlayer::TH_RUN);
     }
-    else if (KEY_TAP(KEY::SPACE))
+    else if (m_pPlayer->Key_Tab(KEY::SPACE))
     {
         m_pPlayer->Change_State(CPlayer::TH_DASH);
     }
-    else if (KEY_TAP(KEY::LBUTTON))
+    else if (m_pPlayer->Key_Tab(KEY::LBUTTON))
     {
         m_pPlayer->Change_State(CPlayer::FLAME_LATTACK0);
     }
-    else if (KEY_HOLD(KEY::RBUTTON))
+    else if (m_pPlayer->Key_Hold(KEY::RBUTTON))
     {
         m_fRButtonTime += fTimeDelta;
         if(m_fRButtonTime > 0.15f)
             m_pPlayer->Change_State(CPlayer::FLAME_CHARGE0);
     }
-    else if (KEY_TAP(KEY::F))
+    else if (m_pPlayer->Key_Tab(KEY::F))
     {
         if (m_pPlayer->Check_Region_Fable01())
         {
             m_pPlayer->Change_State(CPlayer::FLAME_FABLE);
         }
     }
-    else if (KEY_TAP(KEY::R))
+    else if (m_pPlayer->Key_Tab(KEY::R))
     {
         m_pPlayer->Change_State(CPlayer::HEAL);
     }
-    else if (KEY_TAP(KEY::TAPKEY))
+    else if (m_pPlayer->Key_Tab(KEY::TAPKEY))
     {
         m_pPlayer->Change_State(CPlayer::CHANGEWEP);
     }
-    else if (KEY_HOLD(KEY::CTRL))
+    else if (m_pPlayer->Key_Hold(KEY::CTRL))
     {
         m_pPlayer->Change_State(CPlayer::ARM_START);
     }
     
-    if (KEY_AWAY(KEY::RBUTTON))
+    if (m_pPlayer->Key_Away(KEY::RBUTTON))
     {
         m_fRButtonTime = 0.f;
         m_pPlayer->Change_State(CPlayer::FLAME_RATTACK0);

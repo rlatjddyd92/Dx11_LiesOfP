@@ -61,9 +61,9 @@ HRESULT CState_Player_OH_Guard::Start_State(void* pArg)
 
 void CState_Player_OH_Guard::Update(_float fTimeDelta)
 {
-    if (KEY_HOLD(KEY::LSHIFT))
+    if (m_pPlayer->Key_Hold(KEY::LSHIFT))
     {
-        if (KEY_TAP(KEY::F))
+        if (m_pPlayer->Key_Tab(KEY::F))
         {
             if (m_pPlayer->Check_Region_Fable02())
             {
@@ -81,7 +81,7 @@ void CState_Player_OH_Guard::Update(_float fTimeDelta)
         m_pPlayer->Change_Animation_Boundry(m_iAnimation_Guard, true, 0.05f);
     }
 
-    if (KEY_NONE(KEY::LSHIFT))
+    if (m_pPlayer->Key_None(KEY::LSHIFT))
     {
         m_pPlayer->Change_State(CPlayer::OH_IDLE);
     }
@@ -113,10 +113,10 @@ _bool CState_Player_OH_Guard::Move(_float fTimeDelta)
     vPlayerLook.Normalize();
     vPlayerRight.Normalize();
 
-    _bool isForward = KEY_HOLD(KEY::W);
-    _bool isBackward = KEY_HOLD(KEY::S);
-    _bool isRight = KEY_HOLD(KEY::D);
-    _bool isLeft = KEY_HOLD(KEY::A);
+    _bool isForward = m_pPlayer->Key_Hold(KEY::W);
+    _bool isBackward = m_pPlayer->Key_Hold(KEY::S);
+    _bool isRight = m_pPlayer->Key_Hold(KEY::D);
+    _bool isLeft = m_pPlayer->Key_Hold(KEY::A);
 
     if (isForward)
         m_vMoveDir += vCameraLook;

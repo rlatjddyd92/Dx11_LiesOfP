@@ -72,18 +72,18 @@ void CState_Player_Scissor_Fable2::Update(_float fTimeDelta)
 
     if (iFrame < m_iChangeFrame)
     {
-        if (KEY_TAP(KEY::LBUTTON))
+        if (m_pPlayer->Key_Tab(KEY::LBUTTON))
         {
             m_isInputLButton = true;
             m_isInputRButton = false;
         }
-        else if (KEY_TAP(KEY::RBUTTON))
+        else if (m_pPlayer->Key_Tab(KEY::RBUTTON))
         {
             m_isInputRButton = true;
             m_isInputLButton = false;
             m_fRButtonTime = 0.f;
         }
-        else if (KEY_HOLD(KEY::RBUTTON))
+        else if (m_pPlayer->Key_Hold(KEY::RBUTTON))
         {
             m_fRButtonTime += fTimeDelta;
         }

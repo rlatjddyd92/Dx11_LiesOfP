@@ -66,7 +66,7 @@ void CState_Player_Rapier_Charge::Update(_float fTimeDelta)
             else
                 m_pPlayer->Change_State(CPlayer::RAPIER_RATTACK0);
         }
-        else if (KEY_HOLD(KEY::W) || KEY_HOLD(KEY::S) || KEY_HOLD(KEY::D) || KEY_HOLD(KEY::A))
+        else if (m_pPlayer->Key_Hold(KEY::W) || m_pPlayer->Key_Hold(KEY::S) || m_pPlayer->Key_Hold(KEY::D) || m_pPlayer->Key_Hold(KEY::A))
         {
             m_pPlayer->Change_State(CPlayer::OH_RUN);
         }

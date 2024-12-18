@@ -66,12 +66,12 @@ void CState_Player_Ladder::Update(_float fTimeDelta)
 {
     _uint iCurAnim = m_pPlayer->Get_CurrentAnimIndex();
 
-    if (KEY_TAP(KEY::W) || KEY_HOLD(KEY::W))
+    if (m_pPlayer->Key_Tab(KEY::W) || m_pPlayer->Key_Hold(KEY::W))
     {
         m_isInputW = true;
         m_isInputS = false;
     }
-    else if (KEY_TAP(KEY::S) || KEY_HOLD(KEY::S))
+    else if (m_pPlayer->Key_Tab(KEY::S) || m_pPlayer->Key_Hold(KEY::S))
     {
         m_isInputS = true;
         m_isInputW = false;
@@ -228,7 +228,7 @@ void CState_Player_Ladder::Update(_float fTimeDelta)
         }
     }
 
-    if (KEY_TAP(KEY::Q))
+    if (m_pPlayer->Key_Tab(KEY::Q))
         m_pPlayer->Change_State(CPlayer::OH_IDLE);
 }
 

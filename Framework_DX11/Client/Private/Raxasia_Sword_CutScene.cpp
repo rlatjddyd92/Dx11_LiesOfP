@@ -65,79 +65,79 @@ void CRaxasia_Sword_CutScene::Update(_float fTimeDelta)
 	else
 		m_pModelCom->Update_Bone();
 
-	static _float fXPos = 0.03f;
-	static _float fYPos = -0.03f;
-	static _float fZPos = 0.f;
+	//static _float fXPos = 0.03f;
+	//static _float fYPos = -0.03f;
+	//static _float fZPos = 0.f;
 
-	static _float fXRot = 240.f;
-	static _float fYRot = -6.5f;
-	static _float fZRot = 31.f;
+	//static _float fXRot = 240.f;
+	//static _float fYRot = -6.5f;
+	//static _float fZRot = 31.f;
 
-	_matrix		PreTransformMatrix = XMMatrixIdentity();
+	//_matrix		PreTransformMatrix = XMMatrixIdentity();
 
-	if (KEY_HOLD(KEY::CTRL))
-	{
-		if (KEY_TAP(KEY::NUM1))
-		{
-			fXRot -= 1.f;
-		}
-		else if (KEY_TAP(KEY::NUM2))
-		{
-			fXRot += 1.f;
-		}
+	//if (KEY_HOLD(KEY::CTRL))
+	//{
+	//	if (KEY_TAP(KEY::NUM1))
+	//	{
+	//		fXRot -= 1.f;
+	//	}
+	//	else if (KEY_TAP(KEY::NUM2))
+	//	{
+	//		fXRot += 1.f;
+	//	}
 
-		if (KEY_TAP(KEY::NUM3))
-		{
-			fYRot -= 1.f;
-		}
-		else if (KEY_TAP(KEY::NUM4))
-		{
-			fYRot += 1.f;
-		}
+	//	if (KEY_TAP(KEY::NUM3))
+	//	{
+	//		fYRot -= 1.f;
+	//	}
+	//	else if (KEY_TAP(KEY::NUM4))
+	//	{
+	//		fYRot += 1.f;
+	//	}
 
-		if (KEY_TAP(KEY::NUM5))
-		{
-			fZRot -= 1.f;
-		}
-		else if (KEY_TAP(KEY::NUM6))
-		{
-			fZRot += 1.f;
-		}
-	}
-	else
-	{
-		if (KEY_TAP(KEY::NUM1))
-		{
-			fXPos -= 0.01f;
-		}
-		else if (KEY_TAP(KEY::NUM2))
-		{
-			fXPos += 0.01f;
-		}
+	//	if (KEY_TAP(KEY::NUM5))
+	//	{
+	//		fZRot -= 1.f;
+	//	}
+	//	else if (KEY_TAP(KEY::NUM6))
+	//	{
+	//		fZRot += 1.f;
+	//	}
+	//}
+	//else
+	//{
+	//	if (KEY_TAP(KEY::NUM1))
+	//	{
+	//		fXPos -= 0.01f;
+	//	}
+	//	else if (KEY_TAP(KEY::NUM2))
+	//	{
+	//		fXPos += 0.01f;
+	//	}
 
-		if (KEY_TAP(KEY::NUM3))
-		{
-			fYPos -= 0.01f;
-		}
-		else if (KEY_TAP(KEY::NUM4))
-		{
-			fYPos += 0.01f;
-		}
-		if (KEY_TAP(KEY::NUM5))
-		{
-			fZPos -= 0.01f;
-		}
-		else if (KEY_TAP(KEY::NUM6))
-		{
-			fZPos += 0.01f;
-		}
-	}
+	//	if (KEY_TAP(KEY::NUM3))
+	//	{
+	//		fYPos -= 0.01f;
+	//	}
+	//	else if (KEY_TAP(KEY::NUM4))
+	//	{
+	//		fYPos += 0.01f;
+	//	}
+	//	if (KEY_TAP(KEY::NUM5))
+	//	{
+	//		fZPos -= 0.01f;
+	//	}
+	//	else if (KEY_TAP(KEY::NUM6))
+	//	{
+	//		fZPos += 0.01f;
+	//	}
+	//}
 
-	PreTransformMatrix = XMMatrixScaling(0.015f, 0.015f, 0.015f) * XMMatrixRotationX(XMConvertToRadians(fXRot)) * XMMatrixRotationY(XMConvertToRadians(fYRot)) * XMMatrixRotationZ(XMConvertToRadians(fZRot));
+	//PreTransformMatrix = XMMatrixScaling(0.015f, 0.015f, 0.015f) * XMMatrixRotationX(XMConvertToRadians(fXRot)) * XMMatrixRotationY(XMConvertToRadians(fYRot)) * XMMatrixRotationZ(XMConvertToRadians(fZRot));
 
 	//m_pModelCom->Set_PreTranformMatrix(PreTransformMatrix);
 
-	_Vec3 vv = _Vec3(fXPos, fYPos, fZPos);
+	//_Vec3 vv = _Vec3(fXPos, fYPos, fZPos);
 	//m_pTransformCom->Set_State(CTransform::STATE_POSITION, vv);
 
 

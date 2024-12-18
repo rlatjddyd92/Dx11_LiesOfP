@@ -74,22 +74,22 @@ void CState_Player_OH_Walk::Update(_float fTimeDelta)
 
     if (m_fSpaceTime > 0.15f)
     {
-        if (KEY_NONE(KEY::SPACE))
+        if (m_pPlayer->Key_None(KEY::SPACE))
         {
             m_pPlayer->Change_State(CPlayer::OH_DASH);
         }
 
-        if (KEY_HOLD(KEY::SPACE))
+        if (m_pPlayer->Key_Hold(KEY::SPACE))
         {
             m_pPlayer->Change_State(CPlayer::OH_SPRINT);
         }
     }
-    else if (KEY_HOLD(KEY::LSHIFT))
+    else if (m_pPlayer->Key_Hold(KEY::LSHIFT))
     {
         m_pPlayer->Change_State(CPlayer::OH_GUARD);
     }
 
-    if (KEY_TAP(KEY::SPACE))
+    if (m_pPlayer->Key_Tab(KEY::SPACE))
         m_isInputSpace = true;
 
     Control_Sound();
@@ -122,10 +122,10 @@ _bool CState_Player_OH_Walk::Move(_float fTimeDelta)
     vCameraLook.Normalize();
     vCameraRight.Normalize();
 
-    _bool isForward = KEY_HOLD(KEY::W);
-    _bool isBackward = KEY_HOLD(KEY::S);
-    _bool isRight = KEY_HOLD(KEY::D);
-    _bool isLeft = KEY_HOLD(KEY::A);
+    _bool isForward = m_pPlayer->Key_Hold(KEY::W);
+    _bool isBackward = m_pPlayer->Key_Hold(KEY::S);
+    _bool isRight = m_pPlayer->Key_Hold(KEY::D);
+    _bool isLeft = m_pPlayer->Key_Hold(KEY::A);
 
     if (isForward)
     {

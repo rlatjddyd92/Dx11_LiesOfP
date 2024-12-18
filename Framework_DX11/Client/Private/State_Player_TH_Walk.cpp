@@ -57,22 +57,22 @@ void CState_Player_TH_Walk::Update(_float fTimeDelta)
 
     if (m_fSpaceTime > 0.1f)
     {
-        if (KEY_NONE(KEY::SPACE))
+        if (m_pPlayer->Key_None(KEY::SPACE))
         {
             m_pPlayer->Change_State(CPlayer::TH_DASH);
         }
 
-        if (KEY_HOLD(KEY::SPACE))
+        if (m_pPlayer->Key_Hold(KEY::SPACE))
         {
             m_pPlayer->Change_State(CPlayer::TH_RUN);
         }
     }
-    else if (KEY_HOLD(KEY::LSHIFT))
+    else if (m_pPlayer->Key_Hold(KEY::LSHIFT))
     {
         m_pPlayer->Change_State(CPlayer::TH_GUARD);
     }
 
-    if (KEY_TAP(KEY::SPACE))
+    if (m_pPlayer->Key_Tab(KEY::SPACE))
         m_isInputSpace = true;
 }
 
@@ -101,25 +101,25 @@ _bool CState_Player_TH_Walk::Move(_float fTimeDelta)
     vCameraLook.Normalize();
     vCameraRight.Normalize();
 
-    if (KEY_HOLD(KEY::W))
+    if (m_pPlayer->Key_Hold(KEY::W))
     {
         m_vMoveDir += vCameraLook;
         isMoving = true;
     }
-    else if (KEY_HOLD(KEY::S))
+    else if (m_pPlayer->Key_Hold(KEY::S))
     {
         m_vMoveDir -= vCameraLook;
         isMoving = true;
     }
 
-    if (KEY_HOLD(KEY::D))
+    if (m_pPlayer->Key_Hold(KEY::D))
     {
         m_vMoveDir += vCameraRight;
 
         isMoving = true;
     }
 
-    if (KEY_HOLD(KEY::A))
+    if (m_pPlayer->Key_Hold(KEY::A))
     {
         m_vMoveDir -= vCameraRight;
 

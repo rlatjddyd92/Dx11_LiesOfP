@@ -43,14 +43,14 @@ HRESULT CState_Player_Arm_Loop::Start_State(void* pArg)
 
 void CState_Player_Arm_Loop::Update(_float fTimeDelta)
 {
-    if (KEY_HOLD(KEY::CTRL))
+    if (m_pPlayer->Key_Hold(KEY::CTRL))
     {
         // shift 연타하면 퍼펙트 가드 가능인 사기템
-        if (KEY_TAP(KEY::LSHIFT))
+        if (m_pPlayer->Key_Tab(KEY::LSHIFT))
         {
             m_pPlayer->Set_IsGuard(true);
         }
-        else if (KEY_NONE(KEY::LSHIFT) || KEY_AWAY(KEY::LSHIFT))
+        else if (m_pPlayer->Key_None(KEY::LSHIFT) || m_pPlayer->Key_Away(KEY::LSHIFT))
         {
             m_pPlayer->Set_IsGuard(false);
         }
@@ -61,7 +61,7 @@ void CState_Player_Arm_Loop::Update(_float fTimeDelta)
         }
         m_pPlayer->Change_Animation_Boundry(m_iAnimation_ArmLoop, true, 0.05f);
 
-        if (KEY_TAP(KEY::LBUTTON))
+        if (m_pPlayer->Key_Tab(KEY::LBUTTON))
         {
             _uint iWeponType = m_pPlayer->Get_WeaponType();
 
@@ -71,7 +71,7 @@ void CState_Player_Arm_Loop::Update(_float fTimeDelta)
                 m_pPlayer->Change_State(CPlayer::ARM_THRUST);
                 return;
         }
-        else if (KEY_TAP(KEY::F))
+        else if (m_pPlayer->Key_Tab(KEY::F))
         {
             m_pPlayer->Change_State(CPlayer::ARM_PARRY);
         }
@@ -117,10 +117,10 @@ _bool CState_Player_Arm_Loop::Move(_float fTimeDelta)
     vPlayerLook.Normalize();
     vPlayerRight.Normalize();
 
-    _bool isForward = KEY_HOLD(KEY::W);
-    _bool isBackward = KEY_HOLD(KEY::S);
-    _bool isRight = KEY_HOLD(KEY::D);
-    _bool isLeft = KEY_HOLD(KEY::A);
+    _bool isForward = m_pPlayer->Key_Hold(KEY::W);
+    _bool isBackward = m_pPlayer->Key_Hold(KEY::S);
+    _bool isRight = m_pPlayer->Key_Hold(KEY::D);
+    _bool isLeft = m_pPlayer->Key_Hold(KEY::A);
 
     if (isForward)
         m_vMoveDir += vCameraLook;
