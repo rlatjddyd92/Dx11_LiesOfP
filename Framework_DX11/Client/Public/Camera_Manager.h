@@ -25,7 +25,7 @@ public:
 	HRESULT Initialize(ID3D11Device* pDevice, ID3D11DeviceContext* pContext);
 
 	void Add_Camera(const _wstring& strCameraTag, class CCamera* pCamera);
-	HRESULT Change_Camera(const _wstring& strCameraTag);
+	HRESULT Change_Camera(const _wstring& strCameraTag, _bool isMovePreCameraPos = false);
 	class CCamera* Find_Camera(const _wstring& strCameraTag);
 
 	void Clear();

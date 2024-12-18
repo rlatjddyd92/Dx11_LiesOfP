@@ -31,7 +31,7 @@ void CCamera_Manager::Add_Camera(const _wstring& strCameraTag, CCamera* pCamera)
 	Safe_AddRef(pCamera);
 }
 
-HRESULT CCamera_Manager::Change_Camera(const _wstring& strCameraTag)
+HRESULT CCamera_Manager::Change_Camera(const _wstring& strCameraTag, _bool isMovePreCameraPos)
 {
 	CCamera* pCamera = Find_Camera(strCameraTag);
 	if (nullptr == pCamera)
@@ -41,6 +41,13 @@ HRESULT CCamera_Manager::Change_Camera(const _wstring& strCameraTag)
 	{
 		m_pCurrentCamera->IsActive(false);
 		Safe_Release(m_pCurrentCamera);
+	}
+
+	if (isMovePreCameraPos)
+	{
+		_Vec3 vCurrentPos = m_pCurrentCamera->Get_Transform()->Get_State(CTransform::STATE_POSITION);
+
+		pCamera->Get_Transform()->Set_State(CTransform::STATE_POSITION, vCurrentPos);
 	}
 
 	pCamera->IsActive(true);
