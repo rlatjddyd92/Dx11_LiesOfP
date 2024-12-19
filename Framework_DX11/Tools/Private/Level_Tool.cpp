@@ -54,8 +54,8 @@ HRESULT CLevel_GamePlay::Initialize()
 		return E_FAIL;*/
 
 	//strcpy_s(Desc.szModelTag, "Prototype_Component_Model_FlameSword");
-	//strcpy_s(Desc.szModelTag, "Prototype_Component_Model_Player_Arm");
-	strcpy_s(Desc.szModelTag, "Prototype_Component_Model_Raxasia_Sword_CutScene");
+	strcpy_s(Desc.szModelTag, "Prototype_Component_Model_Player_Arm");
+	//strcpy_s(Desc.szModelTag, "Prototype_Component_Model_Raxasia_Sword_CutScene");
 	if (FAILED(m_pGameInstance->Add_CloneObject_ToLayer(LEVEL_TOOL, TEXT("Layer_Offset"), TEXT("Prototype_GameObject_NonAnim"), &Desc)))
 		return E_FAIL;
 	//if (FAILED(m_pGameInstance->Add_CloneObject_ToLayer(LEVEL_TOOL, TEXT("Layer_BackGround"), TEXT("Prototype_GameObject_CutSceneodHand"))))
