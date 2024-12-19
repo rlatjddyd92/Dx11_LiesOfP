@@ -19,7 +19,7 @@ public:
 		const _Matrix* pSocketBoneMatrix = { nullptr };
 	}WEAPON_DESC;
 
-	enum EFFECT_TYPE { EFFECT_TURN, EFFECT_FIT, EFFECT_INSERT,  EFFECT_END };
+	enum EFFECT_TYPE { EFFECT_P2_TURN, EFFECT_P2_LIGHTNING_SMALL, EFFECT_P2_LIGHTNING, EFFECT_P2_SHINE, EFFECT_P2_EXPLOSION, EFFECT_END };
 
 public:
 	class CModel* Get_Model() { return m_pModelCom; }
@@ -61,6 +61,8 @@ private:
 
 private:
 	class CEffect_Manager*				m_pEffect_Manager = { nullptr };
+
+	vector<class CEffect_Container*>	m_Effects;
 	
 	_uint			m_iAnimation_Phase1Index = {};
 	_uint			m_iAnimation_Phase2Index = {};
@@ -75,9 +77,15 @@ private:
 
 	_bool			m_isPlayAnimation = {};
 	_bool			m_isUpdatePos = {};
+
 	_bool			m_isActiveTurnEffect[11] = {false, };
 	_bool			m_isActiveInsertEffect[11] = {false, };
 	_bool			m_isEndPhase1Effect = { false };
+
+	_bool			m_isActiveElecTurnEffect = { false };
+	_bool			m_isActiveShineEffect = { false };
+	_bool			m_isActiveExplosionEffect = { false };
+	_bool			m_isActiveLightingSmallEffect = { false };
 
 	_Matrix					m_WorldMatrix = {};
 	const _Matrix*			m_pParentMatrix = { nullptr };
@@ -86,8 +94,8 @@ private:
 	_Vec3					m_vOffset = {};
 
 private:
-	void			Control_Phase1Effect();
-	void			Control_Phase2Effect();
+	void			Control_Phase1Effect(_float fTimeDelta);
+	void			Control_Phase2Effect(_float fTimeDelta);
 
 private:
 	HRESULT Ready_Components();

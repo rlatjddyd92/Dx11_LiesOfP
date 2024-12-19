@@ -122,7 +122,7 @@ void CState_Raxasia_CutScene_Phase2::Update(_float fTimeDelta)
 
         m_isPlayWeaponChangeAnim = true;
     }
-    else if (!m_isChangeRealWeapon && iFrame > 1125)     // 진짜 무기로 바꾸기
+    else if (!m_isChangeRealWeapon && iFrame > 1175)     // 진짜 무기로 바꾸기
     {
         m_pCutSceneWeapon->IsActive(false);
         dynamic_cast<CRaxasia*>(m_pMonster)->Change_Phase2Sword();
