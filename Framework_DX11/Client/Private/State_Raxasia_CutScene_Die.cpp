@@ -28,7 +28,6 @@ HRESULT CState_Raxasia_CutScene_Die::Start_State(void* pArg)
     m_pMonster->Get_Model()->Set_SpeedPerSec(m_iAnimation_KneeDown, 38);
 
     m_pMonster->Change_Animation(m_iAnimation_KneeDown, false, 0.f, 0);
-    m_pMonster->Stop_Animation();
 
     m_isStartCutScene = false;
     m_fDelay = 0.f;
@@ -40,9 +39,6 @@ HRESULT CState_Raxasia_CutScene_Die::Start_State(void* pArg)
 
 void CState_Raxasia_CutScene_Die::Update(_float fTimeDelta)
 {
-
-
-    m_pMonster->Play_Animation();
 
     _int iFrame = m_pMonster->Get_Frame();
     _uint iCurAnim = m_pMonster->Get_CurrentAnimIndex();
@@ -99,6 +95,7 @@ void CState_Raxasia_CutScene_Die::End_Check(_float fTimeDelta)
         if (m_fDelay < 5.f)
             return;
 
+        dynamic_cast<CRaxasia*>(m_pMonster)->Get_ShieldWeapon()->Set_IsUpdatePos(false);
         m_pMonster->Get_Transform()->Rotation(_vector{ 0, 1, 0, 0 }, XMConvertToRadians(150.f));
         m_pMonster->Change_Animation(m_iAnimation_Die, false, 0.f);
         m_pMonster->Get_Model()->Set_SpeedPerSec(m_iAnimation_Die, 31.5);

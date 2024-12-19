@@ -62,13 +62,13 @@ void CWeapon_Raxasia_P2_Shield::Update(_float fTimeDelta)
 	if (!m_isActive)
 		return;
 
-	static _float fXPos = 0.66f;
-	static _float fYPos = -0.39f;
-	static _float fZPos = 0.21f;
+	static _float fXPos = -0.17f;
+	static _float fYPos = 0.f;
+	static _float fZPos = 0.f;
 
-	static _float fXRot = 280.f;
-	static _float fYRot = -190.f;
-	static _float fZRot = 100.f;
+	static _float fXRot = 260.f;
+	static _float fYRot = -5.f;
+	static _float fZRot = 55.f;
 
 	_matrix		PreTransformMatrix = XMMatrixIdentity();
 
@@ -130,15 +130,14 @@ void CWeapon_Raxasia_P2_Shield::Update(_float fTimeDelta)
 		}
 	}
 
-	if (m_Test)
-	{
-		PreTransformMatrix = XMMatrixScaling(0.015f, 0.015f, 0.015f) * XMMatrixRotationX(XMConvertToRadians(fXRot)) * XMMatrixRotationY(XMConvertToRadians(fYRot)) * XMMatrixRotationZ(XMConvertToRadians(fZRot));
+
+		/*PreTransformMatrix = XMMatrixScaling(0.015f, 0.015f, 0.015f) * XMMatrixRotationX(XMConvertToRadians(fXRot)) * XMMatrixRotationY(XMConvertToRadians(fYRot)) * XMMatrixRotationZ(XMConvertToRadians(fZRot));
 
 		m_pModelCom->Set_PreTranformMatrix(PreTransformMatrix);
 
 		_Vec3 vv = _Vec3(fXPos, fYPos, fZPos);
-		m_pTransformCom->Set_State(CTransform::STATE_POSITION, vv);
-	}
+		m_pTransformCom->Set_State(CTransform::STATE_POSITION, vv);*/
+	
 
 	__super::Update(fTimeDelta);
 

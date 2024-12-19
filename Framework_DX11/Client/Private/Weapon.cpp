@@ -36,6 +36,7 @@ HRESULT CWeapon::Initialize(void * pArg)
 		return E_FAIL;
 
 	m_isActive = false;
+	m_isUpdatePos = true;
 
 	return S_OK;
 }
@@ -56,7 +57,9 @@ void CWeapon::Update(_float fTimeDelta)
 		SocketMatrix.r[i] = XMVector3Normalize(SocketMatrix.r[i]);
 	}
 	m_OldWroldMatrix = m_WorldMatrix;
-	XMStoreFloat4x4(&m_WorldMatrix, XMLoadFloat4x4(m_pTransformCom->Get_WorldMatrix_Ptr()) * SocketMatrix * XMLoadFloat4x4(m_pParentMatrix));
+
+	if(m_isUpdatePos)
+		XMStoreFloat4x4(&m_WorldMatrix, XMLoadFloat4x4(m_pTransformCom->Get_WorldMatrix_Ptr()) * SocketMatrix * XMLoadFloat4x4(m_pParentMatrix));
 
 
 	if (nullptr != m_pBladeMatrix)

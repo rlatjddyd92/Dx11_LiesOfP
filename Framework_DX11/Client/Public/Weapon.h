@@ -49,6 +49,8 @@ public:
 	class CPlayer*		Get_Player() { return m_pPlayer; }
 	class CMonster*		Get_Monster() { return m_pMonster; }
 
+	void				Set_IsUpdatePos(_bool isUpdatePos) { m_isUpdatePos = isUpdatePos; }
+
 	ATTACK_STRENGTH		Get_AttackStrength() { return m_eAttackStrength; }
 	virtual void		Set_AttackStrength(ATTACK_STRENGTH eStrength) { m_eAttackStrength = eStrength; }
 
@@ -130,6 +132,7 @@ protected:
 	_uint					m_iAtkStrength{};
 	_uint					m_iAttackType{};
 
+	_bool					m_isUpdatePos = { true };
 
 	list<CGameObject*>			m_DamagedObjects;
 

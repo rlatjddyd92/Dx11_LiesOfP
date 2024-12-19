@@ -524,11 +524,18 @@ void CRaxasia::Start_CutScene(_uint iCutSceneNum)
 
 	case CUTSCENE_DIE:
 	{
+		_Vec3 vOffset = _Vec3(-0.17f, 0.f, 0.f);
+		_matrix PreTransformMatrix = XMMatrixScaling(0.015f, 0.015f, 0.015f) * XMMatrixRotationX(XMConvertToRadians(260.f)) * XMMatrixRotationY(XMConvertToRadians(-5.f)) * XMMatrixRotationZ(XMConvertToRadians(55.f));
+
 		m_pModelCom = m_pCutSceneModelCom[MODEL_PHASE2];
 
-		Deactiave_Weapon();
-		m_pWeaponShield->IsActive(false);
+		m_pWeapon->ChangeSocketMatrix(m_pModelCom->Get_BoneCombindTransformationMatrix_Ptr("weapon0_r"));
 
+		m_pWeaponShield->ChangeSocketMatrix(m_pModelCom->Get_BoneCombindTransformationMatrix_Ptr("weapon0_l"));
+		m_pWeaponShield->Get_Transform()->Set_State(CTransform::STATE_POSITION, vOffset);
+		m_pWeaponShield->Get_Model()->Set_PreTranformMatrix(PreTransformMatrix);
+
+		
 		m_pRigidBodyCom->Set_IsLockCell(false);
 		m_pRigidBodyCom->Set_IsOnCell(false);
 
@@ -892,7 +899,7 @@ HRESULT CRaxasia::Ready_Weapon()
 
 	WeaponDesc.pParentAtk = &m_eStat.fAtk;
 
-	m_pWeaponShield = dynamic_cast<CWeapon*>(m_pGameInstance->Clone_GameObject(TEXT("Prototype_GameObject_Weapon_Raxasia_P1_Shield"), &WeaponDesc));
+	m_pWeaponShield = dynamic_cast<CWeapon*>(m_pGameInstance->Clone_GameObject(TEXT("Prototype_GameObject_Weapon_Raxasia_P2_Shield"), &WeaponDesc));
 	if (nullptr == m_pWeaponShield)
 		return E_FAIL;
 	
