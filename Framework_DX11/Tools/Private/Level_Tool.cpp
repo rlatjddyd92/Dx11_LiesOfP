@@ -42,16 +42,15 @@ HRESULT CLevel_GamePlay::Initialize()
 	CNonAnimModel::NONMODEL_DESC Desc{};
 	Desc.vPosition = { 0.f, 0.f, 0.f };
 	Desc.vScale = { 1.f,1.f,1.f };
-	Desc.vRotation = { 0.f,0.f,0.f };
+	Desc.vRotation = { 0.f, 0.f, 0.f };
 	Desc.iRenderGroupID = 0;
 
 	//strcpy_s(Desc.szModelTag, "Prototype_Component_Model_FlameSword");
-	//strcpy_s(Desc.szModelTag, "Prototype_Component_Model_Player_Arm");
+	strcpy_s(Desc.szModelTag, "Prototype_Component_Model_Player_Arm");
 	//strcpy_s(Desc.szModelTag, "Prototype_Component_Model_Raxasia_Sword_CutScene");
-	strcpy_s(Desc.szModelTag, "Prototype_NoneAnimModel_Raxasia_Sword01");
+	//strcpy_s(Desc.szModelTag, "Prototype_Component_Model_Raxasia_Sword_CutScene");
 	if (FAILED(m_pGameInstance->Add_CloneObject_ToLayer(LEVEL_TOOL, TEXT("Layer_Offset"), TEXT("Prototype_GameObject_NonAnim"), &Desc)))
 		return E_FAIL;
-
 	//if (FAILED(m_pGameInstance->Add_CloneObject_ToLayer(LEVEL_TOOL, TEXT("Layer_BackGround"), TEXT("Prototype_GameObject_CutSceneodHand"))))
 	//	return E_FAIL;
 

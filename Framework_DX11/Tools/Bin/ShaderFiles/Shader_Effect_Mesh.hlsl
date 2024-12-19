@@ -220,6 +220,7 @@ PS_EFFECT_OUT PS_POW_MAIN(PS_IN In)
     vColor.rgb *= g_fAlpha;
     vColor *= g_vColor;
     
+    // 0.5보다 작으면 0에 가깝게, 0.5보다 크면 1에 가깝게.
     vColor.r = AdaptiveValue(saturate(vColor.r));
     vColor.g = AdaptiveValue(saturate(vColor.g));
     vColor.b = AdaptiveValue(saturate(vColor.b));
@@ -406,7 +407,7 @@ technique11	DefaultTechnique
 
     pass POW_EFFECT // 6
     {
-        SetRasterizerState(RS_Default);
+        SetRasterizerState(RS_Cull_None);
         SetDepthStencilState(DSS_Default, 0);
         SetBlendState(BS_Default, vector(0.f, 0.f, 0.f, 0.f), 0xffffffff);
 

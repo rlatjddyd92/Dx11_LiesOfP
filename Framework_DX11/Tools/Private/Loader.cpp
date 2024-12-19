@@ -100,8 +100,8 @@ HRESULT CLoader::Initialize(LEVELID eNextLevelID)
 	m_eNextLevelID = eNextLevelID;
 	m_iModelCount = 0;
 
-	CController_AnimationTool::Get_Instance()->SetUp_Lump(100);
-
+	CController_AnimationTool::Get_Instance()->SetUp_Lump(100);	
+	
 	InitializeCriticalSection(&m_CriticalSection_Main);
 	m_hThread_Main = (HANDLE)_beginthreadex(nullptr, 0, LoadingMain, this, 0, nullptr);
 	if (0 == m_hThread_Main)
@@ -1207,7 +1207,8 @@ HRESULT CLoader::Ready_Resources_For_ToolLevel_Monster()
 		if (FAILED(m_pGameInstance->Add_Prototype(LEVEL_TOOL, TEXT("Prototype_NoneAnimModel_Raxasia_Shield02"), pModel)))
 			return E_FAIL;
 	}
-	
+
+	PreTransformMatrix = XMMatrixScaling(0.015f, 0.015f, 0.015f) * XMMatrixRotationY(XMConvertToRadians(270.f));
 	pModel = CModel::Create(m_pDevice, m_pContext, CModel::TYPE_ANIM, "../Bin/ModelData/Anim/Monster/Boss/Raxasia/Raxasia_Sword01.dat", PreTransformMatrix, false, nullptr);
 	if (pModel != nullptr)
 	{
@@ -1217,6 +1218,7 @@ HRESULT CLoader::Ready_Resources_For_ToolLevel_Monster()
 		m_pGameInstance->Add_ModelPrototype(LEVEL_TOOL, ("Prototype_NoneAnimModel_Raxasia_Sword01"), pModel);
 	}
 
+	PreTransformMatrix = XMMatrixScaling(0.015f, 0.015f, 0.015f) * XMMatrixRotationY(XMConvertToRadians(270.f));
 	pModel = CModel::Create(m_pDevice, m_pContext, CModel::TYPE_ANIM, "../Bin/ModelData/Anim/Monster/Boss/Raxasia/Raxasia_Sword02.dat", PreTransformMatrix, false, nullptr);
 	if (pModel != nullptr)
 	{
@@ -1261,13 +1263,22 @@ HRESULT CLoader::Ready_Resources_For_ToolLevel_Monster()
 	}
 
 	//Prototype_Component_Model_Raxasia_Sword_CutScene
-	PreTransformMatrix = XMMatrixScaling(0.015f, 0.015f, 0.015f) * XMMatrixRotationX(XMConvertToRadians(200.f)) * XMMatrixRotationY(XMConvertToRadians(-40.f)) * XMMatrixRotationZ(XMConvertToRadians(30.f));
+	PreTransformMatrix = XMMatrixScaling(0.015f, 0.015f, 0.015f) * XMMatrixRotationX(XMConvertToRadians(240.f)) * XMMatrixRotationY(XMConvertToRadians(-6.5f)) * XMMatrixRotationZ(XMConvertToRadians(31.f));
 	pModel = CModel::Create(m_pDevice, m_pContext, CModel::TYPE_ANIM, "../Bin/ModelData/Anim/Monster/Boss/Raxasia/Raxasia_Sword_CutScene.dat", PreTransformMatrix, false, CController_AnimationTool::Get_Instance()->Get_StructStack(m_iModelCount++));
 	if (pModel != nullptr)
 	{
 		if (FAILED(m_pGameInstance->Add_Prototype(LEVEL_TOOL, TEXT("Prototype_Component_Model_Raxasia_Sword_CutScene"), pModel)))
 			return E_FAIL;
 		m_pGameInstance->Add_ModelPrototype(LEVEL_TOOL, ("Prototype_Component_Model_Raxasia_Sword_CutScene"), pModel);
+	}
+
+	//Prototype_Component_Model_Raxasia_Sword_CutScene
+	PreTransformMatrix = XMMatrixScaling(0.015f, 0.015f, 0.015f) * XMMatrixRotationX(XMConvertToRadians(200.f)) * XMMatrixRotationY(XMConvertToRadians(-40.f)) * XMMatrixRotationZ(XMConvertToRadians(30.f));
+	pModel = CModel::Create(m_pDevice, m_pContext, CModel::TYPE_NONANIM, "../Bin/ModelData/Anim/Monster/Boss/Raxasia/Raxasia_Sword_CutScene.dat", PreTransformMatrix, false, CController_AnimationTool::Get_Instance()->Get_StructStack(m_iModelCount++));
+	if (pModel != nullptr)
+	{
+		if (FAILED(m_pGameInstance->Add_Prototype(LEVEL_TOOL, TEXT("Prototype_Component_NonAnimModel_Raxasia_Sword_CutScene"), pModel)))
+			return E_FAIL;
 	}
 
 #pragma endregion

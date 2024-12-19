@@ -70,7 +70,9 @@ void CTexture_Effect::Update(_float fTimeDelta)
         m_fCurrenrtIndex += fTimeDelta * m_DefaultDesc.fSpriteSpeed;
 
     if (TYPE_PREDIR == m_DefaultDesc.eBillboardType)
+    {
         m_pTransformCom->Rotation(m_DefaultDesc.vPreDirAxis, XMConvertToRadians(m_DefaultDesc.fStarRotation));
+    }
 
     __super::Set_WorldMatrix();
 
@@ -89,7 +91,6 @@ void CTexture_Effect::Update(_float fTimeDelta)
     case TYPE_PREROTATION:
         Preserve_Rotation_Billboard(vCurrentScale, vLook);
         break;
-
     case TYPE_PREDIR:
         Preserve_Dir_Billboard(vCurrentScale, vLook);
         break;
@@ -276,6 +277,13 @@ void CTexture_Effect::Preserve_Rotation_Billboard(_Vec3 vCurrentScale, _Vec3 vLo
     _Vec3 vBeforeLook = XMVector3Normalize(XMLoadFloat4x4(&m_WorldMatrix).r[2]);
 
     _Vec3 vAxis = XMVector3Normalize(XMVector3Cross(vBeforeLook, vLook));
+
+    if (0.f == vAxis.x && 0.f == vAxis.y && 0.f == vAxis.z)
+    {
+        Billboard(vCurrentScale, vLook);
+        return;
+    }
+
     _float fRadian = acos(XMVectorGetX(XMVector3Dot(vBeforeLook, vLook)));
     _Matrix RotationMatrix = XMMatrixRotationAxis(vAxis, fRadian);
 
