@@ -134,7 +134,7 @@ HRESULT CRaxasia::Initialize(void* pArg)
 
 	GET_GAMEINTERFACE->Set_OnOff_OrthoUI(false, this);
 
-	//Start_CutScene(CUTSCENE_MEET);
+	Start_CutScene(CUTSCENE_MEET);
 
 	return S_OK;
 }
@@ -561,7 +561,7 @@ void CRaxasia::End_CutScene(_uint iCutSceneNum)
 		m_pRigidBodyCom->Set_IsLockCell(true);
 		m_pRigidBodyCom->Set_IsOnCell(true);
 
-		m_pCutSceneWeapon->IsActive(false);
+		m_pWeapon->ChangeSocketMatrix(m_pModelCom->Get_BoneCombindTransformationMatrix_Ptr(62));
 		Active_Weapon();
 
 		_matrix PreTransformMatrix = XMMatrixScaling(0.01f, 0.01f, 0.01f) *XMMatrixRotationX(XMConvertToRadians(270.0f));
@@ -580,8 +580,6 @@ void CRaxasia::End_CutScene(_uint iCutSceneNum)
 		m_pNavigationCom->Research_Cell(vCurrentPos);
 		m_pRigidBodyCom->Set_IsLockCell(true);
 		m_pRigidBodyCom->Set_IsOnCell(true);
-
-		m_pCutSceneWeapon->IsActive(false);
 
 		_matrix PreTransformMatrix = XMMatrixScaling(0.01f, 0.01f, 0.01f) * XMMatrixRotationX(XMConvertToRadians(270.0f));
 		_Vec3 vShieldOffset = _Vec3(0.f, 0.f, 0.f);
@@ -1073,19 +1071,8 @@ void CRaxasia::ChangePhase()
 
 	CWeapon::MONSTER_WAPON_DESC		WeaponDesc{};
 	WeaponDesc.pParentWorldMatrix = m_pTransformCom->Get_WorldMatrix_Ptr();
-	WeaponDesc.pSocketBoneMatrix = m_pModelCom->Get_BoneCombindTransformationMatrix_Ptr(93);	//Weapon_R
-
 	WeaponDesc.pParentAtk = &m_eStat.fAtk;
-
 	WeaponDesc.pMonster = this;
-
-	m_pWeapon = dynamic_cast<CWeapon*>(m_pGameInstance->Clone_GameObject(TEXT("Prototype_GameObject_Weapon_Raxasia_P2_Sword"), &WeaponDesc));
-	if (nullptr == m_pWeapon)
-		return;
-
-	m_pWeapon->Appear();
-
-
 	WeaponDesc.pSocketBoneMatrix = m_pModelCom->Get_BoneCombindTransformationMatrix_Ptr(46);
 
 	m_pWeaponShield->ChangeSocketMatrix(WeaponDesc.pSocketBoneMatrix);
@@ -1114,6 +1101,26 @@ void CRaxasia::ChangePhase()
 	m_bDieState = false;
 	m_isDead = false;
 	m_isChanged = true;
+}
+
+void CRaxasia::Change_Phase2Sword()
+{
+	if (nullptr != m_pWeapon)
+		Safe_Release(m_pWeapon);
+
+	CWeapon::MONSTER_WAPON_DESC		WeaponDesc{};
+	WeaponDesc.pParentWorldMatrix = m_pTransformCom->Get_WorldMatrix_Ptr();
+	WeaponDesc.pSocketBoneMatrix = m_pModelCom->Get_BoneCombindTransformationMatrix_Ptr("weapon0_r");	//Weapon_R
+
+	WeaponDesc.pParentAtk = &m_eStat.fAtk;
+
+	WeaponDesc.pMonster = this;
+
+	m_pWeapon = dynamic_cast<CWeapon*>(m_pGameInstance->Clone_GameObject(TEXT("Prototype_GameObject_Weapon_Raxasia_P2_Sword"), &WeaponDesc));
+	if (nullptr == m_pWeapon)
+		return;
+
+	m_pWeapon->Appear();
 }
 
 CRaxasia* CRaxasia::Create(ID3D11Device* pDevice, ID3D11DeviceContext* pContext)

@@ -253,11 +253,6 @@ HRESULT CRenderer::Draw()
 	if (FAILED(Render_HDR()))
 		return E_FAIL;
 
-	if (FAILED(Render_DOF())) // DOF 추가
-		return E_FAIL;
-	if (FAILED(Render_Radial()))
-		return E_FAIL;
-
 	if (FAILED(Render_NonLights()))
 		return E_FAIL;
 
@@ -270,6 +265,11 @@ HRESULT CRenderer::Draw()
 	if (FAILED(Render_Blend()))
 		return E_FAIL;
 
+
+	if (FAILED(Render_DOF())) // DOF 추가
+		return E_FAIL;
+	if (FAILED(Render_Radial()))
+		return E_FAIL;
 
 	if (FAILED(Render_Distortion()))
 		return E_FAIL;
@@ -491,8 +491,6 @@ HRESULT CRenderer::Render_Deferred()
 	if (FAILED(m_pGameInstance->Bind_RT_ShaderResource(m_pShader, TEXT("Target_Shade"), "g_ShadeTexture")))
 		return E_FAIL;
 	if (FAILED(m_pGameInstance->Bind_RT_ShaderResource(m_pShader, TEXT("Target_Specular"), "g_SpecularTexture")))
-		return E_FAIL;
-	if (FAILED(m_pGameInstance->Bind_RT_ShaderResource(m_pShader, TEXT("Target_LightDepth"), "g_LightDepthTexture")))
 		return E_FAIL;
 
 	if (m_isOnShadow)

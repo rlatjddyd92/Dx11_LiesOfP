@@ -274,6 +274,12 @@ void CPlayer::Update(_float fTimeDelta)
 		dynamic_cast<CCutScene*>(m_pGameInstance->Find_Object(LEVEL_GAMEPLAY, TEXT("Layer_CutScene"), BOSS1_PHASE2))->Start_Play();
 		//dynamic_cast<CCutScene*>(m_pGameInstance->Find_Object(LEVEL_GAMEPLAY, TEXT("Layer_CutScene"), BOSS1_MEET2))->Start_Play();
 	}
+
+	if (KEY_TAP(KEY::P))
+	{
+		m_pEffect_Manager->Add_Effect_ToLayer(LEVEL_GAMEPLAY, TEXT("Raxasia_CutScene_Weapon_Change_Turn"), m_pTransformCom->Get_WorldMatrix_Ptr(),
+			m_pModelCom->Get_BoneCombindTransformationMatrix_Ptr("BN_Weapon_R"), _Vec3(0.f, 0.f, 0.f), _Vec3(0.f, 0.f, 0.f), _Vec3(1.f, 1.f, 1.f));
+	}
 }
 
 void CPlayer::Late_Update(_float fTimeDelta)

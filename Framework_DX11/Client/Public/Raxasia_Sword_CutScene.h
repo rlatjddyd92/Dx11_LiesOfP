@@ -19,6 +19,8 @@ public:
 		const _Matrix* pSocketBoneMatrix = { nullptr };
 	}WEAPON_DESC;
 
+	enum EFFECT_TYPE { EFFECT_TURN, EFFECT_FIT, EFFECT_INSERT,  EFFECT_END };
+
 public:
 	class CModel* Get_Model() { return m_pModelCom; }
 
@@ -45,17 +47,27 @@ public:
 
 
 public:
-	void Play_Animation(_char* szAnimationName, _float fSpeedRation = 1.f);
-	void Stop_Animation();
+	void		Play_Animation(_char* szAnimationName, _float fSpeedRation = 1.f);
+	void		Stop_Animation();
 
-	void Change_SocketMatrix(const _Matrix* pSocketMatrix);
+	void		Change_SocketMatrix(const _Matrix* pSocketMatrix);
 
-	void Start_UpdatePos();
-	void Stop_UpdatePos();
+	void		Start_UpdatePos();
+	void		Stop_UpdatePos();
 
 private:
 	class CShader* m_pShaderCom = { nullptr };
 	class CModel* m_pModelCom = { nullptr };
+
+private:
+	class CEffect_Manager*				m_pEffect_Manager = { nullptr };
+	
+	_uint			m_iAnimation_Phase1Index = {};
+	_uint			m_iAnimation_Phase2Index = {};
+
+	_int			m_iFrame = {};
+	_int			m_iTurnEffectFrame[11] = {};
+	_int			m_iInsertEffectFrame[11] = {};
 
 	_float           m_fEmissiveMask = {};
 
@@ -63,6 +75,9 @@ private:
 
 	_bool			m_isPlayAnimation = {};
 	_bool			m_isUpdatePos = {};
+	_bool			m_isActiveTurnEffect[11] = {false, };
+	_bool			m_isActiveInsertEffect[11] = {false, };
+	_bool			m_isEndPhase1Effect = { false };
 
 	_Matrix					m_WorldMatrix = {};
 	const _Matrix*			m_pParentMatrix = { nullptr };
@@ -71,8 +86,12 @@ private:
 	_Vec3					m_vOffset = {};
 
 private:
+	void			Control_Phase1Effect();
+	void			Control_Phase2Effect();
 
+private:
 	HRESULT Ready_Components();
+	HRESULT Ready_Effect();
 
 
 public:

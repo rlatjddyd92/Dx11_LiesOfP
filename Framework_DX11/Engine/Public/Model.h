@@ -22,7 +22,10 @@ public:
 
 	vector<class CBone*>& Get_Bones() { return m_Bones; }
 	_int					Get_BoneIndex(const _char* pBoneName) const;
+
 	_matrix					Get_BoneCombindTransformationMatrix(_uint iBoneIndex) const { return m_Bones[iBoneIndex]->Get_CombinedTransformationMatrix(); }
+	_matrix					Get_BoneCombindTransformationMatrix(const _char* pBoneName) const { return m_Bones[Get_BoneIndex(pBoneName)]->Get_CombinedTransformationMatrix(); }
+
 	const _Matrix* Get_BoneCombindTransformationMatrix_Ptr(const _char* pBoneName) const { return m_Bones[Get_BoneIndex(pBoneName)]->Get_CombinedTransformationMatrix_Ptr(); }
 	const _Matrix* Get_BoneCombindTransformationMatrix_Ptr(_uint iBoneIndex) const { return m_Bones[iBoneIndex]->Get_CombinedTransformationMatrix_Ptr(); }
 
@@ -59,7 +62,10 @@ public:
 
 	HRESULT					Update_Boundary();
 
+
+	_matrix					Get_PreTranformMatrix() { return XMLoadFloat4x4(&m_PreTransformMatrix); }
 	void					Set_PreTranformMatrix(_matrix PreTranfromMatrix) { XMStoreFloat4x4(&m_PreTransformMatrix, PreTranfromMatrix); }
+
 	void					SetUp_isNeedTuning(_int iBoneIndex, _bool bState);
 
 public:

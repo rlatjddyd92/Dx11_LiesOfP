@@ -30,7 +30,6 @@ vector			g_vMtrlSpecular = vector(1.f, 1.f, 1.f, 1.f);
 texture2D		g_ShadeTexture;
 texture2D		g_DepthTexture;
 texture2D		g_SpecularTexture;
-texture2D		g_LightDepthTexture;
 texture2D		g_BackTexture;
 texture2D		g_FinalTexture;
 
@@ -47,8 +46,6 @@ vector			g_vCamPosition;
 // 캐스캐이드용 그림자 계산
 float ComputeShadow(float4 vPosition, int iCascadeIndex, float4 vNormalDesc)
 {
-	//    [unroll] 쓰면 빨리지나??
-	
     // 변환 행렬 계산
     float4 vLightProjPos = mul(vPosition, g_CascadeViewMatrix[iCascadeIndex]);
     vLightProjPos = mul(vLightProjPos, g_CascadeProjMatrix[iCascadeIndex]);
@@ -59,9 +56,10 @@ float ComputeShadow(float4 vPosition, int iCascadeIndex, float4 vNormalDesc)
     vTextCoord.x = vLightProjPos.x * 0.5f + 0.5f;
     vTextCoord.y = vLightProjPos.y * -0.5f + 0.5f;
     
-    float fNormalOffset = 0.0001f;
+    float fNormalOffset = 0.00001f;
     float fDot = saturate(dot(normalize(g_vLightDir.xyz) * -1.f, vNormalDesc.xyz));
-    float fBias = max((fNormalOffset * 5.0f) * (1.0f - (fDot * -1.0f)), fNormalOffset);
+    //float fBias = max((fNormalOffset * 5.0f) * (1.0f - (fDot * -1.0f)), fNormalOffset);
+    float fBias = fNormalOffset * 5.0f * (1.0f - fDot);
     
 	// 이 사이에 있어야함
     if (vLightProjPos.z > 1.f || vLightProjPos.z < 0.f)
@@ -69,12 +67,16 @@ float ComputeShadow(float4 vPosition, int iCascadeIndex, float4 vNormalDesc)
         return 1.f;
     }
     
+    const float DepthThreshold = 0.05f; // 깊이 차이 제한값
     float fShadowPower = 1.f;
     for (int x = -1; x <= 1; ++x)
     {
         for (int y = -1; y <= 1; ++y)
         {
             vector vLightDepth = g_CascadeTextureArr.SampleCmpLevelZero(DepthComparisonSampler, float3(vTextCoord, iCascadeIndex), vLightProjPos.z, int2(x, y));
+            
+            float fDepthDifference = abs(vLightProjPos.z - vLightDepth.x);
+            
             if (vLightProjPos.z - fBias > vLightDepth.x)
             {
                 fShadowPower += 0.65f;

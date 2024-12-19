@@ -126,10 +126,6 @@ void CMainApp::Update(_float fTimeDelta)
 			ClipCursor(NULL);
 		}
 	}
-	else if (KEY_TAP(KEY::P))
-	{
-		m_pGameInstance->Toggle_PBR();
-	}
 	else if (KEY_TAP(KEY::O))
 	{
 		m_pGameInstance->Toggle_Shadow();

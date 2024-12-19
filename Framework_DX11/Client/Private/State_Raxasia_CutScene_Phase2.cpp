@@ -120,7 +120,13 @@ void CState_Raxasia_CutScene_Phase2::Update(_float fTimeDelta)
 
         m_isPlayWeaponChangeAnim = true;
     }
+    else if (!m_isChangeRealWeapon && iFrame > 1125)     // 진짜 무기로 바꾸기
+    {
+        m_pCutSceneWeapon->IsActive(false);
+        dynamic_cast<CRaxasia*>(m_pMonster)->Change_Phase2Sword();
 
+        m_isChangeRealWeapon = true;
+    }
     
 
     if (iFrame > 15)
@@ -177,14 +183,14 @@ void CState_Raxasia_CutScene_Phase2::End_Check()
 
 void CState_Raxasia_CutScene_Phase2::Stop_Play_Animation(_int iFrame, _float fTimeDelta)
 {
-    static bool bStopped1 = false;
-    static bool bStopped2 = false;
-    static bool bSpeedChanged = false;
-    static bool bChangedSpeed = false;
-    static bool bChangedSpeedOri = false;
-    static bool bChangedSpeedOri2 = false;
-    static bool bPlayAnim1 = false;
-    static bool bPlayAnim2 = false;
+    static _bool bStopped1 = false;
+    static _bool bStopped2 = false;
+    static _bool bSpeedChanged = false;
+    static _bool bChangedSpeed = false;
+    static _bool bChangedSpeedOri = false;
+    static _bool bChangedSpeedOri2 = false;
+    static _bool bPlayAnim1 = false;
+    static _bool bPlayAnim2 = false;
 
 
     if (iFrame > 507 && bSpeedChanged == false)

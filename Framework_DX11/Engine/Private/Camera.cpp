@@ -193,10 +193,7 @@ void CCamera::Calculat_CascadeFrustum()
 
 		// 움직였음?
 		_Vec3 vShadowCamPos = _Vec3(vCenterPos) + (vLightDir * vMinExtents.z);
-		//if (fabs((vShadowCamPos - m_vPrevCenterPos[i]).Length()) < 5.f) 
-		//{
-		//	return;
-		//}
+
 		m_vPrevCenterPos[i] = vShadowCamPos;
 
 		// 위치, look, up

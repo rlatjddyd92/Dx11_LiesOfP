@@ -31,6 +31,7 @@ private:
     _bool               m_isReConnetWeaponBone = {};
     _bool               m_isPlayWeaponChangeAnim = {};
     _bool               m_isConneectLeftHandShield = {};
+    _bool               m_isChangeRealWeapon = {};
 
     _float              m_fDelay = {};
     _float              m_fAnimationStopTimer = {};

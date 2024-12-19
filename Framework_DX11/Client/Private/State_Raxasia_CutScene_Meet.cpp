@@ -68,6 +68,8 @@ void CState_Raxasia_CutScene_Meet::Update(_float fTimeDelta)
     {
         m_pCutSceneWeapon->Play_Animation("AS_WP_MOB_Raxasia_01_Sword_Cine_Change__Anim", 1.f);
         m_isPlayWeaponAni = true;
+
+        m_pMonster->Stop_Animation();
     }
 
     //if (iFrame > 50)
