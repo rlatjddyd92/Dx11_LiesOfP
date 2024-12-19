@@ -166,8 +166,18 @@ void CCutScene::Active_Obj(CUTSCENE_KEYFRAME_DESC* pCutSceneDesc)
 	}
 	if (pCutSceneDesc->Obj_Desc.bUseObj[BOSS1])
 	{
+		if(m_pObjects[BOSS1] == nullptr)
+			m_pObjects[BOSS1] = static_cast<CPawn*>(m_pGameInstance->Find_Object(LEVEL_GAMEPLAY, TEXT("Layer_Raxasia"), 0));
+
 		if(m_iIndex == BOSS1_PHASE2)
 			static_cast<CRaxasia*>(m_pGameInstance->Find_Object(LEVEL_GAMEPLAY, TEXT("Layer_Raxasia"), 0))->Start_CutScene(1);
+		else if(m_iIndex == BOSS1_DEAD)
+		{
+			CPlayer* pPlayer = dynamic_cast<CPlayer*>(m_pGameInstance->Find_Player(LEVEL_GAMEPLAY));
+			pPlayer->Get_RigidBody()->Set_GloblePose(_Vec3(-80.414f, -97.811f, -43.011f));
+			pPlayer->Get_Navigation()->Research_Cell(_Vec3(-80.414f, -97.811f, -43.011f));
+			static_cast<CRaxasia*>(m_pGameInstance->Find_Object(LEVEL_GAMEPLAY, TEXT("Layer_Raxasia"), 0))->Start_CutScene(2);
+		}
 	}
 	if (pCutSceneDesc->Obj_Desc.bUseObj[BOSS2])
 	{
@@ -193,6 +203,9 @@ void CCutScene::Active_Sound(CUTSCENE_KEYFRAME_DESC* pCutSceneDesc)
 		case BOSS1_MEET2:
 			m_pGameInstance->Play_BGM(TEXT("CutScene_Raxasia_Meet2.wav"), &g_fCutSceneVolume);
 			break;
+		case BOSS1_DEAD:
+			m_pGameInstance->Play_BGM(TEXT("CutScene_Raxasia_Dead.wav"), &g_fCutSceneVolume);
+			break;
 		default:
 			break;
 		}
@@ -208,6 +221,8 @@ void CCutScene::First_Setting()
 
 	_Vec3 vInitPos = {};
 
+	pPlayer->Set_isPlayingCutscene(true);
+
 	switch (m_iIndex)
 	{
 	case SOPHIA_DEAD:
@@ -219,6 +234,8 @@ void CCutScene::First_Setting()
 			return;
 		m_pObjects[BOSS1] = static_cast<CPawn*>(m_pGameInstance->Find_Object(LEVEL_GAMEPLAY, TEXT("Layer_Raxasia"), 0));
 		m_pObjects[BOSS1]->Start_CutScene(0);
+		break;
+	case BOSS1_DEAD:
 		break;
 	case BOSS2_MEET:
 		if (FAILED(m_pGameInstance->Add_CloneObject_ToLayer(LEVEL_GAMEPLAY, TEXT("Layer_SimonManus"), TEXT("Prototype_GameObject_SimonManus"))))
@@ -280,6 +297,15 @@ void CCutScene::End_Setting()
 		pPlayer->Change_State(CPlayer::OH_IDLE);
 		pPlayer-> Get_Navigation()->Move_to_Cell(pPlayer->Get_RigidBody(), 268);
 		m_pObjects[BOSS1]->End_CutScene(0);
+		break;
+	case BOSS1_PHASE2:
+		m_pGameInstance->Stop_BGM();
+		m_pObjects[BOSS1]->End_CutScene(1);
+		pPlayer->Get_Navigation()->Move_to_Cell(pPlayer->Get_RigidBody(), 268);
+		break;	
+	case BOSS1_DEAD:
+		m_pGameInstance->Stop_BGM();
+		m_pObjects[BOSS1]->End_CutScene(2);
 		break;	
 	case BOSS2_MEET:
 		dynamic_cast<CCutScene*>(m_pGameInstance->Find_Object(LEVEL_GAMEPLAY, TEXT("Layer_CutScene"), BOSS2_MEET2))->Start_Play();
@@ -312,6 +338,7 @@ void CCutScene::End_Setting()
 	m_pCamera->Reset_Zoom();
 
 	pPlayer->Get_Camera()->Move_PlayerBackPos();
+	pPlayer->Set_isPlayingCutscene(false);
 }
 
 void CCutScene::Load_KeyFrame(CUTSCENE_KEYFRAME_DESC pDesc)
