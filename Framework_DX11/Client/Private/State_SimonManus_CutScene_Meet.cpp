@@ -41,12 +41,12 @@ void CState_SimonManus_CutScene_Meet::Update(_float fTimeDelta)
     _uint iCurAnim = m_pMonster->Get_CurrentAnimIndex();
 
     m_fDelay += fTimeDelta;
-    if (m_fDelay >= 16.f && !m_isStartCutScene)
+    if (m_fDelay >= 11.f && !m_isStartCutScene)
     {
         m_pMonster->Play_Animation();
         m_isStartCutScene = true;
     }
-    else if (m_fDelay < 16.f)
+    else if (m_fDelay < 11.f)
     {
         m_pMonster->Stop_Animation();
     }
