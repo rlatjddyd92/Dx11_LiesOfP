@@ -1,4 +1,7 @@
 ﻿  unity_WXGLV3RH2PLW5VPU.cpp
+C:\Users\olivi\GitHub\Dx11_LiesOfP\Framework_DX11\Client\Private\Raxasia_Sword_CutScene.cpp(213,30): warning C4244: '초기화 중': 'Engine::_double'에서 'Engine::_float'(으)로 변환하면서 데이터가 손실될 수 있습니다.
+  (소스 파일 '/x64/Release/unity_WXGLV3RH2PLW5VPU.cpp'을(를) 컴파일하는 중)
+  
 C:\Users\olivi\GitHub\Dx11_LiesOfP\Framework_DX11\Client\Private\State_CurruptedStrongArm_Idle.cpp(113,9): warning C4065: switch문에 'default'가 있으나 'case' 레이블이 없습니다.
   (소스 파일 '/x64/Release/unity_WXGLV3RH2PLW5VPU.cpp'을(를) 컴파일하는 중)
   
@@ -51,8 +54,8 @@ C:\Users\olivi\GitHub\Dx11_LiesOfP\Framework_DX11\Client\Private\UIRender_Batchi
   (소스 파일 '/x64/Release/unity_WXGLV3RH2PLW5VPU.cpp'을(를) 컴파일하는 중)
   
   코드를 생성하고 있습니다.
-  2 of 9443 functions (<0.1%) were compiled, the rest were copied from previous compilation.
+  523 of 9445 functions ( 5.5%) were compiled, the rest were copied from previous compilation.
     0 functions were new in current compilation
-    19 functions had inline decision re-evaluated but remain unchanged
+    156 functions had inline decision re-evaluated but remain unchanged
   코드를 생성했습니다.
   Client.vcxproj -> C:\Users\olivi\GitHub\Dx11_LiesOfP\Framework_DX11\Client\Bin\Client.exe

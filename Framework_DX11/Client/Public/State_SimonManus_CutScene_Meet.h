@@ -28,6 +28,8 @@ private:
     _uint               m_iAnimation_End = {};
 
     _bool               m_isStartCutScene = {};
+    _bool               m_isStartPlaySound = {};
+
     _float              m_fDelay = {};
 
     _Vec3               m_vRootMoveStack{};
