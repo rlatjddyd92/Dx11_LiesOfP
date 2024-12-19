@@ -150,11 +150,11 @@ void CCamera::Calculat_CascadeFrustum()
 
 	for (_uint i = 0; i < 3; ++i)
 	{
-		float fNearX = m_fCascadeFarPlanes[i] * fTanHalfHFov;
-		float fNearY = m_fCascadeFarPlanes[i] * fTanHalfVFov;
+		_float fNearX = m_fCascadeFarPlanes[i] * fTanHalfHFov;
+		_float fNearY = m_fCascadeFarPlanes[i] * fTanHalfVFov;
 
-		float fFarX = m_fCascadeFarPlanes[i + 1] * fTanHalfHFov;
-		float fFarY = m_fCascadeFarPlanes[i + 1] * fTanHalfVFov;
+		_float fFarX = m_fCascadeFarPlanes[i + 1] * fTanHalfHFov;
+		_float fFarY = m_fCascadeFarPlanes[i + 1] * fTanHalfVFov;
 
 		//Near Far 평면 구성
 		_Vec4 vFrustumCorners[8] =

@@ -534,7 +534,7 @@ void CRaxasia::Start_CutScene(_uint iCutSceneNum)
 
 		m_pTransformCom->Rotation(_vector{ 0, 1, 0, 0 }, XMConvertToRadians(50.f));
 
-		_Vec3 vCurrentPos = _Vec3(-59.119f, -97.437f, -27.848f);
+		_Vec3 vCurrentPos = _Vec3(-59.119f, -97.743f, -27.848f);
 
 		m_pRigidBodyCom->Set_GloblePose(vCurrentPos);
 

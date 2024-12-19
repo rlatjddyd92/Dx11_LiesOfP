@@ -76,7 +76,7 @@ void CState_Raxasia_CutScene_Die::Update(_float fTimeDelta)
     m_pMonster->Get_Model()->Update_Bone();
 
     vMove = XMVector3TransformNormal(vMove, m_pMonster->Get_Transform()->Get_WorldMatrix()) * 0.8f;
-    vMove.x = vMove.y = vMove.z = 0.f;
+    vMove.x = vMove.z = 0.f;
 
 
     m_pMonster->Get_RigidBody()->Set_Velocity((vMove - m_vRootMoveStack) / fTimeDelta);
