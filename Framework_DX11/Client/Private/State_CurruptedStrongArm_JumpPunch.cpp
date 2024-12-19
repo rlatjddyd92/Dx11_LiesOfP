@@ -104,7 +104,7 @@ void CState_CurruptedStrongArm_JumpPunch::Collider_Check(_double CurTrackPos)
         //¿À¸¥¼ö¿°
         if (CurTrackPos >= 55.f && CurTrackPos <= 75.f)
         {
-            m_pMonster->Active_CurrentWeaponCollider(1.3f, CCurruptedStrongArm_Puppet::TYPE_TENTACLE_FR, HIT_TYPE::HIT_CARCASS, ATTACK_STRENGTH::ATK_WEAK);
+            m_pMonster->Active_CurrentWeaponCollider(1.1f, CCurruptedStrongArm_Puppet::TYPE_TENTACLE_FR, HIT_TYPE::HIT_CARCASS, ATTACK_STRENGTH::ATK_WEAK);
         }
         else
         {
@@ -113,7 +113,7 @@ void CState_CurruptedStrongArm_JumpPunch::Collider_Check(_double CurTrackPos)
         //¿Þ¼ö¿°
         if (CurTrackPos >= 105.f && CurTrackPos <= 125.f)
         {
-            m_pMonster->Active_CurrentWeaponCollider(1.3f, CCurruptedStrongArm_Puppet::TYPE_TENTACLE_FL, HIT_TYPE::HIT_CARCASS, ATTACK_STRENGTH::ATK_WEAK);
+            m_pMonster->Active_CurrentWeaponCollider(1.1f, CCurruptedStrongArm_Puppet::TYPE_TENTACLE_FL, HIT_TYPE::HIT_CARCASS, ATTACK_STRENGTH::ATK_WEAK);
         }
         else
         {
@@ -134,8 +134,8 @@ void CState_CurruptedStrongArm_JumpPunch::Collider_Check(_double CurTrackPos)
         //¾ç¼Õ
         if (CurTrackPos >= 50.f && CurTrackPos <= 60.f)
         {
-            m_pMonster->Active_CurrentWeaponCollider(1.3f, CCurruptedStrongArm_Puppet::TYPE_ARM_LEFT, HIT_TYPE::HIT_CARCASS, ATTACK_STRENGTH::ATK_WEAK);
-            m_pMonster->Active_CurrentWeaponCollider(1.3f, CCurruptedStrongArm_Puppet::TYPE_ARM_RIGHT, HIT_TYPE::HIT_CARCASS, ATTACK_STRENGTH::ATK_WEAK);
+            m_pMonster->Active_CurrentWeaponCollider(1.3f, CCurruptedStrongArm_Puppet::TYPE_ARM_LEFT, HIT_TYPE::HIT_CARCASS, ATTACK_STRENGTH::ATK_NORMAL);
+            m_pMonster->Active_CurrentWeaponCollider(1.3f, CCurruptedStrongArm_Puppet::TYPE_ARM_RIGHT, HIT_TYPE::HIT_CARCASS, ATTACK_STRENGTH::ATK_NORMAL);
         }
         else
         {
@@ -145,7 +145,7 @@ void CState_CurruptedStrongArm_JumpPunch::Collider_Check(_double CurTrackPos)
         //¿Þ¼ö¿°
         if (CurTrackPos >= 80.f && CurTrackPos <= 95.f)
         {
-            m_pMonster->Active_CurrentWeaponCollider(1.3f, CCurruptedStrongArm_Puppet::TYPE_TENTACLE_FL, HIT_TYPE::HIT_CARCASS, ATTACK_STRENGTH::ATK_WEAK);
+            m_pMonster->Active_CurrentWeaponCollider(1.1f, CCurruptedStrongArm_Puppet::TYPE_TENTACLE_FL, HIT_TYPE::HIT_CARCASS, ATTACK_STRENGTH::ATK_WEAK);
         }
         else
         {
@@ -154,7 +154,7 @@ void CState_CurruptedStrongArm_JumpPunch::Collider_Check(_double CurTrackPos)
         //¿À¸¥¼ö¿°
         if (CurTrackPos >= 82.f && CurTrackPos <= 105.f)
         {
-            m_pMonster->Active_CurrentWeaponCollider(1.3f, CCurruptedStrongArm_Puppet::TYPE_TENTACLE_FR, HIT_TYPE::HIT_CARCASS, ATTACK_STRENGTH::ATK_WEAK);
+            m_pMonster->Active_CurrentWeaponCollider(1.1f, CCurruptedStrongArm_Puppet::TYPE_TENTACLE_FR, HIT_TYPE::HIT_CARCASS, ATTACK_STRENGTH::ATK_WEAK);
         }
         else
         {

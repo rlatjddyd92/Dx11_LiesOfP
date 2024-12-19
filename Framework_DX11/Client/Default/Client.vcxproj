@@ -205,6 +205,7 @@
     <ClInclude Include="..\Public\Raxasia.h" />
     <ClInclude Include="..\Public\Raxasia_Helmet_CutScene.h" />
     <ClInclude Include="..\Public\Raxasia_Sword_CutScene.h" />
+    <ClInclude Include="..\Public\RebornerBigA.h" />
     <ClInclude Include="..\Public\SimonManus_CutScene_GodHand.h" />
     <ClInclude Include="..\Public\SimonManus_EnvHand.h" />
     <ClInclude Include="..\Public\State_CurruptedStrongArm_Die.h" />
@@ -269,6 +270,12 @@
     <ClInclude Include="..\Public\State_RaxasiaP2_WaveSting.h" />
     <ClInclude Include="..\Public\State_Raxasia_CutScene_Meet.h" />
     <ClInclude Include="..\Public\State_Raxasia_CutScene_Phase2.h" />
+    <ClInclude Include="..\Public\State_RebornerBigA_Die.h" />
+    <ClInclude Include="..\Public\State_RebornerBigA_Grogy.h" />
+    <ClInclude Include="..\Public\State_RebornerBigA_HitFatal.h" />
+    <ClInclude Include="..\Public\State_RebornerBigA_Idle.h" />
+    <ClInclude Include="..\Public\State_RebornerBigA_Run.h" />
+    <ClInclude Include="..\Public\State_RebornerBigA_Walk.h" />
     <ClInclude Include="..\Public\State_SimonManusP2_Die_Talking.h" />
     <ClInclude Include="..\Public\TorchDeck.h" />
     <ClInclude Include="..\Public\UIPage_Chest.h" />
@@ -480,6 +487,7 @@
     <ClInclude Include="..\Public\Weapon_Rapier.h" />
     <ClInclude Include="..\Public\Weapon_Raxasia_P2_Shield.h" />
     <ClInclude Include="..\Public\Weapon_Raxasia_P2_Sword.h" />
+    <ClInclude Include="..\Public\Weapon_RebornerBigA_Stick.h" />
     <ClInclude Include="..\Public\Weapon_Scissor.h" />
     <ClInclude Include="..\Public\Weapon_Scissor_Blade.h" />
     <ClInclude Include="..\Public\Weapon_Scissor_Handle.h" />
@@ -533,6 +541,7 @@
     <ClCompile Include="..\Private\LastDoor.cpp" />
     <ClCompile Include="..\Private\Raxasia.cpp" />
     <ClCompile Include="..\Private\Raxasia_Sword_CutScene.cpp" />
+    <ClCompile Include="..\Private\RebornerBigA.cpp" />
     <ClCompile Include="..\Private\SimonManus_CutScene_GodHand.cpp" />
     <ClCompile Include="..\Private\SimonManus_EnvHand.cpp" />
     <ClCompile Include="..\Private\State_CurruptedStrongArm_Die.cpp" />
@@ -597,6 +606,12 @@
     <ClCompile Include="..\Private\State_RaxasiaP2_WaveSting.cpp" />
     <ClCompile Include="..\Private\State_Raxasia_CutScene_Meet.cpp" />
     <ClCompile Include="..\Private\State_Raxasia_CutScene_Phase2.cpp" />
+    <ClCompile Include="..\Private\State_RebornerBigA_Die.cpp" />
+    <ClCompile Include="..\Private\State_RebornerBigA_Grogy.cpp" />
+    <ClCompile Include="..\Private\State_RebornerBigA_HitFatal.cpp" />
+    <ClCompile Include="..\Private\State_RebornerBigA_Idle.cpp" />
+    <ClCompile Include="..\Private\State_RebornerBigA_Run.cpp" />
+    <ClCompile Include="..\Private\State_RebornerBigA_Walk.cpp" />
     <ClCompile Include="..\Private\State_SimonManusP2_Die_Talking.cpp" />
     <ClCompile Include="..\Private\TorchDeck.cpp" />
     <ClCompile Include="..\Private\UIPage_Chest.cpp" />
@@ -807,6 +822,7 @@
     <ClCompile Include="..\Private\Weapon_Rapier.cpp" />
     <ClCompile Include="..\Private\Weapon_Raxasia_P2_Shield.cpp" />
     <ClCompile Include="..\Private\Weapon_Raxasia_P2_Sword.cpp" />
+    <ClCompile Include="..\Private\Weapon_RebornerBigA_Stick.cpp" />
     <ClCompile Include="..\Private\Weapon_Scissor.cpp" />
     <ClCompile Include="..\Private\Weapon_Scissor_Blade.cpp" />
     <ClCompile Include="..\Private\Weapon_Scissor_Handle.cpp" />

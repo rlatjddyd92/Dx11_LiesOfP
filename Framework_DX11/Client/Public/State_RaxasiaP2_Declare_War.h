@@ -41,6 +41,7 @@ private:
     _bool               m_bResetHovering = { false };
 
     _bool               m_bHovering = { false };
+    _bool               m_bEndFire = { false };
     _bool               m_bSwing = { false };
     _bool               m_bStart = { false };
     _bool               m_bLanding = { false };

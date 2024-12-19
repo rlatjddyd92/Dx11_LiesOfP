@@ -4,6 +4,9 @@
 #include "Model.h"
 #include "Raxasia.h"
 
+#include "AttackObject.h"
+#include "Effect_Manager.h"
+
 CState_RaxasiaP2_ShieldLinked::CState_RaxasiaP2_ShieldLinked(CFsm* pFsm, CMonster* pMonster)
     :CState{ pFsm }
     , m_pMonster{ pMonster }
@@ -205,6 +208,55 @@ void CState_RaxasiaP2_ShieldLinked::Effect_Check(_double CurTrackPos)
                 m_pMonster->Active_Effect(CRaxasia::EFFECT_INCHENTSWORD_P2, true);
                 m_bCharge = true;
             }
+        }
+    }
+    else if (m_iRouteTrack == 4)
+    {
+
+        if (!m_bJump)
+        {
+            if (CurTrackPos >= 100.f)
+            {
+                _float4x4 WorldMat{};
+                _Vec3 vPos = { 0.f, 0.f, 0.f };
+                XMStoreFloat4x4(&WorldMat, m_pMonster->Get_Transform()->Get_WorldMatrix());
+                vPos = XMVector3TransformCoord(vPos, XMLoadFloat4x4(&WorldMat));
+
+                CEffect_Manager::Get_Instance()->Add_Effect_ToLayer(LEVEL_GAMEPLAY, TEXT("Raxasia_Jump"),
+                    vPos, _Vec3{ m_pMonster->Get_TargetDir() });
+
+                m_pMonster->Active_Effect(CRaxasia::EFFECT_INCHENTSWORD, true);
+                m_bJump = true;
+            }
+        }
+
+        if (!m_bFire)
+        {
+            if (CurTrackPos >= 193.f)
+            {
+                m_bFire = true;
+
+                CAttackObject::ATKOBJ_DESC Desc{};
+
+                _float4x4 WorldMat{};
+                _Vec3 vPos = { 0.f, 0.f, -1.75f };
+                XMStoreFloat4x4(&WorldMat,
+                    (*m_pMonster->Get_BoneCombinedMat(m_pMonster->Get_Model()->Get_UFBIndices(UFB_WEAPON))
+                        * (m_pMonster->Get_Transform()->Get_WorldMatrix())));
+                vPos = XMVector3TransformCoord(vPos, XMLoadFloat4x4(&WorldMat));
+                vPos.y = m_pMonster->Get_Transform()->Get_State(CTransform::STATE_POSITION).y;
+
+                Desc.vPos = vPos;
+
+                Desc.vDir = _Vec3{ m_pMonster->Get_TargetDir() };
+                Desc.vDir.Normalize();
+
+                Desc.vTargetPos = _Vec3{ m_pMonster->Get_TargetPos() };
+                Desc.pOwner = m_pMonster;
+
+                m_pGameInstance->Add_CloneObject_ToLayer(LEVEL_GAMEPLAY, TEXT("Monster_Attack"), TEXT("Prototype_GameObject_ThunderBolt"), &Desc);
+            }
+
         }
     }
 }

@@ -42,9 +42,14 @@ private:
 	_Vec3	m_vMoveDir{};
 	_Vec3	m_vTargetPos{};
 
+	_float	m_fLifeTime = {0.f};
+	_float	m_fLifeDuration = {10.f};
+
+
 	_float	m_fSpeed{};
 
 	_float	m_fTimer{};
+	_float	m_fHeightGap{};
 
 	_int	m_iStateTrack{};
 

@@ -37,6 +37,7 @@ private:
     _bool               m_bEnvelop = { false };
     _bool               m_bAccel = { false };
     _bool               m_bJump = { false };
+    _bool               m_bFire = { false };
 
 
     _bool               m_bRunningWise = { false }; //방향 구분용으로 사용. false면 왼, true면 오른

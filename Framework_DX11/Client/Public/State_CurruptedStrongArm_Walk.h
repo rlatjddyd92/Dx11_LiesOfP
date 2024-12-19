@@ -11,7 +11,7 @@ class CState_CurruptedStrongArm_Walk : public CState
 {
 private:
     typedef enum {
-        AN_WALK_F = 34, AN_WALK_B = 33, AN_WALK_L = 35, AN_WALK_R = 36,
+        AN_WALK_F = 33, AN_WALK_B = 34, AN_WALK_L = 35, AN_WALK_R = 36,
     }ANIMNUM;
 
 public:

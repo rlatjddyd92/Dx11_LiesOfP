@@ -1051,9 +1051,6 @@
     <Filter Include="02.GameObjects\02.Pawn\01.Monster\CarcassTail">
       <UniqueIdentifier>{e6447638-0aaa-4897-887b-a642b899134e}</UniqueIdentifier>
     </Filter>
-    <Filter Include="02.GameObjects\02.Pawn\01.Monster\RebornerMale">
-      <UniqueIdentifier>{b68070e4-27c6-4ef6-8e82-8c6ce0d9846e}</UniqueIdentifier>
-    </Filter>
     <Filter Include="02.GameObjects\02.Pawn\01.Monster\Raxasia">
       <UniqueIdentifier>{f57ad993-eab1-4040-8e32-f758a798764d}</UniqueIdentifier>
     </Filter>
@@ -1170,6 +1167,60 @@
     </Filter>
     <Filter Include="05.Fsm\Monster\Raxasia\P2\Attack\Route\Guard\Guard_Push">
       <UniqueIdentifier>{e8903933-a7d3-4d3e-a68f-8edad605a07c}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="05.Fsm\Monster\RebornerBigA">
+      <UniqueIdentifier>{4af8db94-798d-4bd5-b261-462d3f9caef9}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="05.Fsm\Monster\CarcassNormal">
+      <UniqueIdentifier>{47125a40-3e9c-4a12-a938-101dc385eddd}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.GameObjects\02.Pawn\01.Monster\RebornerBigA">
+      <UniqueIdentifier>{b68070e4-27c6-4ef6-8e82-8c6ce0d9846e}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.GameObjects\02.Pawn\01.Monster\CarcassNormal">
+      <UniqueIdentifier>{fbb31b9b-4d9e-422e-b312-c4d1db68dc8b}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="05.Fsm\Monster\RebornerBigA\Die">
+      <UniqueIdentifier>{09046ceb-cc26-4915-b032-b2c51bc0bab9}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="05.Fsm\Monster\RebornerBigA\Grogy">
+      <UniqueIdentifier>{0eb60ad0-a2cf-4495-95de-4f7e21c7b441}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="05.Fsm\Monster\RebornerBigA\HitFatal">
+      <UniqueIdentifier>{18b612c3-ca32-4852-b9eb-c8f62190f26f}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="05.Fsm\Monster\RebornerBigA\Walk">
+      <UniqueIdentifier>{60885fea-07c5-4f7b-8e67-d8476351896b}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="05.Fsm\Monster\RebornerBigA\Run">
+      <UniqueIdentifier>{536fb3a7-b2f8-443c-8ee7-6fd499010110}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="05.Fsm\Monster\RebornerBigA\Attack">
+      <UniqueIdentifier>{9d203b98-6c07-47e8-824d-70418cd3185f}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="05.Fsm\Monster\RebornerBigA\Idle">
+      <UniqueIdentifier>{8a514bd7-c17e-445d-b960-b820cc6dce2e}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="05.Fsm\Monster\RebornerBigA\Attack\Route">
+      <UniqueIdentifier>{88939342-5bc7-490f-8c97-a5f382f30ec2}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="05.Fsm\Monster\RebornerBigA\Attack\Route\GuardSting">
+      <UniqueIdentifier>{c7ae97c9-8ea5-4175-ba17-a77cc2b33588}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="05.Fsm\Monster\RebornerBigA\Attack\Route\SwingMultiple">
+      <UniqueIdentifier>{db1ad119-a2c4-416c-a102-59d39cdb8424}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="05.Fsm\Monster\RebornerBigA\Attack\Route\RushSting">
+      <UniqueIdentifier>{e3aa852c-fcc6-4d9d-a3b3-c74088537b0f}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="05.Fsm\Monster\RebornerBigA\Attack\Route\SlashJump">
+      <UniqueIdentifier>{8ce67355-2770-4729-92bb-bc2214ac00a9}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="05.Fsm\Monster\RebornerBigA\Attack\Route\SlashTwice">
+      <UniqueIdentifier>{afd3c4d2-f16b-472d-9890-10720520a6c0}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.GameObjects\06.Weapon\03.RebornerBigA">
+      <UniqueIdentifier>{5f8abec3-18b0-4b92-8a40-fb6f85898890}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -2165,6 +2216,30 @@
     <ClInclude Include="..\Public\State_RaxasiaP2_Declare_War.h">
       <Filter>05.Fsm\Monster\Raxasia\P2\Attack\Route\Declare_War</Filter>
     </ClInclude>
+    <ClInclude Include="..\Public\RebornerBigA.h">
+      <Filter>02.GameObjects\02.Pawn\01.Monster\RebornerBigA</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Public\State_RebornerBigA_Walk.h">
+      <Filter>05.Fsm\Monster\RebornerBigA\Walk</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Public\State_RebornerBigA_Run.h">
+      <Filter>05.Fsm\Monster\RebornerBigA\Run</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Public\State_RebornerBigA_Idle.h">
+      <Filter>05.Fsm\Monster\RebornerBigA\Idle</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Public\State_RebornerBigA_HitFatal.h">
+      <Filter>05.Fsm\Monster\RebornerBigA\HitFatal</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Public\State_RebornerBigA_Grogy.h">
+      <Filter>05.Fsm\Monster\RebornerBigA\Grogy</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Public\State_RebornerBigA_Die.h">
+      <Filter>05.Fsm\Monster\RebornerBigA\Die</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Public\Weapon_RebornerBigA_Stick.h">
+      <Filter>02.GameObjects\06.Weapon\03.RebornerBigA</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Client.cpp">
@@ -3128,6 +3203,30 @@
     </ClCompile>
     <ClCompile Include="..\Private\State_RaxasiaP2_Declare_War.cpp">
       <Filter>05.Fsm\Monster\Raxasia\P2\Attack\Route\Declare_War</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Private\RebornerBigA.cpp">
+      <Filter>02.GameObjects\02.Pawn\01.Monster\RebornerBigA</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Private\State_RebornerBigA_Walk.cpp">
+      <Filter>05.Fsm\Monster\RebornerBigA\Walk</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Private\State_RebornerBigA_Run.cpp">
+      <Filter>05.Fsm\Monster\RebornerBigA\Run</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Private\State_RebornerBigA_Idle.cpp">
+      <Filter>05.Fsm\Monster\RebornerBigA\Idle</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Private\State_RebornerBigA_HitFatal.cpp">
+      <Filter>05.Fsm\Monster\RebornerBigA\HitFatal</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Private\State_RebornerBigA_Grogy.cpp">
+      <Filter>05.Fsm\Monster\RebornerBigA\Grogy</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Private\State_RebornerBigA_Die.cpp">
+      <Filter>05.Fsm\Monster\RebornerBigA\Die</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Private\Weapon_RebornerBigA_Stick.cpp">
+      <Filter>02.GameObjects\06.Weapon\03.RebornerBigA</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

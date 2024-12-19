@@ -1151,6 +1151,7 @@ HRESULT CLoader::Ready_Resources_For_ToolLevel_Monster()
 	{
 		if (FAILED(m_pGameInstance->Add_Prototype(LEVEL_TOOL, TEXT("Prototype_NoneAnimModel_RebornerBigA_Weapon"), pModel)))
 			return E_FAIL;
+		m_pGameInstance->Add_ModelPrototype(LEVEL_TOOL, ("Prototype_NoneAnimModel_RebornerBigA_Weapon"), pModel);
 	}
 #pragma endregion
 

@@ -194,38 +194,38 @@ HRESULT CCurruptedStrongArm_Puppet::Ready_Components()
 
 	//ArmLeft
 	ColliderDesc.vExtents = _float3(0.7f, 0.3f, 0.3f);
-	ColliderDesc.vCenter = _float3(-0.1f, 0.f, 0.f);
+	ColliderDesc.vCenter = _float3(0.3f, 0.f, 0.f);
 	ColliderDesc.vAngles = _float3(0.f, 0.f, 0.f);
 
 	if (FAILED(__super::Add_Component(LEVEL_STATIC, TEXT("Prototype_Component_Collider_OBB"),
 		TEXT("Com_Collider_ArmLeft"), reinterpret_cast<CComponent**>(&m_EXCollider[CT_ARM_LEFT]), &ColliderDesc)))
 		return E_FAIL;
-	m_pColliderBindMatrix[CT_ARM_LEFT] = m_pModelCom->Get_BoneCombindTransformationMatrix_Ptr(m_pModelCom->Get_UFBIndices(UFB_HAND_LEFT));
+	m_pColliderBindMatrix[CT_ARM_LEFT] = m_pModelCom->Get_BoneCombindTransformationMatrix_Ptr(m_pModelCom->Get_UFBIndices(UFB_HAND_LEFT) - 1);
 
 
 	//ArmRight
 	if (FAILED(__super::Add_Component(LEVEL_STATIC, TEXT("Prototype_Component_Collider_OBB"),
 		TEXT("Com_Collider_ArmRight"), reinterpret_cast<CComponent**>(&m_EXCollider[CT_ARM_RIGHT]), &ColliderDesc)))
 		return E_FAIL;
-	m_pColliderBindMatrix[CT_ARM_RIGHT] = m_pModelCom->Get_BoneCombindTransformationMatrix_Ptr(m_pModelCom->Get_UFBIndices(UFB_HAND_RIGHT));
+	m_pColliderBindMatrix[CT_ARM_RIGHT] = m_pModelCom->Get_BoneCombindTransformationMatrix_Ptr(m_pModelCom->Get_UFBIndices(UFB_HAND_RIGHT) - 1);
 
 
 	//LegLeft
 	ColliderDesc.vExtents = _float3(0.7f, 0.3f, 0.3f);
-	ColliderDesc.vCenter = _float3(-0.22f, 0.f, 0.f);
+	ColliderDesc.vCenter = _float3(0.22f, 0.f, 0.f);
 	ColliderDesc.vAngles = _float3(0.f, 0.f, 0.f);
 
 	if (FAILED(__super::Add_Component(LEVEL_STATIC, TEXT("Prototype_Component_Collider_OBB"),
 		TEXT("Com_Collider_LegLeft"), reinterpret_cast<CComponent**>(&m_EXCollider[CT_LEG_LEFT]), &ColliderDesc)))
 		return E_FAIL;
-	m_pColliderBindMatrix[CT_LEG_LEFT] = m_pModelCom->Get_BoneCombindTransformationMatrix_Ptr(m_pModelCom->Get_UFBIndices(UFB_FOOT_LEFT));
+	m_pColliderBindMatrix[CT_LEG_LEFT] = m_pModelCom->Get_BoneCombindTransformationMatrix_Ptr(m_pModelCom->Get_UFBIndices(UFB_FOOT_LEFT) - 1);
 
 
 	//LegRight
 	if (FAILED(__super::Add_Component(LEVEL_STATIC, TEXT("Prototype_Component_Collider_OBB"),
 		TEXT("Com_Collider_LegRight"), reinterpret_cast<CComponent**>(&m_EXCollider[CT_LEG_RIGHT]), &ColliderDesc)))
 		return E_FAIL;
-	m_pColliderBindMatrix[CT_LEG_RIGHT] = m_pModelCom->Get_BoneCombindTransformationMatrix_Ptr(m_pModelCom->Get_UFBIndices(UFB_FOOT_RIGHT));
+	m_pColliderBindMatrix[CT_LEG_RIGHT] = m_pModelCom->Get_BoneCombindTransformationMatrix_Ptr(m_pModelCom->Get_UFBIndices(UFB_FOOT_RIGHT) - 1);
 
 	for (_int i = 0; i < CT_END - 1; ++i)
 	{

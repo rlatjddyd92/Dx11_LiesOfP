@@ -34,6 +34,7 @@ HRESULT CState_RaxasiaP2_Declare_War::Start_State(void* pArg)
     m_bDive = false;
     m_bLanding = false;
     m_bHovering = false;
+    m_bEndFire = false;
 
     m_iThunderCnt = 0.f;
     m_fTimeStack_ThunderBolt = 0.f;
@@ -173,7 +174,7 @@ void CState_RaxasiaP2_Declare_War::Effect_Check(_double CurTrackPos, _float fTim
 
                 m_pMonster->Active_Effect(CRaxasia::EFFECT_INCHENTSWORD, true);
                 m_bJump = true;
-                m_pMonster->Active_Effect(CRaxasia::EFFECT_THUNDERCHARGE_GROUND, true);
+                m_pMonster->DeActive_Effect(CRaxasia::EFFECT_THUNDERCHARGE_GROUND);
             }
         }
         else if (!m_bDive)
@@ -203,77 +204,84 @@ void CState_RaxasiaP2_Declare_War::Effect_Check(_double CurTrackPos, _float fTim
             }
         }
 
-        if (!m_bHovering)
+        if (!m_bEndFire)
         {
-            if (CurTrackPos >= 170.f && CurTrackPos <= 250.f)
+
+            if (!m_bHovering)
             {
-                m_bHovering = true;
-            }
-        }
-        else
-        {
-            if (m_fThunderBoltTime <= m_fTimeStack_ThunderBolt)
-            {
-                m_fTimeStack_ThunderBolt -= m_fThunderBoltTime;
-                //썬더볼트 생성
-
-                _float4x4 WorldMat{};
-                _Vec3 vPos = m_vFogSpot;
-                
-                _Vec3 vTargetDir = m_pMonster->Get_TargetDir();
-                vTargetDir.Normalize();
-
-                _Vec3 vRight = vTargetDir.Cross(_Vec3{0.f, 1.f, 0.f});
-
-                _float fvariableX = m_pGameInstance->Get_Random(0.f, 7.f) - 3.5f;
-                _float fvariableZ = m_pGameInstance->Get_Random(0.f, 2.f) - 1.f;
-
-                vPos += vRight * fvariableX;
-                vPos += vTargetDir * fvariableZ;
-                vPos += _Vec3{0.f, -0.5f, 0.f} * fvariableZ;
-
-
-                CAttackObject::ATKOBJ_DESC Desc{};
-                Desc.vPos = vPos;
-
-                fvariableX = m_pGameInstance->Get_Random(0.f, 2.f) - 1.f;
-                _float fvariableY = m_pGameInstance->Get_Random(0.f, 2.f) - 1.f;
-
-                _Vec3 vTargetPos = m_pMonster->Get_TargetPos();
-                _Vec3 vDir = vTargetPos - m_pMonster->Get_Transform()->Get_State(CTransform::STATE_POSITION);
-                vDir.Normalize();
-
-                _Vec3 vUp = { 0.f, 1.f, 0.f };
-                vRight = vUp.Cross(vDir);
-                vUp = vDir.Cross(vRight);
-
-                vDir += (vUp * fvariableY);
-                vDir.Normalize();
-                vDir += (vRight * fvariableX);
-                vDir.Normalize();
-
-                Desc.vDir = vDir;
-                Desc.vDir.Normalize();
-
-                Desc.vTargetPos = _Vec3{ m_pMonster->Get_TargetPos() };
-                Desc.pOwner = m_pMonster;
-
-                m_pGameInstance->Add_CloneObject_ToLayer(LEVEL_GAMEPLAY, TEXT("Monster_Attack"), TEXT("Prototype_GameObject_ThunderBolt"), &Desc);
-
-                ++m_iThunderCnt;
+                if (CurTrackPos >= 170.f && CurTrackPos <= 250.f)
+                {
+                    m_bHovering = true;
+                }
             }
             else
             {
-                m_fTimeStack_ThunderBolt += fTimeDelta;
-            }
-
-            if (m_iThunderCnt < 6.f)
-            {
-                if (CurTrackPos >= 250.f)
+                if (m_fThunderBoltTime <= m_fTimeStack_ThunderBolt)
                 {
-                    m_pMonster->Get_Model()->Set_CurrentTrackPosition((_double)170.f);
-                    m_pMonster->Get_Model()->Set_CurrentTrackPosition_Boundary((_double)170.f);
-                    m_bHovering = false;
+                    m_fTimeStack_ThunderBolt -= m_fThunderBoltTime;
+                    //썬더볼트 생성
+
+                    _float4x4 WorldMat{};
+                    _Vec3 vPos = m_vFogSpot;
+
+                    _Vec3 vTargetDir = m_pMonster->Get_TargetDir();
+                    vTargetDir.Normalize();
+
+                    _Vec3 vRight = vTargetDir.Cross(_Vec3{ 0.f, 1.f, 0.f });
+
+                    _float fvariableX = m_pGameInstance->Get_Random(0.f, 7.f) - 3.5f;
+                    _float fvariableZ = m_pGameInstance->Get_Random(0.f, 2.f) - 1.f;
+
+                    vPos += vRight * fvariableX;
+                    vPos += vTargetDir * fvariableZ;
+                    vPos += _Vec3{ 0.f, -0.5f, 0.f } *fvariableZ;
+
+
+                    CAttackObject::ATKOBJ_DESC Desc{};
+                    Desc.vPos = vPos;
+
+                    fvariableX = m_pGameInstance->Get_Random(0.f, 2.f) - 1.f;
+                    _float fvariableY = m_pGameInstance->Get_Random(0.f, 2.f) - 1.f;
+
+                    _Vec3 vTargetPos = m_pMonster->Get_TargetPos();
+                    _Vec3 vDir = vTargetPos - m_pMonster->Get_Transform()->Get_State(CTransform::STATE_POSITION);
+                    vDir.Normalize();
+
+                    _Vec3 vUp = { 0.f, 1.f, 0.f };
+                    vRight = vUp.Cross(vDir);
+                    vUp = vDir.Cross(vRight);
+
+                    vDir += (vUp * fvariableY);
+                    vDir.Normalize();
+                    vDir += (vRight * fvariableX);
+                    vDir.Normalize();
+
+                    Desc.vDir = vDir;
+                    Desc.vDir.Normalize();
+
+                    Desc.vTargetPos = _Vec3{ m_pMonster->Get_TargetPos() };
+                    Desc.pOwner = m_pMonster;
+
+                    m_pGameInstance->Add_CloneObject_ToLayer(LEVEL_GAMEPLAY, TEXT("Monster_Attack"), TEXT("Prototype_GameObject_ThunderBolt"), &Desc);
+
+                    ++m_iThunderCnt;
+                }
+                else
+                {
+                    m_fTimeStack_ThunderBolt += fTimeDelta;
+                }
+
+                if (m_iThunderCnt < 6)
+                {
+                    if (CurTrackPos >= 250.f)
+                    {
+                        m_pMonster->Get_Model()->Set_CurrentTrackPosition((_double)170.f);
+                        m_pMonster->Get_Model()->Set_CurrentTrackPosition_Boundary((_double)170.f);
+                    }
+                }
+                else
+                {
+                    m_bEndFire = true;
                 }
             }
         }
