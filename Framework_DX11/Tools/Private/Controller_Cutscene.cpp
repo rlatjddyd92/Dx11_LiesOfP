@@ -223,12 +223,12 @@ void CController_Cutscene::Menu()
             iSelectedKeyframeNum = -1;
         }
         //TrackPosition 수정 체크박스
-        static bool bChangeTrackPos = false;
-        ImGui::Checkbox("Change TrackPosition", &bChangeTrackPos);
-        if (bChangeTrackPos)
+        static bool bChangeTrackPosReal = false;
+        ImGui::Checkbox("Change TrackPosition Real", &bChangeTrackPosReal);
+        if (bChangeTrackPosReal)
         {
             if (iSelectedKeyframeNum == -1)
-                bChangeTrackPos = false;
+                bChangeTrackPosReal = false;
             else
             {
                 m_pCurrentCutScene->Get_Selected_KeyFrame(iSelectedKeyframeNum)->fTrackPosition = *m_fTrackPosition;
@@ -274,10 +274,6 @@ void CController_Cutscene::Menu()
     }
     ImGui::SameLine();
     if (ImGui::Button("Load"))
-    {
-        Load();
-    }
-    if (ImGui::Button("Load Old"))
     {
         Load();
     }

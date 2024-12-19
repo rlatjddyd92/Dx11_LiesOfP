@@ -18,7 +18,7 @@ HRESULT CState_Player_OpenRaxasiaDoor::Initialize(_uint iStateNum, void* pArg)
 
     m_pTrackPos = pDesc->pPrevTrackPos;
 
-    m_iAnimation_DoorPush = m_pPlayer->Get_Model()->Find_AnimationIndex("AS_Pino_Prop_DoubleDoor_Slide", 1.42f);
+    m_iAnimation_DoorPush = m_pPlayer->Get_Model()->Find_AnimationIndex("AS_Pino_Prop_DoubleDoor_Slide", 1.75f);
 
     m_iStateNum = iStateNum;
 

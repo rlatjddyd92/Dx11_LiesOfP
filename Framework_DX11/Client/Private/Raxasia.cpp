@@ -570,6 +570,8 @@ void CRaxasia::End_CutScene(_uint iCutSceneNum)
 		m_pWeaponShield->Get_Transform()->Set_State(CTransform::STATE_POSITION, vShieldOffset);
 		m_pWeaponShield->ChangeSocketMatrix(m_pModelCom->Get_BoneCombindTransformationMatrix_Ptr(36));
 		m_pWeaponShield->Get_Model()->Set_PreTranformMatrix(PreTransformMatrix);
+
+		m_isCutScene = false;
 	}
 	else if (m_pCutSceneFsmCom->Get_CurrentState() == STATE_P2)
 	{
@@ -589,9 +591,14 @@ void CRaxasia::End_CutScene(_uint iCutSceneNum)
 		m_pWeaponShield->Get_Model()->Set_PreTranformMatrix(PreTransformMatrix);
 
 		ChangePhase();
+
+		m_isCutScene = false;
+	}
+	else if (m_pCutSceneFsmCom->Get_CurrentState() == STATE_DIE)
+	{
+		
 	}
 
-	m_isCutScene = false;
 }
 
 void CRaxasia::Change_Model(_uint iModelNum)

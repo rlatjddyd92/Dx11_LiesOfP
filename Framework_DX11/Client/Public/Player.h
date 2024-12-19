@@ -192,6 +192,7 @@ public:
 
 	void					Set_DissloveRatio(_float fRatio) { m_fDissloveRatio = fRatio; }
 
+	void					Set_isPlayingCutscene(_bool isPlaying) { m_isPlayingCutscene = isPlaying; }
 #pragma region PLAYER_STAT
 	STAT_INFO&				Get_Player_Stat() { return *m_tPlayer_Stat; }
 	// 24-12-05 ±è¼º¿ë
@@ -200,7 +201,7 @@ public:
 
 #pragma endregion
 
-	_bool					m_bActivated_ManusCutScene = { false };
+
 private:
 	CPlayer(ID3D11Device* pDevice, ID3D11DeviceContext* pContext);
 	CPlayer(const CPlayer& Prototype);
@@ -283,6 +284,9 @@ public:
 
 	void			Init_PlayerCamera();
 	void			Input_Level_UP_Stat(_int iPoint[5], _float pLevelUpStat[9]);
+
+	_bool					m_bActivated_ManusCutScene = { false };
+	_bool					m_isPlayingCutscene = { false };
 
 	/* Effect */
 private:

@@ -32,7 +32,7 @@ HRESULT CTowerDoor::Initialize(void* pArg)
 	if (FAILED(Ready_Components()))
 		return E_FAIL;
 
-	m_iAnim_Open = m_pModelCom->Find_AnimationIndex("AS_Open_Slide", 1.4f);
+	m_iAnim_Open = m_pModelCom->Find_AnimationIndex("AS_Open_Slide", 1.75f);
 	m_pModelCom->SetUp_Animation(m_iAnim_Open, false);
 
 	m_strObjectTag = TEXT("TowerDoor");

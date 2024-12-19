@@ -36,7 +36,7 @@ private:
     class CRaxasia_Sword_CutScene* m_pCutSceneWeapon = { nullptr };
 
 private:
-    void                End_Check();
+    void                End_Check(_float fTimeDelta);
 
 public:
     static CState_Raxasia_CutScene_Die* Create(class CFsm* pFsm, class CMonster* pMonster, _uint iStateNum, void* pArg = nullptr);
