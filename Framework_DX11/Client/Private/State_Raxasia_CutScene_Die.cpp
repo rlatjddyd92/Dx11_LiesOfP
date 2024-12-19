@@ -41,6 +41,7 @@ HRESULT CState_Raxasia_CutScene_Die::Start_State(void* pArg)
 void CState_Raxasia_CutScene_Die::Update(_float fTimeDelta)
 {
 
+
     m_pMonster->Play_Animation();
 
     _int iFrame = m_pMonster->Get_Frame();
@@ -63,6 +64,8 @@ void CState_Raxasia_CutScene_Die::Update(_float fTimeDelta)
     //}
 
 
+    End_Check(fTimeDelta);
+
     _Vec3 vMove = m_pMonster->Get_Model()->Get_BoneCombindTransformationMatrix_Ptr(3)->Translation();
     _float4x4 TransMat;
     XMStoreFloat4x4(&TransMat, m_pMonster->Get_Model()->Get_Bones()[3]->Get_TransformationMatrix());
@@ -73,14 +76,13 @@ void CState_Raxasia_CutScene_Die::Update(_float fTimeDelta)
     m_pMonster->Get_Model()->Update_Bone();
 
     vMove = XMVector3TransformNormal(vMove, m_pMonster->Get_Transform()->Get_WorldMatrix()) * 0.8f;
-    vMove.x =  vMove.z = 0.f;
+    vMove.x = vMove.y = vMove.z = 0.f;
 
 
     m_pMonster->Get_RigidBody()->Set_Velocity((vMove - m_vRootMoveStack) / fTimeDelta);
 
     m_vRootMoveStack = vMove;
 
-    End_Check(fTimeDelta);
 }
 
 void CState_Raxasia_CutScene_Die::End_State()
@@ -100,23 +102,6 @@ void CState_Raxasia_CutScene_Die::End_Check(_float fTimeDelta)
         m_pMonster->Get_Transform()->Rotation(_vector{ 0, 1, 0, 0 }, XMConvertToRadians(150.f));
         m_pMonster->Change_Animation(m_iAnimation_Die, false, 0.f);
         m_pMonster->Get_Model()->Set_SpeedPerSec(m_iAnimation_Die, 31.5);
-        m_pMonster->Get_Model()->Play_Animation(0.00001f);
-
-        _Vec3 vMove = m_pMonster->Get_Model()->Get_BoneCombindTransformationMatrix_Ptr(3)->Translation();
-        _float4x4 TransMat;
-        XMStoreFloat4x4(&TransMat, m_pMonster->Get_Model()->Get_Bones()[3]->Get_TransformationMatrix());
-        TransMat._41 = TransMat._42 = TransMat._43 = 0.f;
-
-        m_pMonster->Get_Model()->Get_Bones()[3]->Set_TransformationMatrix(TransMat);;
-
-        m_pMonster->Get_Model()->Update_Bone();
-
-        vMove = XMVector3TransformNormal(vMove, m_pMonster->Get_Transform()->Get_WorldMatrix()) * 0.8f;
-        vMove.x = vMove.z = 0.f;
-
-
-        m_pMonster->Get_RigidBody()->Set_Velocity((vMove - m_vRootMoveStack) / 0.001f);
-
 
     }
     else if (m_pMonster->Get_EndAnim(m_iAnimation_Die))
