@@ -86,7 +86,7 @@ void CState_RaxasiaP1_Sting_Spread::Update(_float fTimeDelta)
         {
             if (!m_bLockOn)
             {
-                m_vLockVec = { m_pMonster->Get_Transform()->Get_State(CTransform::STATE_LOOK) };
+                m_vLockVec = (_Vec3)m_pMonster->Get_Transform()->Get_State(CTransform::STATE_LOOK);
                 m_vLockVec.Normalize();
                 m_bLockOn = true;
             }
@@ -288,7 +288,7 @@ void CState_RaxasiaP1_Sting_Spread::Effect_Check(_double CurTrackPos)
                 m_pGameInstance->Add_CloneObject_ToLayer(LEVEL_GAMEPLAY, TEXT("Monster_Attack"), TEXT("Prototype_GameObject_ThunderSpread"), &Desc);
 
                 Desc.vPos = vPos;
-                Desc.vDir = vTargetDir - vRight * 0.6;
+                Desc.vDir = vTargetDir - vRight * 0.6f;
                 Desc.vDir.Normalize();
                 m_pGameInstance->Add_CloneObject_ToLayer(LEVEL_GAMEPLAY, TEXT("Monster_Attack"), TEXT("Prototype_GameObject_ThunderSpread"), &Desc);
 

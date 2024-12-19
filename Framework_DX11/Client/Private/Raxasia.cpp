@@ -134,7 +134,7 @@ HRESULT CRaxasia::Initialize(void* pArg)
 
 	GET_GAMEINTERFACE->Set_OnOff_OrthoUI(false, this);
 
-	//Start_CutScene(CUTSCENE_P2);
+	Start_CutScene(CUTSCENE_MEET);
 
 	return S_OK;
 }
@@ -399,6 +399,14 @@ void CRaxasia::DeActive_Effect(const _uint eType)
 	m_Effects[eType]->Set_Loop(false);
 }
 
+void CRaxasia::DeActive_AllEffect()
+{
+	for (auto& pEffect : m_Effects)
+	{
+		pEffect->Set_Loop(false);
+	}
+}
+
 _bool CRaxasia::Get_EffectsLoop(const _uint eType)
 {
 	return m_Effects[eType]->Get_Dead();
@@ -432,6 +440,8 @@ const _Matrix* CRaxasia::Get_WeaponWorldMat()
 void CRaxasia::Start_CutScene(_uint iCutSceneNum)
 {
 	const _Matrix* pNewSocketMatrix = { nullptr };
+
+	DeActive_AllEffect();
 
 	switch (iCutSceneNum)
 	{
@@ -563,6 +573,9 @@ void CRaxasia::End_CutScene(_uint iCutSceneNum)
 		_Vec3 vCurrentPos = m_pTransformCom->Get_State(CTransform::STATE_POSITION);
 		vCurrentPos.y -= 1.2f;
 
+		m_pCutSceneWeapon->IsActive(false);
+		m_pCutSceneWeapon->Start_UpdatePos();
+
 		m_pRigidBodyCom->Set_GloblePose(vCurrentPos);
 		m_pNavigationCom->Research_Cell(vCurrentPos);
 		m_pRigidBodyCom->Set_IsLockCell(true);
@@ -583,18 +596,19 @@ void CRaxasia::End_CutScene(_uint iCutSceneNum)
 	else if (m_pCutSceneFsmCom->Get_CurrentState() == STATE_P2)
 	{
 		_Vec3 vCurrentPos = m_pTransformCom->Get_State(CTransform::STATE_POSITION);
-		vCurrentPos.y -= 1.3f;
+		vCurrentPos.y -= 0.8f;
 
 		m_pRigidBodyCom->Set_GloblePose(vCurrentPos);
 		m_pNavigationCom->Research_Cell(vCurrentPos);
 		m_pRigidBodyCom->Set_IsLockCell(true);
 		m_pRigidBodyCom->Set_IsOnCell(true);
 
-		_matrix PreTransformMatrix = XMMatrixScaling(0.01f, 0.01f, 0.01f) * XMMatrixRotationX(XMConvertToRadians(270.0f));
+		_matrix PreTransformMatrix = XMMatrixScaling(0.015f, 0.015f, 0.015f) * XMMatrixRotationX(XMConvertToRadians(270.0f));
 		_Vec3 vShieldOffset = _Vec3(0.f, 0.f, 0.f);
 
+		m_pCutSceneWeapon->IsActive(false);
+
 		m_pWeaponShield->Get_Transform()->Set_State(CTransform::STATE_POSITION, vShieldOffset);
-		m_pWeaponShield->ChangeSocketMatrix(m_pModelCom->Get_BoneCombindTransformationMatrix_Ptr(36));
 		m_pWeaponShield->Get_Model()->Set_PreTranformMatrix(PreTransformMatrix);
 
 		ChangePhase();
@@ -1081,6 +1095,8 @@ void CRaxasia::ChangePhase()
 	m_Effects[EFFECT_INCHENTSWORD] = CEffect_Manager::Get_Instance()->Clone_Effect(TEXT("Raxasia_Attack_InchentedSword"), pParetnMatrix,
 		pSocketBoneMatrix, _Vec3(0.f, 0.f, 0.f), _Vec3(0.f, 0.f, 1.f), _Vec3(1.f, 1.f, 1.f));
 
+	m_Effects[EFFECT_INCHENTSWORD_P2]->Set_Matrices(pSocketBoneMatrix);
+
 	//P2
 
 	CWeapon::MONSTER_WAPON_DESC		WeaponDesc{};
@@ -1089,6 +1105,8 @@ void CRaxasia::ChangePhase()
 	WeaponDesc.pMonster = this;
 	WeaponDesc.pSocketBoneMatrix = m_pModelCom->Get_BoneCombindTransformationMatrix_Ptr(46);
 
+
+	m_pWeapon->ChangeSocketMatrix(pSocketBoneMatrix);
 	m_pWeaponShield->ChangeSocketMatrix(WeaponDesc.pSocketBoneMatrix);
 
 	m_pColliderBindMatrix[CT_UPPERBODY] = m_pModelCom->Get_BoneCombindTransformationMatrix_Ptr(8);//Spine 2
@@ -1134,6 +1152,10 @@ void CRaxasia::Change_Phase2Sword()
 	if (nullptr == m_pWeapon)
 		return;
 
+	// 실험해보기
+	m_Effects[EFFECT_INCHENTSWORD_P2]->Set_Matrices(WeaponDesc.pSocketBoneMatrix);
+	Active_Effect(CRaxasia::EFFECT_INCHENTSWORD_P2, true);
+
 	m_pWeapon->Appear();
 }
 
@@ -1178,6 +1200,8 @@ void CRaxasia::Free()
 	Safe_Release(m_pCutSceneModelCom[0]);
 	Safe_Release(m_pCutSceneModelCom[1]);
 	Safe_Release(m_pKickCollObj);
+
+	Safe_Release(m_pDouTexture);
 
 	if (true == m_isCloned)
 	{

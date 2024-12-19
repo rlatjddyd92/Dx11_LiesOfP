@@ -4,7 +4,7 @@
 #include "Model.h"
 #include "Player.h"
 #include "Camera.h"
-#include "TreasureBox.h"
+#include "Sophia.h"
 
 CState_Player_SophiaHandEnd::CState_Player_SophiaHandEnd(CFsm* pFsm, CPlayer* pPlayer)
     :CState{ pFsm }
@@ -27,6 +27,9 @@ HRESULT CState_Player_SophiaHandEnd::Initialize(_uint iStateNum, void* pArg)
 
 HRESULT CState_Player_SophiaHandEnd::Start_State(void* pArg)
 {
+    m_pSophia = dynamic_cast<CSophia*>(m_pGameInstance->Find_Object(LEVEL_GAMEPLAY, TEXT("Layer_Sophia"), 0));
+    m_pSophia->DeActive_HeartEffect();
+
     m_pPlayer->Change_Animation(m_iAnimation_SophiaHandEnd, false, 3.f);
 
     return S_OK;
@@ -34,6 +37,14 @@ HRESULT CState_Player_SophiaHandEnd::Start_State(void* pArg)
 
 void CState_Player_SophiaHandEnd::Update(_float fTimeDelta)
 {
+    _int iFrame = m_pPlayer->Get_Frame();
+
+    if (!m_isActiveDisappearEffect && iFrame >= 30)
+    {
+        m_pSophia->Active_DisapperEffect();
+        m_isActiveDisappearEffect = true;
+    }
+
     if (End_Check())
     {
         m_pPlayer->Change_State(CPlayer::OH_IDLE);
@@ -42,6 +53,7 @@ void CState_Player_SophiaHandEnd::Update(_float fTimeDelta)
 
 void CState_Player_SophiaHandEnd::End_State()
 {
+    m_pSophia = nullptr;
 }
 
 _bool CState_Player_SophiaHandEnd::End_Check()

@@ -101,6 +101,22 @@ HRESULT CEffect_Manager::Add_Effect_ToLayer(_uint iLevelID, const _wstring& strE
     return m_pGameInstance->Add_Object_ToLayer(desc.iLevelIndex, TEXT("Layer_Effect"), Find_PoolingEffect(strECTag, &desc));
 }
 
+HRESULT CEffect_Manager::Add_Effect_ToLayer_Rot(_uint iLevelID, const _wstring& strECTag, _Vec3 vPos, _Vec3 vRot, _Vec3 vScale)
+{
+    CEffect_Container::EFFECT_DESC desc = {};
+
+    desc.fRotationPerSec = XMConvertToRadians(90.f);
+    desc.fSpeedPerSec = 1.f;
+    desc.iLevelIndex = iLevelID;
+    desc.pParentMatrix = nullptr;
+    desc.pSocketMatrix = nullptr;
+    desc.vPos = vPos;
+    desc.vRotate = vRot;
+    desc.vScale = vScale;
+
+    return m_pGameInstance->Add_Object_ToLayer(desc.iLevelIndex, TEXT("Layer_Effect"), Find_PoolingEffect(strECTag, &desc));
+}
+
 HRESULT CEffect_Manager::Load_Effects(const _wstring& strEffectPath)
 {
     _wstring searchPath = strEffectPath + L"\\*.*";

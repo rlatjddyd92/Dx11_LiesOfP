@@ -98,6 +98,7 @@ public:
 
 	virtual void		Active_Effect(const _uint eType, _bool isLoop = true) override;
 	virtual void		DeActive_Effect(const _uint eType) override;
+	virtual void		DeActive_AllEffect() override;
 
 	virtual _bool		Get_EffectsLoop(const _uint eType) override;
 	virtual void	Reset_WeaponOverlapCheck(_uint iCollIndex = 0) override;

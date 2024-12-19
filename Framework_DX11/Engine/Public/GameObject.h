@@ -24,6 +24,9 @@ public:
 	_bool					IsActive() { return m_isActive; }
 	void					IsActive(_bool isActive) { m_isActive = isActive; }
 
+	_bool					Get_IsRender() { return m_isRender; }
+	void					Set_IsRender(_bool isRender) { m_isRender = isRender; }
+
 	_bool					Get_Dead() { return m_isDead; }
 	void					Set_Dead(_bool isDead) { m_isDead = isDead; }
 
@@ -73,6 +76,7 @@ protected:
 	_uint						m_iLevelIndex = {};
 
 	_bool						m_isActive = { true };
+	_bool						m_isRender = { true };
 	_bool						m_isDead = { false };
 
 	_wstring					m_strObjectTag = {};

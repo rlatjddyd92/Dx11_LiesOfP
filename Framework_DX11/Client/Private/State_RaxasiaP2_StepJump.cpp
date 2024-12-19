@@ -307,7 +307,7 @@ void CState_RaxasiaP2_StepJump::Effect_Check(_double CurTrackPos)
                 m_pGameInstance->Add_CloneObject_ToLayer(LEVEL_GAMEPLAY, TEXT("Monster_Attack"), TEXT("Prototype_GameObject_ThunderSpread"), &Desc);
 
                 Desc.vPos = vPos;
-                Desc.vDir = vTargetDir - vRight * 0.6;
+                Desc.vDir = vTargetDir - vRight * 0.6f;
                 Desc.vDir.Normalize();
                 m_pGameInstance->Add_CloneObject_ToLayer(LEVEL_GAMEPLAY, TEXT("Monster_Attack"), TEXT("Prototype_GameObject_ThunderSpread"), &Desc);
 

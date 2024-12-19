@@ -26,6 +26,9 @@ private:
 
     _double* m_pTrackPos = { nullptr };
 
+    _bool               m_isActiveDisappearEffect = {};
+    class CSophia*      m_pSophia = { nullptr };
+
 private:
     _bool               End_Check();
 

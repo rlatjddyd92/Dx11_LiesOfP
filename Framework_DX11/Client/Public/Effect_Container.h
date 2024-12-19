@@ -19,6 +19,7 @@ public:
 		_Vec3 vPos = {};
 		_Vec3 vScale = { 1.f, 1.f, 1.f };
 		_Vec3 vDir = { 0.f, 0.f, 1.f };
+		_Vec3 vRotate = { 0.f,0.f,0.f };
 	} EFFECT_DESC;
 
 private:
@@ -41,6 +42,14 @@ public:
 
 	_bool Get_Loop() {
 		return m_isLoop;
+	}
+
+	void Set_Matrices(const _Matrix* pSocketMatrix, const _Matrix* pParentMatrix = nullptr)
+	{
+		if (nullptr != pParentMatrix)
+			m_pParentMatrix = pParentMatrix;
+		if (nullptr != pSocketMatrix)
+			m_pSocketMatrix = pSocketMatrix;
 	}
 
 public:

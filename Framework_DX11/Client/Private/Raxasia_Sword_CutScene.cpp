@@ -209,7 +209,7 @@ void CRaxasia_Sword_CutScene::Stop_UpdatePos()
 
 void CRaxasia_Sword_CutScene::Control_Phase1Effect(_float fTimeDelta)
 {
-	_float fCurretTrackPosition = m_pModelCom->Get_CurrentTrackPosition();
+	_float fCurretTrackPosition = (_float)m_pModelCom->Get_CurrentTrackPosition();
 
 	_Matrix		WorldMatrix{};
 	_matrix		SocketMatrix{};
@@ -241,7 +241,7 @@ void CRaxasia_Sword_CutScene::Control_Phase1Effect(_float fTimeDelta)
 			vCurrentPos = WorldMatrix.Translation();
 			vCurrentPos -= vWorldUp * 0.05f;
 
-			m_pEffect_Manager->Add_Effect_ToLayer(LEVEL_GAMEPLAY, TEXT("Raxasia_CutScene_Weapon_Change_Turn"), vCurrentPos);
+			m_pEffect_Manager->Add_Effect_ToLayer_Rot(LEVEL_GAMEPLAY, TEXT("Raxasia_CutScene_Weapon_Change_Turn"), vCurrentPos, _Vec3(0.f, 45.f, 0.f));
 
 			m_isActiveTurnEffect[i] = true;
 		}
@@ -270,16 +270,25 @@ void CRaxasia_Sword_CutScene::Control_Phase1Effect(_float fTimeDelta)
 
 			vCurrentPos = WorldMatrix.Translation();
 
-			m_pEffect_Manager->Add_Effect_ToLayer(LEVEL_GAMEPLAY, TEXT("Raxasia_CutScene_Weapon_Change_Insert"), vCurrentPos);
+			m_pEffect_Manager->Add_Effect_ToLayer_Rot(LEVEL_GAMEPLAY, TEXT("Raxasia_CutScene_Weapon_Change_Insert"), vCurrentPos, _Vec3(0.f,45.f,0.f));
 
 			m_isActiveInsertEffect[i] = true;
 		}
 	}
 
-	if (!m_isEndPhase1Effect && m_iFrame >= 93)
+	if (!m_isEndPhase1Effect && fCurretTrackPosition >= 93)
 	{
-		m_pEffect_Manager->Add_Effect_ToLayer(LEVEL_GAMEPLAY, TEXT("Raxasia_CutScene_Weapon_Change_Fit"), m_pParentMatrix,
-			m_pSocketMatrix, _Vec3(0.f, 0.f, 0.f), _Vec3(0.f, 0.f, 0.f), _Vec3(1.f, 1.f, 1.f));
+		SocketMatrix = m_pModelCom->Get_BoneCombindTransformationMatrix("BN_Blade6");
+
+		for (size_t i = 0; i < 3; i++)
+		{
+			SocketMatrix.r[i] = XMVector3Normalize(SocketMatrix.r[i]);
+		}
+		XMStoreFloat4x4(&WorldMatrix, SocketMatrix * XMLoadFloat4x4(&m_WorldMatrix));
+
+		vCurrentPos = WorldMatrix.Translation();
+
+		m_pEffect_Manager->Add_Effect_ToLayer_Rot(LEVEL_GAMEPLAY, TEXT("Raxasia_CutScene_Weapon_Change_Fit"), vCurrentPos, _Vec3(0.f, 45.f, 0.f));
 
 		m_isEndPhase1Effect = true;
 	}
@@ -287,7 +296,7 @@ void CRaxasia_Sword_CutScene::Control_Phase1Effect(_float fTimeDelta)
 
 void CRaxasia_Sword_CutScene::Control_Phase2Effect(_float fTimeDelta)
 {
-	_float fCurretTrackPosition = m_pModelCom->Get_CurrentTrackPosition();
+	_float fCurretTrackPosition = (_float)m_pModelCom->Get_CurrentTrackPosition();
 
 	_Matrix		WorldMatrix{};
 	_matrix		SocketMatrix{};
@@ -306,7 +315,7 @@ void CRaxasia_Sword_CutScene::Control_Phase2Effect(_float fTimeDelta)
 		XMStoreFloat4x4(&WorldMatrix, SocketMatrix * XMLoadFloat4x4(&m_WorldMatrix));
 
 		vCurrentPos = WorldMatrix.Translation();
-		vCurrentPos.y += 0.08f;
+		vCurrentPos.y += 0.1f;
 
 		m_Effects[EFFECT_P2_SHINE]->Get_Transform()->Set_State(CTransform::STATE_POSITION, vCurrentPos);
 
@@ -320,7 +329,7 @@ void CRaxasia_Sword_CutScene::Control_Phase2Effect(_float fTimeDelta)
 			vRaxasiaRight.Normalize();
 			vRaxasiaLook.Normalize();
 
-			vCurrentPos = vRaxasiaPos + (vRaxasiaRight - vRaxasiaLook) * 0.5f;
+			vCurrentPos = vRaxasiaPos + (vRaxasiaRight + vRaxasiaLook) * 1.05f;
 			m_Effects[EFFECT_P2_LIGHTNING_SMALL]->Get_Transform()->Set_State(CTransform::STATE_POSITION, vCurrentPos);
 			m_Effects[EFFECT_P2_LIGHTNING_SMALL]->Set_Loop(true);
 		}
@@ -347,7 +356,7 @@ void CRaxasia_Sword_CutScene::Control_Phase2Effect(_float fTimeDelta)
 
 		m_isActiveElecTurnEffect = true;
 	}
-	else if (!m_isActiveExplosionEffect && fCurretTrackPosition >= 300)
+	else if (!m_isActiveExplosionEffect && fCurretTrackPosition >= 280)
 	{
 		SocketMatrix = m_pModelCom->Get_BoneCombindTransformationMatrix("BN_Blade12");
 
