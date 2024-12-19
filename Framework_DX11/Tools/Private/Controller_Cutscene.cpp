@@ -351,7 +351,7 @@ void CController_Cutscene::Shader_Memu()
 {
     //Dof사용 유무
     ImGui::Checkbox("Use Dof", &pCutScene_Desc->ShaderDesc.bUseDof); ImGui::SameLine();
-    ImGui::Checkbox("Inverse Dof", &pCutScene_Desc->ShaderDesc.bwUseDof_Inverse);
+    ImGui::Checkbox("Inverse Dof", &pCutScene_Desc->ShaderDesc.bUseDof_Inverse);
     //Dof수치 증가 방향
     ImGui::Checkbox("Increase", &pCutScene_Desc->ShaderDesc.bDof_Increase); ImGui::SameLine();
     ImGui::Checkbox("Decrease", &pCutScene_Desc->ShaderDesc.bDof_Decrease);
