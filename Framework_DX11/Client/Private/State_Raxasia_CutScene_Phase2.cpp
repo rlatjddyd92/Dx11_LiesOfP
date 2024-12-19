@@ -242,7 +242,7 @@ void CState_Raxasia_CutScene_Phase2::Stop_Play_Animation(_int iFrame, _float fTi
         m_fAnimationStopTimer = 0.f;
         m_pMonster->Play_Animation();
     }
-    else if (bPlayAnim2 == false && m_fAnimationStopTimer2 > 1.9f)
+    else if (bPlayAnim2 == false && m_fAnimationStopTimer2 > 1.f)
     {
         bPlayAnim2 = true;
         m_fAnimationStopTimer = 0.f;
