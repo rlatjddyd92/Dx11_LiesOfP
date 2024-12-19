@@ -28,6 +28,7 @@ HRESULT CState_SimonManus_CutScene_Meet::Start_State(void* pArg)
     m_iAnimation_End = m_pMonster->Get_Model()->Find_AnimationIndex("AS_MOB_Manus_End_Cine", 1.f);
 
     m_pMonster->Change_Animation(m_iAnimation_Turn, false, 0.f, 0);
+    m_pMonster->Get_Model()->Set_SpeedPerSec(m_iAnimation_Turn, 30);
 
     m_isStartCutScene = false;
     m_fDelay = 0.f;
@@ -41,20 +42,14 @@ void CState_SimonManus_CutScene_Meet::Update(_float fTimeDelta)
     _uint iCurAnim = m_pMonster->Get_CurrentAnimIndex();
 
     m_fDelay += fTimeDelta;
-    if (m_fDelay >= 11.f && !m_isStartCutScene)
+    if (m_fDelay >= 13.f && !m_isStartCutScene)
     {
         m_pMonster->Play_Animation();
         m_isStartCutScene = true;
     }
-    else if (m_fDelay < 11.f)
+    else if (m_fDelay < 13.f)
     {
         m_pMonster->Stop_Animation();
-    }
-
-    if (!m_isStartPlaySound && iFrame >= 45)
-    {
-        m_pGameInstance->Play_BGM(TEXT("CutScene_SimonManus_Meet.wav"), &g_fCutSceneVolume);
-        m_isStartPlaySound = true;
     }
 
     _Vec3 vMove = m_pMonster->Get_Model()->Get_BoneCombindTransformationMatrix_Ptr(5)->Translation();
