@@ -19,7 +19,7 @@ HRESULT CState_RebornerBigA_Walk::Initialize(_uint iStateNum, void* pArg)
 
 HRESULT CState_RebornerBigA_Walk::Start_State(void* pArg)
 {
-    m_pMonster->Change_Animation(33, true, 0.1f, 0);
+    m_pMonster->Change_Animation(AN_WALK_F, true, 0.1f, 0);
 
 
     return S_OK;

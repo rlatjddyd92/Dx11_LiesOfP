@@ -133,12 +133,12 @@ void CState_CarcassTail_Idle::Calc_Act_Attack()
 
 
     _Vec3 vUp = XMVector3Normalize(m_pMonster->Get_Transform()->Get_State(CTransform::STATE_UP));
-    _Vec3 vLook = XMVector3Normalize(m_pMonster->Get_Transform()->Get_State(CTransform::STATE_LOOK));
+    _Vec3 vRight = XMVector3Normalize(m_pMonster->Get_Transform()->Get_State(CTransform::STATE_RIGHT));
     _Vec3 vTargetDir = XMVector3Normalize(m_pMonster->Get_TargetDir());
     _Vec3 vTargetRight = vUp.Cross(vTargetDir);
     
 
-    _Vec3 vCrossUp = vLook.Cross(vTargetRight);
+    _Vec3 vCrossUp = vRight.Cross(vTargetRight);
 
     if (vUp.Dot(vCrossUp) >= 0)
     {

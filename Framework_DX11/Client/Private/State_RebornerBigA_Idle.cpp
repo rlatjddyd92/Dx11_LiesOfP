@@ -30,21 +30,21 @@ void CState_RebornerBigA_Idle::Update(_float fTimeDelta)
 {
     m_fIdleTime += fTimeDelta;
     _float fDist = m_pMonster->Calc_Distance_XZ();
-    //if (!m_bFirstMeetCheck)
-    //{
-    //    _Vec3 vTargetPos = m_pMonster->Get_TargetPos();
-    //    _Vec3 vMonsterPos = m_pMonster->Get_Transform()->Get_State(CTransform::STATE_POSITION);
-    //    if (fDist <= 15.f && abs(vTargetPos.y - vMonsterPos.y) <= 5.f)
-    //    {
-    //        m_bFirstMeetCheck = true;
-    //
-    //        GET_GAMEINTERFACE->Set_OnOff_OrthoUI(true, m_pMonster);
-    //    }
-    //    else
-    //    {
-    //        return;
-    //    }
-    //}
+    if (!m_bFirstMeetCheck)
+    {
+        _Vec3 vTargetPos = m_pMonster->Get_TargetPos();
+        _Vec3 vMonsterPos = m_pMonster->Get_Transform()->Get_State(CTransform::STATE_POSITION);
+        if (fDist <= 15.f && abs(vTargetPos.y - vMonsterPos.y) <= 5.f)
+        {
+            m_bFirstMeetCheck = true;
+    
+            GET_GAMEINTERFACE->Set_OnOff_OrthoUI(true, m_pMonster);
+        }
+        else
+        {
+            return;
+        }
+    }
     if (m_fIdleEndDuration <= m_fIdleTime)
     {
         if (fDist >= 30.f)
@@ -70,25 +70,6 @@ void CState_RebornerBigA_Idle::Update(_float fTimeDelta)
 
     }
 
-
-    _int iDir = m_pMonster->Get_Transform()->LookAt_Lerp_NoHeight(m_pMonster->Get_TargetDir(), 2, fTimeDelta);
-    switch (iDir)
-    {
-    case -1:
-        m_pMonster->Change_Animation(AN_TURN_LEFT, true, 0.1f);
-        break;
-
-    case 0:
-        m_pMonster->Change_Animation(AN_IDLE, true, 0.1f);
-        break;
-
-    case 1:
-        m_pMonster->Change_Animation(AN_TURN_RIGHT, true, 0.1f);
-        break;
-
-    default:
-        break;
-    }
 }
 
 void CState_RebornerBigA_Idle::End_State()
@@ -98,25 +79,48 @@ void CState_RebornerBigA_Idle::End_State()
 
 void CState_RebornerBigA_Idle::Calc_Act_Attack()
 {
-    _int iAtkNum = rand() % 3;
-    switch (iAtkNum)
+    //µÚÀÏ¶§
+    _Vec3 vUp = XMVector3Normalize(m_pMonster->Get_Transform()->Get_State(CTransform::STATE_UP));
+    _Vec3 vRight = XMVector3Normalize(m_pMonster->Get_Transform()->Get_State(CTransform::STATE_RIGHT));
+    _Vec3 vTargetDir = XMVector3Normalize(m_pMonster->Get_TargetDir());
+
+
+    _Vec3 vCrossUp = vRight.Cross(vTargetDir);
+
+    if (vCrossUp.y > 0)
     {
-    case 0:
-        m_pMonster->Change_State(CRebornerBigA::SWINGMULTIPLE);
-        break;
-
-    case 1:
-        //m_pMonster->Change_State(CRebornerBigA::STINGTWICE);
-        break;
-
-    case 2:
-        //m_pMonster->Change_State(CRebornerBigA::JUMP_PUNCH);
-        break;
-
-    default:
-        break;
+        m_pMonster->Change_State(CRebornerBigA::SLASHJUMP);
+        return;
     }
-    ++m_iAtkCnt;
+    else
+    {
+        if (m_iAtkCnt >= 4)
+        {
+            m_iAtkCnt = 0;
+        }
+        switch (m_iAtkCnt)
+        {
+        case 0:
+            m_pMonster->Change_State(CRebornerBigA::SWINGMULTIPLE);
+            break;
+
+        case 1:
+            m_pMonster->Change_State(CRebornerBigA::RUSHSTING);
+            break;
+
+        case 2:
+            m_pMonster->Change_State(CRebornerBigA::SLASHTWICE);
+            break;
+
+        case 3:
+            m_pMonster->Change_State(CRebornerBigA::GUARDSTING);
+            break;
+
+        default:
+            break;
+        }
+        ++m_iAtkCnt;
+    }
 }
 
 CState_RebornerBigA_Idle* CState_RebornerBigA_Idle::Create(CFsm* pFsm, CMonster* pMonster, _uint iStateNum, void* pArg)

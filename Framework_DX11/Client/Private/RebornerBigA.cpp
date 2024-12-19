@@ -11,12 +11,19 @@
 #include "GameInterface_Controller.h"
 
 
-#include "State_CurruptedStrongArm_Idle.h"
-#include "State_CurruptedStrongArm_Die.h"
-#include "State_CurruptedStrongArm_Grogy.h"
-#include "State_CurruptedStrongArm_HitFatal.h"
-#include "State_CurruptedStrongArm_Walk.h"
-#include "State_CurruptedStrongArm_RUN.h"
+#include "State_RebornerBigA_Idle.h"
+#include "State_RebornerBigA_Die.h"
+#include "State_RebornerBigA_Grogy.h"
+#include "State_RebornerBigA_HitFatal.h"
+#include "State_RebornerBigA_Walk.h"
+#include "State_RebornerBigA_RUN.h"
+
+#include "State_RebornerBigA_SlashJump.h"
+#include "State_RebornerBigA_GuardSting.h"
+#include "State_RebornerBigA_RushSting.h"
+#include "State_RebornerBigA_SlashTwice.h"
+#include "State_RebornerBigA_SwingMultiple.h"
+
 
 
 CRebornerBigA::CRebornerBigA(ID3D11Device* pDevice, ID3D11DeviceContext* pContext)
@@ -54,8 +61,8 @@ HRESULT CRebornerBigA::Initialize(void* pArg)
 
 	m_pModelCom->SetUp_Animation(51, true);
 
-	//if (FAILED(Ready_FSM()))
-	//	return E_FAIL;
+	if (FAILED(Ready_FSM()))
+		return E_FAIL;
 
 	m_strObjectTag = TEXT("Monster");
 
@@ -105,7 +112,7 @@ void CRebornerBigA::Update(_float fTimeDelta)
 
 	m_pRigidBodyCom->Set_Velocity(m_vCurRootMove / fTimeDelta);
 
-	//m_pFsmCom->Update(fTimeDelta);
+	m_pFsmCom->Update(fTimeDelta);
 
 	Update_Collider();
 
@@ -120,10 +127,6 @@ void CRebornerBigA::Late_Update(_float fTimeDelta)
 	m_pRigidBodyCom->Update(fTimeDelta);
 	m_pGameInstance->Add_RenderObject(CRenderer::RG_NONBLEND, this);
 
-	//for (_uint i = 0; i < TYPE_END; ++i)
-	//{
-	//	m_pColliderObject[i]->Late_Update(fTimeDelta);
-	//}
 
 	m_pGameInstance->Add_ColliderList(m_pColliderCom);
 	m_pWeapon->Late_Update(fTimeDelta);
@@ -206,8 +209,8 @@ HRESULT CRebornerBigA::Ready_Components()
 
 
 	//LOWERArmLeft
-	ColliderDesc.vExtents = _float3(0.35f, 0.15f, 0.15f);
-	ColliderDesc.vCenter = _float3(0.2f, 0.f, 0.f);
+	ColliderDesc.vExtents = _float3(0.4f, 0.15f, 0.15f);
+	ColliderDesc.vCenter = _float3(0.4f, 0.f, 0.f);
 	ColliderDesc.vAngles = _float3(0.f, 0.f, 0.f);
 
 	if (FAILED(__super::Add_Component(LEVEL_STATIC, TEXT("Prototype_Component_Collider_OBB"),
@@ -244,7 +247,7 @@ HRESULT CRebornerBigA::Ready_Components()
 
 	//LOWERLegLeft
 	ColliderDesc.vExtents = _float3(0.45f, 0.15f, 0.15f);
-	ColliderDesc.vCenter = _float3(0.3f, 0.f, 0.f);
+	ColliderDesc.vCenter = _float3(0.4f, 0.f, 0.f);
 	ColliderDesc.vAngles = _float3(0.f, 0.f, 0.f);
 
 	if (FAILED(__super::Add_Component(LEVEL_STATIC, TEXT("Prototype_Component_Collider_OBB"),
@@ -303,14 +306,20 @@ HRESULT CRebornerBigA::Ready_FSM()
 
 
 
-	//m_pFsmCom->Add_State(CState_RebornerBigA_Idle::Create(m_pFsmCom, this, IDLE, &Desc));
-	//m_pFsmCom->Add_State(CState_RebornerBigA_Walk::Create(m_pFsmCom, this, WALK, &Desc));
-	//m_pFsmCom->Add_State(CState_RebornerBigA_Run::Create(m_pFsmCom, this, RUN, &Desc));
-	//m_pFsmCom->Add_State(CState_RebornerBigA_Grogy::Create(m_pFsmCom, this, GROGY, &Desc));
-	//m_pFsmCom->Add_State(CState_RebornerBigA_HitFatal::Create(m_pFsmCom, this, HITFATAL, &Desc));
-	//m_pFsmCom->Add_State(CState_RebornerBigA_Die::Create(m_pFsmCom, this, DIE, &Desc));
+	m_pFsmCom->Add_State(CState_RebornerBigA_Idle::Create(m_pFsmCom, this, IDLE, &Desc));
+	m_pFsmCom->Add_State(CState_RebornerBigA_Walk::Create(m_pFsmCom, this, WALK, &Desc));
+	m_pFsmCom->Add_State(CState_RebornerBigA_Run::Create(m_pFsmCom, this, RUN, &Desc));
+	m_pFsmCom->Add_State(CState_RebornerBigA_Grogy::Create(m_pFsmCom, this, GROGY, &Desc));
+	m_pFsmCom->Add_State(CState_RebornerBigA_HitFatal::Create(m_pFsmCom, this, HITFATAL, &Desc));
+	m_pFsmCom->Add_State(CState_RebornerBigA_Die::Create(m_pFsmCom, this, DIE, &Desc));
 
-	//m_pFsmCom->Set_State(IDLE);
+	m_pFsmCom->Add_State(CState_RebornerBigA_GuardSting::Create(m_pFsmCom, this, GUARDSTING, &Desc));
+	m_pFsmCom->Add_State(CState_RebornerBigA_RushSting::Create(m_pFsmCom, this, RUSHSTING, &Desc));
+	m_pFsmCom->Add_State(CState_RebornerBigA_SlashTwice::Create(m_pFsmCom, this, SLASHTWICE, &Desc));
+	m_pFsmCom->Add_State(CState_RebornerBigA_SlashJump::Create(m_pFsmCom, this, SLASHJUMP, &Desc));
+	m_pFsmCom->Add_State(CState_RebornerBigA_SwingMultiple::Create(m_pFsmCom, this, SWINGMULTIPLE, &Desc));
+
+	m_pFsmCom->Set_State(IDLE);
 
 	return S_OK;
 

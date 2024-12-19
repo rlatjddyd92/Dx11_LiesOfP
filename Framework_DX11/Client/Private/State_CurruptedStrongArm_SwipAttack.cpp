@@ -107,7 +107,7 @@ CState_CurruptedStrongArm_SwipAttack* CState_CurruptedStrongArm_SwipAttack::Crea
 
     if (FAILED(pInstance->Initialize(iStateNum, pArg)))
     {
-        MSG_BOX(TEXT("Failed to Created : CState_Player_Rapier_RAttack00"));
+        MSG_BOX(TEXT("Failed to Created : CState_CurruptedStrongArm_SwipAttack"));
         Safe_Release(pInstance);
     }
 
