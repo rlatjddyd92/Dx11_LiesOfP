@@ -8,6 +8,8 @@
 #include "Weapon_Raxasia_P2_Shield.h"
 #include "Raxasia_Helmet_CutScene.h"
 
+#include "GameInterface_Controller.h"
+
 CState_Raxasia_CutScene_Phase2::CState_Raxasia_CutScene_Phase2(CFsm* pFsm, CMonster* pMonster)
     :CState{ pFsm }
     , m_pMonster{ pMonster }
@@ -166,6 +168,7 @@ void CState_Raxasia_CutScene_Phase2::Update(_float fTimeDelta)
     m_vRootMoveStack = vMove;
 
     End_Check();
+    Control_Dialog(iFrame);
 }
 
 void CState_Raxasia_CutScene_Phase2::End_State()
@@ -246,6 +249,20 @@ void CState_Raxasia_CutScene_Phase2::Stop_Play_Animation(_int iFrame, _float fTi
         m_pMonster->Play_Animation();
     }
 
+}
+
+void CState_Raxasia_CutScene_Phase2::Control_Dialog(_int iFrame)
+{
+    if (!m_isShowDialog[0] && iFrame >= 650)
+    {
+        GET_GAMEINTERFACE->Show_Script(TEXT("아, 시몬 님."), TEXT("none"), 2.1f);
+        m_isShowDialog[0] = true;
+    }
+    else if (!m_isShowDialog[1] && iFrame >= 1370)
+    {
+        GET_GAMEINTERFACE->Show_Script(TEXT("당신의 검인 락사시아가 맹세코"), TEXT("이 탑을 수호할지니."), 6.1f);
+        m_isShowDialog[1] = true;
+    }
 }
 
 CState_Raxasia_CutScene_Phase2* CState_Raxasia_CutScene_Phase2::Create(CFsm* pFsm, CMonster* pMonster, _uint iStateNum, void* pArg)
