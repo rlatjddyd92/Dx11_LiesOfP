@@ -291,6 +291,9 @@
 #include "D:\GitProject\Dx11_LiesOfP\Framework_DX11\Client\Private\State_RaxasiaP2_WaveSting.cpp"
 
 
+#include "D:\GitProject\Dx11_LiesOfP\Framework_DX11\Client\Private\State_Raxasia_CutScene_Die.cpp"
+
+
 #include "D:\GitProject\Dx11_LiesOfP\Framework_DX11\Client\Private\State_Raxasia_CutScene_Meet.cpp"
 
 
