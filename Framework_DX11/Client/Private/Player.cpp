@@ -271,7 +271,7 @@ void CPlayer::Update(_float fTimeDelta)
 	////ÄÆ½Å Å×½ºÆ®
 	if (KEY_TAP(KEY::Q))
 	{
-		dynamic_cast<CCutScene*>(m_pGameInstance->Find_Object(LEVEL_GAMEPLAY, TEXT("Layer_CutScene"), BOSS1_PHASE2))->Start_Play();
+		dynamic_cast<CCutScene*>(m_pGameInstance->Find_Object(LEVEL_GAMEPLAY, TEXT("Layer_CutScene"), BOSS1_DEAD))->Start_Play();
 		//dynamic_cast<CCutScene*>(m_pGameInstance->Find_Object(LEVEL_GAMEPLAY, TEXT("Layer_CutScene"), BOSS1_MEET2))->Start_Play();
 	}
 }
@@ -422,7 +422,7 @@ void CPlayer::OnCollisionExit(CGameObject* pOther)
 
 _bool CPlayer::Key_Tab(KEY eKey)
 {
-	if (GET_GAMEINTERFACE->IsGamePause())
+	if (GET_GAMEINTERFACE->IsGamePause() || m_isPlayingCutscene)
 		return false;
 
 	return KEY_TAP(eKey);
@@ -430,7 +430,7 @@ _bool CPlayer::Key_Tab(KEY eKey)
 
 _bool CPlayer::Key_Hold(KEY eKey)
 {
-	if (GET_GAMEINTERFACE->IsGamePause())
+	if (GET_GAMEINTERFACE->IsGamePause() || m_isPlayingCutscene)
 		return false;
 
 	return KEY_HOLD(eKey);
@@ -438,7 +438,7 @@ _bool CPlayer::Key_Hold(KEY eKey)
 
 _bool CPlayer::Key_Away(KEY eKey)
 {
-	if (GET_GAMEINTERFACE->IsGamePause())
+	if (GET_GAMEINTERFACE->IsGamePause() || m_isPlayingCutscene)
 		return false;
 
 	return KEY_AWAY(eKey);
@@ -446,7 +446,7 @@ _bool CPlayer::Key_Away(KEY eKey)
 
 _bool CPlayer::Key_None(KEY eKey)
 {
-	if (GET_GAMEINTERFACE->IsGamePause())
+	if (GET_GAMEINTERFACE->IsGamePause() || m_isPlayingCutscene)
 		return false;
 
 	return KEY_NONE(eKey);

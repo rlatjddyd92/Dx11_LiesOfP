@@ -48,7 +48,7 @@ private:
     void                Stop_Play_Animation(_int iFrame, _float fTimeDelta);
 
 private:
-    _bool               m_isShowDialog[3] = {false, };
+    _bool               m_isShowDialog[2] = {false, };
 
     void                Control_Dialog(_int iFrame);
 

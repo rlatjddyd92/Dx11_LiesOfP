@@ -5,6 +5,8 @@
 #include "Player.h"
 #include "Weapon_FlameSword.h"
 
+#include "Effect_Manager.h"
+
 CState_Player_Flame_Fable::CState_Player_Flame_Fable(CFsm* pFsm, CPlayer* pPlayer)
     :CState{ pFsm }
     , m_pPlayer{ pPlayer }
@@ -44,8 +46,8 @@ HRESULT CState_Player_Flame_Fable::Start_State(void* pArg)
     m_pPlayer->Play_Sound(CPawn::PAWN_SOUND_EFFECT1, TEXT("SE_PC_SK_FX_Rapier_1H_B_FableArts_Start_01.wav"));
     m_pPlayer->Play_Sound(CPawn::PAWN_SOUND_EFFECT2, TEXT("SE_PC_SK_FX_Rapier_1H_B_FableArts_Motor_03.wav"));
 
-    m_isActiveEffect[0] = false;
-    m_isActiveEffect[1] = false;
+    m_isActiveEffect[0] = m_isActiveEffect[1] = false;
+    m_isActiveFableEffect[0] = m_isActiveFableEffect[1] = false;
 
     m_pPlayer->Decrease_Region(3);
     //m_pPlayer->Active_Effect(TEXT("Player_Attack_Rapier_StormStab_First_Ready"));
@@ -56,6 +58,8 @@ HRESULT CState_Player_Flame_Fable::Start_State(void* pArg)
     }
 
     m_pPlayer->Set_WeaponStrength(ATK_STRONG);
+
+    m_iEffectStartFrame[0] = 21;
 
     m_isActiveEffect[0] = m_isDeActiveEffect[0] = false;
     m_isActiveEffect[1] = m_isDeActiveEffect[1] = false;
@@ -187,6 +191,25 @@ void CState_Player_Flame_Fable::Control_Effect(_int iFrame)
     {
         m_pPlayer->DeActive_WeaponEffect(CWeapon_FlameSword::EFFECT_STORMSLASH2);
         m_isDeActiveEffect[1] = true;
+    }
+
+    if (!m_isActiveFableEffect[0] && iFrame > 0)
+    {
+        const _Matrix* SocketMatrix = m_pPlayer->Get_Model()->Get_BoneCombindTransformationMatrix_Ptr("BN_Weapon_R");
+
+        CEffect_Manager::Get_Instance()->Add_Effect_ToLayer(LEVEL_GAMEPLAY, TEXT("Player_Attack_Rapier_StormStab_First_Ready"), m_pPlayer->Get_Transform()->Get_WorldMatrix_Ptr(),
+            SocketMatrix);
+
+        m_isActiveFableEffect[0] = true;
+    }
+    else if (!m_isActiveFableEffect[1] && iFrame > 75)
+    {
+        const _Matrix* SocketMatrix = m_pPlayer->Get_Model()->Get_BoneCombindTransformationMatrix_Ptr("BN_Weapon_R");
+
+        CEffect_Manager::Get_Instance()->Add_Effect_ToLayer(LEVEL_GAMEPLAY, TEXT("Player_Attack_Rapier_StormStab_Second_Ready"), m_pPlayer->Get_Transform()->Get_WorldMatrix_Ptr(),
+            SocketMatrix);
+
+        m_isActiveFableEffect[1] = true;
     }
 }
 

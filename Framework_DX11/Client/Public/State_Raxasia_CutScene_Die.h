@@ -38,6 +38,11 @@ private:
 private:
     void                End_Check(_float fTimeDelta);
 
+private:
+    _bool               m_isShowDialog = { false };
+
+    void                Control_Dialog(_int iFrame);
+
 public:
     static CState_Raxasia_CutScene_Die* Create(class CFsm* pFsm, class CMonster* pMonster, _uint iStateNum, void* pArg = nullptr);
     virtual void Free() override;

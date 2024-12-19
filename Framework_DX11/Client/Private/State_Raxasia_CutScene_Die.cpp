@@ -5,6 +5,8 @@
 #include "Raxasia.h"
 #include "CutScene.h"
 
+#include "GameInterface_Controller.h"
+
 CState_Raxasia_CutScene_Die::CState_Raxasia_CutScene_Die(CFsm* pFsm, CMonster* pMonster)
     :CState{ pFsm }
     , m_pMonster{ pMonster }
@@ -79,6 +81,7 @@ void CState_Raxasia_CutScene_Die::Update(_float fTimeDelta)
 
     m_vRootMoveStack = vMove;
 
+    Control_Dialog(iFrame);
 }
 
 void CState_Raxasia_CutScene_Die::End_State()
@@ -104,6 +107,18 @@ void CState_Raxasia_CutScene_Die::End_Check(_float fTimeDelta)
     else if (m_pMonster->Get_EndAnim(m_iAnimation_Die))
     {
         // 죽이기
+    }
+}
+
+void CState_Raxasia_CutScene_Die::Control_Dialog(_int iFrame)
+{
+    if (m_pMonster->Get_CurrentAnimIndex() == m_iAnimation_Die)
+    {
+        if (!m_isShowDialog && iFrame >= 20)
+        {
+            GET_GAMEINTERFACE->Show_Script(TEXT("아아, 시몬님. 당신이야말로 제 유일한..."), TEXT("none"), 6.35f);
+            m_isShowDialog = true;
+        }
     }
 }
 
