@@ -803,7 +803,7 @@ _bool CPlayer::Calc_DamageGain(_float fAtkDmg, _Vec3 vHitPos, _uint iHitType, _u
 			{
 				if (nullptr != pAttackerMonster)
 				{
-					m_pEffect_Manager->Add_Effect_ToLayer(LEVEL_GAMEPLAY, TEXT("Player_Attack_ArmSkill_ShieldBlock_Explosion"), (_Vec3)pAttackerMonster->Calc_CenterPos());
+					m_pEffect_Manager->Add_Effect_ToLayer(LEVEL_GAMEPLAY, TEXT("Player_Attack_ArmSkill_ShieldBlock_Explosion"), (_Vec3)Calc_CenterPos());
 					pAttackerMonster->Calc_DamageGain(50.f, (_Vec3)m_pWeapon_Arm->Get_Transform()->Get_State(CTransform::STATE_POSITION), HIT_FIRE, ATK_STRONG, this);
 				}
 
@@ -820,7 +820,7 @@ _bool CPlayer::Calc_DamageGain(_float fAtkDmg, _Vec3 vHitPos, _uint iHitType, _u
 			{
 				if (nullptr != pAttackerMonster)
 				{
-					m_pEffect_Manager->Add_Effect_ToLayer(LEVEL_GAMEPLAY, TEXT("Player_Attack_ArmSkill_ShieldBlock_Explosion"), (_Vec3)pAttackerMonster->Calc_CenterPos());
+					m_pEffect_Manager->Add_Effect_ToLayer(LEVEL_GAMEPLAY, TEXT("Player_Attack_ArmSkill_ShieldBlock_Explosion"), (_Vec3)Calc_CenterPos());
 					pAttackerMonster->Calc_DamageGain(50.f, (_Vec3)m_pWeapon_Arm->Get_Transform()->Get_State(CTransform::STATE_POSITION), HIT_FIRE, ATK_STRONG, this);
 				}
 
