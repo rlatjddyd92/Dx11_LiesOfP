@@ -27,6 +27,8 @@ HRESULT CState_Player_Arm_Start::Initialize(_uint iStateNum, void* pArg)
 
     m_iStateNum = iStateNum;
 
+    m_iEffectFrame = 55;
+
     return S_OK;
 }
 
@@ -43,15 +45,22 @@ HRESULT CState_Player_Arm_Start::Start_State(void* pArg)
 
     m_pPlayer->Get_Model()->Set_RemoteTuning(false);
 
+    m_isActiveEffect = false;
+
+    m_isChangeLoop = false;
+
     return S_OK;
 }
 
 void CState_Player_Arm_Start::Update(_float fTimeDelta)
 {
+    _int iFrmae = m_pPlayer->Get_Frame();
+
     if (m_pPlayer->Key_Hold(KEY::CTRL))
     {
         if (End_Check())
         {
+            m_isChangeLoop = true;
             m_pPlayer->Change_State(CPlayer::ARM_LOOP);
             return;
         }
@@ -70,10 +79,14 @@ void CState_Player_Arm_Start::Update(_float fTimeDelta)
         else
             m_pPlayer->Change_State(CPlayer::TH_IDLE);
     }
+
+    Control_Effect(iFrmae);
 }
 
 void CState_Player_Arm_Start::End_State()
 {
+    if(!m_isChangeLoop)
+        m_pPlayer->Get_Model()->Set_RemoteTuning(true);
 }
 
 _bool CState_Player_Arm_Start::End_Check()
@@ -194,6 +207,15 @@ void CState_Player_Arm_Start::Control_Sound()
             m_pPlayer->Play_Sound(CPlayer::PAWN_SOUND_EFFECT1, TEXT("SE_PC_FS_Stone_Walk_01.wav"));
             m_isPlaySound[i] = true;
         }
+    }
+}
+
+void CState_Player_Arm_Start::Control_Effect(_int iFrame)
+{
+    if (!m_isActiveEffect && m_iEffectFrame < iFrame)
+    {
+        m_pPlayer->Active_Effect(CPlayer::EFFECT_ARM_SHIELDBLOCK, false);
+        m_isActiveEffect = true;
     }
 }
 

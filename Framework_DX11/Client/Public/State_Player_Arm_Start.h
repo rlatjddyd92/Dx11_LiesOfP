@@ -34,6 +34,8 @@ private:
 
     _Vec4               m_vMoveDir = {};
 
+    _bool               m_isChangeLoop = {};
+
 private:
     _bool               End_Check();
 
@@ -43,6 +45,12 @@ private:
     _int                m_iFootStepFrame[14] = {};
     _bool               m_isPlaySound[14] = { false, };
     void                Control_Sound();
+
+private:
+    _uint               m_iEffectFrame = {};
+    _bool               m_isActiveEffect = {};
+
+    void                Control_Effect(_int iFrame);
 
 public:
     static CState_Player_Arm_Start* Create(class CFsm* pFsm, class CPlayer* pPlayer, _uint iStateNum, void* pArg = nullptr);

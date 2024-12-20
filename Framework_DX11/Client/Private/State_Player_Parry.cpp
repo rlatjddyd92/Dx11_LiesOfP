@@ -6,6 +6,8 @@
 #include "Camera.h"
 #include "Weapon.h"
 
+#include "Effect_Manager.h"
+
 CState_Player_Parry::CState_Player_Parry(CFsm* pFsm, CPlayer* pPlayer)
     :CState{ pFsm }
     , m_pPlayer{ pPlayer }
@@ -24,6 +26,8 @@ HRESULT CState_Player_Parry::Initialize(_uint iStateNum, void* pArg)
 
     m_iSoundFrame = 30;
 
+    m_iEffefctFrame = 27;
+
     return S_OK;
 }
 
@@ -31,6 +35,7 @@ HRESULT CState_Player_Parry::Start_State(void* pArg)
 {
     m_pPlayer->Change_Animation(m_iAnimation_Parry[0], false, 0.05f);
 
+    m_isActiveEffect = false;
 
     return S_OK;
 }
@@ -59,6 +64,7 @@ void CState_Player_Parry::Update(_float fTimeDelta)
     }
 
     Control_Sound();
+    Control_Effect(iFrame);
 }
 
 void CState_Player_Parry::End_State()
@@ -83,6 +89,17 @@ void CState_Player_Parry::Control_Sound()
     else
     {
         m_isPlaySound = false;
+    }
+}
+
+void CState_Player_Parry::Control_Effect(_int iFrame)
+{
+    if (!m_isActiveEffect && iFrame >= m_iEffefctFrame)
+    {
+        CEffect_Manager::Get_Instance()->Add_Effect_ToLayer(LEVEL_GAMEPLAY, TEXT("Player_GuardParry"), m_pPlayer->Get_Transform()->Get_WorldMatrix_Ptr(),
+            m_pPlayer->Get_Model()->Get_BoneCombindTransformationMatrix_Ptr("BN_Weapon_R"));
+
+        m_isActiveEffect = true;
     }
 }
 

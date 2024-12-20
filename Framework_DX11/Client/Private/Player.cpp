@@ -10,6 +10,7 @@
 #include "Monster.h"
 #include "Weapon.h"
 #include "Weapon_Scissor.h"
+#include "Weapon_PlayerArm.h"
 
 #include "Ladder.h"
 #include "Lift_Floor.h"
@@ -151,8 +152,8 @@ HRESULT CPlayer::Initialize(void * pArg)
 	//m_pNavigationCom->Move_to_Cell(m_pRigidBodyCom, 440); //상자랑 장애물
 	//m_pNavigationCom->Move_to_Cell(m_pRigidBodyCom, 1066); // 순간이동 790
 	//m_pNavigationCom->Move_to_Cell(m_pRigidBodyCom, 790); // 순간이동 1066
-	//m_pNavigationCom->Move_to_Cell(m_pRigidBodyCom, 1066); // 순간이동 790
-	m_pNavigationCom->Move_to_Cell(m_pRigidBodyCom, 801); // 소피아 방
+	m_pNavigationCom->Move_to_Cell(m_pRigidBodyCom, 1066); // 순간이동 790
+	//m_pNavigationCom->Move_to_Cell(m_pRigidBodyCom, 801); // 소피아 방
 	//m_pNavigationCom->Move_to_Cell(m_pRigidBodyCom, 1178); // 소피아 방 내부
 	//m_pNavigationCom->Move_to_Cell(m_pRigidBodyCom, 0); 
 	//m_pNavigationCom->Move_to_Cell(m_pRigidBodyCom, 268); // 락사시아 보스전
@@ -556,19 +557,11 @@ void CPlayer::DeActive_CurretnWeaponCollider(_uint iHandIndex)
 
 _bool CPlayer::Active_Arm()
 {
-	if (m_pWeapon_Arm->IsActive())
-		return false;
-
-	m_pWeapon_Arm->IsActive(true);
 	return m_pWeapon_Arm->Active_Collider(1.f, 0, HIT_METAL, ATK_STRONG);
 }
 
 void CPlayer::DeActive_Arm()
 {
-	if (!m_pWeapon_Arm->IsActive())
-		return;
-
-	m_pWeapon_Arm->IsActive(false);
 	m_pWeapon_Arm->DeActive_Collider();
 }
 
@@ -748,6 +741,8 @@ _bool CPlayer::Calc_DamageGain(_float fAtkDmg, _Vec3 vHitPos, _uint iHitType, _u
 	if (fAtkDmg <= 0.f || m_bDieState)
 		return false;
 
+	CMonster* pAttackerMonster = static_cast<CMonster*>(pAttacker);
+
 	const _Matrix* pParetnMatrix = m_pTransformCom->Get_WorldMatrix_Ptr();
 	const _Matrix* pSocketBoneMatrix = m_pModelCom->Get_BoneCombindTransformationMatrix_Ptr("BN_Weapon_R");
 
@@ -794,16 +789,47 @@ _bool CPlayer::Calc_DamageGain(_float fAtkDmg, _Vec3 vHitPos, _uint iHitType, _u
 		}
 		else if (m_isParry)
 		{
-			// 데미지 주기
+			if (nullptr != pAttackerMonster)
+			{
+				m_pEffect_Manager->Add_Effect_ToLayer(LEVEL_GAMEPLAY, TEXT("Player_Attack_ArmSkill_GuardParry_Success"), (_Vec3)pAttackerMonster->Calc_CenterPos());
+				pAttackerMonster->Calc_DamageGain(50.f, (_Vec3)m_pWeapon_Arm->Get_Transform()->Get_State(CTransform::STATE_POSITION), HIT_FIRE, ATK_STRONG, this);
+			}
+
 			m_pFsmCom->Change_State(ARM_BOMB);
 		}
 		else if (ATK_WEAK == iAttackStrength)
 		{
-			m_pFsmCom->Change_State(ARM_GURAD_WEAK);
+			if (1)
+			{
+				if (nullptr != pAttackerMonster)
+				{
+					m_pEffect_Manager->Add_Effect_ToLayer(LEVEL_GAMEPLAY, TEXT("Player_Attack_ArmSkill_ShieldBlock_Explosion"), (_Vec3)pAttackerMonster->Calc_CenterPos());
+					pAttackerMonster->Calc_DamageGain(50.f, (_Vec3)m_pWeapon_Arm->Get_Transform()->Get_State(CTransform::STATE_POSITION), HIT_FIRE, ATK_STRONG, this);
+				}
+
+				m_pFsmCom->Change_State(ARM_BOMB);
+			}
+			else
+			{
+				m_pFsmCom->Change_State(ARM_GURAD_WEAK);
+			}
 		}
 		else if (ATK_NORMAL == iAttackStrength)
 		{
-			m_pFsmCom->Change_State(ARM_GURAD_HARD);
+			if (1)
+			{
+				if (nullptr != pAttackerMonster)
+				{
+					m_pEffect_Manager->Add_Effect_ToLayer(LEVEL_GAMEPLAY, TEXT("Player_Attack_ArmSkill_ShieldBlock_Explosion"), (_Vec3)pAttackerMonster->Calc_CenterPos());
+					pAttackerMonster->Calc_DamageGain(50.f, (_Vec3)m_pWeapon_Arm->Get_Transform()->Get_State(CTransform::STATE_POSITION), HIT_FIRE, ATK_STRONG, this);
+				}
+
+				m_pFsmCom->Change_State(ARM_BOMB);
+			}
+			else
+			{
+				m_pFsmCom->Change_State(ARM_GURAD_HARD);
+			}
 		}
 		else if (ATK_STRONG == iAttackStrength)
 		{
@@ -1549,7 +1575,7 @@ HRESULT CPlayer::Ready_Weapon()
 	WeaponDesc.pParentWorldMatrix = m_pTransformCom->Get_WorldMatrix_Ptr();
 	WeaponDesc.pSocketBoneMatrix = m_pModelCom->Get_BoneCombindTransformationMatrix_Ptr("BN_Aegis_All");
 	WeaponDesc.pPlayer = this;
-	m_pWeapon_Arm = dynamic_cast<CWeapon*>(m_pGameInstance->Clone_GameObject(TEXT("Prototype_GameObject_Weapon_PlayerArm"), &WeaponDesc));
+	m_pWeapon_Arm = dynamic_cast<CWeapon_PlayerArm*>(m_pGameInstance->Clone_GameObject(TEXT("Prototype_GameObject_Weapon_PlayerArm"), &WeaponDesc));
 	if (nullptr == m_pWeapon_Arm)
 		return E_FAIL;
 
@@ -1734,12 +1760,12 @@ HRESULT CPlayer::Ready_Effect()
 		pSocketBoneMatrix, _Vec3(0.f, 0.f, 0.f), _Vec3(0.f, 0.f, 0.f), _Vec3(1.f, 1.f, 1.f));
 
 	pSocketBoneMatrix = m_pModelCom->Get_BoneCombindTransformationMatrix_Ptr("BN_Aegis_Base");
-	//pSocketBoneMatrix = m_pModelCom->Get_BoneCombindTransformationMatrix_Ptr("Root");
-	m_Effects[EFFECT_ARM_SKILL] = m_pEffect_Manager->Clone_Effect(TEXT("Player_Attack_ArmSkill"), pParetnMatrix,
+	m_Effects[EFFECT_ARM_COUNTER_CHARGE] = m_pEffect_Manager->Clone_Effect(TEXT("Player_Attack_ArmSkill_CounterCharge"), pParetnMatrix,
 		pSocketBoneMatrix, _Vec3(0.f, 0.f, 0.f), _Vec3(0.f, 0.f, 0.f), _Vec3(1.f, 1.f, 1.f));
 
-	Active_Effect(EFFECT_ARM_SKILL);
-
+	m_Effects[EFFECT_ARM_SHIELDBLOCK] = m_pEffect_Manager->Clone_Effect(TEXT("Player_Attack_ArmSkill_ShieldBlock"), pParetnMatrix,
+		pSocketBoneMatrix, _Vec3(0.f, 0.f, 0.f), _Vec3(0.f, 0.f, 0.f), _Vec3(1.f, 1.f, 1.f));
+	
 	return S_OK;
 }
 
