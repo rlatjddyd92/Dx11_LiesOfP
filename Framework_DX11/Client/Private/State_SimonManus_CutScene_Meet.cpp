@@ -97,11 +97,8 @@ void CState_SimonManus_CutScene_Meet::End_State()
 
 void CState_SimonManus_CutScene_Meet::End_Check(_float fTimeDelta)
 {
-   /* if (m_bChangedToTalk == false && m_pMonster->Get_Frame() > 1200)
-    {
-        m_bChangedToTalk = true;
-        m_pMonster->Change_Animation(m_iAnimation_Talk, false, 0.1f, 0);
-    }*/
+    _uint iCurAnim = m_pMonster->Get_CurrentAnimIndex();
+
     if (m_pMonster->Get_EndAnim(m_iAnimation_Turn))
     {
         m_fDelay2 += fTimeDelta;
@@ -116,13 +113,13 @@ void CState_SimonManus_CutScene_Meet::End_Check(_float fTimeDelta)
     {
         m_pMonster->Change_Animation(m_iAnimation_Hand, false, 0.2f, 65);
     }
+    else if (m_pMonster->Get_CurrentAnimIndex() == m_iAnimation_Hand && m_pMonster->Get_Model()->Get_CurrentFrame() > 607)
+    {
+        m_pMonster->Change_Animation(m_iAnimation_End, false, 0.f, 63);
+    }
     else if (m_pMonster->Get_CurrentAnimIndex() == m_iAnimation_Hand && m_pMonster->Get_Model()->Get_CurrentFrame() > 560)
     {
         m_pMonster->Get_Model()->Set_SpeedPerSec(m_iAnimation_Hand, 11);
-    }
-    else if (m_pMonster->Get_EndAnim(m_iAnimation_Hand))
-    {
-        m_pMonster->Change_Animation(m_iAnimation_End, false, 0.2f, 0);
     }
     else if (m_pMonster->Get_EndAnim(m_iAnimation_End))
     {
