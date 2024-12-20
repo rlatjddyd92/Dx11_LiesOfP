@@ -86,6 +86,14 @@ void CParticle_Effect::Update(_float fTimeDelta)
     case PT_LOCALSPREAD:
         bOver = m_pVIBufferCom->DispatchCS(m_pLocalSpreadCS, Movement);
         break;
+
+    case PT_LOCALMOVE:
+        bOver = m_pVIBufferCom->DispatchCS(m_pLocalMoveCS, Movement);
+        break;
+
+    case PT_LOCALCONVERGE:
+        bOver = m_pVIBufferCom->DispatchCS(m_pLocalConvergeCS, Movement);
+        break;
     }
 
     if (true == bOver)
@@ -109,7 +117,7 @@ void CParticle_Effect::Late_Update(_float fTimeDelta)
 
 HRESULT CParticle_Effect::Render()
 {
-    if (PT_LOCALSPREAD == m_DefaultDesc.eType)
+    if (PT_LOCALSPREAD == m_DefaultDesc.eType || PT_LOCALMOVE == m_DefaultDesc.eType || PT_LOCALCONVERGE == m_DefaultDesc.eType)
     {
         if (FAILED(m_pShaderCom->Bind_Matrix("g_WorldMatrix", &m_WorldMatrix)))
             return E_FAIL;
@@ -292,6 +300,16 @@ HRESULT CParticle_Effect::Ready_Components(const PARTICLE_EFFECT_DESC& Desc)
         TEXT("Com_LocalSpreadCS"), reinterpret_cast<CComponent**>(&m_pLocalSpreadCS))))
         return E_FAIL;
 
+    /* FOR.Com_LocalMoveCS */
+    if (FAILED(__super::Add_Component(LEVEL_TOOL, TEXT("Prototype_Component_Shader_Compute_Particle_LocalMove"),
+        TEXT("Com_LocalMoveCS"), reinterpret_cast<CComponent**>(&m_pLocalMoveCS))))
+        return E_FAIL;
+
+    /* FOR.Com_LocalConvergeCS */
+    if (FAILED(__super::Add_Component(LEVEL_TOOL, TEXT("Prototype_Component_Shader_Compute_Particle_LocalConverge"),
+        TEXT("Com_LocalConvergeCS"), reinterpret_cast<CComponent**>(&m_pLocalConvergeCS))))
+        return E_FAIL;
+
     /* FOR.Com_ResetCS */
     if (FAILED(__super::Add_Component(LEVEL_TOOL, TEXT("Prototype_Component_Shader_Compute_Particle_Reset"),
         TEXT("Com_ResetCS"), reinterpret_cast<CComponent**>(&m_pResetCS))))
@@ -362,7 +380,11 @@ void CParticle_Effect::Free()
     Safe_Release(m_pSpreadCS);
     Safe_Release(m_pMoveCS);
     Safe_Release(m_pConvergeCS);
+
     Safe_Release(m_pLocalSpreadCS);
+    Safe_Release(m_pLocalMoveCS);
+    Safe_Release(m_pLocalConvergeCS);
+
     Safe_Release(m_pResetCS);
 
     for (size_t i = 0; i < TEXTURE_END; ++i)
