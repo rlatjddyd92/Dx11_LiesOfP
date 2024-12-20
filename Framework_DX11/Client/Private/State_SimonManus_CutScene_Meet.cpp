@@ -23,8 +23,8 @@ HRESULT CState_SimonManus_CutScene_Meet::Start_State(void* pArg)
 {
     // 모델이 달라서 여기서 해주기
     m_iAnimation_Turn = m_pMonster->Get_Model()->Find_AnimationIndex("AS_MOB_Manus_Turn_Cine", 1.f);
-    m_iAnimation_Talk = m_pMonster->Get_Model()->Find_AnimationIndex("AS_MOB_Manus_Talk_Cine", 1.5f);
-    m_iAnimation_Hand = m_pMonster->Get_Model()->Find_AnimationIndex("AS_MOB_Manus_Hand_Cine", 1.f);
+    m_iAnimation_Talk = m_pMonster->Get_Model()->Find_AnimationIndex("AS_MOB_Manus_Talk_Cine", 1.315f);
+    m_iAnimation_Hand = m_pMonster->Get_Model()->Find_AnimationIndex("AS_MOB_Manus_Hand_Cine", 1.3159f);
     m_iAnimation_End = m_pMonster->Get_Model()->Find_AnimationIndex("AS_MOB_Manus_End_Cine", 1.f);
 
     m_pMonster->Change_Animation(m_iAnimation_Turn, false, 0.f, 0);
@@ -82,32 +82,47 @@ void CState_SimonManus_CutScene_Meet::Update(_float fTimeDelta)
     if (iCurAnim == m_iAnimation_Hand)
     {
         _int iFrame = m_pMonster->Get_Frame();
-        if (iFrame > 230)
+        if (iFrame > 240)
         {
             m_pMonster->Active_Weapon();
         }
     }
 
-    End_Check();
+    End_Check(fTimeDelta);
 }
 
 void CState_SimonManus_CutScene_Meet::End_State()
 {
 }
 
-void CState_SimonManus_CutScene_Meet::End_Check()
+void CState_SimonManus_CutScene_Meet::End_Check(_float fTimeDelta)
 {
+   /* if (m_bChangedToTalk == false && m_pMonster->Get_Frame() > 1200)
+    {
+        m_bChangedToTalk = true;
+        m_pMonster->Change_Animation(m_iAnimation_Talk, false, 0.1f, 0);
+    }*/
     if (m_pMonster->Get_EndAnim(m_iAnimation_Turn))
     {
-        m_pMonster->Change_Animation(m_iAnimation_Talk, false, 0.1f, 0);
+        m_fDelay2 += fTimeDelta;
+
+        if (m_fDelay2 < 0.9f)
+            return;
+
+        m_pMonster->Change_Animation(m_iAnimation_Talk, false, 0.1f, 0); 
     }
-    else if (m_pMonster->Get_EndAnim(m_iAnimation_Talk))
+   // else if (m_pMonster->Get_EndAnim(m_iAnimation_Talk))
+    else if (m_pMonster->Get_CurrentAnimIndex() == m_iAnimation_Talk && m_pMonster->Get_Model()->Get_CurrentFrame() > 718)
     {
         m_pMonster->Change_Animation(m_iAnimation_Hand, false, 0.2f, 65);
     }
+    else if (m_pMonster->Get_CurrentAnimIndex() == m_iAnimation_Hand && m_pMonster->Get_Model()->Get_CurrentFrame() > 560)
+    {
+        m_pMonster->Get_Model()->Set_SpeedPerSec(m_iAnimation_Hand, 11);
+    }
     else if (m_pMonster->Get_EndAnim(m_iAnimation_Hand))
     {
-        m_pMonster->Change_Animation(m_iAnimation_End, false, 0.f, 0);
+        m_pMonster->Change_Animation(m_iAnimation_End, false, 0.2f, 0);
     }
     else if (m_pMonster->Get_EndAnim(m_iAnimation_End))
     {

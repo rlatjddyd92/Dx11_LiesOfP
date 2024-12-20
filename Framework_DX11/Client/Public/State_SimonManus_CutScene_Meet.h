@@ -30,12 +30,15 @@ private:
     _bool               m_isStartCutScene = {};
     _bool               m_isStartPlaySound = {};
 
+    _bool               m_bChangedToTalk = { false };
+
     _float              m_fDelay = {};
+    _float              m_fDelay2 = {};
 
     _Vec3               m_vRootMoveStack{};
 
 private:
-    void                End_Check();
+    void                End_Check(_float fTimeDelta);
 
 public:
     static CState_SimonManus_CutScene_Meet* Create(class CFsm* pFsm, class CMonster* pMonster, _uint iStateNum, void* pArg = nullptr);
