@@ -12,7 +12,7 @@ class CState_CarcassBigA_Idle : public CState
 private:
     typedef enum {
         AN_IDLE = 20, AN_TURN_LEFT = 30, AN_TURN_RIGHT = 31
-        , AN_RUN = 121, AN_WALK = 125
+        , AN_RUN = 29, AN_WALK = 33
     }ANIMNUM;
 
 public:

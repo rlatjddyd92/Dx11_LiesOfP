@@ -12,7 +12,7 @@ class CState_RaxasiaP2_Idle : public CState
 private:
     typedef enum {
         AN_IDLE = 12, AN_TURN_LEFT = 50, AN_TURN_RIGHT = 51
-        , AN_RUN = 10, AN_WALK = 46
+        , AN_RUN = 53, AN_WALK = 46
     }ANIMNUM;
 public:
     CState_RaxasiaP2_Idle(class CFsm* pFsm, class CMonster* pMonster);

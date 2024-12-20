@@ -12,7 +12,7 @@ class CState_RaxasiaP1_Idle : public CState
 private:
     typedef enum {
         AN_IDLE = 8, AN_TURN_LEFT = 43, AN_TURN_RIGHT = 44
-        , AN_RUN = 10, AN_WALK = 46
+        , AN_RUN = 40, AN_WALK = 46
     }ANIMNUM;
 public:
     CState_RaxasiaP1_Idle(class CFsm* pFsm, class CMonster* pMonster);
@@ -35,8 +35,6 @@ private:
     _bool               m_bRunning = { false };
     _bool               m_bWalk = { false };
 
-    _float              m_fRunSpeed = { 3.5f };
-    _float              m_fWalkSpeed = { 2.f };
     _float              m_fRunningWeights = { 4.f };
 
     _float              m_fNeedDist_ForAttack = { 8.f };
