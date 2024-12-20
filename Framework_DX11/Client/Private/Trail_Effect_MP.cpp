@@ -226,6 +226,10 @@ HRESULT CTrail_Effect_MP::Ready_Components(const TRAIL_MP_DESC& Desc)
 		strComputeShaderTag = TEXT("Prototype_Component_Shader_Compute_Trail_Follow");
 		break;
 
+	case MT_LOCALSPREAD:
+		strComputeShaderTag = TEXT("Prototype_Component_Shader_Compute_Trail_LocalSpread");
+		break;
+
 	default:
 		return E_FAIL;
 	}
