@@ -24,51 +24,136 @@ HRESULT CState_CarcassNormal_Idle::Start_State(void* pArg)
     m_pMonster->Get_Model()->Set_RemoteTuning(true);
     m_pMonster->Change_Animation(AN_IDLE, true, 0.1f, 0);
 
+    m_bWalk = false;
+    m_bRunning = false;
+
     return S_OK;
 }
 
 void CState_CarcassNormal_Idle::Update(_float fTimeDelta)
 {
-    m_fIdleTime += fTimeDelta;
     _float fDist = m_pMonster->Calc_Distance_XZ();
-    if (!m_bFirstMeetCheck)
+    if (!m_bDiscover)
     {
         _Vec3 vTargetPos = m_pMonster->Get_TargetPos();
         _Vec3 vMonsterPos = m_pMonster->Get_Transform()->Get_State(CTransform::STATE_POSITION);
-        if (fDist <= 15.f && abs(vTargetPos.y - vMonsterPos.y) <= 5.f)
-        {
-            m_bFirstMeetCheck = true;
 
-            GET_GAMEINTERFACE->Set_OnOff_OrthoUI(true, m_pMonster);
+        if (abs(vTargetPos.y - vMonsterPos.y) <= 3.f)
+        {
+            _Vec3 vTargetDir = m_pMonster->Get_TargetDir();
+            _Vec3 vLook = m_pMonster->Get_Transform()->Get_State(CTransform::STATE_LOOK);
+            if (fDist <= m_fDiscoverDist)
+            {
+                _int iDir = m_pMonster->Get_Transform()->LookAt_Lerp_NoHeight(m_pMonster->Get_TargetDir(), 0.6f, fTimeDelta);
+                switch (iDir)
+                {
+                case -1:
+                    m_pMonster->Change_Animation(AN_TURN_LEFT, true, 0.1f);
+                    break;
+
+                case 0:
+                    m_pMonster->Change_Animation(AN_IDLE, true, 0.1f);
+                    break;
+
+                case 1:
+                    m_pMonster->Change_Animation(AN_TURN_RIGHT, true, 0.1f);
+                    break;
+
+                default:
+                    break;
+                }
+            }
+            else
+            {
+                m_pMonster->Change_Animation(AN_IDLE, true, 0.1f, 0);
+            }
+
+            if (fDist <= m_fRecognitionDist)
+            {
+                if (!m_bFirstMeetCheck)
+                {
+                    GET_GAMEINTERFACE->Set_OnOff_OrthoUI(true, m_pMonster);
+
+                    m_bFirstMeetCheck = true;
+                }
+
+                _float fRadian = vTargetDir.Dot(vLook);
+                if (fRadian >= XMConvertToRadians(60.f))
+                {
+                    m_bDiscover = true;
+                    return;
+                }
+
+            }
         }
         else
         {
             return;
         }
     }
-    if (m_fIdleEndDuration <= m_fIdleTime)
+    else if (m_fIdleEndDuration <= m_fIdleTime)
     {
         if (fDist >= 30.f)
         {
+            m_bFirstMeetCheck = false;
+            m_bDiscover = false;
             return;
         }
 
-        if (fDist <= 7.f)
+        if (fDist <= m_fNeedDist_ForAttack)
         {
-            Calc_Act_Attack();
+            Calc_Act_Attack(fTimeDelta, fDist);
             return;
         }
-        else if (fDist > 10.f)
+        else if (fDist > m_fNeedDist_ForAttack + m_fRunningWeights || m_bRunning)
         {
-            m_pMonster->Change_State(CCarcassNormal::RUN);
+            if (!m_bRunning)
+            {
+                m_pMonster->Change_Animation(AN_RUN, true, 0.1f, 0);
+                m_bRunning = true;
+            }
+            m_pMonster->Get_Transform()->LookAt_Lerp_NoHeight(m_pMonster->Get_TargetDir(), 2.f, fTimeDelta);
+            _Vec3 vDir = m_pMonster->Get_Transform()->Get_State(CTransform::STATE_LOOK);
+
+            m_pMonster->Get_RigidBody()->Set_Velocity(XMVector3Normalize(vDir) * m_fRunSpeed);
             return;
         }
-        else if (fDist > 7.f)
+        else if (fDist > m_fNeedDist_ForAttack)
         {
-            m_pMonster->Change_State(CCarcassNormal::WALK);
+            if (!m_bWalk)
+            {
+                m_pMonster->Change_Animation(AN_WALK, true, 0.1f, 0);
+                m_bWalk = true;
+            }
+            m_pMonster->Get_Transform()->LookAt_Lerp_NoHeight(m_pMonster->Get_TargetDir(), 1.5, fTimeDelta);
+            _Vec3 vDir = m_pMonster->Get_Transform()->Get_State(CTransform::STATE_LOOK);
+
+            m_pMonster->Get_RigidBody()->Set_Velocity(XMVector3Normalize(vDir) * m_fWalkSpeed);
             return;
         }
 
+    }
+    else
+    {
+        _int iDir = m_pMonster->Get_Transform()->LookAt_Lerp_NoHeight(m_pMonster->Get_TargetDir(), 2, fTimeDelta);
+        switch (iDir)
+        {
+        case -1:
+            m_pMonster->Change_Animation(AN_TURN_LEFT, true, 0.1f);
+            break;
+
+        case 0:
+            m_pMonster->Change_Animation(AN_IDLE, true, 0.1f);
+            break;
+
+        case 1:
+            m_pMonster->Change_Animation(AN_TURN_RIGHT, true, 0.1f);
+            break;
+
+        default:
+            break;
+        }
+        m_fIdleTime += fTimeDelta;
     }
 
 }
@@ -79,7 +164,7 @@ void CState_CarcassNormal_Idle::End_State()
     m_fIdleTime = 0.f;
 }
 
-void CState_CarcassNormal_Idle::Calc_Act_Attack()
+void CState_CarcassNormal_Idle::Calc_Act_Attack(_float fTimeDelta, _float fDist)
 {
     //µÚÀÏ¶§
     _Vec3 vUp = XMVector3Normalize(m_pMonster->Get_Transform()->Get_State(CTransform::STATE_UP));
@@ -91,8 +176,15 @@ void CState_CarcassNormal_Idle::Calc_Act_Attack()
 
     if (vCrossUp.y > 0)
     {
-        m_pMonster->Change_State(CCarcassNormal::HEADINGMULTIPLE);
-        return;
+        if (fDist <= 6.f)
+        {
+            m_pMonster->Change_State(CCarcassNormal::HEADINGMULTIPLE);
+            return;
+        }
+        else
+        {
+            m_pMonster->Get_Transform()->LookAt_Lerp_NoHeight(m_pMonster->Get_TargetDir(), 3, fTimeDelta);
+        }
     }
     else
     {
@@ -105,22 +197,27 @@ void CState_CarcassNormal_Idle::Calc_Act_Attack()
         {
         case 0:
             m_pMonster->Change_State(CCarcassNormal::TRIPLECLAW);
+            m_fNeedDist_ForAttack = 2.f;
             break;
 
         case 1:
             m_pMonster->Change_State(CCarcassNormal::CLAWMULTIPLE);
+            m_fNeedDist_ForAttack = 7.f;
             break;
 
         case 2:
             m_pMonster->Change_State(CCarcassNormal::CLAWRUSH);
+            m_fNeedDist_ForAttack = 3.f;
             break;
 
         case 3:
             m_pMonster->Change_State(CCarcassNormal::TRIPLECLAW_2);
+            m_fNeedDist_ForAttack = 2.5f;
             break;
 
         case 4:
             m_pMonster->Change_State(CCarcassNormal::BITE);
+            m_fNeedDist_ForAttack = 3.f;
             break;
 
         default:

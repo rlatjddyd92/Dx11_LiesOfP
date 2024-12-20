@@ -14,7 +14,7 @@ class CMonster abstract : public CPawn
 {
 public:
 	enum MONSTER_STATE {
-		IDLE, WALK, RUN, ATTACK, GROGY, HITFATAL, PARALYZE, DIE,
+		IDLE, GROGY, HITFATAL, PARALYZE, DIE,
 
 		MONSTER_STATE_END
 	};

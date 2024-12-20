@@ -14,8 +14,6 @@
 #include "State_CarcassNormal_Idle.h"
 #include "State_CarcassNormal_Die.h"
 #include "State_CarcassNormal_HitFatal.h"
-#include "State_CarcassNormal_Walk.h"
-#include "State_CarcassNormal_Run.h"
 
 #include "State_CarcassNormal_HeadingMultiple.h"
 #include "State_CarcassNormal_TripleClaw.h"
@@ -67,8 +65,8 @@ HRESULT CCarcassNormal::Initialize(void* pArg)
 
 	m_strObjectTag = TEXT("Monster");
 
-	m_pTransformCom->Set_State(CTransform::STATE_POSITION,
-		XMVectorSet(0.f, -5.f, 0.f, 1.f));
+	//m_pRigidBodyCom->Set_GloblePose(_Vec3{ 0.f, -5.f, 0.f } + m_pTransformCom->Get_State(CTransform::STATE_LOOK) * 8);
+
 	//m_pTransformCom->LookAt(_vector{ 0, 0, -1, 0 });
 
 
@@ -325,8 +323,6 @@ HRESULT CCarcassNormal::Ready_FSM()
 
 
 	m_pFsmCom->Add_State(CState_CarcassNormal_Idle::Create(m_pFsmCom, this, IDLE, &Desc));
-	m_pFsmCom->Add_State(CState_CarcassNormal_Walk::Create(m_pFsmCom, this, WALK, &Desc));
-	m_pFsmCom->Add_State(CState_CarcassNormal_Run::Create(m_pFsmCom, this, RUN, &Desc));
 	m_pFsmCom->Add_State(CState_CarcassNormal_HitFatal::Create(m_pFsmCom, this, HITFATAL, &Desc));
 	m_pFsmCom->Add_State(CState_CarcassNormal_Die::Create(m_pFsmCom, this, DIE, &Desc));
 
@@ -337,7 +333,7 @@ HRESULT CCarcassNormal::Ready_FSM()
 	m_pFsmCom->Add_State(CState_CarcassNormal_TripleClaw_2::Create(m_pFsmCom, this, TRIPLECLAW_2, &Desc));
 	m_pFsmCom->Add_State(CState_CarcassNormal_Bite::Create(m_pFsmCom, this, BITE, &Desc));
 	m_pFsmCom->Add_State(CState_CarcassNormal_HeadingMultiple::Create(m_pFsmCom, this, HEADINGMULTIPLE, &Desc));
-
+	
 	m_pFsmCom->Set_State(IDLE);
 
 	return S_OK;

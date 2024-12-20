@@ -11,7 +11,7 @@ class CState_RebornerBigA_GuardSting : public CState
 {
 private:
     typedef enum {
-        AN_LINKED_START = 5, AN_LINKED_LAST = 12
+        AN_LINKED_START = 3, AN_LINKED_LAST = 2
     }ANIMNUM;
 public:
     CState_RebornerBigA_GuardSting(class CFsm* pFsm, class CMonster* pMonster);

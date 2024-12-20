@@ -23,72 +23,139 @@ HRESULT CState_CurruptedStrongArm_Idle::Start_State(void* pArg)
 {
     m_pMonster->Change_Animation(AN_IDLE, true, 0.1f, 0);
 
+    m_bRunning = false;
+    m_bWalk = false;
+
     return S_OK;
 }
 
 void CState_CurruptedStrongArm_Idle::Update(_float fTimeDelta)
 {
-    m_fIdleTime += fTimeDelta;
     _float fDist = m_pMonster->Calc_Distance_XZ();
-    //if (!m_bFirstMeetCheck)
-    //{
-    //    _Vec3 vTargetPos = m_pMonster->Get_TargetPos();
-    //    _Vec3 vMonsterPos = m_pMonster->Get_Transform()->Get_State(CTransform::STATE_POSITION);
-    //    if (fDist <= 15.f && abs(vTargetPos.y - vMonsterPos.y) <= 5.f)
-    //    {
-    //        m_bFirstMeetCheck = true;
-    //
-    //        GET_GAMEINTERFACE->Set_OnOff_OrthoUI(true, m_pMonster);
-    //    }
-    //    else
-    //    {
-    //        return;
-    //    }
-    //}
-    if (m_fIdleEndDuration <= m_fIdleTime)
+    if (!m_bDiscover)
     {
-        if (fDist >= 30.f)
+        _Vec3 vTargetPos = m_pMonster->Get_TargetPos();
+        _Vec3 vMonsterPos = m_pMonster->Get_Transform()->Get_State(CTransform::STATE_POSITION);
+
+        if (abs(vTargetPos.y - vMonsterPos.y) <= 3.f)
+        {
+            _Vec3 vTargetDir = m_pMonster->Get_TargetDir();
+            _Vec3 vLook = m_pMonster->Get_Transform()->Get_State(CTransform::STATE_LOOK);
+            if (fDist <= m_fDiscoverDist)
+            {
+                _int iDir = m_pMonster->Get_Transform()->LookAt_Lerp_NoHeight(m_pMonster->Get_TargetDir(), 0.6f, fTimeDelta);
+                switch (iDir)
+                {
+                case -1:
+                    m_pMonster->Change_Animation(AN_TURN_LEFT, true, 0.1f);
+                    break;
+
+                case 0:
+                    m_pMonster->Change_Animation(AN_IDLE, true, 0.1f);
+                    break;
+
+                case 1:
+                    m_pMonster->Change_Animation(AN_TURN_RIGHT, true, 0.1f);
+                    break;
+
+                default:
+                    break;
+                }
+            }
+            else
+            {
+                m_pMonster->Change_Animation(AN_IDLE, true, 0.1f, 0);
+            }
+
+            if (fDist <= m_fRecognitionDist)
+            {
+                if (!m_bFirstMeetCheck)
+                {
+                    GET_GAMEINTERFACE->Set_OnOff_OrthoUI(true, m_pMonster);
+
+                    m_bFirstMeetCheck = true;
+                }
+
+                _float fRadian = vTargetDir.Dot(vLook);
+                if (fRadian >= XMConvertToRadians(60.f))
+                {
+                    m_bDiscover = true;
+                    return;
+                }
+
+            }
+        }
+        else
         {
             return;
         }
+    }
+    else if (m_fIdleEndDuration <= m_fIdleTime)
+    {
+        if (fDist >= 30.f)
+        {
+            m_bFirstMeetCheck = false;
+            m_bDiscover = false;
+            return;
+        }
 
-        if (fDist <= 7.f)
+        if (fDist <= m_fNeedDist_ForAttack)
         {
             Calc_Act_Attack();
             return;
         }
-        else if (fDist > 10.f)
+        else if (fDist > m_fNeedDist_ForAttack + m_fRunningWeights || m_bRunning)
         {
-            m_pMonster->Change_State(CCurruptedStrongArm_Puppet::RUN);
+            if (!m_bRunning)
+            {
+                m_pMonster->Change_Animation(AN_RUN, true, 0.1f, 0);
+                m_bRunning = true;
+            }
+            m_pMonster->Get_Transform()->LookAt_Lerp_NoHeight(m_pMonster->Get_TargetDir(), 2.f, fTimeDelta);
+            _Vec3 vDir = m_pMonster->Get_Transform()->Get_State(CTransform::STATE_LOOK);
+
+            m_pMonster->Get_RigidBody()->Set_Velocity(XMVector3Normalize(vDir) * m_fRunSpeed);
             return;
         }
-        else if (fDist > 7.f)
+        else if (fDist > m_fNeedDist_ForAttack)
         {
-            m_pMonster->Change_State(CCurruptedStrongArm_Puppet::WALK);
+            if (!m_bWalk)
+            {
+                m_pMonster->Change_Animation(AN_WALK, true, 0.1f, 0);
+                m_bWalk = true;
+            }
+            m_pMonster->Get_Transform()->LookAt_Lerp_NoHeight(m_pMonster->Get_TargetDir(), 1.5, fTimeDelta);
+            _Vec3 vDir = m_pMonster->Get_Transform()->Get_State(CTransform::STATE_LOOK);
+
+            m_pMonster->Get_RigidBody()->Set_Velocity(XMVector3Normalize(vDir) * m_fWalkSpeed);
             return;
         }
 
     }
-
-
-    _int iDir = m_pMonster->Get_Transform()->LookAt_Lerp_NoHeight(m_pMonster->Get_TargetDir(), 2, fTimeDelta);
-    switch (iDir)
+    else
     {
-    case -1:
-        m_pMonster->Change_Animation(AN_TURN_LEFT, true, 0.1f);
-        break;
+        _int iDir = m_pMonster->Get_Transform()->LookAt_Lerp_NoHeight(m_pMonster->Get_TargetDir(), 2, fTimeDelta);
+        switch (iDir)
+        {
+        case -1:
+            m_pMonster->Change_Animation(AN_TURN_LEFT, true, 0.1f);
+            break;
 
-    case 0:
-        m_pMonster->Change_Animation(AN_IDLE, true, 0.1f);
-        break;
+        case 0:
+            m_pMonster->Change_Animation(AN_IDLE, true, 0.1f);
+            break;
 
-    case 1:
-        m_pMonster->Change_Animation(AN_TURN_RIGHT, true, 0.1f);
-        break;
+        case 1:
+            m_pMonster->Change_Animation(AN_TURN_RIGHT, true, 0.1f);
+            break;
 
-    default:
-        break;
+        default:
+            break;
+        }
+        m_fIdleTime += fTimeDelta;
     }
+
+
 }
 
 void CState_CurruptedStrongArm_Idle::End_State()
@@ -98,19 +165,25 @@ void CState_CurruptedStrongArm_Idle::End_State()
 
 void CState_CurruptedStrongArm_Idle::Calc_Act_Attack()
 {
-    _int iAtkNum = rand() % 3;
-    switch (iAtkNum)
+    if (m_iAtkCnt >= 3)
+    {
+        m_iAtkCnt = 0;
+    }
+    switch (m_iAtkCnt)
     {
     case 0:
         m_pMonster->Change_State(CCurruptedStrongArm_Puppet::SWIPATTACK);
+        m_fNeedDist_ForAttack = 6.f;
         break;
 
     case 1:
         m_pMonster->Change_State(CCurruptedStrongArm_Puppet::STINGTWICE);
+        m_fNeedDist_ForAttack = 3.5f;
         break;
 
     case 2:
         m_pMonster->Change_State(CCurruptedStrongArm_Puppet::JUMP_PUNCH);
+        m_fNeedDist_ForAttack = 3.f;
         break;
 
     default:

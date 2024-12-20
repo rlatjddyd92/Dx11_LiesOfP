@@ -36,6 +36,8 @@ HRESULT CAObj_ThunderBolt::Initialize(void* pArg)
     m_vMoveDir = pDesc->vDir;
     m_vTargetPos = pDesc->vTargetPos;
 
+    m_vMoveDir.Normalize();
+
 
     m_pTransformCom->LookAt_Dir(_Vec4{ m_vMoveDir });
 
@@ -107,7 +109,7 @@ void CAObj_ThunderBolt::Update(_float fTimeDelta)
         _Vec3 vTargetPos = {};
         if (m_bCounter)
         {
-            vTargetPos = { m_pCopyRaxasia->Get_Transform()->Get_State(CTransform::STATE_POSITION) };
+            vTargetPos = { m_pCopyRaxasia->Calc_CenterPos() };            
         }
         else
         {
@@ -116,31 +118,31 @@ void CAObj_ThunderBolt::Update(_float fTimeDelta)
         _Vec3 vPos = m_pTransformCom->Get_State(CTransform::STATE_POSITION);
 
         _Vec3 vDir = { vTargetPos - vPos };
+        _Vec3 vDirNoHeight = { vTargetPos };
+
+        vDirNoHeight.y = 0.f;
+        _Vec3 vCopyPos = vPos;
+        vCopyPos.y = 0.f;
+
+        vDirNoHeight = vDirNoHeight - vCopyPos;
+
         _Vec3 vLook = m_pTransformCom->Get_State(CTransform::STATE_LOOK);
         _Vec3 vRight = m_pTransformCom->Get_State(CTransform::STATE_RIGHT);
 
-        _Vec3 vDirCtr = vRight.Cross(vDir);
 
-        if (vDirCtr.y > 0.f)
+        _Vec3 vDirCtr = vRight.Cross(vDirNoHeight);
+
+        if (vDirCtr.y <= 0.f)
         {
-            vLook.y -= m_fHeightGap * 7.f * fTimeDelta;
+            vLook.Normalize();
+            vDir.Normalize();
+            vLook += (vDir * 3.f);
+            vLook.Normalize();
+            m_vMoveDir = vLook;
         }
-        else
-        {
-            m_pTransformCom->LookAt_Lerp_NoHeight(_Vec4{ vTargetPos - vPos }, 3.f, fTimeDelta);
-            if (abs(vPos.y - vTargetPos.y) >= 0.3f)
-            {
-                m_fHeightGap = (vPos.y - vTargetPos.y);
-                if (m_bCounter)
-                    vLook.y += m_fHeightGap * 7.f * fTimeDelta;
-                else
-                    vLook.y -= m_fHeightGap * 7.f * fTimeDelta;
 
-            }
+        m_pTransformCom->Set_State(CTransform::STATE_POSITION, vPos + (m_vMoveDir * m_fSpeed * fTimeDelta));
 
-            m_pTransformCom->Set_State(CTransform::STATE_POSITION, vPos + (vLook * m_fSpeed * fTimeDelta));
-        }
-        
         break;
     }
     case 3:
@@ -154,15 +156,18 @@ void CAObj_ThunderBolt::Update(_float fTimeDelta)
     default:
         break;
     }
-        
-    if (!m_bCounter)
+
+
+    if (m_fLifeDuration <= m_fLifeTime)
+    {
+        m_isDead = true;
+    }
+    else
     {
         m_fLifeTime += fTimeDelta;
-        
-        if (m_fLifeDuration <= m_fLifeTime)
-        {
-            m_isDead = true;
-        }
+    }
+    if (!m_bCounter)
+    {
         _Vec3 vPos = m_pTransformCom->Get_State(CTransform::STATE_POSITION);
         if (vPos.y <= m_vTargetPos.y)
         {
@@ -266,7 +271,7 @@ void CAObj_ThunderBolt::OnCollisionEnter(CGameObject* pOther)
                 //m_fHeightGap *= -1.f;
 
                 m_strObjectTag = TEXT("PlayerWeapon");
-
+                m_fLifeTime = 0.f;
                 m_pEffects[STATE_NORMAL] = CEffect_Manager::Get_Instance()->Clone_Effect(TEXT("Raxasia_Attack_ThunderBolt_Counter"), m_pTransformCom->Get_WorldMatrix_Ptr(),
                     nullptr, _Vec3(0.f, 0.f, 0.f), _Vec3(0.f, 0.f, 1.f), _Vec3(1.f, 1.f, 1.f));
                 m_pEffects[STATE_NORMAL]->Set_Loop(true);

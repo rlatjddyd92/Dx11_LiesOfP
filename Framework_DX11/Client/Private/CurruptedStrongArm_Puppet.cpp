@@ -15,8 +15,6 @@
 #include "State_CurruptedStrongArm_Die.h"
 #include "State_CurruptedStrongArm_Grogy.h"
 #include "State_CurruptedStrongArm_HitFatal.h"
-#include "State_CurruptedStrongArm_Walk.h"
-#include "State_CurruptedStrongArm_RUN.h"
 
 #include "State_CurruptedStrongArm_JumpPunch.h"
 #include "State_CurruptedStrongArm_StingTwice.h"
@@ -264,8 +262,8 @@ HRESULT CCurruptedStrongArm_Puppet::Ready_Components()
 	m_pColliderObject[TYPE_ARM_RIGHT] = dynamic_cast<CColliderObject*>(m_pGameInstance->Clone_GameObject(TEXT("Prototype_GameObject_ColliderObj"), &Desc));
 
 	ColliderOBBDesc_Obj.vAngles = _float3(0.0f, 0.0f, 0.0f);
-	ColliderOBBDesc_Obj.vCenter = _float3(0.1f, 0.f, 0.f);
-	ColliderOBBDesc_Obj.vExtents = _float3(0.8f, 0.2f, 0.2f);
+	ColliderOBBDesc_Obj.vCenter = _float3(-0.1f, 0.f, 0.f);
+	ColliderOBBDesc_Obj.vExtents = _float3(1.f, 0.2f, 0.2f);
 
 	Desc.pBoundingDesc = &ColliderOBBDesc_Obj;
 	Desc.eType = CCollider::TYPE_OBB;
@@ -276,9 +274,6 @@ HRESULT CCurruptedStrongArm_Puppet::Ready_Components()
 
 	m_pColliderObject[TYPE_TENTACLE_FL] = dynamic_cast<CColliderObject*>(m_pGameInstance->Clone_GameObject(TEXT("Prototype_GameObject_ColliderObj"), &Desc));
 
-	ColliderOBBDesc_Obj.vAngles = _float3(0.0f, 0.0f, 0.0f);
-	ColliderOBBDesc_Obj.vCenter = _float3(0.1f, 0.f, 0.f);
-	ColliderOBBDesc_Obj.vExtents = _float3(0.8f, 0.2f, 0.2f);
 
 	Desc.pBoundingDesc = &ColliderOBBDesc_Obj;
 	Desc.eType = CCollider::TYPE_OBB;
@@ -289,9 +284,6 @@ HRESULT CCurruptedStrongArm_Puppet::Ready_Components()
 
 	m_pColliderObject[TYPE_TENTACLE_FR] = dynamic_cast<CColliderObject*>(m_pGameInstance->Clone_GameObject(TEXT("Prototype_GameObject_ColliderObj"), &Desc));
 
-	ColliderOBBDesc_Obj.vAngles = _float3(0.0f, 0.0f, 0.0f);
-	ColliderOBBDesc_Obj.vCenter = _float3(0.1f, 0.f, 0.f);
-	ColliderOBBDesc_Obj.vExtents = _float3(0.8f, 0.2f, 0.2f);
 
 	Desc.pBoundingDesc = &ColliderOBBDesc_Obj;
 	Desc.eType = CCollider::TYPE_OBB;
@@ -302,9 +294,6 @@ HRESULT CCurruptedStrongArm_Puppet::Ready_Components()
 
 	m_pColliderObject[TYPE_TENTACLE_BL] = dynamic_cast<CColliderObject*>(m_pGameInstance->Clone_GameObject(TEXT("Prototype_GameObject_ColliderObj"), &Desc));
 
-	ColliderOBBDesc_Obj.vAngles = _float3(0.0f, 0.0f, 0.0f);
-	ColliderOBBDesc_Obj.vCenter = _float3(0.1f, 0.f, 0.f);
-	ColliderOBBDesc_Obj.vExtents = _float3(0.8f, 0.2f, 0.2f);
 
 	Desc.pBoundingDesc = &ColliderOBBDesc_Obj;
 	Desc.eType = CCollider::TYPE_OBB;
@@ -355,10 +344,8 @@ HRESULT CCurruptedStrongArm_Puppet::Ready_FSM()
 
 
 	m_pFsmCom->Add_State(CState_CurruptedStrongArm_Idle::Create(m_pFsmCom, this, IDLE, &Desc));
-	m_pFsmCom->Add_State(CState_CurruptedStrongArm_Walk::Create(m_pFsmCom, this, WALK, &Desc));
-	m_pFsmCom->Add_State(CState_CurruptedStrongArm_Run::Create(m_pFsmCom, this, RUN, &Desc));
 	m_pFsmCom->Add_State(CState_CurruptedStrongArm_Grogy::Create(m_pFsmCom, this, GROGY, &Desc));
-	//m_pFsmCom->Add_State(CState_CurruptedStrongArm_HitFatal::Create(m_pFsmCom, this, HITFATAL, &Desc));
+	m_pFsmCom->Add_State(CState_CurruptedStrongArm_HitFatal::Create(m_pFsmCom, this, HITFATAL, &Desc));
 	m_pFsmCom->Add_State(CState_CurruptedStrongArm_Die::Create(m_pFsmCom, this, DIE, &Desc));
 
 	m_pFsmCom->Add_State(CState_CurruptedStrongArm_StingTwice::Create(m_pFsmCom, this, STINGTWICE, &Desc));

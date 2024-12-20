@@ -23,103 +23,144 @@ HRESULT CState_CarcassTail_Idle::Start_State(void* pArg)
 {
     m_pMonster->Change_Animation(AN_IDLE, true, 0.1f, 0);
 
+    m_bRunning = false;
+    m_bWalk = false;
+
     return S_OK;
 }
 
 void CState_CarcassTail_Idle::Update(_float fTimeDelta)
 {
+    _int iDir = 2;
     _float fDist = m_pMonster->Calc_Distance_XZ();
-    if (!m_bFirstMeetCheck)
+    if (!m_bDiscover)
     {
         _Vec3 vTargetPos = m_pMonster->Get_TargetPos();
         _Vec3 vMonsterPos = m_pMonster->Get_Transform()->Get_State(CTransform::STATE_POSITION);
-        if (fDist <= 15.f && abs(vTargetPos.y - vMonsterPos.y) <= 5.f)
+
+        if (abs(vTargetPos.y - vMonsterPos.y) <= 3.f)
         {
-            GET_GAMEINTERFACE->Set_OnOff_OrthoUI(true, m_pMonster);
-            m_bFirstMeetCheck = true;
+            _Vec3 vTargetDir = m_pMonster->Get_TargetDir();
+            _Vec3 vLook = m_pMonster->Get_Transform()->Get_State(CTransform::STATE_LOOK);
+            if (fDist <= m_fDiscoverDist)
+            {
+                _int iDirCheck = m_pMonster->Get_Transform()->LookAt_Lerp_NoHeight(m_pMonster->Get_TargetDir(), 0.6f, fTimeDelta);
+                switch (iDirCheck)
+                {
+                case -1:
+                    m_pMonster->Change_Animation(AN_TURN_LEFT, true, 0.1f);
+                    break;
+
+                case 0:
+                    m_pMonster->Change_Animation(AN_IDLE, true, 0.1f);
+                    break;
+
+                case 1:
+                    m_pMonster->Change_Animation(AN_TURN_RIGHT, true, 0.1f);
+                    break;
+
+                default:
+                    break;
+                }
+            }
+            else
+            {
+                m_pMonster->Change_Animation(AN_IDLE, true, 0.1f, 0);
+            }
+
+            if (fDist <= m_fRecognitionDist)
+            {
+                if (!m_bFirstMeetCheck)
+                {
+                    GET_GAMEINTERFACE->Set_OnOff_OrthoUI(true, m_pMonster);
+
+                    m_bFirstMeetCheck = true;
+                }
+
+                _float fRadian = vTargetDir.Dot(vLook);
+                if (fRadian >= XMConvertToRadians(60.f))
+                {
+                    m_bDiscover = true;
+                    return;
+                }
+
+            }
         }
         else
         {
             return;
         }
     }
-    _int iDir = 2;
-
-    //뒤에있을때 공격도 있어서. 회전을 거리가 멀때만 하게 조정
-    if (fDist >= 9.f && fDist < 30.f || m_iTailAtkCnt >= 3)
-    {
-       iDir = m_pMonster->Get_Transform()->LookAt_Lerp_NoHeight(m_pMonster->Get_TargetDir(), 2, fTimeDelta);
-
-       switch (iDir)
-        {
-        case -1:
-            m_pMonster->Change_Animation(AN_TURN_LEFT, true, 0.1f);
-            break;
-
-        case 0:
-            m_pMonster->Change_Animation(AN_IDLE, true, 0.1f);
-            m_iTailAtkCnt = 0;
-            break;
-
-        case 1:
-            m_pMonster->Change_Animation(AN_TURN_RIGHT, true, 0.1f);
-            break;
-
-        default:
-            break;
-        }
-    }
-    
-    //방향값 사용을 위해 위로 올림
-
-    m_fIdleTime += fTimeDelta;
-    if (m_fIdleEndDuration <= m_fIdleTime)
+    else if (m_fIdleEndDuration <= m_fIdleTime)
     {
         if (fDist >= 30.f)
         {
+            m_bFirstMeetCheck = false;
+            m_bDiscover = false;
             return;
         }
 
-        if (iDir == 0 && fDist <= 20.f && fDist >= 10.f)
+        if (fDist <= m_fNeedDist_ForAttack)
         {
-            _int iAtkNum = rand() % 2;
-            switch (iAtkNum)
+            Calc_Act_Attack(fTimeDelta, fDist);
+            return;
+        }
+        else if (fDist > m_fNeedDist_ForAttack + m_fRunningWeights || m_bRunning)
+        {
+            if (!m_bRunning)
             {
+                m_pMonster->Change_Animation(AN_RUN, true, 0.1f, 0);
+                m_bRunning = true;
+            }
+            m_pMonster->Get_Transform()->LookAt_Lerp_NoHeight(m_pMonster->Get_TargetDir(), 2.f, fTimeDelta);
+            _Vec3 vDir = m_pMonster->Get_Transform()->Get_State(CTransform::STATE_LOOK);
+
+            m_pMonster->Get_RigidBody()->Set_Velocity(XMVector3Normalize(vDir) * m_fRunSpeed);
+            return;
+        }
+        else if (fDist > m_fNeedDist_ForAttack)
+        {
+            if (!m_bWalk)
+            {
+                m_pMonster->Change_Animation(AN_WALK, true, 0.1f, 0);
+                m_bWalk = true;
+            }
+            m_pMonster->Get_Transform()->LookAt_Lerp_NoHeight(m_pMonster->Get_TargetDir(), 1.5, fTimeDelta);
+            _Vec3 vDir = m_pMonster->Get_Transform()->Get_State(CTransform::STATE_LOOK);
+
+            m_pMonster->Get_RigidBody()->Set_Velocity(XMVector3Normalize(vDir) * m_fWalkSpeed);
+            return;
+        }
+
+    }
+    else
+    {
+        if (fDist >= 9.f && fDist < 30.f || m_fLinkedTailCtrl >= 3)
+        {
+            //뒤에있을때 공격도 있어서. 회전을 거리가 멀때만 하게 조정
+            iDir = m_pMonster->Get_Transform()->LookAt_Lerp_NoHeight(m_pMonster->Get_TargetDir(), 2, fTimeDelta);
+
+            switch (iDir)
+            {
+            case -1:
+                m_pMonster->Change_Animation(AN_TURN_LEFT, true, 0.1f);
+                break;
+
             case 0:
-                m_pMonster->Change_State(CCarcassTail::LEAP);
-                return;
+                m_pMonster->Change_Animation(AN_IDLE, true, 0.1f);
+                m_fLinkedTailCtrl = 0;
                 break;
 
             case 1:
-                m_pMonster->Change_State(CCarcassTail::LEAPTOATTACK);
-                return;
+                m_pMonster->Change_Animation(AN_TURN_RIGHT, true, 0.1f);
                 break;
 
             default:
                 break;
             }
         }
-
-        if (fDist <= 7.f)
-        {
-            Calc_Act_Attack();
-            return;
-        }
-        else if (fDist > 15.f)
-        {
-            m_pMonster->Change_State(CCarcassTail::RUN);
-            return;
-        }
-        else if (fDist > 7.f)
-        {
-            m_pMonster->Change_State(CCarcassTail::WALK);
-            return;
-        }
-
+        m_fIdleTime += fTimeDelta;
     }
-
-
-    
 }
 
 void CState_CarcassTail_Idle::End_State()
@@ -127,7 +168,7 @@ void CState_CarcassTail_Idle::End_State()
     m_fIdleTime = 0.f;
 }
 
-void CState_CarcassTail_Idle::Calc_Act_Attack()
+void CState_CarcassTail_Idle::Calc_Act_Attack(_float fTimeDelta, _float fDist)
 {
     //얘는 뒤에있는지 아닌지 판단해서 꼬리로 할지 앞으로 공격할지 판단해야함
 
@@ -135,57 +176,87 @@ void CState_CarcassTail_Idle::Calc_Act_Attack()
     _Vec3 vUp = XMVector3Normalize(m_pMonster->Get_Transform()->Get_State(CTransform::STATE_UP));
     _Vec3 vRight = XMVector3Normalize(m_pMonster->Get_Transform()->Get_State(CTransform::STATE_RIGHT));
     _Vec3 vTargetDir = XMVector3Normalize(m_pMonster->Get_TargetDir());
-    _Vec3 vTargetRight = vUp.Cross(vTargetDir);
-    
 
-    _Vec3 vCrossUp = vRight.Cross(vTargetRight);
 
-    if (vUp.Dot(vCrossUp) >= 0)
+    _Vec3 vCrossUp = vRight.Cross(vTargetDir);
+
+    if (vCrossUp.y < 0)
     {
         //앞 행동 긁, 박, 연찍, 긁꼬쓸, 연긁, 연박 리프어택
 
-        _int iAtkNum = rand() % 7;
-        switch (iAtkNum)
+        if (m_iAtkCnt >= 9)
+        {
+            m_iAtkCnt = 0.f;
+        }
+
+        switch (m_iAtkCnt)
         {
         case 0:
             m_pMonster->Change_State(CCarcassTail::SCRATCHING);
+            m_fNeedDist_ForAttack = 4.5f;
             break;
 
         case 1:
             m_pMonster->Change_State(CCarcassTail::HEADING);
+            m_fNeedDist_ForAttack = 10.f;
             break;
 
         case 2:
-            m_pMonster->Change_State(CCarcassTail::MULTYHITTINGDOWN);
+            m_pMonster->Change_State(CCarcassTail::LEAP);
+            m_fNeedDist_ForAttack = 4.5f;
             break;
 
         case 3:
             m_pMonster->Change_State(CCarcassTail::SCRATCHINGTOWIP);
+            m_fNeedDist_ForAttack = 4.5f;
             break;
 
         case 4:
             m_pMonster->Change_State(CCarcassTail::SCRATCHINGMULTIPLE);
+            m_fNeedDist_ForAttack = 5.f;
             break;
 
         case 5:
             m_pMonster->Change_State(CCarcassTail::HEADINGMULTIPLE);
+            m_fNeedDist_ForAttack = 12.f;
             break;
 
         case 6:
             m_pMonster->Change_State(CCarcassTail::LEAPATTACK);
+            m_fNeedDist_ForAttack = 4.5f;
+            break;
+
+        case 7:
+            m_pMonster->Change_State(CCarcassTail::MULTYHITTINGDOWN);
+            m_fNeedDist_ForAttack = 15.f;
+            break;
+
+        case 8:
+            m_pMonster->Change_State(CCarcassTail::LEAPTOATTACK);
+            m_fNeedDist_ForAttack = 4.5f;
             break;
 
         default:
             break;
         }
+        ++m_iAtkCnt;
 
     }
     else
     {
+        if (m_fLinkedTailCtrl >= 3.f)
+        {
+            return;
+        }
         //뒤 행동 찍, 쓸, 연쓸
-        ++m_iTailAtkCnt;
-        _int iAtkNum = rand() % 3;
-        switch (iAtkNum)
+        if (m_iTailAtkCnt >= 3)
+        {
+            m_iTailAtkCnt = 0;
+        }
+
+        ++m_fLinkedTailCtrl;
+        
+        switch (m_iTailAtkCnt)
         {
         case 0:
             m_pMonster->Change_State(CCarcassTail::TAILSWINGDOWN);
@@ -202,6 +273,7 @@ void CState_CarcassTail_Idle::Calc_Act_Attack()
         default:
             break;
         }
+        ++m_iTailAtkCnt;
     }
 }
 

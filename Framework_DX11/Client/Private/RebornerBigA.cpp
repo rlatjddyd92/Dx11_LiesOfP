@@ -15,8 +15,6 @@
 #include "State_RebornerBigA_Die.h"
 #include "State_RebornerBigA_Grogy.h"
 #include "State_RebornerBigA_HitFatal.h"
-#include "State_RebornerBigA_Walk.h"
-#include "State_RebornerBigA_RUN.h"
 
 #include "State_RebornerBigA_SlashJump.h"
 #include "State_RebornerBigA_GuardSting.h"
@@ -307,8 +305,6 @@ HRESULT CRebornerBigA::Ready_FSM()
 
 
 	m_pFsmCom->Add_State(CState_RebornerBigA_Idle::Create(m_pFsmCom, this, IDLE, &Desc));
-	m_pFsmCom->Add_State(CState_RebornerBigA_Walk::Create(m_pFsmCom, this, WALK, &Desc));
-	m_pFsmCom->Add_State(CState_RebornerBigA_Run::Create(m_pFsmCom, this, RUN, &Desc));
 	m_pFsmCom->Add_State(CState_RebornerBigA_Grogy::Create(m_pFsmCom, this, GROGY, &Desc));
 	m_pFsmCom->Add_State(CState_RebornerBigA_HitFatal::Create(m_pFsmCom, this, HITFATAL, &Desc));
 	m_pFsmCom->Add_State(CState_RebornerBigA_Die::Create(m_pFsmCom, this, DIE, &Desc));

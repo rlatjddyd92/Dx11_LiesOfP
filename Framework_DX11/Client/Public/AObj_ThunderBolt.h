@@ -43,8 +43,7 @@ private:
 	_Vec3	m_vTargetPos{};
 
 	_float	m_fLifeTime = {0.f};
-	_float	m_fLifeDuration = {10.f};
-
+	_float	m_fLifeDuration = {5.f};
 
 	_float	m_fSpeed{};
 

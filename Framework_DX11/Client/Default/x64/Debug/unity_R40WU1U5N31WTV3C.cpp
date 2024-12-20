@@ -138,16 +138,10 @@
 #include "C:\Users\User\Desktop\GitHubRepo\new\Dx11_LiesOfP\Framework_DX11\Client\Private\State_CarcassNormal_Idle.cpp"
 
 
-#include "C:\Users\User\Desktop\GitHubRepo\new\Dx11_LiesOfP\Framework_DX11\Client\Private\State_CarcassNormal_Run.cpp"
-
-
 #include "C:\Users\User\Desktop\GitHubRepo\new\Dx11_LiesOfP\Framework_DX11\Client\Private\State_CarcassNormal_TripleClaw.cpp"
 
 
 #include "C:\Users\User\Desktop\GitHubRepo\new\Dx11_LiesOfP\Framework_DX11\Client\Private\State_CarcassNormal_TripleClaw_2.cpp"
-
-
-#include "C:\Users\User\Desktop\GitHubRepo\new\Dx11_LiesOfP\Framework_DX11\Client\Private\State_CarcassNormal_Walk.cpp"
 
 
 #include "C:\Users\User\Desktop\GitHubRepo\new\Dx11_LiesOfP\Framework_DX11\Client\Private\State_CurruptedStrongArm_Die.cpp"
@@ -165,16 +159,10 @@
 #include "C:\Users\User\Desktop\GitHubRepo\new\Dx11_LiesOfP\Framework_DX11\Client\Private\State_CurruptedStrongArm_JumpPunch.cpp"
 
 
-#include "C:\Users\User\Desktop\GitHubRepo\new\Dx11_LiesOfP\Framework_DX11\Client\Private\State_CurruptedStrongArm_Run.cpp"
-
-
 #include "C:\Users\User\Desktop\GitHubRepo\new\Dx11_LiesOfP\Framework_DX11\Client\Private\State_CurruptedStrongArm_StingTwice.cpp"
 
 
 #include "C:\Users\User\Desktop\GitHubRepo\new\Dx11_LiesOfP\Framework_DX11\Client\Private\State_CurruptedStrongArm_SwipAttack.cpp"
-
-
-#include "C:\Users\User\Desktop\GitHubRepo\new\Dx11_LiesOfP\Framework_DX11\Client\Private\State_CurruptedStrongArm_Walk.cpp"
 
 
 #include "C:\Users\User\Desktop\GitHubRepo\new\Dx11_LiesOfP\Framework_DX11\Client\Private\State_Player_Arm_Counter.cpp"
@@ -249,9 +237,6 @@
 #include "C:\Users\User\Desktop\GitHubRepo\new\Dx11_LiesOfP\Framework_DX11\Client\Private\State_RaxasiaP1_RepetUpperSlash.cpp"
 
 
-#include "C:\Users\User\Desktop\GitHubRepo\new\Dx11_LiesOfP\Framework_DX11\Client\Private\State_RaxasiaP1_Run.cpp"
-
-
 #include "C:\Users\User\Desktop\GitHubRepo\new\Dx11_LiesOfP\Framework_DX11\Client\Private\State_RaxasiaP1_Sting_Spread.cpp"
 
 
@@ -259,9 +244,6 @@
 
 
 #include "C:\Users\User\Desktop\GitHubRepo\new\Dx11_LiesOfP\Framework_DX11\Client\Private\State_RaxasiaP1_TripleSting.cpp"
-
-
-#include "C:\Users\User\Desktop\GitHubRepo\new\Dx11_LiesOfP\Framework_DX11\Client\Private\State_RaxasiaP1_Walk.cpp"
 
 
 #include "C:\Users\User\Desktop\GitHubRepo\new\Dx11_LiesOfP\Framework_DX11\Client\Private\State_RaxasiaP2_ChargeRush.cpp"
@@ -289,9 +271,6 @@
 
 
 #include "C:\Users\User\Desktop\GitHubRepo\new\Dx11_LiesOfP\Framework_DX11\Client\Private\State_RaxasiaP2_JumpStamp.cpp"
-
-
-#include "C:\Users\User\Desktop\GitHubRepo\new\Dx11_LiesOfP\Framework_DX11\Client\Private\State_RaxasiaP2_Run.cpp"
 
 
 #include "C:\Users\User\Desktop\GitHubRepo\new\Dx11_LiesOfP\Framework_DX11\Client\Private\State_RaxasiaP2_Running.cpp"
@@ -324,9 +303,6 @@
 #include "C:\Users\User\Desktop\GitHubRepo\new\Dx11_LiesOfP\Framework_DX11\Client\Private\State_RaxasiaP2_Tele_LinkedTel.cpp"
 
 
-#include "C:\Users\User\Desktop\GitHubRepo\new\Dx11_LiesOfP\Framework_DX11\Client\Private\State_RaxasiaP2_Walk.cpp"
-
-
 #include "C:\Users\User\Desktop\GitHubRepo\new\Dx11_LiesOfP\Framework_DX11\Client\Private\State_RaxasiaP2_WaveSting.cpp"
 
 
@@ -351,9 +327,6 @@
 #include "C:\Users\User\Desktop\GitHubRepo\new\Dx11_LiesOfP\Framework_DX11\Client\Private\State_RebornerBigA_Idle.cpp"
 
 
-#include "C:\Users\User\Desktop\GitHubRepo\new\Dx11_LiesOfP\Framework_DX11\Client\Private\State_RebornerBigA_Run.cpp"
-
-
 #include "C:\Users\User\Desktop\GitHubRepo\new\Dx11_LiesOfP\Framework_DX11\Client\Private\State_RebornerBigA_RushSting.cpp"
 
 
@@ -364,9 +337,6 @@
 
 
 #include "C:\Users\User\Desktop\GitHubRepo\new\Dx11_LiesOfP\Framework_DX11\Client\Private\State_RebornerBigA_SwingMultiple.cpp"
-
-
-#include "C:\Users\User\Desktop\GitHubRepo\new\Dx11_LiesOfP\Framework_DX11\Client\Private\State_RebornerBigA_Walk.cpp"
 
 
 #include "C:\Users\User\Desktop\GitHubRepo\new\Dx11_LiesOfP\Framework_DX11\Client\Private\State_SimonManusP2_Die_Talking.cpp"
@@ -444,9 +414,6 @@
 #include "C:\Users\User\Desktop\GitHubRepo\new\Dx11_LiesOfP\Framework_DX11\Client\Private\State_CarcassTail_MultyHittingDown.cpp"
 
 
-#include "C:\Users\User\Desktop\GitHubRepo\new\Dx11_LiesOfP\Framework_DX11\Client\Private\State_CarcassTail_Run.cpp"
-
-
 #include "C:\Users\User\Desktop\GitHubRepo\new\Dx11_LiesOfP\Framework_DX11\Client\Private\State_CarcassTail_Scratching.cpp"
 
 
@@ -463,9 +430,6 @@
 
 
 #include "C:\Users\User\Desktop\GitHubRepo\new\Dx11_LiesOfP\Framework_DX11\Client\Private\State_CarcassTail_TailSwipMultiple.cpp"
-
-
-#include "C:\Users\User\Desktop\GitHubRepo\new\Dx11_LiesOfP\Framework_DX11\Client\Private\State_CarcassTail_Walk.cpp"
 
 
 #include "C:\Users\User\Desktop\GitHubRepo\new\Dx11_LiesOfP\Framework_DX11\Client\Private\State_Player_Chest.cpp"
@@ -636,12 +600,6 @@
 #include "C:\Users\User\Desktop\GitHubRepo\new\Dx11_LiesOfP\Framework_DX11\Client\Private\State_CarcassBigA_RageAttack.cpp"
 
 
-#include "C:\Users\User\Desktop\GitHubRepo\new\Dx11_LiesOfP\Framework_DX11\Client\Private\State_CarcassBigA_Run.cpp"
-
-
-#include "C:\Users\User\Desktop\GitHubRepo\new\Dx11_LiesOfP\Framework_DX11\Client\Private\State_CarcassBigA_Walk.cpp"
-
-
 #include "C:\Users\User\Desktop\GitHubRepo\new\Dx11_LiesOfP\Framework_DX11\Client\Private\State_CarcassBigA_WheelWind.cpp"
 
 
@@ -786,9 +744,6 @@
 #include "C:\Users\User\Desktop\GitHubRepo\new\Dx11_LiesOfP\Framework_DX11\Client\Private\State_SimonManusP1_JumpToSwing.cpp"
 
 
-#include "C:\Users\User\Desktop\GitHubRepo\new\Dx11_LiesOfP\Framework_DX11\Client\Private\State_SimonManusP1_Run.cpp"
-
-
 #include "C:\Users\User\Desktop\GitHubRepo\new\Dx11_LiesOfP\Framework_DX11\Client\Private\State_SimonManusP1_Stamp.cpp"
 
 
@@ -808,9 +763,6 @@
 
 
 #include "C:\Users\User\Desktop\GitHubRepo\new\Dx11_LiesOfP\Framework_DX11\Client\Private\State_SimonManusP1_SwipMultiple_R.cpp"
-
-
-#include "C:\Users\User\Desktop\GitHubRepo\new\Dx11_LiesOfP\Framework_DX11\Client\Private\State_SimonManusP1_Walk.cpp"
 
 
 #include "C:\Users\User\Desktop\GitHubRepo\new\Dx11_LiesOfP\Framework_DX11\Client\Private\State_SimonManusP2_AvoidSwing.cpp"
@@ -852,9 +804,6 @@
 #include "C:\Users\User\Desktop\GitHubRepo\new\Dx11_LiesOfP\Framework_DX11\Client\Private\State_SimonManusP2_Route2.cpp"
 
 
-#include "C:\Users\User\Desktop\GitHubRepo\new\Dx11_LiesOfP\Framework_DX11\Client\Private\State_SimonManusP2_Run.cpp"
-
-
 #include "C:\Users\User\Desktop\GitHubRepo\new\Dx11_LiesOfP\Framework_DX11\Client\Private\State_SimonManusP2_SlideMagic.cpp"
 
 
@@ -880,9 +829,6 @@
 
 
 #include "C:\Users\User\Desktop\GitHubRepo\new\Dx11_LiesOfP\Framework_DX11\Client\Private\State_SimonManusP2_ThunderCalling.cpp"
-
-
-#include "C:\Users\User\Desktop\GitHubRepo\new\Dx11_LiesOfP\Framework_DX11\Client\Private\State_SimonManusP2_Walk.cpp"
 
 
 #include "C:\Users\User\Desktop\GitHubRepo\new\Dx11_LiesOfP\Framework_DX11\Client\Private\State_SimonManusP2_Wave.cpp"

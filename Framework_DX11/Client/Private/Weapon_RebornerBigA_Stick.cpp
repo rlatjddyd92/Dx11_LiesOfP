@@ -150,7 +150,7 @@ HRESULT CWeapon_RebornerBigA_Stick::Ready_Components()
 
 	/* FOR.Com_Collider */
 	CBounding_OBB::BOUNDING_OBB_DESC			ColliderDesc{};
-	ColliderDesc.vExtents = _float3(0.8f, 0.15f, 0.15f);
+	ColliderDesc.vExtents = _float3(0.8f, 0.3f, 0.3f);
 	ColliderDesc.vCenter = _float3(0.6f, 0.f, 0.f);
 	ColliderDesc.vAngles = _float3(0.f, 0.f, 0.f);
 
