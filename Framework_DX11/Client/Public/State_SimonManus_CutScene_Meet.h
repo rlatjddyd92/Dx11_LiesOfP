@@ -30,12 +30,15 @@ private:
     _bool               m_isStartCutScene = {};
     _bool               m_isStartPlaySound = {};
 
+    _bool               m_bChangedToTalk = { false };
+
     _float              m_fDelay = {};
+    _float              m_fDelay2 = {};
 
     _Vec3               m_vRootMoveStack{};
 
 private:
-    void                End_Check();
+    void                End_Check(_float fTimeDelta);
 
 private:
     _bool               m_isShowDialog[5] = { false, };
