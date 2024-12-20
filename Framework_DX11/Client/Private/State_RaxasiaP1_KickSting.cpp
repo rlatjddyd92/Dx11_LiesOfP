@@ -44,6 +44,7 @@ void CState_RaxasiaP1_KickSting::Update(_float fTimeDelta)
             ++m_iRouteTrack;
             m_bSwing = false;
             m_pMonster->Change_Animation(AN_JUMPATTACK, false, 0.1f, 0);
+            return;
         }
 
         if (CurTrackPos <= 25.f ||

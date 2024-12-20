@@ -71,7 +71,7 @@ void CState_RaxasiaP1_DashUpper::Update(_float fTimeDelta)
             }
         }
 
-        m_pMonster->Get_Transform()->LookAt_Lerp_NoHeight(m_pMonster->Get_TargetDir(), 2.f, fTimeDelta);
+        m_pMonster->Get_Transform()->LookAt_Lerp_NoHeight(m_pMonster->Get_TargetDir(), 3.f, fTimeDelta);
 
         break;
 
@@ -85,8 +85,11 @@ void CState_RaxasiaP1_DashUpper::Update(_float fTimeDelta)
             return;
         }
 
-        if (CurTrackPos <= 30.f ||
-            CurTrackPos >= 100.f)
+        if (CurTrackPos <= 30.f)
+        {
+            m_pMonster->Get_Transform()->LookAt_Lerp_NoHeight(m_pMonster->Get_TargetDir(), 4.f, fTimeDelta);
+        }
+        if (CurTrackPos >= 100.f)
         {
             m_pMonster->Get_Transform()->LookAt_Lerp_NoHeight(m_pMonster->Get_TargetDir(), 2.f, fTimeDelta);
         }

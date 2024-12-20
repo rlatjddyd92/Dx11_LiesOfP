@@ -11,8 +11,6 @@
 #include "State_CarcassTail_Die.h"
 #include "State_CarcassTail_Grogy.h"
 #include "State_CarcassTail_HitFatal.h"
-#include "State_CarcassTail_Run.h"
-#include "State_CarcassTail_Walk.h"
 
 #include "State_CarcassTail_Heading.h"
 #include "State_CarcassTail_Leap.h"
@@ -67,10 +65,11 @@ HRESULT CCarcassTail::Initialize(void* pArg)
 
 	m_strObjectTag = TEXT("Monster");
 
-	m_pTransformCom->Set_State(CTransform::STATE_POSITION,
-		XMVectorSet(0.f, 0.f, 0.f, 1.f));
-	m_pTransformCom->LookAt(_vector{ 0, 0, -1, 0 });
+	//m_pTransformCom->Set_State(CTransform::STATE_POSITION,
+	//	XMVectorSet(0.f, 0.f, 0.f, 1.f));
+	//m_pTransformCom->LookAt(_vector{ 0, 0, -1, 0 });
 
+	m_pRigidBodyCom->Set_GloblePose(_Vec3{ 0.f, -5.f, 0.f } + m_pTransformCom->Get_State(CTransform::STATE_LOOK) * 8);
 
 	m_vRimLightColor = { 0.f, 0.f, 0.f, 0.f };
 
@@ -284,8 +283,6 @@ HRESULT CCarcassTail::Ready_FSM()
 	m_pFsmCom->Add_State(CState_CarcassTail_Die::Create(m_pFsmCom, this, DIE, &Desc));
 	m_pFsmCom->Add_State(CState_CarcassTail_Grogy::Create(m_pFsmCom, this, GROGY, &Desc));
 	m_pFsmCom->Add_State(CState_CarcassTail_HitFatal::Create(m_pFsmCom, this, HITFATAL, &Desc));
-	m_pFsmCom->Add_State(CState_CarcassTail_Run::Create(m_pFsmCom, this, RUN, &Desc));
-	m_pFsmCom->Add_State(CState_CarcassTail_Walk::Create(m_pFsmCom, this, WALK, &Desc));
 
 	m_pFsmCom->Add_State(CState_CarcassTail_Heading::Create(m_pFsmCom, this, HEADING, &Desc));
 	m_pFsmCom->Add_State(CState_CarcassTail_Leap::Create(m_pFsmCom, this, LEAP, &Desc));

@@ -16,8 +16,6 @@
 #include "State_RaxasiaP1_Die.h"
 #include "State_RaxasiaP1_Grogy.h"
 #include "State_RaxasiaP1_HitFatal.h"
-#include "State_RaxasiaP1_Walk.h"
-#include "State_RaxasiaP1_Run.h"
 
 #include "State_RaxasiaP1_DashUpper.h"
 #include "State_RaxasiaP1_GroundSlash.h"
@@ -39,8 +37,6 @@
 #include "State_RaxasiaP2_Die.h"
 #include "State_RaxasiaP2_Grogy.h"
 #include "State_RaxasiaP2_HitFatal.h"
-#include "State_RaxasiaP2_Walk.h"
-#include "State_RaxasiaP2_Run.h"
 
 #include "State_RaxasiaP2_JumpStamp.h"
 #include "State_RaxasiaP2_Running.h"
@@ -821,8 +817,6 @@ HRESULT CRaxasia::Ready_FSM()
 
 #pragma region Phase1_Fsm
 	m_pFsmCom->Add_State(CState_RaxasiaP1_Idle::Create(m_pFsmCom, this, IDLE, &Desc));
-	m_pFsmCom->Add_State(CState_RaxasiaP1_Walk::Create(m_pFsmCom, this, WALK, &Desc));
-	m_pFsmCom->Add_State(CState_RaxasiaP1_Run::Create(m_pFsmCom, this, RUN, &Desc));
 	m_pFsmCom->Add_State(CState_RaxasiaP1_Grogy::Create(m_pFsmCom, this, GROGY, &Desc));
 	m_pFsmCom->Add_State(CState_RaxasiaP1_HitFatal::Create(m_pFsmCom, this, HITFATAL, &Desc));
 	m_pFsmCom->Add_State(CState_RaxasiaP1_Die::Create(m_pFsmCom, this, DIE, &Desc));
@@ -851,8 +845,6 @@ HRESULT CRaxasia::Ready_FSM()
 		return E_FAIL;
 
 	m_pExtraFsmCom->Add_State(CState_RaxasiaP2_Idle::Create(m_pExtraFsmCom, this, IDLE, &Desc));
-	m_pExtraFsmCom->Add_State(CState_RaxasiaP2_Walk::Create(m_pExtraFsmCom, this, WALK, &Desc));
-	m_pExtraFsmCom->Add_State(CState_RaxasiaP2_Run::Create(m_pExtraFsmCom, this, RUN, &Desc));
 	m_pExtraFsmCom->Add_State(CState_RaxasiaP2_Grogy::Create(m_pExtraFsmCom, this, GROGY, &Desc));
 	m_pExtraFsmCom->Add_State(CState_RaxasiaP2_HitFatal::Create(m_pExtraFsmCom, this, HITFATAL, &Desc));
 	m_pExtraFsmCom->Add_State(CState_RaxasiaP2_Die::Create(m_pExtraFsmCom, this, DIE, &Desc));
@@ -954,16 +946,10 @@ HRESULT CRaxasia::Ready_Effects()
 	m_Effects[EFFECT_DASH] = CEffect_Manager::Get_Instance()->Clone_Effect(TEXT("Raxasia_Attack_Dash"), pParetnMatrix,
 		nullptr, _Vec3(0.f, 1.f, 0.f), _Vec3(0.f, 0.f, 1.f), _Vec3(1.f, 1.f, 1.f));
 
-	m_Effects[EFFECT_THUNDERDISCHARGE] = CEffect_Manager::Get_Instance()->Clone_Effect(TEXT("Raxasia_Attack_ThunderDischarge"), pParetnMatrix,
-		nullptr, _Vec3(0.f, 0.f, 0.f), _Vec3(0.f, 0.f, 1.f), _Vec3(1.f, 1.f, 1.f));
-
 	m_Effects[EFFECT_HOWLING] = CEffect_Manager::Get_Instance()->Clone_Effect(TEXT("Raxasia_Attack_Howling"), pParetnMatrix,
 		nullptr, _Vec3(0.f, 0.f, 0.f), _Vec3(0.f, 0.f, 1.f), _Vec3(1.f, 1.f, 1.f));
 
 	m_Effects[EFFECT_THUNDERCHARGE_GROUND] = CEffect_Manager::Get_Instance()->Clone_Effect(TEXT("Raxasia_Attack_ThunderCharge_Ground"), pParetnMatrix,
-		nullptr, _Vec3(0.f, 0.f, 0.f), _Vec3(0.f, 0.f, 1.f), _Vec3(1.f, 1.f, 1.f));
-
-	m_Effects[EFFECT_THUNDERENVELOP_BIG] = CEffect_Manager::Get_Instance()->Clone_Effect(TEXT("Raxasia_Attack_ThunderEnvelop_Big"), pParetnMatrix,
 		nullptr, _Vec3(0.f, 0.f, 0.f), _Vec3(0.f, 0.f, 1.f), _Vec3(1.f, 1.f, 1.f));
 
 	m_Effects[EFFECT_THUNDERACCEL] = CEffect_Manager::Get_Instance()->Clone_Effect(TEXT("Raxasia_Attack_ThunderAccel"), pParetnMatrix,
@@ -988,7 +974,15 @@ HRESULT CRaxasia::Ready_Effects()
 
 	m_Effects[EFFECT_INCHENTSWORD] = CEffect_Manager::Get_Instance()->Clone_Effect(TEXT("Raxasia_Attack_InchentedSword"), pParetnMatrix,
 		pSocketBoneMatrix, _Vec3(0.f, 0.f, 0.f), _Vec3(0.f, 0.f, 1.f), _Vec3(1.f, 1.f, 1.f));
-	
+
+	pSocketBoneMatrix = m_pExtraModelCom->Get_BoneCombindTransformationMatrix_Ptr(m_pExtraModelCom->Get_UFBIndices(UFB_CHEST));
+
+	m_Effects[EFFECT_THUNDERDISCHARGE] = CEffect_Manager::Get_Instance()->Clone_Effect(TEXT("Raxasia_Attack_ThunderDischarge"), pParetnMatrix,
+		pSocketBoneMatrix, _Vec3(0.f, 0.f, 0.f), _Vec3(0.f, 0.f, 1.f), _Vec3(1.f, 1.f, 1.f));
+
+	m_Effects[EFFECT_THUNDERENVELOP_BIG] = CEffect_Manager::Get_Instance()->Clone_Effect(TEXT("Raxasia_Attack_ThunderEnvelop_Big"), pParetnMatrix,
+		pSocketBoneMatrix, _Vec3(0.f, 0.f, 0.f), _Vec3(0.f, 0.f, 1.f), _Vec3(1.f, 1.f, 1.f));
+
 
 	pSocketBoneMatrix = m_pExtraModelCom->Get_BoneCombindTransformationMatrix_Ptr(m_pExtraModelCom->Get_UFBIndices(UFB_WEAPON));
 
@@ -1103,6 +1097,15 @@ void CRaxasia::ChangePhase()
 	WeaponDesc.pParentWorldMatrix = m_pTransformCom->Get_WorldMatrix_Ptr();
 	WeaponDesc.pParentAtk = &m_eStat.fAtk;
 	WeaponDesc.pMonster = this;
+
+	Safe_Release(m_pWeapon);
+
+	m_pWeapon = dynamic_cast<CWeapon*>(m_pGameInstance->Clone_GameObject(TEXT("Prototype_GameObject_Weapon_Raxasia_P2_Sword"), &WeaponDesc));
+	if (nullptr == m_pWeapon)
+		return;
+
+	m_pWeapon->Appear();
+
 	WeaponDesc.pSocketBoneMatrix = m_pModelCom->Get_BoneCombindTransformationMatrix_Ptr(46);
 
 
