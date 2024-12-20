@@ -272,7 +272,7 @@ void CPlayer::Update(_float fTimeDelta)
 	////ÄÆ½Å Å×½ºÆ®
 	if (KEY_TAP(KEY::Q))
 	{
-		dynamic_cast<CCutScene*>(m_pGameInstance->Find_Object(LEVEL_GAMEPLAY, TEXT("Layer_CutScene"), BOSS1_PHASE2))->Start_Play();
+		dynamic_cast<CCutScene*>(m_pGameInstance->Find_Object(LEVEL_GAMEPLAY, TEXT("Layer_CutScene"), BOSS2_MEET))->Start_Play();
 		//dynamic_cast<CCutScene*>(m_pGameInstance->Find_Object(LEVEL_GAMEPLAY, TEXT("Layer_CutScene"), SOPHIA_DEAD))->Start_Play();
 		//dynamic_cast<CCutScene*>(m_pGameInstance->Find_Object(LEVEL_GAMEPLAY, TEXT("Layer_CutScene"), BOSS1_MEET2))->Start_Play();
 	}
@@ -799,7 +799,7 @@ _bool CPlayer::Calc_DamageGain(_float fAtkDmg, _Vec3 vHitPos, _uint iHitType, _u
 		}
 		else if (ATK_WEAK == iAttackStrength)
 		{
-			if (1)
+			if (0)
 			{
 				if (nullptr != pAttackerMonster)
 				{
@@ -816,7 +816,7 @@ _bool CPlayer::Calc_DamageGain(_float fAtkDmg, _Vec3 vHitPos, _uint iHitType, _u
 		}
 		else if (ATK_NORMAL == iAttackStrength)
 		{
-			if (1)
+			if (0)
 			{
 				if (nullptr != pAttackerMonster)
 				{

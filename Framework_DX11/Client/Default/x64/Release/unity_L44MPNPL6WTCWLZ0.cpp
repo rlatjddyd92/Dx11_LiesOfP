@@ -66,7 +66,13 @@
 #include "C:\Users\olivi\GitHub\Dx11_LiesOfP\Framework_DX11\Client\Private\CarcassBigA.cpp"
 
 
+#include "C:\Users\olivi\GitHub\Dx11_LiesOfP\Framework_DX11\Client\Private\CarcassNormal.cpp"
+
+
 #include "C:\Users\olivi\GitHub\Dx11_LiesOfP\Framework_DX11\Client\Private\CarcassTail.cpp"
+
+
+#include "C:\Users\olivi\GitHub\Dx11_LiesOfP\Framework_DX11\Client\Private\State_CarcassNormal_Bite.cpp"
 
 
 #include "C:\Users\olivi\GitHub\Dx11_LiesOfP\Framework_DX11\Client\Private\CurruptedStrongArm_Puppet.cpp"
@@ -108,10 +114,37 @@
 #include "C:\Users\olivi\GitHub\Dx11_LiesOfP\Framework_DX11\Client\Private\Raxasia_Sword_CutScene.cpp"
 
 
+#include "C:\Users\olivi\GitHub\Dx11_LiesOfP\Framework_DX11\Client\Private\RebornerBigA.cpp"
+
+
 #include "C:\Users\olivi\GitHub\Dx11_LiesOfP\Framework_DX11\Client\Private\SimonManus_CutScene_GodHand.cpp"
 
 
 #include "C:\Users\olivi\GitHub\Dx11_LiesOfP\Framework_DX11\Client\Private\SimonManus_EnvHand.cpp"
+
+
+#include "C:\Users\olivi\GitHub\Dx11_LiesOfP\Framework_DX11\Client\Private\State_CarcassNormal_ClawMultiple.cpp"
+
+
+#include "C:\Users\olivi\GitHub\Dx11_LiesOfP\Framework_DX11\Client\Private\State_CarcassNormal_ClawRush.cpp"
+
+
+#include "C:\Users\olivi\GitHub\Dx11_LiesOfP\Framework_DX11\Client\Private\State_CarcassNormal_Die.cpp"
+
+
+#include "C:\Users\olivi\GitHub\Dx11_LiesOfP\Framework_DX11\Client\Private\State_CarcassNormal_HeadingMultiple.cpp"
+
+
+#include "C:\Users\olivi\GitHub\Dx11_LiesOfP\Framework_DX11\Client\Private\State_CarcassNormal_HitFatal.cpp"
+
+
+#include "C:\Users\olivi\GitHub\Dx11_LiesOfP\Framework_DX11\Client\Private\State_CarcassNormal_Idle.cpp"
+
+
+#include "C:\Users\olivi\GitHub\Dx11_LiesOfP\Framework_DX11\Client\Private\State_CarcassNormal_TripleClaw.cpp"
+
+
+#include "C:\Users\olivi\GitHub\Dx11_LiesOfP\Framework_DX11\Client\Private\State_CarcassNormal_TripleClaw_2.cpp"
 
 
 #include "C:\Users\olivi\GitHub\Dx11_LiesOfP\Framework_DX11\Client\Private\State_CurruptedStrongArm_Die.cpp"
@@ -126,10 +159,13 @@
 #include "C:\Users\olivi\GitHub\Dx11_LiesOfP\Framework_DX11\Client\Private\State_CurruptedStrongArm_Idle.cpp"
 
 
-#include "C:\Users\olivi\GitHub\Dx11_LiesOfP\Framework_DX11\Client\Private\State_CurruptedStrongArm_Run.cpp"
+#include "C:\Users\olivi\GitHub\Dx11_LiesOfP\Framework_DX11\Client\Private\State_CurruptedStrongArm_JumpPunch.cpp"
 
 
-#include "C:\Users\olivi\GitHub\Dx11_LiesOfP\Framework_DX11\Client\Private\State_CurruptedStrongArm_Walk.cpp"
+#include "C:\Users\olivi\GitHub\Dx11_LiesOfP\Framework_DX11\Client\Private\State_CurruptedStrongArm_StingTwice.cpp"
+
+
+#include "C:\Users\olivi\GitHub\Dx11_LiesOfP\Framework_DX11\Client\Private\State_CurruptedStrongArm_SwipAttack.cpp"
 
 
 #include "C:\Users\olivi\GitHub\Dx11_LiesOfP\Framework_DX11\Client\Private\State_Player_Arm_Counter.cpp"
@@ -210,9 +246,6 @@
 #include "C:\Users\olivi\GitHub\Dx11_LiesOfP\Framework_DX11\Client\Private\State_RaxasiaP1_RepetUpperSlash.cpp"
 
 
-#include "C:\Users\olivi\GitHub\Dx11_LiesOfP\Framework_DX11\Client\Private\State_RaxasiaP1_Run.cpp"
-
-
 #include "C:\Users\olivi\GitHub\Dx11_LiesOfP\Framework_DX11\Client\Private\State_RaxasiaP1_Sting_Spread.cpp"
 
 
@@ -220,9 +253,6 @@
 
 
 #include "C:\Users\olivi\GitHub\Dx11_LiesOfP\Framework_DX11\Client\Private\State_RaxasiaP1_TripleSting.cpp"
-
-
-#include "C:\Users\olivi\GitHub\Dx11_LiesOfP\Framework_DX11\Client\Private\State_RaxasiaP1_Walk.cpp"
 
 
 #include "C:\Users\olivi\GitHub\Dx11_LiesOfP\Framework_DX11\Client\Private\State_RaxasiaP2_ChargeRush.cpp"
@@ -250,9 +280,6 @@
 
 
 #include "C:\Users\olivi\GitHub\Dx11_LiesOfP\Framework_DX11\Client\Private\State_RaxasiaP2_JumpStamp.cpp"
-
-
-#include "C:\Users\olivi\GitHub\Dx11_LiesOfP\Framework_DX11\Client\Private\State_RaxasiaP2_Run.cpp"
 
 
 #include "C:\Users\olivi\GitHub\Dx11_LiesOfP\Framework_DX11\Client\Private\State_RaxasiaP2_Running.cpp"
@@ -285,9 +312,6 @@
 #include "C:\Users\olivi\GitHub\Dx11_LiesOfP\Framework_DX11\Client\Private\State_RaxasiaP2_Tele_LinkedTel.cpp"
 
 
-#include "C:\Users\olivi\GitHub\Dx11_LiesOfP\Framework_DX11\Client\Private\State_RaxasiaP2_Walk.cpp"
-
-
 #include "C:\Users\olivi\GitHub\Dx11_LiesOfP\Framework_DX11\Client\Private\State_RaxasiaP2_WaveSting.cpp"
 
 
@@ -298,6 +322,33 @@
 
 
 #include "C:\Users\olivi\GitHub\Dx11_LiesOfP\Framework_DX11\Client\Private\State_Raxasia_CutScene_Phase2.cpp"
+
+
+#include "C:\Users\olivi\GitHub\Dx11_LiesOfP\Framework_DX11\Client\Private\State_RebornerBigA_Die.cpp"
+
+
+#include "C:\Users\olivi\GitHub\Dx11_LiesOfP\Framework_DX11\Client\Private\State_RebornerBigA_Grogy.cpp"
+
+
+#include "C:\Users\olivi\GitHub\Dx11_LiesOfP\Framework_DX11\Client\Private\State_RebornerBigA_GuardSting.cpp"
+
+
+#include "C:\Users\olivi\GitHub\Dx11_LiesOfP\Framework_DX11\Client\Private\State_RebornerBigA_HitFatal.cpp"
+
+
+#include "C:\Users\olivi\GitHub\Dx11_LiesOfP\Framework_DX11\Client\Private\State_RebornerBigA_Idle.cpp"
+
+
+#include "C:\Users\olivi\GitHub\Dx11_LiesOfP\Framework_DX11\Client\Private\State_RebornerBigA_RushSting.cpp"
+
+
+#include "C:\Users\olivi\GitHub\Dx11_LiesOfP\Framework_DX11\Client\Private\State_RebornerBigA_SlashJump.cpp"
+
+
+#include "C:\Users\olivi\GitHub\Dx11_LiesOfP\Framework_DX11\Client\Private\State_RebornerBigA_SlashTwice.cpp"
+
+
+#include "C:\Users\olivi\GitHub\Dx11_LiesOfP\Framework_DX11\Client\Private\State_RebornerBigA_SwingMultiple.cpp"
 
 
 #include "C:\Users\olivi\GitHub\Dx11_LiesOfP\Framework_DX11\Client\Private\State_SimonManusP2_Die_Talking.cpp"
@@ -375,9 +426,6 @@
 #include "C:\Users\olivi\GitHub\Dx11_LiesOfP\Framework_DX11\Client\Private\State_CarcassTail_MultyHittingDown.cpp"
 
 
-#include "C:\Users\olivi\GitHub\Dx11_LiesOfP\Framework_DX11\Client\Private\State_CarcassTail_Run.cpp"
-
-
 #include "C:\Users\olivi\GitHub\Dx11_LiesOfP\Framework_DX11\Client\Private\State_CarcassTail_Scratching.cpp"
 
 
@@ -394,9 +442,6 @@
 
 
 #include "C:\Users\olivi\GitHub\Dx11_LiesOfP\Framework_DX11\Client\Private\State_CarcassTail_TailSwipMultiple.cpp"
-
-
-#include "C:\Users\olivi\GitHub\Dx11_LiesOfP\Framework_DX11\Client\Private\State_CarcassTail_Walk.cpp"
 
 
 #include "C:\Users\olivi\GitHub\Dx11_LiesOfP\Framework_DX11\Client\Private\State_Player_Chest.cpp"
@@ -567,12 +612,6 @@
 #include "C:\Users\olivi\GitHub\Dx11_LiesOfP\Framework_DX11\Client\Private\State_CarcassBigA_RageAttack.cpp"
 
 
-#include "C:\Users\olivi\GitHub\Dx11_LiesOfP\Framework_DX11\Client\Private\State_CarcassBigA_Run.cpp"
-
-
-#include "C:\Users\olivi\GitHub\Dx11_LiesOfP\Framework_DX11\Client\Private\State_CarcassBigA_Walk.cpp"
-
-
 #include "C:\Users\olivi\GitHub\Dx11_LiesOfP\Framework_DX11\Client\Private\State_CarcassBigA_WheelWind.cpp"
 
 
@@ -717,9 +756,6 @@
 #include "C:\Users\olivi\GitHub\Dx11_LiesOfP\Framework_DX11\Client\Private\State_SimonManusP1_JumpToSwing.cpp"
 
 
-#include "C:\Users\olivi\GitHub\Dx11_LiesOfP\Framework_DX11\Client\Private\State_SimonManusP1_Run.cpp"
-
-
 #include "C:\Users\olivi\GitHub\Dx11_LiesOfP\Framework_DX11\Client\Private\State_SimonManusP1_Stamp.cpp"
 
 
@@ -739,9 +775,6 @@
 
 
 #include "C:\Users\olivi\GitHub\Dx11_LiesOfP\Framework_DX11\Client\Private\State_SimonManusP1_SwipMultiple_R.cpp"
-
-
-#include "C:\Users\olivi\GitHub\Dx11_LiesOfP\Framework_DX11\Client\Private\State_SimonManusP1_Walk.cpp"
 
 
 #include "C:\Users\olivi\GitHub\Dx11_LiesOfP\Framework_DX11\Client\Private\State_SimonManusP2_AvoidSwing.cpp"
@@ -783,9 +816,6 @@
 #include "C:\Users\olivi\GitHub\Dx11_LiesOfP\Framework_DX11\Client\Private\State_SimonManusP2_Route2.cpp"
 
 
-#include "C:\Users\olivi\GitHub\Dx11_LiesOfP\Framework_DX11\Client\Private\State_SimonManusP2_Run.cpp"
-
-
 #include "C:\Users\olivi\GitHub\Dx11_LiesOfP\Framework_DX11\Client\Private\State_SimonManusP2_SlideMagic.cpp"
 
 
@@ -811,9 +841,6 @@
 
 
 #include "C:\Users\olivi\GitHub\Dx11_LiesOfP\Framework_DX11\Client\Private\State_SimonManusP2_ThunderCalling.cpp"
-
-
-#include "C:\Users\olivi\GitHub\Dx11_LiesOfP\Framework_DX11\Client\Private\State_SimonManusP2_Walk.cpp"
 
 
 #include "C:\Users\olivi\GitHub\Dx11_LiesOfP\Framework_DX11\Client\Private\State_SimonManusP2_Wave.cpp"
@@ -928,6 +955,9 @@
 
 
 #include "C:\Users\olivi\GitHub\Dx11_LiesOfP\Framework_DX11\Client\Private\Weapon_Raxasia_P2_Sword.cpp"
+
+
+#include "C:\Users\olivi\GitHub\Dx11_LiesOfP\Framework_DX11\Client\Private\Weapon_RebornerBigA_Stick.cpp"
 
 
 #include "C:\Users\olivi\GitHub\Dx11_LiesOfP\Framework_DX11\Client\Private\Weapon_Scissor.cpp"
