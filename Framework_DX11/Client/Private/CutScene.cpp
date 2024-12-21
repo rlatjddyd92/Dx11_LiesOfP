@@ -208,7 +208,7 @@ void CCutScene::Active_Sound(CUTSCENE_KEYFRAME_DESC* pCutSceneDesc)
 			m_pGameInstance->Play_BGM(TEXT("CutScene_Raxasia_Dead.wav"), &g_fCutSceneVolume);
 			break;
 		case BOSS2_MEET:
-			//m_pGameInstance->Play_BGM(TEXT("CutScene_SimonManus_Meet.wav"), &g_fCutSceneVolume);
+			m_pGameInstance->Play_BGM(TEXT("CutScene_SimonManus_Meet.wav"), &g_fCutSceneVolume);
 			break;
 		default:
 			break;
@@ -328,6 +328,9 @@ void CCutScene::End_Setting()
 		break;	
 	case BOSS2_MEET:
 		dynamic_cast<CCutScene*>(m_pGameInstance->Find_Object(LEVEL_GAMEPLAY, TEXT("Layer_CutScene"), BOSS2_MEET2))->Start_Play();
+		break;	
+	case BOSS2_MEET2:
+		dynamic_cast<CCutScene*>(m_pGameInstance->Find_Object(LEVEL_GAMEPLAY, TEXT("Layer_CutScene"), BOSS2_MEET3))->Start_Play();
 		break;	
 	case BOSS2_MEET3:
 		pPlayer->Change_State(CPlayer::OH_IDLE);
