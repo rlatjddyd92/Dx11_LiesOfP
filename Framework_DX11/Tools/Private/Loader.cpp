@@ -620,6 +620,11 @@ HRESULT CLoader::Ready_Resources_For_ToolLevel_Map0()
 		return E_FAIL;
 	m_pGameInstance->Add_ModelPrototype(LEVEL_TOOL, ("SK_NewTown_Lift_01_Door"), pModel);
 
+	pModel = CModel::Create(m_pDevice, m_pContext, CModel::TYPE_ANIM, "../Bin/ModelData/Anim/SteelHeart/SteelHeart.dat", PreTransformMatrix, false, CController_AnimationTool::Get_Instance()->Get_StructStack(m_iModelCount++));
+	if (FAILED(m_pGameInstance->Add_Prototype(LEVEL_TOOL, TEXT("SteelHeart"), pModel)))
+		return E_FAIL;
+	m_pGameInstance->Add_ModelPrototype(LEVEL_TOOL, ("SteelHeart"), pModel);
+
 #pragma endregion
 
 	_finddata_t fd;
