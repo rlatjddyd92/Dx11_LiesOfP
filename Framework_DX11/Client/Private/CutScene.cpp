@@ -210,6 +210,9 @@ void CCutScene::Active_Sound(CUTSCENE_KEYFRAME_DESC* pCutSceneDesc)
 		case BOSS2_MEET:
 			m_pGameInstance->Play_BGM(TEXT("CutScene_SimonManus_Meet.wav"), &g_fCutSceneVolume);
 			break;
+		case BOSS2_PHASE2:
+			m_pGameInstance->Play_BGM(TEXT("CutScene_SimonManus_Phase2.wav"), &g_fCutSceneVolume);
+			break;
 		default:
 			break;
 		}
@@ -265,6 +268,7 @@ void CCutScene::First_Setting()
 	case BOSS2_PHASE2:
 		pPlayer->IsActive(false);
 		static_cast<CSimonManus*>(m_pGameInstance->Find_Object(LEVEL_GAMEPLAY, TEXT("Layer_SimonManus"), 0))->Start_CutScene(1);
+		m_pGameInstance->Stop_BGM();
 		break;
 	case BOSS2_DEFEAT:
 		pPlayer->IsActive(false);
