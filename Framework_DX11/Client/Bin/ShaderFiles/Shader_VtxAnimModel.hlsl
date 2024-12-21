@@ -148,7 +148,7 @@ PS_OUT_MODEL PS_MAIN(PS_IN_ANIMODEL In)
 
     vector vMtrlDiffuse = g_DiffuseTexture.Sample(LinearSampler, In.vTexcoord);
 
-    if (0.3f > vMtrlDiffuse.a)
+    if (0.1f > vMtrlDiffuse.a)
         discard;
 	
     vector vEmissive = g_EmessiveTexture.Sample(LinearClampSampler, In.vTexcoord) * g_fEmessiveMask;
@@ -172,7 +172,7 @@ PS_OUT_MODEL PS_MAIN_NORMAL(PS_IN_NORMAL In)
     if (g_fDissolveRatio >= vDisslove.r)
         discard;
     
-    if (0.3f >= vDiffuse.a)
+    if (0.1f >= vDiffuse.a)
         discard;
 	
     vector vNormalDesc = g_NormalTexture.Sample(LinearSampler, In.vTexcoord);
