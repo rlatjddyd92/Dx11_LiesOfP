@@ -49,11 +49,7 @@ void CState_RaxasiaP2_WaveSting::Update(_float fTimeDelta)
             m_pMonster->Change_Animation(AN_WAVE, false, 0.02f, 50);
             return;
         }
-
-        if (CurTrackPos >= 95.f && CurTrackPos <= 105)
-        {
-            m_pMonster->Get_Transform()->LookAt_Lerp_NoHeight(m_pMonster->Get_TargetDir(), 1.f, fTimeDelta);
-        }
+        m_pMonster->Get_Transform()->LookAt_Lerp_NoHeight(m_pMonster->Get_TargetDir(), 1.f, fTimeDelta);
 
         break;
 
@@ -62,9 +58,14 @@ void CState_RaxasiaP2_WaveSting::Update(_float fTimeDelta)
         {
             ++m_iRouteTrack;
             m_bSwing = false;
-            m_pMonster->Change_Animation(AN_RUN, false, 0.02f, 115);
+            m_pMonster->Change_Animation(AN_RUN, true, 0.02f, 0);
             m_pMonster->Get_Model()->Set_SpeedRatio(AN_RUN, (double)1.5);
             return;
+        }
+        if (CurTrackPos <= 60.f ||
+            (CurTrackPos >= 95.f && CurTrackPos <= 105))
+        {
+            m_pMonster->Get_Transform()->LookAt_Lerp_NoHeight(m_pMonster->Get_TargetDir(), 2.f, fTimeDelta);
         }
 
         break;
@@ -92,6 +93,11 @@ void CState_RaxasiaP2_WaveSting::Update(_float fTimeDelta)
         {
             m_pMonster->Change_State(CRaxasia::IDLE);
             return;
+        }
+        
+        if (CurTrackPos <= 155.f)
+        {
+            m_pMonster->Get_Transform()->LookAt_Lerp_NoHeight(m_pMonster->Get_TargetDir(), 2.f, fTimeDelta);
         }
 
         break;
@@ -180,8 +186,8 @@ void CState_RaxasiaP2_WaveSting::Effect_Check(_double CurTrackPos)
     {
         if (!m_bWave)
         {
-            if ((CurTrackPos >= 80.f && CurTrackPos <= 85.f) ||
-                (CurTrackPos >= 115.f && CurTrackPos <= 120.f))
+            if ((CurTrackPos >= 75.f && CurTrackPos <= 80.f) ||
+                (CurTrackPos >= 110.f && CurTrackPos <= 115.f))
             {
                 //웨이브 공격 생성
                 _float4x4 WorldMat{};
@@ -195,7 +201,7 @@ void CState_RaxasiaP2_WaveSting::Effect_Check(_double CurTrackPos)
 
                 CAttackObject::ATKOBJ_DESC Desc;
 
-                _Vec3 vTargetDir = m_pMonster->Get_TargetPos() - vPos;
+                _Vec3 vTargetDir = m_pMonster->Get_Transform()->Get_State(CTransform::STATE_LOOK);
 
                 Desc.vPos = vPos;
                 Desc.vDir = vTargetDir;

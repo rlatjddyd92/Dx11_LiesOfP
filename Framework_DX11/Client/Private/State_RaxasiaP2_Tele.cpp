@@ -48,7 +48,7 @@ void CState_RaxasiaP2_Tele::Update(_float fTimeDelta)
 
         if (!m_bTele)
         {
-            if (CurTrackPos >= 20.f)
+            if (CurTrackPos >= 60.f)
             {
                 m_bTele = true;
 

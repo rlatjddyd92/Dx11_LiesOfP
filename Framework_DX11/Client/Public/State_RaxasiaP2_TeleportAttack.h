@@ -35,6 +35,8 @@ private:
     _bool               m_bEnvelop = { false };
     _bool               m_bAccel = { false };
 
+    _bool               m_bFire = { false };
+
     _bool               m_bStart = { false };
     _uint               m_iRouteTrack = {};
 

@@ -38,8 +38,8 @@ HRESULT CAObj_ThunderWave::Initialize(void* pArg)
         return E_FAIL;
 
     m_fDamageAmount = 20.f;
-    m_fLifeDuration = 0.8f;
-    m_fSpeed = 20.f;
+    m_fLifeDuration = 1.2f;
+    m_fSpeed = 25.f;
 
     m_pColliderCom->IsActive(true);
 
@@ -68,7 +68,7 @@ void CAObj_ThunderWave::Update(_float fTimeDelta)
         else if (m_pEffect->Get_Dead())
         {
             m_isDead = true;
-            m_pSoundCom[EFF_SOUND_EFFECT1]->Stop();
+            //m_pSoundCom[EFF_SOUND_EFFECT1]->Stop();
         }
     }
     else

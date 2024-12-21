@@ -1097,7 +1097,7 @@ void CRaxasia::ChangePhase()
 	WeaponDesc.pParentWorldMatrix = m_pTransformCom->Get_WorldMatrix_Ptr();
 	WeaponDesc.pParentAtk = &m_eStat.fAtk;
 	WeaponDesc.pMonster = this;
-
+	WeaponDesc.pSocketBoneMatrix = pSocketBoneMatrix;
 	Safe_Release(m_pWeapon);
 
 	m_pWeapon = dynamic_cast<CWeapon*>(m_pGameInstance->Clone_GameObject(TEXT("Prototype_GameObject_Weapon_Raxasia_P2_Sword"), &WeaponDesc));
@@ -1108,9 +1108,8 @@ void CRaxasia::ChangePhase()
 
 	WeaponDesc.pSocketBoneMatrix = m_pModelCom->Get_BoneCombindTransformationMatrix_Ptr(46);
 
-
-	m_pWeapon->ChangeSocketMatrix(pSocketBoneMatrix);
 	m_pWeaponShield->ChangeSocketMatrix(WeaponDesc.pSocketBoneMatrix);
+
 
 	m_pColliderBindMatrix[CT_UPPERBODY] = m_pModelCom->Get_BoneCombindTransformationMatrix_Ptr(8);//Spine 2
 	m_pColliderBindMatrix[CT_LOWERBODY] = m_pModelCom->Get_BoneCombindTransformationMatrix_Ptr(6);//Spine

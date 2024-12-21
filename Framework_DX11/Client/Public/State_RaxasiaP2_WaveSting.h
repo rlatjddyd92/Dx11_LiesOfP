@@ -11,7 +11,7 @@ class CState_RaxasiaP2_WaveSting : public CState
 {
 private:
     typedef enum {
-        AN_CHARGE = 28, AN_RUN = 10, AN_WAVE = 25, AN_STING = 20
+        AN_CHARGE = 28, AN_RUN = 46, AN_WAVE = 25, AN_STING = 20
     }ANIMNUM;
 
 public:

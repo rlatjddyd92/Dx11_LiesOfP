@@ -69,6 +69,11 @@ void CState_RaxasiaP2_StepJump::Update(_float fTimeDelta)
             if (m_bStartSpot)
             {
                 m_fDist = m_pMonster->Calc_Distance_XZ();
+                m_fDist -= 4.f;
+                if (m_fDist < 4.f)
+                {
+                    m_fDist = 4.f;
+                }
                 m_bStartSpot = false;
             }
 
@@ -76,7 +81,7 @@ void CState_RaxasiaP2_StepJump::Update(_float fTimeDelta)
 
             _float fYMove = m_pMonster->Get_RigidBody()->Get_Velocity().y;
 
-            _Vec3 vMove = m_vTargetDir * m_fDist * (((_float)CurTrackPos - 87.f) / 85.f);
+            _Vec3 vMove = m_vTargetDir * m_fDist * (((_float)CurTrackPos - 87.f) / 105.f);
             vMove.y = fYMove;
             m_pMonster->Get_RigidBody()->Set_Velocity((vMove - m_vFlyMoveStack) / fTimeDelta);
             m_vFlyMoveStack = vMove;
@@ -202,9 +207,12 @@ void CState_RaxasiaP2_StepJump::Effect_Check(_double CurTrackPos)
             {
                 m_bStomp = true;
                 _float4x4 WorldMat{};
-                _Vec3 vPos = { 1.f, 0.f, 0.f };
-                XMStoreFloat4x4(&WorldMat, (*m_pMonster->Get_WeaponBoneCombinedMat(1) * (*m_pMonster->Get_WeaponWorldMat())));
+                _Vec3 vPos = { 0.f, 0.f, -1.75f };
+                XMStoreFloat4x4(&WorldMat,
+                    (*m_pMonster->Get_BoneCombinedMat(m_pMonster->Get_Model()->Get_UFBIndices(UFB_WEAPON))
+                        * (m_pMonster->Get_Transform()->Get_WorldMatrix())));
                 vPos = XMVector3TransformCoord(vPos, XMLoadFloat4x4(&WorldMat));
+                vPos.y = m_pMonster->Get_Transform()->Get_State(CTransform::STATE_POSITION).y;
 
                 CEffect_Manager::Get_Instance()->Add_Effect_ToLayer(LEVEL_GAMEPLAY, TEXT("Raxasia_Attack_ThunderStamp_Small"),
                     vPos, _Vec3{ m_pMonster->Get_TargetDir() });
@@ -257,6 +265,7 @@ void CState_RaxasiaP2_StepJump::Effect_Check(_double CurTrackPos)
 
                 m_pMonster->Active_Effect(CRaxasia::EFFECT_INCHENTSWORD_P2, true);
                 //³»·ÁÂï±â
+                m_bInchent = true;
             }
         }
         else if (CurTrackPos >= 230.f)
@@ -281,9 +290,9 @@ void CState_RaxasiaP2_StepJump::Effect_Check(_double CurTrackPos)
 
                 CAttackObject::ATKOBJ_DESC Desc;
 
-                _Vec3 vTargetDir = m_pMonster->Get_TargetPos() - vPos;
+                _Vec3 vTargetDir = m_pMonster->Get_Transform()->Get_State(CTransform::STATE_LOOK);
                 vTargetDir.Normalize();
-                _Vec3 vRight = vTargetDir.Cross(_Vec3{ 0.f, 1.f, 0.f });
+                _Vec3 vRight = m_pMonster->Get_Transform()->Get_State(CTransform::STATE_RIGHT);
                 vRight.Normalize();
 
 
