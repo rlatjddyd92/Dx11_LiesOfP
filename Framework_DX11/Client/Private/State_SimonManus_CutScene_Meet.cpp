@@ -92,7 +92,7 @@ void CState_SimonManus_CutScene_Meet::Update(_float fTimeDelta)
     }
 
     Control_Dialog(iFrame);
-    End_Check();
+    End_Check(fTimeDelta);
 }
 
 void CState_SimonManus_CutScene_Meet::End_State()

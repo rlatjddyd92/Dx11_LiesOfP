@@ -91,6 +91,7 @@ void CTexture_Effect::Update(_float fTimeDelta)
     case TYPE_PREROTATION:
         Preserve_Rotation_Billboard(vCurrentScale, vLook);
         break;
+
     case TYPE_PREDIR:
         Preserve_Dir_Billboard(vCurrentScale, vLook);
         break;
@@ -117,7 +118,7 @@ void CTexture_Effect::Late_Update(_float fTimeDelta)
         }
     }
 
-    if (CRenderer::RG_END <= m_RenderDesc.iRenderGroup)
+    if (CRenderer::RG_END <= m_RenderDesc.iRenderGroup || true == m_isDead || false == m_isActive)
         return;
     m_pGameInstance->Add_RenderObject((CRenderer::RENDERGROUP)m_RenderDesc.iRenderGroup, this);
 }

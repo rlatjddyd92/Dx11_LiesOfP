@@ -730,6 +730,7 @@ void CS_SPREAD_LOCAL_MAIN(uint3 DTid : SV_DispatchThreadID)
     
     if (0.f == fPadding)
     {
+        TailParticle.particle.vTranslation = mul(TailParticle.particle.vTranslation, WorldMatrix);
         TailParticle.vPreTranslation = TailParticle.particle.vTranslation;
     }
     
@@ -862,6 +863,9 @@ void CS_SPREAD_LOCAL_MAIN(uint3 DTid : SV_DispatchThreadID)
                     vResultTailDir = float4(0.f, 1.f, 0.f, 0.f);
     
                 TailParticle.particle.vLook = normalize(vResultTailDir);
+                
+                TailParticle.particle.vTranslation = mul(TailParticle.particle.vTranslation, WorldMatrix);
+                TailParticle.vMoveDir = mul(TailParticle.vMoveDir, WorldMatrix);
                 
                 TailParticles[HeadParticle.iTailInitIndex] = TailParticle;
                 

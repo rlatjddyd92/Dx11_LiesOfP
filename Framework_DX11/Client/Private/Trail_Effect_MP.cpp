@@ -96,10 +96,6 @@ void CTrail_Effect_MP::Late_Update(_float fTimeDelta)
 HRESULT CTrail_Effect_MP::Render()
 {
 	_Matrix WorldMatrix = XMMatrixIdentity();
-
-	// ²¿¸®
-	WorldMatrix = XMMatrixIdentity();
-
 	if (FAILED(m_pShaderCom->Bind_Matrix("g_WorldMatrix", &WorldMatrix)))
 		return E_FAIL;
 
