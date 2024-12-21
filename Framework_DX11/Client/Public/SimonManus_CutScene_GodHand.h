@@ -33,6 +33,7 @@ private:
 
 	_Vec4            m_vRimLightColor = {};
 
+	_bool			 m_bAnimSpeedUp = { false };
 private:
 
 	HRESULT Ready_Components();

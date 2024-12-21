@@ -31,6 +31,11 @@ private:
     _bool               m_isCreatedHand= { false };
     _bool               m_isCreateDome = { false };
     _bool               m_isDistortionHand = { false };
+    _bool               m_bAnimationSpeedDown = { false };
+    _bool               m_bAnimationStop = { false };
+    _bool               m_bAnimationRestart = { false };
+
+    _float              m_fStopedTimer = { 0.f };
 
 private:
     _bool               m_isMaxEmissive = {};

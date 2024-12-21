@@ -42,8 +42,18 @@ void CState_SimonManus_CutScene_Phase2::Update(_float fTimeDelta)
 
     if (!m_isChangePhase2)
     {
-        //if (m_pMonster->Get_EndAnim(m_iAnimation_Change))
-        if (m_pMonster->Get_Frame() > 900)
+        if (iFrame < 105)
+        {
+            m_pMonster->Get_Model()->Set_SpeedPerSec(m_iAnimation_Change, 35);
+        }
+        else if (m_bAnimationSpeedDown == false)
+        {
+            m_bAnimationSpeedDown = true;
+            m_pMonster->Get_Model()->Set_SpeedPerSec(m_iAnimation_Change, 31);
+        }
+
+
+        if (iFrame > 900)
         {
             m_pMonster->Change_Model(0);
 
@@ -51,21 +61,12 @@ void CState_SimonManus_CutScene_Phase2::Update(_float fTimeDelta)
             m_iAnimation_Begod = m_pMonster->Get_Model()->Find_AnimationIndex("AS_Manus_Phase_2_P2_be_God", 1.f);
 
             m_pMonster->Change_Animation(m_iAnimation_Connectgod, false, 0.1f, 0);
+            m_pMonster->Get_Model()->Set_SpeedPerSec(m_iAnimation_Connectgod, 34);
             m_isChangePhase2 = true;
         }
     }
     if (m_isChangePhase2)
     {
-        if (m_pMonster->Get_CurrentAnimIndex() == m_iAnimation_Connectgod
-            && m_isCreatedHand == false
-            && m_pMonster->Get_Frame() > 1150 )
-        {
-            m_isCreatedHand = true;
-
-            if (FAILED(m_pGameInstance->Add_CloneObject_ToLayer(LEVEL_GAMEPLAY, TEXT("Layer_CutScene_GodHand"), TEXT("Prototype_GameObject_CutScene_SimonManus_GodHand"))))
-                return;
-        }
-
         if (m_pMonster->Get_EndAnim(m_iAnimation_Connectgod))
         {
             m_pGameInstance->Find_Object(LEVEL_GAMEPLAY, TEXT("Layer_CutScene_GodHand"), 0)->Set_Dead(true);
@@ -81,13 +82,37 @@ void CState_SimonManus_CutScene_Phase2::Update(_float fTimeDelta)
             Contorl_Emissive(fTimeDelta);
         }
 
-        if (!m_isCreateDome && iFrame > 1225)
+        if (!m_bAnimationStop && iFrame > 1342)
+        {
+            m_bAnimationStop = true;
+            m_pMonster->Stop_Animation();
+        }
+        else if (m_bAnimationStop)
+        {
+            m_fStopedTimer += fTimeDelta;
+        }
+
+        if (!m_isCreatedHand && m_fStopedTimer > 9.29f)
+        {
+            m_isCreatedHand = true;
+
+            if (FAILED(m_pGameInstance->Add_CloneObject_ToLayer(LEVEL_GAMEPLAY, TEXT("Layer_CutScene_GodHand"), TEXT("Prototype_GameObject_CutScene_SimonManus_GodHand"))))
+                return;
+        }
+
+        if (!m_bAnimationRestart && m_fStopedTimer > 17.3f)
+        {
+            m_pMonster->Play_Animation();
+        }
+
+    //ÀÌÆåÆ®
+        if (!m_isCreateDome && m_fStopedTimer > 1.5f)
         {
             CEffect_Manager::Get_Instance()->Add_Effect_ToLayer(LEVEL_GAMEPLAY, TEXT("Map_SimonManus_2P"));
             m_isCreateDome = true;
         }
 
-        if (!m_isDistortionHand && iFrame > 1659)
+        if (!m_isDistortionHand && iFrame > 1655)
         {
             CEffect_Manager::Get_Instance()->Add_Effect_ToLayer(LEVEL_GAMEPLAY, TEXT("SimonManus_ConnectGod"), _Vec3(0.f, 2.73f, 0.f));
             m_isDistortionHand = true;

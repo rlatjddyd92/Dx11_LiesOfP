@@ -55,6 +55,11 @@ void CSimonManus_CutScene_GodHand::Update(_float fTimeDelta)
 {
 	m_pModelCom->Play_Animation(fTimeDelta);
 
+	if (!m_bAnimSpeedUp && m_pModelCom->Get_CurrentFrame() > 180)
+	{
+		m_bAnimSpeedUp = true;
+		m_pModelCom->Set_SpeedPerSec((_uint)0, 30);
+	}
 	//static _float fX = 0.3f;
 	//static _float fY = 17.45f;
 	//static _float fZ = 0.7f;
