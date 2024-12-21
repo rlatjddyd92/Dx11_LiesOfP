@@ -32,6 +32,9 @@ HRESULT CState_RaxasiaP1_Idle::Start_State(void* pArg)
         m_fIdleTime = 0;
     }
 
+    m_bRunning = false;
+    m_bWalk = false;
+
     return S_OK;
 }
 
