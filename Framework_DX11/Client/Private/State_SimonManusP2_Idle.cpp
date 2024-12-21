@@ -52,9 +52,7 @@ void CState_SimonManusP2_Idle::Update(_float fTimeDelta)
                 m_bRunning = true;
             }
             m_pMonster->Get_Transform()->LookAt_Lerp_NoHeight(m_pMonster->Get_TargetDir(), 2.f, fTimeDelta);
-            _Vec3 vDir = m_pMonster->Get_Transform()->Get_State(CTransform::STATE_LOOK);
-
-            m_pMonster->Get_RigidBody()->Set_Velocity(XMVector3Normalize(vDir) * m_fRunSpeed);
+            
             return;
         }
         else if (fDist > m_fNeedDist_ForAttack)
@@ -65,9 +63,7 @@ void CState_SimonManusP2_Idle::Update(_float fTimeDelta)
                 m_bWalk = true;
             }
             m_pMonster->Get_Transform()->LookAt_Lerp_NoHeight(m_pMonster->Get_TargetDir(), 1.5, fTimeDelta);
-            _Vec3 vDir = m_pMonster->Get_Transform()->Get_State(CTransform::STATE_LOOK);
-
-            m_pMonster->Get_RigidBody()->Set_Velocity(XMVector3Normalize(vDir) * m_fWalkSpeed);
+           
             return;
         }
 

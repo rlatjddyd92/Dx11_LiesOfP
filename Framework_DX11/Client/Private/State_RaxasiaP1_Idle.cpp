@@ -32,6 +32,9 @@ HRESULT CState_RaxasiaP1_Idle::Start_State(void* pArg)
         m_fIdleTime = 0;
     }
 
+    m_bRunning = false;
+    m_bWalk = false;
+
     return S_OK;
 }
 
@@ -68,9 +71,7 @@ void CState_RaxasiaP1_Idle::Update(_float fTimeDelta)
                 m_bRunning = true;
             }
             m_pMonster->Get_Transform()->LookAt_Lerp_NoHeight(m_pMonster->Get_TargetDir(), 2.f, fTimeDelta);
-            _Vec3 vDir = m_pMonster->Get_Transform()->Get_State(CTransform::STATE_LOOK);
-
-            m_pMonster->Get_RigidBody()->Set_Velocity(XMVector3Normalize(vDir) * m_fRunSpeed);
+            
             return;
         }
         else if (fDist > m_fNeedDist_ForAttack)
@@ -81,9 +82,7 @@ void CState_RaxasiaP1_Idle::Update(_float fTimeDelta)
                 m_bWalk = true;
             }
             m_pMonster->Get_Transform()->LookAt_Lerp_NoHeight(m_pMonster->Get_TargetDir(), 1.5, fTimeDelta);
-            _Vec3 vDir = m_pMonster->Get_Transform()->Get_State(CTransform::STATE_LOOK);
-
-            m_pMonster->Get_RigidBody()->Set_Velocity(XMVector3Normalize(vDir) * m_fWalkSpeed);
+            
             return;
         }
 
@@ -128,41 +127,42 @@ void CState_RaxasiaP1_Idle::Calc_Act_Attack()
     case 0:
         m_pMonster->Change_State(CRaxasia::ATK_DASHUPPER);
         m_fNeedDist_ForAttack = 7.5f;
-        return;
+        break;
 
     case 1:
         m_pMonster->Change_State(CRaxasia::ATK_GROUNDSLASH);
         m_fNeedDist_ForAttack = 3.5f;
-        return;
+        break;
 
     case 2:
         m_pMonster->Change_State(CRaxasia::ATK_KICKSTING);
         m_fNeedDist_ForAttack = 3.5f;
-        return;
+        break;
 
     case 3:
         m_pMonster->Change_State(CRaxasia::ATK_LINKEDATTACK);
         m_fNeedDist_ForAttack = 4.5f;
-        return;
+        break;
 
     case 4:
         m_pMonster->Change_State(CRaxasia::ATK_REPETUPPERSLASH);
         m_fNeedDist_ForAttack = 6.5f;
-        return;
+        break;
 
     case 5:
         m_pMonster->Change_State(CRaxasia::ATK_TRIPLESTING);
         m_fNeedDist_ForAttack = 6.5f;
-        return;
+        break;
 
     case 6:
         m_pMonster->Change_State(CRaxasia::ATK_STING_ANDSPREAD);
         m_fNeedDist_ForAttack = 8.f;
-        return;
+        break;
 
     default:
-        return;
+        break;
     }
+    ++m_iAtkTrack;
 }
 
 CState_RaxasiaP1_Idle* CState_RaxasiaP1_Idle::Create(CFsm* pFsm, CMonster* pMonster, _uint iStateNum, void* pArg)

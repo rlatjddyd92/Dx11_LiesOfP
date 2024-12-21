@@ -262,9 +262,9 @@ void CState_RaxasiaP1_Sting_Spread::Effect_Check(_double CurTrackPos)
                 vPos = XMVector3TransformCoord(vPos, XMLoadFloat4x4(&WorldMat));
                 vPos.y = m_pMonster->Get_Transform()->Get_State(CTransform::STATE_POSITION).y;
 
-                _Vec3 vTargetDir = m_pMonster->Get_TargetPos() - vPos;
+                _Vec3 vTargetDir = m_pMonster->Get_Transform()->Get_State(CTransform::STATE_LOOK);
                 vTargetDir.Normalize();
-                _Vec3 vRight = vTargetDir.Cross(_Vec3{ 0.f, 1.f, 0.f });
+                _Vec3 vRight = m_pMonster->Get_Transform()->Get_State(CTransform::STATE_RIGHT);
                 vRight.Normalize();
 
 

@@ -87,7 +87,7 @@ void CState_RaxasiaP1_DashUpper::Update(_float fTimeDelta)
 
         if (CurTrackPos <= 30.f)
         {
-            m_pMonster->Get_Transform()->LookAt_Lerp_NoHeight(m_pMonster->Get_TargetDir(), 4.f, fTimeDelta);
+            m_pMonster->Get_Transform()->LookAt_Lerp_NoHeight(m_pMonster->Get_TargetDir(), 6.f, fTimeDelta);
         }
         if (CurTrackPos >= 100.f)
         {

@@ -146,7 +146,7 @@ void CAObj_ThunderBolt::Update(_float fTimeDelta)
         break;
     }
     case 3:
-        if (!m_pEffects[m_iStateTrack]->Get_Loop())
+        if (m_pEffects[m_iStateTrack]->Get_Dead())
         {
             m_isDead = true;
             return;
@@ -231,7 +231,7 @@ void CAObj_ThunderBolt::OnCollisionEnter(CGameObject* pOther)
         if (!bOverlapCheck)
         {
             m_DamagedObjects.push_back(pOther);
-            _bool bAttackCheck = pOther->Calc_DamageGain(m_fDamageAmount * m_fDamageRatio, _Vec3{}, HIT_TYPE::HIT_METAL, ATTACK_STRENGTH::ATK_NORMAL);
+            _bool bAttackCheck = pOther->Calc_DamageGain(m_fDamageAmount * m_fDamageRatio, _Vec3{}, HIT_TYPE::HIT_METAL, ATTACK_STRENGTH::ATK_WEAK);
 
             if (bAttackCheck)
             {
@@ -269,7 +269,7 @@ void CAObj_ThunderBolt::OnCollisionEnter(CGameObject* pOther)
                 Safe_Release(m_pEffects[STATE_IMPACT]);
 
                 //m_fHeightGap *= -1.f;
-
+                m_fDamageAmount = 5.f;
                 m_strObjectTag = TEXT("PlayerWeapon");
                 m_fLifeTime = 0.f;
                 m_pEffects[STATE_NORMAL] = CEffect_Manager::Get_Instance()->Clone_Effect(TEXT("Raxasia_Attack_ThunderBolt_Counter"), m_pTransformCom->Get_WorldMatrix_Ptr(),

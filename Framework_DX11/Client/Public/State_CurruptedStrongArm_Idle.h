@@ -12,7 +12,7 @@ class CState_CurruptedStrongArm_Idle : public CState
 private:
     typedef enum {
         AN_IDLE = 26, AN_TURN_LEFT = 31, AN_TURN_RIGHT = 32
-        ,AN_RUN = 30, AN_WALK = 33
+        ,AN_RUN = 30, AN_WALK = 34
     }ANIMNUM;
 
 public:
@@ -40,8 +40,6 @@ private:
     _bool               m_bRunning = { false };
     _bool               m_bWalk = { false };
 
-    _float              m_fRunSpeed = { 2.4f };
-    _float              m_fWalkSpeed = { 1.f };
     _float              m_fRunningWeights = { 4.f };
 
     _float              m_fNeedDist_ForAttack = { 6.f };
