@@ -6,6 +6,7 @@
 
 #include "Effect_Manager.h"
 
+#include "GameInterface_Controller.h"
 
 CState_SimonManus_CutScene_Phase2::CState_SimonManus_CutScene_Phase2(CFsm* pFsm, CMonster* pMonster)
     :CState{ pFsm }
@@ -31,7 +32,7 @@ HRESULT CState_SimonManus_CutScene_Phase2::Start_State(void* pArg)
 
     m_isChangePhase2 = false;
 
-    m_pMonster->Set_EmissiveMask(0.f);
+    m_pMonster->Set_EmissiveMask(0.1f);
 
     return S_OK;
 }
@@ -77,8 +78,17 @@ void CState_SimonManus_CutScene_Phase2::Update(_float fTimeDelta)
            // m_pMonster->End_CutScene(0);
         }
 
-        if (650 < iFrame && iFrame < 1650)
+        if (640 < iFrame && iFrame < 1310)
         {
+            Contorl_Emissive(fTimeDelta);
+        }
+        else if (1340 < iFrame && iFrame < 1500)
+        {
+            if (!m_isSecondEmissive)
+            {
+                m_pMonster->Set_EmissiveMask(0.1f);
+                m_isSecondEmissive = true;
+            }
             Contorl_Emissive(fTimeDelta);
         }
 
@@ -122,6 +132,8 @@ void CState_SimonManus_CutScene_Phase2::Update(_float fTimeDelta)
 
 
     }
+
+    Control_Dialog(iFrame);
 }
 
 void CState_SimonManus_CutScene_Phase2::End_State()
@@ -133,10 +145,10 @@ void CState_SimonManus_CutScene_Phase2::Contorl_Emissive(_float fTimeDelta)
 {
     _float fEmissive = m_pMonster->Get_EmissiveMask();
 
-    if (fEmissive >= 0.5f)
+    if (fEmissive >= 0.33f)
     {
         m_isMaxEmissive = true;
-        fEmissive = 0.5f;
+        fEmissive = 0.33f;
     }
     else if (fEmissive <= 0.1f)
     {
@@ -146,14 +158,31 @@ void CState_SimonManus_CutScene_Phase2::Contorl_Emissive(_float fTimeDelta)
 
     if (m_isMaxEmissive)
     {
-        fEmissive -= 0.3f * fTimeDelta;
+        fEmissive -= 0.22f * fTimeDelta;
     }
     else
     {
-        fEmissive += 0.3f * fTimeDelta;
+        fEmissive += 0.8f * fTimeDelta;
     }
 
     m_pMonster->Set_EmissiveMask(fEmissive);
+}
+
+void CState_SimonManus_CutScene_Phase2::Control_Dialog(_int iFrame)
+{
+    if (!m_isChangePhase2)
+    {
+        if (!m_isShowDialog[0] && iFrame >= 283)
+        {
+            GET_GAMEINTERFACE->Show_Script(TEXT("흐흐흐, 이것이 진화다."), TEXT("none"), 7.2f);
+            m_isShowDialog[0] = true;
+        }
+        else if (!m_isShowDialog[1] && iFrame >= 628)
+        {
+            GET_GAMEINTERFACE->Show_Script(TEXT("이 약한 육신을 벗어나..."), TEXT("진정한 신의 힘을 얻는 나를 목도하라!"), 24.f);
+            m_isShowDialog[1] = true;
+        }
+    }
 }
 
 CState_SimonManus_CutScene_Phase2* CState_SimonManus_CutScene_Phase2::Create(CFsm* pFsm, CMonster* pMonster, _uint iStateNum, void* pArg)

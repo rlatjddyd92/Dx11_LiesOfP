@@ -439,20 +439,26 @@ void CSimonManus::Start_CutScene(_uint iCutSceneNum)
 	{
 	case CUTSCENE_MEET :
 		m_pModelCom = m_pCutSceneModelCom[MODEL_PHASE1];
+
 		pNewSocketMatrix = m_pModelCom->Get_BoneCombindTransformationMatrix_Ptr("Bn_Weapon_R");
 		m_pWeapon->ChangeSocketMatrix(pNewSocketMatrix);
-		m_pCutSceneFsmCom->Set_State(STATE_MEET);
 		Deactiave_Weapon();
+
+		m_pCutSceneFsmCom->Set_State(STATE_MEET);
 		break;
 	case CUTSCENE_P2:
 		m_pModelCom = m_pCutSceneModelCom[MODEL_PHASE1];
+
 		pNewSocketMatrix = m_pModelCom->Get_BoneCombindTransformationMatrix_Ptr("Bn_Weapon_R");
 		m_pWeapon->ChangeSocketMatrix(pNewSocketMatrix);
-		m_pCutSceneFsmCom->Change_State(STATE_P2);
+		Deactiave_Weapon();	// 수정해보기
+
 		m_isPlayAnimation = true;
-		Deactiave_Weapon();
+
 		m_pRigidBodyCom->Set_GloblePose(_Vec3(0.f, 0.f, 0.f));
 		m_pTransformCom->Rotation(0.f, 50.f, 0.f);
+
+		m_pCutSceneFsmCom->Change_State(STATE_P2);
 		break;
 	case CUTSCENE_DIE:
 		m_pModelCom = m_pCutSceneModelCom[MODEL_PHASE2];
