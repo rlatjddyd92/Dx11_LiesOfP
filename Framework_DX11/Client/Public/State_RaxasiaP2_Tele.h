@@ -28,7 +28,9 @@ private:
     class CMonster* m_pMonster = { nullptr };
 
     _float              m_fCurrentTime = { 0.f };
-    _float              m_fChaseDuration = { 1.5f };
+    _float              m_fChaseDuration = { 0.3f };
+
+    _bool               m_bSpeedController = { false };
 
     _bool               m_bSwing = { false };
     _bool               m_bTeleEffect = { false };

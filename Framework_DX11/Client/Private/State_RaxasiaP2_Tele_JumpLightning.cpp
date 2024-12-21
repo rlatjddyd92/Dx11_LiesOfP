@@ -24,7 +24,7 @@ HRESULT CState_RaxasiaP2_Tele_JumpLightning::Initialize(_uint iStateNum, void* p
 HRESULT CState_RaxasiaP2_Tele_JumpLightning::Start_State(void* pArg)
 {
     m_iRouteTrack = 0;
-    m_pMonster->Change_Animation(AN_LINKED_SECOND, false, 0.1f, 0);
+    m_pMonster->Change_Animation(AN_LINKED_FIRST, false, 0.1f, 0);
 
     m_bSwingSound = false;
 
@@ -39,50 +39,46 @@ void CState_RaxasiaP2_Tele_JumpLightning::Update(_float fTimeDelta)
     switch (m_iRouteTrack)
     {
     case 0:
-        if (End_Check())
+        if (CurTrackPos >= 95.f)
         {
             ++m_iRouteTrack;
             m_bSwing = false;
-            m_pMonster->Change_Animation(AN_LINKED_FIRST, false, 0.1f, 55);
+            //m_pMonster->Change_Animation(AN_LINKED_SECOND, false, 0.5f, 55);
+
+            m_pMonster->SetUp_Animation(AN_LINKED_SECOND, false, 55);
             return;
         }
 
-        if (CurTrackPos <= 80.f)
-        {
-            m_pMonster->Get_Transform()->LookAt_Lerp_NoHeight(m_pMonster->Get_TargetDir(), 2.f, fTimeDelta);
-        }
-
+        m_pMonster->Get_Transform()->LookAt_Lerp_NoHeight(m_pMonster->Get_TargetDir(), 3.f, fTimeDelta);
         break;
 
+
     case 1:
-        if (End_Check())
+        if (CurTrackPos >= 120.f)
         {
             ++m_iRouteTrack;
             m_bSwing = false;
-            m_pMonster->Change_Animation(AN_LINKED_SECOND, false, 0.1f, 0);
+            //m_pMonster->Change_Animation(AN_LINKED_FIRST, false, 0.5f, 50);
+
+            m_pMonster->SetUp_Animation(AN_LINKED_FIRST, false, 50);
             return;
         }
 
-        if (CurTrackPos >= 70.f)
-        {
-            m_pMonster->Get_Transform()->LookAt_Lerp_NoHeight(m_pMonster->Get_TargetDir(), 2.f, fTimeDelta);
-        }
+        m_pMonster->Get_Transform()->LookAt_Lerp_NoHeight(m_pMonster->Get_TargetDir(), 3.f, fTimeDelta);
         break;
 
     case 2:
-        if (End_Check())
+        if (CurTrackPos >= 130.f)
         {
             ++m_iRouteTrack;
             m_bSwing = false;
-            m_pMonster->Change_Animation(AN_JUMPLIGHTNING, false, 0.1f, 0);
+            m_pMonster->Change_Animation(AN_JUMPLIGHTNING, false, 0.5f, 0);
+
+            //m_pMonster->SetUp_Animation(AN_JUMPLIGHTNING, false, 55);
             return;
         }
 
-        if (CurTrackPos <= 80.f)
-        {
-            m_pMonster->Get_Transform()->LookAt_Lerp_NoHeight(m_pMonster->Get_TargetDir(), 2.f, fTimeDelta);
-        }
-
+        m_pMonster->Get_Transform()->LookAt_Lerp_NoHeight(m_pMonster->Get_TargetDir(), 3.f, fTimeDelta);
         break;
 
     case 3:
@@ -91,7 +87,7 @@ void CState_RaxasiaP2_Tele_JumpLightning::Update(_float fTimeDelta)
             m_pMonster->Change_State(CRaxasia::IDLE);
             return;
         }
-        m_pMonster->Get_Transform()->LookAt_Lerp_NoHeight(m_pMonster->Get_TargetDir(), 1.f, fTimeDelta);
+        m_pMonster->Get_Transform()->LookAt_Lerp_NoHeight(m_pMonster->Get_TargetDir(), 2.f, fTimeDelta);
         break;
 
     default:
@@ -129,9 +125,9 @@ _bool CState_RaxasiaP2_Tele_JumpLightning::End_Check()
         break;
 
     case 2:
-        if ((AN_LINKED_SECOND) == iCurAnim)
+        if ((AN_LINKED_FIRST) == iCurAnim)
         {
-            bEndCheck = m_pMonster->Get_EndAnim(AN_LINKED_SECOND);
+            bEndCheck = m_pMonster->Get_EndAnim(AN_LINKED_FIRST);
         }
         break;
 
@@ -153,9 +149,9 @@ void CState_RaxasiaP2_Tele_JumpLightning::Collider_Check(_double CurTrackPos)
 {
     if (m_iRouteTrack == 0 || m_iRouteTrack == 2)
     {
-        if ((CurTrackPos >= 90.f && CurTrackPos <= 100.f))
+        if ((CurTrackPos >= 80.f && CurTrackPos <= 90.f))
         {
-            m_pMonster->Active_CurrentWeaponCollider(1.3f, 0, HIT_TYPE::HIT_METAL, ATTACK_STRENGTH::ATK_NORMAL);
+            m_pMonster->Active_CurrentWeaponCollider(1.2f, 0, HIT_TYPE::HIT_METAL, ATTACK_STRENGTH::ATK_WEAK);
         }
         else
         {
@@ -164,9 +160,9 @@ void CState_RaxasiaP2_Tele_JumpLightning::Collider_Check(_double CurTrackPos)
     }
     else if (m_iRouteTrack == 1)
     {
-        if ((CurTrackPos >= 80.f && CurTrackPos <= 90.f))
+        if ((CurTrackPos >= 90.f && CurTrackPos <= 100.f))
         {
-            m_pMonster->Active_CurrentWeaponCollider(1.6f, 0, HIT_TYPE::HIT_METAL, ATTACK_STRENGTH::ATK_STRONG);
+            m_pMonster->Active_CurrentWeaponCollider(1.2f, 0, HIT_TYPE::HIT_METAL, ATTACK_STRENGTH::ATK_WEAK);
         }
         else
         {
@@ -224,27 +220,28 @@ void CState_RaxasiaP2_Tele_JumpLightning::Effect_Check(_double CurTrackPos)
 
         if (!m_bFire)
         {
-            if (CurTrackPos >= 193.f)
+            if (CurTrackPos >= 183.f)
             {
                 m_bFire = true;
 
                 CAttackObject::ATKOBJ_DESC Desc{};
-
+                
                 _float4x4 WorldMat{};
-                _Vec3 vPos = { 0.f, 0.f, -1.75f };
+                _Vec3 vPos = { 0.f, 0.f, 0.f };
                 XMStoreFloat4x4(&WorldMat,
                     (*m_pMonster->Get_BoneCombinedMat(m_pMonster->Get_Model()->Get_UFBIndices(UFB_WEAPON))
                         * (m_pMonster->Get_Transform()->Get_WorldMatrix())));
                 vPos = XMVector3TransformCoord(vPos, XMLoadFloat4x4(&WorldMat));
-                vPos.y = m_pMonster->Get_Transform()->Get_State(CTransform::STATE_POSITION).y;
-
+                
                 Desc.vPos = vPos;
 
-                Desc.vDir = _Vec3{ m_pMonster->Get_TargetDir() };
+                Desc.vDir = _Vec3{ m_pMonster->Get_TargetPos() - vPos };
                 Desc.vDir.Normalize();
 
                 Desc.vTargetPos = _Vec3{ m_pMonster->Get_TargetPos() };
                 Desc.pOwner = m_pMonster;
+
+                Desc.iTrack_State = 1;
 
                 m_pGameInstance->Add_CloneObject_ToLayer(LEVEL_GAMEPLAY, TEXT("Monster_Attack"), TEXT("Prototype_GameObject_ThunderBolt"), &Desc);
             }

@@ -133,6 +133,7 @@ private:
 	class CTexture* m_pDouTexture = { nullptr };
 
 	_bool					m_isChanged = { false };
+	_bool					m_bChanging = { false };
 	_bool					m_isCutScene = { false };
 
 	const _Matrix* m_pColliderBindMatrix[CT_END] = { nullptr, nullptr, nullptr };

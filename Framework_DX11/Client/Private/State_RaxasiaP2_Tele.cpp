@@ -21,7 +21,9 @@ HRESULT CState_RaxasiaP2_Tele::Initialize(_uint iStateNum, void* pArg)
 HRESULT CState_RaxasiaP2_Tele::Start_State(void* pArg)
 {
     m_iRouteTrack = 0;
-    m_pMonster->Change_Animation(AN_RUN, false, 0.1f, 0);
+    m_pMonster->Change_Animation(AN_RUN, true, 0.1f, 0);
+
+    m_iAtkCnt = 0;
 
     m_bSwingSound = false;
     m_bTele = false;
@@ -39,34 +41,47 @@ void CState_RaxasiaP2_Tele::Update(_float fTimeDelta)
     switch (m_iRouteTrack)
     {
     case 0:
-        if (CurTrackPos >= 70.f)
+        if (!m_bSpeedController)
+        {
+            if (CurTrackPos >= 10.f && CurTrackPos <= 13.f)
+            {
+                m_pMonster->Get_Model()->Set_SpeedRatio(AN_RUN, (double)0.2f);
+                m_bSpeedController = true;
+            }
+        }
+        else
+        {
+            if (CurTrackPos >= 15.f)
+            {
+                if (!m_bTele)
+                {
+                    m_bTele = true;
+
+                    _Vec3 vDir = m_pMonster->Get_TargetDir();
+                    _Vec3 vPos = m_pMonster->Get_TargetPos();
+                    vDir.Normalize();
+
+                    m_pMonster->Get_RigidBody()->Set_GloblePose(vPos - (vDir * 2));
+                }
+                m_pMonster->Get_Model()->Set_SpeedRatio(AN_RUN, (double)1.f);
+                m_bSpeedController = false;
+            }
+        }
+
+        if (CurTrackPos >= 19.f)
         {
             ++m_iRouteTrack;
             m_bSwing = false;
             m_pMonster->Change_Animation(AN_UPPERSLASH, false, 0.1f, 0);
         }
 
-        if (!m_bTele)
-        {
-            if (CurTrackPos >= 60.f)
-            {
-                m_bTele = true;
-
-                _Vec3 vDir = m_pMonster->Get_TargetDir();
-                _Vec3 vPos = m_pMonster->Get_TargetPos();
-                vDir.Normalize();
-
-                m_pMonster->Get_RigidBody()->Set_GloblePose(vPos - (vDir * 2));
-            }
-        }
-        m_pMonster->Get_Transform()->LookAt_Lerp_NoHeight(m_pMonster->Get_TargetDir(), 1.f, fTimeDelta);
-        //바꾸기 직전에 플레이어 방향으로 도약
+        m_pMonster->Get_Transform()->LookAt_Lerp_NoHeight(m_pMonster->Get_TargetDir(), 2.f, fTimeDelta);
         break;
 
     case 1:
         if (End_Check())
         {
-            if (m_iAtkCnt = 0)
+            if (m_iAtkCnt == 0)
             {
                 m_iAtkCnt = 1;
                 m_pMonster->Change_State(CRaxasia::ATKP2_TELE_LINKEDTEL);
@@ -113,7 +128,7 @@ void CState_RaxasiaP2_Tele::Collider_Check(_double CurTrackPos)
     {
         if ((CurTrackPos >= 15.f && CurTrackPos <= 40.f))
         {
-            m_pMonster->Active_CurrentWeaponCollider(1.6f, 0, HIT_TYPE::HIT_METAL, ATTACK_STRENGTH::ATK_STRONG);
+            m_pMonster->Active_CurrentWeaponCollider(1.2f, 0, HIT_TYPE::HIT_METAL, ATTACK_STRENGTH::ATK_WEAK);
         }
         else
         {
@@ -137,13 +152,12 @@ void CState_RaxasiaP2_Tele::Effect_Check(_double CurTrackPos)
         {
             m_pMonster->DeActive_Effect(CRaxasia::EFFECT_SWING);
         }
-
     }
     else
     {
         if (!m_bEnvelop)
         {
-            if (CurTrackPos >= 10.f)
+            if (CurTrackPos >= 14.f)
             {
                 m_bEnvelop = false;
                 m_pMonster->Active_Effect(CRaxasia::EFFECT_THUNDERENVELOP_SMALL, true);
@@ -152,18 +166,16 @@ void CState_RaxasiaP2_Tele::Effect_Check(_double CurTrackPos)
 
         if (!m_bTeleEffect)
         {
-            if (CurTrackPos >= 15.f)
+            if (CurTrackPos >= 14.f)
             {
                 m_bTeleEffect = false;
                 m_pMonster->Active_Effect(CRaxasia::EFFECT_THUNDERACCEL, true);
             }
         }
-        
-        if (CurTrackPos >= 25.f)
+        if (CurTrackPos >= 15.5f)
         {
             m_pMonster->DeActive_Effect(CRaxasia::EFFECT_THUNDERACCEL);
         }
-
     }
 }
 

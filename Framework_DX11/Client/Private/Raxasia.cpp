@@ -137,7 +137,10 @@ HRESULT CRaxasia::Initialize(void* pArg)
 
 void CRaxasia::Priority_Update(_float fTimeDelta)
 {
-
+	if (m_bChanging)
+	{
+		m_bChanging = false;
+	}
 	__super::Set_UpTargetPos();
 	m_pWeapon->Priority_Update(fTimeDelta);
 	m_pWeaponShield->Priority_Update(fTimeDelta);
@@ -910,6 +913,7 @@ HRESULT CRaxasia::Ready_Weapon()
 		return E_FAIL;
 	
 	m_pWeaponShield->Appear();
+	m_pWeaponShield->DeActive_Collider();
 
 
 	/* FOR.Com_Collider_OBB */
@@ -953,7 +957,7 @@ HRESULT CRaxasia::Ready_Effects()
 		nullptr, _Vec3(0.f, 0.f, 0.f), _Vec3(0.f, 0.f, 1.f), _Vec3(1.f, 1.f, 1.f));
 
 	m_Effects[EFFECT_THUNDERACCEL] = CEffect_Manager::Get_Instance()->Clone_Effect(TEXT("Raxasia_Attack_ThunderAccel"), pParetnMatrix,
-		nullptr, _Vec3(0.f, 0.1f, 0.f), _Vec3(0.f, 0.f, 1.f), _Vec3(1.f, 1.f, 1.f));
+		nullptr, _Vec3(0.f, 0.2f, 0.f), _Vec3(0.f, 0.f, 1.f), _Vec3(1.f, 1.f, 1.f));
 
 	m_Effects[EFFECT_SHIELDDASH] = CEffect_Manager::Get_Instance()->Clone_Effect(TEXT("Raxasia_Attack_ShieldDash"), pParetnMatrix,
 		nullptr, _Vec3(0.f, 0.f, 0.f), _Vec3(0.f, 0.f, 1.f), _Vec3(1.f, 1.f, 1.f));

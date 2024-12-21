@@ -229,8 +229,8 @@ HRESULT CWeapon_Raxasia_P2_Shield::Ready_Components()
 
 	/* FOR.Com_Collider */
 	CBounding_OBB::BOUNDING_OBB_DESC			ColliderDesc{};
-	ColliderDesc.vExtents = _float3(0.43f, 0.25f, 0.8f);
-	ColliderDesc.vCenter = _float3(0.f, 0.0f, -0.1f);
+	ColliderDesc.vExtents = _float3(0.9f, 0.35f, 0.9f);
+	ColliderDesc.vCenter = _float3(0.f, -0.2f, -0.1f);
 	ColliderDesc.vAngles = _float3(0.f, 0.f, 0.f);
 
 	if (FAILED(__super::Add_Component(LEVEL_STATIC, TEXT("Prototype_Component_Collider_OBB"),

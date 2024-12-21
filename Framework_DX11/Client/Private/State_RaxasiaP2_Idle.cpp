@@ -114,27 +114,27 @@ void CState_RaxasiaP2_Idle::Calc_Act_Attack()
         m_iAtkTrack = 0;
     }
 
-    m_iAtkTrack = 1;
+    m_iAtkTrack = 3;
 
     switch (m_iAtkTrack)
     {
     case 0:
-        m_pMonster->Change_State(CRaxasia::ATKP2_WAVESTING);
-        m_fNeedDist_ForAttack = 20.f;
+        m_pMonster->Change_State(CRaxasia::ATKP2_WAVESTING);    //
+        m_fNeedDist_ForAttack = 12.f;
         break;
 
     case 1:
-        m_pMonster->Change_State(CRaxasia::ATKP2_RUNNING);
+        m_pMonster->Change_State(CRaxasia::ATKP2_RUNNING);      //
         m_fNeedDist_ForAttack = 20.f;
         break;
 
     case 2:
-        m_pMonster->Change_State(CRaxasia::ATKP2_STEPJUMP);
+        m_pMonster->Change_State(CRaxasia::ATKP2_STEPJUMP);     //
         m_fNeedDist_ForAttack = 15.f;
         break;
 
     case 3:
-        m_pMonster->Change_State(CRaxasia::ATKP2_TELE);
+        m_pMonster->Change_State(CRaxasia::ATKP2_TELE);         
         m_fNeedDist_ForAttack = 16.f;
         break;
 
