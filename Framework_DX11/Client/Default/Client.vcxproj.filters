@@ -1134,7 +1134,7 @@
     </Filter>
     <Filter Include="05.Fsm\Monster\Raxasia\CutScene\Die">
       <UniqueIdentifier>{80716756-08fe-4729-85f6-929b429ac1c5}</UniqueIdentifier>
-	</Filter>
+    </Filter>
     <Filter Include="05.Fsm\Monster\Raxasia\P2\Attack\Route\Guard">
       <UniqueIdentifier>{dc500d27-cd7e-46e4-83fb-153428376054}</UniqueIdentifier>
     </Filter>
@@ -1227,6 +1227,9 @@
     </Filter>
     <Filter Include="05.Fsm\Monster\CarcassNormal\Attack\Route\HeadingMultiple">
       <UniqueIdentifier>{ef405b19-4ecd-4eb8-a5fe-3f7b75625347}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.GameObjects\11.InteractObj\11.SteelHeart">
+      <UniqueIdentifier>{b166c39a-dbcb-47bf-852a-965deb04f761}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -2179,7 +2182,7 @@
     </ClInclude>
     <ClInclude Include="..\Public\State_Raxasia_CutScene_Die.h">
       <Filter>05.Fsm\Monster\Raxasia\CutScene\Die</Filter>
-	</ClInclude>
+    </ClInclude>
     <ClInclude Include="..\Public\State_CurruptedStrongArm_StingTwice.h">
       <Filter>05.Fsm\Monster\CurruptedStrongArm_Puppet\Attack\Single\StingTwice</Filter>
     </ClInclude>
@@ -2254,6 +2257,9 @@
     </ClInclude>
     <ClInclude Include="..\Public\State_CarcassNormal_ClawRush.h">
       <Filter>05.Fsm\Monster\CarcassNormal\Attack\Single\ClawRush</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Public\SteelHeart.h">
+      <Filter>02.GameObjects\11.InteractObj\11.SteelHeart</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -3176,7 +3182,7 @@
     </ClCompile>
     <ClCompile Include="..\Private\State_Raxasia_CutScene_Die.cpp">
       <Filter>05.Fsm\Monster\Raxasia\CutScene\Die</Filter>
-	</ClCompile>
+    </ClCompile>
     <ClCompile Include="..\Private\State_CurruptedStrongArm_SwipAttack.cpp">
       <Filter>05.Fsm\Monster\CurruptedStrongArm_Puppet\Attack\Single\SwipAttack</Filter>
     </ClCompile>
@@ -3251,6 +3257,9 @@
     </ClCompile>
     <ClCompile Include="..\Private\State_CarcassNormal_ClawRush.cpp">
       <Filter>05.Fsm\Monster\CarcassNormal\Attack\Single\ClawRush</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Private\SteelHeart.cpp">
+      <Filter>02.GameObjects\11.InteractObj\11.SteelHeart</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

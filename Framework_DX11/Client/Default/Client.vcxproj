@@ -288,6 +288,7 @@
     <ClInclude Include="..\Public\State_RebornerBigA_SlashTwice.h" />
     <ClInclude Include="..\Public\State_RebornerBigA_SwingMultiple.h" />
     <ClInclude Include="..\Public\State_SimonManusP2_Die_Talking.h" />
+    <ClInclude Include="..\Public\SteelHeart.h" />
     <ClInclude Include="..\Public\TorchDeck.h" />
     <ClInclude Include="..\Public\UIPage_Chest.h" />
     <ClInclude Include="..\Public\UIPage_Shop.h" />
@@ -627,6 +628,7 @@
     <ClCompile Include="..\Private\State_RebornerBigA_SlashTwice.cpp" />
     <ClCompile Include="..\Private\State_RebornerBigA_SwingMultiple.cpp" />
     <ClCompile Include="..\Private\State_SimonManusP2_Die_Talking.cpp" />
+    <ClCompile Include="..\Private\SteelHeart.cpp" />
     <ClCompile Include="..\Private\TorchDeck.cpp" />
     <ClCompile Include="..\Private\UIPage_Chest.cpp" />
     <ClCompile Include="..\Private\UIPage_Shop.cpp" />
