@@ -27,8 +27,8 @@ HRESULT CFreeCamera::Initialize(void * pArg)
 	if (FAILED(__super::Initialize(pDesc)))
 		return E_FAIL;
 
-	m_pTransformCom->Set_State(CTransform::STATE_POSITION,
-		XMVectorSet(-27.575f, -81.264f, -14.253f, 1.f));
+	/*m_pTransformCom->Set_State(CTransform::STATE_POSITION,
+		XMVectorSet(-27.575f, -81.264f, -14.253f, 1.f));*/
 
 	return S_OK;
 }

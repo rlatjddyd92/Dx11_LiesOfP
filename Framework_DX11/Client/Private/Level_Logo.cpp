@@ -20,13 +20,12 @@ HRESULT CLevel_Logo::Initialize()
 	if (FAILED(Ready_Layer_Camera()))
 		return E_FAIL;
 
-	if (FAILED(Ready_Layer_BackGround(TEXT("Layer_BackGround"))))
+	if (FAILED(Ready_TitleObject()))
 		return E_FAIL;
 
 	// 24-11-19 김성용
 	// 게임 인터페이스 인게임 모드 해제
 	GET_GAMEINTERFACE->SetIngame(false);
-
 
 	m_pGameInstance->Play_BGM(TEXT("MU_MS_Title_Piano_03.wav"), &g_fBGMVolume);
 
@@ -61,8 +60,8 @@ HRESULT CLevel_Logo::Ready_Lights()
 	ZeroMemory(&LightDesc, sizeof LightDesc);
 	LightDesc.eType = LIGHT_DESC::TYPE_DIRECTIONAL;
 	LightDesc.vDirection = _float4(0.f, -1.f, 1.f, 0.f);
-	LightDesc.vDiffuse = _float4(0.3f, 0.3f, 0.3f, 1.f);
-	LightDesc.vAmbient = _float4(0.1f, 0.1f, 0.1f, 1.f);
+	LightDesc.vDiffuse = _float4(1.f, 1.f, 1.f, 1.f);
+	LightDesc.vAmbient = _float4(1.f, 1.f, 1.f, 1.f);
 	LightDesc.vSpecular = _float4(0.5f, 0.5f, 0.5f, 1.f);
 
 	if (FAILED(m_pGameInstance->Add_Light(LightDesc)))
@@ -85,17 +84,27 @@ HRESULT CLevel_Logo::Ready_Layer_Camera()
 	Desc.fRotationPerSec = XMConvertToRadians(90.0f);
 	Desc.fAspect = (_float)g_iWinSizeX / g_iWinSizeY;
 
-	CCamera* pCamera = dynamic_cast<CCamera*>(m_pGameInstance->Get_CloneObject_ToLayer(LEVEL_GAMEPLAY, TEXT("Layer_Camera"), TEXT("Prototype_GameObject_FreeCamera"), &Desc));
+	CCamera* pCamera = dynamic_cast<CCamera*>(m_pGameInstance->Get_CloneObject_ToLayer(LEVEL_LOGO, TEXT("Layer_Camera"), TEXT("Prototype_GameObject_FreeCamera"), &Desc));
 	if (nullptr == pCamera)
 		return E_FAIL;
+
+	return S_OK;
+}
+
+HRESULT CLevel_Logo::Ready_TitleObject()
+{
+	if (FAILED(m_pGameInstance->Add_CloneObject_ToLayer(LEVEL_LOGO, TEXT("Layer_TitleObject"),
+		TEXT("Prototype_GameObject_SteelHeart"))))
+		return E_FAIL;
+
 	return S_OK;
 }
 
 HRESULT CLevel_Logo::Ready_Layer_BackGround(const _wstring& strLayerTag)
 {
-	if (FAILED(m_pGameInstance->Add_CloneObject_ToLayer(LEVEL_LOGO, strLayerTag,
-		TEXT("Prototype_GameObject_BackGround"))))
-		return E_FAIL;
+	//if (FAILED(m_pGameInstance->Add_CloneObject_ToLayer(LEVEL_LOGO, strLayerTag,
+	//	TEXT("Prototype_GameObject_BackGround"))))
+	//	return E_FAIL;
 
 	return S_OK;
 }

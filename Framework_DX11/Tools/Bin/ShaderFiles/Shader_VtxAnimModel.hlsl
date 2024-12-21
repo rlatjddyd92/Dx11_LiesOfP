@@ -205,16 +205,13 @@ PS_OUT PS_MAIN_GLASS(PS_IN In)
     PS_OUT Out = (PS_OUT) 0;
 
     vector vMtrlDiffuse = g_DiffuseTexture.Sample(LinearSampler, In.vTexcoord);
-
-    if (0.3f > vMtrlDiffuse.a)
-        discard;
 	
     vector vEmissive = g_EmessiveTexture.Sample(LinearClampSampler, In.vTexcoord) * g_fEmessiveMask;
 	
-    Out.vDiffuse = vector(0.6f, 0.8f, 1.0f, 0.3f);;
+    Out.vDiffuse = vector(0.6f, 0.8f, 1.0f, 0.3f);
     Out.vNormal = vector(In.vNormal.xyz * 0.5f + 0.5f, 0.f);
     Out.vDepth = vector(In.vProjPos.z / In.vProjPos.w, In.vProjPos.w / g_fFar, 0.f, 0.f); // 0~F사이의 깊이, 정규화된 Z값
-    Out.vARM = g_ARMTexture.Sample(LinearSampler, In.vTexcoord);
+    Out.vARM = vector(1.0f, 0.1f, 1.0f, 0.0f);
     Out.vEmessive = vEmissive * g_fEmessiveMask;
     Out.vRimLight = g_vLimLight;
     Out.vPickDepth = vector(In.vProjPos.z / In.vProjPos.w, 0.f, 0.f, 0.f);

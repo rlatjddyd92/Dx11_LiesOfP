@@ -163,19 +163,14 @@ HRESULT CAnimModel::Render()
 	if (FAILED(m_pShaderCom->Bind_RawValue("g_fFar", &m_pGameInstance->Get_Far(), sizeof(_float))))
 		return E_FAIL;
 
-	static _bool isGlass = false;
-
 	_uint		iNumMeshes = m_pModelCom->Get_NumMeshes();
 
 	for (size_t i = 0; i < iNumMeshes; i++)
 	{
-		isGlass = false;
-
 		m_pModelCom->Bind_MeshBoneMatrices(m_pShaderCom, "g_BoneMatrices", (_uint)i);
 
 		if (nullptr != m_pModelCom->Find_Texture((_uint)i, TEXTURE_TYPE::DIFFUSE))
 		{
-			isGlass = true;
 
 			if (FAILED(m_pModelCom->Bind_Material(m_pShaderCom, "g_DiffuseTexture", TEXTURE_TYPE::DIFFUSE, (_uint)i)))
 				return E_FAIL;
@@ -211,16 +206,9 @@ HRESULT CAnimModel::Render()
 		}
 		else
 		{
-			if (isGlass)
-			{
-				if (FAILED(m_pShaderCom->Begin(0)))
-					return E_FAIL;
-			}
-			else
-			{
-				if (FAILED(m_pShaderCom->Begin(3)))
-					return E_FAIL;
-			}
+			if (FAILED(m_pShaderCom->Begin(3)))
+				return E_FAIL;
+
 		}
 
 		if (FAILED(m_pModelCom->Render((_uint)i)))
