@@ -25,6 +25,7 @@ HRESULT CState_SimonManus_CutScene_Phase2::Initialize(_uint iStateNum, void* pAr
 HRESULT CState_SimonManus_CutScene_Phase2::Start_State(void* pArg)
 {
     m_iAnimation_Change = m_pMonster->Get_Model()->Find_AnimationIndex("AS_Manus_Phase_2_P1_Change", 1.f);
+    m_pMonster->Get_Model()->Set_SpeedPerSec(m_iAnimation_Change, 31);
 
     m_pMonster->Change_Animation(m_iAnimation_Change, false, 0.f, 0);
 
