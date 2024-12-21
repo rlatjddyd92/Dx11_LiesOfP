@@ -5,6 +5,8 @@
 #include "Player.h"
 #include "Weapon.h"
 
+#include "Effect_Manager.h"
+
 CState_Player_Arm_Parry::CState_Player_Arm_Parry(CFsm* pFsm, CPlayer* pPlayer)
     :CState{ pFsm }
     , m_pPlayer{ pPlayer }
@@ -23,12 +25,16 @@ HRESULT CState_Player_Arm_Parry::Initialize(_uint iStateNum, void* pArg)
 
     m_iSoundFrame = 25;
 
+    m_iEffefctFrame = 12;
+
     return S_OK;
 }
 
 HRESULT CState_Player_Arm_Parry::Start_State(void* pArg)
 {
     m_pPlayer->Change_Animation(m_iAnimation_Arm_Parry, false, 0.05f);
+
+    m_isActiveEffect = false;
 
     return S_OK;
 }
@@ -37,7 +43,7 @@ void CState_Player_Arm_Parry::Update(_float fTimeDelta)
 {
     _int iFrame = m_pPlayer->Get_Frame();
 
-    if (25 <= iFrame && iFrame < 45)
+    if (12 <= iFrame && iFrame < 27)
     {
         m_pPlayer->Set_IsParry(true);
     }
@@ -49,6 +55,7 @@ void CState_Player_Arm_Parry::Update(_float fTimeDelta)
     }
 
     Control_Sound();
+    Control_Effect(iFrame);
 }
 
 void CState_Player_Arm_Parry::End_State()
@@ -73,6 +80,17 @@ void CState_Player_Arm_Parry::Control_Sound()
     else
     {
         m_isPlaySound = false;
+    }
+}
+
+void CState_Player_Arm_Parry::Control_Effect(_int iFrame)
+{
+    if (!m_isActiveEffect && iFrame >= m_iEffefctFrame)
+    {
+        CEffect_Manager::Get_Instance()->Add_Effect_ToLayer(LEVEL_GAMEPLAY, TEXT("Player_GuardParry"), m_pPlayer->Get_Transform()->Get_WorldMatrix_Ptr(),
+            m_pPlayer->Get_Model()->Get_BoneCombindTransformationMatrix_Ptr("BN_Aegis_Base"));
+
+        m_isActiveEffect = true;
     }
 }
 

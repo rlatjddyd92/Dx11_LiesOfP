@@ -20,15 +20,15 @@ HRESULT CState_CarcassBigA_HitFatal::Initialize(_uint iStateNum, void* pArg)
 
 HRESULT CState_CarcassBigA_HitFatal::Start_State(void* pArg)
 {
-    _vector vPos = XMVectorSetY(m_pMonster->Get_Transform()->Get_State(CTransform::STATE_POSITION), 0);
-    _vector vLook = XMVectorSetY(m_pMonster->Get_Transform()->Get_State(CTransform::STATE_LOOK), 0);
-    _vector vDir = XMVectorSetY(m_pGameInstance->Get_CamPosition_Vec4(), 0);
-    vDir = vDir - vPos;
+    _Vec3 vRight = XMVectorSetY(m_pMonster->Get_Transform()->Get_State(CTransform::STATE_RIGHT), 0);
+    _Vec3 vDir = m_pMonster->Get_TargetDir();
+    vDir.Normalize();
+    vRight.Normalize();
 
-    _float fRadian{};
-    fRadian = acos(XMVectorGetX(XMVector3Dot(vLook, vDir)));
+    _Vec3 fDirCheck{};
+    fDirCheck = vRight.Cross(vDir);
 
-    if (XMConvertToDegrees(fRadian) < 90)
+    if (fDirCheck.y < 0)
     {
         m_iDirCnt = DIR::DIR_FRONT;
     }

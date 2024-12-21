@@ -220,6 +220,7 @@ PS_EFFECT_OUT PS_POW_MAIN(PS_IN In)
     vColor.rgb *= g_fAlpha;
     vColor *= g_vColor;
     
+    // 0.5보다 작으면 0에 가깝게, 0.5보다 크면 1에 가깝게.
     vColor.r = AdaptiveValue(saturate(vColor.r));
     vColor.g = AdaptiveValue(saturate(vColor.g));
     vColor.b = AdaptiveValue(saturate(vColor.b));
@@ -308,6 +309,33 @@ PS_OUT PS_2P_HALFSPHERE_MAIN(PS_IN In)
     return Out;
 }
 
+PS_OUT PS_BLEND_RGBTOA_YALPHA_MAIN(PS_IN In)
+{
+    PS_OUT Out = (PS_OUT) 0;
+    
+    // 0~2 + (-2~2) : -2 ~ 4
+    float2 vTexcoord = In.vTexcoord * g_vTileRepeat + g_vTileMove;
+    
+    vector vColor = g_DiffuseTexture.Sample(LinearSampler, vTexcoord);
+	
+    // vTexcoord.y보다 작은 수 중에 가장 큰 g_vTileRepeat.y의 배수
+    float fMultiple = floor(vTexcoord.y / g_vTileRepeat.y) * g_vTileRepeat.y;
+    float fCurrentY = vTexcoord.y - fMultiple;
+    
+    vColor.a = max(vColor.r, max(vColor.g, vColor.b));
+    vColor.a *= fCurrentY / g_vTileRepeat.y;
+    
+    vColor.rgb *= g_vColor.rgb;
+    vColor.a *= g_fAlpha;
+	
+    if (vColor.a < 0.1f)
+        discard;
+    
+    Out.vColor = vColor;
+	
+    return Out;
+}
+
 
 technique11	DefaultTechnique
 {
@@ -379,7 +407,7 @@ technique11	DefaultTechnique
 
     pass POW_EFFECT // 6
     {
-        SetRasterizerState(RS_Default);
+        SetRasterizerState(RS_Cull_None);
         SetDepthStencilState(DSS_Default, 0);
         SetBlendState(BS_Default, vector(0.f, 0.f, 0.f, 0.f), 0xffffffff);
 
@@ -419,6 +447,17 @@ technique11	DefaultTechnique
         VertexShader = compile vs_5_0 VS_MAIN();
         GeometryShader = NULL;
         PixelShader = compile ps_5_0 PS_2P_HALFSPHERE_MAIN();
+    }
+
+    pass BLEND_RGBTOA_YALPHA // 10
+    {
+        SetRasterizerState(RS_Cull_None);
+        SetDepthStencilState(DSS_NonWrite, 0);
+        SetBlendState(BS_AlphaBlend, vector(0.f, 0.f, 0.f, 0.f), 0xffffffff);
+
+        VertexShader = compile vs_5_0 VS_MAIN();
+        GeometryShader = NULL;
+        PixelShader = compile ps_5_0 PS_BLEND_RGBTOA_YALPHA_MAIN();
     }
 }
 

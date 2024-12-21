@@ -2,6 +2,9 @@
 #include "Sophia.h"
 #include "GameInstance.h"
 
+#include "Effect_Manager.h"
+#include "Effect_Container.h"
+
 CSophia::CSophia(ID3D11Device* pDevice, ID3D11DeviceContext* pContext)
     : CGameObject{ pDevice, pContext }
 {
@@ -33,15 +36,20 @@ HRESULT CSophia::Initialize(void* pArg)
     if (FAILED(Ready_Components(pDesc)))
         return E_FAIL;
 
+    if (FAILED(Ready_Effect()))
+        return E_FAIL;
+
     return S_OK;
 }
 
 void CSophia::Priority_Update(_float fTimeDelta)
 {
+    m_pHearEffeft->Priority_Update(fTimeDelta);
 }
 
 void CSophia::Update(_float fTimeDelta)
 {
+    m_pHearEffeft->Update(fTimeDelta);
 }
 
 void CSophia::Late_Update(_float fTimeDelta)
@@ -49,8 +57,12 @@ void CSophia::Late_Update(_float fTimeDelta)
     if (m_pGameInstance->isIn_Frustum_WorldSpace(m_pTransformCom->Get_State(CTransform::STATE_POSITION), 15.f))
     {
         __super::Late_Update(fTimeDelta);
-        m_pGameInstance->Add_RenderObject(CRenderer::RG_NONBLEND, this);
+
+        if(m_isRender)
+            m_pGameInstance->Add_RenderObject(CRenderer::RG_NONBLEND, this);
     }
+
+    m_pHearEffeft->Late_Update(fTimeDelta);
 }
 
 HRESULT CSophia::Render()
@@ -106,6 +118,40 @@ HRESULT CSophia::Render()
     return S_OK;
 }
 
+void CSophia::Active_HeartEffect()
+{
+    m_pHearEffeft->Set_Loop(true);
+
+    _Vec3 vPos = m_pTransformCom->Get_State(CTransform::STATE_POSITION);
+    _Vec3 vLook = m_pTransformCom->Get_State(CTransform::STATE_LOOK);
+    vLook.y = 0.f;
+    vLook.Normalize();
+
+    vPos += vLook * 0.19f;
+    vPos.y += 1.7f;
+
+    m_pHearEffeft->Get_Transform()->Set_State(CTransform::STATE_POSITION, vPos);
+
+}
+
+void CSophia::DeActive_HeartEffect()
+{
+    m_pHearEffeft->Set_Loop(false);
+}
+
+void CSophia::Active_DisapperEffect()
+{
+    _Vec3 vPos = m_pTransformCom->Get_State(CTransform::STATE_POSITION);
+    _Vec3 vLook = m_pTransformCom->Get_State(CTransform::STATE_LOOK);
+    vLook.y = 0.f;
+    vLook.Normalize();
+
+    vPos += vLook * 0.19f;
+    vPos.y += 1.2f;
+
+    CEffect_Manager::Get_Instance()->Add_Effect_ToLayer(LEVEL_GAMEPLAY, TEXT("Sophia_CutScene_Death"), vPos);
+}
+
 HRESULT CSophia::Ready_Components(OBJECT_DEFAULT_DESC* pDesc)
 {
     /* FOR.Com_Shader */
@@ -117,6 +163,13 @@ HRESULT CSophia::Ready_Components(OBJECT_DEFAULT_DESC* pDesc)
     if (FAILED(__super::Add_Component(LEVEL_GAMEPLAY, TEXT("Sophia_Stoned"),
         TEXT("Com_Model"), reinterpret_cast<CComponent**>(&m_pModelCom))))
         return E_FAIL;
+
+    return S_OK;
+}
+
+HRESULT CSophia::Ready_Effect()
+{
+    m_pHearEffeft = CEffect_Manager::Get_Instance()->Clone_Effect(TEXT("Sophia_CutScene_Heart"), nullptr, nullptr);
 
     return S_OK;
 }
@@ -150,6 +203,13 @@ CGameObject* CSophia::Clone(void* pArg)
 void CSophia::Free()
 {
     __super::Free();
+
+    if (true == m_isCloned)
+    {
+        m_pHearEffeft->Set_Cloned(false);
+        Safe_Release(m_pHearEffeft);
+    }
+
     Safe_Release(m_pShaderCom);
     Safe_Release(m_pModelCom);
 }

@@ -45,9 +45,9 @@ HRESULT CCamera_Manager::Change_Camera(const _wstring& strCameraTag, _bool isMov
 
 	if (isMovePreCameraPos)
 	{
-		_Vec3 vCurrentPos = m_pCurrentCamera->Get_Transform()->Get_State(CTransform::STATE_POSITION);
+		_Matrix CurretWorldMatrix = m_pCurrentCamera->Get_Transform()->Get_WorldMatrix();
 
-		pCamera->Get_Transform()->Set_State(CTransform::STATE_POSITION, vCurrentPos);
+		pCamera->Get_Transform()->Set_WorldMatrix(CurretWorldMatrix);
 	}
 
 	pCamera->IsActive(true);

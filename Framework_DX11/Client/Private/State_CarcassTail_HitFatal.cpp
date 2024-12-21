@@ -20,14 +20,6 @@ HRESULT CState_CarcassTail_HitFatal::Initialize(_uint iStateNum, void* pArg)
 
 HRESULT CState_CarcassTail_HitFatal::Start_State(void* pArg)
 {
-    _vector vPos = XMVectorSetY(m_pMonster->Get_Transform()->Get_State(CTransform::STATE_POSITION), 0);
-    _vector vLook = XMVectorSetY(m_pMonster->Get_Transform()->Get_State(CTransform::STATE_LOOK), 0);
-    _vector vDir = XMVectorSetY(m_pGameInstance->Get_CamPosition_Vec4(), 0);
-    vDir = vDir - vPos;
-
-    _float fRadian{};
-    fRadian = acos(XMVectorGetX(XMVector3Dot(vLook, vDir)));
-
     m_pMonster->Change_Animation(AN_FATAL_START, false, 0.f);
 
     return S_OK;

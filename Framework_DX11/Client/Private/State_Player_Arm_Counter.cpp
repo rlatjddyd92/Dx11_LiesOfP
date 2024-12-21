@@ -25,6 +25,11 @@ HRESULT CState_Player_Arm_Counter::Initialize(_uint iStateNum, void* pArg)
     m_iColliderStartFrame = 96;
     m_iColliderEndFrame = 101;
 
+    m_iActiveEffectFrame = 10;
+    m_iDeActiveEffectFrame = 90;
+
+    m_isChangeLoop = false;
+
     return S_OK;
 }
 
@@ -32,22 +37,30 @@ HRESULT CState_Player_Arm_Counter::Start_State(void* pArg)
 {
     m_pPlayer->Change_Animation(m_iAnimation_Arm_Counter, false, 0.2f, 0, true, true);
 
+    m_isActiveEffect = false;
+
     return S_OK;
 }
 
 void CState_Player_Arm_Counter::Update(_float fTimeDelta)
 {
+    _int iFrmae = m_pPlayer->Get_Frame();
+
     if (End_Check())
     {
+        m_isChangeLoop = true;
         m_pPlayer->Change_State(CPlayer::ARM_LOOP);
         return;
     }
 
     Control_Collider();
+    Control_Effect(iFrmae);
 }
 
 void CState_Player_Arm_Counter::End_State()
 {
+    if (!m_isChangeLoop)
+        m_pPlayer->Get_Model()->Set_RemoteTuning(true);
 }
 
 _bool CState_Player_Arm_Counter::End_Check()
@@ -61,14 +74,27 @@ void CState_Player_Arm_Counter::Control_Collider()
 
     if (m_iColliderStartFrame <= iFrame && iFrame <= m_iColliderEndFrame)
     {
-        if (m_pPlayer->Active_CurrentWeaponCollider())
+        if (m_pPlayer->Active_Arm())
         {
             m_pPlayer->Decrease_Stamina(30.f);
         }
     }
     else
     {
-        m_pPlayer->DeActive_CurretnWeaponCollider();
+        m_pPlayer->DeActive_Arm();
+    }
+}
+
+void CState_Player_Arm_Counter::Control_Effect(_int iFrame)
+{
+    if (!m_isActiveEffect && m_iActiveEffectFrame <= iFrame)
+    {
+        m_pPlayer->Active_Effect(CPlayer::EFFECT_ARM_COUNTER_CHARGE);
+        m_isActiveEffect = true;
+    }
+    else if (m_isActiveEffect && m_iDeActiveEffectFrame <= iFrame)
+    {
+        m_pPlayer->DeActive_Effect(CPlayer::EFFECT_ARM_COUNTER_CHARGE);
     }
 }
 

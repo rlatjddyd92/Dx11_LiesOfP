@@ -101,6 +101,22 @@ HRESULT CEffect_Manager::Add_Effect_ToLayer(_uint iLevelID, const _wstring& strE
     return m_pGameInstance->Add_Object_ToLayer(desc.iLevelIndex, TEXT("Layer_Effect"), Find_PoolingEffect(strECTag, &desc));
 }
 
+HRESULT CEffect_Manager::Add_Effect_ToLayer_Rot(_uint iLevelID, const _wstring& strECTag, _Vec3 vPos, _Vec3 vRot, _Vec3 vScale)
+{
+    CEffect_Container::EFFECT_DESC desc = {};
+
+    desc.fRotationPerSec = XMConvertToRadians(90.f);
+    desc.fSpeedPerSec = 1.f;
+    desc.iLevelIndex = iLevelID;
+    desc.pParentMatrix = nullptr;
+    desc.pSocketMatrix = nullptr;
+    desc.vPos = vPos;
+    desc.vRotate = vRot;
+    desc.vScale = vScale;
+
+    return m_pGameInstance->Add_Object_ToLayer(desc.iLevelIndex, TEXT("Layer_Effect"), Find_PoolingEffect(strECTag, &desc));
+}
+
 HRESULT CEffect_Manager::Load_Effects(const _wstring& strEffectPath)
 {
     _wstring searchPath = strEffectPath + L"\\*.*";
@@ -304,6 +320,16 @@ HRESULT CEffect_Manager::Load_Shaders()
         CShader_Compute::Create(m_pDevice, m_pContext, TEXT("../Bin/ShaderFiles/Shader_ParticleCompute.hlsl"), "CS_SPREAD_LOCAL_MAIN"))))
         return E_FAIL;
 
+    /* For. Prototype_Component_Shader_Compute_Particle_LocalMove */
+    if (FAILED(m_pGameInstance->Add_Prototype(LEVEL_STATIC, TEXT("Prototype_Component_Shader_Compute_Particle_LocalMove"),
+        CShader_Compute::Create(m_pDevice, m_pContext, TEXT("../Bin/ShaderFiles/Shader_ParticleCompute.hlsl"), "CS_MOVE_LOCAL_MAIN"))))
+        return E_FAIL;
+
+    /* For. Prototype_Component_Shader_Compute_Particle_LocalConverge */
+    if (FAILED(m_pGameInstance->Add_Prototype(LEVEL_STATIC, TEXT("Prototype_Component_Shader_Compute_Particle_LocalConverge"),
+        CShader_Compute::Create(m_pDevice, m_pContext, TEXT("../Bin/ShaderFiles/Shader_ParticleCompute.hlsl"), "CS_CONVERGE_LOCAL_MAIN"))))
+        return E_FAIL;
+
     /* For. Prototype_Component_Shader_Compute_Particle_Reset */
     if (FAILED(m_pGameInstance->Add_Prototype(LEVEL_STATIC, TEXT("Prototype_Component_Shader_Compute_Particle_Reset"),
         CShader_Compute::Create(m_pDevice, m_pContext, TEXT("../Bin/ShaderFiles/Shader_ParticleCompute.hlsl"), "CS_RESET_MAIN"))))
@@ -327,6 +353,11 @@ HRESULT CEffect_Manager::Load_Shaders()
     /* For. Prototype_Component_Shader_Compute_Trail_Follow */
     if (FAILED(m_pGameInstance->Add_Prototype(LEVEL_STATIC, TEXT("Prototype_Component_Shader_Compute_Trail_Follow"),
         CShader_Compute::Create(m_pDevice, m_pContext, TEXT("../Bin/ShaderFiles/Shader_Trail_MultiPoint_Compute.hlsl"), "CS_FOLLOW_MAIN"))))
+        return E_FAIL;
+
+    /* For. Prototype_Component_Shader_Compute_Trail_LocalSpread */
+    if (FAILED(m_pGameInstance->Add_Prototype(LEVEL_STATIC, TEXT("Prototype_Component_Shader_Compute_Trail_LocalSpread"),
+        CShader_Compute::Create(m_pDevice, m_pContext, TEXT("../Bin/ShaderFiles/Shader_Trail_MultiPoint_Compute.hlsl"), "CS_SPREAD_LOCAL_MAIN"))))
         return E_FAIL;
 
     /* For. Prototype_Component_Shader_Compute_Trail_Reset */

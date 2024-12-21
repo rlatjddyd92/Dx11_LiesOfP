@@ -212,8 +212,8 @@ HRESULT CUIRender_Batching::Render()
 
 			if (pNow->bIs_TwoDPolygon)
 			{
-				pNow->iTwoPolygon_Buffer_Num = max(pNow->iTwoPolygon_Buffer_Num, 0);
-				pNow->iTwoPolygon_Buffer_Num = min(pNow->iTwoPolygon_Buffer_Num, m_vecVIBuffer_2DPolygon_Com.size() - 1);
+				pNow->iTwoPolygon_Buffer_Num = (_int)max(pNow->iTwoPolygon_Buffer_Num, 0);
+				pNow->iTwoPolygon_Buffer_Num = (_int)min(pNow->iTwoPolygon_Buffer_Num, m_vecVIBuffer_2DPolygon_Com.size() - 1);
 
 				for (_int i = 0; i < 7; ++i)
 				{

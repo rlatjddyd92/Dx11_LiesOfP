@@ -19,7 +19,10 @@
 #include "Monster.h"
 #include "CarcassBigA.h"
 #include "CarcassTail.h"
+#include "CarcassNormal.h"
 #include "CurruptedStrongArm_Puppet.h"
+#include "RebornerBigA.h"
+#include "Weapon_RebornerBigA_Stick.h"
 #include "SimonManus.h"
 
 #include "SpotEffect.h"
@@ -36,6 +39,7 @@
 #include "AObj_GodHands.h"
 #include "GH_Creater.h"
 #include "AObj_Stomp.h"
+#include "AObj_Wave.h"
 
 #include "Raxasia.h"
 #include "AObj_ThunderBlast.h"
@@ -45,6 +49,7 @@
 #include "AObj_ThunderSpread.h"
 #include "AObj_ThunderStamp.h"
 #include "AObj_ThunderWave.h"
+#include "AObj_ThunderBolt.h"
 
 #include "Weapon_Raxasia_P1_Sword.h"
 #include "Weapon_Raxasia_P2_Sword.h"
@@ -883,6 +888,12 @@ HRESULT CLoader::Ready_Resources_For_Monster()
 		CModel::Create(m_pDevice, m_pContext, CModel::TYPE_ANIM, "../Bin/ModelData/Anim/CreatedBinFiles/CarcassTail.dat", PreTransformMatrix, true))))
 		return E_FAIL;
 
+	//Prototype_Component_Model_CarcassNormal
+	PreTransformMatrix = XMMatrixScaling(0.01f, 0.01f, 0.01f) * XMMatrixRotationY(XMConvertToRadians(270.0f));
+	if (FAILED(m_pGameInstance->Add_Prototype(LEVEL_GAMEPLAY, TEXT("Prototype_Component_Model_CarcassNormal"),
+		CModel::Create(m_pDevice, m_pContext, CModel::TYPE_ANIM, "../Bin/ModelData/Anim/CreatedBinFiles/CarcassNormal.dat", PreTransformMatrix, true))))
+		return E_FAIL;
+
 	//Prototype_Component_Model_CarcassBigA
 	PreTransformMatrix = XMMatrixScaling(0.01f, 0.01f, 0.01f) * XMMatrixRotationY(XMConvertToRadians(270.0f));
 	if (FAILED(m_pGameInstance->Add_Prototype(LEVEL_GAMEPLAY, TEXT("Prototype_Component_Model_CarcassBigA"),
@@ -893,6 +904,18 @@ HRESULT CLoader::Ready_Resources_For_Monster()
 	PreTransformMatrix = XMMatrixScaling(0.01f, 0.01f, 0.01f) * XMMatrixRotationY(XMConvertToRadians(270.0f));
 	if (FAILED(m_pGameInstance->Add_Prototype(LEVEL_GAMEPLAY, TEXT("Prototype_Component_Model_Horesman"),
 		CModel::Create(m_pDevice, m_pContext, CModel::TYPE_ANIM, "../Bin/ModelData/Anim/CreatedBinFiles/Horesman.dat", PreTransformMatrix, true))))
+		return E_FAIL;
+
+	//Prototype_Component_Model_RebornerBigA
+	PreTransformMatrix = XMMatrixScaling(0.01f, 0.01f, 0.01f) * XMMatrixRotationY(XMConvertToRadians(270.0f));
+	if (FAILED(m_pGameInstance->Add_Prototype(LEVEL_GAMEPLAY, TEXT("Prototype_Component_Model_RebornerBigA"),
+		CModel::Create(m_pDevice, m_pContext, CModel::TYPE_ANIM, "../Bin/ModelData/Anim/CreatedBinFiles/RebornerBigA.dat", PreTransformMatrix, true))))
+		return E_FAIL;
+
+	//Prototype_Component_Model_Weapon_RebornerBigA_Stick
+	PreTransformMatrix = XMMatrixScaling(0.01f, 0.01f, 0.01f) * XMMatrixRotationZ(XMConvertToRadians(90.0f));
+	if (FAILED(m_pGameInstance->Add_Prototype(LEVEL_GAMEPLAY, TEXT("Prototype_Component_Model_Weapon_RebornerBigA_Stick"),
+		CModel::Create(m_pDevice, m_pContext, CModel::TYPE_ANIM, "../Bin/ModelData/Anim/Monster/RebornerBigA/RebornerBigA_Weapon.dat", PreTransformMatrix, false))))
 		return E_FAIL;
 
 	//Prototype_Component_Model_SimonManus
@@ -1146,6 +1169,11 @@ HRESULT CLoader::Ready_Prototype()
 		CCarcassTail::Create(m_pDevice, m_pContext))))
 		return E_FAIL;
 
+	/* For. Prototype_GameObject_CarcassTail */
+	if (FAILED(m_pGameInstance->Add_Prototype(TEXT("Prototype_GameObject_CarcassNormal"),
+		CCarcassNormal::Create(m_pDevice, m_pContext))))
+		return E_FAIL;
+
 	/* For. Prototype_GameObject_CarcassBigA */
 	if (FAILED(m_pGameInstance->Add_Prototype(TEXT("Prototype_GameObject_CarcassBigA"),
 		CCarcassBigA::Create(m_pDevice, m_pContext))))
@@ -1154,6 +1182,16 @@ HRESULT CLoader::Ready_Prototype()
 	/* For. Prototype_GameObject_CurruptedStrongArm */
 	if (FAILED(m_pGameInstance->Add_Prototype(TEXT("Prototype_GameObject_CurruptedStrongArm"),
 		CCurruptedStrongArm_Puppet::Create(m_pDevice, m_pContext))))
+		return E_FAIL;
+
+	/* For. Prototype_GameObject_CurruptedStrongArm */
+	if (FAILED(m_pGameInstance->Add_Prototype(TEXT("Prototype_GameObject_RebornerBigA"),
+		CRebornerBigA::Create(m_pDevice, m_pContext))))
+		return E_FAIL;
+
+	/* For. Prototype_GameObject_Weapon_RebornerBigA_Stick */
+	if (FAILED(m_pGameInstance->Add_Prototype(TEXT("Prototype_GameObject_Weapon_RebornerBigA_Stick"),
+		CWeapon_RebornerBigA_Stick::Create(m_pDevice, m_pContext))))
 		return E_FAIL;
 
 	/* For. Prototype_GameObject_SimonManus */
@@ -1253,6 +1291,9 @@ HRESULT CLoader::Ready_Prototype()
 		return E_FAIL;
 	if (FAILED(m_pGameInstance->Add_Prototype(TEXT("Prototype_GameObject_ThunderWave"),
 		CAObj_ThunderWave::Create(m_pDevice, m_pContext))))
+		return E_FAIL;
+	if (FAILED(m_pGameInstance->Add_Prototype(TEXT("Prototype_GameObject_ThunderBolt"),
+		CAObj_ThunderBolt::Create(m_pDevice, m_pContext))))
 		return E_FAIL;
 
 

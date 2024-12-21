@@ -30,6 +30,8 @@ private:
 
     _bool               m_bSwing = { false };
     _bool               m_bCharge = { false };
+    _bool               m_bJump = { false };
+    _bool               m_bFire = { false };
 
     _bool               m_bSwingSound = { false };
 

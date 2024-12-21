@@ -29,11 +29,20 @@ private:
 
     _Vec4               m_vTargetDir{};
     _Vec3               m_vFlyMoveStack{};
+    _Vec3               m_vRootMoveStack{};
+
+    _Vec3               m_vCurVelocity{};
 
     _float              m_fCurrentTime = { 0.f };
     _float              m_fChaseDuration = { 1.5f };
 
+    _float              m_fMoveHeight{};
+    _float              m_fCorHeightForLand{};
+
+    _bool               m_bNaviLockCheck = { false };
+
     _bool               m_bStartSpot = { true };
+    _bool               m_bStartHeightCor = { true };
     _bool               m_bSwing = { false };
     _bool               m_bSwingSound = { false };
     

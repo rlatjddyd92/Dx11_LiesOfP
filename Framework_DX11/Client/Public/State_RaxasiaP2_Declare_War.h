@@ -27,12 +27,29 @@ public:
 private:
     class CMonster* m_pMonster = { nullptr };
 
+    _float              m_fThunderBoltTime = { 0.4f };
+    _float              m_fTimeStack_ThunderBolt = { 0.f };
+    _float              m_fLightningTime = { 0.6f };
+    _float              m_fTimeStack_Lightning = { 0.f };
 
+    _float              m_fHeight = {};
+    
+    _int                m_iThunderCnt = {};
+
+    _Vec3               m_vFogSpot = {};
+
+    _bool               m_bResetHovering = { false };
+
+    _bool               m_bHovering = { false };
+    _bool               m_bEndFire = { false };
     _bool               m_bSwing = { false };
     _bool               m_bStart = { false };
+    _bool               m_bLanding = { false };
 
+    _bool               m_bDive = { false };
     _bool               m_bCharge = { false };
     _bool               m_bJump = { false };
+    _bool               m_bEnvelop = { false };
 
     _bool               m_bSwingSound = { false };
 
@@ -41,7 +58,7 @@ private:
 private:
     _bool               End_Check();
     void                Collider_Check(_double CurTrackPos);
-    void                Effect_Check(_double CurTrackPos);
+    void                Effect_Check(_double CurTrackPos, _float fTimeDelta);
     void                Control_Sound(_double CurTrackPos);
 
 public:

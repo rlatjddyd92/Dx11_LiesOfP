@@ -97,6 +97,8 @@ HRESULT CState_Player_Teleport::Start_State(void* pArg)
 
     m_pPlayer->Disappear_Weapon();
 
+    m_pPlayer->Reset_Die();
+
     return S_OK;
 }
 

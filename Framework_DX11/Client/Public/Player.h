@@ -21,13 +21,9 @@ public:
 
 	enum EFFECT_TYPE 
 	{
-		/*EFFECT_RAPIER_TRAIL_FIRST, EFFECT_RAPIER_TRAIL_SECOND,*/
-
-		/*EFFECT_FLAME_BASE, EFFECT_FLAME_SLASH, EFFECT_FLAME_STORMSLASH_FIRST, EFFECT_FLAME_STORMSLASH_SECOND,*/
-
 		EFFECT_GRIND, EFFECT_HEAL,
 
-		EFFECT_ARM_SKILL,
+		EFFECT_ARM_COUNTER_CHARGE, EFFECT_ARM_SHIELDBLOCK,
 
 		EFFECT_END
 	};
@@ -164,6 +160,8 @@ public:
 		if (m_isGuard && isReset)
 			m_fGuardTime = 0.f;
 	}
+
+	class CWeapon_PlayerArm* Get_Arm() { return m_pWeapon_Arm; }
 
 	_bool					Get_IsArm() { return m_isArm; }
 	void					Set_IsArm(_bool isArm) { m_isArm = isArm; }
@@ -321,7 +319,7 @@ private:
 	class CWeapon*		m_pWeapon[WEP_END] = { nullptr, };
 	WEAPON_TYPE			m_eWeaponType = { WEP_RAPIER };
 
-	class CWeapon*		m_pWeapon_Arm = { nullptr };
+	class CWeapon_PlayerArm*		m_pWeapon_Arm = { nullptr };
 
 	class CItem_Throw* m_pThrowItem = { nullptr };
 

@@ -51,6 +51,8 @@ private:
     _int                m_iEffectStartFrame = {};
     _int                m_iEffectEndFrame = {};
     _bool               m_isActiveEffect = {};
+    _bool               m_isActiveFableEffect = {};
+
     void                Control_Effect(_int iFrame);
 
 public:

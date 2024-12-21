@@ -41,9 +41,11 @@ HRESULT CWeapon_PlayerArm::Initialize(void* pArg)
 
 	m_strObjectTag = TEXT("PlayerWeapon");
 	m_pColliderCom->Set_Owner(this);
-	m_fDamageAmount = 5.f;
+	m_fDamageAmount = 85.f;
 
 	m_pColliderCom->IsActive(false);
+
+	m_isActive = true;
 
 	return S_OK;
 }
@@ -63,6 +65,7 @@ void CWeapon_PlayerArm::Update(_float fTimeDelta)
 	__super::Update(fTimeDelta);
 
 	m_pColliderCom->Update(&m_WorldMatrix);
+	m_pGameInstance->Add_ColliderList(m_pColliderCom);
 }
 
 void CWeapon_PlayerArm::Late_Update(_float fTimeDelta)
@@ -73,7 +76,6 @@ void CWeapon_PlayerArm::Late_Update(_float fTimeDelta)
 	__super::Late_Update(fTimeDelta);
 
 	m_pGameInstance->Add_RenderObject(CRenderer::RG_NONBLEND, this);
-	m_pGameInstance->Add_ColliderList(m_pColliderCom);
 
 #ifdef _DEBUG
 	m_pGameInstance->Add_DebugObject(m_pColliderCom);
@@ -121,6 +123,8 @@ void CWeapon_PlayerArm::OnCollisionEnter(CGameObject* pOther)
 			if (pMonster->Calc_DamageGain(m_fDamageAmount * m_fDamageRatio))
 			{
 				// 사우드 및 각종 이펙트
+				CEffect_Manager::Get_Instance()->Add_Effect_ToLayer(LEVEL_GAMEPLAY, TEXT("Player_Attack_ArmSkill_CounterCharge_Explosion"),
+					m_WorldMatrix.Translation());
 			}
 		}
 	}
@@ -128,18 +132,10 @@ void CWeapon_PlayerArm::OnCollisionEnter(CGameObject* pOther)
 
 void CWeapon_PlayerArm::OnCollisionStay(CGameObject* pOther)
 {
-	if (pOther->Get_Tag() == TEXT("Monster"))
-	{
-
-	}
 }
 
 void CWeapon_PlayerArm::OnCollisionExit(CGameObject* pOther)
 {
-	if (pOther->Get_Tag() == TEXT("Monster"))
-	{
-
-	}
 }
 
 void CWeapon_PlayerArm::Play_HitSound(HIT_TYPE eType)
@@ -154,8 +150,8 @@ HRESULT CWeapon_PlayerArm::Ready_Components()
 
 	/* FOR.Com_Collider */
 	CBounding_OBB::BOUNDING_OBB_DESC			ColliderDesc{};
-	ColliderDesc.vExtents = _float3(0.1f, 0.1f, 0.53f);
-	ColliderDesc.vCenter = _float3(0.f, 0.f, 0.5f);
+	ColliderDesc.vExtents = _float3(0.2f, 0.1f, 0.1f);
+	ColliderDesc.vCenter = _float3(0.f, 0.f, 0.f);
 	ColliderDesc.vAngles = _float3(0.f, 0.f, 0.f);
 
 	if (FAILED(__super::Add_Component(LEVEL_STATIC, TEXT("Prototype_Component_Collider_OBB"),

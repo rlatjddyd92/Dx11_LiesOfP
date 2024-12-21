@@ -24,6 +24,7 @@ HRESULT CColliderObject::Initialize(void* pArg)
 
 	COLIDEROBJECT_DESC* pDesc = static_cast<COLIDEROBJECT_DESC*>(pArg);
 	m_eType = pDesc->eType;
+	m_pOwner = pDesc->pOWner;
 
 	if (FAILED(__super::Initialize(pDesc)))
 		return E_FAIL;
@@ -91,7 +92,7 @@ void CColliderObject::OnCollisionEnter(CGameObject* pOther)
 		if (!bOverlapCheck)
 		{
 			m_DamagedObjects.push_back(pOther);
-			pOther->Calc_DamageGain(m_fDamageAmount * m_fDamageRatio, _Vec3{}, m_iHitType, m_iAtkStrength);
+			pOther->Calc_DamageGain(m_fDamageAmount * m_fDamageRatio, _Vec3{}, m_iHitType, m_iAtkStrength, (CGameObject*)m_pOwner);
 		}
 	}
 }

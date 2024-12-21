@@ -6,6 +6,8 @@
 #include "Weapon_Scissor.h"
 #include "Weapon_Scissor_Handle.h"
 
+#include "Effect_Manager.h"
+
 CState_Player_Scissor_Fable2::CState_Player_Scissor_Fable2(CFsm* pFsm, CPlayer* pPlayer)
     :CState{ pFsm }
     , m_pPlayer{ pPlayer }
@@ -62,6 +64,7 @@ HRESULT CState_Player_Scissor_Fable2::Start_State(void* pArg)
     m_pPlayer->Set_WeaponStrength(ATK_STRONG);
 
     m_isActiveSeperateEffect = m_isActiveCombineEffect = false;
+    m_isActiveFableEffect[0] = m_isActiveFableEffect[1] = false;
 
     return S_OK;
 }
@@ -203,6 +206,29 @@ void CState_Player_Scissor_Fable2::Control_Effect(_int iFrame)
     else if (m_isActiveCombineEffect && m_iEffectCombineEndFrame < iFrame)
     {
         m_pPlayer->DeActive_WeaponEffect(CWeapon_Scissor::EFFECT_LINKSLASH);
+    }
+
+    if (!m_isActiveFableEffect[0] && iFrame > 15)
+    {
+        const _Matrix* SocketMatrix = m_pPlayer->Get_Model()->Get_BoneCombindTransformationMatrix_Ptr("BN_Weapon_R");
+
+        CEffect_Manager::Get_Instance()->Add_Effect_ToLayer(LEVEL_GAMEPLAY, TEXT("Player_Attack_Rapier_StormStab_First_Ready"), m_pPlayer->Get_Transform()->Get_WorldMatrix_Ptr(),
+            SocketMatrix);
+
+        SocketMatrix = m_pPlayer->Get_Model()->Get_BoneCombindTransformationMatrix_Ptr("BN_Weapon_L");
+        CEffect_Manager::Get_Instance()->Add_Effect_ToLayer(LEVEL_GAMEPLAY, TEXT("Player_Attack_Rapier_StormStab_First_Ready"), m_pPlayer->Get_Transform()->Get_WorldMatrix_Ptr(),
+            SocketMatrix);
+
+        m_isActiveFableEffect[0] = true;
+    }
+    else if (!m_isActiveFableEffect[1] && iFrame > 53)
+    {
+        const _Matrix* SocketMatrix = m_pPlayer->Get_Model()->Get_BoneCombindTransformationMatrix_Ptr("BN_Weapon_R");
+
+        CEffect_Manager::Get_Instance()->Add_Effect_ToLayer(LEVEL_GAMEPLAY, TEXT("Player_Attack_Rapier_StormStab_Second_Ready"), m_pPlayer->Get_Transform()->Get_WorldMatrix_Ptr(),
+            SocketMatrix);
+
+        m_isActiveFableEffect[1] = true;
     }
 }
 

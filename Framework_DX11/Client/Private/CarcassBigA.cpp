@@ -30,8 +30,6 @@
 #include "State_CarcassBigA_HitFatal.h"
 #include "State_CarcassBigA_Paralyze.h"
 
-#include "State_CarcassBigA_Walk.h"
-#include "State_CarcassBigA_RUN.h"
 
 CCarcassBigA::CCarcassBigA(ID3D11Device * pDevice, ID3D11DeviceContext * pContext)
 	: CMonster{ pDevice, pContext }
@@ -208,6 +206,7 @@ HRESULT CCarcassBigA::Ready_Components()
 	Desc.pParentWorldMatrix = m_pTransformCom->Get_WorldMatrix_Ptr();
 	Desc.pSocketBoneMatrix2 = m_pTransformCom->Get_WorldMatrix_Ptr();
 	Desc.fDamageAmount = 100.f;
+	Desc.pOWner = this;
 
 	m_pColliderObject[TYPE_LEFTHAND] = dynamic_cast<CColliderObject*>(m_pGameInstance->Clone_GameObject(TEXT("Prototype_GameObject_ColliderObj"), &Desc));
 
@@ -276,8 +275,6 @@ HRESULT CCarcassBigA::Ready_FSM()
 
 
 	m_pFsmCom->Add_State(CState_CarcassBigA_Idle::Create(m_pFsmCom, this, IDLE, &Desc));
-	m_pFsmCom->Add_State(CState_CarcassBigA_Walk::Create(m_pFsmCom, this, WALK, &Desc));
-	m_pFsmCom->Add_State(CState_CarcassBigA_Run::Create(m_pFsmCom, this, RUN, &Desc));
 	m_pFsmCom->Add_State(CState_CarcassBigA_Grogy::Create(m_pFsmCom, this, GROGY, &Desc));
 	m_pFsmCom->Add_State(CState_CarcassBigA_HitFatal::Create(m_pFsmCom, this, HITFATAL, &Desc));
 	m_pFsmCom->Add_State(CState_CarcassBigA_Paralyze::Create(m_pFsmCom, this, PARALYZE, &Desc));

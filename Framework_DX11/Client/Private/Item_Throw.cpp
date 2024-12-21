@@ -2,6 +2,9 @@
 #include "Item_Throw.h"
 #include "GameInstance.h"
 #include "Player.h"
+#include "Monster.h"
+
+#include "Effect_Manager.h"
 
 CItem_Throw::CItem_Throw(ID3D11Device* pDevice, ID3D11DeviceContext* pContext)
 	: CGameObject{ pDevice, pContext }
@@ -165,6 +168,9 @@ void CItem_Throw::OnCollisionEnter(CGameObject* pOther)
 {
 	if (!m_isExplosion && pOther->Get_Tag() == TEXT("Monster"))
 	{
+		CMonster* pMonster = dynamic_cast<CMonster*>(pOther);
+
+		pMonster->Calc_DamageGain(155.f, (_Vec3)m_pTransformCom->Get_State(CTransform::STATE_POSITION), HIT_FIRE, ATK_STRONG);
 		Explosion();
 	}
 }
@@ -181,6 +187,19 @@ void CItem_Throw::Explosion()
 {
 	if (m_isExplosion && !m_isThrow)
 		return;
+
+	switch (m_eType)
+	{
+	case SPECIAL_ITEM::SP_GRANADE:
+		CEffect_Manager::Get_Instance()->Add_Effect_ToLayer(LEVEL_GAMEPLAY, TEXT("Player_Item_Fire"), (_Vec3)m_pTransformCom->Get_State(CTransform::STATE_POSITION));
+		break;
+	case SPECIAL_ITEM::SP_THERMITE:
+		CEffect_Manager::Get_Instance()->Add_Effect_ToLayer(LEVEL_GAMEPLAY, TEXT("Player_Item_Bomb"), (_Vec3)m_pTransformCom->Get_State(CTransform::STATE_POSITION));
+		break;
+	case SPECIAL_ITEM::SP_THROW_BATTERY:
+		CEffect_Manager::Get_Instance()->Add_Effect_ToLayer(LEVEL_GAMEPLAY, TEXT("Player_Item_Fire"), (_Vec3)m_pTransformCom->Get_State(CTransform::STATE_POSITION));
+		break;
+	}
 
 	m_isExplosion = true;
 	m_isDead = true;

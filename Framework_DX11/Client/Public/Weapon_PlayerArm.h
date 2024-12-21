@@ -19,6 +19,9 @@ private:
 	virtual ~CWeapon_PlayerArm() = default;
 
 public:
+	_Vec3 Get_Position() { return m_WorldMatrix.Translation(); }
+
+public:
 	virtual HRESULT Initialize_Prototype() override;
 	virtual HRESULT Initialize(void* pArg) override;
 	virtual void Priority_Update(_float fTimeDelta) override;

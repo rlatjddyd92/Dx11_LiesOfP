@@ -94,7 +94,7 @@ void CParticle_Effect::Late_Update(_float fTimeDelta)
 
 HRESULT CParticle_Effect::Render()
 {
-    if (PT_LOCALSPREAD == m_DefaultDesc.eType)
+    if (PT_LOCALSPREAD == m_DefaultDesc.eType || PT_LOCALMOVE == m_DefaultDesc.eType || PT_LOCALCONVERGE == m_DefaultDesc.eType)
     {
         if (FAILED(m_pShaderCom->Bind_Matrix("g_WorldMatrix", &m_WorldMatrix)))
             return E_FAIL;
@@ -247,6 +247,14 @@ HRESULT CParticle_Effect::Ready_Components(const PARTICLE_EFFECT_DESC& Desc)
 
     case PT_LOCALSPREAD:
         strCSPrototypeTag = TEXT("Prototype_Component_Shader_Compute_Particle_LocalSpread");
+        break;
+
+    case PT_LOCALMOVE:
+        strCSPrototypeTag = TEXT("Prototype_Component_Shader_Compute_Particle_LocalMove");
+        break;
+
+    case PT_LOCALCONVERGE:
+        strCSPrototypeTag = TEXT("Prototype_Component_Shader_Compute_Particle_LocalConverge");
         break;
     } 
 

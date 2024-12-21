@@ -337,14 +337,8 @@
     <Filter Include="05.Fsm\Monster\CarcassBigA\Paralize">
       <UniqueIdentifier>{7a808f3d-2504-4269-911e-bb92c1dd6ee0}</UniqueIdentifier>
     </Filter>
-    <Filter Include="05.Fsm\Monster\CarcassBigA\Walk">
-      <UniqueIdentifier>{8cca3e2d-28bf-401e-afd3-0ec774007eac}</UniqueIdentifier>
-    </Filter>
     <Filter Include="05.Fsm\Monster\CarcassBigA\Grogy">
       <UniqueIdentifier>{0075ae76-a3eb-419f-9be1-a9900494ebb6}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="05.Fsm\Monster\CarcassBigA\Run">
-      <UniqueIdentifier>{88fbca0c-fbc5-4331-902b-31f81e9e8c39}</UniqueIdentifier>
     </Filter>
     <Filter Include="05.Fsm\Monster\CarcassBigA\Hit_Fatal">
       <UniqueIdentifier>{3a3180b6-88e0-47d8-a77c-574050019abe}</UniqueIdentifier>
@@ -412,29 +406,17 @@
     <Filter Include="05.Fsm\Monster\SimonManus\P1\HitFatal">
       <UniqueIdentifier>{cebe0b82-9fc4-4388-b4fb-be9fcda771b7}</UniqueIdentifier>
     </Filter>
-    <Filter Include="05.Fsm\Monster\SimonManus\P1\Run">
-      <UniqueIdentifier>{f083c0cc-f7b0-4013-adf6-27165c3074a4}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="05.Fsm\Monster\SimonManus\P1\Walk">
-      <UniqueIdentifier>{fe395b30-26dd-4e7d-9184-bb5c5d694b6b}</UniqueIdentifier>
-    </Filter>
     <Filter Include="05.Fsm\Monster\SimonManus\P2">
       <UniqueIdentifier>{2679afad-ec99-46ef-bfc7-e4ea23aaad12}</UniqueIdentifier>
     </Filter>
     <Filter Include="05.Fsm\Monster\SimonManus\P2\Idle">
       <UniqueIdentifier>{668c14b0-8cf5-45c9-8190-6da55179d975}</UniqueIdentifier>
     </Filter>
-    <Filter Include="05.Fsm\Monster\SimonManus\P2\Walk">
-      <UniqueIdentifier>{ca124187-bf32-47b1-80f7-98f9d7fdfb2a}</UniqueIdentifier>
-    </Filter>
     <Filter Include="05.Fsm\Monster\SimonManus\P2\Die">
       <UniqueIdentifier>{2aaf1b2f-69fc-469f-b4c2-753a79e5e2c9}</UniqueIdentifier>
     </Filter>
     <Filter Include="05.Fsm\Monster\SimonManus\P2\Grogy">
       <UniqueIdentifier>{a5413b70-31ca-4e29-a6d4-3452229d0e7c}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="05.Fsm\Monster\SimonManus\P2\Run">
-      <UniqueIdentifier>{a48d1fcb-7534-41f5-ba75-dab05be2f373}</UniqueIdentifier>
     </Filter>
     <Filter Include="05.Fsm\Monster\SimonManus\P2\Attack">
       <UniqueIdentifier>{948752c6-1189-49a5-a229-89ef31810e34}</UniqueIdentifier>
@@ -573,12 +555,6 @@
     </Filter>
     <Filter Include="05.Fsm\Monster\CarcassTail\Idle">
       <UniqueIdentifier>{b09b699c-63c3-496c-8b7c-87d17ebb1c8f}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="05.Fsm\Monster\CarcassTail\Run">
-      <UniqueIdentifier>{889f9f2f-9aa7-43e5-a6c9-3bfc6b63911d}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="05.Fsm\Monster\CarcassTail\Walk">
-      <UniqueIdentifier>{4ffefbf0-da3c-4da0-9440-7196dd9408f0}</UniqueIdentifier>
     </Filter>
     <Filter Include="05.Fsm\Player">
       <UniqueIdentifier>{720bc44b-de33-49d7-8bc6-83c06d66d2b5}</UniqueIdentifier>
@@ -898,12 +874,6 @@
     <Filter Include="05.Fsm\Monster\Raxasia\P2">
       <UniqueIdentifier>{27dd2a7a-d981-40b4-bbbd-d1835167ba8e}</UniqueIdentifier>
     </Filter>
-    <Filter Include="05.Fsm\Monster\Raxasia\P1\Walk">
-      <UniqueIdentifier>{6843070c-b663-42cd-8dc2-230225faacca}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="05.Fsm\Monster\Raxasia\P1\Run">
-      <UniqueIdentifier>{c6067037-5cb3-406f-ae15-4e78da02fe0d}</UniqueIdentifier>
-    </Filter>
     <Filter Include="05.Fsm\Monster\Raxasia\P1\Idle">
       <UniqueIdentifier>{716f4f77-bcb2-477e-a89e-802d93933993}</UniqueIdentifier>
     </Filter>
@@ -961,12 +931,6 @@
     <Filter Include="03.GameInterface_Controller\00.UIManager\00.UIPage\18.UIPage_Telepot">
       <UniqueIdentifier>{8d2c85a1-e53e-4e3f-b451-241e3aa1bf15}</UniqueIdentifier>
     </Filter>
-    <Filter Include="05.Fsm\Monster\Raxasia\P2\Walk">
-      <UniqueIdentifier>{c4cceff3-bc6b-4cd1-916f-799d6004797c}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="05.Fsm\Monster\Raxasia\P2\Run">
-      <UniqueIdentifier>{ba88d7a1-a821-4741-b7ce-446e07300ca1}</UniqueIdentifier>
-    </Filter>
     <Filter Include="05.Fsm\Monster\Raxasia\P2\Idle">
       <UniqueIdentifier>{54441157-50ad-4848-98e0-69055b5fe2b6}</UniqueIdentifier>
     </Filter>
@@ -1006,12 +970,6 @@
     <Filter Include="05.Fsm\Monster\Raxasia\P2\Attack\Route\TELE\Tele_LinkedTel">
       <UniqueIdentifier>{8d6416ed-86c5-43ab-b39b-94425fafb257}</UniqueIdentifier>
     </Filter>
-    <Filter Include="05.Fsm\Monster\Raxasia\P2\Attack\Route\Guard">
-      <UniqueIdentifier>{dc500d27-cd7e-46e4-83fb-153428376054}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="05.Fsm\Monster\Raxasia\P2\Attack\Route\Guard\Guard_Push">
-      <UniqueIdentifier>{e8903933-a7d3-4d3e-a68f-8edad605a07c}</UniqueIdentifier>
-    </Filter>
     <Filter Include="05.Fsm\Monster\Raxasia\P2\Attack\Route\Running">
       <UniqueIdentifier>{77c0f679-b30b-40bf-a5a6-782f2247e539}</UniqueIdentifier>
     </Filter>
@@ -1050,9 +1008,6 @@
     </Filter>
     <Filter Include="02.GameObjects\02.Pawn\01.Monster\CarcassTail">
       <UniqueIdentifier>{e6447638-0aaa-4897-887b-a642b899134e}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="02.GameObjects\02.Pawn\01.Monster\RebornerMale">
-      <UniqueIdentifier>{b68070e4-27c6-4ef6-8e82-8c6ce0d9846e}</UniqueIdentifier>
     </Filter>
     <Filter Include="02.GameObjects\02.Pawn\01.Monster\Raxasia">
       <UniqueIdentifier>{f57ad993-eab1-4040-8e32-f758a798764d}</UniqueIdentifier>
@@ -1144,12 +1099,6 @@
     <Filter Include="05.Fsm\Monster\CurruptedStrongArm_Puppet\HitFatal">
       <UniqueIdentifier>{8c9e9f3f-78b5-4fa0-84cc-4ff8ac228b68}</UniqueIdentifier>
     </Filter>
-    <Filter Include="05.Fsm\Monster\CurruptedStrongArm_Puppet\Run">
-      <UniqueIdentifier>{bbf5a482-30bb-47d1-8648-4b44ffefaed1}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="05.Fsm\Monster\CurruptedStrongArm_Puppet\Walk">
-      <UniqueIdentifier>{c5c0917a-32e3-472f-94a2-620893575654}</UniqueIdentifier>
-    </Filter>
     <Filter Include="05.Fsm\Monster\CurruptedStrongArm_Puppet\Attack\Route">
       <UniqueIdentifier>{6142570d-2223-46cf-879e-5adc5d3810e4}</UniqueIdentifier>
     </Filter>
@@ -1185,6 +1134,99 @@
     </Filter>
     <Filter Include="05.Fsm\Monster\Raxasia\CutScene\Die">
       <UniqueIdentifier>{80716756-08fe-4729-85f6-929b429ac1c5}</UniqueIdentifier>
+	</Filter>
+    <Filter Include="05.Fsm\Monster\Raxasia\P2\Attack\Route\Guard">
+      <UniqueIdentifier>{dc500d27-cd7e-46e4-83fb-153428376054}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="05.Fsm\Monster\Raxasia\P2\Attack\Route\Guard\Guard_Push">
+      <UniqueIdentifier>{e8903933-a7d3-4d3e-a68f-8edad605a07c}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="05.Fsm\Monster\RebornerBigA">
+      <UniqueIdentifier>{4af8db94-798d-4bd5-b261-462d3f9caef9}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="05.Fsm\Monster\CarcassNormal">
+      <UniqueIdentifier>{47125a40-3e9c-4a12-a938-101dc385eddd}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.GameObjects\02.Pawn\01.Monster\RebornerBigA">
+      <UniqueIdentifier>{b68070e4-27c6-4ef6-8e82-8c6ce0d9846e}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.GameObjects\02.Pawn\01.Monster\CarcassNormal">
+      <UniqueIdentifier>{fbb31b9b-4d9e-422e-b312-c4d1db68dc8b}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="05.Fsm\Monster\RebornerBigA\Die">
+      <UniqueIdentifier>{09046ceb-cc26-4915-b032-b2c51bc0bab9}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="05.Fsm\Monster\RebornerBigA\Grogy">
+      <UniqueIdentifier>{0eb60ad0-a2cf-4495-95de-4f7e21c7b441}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="05.Fsm\Monster\RebornerBigA\HitFatal">
+      <UniqueIdentifier>{18b612c3-ca32-4852-b9eb-c8f62190f26f}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="05.Fsm\Monster\RebornerBigA\Attack">
+      <UniqueIdentifier>{9d203b98-6c07-47e8-824d-70418cd3185f}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="05.Fsm\Monster\RebornerBigA\Idle">
+      <UniqueIdentifier>{8a514bd7-c17e-445d-b960-b820cc6dce2e}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="05.Fsm\Monster\RebornerBigA\Attack\Route">
+      <UniqueIdentifier>{88939342-5bc7-490f-8c97-a5f382f30ec2}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="05.Fsm\Monster\RebornerBigA\Attack\Route\GuardSting">
+      <UniqueIdentifier>{c7ae97c9-8ea5-4175-ba17-a77cc2b33588}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="05.Fsm\Monster\RebornerBigA\Attack\Route\SwingMultiple">
+      <UniqueIdentifier>{db1ad119-a2c4-416c-a102-59d39cdb8424}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="05.Fsm\Monster\RebornerBigA\Attack\Route\RushSting">
+      <UniqueIdentifier>{e3aa852c-fcc6-4d9d-a3b3-c74088537b0f}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="05.Fsm\Monster\RebornerBigA\Attack\Route\SlashTwice">
+      <UniqueIdentifier>{afd3c4d2-f16b-472d-9890-10720520a6c0}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.GameObjects\06.Weapon\03.RebornerBigA">
+      <UniqueIdentifier>{5f8abec3-18b0-4b92-8a40-fb6f85898890}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="05.Fsm\Monster\RebornerBigA\Attack\Single">
+      <UniqueIdentifier>{86a1ceed-74f6-45bd-9447-1bd2567f3bc7}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="05.Fsm\Monster\RebornerBigA\Attack\Single\SlashJump">
+      <UniqueIdentifier>{8ce67355-2770-4729-92bb-bc2214ac00a9}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="05.Fsm\Monster\CarcassNormal\Attack">
+      <UniqueIdentifier>{235c9a5c-ece1-46ae-b322-181c796fb60c}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="05.Fsm\Monster\CarcassNormal\Die">
+      <UniqueIdentifier>{c593bed1-f479-4b9f-9a8e-d19a0cfeef40}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="05.Fsm\Monster\CarcassNormal\HitFatal">
+      <UniqueIdentifier>{5beec40b-6fd3-4fc7-adc9-67ed3845eb6f}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="05.Fsm\Monster\CarcassNormal\Idle">
+      <UniqueIdentifier>{98a66c47-151e-4877-8123-13251ed746d1}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="05.Fsm\Monster\CarcassNormal\Attack\Single">
+      <UniqueIdentifier>{20196178-6d19-4cc7-aca3-366c78dae6ad}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="05.Fsm\Monster\CarcassNormal\Attack\Route">
+      <UniqueIdentifier>{7aff06b2-9ddb-4576-b8d4-f1d97a769533}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="05.Fsm\Monster\CarcassNormal\Attack\Single\ClawMultiple">
+      <UniqueIdentifier>{42f09363-fa5a-4689-b35f-c1d64d5ad16a}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="05.Fsm\Monster\CarcassNormal\Attack\Route\TripleClaw">
+      <UniqueIdentifier>{024184ce-0df4-4a91-a9ba-32500e3c66ac}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="05.Fsm\Monster\CarcassNormal\Attack\Route\TripleClaw_2">
+      <UniqueIdentifier>{c5b0c932-6d3a-4be8-ae1c-8da92272b3d1}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="05.Fsm\Monster\CarcassNormal\Attack\Single\Bite">
+      <UniqueIdentifier>{4b204b4b-68c1-4826-b05a-dff15b5dabf4}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="05.Fsm\Monster\CarcassNormal\Attack\Single\ClawRush">
+      <UniqueIdentifier>{1972aeba-fe26-44bf-a303-bc462581d0f7}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="05.Fsm\Monster\CarcassNormal\Attack\Route\HeadingMultiple">
+      <UniqueIdentifier>{ef405b19-4ecd-4eb8-a5fe-3f7b75625347}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -1295,12 +1337,6 @@
     </ClInclude>
     <ClInclude Include="..\Public\CarcassBigA.h">
       <Filter>02.GameObjects\02.Pawn\01.Monster\CarcassBigA</Filter>
-    </ClInclude>
-    <ClInclude Include="..\Public\State_CarcassBigA_Walk.h">
-      <Filter>05.Fsm\Monster\CarcassBigA\Walk</Filter>
-    </ClInclude>
-    <ClInclude Include="..\Public\State_CarcassBigA_Run.h">
-      <Filter>05.Fsm\Monster\CarcassBigA\Run</Filter>
     </ClInclude>
     <ClInclude Include="..\Public\State_CarcassBigA_Impact.h">
       <Filter>05.Fsm\Monster\CarcassBigA\Attack\Single\Impact</Filter>
@@ -1557,9 +1593,6 @@
     <ClInclude Include="..\Public\State_SimonManusP1_JumpToSwing.h">
       <Filter>05.Fsm\Monster\SimonManus\P1\Attck\Route\JumpToSwing</Filter>
     </ClInclude>
-    <ClInclude Include="..\Public\State_SimonManusP1_Run.h">
-      <Filter>05.Fsm\Monster\SimonManus\P1\Run</Filter>
-    </ClInclude>
     <ClInclude Include="..\Public\State_SimonManusP1_Stamp.h">
       <Filter>05.Fsm\Monster\SimonManus\P1\Attck\Route\Stamp</Filter>
     </ClInclude>
@@ -1580,9 +1613,6 @@
     </ClInclude>
     <ClInclude Include="..\Public\State_SimonManusP1_SwipMultiple_R.h">
       <Filter>05.Fsm\Monster\SimonManus\P1\Attck\Route\SwipMultiple_R</Filter>
-    </ClInclude>
-    <ClInclude Include="..\Public\State_SimonManusP1_Walk.h">
-      <Filter>05.Fsm\Monster\SimonManus\P1\Walk</Filter>
     </ClInclude>
     <ClInclude Include="..\Public\State_SimonManusP2_AvoidSwing.h">
       <Filter>05.Fsm\Monster\SimonManus\P2\Attack\Single\AvoidSwing</Filter>
@@ -1623,9 +1653,6 @@
     <ClInclude Include="..\Public\State_SimonManusP2_Route2.h">
       <Filter>05.Fsm\Monster\SimonManus\P2\Attack\Route\Route2</Filter>
     </ClInclude>
-    <ClInclude Include="..\Public\State_SimonManusP2_Run.h">
-      <Filter>05.Fsm\Monster\SimonManus\P2\Run</Filter>
-    </ClInclude>
     <ClInclude Include="..\Public\State_SimonManusP2_SpreadMagic.h">
       <Filter>05.Fsm\Monster\SimonManus\P2\Attack\Single\SpreadMagic</Filter>
     </ClInclude>
@@ -1643,9 +1670,6 @@
     </ClInclude>
     <ClInclude Include="..\Public\State_SimonManusP2_SwipMultiple.h">
       <Filter>05.Fsm\Monster\SimonManus\P2\Attack\Route\SwipMultiple</Filter>
-    </ClInclude>
-    <ClInclude Include="..\Public\State_SimonManusP2_Walk.h">
-      <Filter>05.Fsm\Monster\SimonManus\P2\Walk</Filter>
     </ClInclude>
     <ClInclude Include="..\Public\State_SimonManusP2_ThunderBall.h">
       <Filter>05.Fsm\Monster\SimonManus\P2\Attack\Single\ThunderBall</Filter>
@@ -1723,9 +1747,6 @@
     <ClInclude Include="..\Public\State_CarcassTail_MultyHittingDown.h">
       <Filter>05.Fsm\Monster\CarcassTail\Attack\Single\MultyHittingDown</Filter>
     </ClInclude>
-    <ClInclude Include="..\Public\State_CarcassTail_Run.h">
-      <Filter>05.Fsm\Monster\CarcassTail\Run</Filter>
-    </ClInclude>
     <ClInclude Include="..\Public\State_CarcassTail_Scratching.h">
       <Filter>05.Fsm\Monster\CarcassTail\Attack\Single\Scratching</Filter>
     </ClInclude>
@@ -1743,9 +1764,6 @@
     </ClInclude>
     <ClInclude Include="..\Public\State_CarcassTail_TailSwipMultiple.h">
       <Filter>05.Fsm\Monster\CarcassTail\Attack\Single\TailSwipMultiple</Filter>
-    </ClInclude>
-    <ClInclude Include="..\Public\State_CarcassTail_Walk.h">
-      <Filter>05.Fsm\Monster\CarcassTail\Walk</Filter>
     </ClInclude>
     <ClInclude Include="..\Public\State_CarcassTail_Die.h">
       <Filter>05.Fsm\Monster\CarcassTail\Die</Filter>
@@ -2000,17 +2018,11 @@
     <ClInclude Include="..\Public\State_RaxasiaP1_RepetUpperSlash.h">
       <Filter>05.Fsm\Monster\Raxasia\P1\Attack\Route\RepetUpperSlash</Filter>
     </ClInclude>
-    <ClInclude Include="..\Public\State_RaxasiaP1_Run.h">
-      <Filter>05.Fsm\Monster\Raxasia\P1\Run</Filter>
-    </ClInclude>
     <ClInclude Include="..\Public\State_RaxasiaP1_SwingDown_Multiple.h">
       <Filter>05.Fsm\Monster\Raxasia\P1\Attack\RouteParts\SwingDown_Multiple</Filter>
     </ClInclude>
     <ClInclude Include="..\Public\State_RaxasiaP1_TripleSting.h">
       <Filter>05.Fsm\Monster\Raxasia\P1\Attack\Route\TripleSting</Filter>
-    </ClInclude>
-    <ClInclude Include="..\Public\State_RaxasiaP1_Walk.h">
-      <Filter>05.Fsm\Monster\Raxasia\P1\Walk</Filter>
     </ClInclude>
     <ClInclude Include="..\Public\Item_Throw.h">
       <Filter>02.GameObjects\15.Item</Filter>
@@ -2045,12 +2057,6 @@
     <ClInclude Include="..\Public\State_RaxasiaP2_Grogy.h">
       <Filter>05.Fsm\Monster\Raxasia\P2\Grogy</Filter>
     </ClInclude>
-    <ClInclude Include="..\Public\State_RaxasiaP2_Run.h">
-      <Filter>05.Fsm\Monster\Raxasia\P2\Run</Filter>
-    </ClInclude>
-    <ClInclude Include="..\Public\State_RaxasiaP2_Walk.h">
-      <Filter>05.Fsm\Monster\Raxasia\P2\Walk</Filter>
-    </ClInclude>
     <ClInclude Include="..\Public\State_RaxasiaP2_JumpStamp.h">
       <Filter>05.Fsm\Monster\Raxasia\P2\Attack\Route\JumpStamp</Filter>
     </ClInclude>
@@ -2080,9 +2086,6 @@
     </ClInclude>
     <ClInclude Include="..\Public\State_RaxasiaP2_Running_Fury.h">
       <Filter>05.Fsm\Monster\Raxasia\P2\Attack\Route\Running\Running_Fury</Filter>
-    </ClInclude>
-    <ClInclude Include="..\Public\State_RaxasiaP2_Declare_War.h">
-      <Filter>05.Fsm\Monster\Raxasia\P2\Attack\Route\Declare_War</Filter>
     </ClInclude>
     <ClInclude Include="..\Public\State_RaxasiaP2_Guard.h">
       <Filter>05.Fsm\Monster\Raxasia\P2\Attack\Route\Guard</Filter>
@@ -2156,12 +2159,6 @@
     <ClInclude Include="..\Public\State_CurruptedStrongArm_HitFatal.h">
       <Filter>05.Fsm\Monster\CurruptedStrongArm_Puppet\HitFatal</Filter>
     </ClInclude>
-    <ClInclude Include="..\Public\State_CurruptedStrongArm_Walk.h">
-      <Filter>05.Fsm\Monster\CurruptedStrongArm_Puppet\Walk</Filter>
-    </ClInclude>
-    <ClInclude Include="..\Public\State_CurruptedStrongArm_Run.h">
-      <Filter>05.Fsm\Monster\CurruptedStrongArm_Puppet\Run</Filter>
-    </ClInclude>
     <ClInclude Include="..\Public\State_CurruptedStrongArm_Grogy.h">
       <Filter>05.Fsm\Monster\CurruptedStrongArm_Puppet\Grogy</Filter>
     </ClInclude>
@@ -2182,6 +2179,81 @@
     </ClInclude>
     <ClInclude Include="..\Public\State_Raxasia_CutScene_Die.h">
       <Filter>05.Fsm\Monster\Raxasia\CutScene\Die</Filter>
+	</ClInclude>
+    <ClInclude Include="..\Public\State_CurruptedStrongArm_StingTwice.h">
+      <Filter>05.Fsm\Monster\CurruptedStrongArm_Puppet\Attack\Single\StingTwice</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Public\State_CurruptedStrongArm_SwipAttack.h">
+      <Filter>05.Fsm\Monster\CurruptedStrongArm_Puppet\Attack\Single\SwipAttack</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Public\State_CurruptedStrongArm_JumpPunch.h">
+      <Filter>05.Fsm\Monster\CurruptedStrongArm_Puppet\Attack\Route\Jump_Punch</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Public\State_RaxasiaP2_Declare_War.h">
+      <Filter>05.Fsm\Monster\Raxasia\P2\Attack\Route\Declare_War</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Public\RebornerBigA.h">
+      <Filter>02.GameObjects\02.Pawn\01.Monster\RebornerBigA</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Public\State_RebornerBigA_Idle.h">
+      <Filter>05.Fsm\Monster\RebornerBigA\Idle</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Public\State_RebornerBigA_HitFatal.h">
+      <Filter>05.Fsm\Monster\RebornerBigA\HitFatal</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Public\State_RebornerBigA_Grogy.h">
+      <Filter>05.Fsm\Monster\RebornerBigA\Grogy</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Public\State_RebornerBigA_Die.h">
+      <Filter>05.Fsm\Monster\RebornerBigA\Die</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Public\Weapon_RebornerBigA_Stick.h">
+      <Filter>02.GameObjects\06.Weapon\03.RebornerBigA</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Public\State_RebornerBigA_GuardSting.h">
+      <Filter>05.Fsm\Monster\RebornerBigA\Attack\Route\GuardSting</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Public\State_RebornerBigA_SlashTwice.h">
+      <Filter>05.Fsm\Monster\RebornerBigA\Attack\Route\SlashTwice</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Public\State_RebornerBigA_SwingMultiple.h">
+      <Filter>05.Fsm\Monster\RebornerBigA\Attack\Route\SwingMultiple</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Public\State_RebornerBigA_RushSting.h">
+      <Filter>05.Fsm\Monster\RebornerBigA\Attack\Route\RushSting</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Public\State_RebornerBigA_SlashJump.h">
+      <Filter>05.Fsm\Monster\RebornerBigA\Attack\Single\SlashJump</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Public\CarcassNormal.h">
+      <Filter>02.GameObjects\02.Pawn\01.Monster\CarcassNormal</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Public\State_CarcassNormal_Idle.h">
+      <Filter>05.Fsm\Monster\CarcassNormal\Idle</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Public\State_CarcassNormal_HitFatal.h">
+      <Filter>05.Fsm\Monster\CarcassNormal\HitFatal</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Public\State_CarcassNormal_Die.h">
+      <Filter>05.Fsm\Monster\CarcassNormal\Die</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Public\State_CarcassNormal_TripleClaw.h">
+      <Filter>05.Fsm\Monster\CarcassNormal\Attack\Route\TripleClaw</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Public\State_CarcassNormal_TripleClaw_2.h">
+      <Filter>05.Fsm\Monster\CarcassNormal\Attack\Route\TripleClaw_2</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Public\State_CarcassNormal_HeadingMultiple.h">
+      <Filter>05.Fsm\Monster\CarcassNormal\Attack\Route\HeadingMultiple</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Public\State_CarcassNormal_ClawMultiple.h">
+      <Filter>05.Fsm\Monster\CarcassNormal\Attack\Single\ClawMultiple</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Public\State_CarcassNormal_Bite.h">
+      <Filter>05.Fsm\Monster\CarcassNormal\Attack\Single\Bite</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Public\State_CarcassNormal_ClawRush.h">
+      <Filter>05.Fsm\Monster\CarcassNormal\Attack\Single\ClawRush</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -2262,12 +2334,6 @@
     </ClCompile>
     <ClCompile Include="..\Private\CarcassBigA.cpp">
       <Filter>02.GameObjects\02.Pawn\01.Monster\CarcassBigA</Filter>
-    </ClCompile>
-    <ClCompile Include="..\Private\State_CarcassBigA_Walk.cpp">
-      <Filter>05.Fsm\Monster\CarcassBigA\Walk</Filter>
-    </ClCompile>
-    <ClCompile Include="..\Private\State_CarcassBigA_Run.cpp">
-      <Filter>05.Fsm\Monster\CarcassBigA\Run</Filter>
     </ClCompile>
     <ClCompile Include="..\Private\State_CarcassBigA_Impact.cpp">
       <Filter>05.Fsm\Monster\CarcassBigA\Attack\Single\Impact</Filter>
@@ -2524,9 +2590,6 @@
     <ClCompile Include="..\Private\State_SimonManusP1_JumpToSwing.cpp">
       <Filter>05.Fsm\Monster\SimonManus\P1\Attck\Route\JumpToSwing</Filter>
     </ClCompile>
-    <ClCompile Include="..\Private\State_SimonManusP1_Run.cpp">
-      <Filter>05.Fsm\Monster\SimonManus\P1\Run</Filter>
-    </ClCompile>
     <ClCompile Include="..\Private\State_SimonManusP1_Stamp.cpp">
       <Filter>05.Fsm\Monster\SimonManus\P1\Attck\Route\Stamp</Filter>
     </ClCompile>
@@ -2547,9 +2610,6 @@
     </ClCompile>
     <ClCompile Include="..\Private\State_SimonManusP1_SwipMultiple_R.cpp">
       <Filter>05.Fsm\Monster\SimonManus\P1\Attck\Route\SwipMultiple_R</Filter>
-    </ClCompile>
-    <ClCompile Include="..\Private\State_SimonManusP1_Walk.cpp">
-      <Filter>05.Fsm\Monster\SimonManus\P1\Walk</Filter>
     </ClCompile>
     <ClCompile Include="..\Private\State_SimonManusP2_AvoidSwing.cpp">
       <Filter>05.Fsm\Monster\SimonManus\P2\Attack\Single\AvoidSwing</Filter>
@@ -2590,9 +2650,6 @@
     <ClCompile Include="..\Private\State_SimonManusP2_Route2.cpp">
       <Filter>05.Fsm\Monster\SimonManus\P2\Attack\Route\Route2</Filter>
     </ClCompile>
-    <ClCompile Include="..\Private\State_SimonManusP2_Run.cpp">
-      <Filter>05.Fsm\Monster\SimonManus\P2\Run</Filter>
-    </ClCompile>
     <ClCompile Include="..\Private\State_SimonManusP2_SpreadMagic.cpp">
       <Filter>05.Fsm\Monster\SimonManus\P2\Attack\Single\SpreadMagic</Filter>
     </ClCompile>
@@ -2610,9 +2667,6 @@
     </ClCompile>
     <ClCompile Include="..\Private\State_SimonManusP2_SwipMultiple.cpp">
       <Filter>05.Fsm\Monster\SimonManus\P2\Attack\Route\SwipMultiple</Filter>
-    </ClCompile>
-    <ClCompile Include="..\Private\State_SimonManusP2_Walk.cpp">
-      <Filter>05.Fsm\Monster\SimonManus\P2\Walk</Filter>
     </ClCompile>
     <ClCompile Include="..\Private\State_SimonManusP2_ThunderBall.cpp">
       <Filter>05.Fsm\Monster\SimonManus\P2\Attack\Single\ThunderBall</Filter>
@@ -2690,9 +2744,6 @@
     <ClCompile Include="..\Private\State_CarcassTail_MultyHittingDown.cpp">
       <Filter>05.Fsm\Monster\CarcassTail\Attack\Single\MultyHittingDown</Filter>
     </ClCompile>
-    <ClCompile Include="..\Private\State_CarcassTail_Run.cpp">
-      <Filter>05.Fsm\Monster\CarcassTail\Run</Filter>
-    </ClCompile>
     <ClCompile Include="..\Private\State_CarcassTail_Scratching.cpp">
       <Filter>05.Fsm\Monster\CarcassTail\Attack\Single\Scratching</Filter>
     </ClCompile>
@@ -2710,9 +2761,6 @@
     </ClCompile>
     <ClCompile Include="..\Private\State_CarcassTail_TailSwipMultiple.cpp">
       <Filter>05.Fsm\Monster\CarcassTail\Attack\Single\TailSwipMultiple</Filter>
-    </ClCompile>
-    <ClCompile Include="..\Private\State_CarcassTail_Walk.cpp">
-      <Filter>05.Fsm\Monster\CarcassTail\Walk</Filter>
     </ClCompile>
     <ClCompile Include="..\Private\State_CarcassTail_Die.cpp">
       <Filter>05.Fsm\Monster\CarcassTail\Die</Filter>
@@ -2967,17 +3015,11 @@
     <ClCompile Include="..\Private\State_RaxasiaP1_RepetUpperSlash.cpp">
       <Filter>05.Fsm\Monster\Raxasia\P1\Attack\Route\RepetUpperSlash</Filter>
     </ClCompile>
-    <ClCompile Include="..\Private\State_RaxasiaP1_Run.cpp">
-      <Filter>05.Fsm\Monster\Raxasia\P1\Run</Filter>
-    </ClCompile>
     <ClCompile Include="..\Private\State_RaxasiaP1_SwingDown_Multiple.cpp">
       <Filter>05.Fsm\Monster\Raxasia\P1\Attack\RouteParts\SwingDown_Multiple</Filter>
     </ClCompile>
     <ClCompile Include="..\Private\State_RaxasiaP1_TripleSting.cpp">
       <Filter>05.Fsm\Monster\Raxasia\P1\Attack\Route\TripleSting</Filter>
-    </ClCompile>
-    <ClCompile Include="..\Private\State_RaxasiaP1_Walk.cpp">
-      <Filter>05.Fsm\Monster\Raxasia\P1\Walk</Filter>
     </ClCompile>
     <ClCompile Include="..\Private\Item_Throw.cpp">
       <Filter>02.GameObjects\15.Item</Filter>
@@ -3012,12 +3054,6 @@
     <ClCompile Include="..\Private\State_RaxasiaP2_Grogy.cpp">
       <Filter>05.Fsm\Monster\Raxasia\P2\Grogy</Filter>
     </ClCompile>
-    <ClCompile Include="..\Private\State_RaxasiaP2_Run.cpp">
-      <Filter>05.Fsm\Monster\Raxasia\P2\Run</Filter>
-    </ClCompile>
-    <ClCompile Include="..\Private\State_RaxasiaP2_Walk.cpp">
-      <Filter>05.Fsm\Monster\Raxasia\P2\Walk</Filter>
-    </ClCompile>
     <ClCompile Include="..\Private\State_RaxasiaP2_JumpStamp.cpp">
       <Filter>05.Fsm\Monster\Raxasia\P2\Attack\Route\JumpStamp</Filter>
     </ClCompile>
@@ -3047,9 +3083,6 @@
     </ClCompile>
     <ClCompile Include="..\Private\State_RaxasiaP2_Running_Fury.cpp">
       <Filter>05.Fsm\Monster\Raxasia\P2\Attack\Route\Running\Running_Fury</Filter>
-    </ClCompile>
-    <ClCompile Include="..\Private\State_RaxasiaP2_Declare_War.cpp">
-      <Filter>05.Fsm\Monster\Raxasia\P2\Attack\Route\Declare_War</Filter>
     </ClCompile>
     <ClCompile Include="..\Private\State_RaxasiaP2_Guard.cpp">
       <Filter>05.Fsm\Monster\Raxasia\P2\Attack\Route\Guard</Filter>
@@ -3123,12 +3156,6 @@
     <ClCompile Include="..\Private\State_CurruptedStrongArm_HitFatal.cpp">
       <Filter>05.Fsm\Monster\CurruptedStrongArm_Puppet\HitFatal</Filter>
     </ClCompile>
-    <ClCompile Include="..\Private\State_CurruptedStrongArm_Walk.cpp">
-      <Filter>05.Fsm\Monster\CurruptedStrongArm_Puppet\Walk</Filter>
-    </ClCompile>
-    <ClCompile Include="..\Private\State_CurruptedStrongArm_Run.cpp">
-      <Filter>05.Fsm\Monster\CurruptedStrongArm_Puppet\Run</Filter>
-    </ClCompile>
     <ClCompile Include="..\Private\State_CurruptedStrongArm_Grogy.cpp">
       <Filter>05.Fsm\Monster\CurruptedStrongArm_Puppet\Grogy</Filter>
     </ClCompile>
@@ -3149,6 +3176,81 @@
     </ClCompile>
     <ClCompile Include="..\Private\State_Raxasia_CutScene_Die.cpp">
       <Filter>05.Fsm\Monster\Raxasia\CutScene\Die</Filter>
+	</ClCompile>
+    <ClCompile Include="..\Private\State_CurruptedStrongArm_SwipAttack.cpp">
+      <Filter>05.Fsm\Monster\CurruptedStrongArm_Puppet\Attack\Single\SwipAttack</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Private\State_CurruptedStrongArm_StingTwice.cpp">
+      <Filter>05.Fsm\Monster\CurruptedStrongArm_Puppet\Attack\Single\StingTwice</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Private\State_CurruptedStrongArm_JumpPunch.cpp">
+      <Filter>05.Fsm\Monster\CurruptedStrongArm_Puppet\Attack\Route\Jump_Punch</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Private\State_RaxasiaP2_Declare_War.cpp">
+      <Filter>05.Fsm\Monster\Raxasia\P2\Attack\Route\Declare_War</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Private\RebornerBigA.cpp">
+      <Filter>02.GameObjects\02.Pawn\01.Monster\RebornerBigA</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Private\State_RebornerBigA_Idle.cpp">
+      <Filter>05.Fsm\Monster\RebornerBigA\Idle</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Private\State_RebornerBigA_HitFatal.cpp">
+      <Filter>05.Fsm\Monster\RebornerBigA\HitFatal</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Private\State_RebornerBigA_Grogy.cpp">
+      <Filter>05.Fsm\Monster\RebornerBigA\Grogy</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Private\State_RebornerBigA_Die.cpp">
+      <Filter>05.Fsm\Monster\RebornerBigA\Die</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Private\Weapon_RebornerBigA_Stick.cpp">
+      <Filter>02.GameObjects\06.Weapon\03.RebornerBigA</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Private\State_RebornerBigA_GuardSting.cpp">
+      <Filter>05.Fsm\Monster\RebornerBigA\Attack\Route\GuardSting</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Private\State_RebornerBigA_SlashTwice.cpp">
+      <Filter>05.Fsm\Monster\RebornerBigA\Attack\Route\SlashTwice</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Private\State_RebornerBigA_SwingMultiple.cpp">
+      <Filter>05.Fsm\Monster\RebornerBigA\Attack\Route\SwingMultiple</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Private\State_RebornerBigA_RushSting.cpp">
+      <Filter>05.Fsm\Monster\RebornerBigA\Attack\Route\RushSting</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Private\State_RebornerBigA_SlashJump.cpp">
+      <Filter>05.Fsm\Monster\RebornerBigA\Attack\Single\SlashJump</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Private\CarcassNormal.cpp">
+      <Filter>02.GameObjects\02.Pawn\01.Monster\CarcassNormal</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Private\State_CarcassNormal_Idle.cpp">
+      <Filter>05.Fsm\Monster\CarcassNormal\Idle</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Private\State_CarcassNormal_HitFatal.cpp">
+      <Filter>05.Fsm\Monster\CarcassNormal\HitFatal</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Private\State_CarcassNormal_Die.cpp">
+      <Filter>05.Fsm\Monster\CarcassNormal\Die</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Private\State_CarcassNormal_TripleClaw.cpp">
+      <Filter>05.Fsm\Monster\CarcassNormal\Attack\Route\TripleClaw</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Private\State_CarcassNormal_TripleClaw_2.cpp">
+      <Filter>05.Fsm\Monster\CarcassNormal\Attack\Route\TripleClaw_2</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Private\State_CarcassNormal_HeadingMultiple.cpp">
+      <Filter>05.Fsm\Monster\CarcassNormal\Attack\Route\HeadingMultiple</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Private\State_CarcassNormal_ClawMultiple.cpp">
+      <Filter>05.Fsm\Monster\CarcassNormal\Attack\Single\ClawMultiple</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Private\State_CarcassNormal_Bite.cpp">
+      <Filter>05.Fsm\Monster\CarcassNormal\Attack\Single\Bite</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Private\State_CarcassNormal_ClawRush.cpp">
+      <Filter>05.Fsm\Monster\CarcassNormal\Attack\Single\ClawRush</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

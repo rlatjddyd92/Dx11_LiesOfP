@@ -46,6 +46,7 @@ HRESULT CState_RaxasiaP2_Running::Start_State(void* pArg)
     {
         m_iNextStateNum = CRaxasia::ATKP2_RUNNING_FURY;
     }
+
     m_iNextStateNum = CRaxasia::ATKP2_RUNNING_LINKED;
 
     m_bSwingSound = false;

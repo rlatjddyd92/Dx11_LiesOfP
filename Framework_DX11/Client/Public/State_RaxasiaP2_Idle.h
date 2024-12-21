@@ -11,7 +11,8 @@ class CState_RaxasiaP2_Idle : public CState
 {
 private:
     typedef enum {
-        AN_IDLE = 12, AN_TURNLEFT = 50, AN_TURNRIGHT = 51
+        AN_IDLE = 12, AN_TURN_LEFT = 50, AN_TURN_RIGHT = 51
+        , AN_RUN = 53, AN_WALK = 46
     }ANIMNUM;
 public:
     CState_RaxasiaP2_Idle(class CFsm* pFsm, class CMonster* pMonster);
@@ -32,16 +33,22 @@ private:
     _float              m_fIdleTime = { 0.f };
     _float              m_fIdleEndDuration = { 1.5f };
 
-    _uint               m_iPastNeerAtkNum{ 512 };
-    _uint               m_iPastMiddleAtkNum{ 512 };
-    _uint               m_iPastFarAtkNum{ 512 };
+    _bool               m_bRunning = { false };
+    _bool               m_bWalk = { false };
+
+    _float              m_fRunSpeed = { 3.5f };
+    _float              m_fWalkSpeed = { 2.f };
+    _float              m_fRunningWeights = { 4.f };
+
+    _float              m_fNeedDist_ForAttack = { 15.f };
+
 
     _uint               m_iAtkCnt{};
 
     _uint               m_iAtkTrack{};
 
 private:
-    void                Calc_Act_Attack(_float fDist);
+    void                Calc_Act_Attack();
 
 public:
     static CState_RaxasiaP2_Idle* Create(class CFsm* pFsm, class CMonster* pMonster, _uint iStateNum, void* pArg = nullptr);

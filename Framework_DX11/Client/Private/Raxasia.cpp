@@ -16,8 +16,6 @@
 #include "State_RaxasiaP1_Die.h"
 #include "State_RaxasiaP1_Grogy.h"
 #include "State_RaxasiaP1_HitFatal.h"
-#include "State_RaxasiaP1_Walk.h"
-#include "State_RaxasiaP1_Run.h"
 
 #include "State_RaxasiaP1_DashUpper.h"
 #include "State_RaxasiaP1_GroundSlash.h"
@@ -39,8 +37,6 @@
 #include "State_RaxasiaP2_Die.h"
 #include "State_RaxasiaP2_Grogy.h"
 #include "State_RaxasiaP2_HitFatal.h"
-#include "State_RaxasiaP2_Walk.h"
-#include "State_RaxasiaP2_Run.h"
 
 #include "State_RaxasiaP2_JumpStamp.h"
 #include "State_RaxasiaP2_Running.h"
@@ -134,7 +130,7 @@ HRESULT CRaxasia::Initialize(void* pArg)
 
 	GET_GAMEINTERFACE->Set_OnOff_OrthoUI(false, this);
 
-	//Start_CutScene(CUTSCENE_DIE);
+	//Start_CutScene(CUTSCENE_MEET);
 
 	return S_OK;
 }
@@ -399,6 +395,14 @@ void CRaxasia::DeActive_Effect(const _uint eType)
 	m_Effects[eType]->Set_Loop(false);
 }
 
+void CRaxasia::DeActive_AllEffect()
+{
+	for (auto& pEffect : m_Effects)
+	{
+		pEffect->Set_Loop(false);
+	}
+}
+
 _bool CRaxasia::Get_EffectsLoop(const _uint eType)
 {
 	return m_Effects[eType]->Get_Dead();
@@ -432,6 +436,8 @@ const _Matrix* CRaxasia::Get_WeaponWorldMat()
 void CRaxasia::Start_CutScene(_uint iCutSceneNum)
 {
 	const _Matrix* pNewSocketMatrix = { nullptr };
+
+	DeActive_AllEffect();
 
 	switch (iCutSceneNum)
 	{
@@ -476,11 +482,11 @@ void CRaxasia::Start_CutScene(_uint iCutSceneNum)
 
 		_matrix PreTransformMatrix = XMMatrixScaling(0.015f, 0.015f, 0.015f) * XMMatrixRotationX(XMConvertToRadians(-90.f));
 
-		//CRaxasia_Sword_CutScene::WEAPON_DESC Desc{};
-		//Desc.pParentWorldMatrix = m_pTransformCom->Get_WorldMatrix_Ptr();
-		//Desc.pSocketBoneMatrix = m_pModelCom->Get_BoneCombindTransformationMatrix_Ptr("weapon0_l");
-		//m_pCutSceneWeapon = dynamic_cast<CRaxasia_Sword_CutScene*>(m_pGameInstance->Get_CloneObject_ToLayer(LEVEL_GAMEPLAY, TEXT("Layer_CutSceneWeapon"),
-		//	TEXT("Prototype_GameObject_Weapon_Raxasia_Sword_CutScene"), &Desc));
+		CRaxasia_Sword_CutScene::WEAPON_DESC Desc{};
+		Desc.pParentWorldMatrix = m_pTransformCom->Get_WorldMatrix_Ptr();
+		Desc.pSocketBoneMatrix = m_pModelCom->Get_BoneCombindTransformationMatrix_Ptr("weapon0_l");
+		m_pCutSceneWeapon = dynamic_cast<CRaxasia_Sword_CutScene*>(m_pGameInstance->Get_CloneObject_ToLayer(LEVEL_GAMEPLAY, TEXT("Layer_CutSceneWeapon"),
+			TEXT("Prototype_GameObject_Weapon_Raxasia_Sword_CutScene"), &Desc));
 
 		m_pCutSceneWeapon->Get_Model()->Set_PreTranformMatrix(PreTransformMatrix);
 		m_pCutSceneWeapon->Get_Transform()->Set_State(CTransform::STATE_POSITION, vOffset);
@@ -524,11 +530,18 @@ void CRaxasia::Start_CutScene(_uint iCutSceneNum)
 
 	case CUTSCENE_DIE:
 	{
+		_Vec3 vOffset = _Vec3(-0.17f, 0.f, 0.f);
+		_matrix PreTransformMatrix = XMMatrixScaling(0.015f, 0.015f, 0.015f) * XMMatrixRotationX(XMConvertToRadians(260.f)) * XMMatrixRotationY(XMConvertToRadians(-5.f)) * XMMatrixRotationZ(XMConvertToRadians(55.f));
+
 		m_pModelCom = m_pCutSceneModelCom[MODEL_PHASE2];
 
-		Deactiave_Weapon();
-		m_pWeaponShield->IsActive(false);
+		m_pWeapon->ChangeSocketMatrix(m_pModelCom->Get_BoneCombindTransformationMatrix_Ptr("weapon0_r"));
 
+		m_pWeaponShield->ChangeSocketMatrix(m_pModelCom->Get_BoneCombindTransformationMatrix_Ptr("weapon0_l"));
+		m_pWeaponShield->Get_Transform()->Set_State(CTransform::STATE_POSITION, vOffset);
+		m_pWeaponShield->Get_Model()->Set_PreTranformMatrix(PreTransformMatrix);
+
+		
 		m_pRigidBodyCom->Set_IsLockCell(false);
 		m_pRigidBodyCom->Set_IsOnCell(false);
 
@@ -556,6 +569,9 @@ void CRaxasia::End_CutScene(_uint iCutSceneNum)
 		_Vec3 vCurrentPos = m_pTransformCom->Get_State(CTransform::STATE_POSITION);
 		vCurrentPos.y -= 1.2f;
 
+		m_pCutSceneWeapon->IsActive(false);
+		m_pCutSceneWeapon->Start_UpdatePos();
+
 		m_pRigidBodyCom->Set_GloblePose(vCurrentPos);
 		m_pNavigationCom->Research_Cell(vCurrentPos);
 		m_pRigidBodyCom->Set_IsLockCell(true);
@@ -576,18 +592,19 @@ void CRaxasia::End_CutScene(_uint iCutSceneNum)
 	else if (m_pCutSceneFsmCom->Get_CurrentState() == STATE_P2)
 	{
 		_Vec3 vCurrentPos = m_pTransformCom->Get_State(CTransform::STATE_POSITION);
-		vCurrentPos.y -= 1.3f;
+		vCurrentPos.y -= 0.8f;
 
 		m_pRigidBodyCom->Set_GloblePose(vCurrentPos);
 		m_pNavigationCom->Research_Cell(vCurrentPos);
 		m_pRigidBodyCom->Set_IsLockCell(true);
 		m_pRigidBodyCom->Set_IsOnCell(true);
 
-		_matrix PreTransformMatrix = XMMatrixScaling(0.01f, 0.01f, 0.01f) * XMMatrixRotationX(XMConvertToRadians(270.0f));
+		_matrix PreTransformMatrix = XMMatrixScaling(0.015f, 0.015f, 0.015f) * XMMatrixRotationX(XMConvertToRadians(270.0f));
 		_Vec3 vShieldOffset = _Vec3(0.f, 0.f, 0.f);
 
+		m_pCutSceneWeapon->IsActive(false);
+
 		m_pWeaponShield->Get_Transform()->Set_State(CTransform::STATE_POSITION, vShieldOffset);
-		m_pWeaponShield->ChangeSocketMatrix(m_pModelCom->Get_BoneCombindTransformationMatrix_Ptr(36));
 		m_pWeaponShield->Get_Model()->Set_PreTranformMatrix(PreTransformMatrix);
 
 		ChangePhase();
@@ -800,8 +817,6 @@ HRESULT CRaxasia::Ready_FSM()
 
 #pragma region Phase1_Fsm
 	m_pFsmCom->Add_State(CState_RaxasiaP1_Idle::Create(m_pFsmCom, this, IDLE, &Desc));
-	m_pFsmCom->Add_State(CState_RaxasiaP1_Walk::Create(m_pFsmCom, this, WALK, &Desc));
-	m_pFsmCom->Add_State(CState_RaxasiaP1_Run::Create(m_pFsmCom, this, RUN, &Desc));
 	m_pFsmCom->Add_State(CState_RaxasiaP1_Grogy::Create(m_pFsmCom, this, GROGY, &Desc));
 	m_pFsmCom->Add_State(CState_RaxasiaP1_HitFatal::Create(m_pFsmCom, this, HITFATAL, &Desc));
 	m_pFsmCom->Add_State(CState_RaxasiaP1_Die::Create(m_pFsmCom, this, DIE, &Desc));
@@ -830,8 +845,6 @@ HRESULT CRaxasia::Ready_FSM()
 		return E_FAIL;
 
 	m_pExtraFsmCom->Add_State(CState_RaxasiaP2_Idle::Create(m_pExtraFsmCom, this, IDLE, &Desc));
-	m_pExtraFsmCom->Add_State(CState_RaxasiaP2_Walk::Create(m_pExtraFsmCom, this, WALK, &Desc));
-	m_pExtraFsmCom->Add_State(CState_RaxasiaP2_Run::Create(m_pExtraFsmCom, this, RUN, &Desc));
 	m_pExtraFsmCom->Add_State(CState_RaxasiaP2_Grogy::Create(m_pExtraFsmCom, this, GROGY, &Desc));
 	m_pExtraFsmCom->Add_State(CState_RaxasiaP2_HitFatal::Create(m_pExtraFsmCom, this, HITFATAL, &Desc));
 	m_pExtraFsmCom->Add_State(CState_RaxasiaP2_Die::Create(m_pExtraFsmCom, this, DIE, &Desc));
@@ -892,7 +905,7 @@ HRESULT CRaxasia::Ready_Weapon()
 
 	WeaponDesc.pParentAtk = &m_eStat.fAtk;
 
-	m_pWeaponShield = dynamic_cast<CWeapon*>(m_pGameInstance->Clone_GameObject(TEXT("Prototype_GameObject_Weapon_Raxasia_P1_Shield"), &WeaponDesc));
+	m_pWeaponShield = dynamic_cast<CWeapon*>(m_pGameInstance->Clone_GameObject(TEXT("Prototype_GameObject_Weapon_Raxasia_P2_Shield"), &WeaponDesc));
 	if (nullptr == m_pWeaponShield)
 		return E_FAIL;
 	
@@ -933,16 +946,10 @@ HRESULT CRaxasia::Ready_Effects()
 	m_Effects[EFFECT_DASH] = CEffect_Manager::Get_Instance()->Clone_Effect(TEXT("Raxasia_Attack_Dash"), pParetnMatrix,
 		nullptr, _Vec3(0.f, 1.f, 0.f), _Vec3(0.f, 0.f, 1.f), _Vec3(1.f, 1.f, 1.f));
 
-	m_Effects[EFFECT_THUNDERDISCHARGE] = CEffect_Manager::Get_Instance()->Clone_Effect(TEXT("Raxasia_Attack_ThunderDischarge"), pParetnMatrix,
-		nullptr, _Vec3(0.f, 0.f, 0.f), _Vec3(0.f, 0.f, 1.f), _Vec3(1.f, 1.f, 1.f));
-
 	m_Effects[EFFECT_HOWLING] = CEffect_Manager::Get_Instance()->Clone_Effect(TEXT("Raxasia_Attack_Howling"), pParetnMatrix,
 		nullptr, _Vec3(0.f, 0.f, 0.f), _Vec3(0.f, 0.f, 1.f), _Vec3(1.f, 1.f, 1.f));
 
 	m_Effects[EFFECT_THUNDERCHARGE_GROUND] = CEffect_Manager::Get_Instance()->Clone_Effect(TEXT("Raxasia_Attack_ThunderCharge_Ground"), pParetnMatrix,
-		nullptr, _Vec3(0.f, 0.f, 0.f), _Vec3(0.f, 0.f, 1.f), _Vec3(1.f, 1.f, 1.f));
-
-	m_Effects[EFFECT_THUNDERENVELOP_BIG] = CEffect_Manager::Get_Instance()->Clone_Effect(TEXT("Raxasia_Attack_ThunderEnvelop_Big"), pParetnMatrix,
 		nullptr, _Vec3(0.f, 0.f, 0.f), _Vec3(0.f, 0.f, 1.f), _Vec3(1.f, 1.f, 1.f));
 
 	m_Effects[EFFECT_THUNDERACCEL] = CEffect_Manager::Get_Instance()->Clone_Effect(TEXT("Raxasia_Attack_ThunderAccel"), pParetnMatrix,
@@ -967,7 +974,15 @@ HRESULT CRaxasia::Ready_Effects()
 
 	m_Effects[EFFECT_INCHENTSWORD] = CEffect_Manager::Get_Instance()->Clone_Effect(TEXT("Raxasia_Attack_InchentedSword"), pParetnMatrix,
 		pSocketBoneMatrix, _Vec3(0.f, 0.f, 0.f), _Vec3(0.f, 0.f, 1.f), _Vec3(1.f, 1.f, 1.f));
-	
+
+	pSocketBoneMatrix = m_pExtraModelCom->Get_BoneCombindTransformationMatrix_Ptr(m_pExtraModelCom->Get_UFBIndices(UFB_CHEST));
+
+	m_Effects[EFFECT_THUNDERDISCHARGE] = CEffect_Manager::Get_Instance()->Clone_Effect(TEXT("Raxasia_Attack_ThunderDischarge"), pParetnMatrix,
+		pSocketBoneMatrix, _Vec3(0.f, 0.f, 0.f), _Vec3(0.f, 0.f, 1.f), _Vec3(1.f, 1.f, 1.f));
+
+	m_Effects[EFFECT_THUNDERENVELOP_BIG] = CEffect_Manager::Get_Instance()->Clone_Effect(TEXT("Raxasia_Attack_ThunderEnvelop_Big"), pParetnMatrix,
+		pSocketBoneMatrix, _Vec3(0.f, 0.f, 0.f), _Vec3(0.f, 0.f, 1.f), _Vec3(1.f, 1.f, 1.f));
+
 
 	pSocketBoneMatrix = m_pExtraModelCom->Get_BoneCombindTransformationMatrix_Ptr(m_pExtraModelCom->Get_UFBIndices(UFB_WEAPON));
 
@@ -1074,14 +1089,27 @@ void CRaxasia::ChangePhase()
 	m_Effects[EFFECT_INCHENTSWORD] = CEffect_Manager::Get_Instance()->Clone_Effect(TEXT("Raxasia_Attack_InchentedSword"), pParetnMatrix,
 		pSocketBoneMatrix, _Vec3(0.f, 0.f, 0.f), _Vec3(0.f, 0.f, 1.f), _Vec3(1.f, 1.f, 1.f));
 
+	m_Effects[EFFECT_INCHENTSWORD_P2]->Set_Matrices(pSocketBoneMatrix);
+
 	//P2
 
 	CWeapon::MONSTER_WAPON_DESC		WeaponDesc{};
 	WeaponDesc.pParentWorldMatrix = m_pTransformCom->Get_WorldMatrix_Ptr();
 	WeaponDesc.pParentAtk = &m_eStat.fAtk;
 	WeaponDesc.pMonster = this;
+
+	Safe_Release(m_pWeapon);
+
+	m_pWeapon = dynamic_cast<CWeapon*>(m_pGameInstance->Clone_GameObject(TEXT("Prototype_GameObject_Weapon_Raxasia_P2_Sword"), &WeaponDesc));
+	if (nullptr == m_pWeapon)
+		return;
+
+	m_pWeapon->Appear();
+
 	WeaponDesc.pSocketBoneMatrix = m_pModelCom->Get_BoneCombindTransformationMatrix_Ptr(46);
 
+
+	m_pWeapon->ChangeSocketMatrix(pSocketBoneMatrix);
 	m_pWeaponShield->ChangeSocketMatrix(WeaponDesc.pSocketBoneMatrix);
 
 	m_pColliderBindMatrix[CT_UPPERBODY] = m_pModelCom->Get_BoneCombindTransformationMatrix_Ptr(8);//Spine 2
@@ -1127,6 +1155,10 @@ void CRaxasia::Change_Phase2Sword()
 	if (nullptr == m_pWeapon)
 		return;
 
+	// 실험해보기
+	m_Effects[EFFECT_INCHENTSWORD_P2]->Set_Matrices(WeaponDesc.pSocketBoneMatrix);
+	Active_Effect(CRaxasia::EFFECT_INCHENTSWORD_P2, true);
+
 	m_pWeapon->Appear();
 }
 
@@ -1171,6 +1203,8 @@ void CRaxasia::Free()
 	Safe_Release(m_pCutSceneModelCom[0]);
 	Safe_Release(m_pCutSceneModelCom[1]);
 	Safe_Release(m_pKickCollObj);
+
+	Safe_Release(m_pDouTexture);
 
 	if (true == m_isCloned)
 	{

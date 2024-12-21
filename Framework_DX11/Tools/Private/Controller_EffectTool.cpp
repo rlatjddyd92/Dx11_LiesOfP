@@ -430,8 +430,12 @@ void CController_EffectTool::Particle_Check()
 		ImGui::RadioButton("Move", (_int*)&m_ParticleDesc.DefaultDesc.eType, CParticle_Effect::PT_MOVE);
 		ImGui::SameLine();
 		ImGui::RadioButton("Converge", (_int*)&m_ParticleDesc.DefaultDesc.eType, CParticle_Effect::PT_CONVERGE);
-		ImGui::SameLine();
+		
 		ImGui::RadioButton("LocalSpread", (_int*)&m_ParticleDesc.DefaultDesc.eType, CParticle_Effect::PT_LOCALSPREAD);
+		ImGui::SameLine();
+		ImGui::RadioButton("LocalMove", (_int*)&m_ParticleDesc.DefaultDesc.eType, CParticle_Effect::PT_LOCALMOVE);
+		ImGui::SameLine();
+		ImGui::RadioButton("LocalConverge", (_int*)&m_ParticleDesc.DefaultDesc.eType, CParticle_Effect::PT_LOCALCONVERGE);
 
 		ImGui::SeparatorText("Compute State");
 		ImGui::Checkbox("Orbit", &m_ParticleStates[PB_ORBIT]);
@@ -1510,6 +1514,8 @@ void CController_EffectTool::Trail_MP_Check()
 		ImGui::SameLine();
 		ImGui::RadioButton("Follow", (_int*)&m_Trail_MPDesc.DefaultDesc.eType, CTrail_Effect_MP::MT_FOLLOW);
 
+		ImGui::RadioButton("LocalSpread", (_int*)&m_Trail_MPDesc.DefaultDesc.eType, CTrail_Effect_MP::MT_LOCALSPREAD);
+
 		ImGui::SeparatorText("Compute State");
 		ImGui::Checkbox("Orbit", &m_Trail_MPState[TMP_ORBIT]);
 		ImGui::SameLine();
@@ -2288,6 +2294,16 @@ HRESULT CController_EffectTool::Load_Shader()
 		CShader_Compute::Create(m_pDevice, m_pContext, TEXT("../Bin/ShaderFiles/Shader_ParticleCompute.hlsl"), "CS_SPREAD_LOCAL_MAIN"))))
 		return E_FAIL;
 
+	/* For. Prototype_Component_Shader_Compute_Particle_LocalMove */
+	if (FAILED(m_pGameInstance->Add_Prototype(LEVEL_TOOL, TEXT("Prototype_Component_Shader_Compute_Particle_LocalMove"),
+		CShader_Compute::Create(m_pDevice, m_pContext, TEXT("../Bin/ShaderFiles/Shader_ParticleCompute.hlsl"), "CS_MOVE_LOCAL_MAIN"))))
+		return E_FAIL;
+
+	/* For. Prototype_Component_Shader_Compute_Particle_LocalConverge */
+	if (FAILED(m_pGameInstance->Add_Prototype(LEVEL_TOOL, TEXT("Prototype_Component_Shader_Compute_Particle_LocalConverge"),
+		CShader_Compute::Create(m_pDevice, m_pContext, TEXT("../Bin/ShaderFiles/Shader_ParticleCompute.hlsl"), "CS_CONVERGE_LOCAL_MAIN"))))
+		return E_FAIL;
+
 	/* For. Prototype_Component_Shader_Compute_Particle_Reset */
 	if (FAILED(m_pGameInstance->Add_Prototype(LEVEL_TOOL, TEXT("Prototype_Component_Shader_Compute_Particle_Reset"),
 		CShader_Compute::Create(m_pDevice, m_pContext, TEXT("../Bin/ShaderFiles/Shader_ParticleCompute.hlsl"), "CS_RESET_MAIN"))))
@@ -2297,6 +2313,7 @@ HRESULT CController_EffectTool::Load_Shader()
 	if (FAILED(m_pGameInstance->Add_Prototype(LEVEL_TOOL, TEXT("Prototype_Component_Shader_TrailTail_PointInstance"),
 		CShader_NonVTX::Create(m_pDevice, m_pContext, TEXT("../Bin/ShaderFiles/Shader_TrailTail_PointInstance.hlsl")))))
 		return E_FAIL;
+
 	/* For. Prototype_Component_Shader_TrailHead_PointInstance */
 	if (FAILED(m_pGameInstance->Add_Prototype(LEVEL_TOOL, TEXT("Prototype_Component_Shader_TrailHead_PointInstance"),
 		CShader_NonVTX::Create(m_pDevice, m_pContext, TEXT("../Bin/ShaderFiles/Shader_TrailHead_PointInstance.hlsl")))))
@@ -2320,6 +2337,11 @@ HRESULT CController_EffectTool::Load_Shader()
 	/* For. Prototype_Component_Shader_Compute_Trail_Follow */
 	if (FAILED(m_pGameInstance->Add_Prototype(LEVEL_TOOL, TEXT("Prototype_Component_Shader_Compute_Trail_Follow"),
 		CShader_Compute::Create(m_pDevice, m_pContext, TEXT("../Bin/ShaderFiles/Shader_Trail_MultiPoint_Compute.hlsl"), "CS_FOLLOW_MAIN"))))
+		return E_FAIL;
+
+	/* For. Prototype_Component_Shader_Compute_Trail_LocalSpread */
+	if (FAILED(m_pGameInstance->Add_Prototype(LEVEL_TOOL, TEXT("Prototype_Component_Shader_Compute_Trail_LocalSpread"),
+		CShader_Compute::Create(m_pDevice, m_pContext, TEXT("../Bin/ShaderFiles/Shader_Trail_MultiPoint_Compute.hlsl"), "CS_SPREAD_LOCAL_MAIN"))))
 		return E_FAIL;
 
 	/* For. Prototype_Component_Shader_Compute_Trail_Reset */

@@ -40,6 +40,7 @@ public:
 	HRESULT Add_Effect_ToLayer(_uint iLevelID, const _wstring& strECTag, _Vec3 vPos = {}, _Vec3 vDir = {}, _Vec3 vScale = { 1.f, 1.f, 1.f });
 	HRESULT Add_Effect_ToLayer(_uint iLevelID, const _wstring& strECTag, const _Matrix* pParentMatrix, const _Matrix* pSocketMatrix, _Vec3 vPos = {}, _Vec3 vDir = {}, _Vec3 vScale = { 1.f, 1.f, 1.f });
 
+	HRESULT Add_Effect_ToLayer_Rot(_uint iLevelID, const _wstring& strECTag, _Vec3 vPos = {}, _Vec3 vRot = {}, _Vec3 vScale = { 1.f, 1.f, 1.f });
 
 private:
 	class CGameInstance* m_pGameInstance = { nullptr };

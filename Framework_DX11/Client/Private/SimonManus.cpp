@@ -22,8 +22,6 @@
 #include "State_SimonManusP1_Die.h"
 #include "State_SimonManusP1_Grogy.h"
 #include "State_SimonManusP1_HitFatal.h"
-#include "State_SimonManusP1_Walk.h"
-#include "State_SimonManusP1_Run.h"
 
 #include "State_SimonManusP1_StingAttack.h"
 #include "State_SimonManusP1_Stamp.h"
@@ -44,8 +42,6 @@
 #include "State_SimonManusP2_Die.h"
 #include "State_SimonManusP2_Grogy.h"
 #include "State_SimonManusP2_HitFatal.h"
-#include "State_SimonManusP2_Walk.h"
-#include "State_SimonManusP2_Run.h"
 
 #include "State_SimonManusP2_ChasingSwing.h"
 #include "State_SimonManusP2_LightningToWave.h"
@@ -150,7 +146,7 @@ HRESULT CSimonManus::Initialize(void* pArg)
 
 	GET_GAMEINTERFACE->Set_OnOff_OrthoUI(false, this);
 
-	Start_CutScene(CUTSCENE_MEET);
+	//Start_CutScene(CUTSCENE_MEET);
 
 	return S_OK;
 }
@@ -608,8 +604,6 @@ HRESULT CSimonManus::Ready_FSM()
 
 #pragma region Phase1_Fsm
 	m_pFsmCom->Add_State(CState_SimonManusP1_Idle::Create(m_pFsmCom, this, IDLE, &Desc));
-	m_pFsmCom->Add_State(CState_SimonManusP1_Walk::Create(m_pFsmCom, this, WALK, &Desc));
-	m_pFsmCom->Add_State(CState_SimonManusP1_Run::Create(m_pFsmCom, this, RUN, &Desc));
 	m_pFsmCom->Add_State(CState_SimonManusP1_Grogy::Create(m_pFsmCom, this, GROGY, &Desc));
 	m_pFsmCom->Add_State(CState_SimonManusP1_HitFatal::Create(m_pFsmCom, this, HITFATAL, &Desc));
 	m_pFsmCom->Add_State(CState_SimonManusP1_Die::Create(m_pFsmCom, this, DIE, &Desc));
@@ -640,8 +634,6 @@ HRESULT CSimonManus::Ready_FSM()
 		return E_FAIL;
 
 	m_pExtraFsmCom->Add_State(CState_SimonManusP2_Idle::Create(m_pExtraFsmCom, this, IDLE, &Desc));
-	m_pExtraFsmCom->Add_State(CState_SimonManusP2_Walk::Create(m_pExtraFsmCom, this, WALK, &Desc));
-	m_pExtraFsmCom->Add_State(CState_SimonManusP2_Run::Create(m_pExtraFsmCom, this, RUN, &Desc));
 	m_pExtraFsmCom->Add_State(CState_SimonManusP2_Grogy::Create(m_pExtraFsmCom, this, GROGY, &Desc));
 	m_pExtraFsmCom->Add_State(CState_SimonManusP2_HitFatal::Create(m_pExtraFsmCom, this, HITFATAL, &Desc));
 	m_pExtraFsmCom->Add_State(CState_SimonManusP2_Die::Create(m_pExtraFsmCom, this, DIE, &Desc));

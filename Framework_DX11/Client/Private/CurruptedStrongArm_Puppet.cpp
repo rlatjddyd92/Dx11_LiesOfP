@@ -11,13 +11,14 @@
 #include "GameInterface_Controller.h"
 
 
-//#include "State_CarcassBigA_Idle.h"
-//#include "State_CarcassBigA_Die.h"
-//#include "State_CarcassBigA_Grogy.h"
-//#include "State_CarcassBigA_HitFatal.h"
-//#include "State_CarcassBigA_Paralyze.h"
-//#include "State_CarcassBigA_Walk.h"
-//#include "State_CarcassBigA_RUN.h"
+#include "State_CurruptedStrongArm_Idle.h"
+#include "State_CurruptedStrongArm_Die.h"
+#include "State_CurruptedStrongArm_Grogy.h"
+#include "State_CurruptedStrongArm_HitFatal.h"
+
+#include "State_CurruptedStrongArm_JumpPunch.h"
+#include "State_CurruptedStrongArm_StingTwice.h"
+#include "State_CurruptedStrongArm_SwipAttack.h"
 
 CCurruptedStrongArm_Puppet::CCurruptedStrongArm_Puppet(ID3D11Device* pDevice, ID3D11DeviceContext* pContext)
 	: CMonster{ pDevice, pContext }
@@ -92,7 +93,7 @@ void CCurruptedStrongArm_Puppet::Priority_Update(_float fTimeDelta)
 	{
 		GET_GAMEINTERFACE->Set_OnOff_OrthoUI(false, this);
 		m_bDieState = true;
-		//m_pFsmCom->Set_State(DIE);
+		m_pFsmCom->Set_State(DIE);
 	}
 }
 
@@ -102,7 +103,7 @@ void CCurruptedStrongArm_Puppet::Update(_float fTimeDelta)
 
 	m_pRigidBodyCom->Set_Velocity(m_vCurRootMove / fTimeDelta);
 
-	//m_pFsmCom->Update(fTimeDelta);
+	m_pFsmCom->Update(fTimeDelta);
 	
 	Update_Collider();
 
@@ -147,7 +148,7 @@ HRESULT CCurruptedStrongArm_Puppet::Render()
 
 void CCurruptedStrongArm_Puppet::Active_CurrentWeaponCollider(_float fDamageRatio, _uint iCollIndex, _uint iHitType, _uint iAtkStrength)
 {
-	m_pColliderObject[iCollIndex]->Active_Collider(fDamageRatio, iCollIndex, iHitType, iAtkStrength);
+	m_pColliderObject[iCollIndex]->Active_Collider(fDamageRatio, 0, iHitType, iAtkStrength);
 }
 
 void CCurruptedStrongArm_Puppet::DeActive_CurretnWeaponCollider(_uint iCollIndex)
@@ -167,8 +168,8 @@ HRESULT CCurruptedStrongArm_Puppet::Ready_Components()
 
 	/* FOR.Com_Collider */		//Body
 	CBounding_OBB::BOUNDING_OBB_DESC			ColliderDesc{};
-	ColliderDesc.vExtents = _float3(0.1f, 0.3f, 0.6f);
-	ColliderDesc.vCenter = _float3(0.f, 0.f, 0.f);
+	ColliderDesc.vExtents = _float3(0.55f, 0.45f, 0.8f);
+	ColliderDesc.vCenter = _float3(0.3f, 0.f, 0.f);
 	ColliderDesc.vAngles = _float3(0.f, 0.f, 0.f);
 
 	if (FAILED(__super::Add_Component(LEVEL_STATIC, TEXT("Prototype_Component_Collider_OBB"),
@@ -191,21 +192,43 @@ HRESULT CCurruptedStrongArm_Puppet::Ready_Components()
 
 	//ArmLeft
 	ColliderDesc.vExtents = _float3(0.7f, 0.3f, 0.3f);
-	ColliderDesc.vCenter = _float3(-0.1f, 0.f, 0.f);
+	ColliderDesc.vCenter = _float3(0.3f, 0.f, 0.f);
 	ColliderDesc.vAngles = _float3(0.f, 0.f, 0.f);
 
 	if (FAILED(__super::Add_Component(LEVEL_STATIC, TEXT("Prototype_Component_Collider_OBB"),
 		TEXT("Com_Collider_ArmLeft"), reinterpret_cast<CComponent**>(&m_EXCollider[CT_ARM_LEFT]), &ColliderDesc)))
 		return E_FAIL;
-	m_pColliderBindMatrix[CT_ARM_LEFT] = m_pModelCom->Get_BoneCombindTransformationMatrix_Ptr(m_pModelCom->Get_UFBIndices(UFB_HAND_LEFT));
+	m_pColliderBindMatrix[CT_ARM_LEFT] = m_pModelCom->Get_BoneCombindTransformationMatrix_Ptr(m_pModelCom->Get_UFBIndices(UFB_HAND_LEFT) - 1);
 
 
 	//ArmRight
 	if (FAILED(__super::Add_Component(LEVEL_STATIC, TEXT("Prototype_Component_Collider_OBB"),
 		TEXT("Com_Collider_ArmRight"), reinterpret_cast<CComponent**>(&m_EXCollider[CT_ARM_RIGHT]), &ColliderDesc)))
 		return E_FAIL;
-	m_pColliderBindMatrix[CT_ARM_RIGHT] = m_pModelCom->Get_BoneCombindTransformationMatrix_Ptr(m_pModelCom->Get_UFBIndices(UFB_HAND_RIGHT));
+	m_pColliderBindMatrix[CT_ARM_RIGHT] = m_pModelCom->Get_BoneCombindTransformationMatrix_Ptr(m_pModelCom->Get_UFBIndices(UFB_HAND_RIGHT) - 1);
 
+
+	//LegLeft
+	ColliderDesc.vExtents = _float3(0.7f, 0.3f, 0.3f);
+	ColliderDesc.vCenter = _float3(0.22f, 0.f, 0.f);
+	ColliderDesc.vAngles = _float3(0.f, 0.f, 0.f);
+
+	if (FAILED(__super::Add_Component(LEVEL_STATIC, TEXT("Prototype_Component_Collider_OBB"),
+		TEXT("Com_Collider_LegLeft"), reinterpret_cast<CComponent**>(&m_EXCollider[CT_LEG_LEFT]), &ColliderDesc)))
+		return E_FAIL;
+	m_pColliderBindMatrix[CT_LEG_LEFT] = m_pModelCom->Get_BoneCombindTransformationMatrix_Ptr(m_pModelCom->Get_UFBIndices(UFB_FOOT_LEFT) - 1);
+
+
+	//LegRight
+	if (FAILED(__super::Add_Component(LEVEL_STATIC, TEXT("Prototype_Component_Collider_OBB"),
+		TEXT("Com_Collider_LegRight"), reinterpret_cast<CComponent**>(&m_EXCollider[CT_LEG_RIGHT]), &ColliderDesc)))
+		return E_FAIL;
+	m_pColliderBindMatrix[CT_LEG_RIGHT] = m_pModelCom->Get_BoneCombindTransformationMatrix_Ptr(m_pModelCom->Get_UFBIndices(UFB_FOOT_RIGHT) - 1);
+
+	for (_int i = 0; i < CT_END - 1; ++i)
+	{
+		m_EXCollider[i]->Set_Owner(this);
+	}
 
 	/* FOR.Com_Collider_OBB */
 	CBounding_OBB::BOUNDING_OBB_DESC			ColliderOBBDesc_Obj{};
@@ -239,8 +262,8 @@ HRESULT CCurruptedStrongArm_Puppet::Ready_Components()
 	m_pColliderObject[TYPE_ARM_RIGHT] = dynamic_cast<CColliderObject*>(m_pGameInstance->Clone_GameObject(TEXT("Prototype_GameObject_ColliderObj"), &Desc));
 
 	ColliderOBBDesc_Obj.vAngles = _float3(0.0f, 0.0f, 0.0f);
-	ColliderOBBDesc_Obj.vCenter = _float3(0.1f, 0.f, 0.f);
-	ColliderOBBDesc_Obj.vExtents = _float3(0.8f, 0.2f, 0.2f);
+	ColliderOBBDesc_Obj.vCenter = _float3(-0.1f, 0.f, 0.f);
+	ColliderOBBDesc_Obj.vExtents = _float3(1.f, 0.2f, 0.2f);
 
 	Desc.pBoundingDesc = &ColliderOBBDesc_Obj;
 	Desc.eType = CCollider::TYPE_OBB;
@@ -251,9 +274,6 @@ HRESULT CCurruptedStrongArm_Puppet::Ready_Components()
 
 	m_pColliderObject[TYPE_TENTACLE_FL] = dynamic_cast<CColliderObject*>(m_pGameInstance->Clone_GameObject(TEXT("Prototype_GameObject_ColliderObj"), &Desc));
 
-	ColliderOBBDesc_Obj.vAngles = _float3(0.0f, 0.0f, 0.0f);
-	ColliderOBBDesc_Obj.vCenter = _float3(0.1f, 0.f, 0.f);
-	ColliderOBBDesc_Obj.vExtents = _float3(0.8f, 0.2f, 0.2f);
 
 	Desc.pBoundingDesc = &ColliderOBBDesc_Obj;
 	Desc.eType = CCollider::TYPE_OBB;
@@ -264,6 +284,25 @@ HRESULT CCurruptedStrongArm_Puppet::Ready_Components()
 
 	m_pColliderObject[TYPE_TENTACLE_FR] = dynamic_cast<CColliderObject*>(m_pGameInstance->Clone_GameObject(TEXT("Prototype_GameObject_ColliderObj"), &Desc));
 
+
+	Desc.pBoundingDesc = &ColliderOBBDesc_Obj;
+	Desc.eType = CCollider::TYPE_OBB;
+	Desc.pSocketBoneMatrix = m_pModelCom->Get_BoneCombindTransformationMatrix_Ptr(311);
+	Desc.pParentWorldMatrix = m_pTransformCom->Get_WorldMatrix_Ptr();
+	Desc.pSocketBoneMatrix2 = m_pTransformCom->Get_WorldMatrix_Ptr();
+	Desc.fDamageAmount = 100.f;
+
+	m_pColliderObject[TYPE_TENTACLE_BL] = dynamic_cast<CColliderObject*>(m_pGameInstance->Clone_GameObject(TEXT("Prototype_GameObject_ColliderObj"), &Desc));
+
+
+	Desc.pBoundingDesc = &ColliderOBBDesc_Obj;
+	Desc.eType = CCollider::TYPE_OBB;
+	Desc.pSocketBoneMatrix = m_pModelCom->Get_BoneCombindTransformationMatrix_Ptr(321);
+	Desc.pParentWorldMatrix = m_pTransformCom->Get_WorldMatrix_Ptr();
+	Desc.pSocketBoneMatrix2 = m_pTransformCom->Get_WorldMatrix_Ptr();
+	Desc.fDamageAmount = 100.f;
+
+	m_pColliderObject[TYPE_TENTACLE_BR] = dynamic_cast<CColliderObject*>(m_pGameInstance->Clone_GameObject(TEXT("Prototype_GameObject_ColliderObj"), &Desc));
 
 
 	// 항상 마지막에 생성하기
@@ -304,16 +343,16 @@ HRESULT CCurruptedStrongArm_Puppet::Ready_FSM()
 
 
 
-	//m_pFsmCom->Add_State(CState_CurruptedStrongArm_Idle::Create(m_pFsmCom, this, IDLE, &Desc));
-	//m_pFsmCom->Add_State(CState_CarcassBigA_Walk::Create(m_pFsmCom, this, WALK, &Desc));
-	//m_pFsmCom->Add_State(CState_CarcassBigA_Run::Create(m_pFsmCom, this, RUN, &Desc));
-	//m_pFsmCom->Add_State(CState_CarcassBigA_Grogy::Create(m_pFsmCom, this, GROGY, &Desc));
-	//m_pFsmCom->Add_State(CState_CarcassBigA_HitFatal::Create(m_pFsmCom, this, HITFATAL, &Desc));
-	//m_pFsmCom->Add_State(CState_CarcassBigA_Paralyze::Create(m_pFsmCom, this, PARALYZE, &Desc));
-	//m_pFsmCom->Add_State(CState_CarcassBigA_Die::Create(m_pFsmCom, this, DIE, &Desc));
+	m_pFsmCom->Add_State(CState_CurruptedStrongArm_Idle::Create(m_pFsmCom, this, IDLE, &Desc));
+	m_pFsmCom->Add_State(CState_CurruptedStrongArm_Grogy::Create(m_pFsmCom, this, GROGY, &Desc));
+	m_pFsmCom->Add_State(CState_CurruptedStrongArm_HitFatal::Create(m_pFsmCom, this, HITFATAL, &Desc));
+	m_pFsmCom->Add_State(CState_CurruptedStrongArm_Die::Create(m_pFsmCom, this, DIE, &Desc));
 
+	m_pFsmCom->Add_State(CState_CurruptedStrongArm_StingTwice::Create(m_pFsmCom, this, STINGTWICE, &Desc));
+	m_pFsmCom->Add_State(CState_CurruptedStrongArm_SwipAttack::Create(m_pFsmCom, this, SWIPATTACK, &Desc));
+	m_pFsmCom->Add_State(CState_CurruptedStrongArm_JumpPunch::Create(m_pFsmCom, this, JUMP_PUNCH, &Desc));
 
-	//m_pFsmCom->Set_State(IDLE);
+	m_pFsmCom->Set_State(IDLE);
 
 	return S_OK;
 
@@ -342,12 +381,12 @@ void CCurruptedStrongArm_Puppet::Update_Collider()
 		, *(m_pColliderBindMatrix[CT_ARM_RIGHT]) * WorldMat);
 	m_EXCollider[CT_ARM_RIGHT]->Update(&UpdateMat);
 
-	//XMStoreFloat4x4(&UpdateMat
-	//	, *(m_pColliderBindMatrix[CT_LOWERLEG_LEFT]) * WorldMat);
-	//m_EXCollider[L_LEG_LEFT]->Update(&UpdateMat);
-	//XMStoreFloat4x4(&UpdateMat
-	//	, *(m_pColliderBindMatrix[CT_LOWERLEG_RIGHT]) * WorldMat);
-	//m_EXCollider[L_LEG_RIGHT]->Update(&UpdateMat);
+	XMStoreFloat4x4(&UpdateMat
+		, *(m_pColliderBindMatrix[CT_LEG_LEFT]) * WorldMat);
+	m_EXCollider[CT_LEG_LEFT]->Update(&UpdateMat);
+	XMStoreFloat4x4(&UpdateMat
+		, *(m_pColliderBindMatrix[CT_LEG_RIGHT]) * WorldMat);
+	m_EXCollider[CT_LEG_RIGHT]->Update(&UpdateMat);
 }
 
 CCurruptedStrongArm_Puppet* CCurruptedStrongArm_Puppet::Create(ID3D11Device* pDevice, ID3D11DeviceContext* pContext)

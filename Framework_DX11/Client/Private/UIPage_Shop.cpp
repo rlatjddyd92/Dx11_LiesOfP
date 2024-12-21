@@ -323,7 +323,7 @@ void CUIPage_Shop::Action_Popup(_float fTimeDelta)
 
 		if ((m_iNowCount != 0) || (m_iNowPrice != 0))
 		{
-			if (m_iNowCount > pItem->iCount)
+			if (m_iNowCount > (_int)pItem->iCount)
 				GET_GAMEINTERFACE->Show_Popup(TEXT("판매 불가"), TEXT("판매 가능한 수량을 초과하였습니다."));
 			else
 			{

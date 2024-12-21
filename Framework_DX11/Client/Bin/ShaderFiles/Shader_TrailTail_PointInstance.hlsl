@@ -81,7 +81,7 @@ VS_OUT VS_MAIN(uint instanceID : SV_InstanceID)
     Out.vPSize = Particle_SRV[instanceID].particle.vPSize;
     Out.vLifeTime = Particle_SRV[instanceID].particle.vLifeTime;
     Out.vColor = Particle_SRV[instanceID].particle.vColor;
-    Out.vLook = Particle_SRV[instanceID].particle.vLook;
+    Out.vLook = mul(Particle_SRV[instanceID].particle.vLook, g_WorldMatrix);
     Out.vPreTranslation = Particle_SRV[instanceID].vPreTranslation;
     Out.fIndex = instanceID % g_iNumTailInstance;
     

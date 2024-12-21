@@ -59,6 +59,11 @@ HRESULT CRaxasia_Sword_CutScene::Initialize(void* pArg)
 
 void CRaxasia_Sword_CutScene::Priority_Update(_float fTimeDelta)
 {
+	for (auto& pEffect : m_Effects)
+	{
+		if (!pEffect->Get_Dead())
+			pEffect->Priority_Update(fTimeDelta);
+	}
 }
 
 void CRaxasia_Sword_CutScene::Update(_float fTimeDelta)
@@ -88,35 +93,29 @@ void CRaxasia_Sword_CutScene::Update(_float fTimeDelta)
 	_uint iCurAnimIndex = m_pModelCom->Get_CurrentAnimationIndex();
 	if (iCurAnimIndex == m_iAnimation_Phase1Index)
 	{
-		Control_Phase1Effect();
+		Control_Phase1Effect(fTimeDelta);
 	}
 	else if (iCurAnimIndex == m_iAnimation_Phase2Index)
 	{
-		Control_Phase2Effect();
+		Control_Phase2Effect(fTimeDelta);
 	}
 
-	if (KEY_TAP(KEY::P))
+
+	for (auto& pEffect : m_Effects)
 	{
-		_Matrix		WorldMatrix{};
-		_matrix		SocketMatrix = m_pModelCom->Get_BoneCombindTransformationMatrix("BN_Blade10");
-
-		for (size_t i = 0; i < 3; i++)
-		{
-			SocketMatrix.r[i] = XMVector3Normalize(SocketMatrix.r[i]);
-		}
-		XMStoreFloat4x4(&WorldMatrix, SocketMatrix * XMLoadFloat4x4(&m_WorldMatrix));
-
-		_Vec3 vCurrentPos = WorldMatrix.Translation();
-		_Vec3 vWorldUp = _Vec3(0.f, 1.f, 0.f);
-
-		vCurrentPos -= vWorldUp * 0.04f;
-
-		m_pEffect_Manager->Add_Effect_ToLayer(LEVEL_GAMEPLAY, TEXT("Raxasia_CutScene_Weapon_Change_Turn"), vCurrentPos);
+		if (!pEffect->Get_Dead())
+			pEffect->Update(fTimeDelta);
 	}
 }
 
 void CRaxasia_Sword_CutScene::Late_Update(_float fTimeDelta)
 {
+	for (auto& pEffect : m_Effects)
+	{
+		if (!pEffect->Get_Dead())
+			pEffect->Late_Update(fTimeDelta);
+	}
+
 	m_pGameInstance->Add_RenderObject(CRenderer::RG_NONBLEND, this);
 }
 
@@ -208,9 +207,9 @@ void CRaxasia_Sword_CutScene::Stop_UpdatePos()
 	m_isUpdatePos = false;
 }
 
-void CRaxasia_Sword_CutScene::Control_Phase1Effect()
+void CRaxasia_Sword_CutScene::Control_Phase1Effect(_float fTimeDelta)
 {
-	_float fCurretTrackPosition = m_pModelCom->Get_CurrentTrackPosition();
+	_float fCurretTrackPosition = (_float)m_pModelCom->Get_CurrentTrackPosition();
 
 	_Matrix		WorldMatrix{};
 	_matrix		SocketMatrix{};
@@ -242,7 +241,7 @@ void CRaxasia_Sword_CutScene::Control_Phase1Effect()
 			vCurrentPos = WorldMatrix.Translation();
 			vCurrentPos -= vWorldUp * 0.05f;
 
-			m_pEffect_Manager->Add_Effect_ToLayer(LEVEL_GAMEPLAY, TEXT("Raxasia_CutScene_Weapon_Change_Turn"), vCurrentPos);
+			m_pEffect_Manager->Add_Effect_ToLayer_Rot(LEVEL_GAMEPLAY, TEXT("Raxasia_CutScene_Weapon_Change_Turn"), vCurrentPos, _Vec3(0.f, 45.f, 0.f));
 
 			m_isActiveTurnEffect[i] = true;
 		}
@@ -271,27 +270,138 @@ void CRaxasia_Sword_CutScene::Control_Phase1Effect()
 
 			vCurrentPos = WorldMatrix.Translation();
 
-			m_pEffect_Manager->Add_Effect_ToLayer(LEVEL_GAMEPLAY, TEXT("Raxasia_CutScene_Weapon_Change_Insert"), vCurrentPos);
+			m_pEffect_Manager->Add_Effect_ToLayer_Rot(LEVEL_GAMEPLAY, TEXT("Raxasia_CutScene_Weapon_Change_Insert"), vCurrentPos, _Vec3(0.f,45.f,0.f));
 
 			m_isActiveInsertEffect[i] = true;
 		}
 	}
 
-	if (!m_isEndPhase1Effect && m_iFrame >= 93)
+	if (!m_isEndPhase1Effect && fCurretTrackPosition >= 93)
 	{
-		m_pEffect_Manager->Add_Effect_ToLayer(LEVEL_GAMEPLAY, TEXT("Raxasia_CutScene_Weapon_Change_Fit"), m_pParentMatrix,
-			m_pSocketMatrix, _Vec3(0.f, 0.f, 0.f), _Vec3(0.f, 0.f, 0.f), _Vec3(1.f, 1.f, 1.f));
+		SocketMatrix = m_pModelCom->Get_BoneCombindTransformationMatrix("BN_Blade6");
+
+		for (size_t i = 0; i < 3; i++)
+		{
+			SocketMatrix.r[i] = XMVector3Normalize(SocketMatrix.r[i]);
+		}
+		XMStoreFloat4x4(&WorldMatrix, SocketMatrix * XMLoadFloat4x4(&m_WorldMatrix));
+
+		vCurrentPos = WorldMatrix.Translation();
+
+		m_pEffect_Manager->Add_Effect_ToLayer_Rot(LEVEL_GAMEPLAY, TEXT("Raxasia_CutScene_Weapon_Change_Fit"), vCurrentPos, _Vec3(0.f, 45.f, 0.f));
 
 		m_isEndPhase1Effect = true;
 	}
 }
 
-void CRaxasia_Sword_CutScene::Control_Phase2Effect()
+void CRaxasia_Sword_CutScene::Control_Phase2Effect(_float fTimeDelta)
 {
-	if (m_iFrame >= 60)
+	_float fCurretTrackPosition = (_float)m_pModelCom->Get_CurrentTrackPosition();
+
+	_Matrix		WorldMatrix{};
+	_matrix		SocketMatrix{};
+
+	_Vec3 vCurrentPos = WorldMatrix.Translation();
+	_Vec3 vWorldUp = _Vec3(0.f, 1.f, 0.f);
+
+	if (fCurretTrackPosition >= 75)
 	{
-		m_pModelCom->Set_SpeedRatio(m_iAnimation_Phase2Index, 2.3f);
+		SocketMatrix = m_pModelCom->Get_BoneCombindTransformationMatrix("BN_Blade12");
+
+		for (size_t i = 0; i < 3; i++)
+		{
+			SocketMatrix.r[i] = XMVector3Normalize(SocketMatrix.r[i]);
+		}
+		XMStoreFloat4x4(&WorldMatrix, SocketMatrix * XMLoadFloat4x4(&m_WorldMatrix));
+
+		vCurrentPos = WorldMatrix.Translation();
+		vCurrentPos.y += 0.1f;
+
+		m_Effects[EFFECT_P2_SHINE]->Get_Transform()->Set_State(CTransform::STATE_POSITION, vCurrentPos);
+
+		if (!m_isActiveShineEffect)
+		{
+			m_Effects[EFFECT_P2_SHINE]->Set_Loop(true);
+
+			_Vec3 vRaxasiaPos = m_pParentMatrix->Translation();
+			_Vec3 vRaxasiaRight = m_pParentMatrix->Right();
+			_Vec3 vRaxasiaLook = m_pParentMatrix->Forward();
+			vRaxasiaRight.Normalize();
+			vRaxasiaLook.Normalize();
+
+			vCurrentPos = vRaxasiaPos + (vRaxasiaRight + vRaxasiaLook) * 1.05f;
+			m_Effects[EFFECT_P2_LIGHTNING_SMALL]->Get_Transform()->Set_State(CTransform::STATE_POSITION, vCurrentPos);
+			m_Effects[EFFECT_P2_LIGHTNING_SMALL]->Set_Loop(true);
+		}
+
+		m_isActiveShineEffect = true;
 	}
+
+	if (!m_isActiveElecTurnEffect && fCurretTrackPosition >= 80)
+	{
+		string strBoneName = "BN_Handle_base";
+
+		SocketMatrix = m_pModelCom->Get_BoneCombindTransformationMatrix(strBoneName.c_str());
+
+		for (size_t i = 0; i < 3; i++)
+		{
+			SocketMatrix.r[i] = XMVector3Normalize(SocketMatrix.r[i]);
+		}
+		XMStoreFloat4x4(&WorldMatrix, SocketMatrix * XMLoadFloat4x4(&m_WorldMatrix));
+
+		vCurrentPos = WorldMatrix.Translation();
+
+		m_Effects[EFFECT_P2_TURN]->Get_Transform()->Set_State(CTransform::STATE_POSITION, vCurrentPos);
+		m_Effects[EFFECT_P2_TURN]->Set_Loop(true);
+
+		m_isActiveElecTurnEffect = true;
+	}
+	else if (!m_isActiveExplosionEffect && fCurretTrackPosition >= 280)
+	{
+		SocketMatrix = m_pModelCom->Get_BoneCombindTransformationMatrix("BN_Blade12");
+
+		for (size_t i = 0; i < 3; i++)
+		{
+			SocketMatrix.r[i] = XMVector3Normalize(SocketMatrix.r[i]);
+		}
+		XMStoreFloat4x4(&WorldMatrix, SocketMatrix * XMLoadFloat4x4(&m_WorldMatrix));
+
+		vCurrentPos = WorldMatrix.Translation();
+
+		m_Effects[EFFECT_P2_EXPLOSION]->Get_Transform()->Set_State(CTransform::STATE_POSITION, vCurrentPos);
+		m_Effects[EFFECT_P2_EXPLOSION]->Set_Loop(true);
+
+		m_Effects[EFFECT_P2_LIGHTNING]->Get_Transform()->Set_State(CTransform::STATE_POSITION, m_pParentMatrix->Translation());
+		m_Effects[EFFECT_P2_LIGHTNING]->Set_Loop(true);
+
+		m_isActiveExplosionEffect = true;
+	}
+
+	if (m_isActiveElecTurnEffect)
+	{
+		_Vec3 vTrunEffectPos = m_Effects[EFFECT_P2_TURN]->Get_Transform()->Get_State(CTransform::STATE_POSITION);
+		vTrunEffectPos.y += 0.5f * fTimeDelta;
+
+		SocketMatrix = m_pModelCom->Get_BoneCombindTransformationMatrix("BN_Blade12");
+
+		for (size_t i = 0; i < 3; i++)
+		{
+			SocketMatrix.r[i] = XMVector3Normalize(SocketMatrix.r[i]);
+		}
+		XMStoreFloat4x4(&WorldMatrix, SocketMatrix * XMLoadFloat4x4(&m_WorldMatrix));
+
+		_Vec3 vTargetPos = WorldMatrix.Translation();
+
+		if (vTargetPos.y < vTrunEffectPos.y)
+		{
+			m_Effects[EFFECT_P2_TURN]->Set_Loop(false);
+		}
+		else
+		{
+			m_Effects[EFFECT_P2_TURN]->Get_Transform()->Set_State(CTransform::STATE_POSITION, vTrunEffectPos);
+		}
+	}
+
 }
 
 HRESULT CRaxasia_Sword_CutScene::Ready_Components()
@@ -315,6 +425,15 @@ HRESULT CRaxasia_Sword_CutScene::Ready_Effect()
 	if (nullptr == m_pEffect_Manager)
 		return E_FAIL;
 	Safe_AddRef(m_pEffect_Manager);
+
+	m_Effects.resize(EFFECT_END);
+
+	m_Effects[EFFECT_P2_TURN] = m_pEffect_Manager->Clone_Effect(TEXT("Raxasia_CutScene_P2_Weapon_Turn"), nullptr, nullptr, _Vec3(0.f, 0.f, 0.f));
+	m_Effects[EFFECT_P2_LIGHTNING_SMALL] = m_pEffect_Manager->Clone_Effect(TEXT("Raxasia_CutScene_P2_Lightning_Small"), nullptr, nullptr, _Vec3(0.f, 0.f, 0.f)); // 락사시아 기준 오른쪽 뒤
+	m_Effects[EFFECT_P2_LIGHTNING] = m_pEffect_Manager->Clone_Effect(TEXT("Raxasia_CutScene_P2_Lightning"), nullptr, nullptr, _Vec3(0.f, 0.f, 0.f));
+	m_Effects[EFFECT_P2_EXPLOSION] = m_pEffect_Manager->Clone_Effect(TEXT("Raxasia_CutScene_P2_Weapon_Shine_Explosion"), nullptr, nullptr, _Vec3(0.f, 0.f, 0.f));
+	m_Effects[EFFECT_P2_SHINE] = m_pEffect_Manager->Clone_Effect(TEXT("Raxasia_CutScene_P2_Shine"), nullptr, nullptr, _Vec3(0.f, 0.f, 0.f));
+
 
 	m_iTurnEffectFrame[0] = 32;
 	m_iTurnEffectFrame[1] = 37;
@@ -375,7 +494,17 @@ void CRaxasia_Sword_CutScene::Free()
 {
 	__super::Free();
 
-	Safe_Release(m_pEffect_Manager);
+	if (true == m_isCloned)
+	{
+		for (auto& pEffect : m_Effects)
+		{
+			pEffect->Set_Cloned(false);
+			Safe_Release(pEffect);
+		}
+		m_Effects.clear();
+		Safe_Release(m_pEffect_Manager);
+	}
+
 	Safe_Release(m_pShaderCom);
 	Safe_Release(m_pModelCom);
 

@@ -133,7 +133,7 @@ void CState_RaxasiaP2_Running_Fury::Update(_float fTimeDelta)
         {
             if (!m_bLockOn)
             {
-                m_vLockVec = { m_pMonster->Get_Transform()->Get_State(CTransform::STATE_LOOK) };
+                m_vLockVec = (_Vec3)m_pMonster->Get_Transform()->Get_State(CTransform::STATE_LOOK);
                 m_vLockVec.Normalize();
                 m_bLockOn = true;
             }
@@ -159,7 +159,7 @@ void CState_RaxasiaP2_Running_Fury::Update(_float fTimeDelta)
         {
             if (!m_bLockOn)
             {
-                m_vLockVec = { m_pMonster->Get_Transform()->Get_State(CTransform::STATE_LOOK) };
+                m_vLockVec = (_Vec3)m_pMonster->Get_Transform()->Get_State(CTransform::STATE_LOOK);
                 m_vLockVec.Normalize();
                 m_bLockOn = true;
             }

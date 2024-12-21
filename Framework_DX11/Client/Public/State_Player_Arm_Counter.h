@@ -26,6 +26,8 @@ private:
 
     _double*            m_pTrackPos = { nullptr };
 
+    _bool               m_isChangeLoop = {};
+
 private:
     _bool               End_Check();
 
@@ -33,6 +35,13 @@ private:
     _int                m_iColliderStartFrame = {};
     _int                m_iColliderEndFrame = {};
     void                Control_Collider();
+
+private:
+    _uint               m_iActiveEffectFrame = {};
+    _bool               m_isActiveEffect = {};
+    _uint               m_iDeActiveEffectFrame = {};
+
+    void                Control_Effect(_int iFrame);
 
 public:
     static CState_Player_Arm_Counter* Create(class CFsm* pFsm, class CPlayer* pPlayer, _uint iStateNum, void* pArg = nullptr);

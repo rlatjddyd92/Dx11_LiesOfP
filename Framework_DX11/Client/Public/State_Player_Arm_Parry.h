@@ -34,6 +34,12 @@ private:
     _bool               m_isPlaySound = {};
     void                Control_Sound();
 
+private:
+    _int                m_iEffefctFrame = {};
+    _bool               m_isActiveEffect = {};
+
+    void                Control_Effect(_int iFrame);
+
 public:
     static CState_Player_Arm_Parry* Create(class CFsm* pFsm, class CPlayer* pPlayer, _uint iStateNum, void* pArg = nullptr);
     virtual void Free() override;

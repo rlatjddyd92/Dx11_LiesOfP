@@ -58,6 +58,7 @@ private:
     _int                m_iEffectCombineEndFrame = {};
     _bool               m_isActiveSeperateEffect = {};
     _bool               m_isActiveCombineEffect = {};
+    _bool               m_isActiveFableEffect[2] = {};
 
     void                Control_Effect(_int iFrame);
 

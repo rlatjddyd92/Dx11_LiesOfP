@@ -24,18 +24,30 @@ HRESULT CState_RaxasiaP2_JumpStamp::Initialize(_uint iStateNum, void* pArg)
 HRESULT CState_RaxasiaP2_JumpStamp::Start_State(void* pArg)
 {
     m_iRouteTrack = 0;
-    m_pMonster->Change_Animation(AN_INCHENT, false, 0.1f, 0);
+    m_fMoveHeight = 0.f;
+    m_fCorHeightForLand = 0.f;
+    m_pMonster->Get_Model()->ReadyDenyNextTranslate(4);
+    m_pMonster->Change_Animation(AN_INCHENT, false, 0.05f, 0);
 
     m_bSwingSound = false;
     m_bStartSpot = true;
     m_bSwing = false;
+    m_bStartHeightCor = false;
 
+    m_vTargetDir = _Vec4{};
+    m_vRootMoveStack = _Vec3{};
+    m_vFlyMoveStack = _Vec3{};
+    m_vCurVelocity = _Vec3{};
+    
     m_bStomp = false;
     m_bAccel = false;
     m_bEnvelop = false;
     m_bInchent = false;
     m_bOnMark = false;
+    m_bNaviLockCheck = false;
 
+    m_pMonster->Get_RigidBody()->Set_IsOnCell(false);
+    m_pMonster->Get_RigidBody()->Set_IsLockCell(false);
 
     return S_OK;
 }
@@ -44,11 +56,37 @@ void CState_RaxasiaP2_JumpStamp::Update(_float fTimeDelta)
 {
     _double CurTrackPos = m_pMonster->Get_CurrentTrackPos();
 
+    if (!(m_iRouteTrack == 3 && CurTrackPos >= 15.f))
+    {
+
+        _Vec3 vMove = m_pMonster->Get_Model()->Get_BoneCombindTransformationMatrix_Ptr(5)->Translation();
+        _float4x4 TransMat;
+        XMStoreFloat4x4(&TransMat, m_pMonster->Get_Model()->Get_Bones()[4]->Get_TransformationMatrix());
+        TransMat._41 = 0.f;
+        TransMat._42 = 0.f;
+        TransMat._43 = 0.f;
+
+        m_pMonster->Get_Model()->Get_Bones()[4]->Set_TransformationMatrix(TransMat);;
+
+        m_pMonster->Get_Model()->Update_Bone();
+
+        vMove = XMVector3TransformNormal(vMove, m_pMonster->Get_Transform()->Get_WorldMatrix());
+        m_fCorHeightForLand = vMove.y;
+        _Vec3 vPos = m_pMonster->Get_Transform()->Get_State(CTransform::STATE_POSITION);
+
+        m_vCurVelocity = (vMove - m_vRootMoveStack) / fTimeDelta;
+
+        m_pMonster->Get_RigidBody()->Set_Velocity(m_vCurVelocity);
+
+        m_vRootMoveStack = vMove;
+    }
+
     switch (m_iRouteTrack)
     {
     case 0:
         if (End_Check())
         {
+            m_pMonster->Get_Model()->ReadyDenyNextTranslate(4);
             ++m_iRouteTrack;
             m_bSwing = false;
             m_pMonster->Change_Animation(AN_JUMPSTAMP_START, false, 0.1f, 0);
@@ -56,19 +94,30 @@ void CState_RaxasiaP2_JumpStamp::Update(_float fTimeDelta)
 
         break;
     case 1:
+    {
         if (End_Check())
         {
+            m_pMonster->Get_Model()->ReadyDenyNextTranslate(4);
+            m_vRootMoveStack = _Vec3{0.151717f, 2.042145f, 0.f};
             ++m_iRouteTrack;
             m_bSwing = false;
             m_pMonster->Change_Animation(AN_JUMPSTAMP_MIDDLE, false, 0.1f, 0);
         }
+        m_pMonster->Get_Transform()->LookAt_Lerp_NoHeight(m_pMonster->Get_TargetDir(), 0.5f, fTimeDelta);
 
         break;
+    }
+        
 
     case 2:
+    {
         if (End_Check())
         {
+            m_pMonster->Get_Model()->ReadyDenyNextTranslate(4);
             ++m_iRouteTrack;
+
+            m_fMoveHeight = m_vTargetDir.y - m_pMonster->Get_Transform()->Get_State(CTransform::STATE_POSITION).y;
+
             m_bSwing = false;
             m_pMonster->Change_Animation(AN_JUMPSTAMP_END, false, 0.1f, 0);
         }
@@ -77,28 +126,53 @@ void CState_RaxasiaP2_JumpStamp::Update(_float fTimeDelta)
             if (CurTrackPos >= 40.f)
             {
                 m_bStartSpot = false;
+
                 m_vTargetDir = m_pMonster->Get_TargetDir();
             }
         }
         if (CurTrackPos <= 40.f)
         {
-            m_pMonster->Get_Transform()->LookAt_Lerp_NoHeight(m_pMonster->Get_TargetDir(), 2.f, fTimeDelta);
+            m_pMonster->Get_Transform()->LookAt_Lerp_NoHeight(m_pMonster->Get_TargetDir(), 0.5f, fTimeDelta);
         }
 
+
         break;
+    }
+        
 
     case 3:
         if (End_Check())
         {
+            m_pMonster->Get_Model()->ReadyDenyNextTranslate(4);
             m_iRouteTrack = 0;
             m_pMonster->Change_State(CRaxasia::IDLE);
             return;
         }
         if (CurTrackPos <= 15.f)
         {
-            _Vec3 vMove = m_vTargetDir * ((_float)CurTrackPos / 15.f);
-            m_pMonster->Get_RigidBody()->Set_Velocity((vMove - m_vFlyMoveStack) / fTimeDelta);
-            m_vFlyMoveStack = vMove;
+            _Vec3 vPos = m_pMonster->Get_Transform()->Get_State(CTransform::STATE_POSITION);
+            _Vec3 vTargetPos = m_pMonster->Get_TargetPos();
+            if (vPos.y <= vTargetPos.y + m_fCorHeightForLand * 2)
+            {
+                vPos.y = vTargetPos.y + m_fCorHeightForLand * 2;
+                m_pMonster->Get_RigidBody()->Set_GloblePose(vPos);
+                m_pMonster->Get_RigidBody()->Set_Velocity(_Vec3{});
+            }
+            else
+            {
+                _Vec3 vMove = m_vTargetDir * ((_float)CurTrackPos / 15.f);
+                _float fMoveY = m_fMoveHeight * ((_float)CurTrackPos / 15.f);
+                vMove.y = fMoveY;
+                m_pMonster->Get_RigidBody()->Set_Velocity(m_vCurVelocity + (vMove - m_vFlyMoveStack) / fTimeDelta);
+                m_vFlyMoveStack = vMove;
+            }
+            
+        }
+        else if(!m_bNaviLockCheck)
+        {
+            m_bNaviLockCheck = true;
+            m_pMonster->Get_RigidBody()->Set_IsOnCell(true);
+            m_pMonster->Get_RigidBody()->Set_IsLockCell(true);
         }
 
         break;
@@ -106,6 +180,8 @@ void CState_RaxasiaP2_JumpStamp::Update(_float fTimeDelta)
     default:
         break;
     }
+
+
 
     Collider_Check(CurTrackPos);
     Effect_Check(CurTrackPos);

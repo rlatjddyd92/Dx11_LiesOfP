@@ -7,6 +7,7 @@
 #include "Pawn.h"
 #include "SimonManus.h"
 #include "Raxasia.h"
+#include "Sophia.h"
 
 CCutScene::CCutScene(ID3D11Device* pDevice, ID3D11DeviceContext* pContext)
 	: CGameObject{ pDevice, pContext }
@@ -229,7 +230,17 @@ void CCutScene::First_Setting()
 	switch (m_iIndex)
 	{
 	case SOPHIA_DEAD:
+	{
+		CSophia* pSophia = dynamic_cast<CSophia*>(m_pGameInstance->Find_Object(LEVEL_GAMEPLAY, TEXT("Layer_Sophia"), 0));
+		pSophia->Active_HeartEffect();
+
+		_Vec3 vStartPos = _Vec3(11.8962f, -89.3730f, 10.0344f);
+		pPlayer->Get_RigidBody()->Set_GloblePose(vStartPos);
+		pPlayer->Get_Navigation()->Research_Cell(vStartPos);
+		pPlayer->Get_Transform()->LookAt_NoHeight(pSophia->Get_Transform()->Get_State(CTransform::STATE_POSITION));
+
 		pPlayer->Disappear_Weapon();
+	}
 		break;
 	case BOSS1_MEET2:
 		pPlayer->IsActive(false);
@@ -285,10 +296,15 @@ void CCutScene::End_Setting()
 		pPlayer->Get_Navigation()->Move_to_Cell(pPlayer->Get_RigidBody(), 1178);
 		break;
 	case SOPHIA_DEAD:
+	{
+		CSophia* pSophia = dynamic_cast<CSophia*>(m_pGameInstance->Find_Object(LEVEL_GAMEPLAY, TEXT("Layer_Sophia"), 0));
+		pSophia->Set_IsRender(false);
+
 		pPlayer->Appear_Weapon();
 		pPlayer->Get_Model()->ReadyDenyNextTranslate(4);
 		pPlayer->Change_State(CPlayer::OH_IDLE);
 		pPlayer->Get_Navigation()->Move_to_Cell(pPlayer->Get_RigidBody(), 1178);
+	}
 		break;	
 	case BOSS1_MEET1:
 		dynamic_cast<CCutScene*>(m_pGameInstance->Find_Object(LEVEL_GAMEPLAY, TEXT("Layer_CutScene"), BOSS1_MEET2))->Start_Play();

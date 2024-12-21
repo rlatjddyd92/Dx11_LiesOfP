@@ -173,16 +173,7 @@ void CState_Player_Rapier_ParryAttack::Control_Sound(_int iFrame)
 
 void CState_Player_Rapier_ParryAttack::Control_Effect(_int iFrame)
 {
-    _uint iCurAnim = m_pPlayer->Get_CurrentAnimIndex();
-
-    if (!m_isActiveEffect[0] && iCurAnim == m_iAnimation_RapierParryAtk[0] && (iFrame == m_iColliderStartFrame[0] || iFrame == m_iColliderStartFrame[0] + 1))
-    {
-        m_isActiveEffect[0] = true;
-    }
-    else if (!m_isActiveEffect[1] && iCurAnim == m_iAnimation_RapierParryAtk[1] && (iFrame == m_iColliderStartFrame[3] || iFrame == m_iColliderStartFrame[3] + 1))
-    {
-        m_isActiveEffect[1] = true;
-    }
+  
 }
 
 CState_Player_Rapier_ParryAttack* CState_Player_Rapier_ParryAttack::Create(CFsm* pFsm, CPlayer* pPlayer, _uint iStateNum, void* pArg)

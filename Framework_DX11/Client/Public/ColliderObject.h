@@ -11,6 +11,7 @@ public:
 		CBounding::BOUNDING_DESC* pBoundingDesc;
 		CCollider::TYPE		eType;
 		_float fDamageAmount = {};
+		class CPawn* pOWner = { nullptr };
 	}COLIDEROBJECT_DESC;
 
 private:
@@ -32,6 +33,7 @@ public:
 	virtual void OnCollisionExit(CGameObject* pOther) override;
 
 private:
+	class CPawn*		m_pOwner = { nullptr };
 	CCollider::TYPE		m_eType{ CCollider::TYPE::TYPE_END};
 
 private:

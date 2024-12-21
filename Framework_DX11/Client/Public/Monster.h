@@ -14,7 +14,7 @@ class CMonster abstract : public CPawn
 {
 public:
 	enum MONSTER_STATE {
-		IDLE, WALK, RUN, ATTACK, GROGY, HITFATAL, PARALYZE, DIE,
+		IDLE, GROGY, HITFATAL, PARALYZE, DIE,
 
 		MONSTER_STATE_END
 	};
@@ -43,6 +43,7 @@ public:
 public:
 	virtual void		Active_Effect(const _uint eType, _bool isLoop = true) {};
 	virtual void		DeActive_Effect(const _uint eType) {};
+	virtual void		DeActive_AllEffect() {};
 
 	virtual _bool		Get_EffectsLoop(const _uint eType) = 0;
 
