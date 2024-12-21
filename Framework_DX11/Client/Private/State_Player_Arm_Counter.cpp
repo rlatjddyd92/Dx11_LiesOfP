@@ -18,7 +18,7 @@ HRESULT CState_Player_Arm_Counter::Initialize(_uint iStateNum, void* pArg)
 
     m_pTrackPos = pDesc->pPrevTrackPos;
 
-    m_iAnimation_Arm_Counter = m_pPlayer->Get_Model()->Find_AnimationIndex("AS_Pino_Arm_GuardEx_Guard_Counter", 2.3f);
+    m_iAnimation_Arm_Counter = m_pPlayer->Get_Model()->Find_AnimationIndex("AS_Pino_Arm_GuardEx_Guard_Counter", 2.6f);
 
     m_iStateNum = iStateNum;
 
@@ -35,7 +35,7 @@ HRESULT CState_Player_Arm_Counter::Initialize(_uint iStateNum, void* pArg)
 
 HRESULT CState_Player_Arm_Counter::Start_State(void* pArg)
 {
-    m_pPlayer->Change_Animation(m_iAnimation_Arm_Counter, false, 0.2f, 0, true, true);
+    m_pPlayer->Change_Animation(m_iAnimation_Arm_Counter, false, 0.15f, 0, true, true);
 
     m_isActiveEffect = false;
 

@@ -799,7 +799,7 @@ _bool CPlayer::Calc_DamageGain(_float fAtkDmg, _Vec3 vHitPos, _uint iHitType, _u
 		}
 		else if (ATK_WEAK == iAttackStrength)
 		{
-			if (1)
+			if (0)
 			{
 				if (nullptr != pAttackerMonster)
 				{
@@ -816,7 +816,7 @@ _bool CPlayer::Calc_DamageGain(_float fAtkDmg, _Vec3 vHitPos, _uint iHitType, _u
 		}
 		else if (ATK_NORMAL == iAttackStrength)
 		{
-			if (1)
+			if (0)
 			{
 				if (nullptr != pAttackerMonster)
 				{

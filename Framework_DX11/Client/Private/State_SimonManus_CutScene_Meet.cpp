@@ -4,6 +4,9 @@
 #include "Model.h"
 #include "SimonManus.h"
 #include "CutScene.h"
+
+#include "GameInterface_Controller.h"
+
 CState_SimonManus_CutScene_Meet::CState_SimonManus_CutScene_Meet(CFsm* pFsm, CMonster* pMonster)
     :CState{ pFsm }
     , m_pMonster{ pMonster }
@@ -88,7 +91,8 @@ void CState_SimonManus_CutScene_Meet::Update(_float fTimeDelta)
         }
     }
 
-    End_Check(fTimeDelta);
+    Control_Dialog(iFrame);
+    End_Check();
 }
 
 void CState_SimonManus_CutScene_Meet::End_State()
@@ -124,6 +128,37 @@ void CState_SimonManus_CutScene_Meet::End_Check(_float fTimeDelta)
     else if (m_pMonster->Get_EndAnim(m_iAnimation_End))
     {
        // m_pMonster->End_CutScene(0);
+    }
+}
+
+void CState_SimonManus_CutScene_Meet::Control_Dialog(_int iFrame)
+{
+    _uint iCurAnimIndex = m_pMonster->Get_CurrentAnimIndex();
+
+    if ( !m_isShowDialog[0] && iCurAnimIndex == m_iAnimation_Turn && iFrame >= 1045)
+    {
+        GET_GAMEINTERFACE->Show_Script(TEXT("보라, 이것이 바로 에르고다. 실로 장엄하지 않은가!"), TEXT("none"), 11.f);
+        m_isShowDialog[0] = true;
+    }
+    else  if (!m_isShowDialog[1] && iCurAnimIndex == m_iAnimation_Talk && iFrame >= 325)
+    {
+        GET_GAMEINTERFACE->Show_Script(TEXT("불멸하는 존재, 거짓없는 세계를 이루는 열쇠지"), TEXT("none"), 11.f);
+        m_isShowDialog[1] = true;
+    }
+    else  if (!m_isShowDialog[2] && iFrame >= 1800)
+    {
+        GET_GAMEINTERFACE->Show_Script(TEXT("이제 그 진화의 문을 열 때가 되었다."), TEXT("none"), 7.f);
+        m_isShowDialog[2] = true;
+    }
+    else  if (!m_isShowDialog[3] && iFrame >= 2100)
+    {
+        GET_GAMEINTERFACE->Show_Script(TEXT("감사하라! 이것이 신조차 삼킬 자, 나 시몬 마누스가 주는 선물이다."), TEXT("none"), 12.f);
+        m_isShowDialog[3] = true;
+    }
+    else  if (!m_isShowDialog[4] && iFrame >= 2400)
+    {
+        GET_GAMEINTERFACE->Show_Script(TEXT("이제 태어날 너희의 신을 경배하라!"), TEXT("none"), 8.f);
+        m_isShowDialog[4] = true;
     }
 }
 
