@@ -85,7 +85,7 @@ void CState_SimonManus_CutScene_Meet::Update(_float fTimeDelta)
     if (iCurAnim == m_iAnimation_Hand)
     {
         _int iFrame = m_pMonster->Get_Frame();
-        if (iFrame > 240)
+        if (iFrame > 255)
         {
             m_pMonster->Active_Weapon();
         }
@@ -118,7 +118,7 @@ void CState_SimonManus_CutScene_Meet::End_Check(_float fTimeDelta)
     }
     else if (m_pMonster->Get_CurrentAnimIndex() == m_iAnimation_Hand && m_pMonster->Get_Model()->Get_CurrentFrame() > 607)
     {
-        m_pMonster->Change_Animation(m_iAnimation_End, false, 0.f, 63);
+        m_pMonster->Change_Animation(m_iAnimation_End, false, 0.f, 64);
     }
     else if (m_pMonster->Get_CurrentAnimIndex() == m_iAnimation_Hand && m_pMonster->Get_Model()->Get_CurrentFrame() > 560)
     {

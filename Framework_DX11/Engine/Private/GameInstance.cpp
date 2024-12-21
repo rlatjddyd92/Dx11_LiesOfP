@@ -182,7 +182,6 @@ HRESULT CGameInstance::Clear(_uint iLevelIndex)
 	/* 컴포넌트 원형들도 레벨별로 관리했었다. */
 	m_pComponent_Manager->Clear(iLevelIndex);
 
-
 	return S_OK;
 }
 
@@ -254,6 +253,22 @@ _uint CGameInstance::Get_CurLevelIndex()
 void CGameInstance::Set_CurLevelIndex(_uint iLevelIndex)
 {
 	m_pLevel_Manager->Set_CurLevelIndex(iLevelIndex);
+}
+_uint CGameInstance::Get_PrevLevelIndex()
+{
+	return m_pLevel_Manager->Get_PrevLevelIndex();
+}
+void CGameInstance::Set_PrevLevelIndex(_uint iLevelIndex)
+{
+	m_pLevel_Manager->Set_PrevLevelIndex(iLevelIndex);
+}
+void CGameInstance::Set_StaticLevelIndex(_uint iLevelIndex)
+{
+	m_pLevel_Manager->Set_StaticLevelIndex(iLevelIndex);
+}
+void CGameInstance::Set_LoadingLevelIndex(_uint iLevelIndex)
+{
+	m_pLevel_Manager->Set_LoadingLevelIndex(iLevelIndex);
 }
 #pragma endregion
 
@@ -580,7 +595,11 @@ _Vec3 CGameInstance::Get_DirectionLightDir()
 	return m_pLight_Manager->Get_DirectionLightDir();
 }
 
-
+void CGameInstance::Clear_Lights()
+{
+	m_pLight_Manager->Clear();
+}
+#pragma endregion
 
 #pragma region FONT_MANAGER 
 
@@ -928,13 +947,13 @@ void CGameInstance::Release_Engine()
 	Safe_Release(m_pPicking);
 	Safe_Release(m_pTarget_Manager);
 	Safe_Release(m_pFont_Manager);
-	Safe_Release(m_pLight_Manager);
 	Safe_Release(m_pPipeLine);
 	Safe_Release(m_pRenderer);
 	Safe_Release(m_pTimer_Manager);
 	Safe_Release(m_pObject_Manager);
 	Safe_Release(m_pComponent_Manager);
 	Safe_Release(m_pLevel_Manager);
+	Safe_Release(m_pLight_Manager);
 	Safe_Release(m_pPhysX_Manager);
 	Safe_Release(m_pInstance_Manager);
 	Safe_Release(m_pSound_Manager);

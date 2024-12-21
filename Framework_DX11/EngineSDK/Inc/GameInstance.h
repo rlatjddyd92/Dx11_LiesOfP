@@ -51,6 +51,11 @@ public:
 	class CLevel*	Get_CurLevel();
 	_uint			Get_CurLevelIndex();
 	void			Set_CurLevelIndex(_uint iLevelIndex);
+	_uint			Get_PrevLevelIndex();
+	void			Set_PrevLevelIndex(_uint iLevelIndex);
+
+	void			Set_StaticLevelIndex(_uint iLevelIndex);
+	void			Set_LoadingLevelIndex(_uint iLevelIndex);
 #pragma endregion
 
 #pragma region OBJECT_MANAGER
@@ -149,6 +154,8 @@ public:
 	void Delete_Light(_int iIndex);
 	_int Find_Light_Index(_Vec4 vPos);
 	_Vec3 Get_DirectionLightDir();
+
+	void Clear_Lights();
 #pragma endregion
 
 #pragma region FONT_MANAGER

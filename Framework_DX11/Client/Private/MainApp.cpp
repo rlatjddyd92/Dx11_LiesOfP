@@ -404,7 +404,7 @@ void CMainApp::Free()
 
 	// 24-11-09 김성용
 	// GameInterface 릴리즈
-	GET_GAMEINTERFACE->Release_GameInterface();
+	//GET_GAMEINTERFACE->Release_GameInterface();
 
 	Safe_Release(m_pGameInstance);
 	

@@ -27,12 +27,21 @@ HRESULT CLight_Manager::Add_Light(const LIGHT_DESC & LightDesc)
 	if (nullptr == pLight)
 		return E_FAIL;
 
-	m_Lights.push_back(pLight);
-
 	if (LIGHT_DESC::TYPE::TYPE_DIRECTIONAL == LightDesc.eType) {
 
 		m_vDirectionLightDir = _Vec3(LightDesc.vDirection.x, LightDesc.vDirection.y, LightDesc.vDirection.z);
+
+		CLight* pDirectionLight = Find_DirectionLight();
+
+		if (nullptr != pDirectionLight)
+		{
+			pDirectionLight->Set_LightDesc(LightDesc);
+
+			return S_OK;
+		}
 	}
+
+	m_Lights.push_back(pLight);
 
 	return S_OK;
 }
@@ -72,18 +81,24 @@ _int CLight_Manager::Find_Light_Index(_Vec4 vPos)
 	return -1;
 }
 
-_int CLight_Manager::Find_DirectionLight()
+void CLight_Manager::Clear()
+{
+	for (auto& pLight : m_Lights)
+		Safe_Release(pLight);
+
+	m_Lights.clear();
+}
+
+CLight* CLight_Manager::Find_DirectionLight()
 {
 	_int iIndex = 0;
 	for (auto& pLight : m_Lights)
 	{
 		if (pLight->Get_LightDesc()->eType == LIGHT_DESC::TYPE::TYPE_DIRECTIONAL)
-			return iIndex;
-
-		++iIndex;
+			return pLight;
 	}
 
-	return -1;
+	return nullptr;
 }
 
 CLight_Manager * CLight_Manager::Create()

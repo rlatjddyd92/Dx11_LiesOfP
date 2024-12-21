@@ -67,7 +67,6 @@ void CFreeCamera::Priority_Update(_float fTimeDelta)
 	}
 
 	__super::Priority_Update(fTimeDelta);
-	Calculat_CascadeFrustum();
 
 	m_ptOldMousePos = ptMouse;
 }
@@ -102,6 +101,8 @@ void CFreeCamera::Update(_float fTimeDelta)
 		currentPos += shakeOffset;
 		m_pTransformCom->Set_State(CTransform::STATE_POSITION, currentPos);
 	}
+
+	Calculat_CascadeFrustum();
 }
 
 void CFreeCamera::Late_Update(_float fTimeDelta)
