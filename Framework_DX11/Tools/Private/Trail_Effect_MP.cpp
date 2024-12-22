@@ -68,6 +68,9 @@ void CTrail_Effect_MP::Update(_float fTimeDelta)
 	Movement.fTimeDelta = fTimeDelta;
 	Movement.WorldMatrix = m_WorldMatrix;
 
+	if (7 == m_DefaultDesc.iShaderIndex && MT_FOLLOW == m_DefaultDesc.eType)
+		Movement.iState |= CTrail_MultiPoint_Instance::STATE_TRAIL;
+
 
 	_bool bOver = { false };
 
