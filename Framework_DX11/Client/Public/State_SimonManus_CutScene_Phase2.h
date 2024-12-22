@@ -34,6 +34,7 @@ private:
     _bool               m_bAnimationSpeedDown = { false };
     _bool               m_bAnimationStop = { false };
     _bool               m_bAnimationRestart = { false };
+    _bool               m_isFirstEmissive = {};
     _bool               m_isSecondEmissive = {};
 
     _float              m_fStopedTimer = { 0.f };

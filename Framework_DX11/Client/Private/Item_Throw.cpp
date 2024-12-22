@@ -197,7 +197,7 @@ void CItem_Throw::Explosion()
 		CEffect_Manager::Get_Instance()->Add_Effect_ToLayer(LEVEL_GAMEPLAY, TEXT("Player_Item_Bomb"), (_Vec3)m_pTransformCom->Get_State(CTransform::STATE_POSITION));
 		break;
 	case SPECIAL_ITEM::SP_THROW_BATTERY:
-		CEffect_Manager::Get_Instance()->Add_Effect_ToLayer(LEVEL_GAMEPLAY, TEXT("Player_Item_Fire"), (_Vec3)m_pTransformCom->Get_State(CTransform::STATE_POSITION));
+		CEffect_Manager::Get_Instance()->Add_Effect_ToLayer(LEVEL_GAMEPLAY, TEXT("Player_Item_Electric"), (_Vec3)m_pTransformCom->Get_State(CTransform::STATE_POSITION));
 		break;
 	}
 
