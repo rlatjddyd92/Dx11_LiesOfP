@@ -54,10 +54,7 @@ void CState_Player_TH_Idle::Update(_float fTimeDelta)
         m_fRButtonTime += fTimeDelta;
         if (m_fRButtonTime > 0.15f)
         {
-            if (m_pPlayer->Get_WeaponType() == CPlayer::WEP_RAPIER)
-                m_pPlayer->Change_State(CPlayer::RAPIER_CHARGE);
-            else if (m_pPlayer->Get_WeaponType() == CPlayer::WEP_SCISSOR)
-                m_pPlayer->Change_State(CPlayer::SCISSOR_CHARGE0);
+            m_pPlayer->Change_State(CPlayer::FLAME_RATTACK0);
         }
     }
     else if (m_pPlayer->Key_Tab(KEY::F))
