@@ -1084,9 +1084,6 @@
     <Filter Include="05.Fsm\Monster\CurruptedStrongArm_Puppet">
       <UniqueIdentifier>{b61a1f13-8a0f-45e8-9428-8852f8e82b01}</UniqueIdentifier>
     </Filter>
-    <Filter Include="05.Fsm\Monster\CurruptedStrongArm_Puppet\Idle">
-      <UniqueIdentifier>{36f5f2c2-3cc6-4135-8945-4d947dc2c2fb}</UniqueIdentifier>
-    </Filter>
     <Filter Include="05.Fsm\Monster\CurruptedStrongArm_Puppet\Attack">
       <UniqueIdentifier>{f2660a4a-a5cd-463d-9315-e2738909a7d1}</UniqueIdentifier>
     </Filter>
@@ -1134,7 +1131,7 @@
     </Filter>
     <Filter Include="05.Fsm\Monster\Raxasia\CutScene\Die">
       <UniqueIdentifier>{80716756-08fe-4729-85f6-929b429ac1c5}</UniqueIdentifier>
-	</Filter>
+    </Filter>
     <Filter Include="05.Fsm\Monster\Raxasia\P2\Attack\Route\Guard">
       <UniqueIdentifier>{dc500d27-cd7e-46e4-83fb-153428376054}</UniqueIdentifier>
     </Filter>
@@ -1227,6 +1224,21 @@
     </Filter>
     <Filter Include="05.Fsm\Monster\CarcassNormal\Attack\Route\HeadingMultiple">
       <UniqueIdentifier>{ef405b19-4ecd-4eb8-a5fe-3f7b75625347}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="05.Fsm\Monster\CarcassNormal\KnockBack">
+      <UniqueIdentifier>{026d4247-d4ff-493a-9711-0808f4524d77}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="05.Fsm\Monster\CarcassTail\KnockBack">
+      <UniqueIdentifier>{b3617b78-4b2b-4989-9408-6c6fce47507a}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="05.Fsm\Monster\RebornerBigA\KnockBack">
+      <UniqueIdentifier>{33bd324b-d1a6-4587-b694-4a91d0845bf7}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="05.Fsm\Monster\CurruptedStrongArm_Puppet\KnockBack">
+      <UniqueIdentifier>{f779a43c-19cf-474c-b119-acbbf5fd31f4}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="05.Fsm\Monster\CurruptedStrongArm_Puppet\Idle">
+      <UniqueIdentifier>{36f5f2c2-3cc6-4135-8945-4d947dc2c2fb}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -2179,7 +2191,7 @@
     </ClInclude>
     <ClInclude Include="..\Public\State_Raxasia_CutScene_Die.h">
       <Filter>05.Fsm\Monster\Raxasia\CutScene\Die</Filter>
-	</ClInclude>
+    </ClInclude>
     <ClInclude Include="..\Public\State_CurruptedStrongArm_StingTwice.h">
       <Filter>05.Fsm\Monster\CurruptedStrongArm_Puppet\Attack\Single\StingTwice</Filter>
     </ClInclude>
@@ -2254,6 +2266,18 @@
     </ClInclude>
     <ClInclude Include="..\Public\State_CarcassNormal_ClawRush.h">
       <Filter>05.Fsm\Monster\CarcassNormal\Attack\Single\ClawRush</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Public\State_RebornerBigA_KnockBack.h">
+      <Filter>05.Fsm\Monster\RebornerBigA\KnockBack</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Public\State_CarcassTail_KnockBack.h">
+      <Filter>05.Fsm\Monster\CarcassTail\KnockBack</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Public\State_CarcassNormal_KnockBack.h">
+      <Filter>05.Fsm\Monster\CarcassNormal\KnockBack</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Public\State_CurruptedStrongArm_KnockBack.h">
+      <Filter>05.Fsm\Monster\CurruptedStrongArm_Puppet\KnockBack</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -3176,7 +3200,7 @@
     </ClCompile>
     <ClCompile Include="..\Private\State_Raxasia_CutScene_Die.cpp">
       <Filter>05.Fsm\Monster\Raxasia\CutScene\Die</Filter>
-	</ClCompile>
+    </ClCompile>
     <ClCompile Include="..\Private\State_CurruptedStrongArm_SwipAttack.cpp">
       <Filter>05.Fsm\Monster\CurruptedStrongArm_Puppet\Attack\Single\SwipAttack</Filter>
     </ClCompile>
@@ -3251,6 +3275,18 @@
     </ClCompile>
     <ClCompile Include="..\Private\State_CarcassNormal_ClawRush.cpp">
       <Filter>05.Fsm\Monster\CarcassNormal\Attack\Single\ClawRush</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Private\State_RebornerBigA_KnockBack.cpp">
+      <Filter>05.Fsm\Monster\RebornerBigA\KnockBack</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Private\State_CarcassTail_KnockBack.cpp">
+      <Filter>05.Fsm\Monster\CarcassTail\KnockBack</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Private\State_CarcassNormal_KnockBack.cpp">
+      <Filter>05.Fsm\Monster\CarcassNormal\KnockBack</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Private\State_CurruptedStrongArm_KnockBack.cpp">
+      <Filter>05.Fsm\Monster\CurruptedStrongArm_Puppet\KnockBack</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

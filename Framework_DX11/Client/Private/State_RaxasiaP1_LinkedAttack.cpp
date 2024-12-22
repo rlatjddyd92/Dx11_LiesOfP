@@ -23,6 +23,12 @@ HRESULT CState_RaxasiaP1_LinkedAttack::Start_State(void* pArg)
     m_iRouteTrack = 0;
     m_pMonster->Change_Animation(AN_LINKEDATTACK_FIRST, false, 0.1f, 0);
 
+    m_bResetRim = false;
+    m_bControlRim = false;
+
+    m_fGoalRimAlpha = 0.1f;
+    m_fCurtRimAlpha = 1.f;
+
     m_bSwingSound = false;
 
     m_vRootMoveStack = _Vec3(0.f, 0.f, 0.f);
@@ -50,7 +56,7 @@ void CState_RaxasiaP1_LinkedAttack::Update(_float fTimeDelta)
         if (CurTrackPos <= 50.f || 
             CurTrackPos >= 130.f)
         {
-            m_pMonster->Get_Transform()->LookAt_Lerp_NoHeight(m_pMonster->Get_TargetDir(), 1.f, fTimeDelta);
+            m_pMonster->Get_Transform()->LookAt_Lerp_NoHeight(m_pMonster->Get_TargetDir(), 2.f, fTimeDelta);
         }
 
         break;
@@ -60,6 +66,7 @@ void CState_RaxasiaP1_LinkedAttack::Update(_float fTimeDelta)
         {
             ++m_iRouteTrack;
             m_bSwing = false;
+            m_bControlRim = true;
             m_vRootMoveStack = _Vec3(0.f, 0.f, 0.f);
             m_pMonster->SetUp_Animation(AN_LINKEDATTACK_LAST, false, 0);
         }
@@ -68,7 +75,7 @@ void CState_RaxasiaP1_LinkedAttack::Update(_float fTimeDelta)
             (CurTrackPos >= 80.f && CurTrackPos <= 90.f) ||
             CurTrackPos >= 115.f)
         {
-            m_pMonster->Get_Transform()->LookAt_Lerp_NoHeight(m_pMonster->Get_TargetDir(), 1.f, fTimeDelta);
+            m_pMonster->Get_Transform()->LookAt_Lerp_NoHeight(m_pMonster->Get_TargetDir(), 2.f, fTimeDelta);
         }
 
         break;
@@ -83,7 +90,16 @@ void CState_RaxasiaP1_LinkedAttack::Update(_float fTimeDelta)
 
         if (CurTrackPos <= 60.f)
         {
-            m_pMonster->Get_Transform()->LookAt_Lerp_NoHeight(m_pMonster->Get_TargetDir(), 1.f, fTimeDelta);
+            m_pMonster->Get_Transform()->LookAt_Lerp_NoHeight(m_pMonster->Get_TargetDir(), 2.f, fTimeDelta);
+        }
+
+        if (!m_bResetRim)
+        {
+            if (CurTrackPos >= 45.f)
+            {
+                m_fGoalRimAlpha = 1.f;
+                m_bResetRim = true;
+            }
         }
     default:
         break;
@@ -93,6 +109,11 @@ void CState_RaxasiaP1_LinkedAttack::Update(_float fTimeDelta)
     Collider_Check(CurTrackPos);
     Effect_Check(CurTrackPos);
     Control_Sound(CurTrackPos);
+
+    if (m_bControlRim)
+    {
+        Update_Rimlight();
+    }
 
 }
 
@@ -192,6 +213,20 @@ void CState_RaxasiaP1_LinkedAttack::Effect_Check(_double CurTrackPos)
         }
     }
 
+}
+
+void CState_RaxasiaP1_LinkedAttack::Update_Rimlight()
+{
+    m_fCurtRimAlpha += (m_fGoalRimAlpha - m_fCurtRimAlpha) / 15;
+    m_pMonster->Set_RimLightColor(_Vec4{ 0.9f, 0.f, 0.f, m_fCurtRimAlpha });
+    if (abs(m_fGoalRimAlpha - m_fCurtRimAlpha) < 0.1f)
+    {
+        m_fCurtRimAlpha = m_fGoalRimAlpha;
+        if (m_fGoalRimAlpha == 1.f)
+        {
+            m_pMonster->Set_RimLightColor(_Vec4{ 0.f, 0.f, 0.f, 1.f });
+        }
+    }
 }
 
 void CState_RaxasiaP1_LinkedAttack::Control_Sound(_double CurTrackPos)

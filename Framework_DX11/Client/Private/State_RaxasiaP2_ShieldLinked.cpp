@@ -23,7 +23,7 @@ HRESULT CState_RaxasiaP2_ShieldLinked::Initialize(_uint iStateNum, void* pArg)
 HRESULT CState_RaxasiaP2_ShieldLinked::Start_State(void* pArg)
 {
     m_iRouteTrack = 0;
-    m_pMonster->Change_Animation(AN_START, false, 0.1f, 0);
+    m_pMonster->Change_Animation(AN_SHIELDATTACK_TWICE, false, 0.1f, 0);
 
     m_bSwingSound = false;
 
@@ -40,24 +40,11 @@ void CState_RaxasiaP2_ShieldLinked::Update(_float fTimeDelta)
     switch (m_iRouteTrack)
     {
     case 0:
-        if (End_Check())
-        {
-            ++m_iRouteTrack;
-            m_bSwing = false;
-            m_pMonster->Change_Animation(AN_SHIELDATTACK_TWICE, false, 0.02f, 0);
-            return;
-        }
-        
-        m_pMonster->Get_Transform()->LookAt_Lerp_NoHeight(m_pMonster->Get_TargetDir(), 1.f, fTimeDelta);
-
-        break;
-
-    case 1:
         if (CurTrackPos >= 255)
         {
             ++m_iRouteTrack;
             m_bSwing = false;
-            m_pMonster->Change_Animation(AN_START, false, 0.02f, 0);
+            m_pMonster->Change_Animation(AN_START, false, 0.1f, 0);
             return;
         }
 
@@ -70,24 +57,25 @@ void CState_RaxasiaP2_ShieldLinked::Update(_float fTimeDelta)
 
         break;
 
-    case 2:
+    case 1:
         if (End_Check())
         {
             ++m_iRouteTrack;
             m_bSwing = false;
-            m_pMonster->Change_Animation(AN_SHIELDATTACK, false, 0.02f, 0);
+            m_pMonster->Change_Animation(AN_SHIELDATTACK, false, 0.1f, 0);
         }
         
         m_pMonster->Get_Transform()->LookAt_Lerp_NoHeight(m_pMonster->Get_TargetDir(), 1.f, fTimeDelta);
 
         break;
 
-    case 3:
+    case 2:
         if (End_Check())
         {
             ++m_iRouteTrack;
             m_bSwing = false;
-            m_pMonster->Change_Animation(AN_JUMPMAGIC, false, 0.02f, 0);
+            m_pMonster->Change_Animation(AN_JUMPMAGIC, false, 0.1f, 0);
+            return;
         }
 
         if (CurTrackPos <= 25.f ||
@@ -97,7 +85,7 @@ void CState_RaxasiaP2_ShieldLinked::Update(_float fTimeDelta)
         }
         break;
 
-    case 4:
+    case 3:
         if (End_Check())
         {
             m_pMonster->Change_State(CRaxasia::IDLE);
@@ -120,6 +108,7 @@ void CState_RaxasiaP2_ShieldLinked::Update(_float fTimeDelta)
 
 void CState_RaxasiaP2_ShieldLinked::End_State()
 {
+    m_pMonster->DeActive_Effect(CRaxasia::EFFECT_INCHENTSWORD_P2);
 }
 
 _bool CState_RaxasiaP2_ShieldLinked::End_Check()
@@ -129,34 +118,27 @@ _bool CState_RaxasiaP2_ShieldLinked::End_Check()
     switch (m_iRouteTrack)
     {
     case 0:
-        if ((AN_START) == iCurAnim)
-        {
-            bEndCheck = m_pMonster->Get_EndAnim(AN_START);
-        }
-        break;
-
-    case 1:
         if ((AN_SHIELDATTACK_TWICE) == iCurAnim)
         {
             bEndCheck = m_pMonster->Get_EndAnim(AN_SHIELDATTACK_TWICE);
         }
         break;
 
-    case 2:
+    case 1:
         if ((AN_START) == iCurAnim)
         {
             bEndCheck = m_pMonster->Get_EndAnim(AN_START);
         }
         break;
 
-    case 3:
+    case 2:
         if ((AN_SHIELDATTACK) == iCurAnim)
         {
             bEndCheck = m_pMonster->Get_EndAnim(AN_SHIELDATTACK);
         }
         break;
 
-    case 4:
+    case 3:
         if ((AN_JUMPMAGIC) == iCurAnim)
         {
             bEndCheck = m_pMonster->Get_EndAnim(AN_JUMPMAGIC);
@@ -172,27 +154,27 @@ _bool CState_RaxasiaP2_ShieldLinked::End_Check()
 
 void CState_RaxasiaP2_ShieldLinked::Collider_Check(_double CurTrackPos)
 {
-    if (m_iRouteTrack == 1)
+    if (m_iRouteTrack == 0)
     {
         if ((CurTrackPos >= 130.f && CurTrackPos <= 145.f) ||
             (CurTrackPos >= 175.f && CurTrackPos <= 195.f))
         {
-            m_pMonster->Active_CurrentWeaponCollider(1.3f, 1, HIT_TYPE::HIT_METAL, ATTACK_STRENGTH::ATK_NORMAL);
+            m_pMonster->Active_CurrentWeaponCollider(1.2f, 1, HIT_TYPE::HIT_METAL, ATTACK_STRENGTH::ATK_WEAK);
         }
         else
         {
-            m_pMonster->DeActive_CurretnWeaponCollider();
+            m_pMonster->DeActive_CurretnWeaponCollider(1);
         }
     }
-    else if (m_iRouteTrack == 3)
+    else if (m_iRouteTrack == 2)
     {
-        if ((CurTrackPos >= 35.f && CurTrackPos <= 60.f))
+        if ((CurTrackPos >= 35.f && CurTrackPos <= 50.f))
         {
-            m_pMonster->Active_CurrentWeaponCollider(1.3f, 1, HIT_TYPE::HIT_METAL, ATTACK_STRENGTH::ATK_NORMAL);
+            m_pMonster->Active_CurrentWeaponCollider(1.4f, 1, HIT_TYPE::HIT_METAL, ATTACK_STRENGTH::ATK_NORMAL);
         }
         else
         {
-            m_pMonster->DeActive_CurretnWeaponCollider();
+            m_pMonster->DeActive_CurretnWeaponCollider(1);
         }
     }
 }
@@ -203,14 +185,14 @@ void CState_RaxasiaP2_ShieldLinked::Effect_Check(_double CurTrackPos)
     {
         if (!m_bCharge)
         {
-            if (CurTrackPos >= 35.f)
+            if (CurTrackPos >= 60.f)
             {
                 m_pMonster->Active_Effect(CRaxasia::EFFECT_INCHENTSWORD_P2, true);
                 m_bCharge = true;
             }
         }
     }
-    else if (m_iRouteTrack == 4)
+    else if (m_iRouteTrack == 3)
     {
 
         if (!m_bJump)
@@ -232,7 +214,7 @@ void CState_RaxasiaP2_ShieldLinked::Effect_Check(_double CurTrackPos)
 
         if (!m_bFire)
         {
-            if (CurTrackPos >= 193.f)
+            if (CurTrackPos >= 195.f)
             {
                 m_bFire = true;
 
@@ -244,7 +226,6 @@ void CState_RaxasiaP2_ShieldLinked::Effect_Check(_double CurTrackPos)
                     (*m_pMonster->Get_BoneCombinedMat(m_pMonster->Get_Model()->Get_UFBIndices(UFB_WEAPON))
                         * (m_pMonster->Get_Transform()->Get_WorldMatrix())));
                 vPos = XMVector3TransformCoord(vPos, XMLoadFloat4x4(&WorldMat));
-                vPos.y = m_pMonster->Get_Transform()->Get_State(CTransform::STATE_POSITION).y;
 
                 Desc.vPos = vPos;
 
@@ -253,6 +234,8 @@ void CState_RaxasiaP2_ShieldLinked::Effect_Check(_double CurTrackPos)
 
                 Desc.vTargetPos = _Vec3{ m_pMonster->Get_TargetPos() };
                 Desc.pOwner = m_pMonster;
+
+                Desc.iTrack_State = 1;
 
                 m_pGameInstance->Add_CloneObject_ToLayer(LEVEL_GAMEPLAY, TEXT("Monster_Attack"), TEXT("Prototype_GameObject_ThunderBolt"), &Desc);
             }

@@ -28,7 +28,7 @@ private:
     class CMonster* m_pMonster = { nullptr };
 
     _bool               m_bFirstMeetCheck = { false };
-    _bool               m_bDiscover = { false };
+    _bool*              m_pDiscover = { nullptr };
 
     _float              m_fRecognitionDist = { 15.f };
     _float              m_fDiscoverDist = { 4.f };

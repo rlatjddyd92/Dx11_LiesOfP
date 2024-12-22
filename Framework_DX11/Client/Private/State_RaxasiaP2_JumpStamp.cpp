@@ -27,7 +27,7 @@ HRESULT CState_RaxasiaP2_JumpStamp::Start_State(void* pArg)
     m_fMoveHeight = 0.f;
     m_fCorHeightForLand = 0.f;
     m_pMonster->Get_Model()->ReadyDenyNextTranslate(4);
-    m_pMonster->Change_Animation(AN_INCHENT, false, 0.05f, 0);
+    m_pMonster->SetUp_Animation(AN_INCHENT, false, 0);
 
     m_bSwingSound = false;
     m_bStartSpot = true;
@@ -90,6 +90,7 @@ void CState_RaxasiaP2_JumpStamp::Update(_float fTimeDelta)
             ++m_iRouteTrack;
             m_bSwing = false;
             m_pMonster->Change_Animation(AN_JUMPSTAMP_START, false, 0.1f, 0);
+            return;
         }
 
         break;
@@ -102,6 +103,7 @@ void CState_RaxasiaP2_JumpStamp::Update(_float fTimeDelta)
             ++m_iRouteTrack;
             m_bSwing = false;
             m_pMonster->Change_Animation(AN_JUMPSTAMP_MIDDLE, false, 0.1f, 0);
+            return;
         }
         m_pMonster->Get_Transform()->LookAt_Lerp_NoHeight(m_pMonster->Get_TargetDir(), 0.5f, fTimeDelta);
 
@@ -120,6 +122,7 @@ void CState_RaxasiaP2_JumpStamp::Update(_float fTimeDelta)
 
             m_bSwing = false;
             m_pMonster->Change_Animation(AN_JUMPSTAMP_END, false, 0.1f, 0);
+            return;
         }
         if (m_bStartSpot)
         {
@@ -275,7 +278,7 @@ void CState_RaxasiaP2_JumpStamp::Effect_Check(_double CurTrackPos)
     {
         if (!m_bStomp)
         {
-            if (CurTrackPos >= 15.f)
+            if (CurTrackPos >= 18.f)
             {
                 _float4x4 WorldMat{};
                 _Vec3 vPos = { 0.f, 0.f, -1.75f };
@@ -285,8 +288,14 @@ void CState_RaxasiaP2_JumpStamp::Effect_Check(_double CurTrackPos)
                 vPos = XMVector3TransformCoord(vPos, XMLoadFloat4x4(&WorldMat));
                 vPos.y = m_pMonster->Get_Transform()->Get_State(CTransform::STATE_POSITION).y;
 
-                CEffect_Manager::Get_Instance()->Add_Effect_ToLayer(LEVEL_GAMEPLAY, TEXT("Raxasia_Attack_ThunderStamp_Mark_Explositon"),
-                    vPos, _Vec3{ m_pMonster->Get_TargetDir() });
+                CAttackObject::ATKOBJ_DESC Desc{};
+                Desc.vPos = vPos;
+                Desc.vDir = _Vec3{ m_pMonster->Get_TargetDir() };
+                Desc.pOwner = m_pMonster;
+                Desc.vTargetPos = _Vec3{ m_pMonster->Get_TargetPos() };
+                Desc.iTrack_State = 1;
+
+                m_pGameInstance->Add_CloneObject_ToLayer(LEVEL_GAMEPLAY, TEXT("Monster_Attack"), TEXT("Prototype_GameObject_ThunderStampMark"), &Desc);
 
                 m_bStomp = true;
             }

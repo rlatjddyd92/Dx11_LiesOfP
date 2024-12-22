@@ -317,8 +317,13 @@ void CState_RaxasiaP2_Declare_War::Effect_Check(_double CurTrackPos, _float fTim
                     XMStoreFloat4x4(&WorldMat, m_pMonster->Get_Transform()->Get_WorldMatrix());
                     vPos = XMVector3TransformCoord(vPos, XMLoadFloat4x4(&WorldMat));
 
-                    CEffect_Manager::Get_Instance()->Add_Effect_ToLayer(LEVEL_GAMEPLAY, TEXT("Raxasia_Attack_ThunderLanding"),
-                        vPos, _Vec3{ m_pMonster->Get_TargetDir() });
+                    CAttackObject::ATKOBJ_DESC Desc{};
+                    Desc.vPos = vPos;
+                    Desc.vDir = _Vec3{ m_pMonster->Get_TargetDir() };
+                    Desc.pOwner = m_pMonster;
+                    Desc.vTargetPos = _Vec3{ m_pMonster->Get_TargetPos() };
+
+                    m_pGameInstance->Add_CloneObject_ToLayer(LEVEL_GAMEPLAY, TEXT("Monster_Attack"), TEXT("Raxasia_Attack_ThunderLanding"), &Desc);
 
                     m_pMonster->DeActive_Effect(CRaxasia::EFFECT_THUNDERENVELOP_SMALL);
                     m_pMonster->DeActive_Effect(CRaxasia::EFFECT_THUNDERACCEL);

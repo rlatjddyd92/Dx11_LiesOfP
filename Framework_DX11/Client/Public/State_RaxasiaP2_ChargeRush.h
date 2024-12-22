@@ -11,7 +11,7 @@ class CState_RaxasiaP2_ChargeRush : public CState
 {
 private:
     typedef enum {
-        AN_CHARGE = 28, AN_SHIELDRUSH = 29
+        AN_CHARGE = 28, AN_CHARGE_LOOP = 27, AN_SHIELDRUSH = 29
     }ANIMNUM;
 
 public:
@@ -28,6 +28,14 @@ private:
     class CMonster* m_pMonster = { nullptr };
 
 
+    _float              m_fCurtRimAlpha = {};
+    _float              m_fGoalRimAlpha = {};
+
+    _bool               m_bResetRim = { false };
+    _bool               m_bControlRim = { false };
+
+    _bool               m_bSpeedController = { false };
+
     _bool               m_bCharge = { false };
     _bool               m_bRush = { false };
     _bool               m_bSwing = { false };
@@ -40,6 +48,7 @@ private:
     _bool               End_Check();
     void                Collider_Check(_double CurTrackPos);
     void                Effect_Check(_double CurTrackPos);
+    void                Update_Rimlight();
     void                Control_Sound(_double CurTrackPos);
 
 public:

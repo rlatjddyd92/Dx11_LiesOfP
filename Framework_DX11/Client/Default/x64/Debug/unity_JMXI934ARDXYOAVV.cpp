@@ -141,10 +141,16 @@
 #include "C:\Users\User\Desktop\GitHubRepo\new\Dx11_LiesOfP\Framework_DX11\Client\Private\State_CarcassNormal_Idle.cpp"
 
 
+#include "C:\Users\User\Desktop\GitHubRepo\new\Dx11_LiesOfP\Framework_DX11\Client\Private\State_CarcassNormal_KnockBack.cpp"
+
+
 #include "C:\Users\User\Desktop\GitHubRepo\new\Dx11_LiesOfP\Framework_DX11\Client\Private\State_CarcassNormal_TripleClaw.cpp"
 
 
 #include "C:\Users\User\Desktop\GitHubRepo\new\Dx11_LiesOfP\Framework_DX11\Client\Private\State_CarcassNormal_TripleClaw_2.cpp"
+
+
+#include "C:\Users\User\Desktop\GitHubRepo\new\Dx11_LiesOfP\Framework_DX11\Client\Private\State_CarcassTail_KnockBack.cpp"
 
 
 #include "C:\Users\User\Desktop\GitHubRepo\new\Dx11_LiesOfP\Framework_DX11\Client\Private\State_CurruptedStrongArm_Die.cpp"
@@ -160,6 +166,9 @@
 
 
 #include "C:\Users\User\Desktop\GitHubRepo\new\Dx11_LiesOfP\Framework_DX11\Client\Private\State_CurruptedStrongArm_JumpPunch.cpp"
+
+
+#include "C:\Users\User\Desktop\GitHubRepo\new\Dx11_LiesOfP\Framework_DX11\Client\Private\State_CurruptedStrongArm_KnockBack.cpp"
 
 
 #include "C:\Users\User\Desktop\GitHubRepo\new\Dx11_LiesOfP\Framework_DX11\Client\Private\State_CurruptedStrongArm_StingTwice.cpp"
@@ -337,6 +346,9 @@
 
 
 #include "C:\Users\User\Desktop\GitHubRepo\new\Dx11_LiesOfP\Framework_DX11\Client\Private\State_RebornerBigA_Idle.cpp"
+
+
+#include "C:\Users\User\Desktop\GitHubRepo\new\Dx11_LiesOfP\Framework_DX11\Client\Private\State_RebornerBigA_KnockBack.cpp"
 
 
 #include "C:\Users\User\Desktop\GitHubRepo\new\Dx11_LiesOfP\Framework_DX11\Client\Private\State_RebornerBigA_RushSting.cpp"

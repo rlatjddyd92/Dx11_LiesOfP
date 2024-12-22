@@ -15,6 +15,7 @@
 #include "State_CurruptedStrongArm_Die.h"
 #include "State_CurruptedStrongArm_Grogy.h"
 #include "State_CurruptedStrongArm_HitFatal.h"
+#include "State_CurruptedStrongArm_KnockBack.h"
 
 #include "State_CurruptedStrongArm_JumpPunch.h"
 #include "State_CurruptedStrongArm_StingTwice.h"
@@ -304,6 +305,10 @@ HRESULT CCurruptedStrongArm_Puppet::Ready_Components()
 
 	m_pColliderObject[TYPE_TENTACLE_BR] = dynamic_cast<CColliderObject*>(m_pGameInstance->Clone_GameObject(TEXT("Prototype_GameObject_ColliderObj"), &Desc));
 
+	for (_int i = 0; i < CT_END - 1; ++i)
+	{
+		m_pColliderObject[i]->DeActive_Collider();
+	}
 
 	// 항상 마지막에 생성하기
 	CRigidBody::RIGIDBODY_DESC RigidBodyDesc{};
@@ -347,6 +352,7 @@ HRESULT CCurruptedStrongArm_Puppet::Ready_FSM()
 	m_pFsmCom->Add_State(CState_CurruptedStrongArm_Grogy::Create(m_pFsmCom, this, GROGY, &Desc));
 	m_pFsmCom->Add_State(CState_CurruptedStrongArm_HitFatal::Create(m_pFsmCom, this, HITFATAL, &Desc));
 	m_pFsmCom->Add_State(CState_CurruptedStrongArm_Die::Create(m_pFsmCom, this, DIE, &Desc));
+	m_pFsmCom->Add_State(CState_CurruptedStrongArm_KnockBack::Create(m_pFsmCom, this, KNOCKBACK, &Desc));
 
 	m_pFsmCom->Add_State(CState_CurruptedStrongArm_StingTwice::Create(m_pFsmCom, this, STINGTWICE, &Desc));
 	m_pFsmCom->Add_State(CState_CurruptedStrongArm_SwipAttack::Create(m_pFsmCom, this, SWIPATTACK, &Desc));

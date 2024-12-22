@@ -21,23 +21,24 @@ HRESULT CState_CarcassTail_Die::Initialize(_uint iStateNum, void* pArg)
 
 HRESULT CState_CarcassTail_Die::Start_State(void* pArg)
 {
+    _Vec3 vUp = XMVector3Normalize(m_pMonster->Get_Transform()->Get_State(CTransform::STATE_UP));
+    _Vec3 vRight = XMVector3Normalize(m_pMonster->Get_Transform()->Get_State(CTransform::STATE_RIGHT));
+    _Vec3 vTargetDir = XMVector3Normalize(m_pMonster->Get_TargetDir());
 
-    _vector vPos = XMVectorSetY(m_pMonster->Get_Transform()->Get_State(CTransform::STATE_POSITION), 0);
-    _vector vLook = XMVectorSetY(m_pMonster->Get_Transform()->Get_State(CTransform::STATE_LOOK), 0);
-    _vector vDir = XMVectorSetY(m_pGameInstance->Get_CamPosition_Vec4(), 0);
-    vDir = vDir - vPos;
 
-    _float fRadian{};
-    fRadian = acos(XMVectorGetX(XMVector3Dot(vLook, vDir)));
+    _Vec3 vCrossUp = vRight.Cross(vTargetDir);
 
-    if (XMConvertToDegrees(fRadian) < 90)
+    _int iAnimIndex = {};
+
+    if (vCrossUp.y <= 0)
     {
-        m_pMonster->Change_Animation(AN_DIE_F, false, 0.1f);
+        iAnimIndex = AN_DIE_F;
     }
     else
     {
-        m_pMonster->Change_Animation(AN_DIE_B, false, 0.1f);
+        iAnimIndex = AN_DIE_B;
     }
+    m_pMonster->Change_Animation(iAnimIndex, false, 0.1f);
 
     return S_OK;
 }

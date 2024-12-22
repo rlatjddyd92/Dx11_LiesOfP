@@ -29,20 +29,20 @@ private:
     class CMonster* m_pMonster = { nullptr };
 
     _bool               m_bFirstMeetCheck = { false };
-    _bool               m_bDiscover = { false };
+    _bool*              m_pDiscover = { nullptr };
 
     _float              m_fRecognitionDist = { 15.f };
     _float              m_fDiscoverDist = { 4.f };
 
     _float              m_fIdleTime = { 0.f };
-    _float              m_fIdleEndDuration = { 1.f };
+    _float              m_fIdleEndDuration = { 0.6f };
 
     _bool               m_bRunning = { false };
     _bool               m_bWalk = { false };
 
     _float              m_fRunSpeed = { 3.5f };
     _float              m_fWalkSpeed = { 1.f };
-    _float              m_fRunningWeights = { 4.f };
+    _float              m_fRunningWeights = { 3.f };
 
     _float              m_fNeedDist_ForAttack = { 3.5f };
 

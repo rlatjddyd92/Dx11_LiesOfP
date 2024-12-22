@@ -39,7 +39,7 @@ HRESULT CAObj_ThunderWave::Initialize(void* pArg)
 
     m_fDamageAmount = 20.f;
     m_fLifeDuration = 1.2f;
-    m_fSpeed = 25.f;
+    m_fSpeed = 35.f;
 
     m_pColliderCom->IsActive(true);
 

@@ -27,11 +27,13 @@ public:
 private:
     class CMonster* m_pMonster = { nullptr };
 
+    _Vec3               m_vDashDirection = {};
 
     _bool               m_bSwing = { false };
 
     _bool               m_bSwingSound = { false };
     _bool               m_bTeleport = { false };
+    _bool               m_bSetDir = { false };
     _bool               m_bEnvelop = { false };
     _bool               m_bAccel = { false };
 

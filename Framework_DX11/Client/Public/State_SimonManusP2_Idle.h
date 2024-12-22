@@ -28,7 +28,7 @@ private:
     class CMonster* m_pMonster = { nullptr };
 
     _float              m_fIdleTime = { 0.f };
-    _float              m_fIdleEndDuration = { 1.5f };
+    _float              m_fIdleEndDuration = { 0.8f };
 
     _uint               m_iAtkCnt{};
     _bool               m_bTest = false;

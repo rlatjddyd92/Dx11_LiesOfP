@@ -15,6 +15,7 @@
 #include "State_RebornerBigA_Die.h"
 #include "State_RebornerBigA_Grogy.h"
 #include "State_RebornerBigA_HitFatal.h"
+#include "State_RebornerBigA_KnockBack.h"
 
 #include "State_RebornerBigA_SlashJump.h"
 #include "State_RebornerBigA_GuardSting.h"
@@ -308,6 +309,7 @@ HRESULT CRebornerBigA::Ready_FSM()
 	m_pFsmCom->Add_State(CState_RebornerBigA_Grogy::Create(m_pFsmCom, this, GROGY, &Desc));
 	m_pFsmCom->Add_State(CState_RebornerBigA_HitFatal::Create(m_pFsmCom, this, HITFATAL, &Desc));
 	m_pFsmCom->Add_State(CState_RebornerBigA_Die::Create(m_pFsmCom, this, DIE, &Desc));
+	m_pFsmCom->Add_State(CState_RebornerBigA_KnockBack::Create(m_pFsmCom, this, KNOCKBACK, &Desc));
 
 	m_pFsmCom->Add_State(CState_RebornerBigA_GuardSting::Create(m_pFsmCom, this, GUARDSTING, &Desc));
 	m_pFsmCom->Add_State(CState_RebornerBigA_RushSting::Create(m_pFsmCom, this, RUSHSTING, &Desc));
@@ -338,6 +340,8 @@ HRESULT CRebornerBigA::Ready_Weapon()
 		return E_FAIL;
 
 	m_pWeapon->Appear();
+
+	m_pWeapon->DeActive_Collider();
 
 	return S_OK;
 }

@@ -31,7 +31,7 @@ private:
     _bool               m_bFirstAct = { true };
 
     _float              m_fIdleTime = { 0.f };
-    _float              m_fIdleEndDuration = { 1.5f };
+    _float              m_fIdleEndDuration = { 0.8f };
 
     _bool               m_bRunning = { false };
     _bool               m_bWalk = { false };

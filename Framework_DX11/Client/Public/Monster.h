@@ -14,7 +14,7 @@ class CMonster abstract : public CPawn
 {
 public:
 	enum MONSTER_STATE {
-		IDLE, GROGY, HITFATAL, PARALYZE, DIE,
+		IDLE, GROGY, HITFATAL, PARALYZE, KNOCKBACK, DIE,
 
 		MONSTER_STATE_END
 	};
@@ -71,13 +71,20 @@ public:
 	virtual const _Matrix* Get_BoneCombinedMat(_uint iBoneIndex);
 	virtual const _Matrix* Get_WeaponBoneCombinedMat(_uint iBoneIndex) { return &_Matrix{}; }
 	virtual const _Matrix* Get_WeaponWorldMat() { return &_Matrix{}; }
+	
+	virtual _bool   Calc_DamageGain(_float fAtkDmg, _Vec3 vHitPos = { 0.f,0.f,0.f }, _uint iHitType = HIT_END, _uint iAttackStrength = ATK_END, CGameObject* pAttacker = nullptr) override;
 
 	void	Increase_GroggyPoint(_float fGroggy) { m_eStat.fGrogyPoint += fGroggy; }
 	virtual void	SetUp_Dead() {};
 
+	_bool*			Get_bDicover() { return &m_bDiscover; };
+
 protected:
 	_Vec4		m_vRootMoveStack{};
 	_Vec3		m_vCurRootMove{};
+
+	_bool               m_bDiscover = { false };
+
 	_bool		m_bEndAnim{ false };
 	_bool		m_bResetRootMove{ true };
 	_bool		m_bRootMoveCtr{ true };

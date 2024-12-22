@@ -33,6 +33,13 @@ HRESULT CAObj_ThunderStampMark::Initialize(void* pArg)
     if (FAILED(Ready_Components()))
         return E_FAIL;
 
+    if (pDesc->iTrack_State == 1)
+    {
+        m_bExplosive = true;
+        m_pEffect->Set_Loop(false);
+        m_pEffectExp->Reset_Effects();
+    }
+
     m_fDamageAmount = 280.f;
     m_fLifeDuration = 1.f;
 
@@ -98,7 +105,7 @@ void CAObj_ThunderStampMark::Late_Update(_float fTimeDelta)
     {
         m_pEffectExp->Late_Update(fTimeDelta);
     }
-    if (m_fLifeTime < m_fLifeDuration)
+    if (m_fLifeTime < m_fLifeDuration && m_bExplosive)
     {
         m_pGameInstance->Add_ColliderList(m_pColliderCom);
 #ifdef DEBUG
@@ -171,6 +178,7 @@ HRESULT CAObj_ThunderStampMark::Ready_Components()
     m_pEffectExp = CEffect_Manager::Get_Instance()->Clone_Effect(TEXT("Raxasia_Attack_ThunderStamp_Mark_Explosion"), pParetnMatrix,
         nullptr, _Vec3(0.f, 0.f, 0.f), _Vec3(0.f, 0.f, 1.f));
 
+    m_pEffect->Set_Loop(true);
     return S_OK;
 }
 
