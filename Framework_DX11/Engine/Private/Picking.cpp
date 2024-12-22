@@ -168,10 +168,11 @@ _bool CPicking::Picking_Object(_uint* pPickID)
 	_float4 fcolorValue = *reinterpret_cast<_float4*>(msr.pData);
 
 	// 각 색상 채널 추출 후 ID로 변환
-	UINT8 r = static_cast<UINT8>(fcolorValue.x * 255);
-	UINT8 g = static_cast<UINT8>(fcolorValue.y * 255);
-	UINT8 b = static_cast<UINT8>(fcolorValue.z * 255);
-	UINT8 a = static_cast<UINT8>(fcolorValue.w * 255);
+	UINT8 r = static_cast<UINT8>(round(fcolorValue.x * 255));
+	UINT8 g = static_cast<UINT8>(round(fcolorValue.y * 255));
+	UINT8 b = static_cast<UINT8>(round(fcolorValue.z * 255));
+	UINT8 a = static_cast<UINT8>(round(fcolorValue.w * 255));
+
 
 	uint32_t hash = (static_cast<uint32_t>(a) << 24) |
 		(static_cast<uint32_t>(r) << 16) |
