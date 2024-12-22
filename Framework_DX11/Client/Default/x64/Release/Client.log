@@ -12,8 +12,8 @@ D:\GitHubProjects\Dx11_LiesOfP\Framework_DX11\Client\Private\UIPage_Stat.cpp(333
 D:\GitHubProjects\Dx11_LiesOfP\Framework_DX11\Client\Private\UIPage_Stat.cpp(337,8): warning C4834: [[nodiscard]] 특성이 포함된 함수의 반환 값을 버리는 중입니다.
 D:\GitHubProjects\Dx11_LiesOfP\Framework_DX11\Client\Private\UIPage_Stat.cpp(341,8): warning C4834: [[nodiscard]] 특성이 포함된 함수의 반환 값을 버리는 중입니다.
   코드를 생성하고 있습니다.
-  2 of 9732 functions (<0.1%) were compiled, the rest were copied from previous compilation.
+  527 of 9732 functions ( 5.4%) were compiled, the rest were copied from previous compilation.
     0 functions were new in current compilation
-    22 functions had inline decision re-evaluated but remain unchanged
+    168 functions had inline decision re-evaluated but remain unchanged
   코드를 생성했습니다.
   Client.vcxproj -> D:\GitHubProjects\Dx11_LiesOfP\Framework_DX11\Client\Bin\Client.exe

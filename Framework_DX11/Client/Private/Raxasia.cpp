@@ -482,11 +482,11 @@ void CRaxasia::Start_CutScene(_uint iCutSceneNum)
 
 		_matrix PreTransformMatrix = XMMatrixScaling(0.015f, 0.015f, 0.015f) * XMMatrixRotationX(XMConvertToRadians(-90.f));
 
-		/*CRaxasia_Sword_CutScene::WEAPON_DESC Desc{};
+		CRaxasia_Sword_CutScene::WEAPON_DESC Desc{};
 		Desc.pParentWorldMatrix = m_pTransformCom->Get_WorldMatrix_Ptr();
 		Desc.pSocketBoneMatrix = m_pModelCom->Get_BoneCombindTransformationMatrix_Ptr("weapon0_l");
 		m_pCutSceneWeapon = dynamic_cast<CRaxasia_Sword_CutScene*>(m_pGameInstance->Get_CloneObject_ToLayer(LEVEL_GAMEPLAY, TEXT("Layer_CutSceneWeapon"),
-			TEXT("Prototype_GameObject_Weapon_Raxasia_Sword_CutScene"), &Desc));*/
+			TEXT("Prototype_GameObject_Weapon_Raxasia_Sword_CutScene"), &Desc));
 
 		m_pCutSceneWeapon->Get_Model()->Set_PreTranformMatrix(PreTransformMatrix);
 		m_pCutSceneWeapon->Get_Transform()->Set_State(CTransform::STATE_POSITION, vOffset);
@@ -995,6 +995,12 @@ HRESULT CRaxasia::Ready_Effects()
 	m_Effects[EFFECT_THUNDERENVELOP_SMALL] = CEffect_Manager::Get_Instance()->Clone_Effect(TEXT("Raxasia_Attack_ThunderEnvelop_Small"), pParetnMatrix,
 		pSocketBoneMatrix, _Vec3(0.f, 0.f, 0.f), _Vec3(0.f, 0.f, 1.f), _Vec3(1.f, 1.f, 1.f), _Vec3(60.f, 0.f, -90.f));
 
+
+	m_Effects[EFFECT_INCHENTSWORD_CUTSCENE] = CEffect_Manager::Get_Instance()->Clone_Effect(TEXT("Raxasia_Attack_InchentedSword_CutScene"), pParetnMatrix,
+		pSocketBoneMatrix, _Vec3(0.f, 0.f, 0.f), _Vec3(0.f, 0.f, 1.f), _Vec3(1.f, 1.f, 1.f), _Vec3(0.f, 0.f, 0.f));
+	
+
+
 	return S_OK;
 }
 
@@ -1091,6 +1097,9 @@ void CRaxasia::ChangePhase()
 
 	m_Effects[EFFECT_INCHENTSWORD_P2]->Set_Matrices(pSocketBoneMatrix);
 
+	m_Effects[EFFECT_INCHENTSWORD] = CEffect_Manager::Get_Instance()->Clone_Effect(TEXT("Raxasia_Attack_InchentedSword"), pParetnMatrix,
+		pSocketBoneMatrix, _Vec3(0.f, 0.f, 0.f), _Vec3(0.f, 0.f, 1.f), _Vec3(1.f, 1.f, 1.f));
+
 	//P2
 
 	CWeapon::MONSTER_WAPON_DESC		WeaponDesc{};
@@ -1155,8 +1164,8 @@ void CRaxasia::Change_Phase2Sword()
 		return;
 
 	// 실험해보기
-	m_Effects[EFFECT_INCHENTSWORD_P2]->Set_Matrices(WeaponDesc.pSocketBoneMatrix);
-	Active_Effect(CRaxasia::EFFECT_INCHENTSWORD_P2, true);
+	m_Effects[EFFECT_INCHENTSWORD_CUTSCENE]->Set_Matrices(WeaponDesc.pSocketBoneMatrix);
+	Active_Effect(CRaxasia::EFFECT_INCHENTSWORD_CUTSCENE, true);
 
 	m_pWeapon->Appear();
 }
