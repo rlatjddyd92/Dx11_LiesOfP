@@ -96,7 +96,7 @@ void CState_SimonManus_CutScene_Phase2::Update(_float fTimeDelta)
                 }
                 Contorl_Emissive(fTimeDelta);
             }
-            else if (1327 < fTrackPosition && fTrackPosition < 1700)
+            else if (1360 < fTrackPosition && fTrackPosition < 1700)
             {
                 if (!m_isSecondEmissive)
                 {
@@ -142,8 +142,7 @@ void CState_SimonManus_CutScene_Phase2::Update(_float fTimeDelta)
             CEffect_Manager::Get_Instance()->Add_Effect_ToLayer(LEVEL_GAMEPLAY, TEXT("SimonManus_ConnectGod"), _Vec3(0.f, 3.2f, 0.6f));
             m_isDistortionHand = true;
         }
-       
-        if (iCurAnimIndex == m_iAnimation_Begod)
+        else if (iCurAnimIndex == m_iAnimation_Begod && m_isDistortionHand)
         {
             m_pMonster->Set_EmissiveMask(0.5f);
         }
@@ -176,11 +175,11 @@ void CState_SimonManus_CutScene_Phase2::Contorl_Emissive(_float fTimeDelta)
 
     if (m_isMaxEmissive)
     {
-        fEmissive -= 0.216f * fTimeDelta;
+        fEmissive -= 0.213f * fTimeDelta;
     }
     else
     {
-        fEmissive += 0.9f * fTimeDelta;
+        fEmissive += 0.91f * fTimeDelta;
     }
 
     m_pMonster->Set_EmissiveMask(fEmissive);
