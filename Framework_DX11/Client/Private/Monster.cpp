@@ -200,6 +200,11 @@ const _Matrix* CMonster::Get_BoneCombinedMat(_uint iBoneIndex)
 
 _bool CMonster::Calc_DamageGain(_float fAtkDmg, _Vec3 vHitPos, _uint iHitType, _uint iAttackStrength, CGameObject* pAttacker)
 {
+	if (m_bDieState)
+	{
+		return false;
+	}
+
 	m_eStat.fHp -= (fAtkDmg * ((100 - m_eStat.fDefence) / 100));
 	m_eStat.fAtkDmg = fAtkDmg;
 

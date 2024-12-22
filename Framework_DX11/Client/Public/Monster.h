@@ -37,8 +37,8 @@ public:
 	virtual HRESULT Render() override;
 	virtual HRESULT Render_LightDepth() override;
 
-	_Vec4		Get_TargetPos() { return m_vPosTarget; }
-	_Vec4		Get_TargetDir();
+	_Vec4				Get_TargetPos() { return m_vPosTarget; }
+	_Vec4				Get_TargetDir();
 
 public:
 	virtual void		Active_Effect(const _uint eType, _bool isLoop = true) {};
@@ -47,37 +47,40 @@ public:
 
 	virtual _bool		Get_EffectsLoop(const _uint eType) = 0;
 
-	void		Set_UpTargetPos();
-	void		Look_Player();
-	_float		Calc_Distance_XZ();
+	void				Set_UpTargetPos();
+	void				Look_Player();
+	_float				Calc_Distance_XZ();
 
-	virtual void	Active_Weapon() {};
-	virtual void	Deactiave_Weapon() {};
+	virtual void		Active_Weapon() {};
+	virtual void		Deactiave_Weapon() {};
 
-	virtual void	Active_CurrentWeaponCollider(_float fDamageRatio, _uint iCollIndex = 0, _uint iHitType = 0, _uint iAtkStrength = 0);
-	virtual void	DeActive_CurretnWeaponCollider(_uint iCollIndex = 0);
+	virtual void		Active_CurrentWeaponCollider(_float fDamageRatio, _uint iCollIndex = 0, _uint iHitType = 0, _uint iAtkStrength = 0);
+	virtual void		DeActive_CurretnWeaponCollider(_uint iCollIndex = 0);
 
-	void		Set_RimLightColor(_Vec4 vColor) { m_vRimLightColor = vColor; }
+	void				Set_RimLightColor(_Vec4 vColor) { m_vRimLightColor = vColor; }
 
 public:
-	virtual void OnCollisionEnter(CGameObject* pOther) override;
-	virtual void OnCollisionStay(CGameObject* pOther) override;
-	virtual void OnCollisionExit(CGameObject* pOther) override;
+	virtual void		OnCollisionEnter(CGameObject* pOther) override;
+	virtual void		OnCollisionStay(CGameObject* pOther) override;
+	virtual void		OnCollisionExit(CGameObject* pOther) override;
 
-	virtual void	Reset_WeaponOverlapCheck(_uint iCollIndex = 0) {};
-	virtual void	Change_WeaponAnimation(_int iAnimIndex, _bool isLoop, _float fChangeDuration = 0.2f, _int iStartFrame = 0, _bool bEitherChange = true, _bool bSameChange = false) {};
-	virtual _bool	Get_WeaponAnimEnd(_int iAnimIndex) { return false; }
+	virtual void		Reset_WeaponOverlapCheck(_uint iCollIndex = 0) {};
+	virtual void		Change_WeaponAnimation(_int iAnimIndex, _bool isLoop, _float fChangeDuration = 0.2f, _int iStartFrame = 0, _bool bEitherChange = true, _bool bSameChange = false) {};
+	virtual _bool		Get_WeaponAnimEnd(_int iAnimIndex) { return false; }
 
 	virtual const _Matrix* Get_BoneCombinedMat(_uint iBoneIndex);
 	virtual const _Matrix* Get_WeaponBoneCombinedMat(_uint iBoneIndex) { return &_Matrix{}; }
 	virtual const _Matrix* Get_WeaponWorldMat() { return &_Matrix{}; }
 	
-	virtual _bool   Calc_DamageGain(_float fAtkDmg, _Vec3 vHitPos = { 0.f,0.f,0.f }, _uint iHitType = HIT_END, _uint iAttackStrength = ATK_END, CGameObject* pAttacker = nullptr) override;
+	virtual _bool		Calc_DamageGain(_float fAtkDmg, _Vec3 vHitPos = { 0.f,0.f,0.f }, _uint iHitType = HIT_END, _uint iAttackStrength = ATK_END, CGameObject* pAttacker = nullptr) override;
 
-	void	Increase_GroggyPoint(_float fGroggy) { m_eStat.fGrogyPoint += fGroggy; }
-	virtual void	SetUp_Dead() {};
+	void				Increase_GroggyPoint(_float fGroggy) { m_eStat.fGrogyPoint += fGroggy; }
+	void				Reset_GroggyPoint() { m_eStat.fGrogyPoint = 0; }
+	virtual void		SetUp_Dead() {};
 
-	_bool*			Get_bDicover() { return &m_bDiscover; };
+	_bool*				Get_bDicover() { return &m_bDiscover; };
+	_Vec3				Get_Look() { return XMVector3Normalize(m_pTransformCom->Get_State(CTransform::STATE_LOOK)); }
+	_bool				Get_IsWeakness() { return m_eStat.bWeakness; }//해당 위크니스는 각각 몹에서 그로기 양 비교하도록 만들기
 
 protected:
 	_Vec4		m_vRootMoveStack{};
@@ -94,8 +97,8 @@ protected:
 	_Vec4		m_vPosTarget{};
 
 protected:
-	HRESULT Ready_Components();
-	HRESULT Ready_FSM();
+	HRESULT		Ready_Components();
+	HRESULT		Ready_FSM();
 
 public:
 	virtual CGameObject* Clone(void* pArg) = 0;
