@@ -9,7 +9,8 @@ public:
 	typedef struct
 	{
 		PARTICLE Particle;
-		_float4 vPreTranslation;
+		_float4 vPreTranslation;	// 이전
+		_float4 vPreTranslation_2;	// 전전
 		_float4 vCurrentRandomPos;
 		_float4 vNextRandomPos;
 		_uint iTailInitIndex;

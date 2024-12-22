@@ -150,7 +150,7 @@ void CState_RaxasiaP2_Running::Update(_float fTimeDelta)
             m_pMonster->Get_RigidBody()->Set_GloblePose(vTargetPos - vDir + (vTemp * fTimeDelta));
 
         }
-        else if (CurTrackPos <= 160)
+        else if (CurTrackPos >= 160 && CurTrackPos <= 190)
         {
             _Vec3 vDir = m_pMonster->Get_TargetDir();
             _Vec3 vVelo = m_pMonster->Get_RigidBody()->Get_Velocity();
@@ -158,13 +158,19 @@ void CState_RaxasiaP2_Running::Update(_float fTimeDelta)
 
             if (m_pMonster->Calc_Distance_XZ() >= 1.5f)
             {
-                m_pMonster->Get_RigidBody()->Set_Velocity(vVelo + vDir * 3);
+                m_pMonster->Get_RigidBody()->Set_Velocity(vVelo + vDir * 5);
             }
             else
             {
-                m_pMonster->Get_RigidBody()->Set_Velocity(vVelo - ( vDir * 3));
+                m_pMonster->Get_RigidBody()->Set_Velocity(vVelo - ( vDir * 5));
             }
-            m_pMonster->Get_Transform()->LookAt_Lerp_NoHeight(m_pMonster->Get_TargetDir(), 3.f, fTimeDelta);
+            
+        }
+
+
+        if (CurTrackPos >= 130 && CurTrackPos <= 190)
+        {
+            m_pMonster->Get_Transform()->LookAt_Lerp_NoHeight(m_pMonster->Get_TargetDir(), 5.f, fTimeDelta);
         }
         break;
     }
@@ -252,16 +258,16 @@ void CState_RaxasiaP2_Running::Effect_Check(_double CurTrackPos)
             m_pMonster->DeActive_Effect(CRaxasia::EFFECT_SWING);
         }
 
-        if ((CurTrackPos >= 165.f && CurTrackPos <= 185.f))
+        if ((CurTrackPos >= 175.f && CurTrackPos <= 185.f))
         {
             if (!m_bShieldAttack)
             {
                 _float4x4 WorldMat{};
                 _Vec3 vPos = { 0.f, 0.f, 0.f };
-                XMStoreFloat4x4(&WorldMat, (*m_pMonster->Get_BoneCombinedMat(m_pMonster->Get_UFBIndex(UFB_HAND_RIGHT)) * m_pMonster->Get_Transform()->Get_WorldMatrix()));
+                XMStoreFloat4x4(&WorldMat, (*m_pMonster->Get_BoneCombinedMat(m_pMonster->Get_UFBIndex(UFB_HAND_LEFT)) * m_pMonster->Get_Transform()->Get_WorldMatrix()));
                 vPos = XMVector3TransformCoord(vPos, XMLoadFloat4x4(&WorldMat));
 
-                CEffect_Manager::Get_Instance()->Add_Effect_ToLayer(LEVEL_GAMEPLAY, TEXT("Raxasia_Attack_ThunderInchent"),
+                CEffect_Manager::Get_Instance()->Add_Effect_ToLayer(LEVEL_GAMEPLAY, TEXT("Raxasia_Attack_Shield_Impact"),
                     vPos, _Vec3{ m_pMonster->Get_TargetDir() });
                 m_bShieldAttack = true;
             }

@@ -126,7 +126,7 @@ void CTexture_Effect::Late_Update(_float fTimeDelta)
         }
     }
 
-    if (CRenderer::RG_END <= m_RenderDesc.iRenderGroup)
+    if (CRenderer::RG_END <= m_RenderDesc.iRenderGroup || true == m_isDead)
         return;
     m_pGameInstance->Add_RenderObject((CRenderer::RENDERGROUP)m_RenderDesc.iRenderGroup, this);
 }

@@ -56,7 +56,7 @@ void CState_RaxasiaP2_Running_Linked::Update(_float fTimeDelta)
             m_pMonster->Change_Animation(AN_LINKED_SECOND, false, 0.2f, 45);
         }
 
-        m_pMonster->Get_Transform()->LookAt_Lerp_NoHeight(m_pMonster->Get_TargetDir(), 2.f, fTimeDelta);
+        m_pMonster->Get_Transform()->LookAt_Lerp_NoHeight(m_pMonster->Get_TargetDir(), 4.f, fTimeDelta);
         if (!m_bSpeedController)
         {
             if (CurTrackPos >= 80)
@@ -74,7 +74,23 @@ void CState_RaxasiaP2_Running_Linked::Update(_float fTimeDelta)
             }
         }
 
-        if (CurTrackPos >= 20.f && CurTrackPos <= 23.f)
+        if (CurTrackPos >= 86.f && CurTrackPos <= 92.f)
+        {
+            _Vec3 vDir = m_pMonster->Get_TargetDir();
+            _Vec3 vVelo = m_pMonster->Get_RigidBody()->Get_Velocity();
+            vDir.Normalize();
+
+            if (m_pMonster->Calc_Distance_XZ() >= 1.5f)
+            {
+                m_pMonster->Get_RigidBody()->Set_Velocity(vVelo + vDir * 3);
+            }
+            else
+            {
+                m_pMonster->Get_RigidBody()->Set_Velocity(vVelo - (vDir * 3));
+            }
+        }
+
+        if (CurTrackPos >= 75.5f && CurTrackPos <= 81.5f)
         {
             _Vec3 vTargetPos = m_pMonster->Get_TargetPos();
 
@@ -104,7 +120,7 @@ void CState_RaxasiaP2_Running_Linked::Update(_float fTimeDelta)
             {
                 vTemp = vDir;
                 vTemp.Normalize();
-                if (m_fDistance < 3.f)
+                if (m_fDistance < 3.5f)
                 {
                     vTemp *= -3.f;
                 }
@@ -124,9 +140,10 @@ void CState_RaxasiaP2_Running_Linked::Update(_float fTimeDelta)
             ++m_iRouteTrack;
             m_bSwing = false;
             m_pMonster->Change_Animation(AN_JUMPLIGHTNING, false, 0.1f, 90);
+            return;
         }
 
-        m_pMonster->Get_Transform()->LookAt_Lerp_NoHeight(m_pMonster->Get_TargetDir(), 2.f, fTimeDelta);
+        m_pMonster->Get_Transform()->LookAt_Lerp_NoHeight(m_pMonster->Get_TargetDir(), 4.f, fTimeDelta);
 
         if (!m_bSpeedController)
         {
@@ -138,14 +155,30 @@ void CState_RaxasiaP2_Running_Linked::Update(_float fTimeDelta)
         }
         else
         {
-            if (CurTrackPos >= 75)
+            if (CurTrackPos >= 78)
             {
                 m_bSpeedController = false;
                 m_pMonster->Get_Model()->Set_SpeedRatio(AN_LINKED_SECOND, (_double)1);
             }
         }
 
-        if (CurTrackPos >= 15.f && CurTrackPos <= 18.f)
+        if (CurTrackPos >= 78.f && CurTrackPos <= 84.f)
+        {
+            _Vec3 vDir = m_pMonster->Get_TargetDir();
+            _Vec3 vVelo = m_pMonster->Get_RigidBody()->Get_Velocity();
+            vDir.Normalize();
+
+            if (m_pMonster->Calc_Distance_XZ() >= 1.5f)
+            {
+                m_pMonster->Get_RigidBody()->Set_Velocity(vVelo + vDir * 3);
+            }
+            else
+            {
+                m_pMonster->Get_RigidBody()->Set_Velocity(vVelo - (vDir * 3));
+            }
+        }
+
+        if (CurTrackPos >= 69.5f && CurTrackPos <= 76.f)
         {
             _Vec3 vTargetPos = m_pMonster->Get_TargetPos();
 
@@ -176,7 +209,7 @@ void CState_RaxasiaP2_Running_Linked::Update(_float fTimeDelta)
             {
                 vTemp = vDir;
                 vTemp.Normalize();
-                if (m_fDistance < 1.f)
+                if (m_fDistance < 3.5f)
                 {
                     vTemp *= -3.f;
                 }
@@ -213,6 +246,7 @@ void CState_RaxasiaP2_Running_Linked::Update(_float fTimeDelta)
 void CState_RaxasiaP2_Running_Linked::End_State()
 {
     m_pMonster->DeActive_Effect(CRaxasia::EFFECT_THUNDERENVELOP_BIG);
+    m_pMonster->DeActive_Effect(CRaxasia::EFFECT_THUNDERENVELOP_SMALL);
 }
 
 _bool CState_RaxasiaP2_Running_Linked::End_Check()
@@ -294,7 +328,7 @@ void CState_RaxasiaP2_Running_Linked::Effect_Check(_double CurTrackPos)
             m_pMonster->DeActive_Effect(CRaxasia::EFFECT_SWING);
         }
 
-        if ((CurTrackPos >= 20.f && CurTrackPos <= 60.f))
+        if ((CurTrackPos >= 80.f && CurTrackPos <= 82.5f))
         {
             if (!m_bAccel)
             {
@@ -323,7 +357,7 @@ void CState_RaxasiaP2_Running_Linked::Effect_Check(_double CurTrackPos)
             m_pMonster->DeActive_Effect(CRaxasia::EFFECT_SWING);
         }
 
-        if ((CurTrackPos >= 15.f && CurTrackPos <= 55.f))
+        if ((CurTrackPos >= 74.f && CurTrackPos <= 76.f))
         {
             if (!m_bAccel)
             {
@@ -356,23 +390,22 @@ void CState_RaxasiaP2_Running_Linked::Effect_Check(_double CurTrackPos)
 
         if (!m_bFire)
         {
-            if (CurTrackPos >= 193.f)
+            if (CurTrackPos >= 180.f)
             {
                 m_bFire = true;
 
                 CAttackObject::ATKOBJ_DESC Desc{};
 
                 _float4x4 WorldMat{};
-                _Vec3 vPos = { 0.f, 0.f, -1.75f };
+                _Vec3 vPos = { 0.f, 0.f, 0.f };
                 XMStoreFloat4x4(&WorldMat,
                     (*m_pMonster->Get_BoneCombinedMat(m_pMonster->Get_Model()->Get_UFBIndices(UFB_WEAPON))
                         * (m_pMonster->Get_Transform()->Get_WorldMatrix())));
                 vPos = XMVector3TransformCoord(vPos, XMLoadFloat4x4(&WorldMat));
-                vPos.y = m_pMonster->Get_Transform()->Get_State(CTransform::STATE_POSITION).y;
 
                 Desc.vPos = vPos;
 
-                Desc.vDir = _Vec3{ m_pMonster->Get_TargetDir() };
+                Desc.vDir = _Vec3{ m_pMonster->Get_TargetPos() - vPos };
                 Desc.vDir.Normalize();
 
                 Desc.vTargetPos = _Vec3{ m_pMonster->Get_TargetPos() };

@@ -28,7 +28,7 @@ private:
     class CMonster* m_pMonster = { nullptr };
 
     _float              m_fDistance = {};
-    _float              m_fAccelSpeed = {50.f};
+    _float              m_fAccelSpeed = {20.f};
     _float              m_fCurrentTime = { 0.f };
     _float              m_fChaseDuration = { 1.5f };
 

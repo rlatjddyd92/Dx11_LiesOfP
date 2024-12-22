@@ -4,6 +4,8 @@
 #include "Model.h"
 #include "Raxasia.h"
 
+#include "AttackObject.h"
+
 CState_RaxasiaP2_TeleportAttack::CState_RaxasiaP2_TeleportAttack(CFsm* pFsm, CMonster* pMonster)
     :CState{ pFsm }
     , m_pMonster{ pMonster }
@@ -30,6 +32,7 @@ HRESULT CState_RaxasiaP2_TeleportAttack::Start_State(void* pArg)
     m_bStart = false;
     m_bEnvelop = false;
     m_bAccel = false;
+    m_bFire = false;
 
     return S_OK;
 }
@@ -197,6 +200,33 @@ void CState_RaxasiaP2_TeleportAttack::Effect_Check(_double CurTrackPos)
             m_pMonster->DeActive_Effect(CRaxasia::EFFECT_THUNDERACCEL);
         }
 
+        if (!m_bFire)
+        {
+            if (CurTrackPos >= 180.f)
+            {
+                m_bFire = true;
+
+                CAttackObject::ATKOBJ_DESC Desc{};
+
+                _float4x4 WorldMat{};
+                _Vec3 vPos = { 0.f, 0.f, 0.f };
+                XMStoreFloat4x4(&WorldMat,
+                    (*m_pMonster->Get_BoneCombinedMat(m_pMonster->Get_Model()->Get_UFBIndices(UFB_WEAPON))
+                        * (m_pMonster->Get_Transform()->Get_WorldMatrix())));
+                vPos = XMVector3TransformCoord(vPos, XMLoadFloat4x4(&WorldMat));
+
+                Desc.vPos = vPos;
+
+                Desc.vDir = _Vec3{ m_pMonster->Get_TargetPos() - vPos };
+                Desc.vDir.Normalize();
+
+                Desc.vTargetPos = _Vec3{ m_pMonster->Get_TargetPos() };
+                Desc.pOwner = m_pMonster;
+
+                m_pGameInstance->Add_CloneObject_ToLayer(LEVEL_GAMEPLAY, TEXT("Monster_Attack"), TEXT("Prototype_GameObject_ThunderBolt"), &Desc);
+            }
+
+        }
     }
 }
 

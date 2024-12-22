@@ -993,7 +993,7 @@ HRESULT CRaxasia::Ready_Effects()
 	pSocketBoneMatrix = m_pExtraModelCom->Get_BoneCombindTransformationMatrix_Ptr(m_pExtraModelCom->Get_UFBIndices(UFB_CHEST));
 
 	m_Effects[EFFECT_THUNDERENVELOP_SMALL] = CEffect_Manager::Get_Instance()->Clone_Effect(TEXT("Raxasia_Attack_ThunderEnvelop_Small"), pParetnMatrix,
-		pSocketBoneMatrix, _Vec3(0.f, 0.f, 0.f), _Vec3(0.f, 0.f, 1.f), _Vec3(1.f, 1.f, 1.f));
+		pSocketBoneMatrix, _Vec3(0.f, 0.f, 0.f), _Vec3(0.f, 0.f, 1.f), _Vec3(1.f, 1.f, 1.f), _Vec3(60.f, 0.f, -90.f));
 
 	return S_OK;
 }
@@ -1097,7 +1097,7 @@ void CRaxasia::ChangePhase()
 	WeaponDesc.pParentWorldMatrix = m_pTransformCom->Get_WorldMatrix_Ptr();
 	WeaponDesc.pParentAtk = &m_eStat.fAtk;
 	WeaponDesc.pMonster = this;
-
+	WeaponDesc.pSocketBoneMatrix = pSocketBoneMatrix;
 	Safe_Release(m_pWeapon);
 
 	m_pWeapon = dynamic_cast<CWeapon*>(m_pGameInstance->Clone_GameObject(TEXT("Prototype_GameObject_Weapon_Raxasia_P2_Sword"), &WeaponDesc));
@@ -1108,9 +1108,8 @@ void CRaxasia::ChangePhase()
 
 	WeaponDesc.pSocketBoneMatrix = m_pModelCom->Get_BoneCombindTransformationMatrix_Ptr(46);
 
-
-	m_pWeapon->ChangeSocketMatrix(pSocketBoneMatrix);
 	m_pWeaponShield->ChangeSocketMatrix(WeaponDesc.pSocketBoneMatrix);
+
 
 	m_pColliderBindMatrix[CT_UPPERBODY] = m_pModelCom->Get_BoneCombindTransformationMatrix_Ptr(8);//Spine 2
 	m_pColliderBindMatrix[CT_LOWERBODY] = m_pModelCom->Get_BoneCombindTransformationMatrix_Ptr(6);//Spine

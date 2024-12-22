@@ -46,7 +46,7 @@ HRESULT CEffect_Manager::Initialize(ID3D11Device* pDevice, ID3D11DeviceContext* 
     return S_OK;
 }
 
-CEffect_Container* CEffect_Manager::Clone_Effect(const _wstring& strECTag, const _Matrix* pParentMatrix, const _Matrix* pSocketMatrix, _Vec3 vPos, _Vec3 vDir, _Vec3 vScale)
+CEffect_Container* CEffect_Manager::Clone_Effect(const _wstring& strECTag, const _Matrix* pParentMatrix, const _Matrix* pSocketMatrix, _Vec3 vPos, _Vec3 vDir, _Vec3 vScale, _Vec3 vRotate)
 {
     CEffect_Container::EFFECT_DESC desc = {};
 
@@ -58,6 +58,7 @@ CEffect_Container* CEffect_Manager::Clone_Effect(const _wstring& strECTag, const
     desc.vPos = vPos;
     desc.vDir = vDir;
     desc.vScale = vScale;
+    desc.vRotate = vRotate;
 
     CEffect_Container* pContainer = Find_PoolingEffect(strECTag, &desc);
 

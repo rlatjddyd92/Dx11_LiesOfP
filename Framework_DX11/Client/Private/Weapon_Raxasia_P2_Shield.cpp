@@ -229,7 +229,7 @@ HRESULT CWeapon_Raxasia_P2_Shield::Ready_Components()
 
 	/* FOR.Com_Collider */
 	CBounding_OBB::BOUNDING_OBB_DESC			ColliderDesc{};
-	ColliderDesc.vExtents = _float3(0.32f, 0.1f, 0.6f);
+	ColliderDesc.vExtents = _float3(0.43f, 0.25f, 0.8f);
 	ColliderDesc.vCenter = _float3(0.f, 0.0f, -0.1f);
 	ColliderDesc.vAngles = _float3(0.f, 0.f, 0.f);
 

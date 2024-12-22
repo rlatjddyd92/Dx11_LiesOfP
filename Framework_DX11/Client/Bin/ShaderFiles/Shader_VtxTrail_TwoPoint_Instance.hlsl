@@ -122,6 +122,7 @@ float3 CatmullRom(float3 p0, float3 p1, float3 p2, float3 p3, float t)
         (-p0 + 3.0 * p1 - 3.0 * p2 + p3) * t3
     );
 }
+
 [maxvertexcount(102)] // 꼭 해줘야 함. 점을 몇 번 찍을 건지.(인덱스 갯수) : 사각형 최대 16개
 void GS_MAIN(point GS_IN In[1], inout TriangleStream<GS_OUT> Container)
 {
@@ -169,7 +170,7 @@ void GS_MAIN(point GS_IN In[1], inout TriangleStream<GS_OUT> Container)
         
         
         if(0 != i)
-        { // 인덱스를 기준으로 텍스처 좌표를 계산합니다.
+        { 
             float fTexPosX = (In[0].fIndex + t) / (float) (g_iNumInstance);
             float fPreTexPosX = (In[0].fIndex + t + (1.f / 16.f)) / (float) (g_iNumInstance);
         
