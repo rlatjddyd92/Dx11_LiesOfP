@@ -49,7 +49,7 @@ public:
 
 	_int		m_iCurrentCellNum = { -1 };
 
-	_float		m_fCullDistance = { 50.f };
+	_float		m_fCullDistance = { 55.f };
 	_float		m_fEmissiveMask = {};
 
 	INSTANCE_DATA		m_tInstanceData = {};
