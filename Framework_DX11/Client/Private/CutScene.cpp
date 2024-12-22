@@ -258,6 +258,10 @@ void CCutScene::First_Setting()
 		m_pObjects[BOSS1] = static_cast<CPawn*>(m_pGameInstance->Find_Object(LEVEL_GAMEPLAY, TEXT("Layer_Raxasia"), 0));
 		m_pObjects[BOSS1]->Start_CutScene(0);
 		break;
+	case BOSS1_PHASE2:
+		pPlayer->Get_Navigation()->Move_to_Cell(pPlayer->Get_RigidBody(), 268);
+		pPlayer->IsActive(false);
+		break;
 	case BOSS1_DEAD:
 		break;
 	case BOSS2_MEET:
@@ -269,7 +273,6 @@ void CCutScene::First_Setting()
 		pPlayer->Get_Navigation()->Research_Cell(vInitPos);
 		pPlayer->Get_Transform()->Rotation(0.f, -45.f, 0.f);
 		pPlayer->Disappear_Weapon();
-		//m_pObjects[BOSS2] = static_cast<CPawn*>(m_pGameInstance->Find_Object(LEVEL_GAMEPLAY, TEXT("Layer_SimonManus"), 0));
 		break;
 	case BOSS2_PHASE2:
 		pPlayer->IsActive(false);
