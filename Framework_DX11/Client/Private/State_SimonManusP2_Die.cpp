@@ -22,8 +22,7 @@ HRESULT CState_SimonManusP2_Die::Start_State(void* pArg)
 {
     m_pMonster->Get_RigidBody()->Set_GloblePose(_Vec3(0.f, 0.f, 0.f));
     m_pMonster->Get_Transform()->Rotation(0.f, 50.f, 0.f);
-    m_pMonster->Change_Animation(AN_DIE, false, 0.1f, 0);
-
+    m_pMonster->Change_Animation(AN_DIE, false, 0.1f, 150);
     return S_OK;
 }
 
