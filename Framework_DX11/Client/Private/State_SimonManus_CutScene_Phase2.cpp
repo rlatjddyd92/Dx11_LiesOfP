@@ -74,6 +74,7 @@ void CState_SimonManus_CutScene_Phase2::Update(_float fTimeDelta)
         {
             m_pGameInstance->Find_Object(LEVEL_GAMEPLAY, TEXT("Layer_CutScene_GodHand"), 0)->Set_Dead(true);
             m_pMonster->Change_Animation(m_iAnimation_Begod, false, 0.1f, 0);
+            m_pMonster->Get_Model()->Set_SpeedPerSec(m_iAnimation_Begod, 23);
         }
         else if (m_pMonster->Get_EndAnim(m_iAnimation_Begod))
         {
@@ -116,7 +117,7 @@ void CState_SimonManus_CutScene_Phase2::Update(_float fTimeDelta)
             m_fStopedTimer += fTimeDelta;
         }
 
-        if (!m_isCreatedHand && m_fStopedTimer > 9.29f)
+        if (!m_isCreatedHand && m_fStopedTimer > 9.34f)
         {
             m_isCreatedHand = true;
 
@@ -138,7 +139,7 @@ void CState_SimonManus_CutScene_Phase2::Update(_float fTimeDelta)
 
         if (!m_isDistortionHand && iFrame > 1655)
         {
-            CEffect_Manager::Get_Instance()->Add_Effect_ToLayer(LEVEL_GAMEPLAY, TEXT("SimonManus_ConnectGod"), _Vec3(0.f, 2.73f, 0.f));
+            CEffect_Manager::Get_Instance()->Add_Effect_ToLayer(LEVEL_GAMEPLAY, TEXT("SimonManus_ConnectGod"), _Vec3(0.f, 3.2f, 0.6f));
             m_isDistortionHand = true;
         }
        
