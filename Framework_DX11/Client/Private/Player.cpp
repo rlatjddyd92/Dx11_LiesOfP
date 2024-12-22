@@ -157,6 +157,7 @@ HRESULT CPlayer::Initialize(void * pArg)
 	//m_pNavigationCom->Move_to_Cell(m_pRigidBodyCom, 1178); // 소피아 방 내부
 	//m_pNavigationCom->Move_to_Cell(m_pRigidBodyCom, 0); 
 	//m_pNavigationCom->Move_to_Cell(m_pRigidBodyCom, 268); // 락사시아 보스전
+	m_pNavigationCom->Move_to_Cell(m_pRigidBodyCom, 1224); // 튜토리얼
 
 	m_iRespawn_Cell_Num = 772;
 
@@ -267,16 +268,6 @@ void CPlayer::Update(_float fTimeDelta)
 	{
 		m_bActivated_ManusCutScene = true;
 		dynamic_cast<CCutScene*>(m_pGameInstance->Find_Object(LEVEL_GAMEPLAY, TEXT("Layer_CutScene"), BOSS2_MEET))->Start_Play();
-	}
-
-	////컷신 테스트
-	if (KEY_TAP(KEY::Q))
-	{
-		dynamic_cast<CCutScene*>(m_pGameInstance->Find_Object(LEVEL_GAMEPLAY, TEXT("Layer_CutScene"), BOSS2_DEFEAT))->Start_Play();
-	}
-	if (KEY_TAP(KEY::V))
-	{
-		dynamic_cast<CCutScene*>(m_pGameInstance->Find_Object(LEVEL_GAMEPLAY, TEXT("Layer_CutScene"), BOSS2_PHASE2))->Start_Play();
 	}
 }
 
