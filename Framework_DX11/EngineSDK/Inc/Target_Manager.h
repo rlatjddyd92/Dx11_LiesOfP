@@ -26,6 +26,7 @@ public:
 	HRESULT Bind_UnorderedAccess(class CShader* pShader, const _wstring& strTargetTag, const _char* pConstantName);
 	HRESULT Copy_RenderTarget(const _wstring& strTargetTag, ID3D11Texture2D* pTexture);
 	HRESULT Clear_MRT(const _wstring& strMRTTag);
+	HRESULT Clear_RTV(const _wstring& strTargetTag);
 
 	ID3D11Buffer* Get_Buffer(const _wstring& strTargetTag);
 	ID3D11UnorderedAccessView* Get_UAV(const _wstring& strTargetTag);

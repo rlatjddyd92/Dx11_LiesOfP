@@ -61,6 +61,9 @@ HRESULT CRigidBody::Initialize(void* pArg)
 
 void CRigidBody::Update(_float fTimeDelta)
 {
+	if (m_isStatic)
+		return;
+
 	PxRigidDynamic* pRigidDynamic = static_cast<PxRigidDynamic*>(m_PxActor);
 	if (m_pOwnerNavigation != nullptr)
 	{
@@ -153,6 +156,9 @@ void CRigidBody::Add_Force(const _Vec3& vForce, PxForceMode::Enum _eMode)
 
 void CRigidBody::Set_Mass(_float fMass)
 {
+	if (m_isStatic)
+		return;
+
 	static_cast<PxRigidDynamic*>(m_PxActor)->setMass(fMass);
 }
 
@@ -207,11 +213,12 @@ HRESULT CRigidBody::Add_PxActor(RIGIDBODY_DESC* pDesc)
 		{
 			m_PxActor->setActorFlag(PxActorFlag::eDISABLE_GRAVITY, true);
 		}
+
+
+		static_cast<PxRigidDynamic*>(m_PxActor)->setRigidDynamicLockFlags(pDesc->PxLockFlags);
 	}
 
 	m_PxActor->setActorFlag(PxActorFlag::eVISUALIZATION, true);
-
-	static_cast<PxRigidDynamic*>(m_PxActor)->setRigidDynamicLockFlags(pDesc->PxLockFlags);
 
 	m_PxMaterial = m_pPhysX->createMaterial(pDesc->fStaticFriction, pDesc->fDynamicFriction, pDesc->fRestituion);
 
@@ -266,104 +273,84 @@ HRESULT CRigidBody::Add_PxGeometry(RIGIDBODY_DESC* pDesc)
 	{
 		physX::GeometryBox* BoxGeometry = static_cast<physX::GeometryBox*>(pGeometry);
 		m_PxShape = m_pPhysX->createShape(PxBoxGeometry(BoxGeometry->vSize.x * 0.5f, BoxGeometry->vSize.y * 0.5f, BoxGeometry->vSize.z * 0.5f), *m_PxMaterial, false, eShapeFlags);
-
-		PxVec3 newPosition(pDesc->vOffset.y, pDesc->vOffset.y, pDesc->vOffset.y); // 캡슐의 새로운 로컬 위치
-		PxQuat newRotation(PxIdentity);        // 기본 회전 (필요에 따라 수정)
-
-		PxTransform newLocalPose(newPosition, newRotation);
-		m_PxShape->setLocalPose(newLocalPose);
 	}
 	break;
 	case physX::PX_MODEL:
 	{
-		//physX::GeometryTriangleMesh* TriangleGeometry = static_cast<physX::GeometryTriangleMesh*>(pGeometry);
-		//// 게임 객체의 모델 컴포넌트를 얻음
-		//CModel* pModel = TriangleGeometry->pModel;
+		physX::GeometryTriangleMesh* TriangleGeometry = static_cast<physX::GeometryTriangleMesh*>(pGeometry);
+		CModel* pModel = TriangleGeometry->pModel;
 
-		//// 모델의 각 메쉬에 대해 처리
-		//for (auto* Mesh : pModel->Get_Meshes())
-		//{
-		//	VTXMESH* pVB = Mesh->Get_Vertices();  // 정점 데이터
-		//	VTXANIMMESH* pAnimVB = Mesh->Get_AnimVertices();  // 정점 데이터
-		//	_uint* pIB = Mesh->Get_Indices();  // 인덱스 데이터
+		_Matrix WorldMatrix = m_pOwnerTransform->Get_WorldMatrix();
 
-		//	_uint iNumVertices = Mesh->Get_NumVertices();  // 정점 개수
-		//	_uint iNumIndices = Mesh->Get_NumIndices();  // 인덱스 개수
-		//	_uint iNumTriangles = iNumIndices / 3;  // 삼각형 개수
+		_Vec3 vScale;
+		_Quaternion Quat;
+		_Vec3 vPos;
 
-		//	// 정점 좌표를 저장할 피직스용 벡터
-		//	vector<PxVec3> Vertices;
-		//	Vertices.reserve(iNumVertices);
+		WorldMatrix.Decompose(vScale, Quat, vPos);	//각 요소 추출
 
-		//	// 게임 객체의 월드 변환 행렬
-		//	_matrix WorldMatrix = m_pOwnerTransform->Get_WorldMatrix();
+		_Matrix ScaleMatrix = XMMatrixScalingFromVector(vScale);
 
-		//	// 정점 좌표 변환 및 저장
-		//	for (_uint i = 0; i < iNumVertices; ++i)
-		//	{
-		//		_vector vVertexPosition = {};
-		//		if (nullptr == pVB)
-		//			vVertexPosition = XMLoadFloat3(&pAnimVB[i].vPosition);
-		//		else
-		//			vVertexPosition = XMLoadFloat3(&pVB[i].vPosition);
+		// 모델의 각 메쉬에 대해 처리
+		for (auto* Mesh : pModel->Get_Meshes())
+		{
+			_Vec3* vVertexPositions = Mesh->Get_VertexPositions();
 
-		//		vVertexPosition = XMVector3TransformCoord(vVertexPosition, WorldMatrix);
-		//		Vertices.push_back(PxVec3(XMVectorGetX(vVertexPosition), XMVectorGetY(vVertexPosition), XMVectorGetZ(vVertexPosition)));
+			_uint* pIB = Mesh->Get_Indices();  // 인덱스 데이터
 
-		//	}
+			_uint iNumVertices = Mesh->Get_NumVertices();  // 정점 개수
+			_uint iNumIndices = Mesh->Get_NumIndices();  // 인덱스 개수
+			_uint iNumTriangles = iNumIndices / 3;  // 삼각형 개수
 
-		//	PxConvexMeshDesc convexDesc;
-		//	convexDesc.points.count = static_cast<PxU32>(Vertices.size());
-		//	convexDesc.points.stride = sizeof(PxVec3);
-		//	convexDesc.points.data = Vertices.data();
-		//	convexDesc.flags = PxConvexFlag::eCOMPUTE_CONVEX;
+			// 정점 좌표를 저장할 피직스용 벡터
+			vector<PxVec3> Vertices;
+			Vertices.reserve(iNumVertices);
 
-		//	// 1. 쿠킹 객체 생성
-		//	PxCookingParams cookingParams(pPhysx->getTolerancesScale());
-		//	cookingParams.meshPreprocessParams |= PxMeshPreprocessingFlag::eWELD_VERTICES; // 정점 용접 옵션
+			// 정점 좌표 변환 및 저장
+			for (_uint i = 0; i < iNumVertices; ++i)
+			{
+				Vertices.emplace_back(ConvertToPxVec3(XMVector3TransformCoord(vVertexPositions[i], WorldMatrix)));
+			}
 
-		//	PxDefaultMemoryInputData input(buffer.getData(), buffer.getSize());
-		//	PxConvexMesh* convexMesh = pPhysx->createConvexMesh(input);
+			// 인덱스를 저장할 벡터
+			vector<PxU32> Indices;
+			Indices.reserve(iNumIndices);
 
-		//	// Convex Mesh 형상 생성
-		//	PxConvexMeshGeometry convexGeometry(convexMesh);
+			// 인덱스 데이터 저장
+			for (_uint i = 0; i < iNumIndices; ++i)
+			{
+				_uint Index = pIB[i];
+				Indices.push_back(Index);
+			}
 
-		//	// 동적 Actor 생성
-		//	m_PxActor = pPhysx->createRigidDynamic(PxTransform(PxVec3(0.0f, 0.0f, 0.0f)));
-		//	PxShape* pShape = pPhysx->createShape(convexGeometry, *m_PxMaterial);
-		//	m_PxActor->attachShape(*pShape);
+			// 삼각형 메쉬 생성
+			PxTriangleMeshDesc tDesc;
+			tDesc.points.count = iNumVertices;
+			tDesc.points.stride = sizeof(PxVec3);
+			tDesc.points.data = Vertices.data();
+			tDesc.triangles.count = iNumTriangles;
+			tDesc.triangles.stride = sizeof(PxU32) * 3;
+			tDesc.triangles.data = Indices.data();
 
-			//// 인덱스를 저장할 벡터
-			//vector<PxU32> Indices;
-			//Indices.reserve(iNumIndices);
+			PxTolerancesScale PxScale;
+			PxCookingParams PxParams(PxScale);
 
-			//// 인덱스 데이터 저장
-			//for (_uint i = 0; i < iNumIndices; ++i)
-			//{
-			//	_uint Index = pIB[i];
-			//	Indices.push_back(Index);
-			//}
+			PxDefaultMemoryOutputStream OutPutStream;
+			if (!PxCookTriangleMesh(PxParams, tDesc, OutPutStream))
+				return E_FAIL;
 
-			//// 삼각형 메쉬 설명 생성
-			//PxTriangleMeshDesc tDesc;
-			//tDesc.points.count = iNumVertices;
-			//tDesc.points.stride = sizeof(PxVec3);
-			//tDesc.points.data = Vertices.data();
-			//tDesc.triangles.count = iNumTriangles;
-			//tDesc.triangles.stride = sizeof(PxU32) * 3;
-			//tDesc.triangles.data = Indices.data();
+			PxDefaultMemoryInputData InputStream(OutPutStream.getData(), OutPutStream.getSize());
 
-			//// 삼각형 메쉬 생성
-			//PxTriangleMesh* pTriangleMesh = PxCreateTriangleMesh(PxCookingParams(PxTolerancesScale(0.0f, 0.0f)), tDesc);
+			// 삼각형 메쉬 생성
+			PxTriangleMesh* pTriangleMesh = m_pPhysX->createTriangleMesh(InputStream);
+			if (!pTriangleMesh)
+				return E_FAIL;
 
-			//// 삼각형 메쉬 형상 생성
-			//PxTriangleMeshGeometry* pGeometry = new PxTriangleMeshGeometry(pTriangleMesh);
-
-			//// 충돌 형상 생성 및 추가
-			//m_PxShape = pPhysx->createShape(PxTriangleMeshGeometry(pTriangleMesh), *m_PxMaterial);
-			//// 물리 씬에 Actor 추가
-			//m_PxScene->addActor(*m_PxActor);
-		//}
+			// 삼각형 메쉬 형상 생성
+			PxTriangleMeshGeometry pGeometry = PxTriangleMeshGeometry(pTriangleMesh);
+			m_PxShape = m_pPhysX->createShape(pGeometry, *m_PxMaterial, true, eShapeFlags);
+			if (!m_PxShape)
+				return E_FAIL;
+		}
 	}
 	break;
 	}

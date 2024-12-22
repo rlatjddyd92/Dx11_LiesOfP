@@ -770,10 +770,8 @@ HRESULT CRaxasia::Ready_Components()
 	for (_uint i = 0; i < COLLTYPE_END; ++i)
 		m_EXCollider[i]->Set_Owner(this);
 
-
-	// RegidBody Initiallize is end of Ready Com
 	CRigidBody::RIGIDBODY_DESC RigidBodyDesc{};
-	RigidBodyDesc.isStatic = false;
+	RigidBodyDesc.isStatic = true;
 	RigidBodyDesc.isGravity = false;
 	RigidBodyDesc.pOwnerTransform = m_pTransformCom;
 	RigidBodyDesc.pOwnerNavigation = m_pNavigationCom;
@@ -784,13 +782,17 @@ HRESULT CRaxasia::Ready_Components()
 	RigidBodyDesc.fDynamicFriction = 0.f;
 	RigidBodyDesc.fRestituion = 0.f;
 
-	physX::GeometryCapsule CapsuleDesc;
-	CapsuleDesc.fHeight = 2.5f;
-	CapsuleDesc.fRadius = 0.45f;
-	RigidBodyDesc.pGeometry = &CapsuleDesc;
-	RigidBodyDesc.PxLockFlags = PxRigidDynamicLockFlag::eLOCK_ANGULAR_X |
-		PxRigidDynamicLockFlag::eLOCK_ANGULAR_Y |
-		PxRigidDynamicLockFlag::eLOCK_ANGULAR_Z;
+	//physX::GeometryCapsule CapsuleDesc;
+	//CapsuleDesc.fHeight = 2.5f;
+	//CapsuleDesc.fRadius = 0.45f;
+	//RigidBodyDesc.pGeometry = &CapsuleDesc;
+	//RigidBodyDesc.PxLockFlags = PxRigidDynamicLockFlag::eLOCK_ANGULAR_X |
+	//	PxRigidDynamicLockFlag::eLOCK_ANGULAR_Y |
+	//	PxRigidDynamicLockFlag::eLOCK_ANGULAR_Z;
+
+	physX::GeometryTriangleMesh TriangleDesc;
+	TriangleDesc.pModel = m_pModelCom;
+	RigidBodyDesc.pGeometry = &TriangleDesc;
 
 	/* FOR.Com_RigidBody */
 	if (FAILED(__super::Add_Component(LEVEL_STATIC, TEXT("Prototype_Component_RigidBody"),

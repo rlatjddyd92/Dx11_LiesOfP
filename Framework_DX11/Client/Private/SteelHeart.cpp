@@ -50,6 +50,8 @@ void CSteelHeart::Update(_float fTimeDelta)
 	// ÂûÄ¬ ¼Ò¸®
 	//m_pSoundCom->Play2D_Repeat()
 
+	//m_pRigidBodyCom->Update(fTimeDelta);
+
 	m_pSoundCom->Update(fTimeDelta);
 }
 
@@ -141,6 +143,27 @@ HRESULT CSteelHeart::Ready_Components()
 		TEXT("Com_Sound"), reinterpret_cast<CComponent**>(&m_pSoundCom))))
 		return E_FAIL;
 	m_pSoundCom->Set_Owner(this);
+
+	CRigidBody::RIGIDBODY_DESC RigidBodyDesc{};
+	RigidBodyDesc.isStatic = true;
+	RigidBodyDesc.isGravity = false;
+	RigidBodyDesc.pOwnerTransform = m_pTransformCom;
+	RigidBodyDesc.pOwnerNavigation = nullptr;
+	RigidBodyDesc.isCapsule = true;
+
+	RigidBodyDesc.pOwner = this;
+	RigidBodyDesc.fStaticFriction = 0.f;
+	RigidBodyDesc.fDynamicFriction = 0.f;
+	RigidBodyDesc.fRestituion = 0.f;
+
+	physX::GeometryTriangleMesh TriangleDesc;
+	TriangleDesc.pModel = m_pModelCom;
+	RigidBodyDesc.pGeometry = &TriangleDesc;
+
+	/* FOR.Com_RigidBody */
+	if (FAILED(__super::Add_Component(LEVEL_STATIC, TEXT("Prototype_Component_RigidBody"),
+		TEXT("Com_RigidBody"), reinterpret_cast<CComponent**>(&m_pRigidBodyCom), &RigidBodyDesc)))
+		return E_FAIL;
 
 	return S_OK;
 }

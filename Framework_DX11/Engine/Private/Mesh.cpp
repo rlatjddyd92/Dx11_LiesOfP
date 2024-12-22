@@ -69,6 +69,9 @@ HRESULT CMesh::Initialize_Prototype(HANDLE* pFile, const CModel* pModel, _fmatri
 	if (FAILED(__super::Create_Buffer(&m_pIB)))
 		return E_FAIL;
 
+	//Safe_Delete_Array(m_pAnimVertices);
+	//Safe_Delete_Array(m_pVertices);
+
 	//Safe_Delete_Array(m_pIndices);
 
 #pragma endregion
@@ -82,6 +85,7 @@ HRESULT CMesh::Initialize_Prototype(HANDLE* pFile, const CModel* pModel, _fmatri
 	//if (m_pVertices != nullptr)
 	//	m_pOctree = COctree::Create(m_vMinPos, m_vMaxPos, m_pIndices, m_pVertices, m_iNumFaces, tmp, &iDepth);
 #pragma endregion
+	
 	return S_OK;
 }
 
@@ -101,10 +105,6 @@ HRESULT CMesh::Initialize_Prototype_To_Binary(HANDLE* pFile, const CModel* pMode
 	m_eTopology = D3D_PRIMITIVE_TOPOLOGY_TRIANGLELIST;
 
 #pragma region VERTEX_BUFFER
-
-	//HRESULT hr = pModel->Get_ModelType() == CModel::TYPE_NONANIM ? Ready_VertexBuffer_NonAnim(pFile, PreTransformMatrix) : Ready_VertexBuffer_Anim(pFile, pModel);
-	//if (FAILED(hr))
-	//	return E_FAIL;
 
 	Ready_VertexBuffer_To_Binary(pFile);
 
@@ -138,6 +138,11 @@ HRESULT CMesh::Initialize_Prototype_To_Binary(HANDLE* pFile, const CModel* pMode
 		return E_FAIL;
 
 #pragma endregion
+
+	//Safe_Delete_Array(m_pAnimVertices);
+	//Safe_Delete_Array(m_pVertices);
+
+	//Safe_Delete_Array(m_pIndices);
 
 	return S_OK;
 }
@@ -240,19 +245,21 @@ HRESULT CMesh::Ready_VertexBuffer_NonAnim(HANDLE* pFile, _fmatrix PreTransformMa
 	m_pVertices = new VTXMESH[m_iNumVertices];
 	ZeroMemory(m_pVertices, sizeof(VTXMESH) * m_iNumVertices);
 
+	m_pVertexPositions = new _Vec3[m_iNumVertices];
+	ZeroMemory(m_pVertexPositions, sizeof(_Vec3) * m_iNumVertices);
+
 	for (size_t i = 0; i < m_iNumVertices; i++)
 	{
 		ReadFile(*pFile, &m_pVertices[i], sizeof(VTXMESH), &dwByte, nullptr);
 
 		XMStoreFloat3(&m_pVertices[i].vPosition, XMVector3TransformCoord(XMLoadFloat3(&m_pVertices[i].vPosition), PreTransformMatrix));
-		//XMStoreFloat3(&m_pVertices[i].vNormal, XMVector3TransformCoord(XMLoadFloat3(&m_pVertices[i].vNormal), PreTransformMatrix));
-		//XMStoreFloat3(&m_pVertices[i].vTangent, XMVector3TransformCoord(XMLoadFloat3(&m_pVertices[i].vTangent), PreTransformMatrix));
 
-		//m_ConvexHullPoints.push_back(m_pVertices[i].vPosition);
+		m_pVertexPositions[i] = m_pVertices[i].vPosition;
 
 		//모델 사이즈 계산
 		CalculateBoundingBox_Mesh( m_pVertices[i].vPosition);
 	}
+
 
 	ZeroMemory(&m_InitialData, sizeof m_InitialData);
 	m_InitialData.pSysMem = m_pVertices;
@@ -279,13 +286,16 @@ HRESULT CMesh::Ready_VertexBuffer_Anim(HANDLE* pFile, const CModel* pModel)
 	m_BufferDesc.MiscFlags = 0;
 	m_BufferDesc.StructureByteStride = m_iVertexStride;
 
-	/* 정점버퍼에 채워줄 값들을 만들기위해서 임시적으로 공간을 할당한다. */
 	m_pAnimVertices = new VTXANIMMESH[m_iNumVertices];
 	ZeroMemory(m_pAnimVertices, sizeof(VTXANIMMESH) * m_iNumVertices);
 
-	for (size_t i = 0; i < m_iNumVertices; i++)
+	m_pVertexPositions = new _Vec3[m_iNumVertices];
+	ZeroMemory(m_pVertexPositions, sizeof(_Vec3) * m_iNumVertices);
+
+	for (_uint i = 0; i < m_iNumVertices; ++i)
 	{
 		ReadFile(*pFile, &m_pAnimVertices[i], sizeof(VTXANIMMESH), &dwByte, nullptr);
+		m_pVertexPositions[i] = m_pAnimVertices[i].vPosition;
 	}
 
 	ReadFile(*pFile, &m_iNumBones, sizeof(_uint), &dwByte, nullptr);
@@ -359,9 +369,13 @@ HRESULT CMesh::Ready_VertexBuffer_To_Binary(HANDLE* pFile)
 	m_pAnimVertices = new VTXANIMMESH[m_iNumVertices];
 	ZeroMemory(m_pAnimVertices, sizeof(VTXANIMMESH) * m_iNumVertices);
 
+	m_pVertexPositions = new _Vec3[m_iNumVertices];
+	ZeroMemory(m_pVertexPositions, sizeof(_Vec3) * m_iNumVertices);
+
 	for (_uint i = 0; i < m_iNumVertices; ++i)
 	{
 		ReadFile(*pFile, &m_pAnimVertices[i], sizeof(VTXANIMMESH), &dwByte, nullptr);
+		m_pVertexPositions[i] = m_pAnimVertices[i].vPosition;
 	}
 
 	ReadFile(*pFile, &m_iNumBones, sizeof(_uint), &dwByte, nullptr);
@@ -475,9 +489,10 @@ void CMesh::Free()
 {
 	__super::Free();
 
-	Safe_Release(m_pOctree);
-	Safe_Delete_Array(m_pVertices);
 	Safe_Delete_Array(m_pAnimVertices);
+	Safe_Delete_Array(m_pVertices);
+
 	Safe_Delete_Array(m_pIndices);
+	Safe_Release(m_pOctree);
 	Safe_Delete_Array(m_pWeightsCnts);
 }

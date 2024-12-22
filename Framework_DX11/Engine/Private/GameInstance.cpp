@@ -670,9 +670,14 @@ HRESULT CGameInstance::Copy_RenderTarget(const _wstring & strTargetTag, ID3D11Te
 	return m_pTarget_Manager->Copy_RenderTarget(strTargetTag, pTexture);
 }
 
-HRESULT CGameInstance::Clear_MRT(const _wstring& strTargetTag)
+HRESULT CGameInstance::Clear_MRT(const _wstring& strMRTTag)
 {
-	return m_pTarget_Manager->Clear_MRT(strTargetTag);
+	return m_pTarget_Manager->Clear_MRT(strMRTTag);
+}
+
+HRESULT CGameInstance::Clear_RTV(const _wstring& strTargetTag)
+{
+	return m_pTarget_Manager->Clear_RTV(strTargetTag);
 }
 
 ID3D11Buffer* CGameInstance::Get_Buffer(const _wstring& strTargetTag)

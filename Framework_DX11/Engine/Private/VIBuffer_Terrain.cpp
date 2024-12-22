@@ -52,7 +52,7 @@ HRESULT CVIBuffer_Terrain::Initialize_Prototype(const _tchar* pHeightMapFilePath
 	VTXNORTEX*			pVertices = new VTXNORTEX[m_iNumVertices];
 	ZeroMemory(pVertices, sizeof(VTXNORTEX) * m_iNumVertices);
 
-	m_pVertexPositions = new _float3[m_iNumVertices];
+	m_pVertexPositions = new _Vec3[m_iNumVertices];
 	ZeroMemory(m_pVertexPositions, sizeof(_float3) * m_iNumVertices);
 
 	for (size_t i = 0; i < m_iNumVerticesZ; i++)

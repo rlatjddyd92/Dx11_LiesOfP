@@ -65,7 +65,8 @@ struct PS_OUT
     vector vColor : SV_TARGET0;
     vector vNormal : SV_TARGET1;
     vector vARM : SV_TARGET2;
-    vector vPickObjectDepth : SV_TARGET7;
+    vector vPickDepth : SV_TARGET3;
+    vector vPickObjectDepth : SV_TARGET4;
 };
 
 PS_OUT PS_MAIN(PS_IN In)
@@ -155,6 +156,7 @@ PS_OUT PS_MAIN(PS_IN In)
     else
         Out.vARM = float4(0.f, 0.f, 0.f, 0.f);
     
+    Out.vPickDepth = vector(In.vProjPos.z / In.vProjPos.w, 0.f, 0.f, 1.f);
     Out.vPickObjectDepth = g_fHashColor;
     
     return Out;

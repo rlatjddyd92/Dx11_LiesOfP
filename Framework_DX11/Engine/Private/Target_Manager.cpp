@@ -171,6 +171,17 @@ HRESULT CTarget_Manager::Clear_MRT(const _wstring& strMRTTag)
 	return S_OK;
 }
 
+HRESULT CTarget_Manager::Clear_RTV(const _wstring& strTargetTag)
+{
+	CRenderTarget* pRenderTarget = Find_RenderTarget(strTargetTag);
+	if (nullptr == pRenderTarget)
+		return E_FAIL;
+
+	pRenderTarget->Clear();
+
+	return S_OK;
+}
+
 ID3D11Buffer* CTarget_Manager::Get_Buffer(const _wstring& strTargetTag)
 {
 	CRenderTarget* pRenderTarget = Find_RenderTarget(strTargetTag);
