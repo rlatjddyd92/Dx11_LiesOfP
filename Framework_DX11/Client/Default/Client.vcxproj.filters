@@ -1231,6 +1231,15 @@
     <Filter Include="02.GameObjects\11.InteractObj\11.SteelHeart">
       <UniqueIdentifier>{b166c39a-dbcb-47bf-852a-965deb04f761}</UniqueIdentifier>
     </Filter>
+    <Filter Include="03.GameInterface_Controller\00.UIManager\00.UIPage\19.UIPage_Achievment">
+      <UniqueIdentifier>{55ad63cd-869a-4859-9b55-21d323d9e4da}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="03.GameInterface_Controller\00.UIManager\00.UIPage\19.UIPage_Achievment\Data">
+      <UniqueIdentifier>{a1c44bcb-a5e7-40b4-8af4-e9afde38678f}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="03.GameInterface_Controller\00.UIManager\00.UIPage\19.UIPage_Achievment\Status">
+      <UniqueIdentifier>{71207553-8ab5-4308-abcf-fde764d7ecf6}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Client.h">
@@ -2261,6 +2270,15 @@
     <ClInclude Include="..\Public\SteelHeart.h">
       <Filter>02.GameObjects\11.InteractObj\11.SteelHeart</Filter>
     </ClInclude>
+    <ClInclude Include="..\Public\UIPage_Achievment.h">
+      <Filter>03.GameInterface_Controller\00.UIManager\00.UIPage\19.UIPage_Achievment</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Public\Achievment_DataLine.h">
+      <Filter>03.GameInterface_Controller\00.UIManager\00.UIPage\19.UIPage_Achievment\Data</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Public\Statistic_Data.h">
+      <Filter>03.GameInterface_Controller\00.UIManager\00.UIPage\19.UIPage_Achievment\Status</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Client.cpp">
@@ -3260,6 +3278,15 @@
     </ClCompile>
     <ClCompile Include="..\Private\SteelHeart.cpp">
       <Filter>02.GameObjects\11.InteractObj\11.SteelHeart</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Private\UIPage_Achievment.cpp">
+      <Filter>03.GameInterface_Controller\00.UIManager\00.UIPage\19.UIPage_Achievment</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Private\Achievment_DataLine.cpp">
+      <Filter>03.GameInterface_Controller\00.UIManager\00.UIPage\19.UIPage_Achievment\Data</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Private\Statistic_Data.cpp">
+      <Filter>03.GameInterface_Controller\00.UIManager\00.UIPage\19.UIPage_Achievment\Status</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

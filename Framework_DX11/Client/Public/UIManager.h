@@ -182,6 +182,7 @@ private:
 	void UIControl_Shop(_float fTimeDelta);
 	void UIControl_Chest(_float fTimeDelta);
 	void UIControl_Telepot(_float fTimeDelta);
+	void UIControl_Achievment(_float fTimeDelta);
 
 public:
 #pragma region Page_Main
@@ -408,6 +409,8 @@ private:
 	CUIPage_Chest* m_pUIPage_Chest = { nullptr };
 	// 텔레포트(별바라기)
 	CUIPage_Telepot* m_pUIPage_Telepot = { nullptr };
+	// 업적
+	CUIPage_Achievment* m_pUIPage_Achievment = { nullptr };
 	
 	CUIRender_Batching* m_pUIRender_Batching = { nullptr };
 
