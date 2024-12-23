@@ -45,7 +45,7 @@ public:
 	virtual void		DeActive_Effect(const _uint eType) {};
 	virtual void		DeActive_AllEffect() {};
 
-	virtual _bool		Get_EffectsLoop(const _uint eType) = 0;
+	virtual _bool		Get_EffectsLoop(const _uint eType) { return true; }
 
 	void		Set_UpTargetPos();
 	void		Look_Player();

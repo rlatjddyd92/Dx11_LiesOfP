@@ -1231,6 +1231,9 @@
     <Filter Include="02.GameObjects\11.InteractObj\11.SteelHeart">
       <UniqueIdentifier>{b166c39a-dbcb-47bf-852a-965deb04f761}</UniqueIdentifier>
     </Filter>
+    <Filter Include="02.GameObjects\02.Pawn\01.Monster\Training">
+      <UniqueIdentifier>{223f254e-5fa3-4583-bdaa-ab2d5c60c350}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Client.h">
@@ -2261,6 +2264,9 @@
     <ClInclude Include="..\Public\SteelHeart.h">
       <Filter>02.GameObjects\11.InteractObj\11.SteelHeart</Filter>
     </ClInclude>
+    <ClInclude Include="..\Public\Monster_Training01.h">
+      <Filter>02.GameObjects\02.Pawn\01.Monster\Training</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Client.cpp">
@@ -3260,6 +3266,9 @@
     </ClCompile>
     <ClCompile Include="..\Private\SteelHeart.cpp">
       <Filter>02.GameObjects\11.InteractObj\11.SteelHeart</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Private\Monster_Training01.cpp">
+      <Filter>02.GameObjects\02.Pawn\01.Monster\Training</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

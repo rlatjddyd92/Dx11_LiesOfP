@@ -194,6 +194,7 @@
     <ClInclude Include="..\Public\CarcassBigA.h" />
     <ClInclude Include="..\Public\CarcassNormal.h" />
     <ClInclude Include="..\Public\CarcassTail.h" />
+    <ClInclude Include="..\Public\Monster_Training01.h" />
     <ClInclude Include="..\Public\State_CarcassNormal_Bite.h" />
     <ClInclude Include="..\Public\CurruptedStrongArm_Puppet.h" />
     <ClInclude Include="..\Public\CutScene.h" />
@@ -534,6 +535,7 @@
     <ClCompile Include="..\Private\CarcassBigA.cpp" />
     <ClCompile Include="..\Private\CarcassNormal.cpp" />
     <ClCompile Include="..\Private\CarcassTail.cpp" />
+    <ClCompile Include="..\Private\Monster_Training01.cpp" />
     <ClCompile Include="..\Private\State_CarcassNormal_Bite.cpp" />
     <ClCompile Include="..\Private\CurruptedStrongArm_Puppet.cpp" />
     <ClCompile Include="..\Private\Machine_EffectObj.cpp" />

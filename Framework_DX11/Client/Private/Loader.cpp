@@ -394,9 +394,6 @@ HRESULT CLoader::Ready_Resources_For_GamePlayLevel()
 
 	GET_GAMEINTERFACE->Set_Loading_Status(TEXT("시몬 마누스가 다가오는 중"), 0.6f);
 
-	if (FAILED(Ready_Resources_For_Monster()))
-		return E_FAIL;
-
 	GET_GAMEINTERFACE->Set_Loading_Status(TEXT("무기와 장비를 준비하는 중"), 0.7f);
 	
 	if (FAILED(Ready_Resources_For_Obj()))
@@ -801,6 +798,10 @@ HRESULT CLoader::Ready_Resources_For_GamePlayLevel_Map1()
 HRESULT CLoader::Ready_Resources_For_GamePlayLevel_Monster()
 {
 	_matrix		PreTransformMatrix = XMMatrixIdentity();
+
+
+	if (FAILED(Ready_Resources_For_Monster()))
+		return E_FAIL;
 
 	m_isFinished_Monster = true;
 
