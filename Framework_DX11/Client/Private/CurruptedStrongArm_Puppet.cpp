@@ -77,7 +77,7 @@ HRESULT CCurruptedStrongArm_Puppet::Initialize(void* pArg)
 	m_eStat.fGrogyPoint = 0.f;
 	m_eStat.fMaxGrogyPoint = 50.f;
 
-	m_vCenterOffset = _Vec3{ 0.f, 0.8f, 0.f };
+	m_vCenterOffset = _Vec3{ 0.f, 1.55f, 0.f };
 
 	// 24-11-26 김성용
 	// 몬스터 직교 UI 접근 코드 

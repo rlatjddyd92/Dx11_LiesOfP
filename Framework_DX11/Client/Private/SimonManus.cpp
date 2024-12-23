@@ -132,7 +132,7 @@ HRESULT CSimonManus::Initialize(void* pArg)
 	m_eStat.fGrogyPoint = 0.f;
 	m_eStat.fMaxGrogyPoint = 50.f;
 
-	m_vCenterOffset = _Vec3{ 0.f, 1.f, 0.f };
+	m_vCenterOffset = _Vec3{ 0.f, 1.95f, 0.f };
 
 	m_eHitType = HIT_CARCASS;
 

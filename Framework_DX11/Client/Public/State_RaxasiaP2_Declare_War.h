@@ -38,6 +38,12 @@ private:
 
     _Vec3               m_vFogSpot = {};
 
+    _Vec4               m_vTargetDir{};
+    _Vec3               m_vFlyMoveStack{};
+    _float              m_fDist = { 0.f };
+
+    _bool               m_bStartSpot = { true };
+
     _bool               m_bResetHovering = { false };
 
     _bool               m_bHovering = { false };

@@ -72,7 +72,29 @@ void CState_RaxasiaP2_Declare_War::Update(_float fTimeDelta)
             m_pMonster->Change_State(CRaxasia::IDLE);
             return;
         }
+
+        if (CurTrackPos >= 295.f && CurTrackPos <= 315.f)
+        {
         
+            if (m_bStartSpot)
+            {
+                m_fDist = m_pMonster->Calc_Distance_XZ();
+                if (m_fDist < 4.f)
+                {
+                    m_fDist = 4.f;
+                }
+                m_bStartSpot = false;
+            }
+        
+            m_pMonster->Get_Transform()->LookAt_Lerp_NoHeight(m_vTargetDir, 1.f, fTimeDelta);
+        
+            _float fYMove = m_pMonster->Get_RigidBody()->Get_Velocity().y;
+        
+            _Vec3 vMove = m_vTargetDir * m_fDist * (((_float)CurTrackPos - 295.f) / 20.f);
+            vMove.y = fYMove;
+            m_pMonster->Get_RigidBody()->Set_Velocity((vMove - m_vFlyMoveStack) / fTimeDelta);
+            m_vFlyMoveStack = vMove;
+        }
         m_pMonster->Get_Transform()->LookAt_Lerp_NoHeight(m_pMonster->Get_TargetDir(), 1.f, fTimeDelta);
         
         break;

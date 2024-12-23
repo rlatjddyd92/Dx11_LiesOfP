@@ -39,6 +39,8 @@ HRESULT CAObj_ThunderMark::Initialize(void* pArg)
     m_pColliderCom->IsActive(true);
 
     m_pColliderCom->Set_Owner(this);
+    
+    m_pEffect->Set_Loop(true);
 
     m_strObjectTag = TEXT("MonsterWeapon");
 

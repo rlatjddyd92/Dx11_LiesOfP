@@ -84,7 +84,9 @@ HRESULT CRebornerBigA::Initialize(void* pArg)
 	m_eStat.fGrogyPoint = 0.f;
 	m_eStat.fMaxGrogyPoint = 50.f;
 
-	m_vCenterOffset = _Vec3{ 0.f, 0.8f, 0.f };
+	m_vCenterOffset = _Vec3{ 0.f, 1.78f, 0.f };
+	
+	m_bDiscover = true;
 
 	// 24-11-26 김성용
 	// 몬스터 직교 UI 접근 코드 
@@ -112,7 +114,7 @@ void CRebornerBigA::Update(_float fTimeDelta)
 {
 	if (KEY_TAP(KEY::R))
 	{
-		CEffect_Manager::Get_Instance()->Add_Effect_ToLayer(LEVEL_GAMEPLAY, TEXT("Raxasia_Attack_Stamp"),
+		CEffect_Manager::Get_Instance()->Add_Effect_ToLayer(LEVEL_GAMEPLAY, TEXT("Monster_Impact"),
 			_Vec3{ Calc_CenterPos() }, _Vec3{ 0, 0, 1 });
 	}
 	m_vCurRootMove = XMVector3TransformNormal(m_pModelCom->Play_Animation(fTimeDelta), m_pTransformCom->Get_WorldMatrix());

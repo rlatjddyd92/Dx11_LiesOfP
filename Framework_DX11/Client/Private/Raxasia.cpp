@@ -120,7 +120,7 @@ HRESULT CRaxasia::Initialize(void* pArg)
 	m_eStat.fGrogyPoint = 0.f;
 	m_eStat.fMaxGrogyPoint = 50.f;
 
-	m_vCenterOffset = _Vec3{0.f, 1.f, 0.f};
+	m_vCenterOffset = _Vec3{0.f, 1.85f, 0.f};
 
 	m_eHitType = HIT_METAL;
 
@@ -139,10 +139,10 @@ HRESULT CRaxasia::Initialize(void* pArg)
 
 void CRaxasia::Priority_Update(_float fTimeDelta)
 {
-	if (m_bChanging)
-	{
-		m_bChanging = false;
-	}
+	//if (m_bChanging)
+	//{
+	//	m_bChanging = false;
+	//}
 	__super::Set_UpTargetPos();
 	m_pWeapon->Priority_Update(fTimeDelta);
 	m_pWeaponShield->Priority_Update(fTimeDelta);
