@@ -83,7 +83,7 @@ void CGameInterface_Controller::Update_GameInterface(_float fTimeDelta)
 void CGameInterface_Controller::Release_GameInterface()
 {
 
-	Safe_Release(m_pGameInstance);
+	//Safe_Release(m_pGameInstance);
 	Safe_Release(m_pUIManager);
 	Safe_Release(m_pItem_Manager);
 	Safe_Release(m_pPlayer_Stat_Manager);

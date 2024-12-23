@@ -24,13 +24,15 @@ public:
 	void Delete_Light(_int iIndex);
 	_int Find_Light_Index(_Vec4 vPos);
 
+	void Clear();
+
 private:
 	vector<class CLight*>	m_Lights;
 
 	_Vec3					m_vDirectionLightDir = {};
 
 private:
-	_int Find_DirectionLight();
+	class CLight* Find_DirectionLight();
 
 public:
 	static CLight_Manager* Create();

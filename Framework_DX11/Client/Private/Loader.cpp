@@ -90,6 +90,7 @@
 #include "Item_Throw.h"
 #include "TorchDeck.h"
 #include "FirePot.h"
+#include "SteelHeart.h"
 #pragma endregion
 
 #include "Machine_EffectObj.h"
@@ -309,7 +310,11 @@ HRESULT CLoader::Ready_Resources_For_LogoLevel()
 
 	lstrcpy(m_szLoadingText, TEXT("모델을(를) 로딩중입니다."));
 
-
+	_matrix      PreTransformMatrix = XMMatrixIdentity();
+	PreTransformMatrix = XMMatrixScaling(0.01f, 0.01f, 0.01f);
+	if (FAILED(m_pGameInstance->Add_Prototype(LEVEL_STATIC, TEXT("Prototype_Component_Model_SteellHeart"),
+		CModel::Create(m_pDevice, m_pContext, CModel::TYPE_ANIM, "../Bin/ModelData/Anim/SteelHeart/SteelHeart.dat", PreTransformMatrix))))
+		return E_FAIL;
 	lstrcpy(m_szLoadingText, TEXT("사운드을(를) 로딩중입니다."));
 	m_pGameInstance->LoadSoundFile("BGM");
 	m_pGameInstance->LoadSoundFile("Enviroment");
@@ -356,6 +361,12 @@ HRESULT CLoader::Ready_Resources_For_GamePlayLevel()
 	//		return textureFuture.get();
 	//}
 
+	//_matrix      PreTransformMatrix = XMMatrixIdentity();
+	//PreTransformMatrix = XMMatrixScaling(0.01f, 0.01f, 0.01f);
+	//if (FAILED(m_pGameInstance->Add_Prototype(LEVEL_GAMEPLAY, TEXT("Prototype_Component_Model_SteellHeart"),
+	//	CModel::Create(m_pDevice, m_pContext, CModel::TYPE_ANIM, "../Bin/ModelData/Anim/SteelHeart/SteelHeart.dat", PreTransformMatrix))))
+	//	return E_FAIL;
+
 	// 24-11-26 김성용
 	// 로딩 화면 조정용 내용 추가 
 	GET_GAMEINTERFACE->Set_Loading_Status(TEXT("이펙트 준비 중"), 0.2f);
@@ -369,37 +380,10 @@ HRESULT CLoader::Ready_Resources_For_GamePlayLevel()
 
 	lstrcpy(m_szLoadingText, TEXT("텍스쳐를 로딩중입니다."));
 
-	/* For. Prototype_Component_Texture_Terrain*/
-	if (FAILED(m_pGameInstance->Add_Prototype(LEVEL_GAMEPLAY, TEXT("Prototype_Component_Texture_Terrain"),
-		CTexture::Create(m_pDevice, m_pContext, TEXT("../Bin/Resources/Textures/Terrain/Grass_%d.dds"), 2))))
-		return E_FAIL;
-
-	/* For. Prototype_Component_Texture_Brush*/
-	if (FAILED(m_pGameInstance->Add_Prototype(LEVEL_GAMEPLAY, TEXT("Prototype_Component_Texture_Brush"),
-		CTexture::Create(m_pDevice, m_pContext, TEXT("../Bin/Resources/Textures/Terrain/Brush.png"), 1))))
-		return E_FAIL;
-
-	/* For. Prototype_Component_Texture_Mask */
-	if (FAILED(m_pGameInstance->Add_Prototype(LEVEL_GAMEPLAY, TEXT("Prototype_Component_Texture_Mask"),
-		CTexture::Create(m_pDevice, m_pContext, TEXT("../Bin/Resources/Textures/Terrain/Mask.bmp"), 1))))
-		return E_FAIL;
-
 	/* For. Prototype_Component_Texture_Sky */
 	if (FAILED(m_pGameInstance->Add_Prototype(LEVEL_GAMEPLAY, TEXT("Prototype_Component_Texture_Sky"),
 		CTexture::Create(m_pDevice, m_pContext, TEXT("../Bin/Resources/Textures/SkyBox/Sky_%d.dds"), 6))))
 		return E_FAIL;
-
-
-	/* For. Prototype_Component_Texture_Particle */
-	if (FAILED(m_pGameInstance->Add_Prototype(LEVEL_GAMEPLAY, TEXT("Prototype_Component_Texture_Particle"),
-		CTexture::Create(m_pDevice, m_pContext, TEXT("../Bin/Resources/Textures/Snow/Snow.png"), 1))))
-		return E_FAIL;
-
-	/* For. Prototype_Component_Texture_Explosion */
-	if (FAILED(m_pGameInstance->Add_Prototype(LEVEL_GAMEPLAY, TEXT("Prototype_Component_Texture_Explosion"),
-		CTexture::Create(m_pDevice, m_pContext, TEXT("../Bin/Resources/Textures/Explosion/Explosion%d.png"), 90))))
-		return E_FAIL;
-
 
 	lstrcpy(m_szLoadingText, TEXT("모델을(를) 로딩중입니다."));
 
@@ -409,9 +393,6 @@ HRESULT CLoader::Ready_Resources_For_GamePlayLevel()
 		return E_FAIL;
 
 	GET_GAMEINTERFACE->Set_Loading_Status(TEXT("시몬 마누스가 다가오는 중"), 0.6f);
-
-	if (FAILED(Ready_Resources_For_Monster()))
-		return E_FAIL;
 
 	GET_GAMEINTERFACE->Set_Loading_Status(TEXT("무기와 장비를 준비하는 중"), 0.7f);
 	
@@ -817,6 +798,10 @@ HRESULT CLoader::Ready_Resources_For_GamePlayLevel_Map1()
 HRESULT CLoader::Ready_Resources_For_GamePlayLevel_Monster()
 {
 	_matrix		PreTransformMatrix = XMMatrixIdentity();
+
+
+	if (FAILED(Ready_Resources_For_Monster()))
+		return E_FAIL;
 
 	m_isFinished_Monster = true;
 
@@ -1419,6 +1404,11 @@ HRESULT CLoader::Ready_Prototype()
 	/* For. Prototype_GameObject_FirePot */
 	if (FAILED(m_pGameInstance->Add_Prototype(TEXT("Prototype_GameObject_FirePot"),
 		CFirePot::Create(m_pDevice, m_pContext))))
+		return E_FAIL;
+
+	/* For. Prototype_GameObject_SteelHeart */
+	if (FAILED(m_pGameInstance->Add_Prototype(TEXT("Prototype_GameObject_SteelHeart"),
+		CSteelHeart::Create(m_pDevice, m_pContext))))
 		return E_FAIL;
 #pragma endregion
 

@@ -182,7 +182,10 @@ void CCutScene::Active_Obj(CUTSCENE_KEYFRAME_DESC* pCutSceneDesc)
 	}
 	if (pCutSceneDesc->Obj_Desc.bUseObj[BOSS2])
 	{
-		m_pObjects[BOSS2]->Change_State(pCutSceneDesc->Obj_Desc.iStateNum[BOSS2]);
+		if (m_pObjects[BOSS2] == nullptr)
+			m_pObjects[BOSS2] = static_cast<CPawn*>(m_pGameInstance->Find_Object(LEVEL_GAMEPLAY, TEXT("Layer_SimonManus"), 0));
+		//m_pObjects[BOSS2]->Change_State(pCutSceneDesc->Obj_Desc.iStateNum[BOSS2]);
+		m_pObjects[BOSS2]->Change_State(4);
 	}
 }
 
@@ -209,6 +212,12 @@ void CCutScene::Active_Sound(CUTSCENE_KEYFRAME_DESC* pCutSceneDesc)
 			break;
 		case BOSS2_MEET:
 			m_pGameInstance->Play_BGM(TEXT("CutScene_SimonManus_Meet.wav"), &g_fCutSceneVolume);
+			break;
+		case BOSS2_PHASE2:
+			m_pGameInstance->Play_BGM(TEXT("CutScene_SimonManus_Phase2.wav"), &g_fCutSceneVolume);
+			break;
+		case BOSS2_DEFEAT:
+			m_pGameInstance->Play_BGM(TEXT("CutScene_SimonManus_Defeat.wav"), &g_fCutSceneVolume);
 			break;
 		default:
 			break;
@@ -249,6 +258,10 @@ void CCutScene::First_Setting()
 		m_pObjects[BOSS1] = static_cast<CPawn*>(m_pGameInstance->Find_Object(LEVEL_GAMEPLAY, TEXT("Layer_Raxasia"), 0));
 		m_pObjects[BOSS1]->Start_CutScene(0);
 		break;
+	case BOSS1_PHASE2:
+		pPlayer->Get_Navigation()->Move_to_Cell(pPlayer->Get_RigidBody(), 268);
+		pPlayer->IsActive(false);
+		break;
 	case BOSS1_DEAD:
 		break;
 	case BOSS2_MEET:
@@ -260,11 +273,11 @@ void CCutScene::First_Setting()
 		pPlayer->Get_Navigation()->Research_Cell(vInitPos);
 		pPlayer->Get_Transform()->Rotation(0.f, -45.f, 0.f);
 		pPlayer->Disappear_Weapon();
-		//m_pObjects[BOSS2] = static_cast<CPawn*>(m_pGameInstance->Find_Object(LEVEL_GAMEPLAY, TEXT("Layer_SimonManus"), 0));
 		break;
 	case BOSS2_PHASE2:
 		pPlayer->IsActive(false);
 		static_cast<CSimonManus*>(m_pGameInstance->Find_Object(LEVEL_GAMEPLAY, TEXT("Layer_SimonManus"), 0))->Start_CutScene(1);
+		m_pGameInstance->Stop_BGM();
 		break;
 	case BOSS2_DEFEAT:
 		pPlayer->IsActive(false);
@@ -350,6 +363,7 @@ void CCutScene::End_Setting()
 	case BOSS2_DEFEAT:
 		pPlayer->IsActive(true);
 		pPlayer->Get_Navigation()->Move_to_Cell(pPlayer->Get_RigidBody(), 40);
+		m_pGameInstance->Stop_BGM();
 		static_cast<CPawn*>(m_pGameInstance->Find_Object(LEVEL_GAMEPLAY, TEXT("Layer_SimonManus"), 0))->Change_State(CSimonManus::DIE_TALKING);
 		break;
 	default:

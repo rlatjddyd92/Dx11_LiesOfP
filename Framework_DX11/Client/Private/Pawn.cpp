@@ -253,7 +253,7 @@ _int CPawn::Get_UFBIndex(_uint UFB_Type)
 
 _Vec4 CPawn::Calc_CenterPos(_bool isUsingBone)
 {
-	if (nullptr == m_pModelCom)
+	if (nullptr == m_pModelCom || !m_pModelCom->Get_IsUseRootBone())
 		return m_pTransformCom->Get_State(CTransform::STATE_POSITION);
 	
 	_Vec4 vPos{};

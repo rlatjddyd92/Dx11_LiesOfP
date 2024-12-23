@@ -2,7 +2,7 @@
 <Project>
   <ProjectOutputs>
     <ProjectOutput>
-      <FullPath>D:\GitProject\Dx11_LiesOfP\Binary_DX11\Engine\Bin\Engine.dll</FullPath>
+      <FullPath>D:\GitHubProjects\Dx11_LiesOfP\Binary_DX11\Engine\Bin\Engine.dll</FullPath>
     </ProjectOutput>
   </ProjectOutputs>
   <ContentFiles />

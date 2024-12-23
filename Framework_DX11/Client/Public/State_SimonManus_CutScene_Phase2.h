@@ -31,10 +31,22 @@ private:
     _bool               m_isCreatedHand= { false };
     _bool               m_isCreateDome = { false };
     _bool               m_isDistortionHand = { false };
+    _bool               m_bAnimationSpeedDown = { false };
+    _bool               m_bAnimationStop = { false };
+    _bool               m_bAnimationRestart = { false };
+    _bool               m_isFirstEmissive = {};
+    _bool               m_isSecondEmissive = {};
+
+    _float              m_fStopedTimer = { 0.f };
 
 private:
     _bool               m_isMaxEmissive = {};
     void                Contorl_Emissive(_float fTimeDelta);
+
+private:
+    _bool               m_isShowDialog[2] = { false, };
+
+    void                Control_Dialog(_int iFrame);
 
 public:
     static CState_SimonManus_CutScene_Phase2* Create(class CFsm* pFsm, class CMonster* pMonster, _uint iStateNum, void* pArg = nullptr);

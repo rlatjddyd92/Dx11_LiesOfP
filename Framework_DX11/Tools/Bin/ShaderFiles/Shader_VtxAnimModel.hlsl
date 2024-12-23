@@ -200,6 +200,26 @@ PS_OUT PS_MAIN_NORMAL(PS_IN_NORMAL In)
     return Out;
 }
 
+PS_OUT PS_MAIN_GLASS(PS_IN In)
+{
+    PS_OUT Out = (PS_OUT) 0;
+
+    vector vMtrlDiffuse = g_DiffuseTexture.Sample(LinearSampler, In.vTexcoord);
+	
+    vector vEmissive = g_EmessiveTexture.Sample(LinearClampSampler, In.vTexcoord) * g_fEmessiveMask;
+	
+    Out.vDiffuse = vector(0.6f, 0.8f, 1.0f, 0.3f);
+    Out.vNormal = vector(In.vNormal.xyz * 0.5f + 0.5f, 0.f);
+    Out.vDepth = vector(In.vProjPos.z / In.vProjPos.w, In.vProjPos.w / g_fFar, 0.f, 0.f); // 0~F사이의 깊이, 정규화된 Z값
+    Out.vARM = vector(1.0f, 0.1f, 1.0f, 0.0f);
+    Out.vEmessive = vEmissive * g_fEmessiveMask;
+    Out.vRimLight = g_vLimLight;
+    Out.vPickDepth = vector(In.vProjPos.z / In.vProjPos.w, 0.f, 0.f, 0.f);
+
+
+    return Out;
+}
+
 struct PS_OUT_LIGHTDEPTH
 {
 	vector vLightDepth : SV_TARGET0;	
@@ -250,5 +270,16 @@ technique11	DefaultTechnique
         VertexShader = compile vs_5_0 VS_MAIN_NORMAL();
         GeometryShader = NULL;
         PixelShader = compile ps_5_0 PS_MAIN_NORMAL();
+    }
+
+    pass AnimModel_Glass
+    {
+        SetRasterizerState(RS_Default);
+        SetDepthStencilState(DSS_Default, 0);
+        SetBlendState(BS_AlphaBlend, vector(0.f, 0.f, 0.f, 0.f), 0xffffffff);
+
+        VertexShader = compile vs_5_0 VS_MAIN();
+        GeometryShader = NULL;
+        PixelShader = compile ps_5_0 PS_MAIN_GLASS();
     }
 }

@@ -91,7 +91,7 @@ namespace Engine
 
 	typedef struct
 	{
-		_bool isOnHDR = false;
+		_bool isOnHDR = true;
 		_float fMiddleGrey = 0.7f;
 		_float fLumWhiteSqr = 0.3f;
 	}HDR_DESC;

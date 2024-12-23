@@ -168,7 +168,7 @@ void CUIPage_Main::Main_Update(_float fTimeDelta)
 	{
 		m_fOpening_Progress += fTimeDelta * 0.3f;
 
-		for (_int i = 0; i < _int(PART_GROUP::GROUP_END); ++i)
+		for (_int i = _int(PART_GROUP::MAIN_MOUSE); i < _int(PART_GROUP::GROUP_END); ++i)
 		{
 			if (i <= _int(PART_GROUP::MAIN_STATIC))
 			{
@@ -203,7 +203,7 @@ void CUIPage_Main::Main_Update(_float fTimeDelta)
 	}
 	else
 	{
-		for (_int i = 0; i < _int(PART_GROUP::GROUP_END); ++i)
+		for (_int i = _int(PART_GROUP::MAIN_MOUSE); i < _int(PART_GROUP::GROUP_END); ++i)
 		{
 			if ((i == _int(PART_GROUP::MAIN_FX)) || (i == _int(PART_GROUP::MAIN_TEXT_FX)))
 			{

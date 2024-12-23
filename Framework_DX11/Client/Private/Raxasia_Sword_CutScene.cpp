@@ -240,8 +240,7 @@ void CRaxasia_Sword_CutScene::Control_Phase1Effect(_float fTimeDelta)
 
 			vCurrentPos = WorldMatrix.Translation();
 			vCurrentPos -= vWorldUp * 0.05f;
-
-			m_pEffect_Manager->Add_Effect_ToLayer_Rot(LEVEL_GAMEPLAY, TEXT("Raxasia_CutScene_Weapon_Change_Turn"), vCurrentPos, _Vec3(0.f, 45.f, 0.f));
+			m_pEffect_Manager->Add_Effect_ToLayer_Rot(LEVEL_GAMEPLAY, TEXT("Raxasia_CutScene_Weapon_Change_Turn"), vCurrentPos, _Vec3(0.f, 60.f, 0.f));
 
 			m_isActiveTurnEffect[i] = true;
 		}
@@ -270,7 +269,7 @@ void CRaxasia_Sword_CutScene::Control_Phase1Effect(_float fTimeDelta)
 
 			vCurrentPos = WorldMatrix.Translation();
 
-			m_pEffect_Manager->Add_Effect_ToLayer_Rot(LEVEL_GAMEPLAY, TEXT("Raxasia_CutScene_Weapon_Change_Insert"), vCurrentPos, _Vec3(0.f,45.f,0.f));
+			m_pEffect_Manager->Add_Effect_ToLayer_Rot(LEVEL_GAMEPLAY, TEXT("Raxasia_CutScene_Weapon_Change_Insert"), vCurrentPos, _Vec3(0.f, 60.f,0.f));
 
 			m_isActiveInsertEffect[i] = true;
 		}
@@ -288,7 +287,7 @@ void CRaxasia_Sword_CutScene::Control_Phase1Effect(_float fTimeDelta)
 
 		vCurrentPos = WorldMatrix.Translation();
 
-		m_pEffect_Manager->Add_Effect_ToLayer_Rot(LEVEL_GAMEPLAY, TEXT("Raxasia_CutScene_Weapon_Change_Fit"), vCurrentPos, _Vec3(0.f, 45.f, 0.f));
+		m_pEffect_Manager->Add_Effect_ToLayer_Rot(LEVEL_GAMEPLAY, TEXT("Raxasia_CutScene_Weapon_Change_Fit"), vCurrentPos, _Vec3(0.f, 60.f, 0.f));
 
 		m_isEndPhase1Effect = true;
 	}

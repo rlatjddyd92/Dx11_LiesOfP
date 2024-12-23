@@ -148,7 +148,7 @@ PS_OUT_MODEL PS_MAIN(PS_IN_ANIMODEL In)
 
     vector vMtrlDiffuse = g_DiffuseTexture.Sample(LinearSampler, In.vTexcoord);
 
-    if (0.3f > vMtrlDiffuse.a)
+    if (0.1f > vMtrlDiffuse.a)
         discard;
 	
     vector vEmissive = g_EmessiveTexture.Sample(LinearClampSampler, In.vTexcoord) * g_fEmessiveMask;
@@ -169,10 +169,10 @@ PS_OUT_MODEL PS_MAIN_NORMAL(PS_IN_NORMAL In)
 
     vector vDiffuse = g_DiffuseTexture.Sample(LinearSampler, In.vTexcoord);
     vector vDisslove = g_DissloveTexture.Sample(LinearSampler, In.vTexcoord);
-    if (g_fDissolveRatio >= vDisslove.r)
+    if (g_fDissolveRatio > vDisslove.r)
         discard;
     
-    if (0.3f >= vDiffuse.a)
+    if (0.1f >= vDiffuse.a)
         discard;
 	
     vector vNormalDesc = g_NormalTexture.Sample(LinearSampler, In.vTexcoord);
@@ -259,6 +259,24 @@ PS_OUT_MODEL PS_MAIN_FUR_BLACK(PS_IN_ANIMODEL In)
     return Out;
 }
 
+PS_OUT_MODEL PS_MAIN_GLASS(PS_IN_ANIMODEL In)
+{
+    PS_OUT_MODEL Out = (PS_OUT_MODEL) 0;
+
+    vector vMtrlDiffuse = g_DiffuseTexture.Sample(LinearSampler, In.vTexcoord);
+	
+    vector vEmissive = g_EmessiveTexture.Sample(LinearClampSampler, In.vTexcoord) * g_fEmessiveMask;
+	
+    Out.vDiffuse = vector(0.6f, 0.8f, 1.0f, 0.3f);
+    Out.vNormal = vector(In.vNormal.xyz * 0.5f + 0.5f, 0.f);
+    Out.vDepth = vector(In.vProjPos.z / In.vProjPos.w, In.vProjPos.w / g_fFar, 0.f, 0.f); // 0~F사이의 깊이, 정규화된 Z값
+    Out.vARM = vector(1.0f, 0.1f, 1.0f, 0.0f);
+    Out.vEmessive = vEmissive * g_fEmessiveMask;
+    Out.vRimLight = vector(0.f, 0.f, 0.f, 0.f);
+    
+    return Out;
+}
+
 technique11 DefaultTechnique
 {
     pass AnimModel // 0
@@ -325,5 +343,16 @@ technique11 DefaultTechnique
         VertexShader = compile vs_5_0 VS_MAIN();
         GeometryShader = NULL;
         PixelShader = compile ps_5_0 PS_MAIN_FUR_BLACK();
+    }
+
+    pass SteelHeartGlass // 6
+    {
+        SetRasterizerState(RS_Default);
+        SetDepthStencilState(DSS_Default, 0);
+        SetBlendState(BS_AlphaBlend, vector(0.f, 0.f, 0.f, 0.f), 0xffffffff);
+
+        VertexShader = compile vs_5_0 VS_MAIN();
+        GeometryShader = NULL;
+        PixelShader = compile ps_5_0 PS_MAIN_GLASS();
     }
 }

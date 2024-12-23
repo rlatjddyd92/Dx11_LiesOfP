@@ -734,7 +734,7 @@ technique11	DefaultTechnique
         PixelShader = compile ps_5_0 PS_FIRE_MAIN();
     }
 
-    pass PARTICLE_TRAIL  // 7
+    pass TRAIL  // 7
     {
         SetRasterizerState(RS_Default);
         SetDepthStencilState(DSS_Default, 0);

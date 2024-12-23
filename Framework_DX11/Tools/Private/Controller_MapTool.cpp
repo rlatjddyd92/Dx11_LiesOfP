@@ -466,7 +466,7 @@ void CController_MapTool::Select_Monster_Model()
 
 	if (ImGui::BeginListBox("Interacts"))
 	{
-		for (int n = 0; n < m_iMonsterListCount; n++)
+		for (int n = 0; n < m_iMonsterListCount+1; n++)
 		{
 			const bool is_selected = (item_selected_idx == n);
 			if (ImGui::Selectable(m_Monster_File_Names[n], is_selected))

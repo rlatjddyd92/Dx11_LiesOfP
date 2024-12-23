@@ -24,6 +24,7 @@ struct HeadParticle
 {
     Particle particle;
     float4 vPreTranslation;
+    float4 vPreTranslation_2;
     float4 vCurrentRandomPos;
     float4 vNextRandomPos;
     uint iTailInitIndex;

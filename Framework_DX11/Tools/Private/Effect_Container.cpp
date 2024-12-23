@@ -216,7 +216,7 @@ void CEffect_Container::Update(_float fTimeDelta)
 
 	if(true == m_bTurn)
 	{ 
-		m_pTransformCom->Turn(_Vec4(0.f, 1.f, 0.f, 0.f), fTimeDelta, 10.f);
+		m_pTransformCom->Turn(_Vec4(0.f, 1.f, 0.f, 0.f), fTimeDelta, 15.f);
 		// m_pTransformCom->Turn(true, true, true, fTimeDelta, 5.f);
 	}
 

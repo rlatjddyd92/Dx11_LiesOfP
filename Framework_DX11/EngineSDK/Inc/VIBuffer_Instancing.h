@@ -55,6 +55,7 @@ public:
 		STATE_ACCEL				= 0x0008,
 		STATE_DECEL				= 0x0010,
 		STATE_TAILSPRAED		= 0x0020,
+		STATE_TRAIL				= 0x0040,
 		STATE_END				= 0x9999
 	};
 

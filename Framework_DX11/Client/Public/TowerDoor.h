@@ -7,6 +7,7 @@ BEGIN(Engine)
 class CCollider;
 class CShader;
 class CModel;
+class CSound;
 END
 
 BEGIN(Client)

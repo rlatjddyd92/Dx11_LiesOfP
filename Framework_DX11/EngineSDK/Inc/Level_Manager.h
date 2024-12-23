@@ -20,6 +20,13 @@ public:
 	_uint			Get_CurLevelIndex() { return m_iLevelIndex; }
 	void			Set_CurLevelIndex(_uint iLevelIndex) { m_iLevelIndex = iLevelIndex; }
 
+	_uint			Get_PrevLevelIndex() { return m_iPrevLeveleIndex; }
+	void			Set_PrevLevelIndex(_uint iLevelIndex) { m_iPrevLeveleIndex = iLevelIndex; }
+
+	void			Set_StaticLevelIndex(_uint iLevelIndex) { m_iStatiLeveleIndex = iLevelIndex; }
+
+	void			Set_LoadingLevelIndex(_uint iLevelIndex) { m_iLoadingLevelIndex = iLevelIndex; }
+
 public:
 	HRESULT Initialize();
 	void Update(_float fTimeDelta);
@@ -31,6 +38,10 @@ private:
 	class CGameInstance*	m_pGameInstance = { nullptr };
 
 	_uint					m_iLevelIndex = {};
+	_uint					m_iPrevLeveleIndex = {};
+
+	_uint					m_iStatiLeveleIndex = {};
+	_uint					m_iLoadingLevelIndex = {};
 
 public:
 	static CLevel_Manager* Create();

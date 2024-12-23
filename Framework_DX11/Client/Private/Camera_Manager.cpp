@@ -51,8 +51,9 @@ HRESULT CCamera_Manager::Change_Camera(const _wstring& strCameraTag, _bool isMov
 	}
 
 	pCamera->IsActive(true);
-	Safe_AddRef(pCamera);
 	m_pCurrentCamera = pCamera;
+
+	Safe_AddRef(m_pCurrentCamera);
 
 	return S_OK;
 }

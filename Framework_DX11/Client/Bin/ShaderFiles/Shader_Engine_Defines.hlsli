@@ -99,6 +99,13 @@ DepthStencilState DSS_Greater
     DepthFunc = greater;
 };
 
+DepthStencilState DSS_Always
+{
+    DepthEnable = true; // 깊이 테스트 활성화
+    DepthWriteMask = all; // 깊이 버퍼에 기록
+    DepthFunc = always; // 무조건 깊이 테스트 통과
+};
+
 BlendState BS_Default
 {
 	BlendEnable[0] = false;	

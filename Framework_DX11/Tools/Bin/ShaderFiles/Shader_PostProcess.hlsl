@@ -93,7 +93,7 @@ PS_OUT PS_MAIN_DOF(PS_IN In)
     // 깊이가 클수록 더 블러를 먹음
     if(fDepth > g_fFocus)
     {
-        float fFocusRatio = saturate(abs(fDepth - g_fFocus) / g_fFocus);
+        float fFocusRatio = saturate((abs(fDepth - g_fFocus) / g_fFocus) * 2.f);
     
         vColor = lerp(vBack, vBlur, fFocusRatio);
     }

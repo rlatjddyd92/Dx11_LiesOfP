@@ -17,6 +17,7 @@ public:
 	_uint			Get_NumVertices() { return m_iNumVertices; }
 	_uint			Get_NumIndices() { return m_iNumIndices; }
 
+	_Vec3*			Get_VertexPositions() { return m_pVertexPositions; }
 public:
 	virtual HRESULT Initialize_Prototype();
 	virtual HRESULT Initialize(void* pArg);
@@ -46,7 +47,7 @@ protected:
 	DXGI_FORMAT					m_eIndexFormat = {};
 	D3D11_PRIMITIVE_TOPOLOGY	m_eTopology = {};
 
-	_float3*				m_pVertexPositions = { nullptr };
+	_Vec3*				m_pVertexPositions = { nullptr };
 
 
 

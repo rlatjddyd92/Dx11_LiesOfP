@@ -72,6 +72,9 @@ void CTrail_Effect_MP::Update(_float fTimeDelta)
 	Movement.fTimeDelta = fTimeDelta;
 	Movement.WorldMatrix = m_WorldMatrix;
 
+	if (7 == m_DefaultDesc.iShaderIndex && MT_FOLLOW == m_DefaultDesc.eType)
+		Movement.iState |= CTrail_MultiPoint_Instance::STATE_TRAIL;
+
 	if (true == m_pVIBufferCom->DispatchCS(m_pActionCS, Movement))
 	{
 		m_isDead = true;
@@ -96,10 +99,6 @@ void CTrail_Effect_MP::Late_Update(_float fTimeDelta)
 HRESULT CTrail_Effect_MP::Render()
 {
 	_Matrix WorldMatrix = XMMatrixIdentity();
-
-	// ²¿¸®
-	WorldMatrix = XMMatrixIdentity();
-
 	if (FAILED(m_pShaderCom->Bind_Matrix("g_WorldMatrix", &WorldMatrix)))
 		return E_FAIL;
 
