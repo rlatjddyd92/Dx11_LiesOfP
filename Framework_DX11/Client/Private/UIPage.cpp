@@ -230,6 +230,8 @@ void CUIPage::Input_Render_Info(UPART& Part, SCROLL_AREA eArea)
 	if (Part.iMoveType == _int(MOVETYPE::TYPE_BAR))
 		pNew->vSize = Part.GetBarSize();
 
+	pNew->bIsAlpha_Adjust = Part.bIsAlpha_Adjust;
+
 	GET_GAMEINTERFACE->Input_Render_Info(pNew);
 }
 

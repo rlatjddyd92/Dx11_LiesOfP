@@ -566,6 +566,9 @@ CUIRender_Batching::UI_SHADER_PASS CUIRender_Batching::Select_Shader_Pass(URENDE
 		eResult = UI_SHADER_PASS::PASS_ANGLE;
 	else if (bIsRange)
 		eResult = UI_SHADER_PASS::PASS_RANGE;
+
+	if (Info.bIsAlpha_Adjust == true)
+		eResult = UI_SHADER_PASS::PASS_COLOR_MULTI_ALPHA_ADJUST;
 	
 	return eResult;
 }

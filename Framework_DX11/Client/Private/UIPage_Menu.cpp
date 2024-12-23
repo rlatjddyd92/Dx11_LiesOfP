@@ -155,9 +155,9 @@ void CUIPage_Menu::Focus_Update(_float fTimeDelta)
 				case _int(PART_GROUP::GROUP_MENU_CHARACTOR):
 					GET_GAMEINTERFACE->SwicthPage(UIPAGE::PAGE_MENU, UIPAGE::PAGE_STAT);
 					break;
-				/*case _int(PART_GROUP::GROUP_MENU_HEART):
-					GET_GAMEINTERFACE->SwicthPage(UIPAGE::PAGE_MENU, UIPAGE::PAGE_COMMON);
-					break;*/
+				case _int(PART_GROUP::GROUP_MENU_HEART):
+					GET_GAMEINTERFACE->SwicthPage(UIPAGE::PAGE_MENU, UIPAGE::PAGE_ACHIEVMENT);
+					break;
 				case _int(PART_GROUP::GROUP_MENU_OPTION):
 					GET_GAMEINTERFACE->SwicthPage(UIPAGE::PAGE_MENU, UIPAGE::PAGE_OPTION);
 					break;
@@ -270,8 +270,8 @@ void CUIPage_Menu::Desc_Update(_float fTimeDelta)
 			strDesc = TEXT("상태를 확인할 수 있습니다.");
 			break;
 		case Client::CUIPage_Menu::PART_GROUP::GROUP_MENU_HEART:
-			strTitle = TEXT("P기관");
-			strDesc = TEXT("업그레이드 및 기능을 선택할 수 있습니다.");
+			strTitle = TEXT("업적");
+			strDesc = TEXT("게임 플레이 기록과 달성 업적을 확인할 수 있습니다.");
 			break;
 		case Client::CUIPage_Menu::PART_GROUP::GROUP_MENU_OPTION:
 			strTitle = TEXT("설정");

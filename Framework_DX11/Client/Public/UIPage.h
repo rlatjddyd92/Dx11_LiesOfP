@@ -129,6 +129,8 @@ public:
 		_int iTwoPolygon_Buffer_Num = 0;
 		_float fRatio_TwoDPolygon[8] = { 1.f, 1.f, 1.f, 1.f, 1.f, 1.f, 1.f, 1.f };
 
+		_bool bIsAlpha_Adjust = false; // rgb 중 가장 낮은 값을 알파로 사용 
+
 	}UPART;
 
 	typedef struct UIPART_GROUP_CONTROL

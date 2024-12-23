@@ -115,6 +115,8 @@ public:
 			return true;
 		else if ((m_pUIPage_Telepot->GetPageAction(PAGEACTION::ACTION_ACTIVE)) || (m_pUIPage_Telepot->GetPageAction(PAGEACTION::ACTION_OPENING)))
 			return true;
+		else if ((m_pUIPage_Achievment->GetPageAction(PAGEACTION::ACTION_ACTIVE)) || (m_pUIPage_Achievment->GetPageAction(PAGEACTION::ACTION_OPENING)))
+			return true;
 		
 		return false;
 	}

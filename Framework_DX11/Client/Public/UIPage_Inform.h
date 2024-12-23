@@ -25,6 +25,9 @@ public:
 		INFORM_Dead,
 		INFORM_Recovery,
 		INFORM_BossKill,
+
+		INFORM_Stargazer_Fx0,
+		INFORM_Stargazer_Fx1,
 		INFORM_Stargazer,
 
 

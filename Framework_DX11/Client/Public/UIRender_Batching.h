@@ -91,6 +91,9 @@ public:
 		_int iTwoPolygon_Buffer_Num = -1;
 		_float fRatio_TwoDPolygon[8] = { 1.f, 1.f, 1.f, 1.f, 1.f, 1.f, 1.f, 1.f };
 
+		// ¾ËÆÄ 
+		_bool bIsAlpha_Adjust = false;
+
 	}URENDER;
 
 	enum class UI_SHADER
@@ -113,6 +116,7 @@ public:
 		PASS_COLOR_MULTI_RANGE,
 		PASS_COLOR_INPUT_ANGLE,
 		PASS_COLOR_MULTI_ANGLE,
+		PASS_COLOR_MULTI_ALPHA_ADJUST,
 		PASS_END
 	};
 

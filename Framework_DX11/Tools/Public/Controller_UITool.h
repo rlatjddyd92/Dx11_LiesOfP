@@ -142,6 +142,8 @@ public:
 		_Vec4 vTexture_Range = { -1.f,-1.f, -1.f, -1.f };
 		_Vec2 vTexture_Angle = { 200.f,200.f };
 
+		_bool bIsAlpha_Adjust = false; // rgb 중 가장 낮은 값을 알파로 사용 
+
 		// 다각형 관련 변수 
 		_bool bIs_TwoDPolygon = false;
 		_int iTwoPolygon_Buffer_Num = 0;

@@ -102,6 +102,11 @@ HRESULT CUIPage_Achievment::Ready_UIPart_Group_Control()
 			m_vec_Group_Ctrl[m_vecPart[i]->iGroupIndex]->PartIndexlist.push_back(i);
 	}
 
+	for (auto& iter : m_vecPart)
+		iter->bRender = false;
+
+	m_vecPageAction[_int(PAGEACTION::ACTION_INACTIVE)] = true;
+
 	m_bRender = false;
 
 	return S_OK;

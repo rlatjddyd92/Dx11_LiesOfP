@@ -55,7 +55,7 @@ float2 Clamp_Range(float2 vTex)
 }
 
  // 각도 조정
-bool Check_Angle(float2 vTex, float4 vPos)
+bool Check_Angle(float2 vTex, float3 vPos)
 {
     float2 vCenter = { 0.5f, 0.5f };
     float2 vDirec = float2(vTex.x, vTex.y) - vCenter;
@@ -233,6 +233,23 @@ PS_OUT PS_COLOR_MULTIPLE_ANGLE(PS_IN In)
     return Out;
 }
 
+// 10. 컬러 곱셈 + 알파 조정 
+PS_OUT PS_COLOR_MULTIPLE_ALPHA_ADJUST(PS_IN In)
+{
+    PS_OUT Out = (PS_OUT) 0;
+	
+    Out.vColor = Sample(In.vTexcoord);
+    
+    Out.vColor.a = max(Out.vColor.r, max(Out.vColor.g, Out.vColor.b)); // rgb 중 가장 높은 값을 알파로 사용한다 
+    
+    if (Out.vColor.a < g_Alpha_Strash)
+        discard;
+
+    Out.vColor = Multi_Color(Out.vColor);
+   
+    return Out;
+}
+
 technique11 DefaultTechnique
 {
 	/* 빛연산 + 림라이트 + ssao + 노멀맵핑 + pbr*/
@@ -344,4 +361,16 @@ technique11 DefaultTechnique
         GeometryShader = NULL;
         PixelShader = compile ps_5_0 PS_COLOR_MULTIPLE_ANGLE();
     }
+
+    pass COLOR_MULTIPLE_ALPHA_ADJUST
+    {
+        SetRasterizerState(RS_Default);
+        SetDepthStencilState(DSS_Default, 0);
+        SetBlendState(BS_AlphaBlend, vector(0.f, 0.f, 0.f, 0.f), 0xffffffff);
+
+        VertexShader = compile vs_5_0 VS_MAIN();
+        GeometryShader = NULL;
+        PixelShader = compile ps_5_0 PS_COLOR_MULTIPLE_ALPHA_ADJUST();
+    }
+
 }

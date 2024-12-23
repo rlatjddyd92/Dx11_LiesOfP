@@ -237,6 +237,13 @@ void CUIManager::UIControl_Telepot(_float fTimeDelta)
 
 void CUIManager::UIControl_Achievment(_float fTimeDelta)
 {
+	if (KEY_TAP(KEY::ESC))
+		SwicthPage(UIPAGE::PAGE_ACHIEVMENT, UIPAGE::PAGE_MENU);
+	else
+	{
+		m_eNowPage = UIPAGE::PAGE_ACHIEVMENT;
+		m_pUIPage_Achievment->Check_Page_Action(fTimeDelta);
+	}
 }
 
 void CUIManager::UIControl_Common(_float fTimeDelta)
@@ -264,7 +271,7 @@ void CUIManager::UIControl_Common(_float fTimeDelta)
 		UIControl_Equip(fTimeDelta);
 	else if ((m_pUIPage_Stat->GetPageAction(PAGEACTION::ACTION_ACTIVE)) || (m_pUIPage_Stat->GetPageAction(PAGEACTION::ACTION_OPENING)))
 		UIControl_Stat(fTimeDelta);
-	else if ((m_pUIPage_Achievment->GetPageAction(PAGEACTION::ACTION_ACTIVE)) || (m_pUIPage_Telepot->GetPageAction(PAGEACTION::ACTION_OPENING)))
+	else if ((m_pUIPage_Achievment->GetPageAction(PAGEACTION::ACTION_ACTIVE)) || (m_pUIPage_Achievment->GetPageAction(PAGEACTION::ACTION_OPENING)))
 		UIControl_Achievment(fTimeDelta);
 	else if ((m_pUIPage_Option->GetPageAction(PAGEACTION::ACTION_ACTIVE)) || (m_pUIPage_Option->GetPageAction(PAGEACTION::ACTION_OPENING)))
 		UIControl_Option(fTimeDelta);
@@ -682,6 +689,8 @@ HRESULT CUIManager::Load_UIDataFile_Part(HANDLE handle, DWORD* dword, _int iInde
 		ReadFile(handle, &pNew->vTexture_Angle, sizeof(_Vec2), dword, nullptr);
 
 		ReadFile(handle, &pNew->iTwoPolygon_Buffer_Num, sizeof(_int), dword, nullptr);
+
+		ReadFile(handle, &pNew->bIsAlpha_Adjust, sizeof(_bool), dword, nullptr);
 
 		if (pNew->iTwoPolygon_Buffer_Num != -1)
 			pNew->bIs_TwoDPolygon = true;

@@ -394,7 +394,7 @@ void CController_UITool::UIPart_Edit()
 		ImGui::DragFloat("Cut_Start", &pNow->vTexture_Angle.x);
 		ImGui::SameLine();
 		ImGui::DragFloat("Cut_End", &pNow->vTexture_Angle.y);
-		
+
 		// 8각형
 		ImGui::Text("2D_Polygon");
 		ImGui::SameLine();
@@ -412,7 +412,7 @@ void CController_UITool::UIPart_Edit()
 		ImGui::DragFloat("Point2", &pNow->fRatio_TwoDPolygon[2], 0.01f);
 		ImGui::SameLine();
 		ImGui::DragFloat("Point3", &pNow->fRatio_TwoDPolygon[3], 0.01f);
-		
+
 		ImGui::DragFloat("Point4", &pNow->fRatio_TwoDPolygon[4], 0.01f);
 		ImGui::SameLine();
 		ImGui::DragFloat("Point5", &pNow->fRatio_TwoDPolygon[5], 0.01f);
@@ -420,7 +420,12 @@ void CController_UITool::UIPart_Edit()
 		ImGui::DragFloat("Point6", &pNow->fRatio_TwoDPolygon[6], 0.01f);
 		ImGui::SameLine();
 		ImGui::DragFloat("Point7", &pNow->fRatio_TwoDPolygon[7], 0.01f);
+
+		// 알파 
+		ImGui::Checkbox("IsAlphaAdjust", &pNow->bIsAlpha_Adjust);
 	}
+
+
 
 	for (auto& iter : m_vecPageInfo[m_iNowSelectNum]->vecPart)
 	{
@@ -495,7 +500,7 @@ _bool CController_UITool::Fade_Out(_wstring strTitle, _wstring strDesc, _Vec3 vC
 		m_vecPageInfo[_int(UIPAGE::PAGE_EFFECT)]->vecPart[2]->szText[iIndex] = strTitle[iIndex];
 	} while (m_InputText[iIndex] != '\0');
 
-	 iIndex = -1;
+	iIndex = -1;
 
 	do
 	{
@@ -557,7 +562,7 @@ void CController_UITool::Show_Script(_wstring strScript0, _wstring strScript1, _
 		m_vecPageInfo[_int(UIPAGE::PAGE_EFFECT)]->vecPart[6]->bRender = true;
 		m_vecPageInfo[_int(UIPAGE::PAGE_EFFECT)]->vecPart[4]->fRatio = 1.f;
 	}
-	else 
+	else
 		m_vecPageInfo[_int(UIPAGE::PAGE_EFFECT)]->vecPart[4]->fRatio = 0.55f;
 
 	m_fTime_Script_Now = 0.f;
@@ -748,6 +753,8 @@ HRESULT CController_UITool::SavePart()
 
 			vecPart.push_back(to_wstring(pNow->iTwoPolygon_Buffer_Num));
 
+			vecPart.push_back(to_wstring(pNow->bIsAlpha_Adjust));
+
 			vecBuffer.push_back(vecPart);
 		}
 	}
@@ -811,6 +818,8 @@ HRESULT CController_UITool::LoadPart()
 		pNew->vTexture_Angle = { stof(vecBuffer[i][42]) , stof(vecBuffer[i][43]) };
 
 		pNew->iTwoPolygon_Buffer_Num = stoi(vecBuffer[i][44]);
+
+		pNew->bIsAlpha_Adjust = _bool(stoi(vecBuffer[i][45]));
 
 		if (pNew->iTwoPolygon_Buffer_Num != -1)
 			pNew->bIs_TwoDPolygon = true;
@@ -945,6 +954,8 @@ HRESULT CController_UITool::MakeClientData_Part(HANDLE handle, DWORD* dword, vec
 		WriteFile(handle, &iter->vTexture_Angle, sizeof(_Vec2), dword, nullptr);
 
 		WriteFile(handle, &iter->iTwoPolygon_Buffer_Num, sizeof(_int), dword, nullptr);
+
+		WriteFile(handle, &iter->bIsAlpha_Adjust, sizeof(_bool), dword, nullptr);
 
 		_int iIndexPartName = -1;
 
