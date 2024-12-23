@@ -1,90 +1,59 @@
-﻿FXC : warning X4717: Effects deprecated for D3DCompiler_47
-D:\GitHubProjects\Dx11_LiesOfP\Framework_DX11\Client\Bin\ShaderFiles\Shader_Effect_Mesh.hlsl(103,5-26): warning X3206: implicit truncation of vector type
+﻿  unity_EQNF29QLTV9NR83K.cpp
+C:\Users\olivi\Github\Dx11_LiesOfP\Framework_DX11\Client\Private\AObj_ThunderBolt.cpp(112,58): warning C4927: 변환이 잘못되었습니다. 사용자 정의 변환이 암시적으로 두 번 이상 적용되었습니다.
+  (소스 파일 '/x64/Release/unity_EQNF29QLTV9NR83K.cpp'을(를) 컴파일하는 중)
+  C:\Users\olivi\Github\Dx11_LiesOfP\Framework_DX11\Client\Private\AObj_ThunderBolt.cpp(112,58):
+  'DirectX::SimpleMath::Vector3::Vector3(DirectX::FXMVECTOR) noexcept' 생성자를 호출하는 동안
+  C:\Users\olivi\Github\Dx11_LiesOfP\Framework_DX11\EngineSDK\Inc\DirectXTK\SimpleMath.h(232,13):
+  'DirectX::SimpleMath::Vector3::Vector3' 선언을 참조하십시오.
   
-  compilation object save succeeded; see D:\GitHubProjects\Dx11_LiesOfP\Framework_DX11\Client\Bin\Shader_Effect_Mesh.cso
-FXC : warning X4717: Effects deprecated for D3DCompiler_47
+C:\Users\olivi\Github\Dx11_LiesOfP\Framework_DX11\Client\Private\AObj_ThunderBolt.cpp(116,57): warning C4927: 변환이 잘못되었습니다. 사용자 정의 변환이 암시적으로 두 번 이상 적용되었습니다.
+  (소스 파일 '/x64/Release/unity_EQNF29QLTV9NR83K.cpp'을(를) 컴파일하는 중)
+  C:\Users\olivi\Github\Dx11_LiesOfP\Framework_DX11\Client\Private\AObj_ThunderBolt.cpp(116,57):
+  'DirectX::SimpleMath::Vector3::Vector3(DirectX::FXMVECTOR) noexcept' 생성자를 호출하는 동안
+  C:\Users\olivi\Github\Dx11_LiesOfP\Framework_DX11\EngineSDK\Inc\DirectXTK\SimpleMath.h(232,13):
+  'DirectX::SimpleMath::Vector3::Vector3' 선언을 참조하십시오.
   
-  compilation object save succeeded; see D:\GitHubProjects\Dx11_LiesOfP\Framework_DX11\Client\Bin\Shader_Effect_Texture.cso
-FXC : warning X4717: Effects deprecated for D3DCompiler_47
-D:\GitHubProjects\Dx11_LiesOfP\Framework_DX11\Client\Bin\ShaderFiles\Shader_ParticleCompute.hlsl(324,9-30): warning X3203: signed/unsigned mismatch, unsigned assumed
-D:\GitHubProjects\Dx11_LiesOfP\Framework_DX11\Client\Bin\ShaderFiles\Shader_ParticleCompute.hlsl(399,9-30): warning X3203: signed/unsigned mismatch, unsigned assumed
-D:\GitHubProjects\Dx11_LiesOfP\Framework_DX11\Client\Bin\ShaderFiles\Shader_ParticleCompute.hlsl(474,9-30): warning X3203: signed/unsigned mismatch, unsigned assumed
+C:\Users\olivi\Github\Dx11_LiesOfP\Framework_DX11\Client\Private\State_Player_Arm_Counter.cpp(90,51): warning C4018: '<=': signed 또는 unsigned가 일치하지 않습니다.
+  (소스 파일 '/x64/Release/unity_EQNF29QLTV9NR83K.cpp'을(를) 컴파일하는 중)
   
-  compilation object save succeeded; see D:\GitHubProjects\Dx11_LiesOfP\Framework_DX11\Client\Bin\Shader_ParticleCompute.cso
-FXC : warning X4717: Effects deprecated for D3DCompiler_47
-D:\GitHubProjects\Dx11_LiesOfP\Framework_DX11\Client\Bin\ShaderFiles\Shader_TrailHead_PointInstance.hlsl(78,5-75): warning X3206: implicit truncation of vector type
+C:\Users\olivi\Github\Dx11_LiesOfP\Framework_DX11\Client\Private\State_Player_Arm_Counter.cpp(95,57): warning C4018: '<=': signed 또는 unsigned가 일치하지 않습니다.
+  (소스 파일 '/x64/Release/unity_EQNF29QLTV9NR83K.cpp'을(를) 컴파일하는 중)
   
-  compilation object save succeeded; see D:\GitHubProjects\Dx11_LiesOfP\Framework_DX11\Client\Bin\Shader_TrailHead_PointInstance.cso
-FXC : warning X4717: Effects deprecated for D3DCompiler_47
-D:\GitHubProjects\Dx11_LiesOfP\Framework_DX11\Client\Bin\ShaderFiles\Shader_TrailTail_PointInstance.hlsl(84,5-75): warning X3206: implicit truncation of vector type
-D:\GitHubProjects\Dx11_LiesOfP\Framework_DX11\Client\Bin\ShaderFiles\Shader_TrailTail_PointInstance.hlsl(290,12-38): warning X3206: implicit truncation of vector type
+C:\Users\olivi\Github\Dx11_LiesOfP\Framework_DX11\Client\Private\State_Player_Arm_Start.cpp(215,45): warning C4018: '<': signed 또는 unsigned가 일치하지 않습니다.
+  (소스 파일 '/x64/Release/unity_EQNF29QLTV9NR83K.cpp'을(를) 컴파일하는 중)
   
-  compilation object save succeeded; see D:\GitHubProjects\Dx11_LiesOfP\Framework_DX11\Client\Bin\Shader_TrailTail_PointInstance.cso
-FXC : warning X4717: Effects deprecated for D3DCompiler_47
-D:\GitHubProjects\Dx11_LiesOfP\Framework_DX11\Client\Bin\ShaderFiles\Shader_Trail_MultiPoint_Compute.hlsl(701,21-69): warning X3206: implicit truncation of vector type
-D:\GitHubProjects\Dx11_LiesOfP\Framework_DX11\Client\Bin\ShaderFiles\Shader_Trail_MultiPoint_Compute.hlsl(703,21-60): warning X3206: implicit truncation of vector type
-D:\GitHubProjects\Dx11_LiesOfP\Framework_DX11\Client\Bin\ShaderFiles\Shader_Trail_MultiPoint_Compute.hlsl(707,21-100): warning X3206: implicit truncation of vector type
+C:\Users\olivi\Github\Dx11_LiesOfP\Framework_DX11\Client\Private\State_RaxasiaP2_Declare_War.cpp(39,21): warning C4244: '=': 'float'에서 'Engine::_int'(으)로 변환하면서 데이터가 손실될 수 있습니다.
+  (소스 파일 '/x64/Release/unity_EQNF29QLTV9NR83K.cpp'을(를) 컴파일하는 중)
   
-  compilation object save succeeded; see D:\GitHubProjects\Dx11_LiesOfP\Framework_DX11\Client\Bin\Shader_Trail_MultiPoint_Compute.cso
-FXC : warning X4717: Effects deprecated for D3DCompiler_47
+C:\Users\olivi\Github\Dx11_LiesOfP\Framework_DX11\Client\Private\State_RaxasiaP2_Declare_War.cpp(188,69): warning C4927: 변환이 잘못되었습니다. 사용자 정의 변환이 암시적으로 두 번 이상 적용되었습니다.
+  (소스 파일 '/x64/Release/unity_EQNF29QLTV9NR83K.cpp'을(를) 컴파일하는 중)
+  C:\Users\olivi\Github\Dx11_LiesOfP\Framework_DX11\Client\Private\State_RaxasiaP2_Declare_War.cpp(188,69):
+  'DirectX::SimpleMath::Vector3::Vector3(DirectX::FXMVECTOR) noexcept' 생성자를 호출하는 동안
+  C:\Users\olivi\Github\Dx11_LiesOfP\Framework_DX11\EngineSDK\Inc\DirectXTK\SimpleMath.h(232,13):
+  'DirectX::SimpleMath::Vector3::Vector3' 선언을 참조하십시오.
   
-  compilation object save succeeded; see D:\GitHubProjects\Dx11_LiesOfP\Framework_DX11\Client\Bin\Shader_UI_Change_Color.cso
-FXC : warning X4717: Effects deprecated for D3DCompiler_47
+C:\Users\olivi\Github\Dx11_LiesOfP\Framework_DX11\Client\Private\State_Training01_Attack.cpp(25,61): warning C4305: '인수': 'double'에서 'Engine::_float'(으)로 잘립니다.
+  (소스 파일 '/x64/Release/unity_EQNF29QLTV9NR83K.cpp'을(를) 컴파일하는 중)
   
-  compilation object save succeeded; see D:\GitHubProjects\Dx11_LiesOfP\Framework_DX11\Client\Bin\Shader_UI_Master.cso
-FXC : warning X4717: Effects deprecated for D3DCompiler_47
+C:\Users\olivi\Github\Dx11_LiesOfP\Framework_DX11\Client\Private\State_CarcassTail_Idle.cpp(190,25): warning C4244: '=': 'float'에서 'Engine::_uint'(으)로 변환하면서 데이터가 손실될 수 있습니다.
+  (소스 파일 '/x64/Release/unity_EQNF29QLTV9NR83K.cpp'을(를) 컴파일하는 중)
   
-  compilation object save succeeded; see D:\GitHubProjects\Dx11_LiesOfP\Framework_DX11\Client\Bin\Shader_UI_Multiple_Color.cso
-FXC : warning X4717: Effects deprecated for D3DCompiler_47
+C:\Users\olivi\Github\Dx11_LiesOfP\Framework_DX11\Client\Private\State_SimonManus_CutScene_Phase2.cpp(43,27): warning C4244: '초기화 중': 'Engine::_double'에서 'Engine::_float'(으)로 변환하면서 데이터가 손실될 수 있습니다.
+  (소스 파일 '/x64/Release/unity_EQNF29QLTV9NR83K.cpp'을(를) 컴파일하는 중)
   
-  compilation object save succeeded; see D:\GitHubProjects\Dx11_LiesOfP\Framework_DX11\Client\Bin\Shader_UI_Normal.cso
-FXC : warning X4717: Effects deprecated for D3DCompiler_47
+C:\Users\olivi\Github\Dx11_LiesOfP\Framework_DX11\Client\Private\UIPage_Stat.cpp(333,8): warning C4834: [[nodiscard]] 특성이 포함된 함수의 반환 값을 버리는 중입니다.
+  (소스 파일 '/x64/Release/unity_EQNF29QLTV9NR83K.cpp'을(를) 컴파일하는 중)
   
-  compilation object save succeeded; see D:\GitHubProjects\Dx11_LiesOfP\Framework_DX11\Client\Bin\Shader_VtxAnimModel.cso
-FXC : warning X4717: Effects deprecated for D3DCompiler_47
+C:\Users\olivi\Github\Dx11_LiesOfP\Framework_DX11\Client\Private\UIPage_Stat.cpp(337,8): warning C4834: [[nodiscard]] 특성이 포함된 함수의 반환 값을 버리는 중입니다.
+  (소스 파일 '/x64/Release/unity_EQNF29QLTV9NR83K.cpp'을(를) 컴파일하는 중)
   
-  compilation object save succeeded; see D:\GitHubProjects\Dx11_LiesOfP\Framework_DX11\Client\Bin\Shader_VtxCubeTex.cso
-FXC : warning X4717: Effects deprecated for D3DCompiler_47
+C:\Users\olivi\Github\Dx11_LiesOfP\Framework_DX11\Client\Private\UIPage_Stat.cpp(341,8): warning C4834: [[nodiscard]] 특성이 포함된 함수의 반환 값을 버리는 중입니다.
+  (소스 파일 '/x64/Release/unity_EQNF29QLTV9NR83K.cpp'을(를) 컴파일하는 중)
   
-  compilation object save succeeded; see D:\GitHubProjects\Dx11_LiesOfP\Framework_DX11\Client\Bin\Shader_VtxModel.cso
-FXC : warning X4717: Effects deprecated for D3DCompiler_47
-  
-  compilation object save succeeded; see D:\GitHubProjects\Dx11_LiesOfP\Framework_DX11\Client\Bin\Shader_VtxNorTex.cso
-FXC : warning X4717: Effects deprecated for D3DCompiler_47
-D:\GitHubProjects\Dx11_LiesOfP\Framework_DX11\Client\Bin\ShaderFiles\Shader_VtxPointInstance.hlsl(73,5-66): warning X3206: implicit truncation of vector type
-  
-  compilation object save succeeded; see D:\GitHubProjects\Dx11_LiesOfP\Framework_DX11\Client\Bin\Shader_VtxPointInstance.cso
-FXC : warning X4717: Effects deprecated for D3DCompiler_47
-  
-  compilation object save succeeded; see D:\GitHubProjects\Dx11_LiesOfP\Framework_DX11\Client\Bin\Shader_VtxPosTex.cso
-FXC : warning X4717: Effects deprecated for D3DCompiler_47
-  
-  compilation object save succeeded; see D:\GitHubProjects\Dx11_LiesOfP\Framework_DX11\Client\Bin\Shader_VtxRectInstance.cso
-FXC : warning X4717: Effects deprecated for D3DCompiler_47
-  
-  compilation object save succeeded; see D:\GitHubProjects\Dx11_LiesOfP\Framework_DX11\Client\Bin\Shader_VtxTrail_OnePoint_Instance.cso
-FXC : warning X4717: Effects deprecated for D3DCompiler_47
-  
-  compilation object save succeeded; see D:\GitHubProjects\Dx11_LiesOfP\Framework_DX11\Client\Bin\Shader_VtxTrail_TwoPoint_Instance.cso
-C:\Program Files\Microsoft Visual Studio\2022\Community\MSBuild\Microsoft\VC\v170\Microsoft.Cpp.Unity.targets(192,5): warning : 'C:\Users\olivi\Github\Dx11_LiesOfP\Framework_DX11\Client\Default\x64\Release\unity_I7OFLG604CCTFUJO.cpp' 경로의 일부를 찾을 수 없습니다.
-  stdafx.cpp
-  unity_MGEG4IRPKZB4OEYY.cpp
-D:\GitHubProjects\Dx11_LiesOfP\Framework_DX11\Client\Private\AObj_ThunderBolt.cpp(112,58): warning C4927: 변환이 잘못되었습니다. 사용자 정의 변환이 암시적으로 두 번 이상 적용되었습니다.
-D:\GitHubProjects\Dx11_LiesOfP\Framework_DX11\Client\Private\AObj_ThunderBolt.cpp(116,57): warning C4927: 변환이 잘못되었습니다. 사용자 정의 변환이 암시적으로 두 번 이상 적용되었습니다.
-D:\GitHubProjects\Dx11_LiesOfP\Framework_DX11\Client\Private\State_Player_Arm_Counter.cpp(90,51): warning C4018: '<=': signed 또는 unsigned가 일치하지 않습니다.
-D:\GitHubProjects\Dx11_LiesOfP\Framework_DX11\Client\Private\State_Player_Arm_Counter.cpp(95,57): warning C4018: '<=': signed 또는 unsigned가 일치하지 않습니다.
-D:\GitHubProjects\Dx11_LiesOfP\Framework_DX11\Client\Private\State_Player_Arm_Start.cpp(215,45): warning C4018: '<': signed 또는 unsigned가 일치하지 않습니다.
-D:\GitHubProjects\Dx11_LiesOfP\Framework_DX11\Client\Private\State_RaxasiaP2_Declare_War.cpp(39,21): warning C4244: '=': 'float'에서 'Engine::_int'(으)로 변환하면서 데이터가 손실될 수 있습니다.
-D:\GitHubProjects\Dx11_LiesOfP\Framework_DX11\Client\Private\State_RaxasiaP2_Declare_War.cpp(188,69): warning C4927: 변환이 잘못되었습니다. 사용자 정의 변환이 암시적으로 두 번 이상 적용되었습니다.
-D:\GitHubProjects\Dx11_LiesOfP\Framework_DX11\Client\Private\State_CarcassTail_Idle.cpp(189,25): warning C4244: '=': 'float'에서 'Engine::_uint'(으)로 변환하면서 데이터가 손실될 수 있습니다.
-D:\GitHubProjects\Dx11_LiesOfP\Framework_DX11\Client\Private\State_SimonManus_CutScene_Phase2.cpp(43,27): warning C4244: '초기화 중': 'Engine::_double'에서 'Engine::_float'(으)로 변환하면서 데이터가 손실될 수 있습니다.
-D:\GitHubProjects\Dx11_LiesOfP\Framework_DX11\Client\Private\UIPage_Stat.cpp(333,8): warning C4834: [[nodiscard]] 특성이 포함된 함수의 반환 값을 버리는 중입니다.
-D:\GitHubProjects\Dx11_LiesOfP\Framework_DX11\Client\Private\UIPage_Stat.cpp(337,8): warning C4834: [[nodiscard]] 특성이 포함된 함수의 반환 값을 버리는 중입니다.
-D:\GitHubProjects\Dx11_LiesOfP\Framework_DX11\Client\Private\UIPage_Stat.cpp(341,8): warning C4834: [[nodiscard]] 특성이 포함된 함수의 반환 값을 버리는 중입니다.
   코드를 생성하고 있습니다.
-  Previous IPDB was built with incompatible compiler, fall back to full compilation.
-D:\GitHubProjects\Dx11_LiesOfP\Framework_DX11\Client\Public\Monster.h(72): warning C4172: 지역 변수 또는 임시의 주소를 반환하고 있습니다.
-D:\GitHubProjects\Dx11_LiesOfP\Framework_DX11\Client\Public\Monster.h(73): warning C4172: 지역 변수 또는 임시의 주소를 반환하고 있습니다.
-  All 9737 functions were compiled because no usable IPDB/IOBJ from previous compilation was found.
+  Previous IPDB and IOBJ mismatch, fall back to full compilation.
+C:\Users\olivi\Github\Dx11_LiesOfP\Framework_DX11\Client\Public\Monster.h(73): warning C4172: 지역 변수 또는 임시의 주소를 반환하고 있습니다.
+C:\Users\olivi\Github\Dx11_LiesOfP\Framework_DX11\Client\Public\Monster.h(72): warning C4172: 지역 변수 또는 임시의 주소를 반환하고 있습니다.
+  All 9832 functions were compiled because no usable IPDB/IOBJ from previous compilation was found.
   코드를 생성했습니다.
-  Client.vcxproj -> D:\GitHubProjects\Dx11_LiesOfP\Framework_DX11\Client\Bin\Client.exe
+  Client.vcxproj -> C:\Users\olivi\Github\Dx11_LiesOfP\Framework_DX11\Client\Bin\Client.exe
