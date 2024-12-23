@@ -119,7 +119,7 @@ PS_OUT PS_MAIN(PS_IN In)
     vNewTexUV += 0.5f;
     
     //float2 vDecalTexCoord = vLocalPos.xz + 0.5f;
-    vector vDecalDiffuse = g_DeacalDiffuseTexture.Sample(LinearSampler, vNewTexUV);
+    vector vDecalDiffuse = g_DeacalDiffuseTexture.Sample(LinearClampSampler, vNewTexUV);
     vDecalDiffuse = vector(vDecalDiffuse.xyz, 0.8f);
     
     if (vDecalDiffuse.a <= 0.1f)
@@ -139,7 +139,7 @@ PS_OUT PS_MAIN(PS_IN In)
     
     if (bNormal)
     {
-        vector vDecalNormal = g_DeacalNormalTexture.Sample(LinearSampler, vNewTexUV);
+        vector vDecalNormal = g_DeacalNormalTexture.Sample(LinearClampSampler, vNewTexUV);
         Out.vNormal = vDecalNormal;
     }
     else   
@@ -147,7 +147,7 @@ PS_OUT PS_MAIN(PS_IN In)
     
     if (bARM)
     {
-        vector vDecalARM = g_DeacalARMTexture.Sample(LinearSampler, vNewTexUV);
+        vector vDecalARM = g_DeacalARMTexture.Sample(LinearClampSampler, vNewTexUV);
         Out.vARM = vDecalARM;
         
         if (vDecalARM.a <= 0.1f)
