@@ -97,6 +97,7 @@
 #pragma endregion
 
 #include "Machine_EffectObj.h"
+#include "Decal.h"
 
 #include "GameInstance.h"
 #include "GameInterface_Controller.h"
@@ -1461,9 +1462,14 @@ HRESULT CLoader::Ready_Prototype()
 		return E_FAIL;
 
 
-	/* For. Prototype_GameObject_CutScene */
+	/* For. Prototype_GameObject_MachineEffect */
 	if (FAILED(m_pGameInstance->Add_Prototype(TEXT("Prototype_GameObject_MachineEffect"),
 		CMachine_EffectObj::Create(m_pDevice, m_pContext))))
+		return E_FAIL;
+
+	/* For. Prototype_GameObject_Decal*/
+	if (FAILED(m_pGameInstance->Add_Prototype(TEXT("Prototype_GameObject_Decal"),
+		CDecal::Create(m_pDevice, m_pContext))))
 		return E_FAIL;
 
 	return S_OK;

@@ -40,7 +40,7 @@ HRESULT CState_SimonManus_CutScene_Phase2::Start_State(void* pArg)
 void CState_SimonManus_CutScene_Phase2::Update(_float fTimeDelta)
 {
     _int iFrame = m_pMonster->Get_Frame();
-    _float fTrackPosition = m_pMonster->Get_CurrentTrackPos();
+    _float fTrackPosition = (_float)m_pMonster->Get_CurrentTrackPos();
     _uint iCurAnimIndex = m_pMonster->Get_CurrentAnimIndex();
 
     if (!m_isChangePhase2)

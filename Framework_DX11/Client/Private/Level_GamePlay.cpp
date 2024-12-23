@@ -441,6 +441,11 @@ HRESULT CLevel_GamePlay::Read_Map_Data()
 						if (FAILED(m_pGameInstance->Add_CloneObject_ToLayer(LEVEL_GAMEPLAY, TEXT("Layer_Monster"), TEXT("Prototype_GameObject_CarcassBigA"), &pDesc)))
 							return E_FAIL;
 					}
+				}	
+				else if (strLayerTag == "Layer_Decal")
+				{
+					if (FAILED(m_pGameInstance->Add_CloneObject_ToLayer(LEVEL_GAMEPLAY, TEXT("Layer_Decal"), TEXT("Prototype_GameObject_Decal"), &pDesc)))
+						return E_FAIL;
 				}
 			}
 			else
