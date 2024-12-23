@@ -16,9 +16,11 @@ BEGIN(Client)
 class CMonster_Training01 final : public CMonster
 {
 public:
-	enum CARCASS_NORMAL_STATE {
-		TRIPLECLAW = MONSTER_STATE_END,
-		TRIPLECLAW_2, CLAWMULTIPLE, CLAWRUSH, BITE, HEADINGMULTIPLE
+	enum TRAINING_STATE
+	{
+		ATTACK = CMonster::MONSTER_STATE_END
+
+		, TRAINING_STATE_END
 	};
 
 private:

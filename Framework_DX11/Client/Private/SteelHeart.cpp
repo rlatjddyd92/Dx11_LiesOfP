@@ -31,7 +31,7 @@ HRESULT CSteelHeart::Initialize(void* pArg)
 	if (FAILED(Ready_Components()))
 		return E_FAIL;
 
-	//m_iAnimation_Gear = m_pModelCom->Find_AnimationIndex("AS_steelheart_gear_V02", 1.75f);
+	m_iAnimation_Gear = m_pModelCom->Find_AnimationIndex("AS_steelheart_gear_V02", 1.75f);
 	m_pModelCom->SetUp_Animation(0, true);
 
 	m_strObjectTag = TEXT("SteelHeart");

@@ -195,6 +195,7 @@
     <ClInclude Include="..\Public\CarcassNormal.h" />
     <ClInclude Include="..\Public\CarcassTail.h" />
     <ClInclude Include="..\Public\Monster_Training01.h" />
+    <ClInclude Include="..\Public\Monster_Training02.h" />
     <ClInclude Include="..\Public\State_CarcassNormal_Bite.h" />
     <ClInclude Include="..\Public\CurruptedStrongArm_Puppet.h" />
     <ClInclude Include="..\Public\CutScene.h" />
@@ -293,6 +294,9 @@
     <ClInclude Include="..\Public\State_RebornerBigA_SlashTwice.h" />
     <ClInclude Include="..\Public\State_RebornerBigA_SwingMultiple.h" />
     <ClInclude Include="..\Public\State_SimonManusP2_Die_Talking.h" />
+    <ClInclude Include="..\Public\State_Training01_Attack.h" />
+    <ClInclude Include="..\Public\State_Training01_Idle.h" />
+    <ClInclude Include="..\Public\State_Training02_Idle.h" />
     <ClInclude Include="..\Public\SteelHeart.h" />
     <ClInclude Include="..\Public\TorchDeck.h" />
     <ClInclude Include="..\Public\UIPage_Chest.h" />
@@ -540,6 +544,7 @@
     <ClCompile Include="..\Private\CarcassNormal.cpp" />
     <ClCompile Include="..\Private\CarcassTail.cpp" />
     <ClCompile Include="..\Private\Monster_Training01.cpp" />
+    <ClCompile Include="..\Private\Monster_Training02.cpp" />
     <ClCompile Include="..\Private\State_CarcassNormal_Bite.cpp" />
     <ClCompile Include="..\Private\CurruptedStrongArm_Puppet.cpp" />
     <ClCompile Include="..\Private\Machine_EffectObj.cpp" />
@@ -638,6 +643,9 @@
     <ClCompile Include="..\Private\State_RebornerBigA_SlashTwice.cpp" />
     <ClCompile Include="..\Private\State_RebornerBigA_SwingMultiple.cpp" />
     <ClCompile Include="..\Private\State_SimonManusP2_Die_Talking.cpp" />
+    <ClCompile Include="..\Private\State_Training01_Attack.cpp" />
+    <ClCompile Include="..\Private\State_Training01_Idle.cpp" />
+    <ClCompile Include="..\Private\State_Training02_Idle.cpp" />
     <ClCompile Include="..\Private\SteelHeart.cpp" />
     <ClCompile Include="..\Private\TorchDeck.cpp" />
     <ClCompile Include="..\Private\UIPage_Chest.cpp" />

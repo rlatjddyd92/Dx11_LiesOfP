@@ -61,6 +61,9 @@
 
 #include "Raxasia_Sword_CutScene.h"
 #include "Raxasia_Helmet_CutScene.h"
+
+#include "Monster_Training01.h"
+#include "Monster_Training02.h"
 #pragma endregion
 
 #pragma region EFFECT
@@ -315,6 +318,12 @@ HRESULT CLoader::Ready_Resources_For_LogoLevel()
 	if (FAILED(m_pGameInstance->Add_Prototype(LEVEL_STATIC, TEXT("Prototype_Component_Model_SteellHeart"),
 		CModel::Create(m_pDevice, m_pContext, CModel::TYPE_ANIM, "../Bin/ModelData/Anim/SteelHeart/SteelHeart.dat", PreTransformMatrix))))
 		return E_FAIL;
+
+	if (FAILED(m_pGameInstance->Add_Prototype(LEVEL_STATIC, TEXT("Sophia_Stoned"),
+		CModel::Create(m_pDevice, m_pContext, CModel::TYPE_NONANIM, "../Bin/ModelData/NonAnim/Map/Etc/Sophia/Sophia_Stoned.dat", PreTransformMatrix))))
+		return E_FAIL;
+
+
 	lstrcpy(m_szLoadingText, TEXT("»ç¿îµåÀ»(¸¦) ·ÎµùÁßÀÔ´Ï´Ù."));
 	m_pGameInstance->LoadSoundFile("BGM");
 	m_pGameInstance->LoadSoundFile("Enviroment");
@@ -963,6 +972,21 @@ HRESULT CLoader::Ready_Resources_For_Monster()
 		CModel::Create(m_pDevice, m_pContext, CModel::TYPE_ANIM, "../Bin/ModelData/Anim/Monster/Boss/Raxasia/Raxasia_Shield02.dat", PreTransformMatrix, false))))
 		return E_FAIL;
 
+
+#pragma region ÈÆ·Ã ·Îº¿
+	//Prototype_Component_Model_Training01
+	PreTransformMatrix = XMMatrixScaling(0.01f, 0.01f, 0.01f) * XMMatrixRotationY(XMConvertToRadians(270.0f));
+	if (FAILED(m_pGameInstance->Add_Prototype(LEVEL_GAMEPLAY, TEXT("Prototype_Component_Model_Training01"),
+		CModel::Create(m_pDevice, m_pContext, CModel::TYPE_ANIM, "../Bin/ModelData/Anim/Monster/Training/Training01.dat", PreTransformMatrix, false))))
+		return E_FAIL;
+
+	//Prototype_Component_Model_Training02
+	PreTransformMatrix = XMMatrixScaling(0.01f, 0.01f, 0.01f) * XMMatrixRotationY(XMConvertToRadians(270.0f));
+	if (FAILED(m_pGameInstance->Add_Prototype(LEVEL_GAMEPLAY, TEXT("Prototype_Component_Model_Training02"),
+		CModel::Create(m_pDevice, m_pContext, CModel::TYPE_ANIM, "../Bin/ModelData/Anim/Monster/Training/Training02.dat", PreTransformMatrix, false))))
+		return E_FAIL;
+#pragma endregion
+
 #pragma region ÄÆ½Å¿ë ¸ðµ¨µé
 	//Prototype_Component_Model_SimonManus_CutScene_P1
 	PreTransformMatrix = XMMatrixScaling(0.01f, 0.01f, 0.01f);
@@ -1315,7 +1339,15 @@ HRESULT CLoader::Ready_Prototype()
 		CSimonManus_EnvHand::Create(m_pDevice, m_pContext))))
 		return E_FAIL;
 
+	/* For. Prototype_GameObject_CutScene_SimonManus_EnvHand */
+	if (FAILED(m_pGameInstance->Add_Prototype(TEXT("Prototype_GameObject_Training01"),
+		CMonster_Training01::Create(m_pDevice, m_pContext))))
+		return E_FAIL;
 
+	/* For. Prototype_GameObject_CutScene_SimonManus_EnvHand */
+	if (FAILED(m_pGameInstance->Add_Prototype(TEXT("Prototype_GameObject_Training02"),
+		CMonster_Training02::Create(m_pDevice, m_pContext))))
+		return E_FAIL;
 #pragma endregion
 
 #pragma region Collider

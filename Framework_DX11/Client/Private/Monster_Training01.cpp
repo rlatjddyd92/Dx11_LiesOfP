@@ -5,6 +5,9 @@
 #include "Player.h"
 #include "Fsm.h"
  
+#include "State_Training01_Idle.h"
+#include "State_Training01_Attack.h"
+
 #include "GameInterface_Controller.h"
 
 
@@ -66,12 +69,6 @@ void CMonster_Training01::Priority_Update(_float fTimeDelta)
 {
 	__super::Set_UpTargetPos();
 
-	if (!m_bDieState && m_eStat.fHp <= 0.f)
-	{
-		GET_GAMEINTERFACE->Set_OnOff_OrthoUI(false, this);
-		m_bDieState = true;
-		m_pFsmCom->Set_State(DIE);
-	}
 }
 
 void CMonster_Training01::Update(_float fTimeDelta)
@@ -92,7 +89,7 @@ void CMonster_Training01::Late_Update(_float fTimeDelta)
 	m_pRigidBodyCom->Update(fTimeDelta);
 	m_pGameInstance->Add_RenderObject(CRenderer::RG_NONBLEND, this);
 
-	m_pColliderObject->Late_Update(fTimeDelta);
+	//m_pColliderObject->Late_Update(fTimeDelta);
 
 	m_pGameInstance->Add_ColliderList(m_pColliderCom);
 }
@@ -115,14 +112,14 @@ HRESULT CMonster_Training01::Ready_Components()
 		return E_FAIL;
 
 	/* FOR.Com_Model */
-	if (FAILED(__super::Add_Component(LEVEL_GAMEPLAY, TEXT("Prototype_Component_Model_CarcassNormal"),
+	if (FAILED(__super::Add_Component(LEVEL_GAMEPLAY, TEXT("Prototype_Component_Model_Training01"),
 		TEXT("Com_Model"), reinterpret_cast<CComponent**>(&m_pModelCom))))
 		return E_FAIL;
 
 	/* FOR.Com_Collider */		//Body
 	CBounding_OBB::BOUNDING_OBB_DESC			ColliderDesc{};
-	ColliderDesc.vExtents = _float3(0.4f, 0.3f, 0.4f);
-	ColliderDesc.vCenter = _float3(-0.1f, 0.f, 0.f);
+	ColliderDesc.vExtents = _float3(0.4f, 0.42f, 0.37f);
+	ColliderDesc.vCenter = _float3(0.f, 1.4f, 0.1f);
 	ColliderDesc.vAngles = _float3(0.f, 0.f, 0.f);
 
 	if (FAILED(__super::Add_Component(LEVEL_STATIC, TEXT("Prototype_Component_Collider_OBB"),
@@ -144,7 +141,7 @@ HRESULT CMonster_Training01::Ready_Components()
 	RigidBodyDesc.fRestituion = 0.0f;
 
 	physX::GeometryCapsule CapsuleDesc;
-	CapsuleDesc.fHeight = 1.5f;
+	CapsuleDesc.fHeight = 1.4f;
 	CapsuleDesc.fRadius = 0.5f;
 	RigidBodyDesc.pGeometry = &CapsuleDesc;
 	RigidBodyDesc.PxLockFlags = PxRigidDynamicLockFlag::eLOCK_ANGULAR_X |
@@ -167,6 +164,8 @@ HRESULT CMonster_Training01::Ready_FSM()
 
 	FSM_INIT_DESC Desc{};
 
+	m_pFsmCom->Add_State(CState_Training01_Idle::Create(m_pFsmCom, this, IDLE, &Desc));
+	m_pFsmCom->Add_State(CState_Training01_Attack::Create(m_pFsmCom, this, ATTACK, &Desc));
 
 	m_pFsmCom->Set_State(IDLE);
 
