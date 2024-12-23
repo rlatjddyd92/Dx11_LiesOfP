@@ -34,7 +34,7 @@ HRESULT CDecal::Initialize(void* pArg)
 		return E_FAIL;
 
 	m_pTransformCom->Set_State(CTransform::STATE_POSITION, pDesc->vPosition);
-
+	m_pTransformCom->Set_Scaled(pDesc->vScale.x, pDesc->vScale.y, pDesc->vScale.z);
 	return S_OK;
 }
 
@@ -147,7 +147,7 @@ HRESULT CDecal::Ready_Components(OBJECT_DEFAULT_DESC* pObjDesc)
 			return E_FAIL;
 	}
 	/* FOR.Com_VIBuffer */
-	if (FAILED(__super::Add_Component(LEVEL_GAMEPLAY, TEXT("Prototype_Component_VIBuffer_Cube"),
+	if (FAILED(__super::Add_Component(LEVEL_STATIC, TEXT("Prototype_Component_VIBuffer_Cube"),
 		TEXT("Com_VIBuffer"), reinterpret_cast<CComponent**>(&m_pVIBufferCom))))
 		return E_FAIL;
 

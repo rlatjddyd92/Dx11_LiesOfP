@@ -16,6 +16,9 @@
       <FullPath>C:\Users\olivi\Github\Dx11_LiesOfP\Framework_DX11\Client\Bin\Shader_ParticleCompute.cso</FullPath>
     </ContentFile>
     <ContentFile>
+      <FullPath>C:\Users\olivi\Github\Dx11_LiesOfP\Framework_DX11\Client\Bin\Shader_SSD.cso</FullPath>
+    </ContentFile>
+    <ContentFile>
       <FullPath>C:\Users\olivi\Github\Dx11_LiesOfP\Framework_DX11\Client\Bin\Shader_TrailHead_PointInstance.cso</FullPath>
     </ContentFile>
     <ContentFile>

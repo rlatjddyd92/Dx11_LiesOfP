@@ -623,6 +623,50 @@ HRESULT CLoader::Ready_Resources_For_GamePlayLevel_Map0()
 	}
 #pragma endregion
 
+#pragma region Decal Textures
+	 handle = _findfirst("../Bin/Resources/Textures/Decal/dds/ENV_Decals/*", &fd);
+
+	if (handle == -1)
+		return E_FAIL;
+
+	char szCurPath4[128] = "../Bin/Resources/Textures/Decal/dds/ENV_Decals/";    // 상대 경로
+	char szFullPath4[128] = "";
+
+	iResult = 0;
+
+	while (iResult != -1)
+	{
+		strcpy_s(szFullPath4, szCurPath4);
+		strcat_s(szFullPath4, fd.name);
+
+		_char szFileName[MAX_PATH] = "";
+		_char szExt[MAX_PATH] = "";
+		_splitpath_s(szFullPath4, nullptr, 0, nullptr, 0, szFileName, MAX_PATH, szExt, MAX_PATH);
+
+		if (!strcmp(fd.name, ".") || !strcmp(fd.name, "..")
+			|| strcmp(szExt, ".dds"))
+		{
+			iResult = _findnext(handle, &fd);
+			continue;
+		}
+
+		string strFileName = szFileName;
+		_wstring strPrototypeName;
+
+		strPrototypeName.assign(strFileName.begin(), strFileName.end());
+		wprintf(strPrototypeName.c_str());	
+
+		_tchar path[MAX_PATH];
+		MultiByteToWideChar(CP_ACP, MB_PRECOMPOSED, szFullPath4, MAX_PATH, path, MAX_PATH);
+
+		if (FAILED(m_pGameInstance->Add_Prototype(LEVEL_GAMEPLAY, strPrototypeName,
+			CTexture::Create(m_pDevice, m_pContext, path, 1))))
+			return E_FAIL;
+
+		iResult = _findnext(handle, &fd);
+	}
+#pragma endregion
+
 	PreTransformMatrix = XMMatrixIdentity();
 	PreTransformMatrix = XMMatrixScaling(0.01f, 0.01f, 0.01f);
 
