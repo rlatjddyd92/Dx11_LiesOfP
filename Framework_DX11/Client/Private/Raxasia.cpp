@@ -186,7 +186,6 @@ void CRaxasia::Update(_float fTimeDelta)
 
 	m_vCurRootMove = XMVector3TransformNormal(m_pModelCom->Play_Animation(fTimeDelta * m_isPlayAnimation), m_pTransformCom->Get_WorldMatrix());
 
-
 	m_pRigidBodyCom->Set_Velocity(m_vCurRootMove / fTimeDelta);
 
 	if (!m_isCutScene)
@@ -776,7 +775,7 @@ HRESULT CRaxasia::Ready_Components()
 		m_EXCollider[i]->Set_Owner(this);
 
 	CRigidBody::RIGIDBODY_DESC RigidBodyDesc{};
-	RigidBodyDesc.isStatic = true;
+	RigidBodyDesc.isStatic = false;
 	RigidBodyDesc.isGravity = false;
 	RigidBodyDesc.pOwnerTransform = m_pTransformCom;
 	RigidBodyDesc.pOwnerNavigation = m_pNavigationCom;
