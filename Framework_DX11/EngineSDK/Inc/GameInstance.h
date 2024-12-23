@@ -301,6 +301,7 @@ private:
 	class CPhysX_Manager*			m_pPhysX_Manager = { nullptr };
 	class CInstance_Manager*		m_pInstance_Manager = { nullptr };
 	class CSound_Manager*			m_pSound_Manager = { nullptr };
+	class CNvCloth_Manager*			m_pNvCloth_Manager = { nullptr };
 
 	// 2024-11-06 ±è¼º¿ë
 	class CCSVFile_Manager*			m_pCSVFile_Manager = { nullptr };

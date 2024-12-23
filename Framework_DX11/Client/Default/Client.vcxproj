@@ -107,7 +107,7 @@
       <Optimization>Disabled</Optimization>
       <PreprocessorDefinitions>_DEBUG;_WINDOWS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <SDLCheck>true</SDLCheck>
-      <AdditionalIncludeDirectories>../../EngineSDK/Inc/;../Public/;../Default;../../EngineSDK/Inc/Fmod;../../EngineSDK/Inc/PhysX</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>../../EngineSDK/Inc/;../Public/;../Default;../../EngineSDK/Inc/Fmod;../../EngineSDK/Inc/PhysX;$(CUDA_PATH_V10_0)/include/</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>

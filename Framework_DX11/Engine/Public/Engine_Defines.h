@@ -66,6 +66,13 @@ using namespace Engine;
 
 using namespace physx;
 
+#include "NvCloth/Cloth.h"
+#include "NvCloth/Factory.h"
+#include "NvCloth/Solver.h"
+#include "NvCloth/DxContextManagerCallback.h"
+
+using namespace nv::cloth;
+
 #define TEXTURE_TYPE_MAX 18
 
 #ifdef _DEBUG

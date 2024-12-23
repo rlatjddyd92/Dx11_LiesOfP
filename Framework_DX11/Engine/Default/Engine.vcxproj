@@ -34,6 +34,7 @@
     <ClCompile Include="..\Private\Component.cpp" />
     <ClCompile Include="..\Private\Component_Manager.cpp" />
     <ClCompile Include="..\Private\CSVFile_Manager.cpp" />
+    <ClCompile Include="..\Private\MyContextManagerCallback.cpp" />
     <ClCompile Include="..\private\CustomFont.cpp" />
     <ClCompile Include="..\Private\DebugDraw.cpp" />
     <ClCompile Include="..\Private\EasyDrawSphere.cpp" />
@@ -55,6 +56,7 @@
     <ClCompile Include="..\private\Mesh.cpp" />
     <ClCompile Include="..\private\Model.cpp" />
     <ClCompile Include="..\private\Navigation.cpp" />
+    <ClCompile Include="..\Private\NvCloth_Manager.cpp" />
     <ClCompile Include="..\Private\Object_Manager.cpp" />
     <ClCompile Include="..\Private\Octree.cpp" />
     <ClCompile Include="..\Private\PhysX_Manager.cpp" />
@@ -108,6 +110,7 @@
     <ClInclude Include="..\Public\Component.h" />
     <ClInclude Include="..\Public\Component_Manager.h" />
     <ClInclude Include="..\Public\CSVFile_Manager.h" />
+    <ClInclude Include="..\Public\MyContextManagerCallback.h" />
     <ClInclude Include="..\public\CustomFont.h" />
     <ClInclude Include="..\Public\DebugDraw.h" />
     <ClInclude Include="..\Public\EasyDrawSphere.h" />
@@ -134,6 +137,7 @@
     <ClInclude Include="..\public\Mesh.h" />
     <ClInclude Include="..\public\Model.h" />
     <ClInclude Include="..\public\Navigation.h" />
+    <ClInclude Include="..\Public\NvCloth_Manager.h" />
     <ClInclude Include="..\Public\Object_Manager.h" />
     <ClInclude Include="..\Public\Octree.h" />
     <ClInclude Include="..\Public\PhysX_Manager.h" />
@@ -280,14 +284,14 @@
       <Optimization>Disabled</Optimization>
       <PreprocessorDefinitions>_DEBUG;_WINDOWS;_USRDLL;ENGINE_EXPORTS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <SDLCheck>true</SDLCheck>
-      <AdditionalIncludeDirectories>../Public/;../Public/Fmod/;../Public/PhysX/</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>../Public/;../Public/Fmod/;../Public/PhysX/;../Public/NvCloth;$(CUDA_PATH_V10_0)/include/</AdditionalIncludeDirectories>
       <LanguageStandard>Default</LanguageStandard>
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
-      <AdditionalDependencies>d3d11.lib;dinput8.lib;Effects11d.lib;DirectXTKd.lib;assimp-vc140-mtd.lib;PhysX_64.lib;PhysXCommon_64.lib;PhysXCooking_64.lib;PhysXExtensions_static_64.lib;PhysXFoundation_64.lib;PhysXPvdSDK_static_64.lib;fmod_vc.lib;%(AdditionalDependencies)</AdditionalDependencies>
-      <AdditionalLibraryDirectories>../ThirdPartyLib/;../ThirdPartyLib/PhysX/Debug;../ThirdPartyLib/Fmod</AdditionalLibraryDirectories>
+      <AdditionalDependencies>d3d11.lib;dinput8.lib;Effects11d.lib;DirectXTKd.lib;assimp-vc140-mtd.lib;PhysX_64.lib;PhysXCommon_64.lib;PhysXCooking_64.lib;PhysXExtensions_static_64.lib;PhysXFoundation_64.lib;PhysXPvdSDK_static_64.lib;fmod_vc.lib;NvClothDEBUG_x64.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalLibraryDirectories>../ThirdPartyLib/;../ThirdPartyLib/PhysX/Debug;../ThirdPartyLib/Fmod;../ThirdPartyLib/NvCloth</AdditionalLibraryDirectories>
     </Link>
     <FxCompile>
       <ShaderType>Effect</ShaderType>
@@ -327,7 +331,7 @@
       <IntrinsicFunctions>true</IntrinsicFunctions>
       <PreprocessorDefinitions>NDEBUG;_WINDOWS;_USRDLL;ENGINE_EXPORTS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <SDLCheck>true</SDLCheck>
-      <AdditionalIncludeDirectories>../Public/;../Public/Fmod/;../Public/PhysX/</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>../Public/;../Public/Fmod/;../Public/PhysX/;../Public/NvCloth/;$(CUDA_PATH_V12_6)\include/</AdditionalIncludeDirectories>
       <LanguageStandard>Default</LanguageStandard>
       <InlineFunctionExpansion>Disabled</InlineFunctionExpansion>
     </ClCompile>
@@ -336,8 +340,8 @@
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
       <OptimizeReferences>true</OptimizeReferences>
       <GenerateDebugInformation>true</GenerateDebugInformation>
-      <AdditionalDependencies>d3d11.lib;dinput8.lib;Effects11.lib;DirectXTK.lib;assimp-vc140-mt.lib;fmod_vc.lib;PhysX_64.lib;PhysXCommon_64.lib;PhysXCooking_64.lib;PhysXExtensions_static_64.lib;PhysXFoundation_64.lib;PhysXPvdSDK_static_64.lib;%(AdditionalDependencies)</AdditionalDependencies>
-      <AdditionalLibraryDirectories>../ThirdPartyLib/;../ThirdPartyLib/PhysX/Release;../ThirdPartyLib/Fmod</AdditionalLibraryDirectories>
+      <AdditionalDependencies>d3d11.lib;dinput8.lib;Effects11.lib;DirectXTK.lib;assimp-vc140-mt.lib;fmod_vc.lib;PhysX_64.lib;PhysXCommon_64.lib;PhysXCooking_64.lib;PhysXExtensions_static_64.lib;PhysXFoundation_64.lib;PhysXPvdSDK_static_64.lib;NvCloth_x64.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalLibraryDirectories>../ThirdPartyLib/;../ThirdPartyLib/PhysX/Release;../ThirdPartyLib/Fmod;../ThirdPartyLib/NvCloth</AdditionalLibraryDirectories>
     </Link>
     <FxCompile>
       <ShaderType>Effect</ShaderType>

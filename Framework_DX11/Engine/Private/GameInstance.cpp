@@ -14,6 +14,7 @@
 #include "Collider_Manager.h"
 #include "Key_Manager.h"
 #include "PhysX_Manager.h"
+#include "NvCloth_Manager.h"
 #include "Sound_Manager.h"
 
 // 2024-11-06 ±è¼º¿ë
@@ -111,6 +112,11 @@ HRESULT CGameInstance::Initialize_Engine(HINSTANCE hInst, _uint iNumLevels, cons
 	m_pPhysX_Manager = CPhysX_Manager::Create();
 	if (nullptr == m_pPhysX_Manager)
 		return E_FAIL;
+
+	m_pNvCloth_Manager = CNvCloth_Manager::Create(*ppDevice, *ppContext);
+	if (nullptr == m_pNvCloth_Manager)
+		return E_FAIL;
+
 
 	// 2024-11-06 ±è¼º¿ë
 	m_pCSVFile_Manager = CCSVFile_Manager::Create();
@@ -959,6 +965,7 @@ void CGameInstance::Release_Engine()
 	Safe_Release(m_pComponent_Manager);
 	Safe_Release(m_pLevel_Manager);
 	Safe_Release(m_pLight_Manager);
+	Safe_Release(m_pNvCloth_Manager);
 	Safe_Release(m_pPhysX_Manager);
 	Safe_Release(m_pInstance_Manager);
 	Safe_Release(m_pSound_Manager);

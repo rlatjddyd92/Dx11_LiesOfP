@@ -44,6 +44,9 @@
 #include "D:\GitHubProjects\Dx11_LiesOfP\Framework_DX11\Engine\Private\CSVFile_Manager.cpp"
 
 
+#include "D:\GitHubProjects\Dx11_LiesOfP\Framework_DX11\Engine\Private\MyContextManagerCallback.cpp"
+
+
 #include "D:\GitHubProjects\Dx11_LiesOfP\Framework_DX11\Engine\private\CustomFont.cpp"
 
 
@@ -105,6 +108,9 @@
 
 
 #include "D:\GitHubProjects\Dx11_LiesOfP\Framework_DX11\Engine\private\Navigation.cpp"
+
+
+#include "D:\GitHubProjects\Dx11_LiesOfP\Framework_DX11\Engine\Private\NvCloth_Manager.cpp"
 
 
 #include "D:\GitHubProjects\Dx11_LiesOfP\Framework_DX11\Engine\Private\Object_Manager.cpp"

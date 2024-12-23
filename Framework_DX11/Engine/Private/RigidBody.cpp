@@ -7,6 +7,7 @@
 #include "Model.h"
 #include "Mesh.h"
 
+
 CRigidBody::CRigidBody(ID3D11Device* pDevice, ID3D11DeviceContext* pContext)
 	: CComponent{ pDevice,  pContext }
 {
@@ -235,12 +236,16 @@ HRESULT CRigidBody::Add_PxGeometry(RIGIDBODY_DESC* pDesc)
 
 	physX::Geometry* pGeometry = pDesc->pGeometry;
 
+	PxShape* pShape = { nullptr };
+
 	switch (pGeometry->GetType())
 	{
 	case physX::PX_CAPSULE:
 	{
 		physX::GeometryCapsule* CapsuleGeometry = static_cast<physX::GeometryCapsule*>(pGeometry);
-		m_PxShape = m_pPhysX->createShape(PxCapsuleGeometry(CapsuleGeometry->fRadius, CapsuleGeometry->fHeight * 0.5f), *m_PxMaterial, false, eShapeFlags);
+		pShape = m_pPhysX->createShape(PxCapsuleGeometry(CapsuleGeometry->fRadius, CapsuleGeometry->fHeight * 0.5f), *m_PxMaterial, false, eShapeFlags);
+		if (!pShape)
+			return E_FAIL;
 
 		PxVec3 newPosition(CapsuleGeometry->fHeight * 0.5f, 0.f, 0.f); // 캡슐의 새로운 로컬 위치
 		PxQuat newRotation(PxIdentity);        // 기본 회전 (필요에 따라 수정)
@@ -258,21 +263,33 @@ HRESULT CRigidBody::Add_PxGeometry(RIGIDBODY_DESC* pDesc)
 
 		m_PxActor->setGlobalPose(Transform);
 
-		m_PxShape->setLocalPose(newLocalPose);
+		pShape->setLocalPose(newLocalPose);
+
+		m_PxActor->attachShape(*pShape);
+		m_PxShapes.emplace_back(pShape);
 	}
 	break;
 	case physX::PX_SPHERE:
 	{
 		//PlayerPxTransform = PxTransformFromSegment(PlayerPxTransform.p, PlayerPxTransform.p + PxVec3(0.f, 1.f, 0.f) * 1.5f);
 		physX::GeometrySphere* SphereGeometry = static_cast<physX::GeometrySphere*>(pGeometry);
-		m_PxShape = m_pPhysX->createShape(PxSphereGeometry(SphereGeometry->fRadius), *m_PxMaterial, false, eShapeFlags);
+		pShape = m_pPhysX->createShape(PxSphereGeometry(SphereGeometry->fRadius), *m_PxMaterial, false, eShapeFlags);
+		if (!pShape)
+			return E_FAIL;
 
+		m_PxActor->attachShape(*pShape);
+		m_PxShapes.emplace_back(pShape);
 	}
 	break;
 	case physX::PX_BOX:
 	{
 		physX::GeometryBox* BoxGeometry = static_cast<physX::GeometryBox*>(pGeometry);
-		m_PxShape = m_pPhysX->createShape(PxBoxGeometry(BoxGeometry->vSize.x * 0.5f, BoxGeometry->vSize.y * 0.5f, BoxGeometry->vSize.z * 0.5f), *m_PxMaterial, false, eShapeFlags);
+		pShape = m_pPhysX->createShape(PxBoxGeometry(BoxGeometry->vSize.x * 0.5f, BoxGeometry->vSize.y * 0.5f, BoxGeometry->vSize.z * 0.5f), *m_PxMaterial, false, eShapeFlags);
+		if (!pShape)
+			return E_FAIL;
+
+		m_PxActor->attachShape(*pShape);
+		m_PxShapes.emplace_back(pShape);
 	}
 	break;
 	case physX::PX_MODEL:
@@ -309,6 +326,7 @@ HRESULT CRigidBody::Add_PxGeometry(RIGIDBODY_DESC* pDesc)
 			for (_uint i = 0; i < iNumVertices; ++i)
 			{
 				Vertices.emplace_back(ConvertToPxVec3(XMVector3TransformCoord(vVertexPositions[i], WorldMatrix)));
+				//Vertices.emplace_back(ConvertToPxVec3(vVertexPositions[i]));
 			}
 
 			// 인덱스를 저장할 벡터
@@ -347,15 +365,20 @@ HRESULT CRigidBody::Add_PxGeometry(RIGIDBODY_DESC* pDesc)
 
 			// 삼각형 메쉬 형상 생성
 			PxTriangleMeshGeometry pGeometry = PxTriangleMeshGeometry(pTriangleMesh);
-			m_PxShape = m_pPhysX->createShape(pGeometry, *m_PxMaterial, true, eShapeFlags);
-			if (!m_PxShape)
+			pShape = m_pPhysX->createShape(pGeometry, *m_PxMaterial, true, eShapeFlags);
+			if (!pShape)
 				return E_FAIL;
+
+			m_PxActor->attachShape(*pShape);
+			m_PxShapes.emplace_back(pShape);
+
+			pShape = nullptr;
 		}
 	}
 	break;
 	}
 
-	m_PxActor->attachShape(*m_PxShape);
+	//m_PxActor->attachShape(*m_PxShape);
 
 	return S_OK;
 }
@@ -391,13 +414,16 @@ void CRigidBody::Free()
 {
 	__super::Free();
 
-	if (m_PxActor && m_PxShape)
+	if (m_PxActor)
 	{
 		// Shape detach 및 Actor 제거
 		if (m_PxActor->getNbShapes() > 0)
 		{
-			m_PxShape->userData = nullptr;
-			m_PxActor->detachShape(*m_PxShape);
+			for (auto& pShape : m_PxShapes)
+			{
+				pShape->userData = nullptr;
+				m_PxActor->detachShape(*pShape);
+			}
 		}
 		m_PxScene->removeActor(*m_PxActor);
 
