@@ -24,6 +24,11 @@ HRESULT CState_RaxasiaP2_WaveSting::Start_State(void* pArg)
 {
     m_iRouteTrack = 0;
     m_pMonster->Change_Animation(AN_CHARGE, false, 0.1f, 50);
+    m_bResetRim = false;
+    m_bControlRim = false;
+
+    m_fGoalRimAlpha = 0.1f;
+    m_fCurtRimAlpha = 1.f;
 
     m_bSwingSound = false;
 
@@ -77,6 +82,7 @@ void CState_RaxasiaP2_WaveSting::Update(_float fTimeDelta)
         {
             ++m_iRouteTrack;
             m_bSwing = false;
+            m_bControlRim = true;
             m_pMonster->DeActive_Effect(CRaxasia::EFFECT_THUNDERENVELOP_SMALL);
             m_pMonster->Get_Model()->Set_SpeedRatio(AN_RUN, (double)1);
             m_pMonster->Change_Animation(AN_STING, false, 0.02f, 50);
@@ -100,6 +106,15 @@ void CState_RaxasiaP2_WaveSting::Update(_float fTimeDelta)
             m_pMonster->Get_Transform()->LookAt_Lerp_NoHeight(m_pMonster->Get_TargetDir(), 2.f, fTimeDelta);
         }
 
+        if (!m_bResetRim)
+        {
+            if (CurTrackPos >= 180.f)
+            {
+                m_fGoalRimAlpha = 1.f;
+                m_bResetRim = true;
+            }
+        }
+
         break;
     default:
         break;
@@ -109,10 +124,16 @@ void CState_RaxasiaP2_WaveSting::Update(_float fTimeDelta)
     Effect_Check(CurTrackPos);
     Control_Sound(CurTrackPos);
 
+    if (m_bControlRim)
+    {
+        Update_Rimlight();
+    }
+
 }
 
 void CState_RaxasiaP2_WaveSting::End_State()
 {
+    m_pMonster->DeActive_Effect(CRaxasia::EFFECT_INCHENTSWORD_P2);
 }
 
 _bool CState_RaxasiaP2_WaveSting::End_Check()
@@ -241,6 +262,23 @@ void CState_RaxasiaP2_WaveSting::Effect_Check(_double CurTrackPos)
         else
         {
             m_pMonster->DeActive_Effect(CRaxasia::EFFECT_THUNDERACCEL);
+        }
+    }
+}
+
+void CState_RaxasiaP2_WaveSting::Update_Rimlight()
+{
+    if (m_fCurtRimAlpha != m_fGoalRimAlpha)
+    {
+        m_fCurtRimAlpha += (m_fGoalRimAlpha - m_fCurtRimAlpha) / 15;
+        m_pMonster->Set_RimLightColor(_Vec4{ 0.9f, 0.f, 0.f, m_fCurtRimAlpha });
+        if (abs(m_fGoalRimAlpha - m_fCurtRimAlpha) < 0.1f)
+        {
+            m_fCurtRimAlpha = m_fGoalRimAlpha;
+            if (m_fGoalRimAlpha == 1.f)
+            {
+                m_pMonster->Set_RimLightColor(_Vec4{ 0.f, 0.f, 0.f, 1.f });
+            }
         }
     }
 }

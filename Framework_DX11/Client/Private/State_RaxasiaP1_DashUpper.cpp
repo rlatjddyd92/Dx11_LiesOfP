@@ -25,6 +25,12 @@ HRESULT CState_RaxasiaP1_DashUpper::Start_State(void* pArg)
     m_iRouteTrack = 0;
     m_pMonster->Change_Animation(AN_DASHUPPER_DASH, false, 0.1f, 0);
 
+    m_bResetRim = false;
+    m_bControlRim = false;
+
+    m_fGoalRimAlpha = 0.1f;
+    m_fCurtRimAlpha = 1.f;
+
     m_bSwingSound = false;
 
     m_bSwing = false;
@@ -118,7 +124,8 @@ void CState_RaxasiaP1_DashUpper::Update(_float fTimeDelta)
             ++m_iRouteTrack;
             m_bSwing = false;
             m_bStamp = false;
-            m_bSpeedController = true;
+            m_bSpeedController = true;//림라이트 온
+            m_bControlRim = true;
             m_pMonster->Change_Animation(AN_TRIPLELINK_FIRST, false, 0.1f, 0);
             m_pMonster->Get_Model()->Set_SpeedRatio(AN_TRIPLELINK_FIRST, (double)0.5f);
             return;
@@ -148,6 +155,16 @@ void CState_RaxasiaP1_DashUpper::Update(_float fTimeDelta)
             m_pMonster->Change_State(CRaxasia::IDLE);
             return;
         }
+
+        if (!m_bResetRim)
+        {
+            if (CurTrackPos >= 60.f)
+            {
+                m_fGoalRimAlpha = 1.f;
+                m_bResetRim = true;
+            }
+        }
+
         break;
 
     default:
@@ -157,6 +174,11 @@ void CState_RaxasiaP1_DashUpper::Update(_float fTimeDelta)
     Collider_Check(CurTrackPos);
     Effect_Check(CurTrackPos);
     Control_Sound(CurTrackPos);
+
+    if (m_bControlRim)
+    {
+        Update_Rimlight();
+    }
 
 }
 
@@ -208,7 +230,7 @@ void CState_RaxasiaP1_DashUpper::Collider_Check(_double CurTrackPos)
     {
         if ((CurTrackPos >= 40.f && CurTrackPos <= 48.f))
         {
-            m_pMonster->Active_CurrentWeaponCollider(1.3f, 0, HIT_TYPE::HIT_METAL, ATTACK_STRENGTH::ATK_WEAK);
+            m_pMonster->Active_CurrentWeaponCollider(1.4f, 0, HIT_TYPE::HIT_METAL, ATTACK_STRENGTH::ATK_WEAK);
         }
         else
         {
@@ -219,7 +241,7 @@ void CState_RaxasiaP1_DashUpper::Collider_Check(_double CurTrackPos)
     {
         if ((CurTrackPos >= 35.f && CurTrackPos <= 44.f))
         {
-            m_pMonster->Active_CurrentWeaponCollider(1.3f, 0, HIT_TYPE::HIT_METAL, ATTACK_STRENGTH::ATK_WEAK);
+            m_pMonster->Active_CurrentWeaponCollider(1.4f, 0, HIT_TYPE::HIT_METAL, ATTACK_STRENGTH::ATK_NORMAL);
         }
         else
         {
@@ -230,7 +252,7 @@ void CState_RaxasiaP1_DashUpper::Collider_Check(_double CurTrackPos)
     {
         if ((CurTrackPos >= 35.f && CurTrackPos <= 48.f))
         {
-            m_pMonster->Active_CurrentWeaponCollider(1.3f, 0, HIT_TYPE::HIT_METAL, ATTACK_STRENGTH::ATK_NORMAL);
+            m_pMonster->Active_CurrentWeaponCollider(1.6f, 0, HIT_TYPE::HIT_METAL, ATTACK_STRENGTH::ATK_STRONG);
         }
         else
         {
@@ -368,6 +390,20 @@ void CState_RaxasiaP1_DashUpper::Effect_Check(_double CurTrackPos)
                     vPos, _Vec3{ m_pMonster->Get_TargetDir() });
                 m_bStamp = true;
             }
+        }
+    }
+}
+
+void CState_RaxasiaP1_DashUpper::Update_Rimlight()
+{
+    m_fCurtRimAlpha += (m_fGoalRimAlpha - m_fCurtRimAlpha) / 15;
+    m_pMonster->Set_RimLightColor(_Vec4{ 0.9f, 0.f, 0.f, m_fCurtRimAlpha });
+    if (abs(m_fGoalRimAlpha - m_fCurtRimAlpha) < 0.1f)
+    {
+        m_fCurtRimAlpha = m_fGoalRimAlpha;
+        if (m_fGoalRimAlpha == 1.f)
+        {
+            m_pMonster->Set_RimLightColor(_Vec4{ 0.f, 0.f, 0.f, 1.f });
         }
     }
 }

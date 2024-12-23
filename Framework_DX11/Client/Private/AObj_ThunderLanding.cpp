@@ -33,7 +33,7 @@ HRESULT CAObj_ThunderLanding::Initialize(void* pArg)
     if (FAILED(Ready_Components()))
         return E_FAIL;
 
-    m_fDamageAmount = 280.f;
+    m_fDamageAmount = 28.f;
     m_fLifeDuration = 0.2f;
 
     m_pColliderCom->IsActive(true);
@@ -125,7 +125,7 @@ HRESULT CAObj_ThunderLanding::Ready_Components()
     /* FOR.Com_Collider */
     CBounding_Sphere::BOUNDING_SPHERE_DESC      ColliderDesc{};
     ColliderDesc.vCenter = _float3(0.f, 0.f, 0.f);
-    ColliderDesc.fRadius = 2.f;
+    ColliderDesc.fRadius = 3.f;
 
     if (FAILED(__super::Add_Component(LEVEL_STATIC, TEXT("Prototype_Component_Collider_Sphere"),
         TEXT("Com_Collider"), reinterpret_cast<CComponent**>(&m_pColliderCom), &ColliderDesc)))

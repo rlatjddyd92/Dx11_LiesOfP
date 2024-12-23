@@ -23,10 +23,11 @@ HRESULT CState_RaxasiaP2_TeleportAttack::Initialize(_uint iStateNum, void* pArg)
 HRESULT CState_RaxasiaP2_TeleportAttack::Start_State(void* pArg)
 {
     m_iRouteTrack = 0;
-    m_pMonster->Change_Animation(AN_BACKJUMP, false, 0.1f, 50);
+    m_pMonster->Change_Animation(AN_BACKJUMP, false, 0.1f, 0);
 
     m_bSwingSound = false;
     m_bTeleport = false;
+    m_bSetDir = false;
 
     m_bSwing = false;
     m_bStart = false;
@@ -48,27 +49,28 @@ void CState_RaxasiaP2_TeleportAttack::Update(_float fTimeDelta)
         {
             ++m_iRouteTrack;
             m_bTeleport = false;
+            m_bAccel = false;
             m_pMonster->DeActive_Effect(CRaxasia::EFFECT_THUNDERENVELOP_SMALL);
             m_pMonster->Change_Animation(AN_JUMPATTACK, false, 0.2f, 50);
             return;
         }
 
-        if (!m_bTeleport)
+        if (CurTrackPos >= 40.f && CurTrackPos <= 45.f)
         {
-            if (CurTrackPos >= 40.f && CurTrackPos <= 42.f)
+            if (!m_bSetDir)
             {
-                m_bTeleport = true;
-                // ез
-                _Vec3 vDir = m_pMonster->Get_TargetDir();
+                _Vec3 vDir = m_pMonster->Get_Transform()->Get_State(CTransform::STATE_LOOK);
 
                 vDir.Normalize();
-
-                m_pMonster->Get_RigidBody()->Set_Velocity(-(vDir * 80.f));
+                m_vDashDirection = -vDir;
+                m_bSetDir = true;
             }
+            m_pMonster->Get_RigidBody()->Set_Velocity((m_vDashDirection * 90.f));
         }
-
-        m_pMonster->Get_Transform()->LookAt_Lerp_NoHeight(m_pMonster->Get_TargetDir(), 2.f, fTimeDelta);
-
+        else
+        {
+            m_pMonster->Get_Transform()->LookAt_Lerp_NoHeight(m_pMonster->Get_TargetDir(), 2.f, fTimeDelta);
+        }
         break;
 
     case 1:
@@ -167,65 +169,36 @@ void CState_RaxasiaP2_TeleportAttack::Effect_Check(_double CurTrackPos)
 {
     if (m_iRouteTrack == 0)
     {
-        if (!m_bStart)
-        {
-            m_bStart = true;
-            m_pMonster->Active_Effect(CRaxasia::EFFECT_THUNDERENVELOP_SMALL, true);
-        }
-    }
-    else
-    {
-        if (!m_bEnvelop)
-        {
-            if (CurTrackPos >= 40.f)
-            {
-                m_pMonster->Active_Effect(CRaxasia::EFFECT_THUNDERENVELOP_SMALL, true);
-            }
-        }
-        else if (CurTrackPos >= 165.f)
-        {
-            m_pMonster->DeActive_Effect(CRaxasia::EFFECT_THUNDERENVELOP_SMALL);
-        }
-
-        if (CurTrackPos >= 39.f && CurTrackPos <= 42.f)
+        if (CurTrackPos >= 35.f && CurTrackPos <= 45.f)
         {
             if (!m_bAccel)
             {
-                m_bAccel = true;
+                m_pMonster->Active_Effect(CRaxasia::EFFECT_THUNDERENVELOP_SMALL, true);
                 m_pMonster->Active_Effect(CRaxasia::EFFECT_THUNDERACCEL, true);
+                m_bAccel = true;
             }
         }
         else
         {
+            m_pMonster->DeActive_Effect(CRaxasia::EFFECT_THUNDERENVELOP_SMALL);
             m_pMonster->DeActive_Effect(CRaxasia::EFFECT_THUNDERACCEL);
         }
-
-        if (!m_bFire)
+    }
+    else
+    {
+        if (CurTrackPos >= 130.f && CurTrackPos <= 140.f)
         {
-            if (CurTrackPos >= 180.f)
+            if (!m_bAccel)
             {
-                m_bFire = true;
-
-                CAttackObject::ATKOBJ_DESC Desc{};
-
-                _float4x4 WorldMat{};
-                _Vec3 vPos = { 0.f, 0.f, 0.f };
-                XMStoreFloat4x4(&WorldMat,
-                    (*m_pMonster->Get_BoneCombinedMat(m_pMonster->Get_Model()->Get_UFBIndices(UFB_WEAPON))
-                        * (m_pMonster->Get_Transform()->Get_WorldMatrix())));
-                vPos = XMVector3TransformCoord(vPos, XMLoadFloat4x4(&WorldMat));
-
-                Desc.vPos = vPos;
-
-                Desc.vDir = _Vec3{ m_pMonster->Get_TargetPos() - vPos };
-                Desc.vDir.Normalize();
-
-                Desc.vTargetPos = _Vec3{ m_pMonster->Get_TargetPos() };
-                Desc.pOwner = m_pMonster;
-
-                m_pGameInstance->Add_CloneObject_ToLayer(LEVEL_GAMEPLAY, TEXT("Monster_Attack"), TEXT("Prototype_GameObject_ThunderBolt"), &Desc);
+                m_pMonster->Active_Effect(CRaxasia::EFFECT_THUNDERENVELOP_SMALL, true);
+                m_pMonster->Active_Effect(CRaxasia::EFFECT_THUNDERACCEL, true);
+                m_bAccel = true;
             }
-
+        }
+        else
+        {
+            m_pMonster->DeActive_Effect(CRaxasia::EFFECT_THUNDERENVELOP_SMALL);
+            m_pMonster->DeActive_Effect(CRaxasia::EFFECT_THUNDERACCEL);
         }
     }
 }

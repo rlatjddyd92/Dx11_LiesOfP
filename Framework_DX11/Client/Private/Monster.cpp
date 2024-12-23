@@ -5,6 +5,7 @@
 #include "Player.h"
 #include "Weapon.h"
 
+#include "Fsm.h"
 
 
 CMonster::CMonster(ID3D11Device* pDevice, ID3D11DeviceContext* pContext)
@@ -195,6 +196,25 @@ void CMonster::OnCollisionExit(CGameObject* pOther)
 const _Matrix* CMonster::Get_BoneCombinedMat(_uint iBoneIndex)
 {
 	return m_pModelCom->Get_BoneCombindTransformationMatrix_Ptr(iBoneIndex);
+}
+
+_bool CMonster::Calc_DamageGain(_float fAtkDmg, _Vec3 vHitPos, _uint iHitType, _uint iAttackStrength, CGameObject* pAttacker)
+{
+	if (m_bDieState)
+	{
+		return false;
+	}
+
+	m_eStat.fHp -= (fAtkDmg * ((100 - m_eStat.fDefence) / 100));
+	m_eStat.fAtkDmg = fAtkDmg;
+
+	if (!m_bDiscover)
+	{
+		m_pFsmCom->Change_State(KNOCKBACK);
+		m_bDiscover = true;
+	}
+
+	return true;
 }
 
 HRESULT CMonster::Ready_Components()

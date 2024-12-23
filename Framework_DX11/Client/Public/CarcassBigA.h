@@ -42,7 +42,7 @@ public:
 
 private:
 	CColliderObject*			m_pColliderObject[TYPE_END] = { nullptr, nullptr, nullptr };
-	_bool					m_bColliderCtrs[TYPE_END] = {true,  true, true};
+	_bool						m_bColliderCtrs[TYPE_END] = {true,  true, true};
 
 private:
 	virtual void	Active_CurrentWeaponCollider(_float fDamageRatio, _uint iCollIndex = 0, _uint iHitType = 0, _uint iAtkStrength = 0) override;

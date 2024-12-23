@@ -138,6 +138,7 @@ void CState_RaxasiaP2_ShieldRush::Effect_Check(_double CurTrackPos)
             if (!m_bRush)
             {
                 m_pMonster->Active_Effect(CRaxasia::EFFECT_SHIELDDASH, true);
+                m_bRush = true;
             }
         }
         else

@@ -14,6 +14,7 @@
 #include "State_CarcassNormal_Idle.h"
 #include "State_CarcassNormal_Die.h"
 #include "State_CarcassNormal_HitFatal.h"
+#include "State_CarcassNormal_KnockBack.h"
 
 #include "State_CarcassNormal_HeadingMultiple.h"
 #include "State_CarcassNormal_TripleClaw.h"
@@ -325,6 +326,7 @@ HRESULT CCarcassNormal::Ready_FSM()
 	m_pFsmCom->Add_State(CState_CarcassNormal_Idle::Create(m_pFsmCom, this, IDLE, &Desc));
 	m_pFsmCom->Add_State(CState_CarcassNormal_HitFatal::Create(m_pFsmCom, this, HITFATAL, &Desc));
 	m_pFsmCom->Add_State(CState_CarcassNormal_Die::Create(m_pFsmCom, this, DIE, &Desc));
+	m_pFsmCom->Add_State(CState_CarcassNormal_KnockBack::Create(m_pFsmCom, this, KNOCKBACK, &Desc));
 
 
 	m_pFsmCom->Add_State(CState_CarcassNormal_TripleClaw::Create(m_pFsmCom, this, TRIPLECLAW, &Desc));

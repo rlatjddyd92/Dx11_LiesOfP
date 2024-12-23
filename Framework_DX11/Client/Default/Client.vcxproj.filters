@@ -922,12 +922,6 @@
     <Filter Include="05.Fsm\Monster\Raxasia\P1\Attack\RouteParts\Discharge">
       <UniqueIdentifier>{e5adac13-4069-48d1-b81c-5f212e5650e1}</UniqueIdentifier>
     </Filter>
-    <Filter Include="02.GameObjects\02.Pawn\01.Monster\SimonManus\EnvHand">
-      <UniqueIdentifier>{198e4125-b11e-41b7-b2a8-104e7a6d3cba}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="02.GameObjects\02.Pawn\01.Monster\SimonManus\GodHand">
-      <UniqueIdentifier>{8d2b04ee-e8f1-46c4-ae87-5c07b49fbf95}</UniqueIdentifier>
-    </Filter>
     <Filter Include="03.GameInterface_Controller\00.UIManager\00.UIPage\18.UIPage_Telepot">
       <UniqueIdentifier>{8d2c85a1-e53e-4e3f-b451-241e3aa1bf15}</UniqueIdentifier>
     </Filter>
@@ -1000,18 +994,6 @@
     <Filter Include="02.GameObjects\02.Pawn\01.Monster">
       <UniqueIdentifier>{0083e25f-5f57-4f81-8604-c0d79a304e39}</UniqueIdentifier>
     </Filter>
-    <Filter Include="02.GameObjects\02.Pawn\01.Monster\CarcassBigA">
-      <UniqueIdentifier>{f6168eed-c521-4165-b051-0becd723a0a2}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="02.GameObjects\02.Pawn\01.Monster\SimonManus">
-      <UniqueIdentifier>{57195b03-ed04-4599-966f-cd38e86fb16d}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="02.GameObjects\02.Pawn\01.Monster\CarcassTail">
-      <UniqueIdentifier>{e6447638-0aaa-4897-887b-a642b899134e}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="02.GameObjects\02.Pawn\01.Monster\Raxasia">
-      <UniqueIdentifier>{f57ad993-eab1-4040-8e32-f758a798764d}</UniqueIdentifier>
-    </Filter>
     <Filter Include="03.GameInterface_Controller\00.UIManager\00.UIPage\06.UIPage_Stat %2890%25%29">
       <UniqueIdentifier>{f815fc82-3802-4a2a-8c10-2a59b6325fce}</UniqueIdentifier>
     </Filter>
@@ -1023,9 +1005,6 @@
     </Filter>
     <Filter Include="05.Fsm\Monster\Raxasia\CutScene\Meet">
       <UniqueIdentifier>{d622711a-38aa-424f-bda2-df758fcfded3}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="02.GameObjects\02.Pawn\01.Monster\Raxasia\CutSceneSword">
-      <UniqueIdentifier>{70d4c3d2-d9d8-46f4-975c-1b6547791ccc}</UniqueIdentifier>
     </Filter>
     <Filter Include="05.Fsm\Monster\Raxasia\CutScene\Phase2">
       <UniqueIdentifier>{95d368c5-a0af-4b47-a9c1-93cf75de38ca}</UniqueIdentifier>
@@ -1047,9 +1026,6 @@
     </Filter>
     <Filter Include="02.GameObjects\12.AttackObject\Raxasia\ThunderBlast">
       <UniqueIdentifier>{7dc222b7-f853-4f65-8a39-500e8e478b14}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="02.GameObjects\02.Pawn\01.Monster\Raxasia\CutSceneHelmet">
-      <UniqueIdentifier>{1d65a508-3da4-4c20-a1f4-28ecd56229f7}</UniqueIdentifier>
     </Filter>
     <Filter Include="05.Fsm\Player\CutScene\Walk">
       <UniqueIdentifier>{dc6f7b9e-e299-46ce-bf7d-94196ab07a34}</UniqueIdentifier>
@@ -1078,14 +1054,8 @@
     <Filter Include="02.GameObjects\12.AttackObject\Raxasia\ThunderStampMark">
       <UniqueIdentifier>{77dace17-07fa-459c-8365-865c87cf129f}</UniqueIdentifier>
     </Filter>
-    <Filter Include="02.GameObjects\02.Pawn\01.Monster\CurruptedStrongArm_Puppet">
-      <UniqueIdentifier>{2a7b97d8-e836-4fee-82c9-aeed32fabee4}</UniqueIdentifier>
-    </Filter>
     <Filter Include="05.Fsm\Monster\CurruptedStrongArm_Puppet">
       <UniqueIdentifier>{b61a1f13-8a0f-45e8-9428-8852f8e82b01}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="05.Fsm\Monster\CurruptedStrongArm_Puppet\Idle">
-      <UniqueIdentifier>{36f5f2c2-3cc6-4135-8945-4d947dc2c2fb}</UniqueIdentifier>
     </Filter>
     <Filter Include="05.Fsm\Monster\CurruptedStrongArm_Puppet\Attack">
       <UniqueIdentifier>{f2660a4a-a5cd-463d-9315-e2738909a7d1}</UniqueIdentifier>
@@ -1146,12 +1116,6 @@
     </Filter>
     <Filter Include="05.Fsm\Monster\CarcassNormal">
       <UniqueIdentifier>{47125a40-3e9c-4a12-a938-101dc385eddd}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="02.GameObjects\02.Pawn\01.Monster\RebornerBigA">
-      <UniqueIdentifier>{b68070e4-27c6-4ef6-8e82-8c6ce0d9846e}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="02.GameObjects\02.Pawn\01.Monster\CarcassNormal">
-      <UniqueIdentifier>{fbb31b9b-4d9e-422e-b312-c4d1db68dc8b}</UniqueIdentifier>
     </Filter>
     <Filter Include="05.Fsm\Monster\RebornerBigA\Die">
       <UniqueIdentifier>{09046ceb-cc26-4915-b032-b2c51bc0bab9}</UniqueIdentifier>
@@ -1233,6 +1197,63 @@
     </Filter>
     <Filter Include="02.GameObjects\02.Pawn\01.Monster\Training">
       <UniqueIdentifier>{223f254e-5fa3-4583-bdaa-ab2d5c60c350}</UniqueIdentifier>
+	</Filter>
+    <Filter Include="05.Fsm\Monster\CarcassNormal\KnockBack">
+      <UniqueIdentifier>{026d4247-d4ff-493a-9711-0808f4524d77}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="05.Fsm\Monster\CarcassTail\KnockBack">
+      <UniqueIdentifier>{b3617b78-4b2b-4989-9408-6c6fce47507a}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="05.Fsm\Monster\RebornerBigA\KnockBack">
+      <UniqueIdentifier>{33bd324b-d1a6-4587-b694-4a91d0845bf7}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="05.Fsm\Monster\CurruptedStrongArm_Puppet\KnockBack">
+      <UniqueIdentifier>{f779a43c-19cf-474c-b119-acbbf5fd31f4}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="05.Fsm\Monster\CurruptedStrongArm_Puppet\Idle">
+      <UniqueIdentifier>{36f5f2c2-3cc6-4135-8945-4d947dc2c2fb}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.GameObjects\02.Pawn\01.Monster\Boss">
+      <UniqueIdentifier>{e92f6bb7-8304-4ba5-90db-2ecd253411b0}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.GameObjects\02.Pawn\01.Monster\Normal">
+      <UniqueIdentifier>{d0fc2795-3de5-487d-a643-4ee6837b16e0}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.GameObjects\02.Pawn\01.Monster\Elite">
+      <UniqueIdentifier>{bd2c0807-9504-4a08-a977-e187c1f7def7}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.GameObjects\02.Pawn\01.Monster\Normal\CurruptedStrongArm_Puppet">
+      <UniqueIdentifier>{2a7b97d8-e836-4fee-82c9-aeed32fabee4}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.GameObjects\02.Pawn\01.Monster\Elite\CarcassTail">
+      <UniqueIdentifier>{e6447638-0aaa-4897-887b-a642b899134e}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.GameObjects\02.Pawn\01.Monster\Normal\CarcassNormal">
+      <UniqueIdentifier>{fbb31b9b-4d9e-422e-b312-c4d1db68dc8b}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.GameObjects\02.Pawn\01.Monster\Elite\CarcassBigA">
+      <UniqueIdentifier>{f6168eed-c521-4165-b051-0becd723a0a2}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.GameObjects\02.Pawn\01.Monster\Normal\RebornerBigA">
+      <UniqueIdentifier>{b68070e4-27c6-4ef6-8e82-8c6ce0d9846e}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.GameObjects\02.Pawn\01.Monster\Boss\Raxasia">
+      <UniqueIdentifier>{f57ad993-eab1-4040-8e32-f758a798764d}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.GameObjects\02.Pawn\01.Monster\Boss\Raxasia\CutSceneSword">
+      <UniqueIdentifier>{70d4c3d2-d9d8-46f4-975c-1b6547791ccc}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.GameObjects\02.Pawn\01.Monster\Boss\Raxasia\CutSceneHelmet">
+      <UniqueIdentifier>{1d65a508-3da4-4c20-a1f4-28ecd56229f7}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.GameObjects\02.Pawn\01.Monster\Boss\SimonManus">
+      <UniqueIdentifier>{57195b03-ed04-4599-966f-cd38e86fb16d}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.GameObjects\02.Pawn\01.Monster\Boss\SimonManus\EnvHand">
+      <UniqueIdentifier>{198e4125-b11e-41b7-b2a8-104e7a6d3cba}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.GameObjects\02.Pawn\01.Monster\Boss\SimonManus\GodHand">
+      <UniqueIdentifier>{8d2b04ee-e8f1-46c4-ae87-5c07b49fbf95}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -1271,9 +1292,6 @@
     </ClInclude>
     <ClInclude Include="..\Public\Terrain.h">
       <Filter>02.GameObjects\01.Terrain</Filter>
-    </ClInclude>
-    <ClInclude Include="..\Public\Monster.h">
-      <Filter>02.GameObjects\02.Pawn\01.Monster</Filter>
     </ClInclude>
     <ClInclude Include="..\public\Player.h">
       <Filter>02.GameObjects\02.Pawn\00.Player</Filter>
@@ -1342,7 +1360,7 @@
       <Filter>02.GameObjects\05.Effect\Effect_Manager</Filter>
     </ClInclude>
     <ClInclude Include="..\Public\CarcassBigA.h">
-      <Filter>02.GameObjects\02.Pawn\01.Monster\CarcassBigA</Filter>
+      <Filter>02.GameObjects\02.Pawn\01.Monster\Elite\CarcassBigA</Filter>
     </ClInclude>
     <ClInclude Include="..\Public\State_CarcassBigA_Impact.h">
       <Filter>05.Fsm\Monster\CarcassBigA\Attack\Single\Impact</Filter>
@@ -1570,7 +1588,7 @@
       <Filter>05.Fsm\Monster\CarcassBigA\Attack\Single\WheelWind</Filter>
     </ClInclude>
     <ClInclude Include="..\Public\SimonManus.h">
-      <Filter>02.GameObjects\02.Pawn\01.Monster\SimonManus</Filter>
+      <Filter>02.GameObjects\02.Pawn\01.Monster\Boss\SimonManus</Filter>
     </ClInclude>
     <ClInclude Include="..\Public\Weapon_SimonManus_Hammer.h">
       <Filter>02.GameObjects\06.Weapon\01.SimonManusWeapon</Filter>
@@ -1724,7 +1742,7 @@
       <Filter>05.Fsm\Player\Common\Ladder</Filter>
     </ClInclude>
     <ClInclude Include="..\Public\CarcassTail.h">
-      <Filter>02.GameObjects\02.Pawn\01.Monster\CarcassTail</Filter>
+      <Filter>02.GameObjects\02.Pawn\01.Monster\Elite\CarcassTail</Filter>
     </ClInclude>
     <ClInclude Include="..\Public\State_CarcassTail_Grogy.h">
       <Filter>05.Fsm\Monster\CarcassTail\Grogy</Filter>
@@ -1935,7 +1953,7 @@
       <Filter>05.Fsm\Monster\SimonManus\CutScene\Phase2</Filter>
     </ClInclude>
     <ClInclude Include="..\Public\Raxasia.h">
-      <Filter>02.GameObjects\02.Pawn\01.Monster\Raxasia</Filter>
+      <Filter>02.GameObjects\02.Pawn\01.Monster\Boss\Raxasia</Filter>
     </ClInclude>
     <ClInclude Include="..\Public\Weapon_Raxasia_P1_Sword.h">
       <Filter>02.GameObjects\06.Weapon\02.Raxasia\P1_Sword</Filter>
@@ -2034,10 +2052,10 @@
       <Filter>02.GameObjects\15.Item</Filter>
     </ClInclude>
     <ClInclude Include="..\Public\SimonManus_EnvHand.h">
-      <Filter>02.GameObjects\02.Pawn\01.Monster\SimonManus\EnvHand</Filter>
+      <Filter>02.GameObjects\02.Pawn\01.Monster\Boss\SimonManus\EnvHand</Filter>
     </ClInclude>
     <ClInclude Include="..\Public\SimonManus_CutScene_GodHand.h">
-      <Filter>02.GameObjects\02.Pawn\01.Monster\SimonManus\GodHand</Filter>
+      <Filter>02.GameObjects\02.Pawn\01.Monster\Boss\SimonManus\GodHand</Filter>
     </ClInclude>
     <ClInclude Include="..\Public\UIPage_Telepot.h">
       <Filter>03.GameInterface_Controller\00.UIManager\00.UIPage\18.UIPage_Telepot</Filter>
@@ -2118,7 +2136,7 @@
       <Filter>05.Fsm\Monster\Raxasia\CutScene\Meet</Filter>
     </ClInclude>
     <ClInclude Include="..\Public\Raxasia_Sword_CutScene.h">
-      <Filter>02.GameObjects\02.Pawn\01.Monster\Raxasia\CutSceneSword</Filter>
+      <Filter>02.GameObjects\02.Pawn\01.Monster\Boss\Raxasia\CutSceneSword</Filter>
     </ClInclude>
     <ClInclude Include="..\Public\State_Raxasia_CutScene_Phase2.h">
       <Filter>05.Fsm\Monster\Raxasia\CutScene\Phase2</Filter>
@@ -2130,7 +2148,7 @@
       <Filter>05.Fsm\Monster\Raxasia\P1\Attack\Route\Sting_Spread</Filter>
     </ClInclude>
     <ClInclude Include="..\Public\Raxasia_Helmet_CutScene.h">
-      <Filter>02.GameObjects\02.Pawn\01.Monster\Raxasia\CutSceneHelmet</Filter>
+      <Filter>02.GameObjects\02.Pawn\01.Monster\Boss\Raxasia\CutSceneHelmet</Filter>
     </ClInclude>
     <ClInclude Include="..\Public\State_Player_OpenRaxasiaDoor.h">
       <Filter>05.Fsm\Player\CutScene\Raxasia\Door</Filter>
@@ -2157,7 +2175,7 @@
       <Filter>02.GameObjects\12.AttackObject\Raxasia\ThunderWave</Filter>
     </ClInclude>
     <ClInclude Include="..\Public\CurruptedStrongArm_Puppet.h">
-      <Filter>02.GameObjects\02.Pawn\01.Monster\CurruptedStrongArm_Puppet</Filter>
+      <Filter>02.GameObjects\02.Pawn\01.Monster\Normal\CurruptedStrongArm_Puppet</Filter>
     </ClInclude>
     <ClInclude Include="..\Public\State_CurruptedStrongArm_Idle.h">
       <Filter>05.Fsm\Monster\CurruptedStrongArm_Puppet\Idle</Filter>
@@ -2199,7 +2217,7 @@
       <Filter>05.Fsm\Monster\Raxasia\P2\Attack\Route\Declare_War</Filter>
     </ClInclude>
     <ClInclude Include="..\Public\RebornerBigA.h">
-      <Filter>02.GameObjects\02.Pawn\01.Monster\RebornerBigA</Filter>
+      <Filter>02.GameObjects\02.Pawn\01.Monster\Normal\RebornerBigA</Filter>
     </ClInclude>
     <ClInclude Include="..\Public\State_RebornerBigA_Idle.h">
       <Filter>05.Fsm\Monster\RebornerBigA\Idle</Filter>
@@ -2232,7 +2250,7 @@
       <Filter>05.Fsm\Monster\RebornerBigA\Attack\Single\SlashJump</Filter>
     </ClInclude>
     <ClInclude Include="..\Public\CarcassNormal.h">
-      <Filter>02.GameObjects\02.Pawn\01.Monster\CarcassNormal</Filter>
+      <Filter>02.GameObjects\02.Pawn\01.Monster\Normal\CarcassNormal</Filter>
     </ClInclude>
     <ClInclude Include="..\Public\State_CarcassNormal_Idle.h">
       <Filter>05.Fsm\Monster\CarcassNormal\Idle</Filter>
@@ -2266,6 +2284,21 @@
     </ClInclude>
     <ClInclude Include="..\Public\Monster_Training01.h">
       <Filter>02.GameObjects\02.Pawn\01.Monster\Training</Filter>
+	</ClInclude>
+    <ClInclude Include="..\Public\State_RebornerBigA_KnockBack.h">
+      <Filter>05.Fsm\Monster\RebornerBigA\KnockBack</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Public\State_CarcassTail_KnockBack.h">
+      <Filter>05.Fsm\Monster\CarcassTail\KnockBack</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Public\State_CarcassNormal_KnockBack.h">
+      <Filter>05.Fsm\Monster\CarcassNormal\KnockBack</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Public\State_CurruptedStrongArm_KnockBack.h">
+      <Filter>05.Fsm\Monster\CurruptedStrongArm_Puppet\KnockBack</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Public\Monster.h">
+      <Filter>02.GameObjects\02.Pawn\01.Monster</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -2345,7 +2378,7 @@
       <Filter>02.GameObjects\05.Effect\Effect_Manager</Filter>
     </ClCompile>
     <ClCompile Include="..\Private\CarcassBigA.cpp">
-      <Filter>02.GameObjects\02.Pawn\01.Monster\CarcassBigA</Filter>
+      <Filter>02.GameObjects\02.Pawn\01.Monster\Elite\CarcassBigA</Filter>
     </ClCompile>
     <ClCompile Include="..\Private\State_CarcassBigA_Impact.cpp">
       <Filter>05.Fsm\Monster\CarcassBigA\Attack\Single\Impact</Filter>
@@ -2573,7 +2606,7 @@
       <Filter>05.Fsm\Monster\CarcassBigA\Attack\Single\WheelWind</Filter>
     </ClCompile>
     <ClCompile Include="..\Private\SimonManus.cpp">
-      <Filter>02.GameObjects\02.Pawn\01.Monster\SimonManus</Filter>
+      <Filter>02.GameObjects\02.Pawn\01.Monster\Boss\SimonManus</Filter>
     </ClCompile>
     <ClCompile Include="..\Private\Weapon_SimonManus_Hammer.cpp">
       <Filter>02.GameObjects\06.Weapon\01.SimonManusWeapon</Filter>
@@ -2727,7 +2760,7 @@
       <Filter>05.Fsm\Player\Common\Ladder</Filter>
     </ClCompile>
     <ClCompile Include="..\Private\CarcassTail.cpp">
-      <Filter>02.GameObjects\02.Pawn\01.Monster\CarcassTail</Filter>
+      <Filter>02.GameObjects\02.Pawn\01.Monster\Elite\CarcassTail</Filter>
     </ClCompile>
     <ClCompile Include="..\Private\State_CarcassTail_Grogy.cpp">
       <Filter>05.Fsm\Monster\CarcassTail\Grogy</Filter>
@@ -2986,7 +3019,7 @@
       <Filter>03.GameInterface_Controller\00.UIManager\00.UIPage\12.UIPage_Effect %2880%25%29</Filter>
     </ClCompile>
     <ClCompile Include="..\Private\Raxasia.cpp">
-      <Filter>02.GameObjects\02.Pawn\01.Monster\Raxasia</Filter>
+      <Filter>02.GameObjects\02.Pawn\01.Monster\Boss\Raxasia</Filter>
     </ClCompile>
     <ClCompile Include="..\Private\UIPage_Shop.cpp">
       <Filter>03.GameInterface_Controller\00.UIManager\00.UIPage\16.UIPage_Shop %2850%25%29</Filter>
@@ -3037,10 +3070,10 @@
       <Filter>02.GameObjects\15.Item</Filter>
     </ClCompile>
     <ClCompile Include="..\Private\SimonManus_EnvHand.cpp">
-      <Filter>02.GameObjects\02.Pawn\01.Monster\SimonManus\EnvHand</Filter>
+      <Filter>02.GameObjects\02.Pawn\01.Monster\Boss\SimonManus\EnvHand</Filter>
     </ClCompile>
     <ClCompile Include="..\Private\SimonManus_CutScene_GodHand.cpp">
-      <Filter>02.GameObjects\02.Pawn\01.Monster\SimonManus\GodHand</Filter>
+      <Filter>02.GameObjects\02.Pawn\01.Monster\Boss\SimonManus\GodHand</Filter>
     </ClCompile>
     <ClCompile Include="..\Private\UIPage_Telepot.cpp">
       <Filter>03.GameInterface_Controller\00.UIManager\00.UIPage\18.UIPage_Telepot</Filter>
@@ -3121,7 +3154,7 @@
       <Filter>05.Fsm\Monster\Raxasia\CutScene\Meet</Filter>
     </ClCompile>
     <ClCompile Include="..\Private\Raxasia_Sword_CutScene.cpp">
-      <Filter>02.GameObjects\02.Pawn\01.Monster\Raxasia\CutSceneSword</Filter>
+      <Filter>02.GameObjects\02.Pawn\01.Monster\Boss\Raxasia\CutSceneSword</Filter>
     </ClCompile>
     <ClCompile Include="..\Private\State_Raxasia_CutScene_Phase2.cpp">
       <Filter>05.Fsm\Monster\Raxasia\CutScene\Phase2</Filter>
@@ -3133,7 +3166,7 @@
       <Filter>05.Fsm\Monster\Raxasia\P1\Attack\Route\Sting_Spread</Filter>
     </ClCompile>
     <ClCompile Include="..\Private\Raxasia_Helmet_CutScene.cpp">
-      <Filter>02.GameObjects\02.Pawn\01.Monster\Raxasia\CutSceneHelmet</Filter>
+      <Filter>02.GameObjects\02.Pawn\01.Monster\Boss\Raxasia\CutSceneHelmet</Filter>
     </ClCompile>
     <ClCompile Include="..\Private\State_Player_OpenRaxasiaDoor.cpp">
       <Filter>05.Fsm\Player\CutScene\Raxasia\Door</Filter>
@@ -3160,7 +3193,7 @@
       <Filter>02.GameObjects\12.AttackObject\Raxasia\ThunderWave</Filter>
     </ClCompile>
     <ClCompile Include="..\Private\CurruptedStrongArm_Puppet.cpp">
-      <Filter>02.GameObjects\02.Pawn\01.Monster\CurruptedStrongArm_Puppet</Filter>
+      <Filter>02.GameObjects\02.Pawn\01.Monster\Normal\CurruptedStrongArm_Puppet</Filter>
     </ClCompile>
     <ClCompile Include="..\Private\State_CurruptedStrongArm_Idle.cpp">
       <Filter>05.Fsm\Monster\CurruptedStrongArm_Puppet\Idle</Filter>
@@ -3202,7 +3235,7 @@
       <Filter>05.Fsm\Monster\Raxasia\P2\Attack\Route\Declare_War</Filter>
     </ClCompile>
     <ClCompile Include="..\Private\RebornerBigA.cpp">
-      <Filter>02.GameObjects\02.Pawn\01.Monster\RebornerBigA</Filter>
+      <Filter>02.GameObjects\02.Pawn\01.Monster\Normal\RebornerBigA</Filter>
     </ClCompile>
     <ClCompile Include="..\Private\State_RebornerBigA_Idle.cpp">
       <Filter>05.Fsm\Monster\RebornerBigA\Idle</Filter>
@@ -3235,7 +3268,7 @@
       <Filter>05.Fsm\Monster\RebornerBigA\Attack\Single\SlashJump</Filter>
     </ClCompile>
     <ClCompile Include="..\Private\CarcassNormal.cpp">
-      <Filter>02.GameObjects\02.Pawn\01.Monster\CarcassNormal</Filter>
+      <Filter>02.GameObjects\02.Pawn\01.Monster\Normal\CarcassNormal</Filter>
     </ClCompile>
     <ClCompile Include="..\Private\State_CarcassNormal_Idle.cpp">
       <Filter>05.Fsm\Monster\CarcassNormal\Idle</Filter>
@@ -3269,6 +3302,18 @@
     </ClCompile>
     <ClCompile Include="..\Private\Monster_Training01.cpp">
       <Filter>02.GameObjects\02.Pawn\01.Monster\Training</Filter>
+	</ClCompile>
+    <ClCompile Include="..\Private\State_RebornerBigA_KnockBack.cpp">
+      <Filter>05.Fsm\Monster\RebornerBigA\KnockBack</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Private\State_CarcassTail_KnockBack.cpp">
+      <Filter>05.Fsm\Monster\CarcassTail\KnockBack</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Private\State_CarcassNormal_KnockBack.cpp">
+      <Filter>05.Fsm\Monster\CarcassNormal\KnockBack</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Private\State_CurruptedStrongArm_KnockBack.cpp">
+      <Filter>05.Fsm\Monster\CurruptedStrongArm_Puppet\KnockBack</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

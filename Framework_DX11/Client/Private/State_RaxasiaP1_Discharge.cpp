@@ -26,6 +26,12 @@ HRESULT CState_RaxasiaP1_Discharge::Start_State(void* pArg)
     m_iRouteTrack = 0;
     m_pMonster->Change_Animation(AN_SWINGDOWN, false, 0.1f, 0);
 
+    m_bResetRim = false;
+    m_bControlRim = false;
+
+    m_fGoalRimAlpha = 0.1f;
+    m_fCurtRimAlpha = 1.f;
+
     m_bSwingSound = false;
     m_bChargeActive = false;
     m_bStampBlast = false;
@@ -47,6 +53,7 @@ void CState_RaxasiaP1_Discharge::Update(_float fTimeDelta)
         {
             ++m_iRouteTrack;
             m_bSwing = false;
+            m_bControlRim = true;
             m_pMonster->Change_Animation(AN_DISCHARGE, false, 0.1f, 0);
             return;
         }
@@ -72,7 +79,15 @@ void CState_RaxasiaP1_Discharge::Update(_float fTimeDelta)
         {
             m_pMonster->Get_Transform()->LookAt_Lerp_NoHeight(m_pMonster->Get_TargetDir(), 1.f, fTimeDelta);
         }
-        //60프레임 이후쯤부터 퓨리
+
+        if (!m_bResetRim)
+        {
+            if (CurTrackPos >= 120.f)
+            {
+                m_fGoalRimAlpha = 1.f;
+                m_bResetRim = true;
+            }
+        }
         break;
 
     default:
@@ -82,6 +97,11 @@ void CState_RaxasiaP1_Discharge::Update(_float fTimeDelta)
     Collider_Check(CurTrackPos);
     Effect_Check(CurTrackPos);
     Control_Sound(CurTrackPos);
+
+    if (m_bControlRim)
+    {
+        Update_Rimlight();
+    }
 
 }
 
@@ -183,6 +203,20 @@ void CState_RaxasiaP1_Discharge::Effect_Check(_double CurTrackPos)
 
                 m_bStampBlast = true;
             }
+        }
+    }
+}
+
+void CState_RaxasiaP1_Discharge::Update_Rimlight()
+{
+    m_fCurtRimAlpha += (m_fGoalRimAlpha - m_fCurtRimAlpha) / 15;
+    m_pMonster->Set_RimLightColor(_Vec4{ 0.9f, 0.f, 0.f, m_fCurtRimAlpha });
+    if (abs(m_fGoalRimAlpha - m_fCurtRimAlpha) < 0.1f)
+    {
+        m_fCurtRimAlpha = m_fGoalRimAlpha;
+        if (m_fGoalRimAlpha == 1.f)
+        {
+            m_pMonster->Set_RimLightColor(_Vec4{ 0.f, 0.f, 0.f, 1.f });
         }
     }
 }

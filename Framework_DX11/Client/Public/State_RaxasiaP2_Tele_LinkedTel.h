@@ -27,10 +27,13 @@ public:
 private:
     class CMonster* m_pMonster = { nullptr };
 
+    _float              m_fDistance = {};
+    _float              m_fAccelSpeed = { 10.f };
     _float              m_fCurrentTime = { 0.f };
     _float              m_fChaseDuration = { 1.5f };
 
     _bool               m_bSwing = { false };
+    _bool               m_bAccel = { false };
 
     _bool               m_bSwingSound = { false };
 

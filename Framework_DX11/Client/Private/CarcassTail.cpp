@@ -11,6 +11,7 @@
 #include "State_CarcassTail_Die.h"
 #include "State_CarcassTail_Grogy.h"
 #include "State_CarcassTail_HitFatal.h"
+#include "State_CarcassTail_KnockBack.h"
 
 #include "State_CarcassTail_Heading.h"
 #include "State_CarcassTail_Leap.h"
@@ -238,7 +239,6 @@ HRESULT CCarcassTail::Ready_Components()
 	for (_int i = 0; i < TYPE_END; ++i)
 	{
 		m_pColliderObject[i]->DeActive_Collider();
-		//m_pColliderObject[i]->;
 	}
 
 	// 항상 마지막에 생성하기
@@ -283,6 +283,7 @@ HRESULT CCarcassTail::Ready_FSM()
 	m_pFsmCom->Add_State(CState_CarcassTail_Die::Create(m_pFsmCom, this, DIE, &Desc));
 	m_pFsmCom->Add_State(CState_CarcassTail_Grogy::Create(m_pFsmCom, this, GROGY, &Desc));
 	m_pFsmCom->Add_State(CState_CarcassTail_HitFatal::Create(m_pFsmCom, this, HITFATAL, &Desc));
+	m_pFsmCom->Add_State(CState_CarcassTail_KnockBack::Create(m_pFsmCom, this, KNOCKBACK, &Desc));
 
 	m_pFsmCom->Add_State(CState_CarcassTail_Heading::Create(m_pFsmCom, this, HEADING, &Desc));
 	m_pFsmCom->Add_State(CState_CarcassTail_Leap::Create(m_pFsmCom, this, LEAP, &Desc));

@@ -45,7 +45,7 @@ HRESULT CWeapon_Raxasia_P2_Shield::Initialize(void* pArg)
 	*m_pParentAtk = 160.f;
 	m_strObjectTag = TEXT("MonsterWeapon");
 
-	m_fDamageAmount = 160.f;
+	m_fDamageAmount = 16.f;
 
 	return S_OK;
 }
@@ -194,7 +194,7 @@ void CWeapon_Raxasia_P2_Shield::OnCollisionEnter(CGameObject* pOther)
 			_Vec3 vPos = m_pTransformCom->Get_State(CTransform::STATE_POSITION);
 			pOther->Calc_DamageGain(m_fDamageAmount * m_fDamageRatio, vPos, HIT_METAL, m_iAtkStrength);
 
-			CEffect_Manager::Get_Instance()->Add_Effect_ToLayer(LEVEL_GAMEPLAY, TEXT("Raxasia_Attack_ThunderInchent"),
+			CEffect_Manager::Get_Instance()->Add_Effect_ToLayer(LEVEL_GAMEPLAY, TEXT("Raxasia_Attack_Shield_Impact"),
 				vPos, _Vec3{ m_pMonster->Get_TargetDir() });
 		}
 	}
@@ -229,8 +229,8 @@ HRESULT CWeapon_Raxasia_P2_Shield::Ready_Components()
 
 	/* FOR.Com_Collider */
 	CBounding_OBB::BOUNDING_OBB_DESC			ColliderDesc{};
-	ColliderDesc.vExtents = _float3(0.43f, 0.25f, 0.8f);
-	ColliderDesc.vCenter = _float3(0.f, 0.0f, -0.1f);
+	ColliderDesc.vExtents = _float3(0.9f, 0.35f, 0.9f);
+	ColliderDesc.vCenter = _float3(0.f, -0.3f, -0.1f);
 	ColliderDesc.vAngles = _float3(0.f, 0.f, 0.f);
 
 	if (FAILED(__super::Add_Component(LEVEL_STATIC, TEXT("Prototype_Component_Collider_OBB"),
