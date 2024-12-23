@@ -87,6 +87,8 @@ HRESULT CCarcassBigA::Initialize(void* pArg)
 	m_eStat.fGrogyPoint = 0.f;
 	m_eStat.fMaxGrogyPoint = 50.f;
 
+	m_vCenterOffset = _Vec3{ 0.f, 1.f, 0.f };
+
 	// 24-11-26 김성용
 	// 몬스터 직교 UI 접근 코드 
 	// 정식 코드  

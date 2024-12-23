@@ -79,6 +79,8 @@ HRESULT CCarcassTail::Initialize(void* pArg)
 	m_eStat.fDefence = 2.f;
 	m_eStat.fStemina = 30.f;
 
+	m_vCenterOffset = _Vec3{ 0.f, 0.6f, 0.f };
+
 	GET_GAMEINTERFACE->Register_Pointer_Into_OrthoUIPage(UI_ORTHO_OBJ_TYPE::ORTHO_NORMAL_MONSTER, this);
 
 	GET_GAMEINTERFACE->Set_OnOff_OrthoUI(false, this);
