@@ -198,6 +198,7 @@ void CSteelHeart::Free()
 {
 	__super::Free();
 
+	Safe_Release(m_pRigidBodyCom);
 	Safe_Release(m_pSoundCom);
 	Safe_Release(m_pShaderCom);
 	Safe_Release(m_pModelCom);
