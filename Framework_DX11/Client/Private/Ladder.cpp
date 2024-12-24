@@ -32,6 +32,7 @@ HRESULT CLadder::Initialize(void* pArg)
 	m_pTransformCom->Rotation(0.f, pDesc->vRotation.y, 0.f);
 	m_pTransformCom->Set_State(CTransform::STATE_POSITION, XMLoadFloat3(&pDesc->vPosition));
 	m_bShadow = pDesc->bShadow;
+	m_iCurrentAreaNum = pDesc->iCurrentAreaNum;
 
 	if (FAILED(Ready_Components(pDesc)))
 		return E_FAIL;

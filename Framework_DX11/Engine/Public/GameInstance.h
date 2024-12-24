@@ -33,6 +33,9 @@ public:
 	
 	POINT Get_MosePos();
 
+	void Set_Player_AreaNum(_int iAreaNum) { m_iPlayer_AreaNum = iAreaNum; };
+	_int Get_Player_AreaNum() { return m_iPlayer_AreaNum; }
+
 #pragma region GRAPHIC_DEVICE
 public:
 	ID3D11ShaderResourceView* Get_BackBuffer_SRV() const;
@@ -311,6 +314,7 @@ private:
 
 private:
 	_bool m_isPicking = { false };
+	_int m_iPlayer_AreaNum = { 0 };
 
 public:	
 	void Release_Engine();

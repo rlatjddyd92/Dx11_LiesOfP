@@ -1276,6 +1276,9 @@
     <Filter Include="05.Fsm\Monster\Training\02">
       <UniqueIdentifier>{f983c8f1-b5fc-4d65-bc72-b7ec24b0af05}</UniqueIdentifier>
     </Filter>
+    <Filter Include="02.GameObjects\16.Decal">
+      <UniqueIdentifier>{a5714c5e-2bd6-46b1-9df8-fcecf30378c8}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Client.h">
@@ -2333,6 +2336,9 @@
     <ClInclude Include="..\Public\State_Training02_Idle.h">
       <Filter>05.Fsm\Monster\Training\02</Filter>
     </ClInclude>
+    <ClInclude Include="..\Public\Decal.h">
+      <Filter>02.GameObjects\16.Decal</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Client.cpp">
@@ -3360,6 +3366,9 @@
     <ClCompile Include="..\Private\State_Training02_Idle.cpp">
       <Filter>05.Fsm\Monster\Training\02</Filter>
     </ClCompile>
+    <ClCompile Include="..\Private\Decal.cpp">
+      <Filter>02.GameObjects\16.Decal</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <Image Include="Client.ico">
@@ -3436,6 +3445,9 @@
     </FxCompile>
     <FxCompile Include="..\Bin\ShaderFiles\Shader_UI_Master.hlsl">
       <Filter>97.ShaderFiles\99.UI_Shader</Filter>
+    </FxCompile>
+    <FxCompile Include="..\Bin\ShaderFiles\Shader_SSD.hlsl">
+      <Filter>97.ShaderFiles</Filter>
     </FxCompile>
   </ItemGroup>
   <ItemGroup>

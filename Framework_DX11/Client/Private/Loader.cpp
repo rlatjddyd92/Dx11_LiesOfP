@@ -97,6 +97,7 @@
 #pragma endregion
 
 #include "Machine_EffectObj.h"
+#include "Decal.h"
 
 #include "GameInstance.h"
 #include "GameInterface_Controller.h"
@@ -622,6 +623,50 @@ HRESULT CLoader::Ready_Resources_For_GamePlayLevel_Map0()
 	}
 #pragma endregion
 
+#pragma region Decal Textures
+	 handle = _findfirst("../Bin/Resources/Textures/Decal/dds/ENV_Decals/*", &fd);
+
+	if (handle == -1)
+		return E_FAIL;
+
+	char szCurPath4[128] = "../Bin/Resources/Textures/Decal/dds/ENV_Decals/";    // »ó´ë °æ·Î
+	char szFullPath4[128] = "";
+
+	iResult = 0;
+
+	while (iResult != -1)
+	{
+		strcpy_s(szFullPath4, szCurPath4);
+		strcat_s(szFullPath4, fd.name);
+
+		_char szFileName[MAX_PATH] = "";
+		_char szExt[MAX_PATH] = "";
+		_splitpath_s(szFullPath4, nullptr, 0, nullptr, 0, szFileName, MAX_PATH, szExt, MAX_PATH);
+
+		if (!strcmp(fd.name, ".") || !strcmp(fd.name, "..")
+			|| strcmp(szExt, ".dds"))
+		{
+			iResult = _findnext(handle, &fd);
+			continue;
+		}
+
+		string strFileName = szFileName;
+		_wstring strPrototypeName;
+
+		strPrototypeName.assign(strFileName.begin(), strFileName.end());
+		wprintf(strPrototypeName.c_str());	
+
+		_tchar path[MAX_PATH];
+		MultiByteToWideChar(CP_ACP, MB_PRECOMPOSED, szFullPath4, MAX_PATH, path, MAX_PATH);
+
+		if (FAILED(m_pGameInstance->Add_Prototype(LEVEL_GAMEPLAY, strPrototypeName,
+			CTexture::Create(m_pDevice, m_pContext, path, 1))))
+			return E_FAIL;
+
+		iResult = _findnext(handle, &fd);
+	}
+#pragma endregion
+
 	PreTransformMatrix = XMMatrixIdentity();
 	PreTransformMatrix = XMMatrixScaling(0.01f, 0.01f, 0.01f);
 
@@ -975,13 +1020,13 @@ HRESULT CLoader::Ready_Resources_For_Monster()
 
 #pragma region ÈÆ·Ã ·Îº¿
 	//Prototype_Component_Model_Training01
-	PreTransformMatrix = XMMatrixScaling(0.01f, 0.01f, 0.01f) * XMMatrixRotationY(XMConvertToRadians(270.0f));
+	PreTransformMatrix = XMMatrixScaling(0.011f, 0.011f, 0.011f) * XMMatrixRotationY(XMConvertToRadians(270.0f));
 	if (FAILED(m_pGameInstance->Add_Prototype(LEVEL_GAMEPLAY, TEXT("Prototype_Component_Model_Training01"),
 		CModel::Create(m_pDevice, m_pContext, CModel::TYPE_ANIM, "../Bin/ModelData/Anim/Monster/Training/Training01.dat", PreTransformMatrix, false))))
 		return E_FAIL;
 
 	//Prototype_Component_Model_Training02
-	PreTransformMatrix = XMMatrixScaling(0.01f, 0.01f, 0.01f) * XMMatrixRotationY(XMConvertToRadians(270.0f));
+	PreTransformMatrix = XMMatrixScaling(0.011f, 0.011f, 0.011f) * XMMatrixRotationY(XMConvertToRadians(270.0f));
 	if (FAILED(m_pGameInstance->Add_Prototype(LEVEL_GAMEPLAY, TEXT("Prototype_Component_Model_Training02"),
 		CModel::Create(m_pDevice, m_pContext, CModel::TYPE_ANIM, "../Bin/ModelData/Anim/Monster/Training/Training02.dat", PreTransformMatrix, false))))
 		return E_FAIL;
@@ -1461,9 +1506,14 @@ HRESULT CLoader::Ready_Prototype()
 		return E_FAIL;
 
 
-	/* For. Prototype_GameObject_CutScene */
+	/* For. Prototype_GameObject_MachineEffect */
 	if (FAILED(m_pGameInstance->Add_Prototype(TEXT("Prototype_GameObject_MachineEffect"),
 		CMachine_EffectObj::Create(m_pDevice, m_pContext))))
+		return E_FAIL;
+
+	/* For. Prototype_GameObject_Decal*/
+	if (FAILED(m_pGameInstance->Add_Prototype(TEXT("Prototype_GameObject_Decal"),
+		CDecal::Create(m_pDevice, m_pContext))))
 		return E_FAIL;
 
 	return S_OK;

@@ -321,7 +321,7 @@ _int CNavigationController::SelectCell(_float3 vPickPos, _int* iSelectNum)
 			fCellSmallY = min(fCellSmallY, vPointC.y);
 
 			//약간 느슨하게 검사
-			if (vPickPos.y <= fCellBigY + 1.f && vPickPos.y >= fCellSmallY - 1.f)
+			if (vPickPos.y <= fCellBigY + 4.f && vPickPos.y >= fCellSmallY - 4.f)
 			{
 				m_iSelectCellIndex = i;
 				*iSelectNum = m_iSelectCellIndex;

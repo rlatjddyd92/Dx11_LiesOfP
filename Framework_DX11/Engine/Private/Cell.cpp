@@ -41,6 +41,8 @@ HRESULT CCell::Initialize(const _float3 * pPoints, void* pArg)
 	m_iAreaNum = pDesc->iAreaNum;
 	m_iCellTypeNum = pDesc->iCellTypeNum;
 
+	int a = 10;
+
 #ifdef _DEBUG
 	m_pVIBuffer = CVIBuffer_Cell::Create(m_pDevice, m_pContext, m_vPoints);
 	if (nullptr == m_pVIBuffer)

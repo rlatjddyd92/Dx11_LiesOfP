@@ -33,7 +33,6 @@ private:
 
 private:
 	_bool m_bShadow = { false };
-
 private:
 	HRESULT Ready_Components(OBJECT_DEFAULT_DESC* pDesc);
 

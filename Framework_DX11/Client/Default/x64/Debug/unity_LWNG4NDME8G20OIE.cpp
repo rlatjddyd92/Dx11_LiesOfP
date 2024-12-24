@@ -72,6 +72,15 @@
 #include "C:\Users\olivi\Github\Dx11_LiesOfP\Framework_DX11\Client\Private\CarcassTail.cpp"
 
 
+#include "C:\Users\olivi\Github\Dx11_LiesOfP\Framework_DX11\Client\Private\Decal.cpp"
+
+
+#include "C:\Users\olivi\Github\Dx11_LiesOfP\Framework_DX11\Client\Private\Monster_Training01.cpp"
+
+
+#include "C:\Users\olivi\Github\Dx11_LiesOfP\Framework_DX11\Client\Private\Monster_Training02.cpp"
+
+
 #include "C:\Users\olivi\Github\Dx11_LiesOfP\Framework_DX11\Client\Private\State_CarcassNormal_Bite.cpp"
 
 
@@ -141,10 +150,16 @@
 #include "C:\Users\olivi\Github\Dx11_LiesOfP\Framework_DX11\Client\Private\State_CarcassNormal_Idle.cpp"
 
 
+#include "C:\Users\olivi\Github\Dx11_LiesOfP\Framework_DX11\Client\Private\State_CarcassNormal_KnockBack.cpp"
+
+
 #include "C:\Users\olivi\Github\Dx11_LiesOfP\Framework_DX11\Client\Private\State_CarcassNormal_TripleClaw.cpp"
 
 
 #include "C:\Users\olivi\Github\Dx11_LiesOfP\Framework_DX11\Client\Private\State_CarcassNormal_TripleClaw_2.cpp"
+
+
+#include "C:\Users\olivi\Github\Dx11_LiesOfP\Framework_DX11\Client\Private\State_CarcassTail_KnockBack.cpp"
 
 
 #include "C:\Users\olivi\Github\Dx11_LiesOfP\Framework_DX11\Client\Private\State_CurruptedStrongArm_Die.cpp"
@@ -160,6 +175,9 @@
 
 
 #include "C:\Users\olivi\Github\Dx11_LiesOfP\Framework_DX11\Client\Private\State_CurruptedStrongArm_JumpPunch.cpp"
+
+
+#include "C:\Users\olivi\Github\Dx11_LiesOfP\Framework_DX11\Client\Private\State_CurruptedStrongArm_KnockBack.cpp"
 
 
 #include "C:\Users\olivi\Github\Dx11_LiesOfP\Framework_DX11\Client\Private\State_CurruptedStrongArm_StingTwice.cpp"
@@ -339,6 +357,9 @@
 #include "C:\Users\olivi\Github\Dx11_LiesOfP\Framework_DX11\Client\Private\State_RebornerBigA_Idle.cpp"
 
 
+#include "C:\Users\olivi\Github\Dx11_LiesOfP\Framework_DX11\Client\Private\State_RebornerBigA_KnockBack.cpp"
+
+
 #include "C:\Users\olivi\Github\Dx11_LiesOfP\Framework_DX11\Client\Private\State_RebornerBigA_RushSting.cpp"
 
 
@@ -352,6 +373,15 @@
 
 
 #include "C:\Users\olivi\Github\Dx11_LiesOfP\Framework_DX11\Client\Private\State_SimonManusP2_Die_Talking.cpp"
+
+
+#include "C:\Users\olivi\Github\Dx11_LiesOfP\Framework_DX11\Client\Private\State_Training01_Attack.cpp"
+
+
+#include "C:\Users\olivi\Github\Dx11_LiesOfP\Framework_DX11\Client\Private\State_Training01_Idle.cpp"
+
+
+#include "C:\Users\olivi\Github\Dx11_LiesOfP\Framework_DX11\Client\Private\State_Training02_Idle.cpp"
 
 
 #include "C:\Users\olivi\Github\Dx11_LiesOfP\Framework_DX11\Client\Private\SteelHeart.cpp"
