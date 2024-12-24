@@ -135,7 +135,13 @@ void CAchievment_DataLine::Set_PopupPart()
 
 void CAchievment_DataLine::Render_Line(_float fAlpha)
 {
+	_Vec4 vOrigin = m_vecBackCtrl[1]->fTextureColor;
+	if (m_bIsComplete == false)
+	{
+		m_vecBackCtrl[1]->fTextureColor = { 0.4f,0.4f,0.4f,1.f };
+	}
 	Render_PartArray(&m_vecBackCtrl, false);
+	m_vecBackCtrl[1]->fTextureColor = vOrigin;
 	Render_PartArray(&m_vecIconCtrl, false);
 	Render_PartArray(&m_vecTitleCtrl, false);
 	Render_PartArray(&m_vecDescCtrl, false);

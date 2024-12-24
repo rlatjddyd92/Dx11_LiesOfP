@@ -155,6 +155,7 @@ HRESULT CUIPage_Achievment::Ready_UIPart_Group_Control()
 	m_bRender = false;
 
 	Make_Achievment_DataLine();
+	Make_Statistic_DataLine();
 
 	return S_OK;
 }
@@ -196,6 +197,16 @@ void CUIPage_Achievment::Make_Achievment_DataLine()
 	}
 }
 
+void CUIPage_Achievment::Make_Statistic_DataLine()
+{
+	for (_int i = 0; i < 4; ++i)
+	{
+		CStatistic_Data* pNew = CStatistic_Data::Create(m_pDevice, m_pContext);
+		pNew->Set_Statistic_Data(m_vecPart, i);
+		m_vecStatistic.push_back(pNew);
+	}
+}
+
 void CUIPage_Achievment::Action_Slide(_float fTimeDelta)
 {
 	if (m_vecPageAction[_int(PAGEACTION::ACTION_ACTIVE)])
@@ -231,7 +242,8 @@ void CUIPage_Achievment::Action_Slide(_float fTimeDelta)
 
 void CUIPage_Achievment::Check_Data(_float fTimeDelta)
 {
-	
+	if (GET_GAMEINTERFACE->IsGamePause() == false)
+		m_vecStatistic[0]->Input_Data_Playtime(fTimeDelta);
 
 
 
@@ -267,11 +279,8 @@ void CUIPage_Achievment::Update_Static(_float fTimeDelta)
 
 void CUIPage_Achievment::Update_Statistic(_float fTimeDelta)
 {
-	for (auto& iter : m_vec_Group_Ctrl[_int(PART_GROUP::GROUP_STATISTIC_LINE)]->PartIndexlist)
-	{
-		__super::UpdatePart_ByIndex(iter, fTimeDelta);
-		Input_Render_Info(*m_vecPart[iter], SCROLL_AREA::SCROLL_NONE);
-	}
+	for (auto& iter : m_vecStatistic)
+		iter->Update_Statistic_Line(m_fTopPartMove);
 }
 
 void CUIPage_Achievment::Update_Achievment(_float fTimeDelta)

@@ -64,6 +64,7 @@ public:
 
 protected:
 	void Make_Achievment_DataLine();
+	void Make_Statistic_DataLine();
 
 	void Action_Slide(_float fTimeDelta);
 
