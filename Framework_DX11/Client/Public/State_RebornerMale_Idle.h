@@ -43,7 +43,7 @@ private:
     _float              m_fWalkSpeed = { 1.f };
     _float              m_fRunningWeights = { 3.f };
 
-    _float              m_fNeedDist_ForAttack = { 3.5f };
+    _float              m_fNeedDist_ForAttack = { 13.f };
 
 
     _uint               m_iAtkCnt{};

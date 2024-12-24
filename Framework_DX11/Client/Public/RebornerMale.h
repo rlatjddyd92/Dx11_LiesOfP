@@ -7,8 +7,8 @@
 BEGIN(Engine)
 class CCollider;
 class CShader;
-class CModel;
 class CFSM;
+class CModel;
 END
 
 BEGIN(Client)
@@ -25,9 +25,8 @@ public:
 
 public:
 	enum REBORNDERBIGA_STATE {
-		SWINGMULTIPLE = MONSTER_STATE_END
-		, RUSHSTING, GUARDSTING
-		, SLASHTWICE, SLASHJUMP
+		KICK = MONSTER_STATE_END
+		, RAPIDFIRE, RELOAD
 	};
 
 private:
