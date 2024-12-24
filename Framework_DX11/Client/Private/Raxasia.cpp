@@ -573,6 +573,7 @@ void CRaxasia::End_CutScene(_uint iCutSceneNum)
 		_Vec3 vCurrentPos = m_pTransformCom->Get_State(CTransform::STATE_POSITION);
 		vCurrentPos.y -= 1.2f;
 
+		m_pCutSceneWeapon->DeActive_AllEffect();
 		m_pCutSceneWeapon->IsActive(false);
 		m_pCutSceneWeapon->Start_UpdatePos();
 
@@ -606,6 +607,7 @@ void CRaxasia::End_CutScene(_uint iCutSceneNum)
 		_matrix PreTransformMatrix = XMMatrixScaling(0.015f, 0.015f, 0.015f) * XMMatrixRotationX(XMConvertToRadians(270.0f));
 		_Vec3 vShieldOffset = _Vec3(0.f, 0.f, 0.f);
 
+		m_pCutSceneWeapon->DeActive_AllEffect();
 		m_pCutSceneWeapon->IsActive(false);
 
 		m_pWeaponShield->Get_Transform()->Set_State(CTransform::STATE_POSITION, vShieldOffset);

@@ -207,6 +207,14 @@ void CRaxasia_Sword_CutScene::Stop_UpdatePos()
 	m_isUpdatePos = false;
 }
 
+void CRaxasia_Sword_CutScene::DeActive_AllEffect()
+{
+	for (auto& Effect : m_Effects)
+	{
+		Effect->Set_Loop(false);
+	}
+}
+
 void CRaxasia_Sword_CutScene::Control_Phase1Effect(_float fTimeDelta)
 {
 	_float fCurretTrackPosition = (_float)m_pModelCom->Get_CurrentTrackPosition();
@@ -241,7 +249,7 @@ void CRaxasia_Sword_CutScene::Control_Phase1Effect(_float fTimeDelta)
 			m_Effects[EFFECT_P1_DRAG]->Set_Loop(true);
 			m_isActiveCutSceneDrag = true;
 		}
-		else if (!m_isDeActiveCutSceneDrag && m_fDragTime > 3.5f)
+		else if (!m_isDeActiveCutSceneDrag && m_fDragTime > 5.5f)
 		{
 			m_Effects[EFFECT_P1_DRAG]->Set_Loop(false);
 			m_isDeActiveCutSceneDrag = true;

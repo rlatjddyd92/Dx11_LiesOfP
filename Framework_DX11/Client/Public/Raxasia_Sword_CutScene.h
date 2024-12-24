@@ -61,6 +61,8 @@ public:
 	void		Start_UpdatePos();
 	void		Stop_UpdatePos();
 
+	void		DeActive_AllEffect();
+
 private:
 	class CShader* m_pShaderCom = { nullptr };
 	class CModel* m_pModelCom = { nullptr };
