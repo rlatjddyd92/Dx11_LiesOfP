@@ -2375,29 +2375,32 @@
     <ClInclude Include="..\Public\Decal.h">
       <Filter>02.GameObjects\16.Decal</Filter>
     </ClInclude>
-    <ClInclude Include="..\Public\RebornerMale.h">
-      <Filter>02.GameObjects\02.Pawn\01.Monster\Normal\RebornerMale</Filter>
-    </ClInclude>
-    <ClInclude Include="..\Public\Weapon_RebornerMale_Gun.h">
-      <Filter>02.GameObjects\06.Weapon\04.RebornerMale</Filter>
-    </ClInclude>
-    <ClInclude Include="..\Public\State_RebornerMale_Idle.h">
-      <Filter>05.Fsm\Monster\RebornerMale\Idle</Filter>
-    </ClInclude>
-    <ClInclude Include="..\Public\State_RebornerMale_KnockBack.h">
-      <Filter>05.Fsm\Monster\RebornerMale\KnockBack</Filter>
-    </ClInclude>
     <ClInclude Include="..\Public\State_RebornerMale_Die.h">
       <Filter>05.Fsm\Monster\RebornerMale\Die</Filter>
     </ClInclude>
     <ClInclude Include="..\Public\State_RebornerMale_HitFatal.h">
       <Filter>05.Fsm\Monster\RebornerMale\HitFatal</Filter>
     </ClInclude>
+    <ClInclude Include="..\Public\State_RebornerMale_Idle.h">
+      <Filter>05.Fsm\Monster\RebornerMale\Idle</Filter>
+    </ClInclude>
     <ClInclude Include="..\Public\State_RebornerMale_Kick.h">
       <Filter>05.Fsm\Monster\RebornerMale\Attack\Kick</Filter>
     </ClInclude>
+    <ClInclude Include="..\Public\State_RebornerMale_KnockBack.h">
+      <Filter>05.Fsm\Monster\RebornerMale\KnockBack</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Public\State_RebornerMale_RapidFire.h">
+      <Filter>05.Fsm\Monster\RebornerMale\Attack\RapidFire</Filter>
+    </ClInclude>
     <ClInclude Include="..\Public\State_RebornerMale_Reaload.h">
       <Filter>05.Fsm\Monster\RebornerMale\Attack\Reload</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Public\Weapon_RebornerMale_Gun.h">
+      <Filter>02.GameObjects\06.Weapon\04.RebornerMale</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Public\RebornerMale.h">
+      <Filter>02.GameObjects\02.Pawn\01.Monster\Normal\RebornerMale</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -3432,29 +3435,32 @@
     <ClCompile Include="..\Private\Decal.cpp">
       <Filter>02.GameObjects\16.Decal</Filter>
     </ClCompile>
-    <ClCompile Include="..\Private\RebornerMale.cpp">
-      <Filter>02.GameObjects\02.Pawn\01.Monster\Normal\RebornerMale</Filter>
-    </ClCompile>
-    <ClCompile Include="..\Private\Weapon_RebornerMale_Gun.cpp">
-      <Filter>02.GameObjects\06.Weapon\04.RebornerMale</Filter>
-    </ClCompile>
-    <ClCompile Include="..\Private\State_RebornerMale_Idle.cpp">
-      <Filter>05.Fsm\Monster\RebornerMale\Idle</Filter>
-    </ClCompile>
-    <ClCompile Include="..\Private\State_RebornerMale_KnockBack.cpp">
-      <Filter>05.Fsm\Monster\RebornerMale\KnockBack</Filter>
-    </ClCompile>
     <ClCompile Include="..\Private\State_RebornerMale_Die.cpp">
       <Filter>05.Fsm\Monster\RebornerMale\Die</Filter>
     </ClCompile>
     <ClCompile Include="..\Private\State_RebornerMale_HitFatal.cpp">
       <Filter>05.Fsm\Monster\RebornerMale\HitFatal</Filter>
     </ClCompile>
+    <ClCompile Include="..\Private\State_RebornerMale_Idle.cpp">
+      <Filter>05.Fsm\Monster\RebornerMale\Idle</Filter>
+    </ClCompile>
     <ClCompile Include="..\Private\State_RebornerMale_Kick.cpp">
       <Filter>05.Fsm\Monster\RebornerMale\Attack\Kick</Filter>
     </ClCompile>
+    <ClCompile Include="..\Private\State_RebornerMale_KnockBack.cpp">
+      <Filter>05.Fsm\Monster\RebornerMale\KnockBack</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Private\State_RebornerMale_RapidFire.cpp">
+      <Filter>05.Fsm\Monster\RebornerMale\Attack\RapidFire</Filter>
+    </ClCompile>
     <ClCompile Include="..\Private\State_RebornerMale_Reaload.cpp">
       <Filter>05.Fsm\Monster\RebornerMale\Attack\Reload</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Private\RebornerMale.cpp">
+      <Filter>02.GameObjects\02.Pawn\01.Monster\Normal\RebornerMale</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Private\Weapon_RebornerMale_Gun.cpp">
+      <Filter>02.GameObjects\06.Weapon\04.RebornerMale</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
