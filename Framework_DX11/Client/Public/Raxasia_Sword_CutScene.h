@@ -88,7 +88,10 @@ private:
 	_bool			m_isActiveInsertEffect[11] = {false, };
 	_bool			m_isEndPhase1Effect = { false };
 	_bool			m_isActiveCutSceneDrag = { false };
+	_bool			m_isDeActiveCutSceneDrag = { false };
 	_bool			m_isActiveStandElecEffect = { false };
+	
+	_float			m_fDragTime = {};
 
 	_bool			m_isActiveElecTurnEffect = { false };
 	_bool			m_isActiveShineEffect = { false };

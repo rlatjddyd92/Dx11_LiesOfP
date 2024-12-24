@@ -220,12 +220,7 @@ void CRaxasia_Sword_CutScene::Control_Phase1Effect(_float fTimeDelta)
 	// ¹Ù´Ú¿¡ ²ø¸®´Â°Å
 	if (!m_isPlayAnimation)
 	{
-		static _float fY = 0.f;
-
-		if (KEY_TAP(KEY::UP))
-		{
-			fY += 0.5f;
-		}
+		m_fDragTime += fTimeDelta;
 
 		SocketMatrix = m_pModelCom->Get_BoneCombindTransformationMatrix("BN_Blade12");
 
@@ -236,14 +231,20 @@ void CRaxasia_Sword_CutScene::Control_Phase1Effect(_float fTimeDelta)
 		XMStoreFloat4x4(&WorldMatrix, SocketMatrix * XMLoadFloat4x4(&m_WorldMatrix));
 
 		vCurrentPos = WorldMatrix.Translation();
-		vCurrentPos.y += fY;
+		vCurrentPos.y -= 0.3f;
 
 		m_Effects[EFFECT_P1_DRAG]->Get_Transform()->Set_State(CTransform::STATE_POSITION, vCurrentPos);
 
 		if (!m_isActiveCutSceneDrag)
 		{
+			m_fDragTime = 0.f;
 			m_Effects[EFFECT_P1_DRAG]->Set_Loop(true);
 			m_isActiveCutSceneDrag = true;
+		}
+		else if (!m_isDeActiveCutSceneDrag && m_fDragTime > 3.5f)
+		{
+			m_Effects[EFFECT_P1_DRAG]->Set_Loop(false);
+			m_isDeActiveCutSceneDrag = true;
 		}
 	}
 
