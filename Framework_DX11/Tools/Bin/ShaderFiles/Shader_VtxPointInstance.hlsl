@@ -680,6 +680,71 @@ PS_EFFECT_OUT PS_POWERGUARD_MAIN(PS_IN In)
     return Out;
 }
 
+PS_EFFECT_OUT PS_THUNDER_FLASH_MAIN(PS_IN In)
+{
+    PS_EFFECT_OUT Out = (PS_EFFECT_OUT) 0;
+	
+    if (In.vLifeTime.y >= In.vLifeTime.x * 0.25f)
+        discard;
+
+    int iTexIndex = (int) ((In.vLifeTime.y / In.vLifeTime.x) * (g_vTexDivide.x * g_vTexDivide.y - 1.f) * g_fSpriteSpeed * 4.f);
+    vector vColor = g_DiffuseTexture.Sample(LinearSampler, Get_SpriteTexcoord(In.vTexcoord, iTexIndex));
+    
+    vColor.a = max(vColor.r, max(vColor.g, vColor.b));
+    vColor.a *= 1.f - (In.vLifeTime.y / In.vLifeTime.x);
+    
+    if (vColor.a <= 0.1f)
+        discard;
+
+    vColor.rgb *= In.vColor.rgb;
+    
+    Out.vDiffuse = vColor;
+    Out.vBlur = vColor;
+
+    return Out;
+}
+
+PS_EFFECT_OUT PS_RGBTOA_MAIN(PS_IN In)
+{
+    PS_EFFECT_OUT Out = (PS_EFFECT_OUT) 0;
+	
+    vector vColor = g_DiffuseTexture.Sample(LinearSampler, In.vTexcoord);
+
+    vColor.a = max(vColor.r, max(vColor.g, vColor.b));
+    
+    if (vColor.a <= 0.1f)
+        discard;
+
+    if (In.vLifeTime.y >= In.vLifeTime.x)
+        discard;
+
+    vColor.rgb *= In.vColor.rgb;
+    
+    Out.vDiffuse = vColor;
+    Out.vBlur = vColor;
+    
+    return Out;
+}
+
+PS_OUT PS_WATERALPHA_MAIN(PS_IN In)
+{
+    PS_OUT Out = (PS_OUT) 0;
+
+    Out.vColor = g_DiffuseTexture.Sample(LinearSampler, In.vTexcoord);
+    
+    Out.vColor.a = Out.vColor.r;
+    
+    if (Out.vColor.a < 0.1f)
+        discard;
+    
+    Out.vColor.a *= 1.f - (In.vLifeTime.y / In.vLifeTime.x);
+    
+    Out.vColor.rgb *= In.vColor.rgb;
+
+    return Out;
+}
+
+
 technique11	DefaultTechnique
 {
 	pass DEFAULT // 0
@@ -878,6 +943,50 @@ technique11	DefaultTechnique
         VertexShader = compile vs_5_0 VS_MAIN();
         GeometryShader = compile gs_5_0 GS_DIR_CENTERSCALING_MAIN();
         PixelShader = compile ps_5_0 PS_THUNDER_MAIN();
+    }
+
+    pass PARTICLE_FLASH_THUNDER // 18
+    {
+        SetRasterizerState(RS_Default);
+        SetDepthStencilState(DSS_Default, 0);
+        SetBlendState(BS_Default, vector(0.f, 0.f, 0.f, 0.f), 0xffffffff);
+
+        VertexShader = compile vs_5_0 VS_MAIN();
+        GeometryShader = compile gs_5_0 GS_DIR_MAIN();
+        PixelShader = compile ps_5_0 PS_THUNDER_FLASH_MAIN();
+    }
+
+    pass PARTICLE_FLASH_THUNDER_CENTERSCALING // 19
+    {
+        SetRasterizerState(RS_Default);
+        SetDepthStencilState(DSS_Default, 0);
+        SetBlendState(BS_Default, vector(0.f, 0.f, 0.f, 0.f), 0xffffffff);
+
+        VertexShader = compile vs_5_0 VS_MAIN();
+        GeometryShader = compile gs_5_0 GS_DIR_CENTERSCALING_MAIN();
+        PixelShader = compile ps_5_0 PS_THUNDER_FLASH_MAIN();
+    }
+
+    pass RGBTOA_DIR // 20
+    {
+        SetRasterizerState(RS_Default);
+        SetDepthStencilState(DSS_Default, 0);
+        SetBlendState(BS_Default, vector(0.f, 0.f, 0.f, 0.f), 0xffffffff);
+
+        VertexShader = compile vs_5_0 VS_MAIN();
+        GeometryShader = compile gs_5_0 GS_DIR_MAIN();
+        PixelShader = compile ps_5_0 PS_RGBTOA_MAIN();
+    }
+
+    pass PARTICLE_WATERALPHA // 21
+    {
+        SetRasterizerState(RS_Default);
+        SetDepthStencilState(DSS_NonWrite, 0);
+        SetBlendState(BS_AlphaBlend, vector(0.f, 0.f, 0.f, 0.f), 0xffffffff);
+
+        VertexShader = compile vs_5_0 VS_MAIN();
+        GeometryShader = compile gs_5_0 GS_DIR_MAIN();
+        PixelShader = compile ps_5_0 PS_WATERALPHA_MAIN();
     }
 
 }
