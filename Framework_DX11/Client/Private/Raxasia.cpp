@@ -1072,7 +1072,7 @@ void CRaxasia::ChangePhase()
 
 	m_pModelCom = m_pExtraModelCom;
 	m_pFsmCom = m_pExtraFsmCom;
-
+	
 	m_pExtraModelCom = nullptr;
 	m_pExtraFsmCom = nullptr;
 
@@ -1104,9 +1104,6 @@ void CRaxasia::ChangePhase()
 		pSocketBoneMatrix, _Vec3(0.f, 0.f, 0.f), _Vec3(0.f, 0.f, 1.f), _Vec3(1.f, 1.f, 1.f));
 
 	m_Effects[EFFECT_INCHENTSWORD_P2]->Set_Matrices(pSocketBoneMatrix);
-
-	m_Effects[EFFECT_INCHENTSWORD] = CEffect_Manager::Get_Instance()->Clone_Effect(TEXT("Raxasia_Attack_InchentedSword"), pParetnMatrix,
-		pSocketBoneMatrix, _Vec3(0.f, 0.f, 0.f), _Vec3(0.f, 0.f, 1.f), _Vec3(1.f, 1.f, 1.f));
 
 	//P2
 

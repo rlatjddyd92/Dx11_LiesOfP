@@ -50,7 +50,10 @@ void CFsm::Add_State(CState* pState)
 void CFsm::Change_State(_uint iState, void* pArg)
 {
 	Safe_Release(m_pPreState);
-	Safe_Release(m_pNowState);
+	if (m_pPreState != m_pNowState)
+	{
+		Safe_Release(m_pNowState);
+	}
 
 	m_pPreState = m_pNowState;
 	Safe_AddRef(m_pPreState);
@@ -77,10 +80,9 @@ void CFsm::Set_State(_uint iState, void* pArg)
 		if (iState == m_States[i]->Get_State())
 		{
 			m_pNowState = m_States[i];
-			m_pPreState = m_States[i];
+			m_pPreState = nullptr;
 
 			Safe_AddRef(m_pNowState);
-			Safe_AddRef(m_pPreState);
 
 			m_pNowState->Start_State(pArg);
 			return;
