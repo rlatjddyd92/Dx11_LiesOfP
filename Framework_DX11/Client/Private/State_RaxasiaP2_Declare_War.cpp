@@ -26,6 +26,8 @@ HRESULT CState_RaxasiaP2_Declare_War::Start_State(void* pArg)
     m_iRouteTrack = 0;
     m_pMonster->Change_Animation(AN_HOWLLING, false, 0.1f, 50);
 
+    m_bStartSpot = true;
+    m_vFlyMoveStack = _Vec3{};
     m_bSwingSound = false;
     m_bSwing = false;
     m_bJump = false;
@@ -67,15 +69,44 @@ void CState_RaxasiaP2_Declare_War::Update(_float fTimeDelta)
         break;
 
     case 1:
+    {
         if (End_Check())
         {
             m_pMonster->Change_State(CRaxasia::IDLE);
             return;
         }
+
+        m_vTargetDir = m_pMonster->Get_TargetDir();
+        m_vTargetDir.Normalize();
+
+        if (CurTrackPos >= 295.f && CurTrackPos <= 315.f)
+        {
         
+            if (m_bStartSpot)
+            {
+                m_fDist = m_pMonster->Calc_Distance_XZ();
+                if (m_fDist < 4.f)
+                {
+                    m_fDist = 4.f;
+                }
+                m_bStartSpot = false;
+            }
+        
+            m_pMonster->Get_Transform()->LookAt_Lerp_NoHeight(m_vTargetDir, 1.f, fTimeDelta);
+        
+            _float fYMove = m_pMonster->Get_RigidBody()->Get_Velocity().y;
+        
+            _Vec3 vMove = m_vTargetDir * m_fDist * (((_float)CurTrackPos - 295.f) / 20.f);
+            vMove.y = fYMove;
+         
+            m_pMonster->Get_RigidBody()->Set_Velocity((vMove - m_vFlyMoveStack) / fTimeDelta);
+            m_vFlyMoveStack = vMove;
+        }
         m_pMonster->Get_Transform()->LookAt_Lerp_NoHeight(m_pMonster->Get_TargetDir(), 1.f, fTimeDelta);
-        
         break;
+    }
+        
+        
 
     default:
         break;
@@ -323,7 +354,7 @@ void CState_RaxasiaP2_Declare_War::Effect_Check(_double CurTrackPos, _float fTim
                     Desc.pOwner = m_pMonster;
                     Desc.vTargetPos = _Vec3{ m_pMonster->Get_TargetPos() };
 
-                    m_pGameInstance->Add_CloneObject_ToLayer(LEVEL_GAMEPLAY, TEXT("Monster_Attack"), TEXT("Raxasia_Attack_ThunderLanding"), &Desc);
+                    m_pGameInstance->Add_CloneObject_ToLayer(LEVEL_GAMEPLAY, TEXT("Monster_Attack"), TEXT("Prototype_GameObject_ThunderLanding"), &Desc);
 
                     m_pMonster->DeActive_Effect(CRaxasia::EFFECT_THUNDERENVELOP_SMALL);
                     m_pMonster->DeActive_Effect(CRaxasia::EFFECT_THUNDERACCEL);

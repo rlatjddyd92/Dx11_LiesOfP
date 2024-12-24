@@ -260,7 +260,7 @@ _Vec4 CPawn::Calc_CenterPos(_bool isUsingBone)
 	
 	if (isUsingBone)
 	{
-		vPos = m_pModelCom->Calc_CenterPos(m_pTransformCom->Get_WorldMatrix()) + m_vCenterOffset;
+		vPos = m_pModelCom->Calc_CenterPos(m_pTransformCom->Get_WorldMatrix());
 	}
 	else
 	{

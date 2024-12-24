@@ -21,6 +21,8 @@ HRESULT CState_CarcassBigA_Die::Initialize(_uint iStateNum, void* pArg)
 
 HRESULT CState_CarcassBigA_Die::Start_State(void* pArg)
 {
+    m_iRouteTrack = 0;
+
     _Vec3 vUp = XMVector3Normalize(m_pMonster->Get_Transform()->Get_State(CTransform::STATE_UP));
     _Vec3 vRight = XMVector3Normalize(m_pMonster->Get_Transform()->Get_State(CTransform::STATE_RIGHT));
     _Vec3 vTargetDir = XMVector3Normalize(m_pMonster->Get_TargetDir());
@@ -29,7 +31,6 @@ HRESULT CState_CarcassBigA_Die::Start_State(void* pArg)
     _Vec3 vCrossUp = vRight.Cross(vTargetDir);
 
     _int iAnimIndex = {};
-
     if (vCrossUp.y <= 0)
     {
         m_iDirCnt = DIR::DIR_FRONT;
@@ -38,19 +39,46 @@ HRESULT CState_CarcassBigA_Die::Start_State(void* pArg)
     {
         m_iDirCnt = DIR::DIR_BEHIND;
     }
-    m_pMonster->Change_Animation(iAnimIndex, false, 0.1f);
+    m_pMonster->Change_Animation(AN_DIE_START_F - m_iDirCnt, false, 0.1f);
 
     return S_OK;
 }
 
 void CState_CarcassBigA_Die::Update(_float fTimeDelta)
 {
-    //if (End_Check())
-    //{
-    //    //몬스터 사망
-    //    m_pMonster->Change_State(CCarcassBigA::IDLE);   //임시
-    //
-    //}
+    switch (m_iRouteTrack)
+    {
+    case 0:
+        if (End_Check())
+        {
+            //몬스터 사망
+            ++m_iRouteTrack;
+            m_pMonster->Change_Animation(AN_DIE_LOOP_F - m_iDirCnt, false, 0.1f);
+        }
+        break;
+
+    case 1:
+        if (End_Check())
+        {
+            //몬스터 사망
+            ++m_iRouteTrack;
+            m_pMonster->Change_Animation(AN_DIE_END_F - m_iDirCnt, false, 0.1f);
+
+        }
+        break;
+
+    case 2:
+        if (End_Check())
+        {
+            //몬스터 사망
+            //m_pMonster->Change_State(CCarcassBigA::IDLE);   //임시
+
+        }
+        break;
+
+    default:
+        break;
+    }
 
 }
 

@@ -84,7 +84,6 @@ void CState_RaxasiaP2_WaveSting::Update(_float fTimeDelta)
             m_bSwing = false;
             m_bControlRim = true;
             m_pMonster->DeActive_Effect(CRaxasia::EFFECT_THUNDERENVELOP_SMALL);
-            m_pMonster->Get_Model()->Set_SpeedRatio(AN_RUN, (double)1);
             m_pMonster->Change_Animation(AN_STING, false, 0.02f, 50);
             return;
         }

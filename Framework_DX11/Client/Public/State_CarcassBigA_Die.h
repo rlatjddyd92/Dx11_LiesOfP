@@ -34,6 +34,7 @@ public:
 private:
     class CMonster* m_pMonster = { nullptr };
 
+    _uint               m_iRouteTrack = {};
     _uint               m_iDirCnt = {};
 
 private:

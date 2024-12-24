@@ -87,6 +87,8 @@ HRESULT CCarcassBigA::Initialize(void* pArg)
 	m_eStat.fGrogyPoint = 0.f;
 	m_eStat.fMaxGrogyPoint = 50.f;
 
+	m_vCenterOffset = _Vec3{ 0.f, 1.7f, 0.f };
+
 	// 24-11-26 김성용
 	// 몬스터 직교 UI 접근 코드 
 	// 정식 코드  
@@ -123,8 +125,7 @@ void CCarcassBigA::Update(_float fTimeDelta)
 			if (m_eStat.bWeakness) m_eStat.bWeakness = false;
 			else m_eStat.bWeakness = true;
 		}
-
-	m_pColliderCom->Update(m_pTransformCom->Get_WorldMatrix_Ptr());
+	Update_Collider();
 	m_pGameInstance->Add_ColliderList(m_pColliderCom);
 }
 
@@ -139,7 +140,6 @@ void CCarcassBigA::Late_Update(_float fTimeDelta)
 	{
 		m_pColliderObject[i]->Late_Update(fTimeDelta);
 	}
-
 	m_pGameInstance->Add_ColliderList(m_pColliderCom);
 }
 
@@ -151,6 +151,10 @@ HRESULT CCarcassBigA::Render()
 #ifdef _DEBUG
 	m_pColliderCom->Render();
 
+	for (_uint i = 0; i < CT_END - 1; ++i)
+	{
+		m_EXCollider[i]->Render();
+	}
 	for (_uint i = 0; i < TYPE_END; ++i)
 	{
 		//m_pColliderObject[i]->Active_Collider();
@@ -182,15 +186,66 @@ HRESULT CCarcassBigA::Ready_Components()
 
 	/* FOR.Com_Collider */		//Body
 	CBounding_OBB::BOUNDING_OBB_DESC			ColliderDesc{};
-	ColliderDesc.vExtents = _float3(0.8f, 2.f, 0.7f);
-	ColliderDesc.vCenter = _float3(0.f, 1.f, 0.3f);
-	ColliderDesc.vAngles = _float3(0.f, 0.3f, 0.f);
+	ColliderDesc.vExtents = _float3(0.7f, 0.55f, 0.8f);
+	ColliderDesc.vCenter = _float3(0.1f, 0.f, 0.f);
+	ColliderDesc.vAngles = _float3(0.f, 0.f, 0.f);
 
 	if (FAILED(__super::Add_Component(LEVEL_STATIC, TEXT("Prototype_Component_Collider_OBB"),
 		TEXT("Com_Collider"), reinterpret_cast<CComponent**>(&m_pColliderCom), &ColliderDesc)))
 		return E_FAIL;
 	m_pColliderCom->Set_Owner(this);
+	m_pColliderBindMatrix[CT_BODY_UPPER] = m_pModelCom->Get_BoneCombindTransformationMatrix_Ptr(8);
 
+	//LowerBody
+	ColliderDesc.vExtents = _float3(0.5f, 0.45f, 0.5f);
+	ColliderDesc.vCenter = _float3(0.f, 0.f, 0.f);
+	ColliderDesc.vAngles = _float3(0.f, 0.f, 0.f);
+
+	if (FAILED(__super::Add_Component(LEVEL_STATIC, TEXT("Prototype_Component_Collider_OBB"),
+		TEXT("Com_Collider_BodyMiddle"), reinterpret_cast<CComponent**>(&m_EXCollider[CT_BODY_LOWER]), &ColliderDesc)))
+		return E_FAIL;
+	m_pColliderBindMatrix[CT_BODY_LOWER] = m_pModelCom->Get_BoneCombindTransformationMatrix_Ptr(5);
+
+
+	//LOWERArmLeft
+	ColliderDesc.vExtents = _float3(0.8f, 0.35f, 0.35f);
+	ColliderDesc.vCenter = _float3(0.6f, 0.f, 0.f);
+	ColliderDesc.vAngles = _float3(0.f, 0.f, 0.f);
+
+	if (FAILED(__super::Add_Component(LEVEL_STATIC, TEXT("Prototype_Component_Collider_OBB"),
+		TEXT("Com_Collider_ArmLeft"), reinterpret_cast<CComponent**>(&m_EXCollider[CT_ARM_LEFT]), &ColliderDesc)))
+		return E_FAIL;
+	m_pColliderBindMatrix[CT_ARM_LEFT] = m_pModelCom->Get_BoneCombindTransformationMatrix_Ptr(m_pModelCom->Get_UFBIndices(UFB_HAND_LEFT) - 1);
+
+	//LOWERArmRight
+	ColliderDesc.vExtents = _float3(0.7f, 0.35f, 0.35f);
+	ColliderDesc.vCenter = _float3(0.4f, 0.f, 0.f);
+	ColliderDesc.vAngles = _float3(0.f, 0.f, 0.f);
+	if (FAILED(__super::Add_Component(LEVEL_STATIC, TEXT("Prototype_Component_Collider_OBB"),
+		TEXT("Com_Collider_ArmRight"), reinterpret_cast<CComponent**>(&m_EXCollider[CT_ARM_RIGHT]), &ColliderDesc)))
+		return E_FAIL;
+	m_pColliderBindMatrix[CT_ARM_RIGHT] = m_pModelCom->Get_BoneCombindTransformationMatrix_Ptr(m_pModelCom->Get_UFBIndices(UFB_HAND_RIGHT) - 1);
+
+
+
+	//LegLeft
+	ColliderDesc.vExtents = _float3(0.4f, 0.2f, 0.2f);
+	ColliderDesc.vCenter = _float3(0.2f, 0.f, 0.f);
+	ColliderDesc.vAngles = _float3(0.f, 0.f, 0.f);
+
+	if (FAILED(__super::Add_Component(LEVEL_STATIC, TEXT("Prototype_Component_Collider_OBB"),
+		TEXT("Com_Collider_UpperLegLeft"), reinterpret_cast<CComponent**>(&m_EXCollider[CT_LEG_LEFT]), &ColliderDesc)))
+		return E_FAIL;
+	m_pColliderBindMatrix[CT_LEG_LEFT] = m_pModelCom->Get_BoneCombindTransformationMatrix_Ptr(m_pModelCom->Get_UFBIndices(UFB_FOOT_LEFT) - 1);
+
+	//LegRight
+	if (FAILED(__super::Add_Component(LEVEL_STATIC, TEXT("Prototype_Component_Collider_OBB"),
+		TEXT("Com_Collider_LegRight"), reinterpret_cast<CComponent**>(&m_EXCollider[CT_LEG_RIGHT]), &ColliderDesc)))
+		return E_FAIL;
+	m_pColliderBindMatrix[CT_LEG_RIGHT] = m_pModelCom->Get_BoneCombindTransformationMatrix_Ptr(m_pModelCom->Get_UFBIndices(UFB_FOOT_RIGHT) - 1);
+
+
+	//유사 웨폰
 	/* FOR.Com_Collider_OBB */
 	CBounding_OBB::BOUNDING_OBB_DESC			ColliderOBBDesc_Obj{};
 
@@ -299,6 +354,36 @@ HRESULT CCarcassBigA::Ready_FSM()
 
 
 
+}
+
+void CCarcassBigA::Update_Collider()
+{
+	_float4x4 UpdateMat{};
+
+	_Matrix WorldMat = XMLoadFloat4x4(m_pTransformCom->Get_WorldMatrix_Ptr());
+	XMStoreFloat4x4(&UpdateMat
+		, *(m_pColliderBindMatrix[CT_BODY_UPPER]) * WorldMat);
+	m_pColliderCom->Update(&UpdateMat);
+
+	XMStoreFloat4x4(&UpdateMat
+		, *(m_pColliderBindMatrix[CT_BODY_LOWER]) * WorldMat);
+	m_EXCollider[CT_BODY_LOWER]->Update(&UpdateMat);
+
+
+	XMStoreFloat4x4(&UpdateMat
+		, *(m_pColliderBindMatrix[CT_ARM_LEFT]) * WorldMat);
+	m_EXCollider[CT_ARM_LEFT]->Update(&UpdateMat);
+	XMStoreFloat4x4(&UpdateMat
+		, *(m_pColliderBindMatrix[CT_ARM_RIGHT]) * WorldMat);
+	m_EXCollider[CT_ARM_RIGHT]->Update(&UpdateMat);
+
+
+	XMStoreFloat4x4(&UpdateMat
+		, *(m_pColliderBindMatrix[CT_LEG_LEFT]) * WorldMat);
+	m_EXCollider[CT_LEG_LEFT]->Update(&UpdateMat);
+	XMStoreFloat4x4(&UpdateMat
+		, *(m_pColliderBindMatrix[CT_LEG_RIGHT]) * WorldMat);
+	m_EXCollider[CT_LEG_RIGHT]->Update(&UpdateMat);
 }
 
 CCarcassBigA* CCarcassBigA::Create(ID3D11Device* pDevice, ID3D11DeviceContext* pContext)

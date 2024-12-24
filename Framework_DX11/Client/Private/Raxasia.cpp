@@ -120,6 +120,8 @@ HRESULT CRaxasia::Initialize(void* pArg)
 	m_eStat.fGrogyPoint = 0.f;
 	m_eStat.fMaxGrogyPoint = 50.f;
 
+	m_vCenterOffset = _Vec3{0.f, 1.85f, 0.f};
+
 	m_eHitType = HIT_METAL;
 
 	m_pWeapon->DeActive_Collider();
@@ -137,10 +139,10 @@ HRESULT CRaxasia::Initialize(void* pArg)
 
 void CRaxasia::Priority_Update(_float fTimeDelta)
 {
-	if (m_bChanging)
-	{
-		m_bChanging = false;
-	}
+	//if (m_bChanging)
+	//{
+	//	m_bChanging = false;
+	//}
 	__super::Set_UpTargetPos();
 	m_pWeapon->Priority_Update(fTimeDelta);
 	m_pWeaponShield->Priority_Update(fTimeDelta);
@@ -183,7 +185,6 @@ void CRaxasia::Update(_float fTimeDelta)
 
 
 	m_vCurRootMove = XMVector3TransformNormal(m_pModelCom->Play_Animation(fTimeDelta * m_isPlayAnimation), m_pTransformCom->Get_WorldMatrix());
-
 
 	m_pRigidBodyCom->Set_Velocity(m_vCurRootMove / fTimeDelta);
 
@@ -1000,7 +1001,7 @@ HRESULT CRaxasia::Ready_Effects()
 		pSocketBoneMatrix, _Vec3(0.f, 0.f, 0.f), _Vec3(0.f, 0.f, 1.f), _Vec3(1.f, 1.f, 1.f));
 
 
-	pSocketBoneMatrix = m_pExtraModelCom->Get_BoneCombindTransformationMatrix_Ptr(m_pExtraModelCom->Get_UFBIndices(UFB_CHEST));
+	pSocketBoneMatrix = m_pExtraModelCom->Get_BoneCombindTransformationMatrix_Ptr(8);
 
 	m_Effects[EFFECT_THUNDERENVELOP_SMALL] = CEffect_Manager::Get_Instance()->Clone_Effect(TEXT("Raxasia_Attack_ThunderEnvelop_Small"), pParetnMatrix,
 		pSocketBoneMatrix, _Vec3(0.f, 0.f, 0.f), _Vec3(0.f, 0.f, 1.f), _Vec3(1.f, 1.f, 1.f), _Vec3(60.f, 0.f, -90.f));
@@ -1075,7 +1076,7 @@ void CRaxasia::ChangePhase()
 
 	m_pModelCom = m_pExtraModelCom;
 	m_pFsmCom = m_pExtraFsmCom;
-
+	
 	m_pExtraModelCom = nullptr;
 	m_pExtraFsmCom = nullptr;
 
@@ -1107,9 +1108,6 @@ void CRaxasia::ChangePhase()
 		pSocketBoneMatrix, _Vec3(0.f, 0.f, 0.f), _Vec3(0.f, 0.f, 1.f), _Vec3(1.f, 1.f, 1.f));
 
 	m_Effects[EFFECT_INCHENTSWORD_P2]->Set_Matrices(pSocketBoneMatrix);
-
-	m_Effects[EFFECT_INCHENTSWORD] = CEffect_Manager::Get_Instance()->Clone_Effect(TEXT("Raxasia_Attack_InchentedSword"), pParetnMatrix,
-		pSocketBoneMatrix, _Vec3(0.f, 0.f, 0.f), _Vec3(0.f, 0.f, 1.f), _Vec3(1.f, 1.f, 1.f));
 
 	//P2
 

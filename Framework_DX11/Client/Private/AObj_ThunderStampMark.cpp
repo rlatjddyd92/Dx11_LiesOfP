@@ -39,6 +39,10 @@ HRESULT CAObj_ThunderStampMark::Initialize(void* pArg)
         m_pEffect->Set_Loop(false);
         m_pEffectExp->Reset_Effects();
     }
+    else
+    {
+        m_pEffect->Set_Loop(true);
+    }
 
     m_fDamageAmount = 280.f;
     m_fLifeDuration = 1.f;
@@ -178,7 +182,6 @@ HRESULT CAObj_ThunderStampMark::Ready_Components()
     m_pEffectExp = CEffect_Manager::Get_Instance()->Clone_Effect(TEXT("Raxasia_Attack_ThunderStamp_Mark_Explosion"), pParetnMatrix,
         nullptr, _Vec3(0.f, 0.f, 0.f), _Vec3(0.f, 0.f, 1.f));
 
-    m_pEffect->Set_Loop(true);
     return S_OK;
 }
 

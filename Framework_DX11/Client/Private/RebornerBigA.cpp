@@ -23,6 +23,7 @@
 #include "State_RebornerBigA_SlashTwice.h"
 #include "State_RebornerBigA_SwingMultiple.h"
 
+#include "Effect_Manager.h"
 
 
 CRebornerBigA::CRebornerBigA(ID3D11Device* pDevice, ID3D11DeviceContext* pContext)
@@ -83,6 +84,10 @@ HRESULT CRebornerBigA::Initialize(void* pArg)
 	m_eStat.fGrogyPoint = 0.f;
 	m_eStat.fMaxGrogyPoint = 50.f;
 
+	m_vCenterOffset = _Vec3{ 0.f, 1.78f, 0.f };
+	
+	m_bDiscover = true;
+
 	// 24-11-26 김성용
 	// 몬스터 직교 UI 접근 코드 
 	// 정식 코드  
@@ -107,6 +112,11 @@ void CRebornerBigA::Priority_Update(_float fTimeDelta)
 
 void CRebornerBigA::Update(_float fTimeDelta)
 {
+	if (KEY_TAP(KEY::R))
+	{
+		CEffect_Manager::Get_Instance()->Add_Effect_ToLayer(LEVEL_GAMEPLAY, TEXT("Monster_Impact"),
+			_Vec3{ Calc_CenterPos() }, _Vec3{ 0, 0, 1 });
+	}
 	m_vCurRootMove = XMVector3TransformNormal(m_pModelCom->Play_Animation(fTimeDelta), m_pTransformCom->Get_WorldMatrix());
 
 	m_pRigidBodyCom->Set_Velocity(m_vCurRootMove / fTimeDelta);
@@ -128,6 +138,10 @@ void CRebornerBigA::Late_Update(_float fTimeDelta)
 
 
 	m_pGameInstance->Add_ColliderList(m_pColliderCom);
+	for (_int i = 0; i < CT_END - 1; ++i)
+	{
+		m_pGameInstance->Add_ColliderList(m_EXCollider[i]);
+	}
 	m_pWeapon->Late_Update(fTimeDelta);
 }
 

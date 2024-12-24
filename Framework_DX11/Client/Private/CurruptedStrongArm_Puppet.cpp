@@ -77,6 +77,8 @@ HRESULT CCurruptedStrongArm_Puppet::Initialize(void* pArg)
 	m_eStat.fGrogyPoint = 0.f;
 	m_eStat.fMaxGrogyPoint = 50.f;
 
+	m_vCenterOffset = _Vec3{ 0.f, 1.55f, 0.f };
+
 	// 24-11-26 김성용
 	// 몬스터 직교 UI 접근 코드 
 	// 정식 코드  
@@ -123,6 +125,10 @@ void CCurruptedStrongArm_Puppet::Late_Update(_float fTimeDelta)
 		m_pColliderObject[i]->Late_Update(fTimeDelta);
 	}
 
+	for (_int i = 0; i < CT_END - 1; ++i)
+	{
+		m_pGameInstance->Add_ColliderList(m_EXCollider[i]);
+	}
 	m_pGameInstance->Add_ColliderList(m_pColliderCom);
 }
 

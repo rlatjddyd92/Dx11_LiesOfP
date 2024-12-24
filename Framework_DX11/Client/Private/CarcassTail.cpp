@@ -79,6 +79,8 @@ HRESULT CCarcassTail::Initialize(void* pArg)
 	m_eStat.fDefence = 2.f;
 	m_eStat.fStemina = 30.f;
 
+	m_vCenterOffset = _Vec3{ 0.f, 0.91f, 0.f };
+
 	GET_GAMEINTERFACE->Register_Pointer_Into_OrthoUIPage(UI_ORTHO_OBJ_TYPE::ORTHO_NORMAL_MONSTER, this);
 
 	GET_GAMEINTERFACE->Set_OnOff_OrthoUI(false, this);
@@ -109,8 +111,7 @@ void CCarcassTail::Update(_float fTimeDelta)
 	_float4x4 WorldMat{};
 	XMStoreFloat4x4(&WorldMat , m_pModelCom->Get_BoneCombindTransformationMatrix(7) * XMLoadFloat4x4(m_pTransformCom->Get_WorldMatrix_Ptr()));
 
-	m_pColliderCom->Update(&WorldMat);
-	m_pGameInstance->Add_ColliderList(m_pColliderCom);
+	Update_Collider();
 }
 
 void CCarcassTail::Late_Update(_float fTimeDelta)
@@ -125,6 +126,11 @@ void CCarcassTail::Late_Update(_float fTimeDelta)
 		m_pColliderObject[i]->Late_Update(fTimeDelta);
 	}
 
+
+	for (_uint i = 0; i < CT_END - 1; ++i)
+	{
+		m_pGameInstance->Add_ColliderList(m_EXCollider[i]);
+	}
 	m_pGameInstance->Add_ColliderList(m_pColliderCom);
 }
 
@@ -135,12 +141,15 @@ HRESULT CCarcassTail::Render()
 
 #ifdef _DEBUG
 	m_pColliderCom->Render();
-
-	for (_uint i = 0; i < TYPE_END; ++i)
+	for (_uint i = 0; i <CT_END - 1; ++i)
 	{
-		//m_pColliderObject[i]->Active_Collider();
-		m_pColliderObject[i]->Render();
+		m_EXCollider[i]->Render();
 	}
+	//for (_uint i = 0; i < TYPE_END; ++i)
+	//{
+	//	//m_pColliderObject[i]->Active_Collider();
+	//	m_pColliderObject[i]->Render();
+	//}
 #endif
 	return S_OK;
 }
@@ -167,14 +176,89 @@ HRESULT CCarcassTail::Ready_Components()
 
 	/* FOR.Com_Collider */		//Body
 	CBounding_OBB::BOUNDING_OBB_DESC			ColliderDesc{};
-	ColliderDesc.vExtents = _float3(1.7f, 0.6f, 1.3f);
-	ColliderDesc.vCenter = _float3(0.3f, -0.1f, 0.f);
+	ColliderDesc.vExtents = _float3(0.45f, 0.45f, 0.9f);
+	ColliderDesc.vCenter = _float3(0.5f, 0.f, 0.f);
 	ColliderDesc.vAngles = _float3(0.f, 0.f, 0.f);
 
 	if (FAILED(__super::Add_Component(LEVEL_STATIC, TEXT("Prototype_Component_Collider_OBB"),
 		TEXT("Com_Collider"), reinterpret_cast<CComponent**>(&m_pColliderCom), &ColliderDesc)))
 		return E_FAIL;
 	m_pColliderCom->Set_Owner(this);
+	m_pColliderBindMatrix[CT_BODY_UPPER] = m_pModelCom->Get_BoneCombindTransformationMatrix_Ptr(8);
+
+	//MiddleBody
+	ColliderDesc.vExtents = _float3(0.6f, 0.55f, 0.4f);
+	ColliderDesc.vCenter = _float3(0.f, 0.f, 0.f);
+	ColliderDesc.vAngles = _float3(0.f, 0.f, 0.f);
+
+	if (FAILED(__super::Add_Component(LEVEL_STATIC, TEXT("Prototype_Component_Collider_OBB"),
+		TEXT("Com_Collider_BodyMiddle"), reinterpret_cast<CComponent**>(&m_EXCollider[CT_BODY_MIDDLE]), &ColliderDesc)))
+		return E_FAIL;
+	m_pColliderBindMatrix[CT_BODY_MIDDLE] = m_pModelCom->Get_BoneCombindTransformationMatrix_Ptr(7);
+
+
+	//LowerBody
+	ColliderDesc.vExtents = _float3(0.35f, 0.6f, 0.85f);
+	ColliderDesc.vCenter = _float3(0.0f, -0.2f, 0.f);
+	ColliderDesc.vAngles = _float3(0.f, 0.f, 0.f);
+
+	if (FAILED(__super::Add_Component(LEVEL_STATIC, TEXT("Prototype_Component_Collider_OBB"),
+		TEXT("Com_Collider_BodyLower"), reinterpret_cast<CComponent**>(&m_EXCollider[CT_BODY_LOWER]), &ColliderDesc)))
+		return E_FAIL;
+	m_pColliderBindMatrix[CT_BODY_LOWER] = m_pModelCom->Get_BoneCombindTransformationMatrix_Ptr(5);
+
+	//Head
+	ColliderDesc.vExtents = _float3(0.4f, 0.5f, 0.5f);
+	ColliderDesc.vCenter = _float3(0.2f, 0.1f, 0.f);
+	ColliderDesc.vAngles = _float3(0.f, 0.f, 0.f);
+
+	if (FAILED(__super::Add_Component(LEVEL_STATIC, TEXT("Prototype_Component_Collider_OBB"),
+		TEXT("Com_Collider_Head"), reinterpret_cast<CComponent**>(&m_EXCollider[CT_HEAD]), &ColliderDesc)))
+		return E_FAIL;
+	m_pColliderBindMatrix[CT_HEAD] = m_pModelCom->Get_BoneCombindTransformationMatrix_Ptr(m_pModelCom->Get_UFBIndices(UFB_HEAD));
+
+
+	//LOWERArmLeft
+	ColliderDesc.vExtents = _float3(0.8f, 0.25f, 0.25f);
+	ColliderDesc.vCenter = _float3(0.3f, 0.f, 0.f);
+	ColliderDesc.vAngles = _float3(0.f, 0.f, 0.f);
+
+	if (FAILED(__super::Add_Component(LEVEL_STATIC, TEXT("Prototype_Component_Collider_OBB"),
+		TEXT("Com_Collider_ArmLeft"), reinterpret_cast<CComponent**>(&m_EXCollider[CT_ARM_LEFT]), &ColliderDesc)))
+		return E_FAIL;
+	m_pColliderBindMatrix[CT_ARM_LEFT] = m_pModelCom->Get_BoneCombindTransformationMatrix_Ptr(m_pModelCom->Get_UFBIndices(UFB_HAND_LEFT) - 1);
+
+
+	//LOWERArmRight
+	if (FAILED(__super::Add_Component(LEVEL_STATIC, TEXT("Prototype_Component_Collider_OBB"),
+		TEXT("Com_Collider_ArmRight"), reinterpret_cast<CComponent**>(&m_EXCollider[CT_ARM_RIGHT]), &ColliderDesc)))
+		return E_FAIL;
+	m_pColliderBindMatrix[CT_ARM_RIGHT] = m_pModelCom->Get_BoneCombindTransformationMatrix_Ptr(m_pModelCom->Get_UFBIndices(UFB_HAND_RIGHT) - 1);
+
+
+
+	//LegLeft
+	ColliderDesc.vExtents = _float3(0.8f, 0.4f, 0.25f);
+	ColliderDesc.vCenter = _float3(-0.25f, 0.3f, 0.f);
+	ColliderDesc.vAngles = _float3(0.f, 0.f, -0.6f);
+
+	if (FAILED(__super::Add_Component(LEVEL_STATIC, TEXT("Prototype_Component_Collider_OBB"),
+		TEXT("Com_Collider_UpperLegLeft"), reinterpret_cast<CComponent**>(&m_EXCollider[CT_LEG_LEFT]), &ColliderDesc)))
+		return E_FAIL;
+	m_pColliderBindMatrix[CT_LEG_LEFT] = m_pModelCom->Get_BoneCombindTransformationMatrix_Ptr(m_pModelCom->Get_UFBIndices(UFB_FOOT_LEFT) - 1);
+
+
+	//LegRight
+	if (FAILED(__super::Add_Component(LEVEL_STATIC, TEXT("Prototype_Component_Collider_OBB"),
+		TEXT("Com_Collider_LegRight"), reinterpret_cast<CComponent**>(&m_EXCollider[CT_LEG_RIGHT]), &ColliderDesc)))
+		return E_FAIL;
+	m_pColliderBindMatrix[CT_LEG_RIGHT] = m_pModelCom->Get_BoneCombindTransformationMatrix_Ptr(m_pModelCom->Get_UFBIndices(UFB_FOOT_RIGHT) - 1);
+
+
+	for (_int i = 0; i < CT_END - 1; ++i)
+	{
+		m_EXCollider[i]->Set_Owner(this);
+	}
 
 	/* FOR.Com_Collider_OBB */
 	CBounding_OBB::BOUNDING_OBB_DESC			ColliderOBBDesc_Obj{};
@@ -304,6 +388,45 @@ HRESULT CCarcassTail::Ready_FSM()
 
 
 	return S_OK;
+
+}
+
+void CCarcassTail::Update_Collider()
+{
+	_float4x4 UpdateMat{};
+
+	_Matrix WorldMat = XMLoadFloat4x4(m_pTransformCom->Get_WorldMatrix_Ptr());
+	XMStoreFloat4x4(&UpdateMat
+		, *(m_pColliderBindMatrix[CT_BODY_UPPER]) * WorldMat);
+	m_pColliderCom->Update(&UpdateMat);
+
+	XMStoreFloat4x4(&UpdateMat
+		, *(m_pColliderBindMatrix[CT_BODY_MIDDLE]) * WorldMat);
+	m_EXCollider[CT_BODY_MIDDLE]->Update(&UpdateMat);
+
+	XMStoreFloat4x4(&UpdateMat
+		, *(m_pColliderBindMatrix[CT_BODY_LOWER]) * WorldMat);
+	m_EXCollider[CT_BODY_LOWER]->Update(&UpdateMat);
+
+	XMStoreFloat4x4(&UpdateMat
+		, *(m_pColliderBindMatrix[CT_HEAD]) * WorldMat);
+	m_EXCollider[CT_HEAD]->Update(&UpdateMat);
+
+
+	XMStoreFloat4x4(&UpdateMat
+		, *(m_pColliderBindMatrix[CT_ARM_LEFT]) * WorldMat);
+	m_EXCollider[CT_ARM_LEFT]->Update(&UpdateMat);
+	XMStoreFloat4x4(&UpdateMat
+		, *(m_pColliderBindMatrix[CT_ARM_RIGHT]) * WorldMat);
+	m_EXCollider[CT_ARM_RIGHT]->Update(&UpdateMat);
+
+
+	XMStoreFloat4x4(&UpdateMat
+		, *(m_pColliderBindMatrix[CT_LEG_LEFT]) * WorldMat);
+	m_EXCollider[CT_LEG_LEFT]->Update(&UpdateMat);
+	XMStoreFloat4x4(&UpdateMat
+		, *(m_pColliderBindMatrix[CT_LEG_RIGHT]) * WorldMat);
+	m_EXCollider[CT_LEG_RIGHT]->Update(&UpdateMat);
 
 }
 
