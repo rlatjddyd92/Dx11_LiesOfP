@@ -293,6 +293,12 @@
     <ClInclude Include="..\Public\State_RebornerBigA_SlashJump.h" />
     <ClInclude Include="..\Public\State_RebornerBigA_SlashTwice.h" />
     <ClInclude Include="..\Public\State_RebornerBigA_SwingMultiple.h" />
+    <ClInclude Include="..\Public\State_RebornerMale_Die.h" />
+    <ClInclude Include="..\Public\State_RebornerMale_HitFatal.h" />
+    <ClInclude Include="..\Public\State_RebornerMale_Idle.h" />
+    <ClInclude Include="..\Public\State_RebornerMale_Kick.h" />
+    <ClInclude Include="..\Public\State_RebornerMale_KnockBack.h" />
+    <ClInclude Include="..\Public\State_RebornerMale_Reaload.h" />
     <ClInclude Include="..\Public\State_SimonManusP2_Die_Talking.h" />
     <ClInclude Include="..\Public\SteelHeart.h" />
     <ClInclude Include="..\Public\TorchDeck.h" />
@@ -498,6 +504,7 @@
     <ClInclude Include="..\Public\Weapon_Raxasia_P2_Shield.h" />
     <ClInclude Include="..\Public\Weapon_Raxasia_P2_Sword.h" />
     <ClInclude Include="..\Public\Weapon_RebornerBigA_Stick.h" />
+    <ClInclude Include="..\Public\Weapon_RebornerMale_Gun.h" />
     <ClInclude Include="..\Public\Weapon_Scissor.h" />
     <ClInclude Include="..\Public\Weapon_Scissor_Blade.h" />
     <ClInclude Include="..\Public\Weapon_Scissor_Handle.h" />
@@ -639,6 +646,12 @@
     <ClCompile Include="..\Private\State_RebornerBigA_SlashJump.cpp" />
     <ClCompile Include="..\Private\State_RebornerBigA_SlashTwice.cpp" />
     <ClCompile Include="..\Private\State_RebornerBigA_SwingMultiple.cpp" />
+    <ClCompile Include="..\Private\State_RebornerMale_Die.cpp" />
+    <ClCompile Include="..\Private\State_RebornerMale_HitFatal.cpp" />
+    <ClCompile Include="..\Private\State_RebornerMale_Idle.cpp" />
+    <ClCompile Include="..\Private\State_RebornerMale_Kick.cpp" />
+    <ClCompile Include="..\Private\State_RebornerMale_KnockBack.cpp" />
+    <ClCompile Include="..\Private\State_RebornerMale_Reaload.cpp" />
     <ClCompile Include="..\Private\State_SimonManusP2_Die_Talking.cpp" />
     <ClCompile Include="..\Private\SteelHeart.cpp" />
     <ClCompile Include="..\Private\TorchDeck.cpp" />
@@ -843,6 +856,7 @@
     <ClCompile Include="..\Private\Weapon_Raxasia_P2_Shield.cpp" />
     <ClCompile Include="..\Private\Weapon_Raxasia_P2_Sword.cpp" />
     <ClCompile Include="..\Private\Weapon_RebornerBigA_Stick.cpp" />
+    <ClCompile Include="..\Private\Weapon_RebornerMale_Gun.cpp" />
     <ClCompile Include="..\Private\Weapon_Scissor.cpp" />
     <ClCompile Include="..\Private\Weapon_Scissor_Blade.cpp" />
     <ClCompile Include="..\Private\Weapon_Scissor_Handle.cpp" />

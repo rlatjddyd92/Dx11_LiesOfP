@@ -153,16 +153,15 @@ void CState_RaxasiaP2_Running::Update(_float fTimeDelta)
         else if (CurTrackPos >= 160 && CurTrackPos <= 175)
         {
             _Vec3 vDir = m_pMonster->Get_TargetDir();
-            _Vec3 vVelo = m_pMonster->Get_RigidBody()->Get_Velocity();
             vDir.Normalize();
 
-            if (m_pMonster->Calc_Distance_XZ() >= 1.4f)
+            if (m_pMonster->Calc_Distance_XZ() >= 2.4f)
             {
-                m_pMonster->Get_RigidBody()->Set_Velocity(vVelo + vDir * 5);
+                m_pMonster->Get_RigidBody()->Add_Velocity(vDir * 5);
             }
             else
             {
-                m_pMonster->Get_RigidBody()->Set_Velocity(vVelo - ( vDir * 5));
+                m_pMonster->Get_RigidBody()->Add_Velocity(( vDir * 5));
             }
             
         }

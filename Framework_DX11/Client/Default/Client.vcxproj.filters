@@ -1261,6 +1261,33 @@
     <Filter Include="02.GameObjects\06.Weapon\04.RebornerMale">
       <UniqueIdentifier>{2ffb7c05-4dab-4fbb-be10-9dbfbc1d93fb}</UniqueIdentifier>
     </Filter>
+    <Filter Include="05.Fsm\Monster\RebornerMale">
+      <UniqueIdentifier>{12b1275c-5757-492c-88f2-b2c8feb54801}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="05.Fsm\Monster\RebornerMale\Idle">
+      <UniqueIdentifier>{b29721be-25d4-416a-af82-62ff205e605f}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="05.Fsm\Monster\RebornerMale\KnockBack">
+      <UniqueIdentifier>{1859654d-f563-4518-a618-20e7db0b4dce}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="05.Fsm\Monster\RebornerMale\Die">
+      <UniqueIdentifier>{d49a8136-fc3b-477c-8632-93116617a058}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="05.Fsm\Monster\RebornerMale\HitFatal">
+      <UniqueIdentifier>{4b49c61e-47e0-4637-a061-00aebb8b7c2d}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="05.Fsm\Monster\RebornerMale\Attack">
+      <UniqueIdentifier>{ce09b9ba-7cfe-48ca-a752-5500d6683265}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="05.Fsm\Monster\RebornerMale\Attack\RapidFire">
+      <UniqueIdentifier>{7f174b03-435c-43cb-9761-cb50655df9e5}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="05.Fsm\Monster\RebornerMale\Attack\Kick">
+      <UniqueIdentifier>{5752f73c-350b-4bd7-8b03-0c04d4687c97}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="05.Fsm\Monster\RebornerMale\Attack\Reload">
+      <UniqueIdentifier>{046e9495-1cea-4eb2-8f65-1bb11f7d5734}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Client.h">
@@ -2309,6 +2336,27 @@
     <ClInclude Include="..\Public\RebornerMale.h">
       <Filter>02.GameObjects\02.Pawn\01.Monster\Normal\RebornerMale</Filter>
     </ClInclude>
+    <ClInclude Include="..\Public\Weapon_RebornerMale_Gun.h">
+      <Filter>02.GameObjects\06.Weapon\04.RebornerMale</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Public\State_RebornerMale_Idle.h">
+      <Filter>05.Fsm\Monster\RebornerMale\Idle</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Public\State_RebornerMale_KnockBack.h">
+      <Filter>05.Fsm\Monster\RebornerMale\KnockBack</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Public\State_RebornerMale_Die.h">
+      <Filter>05.Fsm\Monster\RebornerMale\Die</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Public\State_RebornerMale_HitFatal.h">
+      <Filter>05.Fsm\Monster\RebornerMale\HitFatal</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Public\State_RebornerMale_Kick.h">
+      <Filter>05.Fsm\Monster\RebornerMale\Attack\Kick</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Public\State_RebornerMale_Reaload.h">
+      <Filter>05.Fsm\Monster\RebornerMale\Attack\Reload</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Client.cpp">
@@ -3326,6 +3374,27 @@
     </ClCompile>
     <ClCompile Include="..\Private\RebornerMale.cpp">
       <Filter>02.GameObjects\02.Pawn\01.Monster\Normal\RebornerMale</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Private\Weapon_RebornerMale_Gun.cpp">
+      <Filter>02.GameObjects\06.Weapon\04.RebornerMale</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Private\State_RebornerMale_Idle.cpp">
+      <Filter>05.Fsm\Monster\RebornerMale\Idle</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Private\State_RebornerMale_KnockBack.cpp">
+      <Filter>05.Fsm\Monster\RebornerMale\KnockBack</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Private\State_RebornerMale_Die.cpp">
+      <Filter>05.Fsm\Monster\RebornerMale\Die</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Private\State_RebornerMale_HitFatal.cpp">
+      <Filter>05.Fsm\Monster\RebornerMale\HitFatal</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Private\State_RebornerMale_Kick.cpp">
+      <Filter>05.Fsm\Monster\RebornerMale\Attack\Kick</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Private\State_RebornerMale_Reaload.cpp">
+      <Filter>05.Fsm\Monster\RebornerMale\Attack\Reload</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

@@ -24,7 +24,7 @@ HRESULT CState_RaxasiaP2_Idle::Start_State(void* pArg)
     m_pMonster->Change_Animation(AN_IDLE, true, 0.1f, 0);
     m_bRunning = false;
     m_bWalk = false;
-    //m_bFirstAct = false;
+    m_bFirstAct = false;
     if (pArg != nullptr)
     {
         m_fIdleTime = *static_cast<_float*>(pArg);
@@ -115,6 +115,7 @@ void CState_RaxasiaP2_Idle::Calc_Act_Attack()
         m_iAtkTrack = 0;
     }
 
+    m_iAtkTrack = 1;
     switch (m_iAtkTrack)
     {
     case 0:

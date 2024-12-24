@@ -91,8 +91,30 @@ void CState_RaxasiaP2_Running_Linked::Update(_float fTimeDelta)
                 m_pMonster->Get_RigidBody()->Set_Velocity(vVelo - (vDir * 3));
             }
         }
+        if (CurTrackPos <= 74.f)
+        {
+            _Vec3 vTargetPos = m_pMonster->Get_TargetPos();
 
-        if (CurTrackPos >= 75.5f && CurTrackPos <= 79.5f)
+            _Vec3 vDir = m_pMonster->Get_TargetDir();
+            
+            m_fDistance = m_pMonster->Calc_Distance_XZ();
+
+            vDir *= m_fDistance;
+            _Vec3 vTemp{};
+            vTemp = vDir;
+            vTemp.Normalize();
+            if (m_fDistance <= 4.55)
+            {
+                vTemp *= -15.f;
+            }
+            else if (m_fDistance >= 4.65)
+            {
+                vTemp *= 15.f;
+            }
+
+            m_pMonster->Get_RigidBody()->Set_GloblePose(vTargetPos - vDir + (vTemp * fTimeDelta));
+        }
+        else if (CurTrackPos >= 75.5f && CurTrackPos <= 79.5f)
         {
             _Vec3 vTargetPos = m_pMonster->Get_TargetPos();
 
@@ -226,6 +248,7 @@ void CState_RaxasiaP2_Running_Linked::Update(_float fTimeDelta)
         if (End_Check())
         {
             m_pMonster->Change_State(CRaxasia::IDLE);
+            return;
         }
 
         m_pMonster->Get_Transform()->LookAt_Lerp_NoHeight(m_pMonster->Get_TargetDir(), 2.f, fTimeDelta);

@@ -22,6 +22,8 @@
 #include "CarcassNormal.h"
 #include "CurruptedStrongArm_Puppet.h"
 #include "RebornerBigA.h"
+#include "Weapon_RebornerMale_Gun.h"
+#include "RebornerMale.h"
 #include "Weapon_RebornerBigA_Stick.h"
 #include "SimonManus.h"
 
@@ -891,6 +893,18 @@ HRESULT CLoader::Ready_Resources_For_Monster()
 		CModel::Create(m_pDevice, m_pContext, CModel::TYPE_ANIM, "../Bin/ModelData/Anim/CreatedBinFiles/Horesman.dat", PreTransformMatrix, true))))
 		return E_FAIL;
 
+	//Prototype_Component_Model_RebornerMale
+	PreTransformMatrix = XMMatrixScaling(0.01f, 0.01f, 0.01f) * XMMatrixRotationY(XMConvertToRadians(270.0f));
+	if (FAILED(m_pGameInstance->Add_Prototype(LEVEL_GAMEPLAY, TEXT("Prototype_Component_Model_RebornerMale"),
+		CModel::Create(m_pDevice, m_pContext, CModel::TYPE_ANIM, "../Bin/ModelData/Anim/CreatedBinFiles/RebornerMale.dat", PreTransformMatrix, true))))
+		return E_FAIL;
+
+	//Prototype_Component_Model_Weapon_RebornerMale_Gun
+	PreTransformMatrix = XMMatrixScaling(0.01f, 0.01f, 0.01f) * XMMatrixRotationX(XMConvertToRadians(90.0f)) * XMMatrixRotationZ(XMConvertToRadians(180.0f)) * XMMatrixRotationY(XMConvertToRadians(180.0f));
+	if (FAILED(m_pGameInstance->Add_Prototype(LEVEL_GAMEPLAY, TEXT("Prototype_Component_Model_Weapon_RebornerMale_Gun"),
+		CModel::Create(m_pDevice, m_pContext, CModel::TYPE_ANIM, "../Bin/ModelData/Anim/Monster/RebornerMale/RebornerMale_Weapon.dat", PreTransformMatrix, false))))
+		return E_FAIL;
+
 	//Prototype_Component_Model_RebornerBigA
 	PreTransformMatrix = XMMatrixScaling(0.01f, 0.01f, 0.01f) * XMMatrixRotationY(XMConvertToRadians(270.0f));
 	if (FAILED(m_pGameInstance->Add_Prototype(LEVEL_GAMEPLAY, TEXT("Prototype_Component_Model_RebornerBigA"),
@@ -1169,7 +1183,17 @@ HRESULT CLoader::Ready_Prototype()
 		CCurruptedStrongArm_Puppet::Create(m_pDevice, m_pContext))))
 		return E_FAIL;
 
-	/* For. Prototype_GameObject_CurruptedStrongArm */
+	/* For. Prototype_GameObject_RebornerMale */
+	if (FAILED(m_pGameInstance->Add_Prototype(TEXT("Prototype_GameObject_RebornerMale"),
+		CRebornerMale::Create(m_pDevice, m_pContext))))
+		return E_FAIL;
+
+	/* For. Prototype_GameObject_Weapon_RebornerMale_Gun */
+	if (FAILED(m_pGameInstance->Add_Prototype(TEXT("Prototype_GameObject_Weapon_RebornerMale_Gun"),
+		CWeapon_RebornerMale_Gun::Create(m_pDevice, m_pContext))))
+		return E_FAIL;
+
+	/* For. Prototype_GameObject_RebornerBigA */
 	if (FAILED(m_pGameInstance->Add_Prototype(TEXT("Prototype_GameObject_RebornerBigA"),
 		CRebornerBigA::Create(m_pDevice, m_pContext))))
 		return E_FAIL;

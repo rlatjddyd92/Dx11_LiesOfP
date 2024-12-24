@@ -81,7 +81,7 @@ void CState_RaxasiaP2_StepJump::Update(_float fTimeDelta)
 
             _float fYMove = m_pMonster->Get_RigidBody()->Get_Velocity().y;
 
-            _Vec3 vMove = m_vTargetDir * m_fDist * (((_float)CurTrackPos - 87.f) / 105.f);
+            _Vec3 vMove = m_vTargetDir * m_fDist * (((_float)CurTrackPos - 87.f) / 145.f);
             vMove.y = fYMove;
             m_pMonster->Get_RigidBody()->Set_Velocity((vMove - m_vFlyMoveStack) / fTimeDelta);
             m_vFlyMoveStack = vMove;
