@@ -236,7 +236,8 @@ void CRaxasia::Late_Update(_float fTimeDelta)
 
 	for (_uint i = 0; i < EXCOLLIDER::COLLTYPE_END; ++i)
 	{
-		m_pGameInstance->Add_ColliderList(m_EXCollider[i]);
+		if(!m_isCutScene)
+			m_pGameInstance->Add_ColliderList(m_EXCollider[i]);
 	}
 }
 
@@ -486,11 +487,11 @@ void CRaxasia::Start_CutScene(_uint iCutSceneNum)
 
 		_matrix PreTransformMatrix = XMMatrixScaling(0.015f, 0.015f, 0.015f) * XMMatrixRotationX(XMConvertToRadians(-90.f));
 
-		CRaxasia_Sword_CutScene::WEAPON_DESC Desc{};
-		Desc.pParentWorldMatrix = m_pTransformCom->Get_WorldMatrix_Ptr();
-		Desc.pSocketBoneMatrix = m_pModelCom->Get_BoneCombindTransformationMatrix_Ptr("weapon0_l");
-		m_pCutSceneWeapon = dynamic_cast<CRaxasia_Sword_CutScene*>(m_pGameInstance->Get_CloneObject_ToLayer(LEVEL_GAMEPLAY, TEXT("Layer_CutSceneWeapon"),
-			TEXT("Prototype_GameObject_Weapon_Raxasia_Sword_CutScene"), &Desc));
+		//CRaxasia_Sword_CutScene::WEAPON_DESC Desc{};
+		//Desc.pParentWorldMatrix = m_pTransformCom->Get_WorldMatrix_Ptr();
+		//Desc.pSocketBoneMatrix = m_pModelCom->Get_BoneCombindTransformationMatrix_Ptr("weapon0_l");
+		//m_pCutSceneWeapon = dynamic_cast<CRaxasia_Sword_CutScene*>(m_pGameInstance->Get_CloneObject_ToLayer(LEVEL_GAMEPLAY, TEXT("Layer_CutSceneWeapon"),
+		//	TEXT("Prototype_GameObject_Weapon_Raxasia_Sword_CutScene"), &Desc));
 
 		m_pCutSceneWeapon->Get_Model()->Set_PreTranformMatrix(PreTransformMatrix);
 		m_pCutSceneWeapon->Get_Transform()->Set_State(CTransform::STATE_POSITION, vOffset);
@@ -573,6 +574,7 @@ void CRaxasia::End_CutScene(_uint iCutSceneNum)
 		_Vec3 vCurrentPos = m_pTransformCom->Get_State(CTransform::STATE_POSITION);
 		vCurrentPos.y -= 1.2f;
 
+		m_pCutSceneWeapon->DeActive_AllEffect();
 		m_pCutSceneWeapon->IsActive(false);
 		m_pCutSceneWeapon->Start_UpdatePos();
 
@@ -606,6 +608,7 @@ void CRaxasia::End_CutScene(_uint iCutSceneNum)
 		_matrix PreTransformMatrix = XMMatrixScaling(0.015f, 0.015f, 0.015f) * XMMatrixRotationX(XMConvertToRadians(270.0f));
 		_Vec3 vShieldOffset = _Vec3(0.f, 0.f, 0.f);
 
+		m_pCutSceneWeapon->DeActive_AllEffect();
 		m_pCutSceneWeapon->IsActive(false);
 
 		m_pWeaponShield->Get_Transform()->Set_State(CTransform::STATE_POSITION, vShieldOffset);
@@ -1008,6 +1011,7 @@ HRESULT CRaxasia::Ready_Effects()
 		pSocketBoneMatrix, _Vec3(0.f, 0.f, 0.f), _Vec3(0.f, 0.f, 1.f), _Vec3(1.f, 1.f, 1.f), _Vec3(0.f, 0.f, 0.f));
 	
 
+	
 
 	return S_OK;
 }

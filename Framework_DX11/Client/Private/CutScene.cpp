@@ -333,7 +333,9 @@ void CCutScene::End_Setting()
 	case BOSS1_PHASE2:
 		m_pGameInstance->Stop_BGM();
 		m_pObjects[BOSS1]->End_CutScene(1);
+		pPlayer->IsActive(true);
 		pPlayer->Get_Navigation()->Move_to_Cell(pPlayer->Get_RigidBody(), 268);
+		pPlayer->IsActive(true);
 		break;	
 	case BOSS1_DEAD:
 		m_pGameInstance->Stop_BGM();

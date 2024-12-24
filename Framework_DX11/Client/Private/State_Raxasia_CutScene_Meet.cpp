@@ -6,6 +6,8 @@
 #include "CutScene.h"
 #include "Raxasia_Sword_CutScene.h"
 
+#include "Effect_Manager.h"
+
 CState_Raxasia_CutScene_Meet::CState_Raxasia_CutScene_Meet(CFsm* pFsm, CMonster* pMonster)
     :CState{ pFsm }
     , m_pMonster{ pMonster }
@@ -63,33 +65,34 @@ void CState_Raxasia_CutScene_Meet::Update(_float fTimeDelta)
 
         m_isMoveDown = true;
     }
+    else if (!m_isGround && iFrame >= 248)
+    {
+        _Vec3 vCurrentPos = (_Vec3)m_pMonster->Get_Transform()->Get_State(CTransform::STATE_POSITION);
+        _Vec3 vRight = (_Vec3)m_pMonster->Get_Transform()->Get_State(CTransform::STATE_RIGHT);
+        vRight.y = 0.f;
+        vRight.Normalize();
+
+        vCurrentPos.y -= 1.8f;
+        vCurrentPos += vRight * 3.f;
+
+        CEffect_Manager::Get_Instance()->Add_Effect_ToLayer(LEVEL_GAMEPLAY, TEXT("Raxasia_CutScene_Landing"), vCurrentPos);
+        CEffect_Manager::Get_Instance()->Add_Effect_ToLayer(LEVEL_GAMEPLAY, TEXT("Raxasia_CutScene_SmokeSpread"), vCurrentPos, vRight);
+
+        m_isGround = true;
+    }
+
+
 
     if (!m_isPlayWeaponAni && iFrame > 470)
     {
-        m_pCutSceneWeapon->Stop_UpdatePos();
+        //m_pCutSceneWeapon->Stop_UpdatePos();
         m_pCutSceneWeapon->Play_Animation("AS_WP_MOB_Raxasia_01_Sword_Cine_Change__Anim", 1.f);
         m_isPlayWeaponAni = true;
 
         m_pMonster->Stop_Animation();
     }
 
-    //if (iFrame > 50)
-    //{
-    //    m_pMonster->Stop_Animation();
-    //}
     _uint iCurAnim = m_pMonster->Get_CurrentAnimIndex();
-
-    //m_fDelay += fTimeDelta;
-    //if (m_fDelay >= 0.1f && !m_isStartCutScene)
-    //{
-    //    m_pMonster->Play_Animation();
-    //    m_isStartCutScene = true;
-    //}
-    //else if (m_fDelay < 16.f)
-    //{
-    //    m_pMonster->Stop_Animation();
-    //}
-
 
     _Vec3 vMove = m_pMonster->Get_Model()->Get_BoneCombindTransformationMatrix_Ptr(3)->Translation();
     _float4x4 TransMat;

@@ -207,6 +207,14 @@ void CRaxasia_Sword_CutScene::Stop_UpdatePos()
 	m_isUpdatePos = false;
 }
 
+void CRaxasia_Sword_CutScene::DeActive_AllEffect()
+{
+	for (auto& Effect : m_Effects)
+	{
+		Effect->Set_Loop(false);
+	}
+}
+
 void CRaxasia_Sword_CutScene::Control_Phase1Effect(_float fTimeDelta)
 {
 	_float fCurretTrackPosition = (_float)m_pModelCom->Get_CurrentTrackPosition();
@@ -216,6 +224,37 @@ void CRaxasia_Sword_CutScene::Control_Phase1Effect(_float fTimeDelta)
 
 	_Vec3 vCurrentPos = WorldMatrix.Translation();
 	_Vec3 vWorldUp = _Vec3(0.f, 1.f, 0.f);
+
+	// 바닥에 끌리는거
+	if (!m_isPlayAnimation)
+	{
+		m_fDragTime += fTimeDelta;
+
+		SocketMatrix = m_pModelCom->Get_BoneCombindTransformationMatrix("BN_Blade12");
+
+		for (size_t i = 0; i < 3; i++)
+		{
+			SocketMatrix.r[i] = XMVector3Normalize(SocketMatrix.r[i]);
+		}
+		XMStoreFloat4x4(&WorldMatrix, SocketMatrix * XMLoadFloat4x4(&m_WorldMatrix));
+
+		vCurrentPos = WorldMatrix.Translation();
+		vCurrentPos.y -= 0.3f;
+
+		m_Effects[EFFECT_P1_DRAG]->Get_Transform()->Set_State(CTransform::STATE_POSITION, vCurrentPos);
+
+		if (!m_isActiveCutSceneDrag)
+		{
+			m_fDragTime = 0.f;
+			m_Effects[EFFECT_P1_DRAG]->Set_Loop(true);
+			m_isActiveCutSceneDrag = true;
+		}
+		else if (!m_isDeActiveCutSceneDrag && m_fDragTime > 5.5f)
+		{
+			m_Effects[EFFECT_P1_DRAG]->Set_Loop(false);
+			m_isDeActiveCutSceneDrag = true;
+		}
+	}
 
 	// 다 돌았을 때
 	for (_uint i = 0; i < 11; ++i)
@@ -275,6 +314,7 @@ void CRaxasia_Sword_CutScene::Control_Phase1Effect(_float fTimeDelta)
 		}
 	}
 
+	// 날철컹
 	if (!m_isEndPhase1Effect && fCurretTrackPosition >= 93)
 	{
 		SocketMatrix = m_pModelCom->Get_BoneCombindTransformationMatrix("BN_Blade6");
@@ -290,6 +330,24 @@ void CRaxasia_Sword_CutScene::Control_Phase1Effect(_float fTimeDelta)
 		m_pEffect_Manager->Add_Effect_ToLayer_Rot(LEVEL_GAMEPLAY, TEXT("Raxasia_CutScene_Weapon_Change_Fit"), vCurrentPos, _Vec3(0.f, 60.f, 0.f));
 
 		m_isEndPhase1Effect = true;
+	}
+
+	if (!m_isActiveStandElecEffect && fCurretTrackPosition >= 105)
+	{
+		SocketMatrix = m_pModelCom->Get_BoneCombindTransformationMatrix("BN_Blade6");
+
+		for (size_t i = 0; i < 3; i++)
+		{
+			SocketMatrix.r[i] = XMVector3Normalize(SocketMatrix.r[i]);
+		}
+		XMStoreFloat4x4(&WorldMatrix, SocketMatrix * XMLoadFloat4x4(&m_WorldMatrix));
+
+		vCurrentPos = WorldMatrix.Translation();
+
+		m_Effects[EFFECT_P1_WEAPON_ELECTRIC]->Get_Transform()->Set_State(CTransform::STATE_POSITION, vCurrentPos);
+		m_Effects[EFFECT_P1_WEAPON_ELECTRIC]->Set_Loop(true);
+
+		m_isActiveStandElecEffect = true;
 	}
 }
 
@@ -426,6 +484,11 @@ HRESULT CRaxasia_Sword_CutScene::Ready_Effect()
 	Safe_AddRef(m_pEffect_Manager);
 
 	m_Effects.resize(EFFECT_END);
+
+
+	m_Effects[EFFECT_P1_DRAG] = m_pEffect_Manager->Clone_Effect(TEXT("Raxasia_CutScene_Drag"), nullptr, nullptr, _Vec3(0.f, 0.f, 0.f));
+	m_Effects[EFFECT_P1_WEAPON_ELECTRIC] = m_pEffect_Manager->Clone_Effect(TEXT("Raxasia_CutScene_Weapon_Electric"), nullptr, nullptr, _Vec3(0.f, 0.f, 0.f));
+
 
 	m_Effects[EFFECT_P2_TURN] = m_pEffect_Manager->Clone_Effect(TEXT("Raxasia_CutScene_P2_Weapon_Turn"), nullptr, nullptr, _Vec3(0.f, 0.f, 0.f));
 	m_Effects[EFFECT_P2_LIGHTNING_SMALL] = m_pEffect_Manager->Clone_Effect(TEXT("Raxasia_CutScene_P2_Lightning_Small"), nullptr, nullptr, _Vec3(0.f, 0.f, 0.f)); // 락사시아 기준 오른쪽 뒤

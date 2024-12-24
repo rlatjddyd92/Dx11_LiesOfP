@@ -14,7 +14,6 @@ BEGIN(Tools)
 class CDecal final : public CGameObject
 {
 public:
-public:
 	typedef struct : public CGameObject::GAMEOBJECT_DESC
 	{
 		_float3		vPosition;

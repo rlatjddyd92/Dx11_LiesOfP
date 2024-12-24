@@ -33,6 +33,9 @@ public:
 	
 	POINT Get_MosePos();
 
+	void Set_Player_AreaNum(_int iAreaNum) { m_iPlayer_AreaNum = iAreaNum; };
+	_int Get_Player_AreaNum() { return m_iPlayer_AreaNum; }
+
 #pragma region GRAPHIC_DEVICE
 public:
 	ID3D11ShaderResourceView* Get_BackBuffer_SRV() const;
@@ -301,6 +304,7 @@ private:
 	class CPhysX_Manager*			m_pPhysX_Manager = { nullptr };
 	class CInstance_Manager*		m_pInstance_Manager = { nullptr };
 	class CSound_Manager*			m_pSound_Manager = { nullptr };
+	class CNvCloth_Manager*			m_pNvCloth_Manager = { nullptr };
 
 	// 2024-11-06 ±è¼º¿ë
 	class CCSVFile_Manager*			m_pCSVFile_Manager = { nullptr };
@@ -310,6 +314,7 @@ private:
 
 private:
 	_bool m_isPicking = { false };
+	_int m_iPlayer_AreaNum = { 0 };
 
 public:	
 	void Release_Engine();

@@ -190,11 +190,17 @@ _bool CNavigation::isMove(_Vec3 vPosition)
 					return false;
 
 				if (true == m_Cells[iNeighborIndex]->isIn(vLocalPos, &iNeighborIndex))
-					break;
+				{
+					if(m_Cells[iNeighborIndex]->Get_CellTypeNum() != 100)
+						break;
+					else
+						return false;
+				}
 			}
 			
 			
 			m_iCurrentCellIndex = iNeighborIndex;
+			m_iCurrentAreaIndex = m_Cells[iNeighborIndex]->Get_AreaNum();
 			return true;
 		}
 
@@ -258,6 +264,7 @@ void CNavigation::Move_to_Cell(CRigidBody* pRigidBody, _int iIndex)
 
 	pRigidBody->Set_GloblePose(vAverage);
 	m_iCurrentCellIndex = iIndex;
+	m_iCurrentAreaIndex = m_Cells[iIndex]->Get_AreaNum();
 }
 
 void CNavigation::Research_Cell(_Vec3 vNewPos, _uint* iIndex)

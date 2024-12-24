@@ -27,6 +27,7 @@ private:
     _bool               m_isStartCutScene = {};
     _bool               m_isMoveDown = {};
     _bool               m_isPlayWeaponAni = {};
+    _bool               m_isGround = {};
 
     _float              m_fDelay = {};
 

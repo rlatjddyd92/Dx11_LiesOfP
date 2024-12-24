@@ -28,8 +28,10 @@ private:
     _bool               m_isStartCutScene = {};
     _bool               m_isMoveDown = {};
     _bool               m_isPlayWeaponAni = {};
+    _bool               m_isBoom = {};
 
     _float              m_fDelay = {};
+    _float              m_fBoomTime = {};
 
     _Vec3               m_vRootMoveStack{};
 

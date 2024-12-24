@@ -114,12 +114,12 @@ HRESULT CSteelHeart::Render()
 	}
 
 	/* 유리 재질 */
-	m_pModelCom->Bind_MeshBoneMatrices(m_pShaderCom, "g_BoneMatrices", (_uint)1);
+	/*m_pModelCom->Bind_MeshBoneMatrices(m_pShaderCom, "g_BoneMatrices", (_uint)1);
 
 	m_pShaderCom->Begin(6);
 
 	if (FAILED(m_pModelCom->Render((_uint)1)))
-		return E_FAIL;
+		return E_FAIL;*/
 
 	return S_OK;
 
@@ -133,7 +133,7 @@ HRESULT CSteelHeart::Ready_Components()
 		return E_FAIL;
 
 	/* FOR.Com_Model */
-	if (FAILED(__super::Add_Component(LEVEL_STATIC, TEXT("Prototype_Component_Model_SteellHeart"),
+	if (FAILED(__super::Add_Component(LEVEL_STATIC, TEXT("Prototype_Component_Model_Lift_Door"),
 		TEXT("Com_Model"), reinterpret_cast<CComponent**>(&m_pModelCom))))
 		return E_FAIL;
 

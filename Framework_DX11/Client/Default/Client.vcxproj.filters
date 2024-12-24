@@ -1255,6 +1255,30 @@
     <Filter Include="02.GameObjects\02.Pawn\01.Monster\Boss\SimonManus\GodHand">
       <UniqueIdentifier>{8d2b04ee-e8f1-46c4-ae87-5c07b49fbf95}</UniqueIdentifier>
     </Filter>
+    <Filter Include="05.Fsm\Monster\Training">
+      <UniqueIdentifier>{de6479aa-e3dc-48b9-b6ee-f807b6b97f42}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.GameObjects\02.Pawn\01.Monster\Training\02">
+      <UniqueIdentifier>{3f678235-4a4b-4a71-a957-b9e4beac2012}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.GameObjects\02.Pawn\01.Monster\Training\01%28Attacker%29">
+      <UniqueIdentifier>{f88ee928-9a8f-4d29-a9e6-bb6acb331d0a}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="05.Fsm\Monster\Training\01">
+      <UniqueIdentifier>{c0d2285a-ba22-44c8-9f3b-fe8d467dc7f7}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="05.Fsm\Monster\Training\01\Idle">
+      <UniqueIdentifier>{83fffb0d-307f-4a05-95bd-fafed1c548fd}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="05.Fsm\Monster\Training\01\Attack">
+      <UniqueIdentifier>{497944ab-7ffe-41af-b5db-bbec511497b8}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="05.Fsm\Monster\Training\02">
+      <UniqueIdentifier>{f983c8f1-b5fc-4d65-bc72-b7ec24b0af05}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.GameObjects\16.Decal">
+      <UniqueIdentifier>{a5714c5e-2bd6-46b1-9df8-fcecf30378c8}</UniqueIdentifier>
+    </Filter>
     <Filter Include="02.GameObjects\02.Pawn\01.Monster\Normal\RebornerMale">
       <UniqueIdentifier>{44b8a998-01c5-4a19-9e81-dc5f893ae992}</UniqueIdentifier>
     </Filter>
@@ -2339,17 +2363,23 @@
     <ClInclude Include="..\Public\Monster.h">
       <Filter>02.GameObjects\02.Pawn\01.Monster</Filter>
     </ClInclude>
-    <ClInclude Include="..\Public\RebornerMale.h">
-      <Filter>02.GameObjects\02.Pawn\01.Monster\Normal\RebornerMale</Filter>
+    <ClInclude Include="..\Public\Monster_Training01.h">
+      <Filter>02.GameObjects\02.Pawn\01.Monster\Training\01%28Attacker%29</Filter>
     </ClInclude>
-    <ClInclude Include="..\Public\Weapon_RebornerMale_Gun.h">
-      <Filter>02.GameObjects\06.Weapon\04.RebornerMale</Filter>
+    <ClInclude Include="..\Public\Monster_Training02.h">
+      <Filter>02.GameObjects\02.Pawn\01.Monster\Training\02</Filter>
     </ClInclude>
-    <ClInclude Include="..\Public\State_RebornerMale_Idle.h">
-      <Filter>05.Fsm\Monster\RebornerMale\Idle</Filter>
+    <ClInclude Include="..\Public\State_Training01_Idle.h">
+      <Filter>05.Fsm\Monster\Training\01\Idle</Filter>
     </ClInclude>
-    <ClInclude Include="..\Public\State_RebornerMale_KnockBack.h">
-      <Filter>05.Fsm\Monster\RebornerMale\KnockBack</Filter>
+    <ClInclude Include="..\Public\State_Training01_Attack.h">
+      <Filter>05.Fsm\Monster\Training\01\Attack</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Public\State_Training02_Idle.h">
+      <Filter>05.Fsm\Monster\Training\02</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Public\Decal.h">
+      <Filter>02.GameObjects\16.Decal</Filter>
     </ClInclude>
     <ClInclude Include="..\Public\State_RebornerMale_Die.h">
       <Filter>05.Fsm\Monster\RebornerMale\Die</Filter>
@@ -2357,14 +2387,28 @@
     <ClInclude Include="..\Public\State_RebornerMale_HitFatal.h">
       <Filter>05.Fsm\Monster\RebornerMale\HitFatal</Filter>
     </ClInclude>
+    <ClInclude Include="..\Public\State_RebornerMale_Idle.h">
+      <Filter>05.Fsm\Monster\RebornerMale\Idle</Filter>
+    </ClInclude>
     <ClInclude Include="..\Public\State_RebornerMale_Kick.h">
       <Filter>05.Fsm\Monster\RebornerMale\Attack\Single\Kick</Filter>
     </ClInclude>
-    <ClInclude Include="..\Public\State_RebornerMale_Reload.h">
-      <Filter>05.Fsm\Monster\RebornerMale\Attack\Route\Reload</Filter>
+    <ClInclude Include="..\Public\State_RebornerMale_KnockBack.h">
+      <Filter>05.Fsm\Monster\RebornerMale\KnockBack</Filter>
     </ClInclude>
     <ClInclude Include="..\Public\State_RebornerMale_RapidFire.h">
       <Filter>05.Fsm\Monster\RebornerMale\Attack\Route\RapidFire</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Public\Weapon_RebornerMale_Gun.h">
+      <Filter>02.GameObjects\06.Weapon\04.RebornerMale</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Public\RebornerMale.h">
+      <Filter>02.GameObjects\02.Pawn\01.Monster\Normal\RebornerMale</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Public\State_RebornerMale_RapidFire.h" />
+    <ClInclude Include="..\Public\State_RebornerMale_Reaload.h" />
+    <ClInclude Include="..\Public\State_RebornerMale_Reload.h">
+      <Filter>05.Fsm\Monster\RebornerMale\Attack\Route\Reload</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -3381,17 +3425,23 @@
     <ClCompile Include="..\Private\State_CurruptedStrongArm_KnockBack.cpp">
       <Filter>05.Fsm\Monster\CurruptedStrongArm_Puppet\KnockBack</Filter>
     </ClCompile>
-    <ClCompile Include="..\Private\RebornerMale.cpp">
-      <Filter>02.GameObjects\02.Pawn\01.Monster\Normal\RebornerMale</Filter>
+    <ClCompile Include="..\Private\Monster_Training01.cpp">
+      <Filter>02.GameObjects\02.Pawn\01.Monster\Training\01%28Attacker%29</Filter>
     </ClCompile>
-    <ClCompile Include="..\Private\Weapon_RebornerMale_Gun.cpp">
-      <Filter>02.GameObjects\06.Weapon\04.RebornerMale</Filter>
+    <ClCompile Include="..\Private\Monster_Training02.cpp">
+      <Filter>02.GameObjects\02.Pawn\01.Monster\Training\02</Filter>
     </ClCompile>
-    <ClCompile Include="..\Private\State_RebornerMale_Idle.cpp">
-      <Filter>05.Fsm\Monster\RebornerMale\Idle</Filter>
+    <ClCompile Include="..\Private\State_Training01_Idle.cpp">
+      <Filter>05.Fsm\Monster\Training\01\Idle</Filter>
     </ClCompile>
-    <ClCompile Include="..\Private\State_RebornerMale_KnockBack.cpp">
-      <Filter>05.Fsm\Monster\RebornerMale\KnockBack</Filter>
+    <ClCompile Include="..\Private\State_Training01_Attack.cpp">
+      <Filter>05.Fsm\Monster\Training\01\Attack</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Private\State_Training02_Idle.cpp">
+      <Filter>05.Fsm\Monster\Training\02</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Private\Decal.cpp">
+      <Filter>02.GameObjects\16.Decal</Filter>
     </ClCompile>
     <ClCompile Include="..\Private\State_RebornerMale_Die.cpp">
       <Filter>05.Fsm\Monster\RebornerMale\Die</Filter>
@@ -3399,14 +3449,28 @@
     <ClCompile Include="..\Private\State_RebornerMale_HitFatal.cpp">
       <Filter>05.Fsm\Monster\RebornerMale\HitFatal</Filter>
     </ClCompile>
+    <ClCompile Include="..\Private\State_RebornerMale_Idle.cpp">
+      <Filter>05.Fsm\Monster\RebornerMale\Idle</Filter>
+    </ClCompile>
     <ClCompile Include="..\Private\State_RebornerMale_Kick.cpp">
       <Filter>05.Fsm\Monster\RebornerMale\Attack\Single\Kick</Filter>
     </ClCompile>
-    <ClCompile Include="..\Private\State_RebornerMale_Reload.cpp">
-      <Filter>05.Fsm\Monster\RebornerMale\Attack\Route\Reload</Filter>
+    <ClCompile Include="..\Private\State_RebornerMale_KnockBack.cpp">
+      <Filter>05.Fsm\Monster\RebornerMale\KnockBack</Filter>
     </ClCompile>
     <ClCompile Include="..\Private\State_RebornerMale_RapidFire.cpp">
       <Filter>05.Fsm\Monster\RebornerMale\Attack\Route\RapidFire</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Private\RebornerMale.cpp">
+      <Filter>02.GameObjects\02.Pawn\01.Monster\Normal\RebornerMale</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Private\Weapon_RebornerMale_Gun.cpp">
+      <Filter>02.GameObjects\06.Weapon\04.RebornerMale</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Private\State_RebornerMale_RapidFire.cpp" />
+    <ClCompile Include="..\Private\State_RebornerMale_Reaload.cpp" />
+    <ClCompile Include="..\Private\State_RebornerMale_Reload.cpp">
+      <Filter>05.Fsm\Monster\RebornerMale\Attack\Route\Reload</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -3484,6 +3548,9 @@
     </FxCompile>
     <FxCompile Include="..\Bin\ShaderFiles\Shader_UI_Master.hlsl">
       <Filter>97.ShaderFiles\99.UI_Shader</Filter>
+    </FxCompile>
+    <FxCompile Include="..\Bin\ShaderFiles\Shader_SSD.hlsl">
+      <Filter>97.ShaderFiles</Filter>
     </FxCompile>
   </ItemGroup>
   <ItemGroup>

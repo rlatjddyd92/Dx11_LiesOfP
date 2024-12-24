@@ -157,7 +157,7 @@ HRESULT CPlayer::Initialize(void * pArg)
 	//m_pNavigationCom->Move_to_Cell(m_pRigidBodyCom, 1178); // 소피아 방 내부
 	//m_pNavigationCom->Move_to_Cell(m_pRigidBodyCom, 0); 
 	//m_pNavigationCom->Move_to_Cell(m_pRigidBodyCom, 268); // 락사시아 보스전
-	//m_pNavigationCom->Move_to_Cell(m_pRigidBodyCom, 1224); // 튜토리얼
+	m_pNavigationCom->Move_to_Cell(m_pRigidBodyCom, 1333); // 튜토리얼
 
 	m_iRespawn_Cell_Num = 772;
 
@@ -181,6 +181,7 @@ void CPlayer::Priority_Update(_float fTimeDelta)
 	Update_PrevItemInfo();
 
 	Update_Stat(fTimeDelta);
+	m_pGameInstance->Set_Player_AreaNum(m_pNavigationCom->Get_CurrentAreaNum());
 
 	if (m_isGuard)
 	{
@@ -272,7 +273,7 @@ void CPlayer::Update(_float fTimeDelta)
 
 	if (KEY_TAP(KEY::Q))
 	{
-
+		dynamic_cast<CCutScene*>(m_pGameInstance->Find_Object(LEVEL_GAMEPLAY, TEXT("Layer_CutScene"), BOSS1_MEET1))->Start_Play();
 	}
 }
 
@@ -1764,6 +1765,10 @@ HRESULT CPlayer::Ready_Effect()
 	m_Effects[EFFECT_ARM_SHIELDBLOCK] = m_pEffect_Manager->Clone_Effect(TEXT("Player_Attack_ArmSkill_ShieldBlock"), pParetnMatrix,
 		pSocketBoneMatrix, _Vec3(0.f, 0.f, 0.f), _Vec3(0.f, 0.f, 0.f), _Vec3(1.f, 1.f, 1.f));
 	
+	pSocketBoneMatrix = m_pModelCom->Get_BoneCombindTransformationMatrix_Ptr("Bn_L_ForeTwist");
+	m_Effects[EFFECT_CUTSCENE_ARM_OPENDOOR] = m_pEffect_Manager->Clone_Effect(TEXT("Player_Arm_Electric"), pParetnMatrix,
+		pSocketBoneMatrix, _Vec3(0.f, 0.f, 0.f), _Vec3(0.f, 0.f, 0.f), _Vec3(1.f, 1.f, 1.f));
+
 	return S_OK;
 }
 

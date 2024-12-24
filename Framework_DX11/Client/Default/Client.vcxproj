@@ -107,7 +107,7 @@
       <Optimization>Disabled</Optimization>
       <PreprocessorDefinitions>_DEBUG;_WINDOWS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <SDLCheck>true</SDLCheck>
-      <AdditionalIncludeDirectories>../../EngineSDK/Inc/;../Public/;../Default;../../EngineSDK/Inc/Fmod;../../EngineSDK/Inc/PhysX</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>../../EngineSDK/Inc/;../Public/;../Default;../../EngineSDK/Inc/Fmod;../../EngineSDK/Inc/PhysX;$(CUDA_PATH_V10_0)/include/</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>
@@ -194,7 +194,9 @@
     <ClInclude Include="..\Public\CarcassBigA.h" />
     <ClInclude Include="..\Public\CarcassNormal.h" />
     <ClInclude Include="..\Public\CarcassTail.h" />
+    <ClInclude Include="..\Public\Decal.h" />
     <ClInclude Include="..\Public\Monster_Training01.h" />
+    <ClInclude Include="..\Public\Monster_Training02.h" />
     <ClInclude Include="..\Public\RebornerMale.h" />
     <ClInclude Include="..\Public\State_CarcassNormal_Bite.h" />
     <ClInclude Include="..\Public\CurruptedStrongArm_Puppet.h" />
@@ -299,8 +301,12 @@
     <ClInclude Include="..\Public\State_RebornerMale_Kick.h" />
     <ClInclude Include="..\Public\State_RebornerMale_KnockBack.h" />
     <ClInclude Include="..\Public\State_RebornerMale_RapidFire.h" />
+    <ClInclude Include="..\Public\State_RebornerMale_Reaload.h" />
     <ClInclude Include="..\Public\State_RebornerMale_Reload.h" />
     <ClInclude Include="..\Public\State_SimonManusP2_Die_Talking.h" />
+    <ClInclude Include="..\Public\State_Training01_Attack.h" />
+    <ClInclude Include="..\Public\State_Training01_Idle.h" />
+    <ClInclude Include="..\Public\State_Training02_Idle.h" />
     <ClInclude Include="..\Public\SteelHeart.h" />
     <ClInclude Include="..\Public\TorchDeck.h" />
     <ClInclude Include="..\Public\UIPage_Chest.h" />
@@ -548,7 +554,9 @@
     <ClCompile Include="..\Private\CarcassBigA.cpp" />
     <ClCompile Include="..\Private\CarcassNormal.cpp" />
     <ClCompile Include="..\Private\CarcassTail.cpp" />
+    <ClCompile Include="..\Private\Decal.cpp" />
     <ClCompile Include="..\Private\Monster_Training01.cpp" />
+    <ClCompile Include="..\Private\Monster_Training02.cpp" />
     <ClCompile Include="..\Private\RebornerMale.cpp" />
     <ClCompile Include="..\Private\State_CarcassNormal_Bite.cpp" />
     <ClCompile Include="..\Private\CurruptedStrongArm_Puppet.cpp" />
@@ -653,8 +661,12 @@
     <ClCompile Include="..\Private\State_RebornerMale_Kick.cpp" />
     <ClCompile Include="..\Private\State_RebornerMale_KnockBack.cpp" />
     <ClCompile Include="..\Private\State_RebornerMale_RapidFire.cpp" />
+    <ClCompile Include="..\Private\State_RebornerMale_Reaload.cpp" />
     <ClCompile Include="..\Private\State_RebornerMale_Reload.cpp" />
     <ClCompile Include="..\Private\State_SimonManusP2_Die_Talking.cpp" />
+    <ClCompile Include="..\Private\State_Training01_Attack.cpp" />
+    <ClCompile Include="..\Private\State_Training01_Idle.cpp" />
+    <ClCompile Include="..\Private\State_Training02_Idle.cpp" />
     <ClCompile Include="..\Private\SteelHeart.cpp" />
     <ClCompile Include="..\Private\TorchDeck.cpp" />
     <ClCompile Include="..\Private\UIPage_Chest.cpp" />
@@ -883,6 +895,7 @@
     <FxCompile Include="..\Bin\ShaderFiles\Shader_Effect_Mesh.hlsl" />
     <FxCompile Include="..\Bin\ShaderFiles\Shader_Effect_Texture.hlsl" />
     <FxCompile Include="..\Bin\ShaderFiles\Shader_ParticleCompute.hlsl" />
+    <FxCompile Include="..\Bin\ShaderFiles\Shader_SSD.hlsl" />
     <FxCompile Include="..\Bin\ShaderFiles\Shader_TrailHead_PointInstance.hlsl" />
     <FxCompile Include="..\Bin\ShaderFiles\Shader_TrailTail_PointInstance.hlsl" />
     <FxCompile Include="..\Bin\ShaderFiles\Shader_Trail_MultiPoint_Compute.hlsl" />
