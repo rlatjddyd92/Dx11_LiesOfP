@@ -54,7 +54,7 @@ void CStaticObj::Update(_float fTimeDelta)
 
 void CStaticObj::Late_Update(_float fTimeDelta)
 {
-	if( m_iCurrentAreaNum == 0 || m_pGameInstance->Get_Player_AreaNum() == m_iCurrentAreaNum)
+	if(/* m_iCurrentAreaNum == 0 ||*/ m_pGameInstance->Get_Player_AreaNum() == m_iCurrentAreaNum)
 	{
 		if (m_pGameInstance->Is_Active_Octree() == false || m_pGameInstance->Is_In_FrustumCulledOctree(m_WorldOctreeIndex))
 		{
