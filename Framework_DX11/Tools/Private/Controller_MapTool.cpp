@@ -898,6 +898,11 @@ void CController_MapTool::SaveMap()
 				pDesc.iCurrentCellNum = iCellnum;
 
 				fout.write(reinterpret_cast<const char*>(&pDesc), sizeof(pDesc));
+
+				_int iAreaNum = 0;
+				if(iCellnum != -1)
+					iAreaNum = m_pNavigationController->Get_AreaNum(iCellnum);
+				fout.write(reinterpret_cast<const char*>(&iAreaNum), sizeof(_int));
 			}
 		}
 		else
@@ -965,6 +970,8 @@ void CController_MapTool::LoadMap()
 				OBJECT_DEFAULT_DESC pDesc = {};
 
 				fin.read(reinterpret_cast<char*>(&pDesc), sizeof(pDesc));
+				_int iAreanNum = { 0 };
+				fin.read(reinterpret_cast<char*>(&iAreanNum), sizeof(iAreanNum));
 
 				CNonAnimModel::NONMODEL_DESC nonDesc = {};
 

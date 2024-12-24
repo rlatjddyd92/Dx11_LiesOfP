@@ -23,6 +23,7 @@ public:
 		_bool		bShadow = { false };
 		_uint		iRenderGroupID = { true };
 		_int		iCurrentCellNum;
+		_int		iCurrentArealNum;
 	}STATICOBJ_DESC;
 
 private:
@@ -48,6 +49,7 @@ public:
 	_bool		m_bOctreeCulling = { false };
 
 	_int		m_iCurrentCellNum = { -1 };
+	_int		m_iCurrentAreaNum = { 0 };
 
 	_float		m_fCullDistance = { 55.f };
 	_float		m_fEmissiveMask = {};

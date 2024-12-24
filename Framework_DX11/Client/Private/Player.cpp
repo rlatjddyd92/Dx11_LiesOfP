@@ -181,6 +181,7 @@ void CPlayer::Priority_Update(_float fTimeDelta)
 	Update_PrevItemInfo();
 
 	Update_Stat(fTimeDelta);
+	m_pGameInstance->Set_Player_AreaNum(m_pNavigationCom->Get_CurrentAreaNum());
 
 	if (m_isGuard)
 	{

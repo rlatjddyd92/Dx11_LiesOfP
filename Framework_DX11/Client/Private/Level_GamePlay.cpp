@@ -323,6 +323,9 @@ HRESULT CLevel_GamePlay::Read_Map_Data()
 				OBJECT_DEFAULT_DESC pDesc = {};
 				fin.read(reinterpret_cast<char*>(&pDesc), sizeof(pDesc));
 
+				_int iAreanNum = { 0 };
+				fin.read(reinterpret_cast<char*>(&iAreanNum), sizeof(iAreanNum));
+
 				if (strLayerTag == "Layer_Map" || strLayerTag == "Layer_Etc")
 				{
 					if (wcscmp(pDesc.szModelTag, TEXT("SM_Monastery_Lift_01_Bottom")) == 0)
@@ -367,6 +370,7 @@ HRESULT CLevel_GamePlay::Read_Map_Data()
 					staticObjDesc.iRenderGroupID = pDesc.iID;
 					staticObjDesc.bShadow = pDesc.bShadow;
 					staticObjDesc.iCurrentCellNum = pDesc.iCurrentCellNum;
+					staticObjDesc.iCurrentArealNum = iAreanNum;
 					if (FAILED(m_pGameInstance->Add_CloneObject_ToLayer(LEVEL_GAMEPLAY, TEXT("Layer_Map"), TEXT("Prototype_GameObject_StaticObj"), &staticObjDesc)))
 						return E_FAIL;
 

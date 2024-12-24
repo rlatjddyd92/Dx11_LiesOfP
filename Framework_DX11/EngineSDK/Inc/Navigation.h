@@ -19,6 +19,7 @@ private:
 public:
 	void	Change_CurrentCellIndex(_int iIndex) { m_iCurrentCellIndex = iIndex; };
 	_int	Get_CurrentCellIndex() { return m_iCurrentCellIndex; }
+	_int	Get_CurrentAreaNum() { return m_iCurrentAreaIndex; }
 
 public:
 	virtual HRESULT Initialize_Prototype(const _wstring& strNavigationDataFile);
@@ -40,6 +41,7 @@ public:
 private:
 	vector<class CCell*>				m_Cells;
 	_int								m_iCurrentCellIndex = { -1 };
+	_int								m_iCurrentAreaIndex = { 0 };
 	static _Matrix						m_WorldMatrix;
 
 #ifdef _DEBUG

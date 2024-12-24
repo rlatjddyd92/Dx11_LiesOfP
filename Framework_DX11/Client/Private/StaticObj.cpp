@@ -33,6 +33,7 @@ HRESULT CStaticObj::Initialize(void* pArg)
 	m_isInstance = pDesc->isInstance;
 	m_bShadow = pDesc->bShadow;
 	m_iCurrentCellNum = pDesc->iCurrentCellNum;
+	m_iCurrentAreaNum = pDesc->iCurrentArealNum;
 
 	if (FAILED(Ready_Components(pDesc)))
 		return E_FAIL;
@@ -53,18 +54,20 @@ void CStaticObj::Update(_float fTimeDelta)
 
 void CStaticObj::Late_Update(_float fTimeDelta)
 {
-	
-	if(m_pGameInstance->Is_Active_Octree() == false || m_pGameInstance->Is_In_FrustumCulledOctree(m_WorldOctreeIndex))
+	if( m_iCurrentAreaNum == 0 || m_pGameInstance->Get_Player_AreaNum() == m_iCurrentAreaNum)
 	{
-		if (m_pGameInstance->isIn_Frustum_WorldSpace(m_pTransformCom->Get_State(CTransform::STATE_POSITION), m_fCullDistance))
+		if (m_pGameInstance->Is_Active_Octree() == false || m_pGameInstance->Is_In_FrustumCulledOctree(m_WorldOctreeIndex))
 		{
-			/* 직교투영을 위한 월드행렬까지 셋팅하게 된다. */
-			__super::Late_Update(fTimeDelta);
+			if (m_pGameInstance->isIn_Frustum_WorldSpace(m_pTransformCom->Get_State(CTransform::STATE_POSITION), m_fCullDistance))
+			{
+				/* 직교투영을 위한 월드행렬까지 셋팅하게 된다. */
+				__super::Late_Update(fTimeDelta);
 
-			m_pGameInstance->Add_RenderObject(CRenderer::RG_NONBLEND, this);
+				m_pGameInstance->Add_RenderObject(CRenderer::RG_NONBLEND, this);
 
-			if (m_bShadow)
-				m_pGameInstance->Add_RenderObject(CRenderer::RG_SHADOWOBJ, this);
+				if (m_bShadow)
+					m_pGameInstance->Add_RenderObject(CRenderer::RG_SHADOWOBJ, this);
+			}
 		}
 	}
 }
