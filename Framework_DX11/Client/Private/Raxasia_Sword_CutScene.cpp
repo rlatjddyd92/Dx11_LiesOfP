@@ -218,7 +218,34 @@ void CRaxasia_Sword_CutScene::Control_Phase1Effect(_float fTimeDelta)
 	_Vec3 vWorldUp = _Vec3(0.f, 1.f, 0.f);
 
 	// 바닥에 끌리는거
+	if (!m_isPlayAnimation)
+	{
+		static _float fY = 0.f;
 
+		if (KEY_TAP(KEY::UP))
+		{
+			fY += 0.5f;
+		}
+
+		SocketMatrix = m_pModelCom->Get_BoneCombindTransformationMatrix("BN_Blade12");
+
+		for (size_t i = 0; i < 3; i++)
+		{
+			SocketMatrix.r[i] = XMVector3Normalize(SocketMatrix.r[i]);
+		}
+		XMStoreFloat4x4(&WorldMatrix, SocketMatrix * XMLoadFloat4x4(&m_WorldMatrix));
+
+		vCurrentPos = WorldMatrix.Translation();
+		vCurrentPos.y += fY;
+
+		m_Effects[EFFECT_P1_DRAG]->Get_Transform()->Set_State(CTransform::STATE_POSITION, vCurrentPos);
+
+		if (!m_isActiveCutSceneDrag)
+		{
+			m_Effects[EFFECT_P1_DRAG]->Set_Loop(true);
+			m_isActiveCutSceneDrag = true;
+		}
+	}
 
 	// 다 돌았을 때
 	for (_uint i = 0; i < 11; ++i)
@@ -450,7 +477,7 @@ HRESULT CRaxasia_Sword_CutScene::Ready_Effect()
 	m_Effects.resize(EFFECT_END);
 
 
-	m_Effects[EFFECT_P1_DRAG] = m_pEffect_Manager->Clone_Effect(TEXT("Raxasia_Attack_Drag"), nullptr, nullptr, _Vec3(0.f, 0.f, 0.f));
+	m_Effects[EFFECT_P1_DRAG] = m_pEffect_Manager->Clone_Effect(TEXT("Raxasia_CutScene_Drag"), nullptr, nullptr, _Vec3(0.f, 0.f, 0.f));
 	m_Effects[EFFECT_P1_WEAPON_ELECTRIC] = m_pEffect_Manager->Clone_Effect(TEXT("Raxasia_CutScene_Weapon_Electric"), nullptr, nullptr, _Vec3(0.f, 0.f, 0.f));
 
 

@@ -685,7 +685,7 @@ void CS_FOLLOW_MAIN(uint3 DTid : SV_DispatchThreadID)
                 }
                 else
                 {
-                    if (0 == i)
+                    if(0 == i)
                         continue;
                     
                     vPrePos = float4(CatmullRom((float3) HeadParticle.vPreTranslation_2,

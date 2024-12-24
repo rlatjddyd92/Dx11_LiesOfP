@@ -56,10 +56,15 @@ void CState_Player_OpenRaxasiaDoor::Update(_float fTimeDelta)
 {
     _int iFrame = m_pPlayer->Get_Frame();
 
-    if (iFrame > 50)
+    if (iFrame > 350)
+    {
+        m_pPlayer->DeActive_Effect(CPlayer::EFFECT_CUTSCENE_ARM_OPENDOOR);
+    }
+    else if (iFrame > 120)
     {
         m_pPlayer->Active_Effect(CPlayer::EFFECT_CUTSCENE_ARM_OPENDOOR);
     }
+
 }
 
 void CState_Player_OpenRaxasiaDoor::End_State()
