@@ -398,11 +398,36 @@ PS_EFFECT_OUT PS_MAIN(PS_IN In)
     if (In.vLifeTime.y >= In.vLifeTime.x)
         discard;
     
+    vColor.rgb *= In.vColor.rgb;
+    
     Out.vDiffuse = vColor;
     Out.vBlur = vColor;
     
     return Out;
 }
+
+PS_EFFECT_OUT PS_RGBTOA_MAIN(PS_IN In)
+{
+    PS_EFFECT_OUT Out = (PS_EFFECT_OUT) 0;
+	
+    vector vColor = g_DiffuseTexture.Sample(LinearSampler, In.vTexcoord);
+    
+    vColor.a = max(vColor.r, max(vColor.g, vColor.b));
+
+    if (vColor.a <= 0.3f)
+        discard;
+    
+    if (In.vLifeTime.y >= In.vLifeTime.x)
+        discard;
+    
+    vColor.rgb *= In.vColor.rgb;
+    
+    Out.vDiffuse = vColor;
+    Out.vBlur = vColor;
+    
+    return Out;
+}
+
 
 PS_EFFECT_OUT PS_GLOW_MAIN(PS_IN In)
 {
@@ -810,6 +835,18 @@ technique11	DefaultTechnique
         GeometryShader = compile gs_5_0 GS_MAIN();
         PixelShader = compile ps_5_0 PS_THUNDER_MAIN();
     }
+
+    pass RGBTOA_DIR // 14
+    {
+        SetRasterizerState(RS_Default);
+        SetDepthStencilState(DSS_Default, 0);
+        SetBlendState(BS_Default, vector(0.f, 0.f, 0.f, 0.f), 0xffffffff);
+
+        VertexShader = compile vs_5_0 VS_MAIN();
+        GeometryShader = compile gs_5_0 GS_DIR_MAIN();
+        PixelShader = compile ps_5_0 PS_RGBTOA_MAIN();
+    }
+
 }
 
 float2 Get_SpriteTexcoord(float2 vTexcoord, int iTexIndex)

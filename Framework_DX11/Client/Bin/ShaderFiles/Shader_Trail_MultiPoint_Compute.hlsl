@@ -685,7 +685,7 @@ void CS_FOLLOW_MAIN(uint3 DTid : SV_DispatchThreadID)
                 }
                 else
                 {
-                    if(0 == i)
+                    if (0 == i)
                         continue;
                     
                     vPrePos = float4(CatmullRom((float3) HeadParticle.vPreTranslation_2,
@@ -753,7 +753,7 @@ void CS_FOLLOW_MAIN(uint3 DTid : SV_DispatchThreadID)
 }
 
 [numthreads(256, 1, 1)]
-    void CS_SPREAD_LOCAL_MAIN(uint3 DTid : SV_DispatchThreadID)
+void CS_SPREAD_LOCAL_MAIN(uint3 DTid : SV_DispatchThreadID)
 {
     uint iIndex = DTid.x;
     
@@ -783,6 +783,14 @@ void CS_FOLLOW_MAIN(uint3 DTid : SV_DispatchThreadID)
     {
         HeadParticle HeadParticle = HeadParticles[iHeadIndex];
         
+        if (0.f == fPadding)
+        {
+            HeadParticle.particle.vTranslation = Init_HeadParticles[iHeadIndex].particle.vTranslation;
+            HeadParticle.vPreTranslation = HeadParticle.particle.vTranslation;
+            HeadParticle.vPreTranslation_2 = HeadParticle.particle.vTranslation;
+            HeadParticle.particle.vLifeTime.y = 0.f;
+        }
+
         float4 vDir = HeadParticle.particle.vTranslation - vPivot;
         vDir = normalize(vDir);
     
