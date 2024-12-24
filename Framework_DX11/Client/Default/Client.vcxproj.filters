@@ -1279,13 +1279,19 @@
     <Filter Include="05.Fsm\Monster\RebornerMale\Attack">
       <UniqueIdentifier>{ce09b9ba-7cfe-48ca-a752-5500d6683265}</UniqueIdentifier>
     </Filter>
-    <Filter Include="05.Fsm\Monster\RebornerMale\Attack\RapidFire">
-      <UniqueIdentifier>{7f174b03-435c-43cb-9761-cb50655df9e5}</UniqueIdentifier>
+    <Filter Include="05.Fsm\Monster\RebornerMale\Attack\Route">
+      <UniqueIdentifier>{ef4cb7f6-e1a1-45c1-aa32-d4426029a883}</UniqueIdentifier>
     </Filter>
-    <Filter Include="05.Fsm\Monster\RebornerMale\Attack\Kick">
+    <Filter Include="05.Fsm\Monster\RebornerMale\Attack\Single">
+      <UniqueIdentifier>{7eb647ec-ba82-4a9d-a0a1-246b6331abf9}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="05.Fsm\Monster\RebornerMale\Attack\Single\Kick">
       <UniqueIdentifier>{5752f73c-350b-4bd7-8b03-0c04d4687c97}</UniqueIdentifier>
     </Filter>
-    <Filter Include="05.Fsm\Monster\RebornerMale\Attack\Reload">
+    <Filter Include="05.Fsm\Monster\RebornerMale\Attack\Route\RapidFire">
+      <UniqueIdentifier>{7f174b03-435c-43cb-9761-cb50655df9e5}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="05.Fsm\Monster\RebornerMale\Attack\Route\Reload">
       <UniqueIdentifier>{046e9495-1cea-4eb2-8f65-1bb11f7d5734}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
@@ -2352,10 +2358,13 @@
       <Filter>05.Fsm\Monster\RebornerMale\HitFatal</Filter>
     </ClInclude>
     <ClInclude Include="..\Public\State_RebornerMale_Kick.h">
-      <Filter>05.Fsm\Monster\RebornerMale\Attack\Kick</Filter>
+      <Filter>05.Fsm\Monster\RebornerMale\Attack\Single\Kick</Filter>
     </ClInclude>
-    <ClInclude Include="..\Public\State_RebornerMale_Reaload.h">
-      <Filter>05.Fsm\Monster\RebornerMale\Attack\Reload</Filter>
+    <ClInclude Include="..\Public\State_RebornerMale_Reload.h">
+      <Filter>05.Fsm\Monster\RebornerMale\Attack\Route\Reload</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Public\State_RebornerMale_RapidFire.h">
+      <Filter>05.Fsm\Monster\RebornerMale\Attack\Route\RapidFire</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -3391,10 +3400,13 @@
       <Filter>05.Fsm\Monster\RebornerMale\HitFatal</Filter>
     </ClCompile>
     <ClCompile Include="..\Private\State_RebornerMale_Kick.cpp">
-      <Filter>05.Fsm\Monster\RebornerMale\Attack\Kick</Filter>
+      <Filter>05.Fsm\Monster\RebornerMale\Attack\Single\Kick</Filter>
     </ClCompile>
-    <ClCompile Include="..\Private\State_RebornerMale_Reaload.cpp">
-      <Filter>05.Fsm\Monster\RebornerMale\Attack\Reload</Filter>
+    <ClCompile Include="..\Private\State_RebornerMale_Reload.cpp">
+      <Filter>05.Fsm\Monster\RebornerMale\Attack\Route\Reload</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Private\State_RebornerMale_RapidFire.cpp">
+      <Filter>05.Fsm\Monster\RebornerMale\Attack\Route\RapidFire</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

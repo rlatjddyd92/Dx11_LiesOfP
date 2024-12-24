@@ -100,6 +100,11 @@ void CState_RebornerMale_Idle::Update(_float fTimeDelta)
             *m_pDiscover = false;
             return;
         }
+        if (fDist < 3.f)
+        {
+            m_pMonster->Change_State(CRebornerMale::KICK);
+            return;
+        }
 
         if (fDist <= m_fNeedDist_ForAttack)
         {
@@ -165,60 +170,27 @@ void CState_RebornerMale_Idle::End_State()
 
 void CState_RebornerMale_Idle::Calc_Act_Attack(_float fTimeDelta, _float fDist)
 {
-    //µÚÀÏ¶§
-    _Vec3 vUp = XMVector3Normalize(m_pMonster->Get_Transform()->Get_State(CTransform::STATE_UP));
-    _Vec3 vRight = XMVector3Normalize(m_pMonster->Get_Transform()->Get_State(CTransform::STATE_RIGHT));
-    _Vec3 vTargetDir = XMVector3Normalize(m_pMonster->Get_TargetDir());
-
-
-    _Vec3 vCrossUp = vRight.Cross(vTargetDir);
-
-    if (vCrossUp.y > 0)
+    if (m_iAtkCnt >= 2)
     {
-        if (fDist <= 2.5f)
-        {
-            m_pMonster->Change_State(CRebornerMale::SLASHJUMP);
-            return;
-        }
-        else
-        {
-            m_pMonster->Get_Transform()->LookAt_Lerp_NoHeight(m_pMonster->Get_TargetDir(), 2, fTimeDelta);
-            return;
-        }
+        m_iAtkCnt = 0;
     }
-    else
+
+    switch (m_iAtkCnt)
     {
-        if (m_iAtkCnt >= 4)
-        {
-            m_iAtkCnt = 0;
-        }
-        switch (m_iAtkCnt)
-        {
-        case 0:
-            m_pMonster->Change_State(CRebornerMale::SWINGMULTIPLE);
-            m_fNeedDist_ForAttack = 5.f;
-            break;
+    case 0:
+        m_pMonster->Change_State(CRebornerMale::RAPIDFIRE);
+        m_fNeedDist_ForAttack = 500.f;
+        break;
 
-        case 1:
-            m_pMonster->Change_State(CRebornerMale::RUSHSTING);
-            m_fNeedDist_ForAttack = 2.5f;
-            break;
+    case 1:
+        m_pMonster->Change_State(CRebornerMale::RELOAD);
+        m_fNeedDist_ForAttack = 13.f;
+        break;
 
-        case 2:
-            m_pMonster->Change_State(CRebornerMale::SLASHTWICE);
-            m_fNeedDist_ForAttack = 5.f;
-            break;
-
-        case 3:
-            m_pMonster->Change_State(CRebornerMale::GUARDSTING);
-            m_fNeedDist_ForAttack = 3.5f;
-            break;
-
-        default:
-            break;
-        }
-        ++m_iAtkCnt;
+    default:
+        break;
     }
+    ++m_iAtkCnt;
 }
 
 CState_RebornerMale_Idle* CState_RebornerMale_Idle::Create(CFsm* pFsm, CMonster* pMonster, _uint iStateNum, void* pArg)

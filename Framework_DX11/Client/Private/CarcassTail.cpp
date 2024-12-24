@@ -465,6 +465,10 @@ void CCarcassTail::Free()
 		Safe_Release(m_pColliderObject[i]);
 	}
 
+	for (_uint i = 0; i < CT_END; ++i)
+	{
+		Safe_Release(m_EXCollider[i]);
+	}
 	__super::Free();
 
 }

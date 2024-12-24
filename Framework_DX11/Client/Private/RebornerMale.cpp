@@ -11,17 +11,14 @@
 #include "GameInterface_Controller.h"
 
 
-//#include "State_RebornerBigA_Idle.h"
-//#include "State_RebornerBigA_Die.h"
-//#include "State_RebornerBigA_Grogy.h"
-//#include "State_RebornerBigA_HitFatal.h"
-//#include "State_RebornerBigA_KnockBack.h"
-//
-//#include "State_RebornerBigA_SlashJump.h"
-//#include "State_RebornerBigA_GuardSting.h"
-//#include "State_RebornerBigA_RushSting.h"
-//#include "State_RebornerBigA_SlashTwice.h"
-//#include "State_RebornerBigA_SwingMultiple.h"
+#include "State_RebornerMale_Idle.h"
+#include "State_RebornerMale_Die.h"
+#include "State_RebornerMale_HitFatal.h"
+#include "State_RebornerMale_KnockBack.h"
+
+#include "State_RebornerMale_Kick.h"
+#include "State_RebornerMale_RapidFire.h"
+#include "State_RebornerMale_Reload.h"
 
 #include "Effect_Manager.h"
 
@@ -121,7 +118,7 @@ void CRebornerMale::Update(_float fTimeDelta)
 
 	m_pRigidBodyCom->Set_Velocity(m_vCurRootMove / fTimeDelta);
 
-	//m_pFsmCom->Update(fTimeDelta);
+	m_pFsmCom->Update(fTimeDelta);
 
 	Update_Collider();
 
@@ -317,17 +314,14 @@ HRESULT CRebornerMale::Ready_FSM()
 
 
 
-	//m_pFsmCom->Add_State(CState_RebornerMale_Idle::Create(m_pFsmCom, this, IDLE, &Desc));
-	//m_pFsmCom->Add_State(CState_RebornerBigA_Grogy::Create(m_pFsmCom, this, GROGY, &Desc));
-	//m_pFsmCom->Add_State(CState_RebornerMale_HitFatal::Create(m_pFsmCom, this, HITFATAL, &Desc));
-	//m_pFsmCom->Add_State(CState_RebornerMale_Die::Create(m_pFsmCom, this, DIE, &Desc));
-	//m_pFsmCom->Add_State(CState_RebornerMale_KnockBack::Create(m_pFsmCom, this, KNOCKBACK, &Desc));
-	//
-	//m_pFsmCom->Add_State(CState_RebornerBigA_GuardSting::Create(m_pFsmCom, this, GUARDSTING, &Desc));
-	//m_pFsmCom->Add_State(CState_RebornerBigA_RushSting::Create(m_pFsmCom, this, RUSHSTING, &Desc));
-	//m_pFsmCom->Add_State(CState_RebornerBigA_SlashTwice::Create(m_pFsmCom, this, SLASHTWICE, &Desc));
-	//m_pFsmCom->Add_State(CState_RebornerBigA_SlashJump::Create(m_pFsmCom, this, SLASHJUMP, &Desc));
-	//m_pFsmCom->Add_State(CState_RebornerBigA_SwingMultiple::Create(m_pFsmCom, this, SWINGMULTIPLE, &Desc));
+	m_pFsmCom->Add_State(CState_RebornerMale_Idle::Create(m_pFsmCom, this, IDLE, &Desc));
+	m_pFsmCom->Add_State(CState_RebornerMale_HitFatal::Create(m_pFsmCom, this, HITFATAL, &Desc));
+	m_pFsmCom->Add_State(CState_RebornerMale_Die::Create(m_pFsmCom, this, DIE, &Desc));
+	m_pFsmCom->Add_State(CState_RebornerMale_KnockBack::Create(m_pFsmCom, this, KNOCKBACK, &Desc));
+	
+	m_pFsmCom->Add_State(CState_RebornerMale_Kick::Create(m_pFsmCom, this, KICK, &Desc));
+	m_pFsmCom->Add_State(CState_RebornerMale_RapidFire::Create(m_pFsmCom, this, RAPIDFIRE, &Desc));
+	m_pFsmCom->Add_State(CState_RebornerMale_Reload::Create(m_pFsmCom, this, RELOAD, &Desc));
 
 	m_pFsmCom->Set_State(IDLE);
 
