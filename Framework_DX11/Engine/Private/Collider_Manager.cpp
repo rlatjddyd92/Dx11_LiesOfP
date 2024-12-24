@@ -58,6 +58,9 @@ void CCollider_Manager::Update()
 					pGameObject2->OnCollisionEnter(pGameObject1);
 					pCollider1->GetCollisionSet().insert(pGameObject2);
 					pCollider2->GetCollisionSet().insert(pGameObject1);
+
+					//Safe_AddRef(pGameObject1);
+					//Safe_AddRef(pGameObject2);
 				}
 				//충돌했는데 충돌 목록에 있다
 				//충돌중이다
@@ -79,6 +82,9 @@ void CCollider_Manager::Update()
 					pGameObject2->OnCollisionExit(pGameObject1);
 					pCollider1->GetCollisionSet().erase(pGameObject2);
 					pCollider2->GetCollisionSet().erase(pGameObject1);
+
+					//Safe_Release(pGameObject1);
+					//Safe_Release(pGameObject2);
 				}
 			}
 

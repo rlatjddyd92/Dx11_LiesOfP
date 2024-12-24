@@ -22,6 +22,8 @@
 #include "CarcassNormal.h"
 #include "CurruptedStrongArm_Puppet.h"
 #include "RebornerBigA.h"
+#include "Weapon_RebornerMale_Gun.h"
+#include "RebornerMale.h"
 #include "Weapon_RebornerBigA_Stick.h"
 #include "SimonManus.h"
 
@@ -61,6 +63,9 @@
 
 #include "Raxasia_Sword_CutScene.h"
 #include "Raxasia_Helmet_CutScene.h"
+
+#include "Monster_Training01.h"
+#include "Monster_Training02.h"
 #pragma endregion
 
 #pragma region EFFECT
@@ -94,6 +99,7 @@
 #pragma endregion
 
 #include "Machine_EffectObj.h"
+#include "Decal.h"
 
 #include "GameInstance.h"
 #include "GameInterface_Controller.h"
@@ -315,6 +321,12 @@ HRESULT CLoader::Ready_Resources_For_LogoLevel()
 	if (FAILED(m_pGameInstance->Add_Prototype(LEVEL_STATIC, TEXT("Prototype_Component_Model_SteellHeart"),
 		CModel::Create(m_pDevice, m_pContext, CModel::TYPE_ANIM, "../Bin/ModelData/Anim/SteelHeart/SteelHeart.dat", PreTransformMatrix))))
 		return E_FAIL;
+
+	if (FAILED(m_pGameInstance->Add_Prototype(LEVEL_STATIC, TEXT("Prototype_Component_Model_Lift_Door"),
+		CModel::Create(m_pDevice, m_pContext, CModel::TYPE_ANIM, "../Bin/ModelData/NonAnim/InteractObj/SK_NewTown_Lift_01_Door.dat", PreTransformMatrix))))
+		return E_FAIL;
+
+
 	lstrcpy(m_szLoadingText, TEXT("사운드을(를) 로딩중입니다."));
 	m_pGameInstance->LoadSoundFile("BGM");
 	m_pGameInstance->LoadSoundFile("Enviroment");
@@ -393,9 +405,6 @@ HRESULT CLoader::Ready_Resources_For_GamePlayLevel()
 		return E_FAIL;
 
 	GET_GAMEINTERFACE->Set_Loading_Status(TEXT("시몬 마누스가 다가오는 중"), 0.6f);
-
-	if (FAILED(Ready_Resources_For_Monster()))
-		return E_FAIL;
 
 	GET_GAMEINTERFACE->Set_Loading_Status(TEXT("무기와 장비를 준비하는 중"), 0.7f);
 	
@@ -616,6 +625,50 @@ HRESULT CLoader::Ready_Resources_For_GamePlayLevel_Map0()
 	}
 #pragma endregion
 
+#pragma region Decal Textures
+	 handle = _findfirst("../Bin/Resources/Textures/Decal/dds/ENV_Decals/*", &fd);
+
+	if (handle == -1)
+		return E_FAIL;
+
+	char szCurPath4[128] = "../Bin/Resources/Textures/Decal/dds/ENV_Decals/";    // 상대 경로
+	char szFullPath4[128] = "";
+
+	iResult = 0;
+
+	while (iResult != -1)
+	{
+		strcpy_s(szFullPath4, szCurPath4);
+		strcat_s(szFullPath4, fd.name);
+
+		_char szFileName[MAX_PATH] = "";
+		_char szExt[MAX_PATH] = "";
+		_splitpath_s(szFullPath4, nullptr, 0, nullptr, 0, szFileName, MAX_PATH, szExt, MAX_PATH);
+
+		if (!strcmp(fd.name, ".") || !strcmp(fd.name, "..")
+			|| strcmp(szExt, ".dds"))
+		{
+			iResult = _findnext(handle, &fd);
+			continue;
+		}
+
+		string strFileName = szFileName;
+		_wstring strPrototypeName;
+
+		strPrototypeName.assign(strFileName.begin(), strFileName.end());
+		wprintf(strPrototypeName.c_str());	
+
+		_tchar path[MAX_PATH];
+		MultiByteToWideChar(CP_ACP, MB_PRECOMPOSED, szFullPath4, MAX_PATH, path, MAX_PATH);
+
+		if (FAILED(m_pGameInstance->Add_Prototype(LEVEL_GAMEPLAY, strPrototypeName,
+			CTexture::Create(m_pDevice, m_pContext, path, 1))))
+			return E_FAIL;
+
+		iResult = _findnext(handle, &fd);
+	}
+#pragma endregion
+
 	PreTransformMatrix = XMMatrixIdentity();
 	PreTransformMatrix = XMMatrixScaling(0.01f, 0.01f, 0.01f);
 
@@ -802,6 +855,10 @@ HRESULT CLoader::Ready_Resources_For_GamePlayLevel_Monster()
 {
 	_matrix		PreTransformMatrix = XMMatrixIdentity();
 
+
+	if (FAILED(Ready_Resources_For_Monster()))
+		return E_FAIL;
+
 	m_isFinished_Monster = true;
 
 	return S_OK;
@@ -890,6 +947,18 @@ HRESULT CLoader::Ready_Resources_For_Monster()
 		CModel::Create(m_pDevice, m_pContext, CModel::TYPE_ANIM, "../Bin/ModelData/Anim/CreatedBinFiles/Horesman.dat", PreTransformMatrix, true))))
 		return E_FAIL;
 
+	//Prototype_Component_Model_RebornerMale
+	PreTransformMatrix = XMMatrixScaling(0.01f, 0.01f, 0.01f) * XMMatrixRotationY(XMConvertToRadians(270.0f));
+	if (FAILED(m_pGameInstance->Add_Prototype(LEVEL_GAMEPLAY, TEXT("Prototype_Component_Model_RebornerMale"),
+		CModel::Create(m_pDevice, m_pContext, CModel::TYPE_ANIM, "../Bin/ModelData/Anim/CreatedBinFiles/RebornerMale.dat", PreTransformMatrix, true))))
+		return E_FAIL;
+
+	//Prototype_Component_Model_Weapon_RebornerMale_Gun
+	PreTransformMatrix = XMMatrixScaling(0.01f, 0.01f, 0.01f) * XMMatrixRotationX(XMConvertToRadians(90.0f)) * XMMatrixRotationZ(XMConvertToRadians(180.0f)) * XMMatrixRotationY(XMConvertToRadians(180.0f));
+	if (FAILED(m_pGameInstance->Add_Prototype(LEVEL_GAMEPLAY, TEXT("Prototype_Component_Model_Weapon_RebornerMale_Gun"),
+		CModel::Create(m_pDevice, m_pContext, CModel::TYPE_ANIM, "../Bin/ModelData/Anim/Monster/RebornerMale/RebornerMale_Weapon.dat", PreTransformMatrix, false))))
+		return E_FAIL;
+
 	//Prototype_Component_Model_RebornerBigA
 	PreTransformMatrix = XMMatrixScaling(0.01f, 0.01f, 0.01f) * XMMatrixRotationY(XMConvertToRadians(270.0f));
 	if (FAILED(m_pGameInstance->Add_Prototype(LEVEL_GAMEPLAY, TEXT("Prototype_Component_Model_RebornerBigA"),
@@ -961,6 +1030,21 @@ HRESULT CLoader::Ready_Resources_For_Monster()
 	if (FAILED(m_pGameInstance->Add_Prototype(LEVEL_GAMEPLAY, TEXT("Prototype_Component_Model_RaxasiaP2_Shield"),
 		CModel::Create(m_pDevice, m_pContext, CModel::TYPE_ANIM, "../Bin/ModelData/Anim/Monster/Boss/Raxasia/Raxasia_Shield02.dat", PreTransformMatrix, false))))
 		return E_FAIL;
+
+
+#pragma region 훈련 로봇
+	//Prototype_Component_Model_Training01
+	PreTransformMatrix = XMMatrixScaling(0.011f, 0.011f, 0.011f) * XMMatrixRotationY(XMConvertToRadians(270.0f));
+	if (FAILED(m_pGameInstance->Add_Prototype(LEVEL_GAMEPLAY, TEXT("Prototype_Component_Model_Training01"),
+		CModel::Create(m_pDevice, m_pContext, CModel::TYPE_ANIM, "../Bin/ModelData/Anim/Monster/Training/Training01.dat", PreTransformMatrix, false))))
+		return E_FAIL;
+
+	//Prototype_Component_Model_Training02
+	PreTransformMatrix = XMMatrixScaling(0.011f, 0.011f, 0.011f) * XMMatrixRotationY(XMConvertToRadians(270.0f));
+	if (FAILED(m_pGameInstance->Add_Prototype(LEVEL_GAMEPLAY, TEXT("Prototype_Component_Model_Training02"),
+		CModel::Create(m_pDevice, m_pContext, CModel::TYPE_ANIM, "../Bin/ModelData/Anim/Monster/Training/Training02.dat", PreTransformMatrix, false))))
+		return E_FAIL;
+#pragma endregion
 
 #pragma region 컷신용 모델들
 	//Prototype_Component_Model_SimonManus_CutScene_P1
@@ -1168,7 +1252,17 @@ HRESULT CLoader::Ready_Prototype()
 		CCurruptedStrongArm_Puppet::Create(m_pDevice, m_pContext))))
 		return E_FAIL;
 
-	/* For. Prototype_GameObject_CurruptedStrongArm */
+	/* For. Prototype_GameObject_RebornerMale */
+	if (FAILED(m_pGameInstance->Add_Prototype(TEXT("Prototype_GameObject_RebornerMale"),
+		CRebornerMale::Create(m_pDevice, m_pContext))))
+		return E_FAIL;
+
+	/* For. Prototype_GameObject_Weapon_RebornerMale_Gun */
+	if (FAILED(m_pGameInstance->Add_Prototype(TEXT("Prototype_GameObject_Weapon_RebornerMale_Gun"),
+		CWeapon_RebornerMale_Gun::Create(m_pDevice, m_pContext))))
+		return E_FAIL;
+
+	/* For. Prototype_GameObject_RebornerBigA */
 	if (FAILED(m_pGameInstance->Add_Prototype(TEXT("Prototype_GameObject_RebornerBigA"),
 		CRebornerBigA::Create(m_pDevice, m_pContext))))
 		return E_FAIL;
@@ -1314,7 +1408,15 @@ HRESULT CLoader::Ready_Prototype()
 		CSimonManus_EnvHand::Create(m_pDevice, m_pContext))))
 		return E_FAIL;
 
+	/* For. Prototype_GameObject_CutScene_SimonManus_EnvHand */
+	if (FAILED(m_pGameInstance->Add_Prototype(TEXT("Prototype_GameObject_Training01"),
+		CMonster_Training01::Create(m_pDevice, m_pContext))))
+		return E_FAIL;
 
+	/* For. Prototype_GameObject_CutScene_SimonManus_EnvHand */
+	if (FAILED(m_pGameInstance->Add_Prototype(TEXT("Prototype_GameObject_Training02"),
+		CMonster_Training02::Create(m_pDevice, m_pContext))))
+		return E_FAIL;
 #pragma endregion
 
 #pragma region Collider
@@ -1428,9 +1530,14 @@ HRESULT CLoader::Ready_Prototype()
 		return E_FAIL;
 
 
-	/* For. Prototype_GameObject_CutScene */
+	/* For. Prototype_GameObject_MachineEffect */
 	if (FAILED(m_pGameInstance->Add_Prototype(TEXT("Prototype_GameObject_MachineEffect"),
 		CMachine_EffectObj::Create(m_pDevice, m_pContext))))
+		return E_FAIL;
+
+	/* For. Prototype_GameObject_Decal*/
+	if (FAILED(m_pGameInstance->Add_Prototype(TEXT("Prototype_GameObject_Decal"),
+		CDecal::Create(m_pDevice, m_pContext))))
 		return E_FAIL;
 
 	return S_OK;

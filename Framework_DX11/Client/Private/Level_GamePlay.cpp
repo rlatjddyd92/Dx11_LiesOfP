@@ -60,9 +60,9 @@ HRESULT CLevel_GamePlay::Initialize()
 	m_pGameInstance->Play_BGM(TEXT("MU_MS_MonasteryA_YK1_Fix.wav"), &g_fBGMVolume);
 	m_pGameInstance->Play_ENV(TEXT("AMB_SS_Monastery_Inside_01.wav"), &g_fEnvVolume);
 
-	if (FAILED(m_pGameInstance->Add_CloneObject_ToLayer(LEVEL_GAMEPLAY, TEXT("Layer_TitleObject"),
-		TEXT("Prototype_GameObject_SteelHeart"))))
-		return E_FAIL;
+	//if (FAILED(m_pGameInstance->Add_CloneObject_ToLayer(LEVEL_GAMEPLAY, TEXT("Layer_TitleObject"),
+	//	TEXT("Prototype_GameObject_SteelHeart"))))
+	//	return E_FAIL;
 
 	return S_OK;
 }
@@ -224,21 +224,26 @@ HRESULT CLevel_GamePlay::Ready_Layer_Monster()
 	//if (FAILED(m_pGameInstance->Add_CloneObject_ToLayer(LEVEL_GAMEPLAY, TEXT("Layer_SimonManus"), TEXT("Prototype_GameObject_SimonManus"))))
 	//	return E_FAIL;
 
-	//if (FAILED(m_pGameInstance->Add_CloneObject_ToLayer(LEVEL_GAMEPLAY, TEXT("Layer_Monster"), TEXT("Prototype_GameObject_CurruptedStrongArm"))))
-	//	return E_FAIL;
-	// 
 	//if (FAILED(m_pGameInstance->Add_CloneObject_ToLayer(LEVEL_GAMEPLAY, TEXT("Layer_Monster"), TEXT("Prototype_GameObject_CurruptedStrongArm"))))//**
 	//	return E_FAIL; 
 	
 	//if (FAILED(m_pGameInstance->Add_CloneObject_ToLayer(LEVEL_GAMEPLAY, TEXT("Layer_Monster"), TEXT("Prototype_GameObject_RebornerBigA"))))	//**
 	//	return E_FAIL; 
-		
+
+	//if (FAILED(m_pGameInstance->Add_CloneObject_ToLayer(LEVEL_GAMEPLAY, TEXT("Layer_Monster"), TEXT("Prototype_GameObject_RebornerMale"))))	//**
+	//	return E_FAIL; 
+
 	//if (FAILED(m_pGameInstance->Add_CloneObject_ToLayer(LEVEL_GAMEPLAY, TEXT("Layer_Monster"), TEXT("Prototype_GameObject_CarcassNormal"))))	//**
 	//	return E_FAIL;
 
-	if (FAILED(m_pGameInstance->Add_CloneObject_ToLayer(LEVEL_GAMEPLAY, TEXT("Layer_Raxasia"), TEXT("Prototype_GameObject_Raxasia"))))
-		return E_FAIL;
+	//if (FAILED(m_pGameInstance->Add_CloneObject_ToLayer(LEVEL_GAMEPLAY, TEXT("Layer_Raxasia"), TEXT("Prototype_GameObject_Raxasia"))))
+	//	return E_FAIL;
 	
+	if (FAILED(m_pGameInstance->Add_CloneObject_ToLayer(LEVEL_GAMEPLAY, TEXT("Layer_Monster"), TEXT("Prototype_GameObject_Training01"))))
+		return E_FAIL;
+	if (FAILED(m_pGameInstance->Add_CloneObject_ToLayer(LEVEL_GAMEPLAY, TEXT("Layer_Monster"), TEXT("Prototype_GameObject_Training02"))))	
+		return E_FAIL;
+
 	/* qqqqqq
 	awawdawdawdawd
 	// 해결 가능할까????>???????
@@ -318,6 +323,9 @@ HRESULT CLevel_GamePlay::Read_Map_Data()
 				OBJECT_DEFAULT_DESC pDesc = {};
 				fin.read(reinterpret_cast<char*>(&pDesc), sizeof(pDesc));
 
+				_int iAreanNum = { 0 };
+				fin.read(reinterpret_cast<char*>(&iAreanNum), sizeof(iAreanNum));
+
 				if (strLayerTag == "Layer_Map" || strLayerTag == "Layer_Etc")
 				{
 					if (wcscmp(pDesc.szModelTag, TEXT("SM_Monastery_Lift_01_Bottom")) == 0)
@@ -362,6 +370,7 @@ HRESULT CLevel_GamePlay::Read_Map_Data()
 					staticObjDesc.iRenderGroupID = pDesc.iID;
 					staticObjDesc.bShadow = pDesc.bShadow;
 					staticObjDesc.iCurrentCellNum = pDesc.iCurrentCellNum;
+					staticObjDesc.iCurrentArealNum = iAreanNum;
 					if (FAILED(m_pGameInstance->Add_CloneObject_ToLayer(LEVEL_GAMEPLAY, TEXT("Layer_Map"), TEXT("Prototype_GameObject_StaticObj"), &staticObjDesc)))
 						return E_FAIL;
 
@@ -436,6 +445,11 @@ HRESULT CLevel_GamePlay::Read_Map_Data()
 						if (FAILED(m_pGameInstance->Add_CloneObject_ToLayer(LEVEL_GAMEPLAY, TEXT("Layer_Monster"), TEXT("Prototype_GameObject_CarcassBigA"), &pDesc)))
 							return E_FAIL;
 					}
+				}	
+				else if (strLayerTag == "Layer_Decal")
+				{
+					if (FAILED(m_pGameInstance->Add_CloneObject_ToLayer(LEVEL_GAMEPLAY, TEXT("Layer_Decal"), TEXT("Prototype_GameObject_Decal"), &pDesc)))
+						return E_FAIL;
 				}
 			}
 			else

@@ -6,6 +6,7 @@
 #include "CutScene.h"
 
 #include "GameInterface_Controller.h"
+#include "Effect_Manager.h"
 
 CState_Raxasia_CutScene_Die::CState_Raxasia_CutScene_Die(CFsm* pFsm, CMonster* pMonster)
     :CState{ pFsm }
@@ -41,10 +42,12 @@ HRESULT CState_Raxasia_CutScene_Die::Start_State(void* pArg)
 
 void CState_Raxasia_CutScene_Die::Update(_float fTimeDelta)
 {
-
+    _double TrackPosition = m_pMonster->Get_CurrentTrackPos();
     _int iFrame = m_pMonster->Get_Frame();
     _uint iCurAnim = m_pMonster->Get_CurrentAnimIndex();
 
+    if (!m_isBoom)
+        m_fBoomTime += fTimeDelta;
     //if (iFrame > 50)
     //{
     //    m_pMonster->Stop_Animation();
@@ -80,6 +83,13 @@ void CState_Raxasia_CutScene_Die::Update(_float fTimeDelta)
     m_pMonster->Get_RigidBody()->Set_Velocity((vMove - m_vRootMoveStack) / fTimeDelta);
 
     m_vRootMoveStack = vMove;
+
+    if (!m_isBoom && m_fBoomTime > 8.f)
+    {
+        CEffect_Manager::Get_Instance()->Add_Effect_ToLayer_Rot(LEVEL_GAMEPLAY, TEXT("Raxasia_CutScene_Death_Top"));
+        m_isBoom = true;
+    }
+
 
     Control_Dialog(iFrame);
 }

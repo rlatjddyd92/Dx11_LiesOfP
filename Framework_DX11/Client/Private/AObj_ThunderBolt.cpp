@@ -35,6 +35,7 @@ HRESULT CAObj_ThunderBolt::Initialize(void* pArg)
 
     m_vMoveDir = pDesc->vDir;
     m_vTargetPos = pDesc->vTargetPos;
+    m_iStateTrack = pDesc->iTrack_State;
 
     m_vMoveDir.Normalize();
 
@@ -47,7 +48,6 @@ HRESULT CAObj_ThunderBolt::Initialize(void* pArg)
     m_fDamageAmount = 20.f;
     m_fLifeDuration = 0.3f;
     m_fSpeed = 20.f;
-    m_iStateTrack = 0;
     m_bCounter = false;
 
     m_fLifeTime = { 0.f };
@@ -109,7 +109,7 @@ void CAObj_ThunderBolt::Update(_float fTimeDelta)
         _Vec3 vTargetPos = {};
         if (m_bCounter)
         {
-            vTargetPos = { m_pCopyRaxasia->Calc_CenterPos() };            
+            vTargetPos = { m_pCopyRaxasia->Calc_CenterPos(true) };            
         }
         else
         {
@@ -311,6 +311,7 @@ HRESULT CAObj_ThunderBolt::Ready_Components()
 
     m_pEffects[STATE_SIGN] = CEffect_Manager::Get_Instance()->Clone_Effect(TEXT("Raxasia_Attack_ThunderBolt_Sign"), pParetnMatrix,
         nullptr, _Vec3(0.f, 0.f, 0.f), _Vec3(0.f, 0.f, 1.f), _Vec3(1.f, 1.f, 1.f));
+    m_pEffects[STATE_SIGN]->Set_Loop(false);
 
     m_pEffects[STATE_CREATE] = CEffect_Manager::Get_Instance()->Clone_Effect(TEXT("Raxasia_Attack_ThunderBolt_Create"), pParetnMatrix,
         nullptr, _Vec3(0.f, 0.f, 0.f), _Vec3(0.f, 0.f, 1.f), _Vec3(1.f, 1.f, 1.f));
@@ -322,7 +323,14 @@ HRESULT CAObj_ThunderBolt::Ready_Components()
         nullptr, _Vec3(0.f, 0.f, 0.f), _Vec3(0.f, 0.f, 1.f), _Vec3(1.f, 1.f, 1.f));
 
 
-    m_pEffects[STATE_SIGN]->Set_Loop(true);
+    if (m_iStateTrack == 0 || m_iStateTrack == 2)
+    {
+        m_pEffects[m_iStateTrack]->Set_Loop(true);
+    }
+    else
+    {
+        m_pEffects[m_iStateTrack]->Reset_Effects();
+    }
 
     return S_OK;
 }

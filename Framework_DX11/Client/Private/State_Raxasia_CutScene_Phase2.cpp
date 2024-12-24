@@ -9,6 +9,7 @@
 #include "Raxasia_Helmet_CutScene.h"
 
 #include "GameInterface_Controller.h"
+#include "Effect_Manager.h"
 
 CState_Raxasia_CutScene_Phase2::CState_Raxasia_CutScene_Phase2(CFsm* pFsm, CMonster* pMonster)
     :CState{ pFsm }
@@ -21,6 +22,26 @@ HRESULT CState_Raxasia_CutScene_Phase2::Initialize(_uint iStateNum, void* pArg)
 
     m_iStateNum = iStateNum;
     //CSimonManus::FSMSTATE_DESC* pDesc = static_cast<CSimonManus::FSMSTATE_DESC*>(pArg);
+
+    m_strArmorBoneName[0] = "upperArmorBack_01";
+    m_strArmorBoneName[1] = "shoulderArmor_r";
+    m_strArmorBoneName[2] = "lowerarmArmorBtm_01_r";
+    m_strArmorBoneName[3] = "shoulderArmor_l";
+    m_strArmorBoneName[4] = "upperarmArmorBtm_01_l";
+    m_strArmorBoneName[5] = "upperArmorFront_01";
+    m_strArmorBoneName[6] = "upperarmArmorTop_01_l";
+    m_strArmorBoneName[7] = "lowerarmArmorTop_01_r";
+    m_strArmorBoneName[8] = "lowerarmArmorBtm_01_l";
+
+    m_iFrme_ArmorGround[0] = 518;
+    m_iFrme_ArmorGround[1] = 539;
+    m_iFrme_ArmorGround[2] = 549;
+    m_iFrme_ArmorGround[3] = 551;
+    m_iFrme_ArmorGround[4] = 553;
+    m_iFrme_ArmorGround[5] = 557;
+    m_iFrme_ArmorGround[6] = 562;
+    m_iFrme_ArmorGround[7] = 568;
+    m_iFrme_ArmorGround[8] = 579;
 
     return S_OK;
 }
@@ -50,8 +71,7 @@ void CState_Raxasia_CutScene_Phase2::Update(_float fTimeDelta)
 
     _uint iCurAnim = m_pMonster->Get_CurrentAnimIndex();
 
-
-    if (!m_isOnGroundWeapon && iFrame > 100)    // 검 위치 땅에 고정하기
+    if (!m_isOnGroundWeapon && iFrame > 95)    // 검 위치 땅에 고정하기
     {
         m_pCutSceneWeapon->Stop_UpdatePos();
         m_isOnGroundWeapon = true;
@@ -167,6 +187,7 @@ void CState_Raxasia_CutScene_Phase2::Update(_float fTimeDelta)
 
     m_vRootMoveStack = vMove;
 
+    Control_Effect(iFrame);
     End_Check();
     Control_Dialog(iFrame);
 }
@@ -262,6 +283,50 @@ void CState_Raxasia_CutScene_Phase2::Control_Dialog(_int iFrame)
     {
         GET_GAMEINTERFACE->Show_Script(TEXT("당신의 검인 락사시아가 맹세코"), TEXT("이 탑을 수호할지니."), 6.1f);
         m_isShowDialog[1] = true;
+    }
+}
+
+void CState_Raxasia_CutScene_Phase2::Control_Effect(_int iFrame)
+{
+    if (!m_isCrashGroundWeaon && iFrame >= 17)
+    {
+        _Matrix		WorldMatrix{};
+        _matrix SocketMatrix = m_pMonster->Get_Model()->Get_BoneCombindTransformationMatrix("weapon0_r");
+
+        for (size_t i = 0; i < 3; i++)
+        {
+            SocketMatrix.r[i] = XMVector3Normalize(SocketMatrix.r[i]);
+        }
+        XMStoreFloat4x4(&WorldMatrix, SocketMatrix * XMLoadFloat4x4(&m_pMonster->Get_Transform()->Get_WorldMatrix()));
+
+        _Vec3 vCurrentPos = WorldMatrix.Translation();
+        vCurrentPos.y -= 3.f;
+
+        CEffect_Manager::Get_Instance()->Add_Effect_ToLayer_Rot(LEVEL_GAMEPLAY, TEXT("Raxasia_CutScene_Weapon_DriveGround"), vCurrentPos);
+
+        m_isCrashGroundWeaon = true;
+    }
+
+    for (_uint i = 0; i < 9; ++i)
+    {
+        if (!m_isGroundArmor[i] && iFrame >= m_iFrme_ArmorGround[i])
+        {
+            _Matrix		WorldMatrix{};
+            _matrix SocketMatrix = m_pMonster->Get_Model()->Get_BoneCombindTransformationMatrix(m_strArmorBoneName[i].c_str());
+
+            for (size_t i = 0; i < 3; i++)
+            {
+                SocketMatrix.r[i] = XMVector3Normalize(SocketMatrix.r[i]);
+            }
+            XMStoreFloat4x4(&WorldMatrix, SocketMatrix * XMLoadFloat4x4(&m_pMonster->Get_Transform()->Get_WorldMatrix()));
+
+            _Vec3 vCurrentPos = WorldMatrix.Translation();
+            vCurrentPos.y -= 0.1f;
+
+            CEffect_Manager::Get_Instance()->Add_Effect_ToLayer_Rot(LEVEL_GAMEPLAY, TEXT("Raxasia_CutScene_AromorDrop"), vCurrentPos);
+
+            m_isGroundArmor[i] = true;
+        }
     }
 }
 

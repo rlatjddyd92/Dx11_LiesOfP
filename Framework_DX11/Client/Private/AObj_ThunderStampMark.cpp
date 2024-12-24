@@ -33,6 +33,17 @@ HRESULT CAObj_ThunderStampMark::Initialize(void* pArg)
     if (FAILED(Ready_Components()))
         return E_FAIL;
 
+    if (pDesc->iTrack_State == 1)
+    {
+        m_bExplosive = true;
+        m_pEffect->Set_Loop(false);
+        m_pEffectExp->Reset_Effects();
+    }
+    else
+    {
+        m_pEffect->Set_Loop(true);
+    }
+
     m_fDamageAmount = 280.f;
     m_fLifeDuration = 1.f;
 
@@ -98,7 +109,7 @@ void CAObj_ThunderStampMark::Late_Update(_float fTimeDelta)
     {
         m_pEffectExp->Late_Update(fTimeDelta);
     }
-    if (m_fLifeTime < m_fLifeDuration)
+    if (m_fLifeTime < m_fLifeDuration && m_bExplosive)
     {
         m_pGameInstance->Add_ColliderList(m_pColliderCom);
 #ifdef DEBUG

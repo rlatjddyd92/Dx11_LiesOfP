@@ -32,6 +32,12 @@ private:
     _bool               m_isPlayWeaponChangeAnim = {};
     _bool               m_isConneectLeftHandShield = {};
     _bool               m_isChangeRealWeapon = {};
+    _bool               m_isCrashGroundWeaon = {};
+
+    _int                m_iFrme_ArmorGround[9] = {};
+    string            m_strArmorBoneName[9] = {};
+    _bool               m_isGroundArmor[9] = { false };
+    _float              m_fArmorOffset[9] = {};
 
     _float              m_fDelay = {};
     _float              m_fAnimationStopTimer = {};
@@ -51,6 +57,9 @@ private:
     _bool               m_isShowDialog[2] = {false, };
 
     void                Control_Dialog(_int iFrame);
+
+private:
+    void                Control_Effect(_int iFrame);
 
 public:
     static CState_Raxasia_CutScene_Phase2* Create(class CFsm* pFsm, class CMonster* pMonster, _uint iStateNum, void* pArg = nullptr);

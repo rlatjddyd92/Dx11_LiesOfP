@@ -136,6 +136,10 @@ HRESULT CRenderer::Initialize()
 		return E_FAIL;	
 	if (FAILED(m_pGameInstance->Add_MRT(TEXT("MRT_Decal"), TEXT("Target_DecalARM"))))
 		return E_FAIL;
+	if (FAILED(m_pGameInstance->Add_MRT(TEXT("MRT_Decal"), TEXT("Target_PickDepth"))))
+		return E_FAIL;
+	if (FAILED(m_pGameInstance->Add_MRT(TEXT("MRT_Decal"), TEXT("Target_PickObjectDepth"))))
+		return E_FAIL;
 
 	/* MRT_Distortion */
 	if (FAILED(m_pGameInstance->Add_MRT(TEXT("MRT_Distortion"), TEXT("Target_Distortion"))))
@@ -192,9 +196,9 @@ HRESULT CRenderer::Initialize()
 		return E_FAIL;
 
 #ifdef _DEBUG
-	if (FAILED(m_pGameInstance->Ready_RT_Debug(TEXT("Target_Effect_Diffuse"), 100.f, 100.f, 200.f, 200.f)))
+	if (FAILED(m_pGameInstance->Ready_RT_Debug(TEXT("Target_PickDepth"), 100.f, 100.f, 200.f, 200.f)))
 		return E_FAIL;
-	if (FAILED(m_pGameInstance->Ready_RT_Debug(TEXT("Target_Effect_Blur"), 100.f, 300.f, 200.f, 200.f)))
+	if (FAILED(m_pGameInstance->Ready_RT_Debug(TEXT("Target_PickObjectDepth"), 100.f, 300.f, 200.f, 200.f)))
 		return E_FAIL;
 	if (FAILED(m_pGameInstance->Ready_RT_Debug(TEXT("Target_CascadeShadow"), 100.f, 500.f, 200.f, 200.f)))
 		return E_FAIL;
@@ -392,7 +396,14 @@ HRESULT CRenderer::Render_NonBlend()
 }
 HRESULT CRenderer::Render_Decal()
 {
-	if (FAILED(m_pGameInstance->Begin_MRT(TEXT("MRT_Decal"))))
+	if (FAILED(m_pGameInstance->Begin_MRT(TEXT("MRT_Decal"), nullptr, false)))
+		return E_FAIL;
+
+	if (FAILED(m_pGameInstance->Clear_RTV(TEXT("Target_DecalDiffuse"))))
+		return E_FAIL;
+	if (FAILED(m_pGameInstance->Clear_RTV(TEXT("Target_DecalNormal"))))
+		return E_FAIL;
+	if (FAILED(m_pGameInstance->Clear_RTV(TEXT("Target_DecalARM"))))
 		return E_FAIL;
 
 	for (auto& pGameObject : m_RenderObjects[RG_DECAL])

@@ -45,7 +45,7 @@ void CState_RaxasiaP1_GroundSlash::Update(_float fTimeDelta)
         {
             m_iRouteTrack = 0;
         }
-        m_iRouteTrack = 2;
+        m_iRouteTrack = 0;
         switch (m_iRouteTrack)
         {
         case 0:
@@ -117,10 +117,15 @@ void CState_RaxasiaP1_GroundSlash::Effect_Check(_double CurTrackPos)
     }
 
     if ((CurTrackPos >= 120.f && CurTrackPos <= 125.f) ||
+        (CurTrackPos >= 135.f && CurTrackPos <= 140.f) ||
         (CurTrackPos >= 150.f && CurTrackPos <= 155.f) ||
+        (CurTrackPos >= 160.f && CurTrackPos <= 165.f) ||
         (CurTrackPos >= 175.f && CurTrackPos <= 180.f) ||
-        (CurTrackPos >= 195.f && CurTrackPos <= 200.f) ||
-        (CurTrackPos >= 205.f && CurTrackPos <= 210.f))
+        (CurTrackPos >= 185.f && CurTrackPos <= 190.f) ||
+        (CurTrackPos >= 199.f && CurTrackPos <= 202.f) ||
+        (CurTrackPos >= 205.f && CurTrackPos <= 207.f) ||
+        (CurTrackPos >= 209.f && CurTrackPos <= 211.f) ||
+        (CurTrackPos >= 213.f && CurTrackPos <= 215.f))
     {
         if (!m_bAddMark)
         {

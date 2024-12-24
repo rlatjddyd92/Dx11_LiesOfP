@@ -65,7 +65,8 @@ struct PS_OUT
     vector vColor : SV_TARGET0;
     vector vNormal : SV_TARGET1;
     vector vARM : SV_TARGET2;
-    vector vPickObjectDepth : SV_TARGET7;
+    vector vPickDepth : SV_TARGET3;
+    vector vPickObjectDepth : SV_TARGET4;
 };
 
 PS_OUT PS_MAIN(PS_IN In)
@@ -118,7 +119,7 @@ PS_OUT PS_MAIN(PS_IN In)
     vNewTexUV += 0.5f;
     
     //float2 vDecalTexCoord = vLocalPos.xz + 0.5f;
-    vector vDecalDiffuse = g_DeacalDiffuseTexture.Sample(LinearSampler, vNewTexUV);
+    vector vDecalDiffuse = g_DeacalDiffuseTexture.Sample(LinearClampSampler, vNewTexUV);
     vDecalDiffuse = vector(vDecalDiffuse.xyz, 0.8f);
     
     if (vDecalDiffuse.a <= 0.1f)
@@ -138,7 +139,7 @@ PS_OUT PS_MAIN(PS_IN In)
     
     if (bNormal)
     {
-        vector vDecalNormal = g_DeacalNormalTexture.Sample(LinearSampler, vNewTexUV);
+        vector vDecalNormal = g_DeacalNormalTexture.Sample(LinearClampSampler, vNewTexUV);
         Out.vNormal = vDecalNormal;
     }
     else   
@@ -146,7 +147,7 @@ PS_OUT PS_MAIN(PS_IN In)
     
     if (bARM)
     {
-        vector vDecalARM = g_DeacalARMTexture.Sample(LinearSampler, vNewTexUV);
+        vector vDecalARM = g_DeacalARMTexture.Sample(LinearClampSampler, vNewTexUV);
         Out.vARM = vDecalARM;
         
         if (vDecalARM.a <= 0.1f)
@@ -155,6 +156,7 @@ PS_OUT PS_MAIN(PS_IN In)
     else
         Out.vARM = float4(0.f, 0.f, 0.f, 0.f);
     
+    Out.vPickDepth = vector(In.vProjPos.z / In.vProjPos.w, 0.f, 0.f, 1.f);
     Out.vPickObjectDepth = g_fHashColor;
     
     return Out;

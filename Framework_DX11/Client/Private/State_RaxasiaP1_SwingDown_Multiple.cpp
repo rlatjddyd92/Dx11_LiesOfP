@@ -28,6 +28,12 @@ HRESULT CState_RaxasiaP1_SwingDown_Multiple::Start_State(void* pArg)
 
     m_pMonster->Get_Model()->Set_SpeedRatio(m_iCurAnimIndex, (double)0.5);
 
+    m_bResetRim = false;
+    m_bControlRim = false;
+
+    m_fGoalRimAlpha = 0.1f;
+    m_fCurtRimAlpha = 1.f;
+
     m_bSwingSound = false;
     m_bSpeedController = true;
     m_bSwing = false;
@@ -70,13 +76,14 @@ void CState_RaxasiaP1_SwingDown_Multiple::Update(_float fTimeDelta)
             if (m_iRouteTrack == 7)
             {
                 m_iCurAnimIndex = AN_SWINGDOWN;
-                m_pMonster->Get_Model()->Set_SpeedRatio(m_iCurAnimIndex, (double)0.5f);
+                m_bControlRim = true;
+                m_pMonster->Get_Model()->Set_SpeedRatio(m_iCurAnimIndex, (double)0.3f);
                 m_bSpeedController = true;
             }
             else if (m_iCurAnimIndex == AN_SWINGDOWN_L)
             {
                 m_iCurAnimIndex = AN_SWINGDOWN_R;
-                _double SpeedRatio = m_iRouteTrack * 0.2f;
+                _double SpeedRatio = -0.2f + m_iRouteTrack * 0.2f;
                 if (SpeedRatio >= 2.f)
                     SpeedRatio = 2.f;
                 m_pMonster->Get_Model()->Set_SpeedRatio(m_iCurAnimIndex, (double)1 + SpeedRatio);
@@ -84,15 +91,23 @@ void CState_RaxasiaP1_SwingDown_Multiple::Update(_float fTimeDelta)
             else
             {
                 m_iCurAnimIndex = AN_SWINGDOWN_L;
-                _double SpeedRatio = m_iRouteTrack * 0.2f;
+                _double SpeedRatio = -0.2f + m_iRouteTrack * 0.2f;
                 if (SpeedRatio >= 2.f)
                     SpeedRatio = 2.f;
                 m_pMonster->Get_Model()->Set_SpeedRatio(m_iCurAnimIndex, (double)1 + SpeedRatio);
             }
+
             ++m_iRouteTrack;
             m_bSwing = false;
             m_bStamp = false;
-            m_pMonster->Change_Animation(m_iCurAnimIndex, false, 0.1f, 0);
+            if (m_iRouteTrack == 7)
+            {
+                m_pMonster->Change_Animation(m_iCurAnimIndex, false, 0.5f, 15);
+            }
+            else
+            {
+                m_pMonster->Change_Animation(m_iCurAnimIndex, false, 0.1f, 0);
+            }
             return;
         }
 
@@ -101,7 +116,7 @@ void CState_RaxasiaP1_SwingDown_Multiple::Update(_float fTimeDelta)
             m_pMonster->Get_Transform()->LookAt_Lerp_NoHeight(m_pMonster->Get_TargetDir(), 1.f, fTimeDelta);
         }
     }
-    else if (m_iRouteTrack = 8)
+    else if (m_iRouteTrack == 8)
     {
         if (m_bSpeedController && CurTrackPos >= 35.f)
         {
@@ -109,7 +124,7 @@ void CState_RaxasiaP1_SwingDown_Multiple::Update(_float fTimeDelta)
             m_pMonster->Get_Model()->Set_SpeedRatio(m_iCurAnimIndex, (double)1);
 
         }
-        //림라이트?
+
         if (End_Check())
         {
             m_pMonster->Change_State(CRaxasia::IDLE);
@@ -120,18 +135,27 @@ void CState_RaxasiaP1_SwingDown_Multiple::Update(_float fTimeDelta)
         {
             m_pMonster->Get_Transform()->LookAt_Lerp_NoHeight(m_pMonster->Get_TargetDir(), 1.f, fTimeDelta);
         }
-    }
 
-    _double Ratio = (double)(1 + (m_iRouteTrack * 0.2f));
-    if (Ratio >= 2.f)
-    {
-        Ratio = 2.f;
+        if (!m_bResetRim)
+        {
+            if (CurTrackPos >= 45.f)
+            {
+                m_fGoalRimAlpha = 1.f;
+                m_bResetRim = true;
+            }
+        }
+
     }
-    m_pMonster->Get_Model()->Set_SpeedRatio(m_iCurAnimIndex, Ratio);
 
     Collider_Check(CurTrackPos);
     Effect_Check(CurTrackPos);
     Control_Sound(CurTrackPos);
+
+    if (m_bControlRim)
+    {
+        Update_Rimlight();
+    }
+
 }
 
 void CState_RaxasiaP1_SwingDown_Multiple::End_State()
@@ -240,6 +264,20 @@ void CState_RaxasiaP1_SwingDown_Multiple::Effect_Check(_double CurTrackPos)
                     vPos, _Vec3{ m_pMonster->Get_TargetDir() });
                 m_bStamp = true;
             }
+        }
+    }
+}
+
+void CState_RaxasiaP1_SwingDown_Multiple::Update_Rimlight()
+{
+    m_fCurtRimAlpha += (m_fGoalRimAlpha - m_fCurtRimAlpha) / 15;
+    m_pMonster->Set_RimLightColor(_Vec4{ 0.9f, 0.f, 0.f, m_fCurtRimAlpha });
+    if (abs(m_fGoalRimAlpha - m_fCurtRimAlpha) < 0.1f)
+    {
+        m_fCurtRimAlpha = m_fGoalRimAlpha;
+        if (m_fGoalRimAlpha == 1.f)
+        {
+            m_pMonster->Set_RimLightColor(_Vec4{ 0.f, 0.f, 0.f, 1.f });
         }
     }
 }

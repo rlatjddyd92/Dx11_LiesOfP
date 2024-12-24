@@ -466,7 +466,7 @@ void CController_MapTool::Select_Monster_Model()
 
 	if (ImGui::BeginListBox("Interacts"))
 	{
-		for (int n = 0; n < m_iMonsterListCount; n++)
+		for (int n = 0; n < m_iMonsterListCount+1; n++)
 		{
 			const bool is_selected = (item_selected_idx == n);
 			if (ImGui::Selectable(m_Monster_File_Names[n], is_selected))
@@ -853,7 +853,7 @@ void CController_MapTool::SaveMap()
 				pGameObject = m_pGameInstance->Find_Object(LEVEL_TOOL, sLayerTag, j);
 
 				OBJECT_DEFAULT_DESC pDesc = {};
-				if (static_cast<CNonAnimModel*>(pGameObject)->Get_isDecal())
+				if (sLayerTag == TEXT("Layer_Decal"))
 				{
 					pDesc.bShadow = true;
 					pDesc.bDecal = true;
@@ -898,6 +898,11 @@ void CController_MapTool::SaveMap()
 				pDesc.iCurrentCellNum = iCellnum;
 
 				fout.write(reinterpret_cast<const char*>(&pDesc), sizeof(pDesc));
+
+				_int iAreaNum = 0;
+				if(iCellnum != -1)
+					iAreaNum = m_pNavigationController->Get_AreaNum(iCellnum);
+				fout.write(reinterpret_cast<const char*>(&iAreaNum), sizeof(_int));
 			}
 		}
 		else
@@ -965,10 +970,12 @@ void CController_MapTool::LoadMap()
 				OBJECT_DEFAULT_DESC pDesc = {};
 
 				fin.read(reinterpret_cast<char*>(&pDesc), sizeof(pDesc));
+				_int iAreanNum = { 0 };
+				fin.read(reinterpret_cast<char*>(&iAreanNum), sizeof(iAreanNum));
 
 				CNonAnimModel::NONMODEL_DESC nonDesc = {};
 
-				if (pDesc.bDecal)
+				if (strLayerTag == "Layer_Decal")
 				{
 					nonDesc.isDecal = true;
 					nonDesc.isNormal = pDesc.bNormal;
@@ -1016,6 +1023,11 @@ void CController_MapTool::LoadMap()
 				else if (strLayerTag == "Layer_Monster")
 				{
 					if (FAILED(m_pGameInstance->Add_CloneObject_ToLayer(LEVEL_TOOL, TEXT("Layer_Monster"), TEXT("Prototype_GameObject_NonAnim"), &nonDesc)))
+						return;
+				}	
+				else if (strLayerTag == "Layer_Decal")
+				{
+					if (FAILED(m_pGameInstance->Add_CloneObject_ToLayer(LEVEL_TOOL, TEXT("Layer_Decal"), TEXT("Prototype_GameObject_NonAnim"), &nonDesc)))
 						return;
 				}
 				else

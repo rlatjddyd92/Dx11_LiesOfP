@@ -107,7 +107,7 @@
       <Optimization>Disabled</Optimization>
       <PreprocessorDefinitions>_DEBUG;_WINDOWS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <SDLCheck>true</SDLCheck>
-      <AdditionalIncludeDirectories>../../EngineSDK/Inc/;../Public/;../Default;../../EngineSDK/Inc/Fmod;../../EngineSDK/Inc/PhysX</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>../../EngineSDK/Inc/;../Public/;../Default;../../EngineSDK/Inc/Fmod;../../EngineSDK/Inc/PhysX;$(CUDA_PATH_V10_0)/include/</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>
@@ -194,6 +194,10 @@
     <ClInclude Include="..\Public\CarcassBigA.h" />
     <ClInclude Include="..\Public\CarcassNormal.h" />
     <ClInclude Include="..\Public\CarcassTail.h" />
+    <ClInclude Include="..\Public\Decal.h" />
+    <ClInclude Include="..\Public\Monster_Training01.h" />
+    <ClInclude Include="..\Public\Monster_Training02.h" />
+    <ClInclude Include="..\Public\RebornerMale.h" />
     <ClInclude Include="..\Public\State_CarcassNormal_Bite.h" />
     <ClInclude Include="..\Public\CurruptedStrongArm_Puppet.h" />
     <ClInclude Include="..\Public\CutScene.h" />
@@ -217,13 +221,16 @@
     <ClInclude Include="..\Public\State_CarcassNormal_HeadingMultiple.h" />
     <ClInclude Include="..\Public\State_CarcassNormal_HitFatal.h" />
     <ClInclude Include="..\Public\State_CarcassNormal_Idle.h" />
+    <ClInclude Include="..\Public\State_CarcassNormal_KnockBack.h" />
     <ClInclude Include="..\Public\State_CarcassNormal_TripleClaw.h" />
     <ClInclude Include="..\Public\State_CarcassNormal_TripleClaw_2.h" />
+    <ClInclude Include="..\Public\State_CarcassTail_KnockBack.h" />
     <ClInclude Include="..\Public\State_CurruptedStrongArm_Die.h" />
     <ClInclude Include="..\Public\State_CurruptedStrongArm_Grogy.h" />
     <ClInclude Include="..\Public\State_CurruptedStrongArm_HitFatal.h" />
     <ClInclude Include="..\Public\State_CurruptedStrongArm_Idle.h" />
     <ClInclude Include="..\Public\State_CurruptedStrongArm_JumpPunch.h" />
+    <ClInclude Include="..\Public\State_CurruptedStrongArm_KnockBack.h" />
     <ClInclude Include="..\Public\State_CurruptedStrongArm_StingTwice.h" />
     <ClInclude Include="..\Public\State_CurruptedStrongArm_SwipAttack.h" />
     <ClInclude Include="..\Public\State_Player_Arm_Counter.h" />
@@ -283,11 +290,22 @@
     <ClInclude Include="..\Public\State_RebornerBigA_GuardSting.h" />
     <ClInclude Include="..\Public\State_RebornerBigA_HitFatal.h" />
     <ClInclude Include="..\Public\State_RebornerBigA_Idle.h" />
+    <ClInclude Include="..\Public\State_RebornerBigA_KnockBack.h" />
     <ClInclude Include="..\Public\State_RebornerBigA_RushSting.h" />
     <ClInclude Include="..\Public\State_RebornerBigA_SlashJump.h" />
     <ClInclude Include="..\Public\State_RebornerBigA_SlashTwice.h" />
     <ClInclude Include="..\Public\State_RebornerBigA_SwingMultiple.h" />
+    <ClInclude Include="..\Public\State_RebornerMale_Die.h" />
+    <ClInclude Include="..\Public\State_RebornerMale_HitFatal.h" />
+    <ClInclude Include="..\Public\State_RebornerMale_Idle.h" />
+    <ClInclude Include="..\Public\State_RebornerMale_Kick.h" />
+    <ClInclude Include="..\Public\State_RebornerMale_KnockBack.h" />
+    <ClInclude Include="..\Public\State_RebornerMale_RapidFire.h" />
+    <ClInclude Include="..\Public\State_RebornerMale_Reaload.h" />
     <ClInclude Include="..\Public\State_SimonManusP2_Die_Talking.h" />
+    <ClInclude Include="..\Public\State_Training01_Attack.h" />
+    <ClInclude Include="..\Public\State_Training01_Idle.h" />
+    <ClInclude Include="..\Public\State_Training02_Idle.h" />
     <ClInclude Include="..\Public\SteelHeart.h" />
     <ClInclude Include="..\Public\TorchDeck.h" />
     <ClInclude Include="..\Public\UIPage_Chest.h" />
@@ -492,6 +510,7 @@
     <ClInclude Include="..\Public\Weapon_Raxasia_P2_Shield.h" />
     <ClInclude Include="..\Public\Weapon_Raxasia_P2_Sword.h" />
     <ClInclude Include="..\Public\Weapon_RebornerBigA_Stick.h" />
+    <ClInclude Include="..\Public\Weapon_RebornerMale_Gun.h" />
     <ClInclude Include="..\Public\Weapon_Scissor.h" />
     <ClInclude Include="..\Public\Weapon_Scissor_Blade.h" />
     <ClInclude Include="..\Public\Weapon_Scissor_Handle.h" />
@@ -534,6 +553,10 @@
     <ClCompile Include="..\Private\CarcassBigA.cpp" />
     <ClCompile Include="..\Private\CarcassNormal.cpp" />
     <ClCompile Include="..\Private\CarcassTail.cpp" />
+    <ClCompile Include="..\Private\Decal.cpp" />
+    <ClCompile Include="..\Private\Monster_Training01.cpp" />
+    <ClCompile Include="..\Private\Monster_Training02.cpp" />
+    <ClCompile Include="..\Private\RebornerMale.cpp" />
     <ClCompile Include="..\Private\State_CarcassNormal_Bite.cpp" />
     <ClCompile Include="..\Private\CurruptedStrongArm_Puppet.cpp" />
     <ClCompile Include="..\Private\Machine_EffectObj.cpp" />
@@ -557,13 +580,16 @@
     <ClCompile Include="..\Private\State_CarcassNormal_HeadingMultiple.cpp" />
     <ClCompile Include="..\Private\State_CarcassNormal_HitFatal.cpp" />
     <ClCompile Include="..\Private\State_CarcassNormal_Idle.cpp" />
+    <ClCompile Include="..\Private\State_CarcassNormal_KnockBack.cpp" />
     <ClCompile Include="..\Private\State_CarcassNormal_TripleClaw.cpp" />
     <ClCompile Include="..\Private\State_CarcassNormal_TripleClaw_2.cpp" />
+    <ClCompile Include="..\Private\State_CarcassTail_KnockBack.cpp" />
     <ClCompile Include="..\Private\State_CurruptedStrongArm_Die.cpp" />
     <ClCompile Include="..\Private\State_CurruptedStrongArm_Grogy.cpp" />
     <ClCompile Include="..\Private\State_CurruptedStrongArm_HitFatal.cpp" />
     <ClCompile Include="..\Private\State_CurruptedStrongArm_Idle.cpp" />
     <ClCompile Include="..\Private\State_CurruptedStrongArm_JumpPunch.cpp" />
+    <ClCompile Include="..\Private\State_CurruptedStrongArm_KnockBack.cpp" />
     <ClCompile Include="..\Private\State_CurruptedStrongArm_StingTwice.cpp" />
     <ClCompile Include="..\Private\State_CurruptedStrongArm_SwipAttack.cpp" />
     <ClCompile Include="..\Private\State_Player_Arm_Counter.cpp" />
@@ -623,11 +649,22 @@
     <ClCompile Include="..\Private\State_RebornerBigA_GuardSting.cpp" />
     <ClCompile Include="..\Private\State_RebornerBigA_HitFatal.cpp" />
     <ClCompile Include="..\Private\State_RebornerBigA_Idle.cpp" />
+    <ClCompile Include="..\Private\State_RebornerBigA_KnockBack.cpp" />
     <ClCompile Include="..\Private\State_RebornerBigA_RushSting.cpp" />
     <ClCompile Include="..\Private\State_RebornerBigA_SlashJump.cpp" />
     <ClCompile Include="..\Private\State_RebornerBigA_SlashTwice.cpp" />
     <ClCompile Include="..\Private\State_RebornerBigA_SwingMultiple.cpp" />
+    <ClCompile Include="..\Private\State_RebornerMale_Die.cpp" />
+    <ClCompile Include="..\Private\State_RebornerMale_HitFatal.cpp" />
+    <ClCompile Include="..\Private\State_RebornerMale_Idle.cpp" />
+    <ClCompile Include="..\Private\State_RebornerMale_Kick.cpp" />
+    <ClCompile Include="..\Private\State_RebornerMale_KnockBack.cpp" />
+    <ClCompile Include="..\Private\State_RebornerMale_RapidFire.cpp" />
+    <ClCompile Include="..\Private\State_RebornerMale_Reaload.cpp" />
     <ClCompile Include="..\Private\State_SimonManusP2_Die_Talking.cpp" />
+    <ClCompile Include="..\Private\State_Training01_Attack.cpp" />
+    <ClCompile Include="..\Private\State_Training01_Idle.cpp" />
+    <ClCompile Include="..\Private\State_Training02_Idle.cpp" />
     <ClCompile Include="..\Private\SteelHeart.cpp" />
     <ClCompile Include="..\Private\TorchDeck.cpp" />
     <ClCompile Include="..\Private\UIPage_Chest.cpp" />
@@ -831,6 +868,7 @@
     <ClCompile Include="..\Private\Weapon_Raxasia_P2_Shield.cpp" />
     <ClCompile Include="..\Private\Weapon_Raxasia_P2_Sword.cpp" />
     <ClCompile Include="..\Private\Weapon_RebornerBigA_Stick.cpp" />
+    <ClCompile Include="..\Private\Weapon_RebornerMale_Gun.cpp" />
     <ClCompile Include="..\Private\Weapon_Scissor.cpp" />
     <ClCompile Include="..\Private\Weapon_Scissor_Blade.cpp" />
     <ClCompile Include="..\Private\Weapon_Scissor_Handle.cpp" />
@@ -855,6 +893,7 @@
     <FxCompile Include="..\Bin\ShaderFiles\Shader_Effect_Mesh.hlsl" />
     <FxCompile Include="..\Bin\ShaderFiles\Shader_Effect_Texture.hlsl" />
     <FxCompile Include="..\Bin\ShaderFiles\Shader_ParticleCompute.hlsl" />
+    <FxCompile Include="..\Bin\ShaderFiles\Shader_SSD.hlsl" />
     <FxCompile Include="..\Bin\ShaderFiles\Shader_TrailHead_PointInstance.hlsl" />
     <FxCompile Include="..\Bin\ShaderFiles\Shader_TrailTail_PointInstance.hlsl" />
     <FxCompile Include="..\Bin\ShaderFiles\Shader_Trail_MultiPoint_Compute.hlsl" />

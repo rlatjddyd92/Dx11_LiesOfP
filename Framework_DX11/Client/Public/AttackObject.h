@@ -23,6 +23,8 @@ public:
 
 		_Vec3 vTargetPos{};
 
+		_int iTrack_State{};
+
 		CGameObject* pOwner = { nullptr };
 	}ATKOBJ_DESC;
 

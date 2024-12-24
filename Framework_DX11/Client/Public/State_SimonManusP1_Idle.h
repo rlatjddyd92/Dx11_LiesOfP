@@ -30,7 +30,7 @@ private:
     _bool               m_bFirstMeetCheck = { false };
 
     _float              m_fIdleTime = { 0.f };
-    _float              m_fIdleEndDuration = { 1.5f };
+    _float              m_fIdleEndDuration = { 0.8f };
 
     _uint               m_iPastNeerAtkNum{ 512 };
     _uint               m_iPastMiddleAtkNum{ 512 };

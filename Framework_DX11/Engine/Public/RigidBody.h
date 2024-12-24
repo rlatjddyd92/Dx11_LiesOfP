@@ -76,7 +76,7 @@ private:
 
     PxRigidActor* m_PxActor = { nullptr };
     PxMaterial* m_PxMaterial = { nullptr };
-    PxShape* m_PxShape = { nullptr };  //여러개 붙일 수도 있음
+    vector<PxShape*> m_PxShapes;  //여러개 붙일 수도 있음
 
     _Vec3 m_vVelocity = {};
     _Vec3 m_vForce = {};

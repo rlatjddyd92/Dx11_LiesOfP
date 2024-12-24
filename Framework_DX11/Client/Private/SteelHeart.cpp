@@ -50,6 +50,8 @@ void CSteelHeart::Update(_float fTimeDelta)
 	// ÂûÄ¬ ¼Ò¸®
 	//m_pSoundCom->Play2D_Repeat()
 
+	//m_pRigidBodyCom->Update(fTimeDelta);
+
 	m_pSoundCom->Update(fTimeDelta);
 }
 
@@ -112,12 +114,12 @@ HRESULT CSteelHeart::Render()
 	}
 
 	/* À¯¸® ÀçÁú */
-	m_pModelCom->Bind_MeshBoneMatrices(m_pShaderCom, "g_BoneMatrices", (_uint)1);
+	/*m_pModelCom->Bind_MeshBoneMatrices(m_pShaderCom, "g_BoneMatrices", (_uint)1);
 
 	m_pShaderCom->Begin(6);
 
 	if (FAILED(m_pModelCom->Render((_uint)1)))
-		return E_FAIL;
+		return E_FAIL;*/
 
 	return S_OK;
 
@@ -131,7 +133,7 @@ HRESULT CSteelHeart::Ready_Components()
 		return E_FAIL;
 
 	/* FOR.Com_Model */
-	if (FAILED(__super::Add_Component(LEVEL_STATIC, TEXT("Prototype_Component_Model_SteellHeart"),
+	if (FAILED(__super::Add_Component(LEVEL_STATIC, TEXT("Prototype_Component_Model_Lift_Door"),
 		TEXT("Com_Model"), reinterpret_cast<CComponent**>(&m_pModelCom))))
 		return E_FAIL;
 
@@ -141,6 +143,27 @@ HRESULT CSteelHeart::Ready_Components()
 		TEXT("Com_Sound"), reinterpret_cast<CComponent**>(&m_pSoundCom))))
 		return E_FAIL;
 	m_pSoundCom->Set_Owner(this);
+
+	CRigidBody::RIGIDBODY_DESC RigidBodyDesc{};
+	RigidBodyDesc.isStatic = true;
+	RigidBodyDesc.isGravity = false;
+	RigidBodyDesc.pOwnerTransform = m_pTransformCom;
+	RigidBodyDesc.pOwnerNavigation = nullptr;
+	RigidBodyDesc.isCapsule = true;
+
+	RigidBodyDesc.pOwner = this;
+	RigidBodyDesc.fStaticFriction = 0.f;
+	RigidBodyDesc.fDynamicFriction = 0.f;
+	RigidBodyDesc.fRestituion = 0.f;
+
+	physX::GeometryTriangleMesh TriangleDesc;
+	TriangleDesc.pModel = m_pModelCom;
+	RigidBodyDesc.pGeometry = &TriangleDesc;
+
+	/* FOR.Com_RigidBody */
+	if (FAILED(__super::Add_Component(LEVEL_STATIC, TEXT("Prototype_Component_RigidBody"),
+		TEXT("Com_RigidBody"), reinterpret_cast<CComponent**>(&m_pRigidBodyCom), &RigidBodyDesc)))
+		return E_FAIL;
 
 	return S_OK;
 }
@@ -175,6 +198,7 @@ void CSteelHeart::Free()
 {
 	__super::Free();
 
+	Safe_Release(m_pRigidBodyCom);
 	Safe_Release(m_pSoundCom);
 	Safe_Release(m_pShaderCom);
 	Safe_Release(m_pModelCom);

@@ -294,11 +294,17 @@ HRESULT CWeapon_Rapier::Ready_Effect()
 
 	m_Effects.resize(EFFECT_END);
 
+	//m_Effects[EFFECT_STORMSTAB1] = m_pEffect_Manager->Clone_Effect(TEXT("Player_Attack_Rapier_StormStab_First"), m_pParentMatrix,
+	//	m_pSocketMatrix, _Vec3(0.f, 0.f, 0.f), _Vec3(0.f, 0.f, 0.f), _Vec3(1.f, 1.f, 1.f));
+
+	//m_Effects[EFFECT_STORMSTAB2] = m_pEffect_Manager->Clone_Effect(TEXT("Player_Attack_Rapier_StormStab_Second"), m_pParentMatrix,
+	//	m_pSocketMatrix, _Vec3(0.f, 0.f, 0.f), _Vec3(0.f, 0.f, 0.f), _Vec3(1.f, 1.f, 1.f));
+
 	m_Effects[EFFECT_STORMSTAB1] = m_pEffect_Manager->Clone_Effect(TEXT("Player_Attack_Rapier_StormStab_First"), m_pParentMatrix,
 		m_pSocketMatrix, _Vec3(0.f, 0.f, 0.f), _Vec3(0.f, 0.f, 0.f), _Vec3(1.f, 1.f, 1.f));
 
 	m_Effects[EFFECT_STORMSTAB2] = m_pEffect_Manager->Clone_Effect(TEXT("Player_Attack_Rapier_StormStab_Second"), m_pParentMatrix,
-		m_pSocketMatrix, _Vec3(0.f, 0.f, 0.f), _Vec3(0.f, 0.f, 0.f), _Vec3(1.f, 1.f, 1.f));
+		m_pSocketMatrix);
 
 	return S_OK;
 }

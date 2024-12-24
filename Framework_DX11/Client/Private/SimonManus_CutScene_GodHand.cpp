@@ -60,7 +60,7 @@ void CSimonManus_CutScene_GodHand::Update(_float fTimeDelta)
 		m_bAnimSpeedUp = true;
 		m_pModelCom->Set_SpeedPerSec((_uint)0, 30);
 	}
-	static _float fX = 0.3f;
+	/*static _float fX = 0.3f;
 	static _float fY = 17.45f;
 	static _float fZ = 1.f;
 
@@ -91,7 +91,7 @@ void CSimonManus_CutScene_GodHand::Update(_float fTimeDelta)
 		fZ += 0.05f;
 	}
 
-	m_pTransformCom->Set_State(CTransform::STATE_POSITION, _Vec3(fX, fY, fZ));
+	m_pTransformCom->Set_State(CTransform::STATE_POSITION, _Vec3(fX, fY, fZ));*/
 }
 
 void CSimonManus_CutScene_GodHand::Late_Update(_float fTimeDelta)

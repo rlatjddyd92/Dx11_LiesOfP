@@ -23,6 +23,7 @@ public:
 		_float3		vRotation;
 		_bool		bShadow = { false };
 		_uint		iRenderGroupID = { true };
+		_int		iCurrentAreaNum = { 0 };
 	}LADDER_DESC;
 
 	enum COLLIDERTYPE { UP, DOWN, COLLIDER_END };
@@ -54,6 +55,7 @@ private:
 private:
 	_bool m_bShadow = false;
 	string m_strLadderTag = {};
+	_int m_iCurrentAreaNum = { 0 };
 private:
 	HRESULT Ready_Components(LADDER_DESC* Desc);
 

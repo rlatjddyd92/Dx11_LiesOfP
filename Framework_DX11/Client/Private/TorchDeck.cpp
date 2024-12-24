@@ -52,12 +52,14 @@ void CTorchDeck::Update(_float fTimeDelta)
 
 void CTorchDeck::Late_Update(_float fTimeDelta)
 {
-    if (m_pGameInstance->isIn_Frustum_WorldSpace(m_pTransformCom->Get_State(CTransform::STATE_POSITION), 15.f))
-    {
-        __super::Late_Update(fTimeDelta);
-        m_pGameInstance->Add_RenderObject(CRenderer::RG_NONBLEND, this);
-        m_Effect->Late_Update(fTimeDelta);
-    }
+
+   if (m_pGameInstance->isIn_Frustum_WorldSpace(m_pTransformCom->Get_State(CTransform::STATE_POSITION), 15.f))
+   {
+       __super::Late_Update(fTimeDelta);
+       m_pGameInstance->Add_RenderObject(CRenderer::RG_NONBLEND, this);
+       m_Effect->Late_Update(fTimeDelta);
+   }
+
 }
 
 HRESULT CTorchDeck::Render()
@@ -155,7 +157,6 @@ void CTorchDeck::Free()
          m_Effect->Set_Cloned(false);
          Safe_Release(m_Effect);
     }
-
     Safe_Release(m_pShaderCom);
     Safe_Release(m_pModelCom);
 }

@@ -132,13 +132,13 @@ void CPlayerCamera::PlayerLockOn(_float fTimeDelta)
 
 	_vector vPlayerPos = m_pPlayer->Get_Transform()->Get_State(CTransform::STATE_POSITION);
 
-	vPlayerPos.m128_f32[1] += 2.2f;
+	vPlayerPos.m128_f32[1] += 2.f;
 
 	m_vTargetPos = vPlayerPos - XMVector3Normalize(m_pTransformCom->Get_State(CTransform::STATE_LOOK)) * 3.f;
 
 	// Lerp로 카메라 위치를 부드럽게 이동
 	_vector vCurrentPos = m_pTransformCom->Get_State(CTransform::STATE_POSITION);
-	_vector vNewPos = XMVectorLerp(vCurrentPos, m_vTargetPos, 0.3f); // 보간 비율 0.1
+	_vector vNewPos = XMVectorLerp(vCurrentPos, m_vTargetPos, 0.3f);
 
 	m_pTransformCom->Set_State(CTransform::STATE_POSITION, vNewPos);
 }

@@ -14,6 +14,7 @@
 #include "State_CarcassNormal_Idle.h"
 #include "State_CarcassNormal_Die.h"
 #include "State_CarcassNormal_HitFatal.h"
+#include "State_CarcassNormal_KnockBack.h"
 
 #include "State_CarcassNormal_HeadingMultiple.h"
 #include "State_CarcassNormal_TripleClaw.h"
@@ -83,6 +84,8 @@ HRESULT CCarcassNormal::Initialize(void* pArg)
 	m_eStat.fGrogyPoint = 0.f;
 	m_eStat.fMaxGrogyPoint = 50.f;
 
+	m_vCenterOffset = _Vec3{ 0.f, 1.2f, 0.f };
+
 	// 24-11-26 김성용
 	// 몬스터 직교 UI 접근 코드 
 	// 정식 코드  
@@ -129,6 +132,10 @@ void CCarcassNormal::Late_Update(_float fTimeDelta)
 		m_pColliderObject[i]->Late_Update(fTimeDelta);
 	}
 
+	for (_int i = 0; i < CT_END - 1; ++i)
+	{
+		m_pGameInstance->Add_ColliderList(m_EXCollider[i]);
+	}
 	m_pGameInstance->Add_ColliderList(m_pColliderCom);
 }
 
@@ -325,6 +332,7 @@ HRESULT CCarcassNormal::Ready_FSM()
 	m_pFsmCom->Add_State(CState_CarcassNormal_Idle::Create(m_pFsmCom, this, IDLE, &Desc));
 	m_pFsmCom->Add_State(CState_CarcassNormal_HitFatal::Create(m_pFsmCom, this, HITFATAL, &Desc));
 	m_pFsmCom->Add_State(CState_CarcassNormal_Die::Create(m_pFsmCom, this, DIE, &Desc));
+	m_pFsmCom->Add_State(CState_CarcassNormal_KnockBack::Create(m_pFsmCom, this, KNOCKBACK, &Desc));
 
 
 	m_pFsmCom->Add_State(CState_CarcassNormal_TripleClaw::Create(m_pFsmCom, this, TRIPLECLAW, &Desc));

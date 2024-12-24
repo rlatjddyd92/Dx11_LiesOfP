@@ -120,6 +120,8 @@ HRESULT CRaxasia::Initialize(void* pArg)
 	m_eStat.fGrogyPoint = 0.f;
 	m_eStat.fMaxGrogyPoint = 50.f;
 
+	m_vCenterOffset = _Vec3{0.f, 1.85f, 0.f};
+
 	m_eHitType = HIT_METAL;
 
 	m_pWeapon->DeActive_Collider();
@@ -137,7 +139,10 @@ HRESULT CRaxasia::Initialize(void* pArg)
 
 void CRaxasia::Priority_Update(_float fTimeDelta)
 {
-
+	//if (m_bChanging)
+	//{
+	//	m_bChanging = false;
+	//}
 	__super::Set_UpTargetPos();
 	m_pWeapon->Priority_Update(fTimeDelta);
 	m_pWeaponShield->Priority_Update(fTimeDelta);
@@ -180,7 +185,6 @@ void CRaxasia::Update(_float fTimeDelta)
 
 
 	m_vCurRootMove = XMVector3TransformNormal(m_pModelCom->Play_Animation(fTimeDelta * m_isPlayAnimation), m_pTransformCom->Get_WorldMatrix());
-
 
 	m_pRigidBodyCom->Set_Velocity(m_vCurRootMove / fTimeDelta);
 
@@ -232,7 +236,8 @@ void CRaxasia::Late_Update(_float fTimeDelta)
 
 	for (_uint i = 0; i < EXCOLLIDER::COLLTYPE_END; ++i)
 	{
-		m_pGameInstance->Add_ColliderList(m_EXCollider[i]);
+		if(!m_isCutScene)
+			m_pGameInstance->Add_ColliderList(m_EXCollider[i]);
 	}
 }
 
@@ -482,11 +487,11 @@ void CRaxasia::Start_CutScene(_uint iCutSceneNum)
 
 		_matrix PreTransformMatrix = XMMatrixScaling(0.015f, 0.015f, 0.015f) * XMMatrixRotationX(XMConvertToRadians(-90.f));
 
-		CRaxasia_Sword_CutScene::WEAPON_DESC Desc{};
-		Desc.pParentWorldMatrix = m_pTransformCom->Get_WorldMatrix_Ptr();
-		Desc.pSocketBoneMatrix = m_pModelCom->Get_BoneCombindTransformationMatrix_Ptr("weapon0_l");
-		m_pCutSceneWeapon = dynamic_cast<CRaxasia_Sword_CutScene*>(m_pGameInstance->Get_CloneObject_ToLayer(LEVEL_GAMEPLAY, TEXT("Layer_CutSceneWeapon"),
-			TEXT("Prototype_GameObject_Weapon_Raxasia_Sword_CutScene"), &Desc));
+		//CRaxasia_Sword_CutScene::WEAPON_DESC Desc{};
+		//Desc.pParentWorldMatrix = m_pTransformCom->Get_WorldMatrix_Ptr();
+		//Desc.pSocketBoneMatrix = m_pModelCom->Get_BoneCombindTransformationMatrix_Ptr("weapon0_l");
+		//m_pCutSceneWeapon = dynamic_cast<CRaxasia_Sword_CutScene*>(m_pGameInstance->Get_CloneObject_ToLayer(LEVEL_GAMEPLAY, TEXT("Layer_CutSceneWeapon"),
+		//	TEXT("Prototype_GameObject_Weapon_Raxasia_Sword_CutScene"), &Desc));
 
 		m_pCutSceneWeapon->Get_Model()->Set_PreTranformMatrix(PreTransformMatrix);
 		m_pCutSceneWeapon->Get_Transform()->Set_State(CTransform::STATE_POSITION, vOffset);
@@ -569,6 +574,7 @@ void CRaxasia::End_CutScene(_uint iCutSceneNum)
 		_Vec3 vCurrentPos = m_pTransformCom->Get_State(CTransform::STATE_POSITION);
 		vCurrentPos.y -= 1.2f;
 
+		m_pCutSceneWeapon->DeActive_AllEffect();
 		m_pCutSceneWeapon->IsActive(false);
 		m_pCutSceneWeapon->Start_UpdatePos();
 
@@ -602,6 +608,7 @@ void CRaxasia::End_CutScene(_uint iCutSceneNum)
 		_matrix PreTransformMatrix = XMMatrixScaling(0.015f, 0.015f, 0.015f) * XMMatrixRotationX(XMConvertToRadians(270.0f));
 		_Vec3 vShieldOffset = _Vec3(0.f, 0.f, 0.f);
 
+		m_pCutSceneWeapon->DeActive_AllEffect();
 		m_pCutSceneWeapon->IsActive(false);
 
 		m_pWeaponShield->Get_Transform()->Set_State(CTransform::STATE_POSITION, vShieldOffset);
@@ -770,8 +777,6 @@ HRESULT CRaxasia::Ready_Components()
 	for (_uint i = 0; i < COLLTYPE_END; ++i)
 		m_EXCollider[i]->Set_Owner(this);
 
-
-	// RegidBody Initiallize is end of Ready Com
 	CRigidBody::RIGIDBODY_DESC RigidBodyDesc{};
 	RigidBodyDesc.isStatic = false;
 	RigidBodyDesc.isGravity = false;
@@ -784,13 +789,17 @@ HRESULT CRaxasia::Ready_Components()
 	RigidBodyDesc.fDynamicFriction = 0.f;
 	RigidBodyDesc.fRestituion = 0.f;
 
-	physX::GeometryCapsule CapsuleDesc;
-	CapsuleDesc.fHeight = 2.5f;
-	CapsuleDesc.fRadius = 0.45f;
-	RigidBodyDesc.pGeometry = &CapsuleDesc;
-	RigidBodyDesc.PxLockFlags = PxRigidDynamicLockFlag::eLOCK_ANGULAR_X |
-		PxRigidDynamicLockFlag::eLOCK_ANGULAR_Y |
-		PxRigidDynamicLockFlag::eLOCK_ANGULAR_Z;
+	//physX::GeometryCapsule CapsuleDesc;
+	//CapsuleDesc.fHeight = 2.5f;
+	//CapsuleDesc.fRadius = 0.45f;
+	//RigidBodyDesc.pGeometry = &CapsuleDesc;
+	//RigidBodyDesc.PxLockFlags = PxRigidDynamicLockFlag::eLOCK_ANGULAR_X |
+	//	PxRigidDynamicLockFlag::eLOCK_ANGULAR_Y |
+	//	PxRigidDynamicLockFlag::eLOCK_ANGULAR_Z;
+
+	physX::GeometryTriangleMesh TriangleDesc;
+	TriangleDesc.pModel = m_pModelCom;
+	RigidBodyDesc.pGeometry = &TriangleDesc;
 
 	/* FOR.Com_RigidBody */
 	if (FAILED(__super::Add_Component(LEVEL_STATIC, TEXT("Prototype_Component_RigidBody"),
@@ -899,6 +908,7 @@ HRESULT CRaxasia::Ready_Weapon()
 		return E_FAIL;
 
 	m_pWeapon->Appear();
+	m_pWeapon->DeActive_Collider();
 
 
 	WeaponDesc.pSocketBoneMatrix = m_pModelCom->Get_BoneCombindTransformationMatrix_Ptr(36);	//
@@ -908,8 +918,9 @@ HRESULT CRaxasia::Ready_Weapon()
 	m_pWeaponShield = dynamic_cast<CWeapon*>(m_pGameInstance->Clone_GameObject(TEXT("Prototype_GameObject_Weapon_Raxasia_P2_Shield"), &WeaponDesc));
 	if (nullptr == m_pWeaponShield)
 		return E_FAIL;
-	
+
 	m_pWeaponShield->Appear();
+	m_pWeaponShield->DeActive_Collider();
 
 
 	/* FOR.Com_Collider_OBB */
@@ -953,12 +964,15 @@ HRESULT CRaxasia::Ready_Effects()
 		nullptr, _Vec3(0.f, 0.f, 0.f), _Vec3(0.f, 0.f, 1.f), _Vec3(1.f, 1.f, 1.f));
 
 	m_Effects[EFFECT_THUNDERACCEL] = CEffect_Manager::Get_Instance()->Clone_Effect(TEXT("Raxasia_Attack_ThunderAccel"), pParetnMatrix,
-		nullptr, _Vec3(0.f, 0.1f, 0.f), _Vec3(0.f, 0.f, 1.f), _Vec3(1.f, 1.f, 1.f));
+		nullptr, _Vec3(0.f, 0.2f, 0.f), _Vec3(0.f, 0.f, 1.f), _Vec3(1.f, 1.f, 1.f));
 
 	m_Effects[EFFECT_SHIELDDASH] = CEffect_Manager::Get_Instance()->Clone_Effect(TEXT("Raxasia_Attack_ShieldDash"), pParetnMatrix,
 		nullptr, _Vec3(0.f, 0.f, 0.f), _Vec3(0.f, 0.f, 1.f), _Vec3(1.f, 1.f, 1.f));
 
 	m_Effects[EFFECT_SHIELDCHARGE_GROUND] = CEffect_Manager::Get_Instance()->Clone_Effect(TEXT("Raxasia_Attack_ShieldCharge_Ground"), pParetnMatrix,
+		nullptr, _Vec3(0.f, 0.f, 0.f), _Vec3(0.f, 0.f, 1.f), _Vec3(1.f, 1.f, 1.f));
+
+	m_Effects[EFFECT_THUNDERDISCHARGE] = CEffect_Manager::Get_Instance()->Clone_Effect(TEXT("Raxasia_Attack_ThunderDischarge"), pParetnMatrix,
 		nullptr, _Vec3(0.f, 0.f, 0.f), _Vec3(0.f, 0.f, 1.f), _Vec3(1.f, 1.f, 1.f));
 
 	pSocketBoneMatrix = m_pModelCom->Get_BoneCombindTransformationMatrix_Ptr(m_pModelCom->Get_UFBIndices(UFB_WEAPON));
@@ -977,9 +991,6 @@ HRESULT CRaxasia::Ready_Effects()
 
 	pSocketBoneMatrix = m_pExtraModelCom->Get_BoneCombindTransformationMatrix_Ptr(m_pExtraModelCom->Get_UFBIndices(UFB_CHEST));
 
-	m_Effects[EFFECT_THUNDERDISCHARGE] = CEffect_Manager::Get_Instance()->Clone_Effect(TEXT("Raxasia_Attack_ThunderDischarge"), pParetnMatrix,
-		pSocketBoneMatrix, _Vec3(0.f, 0.f, 0.f), _Vec3(0.f, 0.f, 1.f), _Vec3(1.f, 1.f, 1.f));
-
 	m_Effects[EFFECT_THUNDERENVELOP_BIG] = CEffect_Manager::Get_Instance()->Clone_Effect(TEXT("Raxasia_Attack_ThunderEnvelop_Big"), pParetnMatrix,
 		pSocketBoneMatrix, _Vec3(0.f, 0.f, 0.f), _Vec3(0.f, 0.f, 1.f), _Vec3(1.f, 1.f, 1.f));
 
@@ -990,7 +1001,7 @@ HRESULT CRaxasia::Ready_Effects()
 		pSocketBoneMatrix, _Vec3(0.f, 0.f, 0.f), _Vec3(0.f, 0.f, 1.f), _Vec3(1.f, 1.f, 1.f));
 
 
-	pSocketBoneMatrix = m_pExtraModelCom->Get_BoneCombindTransformationMatrix_Ptr(m_pExtraModelCom->Get_UFBIndices(UFB_CHEST));
+	pSocketBoneMatrix = m_pExtraModelCom->Get_BoneCombindTransformationMatrix_Ptr(8);
 
 	m_Effects[EFFECT_THUNDERENVELOP_SMALL] = CEffect_Manager::Get_Instance()->Clone_Effect(TEXT("Raxasia_Attack_ThunderEnvelop_Small"), pParetnMatrix,
 		pSocketBoneMatrix, _Vec3(0.f, 0.f, 0.f), _Vec3(0.f, 0.f, 1.f), _Vec3(1.f, 1.f, 1.f), _Vec3(60.f, 0.f, -90.f));
@@ -1000,6 +1011,7 @@ HRESULT CRaxasia::Ready_Effects()
 		pSocketBoneMatrix, _Vec3(0.f, 0.f, 0.f), _Vec3(0.f, 0.f, 1.f), _Vec3(1.f, 1.f, 1.f), _Vec3(0.f, 0.f, 0.f));
 	
 
+	
 
 	return S_OK;
 }
@@ -1064,7 +1076,7 @@ void CRaxasia::ChangePhase()
 
 	m_pModelCom = m_pExtraModelCom;
 	m_pFsmCom = m_pExtraFsmCom;
-
+	
 	m_pExtraModelCom = nullptr;
 	m_pExtraFsmCom = nullptr;
 
@@ -1097,9 +1109,6 @@ void CRaxasia::ChangePhase()
 
 	m_Effects[EFFECT_INCHENTSWORD_P2]->Set_Matrices(pSocketBoneMatrix);
 
-	m_Effects[EFFECT_INCHENTSWORD] = CEffect_Manager::Get_Instance()->Clone_Effect(TEXT("Raxasia_Attack_InchentedSword"), pParetnMatrix,
-		pSocketBoneMatrix, _Vec3(0.f, 0.f, 0.f), _Vec3(0.f, 0.f, 1.f), _Vec3(1.f, 1.f, 1.f));
-
 	//P2
 
 	CWeapon::MONSTER_WAPON_DESC		WeaponDesc{};
@@ -1114,6 +1123,8 @@ void CRaxasia::ChangePhase()
 		return;
 
 	m_pWeapon->Appear();
+	m_pWeapon->DeActive_Collider();
+
 
 	WeaponDesc.pSocketBoneMatrix = m_pModelCom->Get_BoneCombindTransformationMatrix_Ptr(46);
 

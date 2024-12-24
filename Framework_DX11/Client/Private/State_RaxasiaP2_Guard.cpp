@@ -25,7 +25,7 @@ HRESULT CState_RaxasiaP2_Guard::Start_State(void* pArg)
     m_iRouteTrack = 0;
     m_fIdleTime = 0;
 
-    if (m_pMonster->Calc_Distance_XZ() >= 15.f)
+    if (m_pMonster->Calc_Distance_XZ() >= 7.f)
     {
         m_iMovingAnimIndex = AN_GUARD_WALK_F;
     }

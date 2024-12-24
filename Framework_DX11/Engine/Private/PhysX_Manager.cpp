@@ -87,6 +87,7 @@ HRESULT CPhysX_Manager::Initialize()
     //PxRigidStatic* groundPlane = PxCreatePlane(*gPhysics, PxPlane(0, 1, 0, 0), *gMaterial);
     //gScene->addActor(*groundPlane);
 
+
     return S_OK;
 }
 

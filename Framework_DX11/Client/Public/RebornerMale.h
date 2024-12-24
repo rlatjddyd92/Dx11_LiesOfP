@@ -15,13 +15,19 @@ BEGIN(Client)
 
 class CRebornerMale final : public CMonster
 {
+public:
+	enum COLLIDERTYPE_BODY {
+		CT_BODY_LOWER
+		, CT_UPPERARM_LEFT, CT_UPPERARM_RIGHT, CT_LOWERARM_LEFT, CT_LOWERARM_RIGHT
+		, CT_UPPERLEG_LEFT, CT_UPPERLEG_RIGHT, CT_LOWERLEG_LEFT, CT_LOWERLEG_RIGHT
+		, CT_BODY_UPPER, CT_END
+	};
 
 public:
-	enum COLLIDERTYPE { TYPE_LEFTHAND, TYPE_RIGHTHAND, TYPE_IMPACT, TYPE_END };
-
-public:
-	enum REBORNER_MALE_STATE {
-		WHEELWIND = MONSTER_STATE_END,
+	enum REBORNDERBIGA_STATE {
+		SWINGMULTIPLE = MONSTER_STATE_END
+		, RUSHSTING, GUARDSTING
+		, SLASHTWICE, SLASHJUMP
 	};
 
 private:
@@ -38,8 +44,7 @@ public:
 	virtual HRESULT Render() override;
 
 private:
-	CColliderObject* m_pColliderObject[TYPE_END] = { nullptr, nullptr, nullptr };
-	_bool					m_bColliderCtrs[TYPE_END] = { true,  true, true };
+	class CCollider* m_EXCollider[CT_END - 1] = { nullptr, nullptr };
 
 private:
 	virtual void	Active_CurrentWeaponCollider(_float fDamageRatio, _uint iCollIndex = 0, _uint iHitType = 0, _uint iAtkStrength = 0) override;
@@ -47,10 +52,16 @@ private:
 
 	virtual _bool		Get_EffectsLoop(const _uint eType) { return false; };
 
+	const _Matrix* m_pColliderBindMatrix[CT_END] = { nullptr, nullptr, nullptr };
+
+	class CWeapon* m_pWeapon = { nullptr };
+
 private:
 	HRESULT Ready_Components();
 	HRESULT Ready_FSM();
+	HRESULT Ready_Weapon();
 
+	void	Update_Collider();
 
 public:
 	static CRebornerMale* Create(ID3D11Device* pDevice, ID3D11DeviceContext* pContext);

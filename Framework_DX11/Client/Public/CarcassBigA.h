@@ -19,6 +19,13 @@ class CCarcassBigA final : public CMonster
 public:
 	enum COLLIDERTYPE { TYPE_LEFTHAND, TYPE_RIGHTHAND, TYPE_IMPACT, TYPE_END };
 
+	enum COLLIDERTYPE_BODY {
+		CT_BODY_LOWER
+		, CT_ARM_LEFT, CT_ARM_RIGHT
+		, CT_LEG_LEFT, CT_LEG_RIGHT
+		, CT_BODY_UPPER, CT_END
+	};
+
 public:
 	enum CARCASS_BIGA_STATE {
 		WHEELWIND = MONSTER_STATE_END,
@@ -42,7 +49,9 @@ public:
 
 private:
 	CColliderObject*			m_pColliderObject[TYPE_END] = { nullptr, nullptr, nullptr };
-	_bool					m_bColliderCtrs[TYPE_END] = {true,  true, true};
+	class CCollider*			m_EXCollider[CT_END - 1] = { nullptr, nullptr };
+	const _Matrix*				m_pColliderBindMatrix[CT_END] = { nullptr, nullptr, nullptr };
+
 
 private:
 	virtual void	Active_CurrentWeaponCollider(_float fDamageRatio, _uint iCollIndex = 0, _uint iHitType = 0, _uint iAtkStrength = 0) override;
@@ -54,6 +63,7 @@ private:
 	HRESULT Ready_Components();
 	HRESULT Ready_FSM();
 
+	void	Update_Collider();
 
 public:
 	static CCarcassBigA* Create(ID3D11Device* pDevice, ID3D11DeviceContext* pContext);

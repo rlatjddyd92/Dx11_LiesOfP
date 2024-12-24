@@ -15,6 +15,7 @@ CState_CurruptedStrongArm_Idle::CState_CurruptedStrongArm_Idle(CFsm* pFsm, CMons
 HRESULT CState_CurruptedStrongArm_Idle::Initialize(_uint iStateNum, void* pArg)
 {
     m_iStateNum = iStateNum;
+    m_pDiscover = m_pMonster->Get_bDicover();
 
     return S_OK;
 }
@@ -32,7 +33,7 @@ HRESULT CState_CurruptedStrongArm_Idle::Start_State(void* pArg)
 void CState_CurruptedStrongArm_Idle::Update(_float fTimeDelta)
 {
     _float fDist = m_pMonster->Calc_Distance_XZ();
-    if (!m_bDiscover)
+    if (!(*m_pDiscover))
     {
         _Vec3 vTargetPos = m_pMonster->Get_TargetPos();
         _Vec3 vMonsterPos = m_pMonster->Get_Transform()->Get_State(CTransform::STATE_POSITION);
@@ -79,7 +80,7 @@ void CState_CurruptedStrongArm_Idle::Update(_float fTimeDelta)
                 _float fRadian = vTargetDir.Dot(vLook);
                 if (fRadian >= XMConvertToRadians(60.f))
                 {
-                    m_bDiscover = true;
+                    *m_pDiscover = true;
                     return;
                 }
 
@@ -95,7 +96,7 @@ void CState_CurruptedStrongArm_Idle::Update(_float fTimeDelta)
         if (fDist >= 30.f)
         {
             m_bFirstMeetCheck = false;
-            m_bDiscover = false;
+            *m_pDiscover = false;
             return;
         }
 

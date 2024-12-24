@@ -19,7 +19,13 @@ public:
 		const _Matrix* pSocketBoneMatrix = { nullptr };
 	}WEAPON_DESC;
 
-	enum EFFECT_TYPE { EFFECT_P2_TURN, EFFECT_P2_LIGHTNING_SMALL, EFFECT_P2_LIGHTNING, EFFECT_P2_SHINE, EFFECT_P2_EXPLOSION, EFFECT_END };
+	enum EFFECT_TYPE 
+	{ 
+		EFFECT_P1_DRAG, EFFECT_P1_WEAPON_ELECTRIC,
+
+		EFFECT_P2_TURN, EFFECT_P2_LIGHTNING_SMALL, EFFECT_P2_LIGHTNING, EFFECT_P2_SHINE, EFFECT_P2_EXPLOSION, 
+		
+		EFFECT_END };
 
 public:
 	class CModel* Get_Model() { return m_pModelCom; }
@@ -55,6 +61,8 @@ public:
 	void		Start_UpdatePos();
 	void		Stop_UpdatePos();
 
+	void		DeActive_AllEffect();
+
 private:
 	class CShader* m_pShaderCom = { nullptr };
 	class CModel* m_pModelCom = { nullptr };
@@ -81,6 +89,11 @@ private:
 	_bool			m_isActiveTurnEffect[11] = {false, };
 	_bool			m_isActiveInsertEffect[11] = {false, };
 	_bool			m_isEndPhase1Effect = { false };
+	_bool			m_isActiveCutSceneDrag = { false };
+	_bool			m_isDeActiveCutSceneDrag = { false };
+	_bool			m_isActiveStandElecEffect = { false };
+	
+	_float			m_fDragTime = {};
 
 	_bool			m_isActiveElecTurnEffect = { false };
 	_bool			m_isActiveShineEffect = { false };

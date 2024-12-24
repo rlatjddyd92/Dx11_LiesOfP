@@ -64,6 +64,11 @@ CModel::CModel(const CModel& Prototype)
 
 	m_isCloned = true;
 	m_eComponentType = MODEL;
+
+	if (m_UFBIndices[UFB_ROOT] != 1024)
+	{
+		m_isUseRootBone = true;
+	}
 }
 
 _int CModel::Get_BoneIndex(const _char* pBoneName) const
@@ -260,7 +265,7 @@ HRESULT CModel::Initialize(void* pArg)
 	if (m_isInstance)
 	{
 		m_iInstanceStride = sizeof(VTXMODELINSTANCE);
-		m_iNumInstance = 100;
+		m_iNumInstance = 150;
 
 		ZeroMemory(&m_InstanceBufferDesc, sizeof m_InstanceBufferDesc);
 		m_InstanceBufferDesc.ByteWidth = m_iInstanceStride * m_iNumInstance;
@@ -523,12 +528,6 @@ void CModel::Update_Bone()
 
 _Vec3 CModel::Play_Animation(_float fTimeDelta)
 {
-	_bool	bRootCheck{ false };
-	if (m_UFBIndices[UFB_ROOT] != 1024)
-	{
-		bRootCheck = true;
-		m_isUseRootBone = true;
-	}
 
 	// ==m_isUseBoundary ·Î º¯°æ
 	_float fAddTime = fTimeDelta * m_bPlayAnimCtr;

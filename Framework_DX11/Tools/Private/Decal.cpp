@@ -31,7 +31,6 @@ HRESULT CDecal::Initialize(void* pArg)
 
 	m_pTransformCom->Set_State(CTransform::STATE_POSITION, pDesc->vPosition);
 
-	m_pTransformCom->Set_Scaled(2.f, 2.f, 2.f);
 	return S_OK;
 }
 

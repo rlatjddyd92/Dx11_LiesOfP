@@ -1,5 +1,5 @@
 #include "stdafx.h"
-#include "..\Public\CarcassBigA.h"
+#include "RebornerMale.h"
 
 #include "GameInstance.h"
 #include "Player.h"
@@ -11,27 +11,20 @@
 #include "GameInterface_Controller.h"
 
 
-#include "State_CarcassBigA_Idle.h"
-#include "State_CarcassBigA_Die.h"
+//#include "State_RebornerBigA_Idle.h"
+//#include "State_RebornerBigA_Die.h"
+//#include "State_RebornerBigA_Grogy.h"
+//#include "State_RebornerBigA_HitFatal.h"
+//#include "State_RebornerBigA_KnockBack.h"
+//
+//#include "State_RebornerBigA_SlashJump.h"
+//#include "State_RebornerBigA_GuardSting.h"
+//#include "State_RebornerBigA_RushSting.h"
+//#include "State_RebornerBigA_SlashTwice.h"
+//#include "State_RebornerBigA_SwingMultiple.h"
 
-#include "State_CarcassBigA_LTSwingRight.h"
-#include "State_CarcassBigA_LOSwingRight.h"
-#include "State_CarcassBigA_RageAttack.h"
-#include "State_CarcassBigA_WheelWind.h"
-#include "State_CarcassBigA_Impact.h"
+#include "Effect_Manager.h"
 
-#include "State_CarcassBigA_AttackRoute_0.h"
-#include "State_CarcassBigA_AttackRoute_1.h"
-#include "State_CarcassBigA_AttackRoute_2.h"
-#include "State_CarcassBigA_AttackRoute_3.h"
-#include "State_CarcassBigA_AttackRoute_4.h"
-
-#include "State_CarcassBigA_Grogy.h"
-#include "State_CarcassBigA_HitFatal.h"
-#include "State_CarcassBigA_Paralyze.h"
-
-#include "State_CarcassBigA_Walk.h"
-#include "State_CarcassBigA_RUN.h"
 
 CRebornerMale::CRebornerMale(ID3D11Device* pDevice, ID3D11DeviceContext* pContext)
 	: CMonster{ pDevice, pContext }
@@ -62,9 +55,11 @@ HRESULT CRebornerMale::Initialize(void* pArg)
 	if (FAILED(Ready_Components()))
 		return E_FAIL;
 
-	m_pNavigationCom->Move_to_Cell(m_pRigidBodyCom, pDefaultDesc->iCurrentCellNum);
+	if (FAILED(Ready_Weapon()))
+		return E_FAIL;
+	//m_pNavigationCom->Move_to_Cell(m_pRigidBodyCom, pDefaultDesc->iCurrentCellNum);
 
-	m_pModelCom->SetUp_Animation(rand() % 20, true);
+	m_pModelCom->SetUp_Animation(1, true);
 
 	if (FAILED(Ready_FSM()))
 		return E_FAIL;
@@ -89,11 +84,16 @@ HRESULT CRebornerMale::Initialize(void* pArg)
 	m_eStat.fGrogyPoint = 0.f;
 	m_eStat.fMaxGrogyPoint = 50.f;
 
+	m_vCenterOffset = _Vec3{ 0.f, 1.78f, 0.f };
+
+	m_bDiscover = true;
+
 	// 24-11-26 김성용
 	// 몬스터 직교 UI 접근 코드 
 	// 정식 코드  
 	GET_GAMEINTERFACE->Register_Pointer_Into_OrthoUIPage(UI_ORTHO_OBJ_TYPE::ORTHO_NORMAL_MONSTER, this);
 
+	GET_GAMEINTERFACE->Set_OnOff_OrthoUI(false, this);
 	return S_OK;
 }
 
@@ -103,36 +103,30 @@ void CRebornerMale::Priority_Update(_float fTimeDelta)
 
 	if (!m_bDieState && m_eStat.fHp <= 0.f)
 	{
+		GET_GAMEINTERFACE->Set_OnOff_OrthoUI(false, this);
 		m_bDieState = true;
 		m_pFsmCom->Set_State(DIE);
 	}
+	m_pWeapon->Priority_Update(fTimeDelta);
 }
 
 void CRebornerMale::Update(_float fTimeDelta)
 {
+	if (KEY_TAP(KEY::R))
+	{
+		CEffect_Manager::Get_Instance()->Add_Effect_ToLayer(LEVEL_GAMEPLAY, TEXT("Monster_Impact"),
+			_Vec3{ Calc_CenterPos() }, _Vec3{ 0, 0, 1 });
+	}
 	m_vCurRootMove = XMVector3TransformNormal(m_pModelCom->Play_Animation(fTimeDelta), m_pTransformCom->Get_WorldMatrix());
 
 	m_pRigidBodyCom->Set_Velocity(m_vCurRootMove / fTimeDelta);
 
-	m_pFsmCom->Update(fTimeDelta);
+	//m_pFsmCom->Update(fTimeDelta);
 
-	// 테스트 임시 코드 
-	if (KEY_HOLD(KEY::ALT))
-		if (KEY_TAP(KEY::NUM5))
-		{
-			if (m_eStat.bWeakness) m_eStat.bWeakness = false;
-			else m_eStat.bWeakness = true;
-		}
+	Update_Collider();
 
-	// 24-12-06 김성용
-	// 테스트 코드 
-	if (KEY_TAP(KEY::N))
-		GET_GAMEINTERFACE->Set_OnOff_OrthoUI(false, this);
-	if (KEY_TAP(KEY::M))
-		GET_GAMEINTERFACE->Set_OnOff_OrthoUI(true, this);
-
-	m_pColliderCom->Update(m_pTransformCom->Get_WorldMatrix_Ptr());
 	m_pGameInstance->Add_ColliderList(m_pColliderCom);
+	m_pWeapon->Update(fTimeDelta);
 }
 
 void CRebornerMale::Late_Update(_float fTimeDelta)
@@ -142,12 +136,13 @@ void CRebornerMale::Late_Update(_float fTimeDelta)
 	m_pRigidBodyCom->Update(fTimeDelta);
 	m_pGameInstance->Add_RenderObject(CRenderer::RG_NONBLEND, this);
 
-	for (_uint i = 0; i < TYPE_END; ++i)
-	{
-		m_pColliderObject[i]->Late_Update(fTimeDelta);
-	}
 
 	m_pGameInstance->Add_ColliderList(m_pColliderCom);
+	for (_int i = 0; i < CT_END - 1; ++i)
+	{
+		m_pGameInstance->Add_ColliderList(m_EXCollider[i]);
+	}
+	m_pWeapon->Late_Update(fTimeDelta);
 }
 
 HRESULT CRebornerMale::Render()
@@ -157,24 +152,21 @@ HRESULT CRebornerMale::Render()
 
 #ifdef _DEBUG
 	m_pColliderCom->Render();
-
-	for (_uint i = 0; i < TYPE_END; ++i)
+	for (_int i = 0; i < CT_END - 1; ++i)
 	{
-		//m_pColliderObject[i]->Active_Collider();
-		m_pColliderObject[i]->Render();
+		m_EXCollider[i]->Render();
 	}
+
 #endif
 	return S_OK;
 }
 
 void CRebornerMale::Active_CurrentWeaponCollider(_float fDamageRatio, _uint iCollIndex, _uint iHitType, _uint iAtkStrength)
 {
-	m_pColliderObject[iCollIndex]->Active_Collider(fDamageRatio, iCollIndex, iHitType, iAtkStrength);
 }
 
 void CRebornerMale::DeActive_CurretnWeaponCollider(_uint iCollIndex)
 {
-	m_pColliderObject[iCollIndex]->DeActive_Collider();
 }
 
 HRESULT CRebornerMale::Ready_Components()
@@ -183,60 +175,107 @@ HRESULT CRebornerMale::Ready_Components()
 		return E_FAIL;
 
 	/* FOR.Com_Model */
-	if (FAILED(__super::Add_Component(LEVEL_GAMEPLAY, TEXT("Prototype_Component_Model_CarcassBigA"),
+	if (FAILED(__super::Add_Component(LEVEL_GAMEPLAY, TEXT("Prototype_Component_Model_RebornerMale"),
 		TEXT("Com_Model"), reinterpret_cast<CComponent**>(&m_pModelCom))))
 		return E_FAIL;
 
 	/* FOR.Com_Collider */		//Body
 	CBounding_OBB::BOUNDING_OBB_DESC			ColliderDesc{};
-	ColliderDesc.vExtents = _float3(0.8f, 2.f, 0.7f);
-	ColliderDesc.vCenter = _float3(0.f, 1.f, 0.3f);
-	ColliderDesc.vAngles = _float3(0.f, 0.3f, 0.f);
+	ColliderDesc.vExtents = _float3(0.4f, 0.3f, 0.35f);
+	ColliderDesc.vCenter = _float3(0.4f, 0.f, 0.f);
+	ColliderDesc.vAngles = _float3(0.f, 0.f, 0.f);
 
 	if (FAILED(__super::Add_Component(LEVEL_STATIC, TEXT("Prototype_Component_Collider_OBB"),
 		TEXT("Com_Collider"), reinterpret_cast<CComponent**>(&m_pColliderCom), &ColliderDesc)))
 		return E_FAIL;
 	m_pColliderCom->Set_Owner(this);
+	m_pColliderBindMatrix[CT_BODY_UPPER] = m_pModelCom->Get_BoneCombindTransformationMatrix_Ptr(8);
 
-	/* FOR.Com_Collider_OBB */
-	CBounding_OBB::BOUNDING_OBB_DESC			ColliderOBBDesc_Obj{};
 
-	ColliderOBBDesc_Obj.vAngles = _float3(0.0f, 0.0f, 0.0f);
-	ColliderOBBDesc_Obj.vCenter = _float3(0.f, 0.f, 0.f);
-	ColliderOBBDesc_Obj.vExtents = _float3(0.8f, 0.45f, 0.45f);
+	//LowerBody
+	ColliderDesc.vExtents = _float3(0.3f, 0.3f, 0.3f);
+	ColliderDesc.vCenter = _float3(0.3f, 0.f, 0.f);
+	ColliderDesc.vAngles = _float3(0.f, 0.f, 0.f);
 
-	CColliderObject::COLIDEROBJECT_DESC Desc{};
+	if (FAILED(__super::Add_Component(LEVEL_STATIC, TEXT("Prototype_Component_Collider_OBB"),
+		TEXT("Com_Collider_BodyLower"), reinterpret_cast<CComponent**>(&m_EXCollider[CT_BODY_LOWER]), &ColliderDesc)))
+		return E_FAIL;
+	m_pColliderBindMatrix[CT_BODY_LOWER] = m_pModelCom->Get_BoneCombindTransformationMatrix_Ptr(5);
 
-	Desc.pBoundingDesc = &ColliderOBBDesc_Obj;
-	Desc.eType = CCollider::TYPE_OBB;
-	Desc.pSocketBoneMatrix = m_pModelCom->Get_BoneCombindTransformationMatrix_Ptr(m_pModelCom->Get_UFBIndices(UFB_HAND_LEFT));
-	Desc.pParentWorldMatrix = m_pTransformCom->Get_WorldMatrix_Ptr();
-	Desc.pSocketBoneMatrix2 = m_pTransformCom->Get_WorldMatrix_Ptr();
-	Desc.fDamageAmount = 100.f;
+	//UPPERArmLeft
+	ColliderDesc.vExtents = _float3(0.35f, 0.15f, 0.15f);
+	ColliderDesc.vCenter = _float3(0.2f, 0.f, 0.f);
+	ColliderDesc.vAngles = _float3(0.f, 0.f, 0.f);
 
-	m_pColliderObject[TYPE_LEFTHAND] = dynamic_cast<CColliderObject*>(m_pGameInstance->Clone_GameObject(TEXT("Prototype_GameObject_ColliderObj"), &Desc));
+	if (FAILED(__super::Add_Component(LEVEL_STATIC, TEXT("Prototype_Component_Collider_OBB"),
+		TEXT("Com_Collider_UpperArmLeft"), reinterpret_cast<CComponent**>(&m_EXCollider[CT_UPPERARM_LEFT]), &ColliderDesc)))
+		return E_FAIL;
+	m_pColliderBindMatrix[CT_UPPERARM_LEFT] = m_pModelCom->Get_BoneCombindTransformationMatrix_Ptr(m_pModelCom->Get_UFBIndices(UFB_HAND_LEFT) - 2);
 
-	/* FOR.Com_Collider_OBB */
-	ColliderOBBDesc_Obj.vAngles = _float3(0.0f, 0.0f, 0.0f);
-	ColliderOBBDesc_Obj.vCenter = _float3(0.f, 0.f, 0.f);
-	ColliderOBBDesc_Obj.vExtents = _float3(0.7f, 0.4f, 0.4f);
+	//UPPERArmRight
+	if (FAILED(__super::Add_Component(LEVEL_STATIC, TEXT("Prototype_Component_Collider_OBB"),
+		TEXT("Com_Collider_UpperArmRight"), reinterpret_cast<CComponent**>(&m_EXCollider[CT_UPPERARM_RIGHT]), &ColliderDesc)))
+		return E_FAIL;
+	m_pColliderBindMatrix[CT_UPPERARM_RIGHT] = m_pModelCom->Get_BoneCombindTransformationMatrix_Ptr(m_pModelCom->Get_UFBIndices(UFB_HAND_RIGHT) - 2);
 
-	Desc.pSocketBoneMatrix = m_pModelCom->Get_BoneCombindTransformationMatrix_Ptr(m_pModelCom->Get_UFBIndices(UFB_HAND_RIGHT));
 
-	m_pColliderObject[TYPE_RIGHTHAND] = dynamic_cast<CColliderObject*>(m_pGameInstance->Clone_GameObject(TEXT("Prototype_GameObject_ColliderObj"), &Desc));
+	//LOWERArmLeft
+	ColliderDesc.vExtents = _float3(0.4f, 0.15f, 0.15f);
+	ColliderDesc.vCenter = _float3(0.4f, 0.f, 0.f);
+	ColliderDesc.vAngles = _float3(0.f, 0.f, 0.f);
 
-	ColliderOBBDesc_Obj.vAngles = _float3(0.f, 0.0f, 0.f);
-	ColliderOBBDesc_Obj.vCenter = _float3(0.8f, 0.f, -1.8f);
-	ColliderOBBDesc_Obj.vExtents = _float3(0.4f, 0.75f, 1.2f);
+	if (FAILED(__super::Add_Component(LEVEL_STATIC, TEXT("Prototype_Component_Collider_OBB"),
+		TEXT("Com_Collider_LowerArmLeft"), reinterpret_cast<CComponent**>(&m_EXCollider[CT_LOWERARM_LEFT]), &ColliderDesc)))
+		return E_FAIL;
+	m_pColliderBindMatrix[CT_LOWERARM_LEFT] = m_pModelCom->Get_BoneCombindTransformationMatrix_Ptr(m_pModelCom->Get_UFBIndices(UFB_HAND_LEFT) - 1);
 
-	Desc.pSocketBoneMatrix = m_pModelCom->Get_BoneCombindTransformationMatrix_Ptr(2);
-	Desc.fDamageAmount = 100.f;
 
-	m_pColliderObject[TYPE_IMPACT] = dynamic_cast<CColliderObject*>(m_pGameInstance->Clone_GameObject(TEXT("Prototype_GameObject_ColliderObj"), &Desc));
+	//LOWERArmRight
+	if (FAILED(__super::Add_Component(LEVEL_STATIC, TEXT("Prototype_Component_Collider_OBB"),
+		TEXT("Com_Collider_LowerArmRight"), reinterpret_cast<CComponent**>(&m_EXCollider[CT_LOWERARM_RIGHT]), &ColliderDesc)))
+		return E_FAIL;
+	m_pColliderBindMatrix[CT_LOWERARM_RIGHT] = m_pModelCom->Get_BoneCombindTransformationMatrix_Ptr(m_pModelCom->Get_UFBIndices(UFB_HAND_RIGHT) - 1);
 
-	for (_int i = 0; i < TYPE_END; ++i)
+
+
+	//UPPERLegLeft
+	ColliderDesc.vExtents = _float3(0.35f, 0.15f, 0.15f);
+	ColliderDesc.vCenter = _float3(0.3f, 0.f, 0.f);
+	ColliderDesc.vAngles = _float3(0.f, 0.f, 0.f);
+
+	if (FAILED(__super::Add_Component(LEVEL_STATIC, TEXT("Prototype_Component_Collider_OBB"),
+		TEXT("Com_Collider_UpperLegLeft"), reinterpret_cast<CComponent**>(&m_EXCollider[CT_UPPERLEG_LEFT]), &ColliderDesc)))
+		return E_FAIL;
+	m_pColliderBindMatrix[CT_UPPERLEG_LEFT] = m_pModelCom->Get_BoneCombindTransformationMatrix_Ptr(m_pModelCom->Get_UFBIndices(UFB_FOOT_LEFT) - 2);
+
+
+	//UPPERLegRight
+	if (FAILED(__super::Add_Component(LEVEL_STATIC, TEXT("Prototype_Component_Collider_OBB"),
+		TEXT("Com_Collider_UpperLegRight"), reinterpret_cast<CComponent**>(&m_EXCollider[CT_UPPERLEG_RIGHT]), &ColliderDesc)))
+		return E_FAIL;
+	m_pColliderBindMatrix[CT_UPPERLEG_RIGHT] = m_pModelCom->Get_BoneCombindTransformationMatrix_Ptr(m_pModelCom->Get_UFBIndices(UFB_FOOT_RIGHT) - 2);
+
+
+	//LOWERLegLeft
+	ColliderDesc.vExtents = _float3(0.45f, 0.15f, 0.15f);
+	ColliderDesc.vCenter = _float3(0.4f, 0.f, 0.f);
+	ColliderDesc.vAngles = _float3(0.f, 0.f, 0.f);
+
+	if (FAILED(__super::Add_Component(LEVEL_STATIC, TEXT("Prototype_Component_Collider_OBB"),
+		TEXT("Com_Collider_LowerLegLeft"), reinterpret_cast<CComponent**>(&m_EXCollider[CT_LOWERLEG_LEFT]), &ColliderDesc)))
+		return E_FAIL;
+	m_pColliderBindMatrix[CT_LOWERLEG_LEFT] = m_pModelCom->Get_BoneCombindTransformationMatrix_Ptr(m_pModelCom->Get_UFBIndices(UFB_FOOT_LEFT) - 1);
+
+
+	//LOWERLegRight
+	if (FAILED(__super::Add_Component(LEVEL_STATIC, TEXT("Prototype_Component_Collider_OBB"),
+		TEXT("Com_Collider_LowerLegRight"), reinterpret_cast<CComponent**>(&m_EXCollider[CT_LOWERLEG_RIGHT]), &ColliderDesc)))
+		return E_FAIL;
+	m_pColliderBindMatrix[CT_LOWERLEG_RIGHT] = m_pModelCom->Get_BoneCombindTransformationMatrix_Ptr(m_pModelCom->Get_UFBIndices(UFB_FOOT_RIGHT) - 1);
+
+	for (_int i = 0; i < CT_END - 1; ++i)
 	{
-		m_pColliderObject[i]->DeActive_Collider();
+		m_EXCollider[i]->Set_Owner(this);
 	}
 
 
@@ -255,7 +294,7 @@ HRESULT CRebornerMale::Ready_Components()
 
 	physX::GeometryCapsule CapsuleDesc;
 	CapsuleDesc.fHeight = 1.5f;
-	CapsuleDesc.fRadius = 0.25f;
+	CapsuleDesc.fRadius = 0.5f;
 	RigidBodyDesc.pGeometry = &CapsuleDesc;
 	RigidBodyDesc.PxLockFlags = PxRigidDynamicLockFlag::eLOCK_ANGULAR_X |
 		PxRigidDynamicLockFlag::eLOCK_ANGULAR_Y |
@@ -278,26 +317,17 @@ HRESULT CRebornerMale::Ready_FSM()
 
 
 
-	m_pFsmCom->Add_State(CState_CarcassBigA_Idle::Create(m_pFsmCom, this, IDLE, &Desc));
-	m_pFsmCom->Add_State(CState_CarcassBigA_Walk::Create(m_pFsmCom, this, WALK, &Desc));
-	m_pFsmCom->Add_State(CState_CarcassBigA_Run::Create(m_pFsmCom, this, RUN, &Desc));
-	m_pFsmCom->Add_State(CState_CarcassBigA_Grogy::Create(m_pFsmCom, this, GROGY, &Desc));
-	m_pFsmCom->Add_State(CState_CarcassBigA_HitFatal::Create(m_pFsmCom, this, HITFATAL, &Desc));
-	m_pFsmCom->Add_State(CState_CarcassBigA_Paralyze::Create(m_pFsmCom, this, PARALYZE, &Desc));
-	m_pFsmCom->Add_State(CState_CarcassBigA_Die::Create(m_pFsmCom, this, DIE, &Desc));
-
-	m_pFsmCom->Add_State(CState_CarcassBigA_WheelWind::Create(m_pFsmCom, this, WHEELWIND, &Desc));
-	m_pFsmCom->Add_State(CState_CarcassBigA_LOSwingRight::Create(m_pFsmCom, this, LO_SWINGRIGHT, &Desc));
-	m_pFsmCom->Add_State(CState_CarcassBigA_LTSwingRight::Create(m_pFsmCom, this, LT_SWINGRIGHT, &Desc));
-	m_pFsmCom->Add_State(CState_CarcassBigA_RageAttack::Create(m_pFsmCom, this, RAGE_ATTACK, &Desc));
-	m_pFsmCom->Add_State(CState_CarcassBigA_Impact::Create(m_pFsmCom, this, ATK_IMPACT, &Desc));
-
-	m_pFsmCom->Add_State(CState_CarcassBigA_AttackRoute_0::Create(m_pFsmCom, this, ATK_ROUTE_0, &Desc));
-	m_pFsmCom->Add_State(CState_CarcassBigA_AttackRoute_1::Create(m_pFsmCom, this, ATK_ROUTE_1, &Desc));
-	m_pFsmCom->Add_State(CState_CarcassBigA_AttackRoute_2::Create(m_pFsmCom, this, ATK_ROUTE_2, &Desc));
-	m_pFsmCom->Add_State(CState_CarcassBigA_AttackRoute_3::Create(m_pFsmCom, this, ATK_ROUTE_3, &Desc));
-	m_pFsmCom->Add_State(CState_CarcassBigA_AttackRoute_4::Create(m_pFsmCom, this, ATK_ROUTE_4, &Desc));
-
+	//m_pFsmCom->Add_State(CState_RebornerMale_Idle::Create(m_pFsmCom, this, IDLE, &Desc));
+	//m_pFsmCom->Add_State(CState_RebornerBigA_Grogy::Create(m_pFsmCom, this, GROGY, &Desc));
+	//m_pFsmCom->Add_State(CState_RebornerMale_HitFatal::Create(m_pFsmCom, this, HITFATAL, &Desc));
+	//m_pFsmCom->Add_State(CState_RebornerMale_Die::Create(m_pFsmCom, this, DIE, &Desc));
+	//m_pFsmCom->Add_State(CState_RebornerMale_KnockBack::Create(m_pFsmCom, this, KNOCKBACK, &Desc));
+	//
+	//m_pFsmCom->Add_State(CState_RebornerBigA_GuardSting::Create(m_pFsmCom, this, GUARDSTING, &Desc));
+	//m_pFsmCom->Add_State(CState_RebornerBigA_RushSting::Create(m_pFsmCom, this, RUSHSTING, &Desc));
+	//m_pFsmCom->Add_State(CState_RebornerBigA_SlashTwice::Create(m_pFsmCom, this, SLASHTWICE, &Desc));
+	//m_pFsmCom->Add_State(CState_RebornerBigA_SlashJump::Create(m_pFsmCom, this, SLASHJUMP, &Desc));
+	//m_pFsmCom->Add_State(CState_RebornerBigA_SwingMultiple::Create(m_pFsmCom, this, SWINGMULTIPLE, &Desc));
 
 	m_pFsmCom->Set_State(IDLE);
 
@@ -305,6 +335,69 @@ HRESULT CRebornerMale::Ready_FSM()
 
 
 
+}
+
+HRESULT CRebornerMale::Ready_Weapon()
+{
+	CWeapon::MONSTER_WAPON_DESC		WeaponDesc{};
+	WeaponDesc.pParentWorldMatrix = m_pTransformCom->Get_WorldMatrix_Ptr();
+	WeaponDesc.pSocketBoneMatrix = m_pModelCom->Get_BoneCombindTransformationMatrix_Ptr(m_pModelCom->Get_UFBIndices(UFB_WEAPON));	//Weapon_R
+	
+	WeaponDesc.pParentAtk = &m_eStat.fAtk;
+
+	WeaponDesc.pMonster = this;
+
+	m_pWeapon = dynamic_cast<CWeapon*>(m_pGameInstance->Clone_GameObject(TEXT("Prototype_GameObject_Weapon_RebornerMale_Gun"), &WeaponDesc));
+	if (nullptr == m_pWeapon)
+		return E_FAIL;
+
+	m_pWeapon->Appear();
+
+	return S_OK;
+}
+
+void CRebornerMale::Update_Collider()
+{
+	_float4x4 UpdateMat{};
+
+	_Matrix WorldMat = XMLoadFloat4x4(m_pTransformCom->Get_WorldMatrix_Ptr());
+	XMStoreFloat4x4(&UpdateMat
+		, *(m_pColliderBindMatrix[CT_BODY_UPPER]) * WorldMat);
+	m_pColliderCom->Update(&UpdateMat);
+
+	XMStoreFloat4x4(&UpdateMat
+		, *(m_pColliderBindMatrix[CT_BODY_LOWER]) * WorldMat);
+	m_EXCollider[CT_BODY_LOWER]->Update(&UpdateMat);
+
+
+	XMStoreFloat4x4(&UpdateMat
+		, *(m_pColliderBindMatrix[CT_UPPERARM_LEFT]) * WorldMat);
+	m_EXCollider[CT_UPPERARM_LEFT]->Update(&UpdateMat);
+	XMStoreFloat4x4(&UpdateMat
+		, *(m_pColliderBindMatrix[CT_UPPERARM_RIGHT]) * WorldMat);
+	m_EXCollider[CT_UPPERARM_RIGHT]->Update(&UpdateMat);
+
+	XMStoreFloat4x4(&UpdateMat
+		, *(m_pColliderBindMatrix[CT_LOWERARM_LEFT]) * WorldMat);
+	m_EXCollider[CT_LOWERARM_LEFT]->Update(&UpdateMat);
+	XMStoreFloat4x4(&UpdateMat
+		, *(m_pColliderBindMatrix[CT_LOWERARM_RIGHT]) * WorldMat);
+	m_EXCollider[CT_LOWERARM_RIGHT]->Update(&UpdateMat);
+
+
+	XMStoreFloat4x4(&UpdateMat
+		, *(m_pColliderBindMatrix[CT_UPPERLEG_LEFT]) * WorldMat);
+	m_EXCollider[CT_UPPERLEG_LEFT]->Update(&UpdateMat);
+	XMStoreFloat4x4(&UpdateMat
+		, *(m_pColliderBindMatrix[CT_UPPERLEG_RIGHT]) * WorldMat);
+	m_EXCollider[CT_UPPERLEG_RIGHT]->Update(&UpdateMat);
+
+	XMStoreFloat4x4(&UpdateMat
+		, *(m_pColliderBindMatrix[CT_LOWERLEG_LEFT]) * WorldMat);
+	m_EXCollider[CT_LOWERLEG_LEFT]->Update(&UpdateMat);
+	XMStoreFloat4x4(&UpdateMat
+		, *(m_pColliderBindMatrix[CT_LOWERLEG_RIGHT]) * WorldMat);
+	m_EXCollider[CT_LOWERLEG_RIGHT]->Update(&UpdateMat);
 }
 
 CRebornerMale* CRebornerMale::Create(ID3D11Device* pDevice, ID3D11DeviceContext* pContext)
@@ -337,11 +430,12 @@ CPawn* CRebornerMale::Clone(void* pArg)
 
 void CRebornerMale::Free()
 {
-	for (_uint i = 0; i < TYPE_END; ++i)
+	for (_uint i = 0; i < CT_END; ++i)
 	{
-		Safe_Release(m_pColliderObject[i]);
+		Safe_Release(m_EXCollider[i]);
 	}
 
 	__super::Free();
 
+	Safe_Release(m_pWeapon);
 }
