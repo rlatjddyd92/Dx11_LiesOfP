@@ -140,7 +140,6 @@ void CCarcassBigA::Late_Update(_float fTimeDelta)
 	{
 		m_pColliderObject[i]->Late_Update(fTimeDelta);
 	}
-
 	m_pGameInstance->Add_ColliderList(m_pColliderCom);
 }
 

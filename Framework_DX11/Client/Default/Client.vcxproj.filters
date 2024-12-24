@@ -1197,7 +1197,7 @@
     </Filter>
     <Filter Include="02.GameObjects\02.Pawn\01.Monster\Training">
       <UniqueIdentifier>{223f254e-5fa3-4583-bdaa-ab2d5c60c350}</UniqueIdentifier>
-	</Filter>
+    </Filter>
     <Filter Include="05.Fsm\Monster\CarcassNormal\KnockBack">
       <UniqueIdentifier>{026d4247-d4ff-493a-9711-0808f4524d77}</UniqueIdentifier>
     </Filter>
@@ -1254,6 +1254,12 @@
     </Filter>
     <Filter Include="02.GameObjects\02.Pawn\01.Monster\Boss\SimonManus\GodHand">
       <UniqueIdentifier>{8d2b04ee-e8f1-46c4-ae87-5c07b49fbf95}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.GameObjects\02.Pawn\01.Monster\Normal\RebornerMale">
+      <UniqueIdentifier>{44b8a998-01c5-4a19-9e81-dc5f893ae992}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.GameObjects\06.Weapon\04.RebornerMale">
+      <UniqueIdentifier>{2ffb7c05-4dab-4fbb-be10-9dbfbc1d93fb}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -2284,7 +2290,7 @@
     </ClInclude>
     <ClInclude Include="..\Public\Monster_Training01.h">
       <Filter>02.GameObjects\02.Pawn\01.Monster\Training</Filter>
-	</ClInclude>
+    </ClInclude>
     <ClInclude Include="..\Public\State_RebornerBigA_KnockBack.h">
       <Filter>05.Fsm\Monster\RebornerBigA\KnockBack</Filter>
     </ClInclude>
@@ -2299,6 +2305,9 @@
     </ClInclude>
     <ClInclude Include="..\Public\Monster.h">
       <Filter>02.GameObjects\02.Pawn\01.Monster</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Public\RebornerMale.h">
+      <Filter>02.GameObjects\02.Pawn\01.Monster\Normal\RebornerMale</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -3302,7 +3311,7 @@
     </ClCompile>
     <ClCompile Include="..\Private\Monster_Training01.cpp">
       <Filter>02.GameObjects\02.Pawn\01.Monster\Training</Filter>
-	</ClCompile>
+    </ClCompile>
     <ClCompile Include="..\Private\State_RebornerBigA_KnockBack.cpp">
       <Filter>05.Fsm\Monster\RebornerBigA\KnockBack</Filter>
     </ClCompile>
@@ -3314,6 +3323,9 @@
     </ClCompile>
     <ClCompile Include="..\Private\State_CurruptedStrongArm_KnockBack.cpp">
       <Filter>05.Fsm\Monster\CurruptedStrongArm_Puppet\KnockBack</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Private\RebornerMale.cpp">
+      <Filter>02.GameObjects\02.Pawn\01.Monster\Normal\RebornerMale</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

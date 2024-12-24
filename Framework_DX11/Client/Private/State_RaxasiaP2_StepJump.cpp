@@ -70,9 +70,9 @@ void CState_RaxasiaP2_StepJump::Update(_float fTimeDelta)
             {
                 m_fDist = m_pMonster->Calc_Distance_XZ();
                 m_fDist -= 4.f;
-                if (m_fDist < 4.f)
+                if (m_fDist < 2.f)
                 {
-                    m_fDist = 4.f;
+                    m_fDist = 2.f;
                 }
                 m_bStartSpot = false;
             }

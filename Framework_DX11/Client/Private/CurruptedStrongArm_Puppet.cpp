@@ -125,6 +125,10 @@ void CCurruptedStrongArm_Puppet::Late_Update(_float fTimeDelta)
 		m_pColliderObject[i]->Late_Update(fTimeDelta);
 	}
 
+	for (_int i = 0; i < CT_END - 1; ++i)
+	{
+		m_pGameInstance->Add_ColliderList(m_EXCollider[i]);
+	}
 	m_pGameInstance->Add_ColliderList(m_pColliderCom);
 }
 
