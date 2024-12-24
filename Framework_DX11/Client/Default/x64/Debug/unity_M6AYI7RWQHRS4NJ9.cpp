@@ -72,6 +72,9 @@
 #include "D:\GitProject\Dx11_LiesOfP\Framework_DX11\Client\Private\CarcassTail.cpp"
 
 
+#include "D:\GitProject\Dx11_LiesOfP\Framework_DX11\Client\Private\Decal.cpp"
+
+
 #include "D:\GitProject\Dx11_LiesOfP\Framework_DX11\Client\Private\Monster_Training01.cpp"
 
 
