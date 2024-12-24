@@ -393,7 +393,7 @@
 #include "D:\GitProject\Dx11_LiesOfP\Framework_DX11\Client\Private\State_RebornerMale_RapidFire.cpp"
 
 
-#include "D:\GitProject\Dx11_LiesOfP\Framework_DX11\Client\Private\State_RebornerMale_Reaload.cpp"
+#include "D:\GitProject\Dx11_LiesOfP\Framework_DX11\Client\Private\State_RebornerMale_Reload.cpp"
 
 
 #include "D:\GitProject\Dx11_LiesOfP\Framework_DX11\Client\Private\State_SimonManusP2_Die_Talking.cpp"
