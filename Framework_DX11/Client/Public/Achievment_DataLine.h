@@ -29,7 +29,7 @@ public:
 		if (m_bIsComplete == false)
 		{
 			m_iNow = min(m_iNow + iStat, m_iGoal);
-			m_iNow = max(m_iNow + iStat, 0);
+			m_iNow = max(m_iNow, 0);
 
 			if (m_iNow >= m_iGoal)
 			{
@@ -109,7 +109,7 @@ private:
 
 	// 팝업 데이터 
 	_float m_fPopup_AlphaNow = 0.f;
-	_Vec3 m_vLifeTime = {0.f,1.f,2.f};
+	_Vec3 m_vLifeTime = {0.f,1.f,4.f};
 
 public:
 	static CAchievment_DataLine* Create(ID3D11Device* pDevice, ID3D11DeviceContext* pContext);

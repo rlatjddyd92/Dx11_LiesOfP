@@ -82,7 +82,8 @@ void CUIPage_Achievment::Late_Update(_float fTimeDelta)
 		{
 			m_fTopPartMove = 0.f;
 			m_vecPageAction[_int(PAGEACTION::ACTION_CLOSING)] = false;
-			m_vecPageAction[_int(PAGEACTION::ACTION_INACTIVE)] = true;
+			//m_vecPageAction[_int(PAGEACTION::ACTION_INACTIVE)] = true;
+			m_bRender = false;
 		}
 	}
 	else if ((!m_vecPageAction[_int(PAGEACTION::ACTION_CLOSING)]) && (m_vecPageAction[_int(PAGEACTION::ACTION_OPENING)]))
@@ -98,9 +99,12 @@ void CUIPage_Achievment::Late_Update(_float fTimeDelta)
 
 	Check_Data(fTimeDelta);
 
-	Update_Static(fTimeDelta);
-	Update_Statistic(fTimeDelta);
-	Update_Achievment(fTimeDelta);
+	if (m_bRender)
+	{
+		Update_Static(fTimeDelta);
+		Update_Statistic(fTimeDelta);
+		Update_Achievment(fTimeDelta);
+	}
 
 	if (!m_Popup_Indexlist.empty())
 		Update_Popup(fTimeDelta);
@@ -146,7 +150,7 @@ HRESULT CUIPage_Achievment::Ready_UIPart_Group_Control()
 	for (auto& iter : m_vecPart)
 		iter->bRender = false;
 
-	m_vecPageAction[_int(PAGEACTION::ACTION_INACTIVE)] = true;
+	//m_vecPageAction[_int(PAGEACTION::ACTION_INACTIVE)] = true;
 
 	m_bRender = false;
 
@@ -168,12 +172,7 @@ void CUIPage_Achievment::Input_Achievment_Data(_int iIndex, _int Data)
 	if (m_vecAcievment[iIndex]->Is_Complete() == true)
 	{
 		m_Popup_Indexlist.push_back(iIndex);
-
-		_float fRatio = 0.f;
-		if (!m_Popup_Indexlist.empty())
-			fRatio = m_Popup_Indexlist.back() + (1.f / _float(m_iMax_Popup - 1));
-
-		m_Popup_Ratiolist.push_back(fRatio);
+		m_Popup_Ratiolist.push_back(1.f);
 
 		if (m_Popup_Indexlist.size() > m_iMax_Popup)
 		{
@@ -225,6 +224,8 @@ void CUIPage_Achievment::Action_Slide(_float fTimeDelta)
 					m_pScroll->Start_Bar_Moving_Y(vMouse.y);
 				}
 		}
+
+		m_vecPart[iBar]->fRatio = m_pScroll->fScroll_Ratio_Y;
 	}
 }
 
@@ -278,32 +279,46 @@ void CUIPage_Achievment::Update_Achievment(_float fTimeDelta)
 	for (_int i = 0; i < m_vecAcievment.size(); ++i)
 	{
 		m_vecAcievment[i]->Update_Line(fTimeDelta, m_pScroll->fData_Offset_Y, m_fTopPartMove, m_bRender);
-
-		if ((m_vecAcievment[i]->Is_Complete() == true)&&(m_vecAcievment[i]->Is_PopupOn() == false))
-		{
-			if (!m_Popup_Indexlist.empty())
-				m_Popup_Indexlist.pop_front();
-			if (!m_Popup_Ratiolist.empty())
-				m_Popup_Ratiolist.pop_front();
-		}
 	}
 }
 
 void CUIPage_Achievment::Update_Popup(_float fTimeDelta)
 {
 	_float fAdjust = 0.f;
+	_int iIndex = 0;
 
-	if (m_Popup_Ratiolist.front() > 0.f)
+	for (auto& iter : m_Popup_Ratiolist)
 	{
-		fAdjust = min(m_Popup_Ratiolist.front(), fTimeDelta);
+		fAdjust = _float(iIndex) / _float(m_iMax_Popup - 1);
+
+		if (iter > fAdjust)
+			iter -= fTimeDelta;
+
+		if (iter < fAdjust)
+			iter = fAdjust;
 	}
 
 	list<_float>::iterator iterRatio = m_Popup_Ratiolist.begin();
 	list<_int>::iterator iterIndex = m_Popup_Indexlist.begin();
 
+	while (!m_Popup_Indexlist.empty())
+	{
+		if ((m_vecAcievment[m_Popup_Indexlist.front()]->Is_Complete() == true) && (m_vecAcievment[m_Popup_Indexlist.front()]->Is_PopupOn() == false))
+		{
+			if (!m_Popup_Indexlist.empty())
+				m_Popup_Indexlist.pop_front();
+			if (!m_Popup_Ratiolist.empty())
+				m_Popup_Ratiolist.pop_front();
+		}
+		else
+			break;
+	}
+
+	iterRatio = m_Popup_Ratiolist.begin();
+	iterIndex = m_Popup_Indexlist.begin();
+
 	while (iterIndex != m_Popup_Indexlist.end())
 	{
-		(*iterRatio) -= fAdjust;
 		m_vecAcievment[(*iterIndex)]->Update_PopUp(fTimeDelta, (*iterRatio));
 		++iterRatio;
 		++iterIndex;

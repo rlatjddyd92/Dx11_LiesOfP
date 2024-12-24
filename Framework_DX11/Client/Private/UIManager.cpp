@@ -86,7 +86,7 @@ HRESULT CUIManager::Initialize_Prototype()
 	m_vecPageRender_Order.push_back(UIPAGE::PAGE_INVEN);
 	m_vecPageRender_Order.push_back(UIPAGE::PAGE_EQUIP);
 	m_vecPageRender_Order.push_back(UIPAGE::PAGE_STAT);
-	m_vecPageRender_Order.push_back(UIPAGE::PAGE_ACHIEVMENT);
+	
 	m_vecPageRender_Order.push_back(UIPAGE::PAGE_OPTION);
 
 	m_vecPageRender_Order.push_back(UIPAGE::PAGE_TALKING);
@@ -94,6 +94,8 @@ HRESULT CUIManager::Initialize_Prototype()
 	m_vecPageRender_Order.push_back(UIPAGE::PAGE_SHOP);
 	m_vecPageRender_Order.push_back(UIPAGE::PAGE_CHEST);
 	m_vecPageRender_Order.push_back(UIPAGE::PAGE_TELEPOT);
+
+	m_vecPageRender_Order.push_back(UIPAGE::PAGE_ACHIEVMENT);
 
 	m_vecPageRender_Order.push_back(UIPAGE::PAGE_COMMON);
 	m_vecPageRender_Order.push_back(UIPAGE::PAGE_ITEMINFO);

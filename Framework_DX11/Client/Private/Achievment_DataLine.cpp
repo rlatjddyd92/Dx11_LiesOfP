@@ -74,7 +74,6 @@ void CAchievment_DataLine::Update_PopUp(_float fTimeDelta, _float fPopupHeight)
 {
 	if (m_vLifeTime.x > 0.f)
 	{
-		m_vLifeTime.x += fTimeDelta;
 		Set_Before_PopUpRender(fTimeDelta, fPopupHeight);
 	}
 }
@@ -100,7 +99,7 @@ void CAchievment_DataLine::Set_Before_LineRender(_float fAdjustY, _float fAlpha)
 void CAchievment_DataLine::Set_Before_PopUpRender(_float fTimeDelta, _float fPopupHeight)
 {
 	m_vecPopup_BackCtrl.front()->fRatio = fPopupHeight;
-	Determine_PopupAlpha(fPopupHeight);
+	Determine_PopupAlpha(fTimeDelta);
 	m_vecPopup_IconCtrl.back()->iTexture_Index = m_iICon_Index;
 	m_vecPopup_TitleCtrl.back()->strText = m_strTitle;
 	m_vecPopup_DescCtrl.back()->strText = m_strDesc;
@@ -163,7 +162,7 @@ void CAchievment_DataLine::Determine_PopupAlpha(_float fTimeDelta)
 
 	if (m_vLifeTime.x >= m_vLifeTime.y * 2.f + m_vLifeTime.z)
 	{
-		fResult = -1.f;
+		fResult = 0.f;
 		m_vLifeTime = { 0.f,0.f,0.f };
 	}
 	else if (m_vLifeTime.x >= m_vLifeTime.y * 1.f + m_vLifeTime.z)
@@ -218,11 +217,17 @@ void CAchievment_DataLine::Render_PartArray(vector<struct CUIPage::UIPART_INFO*>
 	{
 		if (bIsPopup == true)
 		{
-			(*iter)->fTextureColor.w = m_fPopup_AlphaNow;
-			(*iter)->fTextColor.w = m_fPopup_AlphaNow;
+			_float fOrigin = m_fTopPartMove;
+			m_fTopPartMove = m_fPopup_AlphaNow;
+			Input_Render_Info(*(*iter));
+			m_fTopPartMove = fOrigin;
+			++iter;
 		}
-		Input_Render_Info(*(*iter), SCROLL_AREA::SCROLL_ACHIEVMENT);
-		++iter;
+		else
+		{
+			Input_Render_Info(*(*iter), SCROLL_AREA::SCROLL_ACHIEVMENT);
+			++iter;
+		}
 	}
 }
 
