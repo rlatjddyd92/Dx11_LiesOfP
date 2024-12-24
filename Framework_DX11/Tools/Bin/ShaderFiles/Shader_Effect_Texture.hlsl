@@ -224,8 +224,8 @@ PS_OUT PS_BLEND_RGBTOA_GLOW_MAIN(PS_IN In)
 
     Out.vColor.a *= g_fRatio;
     
-    if(Out.vColor.a < 0.1f)
-        discard;
+    //if(Out.vColor.a < 0.1f)
+    //    discard;
     
     return Out;
 }
