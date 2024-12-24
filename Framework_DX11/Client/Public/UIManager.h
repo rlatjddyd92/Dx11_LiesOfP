@@ -351,6 +351,9 @@ public:
 
 #pragma endregion
 
+
+	void Input_Achievment_Data(_int iIndex, _int Data) { m_pUIPage_Achievment->Input_Achievment_Data(iIndex, Data); }
+
 private:
 	HRESULT Load_UIDataFile();
 	HRESULT Make_UIPage(_int iIndex);

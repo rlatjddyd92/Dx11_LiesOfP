@@ -3,11 +3,15 @@
 #include "Client_Defines.h"
 #include "UIPage.h"
 
+
+
 BEGIN(Engine)
 
 END
 
 BEGIN(Client)
+class CStatistic_Data;
+class CAchievment_DataLine;
 
 class CUIPage_Achievment : public CUIPage
 {
@@ -32,23 +36,6 @@ public:
 		GROUP_END
 	};
 
-	// 필요한 것 
-
-	/*
-	1. 배경판 + 타이틀 세팅 
-	2. 스크롤 조정 
-	3. 통계판 조정 
-	 3-1. 통계판 내용 조정
-	4. 업적판 조정 
-	 4-1. 업적판 내용 조정 
-	*/
-
-
-
-
-
-
-
 
 protected:
 	CUIPage_Achievment(ID3D11Device* pDevice, ID3D11DeviceContext* pContext);
@@ -72,14 +59,33 @@ public:
 	const vector<UPART*>& Get_UIPartInfo() { return m_vecPart; }
 	virtual HRESULT Ready_UIPart_Group_Control() override;
 
+	void Input_Achievment_Data(_int iIndex, _int Data);
+	
+
 protected:
+	void Make_Achievment_DataLine();
+
+	void Action_Slide(_float fTimeDelta);
+
+	void Check_Data(_float fTimeDelta);
+
+	void Update_Static(_float fTimeDelta);
+	void Update_Statistic(_float fTimeDelta);
+	void Update_Achievment(_float fTimeDelta);
+	void Update_Popup(_float fTimeDelta);
+
+protected:
+	vector<class CStatistic_Data*> m_vecStatistic;
+	vector<class CAchievment_DataLine*> m_vecAcievment;
+
+	SCROLL* m_pScroll = { nullptr };
 
 
 
-
-
-
-
+	// 팝업 조절용 
+	_int m_iMax_Popup = 4;
+	list<_float> m_Popup_Ratiolist;
+	list<_int> m_Popup_Indexlist;
 
 public:
 	static CUIPage_Achievment* Create(ID3D11Device* pDevice, ID3D11DeviceContext* pContext);

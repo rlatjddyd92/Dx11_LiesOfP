@@ -931,6 +931,7 @@ void CItem_Manager::Buy_ShopItem(_int iIndex, _int iCount)
 	strItem += TEXT(" -> 구입수량 : ");
 	strItem += to_wstring(iCount);
 
+	GET_GAMEINTERFACE->Input_Achievment_Data(1, 1);
 	GET_GAMEINTERFACE->Show_Popup(TEXT("구매 성공"), strItem);
 	GET_GAMEINTERFACE->Get_Player()->Get_Player_Stat_Adjust()->iErgo -= m_vecItem_BasicSpec[iIndex]->iPrice * iCount;
 }
@@ -952,6 +953,7 @@ void CItem_Manager::Sell_ShopItem(INVEN_ARRAY_TYPE eType, _int iIndex, _int iCou
 
 	m_vecArray_Inven[_int(eType)]->Use_Item(iIndex, iCount);
 
+	GET_GAMEINTERFACE->Input_Achievment_Data(2, 1);
 	_wstring strItem = m_vecArray_Inven[_int(eType)]->vecItemInfo[iIndex]->strName;
 	strItem += TEXT(" -> 판매수량 : ");
 	strItem += to_wstring(iCount);

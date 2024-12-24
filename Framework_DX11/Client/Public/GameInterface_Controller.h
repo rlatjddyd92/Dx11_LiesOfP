@@ -167,6 +167,9 @@ public: // 외부에서 매니저 접근
 	// 텔레포트
 	void Set_Now_Interact_Stargezer(_int iNaviIndex) { return m_pUIManager->Set_Now_Interact_Stargezer(iNaviIndex); }
 
+	// 업적
+	void Input_Achievment_Data(_int iIndex, _int Data) { m_pUIManager->Input_Achievment_Data(iIndex, Data); }
+
 #pragma endregion
 
 

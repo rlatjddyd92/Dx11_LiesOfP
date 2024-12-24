@@ -421,7 +421,7 @@ void CUIPage_Option::Update_Tab(_float fTimeDelta)
 
 void CUIPage_Option::Action_Scroll(_float fTimeDelta)
 {
-	if (!m_vecPageAction[_int(PAGEACTION::ACTION_ACTIVE)])
+	if (!m_vecPageAction[_int(PAGEACTION::ACTION_INACTIVE)])
 	{
 		if (m_pScroll_Option->bIsBarMoving_Y)
 		{
