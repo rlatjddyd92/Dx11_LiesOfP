@@ -58,10 +58,7 @@ void CState_Player_OpenRaxasiaDoor::Update(_float fTimeDelta)
 
     if (iFrame > 50)
     {
-        //m_pPlayer->Get_Model()->Find_AnimationIndex("AS_Pino_Prop_DoubleDoor_Slide", 0.1f);
-        //m_pPlayer->Change_State(CPlayer::SOPHIA_WALK);
-        // m_pGameInstance->Stop_BGM();
-      //   m_pGameInstance->Play_BGM(TEXT("MU_MS_Monastery_B_Loop.wav"), &g_fBGMVolume);
+        m_pPlayer->Active_Effect(CPlayer::EFFECT_CUTSCENE_ARM_OPENDOOR);
     }
 }
 

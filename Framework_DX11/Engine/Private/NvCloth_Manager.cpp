@@ -1,7 +1,7 @@
 #include "NvCloth_Manager.h"
 
 #include "GameInstance.h"
-#include "cuda.h"
+//#include "cuda.h"
 
 CNvCloth_Manager::CNvCloth_Manager(ID3D11Device* pDevice, ID3D11DeviceContext* pContext)
 	: m_pDevice{ pDevice }
@@ -15,7 +15,7 @@ HRESULT CNvCloth_Manager::Initialize()
 {
 	m_pContextManagerCallback = new CMyContextManagerCallback(m_pDevice, m_pContext);
 
-	m_pFactory = NvClothCreateFactoryDX11(m_pContextManagerCallback);
+	//m_pFactory = NvClothCreateFactoryDX11(m_pContextManagerCallback);
 	//m_pSolver = m_pFactory->createSolver();
 
 	return S_OK;

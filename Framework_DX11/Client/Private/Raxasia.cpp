@@ -774,7 +774,7 @@ HRESULT CRaxasia::Ready_Components()
 		m_EXCollider[i]->Set_Owner(this);
 
 	CRigidBody::RIGIDBODY_DESC RigidBodyDesc{};
-	RigidBodyDesc.isStatic = true;
+	RigidBodyDesc.isStatic = false;
 	RigidBodyDesc.isGravity = false;
 	RigidBodyDesc.pOwnerTransform = m_pTransformCom;
 	RigidBodyDesc.pOwnerNavigation = m_pNavigationCom;

@@ -19,7 +19,13 @@ public:
 		const _Matrix* pSocketBoneMatrix = { nullptr };
 	}WEAPON_DESC;
 
-	enum EFFECT_TYPE { EFFECT_P2_TURN, EFFECT_P2_LIGHTNING_SMALL, EFFECT_P2_LIGHTNING, EFFECT_P2_SHINE, EFFECT_P2_EXPLOSION, EFFECT_END };
+	enum EFFECT_TYPE 
+	{ 
+		EFFECT_P1_DRAG, EFFECT_P1_WEAPON_ELECTRIC,
+
+		EFFECT_P2_TURN, EFFECT_P2_LIGHTNING_SMALL, EFFECT_P2_LIGHTNING, EFFECT_P2_SHINE, EFFECT_P2_EXPLOSION, 
+		
+		EFFECT_END };
 
 public:
 	class CModel* Get_Model() { return m_pModelCom; }
@@ -81,6 +87,7 @@ private:
 	_bool			m_isActiveTurnEffect[11] = {false, };
 	_bool			m_isActiveInsertEffect[11] = {false, };
 	_bool			m_isEndPhase1Effect = { false };
+	_bool			m_isActiveStandElecEffect = { false };
 
 	_bool			m_isActiveElecTurnEffect = { false };
 	_bool			m_isActiveShineEffect = { false };
