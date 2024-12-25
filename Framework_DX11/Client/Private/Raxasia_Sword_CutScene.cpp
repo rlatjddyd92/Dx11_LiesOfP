@@ -180,11 +180,8 @@ HRESULT CRaxasia_Sword_CutScene::Render()
 
 HRESULT CRaxasia_Sword_CutScene::Render_LightDepth()
 {
-	
-
 	if (FAILED(m_pShaderCom->Bind_Matrix("g_WorldMatrix", &m_WorldMatrix)))
 		return E_FAIL;
-
 	if (FAILED(m_pShaderCom->Bind_Matrices("g_CascadeViewMatrix", m_pGameInstance->Get_CascadeViewMatirx(), 3)))
 		return E_FAIL;
 	if (FAILED(m_pShaderCom->Bind_Matrices("g_CascadeProjMatrix", m_pGameInstance->Get_CascadeProjMatirx(), 3)))
