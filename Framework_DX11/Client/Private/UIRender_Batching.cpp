@@ -129,7 +129,7 @@ HRESULT CUIRender_Batching::Render()
 				pNow->vPosition.x -= fStartX;
 				pNow->vPosition.y -= fStartY;
 
-				if (m_eNow_Area == SCROLL_AREA::SCROLL_TELEPOT)
+				if (m_eNow_Area == SCROLL_AREA::SCROLL_ACHIEVMENT)
 				if (KEY_HOLD(KEY::ALT))
 				{
 					if (KEY_HOLD(KEY::NUM1))
@@ -566,6 +566,9 @@ CUIRender_Batching::UI_SHADER_PASS CUIRender_Batching::Select_Shader_Pass(URENDE
 		eResult = UI_SHADER_PASS::PASS_ANGLE;
 	else if (bIsRange)
 		eResult = UI_SHADER_PASS::PASS_RANGE;
+
+	if (Info.bIsAlpha_Adjust == true)
+		eResult = UI_SHADER_PASS::PASS_COLOR_MULTI_ALPHA_ADJUST;
 	
 	return eResult;
 }

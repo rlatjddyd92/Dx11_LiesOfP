@@ -26,3 +26,4 @@
 #include "UIPage_Shop.h"
 #include "UIPage_Chest.h"
 #include "UIPage_Telepot.h"
+#include "UIPage_Achievment.h"

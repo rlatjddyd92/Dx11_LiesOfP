@@ -145,7 +145,7 @@ HRESULT CPlayer::Initialize(void * pArg)
 	if (FAILED(Ready_Effect()))
 		return E_FAIL;
 
-	//m_pNavigationCom->Move_to_Cell(m_pRigidBodyCom, 1030); // 계단 옆 별바라기
+	m_pNavigationCom->Move_to_Cell(m_pRigidBodyCom, 1030); // 계단 옆 별바라기
 	//m_pNavigationCom->Move_to_Cell(m_pRigidBodyCom, 772); //긴사다리
 	//m_pNavigationCom->Move_to_Cell(m_pRigidBodyCom, 427); //짧은사다리
 	//m_pNavigationCom->Move_to_Cell(m_pRigidBodyCom, 341); //아래엘베

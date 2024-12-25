@@ -117,7 +117,7 @@ void CUIPage_Inform::Show_Region_Info(_wstring strName, _wstring strDesc, _float
 		m_vecPart[i]->fTextureColor.w = 0.f;
 		m_vecPart[i]->fTextColor.w = 0.f;
 	}
-	
+
 	m_vecPart[_int(PART_GROUP::INFORM_Region_Title)]->strText = strName;
 	m_vecPart[_int(PART_GROUP::INFORM_Region_Desc)]->strText = strDesc;
 }
@@ -130,19 +130,34 @@ void CUIPage_Inform::Show_Inform(INFORM_MESSAGE eInform, _float fTime_Emerge, _f
 	m_fTopPartMove = -1.f;
 	m_vLifeTime_Inform = { 0.f, fTime_Emerge , fTime_Show };
 
-	_int iIndex = _int(PART_GROUP::INFORM_Dead) + _int(eInform);
-
-	for (_int i = _int(PART_GROUP::INFORM_Common_Fx); i <= _int(PART_GROUP::INFORM_Stargazer); ++i)
+	if (eInform == INFORM_MESSAGE::INFORM_STARGAZER)
 	{
-		if ((i == _int(PART_GROUP::INFORM_Common_Fx)) || (i == iIndex))
+		m_vecPart[_int(PART_GROUP::INFORM_Stargazer_Fx1)]->bRender = true;
+		m_vecPart[_int(PART_GROUP::INFORM_Stargazer_Fx1)]->fTextureColor.w = 0.f;
+
+		m_vecPart[_int(PART_GROUP::INFORM_Stargazer_Fx1)]->fRatio;
+
+		m_vecPart[_int(PART_GROUP::INFORM_Stargazer)]->bRender = true;
+		m_vecPart[_int(PART_GROUP::INFORM_Stargazer)]->fTextureColor.w = 0.f;
+	}
+	else
+	{
+		_int iIndex = _int(PART_GROUP::INFORM_Dead) + _int(eInform);
+
+		for (_int i = _int(PART_GROUP::INFORM_Common_Fx); i <= _int(PART_GROUP::INFORM_BossKill); ++i)
 		{
-			m_vecPart[i]->bRender = true;
-			m_vecPart[i]->fTextureColor.w = 0.f;
+			if ((i == _int(PART_GROUP::INFORM_Common_Fx)) || (i == iIndex))
+			{
+				m_vecPart[i]->bRender = true;
+				m_vecPart[i]->fTextureColor.w = 0.f;
+			}
 		}
+
+		m_vecPart[_int(PART_GROUP::INFORM_Common_Fx)]->bRender = true;
+		m_vecPart[iIndex]->bRender = true;
 	}
 
-	m_vecPart[_int(PART_GROUP::INFORM_Common_Fx)]->bRender = true;
-	m_vecPart[iIndex]->bRender = true;
+
 }
 
 void CUIPage_Inform::Show_Heart(_wstring strScript, _float fTime_Emerge, _float fTime_Show)
@@ -159,7 +174,7 @@ void CUIPage_Inform::Show_Heart(_wstring strScript, _float fTime_Emerge, _float 
 		m_vecPart[i]->fTextureColor.w = 0.f;
 		m_vecPart[i]->fTextColor.w = 0.f;
 	}
-	
+
 	m_vecPart[_int(PART_GROUP::INFORM_Text_Back)]->strText = strScript;
 	m_vecPart[_int(PART_GROUP::INFORM_Text_Front)]->strText = strScript;
 }
@@ -173,7 +188,7 @@ void CUIPage_Inform::Update_Region(_float fTimeDelta)
 		for (_int i = _int(PART_GROUP::INFORM_Region_Fx); i <= _int(PART_GROUP::INFORM_Region_Desc); ++i)
 			m_vecPart[i]->bRender = false;
 
-	}	
+	}
 	else
 	{
 		for (_int i = _int(PART_GROUP::INFORM_Region_Fx); i <= _int(PART_GROUP::INFORM_Region_Desc); ++i)
@@ -193,6 +208,7 @@ void CUIPage_Inform::Update_Inform(_float fTimeDelta)
 		for (_int i = _int(PART_GROUP::INFORM_Common_Fx); i <= _int(PART_GROUP::INFORM_Stargazer); ++i)
 			m_vecPart[i]->bRender = false;
 
+		m_vecPart[_int(PART_GROUP::INFORM_Stargazer_Fx1)]->fRatio = 0.f;
 	}
 	else
 	{
@@ -201,6 +217,9 @@ void CUIPage_Inform::Update_Inform(_float fTimeDelta)
 			m_vecPart[i]->fTextureColor.w = fRatio;
 			m_vecPart[i]->fTextColor.w = fRatio;
 		}
+
+		m_vecPart[_int(PART_GROUP::INFORM_Stargazer_Fx1)]->fRatio = m_vLifeTime_Inform.x / (m_vLifeTime_Inform.y * 2.f + m_vLifeTime_Inform.z);
+		m_vecPart[_int(PART_GROUP::INFORM_Stargazer_Fx1)]->MovePart(m_vecPart[_int(PART_GROUP::INFORM_Common_Fx)]->fPosition, fTimeDelta);
 	}
 }
 

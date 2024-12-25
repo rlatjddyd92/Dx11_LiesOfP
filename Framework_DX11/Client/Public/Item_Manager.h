@@ -697,6 +697,10 @@ private:
 
 	_bool m_bSpec_Setting = false;
 
+	// ¾÷Àû
+	_bool m_bAmulet_Achievment_Complete = false;
+	_bool m_bDefence_Achievment_Complete = false;
+
 public:
 	static CItem_Manager* Create(CGameInstance* pGameInstance);
 	virtual void Free() override;

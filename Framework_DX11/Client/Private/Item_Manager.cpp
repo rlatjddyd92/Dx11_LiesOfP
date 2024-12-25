@@ -23,6 +23,31 @@ void CItem_Manager::Update_Item(_float fDeltatime)
 		m_bSpec_Setting = false;
 	}
 		
+	if (m_bAmulet_Achievment_Complete == false)
+	{
+		if (m_vecEquip_ItemInfo[_int(EQUIP_SLOT::EQUIP_AMULET_0)]->eType != INVEN_ARRAY_TYPE::TYPE_END)
+			if (m_vecEquip_ItemInfo[_int(EQUIP_SLOT::EQUIP_AMULET_1)]->eType != INVEN_ARRAY_TYPE::TYPE_END)
+			{
+				GET_GAMEINTERFACE->Input_Achievment_Data(5, 1);
+				m_bAmulet_Achievment_Complete = true;
+			}
+	}
+	
+	if (m_bDefence_Achievment_Complete == false)
+	{
+		_int iCountDefence = 0;
+		iCountDefence += m_vecEquip_ItemInfo[_int(EQUIP_SLOT::EQUIP_DEFENCE_FRAME)]->eType != INVEN_ARRAY_TYPE::TYPE_END;
+		iCountDefence += m_vecEquip_ItemInfo[_int(EQUIP_SLOT::EQUIP_DEFENCE_CARTRIGE)]->eType != INVEN_ARRAY_TYPE::TYPE_END;
+		iCountDefence += m_vecEquip_ItemInfo[_int(EQUIP_SLOT::EQUIP_DEFENCE_CONVERTOR)]->eType != INVEN_ARRAY_TYPE::TYPE_END;
+		iCountDefence += m_vecEquip_ItemInfo[_int(EQUIP_SLOT::EQUIP_DEFENCE_RAINER)]->eType != INVEN_ARRAY_TYPE::TYPE_END;
+
+		if (iCountDefence == 4)
+		{
+			GET_GAMEINTERFACE->Input_Achievment_Data(13, 1);
+			m_bDefence_Achievment_Complete = true;
+		}
+	}
+	
 }
 
 ITEM_RESULT CItem_Manager::AddNewItem_Inven(_uint iItemIndex, _uint iCount)
@@ -158,6 +183,9 @@ ITEM_RESULT CItem_Manager::EquipWeapon_Inven(INVEN_ARRAY_TYPE eIndex, EQUIP_SLOT
 		}
 
 		m_bIsChange = true;
+
+		if (GET_GAMEINTERFACE->IsGamePause())
+			GET_GAMEINTERFACE->Input_Achievment_Data(4, 1);
 
 		return ITEM_RESULT::RESULT_SUCCESS;
 	}
@@ -931,6 +959,8 @@ void CItem_Manager::Buy_ShopItem(_int iIndex, _int iCount)
 	strItem += TEXT(" -> 구입수량 : ");
 	strItem += to_wstring(iCount);
 
+	GET_GAMEINTERFACE->Input_Achievment_Data(1, 1);
+	GET_GAMEINTERFACE->Input_Achievment_Data(0, m_vecItem_BasicSpec[iIndex]->iPrice * iCount);
 	GET_GAMEINTERFACE->Show_Popup(TEXT("구매 성공"), strItem);
 	GET_GAMEINTERFACE->Get_Player()->Get_Player_Stat_Adjust()->iErgo -= m_vecItem_BasicSpec[iIndex]->iPrice * iCount;
 }
@@ -952,6 +982,7 @@ void CItem_Manager::Sell_ShopItem(INVEN_ARRAY_TYPE eType, _int iIndex, _int iCou
 
 	m_vecArray_Inven[_int(eType)]->Use_Item(iIndex, iCount);
 
+	GET_GAMEINTERFACE->Input_Achievment_Data(2, 1);
 	_wstring strItem = m_vecArray_Inven[_int(eType)]->vecItemInfo[iIndex]->strName;
 	strItem += TEXT(" -> 판매수량 : ");
 	strItem += to_wstring(iCount);

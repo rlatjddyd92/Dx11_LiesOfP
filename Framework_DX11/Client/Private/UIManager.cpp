@@ -86,6 +86,7 @@ HRESULT CUIManager::Initialize_Prototype()
 	m_vecPageRender_Order.push_back(UIPAGE::PAGE_INVEN);
 	m_vecPageRender_Order.push_back(UIPAGE::PAGE_EQUIP);
 	m_vecPageRender_Order.push_back(UIPAGE::PAGE_STAT);
+	
 	m_vecPageRender_Order.push_back(UIPAGE::PAGE_OPTION);
 
 	m_vecPageRender_Order.push_back(UIPAGE::PAGE_TALKING);
@@ -93,6 +94,8 @@ HRESULT CUIManager::Initialize_Prototype()
 	m_vecPageRender_Order.push_back(UIPAGE::PAGE_SHOP);
 	m_vecPageRender_Order.push_back(UIPAGE::PAGE_CHEST);
 	m_vecPageRender_Order.push_back(UIPAGE::PAGE_TELEPOT);
+
+	m_vecPageRender_Order.push_back(UIPAGE::PAGE_ACHIEVMENT);
 
 	m_vecPageRender_Order.push_back(UIPAGE::PAGE_COMMON);
 	m_vecPageRender_Order.push_back(UIPAGE::PAGE_ITEMINFO);
@@ -234,6 +237,17 @@ void CUIManager::UIControl_Telepot(_float fTimeDelta)
 	}
 }
 
+void CUIManager::UIControl_Achievment(_float fTimeDelta)
+{
+	if (KEY_TAP(KEY::ESC))
+		SwicthPage(UIPAGE::PAGE_ACHIEVMENT, UIPAGE::PAGE_MENU);
+	else
+	{
+		m_eNowPage = UIPAGE::PAGE_ACHIEVMENT;
+		m_pUIPage_Achievment->Check_Page_Action(fTimeDelta);
+	}
+}
+
 void CUIManager::UIControl_Common(_float fTimeDelta)
 {
 	//m_bIsPlayPageMaintain = true;
@@ -259,6 +273,8 @@ void CUIManager::UIControl_Common(_float fTimeDelta)
 		UIControl_Equip(fTimeDelta);
 	else if ((m_pUIPage_Stat->GetPageAction(PAGEACTION::ACTION_ACTIVE)) || (m_pUIPage_Stat->GetPageAction(PAGEACTION::ACTION_OPENING)))
 		UIControl_Stat(fTimeDelta);
+	else if ((m_pUIPage_Achievment->GetPageAction(PAGEACTION::ACTION_ACTIVE)) || (m_pUIPage_Achievment->GetPageAction(PAGEACTION::ACTION_OPENING)))
+		UIControl_Achievment(fTimeDelta);
 	else if ((m_pUIPage_Option->GetPageAction(PAGEACTION::ACTION_ACTIVE)) || (m_pUIPage_Option->GetPageAction(PAGEACTION::ACTION_OPENING)))
 		UIControl_Option(fTimeDelta);
 	else if ((m_pUIPage_Common->GetPageAction(PAGEACTION::ACTION_ACTIVE)) || (m_pUIPage_Common->GetPageAction(PAGEACTION::ACTION_OPENING)))
@@ -624,6 +640,11 @@ HRESULT CUIManager::Make_UIPage(_int iIndex)
 		m_pUIPage_Telepot = CUIPage_Telepot::Create(m_pDevice, m_pContext);
 		m_vecPage[iIndex] = static_cast<CUIPage*>(m_pUIPage_Telepot);
 	}
+	else if (iIndex == _int(UIPAGE::PAGE_ACHIEVMENT))
+	{
+		m_pUIPage_Achievment = CUIPage_Achievment::Create(m_pDevice, m_pContext);
+		m_vecPage[iIndex] = static_cast<CUIPage*>(m_pUIPage_Achievment);
+	}
 
 	if (m_vecPage[iIndex] == nullptr)
 		return E_FAIL;
@@ -670,6 +691,8 @@ HRESULT CUIManager::Load_UIDataFile_Part(HANDLE handle, DWORD* dword, _int iInde
 		ReadFile(handle, &pNew->vTexture_Angle, sizeof(_Vec2), dword, nullptr);
 
 		ReadFile(handle, &pNew->iTwoPolygon_Buffer_Num, sizeof(_int), dword, nullptr);
+
+		ReadFile(handle, &pNew->bIsAlpha_Adjust, sizeof(_bool), dword, nullptr);
 
 		if (pNew->iTwoPolygon_Buffer_Num != -1)
 			pNew->bIs_TwoDPolygon = true;

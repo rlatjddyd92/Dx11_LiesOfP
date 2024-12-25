@@ -131,7 +131,8 @@ HRESULT CUIRender::Render()
 				}
 			}
 
-			
+			if (rNow.bIsAlpha_Adjust == true)
+				ePass = UI_SHADER_PASS::PASS_COLOR_MULTI_ALPHA_ADJUST;
 
 			m_pTransformCom->Set_WorldMatrix(XMMatrixIdentity());
 
@@ -392,7 +393,8 @@ HRESULT CUIRender::Render_Effect_Tool()
 				}
 			}
 
-
+			if (rNow.bIsAlpha_Adjust == true)
+				ePass = UI_SHADER_PASS::PASS_COLOR_MULTI_ALPHA_ADJUST;
 
 			m_pTransformCom->Set_WorldMatrix(XMMatrixIdentity());
 

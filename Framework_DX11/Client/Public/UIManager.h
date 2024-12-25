@@ -115,6 +115,8 @@ public:
 			return true;
 		else if ((m_pUIPage_Telepot->GetPageAction(PAGEACTION::ACTION_ACTIVE)) || (m_pUIPage_Telepot->GetPageAction(PAGEACTION::ACTION_OPENING)))
 			return true;
+		else if ((m_pUIPage_Achievment->GetPageAction(PAGEACTION::ACTION_ACTIVE)) || (m_pUIPage_Achievment->GetPageAction(PAGEACTION::ACTION_OPENING)))
+			return true;
 		
 		return false;
 	}
@@ -182,6 +184,7 @@ private:
 	void UIControl_Shop(_float fTimeDelta);
 	void UIControl_Chest(_float fTimeDelta);
 	void UIControl_Telepot(_float fTimeDelta);
+	void UIControl_Achievment(_float fTimeDelta);
 
 public:
 #pragma region Page_Main
@@ -348,6 +351,9 @@ public:
 
 #pragma endregion
 
+
+	void Input_Achievment_Data(_int iIndex, _int Data) { m_pUIPage_Achievment->Input_Achievment_Data(iIndex, Data); }
+
 private:
 	HRESULT Load_UIDataFile();
 	HRESULT Make_UIPage(_int iIndex);
@@ -408,6 +414,8 @@ private:
 	CUIPage_Chest* m_pUIPage_Chest = { nullptr };
 	// 텔레포트(별바라기)
 	CUIPage_Telepot* m_pUIPage_Telepot = { nullptr };
+	// 업적
+	CUIPage_Achievment* m_pUIPage_Achievment = { nullptr };
 	
 	CUIRender_Batching* m_pUIRender_Batching = { nullptr };
 
