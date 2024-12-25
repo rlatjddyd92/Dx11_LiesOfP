@@ -146,9 +146,9 @@ HRESULT CPlayer::Initialize(void * pArg)
 		return E_FAIL;
 
 	//m_pNavigationCom->Move_to_Cell(m_pRigidBodyCom, 1030); // 계단 옆 별바라기
-	m_pNavigationCom->Move_to_Cell(m_pRigidBodyCom, 772); //긴사다리
+	//m_pNavigationCom->Move_to_Cell(m_pRigidBodyCom, 772); //긴사다리
 	//m_pNavigationCom->Move_to_Cell(m_pRigidBodyCom, 427); //짧은사다리
-	//m_pNavigationCom->Move_to_Cell(m_pRigidBodyCom, 341); //아래엘베
+	m_pNavigationCom->Move_to_Cell(m_pRigidBodyCom, 341); //아래엘베
 	//m_pNavigationCom->Move_to_Cell(m_pRigidBodyCom, 440); //상자랑 장애물
 	//m_pNavigationCom->Move_to_Cell(m_pRigidBodyCom, 1066); // 순간이동 790
 	//m_pNavigationCom->Move_to_Cell(m_pRigidBodyCom, 790); // 순간이동 1066
@@ -392,6 +392,10 @@ void CPlayer::OnCollisionStay(CGameObject* pOther)
 		
 		m_isCollisionMonster = true;
 	}
+	if (pOther->Get_Tag() == TEXT("Lift_Floor"))
+	{
+		m_pNavigationCom->Research_Cell((_Vec3)m_pTransformCom->Get_State(CTransform::STATE_POSITION));
+	}
 }
 
 void CPlayer::OnCollisionExit(CGameObject* pOther)
@@ -407,7 +411,6 @@ void CPlayer::OnCollisionExit(CGameObject* pOther)
 		{
 			m_pRigidBodyCom->Set_IsOnCell(true);
 			m_pRigidBodyCom->Set_IsLockCell(true);
-			m_pNavigationCom->Research_Cell((_Vec3)m_pTransformCom->Get_State(CTransform::STATE_POSITION));
 		}
 	}
 	if (pOther->Get_Tag() == TEXT("Monster"))
