@@ -43,6 +43,7 @@ public:
 	virtual HRESULT Render() override;
 
 private:
+	CColliderObject* m_pColliderObject = { nullptr };
 	class CCollider* m_EXCollider[CT_END - 1] = { nullptr, nullptr };
 
 private:

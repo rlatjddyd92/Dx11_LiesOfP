@@ -105,6 +105,7 @@ void CRebornerMale::Priority_Update(_float fTimeDelta)
 		m_pFsmCom->Set_State(DIE);
 	}
 	m_pWeapon->Priority_Update(fTimeDelta);
+	m_pColliderObject->Priority_Update(fTimeDelta);
 }
 
 void CRebornerMale::Update(_float fTimeDelta)
@@ -124,6 +125,7 @@ void CRebornerMale::Update(_float fTimeDelta)
 
 	m_pGameInstance->Add_ColliderList(m_pColliderCom);
 	m_pWeapon->Update(fTimeDelta);
+	m_pColliderObject->Update(fTimeDelta);
 }
 
 void CRebornerMale::Late_Update(_float fTimeDelta)
@@ -140,6 +142,7 @@ void CRebornerMale::Late_Update(_float fTimeDelta)
 		m_pGameInstance->Add_ColliderList(m_EXCollider[i]);
 	}
 	m_pWeapon->Late_Update(fTimeDelta);
+	m_pColliderObject->Late_Update(fTimeDelta);
 }
 
 HRESULT CRebornerMale::Render()
@@ -149,6 +152,7 @@ HRESULT CRebornerMale::Render()
 
 #ifdef _DEBUG
 	m_pColliderCom->Render();
+	m_pColliderObject->Render();
 	for (_int i = 0; i < CT_END - 1; ++i)
 	{
 		m_EXCollider[i]->Render();
@@ -160,10 +164,12 @@ HRESULT CRebornerMale::Render()
 
 void CRebornerMale::Active_CurrentWeaponCollider(_float fDamageRatio, _uint iCollIndex, _uint iHitType, _uint iAtkStrength)
 {
+	m_pColliderObject->Active_Collider(fDamageRatio, iCollIndex, iHitType, iAtkStrength);
 }
 
 void CRebornerMale::DeActive_CurretnWeaponCollider(_uint iCollIndex)
 {
+	m_pColliderObject->DeActive_Collider();
 }
 
 HRESULT CRebornerMale::Ready_Components()
@@ -274,6 +280,29 @@ HRESULT CRebornerMale::Ready_Components()
 	{
 		m_EXCollider[i]->Set_Owner(this);
 	}
+
+
+	//유사 웨폰
+	/* FOR.Com_Collider_OBB */
+	CBounding_OBB::BOUNDING_OBB_DESC			ColliderOBBDesc_Obj{};
+	
+	ColliderOBBDesc_Obj.vExtents = _float3(0.75f, 0.3f, 0.3f);
+	ColliderOBBDesc_Obj.vCenter = _float3(0.2f, 0.f, 0.f);
+	ColliderOBBDesc_Obj.vAngles = _float3(0.f, 0.f, 0.f);
+
+	CColliderObject::COLIDEROBJECT_DESC Desc{};
+
+	Desc.pBoundingDesc = &ColliderOBBDesc_Obj;
+	Desc.eType = CCollider::TYPE_OBB;
+	Desc.pSocketBoneMatrix = m_pModelCom->Get_BoneCombindTransformationMatrix_Ptr(m_pModelCom->Get_UFBIndices(UFB_FOOT_RIGHT) - 1);
+	Desc.pParentWorldMatrix = m_pTransformCom->Get_WorldMatrix_Ptr();
+	Desc.pSocketBoneMatrix2 = m_pTransformCom->Get_WorldMatrix_Ptr();
+	Desc.fDamageAmount = 100.f;
+	Desc.pOWner = this;
+
+	m_pColliderObject = dynamic_cast<CColliderObject*>(m_pGameInstance->Clone_GameObject(TEXT("Prototype_GameObject_ColliderObj"), &Desc));
+
+
 
 
 	// 항상 마지막에 생성하기

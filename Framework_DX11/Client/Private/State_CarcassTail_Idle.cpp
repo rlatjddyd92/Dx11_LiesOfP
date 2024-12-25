@@ -187,7 +187,7 @@ void CState_CarcassTail_Idle::Calc_Act_Attack(_float fTimeDelta, _float fDist)
 
         if (m_iAtkCnt >= 9)
         {
-            m_iAtkCnt = 0.f;
+            m_iAtkCnt = 0;
         }
 
         switch (m_iAtkCnt)

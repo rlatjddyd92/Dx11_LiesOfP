@@ -11,7 +11,7 @@ class CState_RebornerMale_Idle : public CState
 {
 private:
     typedef enum {
-        AN_IDLE = 49, AN_TURN_LEFT = 47, AN_TURN_RIGHT = 48
+        AN_IDLE = 39, AN_TURN_LEFT = 47, AN_TURN_RIGHT = 48
         , AN_RUN = 46, AN_WALK = 49
     }ANIMNUM;
 

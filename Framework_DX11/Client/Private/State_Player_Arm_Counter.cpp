@@ -87,12 +87,12 @@ void CState_Player_Arm_Counter::Control_Collider()
 
 void CState_Player_Arm_Counter::Control_Effect(_int iFrame)
 {
-    if (!m_isActiveEffect && m_iActiveEffectFrame <= iFrame)
+    if (!m_isActiveEffect && m_iActiveEffectFrame <= (_uint)iFrame)
     {
         m_pPlayer->Active_Effect(CPlayer::EFFECT_ARM_COUNTER_CHARGE);
         m_isActiveEffect = true;
     }
-    else if (m_isActiveEffect && m_iDeActiveEffectFrame <= iFrame)
+    else if (m_isActiveEffect && m_iDeActiveEffectFrame <= (_uint)iFrame)
     {
         m_pPlayer->DeActive_Effect(CPlayer::EFFECT_ARM_COUNTER_CHARGE);
     }

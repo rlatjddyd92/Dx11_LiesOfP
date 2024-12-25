@@ -15,6 +15,9 @@
 #include "C:\Users\User\Desktop\GitHubRepo\new\Dx11_LiesOfP\Framework_DX11\Client\Private\AObj_LightningBall.cpp"
 
 
+#include "C:\Users\User\Desktop\GitHubRepo\new\Dx11_LiesOfP\Framework_DX11\Client\Private\AObj_Bullet.cpp"
+
+
 #include "C:\Users\User\Desktop\GitHubRepo\new\Dx11_LiesOfP\Framework_DX11\Client\Private\AObj_StampBlast.cpp"
 
 
@@ -72,7 +75,13 @@
 #include "C:\Users\User\Desktop\GitHubRepo\new\Dx11_LiesOfP\Framework_DX11\Client\Private\CarcassTail.cpp"
 
 
+#include "C:\Users\User\Desktop\GitHubRepo\new\Dx11_LiesOfP\Framework_DX11\Client\Private\Decal.cpp"
+
+
 #include "C:\Users\User\Desktop\GitHubRepo\new\Dx11_LiesOfP\Framework_DX11\Client\Private\Monster_Training01.cpp"
+
+
+#include "C:\Users\User\Desktop\GitHubRepo\new\Dx11_LiesOfP\Framework_DX11\Client\Private\Monster_Training02.cpp"
 
 
 #include "C:\Users\User\Desktop\GitHubRepo\new\Dx11_LiesOfP\Framework_DX11\Client\Private\RebornerMale.cpp"
@@ -391,6 +400,15 @@
 
 
 #include "C:\Users\User\Desktop\GitHubRepo\new\Dx11_LiesOfP\Framework_DX11\Client\Private\State_SimonManusP2_Die_Talking.cpp"
+
+
+#include "C:\Users\User\Desktop\GitHubRepo\new\Dx11_LiesOfP\Framework_DX11\Client\Private\State_Training01_Attack.cpp"
+
+
+#include "C:\Users\User\Desktop\GitHubRepo\new\Dx11_LiesOfP\Framework_DX11\Client\Private\State_Training01_Idle.cpp"
+
+
+#include "C:\Users\User\Desktop\GitHubRepo\new\Dx11_LiesOfP\Framework_DX11\Client\Private\State_Training02_Idle.cpp"
 
 
 #include "C:\Users\User\Desktop\GitHubRepo\new\Dx11_LiesOfP\Framework_DX11\Client\Private\SteelHeart.cpp"
