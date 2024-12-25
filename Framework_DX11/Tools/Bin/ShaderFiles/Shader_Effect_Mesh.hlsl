@@ -6,6 +6,7 @@ texture2D g_DiffuseTexture;
 texture2D g_NormalTexture;
 texture2D g_MaskTexture_1;
 texture2D g_MaskTexture_2;
+texture2D g_DepthTexture;
 
 float4 g_vColor;
 float g_fAlpha;
@@ -14,6 +15,8 @@ float2 g_vTileRepeat;
 float2 g_vTileMove;
 
 float g_fAccumulateTime;
+
+float g_fFar;
 
 struct VS_IN
 {
@@ -139,12 +142,24 @@ PS_EFFECT_OUT PS_SELF_DISTORTION_MAIN(PS_IN In)
 PS_OUT PS_BLEND_MAIN(PS_IN In)
 {
     PS_OUT Out = (PS_OUT) 0;
+    
+    float2 vDepthTexcoord = (float2) 0.f;
+
+    vDepthTexcoord.x = (In.vProjPos.x / In.vProjPos.w) * 0.5f + 0.5f;
+    vDepthTexcoord.y = (In.vProjPos.y / In.vProjPos.w) * -0.5f + 0.5f;
+
+    vector vDepthDesc = g_DepthTexture.Sample(LinearSampler, vDepthTexcoord);
+    float fOldViewZ = vDepthDesc.y * g_fFar;
+
+    float fViewZ = In.vProjPos.w;
+
     float2 vTexcoord = In.vTexcoord * g_vTileRepeat + g_vTileMove;
     vector vColor = g_DiffuseTexture.Sample(LinearSampler, vTexcoord);
 	
     vColor.rgb *= g_vColor.rgb;
     vColor.a *= g_fAlpha;
-	
+    Out.vColor.a *= saturate(fOldViewZ - fViewZ);
+
     Out.vColor = vColor;
 	
     return Out;
@@ -153,6 +168,17 @@ PS_OUT PS_BLEND_MAIN(PS_IN In)
 PS_OUT PS_BLEND_RGBTOA_MAIN(PS_IN In)
 {
     PS_OUT Out = (PS_OUT) 0;
+    
+    float2 vDepthTexcoord = (float2) 0.f;
+
+    vDepthTexcoord.x = (In.vProjPos.x / In.vProjPos.w) * 0.5f + 0.5f;
+    vDepthTexcoord.y = (In.vProjPos.y / In.vProjPos.w) * -0.5f + 0.5f;
+
+    vector vDepthDesc = g_DepthTexture.Sample(LinearSampler, vDepthTexcoord);
+    float fOldViewZ = vDepthDesc.y * g_fFar;
+
+    float fViewZ = In.vProjPos.w;
+    
     float2 vTexcoord = In.vTexcoord * g_vTileRepeat + g_vTileMove;
     vector vColor = g_DiffuseTexture.Sample(LinearSampler, vTexcoord);
 	
@@ -164,6 +190,8 @@ PS_OUT PS_BLEND_RGBTOA_MAIN(PS_IN In)
     if (vColor.a < 0.1f)
         discard;
     
+    Out.vColor.a *= saturate(fOldViewZ - fViewZ);
+
     Out.vColor = vColor;
 	
     return Out;
@@ -172,11 +200,24 @@ PS_OUT PS_BLEND_RGBTOA_MAIN(PS_IN In)
 PS_OUT PS_BLEND_DA_MAIN(PS_IN In)
 {
     PS_OUT Out = (PS_OUT) 0;
+    
+    float2 vDepthTexcoord = (float2) 0.f;
+
+    vDepthTexcoord.x = (In.vProjPos.x / In.vProjPos.w) * 0.5f + 0.5f;
+    vDepthTexcoord.y = (In.vProjPos.y / In.vProjPos.w) * -0.5f + 0.5f;
+
+    vector vDepthDesc = g_DepthTexture.Sample(LinearSampler, vDepthTexcoord);
+    float fOldViewZ = vDepthDesc.y * g_fFar;
+
+    float fViewZ = In.vProjPos.w;
+
     float2 vTexcoord = In.vTexcoord * g_vTileRepeat + g_vTileMove;
     vector vColor = g_DiffuseTexture.Sample(LinearSampler, vTexcoord);
 	
     vColor.rgb *= g_vColor.rgb * g_fAlpha;
-	
+    
+    Out.vColor.a *= saturate(fOldViewZ - fViewZ);
+
     Out.vColor = vColor;
 	
     return Out;
@@ -313,6 +354,16 @@ PS_OUT PS_BLEND_RGBTOA_YALPHA_MAIN(PS_IN In)
 {
     PS_OUT Out = (PS_OUT) 0;
     
+    float2 vDepthTexcoord = (float2) 0.f;
+
+    vDepthTexcoord.x = (In.vProjPos.x / In.vProjPos.w) * 0.5f + 0.5f;
+    vDepthTexcoord.y = (In.vProjPos.y / In.vProjPos.w) * -0.5f + 0.5f;
+
+    vector vDepthDesc = g_DepthTexture.Sample(LinearSampler, vDepthTexcoord);
+    float fOldViewZ = vDepthDesc.y * g_fFar;
+
+    float fViewZ = In.vProjPos.w;
+
     // 0~2 + (-2~2) : -2 ~ 4
     float2 vTexcoord = In.vTexcoord * g_vTileRepeat + g_vTileMove;
     
@@ -324,7 +375,8 @@ PS_OUT PS_BLEND_RGBTOA_YALPHA_MAIN(PS_IN In)
     
     vColor.a = max(vColor.r, max(vColor.g, vColor.b));
     vColor.a *= fCurrentY / g_vTileRepeat.y;
-    
+    Out.vColor.a *= saturate(fOldViewZ - fViewZ);
+
     vColor.rgb *= g_vColor.rgb;
     vColor.a *= g_fAlpha;
 	

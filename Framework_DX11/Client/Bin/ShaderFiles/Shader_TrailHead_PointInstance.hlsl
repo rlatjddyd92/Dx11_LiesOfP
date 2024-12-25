@@ -36,6 +36,8 @@ matrix			g_WorldMatrix, g_ViewMatrix, g_ProjMatrix;
 texture2D		g_DiffuseTexture;
 texture2D       g_NormalTexture;
 texture2D       g_MaskTexture;
+texture2D       g_DepthTexture;
+
 vector			g_vCamPosition;
 
 float2          g_vTexDivide;
@@ -45,6 +47,7 @@ float           g_fStartRotation = 0.f;
 float           g_fAngle = 0.f;
 float           g_fSpriteSpeed = 0.f;
 
+float g_fFar;
 
 struct VS_OUT
 {

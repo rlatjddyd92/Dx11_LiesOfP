@@ -34,6 +34,7 @@ public:
 		D3D11_UNORDERED_ACCESS_VIEW_DESC* const& pUnorderedAccessViewDesc, const _float4& vClearColor);
 
 	HRESULT Bind_ShaderResource(class CShader* pShader, const _char* pConstantName);
+	HRESULT Bind_ShaderResource_NonVTX(class CShader_NonVTX* pShader, const _char* pConstantName);
 	HRESULT Bind_UnorderedAccess(class CShader* pShader, const _char* pConstantName);
 	void Clear();
 	HRESULT Copy(ID3D11Texture2D* pTexture);

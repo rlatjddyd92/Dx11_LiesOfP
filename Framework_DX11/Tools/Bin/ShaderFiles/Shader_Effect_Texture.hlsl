@@ -21,32 +21,35 @@ texture2D g_NormalTexture;
 texture2D g_MaskTexture_1;
 texture2D g_MaskTexture_2;
 texture2D g_OpacityTexture;
+texture2D g_DepthTexture;
 
-float2  g_vTexDivide;
-int     g_iTexIndex;
-float   g_fRatio;
+float2 g_vTexDivide;
+int g_iTexIndex;
+float g_fRatio;
 
 float2 g_vTileRepeat;
 float2 g_vTileMove;
 
+float g_fFar;
+
 cbuffer Effect_Desc
 {
-    float4 vColor_Add = float4(0.f, 0.f, 0.f, 0.f);         // 더할 색상
-    float4 vColor_Discard = float4(0.f, 0.f, 0.f, 0.f);     // 자를 색상
-    float4 vColor_Mul = float4(1.f, 1.f, 1.f, 1.f);         // 곱할 색상
+    float4 vColor_Add = float4(0.f, 0.f, 0.f, 0.f); // 더할 색상
+    float4 vColor_Discard = float4(0.f, 0.f, 0.f, 0.f); // 자를 색상
+    float4 vColor_Mul = float4(1.f, 1.f, 1.f, 1.f); // 곱할 색상
     
     //float2 vNumSprite = float2(1.f, 1.f);       // 스프라이트 전체 개수
     //float2 vSpriteIndex = float2(0.f, 0.f);     // 스프라이트 현재 인덱스
     
-    bool isMoveDistortion = false;              // 디스토션 움직일거임?            
-    float fDistortionSpeed = 1.f;               // 속도 얼마나 움직일거임?
+    bool isMoveDistortion = false; // 디스토션 움직일거임?            
+    float fDistortionSpeed = 1.f; // 속도 얼마나 움직일거임?
 };
 
 cbuffer Effect_Strength
 {
-    float fBloomIntensity;      // Bloom 강도
-    float fDistortionStrength;  // 왜곡 강도
-    float fDissolveAmount;      // Disslove 진행 양
+    float fBloomIntensity; // Bloom 강도
+    float fDistortionStrength; // 왜곡 강도
+    float fDissolveAmount; // Disslove 진행 양
 };
 
 struct VS_IN
@@ -60,7 +63,7 @@ struct VS_OUT
 {
     float4 vPosition : SV_POSITION;
     float2 vTexcoord : TEXCOORD0;
-	
+    float4 vProjPos : TEXCOORD1;
 };
 
 VS_OUT VS_MAIN( /*정점*/VS_IN In)
@@ -74,6 +77,7 @@ VS_OUT VS_MAIN( /*정점*/VS_IN In)
 
     Out.vPosition = vPosition;
     Out.vTexcoord = In.vTexcoord;
+    Out.vProjPos = vPosition;
 
     return Out;
 }
@@ -82,6 +86,7 @@ struct PS_IN
 {
     float4 vPosition : SV_POSITION;
     float2 vTexcoord : TEXCOORD0;
+    float4 vProjPos : TEXCOORD1;
 };
 
 struct PS_OUT
@@ -143,10 +148,21 @@ PS_OUT PS_BLEND_GLOW_MAIN(PS_IN In)
 {
     PS_OUT Out = (PS_OUT) 0;
     
+    float2 vDepthTexcoord = (float2) 0.f;
+
+    vDepthTexcoord.x = (In.vProjPos.x / In.vProjPos.w) * 0.5f + 0.5f;
+    vDepthTexcoord.y = (In.vProjPos.y / In.vProjPos.w) * -0.5f + 0.5f;
+
+    vector vDepthDesc = g_DepthTexture.Sample(LinearSampler, vDepthTexcoord);
+    float fOldViewZ = vDepthDesc.y * g_fFar;
+
+    float fViewZ = In.vProjPos.w;
+
     Out.vColor = g_DiffuseTexture.Sample(LinearSampler, Get_SpriteTexcoord(In.vTexcoord));
     
     Out.vColor.a *= g_fRatio;
-    
+    Out.vColor.a *= saturate(fOldViewZ - fViewZ);
+
     Out.vColor.r = 1.f - (1 - g_vColor.r) * (1 - Out.vColor.a);
     Out.vColor.g = 1.f - (1 - g_vColor.g) * (1 - Out.vColor.a);
     Out.vColor.b = 1.f - (1 - g_vColor.b) * (1 - Out.vColor.a);
@@ -158,9 +174,20 @@ PS_OUT PS_BLEND_RGBTOA_MAIN(PS_IN In)
 {
     PS_OUT Out = (PS_OUT) 0;
     
+    float2 vDepthTexcoord = (float2) 0.f;
+
+    vDepthTexcoord.x = (In.vProjPos.x / In.vProjPos.w) * 0.5f + 0.5f;
+    vDepthTexcoord.y = (In.vProjPos.y / In.vProjPos.w) * -0.5f + 0.5f;
+
+    vector vDepthDesc = g_DepthTexture.Sample(LinearSampler, vDepthTexcoord);
+    float fOldViewZ = vDepthDesc.y * g_fFar;
+
+    float fViewZ = In.vProjPos.w;
+
     Out.vColor = g_DiffuseTexture.Sample(LinearSampler, Get_SpriteTexcoord(In.vTexcoord));
     
     Out.vColor.a = max(Out.vColor.r, max(Out.vColor.g, Out.vColor.b));
+    Out.vColor.a *= saturate(fOldViewZ - fViewZ);
 
     Out.vColor.rgb *= g_vColor.rgb;
     Out.vColor.a *= g_fRatio;
@@ -216,6 +243,16 @@ PS_OUT PS_BLEND_RGBTOA_GLOW_MAIN(PS_IN In)
     
     Out.vColor = g_DiffuseTexture.Sample(LinearSampler, Get_SpriteTexcoord(In.vTexcoord));
     
+    float2 vDepthTexcoord = (float2) 0.f;
+
+    vDepthTexcoord.x = (In.vProjPos.x / In.vProjPos.w) * 0.5f + 0.5f;
+    vDepthTexcoord.y = (In.vProjPos.y / In.vProjPos.w) * -0.5f + 0.5f;
+
+    vector vDepthDesc = g_DepthTexture.Sample(LinearSampler, vDepthTexcoord);
+    float fOldViewZ = vDepthDesc.y * g_fFar;
+
+    float fViewZ = In.vProjPos.w;
+
     Out.vColor.a = max(Out.vColor.r, max(Out.vColor.g, Out.vColor.b));
 
     Out.vColor.r = 1.f - (1 - g_vColor.r) * (1 - Out.vColor.a);
@@ -223,7 +260,8 @@ PS_OUT PS_BLEND_RGBTOA_GLOW_MAIN(PS_IN In)
     Out.vColor.b = 1.f - (1 - g_vColor.b) * (1 - Out.vColor.a);
 
     Out.vColor.a *= g_fRatio;
-    
+    Out.vColor.a *= saturate(fOldViewZ - fViewZ);
+
     //if(Out.vColor.a < 0.1f)
     //    discard;
     
@@ -252,13 +290,24 @@ PS_OUT PS_BLEND_DIRT_MAIN(PS_IN In)
 {
     PS_OUT Out = (PS_OUT) 0;
     
+    float2 vDepthTexcoord = (float2) 0.f;
+
+    vDepthTexcoord.x = (In.vProjPos.x / In.vProjPos.w) * 0.5f + 0.5f;
+    vDepthTexcoord.y = (In.vProjPos.y / In.vProjPos.w) * -0.5f + 0.5f;
+
+    vector vDepthDesc = g_DepthTexture.Sample(LinearSampler, vDepthTexcoord);
+    float fOldViewZ = vDepthDesc.y * g_fFar;
+
+    float fViewZ = In.vProjPos.w;
+
     Out.vColor = g_DiffuseTexture.Sample(LinearSampler, Get_SpriteTexcoord(In.vTexcoord));
     vector vMask = g_MaskTexture_1.Sample(LinearSampler, Get_SpriteTexcoord(In.vTexcoord));
     
     Out.vColor.rgb *= g_vColor.rgb;
     Out.vColor.a *= g_fRatio;
     Out.vColor *= vMask;
-    
+    Out.vColor.a *= saturate(fOldViewZ - fViewZ);
+
     return Out;
 }
 
@@ -266,6 +315,16 @@ PS_OUT PS_BLEND_MASK_MAIN(PS_IN In)
 {
     PS_OUT Out = (PS_OUT) 0;
     
+    float2 vDepthTexcoord = (float2) 0.f;
+
+    vDepthTexcoord.x = (In.vProjPos.x / In.vProjPos.w) * 0.5f + 0.5f;
+    vDepthTexcoord.y = (In.vProjPos.y / In.vProjPos.w) * -0.5f + 0.5f;
+
+    vector vDepthDesc = g_DepthTexture.Sample(LinearSampler, vDepthTexcoord);
+    float fOldViewZ = vDepthDesc.y * g_fFar;
+
+    float fViewZ = In.vProjPos.w;
+
     Out.vColor = g_DiffuseTexture.Sample(LinearSampler, Get_SpriteTexcoord(In.vTexcoord));
         
     float2 vTexcoord = In.vTexcoord * g_vTileRepeat + g_vTileMove;
@@ -275,7 +334,8 @@ PS_OUT PS_BLEND_MASK_MAIN(PS_IN In)
     Out.vColor.rgb *= g_vColor.rgb;
     
     Out.vColor.a *= g_fRatio;
-    
+    Out.vColor.a *= saturate(fOldViewZ - fViewZ);
+
     return Out;
 }
 
@@ -283,6 +343,16 @@ PS_OUT PS_BLEND_RGBTOA_MASK_MAIN(PS_IN In)
 {
     PS_OUT Out = (PS_OUT) 0;
     
+    float2 vDepthTexcoord = (float2) 0.f;
+
+    vDepthTexcoord.x = (In.vProjPos.x / In.vProjPos.w) * 0.5f + 0.5f;
+    vDepthTexcoord.y = (In.vProjPos.y / In.vProjPos.w) * -0.5f + 0.5f;
+
+    vector vDepthDesc = g_DepthTexture.Sample(LinearSampler, vDepthTexcoord);
+    float fOldViewZ = vDepthDesc.y * g_fFar;
+
+    float fViewZ = In.vProjPos.w;
+
     Out.vColor = g_DiffuseTexture.Sample(LinearSampler, Get_SpriteTexcoord(In.vTexcoord));
         
     float2 vTexcoord = In.vTexcoord * g_vTileRepeat + g_vTileMove;
@@ -295,7 +365,8 @@ PS_OUT PS_BLEND_RGBTOA_MASK_MAIN(PS_IN In)
     Out.vColor.rgb *= g_vColor.rgb;
     
     Out.vColor.a *= g_fRatio;
-    
+    Out.vColor.a *= saturate(fOldViewZ - fViewZ);
+
     return Out;
 }
 
@@ -303,6 +374,16 @@ PS_OUT PS_RGBTOA_MASK_MAIN(PS_IN In)
 {
     PS_OUT Out = (PS_OUT) 0;
     
+    float2 vDepthTexcoord = (float2) 0.f;
+
+    vDepthTexcoord.x = (In.vProjPos.x / In.vProjPos.w) * 0.5f + 0.5f;
+    vDepthTexcoord.y = (In.vProjPos.y / In.vProjPos.w) * -0.5f + 0.5f;
+
+    vector vDepthDesc = g_DepthTexture.Sample(LinearSampler, vDepthTexcoord);
+    float fOldViewZ = vDepthDesc.y * g_fFar;
+
+    float fViewZ = In.vProjPos.w;
+
     Out.vColor = g_DiffuseTexture.Sample(LinearSampler, Get_SpriteTexcoord(In.vTexcoord));
         
     float2 vTexcoord = In.vTexcoord * g_vTileRepeat + g_vTileMove;
@@ -311,7 +392,9 @@ PS_OUT PS_RGBTOA_MASK_MAIN(PS_IN In)
     
     Out.vColor.a = max(Out.vColor.r, max(Out.vColor.g, Out.vColor.b));
     Out.vColor *= vMask;
-    if(Out.vColor.a < 0.1f)
+    Out.vColor.a *= saturate(fOldViewZ - fViewZ);
+
+    if (Out.vColor.a < 0.1f)
         discard;
     
     Out.vColor.rgb *= g_vColor.rgb;
@@ -325,6 +408,16 @@ PS_OUT PS_POWERGUARD_MAIN(PS_IN In)
 {
     PS_OUT Out = (PS_OUT) 0;
     
+    float2 vDepthTexcoord = (float2) 0.f;
+
+    vDepthTexcoord.x = (In.vProjPos.x / In.vProjPos.w) * 0.5f + 0.5f;
+    vDepthTexcoord.y = (In.vProjPos.y / In.vProjPos.w) * -0.5f + 0.5f;
+
+    vector vDepthDesc = g_DepthTexture.Sample(LinearSampler, vDepthTexcoord);
+    float fOldViewZ = vDepthDesc.y * g_fFar;
+
+    float fViewZ = In.vProjPos.w;
+
     Out.vColor = g_DiffuseTexture.Sample(LinearSampler, Get_SpriteTexcoord(In.vTexcoord));
     
     Out.vColor.a = max(Out.vColor.r, max(Out.vColor.g, Out.vColor.b));
@@ -334,7 +427,8 @@ PS_OUT PS_POWERGUARD_MAIN(PS_IN In)
     Out.vColor.b = g_vColor.b * Out.vColor.a;;
 
     Out.vColor.a *= g_fRatio;
-    
+    Out.vColor.a *= saturate(fOldViewZ - fViewZ);
+
     return Out;
 }
 
@@ -358,6 +452,20 @@ PS_EFFECT_OUT PS_RGBTOA_MAIN(PS_IN In)
     return Out;
 }
 
+PS_OUT PS_BLEND_GLOW_NONSOFT_MAIN(PS_IN In)
+{
+    PS_OUT Out = (PS_OUT) 0;
+    
+    Out.vColor = g_DiffuseTexture.Sample(LinearSampler, Get_SpriteTexcoord(In.vTexcoord));
+    
+    Out.vColor.a *= g_fRatio;
+
+    Out.vColor.r = 1.f - (1 - g_vColor.r) * (1 - Out.vColor.a);
+    Out.vColor.g = 1.f - (1 - g_vColor.g) * (1 - Out.vColor.a);
+    Out.vColor.b = 1.f - (1 - g_vColor.b) * (1 - Out.vColor.a);
+    
+    return Out;
+}
 
 technique11 DefaultTechnique
 {
@@ -449,7 +557,7 @@ technique11 DefaultTechnique
         PixelShader = compile ps_5_0 PS_BLOOD_MAIN();
     }
 
-    pass DIRT   // 8
+    pass DIRT // 8
     {
         SetRasterizerState(RS_Default);
         SetDepthStencilState(DSS_NonWrite, 0);
@@ -460,7 +568,7 @@ technique11 DefaultTechnique
         PixelShader = compile ps_5_0 PS_BLEND_DIRT_MAIN();
     }
 
-    pass BLEND_MASK   // 9
+    pass BLEND_MASK // 9
     {
         SetRasterizerState(RS_Default);
         SetDepthStencilState(DSS_NonWrite, 0);
@@ -482,7 +590,7 @@ technique11 DefaultTechnique
         PixelShader = compile ps_5_0 PS_POWERGUARD_MAIN();
     }
 
-    pass BLEND_MASK_RGBTOA  // 11
+    pass BLEND_MASK_RGBTOA // 11
     {
         SetRasterizerState(RS_Default);
         SetDepthStencilState(DSS_NonWrite, 0);
@@ -523,7 +631,7 @@ technique11 DefaultTechnique
 
         VertexShader = compile vs_5_0 VS_MAIN();
         GeometryShader = NULL;
-        PixelShader = compile ps_5_0 PS_BLEND_GLOW_MAIN();
+        PixelShader = compile ps_5_0 PS_BLEND_GLOW_NONSOFT_MAIN();
     }
 }
 

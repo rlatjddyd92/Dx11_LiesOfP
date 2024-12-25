@@ -136,6 +136,16 @@ HRESULT CTarget_Manager::Bind_ShaderResource(CShader * pShader, const _wstring &
 	return pRenderTarget->Bind_ShaderResource(pShader, pConstantName);	
 }
 
+HRESULT CTarget_Manager::Bind_ShaderResource_NonVTX(CShader_NonVTX* pShader, const _wstring& strTargetTag, const _char* pConstantName)
+{
+	CRenderTarget* pRenderTarget = Find_RenderTarget(strTargetTag);
+
+	if (nullptr == pRenderTarget)
+		return E_FAIL;
+
+	return pRenderTarget->Bind_ShaderResource_NonVTX(pShader, pConstantName);
+}
+
 HRESULT CTarget_Manager::Bind_UnorderedAccess(CShader* pShader, const _wstring& strTargetTag, const _char* pConstantName)
 {
 	CRenderTarget* pRenderTarget = Find_RenderTarget(strTargetTag);

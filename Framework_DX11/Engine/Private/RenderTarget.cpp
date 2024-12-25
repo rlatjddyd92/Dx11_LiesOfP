@@ -1,6 +1,7 @@
 #include "..\Public\RenderTarget.h"
 
 #include "Shader.h"
+#include "Shader_NonVTX.h"
 #include "VIBuffer_Rect.h"
 
 CRenderTarget::CRenderTarget(ID3D11Device * pDevice, ID3D11DeviceContext * pContext)
@@ -152,6 +153,11 @@ HRESULT CRenderTarget::Initialize_For_Desc(D3D11_BUFFER_DESC* const& pBufferDesc
 }
 
 HRESULT CRenderTarget::Bind_ShaderResource(CShader * pShader, const _char * pConstantName)
+{
+	return pShader->Bind_SRV(pConstantName, m_pSRV);
+}
+
+HRESULT CRenderTarget::Bind_ShaderResource_NonVTX(CShader_NonVTX* pShader, const _char* pConstantName)
 {
 	return pShader->Bind_SRV(pConstantName, m_pSRV);
 }

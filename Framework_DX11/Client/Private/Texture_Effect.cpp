@@ -179,6 +179,10 @@ HRESULT CTexture_Effect::Render()
         return E_FAIL;
     if (FAILED(m_pShaderCom->Bind_RawValue("g_vTileMove", &m_vCurrentTileMove, sizeof m_vCurrentTileMove)))
         return E_FAIL;
+    if (FAILED(m_pShaderCom->Bind_RawValue("g_fFar", &m_pGameInstance->Get_Far(), sizeof(_float))))
+        return E_FAIL;
+    if (FAILED(m_pGameInstance->Bind_RT_ShaderResource(m_pShaderCom, TEXT("Target_Depth"), "g_DepthTexture")))
+        return E_FAIL;
 
     if (FAILED(m_pShaderCom->Begin(m_DefaultDesc.iShaderIndex)))
         return E_FAIL;

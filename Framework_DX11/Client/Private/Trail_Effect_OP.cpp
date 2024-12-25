@@ -121,6 +121,10 @@ HRESULT CTrail_Effect_OP::Render()
 		return E_FAIL;
 	if (FAILED(m_pShaderCom->Bind_RawValue("g_iState", &m_DefaultDesc.iGeomState, sizeof(_uint))))
 		return E_FAIL;
+	if (FAILED(m_pShaderCom->Bind_RawValue("g_fFar", &m_pGameInstance->Get_Far(), sizeof(_float))))
+		return E_FAIL;
+	if (FAILED(m_pGameInstance->Bind_RT_ShaderResource(m_pShaderCom, TEXT("Target_Depth"), "g_DepthTexture")))
+		return E_FAIL;
 
 	if (FAILED(m_pShaderCom->Begin(m_DefaultDesc.iShaderIndex)))
 		return E_FAIL;
