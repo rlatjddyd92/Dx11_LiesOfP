@@ -299,6 +299,7 @@ void CNavigation::Research_Cell(_Vec3 vNewPos, _uint* iIndex)
 			if (vNewPos.y <= fCellBigY + 1.f && vNewPos.y >= fCellSmallY - 1.f)
 			{
 				m_iCurrentCellIndex = i;
+				m_iCurrentAreaIndex = m_Cells[i]->Get_AreaNum();
 				if(iIndex != nullptr)
 					*iIndex = i;
 				return;
@@ -309,6 +310,7 @@ void CNavigation::Research_Cell(_Vec3 vNewPos, _uint* iIndex)
 	}
 
 	m_iCurrentCellIndex = -1;
+	m_iCurrentAreaIndex = 0;
 	if (iIndex != nullptr)
 		*iIndex = -1;
 }
