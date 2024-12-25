@@ -178,6 +178,34 @@ HRESULT CRaxasia_Sword_CutScene::Render()
 	return S_OK;
 }
 
+HRESULT CRaxasia_Sword_CutScene::Render_LightDepth()
+{
+	
+
+	if (FAILED(m_pShaderCom->Bind_Matrix("g_WorldMatrix", &m_WorldMatrix)))
+		return E_FAIL;
+
+	if (FAILED(m_pShaderCom->Bind_Matrices("g_CascadeViewMatrix", m_pGameInstance->Get_CascadeViewMatirx(), 3)))
+		return E_FAIL;
+	if (FAILED(m_pShaderCom->Bind_Matrices("g_CascadeProjMatrix", m_pGameInstance->Get_CascadeProjMatirx(), 3)))
+		return E_FAIL;
+
+	_uint		iNumMeshes = m_pModelCom->Get_NumMeshes();
+
+	for (size_t i = 0; i < iNumMeshes; i++)
+	{
+		m_pModelCom->Bind_MeshBoneMatrices(m_pShaderCom, "g_BoneMatrices", (_uint)i);
+
+		if (FAILED(m_pShaderCom->Begin(3)))
+			return E_FAIL;
+
+		if (FAILED(m_pModelCom->Render((_uint)i)))
+			return E_FAIL;
+	}
+
+	return S_OK;
+}
+
 void CRaxasia_Sword_CutScene::Play_Animation(_char* szAnimationName, _float fSpeedRation)
 {
 	_uint iAnimationIndex = m_pModelCom->Find_AnimationIndex(szAnimationName, fSpeedRation);

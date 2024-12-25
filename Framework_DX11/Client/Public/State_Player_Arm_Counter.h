@@ -37,9 +37,9 @@ private:
     void                Control_Collider();
 
 private:
-    _uint               m_iActiveEffectFrame = {};
+    _int               m_iActiveEffectFrame = {};
     _bool               m_isActiveEffect = {};
-    _uint               m_iDeActiveEffectFrame = {};
+    _int               m_iDeActiveEffectFrame = {};
 
     void                Control_Effect(_int iFrame);
 

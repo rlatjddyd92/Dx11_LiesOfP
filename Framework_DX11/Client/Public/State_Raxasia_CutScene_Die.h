@@ -29,6 +29,7 @@ private:
     _bool               m_isMoveDown = {};
     _bool               m_isPlayWeaponAni = {};
     _bool               m_isBoom = {};
+    _bool               m_isKneeDown = {};
 
     _float              m_fDelay = {};
     _float              m_fBoomTime = {};

@@ -478,7 +478,7 @@ void CUIPage_Stat::Input_LevelUp_Stat()
 	_float fHp = GET_GAMEINTERFACE->Get_Player()->Get_Player_Stat().vGauge_Hp.z;
 	fHp += GET_GAMEINTERFACE->Get_Player()->Get_Player_Stat_Adjust()->vGauge_Hp.z;
 
-	GET_GAMEINTERFACE->Input_Achievment_Data(3, fHp);
+	GET_GAMEINTERFACE->Input_Achievment_Data(3, (_int)fHp);
 
 	GET_GAMEINTERFACE->Input_Achievment_Data(10, 1);
 	_wstring strErgo_Spend_Inform = TEXT("에르고 사용량 : ");

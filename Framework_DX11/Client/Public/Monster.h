@@ -69,8 +69,8 @@ public:
 	virtual _bool		Get_WeaponAnimEnd(_int iAnimIndex) { return false; }
 
 	virtual const _Matrix* Get_BoneCombinedMat(_uint iBoneIndex);
-	virtual const _Matrix* Get_WeaponBoneCombinedMat(_uint iBoneIndex) { return &_Matrix{}; }
-	virtual const _Matrix* Get_WeaponWorldMat() { return &_Matrix{}; }
+	virtual const _Matrix* Get_WeaponBoneCombinedMat(_uint iBoneIndex) { return nullptr; }
+	virtual const _Matrix* Get_WeaponWorldMat() { return nullptr; }
 	
 	virtual _bool		Calc_DamageGain(_float fAtkDmg, _Vec3 vHitPos = { 0.f,0.f,0.f }, _uint iHitType = HIT_END, _uint iAttackStrength = ATK_END, CGameObject* pAttacker = nullptr) override;
 

@@ -47,7 +47,7 @@ private:
     void                Control_Sound();
 
 private:
-    _uint               m_iEffectFrame = {};
+    _int               m_iEffectFrame = {};
     _bool               m_isActiveEffect = {};
 
     void                Control_Effect(_int iFrame);

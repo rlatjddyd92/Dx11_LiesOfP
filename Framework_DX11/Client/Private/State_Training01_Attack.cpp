@@ -22,7 +22,7 @@ HRESULT CState_Training01_Attack::Initialize(_uint iStateNum, void* pArg)
 
 HRESULT CState_Training01_Attack::Start_State(void* pArg)
 {
-    m_pMonster->Change_Animation(m_iAnimation_Attack, true, 0.1);
+    m_pMonster->Change_Animation(m_iAnimation_Attack, true, 0.1f);
 
     return S_OK;
 }

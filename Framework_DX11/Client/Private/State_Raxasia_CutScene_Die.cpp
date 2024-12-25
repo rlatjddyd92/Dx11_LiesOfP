@@ -90,6 +90,15 @@ void CState_Raxasia_CutScene_Die::Update(_float fTimeDelta)
         m_isBoom = true;
     }
 
+    if (!m_isKneeDown && iFrame > 50)
+    {
+        _Vec3 vCurrentPos = m_pMonster->Get_Transform()->Get_State(CTransform::STATE_POSITION);
+        vCurrentPos.y -= 1.2f;
+
+        CEffect_Manager::Get_Instance()->Add_Effect_ToLayer_Rot(LEVEL_GAMEPLAY, TEXT("Raxasia_CutScene_Weapon_DriveGround"), vCurrentPos);
+        m_isKneeDown = true;
+    }
+
 
     Control_Dialog(iFrame);
 }

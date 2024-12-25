@@ -170,6 +170,7 @@
     <Text Include="ReadMe.txt" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="..\Public\Achievment_DataLine.h" />
     <ClInclude Include="..\Public\AObj_BlackBall.h" />
     <ClInclude Include="..\Public\AObj_ChargeSwing.h" />
     <ClInclude Include="..\Public\AObj_GodHands.h" />
@@ -301,14 +302,15 @@
     <ClInclude Include="..\Public\State_RebornerMale_Kick.h" />
     <ClInclude Include="..\Public\State_RebornerMale_KnockBack.h" />
     <ClInclude Include="..\Public\State_RebornerMale_RapidFire.h" />
-    <ClInclude Include="..\Public\State_RebornerMale_Reaload.h" />
     <ClInclude Include="..\Public\State_RebornerMale_Reload.h" />
     <ClInclude Include="..\Public\State_SimonManusP2_Die_Talking.h" />
     <ClInclude Include="..\Public\State_Training01_Attack.h" />
     <ClInclude Include="..\Public\State_Training01_Idle.h" />
     <ClInclude Include="..\Public\State_Training02_Idle.h" />
+    <ClInclude Include="..\Public\Statistic_Data.h" />
     <ClInclude Include="..\Public\SteelHeart.h" />
     <ClInclude Include="..\Public\TorchDeck.h" />
+    <ClInclude Include="..\Public\UIPage_Achievment.h" />
     <ClInclude Include="..\Public\UIPage_Chest.h" />
     <ClInclude Include="..\Public\UIPage_Shop.h" />
     <ClInclude Include="..\Public\UIPage_Telepot.h" />
@@ -530,6 +532,7 @@
     <ClInclude Include="UI_Enum.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="..\Private\Achievment_DataLine.cpp" />
     <ClCompile Include="..\Private\AObj_BlackBall.cpp" />
     <ClCompile Include="..\Private\AObj_ChargeSwing.cpp" />
     <ClCompile Include="..\Private\AObj_GodHands.cpp" />
@@ -661,14 +664,15 @@
     <ClCompile Include="..\Private\State_RebornerMale_Kick.cpp" />
     <ClCompile Include="..\Private\State_RebornerMale_KnockBack.cpp" />
     <ClCompile Include="..\Private\State_RebornerMale_RapidFire.cpp" />
-    <ClCompile Include="..\Private\State_RebornerMale_Reaload.cpp" />
     <ClCompile Include="..\Private\State_RebornerMale_Reload.cpp" />
     <ClCompile Include="..\Private\State_SimonManusP2_Die_Talking.cpp" />
     <ClCompile Include="..\Private\State_Training01_Attack.cpp" />
     <ClCompile Include="..\Private\State_Training01_Idle.cpp" />
     <ClCompile Include="..\Private\State_Training02_Idle.cpp" />
+    <ClCompile Include="..\Private\Statistic_Data.cpp" />
     <ClCompile Include="..\Private\SteelHeart.cpp" />
     <ClCompile Include="..\Private\TorchDeck.cpp" />
+    <ClCompile Include="..\Private\UIPage_Achievment.cpp" />
     <ClCompile Include="..\Private\UIPage_Chest.cpp" />
     <ClCompile Include="..\Private\UIPage_Shop.cpp" />
     <ClCompile Include="..\Private\UIPage_Telepot.cpp" />

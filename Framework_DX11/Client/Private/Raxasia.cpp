@@ -616,6 +616,8 @@ void CRaxasia::End_CutScene(_uint iCutSceneNum)
 
 		ChangePhase();
 
+		DeActive_Effect(CRaxasia::EFFECT_INCHENTSWORD_CUTSCENE);
+
 		m_isCutScene = false;
 	}
 	else if (m_pCutSceneFsmCom->Get_CurrentState() == STATE_DIE)

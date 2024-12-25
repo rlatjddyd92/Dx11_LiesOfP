@@ -1317,7 +1317,7 @@
     </Filter>
     <Filter Include="05.Fsm\Monster\RebornerMale\Attack\Route\Reload">
       <UniqueIdentifier>{046e9495-1cea-4eb2-8f65-1bb11f7d5734}</UniqueIdentifier>
-	</Filter>
+    </Filter>
     <Filter Include="03.GameInterface_Controller\00.UIManager\00.UIPage\19.UIPage_Achievment">
       <UniqueIdentifier>{55ad63cd-869a-4859-9b55-21d323d9e4da}</UniqueIdentifier>
     </Filter>
@@ -2405,9 +2405,6 @@
     <ClInclude Include="..\Public\State_RebornerMale_KnockBack.h">
       <Filter>05.Fsm\Monster\RebornerMale\KnockBack</Filter>
     </ClInclude>
-    <ClInclude Include="..\Public\State_RebornerMale_RapidFire.h">
-      <Filter>05.Fsm\Monster\RebornerMale\Attack\Route\RapidFire</Filter>
-    </ClInclude>
     <ClInclude Include="..\Public\Weapon_RebornerMale_Gun.h">
       <Filter>02.GameObjects\06.Weapon\04.RebornerMale</Filter>
     </ClInclude>
@@ -2415,15 +2412,17 @@
       <Filter>02.GameObjects\02.Pawn\01.Monster\Normal\RebornerMale</Filter>
     </ClInclude>
     <ClInclude Include="..\Public\State_RebornerMale_RapidFire.h" />
-    <ClInclude Include="..\Public\State_RebornerMale_Reaload.h" />
-    <ClInclude Include="..\Public\State_RebornerMale_Reload.h">
-      <Filter>05.Fsm\Monster\RebornerMale\Attack\Route\Reload</Filter>
-	</ClInclude>
+    <ClInclude Include="..\Public\State_RebornerMale_RapidFire.h">
+      <Filter>05.Fsm\Monster\RebornerMale\Attack\Route\RapidFire</Filter>
+    </ClInclude>
     <ClInclude Include="..\Public\UIPage_Achievment.h">
       <Filter>03.GameInterface_Controller\00.UIManager\00.UIPage\19.UIPage_Achievment</Filter>
     </ClInclude>
     <ClInclude Include="..\Public\Achievment_DataLine.h">
       <Filter>03.GameInterface_Controller\00.UIManager\00.UIPage\19.UIPage_Achievment\Data</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Public\State_RebornerMale_Reload.h">
+      <Filter>05.Fsm\Monster\RebornerMale\Attack\Route\Reload</Filter>
     </ClInclude>
     <ClInclude Include="..\Public\Statistic_Data.h">
       <Filter>03.GameInterface_Controller\00.UIManager\00.UIPage\19.UIPage_Achievment\Status</Filter>
@@ -3476,9 +3475,6 @@
     <ClCompile Include="..\Private\State_RebornerMale_KnockBack.cpp">
       <Filter>05.Fsm\Monster\RebornerMale\KnockBack</Filter>
     </ClCompile>
-    <ClCompile Include="..\Private\State_RebornerMale_RapidFire.cpp">
-      <Filter>05.Fsm\Monster\RebornerMale\Attack\Route\RapidFire</Filter>
-    </ClCompile>
     <ClCompile Include="..\Private\RebornerMale.cpp">
       <Filter>02.GameObjects\02.Pawn\01.Monster\Normal\RebornerMale</Filter>
     </ClCompile>
@@ -3486,15 +3482,17 @@
       <Filter>02.GameObjects\06.Weapon\04.RebornerMale</Filter>
     </ClCompile>
     <ClCompile Include="..\Private\State_RebornerMale_RapidFire.cpp" />
-    <ClCompile Include="..\Private\State_RebornerMale_Reaload.cpp" />
-    <ClCompile Include="..\Private\State_RebornerMale_Reload.cpp">
-      <Filter>05.Fsm\Monster\RebornerMale\Attack\Route\Reload</Filter>
-	</ClCompile>
+    <ClCompile Include="..\Private\State_RebornerMale_RapidFire.cpp">
+      <Filter>05.Fsm\Monster\RebornerMale\Attack\Route\RapidFire</Filter>
+    </ClCompile>
     <ClCompile Include="..\Private\UIPage_Achievment.cpp">
       <Filter>03.GameInterface_Controller\00.UIManager\00.UIPage\19.UIPage_Achievment</Filter>
     </ClCompile>
     <ClCompile Include="..\Private\Achievment_DataLine.cpp">
       <Filter>03.GameInterface_Controller\00.UIManager\00.UIPage\19.UIPage_Achievment\Data</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Private\State_RebornerMale_Reload.cpp">
+      <Filter>05.Fsm\Monster\RebornerMale\Attack\Route\Reload</Filter>
     </ClCompile>
     <ClCompile Include="..\Private\Statistic_Data.cpp">
       <Filter>03.GameInterface_Controller\00.UIManager\00.UIPage\19.UIPage_Achievment\Status</Filter>

@@ -38,7 +38,7 @@ HRESULT CState_RaxasiaP2_Declare_War::Start_State(void* pArg)
     m_bHovering = false;
     m_bEndFire = false;
 
-    m_iThunderCnt = 0.f;
+    m_iThunderCnt = 0;
     m_fTimeStack_ThunderBolt = 0.f;
     m_fTimeStack_Lightning = 0.f;
 
@@ -216,7 +216,7 @@ void CState_RaxasiaP2_Declare_War::Effect_Check(_double CurTrackPos, _float fTim
 
                 CAttackObject::ATKOBJ_DESC Desc;
 
-                Desc.vPos = { m_pMonster->Get_Transform()->Get_State(CTransform::STATE_POSITION) };
+                Desc.vPos = (_Vec3)m_pMonster->Get_Transform()->Get_State(CTransform::STATE_POSITION);
                 Desc.vPos.y = m_fHeight;
 
                 _float fvariableX = m_pGameInstance->Get_Random(0.f, 7.f) - 3.5f;
