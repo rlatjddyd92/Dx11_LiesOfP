@@ -34,10 +34,29 @@ void CFsm::Update(_float fTimeDelta)
 void CFsm::Release_States()
 {
 	for (auto& iter : m_States)
-		Safe_Release(iter);
+	{
+		if (iter)
+		{
+			Safe_Release(iter);
+			iter = nullptr;
+		}
+	}
 
-	Safe_Release(m_pNowState);
-	Safe_Release(m_pPreState);
+
+	if (m_pPreState != m_pNowState)
+	{
+		if (m_pPreState)
+		{
+			Safe_Release(m_pPreState);
+			m_pPreState = nullptr;
+		}
+	}
+
+	if (m_pNowState)
+	{
+		Safe_Release(m_pNowState);
+		m_pNowState = nullptr;
+	}
 
 	m_States.clear();
 }

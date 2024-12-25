@@ -110,6 +110,7 @@ public:
     _int            Get_UFBIndex(_uint UFB_Type);
 
     _Vec4            Calc_CenterPos(_bool isUsingBone = false);
+    _Vec3            Calc_BoneWorldPos(const _char* szBoneName);
 
 protected:
     class CShader* m_pShaderCom = { nullptr };

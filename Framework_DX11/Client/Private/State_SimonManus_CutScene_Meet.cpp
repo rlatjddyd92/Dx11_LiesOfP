@@ -6,6 +6,7 @@
 #include "CutScene.h"
 
 #include "GameInterface_Controller.h"
+#include "Effect_Manager.h"
 
 CState_SimonManus_CutScene_Meet::CState_SimonManus_CutScene_Meet(CFsm* pFsm, CMonster* pMonster)
     :CState{ pFsm }
@@ -18,6 +19,11 @@ HRESULT CState_SimonManus_CutScene_Meet::Initialize(_uint iStateNum, void* pArg)
     
     m_iStateNum = iStateNum;
     //CSimonManus::FSMSTATE_DESC* pDesc = static_cast<CSimonManus::FSMSTATE_DESC*>(pArg);
+
+    m_iBreathFrame[0] = 300;
+    m_iBreathFrame[1] = 350;
+    m_iBreathFrame[2] = 400;
+
 
     return S_OK;
 }
@@ -91,6 +97,7 @@ void CState_SimonManus_CutScene_Meet::Update(_float fTimeDelta)
         }
     }
 
+    Control_Effect(iFrame);
     Control_Dialog(iFrame);
     End_Check(fTimeDelta);
 }
@@ -159,6 +166,77 @@ void CState_SimonManus_CutScene_Meet::Control_Dialog(_int iFrame)
         GET_GAMEINTERFACE->Show_Script(TEXT("이제 태어날 너희의 신을 경배하라!"), TEXT("none"), 8.f);
         m_isShowDialog[4] = true;
     }
+}
+
+void CState_SimonManus_CutScene_Meet::Control_Effect(_int iFrame)
+{
+    _uint iCurAnim = m_pMonster->Get_CurrentAnimIndex();
+    if (iCurAnim == m_iAnimation_Turn)
+    {
+        for (_uint i = 0; i < 3; ++i)
+        {
+            if (!m_isBreath[i] && iFrame >= m_iBreathFrame[i])
+            {
+                _Vec3 vCurrentPos = m_pMonster->Calc_BoneWorldPos("Manus_facial_52");
+                vCurrentPos.y += 0.05f;
+
+                CEffect_Manager::Get_Instance()->Add_Effect_ToLayer_Rot(LEVEL_GAMEPLAY, TEXT("SimonManus_CutScene_Blow"), vCurrentPos);
+
+                m_isBreath[i] = true;
+            }
+        }
+
+        if (!m_isSpit[0] && iFrame >= 0)
+        {
+            _Vec3 vCurrentPos = m_pMonster->Calc_BoneWorldPos("Manus_facial_52");
+
+            // loop인데 아닌걸로 고치기
+            CEffect_Manager::Get_Instance()->Add_Effect_ToLayer_Rot(LEVEL_GAMEPLAY, TEXT("SimonManus_CutScene_Spit"), vCurrentPos);
+
+            m_isSpit[0] = true;
+        }
+    }
+    else if (iCurAnim == m_iAnimation_Hand)
+    {
+        if (!m_isKneeDown && iFrame >= 81)
+        {
+            _Vec3 vCurrentPos = m_pMonster->Calc_BoneWorldPos("Bn_R_Knee");
+            vCurrentPos.y -= 0.1f;
+
+            CEffect_Manager::Get_Instance()->Add_Effect_ToLayer_Rot(LEVEL_GAMEPLAY, TEXT("SimonManus_CutScene_SmallSmoke"), vCurrentPos);
+
+            m_isKneeDown = true;
+        }
+        else if (!m_isFoot[0] && iFrame >= 598)
+        {
+            _Vec3 vCurrentPos = m_pMonster->Calc_BoneWorldPos("Bip001-R-Toe0");
+
+            CEffect_Manager::Get_Instance()->Add_Effect_ToLayer_Rot(LEVEL_GAMEPLAY, TEXT("SimonManus_CutScene_SmallSmoke"), vCurrentPos);
+
+            m_isFoot[0] = true;
+        }
+    }
+    else if (iCurAnim == m_iAnimation_End)
+    {
+        if (!m_isFoot[1] && iFrame >= 111)
+        {
+            _Vec3 vCurrentPos = m_pMonster->Calc_BoneWorldPos("Bip001-L-Toe0");
+
+            CEffect_Manager::Get_Instance()->Add_Effect_ToLayer_Rot(LEVEL_GAMEPLAY, TEXT("SimonManus_CutScene_SmallSmoke"), vCurrentPos);
+
+            m_isFoot[1] = true;
+        }
+        else if (!m_isFoot[2] && iFrame >= 160)
+        {
+            _Vec3 vCurrentPos = m_pMonster->Calc_BoneWorldPos("Bip001-R-Toe0");
+
+            CEffect_Manager::Get_Instance()->Add_Effect_ToLayer_Rot(LEVEL_GAMEPLAY, TEXT("SimonManus_CutScene_SmallSmoke"), vCurrentPos);
+
+            m_isFoot[2] = true;
+        }
+
+    }
+
 }
 
 CState_SimonManus_CutScene_Meet* CState_SimonManus_CutScene_Meet::Create(CFsm* pFsm, CMonster* pMonster, _uint iStateNum, void* pArg)

@@ -81,8 +81,6 @@ void CState_Raxasia_CutScene_Meet::Update(_float fTimeDelta)
         m_isGround = true;
     }
 
-
-
     if (!m_isPlayWeaponAni && iFrame > 470)
     {
         //m_pCutSceneWeapon->Stop_UpdatePos();

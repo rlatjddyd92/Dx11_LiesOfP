@@ -149,26 +149,6 @@ void CState_Raxasia_CutScene_Phase2::Update(_float fTimeDelta)
 
         m_isChangeRealWeapon = true;
     }
-    
-
-    if (iFrame > 15)
-    {
-        //m_pMonster->Stop_Animation();
-        //dynamic_cast<CWeapon_Raxasia_P2_Shield*>(m_pShieldWeapon)->Set_Test();
-    }
-     
-    // 
-    // 
-    //m_fDelay += fTimeDelta;
-    //if (m_fDelay >= 0.1f && !m_isStartCutScene)
-    //{
-    //    m_pMonster->Play_Animation();
-    //    m_isStartCutScene = true;
-    //}
-    //else if (m_fDelay < 16.f)
-    //{
-    //    m_pMonster->Stop_Animation();
-    //}
 
     Stop_Play_Animation(iFrame, fTimeDelta);
 
@@ -188,8 +168,8 @@ void CState_Raxasia_CutScene_Phase2::Update(_float fTimeDelta)
     m_vRootMoveStack = vMove;
 
     Control_Effect(iFrame);
-    End_Check();
     Control_Dialog(iFrame);
+    End_Check();
 }
 
 void CState_Raxasia_CutScene_Phase2::End_State()

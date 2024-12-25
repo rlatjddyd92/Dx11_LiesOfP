@@ -20,6 +20,9 @@ HRESULT CState_SimonManus_CutScene_Phase2::Initialize(_uint iStateNum, void* pAr
     m_iStateNum = iStateNum;
     //CSimonManus::FSMSTATE_DESC* pDesc = static_cast<CSimonManus::FSMSTATE_DESC*>(pArg);
 
+    m_iKneeFrame[0] = 87;
+    m_iKneeFrame[1] = 90;
+
     return S_OK;
 }
 
@@ -130,26 +133,14 @@ void CState_SimonManus_CutScene_Phase2::Update(_float fTimeDelta)
             m_pMonster->Play_Animation();
         }
 
-    //ÀÌÆåÆ®
-        if (!m_isCreateDome && m_fStopedTimer > 1.5f)
-        {
-            CEffect_Manager::Get_Instance()->Add_Effect_ToLayer(LEVEL_GAMEPLAY, TEXT("Map_SimonManus_2P"));
-            m_isCreateDome = true;
-        }
-
-        if (!m_isDistortionHand && iFrame > 1655)
-        {
-            CEffect_Manager::Get_Instance()->Add_Effect_ToLayer(LEVEL_GAMEPLAY, TEXT("SimonManus_ConnectGod"), _Vec3(0.f, 3.2f, 0.6f));
-            m_isDistortionHand = true;
-        }
-        else if (iCurAnimIndex == m_iAnimation_Begod && m_isDistortionHand)
+        if (iCurAnimIndex == m_iAnimation_Begod && m_isDistortionHand)
         {
             m_pMonster->Set_EmissiveMask(0.5f);
         }
 
-
     }
 
+    Control_Effect(iFrame);
     Control_Dialog(iFrame);
 }
 
@@ -200,6 +191,77 @@ void CState_SimonManus_CutScene_Phase2::Control_Dialog(_int iFrame)
             m_isShowDialog[1] = true;
         }
     }
+}
+
+void CState_SimonManus_CutScene_Phase2::Control_Effect(_int iFrame)
+{
+    _uint iCurAnim = m_pMonster->Get_CurrentAnimIndex();
+
+    if (!m_isChangePhase2)
+    {
+        if (iCurAnim == m_iAnimation_Change)
+        {
+            if (!m_isKneeDown[0] && iFrame >= 85)
+            {
+                _Vec3 vCurrentPos = m_pMonster->Calc_BoneWorldPos("Bn_R_Knee");
+                vCurrentPos.y -= 0.1f;
+
+                CEffect_Manager::Get_Instance()->Add_Effect_ToLayer_Rot(LEVEL_GAMEPLAY, TEXT("SimonManus_CutScene_SmallSmoke"), vCurrentPos);
+
+                m_isKneeDown[0] = true;
+            }
+            else if (!m_isKneeDown[1] && iFrame >= 98)
+            {
+                _Vec3 vCurrentPos = m_pMonster->Calc_BoneWorldPos("Bn_L_Knee");
+                vCurrentPos.y -= 0.1f;
+
+                CEffect_Manager::Get_Instance()->Add_Effect_ToLayer_Rot(LEVEL_GAMEPLAY, TEXT("SimonManus_CutScene_SmallSmoke"), vCurrentPos);
+
+                m_isKneeDown[1] = true;
+            }
+            else if (!m_isHandSmoke && iFrame >= 95)
+            {
+                _Vec3 vCurrentPos = m_pMonster->Calc_BoneWorldPos("Bn_Body_14");
+                vCurrentPos.y -= 0.1f;
+
+                CEffect_Manager::Get_Instance()->Add_Effect_ToLayer_Rot(LEVEL_GAMEPLAY, TEXT("SimonManus_CutScene_SmallSmoke"), vCurrentPos);
+
+                m_isHandSmoke = true;
+            }
+        }
+    }
+    else
+    {
+        if (!m_isCreateDome && m_fStopedTimer > 1.5f)
+        {
+            m_pMonster->Active_Effect(CSimonManus::CUTSCENE_P2_MAP);
+
+            m_isCreateDome = true;
+        }
+
+        if (!m_isDistortionHand && iFrame > 1655)
+        {
+            CEffect_Manager::Get_Instance()->Add_Effect_ToLayer(LEVEL_GAMEPLAY, TEXT("SimonManus_ConnectGod"), _Vec3(0.f, 3.2f, 0.6f));
+            m_isDistortionHand = true;
+        }
+
+        if (!m_isAura && iCurAnim == m_iAnimation_Begod && m_isDistortionHand)
+        {
+            for (_uint i = 0; i < 5; ++i)
+            {
+                m_pMonster->Active_Effect(CSimonManus::CUTSCENE_P2_ARM_AURA00 +i);
+            }
+
+            m_isAura = true;
+        }
+        else if (!m_isParticle && iFrame >= 50 && m_isDistortionHand)
+        {
+            m_pMonster->Active_Effect(CSimonManus::CUTSCENE_P2_ARM_PARTICLE);
+
+            m_isParticle = true;
+        }
+    }
+
 }
 
 CState_SimonManus_CutScene_Phase2* CState_SimonManus_CutScene_Phase2::Create(CFsm* pFsm, CMonster* pMonster, _uint iStateNum, void* pArg)

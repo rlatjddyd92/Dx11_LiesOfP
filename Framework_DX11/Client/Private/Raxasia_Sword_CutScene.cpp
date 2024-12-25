@@ -117,6 +117,7 @@ void CRaxasia_Sword_CutScene::Late_Update(_float fTimeDelta)
 	}
 
 	m_pGameInstance->Add_RenderObject(CRenderer::RG_NONBLEND, this);
+	m_pGameInstance->Add_RenderObject(CRenderer::RG_SHADOWOBJ, this);
 }
 
 HRESULT CRaxasia_Sword_CutScene::Render()

@@ -270,6 +270,23 @@ _Vec4 CPawn::Calc_CenterPos(_bool isUsingBone)
 	return vPos;
 }
 
+_Vec3 CPawn::Calc_BoneWorldPos(const _char* szBoneName)
+{
+	if (nullptr == m_pModelCom)
+		return m_pTransformCom->Get_State(CTransform::STATE_POSITION);
+
+	_Matrix WorldMatrix;
+	_matrix SocketMatrix = m_pModelCom->Get_BoneCombindTransformationMatrix(szBoneName);
+
+	for (size_t i = 0; i < 3; i++)
+	{
+		SocketMatrix.r[i] = XMVector3Normalize(SocketMatrix.r[i]);
+	}
+	XMStoreFloat4x4(&WorldMatrix, SocketMatrix * XMLoadFloat4x4(&m_pTransformCom->Get_WorldMatrix()));
+
+	return WorldMatrix.Translation();
+}
+
 HRESULT CPawn::Bind_WorldViewProj()
 {
 	if (FAILED(m_pTransformCom->Bind_ShaderResource(m_pShaderCom, "g_WorldMatrix")))

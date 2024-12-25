@@ -48,6 +48,16 @@ private:
 
     void                Control_Dialog(_int iFrame);
 
+private:
+    _bool               m_isKneeDown[2] = { false };
+    _bool               m_isHandSmoke = { false };
+    _bool               m_isAura = { false };
+    _bool               m_isParticle = { false };
+
+    _int                m_iKneeFrame[2] = {};
+
+    void                Control_Effect(_int iFrame);
+
 public:
     static CState_SimonManus_CutScene_Phase2* Create(class CFsm* pFsm, class CMonster* pMonster, _uint iStateNum, void* pArg = nullptr);
     virtual void Free() override;

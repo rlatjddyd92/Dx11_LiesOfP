@@ -45,6 +45,16 @@ private:
 
     void                Control_Dialog(_int iFrame);
 
+private:
+    _bool               m_isSpit[2] = { false, };
+    _bool               m_isBreath[3] = { false, };
+    _bool               m_isKneeDown = { false };
+    _bool               m_isFoot[3] = { false, };
+
+    _int                m_iBreathFrame[3] = {};
+
+    void                Control_Effect(_int iFrame);
+
 public:
     static CState_SimonManus_CutScene_Meet* Create(class CFsm* pFsm, class CMonster* pMonster, _uint iStateNum, void* pArg = nullptr);
     virtual void Free() override;
