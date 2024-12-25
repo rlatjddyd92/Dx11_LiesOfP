@@ -148,7 +148,7 @@ void CWeapon_Rapier::OnCollisionEnter(CGameObject* pOther)
 				vPlayerLook.Normalize();
 
 				CEffect_Manager::Get_Instance()->Add_Effect_ToLayer(LEVEL_GAMEPLAY, TEXT("Player_Attack_Step_Normal"),
-					(_Vec3)pMonster->Calc_CenterPos(), m_vAttackDir);
+					(_Vec3)pMonster->Calc_CenterPos(), vPlayerLook);
 
 				CEffect_Manager::Get_Instance()->Add_Effect_ToLayer(LEVEL_GAMEPLAY, TEXT("Player_Attack_Blood_Rapier"),
 					m_pParentMatrix, m_pSocketMatrix);
