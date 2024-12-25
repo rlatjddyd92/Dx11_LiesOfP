@@ -666,6 +666,11 @@ HRESULT CGameInstance::Bind_RT_ShaderResource(CShader * pShader, const _wstring 
 	return m_pTarget_Manager->Bind_ShaderResource(pShader, strTargetTag, pConstantName);
 }
 
+HRESULT CGameInstance::Bind_ShaderResource_NonVTX(CShader_NonVTX* pShader, const _wstring& strTargetTag, const _char* pConstantName)
+{
+	return m_pTarget_Manager->Bind_ShaderResource_NonVTX(pShader, strTargetTag, pConstantName);
+}
+
 HRESULT CGameInstance::BInd_RT_UnorderedView(CShader* pShader, const _wstring& strTargetTag, const _char* pConstantName)
 {
 	return m_pTarget_Manager->Bind_UnorderedAccess(pShader, strTargetTag, pConstantName);

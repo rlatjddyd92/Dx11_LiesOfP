@@ -8,6 +8,7 @@ texture2D g_DiffuseTexture;
 texture2D g_MaskTexture_1;
 texture2D g_MaskTexture_2;
 texture2D g_NormalTexture;
+texture2D g_DepthTexture;
 
 vector g_vCamPosition;
 float4 g_vColor;
@@ -15,6 +16,8 @@ float g_fScale;
 int g_iState;
 float2 g_vTexDivide;
 float g_fSpriteSpeed;
+
+float g_fFar;
 
 struct VS_IN
 {
@@ -67,6 +70,7 @@ struct GS_OUT
     float4 vPosition : SV_POSITION;
     float2 vTexcoord : TEXCOORD0;
     float2 vLifeTime : TEXCOORD1;
+    float4 vProjPos : TEXCOORD2;
 };
 
 [maxvertexcount(6)] // ²À ÇØÁà¾ß ÇÔ. Á¡À» ¸î ¹ø ÂïÀ» °ÇÁö.(ÀÎµ¦½º °¹¼ö)
@@ -117,6 +121,11 @@ void GS_MAIN(point GS_IN In[1], inout TriangleStream<GS_OUT> Container)
     Out[2].vPosition = mul(Out[2].vPosition, matVP);
     Out[3].vPosition = mul(Out[3].vPosition, matVP);
 
+    Out[0].vProjPos = Out[0].vPosition;
+    Out[1].vProjPos = Out[1].vPosition;
+    Out[2].vProjPos = Out[2].vPosition;
+    Out[3].vProjPos = Out[3].vPosition;
+
     Container.Append(Out[0]);
     Container.Append(Out[1]);
     Container.Append(Out[2]);
@@ -133,6 +142,7 @@ struct PS_IN
     float4 vPosition : SV_POSITION;
     float2 vTexcoord : TEXCOORD0;
     float2 vLifeTime : TEXCOORD1;
+    float4 vProjPos : TEXCOORD2;
 };
 
 struct PS_OUT
@@ -175,6 +185,16 @@ PS_OUT PS_BLEND_MAIN(PS_IN In)
 {
     PS_OUT Out = (PS_OUT) 0;
     
+    float2 vDepthTexcoord = (float2) 0.f;
+
+    vDepthTexcoord.x = (In.vProjPos.x / In.vProjPos.w) * 0.5f + 0.5f;
+    vDepthTexcoord.y = (In.vProjPos.y / In.vProjPos.w) * -0.5f + 0.5f;
+
+    vector vDepthDesc = g_DepthTexture.Sample(LinearSampler, vDepthTexcoord);
+    float fOldViewZ = vDepthDesc.y * g_fFar;
+
+    float fViewZ = In.vProjPos.w;
+
     int iTexIndex = (int) ((In.vLifeTime.y / In.vLifeTime.x) * (g_vTexDivide.x * g_vTexDivide.y - 1.f) * g_fSpriteSpeed);
 
     Out.vColor = g_DiffuseTexture.Sample(LinearSampler, Get_SpriteTexcoord(In.vTexcoord, iTexIndex));
@@ -186,7 +206,8 @@ PS_OUT PS_BLEND_MAIN(PS_IN In)
         discard;
     
     Out.vColor.rgb *= g_vColor.rgb;
-    
+    Out.vColor.a *= saturate(fOldViewZ - fViewZ);
+
     return Out;
 }
 
@@ -219,6 +240,16 @@ PS_OUT PS_FIRE_BLEND_MAIN(PS_IN In)
 {
     PS_OUT Out = (PS_OUT) 0;
     
+    float2 vDepthTexcoord = (float2) 0.f;
+
+    vDepthTexcoord.x = (In.vProjPos.x / In.vProjPos.w) * 0.5f + 0.5f;
+    vDepthTexcoord.y = (In.vProjPos.y / In.vProjPos.w) * -0.5f + 0.5f;
+
+    vector vDepthDesc = g_DepthTexture.Sample(LinearSampler, vDepthTexcoord);
+    float fOldViewZ = vDepthDesc.y * g_fFar;
+
+    float fViewZ = In.vProjPos.w;
+
     if (In.vLifeTime.x < In.vLifeTime.y)
         discard;
     
@@ -230,6 +261,7 @@ PS_OUT PS_FIRE_BLEND_MAIN(PS_IN In)
 
     Out.vColor.a = max(Out.vColor.r, max(Out.vColor.g, Out.vColor.b));
     Out.vColor.a *= 1.f - (In.vLifeTime.y / In.vLifeTime.x);
+    Out.vColor.a *= saturate(fOldViewZ - fViewZ);
 
     if (Out.vColor.a < 0.1f)
         discard;
