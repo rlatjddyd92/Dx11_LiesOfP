@@ -43,6 +43,11 @@ HRESULT CAchievment_DataLine::Initialize_Data(vector<struct CUIPage::UIPART_INFO
 			m_vecPopup_DescCtrl.push_back(iter);
 	}
 
+	m_vBackColor_Origin = m_vecBackCtrl[1]->fTextureColor;
+	m_vIconColor_Origin = m_vecIconCtrl.back()->fTextureColor;
+	m_vTitleColor_Origin = m_vecTitleCtrl.back()->fTextColor;
+	m_vDescColor_Origin = m_vecDescCtrl.back()->fTextColor;
+
 	return S_OK;
 }
 
@@ -91,7 +96,24 @@ void CAchievment_DataLine::Set_Before_LineRender(_float fAdjustY, _float fAlpha)
 	m_vecResultCtrl.back()->strText = m_bIsComplete == true ? TEXT("含失") : TEXT("耕含失");
 
 	Set_LinePart();
+	
+	if (m_bIsComplete == false)
+	{
+		m_vecBackCtrl[1]->fTextureColor = { 0.3f,0.3f,0.3f,1.f };
+		m_vecIconCtrl.back()->fTextureColor = { 0.3f,0.3f,0.3f,1.f };
+		m_vecTitleCtrl.back()->fTextColor = { 0.2f,0.2f,0.2f,1.f };
+		m_vecDescCtrl.back()->fTextColor = { 0.1f,0.1f,0.1f,1.f };
+	}
+
 	Render_Line(fAlpha);
+
+	if (m_bIsComplete == false)
+	{
+		m_vecBackCtrl[1]->fTextureColor = m_vBackColor_Origin;
+		m_vecIconCtrl.back()->fTextureColor = m_vIconColor_Origin;
+		m_vecTitleCtrl.back()->fTextColor = m_vTitleColor_Origin;
+		m_vecDescCtrl.back()->fTextColor = m_vDescColor_Origin;
+	}
 
 	m_vecBackCtrl.front()->fPosition.y -= -fAdjustY + m_fPosY_By_Index;
 }
@@ -135,13 +157,7 @@ void CAchievment_DataLine::Set_PopupPart()
 
 void CAchievment_DataLine::Render_Line(_float fAlpha)
 {
-	_Vec4 vOrigin = m_vecBackCtrl[1]->fTextureColor;
-	if (m_bIsComplete == false)
-	{
-		m_vecBackCtrl[1]->fTextureColor = { 0.4f,0.4f,0.4f,1.f };
-	}
 	Render_PartArray(&m_vecBackCtrl, false);
-	m_vecBackCtrl[1]->fTextureColor = vOrigin;
 	Render_PartArray(&m_vecIconCtrl, false);
 	Render_PartArray(&m_vecTitleCtrl, false);
 	Render_PartArray(&m_vecDescCtrl, false);

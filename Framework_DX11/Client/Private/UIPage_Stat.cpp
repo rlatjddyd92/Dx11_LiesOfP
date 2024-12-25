@@ -471,13 +471,22 @@ void CUIPage_Stat::Input_LevelUp_Stat()
 
 	for (_int i = 0; i < 9; ++i)
 		m_iLevelUp_Buffer_Stat[i] = 0.f;
+	
+	GET_GAMEINTERFACE->Input_Achievment_Data(0, m_iUsing_Point_Now * iCost);
+	GET_GAMEINTERFACE->Input_Achievment_Data(10, 1);
 
-	m_iUsing_Point_Now = 0;
+	_float fHp = GET_GAMEINTERFACE->Get_Player()->Get_Player_Stat().vGauge_Hp.z;
+	fHp += GET_GAMEINTERFACE->Get_Player()->Get_Player_Stat_Adjust()->vGauge_Hp.z;
 
+	GET_GAMEINTERFACE->Input_Achievment_Data(3, fHp);
+
+	GET_GAMEINTERFACE->Input_Achievment_Data(10, 1);
 	_wstring strErgo_Spend_Inform = TEXT("에르고 사용량 : ");
 	strErgo_Spend_Inform += to_wstring(m_iUsing_Point_Now * iCost);
 
 	GET_GAMEINTERFACE->Show_Popup(TEXT("레벨 업 성공"), strErgo_Spend_Inform);
+
+	m_iUsing_Point_Now = 0;
 }
 
 CUIPage_Stat* CUIPage_Stat::Create(ID3D11Device* pDevice, ID3D11DeviceContext* pContext)

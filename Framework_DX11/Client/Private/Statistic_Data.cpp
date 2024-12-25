@@ -165,9 +165,9 @@ void CStatistic_Data::Update_Statistic_Line(_float fAlpha)
 
 	for (_int i = 0; i < m_vecStatic.size(); ++i)
 	{
-		if (i > 0)
+		if (i > 1)
 			m_vecStatic[i]->MovePart(m_vecStatic[1]->fPosition, 1.f);
-		else 
+		else if (i == 1)
 			m_vecStatic[i]->MovePart(m_vecStatic[0]->fPosition, 1.f);
 
 		__super::Input_Render_Info(*m_vecStatic[i]);

@@ -111,6 +111,12 @@ private:
 	_float m_fPopup_AlphaNow = 0.f;
 	_Vec3 m_vLifeTime = {0.f,1.f,4.f};
 
+	// ∑ª¥ı µ•¿Ã≈Õ 
+	_Vec4 m_vBackColor_Origin = { 0.f,0.f,0.f,0.f };
+	_Vec4 m_vIconColor_Origin = { 0.f,0.f,0.f,0.f };
+	_Vec4 m_vTitleColor_Origin = { 0.f,0.f,0.f,0.f };
+	_Vec4 m_vDescColor_Origin = { 0.f,0.f,0.f,0.f };
+
 public:
 	static CAchievment_DataLine* Create(ID3D11Device* pDevice, ID3D11DeviceContext* pContext);
 	virtual CGameObject* Clone(void* pArg);

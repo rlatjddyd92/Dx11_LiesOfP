@@ -244,13 +244,6 @@ void CUIPage_Achievment::Check_Data(_float fTimeDelta)
 {
 	if (GET_GAMEINTERFACE->IsGamePause() == false)
 		m_vecStatistic[0]->Input_Data_Playtime(fTimeDelta);
-
-
-
-
-
-
-
 }
 
 void CUIPage_Achievment::Update_Static(_float fTimeDelta)
@@ -305,6 +298,8 @@ void CUIPage_Achievment::Update_Popup(_float fTimeDelta)
 
 		if (iter < fAdjust)
 			iter = fAdjust;
+
+		++iIndex;
 	}
 
 	list<_float>::iterator iterRatio = m_Popup_Ratiolist.begin();
