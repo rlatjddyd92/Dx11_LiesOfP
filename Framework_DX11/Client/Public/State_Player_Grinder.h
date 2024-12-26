@@ -31,6 +31,8 @@ private:
 
     _bool               m_isChange[3] = { false, };
 
+    //¿Ã∫¿¡ÿ √ﬂ∞°
+    _bool               m_bAnimCheck = { false };
     _Vec4               m_vMoveDir = {};
 
     _float              m_fMoveSpeed = {};

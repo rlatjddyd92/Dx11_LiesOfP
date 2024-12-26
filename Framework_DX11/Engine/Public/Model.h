@@ -173,6 +173,10 @@ private:
 	_bool							m_isUseRootBone = { false };	//루트본 사용 여부
 	_bool							m_isBoneUpdated = { false };	//뼈 업데이트 여부
 	_bool							m_isSameAnimCheck = { false };
+
+	_bool							m_bMainToBoundary = { false };	// 오류 해결
+	_bool							m_bBoundaryToMain = { false };	// 오류 해결
+
 	_vector							m_vCurRootMove = {};			//이전에 사용한 루트본에의한 움직임
 	_vector							m_vRootMoveStack = {};
 
