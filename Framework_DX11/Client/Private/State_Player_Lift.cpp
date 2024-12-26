@@ -65,10 +65,10 @@ void CState_Player_Lift::Update(_float fTimeDelta)
             m_pPlayer->Change_State(CPlayer::TH_IDLE);
     }
 
-    if (!m_isPlaySound && iFrame == 50 || iFrame == 51)
+    if (!m_isPlaySound && iFrame == 55 || iFrame == 56)
     {
         m_isPlaySound = true;
-        m_pPlayer->Play_Sound(CPawn::PAWN_SOUND_EFFECT1, TEXT("SE_PC_MT_Lift_Active.wav"));
+        m_pPlayer->Play_Sound(CPawn::PAWN_SOUND_EFFECT1, TEXT("AMB_OJ_PR_Lift_Controller_Lever_Open.wav"));
     }
 }
 

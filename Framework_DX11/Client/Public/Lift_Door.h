@@ -7,6 +7,7 @@ BEGIN(Engine)
 class CShader;
 class CModel;
 class CRigidBody;
+class CSound;
 END
 
 BEGIN(Client)
@@ -34,11 +35,14 @@ private:
 	CShader* m_pShaderCom = { nullptr };
 	CModel* m_pModelCom = { nullptr };
 	CRigidBody* m_pRigidBodyCom = { nullptr };
+	CSound* m_pSoundCom = { nullptr };
 
 private:
-	_bool m_bShadow = false;
-	_bool m_bOpen = false;
-	_bool m_bClose = false;
+	_bool m_bShadow = { false };
+	_bool m_bOpen = { false };
+	_bool m_bClose = { false };
+	_bool m_bPlayOpenSound = { false };
+	_bool m_bPlayCloseSound = { false };
 
 	_int m_iAnim_Close = { 0 };
 	_int m_iAnim_Close_Idle = { 0 };
