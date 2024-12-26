@@ -32,9 +32,9 @@ HRESULT CLift_Door::Initialize(void* pArg)
 	if (FAILED(Ready_Components()))
 		return E_FAIL;
 
-	m_iAnim_Close = m_pModelCom->Find_AnimationIndex("AS_Close", 1.f);
+	m_iAnim_Close = m_pModelCom->Find_AnimationIndex("AS_Close", 0.3f);
 	m_iAnim_Close_Idle = m_pModelCom->Find_AnimationIndex("AS_Close_Idle", 1.f);
-	m_iAnim_Open = m_pModelCom->Find_AnimationIndex("AS_Open", 1.f);
+	m_iAnim_Open = m_pModelCom->Find_AnimationIndex("AS_Open", 0.3f);
 	m_iAnim_Open_Idle = m_pModelCom->Find_AnimationIndex("AS_Open_Idle", 1.f);
 
 	m_pModelCom->SetUp_Animation(m_iAnim_Close_Idle, false);
@@ -52,6 +52,13 @@ void CLift_Door::Update(_float fTimeDelta)
 
 	if (m_bOpen)
 	{
+		if (m_bPlayOpenSound == false)
+		{
+			m_bPlayOpenSound = true;
+			m_bPlayCloseSound = false;
+			m_pSoundCom->Play2D(TEXT("AMB_OJ_DR_Lift_Door_Open.wav"), &g_fEffectVolume);
+		}
+
 		m_pRigidBodyCom->Set_Kinematic(true);
 
 		if(m_pModelCom->Get_CurrentAnimationIndex() != m_iAnim_Open
@@ -65,6 +72,13 @@ void CLift_Door::Update(_float fTimeDelta)
 	
 	if(m_bClose)
 	{
+		if (m_bPlayCloseSound == false)
+		{
+			m_bPlayCloseSound = true;
+			m_bPlayOpenSound = false;
+			m_pSoundCom->Play2D(TEXT("AMB_OJ_DR_Lift_Door_Close.wav"), &g_fEffectVolume);
+		}
+
 		m_pRigidBodyCom->Set_Kinematic(false);
 
 		if (m_pModelCom->Get_CurrentAnimationIndex() == m_iAnim_Open_Idle)
@@ -142,6 +156,12 @@ HRESULT CLift_Door::Ready_Components()
 		TEXT("Com_Model"), reinterpret_cast<CComponent**>(&m_pModelCom))))
 		return E_FAIL;
 
+	/* FOR.Com_Sound */
+	if (FAILED(__super::Add_Component(LEVEL_STATIC, TEXT("Prototype_Component_Sound"),
+		TEXT("Com_VoiceSound"), reinterpret_cast<CComponent**>(&m_pSoundCom))))
+		return E_FAIL;
+	m_pSoundCom->Set_Owner(this);
+
 	// 항상 마지막에 생성하기
 	CRigidBody::RIGIDBODY_DESC RigidBodyDesc{};
 	RigidBodyDesc.isStatic = false;
@@ -202,6 +222,7 @@ CGameObject* CLift_Door::Clone(void* pArg)
 void CLift_Door::Free()
 {
 	__super::Free();
+	Safe_Release(m_pSoundCom);
 	Safe_Release(m_pShaderCom);
 	Safe_Release(m_pModelCom);
 	Safe_Release(m_pRigidBodyCom);

@@ -200,7 +200,11 @@ _bool CNavigation::isMove(_Vec3 vPosition)
 			
 			
 			m_iCurrentCellIndex = iNeighborIndex;
-			m_iCurrentAreaIndex = m_Cells[iNeighborIndex]->Get_AreaNum();
+
+			_int iCellAreaNum = m_Cells[iNeighborIndex]->Get_AreaNum();
+			if (iCellAreaNum != 0)	//공용 공간은 방 바꼈다고 판단 X
+				m_iCurrentAreaIndex = iCellAreaNum;
+
 			return true;
 		}
 
@@ -296,7 +300,7 @@ void CNavigation::Research_Cell(_Vec3 vNewPos, _uint* iIndex)
 			fCellSmallY = min(fCellSmallY, vPointC.y);
 
 			//약간 느슨하게 검사
-			if (vNewPos.y <= fCellBigY + 1.f && vNewPos.y >= fCellSmallY - 1.f)
+			if (vNewPos.y <= fCellBigY + 4.f && vNewPos.y >= fCellSmallY - 4.f)
 			{
 				m_iCurrentCellIndex = i;
 				m_iCurrentAreaIndex = m_Cells[i]->Get_AreaNum();
@@ -310,7 +314,6 @@ void CNavigation::Research_Cell(_Vec3 vNewPos, _uint* iIndex)
 	}
 
 	m_iCurrentCellIndex = -1;
-	m_iCurrentAreaIndex = 0;
 	if (iIndex != nullptr)
 		*iIndex = -1;
 }

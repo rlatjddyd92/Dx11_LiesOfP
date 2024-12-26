@@ -70,7 +70,7 @@ HRESULT CCarcassTail::Initialize(void* pArg)
 	//	XMVectorSet(0.f, 0.f, 0.f, 1.f));
 	//m_pTransformCom->LookAt(_vector{ 0, 0, -1, 0 });
 
-	m_pRigidBodyCom->Set_GloblePose(_Vec3{ 0.f, -5.f, 0.f } + m_pTransformCom->Get_State(CTransform::STATE_LOOK) * 8);
+//	m_pRigidBodyCom->Set_GloblePose(_Vec3{ 0.f, -5.f, 0.f } + m_pTransformCom->Get_State(CTransform::STATE_LOOK) * 8);
 
 	m_vRimLightColor = { 0.f, 0.f, 0.f, 0.f };
 

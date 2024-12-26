@@ -45,7 +45,7 @@ HRESULT CMonster_Training01::Initialize(void* pArg)
 
 	m_strObjectTag = TEXT("Monster");
 
-	m_pNavigationCom->Move_to_Cell(m_pRigidBodyCom, 1261); 
+	m_pNavigationCom->Move_to_Cell(m_pRigidBodyCom, 1259); 
 
 	m_vRimLightColor = { 0.f, 0.f, 0.f, 0.f };
 
