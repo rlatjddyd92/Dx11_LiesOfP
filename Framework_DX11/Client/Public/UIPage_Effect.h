@@ -59,6 +59,8 @@ public:
 	_float Check_Fade() { return m_fTime_Fade_Now / m_fTime_Fade_Max; }
 	_float Check_Script() { return m_fTime_Script_Now / m_fTime_Script_Max; }
 
+	_float Check_Ratio(_Vec3* vLifeTime, _float fTimeDelta);
+
 
 private:
 	_float m_fTime_Fade_Now = 0.f;
@@ -67,6 +69,7 @@ private:
 	_float m_fTime_Script_Now = 0.f;
 	_float m_fTime_Script_Max = 0.f;
 
+	_Vec3 m_vTime_Script = { 0.f,0.f,0.f };
 
 public:
 	static CUIPage_Effect* Create(ID3D11Device* pDevice, ID3D11DeviceContext* pContext);

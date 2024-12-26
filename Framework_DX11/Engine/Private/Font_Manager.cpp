@@ -66,6 +66,16 @@ HRESULT CFont_Manager::Render_Right(const _wstring& strFontTag, const _tchar* pT
 	return pFont->Render_Right(pText, vPosition, vColor, fRadian, vPivot, fScale);
 }
 
+_Vec4 CFont_Manager::Measure_Font(const _wstring& strFontTag, _wstring strText)
+{
+	CCustomFont* pFont = Find_Font(strFontTag);
+
+	if (nullptr == pFont)
+		return { -1.f,-1.f ,-1.f ,-1.f };
+
+	return pFont->Measure_Font(strText);
+}
+
 CCustomFont * CFont_Manager::Find_Font(const _wstring & strFontTag)
 {
 	auto	iter = m_Fonts.find(strFontTag);

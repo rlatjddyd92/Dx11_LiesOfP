@@ -87,6 +87,8 @@ void CUIPage_Stat::OpenAction()
 {
 	__super::OpenAction();
 	m_pSoundCom->Play2D(TEXT("SE_UI_OpenMenu_04.wav"), &g_fUIVolume);
+	memset(m_fStarChart_LevelUp_Now, 0.f, sizeof(_float) * 8);
+	memset(m_fStarChart_NowStat_Now, 0.f, sizeof(_float) * 8);
 	m_iFocus_Point = 0;
 }
 
@@ -440,24 +442,42 @@ void CUIPage_Stat::Update_StarChart(_float fTimeDelta)
 	const CPlayer::PLAYER_STAT_INFO pOrigin = GET_GAMEINTERFACE->Get_Player()->Get_Player_Stat();
 	CPlayer::PLAYER_STAT_INFO* pAdjust = GET_GAMEINTERFACE->Get_Player()->Get_Player_Stat_Adjust();
 
-	pOriginPart->fRatio_TwoDPolygon[0] = _float(pAdjust->iStat_Attack + pOrigin.iStat_Attack) / 100.f;
-	pOriginPart->fRatio_TwoDPolygon[1] = _float(pAdjust->iStat_Defence + pOrigin.iStat_Defence) / 100.f;
-	pOriginPart->fRatio_TwoDPolygon[2] = _float(pAdjust->fHeal + pOrigin.fHeal) / 20.f;
-	pOriginPart->fRatio_TwoDPolygon[3] = (pAdjust->fResist_Fire + pOrigin.fResist_Fire) / 100.f;
-	pOriginPart->fRatio_TwoDPolygon[4] = (pAdjust->fResist_Electric + pOrigin.fResist_Electric) / 100.f;
-	pOriginPart->fRatio_TwoDPolygon[5] = (pAdjust->fResist_Acid + pOrigin.fResist_Acid) / 100.f;
-	pOriginPart->fRatio_TwoDPolygon[6] = (pAdjust->vGauge_Hp.z + pOrigin.vGauge_Hp.z) / pOrigin.vGauge_Hp.w;
-	pOriginPart->fRatio_TwoDPolygon[7] = (pAdjust->vGauge_Stamina.z + pOrigin.vGauge_Stamina.z) / pOrigin.vGauge_Stamina.w;
+	m_fStarChart_NowStat_Dest[0] = _float(pAdjust->iStat_Attack + pOrigin.iStat_Attack) / 100.f;
+	m_fStarChart_NowStat_Dest[1] = _float(pAdjust->iStat_Defence + pOrigin.iStat_Defence) / 100.f;
+	m_fStarChart_NowStat_Dest[2] = _float(pAdjust->fHeal + pOrigin.fHeal) / 20.f;
+	m_fStarChart_NowStat_Dest[3] = (pAdjust->fResist_Fire + pOrigin.fResist_Fire) / 100.f;
+	m_fStarChart_NowStat_Dest[4] = (pAdjust->fResist_Electric + pOrigin.fResist_Electric) / 100.f;
+	m_fStarChart_NowStat_Dest[5] = (pAdjust->fResist_Acid + pOrigin.fResist_Acid) / 100.f;
+	m_fStarChart_NowStat_Dest[6] = (pAdjust->vGauge_Hp.z + pOrigin.vGauge_Hp.z) / pOrigin.vGauge_Hp.w;
+	m_fStarChart_NowStat_Dest[7] = (pAdjust->vGauge_Stamina.z + pOrigin.vGauge_Stamina.z) / pOrigin.vGauge_Stamina.w;
 
+	m_fStarChart_LevelUp_Dest[0] = pOriginPart->fRatio_TwoDPolygon[0] + (m_iLevelUp_Buffer_Stat[2] / 100.f);
+	m_fStarChart_LevelUp_Dest[1] = pOriginPart->fRatio_TwoDPolygon[1] + (m_iLevelUp_Buffer_Stat[3] / 100.f);
+	m_fStarChart_LevelUp_Dest[2] = pOriginPart->fRatio_TwoDPolygon[2] + (m_iLevelUp_Buffer_Stat[4] / 20.f);
+	m_fStarChart_LevelUp_Dest[3] = pOriginPart->fRatio_TwoDPolygon[3] + (m_iLevelUp_Buffer_Stat[6] / 100.f);
+	m_fStarChart_LevelUp_Dest[4] = pOriginPart->fRatio_TwoDPolygon[4] + (m_iLevelUp_Buffer_Stat[7] / 100.f);
+	m_fStarChart_LevelUp_Dest[5] = pOriginPart->fRatio_TwoDPolygon[5] + (m_iLevelUp_Buffer_Stat[8] / 100.f);
+	m_fStarChart_LevelUp_Dest[6] = pOriginPart->fRatio_TwoDPolygon[6] + (m_iLevelUp_Buffer_Stat[0] / pOrigin.vGauge_Hp.w);
+	m_fStarChart_LevelUp_Dest[7] = pOriginPart->fRatio_TwoDPolygon[7] + (m_iLevelUp_Buffer_Stat[1] / pOrigin.vGauge_Stamina.w);
 
-	pLevelUpPart->fRatio_TwoDPolygon[0] = pOriginPart->fRatio_TwoDPolygon[0] + (m_iLevelUp_Buffer_Stat[2] / 100.f);
-	pLevelUpPart->fRatio_TwoDPolygon[1] = pOriginPart->fRatio_TwoDPolygon[1] + (m_iLevelUp_Buffer_Stat[3] / 100.f);
-	pLevelUpPart->fRatio_TwoDPolygon[2] = pOriginPart->fRatio_TwoDPolygon[2] + (m_iLevelUp_Buffer_Stat[4] / 20.f);
-	pLevelUpPart->fRatio_TwoDPolygon[3] = pOriginPart->fRatio_TwoDPolygon[3] + (m_iLevelUp_Buffer_Stat[6] / 100.f);
-	pLevelUpPart->fRatio_TwoDPolygon[4] = pOriginPart->fRatio_TwoDPolygon[4] + (m_iLevelUp_Buffer_Stat[7] / 100.f);
-	pLevelUpPart->fRatio_TwoDPolygon[5] = pOriginPart->fRatio_TwoDPolygon[5] + (m_iLevelUp_Buffer_Stat[8] / 100.f);
-	pLevelUpPart->fRatio_TwoDPolygon[6] = pOriginPart->fRatio_TwoDPolygon[6] + (m_iLevelUp_Buffer_Stat[0] / pOrigin.vGauge_Hp.w);
-	pLevelUpPart->fRatio_TwoDPolygon[7] = pOriginPart->fRatio_TwoDPolygon[7] + (m_iLevelUp_Buffer_Stat[1] / pOrigin.vGauge_Stamina.w);
+	for (_int i = 0; i < 8; ++i)
+	{
+		if (m_fStarChart_NowStat_Now[i] < m_fStarChart_NowStat_Dest[i])
+			m_fStarChart_NowStat_Now[i] = min(m_fStarChart_NowStat_Now[i] + fTimeDelta, m_fStarChart_NowStat_Dest[i]);
+		else if (m_fStarChart_NowStat_Now[i] > m_fStarChart_NowStat_Dest[i])
+			m_fStarChart_NowStat_Now[i] = max(m_fStarChart_NowStat_Now[i] - fTimeDelta, m_fStarChart_NowStat_Dest[i]);
+
+		if (m_fStarChart_LevelUp_Now[i] < m_fStarChart_LevelUp_Dest[i])
+			m_fStarChart_LevelUp_Now[i] = min(m_fStarChart_LevelUp_Now[i] + fTimeDelta, m_fStarChart_LevelUp_Dest[i]);
+		else if (m_fStarChart_LevelUp_Now[i] > m_fStarChart_LevelUp_Dest[i])
+			m_fStarChart_LevelUp_Now[i] = max(m_fStarChart_LevelUp_Now[i] - fTimeDelta, m_fStarChart_LevelUp_Dest[i]);
+	}
+
+	for (_int i = 0; i < 8; ++i)
+	{
+		pOriginPart->fRatio_TwoDPolygon[i] = m_fStarChart_NowStat_Now[i];
+		pLevelUpPart->fRatio_TwoDPolygon[i] = m_fStarChart_LevelUp_Now[i];
+	}
 }
 
 void CUIPage_Stat::Input_LevelUp_Stat()

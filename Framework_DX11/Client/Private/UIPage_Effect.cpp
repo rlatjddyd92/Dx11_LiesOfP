@@ -73,7 +73,6 @@ void CUIPage_Effect::Update(_float fTimeDelta)
 			m_vecPart[_int(PART_GROUP::EFFECT_FIFO_Text)]->bRender = false;
 		}
 	}
-
 	
 	_float fFade_Ratio = m_fTime_Fade_Now / m_fTime_Fade_Max;
 
@@ -84,12 +83,18 @@ void CUIPage_Effect::Update(_float fTimeDelta)
 	m_vecPart[_int(PART_GROUP::EFFECT_FIFO_Title)]->fTextColor.w = fFade_Ratio;
 	m_vecPart[_int(PART_GROUP::EFFECT_FIFO_Text)]->fTextColor.w = fFade_Ratio;
 
-	if (m_fTime_Script_Now < m_fTime_Script_Max)
-		m_fTime_Script_Now += fTimeDelta;
+	_float fScript_Ratio = Check_Ratio(&m_vTime_Script, fTimeDelta);
 
-	if (m_fTime_Script_Now >= m_fTime_Script_Max)
+	m_vecPart[_int(PART_GROUP::EFFECT_SCRIPT_Back)]->fTextureColor.w = fScript_Ratio;
+	m_vecPart[_int(PART_GROUP::EFFECT_SCRIPT_Text0)]->fTextColor.w = fScript_Ratio;
+	m_vecPart[_int(PART_GROUP::EFFECT_SCRIPT_Text1)]->fTextColor.w = fScript_Ratio;
+
+	if (fScript_Ratio > 0.f)
+		m_vTime_Script.x += fTimeDelta;
+
+	if (fScript_Ratio == -1.f)
 	{
-		m_fTime_Script_Now = 0.f;
+		m_vTime_Script.x = 0.f;
 		m_vecPart[_int(PART_GROUP::EFFECT_SCRIPT_Back)]->bRender = false;
 		m_vecPart[_int(PART_GROUP::EFFECT_SCRIPT_Text0)]->bRender = false;
 		m_vecPart[_int(PART_GROUP::EFFECT_SCRIPT_Text1)]->bRender = false;
@@ -200,15 +205,52 @@ void CUIPage_Effect::Show_Script(_wstring strScript0, _wstring strScript1, _floa
 	m_vecPart[_int(PART_GROUP::EFFECT_SCRIPT_Back)]->bRender = true;
 	m_vecPart[_int(PART_GROUP::EFFECT_SCRIPT_Text0)]->bRender = true;
 
+	_float fFontX = m_pGameInstance->Measure_Font(TEXT("Font_Normal_16"), strScript0).x;
+
 	if (strScript1 != TEXT("none"))
 	{
 		m_vecPart[_int(PART_GROUP::EFFECT_SCRIPT_Back)]->fRatio = 1.f;
 		m_vecPart[_int(PART_GROUP::EFFECT_SCRIPT_Text1)]->strText = strScript1;
 		m_vecPart[_int(PART_GROUP::EFFECT_SCRIPT_Text1)]->bRender = true;
+
+		fFontX = max(fFontX, m_pGameInstance->Measure_Font(TEXT("Font_Normal_16"), strScript1).x);
 	}
+
+	m_vecPart[_int(PART_GROUP::EFFECT_SCRIPT_Back)]->fSize.x = fFontX * 1.5f;
+
+	m_vTime_Script = { 0.f,fTime / 4.f, fTime / 2.f };
 
 	m_fTime_Script_Now = 0.f;
 	m_fTime_Script_Max = fTime;
+}
+
+_float CUIPage_Effect::Check_Ratio(_Vec3* vLifeTime, _float fTimeDelta)
+{
+	_float fResult = 1.f;
+
+	vLifeTime->x += fTimeDelta;
+
+	if (vLifeTime->x >= vLifeTime->y * 2.f + vLifeTime->z)
+	{
+		fResult = -1.f;
+		*vLifeTime = { 0.f,0.f,0.f };
+	}
+	else if (vLifeTime->x >= vLifeTime->y * 1.f + vLifeTime->z)
+	{
+		fResult = vLifeTime->x - (vLifeTime->y * 1.f + vLifeTime->z);
+		fResult = (vLifeTime->y - fResult) / vLifeTime->y;
+	}
+	else if (vLifeTime->x >= vLifeTime->y)
+	{
+		fResult = 1.f;
+	}
+	else if (vLifeTime->x < vLifeTime->y)
+	{
+		fResult = vLifeTime->x / vLifeTime->y;
+	}
+
+
+	return fResult;
 }
 
 CUIPage_Effect* CUIPage_Effect::Create(ID3D11Device* pDevice, ID3D11DeviceContext* pContext)
