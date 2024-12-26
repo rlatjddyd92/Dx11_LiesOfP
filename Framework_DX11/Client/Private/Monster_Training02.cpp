@@ -45,7 +45,7 @@ HRESULT CMonster_Training02::Initialize(void* pArg)
 
 	m_strObjectTag = TEXT("Monster");
 
-	m_pNavigationCom->Move_to_Cell(m_pRigidBodyCom, 1317); 
+	m_pNavigationCom->Move_to_Cell(m_pRigidBodyCom, 1315); 
 	m_pTransformCom->Rotation(_Vec4(0.f, 1.f, 0.f, 0.f), XMConvertToRadians(180.f));
 
 	m_vRimLightColor = { 0.f, 0.f, 0.f, 0.f };
