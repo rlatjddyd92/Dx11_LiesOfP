@@ -939,16 +939,16 @@ void CItem_Manager::Buy_ShopItem(_int iIndex, _int iCount)
 		if (iter->iIndex == iIndex)
 			break;
 	}
-		
+
 	if ((iNowShop == -1) || (iNowShop >= m_vecShop_Item.size()))
 		return;
 
 	if (m_vecShop_Item[iNowShop]->iCount < iCount)
 		return;
-	
+
 	_int iErgo = GET_GAMEINTERFACE->Get_Player()->Get_Player_Stat().iErgo;
 	iErgo += GET_GAMEINTERFACE->Get_Player()->Get_Player_Stat_Adjust()->iErgo;
-	
+
 	if (iErgo < m_vecItem_BasicSpec[iIndex]->iPrice * iCount)
 		return;
 
@@ -959,8 +959,6 @@ void CItem_Manager::Buy_ShopItem(_int iIndex, _int iCount)
 	strItem += TEXT(" -> 구입수량 : ");
 	strItem += to_wstring(iCount);
 
-	GET_GAMEINTERFACE->Input_Achievment_Data(1, 1);
-	GET_GAMEINTERFACE->Input_Achievment_Data(0, m_vecItem_BasicSpec[iIndex]->iPrice * iCount);
 	GET_GAMEINTERFACE->Show_Popup(TEXT("구매 성공"), strItem);
 	GET_GAMEINTERFACE->Get_Player()->Get_Player_Stat_Adjust()->iErgo -= m_vecItem_BasicSpec[iIndex]->iPrice * iCount;
 }
@@ -975,25 +973,104 @@ void CItem_Manager::Sell_ShopItem(INVEN_ARRAY_TYPE eType, _int iIndex, _int iCou
 
 	_int iCountNow = m_vecArray_Inven[_int(eType)]->vecItemInfo[iIndex]->iCount;
 
-	if(iCount > iCountNow)
+	if (iCount > iCountNow)
 		return;
 
 	GET_GAMEINTERFACE->Get_Player()->Get_Player_Stat_Adjust()->iErgo += m_vecArray_Inven[_int(eType)]->vecItemInfo[iIndex]->iPrice * iCount;
 
 	m_vecArray_Inven[_int(eType)]->Use_Item(iIndex, iCount);
 
-	GET_GAMEINTERFACE->Input_Achievment_Data(2, 1);
 	_wstring strItem = m_vecArray_Inven[_int(eType)]->vecItemInfo[iIndex]->strName;
 	strItem += TEXT(" -> 판매수량 : ");
 	strItem += to_wstring(iCount);
+
+	GET_GAMEINTERFACE->Show_Popup(TEXT("판매 성공"), strItem);
 }
 
 void CItem_Manager::ChestItem_To_Inven(_int iIndex, _int iCount)
 {
+	if (m_mapChest_Item.find(iIndex) == m_mapChest_Item.end())
+		return;
+
+	ITEM* pNow = m_mapChest_Item.find(iIndex)->second;
+
+	if (pNow == nullptr)
+		return;
+
+	if (pNow->iCount < iCount)
+		return;
+
+	pNow->iCount -= iCount;
+	AddNewItem_Inven(iIndex, iCount);
+
+	_wstring strItem = pNow->strName;
+	strItem += TEXT(" -> 꺼낸 수량 : ");
+	strItem += to_wstring(iCount);
+
+	GET_GAMEINTERFACE->Show_Popup(TEXT("보관 아이템 꺼내기"), strItem);
+
+	if (pNow->iCount <= 0)
+	{
+		Safe_Delete(pNow);
+		m_mapChest_Item.erase(m_mapChest_Item.find(iIndex));
+	}
+
 }
 
 void CItem_Manager::InvenItem_To_Chest(INVEN_ARRAY_TYPE eType, _int iIndex, _int iCount)
 {
+	if (!IsValid_Inven(eType, iIndex))
+		return;
+
+	if (m_vecArray_Inven[_int(eType)]->vecItemInfo[iIndex]->bIsAvailable_Chest == false)
+		return;
+
+	_int iCountNow = m_vecArray_Inven[_int(eType)]->vecItemInfo[iIndex]->iCount;
+
+	if (iCount > iCountNow)
+		return;
+
+	if (m_vecArray_Inven[_int(eType)]->vecItemInfo[iIndex]->bStack == true)
+	{
+		_bool bInput = false;
+
+		for (auto& pair : m_mapChest_Item)
+		{
+			if (pair.second->iItem_Index == m_vecArray_Inven[_int(eType)]->vecItemInfo[iIndex]->iItem_Index)
+			{
+				pair.second->iCount += iCount;
+				bInput = true;
+				break;
+			}
+		}
+
+		if (bInput == false)
+		{
+			ITEM* pNew = new ITEM;
+
+			*(pNew) = *(m_vecArray_Inven[_int(eType)]->vecItemInfo[iIndex]);
+			(pNew)->iCount = iCount;
+			m_mapChest_Item.insert({ m_iNext_Chest_Key, pNew });
+			++m_iNext_Chest_Key;
+		}
+	}
+	else
+	{
+		ITEM* pNew = new ITEM;
+
+		*(pNew) = *(m_vecArray_Inven[_int(eType)]->vecItemInfo[iIndex]);
+		m_mapChest_Item.insert({ m_iNext_Chest_Key, pNew });
+		m_vecArray_Inven[_int(eType)]->Remove_Item(iIndex);
+		++m_iNext_Chest_Key;
+	}
+
+	_wstring strItem = m_vecArray_Inven[_int(eType)]->vecItemInfo[iIndex]->strName;
+	strItem += TEXT(" -> 보관 수량 : ");
+	strItem += to_wstring(iCount);
+
+	GET_GAMEINTERFACE->Show_Popup(TEXT("아이템 보관"), strItem);
+
+	m_vecArray_Inven[_int(eType)]->Use_Item(iIndex, iCount);
 }
 
 HRESULT CItem_Manager::Initialize_Item()
@@ -1200,15 +1277,15 @@ void CItem_Manager::Free()
 		Safe_Delete(iter);
 	for (auto& iter : m_vecShop_Item)
 		Safe_Delete(iter);
-	for (auto& iter : m_vecChest_Item)
-		Safe_Delete(iter);
+	for (auto& iter : m_mapChest_Item)
+		Safe_Delete(iter.second);
 
 	m_vecItem_BasicSpec.clear();
 	m_vecItem_InvenSlotIndex.clear();
 	m_vecArray_Inven.clear();
 	m_vecEquip_ItemInfo.clear();
 	m_vecShop_Item.clear();
-	m_vecChest_Item.clear();
+	m_mapChest_Item.clear();
 
 	m_LastFrame_UsingItem.clear();
 

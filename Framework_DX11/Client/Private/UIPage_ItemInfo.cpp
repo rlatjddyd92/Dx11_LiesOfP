@@ -336,9 +336,10 @@ void CUIPage_ItemInfo::Show_Tooltip(INVEN_ARRAY_TYPE eType, _int iIndex)
 			bIsNormal = false;
 		
 
-		m_vecPart[_int(PART_GROUP::TOOLTIP_Back)]->bRender = true;
-		m_vecPart[_int(PART_GROUP::TOOLTIP_Back)]->fPosition = m_vToolTip_Pos;
-		m_vecPart[_int(PART_GROUP::TOOLTIP_Item_Frame)]->bRender = true;
+		for (_int i = _int(PART_GROUP::TOOLTIP_Back); i <= _int(PART_GROUP::TOOLTIP_Item_Fx1); ++i)
+			m_vecPart[i]->bRender = true;
+
+		m_vecPart[_int(PART_GROUP::TOOLTIP_Back)]->fAdjust = m_vToolTip_Pos;
 
 		if (bIsNormal)
 		{
@@ -373,6 +374,11 @@ void CUIPage_ItemInfo::Show_Tooltip(INVEN_ARRAY_TYPE eType, _int iIndex)
 
 		if (pItem)
 		{
+			for (_int i = _int(PART_GROUP::TOOLTIP_Back); i <= _int(PART_GROUP::TOOLTIP_Item_Fx1); ++i)
+				m_vecPart[i]->bRender = true;
+
+			m_vecPart[_int(PART_GROUP::TOOLTIP_Back)]->fAdjust = m_vToolTip_Pos;
+
 			m_vecPart[_int(PART_GROUP::TOOLTIP_Back)]->bRender = true;
 			m_vecPart[_int(PART_GROUP::TOOLTIP_Back)]->fAdjust = m_vToolTip_Pos;
 			m_vecPart[_int(PART_GROUP::TOOLTIP_Item_Frame)]->bRender = true;
@@ -415,10 +421,10 @@ void CUIPage_ItemInfo::Show_Tooltip(EQUIP_SLOT eSlot)
 		else if (!pNowBlade->bModule_Weapon)
 			bIsNormal = false;
 
+		for(_int i = _int(PART_GROUP::TOOLTIP_Back); i <= _int(PART_GROUP::TOOLTIP_Item_Fx1); ++i)
+			m_vecPart[i]->bRender = true;
 
-		m_vecPart[_int(PART_GROUP::TOOLTIP_Back)]->bRender = true;
 		m_vecPart[_int(PART_GROUP::TOOLTIP_Back)]->fAdjust = m_vToolTip_Pos;
-		m_vecPart[_int(PART_GROUP::TOOLTIP_Item_Frame)]->bRender = true;
 
 		if (bIsNormal)
 		{
@@ -453,6 +459,11 @@ void CUIPage_ItemInfo::Show_Tooltip(EQUIP_SLOT eSlot)
 
 		if (pItem)
 		{
+			for (_int i = _int(PART_GROUP::TOOLTIP_Back); i <= _int(PART_GROUP::TOOLTIP_Item_Fx1); ++i)
+				m_vecPart[i]->bRender = true;
+
+			m_vecPart[_int(PART_GROUP::TOOLTIP_Back)]->fAdjust = m_vToolTip_Pos;
+
 			m_vecPart[_int(PART_GROUP::TOOLTIP_Back)]->bRender = true;
 			m_vecPart[_int(PART_GROUP::TOOLTIP_Item_Frame)]->bRender = true;
 			m_vecPart[_int(PART_GROUP::TOOLTIP_Item_Normal)]->bRender = true;

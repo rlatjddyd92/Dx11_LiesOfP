@@ -579,7 +579,7 @@ public:
 
 	// 상점, 보관함
 	vector<SHOP*>& Get_ShopData() { return m_vecShop_Item; }
-	vector<ITEM*>& Get_ChestData() { return m_vecChest_Item; }
+	map<_int, ITEM*>& Get_ChestData() { return m_mapChest_Item; }
 	void Buy_ShopItem(_int iIndex, _int iCount = 1);
 	void Sell_ShopItem(INVEN_ARRAY_TYPE eType, _int iIndex, _int iCount = 1);
 	void ChestItem_To_Inven(_int iIndex, _int iCount = 1);
@@ -663,7 +663,8 @@ private:
 	vector<EQUIP*> m_vecEquip_ItemInfo; // 현재 어떤 장비 장착 중인 지 확인 
 
 	vector<SHOP*> m_vecShop_Item; // 상점 아이템 목록
-	vector<ITEM*> m_vecChest_Item; // 보관함 아이템 목록
+	map<_int, ITEM*> m_mapChest_Item; // 보관함 아이템 목록
+	_int m_iNext_Chest_Key = 1;
 
 	_uint m_iInven_Array_Col_Count = 5; // <- 인벤 한 줄에 몇 개의 셀이 들어가는 지
 

@@ -36,9 +36,15 @@ public:
 
 
 		TOOLTIP_Back,
-		TOOLTIP_Fx,
-		TOOLTIP_Left_Deco,
+		TOOLTIP_Fx0,
+		TOOLTIP_Fx1,
+		TOOLTIP_Fx2,
+		TOOLTIP_Fx3,
+		TOOLTIP_Fx4,
+		TOOLTIP_Fx5,
 		TOOLTIP_Item_Frame,
+		TOOLTIP_Item_Fx0,
+		TOOLTIP_Item_Fx1,
 		TOOLTIP_Item_Blade,
 		TOOLTIP_Item_Cross,
 		TOOLTIP_Item_Handle,
@@ -46,6 +52,7 @@ public:
 		TOOLTIP_Item_Normal,
 		TOOLTIP_Item_Name,
 		TOOLTIP_Item_Desc,
+
 
 
 

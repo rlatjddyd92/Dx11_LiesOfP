@@ -954,7 +954,7 @@ void CUIPage_Option::Update_Variable()
 void CUIPage_Option::Exit_Program()
 {
 	m_fExit_Time = 5.f;
-	GET_GAMEINTERFACE->Fade_Out(TEXT("감사합니다!"), TEXT("최종 발표를 기대해주세요"), _Vec3(0.f, 0.f, 0.f), 1.f);
+	GET_GAMEINTERFACE->Fade_Out(TEXT("감사합니다!"), TEXT("145기 : 정승현, 고준호, 김성용, 양우송, 이봉준"), _Vec3(0.f, 0.f, 0.f), 1.f);
 }
 
 
