@@ -96,6 +96,11 @@ _char* CModel::Get_CurrentAnimationName()
 	return m_Animations[m_iCurrentAnimIndex]->Get_Name();
 }
 
+_uint CModel::Get_LastFrame_CurrentAnim(_uint iAnimIndex)
+{
+	return m_Animations[iAnimIndex]->Get_WideChannel()->Get_KeyFrames().size() - 1;;
+}
+
 _uint	CModel::Get_CurrentFrame(_bool isBoundary)
 {
 	if (!isBoundary)
@@ -411,7 +416,6 @@ HRESULT CModel::SetUp_NextAnimation(_uint iNextAnimationIndex, _bool isLoop, _fl
 
 		m_vRootMoveStack = m_vCurRootMove = _vector{ 0, 0, 0, 1 };
 		m_iCurrentAnimIndex = m_tChaneAnimDesc.iNextAnimIndex;
-		//m_CurrentTrackPosition = m_ChangeTrackPosition;
 		ZeroMemory(&m_tChaneAnimDesc, sizeof(CHANGEANIMATION_DESC));
 
 		m_iCurrentFrame = m_Animations[m_iCurrentAnimIndex]->Update_TransformationMatrices(m_Bones, &m_CurrentTrackPosition, m_KeyFrameIndices[m_iCurrentAnimIndex], m_isLoop, &m_isEnd_Animations[m_iCurrentAnimIndex], 0, false, nullptr, &m_isBoneUpdated);
@@ -484,7 +488,7 @@ HRESULT CModel::SetUp_NextAnimation_Boundary(_uint iNextAnimationIndex, _bool is
 		m_iCurrentAnimIndex_Boundary = m_tChaneAnimDesc_Boundary.iNextAnimIndex;
 		//m_CurrentTrackPosition_Boundary = m_ChangeTrackPosition_Boundary;
 		ZeroMemory(&m_tChaneAnimDesc_Boundary, sizeof(CHANGEANIMATION_DESC));
-
+		
 		m_iCurrentFrame_Boundary = m_Animations[m_iCurrentAnimIndex_Boundary]->Update_TransformationMatrices(m_Bones, &m_CurrentTrackPosition_Boundary, m_KeyFrameIndices[m_iCurrentAnimIndex_Boundary], m_isLoop, &m_isEnd_Animations_Boundary[m_iCurrentAnimIndex_Boundary], 0, false, nullptr, &m_isBoneUpdated);
 
 	}
