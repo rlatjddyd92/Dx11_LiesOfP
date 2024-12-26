@@ -1,8 +1,10 @@
 ﻿     0>$(MSBuildExtensionsPath)에 사용 중인 검색 경로는 C:\Program Files\Microsoft Visual Studio\2022\Community\MSBuild;$(MSBuildProgramFiles32)\MSBuild입니다.
+       Evaluation 동안 로드된 어셈블리: System.Collections.Immutable, Version=8.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a(위치: C:\Program Files\Microsoft Visual Studio\2022\Community\MSBuild\Current\Bin\System.Collections.Immutable.dll%1, MVID: 8448ed54-b238-40d8-a464-bff29b2d85b9%2, AppDomain: [Default]%2).
        확장 경로 C:\Program Files\Microsoft Visual Studio\2022\Community\MSBuild을(를) 사용하여 C:\Program Files\Microsoft Visual Studio\2022\Community\MSBuild\$(MSBuildToolsVersion)\Microsoft.Common.props을(를) 가져옵니다.
        속성 재할당: $(MSBuildProjectExtensionsPath)=C:\Program Files\Microsoft Visual Studio\2022\Community\MSBuild\Current\Microsoft.Common.props(60,5)의 "D:\GitHubProjects\Dx11_LiesOfP\Framework_DX11\Client\Default\obj\"(이전 값: "obj\")
        $(MSBuildExtensionsPath)에 사용 중인 검색 경로는 C:\Program Files\Microsoft Visual Studio\2022\Community\MSBuild;$(MSBuildProgramFiles32)\MSBuild입니다.
        확장 경로 C:\Program Files\Microsoft Visual Studio\2022\Community\MSBuild을(를) 사용하여 C:\Program Files\Microsoft Visual Studio\2022\Community\MSBuild\$(MSBuildToolsVersion)\Imports\Microsoft.Common.props\ImportBefore\*을(를) 가져옵니다.
+       Evaluation 동안 로드된 어셈블리: Microsoft.IO.Redist, Version=6.0.0.0, Culture=neutral, PublicKeyToken=cc7b13ffcd2ddd51(위치: C:\Program Files\Microsoft Visual Studio\2022\Community\MSBuild\Current\Bin\Microsoft.IO.Redist.dll%1, MVID: d528d43e-4d35-4c28-8aa6-a5ce49a5eba7%2, AppDomain: [Default]%2).
        환경에서 값이 'VisualStudioVersion'인 속성 '17.0'이(가) 확장되었습니다.
        "Configuration" 속성은 전역 속성이므로 수정할 수 없습니다.
        $(MSBuildExtensionsPath)에 사용 중인 검색 경로는 C:\Program Files\Microsoft Visual Studio\2022\Community\MSBuild;$(MSBuildProgramFiles32)\MSBuild입니다.
@@ -14,6 +16,7 @@
        속성 재할당: $(WholeProgramOptimization)=D:\GitHubProjects\Dx11_LiesOfP\Framework_DX11\Client\Default\Client.vcxproj(54,5)의 "true"(이전 값: "false")
        속성 재할당: $(CharacterSet)=D:\GitHubProjects\Dx11_LiesOfP\Framework_DX11\Client\Default\Client.vcxproj(55,5)의 "Unicode"(이전 값: "NotSet")
        속성 재할당: $(EnableUnitySupport)=D:\GitHubProjects\Dx11_LiesOfP\Framework_DX11\Client\Default\Client.vcxproj(56,5)의 "true"(이전 값: "false")
+       Evaluation 동안 로드된 어셈블리: Microsoft.Build.Utilities.Core, Version=15.1.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a(위치: C:\Program Files\Microsoft Visual Studio\2022\Community\MSBuild\Current\Bin\Microsoft.Build.Utilities.Core.dll%1, MVID: ee4672b2-20ae-46af-962d-6e9317270cb4%2, AppDomain: [Default]%2).
        환경에서 값이 'PROCESSOR_ARCHITECTURE'인 속성 'AMD64'이(가) 확장되었습니다.
        속성 재할당: $(WindowsSdkDir_10)=C:\Program Files\Microsoft Visual Studio\2022\Community\MSBuild\Microsoft\VC\v170\Microsoft.Cpp.WindowsSDK.props(18,5)의 "C:\Program Files (x86)\Windows Kits\10\"(이전 값: "")
        속성 재할당: $(NETFXSDK_Version)=C:\Program Files\Microsoft Visual Studio\2022\Community\MSBuild\Microsoft\VC\v170\Microsoft.Cpp.WindowsSDK.props(46,5)의 "4.8"(이전 값: "4.8.1")
@@ -828,7 +831,7 @@
        "C:\Program Files\Microsoft Visual Studio\2022\Community\MSBuild\Current\Bin\amd64\Microsoft.Common.CurrentVersion.targets" 프로젝트의 "GetTargetPathWithTargetPlatformMoniker" 대상을 "C:\Program Files\Microsoft Visual Studio\2022\Community\MSBuild\Microsoft\VC\v170\Microsoft.Cpp.DesignTime.targets" 프로젝트의 "GetTargetPathWithTargetPlatformMoniker" 대상으로 재정의하고 있습니다.
        "C:\Program Files\Microsoft Visual Studio\2022\Community\MSBuild\Microsoft\VisualStudio\WebTools.Aspire\Microsoft.WebTools.Aspire.targets(44,11)"의 BeforeTargets 특성에 나열된 "CompileDesignTime" 대상이 프로젝트에 없으며 무시됩니다.
        "C:\Program Files\Microsoft Visual Studio\2022\Community\MSBuild\Microsoft\VisualStudio\WebTools.Aspire\Microsoft.WebTools.Aspire.targets(57,11)"의 BeforeTargets 특성에 나열된 "CompileDesignTime" 대상이 프로젝트에 없으며 무시됩니다.
-빌드 시작: 2024-12-26 오후 11:19:58
+빌드 시작: 2024-12-27 오전 12:13:00
 로깅의 세부 정보 표시가 Detailed(으)로 설정되었습니다.     1>2 노드의 "D:\GitHubProjects\Dx11_LiesOfP\Framework_DX11\Client\Default\Client.vcxproj" 프로젝트(Build 대상)입니다.
      1>프로젝트 파일에 ToolsVersion="14.0"이(가) 들어 있습니다. 이 도구 집합을 알 수 없거나 누락된 경우 적절한 버전의 MSBuild를 설치하여 해당 도구 집합을 확인할 수 있습니다. 또는 정책상의 이유로 빌드에 특정 ToolsVersion이 적용될 수 있습니다. 프로젝트에 ToolsVersion="Current"이(가) 들어 있는 것으로 간주합니다. 자세한 내용은 http://go.microsoft.com/fwlink/?LinkId=293424를 참조하세요.
        조건이 잘못되어 "EnableIntermediateOutputPathMismatchWarning" 대상을 건너뜁니다. ('$(RestoreProjectStyle)' == 'PackageReference')이(가) ('' == 'PackageReference')(으)로 확인되었습니다.
@@ -852,10 +855,10 @@
      1>"D:\GitHubProjects\Dx11_LiesOfP\Framework_DX11\Client\Default\Client.vcxproj" 프로젝트의 "C:\Program Files\Microsoft Visual Studio\2022\Community\MSBuild\Microsoft\VC\v170\Microsoft.Cpp.DesignTime.targets" 파일에 있는 "SetTelemetryEnvironmentVariables" 대상("Build" 대상이 종속됨):
        "C:\Program Files\Microsoft Visual Studio\2022\Community\MSBuild\Microsoft\VC\v170\Microsoft.Build.CppTasks.Common.dll" 어셈블리에서 "SetEnv" 작업을 사용합니다.
        "SetEnv" 작업
-         VSTEL_SolutionSessionID={2C0B82AB-CA1B-4923-A4B7-00653982EC14}
+         VSTEL_SolutionSessionID={8C0C3445-5B7A-4C9F-98A5-69F9397D91E1}
        "SetEnv" 작업을 실행했습니다.
        "SetEnv" 작업
-         VSTEL_CurrentSolutionBuildID=3515333195
+         VSTEL_CurrentSolutionBuildID=968004140
        "SetEnv" 작업을 실행했습니다.
        "SetEnv" 작업
          VSTEL_SolutionPath=D:\GitHubProjects\Dx11_LiesOfP\Framework_DX11\Framework.sln
@@ -1351,6 +1354,7 @@
        조건이 잘못되어 "VCMessage" 작업을 건너뜁니다. ('%(ClCompile.ExcludedFromBuild)' != 'true' and '%(Filename)%(Extension)' != '@(ClCompile->'%(Filename)%(Extension)')' and '%(ObjectFileName)' == '@(ClCompile->Metadata(ObjectFileName)->Distinct())')이(가) ('' != 'true' and 'AObj_GodHands.cpp' != 'AObj_GodHands.cpp' and 'x64\Release\' == 'x64\Release\')(으)로 확인되었습니다.
        조건이 잘못되어 "VCMessage" 작업을 건너뜁니다. ('%(ClCompile.ExcludedFromBuild)' != 'true' and '%(Filename)%(Extension)' != '@(ClCompile->'%(Filename)%(Extension)')' and '%(ObjectFileName)' == '@(ClCompile->Metadata(ObjectFileName)->Distinct())')이(가) ('' != 'true' and 'AObj_GoldBall.cpp' != 'AObj_GoldBall.cpp' and 'x64\Release\' == 'x64\Release\')(으)로 확인되었습니다.
        조건이 잘못되어 "VCMessage" 작업을 건너뜁니다. ('%(ClCompile.ExcludedFromBuild)' != 'true' and '%(Filename)%(Extension)' != '@(ClCompile->'%(Filename)%(Extension)')' and '%(ObjectFileName)' == '@(ClCompile->Metadata(ObjectFileName)->Distinct())')이(가) ('' != 'true' and 'AObj_LightningBall.cpp' != 'AObj_LightningBall.cpp' and 'x64\Release\' == 'x64\Release\')(으)로 확인되었습니다.
+       조건이 잘못되어 "VCMessage" 작업을 건너뜁니다. ('%(ClCompile.ExcludedFromBuild)' != 'true' and '%(Filename)%(Extension)' != '@(ClCompile->'%(Filename)%(Extension)')' and '%(ObjectFileName)' == '@(ClCompile->Metadata(ObjectFileName)->Distinct())')이(가) ('' != 'true' and 'AObj_Bullet.cpp' != 'AObj_Bullet.cpp' and 'x64\Release\' == 'x64\Release\')(으)로 확인되었습니다.
        조건이 잘못되어 "VCMessage" 작업을 건너뜁니다. ('%(ClCompile.ExcludedFromBuild)' != 'true' and '%(Filename)%(Extension)' != '@(ClCompile->'%(Filename)%(Extension)')' and '%(ObjectFileName)' == '@(ClCompile->Metadata(ObjectFileName)->Distinct())')이(가) ('' != 'true' and 'AObj_StampBlast.cpp' != 'AObj_StampBlast.cpp' and 'x64\Release\' == 'x64\Release\')(으)로 확인되었습니다.
        조건이 잘못되어 "VCMessage" 작업을 건너뜁니다. ('%(ClCompile.ExcludedFromBuild)' != 'true' and '%(Filename)%(Extension)' != '@(ClCompile->'%(Filename)%(Extension)')' and '%(ObjectFileName)' == '@(ClCompile->Metadata(ObjectFileName)->Distinct())')이(가) ('' != 'true' and 'AObj_Stomp.cpp' != 'AObj_Stomp.cpp' and 'x64\Release\' == 'x64\Release\')(으)로 확인되었습니다.
        조건이 잘못되어 "VCMessage" 작업을 건너뜁니다. ('%(ClCompile.ExcludedFromBuild)' != 'true' and '%(Filename)%(Extension)' != '@(ClCompile->'%(Filename)%(Extension)')' and '%(ObjectFileName)' == '@(ClCompile->Metadata(ObjectFileName)->Distinct())')이(가) ('' != 'true' and 'AObj_Thunder.cpp' != 'AObj_Thunder.cpp' and 'x64\Release\' == 'x64\Release\')(으)로 확인되었습니다.
@@ -1729,7 +1733,7 @@
      1>"D:\GitHubProjects\Dx11_LiesOfP\Framework_DX11\Client\Default\Client.vcxproj" 프로젝트의 "C:\Program Files\Microsoft Visual Studio\2022\Community\MSBuild\Microsoft\VC\v170\Microsoft.CppBuild.targets" 파일에 있는 "SelectClCompile" 대상("ClCompile" 대상이 종속됨):
      1>"Client.vcxproj" 프로젝트에 "SelectClCompile" 대상을 빌드했습니다.
        조건이 잘못되어 "SelectAnalysisManifest" 대상을 건너뜁니다. ('$(RunMsvcAnalysis)'=='true' and '$(SelectedFiles)'!='')이(가) ('false'=='true' and ''!='')(으)로 확인되었습니다.
-       조건이 잘못되어 "ManagedIncrementalBuildPreProcessDependencyGraph" 대상을 건너뜁니다. ('@(ClCompile)' != '' and '$(EnableManagedIncrementalBuild)' == 'True')이(가) ('stdafx.cpp;x64\Release\unity_H1OF8DG1B0T9SX6O.cpp' != '' and 'false' == 'True')(으)로 확인되었습니다.
+       조건이 잘못되어 "ManagedIncrementalBuildPreProcessDependencyGraph" 대상을 건너뜁니다. ('@(ClCompile)' != '' and '$(EnableManagedIncrementalBuild)' == 'True')이(가) ('stdafx.cpp;x64\Release\unity_4C775S2BU7LHME4V.cpp' != '' and 'false' == 'True')(으)로 확인되었습니다.
      1>"D:\GitHubProjects\Dx11_LiesOfP\Framework_DX11\Client\Default\Client.vcxproj" 프로젝트의 "C:\Program Files\Microsoft Visual Studio\2022\Community\MSBuild\Microsoft\VC\v170\Microsoft.CppCommon.targets" 파일에 있는 "ClCompile" 대상("_ClCompile" 대상이 종속됨):
        조건이 잘못되어 "Delete" 작업을 건너뜁니다. ('%(ClCompile.DebugInformationFormat)' != '' and '%(ClCompile.DebugInformationFormat)' != 'None' and '%(ClCompile.DebugInformationFormat)' != 'OldStyle' and '%(ClCompile.ProgramDataBaseFileName)' != '' and !Exists(%(ClCompile.ProgramDataBaseFileName)))이(가) ('ProgramDatabase' != '' and 'ProgramDatabase' != 'None' and 'ProgramDatabase' != 'OldStyle' and 'x64\Release\vc143.pdb' != '' and !Exists(x64\Release\vc143.pdb))(으)로 확인되었습니다.
        조건이 잘못되어 "MultiToolTask" 작업을 건너뜁니다. ('%(ClCompile.CompilerIteration)' == 'Modules')이(가) ('' == 'Modules')(으)로 확인되었습니다.
@@ -1748,65 +1752,74 @@
        "CL" 작업
          다음에서 빌드된 캐시된 입력 종속성 테이블 사용:
          	D:\GitHubProjects\Dx11_LiesOfP\Framework_DX11\Client\Default\x64\Release\Client.tlog\CL.read.1.tlog
-         D:\GITHUBPROJECTS\DX11_LIESOFP\FRAMEWORK_DX11\CLIENT\DEFAULT\X64\RELEASE\UNITY_H1OF8DG1B0T9SX6O.CPP에 대한 출력:
-         	D:\GITHUBPROJECTS\DX11_LIESOFP\FRAMEWORK_DX11\CLIENT\DEFAULT\X64\RELEASE\UNITY_H1OF8DG1B0T9SX6O.OBJ
-         D:\GITHUBPROJECTS\DX11_LIESOFP\FRAMEWORK_DX11\CLIENT\PRIVATE\CARCASSTAIL.CPP이(가) 2024-12-26 오후 11:12:52에서 수정되었으므로 x64\Release\unity_H1OF8DG1B0T9SX6O.cpp이(가) 컴파일됩니다.
-         D:\GITHUBPROJECTS\DX11_LIESOFP\FRAMEWORK_DX11\CLIENT\DEFAULT\X64\RELEASE\UNITY_H1OF8DG1B0T9SX6O.CPP에 대한 출력:
-         	D:\GITHUBPROJECTS\DX11_LIESOFP\FRAMEWORK_DX11\CLIENT\DEFAULT\X64\RELEASE\UNITY_H1OF8DG1B0T9SX6O.OBJ
+         D:\GITHUBPROJECTS\DX11_LIESOFP\FRAMEWORK_DX11\CLIENT\DEFAULT\X64\RELEASE\UNITY_4C775S2BU7LHME4V.CPP에 대한 출력:
+         	D:\GITHUBPROJECTS\DX11_LIESOFP\FRAMEWORK_DX11\CLIENT\DEFAULT\X64\RELEASE\UNITY_4C775S2BU7LHME4V.OBJ
+         D:\GITHUBPROJECTS\DX11_LIESOFP\FRAMEWORK_DX11\CLIENT\PRIVATE\SIMONMANUS_CUTSCENE_GODHAND.CPP이(가) 2024-12-27 오전 12:10:48에서 수정되었으므로 x64\Release\unity_4C775S2BU7LHME4V.cpp이(가) 컴파일됩니다.
+         D:\GITHUBPROJECTS\DX11_LIESOFP\FRAMEWORK_DX11\CLIENT\DEFAULT\X64\RELEASE\UNITY_4C775S2BU7LHME4V.CPP에 대한 출력:
+         	D:\GITHUBPROJECTS\DX11_LIESOFP\FRAMEWORK_DX11\CLIENT\DEFAULT\X64\RELEASE\UNITY_4C775S2BU7LHME4V.OBJ
          쓰기 추적 로그:
          	x64\Release\Client.tlog\CL.write.1.tlog
          도구로 전달된 환경 변수:
-           VS_UNICODE_OUTPUT=2024
-           SARIF_OUTPUT_PIPE=64
-         C:\Program Files\Microsoft Visual Studio\2022\Community\VC\Tools\MSVC\14.40.33807\bin\HostX64\x64\CL.exe /c /I../../EngineSDK/Inc/ /I../Public/ /I../Default /I../../EngineSDK/Inc/PhysX /I../../EngineSDK/Inc/Fmod /Zi /nologo /W3 /WX- /diagnostics:column /sdl /Od /Ob0 /Oi /GL /D NDEBUG /D _WINDOWS /D _UNICODE /D UNICODE /Gm- /EHsc /MD /GS /Gy /fp:precise /Zc:wchar_t /Zc:forScope /Zc:inline /Yu"stdafx.h" /Fp"x64\Release\Client.pch" /Fo"x64\Release\\" /Fd"x64\Release\vc143.pdb" /external:W3 /Gd /TP /FC /errorReport:prompt x64\Release\unity_H1OF8DG1B0T9SX6O.cpp
+           VS_UNICODE_OUTPUT=1872
+           SARIF_OUTPUT_PIPE=1860
+         C:\Program Files\Microsoft Visual Studio\2022\Community\VC\Tools\MSVC\14.40.33807\bin\HostX64\x64\CL.exe /c /I../../EngineSDK/Inc/ /I../Public/ /I../Default /I../../EngineSDK/Inc/PhysX /I../../EngineSDK/Inc/Fmod /Zi /nologo /W3 /WX- /diagnostics:column /sdl /Od /Ob0 /Oi /GL /D NDEBUG /D _WINDOWS /D _UNICODE /D UNICODE /Gm- /EHsc /MD /GS /Gy /fp:precise /Zc:wchar_t /Zc:forScope /Zc:inline /Yu"stdafx.h" /Fp"x64\Release\Client.pch" /Fo"x64\Release\\" /Fd"x64\Release\vc143.pdb" /external:W3 /Gd /TP /FC /errorReport:prompt x64\Release\unity_4C775S2BU7LHME4V.cpp
          추적 명령:
-         C:\Program Files\Microsoft Visual Studio\2022\Community\MSBuild\Current\Bin\amd64\Tracker.exe /d "C:\Program Files (x86)\MSBuild\15.0\FileTracker\FileTracker32.dll" /i D:\GitHubProjects\Dx11_LiesOfP\Framework_DX11\Client\Default\x64\Release\Client.tlog /r D:\GITHUBPROJECTS\DX11_LIESOFP\FRAMEWORK_DX11\CLIENT\DEFAULT\X64\RELEASE\UNITY_H1OF8DG1B0T9SX6O.CPP /b MSBuildConsole_CancelEventef0c79e1ab154d49898e56f2879984c8  /c "C:\Program Files\Microsoft Visual Studio\2022\Community\VC\Tools\MSVC\14.40.33807\bin\HostX64\x64\CL.exe"  /c /I../../EngineSDK/Inc/ /I../Public/ /I../Default /I../../EngineSDK/Inc/PhysX /I../../EngineSDK/Inc/Fmod /Zi /nologo /W3 /WX- /diagnostics:column /sdl /Od /Ob0 /Oi /GL /D NDEBUG /D _WINDOWS /D _UNICODE /D UNICODE /Gm- /EHsc /MD /GS /Gy /fp:precise /Zc:wchar_t /Zc:forScope /Zc:inline /Yu"stdafx.h" /Fp"x64\Release\Client.pch" /Fo"x64\Release\\" /Fd"x64\Release\vc143.pdb" /external:W3 /Gd /TP /FC /errorReport:prompt x64\Release\unity_H1OF8DG1B0T9SX6O.cpp
-         unity_H1OF8DG1B0T9SX6O.cpp
+         C:\Program Files\Microsoft Visual Studio\2022\Community\MSBuild\Current\Bin\amd64\Tracker.exe /d "C:\Program Files (x86)\MSBuild\15.0\FileTracker\FileTracker32.dll" /i D:\GitHubProjects\Dx11_LiesOfP\Framework_DX11\Client\Default\x64\Release\Client.tlog /r D:\GITHUBPROJECTS\DX11_LIESOFP\FRAMEWORK_DX11\CLIENT\DEFAULT\X64\RELEASE\UNITY_4C775S2BU7LHME4V.CPP /b MSBuildConsole_CancelEventa961198a534f4011a69e5e5ec5b317e5  /c "C:\Program Files\Microsoft Visual Studio\2022\Community\VC\Tools\MSVC\14.40.33807\bin\HostX64\x64\CL.exe"  /c /I../../EngineSDK/Inc/ /I../Public/ /I../Default /I../../EngineSDK/Inc/PhysX /I../../EngineSDK/Inc/Fmod /Zi /nologo /W3 /WX- /diagnostics:column /sdl /Od /Ob0 /Oi /GL /D NDEBUG /D _WINDOWS /D _UNICODE /D UNICODE /Gm- /EHsc /MD /GS /Gy /fp:precise /Zc:wchar_t /Zc:forScope /Zc:inline /Yu"stdafx.h" /Fp"x64\Release\Client.pch" /Fo"x64\Release\\" /Fd"x64\Release\vc143.pdb" /external:W3 /Gd /TP /FC /errorReport:prompt x64\Release\unity_4C775S2BU7LHME4V.cpp
+         unity_4C775S2BU7LHME4V.cpp
      1>D:\GitHubProjects\Dx11_LiesOfP\Framework_DX11\EngineSDK\Inc\NvCloth\ps\PsAllocator.h(49,9): warning C4005: 'PX_ALLOC': 매크로 재정의
-         (소스 파일 '/x64/Release/unity_H1OF8DG1B0T9SX6O.cpp'을(를) 컴파일하는 중)
+         (소스 파일 '/x64/Release/unity_4C775S2BU7LHME4V.cpp'을(를) 컴파일하는 중)
              D:\GitHubProjects\Dx11_LiesOfP\Framework_DX11\EngineSDK\Inc\PhysX\foundation\PxAllocator.h(67,9):
              'PX_ALLOC'의 이전 정의를 참조하십시오.
          
      1>D:\GitHubProjects\Dx11_LiesOfP\Framework_DX11\EngineSDK\Inc\NvCloth\ps\PsAllocator.h(51,9): warning C4005: 'PX_FREE': 매크로 재정의
-         (소스 파일 '/x64/Release/unity_H1OF8DG1B0T9SX6O.cpp'을(를) 컴파일하는 중)
+         (소스 파일 '/x64/Release/unity_4C775S2BU7LHME4V.cpp'을(를) 컴파일하는 중)
              D:\GitHubProjects\Dx11_LiesOfP\Framework_DX11\EngineSDK\Inc\PhysX\foundation\PxAllocator.h(72,9):
              'PX_FREE'의 이전 정의를 참조하십시오.
          
      1>D:\GitHubProjects\Dx11_LiesOfP\Framework_DX11\EngineSDK\Inc\NvCloth\ps\PsAllocator.h(59,9): warning C4005: 'PX_NEW': 매크로 재정의
-         (소스 파일 '/x64/Release/unity_H1OF8DG1B0T9SX6O.cpp'을(를) 컴파일하는 중)
+         (소스 파일 '/x64/Release/unity_4C775S2BU7LHME4V.cpp'을(를) 컴파일하는 중)
              D:\GitHubProjects\Dx11_LiesOfP\Framework_DX11\EngineSDK\Inc\PhysX\foundation\PxAllocator.h(87,9):
              'PX_NEW'의 이전 정의를 참조하십시오.
          
      1>D:\GitHubProjects\Dx11_LiesOfP\Framework_DX11\EngineSDK\Inc\NvCloth\ps\PsAllocator.h(61,9): warning C4005: 'PX_DELETE': 매크로 재정의
-         (소스 파일 '/x64/Release/unity_H1OF8DG1B0T9SX6O.cpp'을(를) 컴파일하는 중)
+         (소스 파일 '/x64/Release/unity_4C775S2BU7LHME4V.cpp'을(를) 컴파일하는 중)
              D:\GitHubProjects\Dx11_LiesOfP\Framework_DX11\EngineSDK\Inc\PhysX\foundation\PxAllocator.h(89,9):
              'PX_DELETE'의 이전 정의를 참조하십시오.
          
      1>D:\GitHubProjects\Dx11_LiesOfP\Framework_DX11\EngineSDK\Inc\NvCloth\ps\PsAllocator.h(72,9): warning C4005: 'PX_DELETE_ARRAY': 매크로 재정의
-         (소스 파일 '/x64/Release/unity_H1OF8DG1B0T9SX6O.cpp'을(를) 컴파일하는 중)
+         (소스 파일 '/x64/Release/unity_4C775S2BU7LHME4V.cpp'을(를) 컴파일하는 중)
              D:\GitHubProjects\Dx11_LiesOfP\Framework_DX11\EngineSDK\Inc\PhysX\foundation\PxAllocator.h(90,9):
              'PX_DELETE_ARRAY'의 이전 정의를 참조하십시오.
          
+     1>D:\GitHubProjects\Dx11_LiesOfP\Framework_DX11\Client\Private\State_Player_Arm_Counter.cpp(90,51): warning C4018: '<=': signed 또는 unsigned가 일치하지 않습니다.
+         (소스 파일 '/x64/Release/unity_4C775S2BU7LHME4V.cpp'을(를) 컴파일하는 중)
+         
+     1>D:\GitHubProjects\Dx11_LiesOfP\Framework_DX11\Client\Private\State_Player_Arm_Counter.cpp(95,57): warning C4018: '<=': signed 또는 unsigned가 일치하지 않습니다.
+         (소스 파일 '/x64/Release/unity_4C775S2BU7LHME4V.cpp'을(를) 컴파일하는 중)
+         
+     1>D:\GitHubProjects\Dx11_LiesOfP\Framework_DX11\Client\Private\State_Player_Arm_Start.cpp(215,45): warning C4018: '<': signed 또는 unsigned가 일치하지 않습니다.
+         (소스 파일 '/x64/Release/unity_4C775S2BU7LHME4V.cpp'을(를) 컴파일하는 중)
+         
      1>D:\GitHubProjects\Dx11_LiesOfP\Framework_DX11\Client\Private\Pawn.cpp(276,36): warning C4927: 변환이 잘못되었습니다. 사용자 정의 변환이 암시적으로 두 번 이상 적용되었습니다.
-         (소스 파일 '/x64/Release/unity_H1OF8DG1B0T9SX6O.cpp'을(를) 컴파일하는 중)
+         (소스 파일 '/x64/Release/unity_4C775S2BU7LHME4V.cpp'을(를) 컴파일하는 중)
              D:\GitHubProjects\Dx11_LiesOfP\Framework_DX11\Client\Private\Pawn.cpp(276,36):
              'DirectX::SimpleMath::Vector3::Vector3(DirectX::FXMVECTOR) noexcept' 생성자를 호출하는 동안
              D:\GitHubProjects\Dx11_LiesOfP\Framework_DX11\EngineSDK\Inc\DirectXTK\SimpleMath.h(232,13):
              'DirectX::SimpleMath::Vector3::Vector3' 선언을 참조하십시오.
          
      1>D:\GitHubProjects\Dx11_LiesOfP\Framework_DX11\Client\Private\UIPage_Stat.cpp(333,8): warning C4834: [[nodiscard]] 특성이 포함된 함수의 반환 값을 버리는 중입니다.
-         (소스 파일 '/x64/Release/unity_H1OF8DG1B0T9SX6O.cpp'을(를) 컴파일하는 중)
+         (소스 파일 '/x64/Release/unity_4C775S2BU7LHME4V.cpp'을(를) 컴파일하는 중)
          
      1>D:\GitHubProjects\Dx11_LiesOfP\Framework_DX11\Client\Private\UIPage_Stat.cpp(337,8): warning C4834: [[nodiscard]] 특성이 포함된 함수의 반환 값을 버리는 중입니다.
-         (소스 파일 '/x64/Release/unity_H1OF8DG1B0T9SX6O.cpp'을(를) 컴파일하는 중)
+         (소스 파일 '/x64/Release/unity_4C775S2BU7LHME4V.cpp'을(를) 컴파일하는 중)
          
      1>D:\GitHubProjects\Dx11_LiesOfP\Framework_DX11\Client\Private\UIPage_Stat.cpp(341,8): warning C4834: [[nodiscard]] 특성이 포함된 함수의 반환 값을 버리는 중입니다.
-         (소스 파일 '/x64/Release/unity_H1OF8DG1B0T9SX6O.cpp'을(를) 컴파일하는 중)
+         (소스 파일 '/x64/Release/unity_4C775S2BU7LHME4V.cpp'을(를) 컴파일하는 중)
          
        "CL" 작업을 실행했습니다.
      1>"Client.vcxproj" 프로젝트에 "ClCompile" 대상을 빌드했습니다.
        조건이 잘못되어 "RunSelectedFileNativeCodeAnalysis" 대상을 건너뜁니다. ('$(RunMsvcAnalysis)'=='true' and '$(SelectedFiles)'!='')이(가) ('false'=='true' and ''!='')(으)로 확인되었습니다.
-       조건이 잘못되어 "ManagedIncrementalBuildPostProcessDependencyGraph" 대상을 건너뜁니다. ('@(ClCompile)' != '' and '$(EnableManagedIncrementalBuild)' == 'True')이(가) ('stdafx.cpp;x64\Release\unity_H1OF8DG1B0T9SX6O.cpp' != '' and 'false' == 'True')(으)로 확인되었습니다.
+       조건이 잘못되어 "ManagedIncrementalBuildPostProcessDependencyGraph" 대상을 건너뜁니다. ('@(ClCompile)' != '' and '$(EnableManagedIncrementalBuild)' == 'True')이(가) ('stdafx.cpp;x64\Release\unity_4C775S2BU7LHME4V.cpp' != '' and 'false' == 'True')(으)로 확인되었습니다.
        조건이 잘못되어 "NoAnalysisToolEnabledWarning" 대상을 건너뜁니다. ('$(RunCppAnalysis)'=='true' AND '$(EnableMicrosoftCodeAnalysis)'=='false' AND '$(EnableClangTidyCodeAnalysis)'=='false')이(가) ('false'=='true' AND 'true'=='false' AND 'false'=='false')(으)로 확인되었습니다.
        조건이 잘못되어 "RunSelectedFileClangTidy" 대상을 건너뜁니다. ('$(RunClangCppAnalysis)'=='true' AND '$(SelectedFiles)'!='')이(가) ('false'=='true' AND ''!='')(으)로 확인되었습니다.
        조건이 잘못되어 "MicrosoftAnalysisIncompatiableWithClangCl" 대상을 건너뜁니다. ('$(RunCppAnalysis)'=='true' AND '$(EnableMicrosoftCodeAnalysis)'=='true' AND '$(UseClangCl)'=='true')이(가) ('false'=='true' AND 'true'=='true' AND ''=='true')(으)로 확인되었습니다.
@@ -1938,10 +1951,10 @@
          	x64\Release\Client.tlog\link.write.1.tlog
          읽기 추적 로그:
          	x64\Release\Client.tlog\link.read.1.tlog
-         D:\GITHUBPROJECTS\DX11_LIESOFP\FRAMEWORK_DX11\CLIENT\DEFAULT\X64\RELEASE\CLIENT.RES|D:\GITHUBPROJECTS\DX11_LIESOFP\FRAMEWORK_DX11\CLIENT\DEFAULT\X64\RELEASE\STDAFX.OBJ|D:\GITHUBPROJECTS\DX11_LIESOFP\FRAMEWORK_DX11\CLIENT\DEFAULT\X64\RELEASE\UNITY_H1OF8DG1B0T9SX6O.OBJ에 대한 출력:
+         D:\GITHUBPROJECTS\DX11_LIESOFP\FRAMEWORK_DX11\CLIENT\DEFAULT\X64\RELEASE\CLIENT.RES|D:\GITHUBPROJECTS\DX11_LIESOFP\FRAMEWORK_DX11\CLIENT\DEFAULT\X64\RELEASE\STDAFX.OBJ|D:\GITHUBPROJECTS\DX11_LIESOFP\FRAMEWORK_DX11\CLIENT\DEFAULT\X64\RELEASE\UNITY_4C775S2BU7LHME4V.OBJ에 대한 출력:
          	D:\GITHUBPROJECTS\DX11_LIESOFP\FRAMEWORK_DX11\CLIENT\BIN\CLIENT.EXE
          	D:\GITHUBPROJECTS\DX11_LIESOFP\FRAMEWORK_DX11\CLIENT\BIN\CLIENT.PDB
-         D:\GITHUBPROJECTS\DX11_LIESOFP\FRAMEWORK_DX11\CLIENT\DEFAULT\X64\RELEASE\CLIENT.RES|D:\GITHUBPROJECTS\DX11_LIESOFP\FRAMEWORK_DX11\CLIENT\DEFAULT\X64\RELEASE\STDAFX.OBJ|D:\GITHUBPROJECTS\DX11_LIESOFP\FRAMEWORK_DX11\CLIENT\DEFAULT\X64\RELEASE\UNITY_H1OF8DG1B0T9SX6O.OBJ에 대한 입력 내용:
+         D:\GITHUBPROJECTS\DX11_LIESOFP\FRAMEWORK_DX11\CLIENT\DEFAULT\X64\RELEASE\CLIENT.RES|D:\GITHUBPROJECTS\DX11_LIESOFP\FRAMEWORK_DX11\CLIENT\DEFAULT\X64\RELEASE\STDAFX.OBJ|D:\GITHUBPROJECTS\DX11_LIESOFP\FRAMEWORK_DX11\CLIENT\DEFAULT\X64\RELEASE\UNITY_4C775S2BU7LHME4V.OBJ에 대한 입력 내용:
          	D:\GITHUBPROJECTS\DX11_LIESOFP\FRAMEWORK_DX11\ENGINESDK\LIB\ENGINE.LIB
          	D:\GITHUBPROJECTS\DX11_LIESOFP\FRAMEWORK_DX11\ENGINESDK\LIB\DIRECTXTK.LIB
          	C:\PROGRAM FILES (X86)\WINDOWS KITS\10\LIB\10.0.22621.0\UM\X64\KERNEL32.LIB
@@ -1958,7 +1971,7 @@
          	C:\PROGRAM FILES (X86)\WINDOWS KITS\10\LIB\10.0.22621.0\UM\X64\ODBCCP32.LIB
          	D:\GITHUBPROJECTS\DX11_LIESOFP\FRAMEWORK_DX11\CLIENT\DEFAULT\X64\RELEASE\CLIENT.RES
          	D:\GITHUBPROJECTS\DX11_LIESOFP\FRAMEWORK_DX11\CLIENT\DEFAULT\X64\RELEASE\STDAFX.OBJ
-         	D:\GITHUBPROJECTS\DX11_LIESOFP\FRAMEWORK_DX11\CLIENT\DEFAULT\X64\RELEASE\UNITY_H1OF8DG1B0T9SX6O.OBJ
+         	D:\GITHUBPROJECTS\DX11_LIESOFP\FRAMEWORK_DX11\CLIENT\DEFAULT\X64\RELEASE\UNITY_4C775S2BU7LHME4V.OBJ
          	C:\WINDOWS\GLOBALIZATION\SORTING\SORTDEFAULT.NLS
          	C:\PROGRAM FILES\MICROSOFT VISUAL STUDIO\2022\COMMUNITY\VC\TOOLS\MSVC\14.40.33807\BIN\HOSTX64\X64\C2.DLL
          	C:\PROGRAM FILES\MICROSOFT VISUAL STUDIO\2022\COMMUNITY\VC\TOOLS\MSVC\14.40.33807\LIB\X64\MSVCRT.LIB
@@ -1972,19 +1985,20 @@
          	C:\PROGRAM FILES\MICROSOFT VISUAL STUDIO\2022\COMMUNITY\VC\TOOLS\MSVC\14.40.33807\BIN\HOSTX64\X64\CVTRES.EXE
          	C:\WINDOWS\SYSTEM32\TZRES.DLL
          	D:\GITHUBPROJECTS\DX11_LIESOFP\FRAMEWORK_DX11\CLIENT\DEFAULT\X64\RELEASE\VC143.PDB
-         소스를 컴파일해야 합니다. 입력 내용 D:\GITHUBPROJECTS\DX11_LIESOFP\FRAMEWORK_DX11\CLIENT\DEFAULT\X64\RELEASE\UNITY_H1OF8DG1B0T9SX6O.OBJ이(가) 출력 내용 D:\GITHUBPROJECTS\DX11_LIESOFP\FRAMEWORK_DX11\CLIENT\BIN\CLIENT.EXE보다 최신입니다.
+         소스를 컴파일해야 합니다. 입력 내용 D:\GITHUBPROJECTS\DX11_LIESOFP\FRAMEWORK_DX11\CLIENT\DEFAULT\X64\RELEASE\UNITY_4C775S2BU7LHME4V.OBJ이(가) 출력 내용 D:\GITHUBPROJECTS\DX11_LIESOFP\FRAMEWORK_DX11\CLIENT\BIN\CLIENT.EXE보다 최신입니다.
          도구로 전달된 환경 변수:
-           VS_UNICODE_OUTPUT=1996
+           VS_UNICODE_OUTPUT=1828
          C:\Program Files\Microsoft Visual Studio\2022\Community\VC\Tools\MSVC\14.40.33807\bin\HostX64\x64\link.exe /ERRORREPORT:PROMPT /OUT:"..\Bin\Client.exe" /INCREMENTAL:NO /NOLOGO /LIBPATH:../../EngineSDK/lib/ Engine.lib DirectXTK.lib kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib /MANIFEST /MANIFESTUAC:"level='asInvoker' uiAccess='false'" /manifest:embed /DEBUG /PDB:"..\Bin\Client.pdb" /SUBSYSTEM:WINDOWS /OPT:REF /OPT:ICF /LTCG:incremental /LTCGOUT:"x64\Release\Client.iobj" /TLBID:1 /DYNAMICBASE /NXCOMPAT /IMPLIB:"..\Bin\Client.lib" /MACHINE:X64 x64\Release\Client.res
          x64\Release\stdafx.obj
-         x64\Release\unity_H1OF8DG1B0T9SX6O.obj
+         x64\Release\unity_4C775S2BU7LHME4V.obj
          추적 명령:
-         C:\Program Files\Microsoft Visual Studio\2022\Community\MSBuild\Current\Bin\amd64\Tracker.exe /a /d "C:\Program Files (x86)\MSBuild\15.0\FileTracker\FileTracker32.dll" /i D:\GitHubProjects\Dx11_LiesOfP\Framework_DX11\Client\Default\x64\Release\Client.tlog /r "D:\GITHUBPROJECTS\DX11_LIESOFP\FRAMEWORK_DX11\CLIENT\DEFAULT\X64\RELEASE\CLIENT.RES|D:\GITHUBPROJECTS\DX11_LIESOFP\FRAMEWORK_DX11\CLIENT\DEFAULT\X64\RELEASE\STDAFX.OBJ|D:\GITHUBPROJECTS\DX11_LIESOFP\FRAMEWORK_DX11\CLIENT\DEFAULT\X64\RELEASE\UNITY_H1OF8DG1B0T9SX6O.OBJ" /b MSBuildConsole_CancelEvent498d22c5421f4280af2130176b60d0ce  /c "C:\Program Files\Microsoft Visual Studio\2022\Community\VC\Tools\MSVC\14.40.33807\bin\HostX64\x64\link.exe"  /ERRORREPORT:PROMPT /OUT:"..\Bin\Client.exe" /INCREMENTAL:NO /NOLOGO /LIBPATH:../../EngineSDK/lib/ Engine.lib DirectXTK.lib kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib /MANIFEST /MANIFESTUAC:"level='asInvoker' uiAccess='false'" /manifest:embed /DEBUG /PDB:"..\Bin\Client.pdb" /SUBSYSTEM:WINDOWS /OPT:REF /OPT:ICF /LTCG:incremental /LTCGOUT:"x64\Release\Client.iobj" /TLBID:1 /DYNAMICBASE /NXCOMPAT /IMPLIB:"..\Bin\Client.lib" /MACHINE:X64 x64\Release\Client.res
+         C:\Program Files\Microsoft Visual Studio\2022\Community\MSBuild\Current\Bin\amd64\Tracker.exe /a /d "C:\Program Files (x86)\MSBuild\15.0\FileTracker\FileTracker32.dll" /i D:\GitHubProjects\Dx11_LiesOfP\Framework_DX11\Client\Default\x64\Release\Client.tlog /r "D:\GITHUBPROJECTS\DX11_LIESOFP\FRAMEWORK_DX11\CLIENT\DEFAULT\X64\RELEASE\CLIENT.RES|D:\GITHUBPROJECTS\DX11_LIESOFP\FRAMEWORK_DX11\CLIENT\DEFAULT\X64\RELEASE\STDAFX.OBJ|D:\GITHUBPROJECTS\DX11_LIESOFP\FRAMEWORK_DX11\CLIENT\DEFAULT\X64\RELEASE\UNITY_4C775S2BU7LHME4V.OBJ" /b MSBuildConsole_CancelEvent8d1ba8fb6fd945298b7f8c3370ff6dcc  /c "C:\Program Files\Microsoft Visual Studio\2022\Community\VC\Tools\MSVC\14.40.33807\bin\HostX64\x64\link.exe"  /ERRORREPORT:PROMPT /OUT:"..\Bin\Client.exe" /INCREMENTAL:NO /NOLOGO /LIBPATH:../../EngineSDK/lib/ Engine.lib DirectXTK.lib kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib /MANIFEST /MANIFESTUAC:"level='asInvoker' uiAccess='false'" /manifest:embed /DEBUG /PDB:"..\Bin\Client.pdb" /SUBSYSTEM:WINDOWS /OPT:REF /OPT:ICF /LTCG:incremental /LTCGOUT:"x64\Release\Client.iobj" /TLBID:1 /DYNAMICBASE /NXCOMPAT /IMPLIB:"..\Bin\Client.lib" /MACHINE:X64 x64\Release\Client.res
          x64\Release\stdafx.obj
-         x64\Release\unity_H1OF8DG1B0T9SX6O.obj
+         x64\Release\unity_4C775S2BU7LHME4V.obj
          코드를 생성하고 있습니다.
-         Previous IPDB and IOBJ mismatch, fall back to full compilation.
-         All 10278 functions were compiled because no usable IPDB/IOBJ from previous compilation was found.
+         2 of 10300 functions (<0.1%) were compiled, the rest were copied from previous compilation.
+           0 functions were new in current compilation
+           29 functions had inline decision re-evaluated but remain unchanged
          코드를 생성했습니다.
        "Link" 작업을 실행했습니다.
        "Message" 작업
@@ -2209,12 +2223,15 @@
          D:\GitHubProjects\Dx11_LiesOfP\Framework_DX11\EngineSDK\Inc\NvCloth\ps\PsAllocator.h(59,9): warning C4005: 'PX_NEW': 매크로 재정의
          D:\GitHubProjects\Dx11_LiesOfP\Framework_DX11\EngineSDK\Inc\NvCloth\ps\PsAllocator.h(61,9): warning C4005: 'PX_DELETE': 매크로 재정의
          D:\GitHubProjects\Dx11_LiesOfP\Framework_DX11\EngineSDK\Inc\NvCloth\ps\PsAllocator.h(72,9): warning C4005: 'PX_DELETE_ARRAY': 매크로 재정의
+         D:\GitHubProjects\Dx11_LiesOfP\Framework_DX11\Client\Private\State_Player_Arm_Counter.cpp(90,51): warning C4018: '<=': signed 또는 unsigned가 일치하지 않습니다.
+         D:\GitHubProjects\Dx11_LiesOfP\Framework_DX11\Client\Private\State_Player_Arm_Counter.cpp(95,57): warning C4018: '<=': signed 또는 unsigned가 일치하지 않습니다.
+         D:\GitHubProjects\Dx11_LiesOfP\Framework_DX11\Client\Private\State_Player_Arm_Start.cpp(215,45): warning C4018: '<': signed 또는 unsigned가 일치하지 않습니다.
          D:\GitHubProjects\Dx11_LiesOfP\Framework_DX11\Client\Private\Pawn.cpp(276,36): warning C4927: 변환이 잘못되었습니다. 사용자 정의 변환이 암시적으로 두 번 이상 적용되었습니다.
          D:\GitHubProjects\Dx11_LiesOfP\Framework_DX11\Client\Private\UIPage_Stat.cpp(333,8): warning C4834: [[nodiscard]] 특성이 포함된 함수의 반환 값을 버리는 중입니다.
          D:\GitHubProjects\Dx11_LiesOfP\Framework_DX11\Client\Private\UIPage_Stat.cpp(337,8): warning C4834: [[nodiscard]] 특성이 포함된 함수의 반환 값을 버리는 중입니다.
          D:\GitHubProjects\Dx11_LiesOfP\Framework_DX11\Client\Private\UIPage_Stat.cpp(341,8): warning C4834: [[nodiscard]] 특성이 포함된 함수의 반환 값을 버리는 중입니다.
 
-    경고 9개
+    경고 12개
     오류 0개
 
-경과 시간: 00:00:12.64
+경과 시간: 00:00:06.17

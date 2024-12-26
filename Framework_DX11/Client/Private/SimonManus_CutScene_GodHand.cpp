@@ -32,7 +32,7 @@ HRESULT CSimonManus_CutScene_GodHand::Initialize(void* pArg)
 		return E_FAIL;
 
 	m_pTransformCom->Set_Scaled(10.f, 10.f, 10.f);
-	m_pTransformCom->Set_State(CTransform::STATE_POSITION, _Vec3(0.3f, 17.45f, 1.f));
+	m_pTransformCom->Set_State(CTransform::STATE_POSITION, _Vec3(0.3f, 17.45f, 0.7f));
 	m_pTransformCom->Rotation(_vector{ 0, 1, 0, 0 }, XMConvertToRadians(50.f));
 
 	if (FAILED(Ready_Components()))
@@ -60,9 +60,9 @@ void CSimonManus_CutScene_GodHand::Update(_float fTimeDelta)
 		m_bAnimSpeedUp = true;
 		m_pModelCom->Set_SpeedPerSec((_uint)0, 30);
 	}
-	/*static _float fX = 0.3f;
+	static _float fX = 0.3f;
 	static _float fY = 17.45f;
-	static _float fZ = 1.f;
+	static _float fZ = 0.7f;
 
 	if (KEY_TAP(KEY::NUM1))
 	{
@@ -91,7 +91,7 @@ void CSimonManus_CutScene_GodHand::Update(_float fTimeDelta)
 		fZ += 0.05f;
 	}
 
-	m_pTransformCom->Set_State(CTransform::STATE_POSITION, _Vec3(fX, fY, fZ));*/
+	m_pTransformCom->Set_State(CTransform::STATE_POSITION, _Vec3(fX, fY, fZ));
 }
 
 void CSimonManus_CutScene_GodHand::Late_Update(_float fTimeDelta)

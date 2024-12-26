@@ -161,7 +161,7 @@ void CState_SimonManus_CutScene_Meet::Control_Dialog(_int iFrame)
         GET_GAMEINTERFACE->Show_Script(TEXT("감사하라! 이것이 신조차 삼킬 자, 나 시몬 마누스가 주는 선물이다."), TEXT("none"), 13.f);
         m_isShowDialog[3] = true;
     }
-    else  if (!m_isShowDialog[4] && iCurAnimIndex == m_iAnimation_End && iFrame >= 130)
+    else  if (!m_isShowDialog[4] && iCurAnimIndex == m_iAnimation_End && iFrame >= 100)
     {
         GET_GAMEINTERFACE->Show_Script(TEXT("이제 태어날 너희의 신을 경배하라!"), TEXT("none"), 8.f);
         m_isShowDialog[4] = true;

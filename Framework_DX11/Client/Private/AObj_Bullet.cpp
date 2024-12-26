@@ -88,7 +88,7 @@ void CAObj_Bullet::Late_Update(_float fTimeDelta)
     if (m_fLifeTime < m_fLifeDuration)
     {
         m_pGameInstance->Add_ColliderList(m_pColliderCom);
-#ifdef DEBUG
+#ifdef _DEBUG
         m_pGameInstance->Add_DebugObject(m_pColliderCom);
 #endif // DEBUG
     }
@@ -101,7 +101,9 @@ HRESULT CAObj_Bullet::Render()
     //if (FAILED(__super::Render()))
     //    return E_FAIL;
 
+#ifdef _DEBUG
     m_pColliderCom->Render();
+#endif // DEBUG
 
     return S_OK;
 }

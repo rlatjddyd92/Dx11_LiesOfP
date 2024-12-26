@@ -282,6 +282,7 @@ void CCutScene::First_Setting()
 		break;
 	case BOSS2_DEFEAT:
 		pPlayer->IsActive(false);
+		static_cast<CSimonManus*>(m_pGameInstance->Find_Object(LEVEL_GAMEPLAY, TEXT("Layer_SimonManus"), 0))->Start_CutScene(2);
 		m_pObjects[BOSS2] = static_cast<CPawn*>(m_pGameInstance->Find_Object(LEVEL_GAMEPLAY, TEXT("Layer_SimonManus"), 0));
 		break;
 	default:
