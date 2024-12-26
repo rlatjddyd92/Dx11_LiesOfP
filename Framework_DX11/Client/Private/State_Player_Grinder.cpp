@@ -87,7 +87,8 @@ void CState_Player_Grinder::Update(_float fTimeDelta)
     if (m_pPlayer->Key_Away(KEY::R))
     {
         m_pPlayer->Play_Sound(CPawn::PAWN_SOUND_EFFECT1, TEXT("SE_PC_MT_Item_Grinder_End_01.wav"));
-        m_pPlayer->Change_Animation(m_iAnimation_Grinder[2], false, 0.1f);
+        m_pPlayer->Change_Animation_Boundry(m_iAnimation_Grinder[2], false, 0.1f);
+        //m_pPlayer->Change_Animation(m_iAnimation_Grinder[2], false, 0.1f);
         m_pPlayer->DeActive_Effect(CPlayer::EFFECT_GRIND);
     }
     else if (m_pPlayer->Key_None(KEY::R))
@@ -96,6 +97,10 @@ void CState_Player_Grinder::Update(_float fTimeDelta)
         {
             if (m_pPlayer->Get_EndAnim(m_iAnimation_Grinder[2], true) || m_pPlayer->Get_EndAnim(m_iAnimation_Grinder[2]))
             {
+                m_pPlayer->SetUp_Animation_Boundry(m_iAnimation_Grinder[2], false, m_pPlayer->Get_Model()->Get_LastFrame_CurrentAnim(m_iAnimation_Grinder[2]));
+                //m_pPlayer->Get_Model()->Update_Animation_Boundary(0.f);
+                m_pPlayer->Get_Model()->Play_Animation(0);
+
                 m_pPlayer->DeActive_Effect(CPlayer::EFFECT_GRIND);
 
                 _uint iWeponType = m_pPlayer->Get_WeaponType();
@@ -108,7 +113,7 @@ void CState_Player_Grinder::Update(_float fTimeDelta)
             }
             else if (!Move(fTimeDelta))
             {
-                m_pPlayer->Change_Animation(m_iAnimation_Grinder[2], false, 0.1f, 0,false);
+                m_pPlayer->Change_Animation(m_iAnimation_Grinder[2], false, 0.1f, 0, false);
             }
 
         }

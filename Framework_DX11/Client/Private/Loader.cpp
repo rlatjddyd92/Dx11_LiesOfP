@@ -30,6 +30,8 @@
 #include "SpotEffect.h"
 #include "FollowedEffect.h"
 
+#include "AObj_Bullet.h"
+
 #include "AObj_StampBlast.h"
 #include "AObj_ChargeSwing.h"
 #include "AObj_GoldBall.h"
@@ -1261,6 +1263,11 @@ HRESULT CLoader::Ready_Prototype()
 	if (FAILED(m_pGameInstance->Add_Prototype(TEXT("Prototype_GameObject_Weapon_RebornerMale_Gun"),
 		CWeapon_RebornerMale_Gun::Create(m_pDevice, m_pContext))))
 		return E_FAIL;
+
+	if (FAILED(m_pGameInstance->Add_Prototype(TEXT("Prototype_GameObject_Reb_Bullet"),
+		CAObj_Bullet::Create(m_pDevice, m_pContext))))
+		return E_FAIL;
+
 
 	/* For. Prototype_GameObject_RebornerBigA */
 	if (FAILED(m_pGameInstance->Add_Prototype(TEXT("Prototype_GameObject_RebornerBigA"),

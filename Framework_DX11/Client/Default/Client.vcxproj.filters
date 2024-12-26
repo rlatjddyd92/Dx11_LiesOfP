@@ -1326,6 +1326,12 @@
     </Filter>
     <Filter Include="03.GameInterface_Controller\00.UIManager\00.UIPage\19.UIPage_Achievment\Status">
       <UniqueIdentifier>{71207553-8ab5-4308-abcf-fde764d7ecf6}</UniqueIdentifier>
+	</Filter>
+    <Filter Include="02.GameObjects\12.AttackObject\RebornerMale">
+      <UniqueIdentifier>{6eda7376-8972-4109-8ea0-2c4f83ca7d36}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.GameObjects\12.AttackObject\RebornerMale\Bullet">
+      <UniqueIdentifier>{a51c15c9-f261-47de-b895-70fdb9d8199b}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -2411,7 +2417,6 @@
     <ClInclude Include="..\Public\RebornerMale.h">
       <Filter>02.GameObjects\02.Pawn\01.Monster\Normal\RebornerMale</Filter>
     </ClInclude>
-    <ClInclude Include="..\Public\State_RebornerMale_RapidFire.h" />
     <ClInclude Include="..\Public\State_RebornerMale_RapidFire.h">
       <Filter>05.Fsm\Monster\RebornerMale\Attack\Route\RapidFire</Filter>
     </ClInclude>
@@ -2426,6 +2431,15 @@
     </ClInclude>
     <ClInclude Include="..\Public\Statistic_Data.h">
       <Filter>03.GameInterface_Controller\00.UIManager\00.UIPage\19.UIPage_Achievment\Status</Filter>
+	</ClInclude>
+    <ClInclude Include="..\Public\State_RebornerMale_Reload.h">
+      <Filter>05.Fsm\Monster\RebornerMale\Attack\Route\Reload</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Public\State_RebornerMale_RapidFire.h">
+      <Filter>05.Fsm\Monster\RebornerMale\Attack\Route\RapidFire</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Public\AObj_Bullet.h">
+      <Filter>02.GameObjects\12.AttackObject\RebornerMale\Bullet</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -3481,7 +3495,6 @@
     <ClCompile Include="..\Private\Weapon_RebornerMale_Gun.cpp">
       <Filter>02.GameObjects\06.Weapon\04.RebornerMale</Filter>
     </ClCompile>
-    <ClCompile Include="..\Private\State_RebornerMale_RapidFire.cpp" />
     <ClCompile Include="..\Private\State_RebornerMale_RapidFire.cpp">
       <Filter>05.Fsm\Monster\RebornerMale\Attack\Route\RapidFire</Filter>
     </ClCompile>
@@ -3496,6 +3509,15 @@
     </ClCompile>
     <ClCompile Include="..\Private\Statistic_Data.cpp">
       <Filter>03.GameInterface_Controller\00.UIManager\00.UIPage\19.UIPage_Achievment\Status</Filter>
+	</ClCompile>
+    <ClCompile Include="..\Private\State_RebornerMale_Reload.cpp">
+      <Filter>05.Fsm\Monster\RebornerMale\Attack\Route\Reload</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Private\State_RebornerMale_RapidFire.cpp">
+      <Filter>05.Fsm\Monster\RebornerMale\Attack\Route\RapidFire</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Private\AObj_Bullet.cpp">
+      <Filter>02.GameObjects\12.AttackObject\RebornerMale\Bullet</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

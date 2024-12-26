@@ -109,12 +109,23 @@ void CAObj_ThunderBolt::Update(_float fTimeDelta)
         _Vec3 vTargetPos = {};
         if (m_bCounter)
         {
-            vTargetPos = (_Vec3)m_pCopyRaxasia->Calc_CenterPos(true);            
+
+            vTargetPos = _Vec3{ m_pCopyRaxasia->Calc_CenterPos(true) };            
         }
         else
         {
-            vTargetPos = (_Vec3)m_pCopyRaxasia->Get_TargetPos();
+            vTargetPos = _Vec3{ m_pCopyRaxasia->Get_TargetPos() };
         }
+
+
+    //    <<<<<< < HEAD
+    //        vTargetPos = (_Vec3)m_pCopyRaxasia->Calc_CenterPos(true);
+    //}
+    //    else
+    //    {
+    //        vTargetPos = (_Vec3)m_pCopyRaxasia->Get_TargetPos();
+    //        ====== =
+
         _Vec3 vPos = m_pTransformCom->Get_State(CTransform::STATE_POSITION);
 
         _Vec3 vDir = { vTargetPos - vPos };

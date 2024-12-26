@@ -176,6 +176,7 @@
     <ClInclude Include="..\Public\AObj_GodHands.h" />
     <ClInclude Include="..\Public\AObj_GoldBall.h" />
     <ClInclude Include="..\Public\AObj_LightningBall.h" />
+    <ClInclude Include="..\Public\AObj_Bullet.h" />
     <ClInclude Include="..\Public\AObj_StampBlast.h" />
     <ClInclude Include="..\Public\AObj_Stomp.h" />
     <ClInclude Include="..\Public\AObj_Thunder.h" />
@@ -538,6 +539,7 @@
     <ClCompile Include="..\Private\AObj_GodHands.cpp" />
     <ClCompile Include="..\Private\AObj_GoldBall.cpp" />
     <ClCompile Include="..\Private\AObj_LightningBall.cpp" />
+    <ClCompile Include="..\Private\AObj_Bullet.cpp" />
     <ClCompile Include="..\Private\AObj_StampBlast.cpp" />
     <ClCompile Include="..\Private\AObj_Stomp.cpp" />
     <ClCompile Include="..\Private\AObj_Thunder.cpp" />

@@ -46,9 +46,9 @@ HRESULT CState_Player_Heal::Initialize(_uint iStateNum, void* pArg)
 HRESULT CState_Player_Heal::Start_State(void* pArg)
 {
     if (m_pFsm->Get_PrevState() != CPlayer::OH_RUN && m_pFsm->Get_PrevState() != CPlayer::TH_WALK)
-        m_pPlayer->Change_Animation(m_iAnimation_Heal, false);
+        m_pPlayer->Change_Animation(m_iAnimation_Heal, false, 0.3f, 0, false);
 
-    m_pPlayer->Change_Animation_Boundry(m_iAnimation_Heal, false);
+    m_pPlayer->Change_Animation_Boundry(m_iAnimation_Heal, false, 0.3f, 0);
 
     m_pPlayer->Set_MoveSpeed(m_fMoveSpeed);
 
@@ -73,9 +73,9 @@ void CState_Player_Heal::Update(_float fTimeDelta)
 
     if (!Move(fTimeDelta))
     {
-        m_pPlayer->Change_Animation(m_iAnimation_Heal, false);
+        m_pPlayer->Change_Animation(m_iAnimation_Heal, false, 0.1f, 0, false);
     }
-    m_pPlayer->Change_Animation_Boundry(m_iAnimation_Heal, false, 0.1f);
+    //m_pPlayer->Change_Animation_Boundry(m_iAnimation_Heal, false, 0.1f);
     
     if ((iFrame == 50 || iFrame == 51) && !m_isPlaySound)
     {
@@ -150,11 +150,11 @@ _bool CState_Player_Heal::Move(_float fTimeDelta)
         // 캐릭터의 전방 벡터와 이동 방향의 Dot값을 기반으로 전후 이동 처리
         if (fForwardDirDot > 0.7f) // 전진
         {
-            m_pPlayer->Change_Animation(m_iAnimation_Walk[iWalkType][WALK_F], true, 0.2f);
+            m_pPlayer->Change_Animation(m_iAnimation_Walk[iWalkType][WALK_F], true, 0.2f, 0, false);
         }
         else if (fForwardDirDot < -0.7f) // 후진
         {
-            m_pPlayer->Change_Animation(m_iAnimation_Walk[iWalkType][WALK_B], true, 0.2f);
+            m_pPlayer->Change_Animation(m_iAnimation_Walk[iWalkType][WALK_B], true, 0.2f, 0, false);
         }
         else
         {

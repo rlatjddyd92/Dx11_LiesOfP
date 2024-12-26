@@ -27,7 +27,8 @@ private:
     class CMonster* m_pMonster = { nullptr };
 
     _uint               m_iRouteTrack = {};
-    _bool               m_bFire = {false};
+    _bool               m_bFire = { false };
+    _bool               m_bSpeedCtrl = { false };
 
 private:
     _bool               End_Check();
