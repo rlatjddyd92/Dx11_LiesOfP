@@ -23,7 +23,7 @@ class ENGINE_DLL CPhysX_Manager :
 {
 
 private:
-    CPhysX_Manager();
+    CPhysX_Manager(ID3D11Device* pDevice, ID3D11DeviceContext* pContext);
     virtual ~CPhysX_Manager() = default;
 
 public:
@@ -41,6 +41,10 @@ public:
 public:
     _bool   RayCast(PxVec3 vRayPos, PxVec3 vRayDir, _vector* vHitPos, _vector* vNormal, _float* fHitDistance);
     _bool   RayCast(_vector vRayPos, _vector vRayDir, _vector* vHitPos, _vector* vNormal, _float* fHitDistance);
+
+private:
+    ID3D11Device* m_pDevice = { nullptr };
+    ID3D11DeviceContext* m_pContext = { nullptr };
 
 private:
     // PhysX Foundation 객체 - PhysX 시스템의 기본 인스턴스. 메모리 할당자와 에러 콜백을 초기화하는데 사용
@@ -87,7 +91,7 @@ private:
 
 
 public:
-    static CPhysX_Manager* Create();
+    static CPhysX_Manager* Create(ID3D11Device* pDevice, ID3D11DeviceContext* pContext);
     virtual void Free() override;
 };
 

@@ -18,6 +18,9 @@
 #include "D:\GitHubProjects\Dx11_LiesOfP\Framework_DX11\Client\Private\AObj_LightningBall.cpp"
 
 
+#include "D:\GitHubProjects\Dx11_LiesOfP\Framework_DX11\Client\Private\AObj_Bullet.cpp"
+
+
 #include "D:\GitHubProjects\Dx11_LiesOfP\Framework_DX11\Client\Private\AObj_StampBlast.cpp"
 
 

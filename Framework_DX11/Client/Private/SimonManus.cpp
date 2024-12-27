@@ -760,6 +760,9 @@ HRESULT CSimonManus::Ready_Effects()
 	m_Effects[P2_SH_EXPLOSION] = CEffect_Manager::Get_Instance()->Clone_Effect(TEXT("SimonManus_Attack_SummonHand_Explosion"), pParetnMatrix,
 		pSocketBoneMatrix, _Vec3(0.f, 0.f, 0.f), _Vec3(0.f, 0.f, 0.f), _Vec3(1.f, 1.f, 1.f));
 
+	m_Effects[P2_AURA] = CEffect_Manager::Get_Instance()->Clone_Effect(TEXT("SimonManus_2P_BodyAura"), pParetnMatrix,
+		nullptr, _Vec3(0.f, 0.f, 0.f), _Vec3(0.f, 0.f, 0.f), _Vec3(1.f, 1.f, 1.f));
+
 #pragma region ÄÆ½Å¿ë ÀÌÆåÆ®µé
 	m_Effects[CUTSCENE_P2_MAP] = CEffect_Manager::Get_Instance()->Clone_Effect(TEXT("Map_SimonManus_2P"), nullptr,
 		nullptr, _Vec3(0.f, 0.f, 0.f), _Vec3(0.f, 0.f, 0.f), _Vec3(1.f, 1.f, 1.f));
@@ -891,19 +894,27 @@ void CSimonManus::ChangePhase()
 	
 	pSocketBoneMatrix = m_pModelCom->Get_BoneCombindTransformationMatrix_Ptr("Bip002-L-Hand");
 	m_Effects[CUTSCENE_P2_ARM_AURA00]->Set_Matrices(pSocketBoneMatrix);
+	m_Effects[CUTSCENE_P2_ARM_AURA00]->Set_Loop(false);
 
 	pSocketBoneMatrix = m_pModelCom->Get_BoneCombindTransformationMatrix_Ptr("Bip002-L-Forearm");
 	m_Effects[CUTSCENE_P2_ARM_AURA01]->Set_Matrices(pSocketBoneMatrix);
+	m_Effects[CUTSCENE_P2_ARM_AURA01]->Set_Loop(false);
 
 	pSocketBoneMatrix = m_pModelCom->Get_BoneCombindTransformationMatrix_Ptr("Bip002-L-UpperArm");
 	m_Effects[CUTSCENE_P2_ARM_AURA02]->Set_Matrices(pSocketBoneMatrix);
+	m_Effects[CUTSCENE_P2_ARM_AURA02]->Set_Loop(false);
 
 	pSocketBoneMatrix = m_pModelCom->Get_BoneCombindTransformationMatrix_Ptr("Bip002-Spine1");
 	m_Effects[CUTSCENE_P2_ARM_AURA03]->Set_Matrices(pSocketBoneMatrix);
+	m_Effects[CUTSCENE_P2_ARM_AURA03]->Set_Loop(false);
 
 	pSocketBoneMatrix = m_pModelCom->Get_BoneCombindTransformationMatrix_Ptr("Bip002-Neck");
 	m_Effects[CUTSCENE_P2_ARM_AURA04]->Set_Matrices(pSocketBoneMatrix);
+	m_Effects[CUTSCENE_P2_ARM_AURA04]->Set_Loop(false);
 
+	pSocketBoneMatrix = m_pModelCom->Get_BoneCombindTransformationMatrix_Ptr("Bip002-L-UpperArm");
+	m_Effects[P2_AURA]->Set_Matrices(pSocketBoneMatrix);
+	m_Effects[P2_AURA]->Set_Loop(true);
 
 	m_isDead = false;
 	m_isChanged = true;
