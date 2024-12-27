@@ -52,6 +52,12 @@ public:
 		TOOLTIP_Item_Normal,
 		TOOLTIP_Item_Name,
 		TOOLTIP_Item_Desc,
+		TOOLTIP_Item_ShopInfo_Frame,
+		TOOLTIP_Item_ShopInfo_Title,
+		TOOLTIP_Item_ShopInfo_Ergo,
+		TOOLTIP_Item_ShopInfo_Count,
+		TOOLTIP_Item_ChestInfo_Frame,
+		TOOLTIP_Item_ChestInfo_Desc,
 
 
 

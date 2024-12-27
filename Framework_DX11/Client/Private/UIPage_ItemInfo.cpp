@@ -112,7 +112,7 @@ void CUIPage_ItemInfo::Late_Update(_float fTimeDelta)
 
 	// ToolTip
 	{
-		for (_int i = _int(PART_GROUP::TOOLTIP_Back); i <= _int(PART_GROUP::TOOLTIP_Item_Desc); ++i)
+		for (_int i = _int(PART_GROUP::TOOLTIP_Back); i <= _int(PART_GROUP::TOOLTIP_Item_ChestInfo_Desc); ++i)
 		{
 			if (i == _int(PART_GROUP::TOOLTIP_Back))
 				m_vecPart[i]->MovePart(_Vec2{0.f,0.f}, fTimeDelta);
@@ -125,7 +125,7 @@ void CUIPage_ItemInfo::Late_Update(_float fTimeDelta)
 	}
 
 	m_vecPageAction[_int(PAGEACTION::ACTION_ACTIVE)] = false;
-	__super::Array_Control(_int(PART_GROUP::TOOLTIP_Back), _int(PART_GROUP::TOOLTIP_Item_Desc), CTRL_COMMAND::COM_RENDER, false);
+	__super::Array_Control(_int(PART_GROUP::TOOLTIP_Back), _int(PART_GROUP::TOOLTIP_Item_ChestInfo_Desc), CTRL_COMMAND::COM_RENDER, false);
 }
 
 HRESULT CUIPage_ItemInfo::Render()
@@ -310,7 +310,7 @@ void CUIPage_ItemInfo::Action_ItemAction(_float fTimeDelta)
 
 void CUIPage_ItemInfo::Show_Tooltip(INVEN_ARRAY_TYPE eType, _int iIndex)
 {
-	for (_int i = _int(PART_GROUP::TOOLTIP_Back); i <= _int(PART_GROUP::TOOLTIP_Item_Desc); ++i)
+	for (_int i = _int(PART_GROUP::TOOLTIP_Back); i <= _int(PART_GROUP::TOOLTIP_Item_ChestInfo_Desc); ++i)
 	{
 		m_vecPart[i]->bRender = false;
 	}
@@ -367,6 +367,12 @@ void CUIPage_ItemInfo::Show_Tooltip(INVEN_ARRAY_TYPE eType, _int iIndex)
 			m_vecPart[_int(PART_GROUP::TOOLTIP_Item_Name)]->strText = pNowBlade->strName;
 			m_vecPart[_int(PART_GROUP::TOOLTIP_Item_Desc)]->strText = pNowBlade->strItem_Desc;
 		}
+
+		m_vecPart[_int(PART_GROUP::TOOLTIP_Item_ShopInfo_Count)]->strText = pNowBlade->bIsAvailable_Shop == false ? TEXT("판매 불가") : to_wstring(pNowBlade->iPrice);
+		m_vecPart[_int(PART_GROUP::TOOLTIP_Item_ChestInfo_Desc)]->strText = pNowBlade->bIsAvailable_Chest == false ? TEXT("보관함 사용 불가") : TEXT("보관함 사용 가능");
+
+		for (_int i = _int(PART_GROUP::TOOLTIP_Item_ShopInfo_Frame); i <= _int(PART_GROUP::TOOLTIP_Item_ChestInfo_Desc); ++i)
+			m_vecPart[i]->bRender = true;
 	}
 	else
 	{
@@ -388,6 +394,13 @@ void CUIPage_ItemInfo::Show_Tooltip(INVEN_ARRAY_TYPE eType, _int iIndex)
 			m_vecPart[_int(PART_GROUP::TOOLTIP_Item_Desc)]->bRender = true;
 			m_vecPart[_int(PART_GROUP::TOOLTIP_Item_Name)]->strText = pItem->strName;
 			m_vecPart[_int(PART_GROUP::TOOLTIP_Item_Desc)]->strText = pItem->strItem_Desc;
+
+			m_vecPart[_int(PART_GROUP::TOOLTIP_Item_ShopInfo_Count)]->strText = pItem->bIsAvailable_Shop == false ? TEXT("판매 불가") : to_wstring(pItem->iPrice);
+			m_vecPart[_int(PART_GROUP::TOOLTIP_Item_ChestInfo_Desc)]->strText = pItem->bIsAvailable_Chest == false ? TEXT("보관함 사용 불가") : TEXT("보관함 사용 가능");
+
+			for (_int i = _int(PART_GROUP::TOOLTIP_Item_ShopInfo_Frame); i <= _int(PART_GROUP::TOOLTIP_Item_ChestInfo_Desc); ++i)
+				m_vecPart[i]->bRender = true;
+
 		}
 
 		
@@ -396,7 +409,7 @@ void CUIPage_ItemInfo::Show_Tooltip(INVEN_ARRAY_TYPE eType, _int iIndex)
 
 void CUIPage_ItemInfo::Show_Tooltip(EQUIP_SLOT eSlot)
 {
-	for (_int i = _int(PART_GROUP::TOOLTIP_Back); i <= _int(PART_GROUP::TOOLTIP_Item_Desc); ++i)
+	for (_int i = _int(PART_GROUP::TOOLTIP_Back); i <= _int(PART_GROUP::TOOLTIP_Item_ChestInfo_Desc); ++i)
 	{
 		m_vecPart[i]->bRender = false;
 	}
@@ -452,6 +465,12 @@ void CUIPage_ItemInfo::Show_Tooltip(EQUIP_SLOT eSlot)
 			m_vecPart[_int(PART_GROUP::TOOLTIP_Item_Name)]->strText = pNowBlade->strName;
 			m_vecPart[_int(PART_GROUP::TOOLTIP_Item_Desc)]->strText = pNowBlade->strItem_Desc;
 		}
+
+		m_vecPart[_int(PART_GROUP::TOOLTIP_Item_ShopInfo_Count)]->strText = pNowBlade->bIsAvailable_Shop == false ? TEXT("판매 불가") : to_wstring(pNowBlade->iPrice);
+		m_vecPart[_int(PART_GROUP::TOOLTIP_Item_ChestInfo_Desc)]->strText = pNowBlade->bIsAvailable_Chest == false ? TEXT("보관함 사용 불가") : TEXT("보관함 사용 가능");
+
+		for (_int i = _int(PART_GROUP::TOOLTIP_Item_ShopInfo_Frame); i <= _int(PART_GROUP::TOOLTIP_Item_ChestInfo_Desc); ++i)
+			m_vecPart[i]->bRender = true;
 	}
 	else
 	{
@@ -472,6 +491,12 @@ void CUIPage_ItemInfo::Show_Tooltip(EQUIP_SLOT eSlot)
 			m_vecPart[_int(PART_GROUP::TOOLTIP_Item_Desc)]->bRender = true;
 			m_vecPart[_int(PART_GROUP::TOOLTIP_Item_Name)]->strText = pItem->strName;
 			m_vecPart[_int(PART_GROUP::TOOLTIP_Item_Desc)]->strText = pItem->strItem_Desc;
+
+			m_vecPart[_int(PART_GROUP::TOOLTIP_Item_ShopInfo_Count)]->strText = pItem->bIsAvailable_Shop == false ? TEXT("판매 불가") : to_wstring(pItem->iPrice);
+			m_vecPart[_int(PART_GROUP::TOOLTIP_Item_ChestInfo_Desc)]->strText = pItem->bIsAvailable_Chest == false ? TEXT("보관함 사용 불가") : TEXT("보관함 사용 가능");
+
+			for (_int i = _int(PART_GROUP::TOOLTIP_Item_ShopInfo_Frame); i <= _int(PART_GROUP::TOOLTIP_Item_ChestInfo_Desc); ++i)
+				m_vecPart[i]->bRender = true;
 		}
 		
 	}

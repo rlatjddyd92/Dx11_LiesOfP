@@ -140,7 +140,14 @@ HRESULT CUIPage_Play::Ready_UIPart_Group_Control()
 
 	m_iWeapon_Equip_0_Symbol = m_vecPart[m_vec_Group_Ctrl[_int(PART_GROUP::GROUP_WEAPON_EQUIP_NUM)]->PartIndexlist.front()]->iTexture_Index;
 
-	m_fNormal_Weapon_Fx_Alpha_Origin = m_vecPart[m_vec_Group_Ctrl[_int(PART_GROUP::GROUP_WEAPON_NORMAL_BACK_FX)]->PartIndexlist.front()]->fTextureColor.w;
+	_int iIndex = -1;
+
+	for (auto& iter : m_vec_Group_Ctrl[_int(PART_GROUP::GROUP_WEAPON_NORMAL_BACK_FX)]->PartIndexlist)
+	{
+		++iIndex;
+		m_fNormal_Weapon_Fx_Alpha_Origin[iIndex] = m_vecPart[iter]->fTextureColor.w;
+		m_vNormal_Weapon_Fx_Size_Origin[iIndex] = m_vecPart[iter]->fSize;
+	}
 
 	__super::Get_Front_Part_In_Control(_int(PART_GROUP::GROUP_HP_NUM))->iParentPart_Index = -1;
 	__super::Get_Front_Part_In_Control(_int(PART_GROUP::GROUP_HP_NUM))->fAdjust = __super::Get_Front_Part_In_Control(_int(PART_GROUP::GROUP_HP_NUM))->fPosition - _Vec2{ 640,360 };
@@ -378,8 +385,7 @@ void CUIPage_Play::Action_Weapon(_float fTimeDelta)
 			bIsNormal = pNow->bModule_Weapon;
 		}
 
-		if (bIsNormal)
-			m_vSwitch_Time.x += 0.01f;
+		m_vSwitch_Time.x = 0.01f;
 	}
 
 	m_bIsWeapon_Lock[0] = m_bIsWeapon_Lock[1];
@@ -575,7 +581,20 @@ void CUIPage_Play::LD_Potion_Tool_Update(_float fTimeDelta)
 
 void CUIPage_Play::LD_Bag_Update(_float fTimeDelta)
 {
-	if (!m_bIsBagOpen)
+	if (m_bIsBagOpen)
+	{
+		if (m_vBag_OpenAction_Time.x < m_vBag_OpenAction_Time.y)
+			m_vBag_OpenAction_Time.x = min(m_vBag_OpenAction_Time.x + fTimeDelta, m_vBag_OpenAction_Time.y);
+	}
+	else
+	{
+		if (m_vBag_OpenAction_Time.x > 0.f)
+			m_vBag_OpenAction_Time.x = max(m_vBag_OpenAction_Time.x - fTimeDelta, 0.f);
+	}
+	
+	Switch_Bag_UI_Action(fTimeDelta, m_bIsBagOpen);
+
+	if ((!m_bIsBagOpen) && (m_vBag_OpenAction_Time.x == 0.f))
 		return;
 
 	vector<const CItem_Manager::ITEM*> vecItem;
@@ -1024,28 +1043,40 @@ void CUIPage_Play::Switch_Weapon_UI_Action(_float fTimeDelta)
 {
 	if (m_vSwitch_Time.x > 0.f)
 	{
-		m_vecPart[m_vec_Group_Ctrl[_int(PART_GROUP::GROUP_WEAPON_NORMAL_BACK_FX)]->PartIndexlist.front()]->fTextureColor.w = m_fNormal_Weapon_Fx_Alpha_Origin * (m_vSwitch_Time.x / m_vSwitch_Time.y) * 2.f;
-		m_vecPart[m_vec_Group_Ctrl[_int(PART_GROUP::GROUP_WEAPON_NORMAL_BACK_FX)]->PartIndexlist.back()]->fTextureColor.w = m_fNormal_Weapon_Fx_Alpha_Origin * (m_vSwitch_Time.x / m_vSwitch_Time.y) * 2.f;
+		_float fRatio = (m_vSwitch_Time.x / m_vSwitch_Time.y);
+		m_vec_Group_Ctrl[_int(PART_GROUP::GROUP_WEAPON_NORMAL_BACK_FX)]->bRender = true;
+		_int iCount = -1;
+		for (auto& iter : m_vec_Group_Ctrl[_int(PART_GROUP::GROUP_WEAPON_NORMAL_BACK_FX)]->PartIndexlist)
+		{
+			++iCount;
+			m_vecPart[iter]->fTextureColor.w = m_fNormal_Weapon_Fx_Alpha_Origin[iCount] * (1.f + fRatio);
+			if (iCount % 2 == 0) m_vecPart[iter]->fSize = m_vNormal_Weapon_Fx_Size_Origin[iCount] * (1.f + fRatio);
+		}
 	}
 	else
 	{
-		m_vecPart[m_vec_Group_Ctrl[_int(PART_GROUP::GROUP_WEAPON_NORMAL_BACK_FX)]->PartIndexlist.front()]->bRender = false;
-		m_vecPart[m_vec_Group_Ctrl[_int(PART_GROUP::GROUP_WEAPON_NORMAL_BACK_FX)]->PartIndexlist.back()]->bRender = false;
-		m_vecPart[m_vec_Group_Ctrl[_int(PART_GROUP::GROUP_WEAPON_NORMAL_BACK_FX)]->PartIndexlist.front()]->fTextureColor.w = 0.f;
-		m_vecPart[m_vec_Group_Ctrl[_int(PART_GROUP::GROUP_WEAPON_NORMAL_BACK_FX)]->PartIndexlist.back()]->fTextureColor.w = 0.f;
+		m_vec_Group_Ctrl[_int(PART_GROUP::GROUP_WEAPON_NORMAL_BACK_FX)]->bRender = false;
 	}
 }
 
 void CUIPage_Play::Switch_Bag_UI_Action(_float fTimeDelta, _bool bIsOpen)
 {
+	for (_int i = _int(PART_GROUP::GROUP_BAG_FRAMELINE); i <= _int(PART_GROUP::GROUP_BAG_NUM); ++i)
+	{
+		m_vec_Group_Ctrl[i]->fRatio = m_vBag_OpenAction_Time.x / m_vBag_OpenAction_Time.y;
+		for (auto& iter : m_vec_Group_Ctrl[i]->PartIndexlist)
+		{
+			if (i == _int(PART_GROUP::GROUP_BAG_FRAMELINE))
+				m_vecPart[iter]->fTextureColor.w = 0.5f * (m_vBag_OpenAction_Time.x / m_vBag_OpenAction_Time.y);
+			else 
+				m_vecPart[iter]->fTextureColor.w = (m_vBag_OpenAction_Time.x / m_vBag_OpenAction_Time.y);
+		}
+	}
 }
 
 void CUIPage_Play::Using_Fable_UI_Action(_float fTimeDelta)
 {
-
-
-
-
+	
 }
 
 CUIPage_Play* CUIPage_Play::Create(ID3D11Device* pDevice, ID3D11DeviceContext* pContext)
