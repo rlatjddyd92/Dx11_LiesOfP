@@ -62,8 +62,10 @@ void CState_SimonManusP2_SpreadMagic::Effect_Check(_double CurTrackPos)
 
             CAttackObject::ATKOBJ_DESC Desc;
             _float4x4 WorldMat{};
-            _Vec3 vMainDir = _Vec3{ XMVector3Normalize(m_pMonster->Get_TargetPos() - 
-                m_pMonster->Get_Transform()->Get_State(CTransform::STATE_POSITION)) } 
+            _Vec3 vTargetPos = m_pMonster->Get_TargetPos();
+            vTargetPos.y += 1.f;
+            _Vec3 vMainDir = _Vec3{ vTargetPos -
+                m_pMonster->Get_Transform()->Get_State(CTransform::STATE_POSITION) } 
             + _Vec3{ 0.f, 0.2f, 0.f };
             _Vec3 vRight = m_pMonster->Get_Transform()->Get_State(CTransform::STATE_RIGHT);
             vRight.Normalize();

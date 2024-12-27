@@ -199,7 +199,9 @@ void CState_SimonManusP2_JumpToAttack::Effect_Check(_double CurTrackPos)
                     _float4x4 WorldMat{};
                     XMStoreFloat4x4(&WorldMat, (*m_pMonster->Get_BoneCombinedMat(m_pMonster->Get_UFBIndex(UFB_HAND_LEFT)) * (*m_pMonster->Get_Transform()->Get_WorldMatrix_Ptr())));
                     Desc.vPos = _Vec3{ WorldMat._41, WorldMat._42 - 0.2f, WorldMat._43 };
-                    _Vec3 vMainDir = m_pMonster->Get_TargetPos() - Desc.vPos;
+                    _Vec3 vTargetPos = m_pMonster->Get_TargetPos();
+                    vTargetPos.y += 1.f;
+                    _Vec3 vMainDir = vTargetPos - Desc.vPos;
                     vMainDir.Normalize();
 
                     Desc.vDir = _Vec3{ vMainDir - vRight * 5 };

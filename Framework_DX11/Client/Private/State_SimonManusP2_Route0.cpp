@@ -24,35 +24,50 @@ HRESULT CState_SimonManusP2_Route0::Start_State(void* pArg)
 
     m_bSwingSound = false;
     m_bSwing = false;
-
+    //m_pMonster->Get_Model()->Set_SpeedRatio(AN_ROUTE_FIRST, 0.1f);
     return S_OK;
 }
 
 void CState_SimonManusP2_Route0::Update(_float fTimeDelta)
 {
-    if (End_Check())
-    {
+    _double CurTrackPos = m_pMonster->Get_CurrentTrackPos();
 
-        switch (m_iRouteTrack)
+    switch (m_iRouteTrack)
+    {
+    case 0:
+        if (End_Check())
         {
-        case 0:
             m_bSwingSound = false;
             m_pMonster->Change_Animation(AN_ROUTE_LAST, false, 0.0f, 0);
             m_bSwing = false;
-            break;
+            ++m_iRouteTrack;
+            return;
+        }
 
-        case 1:
+        if (CurTrackPos <= 45.f || CurTrackPos >= 95.f)
+        {
+            _int iDir = m_pMonster->Get_Transform()->LookAt_Lerp_NoHeight(m_pMonster->Get_TargetDir(), 2, fTimeDelta);
+        }
+        
+        break;
+
+    case 1:
+        if (End_Check())
+        {
             m_pMonster->Change_State(CSimonManus::IDLE);
             return;
-            break;
-
-        default:
-            break;
         }
-        ++m_iRouteTrack;
-    }
 
-    _double CurTrackPos = m_pMonster->Get_CurrentTrackPos();
+        if (CurTrackPos <= 100.f || CurTrackPos >= 200.f)
+        {
+            _int iDir = m_pMonster->Get_Transform()->LookAt_Lerp_NoHeight(m_pMonster->Get_TargetDir(), 2, fTimeDelta);
+        }
+        
+        break;
+
+    default:
+        break;
+    }
 
     Collider_Check(CurTrackPos);
     Effect_Check(CurTrackPos);
@@ -96,7 +111,7 @@ void CState_SimonManusP2_Route0::Collider_Check(_double CurTrackPos)
 {
     if (m_iRouteTrack == 0) //AN_ROUTE_FIRST, 쓰러지면서 하는 스윙
     {
-        if (CurTrackPos >= 60 && CurTrackPos <= 85.f)
+        if (CurTrackPos >= 55.f && CurTrackPos <= 85.f)
         {
             m_pMonster->Active_CurrentWeaponCollider(1.3f, 0, HIT_TYPE::HIT_METAL, ATTACK_STRENGTH::ATK_NORMAL);
         }

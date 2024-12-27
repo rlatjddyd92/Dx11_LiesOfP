@@ -361,9 +361,6 @@
     <Filter Include="05.Fsm\Monster\SimonManus\P1\Attck\Single\Sting">
       <UniqueIdentifier>{6237cc31-566e-4238-9cc0-842b6d5a1659}</UniqueIdentifier>
     </Filter>
-    <Filter Include="05.Fsm\Monster\SimonManus\P1\Attck\Single\AvoidSwing">
-      <UniqueIdentifier>{5020c6ac-0497-4710-95db-fa739b2c22b6}</UniqueIdentifier>
-    </Filter>
     <Filter Include="05.Fsm\Monster\SimonManus\P1\Attck\Single\SwingMultiple">
       <UniqueIdentifier>{22542ba6-c808-4c9e-bf31-284b1ebc3d03}</UniqueIdentifier>
     </Filter>
@@ -442,9 +439,6 @@
     <Filter Include="05.Fsm\Monster\SimonManus\P2\Attack\Route\LightningToWave">
       <UniqueIdentifier>{36fc1f37-9fa8-4bcb-9bd8-eb43b4acc6b1}</UniqueIdentifier>
     </Filter>
-    <Filter Include="05.Fsm\Monster\SimonManus\P2\Attack\Route\Route0">
-      <UniqueIdentifier>{57e7b286-635d-48c5-bffc-666a38b621a5}</UniqueIdentifier>
-    </Filter>
     <Filter Include="05.Fsm\Monster\SimonManus\P2\Attack\Route\Route1">
       <UniqueIdentifier>{6467109c-1f2c-49c7-99be-29881975b050}</UniqueIdentifier>
     </Filter>
@@ -459,9 +453,6 @@
     </Filter>
     <Filter Include="05.Fsm\Monster\SimonManus\P2\Attack\Single\HighJumpFall">
       <UniqueIdentifier>{9d26d286-bc68-46cd-9a2a-003813a3bd73}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="05.Fsm\Monster\SimonManus\P2\Attack\Single\AvoidSwing">
-      <UniqueIdentifier>{2187779e-4c75-4ac3-801e-6b4b401bde9d}</UniqueIdentifier>
     </Filter>
     <Filter Include="05.Fsm\Monster\SimonManus\P2\Attack\Single\Wave">
       <UniqueIdentifier>{4a6b8ef2-d3b5-46d3-a1d3-971403ccfe29}</UniqueIdentifier>
@@ -1326,7 +1317,7 @@
     </Filter>
     <Filter Include="03.GameInterface_Controller\00.UIManager\00.UIPage\19.UIPage_Achievment\Status">
       <UniqueIdentifier>{71207553-8ab5-4308-abcf-fde764d7ecf6}</UniqueIdentifier>
-	</Filter>
+    </Filter>
     <Filter Include="02.GameObjects\12.AttackObject\RebornerMale">
       <UniqueIdentifier>{6eda7376-8972-4109-8ea0-2c4f83ca7d36}</UniqueIdentifier>
     </Filter>
@@ -1671,9 +1662,6 @@
     <ClInclude Include="..\Public\Weapon_SimonManus_Hammer.h">
       <Filter>02.GameObjects\06.Weapon\01.SimonManusWeapon</Filter>
     </ClInclude>
-    <ClInclude Include="..\Public\State_SimonManusP1_AvoidSwing.h">
-      <Filter>05.Fsm\Monster\SimonManus\P1\Attck\Single\AvoidSwing</Filter>
-    </ClInclude>
     <ClInclude Include="..\Public\State_SimonManusP1_ChasingSwing.h">
       <Filter>05.Fsm\Monster\SimonManus\P1\Attck\Route\ChasingSwing</Filter>
     </ClInclude>
@@ -1716,9 +1704,6 @@
     <ClInclude Include="..\Public\State_SimonManusP1_SwipMultiple_R.h">
       <Filter>05.Fsm\Monster\SimonManus\P1\Attck\Route\SwipMultiple_R</Filter>
     </ClInclude>
-    <ClInclude Include="..\Public\State_SimonManusP2_AvoidSwing.h">
-      <Filter>05.Fsm\Monster\SimonManus\P2\Attack\Single\AvoidSwing</Filter>
-    </ClInclude>
     <ClInclude Include="..\Public\State_SimonManusP2_BrutalAttack.h">
       <Filter>05.Fsm\Monster\SimonManus\P2\Attack\Single\BrutalAttack</Filter>
     </ClInclude>
@@ -1745,9 +1730,6 @@
     </ClInclude>
     <ClInclude Include="..\Public\State_SimonManusP2_LightningToWave.h">
       <Filter>05.Fsm\Monster\SimonManus\P2\Attack\Route\LightningToWave</Filter>
-    </ClInclude>
-    <ClInclude Include="..\Public\State_SimonManusP2_Route0.h">
-      <Filter>05.Fsm\Monster\SimonManus\P2\Attack\Route\Route0</Filter>
     </ClInclude>
     <ClInclude Include="..\Public\State_SimonManusP2_Route1.h">
       <Filter>05.Fsm\Monster\SimonManus\P2\Attack\Route\Route1</Filter>
@@ -2431,7 +2413,7 @@
     </ClInclude>
     <ClInclude Include="..\Public\Statistic_Data.h">
       <Filter>03.GameInterface_Controller\00.UIManager\00.UIPage\19.UIPage_Achievment\Status</Filter>
-	</ClInclude>
+    </ClInclude>
     <ClInclude Include="..\Public\State_RebornerMale_Reload.h">
       <Filter>05.Fsm\Monster\RebornerMale\Attack\Route\Reload</Filter>
     </ClInclude>
@@ -2752,9 +2734,6 @@
     <ClCompile Include="..\Private\Weapon_SimonManus_Hammer.cpp">
       <Filter>02.GameObjects\06.Weapon\01.SimonManusWeapon</Filter>
     </ClCompile>
-    <ClCompile Include="..\Private\State_SimonManusP1_AvoidSwing.cpp">
-      <Filter>05.Fsm\Monster\SimonManus\P1\Attck\Single\AvoidSwing</Filter>
-    </ClCompile>
     <ClCompile Include="..\Private\State_SimonManusP1_ChasingSwing.cpp">
       <Filter>05.Fsm\Monster\SimonManus\P1\Attck\Route\ChasingSwing</Filter>
     </ClCompile>
@@ -2797,9 +2776,6 @@
     <ClCompile Include="..\Private\State_SimonManusP1_SwipMultiple_R.cpp">
       <Filter>05.Fsm\Monster\SimonManus\P1\Attck\Route\SwipMultiple_R</Filter>
     </ClCompile>
-    <ClCompile Include="..\Private\State_SimonManusP2_AvoidSwing.cpp">
-      <Filter>05.Fsm\Monster\SimonManus\P2\Attack\Single\AvoidSwing</Filter>
-    </ClCompile>
     <ClCompile Include="..\Private\State_SimonManusP2_BrutalAttack.cpp">
       <Filter>05.Fsm\Monster\SimonManus\P2\Attack\Single\BrutalAttack</Filter>
     </ClCompile>
@@ -2826,9 +2802,6 @@
     </ClCompile>
     <ClCompile Include="..\Private\State_SimonManusP2_LightningToWave.cpp">
       <Filter>05.Fsm\Monster\SimonManus\P2\Attack\Route\LightningToWave</Filter>
-    </ClCompile>
-    <ClCompile Include="..\Private\State_SimonManusP2_Route0.cpp">
-      <Filter>05.Fsm\Monster\SimonManus\P2\Attack\Route\Route0</Filter>
     </ClCompile>
     <ClCompile Include="..\Private\State_SimonManusP2_Route1.cpp">
       <Filter>05.Fsm\Monster\SimonManus\P2\Attack\Route\Route1</Filter>
@@ -3509,7 +3482,7 @@
     </ClCompile>
     <ClCompile Include="..\Private\Statistic_Data.cpp">
       <Filter>03.GameInterface_Controller\00.UIManager\00.UIPage\19.UIPage_Achievment\Status</Filter>
-	</ClCompile>
+    </ClCompile>
     <ClCompile Include="..\Private\State_RebornerMale_Reload.cpp">
       <Filter>05.Fsm\Monster\RebornerMale\Attack\Route\Reload</Filter>
     </ClCompile>

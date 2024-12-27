@@ -20,6 +20,8 @@ HRESULT CState_SimonManusP2_Idle::Initialize(_uint iStateNum, void* pArg)
 HRESULT CState_SimonManusP2_Idle::Start_State(void* pArg)
 {
     m_pMonster->Change_Animation(AN_IDLE, true, 0.1f, 0);
+    m_bRunning = false;
+    m_bWalk = false;
 
     return S_OK;
 }
@@ -59,7 +61,7 @@ void CState_SimonManusP2_Idle::Update(_float fTimeDelta)
         {
             if (!m_bWalk)
             {
-                m_pMonster->Change_Animation(AN_WALK, true, 0.1f, 0);
+                m_pMonster->Change_Animation(AN_WALK_F, true, 0.1f, 0);
                 m_bWalk = true;
             }
             m_pMonster->Get_Transform()->LookAt_Lerp_NoHeight(m_pMonster->Get_TargetDir(), 1.5, fTimeDelta);
@@ -71,24 +73,38 @@ void CState_SimonManusP2_Idle::Update(_float fTimeDelta)
     else
     {
         _int iDir = m_pMonster->Get_Transform()->LookAt_Lerp_NoHeight(m_pMonster->Get_TargetDir(), 2, fTimeDelta);
-        switch (iDir)
+
+
+        if (fDist <= m_fNeedDist_ForAttack)
         {
-        case -1:
-            m_pMonster->Change_Animation(AN_TURN_LEFT, true, 0.1f);
-            break;
-
-        case 0:
-            m_pMonster->Change_Animation(AN_IDLE, true, 0.1f);
-            break;
-
-        case 1:
-            m_pMonster->Change_Animation(AN_TURN_RIGHT, true, 0.1f);
-            break;
-
-        default:
-            break;
+            if (m_pMonster->Get_CurrentAnimIndex() != AN_WALK_B)
+            {
+                m_pMonster->Change_Animation(AN_WALK_B, true, 0.1f, 0);
+            }
         }
+        else
+        {
+            switch (iDir)
+            {
+            case -1:
+                m_pMonster->Change_Animation(AN_TURN_LEFT, true, 0.1f);
+                break;
+
+            case 0:
+                m_pMonster->Change_Animation(AN_IDLE, true, 0.1f);
+                break;
+
+            case 1:
+                m_pMonster->Change_Animation(AN_TURN_RIGHT, true, 0.1f);
+                break;
+
+            default:
+                break;
+            }
+        }
+
         m_fIdleTime += fTimeDelta;
+
     }
 
 }
@@ -100,92 +116,82 @@ void CState_SimonManusP2_Idle::End_State()
 
 void CState_SimonManusP2_Idle::Calc_Act_Attack()
 {
-    if (m_iAtkTrack >= 16)
+    if (m_iAtkTrack >= 14)
     {
         m_iAtkTrack = 0;
     }
-  
+
     switch (m_iAtkTrack)
     {
     case 0:
-        m_pMonster->Change_State(CSimonManus::ATKP2_ROUTE_0);
-        m_fNeedDist_ForAttack = 8.f;
+        m_pMonster->Change_State(CSimonManus::ATKP2_ROUTE_1);
+        m_fNeedDist_ForAttack = 11.f;
         break;
 
     case 1:
-        m_pMonster->Change_State(CSimonManus::ATKP2_ROUTE_1);
-        m_fNeedDist_ForAttack = 8.f;
-        break;
-
-    case 2:
         m_pMonster->Change_State(CSimonManus::ATKP2_SWIPMULTIPLE);
         m_fNeedDist_ForAttack = 12.f;
         break;
 
-    case 3:
+    case 2:
         m_pMonster->Change_State(CSimonManus::ATKP2_WAVE);
-        m_fNeedDist_ForAttack = 8.f;
+        m_fNeedDist_ForAttack = 16.f;
+        break;
+
+    case 3:
+        m_pMonster->Change_State(CSimonManus::ATKP2_JUMPTOATTACK);
+        m_fNeedDist_ForAttack = 25.f;
         break;
 
     case 4:
-        m_pMonster->Change_State(CSimonManus::ATKP2_JUMPTOATTACK);
-        m_fNeedDist_ForAttack = 15.f;
-        break;
-
-    case 5:
         m_pMonster->Change_State(CSimonManus::ATKP2_HIGHJUMPFALL);
-        m_fNeedDist_ForAttack = 6.f;
+        m_fNeedDist_ForAttack = 8.f;
         //m_pMonster->Change_State(CSimonManus::ATKP2_LIGHTNINGTOWAVE);
         break;
 
-    case 6:
-        m_pMonster->Change_State(CSimonManus::ATKP2_AVOIDSWING);
-        m_fNeedDist_ForAttack = 6.f;
-        break;
-
-    case 7:
+    case 5:
         m_pMonster->Change_State(CSimonManus::ATKP2_BRUTALATTACK);
-        m_fNeedDist_ForAttack = 5.5f;
+        m_fNeedDist_ForAttack = 6.5f;
         break;
 
-    case 8:
+    case 6:
         m_pMonster->Change_State(CSimonManus::ATKP2_STAMP);
         m_fNeedDist_ForAttack = 6.5f;
         break;
 
-    case 9:
+    case 7:
         m_pMonster->Change_State(CSimonManus::ATKP2_SWINGDOWN_SWING);
         m_fNeedDist_ForAttack = 7.5f;
         break;
 
-    case 10:
+    case 8:
         m_pMonster->Change_State(CSimonManus::ATKP2_STING);
         m_fNeedDist_ForAttack = 20.f;
         break;
 
-    case 11:
+    case 9:
         m_pMonster->Change_State(CSimonManus::ATKP2_THUNDERCALLING);
         m_fNeedDist_ForAttack = 10.5f;
         break;
 
-    case 12:
+    case 10:
         m_pMonster->Change_State(CSimonManus::ATKP2_CHASINGSWING);
         m_fNeedDist_ForAttack = 12.5f;
         break;
 
-    case 13:
+    case 11:
         m_pMonster->Change_State(CSimonManus::ATKP2_SPREADMAGIC);
         m_fNeedDist_ForAttack = 8.f;
         break;
 
-    case 14:
+    case 12:
         m_pMonster->Change_State(CSimonManus::ATKP2_ROUTE_2);
         m_fNeedDist_ForAttack = 20.f;
         break;
 
-    case 15:
+    case 13:
         m_pMonster->Change_State(CSimonManus::ATKP2_THUNDERBALL);
-        m_fNeedDist_ForAttack = 8.f;
+        m_fNeedDist_ForAttack = 11.f;
         break;
 
     default:

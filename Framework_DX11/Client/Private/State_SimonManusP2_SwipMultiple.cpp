@@ -41,6 +41,7 @@ HRESULT CState_SimonManusP2_SwipMultiple::Start_State(void* pArg)
     m_bSwing_Sound = false;
     m_bStamp_Sound = false;
     m_bSwing = false;
+    m_bResetList = false;
 
     return S_OK;
 }
@@ -148,6 +149,15 @@ void CState_SimonManusP2_SwipMultiple::Collider_Check(_double CurTrackPos)
         {
             m_pMonster->DeActive_CurretnWeaponCollider();
         }
+
+        if (!m_bResetList)
+        {
+            if (CurTrackPos >= 40.f)
+            {
+                m_bResetList = true;
+                m_pMonster->Reset_WeaponOverlapCheck();
+            }
+        }
     }
 }
 
@@ -200,6 +210,7 @@ void CState_SimonManusP2_SwipMultiple::Effect_Check(_double CurTrackPos)
         {
             m_pMonster->DeActive_Effect(CSimonManus::P1_TRAIL);
         }
+
     }
 }
 

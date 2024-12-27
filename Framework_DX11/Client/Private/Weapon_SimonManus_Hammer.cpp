@@ -43,7 +43,7 @@ HRESULT CWeapon_SimonManus_Hammer::Initialize(void* pArg)
 	*m_pParentAtk = 200.f;
 	m_strObjectTag = TEXT("MonsterWeapon");
 
-	m_fDamageAmount = 200.f;
+	m_fDamageAmount = 20.f;
 
 	return S_OK;
 }
@@ -74,6 +74,7 @@ void CWeapon_SimonManus_Hammer::Update(_float fTimeDelta)
 	}
 
 	m_pColliderCom->Update(&m_WorldMatrix);
+	m_pExtraColliderCom->Update(&m_WorldMatrix);
 }
 
 void CWeapon_SimonManus_Hammer::Late_Update(_float fTimeDelta)
@@ -85,6 +86,7 @@ void CWeapon_SimonManus_Hammer::Late_Update(_float fTimeDelta)
 	__super::Late_Update(fTimeDelta);
 
 	m_pGameInstance->Add_ColliderList(m_pColliderCom);
+	m_pGameInstance->Add_ColliderList(m_pExtraColliderCom);
 	m_pGameInstance->Add_RenderObject(CRenderer::RG_NONBLEND, this);
 	m_pGameInstance->Add_RenderObject(CRenderer::RG_SHADOWOBJ, this);
 }
@@ -94,6 +96,10 @@ HRESULT CWeapon_SimonManus_Hammer::Render()
 	if (FAILED(__super::Render()))
 		return E_FAIL;
 
+#ifdef _DEBUG
+	if (nullptr != m_pExtraColliderCom)
+		m_pExtraColliderCom->Render();
+#endif
 	return S_OK;
 }
 
@@ -150,6 +156,38 @@ _bool CWeapon_SimonManus_Hammer::is_EndAnim(_int iAnimIndex)
 	return m_pModelCom->Get_IsEndAnimArray()[iAnimIndex];
 }
 
+_bool CWeapon_SimonManus_Hammer::Active_Collider(_float fDamageRatio, _uint iHandIndex, _uint iHitType, _uint iAtkStrength)
+{
+	if (m_pColliderCom->IsActive())
+		return false;
+
+	m_fDamageRatio = fDamageRatio;
+	m_pColliderCom->IsActive(true);
+	m_iHitType = iHitType;
+	m_iAtkStrength = iAtkStrength;
+	m_DamagedObjects.clear();
+
+	if (m_pExtraColliderCom->IsActive())
+		return false;
+
+	m_pExtraColliderCom->IsActive(true);
+	
+	return true;
+}
+
+void CWeapon_SimonManus_Hammer::DeActive_Collider(_uint iHandIndex)
+{
+	if (!m_pColliderCom->IsActive())
+		return;
+
+	m_pColliderCom->IsActive(false);
+
+	if (!m_pExtraColliderCom->IsActive())
+		return;
+
+	m_pExtraColliderCom->IsActive(false);
+}
+
 HRESULT CWeapon_SimonManus_Hammer::Ready_Components()
 {
 	if (FAILED(__super::Ready_Components()))
@@ -170,6 +208,17 @@ HRESULT CWeapon_SimonManus_Hammer::Ready_Components()
 		TEXT("Com_Collider"), reinterpret_cast<CComponent**>(&m_pColliderCom), &ColliderDesc)))
 		return E_FAIL;
 	m_pColliderCom->Set_Owner(this);
+
+
+	//m_pExtraColliderCom	
+	ColliderDesc.vExtents = _float3(3.5f, 0.8f, 0.8f);
+	ColliderDesc.vCenter = _float3(-2.f, 0.0f, -0.8f);
+	ColliderDesc.vAngles = _float3(0.f, -0.5f, 0.f);
+
+	if (FAILED(__super::Add_Component(LEVEL_STATIC, TEXT("Prototype_Component_Collider_OBB"),
+		TEXT("Com_ExtraCollider"), reinterpret_cast<CComponent**>(&m_pExtraColliderCom), &ColliderDesc)))
+		return E_FAIL;
+	m_pExtraColliderCom->Set_Owner(this);
 
 	return S_OK;
 }

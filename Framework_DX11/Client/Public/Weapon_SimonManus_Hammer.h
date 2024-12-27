@@ -35,8 +35,15 @@ public:
 	virtual void ChangeAnimation(_int iAnimIndex, _bool isLoop, _float fChangeDuration = 0.2f, _int iStartFrame = 0, _bool bEitherChange = true, _bool bSameChange = false) override;
 	virtual _bool is_EndAnim(_int iAnimIndex);
 
+	virtual _bool Active_Collider(_float fDamageRatio = 1.f, _uint iHandIndex = 0, _uint iHitType = 0, _uint iAtkStrength = 0);
+	virtual void DeActive_Collider(_uint iHandIndex = 1);
+
+
 private:
 	HRESULT Ready_Components();
+
+private:
+	CCollider* m_pExtraColliderCom = { nullptr };
 
 private:
 	_bool   m_bStoppedSpin = { true };
