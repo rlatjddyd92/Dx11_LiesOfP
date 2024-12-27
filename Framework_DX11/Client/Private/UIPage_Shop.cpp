@@ -106,6 +106,7 @@ void CUIPage_Shop::OpenAction()
 {
 	__super::OpenAction();
 	m_pSoundCom->Play2D(TEXT("SE_UI_OpenMenu_04.wav"), &g_fUIVolume);
+	GET_GAMEINTERFACE->Off_ItemInfo_UI();
 	Setting_SellTab();
 	Setting_BuyTab();
 }
@@ -114,6 +115,7 @@ void CUIPage_Shop::CloseAction()
 {
 	__super::CloseAction();
 	m_pSoundCom->Play2D(TEXT("SE_UI_CloseWindow_01.wav"), &g_fUIVolume);
+	GET_GAMEINTERFACE->Off_ItemInfo_UI();
 }
 
 CHECK_MOUSE CUIPage_Shop::Check_Page_Action(_float fTimeDelta)

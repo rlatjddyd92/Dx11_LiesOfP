@@ -1049,8 +1049,8 @@ void CUIPage_Play::Switch_Weapon_UI_Action(_float fTimeDelta)
 		for (auto& iter : m_vec_Group_Ctrl[_int(PART_GROUP::GROUP_WEAPON_NORMAL_BACK_FX)]->PartIndexlist)
 		{
 			++iCount;
-			m_vecPart[iter]->fTextureColor.w = m_fNormal_Weapon_Fx_Alpha_Origin[iCount] * (1.f + fRatio);
-			if (iCount % 2 == 0) m_vecPart[iter]->fSize = m_vNormal_Weapon_Fx_Size_Origin[iCount] * (1.f + fRatio);
+			m_vecPart[iter]->fTextureColor.w = m_fNormal_Weapon_Fx_Alpha_Origin[iCount] * (0.5 + fRatio);
+			if (iCount % 2 == 0) m_vecPart[iter]->fSize = m_vNormal_Weapon_Fx_Size_Origin[iCount] * (0.5 + fRatio);
 		}
 	}
 	else

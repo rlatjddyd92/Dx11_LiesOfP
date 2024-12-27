@@ -183,7 +183,7 @@ ITEM_RESULT CItem_Manager::EquipWeapon_Inven(INVEN_ARRAY_TYPE eIndex, EQUIP_SLOT
 		}
 
 		m_bIsChange = true;
-
+		
 		if (GET_GAMEINTERFACE->IsGamePause())
 			GET_GAMEINTERFACE->Input_Achievment_Data(4, 1);
 
@@ -959,6 +959,7 @@ void CItem_Manager::Buy_ShopItem(_int iIndex, _int iCount)
 	strItem += TEXT(" -> 구입수량 : ");
 	strItem += to_wstring(iCount);
 
+	GET_GAMEINTERFACE->Input_Achievment_Data(0, m_vecItem_BasicSpec[iIndex]->iPrice * iCount);
 	GET_GAMEINTERFACE->Show_Popup(TEXT("구매 성공"), strItem);
 	GET_GAMEINTERFACE->Input_Achievment_Data(1, 1);
 	GET_GAMEINTERFACE->Get_Player()->Get_Player_Stat_Adjust()->iErgo -= m_vecItem_BasicSpec[iIndex]->iPrice * iCount;
@@ -1244,13 +1245,6 @@ HRESULT CItem_Manager::Initialize_Item()
 	}
 
 	m_iWeapon_Select = 0;
-
-	
-
-
-
-
-
 
 	return S_OK;
 }

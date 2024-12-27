@@ -8,9 +8,7 @@
 #include "Player.h"
 
 BEGIN(Engine)
-class CShader;
-class CTexture;
-class CVIBuffer_Rect;
+
 END
 
 BEGIN(Client)

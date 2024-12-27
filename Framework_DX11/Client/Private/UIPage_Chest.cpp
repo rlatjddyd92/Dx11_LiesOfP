@@ -116,6 +116,7 @@ void CUIPage_Chest::OpenAction()
 	Setting_Cell_Inven();
 	Setting_Cell_Dest();
 	Reset_PopupInfo();
+	GET_GAMEINTERFACE->Off_ItemInfo_UI();
 }
 
 void CUIPage_Chest::CloseAction()
@@ -123,6 +124,7 @@ void CUIPage_Chest::CloseAction()
 	__super::CloseAction();
 	GET_GAMEINTERFACE->Set_Show_NewMark_Off();
 	GET_GAMEINTERFACE->Off_Focus();
+	GET_GAMEINTERFACE->Off_ItemInfo_UI();
 }
 
 CHECK_MOUSE CUIPage_Chest::Check_Page_Action(_float fTimeDelta)

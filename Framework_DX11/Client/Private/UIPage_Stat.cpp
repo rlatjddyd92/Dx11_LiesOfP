@@ -152,6 +152,7 @@ void CUIPage_Stat::Action_Point(_float fTimeDelta)
 			if (bClick)
 				if (m_iLevelUp_Buffer_Point[i] > 0)
 				{
+					m_pSoundCom->Play2D(TEXT("SE_UI_QuickSlotChange_03.wav"), &g_fUIVolume);
 					--m_iLevelUp_Buffer_Point[i];
 					--m_iUsing_Point_Now;
 				}	
@@ -162,6 +163,7 @@ void CUIPage_Stat::Action_Point(_float fTimeDelta)
 			m_iFocus_Point = i;
 			if (bClick)
 			{
+				m_pSoundCom->Play2D(TEXT("SE_UI_QuickSlotChange_03.wav"), &g_fUIVolume);
 				++m_iLevelUp_Buffer_Point[i];
 				++m_iUsing_Point_Now;
 			}
@@ -499,10 +501,11 @@ void CUIPage_Stat::Input_LevelUp_Stat()
 	GET_GAMEINTERFACE->Input_Achievment_Data(3, fHp);
 
 	GET_GAMEINTERFACE->Input_Achievment_Data(10, 1);
-	_wstring strErgo_Spend_Inform = TEXT("에르고 사용량 : ");
-	strErgo_Spend_Inform += to_wstring(m_iUsing_Point_Now * iCost);
 
-	GET_GAMEINTERFACE->Show_Popup(TEXT("레벨 업 성공"), strErgo_Spend_Inform);
+	m_pSoundCom->Play2D(TEXT("SE_UI_LevelUP.wav"), &g_fUIVolume);
+	//_wstring strErgo_Spend_Inform = TEXT("에르고 사용량 : ");
+	//strErgo_Spend_Inform += to_wstring(m_iUsing_Point_Now * iCost);
+	//GET_GAMEINTERFACE->Show_Popup(TEXT("레벨 업 성공"), strErgo_Spend_Inform);
 
 	m_iUsing_Point_Now = 0;
 }
