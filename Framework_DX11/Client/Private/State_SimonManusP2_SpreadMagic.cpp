@@ -56,18 +56,19 @@ void CState_SimonManusP2_SpreadMagic::Effect_Check(_double CurTrackPos)
 {
     if (!m_bMagicSpread)
     {
-        if (CurTrackPos >= 100.f)
+        if (CurTrackPos >= 50.f)
         {
             m_bMagicSpread = true;
 
             CAttackObject::ATKOBJ_DESC Desc;
             _float4x4 WorldMat{};
             _Vec3 vTargetPos = m_pMonster->Get_TargetPos();
-            vTargetPos.y += 1.f;
+            vTargetPos.y += 1.5f;
             _Vec3 vMainDir = _Vec3{ vTargetPos -
                 m_pMonster->Get_Transform()->Get_State(CTransform::STATE_POSITION) } 
             + _Vec3{ 0.f, 0.2f, 0.f };
             _Vec3 vRight = m_pMonster->Get_Transform()->Get_State(CTransform::STATE_RIGHT);
+            vMainDir.Normalize();
             vRight.Normalize();
 
             XMStoreFloat4x4(&WorldMat, (*m_pMonster->Get_BoneCombinedMat(m_pMonster->Get_UFBIndex(UFB_HAND_LEFT)) * (*m_pMonster->Get_Transform()->Get_WorldMatrix_Ptr())));

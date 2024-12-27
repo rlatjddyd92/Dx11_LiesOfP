@@ -39,10 +39,10 @@ private:
 
     _float              m_fRunningWeights = { 4.f };
 
-    _float              m_fNeedDist_ForAttack = { 6.f };
+    _float              m_fNeedDist_ForAttack = { 25.5f };//13.f
 
 
-    _uint               m_iAtkTrack = { 5 };
+    _uint               m_iAtkTrack = {11 };
 private:
     void                Calc_Act_Attack();
 

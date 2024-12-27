@@ -35,7 +35,9 @@ private:
     _float              m_fCurtRimAlpha = {};
     _float              m_fGoalRimAlpha = {};
 
+    _bool               m_bControlRim = { false };
     _bool               m_bResetRim = { false };
+
     _bool               m_isJump = { false };
     _bool               m_bStartSpot = { true };
 

@@ -167,10 +167,13 @@ _bool CWeapon_SimonManus_Hammer::Active_Collider(_float fDamageRatio, _uint iHan
 	m_iAtkStrength = iAtkStrength;
 	m_DamagedObjects.clear();
 
-	if (m_pExtraColliderCom->IsActive())
-		return false;
+	if (iHandIndex == 1)
+	{
+		if (m_pExtraColliderCom->IsActive())
+			return false;
 
-	m_pExtraColliderCom->IsActive(true);
+		m_pExtraColliderCom->IsActive(true);
+	}
 	
 	return true;
 }
@@ -186,6 +189,7 @@ void CWeapon_SimonManus_Hammer::DeActive_Collider(_uint iHandIndex)
 		return;
 
 	m_pExtraColliderCom->IsActive(false);
+
 }
 
 HRESULT CWeapon_SimonManus_Hammer::Ready_Components()

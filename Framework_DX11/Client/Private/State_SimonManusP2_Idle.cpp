@@ -151,7 +151,7 @@ void CState_SimonManusP2_Idle::Calc_Act_Attack()
 
     case 5:
         m_pMonster->Change_State(CSimonManus::ATKP2_BRUTALATTACK);
-        m_fNeedDist_ForAttack = 6.5f;
+        m_fNeedDist_ForAttack = 7.5f;
         break;
 
     case 6:
@@ -176,7 +176,7 @@ void CState_SimonManusP2_Idle::Calc_Act_Attack()
 
     case 10:
         m_pMonster->Change_State(CSimonManus::ATKP2_CHASINGSWING);
-        m_fNeedDist_ForAttack = 12.5f;
+        m_fNeedDist_ForAttack = 25.5f;
         break;
 
     case 11:
