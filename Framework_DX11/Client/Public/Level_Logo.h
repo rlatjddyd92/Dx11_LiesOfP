@@ -21,6 +21,7 @@ private:
 	HRESULT Ready_Layer_Camera();
 	HRESULT Ready_Layer_BackGround(const _wstring& strLayerTag);
 	HRESULT Ready_TitleObject();
+	HRESULT Read_Map_Data();
 
 public:
 	static CLevel_Logo* Create(ID3D11Device* pDevice, ID3D11DeviceContext* pContext);

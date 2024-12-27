@@ -318,22 +318,79 @@ HRESULT CLoader::Ready_Resources_For_LogoLevel()
 
 	lstrcpy(m_szLoadingText, TEXT("모델을(를) 로딩중입니다."));
 
-	_matrix      PreTransformMatrix = XMMatrixIdentity();
-	//PreTransformMatrix = XMMatrixScaling(0.01f, 0.01f, 0.01f);
-	//if (FAILED(m_pGameInstance->Add_Prototype(LEVEL_STATIC, TEXT("Prototype_Component_Model_SteellHeart"),
-	//	CModel::Create(m_pDevice, m_pContext, CModel::TYPE_ANIM, "../Bin/ModelData/Anim/SteelHeart/SteelHeart.dat", PreTransformMatrix))))
+	_matrix     
+	PreTransformMatrix = XMMatrixScaling(0.01f, 0.01f, 0.01f) * XMMatrixRotationY(XMConvertToRadians(270.f));
+
+	if (FAILED(m_pGameInstance->Add_Prototype(LEVEL_LOGO, TEXT("Prototype_Component_Model_SteellHeart"),
+		CModel::Create(m_pDevice, m_pContext, CModel::TYPE_ANIM, "../Bin/ModelData/NonAnim/Map/Etc/SteelHeart/SteelHeart.dat", PreTransformMatrix))))
+		return E_FAIL;
+
+	PreTransformMatrix = XMMatrixIdentity();
+	PreTransformMatrix = XMMatrixScaling(0.01f, 0.01f, 0.01f);
+	if (FAILED(m_pGameInstance->Add_Prototype(LEVEL_GAMEPLAY, TEXT("Title_Blanket"),
+		CModel::Create(m_pDevice, m_pContext, CModel::TYPE_NONANIM, "../Bin/ModelData/NonAnim/Map/Etc/Title_Blanket/Title_Blanket.dat", PreTransformMatrix))))
+		return E_FAIL;
+
+	PreTransformMatrix = XMMatrixIdentity();
+	PreTransformMatrix = XMMatrixScaling(0.005f, 0.005f, 0.005f);
+
+	// _finddata_t : <io.h>에서 제공하며 파일 정보를 저장하는 구조체
+	_finddata_t fd;
+
+	//if (handle == -1)
 	//	return E_FAIL;
 
-	PreTransformMatrix = XMMatrixScaling(0.01f, 0.01f, 0.01f);
-	if (FAILED(m_pGameInstance->Add_Prototype(LEVEL_STATIC, TEXT("Prototype_Component_Model_Blanket"),
-		CModel::Create(m_pDevice, m_pContext, CModel::TYPE_NONANIM, "../Bin/ModelData/NonAnim/Map/Etc/Interior/Title_Blanket.dat", PreTransformMatrix))))
+
+	int iResult = 0;
+
+	_wstring strPrototype = TEXT("");
+
+#pragma region ETC Interior
+	intptr_t handle = _findfirst("../Bin/ModelData/NonAnim/Map/Etc/Cathedral/*", &fd);
+
+	handle = _findfirst("../Bin/ModelData/NonAnim/Map/Etc/Interior/*", &fd);
+
+	if (handle == -1)
 		return E_FAIL;
 
+	char szCurPath1[128] = "../Bin/ModelData/NonAnim/Map/Etc/Interior/";    // 상대 경로
+	char szFullPath1[128] = "";
 
-	if (FAILED(m_pGameInstance->Add_Prototype(LEVEL_STATIC, TEXT("Prototype_Component_Model_Lift_Door"),
-		CModel::Create(m_pDevice, m_pContext, CModel::TYPE_ANIM, "../Bin/ModelData/NonAnim/InteractObj/SK_NewTown_Lift_01_Door.dat", PreTransformMatrix))))
-		return E_FAIL;
+	iResult = 0;
 
+	while (iResult != -1)
+	{
+		strcpy_s(szFullPath1, szCurPath1);
+		strcat_s(szFullPath1, fd.name);
+
+		_char szFileName[MAX_PATH] = "";
+		_char szExt[MAX_PATH] = "";
+		_splitpath_s(szFullPath1, nullptr, 0, nullptr, 0, szFileName, MAX_PATH, szExt, MAX_PATH);
+
+		if (!strcmp(fd.name, ".") || !strcmp(fd.name, "..")
+			|| strcmp(szExt, ".dat"))
+		{
+			iResult = _findnext(handle, &fd);
+			continue;
+		}
+
+		string strFileName = szFileName;
+		_wstring strPrototypeName;
+
+		strPrototypeName.assign(strFileName.begin(), strFileName.end());
+		wprintf(strPrototypeName.c_str());
+
+		PreTransformMatrix = XMMatrixIdentity();
+		PreTransformMatrix = XMMatrixScaling(0.01f, 0.01f, 0.01f);
+
+		if (FAILED(m_pGameInstance->Add_Prototype(LEVEL_GAMEPLAY, strPrototypeName,
+			CModel::Create(m_pDevice, m_pContext, CModel::TYPE_NONANIM, szFullPath1, PreTransformMatrix))))
+			return E_FAIL;
+
+		//_findnext : <io.h>에서 제공하며 다음 위치의 파일을 찾는 함수, 더이상 없다면 -1을 리턴
+		iResult = _findnext(handle, &fd);
+	}
+#pragma endregion
 
 	lstrcpy(m_szLoadingText, TEXT("사운드을(를) 로딩중입니다."));
 	m_pGameInstance->LoadSoundFile("BGM");
@@ -493,51 +550,6 @@ HRESULT CLoader::Ready_Resources_For_GamePlayLevel_Map0()
 
 		if (FAILED(m_pGameInstance->Add_Prototype(LEVEL_GAMEPLAY, strPrototypeName,
 			CModel::Create(m_pDevice, m_pContext, CModel::TYPE_NONANIM, szFullPath0, PreTransformMatrix))))
-			return E_FAIL;
-
-		//_findnext : <io.h>에서 제공하며 다음 위치의 파일을 찾는 함수, 더이상 없다면 -1을 리턴
-		iResult = _findnext(handle, &fd);
-	}
-#pragma endregion
-
-#pragma region ETC Interior
-	handle = _findfirst("../Bin/ModelData/NonAnim/Map/Etc/Interior/*", &fd);
-
-	if (handle == -1)
-		return E_FAIL;
-
-	char szCurPath1[128] = "../Bin/ModelData/NonAnim/Map/Etc/Interior/";    // 상대 경로
-	char szFullPath1[128] = "";
-
-	iResult = 0;
-
-	while (iResult != -1)
-	{
-		strcpy_s(szFullPath1, szCurPath1);
-		strcat_s(szFullPath1, fd.name);
-
-		_char szFileName[MAX_PATH] = "";
-		_char szExt[MAX_PATH] = "";
-		_splitpath_s(szFullPath1, nullptr, 0, nullptr, 0, szFileName, MAX_PATH, szExt, MAX_PATH);
-
-		if (!strcmp(fd.name, ".") || !strcmp(fd.name, "..")
-			|| strcmp(szExt, ".dat"))
-		{
-			iResult = _findnext(handle, &fd);
-			continue;
-		}
-
-		string strFileName = szFileName;
-		_wstring strPrototypeName;
-
-		strPrototypeName.assign(strFileName.begin(), strFileName.end());
-		wprintf(strPrototypeName.c_str());
-
-		PreTransformMatrix = XMMatrixIdentity();
-		PreTransformMatrix = XMMatrixScaling(0.01f, 0.01f, 0.01f);
-
-		if (FAILED(m_pGameInstance->Add_Prototype(LEVEL_GAMEPLAY, strPrototypeName,
-			CModel::Create(m_pDevice, m_pContext, CModel::TYPE_NONANIM, szFullPath1, PreTransformMatrix))))
 			return E_FAIL;
 
 		//_findnext : <io.h>에서 제공하며 다음 위치의 파일을 찾는 함수, 더이상 없다면 -1을 리턴

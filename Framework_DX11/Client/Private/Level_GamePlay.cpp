@@ -280,6 +280,8 @@ HRESULT CLevel_GamePlay::Ready_Layer_Player()
 
 HRESULT CLevel_GamePlay::Read_Map_Data()
 {
+	m_pGameInstance->Change_Active_Octree();	//옥트리 킴
+
 	_Vec3	vMinPos = { FLT_MAX ,FLT_MAX ,FLT_MAX };		//World_Octree의 최소 좌표, 최대한 크게 초기화
 	_Vec3	vMaxPos = { -FLT_MAX ,-FLT_MAX ,-FLT_MAX };	//World_Octree의 최대 좌표, 최대한 작게 초기화
 

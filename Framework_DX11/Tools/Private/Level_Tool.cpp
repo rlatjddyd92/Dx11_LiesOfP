@@ -112,7 +112,7 @@ HRESULT CLevel_GamePlay::Ready_Layer_Camera()
 {
 	CCamera::CAMERA_DESC		Desc{};
 
-	Desc.vEye = _float4(0.f, 10.f, -10.f, 1.f);
+	Desc.vEye = _float4(0.f, 0.5f, 1.f, 1.f);
 	Desc.vAt = _float4(0.f, 0.f, 0.f, 1.f);
 	Desc.fFovy = XMConvertToRadians(60.0f);
 	Desc.fAspect = (_float)g_iWinSizeX / (_float)g_iWinSizeY;

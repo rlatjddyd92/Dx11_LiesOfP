@@ -620,7 +620,7 @@ HRESULT CLoader::Ready_Resources_For_ToolLevel_Map0()
 		return E_FAIL;
 	m_pGameInstance->Add_ModelPrototype(LEVEL_TOOL, ("SK_NewTown_Lift_01_Door"), pModel);
 
-	pModel = CModel::Create(m_pDevice, m_pContext, CModel::TYPE_ANIM, "../Bin/ModelData/Anim/SteelHeart/SteelHeart.dat", PreTransformMatrix, false, CController_AnimationTool::Get_Instance()->Get_StructStack(m_iModelCount++));
+	pModel = CModel::Create(m_pDevice, m_pContext, CModel::TYPE_ANIM, "../Bin/ModelData/NonAnim/Map/Etc/SteelHeart/SteelHeart.dat", PreTransformMatrix, false, CController_AnimationTool::Get_Instance()->Get_StructStack(m_iModelCount++));
 	if (FAILED(m_pGameInstance->Add_Prototype(LEVEL_TOOL, TEXT("SteelHeart"), pModel)))
 		return E_FAIL;
 	m_pGameInstance->Add_ModelPrototype(LEVEL_TOOL, ("SteelHeart"), pModel);
@@ -1051,6 +1051,10 @@ HRESULT CLoader::Ready_Resources_For_ToolLevel_Map1()
 
 	if (FAILED(m_pGameInstance->Add_Prototype(LEVEL_TOOL, TEXT("Sophia_Stoned"),
 		CModel::Create(m_pDevice, m_pContext, CModel::TYPE_NONANIM, "../Bin/ModelData/NonAnim/Map/Etc/Sophia/Sophia_Stoned.dat", PreTransformMatrix))))
+		return E_FAIL;	
+	
+	if (FAILED(m_pGameInstance->Add_Prototype(LEVEL_TOOL, TEXT("Title_Blanket"),
+		CModel::Create(m_pDevice, m_pContext, CModel::TYPE_NONANIM, "../Bin/ModelData/NonAnim/Map/Etc/Title_Blanket/Title_Blanket.dat", PreTransformMatrix))))
 		return E_FAIL;
 
 	m_isFinished_Map1 = true;
