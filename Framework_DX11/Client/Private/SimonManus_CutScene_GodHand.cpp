@@ -43,7 +43,7 @@ HRESULT CSimonManus_CutScene_GodHand::Initialize(void* pArg)
 	m_pModelCom->Play_Animation(1.f);
 
 
-	m_pParticleEffect = CEffect_Manager::Get_Instance()->Clone_Effect(TEXT("SimonManus_CutScene_2P_Hand"), nullptr, nullptr, _Vec3(0.3f, 17.45f, 0.7f));
+	m_pParticleEffect = CEffect_Manager::Get_Instance()->Clone_Effect(TEXT("SimonManus_CutScene_2P_Hand"), nullptr, nullptr, _Vec3(0.3f, 19.45f, 0.7f));
 	m_pParticleEffect->Set_Loop(true);
 
 	return S_OK;

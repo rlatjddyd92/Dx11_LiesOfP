@@ -30,6 +30,14 @@ private:
 private:
     _bool               End_Check();
 
+private:
+    _bool               m_isEnd_DownEmissive = { false };
+    void                Contorl_Emissive(_float fTimeDelta);
+
+private:
+    _float              m_fDisapperDomeTime = {};
+    _bool               m_isDisappearDome = { false };
+
 public:
     static CState_SimonManusP2_Die* Create(class CFsm* pFsm, class CMonster* pMonster, _uint iStateNum, void* pArg = nullptr);
     virtual void Free() override;
