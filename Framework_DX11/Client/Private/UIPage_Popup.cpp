@@ -268,12 +268,13 @@ void CUIPage_Popup::Show_ItemPopup(_wstring strTitle, _wstring strInputTitle, _i
 		m_pItemPopup_Info->iInterval = iInterval;
 		m_pItemPopup_Info->iMax = iMax;
 
-		for (_int i = _int(PART_GROUP::POPUP_Input_Count_Back); i <= _int(PART_GROUP::POPUP_Input_Count_Increase); ++i)
-			m_vecPart[i]->bRender = true;
-
 		m_vecPart[int(PART_GROUP::POPUP_Input_Count_Text)]->strText = strInputTitle;
 		m_vecPart[int(PART_GROUP::POPUP_Input_Count_Num)]->strText = to_wstring(m_pItemPopup_Info->iNow);
 	}
+	else 
+		for (_int i = _int(PART_GROUP::POPUP_Input_Count_Back); i <= _int(PART_GROUP::POPUP_Input_Count_Increase); ++i)
+			m_vecPart[i]->bRender = false;
+
 		
 	if (pNow_Count != nullptr)
 	{
@@ -281,12 +282,14 @@ void CUIPage_Popup::Show_ItemPopup(_wstring strTitle, _wstring strInputTitle, _i
 		m_pItemPopup_Info->pNow_Count = pNow_Count;
 		m_pItemPopup_Info->iInterval = iInterval;
 
-		for (_int i = _int(PART_GROUP::POPUP_Count_Back); i <= _int(PART_GROUP::POPUP_Count_Num); ++i)
-			m_vecPart[i]->bRender = true;
+
 
 		m_vecPart[int(PART_GROUP::POPUP_Count_Text)]->strText = strCountTitle;
 		m_vecPart[int(PART_GROUP::POPUP_Count_Num)]->strText = to_wstring(m_pItemPopup_Info->iNow_Count);
 	}
+	else
+		for (_int i = _int(PART_GROUP::POPUP_Count_Back); i <= _int(PART_GROUP::POPUP_Count_Num); ++i)
+			m_vecPart[i]->bRender = false;
 	
 	if ((pNow_Input != nullptr) && (pNow_Count != nullptr))
 	{

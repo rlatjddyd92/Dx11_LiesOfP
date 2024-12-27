@@ -95,10 +95,11 @@ HRESULT CUIManager::Initialize_Prototype()
 	m_vecPageRender_Order.push_back(UIPAGE::PAGE_CHEST);
 	m_vecPageRender_Order.push_back(UIPAGE::PAGE_TELEPOT);
 
-	m_vecPageRender_Order.push_back(UIPAGE::PAGE_ACHIEVMENT);
-
 	m_vecPageRender_Order.push_back(UIPAGE::PAGE_COMMON);
 	m_vecPageRender_Order.push_back(UIPAGE::PAGE_ITEMINFO);
+
+	m_vecPageRender_Order.push_back(UIPAGE::PAGE_ACHIEVMENT);
+
 	m_vecPageRender_Order.push_back(UIPAGE::PAGE_INFORM);
 
 	m_vecPageRender_Order.push_back(UIPAGE::PAGE_POPUP);
@@ -210,6 +211,7 @@ void CUIManager::UIControl_Shop(_float fTimeDelta)
 	else
 	{
 		m_eNowPage = UIPAGE::PAGE_SHOP;
+		m_pUIPage_ItemInfo->Set_Active_ItemInfo(true, UIPAGE::PAGE_SHOP);
 		m_pUIPage_Shop->Check_Page_Action(fTimeDelta);
 	}
 
@@ -222,6 +224,7 @@ void CUIManager::UIControl_Chest(_float fTimeDelta)
 	else
 	{
 		m_eNowPage = UIPAGE::PAGE_CHEST;
+		m_pUIPage_ItemInfo->Set_Active_ItemInfo(true, UIPAGE::PAGE_CHEST);
 		m_pUIPage_Chest->Check_Page_Action(fTimeDelta);
 	}
 }

@@ -227,6 +227,8 @@ public:
 	}
 	void Off_ItemAction() { m_pUIPage_ItemInfo->Off_ItemAction(); }
 
+	void Show_Tooltip_Shop(_int iShopIndex) { m_pUIPage_ItemInfo->Show_Tooltip_Shop(iShopIndex); }
+	void Show_Tooltip_Chest(_int iChestIndex) { m_pUIPage_ItemInfo->Show_Tooltip_Chest(iChestIndex); }
 	void Show_Tooltip(INVEN_ARRAY_TYPE eType, _int iIndex) { m_pUIPage_ItemInfo->Show_Tooltip(eType, iIndex); }
 	void Show_Tooltip(EQUIP_SLOT eSlot) { m_pUIPage_ItemInfo->Show_Tooltip(eSlot); }
 

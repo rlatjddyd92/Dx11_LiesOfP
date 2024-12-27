@@ -583,7 +583,7 @@ public:
 	void Buy_ShopItem(_int iIndex, _int iCount = 1);
 	void Sell_ShopItem(INVEN_ARRAY_TYPE eType, _int iIndex, _int iCount = 1);
 	void ChestItem_To_Inven(_int iIndex, _int iCount = 1);
-	void InvenItem_To_Chest(INVEN_ARRAY_TYPE eType, _int iIndex, _int iCount = 1);
+	_int InvenItem_To_Chest(INVEN_ARRAY_TYPE eType, _int iIndex, _int iCount = 1);
 
 
 

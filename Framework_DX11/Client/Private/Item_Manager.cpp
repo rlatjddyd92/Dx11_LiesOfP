@@ -1018,18 +1018,18 @@ void CItem_Manager::ChestItem_To_Inven(_int iIndex, _int iCount)
 
 }
 
-void CItem_Manager::InvenItem_To_Chest(INVEN_ARRAY_TYPE eType, _int iIndex, _int iCount)
+_int CItem_Manager::InvenItem_To_Chest(INVEN_ARRAY_TYPE eType, _int iIndex, _int iCount)
 {
 	if (!IsValid_Inven(eType, iIndex))
-		return;
+		return -1;
 
 	if (m_vecArray_Inven[_int(eType)]->vecItemInfo[iIndex]->bIsAvailable_Chest == false)
-		return;
+		return -1;
 
 	_int iCountNow = m_vecArray_Inven[_int(eType)]->vecItemInfo[iIndex]->iCount;
 
 	if (iCount > iCountNow)
-		return;
+		return -1;
 
 	if (m_vecArray_Inven[_int(eType)]->vecItemInfo[iIndex]->bStack == true)
 	{
@@ -1072,6 +1072,8 @@ void CItem_Manager::InvenItem_To_Chest(INVEN_ARRAY_TYPE eType, _int iIndex, _int
 	GET_GAMEINTERFACE->Show_Popup(TEXT("아이템 보관"), strItem);
 
 	m_vecArray_Inven[_int(eType)]->Use_Item(iIndex, iCount);
+
+	return m_iNext_Chest_Key;
 }
 
 HRESULT CItem_Manager::Initialize_Item()

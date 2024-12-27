@@ -239,13 +239,15 @@ void CUIPage_Shop::Action_Cell(_float fTimeDelta)
 			_Vec2 vMouse = GET_GAMEINTERFACE->CheckMouse(iter->vPos - vOffset, __super::Get_Front_Part_In_Control(_int(PART_GROUP::SHOP_Cell_Static))->fSize);
 			if (vMouse.x != -1.f)
 			{
+				CItem_Manager::SHOP* pShop = GET_GAMEINTERFACE->Get_ShopData()[iter->iIndexShop];
+				const CItem_Manager::ITEM* pItem = GET_GAMEINTERFACE->Get_Item_Origin_Spec(pShop->iIndex);
+
 				if (m_iNowCell != iNowIndex)
 					Action_Focus(fTimeDelta, iter->vPos);
 				m_iNowCell = iNowIndex;
 				if (bClick)
 				{
-					CItem_Manager::SHOP* pShop = GET_GAMEINTERFACE->Get_ShopData()[iter->iIndexShop];
-					const CItem_Manager::ITEM* pItem = GET_GAMEINTERFACE->Get_Item_Origin_Spec(pShop->iIndex);
+					
 
 					if (pShop != nullptr)
 					{
@@ -255,6 +257,8 @@ void CUIPage_Shop::Action_Cell(_float fTimeDelta)
 						m_bIsItem_Popup = true;
 					}
 				}
+
+				GET_GAMEINTERFACE->Show_Tooltip_Shop(iter->iIndexShop);
 			}
 		}
 	}
@@ -281,9 +285,13 @@ void CUIPage_Shop::Action_Cell(_float fTimeDelta)
 						m_bIsItem_Popup = true;
 					}
 				}
+
+				GET_GAMEINTERFACE->Show_Tooltip(iter->eArray, iter->iInven_Index);
 			}
 		}
 	}
+
+	
 }
 
 void CUIPage_Shop::Action_Focus(_float fTimeDelta, _Vec2 vPos)

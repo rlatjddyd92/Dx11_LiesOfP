@@ -1327,6 +1327,21 @@
     <Filter Include="03.GameInterface_Controller\00.UIManager\00.UIPage\19.UIPage_Achievment\Status">
       <UniqueIdentifier>{71207553-8ab5-4308-abcf-fde764d7ecf6}</UniqueIdentifier>
     </Filter>
+    <Filter Include="03.GameInterface_Controller\00.UIManager\02.UIPart_3D">
+      <UniqueIdentifier>{86955ff6-8ad3-4d95-8c1f-e0f6a81039f2}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="03.GameInterface_Controller\00.UIManager\03.UIPage_3D">
+      <UniqueIdentifier>{afb6a2c2-df7b-4df8-aa7f-7c5478df72d1}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="03.GameInterface_Controller\00.UIManager\02.UIPart_3D\00.UIPart_3D_Path">
+      <UniqueIdentifier>{dbcbe4cb-a52c-4950-b563-2bbc0f7821b5}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="03.GameInterface_Controller\00.UIManager\02.UIPart_3D\01.UIPart_3D_Normal">
+      <UniqueIdentifier>{86c58a44-272d-4b46-aa2a-1a67a7c51ce6}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="03.GameInterface_Controller\00.UIManager\03.UIPage_3D\00.UIPage_3D_PathGuide">
+      <UniqueIdentifier>{cbfd3738-fff6-47a5-93a1-7684aa86e4bb}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Client.h">
@@ -2428,6 +2443,21 @@
     <ClInclude Include="..\Public\UIPage_Achievment.h">
       <Filter>03.GameInterface_Controller\00.UIManager\00.UIPage\19.UIPage_Achievment</Filter>
     </ClInclude>
+    <ClInclude Include="..\Public\UIPart_3D.h">
+      <Filter>03.GameInterface_Controller\00.UIManager\02.UIPart_3D</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Public\UIPage_3D.h">
+      <Filter>03.GameInterface_Controller\00.UIManager\03.UIPage_3D</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Public\UIPart_3D_Path.h">
+      <Filter>03.GameInterface_Controller\00.UIManager\02.UIPart_3D\00.UIPart_3D_Path</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Public\UIPart_3D_Normal.h">
+      <Filter>03.GameInterface_Controller\00.UIManager\02.UIPart_3D\01.UIPart_3D_Normal</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Public\UIPage_3D_PathGuide.h">
+      <Filter>03.GameInterface_Controller\00.UIManager\03.UIPage_3D\00.UIPage_3D_PathGuide</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Client.cpp">
@@ -3498,6 +3528,21 @@
     </ClCompile>
     <ClCompile Include="..\Private\UIPage_Achievment.cpp">
       <Filter>03.GameInterface_Controller\00.UIManager\00.UIPage\19.UIPage_Achievment</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Private\UIPart_3D.cpp">
+      <Filter>03.GameInterface_Controller\00.UIManager\02.UIPart_3D</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Private\UIPage_3D.cpp">
+      <Filter>03.GameInterface_Controller\00.UIManager\03.UIPage_3D</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Private\UIPart_3D_Path.cpp">
+      <Filter>03.GameInterface_Controller\00.UIManager\02.UIPart_3D\00.UIPart_3D_Path</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Private\UIPart_3D_Normal.cpp">
+      <Filter>03.GameInterface_Controller\00.UIManager\02.UIPart_3D\01.UIPart_3D_Normal</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Private\UIPage_3D_PathGuide.cpp">
+      <Filter>03.GameInterface_Controller\00.UIManager\03.UIPage_3D\00.UIPage_3D_PathGuide</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

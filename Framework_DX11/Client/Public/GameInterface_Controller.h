@@ -127,6 +127,8 @@ public: // 외부에서 매니저 접근
 
 	void Off_ItemInfo_UI() { m_pUIManager->Off_ItemInfo_UI(); }
 
+	void Show_Tooltip_Shop(_int iShopIndex) { m_pUIManager->Show_Tooltip_Shop(iShopIndex); }
+	void Show_Tooltip_Chest(_int iChestIndex) { m_pUIManager->Show_Tooltip_Chest(iChestIndex); }
 	void Show_Tooltip(INVEN_ARRAY_TYPE eType, _int iIndex) { m_pUIManager->Show_Tooltip(eType, iIndex); }
 	void Show_Tooltip(EQUIP_SLOT eSlot) { m_pUIManager->Show_Tooltip(eSlot); }
 
@@ -244,7 +246,7 @@ public: // 외부에서 매니저 접근
 	void Buy_ShopItem(_int iIndex, _int iCount = 1) { m_pItem_Manager->Buy_ShopItem(iIndex, iCount); }
 	void Sell_ShopItem(INVEN_ARRAY_TYPE eType, _int iIndex, _int iCount = 1) { m_pItem_Manager->Sell_ShopItem(eType, iIndex, iCount); }
 	void ChestItem_To_Inven(_int iIndex, _int iCount = 0) { m_pItem_Manager->ChestItem_To_Inven(iIndex, iCount); }
-	void InvenItem_To_Chest(INVEN_ARRAY_TYPE eType, _int iIndex, _int iCount = 0) { m_pItem_Manager->InvenItem_To_Chest(eType, iIndex, iCount); }
+	_int InvenItem_To_Chest(INVEN_ARRAY_TYPE eType, _int iIndex, _int iCount = 0) { return m_pItem_Manager->InvenItem_To_Chest(eType, iIndex, iCount); }
 
 #pragma endregion
 

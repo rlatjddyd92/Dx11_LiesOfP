@@ -308,13 +308,22 @@ void CUIPage_ItemInfo::Action_ItemAction(_float fTimeDelta)
 	}
 }
 
+void CUIPage_ItemInfo::Show_Tooltip_Shop(_int iShopIndex)
+{
+	const CItem_Manager::ITEM* pItem = GET_GAMEINTERFACE->Get_Item_Origin_Spec(GET_GAMEINTERFACE->Get_ShopData()[iShopIndex]->iIndex);
+
+	Make_TooltipPage(pItem);
+}
+
+void CUIPage_ItemInfo::Show_Tooltip_Chest(_int iChestIndex)
+{
+	const CItem_Manager::ITEM* pItem = GET_GAMEINTERFACE->Get_ChestData().find(iChestIndex)->second;
+
+	Make_TooltipPage(pItem);
+}
+
 void CUIPage_ItemInfo::Show_Tooltip(INVEN_ARRAY_TYPE eType, _int iIndex)
 {
-	for (_int i = _int(PART_GROUP::TOOLTIP_Back); i <= _int(PART_GROUP::TOOLTIP_Item_ChestInfo_Desc); ++i)
-	{
-		m_vecPart[i]->bRender = false;
-	}
-
 	if ((_int(eType) >= _int(INVEN_ARRAY_TYPE::TYPE_WEAPON_NORMAL_BLADE)) && (_int(eType) <= _int(INVEN_ARRAY_TYPE::TYPE_WEAPON_SPECIAL_HANDLE)))
 	{
 		if (eType == INVEN_ARRAY_TYPE::TYPE_WEAPON_NORMAL_HANDLE)
@@ -326,94 +335,18 @@ void CUIPage_ItemInfo::Show_Tooltip(INVEN_ARRAY_TYPE eType, _int iIndex)
 		const CItem_Manager::ITEM* pNowBlade = GET_GAMEINTERFACE->Get_Array_Item_Info(eType, iIndex);
 		const CItem_Manager::ITEM* pNowHandle = GET_GAMEINTERFACE->Get_Array_Item_Info(INVEN_ARRAY_TYPE(_int(eType) + 1), iIndex);
 
-		_bool bIsNormal = true;
-
-		if ((pNowBlade) && (!pNowHandle))
-			bIsNormal = false;
-		else if (!pNowBlade)
-			return;
-		else if (!pNowBlade->bModule_Weapon)
-			bIsNormal = false;
-		
-
-		for (_int i = _int(PART_GROUP::TOOLTIP_Back); i <= _int(PART_GROUP::TOOLTIP_Item_Fx1); ++i)
-			m_vecPart[i]->bRender = true;
-
-		m_vecPart[_int(PART_GROUP::TOOLTIP_Back)]->fAdjust = m_vToolTip_Pos;
-
-		if (bIsNormal)
-		{
-			m_vecPart[_int(PART_GROUP::TOOLTIP_Item_Blade)]->bRender = true;
-			m_vecPart[_int(PART_GROUP::TOOLTIP_Item_Cross)]->bRender = true;
-			m_vecPart[_int(PART_GROUP::TOOLTIP_Item_Handle)]->bRender = true;
-			m_vecPart[_int(PART_GROUP::TOOLTIP_Item_Blade)]->iTexture_Index = pNowBlade->iTexture_Index;
-			m_vecPart[_int(PART_GROUP::TOOLTIP_Item_Handle)]->iTexture_Index = pNowHandle->iTexture_Index;
-
-			_wstring strName{};
-			strName += pNowBlade->strName;
-			strName += TEXT(" / ");
-			strName += pNowHandle->strName;
-			m_vecPart[_int(PART_GROUP::TOOLTIP_Item_Name)]->bRender = true;
-			m_vecPart[_int(PART_GROUP::TOOLTIP_Item_Name)]->strText = strName;
-			m_vecPart[_int(PART_GROUP::TOOLTIP_Item_Desc)]->bRender = true;
-			m_vecPart[_int(PART_GROUP::TOOLTIP_Item_Desc)]->strText = pNowBlade->strItem_Desc;
-		}
-		else
-		{
-			m_vecPart[_int(PART_GROUP::TOOLTIP_Item_Heroic)]->bRender = true;
-			m_vecPart[_int(PART_GROUP::TOOLTIP_Item_Heroic)]->iTexture_Index = pNowBlade->iTexture_Index;
-			m_vecPart[_int(PART_GROUP::TOOLTIP_Item_Name)]->bRender = true;
-			m_vecPart[_int(PART_GROUP::TOOLTIP_Item_Desc)]->bRender = true;
-			m_vecPart[_int(PART_GROUP::TOOLTIP_Item_Name)]->strText = pNowBlade->strName;
-			m_vecPart[_int(PART_GROUP::TOOLTIP_Item_Desc)]->strText = pNowBlade->strItem_Desc;
-		}
-
-		m_vecPart[_int(PART_GROUP::TOOLTIP_Item_ShopInfo_Count)]->strText = pNowBlade->bIsAvailable_Shop == false ? TEXT("판매 불가") : to_wstring(pNowBlade->iPrice);
-		m_vecPart[_int(PART_GROUP::TOOLTIP_Item_ChestInfo_Desc)]->strText = pNowBlade->bIsAvailable_Chest == false ? TEXT("보관함 사용 불가") : TEXT("보관함 사용 가능");
-
-		for (_int i = _int(PART_GROUP::TOOLTIP_Item_ShopInfo_Frame); i <= _int(PART_GROUP::TOOLTIP_Item_ChestInfo_Desc); ++i)
-			m_vecPart[i]->bRender = true;
+		Make_TooltipPage(pNowBlade, true, pNowHandle);
 	}
 	else
 	{
 		const CItem_Manager::ITEM* pItem = GET_GAMEINTERFACE->Get_Array_Item_Info(eType, iIndex);
 
-		if (pItem)
-		{
-			for (_int i = _int(PART_GROUP::TOOLTIP_Back); i <= _int(PART_GROUP::TOOLTIP_Item_Fx1); ++i)
-				m_vecPart[i]->bRender = true;
-
-			m_vecPart[_int(PART_GROUP::TOOLTIP_Back)]->fAdjust = m_vToolTip_Pos;
-
-			m_vecPart[_int(PART_GROUP::TOOLTIP_Back)]->bRender = true;
-			m_vecPart[_int(PART_GROUP::TOOLTIP_Back)]->fAdjust = m_vToolTip_Pos;
-			m_vecPart[_int(PART_GROUP::TOOLTIP_Item_Frame)]->bRender = true;
-			m_vecPart[_int(PART_GROUP::TOOLTIP_Item_Normal)]->bRender = true;
-			m_vecPart[_int(PART_GROUP::TOOLTIP_Item_Normal)]->iTexture_Index = pItem->iTexture_Index;
-			m_vecPart[_int(PART_GROUP::TOOLTIP_Item_Name)]->bRender = true;
-			m_vecPart[_int(PART_GROUP::TOOLTIP_Item_Desc)]->bRender = true;
-			m_vecPart[_int(PART_GROUP::TOOLTIP_Item_Name)]->strText = pItem->strName;
-			m_vecPart[_int(PART_GROUP::TOOLTIP_Item_Desc)]->strText = pItem->strItem_Desc;
-
-			m_vecPart[_int(PART_GROUP::TOOLTIP_Item_ShopInfo_Count)]->strText = pItem->bIsAvailable_Shop == false ? TEXT("판매 불가") : to_wstring(pItem->iPrice);
-			m_vecPart[_int(PART_GROUP::TOOLTIP_Item_ChestInfo_Desc)]->strText = pItem->bIsAvailable_Chest == false ? TEXT("보관함 사용 불가") : TEXT("보관함 사용 가능");
-
-			for (_int i = _int(PART_GROUP::TOOLTIP_Item_ShopInfo_Frame); i <= _int(PART_GROUP::TOOLTIP_Item_ChestInfo_Desc); ++i)
-				m_vecPart[i]->bRender = true;
-
-		}
-
-		
+		Make_TooltipPage(pItem);
 	}
 }
 
 void CUIPage_ItemInfo::Show_Tooltip(EQUIP_SLOT eSlot)
 {
-	for (_int i = _int(PART_GROUP::TOOLTIP_Back); i <= _int(PART_GROUP::TOOLTIP_Item_ChestInfo_Desc); ++i)
-	{
-		m_vecPart[i]->bRender = false;
-	}
-
 	if ((_int(eSlot) >= _int(EQUIP_SLOT::EQUIP_WEAPON_BLADE_0)) && (_int(eSlot) <= _int(EQUIP_SLOT::EQUIP_WEAPON_HANDLE_1)))
 	{
 		if (eSlot == EQUIP_SLOT::EQUIP_WEAPON_HANDLE_0)
@@ -425,16 +358,35 @@ void CUIPage_ItemInfo::Show_Tooltip(EQUIP_SLOT eSlot)
 		const CItem_Manager::ITEM* pNowBlade = GET_GAMEINTERFACE->Get_Equip_Item_Info(eSlot);
 		const CItem_Manager::ITEM* pNowHandle = GET_GAMEINTERFACE->Get_Equip_Item_Info(EQUIP_SLOT(_int(eSlot) + 1));
 
+		Make_TooltipPage(pNowBlade, true, pNowHandle);
+	}
+	else
+	{
+		const CItem_Manager::ITEM* pItem = GET_GAMEINTERFACE->Get_Equip_Item_Info(eSlot);
+
+		Make_TooltipPage(pItem);
+	}
+}
+
+void CUIPage_ItemInfo::Make_TooltipPage(const CItem_Manager::ITEM* Item, _bool bIsWeapon, const CItem_Manager::ITEM* ItemHandle)
+{
+	for (_int i = _int(PART_GROUP::TOOLTIP_Back); i <= _int(PART_GROUP::TOOLTIP_Item_ChestInfo_Desc); ++i)
+	{
+		m_vecPart[i]->bRender = false;
+	}
+
+	if (bIsWeapon == true)
+	{
 		_bool bIsNormal = true;
 
-		if ((pNowBlade) && (!pNowHandle))
-			bIsNormal = false;
-		else if (!pNowBlade)
+		if (!Item)
 			return;
-		else if (!pNowBlade->bModule_Weapon)
+		else if ((Item) && (!ItemHandle))
+			bIsNormal = false;
+		else if (Item->bModule_Weapon == false)
 			bIsNormal = false;
 
-		for(_int i = _int(PART_GROUP::TOOLTIP_Back); i <= _int(PART_GROUP::TOOLTIP_Item_Fx1); ++i)
+		for (_int i = _int(PART_GROUP::TOOLTIP_Back); i <= _int(PART_GROUP::TOOLTIP_Item_Fx1); ++i)
 			m_vecPart[i]->bRender = true;
 
 		m_vecPart[_int(PART_GROUP::TOOLTIP_Back)]->fAdjust = m_vToolTip_Pos;
@@ -444,37 +396,37 @@ void CUIPage_ItemInfo::Show_Tooltip(EQUIP_SLOT eSlot)
 			m_vecPart[_int(PART_GROUP::TOOLTIP_Item_Blade)]->bRender = true;
 			m_vecPart[_int(PART_GROUP::TOOLTIP_Item_Cross)]->bRender = true;
 			m_vecPart[_int(PART_GROUP::TOOLTIP_Item_Handle)]->bRender = true;
-			m_vecPart[_int(PART_GROUP::TOOLTIP_Item_Blade)]->iTexture_Index = pNowBlade->iTexture_Index;
-			m_vecPart[_int(PART_GROUP::TOOLTIP_Item_Handle)]->iTexture_Index = pNowHandle->iTexture_Index;
+			m_vecPart[_int(PART_GROUP::TOOLTIP_Item_Blade)]->iTexture_Index = Item->iTexture_Index;
+			m_vecPart[_int(PART_GROUP::TOOLTIP_Item_Handle)]->iTexture_Index = ItemHandle->iTexture_Index;
 
 			_wstring strName{};
-			strName += pNowBlade->strName;
+			strName += Item->strName;
 			strName += TEXT(" / ");
-			strName += pNowHandle->strName;
+			strName += ItemHandle->strName;
 			m_vecPart[_int(PART_GROUP::TOOLTIP_Item_Name)]->bRender = true;
 			m_vecPart[_int(PART_GROUP::TOOLTIP_Item_Desc)]->bRender = true;
-			m_vecPart[_int(PART_GROUP::TOOLTIP_Item_Desc)]->strText = pNowBlade->strItem_Desc;
+			m_vecPart[_int(PART_GROUP::TOOLTIP_Item_Desc)]->strText = Item->strItem_Desc;
 			m_vecPart[_int(PART_GROUP::TOOLTIP_Item_Name)]->strText = strName;
 		}
 		else
 		{
 			m_vecPart[_int(PART_GROUP::TOOLTIP_Item_Heroic)]->bRender = true;
-			m_vecPart[_int(PART_GROUP::TOOLTIP_Item_Heroic)]->iTexture_Index = pNowBlade->iTexture_Index;
+			m_vecPart[_int(PART_GROUP::TOOLTIP_Item_Heroic)]->iTexture_Index = Item->iTexture_Index;
 			m_vecPart[_int(PART_GROUP::TOOLTIP_Item_Name)]->bRender = true;
 			m_vecPart[_int(PART_GROUP::TOOLTIP_Item_Desc)]->bRender = true;
-			m_vecPart[_int(PART_GROUP::TOOLTIP_Item_Name)]->strText = pNowBlade->strName;
-			m_vecPart[_int(PART_GROUP::TOOLTIP_Item_Desc)]->strText = pNowBlade->strItem_Desc;
+			m_vecPart[_int(PART_GROUP::TOOLTIP_Item_Name)]->strText = Item->strName;
+			m_vecPart[_int(PART_GROUP::TOOLTIP_Item_Desc)]->strText = Item->strItem_Desc;
 		}
 
-		m_vecPart[_int(PART_GROUP::TOOLTIP_Item_ShopInfo_Count)]->strText = pNowBlade->bIsAvailable_Shop == false ? TEXT("판매 불가") : to_wstring(pNowBlade->iPrice);
-		m_vecPart[_int(PART_GROUP::TOOLTIP_Item_ChestInfo_Desc)]->strText = pNowBlade->bIsAvailable_Chest == false ? TEXT("보관함 사용 불가") : TEXT("보관함 사용 가능");
+		m_vecPart[_int(PART_GROUP::TOOLTIP_Item_ShopInfo_Count)]->strText = Item->bIsAvailable_Shop == false ? TEXT("판매 불가") : to_wstring(Item->iPrice);
+		m_vecPart[_int(PART_GROUP::TOOLTIP_Item_ChestInfo_Desc)]->strText = Item->bIsAvailable_Chest == false ? TEXT("보관함 사용 불가") : TEXT("보관함 사용 가능");
 
 		for (_int i = _int(PART_GROUP::TOOLTIP_Item_ShopInfo_Frame); i <= _int(PART_GROUP::TOOLTIP_Item_ChestInfo_Desc); ++i)
 			m_vecPart[i]->bRender = true;
 	}
 	else
 	{
-		const CItem_Manager::ITEM* pItem = GET_GAMEINTERFACE->Get_Equip_Item_Info(eSlot);
+		const CItem_Manager::ITEM* pItem = Item;
 
 		if (pItem)
 		{
@@ -498,7 +450,6 @@ void CUIPage_ItemInfo::Show_Tooltip(EQUIP_SLOT eSlot)
 			for (_int i = _int(PART_GROUP::TOOLTIP_Item_ShopInfo_Frame); i <= _int(PART_GROUP::TOOLTIP_Item_ChestInfo_Desc); ++i)
 				m_vecPart[i]->bRender = true;
 		}
-		
 	}
 }
 

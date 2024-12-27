@@ -2,6 +2,7 @@
 
 #include "Client_Defines.h"
 #include "UIPage.h"
+#include "Item_Manager.h"
 
 BEGIN(Engine)
 
@@ -119,6 +120,9 @@ public:
 	}
 
 	// 툴팁 관련 사항 
+	void Show_Tooltip_Shop(_int iShopIndex);
+	void Show_Tooltip_Chest(_int iChestIndex);
+
 	void Show_Tooltip(INVEN_ARRAY_TYPE eType, _int iIndex);
 	void Show_Tooltip(EQUIP_SLOT eSlot);
 
@@ -126,6 +130,8 @@ public:
 
 
 protected:
+	void Make_TooltipPage(const CItem_Manager::ITEM* Item, _bool bIsWeapon = false, const CItem_Manager::ITEM* ItemHandle = nullptr);
+
 	// Focus
 	_bool m_bFocus = false;
 	_float m_fFocus_Fire_Move_Ratio = 0.f;

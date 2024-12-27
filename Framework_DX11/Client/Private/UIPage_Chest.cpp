@@ -357,6 +357,8 @@ void CUIPage_Chest::Update_Cell(_float fTimeDelta)
 			m_vecPart[_int(PART_GROUP::CHEST_Inven_Array_Cell0_Fx)]->fTextureColor.y = 0.8f;
 			m_vecPart[_int(PART_GROUP::CHEST_Inven_Array_Cell0_Fx)]->fTextureColor.z = 0.8f;
 			m_vecPart[_int(PART_GROUP::CHEST_Inven_Array_Cell0_Fx)]->bRender = true;
+
+			GET_GAMEINTERFACE->Show_Tooltip(iter->eArray, iter->iInven_Index);
 		}
 		
 		if (pNow->bStack == true)
@@ -406,6 +408,8 @@ void CUIPage_Chest::Update_Cell_Dest(_float fTimeDelta)
 			m_vecPart[_int(PART_GROUP::CHEST_Dest_Cell0_Fx)]->fTextureColor.y = 0.8f;
 			m_vecPart[_int(PART_GROUP::CHEST_Dest_Cell0_Fx)]->fTextureColor.z = 0.8f;
 			m_vecPart[_int(PART_GROUP::CHEST_Dest_Cell0_Fx)]->bRender = true;
+
+			GET_GAMEINTERFACE->Show_Tooltip_Chest(iter->iIndexChest);
 		}
 
 		if (pNow->bStack == true)
