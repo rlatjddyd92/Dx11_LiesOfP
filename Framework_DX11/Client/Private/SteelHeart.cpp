@@ -25,8 +25,8 @@ HRESULT CSteelHeart::Initialize(void* pArg)
 		return E_FAIL;
 
 	//m_pTransformCom->Set_Scaled(pDesc->vScale.x, pDesc->vScale.y, pDesc->vScale.z);
-	m_pTransformCom->Rotation(0.f, -120.f, 0.f);
-	m_pTransformCom->Set_State(CTransform::STATE_POSITION, _Vec3(0.f, 0.05f, 1.f));
+	m_pTransformCom->Rotation(3.f, 270.f, 10.f);
+	m_pTransformCom->Set_State(CTransform::STATE_POSITION, _Vec3(-0.18f,0.28f,0.81f));
 
 	if (FAILED(Ready_Components()))
 		return E_FAIL;
@@ -133,7 +133,7 @@ HRESULT CSteelHeart::Ready_Components()
 		return E_FAIL;
 
 	/* FOR.Com_Model */
-	if (FAILED(__super::Add_Component(LEVEL_STATIC, TEXT("Prototype_Component_Model_Lift_Door"),
+	if (FAILED(__super::Add_Component(LEVEL_LOGO, TEXT("Prototype_Component_Model_SteellHeart"),
 		TEXT("Com_Model"), reinterpret_cast<CComponent**>(&m_pModelCom))))
 		return E_FAIL;
 

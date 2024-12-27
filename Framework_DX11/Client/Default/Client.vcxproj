@@ -108,6 +108,7 @@
       <PreprocessorDefinitions>_DEBUG;_WINDOWS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <SDLCheck>true</SDLCheck>
       <AdditionalIncludeDirectories>../../EngineSDK/Inc/;../Public/;../Default;../../EngineSDK/Inc/Fmod;../../EngineSDK/Inc/PhysX;$(CUDA_PATH_V10_0)/include/</AdditionalIncludeDirectories>
+      <AdditionalOptions>/bigobj %(AdditionalOptions)</AdditionalOptions>
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>
@@ -150,6 +151,7 @@
       <SDLCheck>true</SDLCheck>
       <AdditionalIncludeDirectories>../../EngineSDK/Inc/;../Public/;../Default;../../EngineSDK/Inc/PhysX;../../EngineSDK/Inc/Fmod</AdditionalIncludeDirectories>
       <InlineFunctionExpansion>Disabled</InlineFunctionExpansion>
+      <AdditionalOptions>/bigobj %(AdditionalOptions)</AdditionalOptions>
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>
