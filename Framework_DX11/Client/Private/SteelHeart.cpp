@@ -26,7 +26,7 @@ HRESULT CSteelHeart::Initialize(void* pArg)
 
 	//m_pTransformCom->Set_Scaled(pDesc->vScale.x, pDesc->vScale.y, pDesc->vScale.z);
 	m_pTransformCom->Rotation(3.f, 270.f, 10.f);
-	m_pTransformCom->Set_State(CTransform::STATE_POSITION, _Vec3(-0.18f,0.28f,0.81f));
+	m_pTransformCom->Set_State(CTransform::STATE_POSITION, _Vec3(-0.22f,0.264f,0.77f));
 
 	if (FAILED(Ready_Components()))
 		return E_FAIL;

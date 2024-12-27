@@ -38,6 +38,13 @@ HRESULT CLevel_Logo::Initialize()
 
 	m_pGameInstance->Play_BGM(TEXT("MU_MS_Title_Piano_03.wav"), &g_fBGMVolume);
 
+	DOF_DESC* tDesc = m_pGameInstance->Get_DOFDesc();
+	if (nullptr == tDesc)
+		return E_FAIL;
+
+	tDesc->isOnDOF = true;
+	tDesc->fDOF = 0.003f;
+
 	return S_OK;
 }
 
@@ -47,6 +54,13 @@ void CLevel_Logo::Update(_float fTimeDelta)
 
 	if ((GetKeyState(VK_RETURN) & 0x8000) || (GET_GAMEINTERFACE->Get_Start_Loading()))
 	{
+
+		DOF_DESC* tDesc = m_pGameInstance->Get_DOFDesc();
+		if (nullptr == tDesc)
+			return;
+
+		tDesc->isOnDOF = false;
+
 		if (FAILED(m_pGameInstance->Change_Level(LEVEL_LOADING, CLevel_Loading::Create(m_pDevice, m_pContext, LEVEL_GAMEPLAY))))
 			return;
 
