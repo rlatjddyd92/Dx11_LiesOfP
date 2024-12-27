@@ -31,7 +31,8 @@ private:
     _bool               End_Check();
 
 private:
-    _bool               m_isPlaySound = {};
+    _bool               m_isPlaySound = {false};
+    _bool               m_isPlaySound2 = { false };
 
 public:
     static CState_Player_Lift* Create(class CFsm* pFsm, class CPlayer* pPlayer, _uint iStateNum, void* pArg = nullptr);
