@@ -301,7 +301,6 @@
     <ClInclude Include="..\Public\State_RebornerMale_Kick.h" />
     <ClInclude Include="..\Public\State_RebornerMale_KnockBack.h" />
     <ClInclude Include="..\Public\State_RebornerMale_RapidFire.h" />
-    <ClInclude Include="..\Public\State_RebornerMale_Reaload.h" />
     <ClInclude Include="..\Public\State_RebornerMale_Reload.h" />
     <ClInclude Include="..\Public\State_SimonManusP2_Die_Talking.h" />
     <ClInclude Include="..\Public\State_Training01_Attack.h" />
@@ -661,7 +660,6 @@
     <ClCompile Include="..\Private\State_RebornerMale_Kick.cpp" />
     <ClCompile Include="..\Private\State_RebornerMale_KnockBack.cpp" />
     <ClCompile Include="..\Private\State_RebornerMale_RapidFire.cpp" />
-    <ClCompile Include="..\Private\State_RebornerMale_Reaload.cpp" />
     <ClCompile Include="..\Private\State_RebornerMale_Reload.cpp" />
     <ClCompile Include="..\Private\State_SimonManusP2_Die_Talking.cpp" />
     <ClCompile Include="..\Private\State_Training01_Attack.cpp" />
