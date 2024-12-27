@@ -29,6 +29,8 @@ private:
 	class CShader* m_pShaderCom = { nullptr };
 	class CModel* m_pModelCom = { nullptr };
 
+	class CEffect_Container* m_pParticleEffect = { nullptr };
+
 	_float           m_fEmissiveMask = {};
 
 	_Vec4            m_vRimLightColor = {};

@@ -42,12 +42,16 @@ HRESULT CSimonManus_CutScene_GodHand::Initialize(void* pArg)
 
 	m_pModelCom->Play_Animation(1.f);
 
+
+	m_pParticleEffect = CEffect_Manager::Get_Instance()->Clone_Effect(TEXT("SimonManus_CutScene_2P_Hand"), nullptr, nullptr, _Vec3(0.3f, 17.45f, 0.7f));
+	m_pParticleEffect->Set_Loop(true);
+
 	return S_OK;
 }
 
 void CSimonManus_CutScene_GodHand::Priority_Update(_float fTimeDelta)
 {
-
+	m_pParticleEffect->Priority_Update(fTimeDelta);
 
 }
 
@@ -60,7 +64,11 @@ void CSimonManus_CutScene_GodHand::Update(_float fTimeDelta)
 		m_bAnimSpeedUp = true;
 		m_pModelCom->Set_SpeedPerSec((_uint)0, 30);
 	}
-	static _float fX = 0.3f;
+
+
+	m_pParticleEffect->Update(fTimeDelta);
+
+	/*static _float fX = 0.3f;
 	static _float fY = 17.45f;
 	static _float fZ = 0.7f;
 
@@ -91,11 +99,12 @@ void CSimonManus_CutScene_GodHand::Update(_float fTimeDelta)
 		fZ += 0.05f;
 	}
 
-	m_pTransformCom->Set_State(CTransform::STATE_POSITION, _Vec3(fX, fY, fZ));
+	m_pTransformCom->Set_State(CTransform::STATE_POSITION, _Vec3(fX, fY, fZ));*/
 }
 
 void CSimonManus_CutScene_GodHand::Late_Update(_float fTimeDelta)
 {
+	m_pParticleEffect->Late_Update(fTimeDelta);
 
 	m_pGameInstance->Add_RenderObject(CRenderer::RG_NONBLEND, this);
 }
@@ -212,6 +221,12 @@ CGameObject* CSimonManus_CutScene_GodHand::Clone(void* pArg)
 void CSimonManus_CutScene_GodHand::Free()
 {
 	__super::Free();
+
+	if (true == m_isCloned)
+	{
+		m_pParticleEffect->Set_Cloned(false);
+		Safe_Release(m_pParticleEffect);
+	}
 
 	Safe_Release(m_pShaderCom);
 	Safe_Release(m_pModelCom);

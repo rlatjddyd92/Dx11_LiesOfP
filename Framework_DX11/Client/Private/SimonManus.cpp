@@ -497,7 +497,6 @@ void CSimonManus::Change_Model(_uint iModelNum)	// 컷신 2페이즈로 바꾸는 용도
 
 	const _Matrix* pSocketBoneMatrix = m_pModelCom->Get_BoneCombindTransformationMatrix_Ptr("upperBody_spine_01");
 
-
 	m_Effects[CUTSCENE_P2_ARM_PARTICLE]->Set_Matrices(pSocketBoneMatrix);
 
 	pSocketBoneMatrix = m_pModelCom->Get_BoneCombindTransformationMatrix_Ptr("upperarm_twist_01_l");
@@ -872,6 +871,26 @@ void CSimonManus::ChangePhase()
 	m_eStat.fStemina = 100.f;
 	m_eStat.fMaxGrogyPoint = 50.f;
 	m_eStat.fGrogyPoint = 0.f;
+
+	const _Matrix* pSocketBoneMatrix = m_pModelCom->Get_BoneCombindTransformationMatrix_Ptr("upperBody_spine_01");
+
+	m_Effects[CUTSCENE_P2_ARM_PARTICLE]->Set_Matrices(pSocketBoneMatrix);
+
+	pSocketBoneMatrix = m_pModelCom->Get_BoneCombindTransformationMatrix_Ptr("upperarm_twist_01_l");
+	m_Effects[CUTSCENE_P2_ARM_AURA00]->Set_Matrices(pSocketBoneMatrix);
+
+	pSocketBoneMatrix = m_pModelCom->Get_BoneCombindTransformationMatrix_Ptr("lowerarm_twist_01_l");
+	m_Effects[CUTSCENE_P2_ARM_AURA01]->Set_Matrices(pSocketBoneMatrix);
+
+	pSocketBoneMatrix = m_pModelCom->Get_BoneCombindTransformationMatrix_Ptr("hand_l");
+	m_Effects[CUTSCENE_P2_ARM_AURA02]->Set_Matrices(pSocketBoneMatrix);
+
+	pSocketBoneMatrix = m_pModelCom->Get_BoneCombindTransformationMatrix_Ptr("upperBody_spine_03");
+	m_Effects[CUTSCENE_P2_ARM_AURA03]->Set_Matrices(pSocketBoneMatrix);
+
+	pSocketBoneMatrix = m_pModelCom->Get_BoneCombindTransformationMatrix_Ptr("upperBody_neck_01");
+	m_Effects[CUTSCENE_P2_ARM_AURA04]->Set_Matrices(pSocketBoneMatrix);
+
 
 	m_isDead = false;
 	m_isChanged = true;
