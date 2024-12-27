@@ -38,6 +38,10 @@ HRESULT CPhysX_Manager::Initialize()
     if (cudaErr != cudaSuccess) {
         return -1;
     }
+    cudaErr = cudaFree(0); // CUDA 컨텍스트 초기화
+    if (cudaErr != cudaSuccess) {
+        return -1;
+    }
 
     CUdevice cuDevice;
     result = cuDeviceGet(&cuDevice, 0);  // 0번 디바이스 선택
@@ -59,7 +63,9 @@ HRESULT CPhysX_Manager::Initialize()
     cudaContextManagerDesc.graphicsDevice = m_pDevice;    
     cudaContextManagerDesc.ctx = &m_pCudaContext;
 
-    m_CudaContextManager = PxCreateCudaContextManager(*m_PxFoundation, cudaContextManagerDesc, PxGetProfilerCallback());
+    cudaErr = cudaGetLastError();
+
+    m_CudaContextManager = PxCreateCudaContextManager(*m_PxFoundation, cudaContextManagerDesc);
     if (m_CudaContextManager)
     {
         if (!m_CudaContextManager->contextIsValid())
