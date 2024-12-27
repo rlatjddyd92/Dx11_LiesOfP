@@ -32,6 +32,7 @@ private:
 
 private:
     _bool               m_isPlaySound = {};
+    _bool               m_isPlaySound2 = {};
 
 public:
     static CState_Player_Chest* Create(class CFsm* pFsm, class CPlayer* pPlayer, _uint iStateNum, void* pArg = nullptr);
