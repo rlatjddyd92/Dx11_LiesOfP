@@ -104,7 +104,8 @@ void CState_SimonManusP2_Idle::Calc_Act_Attack()
     {
         m_iAtkTrack = 0;
     }
-  
+
+    m_iAtkTrack = 11;
     switch (m_iAtkTrack)
     {
     case 0:

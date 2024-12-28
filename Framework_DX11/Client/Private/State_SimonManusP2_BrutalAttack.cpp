@@ -101,12 +101,14 @@ void CState_SimonManusP2_BrutalAttack::Effect_Check(_double CurTrackPos)
             (CurTrackPos >= 154.f && CurTrackPos <= 180.f) ||
             (CurTrackPos >= 205.f && CurTrackPos <= 270.f))
         {
-            m_pMonster->Active_Effect(CSimonManus::P1_TRAIL);
+            m_pMonster->Active_Effect(CSimonManus::P2_TRAIL);
+            m_pMonster->Active_Effect(CSimonManus::SWING_DRAG);
             m_bSwing = true;
         }
         else
         {
-            m_pMonster->DeActive_CurretnWeaponCollider();
+            m_pMonster->DeActive_Effect(CSimonManus::P2_TRAIL);
+            m_pMonster->DeActive_Effect(CSimonManus::SWING_DRAG);
         }
     }
     else

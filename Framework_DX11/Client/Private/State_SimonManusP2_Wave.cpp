@@ -25,6 +25,7 @@ HRESULT CState_SimonManusP2_Wave::Start_State(void* pArg)
     m_pMonster->Change_Animation(AN_MAGICWAVE, false, 0.1f, 0);
 
     m_bWave = false;
+    m_bWaveEffect = false;
 
     return S_OK;
 }
@@ -52,6 +53,19 @@ _bool CState_SimonManusP2_Wave::End_Check()
 
 void CState_SimonManusP2_Wave::Projectile_Check(_double CurTrackPos)
 {
+    if (CurTrackPos >= 20.f && CurTrackPos <= 45.f)
+    {
+        if (!m_bWaveEffect)
+        {
+            m_bWaveEffect = true;
+            m_pMonster->Active_Effect(CSimonManus::P2_WAVE_TRAIL);
+        }
+    }
+    else
+    {
+        m_pMonster->DeActive_Effect(CSimonManus::P2_WAVE_TRAIL);
+    }
+
     if (!m_bWave)
     {
         if (CurTrackPos >= 40.f)

@@ -148,7 +148,7 @@ HRESULT CSimonManus::Initialize(void* pArg)
 
 	GET_GAMEINTERFACE->Set_OnOff_OrthoUI(false, this);
 
-	Start_CutScene(CUTSCENE_MEET);
+	//Start_CutScene(CUTSCENE_MEET);
 
 	return S_OK;
 }
@@ -710,7 +710,16 @@ HRESULT CSimonManus::Ready_Effects()
 
 	m_Effects[P1_TRAIL] = CEffect_Manager::Get_Instance()->Clone_Effect(TEXT("SimonManus_Attack_Swing"), pParetnMatrix,
 		pSocketBoneMatrix, _Vec3(0.f, 0.f, 0.f), _Vec3(0.f, 0.f, 0.f), _Vec3(1.f, 1.f, 1.f));
-	
+
+	m_Effects[SWING_DRAG] = CEffect_Manager::Get_Instance()->Clone_Effect(TEXT("SimonManus_Attack_Swing_Drag"), pParetnMatrix,
+		pSocketBoneMatrix, _Vec3(0.f, 0.f, 0.f), _Vec3(0.f, 0.f, 0.f), _Vec3(1.f, 1.f, 1.f));
+
+	m_Effects[SWING_DRAG_REVERSE] = CEffect_Manager::Get_Instance()->Clone_Effect(TEXT("SimonManus_Attack_Swing_Drag"), pParetnMatrix,
+		pSocketBoneMatrix, _Vec3(0.f, 0.f, 0.f), _Vec3(0.f, 0.f, 0.f), _Vec3(1.f, 1.f, 1.f), _Vec3(0.f, 0.f, 180.f));
+
+	m_Effects[WEAPON_PARTICLE] = CEffect_Manager::Get_Instance()->Clone_Effect(TEXT("SimonManus_Weapon_Follow"), pParetnMatrix,
+		pSocketBoneMatrix, _Vec3(0.f, 0.f, 0.f), _Vec3(0.f, 0.f, 0.f), _Vec3(1.f, 1.f, 1.f));
+
 	pSocketBoneMatrix = m_pExtraModelCom->Get_BoneCombindTransformationMatrix_Ptr(m_pExtraModelCom->Get_UFBIndices(UFB_HAND_LEFT));
 
 	m_Effects[P2_SLIDEMAGIC] = CEffect_Manager::Get_Instance()->Clone_Effect(TEXT("SimonManus_Attack_SlideMagic"), pParetnMatrix,
@@ -728,13 +737,21 @@ HRESULT CSimonManus::Ready_Effects()
 	m_Effects[P2_SH_EXPLOSION] = CEffect_Manager::Get_Instance()->Clone_Effect(TEXT("SimonManus_Attack_SummonHand_Explosion"), pParetnMatrix,
 		pSocketBoneMatrix, _Vec3(0.f, 0.f, 0.f), _Vec3(0.f, 0.f, 0.f), _Vec3(1.f, 1.f, 1.f));
 
+	m_Effects[P2_TRAIL] = CEffect_Manager::Get_Instance()->Clone_Effect(TEXT("SimonManus_Attack_Swing_2P"), pParetnMatrix,
+		pSocketBoneMatrix, _Vec3(0.f, 0.f, 0.f), _Vec3(0.f, 0.f, 0.f), _Vec3(1.f, 1.f, 1.f));
+
+	pSocketBoneMatrix = m_pExtraModelCom->Get_BoneCombindTransformationMatrix_Ptr(m_pExtraModelCom->Get_UFBIndices(UFB_HAND_LEFT));
+
+	m_Effects[P2_WAVE_TRAIL] = CEffect_Manager::Get_Instance()->Clone_Effect(TEXT("SimonManus_Attack_Wave"), pParetnMatrix,
+		pSocketBoneMatrix, _Vec3(0.f, 0.f, 0.f), _Vec3(0.f, 0.f, 0.f), _Vec3(1.f, 1.f, 1.f));
+
 
 	for (auto& pEffect : m_Effects)
 	{
 		pEffect->Set_Loop(false);
 		pEffect->Set_Dead(true);
 	}
-
+	m_Effects[WEAPON_PARTICLE]->Set_Loop(true);
 
 	return S_OK;
 }
@@ -819,7 +836,12 @@ void CSimonManus::ChangePhase()
 	CEffect_Container::EFFECT_DESC Desc;
 	Desc.pParentMatrix = m_pTransformCom->Get_WorldMatrix_Ptr();
 	Desc.pSocketMatrix = m_pModelCom->Get_BoneCombindTransformationMatrix_Ptr(m_pModelCom->Get_UFBIndices(UFB_HAND_RIGHT));
-	m_Effects[P1_TRAIL]->Set_EffectDesc(Desc);
+	m_Effects[WEAPON_PARTICLE]->Set_EffectDesc(Desc);
+	m_Effects[SWING_DRAG]->Set_EffectDesc(Desc);
+	
+	Desc.vRotate = _Vec3{0.f, 0.f, 180.f};
+	m_Effects[SWING_DRAG_REVERSE]->Set_EffectDesc(Desc);
+
 
 	m_eStat.fHp = 200.f;
 	m_eStat.fMaxHp = 200.f;
