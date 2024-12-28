@@ -171,7 +171,7 @@ void CState_RaxasiaP1_Discharge::Effect_Check(_double CurTrackPos)
             if (CurTrackPos >= 35.f)
             {
                 m_pMonster->Active_Effect(CRaxasia::EFFECT_INCHENTSWORD, true);
-                m_pMonster->Active_Effect(CRaxasia::EFFECT_THUNDERDISCHARGE, false);
+                m_pMonster->Active_Effect(CRaxasia::EFFECT_THUNDERDISCHARGE, false);    //어택 오브젝트로 수정 필요
                 m_bChargeActive = true;
             }
         }

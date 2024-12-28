@@ -44,7 +44,7 @@ HRESULT CAObj_ThunderMark::Initialize(void* pArg)
 
     m_strObjectTag = TEXT("MonsterWeapon");
 
-    //m_pSoundCom[EFF_SOUND_EFFECT1]->Play2D(TEXT("SE_NPC_SK_FX_Spark_M_03.wav"), &g_fEffectVolume, true);
+    m_pSoundCom[EFF_SOUND_EFFECT1]->Play2D(TEXT("SE_NPC_Raxasia_SK_PJ_Spark_Ground_Loop_01.wav"), &g_fEffectVolume, true);
 
     return S_OK;
 }
@@ -69,6 +69,10 @@ void CAObj_ThunderMark::Update(_float fTimeDelta)
         {
             m_pEffectExp->Reset_Effects();
             m_bExplosive = true;
+            m_pSoundCom[EFF_SOUND_EFFECT1]->Stop();
+
+            m_pSoundCom[EFF_SOUND_EFFECT1]->Play2D(TEXT("SE_NPC_Raxasia_SK_PJ_Spark_Ground_Explo_01.wav"), &g_fEffectVolume, false);
+
         }
         else
         {
@@ -99,7 +103,10 @@ void CAObj_ThunderMark::Late_Update(_float fTimeDelta)
     else
     {
         m_pEffectExp->Late_Update(fTimeDelta);
-        m_pGameInstance->Add_ColliderList(m_pColliderCom);
+        if (!m_isDead)
+        {
+            m_pGameInstance->Add_ColliderList(m_pColliderCom);
+        }
     }
     if (m_fLifeTime < m_fLifeDuration)
     {

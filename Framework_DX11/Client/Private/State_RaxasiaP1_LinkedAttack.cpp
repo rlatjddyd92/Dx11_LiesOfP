@@ -173,6 +173,7 @@ void CState_RaxasiaP1_LinkedAttack::Effect_Check(_double CurTrackPos)
             if (!m_bSwing)
             {
                 m_pMonster->Active_Effect(CRaxasia::EFFECT_SWING, true);
+                m_pMonster->Play_Sound(CPawn::PAWN_SOUND_EFFECT1, TEXT("SE_NPC_SK_WS_BroadSword_06.wav"), false);
                 m_bSwing = true;
             }
         }
@@ -189,6 +190,7 @@ void CState_RaxasiaP1_LinkedAttack::Effect_Check(_double CurTrackPos)
             if (!m_bSwing)
             {
                 m_pMonster->Active_Effect(CRaxasia::EFFECT_SWING, true);
+                m_pMonster->Play_Sound(CPawn::PAWN_SOUND_EFFECT1, TEXT("SE_NPC_SK_WS_BroadSword_06.wav"), false);
                 m_bSwing = true;
             }
         }
