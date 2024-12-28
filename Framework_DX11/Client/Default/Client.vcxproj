@@ -312,6 +312,7 @@
     <ClInclude Include="..\Public\Statistic_Data.h" />
     <ClInclude Include="..\Public\SteelHeart.h" />
     <ClInclude Include="..\Public\TorchDeck.h" />
+    <ClInclude Include="..\Public\UIInform_Boss.h" />
     <ClInclude Include="..\Public\UIPage_3D.h" />
     <ClInclude Include="..\Public\UIPage_Achievment.h" />
     <ClInclude Include="..\Public\UIPage_Chest.h" />
@@ -321,6 +322,8 @@
     <ClInclude Include="..\Public\UIPart_3D_Normal.h" />
     <ClInclude Include="..\Public\UIPart_3D_Path.h" />
     <ClInclude Include="..\Public\UIPage_3D_PathGuide.h" />
+    <ClInclude Include="..\Public\UIPlay_Component.h" />
+    <ClInclude Include="..\Public\UIPlay_Weapon.h" />
     <ClInclude Include="..\Public\Weapon_PlayerArm.h" />
     <ClInclude Include="..\Public\Weapon_Raxasia_P1_Shield.h" />
     <ClInclude Include="..\Public\Weapon_Raxasia_P1_Sword.h" />
@@ -680,6 +683,7 @@
     <ClCompile Include="..\Private\Statistic_Data.cpp" />
     <ClCompile Include="..\Private\SteelHeart.cpp" />
     <ClCompile Include="..\Private\TorchDeck.cpp" />
+    <ClCompile Include="..\Private\UIInform_Boss.cpp" />
     <ClCompile Include="..\Private\UIPage_3D.cpp" />
     <ClCompile Include="..\Private\UIPage_Achievment.cpp" />
     <ClCompile Include="..\Private\UIPage_Chest.cpp" />
@@ -689,6 +693,8 @@
     <ClCompile Include="..\Private\UIPart_3D_Normal.cpp" />
     <ClCompile Include="..\Private\UIPart_3D_Path.cpp" />
     <ClCompile Include="..\Private\UIPage_3D_PathGuide.cpp" />
+    <ClCompile Include="..\Private\UIPlay_Component.cpp" />
+    <ClCompile Include="..\Private\UIPlay_Weapon.cpp" />
     <ClCompile Include="..\Private\Weapon_PlayerArm.cpp" />
     <ClCompile Include="..\Private\Weapon_Raxasia_P1_Shield.cpp" />
     <ClCompile Include="..\Private\Weapon_Raxasia_P1_Sword.cpp" />

@@ -446,6 +446,8 @@ void CUIPage_Play::LU_Gauge_Update(_float fTimeDelta)
 			m_vec_Group_Ctrl[_int(PART_GROUP::GROUP_SP0_FILL) + i]->fRatio = 0.f;
 	}
 
+	m_iFable_Art_Cell_Now = iSP_Cell_Filled;
+
 	__super::Get_Front_Part_In_Control(_int(PART_GROUP::GROUP_HP_NUM))->bRender = false;
 	__super::Get_Front_Part_In_Control(_int(PART_GROUP::GROUP_HP_NUM))->strText = {};
 	__super::Get_Front_Part_In_Control(_int(PART_GROUP::GROUP_ST_NUM))->bRender = false;

@@ -53,6 +53,7 @@ public:
 	_Vec2 CheckMouse(_Vec2 fPos, _Vec2 fSize);
 
 	_bool Action_InterAction(_wstring strInterName) { return m_pUIPage_Play->Action_InterAction(strInterName); }
+	_bool Is_UIOff() { return m_bIsUIOff; }
 
 	void Set_Scroll_Area(SCROLL_AREA eArea, _Vec2 vPos, _Vec2 vSize) { m_pUIRender_Batching->Set_Scroll_Area(eArea, vPos, vSize); }
 	void Select_Scroll_Area(SCROLL_AREA eArea) { m_pUIRender_Batching->Select_Scroll_Area(eArea); }
@@ -322,6 +323,7 @@ public:
 		Mute_UI_Volume(false);
 		OpenPage(UIPAGE::PAGE_PLAY);
 		m_bIsPlayPageMaintain = true;
+		m_bIsUIOff = false;
 	}
 	void UIPart_Off()
 	{
@@ -341,6 +343,7 @@ public:
 		}
 
 		m_bIsPlayPageMaintain = false;
+		m_bIsUIOff = true;
 	}
 
 	void Show_Script(_wstring strScript0, _wstring strScript1 = TEXT("none"), _float fTime = 1.f, _Vec3 vColor = _Vec3{ 0.f,0.f,0.f }) 
@@ -421,6 +424,7 @@ private:
 
 	_bool m_bIsIngame = false;
 	_bool m_bIsPlayPageMaintain = false;
+	_bool m_bIsUIOff = false;
 
 	ITEM_FUNC m_eNow_Active_Func = ITEM_FUNC::FUNC_END;
 

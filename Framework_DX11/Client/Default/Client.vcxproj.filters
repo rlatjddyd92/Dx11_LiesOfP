@@ -1342,6 +1342,27 @@
     <Filter Include="03.GameInterface_Controller\00.UIManager\03.UIPage_3D\00.UIPage_3D_PathGuide">
       <UniqueIdentifier>{cbfd3738-fff6-47a5-93a1-7684aa86e4bb}</UniqueIdentifier>
     </Filter>
+    <Filter Include="03.GameInterface_Controller\00.UIManager\00.UIPage\02.UIPage_Play %2870%25%29\PlayComponent">
+      <UniqueIdentifier>{db35134b-ebea-436c-8858-94325d51473f}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="03.GameInterface_Controller\00.UIManager\00.UIPage\02.UIPage_Play %2870%25%29\PlayComponent\00.Weapon">
+      <UniqueIdentifier>{10b16e2c-2ba3-423d-a701-16e62f0b5af4}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="03.GameInterface_Controller\00.UIManager\00.UIPage\15.UIPage_Inform %2850%25%29\Boss">
+      <UniqueIdentifier>{5680f200-edde-4f5c-abf3-893914499931}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="03.GameInterface_Controller\00.UIManager\00.UIPage\15.UIPage_Inform %2850%25%29\Boss\00.Rax_Emerge">
+      <UniqueIdentifier>{b99df093-4cb1-49e6-9f8b-3ab5eb47a53b}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="03.GameInterface_Controller\00.UIManager\00.UIPage\15.UIPage_Inform %2850%25%29\Boss\01.Rax_Dead">
+      <UniqueIdentifier>{96486700-cd4f-4300-aec6-f0a9a80415dd}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="03.GameInterface_Controller\00.UIManager\00.UIPage\15.UIPage_Inform %2850%25%29\Boss\02.Manus_Emerge">
+      <UniqueIdentifier>{d74a40f3-33e5-421d-85f4-e6a115dec5e8}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="03.GameInterface_Controller\00.UIManager\00.UIPage\15.UIPage_Inform %2850%25%29\Boss\03.Manus_Dead">
+      <UniqueIdentifier>{7da1448b-15a9-4763-844b-5afccdceb430}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Client.h">
@@ -2458,6 +2479,15 @@
     <ClInclude Include="..\Public\UIPage_3D_PathGuide.h">
       <Filter>03.GameInterface_Controller\00.UIManager\03.UIPage_3D\00.UIPage_3D_PathGuide</Filter>
     </ClInclude>
+    <ClInclude Include="..\Public\UIPlay_Component.h">
+      <Filter>03.GameInterface_Controller\00.UIManager\00.UIPage\02.UIPage_Play %2870%25%29\PlayComponent</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Public\UIPlay_Weapon.h">
+      <Filter>03.GameInterface_Controller\00.UIManager\00.UIPage\02.UIPage_Play %2870%25%29\PlayComponent\00.Weapon</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Public\UIInform_Boss.h">
+      <Filter>03.GameInterface_Controller\00.UIManager\00.UIPage\15.UIPage_Inform %2850%25%29\Boss</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Client.cpp">
@@ -3543,6 +3573,15 @@
     </ClCompile>
     <ClCompile Include="..\Private\UIPage_3D_PathGuide.cpp">
       <Filter>03.GameInterface_Controller\00.UIManager\03.UIPage_3D\00.UIPage_3D_PathGuide</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Private\UIPlay_Component.cpp">
+      <Filter>03.GameInterface_Controller\00.UIManager\00.UIPage\02.UIPage_Play %2870%25%29\PlayComponent</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Private\UIPlay_Weapon.cpp">
+      <Filter>03.GameInterface_Controller\00.UIManager\00.UIPage\02.UIPage_Play %2870%25%29\PlayComponent\00.Weapon</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Private\UIInform_Boss.cpp">
+      <Filter>03.GameInterface_Controller\00.UIManager\00.UIPage\15.UIPage_Inform %2850%25%29\Boss</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

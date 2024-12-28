@@ -274,6 +274,8 @@ private:
 
 	_Vec2 m_vFable_Art_ActionTime = { 0.f,0.5f };
 
+	_int m_iFable_Art_Cell_Now = 0;
+
 	// 보스 체력바 
 	_bool m_bIs_BossHp_Activate = false;
 	_wstring m_strBossName = {};

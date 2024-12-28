@@ -56,6 +56,8 @@ public: // 외부에서 매니저 접근
 #pragma region UIManager
 	_bool IsGamePause() { return m_pUIManager->IsGamePause(); }
 
+	_bool Is_UIOff() { return m_pUIManager->Is_UIOff(); }
+
 	void OpenMainPage() { m_pUIManager->OpenMainPage(); }
 	void OpenLoadingPage() { m_pUIManager->OpenLoadingPage(); }
 
