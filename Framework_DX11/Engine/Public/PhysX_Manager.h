@@ -18,6 +18,15 @@ BEGIN(Engine)
 class CTransform;
 class CGameObject;
 
+class ErrorCallback : public PxDefaultErrorCallback
+{
+public:
+    virtual void reportError(PxErrorCode::Enum code, const char* message, const char* file, int line)
+    {
+        PxDefaultErrorCallback::reportError(code, message, file, line);
+    }
+};
+
 class ENGINE_DLL CPhysX_Manager :
     public CBase
 {
@@ -66,7 +75,7 @@ private:
 
     // PhysX 할당자 및 에러 콜백 - 메모리 할당과 에러 처리를 위한 콜백 클래스
     PxDefaultAllocator m_PxAllocator;
-    PxDefaultErrorCallback m_PXErrorCallback;
+    ErrorCallback m_ErrorCallback;
 
     // PVD 연결 설정 - 디버깅 정보를 전송할 IP 주소
     std::string m_pvdIPAddress = "127.0.0.1";

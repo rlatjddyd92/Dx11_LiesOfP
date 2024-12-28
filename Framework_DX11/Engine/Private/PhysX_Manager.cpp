@@ -7,6 +7,8 @@
 #include "Model.h"
 #include "Mesh.h"
 
+#include "MyProfilerCallback.h"
+
 CPhysX_Manager::CPhysX_Manager(ID3D11Device* pDevice, ID3D11DeviceContext* pContext)
     : m_pDevice{ pDevice }
     , m_pContext{ pContext }
@@ -19,72 +21,119 @@ HRESULT CPhysX_Manager::Initialize()
 {
     // PhysX Foundation 생성
     // PhysX와 관련된 모든 객체들의 기반이 되는 싱글톤 객체
-    m_PxFoundation = PxCreateFoundation(PX_PHYSICS_VERSION, m_PxAllocator, m_PXErrorCallback);
+    m_PxFoundation = PxCreateFoundation(PX_PHYSICS_VERSION, m_PxAllocator, m_ErrorCallback);
 
-    CUresult result = cuInit(0);
-    if (result != CUDA_SUCCESS)
-    {
-        return -1;
-    }
-
-    int deviceCount = 0;
-    cudaError_t cudaErr = cudaGetDeviceCount(&deviceCount);
-    if (cudaErr != cudaSuccess || deviceCount == 0) {
-        // CUDA 디바이스가 없는 경우
-        return -1;
-    }
-
-    cudaErr = cudaSetDevice(0);
-    if (cudaErr != cudaSuccess) {
-        return -1;
-    }
-    cudaErr = cudaFree(0); // CUDA 컨텍스트 초기화
-    if (cudaErr != cudaSuccess) {
-        return -1;
-    }
-
-    CUdevice cuDevice;
-    result = cuDeviceGet(&cuDevice, 0);  // 0번 디바이스 선택
-    if (result != CUDA_SUCCESS) {
-        return -1;
-    }
-    cudaErr = cudaSetDevice(cuDevice);
-
-    cudaGetDevice(&deviceCount);
-
-    CUcontext m_pCudaContext = nullptr;
-    result = cuCtxCreate(&m_pCudaContext, 0, cuDevice);  // 올바른 장치를 설정하여 컨텍스트 생성
-    if (result != CUDA_SUCCESS) {
-        return -1;
-    }
-
-    // Cuda를 사용한 GPU 물리 연산
-    PxCudaContextManagerDesc cudaContextManagerDesc; 
-    cudaContextManagerDesc.graphicsDevice = m_pDevice;    
-    cudaContextManagerDesc.ctx = &m_pCudaContext;
-
-    cudaErr = cudaGetLastError();
-
-    m_CudaContextManager = PxCreateCudaContextManager(*m_PxFoundation, cudaContextManagerDesc);
-    if (m_CudaContextManager)
-    {
-        if (!m_CudaContextManager->contextIsValid())
-        {
-            PX_RELEASE(m_CudaContextManager);
-        }
-           
-    }
     // PVD(PhysX Visual Debugger) 생성
     m_Pvd = PxCreatePvd(*m_PxFoundation);
     // PVD 소켓 연결 설정
     m_pTransport = PxDefaultPvdSocketTransportCreate(m_pvdIPAddress.c_str(), m_iPvdPortNumber, m_iPvdTimeOutSeconds);
     m_Pvd->connect(*m_pTransport, PxPvdInstrumentationFlag::eALL);
+    //m_Pvd->disconnect(); // 지우기
 
     // PhysX SDK 생성
     // 피직스 객체들을 생성할 수 있는 싱글톤 팩토리 클래스
     // 씬이나 매터리얼을 생성하거나 물리 객체의 형체 정보(Shape), 강체 인스턴스 등 거의 대부분의 PhysX 객체들을 생성할 때 사용
     m_PhysX = PxCreatePhysics(PX_PHYSICS_VERSION, *m_PxFoundation, PxTolerancesScale(), true, m_Pvd);
-    PxInitExtensions(*m_PhysX, m_Pvd);
+    _bool extensionsInitialized = PxInitExtensions(*m_PhysX, m_Pvd);
+    if (!extensionsInitialized) 
+    {
+        printf("Failed to initialize PhysX extensions.\n");
+        return -1;
+    }
+
+    _int cudaDriverVersion = 0;
+    cuDriverGetVersion(&cudaDriverVersion);
+
+    if (cudaDriverVersion < 11000)
+    {
+        MSG_BOX(TEXT("CUDA Driver is not installed or not supported."));
+        return E_FAIL;
+    }
+    else
+    {
+        cudaError_t cudaErr;
+        CUresult result;
+        _int deviceCount = 0;
+
+        result = cuInit(0);
+        if (result != CUDA_SUCCESS) {
+            printf("Failed to initialize CUDA driver: %d\n", result);
+            return -1;
+        }
+
+        cudaErr = cudaDeviceSynchronize();
+        if (cudaErr != cudaSuccess) {
+            printf("CUDA Device synchronization failed: %s\n", cudaGetErrorString(cudaErr));
+            return -1;
+        }
+
+        cudaGetDeviceCount(&deviceCount);
+        if (deviceCount == 0) 
+        {
+            MSG_BOX(TEXT("No CUDA devices found."));
+            return E_FAIL;
+        }
+
+        //Compute Capability가 3.0 미만인 GPU는 PhysX GPU Dynamics를 지원하지 않음
+        for (_int i = 0; i < deviceCount; i++) 
+        {
+            cudaDeviceProp prop;
+            cudaGetDeviceProperties(&prop, i);
+            printf("Device %d: %s\n", i, prop.name);
+            printf("  Compute Capability: %d.%d\n", prop.major, prop.minor);
+            printf("  Total Global Memory: %lu MB\n", prop.totalGlobalMem / (1024 * 1024));
+            printf("  Multiprocessors: %d\n", prop.multiProcessorCount);
+
+        }
+
+        _int driverVersion = 0;
+        cuDriverGetVersion(&driverVersion);
+        printf("CUDA Driver Version: %d\n", driverVersion);
+
+        // CUDA 디바이스 핸들 얻기
+        CUdevice cuDevice;
+        result = cuDeviceGet(&cuDevice, 0);  // 첫 번째 CUDA 장치 가져오기
+        if (result != CUDA_SUCCESS) {
+            printf("Failed to get CUDA device.\n");
+            return -1;
+        }
+
+        CUcontext cuContext;
+        result = cuCtxCreate(&cuContext, 0, cuDevice);  // CUDA 디바이스 핸들로 컨텍스트 생성
+        if (result != CUDA_SUCCESS) {
+            printf("Failed to create CUDA context.\n");
+            return -1;
+        }
+
+        // CUDA 컨텍스트 활성화
+        result = cuCtxPushCurrent(cuContext);
+        if (result != CUDA_SUCCESS) {
+            printf("Failed to push CUDA context.\n");
+            return -1;
+        }
+
+        PxCudaContextManagerDesc cudaContextManagerDesc;
+        //cudaContextManagerDesc.graphicsDevice = reinterpret_cast<void*>(cuDevice);
+        //cudaContextManagerDesc.ctx = &cuContext;
+        //cudaContextManagerDesc.deviceAllocator = nullptr;
+
+        CMyProfilerCallback* profilerCallback = new CMyProfilerCallback();
+        PxSetProfilerCallback(profilerCallback);
+
+        m_CudaContextManager = PxCreateCudaContextManager(*m_PxFoundation, cudaContextManagerDesc, profilerCallback);
+        if (!m_CudaContextManager || !m_CudaContextManager->contextIsValid()) 
+        {
+            printf("Failed to create CUDA Context Manager.\n");
+            return -1;
+        }
+        else
+        {
+            if (!m_CudaContextManager->contextIsValid())
+            {
+                PX_RELEASE(m_CudaContextManager);
+            }
+        }
+    }
 
     // 씬 설명 설정
     PxSceneDesc sceneDesc(m_PhysX->getTolerancesScale());
@@ -105,9 +154,9 @@ HRESULT CPhysX_Manager::Initialize()
     sceneDesc.cudaContextManager = m_CudaContextManager;
     sceneDesc.flags |= PxSceneFlag::eENABLE_GPU_DYNAMICS;
     sceneDesc.flags |= PxSceneFlag::eENABLE_PCM;
-    sceneDesc.broadPhaseType = PxBroadPhaseType::eGPU;
+   /*sceneDesc.broadPhaseType = PxBroadPhaseType::eGPU;
     sceneDesc.gpuMaxNumPartitions = 8;
-    sceneDesc.gpuMaxNumStaticPartitions = 255;
+    sceneDesc.gpuMaxNumStaticPartitions = 255;*/
 
     // 매 프레임마다 마찰 계산 - 필요할까?
     //sceneDesc.flags |= PxSceneFlag::eENABLE_FRICTION_EVERY_ITERATION;
@@ -133,6 +182,10 @@ HRESULT CPhysX_Manager::Initialize()
     //PxRigidStatic* groundPlane = PxCreatePlane(*gPhysics, PxPlane(0, 1, 0, 0), *gMaterial);
     //gScene->addActor(*groundPlane);
 
+
+
+
+  
 
     return S_OK;
 }

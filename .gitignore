@@ -513,3 +513,5 @@ Framework_DX11/Client/Bin/ModelData/NonAnim/InteractObj/Tex/T_Monastery_Lift_01_
 Framework_DX11/Client/Bin/ModelData/NonAnim/InteractObj/Tex/T_Monastery_Lift_01_N.dds
 Framework_DX11/Client/Bin/ModelData/Anim/CreatedBinFiles/CarcassNormal.Dat
 Framework_DX11/Tools/Bin/ModelData/Anim/CreatedBinFiles/CarcassNormal.Dat
+Framework_DX11/Client/Bin/PhysXGpu_64.dll
+Framework_DX11/Engine/Bin/PhysXGpu_64.dll

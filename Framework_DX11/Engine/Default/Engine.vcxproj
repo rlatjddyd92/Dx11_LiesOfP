@@ -55,6 +55,7 @@
     <ClCompile Include="..\private\Light_Manager.cpp" />
     <ClCompile Include="..\private\Mesh.cpp" />
     <ClCompile Include="..\private\Model.cpp" />
+    <ClCompile Include="..\Private\MyProfilerCallback.cpp" />
     <ClCompile Include="..\private\Navigation.cpp" />
     <ClCompile Include="..\Private\NvCloth_Manager.cpp" />
     <ClCompile Include="..\Private\Object_Manager.cpp" />
@@ -136,6 +137,7 @@
     <ClInclude Include="..\public\Light_Manager.h" />
     <ClInclude Include="..\public\Mesh.h" />
     <ClInclude Include="..\public\Model.h" />
+    <ClInclude Include="..\Public\MyProfilerCallback.h" />
     <ClInclude Include="..\public\Navigation.h" />
     <ClInclude Include="..\Public\NvCloth_Manager.h" />
     <ClInclude Include="..\Public\Object_Manager.h" />

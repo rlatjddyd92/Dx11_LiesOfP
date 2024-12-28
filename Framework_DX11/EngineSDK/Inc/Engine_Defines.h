@@ -63,6 +63,8 @@ using namespace Engine;
 
 #include "PxPhysics.h"
 #include "PxPhysicsAPI.h"
+#include "gpu/PxGpu.h"
+#include "gpu/PxPhysicsGpu.h"
 
 using namespace physx;
 

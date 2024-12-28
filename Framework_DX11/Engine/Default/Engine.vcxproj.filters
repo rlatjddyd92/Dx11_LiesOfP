@@ -241,6 +241,9 @@
     <Filter Include="01.Utility\15.NvClothManager\My">
       <UniqueIdentifier>{fb2c93f9-3592-4253-81c1-0103f3ece87b}</UniqueIdentifier>
     </Filter>
+    <Filter Include="01.Utility\12.PhysXManager\ProfileCallBack">
+      <UniqueIdentifier>{4af16754-4ab6-4fc1-bf3b-925240f8789a}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\Private\Base.cpp">
@@ -462,6 +465,9 @@
     </ClCompile>
     <ClCompile Include="..\Private\MyContextManagerCallback.cpp">
       <Filter>01.Utility\15.NvClothManager\My</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Private\MyProfilerCallback.cpp">
+      <Filter>01.Utility\12.PhysXManager\ProfileCallBack</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -705,6 +711,9 @@
     </ClInclude>
     <ClInclude Include="..\Public\MyContextManagerCallback.h">
       <Filter>01.Utility\15.NvClothManager\My</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Public\MyProfilerCallback.h">
+      <Filter>01.Utility\12.PhysXManager\ProfileCallBack</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
