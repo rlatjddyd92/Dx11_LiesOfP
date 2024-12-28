@@ -487,7 +487,7 @@ PS_NORMAL_OUT PS_BLOOD_SPREAD_MAIN(PS_IN In)
     
     Out.vDiffuse.rgb = Out.vDiffuse.r * In.vColor.rgb;
     
-    Out.vARM        = float4(1.f, 1.f, 1.f, 1.f);
+    Out.vARM        = float4(0.f, 0.f, 0.f, 0.f);
     Out.vDepth = float4(0.f, 0.f, 0.f, 0.f);
     Out.vEmessive = float4(0.f, 0.f, 0.f, 0.f);
     Out.vRimLight = float4(0.f, 0.f, 0.f, 0.f);

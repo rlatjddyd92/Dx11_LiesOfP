@@ -182,13 +182,15 @@ void CState_SimonManusP2_Route1::Effect_Check(_double CurTrackPos)
         {
             if (!m_bSwing)
             {
-                m_pMonster->Active_Effect(CSimonManus::P1_TRAIL);
+                m_pMonster->Active_Effect(CSimonManus::P2_TRAIL);
+                m_pMonster->Active_Effect(CSimonManus::SWING_DRAG);
                 m_bSwing = true;
             }
         }
         else
         {
-            m_pMonster->DeActive_Effect(CSimonManus::P1_TRAIL);
+            m_pMonster->DeActive_Effect(CSimonManus::P2_TRAIL);
+            m_pMonster->DeActive_Effect(CSimonManus::SWING_DRAG);
         }
     }
     else if (m_iRouteTrack == 1)       //¾îº¸ÀÌµå ½ºÀ®
@@ -197,13 +199,15 @@ void CState_SimonManusP2_Route1::Effect_Check(_double CurTrackPos)
         {
             if (!m_bSwing)
             {
-                m_pMonster->Active_Effect(CSimonManus::P1_TRAIL);
+                m_pMonster->Active_Effect(CSimonManus::P2_TRAIL);
+                m_pMonster->Active_Effect(CSimonManus::SWING_DRAG);
                 m_bSwing = true;
             }
         }
         else
         {
-            m_pMonster->DeActive_Effect(CSimonManus::P1_TRAIL);
+            m_pMonster->DeActive_Effect(CSimonManus::P2_TRAIL);
+            m_pMonster->DeActive_Effect(CSimonManus::SWING_DRAG);
         }
     }
     else       //½ºÅÆÇÁ
