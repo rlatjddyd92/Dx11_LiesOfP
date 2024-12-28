@@ -55,6 +55,7 @@ void CState_Player_ThrowItem::Update(_float fTimeDelta)
     {
         SPECIAL_ITEM eNow = GET_GAMEINTERFACE->Get_Now_Select_Item();
         m_pPlayer->Create_ThrowItem(eNow);
+        m_pPlayer->Play_Sound(CPlayer::PAWN_SOUND_EFFECT1, TEXT("SE_PC_SK_FX_FlameThrower_Start_01.wav"));
 
         m_isCreateItem = true;
     }

@@ -1,119 +1,119 @@
-﻿FXC : warning X4717: Effects deprecated for D3DCompiler_47
-  
-  compilation object save succeeded; see C:\Users\olivi\GitHub\Dx11_LiesOfP\Framework_DX11\Engine\Bin\Shader_Effect_Texture.cso
-FXC : warning X4717: Effects deprecated for D3DCompiler_47
-C:\Users\olivi\GitHub\Dx11_LiesOfP\Framework_DX11\Engine\Bin\ShaderFiles\Shader_Bloom.hlsl(155,30-91): warning X3570: gradient instruction used in a loop with varying iteration, attempting to unroll the loop
-C:\Users\olivi\GitHub\Dx11_LiesOfP\Framework_DX11\Engine\Bin\ShaderFiles\Shader_Bloom.hlsl(182,30-91): warning X3570: gradient instruction used in a loop with varying iteration, attempting to unroll the loop
-  
-  compilation object save succeeded; see C:\Users\olivi\GitHub\Dx11_LiesOfP\Framework_DX11\Engine\Bin\Shader_Bloom.cso
+﻿  compilation object save succeeded; see C:\Users\olivi\Github\Dx11_LiesOfP\Framework_DX11\Engine\Bin\Shader_Effect_Texture.cso
 FXC : warning X4717: Effects deprecated for D3DCompiler_47
   
-  compilation object save succeeded; see C:\Users\olivi\GitHub\Dx11_LiesOfP\Framework_DX11\Engine\Bin\Shader_Cell.cso
+FXC : warning X4717: Effects deprecated for D3DCompiler_47
+C:\Users\olivi\Github\Dx11_LiesOfP\Framework_DX11\Engine\Bin\ShaderFiles\Shader_Bloom.hlsl(155,30-91): warning X3570: gradient instruction used in a loop with varying iteration, attempting to unroll the loop
+C:\Users\olivi\Github\Dx11_LiesOfP\Framework_DX11\Engine\Bin\ShaderFiles\Shader_Bloom.hlsl(182,30-91): warning X3570: gradient instruction used in a loop with varying iteration, attempting to unroll the loop
+  
+  compilation object save succeeded; see C:\Users\olivi\Github\Dx11_LiesOfP\Framework_DX11\Engine\Bin\Shader_Bloom.cso
 FXC : warning X4717: Effects deprecated for D3DCompiler_47
   
-  compilation object save succeeded; see C:\Users\olivi\GitHub\Dx11_LiesOfP\Framework_DX11\Engine\Bin\Shader_Compute_Back.cso
+  compilation object save succeeded; see C:\Users\olivi\Github\Dx11_LiesOfP\Framework_DX11\Engine\Bin\Shader_Cell.cso
 FXC : warning X4717: Effects deprecated for D3DCompiler_47
   
-  compilation object save succeeded; see C:\Users\olivi\GitHub\Dx11_LiesOfP\Framework_DX11\Engine\Bin\Shader_Compute_Bloom.cso
+  compilation object save succeeded; see C:\Users\olivi\Github\Dx11_LiesOfP\Framework_DX11\Engine\Bin\Shader_Compute_Back.cso
 FXC : warning X4717: Effects deprecated for D3DCompiler_47
   
-  compilation object save succeeded; see C:\Users\olivi\GitHub\Dx11_LiesOfP\Framework_DX11\Engine\Bin\Shader_Compute_Blur.cso
-FXC : warning X4717: Effects deprecated for D3DCompiler_47
-C:\Users\olivi\GitHub\Dx11_LiesOfP\Framework_DX11\Engine\Bin\ShaderFiles\Shader_Deferred.hlsl(180,5-82): warning X3206: implicit truncation of vector type
-C:\Users\olivi\GitHub\Dx11_LiesOfP\Framework_DX11\Engine\Bin\ShaderFiles\Shader_Deferred.hlsl(201,27-49): warning X3571: pow(f, e) will not work for negative f, use abs(f) or conditionally handle negative values if you expect them
-C:\Users\olivi\GitHub\Dx11_LiesOfP\Framework_DX11\Engine\Bin\ShaderFiles\Shader_Deferred.hlsl(235,23-44): warning X3571: pow(f, e) will not work for negative f, use abs(f) or conditionally handle negative values if you expect them
-C:\Users\olivi\GitHub\Dx11_LiesOfP\Framework_DX11\Engine\Bin\ShaderFiles\Shader_Deferred.hlsl(76,34-159): warning X3582: texture access must have literal offset and multisample index, forcing loop to unroll
-C:\Users\olivi\GitHub\Dx11_LiesOfP\Framework_DX11\Engine\Bin\ShaderFiles\Shader_Deferred.hlsl(306,22-44): warning X3571: pow(f, e) will not work for negative f, use abs(f) or conditionally handle negative values if you expect them
-C:\Users\olivi\GitHub\Dx11_LiesOfP\Framework_DX11\Engine\Bin\ShaderFiles\Shader_Deferred.hlsl(339,23-44): warning X3571: pow(f, e) will not work for negative f, use abs(f) or conditionally handle negative values if you expect them
-C:\Users\olivi\GitHub\Dx11_LiesOfP\Framework_DX11\Engine\Bin\ShaderFiles\Shader_Deferred.hlsl(76,34-159): warning X3582: texture access must have literal offset and multisample index, forcing loop to unroll
-C:\Users\olivi\GitHub\Dx11_LiesOfP\Framework_DX11\Engine\Bin\ShaderFiles\Shader_Deferred.hlsl(393,22-44): warning X3571: pow(f, e) will not work for negative f, use abs(f) or conditionally handle negative values if you expect them
-C:\Users\olivi\GitHub\Dx11_LiesOfP\Framework_DX11\Engine\Bin\ShaderFiles\Shader_Deferred.hlsl(426,23-44): warning X3571: pow(f, e) will not work for negative f, use abs(f) or conditionally handle negative values if you expect them
-  
-  compilation object save succeeded; see C:\Users\olivi\GitHub\Dx11_LiesOfP\Framework_DX11\Engine\Bin\Shader_Deferred.cso
+  compilation object save succeeded; see C:\Users\olivi\Github\Dx11_LiesOfP\Framework_DX11\Engine\Bin\Shader_Compute_Bloom.cso
 FXC : warning X4717: Effects deprecated for D3DCompiler_47
   
-  compilation object save succeeded; see C:\Users\olivi\GitHub\Dx11_LiesOfP\Framework_DX11\Engine\Bin\Shader_Distortion.cso
+  compilation object save succeeded; see C:\Users\olivi\Github\Dx11_LiesOfP\Framework_DX11\Engine\Bin\Shader_Compute_Blur.cso
+FXC : warning X4717: Effects deprecated for D3DCompiler_47
+C:\Users\olivi\Github\Dx11_LiesOfP\Framework_DX11\Engine\Bin\ShaderFiles\Shader_Deferred.hlsl(180,5-82): warning X3206: implicit truncation of vector type
+C:\Users\olivi\Github\Dx11_LiesOfP\Framework_DX11\Engine\Bin\ShaderFiles\Shader_Deferred.hlsl(201,27-49): warning X3571: pow(f, e) will not work for negative f, use abs(f) or conditionally handle negative values if you expect them
+C:\Users\olivi\Github\Dx11_LiesOfP\Framework_DX11\Engine\Bin\ShaderFiles\Shader_Deferred.hlsl(235,23-44): warning X3571: pow(f, e) will not work for negative f, use abs(f) or conditionally handle negative values if you expect them
+C:\Users\olivi\Github\Dx11_LiesOfP\Framework_DX11\Engine\Bin\ShaderFiles\Shader_Deferred.hlsl(76,34-159): warning X3582: texture access must have literal offset and multisample index, forcing loop to unroll
+C:\Users\olivi\Github\Dx11_LiesOfP\Framework_DX11\Engine\Bin\ShaderFiles\Shader_Deferred.hlsl(306,22-44): warning X3571: pow(f, e) will not work for negative f, use abs(f) or conditionally handle negative values if you expect them
+C:\Users\olivi\Github\Dx11_LiesOfP\Framework_DX11\Engine\Bin\ShaderFiles\Shader_Deferred.hlsl(339,23-44): warning X3571: pow(f, e) will not work for negative f, use abs(f) or conditionally handle negative values if you expect them
+C:\Users\olivi\Github\Dx11_LiesOfP\Framework_DX11\Engine\Bin\ShaderFiles\Shader_Deferred.hlsl(76,34-159): warning X3582: texture access must have literal offset and multisample index, forcing loop to unroll
+C:\Users\olivi\Github\Dx11_LiesOfP\Framework_DX11\Engine\Bin\ShaderFiles\Shader_Deferred.hlsl(393,22-44): warning X3571: pow(f, e) will not work for negative f, use abs(f) or conditionally handle negative values if you expect them
+C:\Users\olivi\Github\Dx11_LiesOfP\Framework_DX11\Engine\Bin\ShaderFiles\Shader_Deferred.hlsl(426,23-44): warning X3571: pow(f, e) will not work for negative f, use abs(f) or conditionally handle negative values if you expect them
+  
+  compilation object save succeeded; see C:\Users\olivi\Github\Dx11_LiesOfP\Framework_DX11\Engine\Bin\Shader_Deferred.cso
 FXC : warning X4717: Effects deprecated for D3DCompiler_47
   
-  compilation object save succeeded; see C:\Users\olivi\GitHub\Dx11_LiesOfP\Framework_DX11\Engine\Bin\Shader_Compute_HDR.cso
+  compilation object save succeeded; see C:\Users\olivi\Github\Dx11_LiesOfP\Framework_DX11\Engine\Bin\Shader_Distortion.cso
 FXC : warning X4717: Effects deprecated for D3DCompiler_47
   
-  compilation object save succeeded; see C:\Users\olivi\GitHub\Dx11_LiesOfP\Framework_DX11\Engine\Bin\Shader_Model_Instance.cso
+  compilation object save succeeded; see C:\Users\olivi\Github\Dx11_LiesOfP\Framework_DX11\Engine\Bin\Shader_Compute_HDR.cso
 FXC : warning X4717: Effects deprecated for D3DCompiler_47
   
-  compilation object save succeeded; see C:\Users\olivi\GitHub\Dx11_LiesOfP\Framework_DX11\Engine\Bin\Shader_PostProcess.cso
+  compilation object save succeeded; see C:\Users\olivi\Github\Dx11_LiesOfP\Framework_DX11\Engine\Bin\Shader_Model_Instance.cso
 FXC : warning X4717: Effects deprecated for D3DCompiler_47
-C:\Users\olivi\GitHub\Dx11_LiesOfP\Framework_DX11\Engine\Bin\ShaderFiles\Shader_SSAO.hlsl(116,16-42): warning X3206: implicit truncation of vector type
-C:\Users\olivi\GitHub\Dx11_LiesOfP\Framework_DX11\Engine\Bin\ShaderFiles\Shader_SSAO.hlsl(187,12-68): warning X3206: implicit truncation of vector type
-C:\Users\olivi\GitHub\Dx11_LiesOfP\Framework_DX11\Engine\Bin\ShaderFiles\Shader_SSAO.hlsl(188,12-68): warning X3206: implicit truncation of vector type
-C:\Users\olivi\GitHub\Dx11_LiesOfP\Framework_DX11\Engine\Bin\ShaderFiles\Shader_SSAO.hlsl(112,33-78): warning X3570: gradient instruction used in a loop with varying iteration, attempting to unroll the loop
-C:\Users\olivi\GitHub\Dx11_LiesOfP\Framework_DX11\Engine\Bin\ShaderFiles\Shader_SSAO.hlsl(148,24-79): warning X3570: gradient instruction used in a loop with varying iteration, attempting to unroll the loop
-C:\Users\olivi\GitHub\Dx11_LiesOfP\Framework_DX11\Engine\Bin\ShaderFiles\Shader_SSAO.hlsl(172,24-79): warning X3570: gradient instruction used in a loop with varying iteration, attempting to unroll the loop
   
-  compilation object save succeeded; see C:\Users\olivi\GitHub\Dx11_LiesOfP\Framework_DX11\Engine\Bin\Shader_SSAO.cso
-  unity_1YI6XGM24R9XEMGK.cpp
-C:\Users\olivi\GitHub\Dx11_LiesOfP\Framework_DX11\Engine\Public\NvCloth\ps\PsAllocator.h(49,9): warning C4005: 'PX_ALLOC': 매크로 재정의
-  (소스 파일 'x64/Release/unity_1YI6XGM24R9XEMGK.cpp'을(를) 컴파일하는 중)
-      C:\Users\olivi\GitHub\Dx11_LiesOfP\Framework_DX11\Engine\Public\PhysX\foundation\PxAllocator.h(67,9):
-      'PX_ALLOC'의 이전 정의를 참조하십시오.
+  compilation object save succeeded; see C:\Users\olivi\Github\Dx11_LiesOfP\Framework_DX11\Engine\Bin\Shader_PostProcess.cso
+FXC : warning X4717: Effects deprecated for D3DCompiler_47
+C:\Users\olivi\Github\Dx11_LiesOfP\Framework_DX11\Engine\Bin\ShaderFiles\Shader_SSAO.hlsl(116,16-42): warning X3206: implicit truncation of vector type
+C:\Users\olivi\Github\Dx11_LiesOfP\Framework_DX11\Engine\Bin\ShaderFiles\Shader_SSAO.hlsl(187,12-68): warning X3206: implicit truncation of vector type
+C:\Users\olivi\Github\Dx11_LiesOfP\Framework_DX11\Engine\Bin\ShaderFiles\Shader_SSAO.hlsl(188,12-68): warning X3206: implicit truncation of vector type
+C:\Users\olivi\Github\Dx11_LiesOfP\Framework_DX11\Engine\Bin\ShaderFiles\Shader_SSAO.hlsl(112,33-78): warning X3570: gradient instruction used in a loop with varying iteration, attempting to unroll the loop
+C:\Users\olivi\Github\Dx11_LiesOfP\Framework_DX11\Engine\Bin\ShaderFiles\Shader_SSAO.hlsl(148,24-79): warning X3570: gradient instruction used in a loop with varying iteration, attempting to unroll the loop
+C:\Users\olivi\Github\Dx11_LiesOfP\Framework_DX11\Engine\Bin\ShaderFiles\Shader_SSAO.hlsl(172,24-79): warning X3570: gradient instruction used in a loop with varying iteration, attempting to unroll the loop
   
-C:\Users\olivi\GitHub\Dx11_LiesOfP\Framework_DX11\Engine\Public\NvCloth\ps\PsAllocator.h(51,9): warning C4005: 'PX_FREE': 매크로 재정의
-  (소스 파일 'x64/Release/unity_1YI6XGM24R9XEMGK.cpp'을(를) 컴파일하는 중)
-      C:\Users\olivi\GitHub\Dx11_LiesOfP\Framework_DX11\Engine\Public\PhysX\foundation\PxAllocator.h(72,9):
-      'PX_FREE'의 이전 정의를 참조하십시오.
+  compilation object save succeeded; see C:\Users\olivi\Github\Dx11_LiesOfP\Framework_DX11\Engine\Bin\Shader_SSAO.cso
+  unity_FSY81M64NT057DGL.cpp
+C:\Users\olivi\Github\Dx11_LiesOfP\Framework_DX11\Engine\Public\NvCloth\ps\PsAllocator.h(49,1): warning C4005: 'PX_ALLOC': 매크로 재정의
+  (소스 파일 'x64/Release/unity_FSY81M64NT057DGL.cpp'을(를) 컴파일하는 중)
+  C:\Users\olivi\Github\Dx11_LiesOfP\Framework_DX11\Engine\Public\PhysX\foundation\PxAllocator.h(67,1):
+  'PX_ALLOC'의 이전 정의를 참조하십시오.
   
-C:\Users\olivi\GitHub\Dx11_LiesOfP\Framework_DX11\Engine\Public\NvCloth\ps\PsAllocator.h(59,9): warning C4005: 'PX_NEW': 매크로 재정의
-  (소스 파일 'x64/Release/unity_1YI6XGM24R9XEMGK.cpp'을(를) 컴파일하는 중)
-      C:\Users\olivi\GitHub\Dx11_LiesOfP\Framework_DX11\Engine\Public\PhysX\foundation\PxAllocator.h(87,9):
-      'PX_NEW'의 이전 정의를 참조하십시오.
+C:\Users\olivi\Github\Dx11_LiesOfP\Framework_DX11\Engine\Public\NvCloth\ps\PsAllocator.h(51,1): warning C4005: 'PX_FREE': 매크로 재정의
+  (소스 파일 'x64/Release/unity_FSY81M64NT057DGL.cpp'을(를) 컴파일하는 중)
+  C:\Users\olivi\Github\Dx11_LiesOfP\Framework_DX11\Engine\Public\PhysX\foundation\PxAllocator.h(77,1):
+  'PX_FREE'의 이전 정의를 참조하십시오.
   
-C:\Users\olivi\GitHub\Dx11_LiesOfP\Framework_DX11\Engine\Public\NvCloth\ps\PsAllocator.h(61,9): warning C4005: 'PX_DELETE': 매크로 재정의
-  (소스 파일 'x64/Release/unity_1YI6XGM24R9XEMGK.cpp'을(를) 컴파일하는 중)
-      C:\Users\olivi\GitHub\Dx11_LiesOfP\Framework_DX11\Engine\Public\PhysX\foundation\PxAllocator.h(89,9):
-      'PX_DELETE'의 이전 정의를 참조하십시오.
+C:\Users\olivi\Github\Dx11_LiesOfP\Framework_DX11\Engine\Public\NvCloth\ps\PsAllocator.h(59,1): warning C4005: 'PX_NEW': 매크로 재정의
+  (소스 파일 'x64/Release/unity_FSY81M64NT057DGL.cpp'을(를) 컴파일하는 중)
+  C:\Users\olivi\Github\Dx11_LiesOfP\Framework_DX11\Engine\Public\PhysX\foundation\PxAllocator.h(87,1):
+  'PX_NEW'의 이전 정의를 참조하십시오.
   
-C:\Users\olivi\GitHub\Dx11_LiesOfP\Framework_DX11\Engine\Public\NvCloth\ps\PsAllocator.h(72,9): warning C4005: 'PX_DELETE_ARRAY': 매크로 재정의
-  (소스 파일 'x64/Release/unity_1YI6XGM24R9XEMGK.cpp'을(를) 컴파일하는 중)
-      C:\Users\olivi\GitHub\Dx11_LiesOfP\Framework_DX11\Engine\Public\PhysX\foundation\PxAllocator.h(90,9):
-      'PX_DELETE_ARRAY'의 이전 정의를 참조하십시오.
+C:\Users\olivi\Github\Dx11_LiesOfP\Framework_DX11\Engine\Public\NvCloth\ps\PsAllocator.h(61,1): warning C4005: 'PX_DELETE': 매크로 재정의
+  (소스 파일 'x64/Release/unity_FSY81M64NT057DGL.cpp'을(를) 컴파일하는 중)
+  C:\Users\olivi\Github\Dx11_LiesOfP\Framework_DX11\Engine\Public\PhysX\foundation\PxAllocator.h(89,1):
+  'PX_DELETE'의 이전 정의를 참조하십시오.
   
-C:\Users\olivi\GitHub\Dx11_LiesOfP\Framework_DX11\Engine\private\CustomFont.cpp(53,7): warning C4834: [[nodiscard]] 특성이 포함된 함수의 반환 값을 버리는 중입니다.
-  (소스 파일 'x64/Release/unity_1YI6XGM24R9XEMGK.cpp'을(를) 컴파일하는 중)
+C:\Users\olivi\Github\Dx11_LiesOfP\Framework_DX11\Engine\Public\NvCloth\ps\PsAllocator.h(76,1): warning C4005: 'PX_DELETE_ARRAY': 매크로 재정의
+  (소스 파일 'x64/Release/unity_FSY81M64NT057DGL.cpp'을(를) 컴파일하는 중)
+  C:\Users\olivi\Github\Dx11_LiesOfP\Framework_DX11\Engine\Public\PhysX\foundation\PxAllocator.h(90,1):
+  'PX_DELETE_ARRAY'의 이전 정의를 참조하십시오.
   
-C:\Users\olivi\GitHub\Dx11_LiesOfP\Framework_DX11\Engine\private\CustomFont.cpp(54,7): warning C4834: [[nodiscard]] 특성이 포함된 함수의 반환 값을 버리는 중입니다.
-  (소스 파일 'x64/Release/unity_1YI6XGM24R9XEMGK.cpp'을(를) 컴파일하는 중)
+C:\Users\olivi\Github\Dx11_LiesOfP\Framework_DX11\Engine\private\CustomFont.cpp(53,7): warning C4834: [[nodiscard]] 특성이 포함된 함수의 반환 값을 버리는 중입니다.
+  (소스 파일 'x64/Release/unity_FSY81M64NT057DGL.cpp'을(를) 컴파일하는 중)
   
-C:\Users\olivi\GitHub\Dx11_LiesOfP\Framework_DX11\Engine\private\CustomFont.cpp(73,7): warning C4834: [[nodiscard]] 특성이 포함된 함수의 반환 값을 버리는 중입니다.
-  (소스 파일 'x64/Release/unity_1YI6XGM24R9XEMGK.cpp'을(를) 컴파일하는 중)
+C:\Users\olivi\Github\Dx11_LiesOfP\Framework_DX11\Engine\private\CustomFont.cpp(54,7): warning C4834: [[nodiscard]] 특성이 포함된 함수의 반환 값을 버리는 중입니다.
+  (소스 파일 'x64/Release/unity_FSY81M64NT057DGL.cpp'을(를) 컴파일하는 중)
   
-C:\Users\olivi\GitHub\Dx11_LiesOfP\Framework_DX11\Engine\private\CustomFont.cpp(74,7): warning C4834: [[nodiscard]] 특성이 포함된 함수의 반환 값을 버리는 중입니다.
-  (소스 파일 'x64/Release/unity_1YI6XGM24R9XEMGK.cpp'을(를) 컴파일하는 중)
+C:\Users\olivi\Github\Dx11_LiesOfP\Framework_DX11\Engine\private\CustomFont.cpp(73,7): warning C4834: [[nodiscard]] 특성이 포함된 함수의 반환 값을 버리는 중입니다.
+  (소스 파일 'x64/Release/unity_FSY81M64NT057DGL.cpp'을(를) 컴파일하는 중)
   
-C:\Users\olivi\GitHub\Dx11_LiesOfP\Framework_DX11\Engine\private\CustomFont.cpp(95,7): warning C4834: [[nodiscard]] 특성이 포함된 함수의 반환 값을 버리는 중입니다.
-  (소스 파일 'x64/Release/unity_1YI6XGM24R9XEMGK.cpp'을(를) 컴파일하는 중)
+C:\Users\olivi\Github\Dx11_LiesOfP\Framework_DX11\Engine\private\CustomFont.cpp(74,7): warning C4834: [[nodiscard]] 특성이 포함된 함수의 반환 값을 버리는 중입니다.
+  (소스 파일 'x64/Release/unity_FSY81M64NT057DGL.cpp'을(를) 컴파일하는 중)
   
-C:\Users\olivi\GitHub\Dx11_LiesOfP\Framework_DX11\Engine\private\CustomFont.cpp(96,7): warning C4834: [[nodiscard]] 특성이 포함된 함수의 반환 값을 버리는 중입니다.
-  (소스 파일 'x64/Release/unity_1YI6XGM24R9XEMGK.cpp'을(를) 컴파일하는 중)
+C:\Users\olivi\Github\Dx11_LiesOfP\Framework_DX11\Engine\private\CustomFont.cpp(95,7): warning C4834: [[nodiscard]] 특성이 포함된 함수의 반환 값을 버리는 중입니다.
+  (소스 파일 'x64/Release/unity_FSY81M64NT057DGL.cpp'을(를) 컴파일하는 중)
   
-C:\Users\olivi\GitHub\Dx11_LiesOfP\Framework_DX11\Engine\private\Model.cpp(101,77): warning C4267: 'return': 'size_t'에서 'Engine::_uint'(으)로 변환하면서 데이터가 손실될 수 있습니다.
-  (소스 파일 'x64/Release/unity_1YI6XGM24R9XEMGK.cpp'을(를) 컴파일하는 중)
+C:\Users\olivi\Github\Dx11_LiesOfP\Framework_DX11\Engine\private\CustomFont.cpp(96,7): warning C4834: [[nodiscard]] 특성이 포함된 함수의 반환 값을 버리는 중입니다.
+  (소스 파일 'x64/Release/unity_FSY81M64NT057DGL.cpp'을(를) 컴파일하는 중)
   
-C:\Users\olivi\GitHub\Dx11_LiesOfP\Framework_DX11\Engine\private\Model.cpp(1198,29): warning C4927: 변환이 잘못되었습니다. 사용자 정의 변환이 암시적으로 두 번 이상 적용되었습니다.
-  (소스 파일 'x64/Release/unity_1YI6XGM24R9XEMGK.cpp'을(를) 컴파일하는 중)
-      C:\Users\olivi\GitHub\Dx11_LiesOfP\Framework_DX11\Engine\private\Model.cpp(1198,29):
-      'DirectX::SimpleMath::Vector4::Vector4(DirectX::FXMVECTOR) noexcept' 생성자를 호출하는 동안
-      C:\Users\olivi\GitHub\Dx11_LiesOfP\Framework_DX11\Engine\Public\DirectXTK\SimpleMath.h(352,13):
-      'DirectX::SimpleMath::Vector4::Vector4' 선언을 참조하십시오.
+C:\Users\olivi\Github\Dx11_LiesOfP\Framework_DX11\Engine\private\Model.cpp(101,77): warning C4267: 'return': 'size_t'에서 'Engine::_uint'(으)로 변환하면서 데이터가 손실될 수 있습니다.
+  (소스 파일 'x64/Release/unity_FSY81M64NT057DGL.cpp'을(를) 컴파일하는 중)
   
-C:\Program Files\Microsoft Visual Studio\2022\Community\VC\Tools\MSVC\14.41.34120\include\filesystem(12): warning STL4038: The contents of <filesystem> are available only with C++17 or later.
-C:\Users\olivi\GitHub\Dx11_LiesOfP\Framework_DX11\Engine\Private\VIBuffer_2DPolygon.cpp(65,21): warning C4018: '<': signed 또는 unsigned가 일치하지 않습니다.
-  (소스 파일 'x64/Release/unity_1YI6XGM24R9XEMGK.cpp'을(를) 컴파일하는 중)
+C:\Users\olivi\Github\Dx11_LiesOfP\Framework_DX11\Engine\private\Model.cpp(1198,29): warning C4927: 변환이 잘못되었습니다. 사용자 정의 변환이 암시적으로 두 번 이상 적용되었습니다.
+  (소스 파일 'x64/Release/unity_FSY81M64NT057DGL.cpp'을(를) 컴파일하는 중)
+  C:\Users\olivi\Github\Dx11_LiesOfP\Framework_DX11\Engine\private\Model.cpp(1198,29):
+  'DirectX::SimpleMath::Vector4::Vector4(DirectX::FXMVECTOR) noexcept' 생성자를 호출하는 동안
+  C:\Users\olivi\Github\Dx11_LiesOfP\Framework_DX11\Engine\Public\DirectXTK\SimpleMath.h(352,13):
+  'DirectX::SimpleMath::Vector4::Vector4' 선언을 참조하십시오.
+  
+C:\Program Files\Microsoft Visual Studio\2022\Community\VC\Tools\MSVC\14.38.33130\include\filesystem(12): warning STL4038: The contents of <filesystem> are available only with C++17 or later.
+C:\Users\olivi\Github\Dx11_LiesOfP\Framework_DX11\Engine\Private\VIBuffer_2DPolygon.cpp(65,21): warning C4018: '<': signed 또는 unsigned가 일치하지 않습니다.
+  (소스 파일 'x64/Release/unity_FSY81M64NT057DGL.cpp'을(를) 컴파일하는 중)
   
      ..\Bin\Engine.lib 라이브러리 및 ..\Bin\Engine.exp 개체를 생성하고 있습니다.
   코드를 생성하고 있습니다.
   Previous IPDB not found, fall back to full compilation.
-C:\Users\olivi\GitHub\Dx11_LiesOfP\Framework_DX11\Engine\Public\PipeLine.h(30): warning C4172: 지역 변수 또는 임시 의 주소를 반환하는 중
-  All 5580 functions were compiled because no usable IPDB/IOBJ from previous compilation was found.
+C:\Users\olivi\Github\Dx11_LiesOfP\Framework_DX11\Engine\Public\PipeLine.h(30): warning C4172: 지역 변수 또는 임시의 주소를 반환하고 있습니다.
+  All 5566 functions were compiled because no usable IPDB/IOBJ from previous compilation was found.
   코드를 생성했습니다.
 Effects11.lib(EffectAPI.obj) : warning LNK4099: '' PDB를 'Effects11.lib(EffectAPI.obj)' 또는 ''에서 찾을 수 없습니다. 디버그 정보가 없는 것처럼 개체를 링크합니다.
 Effects11.lib(EffectNonRuntime.obj) : warning LNK4099: '' PDB를 'Effects11.lib(EffectNonRuntime.obj)' 또는 ''에서 찾을 수 없습니다. 디버그 정보가 없는 것처럼 개체를 링크합니다.
@@ -160,7 +160,7 @@ PhysXPvdSDK_static_64.lib(PxPvdObjectRegistrar.obj) : warning LNK4099: '' PDB를
 PhysXPvdSDK_static_64.lib(PxPvdMemClient.obj) : warning LNK4099: '' PDB를 'PhysXPvdSDK_static_64.lib(PxPvdMemClient.obj)' 또는 ''에서 찾을 수 없습니다. 디버그 정보가 없는 것처럼 개체를 링크합니다.
 PhysXPvdSDK_static_64.lib(PxProfileEventImpl.obj) : warning LNK4099: '' PDB를 'PhysXPvdSDK_static_64.lib(PxProfileEventImpl.obj)' 또는 ''에서 찾을 수 없습니다. 디버그 정보가 없는 것처럼 개체를 링크합니다.
 PhysXPvdSDK_static_64.lib(PxPvdProfileZoneClient.obj) : warning LNK4099: '' PDB를 'PhysXPvdSDK_static_64.lib(PxPvdProfileZoneClient.obj)' 또는 ''에서 찾을 수 없습니다. 디버그 정보가 없는 것처럼 개체를 링크합니다.
-  Engine.vcxproj -> C:\Users\olivi\GitHub\Dx11_LiesOfP\Framework_DX11\Engine\Bin\Engine.dll
+  Engine.vcxproj -> C:\Users\olivi\Github\Dx11_LiesOfP\Framework_DX11\Engine\Bin\Engine.dll
   ..\Bin\Engine.lib
   1개 파일이 복사되었습니다.
   ..\ThirdPartyLib\assimp-vc140-mt.lib
