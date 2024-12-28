@@ -21,59 +21,59 @@ HRESULT CPhysX_Manager::Initialize()
     // PhysX와 관련된 모든 객체들의 기반이 되는 싱글톤 객체
     m_PxFoundation = PxCreateFoundation(PX_PHYSICS_VERSION, m_PxAllocator, m_PXErrorCallback);
 
-    CUresult result = cuInit(0);
-    if (result != CUDA_SUCCESS)
-    {
-        return -1;
-    }
+    //CUresult result = cuInit(0);
+    //if (result != CUDA_SUCCESS)
+    //{
+    //    return -1;
+    //}
 
-    int deviceCount = 0;
-    cudaError_t cudaErr = cudaGetDeviceCount(&deviceCount);
-    if (cudaErr != cudaSuccess || deviceCount == 0) {
-        // CUDA 디바이스가 없는 경우
-        return -1;
-    }
+    //int deviceCount = 0;
+    //cudaError_t cudaErr = cudaGetDeviceCount(&deviceCount);
+    //if (cudaErr != cudaSuccess || deviceCount == 0) {
+    //    // CUDA 디바이스가 없는 경우
+    //    return -1;
+    //}
 
-    cudaErr = cudaSetDevice(0);
-    if (cudaErr != cudaSuccess) {
-        return -1;
-    }
-    cudaErr = cudaFree(0); // CUDA 컨텍스트 초기화
-    if (cudaErr != cudaSuccess) {
-        return -1;
-    }
+    //cudaErr = cudaSetDevice(0);
+    //if (cudaErr != cudaSuccess) {
+    //    return -1;
+    //}
+    //cudaErr = cudaFree(0); // CUDA 컨텍스트 초기화
+    //if (cudaErr != cudaSuccess) {
+    //    return -1;
+    //}
 
-    CUdevice cuDevice;
-    result = cuDeviceGet(&cuDevice, 0);  // 0번 디바이스 선택
-    if (result != CUDA_SUCCESS) {
-        return -1;
-    }
-    cudaErr = cudaSetDevice(cuDevice);
+    //CUdevice cuDevice;
+    //result = cuDeviceGet(&cuDevice, 0);  // 0번 디바이스 선택
+    //if (result != CUDA_SUCCESS) {
+    //    return -1;
+    //}
+    //cudaErr = cudaSetDevice(cuDevice);
 
-    cudaGetDevice(&deviceCount);
+    //cudaGetDevice(&deviceCount);
 
-    CUcontext m_pCudaContext = nullptr;
-    result = cuCtxCreate(&m_pCudaContext, 0, cuDevice);  // 올바른 장치를 설정하여 컨텍스트 생성
-    if (result != CUDA_SUCCESS) {
-        return -1;
-    }
+    //CUcontext m_pCudaContext = nullptr;
+    //result = cuCtxCreate(&m_pCudaContext, 0, cuDevice);  // 올바른 장치를 설정하여 컨텍스트 생성
+    //if (result != CUDA_SUCCESS) {
+    //    return -1;
+    //}
 
-    // Cuda를 사용한 GPU 물리 연산
-    PxCudaContextManagerDesc cudaContextManagerDesc; 
-    cudaContextManagerDesc.graphicsDevice = m_pDevice;    
-    cudaContextManagerDesc.ctx = &m_pCudaContext;
+    //// Cuda를 사용한 GPU 물리 연산
+    //PxCudaContextManagerDesc cudaContextManagerDesc; 
+    //cudaContextManagerDesc.graphicsDevice = m_pDevice;    
+    //cudaContextManagerDesc.ctx = &m_pCudaContext;
 
-    cudaErr = cudaGetLastError();
+    //cudaErr = cudaGetLastError();
 
-    m_CudaContextManager = PxCreateCudaContextManager(*m_PxFoundation, cudaContextManagerDesc);
-    if (m_CudaContextManager)
-    {
-        if (!m_CudaContextManager->contextIsValid())
-        {
-            PX_RELEASE(m_CudaContextManager);
-        }
-           
-    }
+    //m_CudaContextManager = PxCreateCudaContextManager(*m_PxFoundation, cudaContextManagerDesc);
+    //if (m_CudaContextManager)
+    //{
+    //    if (!m_CudaContextManager->contextIsValid())
+    //    {
+    //        PX_RELEASE(m_CudaContextManager);
+    //    }
+    //       
+    //}
     // PVD(PhysX Visual Debugger) 생성
     m_Pvd = PxCreatePvd(*m_PxFoundation);
     // PVD 소켓 연결 설정
