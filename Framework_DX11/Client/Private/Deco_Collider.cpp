@@ -76,6 +76,16 @@ void CDeco_Collider::Update(_float fTimeDelta)
     if (m_pColliderCom != nullptr)
         m_pColliderCom->Update(m_pTransformCom->Get_WorldMatrix_Ptr());
 
+    //플레이어 공격 딜레이
+    if (m_bHitPlayer)
+    {
+        m_fHitTimer += fTimeDelta;
+        if (m_fHitTimer > 4.f)
+        {
+            m_fHitTimer = 0.f;
+            m_bHitPlayer = false;
+        }
+    }
 }
 
 void CDeco_Collider::Late_Update(_float fTimeDelta)
@@ -101,8 +111,10 @@ void CDeco_Collider::OnCollisionEnter(CGameObject* pOther)
 {
     if (pOther->Get_Tag() == TEXT("Player"))
     {
-        if (m_pWallDeco->Get_IsCanHit())
+        if (m_pWallDeco->Get_IsCanHit() && m_bHitPlayer == false)
         {
+            m_bHitPlayer = true;
+            m_pSoundCom->Play2D(TEXT("AMB_OJ_TR_Grave_Ball_Hit_01.wav                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                 "), &g_fEffectVolume);
             CPlayer* pPlayer = dynamic_cast<CPlayer*>(pOther);
             pPlayer->Calc_DamageGain(81.f, (_Vec3)m_pTransformCom->Get_State(CTransform::STATE_POSITION));
         }
@@ -131,6 +143,12 @@ HRESULT CDeco_Collider::Ready_Components()
         return E_FAIL;
     m_pColliderCom->Set_Owner(this);
      
+    /* FOR.Com_Sound */
+    if (FAILED(__super::Add_Component(LEVEL_STATIC, TEXT("Prototype_Component_Sound"),
+        TEXT("Com_VoiceSound"), reinterpret_cast<CComponent**>(&m_pSoundCom))))
+        return E_FAIL;
+    m_pSoundCom->Set_Owner(this);
+
     // 항상 마지막에 생성하기
     CRigidBody::RIGIDBODY_DESC RigidBodyDesc{};
     RigidBodyDesc.isStatic = false;
@@ -149,7 +167,7 @@ HRESULT CDeco_Collider::Ready_Components()
         ;
 
     physX::GeometryBox BoxDesc;
-    BoxDesc.vSize = _Vec3(1.f, 2.f, 1.f);
+    BoxDesc.vSize = _Vec3(0.8f, 2.f, 0.8f);
     RigidBodyDesc.pGeometry = &BoxDesc;
 
     /* FOR.Com_RigidBody */
@@ -201,6 +219,7 @@ void CDeco_Collider::Free()
 {
     __super::Free();
 
+    Safe_Release(m_pSoundCom);
     Safe_Release(m_pColliderCom);
     Safe_Release(m_pRigidBodyCom);
 }
