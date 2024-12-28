@@ -177,6 +177,7 @@ void CCutScene::Active_Obj(CUTSCENE_KEYFRAME_DESC* pCutSceneDesc)
 			CPlayer* pPlayer = dynamic_cast<CPlayer*>(m_pGameInstance->Find_Player(LEVEL_GAMEPLAY));
 			pPlayer->Get_RigidBody()->Set_GloblePose(_Vec3(-80.414f, -97.811f, -43.011f));
 			pPlayer->Get_Navigation()->Research_Cell(_Vec3(-80.414f, -97.811f, -43.011f));
+			pPlayer->Get_Transform()->Rotation(0.f,50.f,0.f);
 			static_cast<CRaxasia*>(m_pGameInstance->Find_Object(LEVEL_GAMEPLAY, TEXT("Layer_Raxasia"), 0))->Start_CutScene(2);
 		}
 	}
