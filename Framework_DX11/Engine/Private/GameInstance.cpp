@@ -109,7 +109,7 @@ HRESULT CGameInstance::Initialize_Engine(HINSTANCE hInst, _uint iNumLevels, cons
 	if (nullptr == m_pKey_Manager)
 		return E_FAIL;
 
-	m_pPhysX_Manager = CPhysX_Manager::Create();
+	m_pPhysX_Manager = CPhysX_Manager::Create(*ppDevice, *ppContext);
 	if (nullptr == m_pPhysX_Manager)
 		return E_FAIL;
 

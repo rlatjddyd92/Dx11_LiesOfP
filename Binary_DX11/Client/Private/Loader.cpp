@@ -127,12 +127,12 @@ HRESULT CLoader::Ready_Resources_For_GamePlayLevel()
 	//	CModel::Create(m_pDevice, m_pContext, CModel::TYPE_ANIM, "../Bin/Resources/Models/Monastery_TheLastDoor/SK_FO_Monastery_TheLastDoor_01.fbx", "../Bin/ModelData/NonAnim/InteractObj/Tex/", PreTransformMatrix))))
 	//	return E_FAIL;
 
-	if (FAILED(m_pGameInstance->Add_Prototype(LEVEL_GAMEPLAY, TEXT("Prototype_Component_Model_SteelHeart"),
-		CModel::Create(m_pDevice, m_pContext, CModel::TYPE_ANIM, "../Bin/Resources/Models/SteelHeart/SteelHeart.fbx", "../Bin/ModelData/NonAnim/Map/Etc/SteelHeart/Tex", PreTransformMatrix))))
-		return E_FAIL;
+	//if (FAILED(m_pGameInstance->Add_Prototype(LEVEL_GAMEPLAY, TEXT("Prototype_Component_Model_SteelHeart"),
+	//	CModel::Create(m_pDevice, m_pContext, CModel::TYPE_ANIM, "../Bin/Resources/Models/SteelHeart/SteelHeart.fbx", "../Bin/ModelData/NonAnim/Map/Etc/SteelHeart/Tex/", PreTransformMatrix))))
+	//	return E_FAIL;
 	 
 	if (FAILED(m_pGameInstance->Add_Prototype(LEVEL_GAMEPLAY, TEXT("Prototype_Component_Model_Blanket"),
-		CModel::Create(m_pDevice, m_pContext, CModel::TYPE_NONANIM, "../Bin/Resources/Models/Blanket/Title_Blanket.fbx","../Bin/ModelData/NonAnim/Map/Etc/Interior/Tex", PreTransformMatrix))))
+		CModel::Create(m_pDevice, m_pContext, CModel::TYPE_NONANIM, "../Bin/Resources/Models/Blanket/Title_Blanket.fbx","../Bin/ModelData/NonAnim/Map/Etc/Title_Blanket/Tex/", PreTransformMatrix))))
 		return E_FAIL;
 	 
 	// 일반 몬스터 로드 함수

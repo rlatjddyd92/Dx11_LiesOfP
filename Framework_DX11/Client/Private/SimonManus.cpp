@@ -400,6 +400,19 @@ void CSimonManus::DeActive_Effect(const _uint eType)
 	m_Effects[eType]->Set_Loop(false);
 }
 
+void CSimonManus::DeActive_AllEffect()
+{
+	for (auto& Effect : m_Effects)
+	{
+		Effect->Set_Loop(false);
+	}
+}
+
+void CSimonManus::Set_Dead_Effect(const _uint eType)
+{
+	m_Effects[eType]->Set_Dead(true);
+}
+
 _bool CSimonManus::Get_EffectsLoop(const _uint eType)
 {
 	return m_Effects[eType]->Get_Dead();
@@ -494,16 +507,15 @@ void CSimonManus::Change_Model(_uint iModelNum)	// 컷신 2페이즈로 바꾸는 용도
 
 	const _Matrix* pSocketBoneMatrix = m_pModelCom->Get_BoneCombindTransformationMatrix_Ptr("upperBody_spine_01");
 
-
 	m_Effects[CUTSCENE_P2_ARM_PARTICLE]->Set_Matrices(pSocketBoneMatrix);
 
-	pSocketBoneMatrix = m_pModelCom->Get_BoneCombindTransformationMatrix_Ptr("upperarm_twist_01_l");
+	pSocketBoneMatrix = m_pModelCom->Get_BoneCombindTransformationMatrix_Ptr("hand_l");
 	m_Effects[CUTSCENE_P2_ARM_AURA00]->Set_Matrices(pSocketBoneMatrix);
 
-	pSocketBoneMatrix = m_pModelCom->Get_BoneCombindTransformationMatrix_Ptr("lowerarm_twist_01_l");
+	pSocketBoneMatrix = m_pModelCom->Get_BoneCombindTransformationMatrix_Ptr("lowerarm_l");
 	m_Effects[CUTSCENE_P2_ARM_AURA01]->Set_Matrices(pSocketBoneMatrix);
 
-	pSocketBoneMatrix = m_pModelCom->Get_BoneCombindTransformationMatrix_Ptr("hand_l");
+	pSocketBoneMatrix = m_pModelCom->Get_BoneCombindTransformationMatrix_Ptr("upperarm_l");
 	m_Effects[CUTSCENE_P2_ARM_AURA02]->Set_Matrices(pSocketBoneMatrix);
 
 	pSocketBoneMatrix = m_pModelCom->Get_BoneCombindTransformationMatrix_Ptr("upperBody_spine_03");
@@ -742,6 +754,9 @@ HRESULT CSimonManus::Ready_Effects()
 	m_Effects[P2_SH_EXPLOSION] = CEffect_Manager::Get_Instance()->Clone_Effect(TEXT("SimonManus_Attack_SummonHand_Explosion"), pParetnMatrix,
 		pSocketBoneMatrix, _Vec3(0.f, 0.f, 0.f), _Vec3(0.f, 0.f, 0.f), _Vec3(1.f, 1.f, 1.f));
 
+	m_Effects[P2_AURA] = CEffect_Manager::Get_Instance()->Clone_Effect(TEXT("SimonManus_2P_BodyAura"), pParetnMatrix,
+		nullptr, _Vec3(0.f, 0.f, 0.f), _Vec3(0.f, 0.f, 0.f), _Vec3(1.f, 1.f, 1.f));
+
 #pragma region 컷신용 이펙트들
 	m_Effects[CUTSCENE_P2_MAP] = CEffect_Manager::Get_Instance()->Clone_Effect(TEXT("Map_SimonManus_2P"), nullptr,
 		nullptr, _Vec3(0.f, 0.f, 0.f), _Vec3(0.f, 0.f, 0.f), _Vec3(1.f, 1.f, 1.f));
@@ -866,6 +881,34 @@ void CSimonManus::ChangePhase()
 	m_eStat.fStemina = 100.f;
 	m_eStat.fMaxGrogyPoint = 50.f;
 	m_eStat.fGrogyPoint = 0.f;
+
+	const _Matrix* pSocketBoneMatrix = m_pModelCom->Get_BoneCombindTransformationMatrix_Ptr("Bip002-Spine");
+
+	m_Effects[CUTSCENE_P2_ARM_PARTICLE]->Set_Matrices(pSocketBoneMatrix);
+	
+	pSocketBoneMatrix = m_pModelCom->Get_BoneCombindTransformationMatrix_Ptr("Bip002-L-Hand");
+	m_Effects[CUTSCENE_P2_ARM_AURA00]->Set_Matrices(pSocketBoneMatrix);
+	m_Effects[CUTSCENE_P2_ARM_AURA00]->Set_Loop(false);
+
+	pSocketBoneMatrix = m_pModelCom->Get_BoneCombindTransformationMatrix_Ptr("Bip002-L-Forearm");
+	m_Effects[CUTSCENE_P2_ARM_AURA01]->Set_Matrices(pSocketBoneMatrix);
+	m_Effects[CUTSCENE_P2_ARM_AURA01]->Set_Loop(false);
+
+	pSocketBoneMatrix = m_pModelCom->Get_BoneCombindTransformationMatrix_Ptr("Bip002-L-UpperArm");
+	m_Effects[CUTSCENE_P2_ARM_AURA02]->Set_Matrices(pSocketBoneMatrix);
+	m_Effects[CUTSCENE_P2_ARM_AURA02]->Set_Loop(false);
+
+	pSocketBoneMatrix = m_pModelCom->Get_BoneCombindTransformationMatrix_Ptr("Bip002-Spine1");
+	m_Effects[CUTSCENE_P2_ARM_AURA03]->Set_Matrices(pSocketBoneMatrix);
+	m_Effects[CUTSCENE_P2_ARM_AURA03]->Set_Loop(false);
+
+	pSocketBoneMatrix = m_pModelCom->Get_BoneCombindTransformationMatrix_Ptr("Bip002-Neck");
+	m_Effects[CUTSCENE_P2_ARM_AURA04]->Set_Matrices(pSocketBoneMatrix);
+	m_Effects[CUTSCENE_P2_ARM_AURA04]->Set_Loop(false);
+
+	pSocketBoneMatrix = m_pModelCom->Get_BoneCombindTransformationMatrix_Ptr("Bip002-L-UpperArm");
+	m_Effects[P2_AURA]->Set_Matrices(pSocketBoneMatrix);
+	m_Effects[P2_AURA]->Set_Loop(true);
 
 	m_isDead = false;
 	m_isChanged = true;

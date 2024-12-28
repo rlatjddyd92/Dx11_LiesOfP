@@ -32,10 +32,12 @@ HRESULT CLift_Door::Initialize(void* pArg)
 	if (FAILED(Ready_Components()))
 		return E_FAIL;
 
-	m_iAnim_Close = m_pModelCom->Find_AnimationIndex("AS_Close", 0.3f);
+	m_iAnim_Close = m_pModelCom->Find_AnimationIndex("AS_Close", 1.f);
 	m_iAnim_Close_Idle = m_pModelCom->Find_AnimationIndex("AS_Close_Idle", 1.f);
-	m_iAnim_Open = m_pModelCom->Find_AnimationIndex("AS_Open", 0.3f);
+	m_iAnim_Open = m_pModelCom->Find_AnimationIndex("AS_Open", 1.f);
 	m_iAnim_Open_Idle = m_pModelCom->Find_AnimationIndex("AS_Open_Idle", 1.f);
+
+	m_pModelCom->Set_SpeedPerSec(m_iAnim_Close, 12.0);
 
 	m_pModelCom->SetUp_Animation(m_iAnim_Close_Idle, false);
 
@@ -63,7 +65,10 @@ void CLift_Door::Update(_float fTimeDelta)
 
 		if(m_pModelCom->Get_CurrentAnimationIndex() != m_iAnim_Open
 			&& m_pModelCom->Get_CurrentAnimationIndex() == m_iAnim_Close_Idle)
+		{
 			m_pModelCom->SetUp_NextAnimation(m_iAnim_Open);
+			m_pModelCom->Set_SpeedPerSec(m_iAnim_Open, 0.0);
+		}
 
 		if(m_pModelCom->Get_CurrentAnimationIndex() == m_iAnim_Open 
 			&& m_pModelCom->Get_IsEndAnimArray())

@@ -73,6 +73,10 @@ using namespace physx;
 
 using namespace nv::cloth;
 
+#include <cuda.h>
+#include <cuda_runtime.h>
+#include <device_launch_parameters.h>
+
 #define TEXTURE_TYPE_MAX 18
 
 #ifdef _DEBUG

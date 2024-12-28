@@ -44,6 +44,7 @@ public:
 	virtual void		Active_Effect(const _uint eType, _bool isLoop = true) {};
 	virtual void		DeActive_Effect(const _uint eType) {};
 	virtual void		DeActive_AllEffect() {};
+	virtual void		Set_Dead_Effect(const _uint eType) {};
 
 	virtual _bool		Get_EffectsLoop(const _uint eType) { return true; }
 

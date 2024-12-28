@@ -53,7 +53,7 @@ public:
 
 	enum EFFECT_TYPE
 	{
-		P1_TRAIL, P2_SLIDEMAGIC, P2_JUMPMAGIC, P2_SH_CHARGE, P2_SH_EXPLOSION,
+		P1_TRAIL, P2_SLIDEMAGIC, P2_JUMPMAGIC, P2_SH_CHARGE, P2_SH_EXPLOSION, P2_AURA,
 
 		CUTSCENE_P2_ARM_PARTICLE, CUTSCENE_P2_MAP,
 		CUTSCENE_P2_ARM_AURA00, CUTSCENE_P2_ARM_AURA01, CUTSCENE_P2_ARM_AURA02, CUTSCENE_P2_ARM_AURA03, CUTSCENE_P2_ARM_AURA04,
@@ -84,6 +84,8 @@ public:
 
 	virtual void		Active_Effect(const _uint eType, _bool isLoop = true) override;
 	virtual void		DeActive_Effect(const _uint eType) override;
+	virtual void		DeActive_AllEffect() override;
+	virtual void		Set_Dead_Effect(const _uint eType) override;
 
 	virtual _bool		Get_EffectsLoop(const _uint eType) override;
 	virtual void	Reset_WeaponOverlapCheck(_uint iCollIndex = 0) override;

@@ -90,7 +90,7 @@ void CState_SimonManus_CutScene_Phase2::Update(_float fTimeDelta)
             {
                 Contorl_Emissive(fTimeDelta);
             }
-            else if (760 < fTrackPosition && fTrackPosition < 1320)
+            else if (760 < fTrackPosition && fTrackPosition < 1350)
             {
                 if (!m_isFirstEmissive)
                 {

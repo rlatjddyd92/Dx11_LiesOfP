@@ -7,8 +7,12 @@
 #include "Model.h"
 #include "Mesh.h"
 
-CPhysX_Manager::CPhysX_Manager()
+CPhysX_Manager::CPhysX_Manager(ID3D11Device* pDevice, ID3D11DeviceContext* pContext)
+    : m_pDevice{ pDevice }
+    , m_pContext{ pContext }
 {
+    Safe_AddRef(m_pDevice);
+    Safe_AddRef(m_pContext);
 }
 
 HRESULT CPhysX_Manager::Initialize()
@@ -17,9 +21,51 @@ HRESULT CPhysX_Manager::Initialize()
     // PhysX와 관련된 모든 객체들의 기반이 되는 싱글톤 객체
     m_PxFoundation = PxCreateFoundation(PX_PHYSICS_VERSION, m_PxAllocator, m_PXErrorCallback);
 
+    CUresult result = cuInit(0);
+    if (result != CUDA_SUCCESS)
+    {
+        return -1;
+    }
+
+    int deviceCount = 0;
+    cudaError_t cudaErr = cudaGetDeviceCount(&deviceCount);
+    if (cudaErr != cudaSuccess || deviceCount == 0) {
+        // CUDA 디바이스가 없는 경우
+        return -1;
+    }
+
+    cudaErr = cudaSetDevice(0);
+    if (cudaErr != cudaSuccess) {
+        return -1;
+    }
+    cudaErr = cudaFree(0); // CUDA 컨텍스트 초기화
+    if (cudaErr != cudaSuccess) {
+        return -1;
+    }
+
+    CUdevice cuDevice;
+    result = cuDeviceGet(&cuDevice, 0);  // 0번 디바이스 선택
+    if (result != CUDA_SUCCESS) {
+        return -1;
+    }
+    cudaErr = cudaSetDevice(cuDevice);
+
+    cudaGetDevice(&deviceCount);
+
+    CUcontext m_pCudaContext = nullptr;
+    result = cuCtxCreate(&m_pCudaContext, 0, cuDevice);  // 올바른 장치를 설정하여 컨텍스트 생성
+    if (result != CUDA_SUCCESS) {
+        return -1;
+    }
+
     // Cuda를 사용한 GPU 물리 연산
-    PxCudaContextManagerDesc cudaContextManagerDesc;
-    m_CudaContextManager = PxCreateCudaContextManager(*m_PxFoundation, cudaContextManagerDesc, PxGetProfilerCallback());
+    PxCudaContextManagerDesc cudaContextManagerDesc; 
+    cudaContextManagerDesc.graphicsDevice = m_pDevice;    
+    cudaContextManagerDesc.ctx = &m_pCudaContext;
+
+    cudaErr = cudaGetLastError();
+
+    m_CudaContextManager = PxCreateCudaContextManager(*m_PxFoundation, cudaContextManagerDesc);
     if (m_CudaContextManager)
     {
         if (!m_CudaContextManager->contextIsValid())
@@ -380,9 +426,9 @@ PxTransform CPhysX_Manager::Get_PhysXTransform(CGameObject* pObject)
     return PxTransform(position, quaternion);
 }
 
-CPhysX_Manager* CPhysX_Manager::Create()
+CPhysX_Manager* CPhysX_Manager::Create(ID3D11Device* pDevice, ID3D11DeviceContext* pContext)
 {
-    CPhysX_Manager* pInstance = new CPhysX_Manager();
+    CPhysX_Manager* pInstance = new CPhysX_Manager(pDevice, pContext);
 
     if (FAILED(pInstance->Initialize()))
     {
@@ -415,5 +461,6 @@ void CPhysX_Manager::Free()
     // 제일 마지막에 Release
     PhysX_RELEASE(m_PxFoundation);
 
-
+    Safe_Release(m_pContext);
+    Safe_Release(m_pDevice);
 }

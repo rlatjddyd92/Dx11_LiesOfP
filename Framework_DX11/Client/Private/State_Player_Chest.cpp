@@ -42,6 +42,7 @@ HRESULT CState_Player_Chest::Start_State(void* pArg)
     m_pPlayer->Change_Animation(m_iAnimation_Chest, false, 0.f);
 
     m_isPlaySound = false;
+    m_isPlaySound2 = false;
 
     return S_OK;
 }
@@ -64,6 +65,12 @@ void CState_Player_Chest::Update(_float fTimeDelta)
     {
         m_isPlaySound = true;
         m_pPlayer->Play_Sound(CPawn::PAWN_SOUND_EFFECT1, TEXT("SE_PC_MT_TreasureChest_Lock_Break_02.wav"));
+    }
+
+    if (!m_isPlaySound2 && iFrame == 170 || iFrame == 171)
+    {
+        m_isPlaySound2 = true;
+        m_pPlayer->Play_Sound(CPawn::PAWN_SOUND_EFFECT1, TEXT("AMB_OJ_FX_TreasureChest_Open_01.wav"));
     }
 }
 

@@ -47,6 +47,7 @@ HRESULT CState_Player_Lift::Start_State(void* pArg)
     m_pPlayer->Change_Animation(m_iAnimation_Lift, false, 0.f);
 
     m_isPlaySound = false;
+    m_isPlaySound2 = false;
 
     return S_OK;
 }
@@ -65,9 +66,15 @@ void CState_Player_Lift::Update(_float fTimeDelta)
             m_pPlayer->Change_State(CPlayer::TH_IDLE);
     }
 
-    if (!m_isPlaySound && iFrame == 55 || iFrame == 56)
+    if (!m_isPlaySound && iFrame == 5 || iFrame == 6)
     {
         m_isPlaySound = true;
+        m_pPlayer->Play_Sound(CPawn::PAWN_SOUND_EFFECT1, TEXT("SE_PC_MT_Lift_Active.wav"));
+    }
+
+    if (!m_isPlaySound2 && iFrame == 120 || iFrame == 121)
+    {
+        m_isPlaySound2 = true;
         m_pPlayer->Play_Sound(CPawn::PAWN_SOUND_EFFECT1, TEXT("AMB_OJ_PR_Lift_Controller_Lever_Open.wav"));
     }
 }
