@@ -49,6 +49,11 @@ private:
 
     _Vec4               m_vRimLightColor = {};
 
+    _bool               m_bSoundPlay = { false };
+    _bool               m_bSoundPlay2 = { false };
+
+    _int                m_iAnimIndex = { 0 };
+    _int                m_iSoundPlayFrame = { 0 };
 private:
     _uint               Choice_DieAnim(DIE_DESC* pDesc);
     _bool               End_Check();
