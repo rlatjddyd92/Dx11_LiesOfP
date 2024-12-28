@@ -127,12 +127,14 @@ void CState_SimonManusP1_SwipMultiple_L::Effect_Check(_double CurTrackPos)
             if (!m_bSwing)
             {
                 m_pMonster->Active_Effect(CSimonManus::P1_TRAIL);
+                m_pMonster->Active_Effect(CSimonManus::SWING_DRAG);
                 m_bSwing = true;
             }
         }
         else
         {
             m_pMonster->DeActive_Effect(CSimonManus::P1_TRAIL);
+            m_pMonster->DeActive_Effect(CSimonManus::SWING_DRAG);
         }
     }
     else
@@ -142,12 +144,14 @@ void CState_SimonManusP1_SwipMultiple_L::Effect_Check(_double CurTrackPos)
             if (!m_bSwing)
             {
                 m_pMonster->Active_Effect(CSimonManus::P1_TRAIL);
+                m_pMonster->Active_Effect(CSimonManus::SWING_DRAG);
                 m_bSwing = true;
             }
         }
         else
         {
             m_pMonster->DeActive_Effect(CSimonManus::P1_TRAIL);
+            m_pMonster->DeActive_Effect(CSimonManus::SWING_DRAG);
         }
 
         if (!m_bResetCheck && 40.f <= CurTrackPos && CurTrackPos >= 50.f)

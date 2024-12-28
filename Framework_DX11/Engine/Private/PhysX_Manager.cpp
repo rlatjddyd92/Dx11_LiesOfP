@@ -26,14 +26,14 @@ HRESULT CPhysX_Manager::Initialize()
     //{
     //    return -1;
     //}
-    //
+
     //int deviceCount = 0;
     //cudaError_t cudaErr = cudaGetDeviceCount(&deviceCount);
     //if (cudaErr != cudaSuccess || deviceCount == 0) {
     //    // CUDA 디바이스가 없는 경우
     //    return -1;
     //}
-    //
+
     //cudaErr = cudaSetDevice(0);
     //if (cudaErr != cudaSuccess) {
     //    return -1;
@@ -42,29 +42,29 @@ HRESULT CPhysX_Manager::Initialize()
     //if (cudaErr != cudaSuccess) {
     //    return -1;
     //}
-    //
+
     //CUdevice cuDevice;
     //result = cuDeviceGet(&cuDevice, 0);  // 0번 디바이스 선택
     //if (result != CUDA_SUCCESS) {
     //    return -1;
     //}
     //cudaErr = cudaSetDevice(cuDevice);
-    //
+
     //cudaGetDevice(&deviceCount);
-    //
+
     //CUcontext m_pCudaContext = nullptr;
     //result = cuCtxCreate(&m_pCudaContext, 0, cuDevice);  // 올바른 장치를 설정하여 컨텍스트 생성
     //if (result != CUDA_SUCCESS) {
     //    return -1;
     //}
-    //
+
     //// Cuda를 사용한 GPU 물리 연산
     //PxCudaContextManagerDesc cudaContextManagerDesc; 
     //cudaContextManagerDesc.graphicsDevice = m_pDevice;    
     //cudaContextManagerDesc.ctx = &m_pCudaContext;
-    //
+
     //cudaErr = cudaGetLastError();
-    //
+
     //m_CudaContextManager = PxCreateCudaContextManager(*m_PxFoundation, cudaContextManagerDesc);
     //if (m_CudaContextManager)
     //{

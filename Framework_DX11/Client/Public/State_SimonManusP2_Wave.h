@@ -27,6 +27,7 @@ private:
     class CMonster* m_pMonster = { nullptr };
 
     _bool           m_bWave = { false };
+    _bool           m_bWaveEffect = { false };
 
 private:
     _bool               End_Check();
