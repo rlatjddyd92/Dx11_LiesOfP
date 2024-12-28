@@ -193,7 +193,7 @@ void CModel::SetUp_isNeedTuning(_int iBoneIndex, _bool bState)
 	m_Bones[iBoneIndex]->SetUp_isNeedTuning(bState);
 }
 
-HRESULT CModel::Initialize_Prototype(TYPE eType, const _char* pModelFilePath, _fmatrix PreTransformMatrix, _bool isBinaryAnimModel, FilePathStructStack* pStructStack)
+HRESULT CModel::Initialize_Prototype(TYPE eType, const _char* pModelFilePath, _fmatrix PreTransformMatrix, _bool isBinaryAnimModel, FilePathStructStack* pStructStack, DISSOLVE_PARTICLE_DESC ParticleDesc)
 {
 	if (pStructStack != nullptr)
 	{
@@ -220,7 +220,7 @@ HRESULT CModel::Initialize_Prototype(TYPE eType, const _char* pModelFilePath, _f
 
 	if (isBinaryAnimModel)
 	{//변경된 애니메이션 모델이라는 표시 -> 새로만든 바이너리 파일을 통해서 호출
-		ReadyModel_To_Binary(&hFile);
+		ReadyModel_To_Binary(&hFile, ParticleDesc);
 		Update_Boundary();
 	}
 	else			//추가되기 전 일반 바이너리 파일로 불러오는
@@ -233,7 +233,7 @@ HRESULT CModel::Initialize_Prototype(TYPE eType, const _char* pModelFilePath, _f
 		for (auto& Bone : m_Bones)
 			Bone->Setting_ParentBoneName(this);
 
-		if (FAILED(Ready_Meshes(&hFile)))
+		if (FAILED(Ready_Meshes(&hFile, ParticleDesc)))
 			return E_FAIL;
 
 		if (FAILED(Ready_Materials(&hFile, pModelFilePath)))
@@ -1043,7 +1043,7 @@ HRESULT CModel::Create_Bin_Animations(HANDLE* pFile)
 	return S_OK;
 }
 
-HRESULT CModel::ReadyModel_To_Binary(HANDLE* pFile)
+HRESULT CModel::ReadyModel_To_Binary(HANDLE* pFile, const DISSOLVE_PARTICLE_DESC& Desc)
 {
 	_ulong dwByte = 0;
 
@@ -1086,7 +1086,7 @@ HRESULT CModel::ReadyModel_To_Binary(HANDLE* pFile)
 
 	for (_uint i = 0; i < m_iNumMeshes; ++i)
 	{
-		CMesh* pMesh = CMesh::Create_To_Binary(m_pDevice, m_pContext, pFile, this, XMLoadFloat4x4(&m_PreTransformMatrix));
+		CMesh* pMesh = CMesh::Create_To_Binary(m_pDevice, m_pContext, pFile, this, XMLoadFloat4x4(&m_PreTransformMatrix), Desc, i);
 		if (nullptr == pMesh)
 			return E_FAIL;
 
@@ -1195,7 +1195,7 @@ HRESULT CModel::Bind_MeshBoneMatrices(CShader* pShader, const _char* pConstantNa
 	return S_OK;
 }
 
-HRESULT CModel::Ready_Meshes(HANDLE* pFile)
+HRESULT CModel::Ready_Meshes(HANDLE* pFile, DISSOLVE_PARTICLE_DESC ParticleDesc)
 {
 	_ulong dwByte = 0;
 
@@ -1203,7 +1203,7 @@ HRESULT CModel::Ready_Meshes(HANDLE* pFile)
 
 	for (size_t i = 0; i < m_iNumMeshes; i++)
 	{
-		CMesh* pMesh = CMesh::Create(m_pDevice, m_pContext, pFile, this, XMLoadFloat4x4(&m_PreTransformMatrix));
+		CMesh* pMesh = CMesh::Create(m_pDevice, m_pContext, pFile, this, XMLoadFloat4x4(&m_PreTransformMatrix), ParticleDesc, i);
 		if (nullptr == pMesh)
 			return E_FAIL;
 
@@ -1331,11 +1331,11 @@ void CModel::CalculateBoundingBox_Model(CMesh* pMesh, _Vec3& minPos, _Vec3& maxP
 }
 
 
-CModel* CModel::Create(ID3D11Device* pDevice, ID3D11DeviceContext* pContext, TYPE eType, const _char* pModelFilePath, _fmatrix PreTransformMatrix, _bool isBinaryAnimModel, FilePathStructStack* pStructStack)
+CModel* CModel::Create(ID3D11Device* pDevice, ID3D11DeviceContext* pContext, TYPE eType, const _char* pModelFilePath, _fmatrix PreTransformMatrix, _bool isBinaryAnimModel, FilePathStructStack* pStructStack, DISSOLVE_PARTICLE_DESC ParticleDesc)
 {
 	CModel* pInstance = new CModel(pDevice, pContext);
 
-	if (FAILED(pInstance->Initialize_Prototype(eType, pModelFilePath, PreTransformMatrix, isBinaryAnimModel, pStructStack)))
+	if (FAILED(pInstance->Initialize_Prototype(eType, pModelFilePath, PreTransformMatrix, isBinaryAnimModel, pStructStack, ParticleDesc)))
 	{
 		MSG_BOX(TEXT("Failed to Created : CModel"));
 		Safe_Release(pInstance);

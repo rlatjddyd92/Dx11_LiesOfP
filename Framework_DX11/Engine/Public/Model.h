@@ -9,6 +9,20 @@ class ENGINE_DLL CModel final : public CComponent
 {
 public:
 	enum TYPE { TYPE_NONANIM, TYPE_ANIM, TYPE_END };
+
+	typedef struct
+	{
+		_uint		iNumInstance = 0;	// 넓이 1당 몇개의 파티클이 생성될 것인가?
+		_float3		vCenter = {};
+		_float2		vSize = {};
+		_float2		vSpeed = {};
+		_float2		vLifeTime = {};
+		_float4		vMinColor = {};
+		_float4		vMaxColor = {};
+		_uint		iLevelID = {};
+		_wstring	strBufferTag = TEXT("");
+	}DISSOLVE_PARTICLE_DESC;
+
 private:
 	CModel(ID3D11Device* pDevice, ID3D11DeviceContext* pContext);
 	CModel(const CModel& Prototype);
@@ -70,7 +84,7 @@ public:
 	void					SetUp_isNeedTuning(_int iBoneIndex, _bool bState);
 
 public:
-	virtual HRESULT Initialize_Prototype(TYPE eType, const _char* pModelFilePath, _fmatrix PreTransformMatrix, _bool isBinaryAnimModel, FilePathStructStack* pStructStack);
+	virtual HRESULT Initialize_Prototype(TYPE eType, const _char* pModelFilePath, _fmatrix PreTransformMatrix, _bool isBinaryAnimModel, FilePathStructStack* pStructStack, DISSOLVE_PARTICLE_DESC ParticleDesc);
 	virtual HRESULT Initialize(void* pArg) override;
 	virtual HRESULT Render(_uint iMeshIndex);
 	HRESULT Render_Instance(_uint iMeshIndex);
@@ -111,7 +125,7 @@ public:
 	HRESULT		Create_Bin_Materials(HANDLE* pFile);
 	HRESULT		Create_Bin_Animations(HANDLE* pFile);
 
-	HRESULT		ReadyModel_To_Binary(HANDLE* pFile);
+	HRESULT		ReadyModel_To_Binary(HANDLE* pFile, const DISSOLVE_PARTICLE_DESC& Desc);
 
 	void		ReadyDenyNextTranslate(_int iBoneIndex);
 
@@ -200,7 +214,7 @@ private:
 	FilePathStructStack* m_FilePaths = { nullptr };
 
 public:
-	HRESULT	Ready_Meshes(HANDLE* pFile);
+	HRESULT	Ready_Meshes(HANDLE* pFile, DISSOLVE_PARTICLE_DESC ParticleDesc);
 	HRESULT Ready_Materials(HANDLE* pFile, const _char* pModelFilePath);
 	HRESULT Ready_Bones(HANDLE* pFile, _int iParentBoneIndex);
 	HRESULT Ready_Animations(HANDLE* pFile);
@@ -212,7 +226,7 @@ private:
 	void CalculateBoundingBox_Model(CMesh* pMesh, _Vec3& minPos, _Vec3& maxPos); //모델 최대, 최소 사이즈 구하기
 
 public:
-	static CModel* Create(ID3D11Device* pDevice, ID3D11DeviceContext* pContext, TYPE eType, const _char* pModelFilePath, _fmatrix PreTransformMatrix = XMMatrixIdentity(), _bool isBinaryAnimModel = false, FilePathStructStack* pStructStack = nullptr);
+	static CModel* Create(ID3D11Device* pDevice, ID3D11DeviceContext* pContext, TYPE eType, const _char* pModelFilePath, _fmatrix PreTransformMatrix = XMMatrixIdentity(), _bool isBinaryAnimModel = false, FilePathStructStack* pStructStack = nullptr, DISSOLVE_PARTICLE_DESC ParticleDesc = {});
 	virtual CComponent* Clone(void* pArg) override;
 	virtual void Free() override;
 };

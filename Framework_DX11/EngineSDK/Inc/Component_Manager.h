@@ -2,6 +2,7 @@
 
 
 #include "VIBuffer_Point_Instance.h"
+#include "VIBuffer_Dissolve_Instance.h"
 #include "VIBuffer_Rect_Instance.h"
 #include "VIBuffer_Terrain.h"
 #include "VIBuffer_Rect.h"

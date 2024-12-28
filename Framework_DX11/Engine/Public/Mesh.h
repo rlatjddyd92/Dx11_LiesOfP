@@ -29,8 +29,8 @@ public:
 	void Culling(CGameInstance* pGameInstance, _Matrix worldMatrix);
 
 public:
-	virtual HRESULT Initialize_Prototype(HANDLE* pFile, const CModel* pModel, _fmatrix PreTransformMatrix);
-	virtual HRESULT Initialize_Prototype_To_Binary(HANDLE* pFile, const CModel* pModel, _fmatrix PreTransformMatrix);
+	virtual HRESULT Initialize_Prototype(HANDLE* pFile, const CModel* pModel, _fmatrix PreTransformMatrix, const CModel::DISSOLVE_PARTICLE_DESC& ParticleDesc, _uint iMeshIndex);
+	virtual HRESULT Initialize_Prototype_To_Binary(HANDLE* pFile, const CModel* pModel, _fmatrix PreTransformMatrix, const CModel::DISSOLVE_PARTICLE_DESC& ParticleDesc, _uint iMeshIndex);
 	virtual HRESULT Initialize(void* pArg) override;
 
 public:
@@ -68,12 +68,16 @@ private:
 	HRESULT	Ready_VertexBuffer_Anim(HANDLE* pFile, const CModel* pModel);
 
 	HRESULT	Ready_VertexBuffer_To_Binary(HANDLE* pFile);
-
+	
 private:
 	void CalculateBoundingBox_Mesh(const _Vec3& vVertexPos);
+	_Vec3 Get_RandomFacePos(_Vec3 vFirst, _Vec3 vSecond, _Vec3 vThird);
+	_Vec2 Get_CalculateUV(const _Vec3& A, const _Vec3& B, const _Vec3& C, const _Vec2& UV_A, const _Vec2& UV_B, const _Vec2& UV_C, const _Vec3& D);
+	_float Get_TriangleArea(const _Vec3& A, const _Vec3& B, const _Vec3& C);
+
 public:
-	static CMesh* Create(ID3D11Device* pDevice, ID3D11DeviceContext* pContext, HANDLE* pFile, const CModel* pModel, _fmatrix PreTransformMatrix);
-	static CMesh* Create_To_Binary(ID3D11Device* pDevice, ID3D11DeviceContext* pContext, HANDLE* pFile, const CModel* pModel, _fmatrix PreTransformMatrix);
+	static CMesh* Create(ID3D11Device* pDevice, ID3D11DeviceContext* pContext, HANDLE* pFile, const CModel* pModel, _fmatrix PreTransformMatrix, const CModel::DISSOLVE_PARTICLE_DESC& ParticleDesc, _uint iMeshIndex);
+	static CMesh* Create_To_Binary(ID3D11Device* pDevice, ID3D11DeviceContext* pContext, HANDLE* pFile, const CModel* pModel, _fmatrix PreTransformMatrix, const CModel::DISSOLVE_PARTICLE_DESC& ParticleDesc, _uint iMeshIndex);
 	virtual CComponent* Clone(void* pArg);
 	virtual void Free() override;
 };
