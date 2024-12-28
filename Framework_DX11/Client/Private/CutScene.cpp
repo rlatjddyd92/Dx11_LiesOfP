@@ -62,6 +62,16 @@ void CCutScene::Update(_float fTimeDelta)
 	{
 		End_Setting();
 	}
+
+	if (m_bDeactivePlayer || m_bMovePlayerDelay)
+	{
+		m_fPlayerSetDelayTimer += fTimeDelta;
+		if (m_fPlayerSetDelayTimer > 3.f)
+		{
+			m_fPlayerSetDelayTimer = 0.f;
+			Delay_Set_Player();
+		}
+	}
 }
 
 void CCutScene::Late_Update(_float fTimeDelta)
@@ -254,15 +264,16 @@ void CCutScene::First_Setting()
 	}
 		break;
 	case BOSS1_MEET2:
-		pPlayer->IsActive(false);
+		m_bDeactivePlayer = true;
 		if (FAILED(m_pGameInstance->Add_CloneObject_ToLayer(LEVEL_GAMEPLAY, TEXT("Layer_Raxasia"), TEXT("Prototype_GameObject_Raxasia"))))
 			return;
 		m_pObjects[BOSS1] = static_cast<CPawn*>(m_pGameInstance->Find_Object(LEVEL_GAMEPLAY, TEXT("Layer_Raxasia"), 0));
 		m_pObjects[BOSS1]->Start_CutScene(0);
 		break;
 	case BOSS1_PHASE2:
-		pPlayer->Get_Navigation()->Move_to_Cell(pPlayer->Get_RigidBody(), 268);
-		pPlayer->IsActive(false);
+		m_bMovePlayerDelay = true;
+		m_iPlayerMoveCellNum = 268;
+		m_bDeactivePlayer = true;
 		break;
 	case BOSS1_DEAD:
 		break;
@@ -277,12 +288,12 @@ void CCutScene::First_Setting()
 		pPlayer->Disappear_Weapon();
 		break;
 	case BOSS2_PHASE2:
-		pPlayer->IsActive(false);
+		m_bDeactivePlayer = true;
 		static_cast<CSimonManus*>(m_pGameInstance->Find_Object(LEVEL_GAMEPLAY, TEXT("Layer_SimonManus"), 0))->Start_CutScene(1);
 		m_pGameInstance->Stop_BGM();
 		break;
 	case BOSS2_DEFEAT:
-		pPlayer->IsActive(false);
+		m_bDeactivePlayer = true;
 		m_pObjects[BOSS2] = static_cast<CPawn*>(m_pGameInstance->Find_Object(LEVEL_GAMEPLAY, TEXT("Layer_SimonManus"), 0));
 		break;
 	default:
@@ -379,6 +390,22 @@ void CCutScene::End_Setting()
 
 	pPlayer->Get_Camera()->Move_PlayerBackPos();
 	pPlayer->Set_isPlayingCutscene(false);
+}
+
+void CCutScene::Delay_Set_Player()
+{
+	CPlayer* pPlayer = dynamic_cast<CPlayer*>(m_pGameInstance->Find_Player(LEVEL_GAMEPLAY));
+
+	if(m_bDeactivePlayer)
+	{
+		pPlayer->IsActive(false);
+		m_bDeactivePlayer = false;
+	}
+
+	if (m_bMovePlayerDelay)
+	{
+		pPlayer->Get_Navigation()->Move_to_Cell(pPlayer->Get_RigidBody(), m_iPlayerMoveCellNum);
+	}
 }
 
 void CCutScene::Load_KeyFrame(CUTSCENE_KEYFRAME_DESC pDesc)
