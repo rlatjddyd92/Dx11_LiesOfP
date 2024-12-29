@@ -111,6 +111,7 @@ void CAObj_ThunderMark::Late_Update(_float fTimeDelta)
     if (m_fLifeTime < m_fLifeDuration)
     {
 #ifdef DEBUG
+        m_pGameInstance->Add_RenderObject(CRenderer::RG_NONBLEND, this);
         m_pGameInstance->Add_DebugObject(m_pColliderCom);
 #endif // DEBUG
     }
@@ -118,6 +119,9 @@ void CAObj_ThunderMark::Late_Update(_float fTimeDelta)
 
 HRESULT CAObj_ThunderMark::Render()
 {
+#ifdef DEBUG
+    m_pColliderCom->Render();
+#endif // DEBUG
     return S_OK;
 }
 
@@ -165,7 +169,7 @@ HRESULT CAObj_ThunderMark::Ready_Components()
     /* FOR.Com_Collider */
     CBounding_Sphere::BOUNDING_SPHERE_DESC      ColliderDesc{};
     ColliderDesc.vCenter = _float3(0.f, 0.f, 0.f);
-    ColliderDesc.fRadius = 2.f;
+    ColliderDesc.fRadius = 0.7f;
 
     if (FAILED(__super::Add_Component(LEVEL_STATIC, TEXT("Prototype_Component_Collider_Sphere"),
         TEXT("Com_Collider"), reinterpret_cast<CComponent**>(&m_pColliderCom), &ColliderDesc)))

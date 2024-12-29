@@ -144,6 +144,7 @@ void CRaxasia::Priority_Update(_float fTimeDelta)
 	//	m_bChanging = false;
 	//}
 	__super::Set_UpTargetPos();
+	m_pKickCollObj->Priority_Update(fTimeDelta);
 	m_pWeapon->Priority_Update(fTimeDelta);
 	m_pWeaponShield->Priority_Update(fTimeDelta);
 
@@ -211,6 +212,7 @@ void CRaxasia::Update(_float fTimeDelta)
 	}
 
 	m_pWeapon->Update(fTimeDelta);
+	m_pKickCollObj->Update(fTimeDelta);
 	m_pWeaponShield->Update(fTimeDelta);
 }
 
@@ -221,6 +223,7 @@ void CRaxasia::Late_Update(_float fTimeDelta)
 	m_pRigidBodyCom->Update(fTimeDelta);
 
 	m_pWeapon->Late_Update(fTimeDelta);
+	m_pKickCollObj->Late_Update(fTimeDelta);
 	m_pWeaponShield->Late_Update(fTimeDelta);
 
 	m_pGameInstance->Add_ColliderList(m_pColliderCom);
@@ -320,6 +323,7 @@ HRESULT CRaxasia::Render()
 
 #ifdef _DEBUG
 	m_pColliderCom->Render();
+	m_pKickCollObj->Render();
 
 	for (_int i = 0; i < COLLTYPE_END; ++i)
 	{
@@ -928,15 +932,15 @@ HRESULT CRaxasia::Ready_Weapon()
 	/* FOR.Com_Collider_OBB */
 	CBounding_OBB::BOUNDING_OBB_DESC			ColliderOBBDesc_Obj{};
 
-	ColliderOBBDesc_Obj.vAngles = _float3(0.4f, 0.13f, 0.13f);
-	ColliderOBBDesc_Obj.vCenter = _float3(0.13f, 0.f, 0.f);
-	ColliderOBBDesc_Obj.vExtents = _float3(0.f, 0.f, 0.f);
+	ColliderOBBDesc_Obj.vAngles = _float3(0.f, 0.f, 0.f);
+	ColliderOBBDesc_Obj.vCenter = _float3(0.2f, 0.f, 0.f);
+	ColliderOBBDesc_Obj.vExtents = _float3(0.6f, 0.2f, 0.2f);
 
 	CColliderObject::COLIDEROBJECT_DESC Desc{};
 
 	Desc.pBoundingDesc = &ColliderOBBDesc_Obj;
 	Desc.eType = CCollider::TYPE_OBB;
-	Desc.pSocketBoneMatrix = m_pModelCom->Get_BoneCombindTransformationMatrix_Ptr(86);
+	Desc.pSocketBoneMatrix = m_pModelCom->Get_BoneCombindTransformationMatrix_Ptr(m_pModelCom->Get_UFBIndices(UFB_FOOT_RIGHT) - 1);
 	Desc.pParentWorldMatrix = WeaponDesc.pParentWorldMatrix;
 	Desc.pSocketBoneMatrix2 = WeaponDesc.pParentWorldMatrix;
 	Desc.fDamageAmount = 100.f;
@@ -1038,7 +1042,7 @@ void CRaxasia::Update_Collider()
 	XMStoreFloat4x4(&UpdateMat
 		, *(m_pColliderBindMatrix[CT_UPPERLEG_RIGHT]) * WorldMat);
 	m_EXCollider[U_LEG_RIGHT]->Update(&UpdateMat);
-
+	
 	XMStoreFloat4x4(&UpdateMat
 		, *(m_pColliderBindMatrix[CT_LOWERLEG_LEFT]) * WorldMat);
 	m_EXCollider[L_LEG_LEFT]->Update(&UpdateMat);

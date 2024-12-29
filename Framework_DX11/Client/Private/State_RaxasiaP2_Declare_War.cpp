@@ -38,6 +38,11 @@ HRESULT CState_RaxasiaP2_Declare_War::Start_State(void* pArg)
     m_bHovering = false;
     m_bEndFire = false;
 
+    m_bJumpForSound = false;
+    m_bStartForSound = false;
+    m_bDiveForSound = false;
+    m_bEnvelopForSound = false;
+
     m_iThunderCnt = 0;
     m_fTimeStack_ThunderBolt = 0.f;
     m_fTimeStack_Lightning = 0.f;
@@ -60,6 +65,12 @@ void CState_RaxasiaP2_Declare_War::Update(_float fTimeDelta)
             ++m_iRouteTrack;
             m_bSwing = false;
             m_bStart = false;
+
+            m_bJumpForSound = false;
+            m_bStartForSound = false;
+            m_bDiveForSound = false;
+            m_bEnvelopForSound = false;
+
             m_pMonster->Change_Animation(AN_DECLARE_WAR, false, 0.1f, 0);
             return;
         }
@@ -120,6 +131,8 @@ void CState_RaxasiaP2_Declare_War::Update(_float fTimeDelta)
 
 void CState_RaxasiaP2_Declare_War::End_State()
 {
+    m_pMonster->DeActive_Effect(CRaxasia::EFFECT_INCHENTSWORD);
+    m_pMonster->Stop_Sound(CPawn::PAWN_SOUND_VOICE);
 }
 
 _bool CState_RaxasiaP2_Declare_War::End_Check()
@@ -369,7 +382,70 @@ void CState_RaxasiaP2_Declare_War::Effect_Check(_double CurTrackPos, _float fTim
 
 void CState_RaxasiaP2_Declare_War::Control_Sound(_double CurTrackPos)
 {
+    if (m_iRouteTrack == 0)
+    {
+        if (!m_bStartForSound)
+        {
+            if (CurTrackPos >= 50.f)
+            {
+                m_bStartForSound = true;
+                m_pMonster->Play_Sound(CPawn::PAWN_SOUND_VOICE, TEXT("SE_NPC_Raxasia_SK_WP_Sword_Lightning_Loop.wav"), true);
+                m_pMonster->Play_Sound(CPawn::PAWN_SOUND_EFFECT1, TEXT("VO_NPC_Raxasia_P2_Roar_05.wav"), false);   //�Ͽ︵
+            }
+        }
+    }
+    else
+    {
+        if (!m_bStartForSound)
+        {
+            m_bStartForSound = true;
+            m_pMonster->Play_Sound(CPawn::PAWN_SOUND_EFFECT1, TEXT("SE_NPC_Raxasia_SK_FX_Spark_Charge_01.wav"), true);
+        }
 
+        if (!m_bJumpForSound)
+        {
+            if (CurTrackPos >= 68.f)
+            {
+                m_pMonster->Stop_Sound(CPawn::PAWN_SOUND_EFFECT1);
+
+                m_pMonster->Play_Sound(CPawn::PAWN_SOUND_EFFECT1, TEXT("SE_NPC_Raxasia_SK_FX_Spark_Jump_01.wav"), false);
+
+                m_pMonster->Play_Sound(CPawn::PAWN_SOUND_EFFECT2, TEXT("SE_NPC_Raxasia_SK_FX_Cloud_01.wav"), false);
+
+                m_pMonster->Play_Sound(CPawn::PAWN_SOUND_VOICE, TEXT("SE_NPC_Raxasia_SK_WP_Sword_Lightning_Loop.wav"), true);
+                m_bJumpForSound = true;
+            }
+        }
+
+        if (!m_bEnvelopForSound)
+        {
+            if (CurTrackPos >= 150.f)
+            {
+                m_pMonster->Play_Sound(CPawn::PAWN_SOUND_EFFECT1, TEXT("SE_NPC_Raxasia_SK_PJ_Spark_Electric_Loop_02.wav"), true);
+                m_bEnvelopForSound = true;
+            }
+        }
+
+        if (!m_bDiveForSound)
+        {
+            if (CurTrackPos >= 255.f)
+            {
+                m_pMonster->Play_Sound(CPawn::PAWN_SOUND_EFFECT1, TEXT("SE_NPC_Raxasia_SK_PJ_Spark_Electric_Loop_02.wav"), true);
+                m_pMonster->Play_Sound(CPawn::PAWN_SOUND_EFFECT2, TEXT("SE_NPC_Raxasia_SK_FX_Blink_Spark_Foot_03.wav"), true);
+
+                m_bDiveForSound = true;
+            }
+        }
+        else
+        {
+            if (CurTrackPos >= 320.f)
+            {
+                m_pMonster->Stop_Sound(CPawn::PAWN_SOUND_EFFECT1);
+                m_pMonster->Stop_Sound(CPawn::PAWN_SOUND_EFFECT2);
+            }
+        }
+
+    }
 }
 
 CState_RaxasiaP2_Declare_War* CState_RaxasiaP2_Declare_War::Create(CFsm* pFsm, CMonster* pMonster, _uint iStateNum, void* pArg)

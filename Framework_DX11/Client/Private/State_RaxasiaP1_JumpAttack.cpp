@@ -75,6 +75,7 @@ void CState_RaxasiaP1_JumpAttack::Update(_float fTimeDelta)
         {
             ++m_iRouteTrack;
             m_bSwing = false;
+            m_bSwingSound = false;
             m_pMonster->Change_Animation(AN_SLASH, false, 0.1f, 3);
             return;
         }
@@ -163,7 +164,11 @@ void CState_RaxasiaP1_JumpAttack::Effect_Check(_double CurTrackPos)
         {
             if ((CurTrackPos >= 60.f && CurTrackPos <= 75.f))
             {
-                m_pMonster->Active_Effect(CRaxasia::EFFECT_SWING, true);
+                if (!m_bSwing)
+                {
+                    m_pMonster->Active_Effect(CRaxasia::EFFECT_SWING, true);
+                    m_bSwing = true;
+                }
             }
             else
             {
@@ -174,7 +179,11 @@ void CState_RaxasiaP1_JumpAttack::Effect_Check(_double CurTrackPos)
         {
             if ((CurTrackPos >= 65.f && CurTrackPos <= 80.f))
             {
-                m_pMonster->Active_Effect(CRaxasia::EFFECT_SWING, true);
+                if (!m_bSwing)
+                {
+                    m_pMonster->Active_Effect(CRaxasia::EFFECT_SWING, true);
+                    m_bSwing = true;
+                }
             }
             else
             {
@@ -186,7 +195,11 @@ void CState_RaxasiaP1_JumpAttack::Effect_Check(_double CurTrackPos)
     {
         if ((CurTrackPos >= 45.f && CurTrackPos <= 60.f))
         {
-            m_pMonster->Active_Effect(CRaxasia::EFFECT_SWING, true);
+            if (!m_bSwing)
+            {
+                m_pMonster->Active_Effect(CRaxasia::EFFECT_SWING, true);
+                m_bSwing = true;
+            }
         }
         else
         {
@@ -197,6 +210,42 @@ void CState_RaxasiaP1_JumpAttack::Effect_Check(_double CurTrackPos)
 
 void CState_RaxasiaP1_JumpAttack::Control_Sound(_double CurTrackPos)
 {
+    if (m_iRouteTrack == 0)
+    {
+        if (m_iCurAnimIndex == AN_JUMPATTACK_L)
+        {
+            if ((CurTrackPos >= 60.f && CurTrackPos <= 75.f))
+            {
+                if (!m_bSwingSound)
+                {
+                    m_pMonster->Play_Sound(CPawn::PAWN_SOUND_EFFECT1, TEXT("SE_NPC_SK_WS_BroadSword_06.wav"), false);
+                    m_bSwingSound = true;
+                }
+            }
+        }
+        else
+        {
+            if ((CurTrackPos >= 65.f && CurTrackPos <= 80.f))
+            {
+                if (!m_bSwingSound)
+                {
+                    m_pMonster->Play_Sound(CPawn::PAWN_SOUND_EFFECT1, TEXT("SE_NPC_SK_WS_BroadSword_06.wav"), false);
+                    m_bSwingSound = true;
+                }
+            }
+        }
+    }
+    else if (m_iRouteTrack == 1)
+    {
+        if ((CurTrackPos >= 45.f && CurTrackPos <= 60.f))
+        {
+            if (!m_bSwingSound)
+            {
+                m_pMonster->Play_Sound(CPawn::PAWN_SOUND_EFFECT1, TEXT("SE_NPC_SK_WS_BroadSword_06.wav"), false);
+                m_bSwingSound = true;
+            }
+        }
+    }
 
 }
 

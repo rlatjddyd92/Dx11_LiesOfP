@@ -32,6 +32,7 @@ HRESULT CState_RaxasiaP1_DashUpper::Start_State(void* pArg)
     m_fCurtRimAlpha = 1.f;
 
     m_bSwingSound = false;
+    m_bStampSound = false;
 
     m_bSwing = false;
     m_bStamp = false;
@@ -50,6 +51,8 @@ void CState_RaxasiaP1_DashUpper::Update(_float fTimeDelta)
     case 0:
         if (End_Check())
         {
+            m_bSwingSound = false;
+            m_bSwing = false;
             m_pMonster->DeActive_Effect(CRaxasia::EFFECT_DASH);
             m_pMonster->Change_State(CRaxasia::IDLE);
             return;
@@ -77,7 +80,7 @@ void CState_RaxasiaP1_DashUpper::Update(_float fTimeDelta)
             }
         }
 
-        m_pMonster->Get_Transform()->LookAt_Lerp_NoHeight(m_pMonster->Get_TargetDir(), 3.f, fTimeDelta);
+        m_pMonster->Get_Transform()->LookAt_Lerp_NoHeight(m_pMonster->Get_TargetDir(), 0.5f, fTimeDelta);
 
         break;
 
@@ -85,16 +88,14 @@ void CState_RaxasiaP1_DashUpper::Update(_float fTimeDelta)
         if (CurTrackPos >= 130.f)
         {
             ++m_iRouteTrack;
+            m_bSwingSound = false;
+            m_bStampSound = false;
             m_bSwing = false;
             m_bStamp = false;
             m_pMonster->Change_Animation(AN_TRIPLELINK_FIRST, false, 0.1f, 0);
             return;
         }
 
-        if (CurTrackPos <= 30.f)
-        {
-            m_pMonster->Get_Transform()->LookAt_Lerp_NoHeight(m_pMonster->Get_TargetDir(), 6.f, fTimeDelta);
-        }
         if (CurTrackPos >= 100.f)
         {
             m_pMonster->Get_Transform()->LookAt_Lerp_NoHeight(m_pMonster->Get_TargetDir(), 2.f, fTimeDelta);
@@ -105,14 +106,19 @@ void CState_RaxasiaP1_DashUpper::Update(_float fTimeDelta)
         if (CurTrackPos >= 70.f)
         {
             ++m_iRouteTrack;
+            m_bSwingSound = false;
+            m_bStampSound = false;
             m_bSwing = false;
             m_bStamp = false;
             m_pMonster->Change_Animation(AN_TRIPLELINK_SECOND, false, 0.1f, 0);
             return;
         }
 
-        if (CurTrackPos <= 30.f||
-            CurTrackPos >= 60.f)
+        if (CurTrackPos <= 30.f)
+        {
+            m_pMonster->Get_Transform()->LookAt_Lerp_NoHeight(m_pMonster->Get_TargetDir(), 2.f, fTimeDelta);
+        }
+        if (CurTrackPos >= 60.f)
         {
             m_pMonster->Get_Transform()->LookAt_Lerp_NoHeight(m_pMonster->Get_TargetDir(), 1.f, fTimeDelta);
         }
@@ -122,6 +128,8 @@ void CState_RaxasiaP1_DashUpper::Update(_float fTimeDelta)
         if (CurTrackPos >= 70.f)
         {
             ++m_iRouteTrack;
+            m_bSwingSound = false;
+            m_bStampSound = false;
             m_bSwing = false;
             m_bStamp = false;
             m_bSpeedController = true;//림라이트 온
@@ -411,6 +419,80 @@ void CState_RaxasiaP1_DashUpper::Update_Rimlight()
 void CState_RaxasiaP1_DashUpper::Control_Sound(_double CurTrackPos)
 {
 
+    if (m_iRouteTrack == 1)
+    {
+        if ((CurTrackPos >= 30.f && CurTrackPos <= 50.f))
+        {
+            if (!m_bSwingSound)
+            {
+                m_pMonster->Play_Sound(CPawn::PAWN_SOUND_EFFECT1, TEXT("SE_NPC_SK_WS_BroadSword_06.wav"), false);
+                m_bSwingSound = true;
+            }
+        }
+    }
+    else if (m_iRouteTrack == 2)
+    {
+        if ((CurTrackPos >= 40.f && CurTrackPos <= 48.f))
+        {
+            if (!m_bSwingSound)
+            {
+                m_pMonster->Play_Sound(CPawn::PAWN_SOUND_EFFECT1, TEXT("SE_NPC_SK_WS_BroadSword_06.wav"), false);
+                m_bSwingSound = true;
+            }
+        }
+
+        if (!m_bStampSound)
+        {
+            if ((CurTrackPos >= 48.f))
+            {
+                m_pMonster->Play_Sound(CPawn::PAWN_SOUND_EFFECT1, TEXT("SE_NPC_SK_FX_Ground_Exp_M_02.wav"));
+
+                m_bStampSound = true;
+            }
+        }
+    }
+    else if (m_iRouteTrack == 3)
+    {
+        if ((CurTrackPos >= 35.f && CurTrackPos <= 44.f))
+        {
+            if (!m_bSwingSound)
+            {
+                m_pMonster->Play_Sound(CPawn::PAWN_SOUND_EFFECT1, TEXT("SE_NPC_SK_WS_BroadSword_06.wav"), false);
+                m_bSwingSound = true;
+            }
+        }
+
+        if (!m_bStampSound)
+        {
+            if ((CurTrackPos >= 48.f))
+            {
+                m_pMonster->Play_Sound(CPawn::PAWN_SOUND_EFFECT1, TEXT("SE_NPC_SK_FX_Ground_Exp_M_02.wav"));
+
+                m_bStampSound = true;
+            }
+        }
+    }
+    else if (m_iRouteTrack == 4)
+    {
+        if ((CurTrackPos >= 35.f && CurTrackPos <= 48.f))
+        {
+            if (!m_bSwingSound)
+            {
+                m_pMonster->Play_Sound(CPawn::PAWN_SOUND_EFFECT1, TEXT("SE_NPC_SK_WS_BroadSword_06.wav"), false);
+                m_bSwingSound = true;
+            }
+        }
+
+        if (!m_bStampSound)
+        {
+            if ((CurTrackPos >= 48.f))
+            {
+                m_pMonster->Play_Sound(CPawn::PAWN_SOUND_EFFECT1, TEXT("SE_NPC_SK_FX_Ground_Exp_M_02.wav"));
+
+                m_bStampSound = true;
+            }
+        }
+    }
 }
 
 CState_RaxasiaP1_DashUpper* CState_RaxasiaP1_DashUpper::Create(CFsm* pFsm, CMonster* pMonster, _uint iStateNum, void* pArg)

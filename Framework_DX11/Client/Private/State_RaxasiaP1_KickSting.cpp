@@ -27,8 +27,10 @@ HRESULT CState_RaxasiaP1_KickSting::Start_State(void* pArg)
     m_pMonster->Change_Animation(AN_KICKSTING, false, 0.1f, 0);
 
     m_bSwingSound = false;
-
+    m_bStampSound = false;
     m_bSwing = false;
+    m_bStampBlast = false;
+
     return S_OK;
 }
 
@@ -84,6 +86,8 @@ void CState_RaxasiaP1_KickSting::Update(_float fTimeDelta)
 
 void CState_RaxasiaP1_KickSting::End_State()
 {
+    m_pMonster->DeActive_Effect(CRaxasia::EFFECT_INCHENTSWORD);
+    m_pMonster->Stop_Sound(CPawn::PAWN_SOUND_EFFECT2);
 }
 
 _bool CState_RaxasiaP1_KickSting::End_Check()
@@ -101,7 +105,7 @@ void CState_RaxasiaP1_KickSting::Collider_Check(_double CurTrackPos)
         }
         else
         {
-            m_pMonster->DeActive_CurretnWeaponCollider();
+            m_pMonster->DeActive_CurretnWeaponCollider(1);
         }
 
         if ((CurTrackPos >= 80.f && CurTrackPos <= 85.f))
@@ -110,7 +114,7 @@ void CState_RaxasiaP1_KickSting::Collider_Check(_double CurTrackPos)
         }
         else
         {
-            m_pMonster->DeActive_CurretnWeaponCollider(1);
+            m_pMonster->DeActive_CurretnWeaponCollider(0);
         }
     }
     else if (m_iRouteTrack == 1)
@@ -135,6 +139,7 @@ void CState_RaxasiaP1_KickSting::Effect_Check(_double CurTrackPos)
             if (CurTrackPos >= 40.f)
             {
                 m_pMonster->Active_Effect(CRaxasia::EFFECT_INCHENTSWORD, true);
+                m_pMonster->Play_Sound(CPawn::PAWN_SOUND_EFFECT2, TEXT("SE_NPC_Raxasia_SK_WP_Sword_Lightning_Loop.wav"), false);
                 m_bChargeActive = true;
             }
         }
@@ -165,7 +170,6 @@ void CState_RaxasiaP1_KickSting::Effect_Check(_double CurTrackPos)
                 m_pGameInstance->Add_CloneObject_ToLayer(LEVEL_GAMEPLAY, TEXT("Monster_Attack"), TEXT("Prototype_GameObject_ThunderStampMark"), &Desc);
 
                 m_bStampBlast = true;
-                m_bStampBlast = true;
             }
         }
     }
@@ -173,7 +177,29 @@ void CState_RaxasiaP1_KickSting::Effect_Check(_double CurTrackPos)
 
 void CState_RaxasiaP1_KickSting::Control_Sound(_double CurTrackPos)
 {
+    if (m_iRouteTrack == 0)
+    {
+        if ((CurTrackPos >= 80.f && CurTrackPos <= 85.f))
+        {
+            if (!m_bSwingSound)
+            {
+                m_pMonster->Play_Sound(CPawn::PAWN_SOUND_EFFECT1, TEXT("SE_NPC_SK_WS_BroadSword_06.wav"), false);
+                m_bSwingSound = true;
+            }
+        }
+    }
+    else if (m_iRouteTrack == 1)
+    {
+        if (!m_bStampSound)
+        {
+            if ((CurTrackPos >= 48.f))
+            {
+                m_pMonster->Play_Sound(CPawn::PAWN_SOUND_EFFECT1, TEXT("SE_NPC_SK_FX_Ground_Exp_M_02.wav"));
 
+                m_bStampSound = true;
+            }
+        }
+    }
 }
 
 CState_RaxasiaP1_KickSting* CState_RaxasiaP1_KickSting::Create(CFsm* pFsm, CMonster* pMonster, _uint iStateNum, void* pArg)

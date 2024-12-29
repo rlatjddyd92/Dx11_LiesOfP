@@ -246,7 +246,6 @@ void CState_RaxasiaP2_Running_Linked::Update(_float fTimeDelta)
 
 void CState_RaxasiaP2_Running_Linked::End_State()
 {
-    m_pMonster->DeActive_Effect(CRaxasia::EFFECT_THUNDERENVELOP_BIG);
     m_pMonster->DeActive_Effect(CRaxasia::EFFECT_THUNDERENVELOP_SMALL);
 }
 
@@ -430,7 +429,70 @@ void CState_RaxasiaP2_Running_Linked::Effect_Check(_double CurTrackPos)
 
 void CState_RaxasiaP2_Running_Linked::Control_Sound(_double CurTrackPos)
 {
+    if (m_iRouteTrack == 0)
+    {
+        if ((CurTrackPos >= 90.f && CurTrackPos <= 100.f))
+        {
+            if (!m_bSwingSound)
+            {
+                m_pMonster->Play_Sound(CPawn::PAWN_SOUND_EFFECT1, TEXT("SE_NPC_SK_WS_BroadSword_06.wav"), false);
+                m_bSwingSound = true;
+            }
 
+        }
+
+        if ((CurTrackPos >= 75.f && CurTrackPos <= 79.5f))
+        {
+            if (!m_bAccel)
+            {
+                m_pMonster->Play_Sound(CPawn::PAWN_SOUND_EFFECT2, TEXT("SE_NPC_Raxasia_SK_FX_Blink_Spark_Foot_03.wav"), false);
+                m_bAccel = true;
+            }
+        }
+        else
+        {
+            m_pMonster->Stop_Sound(CPawn::PAWN_SOUND_EFFECT2);
+        }
+
+    }
+    else if (m_iRouteTrack == 1)
+    {
+        if ((CurTrackPos >= 80.f && CurTrackPos <= 90.f))
+        {
+            if (!m_bSwingSound)
+            {
+                m_pMonster->Play_Sound(CPawn::PAWN_SOUND_EFFECT1, TEXT("SE_NPC_SK_WS_BroadSword_06.wav"), false);
+                m_bSwingSound = true;
+            }
+
+        }
+
+        if ((CurTrackPos >= 69.f && CurTrackPos <= 76.f))
+        {
+            if (!m_bAccel)
+            {
+                m_pMonster->Play_Sound(CPawn::PAWN_SOUND_EFFECT2, TEXT("SE_NPC_Raxasia_SK_FX_Blink_Spark_Foot_03.wav"), false);
+                m_bAccel = true;
+            }
+        }
+        else
+        {
+            m_pMonster->Stop_Sound(CPawn::PAWN_SOUND_EFFECT2);
+        }
+    }
+    else
+    {
+        if (!m_bJump)
+        {
+            if (CurTrackPos >= 100.f)
+            {
+                m_pMonster->Play_Sound(CPawn::PAWN_SOUND_EFFECT1, TEXT("SE_NPC_Raxasia_SK_FX_Jump_Heavy_01.wav"), false);
+               
+                m_bJump = true;
+            }
+        }
+
+    }
 }
 
 CState_RaxasiaP2_Running_Linked* CState_RaxasiaP2_Running_Linked::Create(CFsm* pFsm, CMonster* pMonster, _uint iStateNum, void* pArg)

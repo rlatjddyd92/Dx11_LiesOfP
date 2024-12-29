@@ -27,6 +27,10 @@ HRESULT CState_RaxasiaP1_Sting_Spread::Start_State(void* pArg)
     m_pMonster->Change_Animation(AN_STING, false, 0.1f, 0);
 
     m_bSwingSound = false;
+    m_bStampSound = false;
+    m_bSpreadSound = false;
+
+
     m_bLockOn = false;
     m_bResetAtkList = false;
     m_bCharge = false;
@@ -48,6 +52,7 @@ void CState_RaxasiaP1_Sting_Spread::Update(_float fTimeDelta)
         {
             ++m_iRouteTrack;
             m_bSwing = false;
+            m_bSwingSound = false;
             m_pMonster->Change_Animation(AN_BACKJUMP, false, 0.1f, 0);
             return;
         }
@@ -64,6 +69,7 @@ void CState_RaxasiaP1_Sting_Spread::Update(_float fTimeDelta)
         {
             ++m_iRouteTrack;
             m_bSwing = false;
+            m_bSwingSound = false;
             m_pMonster->Change_Animation(AN_STING, false, 0.1f, 65);
             return;
         }
@@ -75,6 +81,7 @@ void CState_RaxasiaP1_Sting_Spread::Update(_float fTimeDelta)
         {
             ++m_iRouteTrack;
             m_bSwing = false;
+            m_bSwingSound = false;
             m_pMonster->Change_Animation(AN_SWING_ANDSPREAD, false, 0.1f, 65);
             return;
         }
@@ -182,6 +189,8 @@ void CState_RaxasiaP1_Sting_Spread::Effect_Check(_double CurTrackPos)
                     vPos, _Vec3{ m_pMonster->Get_TargetDir() });
 
                 m_pMonster->Active_Effect(CRaxasia::EFFECT_INCHENTSWORD, true);
+                m_pMonster->Play_Sound(CPawn::PAWN_SOUND_EFFECT2, TEXT("SE_NPC_Raxasia_SK_WP_Sword_Lightning_Loop.wav"), true);
+                
                 m_bCharge = true;
             }
         }
@@ -208,6 +217,7 @@ void CState_RaxasiaP1_Sting_Spread::Effect_Check(_double CurTrackPos)
             {
                 m_bCharge = false;
                 m_pMonster->DeActive_Effect(CRaxasia::EFFECT_INCHENTSWORD);
+                m_pMonster->Stop_Sound(CPawn::PAWN_SOUND_EFFECT2);
             }
         }
         else
@@ -218,6 +228,7 @@ void CState_RaxasiaP1_Sting_Spread::Effect_Check(_double CurTrackPos)
                 m_bSpeedController = true;
                 m_pMonster->Get_Model()->Set_SpeedRatio(AN_SWING_ANDSPREAD, (double)0.5);
                 m_pMonster->Active_Effect(CRaxasia::EFFECT_INCHENTSWORD, true);
+                m_pMonster->Play_Sound(CPawn::PAWN_SOUND_EFFECT2, TEXT("SE_NPC_Raxasia_SK_WP_Sword_Lightning_Loop.wav"), true);
             }
         }
 
@@ -301,7 +312,50 @@ void CState_RaxasiaP1_Sting_Spread::Effect_Check(_double CurTrackPos)
 
 void CState_RaxasiaP1_Sting_Spread::Control_Sound(_double CurTrackPos)
 {
+    if (m_iRouteTrack == 2)
+    {
+        if (!m_bSwingSound)
+        {
+            m_pMonster->Play_Sound(CPawn::PAWN_SOUND_EFFECT1, TEXT("SE_NPC_SK_WS_BroadSword_06.wav"), false);
+            m_bSwingSound = true;
+        }
+    }
+    else if (m_iRouteTrack == 3)
+    {
+        if ((CurTrackPos >= 85.f && CurTrackPos <= 140.f) ||
+            (CurTrackPos >= 210.f && CurTrackPos <= 220.f))
+        {
+            if (!m_bSwingSound)
+            {
+                m_pMonster->Play_Sound(CPawn::PAWN_SOUND_EFFECT1, TEXT("SE_NPC_SK_WS_BroadSword_06.wav"), false);
+                m_bSwingSound = true;
+            }
+        }
+        else if (CurTrackPos >= 110.f)
+        {
+            m_bSwingSound = false;
+        }
 
+        if (!m_bStampSound)
+        {
+            if ((CurTrackPos >= 219.f))
+            {
+                m_pMonster->Play_Sound(CPawn::PAWN_SOUND_EFFECT1, TEXT("SE_NPC_Raxasia_SK_PJ_Thunder_Explo_03.wav"));
+
+                m_bStampSound = true;
+            }
+        }
+
+        if (!m_bSpreadSound)
+        {
+            if (CurTrackPos >= 250.f)
+            {
+                m_pMonster->Play_Sound(CPawn::PAWN_SOUND_EFFECT1, TEXT("SE_NPC_Raxasia_SK_PJ_Spark_Wave_Explo_01.wav"));
+
+                m_bSpreadSound = true;
+            }
+        }
+    }
 }
 
 CState_RaxasiaP1_Sting_Spread* CState_RaxasiaP1_Sting_Spread::Create(CFsm* pFsm, CMonster* pMonster, _uint iStateNum, void* pArg)

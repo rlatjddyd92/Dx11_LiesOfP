@@ -277,6 +277,19 @@ void CState_RaxasiaP2_Running::Effect_Check(_double CurTrackPos)
 
 void CState_RaxasiaP2_Running::Control_Sound(_double CurTrackPos)
 {
+    if (m_iRouteTrack == 1)
+    {
+        if ((CurTrackPos >= 145.f && CurTrackPos <= 160.f))
+        {
+            if (!m_bSwingSound)
+            {
+                m_pMonster->Play_Sound(CPawn::PAWN_SOUND_EFFECT1, TEXT("SE_NPC_SK_WS_BroadSword_06.wav"), false);
+                m_bSwingSound = true;
+            }
+        }
+
+
+    }
 
 }
 

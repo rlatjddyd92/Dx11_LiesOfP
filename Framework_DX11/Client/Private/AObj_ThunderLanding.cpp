@@ -42,7 +42,7 @@ HRESULT CAObj_ThunderLanding::Initialize(void* pArg)
 
     m_strObjectTag = TEXT("MonsterWeapon");
 
-    //m_pSoundCom[EFF_SOUND_EFFECT1]->Play2D(TEXT("SE_NPC_SK_FX_Spark_M_03.wav"), &g_fEffectVolume, true);
+    m_pSoundCom[EFF_SOUND_EFFECT1]->Play2D(TEXT("SE_NPC_Raxasia_SK_FX_Ground_Explo_Huge_02.wav"), &g_fEffectVolume, false);
 
     return S_OK;
 }
@@ -71,6 +71,7 @@ void CAObj_ThunderLanding::Late_Update(_float fTimeDelta)
     {
         m_pGameInstance->Add_ColliderList(m_pColliderCom);
 #ifdef DEBUG
+        m_pGameInstance->Add_RenderObject(CRenderer::RG_NONBLEND, this);
         m_pGameInstance->Add_DebugObject(m_pColliderCom);
 #endif // DEBUG
     }
@@ -78,6 +79,9 @@ void CAObj_ThunderLanding::Late_Update(_float fTimeDelta)
 
 HRESULT CAObj_ThunderLanding::Render()
 {
+#ifdef DEBUG
+    m_pColliderCom->Render();
+#endif // DEBUG
     return S_OK;
 }
 

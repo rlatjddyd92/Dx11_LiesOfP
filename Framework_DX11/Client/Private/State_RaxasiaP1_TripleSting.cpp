@@ -49,6 +49,7 @@ void CState_RaxasiaP1_TripleSting::Update(_float fTimeDelta)
         {
             ++m_iRouteTrack;
             m_bSting = false;
+            m_bSwingSound = false;
             m_pMonster->Change_Animation(AN_STING, false, 0.1f, 80);
         }
         m_pMonster->Get_Transform()->LookAt_Lerp_NoHeight(m_pMonster->Get_TargetDir(), 3, fTimeDelta);
@@ -60,6 +61,7 @@ void CState_RaxasiaP1_TripleSting::Update(_float fTimeDelta)
         {
             ++m_iRouteTrack;
             m_bSting = false;
+            m_bSwingSound = false;
             m_pMonster->Change_Animation(m_iDashAnimIndex, false, 0.2f, 0, true, true);
             return;
         }
@@ -82,6 +84,7 @@ void CState_RaxasiaP1_TripleSting::Update(_float fTimeDelta)
         {
             ++m_iRouteTrack;
             m_bSting = false;
+            m_bSwingSound = false;
             m_pMonster->Change_Animation(AN_STING, false, 0.4f, 40, true, true);
             return;
         }
@@ -93,6 +96,7 @@ void CState_RaxasiaP1_TripleSting::Update(_float fTimeDelta)
         {
             ++m_iRouteTrack;
             m_bSting = false;
+            m_bSwingSound = false;
             m_pMonster->Change_Animation(m_iDashAnimIndex, false, 0.2f, 0, true, true);
             return;
         }
@@ -126,6 +130,7 @@ void CState_RaxasiaP1_TripleSting::Update(_float fTimeDelta)
         {
             m_iRouteTrack = 0;
             m_bSting = false;
+            m_bSwingSound = false;
             m_pMonster->Change_State(CRaxasia::IDLE);
             return;
         }
@@ -235,6 +240,17 @@ void CState_RaxasiaP1_TripleSting::Effect_Check(_double CurTrackPos)
 void CState_RaxasiaP1_TripleSting::Control_Sound(_double CurTrackPos)
 {
 
+    if (m_iRouteTrack != 0)
+    {
+        if ((CurTrackPos >= 115.f && CurTrackPos <= 135.f))
+        {
+            if (!m_bSwingSound)
+            {
+                m_pMonster->Play_Sound(CPawn::PAWN_SOUND_EFFECT1, TEXT("SE_NPC_SK_WS_BroadSword_06.wav"), false);
+                m_bSwingSound = true;
+            }
+        }
+    }
 }
 
 CState_RaxasiaP1_TripleSting* CState_RaxasiaP1_TripleSting::Create(CFsm* pFsm, CMonster* pMonster, _uint iStateNum, void* pArg)

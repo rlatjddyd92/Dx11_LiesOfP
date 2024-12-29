@@ -47,7 +47,7 @@ HRESULT CAObj_ThunderWave::Initialize(void* pArg)
 
     m_strObjectTag = TEXT("MonsterWeapon");
 
-    //m_pSoundCom[EFF_SOUND_EFFECT1]->Play2D(TEXT("SE_NPC_SimonManus_SK_PJ_Ergo_Retspuken_04.wav"), &g_fEffectVolume);
+    m_pSoundCom[EFF_SOUND_EFFECT1]->Play2D_Repeat(TEXT("SE_NPC_Raxasia_SK_PJ_BladeMissile_Ground_02.wav"), &g_fEffectVolume);
 
     return S_OK;
 }
@@ -68,7 +68,8 @@ void CAObj_ThunderWave::Update(_float fTimeDelta)
         else if (m_pEffect->Get_Dead())
         {
             m_isDead = true;
-            //m_pSoundCom[EFF_SOUND_EFFECT1]->Stop();
+            m_pSoundCom[EFF_SOUND_EFFECT1]->Stop();
+            return;
         }
     }
     else
@@ -92,6 +93,7 @@ void CAObj_ThunderWave::Late_Update(_float fTimeDelta)
     {
         m_pGameInstance->Add_ColliderList(m_pColliderCom);
 #ifdef DEBUG
+        m_pGameInstance->Add_RenderObject(CRenderer::RG_NONBLEND, this);
         m_pGameInstance->Add_DebugObject(m_pColliderCom);
 #endif // DEBUG
     }
@@ -99,6 +101,9 @@ void CAObj_ThunderWave::Late_Update(_float fTimeDelta)
 
 HRESULT CAObj_ThunderWave::Render()
 {
+#ifdef DEBUG
+    m_pColliderCom->Render();
+#endif // DEBUG
     return S_OK;
 }
 

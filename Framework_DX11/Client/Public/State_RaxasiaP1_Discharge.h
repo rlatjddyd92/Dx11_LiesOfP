@@ -43,6 +43,8 @@ private:
     _bool               m_bStampBlast = { false };
 
     _bool               m_bSwingSound = { false };
+    _bool               m_bStampSound = { false };
+    _bool               m_bChargeActiveForSound = { false };
 
     _uint               m_iRouteTrack = {};
 

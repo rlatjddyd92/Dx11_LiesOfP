@@ -36,6 +36,7 @@ private:
     _bool               m_bStampBlast = { false };
 
     _bool               m_bSwingSound = { false };
+    _bool               m_bStampSound = { false };
 
     _uint               m_iRouteTrack = {};
 

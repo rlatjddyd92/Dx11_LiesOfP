@@ -39,6 +39,7 @@ private:
     _bool               m_bAccel = { false };
     _bool               m_bEnvelop = { false };
 
+    _bool               m_bAccelForSound = { false };
     _bool               m_bSwingSound = { false };
     _bool               m_bCharge = { false };
 

@@ -80,7 +80,7 @@ void CAObj_ThunderStampMark::Update(_float fTimeDelta)
             m_bExplosive = true;
             m_pSoundCom[EFF_SOUND_EFFECT1]->Stop();
 
-            m_pSoundCom[EFF_SOUND_EFFECT1]->Play2D(TEXT("SE_NPC_Raxasia_SK_PJ_Thunder_Explo_05.wav"), &g_fEffectVolume, false);
+            m_pSoundCom[EFF_SOUND_EFFECT1]->Play2D(TEXT("SE_NPC_Raxasia_SK_PJ_Thunder_Explo_03.wav"), &g_fEffectVolume, false);
 
         }
         else
@@ -96,10 +96,10 @@ void CAObj_ThunderStampMark::Update(_float fTimeDelta)
         {
             m_isDead = true;
         }
-        m_pColliderCom->Update(m_pTransformCom->Get_WorldMatrix_Ptr());
         m_pEffectExp->Update(fTimeDelta);
     }
 
+    m_pColliderCom->Update(m_pTransformCom->Get_WorldMatrix_Ptr());
 
 }
 
@@ -112,11 +112,16 @@ void CAObj_ThunderStampMark::Late_Update(_float fTimeDelta)
     else
     {
         m_pEffectExp->Late_Update(fTimeDelta);
+        if (!m_isDead)
+        {
+            m_pGameInstance->Add_ColliderList(m_pColliderCom);
+        }
     }
+
     if (m_fLifeTime < m_fLifeDuration && m_bExplosive)
     {
-        m_pGameInstance->Add_ColliderList(m_pColliderCom);
 #ifdef DEBUG
+        m_pGameInstance->Add_RenderObject(CRenderer::RG_NONBLEND, this);
         m_pGameInstance->Add_DebugObject(m_pColliderCom);
 #endif // DEBUG
     }
@@ -124,6 +129,9 @@ void CAObj_ThunderStampMark::Late_Update(_float fTimeDelta)
 
 HRESULT CAObj_ThunderStampMark::Render()
 {
+#ifdef DEBUG
+    m_pColliderCom->Render();
+#endif // DEBUG
     return S_OK;
 }
 
