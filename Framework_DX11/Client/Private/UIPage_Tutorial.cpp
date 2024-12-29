@@ -63,10 +63,17 @@ void CUIPage_Tutorial::Update(_float fTimeDelta)
 
 void CUIPage_Tutorial::Late_Update(_float fTimeDelta)
 {
-	__super::Late_Update(fTimeDelta);
+	if (KEY_TAP(KEY::M))
+		ShowTiming(KEY::LSHIFT, 2.f);
+
+	if (m_pTiming->Update_Timing(fTimeDelta) == false)
+		m_vec_Group_Ctrl[_int(PART_GROUP::GROUP_TIMING)]->bRender = false;
+
 
 	for (auto& iter : m_vec_Group_Ctrl)
 		__super::UpdatePart_ByControl(iter);
+
+	__super::Late_Update(fTimeDelta);
 }
 
 HRESULT CUIPage_Tutorial::Render()
@@ -109,6 +116,9 @@ void CUIPage_Tutorial::OffResult()
 
 void CUIPage_Tutorial::ShowTiming(KEY eKey, _float fTime)
 {
+	m_vec_Group_Ctrl[_int(PART_GROUP::GROUP_TIMING)]->bRender = true;
+
+	m_pTiming->Start_Timing(eKey, fTime);
 }
 
 HRESULT CUIPage_Tutorial::Ready_UIPart_Group_Control()
@@ -129,6 +139,11 @@ HRESULT CUIPage_Tutorial::Ready_UIPart_Group_Control()
 	m_bRender = false;
 	m_vecPageAction[_int(PAGEACTION::ACTION_INACTIVE)] = true;
 
+	m_vec_Group_Ctrl[_int(PART_GROUP::GROUP_TIMING)]->bRender = false;
+	m_vec_Group_Ctrl[_int(PART_GROUP::GROUP_RESULT)]->bRender = false;
+
+	Initialize_Tutorial();
+
 	return S_OK;
 }
 
@@ -141,7 +156,7 @@ void CUIPage_Tutorial::Initialize_Tutorial()
 
 
 
-
+	m_pTiming->Set_Timing(m_vecPart);
 
 
 }

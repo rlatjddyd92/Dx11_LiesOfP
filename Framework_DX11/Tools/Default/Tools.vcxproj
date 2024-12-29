@@ -38,6 +38,7 @@
     <ClInclude Include="..\..\imgui\imstb_truetype.h" />
     <ClInclude Include="..\Public\AnimModel.h" />
     <ClInclude Include="..\Public\BackGround.h" />
+    <ClInclude Include="..\Public\Controller_3DUITool.h" />
     <ClInclude Include="..\Public\Controller_Cutscene.h" />
     <ClInclude Include="..\Public\Controller_AnimationTool.h" />
     <ClInclude Include="..\Public\Controller_EffectTool.h" />
@@ -99,6 +100,7 @@
     <ClCompile Include="..\..\imgui\imgui_widgets.cpp" />
     <ClCompile Include="..\Private\AnimModel.cpp" />
     <ClCompile Include="..\Private\BackGround.cpp" />
+    <ClCompile Include="..\Private\Controller_3DUITool.cpp" />
     <ClCompile Include="..\Private\Controller_Cutscene.cpp" />
     <ClCompile Include="..\Private\Controller_AnimationTool.cpp" />
     <ClCompile Include="..\Private\Controller_EffectTool.cpp" />

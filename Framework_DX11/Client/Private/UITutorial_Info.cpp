@@ -109,11 +109,35 @@ HRESULT CUITutorial_Info::Ready_UIPart_Group_Control()
 
 void CUITutorial_Info::Set_Info(vector<struct CUIPage::UIPART_INFO*>& vecOrigin, vector<vector<_wstring>>& vecData)
 {
+	_int iMission = -1;
+	_int iScore = -1;
 
+	for (auto& iter : vecOrigin)
+	{
+		if ((iter->iGroupIndex >= _int(PART_GROUP::GROUP_INFO_FRAME)) && (iter->iGroupIndex <= _int(PART_GROUP::GROUP_INFO_SCORE)))
+		{
+			m_vecSharedPointer_All.push_back(iter);
+		}
+		
+		if (iter->iGroupIndex == _int(PART_GROUP::GROUP_INFO_MISSION))
+		{
+			++iMission;
 
+			if (iMission == 1)
+				m_pSharedPointer_Mission_Title = iter;
+			if (iMission == 2)
+				m_pSharedPointer_Mission_Count = iter;
+			if (iMission == 4)
+				m_pSharedPointer_Mission_Score = iter;
+		}
+		else if (iter->iGroupIndex == _int(PART_GROUP::GROUP_INFO_SCORE))
+		{
+			++iScore;
 
-
-
+			if (iScore == 2)
+				m_pSharedPointer_Sum = iter;
+		}
+	}
 }
 
 CUITutorial_Info* CUITutorial_Info::Create(ID3D11Device* pDevice, ID3D11DeviceContext* pContext)

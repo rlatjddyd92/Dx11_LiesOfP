@@ -1354,14 +1354,17 @@
     <Filter Include="03.GameInterface_Controller\00.UIManager\00.UIPage\20.UIPage_Tutorial\00.Tuto_Info">
       <UniqueIdentifier>{833e2495-37cb-4ac9-9406-1daffc0a81ac}</UniqueIdentifier>
     </Filter>
-    <Filter Include="03.GameInterface_Controller\00.UIManager\00.UIPage\20.UIPage_Tutorial\01.Tuto_Popup">
-      <UniqueIdentifier>{08675e9b-16b2-488a-a6dd-40b1f859f43c}</UniqueIdentifier>
-    </Filter>
     <Filter Include="03.GameInterface_Controller\00.UIManager\00.UIPage\20.UIPage_Tutorial\02.Tuto_Timing">
       <UniqueIdentifier>{6745a1f9-9569-40c2-bdf1-ea2bf5762d8a}</UniqueIdentifier>
     </Filter>
     <Filter Include="03.GameInterface_Controller\00.UIManager\00.UIPage\20.UIPage_Tutorial\03.Tuto_Result">
       <UniqueIdentifier>{136ae3e7-73fc-4413-bba9-6a0a74e38b98}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="03.GameInterface_Controller\00.UIManager\00.UIPage\20.UIPage_Tutorial\01.Tuto_Guide">
+      <UniqueIdentifier>{08675e9b-16b2-488a-a6dd-40b1f859f43c}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="03.GameInterface_Controller\00.UIManager\00.UIPage\20.UIPage_Tutorial\04.Tuto_Popup">
+      <UniqueIdentifier>{5a0fd332-b836-4ef5-979e-a2371f5cc21f}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -2495,7 +2498,7 @@
       <Filter>03.GameInterface_Controller\00.UIManager\00.UIPage\20.UIPage_Tutorial\00.Tuto_Info</Filter>
     </ClInclude>
     <ClInclude Include="..\Public\UITutorial_Guide.h">
-      <Filter>03.GameInterface_Controller\00.UIManager\00.UIPage\20.UIPage_Tutorial\01.Tuto_Popup</Filter>
+      <Filter>03.GameInterface_Controller\00.UIManager\00.UIPage\20.UIPage_Tutorial\01.Tuto_Guide</Filter>
     </ClInclude>
     <ClInclude Include="..\Public\UITutorial_Result.h">
       <Filter>03.GameInterface_Controller\00.UIManager\00.UIPage\20.UIPage_Tutorial\03.Tuto_Result</Filter>
@@ -3602,7 +3605,7 @@
       <Filter>03.GameInterface_Controller\00.UIManager\00.UIPage\20.UIPage_Tutorial\00.Tuto_Info</Filter>
     </ClCompile>
     <ClCompile Include="..\Private\UITutorial_Guide.cpp">
-      <Filter>03.GameInterface_Controller\00.UIManager\00.UIPage\20.UIPage_Tutorial\01.Tuto_Popup</Filter>
+      <Filter>03.GameInterface_Controller\00.UIManager\00.UIPage\20.UIPage_Tutorial\01.Tuto_Guide</Filter>
     </ClCompile>
     <ClCompile Include="..\Private\UITutorial_Result.cpp">
       <Filter>03.GameInterface_Controller\00.UIManager\00.UIPage\20.UIPage_Tutorial\03.Tuto_Result</Filter>

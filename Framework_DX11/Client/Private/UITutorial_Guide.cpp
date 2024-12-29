@@ -109,9 +109,25 @@ HRESULT CUITutorial_Guide::Ready_UIPart_Group_Control()
 
 void CUITutorial_Guide::Set_Guide(vector<struct CUIPage::UIPART_INFO*>& vecOrigin, vector<vector<_wstring>>& vecData)
 {
+	_int iIndex = 0;
+	for (auto& iter : vecOrigin)
+	{
+		if (iter->iGroupIndex == _int(PART_GROUP::GROUP_GUIDE))
+			break;
+
+		++iIndex;
+	}
+
+	m_pSharedPointer_Frame = vecOrigin[iIndex];
+	m_pSharedPointer_Title = vecOrigin[iIndex + 1];
 
 
 
+
+	UPART* m_pSharedPointer_Frame = { nullptr };
+	UPART* m_pSharedPointer_Title = { nullptr };
+	vector<UPART*> m_vecSharedPointer_Ctrl_Upper;
+	vector<UPART*> m_vecSharedPointer_Ctrl_Lower;
 
 
 

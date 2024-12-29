@@ -41,7 +41,7 @@ public:
 
 	void Start_Timing(KEY eKey, _float fTime);
 
-	void Update_Timing(_float fTimeDelta);
+	_bool Update_Timing(_float fTimeDelta);
 
 protected:
 	UPART* m_pSharedPointer_Frame = { nullptr };

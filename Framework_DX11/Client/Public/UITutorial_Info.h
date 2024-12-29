@@ -45,7 +45,7 @@ public:
 	void Set_Info(vector<struct CUIPage::UIPART_INFO*>& vecOrigin, vector<vector<_wstring>>& vecData);
 
 protected:
-	vector<UPART*> m_vecSharedPointer_Frame;
+	vector<UPART*> m_vecSharedPointer_All;
 	UPART* m_pSharedPointer_Mission_Title = { nullptr };
 	UPART* m_pSharedPointer_Mission_Count = { nullptr };
 	UPART* m_pSharedPointer_Mission_Score = { nullptr };

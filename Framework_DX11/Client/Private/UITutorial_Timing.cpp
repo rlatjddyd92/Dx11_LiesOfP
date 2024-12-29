@@ -109,7 +109,19 @@ HRESULT CUITutorial_Timing::Ready_UIPart_Group_Control()
 
 void CUITutorial_Timing::Set_Timing(vector<struct CUIPage::UIPART_INFO*>& vecOrigin)
 {
+	_int iIndex = 0;
 
+
+	for (auto& iter : vecOrigin)
+	{
+		if (iter->iGroupIndex == _int(PART_GROUP::GROUP_TIMING))
+		{
+			if (iIndex == 0) m_pSharedPointer_Frame = iter;
+			if (iIndex == 1) m_pSharedPointer_Gauge = iter;
+			if (iIndex == 2) m_pSharedPointer_Icon = iter;
+			++iIndex;
+		}
+	}
 
 
 
@@ -129,10 +141,10 @@ void CUITutorial_Timing::Start_Timing(KEY eKey, _float fTime)
 	m_bActive = true;
 }
 
-void CUITutorial_Timing::Update_Timing(_float fTimeDelta)
+_bool CUITutorial_Timing::Update_Timing(_float fTimeDelta)
 {
 	if (m_bActive == false)
-		return;
+		return false;
 
 	m_vTime.x += fTimeDelta;
 
@@ -140,19 +152,19 @@ void CUITutorial_Timing::Update_Timing(_float fTimeDelta)
 	{
 		m_vTime = { 0.f,0.f };
 		m_bActive = false;
-		return;
+		return false;
 	}
 
 	_float fAngle = (m_vTime.x / m_vTime.y) * 360.f;
 
 	m_pSharedPointer_Gauge->vTexture_Angle.x = -90.f;
 
-	if (fAngle <= 90.f)
-		m_pSharedPointer_Gauge->vTexture_Angle.y = -fAngle;
-	else if (fAngle <= 270.f)
+	if (fAngle <= 270.f)
 		m_pSharedPointer_Gauge->vTexture_Angle.y = fAngle - 90.f;
 	else
 		m_pSharedPointer_Gauge->vTexture_Angle.y = (fAngle - 270.f) - 180.f;
+
+	return true;
 }
 
 CUITutorial_Timing* CUITutorial_Timing::Create(ID3D11Device* pDevice, ID3D11DeviceContext* pContext)
