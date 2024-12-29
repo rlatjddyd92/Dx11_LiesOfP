@@ -418,6 +418,6 @@ technique11 DefaultTechnique
 
         VertexShader = compile vs_5_0 VS_SPRITE();
         GeometryShader = NULL;
-        PixelShader = compile ps_5_0 PS_COLOR_MULTIPLE();
+        PixelShader = compile ps_5_0 PS_COLOR_MULTIPLE_ALPHA_ADJUST();
     }
 }

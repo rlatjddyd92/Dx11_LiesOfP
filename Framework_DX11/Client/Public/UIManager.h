@@ -282,6 +282,9 @@ public:
 	// 텔레포트
 	void Set_Now_Interact_Stargezer(_int iNaviIndex) { return m_pUIPage_Telepot->Set_Now_Interact_Stargezer(iNaviIndex); }
 
+	// 튜토리얼
+	void Start_Tutorial() { return m_pUIPage_Tutorial->OpenAction(); }
+	void End_Tutorial() { return m_pUIPage_Tutorial->CloseAction(); }
 #pragma endregion
 
 
@@ -419,6 +422,8 @@ private:
 	CUIPage_Telepot* m_pUIPage_Telepot = { nullptr };
 	// 업적
 	CUIPage_Achievment* m_pUIPage_Achievment = { nullptr };
+	// 튜토리얼
+	CUIPage_Tutorial* m_pUIPage_Tutorial = { nullptr };
 	
 	CUIRender_Batching* m_pUIRender_Batching = { nullptr };
 

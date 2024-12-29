@@ -37,7 +37,12 @@ public:
 	const vector<UPART*>& Get_UIPartInfo() { return m_vecPart; }
 	virtual HRESULT Ready_UIPart_Group_Control() override;
 
+	void Set_Result(vector<struct CUIPage::UIPART_INFO*>& vecOrigin);
+
 protected:
+	vector<UPART*> m_vecSharedPointer_Frame;
+	UPART* m_pSharedPointer_Title = { nullptr };
+	UPART* m_pSharedPointer_Score = { nullptr };
 
 
 

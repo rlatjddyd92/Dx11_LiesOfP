@@ -38,13 +38,49 @@ private:
 	void Set_Fable();
 
 private:
-	const CItem_Manager::ITEM* pItem = { nullptr };
+	const CItem_Manager::ITEM* m_pItem = { nullptr };
 	CPlayer::WEAPON_TYPE m_eType_Now = CPlayer::WEAPON_TYPE::WEP_END;
 
+	UPART* m_pSharedPointer_Center = { nullptr };
+	vector<UPART*> m_vecSharedPointer_DurableGauge_Static;
+	UPART* m_pSharedPointer_DurableGauge_Fill = { nullptr };
+	
+	vector<UPART*> m_vecSharedPointer_NormalWeapon_Static;
+	vector<UPART*> m_vecSharedPointer_NormalWeapon_Fx;
+	UPART* m_pSharedPointer_NormalWeapon_Blade = { nullptr };
+	UPART* m_pSharedPointer_NormalWeapon_Handle = { nullptr };
+
+	vector<UPART*> m_vecSharedPointer_SpecialWeapon_Static;
+	UPART* m_pSharedPointer_SpecialWeapon = { nullptr };
+
+	UPART* m_pSharedPointer_SelectNum = { nullptr };
 
 
 
-	vector<UPART*> m_vecSharedPointer_DurableGauge;
+	UPART* m_pSharedPointer_BladeFable_Symbol = { nullptr };
+	UPART* m_pSharedPointer_HandleFable_Symbol = { nullptr };
+
+	vector<UPART*> m_vecSharedPointer_BladeFable_Side_Frame;
+	vector<UPART*> m_vecSharedPointer_BladeFable_Side_White;
+	vector<UPART*> m_vecSharedPointer_BladeFable_Side_Fill;
+
+	vector<UPART*> m_vecSharedPointer_BladeFable_Center_Frame;
+	vector<UPART*> m_vecSharedPointer_BladeFable_Center_White;
+	vector<UPART*> m_vecSharedPointer_BladeFable_Center_Fill;
+
+	vector<UPART*> m_vecSharedPointer_BladeFable_KeySet_F;
+	vector<UPART*> m_vecSharedPointer_BladeFable_KeySet_Combine;
+
+	vector<UPART*> m_vecSharedPointer_HandleFable_Side_Frame;
+	vector<UPART*> m_vecSharedPointer_HandleFable_Side_White;
+	vector<UPART*> m_vecSharedPointer_HandleFable_Side_Fill;
+
+	vector<UPART*> m_vecSharedPointer_HandleFable_Center_Frame;
+	vector<UPART*> m_vecSharedPointer_HandleFable_Center_White;
+	vector<UPART*> m_vecSharedPointer_HandleFable_Center_Fill;
+
+	vector<UPART*> m_vecSharedPointer_HandleFable_KeySet_F;
+	vector<UPART*> m_vecSharedPointer_HandleFable_KeySet_Combine;
 
 public:
 	static CUIPlay_Weapon* Create(ID3D11Device* pDevice, ID3D11DeviceContext* pContext);

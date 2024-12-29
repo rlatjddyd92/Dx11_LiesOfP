@@ -107,6 +107,54 @@ HRESULT CUITutorial_Timing::Ready_UIPart_Group_Control()
 	return S_OK;
 }
 
+void CUITutorial_Timing::Set_Timing(vector<struct CUIPage::UIPART_INFO*>& vecOrigin)
+{
+
+
+
+
+}
+
+void CUITutorial_Timing::Start_Timing(KEY eKey, _float fTime)
+{
+	if (eKey == KEY::LSHIFT)
+		m_pSharedPointer_Icon->iTexture_Index = 250;
+	else if (eKey == KEY::LBUTTON)
+		m_pSharedPointer_Icon->iTexture_Index = 302;
+	else if (eKey == KEY::RBUTTON)
+		m_pSharedPointer_Icon->iTexture_Index = 305;
+
+	m_vTime = { 0.f,fTime };
+
+	m_bActive = true;
+}
+
+void CUITutorial_Timing::Update_Timing(_float fTimeDelta)
+{
+	if (m_bActive == false)
+		return;
+
+	m_vTime.x += fTimeDelta;
+
+	if (m_vTime.x >= m_vTime.y)
+	{
+		m_vTime = { 0.f,0.f };
+		m_bActive = false;
+		return;
+	}
+
+	_float fAngle = (m_vTime.x / m_vTime.y) * 360.f;
+
+	m_pSharedPointer_Gauge->vTexture_Angle.x = -90.f;
+
+	if (fAngle <= 90.f)
+		m_pSharedPointer_Gauge->vTexture_Angle.y = -fAngle;
+	else if (fAngle <= 270.f)
+		m_pSharedPointer_Gauge->vTexture_Angle.y = fAngle - 90.f;
+	else
+		m_pSharedPointer_Gauge->vTexture_Angle.y = (fAngle - 270.f) - 180.f;
+}
+
 CUITutorial_Timing* CUITutorial_Timing::Create(ID3D11Device* pDevice, ID3D11DeviceContext* pContext)
 {
 	CUITutorial_Timing* pInstance = new CUITutorial_Timing(pDevice, pContext);

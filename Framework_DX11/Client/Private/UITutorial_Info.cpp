@@ -107,6 +107,15 @@ HRESULT CUITutorial_Info::Ready_UIPart_Group_Control()
 	return S_OK;
 }
 
+void CUITutorial_Info::Set_Info(vector<struct CUIPage::UIPART_INFO*>& vecOrigin, vector<vector<_wstring>>& vecData)
+{
+
+
+
+
+
+}
+
 CUITutorial_Info* CUITutorial_Info::Create(ID3D11Device* pDevice, ID3D11DeviceContext* pContext)
 {
 	CUITutorial_Info* pInstance = new CUITutorial_Info(pDevice, pContext);

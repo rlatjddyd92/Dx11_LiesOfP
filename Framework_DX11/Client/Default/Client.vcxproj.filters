@@ -1348,21 +1348,6 @@
     <Filter Include="03.GameInterface_Controller\00.UIManager\00.UIPage\02.UIPage_Play %2870%25%29\PlayComponent\00.Weapon">
       <UniqueIdentifier>{10b16e2c-2ba3-423d-a701-16e62f0b5af4}</UniqueIdentifier>
     </Filter>
-    <Filter Include="03.GameInterface_Controller\00.UIManager\00.UIPage\15.UIPage_Inform %2850%25%29\Boss">
-      <UniqueIdentifier>{5680f200-edde-4f5c-abf3-893914499931}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="03.GameInterface_Controller\00.UIManager\00.UIPage\15.UIPage_Inform %2850%25%29\Boss\00.Rax_Emerge">
-      <UniqueIdentifier>{b99df093-4cb1-49e6-9f8b-3ab5eb47a53b}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="03.GameInterface_Controller\00.UIManager\00.UIPage\15.UIPage_Inform %2850%25%29\Boss\01.Rax_Dead">
-      <UniqueIdentifier>{96486700-cd4f-4300-aec6-f0a9a80415dd}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="03.GameInterface_Controller\00.UIManager\00.UIPage\15.UIPage_Inform %2850%25%29\Boss\02.Manus_Emerge">
-      <UniqueIdentifier>{d74a40f3-33e5-421d-85f4-e6a115dec5e8}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="03.GameInterface_Controller\00.UIManager\00.UIPage\15.UIPage_Inform %2850%25%29\Boss\03.Manus_Dead">
-      <UniqueIdentifier>{7da1448b-15a9-4763-844b-5afccdceb430}</UniqueIdentifier>
-    </Filter>
     <Filter Include="03.GameInterface_Controller\00.UIManager\00.UIPage\20.UIPage_Tutorial">
       <UniqueIdentifier>{7ba21645-5b1d-4fa6-8fce-16a6c231b6ab}</UniqueIdentifier>
     </Filter>
@@ -2500,9 +2485,6 @@
     <ClInclude Include="..\Public\UIPlay_Weapon.h">
       <Filter>03.GameInterface_Controller\00.UIManager\00.UIPage\02.UIPage_Play %2870%25%29\PlayComponent\00.Weapon</Filter>
     </ClInclude>
-    <ClInclude Include="..\Public\UIInform_Boss.h">
-      <Filter>03.GameInterface_Controller\00.UIManager\00.UIPage\15.UIPage_Inform %2850%25%29\Boss</Filter>
-    </ClInclude>
     <ClInclude Include="..\Public\UIPage_Tutorial.h">
       <Filter>03.GameInterface_Controller\00.UIManager\00.UIPage\20.UIPage_Tutorial</Filter>
     </ClInclude>
@@ -2512,7 +2494,7 @@
     <ClInclude Include="..\Public\UITutorial_Info.h">
       <Filter>03.GameInterface_Controller\00.UIManager\00.UIPage\20.UIPage_Tutorial\00.Tuto_Info</Filter>
     </ClInclude>
-    <ClInclude Include="..\Public\UITutorial_Popup.h">
+    <ClInclude Include="..\Public\UITutorial_Guide.h">
       <Filter>03.GameInterface_Controller\00.UIManager\00.UIPage\20.UIPage_Tutorial\01.Tuto_Popup</Filter>
     </ClInclude>
     <ClInclude Include="..\Public\UITutorial_Result.h">
@@ -3610,9 +3592,6 @@
     <ClCompile Include="..\Private\UIPlay_Weapon.cpp">
       <Filter>03.GameInterface_Controller\00.UIManager\00.UIPage\02.UIPage_Play %2870%25%29\PlayComponent\00.Weapon</Filter>
     </ClCompile>
-    <ClCompile Include="..\Private\UIInform_Boss.cpp">
-      <Filter>03.GameInterface_Controller\00.UIManager\00.UIPage\15.UIPage_Inform %2850%25%29\Boss</Filter>
-    </ClCompile>
     <ClCompile Include="..\Private\UIPage_Tutorial.cpp">
       <Filter>03.GameInterface_Controller\00.UIManager\00.UIPage\20.UIPage_Tutorial</Filter>
     </ClCompile>
@@ -3622,7 +3601,7 @@
     <ClCompile Include="..\Private\UITutorial_Info.cpp">
       <Filter>03.GameInterface_Controller\00.UIManager\00.UIPage\20.UIPage_Tutorial\00.Tuto_Info</Filter>
     </ClCompile>
-    <ClCompile Include="..\Private\UITutorial_Popup.cpp">
+    <ClCompile Include="..\Private\UITutorial_Guide.cpp">
       <Filter>03.GameInterface_Controller\00.UIManager\00.UIPage\20.UIPage_Tutorial\01.Tuto_Popup</Filter>
     </ClCompile>
     <ClCompile Include="..\Private\UITutorial_Result.cpp">

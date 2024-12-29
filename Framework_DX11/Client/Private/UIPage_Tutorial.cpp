@@ -4,6 +4,12 @@
 #include "GameInstance.h"
 #include "GameInterface_Controller.h"
 
+#include "UITutorial_Info.h";
+#include "UITutorial_Guide.h";
+#include "UITutorial_Timing.h";
+#include "UITutorial_Result.h";
+
+
 CUIPage_Tutorial::CUIPage_Tutorial(ID3D11Device* pDevice, ID3D11DeviceContext* pContext)
 	: CUIPage{ pDevice, pContext }
 {
@@ -34,8 +40,6 @@ HRESULT CUIPage_Tutorial::Initialize_Prototype()
 	/* 직교퉁여을 위한 데이터들을 모두 셋하낟. */
 	if (FAILED(__super::Initialize(&Desc)))
 		return E_FAIL;
-
-	m_fTopPartMove = -1.f;
 
 	return S_OK;
 }
@@ -87,6 +91,26 @@ CHECK_MOUSE CUIPage_Tutorial::Check_Page_Action(_float fTimeDelta)
 	return CHECK_MOUSE::MOUSE_NONE;
 }
 
+void CUIPage_Tutorial::NextMission()
+{
+}
+
+void CUIPage_Tutorial::NextGuide()
+{
+}
+
+void CUIPage_Tutorial::ShowResult()
+{
+}
+
+void CUIPage_Tutorial::OffResult()
+{
+}
+
+void CUIPage_Tutorial::ShowTiming(KEY eKey, _float fTime)
+{
+}
+
 HRESULT CUIPage_Tutorial::Ready_UIPart_Group_Control()
 {
 	__super::Ready_UIPart_Group_Control();
@@ -103,8 +127,33 @@ HRESULT CUIPage_Tutorial::Ready_UIPart_Group_Control()
 	}
 
 	m_bRender = false;
+	m_vecPageAction[_int(PAGEACTION::ACTION_INACTIVE)] = true;
 
 	return S_OK;
+}
+
+void CUIPage_Tutorial::Initialize_Tutorial()
+{
+	m_pInfo = CUITutorial_Info::Create(m_pDevice, m_pContext);
+	m_pGuide = CUITutorial_Guide::Create(m_pDevice, m_pContext);
+	m_pTiming = CUITutorial_Timing::Create(m_pDevice, m_pContext);
+	m_pResult = CUITutorial_Result::Create(m_pDevice, m_pContext);
+
+
+
+
+
+
+}
+
+void CUIPage_Tutorial::Update_Tutorial()
+{
+
+
+
+
+
+
 }
 
 CUIPage_Tutorial* CUIPage_Tutorial::Create(ID3D11Device* pDevice, ID3D11DeviceContext* pContext)
@@ -141,6 +190,11 @@ void CUIPage_Tutorial::Free()
 	{
 		Safe_Delete(iter);
 	}
+
+	Safe_Release(m_pInfo);
+	Safe_Release(m_pGuide);
+	Safe_Release(m_pTiming);
+	Safe_Release(m_pResult);
 
 	m_vecPart.clear();
 }

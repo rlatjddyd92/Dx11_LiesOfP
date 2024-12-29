@@ -80,6 +80,7 @@ HRESULT CUIManager::Initialize_Prototype()
 	m_vecPageRender_Order.push_back(UIPAGE::PAGE_ORTHO);
 
 	m_vecPageRender_Order.push_back(UIPAGE::PAGE_PLAY);
+	m_vecPageRender_Order.push_back(UIPAGE::PAGE_TUTORIAL);
 
 	m_vecPageRender_Order.push_back(UIPAGE::PAGE_MENU);
 
@@ -118,7 +119,10 @@ HRESULT CUIManager::Initialize(void* pArg)
 
 void CUIManager::Priority_Update(_float fTimeDelta)
 {
-	
+	if (KEY_TAP(KEY::P))
+		m_pUIPage_Tutorial->OpenAction();
+	else if (KEY_TAP(KEY::L))
+		m_pUIPage_Tutorial->CloseAction();
 
 	for (auto& iter : m_vecPageRender_Order)
 		if (m_vecPage[_int(iter)]->GetUpdate())
@@ -647,6 +651,11 @@ HRESULT CUIManager::Make_UIPage(_int iIndex)
 	{
 		m_pUIPage_Achievment = CUIPage_Achievment::Create(m_pDevice, m_pContext);
 		m_vecPage[iIndex] = static_cast<CUIPage*>(m_pUIPage_Achievment);
+	}
+	else if (iIndex == _int(UIPAGE::PAGE_TUTORIAL))
+	{
+		m_pUIPage_Tutorial = CUIPage_Tutorial::Create(m_pDevice, m_pContext);
+		m_vecPage[iIndex] = static_cast<CUIPage*>(m_pUIPage_Tutorial);
 	}
 
 	if (m_vecPage[iIndex] == nullptr)

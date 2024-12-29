@@ -37,23 +37,24 @@ public:
 	const vector<UPART*>& Get_UIPartInfo() { return m_vecPart; }
 	virtual HRESULT Ready_UIPart_Group_Control() override;
 
+	void Set_Timing(vector<struct CUIPage::UIPART_INFO*>& vecOrigin);
+
+	void Start_Timing(KEY eKey, _float fTime);
+
+	void Update_Timing(_float fTimeDelta);
+
 protected:
+	UPART* m_pSharedPointer_Frame = { nullptr };
+	UPART* m_pSharedPointer_Gauge = { nullptr };
+	UPART* m_pSharedPointer_Icon = { nullptr };
 
-
-
-
-
-
-
+	_Vec2 m_vTime = { 0.f,0.f };
+	_bool m_bActive = false;
 
 public:
 	static CUITutorial_Timing* Create(ID3D11Device* pDevice, ID3D11DeviceContext* pContext);
 	virtual CGameObject* Clone(void* pArg);
 	virtual void Free() override;
-
-
-
-
 };
 
 END

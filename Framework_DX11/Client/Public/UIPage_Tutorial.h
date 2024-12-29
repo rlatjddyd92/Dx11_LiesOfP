@@ -9,7 +9,7 @@ END
 
 BEGIN(Client)
 class CUITutorial_Info;
-class CUITutorial_Popup;
+class CUITutorial_Guide;
 class CUITutorial_Timing;
 class CUITutorial_Result;
 
@@ -18,9 +18,11 @@ class CUIPage_Tutorial : public CUIPage
 public:
 	enum class PART_GROUP
 	{
-		GROUP_FRAME,
-		GROUP_INFO,
-		GROUP_POPUP,
+		GROUP_CENTER,
+		GROUP_INFO_FRAME,
+		GROUP_INFO_MISSION,
+		GROUP_INFO_SCORE,
+		GROUP_GUIDE,
 		GROUP_TIMING,
 		GROUP_RESULT,
 		GROUP_END
@@ -47,18 +49,27 @@ public:
 
 	virtual CHECK_MOUSE Check_Page_Action(_float fTimeDelta) override;
 
+	// UI °´Ã¼ Á¦¾î 
+	void NextMission();
+	void NextGuide();
+	void ShowResult();
+	void OffResult();
+	void ShowTiming(KEY eKey, _float fTime);
+
 public:
 	const vector<UPART*>& Get_UIPartInfo() { return m_vecPart; }
 	virtual HRESULT Ready_UIPart_Group_Control() override;
 
 protected:
-	class CUITutorial_Info* m_pSharedPointer_Info = { nullptr };
-	class CUITutorial_Popup* m_pSharedPointer_Popup = { nullptr };
-	class CUITutorial_Timing* m_pSharedPointer_Timing = { nullptr };
-	class CUITutorial_Result* m_pSharedPointer_Result = { nullptr };
+	void Initialize_Tutorial();
+	void Update_Tutorial();
 
 
-
+protected:
+	class CUITutorial_Info* m_pInfo = { nullptr };
+	class CUITutorial_Guide* m_pGuide = { nullptr };
+	class CUITutorial_Timing* m_pTiming = { nullptr };
+	class CUITutorial_Result* m_pResult = { nullptr };
 
 public:
 	static CUIPage_Tutorial* Create(ID3D11Device* pDevice, ID3D11DeviceContext* pContext);

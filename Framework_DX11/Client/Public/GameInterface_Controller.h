@@ -174,6 +174,10 @@ public: // 외부에서 매니저 접근
 	// 업적
 	void Input_Achievment_Data(_int iIndex, _int Data) { m_pUIManager->Input_Achievment_Data(iIndex, Data); }
 
+	// 튜토리얼
+	void Start_Tutorial() { return m_pUIManager->Start_Tutorial(); }
+	void End_Tutorial() { return m_pUIManager->End_Tutorial(); }
+
 #pragma endregion
 
 

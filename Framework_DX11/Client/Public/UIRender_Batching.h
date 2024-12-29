@@ -198,7 +198,7 @@ private:
 	_int m_iFrame = 0;
 	_Vec2 m_vImageNum = _Vec2{ 8.f,8.f };
 	_int m_iMaxFrame = 64;
-	_float m_iFrame_Interval = 3;
+	_float m_iFrame_Interval = 6;
 
 public:
 	static CUIRender_Batching* Create(ID3D11Device* pDevice, ID3D11DeviceContext* pContext);

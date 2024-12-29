@@ -27,3 +27,4 @@
 #include "UIPage_Chest.h"
 #include "UIPage_Telepot.h"
 #include "UIPage_Achievment.h"
+#include "UIPage_Tutorial.h"

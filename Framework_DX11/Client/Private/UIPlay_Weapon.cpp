@@ -77,6 +77,23 @@ CHECK_MOUSE CUIPlay_Weapon::Check_Page_Action(_float fTimeDelta)
 	return CHECK_MOUSE();
 }
 
+void CUIPlay_Weapon::Update_WeaponInfo(_int iFable_Count_Now, _float fTimeDelta)
+{
+
+}
+
+void CUIPlay_Weapon::Switch_Weapon()
+{
+}
+
+void CUIPlay_Weapon::Switch_Mode()
+{
+}
+
+void CUIPlay_Weapon::Set_Fable()
+{
+}
+
 CUIPlay_Weapon* CUIPlay_Weapon::Create(ID3D11Device* pDevice, ID3D11DeviceContext* pContext)
 {
 	CUIPlay_Weapon* pInstance = new CUIPlay_Weapon(pDevice, pContext);

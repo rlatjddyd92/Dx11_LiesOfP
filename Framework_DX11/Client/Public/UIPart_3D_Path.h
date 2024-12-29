@@ -5,7 +5,8 @@
 #include "GameInstance.h"
 
 BEGIN(Engine)
-
+class CTexture;
+class CVIBuffer_Rect_Instance;
 END
 
 BEGIN(Client)
@@ -25,10 +26,14 @@ public:
 	virtual void Late_Update(_float fTimeDelta) override;
 	virtual HRESULT Render() override;
 
+public:
+	class CTexture* m_pTextureCom = { nullptr };
+	class CVIBuffer_Rect_Instance* m_pBufferCom = { nullptr };
+
 
 
 private:
-	list<_int> m_NavIndexlist;
+	list<_Vec4> m_vecNodelist;
 
 
 
