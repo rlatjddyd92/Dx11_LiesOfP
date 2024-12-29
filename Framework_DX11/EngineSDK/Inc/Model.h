@@ -36,6 +36,7 @@ public:
 
 	vector<class CBone*>& Get_Bones() { return m_Bones; }
 	_int					Get_BoneIndex(const _char* pBoneName) const;
+	_float4x4*			Get_BoneMatrices(_uint iMeshIndex);
 
 	_matrix					Get_BoneCombindTransformationMatrix(_uint iBoneIndex) const { return m_Bones[iBoneIndex]->Get_CombinedTransformationMatrix(); }
 	_matrix					Get_BoneCombindTransformationMatrix(const _char* pBoneName) const { return m_Bones[Get_BoneIndex(pBoneName)]->Get_CombinedTransformationMatrix(); }
@@ -125,7 +126,7 @@ public:
 	HRESULT		Create_Bin_Materials(HANDLE* pFile);
 	HRESULT		Create_Bin_Animations(HANDLE* pFile);
 
-	HRESULT		ReadyModel_To_Binary(HANDLE* pFile, const DISSOLVE_PARTICLE_DESC& Desc);
+	HRESULT		ReadyModel_To_Binary(HANDLE* pFile, const DISSOLVE_PARTICLE_DESC& ParticleDesc);
 
 	void		ReadyDenyNextTranslate(_int iBoneIndex);
 

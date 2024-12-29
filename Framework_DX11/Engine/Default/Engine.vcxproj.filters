@@ -244,6 +244,12 @@
     <Filter Include="01.Utility\03.Components\VIBuffer\Instancing\Dissolve">
       <UniqueIdentifier>{fbad3249-c5aa-45f1-8bc3-f1f8d6f130d6}</UniqueIdentifier>
     </Filter>
+    <Filter Include="01.Utility\03.Components\VIBuffer\Instancing\Dissolve\Dissolve_Instance">
+      <UniqueIdentifier>{ac20a935-87e9-4524-bb33-f5ab0448ec1b}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="01.Utility\03.Components\VIBuffer\Instancing\Dissolve\Dissolve_Container">
+      <UniqueIdentifier>{84eba419-b027-4805-a20e-d000082014a6}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\Private\Base.cpp">
@@ -467,7 +473,10 @@
       <Filter>01.Utility\15.NvClothManager\My</Filter>
     </ClCompile>
     <ClCompile Include="..\private\VIBuffer_Dissolve_Instance.cpp">
-      <Filter>01.Utility\03.Components\VIBuffer\Instancing\Dissolve</Filter>
+      <Filter>01.Utility\03.Components\VIBuffer\Instancing\Dissolve\Dissolve_Instance</Filter>
+    </ClCompile>
+    <ClCompile Include="..\private\Dissolve_Container.cpp">
+      <Filter>01.Utility\03.Components\VIBuffer\Instancing\Dissolve\Dissolve_Container</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -713,7 +722,10 @@
       <Filter>01.Utility\15.NvClothManager\My</Filter>
     </ClInclude>
     <ClInclude Include="..\public\VIBuffer_Dissolve_Instance.h">
-      <Filter>01.Utility\03.Components\VIBuffer\Instancing\Dissolve</Filter>
+      <Filter>01.Utility\03.Components\VIBuffer\Instancing\Dissolve\Dissolve_Instance</Filter>
+    </ClInclude>
+    <ClInclude Include="..\public\Dissolve_Container.h">
+      <Filter>01.Utility\03.Components\VIBuffer\Instancing\Dissolve\Dissolve_Container</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

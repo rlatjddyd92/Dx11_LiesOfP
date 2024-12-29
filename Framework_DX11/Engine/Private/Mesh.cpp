@@ -17,7 +17,8 @@ CMesh::CMesh(const CMesh & Prototype)
 	Safe_AddRef(m_pOctree);
 }
 
-HRESULT CMesh::Initialize_Prototype(HANDLE* pFile, const CModel* pModel, _fmatrix PreTransformMatrix, const CModel::DISSOLVE_PARTICLE_DESC& ParticleDesc, _uint iMeshIndex)
+HRESULT CMesh::Initialize_Prototype(HANDLE* pFile, const CModel* pModel, _fmatrix PreTransformMatrix, 
+	const CModel::DISSOLVE_PARTICLE_DESC& ParticleDesc, _uint iMeshIndex, vector<class CVIBuffer_Dissolve_Instance*>& Instances)
 {
 	_ulong dwByte = 0;
 
@@ -127,6 +128,16 @@ HRESULT CMesh::Initialize_Prototype(HANDLE* pFile, const CModel* pModel, _fmatri
 			pParticle.vTexcoord = Get_CalculateUV(vPoint[0], vPoint[1], vPoint[2], vUV[0], vUV[1], vUV[2], vResultPos);
 			pParticle.isActive = false;
 
+			if (CModel::TYPE_ANIM == pModel->Get_ModelType())
+			{
+				Calculate_BoneData(iStartNum, pParticle.Particle.vTranslation, &pParticle.vBlendIndices, &pParticle.vBlendWeights);
+			}
+			else
+			{
+				pParticle.vBlendIndices = {};
+				pParticle.vBlendWeights = {};
+			}
+
 			DissolveParticles.emplace_back(pParticle);
 		}
 	}
@@ -138,9 +149,9 @@ HRESULT CMesh::Initialize_Prototype(HANDLE* pFile, const CModel* pModel, _fmatri
 		CVIBuffer_Dissolve_Instance::DISSOLVE_INSTANCE_DESC DissolveDesc = {};
 		DissolveDesc.iNumInstance = DissolveParticles.size();
 		DissolveDesc.pParticles = DissolveParticles.data();
-		// 레벨, 테그, 
-		if (FAILED(m_pGameInstance->Add_Prototype(0, TEXT("Test"), CVIBuffer_Dissolve_Instance::Create(m_pDevice, m_pContext, DissolveDesc))))
-			return E_FAIL;
+		DissolveDesc.iMeshIndex = iMeshIndex;
+
+		Instances.emplace_back(CVIBuffer_Dissolve_Instance::Create(m_pDevice, m_pContext, DissolveDesc));
 	}
 
 
@@ -171,7 +182,8 @@ HRESULT CMesh::Initialize_Prototype(HANDLE* pFile, const CModel* pModel, _fmatri
 	return S_OK;
 }
 
-HRESULT CMesh::Initialize_Prototype_To_Binary(HANDLE* pFile, const CModel* pModel, _fmatrix PreTransformMatrix, const CModel::DISSOLVE_PARTICLE_DESC& ParticleDesc, _uint iMeshIndex)
+HRESULT CMesh::Initialize_Prototype_To_Binary(HANDLE* pFile, const CModel* pModel, _fmatrix PreTransformMatrix, 
+	const CModel::DISSOLVE_PARTICLE_DESC& ParticleDesc, _uint iMeshIndex, vector<class CVIBuffer_Dissolve_Instance*>& Instances)
 {
 	_ulong dwByte = 0;
 
@@ -224,6 +236,7 @@ HRESULT CMesh::Initialize_Prototype_To_Binary(HANDLE* pFile, const CModel* pMode
 		if(3 == iCount)
 		{
 			_uint iStartNum = i - 2;
+
 			if (CModel::TYPE_NONANIM == pModel->Get_ModelType())
 			{
 				vPoint[0] = m_pVertices[m_pIndices[iStartNum]].vPosition;
@@ -245,15 +258,19 @@ HRESULT CMesh::Initialize_Prototype_To_Binary(HANDLE* pFile, const CModel* pMode
 				vUV[2] = m_pAnimVertices[m_pIndices[iStartNum + 2]].vTexcoord;
 			}
 
+
 			_float fSize = Get_TriangleArea(vPoint[0], vPoint[1], vPoint[2]);
 			fSize *= ParticleDesc.iNumInstance;
 
 			if (fSize < 1.f)
 				fSize = 1.f;
+			else
+				_uint a = 0;
 
 			for (size_t j = 0; j < (size_t)fSize; ++j)
 			{
 				CVIBuffer_Dissolve_Instance::DISSOLVE_PARTICLE pParticle = {};
+
 				_Vec3 vResultPos = Get_RandomFacePos(vPoint[0], vPoint[1], vPoint[2]);
 				pParticle.Particle.vTranslation = _Vec4(vResultPos.x, vResultPos.y, vResultPos.z, 0.f);
 
@@ -280,6 +297,16 @@ HRESULT CMesh::Initialize_Prototype_To_Binary(HANDLE* pFile, const CModel* pMode
 				pParticle.vTexcoord = Get_CalculateUV(vPoint[0], vPoint[1], vPoint[2], vUV[0], vUV[1], vUV[2], vResultPos);
 				pParticle.isActive = false;
 
+				if (CModel::TYPE_ANIM == pModel->Get_ModelType())
+				{
+					Calculate_BoneData(iStartNum, pParticle.Particle.vTranslation, &pParticle.vBlendIndices, &pParticle.vBlendWeights);
+				}
+				else
+				{
+					pParticle.vBlendIndices = {};
+					pParticle.vBlendWeights = {};
+				}
+
 				DissolveParticles.emplace_back(pParticle);
 			}
 			iCount = 0;
@@ -291,11 +318,9 @@ HRESULT CMesh::Initialize_Prototype_To_Binary(HANDLE* pFile, const CModel* pMode
 		CVIBuffer_Dissolve_Instance::DISSOLVE_INSTANCE_DESC DissolveDesc = {};
 		DissolveDesc.iNumInstance = DissolveParticles.size();
 		DissolveDesc.pParticles = DissolveParticles.data();
-		// 레벨, 테그, 
-		_wstring strBufferTag = ParticleDesc.strBufferTag;
-		strBufferTag += to_wstring(iMeshIndex);
-		if (FAILED(m_pGameInstance->Add_Prototype(ParticleDesc.iLevelID, strBufferTag, CVIBuffer_Dissolve_Instance::Create(m_pDevice, m_pContext, DissolveDesc))))
-			return E_FAIL;
+		DissolveDesc.iMeshIndex = iMeshIndex;
+		
+		Instances.emplace_back(CVIBuffer_Dissolve_Instance::Create(m_pDevice, m_pContext, DissolveDesc));
 	}
 
 	ZeroMemory(&m_InitialData, sizeof m_InitialData);
@@ -637,17 +662,19 @@ _Vec2 CMesh::Get_CalculateUV(const _Vec3& A, const _Vec3& B, const _Vec3& C, con
 	_vector v2 = XMVectorSet(D.x - A.x, D.y - A.y, D.z - A.z, 0.0f);
 
 	// 내적 계산
+	// 삼각형과 변들 사이의 관계
 	_float d00 = XMVectorGetX(XMVector3Dot(v0, v0));
 	_float d01 = XMVectorGetX(XMVector3Dot(v0, v1));
 	_float d11 = XMVectorGetX(XMVector3Dot(v1, v1));
+	// Point와 변들 사이의 관계
 	_float d20 = XMVectorGetX(XMVector3Dot(v2, v0));
 	_float d21 = XMVectorGetX(XMVector3Dot(v2, v1));
 
 	// 중심 좌표계 가중치 계산
 	_float denom = d00 * d11 - d01 * d01;
-	_float lambda2 = (d11 * d20 - d01 * d21) / denom;
-	_float lambda3 = (d00 * d21 - d01 * d20) / denom;
-	_float lambda1 = 1.0f - lambda2 - lambda3;
+	_float lambda2 = (d11 * d20 - d01 * d21) / denom;	// A에 대한 가중치
+	_float lambda3 = (d00 * d21 - d01 * d20) / denom;	// B에 대한 가중치
+	_float lambda1 = 1.0f - lambda2 - lambda3;			// C에 대한 가중치
 
 	// UV 좌표 보간
 	_Vec2 UV_D = {};
@@ -673,11 +700,88 @@ _float CMesh::Get_TriangleArea(const _Vec3& A, const _Vec3& B, const _Vec3& C)
 	return 0.5f * magnitude;
 }
 
-CMesh* CMesh::Create(ID3D11Device* pDevice, ID3D11DeviceContext* pContext, HANDLE* pFile, const CModel* pModel, _fmatrix PreTransformMatrix, const CModel::DISSOLVE_PARTICLE_DESC& ParticleDesc, _uint iMeshIndex)
+void CMesh::Calculate_BoneData(_uint iStartIndex, const _Vec4& Point, XMUINT4* pParticleIndices, _float4* pParticleWeights)
+{
+	struct BoneData {
+		_float weight;
+		_uint index;
+	};
+
+	// 바리센트릭 좌표 계산
+	_Vec3 v0 = m_pAnimVertices[m_pIndices[iStartIndex + 1]].vPosition - m_pAnimVertices[m_pIndices[iStartIndex]].vPosition;
+	_Vec3 v1 = m_pAnimVertices[m_pIndices[iStartIndex + 2]].vPosition - m_pAnimVertices[m_pIndices[iStartIndex]].vPosition;
+	_Vec3 v2 = (_Vec3)Point - m_pAnimVertices[m_pIndices[iStartIndex]].vPosition;
+
+	_float d00 = v0.Dot(v0);
+	_float d01 = v0.Dot(v1);
+	_float d11 = v1.Dot(v1);
+
+	_float d20 = v2.Dot(v0);
+	_float d21 = v2.Dot(v1);
+
+	_float denominator = d00 * d11 - d01 * d01;
+	_float v = (d11 * d20 - d01 * d21) / denominator;
+	_float w = (d00 * d21 - d01 * d20) / denominator;
+	_float u = 1.0f - v - w;
+
+	// 뼈 데이터 처리 (중복 제거를 위해 맵 사용)
+	unordered_map<_uint, _float> boneWeightMap;
+
+	auto AddBoneWeights = [&](const XMUINT4& blendIndex, const XMFLOAT4& blendWeights, float barycentricWeight) {
+		boneWeightMap[blendIndex.x] += barycentricWeight * blendWeights.x;
+		boneWeightMap[blendIndex.y] += barycentricWeight * blendWeights.y;
+		boneWeightMap[blendIndex.z] += barycentricWeight * blendWeights.z;
+		boneWeightMap[blendIndex.w] += barycentricWeight * blendWeights.w;
+		};
+
+	// 각 정점의 뼈 가중치 추가
+	AddBoneWeights(m_pAnimVertices[m_pIndices[iStartIndex]].vBlendIndices, m_pAnimVertices[m_pIndices[iStartIndex]].vBlendWeights, u);
+	AddBoneWeights(m_pAnimVertices[m_pIndices[iStartIndex + 1]].vBlendIndices, m_pAnimVertices[m_pIndices[iStartIndex + 1]].vBlendWeights, v);
+	AddBoneWeights(m_pAnimVertices[m_pIndices[iStartIndex + 2]].vBlendIndices, m_pAnimVertices[m_pIndices[iStartIndex + 2]].vBlendWeights, w);
+
+	// 중복 제거 후 벡터로 변환
+	vector<BoneData> bones;
+	for (const auto& pair : boneWeightMap)
+	{
+		if (pair.second > 0.0f)
+		{ 
+			BoneData Data = {};
+			Data.index = pair.first;
+			Data.weight = pair.second;
+			bones.emplace_back(Data);
+		}
+	}
+
+	sort(bones.begin(), bones.end(), [](const BoneData& a, const BoneData& b) {
+		return a.weight > b.weight;
+		});
+
+	while (bones.size() < 4)
+	{
+		BoneData Data = {};
+		bones.emplace_back(Data);
+	}
+
+	XMUINT4 A_BlendIndex = { bones[0].index, bones[1].index, bones[2].index, bones[3].index };
+	_float4 A_BlendWeights = { bones[0].weight, bones[1].weight, bones[2].weight, bones[3].weight };
+
+	// 정규화
+	_float totalWeight = A_BlendWeights.x + A_BlendWeights.y + A_BlendWeights.z + A_BlendWeights.w;
+	A_BlendWeights.x /= totalWeight;
+	A_BlendWeights.y /= totalWeight;
+	A_BlendWeights.z /= totalWeight;
+	A_BlendWeights.w /= totalWeight;
+
+	*pParticleIndices = A_BlendIndex;
+	*pParticleWeights = A_BlendWeights;
+}
+
+CMesh* CMesh::Create(ID3D11Device* pDevice, ID3D11DeviceContext* pContext, HANDLE* pFile, const CModel* pModel, _fmatrix PreTransformMatrix, 
+	const CModel::DISSOLVE_PARTICLE_DESC& ParticleDesc, _uint iMeshIndex, vector<class CVIBuffer_Dissolve_Instance*>& Instances)
 {
 	CMesh* pInstance = new CMesh(pDevice, pContext);
 
-	if (FAILED(pInstance->Initialize_Prototype(pFile, pModel, PreTransformMatrix, ParticleDesc, iMeshIndex)))
+	if (FAILED(pInstance->Initialize_Prototype(pFile, pModel, PreTransformMatrix, ParticleDesc, iMeshIndex, Instances)))
 	{
 		MSG_BOX(TEXT("Failed to Created : CMesh"));
 		Safe_Release(pInstance);
@@ -686,11 +790,12 @@ CMesh* CMesh::Create(ID3D11Device* pDevice, ID3D11DeviceContext* pContext, HANDL
 	return pInstance;
 }
 
-CMesh* CMesh::Create_To_Binary(ID3D11Device* pDevice, ID3D11DeviceContext* pContext, HANDLE* pFile, const CModel* pModel, _fmatrix PreTransformMatrix, const CModel::DISSOLVE_PARTICLE_DESC& ParticleDesc, _uint iMeshIndex)
+CMesh* CMesh::Create_To_Binary(ID3D11Device* pDevice, ID3D11DeviceContext* pContext, HANDLE* pFile, const CModel* pModel, _fmatrix PreTransformMatrix, 
+	const CModel::DISSOLVE_PARTICLE_DESC& ParticleDesc, _uint iMeshIndex, vector<class CVIBuffer_Dissolve_Instance*>& Instances)
 {
 	CMesh* pInstance = new CMesh(pDevice, pContext);
 
-	if (FAILED(pInstance->Initialize_Prototype_To_Binary(pFile, pModel, PreTransformMatrix, ParticleDesc, iMeshIndex)))
+	if (FAILED(pInstance->Initialize_Prototype_To_Binary(pFile, pModel, PreTransformMatrix, ParticleDesc, iMeshIndex, Instances)))
 	{
 		MSG_BOX(TEXT("Failed to Created : CMesh"));
 		Safe_Release(pInstance);

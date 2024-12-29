@@ -25,12 +25,17 @@ public:
 	VTXMESH*		Get_Vertices() { return m_pVertices; }
 	VTXANIMMESH*	Get_AnimVertices() { return m_pAnimVertices; }
 	_uint*			Get_Indices() { return m_pIndices; }
+	_float4x4*		Get_BoneMatrices() {
+		return m_BoneMatrices;
+	}
 
 	void Culling(CGameInstance* pGameInstance, _Matrix worldMatrix);
 
 public:
-	virtual HRESULT Initialize_Prototype(HANDLE* pFile, const CModel* pModel, _fmatrix PreTransformMatrix, const CModel::DISSOLVE_PARTICLE_DESC& ParticleDesc, _uint iMeshIndex);
-	virtual HRESULT Initialize_Prototype_To_Binary(HANDLE* pFile, const CModel* pModel, _fmatrix PreTransformMatrix, const CModel::DISSOLVE_PARTICLE_DESC& ParticleDesc, _uint iMeshIndex);
+	virtual HRESULT Initialize_Prototype(HANDLE* pFile, const CModel* pModel, _fmatrix PreTransformMatrix, 
+		const CModel::DISSOLVE_PARTICLE_DESC& ParticleDesc, _uint iMeshIndex, vector<class CVIBuffer_Dissolve_Instance*>& Instances);
+	virtual HRESULT Initialize_Prototype_To_Binary(HANDLE* pFile, const CModel* pModel, _fmatrix PreTransformMatrix, 
+		const CModel::DISSOLVE_PARTICLE_DESC& ParticleDesc, _uint iMeshIndex, vector<class CVIBuffer_Dissolve_Instance*>& Instances);
 	virtual HRESULT Initialize(void* pArg) override;
 
 public:
@@ -74,10 +79,15 @@ private:
 	_Vec3 Get_RandomFacePos(_Vec3 vFirst, _Vec3 vSecond, _Vec3 vThird);
 	_Vec2 Get_CalculateUV(const _Vec3& A, const _Vec3& B, const _Vec3& C, const _Vec2& UV_A, const _Vec2& UV_B, const _Vec2& UV_C, const _Vec3& D);
 	_float Get_TriangleArea(const _Vec3& A, const _Vec3& B, const _Vec3& C);
+	void Calculate_BoneData(_uint iStartIndex, const _Vec4& Point, XMUINT4* pParticleIndices, _float4* pParticleWeights);
 
 public:
-	static CMesh* Create(ID3D11Device* pDevice, ID3D11DeviceContext* pContext, HANDLE* pFile, const CModel* pModel, _fmatrix PreTransformMatrix, const CModel::DISSOLVE_PARTICLE_DESC& ParticleDesc, _uint iMeshIndex);
-	static CMesh* Create_To_Binary(ID3D11Device* pDevice, ID3D11DeviceContext* pContext, HANDLE* pFile, const CModel* pModel, _fmatrix PreTransformMatrix, const CModel::DISSOLVE_PARTICLE_DESC& ParticleDesc, _uint iMeshIndex);
+	static CMesh* Create(ID3D11Device* pDevice, ID3D11DeviceContext* pContext, HANDLE* pFile, const CModel* pModel, _fmatrix PreTransformMatrix, 
+		const CModel::DISSOLVE_PARTICLE_DESC& ParticleDesc, _uint iMeshIndex, vector<class CVIBuffer_Dissolve_Instance*>& Instances);
+	
+	static CMesh* Create_To_Binary(ID3D11Device* pDevice, ID3D11DeviceContext* pContext, HANDLE* pFile, const CModel* pModel, _fmatrix PreTransformMatrix, 
+		const CModel::DISSOLVE_PARTICLE_DESC& ParticleDesc, _uint iMeshIndex, vector<class CVIBuffer_Dissolve_Instance*>& Instances);
+
 	virtual CComponent* Clone(void* pArg);
 	virtual void Free() override;
 };

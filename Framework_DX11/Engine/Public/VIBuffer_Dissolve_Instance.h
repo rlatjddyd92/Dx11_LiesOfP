@@ -3,7 +3,6 @@
 #include "VIBuffer_Instancing.h"
 
 BEGIN(Engine)
-
 class ENGINE_DLL CVIBuffer_Dissolve_Instance final : public CVIBuffer_Instancing
 {
 public:
@@ -11,6 +10,8 @@ public:
 	{
 		PARTICLE Particle;
 		_float2 vTexcoord = {};
+		XMUINT4 vBlendIndices = {};
+		_float4 vBlendWeights = {};
 		_bool isActive = { false };
 	}DISSOLVE_PARTICLE;
 	
@@ -19,7 +20,23 @@ public:
 		// 모델에서 만들고 전달해야 함.
 		_uint		iNumInstance;
 		DISSOLVE_PARTICLE*	pParticles;
+		_uint		iMeshIndex;
 	} DISSOLVE_INSTANCE_DESC;
+
+	typedef struct
+	{
+		_float4x4			m_BoneMatrices[g_iMaxMeshBones] = {};
+		_float				fThreshold = { 0 };
+		_uint				iModelType = { 0 };
+		_float2				fPadding = {};
+	}DISSOLVE_INITIAL;
+
+	typedef struct
+	{
+		_float				fThreshold = { 0 };
+		_uint				iModelType = { 0 };
+		_float2				fPadding = {};
+	}DISSOLVE_DATA;
 
 private:
 	CVIBuffer_Dissolve_Instance(ID3D11Device* pDevice, ID3D11DeviceContext* pContext);
@@ -35,7 +52,7 @@ public:
 	virtual void Reset() override;
 
 public:
-	_bool DispatchCS(class CShader_Compute* pComputeShader, const PARTICLE_MOVEMENT& MovementData);
+	_bool DispatchCS(class CShader_Compute* pComputeShader, class CTexture* pTexture, class CModel* pModel, const PARTICLE_MOVEMENT& MovementData, const DISSOLVE_DATA& DissolveData);
 
 private:
 	_bool m_bFirst = { false };
@@ -43,17 +60,23 @@ private:
 
 	D3D11_BUFFER_DESC					m_ParticleBuffer_Desc = {};
 	D3D11_BUFFER_DESC					m_MoveBuffer_Desc = {};
+	D3D11_BUFFER_DESC					m_DissolveBuffer_Desc = {};
+
 	D3D11_UNORDERED_ACCESS_VIEW_DESC	m_UAV_Desc = {};
 	D3D11_SHADER_RESOURCE_VIEW_DESC		m_SRV_Desc = {};
 
 	ID3D11Buffer* m_pParticleBuffer = nullptr;
 	ID3D11Buffer* m_pMovementBuffer = { nullptr };
+	ID3D11Buffer* m_pDissolveBuffer = { nullptr };
+
 	ID3D11UnorderedAccessView* m_pParticleUAV = nullptr;
 	ID3D11ShaderResourceView* m_pParticleSRV = nullptr;
 
 	D3D11_BUFFER_DESC	m_InitParticleBuffer_Desc = {};
 	ID3D11Buffer*		m_pInitParticleBuffer = nullptr;
 	ID3D11ShaderResourceView* m_pInitParticleSRV = nullptr;
+
+	_uint m_iMeshIndex = { 0 };
 
 private:
 	HRESULT Ready_Buffers(const DISSOLVE_INSTANCE_DESC& Desc);

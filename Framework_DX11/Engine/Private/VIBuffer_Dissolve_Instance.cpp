@@ -11,9 +11,11 @@ CVIBuffer_Dissolve_Instance::CVIBuffer_Dissolve_Instance(const CVIBuffer_Dissolv
 	: CVIBuffer_Instancing{ Prototype }
 	, m_ParticleBuffer_Desc{ Prototype.m_ParticleBuffer_Desc }
 	, m_MoveBuffer_Desc{ Prototype.m_MoveBuffer_Desc }
+	, m_DissolveBuffer_Desc{ Prototype.m_DissolveBuffer_Desc }
 	, m_UAV_Desc{ Prototype.m_UAV_Desc }
 	, m_SRV_Desc{ Prototype.m_SRV_Desc }
 	, m_InitParticleBuffer_Desc{ Prototype.m_InitParticleBuffer_Desc }
+	, m_iMeshIndex{ Prototype.m_iMeshIndex }
 {
 }
 
@@ -24,6 +26,8 @@ HRESULT CVIBuffer_Dissolve_Instance::Initialize_Prototype(const DISSOLVE_INSTANC
 	if (FAILED(Ready_Buffers(Desc)))
 		return E_FAIL;
 
+	m_iMeshIndex = Desc.iMeshIndex;
+
 	return S_OK;
 }
 
@@ -33,6 +37,9 @@ HRESULT CVIBuffer_Dissolve_Instance::Initialize(void* pArg)
 		return E_FAIL;
 
 	if (FAILED(m_pDevice->CreateBuffer(&m_MoveBuffer_Desc, nullptr, &m_pMovementBuffer)))
+		return E_FAIL;
+
+	if (FAILED(m_pDevice->CreateBuffer(&m_DissolveBuffer_Desc, nullptr, &m_pDissolveBuffer)))
 		return E_FAIL;
 
 	if (FAILED(m_pDevice->CreateUnorderedAccessView(m_pParticleBuffer, &m_UAV_Desc, &m_pParticleUAV)))
@@ -79,7 +86,7 @@ void CVIBuffer_Dissolve_Instance::Reset()
 	m_fTime = 0.f;
 }
 
-_bool CVIBuffer_Dissolve_Instance::DispatchCS(class CShader_Compute* pComputeShader, const PARTICLE_MOVEMENT& MovementData)
+_bool CVIBuffer_Dissolve_Instance::DispatchCS(class CShader_Compute* pComputeShader, class CTexture* pTexture, class CModel* pModel, const PARTICLE_MOVEMENT& MovementData, const DISSOLVE_DATA& DissolveData)
 {
 	/* 순서 중요 !! */
 	// 상수 버퍼 업데이트 하고
@@ -101,6 +108,17 @@ _bool CVIBuffer_Dissolve_Instance::DispatchCS(class CShader_Compute* pComputeSha
 		pMovement->vPadding_1 = { 1.f, 1.f };
 
 	m_pContext->Unmap(m_pMovementBuffer, 0);
+
+	if (FAILED(m_pContext->Map(m_pDissolveBuffer, 0, D3D11_MAP_WRITE_DISCARD, 0, &mappedResource)))
+		return true;
+
+	DISSOLVE_INITIAL* pDissolve = static_cast<DISSOLVE_INITIAL*>(mappedResource.pData);
+
+	pDissolve->fThreshold = DissolveData.fThreshold;
+	pDissolve->iModelType = DissolveData.iModelType;
+	memcpy_s(pDissolve->m_BoneMatrices, sizeof(_float4x4) * g_iMaxMeshBones, pModel->Get_BoneMatrices(m_iMeshIndex), sizeof(_float4x4) * g_iMaxMeshBones);
+	 
+	m_pContext->Unmap(m_pDissolveBuffer, 0);
 
 	m_pContext->CSSetUnorderedAccessViews(0, 1, &m_pParticleUAV, nullptr);
 	m_pContext->CSSetShaderResources(0, 1, &m_pInitParticleSRV);
@@ -155,6 +173,11 @@ HRESULT CVIBuffer_Dissolve_Instance::Ready_Buffers(const DISSOLVE_INSTANCE_DESC&
 	m_MoveBuffer_Desc.ByteWidth = sizeof(PARTICLE_MOVEMENT);
 	m_MoveBuffer_Desc.BindFlags = D3D11_BIND_CONSTANT_BUFFER;
 	m_MoveBuffer_Desc.CPUAccessFlags = D3D11_CPU_ACCESS_WRITE;
+
+	m_DissolveBuffer_Desc.Usage = D3D11_USAGE_DYNAMIC;
+	m_DissolveBuffer_Desc.ByteWidth = sizeof(DISSOLVE_INITIAL);
+	m_DissolveBuffer_Desc.BindFlags = D3D11_BIND_CONSTANT_BUFFER;
+	m_DissolveBuffer_Desc.CPUAccessFlags = D3D11_CPU_ACCESS_WRITE;
 
 	// UAV 구성
 	m_UAV_Desc.Format = DXGI_FORMAT_UNKNOWN;

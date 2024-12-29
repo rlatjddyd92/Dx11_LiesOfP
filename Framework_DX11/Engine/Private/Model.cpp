@@ -91,6 +91,11 @@ _int CModel::Get_BoneIndex(const _char* pBoneName) const
 	return iBoneIndex;
 }
 
+_float4x4* CModel::Get_BoneMatrices(_uint iMeshIndex)
+{
+	return m_Meshes[iMeshIndex]->Get_BoneMatrices();
+}
+
 _char* CModel::Get_CurrentAnimationName()
 {
 	return m_Animations[m_iCurrentAnimIndex]->Get_Name();
@@ -1043,7 +1048,7 @@ HRESULT CModel::Create_Bin_Animations(HANDLE* pFile)
 	return S_OK;
 }
 
-HRESULT CModel::ReadyModel_To_Binary(HANDLE* pFile, const DISSOLVE_PARTICLE_DESC& Desc)
+HRESULT CModel::ReadyModel_To_Binary(HANDLE* pFile, const DISSOLVE_PARTICLE_DESC& ParticleDesc)
 {
 	_ulong dwByte = 0;
 
@@ -1084,15 +1089,29 @@ HRESULT CModel::ReadyModel_To_Binary(HANDLE* pFile, const DISSOLVE_PARTICLE_DESC
 
 	ReadFile(*pFile, &m_iNumMeshes, sizeof(_uint), &dwByte, nullptr);
 
+	vector<CVIBuffer_Dissolve_Instance*> Instances;
+	Instances.reserve(m_iNumMeshes);
+
 	for (_uint i = 0; i < m_iNumMeshes; ++i)
 	{
-		CMesh* pMesh = CMesh::Create_To_Binary(m_pDevice, m_pContext, pFile, this, XMLoadFloat4x4(&m_PreTransformMatrix), Desc, i);
+		CMesh* pMesh = CMesh::Create_To_Binary(m_pDevice, m_pContext, pFile, this, XMLoadFloat4x4(&m_PreTransformMatrix), ParticleDesc, i, Instances);
 		if (nullptr == pMesh)
 			return E_FAIL;
 
 		m_Meshes.emplace_back(pMesh);
 
 	}
+	CDissolve_Container::DISSOLVE_CONTAINER_DESC ContainerDesc = {};
+	ContainerDesc.iNumInstance = m_iNumMeshes;
+	ContainerDesc.pInstances = Instances.data();
+	if(0 < ParticleDesc.iNumInstance)
+	{
+		if (FAILED(m_pGameInstance->Add_Prototype(ParticleDesc.iLevelID, ParticleDesc.strBufferTag, CDissolve_Container::Create(m_pDevice, m_pContext, ContainerDesc))))
+			return E_FAIL;
+	}
+
+	
+
 	//여기까지 메쉬
 
 
@@ -1201,15 +1220,26 @@ HRESULT CModel::Ready_Meshes(HANDLE* pFile, DISSOLVE_PARTICLE_DESC ParticleDesc)
 
 	ReadFile(*pFile, &m_iNumMeshes, sizeof(_uint), &dwByte, nullptr);
 
-	for (size_t i = 0; i < m_iNumMeshes; i++)
+	vector<CVIBuffer_Dissolve_Instance*> Instances;
+	Instances.reserve(m_iNumMeshes);
+
+	for (size_t i = 0; i < (size_t)m_iNumMeshes; i++)
 	{
-		CMesh* pMesh = CMesh::Create(m_pDevice, m_pContext, pFile, this, XMLoadFloat4x4(&m_PreTransformMatrix), ParticleDesc, i);
+		CMesh* pMesh = CMesh::Create(m_pDevice, m_pContext, pFile, this, XMLoadFloat4x4(&m_PreTransformMatrix), ParticleDesc, i, Instances);
 		if (nullptr == pMesh)
 			return E_FAIL;
 
 		m_Meshes.emplace_back(pMesh);
 	}
+	CDissolve_Container::DISSOLVE_CONTAINER_DESC ContainerDesc = {};
+	ContainerDesc.iNumInstance = m_iNumMeshes;
+	ContainerDesc.pInstances = Instances.data();
 
+	if (0 < ParticleDesc.iNumInstance)
+	{
+		if (FAILED(m_pGameInstance->Add_Prototype(ParticleDesc.iLevelID, ParticleDesc.strBufferTag, CDissolve_Container::Create(m_pDevice, m_pContext, ContainerDesc))))
+			return E_FAIL;
+	}
 	return S_OK;
 }
 

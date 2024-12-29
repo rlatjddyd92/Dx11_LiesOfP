@@ -2,7 +2,6 @@
 
 
 #include "VIBuffer_Point_Instance.h"
-#include "VIBuffer_Dissolve_Instance.h"
 #include "VIBuffer_Rect_Instance.h"
 #include "VIBuffer_Terrain.h"
 #include "VIBuffer_Rect.h"
@@ -12,6 +11,9 @@
 #include "Trail_OnePoint_Instance.h"
 #include "Trail_TwoPoint_Instance.h"
 #include "Trail_MultiPoint_Instance.h"
+
+#include "VIBuffer_Dissolve_Instance.h"
+#include "Dissolve_Container.h"
 
 #include "Navigation.h"
 #include "Collider.h"

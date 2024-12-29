@@ -3550,6 +3550,9 @@
     <FxCompile Include="..\Bin\ShaderFiles\Shader_SSD.hlsl">
       <Filter>97.ShaderFiles</Filter>
     </FxCompile>
+    <FxCompile Include="..\Bin\ShaderFiles\Shader_DissolveCompute.hlsl">
+      <Filter>97.ShaderFiles\Effect\Compute</Filter>
+    </FxCompile>
   </ItemGroup>
   <ItemGroup>
     <None Include="..\Bin\ShaderFiles\Shader_Client_InOut.hlsli">

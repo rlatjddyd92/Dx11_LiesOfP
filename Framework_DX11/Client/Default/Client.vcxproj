@@ -890,6 +890,7 @@
     <Image Include="small.ico" />
   </ItemGroup>
   <ItemGroup>
+    <FxCompile Include="..\Bin\ShaderFiles\Shader_DissolveCompute.hlsl" />
     <FxCompile Include="..\Bin\ShaderFiles\Shader_Effect_Mesh.hlsl" />
     <FxCompile Include="..\Bin\ShaderFiles\Shader_Effect_Texture.hlsl" />
     <FxCompile Include="..\Bin\ShaderFiles\Shader_ParticleCompute.hlsl" />
