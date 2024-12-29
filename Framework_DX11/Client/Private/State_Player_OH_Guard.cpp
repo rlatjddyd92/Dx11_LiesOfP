@@ -55,7 +55,7 @@ HRESULT CState_Player_OH_Guard::Start_State(void* pArg)
     m_pPlayer->Set_MoveSpeed(3.f);
 
     m_pPlayer->Change_CameraMode(CPlayerCamera::MODE_STATIC);
-
+    m_pPlayer->Play_Sound(CPlayer::PAWN_SOUND_EFFECT1, TEXT("SE_PC_MT_Rustle_Stab_01.wav"));
     return S_OK;
 }
 

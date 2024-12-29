@@ -34,13 +34,19 @@ private:
 
     _double* m_pTrackPos = { nullptr };
 
+    _int                m_iSoundIndex = {};
+    _bool               m_isPlaySound = { false };
+    _bool               m_isPlaySound2 = { false };
+
+    _uint               m_iCurAnim = { 0 };
+    _uint               m_iDashTypeNum = {};
 private:
     void                Select_DashAnimation();
     _bool               End_Check();
 
 private:
     void                Control_Invicible();
-
+    void                Control_Sound();
 public:
     static CState_Player_OH_Dash* Create(class CFsm* pFsm, class CPlayer* pPlayer, _uint iStateNum, void* pArg = nullptr);
     virtual void Free() override;

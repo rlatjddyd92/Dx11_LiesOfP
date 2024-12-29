@@ -42,6 +42,9 @@ private:
     _int                m_iColliderEndFrame = {};
     void                Control_Collider();
 
+    _int                m_iSwishL_SoundFrame = { };
+    _bool               m_isSwishL_PlaySound = {};
+
 public:
     static CState_Player_Flame_ParryAttack* Create(class CFsm* pFsm, class CPlayer* pPlayer, _uint iStateNum, void* pArg = nullptr);
     virtual void Free() override;

@@ -46,6 +46,12 @@ HRESULT CState_Player_Scissor_Fable2::Initialize(_uint iStateNum, void* pArg)
     m_iEffectCombineStartFrame = 53;
     m_iEffectCombineEndFrame = 63;
 
+    m_iSoundFrame = 55;
+
+    m_iSoundFrameArray[0] = 16;
+    m_iSoundFrameArray[1] = 28;
+    m_iSoundFrameArray[2] = 43;
+
     return S_OK;
 }
 
@@ -66,6 +72,12 @@ HRESULT CState_Player_Scissor_Fable2::Start_State(void* pArg)
     m_isActiveSeperateEffect = m_isActiveCombineEffect = false;
     m_isActiveFableEffect[0] = m_isActiveFableEffect[1] = false;
 
+    m_isSoundPlay = false;
+
+    m_isSoundPlayArray[0] = false;
+    m_isSoundPlayArray[1] = false;
+    m_isSoundPlayArray[2] = false;
+    
     return S_OK;
 }
 
@@ -117,6 +129,21 @@ void CState_Player_Scissor_Fable2::Update(_float fTimeDelta)
     if (End_Check())
     {
         m_pPlayer->Change_State(CPlayer::OH_IDLE);
+    }
+
+    if (iFrame >= m_iSoundFrame && !m_isSoundPlay)
+    {
+        m_isSoundPlay = true;
+        m_pPlayer->Play_Sound(CPlayer::PAWN_SOUND_EFFECT1, TEXT("SE_PC_SK_WS_Glaive_P_B_L_01.wav"));
+    }
+
+    for (int i = 0; i < 3; ++i)
+    {
+        if (iFrame >= m_iSoundFrameArray[i] && !m_isSoundPlayArray[i])
+        {
+            m_isSoundPlayArray[i] = true;
+            m_pPlayer->Play_Sound(CPlayer::PAWN_SOUND_EFFECT1, TEXT("SE_PC_SK_WS_Glaive_P_H_SS_01.wav"));
+        }
     }
 
     Control_Collider();

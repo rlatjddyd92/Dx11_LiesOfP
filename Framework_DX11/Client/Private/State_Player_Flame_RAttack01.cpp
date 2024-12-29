@@ -43,6 +43,7 @@ HRESULT CState_Player_Flame_RAttack01::Start_State(void* pArg)
     m_iColliderEndFrame = 35;
 
     m_isActiveEffect = false;
+    m_isPlaySound = false;
 
     return S_OK;
 }
@@ -92,6 +93,12 @@ void CState_Player_Flame_RAttack01::Update(_float fTimeDelta)
     else if (End_Check())
     {
         m_pPlayer->Change_State(CPlayer::TH_IDLE);
+    }
+
+    if (iFrame >= 28 && !m_isPlaySound)
+    {
+        m_isPlaySound = true;
+        m_pPlayer->Play_Sound(CPlayer::PAWN_SOUND_EFFECT1, TEXT("SE_PC_SK_WS_FlameSword_2H_L_02.wav"));
     }
 
     Control_Collider();

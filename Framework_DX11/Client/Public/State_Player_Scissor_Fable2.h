@@ -62,6 +62,11 @@ private:
 
     void                Control_Effect(_int iFrame);
 
+    _int                m_iSoundFrame = {};
+    _int                m_iSoundFrameArray[3] = {};
+    _bool               m_isSoundPlay = {};
+    _bool               m_isSoundPlayArray[3] = {false,};
+
 public:
     static CState_Player_Scissor_Fable2* Create(class CFsm* pFsm, class CPlayer* pPlayer, _uint iStateNum, void* pArg = nullptr);
     virtual void Free() override;

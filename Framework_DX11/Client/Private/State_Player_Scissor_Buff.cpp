@@ -13,7 +13,7 @@ CState_Player_Scissor_Buff::CState_Player_Scissor_Buff(CFsm* pFsm, CPlayer* pPla
 
 HRESULT CState_Player_Scissor_Buff::Initialize(_uint iStateNum, void* pArg)
 {
-    m_iAnimation_ScissorBuff = m_pPlayer->Get_Model()->Find_AnimationIndex("AS_Pino_FableArts_Buff_ScissorSword", 1.5f);
+    m_iAnimation_ScissorBuff = m_pPlayer->Get_Model()->Find_AnimationIndex("AS_Pino_FableArts_Buff_ScissorSword", 1.8f);
 
     FSM_INIT_DESC* pDesc = static_cast<FSM_INIT_DESC*>(pArg);
 
@@ -69,6 +69,7 @@ void CState_Player_Scissor_Buff::Update(_float fTimeDelta)
     if (m_iSeperateFrame == iFrame || m_iSeperateFrame + 1 == iFrame)
     {
         m_pPlayer->Seperate_Scissor();
+        m_pPlayer->Play_Sound(CPlayer::PAWN_SOUND_EFFECT1, TEXT("Scissor_Buff.wav"));
     }
     else if (m_iCombineFrame == iFrame || m_iCombineFrame + 1 == iFrame)
     {

@@ -25,6 +25,8 @@ HRESULT CState_Player_Flame_ParryAttack::Initialize(_uint iStateNum, void* pArg)
     m_iColliderStartFrame = 30;
     m_iColliderEndFrame = 35;
 
+    m_iSwishL_SoundFrame = 25;
+
     return S_OK;
 }
 
@@ -36,6 +38,7 @@ HRESULT CState_Player_Flame_ParryAttack::Start_State(void* pArg)
     m_isInputRButton = false;
     m_fRButtonTime = 0.f;
 
+    m_isSwishL_PlaySound = false;
 
     return S_OK;
 }
@@ -78,6 +81,12 @@ void CState_Player_Flame_ParryAttack::Update(_float fTimeDelta)
     else if (End_Check())
     {
         m_pPlayer->Change_State(CPlayer::TH_IDLE);
+    }
+
+    if (iFrame >= m_iSwishL_SoundFrame && !m_isSwishL_PlaySound)
+    {
+        m_isSwishL_PlaySound = true;
+        m_pPlayer->Play_Sound(CPlayer::PAWN_SOUND_EFFECT1, TEXT("SE_PC_SK_WS_FlameSword_2H_L_01.wav"));
     }
 
     Control_Collider();

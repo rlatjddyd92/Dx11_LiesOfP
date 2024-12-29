@@ -32,6 +32,9 @@ HRESULT CState_Player_Flame_Charge01::Initialize(_uint iStateNum, void* pArg)
     m_iEffectStartFrame[1] = 151;
     m_iEffectEndFrame[1] = 164;
 
+    m_iSwishM_SoundFrame = 100;
+    m_iSwishL_SoundFrame = 155;
+
     return S_OK;
 }
 
@@ -45,6 +48,9 @@ HRESULT CState_Player_Flame_Charge01::Start_State(void* pArg)
 
     m_isActiveEffect[0] = m_isDeActiveEffect[0] = false;
     m_isActiveEffect[1] = m_isDeActiveEffect[1] = false;
+
+    m_isSwishM_PlaySound = false;
+    m_isSwishL_PlaySound = false;
 
     return S_OK;
 }
@@ -94,6 +100,17 @@ void CState_Player_Flame_Charge01::Update(_float fTimeDelta)
     else if (End_Check())
     {
         m_pPlayer->Change_State(CPlayer::TH_IDLE);
+    }
+
+    if (iFrame >= m_iSwishM_SoundFrame && !m_isSwishM_PlaySound)
+    {
+        m_isSwishM_PlaySound = true;
+        m_pPlayer->Play_Sound(CPlayer::PAWN_SOUND_EFFECT1, TEXT("SE_PC_SK_WS_FlameSword_2H_M_01.wav"));
+    }
+    if (iFrame >= m_iSwishL_SoundFrame && !m_isSwishL_PlaySound)
+    {
+        m_isSwishL_PlaySound = true;
+        m_pPlayer->Play_Sound(CPlayer::PAWN_SOUND_EFFECT1, TEXT("SE_PC_SK_WS_FlameSword_2H_L_01.wav"));
     }
 
     Control_Collider();
