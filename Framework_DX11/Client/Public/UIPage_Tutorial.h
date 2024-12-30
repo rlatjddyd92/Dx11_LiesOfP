@@ -30,7 +30,22 @@ public:
 		GROUP_END
 	};
 
+	typedef struct
+	{
+		_wstring strName = {};
+		_wstring strDescA = {};
+		_wstring strDescB = {};
 
+		_int m_iGoal = 0;
+		_int m_iScore = 0;
+
+		_wstring strKey_A_First = {};
+		_wstring strKey_A_Second = {};
+		_wstring strKey_A_Desc = {};
+		_wstring strKey_B_First = {};
+		_wstring strKey_B_Second = {};
+		_wstring strKey_B_Desc = {};
+	}TUTO_INFO;
 
 
 protected:
@@ -74,14 +89,12 @@ protected:
 	class CUITutorial_Result* m_pResult = { nullptr };
 	class CUITutorial_Popup* m_pPopup = { nullptr };
 
+	vector<TUTO_INFO*> m_vecTutorial_Data;
+
 public:
 	static CUIPage_Tutorial* Create(ID3D11Device* pDevice, ID3D11DeviceContext* pContext);
 	virtual CGameObject* Clone(void* pArg);
 	virtual void Free() override;
-
-
-
-
 };
 
 END

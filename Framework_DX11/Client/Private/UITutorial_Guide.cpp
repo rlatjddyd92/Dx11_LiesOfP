@@ -107,7 +107,7 @@ HRESULT CUITutorial_Guide::Ready_UIPart_Group_Control()
 	return S_OK;
 }
 
-void CUITutorial_Guide::Set_Guide(vector<struct CUIPage::UIPART_INFO*>& vecOrigin, vector<vector<_wstring>>& vecData)
+void CUITutorial_Guide::Set_Guide(vector<struct CUIPage::UIPART_INFO*>& vecOrigin)
 {
 	_int iIndex = 0;
 	for (auto& iter : vecOrigin)
@@ -129,6 +129,14 @@ void CUITutorial_Guide::Set_Guide(vector<struct CUIPage::UIPART_INFO*>& vecOrigi
 	vector<UPART*> m_vecSharedPointer_Ctrl_Upper;
 	vector<UPART*> m_vecSharedPointer_Ctrl_Lower;
 
+
+
+
+
+}
+
+void CUITutorial_Guide::Update_Guide(TUTO_INFO& NowData, _float fTimeDelta)
+{
 
 
 

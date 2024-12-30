@@ -107,7 +107,7 @@ HRESULT CUITutorial_Info::Ready_UIPart_Group_Control()
 	return S_OK;
 }
 
-void CUITutorial_Info::Set_Info(vector<struct CUIPage::UIPART_INFO*>& vecOrigin, vector<vector<_wstring>>& vecData)
+void CUITutorial_Info::Set_Info(vector<struct CUIPage::UIPART_INFO*>& vecOrigin)
 {
 	_int iMission = -1;
 	_int iScore = -1;
@@ -138,6 +138,10 @@ void CUITutorial_Info::Set_Info(vector<struct CUIPage::UIPART_INFO*>& vecOrigin,
 				m_pSharedPointer_Sum = iter;
 		}
 	}
+}
+
+void CUITutorial_Info::Update_Info(TUTO_INFO& NowData, _float fTimeDelta)
+{
 }
 
 CUITutorial_Info* CUITutorial_Info::Create(ID3D11Device* pDevice, ID3D11DeviceContext* pContext)

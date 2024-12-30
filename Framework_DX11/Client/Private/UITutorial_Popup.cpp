@@ -111,6 +111,10 @@ void CUITutorial_Popup::Set_Popup(vector<struct CUIPage::UIPART_INFO*>& vecOrigi
 {
 }
 
+void CUITutorial_Popup::Update_Popup(TUTO_INFO& NowData, _float fTimeDelta)
+{
+}
+
 CUITutorial_Popup* CUITutorial_Popup::Create(ID3D11Device* pDevice, ID3D11DeviceContext* pContext)
 {
 	CUITutorial_Popup* pInstance = new CUITutorial_Popup(pDevice, pContext);

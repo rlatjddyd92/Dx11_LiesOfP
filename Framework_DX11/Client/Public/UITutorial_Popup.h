@@ -38,6 +38,7 @@ public:
 	virtual HRESULT Ready_UIPart_Group_Control() override;
 
 	void Set_Popup(vector<struct CUIPage::UIPART_INFO*>& vecOrigin);
+	void Update_Popup(TUTO_INFO& NowData, _float fTimeDelta);
 
 protected:
 	vector<UPART*> m_vecSharedPointer_Frame;

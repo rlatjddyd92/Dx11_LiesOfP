@@ -37,7 +37,8 @@ public:
 	const vector<UPART*>& Get_UIPartInfo() { return m_vecPart; }
 	virtual HRESULT Ready_UIPart_Group_Control() override;
 
-	void Set_Guide(vector<struct CUIPage::UIPART_INFO*>& vecOrigin, vector<vector<_wstring>>& vecData);
+	void Set_Guide(vector<struct CUIPage::UIPART_INFO*>& vecOrigin);
+	void Update_Guide(TUTO_INFO& NowData, _float fTimeDelta);
 
 protected:
 	UPART* m_pSharedPointer_Frame = { nullptr };

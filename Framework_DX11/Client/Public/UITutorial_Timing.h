@@ -40,7 +40,6 @@ public:
 	void Set_Timing(vector<struct CUIPage::UIPART_INFO*>& vecOrigin);
 
 	void Start_Timing(KEY eKey, _float fTime);
-
 	_bool Update_Timing(_float fTimeDelta);
 
 protected:
