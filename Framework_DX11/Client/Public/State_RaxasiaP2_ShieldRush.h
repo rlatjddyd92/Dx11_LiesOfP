@@ -33,6 +33,7 @@ private:
     _bool               m_bRush = { false };
 
     _bool               m_bSwingSound = { false };
+    _bool               m_bHowl = { false };
 
     _uint               m_iRouteTrack = {};
 

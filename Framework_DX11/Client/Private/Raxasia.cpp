@@ -884,7 +884,6 @@ HRESULT CRaxasia::Ready_FSM()
 	m_pExtraFsmCom->Add_State(CState_RaxasiaP2_Tele_LinkedTel::Create(m_pExtraFsmCom, this, ATKP2_TELE_LINKEDTEL, &Desc));
 	m_pExtraFsmCom->Add_State(CState_RaxasiaP2_Tele_JumpLightning::Create(m_pExtraFsmCom, this, ATKP2_TELE_JUMPLIGHTNING, &Desc));
 
-	m_pExtraFsmCom->Set_State(IDLE);
 #pragma endregion
 
 #pragma region CutScene_Fsm
@@ -963,7 +962,7 @@ HRESULT CRaxasia::Ready_Effects()
 
 	
 	m_Effects[EFFECT_DASH] = CEffect_Manager::Get_Instance()->Clone_Effect(TEXT("Raxasia_Attack_Dash"), pParetnMatrix,
-		nullptr, _Vec3(0.f, 1.f, 0.f), _Vec3(0.f, 0.f, 1.f), _Vec3(1.f, 1.f, 1.f));
+		nullptr, _Vec3(0.f, 2.f, 0.f), _Vec3(0.f, 0.f, 1.f), _Vec3(1.f, 1.f, 1.f));
 
 	m_Effects[EFFECT_HOWLING] = CEffect_Manager::Get_Instance()->Clone_Effect(TEXT("Raxasia_Attack_Howling"), pParetnMatrix,
 		nullptr, _Vec3(0.f, 0.f, 0.f), _Vec3(0.f, 0.f, 1.f), _Vec3(1.f, 1.f, 1.f));

@@ -27,6 +27,10 @@ HRESULT CState_RaxasiaP2_StepJump::Start_State(void* pArg)
     m_pMonster->Change_Animation(AN_INCHENT, false, 0.1f, 0);
 
     m_bSwingSound = false;
+    m_bInchentForSound = false;
+    m_bSWingDownForSound = { false };
+    m_bStompForSound = { false };
+    
     m_bStartSpot = true;
     m_vFlyMoveStack = _Vec3{};
     m_bSwing = false;
@@ -61,27 +65,27 @@ void CState_RaxasiaP2_StepJump::Update(_float fTimeDelta)
             m_pMonster->Change_Animation(AN_JUMPSTAMP_MIDDLE, false, 0.1f, 0);
         }
 
-        m_vTargetDir = m_pMonster->Get_TargetDir();
-        m_vTargetDir.Normalize();
 
         if (CurTrackPos >= 87.f && CurTrackPos <= 145.f)
         {
             if (m_bStartSpot)
             {
                 m_fDist = m_pMonster->Calc_Distance_XZ();
-                m_fDist -= 4.f;
-                if (m_fDist < 2.f)
+                m_fDist -= 6.f;
+                if (m_fDist <= 0.5f)
                 {
-                    m_fDist = 2.f;
+                    m_fDist = 0.5f;
                 }
                 m_bStartSpot = false;
+                m_vTargetDir = m_pMonster->Get_TargetDir();
+                m_vTargetDir.Normalize();
             }
 
             m_pMonster->Get_Transform()->LookAt_Lerp_NoHeight(m_vTargetDir, 1.f, fTimeDelta);
 
             _float fYMove = m_pMonster->Get_RigidBody()->Get_Velocity().y;
 
-            _Vec3 vMove = m_vTargetDir * m_fDist * (((_float)CurTrackPos - 87.f) / 145.f);
+            _Vec3 vMove = m_vTargetDir * m_fDist * (((_float)CurTrackPos - 87.f) / 245.f);
             vMove.y = fYMove;
             m_pMonster->Get_RigidBody()->Set_Velocity((vMove - m_vFlyMoveStack) / fTimeDelta);
             m_vFlyMoveStack = vMove;
@@ -162,6 +166,14 @@ void CState_RaxasiaP2_StepJump::Collider_Check(_double CurTrackPos)
 {
     if (m_iRouteTrack == 1)
     {
+        if (CurTrackPos >= 165.f && CurTrackPos <= 175.f)
+        {
+            m_pMonster->Active_CurrentWeaponCollider(1.2f, 0, HIT_TYPE::HIT_METAL, ATTACK_STRENGTH::ATK_WEAK);
+        }
+        else
+        {
+            m_pMonster->DeActive_CurretnWeaponCollider();
+        }
     }
     else if (m_iRouteTrack == 2)
     {
@@ -320,6 +332,7 @@ void CState_RaxasiaP2_StepJump::Effect_Check(_double CurTrackPos)
                 Desc.vDir.Normalize();
                 m_pGameInstance->Add_CloneObject_ToLayer(LEVEL_GAMEPLAY, TEXT("Monster_Attack"), TEXT("Prototype_GameObject_ThunderSpread"), &Desc);
 
+                m_bSWingDown = true;
             }
         }
 
@@ -337,6 +350,84 @@ void CState_RaxasiaP2_StepJump::Effect_Check(_double CurTrackPos)
 void CState_RaxasiaP2_StepJump::Control_Sound(_double CurTrackPos)
 {
 
+    if (m_iRouteTrack == 0)
+    {
+        if (!m_bInchentForSound)
+        {
+            if (CurTrackPos >= 45.f && CurTrackPos <= 55.f)
+            {
+                m_bInchentForSound = true;
+                m_pMonster->Play_Sound(CPawn::PAWN_SOUND_EFFECT2, TEXT("SE_NPC_Raxasia_SK_WP_Sword_Lightning_Loop.wav"), true);
+            }
+        }
+    }
+    if (m_iRouteTrack == 1)
+    {
+        if (!m_bEnvelop)
+        {
+            if (CurTrackPos >= 87.f)
+            {
+                m_bEnvelop = true;
+            }
+        }
+
+        if (!m_bStompForSound)
+        {
+            if (CurTrackPos >= 175.f && CurTrackPos <= 211.f)
+            {
+                m_pMonster->Play_Sound(CPawn::PAWN_SOUND_EFFECT1, TEXT("SE_NPC_Raxasia_SK_FX_Ground_Explo_Huge_02.wav"), false);
+                m_bStompForSound = true;
+            }
+        }
+        else if (CurTrackPos >= 220.f)
+        {
+            m_pMonster->Stop_Sound(CPawn::PAWN_SOUND_EFFECT2);
+            m_bInchentForSound = false;
+        }
+    }
+    else
+    {
+        if ((CurTrackPos >= 90.f && CurTrackPos <= 130.f) ||
+            (CurTrackPos >= 200.f && CurTrackPos <= 206.f))
+        {
+            if (!m_bSwing)
+            {
+                m_pMonster->Play_Sound(CPawn::PAWN_SOUND_EFFECT1, TEXT("SE_NPC_SK_WS_BroadSword_06.wav"), false);
+                m_bSwing = true;
+            }
+        }
+        else
+        {
+            m_bSwing = false;
+        }
+
+        if (!m_bInchentForSound)
+        {
+            if ((CurTrackPos >= 190.f))
+            {
+                m_pMonster->Play_Sound(CPawn::PAWN_SOUND_EFFECT1, TEXT("SE_NPC_Raxasia_SK_FX_Spark_Fall_02.wav"), false);
+                //³»·ÁÂï±â
+                m_pMonster->Play_Sound(CPawn::PAWN_SOUND_EFFECT2, TEXT("SE_NPC_Raxasia_SK_WP_Sword_Lightning_Loop.wav"), true);
+                m_bInchentForSound = true;
+            }
+        }
+        else if (CurTrackPos >= 230.f)
+        {
+            m_pMonster->Stop_Sound(CPawn::PAWN_SOUND_EFFECT2);
+        }
+
+        if (!m_bSWingDownForSound)
+        {
+            if ((CurTrackPos >= 206.f && CurTrackPos <= 211.f))
+            {
+                m_bSWingDownForSound = true;
+
+                m_pMonster->Play_Sound(CPawn::PAWN_SOUND_EFFECT1, TEXT("SE_NPC_Raxasia_SK_PJ_Thunder_Explo_03.wav"), false);
+            }
+        }
+
+
+    }
 }
 
 CState_RaxasiaP2_StepJump* CState_RaxasiaP2_StepJump::Create(CFsm* pFsm, CMonster* pMonster, _uint iStateNum, void* pArg)

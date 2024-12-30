@@ -23,6 +23,7 @@ HRESULT CState_RaxasiaP2_Tele_LinkedTel::Start_State(void* pArg)
     m_pMonster->SetUp_Animation(AN_LINKED_SECOND, false, 0);
     m_bAccel = false;
     m_bSwingSound = false;
+    m_bAccelSound = false;
 
     m_bSwing = false;
     return S_OK;
@@ -40,13 +41,32 @@ void CState_RaxasiaP2_Tele_LinkedTel::Update(_float fTimeDelta)
             ++m_iRouteTrack;
             m_bSwing = false;
             m_bAccel = false;
+            m_bSwingSound = false;
+            m_bAccelSound = false;
             m_pMonster->SetUp_Animation(AN_LINKED_FIRST, false, 45);
             return;
         }
 
-        m_pMonster->Get_Transform()->LookAt_Lerp_NoHeight(m_pMonster->Get_TargetDir(), 2.f, fTimeDelta);
+        m_pMonster->Get_Transform()->LookAt_Lerp_NoHeight(m_pMonster->Get_TargetDir(), 4.f, fTimeDelta);
 
-        if (CurTrackPos >= 73.5f && CurTrackPos <= 77.5f)
+        if (CurTrackPos >= 30.f && CurTrackPos <= 75.f)
+        {
+            _Vec3 vDir = m_pMonster->Get_TargetDir();
+
+            vDir.Normalize();
+
+            if (m_pMonster->Calc_Distance_XZ() >= 3.15)
+            {
+                m_pMonster->Get_RigidBody()->Add_Velocity(vDir * 2);
+            }
+            else
+            {
+                m_pMonster->Get_RigidBody()->Add_Velocity(-(vDir * 2));
+            }
+        }
+
+
+        else if (CurTrackPos >= 75.5f && CurTrackPos <= 80.5f)
         {
             _Vec3 vTargetPos = m_pMonster->Get_TargetPos();
 
@@ -57,9 +77,7 @@ void CState_RaxasiaP2_Tele_LinkedTel::Update(_float fTimeDelta)
             vRight.Normalize();
             _Vec3 vPos = m_pMonster->Get_Transform()->Get_State(CTransform::STATE_POSITION);
 
-            //우측으로
             vPos -= (vRight * m_fAccelSpeed * fTimeDelta);
-
             vDir = vTargetPos - vPos;
             vDir.Normalize();
 
@@ -69,11 +87,11 @@ void CState_RaxasiaP2_Tele_LinkedTel::Update(_float fTimeDelta)
             _Vec3 vTemp{};
             vTemp = vDir;
             vTemp.Normalize();
-            if (m_fDistance <= 3.05)
+            if (m_fDistance <= 3.55)
             {
                 vTemp *= -15.f;
             }
-            else if (m_fDistance >= 3.15)
+            else if (m_fDistance >= 3.65)
             {
                 vTemp *= 15.f;
             }
@@ -87,6 +105,8 @@ void CState_RaxasiaP2_Tele_LinkedTel::Update(_float fTimeDelta)
         {
             ++m_iRouteTrack;
             m_bSwing = false;
+            m_bSwingSound = false;
+            m_bAccelSound = false;
             m_pMonster->SetUp_Animation(AN_UPPERSLASH, false, 0);
             return;
         }
@@ -114,18 +134,15 @@ void CState_RaxasiaP2_Tele_LinkedTel::Update(_float fTimeDelta)
 
             vDir *= m_fDistance;
             _Vec3 vTemp{};
-            if (CurTrackPos >= 5.f)
+            vTemp = vDir;
+            vTemp.Normalize();
+            if (m_fDistance <= 3.05)
             {
-                vTemp = vDir;
-                vTemp.Normalize();
-                if (m_fDistance <= 3.05)
-                {
-                    vTemp *= -15.f;
-                }
-                else if (m_fDistance >= 3.15)
-                {
-                    vTemp *= 15.f;
-                }
+                vTemp *= -15.f;
+            }
+            else if (m_fDistance >= 3.15)
+            {
+                vTemp *= 15.f;
             }
 
             m_pMonster->Get_RigidBody()->Set_GloblePose(vTargetPos - vDir + (vTemp * fTimeDelta));
@@ -237,14 +254,18 @@ void CState_RaxasiaP2_Tele_LinkedTel::Effect_Check(_double CurTrackPos)
     {
         if ((CurTrackPos >= 90.f && CurTrackPos <= 100.f))
         {
-            m_pMonster->Active_Effect(CRaxasia::EFFECT_SWING, true);
+            if (!m_bSwing)
+            {
+                m_pMonster->Active_Effect(CRaxasia::EFFECT_SWING, true);
+                m_bSwing = true;
+            }
         }
         else
         {
             m_pMonster->DeActive_Effect(CRaxasia::EFFECT_SWING);
         }
         
-        if ((CurTrackPos >= 73.f && CurTrackPos <= 77.5f))
+        if ((CurTrackPos >= 73.f && CurTrackPos <= 80.5f))
         {
             if (!m_bAccel)
             {
@@ -262,7 +283,11 @@ void CState_RaxasiaP2_Tele_LinkedTel::Effect_Check(_double CurTrackPos)
     {
         if ((CurTrackPos >= 80.f && CurTrackPos <= 90.f))
         {
-            m_pMonster->Active_Effect(CRaxasia::EFFECT_SWING, true);
+            if (!m_bSwing)
+            {
+                m_pMonster->Active_Effect(CRaxasia::EFFECT_SWING, true);
+                m_bSwing = true;
+            }
         }
         else
         {
@@ -290,6 +315,7 @@ void CState_RaxasiaP2_Tele_LinkedTel::Effect_Check(_double CurTrackPos)
             if (!m_bSwing)
             {
                 m_pMonster->Active_Effect(CRaxasia::EFFECT_SWING, true);
+                m_bSwing = true;
             }
         }
         else
@@ -301,7 +327,67 @@ void CState_RaxasiaP2_Tele_LinkedTel::Effect_Check(_double CurTrackPos)
 
 void CState_RaxasiaP2_Tele_LinkedTel::Control_Sound(_double CurTrackPos)
 {
+    if (m_iRouteTrack == 0)
+    {
+        if ((CurTrackPos >= 90.f && CurTrackPos <= 100.f))
+        {
+            if (!m_bSwingSound)
+            {
+                m_pMonster->Play_Sound(CPawn::PAWN_SOUND_EFFECT1, TEXT("SE_NPC_SK_WS_BroadSword_06.wav"), false);
+                m_bSwingSound = true;
+            }
+        }
 
+        if ((CurTrackPos >= 73.f && CurTrackPos <= 80.5f))
+        {
+            if (!m_bAccelSound)
+            {
+                m_pMonster->Play_Sound(CPawn::PAWN_SOUND_EFFECT2, TEXT("SE_NPC_Raxasia_SK_FX_Blink_Spark_Foot_03.wav"), true);
+                m_bAccelSound = true;
+            }
+        }
+        else
+        {
+            m_pMonster->Stop_Sound(CPawn::PAWN_SOUND_EFFECT2);
+        }
+
+    }
+    else if (m_iRouteTrack == 1)
+    {
+        if ((CurTrackPos >= 80.f && CurTrackPos <= 90.f))
+        {
+            if (!m_bSwingSound)
+            {
+                m_pMonster->Play_Sound(CPawn::PAWN_SOUND_EFFECT1, TEXT("SE_NPC_SK_WS_BroadSword_06.wav"), false);
+                m_bSwingSound = true;
+            }
+        }
+
+        if ((CurTrackPos >= 62.f && CurTrackPos <= 73.f))
+        {
+            if (!m_bAccelSound)
+            {
+                m_pMonster->Play_Sound(CPawn::PAWN_SOUND_EFFECT2, TEXT("SE_NPC_Raxasia_SK_FX_Blink_Spark_Foot_03.wav"), true);
+                m_bAccelSound = true;
+            }
+        }
+        else
+        {
+            m_pMonster->Stop_Sound(CPawn::PAWN_SOUND_EFFECT2);
+        }
+
+    }
+    else
+    {
+        if ((CurTrackPos >= 15.f && CurTrackPos <= 40.f))
+        {
+            if (!m_bSwingSound)
+            {
+                m_pMonster->Play_Sound(CPawn::PAWN_SOUND_EFFECT1, TEXT("SE_NPC_SK_WS_BroadSword_06.wav"), false);
+                m_bSwingSound = true;
+            }
+        }
+    }
 }
 
 CState_RaxasiaP2_Tele_LinkedTel* CState_RaxasiaP2_Tele_LinkedTel::Create(CFsm* pFsm, CMonster* pMonster, _uint iStateNum, void* pArg)

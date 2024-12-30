@@ -34,6 +34,7 @@ private:
     _bool               m_bJump = { false };
 
     _bool               m_bSwingSound = { false };
+    _bool               m_bJumpForSound = { false };
     _bool               m_bFire = { false };
 
     _uint               m_iRouteTrack = {};

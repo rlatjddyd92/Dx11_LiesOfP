@@ -69,13 +69,13 @@ void CFsm::Add_State(CState* pState)
 void CFsm::Change_State(_uint iState, void* pArg)
 {
 	Safe_Release(m_pPreState);
+
 	if (m_pPreState != m_pNowState)
 	{
 		Safe_Release(m_pNowState);
-
-		m_pPreState = m_pNowState;
 	}
 
+	m_pPreState = m_pNowState;
 	Safe_AddRef(m_pPreState);
 
 	m_pNowState->End_State();
@@ -85,7 +85,11 @@ void CFsm::Change_State(_uint iState, void* pArg)
 		if (iState == m_States[i]->Get_State())
 		{
 			m_pNowState = m_States[i];
-			Safe_AddRef(m_pNowState);
+
+			if (m_pPreState != m_pNowState)
+			{
+				Safe_AddRef(m_pNowState);
+			}
 
 			m_pNowState->Start_State(pArg);
 			return;

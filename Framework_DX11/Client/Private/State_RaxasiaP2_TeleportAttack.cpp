@@ -24,8 +24,11 @@ HRESULT CState_RaxasiaP2_TeleportAttack::Start_State(void* pArg)
 {
     m_iRouteTrack = 0;
     m_pMonster->Change_Animation(AN_BACKJUMP, false, 0.1f, 0);
-
+    
+    m_bAccelSound = { false };
     m_bSwingSound = false;
+    m_bShieldSwingSound = false;
+
     m_bTeleport = false;
     m_bSetDir = false;
 
@@ -205,7 +208,63 @@ void CState_RaxasiaP2_TeleportAttack::Effect_Check(_double CurTrackPos)
 
 void CState_RaxasiaP2_TeleportAttack::Control_Sound(_double CurTrackPos)
 {
+    if (m_iRouteTrack == 0)
+    {
+        if (CurTrackPos >= 35.f && CurTrackPos <= 45.f)
+        {
+            if (!m_bAccelSound)
+            {
+                m_pMonster->Play_Sound(CPawn::PAWN_SOUND_VOICE, TEXT("SE_NPC_Raxasia_SK_PJ_Spark_Electric_Loop_02.wav"), true);
+                m_pMonster->Play_Sound(CPawn::PAWN_SOUND_EFFECT2, TEXT("SE_NPC_Raxasia_SK_FX_Blink_Spark_Foot_03.wav"), true);
+                m_bAccel = true;
+            }
+        }
+        else
+        {
+            m_pMonster->Stop_Sound(CPawn::PAWN_SOUND_VOICE);
+            m_pMonster->Stop_Sound(CPawn::PAWN_SOUND_EFFECT2);
+        }
+    }
+    else
+    {
+        if ((CurTrackPos >= 90.f && CurTrackPos <= 110.f) ||
+            (CurTrackPos >= 140.f && CurTrackPos <= 165.f))
+        {
+            if (!m_bSwingSound)
+            {
+                m_pMonster->Play_Sound(CPawn::PAWN_SOUND_EFFECT1, TEXT("SE_NPC_SK_WS_BroadSword_06.wav"), false);
+                m_bSwingSound = true;
+            }
+        }
+        else
+        {
+            m_bSwingSound = false;
+        }
 
+        if ((CurTrackPos >= 75.f && CurTrackPos <= 100.f))
+        {
+            if (!m_bShieldSwingSound)
+            {
+                m_pMonster->Play_Sound(CPawn::PAWN_SOUND_EFFECT2, TEXT("SE_NPC_SK_WS_Blunt_L.wav"), false);
+                m_bShieldSwingSound = true;
+            }
+        }
+
+        if (CurTrackPos >= 130.f && CurTrackPos <= 140.f)
+        {
+            if (!m_bAccelSound)
+            {
+                m_pMonster->Play_Sound(CPawn::PAWN_SOUND_VOICE, TEXT("SE_NPC_Raxasia_SK_PJ_Spark_Electric_Loop_02.wav"), true);
+                m_pMonster->Play_Sound(CPawn::PAWN_SOUND_EFFECT2, TEXT("SE_NPC_Raxasia_SK_FX_Blink_Spark_Foot_03.wav"), true);
+                m_bAccel = true;
+            }
+        }
+        else
+        {
+            m_pMonster->Stop_Sound(CPawn::PAWN_SOUND_VOICE);
+            m_pMonster->Stop_Sound(CPawn::PAWN_SOUND_EFFECT2);
+        }
+    }
 }
 
 CState_RaxasiaP2_TeleportAttack* CState_RaxasiaP2_TeleportAttack::Create(CFsm* pFsm, CMonster* pMonster, _uint iStateNum, void* pArg)

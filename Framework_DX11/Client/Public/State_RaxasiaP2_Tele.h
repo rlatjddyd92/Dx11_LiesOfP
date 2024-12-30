@@ -37,6 +37,8 @@ private:
     _bool               m_bEnvelop = { false };
 
     _bool               m_bSwingSound = { false };
+    _bool               m_bAccelSound = { false };
+    _bool               m_bEnvelopSound = { false };
 
     _bool               m_bTele = { false };
 
