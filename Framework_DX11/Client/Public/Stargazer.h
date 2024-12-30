@@ -8,6 +8,7 @@ class CCollider;
 class CShader;
 class CModel;
 class CRigidBody;
+class CSound;
 END
 
 BEGIN(Client)
@@ -46,6 +47,7 @@ private:
 	CShader* m_pShaderCom = { nullptr };
 	CModel* m_pModelCom[TYPE_END] = {nullptr, nullptr };
 	CRigidBody* m_pRigidBodyCom = { nullptr };
+	CSound* m_pSoundCom = { nullptr };
 
 private:
 	vector<class CEffect_Container*> m_Effects;

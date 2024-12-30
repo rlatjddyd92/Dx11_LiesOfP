@@ -44,6 +44,7 @@ private:
 private:
     _int                m_iFootStepFrame[14] = {};
     _bool               m_isPlaySound[14] = { false, };
+    _bool               m_isPlayArmSound = { false };
     void                Control_Sound();
 
 private:

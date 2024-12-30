@@ -70,7 +70,7 @@ void CState_Player_Chest::Update(_float fTimeDelta)
     if (!m_isPlaySound2 && iFrame == 170 || iFrame == 171)
     {
         m_isPlaySound2 = true;
-        m_pPlayer->Play_Sound(CPawn::PAWN_SOUND_EFFECT1, TEXT("AMB_OJ_FX_TreasureChest_Open_01.wav"));
+        m_pPlayer->Play_Sound(CPawn::PAWN_SOUND_EFFECT1, TEXT("Box_Open.wav"));
     }
 }
 

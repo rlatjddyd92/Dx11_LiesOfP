@@ -27,6 +27,15 @@ HRESULT CState_Player_TH_Guard::Initialize(_uint iStateNum, void* pArg)
     m_fMoveSpeed = 1.5f;
     m_iStateNum = iStateNum;
 
+    m_iFootStepFrame[WALK_B][0] = 28;
+    m_iFootStepFrame[WALK_B][1] = 62;
+    m_iFootStepFrame[WALK_F][0] = 30;
+    m_iFootStepFrame[WALK_F][1] = 66;
+    m_iFootStepFrame[WALK_L][0] = 30;
+    m_iFootStepFrame[WALK_L][1] = 66;
+    m_iFootStepFrame[WALK_R][0] = 34;
+    m_iFootStepFrame[WALK_R][1] = 65;
+
     return S_OK;
 }
 
@@ -39,7 +48,7 @@ HRESULT CState_Player_TH_Guard::Start_State(void* pArg)
 
     m_pPlayer->Set_IsGuard(true);
     m_pPlayer->Set_MoveSpeed(m_fMoveSpeed);
-
+    m_pPlayer->Play_Sound(CPlayer::PAWN_SOUND_EFFECT1, TEXT("SE_PC_MT_Rustle_Stab_01.wav"));
     return S_OK;
 }
 
@@ -66,6 +75,8 @@ void CState_Player_TH_Guard::Update(_float fTimeDelta)
     {
         m_pPlayer->Change_State(CPlayer::TH_IDLE);
     }
+
+    Control_Sound();
 }
 
 void CState_Player_TH_Guard::End_State()
@@ -172,6 +183,46 @@ _bool CState_Player_TH_Guard::Move(_float fTimeDelta)
     }
 
     return isMoving;
+}
+
+void CState_Player_TH_Guard::Control_Sound()
+{
+    _int iFrame = m_pPlayer->Get_Frame();
+
+    WALK eWalk = WALK_END;
+
+    if (m_pPlayer->Get_CurrentAnimIndex() == m_iAnimation_Walk[WALK_F])
+    {
+        eWalk = WALK_F;
+    }
+    else if (m_pPlayer->Get_CurrentAnimIndex() == m_iAnimation_Walk[WALK_B])
+    {
+        eWalk = WALK_B;
+    }
+    else if (m_pPlayer->Get_CurrentAnimIndex() == m_iAnimation_Walk[WALK_L])
+    {
+        eWalk = WALK_L;
+    }
+    else if (m_pPlayer->Get_CurrentAnimIndex() == m_iAnimation_Walk[WALK_R])
+    {
+        eWalk = WALK_R;
+    }
+
+    if ((iFrame == m_iFootStepFrame[eWalk][0] || iFrame == m_iFootStepFrame[eWalk][0] + 1) && !m_isPlaySound[0])
+    {
+        m_pPlayer->Play_Sound(CPlayer::PAWN_SOUND_EFFECT1, TEXT("SE_PC_FS_Stone_Walk_01.wav"));
+        m_isPlaySound[0] = true;
+    }
+    else if ((iFrame == m_iFootStepFrame[eWalk][1] || iFrame == m_iFootStepFrame[eWalk][1] + 1) && !m_isPlaySound[1])
+    {
+        m_pPlayer->Play_Sound(CPlayer::PAWN_SOUND_EFFECT1, TEXT("SE_PC_FS_Stone_Walk_02.wav"));
+        m_isPlaySound[1] = true;
+    }
+    else if (iFrame < 4)
+    {
+        m_isPlaySound[0] = false;
+        m_isPlaySound[1] = false;
+    }
 }
 
 CState_Player_TH_Guard* CState_Player_TH_Guard::Create(CFsm* pFsm, CPlayer* pPlayer, _uint iStateNum, void* pArg)

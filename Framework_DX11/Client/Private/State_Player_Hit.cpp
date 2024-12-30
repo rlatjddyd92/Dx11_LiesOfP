@@ -64,6 +64,9 @@ HRESULT CState_Player_Hit::Start_State(void* pArg)
     m_pPlayer->Change_Weapon();
     m_pPlayer->Combine_Scissor();
 
+    _float fSoundNum = m_pGameInstance->Get_Random(0.f,3.f);
+    Random_Sound_Play(fSoundNum);
+
     return S_OK;
 }
 
@@ -110,6 +113,7 @@ void CState_Player_Hit::Update(_float fTimeDelta)
 void CState_Player_Hit::End_State()
 {
     m_pPlayer->Set_IsGuard(false);
+    m_pPlayer->Stop_Sound(CPlayer::PAWN_SOUND_EFFECT1);
 }
 
 _uint CState_Player_Hit::Choice_HitAnim(_Vec3 vHitPos)
@@ -245,6 +249,22 @@ _bool CState_Player_Hit::End_Check()
     }
 
     return bEndCheck;
+}
+
+void CState_Player_Hit::Random_Sound_Play(_float fSoundNum)
+{
+    if (fSoundNum > 2.f)
+    {
+        m_pPlayer->Play_Sound(CPlayer::PAWN_SOUND_EFFECT1, TEXT("VO_PC_Dmg_HL4_02.wav"));
+    }
+    else if (fSoundNum > 1.f)
+    {
+        m_pPlayer->Play_Sound(CPlayer::PAWN_SOUND_EFFECT1, TEXT("VO_PC_Dmg_HL4_03.wav"));
+    }
+    else
+    {
+        m_pPlayer->Play_Sound(CPlayer::PAWN_SOUND_EFFECT1, TEXT("VO_PC_Dmg_HL4_07.wav"));
+    }
 }
 
 CState_Player_Hit* CState_Player_Hit::Create(CFsm* pFsm, CPlayer* pPlayer, _uint iStateNum, void* pArg)

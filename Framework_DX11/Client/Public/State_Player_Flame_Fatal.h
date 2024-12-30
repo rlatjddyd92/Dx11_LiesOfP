@@ -45,6 +45,12 @@ private:
     _bool               m_isActiveEffect[3] = {};
     void                Control_Effect(_int iFrame);
 
+    _int                m_iSwishL_Sound_Frame = {};
+    _int                m_iSwishM_Sound_Frame = {};
+    _int                m_iSwishS_Sound_Frame = {};
+    _bool               m_isSwishL_Play_Sound = {};
+    _bool               m_isSwishM_Play_Sound = {};
+    _bool               m_isSwishS_Play_Sound = {};
 public:
     static CState_Player_Flame_Fatal* Create(class CFsm* pFsm, class CPlayer* pPlayer, _uint iStateNum, void* pArg = nullptr);
     virtual void Free() override;

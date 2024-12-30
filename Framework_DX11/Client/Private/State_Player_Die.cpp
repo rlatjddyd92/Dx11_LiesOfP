@@ -35,9 +35,9 @@ HRESULT CState_Player_Die::Start_State(void* pArg)
 {
     DIE_DESC* pDesc = static_cast<DIE_DESC*>(pArg);
 
-    _int iAnim = Choice_DieAnim(pDesc);
+    m_iAnimIndex = Choice_DieAnim(pDesc);
 
-    m_pPlayer->Change_Animation(m_iAnimation_Die[iAnim], false, 0.1f);
+    m_pPlayer->Change_Animation(m_iAnimation_Die[m_iAnimIndex], false, 0.1f);
     m_pPlayer->Damaged(9999999.f);
 
     m_pPlayer->Change_Weapon();
@@ -52,6 +52,28 @@ HRESULT CState_Player_Die::Start_State(void* pArg)
 
     m_fDieTime = 0.f;
     m_fDissloveRatio = 0.f;
+
+    m_bSoundPlay = false;
+    m_bSoundPlay2 = true;
+
+    switch (m_iAnimIndex)
+    {
+    case HIT_B:
+        m_iSoundPlayFrame = 106;
+        break;
+    case  HIT_F:
+        m_iSoundPlayFrame = 80;
+        break;
+    case DOWN_B:
+        m_iSoundPlayFrame = 180;
+        break;
+    case  DOWN_F:
+        m_iSoundPlayFrame = 120;
+        break;
+    case CURSE:
+        m_iSoundPlayFrame = 350;
+        break;
+    }
 
     return S_OK;
 }
@@ -95,6 +117,21 @@ void CState_Player_Die::Update(_float fTimeDelta)
 
     m_pPlayer->Set_DissloveRatio(m_fDissloveRatio);
     m_pPlayer->Set_RimLightColor(m_vRimLightColor);
+
+    if (m_bSoundPlay == false)
+    {
+        m_bSoundPlay = true;
+        m_pPlayer->Play_Sound(CPlayer::PAWN_SOUND_EFFECT1, TEXT("VO_PC_Die_HL3_04.wav"));
+    }
+
+    _int iFrame = m_pPlayer->Get_Frame();
+
+    if (iFrame >= m_iSoundPlayFrame && m_bSoundPlay2)
+    {
+        m_pPlayer->Play_Sound(CPlayer::PAWN_SOUND_EFFECT2, TEXT("SE_PC_MT_Land_Die_Heavy_01.wav"));
+        m_bSoundPlay2 = false;
+    }
+
 }
 
 void CState_Player_Die::End_State()

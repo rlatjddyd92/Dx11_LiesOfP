@@ -35,6 +35,8 @@ HRESULT CState_Player_Scissor_Fable0::Initialize(_uint iStateNum, void* pArg)
     m_iEffectStartFrame = 10;
     m_iEffectEndFrame = 27;
 
+    m_iSoundFrame = 17;
+
     return S_OK;
 }
 
@@ -46,6 +48,8 @@ HRESULT CState_Player_Scissor_Fable0::Start_State(void* pArg)
     m_isInputFButton = false;
     m_isInputRButton = false;
     m_fRButtonTime = 0.f;
+
+    m_isSoundPlay = false;
 
     m_pPlayer->Decrease_Region();
 
@@ -119,6 +123,12 @@ void CState_Player_Scissor_Fable0::Update(_float fTimeDelta)
         {
             m_pPlayer->Change_State(CPlayer::SCISSOR_FABAL1);
         }
+    }
+
+    if (iFrame >= m_iSoundFrame && !m_isSoundPlay)
+    {
+        m_isSoundPlay = true;
+        m_pPlayer->Play_Sound(CPlayer::PAWN_SOUND_EFFECT1, TEXT("SE_PC_SK_WS_Glaive_P_B_M_03.wav"));
     }
 
     if (End_Check())

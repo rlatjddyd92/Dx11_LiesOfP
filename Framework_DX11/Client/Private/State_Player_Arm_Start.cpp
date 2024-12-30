@@ -49,6 +49,8 @@ HRESULT CState_Player_Arm_Start::Start_State(void* pArg)
 
     m_isChangeLoop = false;
 
+    m_isPlayArmSound = false;
+
     return S_OK;
 }
 
@@ -58,6 +60,11 @@ void CState_Player_Arm_Start::Update(_float fTimeDelta)
 
     if (m_pPlayer->Key_Hold(KEY::CTRL))
     {
+        if (m_isPlayArmSound == false)
+        {
+            m_pPlayer->Play_Sound(CPlayer::PAWN_SOUND_EFFECT1, TEXT("SE_PC_MT_StatRoom_SlaveArm_Aegis_01.wav"));
+            m_isPlayArmSound = true;
+        }
         if (End_Check())
         {
             m_isChangeLoop = true;
@@ -85,8 +92,10 @@ void CState_Player_Arm_Start::Update(_float fTimeDelta)
 
 void CState_Player_Arm_Start::End_State()
 {
-    if(!m_isChangeLoop)
+    if (!m_isChangeLoop)
         m_pPlayer->Get_Model()->Set_RemoteTuning(true);
+
+    m_pPlayer->Stop_Sound(CPlayer::PAWN_SOUND_EFFECT1);
 }
 
 _bool CState_Player_Arm_Start::End_Check()

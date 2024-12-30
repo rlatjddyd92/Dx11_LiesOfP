@@ -38,12 +38,16 @@ public:
 
 private:
 	_uint						m_iIndex = { 0 };
+	_int						m_iPlayerMoveCellNum = { 0 };
 	_float						m_fMaxFrame = { 50.f };
 	_float						m_fTrackPosition = { 0.f };
+	_float						m_fPlayerSetDelayTimer = { 0.f };
 	_bool						m_bPlay = { false };
 	_bool						m_bFinished = { false };
 	_bool						m_bFinishe_Setting = { false };
 	_bool						m_bFirstStart = { true };
+	_bool						m_bDeactivePlayer = { false };
+	_bool						m_bMovePlayerDelay = { false };
 
 	vector<CUTSCENE_KEYFRAME_DESC*>		m_KeyFrames;
 
@@ -59,6 +63,7 @@ private:
 	void Active_Sound(CUTSCENE_KEYFRAME_DESC* pCutSceneDesc);
 	void First_Setting();
 	void End_Setting();
+	void Delay_Set_Player();
 public:
 	static CCutScene* Create(ID3D11Device* pDevice, ID3D11DeviceContext* pContext);
 	virtual CGameObject* Clone(void* pArg);

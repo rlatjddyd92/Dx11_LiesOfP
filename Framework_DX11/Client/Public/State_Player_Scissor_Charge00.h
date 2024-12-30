@@ -58,6 +58,15 @@ private:
     _bool               m_isRightDeActiveEffect[2] = {};
     void                Control_Effect(_int iFrame);
 
+    _int                m_iSwishL_Sound_Frame = { };
+    _int                m_iSwishM_Sound_Frame = { };
+    _int                m_iSwishS_Sound_Frame = { };
+    _int                m_iSwishS_Sound_Frame2 = { };
+    _bool               m_bSwishL_Sound_Play = { };
+    _bool               m_bSwishM_Sound_Play = { };
+    _bool               m_bSwishS_Sound_Play = { };
+    _bool               m_bSwishS_Sound_Play2 = { };
+    void                Control_Sound(_int iFrame);
 public:
     static CState_Player_Scissor_Charge00* Create(class CFsm* pFsm, class CPlayer* pPlayer, _uint iStateNum, void* pArg = nullptr);
     virtual void Free() override;

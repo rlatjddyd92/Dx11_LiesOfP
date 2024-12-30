@@ -28,9 +28,12 @@ private:
     class CPlayer* m_pPlayer = { nullptr };
 
     _uint               m_iAnimation_Dash[DASH_END] = {};
+    _uint               m_iDashTypeNum = {};
 
     _Vec4               m_vMoveDir = {};
 
+    _bool               m_isPlaySound = { false };
+    _bool               m_isPlaySound2 = { false };
 
     _double* m_pTrackPos = { nullptr };
 
@@ -40,6 +43,7 @@ private:
 
 private:
     void                Control_Invicible();
+    void                Control_Sound();
 
 public:
     static CState_Player_TH_Dash* Create(class CFsm* pFsm, class CPlayer* pPlayer, _uint iStateNum, void* pArg = nullptr);

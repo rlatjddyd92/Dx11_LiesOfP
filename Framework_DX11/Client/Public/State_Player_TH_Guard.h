@@ -33,10 +33,13 @@ private:
     _Vec4               m_vMoveDir = {};
 
     _float              m_fMoveSpeed = {};
+private:
+    _int                m_iFootStepFrame[WALK_END][2] = {};
+    _bool               m_isPlaySound[2] = { false, };
 
 private:
     _bool               Move(_float fTimeDelta);
-
+    void                Control_Sound();
 public:
     static CState_Player_TH_Guard* Create(class CFsm* pFsm, class CPlayer* pPlayer, _uint iStateNum, void* pArg = nullptr);
     virtual void Free() override;

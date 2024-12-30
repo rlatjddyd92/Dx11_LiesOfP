@@ -44,7 +44,7 @@ HRESULT CStargazer::Initialize(void* pArg)
 	m_pPlayer = m_pGameInstance->Find_Player(LEVEL_GAMEPLAY);
 	 
 	m_iAnim_Close = m_pModelCom[RESTORED]->Find_AnimationIndex("AS_Close_Idle", 2.f);
-	m_iAnim_Open = m_pModelCom[RESTORED]->Find_AnimationIndex("AS_Open", 0.5f);
+	m_iAnim_Open = m_pModelCom[RESTORED]->Find_AnimationIndex("AS_Open", 6.f);
 	m_iAnim_OpenIdle = m_pModelCom[RESTORED]->Find_AnimationIndex("AS_Open_Idle", 2.f);
 	m_iAnim_Broken = m_pModelCom[BROKEN]->Find_AnimationIndex("AS_Stargazer_broken_idle", 3.f);
 	m_iAnim_Restore = m_pModelCom[BROKEN]->Find_AnimationIndex("AS_Stargazer_restore", 3.f);
@@ -96,6 +96,8 @@ void CStargazer::Update(_float fTimeDelta)
 			m_Effects[1]->Set_Loop(false);
 			m_pCurrentModel->SetUp_Animation(m_iAnim_Restore);
 		}
+
+		m_pSoundCom->Play2D(TEXT("AMB_OJ_PR_Stargazer_Restore_Activated.wav"), &g_fEffectVolume);
 	}
 
 	//복구 애니메이션 진행 중
@@ -120,11 +122,12 @@ void CStargazer::Update(_float fTimeDelta)
 	{
 		m_isClose = false;
 		m_isOpening = true;
-		m_pCurrentModel->SetUp_NextAnimation(m_iAnim_Open);
+		m_pCurrentModel->SetUp_NextAnimation(m_iAnim_Open, false, 0 , 0);
+		m_pSoundCom->Play2D(TEXT("AMB_OJ_PR_Stargazer_Open_01.wav"), &g_fEffectVolume);
 	}
 
 	//열리는 중->열리고 나서 기본 애니로 변경
-	if (m_isOpening && m_pCurrentModel->Get_IsEndAnimArray())
+	if (m_isOpening && m_pCurrentModel->Get_IsEndAnimArray()[m_iAnim_Open])
 	{
 		m_isOpening = false;
 		m_isOpened = true;
@@ -293,6 +296,12 @@ HRESULT CStargazer::Ready_Components()
 		TEXT("Com_Model1"), reinterpret_cast<CComponent**>(&m_pModelCom[RESTORED]))))
 		return E_FAIL;
 
+	/* FOR.Com_Sound */
+	if (FAILED(__super::Add_Component(LEVEL_STATIC, TEXT("Prototype_Component_Sound"),
+		TEXT("Com_VoiceSound"), reinterpret_cast<CComponent**>(&m_pSoundCom))))
+		return E_FAIL;
+	m_pSoundCom->Set_Owner(this);
+
 	/* For.Com_Collider */
 	CBounding_Sphere::BOUNDING_SPHERE_DESC			ColliderDesc{};
 	ColliderDesc.fRadius = { 2.f };
@@ -374,6 +383,7 @@ void CStargazer::Free()
 		m_Effects.clear();
 	}
 
+	Safe_Release(m_pSoundCom);
 	Safe_Release(m_pColliderCom);
 	Safe_Release(m_pShaderCom);
 

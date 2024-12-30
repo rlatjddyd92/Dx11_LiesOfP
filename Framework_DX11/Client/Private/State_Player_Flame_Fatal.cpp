@@ -30,6 +30,11 @@ HRESULT CState_Player_Flame_Fatal::Initialize(_uint iStateNum, void* pArg)
     m_iColliderStartFrame[2] = 120;
     m_iColliderEndFrame[2] = 130;
 
+    m_iSwishL_Sound_Frame = 120;
+    m_iSwishM_Sound_Frame = 23;
+    m_iSwishS_Sound_Frame = 60;
+
+
     return S_OK;
 }
 
@@ -50,6 +55,10 @@ HRESULT CState_Player_Flame_Fatal::Start_State(void* pArg)
     {
         m_isPlaySound[i] = false;
     }
+
+     m_isSwishL_Play_Sound = false;
+     m_isSwishM_Play_Sound = false;
+     m_isSwishS_Play_Sound = false;
 
     m_pPlayer->Set_WeaponStrength(ATK_STRONG);
 
@@ -100,31 +109,21 @@ void CState_Player_Flame_Fatal::Control_Collider(_int iFrame)
 
 void CState_Player_Flame_Fatal::Control_Sound(_int iFrame)
 {
-    //if ((iFrame == m_iColliderStartFrame[0] || iFrame == m_iColliderStartFrame[0] + 1) && !m_isPlaySound[0])
-    //{
-    //    m_pPlayer->Play_CurrentWeaponSound(CWeapon::WEP_SOUND_EFFECT1, TEXT("SE_PC_SK_WS_Dagger_1H_S_01.wav"));
-    //    m_isPlaySound[0] = true;
-    //}
-    //else if ((iFrame == m_iColliderStartFrame[1] || iFrame == m_iColliderStartFrame[1] + 1) && !m_isPlaySound[1])
-    //{
-    //    m_pPlayer->Play_CurrentWeaponSound(CWeapon::WEP_SOUND_EFFECT1, TEXT("SE_PC_SK_WS_Dagger_1H_S_02.wav"));
-    //    m_isPlaySound[1] = true;
-    //}
-    //else if ((iFrame == m_iColliderStartFrame[2] || iFrame == m_iColliderStartFrame[2] + 1) && !m_isPlaySound[2])
-    //{
-    //    m_pPlayer->Play_CurrentWeaponSound(CWeapon::WEP_SOUND_EFFECT1, TEXT("SE_PC_SK_WS_Dagger_1H_S_01.wav"));
-    //    m_isPlaySound[2] = true;
-    //}
-    //else if ((iFrame == m_iColliderStartFrame[3] || iFrame == m_iColliderStartFrame[3] + 1) && !m_isPlaySound[3])
-    //{
-    //    m_pPlayer->Play_CurrentWeaponSound(CWeapon::WEP_SOUND_EFFECT1, TEXT("SE_PC_SK_WS_Dagger_1H_S_02.wav"));
-    //    m_isPlaySound[3] = true;
-    //}
-    //else if ((iFrame == m_iColliderStartFrame[4] || iFrame == m_iColliderStartFrame[4] + 1) && !m_isPlaySound[4])
-    //{
-    //    m_pPlayer->Play_CurrentWeaponSound(CWeapon::WEP_SOUND_EFFECT1, TEXT("SE_PC_SK_WS_Dagger_1H_S_03.wav"));
-    //    m_isPlaySound[4] = true;
-    //}
+    if ((iFrame == m_iSwishL_Sound_Frame || iFrame == m_iSwishL_Sound_Frame + 1) && !m_isSwishL_Play_Sound)
+    {
+        m_pPlayer->Play_CurrentWeaponSound(CWeapon::WEP_SOUND_EFFECT1, TEXT("SE_PC_SK_WS_FlameSword_2H_L_01.wav"));
+        m_isSwishL_Play_Sound = true;
+    }
+    else  if ((iFrame == m_iSwishM_Sound_Frame || iFrame == m_iSwishM_Sound_Frame + 1) && !m_isSwishM_Play_Sound)
+    {
+        m_pPlayer->Play_CurrentWeaponSound(CWeapon::WEP_SOUND_EFFECT1, TEXT("SE_PC_SK_WS_FlameSword_2H_M_01.wav"));
+        m_isSwishM_Play_Sound = true;
+    }
+    else  if ((iFrame == m_iSwishS_Sound_Frame || iFrame == m_iSwishS_Sound_Frame + 1) && !m_isSwishS_Play_Sound)
+    {
+        m_pPlayer->Play_CurrentWeaponSound(CWeapon::WEP_SOUND_EFFECT1, TEXT("SE_PC_SK_WS_FlameSword_2H_S_01.wav"));
+        m_isSwishS_Play_Sound = true;
+    }
 }
 
 void CState_Player_Flame_Fatal::Control_Effect(_int iFrame)

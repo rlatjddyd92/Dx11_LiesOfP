@@ -412,6 +412,8 @@ HRESULT CLoader::Ready_Resources_For_LogoLevel()
 	m_pGameInstance->LoadSoundFile("Scenario/Object");
 	m_pGameInstance->LoadSoundFile("Scenario/CutScene");
 
+	m_pGameInstance->LoadSoundFile("Obj");
+
 	lstrcpy(m_szLoadingText, TEXT("객체원형을(를) 로딩중입니다."));
 	/* For. Prototype_GameObject_BackGround */
 	if (FAILED(m_pGameInstance->Add_Prototype(TEXT("Prototype_GameObject_BackGround"),

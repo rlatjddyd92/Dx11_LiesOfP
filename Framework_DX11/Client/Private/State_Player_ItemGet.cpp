@@ -34,6 +34,8 @@ HRESULT CState_Player_ItemGet::Start_State(void* pArg)
     else
         m_pPlayer->Change_Animation(m_iAnimation_TH_ItemGet, false, 0.f);
 
+    m_pPlayer->Play_Sound(CPlayer::PAWN_SOUND_EFFECT1, TEXT("SE_OJ_FX_Hidden_Item_Move_01.wav"));
+
     return S_OK;
 }
 
