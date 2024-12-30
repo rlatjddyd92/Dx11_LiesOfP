@@ -59,10 +59,10 @@ void CUITutorial_Popup::Update(_float fTimeDelta)
 
 void CUITutorial_Popup::Late_Update(_float fTimeDelta)
 {
-	__super::Late_Update(fTimeDelta);
-
 	for (auto& iter : m_vec_Group_Ctrl)
 		__super::UpdatePart_ByControl(iter);
+
+	__super::Late_Update(fTimeDelta);
 }
 
 HRESULT CUITutorial_Popup::Render()

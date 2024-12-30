@@ -76,7 +76,7 @@ void CMainApp::Update(_float fTimeDelta)
 		if (KEY_TAP(KEY::NUM7))
 			GET_GAMEINTERFACE->Fade_In(2.f);
 		if (KEY_TAP(KEY::NUM8))
-			GET_GAMEINTERFACE->Show_Script(TEXT("테스트 대사 2줄 버전"), TEXT("테스트 대사 2줄 버전"), 3.f);
+			GET_GAMEINTERFACE->Show_Script_Npc_Talking(NPC_SCRIPT::SCR_SOPIA_FIRST);
 		if (KEY_TAP(KEY::NUM9))
 			GET_GAMEINTERFACE->UIPart_On();
 	}
