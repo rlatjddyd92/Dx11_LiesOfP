@@ -78,9 +78,9 @@ HRESULT CPhysX_Manager::Initialize()
 
 
 #ifdef _DEBUG
-    m_PxScene->setVisualizationParameter(PxVisualizationParameter::eSCALE, 1.0f);
+   /* m_PxScene->setVisualizationParameter(PxVisualizationParameter::eSCALE, 1.0f);
     m_PxScene->setVisualizationParameter(PxVisualizationParameter::eACTOR_AXES, 1.0f);
-    m_PxScene->getVisualizationParameter(PxVisualizationParameter::eCOLLISION_SHAPES);
+    m_PxScene->getVisualizationParameter(PxVisualizationParameter::eCOLLISION_SHAPES);*/
 #endif
 
     return S_OK;
@@ -93,7 +93,7 @@ void CPhysX_Manager::PhysX_Update(_float fTimeDelta)
     // 물리 씬 업데이트
     m_PxScene->simulate(fTimeDelta);
     m_PxScene->fetchResults(true);
-    m_PxScene->fetchResultsParticleSystem();
+    //m_PxScene->fetchResultsParticleSystem();
 }
 
 _bool CPhysX_Manager::RayCast(PxVec3 vRayPos, PxVec3 vRayDir, _vector* vHitPos, _vector* vNormal, _float* fHitDistance)
@@ -409,7 +409,6 @@ void CPhysX_Manager::Free()
     PhysX_RELEASE(m_PxDispatcher);
     PhysX_RELEASE(m_PhysX);
 
-    PxPvdTransport* transport = m_Pvd->getTransport();
     m_pTransport->disconnect();
     PhysX_RELEASE(m_Pvd);
     PhysX_RELEASE(m_pTransport);
