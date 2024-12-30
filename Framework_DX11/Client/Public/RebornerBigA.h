@@ -46,9 +46,11 @@ public:
 private:
 	class CCollider* m_EXCollider[CT_END - 1] = { nullptr, nullptr };
 
-private:
+public:
 	virtual void	Active_CurrentWeaponCollider(_float fDamageRatio, _uint iCollIndex = 0, _uint iHitType = 0, _uint iAtkStrength = 0) override;
 	virtual void	DeActive_CurretnWeaponCollider(_uint iCollIndex = 0) override;
+
+private:
 
 	virtual _bool		Get_EffectsLoop(const _uint eType) { return false; };
 

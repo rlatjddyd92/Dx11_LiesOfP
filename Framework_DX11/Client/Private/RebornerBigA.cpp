@@ -91,6 +91,8 @@ HRESULT CRebornerBigA::Initialize(void* pArg)
 	// 24-11-26 김성용
 	// 몬스터 직교 UI 접근 코드 
 	// 정식 코드  
+
+	m_pSoundCom[CPawn::PAWN_SOUND_VOICE]->Play2D_Repeat(TEXT("SE_NPC_Carcass_Horseman_MT_Tentacle_Movement_02"), &g_fVoiceVolume);
 	GET_GAMEINTERFACE->Register_Pointer_Into_OrthoUIPage(UI_ORTHO_OBJ_TYPE::ORTHO_NORMAL_MONSTER, this);
 
 	GET_GAMEINTERFACE->Set_OnOff_OrthoUI(false, this);
@@ -105,7 +107,7 @@ void CRebornerBigA::Priority_Update(_float fTimeDelta)
 	{
 		GET_GAMEINTERFACE->Set_OnOff_OrthoUI(false, this);
 		m_bDieState = true;
-		m_pFsmCom->Set_State(DIE);
+		m_pFsmCom->Change_State(DIE);
 	}
 	m_pWeapon->Priority_Update(fTimeDelta);
 }
@@ -124,6 +126,11 @@ void CRebornerBigA::Update(_float fTimeDelta)
 	m_pFsmCom->Update(fTimeDelta);
 
 	Update_Collider();
+
+	for (_uint i = 0; i < PAWN_SOUND_END; ++i)
+	{
+		m_pSoundCom[i]->Update(fTimeDelta);
+	}
 
 	m_pGameInstance->Add_ColliderList(m_pColliderCom);
 	m_pWeapon->Update(fTimeDelta);
