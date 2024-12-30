@@ -1,5 +1,6 @@
 #pragma once
 #include "Base.h"
+#include <iostream>
 
 // 디버그 모드에서 릭을 잡기위한 crtdebug 때문에 PhysX의 new 재정의에서 오류가 남
 // 피직스  헤더파일을 포함하기 전에 undef로 new 재정의를 잠시 해제함
@@ -27,6 +28,28 @@ public:
     }
 };
 
+class CMyProfilerCallback : public physx::PxProfilerCallback
+{
+public:
+    // zoneStart: 프로파일링 영역 시작 시 호출
+    void* zoneStart(const char* eventName, bool detached, uint64_t contextId) override
+    {
+        // 이벤트 이름과 컨텍스트 ID를 로그에 기록
+        std::cout << "Zone Started: " << eventName << " (ContextId: " << contextId << ")" << std::endl;
+        // 실제 데이터를 추적할 수 있는 구조체나 변수 반환 (여기서는 예시로 NULL 반환)
+
+        return nullptr;
+    }
+
+    // zoneEnd: 프로파일링 영역 종료 시 호출
+    void zoneEnd(void* profilerData, const char* eventName, bool detached, uint64_t contextId) override
+    {
+        // 프로파일링 영역의 종료를 로그에 기록
+        std::cout << "Zone Ended: " << eventName << " (ContextId: " << contextId << ")" << std::endl;
+        // profilerData는 zoneStart에서 반환된 데이터로, 이를 통해 성능 정보를 추적할 수 있습니다.
+    }
+};
+
 class ENGINE_DLL CPhysX_Manager :
     public CBase
 {
@@ -36,9 +59,9 @@ private:
     virtual ~CPhysX_Manager() = default;
 
 public:
-    PxPhysics*      Get_PhysX() const { return m_PhysX; }
-    PxScene*        Get_PhysXScene() const { return m_PxScene; }
-    PxFoundation*   Get_PhysXFoundation() const { return m_PxFoundation; }
+    PxPhysics* Get_PhysX() const { return m_PhysX; }
+    PxScene* Get_PhysXScene() const { return m_PxScene; }
+    PxFoundation* Get_PhysXFoundation() const { return m_PxFoundation; }
     PxCudaContextManager* Get_PhysXCuda() const { return m_CudaContextManager; }
 
     void                Set_Gravity(_float fY) { m_PxScene->setGravity(PxVec3(0.f, fY, 0.f)); }
@@ -76,6 +99,7 @@ private:
     // PhysX 할당자 및 에러 콜백 - 메모리 할당과 에러 처리를 위한 콜백 클래스
     PxDefaultAllocator m_PxAllocator;
     ErrorCallback m_ErrorCallback;
+    CMyProfilerCallback m_ProfilerCallbakc;
 
     // PVD 연결 설정 - 디버깅 정보를 전송할 IP 주소
     std::string m_pvdIPAddress = "127.0.0.1";
@@ -96,8 +120,8 @@ private:
 
 private:
     // 주어진 게임 오브젝트의 PhysX 변환 정보를 얻기 위한 함수
-    PxTransform Get_PhysXTransform(CGameObject* pObject);
-
+    PxTransform     Get_PhysXTransform(CGameObject* pObject);
+    HRESULT         Create_CudaContextManager();
 
 public:
     static CPhysX_Manager* Create(ID3D11Device* pDevice, ID3D11DeviceContext* pContext);

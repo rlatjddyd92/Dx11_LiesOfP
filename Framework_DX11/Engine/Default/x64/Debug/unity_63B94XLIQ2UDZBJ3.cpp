@@ -107,9 +107,6 @@
 #include "D:\GitProject\Dx11_LiesOfP\Framework_DX11\Engine\private\Model.cpp"
 
 
-#include "D:\GitProject\Dx11_LiesOfP\Framework_DX11\Engine\Private\MyProfilerCallback.cpp"
-
-
 #include "D:\GitProject\Dx11_LiesOfP\Framework_DX11\Engine\private\Navigation.cpp"
 
 

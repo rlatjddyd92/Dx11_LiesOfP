@@ -48,16 +48,16 @@ HRESULT CPhysX_Manager::Initialize()
     sceneDesc.contactPairSlabSize = 512;
 
     // GPU 관련 설정
-    if (S_OK == Create_CudaContextManager())
-    {
-        sceneDesc.cudaContextManager = m_CudaContextManager;
-        sceneDesc.flags |= PxSceneFlag::eENABLE_GPU_DYNAMICS;
-        sceneDesc.flags |= PxSceneFlag::eENABLE_PCM;
-        sceneDesc.broadPhaseType = PxBroadPhaseType::eGPU;
-        sceneDesc.solverType = PxSolverType::eTGS;
-        sceneDesc.gpuMaxNumPartitions = 8;
-        sceneDesc.gpuMaxNumStaticPartitions = 255;
-    }
+    //if (S_OK == Create_CudaContextManager())
+    //{
+    //    //sceneDesc.cudaContextManager = m_CudaContextManager;
+    //    //sceneDesc.flags |= PxSceneFlag::eENABLE_GPU_DYNAMICS;
+    //    //sceneDesc.flags |= PxSceneFlag::eENABLE_PCM;
+    //    //sceneDesc.broadPhaseType = PxBroadPhaseType::eGPU;
+    //    //sceneDesc.solverType = PxSolverType::eTGS;
+    //    //sceneDesc.gpuMaxNumPartitions = 8;
+    //    //sceneDesc.gpuMaxNumStaticPartitions = 255;
+    //}
 
     // 씬 생성 PhysX 액터들이 배치될 수 있는 씬
     m_PxScene = m_PhysX->createScene(sceneDesc);
