@@ -337,6 +337,158 @@ void CState_RaxasiaP2_StepJump::Effect_Check(_double CurTrackPos)
 void CState_RaxasiaP2_StepJump::Control_Sound(_double CurTrackPos)
 {
 
+    if (m_iRouteTrack == 0)
+    {
+        if (!m_bInchent)
+        {
+            if (CurTrackPos >= 45.f && CurTrackPos <= 55.f)
+            {
+                m_bInchent = true;
+                m_pMonster->Play_Sound(CPawn::PAWN_SOUND_EFFECT2, TEXT("SE_NPC_Raxasia_SK_WP_Sword_Lightning_Loop.wav"), false);
+            }
+        }
+    }
+    if (m_iRouteTrack == 1)
+    {
+        if (!m_bEnvelop)
+        {
+            if (CurTrackPos >= 87.f)
+            {
+                m_bEnvelop = true;
+            }
+        }
+
+        if (!m_bStomp)
+        {
+            if (CurTrackPos >= 175.f && CurTrackPos <= 211.f)
+            {
+                m_bStomp = true;
+                _float4x4 WorldMat{};
+                _Vec3 vPos = { 0.f, 0.f, -1.75f };
+                XMStoreFloat4x4(&WorldMat,
+                    (*m_pMonster->Get_BoneCombinedMat(m_pMonster->Get_Model()->Get_UFBIndices(UFB_WEAPON))
+                        * (m_pMonster->Get_Transform()->Get_WorldMatrix())));
+                vPos = XMVector3TransformCoord(vPos, XMLoadFloat4x4(&WorldMat));
+                vPos.y = m_pMonster->Get_Transform()->Get_State(CTransform::STATE_POSITION).y;
+
+                CEffect_Manager::Get_Instance()->Add_Effect_ToLayer(LEVEL_GAMEPLAY, TEXT("Raxasia_Attack_ThunderStamp_Small"),
+                    vPos, _Vec3{ m_pMonster->Get_TargetDir() });
+
+                //ÂïÀ¸¸é¼­ ¸¶Å© »ý¼º ÈÄ Æø¹ß
+
+                CAttackObject::ATKOBJ_DESC Desc;
+
+                _Vec3 vTargetDir = m_pMonster->Get_TargetPos() - vPos;
+
+                Desc.vPos = vPos;
+                Desc.vDir = vTargetDir;
+                m_pGameInstance->Add_CloneObject_ToLayer(LEVEL_GAMEPLAY, TEXT("Monster_Attack"), TEXT("Prototype_GameObject_ThunderStampMark"), &Desc);
+
+            }
+        }
+        else if (CurTrackPos >= 220.f)
+        {
+            m_pMonster->DeActive_Effect(CRaxasia::EFFECT_INCHENTSWORD_P2);
+            m_bInchent = false;
+        }
+    }
+    else
+    {
+        if ((CurTrackPos >= 90.f && CurTrackPos <= 130.f) ||
+            (CurTrackPos >= 200.f && CurTrackPos <= 206.f))
+        {
+            if (!m_bSwing)
+            {
+                m_pMonster->Active_Effect(CRaxasia::EFFECT_SWING, true);
+                m_bSwing = true;
+            }
+        }
+        else
+        {
+            m_pMonster->DeActive_Effect(CRaxasia::EFFECT_SWING);
+        }
+
+        if (!m_bInchent)
+        {
+            if ((CurTrackPos >= 190.f))
+            {
+                _float4x4 WorldMat{};
+                _Vec3 vPos = { 0.f, 0.f, 0.f };
+                XMStoreFloat4x4(&WorldMat, (*m_pMonster->Get_BoneCombinedMat(m_pMonster->Get_UFBIndex(UFB_HAND_RIGHT)) * m_pMonster->Get_Transform()->Get_WorldMatrix()));
+                vPos = XMVector3TransformCoord(vPos, XMLoadFloat4x4(&WorldMat));
+
+                CEffect_Manager::Get_Instance()->Add_Effect_ToLayer(LEVEL_GAMEPLAY, TEXT("Raxasia_Attack_ThunderInchent"),
+                    vPos, _Vec3{ m_pMonster->Get_TargetDir() });
+
+                m_pMonster->Active_Effect(CRaxasia::EFFECT_INCHENTSWORD_P2, true);
+                //³»·ÁÂï±â
+                m_bInchent = true;
+            }
+        }
+        else if (CurTrackPos >= 230.f)
+        {
+            m_pMonster->DeActive_Effect(CRaxasia::EFFECT_INCHENTSWORD_P2);
+        }
+
+        if (!m_bSWingDown)
+        {
+            if ((CurTrackPos >= 206.f && CurTrackPos <= 211.f))
+            {
+                _float4x4 WorldMat{};
+                _Vec3 vPos = { 0.f, 0.f, -1.75f };
+                XMStoreFloat4x4(&WorldMat,
+                    (*m_pMonster->Get_BoneCombinedMat(m_pMonster->Get_Model()->Get_UFBIndices(UFB_WEAPON))
+                        * (m_pMonster->Get_Transform()->Get_WorldMatrix())));
+                vPos = XMVector3TransformCoord(vPos, XMLoadFloat4x4(&WorldMat));
+                vPos.y = m_pMonster->Get_Transform()->Get_State(CTransform::STATE_POSITION).y;
+
+                CEffect_Manager::Get_Instance()->Add_Effect_ToLayer(LEVEL_GAMEPLAY, TEXT("Raxasia_Attack_ThunderStamp"),
+                    vPos, _Vec3{ m_pMonster->Get_TargetDir() });
+
+                CAttackObject::ATKOBJ_DESC Desc;
+
+                _Vec3 vTargetDir = m_pMonster->Get_Transform()->Get_State(CTransform::STATE_LOOK);
+                vTargetDir.Normalize();
+                _Vec3 vRight = m_pMonster->Get_Transform()->Get_State(CTransform::STATE_RIGHT);
+                vRight.Normalize();
+
+
+                Desc.vPos = vPos;
+                Desc.vDir = vTargetDir;
+                m_pGameInstance->Add_CloneObject_ToLayer(LEVEL_GAMEPLAY, TEXT("Monster_Attack"), TEXT("Prototype_GameObject_ThunderSpread"), &Desc);
+
+                Desc.vPos = vPos;
+                Desc.vDir = vTargetDir + vRight * 0.3f;
+                Desc.vDir.Normalize();
+                m_pGameInstance->Add_CloneObject_ToLayer(LEVEL_GAMEPLAY, TEXT("Monster_Attack"), TEXT("Prototype_GameObject_ThunderSpread"), &Desc);
+
+                Desc.vPos = vPos;
+                Desc.vDir = vTargetDir - vRight * 0.3f;
+                Desc.vDir.Normalize();
+                m_pGameInstance->Add_CloneObject_ToLayer(LEVEL_GAMEPLAY, TEXT("Monster_Attack"), TEXT("Prototype_GameObject_ThunderSpread"), &Desc);
+
+                Desc.vPos = vPos;
+                Desc.vDir = vTargetDir + vRight * 0.6f;
+                Desc.vDir.Normalize();
+                m_pGameInstance->Add_CloneObject_ToLayer(LEVEL_GAMEPLAY, TEXT("Monster_Attack"), TEXT("Prototype_GameObject_ThunderSpread"), &Desc);
+
+                Desc.vPos = vPos;
+                Desc.vDir = vTargetDir - vRight * 0.6f;
+                Desc.vDir.Normalize();
+                m_pGameInstance->Add_CloneObject_ToLayer(LEVEL_GAMEPLAY, TEXT("Monster_Attack"), TEXT("Prototype_GameObject_ThunderSpread"), &Desc);
+
+            }
+        }
+
+        if (!m_bSpread)
+        {
+            if ((CurTrackPos >= 200.f && CurTrackPos <= 206.f))
+            {
+                m_bSpread = true;
+            }
+        }
+
+    }
 }
 
 CState_RaxasiaP2_StepJump* CState_RaxasiaP2_StepJump::Create(CFsm* pFsm, CMonster* pMonster, _uint iStateNum, void* pArg)

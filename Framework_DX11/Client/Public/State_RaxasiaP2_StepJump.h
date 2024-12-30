@@ -43,7 +43,8 @@ private:
     _bool               m_bStomp = { false };
     _bool               m_bSWingDown = { false };
     _bool               m_bSpread = { false };
-    
+
+    _bool               m_bInchent = { false };
 
     _uint               m_iRouteTrack = {};
 
