@@ -35,6 +35,7 @@ HRESULT CState_Player_Scissor_Fable1::Initialize(_uint iStateNum, void* pArg)
     m_iEffectStartFrame = 10;
     m_iEffectEndFrame = 22;
 
+    m_iSoundFrame = 10;
     return S_OK;
 }
 
@@ -54,6 +55,8 @@ HRESULT CState_Player_Scissor_Fable1::Start_State(void* pArg)
     m_pPlayer->Set_WeaponStrength(ATK_STRONG);
 
     m_isActiveEffect = m_isActiveFableEffect = false;
+
+    m_isSoundPlay = false;
 
     return S_OK;
 }
@@ -126,6 +129,12 @@ void CState_Player_Scissor_Fable1::Update(_float fTimeDelta)
     if (End_Check())
     {
         m_pPlayer->Change_State(CPlayer::OH_IDLE);
+    }
+
+    if (iFrame >= m_iSoundFrame && !m_isSoundPlay)
+    {
+        m_isSoundPlay = true;
+        m_pPlayer->Play_Sound(CPlayer::PAWN_SOUND_EFFECT1, TEXT("SE_PC_SK_WS_Glaive_P_B_S_01.wav"));
     }
 
     Control_Collider();

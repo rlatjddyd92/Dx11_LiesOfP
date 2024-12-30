@@ -192,17 +192,21 @@ void CItem_Throw::Explosion()
 	{
 	case SPECIAL_ITEM::SP_GRANADE:
 		CEffect_Manager::Get_Instance()->Add_Effect_ToLayer(LEVEL_GAMEPLAY, TEXT("Player_Item_Fire"), (_Vec3)m_pTransformCom->Get_State(CTransform::STATE_POSITION));
+		m_pSoundCom->Play2D(TEXT("SE_PC_SK_FX_FlameThrower_Upgrade_End_01.wav"), &g_fEffectVolume);
 		break;
 	case SPECIAL_ITEM::SP_THERMITE:
 		CEffect_Manager::Get_Instance()->Add_Effect_ToLayer(LEVEL_GAMEPLAY, TEXT("Player_Item_Bomb"), (_Vec3)m_pTransformCom->Get_State(CTransform::STATE_POSITION));
+		m_pSoundCom->Play2D(TEXT("SE_PC_SK_FX_FlameThrower_Upgrade_Explo_01.wav"), &g_fEffectVolume);
 		break;
 	case SPECIAL_ITEM::SP_THROW_BATTERY:
 		CEffect_Manager::Get_Instance()->Add_Effect_ToLayer(LEVEL_GAMEPLAY, TEXT("Player_Item_Electric"), (_Vec3)m_pTransformCom->Get_State(CTransform::STATE_POSITION));
+		m_pSoundCom->Play2D(TEXT("SE_PC_SK_Hit_Electric_Common_01.wav"), &g_fEffectVolume); 
 		break;
 	}
 
 	m_isExplosion = true;
 	m_isDead = true;
+
 }
 
 void CItem_Throw::Throw()

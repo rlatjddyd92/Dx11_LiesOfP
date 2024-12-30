@@ -47,6 +47,8 @@ private:
 
     void                Control_Effect(_int iFrame);
 
+    _bool               m_isPlaySound = { false };
+
 public:
     static CState_Player_Flame_RAttack00* Create(class CFsm* pFsm, class CPlayer* pPlayer, _uint iStateNum, void* pArg = nullptr);
     virtual void Free() override;

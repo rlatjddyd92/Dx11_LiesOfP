@@ -22,6 +22,14 @@ HRESULT CState_Player_OpenRaxasiaDoor::Initialize(_uint iStateNum, void* pArg)
 
     m_iStateNum = iStateNum;
 
+    m_iFootStepFrame[0] = 460;
+    m_iFootStepFrame[1] = 495;
+    m_iFootStepFrame[2] = 530;
+    m_iFootStepFrame[3] = 560;
+    m_iFootStepFrame[4] = 605;
+    m_iFootStepFrame[5] = 640;
+    m_iFootStepFrame[6] = 670;
+
     return S_OK;
 }
 
@@ -49,6 +57,11 @@ HRESULT CState_Player_OpenRaxasiaDoor::Start_State(void* pArg)
     m_pPlayer->Get_Navigation()->Research_Cell(vInitPos);
     m_pTowerDoor->Set_IsOpen(true);
 
+    for (_uint i = 0; i < 14; ++i)
+    {
+        m_isPlaySound[i] = false;
+    }
+
     return S_OK;
 }
 
@@ -65,6 +78,14 @@ void CState_Player_OpenRaxasiaDoor::Update(_float fTimeDelta)
         m_pPlayer->Active_Effect(CPlayer::EFFECT_CUTSCENE_ARM_OPENDOOR);
     }
 
+    for (_uint i = 0; i < 7; ++i)
+    {
+        if ((iFrame == m_iFootStepFrame[i] || iFrame == m_iFootStepFrame[i] + 1) && !m_isPlaySound[i])
+        {
+            m_pPlayer->Play_Sound(CPlayer::PAWN_SOUND_EFFECT1, TEXT("SE_PC_FS_Stone_Walk_01.wav"));
+            m_isPlaySound[i] = true;
+        }
+    }
 }
 
 void CState_Player_OpenRaxasiaDoor::End_State()

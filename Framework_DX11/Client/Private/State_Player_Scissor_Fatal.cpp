@@ -32,6 +32,11 @@ HRESULT CState_Player_Scissor_Fatal::Initialize(_uint iStateNum, void* pArg)
     m_iColliderStartFrame[3] = 87;
     m_iColliderEndFrame[3] = 93;
 
+    m_iSwishL_Sound_Frame = 85;
+    m_iSwishM_Sound_Frame = 14;
+    m_iSwishS_Sound_Frame = 27;
+    m_iSwishM_Sound_Frame2 =47;
+
     return S_OK;
 }
 
@@ -46,14 +51,13 @@ HRESULT CState_Player_Scissor_Fatal::Start_State(void* pArg)
     m_isActiveEffect[1] = false;
     m_isActiveEffect[2] = false;
     m_isActiveEffect[3] = false;
-    m_isActiveEffect[4] = false;
 
     //m_pPlayer->Active_Effect(TEXT("Player_Attack_Rapier_StormStab_First_Ready"));
 
-    for (_uint i = 0; i < 3; ++i)
-    {
-        m_isPlaySound[i] = false;
-    }
+    m_bSwishL_Sound_Play = false;
+    m_bSwishM_Sound_Play = false;
+    m_bSwishS_Sound_Play = false;
+    m_bSwishM_Sound_Play2 = false;
 
     m_pPlayer->Set_WeaponStrength(ATK_STRONG);
 
@@ -104,31 +108,27 @@ void CState_Player_Scissor_Fatal::Control_Collider(_int iFrame)
 
 void CState_Player_Scissor_Fatal::Control_Sound(_int iFrame)
 {
-    //if ((iFrame == m_iColliderStartFrame[0] || iFrame == m_iColliderStartFrame[0] + 1) && !m_isPlaySound[0])
-    //{
-    //    m_pPlayer->Play_CurrentWeaponSound(CWeapon::WEP_SOUND_EFFECT1, TEXT("SE_PC_SK_WS_Dagger_1H_S_01.wav"));
-    //    m_isPlaySound[0] = true;
-    //}
-    //else if ((iFrame == m_iColliderStartFrame[1] || iFrame == m_iColliderStartFrame[1] + 1) && !m_isPlaySound[1])
-    //{
-    //    m_pPlayer->Play_CurrentWeaponSound(CWeapon::WEP_SOUND_EFFECT1, TEXT("SE_PC_SK_WS_Dagger_1H_S_02.wav"));
-    //    m_isPlaySound[1] = true;
-    //}
-    //else if ((iFrame == m_iColliderStartFrame[2] || iFrame == m_iColliderStartFrame[2] + 1) && !m_isPlaySound[2])
-    //{
-    //    m_pPlayer->Play_CurrentWeaponSound(CWeapon::WEP_SOUND_EFFECT1, TEXT("SE_PC_SK_WS_Dagger_1H_S_01.wav"));
-    //    m_isPlaySound[2] = true;
-    //}
-    //else if ((iFrame == m_iColliderStartFrame[3] || iFrame == m_iColliderStartFrame[3] + 1) && !m_isPlaySound[3])
-    //{
-    //    m_pPlayer->Play_CurrentWeaponSound(CWeapon::WEP_SOUND_EFFECT1, TEXT("SE_PC_SK_WS_Dagger_1H_S_02.wav"));
-    //    m_isPlaySound[3] = true;
-    //}
-    //else if ((iFrame == m_iColliderStartFrame[4] || iFrame == m_iColliderStartFrame[4] + 1) && !m_isPlaySound[4])
-    //{
-    //    m_pPlayer->Play_CurrentWeaponSound(CWeapon::WEP_SOUND_EFFECT1, TEXT("SE_PC_SK_WS_Dagger_1H_S_03.wav"));
-    //    m_isPlaySound[4] = true;
-    //}
+    if (iFrame >= m_iSwishL_Sound_Frame && !m_bSwishL_Sound_Play)
+    {
+        m_pPlayer->Play_CurrentWeaponSound(CWeapon::WEP_SOUND_EFFECT1, TEXT("SE_PC_SK_WS_Dagger_1H_L_01.wav"));
+        m_bSwishL_Sound_Play = true;
+    }
+    if (iFrame >= m_iSwishM_Sound_Frame && !m_bSwishM_Sound_Play)
+    {
+        m_pPlayer->Play_CurrentWeaponSound(CWeapon::WEP_SOUND_EFFECT1, TEXT("SE_PC_SK_WS_Dagger_1H_M_01.wav"));
+        m_bSwishM_Sound_Play = true;
+    }
+    if (iFrame >= m_iSwishM_Sound_Frame2 && !m_bSwishM_Sound_Play2)
+    {
+        m_pPlayer->Play_CurrentWeaponSound(CWeapon::WEP_SOUND_EFFECT1, TEXT("SE_PC_SK_WS_Dagger_1H_M_01.wav"));
+        m_bSwishM_Sound_Play2 = true;
+    }
+    if (iFrame >= m_iSwishS_Sound_Frame && !m_bSwishS_Sound_Play)
+    {
+        m_pPlayer->Play_CurrentWeaponSound(CWeapon::WEP_SOUND_EFFECT1, TEXT("SE_PC_SK_WS_Dagger_1H_S_01.wav"));
+        m_bSwishS_Sound_Play = true;
+    }
+  
 }
 
 void CState_Player_Scissor_Fatal::Control_Effect(_int iFrame)

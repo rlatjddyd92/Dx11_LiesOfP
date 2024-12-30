@@ -54,6 +54,8 @@ private:
     _uint               Choice_DonwAnim(_Vec3 vHitPos);
     _bool               End_Check();
 
+    void                Random_Sound_Play(_float fSoundNum);
+
 public:
     static CState_Player_Hit* Create(class CFsm* pFsm, class CPlayer* pPlayer, _uint iStateNum, void* pArg = nullptr);
     virtual void Free() override;

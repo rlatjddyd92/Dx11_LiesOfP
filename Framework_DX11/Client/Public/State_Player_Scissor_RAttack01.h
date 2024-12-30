@@ -53,6 +53,10 @@ private:
     _bool               m_isRightActiveEffect = {};
     void                Control_Effect(_int iFrame);
 
+    _int                m_iSwishL_SoundFrame = {};
+    _int                m_iSwishM_SoundFrame = {};
+    _bool               m_isPlaySound_SwishL = { false };
+    _bool               m_isPlaySound_SwishM = { false };
 public:
     static CState_Player_Scissor_RAttack01* Create(class CFsm* pFsm, class CPlayer* pPlayer, _uint iStateNum, void* pArg = nullptr);
     virtual void Free() override;

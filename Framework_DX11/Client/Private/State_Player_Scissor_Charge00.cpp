@@ -44,6 +44,11 @@ HRESULT CState_Player_Scissor_Charge00::Initialize(_uint iStateNum, void* pArg)
     m_iRightEffectStartFrame[1] = 112;
     m_iRightEffectEndFrame[1] = 124;
 
+    m_iSwishL_Sound_Frame = 110;
+    m_iSwishM_Sound_Frame = 75;
+    m_iSwishS_Sound_Frame = 68;
+    m_iSwishS_Sound_Frame2 = 10;
+
     m_iStateNum = iStateNum;
 
     return S_OK;
@@ -63,6 +68,11 @@ HRESULT CState_Player_Scissor_Charge00::Start_State(void* pArg)
     m_isRightActiveEffect[0] = m_isRightActiveEffect[1] = false;
     m_isLeftDeActiveEffect[0] = m_isLeftDeActiveEffect[1] = false;
     m_isRightDeActiveEffect[0] = m_isRightDeActiveEffect[1] = false;
+
+    m_bSwishL_Sound_Play = false;
+    m_bSwishM_Sound_Play = false;
+    m_bSwishS_Sound_Play = false;
+    m_bSwishS_Sound_Play2 = false;
 
     return S_OK;
 }
@@ -125,6 +135,7 @@ void CState_Player_Scissor_Charge00::Update(_float fTimeDelta)
 
     Control_Collider();
     Control_Effect(iFrame);
+    Control_Sound(iFrame);
 }
 
 void CState_Player_Scissor_Charge00::End_State()
@@ -195,6 +206,30 @@ void CState_Player_Scissor_Charge00::Control_Effect(_int iFrame)
             m_pPlayer->DeActive_WeaponEffect(CWeapon_Scissor::EFFECT_BASE, 0);
             m_isRightDeActiveEffect[i] = true;
         }
+    }
+}
+
+void CState_Player_Scissor_Charge00::Control_Sound(_int iFrame)
+{
+    if (iFrame >= m_iSwishL_Sound_Frame && !m_bSwishL_Sound_Play)
+    {
+        m_bSwishL_Sound_Play = true;
+        m_pPlayer->Play_Sound(CPlayer::PAWN_SOUND_EFFECT1, TEXT("SE_PC_SK_WS_CookingKnife_1H_L_01.wav"));
+    }
+    if (iFrame >= m_iSwishM_Sound_Frame && !m_bSwishM_Sound_Play)
+    {
+        m_bSwishM_Sound_Play = true;
+        m_pPlayer->Play_Sound(CPlayer::PAWN_SOUND_EFFECT1, TEXT("SE_PC_SK_WS_CookingKnife_1H_M_01.wav"));
+    }
+    if (iFrame >= m_iSwishS_Sound_Frame && !m_bSwishS_Sound_Play)
+    {
+        m_bSwishS_Sound_Play = true;
+        m_pPlayer->Play_Sound(CPlayer::PAWN_SOUND_EFFECT1, TEXT("SE_PC_SK_WS_CookingKnife_1H_S_01.wav"));
+    }  
+    if (iFrame >= m_iSwishS_Sound_Frame2 && !m_bSwishS_Sound_Play2)
+    {
+        m_bSwishS_Sound_Play2 = true;
+        m_pPlayer->Play_Sound(CPlayer::PAWN_SOUND_EFFECT1, TEXT("SE_PC_SK_WS_CookingKnife_1H_S_01.wav"));
     }
 }
 

@@ -37,7 +37,14 @@ private:
     void                Control_Collider(_int iFrame);
 
 private:
-    _bool               m_isPlaySound[4] = {};
+    _int                m_iSwishL_Sound_Frame = { };
+    _int                m_iSwishM_Sound_Frame = { };
+    _int                m_iSwishS_Sound_Frame = { };
+    _int                m_iSwishM_Sound_Frame2 = { };
+    _bool               m_bSwishL_Sound_Play = { };
+    _bool               m_bSwishM_Sound_Play = { };
+    _bool               m_bSwishS_Sound_Play = { };
+    _bool               m_bSwishM_Sound_Play2 = { };
     void                Control_Sound(_int iFrame);
 
 private:

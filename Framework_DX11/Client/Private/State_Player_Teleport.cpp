@@ -57,7 +57,7 @@ HRESULT CState_Player_Teleport::Start_State(void* pArg)
         m_isEnd_Teleport = false;
         m_isAppearStartEffect = false;
 
-        m_pPlayer->Play_Sound(CPawn::PAWN_SOUND_EFFECT1, TEXT("SE_PC_MT_Teleport_Start.wav"));
+        m_pPlayer->Play_Sound(CPawn::PAWN_SOUND_EFFECT1, TEXT("SE_PC_MT_Teleport_Start_VolumeUP.wav"));
 
         m_fDissloveRatio = 0.f;
 
@@ -87,7 +87,7 @@ HRESULT CState_Player_Teleport::Start_State(void* pArg)
         m_isEnd_Teleport = false;
         m_isAppearStartEffect = false;
 
-        m_pPlayer->Play_Sound(CPawn::PAWN_SOUND_EFFECT1, TEXT("SE_PC_MT_Teleport_Start.wav"));
+        m_pPlayer->Play_Sound(CPawn::PAWN_SOUND_EFFECT1, TEXT("SE_PC_MT_Teleport_Start_VolumeUP.wav"));
 
         m_fDissloveRatio = 0.f;
     }
@@ -175,7 +175,7 @@ void CState_Player_Teleport::Update_SteppingStone(_float fTimeDelta)
             m_isFadeOut = true;
 
             CEffect_Manager::Get_Instance()->Add_Effect_ToLayer(LEVEL_GAMEPLAY, TEXT("Player_Teleport_Arrive"), (_Vec3)m_pPlayer->Get_Transform()->Get_State(CTransform::STATE_POSITION));
-            m_pPlayer->Play_Sound(CPawn::PAWN_SOUND_EFFECT2, TEXT("SE_PC_MT_Teleport_End.wav"));
+            m_pPlayer->Play_Sound(CPawn::PAWN_SOUND_EFFECT2, TEXT("SE_PC_MT_Teleport_End_VolumeUP.wav"));
         }
         else if (iFrame > 80)
         {
@@ -244,7 +244,7 @@ void CState_Player_Teleport::Update_Stargazer(_float fTimeDelta)
             m_isFadeOut = true;
 
             CEffect_Manager::Get_Instance()->Add_Effect_ToLayer(LEVEL_GAMEPLAY, TEXT("Player_Teleport_Arrive"), (_Vec3)m_pPlayer->Get_Transform()->Get_State(CTransform::STATE_POSITION));
-            m_pPlayer->Play_Sound(CPawn::PAWN_SOUND_EFFECT2, TEXT("SE_PC_MT_Teleport_End.wav"));
+            m_pPlayer->Play_Sound(CPawn::PAWN_SOUND_EFFECT2, TEXT("SE_PC_MT_Teleport_End_VolumeUP.wav"));
         }
         else if (iFrame > 80)
         {
@@ -292,7 +292,7 @@ void CState_Player_Teleport::Update_Die(_float fTimeDelta)
             {
                 GET_GAMEINTERFACE->Fade_In(0.9f);
                 CEffect_Manager::Get_Instance()->Add_Effect_ToLayer(LEVEL_GAMEPLAY, TEXT("Player_Teleport_Arrive"), (_Vec3)m_pPlayer->Get_Transform()->Get_State(CTransform::STATE_POSITION));
-                m_pPlayer->Play_Sound(CPawn::PAWN_SOUND_EFFECT2, TEXT("SE_PC_MT_Teleport_End.wav"));
+                m_pPlayer->Play_Sound(CPawn::PAWN_SOUND_EFFECT2, TEXT("SE_PC_MT_Teleport_End_VolumeUP.wav"));
                 m_isFadeIn = true;
             }
         }

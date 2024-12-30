@@ -47,17 +47,21 @@ HRESULT CPhysX_Manager::Initialize()
     sceneDesc.contactReportStreamBufferSize = 16384;
     sceneDesc.contactPairSlabSize = 512;
 
+#ifdef __cuda_cuda_h__
+
+
     // GPU 관련 설정
-    //if (S_OK == Create_CudaContextManager())
-    //{
-    //    //sceneDesc.cudaContextManager = m_CudaContextManager;
-    //    //sceneDesc.flags |= PxSceneFlag::eENABLE_GPU_DYNAMICS;
-    //    //sceneDesc.flags |= PxSceneFlag::eENABLE_PCM;
-    //    //sceneDesc.broadPhaseType = PxBroadPhaseType::eGPU;
-    //    //sceneDesc.solverType = PxSolverType::eTGS;
-    //    //sceneDesc.gpuMaxNumPartitions = 8;
-    //    //sceneDesc.gpuMaxNumStaticPartitions = 255;
-    //}
+    if (S_OK == Create_CudaContextManager())
+    {
+        //sceneDesc.cudaContextManager = m_CudaContextManager;
+        //sceneDesc.flags |= PxSceneFlag::eENABLE_GPU_DYNAMICS;
+        //sceneDesc.flags |= PxSceneFlag::eENABLE_PCM;
+        //sceneDesc.broadPhaseType = PxBroadPhaseType::eGPU;
+        //sceneDesc.solverType = PxSolverType::eTGS;
+        //sceneDesc.gpuMaxNumPartitions = 8;
+        //sceneDesc.gpuMaxNumStaticPartitions = 255;
+    }
+#endif // __cuda_cuda_h__
 
     // 씬 생성 PhysX 액터들이 배치될 수 있는 씬
     m_PxScene = m_PhysX->createScene(sceneDesc);
@@ -290,6 +294,8 @@ PxTransform CPhysX_Manager::Get_PhysXTransform(CGameObject* pObject)
 
 HRESULT CPhysX_Manager::Create_CudaContextManager()
 {
+#ifdef __cuda_cuda_h__
+
     _int cudaDriverVersion = 0;
     cuDriverGetVersion(&cudaDriverVersion);
 
@@ -373,7 +379,7 @@ HRESULT CPhysX_Manager::Create_CudaContextManager()
             }
         }
     }
-
+#endif
 
     return S_OK;
 }

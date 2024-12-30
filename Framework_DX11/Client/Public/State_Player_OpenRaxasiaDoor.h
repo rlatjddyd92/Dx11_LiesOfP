@@ -27,6 +27,9 @@ private:
     _double* m_pTrackPos = { nullptr };
 
     class CTowerDoor* m_pTowerDoor = { nullptr };
+
+    _int                m_iFootStepFrame[7] = {};
+    _bool               m_isPlaySound[7] = { false, };
 private:
     _bool               End_Check();
 

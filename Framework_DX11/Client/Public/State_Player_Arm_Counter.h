@@ -39,6 +39,7 @@ private:
 private:
     _int               m_iActiveEffectFrame = {};
     _bool               m_isActiveEffect = {};
+    _bool               m_isPlaySound = {false};
     _int               m_iDeActiveEffectFrame = {};
 
     void                Control_Effect(_int iFrame);

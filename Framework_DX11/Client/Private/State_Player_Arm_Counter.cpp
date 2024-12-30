@@ -38,6 +38,7 @@ HRESULT CState_Player_Arm_Counter::Start_State(void* pArg)
     m_pPlayer->Change_Animation(m_iAnimation_Arm_Counter, false, 0.15f, 0, true, true);
 
     m_isActiveEffect = false;
+    m_isPlaySound = false;
 
     return S_OK;
 }
@@ -55,12 +56,20 @@ void CState_Player_Arm_Counter::Update(_float fTimeDelta)
 
     Control_Collider();
     Control_Effect(iFrmae);
+
+    if (m_isPlaySound == false)
+    {
+        m_isPlaySound = true;
+        m_pPlayer->Play_Sound(CPlayer::PAWN_SOUND_EFFECT2, TEXT("SE_PC_SK_FX_Aegis_Counter_01.wav"));
+    }
 }
 
 void CState_Player_Arm_Counter::End_State()
 {
     if (!m_isChangeLoop)
         m_pPlayer->Get_Model()->Set_RemoteTuning(true);
+
+    m_pPlayer->Stop_Sound(CPlayer::PAWN_SOUND_EFFECT2);
 }
 
 _bool CState_Player_Arm_Counter::End_Check()

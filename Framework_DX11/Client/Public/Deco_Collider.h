@@ -6,6 +6,7 @@
 BEGIN(Engine)
 class CCollider;
 class CRigidBody;
+class CSound;
 END
 
 BEGIN(Client)
@@ -41,7 +42,7 @@ public:
 private:
 	CCollider* m_pColliderCom = { nullptr };
 	CRigidBody* m_pRigidBodyCom = { nullptr };
-
+	CSound* m_pSoundCom = { nullptr };
 private:
 	const _float4x4* m_pParentWorldMatrix = { nullptr };
 	const _float4x4* m_pSoketMatrix = { nullptr };
@@ -53,6 +54,9 @@ private:
 	_Vec3 m_vCurPos = {};
 
 	_bool m_bSetRigidPos = { false };
+	_bool m_bHitPlayer = { false };
+
+	_float m_fHitTimer = { 0.f };
 
 private:
 	HRESULT Ready_Components();

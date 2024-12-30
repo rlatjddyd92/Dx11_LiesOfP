@@ -57,6 +57,11 @@ private:
 
     void                Control_Effect(_int iFrame);
 
+    _int                m_iSwishL_Sound_Frame = { };
+    _int                m_iSwishL_Sound_Frame2 = { };
+    _bool               m_bSwishL_Sound_Play = { };
+    _bool               m_bSwishL_Sound_Play2 = { };
+
 public:
     static CState_Player_Scissor_Charge01* Create(class CFsm* pFsm, class CPlayer* pPlayer, _uint iStateNum, void* pArg = nullptr);
     virtual void Free() override;
