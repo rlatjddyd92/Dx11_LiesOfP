@@ -17,9 +17,11 @@ private:
 	virtual ~CNavigation() = default;
 
 public:
-	void	Change_CurrentCellIndex(_int iIndex) { m_iCurrentCellIndex = iIndex; };
+	void	Change_CurrentCellIndex(_int iIndex) { m_iCurrentCellIndex = iIndex; }
 	_int	Get_CurrentCellIndex() { return m_iCurrentCellIndex; }
 	_int	Get_CurrentAreaNum() { return m_iCurrentAreaIndex; }
+
+	void	Set_ExceptCellNum(_int iCellNum) { m_iExceptCellNum = iCellNum; }
 
 public:
 	virtual HRESULT Initialize_Prototype(const _wstring& strNavigationDataFile);
@@ -43,6 +45,10 @@ private:
 	_int								m_iCurrentCellIndex = { -1 };
 	_int								m_iCurrentAreaIndex = { 0 };
 	static _Matrix						m_WorldMatrix;
+
+	_Vec3								m_vOutLine{};		// ¼¿ÀÌ ³ª°£ ¸é
+
+	_int								m_iExceptCellNum = { -1 };
 
 #ifdef _DEBUG
 private:

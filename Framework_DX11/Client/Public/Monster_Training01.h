@@ -37,6 +37,10 @@ public:
 	virtual HRESULT Render() override;
 
 private:
+	virtual void	Active_CurrentWeaponCollider(_float fDamageRatio, _uint iCollIndex = 0, _uint iHitType = 0, _uint iAtkStrength = 0) override;
+	virtual void	DeActive_CurretnWeaponCollider(_uint iCollIndex = 0) override;
+
+private:
 	CColliderObject* m_pColliderObject = { nullptr };
 
 private:

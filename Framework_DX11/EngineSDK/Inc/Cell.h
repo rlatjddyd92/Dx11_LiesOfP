@@ -45,7 +45,7 @@ public:
 public:
 	HRESULT Initialize(const _float3* pPoints, void* pArg);
 	_bool Compare_Points(_fvector vSour, _fvector vDest);
-	_bool isIn(_fvector vPosition, _int* pNeighborIndex);
+	_bool isIn(_fvector vPosition, _int* pNeighborIndex, _Vec3* vOutLine = nullptr);
 
 #ifdef _DEBUG
 public:

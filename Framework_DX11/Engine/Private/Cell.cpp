@@ -81,7 +81,7 @@ _bool CCell::Compare_Points(_fvector vSour, _fvector vDest)
 	return false;
 }
 
-_bool CCell::isIn(_fvector vPosition, _int* pNeighborIndex)
+_bool CCell::isIn(_fvector vPosition, _int* pNeighborIndex, _Vec3* vOutLine)
 {
 	for (size_t i = 0; i < LINE_END; i++)
 	{
@@ -94,6 +94,7 @@ _bool CCell::isIn(_fvector vPosition, _int* pNeighborIndex)
 
 		if (0 < XMVectorGetX(XMVector3Dot(vSour, vDest)))
 		{
+			*vOutLine = vLine;
 			*pNeighborIndex = m_iNeighborIndices[i];
 			return false;
 		}
