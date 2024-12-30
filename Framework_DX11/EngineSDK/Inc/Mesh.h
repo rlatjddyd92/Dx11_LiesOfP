@@ -33,9 +33,9 @@ public:
 
 public:
 	virtual HRESULT Initialize_Prototype(HANDLE* pFile, const CModel* pModel, _fmatrix PreTransformMatrix, 
-		const CModel::DISSOLVE_PARTICLE_DESC& ParticleDesc, _uint iMeshIndex, vector<class CVIBuffer_Dissolve_Instance*>& Instances);
+		const CModel::DISSOLVE_PARTICLE_DESC& ParticleDesc, _uint iMeshIndex, vector<DISSOLVE_PARTICLE>& Instances);
 	virtual HRESULT Initialize_Prototype_To_Binary(HANDLE* pFile, const CModel* pModel, _fmatrix PreTransformMatrix, 
-		const CModel::DISSOLVE_PARTICLE_DESC& ParticleDesc, _uint iMeshIndex, vector<class CVIBuffer_Dissolve_Instance*>& Instances);
+		const CModel::DISSOLVE_PARTICLE_DESC& ParticleDesc, _uint iMeshIndex, vector<DISSOLVE_PARTICLE>& Instances);
 	virtual HRESULT Initialize(void* pArg) override;
 
 public:
@@ -83,10 +83,10 @@ private:
 
 public:
 	static CMesh* Create(ID3D11Device* pDevice, ID3D11DeviceContext* pContext, HANDLE* pFile, const CModel* pModel, _fmatrix PreTransformMatrix, 
-		const CModel::DISSOLVE_PARTICLE_DESC& ParticleDesc, _uint iMeshIndex, vector<class CVIBuffer_Dissolve_Instance*>& Instances);
+		const CModel::DISSOLVE_PARTICLE_DESC& ParticleDesc, _uint iMeshIndex, vector<DISSOLVE_PARTICLE>& Instances);
 	
 	static CMesh* Create_To_Binary(ID3D11Device* pDevice, ID3D11DeviceContext* pContext, HANDLE* pFile, const CModel* pModel, _fmatrix PreTransformMatrix, 
-		const CModel::DISSOLVE_PARTICLE_DESC& ParticleDesc, _uint iMeshIndex, vector<class CVIBuffer_Dissolve_Instance*>& Instances);
+		const CModel::DISSOLVE_PARTICLE_DESC& ParticleDesc, _uint iMeshIndex, vector<DISSOLVE_PARTICLE>& Instances);
 
 	virtual CComponent* Clone(void* pArg);
 	virtual void Free() override;

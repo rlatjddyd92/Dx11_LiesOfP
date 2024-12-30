@@ -18,7 +18,7 @@ CMesh::CMesh(const CMesh & Prototype)
 }
 
 HRESULT CMesh::Initialize_Prototype(HANDLE* pFile, const CModel* pModel, _fmatrix PreTransformMatrix, 
-	const CModel::DISSOLVE_PARTICLE_DESC& ParticleDesc, _uint iMeshIndex, vector<class CVIBuffer_Dissolve_Instance*>& Instances)
+	const CModel::DISSOLVE_PARTICLE_DESC& ParticleDesc, _uint iMeshIndex, vector<DISSOLVE_PARTICLE>& Instances)
 {
 	_ulong dwByte = 0;
 
@@ -56,8 +56,8 @@ HRESULT CMesh::Initialize_Prototype(HANDLE* pFile, const CModel* pModel, _fmatri
 
 	_uint		iNumIndices = { 0 };
 
-	vector<CVIBuffer_Dissolve_Instance::DISSOLVE_PARTICLE> DissolveParticles;
-
+	_uint iCount = 0;
+	_float fSize = 0.f;
 	for (size_t i = 0; i < m_iNumFaces; i++)
 	{
 		_uint iStartNum = iNumIndices;
@@ -66,7 +66,7 @@ HRESULT CMesh::Initialize_Prototype(HANDLE* pFile, const CModel* pModel, _fmatri
 		ReadFile(*pFile, &m_pIndices[iNumIndices++], sizeof(_uint), &dwByte, nullptr);
 		ReadFile(*pFile, &m_pIndices[iNumIndices++], sizeof(_uint), &dwByte, nullptr);
 
-		if(ParticleDesc.iNumInstance <= 0)
+		if (ParticleDesc.iNumInstance <= 0)
 			continue;
 
 		_Vec3 vPoint[3] = {};
@@ -93,17 +93,20 @@ HRESULT CMesh::Initialize_Prototype(HANDLE* pFile, const CModel* pModel, _fmatri
 			vUV[2] = m_pAnimVertices[m_pIndices[iStartNum + 2]].vTexcoord;
 		}
 
-		_float fSize = Get_TriangleArea(vPoint[0], vPoint[1], vPoint[2]);
-		fSize *= ParticleDesc.iNumInstance;
+		// 넓이 누적
+		fSize += Get_TriangleArea(vPoint[0], vPoint[1], vPoint[2]);
 
-		if (fSize < 1.f)
-			fSize = 1.f;
+		_uint iAreaCount = _uint(fSize * ParticleDesc.iNumInstance);
 
-		for (size_t j = 0; j < (size_t)fSize; ++j)
+		if (iAreaCount > 0)
+			fSize = fSize - ((_float)iAreaCount / ParticleDesc.iNumInstance);
+
+		for (size_t j = 0; j < (size_t)iAreaCount; ++j)
 		{
-			CVIBuffer_Dissolve_Instance::DISSOLVE_PARTICLE pParticle = {};
+			DISSOLVE_PARTICLE pParticle = {};
+
 			_Vec3 vResultPos = Get_RandomFacePos(vPoint[0], vPoint[1], vPoint[2]);
-			pParticle.Particle.vTranslation = _Vec4(vResultPos.x, vResultPos.y, vResultPos.z, 0.f);
+			pParticle.Particle.vTranslation = _Vec4(vResultPos.x, vResultPos.y, vResultPos.z, 1.f);
 
 			pParticle.Particle.vPosition = _float3(0.f, 0.f, 0.f);
 
@@ -124,7 +127,7 @@ HRESULT CMesh::Initialize_Prototype(HANDLE* pFile, const CModel* pModel, _fmatri
 
 			pParticle.Particle.vCurrenrRandomDir = _float4(m_pGameInstance->Get_Random(-1.f, 1.f), m_pGameInstance->Get_Random(-1.f, 1.f), m_pGameInstance->Get_Random(-1.f, 1.f), 0.f);
 			pParticle.Particle.vNextRandomDir = _float4(m_pGameInstance->Get_Random(-1.f, 1.f), m_pGameInstance->Get_Random(-1.f, 1.f), m_pGameInstance->Get_Random(-1.f, 1.f), 0.f);
-			
+
 			pParticle.vTexcoord = Get_CalculateUV(vPoint[0], vPoint[1], vPoint[2], vUV[0], vUV[1], vUV[2], vResultPos);
 			pParticle.isActive = false;
 
@@ -138,21 +141,12 @@ HRESULT CMesh::Initialize_Prototype(HANDLE* pFile, const CModel* pModel, _fmatri
 				pParticle.vBlendWeights = {};
 			}
 
-			DissolveParticles.emplace_back(pParticle);
+			Instances.emplace_back(pParticle);
 		}
 	}
 
 	// 파티클 초기화 -완-
 	// 이제 이걸 Buffer에 전달해서, 그걸로 버퍼 잘 만들어지는지 확인해야 함.
-	if (0 < ParticleDesc.iNumInstance)
-	{
-		CVIBuffer_Dissolve_Instance::DISSOLVE_INSTANCE_DESC DissolveDesc = {};
-		DissolveDesc.iNumInstance = DissolveParticles.size();
-		DissolveDesc.pParticles = DissolveParticles.data();
-		DissolveDesc.iMeshIndex = iMeshIndex;
-
-		Instances.emplace_back(CVIBuffer_Dissolve_Instance::Create(m_pDevice, m_pContext, DissolveDesc));
-	}
 
 
 	ZeroMemory(&m_InitialData, sizeof m_InitialData);
@@ -183,7 +177,7 @@ HRESULT CMesh::Initialize_Prototype(HANDLE* pFile, const CModel* pModel, _fmatri
 }
 
 HRESULT CMesh::Initialize_Prototype_To_Binary(HANDLE* pFile, const CModel* pModel, _fmatrix PreTransformMatrix, 
-	const CModel::DISSOLVE_PARTICLE_DESC& ParticleDesc, _uint iMeshIndex, vector<class CVIBuffer_Dissolve_Instance*>& Instances)
+	const CModel::DISSOLVE_PARTICLE_DESC& ParticleDesc, _uint iMeshIndex, vector<DISSOLVE_PARTICLE>& Instances)
 {
 	_ulong dwByte = 0;
 
@@ -219,9 +213,8 @@ HRESULT CMesh::Initialize_Prototype_To_Binary(HANDLE* pFile, const CModel* pMode
 	m_pIndices = new _uint[m_iNumIndices];
 	ZeroMemory(m_pIndices, sizeof(_uint) * m_iNumIndices);
 
-	vector<CVIBuffer_Dissolve_Instance::DISSOLVE_PARTICLE> DissolveParticles;
-
 	_uint iCount = 0;
+	_float fSize = 0.f;
 	for (_uint i = 0; i < m_iNumIndices; ++i)
 	{
 		ReadFile(*pFile, &m_pIndices[i], sizeof(_uint), &dwByte, nullptr);
@@ -258,21 +251,20 @@ HRESULT CMesh::Initialize_Prototype_To_Binary(HANDLE* pFile, const CModel* pMode
 				vUV[2] = m_pAnimVertices[m_pIndices[iStartNum + 2]].vTexcoord;
 			}
 
+			// 넓이 누적
+			fSize += Get_TriangleArea(vPoint[0], vPoint[1], vPoint[2]);
 
-			_float fSize = Get_TriangleArea(vPoint[0], vPoint[1], vPoint[2]);
-			fSize *= ParticleDesc.iNumInstance;
+			_uint iAreaCount = _uint(fSize * ParticleDesc.iNumInstance);
+			
+			if (iAreaCount > 0)
+				fSize = fSize - ((_float)iAreaCount / ParticleDesc.iNumInstance);
 
-			if (fSize < 1.f)
-				fSize = 1.f;
-			else
-				_uint a = 0;
-
-			for (size_t j = 0; j < (size_t)fSize; ++j)
+			for (size_t j = 0; j < (size_t)iAreaCount; ++j)
 			{
-				CVIBuffer_Dissolve_Instance::DISSOLVE_PARTICLE pParticle = {};
+				DISSOLVE_PARTICLE pParticle = {};
 
 				_Vec3 vResultPos = Get_RandomFacePos(vPoint[0], vPoint[1], vPoint[2]);
-				pParticle.Particle.vTranslation = _Vec4(vResultPos.x, vResultPos.y, vResultPos.z, 0.f);
+				pParticle.Particle.vTranslation = _Vec4(vResultPos.x, vResultPos.y, vResultPos.z, 1.f);
 
 				pParticle.Particle.vPosition = _float3(0.f, 0.f, 0.f);
 
@@ -307,20 +299,14 @@ HRESULT CMesh::Initialize_Prototype_To_Binary(HANDLE* pFile, const CModel* pMode
 					pParticle.vBlendWeights = {};
 				}
 
-				DissolveParticles.emplace_back(pParticle);
+				Instances.emplace_back(pParticle);
 			}
+
 			iCount = 0;
 		}
-	}
 
-	if (0 < ParticleDesc.iNumInstance)
-	{
-		CVIBuffer_Dissolve_Instance::DISSOLVE_INSTANCE_DESC DissolveDesc = {};
-		DissolveDesc.iNumInstance = DissolveParticles.size();
-		DissolveDesc.pParticles = DissolveParticles.data();
-		DissolveDesc.iMeshIndex = iMeshIndex;
-		
-		Instances.emplace_back(CVIBuffer_Dissolve_Instance::Create(m_pDevice, m_pContext, DissolveDesc));
+		if(0.f == fSize)
+			_uint a = 0;
 	}
 
 	ZeroMemory(&m_InitialData, sizeof m_InitialData);
@@ -519,6 +505,7 @@ HRESULT CMesh::Ready_VertexBuffer_Anim(HANDLE* pFile, const CModel* pModel)
 			ReadFile(*pFile, &m_pAnimVertices[iWeightIndex].vBlendIndices, sizeof(XMUINT4), &dwByte, nullptr);
 			ReadFile(*pFile, &m_pAnimVertices[iWeightIndex].vBlendWeights, sizeof(XMFLOAT4), &dwByte, nullptr);
 
+			_uint a = 0;
 		}
 	}
 
@@ -641,6 +628,7 @@ void CMesh::CalculateBoundingBox_Mesh(const _Vec3& vVertexPos)
 
 _Vec3 CMesh::Get_RandomFacePos(_Vec3 vFirst, _Vec3 vSecond, _Vec3 vThird)
 {
+
 	_float fBeta = m_pGameInstance->Get_Random_Normal();
 	_float fGamma = m_pGameInstance->Get_Random_Normal() * (1.f - fBeta);
 	_float fAlpha = 1.f - fBeta - fGamma;
@@ -744,7 +732,7 @@ void CMesh::Calculate_BoneData(_uint iStartIndex, const _Vec4& Point, XMUINT4* p
 	for (const auto& pair : boneWeightMap)
 	{
 		if (pair.second > 0.0f)
-		{ 
+		{
 			BoneData Data = {};
 			Data.index = pair.first;
 			Data.weight = pair.second;
@@ -752,32 +740,52 @@ void CMesh::Calculate_BoneData(_uint iStartIndex, const _Vec4& Point, XMUINT4* p
 		}
 	}
 
-	sort(bones.begin(), bones.end(), [](const BoneData& a, const BoneData& b) {
-		return a.weight > b.weight;
+	// 뼈 인덱스를 오름차순으로 정렬
+	std::sort(bones.begin(), bones.end(), [](const BoneData& a, const BoneData& b) {
+		return a.index < b.index; // 인덱스를 기준으로 정렬
 		});
 
-	while (bones.size() < 4)
-	{
-		BoneData Data = {};
-		bones.emplace_back(Data);
+	// 정렬된 결과에 맞춰 XMUINT4와 _float4 생성
+	XMUINT4 A_BlendIndex = { 0, 0, 0, 0 };
+	_float4 A_BlendWeights = { 0.0f, 0.0f, 0.0f, 0.0f };
+
+	vector<_uint> BoneBlendIndices;
+	vector<_float> BoneBlendWeights;
+
+	BoneBlendIndices.resize(4);
+	BoneBlendWeights.resize(4);
+
+	// 최대 4개의 뼈 데이터를 채움
+	for (size_t i = 0; i < bones.size() && i < 4; ++i) {
+		BoneBlendIndices[i] = bones[i].index;
+		BoneBlendWeights[i] = bones[i].weight;
 	}
 
-	XMUINT4 A_BlendIndex = { bones[0].index, bones[1].index, bones[2].index, bones[3].index };
-	_float4 A_BlendWeights = { bones[0].weight, bones[1].weight, bones[2].weight, bones[3].weight };
+	A_BlendIndex.x = BoneBlendIndices[0];
+	A_BlendIndex.y = BoneBlendIndices[1];
+	A_BlendIndex.z = BoneBlendIndices[2];
+	A_BlendIndex.w = BoneBlendIndices[3];
 
-	// 정규화
+	A_BlendWeights.x = BoneBlendWeights[0];
+	A_BlendWeights.y = BoneBlendWeights[1];
+	A_BlendWeights.z = BoneBlendWeights[2];
+	A_BlendWeights.w = BoneBlendWeights[3];
+
+	// 정규화 (총합이 0이 아닌 경우만)
 	_float totalWeight = A_BlendWeights.x + A_BlendWeights.y + A_BlendWeights.z + A_BlendWeights.w;
-	A_BlendWeights.x /= totalWeight;
-	A_BlendWeights.y /= totalWeight;
-	A_BlendWeights.z /= totalWeight;
-	A_BlendWeights.w /= totalWeight;
+	if (totalWeight > 0.0f) {
+		A_BlendWeights.x /= totalWeight;
+		A_BlendWeights.y /= totalWeight;
+		A_BlendWeights.z /= totalWeight;
+		A_BlendWeights.w /= totalWeight;
+	}
 
 	*pParticleIndices = A_BlendIndex;
 	*pParticleWeights = A_BlendWeights;
 }
 
 CMesh* CMesh::Create(ID3D11Device* pDevice, ID3D11DeviceContext* pContext, HANDLE* pFile, const CModel* pModel, _fmatrix PreTransformMatrix, 
-	const CModel::DISSOLVE_PARTICLE_DESC& ParticleDesc, _uint iMeshIndex, vector<class CVIBuffer_Dissolve_Instance*>& Instances)
+	const CModel::DISSOLVE_PARTICLE_DESC& ParticleDesc, _uint iMeshIndex, vector<DISSOLVE_PARTICLE>& Instances)
 {
 	CMesh* pInstance = new CMesh(pDevice, pContext);
 
@@ -791,7 +799,7 @@ CMesh* CMesh::Create(ID3D11Device* pDevice, ID3D11DeviceContext* pContext, HANDL
 }
 
 CMesh* CMesh::Create_To_Binary(ID3D11Device* pDevice, ID3D11DeviceContext* pContext, HANDLE* pFile, const CModel* pModel, _fmatrix PreTransformMatrix, 
-	const CModel::DISSOLVE_PARTICLE_DESC& ParticleDesc, _uint iMeshIndex, vector<class CVIBuffer_Dissolve_Instance*>& Instances)
+	const CModel::DISSOLVE_PARTICLE_DESC& ParticleDesc, _uint iMeshIndex, vector<DISSOLVE_PARTICLE>& Instances)
 {
 	CMesh* pInstance = new CMesh(pDevice, pContext);
 

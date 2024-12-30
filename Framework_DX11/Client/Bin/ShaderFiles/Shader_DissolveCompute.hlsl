@@ -67,19 +67,15 @@ cbuffer MovementBuffer : register(b0)   // 받아온 걸 상수로 쓰기 위한 버퍼인듯?
 
 cbuffer InitialBuffer : register(b1)
 {
-    matrix  BoneMatrices[MAX_BONES];
+    row_major matrix BoneMatrices[MAX_BONES];
     
     float   fThreshold;
     uint    iModelType;
     float2  fPadding;
 }
 
-texture2D g_NoiseTexture;
-
-sampler Sampler_Default = sampler_state
-{
-    Filter = min_mag_mip_linear;
-};
+//Texture2D g_NoiseTexture : register(t1); // 텍스처 레지스터에 연결
+//SamplerState Sampler_Default : register(s0); // 샘플러 레지스터에 연결
 
 float rand(float seed);
 float3 RotateByAxis(float3 vVector, float3 vAxis, float fAngle);
@@ -96,25 +92,25 @@ void CS_MOVE_MAIN(uint3 DTid : SV_DispatchThreadID)
     
     float4 vWorldPivot = mul(vPivot, WorldMatrix);
     
-    if (0.f == pad_1.x)
-    {
-        if (TYPE_ANIM == iModelType)
-        {
-            float fWeightW = 1.f - (DissolveParticle.vBlendWeights.x + DissolveParticle.vBlendWeights.y + DissolveParticle.vBlendWeights.z);
+    //if (0.f == pad_1.x)
+    //{
+    //    if (TYPE_ANIM == iModelType)
+    //    {
+    //        float fWeightW = 1.f - (DissolveParticle.vBlendWeights.x + DissolveParticle.vBlendWeights.y + DissolveParticle.vBlendWeights.z);
 
-            matrix BoneMatrix = BoneMatrices[DissolveParticle.vBlendIndices.x] * DissolveParticle.vBlendWeights.x +
-		    BoneMatrices[DissolveParticle.vBlendIndices.y] * DissolveParticle.vBlendWeights.y +
-		    BoneMatrices[DissolveParticle.vBlendIndices.z] * DissolveParticle.vBlendWeights.z +
-		    BoneMatrices[DissolveParticle.vBlendIndices.w] * fWeightW;
+    //        matrix BoneMatrix = BoneMatrices[DissolveParticle.vBlendIndices.x] * DissolveParticle.vBlendWeights.x +
+		  //  BoneMatrices[DissolveParticle.vBlendIndices.y] * DissolveParticle.vBlendWeights.y +
+		  //  BoneMatrices[DissolveParticle.vBlendIndices.z] * DissolveParticle.vBlendWeights.z +
+		  //  BoneMatrices[DissolveParticle.vBlendIndices.w] * fWeightW;
 		
-            DissolveParticle.Particle.vTranslation = mul(DissolveParticle.Particle.vTranslation, BoneMatrix);
-        }
+    //        DissolveParticle.Particle.vTranslation = mul(DissolveParticle.Particle.vTranslation, BoneMatrix);
+    //    }
         
-        DissolveParticle.Particle.vTranslation = mul(DissolveParticle.Particle.vTranslation, WorldMatrix);
-        DissolveParticle.Particle.vRight = vWorldPivot;
-        DissolveParticle.Particle.vUp = float4(vOrbitAxis.x, vOrbitAxis.y, vOrbitAxis.z, 0.f);
-        DissolveParticle.Particle.vUp = mul(DissolveParticle.Particle.vUp, WorldMatrix);
-    }
+    //    DissolveParticle.Particle.vTranslation = mul(DissolveParticle.Particle.vTranslation, WorldMatrix);
+    //    DissolveParticle.Particle.vRight = vWorldPivot;
+    //    DissolveParticle.Particle.vUp = float4(vOrbitAxis.x, vOrbitAxis.y, vOrbitAxis.z, 0.f);
+    //    DissolveParticle.Particle.vUp = mul(DissolveParticle.Particle.vUp, WorldMatrix);
+    //}
     
     float4 vDir = vMoveDir;
     vDir = normalize(vDir);
@@ -173,9 +169,22 @@ void CS_MOVE_MAIN(uint3 DTid : SV_DispatchThreadID)
     if ((iState & STATE_LOOP) && (DissolveParticle.Particle.vLifeTime.y >= DissolveParticle.Particle.vLifeTime.x))
     {
         DissolveParticle.Particle = InitParticles[iIndex].Particle;
+        
+        if (TYPE_ANIM == iModelType)
+        {
+            float fWeightW = saturate(1.f - (DissolveParticle.vBlendWeights.x + DissolveParticle.vBlendWeights.y + DissolveParticle.vBlendWeights.z));
+
+            matrix BoneMatrix = BoneMatrices[DissolveParticle.vBlendIndices.x] * DissolveParticle.vBlendWeights.x +
+		            BoneMatrices[DissolveParticle.vBlendIndices.y] * DissolveParticle.vBlendWeights.y +
+		            BoneMatrices[DissolveParticle.vBlendIndices.z] * DissolveParticle.vBlendWeights.z +
+		            BoneMatrices[DissolveParticle.vBlendIndices.w] * fWeightW;
+        
+            DissolveParticle.Particle.vTranslation = mul(DissolveParticle.Particle.vTranslation, BoneMatrix);
+        }
+
+        DissolveParticle.Particle.vTranslation = mul(DissolveParticle.Particle.vTranslation, WorldMatrix);
         DissolveParticle.Particle.vLook = normalize(vDir * DissolveParticle.Particle.fSpeed * fTimeDelta + vRotateDir);
         DissolveParticle.Particle.vLifeTime.y = 0.f;
-        DissolveParticle.Particle.vTranslation = mul(DissolveParticle.Particle.vTranslation, WorldMatrix);
         DissolveParticle.Particle.vRight = vWorldPivot;
         DissolveParticle.Particle.vUp = float4(vOrbitAxis.x, vOrbitAxis.y, vOrbitAxis.z, 0.f);
         DissolveParticle.Particle.vUp = mul(DissolveParticle.Particle.vUp, WorldMatrix);

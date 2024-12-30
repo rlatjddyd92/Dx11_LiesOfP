@@ -58,6 +58,15 @@ namespace Engine
 
 	typedef struct
 	{
+		PARTICLE Particle;
+		_float2 vTexcoord = {};
+		XMUINT4 vBlendIndices = {};
+		_float4 vBlendWeights = {};
+		_bool isActive = { false };
+	}DISSOLVE_PARTICLE;
+
+	typedef struct
+	{
 		vector<string>			m_ModelFilePaths;
 	}FilePathStruct;
 

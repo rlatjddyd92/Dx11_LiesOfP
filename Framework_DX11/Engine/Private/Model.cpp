@@ -1089,7 +1089,7 @@ HRESULT CModel::ReadyModel_To_Binary(HANDLE* pFile, const DISSOLVE_PARTICLE_DESC
 
 	ReadFile(*pFile, &m_iNumMeshes, sizeof(_uint), &dwByte, nullptr);
 
-	vector<CVIBuffer_Dissolve_Instance*> Instances;
+	vector<DISSOLVE_PARTICLE> Instances;
 	Instances.reserve(m_iNumMeshes);
 
 	for (_uint i = 0; i < m_iNumMeshes; ++i)
@@ -1099,21 +1099,20 @@ HRESULT CModel::ReadyModel_To_Binary(HANDLE* pFile, const DISSOLVE_PARTICLE_DESC
 			return E_FAIL;
 
 		m_Meshes.emplace_back(pMesh);
-
 	}
-	CDissolve_Container::DISSOLVE_CONTAINER_DESC ContainerDesc = {};
-	ContainerDesc.iNumInstance = m_iNumMeshes;
-	ContainerDesc.pInstances = Instances.data();
-	if(0 < ParticleDesc.iNumInstance)
+
+	if (0 < ParticleDesc.iNumInstance)
 	{
-		if (FAILED(m_pGameInstance->Add_Prototype(ParticleDesc.iLevelID, ParticleDesc.strBufferTag, CDissolve_Container::Create(m_pDevice, m_pContext, ContainerDesc))))
+		CVIBuffer_Dissolve_Instance::DISSOLVE_INSTANCE_DESC DissolveDesc = {};
+		DissolveDesc.iNumInstance = Instances.size();
+		DissolveDesc.pParticles = Instances.data();
+
+		if(FAILED(m_pGameInstance->Add_Prototype(ParticleDesc.iLevelID, ParticleDesc.strBufferTag, CVIBuffer_Dissolve_Instance::Create(m_pDevice, m_pContext, DissolveDesc))))
 			return E_FAIL;
 	}
 
-	
 
 	//여기까지 메쉬
-
 
 	ReadFile(*pFile, &m_iNumMaterials, sizeof(_uint), &dwByte, nullptr);
 
@@ -1220,8 +1219,7 @@ HRESULT CModel::Ready_Meshes(HANDLE* pFile, DISSOLVE_PARTICLE_DESC ParticleDesc)
 
 	ReadFile(*pFile, &m_iNumMeshes, sizeof(_uint), &dwByte, nullptr);
 
-	vector<CVIBuffer_Dissolve_Instance*> Instances;
-	Instances.reserve(m_iNumMeshes);
+	vector<DISSOLVE_PARTICLE> Instances;
 
 	for (size_t i = 0; i < (size_t)m_iNumMeshes; i++)
 	{
@@ -1231,15 +1229,18 @@ HRESULT CModel::Ready_Meshes(HANDLE* pFile, DISSOLVE_PARTICLE_DESC ParticleDesc)
 
 		m_Meshes.emplace_back(pMesh);
 	}
-	CDissolve_Container::DISSOLVE_CONTAINER_DESC ContainerDesc = {};
-	ContainerDesc.iNumInstance = m_iNumMeshes;
-	ContainerDesc.pInstances = Instances.data();
 
 	if (0 < ParticleDesc.iNumInstance)
 	{
-		if (FAILED(m_pGameInstance->Add_Prototype(ParticleDesc.iLevelID, ParticleDesc.strBufferTag, CDissolve_Container::Create(m_pDevice, m_pContext, ContainerDesc))))
+		CVIBuffer_Dissolve_Instance::DISSOLVE_INSTANCE_DESC DissolveDesc = {};
+		DissolveDesc.iNumInstance = Instances.size();
+		DissolveDesc.pParticles = Instances.data();
+
+		if (FAILED(m_pGameInstance->Add_Prototype(ParticleDesc.iLevelID, ParticleDesc.strBufferTag, CVIBuffer_Dissolve_Instance::Create(m_pDevice, m_pContext, DissolveDesc))))
 			return E_FAIL;
 	}
+
+
 	return S_OK;
 }
 

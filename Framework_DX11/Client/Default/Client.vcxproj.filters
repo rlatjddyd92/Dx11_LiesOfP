@@ -1318,6 +1318,9 @@
     <Filter Include="05.Fsm\Monster\RebornerMale\Attack\Route\Reload">
       <UniqueIdentifier>{046e9495-1cea-4eb2-8f65-1bb11f7d5734}</UniqueIdentifier>
     </Filter>
+    <Filter Include="02.GameObjects\02.Pawn\00.Player\Dissolve_Test">
+      <UniqueIdentifier>{ac49ad54-4c6a-4a3c-a51f-12062146dfda}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Client.h">
@@ -2409,6 +2412,9 @@
     <ClInclude Include="..\Public\State_RebornerMale_RapidFire.h">
       <Filter>05.Fsm\Monster\RebornerMale\Attack\Route\RapidFire</Filter>
     </ClInclude>
+    <ClInclude Include="..\public\Dissolve_Test.h">
+      <Filter>02.GameObjects\02.Pawn\00.Player\Dissolve_Test</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Client.cpp">
@@ -3470,6 +3476,9 @@
     <ClCompile Include="..\Private\State_RebornerMale_RapidFire.cpp">
       <Filter>05.Fsm\Monster\RebornerMale\Attack\Route\RapidFire</Filter>
     </ClCompile>
+    <ClCompile Include="..\private\Dissolve_Test.cpp">
+      <Filter>02.GameObjects\02.Pawn\00.Player\Dissolve_Test</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <Image Include="Client.ico">
@@ -3552,6 +3561,9 @@
     </FxCompile>
     <FxCompile Include="..\Bin\ShaderFiles\Shader_DissolveCompute.hlsl">
       <Filter>97.ShaderFiles\Effect\Compute</Filter>
+    </FxCompile>
+    <FxCompile Include="..\Bin\ShaderFiles\Shader_VtxDiffuseInstance.hlsl">
+      <Filter>97.ShaderFiles\Effect\Vtx</Filter>
     </FxCompile>
   </ItemGroup>
   <ItemGroup>

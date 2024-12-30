@@ -15,7 +15,6 @@ CVIBuffer_Dissolve_Instance::CVIBuffer_Dissolve_Instance(const CVIBuffer_Dissolv
 	, m_UAV_Desc{ Prototype.m_UAV_Desc }
 	, m_SRV_Desc{ Prototype.m_SRV_Desc }
 	, m_InitParticleBuffer_Desc{ Prototype.m_InitParticleBuffer_Desc }
-	, m_iMeshIndex{ Prototype.m_iMeshIndex }
 {
 }
 
@@ -25,8 +24,6 @@ HRESULT CVIBuffer_Dissolve_Instance::Initialize_Prototype(const DISSOLVE_INSTANC
 
 	if (FAILED(Ready_Buffers(Desc)))
 		return E_FAIL;
-
-	m_iMeshIndex = Desc.iMeshIndex;
 
 	return S_OK;
 }
@@ -59,6 +56,8 @@ HRESULT CVIBuffer_Dissolve_Instance::Initialize(void* pArg)
 
 HRESULT CVIBuffer_Dissolve_Instance::Bind_Buffer(CShader_NonVTX* pShader, const _char* pConstantName)
 {
+	//For_Debug();
+
 	//// SRV 바인딩하고
 	if (FAILED(pShader->Bind_SRV(pConstantName, m_pParticleSRV)))
 		return E_FAIL;
@@ -116,13 +115,15 @@ _bool CVIBuffer_Dissolve_Instance::DispatchCS(class CShader_Compute* pComputeSha
 
 	pDissolve->fThreshold = DissolveData.fThreshold;
 	pDissolve->iModelType = DissolveData.iModelType;
-	memcpy_s(pDissolve->m_BoneMatrices, sizeof(_float4x4) * g_iMaxMeshBones, pModel->Get_BoneMatrices(m_iMeshIndex), sizeof(_float4x4) * g_iMaxMeshBones);
-	 
+	memcpy_s(pDissolve->m_BoneMatrices, sizeof(_float4x4) * g_iMaxMeshBones, pModel->Get_BoneMatrices(0), sizeof(_float4x4) * g_iMaxMeshBones);
+	//memcpy_s(&Test, sizeof(_float4x4) * g_iMaxMeshBones, pModel->Get_BoneMatrices(0), sizeof(_float4x4) * g_iMaxMeshBones);
+	
 	m_pContext->Unmap(m_pDissolveBuffer, 0);
 
 	m_pContext->CSSetUnorderedAccessViews(0, 1, &m_pParticleUAV, nullptr);
 	m_pContext->CSSetShaderResources(0, 1, &m_pInitParticleSRV);
 	m_pContext->CSSetConstantBuffers(0, 1, &m_pMovementBuffer);
+	m_pContext->CSSetConstantBuffers(1, 1, &m_pDissolveBuffer);
 
 	pComputeShader->Execute_ComputeShader((m_iNumInstance + 255) / 256, 1, 1);
 
@@ -156,8 +157,11 @@ HRESULT CVIBuffer_Dissolve_Instance::Ready_Buffers(const DISSOLVE_INSTANCE_DESC&
 
 	DISSOLVE_PARTICLE* pParticle = static_cast<DISSOLVE_PARTICLE*>(m_pInstanceVertices);
 
-	pParticle = Desc.pParticles;
-
+	for (size_t i = 0; i < m_iNumInstance; ++i)
+	{
+		pParticle[i] = Desc.pParticles[i];
+	}
+	
 	ZeroMemory(&m_InstanceInitialData, sizeof m_InstanceInitialData);
 	m_InstanceInitialData.pSysMem = m_pInstanceVertices;
 
@@ -199,6 +203,48 @@ HRESULT CVIBuffer_Dissolve_Instance::Ready_Buffers(const DISSOLVE_INSTANCE_DESC&
 	return S_OK;
 }
 
+void CVIBuffer_Dissolve_Instance::For_Debug()
+{
+	// 스테이징 버퍼 (CPU에서 읽을 수 있는 버퍼)
+	ID3D11Buffer* pStagingBuffer = nullptr;
+	m_ParticleBuffer_Desc.Usage = D3D11_USAGE_STAGING;  // CPU 접근 가능
+	m_ParticleBuffer_Desc.CPUAccessFlags = D3D11_CPU_ACCESS_READ;  // 읽기 가능
+	m_ParticleBuffer_Desc.BindFlags = 0;  // GPU 바인딩 플래그는 사용하지 않음
+	m_ParticleBuffer_Desc.MiscFlags = 0;  // MiscFlags도 사용하지 않음
+
+	HRESULT hr = m_pDevice->CreateBuffer(&m_ParticleBuffer_Desc, nullptr, &pStagingBuffer);
+	if (FAILED(hr)) {
+		OutputDebugString(L"Failed to create staging buffer.\n");
+	}
+
+	if (nullptr != pStagingBuffer)
+	{
+		m_pContext->CopyResource(pStagingBuffer, m_pParticleBuffer);
+
+		D3D11_MAPPED_SUBRESOURCE mappedResource;
+		hr = m_pContext->Map(pStagingBuffer, 0, D3D11_MAP_READ, 0, &mappedResource);
+		if (SUCCEEDED(hr)) {
+			// 데이터 확인
+			DISSOLVE_PARTICLE* pData = static_cast<DISSOLVE_PARTICLE*>(mappedResource.pData);
+			for (int i = 0; i < m_iNumInstance; ++i)
+			{
+				_Vec4 vCheck = pData[i].Particle.vTranslation;
+				//_float fWeightW = 1.f - (pData[i].vBlendWeights.x + pData[i].vBlendWeights.y + pData[i].vBlendWeights.z);
+
+				//_Matrix BoneMatrix = Test[pData[i].vBlendIndices.x] * pData[i].vBlendWeights.x +
+				//	Test[pData[i].vBlendIndices.y] * pData[i].vBlendWeights.y +
+				//	Test[pData[i].vBlendIndices.z] * pData[i].vBlendWeights.z +
+				//	Test[pData[i].vBlendIndices.w] * fWeightW;
+
+				//vCheck = XMVector3TransformCoord(vCheck, BoneMatrix);
+				_uint a = 0;
+			}
+			m_pContext->Unmap(pStagingBuffer, 0);
+		}
+	}
+	Safe_Release(pStagingBuffer);
+}
+
 CVIBuffer_Dissolve_Instance* CVIBuffer_Dissolve_Instance::Create(ID3D11Device* pDevice, ID3D11DeviceContext* pContext, const DISSOLVE_INSTANCE_DESC& Desc)
 {
 	CVIBuffer_Dissolve_Instance* pInstance = new CVIBuffer_Dissolve_Instance(pDevice, pContext);
@@ -233,6 +279,7 @@ void CVIBuffer_Dissolve_Instance::Free()
 	{
 		Safe_Release(m_pParticleBuffer);
 		Safe_Release(m_pMovementBuffer);
+		Safe_Release(m_pDissolveBuffer);
 		Safe_Release(m_pParticleUAV);
 		Safe_Release(m_pParticleSRV);
 		Safe_Release(m_pInitParticleBuffer);

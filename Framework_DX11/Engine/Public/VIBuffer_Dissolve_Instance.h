@@ -6,15 +6,7 @@ BEGIN(Engine)
 class ENGINE_DLL CVIBuffer_Dissolve_Instance final : public CVIBuffer_Instancing
 {
 public:
-	typedef struct
-	{
-		PARTICLE Particle;
-		_float2 vTexcoord = {};
-		XMUINT4 vBlendIndices = {};
-		_float4 vBlendWeights = {};
-		_bool isActive = { false };
-	}DISSOLVE_PARTICLE;
-	
+
 	typedef struct
 	{
 		// 모델에서 만들고 전달해야 함.
@@ -76,10 +68,11 @@ private:
 	ID3D11Buffer*		m_pInitParticleBuffer = nullptr;
 	ID3D11ShaderResourceView* m_pInitParticleSRV = nullptr;
 
-	_uint m_iMeshIndex = { 0 };
+	_Matrix Test[g_iMaxMeshBones] = {};
 
 private:
 	HRESULT Ready_Buffers(const DISSOLVE_INSTANCE_DESC& Desc);
+	void For_Debug();
 
 public:
 	static CVIBuffer_Dissolve_Instance* Create(ID3D11Device* pDevice, ID3D11DeviceContext* pContext, const DISSOLVE_INSTANCE_DESC& Desc);

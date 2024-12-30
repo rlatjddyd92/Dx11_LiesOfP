@@ -108,6 +108,9 @@
 // 게임 인터페이스와 연결을 위해 추가 
 #include "GameInterface_Controller.h"
 
+// 고준호 추가
+#include "Dissolve_Test.h"
+
 CPlayer::CPlayer(ID3D11Device * pDevice, ID3D11DeviceContext * pContext)
 	: CPawn{ pDevice, pContext }
 {
@@ -147,7 +150,7 @@ HRESULT CPlayer::Initialize(void * pArg)
 
 	//m_pNavigationCom->Move_to_Cell(m_pRigidBodyCom, 1030); // 계단 옆 별바라기
 	//m_pNavigationCom->Move_to_Cell(m_pRigidBodyCom, 772); //긴사다리
-	m_pNavigationCom->Move_to_Cell(m_pRigidBodyCom, 427); //짧은사다리
+	//m_pNavigationCom->Move_to_Cell(m_pRigidBodyCom, 427); //짧은사다리
 	//m_pNavigationCom->Move_to_Cell(m_pRigidBodyCom, 341); //아래엘베
 	//m_pNavigationCom->Move_to_Cell(m_pRigidBodyCom, 440); //상자랑 장애물
 	//m_pNavigationCom->Move_to_Cell(m_pRigidBodyCom, 790); // 순간이동 790
@@ -171,6 +174,16 @@ HRESULT CPlayer::Initialize(void * pArg)
 	GET_GAMEINTERFACE->Input_Player_Pointer(this);
 
 	m_vRimLightColor = _Vec4(0.f, 0.f, 0.f, 0.f);
+
+	CDissolve_Test::DISSOLVE_OBJECT_DESC TestDesc = {};
+	TestDesc.fRotationPerSec = 90.f;
+	TestDesc.fSpeedPerSec = 1.f;
+	TestDesc.iLevelIndex = LEVEL_GAMEPLAY;
+	TestDesc.pModelCom = m_pModelCom;
+	TestDesc.pPlayerTransformCom = m_pTransformCom;
+
+	if (FAILED(m_pGameInstance->Add_CloneObject_ToLayer(LEVEL_GAMEPLAY, TEXT("Layer_Test"), TEXT("Prototype_GameObject_Effect_Dissolve_Particle"), &TestDesc)))
+		return E_FAIL;
 
 	return S_OK;
 }

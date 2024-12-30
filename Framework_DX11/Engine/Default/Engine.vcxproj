@@ -34,7 +34,6 @@
     <ClCompile Include="..\Private\Component.cpp" />
     <ClCompile Include="..\Private\Component_Manager.cpp" />
     <ClCompile Include="..\Private\CSVFile_Manager.cpp" />
-    <ClCompile Include="..\private\Dissolve_Container.cpp" />
     <ClCompile Include="..\Private\MyContextManagerCallback.cpp" />
     <ClCompile Include="..\private\CustomFont.cpp" />
     <ClCompile Include="..\Private\DebugDraw.cpp" />
@@ -112,7 +111,6 @@
     <ClInclude Include="..\Public\Component.h" />
     <ClInclude Include="..\Public\Component_Manager.h" />
     <ClInclude Include="..\Public\CSVFile_Manager.h" />
-    <ClInclude Include="..\public\Dissolve_Container.h" />
     <ClInclude Include="..\Public\MyContextManagerCallback.h" />
     <ClInclude Include="..\public\CustomFont.h" />
     <ClInclude Include="..\Public\DebugDraw.h" />
