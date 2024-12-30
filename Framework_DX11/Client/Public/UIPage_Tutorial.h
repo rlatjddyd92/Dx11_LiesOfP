@@ -12,6 +12,7 @@ class CUITutorial_Info;
 class CUITutorial_Guide;
 class CUITutorial_Timing;
 class CUITutorial_Result;
+class CUITutorial_Popup;
 
 class CUIPage_Tutorial : public CUIPage
 {
@@ -25,6 +26,7 @@ public:
 		GROUP_GUIDE,
 		GROUP_TIMING,
 		GROUP_RESULT,
+		GROUP_POPUP,
 		GROUP_END
 	};
 
@@ -70,6 +72,7 @@ protected:
 	class CUITutorial_Guide* m_pGuide = { nullptr };
 	class CUITutorial_Timing* m_pTiming = { nullptr };
 	class CUITutorial_Result* m_pResult = { nullptr };
+	class CUITutorial_Popup* m_pPopup = { nullptr };
 
 public:
 	static CUIPage_Tutorial* Create(ID3D11Device* pDevice, ID3D11DeviceContext* pContext);

@@ -326,6 +326,7 @@
     <ClInclude Include="..\Public\UIPlay_Weapon.h" />
     <ClInclude Include="..\Public\UITutorial_Info.h" />
     <ClInclude Include="..\Public\UITutorial_Guide.h" />
+    <ClInclude Include="..\Public\UITutorial_Popup.h" />
     <ClInclude Include="..\Public\UITutorial_Result.h" />
     <ClInclude Include="..\Public\UITutorial_Timing.h" />
     <ClInclude Include="..\Public\Weapon_PlayerArm.h" />
@@ -701,6 +702,7 @@
     <ClCompile Include="..\Private\UIPlay_Weapon.cpp" />
     <ClCompile Include="..\Private\UITutorial_Info.cpp" />
     <ClCompile Include="..\Private\UITutorial_Guide.cpp" />
+    <ClCompile Include="..\Private\UITutorial_Popup.cpp" />
     <ClCompile Include="..\Private\UITutorial_Result.cpp" />
     <ClCompile Include="..\Private\UITutorial_Timing.cpp" />
     <ClCompile Include="..\Private\Weapon_PlayerArm.cpp" />

@@ -8,7 +8,7 @@
 #include "UITutorial_Guide.h";
 #include "UITutorial_Timing.h";
 #include "UITutorial_Result.h";
-
+#include "UITutorial_Popup.h";
 
 CUIPage_Tutorial::CUIPage_Tutorial(ID3D11Device* pDevice, ID3D11DeviceContext* pContext)
 	: CUIPage{ pDevice, pContext }
@@ -153,7 +153,7 @@ void CUIPage_Tutorial::Initialize_Tutorial()
 	m_pGuide = CUITutorial_Guide::Create(m_pDevice, m_pContext);
 	m_pTiming = CUITutorial_Timing::Create(m_pDevice, m_pContext);
 	m_pResult = CUITutorial_Result::Create(m_pDevice, m_pContext);
-
+	m_pPopup = CUITutorial_Popup::Create(m_pDevice, m_pContext);
 
 
 	m_pTiming->Set_Timing(m_vecPart);
@@ -208,8 +208,9 @@ void CUIPage_Tutorial::Free()
 
 	Safe_Release(m_pInfo);
 	Safe_Release(m_pGuide);
-	Safe_Release(m_pTiming);
+	Safe_Release(m_pTiming); 
 	Safe_Release(m_pResult);
+	Safe_Release(m_pPopup);
 
 	m_vecPart.clear();
 }
