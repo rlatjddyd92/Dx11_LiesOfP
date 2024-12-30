@@ -98,6 +98,7 @@ private:
     // 주어진 게임 오브젝트의 PhysX 변환 정보를 얻기 위한 함수
     PxTransform Get_PhysXTransform(CGameObject* pObject);
 
+    HRESULT     Create_CudaContextManager();
 
 public:
     static CPhysX_Manager* Create(ID3D11Device* pDevice, ID3D11DeviceContext* pContext);
