@@ -15,7 +15,7 @@ CAchievment_DataLine::CAchievment_DataLine(const CAchievment_DataLine& Prototype
 {
 }
 
-HRESULT CAchievment_DataLine::Initialize_Data(vector<struct CUIPage::UIPART_INFO*>& vecOrigin)
+HRESULT CAchievment_DataLine::Initialize_Data(vector<struct CUIPage::UIPART_INFO*>& vecOrigin, struct CUIPage::SCROLL_INFO* Scroll)
 {
 	for (auto& iter : vecOrigin)
 	{
@@ -47,6 +47,8 @@ HRESULT CAchievment_DataLine::Initialize_Data(vector<struct CUIPage::UIPART_INFO
 	m_vIconColor_Origin = m_vecIconCtrl.back()->fTextureColor;
 	m_vTitleColor_Origin = m_vecTitleCtrl.back()->fTextColor;
 	m_vDescColor_Origin = m_vecDescCtrl.back()->fTextColor;
+
+	m_pScroll = Scroll;
 
 	return S_OK;
 }
@@ -86,6 +88,10 @@ void CAchievment_DataLine::Update_PopUp(_float fTimeDelta, _float fPopupHeight)
 void CAchievment_DataLine::Set_Before_LineRender(_float fAdjustY, _float fAlpha)
 {
 	m_vecBackCtrl.front()->fPosition.y += -fAdjustY + m_fPosY_By_Index;
+
+	if (m_pScroll->Check_Is_Render_Y(m_vecBackCtrl.front()->fPosition.y, m_vecBackCtrl.front()->fSize.y) == false)
+		return;
+
 	m_vecIconCtrl.back()->iTexture_Index = m_iICon_Index;
 	m_vecTitleCtrl.back()->strText = m_strTitle;
 	m_vecDescCtrl.back()->strText = m_strDesc;

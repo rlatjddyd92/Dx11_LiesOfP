@@ -283,8 +283,15 @@ public:
 	void Set_Now_Interact_Stargezer(_int iNaviIndex) { return m_pUIPage_Telepot->Set_Now_Interact_Stargezer(iNaviIndex); }
 
 	// Æ©Åä¸®¾ó
-	void Start_Tutorial() { return m_pUIPage_Tutorial->OpenAction(); }
-	void End_Tutorial() { return m_pUIPage_Tutorial->CloseAction(); }
+	void Start_Tutorial() 
+	{ 
+		m_pUIPage_Tutorial->OpenAction();
+	}
+	void End_Tutorial()
+	{ 
+		m_pUIPage_Tutorial->CloseAction(); 
+		m_pUIPage_Play->KeyGuideOn();
+	}
 #pragma endregion
 
 

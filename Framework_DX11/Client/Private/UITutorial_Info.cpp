@@ -110,7 +110,6 @@ HRESULT CUITutorial_Info::Ready_UIPart_Group_Control()
 void CUITutorial_Info::Set_Info(vector<struct CUIPage::UIPART_INFO*>& vecOrigin)
 {
 	_int iMission = -1;
-	_int iScore = -1;
 
 	for (auto& iter : vecOrigin)
 	{
@@ -129,13 +128,6 @@ void CUITutorial_Info::Set_Info(vector<struct CUIPage::UIPART_INFO*>& vecOrigin)
 				m_pSharedPointer_Mission_Count = iter;
 			if (iMission == 4)
 				m_pSharedPointer_Mission_Score = iter;
-		}
-		else if (iter->iGroupIndex == _int(PART_GROUP::GROUP_INFO_SCORE))
-		{
-			++iScore;
-
-			if (iScore == 2)
-				m_pSharedPointer_Sum = iter;
 		}
 	}
 }
@@ -180,4 +172,5 @@ void CUITutorial_Info::Free()
 	}
 
 	m_vecPart.clear();
+	m_vecSharedPointer_All.clear();
 }

@@ -21,7 +21,7 @@ private:
 
 public:
 	// 诀利 单捞磐 包府
-	HRESULT Initialize_Data(vector<struct CUIPage::UIPART_INFO*>& vecOrigin);
+	HRESULT Initialize_Data(vector<struct CUIPage::UIPART_INFO*>& vecOrigin, struct CUIPage::SCROLL_INFO* Scroll);
 	void Input_Data(vector<_wstring>& Data);
 
 	void Add_Stat(_int iStat)
@@ -116,6 +116,8 @@ private:
 	_Vec4 m_vIconColor_Origin = { 0.f,0.f,0.f,0.f };
 	_Vec4 m_vTitleColor_Origin = { 0.f,0.f,0.f,0.f };
 	_Vec4 m_vDescColor_Origin = { 0.f,0.f,0.f,0.f };
+
+	struct CUIPage::SCROLL_INFO* m_pScroll = { nullptr };
 
 public:
 	static CAchievment_DataLine* Create(ID3D11Device* pDevice, ID3D11DeviceContext* pContext);

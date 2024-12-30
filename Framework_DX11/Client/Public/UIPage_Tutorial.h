@@ -39,11 +39,11 @@ public:
 		_int m_iGoal = 0;
 		_int m_iScore = 0;
 
-		_wstring strKey_A_First = {};
-		_wstring strKey_A_Second = {};
+		KEY eKey_A_First = KEY::N;
+		KEY eKey_A_Second = KEY::N;
 		_wstring strKey_A_Desc = {};
-		_wstring strKey_B_First = {};
-		_wstring strKey_B_Second = {};
+		KEY eKey_B_First = KEY::N;
+		KEY eKey_B_Second = KEY::N;
 		_wstring strKey_B_Desc = {};
 	}TUTO_INFO;
 
@@ -66,12 +66,10 @@ public:
 
 	virtual CHECK_MOUSE Check_Page_Action(_float fTimeDelta) override;
 
-	// UI 按眉 力绢 
-	void NextMission();
-	void NextGuide();
-	void ShowResult();
-	void OffResult();
-	void ShowTiming(KEY eKey, _float fTime);
+	void Close_Popup();
+	void Open_Popup();
+	
+	_bool Get_TutorialPopup_Open() { return m_bPopupOpen; }
 
 public:
 	const vector<UPART*>& Get_UIPartInfo() { return m_vecPart; }
@@ -81,15 +79,25 @@ protected:
 	void Initialize_Tutorial();
 	void Update_Tutorial();
 
+	// UI 按眉 力绢 
+	void Update_Tutorial_Info(_float fTimeDelta);
+	void Update_Tutorial_Guide(_float fTimeDelta);
+	void Update_Tutorial_Timing(_float fTimeDelta);
+	void Update_Tutorial_Result(_float fTimeDelta);
+	void Update_Tutorial_Popup(_float fTimeDelta);
+
+	void ShowTiming(KEY eKey, _float fTime);
+
 
 protected:
-	class CUITutorial_Info* m_pInfo = { nullptr };
+	vector<class CUITutorial_Info*> m_vecInfo = { nullptr };
 	class CUITutorial_Guide* m_pGuide = { nullptr };
 	class CUITutorial_Timing* m_pTiming = { nullptr };
 	class CUITutorial_Result* m_pResult = { nullptr };
 	class CUITutorial_Popup* m_pPopup = { nullptr };
 
 	vector<TUTO_INFO*> m_vecTutorial_Data;
+	_bool m_bPopupOpen = false;
 
 public:
 	static CUIPage_Tutorial* Create(ID3D11Device* pDevice, ID3D11DeviceContext* pContext);

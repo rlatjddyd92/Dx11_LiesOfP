@@ -50,7 +50,6 @@ protected:
 	UPART* m_pSharedPointer_Mission_Title = { nullptr };
 	UPART* m_pSharedPointer_Mission_Count = { nullptr };
 	UPART* m_pSharedPointer_Mission_Score = { nullptr };
-	UPART* m_pSharedPointer_Sum = { nullptr };
 
 	_int m_iScore_Sum = 0;
 

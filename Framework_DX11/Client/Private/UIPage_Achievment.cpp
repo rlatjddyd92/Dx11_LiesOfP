@@ -191,7 +191,7 @@ void CUIPage_Achievment::Make_Achievment_DataLine()
 	for (_int i = 1; i < vecBuffer.size(); ++i)
 	{
 		CAchievment_DataLine* pNew = CAchievment_DataLine::Create(m_pDevice, m_pContext);
-		pNew->Initialize_Data(m_vecPart);
+		pNew->Initialize_Data(m_vecPart, m_pScroll);
 		pNew->Input_Data(vecBuffer[i]);
 		m_vecAcievment.push_back(pNew);
 	}

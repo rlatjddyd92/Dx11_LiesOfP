@@ -44,6 +44,7 @@ protected:
 	UPART* m_pSharedPointer_Frame = { nullptr };
 	UPART* m_pSharedPointer_Title = { nullptr };
 	vector<UPART*> m_vecSharedPointer_Ctrl_Upper;
+	vector<UPART*> m_vecSharedPointer_Ctrl_Middle;
 	vector<UPART*> m_vecSharedPointer_Ctrl_Lower;
 
 public:

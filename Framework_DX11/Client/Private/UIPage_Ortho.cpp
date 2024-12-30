@@ -299,7 +299,7 @@ void CUIPage_Ortho::Make_Monster_HP_Bar(CGameObject* pHost, _float fTimeDelta, _
 
 void CUIPage_Ortho::Make_Monster_Focusing(CGameObject* pHost, _float fTimeDelta, _float fDistance)
 {
-	CPawn* pTarget = GET_GAMEINTERFACE->Get_Player()->Find_TargetMonster();
+	CPawn* pTarget = GET_GAMEINTERFACE->Get_Player()->Get_TargetMonster();
 
 	if (pTarget == nullptr)
 		return;

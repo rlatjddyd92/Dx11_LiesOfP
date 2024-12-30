@@ -318,7 +318,9 @@ void CUIManager::UIControl_Loading(_float fTimeDelta)
 void CUIManager::UIControl_Play(_float fTimeDelta)
 {
 	if (KEY_TAP(KEY::ESC))
+	{
 		SwicthPage(UIPAGE::PAGE_MENU, UIPAGE::PAGE_PLAY);
+	}
 	else
 	{
 		m_eNowPage = UIPAGE::PAGE_PLAY;
