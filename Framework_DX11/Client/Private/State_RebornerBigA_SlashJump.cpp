@@ -25,7 +25,7 @@ HRESULT CState_RebornerBigA_SlashJump::Initialize(_uint iStateNum, void* pArg)
 HRESULT CState_RebornerBigA_SlashJump::Start_State(void* pArg)
 {
     m_pMonster->Change_Animation(AN_SWIPATTACK, false, 0.1f, 0, true);
-
+    m_bSwingSound = { false };
     return S_OK;
 }
 
@@ -69,6 +69,18 @@ void CState_RebornerBigA_SlashJump::Collider_Check(_double CurTrackPos)
     else
     {
         m_pMonster->DeActive_CurretnWeaponCollider();
+    }
+}
+
+void CState_RebornerBigA_SlashJump::Sound_Check(_double CurTrackPos)
+{
+    if (!m_bSwingSound)
+    {
+        if ((CurTrackPos >= 50.f && CurTrackPos <= 57.f))
+        {
+            m_pMonster->Play_Sound(CPawn::PAWN_SOUND_EFFECT1, TEXT("SE_NPC_SK_WS_Staff_03"), false);
+            m_bSwingSound = true;
+        }
     }
 }
 

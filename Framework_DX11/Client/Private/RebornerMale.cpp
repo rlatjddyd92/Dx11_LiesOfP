@@ -102,7 +102,7 @@ void CRebornerMale::Priority_Update(_float fTimeDelta)
 	{
 		GET_GAMEINTERFACE->Set_OnOff_OrthoUI(false, this);
 		m_bDieState = true;
-		m_pFsmCom->Set_State(DIE);
+		m_pFsmCom->Change_State(DIE);
 	}
 	m_pWeapon->Priority_Update(fTimeDelta);
 	m_pColliderObject->Priority_Update(fTimeDelta);
@@ -122,6 +122,11 @@ void CRebornerMale::Update(_float fTimeDelta)
 	m_pFsmCom->Update(fTimeDelta);
 
 	Update_Collider();
+
+	for (_uint i = 0; i < PAWN_SOUND_END; ++i)
+	{
+		m_pSoundCom[i]->Update(fTimeDelta);
+	}
 
 	m_pGameInstance->Add_ColliderList(m_pColliderCom);
 	m_pWeapon->Update(fTimeDelta);

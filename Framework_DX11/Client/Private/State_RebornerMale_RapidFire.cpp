@@ -197,6 +197,8 @@ void CState_RebornerMale_RapidFire::Effect_Check(_double CurTrackPos)
 
                 m_pGameInstance->Add_CloneObject_ToLayer(LEVEL_GAMEPLAY, TEXT("Monster_Attack"), TEXT("Prototype_GameObject_Reb_Bullet"), &Desc);
 
+                m_pMonster->Play_Sound(CPawn::PAWN_SOUND_EFFECT1, TEXT("SE_NPC_SK_FX_Rifle_Firing_02.wav"), false);
+
             }
         }
     }
