@@ -76,6 +76,9 @@ HRESULT CSteelHeart::Render()
 	if (FAILED(m_pShaderCom->Bind_RawValue("g_fDissolveRatio", &fDisslove, sizeof(_float))))
 		return E_FAIL;
 
+	if (FAILED(m_pShaderCom->Bind_RawValue("g_fFar", &m_pGameInstance->Get_Far(), sizeof(_float))))
+		return E_FAIL;
+
 	_uint		iNumMeshes = m_pModelCom->Get_NumMeshes();
 
 	for (size_t i = 0; i < iNumMeshes; i++)

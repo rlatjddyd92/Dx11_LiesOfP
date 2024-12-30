@@ -374,16 +374,6 @@ HRESULT CRigidBody::Add_PxGeometry(RIGIDBODY_DESC* pDesc)
 
 			pShape = nullptr;
 
-
-			PxParticleClothBuffer* ClothBuffer = m_pPhysX->createParticleClothBuffer(
-				iNumVertices,       // 최대 입자 수 (Cloth의 시뮬레이션 포인트 개수)
-				0,         // 최대 볼륨 수 (Optional: Cloth의 내부 볼륨 제한)
-				1,           // Cloth 개수 (Simultaneously 처리할 Cloth 수)
-				iNumTriangles,        // 삼각형 개수 (전체 시뮬레이션에서 사용하는 삼각형 개수)
-				iNumTriangles * 3,          // 스프링 개수 (구속 조건으로 사용할 스프링 개수)
-				m_pGameInstance->Get_PhysXCuda() // CUDA 컨텍스트 매니저 (GPU 가속을 위한 매니저 객체)
-			);
-
 		}
 	}
 	break;
