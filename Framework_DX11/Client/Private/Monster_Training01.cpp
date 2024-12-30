@@ -70,6 +70,7 @@ void CMonster_Training01::Priority_Update(_float fTimeDelta)
 {
 	__super::Set_UpTargetPos();
 
+	m_pColliderObject->Priority_Update(fTimeDelta);
 }
 
 void CMonster_Training01::Update(_float fTimeDelta)
@@ -78,9 +79,11 @@ void CMonster_Training01::Update(_float fTimeDelta)
 
 	m_pRigidBodyCom->Set_Velocity(m_vCurRootMove / fTimeDelta);
 
+	m_pColliderCom->Update(m_pTransformCom->Get_WorldMatrix_Ptr());
+
 	m_pFsmCom->Update(fTimeDelta);
 
-	m_pGameInstance->Add_ColliderList(m_pColliderCom);
+	m_pColliderObject->Update(fTimeDelta);
 }
 
 void CMonster_Training01::Late_Update(_float fTimeDelta)
@@ -90,7 +93,7 @@ void CMonster_Training01::Late_Update(_float fTimeDelta)
 	m_pRigidBodyCom->Update(fTimeDelta);
 	m_pGameInstance->Add_RenderObject(CRenderer::RG_NONBLEND, this);
 
-	//m_pColliderObject->Late_Update(fTimeDelta);
+	m_pColliderObject->Late_Update(fTimeDelta);
 
 	m_pGameInstance->Add_ColliderList(m_pColliderCom);
 }
@@ -127,6 +130,24 @@ HRESULT CMonster_Training01::Ready_Components()
 		TEXT("Com_Collider"), reinterpret_cast<CComponent**>(&m_pColliderCom), &ColliderDesc)))
 		return E_FAIL;
 	m_pColliderCom->Set_Owner(this);
+
+	CBounding_OBB::BOUNDING_OBB_DESC			ColliderOBBDesc_Obj{};
+
+	ColliderOBBDesc_Obj.vExtents = _float3(0.3f, 0.3f, 0.3f);
+	ColliderOBBDesc_Obj.vCenter = _float3(0.f, 0.f, 0.f);
+	ColliderOBBDesc_Obj.vAngles = _float3(0.f, 0.f, 0.f);
+
+	CColliderObject::COLIDEROBJECT_DESC Desc{};
+
+	Desc.pBoundingDesc = &ColliderOBBDesc_Obj;
+	Desc.eType = CCollider::TYPE_OBB;
+	Desc.pSocketBoneMatrix = m_pModelCom->Get_BoneCombindTransformationMatrix_Ptr("Bip001-R-Hand");
+	Desc.pParentWorldMatrix = m_pTransformCom->Get_WorldMatrix_Ptr();
+	Desc.pSocketBoneMatrix2 = m_pTransformCom->Get_WorldMatrix_Ptr();
+	Desc.fDamageAmount = 100.f;
+	Desc.pOWner = this;
+
+	m_pColliderObject = dynamic_cast<CColliderObject*>(m_pGameInstance->Clone_GameObject(TEXT("Prototype_GameObject_ColliderObj"), &Desc));
 
 	// 항상 마지막에 생성하기
 	CRigidBody::RIGIDBODY_DESC RigidBodyDesc{};
@@ -207,7 +228,6 @@ CPawn* CMonster_Training01::Clone(void* pArg)
 void CMonster_Training01::Free()
 {
 	Safe_Release(m_pColliderObject);
-
 
 	__super::Free();
 

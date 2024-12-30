@@ -117,12 +117,12 @@ HRESULT CSteelHeart::Render()
 	}
 
 	/* 유리 재질 */
-	/*m_pModelCom->Bind_MeshBoneMatrices(m_pShaderCom, "g_BoneMatrices", (_uint)1);
+	m_pModelCom->Bind_MeshBoneMatrices(m_pShaderCom, "g_BoneMatrices", (_uint)1);
 
 	m_pShaderCom->Begin(6);
 
 	if (FAILED(m_pModelCom->Render((_uint)1)))
-		return E_FAIL;*/
+		return E_FAIL;
 
 	return S_OK;
 

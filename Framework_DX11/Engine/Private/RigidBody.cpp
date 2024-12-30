@@ -182,6 +182,9 @@ void CRigidBody::Set_Kinematic(_bool isKinematic)
 {
 	if (isKinematic)
 		m_PxScene->removeActor(*m_PxActor);
+	else
+		m_PxScene->addActor(*m_PxActor);
+
 	/*static_cast<PxRigidDynamic*>(m_PxActor)->setRigidBodyFlag(PxRigidBodyFlag::eKINEMATIC, isKinematic);
 	m_PxShape->setFlag(PxShapeFlag::eTRIGGER_SHAPE, isKinematic);
 	m_PxShape->setFlag(PxShapeFlag::eSIMULATION_SHAPE, !isKinematic);*/
@@ -247,7 +250,7 @@ HRESULT CRigidBody::Add_PxGeometry(RIGIDBODY_DESC* pDesc)
 		if (!pShape)
 			return E_FAIL;
 
-		PxVec3 newPosition(CapsuleGeometry->fHeight * 0.5f, 0.f, 0.f); // 캡슐의 새로운 로컬 위치
+		PxVec3 newPosition(CapsuleGeometry->fHeight * 0.5f + 0.1f, 0.f, 0.f); // 캡슐의 새로운 로컬 위치
 		PxQuat newRotation(PxIdentity);        // 기본 회전 (필요에 따라 수정)
 
 		PxTransform newLocalPose(newPosition, newRotation);

@@ -317,6 +317,12 @@
     <ClInclude Include="..\Public\UIPage_Chest.h" />
     <ClInclude Include="..\Public\UIPage_Shop.h" />
     <ClInclude Include="..\Public\UIPage_Telepot.h" />
+    <ClInclude Include="..\Public\UIPage_Tutorial.h" />
+    <ClInclude Include="..\Public\UITutorial_Guide.h" />
+    <ClInclude Include="..\Public\UITutorial_Info.h" />
+    <ClInclude Include="..\Public\UITutorial_Popup.h" />
+    <ClInclude Include="..\Public\UITutorial_Result.h" />
+    <ClInclude Include="..\Public\UITutorial_Timing.h" />
     <ClInclude Include="..\Public\Weapon_PlayerArm.h" />
     <ClInclude Include="..\Public\Weapon_Raxasia_P1_Shield.h" />
     <ClInclude Include="..\Public\Weapon_Raxasia_P1_Sword.h" />
@@ -677,6 +683,12 @@
     <ClCompile Include="..\Private\UIPage_Chest.cpp" />
     <ClCompile Include="..\Private\UIPage_Shop.cpp" />
     <ClCompile Include="..\Private\UIPage_Telepot.cpp" />
+    <ClCompile Include="..\Private\UIPage_Tutorial.cpp" />
+    <ClCompile Include="..\Private\UITutorial_Guide.cpp" />
+    <ClCompile Include="..\Private\UITutorial_Info.cpp" />
+    <ClCompile Include="..\Private\UITutorial_Popup.cpp" />
+    <ClCompile Include="..\Private\UITutorial_Result.cpp" />
+    <ClCompile Include="..\Private\UITutorial_Timing.cpp" />
     <ClCompile Include="..\Private\Weapon_PlayerArm.cpp" />
     <ClCompile Include="..\Private\Weapon_Raxasia_P1_Shield.cpp" />
     <ClCompile Include="..\Private\Weapon_Raxasia_P1_Sword.cpp" />

@@ -1326,7 +1326,7 @@
     </Filter>
     <Filter Include="02.GameObjects\12.AttackObject\Raxasia\ThunderDischarge">
       <UniqueIdentifier>{9c2b992e-d2e7-4b03-ba9f-da2a9beca625}</UniqueIdentifier>
-	</Filter>
+    </Filter>
     <Filter Include="03.GameInterface_Controller\00.UIManager\02.UIPart_3D">
       <UniqueIdentifier>{86955ff6-8ad3-4d95-8c1f-e0f6a81039f2}</UniqueIdentifier>
     </Filter>
@@ -2446,9 +2446,8 @@
     </ClInclude>
     <ClInclude Include="..\Public\UIPage_Achievment.h">
       <Filter>03.GameInterface_Controller\00.UIManager\00.UIPage\19.UIPage_Achievment</Filter>
-	</ClInclude>
+    </ClInclude>
     <ClInclude Include="..\Public\State_RebornerMale_RapidFire.h" />
-    <ClInclude Include="..\Public\State_RebornerMale_Reaload.h" />
     <ClInclude Include="..\Public\State_RebornerMale_Reload.h">
       <Filter>05.Fsm\Monster\RebornerMale\Attack\Route\Reload</Filter>
     </ClInclude>
@@ -2469,48 +2468,27 @@
     </ClInclude>
     <ClInclude Include="..\Public\AObj_Bullet.h">
       <Filter>02.GameObjects\12.AttackObject\RebornerMale\Bullet</Filter>
-	</ClInclude>
+    </ClInclude>
     <ClInclude Include="..\Public\UIPage_Achievment.h">
       <Filter>03.GameInterface_Controller\00.UIManager\00.UIPage\19.UIPage_Achievment</Filter>
-    </ClInclude>
-    <ClInclude Include="..\Public\UIPart_3D.h">
-      <Filter>03.GameInterface_Controller\00.UIManager\02.UIPart_3D</Filter>
-    </ClInclude>
-    <ClInclude Include="..\Public\UIPage_3D.h">
-      <Filter>03.GameInterface_Controller\00.UIManager\03.UIPage_3D</Filter>
-    </ClInclude>
-    <ClInclude Include="..\Public\UIPart_3D_Path.h">
-      <Filter>03.GameInterface_Controller\00.UIManager\02.UIPart_3D\00.UIPart_3D_Path</Filter>
-    </ClInclude>
-    <ClInclude Include="..\Public\UIPart_3D_Normal.h">
-      <Filter>03.GameInterface_Controller\00.UIManager\02.UIPart_3D\01.UIPart_3D_Normal</Filter>
-    </ClInclude>
-    <ClInclude Include="..\Public\UIPage_3D_PathGuide.h">
-      <Filter>03.GameInterface_Controller\00.UIManager\03.UIPage_3D\00.UIPage_3D_PathGuide</Filter>
-    </ClInclude>
-    <ClInclude Include="..\Public\UIPlay_Component.h">
-      <Filter>03.GameInterface_Controller\00.UIManager\00.UIPage\02.UIPage_Play %2870%25%29\PlayComponent</Filter>
-    </ClInclude>
-    <ClInclude Include="..\Public\UIPlay_Weapon.h">
-      <Filter>03.GameInterface_Controller\00.UIManager\00.UIPage\02.UIPage_Play %2870%25%29\PlayComponent\00.Weapon</Filter>
     </ClInclude>
     <ClInclude Include="..\Public\UIPage_Tutorial.h">
       <Filter>03.GameInterface_Controller\00.UIManager\00.UIPage\20.UIPage_Tutorial</Filter>
     </ClInclude>
-    <ClInclude Include="..\Public\UITutorial_Timing.h">
-      <Filter>03.GameInterface_Controller\00.UIManager\00.UIPage\20.UIPage_Tutorial\02.Tuto_Timing</Filter>
+    <ClInclude Include="..\Public\UITutorial_Guide.h">
+      <Filter>03.GameInterface_Controller\00.UIManager\00.UIPage\20.UIPage_Tutorial\01.Tuto_Guide</Filter>
     </ClInclude>
     <ClInclude Include="..\Public\UITutorial_Info.h">
       <Filter>03.GameInterface_Controller\00.UIManager\00.UIPage\20.UIPage_Tutorial\00.Tuto_Info</Filter>
     </ClInclude>
-    <ClInclude Include="..\Public\UITutorial_Guide.h">
-      <Filter>03.GameInterface_Controller\00.UIManager\00.UIPage\20.UIPage_Tutorial\01.Tuto_Guide</Filter>
+    <ClInclude Include="..\Public\UITutorial_Popup.h">
+      <Filter>03.GameInterface_Controller\00.UIManager\00.UIPage\20.UIPage_Tutorial\04.Tuto_Popup</Filter>
     </ClInclude>
     <ClInclude Include="..\Public\UITutorial_Result.h">
       <Filter>03.GameInterface_Controller\00.UIManager\00.UIPage\20.UIPage_Tutorial\03.Tuto_Result</Filter>
     </ClInclude>
-    <ClInclude Include="..\Public\UITutorial_Popup.h">
-      <Filter>03.GameInterface_Controller\00.UIManager\00.UIPage\20.UIPage_Tutorial\04.Tuto_Popup</Filter>
+    <ClInclude Include="..\Public\UITutorial_Timing.h">
+      <Filter>03.GameInterface_Controller\00.UIManager\00.UIPage\20.UIPage_Tutorial\02.Tuto_Timing</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -3562,9 +3540,8 @@
     </ClCompile>
     <ClCompile Include="..\Private\UIPage_Achievment.cpp">
       <Filter>03.GameInterface_Controller\00.UIManager\00.UIPage\19.UIPage_Achievment</Filter>
-	</ClCompile>
+    </ClCompile>
     <ClCompile Include="..\Private\State_RebornerMale_RapidFire.cpp" />
-    <ClCompile Include="..\Private\State_RebornerMale_Reaload.cpp" />
     <ClCompile Include="..\Private\State_RebornerMale_Reload.cpp">
       <Filter>05.Fsm\Monster\RebornerMale\Attack\Route\Reload</Filter>
     </ClCompile>
@@ -3585,48 +3562,27 @@
     </ClCompile>
     <ClCompile Include="..\Private\AObj_Bullet.cpp">
       <Filter>02.GameObjects\12.AttackObject\RebornerMale\Bullet</Filter>
-	</ClCompile>
+    </ClCompile>
     <ClCompile Include="..\Private\UIPage_Achievment.cpp">
       <Filter>03.GameInterface_Controller\00.UIManager\00.UIPage\19.UIPage_Achievment</Filter>
-    </ClCompile>
-    <ClCompile Include="..\Private\UIPart_3D.cpp">
-      <Filter>03.GameInterface_Controller\00.UIManager\02.UIPart_3D</Filter>
-    </ClCompile>
-    <ClCompile Include="..\Private\UIPage_3D.cpp">
-      <Filter>03.GameInterface_Controller\00.UIManager\03.UIPage_3D</Filter>
-    </ClCompile>
-    <ClCompile Include="..\Private\UIPart_3D_Path.cpp">
-      <Filter>03.GameInterface_Controller\00.UIManager\02.UIPart_3D\00.UIPart_3D_Path</Filter>
-    </ClCompile>
-    <ClCompile Include="..\Private\UIPart_3D_Normal.cpp">
-      <Filter>03.GameInterface_Controller\00.UIManager\02.UIPart_3D\01.UIPart_3D_Normal</Filter>
-    </ClCompile>
-    <ClCompile Include="..\Private\UIPage_3D_PathGuide.cpp">
-      <Filter>03.GameInterface_Controller\00.UIManager\03.UIPage_3D\00.UIPage_3D_PathGuide</Filter>
-    </ClCompile>
-    <ClCompile Include="..\Private\UIPlay_Component.cpp">
-      <Filter>03.GameInterface_Controller\00.UIManager\00.UIPage\02.UIPage_Play %2870%25%29\PlayComponent</Filter>
-    </ClCompile>
-    <ClCompile Include="..\Private\UIPlay_Weapon.cpp">
-      <Filter>03.GameInterface_Controller\00.UIManager\00.UIPage\02.UIPage_Play %2870%25%29\PlayComponent\00.Weapon</Filter>
-    </ClCompile>
-    <ClCompile Include="..\Private\UIPage_Tutorial.cpp">
-      <Filter>03.GameInterface_Controller\00.UIManager\00.UIPage\20.UIPage_Tutorial</Filter>
-    </ClCompile>
-    <ClCompile Include="..\Private\UITutorial_Timing.cpp">
-      <Filter>03.GameInterface_Controller\00.UIManager\00.UIPage\20.UIPage_Tutorial\02.Tuto_Timing</Filter>
-    </ClCompile>
-    <ClCompile Include="..\Private\UITutorial_Info.cpp">
-      <Filter>03.GameInterface_Controller\00.UIManager\00.UIPage\20.UIPage_Tutorial\00.Tuto_Info</Filter>
     </ClCompile>
     <ClCompile Include="..\Private\UITutorial_Guide.cpp">
       <Filter>03.GameInterface_Controller\00.UIManager\00.UIPage\20.UIPage_Tutorial\01.Tuto_Guide</Filter>
     </ClCompile>
-    <ClCompile Include="..\Private\UITutorial_Result.cpp">
-      <Filter>03.GameInterface_Controller\00.UIManager\00.UIPage\20.UIPage_Tutorial\03.Tuto_Result</Filter>
+    <ClCompile Include="..\Private\UIPage_Tutorial.cpp">
+      <Filter>03.GameInterface_Controller\00.UIManager\00.UIPage\20.UIPage_Tutorial</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Private\UITutorial_Info.cpp">
+      <Filter>03.GameInterface_Controller\00.UIManager\00.UIPage\20.UIPage_Tutorial\00.Tuto_Info</Filter>
     </ClCompile>
     <ClCompile Include="..\Private\UITutorial_Popup.cpp">
       <Filter>03.GameInterface_Controller\00.UIManager\00.UIPage\20.UIPage_Tutorial\04.Tuto_Popup</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Private\UITutorial_Result.cpp">
+      <Filter>03.GameInterface_Controller\00.UIManager\00.UIPage\20.UIPage_Tutorial\03.Tuto_Result</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Private\UITutorial_Timing.cpp">
+      <Filter>03.GameInterface_Controller\00.UIManager\00.UIPage\20.UIPage_Tutorial\02.Tuto_Timing</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
