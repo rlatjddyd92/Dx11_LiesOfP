@@ -103,7 +103,7 @@ void CCarcassNormal::Priority_Update(_float fTimeDelta)
 	{
 		GET_GAMEINTERFACE->Set_OnOff_OrthoUI(false, this);
 		m_bDieState = true;
-		m_pFsmCom->Set_State(DIE);
+		m_pFsmCom->Change_State(DIE);
 	}
 }
 
