@@ -44,7 +44,9 @@ private:
     _bool               m_bSWingDown = { false };
     _bool               m_bSpread = { false };
 
-    _bool               m_bInchent = { false };
+    _bool               m_bInchentForSound = { false };
+    _bool               m_bSWingDownForSound = { false };
+    _bool               m_bStompForSound = { false };
 
     _uint               m_iRouteTrack = {};
 

@@ -44,7 +44,11 @@ private:
     _bool               m_bStartSpot = { true };
     _bool               m_bStartHeightCor = { true };
     _bool               m_bSwing = { false };
+
     _bool               m_bSwingSound = { false };
+    _bool               m_bInchentSound = { false };
+    _bool               m_bEnvelopSound = { false };
+    _bool               m_bStompSound = { false };
     
     _bool               m_bInchent = { false };
     _bool               m_bEnvelop = { false };
@@ -55,6 +59,7 @@ private:
 
     _uint               m_iRouteTrack = {};
 
+    _uint               m_iTestCnt = {};
 private:
     _bool               End_Check();
     void                Collider_Check(_double CurTrackPos);

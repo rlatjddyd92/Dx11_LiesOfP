@@ -29,6 +29,7 @@ HRESULT CState_RaxasiaP2_ChargeRush::Start_State(void* pArg)
     m_fCurtRimAlpha = 1.f;
 
     m_bSwingSound = false;
+    m_bChargeSound = false;
 
     m_bSwing = false;
     return S_OK;
@@ -45,7 +46,9 @@ void CState_RaxasiaP2_ChargeRush::Update(_float fTimeDelta)
             ++m_iRouteTrack;
             m_bSwing = false;
             m_bCharge = false;
+            m_bChargeSound = false;
             m_pMonster->Change_Animation(AN_CHARGE_LOOP, false, 0.02f, 0);
+            m_pMonster->Play_Sound(CPawn::PAWN_SOUND_VOICE, TEXT("VO_NPC_Raxasia_P2_Roar_05.wav"), false);
             return;
         }
 
@@ -58,10 +61,12 @@ void CState_RaxasiaP2_ChargeRush::Update(_float fTimeDelta)
             ++m_iRouteTrack;
             m_bSwing = false;
             m_bCharge = false;
+            m_bChargeSound = false;
             m_bRush = false;
             if (m_iRouteTrack == 3)
             {
                 m_pMonster->DeActive_Effect(CRaxasia::EFFECT_SHIELDCHARGE_GROUND);
+                m_pMonster->Stop_Sound(CPawn::PAWN_SOUND_EFFECT2);
                 m_pMonster->Change_Animation(AN_SHIELDRUSH, false, 0.2f, 0);
                 return;
             }
@@ -266,7 +271,46 @@ void CState_RaxasiaP2_ChargeRush::Update_Rimlight()
 
 void CState_RaxasiaP2_ChargeRush::Control_Sound(_double CurTrackPos)
 {
-
+    if (m_iRouteTrack == 0)
+    {
+        if (!m_bChargeSound)
+        {
+            if (CurTrackPos >= 35.f)
+            {
+                m_pMonster->Play_Sound(CPawn::PAWN_SOUND_EFFECT2, TEXT("SE_NPC_Raxasia_SK_PJ_Spark_Heavy_Loop_03.wav"), true);
+                m_pMonster->Play_Sound(CPawn::PAWN_SOUND_VOICE, TEXT("SE_NPC_Raxasia_SK_PJ_Spark_Electric_Loop_02.wav"), true);
+                m_bChargeSound = true;
+            }
+        }
+    }
+    else if (m_iRouteTrack >= 1 && m_iRouteTrack <= 2)
+    {
+        if (!m_bChargeSound)
+        {
+            if (CurTrackPos >= 60.f && CurTrackPos <= 70.f)
+            {
+                m_pMonster->Play_Sound(CPawn::PAWN_SOUND_EFFECT1, TEXT("SE_NPC_Raxasia_SK_FX_Spark_Charge_01.wav"), false);
+                m_bChargeSound = true;
+            }
+        }
+    }
+    else if (m_iRouteTrack >= 3 && m_iRouteTrack <= 5)
+    {
+        if (CurTrackPos >= 7.f && CurTrackPos <= 100.f)
+        {
+            if (!m_bRush)
+            {
+                m_pMonster->Active_Effect(CRaxasia::EFFECT_SHIELDDASH, true);   //ÀÌÆåÆ® 1, 2 ¹èÁ¤
+                m_pMonster->Active_Effect(CRaxasia::EFFECT_THUNDERACCEL, true);
+                m_bRush = true;
+            }
+        }
+        else
+        {
+            m_pMonster->DeActive_Effect(CRaxasia::EFFECT_SHIELDDASH);
+            m_pMonster->DeActive_Effect(CRaxasia::EFFECT_THUNDERACCEL);
+        }
+    }
 }
 
 CState_RaxasiaP2_ChargeRush* CState_RaxasiaP2_ChargeRush::Create(CFsm* pFsm, CMonster* pMonster, _uint iStateNum, void* pArg)

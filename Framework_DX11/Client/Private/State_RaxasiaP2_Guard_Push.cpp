@@ -125,7 +125,20 @@ void CState_RaxasiaP2_Guard_Push::Effect_Check(_double CurTrackPos)
 
 void CState_RaxasiaP2_Guard_Push::Control_Sound(_double CurTrackPos)
 {
-
+    if (m_iRouteTrack == 1)
+    {
+        if ((CurTrackPos >= 35.f && CurTrackPos <= 60.f))
+        {
+            if (!m_bSwingSound)
+            {
+                if ((CurTrackPos >= 35.f))
+                {
+                    m_pMonster->Play_Sound(CPawn::PAWN_SOUND_EFFECT1, TEXT("SE_NPC_SK_WS_Blunt_L.wav"), false);
+                    m_bSwingSound = true;
+                }
+            }
+        }
+    }
 }
 
 CState_RaxasiaP2_Guard_Push* CState_RaxasiaP2_Guard_Push::Create(CFsm* pFsm, CMonster* pMonster, _uint iStateNum, void* pArg)

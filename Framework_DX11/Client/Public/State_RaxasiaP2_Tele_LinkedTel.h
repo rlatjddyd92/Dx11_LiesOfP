@@ -36,6 +36,7 @@ private:
     _bool               m_bAccel = { false };
 
     _bool               m_bSwingSound = { false };
+    _bool               m_bAccelSound = { false };
 
     _uint               m_iRouteTrack = {};
 

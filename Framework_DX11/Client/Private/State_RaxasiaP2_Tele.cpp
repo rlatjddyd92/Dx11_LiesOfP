@@ -24,8 +24,12 @@ HRESULT CState_RaxasiaP2_Tele::Start_State(void* pArg)
     m_pMonster->Change_Animation(AN_RUN, true, 0.1f, 0);
 
     m_iAtkCnt = 0;
+    m_bSpeedController = false;
 
     m_bSwingSound = false;
+    m_bAccelSound = false;
+    m_bEnvelopSound = false;
+
     m_bTele = false;
     m_bSwing = false;
     m_bEnvelop = false;
@@ -43,7 +47,7 @@ void CState_RaxasiaP2_Tele::Update(_float fTimeDelta)
     case 0:
         if (!m_bSpeedController)
         {
-            if (CurTrackPos >= 10.f && CurTrackPos <= 13.f)
+            if (CurTrackPos >= 10.f && CurTrackPos <= 14.f)
             {
                 m_pMonster->Get_Model()->Set_SpeedRatio(AN_RUN, (double)0.2f);
                 m_bSpeedController = true;
@@ -115,6 +119,7 @@ void CState_RaxasiaP2_Tele::Update(_float fTimeDelta)
 void CState_RaxasiaP2_Tele::End_State()
 {
     m_pMonster->DeActive_Effect(CRaxasia::EFFECT_THUNDERENVELOP_SMALL);
+    m_pMonster->Stop_Sound(CPawn::PAWN_SOUND_VOICE);
 }
 
 _bool CState_RaxasiaP2_Tele::End_Check()
@@ -181,7 +186,45 @@ void CState_RaxasiaP2_Tele::Effect_Check(_double CurTrackPos)
 
 void CState_RaxasiaP2_Tele::Control_Sound(_double CurTrackPos)
 {
+    if (m_iRouteTrack == 1)
+    {
+        if ((CurTrackPos >= 15.f && CurTrackPos <= 40.f))
+        {
+            if (!m_bSwingSound)
+            {
+                m_pMonster->Play_Sound(CPawn::PAWN_SOUND_EFFECT1, TEXT("SE_NPC_SK_WS_BroadSword_06.wav"), false);
+                m_bSwingSound = true;
+            }
+        }
+        else
+        {
+            m_pMonster->Stop_Sound(CPawn::PAWN_SOUND_EFFECT1);
+        }
+    }
+    else
+    {
+        if (!m_bEnvelopSound)
+        {
+            if (CurTrackPos >= 14.f)
+            {
+                m_bEnvelopSound = false;
+                m_pMonster->Play_Sound(CPawn::PAWN_SOUND_VOICE, TEXT("SE_NPC_Raxasia_SK_PJ_Spark_Electric_Loop_02.wav"), true);
+            }
+        }
 
+        if (!m_bAccelSound)
+        {
+            if (CurTrackPos >= 14.f)
+            {
+                m_bAccelSound = true;
+                m_pMonster->Play_Sound(CPawn::PAWN_SOUND_EFFECT2, TEXT("SE_NPC_Raxasia_SK_FX_Blink_Spark_Foot_03.wav"), true);
+            }
+        }
+        if (CurTrackPos >= 15.5f)
+        {
+            m_pMonster->Stop_Sound(CPawn::PAWN_SOUND_EFFECT2);
+        }
+    }
 }
 
 CState_RaxasiaP2_Tele* CState_RaxasiaP2_Tele::Create(CFsm* pFsm, CMonster* pMonster, _uint iStateNum, void* pArg)

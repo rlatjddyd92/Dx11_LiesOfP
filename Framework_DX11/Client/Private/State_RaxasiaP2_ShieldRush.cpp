@@ -27,6 +27,7 @@ HRESULT CState_RaxasiaP2_ShieldRush::Start_State(void* pArg)
     m_bSwing = false;
     m_bCharge = false;
     m_bRush = false;
+    m_bHowl = { false };
 
     return S_OK;
 }
@@ -74,6 +75,7 @@ void CState_RaxasiaP2_ShieldRush::Update(_float fTimeDelta)
 void CState_RaxasiaP2_ShieldRush::End_State()
 {
     m_pMonster->DeActive_Effect(CRaxasia::EFFECT_INCHENTSWORD_P2);
+    m_pMonster->Stop_Sound(CPawn::PAWN_SOUND_EFFECT2);
 }
 
 _bool CState_RaxasiaP2_ShieldRush::End_Check()
@@ -150,7 +152,28 @@ void CState_RaxasiaP2_ShieldRush::Effect_Check(_double CurTrackPos)
 
 void CState_RaxasiaP2_ShieldRush::Control_Sound(_double CurTrackPos)
 {
-
+    if (m_iRouteTrack == 0)
+    {
+        if (!m_bCharge)
+        {
+            if (CurTrackPos >= 35.f)
+            {
+                m_pMonster->Play_Sound(CPawn::PAWN_SOUND_EFFECT2, TEXT("SE_NPC_Raxasia_SK_WP_Sword_Lightning_Loop.wav"), true);
+                m_bCharge = true;
+            }
+        }
+    }
+    else if (m_iRouteTrack == 1)
+    {
+        if (CurTrackPos >= 7.f && CurTrackPos <= 100.f)
+        {
+            if (!m_bHowl)       //ÇÔ¼º
+            {
+                m_pMonster->Play_Sound(CPawn::PAWN_SOUND_VOICE, TEXT("VO_NPC_Raxasia_P2_Roar_05.wav"), false);
+                m_bHowl = true;
+            }
+        }
+    }
 }
 
 CState_RaxasiaP2_ShieldRush* CState_RaxasiaP2_ShieldRush::Create(CFsm* pFsm, CMonster* pMonster, _uint iStateNum, void* pArg)

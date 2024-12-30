@@ -32,6 +32,9 @@ private:
     _bool               m_bSwing = { false };
 
     _bool               m_bSwingSound = { false };
+    _bool               m_bShieldSwingSound = { false };
+    _bool               m_bAccelSound = { false };
+
     _bool               m_bTeleport = { false };
     _bool               m_bSetDir = { false };
     _bool               m_bEnvelop = { false };

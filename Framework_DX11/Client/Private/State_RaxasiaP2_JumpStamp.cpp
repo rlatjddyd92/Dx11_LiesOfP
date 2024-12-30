@@ -29,7 +29,11 @@ HRESULT CState_RaxasiaP2_JumpStamp::Start_State(void* pArg)
     m_pMonster->Get_Model()->ReadyDenyNextTranslate(4);
     m_pMonster->SetUp_Animation(AN_INCHENT, false, 0);
 
-    m_bSwingSound = false;
+    m_bSwingSound = { false };
+    m_bInchentSound = { false };
+    m_bEnvelopSound = { false };
+    m_bStompSound = { false };
+
     m_bStartSpot = true;
     m_bSwing = false;
     m_bStartHeightCor = false;
@@ -113,7 +117,7 @@ void CState_RaxasiaP2_JumpStamp::Update(_float fTimeDelta)
 
     case 2:
     {
-        if (End_Check())
+        if (CurTrackPos >= 20.f)
         {
             m_pMonster->Get_Model()->ReadyDenyNextTranslate(4);
             ++m_iRouteTrack;
@@ -126,14 +130,14 @@ void CState_RaxasiaP2_JumpStamp::Update(_float fTimeDelta)
         }
         if (m_bStartSpot)
         {
-            if (CurTrackPos >= 40.f)
+            if (CurTrackPos >= 15.f)
             {
                 m_bStartSpot = false;
 
                 m_vTargetDir = m_pMonster->Get_TargetDir();
             }
         }
-        if (CurTrackPos <= 40.f)
+        if (CurTrackPos <= 15.f)
         {
             m_pMonster->Get_Transform()->LookAt_Lerp_NoHeight(m_pMonster->Get_TargetDir(), 0.5f, fTimeDelta);
         }
@@ -194,6 +198,10 @@ void CState_RaxasiaP2_JumpStamp::Update(_float fTimeDelta)
 
 void CState_RaxasiaP2_JumpStamp::End_State()
 {
+    m_pMonster->DeActive_Effect(CRaxasia::EFFECT_INCHENTSWORD_P2);
+    m_pMonster->DeActive_Effect(CRaxasia::EFFECT_THUNDERENVELOP_SMALL);
+    m_pMonster->Stop_Sound(CPawn::PAWN_SOUND_EFFECT2);
+    m_pMonster->Stop_Sound(CPawn::PAWN_SOUND_VOICE);
 }
 
 _bool CState_RaxasiaP2_JumpStamp::End_Check()
@@ -301,9 +309,9 @@ void CState_RaxasiaP2_JumpStamp::Effect_Check(_double CurTrackPos)
             }
         }
         //일정간격두고 마크 3개 터트리기
-        if ((CurTrackPos >= 15.f && CurTrackPos >= 17.f) ||
-            (CurTrackPos >= 18.f && CurTrackPos >= 20.f) || 
-            (CurTrackPos >= 21.f && CurTrackPos >= 23.f))
+        if ((CurTrackPos >= 15.f && CurTrackPos <= 17.f) ||
+            (CurTrackPos >= 22.f && CurTrackPos <= 24.f) || 
+            (CurTrackPos >= 27.f && CurTrackPos <= 29.f))
         {
             if (!m_bOnMark)
             {
@@ -324,20 +332,55 @@ void CState_RaxasiaP2_JumpStamp::Effect_Check(_double CurTrackPos)
                 Desc.vPos = vPos;
 
                 m_pGameInstance->Add_CloneObject_ToLayer(LEVEL_GAMEPLAY, TEXT("Monster_Attack"), TEXT("Prototype_GameObject_ThunderMark"), &Desc);
-
+                ++m_iTestCnt;
             }
         }
         else
         {
             m_bOnMark = false;
         }
-
     }
 }
 
 void CState_RaxasiaP2_JumpStamp::Control_Sound(_double CurTrackPos)
 {
+    if (m_iRouteTrack == 0)
+    {
+        if (!m_bInchentSound)
+        {
+            if (CurTrackPos >= 45.f)
+            {
+                m_bInchentSound = true;
+                m_pMonster->Play_Sound(CPawn::PAWN_SOUND_EFFECT2, TEXT("SE_NPC_Raxasia_SK_WP_Sword_Lightning_Loop.wav"), true);
+            }
+        }
+    }
+    else if (m_iRouteTrack == 1)
+    {
+        if (!m_bEnvelopSound)
+        {
+            if (CurTrackPos >= 97.f)
+            {
+                m_bEnvelopSound = true;
+                m_pMonster->Play_Sound(CPawn::PAWN_SOUND_VOICE, TEXT("SE_NPC_Raxasia_SK_PJ_Spark_Electric_Loop_02.wav"), true);
 
+                m_pMonster->Play_Sound(CPawn::PAWN_SOUND_EFFECT1, TEXT("SE_NPC_Raxasia_SK_FX_Jump_Heavy_01.wav"), false);
+
+            }
+        }
+    }
+    else if (m_iRouteTrack == 3)
+    {
+        if (!m_bStompSound)
+        {
+            if ((CurTrackPos >= 18.f))
+            {
+                m_bStompSound = true;
+
+                m_pMonster->Play_Sound(CPawn::PAWN_SOUND_EFFECT1, TEXT("SE_NPC_Raxasia_SK_PJ_Thunder_Explo_03.wav"), false);
+            }
+        }
+    }
 }
 
 CState_RaxasiaP2_JumpStamp* CState_RaxasiaP2_JumpStamp::Create(CFsm* pFsm, CMonster* pMonster, _uint iStateNum, void* pArg)

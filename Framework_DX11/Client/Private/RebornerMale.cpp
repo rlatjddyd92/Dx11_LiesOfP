@@ -458,6 +458,8 @@ void CRebornerMale::Free()
 		Safe_Release(m_EXCollider[i]);
 	}
 
+	Safe_Release(m_pColliderObject);
+
 	__super::Free();
 
 	Safe_Release(m_pWeapon);

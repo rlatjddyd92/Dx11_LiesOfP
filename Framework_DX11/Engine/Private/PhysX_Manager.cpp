@@ -404,7 +404,7 @@ void CPhysX_Manager::Free()
     PhysX_RELEASE(m_PxScene);
 
     // PhysX Extensions ´Ý±â
-    PxCloseExtensions();
+    //PxCloseExtensions();
 
     PhysX_RELEASE(m_PxDispatcher);
     PhysX_RELEASE(m_PhysX);

@@ -27,6 +27,10 @@ HRESULT CState_RaxasiaP2_StepJump::Start_State(void* pArg)
     m_pMonster->Change_Animation(AN_INCHENT, false, 0.1f, 0);
 
     m_bSwingSound = false;
+    m_bInchentForSound = false;
+    m_bSWingDownForSound = { false };
+    m_bStompForSound = { false };
+    
     m_bStartSpot = true;
     m_vFlyMoveStack = _Vec3{};
     m_bSwing = false;
@@ -61,27 +65,27 @@ void CState_RaxasiaP2_StepJump::Update(_float fTimeDelta)
             m_pMonster->Change_Animation(AN_JUMPSTAMP_MIDDLE, false, 0.1f, 0);
         }
 
-        m_vTargetDir = m_pMonster->Get_TargetDir();
-        m_vTargetDir.Normalize();
 
         if (CurTrackPos >= 87.f && CurTrackPos <= 145.f)
         {
             if (m_bStartSpot)
             {
                 m_fDist = m_pMonster->Calc_Distance_XZ();
-                m_fDist -= 4.f;
-                if (m_fDist < 2.f)
+                m_fDist -= 6.f;
+                if (m_fDist <= 0.5f)
                 {
-                    m_fDist = 2.f;
+                    m_fDist = 0.5f;
                 }
                 m_bStartSpot = false;
+                m_vTargetDir = m_pMonster->Get_TargetDir();
+                m_vTargetDir.Normalize();
             }
 
             m_pMonster->Get_Transform()->LookAt_Lerp_NoHeight(m_vTargetDir, 1.f, fTimeDelta);
 
             _float fYMove = m_pMonster->Get_RigidBody()->Get_Velocity().y;
 
-            _Vec3 vMove = m_vTargetDir * m_fDist * (((_float)CurTrackPos - 87.f) / 145.f);
+            _Vec3 vMove = m_vTargetDir * m_fDist * (((_float)CurTrackPos - 87.f) / 245.f);
             vMove.y = fYMove;
             m_pMonster->Get_RigidBody()->Set_Velocity((vMove - m_vFlyMoveStack) / fTimeDelta);
             m_vFlyMoveStack = vMove;
@@ -162,6 +166,14 @@ void CState_RaxasiaP2_StepJump::Collider_Check(_double CurTrackPos)
 {
     if (m_iRouteTrack == 1)
     {
+        if (CurTrackPos >= 165.f && CurTrackPos <= 175.f)
+        {
+            m_pMonster->Active_CurrentWeaponCollider(1.2f, 0, HIT_TYPE::HIT_METAL, ATTACK_STRENGTH::ATK_WEAK);
+        }
+        else
+        {
+            m_pMonster->DeActive_CurretnWeaponCollider();
+        }
     }
     else if (m_iRouteTrack == 2)
     {
@@ -320,6 +332,7 @@ void CState_RaxasiaP2_StepJump::Effect_Check(_double CurTrackPos)
                 Desc.vDir.Normalize();
                 m_pGameInstance->Add_CloneObject_ToLayer(LEVEL_GAMEPLAY, TEXT("Monster_Attack"), TEXT("Prototype_GameObject_ThunderSpread"), &Desc);
 
+                m_bSWingDown = true;
             }
         }
 
@@ -339,12 +352,12 @@ void CState_RaxasiaP2_StepJump::Control_Sound(_double CurTrackPos)
 
     if (m_iRouteTrack == 0)
     {
-        if (!m_bInchent)
+        if (!m_bInchentForSound)
         {
             if (CurTrackPos >= 45.f && CurTrackPos <= 55.f)
             {
-                m_bInchent = true;
-                m_pMonster->Play_Sound(CPawn::PAWN_SOUND_EFFECT2, TEXT("SE_NPC_Raxasia_SK_WP_Sword_Lightning_Loop.wav"), false);
+                m_bInchentForSound = true;
+                m_pMonster->Play_Sound(CPawn::PAWN_SOUND_EFFECT2, TEXT("SE_NPC_Raxasia_SK_WP_Sword_Lightning_Loop.wav"), true);
             }
         }
     }
@@ -358,38 +371,18 @@ void CState_RaxasiaP2_StepJump::Control_Sound(_double CurTrackPos)
             }
         }
 
-        if (!m_bStomp)
+        if (!m_bStompForSound)
         {
             if (CurTrackPos >= 175.f && CurTrackPos <= 211.f)
             {
-                m_bStomp = true;
-                _float4x4 WorldMat{};
-                _Vec3 vPos = { 0.f, 0.f, -1.75f };
-                XMStoreFloat4x4(&WorldMat,
-                    (*m_pMonster->Get_BoneCombinedMat(m_pMonster->Get_Model()->Get_UFBIndices(UFB_WEAPON))
-                        * (m_pMonster->Get_Transform()->Get_WorldMatrix())));
-                vPos = XMVector3TransformCoord(vPos, XMLoadFloat4x4(&WorldMat));
-                vPos.y = m_pMonster->Get_Transform()->Get_State(CTransform::STATE_POSITION).y;
-
-                CEffect_Manager::Get_Instance()->Add_Effect_ToLayer(LEVEL_GAMEPLAY, TEXT("Raxasia_Attack_ThunderStamp_Small"),
-                    vPos, _Vec3{ m_pMonster->Get_TargetDir() });
-
-                //ÂïÀ¸¸é¼­ ¸¶Å© »ý¼º ÈÄ Æø¹ß
-
-                CAttackObject::ATKOBJ_DESC Desc;
-
-                _Vec3 vTargetDir = m_pMonster->Get_TargetPos() - vPos;
-
-                Desc.vPos = vPos;
-                Desc.vDir = vTargetDir;
-                m_pGameInstance->Add_CloneObject_ToLayer(LEVEL_GAMEPLAY, TEXT("Monster_Attack"), TEXT("Prototype_GameObject_ThunderStampMark"), &Desc);
-
+                m_pMonster->Play_Sound(CPawn::PAWN_SOUND_EFFECT1, TEXT("SE_NPC_Raxasia_SK_FX_Ground_Explo_Huge_02.wav"), false);
+                m_bStompForSound = true;
             }
         }
         else if (CurTrackPos >= 220.f)
         {
-            m_pMonster->DeActive_Effect(CRaxasia::EFFECT_INCHENTSWORD_P2);
-            m_bInchent = false;
+            m_pMonster->Stop_Sound(CPawn::PAWN_SOUND_EFFECT2);
+            m_bInchentForSound = false;
         }
     }
     else
@@ -399,94 +392,40 @@ void CState_RaxasiaP2_StepJump::Control_Sound(_double CurTrackPos)
         {
             if (!m_bSwing)
             {
-                m_pMonster->Active_Effect(CRaxasia::EFFECT_SWING, true);
+                m_pMonster->Play_Sound(CPawn::PAWN_SOUND_EFFECT1, TEXT("SE_NPC_SK_WS_BroadSword_06.wav"), false);
                 m_bSwing = true;
             }
         }
         else
         {
-            m_pMonster->DeActive_Effect(CRaxasia::EFFECT_SWING);
+            m_bSwing = false;
         }
 
-        if (!m_bInchent)
+        if (!m_bInchentForSound)
         {
             if ((CurTrackPos >= 190.f))
             {
-                _float4x4 WorldMat{};
-                _Vec3 vPos = { 0.f, 0.f, 0.f };
-                XMStoreFloat4x4(&WorldMat, (*m_pMonster->Get_BoneCombinedMat(m_pMonster->Get_UFBIndex(UFB_HAND_RIGHT)) * m_pMonster->Get_Transform()->Get_WorldMatrix()));
-                vPos = XMVector3TransformCoord(vPos, XMLoadFloat4x4(&WorldMat));
-
-                CEffect_Manager::Get_Instance()->Add_Effect_ToLayer(LEVEL_GAMEPLAY, TEXT("Raxasia_Attack_ThunderInchent"),
-                    vPos, _Vec3{ m_pMonster->Get_TargetDir() });
-
-                m_pMonster->Active_Effect(CRaxasia::EFFECT_INCHENTSWORD_P2, true);
+                m_pMonster->Play_Sound(CPawn::PAWN_SOUND_EFFECT1, TEXT("SE_NPC_Raxasia_SK_FX_Spark_Fall_02.wav"), false);
                 //³»·ÁÂï±â
-                m_bInchent = true;
+                m_pMonster->Play_Sound(CPawn::PAWN_SOUND_EFFECT2, TEXT("SE_NPC_Raxasia_SK_WP_Sword_Lightning_Loop.wav"), true);
+                m_bInchentForSound = true;
             }
         }
         else if (CurTrackPos >= 230.f)
         {
-            m_pMonster->DeActive_Effect(CRaxasia::EFFECT_INCHENTSWORD_P2);
+            m_pMonster->Stop_Sound(CPawn::PAWN_SOUND_EFFECT2);
         }
 
-        if (!m_bSWingDown)
+        if (!m_bSWingDownForSound)
         {
             if ((CurTrackPos >= 206.f && CurTrackPos <= 211.f))
             {
-                _float4x4 WorldMat{};
-                _Vec3 vPos = { 0.f, 0.f, -1.75f };
-                XMStoreFloat4x4(&WorldMat,
-                    (*m_pMonster->Get_BoneCombinedMat(m_pMonster->Get_Model()->Get_UFBIndices(UFB_WEAPON))
-                        * (m_pMonster->Get_Transform()->Get_WorldMatrix())));
-                vPos = XMVector3TransformCoord(vPos, XMLoadFloat4x4(&WorldMat));
-                vPos.y = m_pMonster->Get_Transform()->Get_State(CTransform::STATE_POSITION).y;
+                m_bSWingDownForSound = true;
 
-                CEffect_Manager::Get_Instance()->Add_Effect_ToLayer(LEVEL_GAMEPLAY, TEXT("Raxasia_Attack_ThunderStamp"),
-                    vPos, _Vec3{ m_pMonster->Get_TargetDir() });
-
-                CAttackObject::ATKOBJ_DESC Desc;
-
-                _Vec3 vTargetDir = m_pMonster->Get_Transform()->Get_State(CTransform::STATE_LOOK);
-                vTargetDir.Normalize();
-                _Vec3 vRight = m_pMonster->Get_Transform()->Get_State(CTransform::STATE_RIGHT);
-                vRight.Normalize();
-
-
-                Desc.vPos = vPos;
-                Desc.vDir = vTargetDir;
-                m_pGameInstance->Add_CloneObject_ToLayer(LEVEL_GAMEPLAY, TEXT("Monster_Attack"), TEXT("Prototype_GameObject_ThunderSpread"), &Desc);
-
-                Desc.vPos = vPos;
-                Desc.vDir = vTargetDir + vRight * 0.3f;
-                Desc.vDir.Normalize();
-                m_pGameInstance->Add_CloneObject_ToLayer(LEVEL_GAMEPLAY, TEXT("Monster_Attack"), TEXT("Prototype_GameObject_ThunderSpread"), &Desc);
-
-                Desc.vPos = vPos;
-                Desc.vDir = vTargetDir - vRight * 0.3f;
-                Desc.vDir.Normalize();
-                m_pGameInstance->Add_CloneObject_ToLayer(LEVEL_GAMEPLAY, TEXT("Monster_Attack"), TEXT("Prototype_GameObject_ThunderSpread"), &Desc);
-
-                Desc.vPos = vPos;
-                Desc.vDir = vTargetDir + vRight * 0.6f;
-                Desc.vDir.Normalize();
-                m_pGameInstance->Add_CloneObject_ToLayer(LEVEL_GAMEPLAY, TEXT("Monster_Attack"), TEXT("Prototype_GameObject_ThunderSpread"), &Desc);
-
-                Desc.vPos = vPos;
-                Desc.vDir = vTargetDir - vRight * 0.6f;
-                Desc.vDir.Normalize();
-                m_pGameInstance->Add_CloneObject_ToLayer(LEVEL_GAMEPLAY, TEXT("Monster_Attack"), TEXT("Prototype_GameObject_ThunderSpread"), &Desc);
-
+                m_pMonster->Play_Sound(CPawn::PAWN_SOUND_EFFECT1, TEXT("SE_NPC_Raxasia_SK_PJ_Thunder_Explo_03.wav"), false);
             }
         }
 
-        if (!m_bSpread)
-        {
-            if ((CurTrackPos >= 200.f && CurTrackPos <= 206.f))
-            {
-                m_bSpread = true;
-            }
-        }
 
     }
 }

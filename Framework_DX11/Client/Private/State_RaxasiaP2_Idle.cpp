@@ -115,7 +115,7 @@ void CState_RaxasiaP2_Idle::Calc_Act_Attack()
         m_iAtkTrack = 0;
     }
 
-    m_iAtkTrack = 1;
+    m_iAtkTrack = 8;
     switch (m_iAtkTrack)
     {
     case 0:
@@ -154,7 +154,7 @@ void CState_RaxasiaP2_Idle::Calc_Act_Attack()
         break;
 
     case 7:
-        m_pMonster->Change_State(CRaxasia::ATKP2_CHARGERUSH);   
+        m_pMonster->Change_State(CRaxasia::ATKP2_CHARGERUSH);   //
         m_fNeedDist_ForAttack = 12.f;
         break;
 
