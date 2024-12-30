@@ -197,6 +197,9 @@
 #include "D:\GitProject\Dx11_LiesOfP\Framework_DX11\Engine\Private\VIBuffer_Cube.cpp"
 
 
+#include "D:\GitProject\Dx11_LiesOfP\Framework_DX11\Engine\private\VIBuffer_Dissolve_Instance.cpp"
+
+
 #include "D:\GitProject\Dx11_LiesOfP\Framework_DX11\Engine\private\VIBuffer_Instancing.cpp"
 
 

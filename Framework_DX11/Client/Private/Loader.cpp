@@ -897,7 +897,7 @@ HRESULT CLoader::Ready_Resources_For_Player()
 	DissolveParticleDesc.vLifeTime = { 5.f, 10.f };
 	DissolveParticleDesc.vMinColor = { 0.f, 1.f, 1.f, 1.f };
 	DissolveParticleDesc.vMaxColor = { 1.f, 1.f, 1.f, 1.f };
-	DissolveParticleDesc.vSize = { 0.01f, 0.02f };
+	DissolveParticleDesc.vSize = { 0.005f, 0.01f };
 	DissolveParticleDesc.vSpeed = { 1.f, 2.f };
 	DissolveParticleDesc.iLevelID = LEVEL_GAMEPLAY;
 	DissolveParticleDesc.strBufferTag = TEXT("Prototype_Component_DissolveContainer_Player");

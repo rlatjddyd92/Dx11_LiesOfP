@@ -73,7 +73,7 @@ void CDissolve_Test::Update(_float fTimeDelta)
 
 void CDissolve_Test::Late_Update(_float fTimeDelta)
 {
-    m_pGameInstance->Add_RenderObject(CRenderer::RG_NONLIGHT, this);
+    m_pGameInstance->Add_RenderObject(CRenderer::RG_EFFECT, this);
 }
 
 HRESULT CDissolve_Test::Render()
