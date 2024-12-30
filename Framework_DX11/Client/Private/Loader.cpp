@@ -891,10 +891,21 @@ HRESULT CLoader::Ready_Resources_For_Player()
 {
 	_matrix		PreTransformMatrix = XMMatrixIdentity();
 
+	CModel::DISSOLVE_PARTICLE_DESC DissolveParticleDesc = {};
+	DissolveParticleDesc.iNumInstance = 10000;
+	DissolveParticleDesc.vCenter = { 0.f, 0.f, 0.f };
+	DissolveParticleDesc.vLifeTime = { 5.f, 10.f };
+	DissolveParticleDesc.vMinColor = { 0.f, 1.f, 1.f, 1.f };
+	DissolveParticleDesc.vMaxColor = { 1.f, 1.f, 1.f, 1.f };
+	DissolveParticleDesc.vSize = { 0.01f, 0.02f };
+	DissolveParticleDesc.vSpeed = { 1.f, 2.f };
+	DissolveParticleDesc.iLevelID = LEVEL_GAMEPLAY;
+	DissolveParticleDesc.strBufferTag = TEXT("Prototype_Component_DissolveContainer_Player");
+
 	/* Prototype_Component_Model_Player */
 	PreTransformMatrix = XMMatrixScaling(0.01f, 0.01f, 0.01f) * XMMatrixRotationY(XMConvertToRadians(270.0f));
 	if (FAILED(m_pGameInstance->Add_Prototype(LEVEL_GAMEPLAY, TEXT("Prototype_Component_Model_Player"),
-		CModel::Create(m_pDevice, m_pContext, CModel::TYPE_ANIM, "../Bin/ModelData/Anim/CreatedBinFiles/Player.dat", PreTransformMatrix, true))))
+		CModel::Create(m_pDevice, m_pContext, CModel::TYPE_ANIM, "../Bin/ModelData/Anim/CreatedBinFiles/Player.dat", PreTransformMatrix, true, nullptr, DissolveParticleDesc))))
 		return E_FAIL;
 
 	/* Prototype_Component_Model_Rapier */

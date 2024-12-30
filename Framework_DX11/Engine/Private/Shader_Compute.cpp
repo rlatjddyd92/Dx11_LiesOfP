@@ -19,10 +19,12 @@ HRESULT CShader_Compute::Initialize_Prototype(const _tchar* pShaderFilePath, con
 	if (GetFileAttributes(pShaderFilePath) == INVALID_FILE_ATTRIBUTES)
 		int a = 0;
 
+	HRESULT hr = D3DCompileFromFile(pShaderFilePath, nullptr, nullptr, pMainTag, "cs_5_0", D3DCOMPILE_ENABLE_STRICTNESS,
+		0, &pCS_Blob, &pErrorBlob);
 	// pMainTag : PS_MAIN처럼 어떤 셰이더 쓸지 정해줌.
-	if (FAILED(D3DCompileFromFile(pShaderFilePath, nullptr, nullptr, pMainTag, "cs_5_0", D3DCOMPILE_ENABLE_STRICTNESS,
-		0, &pCS_Blob, &pErrorBlob)))
+	if (FAILED(hr))
 	{
+		OutputDebugStringA((char*)pErrorBlob->GetBufferPointer());
 		_char* pChar = static_cast<char*>(pErrorBlob->GetBufferPointer());
 		string str = pChar;
 		Safe_Release(pErrorBlob);

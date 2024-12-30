@@ -199,6 +199,7 @@
     <ClInclude Include="..\Public\CarcassNormal.h" />
     <ClInclude Include="..\Public\CarcassTail.h" />
     <ClInclude Include="..\Public\Decal.h" />
+    <ClInclude Include="..\public\Dissolve_Test.h" />
     <ClInclude Include="..\Public\Monster_Training01.h" />
     <ClInclude Include="..\Public\Monster_Training02.h" />
     <ClInclude Include="..\Public\RebornerMale.h" />
@@ -565,6 +566,7 @@
     <ClCompile Include="..\Private\CarcassNormal.cpp" />
     <ClCompile Include="..\Private\CarcassTail.cpp" />
     <ClCompile Include="..\Private\Decal.cpp" />
+    <ClCompile Include="..\private\Dissolve_Test.cpp" />
     <ClCompile Include="..\Private\Monster_Training01.cpp" />
     <ClCompile Include="..\Private\Monster_Training02.cpp" />
     <ClCompile Include="..\Private\RebornerMale.cpp" />
@@ -906,6 +908,7 @@
     <Image Include="small.ico" />
   </ItemGroup>
   <ItemGroup>
+    <FxCompile Include="..\Bin\ShaderFiles\Shader_DissolveCompute.hlsl" />
     <FxCompile Include="..\Bin\ShaderFiles\Shader_Effect_Mesh.hlsl" />
     <FxCompile Include="..\Bin\ShaderFiles\Shader_Effect_Texture.hlsl" />
     <FxCompile Include="..\Bin\ShaderFiles\Shader_ParticleCompute.hlsl" />
@@ -919,6 +922,7 @@
     <FxCompile Include="..\Bin\ShaderFiles\Shader_UI_Normal.hlsl" />
     <FxCompile Include="..\Bin\ShaderFiles\Shader_VtxAnimModel.hlsl" />
     <FxCompile Include="..\Bin\ShaderFiles\Shader_VtxCubeTex.hlsl" />
+    <FxCompile Include="..\Bin\ShaderFiles\Shader_VtxDiffuseInstance.hlsl" />
     <FxCompile Include="..\Bin\ShaderFiles\Shader_VtxModel.hlsl" />
     <FxCompile Include="..\Bin\ShaderFiles\Shader_VtxNorTex.hlsl" />
     <FxCompile Include="..\Bin\ShaderFiles\Shader_VtxPointInstance.hlsl" />

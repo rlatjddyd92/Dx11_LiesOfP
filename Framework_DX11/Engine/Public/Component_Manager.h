@@ -12,6 +12,8 @@
 #include "Trail_TwoPoint_Instance.h"
 #include "Trail_MultiPoint_Instance.h"
 
+#include "VIBuffer_Dissolve_Instance.h"
+
 #include "Navigation.h"
 #include "Collider.h"
 #include "Texture.h"

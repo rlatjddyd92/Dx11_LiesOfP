@@ -58,18 +58,18 @@ void CParticle_Effect::Update(_float fTimeDelta)
 
     CVIBuffer_Point_Instance::PARTICLE_MOVEMENT Movement = {};
 
-    Movement.iState = m_DefaultDesc.iComputeState;
-    Movement.vPivot = m_DefaultDesc.vPivot;
-    Movement.fGravity = m_DefaultDesc.fGravity;
-    Movement.vMoveDir = m_DefaultDesc.vMoveDir;
-    Movement.fTimeDelta = fTimeDelta;
-    Movement.vOrbitAxis = m_DefaultDesc.vOrbitAxis;
-    Movement.fOrbitAngle = m_DefaultDesc.fOrbitAngle;
-    Movement.fTimeInterval = m_DefaultDesc.fRandomTimeInterval;
-    Movement.fRandomRatio = m_DefaultDesc.fRandomMoveRatio;
-    Movement.fAccelLimit = m_DefaultDesc.fAccelLimit;
-    Movement.fAccelSpeed = m_DefaultDesc.fAccelSpeed;
-    Movement.WorldMatrix = m_WorldMatrix;
+    Movement.iState         = m_DefaultDesc.iComputeState;
+    Movement.vPivot         = m_DefaultDesc.vPivot;
+    Movement.fGravity       = m_DefaultDesc.fGravity;
+    Movement.vMoveDir       = m_DefaultDesc.vMoveDir;
+    Movement.fTimeDelta     = fTimeDelta;
+    Movement.vOrbitAxis     = m_DefaultDesc.vOrbitAxis;
+    Movement.fOrbitAngle    = m_DefaultDesc.fOrbitAngle;
+    Movement.fTimeInterval  = m_DefaultDesc.fRandomTimeInterval;
+    Movement.fRandomRatio   = m_DefaultDesc.fRandomMoveRatio;
+    Movement.fAccelLimit    = m_DefaultDesc.fAccelLimit;
+    Movement.fAccelSpeed    = m_DefaultDesc.fAccelSpeed;
+    Movement.WorldMatrix    = m_WorldMatrix;
 
     if(true == m_pVIBufferCom->DispatchCS(m_pActionCS, Movement))
     {
