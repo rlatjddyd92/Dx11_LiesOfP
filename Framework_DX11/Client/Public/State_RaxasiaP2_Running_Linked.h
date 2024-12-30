@@ -41,7 +41,11 @@ private:
 
 
     _bool               m_bRunningWise = { false }; //방향 구분용으로 사용. false면 왼, true면 오른
+    
     _bool               m_bSwingSound = { false };
+    _bool               m_bAccelForSound = { false };
+    _bool               m_bJumpForSound = { false };
+    _bool               m_bFireForSound = { false };
 
     _uint               m_iRouteTrack = {};
 
