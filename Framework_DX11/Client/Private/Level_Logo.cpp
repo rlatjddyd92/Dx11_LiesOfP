@@ -26,8 +26,8 @@ HRESULT CLevel_Logo::Initialize()
 	if (FAILED(Ready_Layer_Camera()))
 		return E_FAIL;
 
-	//if (FAILED(Ready_TitleObject()))
-	//	return E_FAIL;
+	if (FAILED(Ready_TitleObject()))
+		return E_FAIL;
 
 	if (FAILED(Read_Map_Data()))
 		return E_FAIL;

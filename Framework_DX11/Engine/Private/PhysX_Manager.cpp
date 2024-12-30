@@ -48,18 +48,16 @@ HRESULT CPhysX_Manager::Initialize()
     sceneDesc.contactPairSlabSize = 512;
 
 #ifdef __cuda_cuda_h__
-
-
     // GPU 관련 설정
     if (S_OK == Create_CudaContextManager())
     {
-        //sceneDesc.cudaContextManager = m_CudaContextManager;
-        //sceneDesc.flags |= PxSceneFlag::eENABLE_GPU_DYNAMICS;
-        //sceneDesc.flags |= PxSceneFlag::eENABLE_PCM;
-        //sceneDesc.broadPhaseType = PxBroadPhaseType::eGPU;
-        //sceneDesc.solverType = PxSolverType::eTGS;
-        //sceneDesc.gpuMaxNumPartitions = 8;
-        //sceneDesc.gpuMaxNumStaticPartitions = 255;
+        sceneDesc.cudaContextManager = m_CudaContextManager;
+        sceneDesc.flags |= PxSceneFlag::eENABLE_GPU_DYNAMICS;
+        sceneDesc.flags |= PxSceneFlag::eENABLE_PCM;
+        sceneDesc.broadPhaseType = PxBroadPhaseType::eGPU;
+        sceneDesc.solverType = PxSolverType::eTGS;
+        sceneDesc.gpuMaxNumPartitions = 8;
+        sceneDesc.gpuMaxNumStaticPartitions = 255;
     }
 #endif // __cuda_cuda_h__
 
@@ -78,9 +76,9 @@ HRESULT CPhysX_Manager::Initialize()
 
 
 #ifdef _DEBUG
-   /* m_PxScene->setVisualizationParameter(PxVisualizationParameter::eSCALE, 1.0f);
+    m_PxScene->setVisualizationParameter(PxVisualizationParameter::eSCALE, 1.0f);
     m_PxScene->setVisualizationParameter(PxVisualizationParameter::eACTOR_AXES, 1.0f);
-    m_PxScene->getVisualizationParameter(PxVisualizationParameter::eCOLLISION_SHAPES);*/
+    m_PxScene->getVisualizationParameter(PxVisualizationParameter::eCOLLISION_SHAPES);
 #endif
 
     return S_OK;
@@ -93,7 +91,7 @@ void CPhysX_Manager::PhysX_Update(_float fTimeDelta)
     // 물리 씬 업데이트
     m_PxScene->simulate(fTimeDelta);
     m_PxScene->fetchResults(true);
-    //m_PxScene->fetchResultsParticleSystem();
+    m_PxScene->fetchResultsParticleSystem();
 }
 
 _bool CPhysX_Manager::RayCast(PxVec3 vRayPos, PxVec3 vRayDir, _vector* vHitPos, _vector* vNormal, _float* fHitDistance)
@@ -403,9 +401,6 @@ void CPhysX_Manager::Free()
 
     PhysX_RELEASE(m_PxScene);
 
-    // PhysX Extensions 닫기
-    PxCloseExtensions();
-
     PhysX_RELEASE(m_PxDispatcher);
     PhysX_RELEASE(m_PhysX);
 
@@ -414,7 +409,11 @@ void CPhysX_Manager::Free()
     PhysX_RELEASE(m_pTransport);
 
     PhysX_RELEASE(m_CudaContextManager);
-    // 제일 마지막에 Release
+
+    //// PhysX Extensions 닫기
+    //PxCloseExtensions();
+
+    //// 제일 마지막에 Release
     PhysX_RELEASE(m_PxFoundation);
 
     Safe_Release(m_pContext);
