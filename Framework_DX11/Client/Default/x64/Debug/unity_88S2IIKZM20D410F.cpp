@@ -801,9 +801,6 @@
 #include "D:\GitProject\Dx11_LiesOfP\Framework_DX11\Client\Private\State_Player_TH_Walk.cpp"
 
 
-#include "D:\GitProject\Dx11_LiesOfP\Framework_DX11\Client\Private\State_SimonManusP1_AvoidSwing.cpp"
-
-
 #include "D:\GitProject\Dx11_LiesOfP\Framework_DX11\Client\Private\State_SimonManusP1_ChasingSwing.cpp"
 
 
@@ -846,9 +843,6 @@
 #include "D:\GitProject\Dx11_LiesOfP\Framework_DX11\Client\Private\State_SimonManusP1_SwipMultiple_R.cpp"
 
 
-#include "D:\GitProject\Dx11_LiesOfP\Framework_DX11\Client\Private\State_SimonManusP2_AvoidSwing.cpp"
-
-
 #include "D:\GitProject\Dx11_LiesOfP\Framework_DX11\Client\Private\State_SimonManusP2_BrutalAttack.cpp"
 
 
@@ -874,9 +868,6 @@
 
 
 #include "D:\GitProject\Dx11_LiesOfP\Framework_DX11\Client\Private\State_SimonManusP2_LightningToWave.cpp"
-
-
-#include "D:\GitProject\Dx11_LiesOfP\Framework_DX11\Client\Private\State_SimonManusP2_Route0.cpp"
 
 
 #include "D:\GitProject\Dx11_LiesOfP\Framework_DX11\Client\Private\State_SimonManusP2_Route1.cpp"
