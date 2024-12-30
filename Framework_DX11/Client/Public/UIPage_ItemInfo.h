@@ -2,6 +2,7 @@
 
 #include "Client_Defines.h"
 #include "UIPage.h"
+#include "Item_Manager.h"
 
 BEGIN(Engine)
 
@@ -36,9 +37,15 @@ public:
 
 
 		TOOLTIP_Back,
-		TOOLTIP_Fx,
-		TOOLTIP_Left_Deco,
+		TOOLTIP_Fx0,
+		TOOLTIP_Fx1,
+		TOOLTIP_Fx2,
+		TOOLTIP_Fx3,
+		TOOLTIP_Fx4,
+		TOOLTIP_Fx5,
 		TOOLTIP_Item_Frame,
+		TOOLTIP_Item_Fx0,
+		TOOLTIP_Item_Fx1,
 		TOOLTIP_Item_Blade,
 		TOOLTIP_Item_Cross,
 		TOOLTIP_Item_Handle,
@@ -46,6 +53,13 @@ public:
 		TOOLTIP_Item_Normal,
 		TOOLTIP_Item_Name,
 		TOOLTIP_Item_Desc,
+		TOOLTIP_Item_ShopInfo_Frame,
+		TOOLTIP_Item_ShopInfo_Title,
+		TOOLTIP_Item_ShopInfo_Ergo,
+		TOOLTIP_Item_ShopInfo_Count,
+		TOOLTIP_Item_ChestInfo_Frame,
+		TOOLTIP_Item_ChestInfo_Desc,
+
 
 
 
@@ -106,6 +120,9 @@ public:
 	}
 
 	// 툴팁 관련 사항 
+	void Show_Tooltip_Shop(_int iShopIndex);
+	void Show_Tooltip_Chest(_int iChestIndex);
+
 	void Show_Tooltip(INVEN_ARRAY_TYPE eType, _int iIndex);
 	void Show_Tooltip(EQUIP_SLOT eSlot);
 
@@ -113,6 +130,8 @@ public:
 
 
 protected:
+	void Make_TooltipPage(const CItem_Manager::ITEM* Item, _bool bIsWeapon = false, const CItem_Manager::ITEM* ItemHandle = nullptr);
+
 	// Focus
 	_bool m_bFocus = false;
 	_float m_fFocus_Fire_Move_Ratio = 0.f;

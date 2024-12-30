@@ -105,6 +105,8 @@ HRESULT CUIPage_Shop::Render()
 void CUIPage_Shop::OpenAction()
 {
 	__super::OpenAction();
+	m_pSoundCom->Play2D(TEXT("SE_UI_OpenMenu_04.wav"), &g_fUIVolume);
+	GET_GAMEINTERFACE->Off_ItemInfo_UI();
 	Setting_SellTab();
 	Setting_BuyTab();
 }
@@ -112,6 +114,8 @@ void CUIPage_Shop::OpenAction()
 void CUIPage_Shop::CloseAction()
 {
 	__super::CloseAction();
+	m_pSoundCom->Play2D(TEXT("SE_UI_CloseWindow_01.wav"), &g_fUIVolume);
+	GET_GAMEINTERFACE->Off_ItemInfo_UI();
 }
 
 CHECK_MOUSE CUIPage_Shop::Check_Page_Action(_float fTimeDelta)
@@ -237,13 +241,15 @@ void CUIPage_Shop::Action_Cell(_float fTimeDelta)
 			_Vec2 vMouse = GET_GAMEINTERFACE->CheckMouse(iter->vPos - vOffset, __super::Get_Front_Part_In_Control(_int(PART_GROUP::SHOP_Cell_Static))->fSize);
 			if (vMouse.x != -1.f)
 			{
+				CItem_Manager::SHOP* pShop = GET_GAMEINTERFACE->Get_ShopData()[iter->iIndexShop];
+				const CItem_Manager::ITEM* pItem = GET_GAMEINTERFACE->Get_Item_Origin_Spec(pShop->iIndex);
+
 				if (m_iNowCell != iNowIndex)
 					Action_Focus(fTimeDelta, iter->vPos);
 				m_iNowCell = iNowIndex;
 				if (bClick)
 				{
-					CItem_Manager::SHOP* pShop = GET_GAMEINTERFACE->Get_ShopData()[iter->iIndexShop];
-					const CItem_Manager::ITEM* pItem = GET_GAMEINTERFACE->Get_Item_Origin_Spec(pShop->iIndex);
+					
 
 					if (pShop != nullptr)
 					{
@@ -253,6 +259,8 @@ void CUIPage_Shop::Action_Cell(_float fTimeDelta)
 						m_bIsItem_Popup = true;
 					}
 				}
+
+				GET_GAMEINTERFACE->Show_Tooltip_Shop(iter->iIndexShop);
 			}
 		}
 	}
@@ -279,9 +287,13 @@ void CUIPage_Shop::Action_Cell(_float fTimeDelta)
 						m_bIsItem_Popup = true;
 					}
 				}
+
+				GET_GAMEINTERFACE->Show_Tooltip(iter->eArray, iter->iInven_Index);
 			}
 		}
 	}
+
+	
 }
 
 void CUIPage_Shop::Action_Focus(_float fTimeDelta, _Vec2 vPos)

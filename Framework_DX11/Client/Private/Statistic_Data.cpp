@@ -135,14 +135,15 @@ void CStatistic_Data::Update_Statistic_Line(_float fAlpha)
 		_int iHour = iMin / 60;
 		iMin = iMin % 60;
 
-		_wstring strTime = to_wstring(iHour);
-		if (iHour != 0)
-			strTime += TEXT(":");
-		strTime += to_wstring(iMin);
-		if (iMin != 0)
-			strTime += TEXT(":");
-		strTime += to_wstring(iSecond);
-
+		_wstring strTime = {};
+		strTime += to_wstring(iHour / 10);
+		strTime += to_wstring(iHour % 10);
+		strTime += TEXT(":");
+		strTime += to_wstring(iMin / 10);
+		strTime += to_wstring(iMin % 10);
+		strTime += TEXT(":");
+		strTime += to_wstring(iSecond / 10);
+		strTime += to_wstring(iSecond % 10);
 		m_strStat = strTime;
 	}
 	else if (m_iStaticIndex == 1)

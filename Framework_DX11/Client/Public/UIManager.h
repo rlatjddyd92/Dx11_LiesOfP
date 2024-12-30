@@ -53,6 +53,7 @@ public:
 	_Vec2 CheckMouse(_Vec2 fPos, _Vec2 fSize);
 
 	_bool Action_InterAction(_wstring strInterName) { return m_pUIPage_Play->Action_InterAction(strInterName); }
+	_bool Is_UIOff() { return m_bIsUIOff; }
 
 	void Set_Scroll_Area(SCROLL_AREA eArea, _Vec2 vPos, _Vec2 vSize) { m_pUIRender_Batching->Set_Scroll_Area(eArea, vPos, vSize); }
 	void Select_Scroll_Area(SCROLL_AREA eArea) { m_pUIRender_Batching->Select_Scroll_Area(eArea); }
@@ -227,6 +228,8 @@ public:
 	}
 	void Off_ItemAction() { m_pUIPage_ItemInfo->Off_ItemAction(); }
 
+	void Show_Tooltip_Shop(_int iShopIndex) { m_pUIPage_ItemInfo->Show_Tooltip_Shop(iShopIndex); }
+	void Show_Tooltip_Chest(_int iChestIndex) { m_pUIPage_ItemInfo->Show_Tooltip_Chest(iChestIndex); }
 	void Show_Tooltip(INVEN_ARRAY_TYPE eType, _int iIndex) { m_pUIPage_ItemInfo->Show_Tooltip(eType, iIndex); }
 	void Show_Tooltip(EQUIP_SLOT eSlot) { m_pUIPage_ItemInfo->Show_Tooltip(eSlot); }
 
@@ -279,6 +282,9 @@ public:
 	// 텔레포트
 	void Set_Now_Interact_Stargezer(_int iNaviIndex) { return m_pUIPage_Telepot->Set_Now_Interact_Stargezer(iNaviIndex); }
 
+	// 튜토리얼
+	void Start_Tutorial() { return m_pUIPage_Tutorial->OpenAction(); }
+	void End_Tutorial() { return m_pUIPage_Tutorial->CloseAction(); }
 #pragma endregion
 
 
@@ -309,12 +315,10 @@ public:
 
 	void Fade_Out(_wstring strTitle, _wstring strDesc, _Vec3 vColor = _Vec3{ 0.f,0.f,0.f }, _float fTime = 1.f) 
 	{ 
-		Mute_UI_Volume(true);
 		m_pUIPage_Effect->Fade_Out(strTitle, strDesc, vColor, fTime);
 	}
 	void Fade_In(_float fTime = 1.f)
 	{ 
-		Mute_UI_Volume(true);
 		m_pUIPage_Effect->Fade_In(fTime);
 	}
 	void UIPart_On()
@@ -322,6 +326,7 @@ public:
 		Mute_UI_Volume(false);
 		OpenPage(UIPAGE::PAGE_PLAY);
 		m_bIsPlayPageMaintain = true;
+		m_bIsUIOff = false;
 	}
 	void UIPart_Off()
 	{
@@ -341,6 +346,7 @@ public:
 		}
 
 		m_bIsPlayPageMaintain = false;
+		m_bIsUIOff = true;
 	}
 
 	void Show_Script(_wstring strScript0, _wstring strScript1 = TEXT("none"), _float fTime = 1.f, _Vec3 vColor = _Vec3{ 0.f,0.f,0.f }) 
@@ -416,11 +422,14 @@ private:
 	CUIPage_Telepot* m_pUIPage_Telepot = { nullptr };
 	// 업적
 	CUIPage_Achievment* m_pUIPage_Achievment = { nullptr };
+	// 튜토리얼
+	CUIPage_Tutorial* m_pUIPage_Tutorial = { nullptr };
 	
 	CUIRender_Batching* m_pUIRender_Batching = { nullptr };
 
 	_bool m_bIsIngame = false;
 	_bool m_bIsPlayPageMaintain = false;
+	_bool m_bIsUIOff = false;
 
 	ITEM_FUNC m_eNow_Active_Func = ITEM_FUNC::FUNC_END;
 

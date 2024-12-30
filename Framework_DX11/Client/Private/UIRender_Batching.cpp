@@ -116,6 +116,9 @@ HRESULT CUIRender_Batching::Render()
 
 			m_pTransformCom->Set_Scaled(pNow->vSize.x * fSizeX_Adjust, pNow->vSize.y * fSizeY_Adjust, 1.f);
 
+			if ((!pNow->bIsItem) && (pNow->iTexture == 121))
+				m_pTransformCom->Set_Scaled(pNow->vSize.x * fSizeX_Adjust * 5.f, pNow->vSize.y * fSizeY_Adjust * 5.f, 1.f);
+
 			if (m_eNow_Area == SCROLL_AREA::SCROLL_NONE)
 			{
 				m_pTransformCom->Set_State(CTransform::STATE_POSITION,
@@ -158,8 +161,6 @@ HRESULT CUIRender_Batching::Render()
 					m_pTransformCom->Set_State(CTransform::STATE_POSITION,
 						XMVectorSet((pNow->vPosition.x) - fWidth * 0.5f, -(pNow->vPosition.y) + fHeight * 0.5f, 0.f, 1.f));
 			}
-			
-			
 
 			if (pNow->fTurn != 0.f)
 				m_pTransformCom->Rotation({ 0.f,0.f,1.f,0.f }, XMConvertToRadians(pNow->fTurn));
@@ -173,7 +174,25 @@ HRESULT CUIRender_Batching::Render()
 			if (FAILED(m_vecShader_UI[_int(eShader)]->Bind_Matrix("g_ProjMatrix", &m_ProjMatrix)))
 				return E_FAIL;
 
-			if (!pNow->bIsItem)
+			if ((!pNow->bIsItem) && (pNow->iTexture == 121))
+			{
+				ePass = UI_SHADER_PASS::PASS_COLOR_SPRITE;
+				if (FAILED(m_pFirePoint_Sprite_TextureCom->Bind_ShadeResource(m_vecShader_UI[_int(eShader)], "g_Texture", 0)))
+					return E_FAIL;
+
+				if (FAILED(m_vecShader_UI[_int(eShader)]->Bind_RawValue("g_vTexDivide", &m_vImageNum, sizeof(_float2))))
+					return E_FAIL;
+
+				_int iNow = m_iFrame / m_iFrame_Interval;
+
+				if (FAILED(m_vecShader_UI[_int(eShader)]->Bind_RawValue("g_iTexIndex", &m_iFrame, sizeof(_int))))
+					return E_FAIL;
+
+				++m_iFrame;
+				if (m_iFrame > m_iMaxFrame * m_iFrame_Interval)
+					m_iFrame = 0;
+			}
+			else if (!pNow->bIsItem)
 			{
 				if (m_vecTextureInfo_UIPart[pNow->iTexture]->Texture == nullptr)
 					if (FAILED(Make_Texture(pNow->iTexture)))
@@ -478,6 +497,8 @@ HRESULT CUIRender_Batching::Ready_Texture_UIPart()
 		m_vecTextureInfo_UIPart.push_back(pNew);
 	}
 
+	m_pFirePoint_Sprite_TextureCom = CTexture::Create(m_pDevice, m_pContext, TEXT("../Bin/Resources/Textures/Effect/T_SubUV_Fire_18_ECD_8x8_SC_LGS.dds"), 1);
+
 	return S_OK;
 }
 
@@ -655,6 +676,8 @@ void CUIRender_Batching::Free()
 		Safe_Release(iter);
 
 	m_vecVIBuffer_2DPolygon_Com.clear();
+
+	Safe_Release(m_pFirePoint_Sprite_TextureCom);
 
 	m_vecViewPort_Adjust.clear();
 }

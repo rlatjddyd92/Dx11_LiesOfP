@@ -102,6 +102,16 @@ HRESULT CCustomFont::Render_Right(const _tchar* pText, _fvector vPosition, _fvec
 	return S_OK;
 }
 
+_Vec4 CCustomFont::Measure_Font(_wstring strText)
+{
+	_tchar szText[100] = {};
+
+	for (_int i = 0; i <= strText.size(); ++i)
+		szText[i] = strText[i];
+
+	return m_pFont->MeasureString(szText);
+}
+
 CCustomFont* CCustomFont::Create(ID3D11Device* pDevice, ID3D11DeviceContext* pContext, const _tchar* pFontFilePath)
 {
 	CCustomFont* pInstance = new CCustomFont(pDevice, pContext);

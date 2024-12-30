@@ -84,11 +84,13 @@ HRESULT CUIPage_Telepot::Render()
 void CUIPage_Telepot::OpenAction()
 {
 	__super::OpenAction();
+	m_pSoundCom->Play2D(TEXT("SE_UI_OpenMenu_04.wav"), &g_fUIVolume);
 }
 
 void CUIPage_Telepot::CloseAction()
 {
 	__super::CloseAction();
+	m_pSoundCom->Play2D(TEXT("SE_UI_CloseWindow_01.wav"), &g_fUIVolume);
 }
 
 CHECK_MOUSE CUIPage_Telepot::Check_Page_Action(_float fTimeDelta)

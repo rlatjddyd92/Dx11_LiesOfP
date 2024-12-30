@@ -669,7 +669,7 @@ HRESULT CController_UITool::SavePart()
 
 	vecBuffer.push_back(m_DataTag_Part);
 
-	for (_int i = 0; i < _int(UIPAGE::PAGE_END); ++i)
+	for (_int i = 0; i < m_vecPageInfo.size(); ++i)
 	{
 		for (_int j = 0; j < m_vecPageInfo[i]->vecPart.size(); ++j)
 		{

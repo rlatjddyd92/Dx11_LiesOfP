@@ -106,7 +106,7 @@ void CUIPage_Achievment::Late_Update(_float fTimeDelta)
 		Update_Achievment(fTimeDelta);
 	}
 
-	if (!m_Popup_Indexlist.empty())
+	if ((!m_Popup_Indexlist.empty()) && (GET_GAMEINTERFACE->Is_UIOff() == false))
 		Update_Popup(fTimeDelta);
 }
 

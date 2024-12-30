@@ -172,6 +172,29 @@ HRESULT CUIPage_Ortho::Render_Ortho_UI()
 	return S_OK;
 }
 
+void CUIPage_Ortho::Set_OnOff_OrthoUI(_bool bIsOn, void* pObj)
+{
+	for (auto& iter : m_Ortho_Host_list)
+		if (iter->pHost == pObj)
+		{
+			iter->bIsActive = bIsOn;
+
+			if (bIsOn == false)
+			{
+				const CPawn::PAWN_STATUS* pStat = static_cast<CPawn*>(pObj)->Get_Status();
+				if (pStat->fHp == 0)
+				{
+					if (iter->eType == UI_ORTHO_OBJ_TYPE::ORTHO_BOSS_RAXASIA)
+						GET_GAMEINTERFACE->Input_Achievment_Data(8, 1);
+					else if (iter->eType == UI_ORTHO_OBJ_TYPE::ORTHO_BOSS_SIMON)
+						GET_GAMEINTERFACE->Input_Achievment_Data(9, 1);
+					else 
+						GET_GAMEINTERFACE->Input_Achievment_Data(6, 1);
+				}
+			}
+		}
+}
+
 void CUIPage_Ortho::Initialize_Ortho_Info()
 {
 	// 직교 UI 별 보정치 세팅 
@@ -272,7 +295,6 @@ void CUIPage_Ortho::Make_Monster_HP_Bar(CGameObject* pHost, _float fTimeDelta, _
 		*pRender_HP_Demege = { fDistance ,fPosition,  PART_GROUP::GROUP_HP_COUNT, fRatio, to_wstring(_int(fDamege)), -1 };
 		m_queue_Ortho_Render_Ctrl.push(pRender_HP_Demege);
 	}
-	
 }
 
 void CUIPage_Ortho::Make_Monster_Focusing(CGameObject* pHost, _float fTimeDelta, _float fDistance)

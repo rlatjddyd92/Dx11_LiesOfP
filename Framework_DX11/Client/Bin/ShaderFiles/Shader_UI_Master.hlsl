@@ -11,6 +11,8 @@ float g_Alpha_Strash;
 float4 g_Render_Area; // (그릴 좌표 범위 지정) (left,top,right,bottom)
 float2 g_Render_Angle; // (그릴 각도 지정) (Start, end) (vec(1,0) 방향을 0도로 하여 0~360으로 지정) (방향 : CW)
 
+float2 g_vTexDivide;
+int g_iTexIndex;
 
 // 컬러 변경 
 float4 Input_Color(float4 vColor)
@@ -72,6 +74,21 @@ bool Check_Angle(float2 vTex, float3 vPos)
     return true;
 }
 
+// 스프라이트
+float2 Get_SpriteTexcoord(float2 vTexcoord)
+{
+    float2 start = (float2) 0;
+    float2 over = (float2) 0;
+
+    start.x = (1 / g_vTexDivide.x) * g_iTexIndex;
+    start.y = (1 / g_vTexDivide.y) * (int) (g_iTexIndex / g_vTexDivide.x);
+	
+    over.x = start.x + (1 / g_vTexDivide.x);
+    over.y = start.y + (1 / g_vTexDivide.y);
+	
+    return start + (over - start) * vTexcoord;
+}
+
 struct VS_IN
 {
     float3 vPosition : POSITION;
@@ -121,6 +138,24 @@ VS_OUT VS_RANGE( /*정점*/VS_IN In)
     
     Out.vPosition = vPosition;
     Out.vTexcoord = Clamp_Range(In.vTexcoord);
+
+    return Out;
+}
+
+VS_OUT VS_SPRITE( /*정점*/VS_IN In)
+{
+    VS_OUT Out = (VS_OUT) 0;
+
+	/* 정점에 위치를 월드 뷰 투영변환한다.*/		
+	/* 클라이언트에서 곱셈연산을 수행하는 TrnasformCoord함수와는 다르게 */
+	/* mul함수의 경우에는 순수하게 행렬의 곱하기만 수행을 하고 w나누기연산자체는 수행하지 않는다. */
+    vector vPosition = mul(vector(In.vPosition, 1.f), g_WorldMatrix);
+
+    vPosition = mul(vPosition, g_ViewMatrix);
+    vPosition = mul(vPosition, g_ProjMatrix);
+    
+    Out.vPosition = vPosition;
+    Out.vTexcoord = Get_SpriteTexcoord(In.vTexcoord);
 
     return Out;
 }
@@ -362,6 +397,7 @@ technique11 DefaultTechnique
         PixelShader = compile ps_5_0 PS_COLOR_MULTIPLE_ANGLE();
     }
 
+    // 9. RGB 중 가장 낮은 값을 알파로
     pass COLOR_MULTIPLE_ALPHA_ADJUST
     {
         SetRasterizerState(RS_Default);
@@ -373,4 +409,15 @@ technique11 DefaultTechnique
         PixelShader = compile ps_5_0 PS_COLOR_MULTIPLE_ALPHA_ADJUST();
     }
 
+    // 10. 스프라이트 그리기 
+    pass COLOR_SPRITE
+    {
+        SetRasterizerState(RS_Default);
+        SetDepthStencilState(DSS_Default, 0);
+        SetBlendState(BS_AlphaBlend, vector(0.f, 0.f, 0.f, 0.f), 0xffffffff);
+
+        VertexShader = compile vs_5_0 VS_SPRITE();
+        GeometryShader = NULL;
+        PixelShader = compile ps_5_0 PS_COLOR_MULTIPLE_ALPHA_ADJUST();
+    }
 }

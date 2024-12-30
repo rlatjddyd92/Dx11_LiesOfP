@@ -61,32 +61,27 @@ void CMainApp::Update(_float fTimeDelta)
 	// UI 연출 관련 테스트 코드 
 	if (KEY_HOLD(KEY::CTRL))
 	{
+		if (KEY_TAP(KEY::NUM1))
+			GET_GAMEINTERFACE->Show_Script(TEXT("테스트"), TEXT("테스트"), 3.f);
+		if (KEY_TAP(KEY::NUM2))
+			GET_GAMEINTERFACE->Show_Script(TEXT("테스트테스트"), TEXT("테스트테스트"), 3.f);
+		if (KEY_TAP(KEY::NUM3))
+			GET_GAMEINTERFACE->Fade_Out(TEXT("FadeOut_Test"), TEXT("FadeOut_Desc"), { 0.f,0.f,0.f }, 2.f);
+		if (KEY_TAP(KEY::NUM4))
+			GET_GAMEINTERFACE->Fade_In(2.f);
+		if (KEY_TAP(KEY::NUM4))
+			GET_GAMEINTERFACE->Fade_In(2.f);
 		if (KEY_TAP(KEY::NUM6))
 			GET_GAMEINTERFACE->Fade_Out(TEXT("FadeOut_Test"), TEXT("FadeOut_Desc"), { 0.f,0.f,0.f }, 2.f);
 		if (KEY_TAP(KEY::NUM7))
 			GET_GAMEINTERFACE->Fade_In(2.f);
 		if (KEY_TAP(KEY::NUM8))
-			GET_GAMEINTERFACE->Show_Script(TEXT("테스트 대사 2줄 버전"), TEXT("테스트 대사 2줄 버전"), 3.f);
+			GET_GAMEINTERFACE->Show_Script_Npc_Talking(NPC_SCRIPT::SCR_SOPIA_FIRST);
 		if (KEY_TAP(KEY::NUM9))
 			GET_GAMEINTERFACE->UIPart_On();
 	}
 
-	// 24-12-04 김성용 
-	// NPC 대화창 테스트 코드 
 
-	if (KEY_HOLD(KEY::CTRL))
-	{
-		if (KEY_TAP(KEY::NUM1))
-			GET_GAMEINTERFACE->Show_Script_Npc_Talking(NPC_SCRIPT::SCR_ZEMINI, 0);
-		if (KEY_TAP(KEY::NUM2))
-			GET_GAMEINTERFACE->Show_Script_Npc_Talking(NPC_SCRIPT::SCR_SOPIA_FIRST, 0);
-		if (KEY_TAP(KEY::NUM3))
-			GET_GAMEINTERFACE->Show_Script_Npc_Talking(NPC_SCRIPT::SCR_MANUS, 0);
-		if (KEY_TAP(KEY::NUM4))
-			GET_GAMEINTERFACE->Show_Script_Npc_Talking(NPC_SCRIPT::SCR_STARGAZER, 0);
-		if (KEY_TAP(KEY::NUM5))
-			GET_GAMEINTERFACE->OFF_Script();
-	}
 
 	if (KEY_HOLD(KEY::ALT))
 	{

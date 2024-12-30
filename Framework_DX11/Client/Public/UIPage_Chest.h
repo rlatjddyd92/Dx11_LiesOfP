@@ -118,24 +118,27 @@ public:
 	const vector<UPART*>& Get_UIPartInfo() { return m_vecPart; }
 	virtual HRESULT Ready_UIPart_Group_Control() override;
 
+	_bool IsInven() { return m_bIsInven; }
+
 protected:
-	void Action_Tab(_float fTimeDelta);
 	void Action_Scroll(_float fTimeDelta);
 	void Action_Cell(_float fTimeDelta);
-	void Action_Focus(_float fTimeDelta, _Vec2 vPos);
 	void Action_Popup(_float fTimeDelta);
 
-	void Update_Tab(_float fTimeDelta);
+	void Update_Top(_float fTimeDelta);
 	void Update_Scroll(_float fTimeDelta);
 	void Update_Cell(_float fTimeDelta);
+	void Update_Cell_Dest(_float fTimeDelta);
 	void Update_Focus(_float fTimeDelta);
 	void Update_BagInfo(_float fTimeDelta);
 
-	void Setting_Cell();
+	void Setting_Cell_Inven();
+	void Setting_Cell_Dest();
 
 	void Reset_PopupInfo();
 
-	_int m_iNowTab = 0;
+	_bool m_bIsInven = true;
+	_int m_iNowFocus = 0;
 	_int m_iNowCell = 0;
 	_int m_iNowCount = 0;
 
@@ -143,8 +146,8 @@ protected:
 	SCROLL* m_pScroll_InvenInfo = { nullptr };
 	SCROLL* m_pScroll_Chest = { nullptr };
 
-	vector<CELL_RENDER*> m_vecSell_RenderInfo;
-	vector<CELL_RENDER*> m_vecBuy_RenderInfo;
+	vector<CELL_RENDER*> m_vecInven_RenderInfo;
+	vector<CELL_RENDER*> m_vecDest_RenderInfo;
 
 
 

@@ -251,6 +251,8 @@ private:
 	_float m_fBag_Open_Waiting_Now = 0.f;
 	_float m_fBag_Open_Waiting_Limit = 0.5f;
 
+	_Vec2 m_vBag_OpenAction_Time = { 0.f,0.5f };
+
 	// 인터랙션
 	_bool m_bCan_InterAction = true;
 
@@ -266,10 +268,13 @@ private:
 	// [0], [1]이 {true, false}인 경우 {false,false}로 맞추기만 한다 
 
 	_int m_iWeapon_Equip_0_Symbol = 0;
-	_Vec2 m_vSwitch_Time = { 0.f,0.5f };
-	_float m_fNormal_Weapon_Fx_Alpha_Origin = 0.f;
+	_Vec2 m_vSwitch_Time = { 0.f,0.25f };
+	_float m_fNormal_Weapon_Fx_Alpha_Origin[4] = { 0.f, };
+	_Vec2 m_vNormal_Weapon_Fx_Size_Origin[4] = { {0.f,0.f}, };
 
 	_Vec2 m_vFable_Art_ActionTime = { 0.f,0.5f };
+
+	_int m_iFable_Art_Cell_Now = 0;
 
 	// 보스 체력바 
 	_bool m_bIs_BossHp_Activate = false;
