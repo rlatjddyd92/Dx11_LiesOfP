@@ -115,7 +115,7 @@ void CState_RaxasiaP2_Idle::Calc_Act_Attack()
         m_iAtkTrack = 0;
     }
 
-    m_iAtkTrack = 8;
+    m_iAtkTrack = 7;
     switch (m_iAtkTrack)
     {
     case 0:

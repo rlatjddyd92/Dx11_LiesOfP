@@ -30,6 +30,7 @@ HRESULT CState_RaxasiaP2_ChargeRush::Start_State(void* pArg)
 
     m_bSwingSound = false;
     m_bChargeSound = false;
+    m_bRushSound = false;
 
     m_bSwing = false;
     return S_OK;
@@ -48,7 +49,7 @@ void CState_RaxasiaP2_ChargeRush::Update(_float fTimeDelta)
             m_bCharge = false;
             m_bChargeSound = false;
             m_pMonster->Change_Animation(AN_CHARGE_LOOP, false, 0.02f, 0);
-            m_pMonster->Play_Sound(CPawn::PAWN_SOUND_VOICE, TEXT("VO_NPC_Raxasia_P2_Roar_05.wav"), false);
+            m_pMonster->Play_Sound(CPawn::PAWN_SOUND_EFFECT1, TEXT("VO_NPC_Raxasia_P2_Roar_05.wav"), false);
             return;
         }
 
@@ -84,6 +85,7 @@ void CState_RaxasiaP2_ChargeRush::Update(_float fTimeDelta)
             ++m_iRouteTrack;
             m_bSwing = false;
             m_bRush = false;
+            m_bRushSound = false;
             m_bSpeedController = false;
             m_bControlRim = true;
 
@@ -156,6 +158,8 @@ void CState_RaxasiaP2_ChargeRush::End_State()
 {
     m_pMonster->DeActive_Effect(CRaxasia::EFFECT_INCHENTSWORD_P2);
     m_pMonster->DeActive_Effect(CRaxasia::EFFECT_THUNDERENVELOP_SMALL);
+
+    m_pMonster->Stop_Sound(CPawn::PAWN_SOUND_VOICE);
 }
 
 _bool CState_RaxasiaP2_ChargeRush::End_Check()
@@ -283,7 +287,7 @@ void CState_RaxasiaP2_ChargeRush::Control_Sound(_double CurTrackPos)
             }
         }
     }
-    else if (m_iRouteTrack >= 1 && m_iRouteTrack <= 2)
+    else if (m_iRouteTrack >= 1 && m_iRouteTrack <= 2)          //돌진 하울링에 2번 부여
     {
         if (!m_bChargeSound)
         {
@@ -298,17 +302,16 @@ void CState_RaxasiaP2_ChargeRush::Control_Sound(_double CurTrackPos)
     {
         if (CurTrackPos >= 7.f && CurTrackPos <= 100.f)
         {
-            if (!m_bRush)
+            if (!m_bRushSound)
             {
-                m_pMonster->Active_Effect(CRaxasia::EFFECT_SHIELDDASH, true);   //이펙트 1, 2 배정
-                m_pMonster->Active_Effect(CRaxasia::EFFECT_THUNDERACCEL, true);
-                m_bRush = true;
+                m_pMonster->Play_Sound(CPawn::PAWN_SOUND_EFFECT2, TEXT("VO_NPC_Raxasia_P2_Roar_05.wav"), false);
+                m_pMonster->Play_Sound(CPawn::PAWN_SOUND_EFFECT1, TEXT("SE_NPC_Raxasia_SK_FX_Blink_Spark_Foot_03.wav"), true);
+                m_bRushSound = true;
             }
         }
         else
         {
-            m_pMonster->DeActive_Effect(CRaxasia::EFFECT_SHIELDDASH);
-            m_pMonster->DeActive_Effect(CRaxasia::EFFECT_THUNDERACCEL);
+            m_pMonster->Stop_Sound(CPawn::PAWN_SOUND_EFFECT1);
         }
     }
 }
