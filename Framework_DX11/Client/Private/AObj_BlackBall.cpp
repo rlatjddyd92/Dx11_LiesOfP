@@ -119,7 +119,10 @@ void CAObj_BlackBall::Update(_float fTimeDelta)
             _float4x4 WorldMat{};
             Desc.vPos = _Vec3{ m_pTransformCom->Get_State(CTransform::STATE_POSITION) };
 
-            Desc.vDir = _Vec3{ (m_pCopyPlayerTransformCom->Get_State(CTransform::STATE_POSITION) - Desc.vPos) };
+            _Vec3 vTargetPos = m_pCopyPlayerTransformCom->Get_State(CTransform::STATE_POSITION);
+            vTargetPos.y += 1.5f;
+
+            Desc.vDir = _Vec3{ ( vTargetPos - Desc.vPos) };
             Desc.vDir.Normalize();
 
             m_pGameInstance->Add_CloneObject_ToLayer(LEVEL_GAMEPLAY, TEXT("Monster_Attack_Extra"), TEXT("Prototype_GameObject_GoldBall"), &Desc);

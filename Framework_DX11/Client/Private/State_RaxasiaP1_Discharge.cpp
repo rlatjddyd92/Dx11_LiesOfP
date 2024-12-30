@@ -33,6 +33,9 @@ HRESULT CState_RaxasiaP1_Discharge::Start_State(void* pArg)
     m_fCurtRimAlpha = 1.f;
 
     m_bSwingSound = false;
+    m_bStampSound = false;
+
+    m_bChargeActiveForSound = false;
     m_bChargeActive = false;
     m_bStampBlast = false;
 
@@ -54,6 +57,7 @@ void CState_RaxasiaP1_Discharge::Update(_float fTimeDelta)
             ++m_iRouteTrack;
             m_bSwing = false;
             m_bControlRim = true;
+            m_bStampSound = false;
             m_pMonster->Change_Animation(AN_DISCHARGE, false, 0.1f, 0);
             return;
         }
@@ -108,6 +112,7 @@ void CState_RaxasiaP1_Discharge::Update(_float fTimeDelta)
 void CState_RaxasiaP1_Discharge::End_State()
 {
     m_pMonster->DeActive_Effect(CRaxasia::EFFECT_INCHENTSWORD);
+    m_pMonster->Stop_Sound(CPawn::PAWN_SOUND_EFFECT1);
 }
 
 _bool CState_RaxasiaP1_Discharge::End_Check()
@@ -171,7 +176,7 @@ void CState_RaxasiaP1_Discharge::Effect_Check(_double CurTrackPos)
             if (CurTrackPos >= 35.f)
             {
                 m_pMonster->Active_Effect(CRaxasia::EFFECT_INCHENTSWORD, true);
-                m_pMonster->Active_Effect(CRaxasia::EFFECT_THUNDERDISCHARGE, false);
+                m_pMonster->Active_Effect(CRaxasia::EFFECT_THUNDERDISCHARGE, false);    //어택 오브젝트로 수정 필요
                 m_bChargeActive = true;
             }
         }
@@ -223,7 +228,58 @@ void CState_RaxasiaP1_Discharge::Update_Rimlight()
 
 void CState_RaxasiaP1_Discharge::Control_Sound(_double CurTrackPos)
 {
+    if (m_iRouteTrack == 0)
+    {
+        if ((CurTrackPos >= 35.f && CurTrackPos <= 44.4f))
+        {
+            if (!m_bSwingSound)
+            {
+                m_pMonster->Play_Sound(CPawn::PAWN_SOUND_EFFECT1, TEXT("SE_NPC_SK_WS_BroadSword_06.wav"), false);
+                m_bSwingSound = true;
+            }
+        }
 
+        if (!m_bStampSound)
+        {
+            if ((CurTrackPos >= 44.f))
+            {
+                m_pMonster->Play_Sound(CPawn::PAWN_SOUND_EFFECT1, TEXT("SE_NPC_SK_FX_Ground_Exp_M_02.wav"));
+
+                m_bStampSound = true;
+            }
+        }
+
+    }
+    else
+    {
+        if (!m_bChargeActiveForSound)
+        {
+            if (CurTrackPos >= 35.f)
+            {
+                m_pMonster->Play_Sound(CPawn::PAWN_SOUND_EFFECT1, TEXT("SE_NPC_Raxasia_SK_WP_Sword_Lightning_Loop.wav"), true);
+                m_pMonster->Play_Sound(CPawn::PAWN_SOUND_EFFECT2, TEXT("SE_NPC_Raxasia_SK_PJ_Spark_Blast_03.wav"), false);
+                m_bChargeActiveForSound = true;
+            }
+        }
+        if (!m_bSwingSound)
+        {
+            if ((CurTrackPos >= 105.f && CurTrackPos <= 120.f))
+            {
+                m_pMonster->Play_Sound(CPawn::PAWN_SOUND_EFFECT1, TEXT("SE_NPC_SK_WS_BroadSword_06.wav"), false);
+                m_bSwingSound = true;
+            }
+        }
+
+        if (!m_bStampSound)
+        {
+            if ((CurTrackPos >= 120.f))
+            {
+                m_pMonster->Play_Sound(CPawn::PAWN_SOUND_EFFECT1, TEXT("SE_NPC_SK_FX_Ground_Exp_M_02.wav"));
+
+                m_bStampSound = true;
+            }
+        }
+    }
 }
 
 CState_RaxasiaP1_Discharge* CState_RaxasiaP1_Discharge::Create(CFsm* pFsm, CMonster* pMonster, _uint iStateNum, void* pArg)

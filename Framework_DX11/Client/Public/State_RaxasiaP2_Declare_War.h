@@ -58,6 +58,10 @@ private:
     _bool               m_bEnvelop = { false };
 
     _bool               m_bSwingSound = { false };
+    _bool               m_bJumpForSound = { false };
+    _bool               m_bStartForSound = { false };
+    _bool               m_bDiveForSound = { false };
+    _bool               m_bEnvelopForSound = { false };
 
     _uint               m_iRouteTrack = {};
 

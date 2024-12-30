@@ -150,7 +150,7 @@ HRESULT CWeapon_Raxasia_P1_Sword::Ready_Components()
 
 	/* FOR.Com_Collider */
 	CBounding_OBB::BOUNDING_OBB_DESC			ColliderDesc{};
-	ColliderDesc.vExtents = _float3(0.6f, 0.3f, 2.25f);
+	ColliderDesc.vExtents = _float3(0.6f, 0.4f, 2.25f);
 	ColliderDesc.vCenter = _float3(0.f, 0.0f, -0.95f);
 	ColliderDesc.vAngles = _float3(0.f, 0.f, 0.f);
 

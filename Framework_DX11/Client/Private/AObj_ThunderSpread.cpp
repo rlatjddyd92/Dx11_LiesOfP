@@ -47,8 +47,6 @@ HRESULT CAObj_ThunderSpread::Initialize(void* pArg)
 
     m_strObjectTag = TEXT("MonsterWeapon");
 
-    //m_pSoundCom[EFF_SOUND_EFFECT1]->Play2D(TEXT("SE_NPC_SimonManus_SK_PJ_Ergo_Retspuken_04.wav"), &g_fEffectVolume);
-
     return S_OK;
 }
 
@@ -64,6 +62,7 @@ void CAObj_ThunderSpread::Update(_float fTimeDelta)
         if (m_pEffect->Get_Loop())
         {
             m_pEffect->Set_Loop(false);
+            m_fLifeTime = 0.f;
         }
         else if (m_pEffect->Get_Dead())
         {
@@ -92,6 +91,7 @@ void CAObj_ThunderSpread::Late_Update(_float fTimeDelta)
     {
         m_pGameInstance->Add_ColliderList(m_pColliderCom);
 #ifdef DEBUG
+        m_pGameInstance->Add_RenderObject(CRenderer::RG_NONBLEND, this);
         m_pGameInstance->Add_DebugObject(m_pColliderCom);
 #endif // DEBUG
     }
@@ -99,6 +99,9 @@ void CAObj_ThunderSpread::Late_Update(_float fTimeDelta)
 
 HRESULT CAObj_ThunderSpread::Render()
 {
+#ifdef DEBUG
+    m_pColliderCom->Render();
+#endif // DEBUG
     return S_OK;
 }
 

@@ -77,6 +77,7 @@ void CState_RaxasiaP1_RepetUpperSlash::Route_Controll(_double CurTrackPos, _floa
         {
             ++m_iRouteTrack;
             m_bSwing = false;
+            m_bSwingSound = false;
             m_bDrag = false;
             m_pMonster->Change_Animation(AN_UPPERTWICE, false, 0.02f, 0);
         }
@@ -94,6 +95,7 @@ void CState_RaxasiaP1_RepetUpperSlash::Route_Controll(_double CurTrackPos, _floa
         {
             ++m_iRouteTrack;
             m_bSwing = false;
+            m_bSwingSound = false;
             m_bDrag = false;
             m_pMonster->Change_Animation(AN_UPPERTWICE, false, 0.02f, 0, true, true);
         }
@@ -119,6 +121,7 @@ void CState_RaxasiaP1_RepetUpperSlash::Route_Controll(_double CurTrackPos, _floa
         {
             ++m_iRouteTrack;
             m_bSwing = false;
+            m_bSwingSound = false;
             m_bDrag = false;
             m_pMonster->Change_Animation(AN_UPPERTWICE, false, 0.02f, 0, true, true);
         }
@@ -144,6 +147,7 @@ void CState_RaxasiaP1_RepetUpperSlash::Route_Controll(_double CurTrackPos, _floa
         {
             ++m_iRouteTrack;
             m_bSwing = false;
+            m_bSwingSound = false;
             m_bDrag = false;
             m_pMonster->Change_Animation(AN_UPPERTWICE, false, 0.02f, 0, true, true);
         }
@@ -155,6 +159,7 @@ void CState_RaxasiaP1_RepetUpperSlash::Route_Controll(_double CurTrackPos, _floa
         {
             ++m_iRouteTrack;
             m_bSwing = false;
+            m_bSwingSound = false;
             m_bDrag = false;
             m_pMonster->Change_Animation(AN_UPPERTWICE, false, 0.02f, 0, true, true);
         }
@@ -166,6 +171,7 @@ void CState_RaxasiaP1_RepetUpperSlash::Route_Controll(_double CurTrackPos, _floa
         {
             ++m_iRouteTrack;
             m_bSwing = false;
+            m_bSwingSound = false;
             m_bDrag = false;
             m_pMonster->Change_Animation(AN_LINKED_LAST, false, 0.02f, 0, true, true);
         }
@@ -188,8 +194,7 @@ void CState_RaxasiaP1_RepetUpperSlash::Route_Controll(_double CurTrackPos, _floa
         }
 
         if (CurTrackPos <= 25.f ||
-            (CurTrackPos <= 65.f && CurTrackPos <= 75.f) ||
-            CurTrackPos >= 100.f)
+            (CurTrackPos <= 65.f && CurTrackPos <= 75.f))
         {
             m_pMonster->Get_Transform()->LookAt_Lerp_NoHeight(m_pMonster->Get_TargetDir(), 1.f, fTimeDelta);
         }
@@ -337,6 +342,49 @@ void CState_RaxasiaP1_RepetUpperSlash::Effect_Check(_double CurTrackPos)
 
 void CState_RaxasiaP1_RepetUpperSlash::Control_Sound(_double CurTrackPos)
 {
+    if (m_iRouteTrack == 0)
+    {
+        if ((CurTrackPos >= 105.f && CurTrackPos <= 125.f))
+        {
+            if (!m_bSwingSound)
+            {
+                m_pMonster->Play_Sound(CPawn::PAWN_SOUND_EFFECT1, TEXT("SE_NPC_SK_WS_BroadSword_06.wav"), false);
+                m_bSwingSound = true;
+            }
+        }
+    }
+    else if (m_iRouteTrack >= 1 && m_iRouteTrack <= 5)
+    {
+        if ((CurTrackPos >= 25.f && CurTrackPos <= 40.f) ||
+            (CurTrackPos >= 70.f && CurTrackPos <= 85.f))
+        {
+            if (!m_bSwingSound)
+            {
+                m_pMonster->Play_Sound(CPawn::PAWN_SOUND_EFFECT2, TEXT("SE_NPC_SK_WS_BroadSword_06.wav"), false);
+                m_bSwingSound = true;
+            }
+        }
+        else
+        {
+            m_bSwingSound = false;
+        }
+    }
+    else if (m_iRouteTrack == 6)
+    {
+        if ((CurTrackPos >= 35.f && CurTrackPos <= 60.f) ||
+            (CurTrackPos >= 80.f && CurTrackPos <= 95.f))
+        {
+            if (!m_bSwingSound)
+            {
+                m_pMonster->Play_Sound(CPawn::PAWN_SOUND_EFFECT1, TEXT("SE_NPC_SK_WS_BroadSword_06.wav"), false);
+                m_bSwingSound = true;
+            }
+        }
+        else
+        {
+            m_bSwingSound = false;
+        }
+    }
 
 }
 

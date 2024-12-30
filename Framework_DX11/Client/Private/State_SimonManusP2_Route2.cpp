@@ -24,7 +24,7 @@ HRESULT CState_SimonManusP2_Route2::Start_State(void* pArg)
 
     m_fGoalRimAlpha = 0.1f;
     m_fCurtRimAlpha = 1.f;
-
+    m_bControlRim = false;
     m_isJump = true;
     m_bLandSound = false;
     m_bSwingSound = false;
@@ -43,6 +43,8 @@ void CState_SimonManusP2_Route2::Update(_float fTimeDelta)
         {
             ++m_iRouteTrack;
             m_pMonster->Change_Animation(AN_ROUTE_LAST, false, 0.1f, 170);
+            m_bControlRim = true;
+            return;
         }
 
         if (CurTrackPos >= 90.f && CurTrackPos <= 110.f)
@@ -92,7 +94,11 @@ void CState_SimonManusP2_Route2::Update(_float fTimeDelta)
     Collider_Check(CurTrackPos);
     Effect_Check(CurTrackPos);
     Control_Sound(CurTrackPos);
-    Update_Rimlight();
+
+    if (m_bControlRim)
+    {
+        Update_Rimlight();
+    }
 
 }
 
@@ -135,7 +141,7 @@ void CState_SimonManusP2_Route2::Collider_Check(_double CurTrackPos)
     {
         if (CurTrackPos >= 60 && CurTrackPos <= 85.f)
         {
-            m_pMonster->Active_CurrentWeaponCollider(1.3f, 0, HIT_TYPE::HIT_METAL, ATTACK_STRENGTH::ATK_NORMAL);
+            m_pMonster->Active_CurrentWeaponCollider(1.3f, 1, HIT_TYPE::HIT_METAL, ATTACK_STRENGTH::ATK_NORMAL);
         }
         else
         {
@@ -163,13 +169,15 @@ void CState_SimonManusP2_Route2::Effect_Check(_double CurTrackPos)
         {
             if (!m_bSwing)
             {
-                m_pMonster->Active_Effect(CSimonManus::P1_TRAIL);
+                m_pMonster->Active_Effect(CSimonManus::P2_TRAIL);
+                m_pMonster->Active_Effect(CSimonManus::SWING_DRAG);
                 m_bSwing = true;
             }
         }
         else
         {
-            m_pMonster->DeActive_Effect(CSimonManus::P1_TRAIL);
+            m_pMonster->DeActive_Effect(CSimonManus::P2_TRAIL);
+            m_pMonster->DeActive_Effect(CSimonManus::SWING_DRAG);
         }
     }
 }
@@ -178,7 +186,7 @@ void CState_SimonManusP2_Route2::Update_Rimlight()
 {
     if (m_fCurtRimAlpha != m_fGoalRimAlpha)
     {
-        m_fCurtRimAlpha += (m_fGoalRimAlpha - m_fCurtRimAlpha) / 20;
+        m_fCurtRimAlpha += (m_fGoalRimAlpha - m_fCurtRimAlpha) / 15;
         m_pMonster->Set_RimLightColor(_Vec4{ 0.9f, 0.f, 0.f, m_fCurtRimAlpha });
         if (abs(m_fGoalRimAlpha - m_fCurtRimAlpha) < 0.1f)
         {

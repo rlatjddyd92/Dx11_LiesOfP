@@ -440,7 +440,6 @@
     <ClInclude Include="..\Public\State_Player_TH_Run.h" />
     <ClInclude Include="..\Public\State_Player_TH_Sprint.h" />
     <ClInclude Include="..\Public\State_Player_TH_Walk.h" />
-    <ClInclude Include="..\Public\State_SimonManusP1_AvoidSwing.h" />
     <ClInclude Include="..\Public\State_SimonManusP1_ChasingSwing.h" />
     <ClInclude Include="..\Public\State_SimonManusP1_Die.h" />
     <ClInclude Include="..\Public\State_SimonManusP1_Grogy.h" />
@@ -455,7 +454,6 @@
     <ClInclude Include="..\Public\State_SimonManusP1_SwingMultiple.h" />
     <ClInclude Include="..\Public\State_SimonManusP1_SwipMultiple_L.h" />
     <ClInclude Include="..\Public\State_SimonManusP1_SwipMultiple_R.h" />
-    <ClInclude Include="..\Public\State_SimonManusP2_AvoidSwing.h" />
     <ClInclude Include="..\Public\State_SimonManusP2_BrutalAttack.h" />
     <ClInclude Include="..\Public\State_SimonManusP2_ChasingSwing.h" />
     <ClInclude Include="..\Public\State_SimonManusP2_Die.h" />
@@ -465,7 +463,6 @@
     <ClInclude Include="..\Public\State_SimonManusP2_Idle.h" />
     <ClInclude Include="..\Public\State_SimonManusP2_JumpToAttack.h" />
     <ClInclude Include="..\Public\State_SimonManusP2_LightningToWave.h" />
-    <ClInclude Include="..\Public\State_SimonManusP2_Route0.h" />
     <ClInclude Include="..\Public\State_SimonManusP2_Route1.h" />
     <ClInclude Include="..\Public\State_SimonManusP2_Route2.h" />
     <ClInclude Include="..\Public\State_SimonManusP2_SlideMagic.h" />
@@ -802,7 +799,6 @@
     <ClCompile Include="..\Private\State_Player_TH_Run.cpp" />
     <ClCompile Include="..\Private\State_Player_TH_Sprint.cpp" />
     <ClCompile Include="..\Private\State_Player_TH_Walk.cpp" />
-    <ClCompile Include="..\Private\State_SimonManusP1_AvoidSwing.cpp" />
     <ClCompile Include="..\Private\State_SimonManusP1_ChasingSwing.cpp" />
     <ClCompile Include="..\Private\State_SimonManusP1_Die.cpp" />
     <ClCompile Include="..\Private\State_SimonManusP1_Grogy.cpp" />
@@ -817,7 +813,6 @@
     <ClCompile Include="..\Private\State_SimonManusP1_SwingMultiple.cpp" />
     <ClCompile Include="..\Private\State_SimonManusP1_SwipMultiple_L.cpp" />
     <ClCompile Include="..\Private\State_SimonManusP1_SwipMultiple_R.cpp" />
-    <ClCompile Include="..\Private\State_SimonManusP2_AvoidSwing.cpp" />
     <ClCompile Include="..\Private\State_SimonManusP2_BrutalAttack.cpp" />
     <ClCompile Include="..\Private\State_SimonManusP2_ChasingSwing.cpp" />
     <ClCompile Include="..\Private\State_SimonManusP2_Die.cpp" />
@@ -827,7 +822,6 @@
     <ClCompile Include="..\Private\State_SimonManusP2_Idle.cpp" />
     <ClCompile Include="..\Private\State_SimonManusP2_JumpToAttack.cpp" />
     <ClCompile Include="..\Private\State_SimonManusP2_LightningToWave.cpp" />
-    <ClCompile Include="..\Private\State_SimonManusP2_Route0.cpp" />
     <ClCompile Include="..\Private\State_SimonManusP2_Route1.cpp" />
     <ClCompile Include="..\Private\State_SimonManusP2_Route2.cpp" />
     <ClCompile Include="..\Private\State_SimonManusP2_SlideMagic.cpp" />

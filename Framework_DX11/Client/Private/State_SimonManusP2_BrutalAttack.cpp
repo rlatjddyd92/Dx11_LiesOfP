@@ -23,6 +23,7 @@ HRESULT CState_SimonManusP2_BrutalAttack::Initialize(_uint iStateNum, void* pArg
 HRESULT CState_SimonManusP2_BrutalAttack::Start_State(void* pArg)
 {
     m_pMonster->Change_Animation(AN_BRUTALATTACK, false, 0.1f, 0);
+    m_pMonster->Get_Model()->Set_SpeedRatio(AN_BRUTALATTACK, 0.15);
     m_iColliderResetCheckCnt = 0;
     m_bSwingSound = false;
     m_bStampSound = false;
@@ -34,13 +35,21 @@ HRESULT CState_SimonManusP2_BrutalAttack::Start_State(void* pArg)
 
 void CState_SimonManusP2_BrutalAttack::Update(_float fTimeDelta)
 {
+    _double CurTrackPos = m_pMonster->Get_CurrentTrackPos();
+
     if (End_Check())//애니메이션의 종료 받아오도록 해서 어택이 종료된 시점에
     {
         m_pMonster->Change_State(CSimonManus::IDLE);
         return;
     }
 
-    _double CurTrackPos = m_pMonster->Get_CurrentTrackPos();
+    if (CurTrackPos <= 190.f || 
+        (CurTrackPos >= 290.f && CurTrackPos <= 350.f) ||
+        (CurTrackPos >= 470.f && CurTrackPos <= 555.f))
+    {
+        _int iDir = m_pMonster->Get_Transform()->LookAt_Lerp_NoHeight(m_pMonster->Get_TargetDir(), 2, fTimeDelta);
+    }
+
 
     Collider_Check(CurTrackPos);
     Effect_Check(CurTrackPos);
@@ -67,7 +76,7 @@ void CState_SimonManusP2_BrutalAttack::Collider_Check(_double CurTrackPos)
         (CurTrackPos >= 400.f && CurTrackPos <= 412.f) ||
         (CurTrackPos >= 560.f && CurTrackPos <= 569.f))
     {
-        m_pMonster->Active_CurrentWeaponCollider(1.1f, 0, HIT_TYPE::HIT_METAL, ATTACK_STRENGTH::ATK_NORMAL);
+        m_pMonster->Active_CurrentWeaponCollider(1.1f, 1, HIT_TYPE::HIT_METAL, ATTACK_STRENGTH::ATK_NORMAL);
     }
     else
     {
@@ -101,12 +110,14 @@ void CState_SimonManusP2_BrutalAttack::Effect_Check(_double CurTrackPos)
             (CurTrackPos >= 154.f && CurTrackPos <= 180.f) ||
             (CurTrackPos >= 205.f && CurTrackPos <= 270.f))
         {
-            m_pMonster->Active_Effect(CSimonManus::P1_TRAIL);
+            m_pMonster->Active_Effect(CSimonManus::P2_TRAIL);
+            m_pMonster->Active_Effect(CSimonManus::SWING_DRAG);
             m_bSwing = true;
         }
         else
         {
-            m_pMonster->DeActive_CurretnWeaponCollider();
+            m_pMonster->DeActive_Effect(CSimonManus::P2_TRAIL);
+            m_pMonster->DeActive_Effect(CSimonManus::SWING_DRAG);
         }
     }
     else

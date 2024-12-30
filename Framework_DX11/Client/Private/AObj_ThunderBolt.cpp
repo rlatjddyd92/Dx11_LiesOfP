@@ -59,7 +59,10 @@ HRESULT CAObj_ThunderBolt::Initialize(void* pArg)
 
     m_strObjectTag = TEXT("MonsterWeapon");
 
-    //m_pSoundCom[EFF_SOUND_EFFECT1]->Play2D(TEXT("SE_NPC_SimonManus_SK_PJ_Ergo_Retspuken_04.wav"), &g_fEffectVolume);
+    if (m_iStateTrack == 0)
+    {
+        m_pSoundCom[EFF_SOUND_EFFECT1]->Play2D(TEXT("SE_NPC_Raxasia_SK_PJ_BladeMissile_01.wav"), &g_fEffectVolume);
+    }
 
     return S_OK;
 }
@@ -77,7 +80,7 @@ void CAObj_ThunderBolt::Update(_float fTimeDelta)
 {
     switch (m_iStateTrack)
     {
-    case 0:
+    case 0:         //번개
     {
         m_fTimer += fTimeDelta;
         if (m_fTimer >= 0.5f)
@@ -89,8 +92,7 @@ void CAObj_ThunderBolt::Update(_float fTimeDelta)
         }
         break;
     }
-
-    case 1:
+    case 1:         //생성
     {
         if (!m_pEffects[m_iStateTrack]->Get_Loop())
         {
@@ -103,8 +105,7 @@ void CAObj_ThunderBolt::Update(_float fTimeDelta)
         }
         break;
     }
-
-    case 2:
+    case 2:         //추적
     {
         _Vec3 vTargetPos = {};
         if (m_bCounter)
@@ -156,10 +157,11 @@ void CAObj_ThunderBolt::Update(_float fTimeDelta)
 
         break;
     }
-    case 3:
+    case 3:         //피격
         if (m_pEffects[m_iStateTrack]->Get_Dead())
         {
             m_isDead = true;
+            m_pSoundCom[EFF_SOUND_EFFECT2]->Stop();
             return;
         }
         break;
@@ -209,6 +211,7 @@ void CAObj_ThunderBolt::Late_Update(_float fTimeDelta)
     {
         m_pGameInstance->Add_ColliderList(m_pColliderCom);
 #ifdef DEBUG
+        m_pGameInstance->Add_RenderObject(CRenderer::RG_NONBLEND, this);
         m_pGameInstance->Add_DebugObject(m_pColliderCom);
 #endif // DEBUG
     }
@@ -216,6 +219,9 @@ void CAObj_ThunderBolt::Late_Update(_float fTimeDelta)
 
 HRESULT CAObj_ThunderBolt::Render()
 {
+#ifdef DEBUG
+    m_pColliderCom->Render();
+#endif // DEBUG
     return S_OK;
 }
 
@@ -251,6 +257,8 @@ void CAObj_ThunderBolt::OnCollisionEnter(CGameObject* pOther)
                 m_iStateTrack = STATE_IMPACT;
                 m_pEffects[STATE_IMPACT]->Reset_Effects();
                 m_bImpact = true;
+                m_pSoundCom[EFF_SOUND_EFFECT1]->Play2D(TEXT("SE_NPC_Raxasia_SK_PJ_BladeMissile_Hit_03.wav"), &g_fEffectVolume);
+
             }
             else
             {
@@ -290,6 +298,10 @@ void CAObj_ThunderBolt::OnCollisionEnter(CGameObject* pOther)
                 m_pEffects[STATE_IMPACT] = CEffect_Manager::Get_Instance()->Clone_Effect(TEXT("Raxasia_Attack_ThunderBolt_Counter_Impact"), m_pTransformCom->Get_WorldMatrix_Ptr(),
                     nullptr, _Vec3(0.f, 0.f, 0.f), _Vec3(0.f, 0.f, 1.f), _Vec3(1.f, 1.f, 1.f));
 
+                m_pSoundCom[EFF_SOUND_EFFECT1]->Play2D(TEXT("SE_NPC_Raxasia_SK_PJ_Reflection_PerfectGuard_03.wav"), &g_fEffectVolume);
+
+                m_pSoundCom[EFF_SOUND_EFFECT2]->Play2D(TEXT("SE_NPC_Raxasia_SK_PJ_Reflection_PerfectGuard_Loop_01.wav"), &g_fEffectVolume);
+
             }
         }
     }
@@ -307,6 +319,12 @@ HRESULT CAObj_ThunderBolt::Ready_Components()
 {
     if (FAILED(__super::Ready_Components()))
         return E_FAIL;
+
+    /* FOR.Com_EffectSound */
+    if (FAILED(__super::Add_Component(LEVEL_STATIC, TEXT("Prototype_Component_Sound"),
+        TEXT("Com_EffectSound_2"), reinterpret_cast<CComponent**>(&m_pSoundCom[EFF_SOUND_EFFECT2]))))
+        return E_FAIL;
+    m_pSoundCom[EFF_SOUND_EFFECT2]->Set_Owner(this);
 
     /* FOR.Com_Collider */
     CBounding_Sphere::BOUNDING_SPHERE_DESC      ColliderDesc{};

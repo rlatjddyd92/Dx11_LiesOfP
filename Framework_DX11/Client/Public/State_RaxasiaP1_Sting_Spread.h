@@ -37,6 +37,8 @@ private:
     _bool               m_bSpeedController = { false };
 
     _bool               m_bSwingSound = { false };
+    _bool               m_bStampSound = { false };
+    _bool               m_bSpreadSound = { false };
     _bool               m_bLockOn = { false };
     _bool               m_bCharge = { false };
     _bool               m_bResetAtkList = { false };

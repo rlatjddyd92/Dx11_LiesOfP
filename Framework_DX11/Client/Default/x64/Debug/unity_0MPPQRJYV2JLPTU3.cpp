@@ -1,5 +1,8 @@
 #include "stdafx.h"
 
+#include "C:\Users\User\Desktop\GitHubRepo\new\Dx11_LiesOfP\Framework_DX11\Client\Private\Achievment_DataLine.cpp"
+
+
 #include "C:\Users\User\Desktop\GitHubRepo\new\Dx11_LiesOfP\Framework_DX11\Client\Private\AObj_BlackBall.cpp"
 
 
@@ -411,10 +414,16 @@
 #include "C:\Users\User\Desktop\GitHubRepo\new\Dx11_LiesOfP\Framework_DX11\Client\Private\State_Training02_Idle.cpp"
 
 
+#include "C:\Users\User\Desktop\GitHubRepo\new\Dx11_LiesOfP\Framework_DX11\Client\Private\Statistic_Data.cpp"
+
+
 #include "C:\Users\User\Desktop\GitHubRepo\new\Dx11_LiesOfP\Framework_DX11\Client\Private\SteelHeart.cpp"
 
 
 #include "C:\Users\User\Desktop\GitHubRepo\new\Dx11_LiesOfP\Framework_DX11\Client\Private\TorchDeck.cpp"
+
+
+#include "C:\Users\User\Desktop\GitHubRepo\new\Dx11_LiesOfP\Framework_DX11\Client\Private\UIPage_Achievment.cpp"
 
 
 #include "C:\Users\User\Desktop\GitHubRepo\new\Dx11_LiesOfP\Framework_DX11\Client\Private\UIPage_Chest.cpp"
@@ -792,9 +801,6 @@
 #include "C:\Users\User\Desktop\GitHubRepo\new\Dx11_LiesOfP\Framework_DX11\Client\Private\State_Player_TH_Walk.cpp"
 
 
-#include "C:\Users\User\Desktop\GitHubRepo\new\Dx11_LiesOfP\Framework_DX11\Client\Private\State_SimonManusP1_AvoidSwing.cpp"
-
-
 #include "C:\Users\User\Desktop\GitHubRepo\new\Dx11_LiesOfP\Framework_DX11\Client\Private\State_SimonManusP1_ChasingSwing.cpp"
 
 
@@ -837,9 +843,6 @@
 #include "C:\Users\User\Desktop\GitHubRepo\new\Dx11_LiesOfP\Framework_DX11\Client\Private\State_SimonManusP1_SwipMultiple_R.cpp"
 
 
-#include "C:\Users\User\Desktop\GitHubRepo\new\Dx11_LiesOfP\Framework_DX11\Client\Private\State_SimonManusP2_AvoidSwing.cpp"
-
-
 #include "C:\Users\User\Desktop\GitHubRepo\new\Dx11_LiesOfP\Framework_DX11\Client\Private\State_SimonManusP2_BrutalAttack.cpp"
 
 
@@ -865,9 +868,6 @@
 
 
 #include "C:\Users\User\Desktop\GitHubRepo\new\Dx11_LiesOfP\Framework_DX11\Client\Private\State_SimonManusP2_LightningToWave.cpp"
-
-
-#include "C:\Users\User\Desktop\GitHubRepo\new\Dx11_LiesOfP\Framework_DX11\Client\Private\State_SimonManusP2_Route0.cpp"
 
 
 #include "C:\Users\User\Desktop\GitHubRepo\new\Dx11_LiesOfP\Framework_DX11\Client\Private\State_SimonManusP2_Route1.cpp"

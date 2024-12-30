@@ -47,7 +47,7 @@ HRESULT CState_RaxasiaP2_Running::Start_State(void* pArg)
         m_iNextStateNum = CRaxasia::ATKP2_RUNNING_FURY;
     }
 
-    m_iNextStateNum = CRaxasia::ATKP2_RUNNING_LINKED;
+    //m_iNextStateNum = CRaxasia::ATKP2_RUNNING_LINKED;
 
     m_bSwingSound = false;
     m_bShieldAttack = false;
@@ -241,7 +241,6 @@ void CState_RaxasiaP2_Running::Collider_Check(_double CurTrackPos)
 
 void CState_RaxasiaP2_Running::Effect_Check(_double CurTrackPos)
 {
-
     if (m_iRouteTrack == 1)
     {
         if (!m_bSwing)
@@ -277,6 +276,17 @@ void CState_RaxasiaP2_Running::Effect_Check(_double CurTrackPos)
 
 void CState_RaxasiaP2_Running::Control_Sound(_double CurTrackPos)
 {
+    if (m_iRouteTrack == 1)
+    {
+        if ((CurTrackPos >= 145.f && CurTrackPos <= 160.f))
+        {
+            if (!m_bSwingSound)
+            {
+                m_pMonster->Play_Sound(CPawn::PAWN_SOUND_EFFECT1, TEXT("SE_NPC_SK_WS_BroadSword_06.wav"), false);
+                m_bSwingSound = true;
+            }
+        }
+    }
 
 }
 

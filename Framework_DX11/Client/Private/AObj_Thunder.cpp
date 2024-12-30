@@ -34,7 +34,7 @@ HRESULT CAObj_Thunder::Initialize(void* pArg)
         return E_FAIL;
 
     m_fDamageAmount = 20.f;
-    m_fLifeDuration = 0.4f;
+    m_fLifeDuration = 0.2f;
     m_fAttackTime = 1.5f;
 
     m_pColliderCom->IsActive(false);
@@ -171,7 +171,7 @@ HRESULT CAObj_Thunder::Ready_Components()
     /* FOR.Com_Collider */
     CBounding_Sphere::BOUNDING_SPHERE_DESC      ColliderDesc{};
     ColliderDesc.vCenter = _float3(0.f, 0.f, 0.f);
-    ColliderDesc.fRadius = 1.5f;
+    ColliderDesc.fRadius = 2.5f;
 
     if (FAILED(__super::Add_Component(LEVEL_STATIC, TEXT("Prototype_Component_Collider_Sphere"),
         TEXT("Com_Collider"), reinterpret_cast<CComponent**>(&m_pColliderCom), &ColliderDesc)))

@@ -159,7 +159,9 @@ void CState_SimonManusP2_SlideMagic::Effect_Check(_double CurTrackPos)
         _float4x4 WorldMat{};
         XMStoreFloat4x4(&WorldMat, (*m_pMonster->Get_BoneCombinedMat(m_pMonster->Get_UFBIndex(UFB_HAND_LEFT)) *(*m_pMonster->Get_Transform()->Get_WorldMatrix_Ptr())));
         Desc.vPos = _Vec3{ WorldMat._41, WorldMat._42 - 0.2f, WorldMat._43 };
-        Desc.vDir = _Vec3{ XMVector3Normalize(m_pMonster->Get_TargetPos() - Desc.vPos) };
+        _Vec3 vTargetPos = m_pMonster->Get_TargetPos();
+        vTargetPos.y += 1.f;
+        Desc.vDir = _Vec3{ vTargetPos - Desc.vPos };
 
         m_pGameInstance->Add_CloneObject_ToLayer(LEVEL_GAMEPLAY, TEXT("Monster_Attack"), TEXT("Prototype_GameObject_GoldBall"), &Desc);
 

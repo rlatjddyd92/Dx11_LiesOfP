@@ -98,7 +98,7 @@ _char* CModel::Get_CurrentAnimationName()
 
 _uint CModel::Get_LastFrame_CurrentAnim(_uint iAnimIndex)
 {
-	return m_Animations[iAnimIndex]->Get_WideChannel()->Get_KeyFrames().size() - 1;;
+	return m_Animations[iAnimIndex]->Get_WideChannel()->Get_KeyFrames().size() - 1;
 }
 
 _uint	CModel::Get_CurrentFrame(_bool isBoundary)

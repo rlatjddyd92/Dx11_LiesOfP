@@ -65,7 +65,7 @@ void CState_SimonManusP1_SwingMultiple::Collider_Check(_double CurTrackPos)
         (CurTrackPos >= 385.f && CurTrackPos <= 415.f) ||
         (CurTrackPos >= 550.f && CurTrackPos <= 565.f))
     {
-        m_pMonster->Active_CurrentWeaponCollider(1.3f, 0, HIT_TYPE::HIT_METAL, ATTACK_STRENGTH::ATK_NORMAL);
+        m_pMonster->Active_CurrentWeaponCollider(1.3f, 1, HIT_TYPE::HIT_METAL, ATTACK_STRENGTH::ATK_NORMAL);
     }
     else
     {
@@ -83,6 +83,7 @@ void CState_SimonManusP1_SwingMultiple::Effect_Check(_double CurTrackPos)
         {
             m_bSwing = true;
             m_pMonster->Active_Effect(CSimonManus::P1_TRAIL);
+            m_pMonster->Active_Effect(CSimonManus::SWING_DRAG);
         }
     }
     else if((CurTrackPos > 116.f && CurTrackPos <= 122.f) ||
@@ -91,6 +92,7 @@ void CState_SimonManusP1_SwingMultiple::Effect_Check(_double CurTrackPos)
     {
         m_bSwing = false;
         m_pMonster->DeActive_Effect(CSimonManus::P1_TRAIL);
+        m_pMonster->DeActive_Effect(CSimonManus::SWING_DRAG);
     }
 }
 void CState_SimonManusP1_SwingMultiple::Control_Sound(_double CurTrackPos)

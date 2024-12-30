@@ -31,6 +31,7 @@ HRESULT CState_RaxasiaP2_WaveSting::Start_State(void* pArg)
     m_fCurtRimAlpha = 1.f;
 
     m_bSwingSound = false;
+    m_bAccelForSound = false;
 
     m_bSwing = false;
     m_bWave = false;
@@ -84,6 +85,7 @@ void CState_RaxasiaP2_WaveSting::Update(_float fTimeDelta)
             m_bSwing = false;
             m_bControlRim = true;
             m_pMonster->DeActive_Effect(CRaxasia::EFFECT_THUNDERENVELOP_SMALL);
+            m_pMonster->Stop_Sound(CPawn::PAWN_SOUND_EFFECT1);
             m_pMonster->Change_Animation(AN_STING, false, 0.02f, 50);
             return;
         }
@@ -133,6 +135,7 @@ void CState_RaxasiaP2_WaveSting::Update(_float fTimeDelta)
 void CState_RaxasiaP2_WaveSting::End_State()
 {
     m_pMonster->DeActive_Effect(CRaxasia::EFFECT_INCHENTSWORD_P2);
+    m_pMonster->Stop_Sound(CPawn::PAWN_SOUND_VOICE);
 }
 
 _bool CState_RaxasiaP2_WaveSting::End_Check()
@@ -246,6 +249,7 @@ void CState_RaxasiaP2_WaveSting::Effect_Check(_double CurTrackPos)
             if (CurTrackPos >= 15.f)
             {
                 m_bEnvelop = true;
+                m_pMonster->Play_Sound(CPawn::PAWN_SOUND_EFFECT1, TEXT("SE_NPC_Raxasia_SK_PJ_Spark_Electric_Loop_02.wav"), true);
                 m_pMonster->Active_Effect(CRaxasia::EFFECT_THUNDERENVELOP_SMALL, true);
             }
         }
@@ -284,7 +288,32 @@ void CState_RaxasiaP2_WaveSting::Update_Rimlight()
 
 void CState_RaxasiaP2_WaveSting::Control_Sound(_double CurTrackPos)
 {
-
+    if (m_iRouteTrack == 0)
+    {
+        if (!m_bCharge)
+        {
+            if (CurTrackPos >= 35.f)
+            {
+                m_pMonster->Play_Sound(CPawn::PAWN_SOUND_VOICE, TEXT("SE_NPC_Raxasia_SK_WP_Sword_Lightning_Loop.wav"), true);
+                m_bCharge = true;
+            }
+        }
+    }
+    else if (m_iRouteTrack == 2)
+    {
+        if (CurTrackPos >= 19.f && CurTrackPos <= 21.f)
+        {
+            if (!m_bAccelForSound)
+            {
+                m_pMonster->Play_Sound(CPawn::PAWN_SOUND_EFFECT2, TEXT("SE_NPC_Raxasia_SK_FX_Blink_Spark_Foot_03.wav"), true);
+                m_bAccelForSound = true;
+            }
+        }
+        else
+        {
+            m_pMonster->Stop_Sound(CPawn::PAWN_SOUND_EFFECT2);
+        }
+    }
 }
 
 CState_RaxasiaP2_WaveSting* CState_RaxasiaP2_WaveSting::Create(CFsm* pFsm, CMonster* pMonster, _uint iStateNum, void* pArg)

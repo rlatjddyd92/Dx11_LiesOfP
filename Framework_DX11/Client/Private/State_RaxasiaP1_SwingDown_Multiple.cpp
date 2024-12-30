@@ -35,6 +35,7 @@ HRESULT CState_RaxasiaP1_SwingDown_Multiple::Start_State(void* pArg)
     m_fCurtRimAlpha = 1.f;
 
     m_bSwingSound = false;
+    m_bStampSound = false;
     m_bSpeedController = true;
     m_bSwing = false;
     m_bStamp = false;
@@ -60,6 +61,8 @@ void CState_RaxasiaP1_SwingDown_Multiple::Update(_float fTimeDelta)
             ++m_iRouteTrack;
             m_bSwing = false;
             m_bStamp = false;
+            m_bSwingSound = false;
+            m_bStampSound = false;
             m_iCurAnimIndex = AN_SWINGDOWN_R;
             m_pMonster->Change_Animation(m_iCurAnimIndex, false, 0.1f, 0);
             return;
@@ -100,6 +103,8 @@ void CState_RaxasiaP1_SwingDown_Multiple::Update(_float fTimeDelta)
             ++m_iRouteTrack;
             m_bSwing = false;
             m_bStamp = false;
+            m_bSwingSound = false;
+            m_bStampSound = false;
             if (m_iRouteTrack == 7)
             {
                 m_pMonster->Change_Animation(m_iCurAnimIndex, false, 0.5f, 15);
@@ -214,7 +219,7 @@ void CState_RaxasiaP1_SwingDown_Multiple::Effect_Check(_double CurTrackPos)
             m_bSwing = false;
         }
         
-        if (!m_bStamp)
+        if (!m_bStampSound)
         {
             if (CurTrackPos > 44.4f)
             {
@@ -228,7 +233,7 @@ void CState_RaxasiaP1_SwingDown_Multiple::Effect_Check(_double CurTrackPos)
 
                 CEffect_Manager::Get_Instance()->Add_Effect_ToLayer(LEVEL_GAMEPLAY, TEXT("Raxasia_Attack_Stamp"),
                     vPos, _Vec3{ m_pMonster->Get_TargetDir() });
-                m_bStamp = true;
+                m_bStampSound = true;
             }
         }
     }
@@ -248,7 +253,7 @@ void CState_RaxasiaP1_SwingDown_Multiple::Effect_Check(_double CurTrackPos)
             m_bSwing = false;
         }
 
-        if (!m_bStamp)
+        if (!m_bStampSound)
         {
             if (CurTrackPos > 49.f)
             {
@@ -262,7 +267,7 @@ void CState_RaxasiaP1_SwingDown_Multiple::Effect_Check(_double CurTrackPos)
 
                 CEffect_Manager::Get_Instance()->Add_Effect_ToLayer(LEVEL_GAMEPLAY, TEXT("Raxasia_Attack_Stamp"),
                     vPos, _Vec3{ m_pMonster->Get_TargetDir() });
-                m_bStamp = true;
+                m_bStampSound = true;
             }
         }
     }
@@ -284,6 +289,48 @@ void CState_RaxasiaP1_SwingDown_Multiple::Update_Rimlight()
 
 void CState_RaxasiaP1_SwingDown_Multiple::Control_Sound(_double CurTrackPos)
 {
+    if (m_iRouteTrack == 0 || m_iRouteTrack == 8)
+    {
+        if ((CurTrackPos >= 35.f && CurTrackPos <= 44.4f))
+        {
+            if (!m_bSwingSound)
+            {
+                m_pMonster->Play_Sound(CPawn::PAWN_SOUND_EFFECT1, TEXT("SE_NPC_SK_WS_BroadSword_06.wav"), false);
+                m_bSwingSound = true;
+            }
+        }
+
+        if (!m_bStampSound)
+        {
+            if ((CurTrackPos >= 44.f))
+            {
+                m_pMonster->Play_Sound(CPawn::PAWN_SOUND_EFFECT1, TEXT("SE_NPC_SK_FX_Ground_Exp_M_02.wav"));
+
+                m_bStampSound = true;
+            }
+        }
+    }
+    else if (m_iRouteTrack >= 1 && m_iRouteTrack <= 7)
+    {
+        if ((CurTrackPos >= 40.f && CurTrackPos <= 48.5f))
+        {
+            if (!m_bSwingSound)
+            {
+                m_pMonster->Play_Sound(CPawn::PAWN_SOUND_EFFECT1, TEXT("SE_NPC_SK_WS_BroadSword_06.wav"), false);
+                m_bSwingSound = true;
+            }
+        }
+
+        if (!m_bStampSound)
+        {
+            if ((CurTrackPos >= 48.5f))
+            {
+                m_pMonster->Play_Sound(CPawn::PAWN_SOUND_EFFECT1, TEXT("SE_NPC_SK_FX_Ground_Exp_M_02.wav"));
+
+                m_bStampSound = true;
+            }
+        }
+    }
 
 }
 

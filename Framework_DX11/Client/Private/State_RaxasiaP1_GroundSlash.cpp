@@ -76,6 +76,7 @@ void CState_RaxasiaP1_GroundSlash::Update(_float fTimeDelta)
 void CState_RaxasiaP1_GroundSlash::End_State()
 {
     m_pMonster->DeActive_Effect(CRaxasia::EFFECT_INCHENTSWORD);
+    m_pMonster->DeActive_Effect(CRaxasia::EFFECT_THUNDERDRAG);
 }
 
 _bool CState_RaxasiaP1_GroundSlash::End_Check()
@@ -111,7 +112,7 @@ void CState_RaxasiaP1_GroundSlash::Effect_Check(_double CurTrackPos)
         if (CurTrackPos >= 60.f)
         {
             m_pMonster->Active_Effect(CRaxasia::EFFECT_INCHENTSWORD, true);
-            m_pMonster->Active_Effect(CRaxasia::EFFECT_DRAG, true);
+            m_pMonster->Active_Effect(CRaxasia::EFFECT_THUNDERDRAG, true);
             m_bInchent = true;
         }
     }

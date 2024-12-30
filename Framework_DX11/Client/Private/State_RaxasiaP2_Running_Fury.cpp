@@ -38,6 +38,9 @@ HRESULT CState_RaxasiaP2_Running_Fury::Start_State(void* pArg)
 
     m_bLockOn = false;
     m_bSwingSound = false;
+    m_bStartForSound = false;
+    m_bChargeForSound = false;
+
     m_bSpeedController = false;
     m_bSwing = false;
     m_bShieldAttack = false;
@@ -177,6 +180,8 @@ void CState_RaxasiaP2_Running_Fury::Update(_float fTimeDelta)
         {
             if (CurTrackPos >= 175.f)
             {
+                m_pMonster->DeActive_Effect(CRaxasia::EFFECT_INCHENTSWORD);
+                m_pMonster->Stop_Sound(CPawn::PAWN_SOUND_EFFECT2);
                 m_fGoalRimAlpha = 1.f;
                 m_bResetRim = true;
             }
@@ -313,6 +318,8 @@ void CState_RaxasiaP2_Running_Fury::Effect_Check(_double CurTrackPos)
 
                 CEffect_Manager::Get_Instance()->Add_Effect_ToLayer(LEVEL_GAMEPLAY, TEXT("Raxasia_Attack_ThunderInchent"),
                     vPos, _Vec3{ m_pMonster->Get_TargetDir() });
+
+                m_pMonster->Active_Effect(CRaxasia::EFFECT_INCHENTSWORD);
                 m_bShieldAttack = true;
             }
         }
@@ -339,6 +346,58 @@ void CState_RaxasiaP2_Running_Fury::Update_Rimlight()
 void CState_RaxasiaP2_Running_Fury::Control_Sound(_double CurTrackPos)
 {
 
+    if (m_iRouteTrack == 0)
+    {
+        if (!m_bStartForSound)
+        {
+            if (CurTrackPos <= 10.f)
+            {
+                m_bStartForSound = true;
+                m_pMonster->Play_Sound(CPawn::PAWN_SOUND_EFFECT1, TEXT("SE_NPC_Raxasia_SK_WP_Sword_Lightning_Loop.wav"), true);
+                m_pMonster->Play_Sound(CPawn::PAWN_SOUND_EFFECT2, TEXT("SE_NPC_Raxasia_SK_FX_Blink_Spark_Foot_03.wav"), true);
+            }
+        }
+        else
+        {
+            if (CurTrackPos >= 145.f)
+            {
+                m_bStartForSound = false;
+                m_pMonster->Stop_Sound(CPawn::PAWN_SOUND_EFFECT1);
+                m_pMonster->Stop_Sound(CPawn::PAWN_SOUND_EFFECT2);
+            }
+        }
+
+        if (!m_bSwingSound)
+        {
+            if ((CurTrackPos >= 145.f && CurTrackPos <= 160.f))
+            {
+                m_bSwingSound = true;
+                m_pMonster->Play_Sound(CPawn::PAWN_SOUND_EFFECT1, TEXT("SE_NPC_SK_WS_BroadSword_06.wav"), false);
+            }
+        }
+
+        if ((CurTrackPos >= 165.f && CurTrackPos <= 185.f))
+        {
+            if (!m_bChargeForSound)
+            {
+                //번개 사운드 1
+                m_pMonster->Play_Sound(CPawn::PAWN_SOUND_EFFECT1, TEXT("SE_NPC_Raxasia_SK_FX_Spark_Fall_02.wav"), false);
+                m_pMonster->Play_Sound(CPawn::PAWN_SOUND_EFFECT2, TEXT("SE_NPC_Raxasia_SK_WP_Sword_Lightning_Loop.wav"), false);
+                m_bChargeForSound = true;
+            }
+        }
+    }
+    else if (m_iRouteTrack == 1)
+    {
+        if (!m_bSwingSound)
+        {
+            if (CurTrackPos >= 160.f && CurTrackPos <= 170.f)
+            {
+                m_bSwingSound = true;
+                m_pMonster->Play_Sound(CPawn::PAWN_SOUND_EFFECT1, TEXT("SE_NPC_SK_WS_BroadSword_06.wav"), false);
+            }
+        }
+    }
 }
 
 CState_RaxasiaP2_Running_Fury* CState_RaxasiaP2_Running_Fury::Create(CFsm* pFsm, CMonster* pMonster, _uint iStateNum, void* pArg)

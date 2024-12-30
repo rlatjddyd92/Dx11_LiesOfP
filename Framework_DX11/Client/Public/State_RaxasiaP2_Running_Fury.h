@@ -39,7 +39,11 @@ private:
     _bool               m_bSwing = { false };
     _bool               m_bShieldAttack = { false };
     _bool               m_bStart = { false };
+
+    _bool               m_bStartForSound = { false };
     _bool               m_bSwingSound = { false };
+    _bool               m_bChargeForSound = { false };
+
     _bool               m_bSpeedController = { false };
     _bool               m_bLockOn = { false };
 

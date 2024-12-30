@@ -34,31 +34,62 @@ HRESULT CState_SimonManusP2_Route1::Start_State(void* pArg)
 
 void CState_SimonManusP2_Route1::Update(_float fTimeDelta)
 {
-    if (End_Check())
+    _double CurTrackPos = m_pMonster->Get_CurrentTrackPos();
+
+    switch (m_iRouteTrack)
     {
-
-        switch (m_iRouteTrack)
+    case 0:
+        if (End_Check())
         {
-        case 0:
-            m_pMonster->Change_Animation(AN_ROUTE_MIDDLE, false, 0.0f, 0);
             m_bSwingSound = false;
-            break;
+            m_pMonster->Change_Animation(AN_ROUTE_MIDDLE, false, 0.0f, 0);
+            m_bSwing = false;
+            ++m_iRouteTrack;
+            return;
+        }
 
-        case 1:
-            m_pMonster->Change_Animation(AN_ROUTE_LAST, false, 0.1f, 0);
-            break;
+        if (CurTrackPos <= 45.f || CurTrackPos >= 95.f)
+        {
+            _int iDir = m_pMonster->Get_Transform()->LookAt_Lerp_NoHeight(m_pMonster->Get_TargetDir(), 2, fTimeDelta);
+        }
 
-        case 2:
+        break;
+
+    case 1:
+        if (End_Check())
+        {
+            m_bSwingSound = false;
+            m_pMonster->Change_Animation(AN_ROUTE_LAST, false, 0.0f, 0);
+            m_bSwing = false;
+            ++m_iRouteTrack;
+            return;
+        }
+
+        if (CurTrackPos <= 100.f || CurTrackPos >= 200.f)
+        {
+            _int iDir = m_pMonster->Get_Transform()->LookAt_Lerp_NoHeight(m_pMonster->Get_TargetDir(), 2, fTimeDelta);
+        }
+
+        break;
+
+    case 2:
+        if (End_Check())
+        {
             m_pMonster->Change_State(CSimonManus::IDLE);
             return;
-            break;
-
-        default:
-            break;
         }
-        ++m_iRouteTrack;
+
+        if (CurTrackPos <= 50.f)
+        {
+            _int iDir = m_pMonster->Get_Transform()->LookAt_Lerp_NoHeight(m_pMonster->Get_TargetDir(), 2, fTimeDelta);
+        }
+
+
+        break;
+
+    default:
+        break;
     }
-    _double CurTrackPos = m_pMonster->Get_CurrentTrackPos();
 
     Collider_Check(fTimeDelta, CurTrackPos);
     Effect_Check(CurTrackPos);
@@ -109,14 +140,10 @@ void CState_SimonManusP2_Route1::Collider_Check(_float fTimeDelta, _double CurTr
 {
     if (m_iRouteTrack == 0) //AN_ROUTE_FIRST, 쓰러지면서 하는 스윙
     {
-        if (CurTrackPos <= 50.f)
-        {
-            m_pMonster->Get_Transform()->LookAt_Lerp_NoHeight(m_pMonster->Get_TargetDir(), 5, fTimeDelta);
-        }
 
-        if (CurTrackPos >= 60 && CurTrackPos <= 85.f)
+        if (CurTrackPos >= 50 && CurTrackPos <= 85.f)
         {
-            m_pMonster->Active_CurrentWeaponCollider(1.3f, 0, HIT_TYPE::HIT_METAL, ATTACK_STRENGTH::ATK_NORMAL);
+            m_pMonster->Active_CurrentWeaponCollider(1.3f, 1, HIT_TYPE::HIT_METAL, ATTACK_STRENGTH::ATK_NORMAL);
         }
         else
         {
@@ -127,7 +154,7 @@ void CState_SimonManusP2_Route1::Collider_Check(_float fTimeDelta, _double CurTr
     {
         if (CurTrackPos >= 120 && CurTrackPos <= 180.f)
         {
-            m_pMonster->Active_CurrentWeaponCollider(1.f, 0, HIT_TYPE::HIT_METAL, ATTACK_STRENGTH::ATK_WEAK);
+            m_pMonster->Active_CurrentWeaponCollider(1.f, 1, HIT_TYPE::HIT_METAL, ATTACK_STRENGTH::ATK_WEAK);
         }
         else
         {
@@ -155,13 +182,15 @@ void CState_SimonManusP2_Route1::Effect_Check(_double CurTrackPos)
         {
             if (!m_bSwing)
             {
-                m_pMonster->Active_Effect(CSimonManus::P1_TRAIL);
+                m_pMonster->Active_Effect(CSimonManus::P2_TRAIL);
+                m_pMonster->Active_Effect(CSimonManus::SWING_DRAG);
                 m_bSwing = true;
             }
         }
         else
         {
-            m_pMonster->DeActive_Effect(CSimonManus::P1_TRAIL);
+            m_pMonster->DeActive_Effect(CSimonManus::P2_TRAIL);
+            m_pMonster->DeActive_Effect(CSimonManus::SWING_DRAG);
         }
     }
     else if (m_iRouteTrack == 1)       //어보이드 스윙
@@ -170,13 +199,15 @@ void CState_SimonManusP2_Route1::Effect_Check(_double CurTrackPos)
         {
             if (!m_bSwing)
             {
-                m_pMonster->Active_Effect(CSimonManus::P1_TRAIL);
+                m_pMonster->Active_Effect(CSimonManus::P2_TRAIL);
+                m_pMonster->Active_Effect(CSimonManus::SWING_DRAG);
                 m_bSwing = true;
             }
         }
         else
         {
-            m_pMonster->DeActive_Effect(CSimonManus::P1_TRAIL);
+            m_pMonster->DeActive_Effect(CSimonManus::P2_TRAIL);
+            m_pMonster->DeActive_Effect(CSimonManus::SWING_DRAG);
         }
     }
     else       //스탬프

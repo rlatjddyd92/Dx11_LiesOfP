@@ -25,7 +25,6 @@
 
 #include "State_SimonManusP1_StingAttack.h"
 #include "State_SimonManusP1_Stamp.h"
-#include "State_SimonManusP1_AvoidSwing.h"
 #include "State_SimonManusP1_ChasingSwing.h"
 #include "State_SimonManusP1_JumpToSwing.h"
 #include "State_SimonManusP1_HighJumpFall.h"
@@ -49,11 +48,9 @@
 #include "State_SimonManusP2_Stamp.h"
 #include "State_SimonManusP2_SwipMultiple.h"
 #include "State_SimonManusP2_JumpToAttack.h"
-#include "State_SimonManusP2_Route0.h"
 #include "State_SimonManusP2_Route1.h"
 #include "State_SimonManusP2_Route2.h"
 
-#include "State_SimonManusP2_AvoidSwing.h"
 #include "State_SimonManusP2_Sting.h"
 #include "State_SimonManusP2_BrutalAttack.h"
 #include "State_SimonManusP2_SummonHand.h"
@@ -148,7 +145,7 @@ HRESULT CSimonManus::Initialize(void* pArg)
 
 	GET_GAMEINTERFACE->Set_OnOff_OrthoUI(false, this);
 
-	Start_CutScene(CUTSCENE_MEET);
+	//Start_CutScene(CUTSCENE_MEET);
 
 	return S_OK;
 }
@@ -648,7 +645,6 @@ HRESULT CSimonManus::Ready_FSM()
 	m_pFsmCom->Add_State(CState_SimonManusP1_HitFatal::Create(m_pFsmCom, this, HITFATAL, &Desc));
 	m_pFsmCom->Add_State(CState_SimonManusP1_Die::Create(m_pFsmCom, this, DIE, &Desc));
 
-	m_pFsmCom->Add_State(CState_SimonManusP1_AvoidSwing::Create(m_pFsmCom, this, ATK_AVOIDSWING, &Desc));
 	m_pFsmCom->Add_State(CState_SimonManusP1_StingAttack::Create(m_pFsmCom, this, ATK_STING, &Desc));
 	m_pFsmCom->Add_State(CState_SimonManusP1_Stamp::Create(m_pFsmCom, this, ATK_STAMP, &Desc));
 	m_pFsmCom->Add_State(CState_SimonManusP1_SwingMultiple::Create(m_pFsmCom, this, ATK_SWINGMULTIPLE, &Desc));
@@ -678,7 +674,6 @@ HRESULT CSimonManus::Ready_FSM()
 	m_pExtraFsmCom->Add_State(CState_SimonManusP2_HitFatal::Create(m_pExtraFsmCom, this, HITFATAL, &Desc));
 	m_pExtraFsmCom->Add_State(CState_SimonManusP2_Die::Create(m_pExtraFsmCom, this, DIE, &Desc));
 
-	m_pExtraFsmCom->Add_State(CState_SimonManusP2_AvoidSwing::Create(m_pExtraFsmCom, this, ATKP2_AVOIDSWING, &Desc));
 	m_pExtraFsmCom->Add_State(CState_SimonManusP2_BrutalAttack::Create(m_pExtraFsmCom, this, ATKP2_BRUTALATTACK, &Desc));
 	m_pExtraFsmCom->Add_State(CState_SimonManusP2_HighJumpFall::Create(m_pExtraFsmCom, this, ATKP2_HIGHJUMPFALL, &Desc));
 	m_pExtraFsmCom->Add_State(CState_SimonManusP2_SpreadMagic::Create(m_pExtraFsmCom, this, ATKP2_SPREADMAGIC, &Desc));
@@ -695,7 +690,6 @@ HRESULT CSimonManus::Ready_FSM()
 	m_pExtraFsmCom->Add_State(CState_SimonManusP2_Stamp::Create(m_pExtraFsmCom, this, ATKP2_STAMP, &Desc));
 	m_pExtraFsmCom->Add_State(CState_SimonManusP2_SwingDown_Swing::Create(m_pExtraFsmCom, this, ATKP2_SWINGDOWN_SWING, &Desc));
 	m_pExtraFsmCom->Add_State(CState_SimonManusP2_SwipMultiple::Create(m_pExtraFsmCom, this, ATKP2_SWIPMULTIPLE, &Desc));
-	m_pExtraFsmCom->Add_State(CState_SimonManusP2_Route0::Create(m_pExtraFsmCom, this, ATKP2_ROUTE_0, &Desc));
 	m_pExtraFsmCom->Add_State(CState_SimonManusP2_Route1::Create(m_pExtraFsmCom, this, ATKP2_ROUTE_1, &Desc));
 	m_pExtraFsmCom->Add_State(CState_SimonManusP2_Route2::Create(m_pExtraFsmCom, this, ATKP2_ROUTE_2, &Desc));
 
@@ -742,7 +736,16 @@ HRESULT CSimonManus::Ready_Effects()
 
 	m_Effects[P1_TRAIL] = CEffect_Manager::Get_Instance()->Clone_Effect(TEXT("SimonManus_Attack_Swing"), pParetnMatrix,
 		pSocketBoneMatrix, _Vec3(0.f, 0.f, 0.f), _Vec3(0.f, 0.f, 0.f), _Vec3(1.f, 1.f, 1.f));
-	
+
+	m_Effects[SWING_DRAG] = CEffect_Manager::Get_Instance()->Clone_Effect(TEXT("SimonManus_Attack_Swing_Drag"), pParetnMatrix,
+		pSocketBoneMatrix, _Vec3(0.f, 0.f, 0.f), _Vec3(0.f, 0.f, 0.f), _Vec3(1.f, 1.f, 1.f));
+
+	m_Effects[SWING_DRAG_REVERSE] = CEffect_Manager::Get_Instance()->Clone_Effect(TEXT("SimonManus_Attack_Swing_Drag"), pParetnMatrix,
+		pSocketBoneMatrix, _Vec3(0.f, 0.f, 0.f), _Vec3(0.f, 0.f, 0.f), _Vec3(1.f, 1.f, 1.f), _Vec3(0.f, 0.f, 180.f));
+
+	m_Effects[WEAPON_PARTICLE] = CEffect_Manager::Get_Instance()->Clone_Effect(TEXT("SimonManus_Weapon_Follow"), pParetnMatrix,
+		pSocketBoneMatrix, _Vec3(0.f, 0.f, 0.f), _Vec3(0.f, 0.f, 0.f), _Vec3(1.f, 1.f, 1.f));
+
 	pSocketBoneMatrix = m_pExtraModelCom->Get_BoneCombindTransformationMatrix_Ptr(m_pExtraModelCom->Get_UFBIndices(UFB_HAND_LEFT));
 
 	m_Effects[P2_SLIDEMAGIC] = CEffect_Manager::Get_Instance()->Clone_Effect(TEXT("SimonManus_Attack_SlideMagic"), pParetnMatrix,
@@ -758,6 +761,14 @@ HRESULT CSimonManus::Ready_Effects()
 		pSocketBoneMatrix, _Vec3(0.f, 0.f, 0.f), _Vec3(0.f, 0.f, 0.f), _Vec3(1.f, 1.f, 1.f));
 
 	m_Effects[P2_SH_EXPLOSION] = CEffect_Manager::Get_Instance()->Clone_Effect(TEXT("SimonManus_Attack_SummonHand_Explosion"), pParetnMatrix,
+		pSocketBoneMatrix, _Vec3(0.f, 0.f, 0.f), _Vec3(0.f, 0.f, 0.f), _Vec3(1.f, 1.f, 1.f));
+
+	m_Effects[P2_TRAIL] = CEffect_Manager::Get_Instance()->Clone_Effect(TEXT("SimonManus_Attack_Swing_2P"), pParetnMatrix,
+		pSocketBoneMatrix, _Vec3(0.f, 0.f, 0.f), _Vec3(0.f, 0.f, 0.f), _Vec3(1.f, 1.f, 1.f));
+
+	pSocketBoneMatrix = m_pExtraModelCom->Get_BoneCombindTransformationMatrix_Ptr(m_pExtraModelCom->Get_UFBIndices(UFB_HAND_LEFT));
+
+	m_Effects[P2_WAVE_TRAIL] = CEffect_Manager::Get_Instance()->Clone_Effect(TEXT("SimonManus_Attack_Wave"), pParetnMatrix,
 		pSocketBoneMatrix, _Vec3(0.f, 0.f, 0.f), _Vec3(0.f, 0.f, 0.f), _Vec3(1.f, 1.f, 1.f));
 
 	m_Effects[P2_AURA] = CEffect_Manager::Get_Instance()->Clone_Effect(TEXT("SimonManus_2P_BodyAura"), pParetnMatrix,
@@ -792,7 +803,7 @@ HRESULT CSimonManus::Ready_Effects()
 		pEffect->Set_Loop(false);
 		pEffect->Set_Dead(true);
 	}
-
+	m_Effects[WEAPON_PARTICLE]->Set_Loop(true);
 
 	return S_OK;
 }
@@ -878,7 +889,12 @@ void CSimonManus::ChangePhase()
 	CEffect_Container::EFFECT_DESC Desc;
 	Desc.pParentMatrix = m_pTransformCom->Get_WorldMatrix_Ptr();
 	Desc.pSocketMatrix = m_pModelCom->Get_BoneCombindTransformationMatrix_Ptr(m_pModelCom->Get_UFBIndices(UFB_HAND_RIGHT));
-	m_Effects[P1_TRAIL]->Set_EffectDesc(Desc);
+	m_Effects[WEAPON_PARTICLE]->Set_EffectDesc(Desc);
+	m_Effects[SWING_DRAG]->Set_EffectDesc(Desc);
+	
+	Desc.vRotate = _Vec3{0.f, 0.f, 180.f};
+	m_Effects[SWING_DRAG_REVERSE]->Set_EffectDesc(Desc);
+
 
 	m_eStat.fHp = 200.f;
 	m_eStat.fMaxHp = 200.f;

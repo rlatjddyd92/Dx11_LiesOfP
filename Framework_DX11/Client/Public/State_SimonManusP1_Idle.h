@@ -12,7 +12,7 @@ class CState_SimonManusP1_Idle : public CState
 private:
     typedef enum {
         AN_IDLE = 7, AN_TURN_LEFT = 47, AN_TURN_RIGHT = 48
-        , AN_RUN = 10, AN_WALK = 50
+        , AN_RUN = 10, AN_WALK_F = 50, AN_WALK_B = 49
     }ANIMNUM;
 public:
     CState_SimonManusP1_Idle(class CFsm* pFsm, class CMonster* pMonster);
@@ -43,7 +43,7 @@ private:
     _float              m_fWalkSpeed = { 2.f };
     _float              m_fRunningWeights = { 4.f };
 
-    _float              m_fNeedDist_ForAttack = { 5.f };
+    _float              m_fNeedDist_ForAttack = { 5.5f };
 
     _uint               m_iAtkCnt{};
 
