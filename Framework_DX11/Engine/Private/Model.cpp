@@ -103,7 +103,7 @@ _char* CModel::Get_CurrentAnimationName()
 
 _uint CModel::Get_LastFrame_CurrentAnim(_uint iAnimIndex)
 {
-	return m_Animations[iAnimIndex]->Get_WideChannel()->Get_KeyFrames().size() - 1;
+	return (_uint)m_Animations[iAnimIndex]->Get_WideChannel()->Get_KeyFrames().size() - 1;
 }
 
 _uint	CModel::Get_CurrentFrame(_bool isBoundary)
@@ -1126,7 +1126,7 @@ HRESULT CModel::ReadyModel_To_Binary(HANDLE* pFile, const DISSOLVE_PARTICLE_DESC
 	if (0 < ParticleDesc.iNumInstance)
 	{
 		CVIBuffer_Dissolve_Instance::DISSOLVE_INSTANCE_DESC DissolveDesc = {};
-		DissolveDesc.iNumInstance = Instances.size();
+		DissolveDesc.iNumInstance = (_uint)Instances.size();
 		DissolveDesc.pParticles = Instances.data();
 
 		if(FAILED(m_pGameInstance->Add_Prototype(ParticleDesc.iLevelID, ParticleDesc.strBufferTag, CVIBuffer_Dissolve_Instance::Create(m_pDevice, m_pContext, DissolveDesc))))
@@ -1211,9 +1211,9 @@ _Vec4 CModel::Calc_CenterPos(_Matrix WorldMat)
 	_Matrix FinalMat{};
 	FinalMat = m_Bones[m_UFBIndices[UFB_CHEST]]->Get_CombinedTransformationMatrix() * WorldMat;
 
-	_Vec3	vOut{ FinalMat._41, FinalMat._42 , FinalMat._43 };
+	_Vec4	vOut{ FinalMat._41, FinalMat._42 , FinalMat._43, 1.f };
 
-	return FinalMat.Translation();
+	return vOut;
 }
 
 _float CModel::Get_CurrentDuration()
@@ -1245,7 +1245,7 @@ HRESULT CModel::Ready_Meshes(HANDLE* pFile, DISSOLVE_PARTICLE_DESC ParticleDesc)
 
 	for (size_t i = 0; i < (size_t)m_iNumMeshes; i++)
 	{
-		CMesh* pMesh = CMesh::Create(m_pDevice, m_pContext, pFile, this, XMLoadFloat4x4(&m_PreTransformMatrix), ParticleDesc, i, Instances);
+		CMesh* pMesh = CMesh::Create(m_pDevice, m_pContext, pFile, this, XMLoadFloat4x4(&m_PreTransformMatrix), ParticleDesc, (_uint)i, Instances);
 		if (nullptr == pMesh)
 			return E_FAIL;
 
@@ -1255,7 +1255,7 @@ HRESULT CModel::Ready_Meshes(HANDLE* pFile, DISSOLVE_PARTICLE_DESC ParticleDesc)
 	if (0 < ParticleDesc.iNumInstance)
 	{
 		CVIBuffer_Dissolve_Instance::DISSOLVE_INSTANCE_DESC DissolveDesc = {};
-		DissolveDesc.iNumInstance = Instances.size();
+		DissolveDesc.iNumInstance = (_uint)Instances.size();
 		DissolveDesc.pParticles = Instances.data();
 
 		if (FAILED(m_pGameInstance->Add_Prototype(ParticleDesc.iLevelID, ParticleDesc.strBufferTag, CVIBuffer_Dissolve_Instance::Create(m_pDevice, m_pContext, DissolveDesc))))

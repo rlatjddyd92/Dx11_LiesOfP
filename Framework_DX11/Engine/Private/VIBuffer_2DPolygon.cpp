@@ -62,7 +62,7 @@ HRESULT CVIBuffer_2DPolygon::Initialize(void* pArg)
 	pVertices[0].vPosition = _float3(0.f, 0.f, 0.f);
 	pVertices[0].vTexcoord = _float2(0.5f, 0.5f);
 
-	for (_int i = 1; i < m_iNumVertices; ++i)
+	for (_uint i = 1; i < m_iNumVertices; ++i)
 	{
 		vVertices = Make_Vertices(m_fTurn + (fInterval_Angle * (i - 1)));
 

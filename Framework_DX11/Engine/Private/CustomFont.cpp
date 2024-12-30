@@ -50,8 +50,8 @@ HRESULT CCustomFont::Render(const _tchar* pText, _fvector vPosition, _fvector vC
 	else
 		m_pBatch->Begin();
 
-	round(vPosition.m128_f32[0]);
-	round(vPosition.m128_f32[1]);
+	_float fRound = round(vPosition.m128_f32[0]);
+	fRound = round(vPosition.m128_f32[1]);
 
 	m_pFont->DrawString(m_pBatch, pText, vPosition, vColor, fRadian, vPivot, fScale);
 
@@ -70,8 +70,8 @@ HRESULT CCustomFont::Render_Center(const _tchar* pText, _fvector vPosition, _fve
 	else
 		m_pBatch->Begin();
 
-	round(vAdjustedPosition.m128_f32[0]);
-	round(vAdjustedPosition.m128_f32[1]);
+	_float fRound = round(vAdjustedPosition.m128_f32[0]);
+	fRound = round(vAdjustedPosition.m128_f32[1]);
 
 	m_pFont->DrawString(m_pBatch, pText, vAdjustedPosition, vColor, fRadian, vPivot, fScale);
 
@@ -92,8 +92,8 @@ HRESULT CCustomFont::Render_Right(const _tchar* pText, _fvector vPosition, _fvec
 	else
 		m_pBatch->Begin();
 
-	round(vAdjustedPosition.m128_f32[0]);
-	round(vAdjustedPosition.m128_f32[1]);
+	_float fRound = round(vAdjustedPosition.m128_f32[0]);
+	fRound = round(vAdjustedPosition.m128_f32[1]);
 
 	m_pFont->DrawString(m_pBatch, pText, vAdjustedPosition, vColor, fRadian, vPivot, fScale);
 

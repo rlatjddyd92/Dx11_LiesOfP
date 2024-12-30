@@ -226,7 +226,7 @@ void CVIBuffer_Dissolve_Instance::For_Debug()
 		if (SUCCEEDED(hr)) {
 			// 데이터 확인
 			DISSOLVE_PARTICLE* pData = static_cast<DISSOLVE_PARTICLE*>(mappedResource.pData);
-			for (int i = 0; i < m_iNumInstance; ++i)
+			for (_uint i = 0; i < m_iNumInstance; ++i)
 			{
 				_Vec4 vCheck = pData[i].Particle.vTranslation;
 				//_float fWeightW = 1.f - (pData[i].vBlendWeights.x + pData[i].vBlendWeights.y + pData[i].vBlendWeights.z);
