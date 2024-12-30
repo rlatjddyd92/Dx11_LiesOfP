@@ -42,6 +42,7 @@ private:
 
     _bool               m_bSwingSound = { false };
     _bool               m_bChargeSound = { false };
+    _bool               m_bRushSound = { false };
 
     _uint               m_iRouteTrack = {};
 

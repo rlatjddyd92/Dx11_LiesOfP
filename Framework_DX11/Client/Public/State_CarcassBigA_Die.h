@@ -12,9 +12,7 @@ class CState_CarcassBigA_Die :
 {
 private:
     typedef enum {
-        AN_DIE_START_F = 14, AN_DIE_START_B = 13,
-        AN_DIE_LOOP_F = 12, AN_DIE_LOOP_B = 11,
-        AN_DIE_END_F = 10, AN_DIE_END_B = 9
+        AN_DIE_F = 19, AN_DIE_B = 18
     }ANIMNUM;
 private:
     typedef enum {

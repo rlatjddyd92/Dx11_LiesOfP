@@ -39,45 +39,18 @@ HRESULT CState_CarcassBigA_Die::Start_State(void* pArg)
     {
         m_iDirCnt = DIR::DIR_BEHIND;
     }
-    m_pMonster->Change_Animation(AN_DIE_START_F - m_iDirCnt, false, 0.1f);
+    m_pMonster->Change_Animation(AN_DIE_F - m_iDirCnt, false, 0.1f);
 
     return S_OK;
 }
 
 void CState_CarcassBigA_Die::Update(_float fTimeDelta)
 {
-    switch (m_iRouteTrack)
+    if (End_Check())
     {
-    case 0:
-        if (End_Check())
-        {
-            //몬스터 사망
-            ++m_iRouteTrack;
-            m_pMonster->Change_Animation(AN_DIE_LOOP_F - m_iDirCnt, false, 0.1f);
-        }
-        break;
+        //몬스터 사망
+        //m_pMonster->Change_State(CCarcassBigA::IDLE);   //임시
 
-    case 1:
-        if (End_Check())
-        {
-            //몬스터 사망
-            ++m_iRouteTrack;
-            m_pMonster->Change_Animation(AN_DIE_END_F - m_iDirCnt, false, 0.1f);
-
-        }
-        break;
-
-    case 2:
-        if (End_Check())
-        {
-            //몬스터 사망
-            //m_pMonster->Change_State(CCarcassBigA::IDLE);   //임시
-
-        }
-        break;
-
-    default:
-        break;
     }
 
 }
@@ -88,39 +61,7 @@ void CState_CarcassBigA_Die::End_State()
 
 _bool CState_CarcassBigA_Die::End_Check()
 {
-    _uint iCurAnim = m_pMonster->Get_CurrentAnimIndex();
-    _bool bEndCheck{ false };
-    if ((AN_DIE_START_F) == iCurAnim)
-    {
-        bEndCheck = m_pMonster->Get_EndAnim(AN_DIE_START_F);
-    }
-    else if ((AN_DIE_START_B) == iCurAnim)
-    {
-        bEndCheck = m_pMonster->Get_EndAnim(AN_DIE_START_B);
-    }
-    else if ((AN_DIE_LOOP_F) == iCurAnim)
-    {
-        bEndCheck = m_pMonster->Get_EndAnim(AN_DIE_LOOP_F);
-    }
-    else if ((AN_DIE_LOOP_B) == iCurAnim)
-    {
-        bEndCheck = m_pMonster->Get_EndAnim(AN_DIE_LOOP_B);
-    }
-    else if ((AN_DIE_END_F) == iCurAnim)
-    {
-        bEndCheck = m_pMonster->Get_EndAnim(AN_DIE_END_F);
-    }
-    else if ((AN_DIE_END_B) == iCurAnim)
-    {
-        bEndCheck = m_pMonster->Get_EndAnim(AN_DIE_END_B);
-    }
-    else
-    {
-
-    }
-    //애니메이션 번호와 일치하지 않는?다
-
-    return bEndCheck;
+    return  m_pMonster->Get_EndAnim(AN_DIE_F - m_iDirCnt);;
 }
 
 CState_CarcassBigA_Die* CState_CarcassBigA_Die::Create(CFsm* pFsm, CMonster* pMonster, _uint iStateNum, void* pArg)
