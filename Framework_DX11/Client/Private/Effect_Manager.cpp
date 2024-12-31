@@ -6,7 +6,6 @@
 
 #include "Effect_Container.h"
 
-#include "Dissolve_Test.h"
 
 #define CREATE_CONTAINER(pArg) static_cast<CEffect_Container*>(m_pGameInstance->Clone_GameObject(TEXT("Prototype_GameObject_Effect_Container"), pArg));
 
@@ -373,9 +372,19 @@ HRESULT CEffect_Manager::Load_Shaders()
         CShader_Compute::Create(m_pDevice, m_pContext, TEXT("../Bin/ShaderFiles/Shader_Trail_MultiPoint_Compute.hlsl"), "CS_RESET_MAIN"))))
         return E_FAIL;
 
-    /* For. Prototype_Component_Shader_Compute_Dissolve */
-    if (FAILED(m_pGameInstance->Add_Prototype(LEVEL_STATIC, TEXT("Prototype_Component_Shader_Compute_Dissolve"),
+    /* For. Prototype_Component_Shader_Compute_Dissolve_Move */
+    if (FAILED(m_pGameInstance->Add_Prototype(LEVEL_STATIC, TEXT("Prototype_Component_Shader_Compute_Dissolve_Move"),
         CShader_Compute::Create(m_pDevice, m_pContext, TEXT("../Bin/ShaderFiles/Shader_DissolveCompute.hlsl"), "CS_MOVE_MAIN"))))
+        return E_FAIL;
+
+    /* For. Prototype_Component_Shader_Compute_Dissolve_Move_NonTexture */
+    if (FAILED(m_pGameInstance->Add_Prototype(LEVEL_STATIC, TEXT("Prototype_Component_Shader_Compute_Dissolve_Move_NonTexture"),
+        CShader_Compute::Create(m_pDevice, m_pContext, TEXT("../Bin/ShaderFiles/Shader_DissolveCompute.hlsl"), "CS_MOVE_NONTEXTURE_MAIN"))))
+        return E_FAIL;
+
+    /* For. Prototype_Component_Shader_Compute_Dissolve_Reset */
+    if (FAILED(m_pGameInstance->Add_Prototype(LEVEL_STATIC, TEXT("Prototype_Component_Shader_Compute_Dissolve_Reset"),
+        CShader_Compute::Create(m_pDevice, m_pContext, TEXT("../Bin/ShaderFiles/Shader_DissolveCompute.hlsl"), "CS_RESET_MAIN"))))
         return E_FAIL;
 
     return S_OK;
@@ -418,10 +427,6 @@ HRESULT CEffect_Manager::Load_Objects()
         CTrail_Effect_MP::Create(m_pDevice, m_pContext))))
         return E_FAIL;
 
-    /* For. Prototype_GameObject_Effect_Dissolve_Particle */
-    if (FAILED(m_pGameInstance->Add_Prototype(TEXT("Prototype_GameObject_Effect_Dissolve_Particle"),
-        CDissolve_Test::Create(m_pDevice, m_pContext))))
-        return E_FAIL;
 
     return S_OK;
 }

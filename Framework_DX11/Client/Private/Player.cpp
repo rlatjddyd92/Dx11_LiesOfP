@@ -109,7 +109,7 @@
 #include "GameInterface_Controller.h"
 
 // 고준호 추가
-#include "Dissolve_Test.h"
+#include "Dissolve_Player_Dead.h"
 
 CPlayer::CPlayer(ID3D11Device * pDevice, ID3D11DeviceContext * pContext)
 	: CPawn{ pDevice, pContext }
@@ -154,7 +154,7 @@ HRESULT CPlayer::Initialize(void * pArg)
 	//m_pNavigationCom->Move_to_Cell(m_pRigidBodyCom, 427); //짧은사다리
 	//m_pNavigationCom->Move_to_Cell(m_pRigidBodyCom, 341); //아래엘베
 	//m_pNavigationCom->Move_to_Cell(m_pRigidBodyCom, 440); //상자랑 장애물
-	m_pNavigationCom->Move_to_Cell(m_pRigidBodyCom, 1066); // 순간이동 1066
+	//m_pNavigationCom->Move_to_Cell(m_pRigidBodyCom, 1066); // 순간이동 1066
 	//m_pNavigationCom->Move_to_Cell(m_pRigidBodyCom, 790); // 순간이동 790
 	//m_pNavigationCom->Move_to_Cell(m_pRigidBodyCom, 801); // 소피아 방
 	//m_pNavigationCom->Move_to_Cell(m_pRigidBodyCom, 1178); // 소피아 방 내부
@@ -215,6 +215,8 @@ void CPlayer::Priority_Update(_float fTimeDelta)
 		if(!pEffect->Get_Dead())
 			pEffect->Priority_Update(fTimeDelta);
 	}
+
+	m_pDissolveEffect->Priority_Update(fTimeDelta);
 }
 
 void CPlayer::Update(_float fTimeDelta)
@@ -270,7 +272,8 @@ void CPlayer::Update(_float fTimeDelta)
 	}
 	if (KEY_HOLD(KEY::N))
 	{
-		m_fDissloveRatio += fTimeDelta * 0.1f;
+		//m_fDissloveRatio += fTimeDelta * 0.5f;
+		m_pDissolveEffect->Reset();
 	};
 
 	//마누스 컷신 실행부분
@@ -282,9 +285,11 @@ void CPlayer::Update(_float fTimeDelta)
 
 	if (KEY_TAP(KEY::Q))
 	{
-		//dynamic_cast<CCutScene*>(m_pGameInstance->Find_Object(LEVEL_GAMEPLAY, TEXT("Layer_CutScene"), BOSS1_MEET1))->Start_Play();
-		Change_State(FLAME_FATAL);
+		dynamic_cast<CCutScene*>(m_pGameInstance->Find_Object(LEVEL_GAMEPLAY, TEXT("Layer_CutScene"), BOSS2_PHASE2))->Start_Play();
+		//Change_State(FLAME_FATAL);
 	}
+
+	m_pDissolveEffect->Update(fTimeDelta);
 }
 
 void CPlayer::Late_Update(_float fTimeDelta)
@@ -302,6 +307,8 @@ void CPlayer::Late_Update(_float fTimeDelta)
 		if (!pEffect->Get_Dead())
 			pEffect->Late_Update(fTimeDelta);
 	}
+
+	m_pDissolveEffect->Late_Update(fTimeDelta);
 
 	m_pGameInstance->Add_RenderObject(CRenderer::RG_NONBLEND, this);
 	m_pGameInstance->Add_RenderObject(CRenderer::RG_SHADOWOBJ, this);
@@ -1176,6 +1183,11 @@ void CPlayer::Decrease_Arm(_float fAmount)
 	m_vGuage_Arm.x = max(0.f, m_vGuage_Arm.x - fAmount);
 }
 
+void CPlayer::On_DissolveEffect(_bool bOn)
+{
+	m_pDissolveEffect->Set_On(bOn);
+}
+
 CStargazer* CPlayer::Find_Stargazer(_int iCellNumber)
 {
 	CLayer* pStargzzerLayer = m_pGameInstance->Find_Layer(LEVEL_GAMEPLAY, TEXT("Layer_Stargazer"));
@@ -1806,7 +1818,7 @@ HRESULT CPlayer::Ready_Effect()
 	m_Effects[EFFECT_CUTSCENE_ARM_OPENDOOR] = m_pEffect_Manager->Clone_Effect(TEXT("Player_Arm_Electric"), pParetnMatrix,
 		pSocketBoneMatrix, _Vec3(0.f, 0.f, 0.f), _Vec3(0.f, 0.f, 0.f), _Vec3(1.f, 1.f, 1.f));
 
-	CDissolve_Test::DISSOLVE_OBJECT_DESC TestDesc = {};
+	CDissolve_Player_Dead::DISSOLVE_OBJECT_DESC TestDesc = {};
 	TestDesc.fRotationPerSec = 90.f;
 	TestDesc.fSpeedPerSec = 1.f;
 	TestDesc.iLevelIndex = LEVEL_GAMEPLAY;
@@ -1816,8 +1828,7 @@ HRESULT CPlayer::Ready_Effect()
 	TestDesc.pThreshold = &m_fDissloveRatio;
 	TestDesc.vTextureSize = _float2(2048.f, 2048.f);
 
-	if (FAILED(m_pGameInstance->Add_CloneObject_ToLayer(LEVEL_GAMEPLAY, TEXT("Layer_Test"), TEXT("Prototype_GameObject_Effect_Dissolve_Particle"), &TestDesc)))
-		return E_FAIL;
+	m_pDissolveEffect = static_cast<CDissolve_Player_Dead*>(m_pGameInstance->Clone_GameObject(TEXT("Prototype_GameObject_Effect_Dissolve_Player_Dead"), &TestDesc));
 
 	return S_OK;
 }
@@ -1879,5 +1890,8 @@ void CPlayer::Free()
 	// 스탯 구조체 제거 
 	Safe_Delete(m_tPlayer_Stat);
 	Safe_Delete(m_tPlayer_Stat_Adjust);
+
+	// 고준호
+	Safe_Release(m_pDissolveEffect);
 }
 

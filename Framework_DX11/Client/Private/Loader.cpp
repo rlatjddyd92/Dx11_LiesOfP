@@ -106,6 +106,12 @@
 #include "GameInstance.h"
 #include "GameInterface_Controller.h"
 
+#pragma region DISSOLVE_EFFECT
+#include "Dissolve_Player_Dead.h"
+#include "Dissolve_SimonManus_Dead.h"
+#include "SimonManus_2P_Aura.h"
+#pragma endregion
+
 CLoader::CLoader(ID3D11Device * pDevice, ID3D11DeviceContext * pContext)
 	: m_pDevice { pDevice }
 	, m_pContext { pContext }
@@ -891,21 +897,10 @@ HRESULT CLoader::Ready_Resources_For_Player()
 {
 	_matrix		PreTransformMatrix = XMMatrixIdentity();
 
-	CModel::DISSOLVE_PARTICLE_DESC DissolveParticleDesc = {};
-	DissolveParticleDesc.iNumInstance = 1000;
-	DissolveParticleDesc.vCenter = { 0.f, 0.f, 0.f };
-	DissolveParticleDesc.vLifeTime = { 3.f, 6.f };
-	DissolveParticleDesc.vMinColor = { 0.f, 1.f, 1.f, 1.f };
-	DissolveParticleDesc.vMaxColor = { 1.f, 1.f, 1.f, 1.f };
-	DissolveParticleDesc.vSize = { 0.005f, 0.01f };
-	DissolveParticleDesc.vSpeed = { 1.f, 2.f };
-	DissolveParticleDesc.iLevelID = LEVEL_GAMEPLAY;
-	DissolveParticleDesc.strBufferTag = TEXT("Prototype_Component_DissolveContainer_Player");
-
 	/* Prototype_Component_Model_Player */
 	PreTransformMatrix = XMMatrixScaling(0.01f, 0.01f, 0.01f) * XMMatrixRotationY(XMConvertToRadians(270.0f));
 	if (FAILED(m_pGameInstance->Add_Prototype(LEVEL_GAMEPLAY, TEXT("Prototype_Component_Model_Player"),
-		CModel::Create(m_pDevice, m_pContext, CModel::TYPE_ANIM, "../Bin/ModelData/Anim/CreatedBinFiles/Player.dat", PreTransformMatrix, true, nullptr, DissolveParticleDesc))))
+		CModel::Create(m_pDevice, m_pContext, CModel::TYPE_ANIM, "../Bin/ModelData/Anim/CreatedBinFiles/Player.dat", PreTransformMatrix, true))))
 		return E_FAIL;
 
 	/* Prototype_Component_Model_Rapier */
@@ -948,6 +943,21 @@ HRESULT CLoader::Ready_Resources_For_Player()
 	PreTransformMatrix = XMMatrixScaling(0.01f, 0.01f, 0.01f) * XMMatrixRotationX(XMConvertToRadians(270.f)) * XMMatrixRotationZ(XMConvertToRadians(-180.f));
 	if (FAILED(m_pGameInstance->Add_Prototype(LEVEL_GAMEPLAY, TEXT("Prototype_Component_Model_Scissor_Right_Bld"),
 		CModel::Create(m_pDevice, m_pContext, CModel::TYPE_ANIM, "../Bin/ModelData/NonAnim/Weapon/Scissor_Right_Blade.dat", PreTransformMatrix, false))))
+		return E_FAIL;
+
+	DISSOLVE_INSTANCE_DESC DissolveInstanceDesc = {};
+	DissolveInstanceDesc.iNumInstance = 1000;
+	DissolveInstanceDesc.vCenter = { 0.f, 0.f, 0.f };
+	DissolveInstanceDesc.vLifeTime = { 3.f, 6.f };
+	DissolveInstanceDesc.vMinColor = { 0.1f, 0.3f, 0.7f, 1.f };
+	DissolveInstanceDesc.vMaxColor = { 0.1f, 0.3f, 0.7f, 1.f };
+	DissolveInstanceDesc.vSize = { 0.005f, 0.01f };
+	DissolveInstanceDesc.vSpeed = { 0.25f, 0.5f };
+	DissolveInstanceDesc.iModelLevelIndex = LEVEL_GAMEPLAY;
+	DissolveInstanceDesc.strModelTag = TEXT("Prototype_Component_Model_Player");
+
+	if (FAILED(m_pGameInstance->Add_Prototype(LEVEL_GAMEPLAY, TEXT("Prototype_Component_VIBuffer_Dissolve_Player_Dead"),
+		CVIBuffer_Dissolve_Instance::Create(m_pDevice, m_pContext, DissolveInstanceDesc))))
 		return E_FAIL;
 
 	return S_OK;
@@ -1015,6 +1025,37 @@ HRESULT CLoader::Ready_Resources_For_Monster()
 	PreTransformMatrix = XMMatrixScaling(0.01f, 0.01f, 0.01f) * XMMatrixRotationY(XMConvertToRadians(270.0f));
 	if (FAILED(m_pGameInstance->Add_Prototype(LEVEL_GAMEPLAY, TEXT("Prototype_Component_Model_SimonManusP2"),
 		CModel::Create(m_pDevice, m_pContext, CModel::TYPE_ANIM, "../Bin/ModelData/Anim/CreatedBinFiles/SimonManus_P2.dat", PreTransformMatrix, true))))
+		return E_FAIL;
+
+	DISSOLVE_INSTANCE_DESC DissolveInstanceDesc = {};
+	DissolveInstanceDesc.iNumInstance = 150;
+	DissolveInstanceDesc.vCenter = { 0.f, 0.f, 0.f };
+	DissolveInstanceDesc.vLifeTime = { 0.5f, 1.f };
+	DissolveInstanceDesc.vMinColor = { 2.f, 3.f, 3.f, 0.f };
+	DissolveInstanceDesc.vMaxColor = { 2.f, 3.f, 3.f, 1.f };
+	DissolveInstanceDesc.vSize = { 0.35f, 0.7f };
+	DissolveInstanceDesc.vSpeed = { 0.5f, 1.f };
+	DissolveInstanceDesc.iModelLevelIndex = LEVEL_GAMEPLAY;
+	DissolveInstanceDesc.strModelTag = TEXT("Prototype_Component_Model_SimonManusP2");
+	DissolveInstanceDesc.iMeshIndex = 3;
+
+	if (FAILED(m_pGameInstance->Add_Prototype(LEVEL_GAMEPLAY, TEXT("Prototype_Component_VIBuffer_Dissolve_SimonManusP2_Aura"),
+		CVIBuffer_Dissolve_Instance::Create(m_pDevice, m_pContext, DissolveInstanceDesc))))
+		return E_FAIL;
+
+	DissolveInstanceDesc = {};
+	DissolveInstanceDesc.iNumInstance = 1000;
+	DissolveInstanceDesc.vCenter = { 0.f, 0.f, 0.f };
+	DissolveInstanceDesc.vLifeTime = { 3.f, 6.f };
+	DissolveInstanceDesc.vMinColor = { 0.f, 1.f, 1.f, 1.f };
+	DissolveInstanceDesc.vMaxColor = { 1.f, 1.f, 1.f, 1.f };
+	DissolveInstanceDesc.vSize = { 0.005f, 0.01f };
+	DissolveInstanceDesc.vSpeed = { 0.25f, 0.5f };
+	DissolveInstanceDesc.iModelLevelIndex = LEVEL_GAMEPLAY;
+	DissolveInstanceDesc.strModelTag = TEXT("Prototype_Component_Model_SimonManusP2");
+
+	if (FAILED(m_pGameInstance->Add_Prototype(LEVEL_GAMEPLAY, TEXT("Prototype_Component_VIBuffer_Dissolve_SimonManus_Dead"),
+		CVIBuffer_Dissolve_Instance::Create(m_pDevice, m_pContext, DissolveInstanceDesc))))
 		return E_FAIL;
 
 	//Prototype_Component_Model_Weapon_SimonManus_Hammer
@@ -1090,11 +1131,28 @@ HRESULT CLoader::Ready_Resources_For_Monster()
 		CModel::Create(m_pDevice, m_pContext, CModel::TYPE_ANIM, "../Bin/ModelData/Anim/CreatedBinFiles/SimonManus_CutScene_P1.dat", PreTransformMatrix, true))))
 		return E_FAIL;*/
 
-		//Prototype_Component_Model_SimonManus_CutScene_P2
+	//Prototype_Component_Model_SimonManus_CutScene_P2
 	PreTransformMatrix = XMMatrixScaling(0.01f, 0.01f, 0.01f);
 	if (FAILED(m_pGameInstance->Add_Prototype(LEVEL_GAMEPLAY, TEXT("Prototype_Component_Model_SimonManus_CutScene_P2"),
 		CModel::Create(m_pDevice, m_pContext, CModel::TYPE_ANIM, "../Bin/ModelData/Anim/Monster/Boss/SimonManus/SimonManus_CutScene_P2.dat", PreTransformMatrix, false))))
 		return E_FAIL;
+
+	DissolveInstanceDesc = {};
+	DissolveInstanceDesc.iNumInstance = 150;
+	DissolveInstanceDesc.vCenter = { 0.f, 0.f, 0.f };
+	DissolveInstanceDesc.vLifeTime = { 0.5f, 1.f };
+	DissolveInstanceDesc.vMinColor = { 2.f, 3.f, 3.f, 0.f };
+	DissolveInstanceDesc.vMaxColor = { 2.f, 3.f, 3.f, 1.f };
+	DissolveInstanceDesc.vSize = { 0.35f, 0.7f };
+	DissolveInstanceDesc.vSpeed = { 0.5f, 1.f };
+	DissolveInstanceDesc.iModelLevelIndex = LEVEL_GAMEPLAY;
+	DissolveInstanceDesc.strModelTag = TEXT("Prototype_Component_Model_SimonManus_CutScene_P2");
+	DissolveInstanceDesc.iMeshIndex = 4;
+
+	if (FAILED(m_pGameInstance->Add_Prototype(LEVEL_GAMEPLAY, TEXT("Prototype_Component_VIBuffer_Dissolve_SimonManusP2_CutScene_Aura"),
+		CVIBuffer_Dissolve_Instance::Create(m_pDevice, m_pContext, DissolveInstanceDesc))))
+		return E_FAIL;
+
 
 	//Prototype_Component_Model_SimonManus_CutScene_EnvHand
 	PreTransformMatrix = XMMatrixScaling(0.01f, 0.01f, 0.01f);
@@ -1578,6 +1636,23 @@ HRESULT CLoader::Ready_Prototype()
 	if (FAILED(m_pGameInstance->Add_Prototype(TEXT("Prototype_GameObject_Decal"),
 		CDecal::Create(m_pDevice, m_pContext))))
 		return E_FAIL;
+
+#pragma region DISSOLVE_EFFECT
+	/* For. Prototype_GameObject_Effect_Dissolve_Player_Dead */
+	if (FAILED(m_pGameInstance->Add_Prototype(TEXT("Prototype_GameObject_Effect_Dissolve_Player_Dead"),
+		CDissolve_Player_Dead::Create(m_pDevice, m_pContext))))
+		return E_FAIL;
+
+	/* For. Prototype_GameObject_Effect_Dissolve_SimonManus_Dead */
+	if (FAILED(m_pGameInstance->Add_Prototype(TEXT("Prototype_GameObject_Effect_Dissolve_SimonManus_Dead"),
+		CDissolve_SimonManus_Dead::Create(m_pDevice, m_pContext))))
+		return E_FAIL;
+
+	/* For. Prototype_GameObject_Effect_Dissolve_SimonManus_2P_Aura */
+	if (FAILED(m_pGameInstance->Add_Prototype(TEXT("Prototype_GameObject_Effect_Dissolve_SimonManus_2P_Aura"),
+		CSimonManus_2P_Aura::Create(m_pDevice, m_pContext))))
+		return E_FAIL;
+#pragma endregion
 
 	return S_OK;
 }

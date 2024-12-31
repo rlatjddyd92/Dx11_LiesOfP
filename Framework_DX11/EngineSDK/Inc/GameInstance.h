@@ -89,6 +89,7 @@ public:
 	class CComponent* Clone_Component(_uint iLevelIndex, const _wstring& strPrototypeTag, void* pArg = nullptr );
 	HRESULT Add_ModelPrototype(_uint iLevelIndex, const _char* strPrototypeTag, class CComponent* pPrototype);
 	map<const _char*, class CComponent*> Get_ModelPrototypes(_uint iLevelIndex);
+	class CComponent* Find_ComponentPrototype(_uint iLevelIndex, const _wstring& strPrototypeTag);
 #pragma endregion
 
 #pragma region TIMER_MANAGER

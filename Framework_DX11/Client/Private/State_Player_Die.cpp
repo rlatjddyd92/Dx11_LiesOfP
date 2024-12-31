@@ -92,7 +92,8 @@ void CState_Player_Die::Update(_float fTimeDelta)
         m_fDieTime += fTimeDelta;
         if (!m_isAppearStartEffect)
         {
-            CEffect_Manager::Get_Instance()->Add_Effect_ToLayer(LEVEL_GAMEPLAY, TEXT("Player_Teleport_Depart"), (_Vec3)m_pPlayer->Get_Transform()->Get_State(CTransform::STATE_POSITION));
+            //CEffect_Manager::Get_Instance()->Add_Effect_ToLayer(LEVEL_GAMEPLAY, TEXT("Player_Teleport_Depart"), (_Vec3)m_pPlayer->Get_Transform()->Get_State(CTransform::STATE_POSITION));
+            m_pPlayer->On_DissolveEffect(true);
             m_isAppearStartEffect = true;
         }
         else if (m_fDieTime > 0.4f && !m_isFadeOut)

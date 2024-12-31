@@ -32,10 +32,8 @@ public:
 	void Culling(CGameInstance* pGameInstance, _Matrix worldMatrix);
 
 public:
-	virtual HRESULT Initialize_Prototype(HANDLE* pFile, const CModel* pModel, _fmatrix PreTransformMatrix, 
-		const CModel::DISSOLVE_PARTICLE_DESC& ParticleDesc, _uint iMeshIndex, vector<DISSOLVE_PARTICLE>& Instances);
-	virtual HRESULT Initialize_Prototype_To_Binary(HANDLE* pFile, const CModel* pModel, _fmatrix PreTransformMatrix, 
-		const CModel::DISSOLVE_PARTICLE_DESC& ParticleDesc, _uint iMeshIndex, vector<DISSOLVE_PARTICLE>& Instances);
+	virtual HRESULT Initialize_Prototype(HANDLE* pFile, const CModel* pModel, _fmatrix PreTransformMatrix);
+	virtual HRESULT Initialize_Prototype_To_Binary(HANDLE* pFile, const CModel* pModel, _fmatrix PreTransformMatrix);
 	virtual HRESULT Initialize(void* pArg) override;
 
 public:
@@ -44,6 +42,9 @@ public:
 	HRESULT		Create_BinaryFile(HANDLE* pFile);
 	_Vec3 Get_MinPos_Vertex() { return m_vMinPos; }
 	_Vec3 Get_MaxPos_Vertex() { return m_vMaxPos; }
+
+	vector<DISSOLVE_PARTICLE>& Create_Particles(const CModel* pModel, const DISSOLVE_INSTANCE_DESC& ParticleDesc, vector<DISSOLVE_PARTICLE>& Instances);
+
 private:
 	_char				m_szName[MAX_PATH] = {};
 	_uint				m_iMaterialIndex = { 0 };
@@ -82,11 +83,9 @@ private:
 	void Calculate_BoneData(_uint iStartIndex, const _Vec4& Point, XMUINT4* pParticleIndices, _float4* pParticleWeights);
 
 public:
-	static CMesh* Create(ID3D11Device* pDevice, ID3D11DeviceContext* pContext, HANDLE* pFile, const CModel* pModel, _fmatrix PreTransformMatrix, 
-		const CModel::DISSOLVE_PARTICLE_DESC& ParticleDesc, _uint iMeshIndex, vector<DISSOLVE_PARTICLE>& Instances);
+	static CMesh* Create(ID3D11Device* pDevice, ID3D11DeviceContext* pContext, HANDLE* pFile, const CModel* pModel, _fmatrix PreTransformMatrix);
 	
-	static CMesh* Create_To_Binary(ID3D11Device* pDevice, ID3D11DeviceContext* pContext, HANDLE* pFile, const CModel* pModel, _fmatrix PreTransformMatrix, 
-		const CModel::DISSOLVE_PARTICLE_DESC& ParticleDesc, _uint iMeshIndex, vector<DISSOLVE_PARTICLE>& Instances);
+	static CMesh* Create_To_Binary(ID3D11Device* pDevice, ID3D11DeviceContext* pContext, HANDLE* pFile, const CModel* pModel, _fmatrix PreTransformMatrix);
 
 	virtual CComponent* Clone(void* pArg);
 	virtual void Free() override;

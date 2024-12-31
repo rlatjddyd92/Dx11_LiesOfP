@@ -249,7 +249,7 @@ void CState_SimonManus_CutScene_Phase2::Control_Effect(_int iFrame)
         {
             for (_uint i = 0; i < 5; ++i)
             {
-                m_pMonster->Active_Effect(CSimonManus::CUTSCENE_P2_ARM_AURA00 +i);
+                static_cast<CSimonManus*>(m_pMonster)->On_Aura(true, true);
             }
 
             m_isAura = true;

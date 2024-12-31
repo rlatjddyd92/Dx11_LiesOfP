@@ -12,7 +12,7 @@ class CModel;
 END
 
 BEGIN(Client)
-class CDissolve_Test final : public CGameObject
+class CDissolve_Player_Dead final : public CGameObject
 {
 public:
 	typedef struct : public CGameObject::GAMEOBJECT_DESC
@@ -25,9 +25,9 @@ public:
 	}DISSOLVE_OBJECT_DESC;
 
 private:
-	CDissolve_Test(ID3D11Device* pDevice, ID3D11DeviceContext* pContext);
-	CDissolve_Test(const CDissolve_Test& Prototype);
-	virtual ~CDissolve_Test() = default;
+	CDissolve_Player_Dead(ID3D11Device* pDevice, ID3D11DeviceContext* pContext);
+	CDissolve_Player_Dead(const CDissolve_Player_Dead& Prototype);
+	virtual ~CDissolve_Player_Dead() = default;
 
 public:
 	virtual HRESULT Initialize_Prototype();
@@ -37,6 +37,13 @@ public:
 	virtual void Late_Update(_float fTimeDelta);
 	virtual HRESULT Render();
 
+public:
+	void Reset();
+
+	void Set_On(_bool bOn) {
+		m_bOn = bOn;
+		Reset();
+	}
 
 private:
 	class CShader_NonVTX*				m_pShaderCom = { nullptr };
@@ -46,6 +53,7 @@ private:
 	class CTexture*						m_pTextureCom = nullptr;
 	// µðÁ¹ºê ÄÄÇ»Æ® ¼ÎÀÌ´õ
 	class CShader_Compute*				m_pActionCS = { nullptr };
+	class CShader_Compute*				m_pResetCS = { nullptr };
 
 	// ÇÃ·¹ÀÌ¾î ¸ðµ¨
 	class CModel*						m_pModelCom = { nullptr };
@@ -68,11 +76,12 @@ private:
 	_float2								m_vTextureSize = {};
 
 	_bool								m_bOn = { false };
+
 private:
 	HRESULT Ready_Componet();
 
 public:
-	static CDissolve_Test* Create(ID3D11Device* pDevice, ID3D11DeviceContext* pContext);
+	static CDissolve_Player_Dead* Create(ID3D11Device* pDevice, ID3D11DeviceContext* pContext);
 	virtual CGameObject* Clone(void* pArg);
 	virtual void Free() override;
 };

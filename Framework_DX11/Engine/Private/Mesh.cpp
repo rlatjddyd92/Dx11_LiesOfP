@@ -17,8 +17,7 @@ CMesh::CMesh(const CMesh & Prototype)
 	Safe_AddRef(m_pOctree);
 }
 
-HRESULT CMesh::Initialize_Prototype(HANDLE* pFile, const CModel* pModel, _fmatrix PreTransformMatrix, 
-	const CModel::DISSOLVE_PARTICLE_DESC& ParticleDesc, _uint iMeshIndex, vector<DISSOLVE_PARTICLE>& Instances)
+HRESULT CMesh::Initialize_Prototype(HANDLE* pFile, const CModel* pModel, _fmatrix PreTransformMatrix)
 {
 	_ulong dwByte = 0;
 
@@ -65,84 +64,6 @@ HRESULT CMesh::Initialize_Prototype(HANDLE* pFile, const CModel* pModel, _fmatri
 		ReadFile(*pFile, &m_pIndices[iNumIndices++], sizeof(_uint), &dwByte, nullptr);
 		ReadFile(*pFile, &m_pIndices[iNumIndices++], sizeof(_uint), &dwByte, nullptr);
 		ReadFile(*pFile, &m_pIndices[iNumIndices++], sizeof(_uint), &dwByte, nullptr);
-
-		if (ParticleDesc.iNumInstance <= 0)
-			continue;
-
-		_Vec3 vPoint[3] = {};
-		_Vec2 vUV[3] = {};
-
-		if (CModel::TYPE_NONANIM == pModel->Get_ModelType())
-		{
-			vPoint[0] = m_pVertices[m_pIndices[iStartNum]].vPosition;
-			vPoint[1] = m_pVertices[m_pIndices[iStartNum + 1]].vPosition;
-			vPoint[2] = m_pVertices[m_pIndices[iStartNum + 2]].vPosition;
-
-			vUV[0] = m_pVertices[m_pIndices[iStartNum]].vTexcoord;
-			vUV[1] = m_pVertices[m_pIndices[iStartNum + 1]].vTexcoord;
-			vUV[2] = m_pVertices[m_pIndices[iStartNum + 2]].vTexcoord;
-		}
-		else
-		{
-			vPoint[0] = m_pAnimVertices[m_pIndices[iStartNum]].vPosition;
-			vPoint[1] = m_pAnimVertices[m_pIndices[iStartNum + 1]].vPosition;
-			vPoint[2] = m_pAnimVertices[m_pIndices[iStartNum + 2]].vPosition;
-
-			vUV[0] = m_pAnimVertices[m_pIndices[iStartNum]].vTexcoord;
-			vUV[1] = m_pAnimVertices[m_pIndices[iStartNum + 1]].vTexcoord;
-			vUV[2] = m_pAnimVertices[m_pIndices[iStartNum + 2]].vTexcoord;
-		}
-
-		// 넓이 누적
-		fSize += Get_TriangleArea(vPoint[0], vPoint[1], vPoint[2]);
-
-		_uint iAreaCount = _uint(fSize * ParticleDesc.iNumInstance);
-
-		if (iAreaCount > 0)
-			fSize = fSize - ((_float)iAreaCount / ParticleDesc.iNumInstance);
-
-		for (size_t j = 0; j < (size_t)iAreaCount; ++j)
-		{
-			DISSOLVE_PARTICLE pParticle = {};
-
-			_Vec3 vResultPos = Get_RandomFacePos(vPoint[0], vPoint[1], vPoint[2]);
-			pParticle.Particle.vTranslation = _Vec4(vResultPos.x, vResultPos.y, vResultPos.z, 1.f);
-
-			pParticle.Particle.vPosition = _float3(0.f, 0.f, 0.f);
-
-			_float fScale = m_pGameInstance->Get_Random(ParticleDesc.vSize.x, ParticleDesc.vSize.y);
-			pParticle.Particle.vPSize = _float2(fScale, fScale);
-
-			pParticle.Particle.vRight = _float4(1.f, 0.f, 0.f, 0.f);
-			pParticle.Particle.vUp = _float4(0.f, 1.f, 0.f, 0.f);
-			pParticle.Particle.vLook = _float4(0.f, 0.f, 1.f, 0.f);
-
-			pParticle.Particle.vLifeTime = _float2(m_pGameInstance->Get_Random(ParticleDesc.vLifeTime.x, ParticleDesc.vLifeTime.y), 0.0f);
-			pParticle.Particle.vColor = _float4(m_pGameInstance->Get_Random(ParticleDesc.vMinColor.x, ParticleDesc.vMaxColor.x),
-				m_pGameInstance->Get_Random(ParticleDesc.vMinColor.y, ParticleDesc.vMaxColor.y),
-				m_pGameInstance->Get_Random(ParticleDesc.vMinColor.z, ParticleDesc.vMaxColor.z),
-				m_pGameInstance->Get_Random(ParticleDesc.vMinColor.w, ParticleDesc.vMaxColor.w));
-
-			pParticle.Particle.fSpeed = m_pGameInstance->Get_Random(ParticleDesc.vSpeed.x, ParticleDesc.vSpeed.y);
-
-			pParticle.Particle.vCurrenrRandomDir = _float4(m_pGameInstance->Get_Random(-1.f, 1.f), m_pGameInstance->Get_Random(-1.f, 1.f), m_pGameInstance->Get_Random(-1.f, 1.f), 0.f);
-			pParticle.Particle.vNextRandomDir = _float4(m_pGameInstance->Get_Random(-1.f, 1.f), m_pGameInstance->Get_Random(-1.f, 1.f), m_pGameInstance->Get_Random(-1.f, 1.f), 0.f);
-
-			pParticle.vTexcoord = Get_CalculateUV(vPoint[0], vPoint[1], vPoint[2], vUV[0], vUV[1], vUV[2], vResultPos);
-			pParticle.isActive = 0;
-
-			if (CModel::TYPE_ANIM == pModel->Get_ModelType())
-			{
-				Calculate_BoneData(iStartNum, pParticle.Particle.vTranslation, &pParticle.vBlendIndices, &pParticle.vBlendWeights);
-			}
-			else
-			{
-				pParticle.vBlendIndices = {};
-				pParticle.vBlendWeights = {};
-			}
-
-			Instances.emplace_back(pParticle);
-		}
 	}
 
 	// 파티클 초기화 -완-
@@ -176,8 +97,7 @@ HRESULT CMesh::Initialize_Prototype(HANDLE* pFile, const CModel* pModel, _fmatri
 	return S_OK;
 }
 
-HRESULT CMesh::Initialize_Prototype_To_Binary(HANDLE* pFile, const CModel* pModel, _fmatrix PreTransformMatrix, 
-	const CModel::DISSOLVE_PARTICLE_DESC& ParticleDesc, _uint iMeshIndex, vector<DISSOLVE_PARTICLE>& Instances)
+HRESULT CMesh::Initialize_Prototype_To_Binary(HANDLE* pFile, const CModel* pModel, _fmatrix PreTransformMatrix)
 {
 	_ulong dwByte = 0;
 
@@ -218,95 +138,6 @@ HRESULT CMesh::Initialize_Prototype_To_Binary(HANDLE* pFile, const CModel* pMode
 	for (_uint i = 0; i < m_iNumIndices; ++i)
 	{
 		ReadFile(*pFile, &m_pIndices[i], sizeof(_uint), &dwByte, nullptr);
-
-		if (ParticleDesc.iNumInstance <= 0)
-			continue;
-
-		++iCount;
-		_Vec3 vPoint[3] = {};
-		_Vec2 vUV[3] = {};
-
-		if(3 == iCount)
-		{
-			_uint iStartNum = i - 2;
-
-			if (CModel::TYPE_NONANIM == pModel->Get_ModelType())
-			{
-				vPoint[0] = m_pVertices[m_pIndices[iStartNum]].vPosition;
-				vPoint[1] = m_pVertices[m_pIndices[iStartNum + 1]].vPosition;
-				vPoint[2] = m_pVertices[m_pIndices[iStartNum + 2]].vPosition;
-
-				vUV[0] = m_pVertices[m_pIndices[iStartNum]].vTexcoord;
-				vUV[1] = m_pVertices[m_pIndices[iStartNum + 1]].vTexcoord;
-				vUV[2] = m_pVertices[m_pIndices[iStartNum + 2]].vTexcoord;
-			}
-			else
-			{
-				vPoint[0] = m_pAnimVertices[m_pIndices[iStartNum]].vPosition;
-				vPoint[1] = m_pAnimVertices[m_pIndices[iStartNum + 1]].vPosition;
-				vPoint[2] = m_pAnimVertices[m_pIndices[iStartNum + 2]].vPosition;
-
-				vUV[0] = m_pAnimVertices[m_pIndices[iStartNum]].vTexcoord;
-				vUV[1] = m_pAnimVertices[m_pIndices[iStartNum + 1]].vTexcoord;
-				vUV[2] = m_pAnimVertices[m_pIndices[iStartNum + 2]].vTexcoord;
-			}
-
-			// 넓이 누적
-			fSize += Get_TriangleArea(vPoint[0], vPoint[1], vPoint[2]);
-
-			_uint iAreaCount = _uint(fSize * ParticleDesc.iNumInstance);
-			
-			if (iAreaCount > 0)
-				fSize = fSize - ((_float)iAreaCount / ParticleDesc.iNumInstance);
-
-			for (size_t j = 0; j < (size_t)iAreaCount; ++j)
-			{
-				DISSOLVE_PARTICLE pParticle = {};
-
-				_Vec3 vResultPos = Get_RandomFacePos(vPoint[0], vPoint[1], vPoint[2]);
-				pParticle.Particle.vTranslation = _Vec4(vResultPos.x, vResultPos.y, vResultPos.z, 1.f);
-
-				pParticle.Particle.vPosition = _float3(0.f, 0.f, 0.f);
-
-				_float fScale = m_pGameInstance->Get_Random(ParticleDesc.vSize.x, ParticleDesc.vSize.y);
-				pParticle.Particle.vPSize = _float2(fScale, fScale);
-
-				pParticle.Particle.vRight = _float4(1.f, 0.f, 0.f, 0.f);
-				pParticle.Particle.vUp = _float4(0.f, 1.f, 0.f, 0.f);
-				pParticle.Particle.vLook = _float4(0.f, 0.f, 1.f, 0.f);
-
-				pParticle.Particle.vLifeTime = _float2(m_pGameInstance->Get_Random(ParticleDesc.vLifeTime.x, ParticleDesc.vLifeTime.y), 0.0f);
-				pParticle.Particle.vColor = _float4(m_pGameInstance->Get_Random(ParticleDesc.vMinColor.x, ParticleDesc.vMaxColor.x),
-					m_pGameInstance->Get_Random(ParticleDesc.vMinColor.y, ParticleDesc.vMaxColor.y),
-					m_pGameInstance->Get_Random(ParticleDesc.vMinColor.z, ParticleDesc.vMaxColor.z),
-					m_pGameInstance->Get_Random(ParticleDesc.vMinColor.w, ParticleDesc.vMaxColor.w));
-
-				pParticle.Particle.fSpeed = m_pGameInstance->Get_Random(ParticleDesc.vSpeed.x, ParticleDesc.vSpeed.y);
-
-				pParticle.Particle.vCurrenrRandomDir = _float4(m_pGameInstance->Get_Random(-1.f, 1.f), m_pGameInstance->Get_Random(-1.f, 1.f), m_pGameInstance->Get_Random(-1.f, 1.f), 0.f);
-				pParticle.Particle.vNextRandomDir = _float4(m_pGameInstance->Get_Random(-1.f, 1.f), m_pGameInstance->Get_Random(-1.f, 1.f), m_pGameInstance->Get_Random(-1.f, 1.f), 0.f);
-
-				pParticle.vTexcoord = Get_CalculateUV(vPoint[0], vPoint[1], vPoint[2], vUV[0], vUV[1], vUV[2], vResultPos);
-				pParticle.isActive = 0;
-
-				if (CModel::TYPE_ANIM == pModel->Get_ModelType())
-				{
-					Calculate_BoneData(iStartNum, pParticle.Particle.vTranslation, &pParticle.vBlendIndices, &pParticle.vBlendWeights);
-				}
-				else
-				{
-					pParticle.vBlendIndices = {};
-					pParticle.vBlendWeights = {};
-				}
-
-				Instances.emplace_back(pParticle);
-			}
-
-			iCount = 0;
-		}
-
-		if(0.f == fSize)
-			_uint a = 0;
 	}
 
 	ZeroMemory(&m_InitialData, sizeof m_InitialData);
@@ -405,6 +236,102 @@ HRESULT CMesh::Create_BinaryFile(HANDLE* pFile)
 	
 
 	return S_OK;
+}
+
+vector<DISSOLVE_PARTICLE>& CMesh::Create_Particles(const CModel* pModel, const DISSOLVE_INSTANCE_DESC& ParticleDesc, vector<DISSOLVE_PARTICLE>& Instances)
+{
+	_uint iCount = 0;
+	_float fSize = 0.f;
+	for (_uint i = 0; i < m_iNumIndices; ++i)
+	{
+		if (ParticleDesc.iNumInstance <= 0)
+			continue;
+
+		++iCount;
+		_Vec3 vPoint[3] = {};
+		_Vec2 vUV[3] = {};
+
+		if (3 == iCount)
+		{
+			_uint iStartNum = i - 2;
+
+			if (CModel::TYPE_NONANIM == pModel->Get_ModelType())
+			{
+				vPoint[0] = m_pVertices[m_pIndices[iStartNum]].vPosition;
+				vPoint[1] = m_pVertices[m_pIndices[iStartNum + 1]].vPosition;
+				vPoint[2] = m_pVertices[m_pIndices[iStartNum + 2]].vPosition;
+
+				vUV[0] = m_pVertices[m_pIndices[iStartNum]].vTexcoord;
+				vUV[1] = m_pVertices[m_pIndices[iStartNum + 1]].vTexcoord;
+				vUV[2] = m_pVertices[m_pIndices[iStartNum + 2]].vTexcoord;
+			}
+			else
+			{
+				vPoint[0] = m_pAnimVertices[m_pIndices[iStartNum]].vPosition;
+				vPoint[1] = m_pAnimVertices[m_pIndices[iStartNum + 1]].vPosition;
+				vPoint[2] = m_pAnimVertices[m_pIndices[iStartNum + 2]].vPosition;
+
+				vUV[0] = m_pAnimVertices[m_pIndices[iStartNum]].vTexcoord;
+				vUV[1] = m_pAnimVertices[m_pIndices[iStartNum + 1]].vTexcoord;
+				vUV[2] = m_pAnimVertices[m_pIndices[iStartNum + 2]].vTexcoord;
+			}
+
+			// 넓이 누적
+			fSize += Get_TriangleArea(vPoint[0], vPoint[1], vPoint[2]);
+
+			_uint iAreaCount = _uint(fSize * ParticleDesc.iNumInstance);
+
+			if (iAreaCount > 0)
+				fSize = fSize - ((_float)iAreaCount / ParticleDesc.iNumInstance);
+
+			for (size_t j = 0; j < (size_t)iAreaCount; ++j)
+			{
+				DISSOLVE_PARTICLE pParticle = {};
+
+				_Vec3 vResultPos = Get_RandomFacePos(vPoint[0], vPoint[1], vPoint[2]);
+				pParticle.Particle.vTranslation = _Vec4(vResultPos.x, vResultPos.y, vResultPos.z, 1.f);
+
+				pParticle.Particle.vPosition = _float3(0.f, 0.f, 0.f);
+
+				_float fScale = m_pGameInstance->Get_Random(ParticleDesc.vSize.x, ParticleDesc.vSize.y);
+				pParticle.Particle.vPSize = _float2(fScale, fScale);
+
+				pParticle.Particle.vRight = _float4(1.f, 0.f, 0.f, 0.f);
+				pParticle.Particle.vUp = _float4(0.f, 1.f, 0.f, 0.f);
+				pParticle.Particle.vLook = _float4(0.f, 0.f, 1.f, 0.f);
+
+				pParticle.Particle.vLifeTime = _float2(m_pGameInstance->Get_Random(ParticleDesc.vLifeTime.x, ParticleDesc.vLifeTime.y), 0.0f);
+				pParticle.Particle.vColor = _float4(m_pGameInstance->Get_Random(ParticleDesc.vMinColor.x, ParticleDesc.vMaxColor.x),
+					m_pGameInstance->Get_Random(ParticleDesc.vMinColor.y, ParticleDesc.vMaxColor.y),
+					m_pGameInstance->Get_Random(ParticleDesc.vMinColor.z, ParticleDesc.vMaxColor.z),
+					m_pGameInstance->Get_Random(ParticleDesc.vMinColor.w, ParticleDesc.vMaxColor.w));
+
+				pParticle.Particle.fSpeed = m_pGameInstance->Get_Random(ParticleDesc.vSpeed.x, ParticleDesc.vSpeed.y);
+
+				pParticle.Particle.vCurrenrRandomDir = _float4(m_pGameInstance->Get_Random(-1.f, 1.f), m_pGameInstance->Get_Random(-1.f, 1.f), m_pGameInstance->Get_Random(-1.f, 1.f), 0.f);
+				pParticle.Particle.vNextRandomDir = _float4(m_pGameInstance->Get_Random(-1.f, 1.f), m_pGameInstance->Get_Random(-1.f, 1.f), m_pGameInstance->Get_Random(-1.f, 1.f), 0.f);
+
+				pParticle.vTexcoord = Get_CalculateUV(vPoint[0], vPoint[1], vPoint[2], vUV[0], vUV[1], vUV[2], vResultPos);
+				pParticle.isActive = 0;
+
+				if (CModel::TYPE_ANIM == pModel->Get_ModelType())
+				{
+					Calculate_BoneData(iStartNum, pParticle.Particle.vTranslation, &pParticle.vBlendIndices, &pParticle.vBlendWeights);
+				}
+				else
+				{
+					pParticle.vBlendIndices = {};
+					pParticle.vBlendWeights = {};
+				}
+
+				Instances.emplace_back(pParticle);
+			}
+
+			iCount = 0;
+		}
+	}
+
+	return Instances;
 }
 
 HRESULT CMesh::Ready_VertexBuffer_NonAnim(HANDLE* pFile, _fmatrix PreTransformMatrix)
@@ -784,12 +711,11 @@ void CMesh::Calculate_BoneData(_uint iStartIndex, const _Vec4& Point, XMUINT4* p
 	*pParticleWeights = A_BlendWeights;
 }
 
-CMesh* CMesh::Create(ID3D11Device* pDevice, ID3D11DeviceContext* pContext, HANDLE* pFile, const CModel* pModel, _fmatrix PreTransformMatrix, 
-	const CModel::DISSOLVE_PARTICLE_DESC& ParticleDesc, _uint iMeshIndex, vector<DISSOLVE_PARTICLE>& Instances)
+CMesh* CMesh::Create(ID3D11Device* pDevice, ID3D11DeviceContext* pContext, HANDLE* pFile, const CModel* pModel, _fmatrix PreTransformMatrix)
 {
 	CMesh* pInstance = new CMesh(pDevice, pContext);
 
-	if (FAILED(pInstance->Initialize_Prototype(pFile, pModel, PreTransformMatrix, ParticleDesc, iMeshIndex, Instances)))
+	if (FAILED(pInstance->Initialize_Prototype(pFile, pModel, PreTransformMatrix)))
 	{
 		MSG_BOX(TEXT("Failed to Created : CMesh"));
 		Safe_Release(pInstance);
@@ -798,12 +724,11 @@ CMesh* CMesh::Create(ID3D11Device* pDevice, ID3D11DeviceContext* pContext, HANDL
 	return pInstance;
 }
 
-CMesh* CMesh::Create_To_Binary(ID3D11Device* pDevice, ID3D11DeviceContext* pContext, HANDLE* pFile, const CModel* pModel, _fmatrix PreTransformMatrix, 
-	const CModel::DISSOLVE_PARTICLE_DESC& ParticleDesc, _uint iMeshIndex, vector<DISSOLVE_PARTICLE>& Instances)
+CMesh* CMesh::Create_To_Binary(ID3D11Device* pDevice, ID3D11DeviceContext* pContext, HANDLE* pFile, const CModel* pModel, _fmatrix PreTransformMatrix)
 {
 	CMesh* pInstance = new CMesh(pDevice, pContext);
 
-	if (FAILED(pInstance->Initialize_Prototype_To_Binary(pFile, pModel, PreTransformMatrix, ParticleDesc, iMeshIndex, Instances)))
+	if (FAILED(pInstance->Initialize_Prototype_To_Binary(pFile, pModel, PreTransformMatrix)))
 	{
 		MSG_BOX(TEXT("Failed to Created : CMesh"));
 		Safe_Release(pInstance);

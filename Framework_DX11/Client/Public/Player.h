@@ -291,6 +291,8 @@ public:
 	void			Init_PlayerCamera();
 	void			Input_Level_UP_Stat(_int iPoint[5], _float pLevelUpStat[9]);
 
+	void			On_DissolveEffect(_bool bOn);
+
 	_bool					m_bActivated_ManusCutScene = { false };
 	_bool					m_isPlayingCutscene = { false };
 
@@ -330,6 +332,7 @@ private:
 	class CWeapon_PlayerArm*		m_pWeapon_Arm = { nullptr };
 
 	class CItem_Throw* m_pThrowItem = { nullptr };
+	class CDissolve_Player_Dead* m_pDissolveEffect = { nullptr };
 
 private:
 	_vector		m_vRootMoveStack = {};

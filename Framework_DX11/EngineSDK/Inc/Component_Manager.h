@@ -51,6 +51,8 @@ public:
 	class CComponent* Clone_Component(_uint iLevelIndex, const _wstring& strPrototypeTag, void* pArg);
 	void Clear(_uint iLevelIndex);
 
+	class CComponent* Find_Prototype(_uint iLevelIndex, const _wstring& strPrototypeTag);
+
 private:
 	map<const _wstring, class CComponent*>*		m_pPrototypes = { nullptr };
 	_uint										m_iNumLevels = { 0 };
@@ -59,7 +61,6 @@ private:
 	map<const _char*, class CComponent*>*		m_pModelPrototypes = { nullptr };
 
 private:
-	class CComponent* Find_Prototype(_uint iLevelIndex, const _wstring& strPrototypeTag);
 	class CComponent* Find_ModelPrototype(_uint iLevelIndex, const _char* strPrototypeTag);
 
 public:
