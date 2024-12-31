@@ -50,7 +50,7 @@ HRESULT CCurruptedStrongArm_Puppet::Initialize(void* pArg)
 	if (FAILED(Ready_Components()))
 		return E_FAIL;
 
-	//m_pNavigationCom->Move_to_Cell(m_pRigidBodyCom, pDefaultDesc->iCurrentCellNum);
+	m_pNavigationCom->Move_to_Cell(m_pRigidBodyCom, pDefaultDesc->iCurrentCellNum);
 
 	m_pModelCom->SetUp_Animation(26, true);
 
@@ -59,8 +59,6 @@ HRESULT CCurruptedStrongArm_Puppet::Initialize(void* pArg)
 
 	m_strObjectTag = TEXT("Monster");
 
-	m_pTransformCom->Set_State(CTransform::STATE_POSITION,
-		XMVectorSet(0.f, -5.f, 0.f, 1.f));
 	//m_pTransformCom->LookAt(_vector{ 0, 0, -1, 0 });
 
 
