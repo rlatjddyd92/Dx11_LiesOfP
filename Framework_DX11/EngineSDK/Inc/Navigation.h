@@ -23,6 +23,8 @@ public:
 
 	void	Set_ExceptCellNum(_int iCellNum) { m_iExceptCellNum = iCellNum; }
 
+	_Vec3	Get_OutLine() { return m_vOutLine; }
+
 public:
 	virtual HRESULT Initialize_Prototype(const _wstring& strNavigationDataFile);
 	virtual HRESULT Initialize(void* pArg) override; 

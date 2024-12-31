@@ -196,6 +196,8 @@ HRESULT CLevel_Logo::Read_Map_Data()
 					staticObjDesc.bShadow = pDesc.bShadow;
 					staticObjDesc.iCurrentCellNum = pDesc.iCurrentCellNum;
 					staticObjDesc.iCurrentArealNum = iAreanNum;
+					staticObjDesc.iLevelIndex = LEVEL_LOGO;
+
 					if (FAILED(m_pGameInstance->Add_CloneObject_ToLayer(LEVEL_LOGO, TEXT("Layer_Map"), TEXT("Prototype_GameObject_StaticObj"), &staticObjDesc)))
 						return E_FAIL;
 

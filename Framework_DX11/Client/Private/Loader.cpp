@@ -327,7 +327,7 @@ HRESULT CLoader::Ready_Resources_For_LogoLevel()
 
 	PreTransformMatrix = XMMatrixIdentity();
 	PreTransformMatrix = XMMatrixScaling(0.01f, 0.01f, 0.01f);
-	if (FAILED(m_pGameInstance->Add_Prototype(LEVEL_GAMEPLAY, TEXT("Title_Blanket"),
+	if (FAILED(m_pGameInstance->Add_Prototype(LEVEL_LOGO, TEXT("Title_Blanket"),
 		CModel::Create(m_pDevice, m_pContext, CModel::TYPE_NONANIM, "../Bin/ModelData/NonAnim/Map/Etc/Title_Blanket/Title_Blanket.dat", PreTransformMatrix))))
 		return E_FAIL;
 
@@ -383,7 +383,7 @@ HRESULT CLoader::Ready_Resources_For_LogoLevel()
 		PreTransformMatrix = XMMatrixIdentity();
 		PreTransformMatrix = XMMatrixScaling(0.01f, 0.01f, 0.01f);
 
-		if (FAILED(m_pGameInstance->Add_Prototype(LEVEL_GAMEPLAY, strPrototypeName,
+		if (FAILED(m_pGameInstance->Add_Prototype(LEVEL_LOGO, strPrototypeName,
 			CModel::Create(m_pDevice, m_pContext, CModel::TYPE_NONANIM, szFullPath1, PreTransformMatrix))))
 			return E_FAIL;
 
@@ -862,6 +862,51 @@ HRESULT CLoader::Ready_Resources_For_GamePlayLevel_Map1()
 		//	int a = 0;
 		if (FAILED(m_pGameInstance->Add_Prototype(LEVEL_GAMEPLAY, strPrototypeName,
 			CModel::Create(m_pDevice, m_pContext, CModel::TYPE_NONANIM, szFullPath3, PreTransformMatrix))))
+			return E_FAIL;
+
+		//_findnext : <io.h>에서 제공하며 다음 위치의 파일을 찾는 함수, 더이상 없다면 -1을 리턴
+		iResult = _findnext(handle, &fd);
+	}
+#pragma endregion
+
+#pragma region ETC Interior
+	handle = _findfirst("../Bin/ModelData/NonAnim/Map/Etc/Interior/*", &fd);
+
+	if (handle == -1)
+		return E_FAIL;
+
+	char szCurPath4[128] = "../Bin/ModelData/NonAnim/Map/Etc/Interior/";    // 상대 경로
+	char szFullPath4[128] = "";
+
+	iResult = 0;
+
+	while (iResult != -1)
+	{
+		strcpy_s(szFullPath4, szCurPath4);
+		strcat_s(szFullPath4, fd.name);
+
+		_char szFileName[MAX_PATH] = "";
+		_char szExt[MAX_PATH] = "";
+		_splitpath_s(szFullPath4, nullptr, 0, nullptr, 0, szFileName, MAX_PATH, szExt, MAX_PATH);
+
+		if (!strcmp(fd.name, ".") || !strcmp(fd.name, "..")
+			|| strcmp(szExt, ".dat"))
+		{
+			iResult = _findnext(handle, &fd);
+			continue;
+		}
+
+		string strFileName = szFileName;
+		_wstring strPrototypeName;
+
+		strPrototypeName.assign(strFileName.begin(), strFileName.end());
+		wprintf(strPrototypeName.c_str());
+
+		PreTransformMatrix = XMMatrixIdentity();
+		PreTransformMatrix = XMMatrixScaling(0.01f, 0.01f, 0.01f);
+
+		if (FAILED(m_pGameInstance->Add_Prototype(LEVEL_GAMEPLAY, strPrototypeName,
+			CModel::Create(m_pDevice, m_pContext, CModel::TYPE_NONANIM, szFullPath4, PreTransformMatrix))))
 			return E_FAIL;
 
 		//_findnext : <io.h>에서 제공하며 다음 위치의 파일을 찾는 함수, 더이상 없다면 -1을 리턴

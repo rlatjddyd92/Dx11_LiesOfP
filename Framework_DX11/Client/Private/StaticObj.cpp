@@ -34,6 +34,8 @@ HRESULT CStaticObj::Initialize(void* pArg)
 	m_bShadow = pDesc->bShadow;
 	m_iCurrentCellNum = pDesc->iCurrentCellNum;
 	m_iCurrentAreaNum = pDesc->iCurrentArealNum;
+	m_iLevelIndex = pDesc->iLevelIndex;
+
 
 	if (FAILED(Ready_Components(pDesc)))
 		return E_FAIL;
@@ -205,7 +207,7 @@ HRESULT CStaticObj::Ready_Components(STATICOBJ_DESC* pNonAnimDesc)
 
 	if (m_isInstance)
 	{
-		CModel* pInstanceModel = m_pGameInstance->Add_NonAnimModel_Instance(LEVEL_GAMEPLAY, szModelTag);
+		CModel* pInstanceModel = m_pGameInstance->Add_NonAnimModel_Instance(m_iLevelIndex, szModelTag);
 		if (nullptr == pInstanceModel)
 			return E_FAIL;
 
@@ -218,7 +220,7 @@ HRESULT CStaticObj::Ready_Components(STATICOBJ_DESC* pNonAnimDesc)
 	else
 	{
 		/* FOR.Com_Model */
-		if (FAILED(__super::Add_Component(LEVEL_GAMEPLAY, szModelTag,
+		if (FAILED(__super::Add_Component(m_iLevelIndex, szModelTag,
 			TEXT("Com_Model"), reinterpret_cast<CComponent**>(&m_pModelCom))))
 			return E_FAIL;
 	}

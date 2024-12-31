@@ -189,7 +189,7 @@ _bool CNavigation::isMove(_Vec3 vPosition)
 				if (-1 == iNeighborIndex || m_Cells[iNeighborIndex]->Get_CellTypeNum() == 100 || m_Cells[iNeighborIndex]->Get_CellTypeNum() == m_iExceptCellNum)
 					return false;
 
-				if (true == m_Cells[iNeighborIndex]->isIn(vLocalPos, &iNeighborIndex))
+				if (true == m_Cells[iNeighborIndex]->isIn(vLocalPos, &iNeighborIndex, &m_vOutLine))
 				{
 					break;
 				}
@@ -309,7 +309,6 @@ void CNavigation::Research_Cell(_Vec3 vNewPos, _uint* iIndex)
 		}
 	}
 
-	m_iCurrentCellIndex = -1;
 	if (iIndex != nullptr)
 		*iIndex = -1;
 }

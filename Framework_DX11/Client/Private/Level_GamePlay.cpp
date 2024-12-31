@@ -230,8 +230,8 @@ HRESULT CLevel_GamePlay::Ready_Layer_Monster()
 	//if (FAILED(m_pGameInstance->Add_CloneObject_ToLayer(LEVEL_GAMEPLAY, TEXT("Layer_Monster"), TEXT("Prototype_GameObject_RebornerBigA"))))	//**
 	//	return E_FAIL; 
 
-	if (FAILED(m_pGameInstance->Add_CloneObject_ToLayer(LEVEL_GAMEPLAY, TEXT("Layer_Monster"), TEXT("Prototype_GameObject_RebornerMale"))))	//**
-		return E_FAIL; 
+	//if (FAILED(m_pGameInstance->Add_CloneObject_ToLayer(LEVEL_GAMEPLAY, TEXT("Layer_Monster"), TEXT("Prototype_GameObject_RebornerMale"))))	//**
+	//	return E_FAIL; 
 
 	//if (FAILED(m_pGameInstance->Add_CloneObject_ToLayer(LEVEL_GAMEPLAY, TEXT("Layer_Monster"), TEXT("Prototype_GameObject_CarcassNormal"))))	//**
 	//	return E_FAIL;
@@ -373,6 +373,8 @@ HRESULT CLevel_GamePlay::Read_Map_Data()
 					staticObjDesc.bShadow = pDesc.bShadow;
 					staticObjDesc.iCurrentCellNum = pDesc.iCurrentCellNum;
 					staticObjDesc.iCurrentArealNum = iAreanNum;
+					staticObjDesc.iLevelIndex = LEVEL_GAMEPLAY;
+
 					if (FAILED(m_pGameInstance->Add_CloneObject_ToLayer(LEVEL_GAMEPLAY, TEXT("Layer_Map"), TEXT("Prototype_GameObject_StaticObj"), &staticObjDesc)))
 						return E_FAIL;
 
@@ -431,6 +433,8 @@ HRESULT CLevel_GamePlay::Read_Map_Data()
 						 laderDesc.vRotation = pDesc.vRotation;
 						 laderDesc.bShadow = pDesc.bShadow;
 						 laderDesc.iRenderGroupID = pDesc.iID;
+						 laderDesc.iLevelIndex = LEVEL_GAMEPLAY;
+
 						 if (FAILED(m_pGameInstance->Add_CloneObject_ToLayer(LEVEL_GAMEPLAY, TEXT("Layer_InteractObj"), TEXT("Prototype_GameObject_Ladder"), &laderDesc)))
 							 return E_FAIL;
 					 }

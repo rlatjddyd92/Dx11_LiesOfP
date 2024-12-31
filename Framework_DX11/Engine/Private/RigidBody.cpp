@@ -77,10 +77,18 @@ void CRigidBody::Update(_float fTimeDelta)
 
 		if (m_isLockCell && !m_pOwnerNavigation->isMove(vPos + m_vVelocity * fTimeDelta))
 		{
-			pRigidDynamic->setLinearVelocity(PxVec3(0.f, 0.f, 0.f));
+			_Vec3 vSlide = m_pOwnerNavigation->Get_OutLine();
+			vSlide.Normalize();
+			_float fProj = m_vVelocity.Dot(vSlide);
+			vSlide = vSlide * fProj;
+
+
+			pRigidDynamic->setLinearVelocity(ConvertToPxVec3(vSlide));
 
 			PlayerPxTransform.p = PxVec3(vPos.x, vPos.y, vPos.z);
 			pRigidDynamic->setGlobalPose(PlayerPxTransform);
+
+			m_pOwnerNavigation->Research_Cell(vPos);
 		}
 		else
 		{
