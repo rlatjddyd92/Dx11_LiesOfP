@@ -149,8 +149,8 @@ HRESULT CPlayer::Initialize(void * pArg)
 		return E_FAIL;
 
 	//m_pNavigationCom->Move_to_Cell(m_pRigidBodyCom, 1030); // 계단 옆 별바라기
-	m_pNavigationCom->Move_to_Cell(m_pRigidBodyCom, 774); //긴사다리 위
-	//m_pNavigationCom->Move_to_Cell(m_pRigidBodyCom, 772); //긴사다리
+	//m_pNavigationCom->Move_to_Cell(m_pRigidBodyCom, 774); //긴사다리 위
+	m_pNavigationCom->Move_to_Cell(m_pRigidBodyCom, 772); //긴사다리
 	//m_pNavigationCom->Move_to_Cell(m_pRigidBodyCom, 427); //짧은사다리
 	//m_pNavigationCom->Move_to_Cell(m_pRigidBodyCom, 341); //아래엘베
 	//m_pNavigationCom->Move_to_Cell(m_pRigidBodyCom, 440); //상자랑 장애물
@@ -1406,6 +1406,14 @@ void CPlayer::CollisionStay_IntercObj(CGameObject* pGameObject)
 		{
 			dynamic_cast<CCutScene*>(m_pGameInstance->Find_Object(LEVEL_GAMEPLAY, TEXT("Layer_CutScene"), BOSS1_MEET1))->Start_Play();
 			//m_pFsmCom->Change_State(RAXASIA_DOOR_OPEN, pTowerDoor);
+		}
+	}
+	else if (pGameObject->Get_Tag() == TEXT("Item_Dropped"))
+	{
+		if (GET_GAMEINTERFACE->Action_InterAction(TEXT("아이템 획득")))
+		{
+			pGameObject->Set_Dead(true);
+			m_pFsmCom->Change_State(ITEMGET);
 		}
 	}
 }

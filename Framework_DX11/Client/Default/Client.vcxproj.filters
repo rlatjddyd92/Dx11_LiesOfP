@@ -1365,9 +1365,15 @@
     </Filter>
     <Filter Include="03.GameInterface_Controller\00.UIManager\00.UIPage\20.UIPage_Tutorial\04.Tuto_Popup">
       <UniqueIdentifier>{5a0fd332-b836-4ef5-979e-a2371f5cc21f}</UniqueIdentifier>
-	</Filter>
+    </Filter>
     <Filter Include="02.GameObjects\02.Pawn\00.Player\Dissolve_Test">
       <UniqueIdentifier>{ac49ad54-4c6a-4a3c-a51f-12062146dfda}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.GameObjects\15.Item\Item_Throw">
+      <UniqueIdentifier>{25b6cecb-bc06-44e5-ae54-363a24cb0c07}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.GameObjects\15.Item\Item_Dropped">
+      <UniqueIdentifier>{2893d043-136b-4210-a8a4-0b035b94c9f0}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -2153,9 +2159,6 @@
     <ClInclude Include="..\Public\State_RaxasiaP1_TripleSting.h">
       <Filter>05.Fsm\Monster\Raxasia\P1\Attack\Route\TripleSting</Filter>
     </ClInclude>
-    <ClInclude Include="..\Public\Item_Throw.h">
-      <Filter>02.GameObjects\15.Item</Filter>
-    </ClInclude>
     <ClInclude Include="..\Public\SimonManus_EnvHand.h">
       <Filter>02.GameObjects\02.Pawn\01.Monster\Boss\SimonManus\EnvHand</Filter>
     </ClInclude>
@@ -2492,9 +2495,15 @@
     </ClInclude>
     <ClInclude Include="..\Public\UITutorial_Timing.h">
       <Filter>03.GameInterface_Controller\00.UIManager\00.UIPage\20.UIPage_Tutorial\02.Tuto_Timing</Filter>
-	</ClInclude>
+    </ClInclude>
     <ClInclude Include="..\public\Dissolve_Test.h">
       <Filter>02.GameObjects\02.Pawn\00.Player\Dissolve_Test</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Public\Item_Throw.h">
+      <Filter>02.GameObjects\15.Item\Item_Throw</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Public\Item_Dropped.h">
+      <Filter>02.GameObjects\15.Item\Item_Dropped</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -3253,9 +3262,6 @@
     <ClCompile Include="..\Private\State_RaxasiaP1_TripleSting.cpp">
       <Filter>05.Fsm\Monster\Raxasia\P1\Attack\Route\TripleSting</Filter>
     </ClCompile>
-    <ClCompile Include="..\Private\Item_Throw.cpp">
-      <Filter>02.GameObjects\15.Item</Filter>
-    </ClCompile>
     <ClCompile Include="..\Private\SimonManus_EnvHand.cpp">
       <Filter>02.GameObjects\02.Pawn\01.Monster\Boss\SimonManus\EnvHand</Filter>
     </ClCompile>
@@ -3589,9 +3595,15 @@
     </ClCompile>
     <ClCompile Include="..\Private\UITutorial_Timing.cpp">
       <Filter>03.GameInterface_Controller\00.UIManager\00.UIPage\20.UIPage_Tutorial\02.Tuto_Timing</Filter>
-	</ClCompile>
+    </ClCompile>
     <ClCompile Include="..\private\Dissolve_Test.cpp">
       <Filter>02.GameObjects\02.Pawn\00.Player\Dissolve_Test</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Private\Item_Throw.cpp">
+      <Filter>02.GameObjects\15.Item\Item_Throw</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Private\Item_Dropped.cpp">
+      <Filter>02.GameObjects\15.Item\Item_Dropped</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

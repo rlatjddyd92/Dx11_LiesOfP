@@ -84,6 +84,9 @@
 #include "C:\Users\olivi\Github\Dx11_LiesOfP\Framework_DX11\Client\private\Dissolve_Test.cpp"
 
 
+#include "C:\Users\olivi\Github\Dx11_LiesOfP\Framework_DX11\Client\Private\Item_Dropped.cpp"
+
+
 #include "C:\Users\olivi\Github\Dx11_LiesOfP\Framework_DX11\Client\Private\Monster_Training01.cpp"
 
 
