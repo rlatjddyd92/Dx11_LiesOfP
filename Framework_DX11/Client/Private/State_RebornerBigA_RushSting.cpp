@@ -27,6 +27,8 @@ HRESULT CState_RebornerBigA_RushSting::Start_State(void* pArg)
     m_pMonster->Change_Animation(AN_LINKED_START, false, 0.1f, 0, true);
     m_iRouteTrack = 0;
 
+    m_bSwingSound = false;
+
     return S_OK;
 }
 
@@ -39,6 +41,8 @@ void CState_RebornerBigA_RushSting::Update(_float fTimeDelta)
         if (CurTrackPos >= 110)
         {
             ++m_iRouteTrack;
+            m_bSwingSound = false;
+
             m_pMonster->SetUp_Animation(AN_LINKED_LAST, false, 0, true);
             return;
         }
@@ -103,6 +107,32 @@ void CState_RebornerBigA_RushSting::Collider_Check(_double CurTrackPos)
         }
     }
 
+}
+
+void CState_RebornerBigA_RushSting::Sound_Check(_double CurTrackPos)
+{
+    if (m_iRouteTrack == 0)
+    {
+        if (CurTrackPos >= 87.f && CurTrackPos <= 95.f)
+        {
+            if (!m_bSwingSound)
+            {
+                m_pMonster->Play_Sound(CPawn::PAWN_SOUND_EFFECT1, TEXT("SE_NPC_SK_WS_Staff_03.wav"), false);
+                m_bSwingSound = true;
+            }
+        }
+    }
+    else
+    {
+        if (CurTrackPos >= 45.f && CurTrackPos <= 57.f)
+        {
+            if (!m_bSwingSound)
+            {
+                m_pMonster->Play_Sound(CPawn::PAWN_SOUND_EFFECT1, TEXT("SE_NPC_SK_WS_Staff_03.wav"), false);
+                m_bSwingSound = true;
+            }
+        }
+    }
 }
 
 CState_RebornerBigA_RushSting* CState_RebornerBigA_RushSting::Create(CFsm* pFsm, CMonster* pMonster, _uint iStateNum, void* pArg)

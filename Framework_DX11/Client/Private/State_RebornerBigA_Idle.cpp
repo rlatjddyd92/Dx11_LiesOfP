@@ -193,6 +193,7 @@ void CState_RebornerBigA_Idle::Calc_Act_Attack(_float fTimeDelta, _float fDist)
         {
             m_iAtkCnt = 0;
         }
+
         switch (m_iAtkCnt)
         {
         case 0:

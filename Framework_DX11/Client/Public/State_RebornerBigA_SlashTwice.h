@@ -26,11 +26,14 @@ public:
 private:
     class CMonster* m_pMonster = { nullptr };
 
+    _bool               m_bSwingSound = { false };
+
     _uint               m_iRouteTrack = {};
 
 private:
     _bool               End_Check();
     void                Collider_Check(_double CurTrackPos);
+    void                Sound_Check(_double CurTrackPos);
 
 public:
     static CState_RebornerBigA_SlashTwice* Create(class CFsm* pFsm, class CMonster* pMonster, _uint iStateNum, void* pArg = nullptr);
