@@ -58,6 +58,7 @@
     <ClCompile Include="..\private\Navigation.cpp" />
     <ClCompile Include="..\Private\NvCloth_Manager.cpp" />
     <ClCompile Include="..\Private\Object_Manager.cpp" />
+    <ClCompile Include="..\Private\Occludee.cpp" />
     <ClCompile Include="..\Private\Octree.cpp" />
     <ClCompile Include="..\Private\PhysX_Manager.cpp" />
     <ClCompile Include="..\private\Picking.cpp" />
@@ -140,6 +141,7 @@
     <ClInclude Include="..\public\Navigation.h" />
     <ClInclude Include="..\Public\NvCloth_Manager.h" />
     <ClInclude Include="..\Public\Object_Manager.h" />
+    <ClInclude Include="..\Public\Occludee.h" />
     <ClInclude Include="..\Public\Octree.h" />
     <ClInclude Include="..\Public\PhysX_Manager.h" />
     <ClInclude Include="..\public\Picking.h" />

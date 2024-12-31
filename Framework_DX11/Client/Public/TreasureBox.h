@@ -47,6 +47,7 @@ private:
 	_bool m_bShadow = { false };
 	_bool m_bCollision = { false };
 	_bool m_bOpen = { false };
+	_bool m_bAddItem = { false };
 
 	_int m_iAnim_Close_Idle = { 0 };
 	_int m_iAnim_Open = { 0 };

@@ -1411,6 +1411,14 @@ void CPlayer::CollisionStay_IntercObj(CGameObject* pGameObject)
 			//m_pFsmCom->Change_State(RAXASIA_DOOR_OPEN, pTowerDoor);
 		}
 	}
+	else if (pGameObject->Get_Tag() == TEXT("Item_Dropped"))
+	{
+		if (GET_GAMEINTERFACE->Action_InterAction(TEXT("¾ÆÀÌÅÛ È¹µæ")))
+		{
+			pGameObject->Set_Dead(true);
+			m_pFsmCom->Change_State(ITEMGET);
+		}
+	}
 }
 
 void CPlayer::Choice_GuardSound(_uint iAttackStrength, _uint iHitType, _bool isPerfect)

@@ -98,6 +98,7 @@
 #include "TorchDeck.h"
 #include "FirePot.h"
 #include "SteelHeart.h"
+#include "Item_Dropped.h"
 #pragma endregion
 
 #include "Machine_EffectObj.h"
@@ -1594,6 +1595,11 @@ HRESULT CLoader::Ready_Prototype()
 	/* For. Prototype_GameObject_SteelHeart */
 	if (FAILED(m_pGameInstance->Add_Prototype(TEXT("Prototype_GameObject_SteelHeart"),
 		CSteelHeart::Create(m_pDevice, m_pContext))))
+		return E_FAIL;
+
+	/* For. Prototype_GameObject_Item_Dropped */
+	if (FAILED(m_pGameInstance->Add_Prototype(TEXT("Prototype_GameObject_Item_Dropped"),
+		CItem_Dropped::Create(m_pDevice, m_pContext))))
 		return E_FAIL;
 #pragma endregion
 
