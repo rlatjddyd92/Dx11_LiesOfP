@@ -486,5 +486,4 @@ void CCarcassNormal::Free()
 	}
 
 	__super::Free();
-
 }
