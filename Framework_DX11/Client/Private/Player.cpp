@@ -177,15 +177,6 @@ HRESULT CPlayer::Initialize(void * pArg)
 
 	m_vRimLightColor = _Vec4(0.f, 0.f, 0.f, 0.f);
 
-	CDissolve_Test::DISSOLVE_OBJECT_DESC TestDesc = {};
-	TestDesc.fRotationPerSec = 90.f;
-	TestDesc.fSpeedPerSec = 1.f;
-	TestDesc.iLevelIndex = LEVEL_GAMEPLAY;
-	TestDesc.pModelCom = m_pModelCom;
-	TestDesc.pPlayerTransformCom = m_pTransformCom;
-
-	//if (FAILED(m_pGameInstance->Add_CloneObject_ToLayer(LEVEL_GAMEPLAY, TEXT("Layer_Test"), TEXT("Prototype_GameObject_Effect_Dissolve_Particle"), &TestDesc)))
-	//	return E_FAIL;
 
 	return S_OK;
 }
@@ -277,6 +268,10 @@ void CPlayer::Update(_float fTimeDelta)
 		Calc_DebuffGain(DEBUFF_ELEC, 30.f);
 		//Change_State(RAPIER_FATAL);
 	}
+	if (KEY_HOLD(KEY::N))
+	{
+		m_fDissloveRatio += fTimeDelta * 0.1f;
+	};
 
 	//마누스 컷신 실행부분
 	if (m_pNavigationCom->Get_CurrentCellIndex() == 208 && m_bActivated_ManusCutScene == false)
@@ -1810,6 +1805,19 @@ HRESULT CPlayer::Ready_Effect()
 	pSocketBoneMatrix = m_pModelCom->Get_BoneCombindTransformationMatrix_Ptr("Bn_L_ForeTwist");
 	m_Effects[EFFECT_CUTSCENE_ARM_OPENDOOR] = m_pEffect_Manager->Clone_Effect(TEXT("Player_Arm_Electric"), pParetnMatrix,
 		pSocketBoneMatrix, _Vec3(0.f, 0.f, 0.f), _Vec3(0.f, 0.f, 0.f), _Vec3(1.f, 1.f, 1.f));
+
+	CDissolve_Test::DISSOLVE_OBJECT_DESC TestDesc = {};
+	TestDesc.fRotationPerSec = 90.f;
+	TestDesc.fSpeedPerSec = 1.f;
+	TestDesc.iLevelIndex = LEVEL_GAMEPLAY;
+	TestDesc.pModelCom = m_pModelCom;
+	TestDesc.pPlayerTransformCom = m_pTransformCom;
+	TestDesc.pDissolveTextureCom = m_pDissloveTexture;
+	TestDesc.pThreshold = &m_fDissloveRatio;
+	TestDesc.vTextureSize = _float2(2048.f, 2048.f);
+
+	if (FAILED(m_pGameInstance->Add_CloneObject_ToLayer(LEVEL_GAMEPLAY, TEXT("Layer_Test"), TEXT("Prototype_GameObject_Effect_Dissolve_Particle"), &TestDesc)))
+		return E_FAIL;
 
 	return S_OK;
 }

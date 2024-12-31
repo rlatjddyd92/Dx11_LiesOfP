@@ -17,8 +17,11 @@ class CDissolve_Test final : public CGameObject
 public:
 	typedef struct : public CGameObject::GAMEOBJECT_DESC
 	{
-		class CModel* pModelCom = { nullptr };
-		class CTransform* pPlayerTransformCom = { nullptr };
+		class CModel*			pModelCom = { nullptr };
+		class CTransform*		pPlayerTransformCom = { nullptr };
+		class CTexture*			pDissolveTextureCom = { nullptr };
+		_float*					pThreshold = {};
+		_float2					vTextureSize = {};
 	}DISSOLVE_OBJECT_DESC;
 
 private:
@@ -34,6 +37,7 @@ public:
 	virtual void Late_Update(_float fTimeDelta);
 	virtual HRESULT Render();
 
+
 private:
 	class CShader_NonVTX*				m_pShaderCom = { nullptr };
 	// 모델 만들 때 넣어준 테그 그대로 쓰고
@@ -47,6 +51,8 @@ private:
 	class CModel*						m_pModelCom = { nullptr };
 	// 플레이어 트렌스폼
 	class CTransform*					m_pPlayerTransformCom = { nullptr };
+	// 디졸브 텍스처
+	class CTexture*						m_pDissolveTextureCom = { nullptr };
 
 	// 렌더 셰이더에 전달
 	_uint								m_iShaderIndex = { 0 };
@@ -58,6 +64,10 @@ private:
 	_float								m_fStartRotation = { 0.f };
 	_float								m_fRotationPerSecond = { 0.f };
 
+	_float*								m_pThreshold = {};
+	_float2								m_vTextureSize = {};
+
+	_bool								m_bOn = { false };
 private:
 	HRESULT Ready_Componet();
 

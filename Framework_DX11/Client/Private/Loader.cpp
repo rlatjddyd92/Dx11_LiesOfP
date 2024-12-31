@@ -892,9 +892,9 @@ HRESULT CLoader::Ready_Resources_For_Player()
 	_matrix		PreTransformMatrix = XMMatrixIdentity();
 
 	CModel::DISSOLVE_PARTICLE_DESC DissolveParticleDesc = {};
-	DissolveParticleDesc.iNumInstance = 10000;
+	DissolveParticleDesc.iNumInstance = 1000;
 	DissolveParticleDesc.vCenter = { 0.f, 0.f, 0.f };
-	DissolveParticleDesc.vLifeTime = { 5.f, 10.f };
+	DissolveParticleDesc.vLifeTime = { 3.f, 6.f };
 	DissolveParticleDesc.vMinColor = { 0.f, 1.f, 1.f, 1.f };
 	DissolveParticleDesc.vMaxColor = { 1.f, 1.f, 1.f, 1.f };
 	DissolveParticleDesc.vSize = { 0.005f, 0.01f };

@@ -87,8 +87,8 @@ void CVIBuffer_Dissolve_Instance::Reset()
 
 _bool CVIBuffer_Dissolve_Instance::DispatchCS(class CShader_Compute* pComputeShader, class CTexture* pTexture, class CModel* pModel, const PARTICLE_MOVEMENT& MovementData, const DISSOLVE_DATA& DissolveData)
 {
-	/* 순서 중요 !! */
-	// 상수 버퍼 업데이트 하고
+	_float fCheck_Threshold = DissolveData.fThreshold;
+
 	D3D11_MAPPED_SUBRESOURCE mappedResource;
 
 	if (FAILED(m_pContext->Map(m_pMovementBuffer, 0, D3D11_MAP_WRITE_DISCARD, 0, &mappedResource)))
@@ -115,6 +115,7 @@ _bool CVIBuffer_Dissolve_Instance::DispatchCS(class CShader_Compute* pComputeSha
 
 	pDissolve->fThreshold = DissolveData.fThreshold;
 	pDissolve->iModelType = DissolveData.iModelType;
+	pDissolve->vTextureSize = DissolveData.vTextureSize;
 	memcpy_s(pDissolve->m_BoneMatrices, sizeof(_float4x4) * g_iMaxMeshBones, pModel->Get_BoneMatrices(0), sizeof(_float4x4) * g_iMaxMeshBones);
 	//memcpy_s(&Test, sizeof(_float4x4) * g_iMaxMeshBones, pModel->Get_BoneMatrices(0), sizeof(_float4x4) * g_iMaxMeshBones);
 	
@@ -122,6 +123,10 @@ _bool CVIBuffer_Dissolve_Instance::DispatchCS(class CShader_Compute* pComputeSha
 
 	m_pContext->CSSetUnorderedAccessViews(0, 1, &m_pParticleUAV, nullptr);
 	m_pContext->CSSetShaderResources(0, 1, &m_pInitParticleSRV);
+
+	ID3D11ShaderResourceView* pSRV = pTexture->Get_SRV(0);
+	m_pContext->CSSetShaderResources(1, 1, &pSRV);
+
 	m_pContext->CSSetConstantBuffers(0, 1, &m_pMovementBuffer);
 	m_pContext->CSSetConstantBuffers(1, 1, &m_pDissolveBuffer);
 
@@ -132,13 +137,13 @@ _bool CVIBuffer_Dissolve_Instance::DispatchCS(class CShader_Compute* pComputeSha
 	m_pContext->CSSetUnorderedAccessViews(0, 1, nullUAV, nullptr);
 
 	// SRV 해제하고
-	ID3D11ShaderResourceView* nullSRV = { nullptr };
-	m_pContext->CSSetShaderResources(0, 1, &nullSRV);
+	ID3D11ShaderResourceView* nullSRV[] = { nullptr, nullptr };
+	m_pContext->CSSetShaderResources(0, 2, nullSRV);
 
 	// 셰이더까지 해제하면 끝
 	m_pContext->CSSetShader(nullptr, nullptr, 0);
 
-	if (false == (STATE_LOOP & MovementData.iState))
+	if (false == (STATE_LOOP & MovementData.iState) && 1.f <= fCheck_Threshold)
 	{
 		m_fTime += MovementData.fTimeDelta;
 		if (m_vLifeTime.y < m_fTime)
@@ -152,6 +157,8 @@ _bool CVIBuffer_Dissolve_Instance::DispatchCS(class CShader_Compute* pComputeSha
 HRESULT CVIBuffer_Dissolve_Instance::Ready_Buffers(const DISSOLVE_INSTANCE_DESC& Desc)
 {
 	m_iNumInstance = Desc.iNumInstance;
+	m_vLifeTime.y = Desc.fMaxLifeTime;
+
 	m_pInstanceVertices = new DISSOLVE_PARTICLE[m_iNumInstance];
 	ZeroMemory(m_pInstanceVertices, sizeof(DISSOLVE_PARTICLE) * m_iNumInstance);
 
@@ -237,6 +244,12 @@ void CVIBuffer_Dissolve_Instance::For_Debug()
 				//	Test[pData[i].vBlendIndices.w] * fWeightW;
 
 				//vCheck = XMVector3TransformCoord(vCheck, BoneMatrix);
+
+				if (1 == pData[i].isActive)
+				{
+					_uint b = 0;
+				}
+
 				_uint a = 0;
 			}
 			m_pContext->Unmap(pStagingBuffer, 0);

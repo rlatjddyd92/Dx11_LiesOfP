@@ -1128,12 +1128,11 @@ HRESULT CModel::ReadyModel_To_Binary(HANDLE* pFile, const DISSOLVE_PARTICLE_DESC
 		CVIBuffer_Dissolve_Instance::DISSOLVE_INSTANCE_DESC DissolveDesc = {};
 		DissolveDesc.iNumInstance = (_uint)Instances.size();
 		DissolveDesc.pParticles = Instances.data();
+		DissolveDesc.fMaxLifeTime = ParticleDesc.vLifeTime.y;
 
 		if(FAILED(m_pGameInstance->Add_Prototype(ParticleDesc.iLevelID, ParticleDesc.strBufferTag, CVIBuffer_Dissolve_Instance::Create(m_pDevice, m_pContext, DissolveDesc))))
 			return E_FAIL;
 	}
-
-
 	//여기까지 메쉬
 
 	ReadFile(*pFile, &m_iNumMaterials, sizeof(_uint), &dwByte, nullptr);
@@ -1257,6 +1256,7 @@ HRESULT CModel::Ready_Meshes(HANDLE* pFile, DISSOLVE_PARTICLE_DESC ParticleDesc)
 		CVIBuffer_Dissolve_Instance::DISSOLVE_INSTANCE_DESC DissolveDesc = {};
 		DissolveDesc.iNumInstance = (_uint)Instances.size();
 		DissolveDesc.pParticles = Instances.data();
+		DissolveDesc.fMaxLifeTime = ParticleDesc.vLifeTime.y;
 
 		if (FAILED(m_pGameInstance->Add_Prototype(ParticleDesc.iLevelID, ParticleDesc.strBufferTag, CVIBuffer_Dissolve_Instance::Create(m_pDevice, m_pContext, DissolveDesc))))
 			return E_FAIL;

@@ -13,6 +13,7 @@ public:
 		_uint		iNumInstance;
 		DISSOLVE_PARTICLE*	pParticles;
 		_uint		iMeshIndex;
+		_float		fMaxLifeTime;
 	} DISSOLVE_INSTANCE_DESC;
 
 	typedef struct
@@ -20,14 +21,14 @@ public:
 		_float4x4			m_BoneMatrices[g_iMaxMeshBones] = {};
 		_float				fThreshold = { 0 };
 		_uint				iModelType = { 0 };
-		_float2				fPadding = {};
+		_float2				vTextureSize = {};
 	}DISSOLVE_INITIAL;
 
 	typedef struct
 	{
 		_float				fThreshold = { 0 };
 		_uint				iModelType = { 0 };
-		_float2				fPadding = {};
+		_float2				vTextureSize = {};
 	}DISSOLVE_DATA;
 
 private:
@@ -68,7 +69,7 @@ private:
 	ID3D11Buffer*		m_pInitParticleBuffer = nullptr;
 	ID3D11ShaderResourceView* m_pInitParticleSRV = nullptr;
 
-	_Matrix Test[g_iMaxMeshBones] = {};
+	//_Matrix Test[g_iMaxMeshBones] = {};
 
 private:
 	HRESULT Ready_Buffers(const DISSOLVE_INSTANCE_DESC& Desc);

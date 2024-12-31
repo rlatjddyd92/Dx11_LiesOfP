@@ -33,6 +33,12 @@ HRESULT CDissolve_Test::Initialize(void* pArg)
     m_pPlayerTransformCom = pDesc->pPlayerTransformCom;
     Safe_AddRef(m_pPlayerTransformCom);
 
+    m_pDissolveTextureCom = pDesc->pDissolveTextureCom;
+    Safe_AddRef(m_pDissolveTextureCom);
+
+    m_pThreshold = pDesc->pThreshold;
+    m_vTextureSize = pDesc->vTextureSize;
+
     m_iShaderIndex = 16;
 
     return S_OK;
@@ -40,39 +46,46 @@ HRESULT CDissolve_Test::Initialize(void* pArg)
 
 void CDissolve_Test::Priority_Update(_float fTimeDelta)
 {
+    if (0.f < *m_pThreshold )
+        m_bOn = true;
 }
 
 void CDissolve_Test::Update(_float fTimeDelta)
 {
+    if (false == m_bOn)
+        return;
+
     CVIBuffer_Instancing::PARTICLE_MOVEMENT Movement = {};
     
-    Movement.iState |= CVIBuffer_Instancing::STATE_LOOP;
+    Movement.iState |= CVIBuffer_Instancing::STATE_RANDOM;
     Movement.vPivot = _Vec4(0.f, 0.f, 0.f, 1.f);
     Movement.fGravity = 0.f;
     Movement.vMoveDir = _Vec4(0.f, 1.f, 0.f, 0.f);
     Movement.fTimeDelta = fTimeDelta;
     Movement.vOrbitAxis = _Vec3(0.f, 1.f, 0.f);
     Movement.fOrbitAngle = 90.f;
-    Movement.fTimeInterval = 0.f;
-    Movement.fRandomRatio = 0.f;
+    Movement.fTimeInterval = 1.f;
+    Movement.fRandomRatio = 0.5f;
     Movement.fAccelLimit = 0.f;
     Movement.fAccelSpeed = 0.f;
     Movement.WorldMatrix = m_pPlayerTransformCom->Get_WorldMatrix();
 
     CVIBuffer_Dissolve_Instance::DISSOLVE_DATA Data = {};
-    Data.fThreshold = 0.f;
+    Data.fThreshold = *m_pThreshold;
     Data.iModelType = CModel::TYPE_ANIM;
+    Data.vTextureSize = m_vTextureSize;
 
-
-    if (true == m_pVIBufferCom->DispatchCS(m_pActionCS, nullptr, m_pModelCom, Movement, Data))
+    if (true == m_pVIBufferCom->DispatchCS(m_pActionCS, m_pDissolveTextureCom, m_pModelCom, Movement, Data))
     {
         m_isDead = true;
     }
-
 }
 
 void CDissolve_Test::Late_Update(_float fTimeDelta)
 {
+    if (false == m_bOn)
+        return;
+
     m_pGameInstance->Add_RenderObject(CRenderer::RG_EFFECT, this);
 }
 
@@ -120,6 +133,7 @@ HRESULT CDissolve_Test::Render()
 
     return S_OK;
 }
+
 
 HRESULT CDissolve_Test::Ready_Componet()
 {
@@ -183,4 +197,5 @@ void CDissolve_Test::Free()
 
     Safe_Release(m_pModelCom);
     Safe_Release(m_pPlayerTransformCom);
+    Safe_Release(m_pDissolveTextureCom);
 }

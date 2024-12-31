@@ -129,7 +129,7 @@ HRESULT CMesh::Initialize_Prototype(HANDLE* pFile, const CModel* pModel, _fmatri
 			pParticle.Particle.vNextRandomDir = _float4(m_pGameInstance->Get_Random(-1.f, 1.f), m_pGameInstance->Get_Random(-1.f, 1.f), m_pGameInstance->Get_Random(-1.f, 1.f), 0.f);
 
 			pParticle.vTexcoord = Get_CalculateUV(vPoint[0], vPoint[1], vPoint[2], vUV[0], vUV[1], vUV[2], vResultPos);
-			pParticle.isActive = false;
+			pParticle.isActive = 0;
 
 			if (CModel::TYPE_ANIM == pModel->Get_ModelType())
 			{
@@ -287,7 +287,7 @@ HRESULT CMesh::Initialize_Prototype_To_Binary(HANDLE* pFile, const CModel* pMode
 				pParticle.Particle.vNextRandomDir = _float4(m_pGameInstance->Get_Random(-1.f, 1.f), m_pGameInstance->Get_Random(-1.f, 1.f), m_pGameInstance->Get_Random(-1.f, 1.f), 0.f);
 
 				pParticle.vTexcoord = Get_CalculateUV(vPoint[0], vPoint[1], vPoint[2], vUV[0], vUV[1], vUV[2], vResultPos);
-				pParticle.isActive = false;
+				pParticle.isActive = 0;
 
 				if (CModel::TYPE_ANIM == pModel->Get_ModelType())
 				{

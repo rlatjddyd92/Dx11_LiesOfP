@@ -62,7 +62,7 @@ namespace Engine
 		_float2 vTexcoord = {};
 		XMUINT4 vBlendIndices = {};
 		_float4 vBlendWeights = {};
-		_bool isActive = { false };
+		_uint isActive = { 0 };
 	}DISSOLVE_PARTICLE;
 
 	typedef struct
