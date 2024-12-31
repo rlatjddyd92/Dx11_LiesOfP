@@ -230,8 +230,8 @@ HRESULT CLevel_GamePlay::Ready_Layer_Monster()
 	//if (FAILED(m_pGameInstance->Add_CloneObject_ToLayer(LEVEL_GAMEPLAY, TEXT("Layer_Monster"), TEXT("Prototype_GameObject_RebornerBigA"))))	//**
 	//	return E_FAIL; 
 
-	if (FAILED(m_pGameInstance->Add_CloneObject_ToLayer(LEVEL_GAMEPLAY, TEXT("Layer_Monster"), TEXT("Prototype_GameObject_RebornerMale"))))	//**
-		return E_FAIL; 
+	//if (FAILED(m_pGameInstance->Add_CloneObject_ToLayer(LEVEL_GAMEPLAY, TEXT("Layer_Monster"), TEXT("Prototype_GameObject_RebornerMale"))))	//**
+	//	return E_FAIL; 
 
 	//if (FAILED(m_pGameInstance->Add_CloneObject_ToLayer(LEVEL_GAMEPLAY, TEXT("Layer_Monster"), TEXT("Prototype_GameObject_CarcassNormal"))))	//**
 	//	return E_FAIL;
@@ -442,9 +442,29 @@ HRESULT CLevel_GamePlay::Read_Map_Data()
 						if (FAILED(m_pGameInstance->Add_CloneObject_ToLayer(LEVEL_GAMEPLAY, TEXT("Layer_Monster"), TEXT("Prototype_GameObject_CarcassTail"), &pDesc)))
 							return E_FAIL;
 					}
-					if (wcscmp(pDesc.szModelTag, TEXT("Prototype_AnimModel_CarcassBigA")) == 0)
+					else if (wcscmp(pDesc.szModelTag, TEXT("Prototype_AnimModel_CarcassBigA")) == 0)
 					{
 						if (FAILED(m_pGameInstance->Add_CloneObject_ToLayer(LEVEL_GAMEPLAY, TEXT("Layer_Monster"), TEXT("Prototype_GameObject_CarcassBigA"), &pDesc)))
+							return E_FAIL;
+					}
+					else if (wcscmp(pDesc.szModelTag, TEXT("Prototype_AnimModel_CarcassNormal")) == 0)
+					{
+						if (FAILED(m_pGameInstance->Add_CloneObject_ToLayer(LEVEL_GAMEPLAY, TEXT("Layer_Monster"), TEXT("Prototype_GameObject_CarcassNormal"), &pDesc)))
+							return E_FAIL;
+					}
+					else if (wcscmp(pDesc.szModelTag, TEXT("Prototype_AnimModel_Horesman")) == 0)
+					{
+						if (FAILED(m_pGameInstance->Add_CloneObject_ToLayer(LEVEL_GAMEPLAY, TEXT("Layer_Monster"), TEXT("Prototype_GameObject_CurruptedStrongArm"), &pDesc)))
+							return E_FAIL;
+					}
+					else if (wcscmp(pDesc.szModelTag, TEXT("Prototype_AnimModel_RebornerBigA")) == 0)
+					{
+						if (FAILED(m_pGameInstance->Add_CloneObject_ToLayer(LEVEL_GAMEPLAY, TEXT("Layer_Monster"), TEXT("Prototype_GameObject_RebornerBigA"), &pDesc)))
+							return E_FAIL;
+					}
+					else if (wcscmp(pDesc.szModelTag, TEXT("Prototype_AnimModel_RebornerMale")) == 0)
+					{
+						if (FAILED(m_pGameInstance->Add_CloneObject_ToLayer(LEVEL_GAMEPLAY, TEXT("Layer_Monster"), TEXT("Prototype_GameObject_RebornerMale"), &pDesc)))
 							return E_FAIL;
 					}
 				}	

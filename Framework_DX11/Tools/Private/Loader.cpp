@@ -600,11 +600,6 @@ HRESULT CLoader::Ready_Resources_For_ToolLevel_Map0()
 		return E_FAIL;
 	m_pGameInstance->Add_ModelPrototype(LEVEL_TOOL, ("SK_FO_Monastery_WallDeco_01_Scupture04"), pModel);
 
-	pModel = CModel::Create(m_pDevice, m_pContext, CModel::TYPE_ANIM, "../Bin/ModelData/NonAnim/InteractObj/SK_FO_TreasureChest_02_Red.dat", PreTransformMatrix, false, CController_AnimationTool::Get_Instance()->Get_StructStack(m_iModelCount++));
-	if (FAILED(m_pGameInstance->Add_Prototype(LEVEL_TOOL, TEXT("SK_FO_TreasureChest_02_Red"), pModel)))
-		return E_FAIL;
-	m_pGameInstance->Add_ModelPrototype(LEVEL_TOOL, ("SK_FO_TreasureChest_02_Red"), pModel);
-	
 	pModel = CModel::Create(m_pDevice, m_pContext, CModel::TYPE_ANIM, "../Bin/ModelData/NonAnim/InteractObj/SK_LV_Ladder_MetalWood_01_KSJ.dat", PreTransformMatrix, false, CController_AnimationTool::Get_Instance()->Get_StructStack(m_iModelCount++));
 	if (FAILED(m_pGameInstance->Add_Prototype(LEVEL_TOOL, TEXT("SK_LV_Ladder_MetalWood_01_KSJ"), pModel)))
 		return E_FAIL;
@@ -625,6 +620,11 @@ HRESULT CLoader::Ready_Resources_For_ToolLevel_Map0()
 		return E_FAIL;
 	m_pGameInstance->Add_ModelPrototype(LEVEL_TOOL, ("SteelHeart"), pModel);
 
+	PreTransformMatrix = XMMatrixIdentity();
+	PreTransformMatrix = XMMatrixScaling(0.0001f, 0.0001f, 0.0001f);
+	pModel = CModel::Create(m_pDevice, m_pContext, CModel::TYPE_ANIM, "../Bin/ModelData/NonAnim/InteractObj/SK_FO_TreasureChest_02_Red.dat", PreTransformMatrix, false, CController_AnimationTool::Get_Instance()->Get_StructStack(m_iModelCount++));
+	if (FAILED(m_pGameInstance->Add_Prototype(LEVEL_TOOL, TEXT("SK_FO_TreasureChest_02_Red"), pModel)))
+		return E_FAIL;
 #pragma endregion
 
 	_finddata_t fd;

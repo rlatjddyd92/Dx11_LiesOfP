@@ -94,7 +94,8 @@ _bool CCell::isIn(_fvector vPosition, _int* pNeighborIndex, _Vec3* vOutLine)
 
 		if (0 < XMVectorGetX(XMVector3Dot(vSour, vDest)))
 		{
-			*vOutLine = vLine;
+			if(vOutLine != nullptr)
+				*vOutLine = vLine;
 			*pNeighborIndex = m_iNeighborIndices[i];
 			return false;
 		}
