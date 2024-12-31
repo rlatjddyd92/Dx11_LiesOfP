@@ -147,6 +147,8 @@ HRESULT CSimonManus::Initialize(void* pArg)
 
 	Start_CutScene(CUTSCENE_MEET);
 
+	m_pNavigationCom->Set_ExceptCellNum(99);
+
 	return S_OK;
 }
 

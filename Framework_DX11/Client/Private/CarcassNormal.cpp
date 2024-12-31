@@ -480,6 +480,11 @@ CPawn* CCarcassNormal::Clone(void* pArg)
 
 void CCarcassNormal::Free()
 {
+	for (_uint i = 0; i < CT_END; ++i)
+	{
+		Safe_Release(m_EXCollider[i]);
+	}
+
 	for (_uint i = 0; i < TYPE_END; ++i)
 	{
 		Safe_Release(m_pColliderObject[i]);

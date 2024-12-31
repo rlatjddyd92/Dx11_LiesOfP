@@ -79,6 +79,7 @@ void CRigidBody::Update(_float fTimeDelta)
 		{
 			_Vec3 vSlide = m_pOwnerNavigation->Get_OutLine();
 			vSlide.Normalize();
+
 			_float fProj = m_vVelocity.Dot(vSlide);
 			vSlide = vSlide * fProj;
 

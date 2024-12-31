@@ -81,8 +81,6 @@ void CItem_Throw::Update(_float fTimeDelta)
 		}
 		else if (m_isThrow)
 		{
-			// 회전 시키기
-
 			m_fThrowTime += fTimeDelta;
 
 			_Vec3 vCurrentPos = m_pTransformCom->Get_State(CTransform::STATE_POSITION);
@@ -221,7 +219,7 @@ void CItem_Throw::Throw()
 
 	m_vThrowDir.Normalize();
 
-	m_vThrowDir *= 1000.f;
+	m_vThrowDir *= 900.f;
 	//m_vThrowDir.y *= 100.f;
 
 	m_pRigidBodyCom->Add_Force(m_vThrowDir);

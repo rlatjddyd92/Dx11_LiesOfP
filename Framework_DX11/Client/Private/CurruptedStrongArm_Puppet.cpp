@@ -429,6 +429,11 @@ CPawn* CCurruptedStrongArm_Puppet::Clone(void* pArg)
 
 void CCurruptedStrongArm_Puppet::Free()
 {
+	for (_uint i = 0; i < CT_END; ++i)
+	{
+		Safe_Release(m_EXCollider[i]);
+	}
+
 	for (_uint i = 0; i < TYPE_END; ++i)
 	{
 		Safe_Release(m_pColliderObject[i]);

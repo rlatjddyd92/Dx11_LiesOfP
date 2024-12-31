@@ -708,10 +708,11 @@ void CModel::Update_Animation(_float fTimeDelta)
 	}
 	else
 	{
-
-		/* 뼈를 움직인다.(CBone`s m_TransformationMatrix행렬을 갱신한다.) */
-		m_iCurrentFrame = m_Animations[m_iCurrentAnimIndex]->Update_TransformationMatrices(m_Bones, &m_CurrentTrackPosition, m_KeyFrameIndices[m_iCurrentAnimIndex], m_isLoop, &m_isEnd_Animations[m_iCurrentAnimIndex], fTimeDelta, false, &m_isBoneUpdated);
-
+		if(m_Animations.size() > 0)
+		{
+			/* 뼈를 움직인다.(CBone`s m_TransformationMatrix행렬을 갱신한다.) */
+			m_iCurrentFrame = m_Animations[m_iCurrentAnimIndex]->Update_TransformationMatrices(m_Bones, &m_CurrentTrackPosition, m_KeyFrameIndices[m_iCurrentAnimIndex], m_isLoop, &m_isEnd_Animations[m_iCurrentAnimIndex], fTimeDelta, false, &m_isBoneUpdated);
+		}
 	}
 }
 

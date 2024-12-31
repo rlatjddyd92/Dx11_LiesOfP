@@ -149,7 +149,7 @@ HRESULT CPlayer::Initialize(void * pArg)
 		return E_FAIL;
 
 	//m_pNavigationCom->Move_to_Cell(m_pRigidBodyCom, 1030); // 계단 옆 별바라기
-	m_pNavigationCom->Move_to_Cell(m_pRigidBodyCom, 774); //긴사다리 위
+	//m_pNavigationCom->Move_to_Cell(m_pRigidBodyCom, 774); //긴사다리 위
 	//m_pNavigationCom->Move_to_Cell(m_pRigidBodyCom, 772); //긴사다리
 	//m_pNavigationCom->Move_to_Cell(m_pRigidBodyCom, 427); //짧은사다리
 	//m_pNavigationCom->Move_to_Cell(m_pRigidBodyCom, 341); //아래엘베
@@ -186,6 +186,9 @@ HRESULT CPlayer::Initialize(void * pArg)
 
 	//if (FAILED(m_pGameInstance->Add_CloneObject_ToLayer(LEVEL_GAMEPLAY, TEXT("Layer_Test"), TEXT("Prototype_GameObject_Effect_Dissolve_Particle"), &TestDesc)))
 	//	return E_FAIL;
+
+
+	m_pNavigationCom->Set_ExceptCellNum(99);
 
 	return S_OK;
 }
@@ -605,7 +608,7 @@ void CPlayer::Change_CameraMode(CPlayerCamera::CAMERA_MODE eMode)
 
 void CPlayer::LockOnOff()
 {
-	if (!m_isLockOn)
+	if (!m_isLockOn && !m_isPlayingCutscene)
 	{
 		m_pTargetMonster = Find_TargetMonster();
 		if (nullptr == m_pTargetMonster)

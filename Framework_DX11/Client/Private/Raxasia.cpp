@@ -134,7 +134,7 @@ HRESULT CRaxasia::Initialize(void* pArg)
 
 	//Start_CutScene(CUTSCENE_MEET);
 
-	ChangePhase();
+	//ChangePhase();
 	return S_OK;
 }
 
