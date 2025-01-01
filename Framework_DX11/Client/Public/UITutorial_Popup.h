@@ -38,17 +38,18 @@ public:
 	virtual HRESULT Ready_UIPart_Group_Control() override;
 
 	void Set_Popup(vector<struct CUIPage::UIPART_INFO*>& vecOrigin);
-	void Update_Popup(TUTO_INFO& NowData, _float fTimeDelta);
+	void Update_Popup(TUTO_CHAPTER& NowData, _float fTimeDelta);
 
 protected:
 	vector<UPART*> m_vecSharedPointer_Frame;
 	UPART* m_pSharedPointer_Title = { nullptr };
-	UPART* m_pSharedPointer_Score = { nullptr };
+	
+	vector<UPART*> m_vecSharedPointer_Ctrl_Upper;
+	vector<UPART*> m_vecSharedPointer_Ctrl_Middle;
+	vector<UPART*> m_vecSharedPointer_Ctrl_Lower;
 
-
-
-
-
+	UPART* m_pSharedPointer_DescA = { nullptr };
+	UPART* m_pSharedPointer_DescB = { nullptr };
 
 
 

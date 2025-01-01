@@ -21,7 +21,7 @@ private:
 
 public:
 	// 诀利 单捞磐 包府
-	HRESULT Initialize_Data(vector<struct CUIPage::UIPART_INFO*>& vecOrigin, struct CUIPage::SCROLL_INFO* Scroll);
+	HRESULT Initialize_Data(vector<struct CUIPage::UIPART_INFO*>& vecOrigin);
 	void Input_Data(vector<_wstring>& Data);
 
 	void Add_Stat(_int iStat)
@@ -39,6 +39,8 @@ public:
 			}
 		}
 	}
+
+	void Set_Scroll(struct CUIPage::SCROLL_INFO* Scroll) { m_pScroll = Scroll; }
 
 	// 诀利 能飘费 
 	_bool Update_Line(_float fTimeDelta, _float fAdjustY, _float fAlpha, _bool bIsRender);

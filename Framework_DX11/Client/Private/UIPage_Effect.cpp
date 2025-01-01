@@ -246,7 +246,9 @@ _float CUIPage_Effect::Check_Ratio(_Vec3* vLifeTime, _float fTimeDelta)
 	}
 	else if (vLifeTime->x < vLifeTime->y)
 	{
-		fResult = vLifeTime->x / vLifeTime->y;
+		// 나타날 떄는 즉시
+		fResult = 1.f;
+		//fResult = vLifeTime->x / vLifeTime->y;
 	}
 
 

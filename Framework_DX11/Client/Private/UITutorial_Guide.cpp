@@ -119,28 +119,45 @@ void CUITutorial_Guide::Set_Guide(vector<struct CUIPage::UIPART_INFO*>& vecOrigi
 	}
 
 	m_pSharedPointer_Frame = vecOrigin[iIndex];
-	m_pSharedPointer_Title = vecOrigin[iIndex + 1];
+	++iIndex;
+	m_pSharedPointer_Title = vecOrigin[iIndex];
 
+	for (_int i = 0; i < 4; ++i)
+	{
+		++iIndex;
+		m_vecSharedPointer_Ctrl_Upper.push_back(vecOrigin[iIndex]);
+	}
 
+	for (_int i = 0; i < 4; ++i)
+	{
+		++iIndex;
+		m_vecSharedPointer_Ctrl_Middle.push_back(vecOrigin[iIndex]);
+	}
 
-
-	UPART* m_pSharedPointer_Frame = { nullptr };
-	UPART* m_pSharedPointer_Title = { nullptr };
-	vector<UPART*> m_vecSharedPointer_Ctrl_Upper;
-	vector<UPART*> m_vecSharedPointer_Ctrl_Lower;
-
-
-
-
-
+	for (_int i = 0; i < 4; ++i)
+	{
+		++iIndex;
+		m_vecSharedPointer_Ctrl_Lower.push_back(vecOrigin[iIndex]);
+	}
 }
 
-void CUITutorial_Guide::Update_Guide(TUTO_INFO& NowData, _float fTimeDelta)
+void CUITutorial_Guide::Update_Guide(TUTO_CHAPTER& NowData, _float fTimeDelta)
 {
+	if (m_iNowChapter == NowData.iCapterIndex)
+		return;
 
+	m_iNowChapter = NowData.iCapterIndex;
 
+	m_pSharedPointer_Title->strText = NowData.strTitle;
 
+	_int iCount = 0;
+	iCount += Set_Crtl_Guide(&m_vecSharedPointer_Ctrl_Upper, NowData, 0);
+	iCount += Set_Crtl_Guide(&m_vecSharedPointer_Ctrl_Middle, NowData, 1);
+	iCount += Set_Crtl_Guide(&m_vecSharedPointer_Ctrl_Lower, NowData, 2);
 
+	if (iCount == 3) m_pSharedPointer_Frame->fRatio = 1.f;
+	if (iCount == 2) m_pSharedPointer_Frame->fRatio = 0.75f;
+	if (iCount == 1) m_pSharedPointer_Frame->fRatio = 0.50f;
 }
 
 CUITutorial_Guide* CUITutorial_Guide::Create(ID3D11Device* pDevice, ID3D11DeviceContext* pContext)
@@ -179,4 +196,8 @@ void CUITutorial_Guide::Free()
 	}
 
 	m_vecPart.clear();
+
+	m_vecSharedPointer_Ctrl_Upper.clear();
+	m_vecSharedPointer_Ctrl_Middle.clear();
+	m_vecSharedPointer_Ctrl_Lower.clear();
 }

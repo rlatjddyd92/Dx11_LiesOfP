@@ -63,14 +63,19 @@ void CUIPage_Tutorial::Update(_float fTimeDelta)
 
 void CUIPage_Tutorial::Late_Update(_float fTimeDelta)
 {
+	if (m_iNowChapter == -1)
+		Next_Chapter();
+
+	Test_Control(fTimeDelta);
+
 	Update_Tutorial_Info(fTimeDelta);
 	Update_Tutorial_Guide(fTimeDelta);
 	Update_Tutorial_Timing(fTimeDelta);
 	Update_Tutorial_Result(fTimeDelta);
 	Update_Tutorial_Popup(fTimeDelta);
 
-	for (auto& iter : m_vec_Group_Ctrl)
-		__super::UpdatePart_ByControl(iter);
+	/*for (auto& iter : m_vec_Group_Ctrl)
+		__super::UpdatePart_ByControl(iter);*/
 
 	__super::Late_Update(fTimeDelta);
 }
@@ -109,20 +114,21 @@ void CUIPage_Tutorial::Open_Popup()
 
 void CUIPage_Tutorial::Update_Tutorial_Info(_float fTimeDelta)
 {
+	for (_int i = 0; i < 4; ++i)
+	{
+		if (m_iNow_Index + i >= m_vecTutorial_MissionData.size())
+			break;
 
+		if (m_vecTutorial_MissionData[m_iNow_Index + i]->iCapterIndex != m_iNowChapter)
+			break;
 
-
-
-
+		m_vecMission_Info[i]->Update_Info(*m_vecTutorial_MissionData[m_iNow_Index + i], fTimeDelta);
+	}
 }
 
 void CUIPage_Tutorial::Update_Tutorial_Guide(_float fTimeDelta)
 {
-
-
-
-
-
+	m_pGuide->Update_Guide(*m_vecTutorial_ChapterData[m_iNowChapter], fTimeDelta);
 }
 
 void CUIPage_Tutorial::Update_Tutorial_Timing(_float fTimeDelta)
@@ -131,7 +137,10 @@ void CUIPage_Tutorial::Update_Tutorial_Timing(_float fTimeDelta)
 		ShowTiming(KEY::LSHIFT, 2.f);
 
 	if (m_pTiming->Update_Timing(fTimeDelta) == false)
-		m_vec_Group_Ctrl[_int(PART_GROUP::GROUP_TIMING)]->bRender = false;
+	{
+		for (auto& iter : m_vec_Group_Ctrl[_int(PART_GROUP::GROUP_TIMING)]->PartIndexlist)
+			m_vecPart[iter]->bRender = false;
+	}
 }
 
 void CUIPage_Tutorial::Update_Tutorial_Result(_float fTimeDelta)
@@ -143,17 +152,158 @@ void CUIPage_Tutorial::Update_Tutorial_Result(_float fTimeDelta)
 
 void CUIPage_Tutorial::Update_Tutorial_Popup(_float fTimeDelta)
 {
-	if (KEY_TAP(KEY::ENTER))
-		m_bPopupOpen = !m_bPopupOpen;
+	if (m_bNewChapter == false)
+		return;
 
-	m_vec_Group_Ctrl[_int(PART_GROUP::GROUP_POPUP)]->bRender = m_bPopupOpen;
+	if (KEY_TAP(KEY::ENTER))
+	{
+		m_bPopupOpen = !m_bPopupOpen;
+	}
+
+	for (auto& iter : m_vec_Group_Ctrl[_int(PART_GROUP::GROUP_POPUP)]->PartIndexlist)
+		m_vecPart[iter]->bRender = m_bPopupOpen;
+	
+	if (m_bPopupOpen == true) m_pPopup->Update_Popup(*m_vecTutorial_ChapterData[m_iNowChapter], fTimeDelta);
+
+	m_bNewChapter = m_bPopupOpen;
 }
 
 void CUIPage_Tutorial::ShowTiming(KEY eKey, _float fTime)
 {
-	m_vec_Group_Ctrl[_int(PART_GROUP::GROUP_TIMING)]->bRender = true;
+	for (auto& iter : m_vec_Group_Ctrl[_int(PART_GROUP::GROUP_TIMING)]->PartIndexlist)
+		m_vecPart[iter]->bRender = true;
 
 	m_pTiming->Start_Timing(eKey, fTime);
+}
+
+void CUIPage_Tutorial::Test_Control(_float fTimeDelta)
+{
+	if ((m_bNewChapter == false) && (KEY_TAP(KEY::N)))
+	{
+		_int iIndex = m_iNow_Index;
+
+		while (1)
+		{
+			if (iIndex >= m_vecTutorial_MissionData.size())
+				CloseAction();
+			else if (m_vecTutorial_MissionData[iIndex]->iCapterIndex != m_iNowChapter)
+				Next_Chapter();
+			else if (m_vecTutorial_MissionData[iIndex]->bComplete == false)
+			{
+				m_vecTutorial_MissionData[iIndex]->bComplete = true;
+				break;
+			}
+			
+			++iIndex;
+		}
+	}
+}
+
+void CUIPage_Tutorial::Check_Mission_Complete(_float fTimeDelta)
+{
+	if (GET_GAMEINTERFACE->IsGamePause() == true)
+		return;
+
+	switch (m_iNowChapter)
+	{
+	case 0: 
+		Check_Player_Move(fTimeDelta); // 이동하기 미션, 회피 미션
+	case 1:
+		Check_Player_Move(fTimeDelta); // 이동하기 미션, 회피 미션
+	case 2:
+		Check_Player_Lbutton_Attack(); // 일반 공격 
+	case 3:
+		Check_Player_RButton_Attack(); // 강공격
+	case 4:
+		Check_Player_Fable_Art(); // 유저 페이블 아츠 사용
+	case 5:
+		Check_Dummy_Weakness(); // 그로기 성공
+		Check_Dummy_Get_FatalAttack(); // 페이탈 어택 성공
+	case 6:
+		Check_Player_Switch_Weapon(); // 무기 변경
+	case 7:
+		Check_Player_Guard(); // 가드, 퍼펙트 가드
+	case 8:
+		Check_Player_Resion_Arm_Normal(); // 리전 암 전개
+	case 9:
+		Check_Player_Resion_Arm_Skill(); // 리전 암 막기, 리전 암 공격
+	default:
+		break;
+	}
+
+	_int iIndex = m_iNow_Index;
+
+	while (1)
+	{
+		if (iIndex > m_vecTutorial_MissionData.size())
+			CloseAction();
+
+		if (m_vecTutorial_MissionData[iIndex]->iCapterIndex != m_iNowChapter)
+			Next_Chapter();
+
+		if (m_vecTutorial_MissionData[iIndex]->bComplete == false)
+			break;
+
+		++iIndex;
+	}
+}
+
+void CUIPage_Tutorial::Check_Player_Move(_float fTimeDelta)
+{
+	if (m_iNow_Index == 0)
+	{
+		if (m_vecTutorial_MissionData[m_iNow_Index + 0]->bComplete == false)
+			if ((KEY_TAP(KEY::W)) || (KEY_HOLD(KEY::W)))
+				m_vecTutorial_MissionData[m_iNow_Index + 0]->fNow += fTimeDelta;
+
+		if (m_vecTutorial_MissionData[m_iNow_Index + 1]->bComplete == false)
+			if ((KEY_TAP(KEY::S)) || (KEY_HOLD(KEY::S)))
+				m_vecTutorial_MissionData[m_iNow_Index + 0]->fNow += fTimeDelta;
+
+		if (m_vecTutorial_MissionData[m_iNow_Index + 2]->bComplete == false)
+			if ((KEY_TAP(KEY::A)) || (KEY_HOLD(KEY::A)))
+				m_vecTutorial_MissionData[m_iNow_Index + 0]->fNow += fTimeDelta;
+
+		if (m_vecTutorial_MissionData[m_iNow_Index + 3]->bComplete == false)
+			if ((KEY_TAP(KEY::D)) || (KEY_HOLD(KEY::D)))
+				m_vecTutorial_MissionData[m_iNow_Index + 0]->fNow += fTimeDelta;
+	}
+}
+
+void CUIPage_Tutorial::Check_Player_Lbutton_Attack()
+{
+}
+
+void CUIPage_Tutorial::Check_Player_RButton_Attack()
+{
+}
+
+void CUIPage_Tutorial::Check_Player_Fable_Art()
+{
+}
+
+void CUIPage_Tutorial::Check_Dummy_Weakness()
+{
+}
+
+void CUIPage_Tutorial::Check_Dummy_Get_FatalAttack()
+{
+}
+
+void CUIPage_Tutorial::Check_Player_Switch_Weapon()
+{
+}
+
+void CUIPage_Tutorial::Check_Player_Guard()
+{
+}
+
+void CUIPage_Tutorial::Check_Player_Resion_Arm_Normal()
+{
+}
+
+void CUIPage_Tutorial::Check_Player_Resion_Arm_Skill()
+{
 }
 
 HRESULT CUIPage_Tutorial::Ready_UIPart_Group_Control()
@@ -176,18 +326,28 @@ HRESULT CUIPage_Tutorial::Ready_UIPart_Group_Control()
 
 	m_vec_Group_Ctrl[_int(PART_GROUP::GROUP_TIMING)]->bRender = false;
 	m_vec_Group_Ctrl[_int(PART_GROUP::GROUP_RESULT)]->bRender = false;
+	m_vec_Group_Ctrl[_int(PART_GROUP::GROUP_INFO_FRAME)]->bRender = false;
+	m_vec_Group_Ctrl[_int(PART_GROUP::GROUP_INFO_MISSION)]->bRender = false;
 
 	Initialize_Tutorial();
+
+	m_vecPart[m_vecPart.size() - 2]->iTexture_Index = 220;
+
+	for (auto& iter : m_vec_Group_Ctrl)
+		__super::UpdatePart_ByControl(iter);
 
 	return S_OK;
 }
 
 void CUIPage_Tutorial::Initialize_Tutorial()
 {
+	m_vecMission_Info.clear();
+
 	for (_int i = 0; i < 4; ++i)
 	{
 		CUITutorial_Info* pNew = CUITutorial_Info::Create(m_pDevice, m_pContext);
-		m_vecInfo.push_back(pNew);
+		pNew->Set_Info(m_vecPart);
+		m_vecMission_Info.push_back(pNew);
 	}
 
 	m_pGuide = CUITutorial_Guide::Create(m_pDevice, m_pContext);
@@ -195,7 +355,112 @@ void CUIPage_Tutorial::Initialize_Tutorial()
 	m_pResult = CUITutorial_Result::Create(m_pDevice, m_pContext);
 	m_pPopup = CUITutorial_Popup::Create(m_pDevice, m_pContext);
 
+	m_pGuide->Set_Guide(m_vecPart);
 	m_pTiming->Set_Timing(m_vecPart);
+	m_pResult->Set_Result(m_vecPart);
+	m_pPopup->Set_Popup(m_vecPart);
+
+	Data_Setting();
+}
+
+void CUIPage_Tutorial::Data_Setting()
+{
+	vector<vector<_wstring>> vecBuffer_Chapter;
+	m_pGameInstance->LoadDataByFile("../Bin/DataFiles/Tutorial_Chapter.csv", &vecBuffer_Chapter);
+
+	for (_int i = 1; i < vecBuffer_Chapter.size(); ++i)
+	{
+		TUTO_CHAPTER* pNew = new TUTO_CHAPTER;
+
+		pNew->iCapterIndex = stoi(vecBuffer_Chapter[i][0]);
+		pNew->strTitle = vecBuffer_Chapter[i][1];
+		pNew->strDescA = vecBuffer_Chapter[i][2];
+		pNew->strDescB = vecBuffer_Chapter[i][3];
+
+		pNew->iKey_Texture[0] = Check_KeyTexture_Index(vecBuffer_Chapter[i][4]);
+		pNew->iKey_Texture[1] = Check_KeyTexture_Index(vecBuffer_Chapter[i][5]);
+		pNew->strKey_Desc[0] = vecBuffer_Chapter[i][6];
+		pNew->iKey_Texture[2] = Check_KeyTexture_Index(vecBuffer_Chapter[i][7]);
+		pNew->iKey_Texture[3] = Check_KeyTexture_Index(vecBuffer_Chapter[i][8]);
+		pNew->strKey_Desc[1] = vecBuffer_Chapter[i][9];
+		pNew->iKey_Texture[4] = Check_KeyTexture_Index(vecBuffer_Chapter[i][10]);
+		pNew->iKey_Texture[5] = Check_KeyTexture_Index(vecBuffer_Chapter[i][11]);
+		pNew->strKey_Desc[2] = vecBuffer_Chapter[i][12];
+
+		m_vecTutorial_ChapterData.push_back(pNew);
+	}
+
+	vector<vector<_wstring>> vecBuffer_Mission;
+	m_pGameInstance->LoadDataByFile("../Bin/DataFiles/Tutorial_Info.csv", &vecBuffer_Mission);
+
+	for (_int i = 1; i < vecBuffer_Mission.size(); ++i)
+	{
+		TUTO_MISSION* pNew = new TUTO_MISSION;
+
+		pNew->iCapterIndex = stoi(vecBuffer_Mission[i][0]);
+		pNew->iMissionIndex = stoi(vecBuffer_Mission[i][1]);
+		pNew->strTitle = vecBuffer_Mission[i][2];
+		pNew->fGoal = stof(vecBuffer_Mission[i][3]);
+
+		m_vecTutorial_MissionData.push_back(pNew);
+	}
+}
+
+_int CUIPage_Tutorial::Check_KeyTexture_Index(_wstring strKeyName)
+{
+	_int iResult = -1;
+
+	if(strKeyName[0] == 'W')
+		iResult = 294;
+	else if ((strKeyName[0] == 'S') && (strKeyName[1] == 'P'))
+		iResult = 287;
+	else if (strKeyName[0] == 'L')
+		iResult = 302;
+	else if (strKeyName[0] == 'R')
+		iResult = 305;
+	else if (strKeyName[0] == 'F')
+		iResult = 223;
+	else if (strKeyName[0] == 'T')
+		iResult = 289;
+	else if ((strKeyName[0] == 'S') && (strKeyName[1] == 'H'))
+		iResult = 250;
+	else if (strKeyName[0] == 'C')
+		iResult = 249;
+
+	return iResult;
+}
+
+_bool CUIPage_Tutorial::Set_Crtl_Guide(vector<UPART*>* Part, TUTO_CHAPTER& Data, _int iIndex)
+{
+	for (auto& iter : (*Part))
+		iter->bRender = false;
+
+	if (Data.iKey_Texture[iIndex * 2] == -1)
+		return false;
+
+	(*Part)[0]->iTexture_Index = Data.iKey_Texture[iIndex * 2];
+	(*Part)[0]->bRender = true;
+
+	(*Part)[0]->fSize.y = (*Part)[0]->iTexture_Index == 287 ? m_fKeyHeight * 0.5f : m_fKeyHeight;
+	
+	if (Data.iKey_Texture[(iIndex * 2) + 1] != -1)
+	{
+		(*Part)[1]->bRender = true;
+		(*Part)[2]->iTexture_Index = Data.iKey_Texture[(iIndex * 2) + 1];
+		(*Part)[2]->bRender = true;
+		(*Part)[3]->fRatio = 1.f;
+		(*Part)[2]->fSize.y = (*Part)[2]->iTexture_Index == 287 ? m_fKeyHeight * 0.5f : m_fKeyHeight;
+	}
+	else 
+		(*Part)[3]->fRatio = 0.f;
+
+	if (Data.strKey_Desc[iIndex][0] != 'n')
+	{
+		(*Part)[3]->bRender = true;
+		(*Part)[3]->strText = Data.strKey_Desc[iIndex];
+	}
+
+	return true;
 }
 
 void CUIPage_Tutorial::Update_Tutorial()
@@ -206,6 +471,25 @@ void CUIPage_Tutorial::Update_Tutorial()
 
 
 
+}
+
+void CUIPage_Tutorial::Next_Chapter()
+{
+	++m_iNowChapter;
+
+	if (m_iNowChapter < m_vecTutorial_ChapterData.size())
+	{
+		while (m_vecTutorial_MissionData[m_iNow_Index]->iCapterIndex != m_iNowChapter)
+			++m_iNow_Index;
+
+		m_bNewChapter = true;
+
+		Open_Popup();
+	}
+	else
+	{
+		// 여기에 종료 팝업 필요
+	}
 }
 
 CUIPage_Tutorial* CUIPage_Tutorial::Create(ID3D11Device* pDevice, ID3D11DeviceContext* pContext)
@@ -243,17 +527,30 @@ void CUIPage_Tutorial::Free()
 		Safe_Delete(iter);
 	}
 
-	for (auto& iter : m_vecInfo)
+	for (auto& iter : m_vecMission_Info)
 	{
 		Safe_Release(iter);
 	}
 
-	m_vecInfo.clear();
+	m_vecMission_Info.clear();
 
 	Safe_Release(m_pGuide);
 	Safe_Release(m_pTiming); 
 	Safe_Release(m_pResult);
 	Safe_Release(m_pPopup);
+
+	for (auto& iter : m_vecTutorial_ChapterData)
+	{
+		Safe_Delete(iter);
+	}
+
+	for (auto& iter : m_vecTutorial_MissionData)
+	{
+		Safe_Delete(iter);
+	}
+
+	m_vecTutorial_ChapterData.clear();
+	m_vecTutorial_MissionData.clear();
 
 	m_vecPart.clear();
 }

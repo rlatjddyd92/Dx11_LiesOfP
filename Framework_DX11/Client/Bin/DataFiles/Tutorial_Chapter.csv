@@ -1,11 +1,11 @@
 ﻿_Index,_Title,_ChapterDesc0,_ChapterDesc1,_Key00,_Key01,_KeyDesc0,_Key10,_Key11,_KeyDesc1,_Key20,_Key21,_KeyDesc2
-0,기본 이동 방법,WASD 키를 이용하여 이동 가능,none,WASD,none,: 상하좌우 이동하기,none,none,,none,none,
-1,기본 회피 방법,이동키와 스페이스를 함께 누르면 회피,none,WASD,SPACE,: 회피,none,none,,none,none,
-2,기본 공격 방법,마우스 좌클릭으로 일반 공격,"여러 회 클릭 시, 2가지 공격을 번갈아 가며 진행",좌클릭,none,: 일반 공격 1,좌클릭,none,: 일반 공격 2,none,none,
-3,강력한 공격 진행,마우스 우측버튼을 길게 누른 후 떼면 강공격 진행,강공격으로 몬스터를 그로기 상태로 만들 수 있다,우클릭,none,: (길게 누르고 떼기) 강공격 ,none,none,,none,none,
-4,페이블 아츠 사용 1,페이블 아츠를 소모해 특수한 기술 사용,우측 하단에서 조작키 및 소모되는 아츠 확인,F,none,: 페이블 아츠 기술 1,F,SHIFT,: 페이블 아츠 기술 2,none,none,
-5,페이탈 어택,그로기 상태에 빠진 적을 상대로 페이탈 어택 가능,페이탈 어택은 강력한 데미지를 입힌다.,좌클릭,none,: 페이탈 어택 표시가 뜬 상태에서 좌클릭,none,none,,none,none,
-6,무기 교체하기,전투 중 무기 교체 가능,무기 별로 다른 페이블 아츠 기술 사용 가능,TAP,none,: 무기 교체하기,none,none,,none,none,
-7,기본 방어 기술,몬스터 공격을 막아 데미지를 줄인다,정확한 타이밍에 가드하면 퍼펙트 가드가 되어 데미지를 입지 않는다,SHIFT,none,: 가드,SHIFT,none,: (정확한 타이밍) 퍼펙트 가드,none,none,
-8,리전 암 사용하기,리전 암으로 방패 전개 및 각종 기술 사용,리전 암은 가드리게인을 소모하며 남은 수치는 좌측 하단에서 확인,CTRL,none,: 방패 전개,none,none,,none,none,
-9,리전 암 특수 기능,방패 전개 상태에서 공격 및 방어 가능,방패로 가드를 하면 퍼펙트 가드가 높은 확률로 발동,CTRL,좌클릭,: 방패 사용 중 공격,CTRL,SHIFT,: 방패로 막기 (퍼펙트 가드 확률 UP),none,none,
+0,기본 이동 방법,WASD 키를 이용하여 이동 가능,none,WASD,none,: 상하좌우 이동하기,none,none,none,none,none,none
+1,기본 회피 방법,이동키와 스페이스를 함께 누르면 회피,none,WASD,SPACE,: 회피,none,none,none,none,none,none
+2,기본 공격 방법,마우스 좌클릭으로 일반 공격,여러 회 클릭 하면 2가지 공격을 번갈아 가며 진행,LBUTTON,none,: 일반 공격 1,LBUTTON,none,: 일반 공격 2,none,none,none
+3,강력한 공격 진행,마우스 우측버튼을 길게 누른 후 떼면 강공격 진행,강공격으로 몬스터를 그로기 상태로 만들 수 있다,RBUTTON,none,: (길게 누르고 떼기) 강공격 ,none,none,none,none,none,none
+4,페이블 아츠 사용 1,페이블 아츠를 소모해 특수한 기술 사용,우측 하단에서 조작키 및 소모되는 아츠 확인,F,none,: 페이블 아츠 기술 1,F,SHIFT,: 페이블 아츠 기술 2,none,none,none
+5,페이탈 어택,그로기 상태에 빠진 적을 상대로 페이탈 어택 가능,페이탈 어택은 강력한 데미지를 입힌다.,LBUTTON,none,: 페이탈 어택 표시가 뜬 상태에서 좌클릭,none,none,none,none,none,none
+6,무기 교체하기,전투 중 무기 교체 가능,무기 별로 다른 페이블 아츠 기술 사용 가능,TAP,none,: 무기 교체하기,none,none,none,none,none,none
+7,기본 방어 기술,몬스터 공격을 막아 데미지를 줄인다,정확한 타이밍에 가드하면 퍼펙트 가드가 되어 데미지를 입지 않는다,SHIFT,none,: 가드,SHIFT,none,: (정확한 타이밍) 퍼펙트 가드,none,none,none
+8,리전 암 사용하기,리전 암으로 방패 전개 및 각종 기술 사용,리전 암은 가드리게인을 소모하며 남은 수치는 좌측 하단에서 확인,CTRL,none,: 방패 전개,none,none,none,none,none,none
+9,리전 암 특수 기능,방패 전개 상태에서 공격 및 방어 가능,방패로 가드를 하면 퍼펙트 가드가 높은 확률로 발동,CTRL,LBUTTON,: 방패 사용 중 공격,CTRL,SHIFT,: 막기 (퍼펙트 가드 확률 UP),none,none,none

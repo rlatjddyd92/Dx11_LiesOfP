@@ -70,6 +70,9 @@ void CUIPage_Achievment::Update(_float fTimeDelta)
 		
 		fInterval *= (1.3f * m_vecAcievment.size());
 		m_pScroll->Activate_Scroll(fInterval, 0.f);
+
+		for (auto& iter : m_vecAcievment)
+			iter->Set_Scroll(pScroll);
 	}
 }
 
@@ -191,7 +194,7 @@ void CUIPage_Achievment::Make_Achievment_DataLine()
 	for (_int i = 1; i < vecBuffer.size(); ++i)
 	{
 		CAchievment_DataLine* pNew = CAchievment_DataLine::Create(m_pDevice, m_pContext);
-		pNew->Initialize_Data(m_vecPart, m_pScroll);
+		pNew->Initialize_Data(m_vecPart);
 		pNew->Input_Data(vecBuffer[i]);
 		m_vecAcievment.push_back(pNew);
 	}

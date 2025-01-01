@@ -153,4 +153,6 @@ void CUITutorial_Result::Free()
 	}
 
 	m_vecPart.clear();
+
+	m_vecSharedPointer_Frame.clear();
 }
