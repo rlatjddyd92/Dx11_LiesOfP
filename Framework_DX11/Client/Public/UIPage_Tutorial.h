@@ -103,6 +103,7 @@ protected:
 	void Update_Tutorial_Timing(_float fTimeDelta);
 	void Update_Tutorial_Result(_float fTimeDelta);
 	void Update_Tutorial_Popup(_float fTimeDelta);
+	void Update_Tutorial_NowChapter(_float fTimeDelta);
 
 	void ShowTiming(KEY eKey, _float fTime);
 
@@ -111,7 +112,8 @@ protected:
 	// 유저 행동 확인 
 	void Check_Mission_Complete(_float fTimeDelta);
 
-	void Check_Player_Move(_float fTimeDelta); // 이동하기 미션, 회피 미션
+	void Check_Player_Move(_float fTimeDelta); // 이동하기 미션
+	void Check_Player_Dash(_float fTimeDelta); // 회피 미션
 	void Check_Player_Lbutton_Attack(); // 일반 공격 
 	void Check_Player_RButton_Attack(); // 강공격
 	void Check_Player_Fable_Art(); // 유저 페이블 아츠 사용

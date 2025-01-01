@@ -75,6 +75,7 @@ void CUIPage_Tutorial::Late_Update(_float fTimeDelta)
 	Update_Tutorial_Timing(fTimeDelta);
 	Update_Tutorial_Result(fTimeDelta);
 	Update_Tutorial_Popup(fTimeDelta);
+	Update_Tutorial_NowChapter(fTimeDelta);
 
 	/*for (auto& iter : m_vec_Group_Ctrl)
 		__super::UpdatePart_ByControl(iter);*/
@@ -170,6 +171,16 @@ void CUIPage_Tutorial::Update_Tutorial_Popup(_float fTimeDelta)
 	m_bNewChapter = m_bPopupOpen;
 }
 
+void CUIPage_Tutorial::Update_Tutorial_NowChapter(_float fTimeDelta)
+{
+	list<_int>::iterator iter = m_vec_Group_Ctrl[_int(PART_GROUP::GROUP_INFO_SCORE)]->PartIndexlist.begin();
+
+	++iter;
+	m_vecPart[*iter]->strText = to_wstring(m_iNowChapter + 1);
+	++iter;
+	m_vecPart[*iter]->strText = m_vecTutorial_ChapterData[m_iNowChapter]->strTitle;
+}
+
 void CUIPage_Tutorial::ShowTiming(KEY eKey, _float fTime)
 {
 	for (auto& iter : m_vec_Group_Ctrl[_int(PART_GROUP::GROUP_TIMING)]->PartIndexlist)
@@ -215,9 +226,9 @@ void CUIPage_Tutorial::Check_Mission_Complete(_float fTimeDelta)
 	switch (m_iNowChapter)
 	{
 	case 0: 
-		Check_Player_Move(fTimeDelta); // 이동하기 미션, 회피 미션
+		Check_Player_Move(fTimeDelta); // 이동하기 미션
 	case 1:
-		Check_Player_Move(fTimeDelta); // 이동하기 미션, 회피 미션
+		Check_Player_Dash(fTimeDelta); // 회피 미션
 	case 2:
 		Check_Player_Lbutton_Attack(); // 일반 공격 
 	case 3:
@@ -291,6 +302,10 @@ void CUIPage_Tutorial::Check_Player_Move(_float fTimeDelta)
 
 	// 유저 회피 동작 확인 
 	// 최초 진입 시점 1회만 확인해야 함
+}
+
+void CUIPage_Tutorial::Check_Player_Dash(_float fTimeDelta)
+{
 }
 
 void CUIPage_Tutorial::Check_Player_Lbutton_Attack()

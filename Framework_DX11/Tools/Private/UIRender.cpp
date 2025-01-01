@@ -1,5 +1,4 @@
-#include "UIRender.h"
-#include "UIRender.h"
+
 #include "stdafx.h"
 #include "..\Public\UIRender.h"
 
