@@ -187,6 +187,8 @@ public:
 	_bool					Get_IsTeleport() { return m_isTeleport; }
 	void					Set_IsTeleport(_bool isTeleport) { m_isTeleport = isTeleport; }
 
+	_bool					Get_IsFatal() { return  m_isFatalAttack; }
+
 	WEAPON_TYPE				Get_WeaponType() { return m_eWeaponType; }
 	void					Set_WeaponType(WEAPON_TYPE eType) { m_eWeaponType = eType; }
 	class CWeapon*			Get_CurrentWeapon() { return m_pWeapon[m_eWeaponType]; }
@@ -335,6 +337,7 @@ private:
 
 	class CPlayerCollider_Fatal*	m_pFatalColliderObj = { nullptr };
 	class CMonster*					m_pContactMonster = { nullptr };
+	_bool							m_isFatalAttack = { false };
 
 private:
 	_vector		m_vRootMoveStack = {};

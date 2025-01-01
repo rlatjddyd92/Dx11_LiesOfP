@@ -31,10 +31,10 @@ HRESULT CState_Player_TH_Guard::Initialize(_uint iStateNum, void* pArg)
     m_iFootStepFrame[WALK_B][1] = 62;
     m_iFootStepFrame[WALK_F][0] = 30;
     m_iFootStepFrame[WALK_F][1] = 66;
-    m_iFootStepFrame[WALK_L][0] = 30;
-    m_iFootStepFrame[WALK_L][1] = 66;
-    m_iFootStepFrame[WALK_R][0] = 34;
-    m_iFootStepFrame[WALK_R][1] = 65;
+    m_iFootStepFrame[WALK_L][0] = 27;
+    m_iFootStepFrame[WALK_L][1] = 63;
+    m_iFootStepFrame[WALK_R][0] = 31;
+    m_iFootStepFrame[WALK_R][1] = 62;
 
     return S_OK;
 }
@@ -68,6 +68,10 @@ void CState_Player_TH_Guard::Update(_float fTimeDelta)
         {
             m_pPlayer->Change_Animation(m_iAnimation_Guard, true);
         }
+        else
+        {
+            Control_Sound();
+        }
         m_pPlayer->Change_Animation_Boundry(m_iAnimation_Guard, true, 0.f);
     }
 
@@ -75,8 +79,6 @@ void CState_Player_TH_Guard::Update(_float fTimeDelta)
     {
         m_pPlayer->Change_State(CPlayer::TH_IDLE);
     }
-
-    Control_Sound();
 }
 
 void CState_Player_TH_Guard::End_State()
@@ -207,13 +209,17 @@ void CState_Player_TH_Guard::Control_Sound()
     {
         eWalk = WALK_R;
     }
+    else
+    {
+        return;
+    }
 
-    if ((iFrame == m_iFootStepFrame[eWalk][0] || iFrame == m_iFootStepFrame[eWalk][0] + 1) && !m_isPlaySound[0])
+    if (iFrame >= m_iFootStepFrame[eWalk][0] && !m_isPlaySound[0])
     {
         m_pPlayer->Play_Sound(CPlayer::PAWN_SOUND_EFFECT1, TEXT("SE_PC_FS_Stone_Walk_01.wav"));
         m_isPlaySound[0] = true;
     }
-    else if ((iFrame == m_iFootStepFrame[eWalk][1] || iFrame == m_iFootStepFrame[eWalk][1] + 1) && !m_isPlaySound[1])
+    else if (iFrame >= m_iFootStepFrame[eWalk][1] && !m_isPlaySound[1])
     {
         m_pPlayer->Play_Sound(CPlayer::PAWN_SOUND_EFFECT1, TEXT("SE_PC_FS_Stone_Walk_02.wav"));
         m_isPlaySound[1] = true;

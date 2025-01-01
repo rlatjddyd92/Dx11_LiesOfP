@@ -40,8 +40,8 @@ private:
     _bool               Move(_float fTimeDelta);
 
 private:
-    _int                m_iFootStepFrame[14] = {};
-    _bool               m_isPlaySound[14] = { false, };
+    _int                m_iFootStepFrame[WALK_END][2] = {};
+    _bool               m_isPlaySound[2] = { false, };
     void                Control_Sound();
 
 public:

@@ -178,7 +178,7 @@ void CSimonManus::Priority_Update(_float fTimeDelta)
 
 	if (m_isStartDisslove)
 	{
-		m_fDissloveRatio += 0.1f * fTimeDelta;
+		m_fDissloveRatio += 0.3f * fTimeDelta;
 		if (m_fDissloveRatio >= 2.f)
 			m_isDead = true;
 	}
@@ -473,6 +473,8 @@ void CSimonManus::Start_CutScene(_uint iCutSceneNum)
 {
 	const _Matrix* pNewSocketMatrix = { nullptr };
 
+	DeActive_AllEffect();
+
 	switch (iCutSceneNum)
 	{
 	case CUTSCENE_MEET :
@@ -508,7 +510,7 @@ void CSimonManus::Start_CutScene(_uint iCutSceneNum)
 
 void CSimonManus::End_CutScene(_uint iCutSceneNum)
 {
-	if (m_pCutSceneFsmCom->Get_CurrentState() == STATE_MEET)
+	if (iCutSceneNum == STATE_MEET)
 	{
 		m_pModelCom = m_pP1ModelCom;
 
@@ -518,15 +520,16 @@ void CSimonManus::End_CutScene(_uint iCutSceneNum)
 
 		Active_Weapon();
 	}
-	else if (m_pCutSceneFsmCom->Get_CurrentState() == STATE_P2)
+	else if (iCutSceneNum == STATE_P2)
 	{
 		ChangePhase();
 		Active_Weapon();
 	}
-	else if (m_pCutSceneFsmCom->Get_CurrentState() == STATE_DIE)
+	else if (iCutSceneNum == STATE_DIE)
 	{
 		m_isStartDisslove = true;
 		m_pWeapon->IsActive(false);
+		Change_State(CSimonManus::DIE_TALKING);
 	}
 
 	m_isCutScene = false;
@@ -861,7 +864,7 @@ void CSimonManus::ChangePhase()
 
 	m_pFsmCom->Release_States();
 	
-	Safe_Release(m_pModelCom);
+	//Safe_Release(m_pModelCom);
 	Safe_Release(m_pFsmCom);
 
 	m_pModelCom = m_pExtraModelCom;
@@ -968,10 +971,20 @@ void CSimonManus::Free()
 		Safe_Release(m_EXCollider[i]);
 	}
 	Safe_Release(m_pWeapon);
-	Safe_Release(m_pP1ModelCom);
-	Safe_Release(m_pExtraModelCom);
-	Safe_Release(m_pCutSceneModelCom[0]);
-	Safe_Release(m_pCutSceneModelCom[1]);
+
+	Safe_Release(m_pDissloveTexture);
+
+	if (m_pModelCom != m_pP1ModelCom)
+		Safe_Release(m_pP1ModelCom);
+
+	if (m_pModelCom != m_pExtraModelCom)
+		Safe_Release(m_pExtraModelCom);
+
+	if (m_pModelCom != m_pCutSceneModelCom[0])
+		Safe_Release(m_pCutSceneModelCom[0]);
+
+	if (m_pModelCom != m_pCutSceneModelCom[1])
+		Safe_Release(m_pCutSceneModelCom[1]);
 
 	if (true == m_isCloned)
 	{

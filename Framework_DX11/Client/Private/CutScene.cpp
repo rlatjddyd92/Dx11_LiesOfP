@@ -381,7 +381,7 @@ void CCutScene::End_Setting()
 		pPlayer->IsActive(true);
 		pPlayer->Get_Navigation()->Move_to_Cell(pPlayer->Get_RigidBody(), 40);
 		m_pGameInstance->Stop_BGM();
-		static_cast<CPawn*>(m_pGameInstance->Find_Object(LEVEL_GAMEPLAY, TEXT("Layer_SimonManus"), 0))->Change_State(CSimonManus::DIE_TALKING);
+		static_cast<CPawn*>(m_pGameInstance->Find_Object(LEVEL_GAMEPLAY, TEXT("Layer_SimonManus"), 0))->End_CutScene(2);
 		break;
 	default:
 		break;
