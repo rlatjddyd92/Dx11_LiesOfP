@@ -1386,6 +1386,9 @@
     </Filter>
     <Filter Include="02.GameObjects\02.Pawn\01.Monster\Boss\Raxasia\Dissolve_Raxasia_Dead">
       <UniqueIdentifier>{3d3c022c-e525-4921-b9ff-31c7628b841b}</UniqueIdentifier>
+	</Filter>
+    <Filter Include="02.GameObjects\13.EffectObject\Butterfly">
+      <UniqueIdentifier>{862e0e30-3183-4d04-8eaa-00bc69ea82f2}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -2558,6 +2561,9 @@
     </ClInclude>
     <ClInclude Include="..\Public\UIPage_3D_PathGuide.h">
       <Filter>03.GameInterface_Controller\00.UIManager\03.UIPage_3D\00.UIPage_3D_PathGuide</Filter>
+	</ClInclude>
+    <ClInclude Include="..\Public\Butterfly.h">
+      <Filter>02.GameObjects\13.EffectObject\Butterfly</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -3700,6 +3706,9 @@
     </ClCompile>
     <ClCompile Include="..\private\Dissolve_Raxasia_Dead.cpp">
       <Filter>02.GameObjects\02.Pawn\01.Monster\Boss\Raxasia\Dissolve_Raxasia_Dead</Filter>
+	</ClCompile>
+    <ClCompile Include="..\Private\Butterfly.cpp">
+      <Filter>02.GameObjects\13.EffectObject\Butterfly</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

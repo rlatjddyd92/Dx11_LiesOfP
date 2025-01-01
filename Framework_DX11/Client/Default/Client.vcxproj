@@ -194,6 +194,7 @@
     <ClInclude Include="..\Public\AObj_Wave.h" />
     <ClInclude Include="..\Public\AttackObject.h" />
     <ClInclude Include="..\public\BackGround.h" />
+    <ClInclude Include="..\Public\Butterfly.h" />
     <ClInclude Include="..\Public\Camera_Manager.h" />
     <ClInclude Include="..\Public\CarcassBigA.h" />
     <ClInclude Include="..\Public\CarcassNormal.h" />
@@ -566,6 +567,7 @@
     <ClCompile Include="..\Private\AObj_Wave.cpp" />
     <ClCompile Include="..\Private\AttackObject.cpp" />
     <ClCompile Include="..\private\BackGround.cpp" />
+    <ClCompile Include="..\Private\Butterfly.cpp" />
     <ClCompile Include="..\Private\Camera_Manager.cpp" />
     <ClCompile Include="..\Private\CarcassBigA.cpp" />
     <ClCompile Include="..\Private\CarcassNormal.cpp" />

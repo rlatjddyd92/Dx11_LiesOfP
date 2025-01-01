@@ -49,6 +49,13 @@ void CState_Player_SophiaHandEnd::Update(_float fTimeDelta)
     {
         m_pPlayer->Change_State(CPlayer::OH_IDLE);
     }
+
+    if (m_bMakeButterfly == false && iFrame >= 5)
+    {
+        m_bMakeButterfly = true;
+        m_pGameInstance->Add_CloneObject_ToLayer(LEVEL_GAMEPLAY, TEXT("Layer_Butterfly"), TEXT("Prototype_GameObject_Butterfly"));
+    }
+
 }
 
 void CState_Player_SophiaHandEnd::End_State()
