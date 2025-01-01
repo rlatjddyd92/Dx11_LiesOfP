@@ -616,7 +616,7 @@ HRESULT CSimonManus::Ready_Components()
 
 	physX::GeometryCapsule CapsuleDesc;
 	CapsuleDesc.fHeight = 2.5f;
-	CapsuleDesc.fRadius = 0.45f;
+	CapsuleDesc.fRadius = 0.9f;
 	RigidBodyDesc.pGeometry = &CapsuleDesc;
 	RigidBodyDesc.PxLockFlags = PxRigidDynamicLockFlag::eLOCK_ANGULAR_X |
 		PxRigidDynamicLockFlag::eLOCK_ANGULAR_Y |

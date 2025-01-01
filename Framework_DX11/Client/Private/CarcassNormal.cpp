@@ -305,7 +305,7 @@ HRESULT CCarcassNormal::Ready_Components()
 
 	physX::GeometryCapsule CapsuleDesc;
 	CapsuleDesc.fHeight = 1.5f;
-	CapsuleDesc.fRadius = 0.5f;
+	CapsuleDesc.fRadius = 0.4f;
 	RigidBodyDesc.pGeometry = &CapsuleDesc;
 	RigidBodyDesc.PxLockFlags = PxRigidDynamicLockFlag::eLOCK_ANGULAR_X |
 		PxRigidDynamicLockFlag::eLOCK_ANGULAR_Y |

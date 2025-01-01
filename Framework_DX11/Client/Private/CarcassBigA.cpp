@@ -59,7 +59,7 @@ HRESULT CCarcassBigA::Initialize(void* pArg)
 	if (FAILED(Ready_Components()))
 		return E_FAIL;
 
-	//m_pNavigationCom->Move_to_Cell(m_pRigidBodyCom, pDefaultDesc->iCurrentCellNum);
+	m_pNavigationCom->Move_to_Cell(m_pRigidBodyCom, pDefaultDesc->iCurrentCellNum);
 
 	m_pModelCom->SetUp_Animation(rand() % 20, true);
 
@@ -304,7 +304,7 @@ HRESULT CCarcassBigA::Ready_Components()
 
 	physX::GeometryCapsule CapsuleDesc;
 	CapsuleDesc.fHeight = 1.5f;
-	CapsuleDesc.fRadius = 0.5f;
+	CapsuleDesc.fRadius = 0.7f;
 	RigidBodyDesc.pGeometry = &CapsuleDesc;
 	RigidBodyDesc.PxLockFlags = PxRigidDynamicLockFlag::eLOCK_ANGULAR_X |
 		PxRigidDynamicLockFlag::eLOCK_ANGULAR_Y |
