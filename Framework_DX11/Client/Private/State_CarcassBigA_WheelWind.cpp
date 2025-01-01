@@ -24,6 +24,8 @@ HRESULT CState_CarcassBigA_WheelWind::Start_State(void* pArg)
 {
     m_pMonster->Change_Animation(AN_SWINGRIGHT, false, 0.1f, 0, true);
 
+    m_bSwingSound = false;
+
     return S_OK;
 }
 
@@ -37,6 +39,7 @@ void CState_CarcassBigA_WheelWind::Update(_float fTimeDelta)
     }
 
     Collider_Check(CurTrackPos);
+    Sound_Check(CurTrackPos);
 
 }
 
@@ -58,6 +61,23 @@ void CState_CarcassBigA_WheelWind::Collider_Check(_double CurTrackPos)
     else
     {
         m_pMonster->DeActive_CurretnWeaponCollider(1);
+    }
+}
+
+void CState_CarcassBigA_WheelWind::Sound_Check(_double CurTrackPos)
+{
+    if ((CurTrackPos >= 85.f && CurTrackPos <= 110.f) ||
+        (CurTrackPos >= 120.f && CurTrackPos <= 155.f))
+    {
+        if (!m_bSwingSound)
+        {
+            m_pMonster->Play_Sound(CPawn::PAWN_SOUND_EFFECT1, TEXT("SE_NPC_Carcass_OneArmed_SK_WS_Blunt_01.wav"), false);
+            m_bSwingSound = true;
+        }
+    }
+    else
+    {
+        m_bSwingSound = false;
     }
 }
 

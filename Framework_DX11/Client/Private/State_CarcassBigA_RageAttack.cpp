@@ -29,12 +29,15 @@ HRESULT CState_CarcassBigA_RageAttack::Start_State(void* pArg)
 
 void CState_CarcassBigA_RageAttack::Update(_float fTimeDelta)
 {
+    _double CurTrackPos = m_pMonster->Get_CurrentTrackPos();
+
     if (End_Check())
     {
         m_pMonster->Change_State(CMonster::IDLE);
     }
 
-    Collider_Check();
+    Collider_Check(CurTrackPos);
+    //Sound_Check(CurTrackPos);
 
 }
 
@@ -47,10 +50,35 @@ _bool CState_CarcassBigA_RageAttack::End_Check()
     return m_pMonster->Get_EndAnim(AN_RAGEATTACK);
 }
 
-void CState_CarcassBigA_RageAttack::Collider_Check()
+void CState_CarcassBigA_RageAttack::Collider_Check(_double CurTrackPos)
 {
-    _double CurTrackPos = m_pMonster->Get_CurrentTrackPos();
+    if ((CurTrackPos >= 90.f && CurTrackPos <= 115.f) ||
+        (CurTrackPos >= 135.f && CurTrackPos <= 165.f) ||
+        (CurTrackPos >= 225.f && CurTrackPos <= 245.f) ||
+        (CurTrackPos >= 275.f && CurTrackPos <= 295.f))
+    {
+        m_pMonster->Active_CurrentWeaponCollider(1.3f, 0, HIT_TYPE::HIT_CARCASS, ATTACK_STRENGTH::ATK_NORMAL);
+    }
+    else
+    {
+        m_pMonster->DeActive_CurretnWeaponCollider(0);
+    }
 
+    if ((CurTrackPos >= 82.f && CurTrackPos <= 100.f) ||
+        (CurTrackPos >= 150.f && CurTrackPos <= 165.f) ||
+        (CurTrackPos >= 185.f && CurTrackPos <= 195.f) ||
+        (CurTrackPos >= 205.f && CurTrackPos <= 225.f))
+    {
+        m_pMonster->Active_CurrentWeaponCollider(1.4f, 1, HIT_TYPE::HIT_CARCASS, ATTACK_STRENGTH::ATK_NORMAL);
+    }
+    else
+    {
+        m_pMonster->DeActive_CurretnWeaponCollider(1);
+    }
+}
+
+void CState_CarcassBigA_RageAttack::Sound_Check(_double CurTrackPos)
+{
     if ((CurTrackPos >= 90.f && CurTrackPos <= 115.f) ||
         (CurTrackPos >= 135.f && CurTrackPos <= 165.f) ||
         (CurTrackPos >= 225.f && CurTrackPos <= 245.f) ||

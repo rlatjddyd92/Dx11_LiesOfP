@@ -409,6 +409,8 @@ HRESULT CLoader::Ready_Resources_For_LogoLevel()
 	m_pGameInstance->LoadSoundFile("Monster/Effect");
 	m_pGameInstance->LoadSoundFile("Monster/SimonManus");
 	m_pGameInstance->LoadSoundFile("Monster/Raxasia");
+	m_pGameInstance->LoadSoundFile("Monster/CarcassBigA");
+	m_pGameInstance->LoadSoundFile("Monster/CurruptedStrongArm");
 
 	m_pGameInstance->LoadSoundFile("Scenario/Object");
 	m_pGameInstance->LoadSoundFile("Scenario/CutScene");

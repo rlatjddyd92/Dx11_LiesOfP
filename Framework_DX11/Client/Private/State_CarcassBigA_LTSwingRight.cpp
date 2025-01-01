@@ -26,17 +26,31 @@ HRESULT CState_CarcassBigA_LTSwingRight::Start_State(void* pArg)
 
     m_fGoalRimAlpha = 0.1f;
     m_fCurtRimAlpha = 1.f;
+
+    m_bSwingSound = false;
+
     return S_OK;
 }
 
 void CState_CarcassBigA_LTSwingRight::Update(_float fTimeDelta)
 {
+    _double CurTrackPos = m_pMonster->Get_CurrentTrackPos();
+
     if (End_Check())
     {
         m_pMonster->Change_State(CMonster::IDLE);
     }
 
-    Collider_Check();
+    if (!m_bResetRim)
+    {
+        if (CurTrackPos > 85.f)
+        {
+            m_fGoalRimAlpha = 0.f;
+            m_bResetRim = true;
+        }
+    }
+
+    Collider_Check(CurTrackPos);
     Update_Rimlight();
 
 }
@@ -51,10 +65,8 @@ _bool CState_CarcassBigA_LTSwingRight::End_Check()
     return m_pMonster->Get_EndAnim(AN_LTSWINGRIGHT);
 }
 
-void CState_CarcassBigA_LTSwingRight::Collider_Check()
+void CState_CarcassBigA_LTSwingRight::Collider_Check(_double CurTrackPos)
 {
-    _double CurTrackPos = m_pMonster->Get_CurrentTrackPos();
-
     if (CurTrackPos >= 75.f && CurTrackPos <= 95.f)
     {
         m_pMonster->Active_CurrentWeaponCollider(1.6f, 0, HIT_TYPE::HIT_CARCASS, ATTACK_STRENGTH::ATK_STRONG);
@@ -63,13 +75,16 @@ void CState_CarcassBigA_LTSwingRight::Collider_Check()
     {
         m_pMonster->DeActive_CurretnWeaponCollider(0);
     }
+}
 
-    if (!m_bResetRim)
+void CState_CarcassBigA_LTSwingRight::Sound_Check(_double CurTrackPos)
+{
+    if (!m_bSwingSound)
     {
-        if (CurTrackPos > 85.f)
+        if (CurTrackPos >= 75.f && CurTrackPos <= 95.f)
         {
-            m_fGoalRimAlpha = 0.f;
-            m_bResetRim = true;
+            m_pMonster->Play_Sound(CPawn::PAWN_SOUND_EFFECT1, TEXT("SE_NPC_Carcass_OneArmed_SK_WS_Blunt_01.wav"), false);
+            m_bSwingSound = true;
         }
     }
 }
