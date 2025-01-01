@@ -26,7 +26,8 @@ public:
 private:
     class CMonster* m_pMonster = { nullptr };
 
-    _bool               m_bSwingSound = { false };
+    _bool               m_bSwingSoundL = { false };
+    _bool               m_bSwingSoundR = { false };
 private:
     _bool               End_Check();
     void                Collider_Check(_double CurTrackPos);

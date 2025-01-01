@@ -264,15 +264,15 @@ HRESULT CCarcassTail::Ready_Components()
 	/* FOR.Com_Collider_OBB */
 	CBounding_OBB::BOUNDING_OBB_DESC			ColliderOBBDesc_Obj{};
 
-	ColliderOBBDesc_Obj.vExtents = _float3(0.5f, 0.25f, 0.25f);
-	ColliderOBBDesc_Obj.vCenter = _float3(0.f, 0.f, 0.f);
+	ColliderOBBDesc_Obj.vExtents = _float3(0.9f, 0.4f, 0.4f);
+	ColliderOBBDesc_Obj.vCenter = _float3(0.3f, 0.f, 0.f);
 	ColliderOBBDesc_Obj.vAngles = _float3(0.f, 0.f, 0.f);
-
+	
 	CColliderObject::COLIDEROBJECT_DESC Desc{};
 
 	Desc.pBoundingDesc = &ColliderOBBDesc_Obj;
 	Desc.eType = CCollider::TYPE_OBB;
-	Desc.pSocketBoneMatrix = m_pModelCom->Get_BoneCombindTransformationMatrix_Ptr(m_pModelCom->Get_UFBIndices(UFB_HAND_LEFT));
+	Desc.pSocketBoneMatrix = m_pModelCom->Get_BoneCombindTransformationMatrix_Ptr(m_pModelCom->Get_UFBIndices(UFB_HAND_LEFT) - 1);
 	Desc.pParentWorldMatrix = m_pTransformCom->Get_WorldMatrix_Ptr();
 	Desc.pSocketBoneMatrix2 = m_pTransformCom->Get_WorldMatrix_Ptr();
 	Desc.fDamageAmount = 120.f;
@@ -284,7 +284,7 @@ HRESULT CCarcassTail::Ready_Components()
 	//ColliderOBBDesc_Obj.vCenter = _float3(0.f, 0.f, 0.f);
 	//ColliderOBBDesc_Obj.vAngles = _float3(0.f, 0.f, 0.f);
 
-	Desc.pSocketBoneMatrix = m_pModelCom->Get_BoneCombindTransformationMatrix_Ptr(m_pModelCom->Get_UFBIndices(UFB_HAND_RIGHT));
+	Desc.pSocketBoneMatrix = m_pModelCom->Get_BoneCombindTransformationMatrix_Ptr(m_pModelCom->Get_UFBIndices(UFB_HAND_RIGHT) - 1);
 
 	m_pColliderObject[TYPE_RIGHTHAND] = dynamic_cast<CColliderObject*>(m_pGameInstance->Clone_GameObject(TEXT("Prototype_GameObject_ColliderObj"), &Desc));
 

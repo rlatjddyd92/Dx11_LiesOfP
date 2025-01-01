@@ -84,11 +84,15 @@ void CState_CarcassBigA_RageAttack::Sound_Check(_double CurTrackPos)
         (CurTrackPos >= 225.f && CurTrackPos <= 245.f) ||
         (CurTrackPos >= 275.f && CurTrackPos <= 295.f))
     {
-        m_pMonster->Active_CurrentWeaponCollider(1.3f, 0, HIT_TYPE::HIT_CARCASS, ATTACK_STRENGTH::ATK_NORMAL);
+        if (!m_bSwingSoundL)
+        {
+            m_pMonster->Play_Sound(CPawn::PAWN_SOUND_EFFECT1, TEXT("SE_NPC_Carcass_OneArmed_SK_WS_Blunt_01.wav"), false);
+            m_bSwingSoundL = true;
+        }
     }
     else
     {
-        m_pMonster->DeActive_CurretnWeaponCollider(0);
+        m_bSwingSoundL = false;
     }
 
     if ((CurTrackPos >= 82.f && CurTrackPos <= 100.f) ||
@@ -96,11 +100,15 @@ void CState_CarcassBigA_RageAttack::Sound_Check(_double CurTrackPos)
         (CurTrackPos >= 185.f && CurTrackPos <= 195.f) ||
         (CurTrackPos >= 205.f && CurTrackPos <= 225.f))
     {
-        m_pMonster->Active_CurrentWeaponCollider(1.4f, 1, HIT_TYPE::HIT_CARCASS, ATTACK_STRENGTH::ATK_NORMAL);
+        if (!m_bSwingSoundR)
+        {
+            m_pMonster->Play_Sound(CPawn::PAWN_SOUND_EFFECT2, TEXT("SE_NPC_Carcass_OneArmed_SK_WS_Blunt_01.wav"), false);
+            m_bSwingSoundR = true;
+        }
     }
     else
     {
-        m_pMonster->DeActive_CurretnWeaponCollider(1);
+        m_bSwingSoundR = false;
     }
 }
 

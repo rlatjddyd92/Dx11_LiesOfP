@@ -25,12 +25,16 @@ HRESULT CState_CarcassBigA_AttackRoute_1::Start_State(void* pArg)
     m_fIdleTime = m_fIdleDuration;
     m_iRouteTrack = 0;
     m_isDelayed = false;
+    m_bSwingSound = false;
+
 
     return S_OK;
 }
 
 void CState_CarcassBigA_AttackRoute_1::Update(_float fTimeDelta)
 {
+
+    _double CurTrackPos = m_pMonster->Get_CurrentTrackPos();
 
     if (!m_isDelayed)
     {
@@ -42,6 +46,7 @@ void CState_CarcassBigA_AttackRoute_1::Update(_float fTimeDelta)
         if (End_Check())
         {
             ++m_iRouteTrack;
+            m_bSwingSound = false;
 
             if (m_iRouteTrack >= 2)
             {
@@ -80,7 +85,8 @@ void CState_CarcassBigA_AttackRoute_1::Update(_float fTimeDelta)
         }
     }
 
-    Collider_Check();
+    Collider_Check(CurTrackPos);
+    Sound_Check(CurTrackPos);
 
 }
 
@@ -98,17 +104,11 @@ _bool CState_CarcassBigA_AttackRoute_1::End_Check()
     switch (m_iRouteTrack)
     {
     case 0:
-        if ((AN_ROUTE_FIRST) == iCurAnim)
-        {
-            bEndCheck = m_pMonster->Get_EndAnim(AN_ROUTE_FIRST);
-        }
+        bEndCheck = m_pMonster->Get_EndAnim(AN_ROUTE_FIRST);
         break;
 
     case 1:
-        if ((AN_ROUTE_LAST) == iCurAnim)
-        {
-            bEndCheck = m_pMonster->Get_EndAnim(AN_ROUTE_LAST);
-        }
+        bEndCheck = m_pMonster->Get_EndAnim(AN_ROUTE_LAST);
         break;
 
     default:
@@ -118,10 +118,8 @@ _bool CState_CarcassBigA_AttackRoute_1::End_Check()
     return bEndCheck;
 }
 
-void CState_CarcassBigA_AttackRoute_1::Collider_Check()
+void CState_CarcassBigA_AttackRoute_1::Collider_Check(_double CurTrackPos)
 {
-    _double CurTrackPos = m_pMonster->Get_CurrentTrackPos();
-
     if (m_iRouteTrack == 0)
     {
         if (CurTrackPos >= 110.f && CurTrackPos <= 130.f)
@@ -142,6 +140,32 @@ void CState_CarcassBigA_AttackRoute_1::Collider_Check()
         else
         {
             m_pMonster->DeActive_CurretnWeaponCollider(1);
+        }
+    }
+}
+
+void CState_CarcassBigA_AttackRoute_1::Sound_Check(_double CurTrackPos)
+{
+    if (m_iRouteTrack == 0)
+    {
+        if (!m_bSwingSound)
+        {
+            if (CurTrackPos >= 110.f && CurTrackPos <= 130.f)
+            {
+                m_pMonster->Play_Sound(CPawn::PAWN_SOUND_EFFECT1, TEXT("SE_NPC_Carcass_OneArmed_SK_WS_Blunt_01.wav"), false);
+                m_bSwingSound = true;
+            }
+        }
+    }
+    else
+    {
+        if (!m_bSwingSound)
+        {
+            if (CurTrackPos >= 115.f && CurTrackPos <= 140.f)
+            {
+                m_pMonster->Play_Sound(CPawn::PAWN_SOUND_EFFECT1, TEXT("SE_NPC_Carcass_OneArmed_SK_WS_Blunt_01.wav"), false);
+                m_bSwingSound = true;
+            }
         }
     }
 }

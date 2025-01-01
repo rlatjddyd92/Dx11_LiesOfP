@@ -30,9 +30,13 @@ private:
 
     _float              m_fImpactSpeed = { 5.f };
 
+    _bool               m_bDashSound = { false };
+    _bool               m_bStepSound = { false };
+
 private:
     _bool               End_Check();
-    void                Collider_Check();
+    void                Collider_Check(_double CurTrackPos);
+    void                Sound_Check(_double CurTrackPos);
 
 public:
     static CState_CarcassBigA_Impact* Create(class CFsm* pFsm, class CMonster* pMonster, _uint iStateNum, void* pArg = nullptr);

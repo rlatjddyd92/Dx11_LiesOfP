@@ -666,9 +666,6 @@
 #include "C:\Users\User\Desktop\GitHubRepo\new\Dx11_LiesOfP\Framework_DX11\Client\Private\Stargazer.cpp"
 
 
-#include "C:\Users\User\Desktop\GitHubRepo\new\Dx11_LiesOfP\Framework_DX11\Client\Private\State_CarcassBigA_AttackRoute_0.cpp"
-
-
 #include "C:\Users\User\Desktop\GitHubRepo\new\Dx11_LiesOfP\Framework_DX11\Client\Private\State_CarcassBigA_AttackRoute_1.cpp"
 
 

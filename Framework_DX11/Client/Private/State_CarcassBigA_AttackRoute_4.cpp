@@ -21,6 +21,7 @@ HRESULT CState_CarcassBigA_AttackRoute_4::Initialize(_uint iStateNum, void* pArg
 HRESULT CState_CarcassBigA_AttackRoute_4::Start_State(void* pArg)
 {
     m_pMonster->Change_Animation(AN_ROUTE_FIRST, false, 0.1f);
+    m_bSwingSound = false;
 
     return S_OK;
 }
@@ -58,7 +59,7 @@ void CState_CarcassBigA_AttackRoute_4::Update(_float fTimeDelta)
     }
 
 
-    Collider_Check();
+    Collider_Check(CurTrackPos);
 
 }
 
@@ -94,10 +95,8 @@ _bool CState_CarcassBigA_AttackRoute_4::End_Check()
     return bEndCheck;
 }
 
-void CState_CarcassBigA_AttackRoute_4::Collider_Check()
+void CState_CarcassBigA_AttackRoute_4::Collider_Check(_double CurTrackPos)
 {
-    _double CurTrackPos = m_pMonster->Get_CurrentTrackPos();
-
     if (m_iRouteTrack == 0)
     {
         if (CurTrackPos >= 55.f && CurTrackPos <= 140.f)
@@ -121,6 +120,40 @@ void CState_CarcassBigA_AttackRoute_4::Collider_Check()
         }
     }
 
+}
+
+void CState_CarcassBigA_AttackRoute_4::Sound_Check(_double CurTrackPos)
+{
+    if (m_iRouteTrack == 0)
+    {
+        //ÀÓÆÑÆ®
+        if ((CurTrackPos >= 27.f && CurTrackPos <= 30.f) ||
+            (CurTrackPos >= 76.f && CurTrackPos <= 80.f) ||
+            (CurTrackPos >= 108.f && CurTrackPos <= 115.f) ||
+            (CurTrackPos >= 126.f && CurTrackPos <= 130.f))
+        {
+            if (!m_bStepSound)
+            {
+                m_pMonster->Play_Sound(CPawn::PAWN_SOUND_EFFECT1, TEXT("SE_NPC_FS_Carcass_OneArmed_Stone_04.wav"), false);
+                m_bStepSound = true;
+            }
+        }
+        else
+        {
+            m_bStepSound = false;
+        }
+    }
+    else
+    {
+        if( !m_bSwingSound)
+        {
+            if (CurTrackPos >= 90.f && CurTrackPos <= 105.f)
+            {
+                m_pMonster->Play_Sound(CPawn::PAWN_SOUND_EFFECT1, TEXT("SE_NPC_Carcass_OneArmed_SK_WS_Blunt_01.wav"), false);
+                m_bSwingSound = true;
+            }
+        }
+    }
 }
 
 CState_CarcassBigA_AttackRoute_4* CState_CarcassBigA_AttackRoute_4::Create(CFsm* pFsm, CMonster* pMonster, _uint iStateNum, void* pArg)

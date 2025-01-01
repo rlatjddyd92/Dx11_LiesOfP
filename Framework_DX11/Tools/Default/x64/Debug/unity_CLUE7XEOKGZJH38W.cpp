@@ -5,6 +5,9 @@
 #include "C:\Users\User\Desktop\GitHubRepo\new\Dx11_LiesOfP\Framework_DX11\Tools\Private\BackGround.cpp"
 
 
+#include "C:\Users\User\Desktop\GitHubRepo\new\Dx11_LiesOfP\Framework_DX11\Tools\Private\Controller_3DUITool.cpp"
+
+
 #include "C:\Users\User\Desktop\GitHubRepo\new\Dx11_LiesOfP\Framework_DX11\Tools\Private\Controller_Cutscene.cpp"
 
 

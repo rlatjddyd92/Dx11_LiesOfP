@@ -42,7 +42,8 @@ void CState_CarcassBigA_Impact::Update(_float fTimeDelta)
     }
    
 
-    Collider_Check();
+    Collider_Check(CurTrackPos);
+    Sound_Check(CurTrackPos);
 }
 
 void CState_CarcassBigA_Impact::End_State()
@@ -55,10 +56,8 @@ _bool CState_CarcassBigA_Impact::End_Check()
     return m_pMonster->Get_EndAnim(AN_IMPACT);
 }
 
-void CState_CarcassBigA_Impact::Collider_Check()
+void CState_CarcassBigA_Impact::Collider_Check(_double CurTrackPos)
 {
-    _double CurTrackPos = m_pMonster->Get_CurrentTrackPos();
-
     if (CurTrackPos >= 55.f && CurTrackPos <= 140.f)
     {
         m_pMonster->Active_CurrentWeaponCollider(1.4f, 2, HIT_TYPE::HIT_CARCASS, ATTACK_STRENGTH::ATK_NORMAL);
@@ -66,6 +65,25 @@ void CState_CarcassBigA_Impact::Collider_Check()
     else
     {
         m_pMonster->DeActive_CurretnWeaponCollider(2);
+    }
+}
+
+void CState_CarcassBigA_Impact::Sound_Check(_double CurTrackPos)
+{
+    if ((CurTrackPos >= 27.f && CurTrackPos <= 30.f) || 
+        (CurTrackPos >= 76.f && CurTrackPos <= 80.f) ||
+        (CurTrackPos >= 108.f && CurTrackPos <= 115.f) || 
+        (CurTrackPos >= 126.f && CurTrackPos <= 130.f))
+    {
+        if(!m_bStepSound)
+        {
+            m_pMonster->Play_Sound(CPawn::PAWN_SOUND_EFFECT1, TEXT("SE_NPC_FS_Carcass_OneArmed_Stone_04.wav"), false);
+            m_bStepSound = true;
+        }
+    }
+    else
+    {
+        m_bStepSound = false;
     }
 }
 

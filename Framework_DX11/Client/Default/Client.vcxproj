@@ -395,7 +395,6 @@
     <ClInclude Include="..\Public\SimonManus.h" />
     <ClInclude Include="..\Public\Sky.h" />
     <ClInclude Include="..\Public\Stargazer.h" />
-    <ClInclude Include="..\Public\State_CarcassBigA_AttackRoute_0.h" />
     <ClInclude Include="..\Public\State_CarcassBigA_AttackRoute_1.h" />
     <ClInclude Include="..\Public\State_CarcassBigA_AttackRoute_2.h" />
     <ClInclude Include="..\Public\State_CarcassBigA_AttackRoute_3.h" />
@@ -762,7 +761,6 @@
     <ClCompile Include="..\Private\SimonManus.cpp" />
     <ClCompile Include="..\Private\Sky.cpp" />
     <ClCompile Include="..\Private\Stargazer.cpp" />
-    <ClCompile Include="..\Private\State_CarcassBigA_AttackRoute_0.cpp" />
     <ClCompile Include="..\Private\State_CarcassBigA_AttackRoute_1.cpp" />
     <ClCompile Include="..\Private\State_CarcassBigA_AttackRoute_2.cpp" />
     <ClCompile Include="..\Private\State_CarcassBigA_AttackRoute_3.cpp" />

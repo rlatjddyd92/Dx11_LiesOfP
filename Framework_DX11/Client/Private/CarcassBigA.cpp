@@ -20,7 +20,6 @@
 #include "State_CarcassBigA_WheelWind.h"
 #include "State_CarcassBigA_Impact.h"
 
-#include "State_CarcassBigA_AttackRoute_0.h"
 #include "State_CarcassBigA_AttackRoute_1.h"
 #include "State_CarcassBigA_AttackRoute_2.h"
 #include "State_CarcassBigA_AttackRoute_3.h"
@@ -60,7 +59,7 @@ HRESULT CCarcassBigA::Initialize(void* pArg)
 	if (FAILED(Ready_Components()))
 		return E_FAIL;
 
-	m_pNavigationCom->Move_to_Cell(m_pRigidBodyCom, pDefaultDesc->iCurrentCellNum);
+	//m_pNavigationCom->Move_to_Cell(m_pRigidBodyCom, pDefaultDesc->iCurrentCellNum);
 
 	m_pModelCom->SetUp_Animation(rand() % 20, true);
 
@@ -251,14 +250,14 @@ HRESULT CCarcassBigA::Ready_Components()
 	CBounding_OBB::BOUNDING_OBB_DESC			ColliderOBBDesc_Obj{};
 
 	ColliderOBBDesc_Obj.vAngles = _float3(0.0f, 0.0f, 0.0f);
-	ColliderOBBDesc_Obj.vCenter = _float3(0.f, 0.f, 0.f);
-	ColliderOBBDesc_Obj.vExtents = _float3(0.8f, 0.45f, 0.45f);
+	ColliderOBBDesc_Obj.vCenter = _float3(0.1f, 0.f, 0.f);
+	ColliderOBBDesc_Obj.vExtents = _float3(1.2f, 0.45f, 0.45f);
 
 	CColliderObject::COLIDEROBJECT_DESC Desc{};
 
 	Desc.pBoundingDesc = &ColliderOBBDesc_Obj;
 	Desc.eType = CCollider::TYPE_OBB;
-	Desc.pSocketBoneMatrix = m_pModelCom->Get_BoneCombindTransformationMatrix_Ptr(m_pModelCom->Get_UFBIndices(UFB_HAND_LEFT));
+	Desc.pSocketBoneMatrix = m_pModelCom->Get_BoneCombindTransformationMatrix_Ptr(m_pModelCom->Get_UFBIndices(UFB_HAND_LEFT) - 1);
 	Desc.pParentWorldMatrix = m_pTransformCom->Get_WorldMatrix_Ptr();
 	Desc.pSocketBoneMatrix2 = m_pTransformCom->Get_WorldMatrix_Ptr();
 	Desc.fDamageAmount = 100.f;
@@ -269,9 +268,9 @@ HRESULT CCarcassBigA::Ready_Components()
 	/* FOR.Com_Collider_OBB */
 	ColliderOBBDesc_Obj.vAngles = _float3(0.0f, 0.0f, 0.0f);
 	ColliderOBBDesc_Obj.vCenter = _float3(0.f, 0.f, 0.f);
-	ColliderOBBDesc_Obj.vExtents = _float3(0.7f, 0.4f, 0.4f);
+	ColliderOBBDesc_Obj.vExtents = _float3(1.2f, 0.5f, 0.5f);
 	
-	Desc.pSocketBoneMatrix = m_pModelCom->Get_BoneCombindTransformationMatrix_Ptr(m_pModelCom->Get_UFBIndices(UFB_HAND_RIGHT));
+	Desc.pSocketBoneMatrix = m_pModelCom->Get_BoneCombindTransformationMatrix_Ptr(m_pModelCom->Get_UFBIndices(UFB_HAND_RIGHT) - 1);
 	
 	m_pColliderObject[TYPE_RIGHTHAND] = dynamic_cast<CColliderObject*>(m_pGameInstance->Clone_GameObject(TEXT("Prototype_GameObject_ColliderObj"), &Desc));
 
@@ -342,7 +341,6 @@ HRESULT CCarcassBigA::Ready_FSM()
 	m_pFsmCom->Add_State(CState_CarcassBigA_RageAttack::Create(m_pFsmCom, this, RAGE_ATTACK, &Desc));
 	m_pFsmCom->Add_State(CState_CarcassBigA_Impact::Create(m_pFsmCom, this, ATK_IMPACT, &Desc));
 
-	m_pFsmCom->Add_State(CState_CarcassBigA_AttackRoute_0::Create(m_pFsmCom, this, ATK_ROUTE_0, &Desc));
 	m_pFsmCom->Add_State(CState_CarcassBigA_AttackRoute_1::Create(m_pFsmCom, this, ATK_ROUTE_1, &Desc));
 	m_pFsmCom->Add_State(CState_CarcassBigA_AttackRoute_2::Create(m_pFsmCom, this, ATK_ROUTE_2, &Desc));
 	m_pFsmCom->Add_State(CState_CarcassBigA_AttackRoute_3::Create(m_pFsmCom, this, ATK_ROUTE_3, &Desc));
