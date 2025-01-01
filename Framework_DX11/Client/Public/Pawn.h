@@ -86,7 +86,7 @@ public:
     virtual void OnCollisionExit(CGameObject* pOther) override;
 
 public:
-    void            Change_State(const _uint iState, void* pArg = nullptr);
+    virtual void    Change_State(const _uint iState, void* pArg = nullptr);
     void            Set_Animation(_uint iAnimIndex, _bool IsLoop = false);
     void            SetUp_Animation(_uint iAnimIndex, _bool IsLoop = false, _uint iStartFrame = 0, _bool bEitherBoundary = true);
     void            SetUp_Animation_Boundry(_uint iAnimIndex, _bool IsLoop = false, _uint iStartFrame = 0);

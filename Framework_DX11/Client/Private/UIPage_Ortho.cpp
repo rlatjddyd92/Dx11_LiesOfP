@@ -215,8 +215,6 @@ void CUIPage_Ortho::CheckHost(_float fTimeDelta)
 		
 		
 		*/
-	
-		
 
 
 		if (((*iter)->pHost == nullptr) || ((*iter)->pHost->Get_Dead()))

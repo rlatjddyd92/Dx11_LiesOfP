@@ -106,13 +106,16 @@ void CPlayerCamera::PlayerMove(_float fTimeDelta)
 
 	vPlayerPos.m128_f32[1] += 1.65f;
 
-	if (MouseMove = m_pGameInstance->Get_DIMouseMove(DIMM_X))
+	if (!m_isLock)
 	{
-		m_pTransformCom->Orbit(XMVectorSet(0.f, 1.f, 0.f, 0.f), vPlayerPos, 0.3f, 2.8f, fTimeDelta * MouseMove * 0.1f);
-	}
-	if (MouseMove = m_pGameInstance->Get_DIMouseMove(DIMM_Y))
-	{
-		m_pTransformCom->Orbit(m_pTransformCom->Get_State(CTransform::STATE_RIGHT), vPlayerPos, 0.8f, 2.8f, fTimeDelta * MouseMove * 0.1f);
+		if (MouseMove = m_pGameInstance->Get_DIMouseMove(DIMM_X))
+		{
+			m_pTransformCom->Orbit(XMVectorSet(0.f, 1.f, 0.f, 0.f), vPlayerPos, 0.3f, 2.8f, fTimeDelta * MouseMove * 0.1f);
+		}
+		if (MouseMove = m_pGameInstance->Get_DIMouseMove(DIMM_Y))
+		{
+			m_pTransformCom->Orbit(m_pTransformCom->Get_State(CTransform::STATE_RIGHT), vPlayerPos, 0.8f, 2.8f, fTimeDelta * MouseMove * 0.1f);
+		}
 	}
 	m_vTargetPos = vPlayerPos - XMVector3Normalize(m_pTransformCom->Get_State(CTransform::STATE_LOOK)) * 2.8f;
 

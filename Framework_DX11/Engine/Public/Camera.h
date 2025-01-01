@@ -30,6 +30,9 @@ protected:
 public:
 	void Set_Far(_float fFar) { m_fFar = fFar; }
 
+	_bool Get_IsLock() { return m_isLock; }
+	void Set_IsLock(_bool isLock) { m_isLock = isLock; }
+
 public:
 	virtual HRESULT Initialize_Prototype();
 	virtual HRESULT Initialize(void* pArg);
@@ -90,6 +93,8 @@ protected:
 	_Vec3				m_vPrevCenterPos[3];
 
 	_wstring			m_strCameraTag = {};
+
+	_bool				m_isLock = { false };
 
 protected:
 	void Calculat_CascadeFrustum();

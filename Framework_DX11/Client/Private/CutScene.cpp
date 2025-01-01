@@ -134,7 +134,7 @@ void CCutScene::Active_UI(CUTSCENE_KEYFRAME_DESC* pCutSceneDesc)
 	//UI ¼û°Ü¾ß ÇÔ
 	if (pCutSceneDesc->UI_DESC.bFadeOut)
 	{
-		//GET_GAMEINTERFACE->Fade_Out(TEXT(""), TEXT(""), pCutSceneDesc->UI_DESC.fColor, pCutSceneDesc->UI_DESC.fTime);
+		GET_GAMEINTERFACE->Fade_Out(TEXT(""), TEXT(""), pCutSceneDesc->UI_DESC.fColor, pCutSceneDesc->UI_DESC.fTime);
 	}
 	if (pCutSceneDesc->UI_DESC.bFadeIn)
 	{
@@ -323,6 +323,7 @@ void CCutScene::End_Setting()
 		pPlayer->Change_State(CPlayer::OH_IDLE);
 		pPlayer->Get_Navigation()->Move_to_Cell(pPlayer->Get_RigidBody(), 1178);
 		pPlayer->Init_PlayerCamera();
+		GET_GAMEINTERFACE->Show_Script_Npc_Talking(NPC_SCRIPT::SCR_SOPIA_FIRST);
 		break;
 	case SOPHIA_DEAD:
 	{
@@ -334,6 +335,7 @@ void CCutScene::End_Setting()
 		pPlayer->Change_State(CPlayer::OH_IDLE);
 		pPlayer->Get_Navigation()->Move_to_Cell(pPlayer->Get_RigidBody(), 1178);
 		pPlayer->Init_PlayerCamera();
+		GET_GAMEINTERFACE->Show_Script_Npc_Talking(NPC_SCRIPT::SCR_SOPIA_DIE);
 	}
 		break;	
 	case BOSS1_MEET1:
@@ -395,6 +397,7 @@ void CCutScene::End_Setting()
 		m_pGameInstance->Stop_BGM();
 		static_cast<CPawn*>(m_pGameInstance->Find_Object(LEVEL_GAMEPLAY, TEXT("Layer_SimonManus"), 0))->End_CutScene(2);
 		pPlayer->Init_PlayerCamera();
+		GET_GAMEINTERFACE->Show_Script_Npc_Talking(NPC_SCRIPT::SCR_MANUS);
 		break;
 	default:
 		break;
