@@ -99,6 +99,7 @@
 #include "FirePot.h"
 #include "SteelHeart.h"
 #include "Item_Dropped.h"
+#include "Butterfly.h"
 #pragma endregion
 
 #include "Machine_EffectObj.h"
@@ -1183,6 +1184,12 @@ HRESULT CLoader::Ready_Resources_For_Obj()
 		CModel::Create(m_pDevice, m_pContext, CModel::TYPE_ANIM, "../Bin/ModelData/NonAnim/InteractObj/SK_FO_Monastery_TheLastDoor_01.dat", PreTransformMatrix))))
 		return E_FAIL;
 
+	PreTransformMatrix = XMMatrixIdentity();
+	PreTransformMatrix = XMMatrixScaling(0.01f, 0.01f, 0.01f);
+	if (FAILED(m_pGameInstance->Add_Prototype(LEVEL_GAMEPLAY, TEXT("Prototype_Component_Model_Butterfly"),
+		CModel::Create(m_pDevice, m_pContext, CModel::TYPE_ANIM, "../Bin/ModelData/Anim/Butterfly/Butterfly.dat", PreTransformMatrix))))
+		return E_FAIL;
+
 	PreTransformMatrix = XMMatrixScaling(0.0001f, 0.0001f, 0.0001f) * XMMatrixRotationY(XMConvertToRadians(270.0f));
 	if (FAILED(m_pGameInstance->Add_Prototype(LEVEL_GAMEPLAY, TEXT("Prototype_Component_Model_TreasureBox"),
 		CModel::Create(m_pDevice, m_pContext, CModel::TYPE_ANIM, "../Bin/ModelData/NonAnim/InteractObj/SK_FO_TreasureChest_02_Red.dat", PreTransformMatrix))))
@@ -1555,6 +1562,11 @@ HRESULT CLoader::Ready_Prototype()
 	/* For. Prototype_GameObject_Item_Dropped */
 	if (FAILED(m_pGameInstance->Add_Prototype(TEXT("Prototype_GameObject_Item_Dropped"),
 		CItem_Dropped::Create(m_pDevice, m_pContext))))
+		return E_FAIL;
+
+	/* For. Prototype_GameObject_Butterfly */
+	if (FAILED(m_pGameInstance->Add_Prototype(TEXT("Prototype_GameObject_Butterfly"),
+		CButterfly::Create(m_pDevice, m_pContext))))
 		return E_FAIL;
 #pragma endregion
 

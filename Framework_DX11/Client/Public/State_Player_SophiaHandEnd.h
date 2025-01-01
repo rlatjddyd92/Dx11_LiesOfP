@@ -29,6 +29,7 @@ private:
     _bool               m_isActiveDisappearEffect = {};
     class CSophia*      m_pSophia = { nullptr };
 
+    _bool               m_bMakeButterfly = { false };
 private:
     _bool               End_Check();
 

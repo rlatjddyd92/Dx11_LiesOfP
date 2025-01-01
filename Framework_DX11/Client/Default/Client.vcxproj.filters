@@ -1375,6 +1375,9 @@
     <Filter Include="02.GameObjects\15.Item\Item_Dropped">
       <UniqueIdentifier>{2893d043-136b-4210-a8a4-0b035b94c9f0}</UniqueIdentifier>
     </Filter>
+    <Filter Include="02.GameObjects\13.EffectObject\Butterfly">
+      <UniqueIdentifier>{862e0e30-3183-4d04-8eaa-00bc69ea82f2}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Client.h">
@@ -2505,6 +2508,9 @@
     <ClInclude Include="..\Public\Item_Dropped.h">
       <Filter>02.GameObjects\15.Item\Item_Dropped</Filter>
     </ClInclude>
+    <ClInclude Include="..\Public\Butterfly.h">
+      <Filter>02.GameObjects\13.EffectObject\Butterfly</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Client.cpp">
@@ -3604,6 +3610,9 @@
     </ClCompile>
     <ClCompile Include="..\Private\Item_Dropped.cpp">
       <Filter>02.GameObjects\15.Item\Item_Dropped</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Private\Butterfly.cpp">
+      <Filter>02.GameObjects\13.EffectObject\Butterfly</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

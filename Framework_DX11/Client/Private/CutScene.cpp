@@ -330,6 +330,12 @@ void CCutScene::End_Setting()
 		pPlayer->Get_Model()->ReadyDenyNextTranslate(4);
 		pPlayer->Change_State(CPlayer::OH_IDLE);
 		pPlayer->Get_Navigation()->Move_to_Cell(pPlayer->Get_RigidBody(), 1178);
+
+		int iCount = m_pGameInstance->Get_Layer_ObjectCount(LEVEL_GAMEPLAY, TEXT("Layer_Butterfly"));
+		for (int i = iCount; i > 0; --i)
+		{
+			m_pGameInstance->Find_Object(LEVEL_GAMEPLAY, TEXT("Layer_Butterfly"), iCount - 1)->Set_Dead(true);
+		}
 	}
 		break;	
 	case BOSS1_MEET1:

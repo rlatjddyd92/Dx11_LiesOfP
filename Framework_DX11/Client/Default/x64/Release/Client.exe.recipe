@@ -7,6 +7,9 @@
   </ProjectOutputs>
   <ContentFiles>
     <ContentFile>
+      <FullPath>C:\Users\olivi\Github\Dx11_LiesOfP\Framework_DX11\Client\Bin\Shader_DissolveCompute.cso</FullPath>
+    </ContentFile>
+    <ContentFile>
       <FullPath>C:\Users\olivi\Github\Dx11_LiesOfP\Framework_DX11\Client\Bin\Shader_Effect_Mesh.cso</FullPath>
     </ContentFile>
     <ContentFile>
@@ -44,6 +47,9 @@
     </ContentFile>
     <ContentFile>
       <FullPath>C:\Users\olivi\Github\Dx11_LiesOfP\Framework_DX11\Client\Bin\Shader_VtxCubeTex.cso</FullPath>
+    </ContentFile>
+    <ContentFile>
+      <FullPath>C:\Users\olivi\Github\Dx11_LiesOfP\Framework_DX11\Client\Bin\Shader_VtxDiffuseInstance.cso</FullPath>
     </ContentFile>
     <ContentFile>
       <FullPath>C:\Users\olivi\Github\Dx11_LiesOfP\Framework_DX11\Client\Bin\Shader_VtxModel.cso</FullPath>
