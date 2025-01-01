@@ -45,7 +45,7 @@ private:
 
     _float              m_fRunningWeights = { 4.f };
 
-    _float              m_fNeedDist_ForAttack = { 3.f };
+    _float              m_fNeedDist_ForAttack = { 4.6f };
 
 
     _uint               m_iAtkCnt{};

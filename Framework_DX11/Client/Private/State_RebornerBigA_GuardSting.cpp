@@ -27,6 +27,8 @@ HRESULT CState_RebornerBigA_GuardSting::Start_State(void* pArg)
     m_pMonster->Change_Animation(AN_LINKED_START, false, 0.1f, 0, true);
     m_iRouteTrack = 0;
 
+    m_bSwingSound = { false };
+
     return S_OK;
 }
 
@@ -43,7 +45,8 @@ void CState_RebornerBigA_GuardSting::Update(_float fTimeDelta)
             if (fDist <= 4.f)
             {
                 ++m_iRouteTrack;
-                m_pMonster->Change_Animation(AN_LINKED_LAST, false, 0.1f, 0, true);
+                m_bSwingSound = false;
+                m_pMonster->Change_Animation(AN_LINKED_MIDDLE, false, 0.1f, 0, true);
                 return;
             }
         }
@@ -55,11 +58,13 @@ void CState_RebornerBigA_GuardSting::Update(_float fTimeDelta)
 
         m_pMonster->Get_Transform()->LookAt_Lerp_NoHeight(m_pMonster->Get_TargetDir(), 1, fTimeDelta);
     }
-    else
+    else if (m_iRouteTrack == 1)
     {
         if (End_Check())
         {
-            m_pMonster->Change_State(CMonster::IDLE);
+            ++m_iRouteTrack;
+            m_bSwingSound = false;
+            m_pMonster->Change_Animation(AN_LINKED_LAST, false, 0.4f, 50, true);
             return;
         }
 
@@ -67,6 +72,14 @@ void CState_RebornerBigA_GuardSting::Update(_float fTimeDelta)
             (CurTrackPos >= 80.f && CurTrackPos <= 100.f))
         {
             m_pMonster->Get_Transform()->LookAt_Lerp_NoHeight(m_pMonster->Get_TargetDir(), 1, fTimeDelta);
+        }
+    }
+    else
+    {
+        if (End_Check())
+        {
+            m_pMonster->Change_State(CMonster::IDLE);
+            return;
         }
     }
 
@@ -88,6 +101,10 @@ _bool CState_RebornerBigA_GuardSting::End_Check()
     {
         bEndCheck = m_pMonster->Get_EndAnim(AN_LINKED_START);
     }
+    else if (m_iRouteTrack == 1)
+    {
+        bEndCheck = m_pMonster->Get_EndAnim(AN_LINKED_MIDDLE);
+    }
     else
     {
         bEndCheck = m_pMonster->Get_EndAnim(AN_LINKED_LAST);
@@ -103,6 +120,17 @@ void CState_RebornerBigA_GuardSting::Collider_Check(_double CurTrackPos)
         if ((CurTrackPos >= 25.f && CurTrackPos <= 40.f) ||
             (CurTrackPos >= 100.f && CurTrackPos <= 125.f))
         {
+            m_pMonster->Active_CurrentWeaponCollider(1.3f, 0, HIT_TYPE::HIT_METAL, ATTACK_STRENGTH::ATK_WEAK);
+        }
+        else
+        {
+            m_pMonster->DeActive_CurretnWeaponCollider();
+        }
+    }
+    else if (m_iRouteTrack == 2)
+    {
+        if (CurTrackPos >= 55.f && CurTrackPos <= 65.f)
+        {
             m_pMonster->Active_CurrentWeaponCollider(1.3f, 0, HIT_TYPE::HIT_METAL, ATTACK_STRENGTH::ATK_NORMAL);
         }
         else
@@ -111,6 +139,30 @@ void CState_RebornerBigA_GuardSting::Collider_Check(_double CurTrackPos)
         }
     }
 
+}
+
+void CState_RebornerBigA_GuardSting::Sound_Check(_double CurTrackPos)
+{
+    if (m_iRouteTrack == 1)
+    {
+        if ((CurTrackPos >= 25.f && CurTrackPos <= 40.f) ||
+            (CurTrackPos >= 100.f && CurTrackPos <= 125.f))
+        {
+            if (!m_bSwingSound)
+            {
+                m_pMonster->Play_Sound(CPawn::PAWN_SOUND_EFFECT1, TEXT("SE_NPC_SK_WS_Staff_03.wav"), false);
+                m_bSwingSound = true;
+            }
+        }
+        else
+        {
+            m_bSwingSound = false;
+        }
+    }
+    else if (m_iRouteTrack == 2)
+    {
+
+    }
 }
 
 CState_RebornerBigA_GuardSting* CState_RebornerBigA_GuardSting::Create(CFsm* pFsm, CMonster* pMonster, _uint iStateNum, void* pArg)

@@ -24,11 +24,14 @@ HRESULT CState_CarcassBigA_AttackRoute_3::Start_State(void* pArg)
     m_pMonster->Change_Animation(AN_ROUTE_FIRST, false, 0.1f, 0);
 
     m_fIdleTime = m_fIdleDuration;
+    m_bSwingSound = false;
     return S_OK;
 }
 
 void CState_CarcassBigA_AttackRoute_3::Update(_float fTimeDelta)
 {
+    _double CurTrackPos = m_pMonster->Get_CurrentTrackPos();
+
     if (!m_isDelayed)
     {
         if (m_iRouteTrack == 1)
@@ -39,6 +42,7 @@ void CState_CarcassBigA_AttackRoute_3::Update(_float fTimeDelta)
         if (End_Check())
         {
             ++m_iRouteTrack;
+            m_bSwingSound = false;
 
             if (m_iRouteTrack >= 2)
             {
@@ -77,7 +81,8 @@ void CState_CarcassBigA_AttackRoute_3::Update(_float fTimeDelta)
         }
     }
 
-    Collider_Check();
+    Collider_Check(CurTrackPos);
+    Sound_Check(CurTrackPos);
 
 }
 
@@ -113,10 +118,8 @@ _bool CState_CarcassBigA_AttackRoute_3::End_Check()
     return bEndCheck;
 }
 
-void CState_CarcassBigA_AttackRoute_3::Collider_Check()
+void CState_CarcassBigA_AttackRoute_3::Collider_Check(_double CurTrackPos)
 {
-    _double CurTrackPos = m_pMonster->Get_CurrentTrackPos();
-
     if (m_iRouteTrack == 0)
     {
         if (CurTrackPos >= 50.f && CurTrackPos <= 70.f)
@@ -137,6 +140,32 @@ void CState_CarcassBigA_AttackRoute_3::Collider_Check()
         else
         {
             m_pMonster->DeActive_CurretnWeaponCollider(1);
+        }
+    }
+}
+
+void CState_CarcassBigA_AttackRoute_3::Sound_Check(_double CurTrackPos)
+{
+    if (m_iRouteTrack == 0)
+    {
+        if (!m_bSwingSound)
+        {
+            if (CurTrackPos >= 50.f && CurTrackPos <= 70.f)
+            {
+                m_pMonster->Play_Sound(CPawn::PAWN_SOUND_EFFECT1, TEXT("SE_NPC_Carcass_OneArmed_SK_WS_Blunt_01.wav"), false);
+                m_bSwingSound = true;
+            }
+        }
+    }
+    else
+    {
+        if (!m_bSwingSound)
+        {
+            if (CurTrackPos >= 90.f && CurTrackPos <= 105.f)
+            {
+                m_pMonster->Play_Sound(CPawn::PAWN_SOUND_EFFECT1, TEXT("SE_NPC_Carcass_OneArmed_SK_WS_Blunt_01.wav"), false);
+                m_bSwingSound = true;
+            }
         }
     }
 }

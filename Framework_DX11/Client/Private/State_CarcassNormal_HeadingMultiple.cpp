@@ -26,6 +26,8 @@ HRESULT CState_CarcassNormal_HeadingMultiple::Start_State(void* pArg)
 {
     m_pMonster->Change_Animation(AN_ROTATE_HEADING, false, 0.1f, 0, true);
     m_iRouteTrack = 0;
+    m_bHeadingSound = false;
+    m_bSwingSound = false;
 
     return S_OK;
 }
@@ -39,6 +41,8 @@ void CState_CarcassNormal_HeadingMultiple::Update(_float fTimeDelta)
         if (End_Check())
         {
             ++m_iRouteTrack;
+            m_bHeadingSound = false;
+            m_bSwingSound = false;
             m_pMonster->SetUp_Animation(AN_HEADING, false, 0, true);
             m_pMonster->Get_Model()->Play_Animation(0);
             m_pMonster->Get_Transform()->Look_Dir(-(m_pMonster->Get_Transform()->Get_State(CTransform::STATE_LOOK)));
@@ -71,6 +75,7 @@ void CState_CarcassNormal_HeadingMultiple::Update(_float fTimeDelta)
 
 
     Collider_Check(CurTrackPos);
+    Sound_Check(CurTrackPos);
 
 }
 
@@ -146,6 +151,67 @@ void CState_CarcassNormal_HeadingMultiple::Collider_Check(_double CurTrackPos)
         }
     }
 
+}
+
+void CState_CarcassNormal_HeadingMultiple::Sound_Check(_double CurTrackPos)
+{
+    if (m_iRouteTrack == 0)
+    {
+        //머리
+        if ((CurTrackPos >= 65.f && CurTrackPos <= 78.f) ||
+            (CurTrackPos >= 108.f && CurTrackPos <= 123.f) ||
+            (CurTrackPos >= 165.f && CurTrackPos <= 177.f))
+        {
+            if (!m_bHeadingSound)
+            {
+                m_pMonster->Play_Sound(CPawn::PAWN_SOUND_EFFECT1, TEXT("SE_NPC_SK_WS_Normal_01.wav"), false);
+                m_bHeadingSound = true;
+            }
+        }
+        else
+        {
+            m_bHeadingSound = false;
+        }
+
+        //
+        if (!m_bSwingSound)
+        {
+            if (CurTrackPos >= 164.f && CurTrackPos <= 183.f)
+            {
+                m_pMonster->Play_Sound(CPawn::PAWN_SOUND_EFFECT2, TEXT("SE_NPC_SK_WS_Nail_01.wav"), false);
+                m_bSwingSound = true;
+            }
+        }
+
+    }
+    else
+    {
+        //머리
+        if ((CurTrackPos >= 61.f && CurTrackPos <= 74.f) ||
+            (CurTrackPos >= 103.f && CurTrackPos <= 118.f) ||
+            (CurTrackPos >= 160.f && CurTrackPos <= 170.f))
+        {
+            if (!m_bHeadingSound)
+            {
+                m_pMonster->Play_Sound(CPawn::PAWN_SOUND_EFFECT1, TEXT("SE_NPC_SK_WS_Normal_01.wav"), false);
+                m_bHeadingSound = true;
+            }
+        }
+        else
+        {
+            m_bHeadingSound = false;
+        }
+
+        //양손
+        if (!m_bSwingSound)
+        {
+            if (CurTrackPos >= 157.f && CurTrackPos <= 175.f)
+            {
+                m_pMonster->Play_Sound(CPawn::PAWN_SOUND_EFFECT2, TEXT("SE_NPC_SK_WS_Nail_01.wav"), false);
+                m_bSwingSound = true;
+            }
+        }
+    }
 }
 
 CState_CarcassNormal_HeadingMultiple* CState_CarcassNormal_HeadingMultiple::Create(CFsm* pFsm, CMonster* pMonster, _uint iStateNum, void* pArg)

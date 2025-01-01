@@ -25,6 +25,7 @@ HRESULT CState_CarcassNormal_Bite::Initialize(_uint iStateNum, void* pArg)
 HRESULT CState_CarcassNormal_Bite::Start_State(void* pArg)
 {
     m_pMonster->Change_Animation(AN_BITE, false, 0.1f, 0, true);
+    m_bSwingSound = false;
 
     return S_OK;
 }
@@ -40,6 +41,7 @@ void CState_CarcassNormal_Bite::Update(_float fTimeDelta)
     }
 
     Collider_Check(CurTrackPos);
+    Sound_Check(CurTrackPos);
 
     if (CurTrackPos <= 25.f ||
         CurTrackPos >= 70.f)
@@ -67,6 +69,18 @@ void CState_CarcassNormal_Bite::Collider_Check(_double CurTrackPos)
     else
     {
         m_pMonster->DeActive_CurretnWeaponCollider();
+    }
+}
+
+void CState_CarcassNormal_Bite::Sound_Check(_double CurTrackPos)
+{
+    if (!m_bSwingSound)
+    {
+        if ((CurTrackPos >= 50.f && CurTrackPos <= 57.f))
+        {
+            m_pMonster->Play_Sound(CPawn::PAWN_SOUND_EFFECT1, TEXT("SE_NPC_SK_WS_Normal_01.wav"), false);
+            m_bSwingSound = true;
+        }
     }
 }
 

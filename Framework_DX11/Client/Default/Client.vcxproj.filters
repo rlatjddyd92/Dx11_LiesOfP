@@ -301,9 +301,6 @@
     <Filter Include="05.Fsm\Monster\CarcassBigA\Attack\Route">
       <UniqueIdentifier>{defc5ddf-41fa-4d35-a731-88c238c47ef0}</UniqueIdentifier>
     </Filter>
-    <Filter Include="05.Fsm\Monster\CarcassBigA\Attack\Route\AttackRoute_0">
-      <UniqueIdentifier>{3aa6a256-937b-4f1c-8b46-1888ac52205c}</UniqueIdentifier>
-    </Filter>
     <Filter Include="05.Fsm\Monster\CarcassBigA\Attack\Route\AttackRoute_1">
       <UniqueIdentifier>{11326689-9b56-489f-aabe-90494d95ebfc}</UniqueIdentifier>
     </Filter>
@@ -1695,9 +1692,6 @@
     <ClInclude Include="..\Public\State_Player_Scissor_Fable2.h">
       <Filter>05.Fsm\Player\OneHand\00.Attack\Scissor\00.FableArts\Combo\Combo3</Filter>
     </ClInclude>
-    <ClInclude Include="..\Public\State_CarcassBigA_AttackRoute_0.h">
-      <Filter>05.Fsm\Monster\CarcassBigA\Attack\Route\AttackRoute_0</Filter>
-    </ClInclude>
     <ClInclude Include="..\Public\State_CarcassBigA_AttackRoute_1.h">
       <Filter>05.Fsm\Monster\CarcassBigA\Attack\Route\AttackRoute_1</Filter>
     </ClInclude>
@@ -2842,9 +2836,6 @@
     </ClCompile>
     <ClCompile Include="..\Private\Weapon.cpp">
       <Filter>02.GameObjects\06.Weapon</Filter>
-    </ClCompile>
-    <ClCompile Include="..\Private\State_CarcassBigA_AttackRoute_0.cpp">
-      <Filter>05.Fsm\Monster\CarcassBigA\Attack\Route\AttackRoute_0</Filter>
     </ClCompile>
     <ClCompile Include="..\Private\State_CarcassBigA_AttackRoute_1.cpp">
       <Filter>05.Fsm\Monster\CarcassBigA\Attack\Route\AttackRoute_1</Filter>

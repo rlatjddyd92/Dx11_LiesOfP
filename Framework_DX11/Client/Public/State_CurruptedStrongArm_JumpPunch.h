@@ -26,11 +26,16 @@ public:
 private:
     class CMonster* m_pMonster = { nullptr };
 
+    _bool               m_bSwingSound = { false };
+    _bool               m_bTentaSound = { false };
+    _bool               m_bTentaSound_2 = { false };
+
     _uint               m_iRouteTrack = {};
 
 private:
     _bool               End_Check();
     void                Collider_Check(_double CurTrackPos);
+    void                Sound_Check(_double CurTrackPos);
 
 public:
     static CState_CurruptedStrongArm_JumpPunch* Create(class CFsm* pFsm, class CMonster* pMonster, _uint iStateNum, void* pArg = nullptr);

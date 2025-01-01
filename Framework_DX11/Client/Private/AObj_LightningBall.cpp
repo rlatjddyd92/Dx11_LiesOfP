@@ -37,7 +37,11 @@ HRESULT CAObj_LightningBall::Initialize(void* pArg)
 
     m_fDamageAmount = 20.f;
 
-    m_pSoundCom[EFF_SOUND_EFFECT1]->Play2D(TEXT("SE_NPC_SK_FX_Ground_Exp_L_03.wav"), &g_fEffectVolume);
+    if (m_pSoundCom[EFF_SOUND_EFFECT1] != nullptr)
+    {
+        m_pSoundCom[EFF_SOUND_EFFECT1]->Play2D(TEXT("SE_NPC_SK_FX_Ground_Exp_L_03.wav"), &g_fEffectVolume);
+    }
+
 
     m_strObjectTag = TEXT("MonsterWeapon");
 
@@ -92,7 +96,9 @@ void CAObj_LightningBall::Update(_float fTimeDelta)
 
                 CAttackObject::ATKOBJ_DESC Desc{};
                 Desc.vPos = _Vec3{ m_pTransformCom->Get_State(CTransform::STATE_POSITION) };
-                Desc.vDir = _Vec3{ m_pCopyPlayerTransformCom->Get_State(CTransform::STATE_POSITION) } - Desc.vPos;
+                _Vec3 vTargetPos = m_pCopyPlayerTransformCom->Get_State(CTransform::STATE_POSITION);
+                vTargetPos.y += 1.f;
+                Desc.vDir = _Vec3{ vTargetPos } - Desc.vPos;
                 Desc.vDir.Normalize();
 
                 Desc.vTargetPos = _Vec3{ m_pCopyPlayerTransformCom->Get_State(CTransform::STATE_POSITION) };

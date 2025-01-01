@@ -38,10 +38,11 @@ void CState_CarcassNormal_ClawRush::Update(_float fTimeDelta)
         m_pMonster->Change_State(CCarcassNormal::IDLE);
         return;
     }
+    m_pMonster->Get_Transform()->LookAt_Lerp_NoHeight(m_pMonster->Get_TargetDir(), 3.f, fTimeDelta);
 
     Collider_Check(CurTrackPos);
+    Sound_Check(CurTrackPos);
 
-    m_pMonster->Get_Transform()->LookAt_Lerp_NoHeight(m_pMonster->Get_TargetDir(), 3.f, fTimeDelta);
 
 }
 
@@ -77,6 +78,26 @@ void CState_CarcassNormal_ClawRush::Collider_Check(_double CurTrackPos)
     else
     {
         m_pMonster->DeActive_CurretnWeaponCollider(1);
+    }
+}
+
+void CState_CarcassNormal_ClawRush::Sound_Check(_double CurTrackPos)
+{
+    if ((CurTrackPos >= 75.f && CurTrackPos <= 90.f) ||
+        (CurTrackPos >= 109.f && CurTrackPos <= 119.f) ||
+        (CurTrackPos >= 125.f && CurTrackPos <= 140.f) ||
+        (CurTrackPos >= 155.f && CurTrackPos <= 165.f) ||
+        (CurTrackPos >= 200.f && CurTrackPos <= 205.f))
+    {
+        if (!m_bSwingSound)
+        {
+            m_pMonster->Play_Sound(CPawn::PAWN_SOUND_EFFECT1, TEXT("SE_NPC_SK_WS_Nail_01.wav"), false);
+            m_bSwingSound = true;
+        }
+    }
+    else
+    {
+        m_bSwingSound = false;
     }
 }
 

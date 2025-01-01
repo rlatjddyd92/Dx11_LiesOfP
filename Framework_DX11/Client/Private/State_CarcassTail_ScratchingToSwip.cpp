@@ -34,6 +34,9 @@ HRESULT CState_CarcassTail_ScratchingToSwip::Start_State(void* pArg)
     }
 
     m_pMonster->Change_Animation(m_iFirstAnim, false, 0.1f, 0);
+    
+    m_bSwingSound = false;
+    m_bSwipSound = false;
 
     m_fIdleTime = m_fIdleDuration;
     return S_OK;
@@ -48,6 +51,8 @@ void CState_CarcassTail_ScratchingToSwip::Update(_float fTimeDelta)
         if (CurTrackPos >= 179)
         {
             ++m_iRouteTrack;
+            m_bSwingSound = false;
+            m_bSwipSound = false;
 
             m_pMonster->Change_Animation(m_iLastAnim, false, 0.1f, 80);
         }
@@ -62,7 +67,8 @@ void CState_CarcassTail_ScratchingToSwip::Update(_float fTimeDelta)
     }
 
 
-    Collider_Check();
+    Collider_Check(CurTrackPos);
+    Sound_Check(CurTrackPos);
 
 }
 
@@ -98,10 +104,8 @@ _bool CState_CarcassTail_ScratchingToSwip::End_Check()
     return bEndCheck;
 }
 
-void CState_CarcassTail_ScratchingToSwip::Collider_Check()
+void CState_CarcassTail_ScratchingToSwip::Collider_Check(_double CurTrackPos)
 {
-    _double CurTrackPos = m_pMonster->Get_CurrentTrackPos();
-
     if (m_iRouteTrack == 0)
     {
         if (CurTrackPos >= 85.f && CurTrackPos <= 95.f)
@@ -137,6 +141,32 @@ void CState_CarcassTail_ScratchingToSwip::Collider_Check()
         else
         {
             m_pMonster->DeActive_CurretnWeaponCollider(2);
+        }
+    }
+}
+
+void CState_CarcassTail_ScratchingToSwip::Sound_Check(_double CurTrackPos)
+{
+    if (m_iRouteTrack == 0)
+    {
+        if (!m_bSwingSound)
+        {
+            if (CurTrackPos >= 85.f && CurTrackPos <= 95.f)
+            {
+                m_pMonster->Play_Sound(CPawn::PAWN_SOUND_EFFECT1, TEXT("SE_NPC_SK_WS_Nail_03.wav"), false);
+                m_bSwingSound = true;
+            }
+        }
+    }
+    else
+    {
+        if (!m_bSwipSound)
+        {
+            if (CurTrackPos >= 110.f && CurTrackPos <= 135.f)
+            {
+                m_pMonster->Play_Sound(CPawn::PAWN_SOUND_EFFECT1, TEXT("SE_NPC_SK_WS_PoliceBilly_06.wav"), false);
+                m_bSwipSound = true;
+            }
         }
     }
 }

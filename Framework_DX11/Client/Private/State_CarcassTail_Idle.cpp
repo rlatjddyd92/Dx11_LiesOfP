@@ -190,6 +190,7 @@ void CState_CarcassTail_Idle::Calc_Act_Attack(_float fTimeDelta, _float fDist)
             m_iAtkCnt = 0;
         }
 
+        m_iAtkCnt = 4;
         switch (m_iAtkCnt)
         {
         case 0:

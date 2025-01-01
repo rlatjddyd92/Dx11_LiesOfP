@@ -39,7 +39,7 @@ void CState_RebornerBigA_Idle::Update(_float fTimeDelta)
         _Vec3 vTargetPos = m_pMonster->Get_TargetPos();
         _Vec3 vMonsterPos = m_pMonster->Get_Transform()->Get_State(CTransform::STATE_POSITION);
 
-        if (abs(vTargetPos.y - vMonsterPos.y) <= 3.f)
+        if (abs(vTargetPos.y - vMonsterPos.y) <= 1.f)
         {
             _Vec3 vTargetDir = m_pMonster->Get_TargetDir();
             _Vec3 vLook = m_pMonster->Get_Transform()->Get_State(CTransform::STATE_LOOK);
@@ -193,6 +193,7 @@ void CState_RebornerBigA_Idle::Calc_Act_Attack(_float fTimeDelta, _float fDist)
         {
             m_iAtkCnt = 0;
         }
+
         switch (m_iAtkCnt)
         {
         case 0:

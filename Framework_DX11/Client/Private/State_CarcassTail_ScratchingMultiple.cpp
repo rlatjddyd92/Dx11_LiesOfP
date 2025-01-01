@@ -24,18 +24,17 @@ HRESULT CState_CarcassTail_ScratchingMultiple::Start_State(void* pArg)
     m_pMonster->Change_Animation(AN_ROUTE_FIRST, false, 0.1f, 0);
 
     m_fIdleTime = m_fIdleDuration;
+    m_bSwingSound = false;
+
     return S_OK;
 }
 
 void CState_CarcassTail_ScratchingMultiple::Update(_float fTimeDelta)
 {
+    _double CurTrackPos = m_pMonster->Get_CurrentTrackPos();
+
     if (!m_isDelayed)
     {
-        if (m_iRouteTrack == 1)
-        {
-            m_pMonster->Change_Animation(AN_ROUTE_LAST, false, 0.1f, 0, true);
-        }
-
         if (End_Check())
         {
             ++m_iRouteTrack;
@@ -48,6 +47,15 @@ void CState_CarcassTail_ScratchingMultiple::Update(_float fTimeDelta)
             m_fIdleTime = 0.f;
             m_isDelayed = true;
         }
+
+        if (m_iRouteTrack == 1)
+        {
+            m_pMonster->Change_Animation(AN_ROUTE_LAST, false, 0.1f, 0, true);
+            m_bSwingSound = false;
+
+            return;
+        }
+
     }
     else
     {
@@ -61,15 +69,15 @@ void CState_CarcassTail_ScratchingMultiple::Update(_float fTimeDelta)
         switch (iDir)
         {
         case -1:
-            m_pMonster->Change_Animation(30, true, 0.1f);
+            m_pMonster->Change_Animation(49, true, 0.1f);
             break;
 
         case 0:
-            m_pMonster->Change_Animation(20, true, 0.1f);
+            m_pMonster->Change_Animation(44, true, 0.1f);
             break;
 
         case 1:
-            m_pMonster->Change_Animation(31, true, 0.1f);
+            m_pMonster->Change_Animation(50, true, 0.1f);
             break;
 
         default:
@@ -77,7 +85,8 @@ void CState_CarcassTail_ScratchingMultiple::Update(_float fTimeDelta)
         }
     }
 
-    Collider_Check();
+    Collider_Check(CurTrackPos);
+    Sound_Check(CurTrackPos);
 
 }
 
@@ -113,10 +122,8 @@ _bool CState_CarcassTail_ScratchingMultiple::End_Check()
     return bEndCheck;
 }
 
-void CState_CarcassTail_ScratchingMultiple::Collider_Check()
+void CState_CarcassTail_ScratchingMultiple::Collider_Check(_double CurTrackPos)
 {
-    _double CurTrackPos = m_pMonster->Get_CurrentTrackPos();
-
     if (CurTrackPos >= 85.f && CurTrackPos <= 115.f)
     {
         if (m_iRouteTrack == 0)
@@ -137,6 +144,18 @@ void CState_CarcassTail_ScratchingMultiple::Collider_Check()
         else
         {
             m_pMonster->DeActive_CurretnWeaponCollider(1);
+        }
+    }
+}
+
+void CState_CarcassTail_ScratchingMultiple::Sound_Check(_double CurTrackPos)
+{
+    if (!m_bSwingSound)
+    {
+        if (CurTrackPos >= 85.f && CurTrackPos <= 115.f)
+        {
+            m_pMonster->Play_Sound(CPawn::PAWN_SOUND_EFFECT1, TEXT("SE_NPC_SK_WS_Nail_03.wav"), false);
+            m_bSwingSound = true;
         }
     }
 }

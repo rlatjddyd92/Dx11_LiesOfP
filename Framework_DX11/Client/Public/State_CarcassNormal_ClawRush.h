@@ -26,9 +26,12 @@ public:
 private:
     class CMonster* m_pMonster = { nullptr };
 
+    _bool           m_bSwingSound = { false };
+
 private:
     _bool               End_Check();
     void                Collider_Check(_double CurTrackPos);
+    void                Sound_Check(_double CurTrackPos);
 
 public:
     static CState_CarcassNormal_ClawRush* Create(class CFsm* pFsm, class CMonster* pMonster, _uint iStateNum, void* pArg = nullptr);

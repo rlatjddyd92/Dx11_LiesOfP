@@ -24,11 +24,17 @@ HRESULT CState_CarcassTail_LeapToAttack::Start_State(void* pArg)
     m_pMonster->Change_Animation(AN_ROUTE_FIRST, false, 0.1f, 0);
 
     m_fIdleTime = m_fIdleDuration;
+
+    m_bHeadingSound = false;
+    m_bSwingSound = false;
+
     return S_OK;
 }
 
 void CState_CarcassTail_LeapToAttack::Update(_float fTimeDelta)
 {
+    _double CurTrackPos = m_pMonster->Get_CurrentTrackPos();
+
     if (End_Check())
     {
         if (m_iRouteTrack == 0)
@@ -83,7 +89,8 @@ void CState_CarcassTail_LeapToAttack::Update(_float fTimeDelta)
         m_pMonster->Get_Transform()->LookAt_Lerp_NoHeight(m_pMonster->Get_TargetDir(), 1.5f, fTimeDelta);
     }
 
-    Collider_Check();
+    Collider_Check(CurTrackPos);
+    Sound_Check(CurTrackPos);
 
 }
 
@@ -119,10 +126,8 @@ _bool CState_CarcassTail_LeapToAttack::End_Check()
     return bEndCheck;
 }
 
-void CState_CarcassTail_LeapToAttack::Collider_Check()
+void CState_CarcassTail_LeapToAttack::Collider_Check(_double CurTrackPos)
 {
-    _double CurTrackPos = m_pMonster->Get_CurrentTrackPos();
-
     if (m_iRouteTrack == 0)
     {
         if (CurTrackPos >= 50.f && CurTrackPos <= 70.f)
@@ -143,6 +148,32 @@ void CState_CarcassTail_LeapToAttack::Collider_Check()
         else
         {
             m_pMonster->DeActive_CurretnWeaponCollider(1);
+        }
+    }
+}
+
+void CState_CarcassTail_LeapToAttack::Sound_Check(_double CurTrackPos)
+{
+    if (m_iRouteTrack == 0)
+    {
+        if (!m_bHeadingSound)
+        {
+            if (CurTrackPos >= 50.f && CurTrackPos <= 70.f)
+            {
+                m_pMonster->Play_Sound(CPawn::PAWN_SOUND_EFFECT1, TEXT("SE_NPC_SK_WS_Heavy_03.wav"), false);
+                m_bHeadingSound = true;
+            }
+        }
+    }
+    else
+    {
+        if (!m_bSwingSound)
+        {
+            if (CurTrackPos >= 90.f && CurTrackPos <= 105.f)
+            {
+                m_pMonster->Play_Sound(CPawn::PAWN_SOUND_EFFECT1, TEXT("SE_NPC_SK_WS_Nail_03.wav"), false);
+                m_bSwingSound = true;
+            }
         }
     }
 }

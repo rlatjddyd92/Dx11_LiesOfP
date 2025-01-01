@@ -18,12 +18,13 @@ class CAttackObject abstract : public CGameObject
 public:
 	typedef struct
 	{
-		_Vec3 vPos{};
-		_Vec3 vDir{};
+		_Vec3	vPos{};
+		_Vec3	vDir{};
 
-		_Vec3 vTargetPos{};
+		_Vec3	vTargetPos{};
 
-		_int iTrack_State{};
+		_int	iTrack_State{};
+		_bool	bSoundControl = { true };
 
 		CGameObject* pOwner = { nullptr };
 	}ATKOBJ_DESC;

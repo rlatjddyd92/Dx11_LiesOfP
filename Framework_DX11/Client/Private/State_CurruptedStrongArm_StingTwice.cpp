@@ -26,6 +26,9 @@ HRESULT CState_CurruptedStrongArm_StingTwice::Start_State(void* pArg)
 {
     m_pMonster->Change_Animation(AN_STINGTWICE, false, 0.1f, 0, true);
 
+    m_bTentaSound = false;
+    m_bTentaSound_2 = false;
+
     return S_OK;
 }
 
@@ -39,12 +42,14 @@ void CState_CurruptedStrongArm_StingTwice::Update(_float fTimeDelta)
 
     _double CurTrackPos = m_pMonster->Get_CurrentTrackPos();
 
-    Collider_Check(CurTrackPos);
-
     if (CurTrackPos <= 45.f)
     {
         m_pMonster->Get_Transform()->LookAt_Lerp_NoHeight(m_pMonster->Get_TargetDir(), 1, fTimeDelta);
     }
+
+    Collider_Check(CurTrackPos);
+    Sound_Check(CurTrackPos);
+
 }
 
 void CState_CurruptedStrongArm_StingTwice::End_State()
@@ -77,6 +82,27 @@ void CState_CurruptedStrongArm_StingTwice::Collider_Check(_double CurTrackPos)
         m_pMonster->DeActive_CurretnWeaponCollider(CCurruptedStrongArm_Puppet::TYPE_TENTACLE_FL);
     }
 
+}
+
+void CState_CurruptedStrongArm_StingTwice::Sound_Check(_double CurTrackPos)
+{
+    if (!m_bTentaSound)
+    {
+        if (CurTrackPos >= 45.f && CurTrackPos <= 52.f)
+        {
+            m_pMonster->Play_Sound(CPawn::PAWN_SOUND_EFFECT1, TEXT("SE_NPC_SK_WS_BroadSword_Stab_01.wav"), false);
+            m_bTentaSound = true;
+        }
+    }
+    
+    if (!m_bTentaSound_2)
+    {
+        if (CurTrackPos >= 52.f && CurTrackPos <= 58.f)
+        {
+            m_pMonster->Play_Sound(CPawn::PAWN_SOUND_EFFECT2, TEXT("SE_NPC_SK_WS_BroadSword_Stab_01.wav"), false);
+            m_bTentaSound_2 = true;
+        }
+    }
 }
 
 CState_CurruptedStrongArm_StingTwice* CState_CurruptedStrongArm_StingTwice::Create(CFsm* pFsm, CMonster* pMonster, _uint iStateNum, void* pArg)

@@ -26,14 +26,17 @@ public:
 private:
     class CMonster* m_pMonster = { nullptr };
 
-    _float       m_fCurtRimAlpha = {};
-    _float       m_fGoalRimAlpha = {};
+    _float      m_fCurtRimAlpha = {};
+    _float      m_fGoalRimAlpha = {};
+
+    _bool       m_bSwingSound = { false };
 
     _bool       m_bResetRim = { false };
 
 private:
     _bool               End_Check();
-    void                Collider_Check();
+    void                Collider_Check(_double CurTrackPos);
+    void                Sound_Check(_double CurTrackPos);
     void                Update_Rimlight();
 
 public:

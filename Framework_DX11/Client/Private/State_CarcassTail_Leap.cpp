@@ -24,17 +24,22 @@ HRESULT CState_CarcassTail_Leap::Start_State(void* pArg)
 {
     m_pMonster->Change_Animation(AN_LEAP, false, 0.1f, 0, true);
 
+    m_bJumpSound = false;
+
     return S_OK;
 }
 
 void CState_CarcassTail_Leap::Update(_float fTimeDelta)
 {
+    _double CurTrackPos = m_pMonster->Get_CurrentTrackPos();
+
     if (End_Check())
     {
         m_pMonster->Change_State(CMonster::IDLE);
     }
 
-    Collider_Check();
+    Collider_Check(CurTrackPos);
+    Sound_Check(CurTrackPos);
 
 }
 
@@ -47,10 +52,8 @@ _bool CState_CarcassTail_Leap::End_Check()
     return m_pMonster->Get_EndAnim(AN_LEAP);
 }
 
-void CState_CarcassTail_Leap::Collider_Check()
+void CState_CarcassTail_Leap::Collider_Check(_double CurTrackPos)
 {
-    _double CurTrackPos = m_pMonster->Get_CurrentTrackPos();
-
     if ((CurTrackPos >= 50.f && CurTrackPos <= 90.f))
     {
         m_pMonster->Active_CurrentWeaponCollider(1.4f, 3, HIT_TYPE::HIT_CARCASS, ATTACK_STRENGTH::ATK_NORMAL);
@@ -58,6 +61,18 @@ void CState_CarcassTail_Leap::Collider_Check()
     else
     {
         m_pMonster->DeActive_CurretnWeaponCollider(3);
+    }
+}
+
+void CState_CarcassTail_Leap::Sound_Check(_double CurTrackPos)
+{
+    if (!m_bJumpSound)
+    {
+        if ((CurTrackPos >= 50.f && CurTrackPos <= 90.f))
+        {
+            m_pMonster->Play_Sound(CPawn::PAWN_SOUND_EFFECT1, TEXT("SE_NPC_SK_FX_Rock_Debris_L_03.wav"), false);
+            m_bJumpSound = true;
+        }
     }
 }
 

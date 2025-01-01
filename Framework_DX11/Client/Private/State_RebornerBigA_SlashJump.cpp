@@ -43,6 +43,7 @@ void CState_RebornerBigA_SlashJump::Update(_float fTimeDelta)
     }
 
     Collider_Check(CurTrackPos);
+    Sound_Check(CurTrackPos);
 
     //if (CurTrackPos <= 45.f)
     //{
@@ -78,7 +79,7 @@ void CState_RebornerBigA_SlashJump::Sound_Check(_double CurTrackPos)
     {
         if ((CurTrackPos >= 50.f && CurTrackPos <= 57.f))
         {
-            m_pMonster->Play_Sound(CPawn::PAWN_SOUND_EFFECT1, TEXT("SE_NPC_SK_WS_Staff_03"), false);
+            m_pMonster->Play_Sound(CPawn::PAWN_SOUND_EFFECT1, TEXT("SE_NPC_SK_WS_Staff_03.wav"), false);
             m_bSwingSound = true;
         }
     }

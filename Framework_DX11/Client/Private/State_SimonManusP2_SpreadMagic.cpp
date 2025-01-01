@@ -74,10 +74,12 @@ void CState_SimonManusP2_SpreadMagic::Effect_Check(_double CurTrackPos)
             XMStoreFloat4x4(&WorldMat, (*m_pMonster->Get_BoneCombinedMat(m_pMonster->Get_UFBIndex(UFB_HAND_LEFT)) * (*m_pMonster->Get_Transform()->Get_WorldMatrix_Ptr())));
             Desc.vPos = _Vec3{ WorldMat._41, WorldMat._42 - 0.2f, WorldMat._43 };
             
+            Desc.bSoundControl = true;
             Desc.vDir = vMainDir + vRight;
             Desc.vDir.Normalize();
             m_pGameInstance->Add_CloneObject_ToLayer(LEVEL_GAMEPLAY, TEXT("Monster_Attack"), TEXT("Prototype_GameObject_BlackBall"), &Desc);
 
+            Desc.bSoundControl = false;
             Desc.vDir = vMainDir + vRight * 0.6f;
             Desc.vDir.Normalize();
             m_pGameInstance->Add_CloneObject_ToLayer(LEVEL_GAMEPLAY, TEXT("Monster_Attack"), TEXT("Prototype_GameObject_BlackBall"), &Desc);

@@ -30,6 +30,8 @@ private:
 	_Vec3	m_vMoveDir{};
 	_float	m_fSpeed{};
 
+	_bool			m_bSoundControl = { false };
+
 	_bool	m_bDelCheck = {false};
 
 private:

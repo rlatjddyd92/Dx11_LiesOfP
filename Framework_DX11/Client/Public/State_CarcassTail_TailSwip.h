@@ -28,9 +28,12 @@ private:
 
     _uint           m_iCurAnim = {};
 
+    _bool           m_bSwipSound = { false };
+
 private:
     _bool               End_Check();
-    void                Collider_Check();
+    void                Collider_Check(_double CurTrackPos);
+    void                Sound_Check(_double CurTrackPos);
 
 public:
     static CState_CarcassTail_TailSwip* Create(class CFsm* pFsm, class CMonster* pMonster, _uint iStateNum, void* pArg = nullptr);

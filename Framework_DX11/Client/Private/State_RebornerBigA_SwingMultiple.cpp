@@ -27,6 +27,8 @@ HRESULT CState_RebornerBigA_SwingMultiple::Start_State(void* pArg)
     m_pMonster->Change_Animation(AN_LINKED_START, false, 0.1f, 0, true);
     m_iRouteTrack = 0;
 
+    m_bSwingSound = false;
+
     return S_OK;
 }
 
@@ -39,6 +41,7 @@ void CState_RebornerBigA_SwingMultiple::Update(_float fTimeDelta)
         if (CurTrackPos >= 80.f)
         {
             ++m_iRouteTrack;
+            m_bSwingSound = false;
             m_pMonster->SetUp_Animation(AN_LINKED_MIDDLE, false, 0, true);
             return;
         }
@@ -52,6 +55,7 @@ void CState_RebornerBigA_SwingMultiple::Update(_float fTimeDelta)
         if (CurTrackPos >= 75.f)
         {
             ++m_iRouteTrack;
+            m_bSwingSound = false;
             m_pMonster->SetUp_Animation(AN_LINKED_LAST, false, 0, true);
             return;
         }
@@ -80,6 +84,7 @@ void CState_RebornerBigA_SwingMultiple::Update(_float fTimeDelta)
 
 
     Collider_Check(CurTrackPos);
+    Sound_Check(CurTrackPos);
 
 }
 
@@ -130,6 +135,53 @@ void CState_RebornerBigA_SwingMultiple::Collider_Check(_double CurTrackPos)
         }
     }
 
+}
+
+void CState_RebornerBigA_SwingMultiple::Sound_Check(_double CurTrackPos)
+{
+    if (m_iRouteTrack == 0)
+    {
+        if (CurTrackPos >= 55.f && CurTrackPos <= 70.f)
+        {
+            if (!m_bSwingSound)
+            {
+                m_pMonster->Play_Sound(CPawn::PAWN_SOUND_EFFECT1, TEXT("SE_NPC_SK_WS_Staff_03.wav"), false);
+                m_bSwingSound = true;
+            }
+        }
+    }
+    else if (m_iRouteTrack == 1)
+    {
+        if ((CurTrackPos >= 20.f && CurTrackPos <= 30.f) ||
+            (CurTrackPos >= 45.f && CurTrackPos <= 55.f))
+        {
+            if (!m_bSwingSound)
+            {
+                m_pMonster->Play_Sound(CPawn::PAWN_SOUND_EFFECT1, TEXT("SE_NPC_SK_WS_Staff_03.wav"), false);
+                m_bSwingSound = true;
+            }
+        }
+        else
+        {
+            m_bSwingSound = false;
+        }
+    }
+    else
+    {
+        if ((CurTrackPos >= 37.f && CurTrackPos <= 45.f) ||
+            (CurTrackPos >= 142.f && CurTrackPos <= 149.f))
+        {
+            if (!m_bSwingSound)
+            {
+                m_pMonster->Play_Sound(CPawn::PAWN_SOUND_EFFECT1, TEXT("SE_NPC_SK_WS_Staff_03.wav"), false);
+                m_bSwingSound = true;
+            }
+        }
+        else
+        {
+            m_bSwingSound = false;
+        }
+    }
 }
 
 CState_RebornerBigA_SwingMultiple* CState_RebornerBigA_SwingMultiple::Create(CFsm* pFsm, CMonster* pMonster, _uint iStateNum, void* pArg)

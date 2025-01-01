@@ -68,7 +68,10 @@ void CAObj_GodHands::Update(_float fTimeDelta)
         case 0:     //»çÀÎ
             if (m_pEffects[STATE_SIGN]->Get_Dead())
             {
-                m_pSoundCom[EFF_SOUND_EFFECT1]->Play2D(TEXT("SE_NPC_SimonManus_SK_FX_Ergo_GodHand_Wind_01.wav"), &g_fEffectVolume);
+                if (m_pSoundCom[EFF_SOUND_EFFECT1] != nullptr)
+                {
+                    m_pSoundCom[EFF_SOUND_EFFECT1]->Play2D(TEXT("SE_NPC_SimonManus_SK_FX_Ergo_GodHand_Wind_01.wav"), &g_fEffectVolume);
+                }
 
                 ++m_iDropPhase;
                 m_pTransformCom->Set_State(CTransform::STATE_POSITION, m_vOriginPos + _Vec3{ 0.f, 20.f, 0.f });
@@ -91,7 +94,10 @@ void CAObj_GodHands::Update(_float fTimeDelta)
 
             if (m_fLifeTime >= m_fHandActTime + 0.15f)
             {
-                m_pSoundCom[EFF_SOUND_EFFECT1]->Play2D(TEXT("SE_NPC_SimonManus_SK_FX_Ergo_GodHand_Exp_01.wav"), &g_fEffectVolume);
+                if (m_pSoundCom[EFF_SOUND_EFFECT1] != nullptr)
+                {
+                    m_pSoundCom[EFF_SOUND_EFFECT1]->Play2D(TEXT("SE_NPC_SimonManus_SK_FX_Ergo_GodHand_Exp_01.wav"), &g_fEffectVolume);
+                }
 
                 ++m_iDropPhase;
                 m_pEffects[STATE_BLAST]->Reset_Effects();

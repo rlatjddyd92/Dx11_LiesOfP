@@ -47,7 +47,10 @@ HRESULT CAObj_ThunderWave::Initialize(void* pArg)
 
     m_strObjectTag = TEXT("MonsterWeapon");
 
-    m_pSoundCom[EFF_SOUND_EFFECT1]->Play2D_Repeat(TEXT("SE_NPC_Raxasia_SK_PJ_BladeMissile_Ground_02.wav"), &g_fEffectVolume);
+    if (m_pSoundCom[EFF_SOUND_EFFECT1] != nullptr)
+    {
+        m_pSoundCom[EFF_SOUND_EFFECT1]->Play2D_Repeat(TEXT("SE_NPC_Raxasia_SK_PJ_BladeMissile_Ground_02.wav"), &g_fEffectVolume);
+    }
 
     return S_OK;
 }
@@ -68,7 +71,11 @@ void CAObj_ThunderWave::Update(_float fTimeDelta)
         else if (m_pEffect->Get_Dead())
         {
             m_isDead = true;
-            m_pSoundCom[EFF_SOUND_EFFECT1]->Stop();
+            if (m_pSoundCom[EFF_SOUND_EFFECT1] != nullptr)
+            {
+                m_pSoundCom[EFF_SOUND_EFFECT1]->Stop();
+            }
+
             return;
         }
     }

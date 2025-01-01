@@ -21,13 +21,19 @@ HRESULT CState_CarcassTail_LeapAttack::Initialize(_uint iStateNum, void* pArg)
 
 HRESULT CState_CarcassTail_LeapAttack::Start_State(void* pArg)
 {
+    m_iRouteTrack = 0;
     m_pMonster->Change_Animation(AN_ROUTE_FIRST, false, 0.1f, 0);
+
+    m_bHeadingSound = false;
+    m_bJumpSound = false;
 
     return S_OK;
 }
 
 void CState_CarcassTail_LeapAttack::Update(_float fTimeDelta)
 {
+    _double CurTrackPos = m_pMonster->Get_CurrentTrackPos();
+
     if (m_iRouteTrack == 0)
     {
         m_pMonster->Get_Transform()->LookAt_Lerp_NoHeight(m_pMonster->Get_TargetDir(), 1.5f, fTimeDelta);
@@ -68,13 +74,13 @@ void CState_CarcassTail_LeapAttack::Update(_float fTimeDelta)
     }
 
 
-    Collider_Check();
+    Collider_Check(CurTrackPos);
+    Sound_Check(CurTrackPos);
 
 }
 
 void CState_CarcassTail_LeapAttack::End_State()
 {
-    m_iRouteTrack = 0;
 }
 
 _bool CState_CarcassTail_LeapAttack::End_Check()
@@ -111,10 +117,8 @@ _bool CState_CarcassTail_LeapAttack::End_Check()
     return bEndCheck;
 }
 
-void CState_CarcassTail_LeapAttack::Collider_Check()
+void CState_CarcassTail_LeapAttack::Collider_Check(_double CurTrackPos)
 {
-    _double CurTrackPos = m_pMonster->Get_CurrentTrackPos();
-
     if (m_iRouteTrack == 0)
     {
         if (CurTrackPos >= 230.f)
@@ -136,6 +140,32 @@ void CState_CarcassTail_LeapAttack::Collider_Check()
         else
         {
             m_pMonster->DeActive_CurretnWeaponCollider(3);
+        }
+    }
+}
+
+void CState_CarcassTail_LeapAttack::Sound_Check(_double CurTrackPos)
+{
+    if (m_iRouteTrack == 0)
+    {
+        if (!m_bJumpSound)
+        {
+            if (CurTrackPos >= 230.f)
+            {
+                m_pMonster->Play_Sound(CPawn::PAWN_SOUND_EFFECT1, TEXT("SE_NPC_SK_FX_Rock_Debris_L_03.wav"), false);
+                m_bJumpSound = true;
+            }
+        }
+    }
+    else if (m_iRouteTrack == 2)
+    {
+        if (!m_bHeadingSound)
+        {
+            if ((CurTrackPos <= 60.f && CurTrackPos <= 80.f))
+            {
+                m_pMonster->Play_Sound(CPawn::PAWN_SOUND_EFFECT1, TEXT("SE_NPC_SK_WS_Heavy_03.wav"), false);
+                m_bHeadingSound = true;
+            }
         }
     }
 }

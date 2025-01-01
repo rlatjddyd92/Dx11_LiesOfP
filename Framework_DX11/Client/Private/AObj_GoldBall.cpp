@@ -34,6 +34,8 @@ HRESULT CAObj_GoldBall::Initialize(void* pArg)
 
     m_vMoveDir = pDesc->vDir;
 
+    m_bSoundControl = pDesc->bSoundControl;
+
     if (FAILED(Ready_Components()))
         return E_FAIL;
 
@@ -47,7 +49,13 @@ HRESULT CAObj_GoldBall::Initialize(void* pArg)
 
     m_strObjectTag = TEXT("MonsterWeapon");
 
-    m_pSoundCom[EFF_SOUND_EFFECT1]->Play2D(TEXT("SE_NPC_SimonManus_SK_PJ_Ergo_Direct_01.wav"), &g_fEffectVolume);
+    if (m_bSoundControl)
+    {
+        if (m_pSoundCom[EFF_SOUND_EFFECT1] != nullptr)
+        {
+            m_pSoundCom[EFF_SOUND_EFFECT1]->Play2D(TEXT("SE_NPC_SimonManus_SK_PJ_Ergo_Direct_01.wav"), &g_fEffectVolume);
+        }
+    }
 
     return S_OK;
 }

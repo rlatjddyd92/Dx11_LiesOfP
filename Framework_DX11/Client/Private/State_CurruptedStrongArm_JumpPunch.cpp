@@ -26,6 +26,10 @@ HRESULT CState_CurruptedStrongArm_JumpPunch::Start_State(void* pArg)
 {
     m_pMonster->Change_Animation(AN_PUNCHTWICE, false, 0.1f, 0, true);
     m_iRouteTrack = 0;
+    
+    m_bSwingSound = false;
+    m_bTentaSound = false;
+    m_bTentaSound_2 = false;
 
     return S_OK;
 }
@@ -39,6 +43,9 @@ void CState_CurruptedStrongArm_JumpPunch::Update(_float fTimeDelta)
         if (End_Check())
         {
             ++m_iRouteTrack;
+            m_bSwingSound = false;
+            m_bTentaSound = false;
+            m_bTentaSound_2 = false;
             m_pMonster->Change_Animation(AN_JUMP, false, 0.1f, 0, true);
             return;
         }
@@ -162,6 +169,86 @@ void CState_CurruptedStrongArm_JumpPunch::Collider_Check(_double CurTrackPos)
         }
     }
 
+}
+
+void CState_CurruptedStrongArm_JumpPunch::Sound_Check(_double CurTrackPos)
+{
+    if (m_iRouteTrack == 0)
+    {
+        //¿À¸¥¼Õ
+        if (CurTrackPos >= 40.f && CurTrackPos <= 52.f)
+        {
+            if (!m_bSwingSound)
+            {
+                m_pMonster->Play_Sound(CPawn::PAWN_SOUND_EFFECT1, TEXT("SE_NPC_SK_WS_Heavy_03.wav"), false);
+                m_bSwingSound = true;
+            }
+        }
+        else if (CurTrackPos <= 62.f)
+        {
+            m_bSwingSound = false;
+        }
+
+        if (!m_bTentaSound)
+        {
+            if (CurTrackPos >= 55.f && CurTrackPos <= 75.f)
+            {
+                m_pMonster->Play_Sound(CPawn::PAWN_SOUND_EFFECT1, TEXT("SE_NPC_SK_WS_BroadSword_Stab_01.wav"), false);
+                m_bTentaSound = true;
+            }
+        }
+
+
+        if (!m_bTentaSound_2)
+        {
+            if (CurTrackPos >= 105.f && CurTrackPos <= 125.f)
+            {
+                m_pMonster->Play_Sound(CPawn::PAWN_SOUND_EFFECT2, TEXT("SE_NPC_SK_WS_BroadSword_Stab_01.wav"), false);
+                m_bTentaSound_2 = true;
+            }
+        }
+
+        if (!m_bSwingSound)
+        {
+            if (CurTrackPos >= 130.f && CurTrackPos <= 150.f)
+            {
+                m_pMonster->Play_Sound(CPawn::PAWN_SOUND_EFFECT1, TEXT("SE_NPC_SK_WS_Heavy_03.wav"), false);
+                m_bSwingSound = true;
+            }
+        }
+    }
+    else
+    {
+        //¾ç¼Õ
+        if (!m_bSwingSound)
+        {
+            if (CurTrackPos >= 50.f && CurTrackPos <= 60.f)
+            {
+                m_pMonster->Play_Sound(CPawn::PAWN_SOUND_EFFECT1, TEXT("SE_NPC_SK_WS_Heavy_03.wav"), false);
+                m_bSwingSound = true;
+            }
+        }
+
+        //¿Þ¼ö¿°
+        if (!m_bTentaSound)
+        {
+            if (CurTrackPos >= 80.f && CurTrackPos <= 95.f)
+            {
+                m_pMonster->Play_Sound(CPawn::PAWN_SOUND_EFFECT1, TEXT("SE_NPC_SK_WS_BroadSword_Stab_01.wav"), false);
+                m_bTentaSound = true;
+            }
+        }
+
+        //¿À¸¥¼ö¿°
+        if (!m_bTentaSound_2)
+        {
+            if (CurTrackPos >= 82.f && CurTrackPos <= 105.f)
+            {
+                m_pMonster->Play_Sound(CPawn::PAWN_SOUND_EFFECT2, TEXT("SE_NPC_SK_WS_BroadSword_Stab_01.wav"), false);
+                m_bTentaSound_2 = true;
+            }
+        }
+    }
 }
 
 CState_CurruptedStrongArm_JumpPunch* CState_CurruptedStrongArm_JumpPunch::Create(CFsm* pFsm, CMonster* pMonster, _uint iStateNum, void* pArg)

@@ -28,9 +28,12 @@ private:
 
     _uint               m_iRouteTrack = {};
 
+    _bool           m_bSwingSound = { false };
+
 private:
     _bool               End_Check();
     void                Collider_Check(_double CurTrackPos);
+    void                Sound_Check(_double CurTrackPos);
 
 public:
     static CState_CarcassNormal_TripleClaw_2* Create(class CFsm* pFsm, class CMonster* pMonster, _uint iStateNum, void* pArg = nullptr);

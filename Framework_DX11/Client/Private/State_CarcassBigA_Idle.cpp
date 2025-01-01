@@ -164,60 +164,56 @@ void CState_CarcassBigA_Idle::End_State()
 
 void CState_CarcassBigA_Idle::Calc_Act_Attack()
 {
-    if (m_iAtkCnt >= 10)
+    if (m_iAtkCnt >= 9)
     {
         m_iAtkCnt = 0;
     }
+
     switch (m_iAtkCnt)
     {
     case 0:
-        m_pMonster->Change_State(CCarcassBigA::ATK_ROUTE_0);
-        m_fNeedDist_ForAttack = 3.f;
+        m_pMonster->Change_State(CCarcassBigA::ATK_ROUTE_1);
+        m_fNeedDist_ForAttack = 4.6f;
         break;
 
     case 1:
-        m_pMonster->Change_State(CCarcassBigA::ATK_ROUTE_1);
-        m_fNeedDist_ForAttack = 3.f;
+        m_pMonster->Change_State(CCarcassBigA::ATK_ROUTE_2);
+        m_fNeedDist_ForAttack = 4.6f;
         break;
 
     case 2:
-        m_pMonster->Change_State(CCarcassBigA::ATK_ROUTE_2);
-        m_fNeedDist_ForAttack = 3.f;
+        m_pMonster->Change_State(CCarcassBigA::ATK_ROUTE_3);
+        m_fNeedDist_ForAttack = 4.f;
         break;
 
     case 3:
-        m_pMonster->Change_State(CCarcassBigA::ATK_ROUTE_3);
-        m_fNeedDist_ForAttack = 3.f;
+        m_pMonster->Change_State(CCarcassBigA::LO_SWINGRIGHT);
+        m_fNeedDist_ForAttack = 7.f;
         break;
 
     case 4:
-        m_pMonster->Change_State(CCarcassBigA::LO_SWINGRIGHT);
-        m_fNeedDist_ForAttack = 6.f;
-        break;
-
-    case 5:
         m_pMonster->Change_State(CCarcassBigA::ATK_ROUTE_4);
         m_fNeedDist_ForAttack = 3.f;
         break;
 
-    case 6:
+    case 5:
         m_pMonster->Change_State(CCarcassBigA::WHEELWIND);
-        m_fNeedDist_ForAttack = 6.f;
+        m_fNeedDist_ForAttack = 7.f;
         break;
 
-    case 7:
+    case 6:
         m_pMonster->Change_State(CCarcassBigA::ATK_IMPACT);
         m_fNeedDist_ForAttack = 2.5f;
         break;
 
-    case 8:
+    case 7:
         m_pMonster->Change_State(CCarcassBigA::RAGE_ATTACK);
-        m_fNeedDist_ForAttack = 3.f;
+        m_fNeedDist_ForAttack = 4.f;
         break;
 
-    case 9:
+    case 8:
         m_pMonster->Change_State(CCarcassBigA::LT_SWINGRIGHT);
-        m_fNeedDist_ForAttack = 3.f;
+        m_fNeedDist_ForAttack = 4.6f;
         break;
 
 

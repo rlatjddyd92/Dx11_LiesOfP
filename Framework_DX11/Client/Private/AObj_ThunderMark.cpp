@@ -44,7 +44,10 @@ HRESULT CAObj_ThunderMark::Initialize(void* pArg)
 
     m_strObjectTag = TEXT("MonsterWeapon");
 
-    m_pSoundCom[EFF_SOUND_EFFECT1]->Play2D(TEXT("SE_NPC_Raxasia_SK_PJ_Spark_Ground_Loop_01.wav"), &g_fEffectVolume, true);
+    if (m_pSoundCom[EFF_SOUND_EFFECT1] != nullptr)
+    {
+        m_pSoundCom[EFF_SOUND_EFFECT1]->Play2D(TEXT("SE_NPC_Raxasia_SK_PJ_Spark_Ground_Loop_01.wav"), &g_fEffectVolume, true);
+    }
 
     return S_OK;
 }
@@ -69,9 +72,12 @@ void CAObj_ThunderMark::Update(_float fTimeDelta)
         {
             m_pEffectExp->Reset_Effects();
             m_bExplosive = true;
-            m_pSoundCom[EFF_SOUND_EFFECT1]->Stop();
+            if (m_pSoundCom[EFF_SOUND_EFFECT1] != nullptr)
+            {
+                m_pSoundCom[EFF_SOUND_EFFECT1]->Stop();
 
-            m_pSoundCom[EFF_SOUND_EFFECT1]->Play2D(TEXT("SE_NPC_Raxasia_SK_PJ_Spark_Ground_Explo_01.wav"), &g_fEffectVolume, false);
+                m_pSoundCom[EFF_SOUND_EFFECT1]->Play2D(TEXT("SE_NPC_Raxasia_SK_PJ_Spark_Ground_Explo_01.wav"), &g_fEffectVolume, false);
+            }
 
         }
         else

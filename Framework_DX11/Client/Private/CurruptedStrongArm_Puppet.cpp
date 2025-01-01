@@ -77,6 +77,8 @@ HRESULT CCurruptedStrongArm_Puppet::Initialize(void* pArg)
 
 	m_vCenterOffset = _Vec3{ 0.f, 1.55f, 0.f };
 
+	m_bDiscover = false;
+
 	// 24-11-26 김성용
 	// 몬스터 직교 UI 접근 코드 
 	// 정식 코드  
@@ -329,7 +331,7 @@ HRESULT CCurruptedStrongArm_Puppet::Ready_Components()
 
 	physX::GeometryCapsule CapsuleDesc;
 	CapsuleDesc.fHeight = 1.5f;
-	CapsuleDesc.fRadius = 0.5f;
+	CapsuleDesc.fRadius = 0.85f;
 	RigidBodyDesc.pGeometry = &CapsuleDesc;
 	RigidBodyDesc.PxLockFlags = PxRigidDynamicLockFlag::eLOCK_ANGULAR_X |
 		PxRigidDynamicLockFlag::eLOCK_ANGULAR_Y |
@@ -437,6 +439,11 @@ void CCurruptedStrongArm_Puppet::Free()
 	for (_uint i = 0; i < TYPE_END; ++i)
 	{
 		Safe_Release(m_pColliderObject[i]);
+	}
+
+	for (_uint i = 0; i < CT_END - 1; ++i)
+	{
+		Safe_Release(m_EXCollider[i]);
 	}
 
 	__super::Free();

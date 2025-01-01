@@ -26,6 +26,7 @@ HRESULT CState_CarcassNormal_ClawMultiple::Start_State(void* pArg)
 {
     m_pMonster->Change_Animation(AN_CLAWMULTIPLE, false, 0.1f, 0, true);
 
+    m_bSwingSound = false;
     return S_OK;
 }
 
@@ -40,6 +41,7 @@ void CState_CarcassNormal_ClawMultiple::Update(_float fTimeDelta)
     }
 
     Collider_Check(CurTrackPos);
+    Sound_Check(CurTrackPos);
 
     if (CurTrackPos <= 75.f ||
         (CurTrackPos >= 100.f && CurTrackPos <= 110.f) ||
@@ -84,6 +86,26 @@ void CState_CarcassNormal_ClawMultiple::Collider_Check(_double CurTrackPos)
     else
     {
         m_pMonster->DeActive_CurretnWeaponCollider(1);
+    }
+}
+
+void CState_CarcassNormal_ClawMultiple::Sound_Check(_double CurTrackPos)
+{
+    if ((CurTrackPos >= 85.f && CurTrackPos <= 98.f) || 
+        (CurTrackPos >= 110.f && CurTrackPos <= 125.f) ||
+        (CurTrackPos >= 130.f && CurTrackPos <= 145.f) ||
+        (CurTrackPos >= 155.f && CurTrackPos <= 170.f) ||
+        (CurTrackPos >= 175.f && CurTrackPos <= 190.f))
+    {
+        if (!m_bSwingSound)
+        {
+            m_pMonster->Play_Sound(CPawn::PAWN_SOUND_EFFECT1, TEXT("SE_NPC_SK_WS_Nail_01.wav"), false);
+            m_bSwingSound = true;
+        }
+    }
+    else
+    {
+        m_bSwingSound = false;
     }
 }
 

@@ -39,7 +39,7 @@ void CState_RebornerMale_Idle::Update(_float fTimeDelta)
         _Vec3 vTargetPos = m_pMonster->Get_TargetPos();
         _Vec3 vMonsterPos = m_pMonster->Get_Transform()->Get_State(CTransform::STATE_POSITION);
 
-        if (abs(vTargetPos.y - vMonsterPos.y) <= 3.f)
+        if (fabs(vTargetPos.y - vMonsterPos.y) <= 0.2f)
         {
             _Vec3 vTargetDir = m_pMonster->Get_TargetDir();
             _Vec3 vLook = m_pMonster->Get_Transform()->Get_State(CTransform::STATE_LOOK);

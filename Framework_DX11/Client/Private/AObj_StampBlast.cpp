@@ -39,7 +39,10 @@ HRESULT CAObj_StampBlast::Initialize(void* pArg)
 
     m_pColliderCom->Set_Owner(this);
 
-    m_pSoundCom[EFF_SOUND_EFFECT1]->Play2D(TEXT("SE_NPC_SK_FX_Ground_Exp_L_03.wav"), &g_fEffectVolume);
+    if (m_pSoundCom[EFF_SOUND_EFFECT1] != nullptr)
+    {
+        m_pSoundCom[EFF_SOUND_EFFECT1]->Play2D(TEXT("SE_NPC_SK_FX_Ground_Exp_L_03.wav"), &g_fEffectVolume);
+    }
 
     m_strObjectTag = TEXT("MonsterWeapon");
 

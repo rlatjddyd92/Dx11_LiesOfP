@@ -23,7 +23,7 @@ HRESULT CState_CarcassTail_MultyHittingDown::Initialize(_uint iStateNum, void* p
 HRESULT CState_CarcassTail_MultyHittingDown::Start_State(void* pArg)
 {
     m_pMonster->Change_Animation(AN_MULTYHITTINGDOWN, false, 0.1f, 0, true);
-
+    m_bSwingSound = false;
     return S_OK;
 }
 
@@ -41,7 +41,8 @@ void CState_CarcassTail_MultyHittingDown::Update(_float fTimeDelta)
         m_pMonster->Change_State(CMonster::IDLE);
     }
 
-    Collider_Check();
+    Collider_Check(CurTrackPos);
+    Sound_Check(CurTrackPos);
 
 }
 
@@ -54,10 +55,8 @@ _bool CState_CarcassTail_MultyHittingDown::End_Check()
     return m_pMonster->Get_EndAnim(AN_MULTYHITTINGDOWN);
 }
 
-void CState_CarcassTail_MultyHittingDown::Collider_Check()
+void CState_CarcassTail_MultyHittingDown::Collider_Check(_double CurTrackPos)
 {
-    _double CurTrackPos = m_pMonster->Get_CurrentTrackPos();
-
     if ((CurTrackPos >= 85.f && CurTrackPos <= 95.f) ||
         (CurTrackPos >= 165.f && CurTrackPos <= 175.f))
     {
@@ -77,6 +76,26 @@ void CState_CarcassTail_MultyHittingDown::Collider_Check()
     {
         m_pMonster->DeActive_CurretnWeaponCollider(1);
     }
+}
+
+void CState_CarcassTail_MultyHittingDown::Sound_Check(_double CurTrackPos)
+{
+    if ((CurTrackPos >= 85.f && CurTrackPos <= 95.f) ||
+        (CurTrackPos >= 120.f && CurTrackPos <= 129.f) ||
+        (CurTrackPos >= 165.f && CurTrackPos <= 175.f) ||
+        (CurTrackPos >= 195.f && CurTrackPos <= 204.f))
+    {
+        if (!m_bSwingSound)
+        {
+            m_pMonster->Play_Sound(CPawn::PAWN_SOUND_EFFECT1, TEXT("SE_NPC_SK_WS_Nail_03.wav"), false);
+            m_bSwingSound = true;
+        }
+    }
+    else
+    {
+        m_bSwingSound = false;
+    }
+
 }
 
 CState_CarcassTail_MultyHittingDown* CState_CarcassTail_MultyHittingDown::Create(CFsm* pFsm, CMonster* pMonster, _uint iStateNum, void* pArg)
