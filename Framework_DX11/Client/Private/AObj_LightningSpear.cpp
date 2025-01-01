@@ -41,7 +41,7 @@ HRESULT CAObj_LightningSpear::Initialize(void* pArg)
         return E_FAIL;
 
     m_fDamageAmount = 20.f;
-    m_fLifeDuration = 0.6f;
+    m_fLifeDuration = 4.f;
     m_fSpeed = 13.f;
     
     m_pColliderCom->IsActive(true);
@@ -69,7 +69,7 @@ void CAObj_LightningSpear::Update(_float fTimeDelta)
 
     if (m_fLifeTime >= m_fLifeDuration)
     {
-        if (m_pEffect->Get_Dead())
+        if (m_pEffect->Get_Loop())
         {
             m_pEffect->Set_Loop(false);
         }
@@ -105,6 +105,7 @@ void CAObj_LightningSpear::Late_Update(_float fTimeDelta)
     m_pEffect->Late_Update(fTimeDelta);
     if (m_fLifeTime < m_fLifeDuration)
     {
+        m_pGameInstance->Add_RenderObject(CRenderer::RG_NONBLEND, this);
         m_pGameInstance->Add_ColliderList(m_pColliderCom);
 #ifdef DEBUG
         m_pGameInstance->Add_DebugObject(m_pColliderCom);
@@ -117,7 +118,7 @@ HRESULT CAObj_LightningSpear::Render()
 {
     //if (FAILED(__super::Render()))
     //    return E_FAIL;
-
+    m_pColliderCom->Render();
     return S_OK;
 }
 
@@ -178,11 +179,12 @@ HRESULT CAObj_LightningSpear::Ready_Components()
         return E_FAIL;
 
     /* FOR.Com_Collider */
-    CBounding_Sphere::BOUNDING_SPHERE_DESC      ColliderDesc{};
+    CBounding_OBB::BOUNDING_OBB_DESC      ColliderDesc{};
+    ColliderDesc.vExtents = _float3(0.2f, 0.2f, 1.f);
     ColliderDesc.vCenter = _float3(0.f, 0.f, 0.f);
-    ColliderDesc.fRadius = 0.5f;
+    ColliderDesc.vAngles = _float3(0.f, 0.f, 0.f);
 
-    if (FAILED(__super::Add_Component(LEVEL_STATIC, TEXT("Prototype_Component_Collider_Sphere"),
+    if (FAILED(__super::Add_Component(LEVEL_STATIC, TEXT("Prototype_Component_Collider_OBB"),
         TEXT("Com_Collider"), reinterpret_cast<CComponent**>(&m_pColliderCom), &ColliderDesc)))
         return E_FAIL;
     m_pColliderCom->Set_Owner(this);

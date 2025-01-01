@@ -96,7 +96,9 @@ void CAObj_LightningBall::Update(_float fTimeDelta)
 
                 CAttackObject::ATKOBJ_DESC Desc{};
                 Desc.vPos = _Vec3{ m_pTransformCom->Get_State(CTransform::STATE_POSITION) };
-                Desc.vDir = _Vec3{ m_pCopyPlayerTransformCom->Get_State(CTransform::STATE_POSITION) } - Desc.vPos;
+                _Vec3 vTargetPos = m_pCopyPlayerTransformCom->Get_State(CTransform::STATE_POSITION);
+                vTargetPos.y += 1.f;
+                Desc.vDir = _Vec3{ vTargetPos } - Desc.vPos;
                 Desc.vDir.Normalize();
 
                 Desc.vTargetPos = _Vec3{ m_pCopyPlayerTransformCom->Get_State(CTransform::STATE_POSITION) };
