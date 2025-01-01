@@ -66,6 +66,9 @@
 #include "D:\GitHubProjects\Dx11_LiesOfP\Framework_DX11\Client\private\BackGround.cpp"
 
 
+#include "D:\GitHubProjects\Dx11_LiesOfP\Framework_DX11\Client\Private\Butterfly.cpp"
+
+
 #include "D:\GitHubProjects\Dx11_LiesOfP\Framework_DX11\Client\Private\Camera_Manager.cpp"
 
 
@@ -676,9 +679,6 @@
 
 
 #include "D:\GitHubProjects\Dx11_LiesOfP\Framework_DX11\Client\Private\Stargazer.cpp"
-
-
-#include "D:\GitHubProjects\Dx11_LiesOfP\Framework_DX11\Client\Private\State_CarcassBigA_AttackRoute_0.cpp"
 
 
 #include "D:\GitHubProjects\Dx11_LiesOfP\Framework_DX11\Client\Private\State_CarcassBigA_AttackRoute_1.cpp"
