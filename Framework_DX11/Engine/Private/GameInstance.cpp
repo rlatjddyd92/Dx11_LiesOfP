@@ -393,6 +393,11 @@ map<const _char*, class CComponent*> CGameInstance::Get_ModelPrototypes(_uint iL
 	return m_pComponent_Manager->Get_ModelPrototypes(iLevelIndex);
 }
 
+CComponent* CGameInstance::Find_ComponentPrototype(_uint iLevelIndex, const _wstring& strPrototypeTag)
+{
+	return m_pComponent_Manager->Find_Prototype(iLevelIndex, strPrototypeTag);
+}
+
 #pragma endregion
 
 #pragma region TIMER_MANAGER

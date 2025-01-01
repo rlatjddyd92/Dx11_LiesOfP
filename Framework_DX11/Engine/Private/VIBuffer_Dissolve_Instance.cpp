@@ -22,7 +22,10 @@ HRESULT CVIBuffer_Dissolve_Instance::Initialize_Prototype(const DISSOLVE_INSTANC
 {
 	m_isClient = true;
 
-	if (FAILED(Ready_Buffers(Desc)))
+	CModel* pModel = static_cast<CModel*>(m_pGameInstance->Find_ComponentPrototype(Desc.iModelLevelIndex, Desc.strModelTag));
+
+	vector<DISSOLVE_PARTICLE> Instances;
+	if (FAILED(Ready_Buffers(pModel->Create_Particles(Desc, Instances))))
 		return E_FAIL;
 
 	return S_OK;
@@ -87,8 +90,6 @@ void CVIBuffer_Dissolve_Instance::Reset()
 
 _bool CVIBuffer_Dissolve_Instance::DispatchCS(class CShader_Compute* pComputeShader, class CTexture* pTexture, class CModel* pModel, const PARTICLE_MOVEMENT& MovementData, const DISSOLVE_DATA& DissolveData)
 {
-	/* 순서 중요 !! */
-	// 상수 버퍼 업데이트 하고
 	D3D11_MAPPED_SUBRESOURCE mappedResource;
 
 	if (FAILED(m_pContext->Map(m_pMovementBuffer, 0, D3D11_MAP_WRITE_DISCARD, 0, &mappedResource)))
@@ -115,6 +116,7 @@ _bool CVIBuffer_Dissolve_Instance::DispatchCS(class CShader_Compute* pComputeSha
 
 	pDissolve->fThreshold = DissolveData.fThreshold;
 	pDissolve->iModelType = DissolveData.iModelType;
+	pDissolve->vTextureSize = DissolveData.vTextureSize;
 	memcpy_s(pDissolve->m_BoneMatrices, sizeof(_float4x4) * g_iMaxMeshBones, pModel->Get_BoneMatrices(0), sizeof(_float4x4) * g_iMaxMeshBones);
 	//memcpy_s(&Test, sizeof(_float4x4) * g_iMaxMeshBones, pModel->Get_BoneMatrices(0), sizeof(_float4x4) * g_iMaxMeshBones);
 	
@@ -122,6 +124,10 @@ _bool CVIBuffer_Dissolve_Instance::DispatchCS(class CShader_Compute* pComputeSha
 
 	m_pContext->CSSetUnorderedAccessViews(0, 1, &m_pParticleUAV, nullptr);
 	m_pContext->CSSetShaderResources(0, 1, &m_pInitParticleSRV);
+
+	ID3D11ShaderResourceView* pSRV = pTexture->Get_SRV(0);
+	m_pContext->CSSetShaderResources(1, 1, &pSRV);
+
 	m_pContext->CSSetConstantBuffers(0, 1, &m_pMovementBuffer);
 	m_pContext->CSSetConstantBuffers(1, 1, &m_pDissolveBuffer);
 
@@ -132,13 +138,13 @@ _bool CVIBuffer_Dissolve_Instance::DispatchCS(class CShader_Compute* pComputeSha
 	m_pContext->CSSetUnorderedAccessViews(0, 1, nullUAV, nullptr);
 
 	// SRV 해제하고
-	ID3D11ShaderResourceView* nullSRV = { nullptr };
-	m_pContext->CSSetShaderResources(0, 1, &nullSRV);
+	ID3D11ShaderResourceView* nullSRV[] = { nullptr, nullptr };
+	m_pContext->CSSetShaderResources(0, 2, nullSRV);
 
 	// 셰이더까지 해제하면 끝
 	m_pContext->CSSetShader(nullptr, nullptr, 0);
 
-	if (false == (STATE_LOOP & MovementData.iState))
+	if (false == (STATE_LOOP & MovementData.iState) && 1.f <= DissolveData.fThreshold)
 	{
 		m_fTime += MovementData.fTimeDelta;
 		if (m_vLifeTime.y < m_fTime)
@@ -148,10 +154,74 @@ _bool CVIBuffer_Dissolve_Instance::DispatchCS(class CShader_Compute* pComputeSha
 	return false;
 }
 
+_bool CVIBuffer_Dissolve_Instance::DispatchCS_NonTexture(CShader_Compute* pComputeShader, CModel* pModel, const PARTICLE_MOVEMENT& MovementData, const DISSOLVE_DATA& DissolveData)
+{
+	D3D11_MAPPED_SUBRESOURCE mappedResource;
 
-HRESULT CVIBuffer_Dissolve_Instance::Ready_Buffers(const DISSOLVE_INSTANCE_DESC& Desc)
+	if (FAILED(m_pContext->Map(m_pMovementBuffer, 0, D3D11_MAP_WRITE_DISCARD, 0, &mappedResource)))
+		return true;
+
+	PARTICLE_MOVEMENT* pMovement = static_cast<PARTICLE_MOVEMENT*>(mappedResource.pData);
+	*pMovement = MovementData;
+	(*pMovement).iNumInstance = m_iNumInstance;
+
+	if (false == m_bFirst)
+	{
+		pMovement->vPadding_1 = { 0.f, 0.f };
+		m_bFirst = true;
+	}
+	else
+		pMovement->vPadding_1 = { 1.f, 1.f };
+
+	m_pContext->Unmap(m_pMovementBuffer, 0);
+
+	if (FAILED(m_pContext->Map(m_pDissolveBuffer, 0, D3D11_MAP_WRITE_DISCARD, 0, &mappedResource)))
+		return true;
+
+	DISSOLVE_INITIAL* pDissolve = static_cast<DISSOLVE_INITIAL*>(mappedResource.pData);
+
+	pDissolve->fThreshold = DissolveData.fThreshold;
+	pDissolve->iModelType = DissolveData.iModelType;
+	pDissolve->vTextureSize = DissolveData.vTextureSize;
+	memcpy_s(pDissolve->m_BoneMatrices, sizeof(_float4x4) * g_iMaxMeshBones, pModel->Get_BoneMatrices(0), sizeof(_float4x4) * g_iMaxMeshBones);
+	//memcpy_s(&Test, sizeof(_float4x4) * g_iMaxMeshBones, pModel->Get_BoneMatrices(0), sizeof(_float4x4) * g_iMaxMeshBones);
+
+	m_pContext->Unmap(m_pDissolveBuffer, 0);
+
+	m_pContext->CSSetUnorderedAccessViews(0, 1, &m_pParticleUAV, nullptr);
+	m_pContext->CSSetShaderResources(0, 1, &m_pInitParticleSRV);
+
+	m_pContext->CSSetConstantBuffers(0, 1, &m_pMovementBuffer);
+	m_pContext->CSSetConstantBuffers(1, 1, &m_pDissolveBuffer);
+
+	pComputeShader->Execute_ComputeShader((m_iNumInstance + 255) / 256, 1, 1);
+
+	// UAV 해제하고
+	ID3D11UnorderedAccessView* nullUAV[] = { nullptr };
+	m_pContext->CSSetUnorderedAccessViews(0, 1, nullUAV, nullptr);
+
+	// SRV 해제하고
+	ID3D11ShaderResourceView* nullSRV[] = { nullptr };
+	m_pContext->CSSetShaderResources(0, 1, nullSRV);
+
+	// 셰이더까지 해제하면 끝
+	m_pContext->CSSetShader(nullptr, nullptr, 0);
+
+	if (false == (STATE_LOOP & MovementData.iState) && 1.f <= DissolveData.fThreshold)
+	{
+		m_fTime += MovementData.fTimeDelta;
+		if (m_vLifeTime.y < m_fTime)
+			return true;
+	}
+
+	return false;
+}
+
+HRESULT CVIBuffer_Dissolve_Instance::Ready_Buffers(const DISSOLVE_PARTICLE_DESC& Desc)
 {
 	m_iNumInstance = Desc.iNumInstance;
+	m_vLifeTime.y = Desc.fMaxLifeTime;
+
 	m_pInstanceVertices = new DISSOLVE_PARTICLE[m_iNumInstance];
 	ZeroMemory(m_pInstanceVertices, sizeof(DISSOLVE_PARTICLE) * m_iNumInstance);
 
@@ -237,6 +307,12 @@ void CVIBuffer_Dissolve_Instance::For_Debug()
 				//	Test[pData[i].vBlendIndices.w] * fWeightW;
 
 				//vCheck = XMVector3TransformCoord(vCheck, BoneMatrix);
+
+				if (1 == pData[i].isActive)
+				{
+					_uint b = 0;
+				}
+
 				_uint a = 0;
 			}
 			m_pContext->Unmap(pStagingBuffer, 0);

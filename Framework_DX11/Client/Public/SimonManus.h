@@ -56,10 +56,8 @@ public:
 		P1_TRAIL, P2_TRAIL, SWING_DRAG, SWING_DRAG_REVERSE, P2_SLIDEMAGIC,
 		P2_JUMPMAGIC, P2_SH_CHARGE, P2_SH_EXPLOSION, P2_WAVE_TRAIL,
 		WEAPON_PARTICLE,
-		P2_AURA,
 
 		CUTSCENE_P2_ARM_PARTICLE, CUTSCENE_P2_MAP,
-		CUTSCENE_P2_ARM_AURA00, CUTSCENE_P2_ARM_AURA01, CUTSCENE_P2_ARM_AURA02, CUTSCENE_P2_ARM_AURA03, CUTSCENE_P2_ARM_AURA04,
 
 
 		EFFECT_END
@@ -104,6 +102,8 @@ public:
 	virtual void    End_CutScene(_uint iCutSceneNum) override;
 	virtual void    Change_Model(_uint iModelNum) override;
 
+	void On_Aura(_bool bAura, _bool bCutScene);
+
 private:
 	CColliderObject* m_pColliderObject = { nullptr };
 	vector<CGameObject*>	CollObjRenderP{};
@@ -125,6 +125,8 @@ private:
 	const _Matrix*			m_pColliderBindMatrix[CT_END] = { nullptr, nullptr, nullptr};
 
 	CTexture*				m_pDissloveTexture = { nullptr };
+
+	class CSimonManus_2P_Aura* m_pAuraEffect = { nullptr };
 
 private:
 

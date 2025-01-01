@@ -203,7 +203,7 @@ void CModel::SetUp_isNeedTuning(_int iBoneIndex, _bool bState)
 	m_Bones[iBoneIndex]->SetUp_isNeedTuning(bState);
 }
 
-HRESULT CModel::Initialize_Prototype(TYPE eType, const _char* pModelFilePath, _fmatrix PreTransformMatrix, _bool isBinaryAnimModel, FilePathStructStack* pStructStack, DISSOLVE_PARTICLE_DESC ParticleDesc)
+HRESULT CModel::Initialize_Prototype(TYPE eType, const _char* pModelFilePath, _fmatrix PreTransformMatrix, _bool isBinaryAnimModel, FilePathStructStack* pStructStack)
 {
 	if (pStructStack != nullptr)
 	{
@@ -230,7 +230,7 @@ HRESULT CModel::Initialize_Prototype(TYPE eType, const _char* pModelFilePath, _f
 
 	if (isBinaryAnimModel)
 	{//변경된 애니메이션 모델이라는 표시 -> 새로만든 바이너리 파일을 통해서 호출
-		ReadyModel_To_Binary(&hFile, ParticleDesc);
+		ReadyModel_To_Binary(&hFile);
 		Update_Boundary();
 	}
 	else			//추가되기 전 일반 바이너리 파일로 불러오는
@@ -243,7 +243,7 @@ HRESULT CModel::Initialize_Prototype(TYPE eType, const _char* pModelFilePath, _f
 		for (auto& Bone : m_Bones)
 			Bone->Setting_ParentBoneName(this);
 
-		if (FAILED(Ready_Meshes(&hFile, ParticleDesc)))
+		if (FAILED(Ready_Meshes(&hFile)))
 			return E_FAIL;
 
 		if (FAILED(Ready_Materials(&hFile, pModelFilePath)))
@@ -1071,7 +1071,7 @@ HRESULT CModel::Create_Bin_Animations(HANDLE* pFile)
 	return S_OK;
 }
 
-HRESULT CModel::ReadyModel_To_Binary(HANDLE* pFile, const DISSOLVE_PARTICLE_DESC& ParticleDesc)
+HRESULT CModel::ReadyModel_To_Binary(HANDLE* pFile)
 {
 	_ulong dwByte = 0;
 
@@ -1112,28 +1112,14 @@ HRESULT CModel::ReadyModel_To_Binary(HANDLE* pFile, const DISSOLVE_PARTICLE_DESC
 
 	ReadFile(*pFile, &m_iNumMeshes, sizeof(_uint), &dwByte, nullptr);
 
-	vector<DISSOLVE_PARTICLE> Instances;
-	Instances.reserve(m_iNumMeshes);
-
 	for (_uint i = 0; i < m_iNumMeshes; ++i)
 	{
-		CMesh* pMesh = CMesh::Create_To_Binary(m_pDevice, m_pContext, pFile, this, XMLoadFloat4x4(&m_PreTransformMatrix), ParticleDesc, i, Instances);
+		CMesh* pMesh = CMesh::Create_To_Binary(m_pDevice, m_pContext, pFile, this, XMLoadFloat4x4(&m_PreTransformMatrix));
 		if (nullptr == pMesh)
 			return E_FAIL;
 
 		m_Meshes.emplace_back(pMesh);
 	}
-
-	if (0 < ParticleDesc.iNumInstance)
-	{
-		CVIBuffer_Dissolve_Instance::DISSOLVE_INSTANCE_DESC DissolveDesc = {};
-		DissolveDesc.iNumInstance = (_uint)Instances.size();
-		DissolveDesc.pParticles = Instances.data();
-
-		if(FAILED(m_pGameInstance->Add_Prototype(ParticleDesc.iLevelID, ParticleDesc.strBufferTag, CVIBuffer_Dissolve_Instance::Create(m_pDevice, m_pContext, DissolveDesc))))
-			return E_FAIL;
-	}
-
 
 	//여기까지 메쉬
 
@@ -1156,7 +1142,6 @@ HRESULT CModel::ReadyModel_To_Binary(HANDLE* pFile, const DISSOLVE_PARTICLE_DESC
 			if (!isHaveTextures)
 				continue;
 
-
 			_char				szTexturePath[MAX_PATH] = "";
 
 			ReadFile(*pFile, szTexturePath, MAX_PATH, &dwByte, nullptr);
@@ -1173,8 +1158,8 @@ HRESULT CModel::ReadyModel_To_Binary(HANDLE* pFile, const DISSOLVE_PARTICLE_DESC
 			MultiByteToWideChar(CP_ACP, 0, szTexturePath, (_int)(strlen(szTexturePath)), szFinalPath, MAX_PATH);
 
 			if (m_pGameInstance)
-
 				MeshMaterial.pMaterialTextures[j] = CTexture::Create(m_pDevice, m_pContext, szFinalPath, 1);
+
 			if (nullptr == MeshMaterial.pMaterialTextures[j])
 				return E_FAIL;
 		}
@@ -1217,6 +1202,24 @@ _Vec4 CModel::Calc_CenterPos(_Matrix WorldMat)
 	return vOut;
 }
 
+DISSOLVE_PARTICLE_DESC CModel::Create_Particles(const DISSOLVE_INSTANCE_DESC& ParticleDesc, vector<DISSOLVE_PARTICLE>& Instances)
+{
+	Instances.reserve(m_iNumMeshes);
+
+	for (_uint i = 0; i < m_iNumMeshes; ++i)
+	{
+		if(ParticleDesc.iMeshIndex < 0 || i == ParticleDesc.iMeshIndex)
+			m_Meshes[i]->Create_Particles(this, ParticleDesc, Instances);
+	}
+
+	DISSOLVE_PARTICLE_DESC DissolveDesc = {};
+	DissolveDesc.iNumInstance = (_uint)Instances.size();
+	DissolveDesc.pParticles = Instances.data();
+	DissolveDesc.fMaxLifeTime = ParticleDesc.vLifeTime.y;
+
+	return DissolveDesc;
+}
+
 _float CModel::Get_CurrentDuration()
 {
 	return (_float)m_Animations[m_iCurrentAnimIndex]->Get_Duration();
@@ -1236,33 +1239,20 @@ HRESULT CModel::Bind_MeshBoneMatrices(CShader* pShader, const _char* pConstantNa
 	return S_OK;
 }
 
-HRESULT CModel::Ready_Meshes(HANDLE* pFile, DISSOLVE_PARTICLE_DESC ParticleDesc)
+HRESULT CModel::Ready_Meshes(HANDLE* pFile)
 {
 	_ulong dwByte = 0;
 
 	ReadFile(*pFile, &m_iNumMeshes, sizeof(_uint), &dwByte, nullptr);
 
-	vector<DISSOLVE_PARTICLE> Instances;
-
 	for (size_t i = 0; i < (size_t)m_iNumMeshes; i++)
 	{
-		CMesh* pMesh = CMesh::Create(m_pDevice, m_pContext, pFile, this, XMLoadFloat4x4(&m_PreTransformMatrix), ParticleDesc, (_uint)i, Instances);
+		CMesh* pMesh = CMesh::Create(m_pDevice, m_pContext, pFile, this, XMLoadFloat4x4(&m_PreTransformMatrix));
 		if (nullptr == pMesh)
 			return E_FAIL;
 
 		m_Meshes.emplace_back(pMesh);
 	}
-
-	if (0 < ParticleDesc.iNumInstance)
-	{
-		CVIBuffer_Dissolve_Instance::DISSOLVE_INSTANCE_DESC DissolveDesc = {};
-		DissolveDesc.iNumInstance = (_uint)Instances.size();
-		DissolveDesc.pParticles = Instances.data();
-
-		if (FAILED(m_pGameInstance->Add_Prototype(ParticleDesc.iLevelID, ParticleDesc.strBufferTag, CVIBuffer_Dissolve_Instance::Create(m_pDevice, m_pContext, DissolveDesc))))
-			return E_FAIL;
-	}
-
 
 	return S_OK;
 }
@@ -1385,11 +1375,11 @@ void CModel::CalculateBoundingBox_Model(CMesh* pMesh, _Vec3& minPos, _Vec3& maxP
 }
 
 
-CModel* CModel::Create(ID3D11Device* pDevice, ID3D11DeviceContext* pContext, TYPE eType, const _char* pModelFilePath, _fmatrix PreTransformMatrix, _bool isBinaryAnimModel, FilePathStructStack* pStructStack, DISSOLVE_PARTICLE_DESC ParticleDesc)
+CModel* CModel::Create(ID3D11Device* pDevice, ID3D11DeviceContext* pContext, TYPE eType, const _char* pModelFilePath, _fmatrix PreTransformMatrix, _bool isBinaryAnimModel, FilePathStructStack* pStructStack)
 {
 	CModel* pInstance = new CModel(pDevice, pContext);
 
-	if (FAILED(pInstance->Initialize_Prototype(eType, pModelFilePath, PreTransformMatrix, isBinaryAnimModel, pStructStack, ParticleDesc)))
+	if (FAILED(pInstance->Initialize_Prototype(eType, pModelFilePath, PreTransformMatrix, isBinaryAnimModel, pStructStack)))
 	{
 		MSG_BOX(TEXT("Failed to Created : CModel"));
 		Safe_Release(pInstance);

@@ -62,8 +62,29 @@ namespace Engine
 		_float2 vTexcoord = {};
 		XMUINT4 vBlendIndices = {};
 		_float4 vBlendWeights = {};
-		_bool isActive = { false };
+		_uint isActive = { 0 };
 	}DISSOLVE_PARTICLE;
+
+	typedef struct
+	{
+		_uint		iModelLevelIndex;
+		_wstring	strModelTag;		// 어떤 모델을 사용할 것인가?
+		_int		iMeshIndex = { -1 };
+		_uint		iNumInstance = 0;	// 넓이 1당 몇개의 파티클이 생성될 것인가?
+		_float3		vCenter = {};
+		_float2		vSize = {};
+		_float2		vSpeed = {};
+		_float2		vLifeTime = {};
+		_float4		vMinColor = {};
+		_float4		vMaxColor = {};
+	}DISSOLVE_INSTANCE_DESC;
+	
+	typedef struct
+	{
+		_uint				iNumInstance;
+		DISSOLVE_PARTICLE*	pParticles;
+		_float				fMaxLifeTime;
+	}DISSOLVE_PARTICLE_DESC;
 
 	typedef struct
 	{

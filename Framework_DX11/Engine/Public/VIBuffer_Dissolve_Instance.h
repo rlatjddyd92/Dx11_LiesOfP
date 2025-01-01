@@ -6,28 +6,19 @@ BEGIN(Engine)
 class ENGINE_DLL CVIBuffer_Dissolve_Instance final : public CVIBuffer_Instancing
 {
 public:
-
-	typedef struct
-	{
-		// 모델에서 만들고 전달해야 함.
-		_uint		iNumInstance;
-		DISSOLVE_PARTICLE*	pParticles;
-		_uint		iMeshIndex;
-	} DISSOLVE_INSTANCE_DESC;
-
 	typedef struct
 	{
 		_float4x4			m_BoneMatrices[g_iMaxMeshBones] = {};
 		_float				fThreshold = { 0 };
 		_uint				iModelType = { 0 };
-		_float2				fPadding = {};
+		_float2				vTextureSize = {};
 	}DISSOLVE_INITIAL;
 
 	typedef struct
 	{
 		_float				fThreshold = { 0 };
 		_uint				iModelType = { 0 };
-		_float2				fPadding = {};
+		_float2				vTextureSize = {};
 	}DISSOLVE_DATA;
 
 private:
@@ -45,6 +36,7 @@ public:
 
 public:
 	_bool DispatchCS(class CShader_Compute* pComputeShader, class CTexture* pTexture, class CModel* pModel, const PARTICLE_MOVEMENT& MovementData, const DISSOLVE_DATA& DissolveData);
+	_bool DispatchCS_NonTexture(class CShader_Compute* pComputeShader, class CModel* pModel, const PARTICLE_MOVEMENT& MovementData, const DISSOLVE_DATA& DissolveData);
 
 private:
 	_bool m_bFirst = { false };
@@ -68,10 +60,10 @@ private:
 	ID3D11Buffer*		m_pInitParticleBuffer = nullptr;
 	ID3D11ShaderResourceView* m_pInitParticleSRV = nullptr;
 
-	_Matrix Test[g_iMaxMeshBones] = {};
+	//_Matrix Test[g_iMaxMeshBones] = {};
 
 private:
-	HRESULT Ready_Buffers(const DISSOLVE_INSTANCE_DESC& Desc);
+	HRESULT Ready_Buffers(const DISSOLVE_PARTICLE_DESC& Desc);
 	void For_Debug();
 
 public:

@@ -15,6 +15,11 @@ private:
 	virtual ~CTexture() = default;
 
 public:
+	ID3D11ShaderResourceView* Get_SRV(_uint i) {
+		return m_SRVs[i];
+	}
+
+public:
 	virtual HRESULT Initialize_Prototype(const _tchar* pTextureFilePath, _uint iNumTextures);
 	virtual HRESULT Initialize(void* pArg) override;
 
