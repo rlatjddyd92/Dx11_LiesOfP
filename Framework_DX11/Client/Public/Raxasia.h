@@ -133,6 +133,7 @@ private:
 	class CCollider* m_EXCollider[COLLTYPE_END] = { nullptr, nullptr };
 
 	class CTexture* m_pDouTexture = { nullptr };
+	class CTexture* m_pDissloveTexture = { nullptr };
 
 	_bool					m_isChanged = { false };
 	_bool					m_bChanging = { false };

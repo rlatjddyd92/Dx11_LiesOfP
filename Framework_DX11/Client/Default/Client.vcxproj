@@ -203,6 +203,7 @@
     <ClInclude Include="..\Public\Item_Dropped.h" />
     <ClInclude Include="..\Public\Monster_Training01.h" />
     <ClInclude Include="..\Public\Monster_Training02.h" />
+    <ClInclude Include="..\Public\PlayerCollider_Fatal.h" />
     <ClInclude Include="..\Public\RebornerMale.h" />
     <ClInclude Include="..\Public\State_CarcassNormal_Bite.h" />
     <ClInclude Include="..\Public\CurruptedStrongArm_Puppet.h" />
@@ -571,6 +572,7 @@
     <ClCompile Include="..\Private\Item_Dropped.cpp" />
     <ClCompile Include="..\Private\Monster_Training01.cpp" />
     <ClCompile Include="..\Private\Monster_Training02.cpp" />
+    <ClCompile Include="..\Private\PlayerCollider_Fatal.cpp" />
     <ClCompile Include="..\Private\RebornerMale.cpp" />
     <ClCompile Include="..\Private\State_CarcassNormal_Bite.cpp" />
     <ClCompile Include="..\Private\CurruptedStrongArm_Puppet.cpp" />

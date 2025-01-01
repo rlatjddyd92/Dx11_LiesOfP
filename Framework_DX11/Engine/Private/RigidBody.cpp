@@ -83,8 +83,14 @@ void CRigidBody::Update(_float fTimeDelta)
 			_float fProj = m_vVelocity.Dot(vSlide);
 			vSlide = vSlide * fProj;
 
-
-			pRigidDynamic->setLinearVelocity(ConvertToPxVec3(vSlide));
+			if(m_pOwnerNavigation->isMove(vPos + vSlide * fTimeDelta))
+			{
+				pRigidDynamic->setLinearVelocity(ConvertToPxVec3(vSlide));
+			}
+			else
+			{
+				pRigidDynamic->setLinearVelocity(ConvertToPxVec3(_Vec3(0.f, 0.f, 0.f)));
+			}
 
 			PlayerPxTransform.p = PxVec3(vPos.x, vPos.y, vPos.z);
 			pRigidDynamic->setGlobalPose(PlayerPxTransform);

@@ -1046,7 +1046,7 @@ HRESULT CLoader::Ready_Resources_For_Monster()
 		return E_FAIL;
 
 	//Prototype_Component_Model_Weapon_RebornerBigA_Stick
-	PreTransformMatrix = XMMatrixScaling(0.012f, 0.012f, 0.012f) * XMMatrixRotationZ(XMConvertToRadians(90.0f));
+	PreTransformMatrix = XMMatrixScaling(0.014f, 0.014f, 0.014f) * XMMatrixRotationZ(XMConvertToRadians(90.0f));
 	if (FAILED(m_pGameInstance->Add_Prototype(LEVEL_GAMEPLAY, TEXT("Prototype_Component_Model_Weapon_RebornerBigA_Stick"),
 		CModel::Create(m_pDevice, m_pContext, CModel::TYPE_ANIM, "../Bin/ModelData/Anim/Monster/RebornerBigA/RebornerBigA_Weapon.dat", PreTransformMatrix, false))))
 		return E_FAIL;

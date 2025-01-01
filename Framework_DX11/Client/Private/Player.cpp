@@ -11,6 +11,7 @@
 #include "Weapon.h"
 #include "Weapon_Scissor.h"
 #include "Weapon_PlayerArm.h"
+#include "PlayerCollider_Fatal.h"
 
 #include "Ladder.h"
 #include "Lift_Floor.h"
@@ -154,7 +155,7 @@ HRESULT CPlayer::Initialize(void * pArg)
 	//m_pNavigationCom->Move_to_Cell(m_pRigidBodyCom, 427); //짧은사다리
 	//m_pNavigationCom->Move_to_Cell(m_pRigidBodyCom, 341); //아래엘베
 	//m_pNavigationCom->Move_to_Cell(m_pRigidBodyCom, 440); //상자랑 장애물
-	//m_pNavigationCom->Move_to_Cell(m_pRigidBodyCom, 1066); // 순간이동 1066
+	m_pNavigationCom->Move_to_Cell(m_pRigidBodyCom, 1066); // 순간이동 1066
 	//m_pNavigationCom->Move_to_Cell(m_pRigidBodyCom, 790); // 순간이동 790
 	//m_pNavigationCom->Move_to_Cell(m_pRigidBodyCom, 801); // 소피아 방
 	//m_pNavigationCom->Move_to_Cell(m_pRigidBodyCom, 1178); // 소피아 방 내부
@@ -177,6 +178,8 @@ HRESULT CPlayer::Initialize(void * pArg)
 
 	m_vRimLightColor = _Vec4(0.f, 0.f, 0.f, 0.f);
 
+	m_pContactMonster = m_pFatalColliderObj->Get_ContactMonster_Ptr();
+
 	CDissolve_Test::DISSOLVE_OBJECT_DESC TestDesc = {};
 	TestDesc.fRotationPerSec = 90.f;
 	TestDesc.fSpeedPerSec = 1.f;
@@ -186,9 +189,6 @@ HRESULT CPlayer::Initialize(void * pArg)
 
 	//if (FAILED(m_pGameInstance->Add_CloneObject_ToLayer(LEVEL_GAMEPLAY, TEXT("Layer_Test"), TEXT("Prototype_GameObject_Effect_Dissolve_Particle"), &TestDesc)))
 	//	return E_FAIL;
-
-
-	m_pNavigationCom->Set_ExceptCellNum(99);
 
 	return S_OK;
 }
@@ -221,6 +221,8 @@ void CPlayer::Priority_Update(_float fTimeDelta)
 		m_pWeapon[m_eWeaponType]->Priority_Update(fTimeDelta);
 	if(nullptr != m_pWeapon_Arm)
 		m_pWeapon_Arm->Priority_Update(fTimeDelta);
+
+	m_pFatalColliderObj->Priority_Update(fTimeDelta);
 
 	for (auto& pEffect : m_Effects)
 	{
@@ -256,6 +258,8 @@ void CPlayer::Update(_float fTimeDelta)
 		m_pSoundCom[i]->Update(fTimeDelta);
 	}
 
+	m_pFatalColliderObj->Update(fTimeDelta);
+
 	for (auto& pEffect : m_Effects)
 	{
 		if (!pEffect->Get_Dead())
@@ -290,8 +294,8 @@ void CPlayer::Update(_float fTimeDelta)
 
 	if (KEY_TAP(KEY::Q))
 	{
-		//dynamic_cast<CCutScene*>(m_pGameInstance->Find_Object(LEVEL_GAMEPLAY, TEXT("Layer_CutScene"), BOSS1_MEET1))->Start_Play();
-		Change_State(FLAME_FATAL);
+		dynamic_cast<CCutScene*>(m_pGameInstance->Find_Object(LEVEL_GAMEPLAY, TEXT("Layer_CutScene"), BOSS1_DEAD))->Start_Play();
+		//Change_State(FLAME_FATAL);
 	}
 }
 
@@ -304,6 +308,8 @@ void CPlayer::Late_Update(_float fTimeDelta)
 		m_pWeapon[m_eWeaponType]->Late_Update(fTimeDelta);
 	if (nullptr != m_pWeapon_Arm)
 		m_pWeapon_Arm->Late_Update(fTimeDelta);
+
+	m_pFatalColliderObj->Late_Update(fTimeDelta);
 
 	for (auto& pEffect : m_Effects)
 	{
@@ -1657,6 +1663,14 @@ HRESULT CPlayer::Ready_Components()
 		return E_FAIL;
 	m_pColliderCom->Set_Owner(this);
 
+	CPlayerCollider_Fatal::FATALCOLLIDER_DESC FatalColliderDesc{};
+	FatalColliderDesc.iLevelIndex = LEVEL_GAMEPLAY;
+	FatalColliderDesc.pPlayer = this;
+
+	m_pFatalColliderObj = CPlayerCollider_Fatal::Create(m_pDevice, m_pContext, &FatalColliderDesc);
+	if (!m_pFatalColliderObj)
+		return E_FAIL;
+
 	// 항상 마지막에 생성하기
 	CRigidBody::RIGIDBODY_DESC RigidBodyDesc{};
 	RigidBodyDesc.isStatic = false;
@@ -1877,6 +1891,8 @@ void CPlayer::Free()
 	}
 
 	Safe_Release(m_pWeapon_Arm);
+
+	Safe_Release(m_pFatalColliderObj);
 
 	// 24-11-27 김성용
 	// 스탯 구조체 제거 

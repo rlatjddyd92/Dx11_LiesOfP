@@ -124,6 +124,7 @@ protected:
     _bool            m_isGravity = { false };
     _bool            m_isPlayAnimation = { true };
     _bool            m_isCutScene = { false };
+    _bool            m_isStartDisslove = { false };
 
     _bool		     m_bDieState = { false };
 
@@ -131,6 +132,7 @@ protected:
 
     _float           m_fMoveSpeed = {};
     _float           m_fEmissiveMask = {};
+    _float			 m_fDissloveRatio = {};
 
 
     _Vec4            m_vRimLightColor = {};
@@ -138,7 +140,7 @@ protected:
     _Vec3            m_vVelocity = {};
     _Vec3            m_vCenterOffset = {};
 
-    HIT_TYPE        m_eHitType = {};
+    HIT_TYPE         m_eHitType = {};
 
     //스테이터스 부분
     PAWN_STATUS         m_eStat{};

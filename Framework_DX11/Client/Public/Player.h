@@ -319,7 +319,6 @@ private:
 	_float				m_fDebuffSpeedRatio = { 1.f };
 	_float				m_fDebuffAcidDamageTime = {};
 	_float				m_fRecoveryStaminaTime = { 0.f };
-	_float				m_fDissloveRatio = {};
 
 	CMonster*			m_pTargetMonster = { nullptr };
 	CMonster*			m_pIntersectMonster = { nullptr };
@@ -330,6 +329,9 @@ private:
 	class CWeapon_PlayerArm*		m_pWeapon_Arm = { nullptr };
 
 	class CItem_Throw* m_pThrowItem = { nullptr };
+
+	class CPlayerCollider_Fatal*	m_pFatalColliderObj = { nullptr };
+	class CMonster*					m_pContactMonster = { nullptr };
 
 private:
 	_vector		m_vRootMoveStack = {};

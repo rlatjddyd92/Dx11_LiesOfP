@@ -167,6 +167,13 @@ void CRaxasia::Priority_Update(_float fTimeDelta)
 
 	}
 
+	if (m_isStartDisslove)
+	{
+		m_fDissloveRatio += 0.1f * fTimeDelta;
+		if (m_fDissloveRatio >= 2.f)
+			m_isDead = true;
+	}
+
 	for (auto& pEffect : m_Effects)
 	{
 		if (!pEffect->Get_Dead())
@@ -250,6 +257,11 @@ HRESULT CRaxasia::Render()
 	if (FAILED(Bind_WorldViewProj()))
 		return E_FAIL;
 
+	if (FAILED(m_pDissloveTexture->Bind_ShadeResource(m_pShaderCom, "g_DissloveTexture", 0)))
+		return E_FAIL;
+	if (FAILED(m_pShaderCom->Bind_RawValue("g_fDissolveRatio", &m_fDissloveRatio, sizeof(_float))))
+		return E_FAIL;
+
 	_uint		iNumMeshes = m_pModelCom->Get_NumMeshes();
 
 	for (size_t i = 0; i < iNumMeshes; i++)
@@ -320,6 +332,10 @@ HRESULT CRaxasia::Render()
 	//RimLight ÃÊ±âÈ­
 	_Vec4 vInitRimLight = _Vec4(0.f, 0.f, 0.f, 0.f);
 	if (FAILED(m_pShaderCom->Bind_RawValue("g_vRimLight", &vInitRimLight, sizeof(_float4))))
+		return E_FAIL;
+
+	_float fResetDisslove = -1.f;
+	if (FAILED(m_pShaderCom->Bind_RawValue("g_fDissolveRatio", &fResetDisslove, sizeof(_float))))
 		return E_FAIL;
 
 #ifdef _DEBUG
@@ -628,7 +644,10 @@ void CRaxasia::End_CutScene(_uint iCutSceneNum)
 	}
 	else if (m_pCutSceneFsmCom->Get_CurrentState() == STATE_DIE)
 	{
-		
+		m_isStartDisslove = true;
+
+		m_pWeapon->IsActive(false);
+		m_pWeaponShield->IsActive(false);
 	}
 
 }
@@ -653,6 +672,8 @@ HRESULT CRaxasia::Ready_Components()
 {
 	if (FAILED(__super::Ready_Components()))
 		return E_FAIL;
+
+	m_pDissloveTexture = CTexture::Create(m_pDevice, m_pContext, TEXT("../Bin/ModelData/Anim/Player/T_DissolveMask_A.dds"), 1);
 
 	/* FOR.Com_Model */
 	if (FAILED(__super::Add_Component(LEVEL_GAMEPLAY, TEXT("Prototype_Component_Model_RaxasiaP1"),
@@ -1222,13 +1243,19 @@ void CRaxasia::Free()
 	{
 		Safe_Release(m_EXCollider[i]);
 	}
+
+	Safe_Release(m_pDissloveTexture);
 	Safe_Release(m_pWeapon);
 	Safe_Release(m_pWeaponShield);
 	Safe_Release(m_pP1ModelCom);
 	Safe_Release(m_pExtraModelCom);
-	Safe_Release(m_pCutSceneModelCom[0]);
-	Safe_Release(m_pCutSceneModelCom[1]);
 	Safe_Release(m_pKickCollObj);
+
+	if(m_pModelCom != m_pCutSceneModelCom[0])
+		Safe_Release(m_pCutSceneModelCom[0]);
+	if (m_pModelCom != m_pCutSceneModelCom[1])
+		Safe_Release(m_pCutSceneModelCom[1]);
+
 
 	Safe_Release(m_pDouTexture);
 

@@ -147,6 +147,9 @@ PS_OUT_MODEL PS_MAIN(PS_IN_ANIMODEL In)
     PS_OUT_MODEL Out = (PS_OUT_MODEL) 0;
 
     vector vMtrlDiffuse = g_DiffuseTexture.Sample(LinearSampler, In.vTexcoord);
+    vector vDisslove = g_DissloveTexture.Sample(LinearSampler, In.vTexcoord);
+    if (g_fDissolveRatio > vDisslove.r)
+        discard;
 
     if (0.1f > vMtrlDiffuse.a)
         discard;
@@ -222,6 +225,10 @@ PS_OUT_MODEL PS_MAIN_FUR_MAGENTA(PS_IN_NORMAL In)
     vector vDiffuse = g_DiffuseTexture.Sample(LinearSampler, In.vTexcoord);
     vector vMask = g_MaskTexture.Sample(LinearSampler, In.vTexcoord);
 
+    vector vDisslove = g_DissloveTexture.Sample(LinearSampler, In.vTexcoord);
+    if (g_fDissolveRatio > vDisslove.r)
+        discard;
+
     if (vMask.r >= 1.f && vMask.b >= 1.f)
         discard;
 	
@@ -246,6 +253,11 @@ PS_OUT_MODEL PS_MAIN_FUR_BLACK(PS_IN_ANIMODEL In)
     PS_OUT_MODEL Out = (PS_OUT_MODEL) 0;
 	
     vector vDiffuse = g_DiffuseTexture.Sample(LinearSampler, In.vTexcoord);
+
+    vector vDisslove = g_DissloveTexture.Sample(LinearSampler, In.vTexcoord);
+    if (g_fDissolveRatio > vDisslove.r)
+        discard;
+
     if(vDiffuse.r < 0.05f)
         discard;
     
@@ -263,7 +275,11 @@ PS_OUT_MODEL PS_MAIN_GLASS(PS_IN_ANIMODEL In)
 {
     PS_OUT_MODEL Out = (PS_OUT_MODEL) 0;
 
-    vector vMtrlDiffuse = g_DiffuseTexture.Sample(LinearSampler, In.vTexcoord);
+    vector vMtrlDiffuse = g_DiffuseTexture.Sample(LinearSampler, In.vTexcoord);    
+    
+    vector vDisslove = g_DissloveTexture.Sample(LinearSampler, In.vTexcoord);
+    if (g_fDissolveRatio > vDisslove.r)
+        discard;
 	
     vector vEmissive = g_EmessiveTexture.Sample(LinearClampSampler, In.vTexcoord) * g_fEmessiveMask;
 	

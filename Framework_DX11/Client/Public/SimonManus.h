@@ -109,7 +109,6 @@ private:
 	vector<CGameObject*>	CollObjRenderP{};
 	vector<class CEffect_Container*> m_Effects;
 
-
 	class CWeapon*			m_pWeapon = { nullptr };
 	class CFsm*				m_pExtraFsmCom = { nullptr };	//2페이즈 fsm
 	class CModel*			m_pP1ModelCom = { nullptr };	//1페이즈 model
@@ -124,6 +123,8 @@ private:
 	_bool					m_isCutScene = { false };
 	
 	const _Matrix*			m_pColliderBindMatrix[CT_END] = { nullptr, nullptr, nullptr};
+
+	CTexture*				m_pDissloveTexture = { nullptr };
 
 private:
 

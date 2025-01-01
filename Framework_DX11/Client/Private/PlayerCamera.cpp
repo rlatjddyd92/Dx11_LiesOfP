@@ -112,7 +112,7 @@ void CPlayerCamera::PlayerMove(_float fTimeDelta)
 	}
 	if (MouseMove = m_pGameInstance->Get_DIMouseMove(DIMM_Y))
 	{
-		m_pTransformCom->Orbit(m_pTransformCom->Get_State(CTransform::STATE_RIGHT), vPlayerPos, 0.6f, 3.f, fTimeDelta * MouseMove * 0.1f);
+		m_pTransformCom->Orbit(m_pTransformCom->Get_State(CTransform::STATE_RIGHT), vPlayerPos, 0.8f, 3.f, fTimeDelta * MouseMove * 0.1f);
 	}
 	m_vTargetPos = vPlayerPos - XMVector3Normalize(m_pTransformCom->Get_State(CTransform::STATE_LOOK)) * 3.f;
 

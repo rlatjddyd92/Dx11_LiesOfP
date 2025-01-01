@@ -56,6 +56,10 @@ HRESULT CState_Player_OH_Guard::Start_State(void* pArg)
 
     m_pPlayer->Change_CameraMode(CPlayerCamera::MODE_STATIC);
     m_pPlayer->Play_Sound(CPlayer::PAWN_SOUND_EFFECT1, TEXT("SE_PC_MT_Rustle_Stab_01.wav"));
+
+    m_isPlaySound[0] = false;
+    m_isPlaySound[1] = false;
+
     return S_OK;
 }
 
@@ -230,11 +234,11 @@ void CState_Player_OH_Guard::Control_Sound()
         m_pPlayer->Play_Sound(CPlayer::PAWN_SOUND_EFFECT1, TEXT("SE_PC_FS_Stone_Walk_02.wav"));
         m_isPlaySound[1] = true;
     }
-    else if (iFrame < 4)
-    {
-        m_isPlaySound[0] = false;
-        m_isPlaySound[1] = false;
-    }
+    //else if (iFrame < 4)
+    //{
+    //    m_isPlaySound[0] = false;
+    //    m_isPlaySound[1] = false;
+    //}
 }
 
 CState_Player_OH_Guard* CState_Player_OH_Guard::Create(CFsm* pFsm, CPlayer* pPlayer, _uint iStateNum, void* pArg)
