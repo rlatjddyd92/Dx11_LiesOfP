@@ -257,6 +257,8 @@ public:
 		UIPart_On();
 	}
 
+	_bool IsTlaking_WithNPC() { return m_pUIPage_Talking->IsTlaking_WithNPC(); }
+
 	void Show_Select_Script(_wstring strLeft, _wstring strRight, _float fTime) { m_pUIPage_Talking->Show_Select_Script(strLeft, strRight, fTime); }
 	_bool IsLeft_LastSelect_Result() { return m_pUIPage_Talking->IsLeft_LastSelect_Result(); }
 

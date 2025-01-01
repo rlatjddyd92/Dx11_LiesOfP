@@ -61,7 +61,6 @@ public:
 
 	_float Check_Ratio(_Vec3* vLifeTime, _float fTimeDelta);
 
-
 private:
 	_float m_fTime_Fade_Now = 0.f;
 	_float m_fTime_Fade_Max = 0.f;

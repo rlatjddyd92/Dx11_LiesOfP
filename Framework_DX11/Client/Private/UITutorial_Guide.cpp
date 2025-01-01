@@ -157,7 +157,7 @@ void CUITutorial_Guide::Update_Guide(TUTO_CHAPTER& NowData, _float fTimeDelta)
 
 	if (iCount == 3) m_pSharedPointer_Frame->fRatio = 1.f;
 	if (iCount == 2) m_pSharedPointer_Frame->fRatio = 0.75f;
-	if (iCount == 1) m_pSharedPointer_Frame->fRatio = 0.50f;
+	if (iCount == 1) m_pSharedPointer_Frame->fRatio = 0.55f;
 }
 
 CUITutorial_Guide* CUITutorial_Guide::Create(ID3D11Device* pDevice, ID3D11DeviceContext* pContext)

@@ -144,6 +144,7 @@ public: // 외부에서 매니저 접근
 
 	// NPC 스크립트 
 	void Show_Script_Npc_Talking(NPC_SCRIPT eNPC, _int iScriptNum = -1) { m_pUIManager->Show_Script_Npc_Talking(eNPC, iScriptNum); }
+	_bool IsTlaking_WithNPC() { return m_pUIManager->IsTlaking_WithNPC(); }
 	void Next_Script() { m_pUIManager->Next_Script(); }
 	void OFF_Script() { m_pUIManager->OFF_Script(); }
 	void Show_Select_Script(_wstring strLeft, _wstring strRight, _float fTime) { m_pUIManager->Show_Select_Script(strLeft, strRight, fTime); }

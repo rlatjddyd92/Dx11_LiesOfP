@@ -66,7 +66,9 @@ void CUIPage_Tutorial::Late_Update(_float fTimeDelta)
 	if (m_iNowChapter == -1)
 		Next_Chapter();
 
-	Test_Control(fTimeDelta);
+	//Test_Control(fTimeDelta);
+
+	Check_Mission_Complete(fTimeDelta);
 
 	Update_Tutorial_Info(fTimeDelta);
 	Update_Tutorial_Guide(fTimeDelta);
@@ -185,16 +187,22 @@ void CUIPage_Tutorial::Test_Control(_float fTimeDelta)
 		while (1)
 		{
 			if (iIndex >= m_vecTutorial_MissionData.size())
+			{
 				CloseAction();
+				break;
+			}
 			else if (m_vecTutorial_MissionData[iIndex]->iCapterIndex != m_iNowChapter)
+			{
 				Next_Chapter();
+				break;
+			}
 			else if (m_vecTutorial_MissionData[iIndex]->bComplete == false)
 			{
 				m_vecTutorial_MissionData[iIndex]->bComplete = true;
 				break;
 			}
-			
-			++iIndex;
+			else
+				++iIndex;
 		}
 	}
 }
@@ -232,17 +240,29 @@ void CUIPage_Tutorial::Check_Mission_Complete(_float fTimeDelta)
 	}
 
 	_int iIndex = m_iNow_Index;
+	_bool bIsComplete = true;
 
 	while (1)
 	{
-		if (iIndex > m_vecTutorial_MissionData.size())
+		if (iIndex >= m_vecTutorial_MissionData.size())
+		{
 			CloseAction();
+			break;
+		}
+		else if (m_vecTutorial_MissionData[iIndex]->iCapterIndex != m_iNowChapter)
+		{
+			if (bIsComplete == true) Next_Chapter();
+			break;
+		}
 
-		if (m_vecTutorial_MissionData[iIndex]->iCapterIndex != m_iNowChapter)
-			Next_Chapter();
+		if (m_vecTutorial_MissionData[iIndex]->fNow >= m_vecTutorial_MissionData[iIndex]->fGoal)
+		{
+			m_vecTutorial_MissionData[iIndex]->fNow = m_vecTutorial_MissionData[iIndex]->fGoal;
+			m_vecTutorial_MissionData[iIndex]->bComplete = true;
+		}
 
 		if (m_vecTutorial_MissionData[iIndex]->bComplete == false)
-			break;
+			bIsComplete = false;
 
 		++iIndex;
 	}
@@ -254,28 +274,36 @@ void CUIPage_Tutorial::Check_Player_Move(_float fTimeDelta)
 	{
 		if (m_vecTutorial_MissionData[m_iNow_Index + 0]->bComplete == false)
 			if ((KEY_TAP(KEY::W)) || (KEY_HOLD(KEY::W)))
-				m_vecTutorial_MissionData[m_iNow_Index + 0]->fNow += fTimeDelta;
+				m_vecTutorial_MissionData[m_iNow_Index + 0]->fNow += fTimeDelta * 2.f;
 
 		if (m_vecTutorial_MissionData[m_iNow_Index + 1]->bComplete == false)
 			if ((KEY_TAP(KEY::S)) || (KEY_HOLD(KEY::S)))
-				m_vecTutorial_MissionData[m_iNow_Index + 0]->fNow += fTimeDelta;
+				m_vecTutorial_MissionData[m_iNow_Index + 1]->fNow += fTimeDelta * 2.f;
 
 		if (m_vecTutorial_MissionData[m_iNow_Index + 2]->bComplete == false)
 			if ((KEY_TAP(KEY::A)) || (KEY_HOLD(KEY::A)))
-				m_vecTutorial_MissionData[m_iNow_Index + 0]->fNow += fTimeDelta;
+				m_vecTutorial_MissionData[m_iNow_Index + 2]->fNow += fTimeDelta * 2.f;
 
 		if (m_vecTutorial_MissionData[m_iNow_Index + 3]->bComplete == false)
 			if ((KEY_TAP(KEY::D)) || (KEY_HOLD(KEY::D)))
-				m_vecTutorial_MissionData[m_iNow_Index + 0]->fNow += fTimeDelta;
+				m_vecTutorial_MissionData[m_iNow_Index + 3]->fNow += fTimeDelta * 2.f;
 	}
+
+	// 유저 회피 동작 확인 
+	// 최초 진입 시점 1회만 확인해야 함
 }
 
 void CUIPage_Tutorial::Check_Player_Lbutton_Attack()
 {
+	// 일반 공격 동작 확인 
+	// 
 }
 
 void CUIPage_Tutorial::Check_Player_RButton_Attack()
 {
+	// 
+
+
 }
 
 void CUIPage_Tutorial::Check_Player_Fable_Art()
@@ -488,6 +516,7 @@ void CUIPage_Tutorial::Next_Chapter()
 	}
 	else
 	{
+		GET_GAMEINTERFACE->Input_Achievment_Data(16, 1);
 		// 여기에 종료 팝업 필요
 	}
 }

@@ -456,17 +456,8 @@ public:
 			return Get_Equip_Item_Info(EQUIP_SLOT::EQUIP_WEAPON_HANDLE_1);
 	}
 	
-	void Add_Durable_Weapon(_float fAdd)
-	{
-		ITEM* pNowWeapon = m_vecArray_Inven[_int(m_vecEquip_ItemInfo[_int(EQUIP_SLOT::EQUIP_WEAPON_BLADE_0) + m_iWeapon_Select * 2]->eType)]->vecItemInfo[m_vecEquip_ItemInfo[_int(EQUIP_SLOT::EQUIP_WEAPON_BLADE_0) + m_iWeapon_Select * 2]->iIndex];
-
-		if (pNowWeapon != nullptr)
-		{
-			pNowWeapon->fDurable_Now += fAdd;
-			pNowWeapon->fDurable_Now = min(pNowWeapon->fDurable_Now, pNowWeapon->fDurable_Max);
-			pNowWeapon->fDurable_Now = max(pNowWeapon->fDurable_Now, 0.f);
-		}
-	}
+	void Add_Durable_Weapon(_float fAdd);
+	
 
 
 
