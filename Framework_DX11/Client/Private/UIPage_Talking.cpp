@@ -35,7 +35,7 @@ HRESULT CUIPage_Talking::Initialize_Prototype()
 	if (FAILED(__super::Initialize(&Desc)))
 		return E_FAIL;
 
-
+	m_vecPageAction[_int(PAGEACTION::ACTION_INACTIVE)] = true;
 
 	return S_OK;
 }
@@ -366,8 +366,6 @@ void CUIPage_Talking::Update_Select(_float fTimeDelta)
 		m_vecPart[_int(PART_GROUP::TALKING_Select_Right_L)]->bRender = false;
 		m_vecPart[_int(PART_GROUP::TALKING_Select_Right_M)]->bRender = false;
 		m_vecPart[_int(PART_GROUP::TALKING_Select_Right_R)]->bRender = false;
-		
-			
 	}
 	else if (GET_GAMEINTERFACE->CheckMouse(m_vecPart[_int(PART_GROUP::TALKING_Select_Right_Back)]->fPosition, m_vecPart[_int(PART_GROUP::TALKING_Select_Right_Back)]->fSize).x != -1.f)
 	{
@@ -383,6 +381,9 @@ void CUIPage_Talking::Update_Select(_float fTimeDelta)
 	{
 		for (_int i = _int(PART_GROUP::TALKING_Select_Clock_Center); i <= _int(PART_GROUP::TALKING_Select_Right_Text); ++i)
 			m_vecPart[i]->bRender = false;
+
+		GET_GAMEINTERFACE->Input_Achievment_Data(7, 1);
+		GET_GAMEINTERFACE->Show_Heart(TEXT("심장이 고동친다."));
 	}
 
 

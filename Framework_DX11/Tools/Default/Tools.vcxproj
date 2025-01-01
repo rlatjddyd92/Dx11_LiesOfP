@@ -74,6 +74,7 @@
     <ClInclude Include="..\public\Trail_Effect_OP.h" />
     <ClInclude Include="..\public\Trail_Effect_TP.h" />
     <ClInclude Include="..\Public\UIRender.h" />
+    <ClInclude Include="..\Public\UIRender_3D.h" />
     <ClInclude Include="framework.h" />
     <ClInclude Include="Resource.h" />
     <ClInclude Include="stdafx.h" />
@@ -134,6 +135,7 @@
     <ClCompile Include="..\private\Trail_Effect_OP.cpp" />
     <ClCompile Include="..\private\Trail_Effect_TP.cpp" />
     <ClCompile Include="..\Private\UIRender.cpp" />
+    <ClCompile Include="..\Private\UIRender_3D.cpp" />
     <ClCompile Include="stdafx.cpp" />
     <ClCompile Include="Tools.cpp" />
   </ItemGroup>

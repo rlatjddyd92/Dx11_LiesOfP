@@ -38,13 +38,16 @@ public:
 	virtual HRESULT Ready_UIPart_Group_Control() override;
 
 	void Set_Guide(vector<struct CUIPage::UIPART_INFO*>& vecOrigin);
-	void Update_Guide(TUTO_INFO& NowData, _float fTimeDelta);
+	void Update_Guide(TUTO_CHAPTER& NowData, _float fTimeDelta);
 
 protected:
 	UPART* m_pSharedPointer_Frame = { nullptr };
 	UPART* m_pSharedPointer_Title = { nullptr };
 	vector<UPART*> m_vecSharedPointer_Ctrl_Upper;
+	vector<UPART*> m_vecSharedPointer_Ctrl_Middle;
 	vector<UPART*> m_vecSharedPointer_Ctrl_Lower;
+
+	_int m_iNowChapter = -1;
 
 public:
 	static CUITutorial_Guide* Create(ID3D11Device* pDevice, ID3D11DeviceContext* pContext);

@@ -210,11 +210,8 @@ public:
 	// 무기 락 조정
 	void SetWeaponLock(_bool bIsWeaponLock);
 
-
-	// 좌상단 게이지는 스탯 매니저의 내용을 참조하여 변경 
-	// 외부 -> 스탯 매니저 -> UI 매니저(Page_Play)
-
-	// 좌하단 포션/도구 
+	// 키 가이드
+	void KeyGuideOn() { m_bIsKeyGuideOn = true; }
 
 public: 
 
@@ -290,6 +287,10 @@ private:
 	_Vec2 m_vGrinder_Wait = { 0.f,2.f };
 
 	_bool m_bIsStart = true;
+
+	// 키 가이드 
+	_bool m_bIsKeyGuideOn = false;
+	_Vec2 m_vKeyGuideTime = { 0.f,1.f };
 
 private: // 테스트 변수
 	_bool m_bWeapon_Top = true;

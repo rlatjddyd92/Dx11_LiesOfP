@@ -86,6 +86,14 @@ void CAchievment_DataLine::Update_PopUp(_float fTimeDelta, _float fPopupHeight)
 void CAchievment_DataLine::Set_Before_LineRender(_float fAdjustY, _float fAlpha)
 {
 	m_vecBackCtrl.front()->fPosition.y += -fAdjustY + m_fPosY_By_Index;
+
+	if (m_pScroll->Check_Is_Render_Y(m_vecBackCtrl.front()->fPosition.y, m_vecBackCtrl[1]->fSize.y) == false)
+	{
+		m_vecBackCtrl.front()->fPosition.y -= -fAdjustY + m_fPosY_By_Index;
+		return;
+	}
+		
+
 	m_vecIconCtrl.back()->iTexture_Index = m_iICon_Index;
 	m_vecTitleCtrl.back()->strText = m_strTitle;
 	m_vecDescCtrl.back()->strText = m_strDesc;

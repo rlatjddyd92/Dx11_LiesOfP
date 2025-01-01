@@ -154,6 +154,12 @@
     <Filter Include="90.ImGuiManager\Controller_3DUITool">
       <UniqueIdentifier>{ab3a9007-89f2-4c01-b036-9d78bb7c88c9}</UniqueIdentifier>
     </Filter>
+    <Filter Include="02.GameObjects\05.UIRender\00.UI_Normal">
+      <UniqueIdentifier>{32664004-0531-409e-b75d-01a68ed09936}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.GameObjects\05.UIRender\01.UI_3D">
+      <UniqueIdentifier>{36ee7403-f4e4-4025-a8c0-92140379ccf1}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="framework.h">
@@ -267,9 +273,6 @@
     <ClInclude Include="..\..\ImGuizmo\ImZoomSlider.h">
       <Filter>Imguizmo</Filter>
     </ClInclude>
-    <ClInclude Include="..\Public\UIRender.h">
-      <Filter>02.GameObjects\05.UIRender</Filter>
-    </ClInclude>
     <ClInclude Include="..\public\Texture_Effect.h">
       <Filter>02.GameObjects\04.Effect\Effect_Base\Texture_Effect</Filter>
     </ClInclude>
@@ -335,6 +338,12 @@
     </ClInclude>
     <ClInclude Include="..\Public\Controller_3DUITool.h">
       <Filter>90.ImGuiManager\Controller_3DUITool</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Public\UIRender.h">
+      <Filter>02.GameObjects\05.UIRender\00.UI_Normal</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Public\UIRender_3D.h">
+      <Filter>02.GameObjects\05.UIRender\01.UI_3D</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -442,9 +451,6 @@
     <ClCompile Include="..\..\ImGuizmo\ImSequencer.cpp">
       <Filter>Imguizmo</Filter>
     </ClCompile>
-    <ClCompile Include="..\Private\UIRender.cpp">
-      <Filter>02.GameObjects\05.UIRender</Filter>
-    </ClCompile>
     <ClCompile Include="..\private\Texture_Effect.cpp">
       <Filter>02.GameObjects\04.Effect\Effect_Base\Texture_Effect</Filter>
     </ClCompile>
@@ -498,6 +504,12 @@
     </ClCompile>
     <ClCompile Include="..\Private\Controller_3DUITool.cpp">
       <Filter>90.ImGuiManager\Controller_3DUITool</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Private\UIRender.cpp">
+      <Filter>02.GameObjects\05.UIRender\00.UI_Normal</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Private\UIRender_3D.cpp">
+      <Filter>02.GameObjects\05.UIRender\01.UI_3D</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

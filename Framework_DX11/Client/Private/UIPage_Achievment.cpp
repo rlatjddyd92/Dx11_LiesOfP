@@ -70,6 +70,9 @@ void CUIPage_Achievment::Update(_float fTimeDelta)
 		
 		fInterval *= (1.3f * m_vecAcievment.size());
 		m_pScroll->Activate_Scroll(fInterval, 0.f);
+
+		for (auto& iter : m_vecAcievment)
+			iter->Set_Scroll(pScroll);
 	}
 }
 

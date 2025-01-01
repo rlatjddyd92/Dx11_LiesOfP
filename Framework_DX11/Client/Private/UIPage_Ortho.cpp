@@ -181,8 +181,7 @@ void CUIPage_Ortho::Set_OnOff_OrthoUI(_bool bIsOn, void* pObj)
 
 			if (bIsOn == false)
 			{
-				const CPawn::PAWN_STATUS* pStat = static_cast<CPawn*>(pObj)->Get_Status();
-				if (pStat->fHp == 0)
+				if (static_cast<CPawn*>(pObj)->Get_Status()->fHp <= 0.f)
 				{
 					if (iter->eType == UI_ORTHO_OBJ_TYPE::ORTHO_BOSS_RAXASIA)
 						GET_GAMEINTERFACE->Input_Achievment_Data(8, 1);
@@ -216,20 +215,25 @@ void CUIPage_Ortho::CheckHost(_float fTimeDelta)
 		
 		
 		*/
-		if (!(*iter)->bIsActive)
-		{
-			++iter;
-			continue;
-		}
-			
+	
+		
 
 
 		if (((*iter)->pHost == nullptr) || ((*iter)->pHost->Get_Dead()))
 		{
 			// iter->pHost는 얕은 복사로 가져왔으며 addref 하지 않았음
 			Safe_Delete(*iter);
+			Set_OnOff_OrthoUI(false, (*iter)->pHost);
 			iter = m_Ortho_Host_list.erase(iter);
+			continue;
 		}
+
+		if (!(*iter)->bIsActive)
+		{
+			++iter;
+			continue;
+		}
+
 		else if ((*iter)->eType == UI_ORTHO_OBJ_TYPE::ORTHO_NORMAL_MONSTER)
 		{
 			_float fDistnace = Check_Distance_From_Cam((*iter)->pHost);

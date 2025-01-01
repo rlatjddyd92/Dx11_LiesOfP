@@ -40,6 +40,8 @@ public:
 		}
 	}
 
+	void Set_Scroll(struct CUIPage::SCROLL_INFO* Scroll) { m_pScroll = Scroll; }
+
 	// 업적 콘트롤 
 	_bool Update_Line(_float fTimeDelta, _float fAdjustY, _float fAlpha, _bool bIsRender);
 
@@ -116,6 +118,8 @@ private:
 	_Vec4 m_vIconColor_Origin = { 0.f,0.f,0.f,0.f };
 	_Vec4 m_vTitleColor_Origin = { 0.f,0.f,0.f,0.f };
 	_Vec4 m_vDescColor_Origin = { 0.f,0.f,0.f,0.f };
+
+	struct CUIPage::SCROLL_INFO* m_pScroll = { nullptr };
 
 public:
 	static CAchievment_DataLine* Create(ID3D11Device* pDevice, ID3D11DeviceContext* pContext);

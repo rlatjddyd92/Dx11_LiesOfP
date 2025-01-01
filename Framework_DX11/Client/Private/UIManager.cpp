@@ -122,7 +122,11 @@ void CUIManager::Priority_Update(_float fTimeDelta)
 	if (KEY_TAP(KEY::P))
 		m_pUIPage_Tutorial->OpenAction();
 	else if (KEY_TAP(KEY::L))
+	{
 		m_pUIPage_Tutorial->CloseAction();
+		m_pUIPage_Play->KeyGuideOn();
+	}
+		
 
 	for (auto& iter : m_vecPageRender_Order)
 		if (m_vecPage[_int(iter)]->GetUpdate())
@@ -318,7 +322,9 @@ void CUIManager::UIControl_Loading(_float fTimeDelta)
 void CUIManager::UIControl_Play(_float fTimeDelta)
 {
 	if (KEY_TAP(KEY::ESC))
+	{
 		SwicthPage(UIPAGE::PAGE_MENU, UIPAGE::PAGE_PLAY);
+	}
 	else
 	{
 		m_eNowPage = UIPAGE::PAGE_PLAY;

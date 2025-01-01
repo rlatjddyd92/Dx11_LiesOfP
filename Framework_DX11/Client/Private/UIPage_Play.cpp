@@ -70,15 +70,14 @@ void CUIPage_Play::Late_Update(_float fTimeDelta)
 	RD_Weapon_Update(fTimeDelta);
 	STAT_Page_Update(fTimeDelta);
 
+	m_vec_Group_Ctrl[_int(PART_GROUP::GROUP_CTRL)]->bRender = m_bIsKeyGuideOn;
+
 	for (auto& iter : m_vec_Group_Ctrl)
 		__super::UpdatePart_ByControl(iter);
 
 	Boss_Hp_Update(fTimeDelta);
 	__super::Late_Update(fTimeDelta);
-
 	
-
-
 	PlayInfo_Update(fTimeDelta);
 	m_bCan_InterAction = true;
 	__super::Array_Control(_int(PART_GROUP::GROUP_INTER_STATIC), _int(PART_GROUP::GROUP_INTER_TEXT), CTRL_COMMAND::COM_RENDER, false);

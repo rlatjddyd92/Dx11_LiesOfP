@@ -257,6 +257,8 @@ public:
 		UIPart_On();
 	}
 
+	_bool IsTlaking_WithNPC() { return m_pUIPage_Talking->IsTlaking_WithNPC(); }
+
 	void Show_Select_Script(_wstring strLeft, _wstring strRight, _float fTime) { m_pUIPage_Talking->Show_Select_Script(strLeft, strRight, fTime); }
 	_bool IsLeft_LastSelect_Result() { return m_pUIPage_Talking->IsLeft_LastSelect_Result(); }
 
@@ -283,8 +285,15 @@ public:
 	void Set_Now_Interact_Stargezer(_int iNaviIndex) { return m_pUIPage_Telepot->Set_Now_Interact_Stargezer(iNaviIndex); }
 
 	// Æ©Åä¸®¾ó
-	void Start_Tutorial() { return m_pUIPage_Tutorial->OpenAction(); }
-	void End_Tutorial() { return m_pUIPage_Tutorial->CloseAction(); }
+	void Start_Tutorial() 
+	{ 
+		m_pUIPage_Tutorial->OpenAction();
+	}
+	void End_Tutorial()
+	{ 
+		m_pUIPage_Tutorial->CloseAction(); 
+		m_pUIPage_Play->KeyGuideOn();
+	}
 #pragma endregion
 
 

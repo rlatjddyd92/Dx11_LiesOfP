@@ -110,11 +110,10 @@ HRESULT CUITutorial_Info::Ready_UIPart_Group_Control()
 void CUITutorial_Info::Set_Info(vector<struct CUIPage::UIPART_INFO*>& vecOrigin)
 {
 	_int iMission = -1;
-	_int iScore = -1;
 
 	for (auto& iter : vecOrigin)
 	{
-		if ((iter->iGroupIndex >= _int(PART_GROUP::GROUP_INFO_FRAME)) && (iter->iGroupIndex <= _int(PART_GROUP::GROUP_INFO_SCORE)))
+		if (iter->iGroupIndex <= _int(PART_GROUP::GROUP_INFO_MISSION))
 		{
 			m_vecSharedPointer_All.push_back(iter);
 		}
@@ -127,21 +126,43 @@ void CUITutorial_Info::Set_Info(vector<struct CUIPage::UIPART_INFO*>& vecOrigin)
 				m_pSharedPointer_Mission_Title = iter;
 			if (iMission == 2)
 				m_pSharedPointer_Mission_Count = iter;
+			if (iMission == 3)
+				m_pSharedPointer_Mission_Result_Back = iter;
 			if (iMission == 4)
-				m_pSharedPointer_Mission_Score = iter;
-		}
-		else if (iter->iGroupIndex == _int(PART_GROUP::GROUP_INFO_SCORE))
-		{
-			++iScore;
-
-			if (iScore == 2)
-				m_pSharedPointer_Sum = iter;
+				m_pSharedPointer_Mission_Result_Text = iter;
 		}
 	}
 }
 
-void CUITutorial_Info::Update_Info(TUTO_INFO& NowData, _float fTimeDelta)
+void CUITutorial_Info::Update_Info(TUTO_MISSION& NowData, _float fTimeDelta)
 {
+	_float fRatio = _float(NowData.iMissionIndex) / 3.f;
+
+	m_vecSharedPointer_All[1]->fRatio = fRatio;
+	m_pSharedPointer_Mission_Title->strText = NowData.strTitle;
+	
+	_wstring strCount = to_wstring(_int(NowData.fNow));
+	strCount += TEXT(" / ");
+	strCount += to_wstring(_int(NowData.fGoal));
+
+	m_pSharedPointer_Mission_Count->strText = strCount;
+
+	if (NowData.bComplete == true)
+	{
+		m_pSharedPointer_Mission_Result_Back->fTextureColor.y = 1.f;
+		m_pSharedPointer_Mission_Result_Text->strText = TEXT("O");
+	}
+	else
+	{
+		m_pSharedPointer_Mission_Result_Back->fTextureColor.y = 0.5f;
+		m_pSharedPointer_Mission_Result_Text->strText = TEXT("X");
+	}
+
+	for (_int i = 1; i < m_vecSharedPointer_All.size(); ++i)
+	{
+		m_vecSharedPointer_All[i]->MovePart(m_vecSharedPointer_All[m_vecSharedPointer_All[i]->iParentPart_Index]->fPosition, fTimeDelta);
+		__super::Input_Render_Info(*m_vecSharedPointer_All[i]);
+	}
 }
 
 CUITutorial_Info* CUITutorial_Info::Create(ID3D11Device* pDevice, ID3D11DeviceContext* pContext)
@@ -180,4 +201,5 @@ void CUITutorial_Info::Free()
 	}
 
 	m_vecPart.clear();
+	m_vecSharedPointer_All.clear();
 }

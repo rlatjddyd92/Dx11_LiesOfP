@@ -109,10 +109,76 @@ HRESULT CUITutorial_Popup::Ready_UIPart_Group_Control()
 
 void CUITutorial_Popup::Set_Popup(vector<struct CUIPage::UIPART_INFO*>& vecOrigin)
 {
+	_int iIndex = 0;
+	for (auto& iter : vecOrigin)
+	{
+		if (iter->iGroupIndex == _int(PART_GROUP::GROUP_POPUP))
+			break;
+
+		++iIndex;
+	}
+
+	for (_int i = 0; i < 7; ++i)
+	{
+		m_vecSharedPointer_Frame.push_back(vecOrigin[iIndex]);
+		++iIndex;
+	}
+
+	m_pSharedPointer_Title = m_vecSharedPointer_Frame[m_vecSharedPointer_Frame.size() - 2];
+
+	for (_int i = 0; i < 4; ++i)
+	{
+		m_vecSharedPointer_Ctrl_Upper.push_back(vecOrigin[iIndex]);
+		++iIndex;
+	}
+
+	for (_int i = 0; i < 4; ++i)
+	{
+		m_vecSharedPointer_Ctrl_Middle.push_back(vecOrigin[iIndex]);
+		++iIndex;
+	}
+
+	for (_int i = 0; i < 4; ++i)
+	{
+		m_vecSharedPointer_Ctrl_Lower.push_back(vecOrigin[iIndex]);
+		++iIndex;
+	}
+
+	m_pSharedPointer_DescA = vecOrigin[iIndex];
+	++iIndex;
+	m_pSharedPointer_DescB = vecOrigin[iIndex];
+	++iIndex;
+
+	for (_int i = 0; i < 3; ++i)
+	{
+		m_vecSharedPointer_Frame.push_back(vecOrigin[iIndex]);
+		++iIndex;
+	}
 }
 
-void CUITutorial_Popup::Update_Popup(TUTO_INFO& NowData, _float fTimeDelta)
+void CUITutorial_Popup::Update_Popup(TUTO_CHAPTER& NowData, _float fTimeDelta)
 {
+	m_pSharedPointer_Title->strText = NowData.strTitle;
+
+	Set_Crtl_Guide(&m_vecSharedPointer_Ctrl_Upper, NowData, 0);
+	Set_Crtl_Guide(&m_vecSharedPointer_Ctrl_Middle, NowData, 1);
+	Set_Crtl_Guide(&m_vecSharedPointer_Ctrl_Lower, NowData, 2);
+
+	if (NowData.strDescA[0] != 'n')
+	{
+		m_pSharedPointer_DescA->strText = NowData.strDescA;
+		m_pSharedPointer_DescA->bRender = true;
+	}
+	else 
+		m_pSharedPointer_DescA->bRender = false;
+		
+	if (NowData.strDescB[0] != 'n')
+	{
+		m_pSharedPointer_DescB->strText = NowData.strDescB;
+		m_pSharedPointer_DescB->bRender = true;
+	}
+	else
+		m_pSharedPointer_DescB->bRender = false;
 }
 
 CUITutorial_Popup* CUITutorial_Popup::Create(ID3D11Device* pDevice, ID3D11DeviceContext* pContext)
@@ -151,4 +217,10 @@ void CUITutorial_Popup::Free()
 	}
 
 	m_vecPart.clear();
+
+	m_vecSharedPointer_Frame.clear();
+	
+	m_vecSharedPointer_Ctrl_Upper.clear();
+	m_vecSharedPointer_Ctrl_Middle.clear();
+	m_vecSharedPointer_Ctrl_Lower.clear();
 }

@@ -20,6 +20,31 @@ class CController_3DUITool : public CBase
 	DECLARE_SINGLETON(CController_3DUITool)
 
 public:
+	typedef struct
+	{
+		
+
+
+
+
+
+
+
+
+	}UI_3D_PART;
+
+	typedef struct
+	{
+		_int iGuide_NodeIndex = -1;
+		_int iNavi_Index = -1;
+		_Vec4 vPosition_Origin = { 0.f,0.f,0.f,0.f }; // UI를 고정할 
+		_Vec4 vPosition_Adjust = { 0.f,0.f,0.f,0.f }; 
+		list<_int> Linked_Nodelist;
+		_int iDestNum = -1;
+	}UI_3D_GUIDE_PART;
+
+
+public:
 	HRESULT Initialize(ID3D11Device* pDevice, ID3D11DeviceContext* pContext);
 
 public:
@@ -53,6 +78,7 @@ private:
 
 	vector<_wstring>	m_PrototypeTags;
 
+	vector<UI_3D_GUIDE_PART>	m_vecGuidePart;
 
 
 
