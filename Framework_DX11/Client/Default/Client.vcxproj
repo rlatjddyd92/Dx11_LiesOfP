@@ -200,6 +200,7 @@
     <ClInclude Include="..\Public\CarcassTail.h" />
     <ClInclude Include="..\Public\Decal.h" />
     <ClInclude Include="..\Public\Dissolve_Player_Dead.h" />
+    <ClInclude Include="..\public\Dissolve_Raxasia_Dead.h" />
     <ClInclude Include="..\Public\Dissolve_SimonManus_Dead.h" />
     <ClInclude Include="..\Public\Item_Dropped.h" />
     <ClInclude Include="..\Public\Monster_Training01.h" />
@@ -571,6 +572,7 @@
     <ClCompile Include="..\Private\CarcassTail.cpp" />
     <ClCompile Include="..\Private\Decal.cpp" />
     <ClCompile Include="..\Private\Dissolve_Player_Dead.cpp" />
+    <ClCompile Include="..\private\Dissolve_Raxasia_Dead.cpp" />
     <ClCompile Include="..\Private\Dissolve_SimonManus_Dead.cpp" />
     <ClCompile Include="..\Private\Item_Dropped.cpp" />
     <ClCompile Include="..\Private\Monster_Training01.cpp" />

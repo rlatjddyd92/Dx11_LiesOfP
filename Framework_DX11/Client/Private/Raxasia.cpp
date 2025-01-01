@@ -69,6 +69,8 @@
 #include "CutScene.h"
 #include "Weapon.h"
 
+#include "Dissolve_Raxasia_Dead.h"
+
 CRaxasia::CRaxasia(ID3D11Device* pDevice, ID3D11DeviceContext* pContext)
 	: CMonster{ pDevice, pContext }
 {
@@ -179,6 +181,7 @@ void CRaxasia::Priority_Update(_float fTimeDelta)
 		if (!pEffect->Get_Dead())
 			pEffect->Priority_Update(fTimeDelta);
 	}
+	m_pDissolveEffect->Priority_Update(fTimeDelta);
 }
 
 void CRaxasia::Update(_float fTimeDelta)
@@ -213,6 +216,7 @@ void CRaxasia::Update(_float fTimeDelta)
 		if (!pEffect->Get_Dead())
 			pEffect->Update(fTimeDelta);
 	}
+	m_pDissolveEffect->Update(fTimeDelta);
 
 	if (!m_isCutScene)
 	{
@@ -241,6 +245,7 @@ void CRaxasia::Late_Update(_float fTimeDelta)
 		if (!pEffect->Get_Dead())
 			pEffect->Late_Update(fTimeDelta);
 	}
+	m_pDissolveEffect->Late_Update(fTimeDelta);
 
 	m_pGameInstance->Add_RenderObject(CRenderer::RG_NONBLEND, this);
 	m_pGameInstance->Add_RenderObject(CRenderer::RG_SHADOWOBJ, this);
@@ -579,6 +584,7 @@ void CRaxasia::Start_CutScene(_uint iCutSceneNum)
 		m_pRigidBodyCom->Set_GloblePose(vCurrentPos);
 
 		m_pCutSceneFsmCom->Set_State(STATE_DIE);
+		
 
 		break;
 	}
@@ -645,6 +651,7 @@ void CRaxasia::End_CutScene(_uint iCutSceneNum)
 	else if (m_pCutSceneFsmCom->Get_CurrentState() == STATE_DIE)
 	{
 		m_isStartDisslove = true;
+		m_pDissolveEffect->Set_On(true);
 
 		m_pWeapon->IsActive(false);
 		m_pWeaponShield->IsActive(false);
@@ -1039,7 +1046,17 @@ HRESULT CRaxasia::Ready_Effects()
 		pSocketBoneMatrix, _Vec3(0.f, 0.f, 0.f), _Vec3(0.f, 0.f, 1.f), _Vec3(1.f, 1.f, 1.f), _Vec3(0.f, 0.f, 0.f));
 	
 
-	
+	CDissolve_Raxasia_Dead::DISSOLVE_OBJECT_DESC TestDesc = {};
+	TestDesc.fRotationPerSec = 90.f;
+	TestDesc.fSpeedPerSec = 1.f;
+	TestDesc.iLevelIndex = LEVEL_GAMEPLAY;
+	TestDesc.pModelCom = m_pCutSceneModelCom[MODEL_PHASE2];
+	TestDesc.pRaxasiaTransformCom = m_pTransformCom;
+	TestDesc.pDissolveTextureCom = m_pDissloveTexture;
+	TestDesc.pThreshold = &m_fDissloveRatio;
+	TestDesc.vTextureSize = _float2(2048.f, 2048.f);
+
+	m_pDissolveEffect = static_cast<CDissolve_Raxasia_Dead*>(m_pGameInstance->Clone_GameObject(TEXT("Prototype_GameObject_Effect_Dissolve_Raxasia_Dead"), &TestDesc));
 
 	return S_OK;
 }
@@ -1280,6 +1297,7 @@ void CRaxasia::Free()
 		m_pCutSceneFsmCom->Release_States();
 	}
 	Safe_Release(m_pCutSceneFsmCom);
+	Safe_Release(m_pDissolveEffect);
 
 	__super::Free();
 

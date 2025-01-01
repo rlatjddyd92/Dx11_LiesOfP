@@ -142,6 +142,7 @@ private:
 	const _Matrix* m_pColliderBindMatrix[CT_END] = { nullptr, nullptr, nullptr };
 
 	class CRaxasia_Sword_CutScene*			m_pCutSceneWeapon = { nullptr };
+	class CDissolve_Raxasia_Dead*			m_pDissolveEffect = { nullptr };
 
 private:
 

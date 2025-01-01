@@ -144,7 +144,7 @@ _bool CVIBuffer_Dissolve_Instance::DispatchCS(class CShader_Compute* pComputeSha
 	// 셰이더까지 해제하면 끝
 	m_pContext->CSSetShader(nullptr, nullptr, 0);
 
-	if (false == (STATE_LOOP & MovementData.iState) && 1.f <= DissolveData.fThreshold)
+	if (false == (STATE_LOOP & MovementData.iState) && DissolveData.fThreshold <= 0.f)
 	{
 		m_fTime += MovementData.fTimeDelta;
 		if (m_vLifeTime.y < m_fTime)
