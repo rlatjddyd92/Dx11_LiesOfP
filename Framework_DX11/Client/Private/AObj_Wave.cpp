@@ -47,7 +47,10 @@ HRESULT CAObj_Wave::Initialize(void* pArg)
 
     m_strObjectTag = TEXT("MonsterWeapon");
 
-    m_pSoundCom[EFF_SOUND_EFFECT1]->Play2D(TEXT("SE_NPC_SimonManus_SK_PJ_Ergo_Retspuken_04.wav"), &g_fEffectVolume);
+    if (m_pSoundCom[EFF_SOUND_EFFECT1] != nullptr)
+    {
+        m_pSoundCom[EFF_SOUND_EFFECT1]->Play2D(TEXT("SE_NPC_SimonManus_SK_PJ_Ergo_Retspuken_04.wav"), &g_fEffectVolume);
+    }
 
     return S_OK;
 }

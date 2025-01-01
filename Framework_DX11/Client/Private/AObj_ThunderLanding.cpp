@@ -42,7 +42,10 @@ HRESULT CAObj_ThunderLanding::Initialize(void* pArg)
 
     m_strObjectTag = TEXT("MonsterWeapon");
 
-    m_pSoundCom[EFF_SOUND_EFFECT1]->Play2D(TEXT("SE_NPC_Raxasia_SK_FX_Ground_Explo_Huge_02.wav"), &g_fEffectVolume, false);
+    if (m_pSoundCom[EFF_SOUND_EFFECT1] != nullptr)
+    {
+        m_pSoundCom[EFF_SOUND_EFFECT1]->Play2D(TEXT("SE_NPC_Raxasia_SK_FX_Ground_Explo_Huge_02.wav"), &g_fEffectVolume, false);
+    }
 
     return S_OK;
 }

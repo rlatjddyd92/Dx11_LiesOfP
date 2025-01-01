@@ -116,6 +116,9 @@
 #include "C:\Users\User\Desktop\GitHubRepo\new\Dx11_LiesOfP\Framework_DX11\Engine\Private\Object_Manager.cpp"
 
 
+#include "C:\Users\User\Desktop\GitHubRepo\new\Dx11_LiesOfP\Framework_DX11\Engine\Private\Occludee.cpp"
+
+
 #include "C:\Users\User\Desktop\GitHubRepo\new\Dx11_LiesOfP\Framework_DX11\Engine\Private\Octree.cpp"
 
 
@@ -195,6 +198,9 @@
 
 
 #include "C:\Users\User\Desktop\GitHubRepo\new\Dx11_LiesOfP\Framework_DX11\Engine\Private\VIBuffer_Cube.cpp"
+
+
+#include "C:\Users\User\Desktop\GitHubRepo\new\Dx11_LiesOfP\Framework_DX11\Engine\private\VIBuffer_Dissolve_Instance.cpp"
 
 
 #include "C:\Users\User\Desktop\GitHubRepo\new\Dx11_LiesOfP\Framework_DX11\Engine\private\VIBuffer_Instancing.cpp"

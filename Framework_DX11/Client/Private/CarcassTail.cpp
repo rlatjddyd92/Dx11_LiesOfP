@@ -57,7 +57,7 @@ HRESULT CCarcassTail::Initialize(void* pArg)
 	if (FAILED(Ready_Components()))
 		return E_FAIL;
 
-	m_pNavigationCom->Move_to_Cell(m_pRigidBodyCom, pDefaultDesc->iCurrentCellNum);
+	//m_pNavigationCom->Move_to_Cell(m_pRigidBodyCom, pDefaultDesc->iCurrentCellNum);
 
 	m_pModelCom->SetUp_Animation(rand() % 20, true);
 
@@ -70,7 +70,7 @@ HRESULT CCarcassTail::Initialize(void* pArg)
 	//	XMVectorSet(0.f, 0.f, 0.f, 1.f));
 	//m_pTransformCom->LookAt(_vector{ 0, 0, -1, 0 });
 
-//	m_pRigidBodyCom->Set_GloblePose(_Vec3{ 0.f, -5.f, 0.f } + m_pTransformCom->Get_State(CTransform::STATE_LOOK) * 8);
+	//m_pRigidBodyCom->Set_GloblePose(_Vec3{ 0.f, -5.f, 0.f } + m_pTransformCom->Get_State(CTransform::STATE_LOOK) * 8);
 
 	m_vRimLightColor = { 0.f, 0.f, 0.f, 0.f };
 
@@ -81,6 +81,7 @@ HRESULT CCarcassTail::Initialize(void* pArg)
 
 	m_vCenterOffset = _Vec3{ 0.f, 0.91f, 0.f };
 
+	m_bDiscover = false;
 	GET_GAMEINTERFACE->Register_Pointer_Into_OrthoUIPage(UI_ORTHO_OBJ_TYPE::ORTHO_NORMAL_MONSTER, this);
 
 	GET_GAMEINTERFACE->Set_OnOff_OrthoUI(false, this);
@@ -219,7 +220,7 @@ HRESULT CCarcassTail::Ready_Components()
 
 
 	//LOWERArmLeft
-	ColliderDesc.vExtents = _float3(0.8f, 0.25f, 0.25f);
+	ColliderDesc.vExtents = _float3(0.8f, 0.3f, 0.3f);
 	ColliderDesc.vCenter = _float3(0.3f, 0.f, 0.f);
 	ColliderDesc.vAngles = _float3(0.f, 0.f, 0.f);
 
@@ -238,7 +239,7 @@ HRESULT CCarcassTail::Ready_Components()
 
 
 	//LegLeft
-	ColliderDesc.vExtents = _float3(0.8f, 0.4f, 0.25f);
+	ColliderDesc.vExtents = _float3(0.9f, 0.5f, 0.35f);
 	ColliderDesc.vCenter = _float3(-0.25f, 0.3f, 0.f);
 	ColliderDesc.vAngles = _float3(0.f, 0.f, -0.6f);
 

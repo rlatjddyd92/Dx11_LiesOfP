@@ -24,11 +24,15 @@ HRESULT CState_CarcassTail_TailSwingDown::Start_State(void* pArg)
 {
     m_pMonster->Change_Animation(AN_TAILSWINGDOWN, false, 0.1f, 0, true);
 
+    m_bSwingSound = false;
+
     return S_OK;
 }
 
 void CState_CarcassTail_TailSwingDown::Update(_float fTimeDelta)
 {
+    _double CurTrackPos = m_pMonster->Get_CurrentTrackPos();
+
     if (End_Check())
     {
         m_pMonster->Change_State(CMonster::IDLE);
@@ -36,7 +40,8 @@ void CState_CarcassTail_TailSwingDown::Update(_float fTimeDelta)
 
     m_pMonster->Get_Transform()->LookAt_Lerp_NoHeight(-m_pMonster->Get_TargetDir(), 1.5f, fTimeDelta);
 
-    Collider_Check();
+    Collider_Check(CurTrackPos);
+    Sound_Check(CurTrackPos);
 
 }
 
@@ -49,10 +54,8 @@ _bool CState_CarcassTail_TailSwingDown::End_Check()
     return m_pMonster->Get_EndAnim(AN_TAILSWINGDOWN);
 }
 
-void CState_CarcassTail_TailSwingDown::Collider_Check()
+void CState_CarcassTail_TailSwingDown::Collider_Check(_double CurTrackPos)
 {
-    _double CurTrackPos = m_pMonster->Get_CurrentTrackPos();
-
     if ((CurTrackPos >= 65.f && CurTrackPos <= 72.f) || 
         (CurTrackPos >= 110.f && CurTrackPos <= 115.f) ||
         (CurTrackPos >= 250.f && CurTrackPos <= 258.f))
@@ -63,6 +66,24 @@ void CState_CarcassTail_TailSwingDown::Collider_Check()
     else
     {
         m_pMonster->DeActive_CurretnWeaponCollider(2);
+    }
+}
+
+void CState_CarcassTail_TailSwingDown::Sound_Check(_double CurTrackPos)
+{
+    if ((CurTrackPos >= 65.f && CurTrackPos <= 72.f) ||
+        (CurTrackPos >= 110.f && CurTrackPos <= 115.f) ||
+        (CurTrackPos >= 250.f && CurTrackPos <= 258.f))
+    {
+        if (!m_bSwingSound)
+        {
+            m_pMonster->Play_Sound(CPawn::PAWN_SOUND_EFFECT1, TEXT("SE_NPC_SK_WS_PoliceBilly_06.wav"), false);
+            m_bSwingSound = true;
+        }
+    }
+    else
+    {
+        m_bSwingSound = false;
     }
 }
 

@@ -33,6 +33,8 @@ HRESULT CAObj_BlackBall::Initialize(void* pArg)
     if (FAILED(Ready_Components()))
         return E_FAIL;
 
+    m_bSoundControl = pDesc->bSoundControl;
+
     m_vMoveDir = pDesc->vDir;
     m_vMoveDir.Normalize();
 
@@ -50,7 +52,13 @@ HRESULT CAObj_BlackBall::Initialize(void* pArg)
 
     m_strObjectTag = TEXT("MonsterWeapon");
 
-    m_pSoundCom[EFF_SOUND_EFFECT1]->Play2D(TEXT("SE_NPC_SimonManus_SK_PJ_Ergo_Direct_01.wav"), &g_fEffectVolume);
+    if (m_bSoundControl)
+    {
+        if (m_pSoundCom[EFF_SOUND_EFFECT1] != nullptr)
+        {
+            m_pSoundCom[EFF_SOUND_EFFECT1]->Play2D(TEXT("SE_NPC_SimonManus_SK_PJ_Ergo_Direct_01.wav"), &g_fEffectVolume);
+        }
+    }
 
     return S_OK;
 }
@@ -112,7 +120,10 @@ void CAObj_BlackBall::Update(_float fTimeDelta)
         }
         else
         {
-            m_pSoundCom[EFF_SOUND_EFFECT1]->Stop();
+            if (m_pSoundCom[EFF_SOUND_EFFECT1] != nullptr)
+            {
+                m_pSoundCom[EFF_SOUND_EFFECT1]->Stop();
+            }
 
             //°ñµåº¼ »ý¼º
             CAttackObject::ATKOBJ_DESC Desc;
@@ -124,6 +135,8 @@ void CAObj_BlackBall::Update(_float fTimeDelta)
 
             Desc.vDir = _Vec3{ ( vTargetPos - Desc.vPos) };
             Desc.vDir.Normalize();
+
+            Desc.bSoundControl = m_bSoundControl;
 
             m_pGameInstance->Add_CloneObject_ToLayer(LEVEL_GAMEPLAY, TEXT("Monster_Attack_Extra"), TEXT("Prototype_GameObject_GoldBall"), &Desc);
             

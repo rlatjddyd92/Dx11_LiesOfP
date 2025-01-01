@@ -25,6 +25,7 @@ HRESULT CState_CarcassTail_Scratching::Start_State(void* pArg)
     m_iCurAnim = AN_SCRATCHING_R;     //왼 오 구분하게 만들기
 
     m_pMonster->Change_Animation(m_iCurAnim, false, 0.1f, 0, true);
+    m_bSwingSound = false;
 
     return S_OK;
 }
@@ -43,7 +44,8 @@ void CState_CarcassTail_Scratching::Update(_float fTimeDelta)
         m_pMonster->Change_State(CMonster::IDLE);
     }
 
-    Collider_Check();
+    Collider_Check(CurTrackPos);
+    Sound_Check(CurTrackPos);
 
 }
 
@@ -56,10 +58,8 @@ _bool CState_CarcassTail_Scratching::End_Check()
     return m_pMonster->Get_EndAnim(m_iCurAnim);
 }
 
-void CState_CarcassTail_Scratching::Collider_Check()
+void CState_CarcassTail_Scratching::Collider_Check(_double CurTrackPos)
 {
-    _double CurTrackPos = m_pMonster->Get_CurrentTrackPos();
-
     if ((CurTrackPos >= 85.f && CurTrackPos <= 115.f))
     {
         if (m_iCurAnim == AN_SCRATCHING_L)
@@ -80,6 +80,18 @@ void CState_CarcassTail_Scratching::Collider_Check()
         else
         {
             m_pMonster->DeActive_CurretnWeaponCollider(1);
+        }
+    }
+}
+
+void CState_CarcassTail_Scratching::Sound_Check(_double CurTrackPos)
+{
+    if (!m_bSwingSound)
+    {
+        if ((CurTrackPos >= 85.f && CurTrackPos <= 115.f))
+        {
+            m_pMonster->Play_Sound(CPawn::PAWN_SOUND_EFFECT1, TEXT("SE_NPC_SK_WS_Nail_03.wav"), false);
+            m_bSwingSound = true;
         }
     }
 }

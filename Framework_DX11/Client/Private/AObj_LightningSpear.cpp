@@ -50,7 +50,10 @@ HRESULT CAObj_LightningSpear::Initialize(void* pArg)
 
     m_strObjectTag = TEXT("MonsterWeapon");
 
-    m_pSoundCom[EFF_SOUND_EFFECT1]->Play2D(TEXT("SE_NPC_SK_FX_Spark_M_03.wav"), &g_fEffectVolume);
+    if (m_pSoundCom[EFF_SOUND_EFFECT1] != nullptr)
+    {
+        m_pSoundCom[EFF_SOUND_EFFECT1]->Play2D(TEXT("SE_NPC_SK_FX_Spark_M_03.wav"), &g_fEffectVolume);
+    }
 
     return S_OK;
 }
@@ -145,8 +148,13 @@ void CAObj_LightningSpear::OnCollisionEnter(CGameObject* pOther)
         {
             m_DamagedObjects.push_back(pOther);
             pOther->Calc_DamageGain(m_fDamageAmount * m_fDamageRatio, _Vec3{}, HIT_TYPE::HIT_ELECTRIC, ATTACK_STRENGTH::ATK_NORMAL);
-            m_pSoundCom[EFF_SOUND_EFFECT2]->Play2D(TEXT("SE_NPC_SimonManus_SK_PJ_Ergo_Direct_Hit_01.wav"), &g_fEffectVolume);
 
+            if (m_pSoundCom[EFF_SOUND_EFFECT2] != nullptr)
+            {
+                m_pSoundCom[EFF_SOUND_EFFECT2]->Play2D(TEXT("SE_NPC_SimonManus_SK_PJ_Ergo_Direct_Hit_01.wav"), &g_fEffectVolume);
+            }
+
+            
             m_isDead = true;
 
             CEffect_Manager::Get_Instance()->Add_Effect_ToLayer(LEVEL_GAMEPLAY, TEXT("SimonManus_Attack_LightningSpear_Impact_Ground"),

@@ -85,7 +85,7 @@ HRESULT CRebornerBigA::Initialize(void* pArg)
 
 	m_vCenterOffset = _Vec3{ 0.f, 1.78f, 0.f };
 	
-	m_bDiscover = true;
+	m_bDiscover = false;
 
 	// 24-11-26 김성용
 	// 몬스터 직교 UI 접근 코드 
@@ -322,7 +322,6 @@ HRESULT CRebornerBigA::Ready_FSM()
 		return E_FAIL;
 
 	FSM_INIT_DESC Desc{};
-
 
 
 	m_pFsmCom->Add_State(CState_RebornerBigA_Idle::Create(m_pFsmCom, this, IDLE, &Desc));

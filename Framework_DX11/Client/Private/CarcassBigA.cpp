@@ -89,6 +89,7 @@ HRESULT CCarcassBigA::Initialize(void* pArg)
 
 	m_vCenterOffset = _Vec3{ 0.f, 1.7f, 0.f };
 
+	m_bDiscover = false;
 	// 24-11-26 김성용
 	// 몬스터 직교 UI 접근 코드 
 	// 정식 코드  
@@ -208,7 +209,7 @@ HRESULT CCarcassBigA::Ready_Components()
 
 
 	//LOWERArmLeft
-	ColliderDesc.vExtents = _float3(0.8f, 0.35f, 0.35f);
+	ColliderDesc.vExtents = _float3(0.8f, 0.38f, 0.38f);
 	ColliderDesc.vCenter = _float3(0.6f, 0.f, 0.f);
 	ColliderDesc.vAngles = _float3(0.f, 0.f, 0.f);
 
@@ -218,7 +219,7 @@ HRESULT CCarcassBigA::Ready_Components()
 	m_pColliderBindMatrix[CT_ARM_LEFT] = m_pModelCom->Get_BoneCombindTransformationMatrix_Ptr(m_pModelCom->Get_UFBIndices(UFB_HAND_LEFT) - 1);
 
 	//LOWERArmRight
-	ColliderDesc.vExtents = _float3(0.7f, 0.35f, 0.35f);
+	ColliderDesc.vExtents = _float3(0.7f, 0.38f, 0.38f);
 	ColliderDesc.vCenter = _float3(0.4f, 0.f, 0.f);
 	ColliderDesc.vAngles = _float3(0.f, 0.f, 0.f);
 	if (FAILED(__super::Add_Component(LEVEL_STATIC, TEXT("Prototype_Component_Collider_OBB"),
@@ -229,7 +230,7 @@ HRESULT CCarcassBigA::Ready_Components()
 
 
 	//LegLeft
-	ColliderDesc.vExtents = _float3(0.4f, 0.2f, 0.2f);
+	ColliderDesc.vExtents = _float3(0.5f, 0.2f, 0.2f);
 	ColliderDesc.vCenter = _float3(0.2f, 0.f, 0.f);
 	ColliderDesc.vAngles = _float3(0.f, 0.f, 0.f);
 

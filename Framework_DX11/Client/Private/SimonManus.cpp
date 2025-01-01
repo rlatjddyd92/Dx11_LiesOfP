@@ -145,7 +145,7 @@ HRESULT CSimonManus::Initialize(void* pArg)
 
 	GET_GAMEINTERFACE->Set_OnOff_OrthoUI(false, this);
 
-	Start_CutScene(CUTSCENE_MEET);
+	//Start_CutScene(CUTSCENE_MEET);
 
 	m_pNavigationCom->Set_ExceptCellNum(99);
 
@@ -567,7 +567,7 @@ HRESULT CSimonManus::Ready_Components()
 	m_pColliderCom->Set_Owner(this);
 
 	//LegsL
-	ColliderDesc.vExtents = _float3(0.3f, 0.6f, 0.3f);
+	ColliderDesc.vExtents = _float3(0.3f, 0.8f, 0.3f);
 	ColliderDesc.vCenter = _float3(-0.1f, -0.4f, 0.f);
 	ColliderDesc.vAngles = _float3(0.f, 0.f, -0.45f);
 	if (FAILED(__super::Add_Component(LEVEL_STATIC, TEXT("Prototype_Component_Collider_OBB"),
@@ -575,7 +575,7 @@ HRESULT CSimonManus::Ready_Components()
 		return E_FAIL;
 
 	//R
-	ColliderDesc.vExtents = _float3(0.3f, 0.6f, 0.3f);
+	ColliderDesc.vExtents = _float3(0.3f, 0.8f, 0.3f);
 	ColliderDesc.vCenter = _float3(-0.1f, -0.4f, 0.f);
 	ColliderDesc.vAngles = _float3(0.f, 0.f, -0.45f);
 
@@ -584,7 +584,7 @@ HRESULT CSimonManus::Ready_Components()
 		return E_FAIL;
 
 	//LowerBody
-	ColliderDesc.vExtents = _float3(0.6f, 1.f, 0.8f);
+	ColliderDesc.vExtents = _float3(0.8f, 1.f, 0.9f);
 	ColliderDesc.vCenter = _float3(0.f, -0.1f, 0.f);
 	ColliderDesc.vAngles = _float3(0.f, 0.f, 0.f);
 

@@ -84,6 +84,7 @@ HRESULT CCarcassNormal::Initialize(void* pArg)
 
 	m_vCenterOffset = _Vec3{ 0.f, 1.2f, 0.f };
 
+	m_bDiscover = false;
 	// 24-11-26 김성용
 	// 몬스터 직교 UI 접근 코드 
 	// 정식 코드  

@@ -46,7 +46,10 @@ HRESULT CAObj_Bullet::Initialize(void* pArg)
 
     m_pColliderCom->Set_Owner(this);
 
-    m_pSoundCom[EFF_SOUND_EFFECT1]->Play2D(TEXT("SE_NPC_SK_PJ_Bullet_01.wav"), &g_fEffectVolume, false);
+    if (m_pSoundCom[EFF_SOUND_EFFECT1] != nullptr)
+    {
+        m_pSoundCom[EFF_SOUND_EFFECT1]->Play2D(TEXT("SE_NPC_SK_PJ_Bullet_01.wav"), &g_fEffectVolume, false);
+    }
 
     m_strObjectTag = TEXT("MonsterWeapon");
 
@@ -69,7 +72,10 @@ void CAObj_Bullet::Update(_float fTimeDelta)
         else
         {
             m_isDead = true;
-            m_pSoundCom[EFF_SOUND_EFFECT1]->Stop();
+            if (m_pSoundCom[EFF_SOUND_EFFECT1] != nullptr)
+            {
+                m_pSoundCom[EFF_SOUND_EFFECT1]->Stop();
+            }
         }
     }
     else
@@ -81,7 +87,10 @@ void CAObj_Bullet::Update(_float fTimeDelta)
     m_pTransformCom->Set_State(CTransform::STATE_POSITION, m_pTransformCom->Get_State(CTransform::STATE_POSITION) + m_vMoveDir * m_fSpeed * fTimeDelta);
 
     m_pColliderCom->Update(m_pTransformCom->Get_WorldMatrix_Ptr());
-    m_pSoundCom[EFF_SOUND_EFFECT1]->Update(fTimeDelta);
+    if (m_pSoundCom[EFF_SOUND_EFFECT1] != nullptr)
+    {
+        m_pSoundCom[EFF_SOUND_EFFECT1]->Update(fTimeDelta);
+    }
     m_pEffect->Update(fTimeDelta);
 }
 

@@ -35,6 +35,8 @@ private:
 	_bool			m_bShoted = { false };
 	_bool			m_bEnd = { false };
 
+	_bool			m_bSoundControl = { false };
+
 	_int	m_iThrowPhase{};
 
 	_Vec3	m_vMoveDir{};

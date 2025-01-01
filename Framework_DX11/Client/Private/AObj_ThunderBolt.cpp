@@ -61,7 +61,10 @@ HRESULT CAObj_ThunderBolt::Initialize(void* pArg)
 
     if (m_iStateTrack == 0)
     {
-        m_pSoundCom[EFF_SOUND_EFFECT1]->Play2D(TEXT("SE_NPC_Raxasia_SK_PJ_BladeMissile_01.wav"), &g_fEffectVolume);
+        if (m_pSoundCom[EFF_SOUND_EFFECT1] != nullptr)
+        {
+            m_pSoundCom[EFF_SOUND_EFFECT1]->Play2D(TEXT("SE_NPC_Raxasia_SK_PJ_BladeMissile_01.wav"), &g_fEffectVolume);
+        }
     }
 
     return S_OK;
@@ -161,7 +164,10 @@ void CAObj_ThunderBolt::Update(_float fTimeDelta)
         if (m_pEffects[m_iStateTrack]->Get_Dead())
         {
             m_isDead = true;
-            m_pSoundCom[EFF_SOUND_EFFECT2]->Stop();
+            if (m_pSoundCom[EFF_SOUND_EFFECT2] != nullptr)
+            {
+                m_pSoundCom[EFF_SOUND_EFFECT2]->Stop();
+            }
             return;
         }
         break;
@@ -257,7 +263,10 @@ void CAObj_ThunderBolt::OnCollisionEnter(CGameObject* pOther)
                 m_iStateTrack = STATE_IMPACT;
                 m_pEffects[STATE_IMPACT]->Reset_Effects();
                 m_bImpact = true;
-                m_pSoundCom[EFF_SOUND_EFFECT1]->Play2D(TEXT("SE_NPC_Raxasia_SK_PJ_BladeMissile_Hit_03.wav"), &g_fEffectVolume);
+                if (m_pSoundCom[EFF_SOUND_EFFECT1] != nullptr)
+                {
+                    m_pSoundCom[EFF_SOUND_EFFECT1]->Play2D(TEXT("SE_NPC_Raxasia_SK_PJ_BladeMissile_Hit_03.wav"), &g_fEffectVolume);
+                }
 
             }
             else
@@ -298,9 +307,15 @@ void CAObj_ThunderBolt::OnCollisionEnter(CGameObject* pOther)
                 m_pEffects[STATE_IMPACT] = CEffect_Manager::Get_Instance()->Clone_Effect(TEXT("Raxasia_Attack_ThunderBolt_Counter_Impact"), m_pTransformCom->Get_WorldMatrix_Ptr(),
                     nullptr, _Vec3(0.f, 0.f, 0.f), _Vec3(0.f, 0.f, 1.f), _Vec3(1.f, 1.f, 1.f));
 
-                m_pSoundCom[EFF_SOUND_EFFECT1]->Play2D(TEXT("SE_NPC_Raxasia_SK_PJ_Reflection_PerfectGuard_03.wav"), &g_fEffectVolume);
+                if (m_pSoundCom[EFF_SOUND_EFFECT1] != nullptr)
+                {
+                    m_pSoundCom[EFF_SOUND_EFFECT1]->Play2D(TEXT("SE_NPC_Raxasia_SK_PJ_Reflection_PerfectGuard_03.wav"), &g_fEffectVolume);
+                }
 
-                m_pSoundCom[EFF_SOUND_EFFECT2]->Play2D(TEXT("SE_NPC_Raxasia_SK_PJ_Reflection_PerfectGuard_Loop_01.wav"), &g_fEffectVolume);
+                if (m_pSoundCom[EFF_SOUND_EFFECT2] != nullptr)
+                {
+                    m_pSoundCom[EFF_SOUND_EFFECT2]->Play2D(TEXT("SE_NPC_Raxasia_SK_PJ_Reflection_PerfectGuard_Loop_01.wav"), &g_fEffectVolume);
+                }
 
             }
         }

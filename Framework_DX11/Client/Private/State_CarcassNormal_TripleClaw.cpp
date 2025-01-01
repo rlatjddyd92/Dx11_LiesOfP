@@ -27,6 +27,8 @@ HRESULT CState_CarcassNormal_TripleClaw::Start_State(void* pArg)
     m_pMonster->Change_Animation(AN_LINKED_START, false, 0.1f, 0, true);
     m_iRouteTrack = 0;
 
+    m_bSwingSound = false;
+
     return S_OK;
 }
 
@@ -39,6 +41,7 @@ void CState_CarcassNormal_TripleClaw::Update(_float fTimeDelta)
         if (CurTrackPos >= 90.f)
         {
             ++m_iRouteTrack;
+            m_bSwingSound = false;
             m_pMonster->Change_Animation(AN_LINKED_MIDDLE, false, 0.1f, 0, true);
             return;
         }
@@ -53,6 +56,7 @@ void CState_CarcassNormal_TripleClaw::Update(_float fTimeDelta)
         if (CurTrackPos >= 65.f)
         {
             ++m_iRouteTrack;
+            m_bSwingSound = false;
             m_pMonster->Change_Animation(AN_LINKED_LAST, false, 0.1f, 0, true);
             return;
         }
@@ -80,6 +84,7 @@ void CState_CarcassNormal_TripleClaw::Update(_float fTimeDelta)
 
 
     Collider_Check(CurTrackPos);
+    Sound_Check(CurTrackPos);
 
 }
 
@@ -129,6 +134,43 @@ void CState_CarcassNormal_TripleClaw::Collider_Check(_double CurTrackPos)
         }
     }
 
+}
+
+void CState_CarcassNormal_TripleClaw::Sound_Check(_double CurTrackPos)
+{
+    if (m_iRouteTrack == 0)
+    {
+        if (!m_bSwingSound)
+        {
+            if (CurTrackPos >= 55.f && CurTrackPos <= 70.f)
+            {
+                m_pMonster->Play_Sound(CPawn::PAWN_SOUND_EFFECT1, TEXT("SE_NPC_SK_WS_Nail_01.wav"), false);
+                m_bSwingSound = true;
+            }
+        }
+    }
+    else if (m_iRouteTrack == 1)
+    {
+        if (!m_bSwingSound)
+        {
+            if (CurTrackPos >= 25.f && CurTrackPos <= 45.f)
+            {
+                m_pMonster->Play_Sound(CPawn::PAWN_SOUND_EFFECT1, TEXT("SE_NPC_SK_WS_Nail_01.wav"), false);
+                m_bSwingSound = true;
+            }
+        }
+    }
+    else
+    {
+        if (!m_bSwingSound)
+        {
+            if (CurTrackPos >= 55.f && CurTrackPos <= 68.f)
+            {
+                m_pMonster->Play_Sound(CPawn::PAWN_SOUND_EFFECT1, TEXT("SE_NPC_SK_WS_Nail_01.wav"), false);
+                m_bSwingSound = true;
+            }
+        }
+    }
 }
 
 CState_CarcassNormal_TripleClaw* CState_CarcassNormal_TripleClaw::Create(CFsm* pFsm, CMonster* pMonster, _uint iStateNum, void* pArg)
