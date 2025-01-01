@@ -247,10 +247,7 @@ void CState_SimonManus_CutScene_Phase2::Control_Effect(_int iFrame)
 
         if (!m_isAura && iCurAnim == m_iAnimation_Begod && m_isDistortionHand)
         {
-            for (_uint i = 0; i < 5; ++i)
-            {
-                static_cast<CSimonManus*>(m_pMonster)->On_Aura(true, true);
-            }
+            static_cast<CSimonManus*>(m_pMonster)->On_Aura(true, true);
 
             m_isAura = true;
         }

@@ -147,10 +147,10 @@ void CPlayerCamera::PlayerInitMove(_float fTimeDelta)
 {
 	_vector vPlayerPos = m_pPlayer->Get_Transform()->Get_State(CTransform::STATE_POSITION);
 
-	vPlayerPos.m128_f32[1] += 1.75f;
+	vPlayerPos.m128_f32[1] += 1.65f;
 
 	_vector vCurrentPos = m_pTransformCom->Get_State(CTransform::STATE_POSITION);
-	_Vec3 vNewPos = XMVectorLerp(vCurrentPos, m_vTargetPos, 0.07f); 
+	_Vec3 vNewPos = XMVectorLerp(vCurrentPos, m_vTargetPos, 0.05f); 
 
 	m_pTransformCom->Set_State(CTransform::STATE_POSITION, vNewPos);
 

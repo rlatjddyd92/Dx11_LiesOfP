@@ -84,6 +84,9 @@
 #include "D:\GitHubProjects\Dx11_LiesOfP\Framework_DX11\Client\Private\Dissolve_Player_Dead.cpp"
 
 
+#include "D:\GitHubProjects\Dx11_LiesOfP\Framework_DX11\Client\private\Dissolve_Raxasia_Dead.cpp"
+
+
 #include "D:\GitHubProjects\Dx11_LiesOfP\Framework_DX11\Client\Private\Dissolve_SimonManus_Dead.cpp"
 
 

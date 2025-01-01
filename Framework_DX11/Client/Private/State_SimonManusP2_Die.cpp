@@ -66,7 +66,7 @@ void CState_SimonManusP2_Die::Contorl_Emissive(_float fTimeDelta)
         m_isEnd_DownEmissive = true;
     }
    
-    if (fEmissive < 0.05f)
+    if (fEmissive < 0.1f)
     {
         if (!m_isDisappearDome)
         {
@@ -75,6 +75,7 @@ void CState_SimonManusP2_Die::Contorl_Emissive(_float fTimeDelta)
         }
         else
         {
+            static_cast<CSimonManus*>(m_pMonster)->On_Aura(false, false);
             m_pMonster->DeActive_AllEffect();
             m_pMonster->Set_Dead_Effect(CSimonManus::CUTSCENE_P2_MAP);
         }

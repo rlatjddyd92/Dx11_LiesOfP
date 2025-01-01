@@ -134,7 +134,7 @@ void CCutScene::Active_UI(CUTSCENE_KEYFRAME_DESC* pCutSceneDesc)
 	//UI ¼û°Ü¾ß ÇÔ
 	if (pCutSceneDesc->UI_DESC.bFadeOut)
 	{
-		GET_GAMEINTERFACE->Fade_Out(TEXT(""), TEXT(""), pCutSceneDesc->UI_DESC.fColor, pCutSceneDesc->UI_DESC.fTime);
+		//GET_GAMEINTERFACE->Fade_Out(TEXT(""), TEXT(""), pCutSceneDesc->UI_DESC.fColor, pCutSceneDesc->UI_DESC.fTime);
 	}
 	if (pCutSceneDesc->UI_DESC.bFadeIn)
 	{
@@ -322,6 +322,7 @@ void CCutScene::End_Setting()
 		pPlayer->Get_Model()->ReadyDenyNextTranslate(4);
 		pPlayer->Change_State(CPlayer::OH_IDLE);
 		pPlayer->Get_Navigation()->Move_to_Cell(pPlayer->Get_RigidBody(), 1178);
+		pPlayer->Init_PlayerCamera();
 		break;
 	case SOPHIA_DEAD:
 	{
@@ -332,6 +333,7 @@ void CCutScene::End_Setting()
 		pPlayer->Get_Model()->ReadyDenyNextTranslate(4);
 		pPlayer->Change_State(CPlayer::OH_IDLE);
 		pPlayer->Get_Navigation()->Move_to_Cell(pPlayer->Get_RigidBody(), 1178);
+		pPlayer->Init_PlayerCamera();
 	}
 		break;	
 	case BOSS1_MEET1:
@@ -344,6 +346,7 @@ void CCutScene::End_Setting()
 		pPlayer->Change_State(CPlayer::OH_IDLE);
 		pPlayer-> Get_Navigation()->Move_to_Cell(pPlayer->Get_RigidBody(), 268);
 		m_pObjects[BOSS1]->End_CutScene(0);
+		pPlayer->Init_PlayerCamera();
 		break;
 	case BOSS1_PHASE2:
 		m_pGameInstance->Stop_BGM();
@@ -351,10 +354,12 @@ void CCutScene::End_Setting()
 		pPlayer->IsActive(true);
 		pPlayer->Get_Navigation()->Move_to_Cell(pPlayer->Get_RigidBody(), 268);
 		pPlayer->IsActive(true);
+		pPlayer->Init_PlayerCamera();
 		break;	
 	case BOSS1_DEAD:
 		m_pGameInstance->Stop_BGM();
 		m_pObjects[BOSS1]->End_CutScene(2);
+		pPlayer->Init_PlayerCamera();
 		break;	
 	case BOSS2_MEET:
 		dynamic_cast<CCutScene*>(m_pGameInstance->Find_Object(LEVEL_GAMEPLAY, TEXT("Layer_CutScene"), BOSS2_MEET2))->Start_Play();
@@ -363,18 +368,25 @@ void CCutScene::End_Setting()
 		dynamic_cast<CCutScene*>(m_pGameInstance->Find_Object(LEVEL_GAMEPLAY, TEXT("Layer_CutScene"), BOSS2_MEET3))->Start_Play();
 		break;	
 	case BOSS2_MEET3:
+	{
+		CPawn* pBoss2 = static_cast<CPawn*>(m_pGameInstance->Find_Object(LEVEL_GAMEPLAY, TEXT("Layer_SimonManus"), 0));
 		pPlayer->Change_State(CPlayer::OH_IDLE);
 		pPlayer->Get_Navigation()->Move_to_Cell(pPlayer->Get_RigidBody(), 118);
 		pPlayer->Appear_Weapon();
-		static_cast<CPawn*>(m_pGameInstance->Find_Object(LEVEL_GAMEPLAY, TEXT("Layer_SimonManus"), 0))->End_CutScene(0);
+		pPlayer->Get_Transform()->LookAt_NoHeight(pBoss2->Get_Transform()->Get_State(CTransform::STATE_POSITION));
+		pBoss2->End_CutScene(0);
+		pPlayer->Init_PlayerCamera();
+	}
 		break;	
 	case BOSS2_PHASE2:
 	{
 		CPawn* pBoss2 = static_cast<CPawn*>(m_pGameInstance->Find_Object(LEVEL_GAMEPLAY, TEXT("Layer_SimonManus"), 0));
 		pPlayer->IsActive(true);
 		pPlayer->Get_Navigation()->Move_to_Cell(pPlayer->Get_RigidBody(), 118);
+		pPlayer->Get_Transform()->LookAt_NoHeight(pBoss2->Get_Transform()->Get_State(CTransform::STATE_POSITION));
 		pBoss2->End_CutScene(1);
 		pBoss2->Reset_Die();
+		pPlayer->Init_PlayerCamera();
 	}
 		break;
 	case BOSS2_DEFEAT:
@@ -382,6 +394,7 @@ void CCutScene::End_Setting()
 		pPlayer->Get_Navigation()->Move_to_Cell(pPlayer->Get_RigidBody(), 40);
 		m_pGameInstance->Stop_BGM();
 		static_cast<CPawn*>(m_pGameInstance->Find_Object(LEVEL_GAMEPLAY, TEXT("Layer_SimonManus"), 0))->End_CutScene(2);
+		pPlayer->Init_PlayerCamera();
 		break;
 	default:
 		break;
@@ -390,7 +403,6 @@ void CCutScene::End_Setting()
 	m_pCamera->Reset_MoveLerp();
 	m_pCamera->Reset_Zoom();
 
-	pPlayer->Get_Camera()->Move_PlayerBackPos();
 	pPlayer->Set_isPlayingCutscene(false);
 }
 
