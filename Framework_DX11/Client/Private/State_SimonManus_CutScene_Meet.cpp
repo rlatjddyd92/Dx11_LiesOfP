@@ -186,7 +186,7 @@ void CState_SimonManus_CutScene_Meet::Control_Effect(_int iFrame)
             }
         }
 
-        if (!m_isSpit[0] && iFrame >= 0)
+        if (!m_isSpit[0] && iFrame >= m_iBreathFrame[0])
         {
             _Vec3 vCurrentPos = m_pMonster->Calc_BoneWorldPos("Manus_facial_52");
 

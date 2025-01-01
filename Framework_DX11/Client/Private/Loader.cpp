@@ -1030,11 +1030,11 @@ HRESULT CLoader::Ready_Resources_For_Monster()
 	DISSOLVE_INSTANCE_DESC DissolveInstanceDesc = {};
 	DissolveInstanceDesc.iNumInstance = 150;
 	DissolveInstanceDesc.vCenter = { 0.f, 0.f, 0.f };
-	DissolveInstanceDesc.vLifeTime = { 0.5f, 1.f };
+	DissolveInstanceDesc.vLifeTime = { 2.f, 4.f };
 	DissolveInstanceDesc.vMinColor = { 2.f, 3.f, 3.f, 0.f };
 	DissolveInstanceDesc.vMaxColor = { 2.f, 3.f, 3.f, 1.f };
 	DissolveInstanceDesc.vSize = { 0.35f, 0.7f };
-	DissolveInstanceDesc.vSpeed = { 0.5f, 1.f };
+	DissolveInstanceDesc.vSpeed = { 0.25f, 0.5f };
 	DissolveInstanceDesc.iModelLevelIndex = LEVEL_GAMEPLAY;
 	DissolveInstanceDesc.strModelTag = TEXT("Prototype_Component_Model_SimonManusP2");
 	DissolveInstanceDesc.iMeshIndex = 3;
@@ -1140,11 +1140,11 @@ HRESULT CLoader::Ready_Resources_For_Monster()
 	DissolveInstanceDesc = {};
 	DissolveInstanceDesc.iNumInstance = 150;
 	DissolveInstanceDesc.vCenter = { 0.f, 0.f, 0.f };
-	DissolveInstanceDesc.vLifeTime = { 0.5f, 1.f };
+	DissolveInstanceDesc.vLifeTime = { 2.f, 4.f };
 	DissolveInstanceDesc.vMinColor = { 2.f, 3.f, 3.f, 0.f };
 	DissolveInstanceDesc.vMaxColor = { 2.f, 3.f, 3.f, 1.f };
 	DissolveInstanceDesc.vSize = { 0.35f, 0.7f };
-	DissolveInstanceDesc.vSpeed = { 0.5f, 1.f };
+	DissolveInstanceDesc.vSpeed = { 0.25f, 0.5f };
 	DissolveInstanceDesc.iModelLevelIndex = LEVEL_GAMEPLAY;
 	DissolveInstanceDesc.strModelTag = TEXT("Prototype_Component_Model_SimonManus_CutScene_P2");
 	DissolveInstanceDesc.iMeshIndex = 4;
