@@ -91,6 +91,11 @@ _int CModel::Get_BoneIndex(const _char* pBoneName) const
 	return iBoneIndex;
 }
 
+_float4x4* CModel::Get_BoneMatrices(_uint iMeshIndex)
+{
+	return m_Meshes[iMeshIndex]->Get_BoneMatrices();
+}
+
 _char* CModel::Get_CurrentAnimationName()
 {
 	return m_Animations[m_iCurrentAnimIndex]->Get_Name();
@@ -98,7 +103,7 @@ _char* CModel::Get_CurrentAnimationName()
 
 _uint CModel::Get_LastFrame_CurrentAnim(_uint iAnimIndex)
 {
-	return m_Animations[iAnimIndex]->Get_WideChannel()->Get_KeyFrames().size() - 1;
+	return (_uint)m_Animations[iAnimIndex]->Get_WideChannel()->Get_KeyFrames().size() - 1;
 }
 
 _uint	CModel::Get_CurrentFrame(_bool isBoundary)
@@ -198,7 +203,7 @@ void CModel::SetUp_isNeedTuning(_int iBoneIndex, _bool bState)
 	m_Bones[iBoneIndex]->SetUp_isNeedTuning(bState);
 }
 
-HRESULT CModel::Initialize_Prototype(TYPE eType, const _char* pModelFilePath, _fmatrix PreTransformMatrix, _bool isBinaryAnimModel, FilePathStructStack* pStructStack)
+HRESULT CModel::Initialize_Prototype(TYPE eType, const _char* pModelFilePath, _fmatrix PreTransformMatrix, _bool isBinaryAnimModel, FilePathStructStack* pStructStack, DISSOLVE_PARTICLE_DESC ParticleDesc)
 {
 	if (pStructStack != nullptr)
 	{
@@ -225,7 +230,7 @@ HRESULT CModel::Initialize_Prototype(TYPE eType, const _char* pModelFilePath, _f
 
 	if (isBinaryAnimModel)
 	{//변경된 애니메이션 모델이라는 표시 -> 새로만든 바이너리 파일을 통해서 호출
-		ReadyModel_To_Binary(&hFile);
+		ReadyModel_To_Binary(&hFile, ParticleDesc);
 		Update_Boundary();
 	}
 	else			//추가되기 전 일반 바이너리 파일로 불러오는
@@ -238,7 +243,7 @@ HRESULT CModel::Initialize_Prototype(TYPE eType, const _char* pModelFilePath, _f
 		for (auto& Bone : m_Bones)
 			Bone->Setting_ParentBoneName(this);
 
-		if (FAILED(Ready_Meshes(&hFile)))
+		if (FAILED(Ready_Meshes(&hFile, ParticleDesc)))
 			return E_FAIL;
 
 		if (FAILED(Ready_Materials(&hFile, pModelFilePath)))
@@ -703,10 +708,11 @@ void CModel::Update_Animation(_float fTimeDelta)
 	}
 	else
 	{
-
-		/* 뼈를 움직인다.(CBone`s m_TransformationMatrix행렬을 갱신한다.) */
-		m_iCurrentFrame = m_Animations[m_iCurrentAnimIndex]->Update_TransformationMatrices(m_Bones, &m_CurrentTrackPosition, m_KeyFrameIndices[m_iCurrentAnimIndex], m_isLoop, &m_isEnd_Animations[m_iCurrentAnimIndex], fTimeDelta, false, &m_isBoneUpdated);
-
+		if(m_Animations.size() > 0)
+		{
+			/* 뼈를 움직인다.(CBone`s m_TransformationMatrix행렬을 갱신한다.) */
+			m_iCurrentFrame = m_Animations[m_iCurrentAnimIndex]->Update_TransformationMatrices(m_Bones, &m_CurrentTrackPosition, m_KeyFrameIndices[m_iCurrentAnimIndex], m_isLoop, &m_isEnd_Animations[m_iCurrentAnimIndex], fTimeDelta, false, &m_isBoneUpdated);
+		}
 	}
 }
 
@@ -1065,7 +1071,7 @@ HRESULT CModel::Create_Bin_Animations(HANDLE* pFile)
 	return S_OK;
 }
 
-HRESULT CModel::ReadyModel_To_Binary(HANDLE* pFile)
+HRESULT CModel::ReadyModel_To_Binary(HANDLE* pFile, const DISSOLVE_PARTICLE_DESC& ParticleDesc)
 {
 	_ulong dwByte = 0;
 
@@ -1106,17 +1112,30 @@ HRESULT CModel::ReadyModel_To_Binary(HANDLE* pFile)
 
 	ReadFile(*pFile, &m_iNumMeshes, sizeof(_uint), &dwByte, nullptr);
 
+	vector<DISSOLVE_PARTICLE> Instances;
+	Instances.reserve(m_iNumMeshes);
+
 	for (_uint i = 0; i < m_iNumMeshes; ++i)
 	{
-		CMesh* pMesh = CMesh::Create_To_Binary(m_pDevice, m_pContext, pFile, this, XMLoadFloat4x4(&m_PreTransformMatrix));
+		CMesh* pMesh = CMesh::Create_To_Binary(m_pDevice, m_pContext, pFile, this, XMLoadFloat4x4(&m_PreTransformMatrix), ParticleDesc, i, Instances);
 		if (nullptr == pMesh)
 			return E_FAIL;
 
 		m_Meshes.emplace_back(pMesh);
-
 	}
-	//여기까지 메쉬
 
+	if (0 < ParticleDesc.iNumInstance)
+	{
+		CVIBuffer_Dissolve_Instance::DISSOLVE_INSTANCE_DESC DissolveDesc = {};
+		DissolveDesc.iNumInstance = (_uint)Instances.size();
+		DissolveDesc.pParticles = Instances.data();
+
+		if(FAILED(m_pGameInstance->Add_Prototype(ParticleDesc.iLevelID, ParticleDesc.strBufferTag, CVIBuffer_Dissolve_Instance::Create(m_pDevice, m_pContext, DissolveDesc))))
+			return E_FAIL;
+	}
+
+
+	//여기까지 메쉬
 
 	ReadFile(*pFile, &m_iNumMaterials, sizeof(_uint), &dwByte, nullptr);
 
@@ -1193,9 +1212,9 @@ _Vec4 CModel::Calc_CenterPos(_Matrix WorldMat)
 	_Matrix FinalMat{};
 	FinalMat = m_Bones[m_UFBIndices[UFB_CHEST]]->Get_CombinedTransformationMatrix() * WorldMat;
 
-	_Vec3	vOut{ FinalMat._41, FinalMat._42 , FinalMat._43 };
+	_Vec4	vOut{ FinalMat._41, FinalMat._42 , FinalMat._43, 1.f };
 
-	return FinalMat.Translation();
+	return vOut;
 }
 
 _float CModel::Get_CurrentDuration()
@@ -1217,20 +1236,33 @@ HRESULT CModel::Bind_MeshBoneMatrices(CShader* pShader, const _char* pConstantNa
 	return S_OK;
 }
 
-HRESULT CModel::Ready_Meshes(HANDLE* pFile)
+HRESULT CModel::Ready_Meshes(HANDLE* pFile, DISSOLVE_PARTICLE_DESC ParticleDesc)
 {
 	_ulong dwByte = 0;
 
 	ReadFile(*pFile, &m_iNumMeshes, sizeof(_uint), &dwByte, nullptr);
 
-	for (size_t i = 0; i < m_iNumMeshes; i++)
+	vector<DISSOLVE_PARTICLE> Instances;
+
+	for (size_t i = 0; i < (size_t)m_iNumMeshes; i++)
 	{
-		CMesh* pMesh = CMesh::Create(m_pDevice, m_pContext, pFile, this, XMLoadFloat4x4(&m_PreTransformMatrix));
+		CMesh* pMesh = CMesh::Create(m_pDevice, m_pContext, pFile, this, XMLoadFloat4x4(&m_PreTransformMatrix), ParticleDesc, (_uint)i, Instances);
 		if (nullptr == pMesh)
 			return E_FAIL;
 
 		m_Meshes.emplace_back(pMesh);
 	}
+
+	if (0 < ParticleDesc.iNumInstance)
+	{
+		CVIBuffer_Dissolve_Instance::DISSOLVE_INSTANCE_DESC DissolveDesc = {};
+		DissolveDesc.iNumInstance = (_uint)Instances.size();
+		DissolveDesc.pParticles = Instances.data();
+
+		if (FAILED(m_pGameInstance->Add_Prototype(ParticleDesc.iLevelID, ParticleDesc.strBufferTag, CVIBuffer_Dissolve_Instance::Create(m_pDevice, m_pContext, DissolveDesc))))
+			return E_FAIL;
+	}
+
 
 	return S_OK;
 }
@@ -1353,11 +1385,11 @@ void CModel::CalculateBoundingBox_Model(CMesh* pMesh, _Vec3& minPos, _Vec3& maxP
 }
 
 
-CModel* CModel::Create(ID3D11Device* pDevice, ID3D11DeviceContext* pContext, TYPE eType, const _char* pModelFilePath, _fmatrix PreTransformMatrix, _bool isBinaryAnimModel, FilePathStructStack* pStructStack)
+CModel* CModel::Create(ID3D11Device* pDevice, ID3D11DeviceContext* pContext, TYPE eType, const _char* pModelFilePath, _fmatrix PreTransformMatrix, _bool isBinaryAnimModel, FilePathStructStack* pStructStack, DISSOLVE_PARTICLE_DESC ParticleDesc)
 {
 	CModel* pInstance = new CModel(pDevice, pContext);
 
-	if (FAILED(pInstance->Initialize_Prototype(eType, pModelFilePath, PreTransformMatrix, isBinaryAnimModel, pStructStack)))
+	if (FAILED(pInstance->Initialize_Prototype(eType, pModelFilePath, PreTransformMatrix, isBinaryAnimModel, pStructStack, ParticleDesc)))
 	{
 		MSG_BOX(TEXT("Failed to Created : CModel"));
 		Safe_Release(pInstance);

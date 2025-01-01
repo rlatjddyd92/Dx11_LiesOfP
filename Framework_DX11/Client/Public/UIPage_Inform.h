@@ -37,12 +37,13 @@ public:
 		INFORM_Text_Back,
 		INFORM_Text_Front,
 
-
-
-
-
 		GROUP_END
 	};
+
+	
+
+
+
 
 
 
@@ -72,11 +73,15 @@ public:
 	void Show_Region_Info(_wstring strName, _wstring strDesc, _float fTime_Emerge = 1.f, _float fTime_Show = 2.f);
 	void Show_Inform(INFORM_MESSAGE eInform, _float fTime_Emerge = 1.f, _float fTime_Show = 2.f);
 	void Show_Heart(_wstring strScript, _float fTime_Emerge = 1.f, _float fTime_Show = 2.f);
+	void Show_Dead(_float fTime_Emerge = 1.f, _float fTime_Show = 2.f);
 
 protected:
+
+
 	void Update_Region(_float fTimeDelta);
 	void Update_Inform(_float fTimeDelta);
 	void Update_Heart(_float fTimeDelta);
+	void Update_Dead(_float fTimeDelta);
 
 protected:
 	_float Check_Ratio(_Vec3* vLifeTime, _float fTimeDelta);

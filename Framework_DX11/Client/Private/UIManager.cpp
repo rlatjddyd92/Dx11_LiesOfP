@@ -80,6 +80,7 @@ HRESULT CUIManager::Initialize_Prototype()
 	m_vecPageRender_Order.push_back(UIPAGE::PAGE_ORTHO);
 
 	m_vecPageRender_Order.push_back(UIPAGE::PAGE_PLAY);
+	m_vecPageRender_Order.push_back(UIPAGE::PAGE_TUTORIAL);
 
 	m_vecPageRender_Order.push_back(UIPAGE::PAGE_MENU);
 
@@ -95,10 +96,11 @@ HRESULT CUIManager::Initialize_Prototype()
 	m_vecPageRender_Order.push_back(UIPAGE::PAGE_CHEST);
 	m_vecPageRender_Order.push_back(UIPAGE::PAGE_TELEPOT);
 
-	m_vecPageRender_Order.push_back(UIPAGE::PAGE_ACHIEVMENT);
-
 	m_vecPageRender_Order.push_back(UIPAGE::PAGE_COMMON);
 	m_vecPageRender_Order.push_back(UIPAGE::PAGE_ITEMINFO);
+
+	m_vecPageRender_Order.push_back(UIPAGE::PAGE_ACHIEVMENT);
+
 	m_vecPageRender_Order.push_back(UIPAGE::PAGE_INFORM);
 
 	m_vecPageRender_Order.push_back(UIPAGE::PAGE_POPUP);
@@ -117,7 +119,10 @@ HRESULT CUIManager::Initialize(void* pArg)
 
 void CUIManager::Priority_Update(_float fTimeDelta)
 {
-	
+	if (KEY_TAP(KEY::P))
+		m_pUIPage_Tutorial->OpenAction();
+	else if (KEY_TAP(KEY::L))
+		m_pUIPage_Tutorial->CloseAction();
 
 	for (auto& iter : m_vecPageRender_Order)
 		if (m_vecPage[_int(iter)]->GetUpdate())
@@ -210,6 +215,7 @@ void CUIManager::UIControl_Shop(_float fTimeDelta)
 	else
 	{
 		m_eNowPage = UIPAGE::PAGE_SHOP;
+		m_pUIPage_ItemInfo->Set_Active_ItemInfo(true, UIPAGE::PAGE_SHOP);
 		m_pUIPage_Shop->Check_Page_Action(fTimeDelta);
 	}
 
@@ -222,6 +228,7 @@ void CUIManager::UIControl_Chest(_float fTimeDelta)
 	else
 	{
 		m_eNowPage = UIPAGE::PAGE_CHEST;
+		m_pUIPage_ItemInfo->Set_Active_ItemInfo(true, UIPAGE::PAGE_CHEST);
 		m_pUIPage_Chest->Check_Page_Action(fTimeDelta);
 	}
 }
@@ -645,6 +652,11 @@ HRESULT CUIManager::Make_UIPage(_int iIndex)
 		m_pUIPage_Achievment = CUIPage_Achievment::Create(m_pDevice, m_pContext);
 		m_vecPage[iIndex] = static_cast<CUIPage*>(m_pUIPage_Achievment);
 	}
+	else if (iIndex == _int(UIPAGE::PAGE_TUTORIAL))
+	{
+		m_pUIPage_Tutorial = CUIPage_Tutorial::Create(m_pDevice, m_pContext);
+		m_vecPage[iIndex] = static_cast<CUIPage*>(m_pUIPage_Tutorial);
+	}
 
 	if (m_vecPage[iIndex] == nullptr)
 		return E_FAIL;
@@ -827,7 +839,7 @@ void CUIManager::Open_Close_Page(UIPAGE ePage)
 void CUIManager::OpenPage(UIPAGE ePage)
 {
 	m_pUIPage_Popup->Off_Popup();
-
+	Mute_UI_Volume(false);
 	if (ePage != UIPAGE::PAGE_END)
 		m_vecPage[_int(ePage)]->OpenAction();
 }

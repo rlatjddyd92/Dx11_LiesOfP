@@ -139,6 +139,8 @@ void CUIPage_Inform::Show_Inform(INFORM_MESSAGE eInform, _float fTime_Emerge, _f
 
 		m_vecPart[_int(PART_GROUP::INFORM_Stargazer)]->bRender = true;
 		m_vecPart[_int(PART_GROUP::INFORM_Stargazer)]->fTextureColor.w = 0.f;
+
+		GET_GAMEINTERFACE->Input_Achievment_Data(11, 1);
 	}
 	else
 	{
@@ -177,6 +179,17 @@ void CUIPage_Inform::Show_Heart(_wstring strScript, _float fTime_Emerge, _float 
 
 	m_vecPart[_int(PART_GROUP::INFORM_Text_Back)]->strText = strScript;
 	m_vecPart[_int(PART_GROUP::INFORM_Text_Front)]->strText = strScript;
+}
+
+void CUIPage_Inform::Show_Dead(_float fTime_Emerge, _float fTime_Show)
+{
+
+
+
+
+
+
+
 }
 
 void CUIPage_Inform::Update_Region(_float fTimeDelta)
@@ -242,6 +255,15 @@ void CUIPage_Inform::Update_Heart(_float fTimeDelta)
 			m_vecPart[i]->fRatio = fRatio;
 		}
 	}
+}
+
+void CUIPage_Inform::Update_Dead(_float fTimeDelta)
+{
+
+
+
+
+
 }
 
 _float CUIPage_Inform::Check_Ratio(_Vec3* vLifeTime, _float fTimeDelta)

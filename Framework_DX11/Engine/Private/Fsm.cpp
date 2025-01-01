@@ -38,10 +38,8 @@ void CFsm::Release_States()
 		if (iter)
 		{
 			Safe_Release(iter);
-			iter = nullptr;
 		}
 	}
-
 
 	if (m_pPreState != m_pNowState)
 	{

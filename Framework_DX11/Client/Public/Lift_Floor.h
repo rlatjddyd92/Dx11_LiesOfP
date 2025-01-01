@@ -59,7 +59,7 @@ private:
 
 	_float m_fMoveDir = { 0.f };
 	_float m_fCollisonTimer = { 0.f };
-	_float m_vTargetPosList[2] = { -97.8f,-130.85f};
+	_float m_vTargetPosList[2] = { -97.8f,-130.8f};
 	_Vec4 m_vTargetPos = {};
 
 	class CLift_Door* m_pDoors[DIR_END] = { nullptr,nullptr };

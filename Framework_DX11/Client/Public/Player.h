@@ -166,7 +166,12 @@ public:
 	class CWeapon_PlayerArm* Get_Arm() { return m_pWeapon_Arm; }
 
 	_bool					Get_IsArm() { return m_isArm; }
-	void					Set_IsArm(_bool isArm) { m_isArm = isArm; }
+	void					Set_IsArm(_bool isArm) { 
+		m_isArm = isArm; 
+		if (isArm)
+			m_fArmRecoveryTime = 1.f;
+	}
+	_Vec2* Get_ArmGuage_Ptr() { return &m_vGuage_Arm; }
 
 	_bool					Get_IsParry() { return m_isParry; }
 	void					Set_IsParry(_bool isParry) { m_isParry = isParry; }
@@ -273,6 +278,7 @@ public:
 	void			Decrease_Region(_uint iRegionCount = 1);
 	void			Recovery_Region(_float fAmount = 10.f);
 	void			Recovery_HP(_float fAmount);
+	void			Decrease_Arm(_float fAmount = 30.f);
 
 	class CStargazer* Find_Stargazer(_int iCellNumber = -1);
 
@@ -344,6 +350,9 @@ private:
 
 	_float				m_fDebuffReduceTime = {};
 	_float				m_fDebuffRecoveryTime[DEBUFF_END] = {};
+
+	_float				m_fArmRecoveryTime = {};
+	_Vec2				m_vGuage_Arm = { 200.f, 200.f };
 
 private:
 

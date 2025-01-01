@@ -173,7 +173,7 @@ _bool CNavigation::isMove(_Vec3 vPosition)
 	_int			iNeighborIndex = { -1 };
 
 	/* 원래 있던 삼각형 안에서 움직인거야. */
-	if (true == m_Cells[m_iCurrentCellIndex]->isIn(vLocalPos, &iNeighborIndex))
+	if (true == m_Cells[m_iCurrentCellIndex]->isIn(vLocalPos, &iNeighborIndex, &m_vOutLine))
 	{
 		return true;
 	}
@@ -186,18 +186,14 @@ _bool CNavigation::isMove(_Vec3 vPosition)
 		{
 			while (true)
 			{
-				if (-1 == iNeighborIndex)
+				if (-1 == iNeighborIndex || m_Cells[iNeighborIndex]->Get_CellTypeNum() == 100 || m_Cells[iNeighborIndex]->Get_CellTypeNum() == m_iExceptCellNum)
 					return false;
 
-				if (true == m_Cells[iNeighborIndex]->isIn(vLocalPos, &iNeighborIndex))
+				if (true == m_Cells[iNeighborIndex]->isIn(vLocalPos, &iNeighborIndex, &m_vOutLine))
 				{
-					if(m_Cells[iNeighborIndex]->Get_CellTypeNum() != 100)
-						break;
-					else
-						return false;
+					break;
 				}
 			}
-			
 			
 			m_iCurrentCellIndex = iNeighborIndex;
 
@@ -313,7 +309,6 @@ void CNavigation::Research_Cell(_Vec3 vNewPos, _uint* iIndex)
 		}
 	}
 
-	m_iCurrentCellIndex = -1;
 	if (iIndex != nullptr)
 		*iIndex = -1;
 }

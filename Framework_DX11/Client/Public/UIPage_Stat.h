@@ -109,6 +109,11 @@ private:
 	_float m_iLevelUp_Buffer_Stat[9] = { 0.f, };
 	_int m_iUsing_Point_Now = 0;
 
+	_float m_fStarChart_LevelUp_Now[8] = { 0.f, };
+	_float m_fStarChart_NowStat_Now[8] = { 0.f, };
+	_float m_fStarChart_LevelUp_Dest[8] = { 0.f, };
+	_float m_fStarChart_NowStat_Dest[8] = { 0.f, };
+
 	_bool m_bActive_LevelUp_Button = false;
 
 public:

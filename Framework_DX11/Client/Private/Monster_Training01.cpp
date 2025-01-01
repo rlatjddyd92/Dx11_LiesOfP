@@ -51,7 +51,7 @@ HRESULT CMonster_Training01::Initialize(void* pArg)
 
 	m_eStat.fHp = 50.f;
 	m_eStat.fMaxHp = 50.f;
-	m_eStat.fAtk = 4.f;
+	m_eStat.fAtk = 0.1f;
 	m_eStat.fDefence = 3.f;
 	m_eStat.fStemina = 30.f;
 
@@ -63,6 +63,9 @@ HRESULT CMonster_Training01::Initialize(void* pArg)
 	GET_GAMEINTERFACE->Register_Pointer_Into_OrthoUIPage(UI_ORTHO_OBJ_TYPE::ORTHO_NORMAL_MONSTER, this);
 
 	GET_GAMEINTERFACE->Set_OnOff_OrthoUI(false, this);
+
+	m_pColliderObject->Active_Collider(true);
+
 	return S_OK;
 }
 
@@ -70,6 +73,7 @@ void CMonster_Training01::Priority_Update(_float fTimeDelta)
 {
 	__super::Set_UpTargetPos();
 
+	m_pColliderObject->Priority_Update(fTimeDelta);
 }
 
 void CMonster_Training01::Update(_float fTimeDelta)
@@ -78,9 +82,11 @@ void CMonster_Training01::Update(_float fTimeDelta)
 
 	m_pRigidBodyCom->Set_Velocity(m_vCurRootMove / fTimeDelta);
 
+	m_pColliderCom->Update(m_pTransformCom->Get_WorldMatrix_Ptr());
+
 	m_pFsmCom->Update(fTimeDelta);
 
-	m_pGameInstance->Add_ColliderList(m_pColliderCom);
+	m_pColliderObject->Update(fTimeDelta);
 }
 
 void CMonster_Training01::Late_Update(_float fTimeDelta)
@@ -88,11 +94,12 @@ void CMonster_Training01::Late_Update(_float fTimeDelta)
 	__super::Late_Update(fTimeDelta);
 
 	m_pRigidBodyCom->Update(fTimeDelta);
-	m_pGameInstance->Add_RenderObject(CRenderer::RG_NONBLEND, this);
 
-	//m_pColliderObject->Late_Update(fTimeDelta);
+	m_pColliderObject->Late_Update(fTimeDelta);
 
 	m_pGameInstance->Add_ColliderList(m_pColliderCom);
+
+	m_pGameInstance->Add_RenderObject(CRenderer::RG_NONBLEND, this);
 }
 
 HRESULT CMonster_Training01::Render()
@@ -105,6 +112,16 @@ HRESULT CMonster_Training01::Render()
 
 #endif
 	return S_OK;
+}
+
+void CMonster_Training01::Active_CurrentWeaponCollider(_float fDamageRatio, _uint iCollIndex, _uint iHitType, _uint iAtkStrength)
+{
+	m_pColliderObject->Active_Collider(fDamageRatio, iCollIndex, iHitType, iAtkStrength);
+}
+
+void CMonster_Training01::DeActive_CurretnWeaponCollider(_uint iCollIndex)
+{
+	m_pColliderObject->DeActive_Collider();
 }
 
 HRESULT CMonster_Training01::Ready_Components()
@@ -127,6 +144,24 @@ HRESULT CMonster_Training01::Ready_Components()
 		TEXT("Com_Collider"), reinterpret_cast<CComponent**>(&m_pColliderCom), &ColliderDesc)))
 		return E_FAIL;
 	m_pColliderCom->Set_Owner(this);
+
+	CBounding_OBB::BOUNDING_OBB_DESC			ColliderOBBDesc_Obj{};
+
+	ColliderOBBDesc_Obj.vExtents = _float3(0.1f, 0.1f, 0.1f);
+	ColliderOBBDesc_Obj.vCenter = _float3(0.15f, 0.f, 0.f);
+	ColliderOBBDesc_Obj.vAngles = _float3(0.f, 0.f, 0.f);
+
+	CColliderObject::COLIDEROBJECT_DESC Desc{};
+
+	Desc.pBoundingDesc = &ColliderOBBDesc_Obj;
+	Desc.eType = CCollider::TYPE_OBB;
+	Desc.pSocketBoneMatrix = m_pModelCom->Get_BoneCombindTransformationMatrix_Ptr("Bip001-R-Hand");
+	Desc.pParentWorldMatrix = m_pTransformCom->Get_WorldMatrix_Ptr();
+	Desc.pSocketBoneMatrix2 = m_pTransformCom->Get_WorldMatrix_Ptr();
+	Desc.fDamageAmount = 0.1f;
+	Desc.pOWner = this;
+
+	m_pColliderObject = dynamic_cast<CColliderObject*>(m_pGameInstance->Clone_GameObject(TEXT("Prototype_GameObject_ColliderObj"), &Desc));
 
 	// 항상 마지막에 생성하기
 	CRigidBody::RIGIDBODY_DESC RigidBodyDesc{};
@@ -207,7 +242,6 @@ CPawn* CMonster_Training01::Clone(void* pArg)
 void CMonster_Training01::Free()
 {
 	Safe_Release(m_pColliderObject);
-
 
 	__super::Free();
 

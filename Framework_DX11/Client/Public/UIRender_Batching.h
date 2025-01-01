@@ -117,6 +117,7 @@ public:
 		PASS_COLOR_INPUT_ANGLE,
 		PASS_COLOR_MULTI_ANGLE,
 		PASS_COLOR_MULTI_ALPHA_ADJUST,
+		PASS_COLOR_SPRITE,
 		PASS_END
 	};
 
@@ -167,6 +168,8 @@ public:
 
 	class CVIBuffer_Rect* m_pVIBufferCom_FullScreen = { nullptr };
 	class CVIBuffer_Rect* m_pVIBufferCom_Scroll = { nullptr };
+
+	class CTexture* m_pFirePoint_Sprite_TextureCom = { nullptr };
 private:
 	HRESULT Ready_Components();
 
@@ -190,6 +193,12 @@ private:
 
 	SCROLL_AREA m_eNow_Area = SCROLL_AREA::SCROLL_NONE;
 	vector<_float> m_vecfScrollY_Offset_Max;
+
+	// Focus 스프라이트 
+	_int m_iFrame = 0;
+	_Vec2 m_vImageNum = _Vec2{ 8.f,8.f };
+	_int m_iMaxFrame = 64;
+	_float m_iFrame_Interval = 6;
 
 public:
 	static CUIRender_Batching* Create(ID3D11Device* pDevice, ID3D11DeviceContext* pContext);

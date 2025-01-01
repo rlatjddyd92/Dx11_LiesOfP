@@ -1327,6 +1327,54 @@
     <Filter Include="02.GameObjects\12.AttackObject\Raxasia\ThunderDischarge">
       <UniqueIdentifier>{9c2b992e-d2e7-4b03-ba9f-da2a9beca625}</UniqueIdentifier>
     </Filter>
+    <Filter Include="03.GameInterface_Controller\00.UIManager\02.UIPart_3D">
+      <UniqueIdentifier>{86955ff6-8ad3-4d95-8c1f-e0f6a81039f2}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="03.GameInterface_Controller\00.UIManager\03.UIPage_3D">
+      <UniqueIdentifier>{afb6a2c2-df7b-4df8-aa7f-7c5478df72d1}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="03.GameInterface_Controller\00.UIManager\02.UIPart_3D\00.UIPart_3D_Path">
+      <UniqueIdentifier>{dbcbe4cb-a52c-4950-b563-2bbc0f7821b5}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="03.GameInterface_Controller\00.UIManager\02.UIPart_3D\01.UIPart_3D_Normal">
+      <UniqueIdentifier>{86c58a44-272d-4b46-aa2a-1a67a7c51ce6}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="03.GameInterface_Controller\00.UIManager\03.UIPage_3D\00.UIPage_3D_PathGuide">
+      <UniqueIdentifier>{cbfd3738-fff6-47a5-93a1-7684aa86e4bb}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="03.GameInterface_Controller\00.UIManager\00.UIPage\02.UIPage_Play %2870%25%29\PlayComponent">
+      <UniqueIdentifier>{db35134b-ebea-436c-8858-94325d51473f}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="03.GameInterface_Controller\00.UIManager\00.UIPage\02.UIPage_Play %2870%25%29\PlayComponent\00.Weapon">
+      <UniqueIdentifier>{10b16e2c-2ba3-423d-a701-16e62f0b5af4}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="03.GameInterface_Controller\00.UIManager\00.UIPage\20.UIPage_Tutorial">
+      <UniqueIdentifier>{7ba21645-5b1d-4fa6-8fce-16a6c231b6ab}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="03.GameInterface_Controller\00.UIManager\00.UIPage\20.UIPage_Tutorial\00.Tuto_Info">
+      <UniqueIdentifier>{833e2495-37cb-4ac9-9406-1daffc0a81ac}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="03.GameInterface_Controller\00.UIManager\00.UIPage\20.UIPage_Tutorial\02.Tuto_Timing">
+      <UniqueIdentifier>{6745a1f9-9569-40c2-bdf1-ea2bf5762d8a}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="03.GameInterface_Controller\00.UIManager\00.UIPage\20.UIPage_Tutorial\03.Tuto_Result">
+      <UniqueIdentifier>{136ae3e7-73fc-4413-bba9-6a0a74e38b98}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="03.GameInterface_Controller\00.UIManager\00.UIPage\20.UIPage_Tutorial\01.Tuto_Guide">
+      <UniqueIdentifier>{08675e9b-16b2-488a-a6dd-40b1f859f43c}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="03.GameInterface_Controller\00.UIManager\00.UIPage\20.UIPage_Tutorial\04.Tuto_Popup">
+      <UniqueIdentifier>{5a0fd332-b836-4ef5-979e-a2371f5cc21f}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.GameObjects\02.Pawn\00.Player\Dissolve_Test">
+      <UniqueIdentifier>{ac49ad54-4c6a-4a3c-a51f-12062146dfda}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.GameObjects\15.Item\Item_Throw">
+      <UniqueIdentifier>{25b6cecb-bc06-44e5-ae54-363a24cb0c07}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.GameObjects\15.Item\Item_Dropped">
+      <UniqueIdentifier>{2893d043-136b-4210-a8a4-0b035b94c9f0}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Client.h">
@@ -2111,9 +2159,6 @@
     <ClInclude Include="..\Public\State_RaxasiaP1_TripleSting.h">
       <Filter>05.Fsm\Monster\Raxasia\P1\Attack\Route\TripleSting</Filter>
     </ClInclude>
-    <ClInclude Include="..\Public\Item_Throw.h">
-      <Filter>02.GameObjects\15.Item</Filter>
-    </ClInclude>
     <ClInclude Include="..\Public\SimonManus_EnvHand.h">
       <Filter>02.GameObjects\02.Pawn\01.Monster\Boss\SimonManus\EnvHand</Filter>
     </ClInclude>
@@ -2408,6 +2453,10 @@
     <ClInclude Include="..\Public\UIPage_Achievment.h">
       <Filter>03.GameInterface_Controller\00.UIManager\00.UIPage\19.UIPage_Achievment</Filter>
     </ClInclude>
+    <ClInclude Include="..\Public\State_RebornerMale_RapidFire.h" />
+    <ClInclude Include="..\Public\State_RebornerMale_Reload.h">
+      <Filter>05.Fsm\Monster\RebornerMale\Attack\Route\Reload</Filter>
+    </ClInclude>
     <ClInclude Include="..\Public\Achievment_DataLine.h">
       <Filter>03.GameInterface_Controller\00.UIManager\00.UIPage\19.UIPage_Achievment\Data</Filter>
     </ClInclude>
@@ -2425,6 +2474,36 @@
     </ClInclude>
     <ClInclude Include="..\Public\AObj_Bullet.h">
       <Filter>02.GameObjects\12.AttackObject\RebornerMale\Bullet</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Public\UIPage_Achievment.h">
+      <Filter>03.GameInterface_Controller\00.UIManager\00.UIPage\19.UIPage_Achievment</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Public\UIPage_Tutorial.h">
+      <Filter>03.GameInterface_Controller\00.UIManager\00.UIPage\20.UIPage_Tutorial</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Public\UITutorial_Guide.h">
+      <Filter>03.GameInterface_Controller\00.UIManager\00.UIPage\20.UIPage_Tutorial\01.Tuto_Guide</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Public\UITutorial_Info.h">
+      <Filter>03.GameInterface_Controller\00.UIManager\00.UIPage\20.UIPage_Tutorial\00.Tuto_Info</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Public\UITutorial_Popup.h">
+      <Filter>03.GameInterface_Controller\00.UIManager\00.UIPage\20.UIPage_Tutorial\04.Tuto_Popup</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Public\UITutorial_Result.h">
+      <Filter>03.GameInterface_Controller\00.UIManager\00.UIPage\20.UIPage_Tutorial\03.Tuto_Result</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Public\UITutorial_Timing.h">
+      <Filter>03.GameInterface_Controller\00.UIManager\00.UIPage\20.UIPage_Tutorial\02.Tuto_Timing</Filter>
+    </ClInclude>
+    <ClInclude Include="..\public\Dissolve_Test.h">
+      <Filter>02.GameObjects\02.Pawn\00.Player\Dissolve_Test</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Public\Item_Throw.h">
+      <Filter>02.GameObjects\15.Item\Item_Throw</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Public\Item_Dropped.h">
+      <Filter>02.GameObjects\15.Item\Item_Dropped</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -3183,9 +3262,6 @@
     <ClCompile Include="..\Private\State_RaxasiaP1_TripleSting.cpp">
       <Filter>05.Fsm\Monster\Raxasia\P1\Attack\Route\TripleSting</Filter>
     </ClCompile>
-    <ClCompile Include="..\Private\Item_Throw.cpp">
-      <Filter>02.GameObjects\15.Item</Filter>
-    </ClCompile>
     <ClCompile Include="..\Private\SimonManus_EnvHand.cpp">
       <Filter>02.GameObjects\02.Pawn\01.Monster\Boss\SimonManus\EnvHand</Filter>
     </ClCompile>
@@ -3477,6 +3553,10 @@
     <ClCompile Include="..\Private\UIPage_Achievment.cpp">
       <Filter>03.GameInterface_Controller\00.UIManager\00.UIPage\19.UIPage_Achievment</Filter>
     </ClCompile>
+    <ClCompile Include="..\Private\State_RebornerMale_RapidFire.cpp" />
+    <ClCompile Include="..\Private\State_RebornerMale_Reload.cpp">
+      <Filter>05.Fsm\Monster\RebornerMale\Attack\Route\Reload</Filter>
+    </ClCompile>
     <ClCompile Include="..\Private\Achievment_DataLine.cpp">
       <Filter>03.GameInterface_Controller\00.UIManager\00.UIPage\19.UIPage_Achievment\Data</Filter>
     </ClCompile>
@@ -3494,6 +3574,36 @@
     </ClCompile>
     <ClCompile Include="..\Private\AObj_Bullet.cpp">
       <Filter>02.GameObjects\12.AttackObject\RebornerMale\Bullet</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Private\UIPage_Achievment.cpp">
+      <Filter>03.GameInterface_Controller\00.UIManager\00.UIPage\19.UIPage_Achievment</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Private\UITutorial_Guide.cpp">
+      <Filter>03.GameInterface_Controller\00.UIManager\00.UIPage\20.UIPage_Tutorial\01.Tuto_Guide</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Private\UIPage_Tutorial.cpp">
+      <Filter>03.GameInterface_Controller\00.UIManager\00.UIPage\20.UIPage_Tutorial</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Private\UITutorial_Info.cpp">
+      <Filter>03.GameInterface_Controller\00.UIManager\00.UIPage\20.UIPage_Tutorial\00.Tuto_Info</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Private\UITutorial_Popup.cpp">
+      <Filter>03.GameInterface_Controller\00.UIManager\00.UIPage\20.UIPage_Tutorial\04.Tuto_Popup</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Private\UITutorial_Result.cpp">
+      <Filter>03.GameInterface_Controller\00.UIManager\00.UIPage\20.UIPage_Tutorial\03.Tuto_Result</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Private\UITutorial_Timing.cpp">
+      <Filter>03.GameInterface_Controller\00.UIManager\00.UIPage\20.UIPage_Tutorial\02.Tuto_Timing</Filter>
+    </ClCompile>
+    <ClCompile Include="..\private\Dissolve_Test.cpp">
+      <Filter>02.GameObjects\02.Pawn\00.Player\Dissolve_Test</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Private\Item_Throw.cpp">
+      <Filter>02.GameObjects\15.Item\Item_Throw</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Private\Item_Dropped.cpp">
+      <Filter>02.GameObjects\15.Item\Item_Dropped</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -3574,6 +3684,12 @@
     </FxCompile>
     <FxCompile Include="..\Bin\ShaderFiles\Shader_SSD.hlsl">
       <Filter>97.ShaderFiles</Filter>
+    </FxCompile>
+    <FxCompile Include="..\Bin\ShaderFiles\Shader_DissolveCompute.hlsl">
+      <Filter>97.ShaderFiles\Effect\Compute</Filter>
+    </FxCompile>
+    <FxCompile Include="..\Bin\ShaderFiles\Shader_VtxDiffuseInstance.hlsl">
+      <Filter>97.ShaderFiles\Effect\Vtx</Filter>
     </FxCompile>
   </ItemGroup>
   <ItemGroup>

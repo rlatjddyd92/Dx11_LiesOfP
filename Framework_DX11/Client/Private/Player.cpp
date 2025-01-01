@@ -108,6 +108,9 @@
 // 게임 인터페이스와 연결을 위해 추가 
 #include "GameInterface_Controller.h"
 
+// 고준호 추가
+#include "Dissolve_Test.h"
+
 CPlayer::CPlayer(ID3D11Device * pDevice, ID3D11DeviceContext * pContext)
 	: CPawn{ pDevice, pContext }
 {
@@ -174,6 +177,19 @@ HRESULT CPlayer::Initialize(void * pArg)
 
 	m_vRimLightColor = _Vec4(0.f, 0.f, 0.f, 0.f);
 
+	CDissolve_Test::DISSOLVE_OBJECT_DESC TestDesc = {};
+	TestDesc.fRotationPerSec = 90.f;
+	TestDesc.fSpeedPerSec = 1.f;
+	TestDesc.iLevelIndex = LEVEL_GAMEPLAY;
+	TestDesc.pModelCom = m_pModelCom;
+	TestDesc.pPlayerTransformCom = m_pTransformCom;
+
+	//if (FAILED(m_pGameInstance->Add_CloneObject_ToLayer(LEVEL_GAMEPLAY, TEXT("Layer_Test"), TEXT("Prototype_GameObject_Effect_Dissolve_Particle"), &TestDesc)))
+	//	return E_FAIL;
+
+
+	m_pNavigationCom->Set_ExceptCellNum(99);
+
 	return S_OK;
 }
 
@@ -189,7 +205,7 @@ void CPlayer::Priority_Update(_float fTimeDelta)
 		m_fGuardTime += fTimeDelta;
 	}
 
-	if (Key_Tab(KEY::WHEELBUTTON))
+	if (Key_Tab(KEY::Y))
 		LockOnOff();
 
 	if (m_isLockOn)
@@ -592,7 +608,7 @@ void CPlayer::Change_CameraMode(CPlayerCamera::CAMERA_MODE eMode)
 
 void CPlayer::LockOnOff()
 {
-	if (!m_isLockOn)
+	if (!m_isLockOn && !m_isPlayingCutscene)
 	{
 		m_pTargetMonster = Find_TargetMonster();
 		if (nullptr == m_pTargetMonster)
@@ -618,6 +634,7 @@ void CPlayer::LockOnOff()
 	}
 	else
 	{
+		m_pTargetMonster = nullptr;
 		m_isLockOn = false;
 	}
 }
@@ -1076,6 +1093,24 @@ void CPlayer::Update_Stat(_float fTimeDelta)
 	}
 #pragma endregion
 
+#pragma region 리전암
+	if (!m_isArm)
+	{
+		if (m_fArmRecoveryTime > 0.f)
+		{
+			m_fArmRecoveryTime -= fTimeDelta;
+		}
+		else if (m_fArmRecoveryTime <= 0.f)
+		{
+			m_vGuage_Arm.x = min(m_vGuage_Arm.x + 0.02f * fTimeDelta, m_vGuage_Arm.y);
+		}
+	}
+	else
+	{
+		m_vGuage_Arm.x = max(0.f, m_vGuage_Arm.x - 0.04f * fTimeDelta);
+	}
+#pragma endregion
+
 #pragma region 디버프
 	for (_uint i = 0; i < DEBUFF_END; ++i)
 	{
@@ -1142,6 +1177,11 @@ void CPlayer::Recovery_HP(_float fAmount)
 
 	if (m_tPlayer_Stat->vGauge_Hp.x > m_tPlayer_Stat->vGauge_Hp.y)
 		m_tPlayer_Stat->vGauge_Hp.y = m_tPlayer_Stat->vGauge_Hp.x;
+}
+
+void CPlayer::Decrease_Arm(_float fAmount)
+{
+	m_vGuage_Arm.x = max(0.f, m_vGuage_Arm.x - fAmount);
 }
 
 CStargazer* CPlayer::Find_Stargazer(_int iCellNumber)
@@ -1369,6 +1409,14 @@ void CPlayer::CollisionStay_IntercObj(CGameObject* pGameObject)
 		{
 			dynamic_cast<CCutScene*>(m_pGameInstance->Find_Object(LEVEL_GAMEPLAY, TEXT("Layer_CutScene"), BOSS1_MEET1))->Start_Play();
 			//m_pFsmCom->Change_State(RAXASIA_DOOR_OPEN, pTowerDoor);
+		}
+	}
+	else if (pGameObject->Get_Tag() == TEXT("Item_Dropped"))
+	{
+		if (GET_GAMEINTERFACE->Action_InterAction(TEXT("아이템 획득")))
+		{
+			pGameObject->Set_Dead(true);
+			m_pFsmCom->Change_State(ITEMGET);
 		}
 	}
 }

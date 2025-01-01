@@ -1,6 +1,7 @@
 #include "stdafx.h"
 #include "TreasureBox.h"
 #include "GameInstance.h"
+#include "Item_Dropped.h"
 
 CTreasureBox::CTreasureBox(ID3D11Device* pDevice, ID3D11DeviceContext* pContext)
 	: CGameObject{ pDevice, pContext }
@@ -54,6 +55,14 @@ void CTreasureBox::Update(_float fTimeDelta)
 	if (m_bOpen)
 	{
 		m_pModelCom->SetUp_NextAnimation(m_iAnim_Open, false);
+
+		if(m_bAddItem == false)
+		{
+			m_bAddItem = true;
+			CItem_Dropped::ITEM_DROPPED_DESC pDesc = {};
+			pDesc.vParentPos = m_pTransformCom->Get_State(CTransform::STATE_POSITION);
+			m_pGameInstance->Add_CloneObject_ToLayer(LEVEL_GAMEPLAY, TEXT("Layer_Item_Dropped"), TEXT("Prototype_GameObject_Item_Dropped"), &pDesc);
+		}
 	}
 
 	m_pModelCom->Play_Animation(fTimeDelta);

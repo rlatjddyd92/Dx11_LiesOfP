@@ -134,7 +134,7 @@ HRESULT CRaxasia::Initialize(void* pArg)
 
 	//Start_CutScene(CUTSCENE_MEET);
 
-	ChangePhase();
+	//ChangePhase();
 	return S_OK;
 }
 
@@ -797,13 +797,13 @@ HRESULT CRaxasia::Ready_Components()
 	RigidBodyDesc.fDynamicFriction = 0.f;
 	RigidBodyDesc.fRestituion = 0.f;
 
-	//physX::GeometryCapsule CapsuleDesc;
-	//CapsuleDesc.fHeight = 2.5f;
-	//CapsuleDesc.fRadius = 0.45f;
-	//RigidBodyDesc.pGeometry = &CapsuleDesc;
-	//RigidBodyDesc.PxLockFlags = PxRigidDynamicLockFlag::eLOCK_ANGULAR_X |
-	//	PxRigidDynamicLockFlag::eLOCK_ANGULAR_Y |
-	//	PxRigidDynamicLockFlag::eLOCK_ANGULAR_Z;
+	physX::GeometryCapsule CapsuleDesc;
+	CapsuleDesc.fHeight = 2.5f;
+	CapsuleDesc.fRadius = 0.45f;
+	RigidBodyDesc.pGeometry = &CapsuleDesc;
+	RigidBodyDesc.PxLockFlags = PxRigidDynamicLockFlag::eLOCK_ANGULAR_X |
+		PxRigidDynamicLockFlag::eLOCK_ANGULAR_Y |
+		PxRigidDynamicLockFlag::eLOCK_ANGULAR_Z;
 
 	physX::GeometryTriangleMesh TriangleDesc;
 	TriangleDesc.pModel = m_pModelCom;

@@ -56,6 +56,8 @@ public: // 외부에서 매니저 접근
 #pragma region UIManager
 	_bool IsGamePause() { return m_pUIManager->IsGamePause(); }
 
+	_bool Is_UIOff() { return m_pUIManager->Is_UIOff(); }
+
 	void OpenMainPage() { m_pUIManager->OpenMainPage(); }
 	void OpenLoadingPage() { m_pUIManager->OpenLoadingPage(); }
 
@@ -127,6 +129,8 @@ public: // 외부에서 매니저 접근
 
 	void Off_ItemInfo_UI() { m_pUIManager->Off_ItemInfo_UI(); }
 
+	void Show_Tooltip_Shop(_int iShopIndex) { m_pUIManager->Show_Tooltip_Shop(iShopIndex); }
+	void Show_Tooltip_Chest(_int iChestIndex) { m_pUIManager->Show_Tooltip_Chest(iChestIndex); }
 	void Show_Tooltip(INVEN_ARRAY_TYPE eType, _int iIndex) { m_pUIManager->Show_Tooltip(eType, iIndex); }
 	void Show_Tooltip(EQUIP_SLOT eSlot) { m_pUIManager->Show_Tooltip(eSlot); }
 
@@ -169,6 +173,10 @@ public: // 외부에서 매니저 접근
 
 	// 업적
 	void Input_Achievment_Data(_int iIndex, _int Data) { m_pUIManager->Input_Achievment_Data(iIndex, Data); }
+
+	// 튜토리얼
+	void Start_Tutorial() { return m_pUIManager->Start_Tutorial(); }
+	void End_Tutorial() { return m_pUIManager->End_Tutorial(); }
 
 #pragma endregion
 
@@ -240,11 +248,11 @@ public: // 외부에서 매니저 접근
 
 	// 상점, 보관함
 	vector<CItem_Manager::SHOP*>& Get_ShopData() { return m_pItem_Manager->Get_ShopData(); }
-	vector<CItem_Manager::ITEM*>& Get_ChestData() { return m_pItem_Manager->Get_ChestData(); }
+	map<_int, CItem_Manager::ITEM*>& Get_ChestData() { return m_pItem_Manager->Get_ChestData(); }
 	void Buy_ShopItem(_int iIndex, _int iCount = 1) { m_pItem_Manager->Buy_ShopItem(iIndex, iCount); }
 	void Sell_ShopItem(INVEN_ARRAY_TYPE eType, _int iIndex, _int iCount = 1) { m_pItem_Manager->Sell_ShopItem(eType, iIndex, iCount); }
 	void ChestItem_To_Inven(_int iIndex, _int iCount = 0) { m_pItem_Manager->ChestItem_To_Inven(iIndex, iCount); }
-	void InvenItem_To_Chest(INVEN_ARRAY_TYPE eType, _int iIndex, _int iCount = 0) { m_pItem_Manager->InvenItem_To_Chest(eType, iIndex, iCount); }
+	_int InvenItem_To_Chest(INVEN_ARRAY_TYPE eType, _int iIndex, _int iCount = 0) { return m_pItem_Manager->InvenItem_To_Chest(eType, iIndex, iCount); }
 
 #pragma endregion
 

@@ -85,12 +85,8 @@ public:
 
 	HRESULT Render_Ortho_UI();
 
-	void Set_OnOff_OrthoUI(_bool bIsOn, void* pObj)
-	{
-		for (auto& iter : m_Ortho_Host_list)
-			if (iter->pHost == pObj)
-				iter->bIsActive = bIsOn;
-	}
+	void Set_OnOff_OrthoUI(_bool bIsOn, void* pObj);
+	
 
 private:
 	void Initialize_Ortho_Info(); // <- 직교 UI 사용을 위한 기본 세팅을 진행한다 

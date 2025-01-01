@@ -6,6 +6,8 @@
 
 #include "Effect_Container.h"
 
+#include "Dissolve_Test.h"
+
 #define CREATE_CONTAINER(pArg) static_cast<CEffect_Container*>(m_pGameInstance->Clone_GameObject(TEXT("Prototype_GameObject_Effect_Container"), pArg));
 
 
@@ -281,6 +283,11 @@ HRESULT CEffect_Manager::Load_Shaders()
         CShader_NonVTX::Create(m_pDevice, m_pContext, TEXT("../Bin/ShaderFiles/Shader_VtxPointInstance.hlsl")))))
         return E_FAIL;
 
+    /* For. Prototype_Component_Shader_VtxDiffuseInstance */
+    if (FAILED(m_pGameInstance->Add_Prototype(LEVEL_STATIC, TEXT("Prototype_Component_Shader_VtxDiffuseInstance"),
+        CShader_NonVTX::Create(m_pDevice, m_pContext, TEXT("../Bin/ShaderFiles/Shader_VtxDiffuseInstance.hlsl")))))
+        return E_FAIL;
+    
     /* For. Prototype_Component_Shader_Trail_OnePoint_Instance */
     if (FAILED(m_pGameInstance->Add_Prototype(LEVEL_STATIC, TEXT("Prototype_Component_Shader_Trail_OnePoint_Instance"),
         CShader::Create(m_pDevice, m_pContext, TEXT("../Bin/ShaderFiles/Shader_VtxTrail_OnePoint_Instance.hlsl"), VTXTRAIL_ONEPOINT_INSTANCE::Elements, VTXTRAIL_ONEPOINT_INSTANCE::iNumElements))))
@@ -366,6 +373,11 @@ HRESULT CEffect_Manager::Load_Shaders()
         CShader_Compute::Create(m_pDevice, m_pContext, TEXT("../Bin/ShaderFiles/Shader_Trail_MultiPoint_Compute.hlsl"), "CS_RESET_MAIN"))))
         return E_FAIL;
 
+    /* For. Prototype_Component_Shader_Compute_Dissolve */
+    if (FAILED(m_pGameInstance->Add_Prototype(LEVEL_STATIC, TEXT("Prototype_Component_Shader_Compute_Dissolve"),
+        CShader_Compute::Create(m_pDevice, m_pContext, TEXT("../Bin/ShaderFiles/Shader_DissolveCompute.hlsl"), "CS_MOVE_MAIN"))))
+        return E_FAIL;
+
     return S_OK;
 }
 
@@ -405,6 +417,12 @@ HRESULT CEffect_Manager::Load_Objects()
     if (FAILED(m_pGameInstance->Add_Prototype(TEXT("Prototype_GameObject_Effect_Trail_MP"),
         CTrail_Effect_MP::Create(m_pDevice, m_pContext))))
         return E_FAIL;
+
+    /* For. Prototype_GameObject_Effect_Dissolve_Particle */
+    if (FAILED(m_pGameInstance->Add_Prototype(TEXT("Prototype_GameObject_Effect_Dissolve_Particle"),
+        CDissolve_Test::Create(m_pDevice, m_pContext))))
+        return E_FAIL;
+
     return S_OK;
 }
 

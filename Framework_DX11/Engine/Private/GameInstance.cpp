@@ -628,6 +628,10 @@ HRESULT CGameInstance::Render_TextRight(const _wstring& strFontTag, const _tchar
 {
 	return m_pFont_Manager->Render_Right(strFontTag, pText, vPosition, vColor, fRadian, vPivot, fScale);
 }
+_Vec4 CGameInstance::Measure_Font(const _wstring& strFontTag, _wstring strText)
+{
+	return m_pFont_Manager->Measure_Font(strFontTag, strText);
+}
 #pragma endregion
 
 #pragma region TARGET_MANAGER

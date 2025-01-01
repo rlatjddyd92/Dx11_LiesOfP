@@ -48,18 +48,16 @@ HRESULT CPhysX_Manager::Initialize()
     sceneDesc.contactPairSlabSize = 512;
 
 #ifdef __cuda_cuda_h__
-
-
     // GPU 관련 설정
     if (S_OK == Create_CudaContextManager())
     {
-        //sceneDesc.cudaContextManager = m_CudaContextManager;
-        //sceneDesc.flags |= PxSceneFlag::eENABLE_GPU_DYNAMICS;
-        //sceneDesc.flags |= PxSceneFlag::eENABLE_PCM;
-        //sceneDesc.broadPhaseType = PxBroadPhaseType::eGPU;
-        //sceneDesc.solverType = PxSolverType::eTGS;
-        //sceneDesc.gpuMaxNumPartitions = 8;
-        //sceneDesc.gpuMaxNumStaticPartitions = 255;
+        sceneDesc.cudaContextManager = m_CudaContextManager;
+        sceneDesc.flags |= PxSceneFlag::eENABLE_GPU_DYNAMICS;
+        sceneDesc.flags |= PxSceneFlag::eENABLE_PCM;
+        sceneDesc.broadPhaseType = PxBroadPhaseType::eGPU;
+        sceneDesc.solverType = PxSolverType::eTGS;
+        sceneDesc.gpuMaxNumPartitions = 8;
+        sceneDesc.gpuMaxNumStaticPartitions = 255;
     }
 #endif // __cuda_cuda_h__
 
@@ -403,19 +401,19 @@ void CPhysX_Manager::Free()
 
     PhysX_RELEASE(m_PxScene);
 
-    // PhysX Extensions 닫기
-    //PxCloseExtensions();
-
     PhysX_RELEASE(m_PxDispatcher);
     PhysX_RELEASE(m_PhysX);
 
-    PxPvdTransport* transport = m_Pvd->getTransport();
     m_pTransport->disconnect();
     PhysX_RELEASE(m_Pvd);
     PhysX_RELEASE(m_pTransport);
 
     PhysX_RELEASE(m_CudaContextManager);
-    // 제일 마지막에 Release
+
+    //// PhysX Extensions 닫기
+    //PxCloseExtensions();
+
+    //// 제일 마지막에 Release
     PhysX_RELEASE(m_PxFoundation);
 
     Safe_Release(m_pContext);

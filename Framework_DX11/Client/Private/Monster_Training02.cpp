@@ -81,7 +81,7 @@ void CMonster_Training02::Update(_float fTimeDelta)
 
 	m_pFsmCom->Update(fTimeDelta);
 
-	m_pGameInstance->Add_ColliderList(m_pColliderCom);
+	m_pColliderCom->Update(m_pTransformCom->Get_WorldMatrix_Ptr());
 }
 
 void CMonster_Training02::Late_Update(_float fTimeDelta)

@@ -26,6 +26,11 @@ private:
 
     _float              m_fAttackDelayTime = {};
 
+private:
+    _int                m_iColliderStartFrame = {};
+    _int                m_iColliderEndFrame = {};
+    void                Control_Collider();
+
 public:
     static CState_Training01_Attack* Create(class CFsm* pFsm, class CMonster* pMonster, _uint iStateNum, void* pArg = nullptr);
     virtual void Free() override;

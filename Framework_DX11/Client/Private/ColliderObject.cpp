@@ -50,8 +50,8 @@ void CColliderObject::Update(_float fTimeDelta)
 
 void CColliderObject::Late_Update(_float fTimeDelta)
 {
-	if (!m_pColliderCom->IsActive())
-		return;
+	//if (!m_pColliderCom->IsActive())
+	//	return;
 
 	_float4x4 WorldMatrix;
 
@@ -61,12 +61,13 @@ void CColliderObject::Late_Update(_float fTimeDelta)
 
 	if (nullptr != m_pColliderCom)
 		m_pGameInstance->Add_ColliderList(m_pColliderCom);
+
+
+	m_pGameInstance->Add_RenderObject(CRenderer::RG_NONBLEND, this);
 }
 
 HRESULT CColliderObject::Render()
 {
-	if (!m_pColliderCom->IsActive())
-		return S_OK;
 	
 #ifdef _DEBUG
 	m_pColliderCom->Render();

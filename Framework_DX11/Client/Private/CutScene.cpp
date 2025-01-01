@@ -51,6 +51,16 @@ void CCutScene::Update(_float fTimeDelta)
 	{
 		m_fTrackPosition += fTimeDelta;
 		Play_Keyframes(fTimeDelta);
+
+		if (m_bDeactivePlayer || m_bMovePlayerDelay)
+		{
+			m_fPlayerSetDelayTimer += fTimeDelta;
+			if (m_fPlayerSetDelayTimer > 3.f)
+			{
+				m_fPlayerSetDelayTimer = 0.f;
+				Delay_Set_Player();
+			}
+		}
 	}
 	else if (m_fTrackPosition > m_fMaxFrame)
 	{
@@ -63,15 +73,7 @@ void CCutScene::Update(_float fTimeDelta)
 		End_Setting();
 	}
 
-	if (m_bDeactivePlayer || m_bMovePlayerDelay)
-	{
-		m_fPlayerSetDelayTimer += fTimeDelta;
-		if (m_fPlayerSetDelayTimer > 3.f)
-		{
-			m_fPlayerSetDelayTimer = 0.f;
-			Delay_Set_Player();
-		}
-	}
+
 }
 
 void CCutScene::Late_Update(_float fTimeDelta)

@@ -17,6 +17,9 @@ HRESULT CState_Training01_Attack::Initialize(_uint iStateNum, void* pArg)
     m_iAnimation_Attack = m_pMonster->Get_Model()->Find_AnimationIndex("AT_Training_Skill_01", 2.8f);
     m_iStateNum = iStateNum;
 
+    m_iColliderStartFrame = 124;
+    m_iColliderEndFrame = 130;
+
     return S_OK;
 }
 
@@ -34,10 +37,25 @@ void CState_Training01_Attack::Update(_float fTimeDelta)
         m_pMonster->Change_State(CMonster::IDLE);
     }
 
+    Control_Collider();
 }
 
 void CState_Training01_Attack::End_State()
 {
+}
+
+void CState_Training01_Attack::Control_Collider()
+{
+    _int iFrame = m_pMonster->Get_Frame();
+
+    if (m_iColliderStartFrame <= iFrame && iFrame <= m_iColliderEndFrame)
+    {
+        m_pMonster->Active_CurrentWeaponCollider(1.f);
+    }
+    else
+    {
+        m_pMonster->DeActive_CurretnWeaponCollider();
+    }
 }
 
 CState_Training01_Attack* CState_Training01_Attack::Create(CFsm* pFsm, CMonster* pMonster, _uint iStateNum, void* pArg)

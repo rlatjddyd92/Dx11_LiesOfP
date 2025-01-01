@@ -117,7 +117,8 @@ void CState_Player_OH_Idle::Update(_float fTimeDelta)
     }
     else if (m_pPlayer->Key_Hold(KEY::CTRL))
     {
-        m_pPlayer->Change_State(CPlayer::ARM_START);
+        if(m_pPlayer->Get_ArmGuage_Ptr()->x >= 10.f)
+            m_pPlayer->Change_State(CPlayer::ARM_START);
     }
     
     if (m_pPlayer->Key_Away(KEY::RBUTTON))

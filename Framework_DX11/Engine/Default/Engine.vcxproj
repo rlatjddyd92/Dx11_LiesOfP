@@ -58,6 +58,7 @@
     <ClCompile Include="..\private\Navigation.cpp" />
     <ClCompile Include="..\Private\NvCloth_Manager.cpp" />
     <ClCompile Include="..\Private\Object_Manager.cpp" />
+    <ClCompile Include="..\Private\Occludee.cpp" />
     <ClCompile Include="..\Private\Octree.cpp" />
     <ClCompile Include="..\Private\PhysX_Manager.cpp" />
     <ClCompile Include="..\private\Picking.cpp" />
@@ -85,6 +86,7 @@
     <ClCompile Include="..\Private\VIBuffer_2DPolygon.cpp" />
     <ClCompile Include="..\Private\VIBuffer_Cell.cpp" />
     <ClCompile Include="..\Private\VIBuffer_Cube.cpp" />
+    <ClCompile Include="..\private\VIBuffer_Dissolve_Instance.cpp" />
     <ClCompile Include="..\private\VIBuffer_Instancing.cpp" />
     <ClCompile Include="..\Private\VIBuffer_PhysX.cpp" />
     <ClCompile Include="..\Private\VIBuffer_Point_Instance.cpp" />
@@ -139,6 +141,7 @@
     <ClInclude Include="..\public\Navigation.h" />
     <ClInclude Include="..\Public\NvCloth_Manager.h" />
     <ClInclude Include="..\Public\Object_Manager.h" />
+    <ClInclude Include="..\Public\Occludee.h" />
     <ClInclude Include="..\Public\Octree.h" />
     <ClInclude Include="..\Public\PhysX_Manager.h" />
     <ClInclude Include="..\public\Picking.h" />
@@ -166,6 +169,7 @@
     <ClInclude Include="..\Public\VIBuffer_2DPolygon.h" />
     <ClInclude Include="..\Public\VIBuffer_Cell.h" />
     <ClInclude Include="..\Public\VIBuffer_Cube.h" />
+    <ClInclude Include="..\public\VIBuffer_Dissolve_Instance.h" />
     <ClInclude Include="..\public\VIBuffer_Instancing.h" />
     <ClInclude Include="..\Public\VIBuffer_PhysX.h" />
     <ClInclude Include="..\Public\VIBuffer_Point_Instance.h" />
@@ -286,6 +290,7 @@
       <SDLCheck>true</SDLCheck>
       <AdditionalIncludeDirectories>../Public/;../Public/Fmod/;../Public/PhysX/;../Public/NvCloth;$(CUDA_PATH)/include/</AdditionalIncludeDirectories>
       <LanguageStandard>Default</LanguageStandard>
+      <AdditionalOptions>/bigobj %(AdditionalOptions)</AdditionalOptions>
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>
