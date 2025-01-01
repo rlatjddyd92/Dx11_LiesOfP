@@ -1366,9 +1366,6 @@
     <Filter Include="03.GameInterface_Controller\00.UIManager\00.UIPage\20.UIPage_Tutorial\04.Tuto_Popup">
       <UniqueIdentifier>{5a0fd332-b836-4ef5-979e-a2371f5cc21f}</UniqueIdentifier>
     </Filter>
-    <Filter Include="02.GameObjects\02.Pawn\00.Player\Dissolve_Test">
-      <UniqueIdentifier>{ac49ad54-4c6a-4a3c-a51f-12062146dfda}</UniqueIdentifier>
-    </Filter>
     <Filter Include="02.GameObjects\15.Item\Item_Throw">
       <UniqueIdentifier>{25b6cecb-bc06-44e5-ae54-363a24cb0c07}</UniqueIdentifier>
     </Filter>
@@ -1377,7 +1374,7 @@
     </Filter>
     <Filter Include="02.GameObjects\02.Pawn\00.Player\FatalCollider">
       <UniqueIdentifier>{5c4f0d66-ddb9-4019-b0ad-753ffdb3bd9d}</UniqueIdentifier>
-	</Filter>
+    </Filter>
     <Filter Include="02.GameObjects\02.Pawn\00.Player\Dissolve_Player_Dead">
       <UniqueIdentifier>{ac49ad54-4c6a-4a3c-a51f-12062146dfda}</UniqueIdentifier>
     </Filter>
@@ -2508,18 +2505,6 @@
     <ClInclude Include="..\Public\UITutorial_Timing.h">
       <Filter>03.GameInterface_Controller\00.UIManager\00.UIPage\20.UIPage_Tutorial\02.Tuto_Timing</Filter>
     </ClInclude>
-    <ClInclude Include="..\public\Dissolve_Test.h">
-      <Filter>02.GameObjects\02.Pawn\00.Player\Dissolve_Test</Filter>
-	</ClInclude>
-    <ClInclude Include="..\public\Dissolve_Player_Dead.h">
-      <Filter>02.GameObjects\02.Pawn\00.Player\Dissolve_Player_Dead</Filter>
-    </ClInclude>
-    <ClInclude Include="..\public\SimonManus_2P_Aura.h">
-      <Filter>02.GameObjects\02.Pawn\01.Monster\Boss\SimonManus\SimonManus_2P_Aura</Filter>
-    </ClInclude>
-    <ClInclude Include="..\public\Dissolve_SimonManus_Dead.h">
-      <Filter>02.GameObjects\02.Pawn\01.Monster\Boss\SimonManus\Dissolve_SimonManus_Dead</Filter>
-    </ClInclude>
     <ClInclude Include="..\Public\Item_Throw.h">
       <Filter>02.GameObjects\15.Item\Item_Throw</Filter>
     </ClInclude>
@@ -2528,6 +2513,15 @@
     </ClInclude>
     <ClInclude Include="..\Public\PlayerCollider_Fatal.h">
       <Filter>02.GameObjects\02.Pawn\00.Player\FatalCollider</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Public\Dissolve_Player_Dead.h">
+      <Filter>02.GameObjects\02.Pawn\00.Player\Dissolve_Player_Dead</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Public\Dissolve_SimonManus_Dead.h">
+      <Filter>02.GameObjects\02.Pawn\01.Monster\Boss\SimonManus\Dissolve_SimonManus_Dead</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Public\SimonManus_2P_Aura.h">
+      <Filter>02.GameObjects\02.Pawn\01.Monster\Boss\SimonManus\SimonManus_2P_Aura</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -3620,18 +3614,6 @@
     <ClCompile Include="..\Private\UITutorial_Timing.cpp">
       <Filter>03.GameInterface_Controller\00.UIManager\00.UIPage\20.UIPage_Tutorial\02.Tuto_Timing</Filter>
     </ClCompile>
-    <ClCompile Include="..\private\Dissolve_Test.cpp">
-      <Filter>02.GameObjects\02.Pawn\00.Player\Dissolve_Test</Filter>
-	</ClCompile>
-    <ClCompile Include="..\private\Dissolve_Player_Dead.cpp">
-      <Filter>02.GameObjects\02.Pawn\00.Player\Dissolve_Player_Dead</Filter>
-    </ClCompile>
-    <ClCompile Include="..\private\SimonManus_2P_Aura.cpp">
-      <Filter>02.GameObjects\02.Pawn\01.Monster\Boss\SimonManus\SimonManus_2P_Aura</Filter>
-    </ClCompile>
-    <ClCompile Include="..\private\Dissolve_SimonManus_Dead.cpp">
-      <Filter>02.GameObjects\02.Pawn\01.Monster\Boss\SimonManus\Dissolve_SimonManus_Dead</Filter>
-    </ClCompile>
     <ClCompile Include="..\Private\Item_Throw.cpp">
       <Filter>02.GameObjects\15.Item\Item_Throw</Filter>
     </ClCompile>
@@ -3640,6 +3622,15 @@
     </ClCompile>
     <ClCompile Include="..\Private\PlayerCollider_Fatal.cpp">
       <Filter>02.GameObjects\02.Pawn\00.Player\FatalCollider</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Private\Dissolve_Player_Dead.cpp">
+      <Filter>02.GameObjects\02.Pawn\00.Player\Dissolve_Player_Dead</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Private\Dissolve_SimonManus_Dead.cpp">
+      <Filter>02.GameObjects\02.Pawn\01.Monster\Boss\SimonManus\Dissolve_SimonManus_Dead</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Private\SimonManus_2P_Aura.cpp">
+      <Filter>02.GameObjects\02.Pawn\01.Monster\Boss\SimonManus\SimonManus_2P_Aura</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

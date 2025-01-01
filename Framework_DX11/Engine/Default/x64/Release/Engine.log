@@ -1,8 +1,10 @@
 ﻿     0>$(MSBuildExtensionsPath)에 사용 중인 검색 경로는 C:\Program Files\Microsoft Visual Studio\2022\Community\MSBuild;$(MSBuildProgramFiles32)\MSBuild입니다.
+       Evaluation 동안 로드된 어셈블리: System.Collections.Immutable, Version=8.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a(위치: C:\Program Files\Microsoft Visual Studio\2022\Community\MSBuild\Current\Bin\System.Collections.Immutable.dll%1, MVID: 8448ed54-b238-40d8-a464-bff29b2d85b9%2, AppDomain: [Default]%2).
        확장 경로 C:\Program Files\Microsoft Visual Studio\2022\Community\MSBuild을(를) 사용하여 C:\Program Files\Microsoft Visual Studio\2022\Community\MSBuild\$(MSBuildToolsVersion)\Microsoft.Common.props을(를) 가져옵니다.
        속성 재할당: $(MSBuildProjectExtensionsPath)=C:\Program Files\Microsoft Visual Studio\2022\Community\MSBuild\Current\Microsoft.Common.props(60,5)의 "D:\GitHubProjects\Dx11_LiesOfP\Framework_DX11\Engine\Default\obj\"(이전 값: "obj\")
        $(MSBuildExtensionsPath)에 사용 중인 검색 경로는 C:\Program Files\Microsoft Visual Studio\2022\Community\MSBuild;$(MSBuildProgramFiles32)\MSBuild입니다.
        확장 경로 C:\Program Files\Microsoft Visual Studio\2022\Community\MSBuild을(를) 사용하여 C:\Program Files\Microsoft Visual Studio\2022\Community\MSBuild\$(MSBuildToolsVersion)\Imports\Microsoft.Common.props\ImportBefore\*을(를) 가져옵니다.
+       Evaluation 동안 로드된 어셈블리: Microsoft.IO.Redist, Version=6.0.0.0, Culture=neutral, PublicKeyToken=cc7b13ffcd2ddd51(위치: C:\Program Files\Microsoft Visual Studio\2022\Community\MSBuild\Current\Bin\Microsoft.IO.Redist.dll%1, MVID: d528d43e-4d35-4c28-8aa6-a5ce49a5eba7%2, AppDomain: [Default]%2).
        환경에서 값이 'VisualStudioVersion'인 속성 '17.0'이(가) 확장되었습니다.
        "Configuration" 속성은 전역 속성이므로 수정할 수 없습니다.
        $(MSBuildExtensionsPath)에 사용 중인 검색 경로는 C:\Program Files\Microsoft Visual Studio\2022\Community\MSBuild;$(MSBuildProgramFiles32)\MSBuild입니다.
@@ -15,6 +17,7 @@
        속성 재할당: $(WholeProgramOptimization)=D:\GitHubProjects\Dx11_LiesOfP\Framework_DX11\Engine\Default\Engine.vcxproj(233,5)의 "true"(이전 값: "false")
        속성 재할당: $(CharacterSet)=D:\GitHubProjects\Dx11_LiesOfP\Framework_DX11\Engine\Default\Engine.vcxproj(234,5)의 "Unicode"(이전 값: "NotSet")
        속성 재할당: $(EnableUnitySupport)=D:\GitHubProjects\Dx11_LiesOfP\Framework_DX11\Engine\Default\Engine.vcxproj(235,5)의 "true"(이전 값: "false")
+       Evaluation 동안 로드된 어셈블리: Microsoft.Build.Utilities.Core, Version=15.1.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a(위치: C:\Program Files\Microsoft Visual Studio\2022\Community\MSBuild\Current\Bin\Microsoft.Build.Utilities.Core.dll%1, MVID: ee4672b2-20ae-46af-962d-6e9317270cb4%2, AppDomain: [Default]%2).
        환경에서 값이 'PROCESSOR_ARCHITECTURE'인 속성 'AMD64'이(가) 확장되었습니다.
        속성 재할당: $(WindowsSdkDir_10)=C:\Program Files\Microsoft Visual Studio\2022\Community\MSBuild\Microsoft\VC\v170\Microsoft.Cpp.WindowsSDK.props(18,5)의 "C:\Program Files (x86)\Windows Kits\10\"(이전 값: "")
        속성 재할당: $(NETFXSDK_Version)=C:\Program Files\Microsoft Visual Studio\2022\Community\MSBuild\Microsoft\VC\v170\Microsoft.Cpp.WindowsSDK.props(46,5)의 "4.8"(이전 값: "4.8.1")
@@ -828,7 +831,7 @@
        "C:\Program Files\Microsoft Visual Studio\2022\Community\MSBuild\Current\Bin\amd64\Microsoft.Common.CurrentVersion.targets" 프로젝트의 "GetTargetPathWithTargetPlatformMoniker" 대상을 "C:\Program Files\Microsoft Visual Studio\2022\Community\MSBuild\Microsoft\VC\v170\Microsoft.Cpp.DesignTime.targets" 프로젝트의 "GetTargetPathWithTargetPlatformMoniker" 대상으로 재정의하고 있습니다.
        "C:\Program Files\Microsoft Visual Studio\2022\Community\MSBuild\Microsoft\VisualStudio\WebTools.Aspire\Microsoft.WebTools.Aspire.targets(44,11)"의 BeforeTargets 특성에 나열된 "CompileDesignTime" 대상이 프로젝트에 없으며 무시됩니다.
        "C:\Program Files\Microsoft Visual Studio\2022\Community\MSBuild\Microsoft\VisualStudio\WebTools.Aspire\Microsoft.WebTools.Aspire.targets(57,11)"의 BeforeTargets 특성에 나열된 "CompileDesignTime" 대상이 프로젝트에 없으며 무시됩니다.
-빌드 시작: 2025-01-01 오후 12:19:12
+빌드 시작: 2025-01-01 오후 12:46:39
 로깅의 세부 정보 표시가 Detailed(으)로 설정되었습니다.     1>2 노드의 "D:\GitHubProjects\Dx11_LiesOfP\Framework_DX11\Engine\Default\Engine.vcxproj" 프로젝트(Rebuild 대상)입니다.
      1>프로젝트 파일에 ToolsVersion="14.0"이(가) 들어 있습니다. 이 도구 집합을 알 수 없거나 누락된 경우 적절한 버전의 MSBuild를 설치하여 해당 도구 집합을 확인할 수 있습니다. 또는 정책상의 이유로 빌드에 특정 ToolsVersion이 적용될 수 있습니다. 프로젝트에 ToolsVersion="Current"이(가) 들어 있는 것으로 간주합니다. 자세한 내용은 http://go.microsoft.com/fwlink/?LinkId=293424를 참조하세요.
        조건이 잘못되어 "EnableIntermediateOutputPathMismatchWarning" 대상을 건너뜁니다. ('$(RestoreProjectStyle)' == 'PackageReference')이(가) ('' == 'PackageReference')(으)로 확인되었습니다.
@@ -852,10 +855,10 @@
      1>"D:\GitHubProjects\Dx11_LiesOfP\Framework_DX11\Engine\Default\Engine.vcxproj" 프로젝트의 "C:\Program Files\Microsoft Visual Studio\2022\Community\MSBuild\Microsoft\VC\v170\Microsoft.Cpp.DesignTime.targets" 파일에 있는 "SetTelemetryEnvironmentVariables" 대상("Rebuild" 대상이 종속됨):
        "C:\Program Files\Microsoft Visual Studio\2022\Community\MSBuild\Microsoft\VC\v170\Microsoft.Build.CppTasks.Common.dll" 어셈블리에서 "SetEnv" 작업을 사용합니다.
        "SetEnv" 작업
-         VSTEL_SolutionSessionID={2B81309E-0BF9-49E6-825E-A1951C7D2F7D}
+         VSTEL_SolutionSessionID={87627F76-DF33-45D1-977C-2C2CC3B32ED3}
        "SetEnv" 작업을 실행했습니다.
        "SetEnv" 작업
-         VSTEL_CurrentSolutionBuildID=2243649832
+         VSTEL_CurrentSolutionBuildID=1535439351
        "SetEnv" 작업을 실행했습니다.
        "SetEnv" 작업
          VSTEL_SolutionPath=D:\GitHubProjects\Dx11_LiesOfP\Framework_DX11\Framework.sln
@@ -1182,7 +1185,7 @@
            TRACKER_CONSOLEPAGE=65001
          C:\Program Files (x86)\Windows Kits\10\bin\10.0.22621.0\x64\fxc.exe /nologo /E"main" /T fx_5_0 /Fo "..\Bin\Shader_Effect_Texture.cso" ..\..\Client\Bin\ShaderFiles\Shader_Effect_Texture.hlsl 
          추적 명령:
-         C:\Program Files\Microsoft Visual Studio\2022\Community\MSBuild\Current\Bin\amd64\Tracker.exe /d "C:\Program Files (x86)\MSBuild\15.0\FileTracker\FileTracker32.dll" /i D:\GitHubProjects\Dx11_LiesOfP\Framework_DX11\Engine\Default\x64\Release\Engine.tlog /r D:\GITHUBPROJECTS\DX11_LIESOFP\FRAMEWORK_DX11\CLIENT\BIN\SHADERFILES\SHADER_EFFECT_TEXTURE.HLSL /b MSBuildConsole_CancelEvent8bcbf7c9ac1f4e9aa6b8c733f8df8ebe  /c "C:\Program Files (x86)\Windows Kits\10\bin\10.0.22621.0\x64\fxc.exe"  /nologo /E"main" /T fx_5_0 /Fo "..\Bin\Shader_Effect_Texture.cso" ..\..\Client\Bin\ShaderFiles\Shader_Effect_Texture.hlsl 
+         C:\Program Files\Microsoft Visual Studio\2022\Community\MSBuild\Current\Bin\amd64\Tracker.exe /d "C:\Program Files (x86)\MSBuild\15.0\FileTracker\FileTracker32.dll" /i D:\GitHubProjects\Dx11_LiesOfP\Framework_DX11\Engine\Default\x64\Release\Engine.tlog /r D:\GITHUBPROJECTS\DX11_LIESOFP\FRAMEWORK_DX11\CLIENT\BIN\SHADERFILES\SHADER_EFFECT_TEXTURE.HLSL /b MSBuildConsole_CancelEventa207e00993b54973a8ec0b7ebff28423  /c "C:\Program Files (x86)\Windows Kits\10\bin\10.0.22621.0\x64\fxc.exe"  /nologo /E"main" /T fx_5_0 /Fo "..\Bin\Shader_Effect_Texture.cso" ..\..\Client\Bin\ShaderFiles\Shader_Effect_Texture.hlsl 
      1>FXC : warning X4717: Effects deprecated for D3DCompiler_47
          
          compilation object save succeeded; see D:\GitHubProjects\Dx11_LiesOfP\Framework_DX11\Engine\Bin\Shader_Effect_Texture.cso
@@ -1198,7 +1201,7 @@
            TRACKER_CONSOLEPAGE=65001
          C:\Program Files (x86)\Windows Kits\10\bin\10.0.22621.0\x64\fxc.exe /nologo /E"main" /T fx_5_0 /Fo "..\Bin\Shader_Bloom.cso" ..\Bin\ShaderFiles\Shader_Bloom.hlsl 
          추적 명령:
-         C:\Program Files\Microsoft Visual Studio\2022\Community\MSBuild\Current\Bin\amd64\Tracker.exe /d "C:\Program Files (x86)\MSBuild\15.0\FileTracker\FileTracker32.dll" /i D:\GitHubProjects\Dx11_LiesOfP\Framework_DX11\Engine\Default\x64\Release\Engine.tlog /r D:\GITHUBPROJECTS\DX11_LIESOFP\FRAMEWORK_DX11\ENGINE\BIN\SHADERFILES\SHADER_BLOOM.HLSL /b MSBuildConsole_CancelEvent582fa9ae0db0402d861ba3aeced56cda  /c "C:\Program Files (x86)\Windows Kits\10\bin\10.0.22621.0\x64\fxc.exe"  /nologo /E"main" /T fx_5_0 /Fo "..\Bin\Shader_Bloom.cso" ..\Bin\ShaderFiles\Shader_Bloom.hlsl 
+         C:\Program Files\Microsoft Visual Studio\2022\Community\MSBuild\Current\Bin\amd64\Tracker.exe /d "C:\Program Files (x86)\MSBuild\15.0\FileTracker\FileTracker32.dll" /i D:\GitHubProjects\Dx11_LiesOfP\Framework_DX11\Engine\Default\x64\Release\Engine.tlog /r D:\GITHUBPROJECTS\DX11_LIESOFP\FRAMEWORK_DX11\ENGINE\BIN\SHADERFILES\SHADER_BLOOM.HLSL /b MSBuildConsole_CancelEvent2c81dc4b609c4d4db47ea10947a47ce4  /c "C:\Program Files (x86)\Windows Kits\10\bin\10.0.22621.0\x64\fxc.exe"  /nologo /E"main" /T fx_5_0 /Fo "..\Bin\Shader_Bloom.cso" ..\Bin\ShaderFiles\Shader_Bloom.hlsl 
      1>FXC : warning X4717: Effects deprecated for D3DCompiler_47
      1>D:\GitHubProjects\Dx11_LiesOfP\Framework_DX11\Engine\Bin\ShaderFiles\Shader_Bloom.hlsl(155,30-91): warning X3570: gradient instruction used in a loop with varying iteration, attempting to unroll the loop
      1>D:\GitHubProjects\Dx11_LiesOfP\Framework_DX11\Engine\Bin\ShaderFiles\Shader_Bloom.hlsl(182,30-91): warning X3570: gradient instruction used in a loop with varying iteration, attempting to unroll the loop
@@ -1216,7 +1219,7 @@
            TRACKER_CONSOLEPAGE=65001
          C:\Program Files (x86)\Windows Kits\10\bin\10.0.22621.0\x64\fxc.exe /nologo /E"main" /T fx_5_0 /Fo "..\Bin\Shader_Cell.cso" ..\Bin\ShaderFiles\Shader_Cell.hlsl 
          추적 명령:
-         C:\Program Files\Microsoft Visual Studio\2022\Community\MSBuild\Current\Bin\amd64\Tracker.exe /d "C:\Program Files (x86)\MSBuild\15.0\FileTracker\FileTracker32.dll" /i D:\GitHubProjects\Dx11_LiesOfP\Framework_DX11\Engine\Default\x64\Release\Engine.tlog /r D:\GITHUBPROJECTS\DX11_LIESOFP\FRAMEWORK_DX11\ENGINE\BIN\SHADERFILES\SHADER_CELL.HLSL /b MSBuildConsole_CancelEventa2ef046c0f2549f989907de3ef427087  /c "C:\Program Files (x86)\Windows Kits\10\bin\10.0.22621.0\x64\fxc.exe"  /nologo /E"main" /T fx_5_0 /Fo "..\Bin\Shader_Cell.cso" ..\Bin\ShaderFiles\Shader_Cell.hlsl 
+         C:\Program Files\Microsoft Visual Studio\2022\Community\MSBuild\Current\Bin\amd64\Tracker.exe /d "C:\Program Files (x86)\MSBuild\15.0\FileTracker\FileTracker32.dll" /i D:\GitHubProjects\Dx11_LiesOfP\Framework_DX11\Engine\Default\x64\Release\Engine.tlog /r D:\GITHUBPROJECTS\DX11_LIESOFP\FRAMEWORK_DX11\ENGINE\BIN\SHADERFILES\SHADER_CELL.HLSL /b MSBuildConsole_CancelEventc94fc62db89543cf9bab54ae572bd584  /c "C:\Program Files (x86)\Windows Kits\10\bin\10.0.22621.0\x64\fxc.exe"  /nologo /E"main" /T fx_5_0 /Fo "..\Bin\Shader_Cell.cso" ..\Bin\ShaderFiles\Shader_Cell.hlsl 
      1>FXC : warning X4717: Effects deprecated for D3DCompiler_47
          
          compilation object save succeeded; see D:\GitHubProjects\Dx11_LiesOfP\Framework_DX11\Engine\Bin\Shader_Cell.cso
@@ -1232,7 +1235,7 @@
            TRACKER_CONSOLEPAGE=65001
          C:\Program Files (x86)\Windows Kits\10\bin\10.0.22621.0\x64\fxc.exe /nologo /E"main" /T fx_5_0 /Fo "..\Bin\Shader_Compute_Back.cso" ..\Bin\ShaderFiles\Shader_Compute_Back.hlsl 
          추적 명령:
-         C:\Program Files\Microsoft Visual Studio\2022\Community\MSBuild\Current\Bin\amd64\Tracker.exe /d "C:\Program Files (x86)\MSBuild\15.0\FileTracker\FileTracker32.dll" /i D:\GitHubProjects\Dx11_LiesOfP\Framework_DX11\Engine\Default\x64\Release\Engine.tlog /r D:\GITHUBPROJECTS\DX11_LIESOFP\FRAMEWORK_DX11\ENGINE\BIN\SHADERFILES\SHADER_COMPUTE_BACK.HLSL /b MSBuildConsole_CancelEvent4d48410c7452429ea1ff71e0a9b30d11  /c "C:\Program Files (x86)\Windows Kits\10\bin\10.0.22621.0\x64\fxc.exe"  /nologo /E"main" /T fx_5_0 /Fo "..\Bin\Shader_Compute_Back.cso" ..\Bin\ShaderFiles\Shader_Compute_Back.hlsl 
+         C:\Program Files\Microsoft Visual Studio\2022\Community\MSBuild\Current\Bin\amd64\Tracker.exe /d "C:\Program Files (x86)\MSBuild\15.0\FileTracker\FileTracker32.dll" /i D:\GitHubProjects\Dx11_LiesOfP\Framework_DX11\Engine\Default\x64\Release\Engine.tlog /r D:\GITHUBPROJECTS\DX11_LIESOFP\FRAMEWORK_DX11\ENGINE\BIN\SHADERFILES\SHADER_COMPUTE_BACK.HLSL /b MSBuildConsole_CancelEventdb9cfb8a94b14e97b1cd030b96b11436  /c "C:\Program Files (x86)\Windows Kits\10\bin\10.0.22621.0\x64\fxc.exe"  /nologo /E"main" /T fx_5_0 /Fo "..\Bin\Shader_Compute_Back.cso" ..\Bin\ShaderFiles\Shader_Compute_Back.hlsl 
      1>FXC : warning X4717: Effects deprecated for D3DCompiler_47
          
          compilation object save succeeded; see D:\GitHubProjects\Dx11_LiesOfP\Framework_DX11\Engine\Bin\Shader_Compute_Back.cso
@@ -1248,7 +1251,7 @@
            TRACKER_CONSOLEPAGE=65001
          C:\Program Files (x86)\Windows Kits\10\bin\10.0.22621.0\x64\fxc.exe /nologo /E"main" /T fx_5_0 /Fo "..\Bin\Shader_Compute_Bloom.cso" ..\Bin\ShaderFiles\Shader_Compute_Bloom.hlsl 
          추적 명령:
-         C:\Program Files\Microsoft Visual Studio\2022\Community\MSBuild\Current\Bin\amd64\Tracker.exe /d "C:\Program Files (x86)\MSBuild\15.0\FileTracker\FileTracker32.dll" /i D:\GitHubProjects\Dx11_LiesOfP\Framework_DX11\Engine\Default\x64\Release\Engine.tlog /r D:\GITHUBPROJECTS\DX11_LIESOFP\FRAMEWORK_DX11\ENGINE\BIN\SHADERFILES\SHADER_COMPUTE_BLOOM.HLSL /b MSBuildConsole_CancelEvent666a8a36d58f48e49bcc390a4c4ea1b0  /c "C:\Program Files (x86)\Windows Kits\10\bin\10.0.22621.0\x64\fxc.exe"  /nologo /E"main" /T fx_5_0 /Fo "..\Bin\Shader_Compute_Bloom.cso" ..\Bin\ShaderFiles\Shader_Compute_Bloom.hlsl 
+         C:\Program Files\Microsoft Visual Studio\2022\Community\MSBuild\Current\Bin\amd64\Tracker.exe /d "C:\Program Files (x86)\MSBuild\15.0\FileTracker\FileTracker32.dll" /i D:\GitHubProjects\Dx11_LiesOfP\Framework_DX11\Engine\Default\x64\Release\Engine.tlog /r D:\GITHUBPROJECTS\DX11_LIESOFP\FRAMEWORK_DX11\ENGINE\BIN\SHADERFILES\SHADER_COMPUTE_BLOOM.HLSL /b MSBuildConsole_CancelEvent85cbd963873e46e0bf8293245fc12e75  /c "C:\Program Files (x86)\Windows Kits\10\bin\10.0.22621.0\x64\fxc.exe"  /nologo /E"main" /T fx_5_0 /Fo "..\Bin\Shader_Compute_Bloom.cso" ..\Bin\ShaderFiles\Shader_Compute_Bloom.hlsl 
      1>FXC : warning X4717: Effects deprecated for D3DCompiler_47
          
          compilation object save succeeded; see D:\GitHubProjects\Dx11_LiesOfP\Framework_DX11\Engine\Bin\Shader_Compute_Bloom.cso
@@ -1264,7 +1267,7 @@
            TRACKER_CONSOLEPAGE=65001
          C:\Program Files (x86)\Windows Kits\10\bin\10.0.22621.0\x64\fxc.exe /nologo /E"main" /T fx_5_0 /Fo "..\Bin\Shader_Compute_Blur.cso" ..\Bin\ShaderFiles\Shader_Compute_Blur.hlsl 
          추적 명령:
-         C:\Program Files\Microsoft Visual Studio\2022\Community\MSBuild\Current\Bin\amd64\Tracker.exe /d "C:\Program Files (x86)\MSBuild\15.0\FileTracker\FileTracker32.dll" /i D:\GitHubProjects\Dx11_LiesOfP\Framework_DX11\Engine\Default\x64\Release\Engine.tlog /r D:\GITHUBPROJECTS\DX11_LIESOFP\FRAMEWORK_DX11\ENGINE\BIN\SHADERFILES\SHADER_COMPUTE_BLUR.HLSL /b MSBuildConsole_CancelEvent2270ffa8ed96417ebf989df21c30ca11  /c "C:\Program Files (x86)\Windows Kits\10\bin\10.0.22621.0\x64\fxc.exe"  /nologo /E"main" /T fx_5_0 /Fo "..\Bin\Shader_Compute_Blur.cso" ..\Bin\ShaderFiles\Shader_Compute_Blur.hlsl 
+         C:\Program Files\Microsoft Visual Studio\2022\Community\MSBuild\Current\Bin\amd64\Tracker.exe /d "C:\Program Files (x86)\MSBuild\15.0\FileTracker\FileTracker32.dll" /i D:\GitHubProjects\Dx11_LiesOfP\Framework_DX11\Engine\Default\x64\Release\Engine.tlog /r D:\GITHUBPROJECTS\DX11_LIESOFP\FRAMEWORK_DX11\ENGINE\BIN\SHADERFILES\SHADER_COMPUTE_BLUR.HLSL /b MSBuildConsole_CancelEvent738075db93c04052bbbed90ae64c300f  /c "C:\Program Files (x86)\Windows Kits\10\bin\10.0.22621.0\x64\fxc.exe"  /nologo /E"main" /T fx_5_0 /Fo "..\Bin\Shader_Compute_Blur.cso" ..\Bin\ShaderFiles\Shader_Compute_Blur.hlsl 
      1>FXC : warning X4717: Effects deprecated for D3DCompiler_47
          
          compilation object save succeeded; see D:\GitHubProjects\Dx11_LiesOfP\Framework_DX11\Engine\Bin\Shader_Compute_Blur.cso
@@ -1280,7 +1283,7 @@
            TRACKER_CONSOLEPAGE=65001
          C:\Program Files (x86)\Windows Kits\10\bin\10.0.22621.0\x64\fxc.exe /nologo /E"main" /T fx_5_0 /Fo "..\Bin\Shader_Deferred.cso" ..\Bin\ShaderFiles\Shader_Deferred.hlsl 
          추적 명령:
-         C:\Program Files\Microsoft Visual Studio\2022\Community\MSBuild\Current\Bin\amd64\Tracker.exe /d "C:\Program Files (x86)\MSBuild\15.0\FileTracker\FileTracker32.dll" /i D:\GitHubProjects\Dx11_LiesOfP\Framework_DX11\Engine\Default\x64\Release\Engine.tlog /r D:\GITHUBPROJECTS\DX11_LIESOFP\FRAMEWORK_DX11\ENGINE\BIN\SHADERFILES\SHADER_DEFERRED.HLSL /b MSBuildConsole_CancelEvent2011a26aabc6416db1ecf45408f9f3d1  /c "C:\Program Files (x86)\Windows Kits\10\bin\10.0.22621.0\x64\fxc.exe"  /nologo /E"main" /T fx_5_0 /Fo "..\Bin\Shader_Deferred.cso" ..\Bin\ShaderFiles\Shader_Deferred.hlsl 
+         C:\Program Files\Microsoft Visual Studio\2022\Community\MSBuild\Current\Bin\amd64\Tracker.exe /d "C:\Program Files (x86)\MSBuild\15.0\FileTracker\FileTracker32.dll" /i D:\GitHubProjects\Dx11_LiesOfP\Framework_DX11\Engine\Default\x64\Release\Engine.tlog /r D:\GITHUBPROJECTS\DX11_LIESOFP\FRAMEWORK_DX11\ENGINE\BIN\SHADERFILES\SHADER_DEFERRED.HLSL /b MSBuildConsole_CancelEvent46398c98ba7d407fa92f7b3e0952fa87  /c "C:\Program Files (x86)\Windows Kits\10\bin\10.0.22621.0\x64\fxc.exe"  /nologo /E"main" /T fx_5_0 /Fo "..\Bin\Shader_Deferred.cso" ..\Bin\ShaderFiles\Shader_Deferred.hlsl 
      1>FXC : warning X4717: Effects deprecated for D3DCompiler_47
      1>D:\GitHubProjects\Dx11_LiesOfP\Framework_DX11\Engine\Bin\ShaderFiles\Shader_Deferred.hlsl(180,5-82): warning X3206: implicit truncation of vector type
      1>D:\GitHubProjects\Dx11_LiesOfP\Framework_DX11\Engine\Bin\ShaderFiles\Shader_Deferred.hlsl(201,27-49): warning X3571: pow(f, e) will not work for negative f, use abs(f) or conditionally handle negative values if you expect them
@@ -1305,7 +1308,7 @@
            TRACKER_CONSOLEPAGE=65001
          C:\Program Files (x86)\Windows Kits\10\bin\10.0.22621.0\x64\fxc.exe /nologo /E"main" /T fx_5_0 /Fo "..\Bin\Shader_Distortion.cso" ..\Bin\ShaderFiles\Shader_Distortion.hlsl 
          추적 명령:
-         C:\Program Files\Microsoft Visual Studio\2022\Community\MSBuild\Current\Bin\amd64\Tracker.exe /d "C:\Program Files (x86)\MSBuild\15.0\FileTracker\FileTracker32.dll" /i D:\GitHubProjects\Dx11_LiesOfP\Framework_DX11\Engine\Default\x64\Release\Engine.tlog /r D:\GITHUBPROJECTS\DX11_LIESOFP\FRAMEWORK_DX11\ENGINE\BIN\SHADERFILES\SHADER_DISTORTION.HLSL /b MSBuildConsole_CancelEventbc3638e8d948443fa8dfb7637cded8da  /c "C:\Program Files (x86)\Windows Kits\10\bin\10.0.22621.0\x64\fxc.exe"  /nologo /E"main" /T fx_5_0 /Fo "..\Bin\Shader_Distortion.cso" ..\Bin\ShaderFiles\Shader_Distortion.hlsl 
+         C:\Program Files\Microsoft Visual Studio\2022\Community\MSBuild\Current\Bin\amd64\Tracker.exe /d "C:\Program Files (x86)\MSBuild\15.0\FileTracker\FileTracker32.dll" /i D:\GitHubProjects\Dx11_LiesOfP\Framework_DX11\Engine\Default\x64\Release\Engine.tlog /r D:\GITHUBPROJECTS\DX11_LIESOFP\FRAMEWORK_DX11\ENGINE\BIN\SHADERFILES\SHADER_DISTORTION.HLSL /b MSBuildConsole_CancelEvent8068aa89f64d4d04b26136bc7212de79  /c "C:\Program Files (x86)\Windows Kits\10\bin\10.0.22621.0\x64\fxc.exe"  /nologo /E"main" /T fx_5_0 /Fo "..\Bin\Shader_Distortion.cso" ..\Bin\ShaderFiles\Shader_Distortion.hlsl 
      1>FXC : warning X4717: Effects deprecated for D3DCompiler_47
          
          compilation object save succeeded; see D:\GitHubProjects\Dx11_LiesOfP\Framework_DX11\Engine\Bin\Shader_Distortion.cso
@@ -1321,7 +1324,7 @@
            TRACKER_CONSOLEPAGE=65001
          C:\Program Files (x86)\Windows Kits\10\bin\10.0.22621.0\x64\fxc.exe /nologo /E"main" /T fx_5_0 /Fo "..\Bin\Shader_Compute_HDR.cso" ..\Bin\ShaderFiles\Shader_Compute_HDR.hlsl 
          추적 명령:
-         C:\Program Files\Microsoft Visual Studio\2022\Community\MSBuild\Current\Bin\amd64\Tracker.exe /d "C:\Program Files (x86)\MSBuild\15.0\FileTracker\FileTracker32.dll" /i D:\GitHubProjects\Dx11_LiesOfP\Framework_DX11\Engine\Default\x64\Release\Engine.tlog /r D:\GITHUBPROJECTS\DX11_LIESOFP\FRAMEWORK_DX11\ENGINE\BIN\SHADERFILES\SHADER_COMPUTE_HDR.HLSL /b MSBuildConsole_CancelEvent766058f1fead4e48b360cbb3053bbb0e  /c "C:\Program Files (x86)\Windows Kits\10\bin\10.0.22621.0\x64\fxc.exe"  /nologo /E"main" /T fx_5_0 /Fo "..\Bin\Shader_Compute_HDR.cso" ..\Bin\ShaderFiles\Shader_Compute_HDR.hlsl 
+         C:\Program Files\Microsoft Visual Studio\2022\Community\MSBuild\Current\Bin\amd64\Tracker.exe /d "C:\Program Files (x86)\MSBuild\15.0\FileTracker\FileTracker32.dll" /i D:\GitHubProjects\Dx11_LiesOfP\Framework_DX11\Engine\Default\x64\Release\Engine.tlog /r D:\GITHUBPROJECTS\DX11_LIESOFP\FRAMEWORK_DX11\ENGINE\BIN\SHADERFILES\SHADER_COMPUTE_HDR.HLSL /b MSBuildConsole_CancelEventd1596d303d5e4840bbeb2cd36263b58b  /c "C:\Program Files (x86)\Windows Kits\10\bin\10.0.22621.0\x64\fxc.exe"  /nologo /E"main" /T fx_5_0 /Fo "..\Bin\Shader_Compute_HDR.cso" ..\Bin\ShaderFiles\Shader_Compute_HDR.hlsl 
      1>FXC : warning X4717: Effects deprecated for D3DCompiler_47
          
          compilation object save succeeded; see D:\GitHubProjects\Dx11_LiesOfP\Framework_DX11\Engine\Bin\Shader_Compute_HDR.cso
@@ -1337,7 +1340,7 @@
            TRACKER_CONSOLEPAGE=65001
          C:\Program Files (x86)\Windows Kits\10\bin\10.0.22621.0\x64\fxc.exe /nologo /E"main" /T fx_5_0 /Fo "..\Bin\Shader_Model_Instance.cso" ..\Bin\ShaderFiles\Shader_Model_Instance.hlsl 
          추적 명령:
-         C:\Program Files\Microsoft Visual Studio\2022\Community\MSBuild\Current\Bin\amd64\Tracker.exe /d "C:\Program Files (x86)\MSBuild\15.0\FileTracker\FileTracker32.dll" /i D:\GitHubProjects\Dx11_LiesOfP\Framework_DX11\Engine\Default\x64\Release\Engine.tlog /r D:\GITHUBPROJECTS\DX11_LIESOFP\FRAMEWORK_DX11\ENGINE\BIN\SHADERFILES\SHADER_MODEL_INSTANCE.HLSL /b MSBuildConsole_CancelEvent0ba4e1d7c86c4bef8238a289506a9fec  /c "C:\Program Files (x86)\Windows Kits\10\bin\10.0.22621.0\x64\fxc.exe"  /nologo /E"main" /T fx_5_0 /Fo "..\Bin\Shader_Model_Instance.cso" ..\Bin\ShaderFiles\Shader_Model_Instance.hlsl 
+         C:\Program Files\Microsoft Visual Studio\2022\Community\MSBuild\Current\Bin\amd64\Tracker.exe /d "C:\Program Files (x86)\MSBuild\15.0\FileTracker\FileTracker32.dll" /i D:\GitHubProjects\Dx11_LiesOfP\Framework_DX11\Engine\Default\x64\Release\Engine.tlog /r D:\GITHUBPROJECTS\DX11_LIESOFP\FRAMEWORK_DX11\ENGINE\BIN\SHADERFILES\SHADER_MODEL_INSTANCE.HLSL /b MSBuildConsole_CancelEvent52cf275524bc42568a7178a3c465d6bd  /c "C:\Program Files (x86)\Windows Kits\10\bin\10.0.22621.0\x64\fxc.exe"  /nologo /E"main" /T fx_5_0 /Fo "..\Bin\Shader_Model_Instance.cso" ..\Bin\ShaderFiles\Shader_Model_Instance.hlsl 
      1>FXC : warning X4717: Effects deprecated for D3DCompiler_47
          
          compilation object save succeeded; see D:\GitHubProjects\Dx11_LiesOfP\Framework_DX11\Engine\Bin\Shader_Model_Instance.cso
@@ -1353,7 +1356,7 @@
            TRACKER_CONSOLEPAGE=65001
          C:\Program Files (x86)\Windows Kits\10\bin\10.0.22621.0\x64\fxc.exe /nologo /E"main" /T fx_5_0 /Fo "..\Bin\Shader_PostProcess.cso" ..\Bin\ShaderFiles\Shader_PostProcess.hlsl 
          추적 명령:
-         C:\Program Files\Microsoft Visual Studio\2022\Community\MSBuild\Current\Bin\amd64\Tracker.exe /d "C:\Program Files (x86)\MSBuild\15.0\FileTracker\FileTracker32.dll" /i D:\GitHubProjects\Dx11_LiesOfP\Framework_DX11\Engine\Default\x64\Release\Engine.tlog /r D:\GITHUBPROJECTS\DX11_LIESOFP\FRAMEWORK_DX11\ENGINE\BIN\SHADERFILES\SHADER_POSTPROCESS.HLSL /b MSBuildConsole_CancelEvent0e9b3020c9a242b989ee506e71bc33f9  /c "C:\Program Files (x86)\Windows Kits\10\bin\10.0.22621.0\x64\fxc.exe"  /nologo /E"main" /T fx_5_0 /Fo "..\Bin\Shader_PostProcess.cso" ..\Bin\ShaderFiles\Shader_PostProcess.hlsl 
+         C:\Program Files\Microsoft Visual Studio\2022\Community\MSBuild\Current\Bin\amd64\Tracker.exe /d "C:\Program Files (x86)\MSBuild\15.0\FileTracker\FileTracker32.dll" /i D:\GitHubProjects\Dx11_LiesOfP\Framework_DX11\Engine\Default\x64\Release\Engine.tlog /r D:\GITHUBPROJECTS\DX11_LIESOFP\FRAMEWORK_DX11\ENGINE\BIN\SHADERFILES\SHADER_POSTPROCESS.HLSL /b MSBuildConsole_CancelEvent68f86a887e9344b1a937c4379e2f3c77  /c "C:\Program Files (x86)\Windows Kits\10\bin\10.0.22621.0\x64\fxc.exe"  /nologo /E"main" /T fx_5_0 /Fo "..\Bin\Shader_PostProcess.cso" ..\Bin\ShaderFiles\Shader_PostProcess.hlsl 
      1>FXC : warning X4717: Effects deprecated for D3DCompiler_47
          
          compilation object save succeeded; see D:\GitHubProjects\Dx11_LiesOfP\Framework_DX11\Engine\Bin\Shader_PostProcess.cso
@@ -1369,7 +1372,7 @@
            TRACKER_CONSOLEPAGE=65001
          C:\Program Files (x86)\Windows Kits\10\bin\10.0.22621.0\x64\fxc.exe /nologo /E"main" /T fx_5_0 /Fo "..\Bin\Shader_SSAO.cso" ..\Bin\ShaderFiles\Shader_SSAO.hlsl 
          추적 명령:
-         C:\Program Files\Microsoft Visual Studio\2022\Community\MSBuild\Current\Bin\amd64\Tracker.exe /d "C:\Program Files (x86)\MSBuild\15.0\FileTracker\FileTracker32.dll" /i D:\GitHubProjects\Dx11_LiesOfP\Framework_DX11\Engine\Default\x64\Release\Engine.tlog /r D:\GITHUBPROJECTS\DX11_LIESOFP\FRAMEWORK_DX11\ENGINE\BIN\SHADERFILES\SHADER_SSAO.HLSL /b MSBuildConsole_CancelEvent0ef1c14d45044008b095f12472ccbfc3  /c "C:\Program Files (x86)\Windows Kits\10\bin\10.0.22621.0\x64\fxc.exe"  /nologo /E"main" /T fx_5_0 /Fo "..\Bin\Shader_SSAO.cso" ..\Bin\ShaderFiles\Shader_SSAO.hlsl 
+         C:\Program Files\Microsoft Visual Studio\2022\Community\MSBuild\Current\Bin\amd64\Tracker.exe /d "C:\Program Files (x86)\MSBuild\15.0\FileTracker\FileTracker32.dll" /i D:\GitHubProjects\Dx11_LiesOfP\Framework_DX11\Engine\Default\x64\Release\Engine.tlog /r D:\GITHUBPROJECTS\DX11_LIESOFP\FRAMEWORK_DX11\ENGINE\BIN\SHADERFILES\SHADER_SSAO.HLSL /b MSBuildConsole_CancelEvent068b4f5a5dc34d58bb049a0f41434f3f  /c "C:\Program Files (x86)\Windows Kits\10\bin\10.0.22621.0\x64\fxc.exe"  /nologo /E"main" /T fx_5_0 /Fo "..\Bin\Shader_SSAO.cso" ..\Bin\ShaderFiles\Shader_SSAO.hlsl 
      1>FXC : warning X4717: Effects deprecated for D3DCompiler_47
      1>D:\GitHubProjects\Dx11_LiesOfP\Framework_DX11\Engine\Bin\ShaderFiles\Shader_SSAO.hlsl(116,16-42): warning X3206: implicit truncation of vector type
      1>D:\GitHubProjects\Dx11_LiesOfP\Framework_DX11\Engine\Bin\ShaderFiles\Shader_SSAO.hlsl(187,12-68): warning X3206: implicit truncation of vector type
@@ -1555,11 +1558,11 @@
        "CL" 작업
          PDB "x64\Release\vc143.pdb" 누락으로 인해 모든 소스 파일을 강제로 다시 컴파일합니다.
          도구로 전달된 환경 변수:
-           VS_UNICODE_OUTPUT=2440
-           SARIF_OUTPUT_PIPE=2784
+           VS_UNICODE_OUTPUT=1208
+           SARIF_OUTPUT_PIPE=1532
          C:\Program Files\Microsoft Visual Studio\2022\Community\VC\Tools\MSVC\14.40.33807\bin\HostX64\x64\CL.exe /c /I../Public/ /I../Public/Fmod/ /I../Public/PhysX/ /I../Public/NvCloth/ /I\include/ /Zi /nologo /W3 /WX- /diagnostics:column /sdl /Od /Ob0 /Oi /GL /D NDEBUG /D _WINDOWS /D _USRDLL /D ENGINE_EXPORTS /D _WINDLL /D _UNICODE /D UNICODE /Gm- /EHsc /MD /GS /Gy /fp:precise /Zc:wchar_t /Zc:forScope /Zc:inline /Fo"x64\Release\\" /Fd"x64\Release\vc143.pdb" /external:W3 /Gd /TP /FC /errorReport:prompt x64\Release\unity_I4973X5RHK8BCWCR.cpp
          추적 명령:
-         C:\Program Files\Microsoft Visual Studio\2022\Community\MSBuild\Current\Bin\amd64\Tracker.exe /d "C:\Program Files (x86)\MSBuild\15.0\FileTracker\FileTracker32.dll" /i D:\GitHubProjects\Dx11_LiesOfP\Framework_DX11\Engine\Default\x64\Release\Engine.tlog /r D:\GITHUBPROJECTS\DX11_LIESOFP\FRAMEWORK_DX11\ENGINE\DEFAULT\X64\RELEASE\UNITY_I4973X5RHK8BCWCR.CPP /b MSBuildConsole_CancelEvent6ebc7e23fa844f04a4beaaae0e660f44  /c "C:\Program Files\Microsoft Visual Studio\2022\Community\VC\Tools\MSVC\14.40.33807\bin\HostX64\x64\CL.exe"  /c /I../Public/ /I../Public/Fmod/ /I../Public/PhysX/ /I../Public/NvCloth/ /I\include/ /Zi /nologo /W3 /WX- /diagnostics:column /sdl /Od /Ob0 /Oi /GL /D NDEBUG /D _WINDOWS /D _USRDLL /D ENGINE_EXPORTS /D _WINDLL /D _UNICODE /D UNICODE /Gm- /EHsc /MD /GS /Gy /fp:precise /Zc:wchar_t /Zc:forScope /Zc:inline /Fo"x64\Release\\" /Fd"x64\Release\vc143.pdb" /external:W3 /Gd /TP /FC /errorReport:prompt x64\Release\unity_I4973X5RHK8BCWCR.cpp
+         C:\Program Files\Microsoft Visual Studio\2022\Community\MSBuild\Current\Bin\amd64\Tracker.exe /d "C:\Program Files (x86)\MSBuild\15.0\FileTracker\FileTracker32.dll" /i D:\GitHubProjects\Dx11_LiesOfP\Framework_DX11\Engine\Default\x64\Release\Engine.tlog /r D:\GITHUBPROJECTS\DX11_LIESOFP\FRAMEWORK_DX11\ENGINE\DEFAULT\X64\RELEASE\UNITY_I4973X5RHK8BCWCR.CPP /b MSBuildConsole_CancelEventc48aa1b5530b44fbb4df35556190d9ea  /c "C:\Program Files\Microsoft Visual Studio\2022\Community\VC\Tools\MSVC\14.40.33807\bin\HostX64\x64\CL.exe"  /c /I../Public/ /I../Public/Fmod/ /I../Public/PhysX/ /I../Public/NvCloth/ /I\include/ /Zi /nologo /W3 /WX- /diagnostics:column /sdl /Od /Ob0 /Oi /GL /D NDEBUG /D _WINDOWS /D _USRDLL /D ENGINE_EXPORTS /D _WINDLL /D _UNICODE /D UNICODE /Gm- /EHsc /MD /GS /Gy /fp:precise /Zc:wchar_t /Zc:forScope /Zc:inline /Fo"x64\Release\\" /Fd"x64\Release\vc143.pdb" /external:W3 /Gd /TP /FC /errorReport:prompt x64\Release\unity_I4973X5RHK8BCWCR.cpp
          unity_I4973X5RHK8BCWCR.cpp
      1>D:\GitHubProjects\Dx11_LiesOfP\Framework_DX11\Engine\Public\NvCloth\ps\PsAllocator.h(49,9): warning C4005: 'PX_ALLOC': 매크로 재정의
          (소스 파일 'x64/Release/unity_I4973X5RHK8BCWCR.cpp'을(를) 컴파일하는 중)
@@ -1704,15 +1707,15 @@
        "C:\Program Files\Microsoft Visual Studio\2022\Community\MSBuild\Microsoft\VC\v170\Microsoft.Build.CppTasks.Common.dll" 어셈블리에서 "Link" 작업을 사용합니다.
        "Link" 작업
          도구로 전달된 환경 변수:
-           VS_UNICODE_OUTPUT=2292
+           VS_UNICODE_OUTPUT=1564
          C:\Program Files\Microsoft Visual Studio\2022\Community\VC\Tools\MSVC\14.40.33807\bin\HostX64\x64\link.exe /ERRORREPORT:PROMPT /OUT:"..\Bin\Engine.dll" /INCREMENTAL:NO /NOLOGO /LIBPATH:../ThirdPartyLib/ /LIBPATH:../ThirdPartyLib/PhysX/Release /LIBPATH:../ThirdPartyLib/Fmod /LIBPATH:../ThirdPartyLib/NvCloth d3d11.lib dinput8.lib Effects11.lib DirectXTK.lib "assimp-vc140-mt.lib" fmod_vc.lib PhysX_64.lib PhysXCommon_64.lib PhysXCooking_64.lib PhysXExtensions_static_64.lib PhysXFoundation_64.lib PhysXPvdSDK_static_64.lib NvCloth_x64.lib kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib /MANIFEST /MANIFESTUAC:"level='asInvoker' uiAccess='false'" /manifest:embed /DEBUG /PDB:"..\Bin\Engine.pdb" /SUBSYSTEM:WINDOWS /OPT:REF /OPT:ICF /LTCG:incremental /LTCGOUT:"x64\Release\Engine.iobj" /TLBID:1 /DYNAMICBASE /NXCOMPAT /IMPLIB:"..\Bin\Engine.lib" /MACHINE:X64 /DLL x64\Release\unity_I4973X5RHK8BCWCR.obj
          추적 명령:
-         C:\Program Files\Microsoft Visual Studio\2022\Community\MSBuild\Current\Bin\amd64\Tracker.exe /a /d "C:\Program Files (x86)\MSBuild\15.0\FileTracker\FileTracker32.dll" /i D:\GitHubProjects\Dx11_LiesOfP\Framework_DX11\Engine\Default\x64\Release\Engine.tlog /r D:\GITHUBPROJECTS\DX11_LIESOFP\FRAMEWORK_DX11\ENGINE\DEFAULT\X64\RELEASE\UNITY_I4973X5RHK8BCWCR.OBJ /b MSBuildConsole_CancelEventeefa8b9c19244816b1060cbeebf227af  /c "C:\Program Files\Microsoft Visual Studio\2022\Community\VC\Tools\MSVC\14.40.33807\bin\HostX64\x64\link.exe"  /ERRORREPORT:PROMPT /OUT:"..\Bin\Engine.dll" /INCREMENTAL:NO /NOLOGO /LIBPATH:../ThirdPartyLib/ /LIBPATH:../ThirdPartyLib/PhysX/Release /LIBPATH:../ThirdPartyLib/Fmod /LIBPATH:../ThirdPartyLib/NvCloth d3d11.lib dinput8.lib Effects11.lib DirectXTK.lib "assimp-vc140-mt.lib" fmod_vc.lib PhysX_64.lib PhysXCommon_64.lib PhysXCooking_64.lib PhysXExtensions_static_64.lib PhysXFoundation_64.lib PhysXPvdSDK_static_64.lib NvCloth_x64.lib kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib /MANIFEST /MANIFESTUAC:"level='asInvoker' uiAccess='false'" /manifest:embed /DEBUG /PDB:"..\Bin\Engine.pdb" /SUBSYSTEM:WINDOWS /OPT:REF /OPT:ICF /LTCG:incremental /LTCGOUT:"x64\Release\Engine.iobj" /TLBID:1 /DYNAMICBASE /NXCOMPAT /IMPLIB:"..\Bin\Engine.lib" /MACHINE:X64 /DLL x64\Release\unity_I4973X5RHK8BCWCR.obj
+         C:\Program Files\Microsoft Visual Studio\2022\Community\MSBuild\Current\Bin\amd64\Tracker.exe /a /d "C:\Program Files (x86)\MSBuild\15.0\FileTracker\FileTracker32.dll" /i D:\GitHubProjects\Dx11_LiesOfP\Framework_DX11\Engine\Default\x64\Release\Engine.tlog /r D:\GITHUBPROJECTS\DX11_LIESOFP\FRAMEWORK_DX11\ENGINE\DEFAULT\X64\RELEASE\UNITY_I4973X5RHK8BCWCR.OBJ /b MSBuildConsole_CancelEvent28c6fbbd4468457e806cc529fd6771f9  /c "C:\Program Files\Microsoft Visual Studio\2022\Community\VC\Tools\MSVC\14.40.33807\bin\HostX64\x64\link.exe"  /ERRORREPORT:PROMPT /OUT:"..\Bin\Engine.dll" /INCREMENTAL:NO /NOLOGO /LIBPATH:../ThirdPartyLib/ /LIBPATH:../ThirdPartyLib/PhysX/Release /LIBPATH:../ThirdPartyLib/Fmod /LIBPATH:../ThirdPartyLib/NvCloth d3d11.lib dinput8.lib Effects11.lib DirectXTK.lib "assimp-vc140-mt.lib" fmod_vc.lib PhysX_64.lib PhysXCommon_64.lib PhysXCooking_64.lib PhysXExtensions_static_64.lib PhysXFoundation_64.lib PhysXPvdSDK_static_64.lib NvCloth_x64.lib kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib /MANIFEST /MANIFESTUAC:"level='asInvoker' uiAccess='false'" /manifest:embed /DEBUG /PDB:"..\Bin\Engine.pdb" /SUBSYSTEM:WINDOWS /OPT:REF /OPT:ICF /LTCG:incremental /LTCGOUT:"x64\Release\Engine.iobj" /TLBID:1 /DYNAMICBASE /NXCOMPAT /IMPLIB:"..\Bin\Engine.lib" /MACHINE:X64 /DLL x64\Release\unity_I4973X5RHK8BCWCR.obj
             ..\Bin\Engine.lib 라이브러리 및 ..\Bin\Engine.exp 개체를 생성하고 있습니다.
          코드를 생성하고 있습니다.
          Previous IPDB not found, fall back to full compilation.
      1>D:\GitHubProjects\Dx11_LiesOfP\Framework_DX11\Engine\Public\PipeLine.h(30): warning C4172: 지역 변수 또는 임시의 주소를 반환하고 있습니다.
-         All 5949 functions were compiled because no usable IPDB/IOBJ from previous compilation was found.
+         All 5952 functions were compiled because no usable IPDB/IOBJ from previous compilation was found.
          코드를 생성했습니다.
      1>Effects11.lib(EffectAPI.obj) : warning LNK4099: '' PDB를 'Effects11.lib(EffectAPI.obj)' 또는 ''에서 찾을 수 없습니다. 디버그 정보가 없는 것처럼 개체를 링크합니다.
      1>Effects11.lib(EffectNonRuntime.obj) : warning LNK4099: '' PDB를 'Effects11.lib(EffectNonRuntime.obj)' 또는 ''에서 찾을 수 없습니다. 디버그 정보가 없는 것처럼 개체를 링크합니다.
@@ -2721,4 +2724,4 @@
     경고 67개
     오류 0개
 
-경과 시간: 00:00:09.99
+경과 시간: 00:00:10.17

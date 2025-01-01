@@ -81,7 +81,10 @@
 #include "D:\GitHubProjects\Dx11_LiesOfP\Framework_DX11\Client\Private\Decal.cpp"
 
 
-#include "D:\GitHubProjects\Dx11_LiesOfP\Framework_DX11\Client\private\Dissolve_Test.cpp"
+#include "D:\GitHubProjects\Dx11_LiesOfP\Framework_DX11\Client\Private\Dissolve_Player_Dead.cpp"
+
+
+#include "D:\GitHubProjects\Dx11_LiesOfP\Framework_DX11\Client\Private\Dissolve_SimonManus_Dead.cpp"
 
 
 #include "D:\GitHubProjects\Dx11_LiesOfP\Framework_DX11\Client\Private\Item_Dropped.cpp"
@@ -97,6 +100,9 @@
 
 
 #include "D:\GitHubProjects\Dx11_LiesOfP\Framework_DX11\Client\Private\RebornerMale.cpp"
+
+
+#include "D:\GitHubProjects\Dx11_LiesOfP\Framework_DX11\Client\Private\SimonManus_2P_Aura.cpp"
 
 
 #include "D:\GitHubProjects\Dx11_LiesOfP\Framework_DX11\Client\Private\State_CarcassNormal_Bite.cpp"

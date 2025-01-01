@@ -180,16 +180,6 @@ HRESULT CPlayer::Initialize(void * pArg)
 
 	m_pContactMonster = m_pFatalColliderObj->Get_ContactMonster_Ptr();
 
-	CDissolve_Test::DISSOLVE_OBJECT_DESC TestDesc = {};
-	TestDesc.fRotationPerSec = 90.f;
-	TestDesc.fSpeedPerSec = 1.f;
-	TestDesc.iLevelIndex = LEVEL_GAMEPLAY;
-	TestDesc.pModelCom = m_pModelCom;
-	TestDesc.pPlayerTransformCom = m_pTransformCom;
-
-	//if (FAILED(m_pGameInstance->Add_CloneObject_ToLayer(LEVEL_GAMEPLAY, TEXT("Layer_Test"), TEXT("Prototype_GameObject_Effect_Dissolve_Particle"), &TestDesc)))
-	//	return E_FAIL;
-
 	return S_OK;
 }
 

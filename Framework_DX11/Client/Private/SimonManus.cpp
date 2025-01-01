@@ -178,7 +178,7 @@ void CSimonManus::Priority_Update(_float fTimeDelta)
 
 	if (m_isStartDisslove)
 	{
-		m_fDissloveRatio += fTimeDelta;
+		m_fDissloveRatio += 0.1f * fTimeDelta;
 		if (m_fDissloveRatio >= 2.f)
 			m_isDead = true;
 	}
@@ -523,6 +523,12 @@ void CSimonManus::End_CutScene(_uint iCutSceneNum)
 		ChangePhase();
 		Active_Weapon();
 	}
+	else if (m_pCutSceneFsmCom->Get_CurrentState() == STATE_DIE)
+	{
+		m_isStartDisslove = true;
+		m_pWeapon->IsActive(false);
+	}
+
 	m_isCutScene = false;
 }
 
