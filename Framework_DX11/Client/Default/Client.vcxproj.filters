@@ -1384,6 +1384,9 @@
     <Filter Include="02.GameObjects\02.Pawn\01.Monster\Boss\SimonManus\Dissolve_SimonManus_Dead">
       <UniqueIdentifier>{ee869710-c92e-4fc3-a694-89a9369cb840}</UniqueIdentifier>
     </Filter>
+    <Filter Include="02.GameObjects\02.Pawn\01.Monster\Boss\Raxasia\Dissolve_Raxasia_Dead">
+      <UniqueIdentifier>{3d3c022c-e525-4921-b9ff-31c7628b841b}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Client.h">
@@ -2523,6 +2526,9 @@
     <ClInclude Include="..\Public\SimonManus_2P_Aura.h">
       <Filter>02.GameObjects\02.Pawn\01.Monster\Boss\SimonManus\SimonManus_2P_Aura</Filter>
     </ClInclude>
+    <ClInclude Include="..\public\Dissolve_Raxasia_Dead.h">
+      <Filter>02.GameObjects\02.Pawn\01.Monster\Boss\Raxasia\Dissolve_Raxasia_Dead</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Client.cpp">
@@ -3631,6 +3637,9 @@
     </ClCompile>
     <ClCompile Include="..\Private\SimonManus_2P_Aura.cpp">
       <Filter>02.GameObjects\02.Pawn\01.Monster\Boss\SimonManus\SimonManus_2P_Aura</Filter>
+    </ClCompile>
+    <ClCompile Include="..\private\Dissolve_Raxasia_Dead.cpp">
+      <Filter>02.GameObjects\02.Pawn\01.Monster\Boss\Raxasia\Dissolve_Raxasia_Dead</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

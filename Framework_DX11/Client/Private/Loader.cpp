@@ -110,6 +110,7 @@
 #pragma region DISSOLVE_EFFECT
 #include "Dissolve_Player_Dead.h"
 #include "Dissolve_SimonManus_Dead.h"
+#include "Dissolve_Raxasia_Dead.h"
 #include "SimonManus_2P_Aura.h"
 #pragma endregion
 
@@ -1224,6 +1225,23 @@ HRESULT CLoader::Ready_Resources_For_Monster()
 		CModel::Create(m_pDevice, m_pContext, CModel::TYPE_ANIM, "../Bin/ModelData/Anim/CreatedBinFiles/Raxasia_CutScene_P2.dat", PreTransformMatrix, true))))
 		return E_FAIL;
 
+	DissolveInstanceDesc = {};
+	DissolveInstanceDesc.iNumInstance = 1000;
+	DissolveInstanceDesc.vCenter = { 0.f, 0.f, 0.f };
+	DissolveInstanceDesc.vLifeTime = { 5.f, 10.f };
+	DissolveInstanceDesc.vLifeTime = { 100.f, 100.f };
+	DissolveInstanceDesc.vMinColor = { 0.f, 1.f, 1.f, 1.f };
+	DissolveInstanceDesc.vMaxColor = { 1.f, 1.f, 1.f, 1.f };
+	DissolveInstanceDesc.vSize = { 0.005f, 0.01f };
+	DissolveInstanceDesc.vSpeed = { 0.25f, 0.5f };
+	DissolveInstanceDesc.iModelLevelIndex = LEVEL_GAMEPLAY;
+	DissolveInstanceDesc.strModelTag = TEXT("Prototype_Component_Model_Raxasia_CutScene_P2");
+
+	if (FAILED(m_pGameInstance->Add_Prototype(LEVEL_GAMEPLAY, TEXT("Prototype_Component_VIBuffer_Dissolve_Raxasia_Dead"),
+		CVIBuffer_Dissolve_Instance::Create(m_pDevice, m_pContext, DissolveInstanceDesc))))
+		return E_FAIL;
+
+
 	//Prototype_Component_Model_Raxasia_Sword_CutScene
 	PreTransformMatrix = XMMatrixScaling(0.015f, 0.015f, 0.015f) * XMMatrixRotationX(XMConvertToRadians(215.f)) * XMMatrixRotationY(XMConvertToRadians(-50.f)) * XMMatrixRotationZ(XMConvertToRadians(15.f));
 	if (FAILED(m_pGameInstance->Add_Prototype(LEVEL_GAMEPLAY, TEXT("Prototype_Component_Model_Raxasia_Sword_CutScene"),
@@ -1697,6 +1715,11 @@ HRESULT CLoader::Ready_Prototype()
 	/* For. Prototype_GameObject_Effect_Dissolve_SimonManus_Dead */
 	if (FAILED(m_pGameInstance->Add_Prototype(TEXT("Prototype_GameObject_Effect_Dissolve_SimonManus_Dead"),
 		CDissolve_SimonManus_Dead::Create(m_pDevice, m_pContext))))
+		return E_FAIL;
+
+	/* For. Prototype_GameObject_Effect_Dissolve_Raxasia_Dead */
+	if (FAILED(m_pGameInstance->Add_Prototype(TEXT("Prototype_GameObject_Effect_Dissolve_Raxasia_Dead"),
+		CDissolve_Raxasia_Dead::Create(m_pDevice, m_pContext))))
 		return E_FAIL;
 
 	/* For. Prototype_GameObject_Effect_Dissolve_SimonManus_2P_Aura */
