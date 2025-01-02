@@ -44,15 +44,10 @@ HRESULT CState_Player_Scissor_Fatal::Start_State(void* pArg)
 {
     m_pPlayer->Change_Animation(m_iAnimation_ScissorFatal, false, 0.05f);
 
-    //m_pPlayer->Play_Sound(CPawn::PAWN_SOUND_EFFECT1, TEXT("SE_PC_SK_FX_Rapier_1H_B_FableArts_Start_01.wav"));
-    //m_pPlayer->Play_Sound(CPawn::PAWN_SOUND_EFFECT2, TEXT("SE_PC_SK_FX_Rapier_1H_B_FableArts_Motor_03.wav"));
-
     m_isActiveEffect[0] = false;
     m_isActiveEffect[1] = false;
     m_isActiveEffect[2] = false;
     m_isActiveEffect[3] = false;
-
-    //m_pPlayer->Active_Effect(TEXT("Player_Attack_Rapier_StormStab_First_Ready"));
 
     m_bSwishL_Sound_Play = false;
     m_bSwishM_Sound_Play = false;

@@ -147,9 +147,21 @@ void CWeapon_FlameSword::OnCollisionEnter(CGameObject* pOther)
 
 			if (pMonster->Calc_DamageGain(m_fDamageAmount * m_fDamageRatio))
 			{
-
-				CEffect_Manager::Get_Instance()->Add_Effect_ToLayer(LEVEL_GAMEPLAY, TEXT("Player_Attack_Slash_FlameSword_Normal"),
-					(_Vec3)pMonster->Calc_CenterPos(), m_vAttackDir);
+				if (m_eAttackStrength == ATK_STRONG)
+				{
+					CEffect_Manager::Get_Instance()->Add_Effect_ToLayer(LEVEL_GAMEPLAY, TEXT("Player_Attack_Slash_FatalAttak_1"),
+						(_Vec3)pMonster->Calc_CenterPos(), m_vAttackDir);
+				}
+				else if (m_eAttackStrength == ATK_STRONG)
+				{
+					CEffect_Manager::Get_Instance()->Add_Effect_ToLayer(LEVEL_GAMEPLAY, TEXT("Player_Attack_Slash_FatalAttak_2"),
+						(_Vec3)pMonster->Calc_CenterPos(), m_vAttackDir);
+				}
+				else
+				{
+					CEffect_Manager::Get_Instance()->Add_Effect_ToLayer(LEVEL_GAMEPLAY, TEXT("Player_Attack_Slash_FlameSword_Normal"),
+						(_Vec3)pMonster->Calc_CenterPos(), m_vAttackDir);
+				}
 
 				CEffect_Manager::Get_Instance()->Add_Effect_ToLayer(LEVEL_GAMEPLAY, TEXT("Player_Attack_Blood_FlameSword"),
 					m_pParentMatrix, m_pSocketMatrix);

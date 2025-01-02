@@ -147,15 +147,28 @@ void CWeapon_Rapier::OnCollisionEnter(CGameObject* pOther)
 				_Vec3 vPlayerLook = (_Vec3)m_pPlayer->Get_Transform()->Get_State(CTransform::STATE_LOOK);
 				vPlayerLook.Normalize();
 
-				CEffect_Manager::Get_Instance()->Add_Effect_ToLayer(LEVEL_GAMEPLAY, TEXT("Player_Attack_Step_Normal"),
-					(_Vec3)pMonster->Calc_CenterPos(), vPlayerLook);
+				if (m_eAttackStrength == ATK_STRONG)
+				{
+					CEffect_Manager::Get_Instance()->Add_Effect_ToLayer(LEVEL_GAMEPLAY, TEXT("Player_Attack_Step_FatalAttack_1"),
+						(_Vec3)pMonster->Calc_CenterPos(), vPlayerLook);
+				}
+				else if (m_eAttackStrength == ATK_STRONG)
+				{
+					CEffect_Manager::Get_Instance()->Add_Effect_ToLayer(LEVEL_GAMEPLAY, TEXT("Player_Attack_Step_FatalAttack_2"),
+						(_Vec3)pMonster->Calc_CenterPos(), vPlayerLook);
+				}
+				else
+				{
+					CEffect_Manager::Get_Instance()->Add_Effect_ToLayer(LEVEL_GAMEPLAY, TEXT("Player_Attack_Step_Normal"),
+						(_Vec3)pMonster->Calc_CenterPos(), vPlayerLook);
+				}
 
 				CEffect_Manager::Get_Instance()->Add_Effect_ToLayer(LEVEL_GAMEPLAY, TEXT("Player_Attack_Blood_Rapier"),
 					m_pParentMatrix, m_pSocketMatrix);
 
 				// 24-12-06 김성용
 				// 무기 사용 시, 내구도 감소 
-				GET_GAMEINTERFACE->Add_Durable_Weapon(-1.f);
+				GET_GAMEINTERFACE->Add_Durable_Weapon(-5.f);
 
 				if (pMonster->Get_Status()->fHp > 0.f)
 				{

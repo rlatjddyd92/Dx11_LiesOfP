@@ -2,8 +2,10 @@
 #include "Weapon_Scissor_Handle.h"
 #include "Player.h"
 #include "Weapon_Scissor_Blade.h"
+#include "Monster.h"
 
 #include "GameInstance.h"
+#include "GameInterface_Controller.h"
 
 #include "Effect_Manager.h"
 #include "Effect_Container.h"
@@ -163,7 +165,32 @@ void CWeapon_Scissor_Handle::OnCollisionEnter(CGameObject* pOther)
 			CMonster* pMonster = dynamic_cast<CMonster*>(pOther);
 
 			m_DamagedObjects.push_back(pOther);
-			pOther->Calc_DamageGain(m_fDamageAmount * m_fDamageRatio);
+			if (pMonster->Calc_DamageGain(m_fDamageAmount * m_fDamageRatio))
+			{
+				_Vec3 vPlayerLook = (_Vec3)m_pPlayer->Get_Transform()->Get_State(CTransform::STATE_LOOK);
+				vPlayerLook.Normalize();
+
+				CEffect_Manager::Get_Instance()->Add_Effect_ToLayer(LEVEL_GAMEPLAY, TEXT("Player_Attack_Step_Normal"),
+					(_Vec3)pMonster->Calc_CenterPos(), vPlayerLook);
+
+				CEffect_Manager::Get_Instance()->Add_Effect_ToLayer(LEVEL_GAMEPLAY, TEXT("Player_Attack_Blood_Rapier"),
+					m_pParentMatrix, m_pSocketMatrix);
+
+				// 24-12-06 김성용
+				// 무기 사용 시, 내구도 감소 
+				GET_GAMEINTERFACE->Add_Durable_Weapon(-5.f);
+
+				if (pMonster->Get_Status()->fHp > 0.f)
+				{
+					CEffect_Manager::Get_Instance()->Add_Effect_ToLayer(LEVEL_GAMEPLAY, TEXT("Monster_Impact"),
+						(_Vec3)pMonster->Calc_CenterPos(), vPlayerLook);
+				}
+				else if (pMonster->Get_Status()->fHp <= 0.f)
+				{
+					CEffect_Manager::Get_Instance()->Add_Effect_ToLayer(LEVEL_GAMEPLAY, TEXT("Monster_Impact_Death"),
+						(_Vec3)pMonster->Calc_CenterPos(), vPlayerLook);
+				}
+			}
 
 			Play_HitSound(pMonster->Get_HitType());
 		}
