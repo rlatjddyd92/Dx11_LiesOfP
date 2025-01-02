@@ -14,6 +14,7 @@ HRESULT CState_CarcassNormal_HitFatal::Initialize(_uint iStateNum, void* pArg)
 {
     m_iStateNum = iStateNum;
     //FSM_INIT_DESC* pDesc = static_cast<FSM_INIT_DESC*>(pArg);
+    m_pFatalAttacked = m_pMonster->Get_bFatalAttacked();
 
     return S_OK;
 }
@@ -59,10 +60,10 @@ void CState_CarcassNormal_HitFatal::Update(_float fTimeDelta)
         break;
 
     case 1:     //ÆäÀÌÅ» ·çÇÁ
-        if (End_Check())
+        if ((*m_pFatalAttacked) == true)
         {
             ++m_iAnimTrack;
-            m_pMonster->Change_Animation(AN_DOWN_B + m_iDirCnt, false, 0.f);
+            m_pMonster->Change_Animation(AN_DOWN_B + m_iDirCnt, false, 0.1f);
             return;
         }
         break;
@@ -70,10 +71,20 @@ void CState_CarcassNormal_HitFatal::Update(_float fTimeDelta)
     case 2:     //³Ñ¾îÁü
         if (End_Check())
         {
+            ++m_iAnimTrack;
+            m_pMonster->Change_Animation(AN_UP_B + m_iDirCnt, false, 0.f);
+            return;
+        }
+        break;
+
+    case 3:     //ÀÏ¾î¼¶
+        if (End_Check())
+        {
             m_pMonster->Change_State(CCarcassNormal::IDLE);
             return;
         }
         break;
+
 
     default:
         break;
@@ -94,13 +105,13 @@ _bool CState_CarcassNormal_HitFatal::End_Check()
     {
         bEndCheck = m_pMonster->Get_EndAnim(AN_FATAL_START);
     }
-    else if ((AN_FATAL_LOOP) == iCurAnim)
-    {
-        bEndCheck = m_pMonster->Get_EndAnim(AN_FATAL_LOOP);
-    }
-    if ((AN_DOWN_B + m_iDirCnt) == iCurAnim)
+    else if ((AN_DOWN_B + m_iDirCnt) == iCurAnim)
     {
         bEndCheck = m_pMonster->Get_EndAnim((AN_DOWN_B + m_iDirCnt));
+    }
+    else if ((AN_UP_B + m_iDirCnt) == iCurAnim)
+    {
+        bEndCheck = m_pMonster->Get_EndAnim((AN_UP_B + m_iDirCnt));
     }
     else
     {

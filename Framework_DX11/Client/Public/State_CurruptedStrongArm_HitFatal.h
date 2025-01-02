@@ -13,11 +13,12 @@ class CState_CurruptedStrongArm_HitFatal :
 private:
     typedef enum {
         AN_FATAL_START = 17, AN_FATAL_LOOP = 15
+        , AN_DOWN_B = 6, AN_DOWN_F = 7, AN_UP_B = 8, AN_UP_F = 9
     }ANIMNUM;
 
 private:
     typedef enum {
-        DIR_FRONT, DIR_BEHIND
+        DIR_BEHIND, DIR_FRONT
     }DIR;
 
 public:
@@ -37,6 +38,8 @@ private:
     _float              m_fHitFatalDuration = { 3.f };
 
     _int                m_iAnimTrack = {};
+
+    _int                m_iDirCnt = {};
 
     _bool*              m_pFatalAttacked = { nullptr };
 

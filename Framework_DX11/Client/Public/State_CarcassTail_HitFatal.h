@@ -12,9 +12,13 @@ class CState_CarcassTail_HitFatal :
 {
 private:
     typedef enum {
-        AN_FATAL_START = 35,
-        AN_FATAL_LOOP = 34
+        AN_FATAL_START = 35, AN_FATAL_LOOP = 34
+        , AN_DOWN_B = 20, AN_DOWN_F = 21, AN_UP_B = 22, AN_UP_F = 23
     }ANIMNUM;
+
+    typedef enum {
+        DIR_BEHIND, DIR_FRONT
+    }DIR;
 
 public:
     CState_CarcassTail_HitFatal(class CFsm* pFsm, class CMonster* pMonster);
@@ -33,6 +37,10 @@ private:
     _float              m_fHitFatalDuration = { 3.f };
 
     _uint               m_iAnimCnt = {};
+
+    _int                m_iDirCnt = {};
+
+    _bool*              m_pFatalAttacked = { nullptr };
 
 private:
     _bool               End_Check();
