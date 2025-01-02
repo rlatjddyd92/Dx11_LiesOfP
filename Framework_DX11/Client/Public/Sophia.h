@@ -38,6 +38,8 @@ private:
 
 private:
 	class CEffect_Container* m_pHearEffeft = { nullptr };
+	class CDissolve_Sophia_Death* m_pDissolveEffect = { nullptr };
+
 private:
 	_bool m_bShadow = false;
 

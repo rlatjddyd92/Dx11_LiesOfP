@@ -138,9 +138,6 @@ PS_OUT PS_BLEND_MAIN(PS_IN In)
     Out.vColor.rgb *= g_vColor.rgb;
     Out.vColor.a *= g_fRatio;
     
-    if (Out.vColor.a < 0.1f)
-        discard;
-    
     return Out;
 }
 

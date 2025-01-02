@@ -71,6 +71,7 @@
 
 // °íÁØÈ£
 #include "SimonManus_2P_Aura.h"
+#include "Dissolve_SimonManus_Dead.h"
 
 CSimonManus::CSimonManus(ID3D11Device * pDevice, ID3D11DeviceContext * pContext)
 	: CMonster{ pDevice, pContext }
@@ -190,6 +191,7 @@ void CSimonManus::Priority_Update(_float fTimeDelta)
 	}
 
 	m_pAuraEffect->Priority_Update(fTimeDelta);
+	m_pDissolveEffect->Priority_Update(fTimeDelta);
 }
 
 void CSimonManus::Update(_float fTimeDelta)
@@ -232,6 +234,7 @@ void CSimonManus::Update(_float fTimeDelta)
 	}
 
 	m_pAuraEffect->Update(fTimeDelta);
+	m_pDissolveEffect->Update(fTimeDelta);
 
 	Update_Collider();
 
@@ -255,6 +258,7 @@ void CSimonManus::Late_Update(_float fTimeDelta)
 			pEffect->Late_Update(fTimeDelta);
 	}
 	m_pAuraEffect->Late_Update(fTimeDelta);
+	m_pDissolveEffect->Late_Update(fTimeDelta);
 
 	m_pGameInstance->Add_RenderObject(CRenderer::RG_NONBLEND, this);
 	m_pGameInstance->Add_RenderObject(CRenderer::RG_SHADOWOBJ, this);
@@ -530,6 +534,7 @@ void CSimonManus::End_CutScene(_uint iCutSceneNum)
 		m_isStartDisslove = true;
 		m_pWeapon->IsActive(false);
 		Change_State(CSimonManus::DIE_TALKING);
+		m_pDissolveEffect->Set_On(true);
 	}
 
 	m_isCutScene = false;
@@ -828,6 +833,18 @@ HRESULT CSimonManus::Ready_Effects()
 
 	m_pAuraEffect = static_cast<CSimonManus_2P_Aura*>(m_pGameInstance->Clone_GameObject(TEXT("Prototype_GameObject_Effect_Dissolve_SimonManus_2P_Aura"), &AuraDesc));
 
+	CDissolve_SimonManus_Dead::DISSOLVE_OBJECT_DESC DissolveDesc = {};
+	DissolveDesc.fRotationPerSec = 90.f;
+	DissolveDesc.fSpeedPerSec = 1.f;
+	DissolveDesc.iLevelIndex = LEVEL_GAMEPLAY;
+	DissolveDesc.pModelCom = m_pExtraModelCom;
+	DissolveDesc.pManusTransformCom = m_pTransformCom;
+	DissolveDesc.pDissolveTextureCom = m_pDissloveTexture;
+	DissolveDesc.pThreshold = &m_fDissloveRatio;
+	DissolveDesc.vTextureSize = _float2(2048.f, 2048.f);
+
+	m_pDissolveEffect = static_cast<CDissolve_SimonManus_Dead*>(m_pGameInstance->Clone_GameObject(TEXT("Prototype_GameObject_Effect_Dissolve_SimonManus_Dead"), &DissolveDesc));
+
 	return S_OK;
 }
 
@@ -1009,6 +1026,7 @@ void CSimonManus::Free()
 	Safe_Release(m_pCutSceneFsmCom);
 
 	Safe_Release(m_pAuraEffect);
+	Safe_Release(m_pDissolveEffect);
 
 	__super::Free();
 

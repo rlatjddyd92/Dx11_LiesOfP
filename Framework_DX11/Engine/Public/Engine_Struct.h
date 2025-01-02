@@ -70,6 +70,7 @@ namespace Engine
 		_uint		iModelLevelIndex;
 		_wstring	strModelTag;		// 어떤 모델을 사용할 것인가?
 		_int		iMeshIndex = { -1 };
+		_bool		bExceptMesh = { false };
 		_uint		iNumInstance = 0;	// 넓이 1당 몇개의 파티클이 생성될 것인가?
 		_float3		vCenter = {};
 		_float2		vSize = {};
