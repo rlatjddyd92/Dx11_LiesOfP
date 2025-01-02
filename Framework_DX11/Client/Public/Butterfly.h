@@ -25,6 +25,8 @@ public:
 	virtual void Late_Update(_float fTimeDelta) override;
 	virtual HRESULT Render() override;
 
+public:
+	void Set_Offset(_float fX, _float fY, _float fZ) { m_vPosOffset = { fX, fY, fZ }; }
 private:
 	CShader* m_pShaderCom = { nullptr };
 	CModel* m_pModelCom = { nullptr };
@@ -34,6 +36,7 @@ private:
 	_bool	m_bFirstPosSetting = { false };
 
 	_Vec3 m_vNewPos = {};
+	_Vec3 m_vPosOffset= {};
 
 	_float           m_fEmissiveMask = {};
 

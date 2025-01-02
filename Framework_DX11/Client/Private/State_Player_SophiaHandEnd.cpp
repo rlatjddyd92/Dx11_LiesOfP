@@ -5,6 +5,7 @@
 #include "Player.h"
 #include "Camera.h"
 #include "Sophia.h"
+#include "Butterfly.h"
 
 CState_Player_SophiaHandEnd::CState_Player_SophiaHandEnd(CFsm* pFsm, CPlayer* pPlayer)
     :CState{ pFsm }
@@ -61,6 +62,30 @@ void CState_Player_SophiaHandEnd::Update(_float fTimeDelta)
         m_pGameInstance->Add_CloneObject_ToLayer(LEVEL_GAMEPLAY, TEXT("Layer_Butterfly"), TEXT("Prototype_GameObject_Butterfly"));
         CGameObject* pButterfly = m_pGameInstance->Find_Object(LEVEL_GAMEPLAY, TEXT("Layer_Butterfly"), 1);
         pButterfly->Get_Transform()->Rotation(0.f, 155.f, 10.f);
+
+        m_pGameInstance->Add_CloneObject_ToLayer(LEVEL_GAMEPLAY, TEXT("Layer_Butterfly"), TEXT("Prototype_GameObject_Butterfly"));
+        CButterfly* pButterfly2 = static_cast<CButterfly*>(m_pGameInstance->Find_Object(LEVEL_GAMEPLAY, TEXT("Layer_Butterfly"), 2));
+        pButterfly2->Set_Offset(0.f,-0.2f,0.f);
+
+        m_pGameInstance->Add_CloneObject_ToLayer(LEVEL_GAMEPLAY, TEXT("Layer_Butterfly"), TEXT("Prototype_GameObject_Butterfly"));
+        CButterfly* pButterfly4 = static_cast<CButterfly*>(m_pGameInstance->Find_Object(LEVEL_GAMEPLAY, TEXT("Layer_Butterfly"), 3));
+        pButterfly4->Set_Offset(0.099, 0.f, 1.07f);
+
+    }  
+    
+    if (m_bMakeButterfly3 == false && iFrame >= 30)
+    {
+        m_bMakeButterfly3 = true;
+        m_pGameInstance->Add_CloneObject_ToLayer(LEVEL_GAMEPLAY, TEXT("Layer_Butterfly"), TEXT("Prototype_GameObject_Butterfly"));
+    } 
+    
+    if (m_bMakeButterfly4 == false && iFrame >= 33)
+    {
+        m_bMakeButterfly4 = true;
+        m_pGameInstance->Add_CloneObject_ToLayer(LEVEL_GAMEPLAY, TEXT("Layer_Butterfly"), TEXT("Prototype_GameObject_Butterfly"));
+        CButterfly* pButterfly3 = static_cast<CButterfly*>(m_pGameInstance->Find_Object(LEVEL_GAMEPLAY, TEXT("Layer_Butterfly"), 5));
+        pButterfly3->Set_Offset(0.f, 0.1f, 0.f);
+        pButterfly3->Get_Transform()->Rotation(0.f, 155.f, 15.f);
     }
 
 }

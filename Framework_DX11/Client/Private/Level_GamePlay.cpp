@@ -16,6 +16,7 @@
 #include "Ladder.h"
 #include "CutScene.h"
 
+#include "Butterfly.h"
 CLevel_GamePlay::CLevel_GamePlay(ID3D11Device* pDevice, ID3D11DeviceContext* pContext)
 	: CLevel{ pDevice, pContext }
 {
@@ -49,6 +50,10 @@ HRESULT CLevel_GamePlay::Initialize()
 
 	if (FAILED(Ready_CutScene_Data()))
 		return E_FAIL;
+
+	m_pGameInstance->Add_CloneObject_ToLayer(LEVEL_GAMEPLAY, TEXT("Layer_Butterfly"), TEXT("Prototype_GameObject_Butterfly"));
+	CButterfly* pButterfly4 = static_cast<CButterfly*>(m_pGameInstance->Find_Object(LEVEL_GAMEPLAY, TEXT("Layer_Butterfly"), 0));
+	pButterfly4->Set_Offset(-0.7f, 0.f, 9.5f);
 
 	// 24-11-19 김성용
 	// 게임 인터페이스를 인게임 모드로 전환

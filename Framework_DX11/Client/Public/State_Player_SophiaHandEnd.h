@@ -31,6 +31,8 @@ private:
 
     _bool               m_bMakeButterfly = { false };
     _bool               m_bMakeButterfly2 = { false };
+    _bool               m_bMakeButterfly3 = { false };
+    _bool               m_bMakeButterfly4 = { false };
 private:
     _bool               End_Check();
 

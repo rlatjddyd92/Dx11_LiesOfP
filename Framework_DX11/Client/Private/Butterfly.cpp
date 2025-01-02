@@ -38,6 +38,7 @@ HRESULT CButterfly::Initialize(void* pArg)
 	m_pModelCom->SetUp_Animation(m_iAnimIndex, true);
 	m_pTransformCom->Set_Scaled(0.15f, 0.15f, 0.15f);
 	m_pTransformCom->Rotation(0.f, 155.f, 0.f);
+
 	return S_OK;
 }
 
@@ -49,10 +50,9 @@ void CButterfly::Priority_Update(_float fTimeDelta)
 		CGameObject* pSophia = m_pGameInstance->Find_Object(LEVEL_GAMEPLAY, TEXT("Layer_Sophia"), 0);
 		_Vec3 vNewPos = pSophia->Get_Transform()->Get_State(CTransform::STATE_POSITION);
 		m_vNewPos = vNewPos;
-
-		m_vNewPos.y += 1.67f;
-		m_vNewPos.z -= 0.2f;
-		m_vNewPos.x += 0.65f;
+		m_vNewPos.x = m_vNewPos.x + 0.65f + m_vPosOffset.x;
+		m_vNewPos.y = m_vNewPos.y + 1.67f + m_vPosOffset.y;
+		m_vNewPos.z = m_vNewPos.z - 0.2f + m_vPosOffset.y;
 		m_pTransformCom->Set_State(CTransform::STATE_POSITION, m_vNewPos);
 	}
 }
@@ -61,8 +61,9 @@ void CButterfly::Update(_float fTimeDelta)
 {
 	m_pModelCom->Play_Animation(fTimeDelta);
 
-	m_pTransformCom->Go_Right(fTimeDelta, 0.3f);
-	/*static _float fX = m_vNewPos.x;
+	//m_pTransformCom->Go_Right(fTimeDelta, 0.3f);
+
+	static _float fX = m_vNewPos.x;
 	static _float fY = m_vNewPos.y;
 	static _float fZ = m_vNewPos.z;
 
@@ -93,7 +94,7 @@ void CButterfly::Update(_float fTimeDelta)
 		fZ += 0.05f;
 	}
 
-	m_pTransformCom->Set_State(CTransform::STATE_POSITION, _Vec3(fX, fY, fZ));*/
+	m_pTransformCom->Set_State(CTransform::STATE_POSITION, _Vec3(fX, fY, fZ));
 
 }
 

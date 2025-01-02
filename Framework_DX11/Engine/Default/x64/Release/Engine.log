@@ -51,7 +51,6 @@ C:\Users\olivi\GitHub\Dx11_LiesOfP\Framework_DX11\Engine\Bin\ShaderFiles\Shader_
 C:\Users\olivi\GitHub\Dx11_LiesOfP\Framework_DX11\Engine\Bin\ShaderFiles\Shader_SSAO.hlsl(172,24-79): warning X3570: gradient instruction used in a loop with varying iteration, attempting to unroll the loop
   
   compilation object save succeeded; see C:\Users\olivi\GitHub\Dx11_LiesOfP\Framework_DX11\Engine\Bin\Shader_SSAO.cso
-C:\Program Files\Microsoft Visual Studio\2022\Community\MSBuild\Microsoft\VC\v170\Microsoft.Cpp.Unity.targets(192,5): warning : 'D:\GitHubProjects\Dx11_LiesOfP\Framework_DX11\Engine\Default\x64\Release\unity_I4973X5RHK8BCWCR.cpp' 경로의 일부를 찾을 수 없습니다.
   unity_66FL2B5TRC64SCEO.cpp
 C:\Users\olivi\GitHub\Dx11_LiesOfP\Framework_DX11\Engine\Public\NvCloth\ps\PsAllocator.h(49,9): warning C4005: 'PX_ALLOC': 매크로 재정의
   (소스 파일 'x64/Release/unity_66FL2B5TRC64SCEO.cpp'을(를) 컴파일하는 중)
@@ -83,7 +82,7 @@ C:\Program Files\Microsoft Visual Studio\2022\Community\VC\Tools\MSVC\14.41.3412
   코드를 생성하고 있습니다.
   Previous IPDB not found, fall back to full compilation.
 C:\Users\olivi\GitHub\Dx11_LiesOfP\Framework_DX11\Engine\Public\PipeLine.h(30): warning C4172: 지역 변수 또는 임시 의 주소를 반환하는 중
-  All 5953 functions were compiled because no usable IPDB/IOBJ from previous compilation was found.
+  All 5954 functions were compiled because no usable IPDB/IOBJ from previous compilation was found.
   코드를 생성했습니다.
 Effects11.lib(EffectAPI.obj) : warning LNK4099: '' PDB를 'Effects11.lib(EffectAPI.obj)' 또는 ''에서 찾을 수 없습니다. 디버그 정보가 없는 것처럼 개체를 링크합니다.
 Effects11.lib(EffectNonRuntime.obj) : warning LNK4099: '' PDB를 'Effects11.lib(EffectNonRuntime.obj)' 또는 ''에서 찾을 수 없습니다. 디버그 정보가 없는 것처럼 개체를 링크합니다.
