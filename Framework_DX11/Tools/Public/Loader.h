@@ -5,6 +5,7 @@
 
 BEGIN(Engine)
 class CGameInstance;
+class CTest;
 END
 
 BEGIN(Tools)

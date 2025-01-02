@@ -173,7 +173,7 @@ void CState_RebornerMale_RapidFire::Effect_Check(_double CurTrackPos)
                         * (m_pMonster->Get_Transform()->Get_WorldMatrix())));
                 vPos = XMVector3TransformCoord(vPos, XMLoadFloat4x4(&WorldMat));
 
-                CEffect_Manager::Get_Instance()->Add_Effect_ToLayer(LEVEL_GAMEPLAY, TEXT("SimonManus_CutScene_SmallSmoke"),
+                CEffect_Manager::Get_Instance()->Add_Effect_ToLayer(LEVEL_GAMEPLAY, TEXT("Monster_Bullet_Muzzle"),
                     vPos, _Vec3{ 0.f, 0.f, 1.f });
                 
                 CAttackObject::ATKOBJ_DESC Desc;
