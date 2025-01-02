@@ -61,6 +61,8 @@ HRESULT CState_Player_Scissor_Fatal::Start_State(void* pArg)
 
     m_pPlayer->Set_WeaponStrength(ATK_STRONG);
 
+    m_pPlayer->SetUp_Monster_Fatal();
+
     return S_OK;
 }
 
@@ -93,10 +95,17 @@ void CState_Player_Scissor_Fatal::Control_Collider(_int iFrame)
 {
     _bool   isColliderActive = false;
 
-    for (_uint i = 0; i < 2; ++i)
+    for (_uint i = 0; i < 4; ++i)
     {
         if (m_iColliderStartFrame[i] <= iFrame && iFrame <= m_iColliderEndFrame[i])
+        {
+            if (i == 4)
+            {
+                m_pPlayer->Set_WeaponStrength(ATK_LAST);
+            }
+
             isColliderActive = true;
+        }
     }
 
     if (isColliderActive)

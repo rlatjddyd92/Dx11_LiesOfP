@@ -176,18 +176,10 @@ void CWeapon_Rapier::OnCollisionEnter(CGameObject* pOther)
 
 void CWeapon_Rapier::OnCollisionStay(CGameObject* pOther)
 {
-	if (pOther->Get_Tag() == TEXT("Monster"))
-	{
-
-	}
 }
 
 void CWeapon_Rapier::OnCollisionExit(CGameObject* pOther)
 {
-	if (pOther->Get_Tag() == TEXT("Monster"))
-	{
-
-	}
 }
 
 void CWeapon_Rapier::Play_HitSound(HIT_TYPE eType)

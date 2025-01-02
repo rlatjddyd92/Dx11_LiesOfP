@@ -295,10 +295,12 @@ public:
 
 	void			On_DissolveEffect(_bool bOn);
 
+	void			SetUp_Monster_Fatal();
+
+private:
 	_bool					m_bActivated_ManusCutScene = { false };
 	_bool					m_isPlayingCutscene = { false };
 
-	/* Effect */
 private:
 	vector<class CEffect_Container*> m_Effects;
 	class CEffect_Manager* m_pEffect_Manager = { nullptr };

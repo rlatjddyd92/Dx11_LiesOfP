@@ -151,13 +151,13 @@ HRESULT CPlayer::Initialize(void * pArg)
 
 	//m_pNavigationCom->Move_to_Cell(m_pRigidBodyCom, 1030); // 계단 옆 별바라기
 	//m_pNavigationCom->Move_to_Cell(m_pRigidBodyCom, 774); //긴사다리 위
-	//m_pNavigationCom->Move_to_Cell(m_pRigidBodyCom, 772); //긴사다리
+	m_pNavigationCom->Move_to_Cell(m_pRigidBodyCom, 772); //긴사다리
 	//m_pNavigationCom->Move_to_Cell(m_pRigidBodyCom, 427); //짧은사다리
 	//m_pNavigationCom->Move_to_Cell(m_pRigidBodyCom, 341); //아래엘베
 	//m_pNavigationCom->Move_to_Cell(m_pRigidBodyCom, 440); //상자랑 장애물
 	//m_pNavigationCom->Move_to_Cell(m_pRigidBodyCom, 1066); // 순간이동 1066
 	//m_pNavigationCom->Move_to_Cell(m_pRigidBodyCom, 790); // 순간이동 790
-	m_pNavigationCom->Move_to_Cell(m_pRigidBodyCom, 801); // 소피아 방
+	//m_pNavigationCom->Move_to_Cell(m_pRigidBodyCom, 801); // 소피아 방
 	//m_pNavigationCom->Move_to_Cell(m_pRigidBodyCom, 1178); // 소피아 방 내부
 	//m_pNavigationCom->Move_to_Cell(m_pRigidBodyCom, 0); 
 	//m_pNavigationCom->Move_to_Cell(m_pRigidBodyCom, 268); // 락사시아 보스전
@@ -1204,6 +1204,14 @@ void CPlayer::Decrease_Arm(_float fAmount)
 void CPlayer::On_DissolveEffect(_bool bOn)
 {
 	m_pDissolveEffect->Set_On(bOn);
+}
+
+void CPlayer::SetUp_Monster_Fatal()
+{
+	if (!m_pContactMonster)
+		return;
+
+	m_pContactMonster->Start_Fatal();
 }
 
 CStargazer* CPlayer::Find_Stargazer(_int iCellNumber)
