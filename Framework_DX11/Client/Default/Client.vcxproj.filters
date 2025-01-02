@@ -1390,6 +1390,9 @@
     <Filter Include="02.GameObjects\11.InteractObj\08.Sophia\Dissolve_Sophia_Death">
       <UniqueIdentifier>{da95df1b-1675-49d1-9f2b-2f18db97b9bc}</UniqueIdentifier>
     </Filter>
+    <Filter Include="02.GameObjects\11.InteractObj\12.MoveBlockObj">
+      <UniqueIdentifier>{40711a2e-f4e9-4b05-8ea4-63f2df6bc760}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Client.h">
@@ -2543,7 +2546,7 @@
     </ClInclude>
     <ClInclude Include="..\public\Dissolve_Sophia_Death.h">
       <Filter>02.GameObjects\11.InteractObj\08.Sophia\Dissolve_Sophia_Death</Filter>
-	</ClInclude>
+    </ClInclude>
     <ClInclude Include="..\Public\UIPart_3D.h">
       <Filter>03.GameInterface_Controller\00.UIManager\02.UIPart_3D</Filter>
     </ClInclude>
@@ -2559,6 +2562,7 @@
     <ClInclude Include="..\Public\UIPart_3D_Path.h">
       <Filter>03.GameInterface_Controller\00.UIManager\02.UIPart_3D\00.UIPart_3D_Path</Filter>
     </ClInclude>
+    <ClInclude Include="CMoveBlockObj.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Client.cpp">
@@ -3682,7 +3686,7 @@
     </ClCompile>
     <ClCompile Include="..\private\Dissolve_Sophia_Death.cpp">
       <Filter>02.GameObjects\11.InteractObj\08.Sophia\Dissolve_Sophia_Death</Filter>
-	</ClCompile>
+    </ClCompile>
     <ClCompile Include="..\Private\UIPart_3D_Path.cpp">
       <Filter>03.GameInterface_Controller\00.UIManager\02.UIPart_3D\00.UIPart_3D_Path</Filter>
     </ClCompile>
@@ -3698,6 +3702,7 @@
     <ClCompile Include="..\Private\UIPart_3D.cpp">
       <Filter>03.GameInterface_Controller\00.UIManager\02.UIPart_3D</Filter>
     </ClCompile>
+    <ClCompile Include="CMoveBlockObj.cpp" />
   </ItemGroup>
   <ItemGroup>
     <Image Include="Client.ico">
