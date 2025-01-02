@@ -78,6 +78,8 @@ public:
 	void				Increase_GroggyPoint(_float fGroggy) { m_eStat.fGrogyPoint += fGroggy; }
 	void				Reset_GroggyPoint() { m_eStat.fGrogyPoint = 0; }
 	virtual void		SetUp_Dead() {};
+	
+	virtual void		Start_Fatal();
 
 	_bool*				Get_bDicover() { return &m_bDiscover; };
 	_Vec3				Get_Look() { return XMVector3Normalize(m_pTransformCom->Get_State(CTransform::STATE_LOOK)); }

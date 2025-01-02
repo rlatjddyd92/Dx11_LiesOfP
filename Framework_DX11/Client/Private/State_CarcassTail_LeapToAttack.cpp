@@ -171,7 +171,7 @@ void CState_CarcassTail_LeapToAttack::Sound_Check(_double CurTrackPos)
         {
             if (CurTrackPos >= 90.f && CurTrackPos <= 105.f)
             {
-                m_pMonster->Play_Sound(CPawn::PAWN_SOUND_EFFECT1, TEXT("SE_NPC_SK_WS_Nail_03.wav"), false);
+                m_pMonster->Play_Sound(CPawn::PAWN_SOUND_EFFECT1, TEXT("SE_NPC_CarcassBear_SK_WS_Claw_06.wav"), false);
                 m_bSwingSound = true;
             }
         }

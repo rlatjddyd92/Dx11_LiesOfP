@@ -355,14 +355,14 @@ HRESULT CCarcassNormal::Ready_Weapon()
 	CBounding_OBB::BOUNDING_OBB_DESC			ColliderOBBDesc_Obj{};
 
 	ColliderOBBDesc_Obj.vAngles = _float3(0.f, 0.f, 0.f);
-	ColliderOBBDesc_Obj.vCenter = _float3(0.f, 0.f, 0.f);
-	ColliderOBBDesc_Obj.vExtents = _float3(0.3f, 0.2f, 0.2f);
+	ColliderOBBDesc_Obj.vCenter = _float3(0.2f, 0.f, 0.f);
+	ColliderOBBDesc_Obj.vExtents = _float3(0.6f, 0.2f, 0.2f);
 
 	CColliderObject::COLIDEROBJECT_DESC Desc{};
 
 	Desc.pBoundingDesc = &ColliderOBBDesc_Obj;
 	Desc.eType = CCollider::TYPE_OBB;
-	Desc.pSocketBoneMatrix = m_pModelCom->Get_BoneCombindTransformationMatrix_Ptr(m_pModelCom->Get_UFBIndices(UFB_HAND_LEFT));
+	Desc.pSocketBoneMatrix = m_pModelCom->Get_BoneCombindTransformationMatrix_Ptr(m_pModelCom->Get_UFBIndices(UFB_HAND_LEFT) - 1);
 	Desc.pParentWorldMatrix = m_pTransformCom->Get_WorldMatrix_Ptr();
 	Desc.pSocketBoneMatrix2 = m_pTransformCom->Get_WorldMatrix_Ptr();
 	Desc.fDamageAmount = 80.f;
@@ -370,12 +370,12 @@ HRESULT CCarcassNormal::Ready_Weapon()
 	m_pColliderObject[TYPE_HAND_LEFT] = dynamic_cast<CColliderObject*>(m_pGameInstance->Clone_GameObject(TEXT("Prototype_GameObject_ColliderObj"), &Desc));
 
 	ColliderOBBDesc_Obj.vAngles = _float3(0.f, 0.f, 0.f);
-	ColliderOBBDesc_Obj.vCenter = _float3(0.f, 0.f, 0.f);
-	ColliderOBBDesc_Obj.vExtents = _float3(0.3f, 0.2f, 0.2f);
+	ColliderOBBDesc_Obj.vCenter = _float3(0.2f, 0.f, 0.f);
+	ColliderOBBDesc_Obj.vExtents = _float3(0.6f, 0.2f, 0.2f);
 
 	Desc.pBoundingDesc = &ColliderOBBDesc_Obj;
 	Desc.eType = CCollider::TYPE_OBB;
-	Desc.pSocketBoneMatrix = m_pModelCom->Get_BoneCombindTransformationMatrix_Ptr(m_pModelCom->Get_UFBIndices(UFB_HAND_RIGHT));
+	Desc.pSocketBoneMatrix = m_pModelCom->Get_BoneCombindTransformationMatrix_Ptr(m_pModelCom->Get_UFBIndices(UFB_HAND_RIGHT) - 1);
 	Desc.pParentWorldMatrix = m_pTransformCom->Get_WorldMatrix_Ptr();
 	Desc.pSocketBoneMatrix2 = m_pTransformCom->Get_WorldMatrix_Ptr();
 	Desc.fDamageAmount = 80.f;

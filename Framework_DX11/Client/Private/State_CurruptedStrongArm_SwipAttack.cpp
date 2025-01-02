@@ -113,7 +113,7 @@ void CState_CurruptedStrongArm_SwipAttack::Sound_Check(_double CurTrackPos)
         if (CurTrackPos >= 50.f && CurTrackPos <= 68.f)
         {
             m_pMonster->Play_Sound(CPawn::PAWN_SOUND_EFFECT1, TEXT("SE_NPC_SK_WS_Heavy_03.wav"), false);
-            m_pMonster->Play_Sound(CPawn::PAWN_SOUND_EFFECT2, TEXT("SE_NPC_SK_WS_BroadSword_Stab_01.wav"), false);
+            m_pMonster->Play_Sound(CPawn::PAWN_SOUND_EFFECT2, TEXT("SE_PC_SK_WS_Sword_1H_Spear_03.wav"), false);
             m_bSwingSound = true;
         }
     }
@@ -122,7 +122,7 @@ void CState_CurruptedStrongArm_SwipAttack::Sound_Check(_double CurTrackPos)
     {
         if (CurTrackPos >= 62.f && CurTrackPos <= 75.f)
         {
-            m_pMonster->Play_Sound(CPawn::PAWN_SOUND_EFFECT2, TEXT("SE_NPC_SK_WS_BroadSword_Stab_01.wav"), false);
+            m_pMonster->Play_Sound(CPawn::PAWN_SOUND_EFFECT2, TEXT("SE_PC_SK_WS_Sword_1H_Spear_03.wav"), false);
             m_bTentaSound = true;
         }
     }
@@ -132,7 +132,7 @@ void CState_CurruptedStrongArm_SwipAttack::Sound_Check(_double CurTrackPos)
     {
         if (CurTrackPos >= 65.f && CurTrackPos <= 78.f)
         {
-            m_pMonster->Play_Sound(CPawn::PAWN_SOUND_EFFECT2, TEXT("SE_NPC_SK_WS_BroadSword_Stab_01.wav"), false);
+            m_pMonster->Play_Sound(CPawn::PAWN_SOUND_EFFECT2, TEXT("SE_PC_SK_WS_Sword_1H_Spear_03.wav"), false);
             m_bTentaSound_2 = true;
         }
     }

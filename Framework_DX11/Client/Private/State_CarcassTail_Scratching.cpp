@@ -90,7 +90,7 @@ void CState_CarcassTail_Scratching::Sound_Check(_double CurTrackPos)
     {
         if ((CurTrackPos >= 85.f && CurTrackPos <= 115.f))
         {
-            m_pMonster->Play_Sound(CPawn::PAWN_SOUND_EFFECT1, TEXT("SE_NPC_SK_WS_Nail_03.wav"), false);
+            m_pMonster->Play_Sound(CPawn::PAWN_SOUND_EFFECT1, TEXT("SE_NPC_CarcassBear_SK_WS_Claw_06.wav"), false);
             m_bSwingSound = true;
         }
     }
