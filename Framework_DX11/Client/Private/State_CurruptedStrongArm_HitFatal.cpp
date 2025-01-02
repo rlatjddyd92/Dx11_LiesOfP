@@ -21,7 +21,6 @@ HRESULT CState_CurruptedStrongArm_HitFatal::Initialize(_uint iStateNum, void* pA
 HRESULT CState_CurruptedStrongArm_HitFatal::Start_State(void* pArg)
 {
     m_iAnimTrack = 0;
-
     m_pMonster->Change_Animation(AN_FATAL_START, false, 0.f);
 
     return S_OK;
@@ -42,7 +41,7 @@ void CState_CurruptedStrongArm_HitFatal::Update(_float fTimeDelta)
     case 1:
         if (End_Check())
         {
-            m_pMonster->Change_State(CCurruptedStrongArm_Puppet::GROGY);
+            m_pMonster->Change_State(CCurruptedStrongArm_Puppet::IDLE);
         }
         break;
 

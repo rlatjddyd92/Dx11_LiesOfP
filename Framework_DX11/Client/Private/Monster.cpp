@@ -44,7 +44,12 @@ HRESULT CMonster::Initialize(void* pArg)
 
 void CMonster::Priority_Update(_float fTimeDelta)
 {
-	int a = 10;
+	Set_UpTargetPos();
+	if (m_eStat.fGrogyPoint >= m_eStat.fMaxGrogyPoint)
+	{
+		m_eStat.bWeakness = true;
+	}
+	
 }
 
 void CMonster::Update(_float fTimeDelta)
@@ -213,6 +218,13 @@ _bool CMonster::Calc_DamageGain(_float fAtkDmg, _Vec3 vHitPos, _uint iHitType, _
 		if (!m_bDiscover)
 		{
 			m_pFsmCom->Change_State(KNOCKBACK);
+		}
+	}
+	else
+	{
+		if (iAttackStrength == ATTACK_STRENGTH::ATK_LAST)
+		{
+			m_bFatalAttacked = true;
 		}
 	}
 

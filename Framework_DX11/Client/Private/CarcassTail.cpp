@@ -91,7 +91,7 @@ HRESULT CCarcassTail::Initialize(void* pArg)
 
 void CCarcassTail::Priority_Update(_float fTimeDelta)
 {
-	__super::Set_UpTargetPos();
+	__super::Priority_Update(fTimeDelta);
 
 	if (!m_bDieState && m_eStat.fHp <= 0.f)
 	{

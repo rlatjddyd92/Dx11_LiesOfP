@@ -80,6 +80,7 @@ public:
 	virtual void		SetUp_Dead() {};
 	
 	virtual void		Start_Fatal();
+	_bool*				Get_bFatalAttacked() { return &m_bFatalAttacked; }
 
 	_bool*				Get_bDicover() { return &m_bDiscover; };
 	_Vec3				Get_Look() { return XMVector3Normalize(m_pTransformCom->Get_State(CTransform::STATE_LOOK)); }
@@ -94,6 +95,8 @@ protected:
 	_bool		m_bEndAnim = { false };
 	_bool		m_bResetRootMove = { true };
 	_bool		m_bRootMoveCtr = { true };
+
+	_bool		m_bFatalAttacked = { false };
 
 	_float		m_fPrevTrackPos{};
 

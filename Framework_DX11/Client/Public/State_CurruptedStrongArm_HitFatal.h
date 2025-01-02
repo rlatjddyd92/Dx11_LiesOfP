@@ -38,6 +38,8 @@ private:
 
     _int                m_iAnimTrack = {};
 
+    _bool*              m_pFatalAttacked = { nullptr };
+
 private:
     _bool               End_Check();
 
