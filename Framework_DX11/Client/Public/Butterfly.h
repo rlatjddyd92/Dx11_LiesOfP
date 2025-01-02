@@ -35,6 +35,8 @@ private:
 
 	_Vec3 m_vNewPos = {};
 
+	_float           m_fEmissiveMask = {};
+
 private:
 	HRESULT Ready_Components(OBJECT_DEFAULT_DESC* pDesc);
 

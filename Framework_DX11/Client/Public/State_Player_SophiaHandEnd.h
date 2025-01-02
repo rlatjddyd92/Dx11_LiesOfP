@@ -30,6 +30,7 @@ private:
     class CSophia*      m_pSophia = { nullptr };
 
     _bool               m_bMakeButterfly = { false };
+    _bool               m_bMakeButterfly2 = { false };
 private:
     _bool               End_Check();
 

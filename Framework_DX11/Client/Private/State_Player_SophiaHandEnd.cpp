@@ -50,10 +50,17 @@ void CState_Player_SophiaHandEnd::Update(_float fTimeDelta)
         m_pPlayer->Change_State(CPlayer::OH_IDLE);
     }
 
-    if (m_bMakeButterfly == false && iFrame >= 5)
+    if (m_bMakeButterfly == false && iFrame >= 1)
     {
         m_bMakeButterfly = true;
         m_pGameInstance->Add_CloneObject_ToLayer(LEVEL_GAMEPLAY, TEXT("Layer_Butterfly"), TEXT("Prototype_GameObject_Butterfly"));
+    }
+    if (m_bMakeButterfly2 == false && iFrame >= 20)
+    {
+        m_bMakeButterfly2 = true;
+        m_pGameInstance->Add_CloneObject_ToLayer(LEVEL_GAMEPLAY, TEXT("Layer_Butterfly"), TEXT("Prototype_GameObject_Butterfly"));
+        CGameObject* pButterfly = m_pGameInstance->Find_Object(LEVEL_GAMEPLAY, TEXT("Layer_Butterfly"), 1);
+        pButterfly->Get_Transform()->Rotation(0.f, 155.f, 10.f);
     }
 
 }
