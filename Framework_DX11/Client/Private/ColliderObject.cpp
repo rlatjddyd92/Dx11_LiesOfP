@@ -53,11 +53,9 @@ void CColliderObject::Late_Update(_float fTimeDelta)
 	//if (!m_pColliderCom->IsActive())
 	//	return;
 
-	_float4x4 WorldMatrix;
+	XMStoreFloat4x4(&m_WorldMatrix, (*m_pSocketMatrix) * (*m_pParentMatrix));
 
-	XMStoreFloat4x4(&WorldMatrix, (*m_pSocketMatrix) * (*m_pParentMatrix));
-
-	m_pColliderCom->Update(&WorldMatrix);
+	m_pColliderCom->Update(&m_WorldMatrix);
 
 	if (nullptr != m_pColliderCom)
 		m_pGameInstance->Add_ColliderList(m_pColliderCom);
@@ -93,7 +91,7 @@ void CColliderObject::OnCollisionEnter(CGameObject* pOther)
 		if (!bOverlapCheck)
 		{
 			m_DamagedObjects.push_back(pOther);
-			pOther->Calc_DamageGain(m_fDamageAmount * m_fDamageRatio, _Vec3{}, m_iHitType, m_iAtkStrength, (CGameObject*)m_pOwner);
+			pOther->Calc_DamageGain(m_fDamageAmount * m_fDamageRatio, m_WorldMatrix.Translation(), m_iHitType, m_iAtkStrength, (CGameObject*)m_pOwner);
 		}
 	}
 }

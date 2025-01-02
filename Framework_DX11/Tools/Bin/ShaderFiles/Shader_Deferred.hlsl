@@ -241,11 +241,11 @@ PS_OUT_LIGHT PS_MAIN_LIGHT_DIRECTIONAL_PBR(PS_IN In)
     if (g_isShadow)
     {
         float fShadowPower = 1.f;
-        if (fViewZ <= 10.f)
+        if (fViewZ <= 7.f)
         {
             fShadowPower = ComputeShadow(vPosition, 0, vNormalDesc);
         }
-        else if (fViewZ > 10.f && fViewZ <= 25.f)
+        else if (fViewZ > 7.f && fViewZ <= 25.f)
         {
             fShadowPower = ComputeShadow(vPosition, 1, vNormalDesc);
         }

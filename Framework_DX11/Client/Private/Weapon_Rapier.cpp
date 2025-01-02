@@ -159,11 +159,13 @@ void CWeapon_Rapier::OnCollisionEnter(CGameObject* pOther)
 
 				if (m_eAttackStrength == ATK_STRONG)
 				{
+					m_pPlayer->Get_Camera()->Start_PosShake(0.45f, 0.2f);
 					CEffect_Manager::Get_Instance()->Add_Effect_ToLayer(LEVEL_GAMEPLAY, TEXT("Player_Attack_Step_FatalAttack_1"),
 						(_Vec3)pMonster->Calc_CenterPos(), vPlayerLook);
 				}
-				else if (m_eAttackStrength == ATK_STRONG)
+				else if (m_eAttackStrength == ATK_LAST)
 				{
+					m_pPlayer->Get_Camera()->Start_PosShake(0.6f, 0.25f);
 					CEffect_Manager::Get_Instance()->Add_Effect_ToLayer(LEVEL_GAMEPLAY, TEXT("Player_Attack_Step_FatalAttack_2"),
 						(_Vec3)pMonster->Calc_CenterPos(), vPlayerLook);
 				}

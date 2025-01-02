@@ -182,11 +182,13 @@ void CWeapon_Scissor::OnCollisionEnter(CGameObject* pOther)
 
 				if (m_eAttackStrength == ATK_STRONG)
 				{
+					m_pPlayer->Get_Camera()->Start_PosShake(0.45f, 0.2f);
 					CEffect_Manager::Get_Instance()->Add_Effect_ToLayer(LEVEL_GAMEPLAY, TEXT("Player_Attack_Slash_FatalAttak_1"),
 						(_Vec3)pMonster->Calc_CenterPos(), m_vAttackDir);
 				}
 				else if (m_eAttackStrength == ATK_LAST)
 				{
+					m_pPlayer->Get_Camera()->Start_PosShake(0.6f, 0.25f);
 					CEffect_Manager::Get_Instance()->Add_Effect_ToLayer(LEVEL_GAMEPLAY, TEXT("Player_Attack_Slash_FatalAttak_2"),
 						(_Vec3)pMonster->Calc_CenterPos(), m_vAttackDir);
 				}
@@ -522,6 +524,6 @@ void CWeapon_Scissor::Free()
 
 	for (_uint i = 0; i < 2; ++i)
 	{
-			Safe_Release(m_pScissor_Sperate[i]);
+		Safe_Release(m_pScissor_Sperate[i]);
 	}
 }

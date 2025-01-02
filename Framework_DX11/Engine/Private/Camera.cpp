@@ -144,7 +144,7 @@ void CCamera::Calculat_CascadeFrustum()
 	_float fTanHalfHFov = fTanHalfVFov * m_fAspect;
 
 	m_fCascadeFarPlanes[0] = m_fNear;
-	m_fCascadeFarPlanes[1] = 10.f;
+	m_fCascadeFarPlanes[1] = 7.f;
 	m_fCascadeFarPlanes[2] = 25.f;
 	m_fCascadeFarPlanes[3] = 200.f;
 
