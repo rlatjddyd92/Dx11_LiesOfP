@@ -1,6 +1,8 @@
 #include "stdafx.h"
 #include "Butterfly.h"
 #include "GameInstance.h"
+#include "Effect_Manager.h"
+#include "Effect_Container.h"
 
 CButterfly::CButterfly(ID3D11Device* pDevice, ID3D11DeviceContext* pContext)
     : CGameObject{ pDevice, pContext }
@@ -39,6 +41,9 @@ HRESULT CButterfly::Initialize(void* pArg)
 	m_pTransformCom->Set_Scaled(0.15f, 0.15f, 0.15f);
 	m_pTransformCom->Rotation(0.f, 155.f, 0.f);
 
+	m_Effect = CEffect_Manager::Get_Instance()->Clone_Effect(TEXT("ButterFly_Fly"), m_pTransformCom->Get_WorldMatrix_Ptr(), nullptr, _Vec3(0.f, 0.f, 0.0f));
+	m_Effect->Set_Loop(true);
+
 	return S_OK;
 }
 
@@ -52,49 +57,50 @@ void CButterfly::Priority_Update(_float fTimeDelta)
 		m_vNewPos = vNewPos;
 		m_vNewPos.x = m_vNewPos.x + 0.65f + m_vPosOffset.x;
 		m_vNewPos.y = m_vNewPos.y + 1.67f + m_vPosOffset.y;
-		m_vNewPos.z = m_vNewPos.z - 0.2f + m_vPosOffset.y;
+		m_vNewPos.z = m_vNewPos.z - 0.2f + m_vPosOffset.z;
 		m_pTransformCom->Set_State(CTransform::STATE_POSITION, m_vNewPos);
 	}
+	m_Effect->Priority_Update(fTimeDelta);
 }
 
 void CButterfly::Update(_float fTimeDelta)
 {
 	m_pModelCom->Play_Animation(fTimeDelta);
+	m_Effect->Update(fTimeDelta);
+	m_pTransformCom->Go_Right(fTimeDelta, 0.3f);
 
-	//m_pTransformCom->Go_Right(fTimeDelta, 0.3f);
+	//static _float fX = m_vNewPos.x;
+	//static _float fY = m_vNewPos.y;
+	//static _float fZ = m_vNewPos.z;
 
-	static _float fX = m_vNewPos.x;
-	static _float fY = m_vNewPos.y;
-	static _float fZ = m_vNewPos.z;
+	//if (KEY_TAP(KEY::NUM1))
+	//{
+	//	fX -= 0.05f;
+	//}
+	//else if (KEY_TAP(KEY::NUM4))
+	//{
+	//	fX += 0.05f;
+	//}
 
-	if (KEY_TAP(KEY::NUM1))
-	{
-		fX -= 0.05f;
-	}
-	else if (KEY_TAP(KEY::NUM4))
-	{
-		fX += 0.05f;
-	}
+	//if (KEY_TAP(KEY::NUM2))
+	//{
+	//	fY -= 0.05f;
+	//}
+	//else if (KEY_TAP(KEY::NUM5))
+	//{
+	//	fY += 0.05f;
+	//}
 
-	if (KEY_TAP(KEY::NUM2))
-	{
-		fY -= 0.05f;
-	}
-	else if (KEY_TAP(KEY::NUM5))
-	{
-		fY += 0.05f;
-	}
+	//if (KEY_TAP(KEY::NUM3))
+	//{
+	//	fZ -= 0.05f;
+	//}
+	//else if (KEY_TAP(KEY::NUM6))
+	//{
+	//	fZ += 0.05f;
+	//}
 
-	if (KEY_TAP(KEY::NUM3))
-	{
-		fZ -= 0.05f;
-	}
-	else if (KEY_TAP(KEY::NUM6))
-	{
-		fZ += 0.05f;
-	}
-
-	m_pTransformCom->Set_State(CTransform::STATE_POSITION, _Vec3(fX, fY, fZ));
+	//m_pTransformCom->Set_State(CTransform::STATE_POSITION, _Vec3(fX, fY, fZ));
 
 }
 
@@ -102,6 +108,7 @@ void CButterfly::Late_Update(_float fTimeDelta)
 {
 	__super::Late_Update(fTimeDelta);
 	m_pGameInstance->Add_RenderObject(CRenderer::RG_NONBLEND, this);
+	m_Effect->Late_Update(fTimeDelta);
 }
 
 HRESULT CButterfly::Render()
@@ -211,6 +218,12 @@ CGameObject* CButterfly::Clone(void* pArg)
 void CButterfly::Free()
 {
 	__super::Free();
+
+	if (true == m_isCloned)
+	{
+		m_Effect->Set_Cloned(false);
+		Safe_Release(m_Effect);
+	}
 	Safe_Release(m_pShaderCom);
 	Safe_Release(m_pModelCom);
 }
