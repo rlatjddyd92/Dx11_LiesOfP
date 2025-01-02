@@ -59,6 +59,9 @@ HRESULT CRebornerBigA::Initialize(void* pArg)
 	if (FAILED(Ready_Weapon()))
 		return E_FAIL;
 
+	if (FAILED(Ready_Effect()))
+		return E_FAIL;
+
 	m_pNavigationCom->Move_to_Cell(m_pRigidBodyCom, pDefaultDesc->iCurrentCellNum);
 	m_iInitRoomNum = m_pNavigationCom->Get_Cell_AreaNum(pDefaultDesc->iCurrentCellNum);
 
@@ -111,6 +114,12 @@ void CRebornerBigA::Priority_Update(_float fTimeDelta)
 		m_pFsmCom->Change_State(DIE);
 	}
 	m_pWeapon->Priority_Update(fTimeDelta);
+
+	if (!m_pSwingEffect->Get_Dead())
+	{
+		m_pSwingEffect->Priority_Update(fTimeDelta);
+	}
+
 }
 
 void CRebornerBigA::Update(_float fTimeDelta)
@@ -136,6 +145,11 @@ void CRebornerBigA::Update(_float fTimeDelta)
 		m_pSoundCom[i]->Update(fTimeDelta);
 	}
 
+	if (!m_pSwingEffect->Get_Dead())
+	{
+		m_pSwingEffect->Update(fTimeDelta);
+	}
+
 	m_pGameInstance->Add_ColliderList(m_pColliderCom);
 	m_pWeapon->Update(fTimeDelta);
 }
@@ -151,6 +165,10 @@ void CRebornerBigA::Late_Update(_float fTimeDelta)
 			m_pRigidBodyCom->Update(fTimeDelta);
 			m_pGameInstance->Add_RenderObject(CRenderer::RG_NONBLEND, this);
 
+			if (!m_pSwingEffect->Get_Dead())
+			{
+				m_pSwingEffect->Late_Update(fTimeDelta);
+			}
 
 			m_pGameInstance->Add_ColliderList(m_pColliderCom);
 			for (_int i = 0; i < CT_END - 1; ++i)
@@ -474,7 +492,7 @@ CPawn* CRebornerBigA::Clone(void* pArg)
 
 void CRebornerBigA::Free()
 {
-	for (_uint i = 0; i < CT_END; ++i)
+	for (_uint i = 0; i < CT_END - 1; ++i)
 	{
 		Safe_Release(m_EXCollider[i]);
 	}

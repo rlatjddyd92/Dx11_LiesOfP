@@ -220,12 +220,10 @@ _bool CMonster::Calc_DamageGain(_float fAtkDmg, _Vec3 vHitPos, _uint iHitType, _
 			m_pFsmCom->Change_State(KNOCKBACK);
 		}
 	}
-	else
+	
+	if (iAttackStrength == ATTACK_STRENGTH::ATK_LAST)
 	{
-		if (iAttackStrength == ATTACK_STRENGTH::ATK_LAST)
-		{
-			m_bFatalAttacked = true;
-		}
+		m_bFatalAttacked = true;
 	}
 
 	if (!m_bDiscover)

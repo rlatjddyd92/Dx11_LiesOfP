@@ -89,6 +89,8 @@ void CState_RebornerBigA_GuardSting::Update(_float fTimeDelta)
 
 
     Collider_Check(CurTrackPos);
+    Sound_Check(CurTrackPos);
+    Effect_Check(CurTrackPos);
 
 }
 

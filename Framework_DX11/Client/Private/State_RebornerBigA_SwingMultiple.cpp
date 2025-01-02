@@ -88,6 +88,7 @@ void CState_RebornerBigA_SwingMultiple::Update(_float fTimeDelta)
 
     Collider_Check(CurTrackPos);
     Sound_Check(CurTrackPos);
+    Effect_Check(CurTrackPos);
 
 }
 
