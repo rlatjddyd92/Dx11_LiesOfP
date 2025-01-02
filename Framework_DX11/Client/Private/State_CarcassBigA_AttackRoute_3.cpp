@@ -156,6 +156,15 @@ void CState_CarcassBigA_AttackRoute_3::Sound_Check(_double CurTrackPos)
                 m_bSwingSound = true;
             }
         }
+
+        if (!m_bStampSound)
+        {
+            if (CurTrackPos >= 70.f && CurTrackPos <= 75.f)
+            {
+                m_pMonster->Play_Sound(CPawn::PAWN_SOUND_EFFECT2, TEXT("SE_NPC_Carcass_OneArmed_SK_Impact_Ground_01.wav"), false);
+                m_bStampSound = true;
+            }
+        }
     }
     else
     {

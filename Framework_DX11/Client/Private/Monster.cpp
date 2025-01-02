@@ -217,6 +217,11 @@ _bool CMonster::Calc_DamageGain(_float fAtkDmg, _Vec3 vHitPos, _uint iHitType, _
 	return true;
 }
 
+void CMonster::Start_Fatal()
+{
+	m_pFsmCom->Change_State(HITFATAL);
+}
+
 HRESULT CMonster::Ready_Components()
 {
 	if (FAILED(__super::Ready_Components()))

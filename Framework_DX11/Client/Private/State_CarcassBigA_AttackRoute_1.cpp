@@ -26,7 +26,7 @@ HRESULT CState_CarcassBigA_AttackRoute_1::Start_State(void* pArg)
     m_iRouteTrack = 0;
     m_isDelayed = false;
     m_bSwingSound = false;
-
+    m_bStampSound = false;
 
     return S_OK;
 }
@@ -165,6 +165,15 @@ void CState_CarcassBigA_AttackRoute_1::Sound_Check(_double CurTrackPos)
             {
                 m_pMonster->Play_Sound(CPawn::PAWN_SOUND_EFFECT1, TEXT("SE_NPC_Carcass_OneArmed_SK_WS_Blunt_01.wav"), false);
                 m_bSwingSound = true;
+            }
+        }
+
+        if (!m_bStampSound)
+        {
+            if (CurTrackPos >= 140.f && CurTrackPos <= 145.f)
+            {
+                m_pMonster->Play_Sound(CPawn::PAWN_SOUND_EFFECT2, TEXT("SE_NPC_Carcass_OneArmed_SK_Impact_Ground_01.wav"), false);
+                m_bStampSound = true;
             }
         }
     }
