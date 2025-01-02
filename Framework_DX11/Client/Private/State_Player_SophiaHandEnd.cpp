@@ -89,8 +89,8 @@ void CState_Player_SophiaHandEnd::Update(_float fTimeDelta)
 
         m_pGameInstance->Add_CloneObject_ToLayer(LEVEL_GAMEPLAY, TEXT("Layer_Butterfly"), TEXT("Prototype_GameObject_Butterfly"));
         CButterfly* pButterfly4 = static_cast<CButterfly*>(m_pGameInstance->Find_Object(LEVEL_GAMEPLAY, TEXT("Layer_Butterfly"), 6));
-        pButterfly3->Get_Transform()->Rotation(0.f, 155.f, 15.f);
-        pButterfly4->Set_Offset(-0.3f, 0.f, 0.85f);
+        pButterfly3->Get_Transform()->Rotation(0.f, 155.f, 20.f);
+        pButterfly4->Set_Offset(-0.3f, 0.2f, 0.85f);
     }
 
 }
