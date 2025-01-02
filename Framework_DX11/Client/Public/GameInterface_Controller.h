@@ -177,6 +177,8 @@ public: // 외부에서 매니저 접근
 	void Input_Achievment_Data(_int iIndex, _int Data) { m_pUIManager->Input_Achievment_Data(iIndex, Data); }
 
 	// 튜토리얼
+	void Set_PlayerStateChange() { m_pUIManager->Set_PlayerStateChange(); }
+
 	void Start_Tutorial() { return m_pUIManager->Start_Tutorial(); }
 	void End_Tutorial() { return m_pUIManager->End_Tutorial(); }
 
@@ -186,6 +188,9 @@ public: // 외부에서 매니저 접근
 
 	void Input_TrainingMonsterPointer_Attack(class CGameObject* pPoiter) { m_pUIManager->Input_TrainingMonsterPointer_Attack(pPoiter); }
 	void Input_TrainingMonsterPointer_Normal(class CGameObject* pPoiter) { m_pUIManager->Input_TrainingMonsterPointer_Normal(pPoiter); }
+
+	// 게임 종료 
+	void Exit_Program() { m_pUIManager->Exit_Program(); }
 
 #pragma endregion
 

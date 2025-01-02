@@ -222,9 +222,6 @@ protected:
 
 	_int m_iDesc_Line = 0;
 
-	// 종료 변수 
-	_float m_fExit_Time = -1.f;
-
 	// 그래픽 효과 조절용 
 	_bool m_bGraphic[6] = { true, true, true, false, true, true, };
 

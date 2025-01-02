@@ -119,6 +119,13 @@ HRESULT CUIManager::Initialize(void* pArg)
 
 void CUIManager::Priority_Update(_float fTimeDelta)
 {
+	if (m_fExit_Time > 0.f)
+	{
+		m_fExit_Time -= fTimeDelta;
+		if (m_fExit_Time <= 0.f)
+			DestroyWindow(g_hWnd);
+	}
+
 	if (KEY_TAP(KEY::P))
 		m_pUIPage_Tutorial->OpenAction();
 	else if (KEY_TAP(KEY::L))

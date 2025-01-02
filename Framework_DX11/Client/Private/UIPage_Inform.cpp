@@ -238,6 +238,9 @@ void CUIPage_Inform::Update_Inform(_float fTimeDelta)
 
 void CUIPage_Inform::Update_Heart(_float fTimeDelta)
 {
+	if (m_vLifeTime_Heart.z == 0.f)
+		return;
+
 	_float fRatio = Check_Ratio(&m_vLifeTime_Heart, fTimeDelta);
 
 	if (fRatio == -1.f)
@@ -245,6 +248,7 @@ void CUIPage_Inform::Update_Heart(_float fTimeDelta)
 		for (_int i = _int(PART_GROUP::INFORM_Heart); i <= _int(PART_GROUP::INFORM_Text_Front); ++i)
 			m_vecPart[i]->bRender = false;
 
+		GET_GAMEINTERFACE->Exit_Program();
 	}
 	else
 	{

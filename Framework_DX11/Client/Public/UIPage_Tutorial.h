@@ -87,6 +87,10 @@ public:
 	void Input_TrainingMonsterPointer_Attack(class CGameObject* pPoiter);
 	void Input_TrainingMonsterPointer_Normal(class CGameObject* pPoiter);
 
+	// 유저 행동 변경 
+	void Set_PlayerStateChange() { m_bPlayer_StateChanged = true; }
+
+
 public:
 	const vector<UPART*>& Get_UIPartInfo() { return m_vecPart; }
 	virtual HRESULT Ready_UIPart_Group_Control() override;
@@ -100,6 +104,8 @@ protected:
 
 
 	void Update_Tutorial();
+
+	
 
 	// 단계 넘어가기 
 	void Next_Chapter();
@@ -155,6 +161,11 @@ protected:
 	_int m_iNow_Index = 0;
 
 	_float m_fKeyHeight = 30.f;
+
+	// 유저 동작 확인용 
+	_bool m_bPlayer_StateChanged = false;
+
+
 
 	// 우클릭 강공격용
 	_Vec2 m_vHoldTime_RButton = { 0.f,2.f };

@@ -79,13 +79,6 @@ void CUIPage_Option::Update(_float fTimeDelta)
 
 void CUIPage_Option::Late_Update(_float fTimeDelta)
 {
-	if (m_fExit_Time >= 0.f)
-	{
-		m_fExit_Time -= fTimeDelta;
-		if (m_fExit_Time <= 0.f)
-			DestroyWindow(g_hWnd);
-	}
-
 	if (!m_bRender) 
 		return;
 
@@ -547,7 +540,7 @@ void CUIPage_Option::Update_Line(_float fTimeDelta)
 						if (m_iNow_Line == 0)
 						{
 							if ((bMouse) && (KEY_TAP(KEY::LBUTTON)))
-								Exit_Program();
+								GET_GAMEINTERFACE->Exit_Program();
 						}
 				}
 			}
@@ -950,13 +943,6 @@ void CUIPage_Option::Update_Variable()
 	if (m_pGameInstance->Get_IsOnShadow() != m_bGraphic[5])
 		m_pGameInstance->Toggle_Shadow();
 }
-
-void CUIPage_Option::Exit_Program()
-{
-	m_fExit_Time = 5.f;
-	GET_GAMEINTERFACE->Fade_Out(TEXT("감사합니다!"), TEXT("145기 : 정승현, 고준호, 김성용, 양우송, 이봉준"), _Vec3(0.f, 0.f, 0.f), 1.f);
-}
-
 
 CUIPage_Option* CUIPage_Option::Create(ID3D11Device* pDevice, ID3D11DeviceContext* pContext)
 {

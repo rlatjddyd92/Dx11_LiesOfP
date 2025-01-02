@@ -116,9 +116,6 @@ HRESULT CUIRender_Batching::Render()
 
 			m_pTransformCom->Set_Scaled(pNow->vSize.x * fSizeX_Adjust, pNow->vSize.y * fSizeY_Adjust, 1.f);
 
-			if ((!pNow->bIsItem) && (pNow->iTexture == 121))
-				m_pTransformCom->Set_Scaled(pNow->vSize.x * fSizeX_Adjust * 5.f, pNow->vSize.y * fSizeY_Adjust * 5.f, 1.f);
-
 			if (m_eNow_Area == SCROLL_AREA::SCROLL_NONE)
 			{
 				m_pTransformCom->Set_State(CTransform::STATE_POSITION,

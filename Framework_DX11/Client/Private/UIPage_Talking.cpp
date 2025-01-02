@@ -190,6 +190,16 @@ void CUIPage_Talking::Update_Script(_float fTimeDelta)
 			if (m_vecNpc_ScriptInfo[_int(m_eNowNpc)]->Add_ScriptNum() == false)
 			{
 				CloseAction();
+
+				if (m_eNowNpc != NPC_SCRIPT::SCR_ZEMINI_SECOND)
+					GET_GAMEINTERFACE->UIPart_On();
+				else
+				{
+					GET_GAMEINTERFACE->Show_Heart(TEXT("심장이 고동친다."));
+					
+				}
+					
+
 				return;
 			}
 	}

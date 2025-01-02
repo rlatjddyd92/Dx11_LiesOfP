@@ -286,6 +286,8 @@ public:
 	void Set_Now_Interact_Stargezer(_int iNaviIndex) { return m_pUIPage_Telepot->Set_Now_Interact_Stargezer(iNaviIndex); }
 
 	// 튜토리얼
+	void Set_PlayerStateChange() { m_pUIPage_Tutorial->Set_PlayerStateChange(); }
+
 	void Start_Tutorial() 
 	{ 
 		m_pUIPage_Tutorial->OpenAction();
@@ -303,6 +305,13 @@ public:
 
 	void Input_TrainingMonsterPointer_Attack(class CGameObject* pPoiter) { m_pUIPage_Tutorial->Input_TrainingMonsterPointer_Attack(pPoiter); }
 	void Input_TrainingMonsterPointer_Normal(class CGameObject* pPoiter) { m_pUIPage_Tutorial->Input_TrainingMonsterPointer_Normal(pPoiter); }
+
+	// 게임 종료
+	void Exit_Program()
+	{
+		m_fExit_Time = 5.f;
+		Fade_Out(TEXT("감사합니다!"), TEXT("145기 : 정승현, 고준호, 김성용, 양우송, 이봉준"), _Vec3(0.f, 0.f, 0.f), 1.f);
+	}
 
 #pragma endregion
 
@@ -461,6 +470,10 @@ private:
 	_float m_fVolume_Origin = 0.f;
 
 	_int m_iReservated_Region = -1;
+
+	// 게임 종료 
+	_float m_fExit_Time = 0.f;
+
 
 	// test code
 #ifdef _DEBUG
