@@ -268,7 +268,7 @@ void CUIPage_Tutorial::Check_Mission_Complete(_float fTimeDelta)
 	{
 		if (iIndex >= m_vecTutorial_MissionData.size())
 		{
-			CloseAction();
+			Next_Chapter();
 			break;
 		}
 		else if (m_vecTutorial_MissionData[iIndex]->iCapterIndex != m_iNowChapter)
@@ -712,6 +712,7 @@ void CUIPage_Tutorial::Next_Chapter()
 	else
 	{
 		GET_GAMEINTERFACE->Input_Achievment_Data(16, 1);
+		CloseAction();
 		// 여기에 종료 팝업 필요
 	}
 }

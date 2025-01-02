@@ -382,8 +382,8 @@ void CUIPage_Talking::Update_Select(_float fTimeDelta)
 		for (_int i = _int(PART_GROUP::TALKING_Select_Clock_Center); i <= _int(PART_GROUP::TALKING_Select_Right_Text); ++i)
 			m_vecPart[i]->bRender = false;
 
-		GET_GAMEINTERFACE->Input_Achievment_Data(7, 1);
-		GET_GAMEINTERFACE->Show_Heart(TEXT("심장이 고동친다."));
+		if (m_eNowNpc == NPC_SCRIPT::SCR_MANUS)
+			GET_GAMEINTERFACE->Input_Achievment_Data(7, 1);
 	}
 
 

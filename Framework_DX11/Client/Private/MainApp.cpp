@@ -61,49 +61,28 @@ void CMainApp::Update(_float fTimeDelta)
 	// UI 연출 관련 테스트 코드 
 	if (KEY_HOLD(KEY::CTRL))
 	{
-		if (KEY_TAP(KEY::NUM1))
-			GET_GAMEINTERFACE->Show_Script(TEXT("테스트"), TEXT("테스트"), 3.f);
-		if (KEY_TAP(KEY::NUM2))
-			GET_GAMEINTERFACE->Show_Script(TEXT("테스트테스트"), TEXT("테스트테스트"), 3.f);
 		if (KEY_TAP(KEY::NUM3))
-			GET_GAMEINTERFACE->Fade_Out(TEXT("FadeOut_Test"), TEXT("FadeOut_Desc"), { 0.f,0.f,0.f }, 2.f);
+			GET_GAMEINTERFACE->Show_Heart(TEXT("심장이 고동친다"));
 		if (KEY_TAP(KEY::NUM4))
-			GET_GAMEINTERFACE->Show_Script_Npc_Talking(NPC_SCRIPT::SCR_MANUS);
-		if (KEY_TAP(KEY::NUM5))
-			GET_GAMEINTERFACE->Show_Script_Npc_Talking(NPC_SCRIPT::SCR_SOPIA_DIE);
-		if (KEY_TAP(KEY::NUM6))
 			GET_GAMEINTERFACE->Show_Script_Npc_Talking(NPC_SCRIPT::SCR_ZEMINI);
+		if (KEY_TAP(KEY::NUM5))
+			GET_GAMEINTERFACE->Show_Script_Npc_Talking(NPC_SCRIPT::SCR_SOPIA_FIRST);
+		if (KEY_TAP(KEY::NUM6))
+			GET_GAMEINTERFACE->Show_Script_Npc_Talking(NPC_SCRIPT::SCR_MANUS);
 		if (KEY_TAP(KEY::NUM7))
-			GET_GAMEINTERFACE->Show_Script_Npc_Talking(NPC_SCRIPT::SCR_SOPIA_FIRST);
+			GET_GAMEINTERFACE->Show_Script_Npc_Talking(NPC_SCRIPT::SCR_SOPIA_DIE);
 		if (KEY_TAP(KEY::NUM8))
-			GET_GAMEINTERFACE->Show_Script_Npc_Talking(NPC_SCRIPT::SCR_SOPIA_FIRST);
+			GET_GAMEINTERFACE->Show_Script_Npc_Talking(NPC_SCRIPT::SCR_ZEMINI_SECOND);
 		if (KEY_TAP(KEY::NUM9))
 			GET_GAMEINTERFACE->UIPart_On();
 
-		if (GET_GAMEINTERFACE->IsTlaking_WithNPC() == true)
+		if (GET_GAMEINTERFACE->IsTalking_WithNPC() == true)
 			_int i = 0;
+		if (GET_GAMEINTERFACE->IsTalking_SelectPage() == true)
+			_int i = 0;
+
+		
 	}
-
-
-
-	if (KEY_HOLD(KEY::ALT))
-	{
-		if (KEY_TAP(KEY::F5))
-			GET_GAMEINTERFACE->Show_Region_Info(TEXT("모나스트리"), TEXT("흐린 날씨"));
-		if (KEY_TAP(KEY::F6))
-			GET_GAMEINTERFACE->Show_Inform(INFORM_MESSAGE::INFORM_BOSSKILL);
-		if (KEY_TAP(KEY::F7))
-			GET_GAMEINTERFACE->Show_Inform(INFORM_MESSAGE::INFORM_DEAD);
-		if (KEY_TAP(KEY::F8))
-			GET_GAMEINTERFACE->Show_Inform(INFORM_MESSAGE::INFORM_RECOVERY);
-		if (KEY_TAP(KEY::F9))
-			GET_GAMEINTERFACE->Show_Inform(INFORM_MESSAGE::INFORM_STARGAZER);
-		if (KEY_TAP(KEY::NUM5))
-			GET_GAMEINTERFACE->Show_Heart(TEXT("심장이 고동친다"));
-	}
-
-	
-
 	
 	if (KEY_TAP(KEY::M))
 	{
