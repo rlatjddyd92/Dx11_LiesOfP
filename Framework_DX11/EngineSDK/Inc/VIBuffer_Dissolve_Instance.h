@@ -61,6 +61,7 @@ private:
 	ID3D11ShaderResourceView* m_pInitParticleSRV = nullptr;
 
 	//_Matrix Test[g_iMaxMeshBones] = {};
+	_bool m_bExceptMesh = { false };
 
 private:
 	HRESULT Ready_Buffers(const DISSOLVE_PARTICLE_DESC& Desc);

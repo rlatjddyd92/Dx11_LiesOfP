@@ -1208,8 +1208,18 @@ DISSOLVE_PARTICLE_DESC CModel::Create_Particles(const DISSOLVE_INSTANCE_DESC& Pa
 
 	for (_uint i = 0; i < m_iNumMeshes; ++i)
 	{
-		if(ParticleDesc.iMeshIndex < 0 || i == ParticleDesc.iMeshIndex)
+		if(false == ParticleDesc.bExceptMesh)
+		{
+			if (ParticleDesc.iMeshIndex < 0 || i == ParticleDesc.iMeshIndex)
+				m_Meshes[i]->Create_Particles(this, ParticleDesc, Instances);
+		}
+		else
+		{
+			if (i == ParticleDesc.iMeshIndex)
+				continue;
+
 			m_Meshes[i]->Create_Particles(this, ParticleDesc, Instances);
+		}
 	}
 
 	DISSOLVE_PARTICLE_DESC DissolveDesc = {};

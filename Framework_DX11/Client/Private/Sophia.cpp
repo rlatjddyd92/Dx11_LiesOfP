@@ -5,6 +5,8 @@
 #include "Effect_Manager.h"
 #include "Effect_Container.h"
 
+#include "Dissolve_Sophia_Death.h"
+
 CSophia::CSophia(ID3D11Device* pDevice, ID3D11DeviceContext* pContext)
     : CGameObject{ pDevice, pContext }
 {
@@ -142,14 +144,18 @@ void CSophia::DeActive_HeartEffect()
 void CSophia::Active_DisapperEffect()
 {
     _Vec3 vPos = m_pTransformCom->Get_State(CTransform::STATE_POSITION);
-    _Vec3 vLook = m_pTransformCom->Get_State(CTransform::STATE_LOOK);
-    vLook.y = 0.f;
-    vLook.Normalize();
+    //_Vec3 vLook = m_pTransformCom->Get_State(CTransform::STATE_LOOK);
+    //vLook.y = 0.f;
+    //vLook.Normalize();
 
-    vPos += vLook * 0.19f;
-    vPos.y += 1.2f;
+    //vPos += vLook * 0.19f;
+    //vPos.y += 1.2f;
 
+    // 여기다가.
     CEffect_Manager::Get_Instance()->Add_Effect_ToLayer(LEVEL_GAMEPLAY, TEXT("Sophia_CutScene_Death"), vPos);
+
+    m_pGameInstance->Add_Object_ToLayer(LEVEL_GAMEPLAY, TEXT("Layer_Effect"), m_pDissolveEffect);
+    Safe_AddRef(m_pDissolveEffect);
 }
 
 HRESULT CSophia::Ready_Components(OBJECT_DEFAULT_DESC* pDesc)
@@ -170,6 +176,15 @@ HRESULT CSophia::Ready_Components(OBJECT_DEFAULT_DESC* pDesc)
 HRESULT CSophia::Ready_Effect()
 {
     m_pHearEffeft = CEffect_Manager::Get_Instance()->Clone_Effect(TEXT("Sophia_CutScene_Heart"), nullptr, nullptr);
+
+    CDissolve_Sophia_Death::DISSOLVE_OBJECT_DESC Desc = {};
+    Desc.fRotationPerSec = XMConvertToRadians(90.f);
+    Desc.fSpeedPerSec = 1.f;
+    Desc.iLevelIndex = LEVEL_GAMEPLAY;
+    Desc.pModelCom = m_pModelCom;
+    Desc.pSophiaTransformCom = m_pTransformCom;
+
+    m_pDissolveEffect = static_cast<CDissolve_Sophia_Death*>(m_pGameInstance->Clone_GameObject(TEXT("Prototype_GameObject_Effect_Dissolve_Sophia_Dead"), &Desc));
 
     return S_OK;
 }
@@ -212,4 +227,5 @@ void CSophia::Free()
 
     Safe_Release(m_pShaderCom);
     Safe_Release(m_pModelCom);
+    Safe_Release(m_pDissolveEffect);
 }

@@ -112,6 +112,8 @@
 #include "Dissolve_Player_Dead.h"
 #include "Dissolve_SimonManus_Dead.h"
 #include "Dissolve_Raxasia_Dead.h"
+#include "Dissolve_Sophia_Death.h"
+
 #include "SimonManus_2P_Aura.h"
 #pragma endregion
 
@@ -710,6 +712,23 @@ HRESULT CLoader::Ready_Resources_For_GamePlayLevel_Map0()
 		CModel::Create(m_pDevice, m_pContext, CModel::TYPE_NONANIM, "../Bin/ModelData/NonAnim/Map/Etc/Sophia/Sophia_Stoned.dat", PreTransformMatrix))))
 		return E_FAIL;	
 	
+	DISSOLVE_INSTANCE_DESC DissolveInstanceDesc = {};
+	DissolveInstanceDesc.iNumInstance = 1000;
+	DissolveInstanceDesc.vCenter = { 0.f, 0.f, 0.f };
+	DissolveInstanceDesc.vLifeTime = { 15.f, 30.f };
+	DissolveInstanceDesc.vMinColor = { 0.1f, 0.3f, 0.7f, 1.f };
+	DissolveInstanceDesc.vMaxColor = { 0.1f, 0.3f, 0.7f, 1.f };
+	DissolveInstanceDesc.vSize = { 0.005f, 0.005f };
+	DissolveInstanceDesc.vSpeed = { 0.15f, 0.3f };
+	DissolveInstanceDesc.iModelLevelIndex = LEVEL_GAMEPLAY;
+	DissolveInstanceDesc.strModelTag = TEXT("Sophia_Stoned");
+	DissolveInstanceDesc.iMeshIndex = 1;
+	DissolveInstanceDesc.bExceptMesh = true;
+
+	if (FAILED(m_pGameInstance->Add_Prototype(LEVEL_GAMEPLAY, TEXT("Prototype_Component_VIBuffer_Dissolve_Sophia_Dead"),
+		CVIBuffer_Dissolve_Instance::Create(m_pDevice, m_pContext, DissolveInstanceDesc))))
+		return E_FAIL;
+
 	PreTransformMatrix = XMMatrixIdentity();
 	PreTransformMatrix = XMMatrixScaling(0.005f, 0.005f, 0.005f);
 
@@ -1736,10 +1755,16 @@ HRESULT CLoader::Ready_Prototype()
 		CDissolve_Raxasia_Dead::Create(m_pDevice, m_pContext))))
 		return E_FAIL;
 
+	/* For. Prototype_GameObject_Effect_Dissolve_Sophia_Dead */
+	if (FAILED(m_pGameInstance->Add_Prototype(TEXT("Prototype_GameObject_Effect_Dissolve_Sophia_Dead"),
+		CDissolve_Sophia_Death::Create(m_pDevice, m_pContext))))
+		return E_FAIL;
+
 	/* For. Prototype_GameObject_Effect_Dissolve_SimonManus_2P_Aura */
 	if (FAILED(m_pGameInstance->Add_Prototype(TEXT("Prototype_GameObject_Effect_Dissolve_SimonManus_2P_Aura"),
 		CSimonManus_2P_Aura::Create(m_pDevice, m_pContext))))
 		return E_FAIL;
+
 #pragma endregion
 
 	return S_OK;

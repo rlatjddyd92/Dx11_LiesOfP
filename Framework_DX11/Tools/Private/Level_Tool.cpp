@@ -41,13 +41,13 @@ HRESULT CLevel_GamePlay::Initialize()
 
 	CNonAnimModel::NONMODEL_DESC Desc{};
 	Desc.vPosition = { 0.f, 0.f, 0.f };
-	Desc.vScale = { 1.5f,1.5f,1.5f };
+	Desc.vScale = { 1.2f,1.2f,1.2f };
 	Desc.vRotation = { 0.f, 0.f, 0.f };
 	Desc.iRenderGroupID = 0;
 
-	//strcpy_s(Desc.szModelTag, "Prototype_Component_Model_Raxasia_Sword_CutScene");
-	//if (FAILED(m_pGameInstance->Add_CloneObject_ToLayer(LEVEL_TOOL, TEXT("Layer_Torch"), TEXT("Prototype_GameObject_NonAnim"), &Desc)))
-	//	return E_FAIL;
+	strcpy_s(Desc.szModelTag, "Prototype_AnimModel_RebornerBigA_Weapon");
+	if (FAILED(m_pGameInstance->Add_CloneObject_ToLayer(LEVEL_TOOL, TEXT("Layer_Torch"), TEXT("Prototype_GameObject_NonAnim"), &Desc)))
+		return E_FAIL;
 	//strcpy_s(Desc.szModelTag, "Prototype_AnimModel_SimonManus_Weapon");
 	//strcpy_s(Desc.szModelTag, "Prototype_Component_Model_Player_Arm");
 	//strcpy_s(Desc.szModelTag, "Prototype_Component_Model_FlameSword");
