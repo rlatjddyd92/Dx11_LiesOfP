@@ -395,6 +395,8 @@ HRESULT CRebornerBigA::Ready_Effect()
 	m_pSwingEffect = CEffect_Manager::Get_Instance()->Clone_Effect(TEXT("Monster_Stick_Swing"), pParetnMatrix,
 		pSocketBoneMatrix, _Vec3(0.f, 0.f, 0.f), _Vec3(0.f, 0.f, 1.f), _Vec3(1.f, 1.f, 1.f));
 
+	m_pSwingEffect->Set_Loop(false);
+
 	return S_OK;
 }
 
