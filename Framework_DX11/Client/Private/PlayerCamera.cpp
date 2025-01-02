@@ -2,6 +2,7 @@
 
 #include "PlayerCamera.h"
 #include "GameInstance.h"
+#include "GameInterface_Controller.h"
 
 #include "Player.h"
 #include "Monster.h"
@@ -106,7 +107,7 @@ void CPlayerCamera::PlayerMove(_float fTimeDelta)
 
 	vPlayerPos.m128_f32[1] += 1.65f;
 
-	if (!m_isLock)
+	if (!m_isLock && !GET_GAMEINTERFACE->IsTlaking_WithNPC())
 	{
 		if (MouseMove = m_pGameInstance->Get_DIMouseMove(DIMM_X))
 		{

@@ -234,6 +234,7 @@ public:
 	_bool			Key_Away(KEY eKey);
 	_bool			Key_None(KEY eKey);
 
+	virtual	void	Change_State(_uint iState, void* pArg = nullptr);
 
 	void			Move_Dir(_Vec4 vDir, _float fTimeDelta, _bool isTurn = true);
 	_bool			Turn_Lerp(_Vec4 vDir, _float fTimeDelta);

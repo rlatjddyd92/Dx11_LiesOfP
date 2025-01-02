@@ -79,9 +79,6 @@ void CMainApp::Update(_float fTimeDelta)
 			GET_GAMEINTERFACE->Show_Script_Npc_Talking(NPC_SCRIPT::SCR_SOPIA_FIRST);
 		if (KEY_TAP(KEY::NUM9))
 			GET_GAMEINTERFACE->UIPart_On();
-
-		if (GET_GAMEINTERFACE->IsTlaking_WithNPC() == true)
-			_int i = 0;
 	}
 
 
