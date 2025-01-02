@@ -67,7 +67,7 @@ HRESULT CRenderer::Initialize()
 	if (FAILED(m_pGameInstance->Add_RenderTarget(TEXT("Target_Distortion"), (_uint)ViewportDesc.Width, (_uint)ViewportDesc.Height, DXGI_FORMAT_B8G8R8A8_UNORM, _float4(0.f, 0.f, 0.f, 0.f))))
 		return E_FAIL;
 
-	if (FAILED(m_pGameInstance->Add_RenderTarget_Array(TEXT("Target_Cascade"), (_uint)2048, (_uint)2048, DXGI_FORMAT_R32G32B32A32_FLOAT, _float4(1.f, 1.f, 1.f, 1.f), 3)))
+	if (FAILED(m_pGameInstance->Add_RenderTarget_Array(TEXT("Target_Cascade"), (_uint)4096, (_uint)4096, DXGI_FORMAT_R32G32B32A32_FLOAT, _float4(1.f, 1.f, 1.f, 1.f), 3)))
 		return E_FAIL;
 
 	//Decal
@@ -1391,8 +1391,8 @@ HRESULT CRenderer::Render_Cascade()
 		ZeroMemory(&ViewportDesc, sizeof(D3D11_VIEWPORT));
 		ViewportDesc.TopLeftX = 0;
 		ViewportDesc.TopLeftY = 0;
-		ViewportDesc.Width = 2048;
-		ViewportDesc.Height = 2048;
+		ViewportDesc.Width = 4096;
+		ViewportDesc.Height = 4096;
 		ViewportDesc.MinDepth = 0.f;
 		ViewportDesc.MaxDepth = 1.f;
 
@@ -1566,8 +1566,8 @@ HRESULT CRenderer::Ready_CascadeDepthStencilView()
 	D3D11_TEXTURE2D_DESC	TextureDesc;
 	ZeroMemory(&TextureDesc, sizeof(D3D11_TEXTURE2D_DESC));
 
-	TextureDesc.Width = 2048;
-	TextureDesc.Height = 2048;
+	TextureDesc.Width = 4096;
+	TextureDesc.Height = 4096;
 	TextureDesc.MipLevels = 1;
 	TextureDesc.ArraySize = 3;
 	TextureDesc.Format = DXGI_FORMAT_D32_FLOAT_S8X24_UINT;

@@ -140,9 +140,19 @@ void CWeapon_Rapier::OnCollisionEnter(CGameObject* pOther)
 		if (!bOverlapCheck)
 		{
 			CMonster* pMonster = dynamic_cast<CMonster*>(pOther);
+			if (pMonster->Get_IsDieState())
+				return;
 
-			m_DamagedObjects.push_back(pOther);
-			if (pMonster->Calc_DamageGain(m_fDamageAmount * m_fDamageRatio))
+			m_DamagedObjects.push_back(pOther); 
+			
+			_Vec3 vHitPos = {};
+
+			if (!m_pBladeMatrix)
+				vHitPos = m_BladeWorldMatrix.Translation();
+			else
+				vHitPos = m_WorldMatrix.Translation();
+
+			if (pMonster->Calc_DamageGain(m_fDamageAmount * m_fDamageRatio, vHitPos, HIT_METAL, m_iAtkStrength, this))
 			{
 				_Vec3 vPlayerLook = (_Vec3)m_pPlayer->Get_Transform()->Get_State(CTransform::STATE_LOOK);
 				vPlayerLook.Normalize();

@@ -171,7 +171,6 @@ void CWeapon_Scissor::OnCollisionEnter(CGameObject* pOther)
 		if (!bOverlapCheck)
 		{
 			CMonster* pMonster = dynamic_cast<CMonster*>(pOther);
-
 			if (pMonster->Get_IsDieState())
 				return;
 

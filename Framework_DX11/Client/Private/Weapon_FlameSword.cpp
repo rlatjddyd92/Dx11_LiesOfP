@@ -141,11 +141,19 @@ void CWeapon_FlameSword::OnCollisionEnter(CGameObject* pOther)
 		if (!bOverlapCheck)
 		{
 			CMonster* pMonster = dynamic_cast<CMonster*>(pOther);
+			if (pMonster->Get_IsDieState())
+				return;
 
 			m_DamagedObjects.push_back(pOther);
-			pOther->Calc_DamageGain(m_fDamageAmount * m_fDamageRatio);
 
-			if (pMonster->Calc_DamageGain(m_fDamageAmount * m_fDamageRatio))
+			_Vec3 vHitPos = {};
+
+			if (!m_pBladeMatrix)
+				vHitPos = m_BladeWorldMatrix.Translation();
+			else
+				vHitPos = m_WorldMatrix.Translation();
+
+			if (pMonster->Calc_DamageGain(m_fDamageAmount * m_fDamageRatio, vHitPos, HIT_METAL, m_iAtkStrength, this))
 			{
 				if (m_eAttackStrength == ATK_STRONG)
 				{
