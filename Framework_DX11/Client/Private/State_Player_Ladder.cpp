@@ -161,9 +161,9 @@ void CState_Player_Ladder::Update(_float fTimeDelta)
     {
         _Vec3 vPlayerPos = m_pPlayer->Get_Transform()->Get_State(CTransform::STATE_POSITION);
         if (m_eUpDownType == LADDER_UP)
-            vPlayerPos.y += 0.95f * fTimeDelta;
+            vPlayerPos.y += 0.94f * fTimeDelta;
         else
-            vPlayerPos.y -= 0.95f * fTimeDelta;
+            vPlayerPos.y -= 0.94f * fTimeDelta;
 
         m_pPlayer->Get_RigidBody()->Set_GloblePose(vPlayerPos);
     }

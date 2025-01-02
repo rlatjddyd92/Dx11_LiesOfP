@@ -366,10 +366,10 @@ private:
 
 	void			Update_Stat(_float fTimeDelta);
 	void			CollisionStay_IntercObj(CGameObject* pGameObject);
-
 	void			Choice_GuardSound(_uint iAttackStrength = ATK_WEAK, _uint iHitType = HIT_END, _bool isPerfect = false);
-
 	void			Update_PrevItemInfo();
+	void			Check_FatalAttack();
+
 private:
 	HRESULT Ready_Components();
 	HRESULT Ready_Weapon();

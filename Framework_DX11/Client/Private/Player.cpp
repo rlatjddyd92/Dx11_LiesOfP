@@ -157,8 +157,8 @@ HRESULT CPlayer::Initialize(void * pArg)
 	//m_pNavigationCom->Move_to_Cell(m_pRigidBodyCom, 440); //상자랑 장애물
 	//m_pNavigationCom->Move_to_Cell(m_pRigidBodyCom, 1066); // 순간이동 1066
 	//m_pNavigationCom->Move_to_Cell(m_pRigidBodyCom, 790); // 순간이동 790
-	//m_pNavigationCom->Move_to_Cell(m_pRigidBodyCom, 801); // 소피아 방
-	m_pNavigationCom->Move_to_Cell(m_pRigidBodyCom, 1178); // 소피아 방 내부
+	m_pNavigationCom->Move_to_Cell(m_pRigidBodyCom, 801); // 소피아 방
+	//m_pNavigationCom->Move_to_Cell(m_pRigidBodyCom, 1178); // 소피아 방 내부
 	//m_pNavigationCom->Move_to_Cell(m_pRigidBodyCom, 0); 
 	//m_pNavigationCom->Move_to_Cell(m_pRigidBodyCom, 268); // 락사시아 보스전
 	//m_pNavigationCom->Move_to_Cell(m_pRigidBodyCom, 1333); // 튜토리얼
@@ -178,41 +178,39 @@ HRESULT CPlayer::Initialize(void * pArg)
 
 	m_vRimLightColor = _Vec4(0.f, 0.f, 0.f, 0.f);
 
-	m_pContactMonster = m_pFatalColliderObj->Get_ContactMonster_Ptr();
-
 	return S_OK;
 }
 
 void CPlayer::Priority_Update(_float fTimeDelta)
 {
+	m_pGameInstance->Set_Player_AreaNum(m_pNavigationCom->Get_CurrentAreaNum());
+
 	Update_PrevItemInfo();
 
 	Update_Stat(fTimeDelta);
-	m_pGameInstance->Set_Player_AreaNum(m_pNavigationCom->Get_CurrentAreaNum());
 
 	if (m_isGuard)
 	{
 		m_fGuardTime += fTimeDelta;
 	}
 
-	if (Key_Tab(KEY::Y))
+	if (Key_Tab(KEY::WHEELBUTTON))
 		LockOnOff();
-
-	if (m_isLockOn)
-	{
-		if (m_pTargetMonster->Get_IsDieState() || m_pFsmCom->Get_CurrentState() == DIE)
-		{
-			m_pTargetMonster = nullptr;
-			m_isLockOn = false;
-		}
-	}
 
 	if(nullptr != m_pWeapon[m_eWeaponType])
 		m_pWeapon[m_eWeaponType]->Priority_Update(fTimeDelta);
 	if(nullptr != m_pWeapon_Arm)
 		m_pWeapon_Arm->Priority_Update(fTimeDelta);
 
-	m_pFatalColliderObj->Priority_Update(fTimeDelta);
+	if (nullptr != m_pFatalColliderObj)
+	{
+		m_pFatalColliderObj->Priority_Update(fTimeDelta);
+		m_pContactMonster = m_pFatalColliderObj->Get_ContactMonster_Ptr();
+	}
+	Check_FatalAttack();
+
+	if (nullptr != m_pDissolveEffect)
+		m_pDissolveEffect->Priority_Update(fTimeDelta);
 
 	for (auto& pEffect : m_Effects)
 	{
@@ -220,14 +218,11 @@ void CPlayer::Priority_Update(_float fTimeDelta)
 			pEffect->Priority_Update(fTimeDelta);
 	}
 
-	m_pDissolveEffect->Priority_Update(fTimeDelta);
 }
 
 void CPlayer::Update(_float fTimeDelta)
 {
 	m_vCurRootMove = XMVector3TransformNormal(m_pModelCom->Play_Animation(fTimeDelta), m_pTransformCom->Get_WorldMatrix());
-
-	m_pRigidBodyCom->Set_Velocity(m_vCurRootMove / fTimeDelta);
 
 	if (m_pIntersectMonster)
 	{
@@ -240,17 +235,29 @@ void CPlayer::Update(_float fTimeDelta)
 		if (vVelocityDir.Dot(vMonsterDir) > 0.7f)
 			m_vCurRootMove = _Vec3(0.f, 0.f, 0.f);
 	}
+	m_pRigidBodyCom->Set_Velocity(m_vCurRootMove / fTimeDelta);
 
 	m_pFsmCom->Update(fTimeDelta);
 
 	m_pRigidBodyCom->Update(fTimeDelta);
+
+	if (nullptr != m_pWeapon[m_eWeaponType])
+		m_pWeapon[m_eWeaponType]->Update(fTimeDelta);
+	if (nullptr != m_pWeapon_Arm)
+		m_pWeapon_Arm->Update(fTimeDelta);
+	if (nullptr != m_pFatalColliderObj)
+		m_pFatalColliderObj->Update(fTimeDelta);
+
+	if (nullptr != m_pDissolveEffect)
+		m_pDissolveEffect->Update(fTimeDelta);
 
 	for (_uint i = 0; i < PAWN_SOUND_END; ++i)
 	{
 		m_pSoundCom[i]->Update(fTimeDelta);
 	}
 
-	m_pFatalColliderObj->Update(fTimeDelta);
+	m_pColliderCom->Update(m_pTransformCom->Get_WorldMatrix_Ptr());
+	m_pGameInstance->Add_ColliderList(m_pColliderCom);
 
 	for (auto& pEffect : m_Effects)
 	{
@@ -258,14 +265,7 @@ void CPlayer::Update(_float fTimeDelta)
 			pEffect->Update(fTimeDelta);
 	}
 
-	m_pColliderCom->Update(m_pTransformCom->Get_WorldMatrix_Ptr());
-	m_pGameInstance->Add_ColliderList(m_pColliderCom);
-
-	if (nullptr != m_pWeapon[m_eWeaponType])
-		m_pWeapon[m_eWeaponType]->Update(fTimeDelta);
-	if (nullptr != m_pWeapon_Arm)
-		m_pWeapon_Arm->Update(fTimeDelta);
-
+#pragma region 디버그 확인용
 	if (KEY_TAP(KEY::L))
 	{
 		Change_State(RAPIER_PARRYATTACK);
@@ -294,8 +294,7 @@ void CPlayer::Update(_float fTimeDelta)
 		dynamic_cast<CCutScene*>(m_pGameInstance->Find_Object(LEVEL_GAMEPLAY, TEXT("Layer_CutScene"), SOPHIA_DEAD))->Start_Play();
 		//Change_State(FLAME_FATAL);
 	}
-
-	m_pDissolveEffect->Update(fTimeDelta);
+#pragma endregion
 }
 
 void CPlayer::Late_Update(_float fTimeDelta)
@@ -307,16 +306,17 @@ void CPlayer::Late_Update(_float fTimeDelta)
 		m_pWeapon[m_eWeaponType]->Late_Update(fTimeDelta);
 	if (nullptr != m_pWeapon_Arm)
 		m_pWeapon_Arm->Late_Update(fTimeDelta);
+	if (nullptr != m_pFatalColliderObj)
+		m_pFatalColliderObj->Late_Update(fTimeDelta);
 
-	m_pFatalColliderObj->Late_Update(fTimeDelta);
+	if (nullptr != m_pFatalColliderObj)
+		m_pDissolveEffect->Late_Update(fTimeDelta);
 
 	for (auto& pEffect : m_Effects)
 	{
 		if (!pEffect->Get_Dead())
 			pEffect->Late_Update(fTimeDelta);
 	}
-
-	m_pDissolveEffect->Late_Update(fTimeDelta);
 
 	m_pGameInstance->Add_RenderObject(CRenderer::RG_NONBLEND, this);
 	m_pGameInstance->Add_RenderObject(CRenderer::RG_SHADOWOBJ, this);
@@ -643,6 +643,16 @@ void CPlayer::LockOnOff()
 	{
 		m_pTargetMonster = nullptr;
 		m_isLockOn = false;
+	}
+
+
+	if (m_isLockOn)
+	{
+		if (m_pTargetMonster->Get_IsDieState() || m_pFsmCom->Get_CurrentState() == DIE)
+		{
+			m_pTargetMonster = nullptr;
+			m_isLockOn = false;
+		}
 	}
 }
 
@@ -1611,6 +1621,41 @@ void CPlayer::Update_PrevItemInfo()
 		}
 
 		//GET_GAMEINTERFACE->Show_Script(strTest, TEXT("none"), 1.f);
+	}
+}
+
+void CPlayer::Check_FatalAttack()
+{
+	if (nullptr == m_pContactMonster)
+	{
+		m_isFatalAttack = false;
+		return;
+	}
+
+	_Matrix MonsterWorldMatrix = m_pContactMonster->Get_Transform()->Get_WorldMatrix();
+	_Matrix PlayerWorldMatrix = m_pTransformCom->Get_WorldMatrix();
+
+	_Vec3 vMonsterLook = MonsterWorldMatrix.Forward();
+	_Vec3 vPlayerLook = PlayerWorldMatrix.Forward();
+	vMonsterLook.Normalize();
+	vPlayerLook.Normalize();
+
+	_Vec3 vMonsterPos = MonsterWorldMatrix.Translation();
+	_Vec3 vPlayerPos = PlayerWorldMatrix.Translation();
+
+	_Vec3 vDir_MostertoPlayer = vPlayerPos - vMonsterPos;
+	vDir_MostertoPlayer.Normalize();
+
+	_float fDirDot = vMonsterLook.Dot(vDir_MostertoPlayer);
+	_float fLookDot = vMonsterLook.Dot(vPlayerLook);
+
+	if (fDirDot >= 0.85f && fLookDot >= 0.8f)
+	{
+		m_isFatalAttack = true;
+	}
+	else
+	{
+		m_isFatalAttack = false;
 	}
 }
 

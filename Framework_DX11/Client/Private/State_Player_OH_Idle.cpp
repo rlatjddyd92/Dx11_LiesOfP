@@ -49,10 +49,20 @@ void CState_Player_OH_Idle::Update(_float fTimeDelta)
     }
     else if (m_pPlayer->Key_Tab(KEY::LBUTTON))
     {
-        if(m_pPlayer->Get_WeaponType() == CPlayer::WEP_RAPIER)
-            m_pPlayer->Change_State(CPlayer::RAPIER_LATTACK0);
-        else if (m_pPlayer->Get_WeaponType() == CPlayer::WEP_SCISSOR)
-            m_pPlayer->Change_State(CPlayer::SCISSOR_LATTACK0);
+        if (!m_pPlayer->Get_IsFatal())
+        {
+            if (m_pPlayer->Get_WeaponType() == CPlayer::WEP_RAPIER)
+                m_pPlayer->Change_State(CPlayer::RAPIER_LATTACK0);
+            else if (m_pPlayer->Get_WeaponType() == CPlayer::WEP_SCISSOR)
+                m_pPlayer->Change_State(CPlayer::SCISSOR_LATTACK0);
+        }
+        else
+        {
+            if (m_pPlayer->Get_WeaponType() == CPlayer::WEP_RAPIER)
+                m_pPlayer->Change_State(CPlayer::RAPIER_FATAL);
+            else if (m_pPlayer->Get_WeaponType() == CPlayer::WEP_SCISSOR)
+                m_pPlayer->Change_State(CPlayer::SCISSOR_FATAL);
+        }
     }
     else if (m_pPlayer->Key_Hold(KEY::RBUTTON))
     {

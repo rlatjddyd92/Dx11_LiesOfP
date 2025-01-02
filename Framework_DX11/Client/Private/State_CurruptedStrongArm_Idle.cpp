@@ -44,7 +44,7 @@ void CState_CurruptedStrongArm_Idle::Update(_float fTimeDelta)
             _Vec3 vLook = m_pMonster->Get_Transform()->Get_State(CTransform::STATE_LOOK);
             if (fDist <= m_fDiscoverDist)
             {
-                _int iDir = m_pMonster->Get_Transform()->LookAt_Lerp_NoHeight(m_pMonster->Get_TargetDir(), 0.6f, fTimeDelta);
+                _int iDir = 0;//m_pMonster->Get_Transform()->LookAt_Lerp_NoHeight(m_pMonster->Get_TargetDir(), 0.6f, fTimeDelta);
                 switch (iDir)
                 {
                 case -1:

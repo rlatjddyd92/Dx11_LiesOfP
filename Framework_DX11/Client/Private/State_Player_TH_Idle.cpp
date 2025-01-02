@@ -47,7 +47,14 @@ void CState_Player_TH_Idle::Update(_float fTimeDelta)
     }
     else if (m_pPlayer->Key_Tab(KEY::LBUTTON))
     {
-        m_pPlayer->Change_State(CPlayer::FLAME_LATTACK0);
+        if (!m_pPlayer->Get_IsFatal())
+        {
+            m_pPlayer->Change_State(CPlayer::FLAME_LATTACK0);
+        }
+        else
+        {
+            m_pPlayer->Change_State(CPlayer::FLAME_FATAL);
+        }
     }
     else if (m_pPlayer->Key_Hold(KEY::RBUTTON))
     {

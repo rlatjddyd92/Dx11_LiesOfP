@@ -442,39 +442,39 @@ HRESULT CLevel_GamePlay::Read_Map_Data()
 							 return E_FAIL;
 					 }
 				}
-				//else if (strLayerTag == "Layer_Monster")
-				//{
-				//	if (wcscmp(pDesc.szModelTag, TEXT("Prototype_AnimModel_CarcassTail")) == 0)
-				//	{
-				//		if (FAILED(m_pGameInstance->Add_CloneObject_ToLayer(LEVEL_GAMEPLAY, TEXT("Layer_Monster"), TEXT("Prototype_GameObject_CarcassTail"), &pDesc)))
-				//			return E_FAIL;
-				//	}
-				//	else if (wcscmp(pDesc.szModelTag, TEXT("Prototype_AnimModel_CarcassBigA")) == 0)
-				//	{
-				//		if (FAILED(m_pGameInstance->Add_CloneObject_ToLayer(LEVEL_GAMEPLAY, TEXT("Layer_Monster"), TEXT("Prototype_GameObject_CarcassBigA"), &pDesc)))
-				//			return E_FAIL;
-				//	}
-				//	else if (wcscmp(pDesc.szModelTag, TEXT("Prototype_AnimModel_CarcassNormal")) == 0)
-				//	{
-				//		if (FAILED(m_pGameInstance->Add_CloneObject_ToLayer(LEVEL_GAMEPLAY, TEXT("Layer_Monster"), TEXT("Prototype_GameObject_CarcassNormal"), &pDesc)))
-				//			return E_FAIL;
-				//	}
-				//	else if (wcscmp(pDesc.szModelTag, TEXT("Prototype_AnimModel_Horesman")) == 0)
-				//	{
-				//		if (FAILED(m_pGameInstance->Add_CloneObject_ToLayer(LEVEL_GAMEPLAY, TEXT("Layer_Monster"), TEXT("Prototype_GameObject_CurruptedStrongArm"), &pDesc)))
-				//			return E_FAIL;
-				//	}
-				//	else if (wcscmp(pDesc.szModelTag, TEXT("Prototype_AnimModel_RebornerBigA")) == 0)
-				//	{
-				//		if (FAILED(m_pGameInstance->Add_CloneObject_ToLayer(LEVEL_GAMEPLAY, TEXT("Layer_Monster"), TEXT("Prototype_GameObject_RebornerBigA"), &pDesc)))
-				//			return E_FAIL;
-				//	}
-				//	else if (wcscmp(pDesc.szModelTag, TEXT("Prototype_AnimModel_RebornerMale")) == 0)
-				//	{
-				//		if (FAILED(m_pGameInstance->Add_CloneObject_ToLayer(LEVEL_GAMEPLAY, TEXT("Layer_Monster"), TEXT("Prototype_GameObject_RebornerMale"), &pDesc)))
-				//			return E_FAIL;
-				//	}
-				//}	
+				else if (strLayerTag == "Layer_Monster")
+				{
+					if (wcscmp(pDesc.szModelTag, TEXT("Prototype_AnimModel_CarcassTail")) == 0)
+					{
+						if (FAILED(m_pGameInstance->Add_CloneObject_ToLayer(LEVEL_GAMEPLAY, TEXT("Layer_Monster"), TEXT("Prototype_GameObject_CarcassTail"), &pDesc)))
+							return E_FAIL;
+					}
+					else if (wcscmp(pDesc.szModelTag, TEXT("Prototype_AnimModel_CarcassBigA")) == 0)
+					{
+						if (FAILED(m_pGameInstance->Add_CloneObject_ToLayer(LEVEL_GAMEPLAY, TEXT("Layer_Monster"), TEXT("Prototype_GameObject_CarcassBigA"), &pDesc)))
+							return E_FAIL;
+					}
+					else if (wcscmp(pDesc.szModelTag, TEXT("Prototype_AnimModel_CarcassNormal")) == 0)
+					{
+						if (FAILED(m_pGameInstance->Add_CloneObject_ToLayer(LEVEL_GAMEPLAY, TEXT("Layer_Monster"), TEXT("Prototype_GameObject_CarcassNormal"), &pDesc)))
+							return E_FAIL;
+					}
+					else if (wcscmp(pDesc.szModelTag, TEXT("Prototype_AnimModel_Horesman")) == 0)
+					{
+						if (FAILED(m_pGameInstance->Add_CloneObject_ToLayer(LEVEL_GAMEPLAY, TEXT("Layer_Monster"), TEXT("Prototype_GameObject_CurruptedStrongArm"), &pDesc)))
+							return E_FAIL;
+					}
+					else if (wcscmp(pDesc.szModelTag, TEXT("Prototype_AnimModel_RebornerBigA")) == 0)
+					{
+						if (FAILED(m_pGameInstance->Add_CloneObject_ToLayer(LEVEL_GAMEPLAY, TEXT("Layer_Monster"), TEXT("Prototype_GameObject_RebornerBigA"), &pDesc)))
+							return E_FAIL;
+					}
+					else if (wcscmp(pDesc.szModelTag, TEXT("Prototype_AnimModel_RebornerMale")) == 0)
+					{
+						if (FAILED(m_pGameInstance->Add_CloneObject_ToLayer(LEVEL_GAMEPLAY, TEXT("Layer_Monster"), TEXT("Prototype_GameObject_RebornerMale"), &pDesc)))
+							return E_FAIL;
+					}
+				}	
 				else if (strLayerTag == "Layer_Decal")
 				{
 					if (FAILED(m_pGameInstance->Add_CloneObject_ToLayer(LEVEL_GAMEPLAY, TEXT("Layer_Decal"), TEXT("Prototype_GameObject_Decal"), &pDesc)))
