@@ -21,23 +21,24 @@ HRESULT CState_CurruptedStrongArm_Die::Initialize(_uint iStateNum, void* pArg)
 
 HRESULT CState_CurruptedStrongArm_Die::Start_State(void* pArg)
 {
-
-    _vector vPos = XMVectorSetY(m_pMonster->Get_Transform()->Get_State(CTransform::STATE_POSITION), 0);
-    _vector vLook = XMVectorSetY(m_pMonster->Get_Transform()->Get_State(CTransform::STATE_LOOK), 0);
-    _vector vDir = XMVectorSetY(m_pGameInstance->Get_CamPosition_Vec4(), 0);
-    vDir = vDir - vPos;
-
-    _float fRadian{};
-    fRadian = acos(XMVectorGetX(XMVector3Dot(vLook, vDir)));
     _int iAnimIndex = {};
 
-    if (XMConvertToDegrees(fRadian) < 90)
+    _Vec3 vRight = XMVectorSetY(m_pMonster->Get_Transform()->Get_State(CTransform::STATE_RIGHT), 0);
+    _Vec3 vDir = m_pMonster->Get_TargetDir();
+    vDir.Normalize();
+    vRight.Normalize();
+
+    _Vec3 fDirCheck{};
+    fDirCheck = vRight.Cross(vDir);
+
+
+    if (fDirCheck.y < 0)
     {
-        iAnimIndex = AN_DIE_F;
+        iAnimIndex = AN_DIE_B;
     }
     else
     {
-        iAnimIndex = AN_DIE_B;
+        iAnimIndex = AN_DIE_F;
     }
     m_pMonster->Change_Animation(iAnimIndex, false, 0.1f);
 

@@ -16,7 +16,7 @@ private:
     }ANIMNUM;
 private:
     typedef enum {
-        DIR_FRONT, DIR_BEHIND
+        DIR_BEHIND, DIR_FRONT
     }DIR;
 
 public:

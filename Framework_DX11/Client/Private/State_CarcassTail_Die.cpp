@@ -32,11 +32,11 @@ HRESULT CState_CarcassTail_Die::Start_State(void* pArg)
 
     if (vCrossUp.y <= 0)
     {
-        iAnimIndex = AN_DIE_F;
+        iAnimIndex = AN_DIE_B;
     }
     else
     {
-        iAnimIndex = AN_DIE_B;
+        iAnimIndex = AN_DIE_F;
     }
     m_pMonster->Change_Animation(iAnimIndex, false, 0.1f);
 
