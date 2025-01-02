@@ -129,6 +129,7 @@ protected:
     _bool		     m_bDieState = { false };
 
     _int             m_iRespawn_Cell_Num = { -1 };
+    _int             m_iInitRoomNum = { -1 };
 
     _float           m_fMoveSpeed = {};
     _float           m_fEmissiveMask = {};

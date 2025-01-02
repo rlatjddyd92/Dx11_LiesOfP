@@ -46,6 +46,8 @@ HRESULT CMonster_Training02::Initialize(void* pArg)
 	m_strObjectTag = TEXT("Monster");
 
 	m_pNavigationCom->Move_to_Cell(m_pRigidBodyCom, 1315); 
+	m_iInitRoomNum = m_pNavigationCom->Get_Cell_AreaNum(1315);
+
 	m_pTransformCom->Rotation(_Vec4(0.f, 1.f, 0.f, 0.f), XMConvertToRadians(180.f));
 
 	m_vRimLightColor = { 0.f, 0.f, 0.f, 0.f };
@@ -75,7 +77,10 @@ void CMonster_Training02::Priority_Update(_float fTimeDelta)
 
 void CMonster_Training02::Update(_float fTimeDelta)
 {
-	m_vCurRootMove = XMVector3TransformNormal(m_pModelCom->Play_Animation(fTimeDelta), m_pTransformCom->Get_WorldMatrix());
+	if (m_pGameInstance->Get_Player_AreaNum() == m_iInitRoomNum)
+		m_vCurRootMove = XMVector3TransformNormal(m_pModelCom->Play_Animation(fTimeDelta), m_pTransformCom->Get_WorldMatrix());
+	else
+		m_vCurRootMove = _Vec3(0.f, 0.f, 0.f);
 
 	m_pRigidBodyCom->Set_Velocity(m_vCurRootMove / fTimeDelta);
 
@@ -86,14 +91,20 @@ void CMonster_Training02::Update(_float fTimeDelta)
 
 void CMonster_Training02::Late_Update(_float fTimeDelta)
 {
-	__super::Late_Update(fTimeDelta);
+	if (m_pGameInstance->Get_Player_AreaNum() == m_iInitRoomNum)
+	{
+		if (m_pGameInstance->isIn_Frustum_WorldSpace(m_pTransformCom->Get_State(CTransform::STATE_POSITION), 50.f))
+		{
+			__super::Late_Update(fTimeDelta);
 
-	m_pRigidBodyCom->Update(fTimeDelta);
-	m_pGameInstance->Add_RenderObject(CRenderer::RG_NONBLEND, this);
+			m_pRigidBodyCom->Update(fTimeDelta);
+			m_pGameInstance->Add_RenderObject(CRenderer::RG_NONBLEND, this);
 
-	//m_pColliderObject->Late_Update(fTimeDelta);
+			//m_pColliderObject->Late_Update(fTimeDelta);
 
-	m_pGameInstance->Add_ColliderList(m_pColliderCom);
+			m_pGameInstance->Add_ColliderList(m_pColliderCom);
+		}
+	}
 }
 
 HRESULT CMonster_Training02::Render()

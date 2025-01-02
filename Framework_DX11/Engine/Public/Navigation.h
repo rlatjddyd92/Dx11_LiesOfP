@@ -20,6 +20,7 @@ public:
 	void	Change_CurrentCellIndex(_int iIndex) { m_iCurrentCellIndex = iIndex; }
 	_int	Get_CurrentCellIndex() { return m_iCurrentCellIndex; }
 	_int	Get_CurrentAreaNum() { return m_iCurrentAreaIndex; }
+	_int	Get_Cell_AreaNum(_int iIndex);
 
 	void	Set_ExceptCellNum(_int iCellNum) { m_iExceptCellNum = iCellNum; }
 
