@@ -146,7 +146,8 @@ void CRaxasia::Priority_Update(_float fTimeDelta)
 	//{
 	//	m_bChanging = false;
 	//}
-	__super::Set_UpTargetPos();
+	__super::Priority_Update(fTimeDelta);
+
 	m_pKickCollObj->Priority_Update(fTimeDelta);
 	m_pWeapon->Priority_Update(fTimeDelta);
 	m_pWeaponShield->Priority_Update(fTimeDelta);

@@ -15,23 +15,13 @@ HRESULT CState_CarcassTail_Grogy::Initialize(_uint iStateNum, void* pArg)
     m_iStateNum = iStateNum;
     FSM_INIT_DESC* pDesc = static_cast<FSM_INIT_DESC*>(pArg);
 
-    m_pTrackPos = pDesc->pPrevTrackPos;
-
     return S_OK;
 }
 
 HRESULT CState_CarcassTail_Grogy::Start_State(void* pArg)
 {
-    if (*m_pTrackPos > 0)
-    {
-        m_iAnimCnt = 2;
-        m_pMonster->Change_Animation(AN_GROGY_START - m_iAnimCnt, false, 0);
-        *m_pTrackPos = 0.f;
-    }
-    else
-    {
-        m_pMonster->Change_Animation(17, false);
-    } 
+    m_pMonster->Change_Animation(17, false);
+    m_iAnimCnt = 0;
 
     return S_OK;
 }
@@ -73,8 +63,6 @@ void CState_CarcassTail_Grogy::Update(_float fTimeDelta)
         break;
     }
 
-
-    *m_pTrackPos = m_fGrogyTime;
 }
 
 void CState_CarcassTail_Grogy::End_State()

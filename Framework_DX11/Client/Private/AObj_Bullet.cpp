@@ -171,7 +171,7 @@ HRESULT CAObj_Bullet::Ready_Components()
 
     /* FOR.Com_Collider */
     CBounding_OBB::BOUNDING_OBB_DESC      ColliderDesc{};
-    ColliderDesc.vExtents = _float3(0.25f, 0.25f, 0.5f);
+    ColliderDesc.vExtents = _float3(0.1f, 0.1f, 0.5f);
     ColliderDesc.vCenter = _float3(0.f, 0.f, -0.15f);
     ColliderDesc.vAngles = _float3(0.f, 0.f, 0.f);
 
@@ -182,7 +182,7 @@ HRESULT CAObj_Bullet::Ready_Components()
 
     const _Matrix* pParetnMatrix = m_pTransformCom->Get_WorldMatrix_Ptr();
 
-    m_pEffect = CEffect_Manager::Get_Instance()->Clone_Effect(TEXT("SimonManus_Attack_GoldBall"), pParetnMatrix,
+    m_pEffect = CEffect_Manager::Get_Instance()->Clone_Effect(TEXT("Monster_Bullet"), pParetnMatrix,
         nullptr, _Vec3(0.f, 0.f, 0.f), _Vec3(0.f, 0.f, 0.f), _Vec3(1.f, 1.f, 1.f));
 
     m_pEffect->Set_Loop(true);

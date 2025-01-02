@@ -14,12 +14,15 @@ HRESULT CState_CarcassBigA_HitFatal::Initialize(_uint iStateNum, void* pArg)
 {
     m_iStateNum = iStateNum;
     //FSM_INIT_DESC* pDesc = static_cast<FSM_INIT_DESC*>(pArg);
+    m_pFatalAttacked = m_pMonster->Get_bFatalAttacked();
 
     return S_OK;
 }
 
 HRESULT CState_CarcassBigA_HitFatal::Start_State(void* pArg)
 {
+    m_iAnimCnt = 0;
+
     _Vec3 vRight = XMVectorSetY(m_pMonster->Get_Transform()->Get_State(CTransform::STATE_RIGHT), 0);
     _Vec3 vDir = m_pMonster->Get_TargetDir();
     vDir.Normalize();
@@ -36,25 +39,53 @@ HRESULT CState_CarcassBigA_HitFatal::Start_State(void* pArg)
     {
         m_iDirCnt = DIR::DIR_BEHIND;
     }
-    m_pMonster->Change_Animation(AN_FATAL_START_F - m_iDirCnt - (2 * m_iAnimCnt), false, 0.f);
+    m_pMonster->Change_Animation(AN_FATAL_START_B + m_iDirCnt , false, 0.f);
 
     return S_OK;
 }
 
 void CState_CarcassBigA_HitFatal::Update(_float fTimeDelta)
 {
-    if (End_Check())
+    switch (m_iAnimCnt)
     {
-        if (m_iAnimCnt < 2)
+    case 0:     //ÆäÀÌÅ» ½ÃÀÛ
+        if (End_Check())
         {
             ++m_iAnimCnt;
-            m_pMonster->Change_Animation(AN_FATAL_START_F - m_iDirCnt - (2 * m_iAnimCnt), false, 0.f);
+            m_pMonster->Change_Animation(AN_FATAL_LOOP_B + m_iDirCnt, true, 0.f);
+            return;
         }
-        else
+        break;
+
+    case 1:     //ÆäÀÌÅ» ·çÇÁ
+        if ((*m_pFatalAttacked) == true)
         {
-            m_iAnimCnt = 0;
-            m_pMonster->Change_State(CCarcassBigA::GROGY);
+            ++m_iAnimCnt;
+            m_pMonster->Change_Animation(AN_FATAL_END_B + m_iDirCnt, false, 0.f);
+            return;
         }
+        break;
+
+    case 2:     //³Ñ¾îÁü
+        if (End_Check())
+        {
+            ++m_iAnimCnt;
+            m_pMonster->Change_Animation(AN_UP, false, 0.1f);
+            return;
+        }
+        break;
+
+    case 3:     //ÀÏ¾î¼¶
+        if (End_Check())
+        {
+            m_pMonster->Change_State(CCarcassBigA::IDLE);
+            return;
+        }
+        break;
+
+
+    default:
+        break;
     }
 
 }
@@ -76,14 +107,6 @@ _bool CState_CarcassBigA_HitFatal::End_Check()
     {
         bEndCheck = m_pMonster->Get_EndAnim(AN_FATAL_START_B);
     }
-    else if ((AN_FATAL_LOOP_F) == iCurAnim)
-    {
-        bEndCheck = m_pMonster->Get_EndAnim(AN_FATAL_LOOP_F);
-    }
-    else if ((AN_FATAL_LOOP_B) == iCurAnim)
-    {
-        bEndCheck = m_pMonster->Get_EndAnim(AN_FATAL_LOOP_B);
-    }
     else if ((AN_FATAL_END_F) == iCurAnim)
     {
         bEndCheck = m_pMonster->Get_EndAnim(AN_FATAL_END_F);
@@ -91,6 +114,10 @@ _bool CState_CarcassBigA_HitFatal::End_Check()
     else if ((AN_FATAL_END_B) == iCurAnim)
     {
         bEndCheck = m_pMonster->Get_EndAnim(AN_FATAL_END_B);
+    }
+    else if ((AN_UP) == iCurAnim)
+    {
+        bEndCheck = m_pMonster->Get_EndAnim(AN_UP);
     }
     else
     {

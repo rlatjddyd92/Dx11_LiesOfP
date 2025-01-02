@@ -29,8 +29,6 @@ private:
     _float              m_fGrogyTime = { 0.f };
     _float              m_fGrogyDuration = { 3.f };
 
-    _double* m_pTrackPos = { nullptr };
-
     _uint               m_iAnimCnt = {};
 
 private:

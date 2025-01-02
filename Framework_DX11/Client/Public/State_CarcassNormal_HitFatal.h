@@ -13,7 +13,7 @@ class CState_CarcassNormal_HitFatal :
 private:
     typedef enum {
         AN_FATAL_START = 74, AN_FATAL_LOOP = 73
-        , AN_DOWN_B = 49, AN_DOWN_F = 51
+        , AN_DOWN_B = 49, AN_DOWN_F = 51, AN_UP_B = 53, AN_UP_F = 55
     }ANIMNUM;
 
 private:
@@ -40,6 +40,8 @@ private:
     _int                m_iAnimTrack = {};
 
     _int                m_iDirCnt = {};
+
+    _bool*              m_pFatalAttacked = { nullptr };
 
 private:
     _bool               End_Check();

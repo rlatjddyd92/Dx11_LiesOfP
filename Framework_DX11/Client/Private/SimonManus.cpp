@@ -158,7 +158,8 @@ HRESULT CSimonManus::Initialize(void* pArg)
 
 void CSimonManus::Priority_Update(_float fTimeDelta)
 {
-	__super::Set_UpTargetPos();
+	__super::Priority_Update(fTimeDelta);
+
 	m_pWeapon->Priority_Update(fTimeDelta);
 
 	if (!m_bDieState && m_eStat.fHp <= 0.f)

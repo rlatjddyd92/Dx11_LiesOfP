@@ -14,6 +14,7 @@ HRESULT CState_RebornerMale_HitFatal::Initialize(_uint iStateNum, void* pArg)
 {
     m_iStateNum = iStateNum;
     //FSM_INIT_DESC* pDesc = static_cast<FSM_INIT_DESC*>(pArg);
+    m_pFatalAttacked = m_pMonster->Get_bFatalAttacked();
 
     return S_OK;
 }
@@ -53,16 +54,16 @@ void CState_RebornerMale_HitFatal::Update(_float fTimeDelta)
         if (End_Check())
         {
             ++m_iAnimTrack;
-            m_pMonster->Change_Animation(AN_FATAL_LOOP, false, 0.f);
+            m_pMonster->Change_Animation(AN_FATAL_LOOP, true, 0.f);
             return;
         }
         break;
 
     case 1:     //ÆäÀÌÅ» ·çÇÁ
-        if (End_Check())
+        if ((*m_pFatalAttacked) == true)
         {
             ++m_iAnimTrack;
-            m_pMonster->Change_Animation(AN_DOWN_B + m_iDirCnt, false, 0.f);
+            m_pMonster->Change_Animation(AN_DOWN_B + m_iDirCnt, false, 0.1f);
             return;
         }
         break;
@@ -104,11 +105,7 @@ _bool CState_RebornerMale_HitFatal::End_Check()
     {
         bEndCheck = m_pMonster->Get_EndAnim(AN_FATAL_START);
     }
-    else if ((AN_FATAL_LOOP) == iCurAnim)
-    {
-        bEndCheck = m_pMonster->Get_EndAnim(AN_FATAL_LOOP);
-    }
-    if ((AN_DOWN_B + m_iDirCnt) == iCurAnim)
+    else if ((AN_DOWN_B + m_iDirCnt) == iCurAnim)
     {
         bEndCheck = m_pMonster->Get_EndAnim((AN_DOWN_B + m_iDirCnt));
     }

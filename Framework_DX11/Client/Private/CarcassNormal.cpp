@@ -96,7 +96,7 @@ HRESULT CCarcassNormal::Initialize(void* pArg)
 
 void CCarcassNormal::Priority_Update(_float fTimeDelta)
 {
-	__super::Set_UpTargetPos();
+	__super::Priority_Update(fTimeDelta);
 
 	if (!m_bDieState && m_eStat.fHp <= 0.f)
 	{
