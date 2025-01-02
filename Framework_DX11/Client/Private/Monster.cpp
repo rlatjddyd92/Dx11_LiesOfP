@@ -208,9 +208,16 @@ _bool CMonster::Calc_DamageGain(_float fAtkDmg, _Vec3 vHitPos, _uint iHitType, _
 	m_eStat.fHp -= (fAtkDmg * ((100 - m_eStat.fDefence) / 100));
 	m_eStat.fAtkDmg = fAtkDmg;
 
+	if (m_pFsmCom->Get_CurrentState() != HITFATAL)
+	{
+		if (!m_bDiscover)
+		{
+			m_pFsmCom->Change_State(KNOCKBACK);
+		}
+	}
+
 	if (!m_bDiscover)
 	{
-		m_pFsmCom->Change_State(KNOCKBACK);
 		m_bDiscover = true;
 	}
 
