@@ -127,6 +127,7 @@ private:
 	CTexture*				m_pDissloveTexture = { nullptr };
 
 	class CSimonManus_2P_Aura* m_pAuraEffect = { nullptr };
+	class CDissolve_SimonManus_Dead* m_pDissolveEffect = { nullptr };
 
 private:
 

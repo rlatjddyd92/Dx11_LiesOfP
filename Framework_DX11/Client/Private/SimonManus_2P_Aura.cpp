@@ -46,6 +46,9 @@ HRESULT CSimonManus_2P_Aura::Initialize(void* pArg)
     m_fRotationPerSecond = 90.f;
     m_vTextureSize = { 2048.f, 2048.f };
 
+    m_iState = CVIBuffer_Instancing::STATE_RANDOM | CVIBuffer_Instancing::STATE_LOOP | CVIBuffer_Instancing::STATE_DECEL;
+    m_fThreshold = 0.15f;
+
     return S_OK;
 }
 
@@ -60,9 +63,10 @@ void CSimonManus_2P_Aura::Update(_float fTimeDelta)
     if (false == m_bOn)
         return;
 
+    
     CVIBuffer_Instancing::PARTICLE_MOVEMENT Movement = {};
 
-    Movement.iState = CVIBuffer_Instancing::STATE_RANDOM | CVIBuffer_Instancing::STATE_LOOP | CVIBuffer_Instancing::STATE_DECEL;
+    Movement.iState = m_iState;
     Movement.vPivot = _Vec4(0.f, 0.f, 0.f, 1.f);
     Movement.fGravity = 0.f;
     Movement.vMoveDir = _Vec4(0.f, 1.f, 0.f, 0.f);
@@ -76,7 +80,7 @@ void CSimonManus_2P_Aura::Update(_float fTimeDelta)
     Movement.WorldMatrix = m_pManus_TransformCom->Get_WorldMatrix();
 
     CVIBuffer_Dissolve_Instance::DISSOLVE_DATA Data = {};
-    Data.fThreshold = 0.15f;
+    Data.fThreshold = m_fThreshold;
     Data.iModelType = CModel::TYPE_ANIM;
     Data.vTextureSize = m_vTextureSize;
 
@@ -177,6 +181,22 @@ void CSimonManus_2P_Aura::Reset()
     }
     
 
+}
+
+void CSimonManus_2P_Aura::Set_On(_bool bOn, _bool bCutScene)
+{
+    m_bCutScene = bCutScene;
+
+    if (true == bOn)
+    {
+        m_bOn = bOn;
+        Reset();
+    }
+    else
+    {
+        m_fThreshold = 0.f;
+        m_iState &= ~CVIBuffer_Instancing::STATE_LOOP;
+    }
 }
 
 HRESULT CSimonManus_2P_Aura::Ready_Componet()

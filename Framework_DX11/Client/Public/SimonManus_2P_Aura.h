@@ -39,12 +39,7 @@ public:
 
 public:
 	void Reset();
-	void Set_On(_bool bOn, _bool bCutScene) {
-		m_bOn = bOn;
-		m_bCutScene = bCutScene;
-
-		Reset();
-	}
+	void Set_On(_bool bOn, _bool bCutScene);
 
 private:
 	class CShader_NonVTX* m_pShaderCom = { nullptr };
@@ -80,6 +75,9 @@ private:
 
 	_bool								m_bCutScene = { false };
 	_bool								m_bOn = { false };
+
+	_uint								m_iState = { 0 };
+	_float								m_fThreshold = { 0.f };
 
 private:
 	HRESULT Ready_Componet();
