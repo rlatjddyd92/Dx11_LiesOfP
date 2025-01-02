@@ -94,7 +94,7 @@ void CState_Player_Scissor_Fatal::Control_Collider(_int iFrame)
     {
         if (m_iColliderStartFrame[i] <= iFrame && iFrame <= m_iColliderEndFrame[i])
         {
-            if (i == 4)
+            if (i == 3)
             {
                 m_pPlayer->Set_WeaponStrength(ATK_LAST);
             }

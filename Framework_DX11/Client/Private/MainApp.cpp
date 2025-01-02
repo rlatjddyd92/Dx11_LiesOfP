@@ -400,22 +400,22 @@ void CMainApp::Free()
 {
 	__super::Free();
 
+	CEffect_Manager::Destroy_Instance();
+	CCamera_Manager::Destroy_Instance();
+	GET_GAMEINTERFACE->Release_GameInterface();
+
+	ClipCursor(NULL); // 마우스를 제한 해제
+	ShowCursor(TRUE);  // 마우스 커서를 다시 보이게 함
+
 	Safe_Release(m_pDevice);
 	Safe_Release(m_pContext);
+
 
 	m_pGameInstance->Release_Engine();
 
 	// 24-11-09 김성용
 	// GameInterface 릴리즈
-	GET_GAMEINTERFACE->Release_GameInterface();
 
 	Safe_Release(m_pGameInstance);
-	
-	CEffect_Manager::Destroy_Instance();
-	CCamera_Manager::Destroy_Instance();
-
-
-	ClipCursor(NULL); // 마우스를 제한 해제
-	ShowCursor(TRUE);  // 마우스 커서를 다시 보이게 함
 }
 

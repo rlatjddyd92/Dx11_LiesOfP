@@ -186,7 +186,7 @@ void CWeapon_Scissor::OnCollisionEnter(CGameObject* pOther)
 					CEffect_Manager::Get_Instance()->Add_Effect_ToLayer(LEVEL_GAMEPLAY, TEXT("Player_Attack_Slash_FatalAttak_1"),
 						(_Vec3)pMonster->Calc_CenterPos(), m_vAttackDir);
 				}
-				else if (m_eAttackStrength == ATK_STRONG)
+				else if (m_eAttackStrength == ATK_LAST)
 				{
 					CEffect_Manager::Get_Instance()->Add_Effect_ToLayer(LEVEL_GAMEPLAY, TEXT("Player_Attack_Slash_FatalAttak_2"),
 						(_Vec3)pMonster->Calc_CenterPos(), m_vAttackDir);

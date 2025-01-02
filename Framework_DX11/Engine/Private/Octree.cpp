@@ -192,11 +192,11 @@ void COctree::Free()
 {
 	__super::Free();
 
-	if (m_pBoundBox)
-		delete m_pBoundBox;
-	m_pBoundBox = nullptr;
+	//if (m_pBoundBox)
+	//	delete m_pBoundBox;
+	//m_pBoundBox = nullptr;
 
-	for (int i = 0; i < 8; ++i) {
-		Safe_Release(m_pChildren[i]);
-	}
+	//for (int i = 0; i < 8; ++i) {
+	//	Safe_Release(m_pChildren[i]);
+	//}
 }
