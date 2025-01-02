@@ -1,4 +1,14 @@
-﻿  unity_VC40HRGOV68UNZPY.cpp
-MSVCRTD.lib(dyn_tls_dtor.obj) : warning LNK4020: ''의 형식 레코드가 손상되었습니다. 디버거에서 일부 기호와 형식에 액세스할 수 없습니다.
-MSVCRTD.lib(init.obj) : warning LNK4020: ''의 형식 레코드가 손상되었습니다. 디버거에서 일부 기호와 형식에 액세스할 수 없습니다.
-  Client.vcxproj -> C:\Users\olivi\Github\Dx11_LiesOfP\Binary_DX11\Client\Bin\Client.exe
+﻿FXC : warning X4717: Effects deprecated for D3DCompiler_47
+  
+  compilation object save succeeded; see D:\GitProject\Dx11_LiesOfP\Binary_DX11\Client\Bin\Shader_VtxModel.cso
+FXC : warning X4717: Effects deprecated for D3DCompiler_47
+  
+  compilation object save succeeded; see D:\GitProject\Dx11_LiesOfP\Binary_DX11\Client\Bin\Shader_VtxNorTex.cso
+FXC : warning X4717: Effects deprecated for D3DCompiler_47
+  
+  compilation object save succeeded; see D:\GitProject\Dx11_LiesOfP\Binary_DX11\Client\Bin\Shader_VtxPosTex.cso
+C:\Program Files\Microsoft Visual Studio\2022\Community\MSBuild\Microsoft\VC\v170\Microsoft.Cpp.Unity.targets(190,5): warning : 'C:\Users\olivi\Github\Dx11_LiesOfP\Binary_DX11\Client\Default\x64\Debug\unity_VC40HRGOV68UNZPY.cpp' 경로의 일부를 찾을 수 없습니다.
+  stdafx.cpp
+  unity_53HJLOVPAVVEI82L.cpp
+  LINK : ..\Bin\Client.exe을(를) 찾을 수 없거나 마지막 증분 링크에 의해 빌드되지 않았습니다. 전체 링크를 수행하고 있습니다.
+  Client.vcxproj -> D:\GitProject\Dx11_LiesOfP\Binary_DX11\Client\Bin\Client.exe

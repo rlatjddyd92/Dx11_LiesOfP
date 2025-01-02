@@ -135,13 +135,13 @@ HRESULT CLoader::Ready_Resources_For_GamePlayLevel()
 		CModel::Create(m_pDevice, m_pContext, CModel::TYPE_NONANIM, "../Bin/Resources/Models/Blanket/Title_Blanket.fbx","../Bin/ModelData/NonAnim/Map/Etc/Title_Blanket/Tex/", PreTransformMatrix))))
 		return E_FAIL;*/
 
-	if (FAILED(m_pGameInstance->Add_Prototype(LEVEL_GAMEPLAY, TEXT("Prototype_Component_Model_Butterfly"),
-		CModel::Create(m_pDevice, m_pContext, CModel::TYPE_ANIM, "../Bin/Resources/Models/Butterfly/Butterfly.fbx", "../Bin/ModelData/Anim/Butterfly/Tex/", PreTransformMatrix))))
-		return E_FAIL;
+	//if (FAILED(m_pGameInstance->Add_Prototype(LEVEL_GAMEPLAY, TEXT("Prototype_Component_Model_Butterfly"),
+	//	CModel::Create(m_pDevice, m_pContext, CModel::TYPE_ANIM, "../Bin/Resources/Models/Butterfly/Butterfly.fbx", "../Bin/ModelData/Anim/Butterfly/Tex/", PreTransformMatrix))))
+	//	return E_FAIL;
 	 
 	// 일반 몬스터 로드 함수
-	//if (FAILED(Ready_Resources_For_BasicMonster()))
-	//	return E_FAIL;
+	if (FAILED(Ready_Resources_For_BasicMonster()))
+		return E_FAIL;
 	 
 	//if (FAILED(Ready_Resources_For_BossMonster()))
 	//	return E_FAIL;
@@ -305,16 +305,23 @@ HRESULT CLoader::Ready_Resources_For_BasicMonster()
 	//	return E_FAIL;
 //#pragma endregion
 
-#pragma region Training
-	/* For. Prototype_Component_Model_Monster_RebornerMale */
-	if (FAILED(m_pGameInstance->Add_Prototype(LEVEL_GAMEPLAY, TEXT("Prototype_Component_Model_Monster_Training01"),
-		CModel::Create(m_pDevice, m_pContext, CModel::TYPE_ANIM, "../Bin/Resources/Models/Monster/Training/Training01.fbx", "../Bin/ModelData/Anim/Monster/Training/", PreTransformMatrix))))
+	#pragma region RebornerMale_Fire
+	/* For. Prototype_Component_Model_Monster_RebornerMale_Fire */
+	if (FAILED(m_pGameInstance->Add_Prototype(LEVEL_GAMEPLAY, TEXT("Prototype_Component_Model_Monster_RebornerMale_Fire"),
+		CModel::Create(m_pDevice, m_pContext, CModel::TYPE_ANIM, "../Bin/Resources/Models/Monster/RebornerMale_Fire/RebornerMale_Fire.fbx", "../Bin/ModelData/Anim/Monster/RebornerMale_Fire/", PreTransformMatrix))))
 		return E_FAIL;
+#pragma endregion
 
-	/* For. Prototype_Component_Model_Monster_RebornerMale_Weapon */
-	if (FAILED(m_pGameInstance->Add_Prototype(LEVEL_GAMEPLAY, TEXT("Prototype_Component_Model_Monster_Training02"),
-		CModel::Create(m_pDevice, m_pContext, CModel::TYPE_ANIM, "../Bin/Resources/Models/Monster/Training/Training02.fbx", "../Bin/ModelData/Anim/Monster/Training/", PreTransformMatrix))))
-		return E_FAIL;
+#pragma region Training
+	///* For. Prototype_Component_Model_Monster_RebornerMale */
+	//if (FAILED(m_pGameInstance->Add_Prototype(LEVEL_GAMEPLAY, TEXT("Prototype_Component_Model_Monster_Training01"),
+	//	CModel::Create(m_pDevice, m_pContext, CModel::TYPE_ANIM, "../Bin/Resources/Models/Monster/Training/Training01.fbx", "../Bin/ModelData/Anim/Monster/Training/", PreTransformMatrix))))
+	//	return E_FAIL;
+
+	///* For. Prototype_Component_Model_Monster_RebornerMale_Weapon */
+	//if (FAILED(m_pGameInstance->Add_Prototype(LEVEL_GAMEPLAY, TEXT("Prototype_Component_Model_Monster_Training02"),
+	//	CModel::Create(m_pDevice, m_pContext, CModel::TYPE_ANIM, "../Bin/Resources/Models/Monster/Training/Training02.fbx", "../Bin/ModelData/Anim/Monster/Training/", PreTransformMatrix))))
+	//	return E_FAIL;
 #pragma endregion
 
 	return S_OK;
