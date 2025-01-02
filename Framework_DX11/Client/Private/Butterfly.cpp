@@ -30,14 +30,15 @@ HRESULT CButterfly::Initialize(void* pArg)
 
 	//m_iAnimIndex = m_pModelCom->Find_AnimationIndex("AS_Idle_C", 1.f);	//가만히 날개짓
 	//m_iAnimIndex = m_pModelCom->Find_AnimationIndex("AS_Walk_C_B_Root", 1.f);	//뒤로 이동
-	//m_iAnimIndex = m_pModelCom->Find_AnimationIndex("AS_Walk_C_F", 1.f);	 //앞으로 이동	
-	m_iAnimIndex = m_pModelCom->Find_AnimationIndex("AS_Walk_C_F_Root", 1.f); //앞으로 이동(루트 이동)
+	m_iAnimIndex = m_pModelCom->Find_AnimationIndex("AS_Walk_C_F", 1.f);	 //앞으로 이동	
+	//m_iAnimIndex = m_pModelCom->Find_AnimationIndex("AS_Walk_C_F_Root", 1.f); //앞으로 이동(루트 이동)
 	//m_iAnimIndex = m_pModelCom->Find_AnimationIndex("AS_Walk_C_L_Root", 1.f);	//왼쪽으로 이동(루트 이동)
 	//m_iAnimIndex = m_pModelCom->Find_AnimationIndex("AS_Walk_C_R_Root", 1.f);	//오른쪽으로 이동(루트 이동)
 
 	m_pModelCom->SetUp_Animation(m_iAnimIndex, true);
-	m_pTransformCom->Set_Scaled(0.2f, 0.2f, 0.2f);
+	m_pTransformCom->Set_Scaled(0.15f, 0.15f, 0.15f);
 	m_pTransformCom->Rotation(0.f, 155.f, 0.f);
+
 	return S_OK;
 }
 
@@ -49,10 +50,9 @@ void CButterfly::Priority_Update(_float fTimeDelta)
 		CGameObject* pSophia = m_pGameInstance->Find_Object(LEVEL_GAMEPLAY, TEXT("Layer_Sophia"), 0);
 		_Vec3 vNewPos = pSophia->Get_Transform()->Get_State(CTransform::STATE_POSITION);
 		m_vNewPos = vNewPos;
-
-		m_vNewPos.y += 1.65f;
-		m_vNewPos.z -= 0.2f;
-		m_vNewPos.x += 0.65f;
+		m_vNewPos.x = m_vNewPos.x + 0.65f + m_vPosOffset.x;
+		m_vNewPos.y = m_vNewPos.y + 1.67f + m_vPosOffset.y;
+		m_vNewPos.z = m_vNewPos.z - 0.2f + m_vPosOffset.y;
 		m_pTransformCom->Set_State(CTransform::STATE_POSITION, m_vNewPos);
 	}
 }
@@ -60,6 +60,8 @@ void CButterfly::Priority_Update(_float fTimeDelta)
 void CButterfly::Update(_float fTimeDelta)
 {
 	m_pModelCom->Play_Animation(fTimeDelta);
+
+	//m_pTransformCom->Go_Right(fTimeDelta, 0.3f);
 
 	static _float fX = m_vNewPos.x;
 	static _float fY = m_vNewPos.y;
@@ -93,6 +95,7 @@ void CButterfly::Update(_float fTimeDelta)
 	}
 
 	m_pTransformCom->Set_State(CTransform::STATE_POSITION, _Vec3(fX, fY, fZ));
+
 }
 
 void CButterfly::Late_Update(_float fTimeDelta)
@@ -118,6 +121,20 @@ HRESULT CButterfly::Render()
 		if (FAILED(m_pModelCom->Bind_Material(m_pShaderCom, "g_DiffuseTexture", DIFFUSE, (_uint)i)))
 			return E_FAIL;
 
+		// EMISSIVE
+		if (nullptr != m_pModelCom->Find_Texture((_uint)i, TEXTURE_TYPE::EMISSIVE))
+		{
+			m_fEmissiveMask = 1.f;
+			if (FAILED(m_pModelCom->Bind_Material(m_pShaderCom, "g_EmessiveTexture", EMISSIVE, (_uint)i)))
+				return E_FAIL;
+		}
+		else
+		{
+			m_fEmissiveMask = 0.f;
+		}
+		if (FAILED(m_pShaderCom->Bind_RawValue("g_fEmessiveMask", &m_fEmissiveMask, sizeof(_float))))
+			return E_FAIL;
+
 		if (nullptr != m_pModelCom->Find_Texture((_uint)i, TEXTURE_TYPE::ROUGHNESS))
 		{
 			if (FAILED(m_pModelCom->Bind_Material(m_pShaderCom, "g_ARMTexture", ROUGHNESS, (_uint)i)))
@@ -141,6 +158,11 @@ HRESULT CButterfly::Render()
 		if (FAILED(m_pModelCom->Render((_uint)i)))
 			return E_FAIL;
 	}
+
+	m_fEmissiveMask = 0.f;
+
+	if (FAILED(m_pShaderCom->Bind_RawValue("g_fEmessiveMask", &m_fEmissiveMask, sizeof(_float))))
+	return E_FAIL;
 
 	return S_OK;
 }

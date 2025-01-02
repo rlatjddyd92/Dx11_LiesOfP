@@ -56,6 +56,7 @@ HRESULT CRebornerMale::Initialize(void* pArg)
 		return E_FAIL;
 
 	m_pNavigationCom->Move_to_Cell(m_pRigidBodyCom, pDefaultDesc->iCurrentCellNum);
+	m_iInitRoomNum = m_pNavigationCom->Get_Cell_AreaNum(pDefaultDesc->iCurrentCellNum);
 
 	m_pModelCom->SetUp_Animation(1, true);
 
@@ -114,7 +115,11 @@ void CRebornerMale::Update(_float fTimeDelta)
 		CEffect_Manager::Get_Instance()->Add_Effect_ToLayer(LEVEL_GAMEPLAY, TEXT("Monster_Impact"),
 			_Vec3{ Calc_CenterPos() }, _Vec3{ 0, 0, 1 });
 	}
-	m_vCurRootMove = XMVector3TransformNormal(m_pModelCom->Play_Animation(fTimeDelta), m_pTransformCom->Get_WorldMatrix());
+
+	if (m_pGameInstance->Get_Player_AreaNum() == m_iInitRoomNum)
+		m_vCurRootMove = XMVector3TransformNormal(m_pModelCom->Play_Animation(fTimeDelta), m_pTransformCom->Get_WorldMatrix());
+	else
+		m_vCurRootMove = _Vec3(0.f, 0.f, 0.f);
 
 	m_pRigidBodyCom->Set_Velocity(m_vCurRootMove / fTimeDelta);
 
@@ -134,19 +139,25 @@ void CRebornerMale::Update(_float fTimeDelta)
 
 void CRebornerMale::Late_Update(_float fTimeDelta)
 {
-	__super::Late_Update(fTimeDelta);
-
-	m_pRigidBodyCom->Update(fTimeDelta);
-	m_pGameInstance->Add_RenderObject(CRenderer::RG_NONBLEND, this);
-
-
-	m_pGameInstance->Add_ColliderList(m_pColliderCom);
-	for (_int i = 0; i < CT_END - 1; ++i)
+	if (m_pGameInstance->Get_Player_AreaNum() == m_iInitRoomNum)
 	{
-		m_pGameInstance->Add_ColliderList(m_EXCollider[i]);
+		if (m_pGameInstance->isIn_Frustum_WorldSpace(m_pTransformCom->Get_State(CTransform::STATE_POSITION), 50.f))
+		{
+			__super::Late_Update(fTimeDelta);
+
+			m_pRigidBodyCom->Update(fTimeDelta);
+			m_pGameInstance->Add_RenderObject(CRenderer::RG_NONBLEND, this);
+
+
+			m_pGameInstance->Add_ColliderList(m_pColliderCom);
+			for (_int i = 0; i < CT_END - 1; ++i)
+			{
+				m_pGameInstance->Add_ColliderList(m_EXCollider[i]);
+			}
+			m_pWeapon->Late_Update(fTimeDelta);
+			m_pColliderObject->Late_Update(fTimeDelta);
+		}
 	}
-	m_pWeapon->Late_Update(fTimeDelta);
-	m_pColliderObject->Late_Update(fTimeDelta);
 }
 
 HRESULT CRebornerMale::Render()

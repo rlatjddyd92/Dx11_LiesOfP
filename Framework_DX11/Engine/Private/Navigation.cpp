@@ -35,6 +35,11 @@ CNavigation::CNavigation(const CNavigation & Prototype)
 	m_eComponentType = NAVIGATION;
 }
 
+_int CNavigation::Get_Cell_AreaNum(_int iIndex)
+{
+	return m_Cells[iIndex]->Get_AreaNum();
+}
+
 //HRESULT CNavigation::Initialize_Prototype(const _wstring& strNavigationDataFile)
 //{
 //	XMStoreFloat4x4(&m_WorldMatrix, XMMatrixIdentity());

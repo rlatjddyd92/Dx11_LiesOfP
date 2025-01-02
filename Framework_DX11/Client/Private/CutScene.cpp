@@ -338,9 +338,9 @@ void CCutScene::End_Setting()
 		GET_GAMEINTERFACE->Show_Script_Npc_Talking(NPC_SCRIPT::SCR_SOPIA_DIE);
 
 		int iCount = m_pGameInstance->Get_Layer_ObjectCount(LEVEL_GAMEPLAY, TEXT("Layer_Butterfly"));
-		for (int i = iCount; i > 0; --i)
+		for (int i = 0; i < iCount; ++i)
 		{
-			m_pGameInstance->Find_Object(LEVEL_GAMEPLAY, TEXT("Layer_Butterfly"), iCount - 1)->Set_Dead(true);
+			m_pGameInstance->Find_Object(LEVEL_GAMEPLAY, TEXT("Layer_Butterfly"), i)->Set_Dead(true);
 		}
 	}
 		break;	
