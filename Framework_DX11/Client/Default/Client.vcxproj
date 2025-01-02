@@ -537,6 +537,7 @@
     <ClInclude Include="..\Public\Weapon_Scissor_Handle.h" />
     <ClInclude Include="..\Public\Weapon_SimonManus_Hammer.h" />
     <ClInclude Include="Client.h" />
+    <ClInclude Include="CMoveBlockObj.h" />
     <ClInclude Include="State_Player_SophiaHand.h" />
     <ClInclude Include="Interface_Enums.h" />
     <ClInclude Include="Item_Defines.h" />
@@ -914,6 +915,7 @@
     <ClCompile Include="..\Private\Weapon_Scissor_Handle.cpp" />
     <ClCompile Include="..\Private\Weapon_SimonManus_Hammer.cpp" />
     <ClCompile Include="Client.cpp" />
+    <ClCompile Include="CMoveBlockObj.cpp" />
     <ClCompile Include="State_Player_SophiaHand.cpp" />
     <ClCompile Include="stdafx.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Create</PrecompiledHeader>

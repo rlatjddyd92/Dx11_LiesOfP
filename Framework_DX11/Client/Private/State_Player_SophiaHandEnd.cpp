@@ -67,9 +67,9 @@ void CState_Player_SophiaHandEnd::Update(_float fTimeDelta)
         CButterfly* pButterfly2 = static_cast<CButterfly*>(m_pGameInstance->Find_Object(LEVEL_GAMEPLAY, TEXT("Layer_Butterfly"), 2));
         pButterfly2->Set_Offset(0.f,-0.2f,0.f);
 
-        m_pGameInstance->Add_CloneObject_ToLayer(LEVEL_GAMEPLAY, TEXT("Layer_Butterfly"), TEXT("Prototype_GameObject_Butterfly"));
+       m_pGameInstance->Add_CloneObject_ToLayer(LEVEL_GAMEPLAY, TEXT("Layer_Butterfly"), TEXT("Prototype_GameObject_Butterfly"));
         CButterfly* pButterfly4 = static_cast<CButterfly*>(m_pGameInstance->Find_Object(LEVEL_GAMEPLAY, TEXT("Layer_Butterfly"), 3));
-        pButterfly4->Set_Offset(0.099f, 0.f, 1.07f);
+       	pButterfly4->Set_Offset(-0.3f, 0.f, 0.85f);
 
     }  
     
@@ -86,6 +86,11 @@ void CState_Player_SophiaHandEnd::Update(_float fTimeDelta)
         CButterfly* pButterfly3 = static_cast<CButterfly*>(m_pGameInstance->Find_Object(LEVEL_GAMEPLAY, TEXT("Layer_Butterfly"), 5));
         pButterfly3->Set_Offset(0.f, 0.1f, 0.f);
         pButterfly3->Get_Transform()->Rotation(0.f, 155.f, 15.f);
+
+        m_pGameInstance->Add_CloneObject_ToLayer(LEVEL_GAMEPLAY, TEXT("Layer_Butterfly"), TEXT("Prototype_GameObject_Butterfly"));
+        CButterfly* pButterfly4 = static_cast<CButterfly*>(m_pGameInstance->Find_Object(LEVEL_GAMEPLAY, TEXT("Layer_Butterfly"), 6));
+        pButterfly3->Get_Transform()->Rotation(0.f, 155.f, 20.f);
+        pButterfly4->Set_Offset(-0.3f, 0.2f, 0.85f);
     }
 
 }
