@@ -158,7 +158,7 @@ void CUIPage_Telepot::Page_Setting()
 	}
 
 	m_vecTelepot_Dest[0]->iDestination_Navi_Index = 747; // 모나스트리 입구
-	m_vecTelepot_Dest[1]->iDestination_Navi_Index = 280; // 락사시아 보스전 
+	m_vecTelepot_Dest[1]->iDestination_Navi_Index = 228; // 락사시아 보스전 
 	m_vecTelepot_Dest[2]->iDestination_Navi_Index = 1008; // 원형계단
 	m_vecTelepot_Dest[3]->iDestination_Navi_Index = 227; // 마누스 보스전
 

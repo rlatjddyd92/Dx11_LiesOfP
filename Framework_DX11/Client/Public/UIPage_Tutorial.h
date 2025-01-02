@@ -129,9 +129,10 @@ protected:
 	void Check_Dummy_Weakness(); // 그로기 성공
 	void Check_Dummy_Get_FatalAttack(); // 페이탈 어택 성공
 	void Check_Player_Switch_Weapon(); // 무기 변경
-	void Check_Player_Guard(); // 가드, 퍼펙트 가드
-	void Check_Player_Resion_Arm_Normal(); // 리전 암 전개
+	void Check_Player_Guard(_float fTimeDelta); // 가드, 퍼펙트 가드
+	void Check_Player_Resion_Arm_Start(); // 리전 암 전개
 	void Check_Player_Resion_Arm_Skill(); // 리전 암 막기, 리전 암 공격
+	void Check_Player_Resion_Arm_Counter(); // 리전 암 카운터
 
 protected:
 	vector<class CUITutorial_Info*> m_vecMission_Info = { nullptr };
@@ -162,6 +163,10 @@ protected:
 
 	// 무기 교체 확인용
 	_int m_iBeforeWeapon = -1;
+
+	// 무기 가드 확인용
+	_Vec2 m_vGuardTime = { 0.f,0.15f };
+	_bool m_bGuard = false;
 	
 	// 얕은 복사, 릴리즈 하지 말 것
 	class CMonster_Training01* m_pSharedPonter_AttackMonster = { nullptr };
