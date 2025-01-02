@@ -2534,21 +2534,9 @@
     </ClInclude>
     <ClInclude Include="..\public\Dissolve_Raxasia_Dead.h">
       <Filter>02.GameObjects\02.Pawn\01.Monster\Boss\Raxasia\Dissolve_Raxasia_Dead</Filter>
-	</ClInclude>
+    </ClInclude>
     <ClInclude Include="..\Public\UITutorial_Guide.h">
       <Filter>03.GameInterface_Controller\00.UIManager\00.UIPage\20.UIPage_Tutorial\01.Tuto_Guide</Filter>
-    </ClInclude>
-    <ClInclude Include="..\Public\UIPlay_Weapon.h">
-      <Filter>03.GameInterface_Controller\00.UIManager\00.UIPage\02.UIPage_Play %2870%25%29\PlayComponent\00.Weapon</Filter>
-    </ClInclude>
-    <ClInclude Include="..\Public\UIPlay_Component.h">
-      <Filter>03.GameInterface_Controller\00.UIManager\00.UIPage\02.UIPage_Play %2870%25%29\PlayComponent</Filter>
-    </ClInclude>
-    <ClInclude Include="..\Public\UIPart_3D_Path.h">
-      <Filter>03.GameInterface_Controller\00.UIManager\02.UIPart_3D\00.UIPart_3D_Path</Filter>
-    </ClInclude>
-    <ClInclude Include="..\Public\UIPart_3D_Normal.h">
-      <Filter>03.GameInterface_Controller\00.UIManager\02.UIPart_3D\01.UIPart_3D_Normal</Filter>
     </ClInclude>
     <ClInclude Include="..\Public\UIPart_3D.h">
       <Filter>03.GameInterface_Controller\00.UIManager\02.UIPart_3D</Filter>
@@ -2558,6 +2546,12 @@
     </ClInclude>
     <ClInclude Include="..\Public\UIPage_3D_PathGuide.h">
       <Filter>03.GameInterface_Controller\00.UIManager\03.UIPage_3D\00.UIPage_3D_PathGuide</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Public\UIPart_3D_Normal.h">
+      <Filter>03.GameInterface_Controller\00.UIManager\02.UIPart_3D\01.UIPart_3D_Normal</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Public\UIPart_3D_Path.h">
+      <Filter>03.GameInterface_Controller\00.UIManager\02.UIPart_3D\00.UIPart_3D_Path</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -3653,27 +3647,6 @@
     <ClCompile Include="..\Private\UITutorial_Timing.cpp">
       <Filter>03.GameInterface_Controller\00.UIManager\00.UIPage\20.UIPage_Tutorial\02.Tuto_Timing</Filter>
     </ClCompile>
-    <ClCompile Include="..\Private\UIPlay_Weapon.cpp">
-      <Filter>03.GameInterface_Controller\00.UIManager\00.UIPage\02.UIPage_Play %2870%25%29\PlayComponent\00.Weapon</Filter>
-    </ClCompile>
-    <ClCompile Include="..\Private\UIPlay_Component.cpp">
-      <Filter>03.GameInterface_Controller\00.UIManager\00.UIPage\02.UIPage_Play %2870%25%29\PlayComponent</Filter>
-    </ClCompile>
-    <ClCompile Include="..\Private\UIPart_3D_Path.cpp">
-      <Filter>03.GameInterface_Controller\00.UIManager\02.UIPart_3D\00.UIPart_3D_Path</Filter>
-    </ClCompile>
-    <ClCompile Include="..\Private\UIPart_3D_Normal.cpp">
-      <Filter>03.GameInterface_Controller\00.UIManager\02.UIPart_3D\01.UIPart_3D_Normal</Filter>
-    </ClCompile>
-    <ClCompile Include="..\Private\UIPart_3D.cpp">
-      <Filter>03.GameInterface_Controller\00.UIManager\02.UIPart_3D</Filter>
-    </ClCompile>
-    <ClCompile Include="..\Private\UIPage_3D.cpp">
-      <Filter>03.GameInterface_Controller\00.UIManager\03.UIPage_3D</Filter>
-    </ClCompile>
-    <ClCompile Include="..\Private\UIPage_3D_PathGuide.cpp">
-      <Filter>03.GameInterface_Controller\00.UIManager\03.UIPage_3D\00.UIPage_3D_PathGuide</Filter>
-    </ClCompile>
     <ClCompile Include="..\Private\UITutorial_Result.cpp">
       <Filter>03.GameInterface_Controller\00.UIManager\00.UIPage\20.UIPage_Tutorial\03.Tuto_Result</Filter>
     </ClCompile>
@@ -3700,6 +3673,21 @@
     </ClCompile>
     <ClCompile Include="..\private\Dissolve_Raxasia_Dead.cpp">
       <Filter>02.GameObjects\02.Pawn\01.Monster\Boss\Raxasia\Dissolve_Raxasia_Dead</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Private\UIPart_3D_Path.cpp">
+      <Filter>03.GameInterface_Controller\00.UIManager\02.UIPart_3D\00.UIPart_3D_Path</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Private\UIPart_3D_Normal.cpp">
+      <Filter>03.GameInterface_Controller\00.UIManager\02.UIPart_3D\01.UIPart_3D_Normal</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Private\UIPage_3D.cpp">
+      <Filter>03.GameInterface_Controller\00.UIManager\03.UIPage_3D</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Private\UIPage_3D_PathGuide.cpp">
+      <Filter>03.GameInterface_Controller\00.UIManager\03.UIPage_3D\00.UIPage_3D_PathGuide</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Private\UIPart_3D.cpp">
+      <Filter>03.GameInterface_Controller\00.UIManager\02.UIPart_3D</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

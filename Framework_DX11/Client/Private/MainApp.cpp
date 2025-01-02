@@ -68,13 +68,13 @@ void CMainApp::Update(_float fTimeDelta)
 		if (KEY_TAP(KEY::NUM3))
 			GET_GAMEINTERFACE->Fade_Out(TEXT("FadeOut_Test"), TEXT("FadeOut_Desc"), { 0.f,0.f,0.f }, 2.f);
 		if (KEY_TAP(KEY::NUM4))
-			GET_GAMEINTERFACE->Fade_In(2.f);
-		if (KEY_TAP(KEY::NUM4))
-			GET_GAMEINTERFACE->Fade_In(2.f);
+			GET_GAMEINTERFACE->Show_Script_Npc_Talking(NPC_SCRIPT::SCR_MANUS);
+		if (KEY_TAP(KEY::NUM5))
+			GET_GAMEINTERFACE->Show_Script_Npc_Talking(NPC_SCRIPT::SCR_SOPIA_DIE);
 		if (KEY_TAP(KEY::NUM6))
-			GET_GAMEINTERFACE->Fade_Out(TEXT("FadeOut_Test"), TEXT("FadeOut_Desc"), { 0.f,0.f,0.f }, 2.f);
+			GET_GAMEINTERFACE->Show_Script_Npc_Talking(NPC_SCRIPT::SCR_ZEMINI);
 		if (KEY_TAP(KEY::NUM7))
-			GET_GAMEINTERFACE->Fade_In(2.f);
+			GET_GAMEINTERFACE->Show_Script_Npc_Talking(NPC_SCRIPT::SCR_SOPIA_FIRST);
 		if (KEY_TAP(KEY::NUM8))
 			GET_GAMEINTERFACE->Show_Script_Npc_Talking(NPC_SCRIPT::SCR_SOPIA_FIRST);
 		if (KEY_TAP(KEY::NUM9))

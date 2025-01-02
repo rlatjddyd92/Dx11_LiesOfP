@@ -294,6 +294,14 @@ public:
 		m_pUIPage_Tutorial->CloseAction(); 
 		m_pUIPage_Play->KeyGuideOn();
 	}
+
+	_bool IsTutorial_Open() { return m_pUIPage_Tutorial->GetPageAction(PAGEACTION::ACTION_ACTIVE); } 
+	_bool Get_TutorialPopup_Open() { return m_pUIPage_Tutorial->Get_TutorialPopup_Open(); }
+	_int Get_NowChapter() { return m_pUIPage_Tutorial->Get_NowChapter(); }
+
+	void Input_TrainingMonsterPointer_Attack(class CGameObject* pPoiter) { m_pUIPage_Tutorial->Input_TrainingMonsterPointer_Attack(pPoiter); }
+	void Input_TrainingMonsterPointer_Normal(class CGameObject* pPoiter) { m_pUIPage_Tutorial->Input_TrainingMonsterPointer_Normal(pPoiter); }
+
 #pragma endregion
 
 

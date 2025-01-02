@@ -14,6 +14,9 @@ class CUITutorial_Timing;
 class CUITutorial_Result;
 class CUITutorial_Popup;
 
+class CMonster_Training01;
+class CMonster_Training02;
+
 class CUIPage_Tutorial : public CUIPage
 {
 public:
@@ -76,7 +79,13 @@ public:
 	void Close_Popup();
 	void Open_Popup();
 	
+	// 정보 확인
 	_bool Get_TutorialPopup_Open() { return m_bPopupOpen; }
+	_int Get_NowChapter() { return m_iNowChapter; }
+
+	// 더미 포인터 넣기 
+	void Input_TrainingMonsterPointer_Attack(class CGameObject* pPoiter);
+	void Input_TrainingMonsterPointer_Normal(class CGameObject* pPoiter);
 
 public:
 	const vector<UPART*>& Get_UIPartInfo() { return m_vecPart; }
@@ -115,8 +124,8 @@ protected:
 	void Check_Player_Move(_float fTimeDelta); // 이동하기 미션
 	void Check_Player_Dash(_float fTimeDelta); // 회피 미션
 	void Check_Player_Lbutton_Attack(); // 일반 공격 
-	void Check_Player_RButton_Attack(); // 강공격
-	void Check_Player_Fable_Art(); // 유저 페이블 아츠 사용
+	void Check_Player_RButton_Attack(_float fTimeDelta); // 강공격
+	void Check_Player_Fable_Art(_bool bIsSecond); // 유저 페이블 아츠 사용
 	void Check_Dummy_Weakness(); // 그로기 성공
 	void Check_Dummy_Get_FatalAttack(); // 페이탈 어택 성공
 	void Check_Player_Switch_Weapon(); // 무기 변경
@@ -145,6 +154,18 @@ protected:
 	_int m_iNow_Index = 0;
 
 	_float m_fKeyHeight = 30.f;
+
+	// 우클릭 강공격용
+	_Vec2 m_vHoldTime_RButton = { 0.f,2.f };
+
+
+
+	// 무기 교체 확인용
+	_int m_iBeforeWeapon = -1;
+	
+	// 얕은 복사, 릴리즈 하지 말 것
+	class CMonster_Training01* m_pSharedPonter_AttackMonster = { nullptr };
+	class CMonster_Training02* m_pSharedPonter_NormalMonster = { nullptr };
 
 public:
 	static CUIPage_Tutorial* Create(ID3D11Device* pDevice, ID3D11DeviceContext* pContext);
