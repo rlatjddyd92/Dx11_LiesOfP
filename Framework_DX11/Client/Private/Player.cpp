@@ -483,7 +483,7 @@ _bool CPlayer::Key_None(KEY eKey)
 
 void CPlayer::Change_State(_uint iState, void* pArg)
 {
-	if (GET_GAMEINTERFACE->IsTlaking_WithNPC())
+	if (GET_GAMEINTERFACE->IsTalking_WithNPC())
 		return;
 
 	__super::Change_State(iState, pArg);

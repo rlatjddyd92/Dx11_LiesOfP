@@ -273,7 +273,7 @@ _Vec4 CPawn::Calc_CenterPos(_bool isUsingBone)
 _Vec3 CPawn::Calc_BoneWorldPos(const _char* szBoneName)
 {
 	if (nullptr == m_pModelCom)
-		return m_pTransformCom->Get_State(CTransform::STATE_POSITION);
+		return (_Vec3)m_pTransformCom->Get_State(CTransform::STATE_POSITION);
 
 	_Matrix WorldMatrix;
 	_matrix SocketMatrix = m_pModelCom->Get_BoneCombindTransformationMatrix(szBoneName);

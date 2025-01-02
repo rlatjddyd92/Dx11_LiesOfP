@@ -107,7 +107,7 @@ void CPlayerCamera::PlayerMove(_float fTimeDelta)
 
 	vPlayerPos.m128_f32[1] += 1.65f;
 
-	if (!m_isLock && !GET_GAMEINTERFACE->IsTlaking_WithNPC())
+	if (!m_isLock && !GET_GAMEINTERFACE->IsTalking_WithNPC())
 	{
 		if (MouseMove = m_pGameInstance->Get_DIMouseMove(DIMM_X))
 		{

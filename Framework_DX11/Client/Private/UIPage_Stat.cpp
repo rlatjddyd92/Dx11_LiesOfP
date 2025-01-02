@@ -87,8 +87,8 @@ void CUIPage_Stat::OpenAction()
 {
 	__super::OpenAction();
 	m_pSoundCom->Play2D(TEXT("SE_UI_OpenMenu_04.wav"), &g_fUIVolume);
-	memset(m_fStarChart_LevelUp_Now, 0.f, sizeof(_float) * 8);
-	memset(m_fStarChart_NowStat_Now, 0.f, sizeof(_float) * 8);
+	memset(m_fStarChart_LevelUp_Now, 0, sizeof(_float) * 8);
+	memset(m_fStarChart_NowStat_Now, 0, sizeof(_float) * 8);
 	m_iFocus_Point = 0;
 }
 
@@ -332,15 +332,15 @@ void CUIPage_Stat::Update_SpecData(_float fTimeDelta)
 	for (_int i = 0; i < 9; ++i)
 	{
 		pOrigin_Stat[i] *= 100.f;
-		round(pOrigin_Stat[i]);
+		_float fRound = round(pOrigin_Stat[i]);
 		pOrigin_Stat[i] /= 100.f;
 
 		pAdjust_Stat[i] *= 100.f;
-		round(pAdjust_Stat[i]);
+		fRound = round(pAdjust_Stat[i]);
 		pAdjust_Stat[i] /= 100.f;
 
 		m_iLevelUp_Buffer_Stat[i] *= 100.f;
-		round(m_iLevelUp_Buffer_Stat[i]);
+		fRound = round(m_iLevelUp_Buffer_Stat[i]);
 		m_iLevelUp_Buffer_Stat[i] /= 100.f;
 	}
 

@@ -82,7 +82,7 @@ C:\Program Files\Microsoft Visual Studio\2022\Community\VC\Tools\MSVC\14.38.3313
   코드를 생성하고 있습니다.
   Previous IPDB not found, fall back to full compilation.
 D:\GitProject\Dx11_LiesOfP\Framework_DX11\Engine\Public\PipeLine.h(30): warning C4172: 지역 변수 또는 임시의 주소를 반환하고 있습니다.
-  All 5938 functions were compiled because no usable IPDB/IOBJ from previous compilation was found.
+  All 5939 functions were compiled because no usable IPDB/IOBJ from previous compilation was found.
   코드를 생성했습니다.
 Effects11.lib(EffectAPI.obj) : warning LNK4099: '' PDB를 'Effects11.lib(EffectAPI.obj)' 또는 ''에서 찾을 수 없습니다. 디버그 정보가 없는 것처럼 개체를 링크합니다.
 Effects11.lib(EffectNonRuntime.obj) : warning LNK4099: '' PDB를 'Effects11.lib(EffectNonRuntime.obj)' 또는 ''에서 찾을 수 없습니다. 디버그 정보가 없는 것처럼 개체를 링크합니다.
