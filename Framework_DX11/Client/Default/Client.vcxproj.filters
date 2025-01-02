@@ -2543,6 +2543,21 @@
     </ClInclude>
     <ClInclude Include="..\public\Dissolve_Sophia_Death.h">
       <Filter>02.GameObjects\11.InteractObj\08.Sophia\Dissolve_Sophia_Death</Filter>
+	</ClInclude>
+    <ClInclude Include="..\Public\UIPart_3D.h">
+      <Filter>03.GameInterface_Controller\00.UIManager\02.UIPart_3D</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Public\UIPage_3D.h">
+      <Filter>03.GameInterface_Controller\00.UIManager\03.UIPage_3D</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Public\UIPage_3D_PathGuide.h">
+      <Filter>03.GameInterface_Controller\00.UIManager\03.UIPage_3D\00.UIPage_3D_PathGuide</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Public\UIPart_3D_Normal.h">
+      <Filter>03.GameInterface_Controller\00.UIManager\02.UIPart_3D\01.UIPart_3D_Normal</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Public\UIPart_3D_Path.h">
+      <Filter>03.GameInterface_Controller\00.UIManager\02.UIPart_3D\00.UIPart_3D_Path</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -3667,6 +3682,21 @@
     </ClCompile>
     <ClCompile Include="..\private\Dissolve_Sophia_Death.cpp">
       <Filter>02.GameObjects\11.InteractObj\08.Sophia\Dissolve_Sophia_Death</Filter>
+	</ClCompile>
+    <ClCompile Include="..\Private\UIPart_3D_Path.cpp">
+      <Filter>03.GameInterface_Controller\00.UIManager\02.UIPart_3D\00.UIPart_3D_Path</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Private\UIPart_3D_Normal.cpp">
+      <Filter>03.GameInterface_Controller\00.UIManager\02.UIPart_3D\01.UIPart_3D_Normal</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Private\UIPage_3D.cpp">
+      <Filter>03.GameInterface_Controller\00.UIManager\03.UIPage_3D</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Private\UIPage_3D_PathGuide.cpp">
+      <Filter>03.GameInterface_Controller\00.UIManager\03.UIPage_3D\00.UIPage_3D_PathGuide</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Private\UIPart_3D.cpp">
+      <Filter>03.GameInterface_Controller\00.UIManager\02.UIPart_3D</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

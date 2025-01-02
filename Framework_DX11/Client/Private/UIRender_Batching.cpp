@@ -174,7 +174,7 @@ HRESULT CUIRender_Batching::Render()
 			if (FAILED(m_vecShader_UI[_int(eShader)]->Bind_Matrix("g_ProjMatrix", &m_ProjMatrix)))
 				return E_FAIL;
 
-			if ((!pNow->bIsItem) && (pNow->iTexture == 121))
+			/*if ((!pNow->bIsItem) && (pNow->iTexture == 121))
 			{
 				ePass = UI_SHADER_PASS::PASS_COLOR_SPRITE;
 				if (FAILED(m_pFirePoint_Sprite_TextureCom->Bind_ShadeResource(m_vecShader_UI[_int(eShader)], "g_Texture", 0)))
@@ -192,7 +192,7 @@ HRESULT CUIRender_Batching::Render()
 				if (m_iFrame > m_iMaxFrame * m_iFrame_Interval)
 					m_iFrame = 0;
 			}
-			else if (!pNow->bIsItem)
+			else */if (!pNow->bIsItem)
 			{
 				if (m_vecTextureInfo_UIPart[pNow->iTexture]->Texture == nullptr)
 					if (FAILED(Make_Texture(pNow->iTexture)))

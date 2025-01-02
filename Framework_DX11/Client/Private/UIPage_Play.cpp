@@ -655,9 +655,11 @@ void CUIPage_Play::LD_Arm_Update(_float fTimeDelta)
 	if (pNow == nullptr)
 		return;
 
+	_Vec2 vGauge = *GET_GAMEINTERFACE->Get_Player()->Get_ArmGuage_Ptr();
+
 	__super::Get_Front_Part_In_Control(_int(PART_GROUP::GROUP_ARM_NAME))->strText = pNow->strName;
 	__super::Get_Front_Part_In_Control(_int(PART_GROUP::GROUP_ARM_TEX))->iTexture_Index = pNow->iTexture_Index;
-	__super::Get_Front_Part_In_Control(_int(PART_GROUP::GROUP_ARM_GAUGE_FILL))->fRatio = GET_GAMEINTERFACE->Get_Arm_Gauge_Ratio();
+	__super::Get_Front_Part_In_Control(_int(PART_GROUP::GROUP_ARM_GAUGE_FILL))->fRatio = vGauge.x / vGauge.y;
 }
 
 void CUIPage_Play::RU_Coin_Update(_float fTimeDelta)

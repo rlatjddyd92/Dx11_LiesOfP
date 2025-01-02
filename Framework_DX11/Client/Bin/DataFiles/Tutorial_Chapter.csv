@@ -8,4 +8,5 @@
 6,무기 교체하기,전투 중 무기 교체 가능,무기 별로 다른 페이블 아츠 기술 사용 가능,TAP,none,: 무기 교체하기,none,none,none,none,none,none
 7,기본 방어 기술,몬스터 공격을 막아 데미지를 줄인다,정확한 타이밍에 가드하면 퍼펙트 가드가 되어 데미지를 입지 않는다,SHIFT,none,: 가드,SHIFT,none,: (정확한 타이밍) 퍼펙트 가드,none,none,none
 8,리전 암 사용하기,리전 암으로 방패 전개 및 각종 기술 사용,리전 암은 가드리게인을 소모하며 남은 수치는 좌측 하단에서 확인,CTRL,none,: 방패 전개,none,none,none,none,none,none
-9,리전 암 특수 기능,방패 전개 상태에서 공격 및 방어 가능,방패로 가드를 하면 퍼펙트 가드가 높은 확률로 발동,CTRL,LBUTTON,: 방패 사용 중 공격,CTRL,SHIFT,: 막기 (퍼펙트 가드 확률 UP),none,none,none
+9,리전 암 공격 및 방어,방패 전개 상태에서 공격 및 방어 가능,방패로 가드를 하면 퍼펙트 가드가 높은 확률로 발동,CTRL,LBUTTON,: 방패 사용 중 공격,CTRL,SHIFT,: 가드 (퍼펙트 확률 UP),none,none,none
+10,리전 암 카운터,방패로 적의 공격을 막고 뒤로 밀렸을 때,Ctrl을 빠르게 떼었다가 누르면 카운터 어택,CTRL,none,: 방어 상태 유지,CTRL,CTRL,: 카운터,none,none,none

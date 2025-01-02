@@ -122,11 +122,15 @@ void CUIManager::Priority_Update(_float fTimeDelta)
 	if (KEY_TAP(KEY::P))
 		m_pUIPage_Tutorial->OpenAction();
 	else if (KEY_TAP(KEY::L))
-	{
 		m_pUIPage_Tutorial->CloseAction();
-		m_pUIPage_Play->KeyGuideOn();
-	}
 		
+	if (m_pUIPage_Tutorial->GetPageAction(PAGEACTION::ACTION_OPENING))
+		if (m_pUIPage_Play->IsKeyGuideOn() == true)
+			m_pUIPage_Play->KeyGuideOnOff(false);
+
+	if (m_pUIPage_Tutorial->GetPageAction(PAGEACTION::ACTION_CLOSING))
+		if (m_pUIPage_Play->IsKeyGuideOn() == false)
+			m_pUIPage_Play->KeyGuideOnOff(true);
 
 	for (auto& iter : m_vecPageRender_Order)
 		if (m_vecPage[_int(iter)]->GetUpdate())

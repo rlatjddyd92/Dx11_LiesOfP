@@ -155,7 +155,8 @@ public:
 	void Show_Select_Script(_wstring strLeft, _wstring strRight, _float fTime);
 	_bool IsLeft_LastSelect_Result() { return m_bLastSelect_Result_IsLeft; }
 
-	_bool IsTlaking_WithNPC() { return !m_vecPageAction[_int(PAGEACTION::ACTION_INACTIVE)]; }
+	_bool IsTalking_WithNPC() { return !m_vecPageAction[_int(PAGEACTION::ACTION_INACTIVE)]; }
+	_bool IsTalking_SelectPage() { return (m_vSelectTime.x >= 0.f); }
 
 protected:
 	void Update_Script(_float fTimeDelta);

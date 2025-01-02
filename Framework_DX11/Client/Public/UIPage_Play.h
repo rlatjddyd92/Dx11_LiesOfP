@@ -211,7 +211,8 @@ public:
 	void SetWeaponLock(_bool bIsWeaponLock);
 
 	// 키 가이드
-	void KeyGuideOn() { m_bIsKeyGuideOn = true; }
+	void KeyGuideOnOff(_bool bIsOn) { m_bIsKeyGuideOn = bIsOn; }
+	_bool IsKeyGuideOn() { return m_bIsKeyGuideOn; }
 
 public: 
 
@@ -289,7 +290,7 @@ private:
 	_bool m_bIsStart = true;
 
 	// 키 가이드 
-	_bool m_bIsKeyGuideOn = false;
+	_bool m_bIsKeyGuideOn = true;
 	_Vec2 m_vKeyGuideTime = { 0.f,1.f };
 
 private: // 테스트 변수

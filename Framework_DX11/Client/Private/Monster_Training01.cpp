@@ -60,9 +60,9 @@ HRESULT CMonster_Training01::Initialize(void* pArg)
 	m_eStat.fGrogyPoint = 0.f;
 	m_eStat.fMaxGrogyPoint = 50.f;
 
-	GET_GAMEINTERFACE->Register_Pointer_Into_OrthoUIPage(UI_ORTHO_OBJ_TYPE::ORTHO_NORMAL_MONSTER, this);
+	GET_GAMEINTERFACE->Register_Pointer_Into_OrthoUIPage(UI_ORTHO_OBJ_TYPE::ORTHO_TRAINIG_MONSTER_ATTACK, this);
 
-	GET_GAMEINTERFACE->Set_OnOff_OrthoUI(false, this);
+	GET_GAMEINTERFACE->Set_OnOff_OrthoUI(false, this); 
 
 	m_pColliderObject->Active_Collider(true);
 

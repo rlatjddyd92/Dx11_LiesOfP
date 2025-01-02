@@ -257,7 +257,8 @@ public:
 		UIPart_On();
 	}
 
-	_bool IsTlaking_WithNPC() { return m_pUIPage_Talking->IsTlaking_WithNPC(); }
+	_bool IsTalking_WithNPC() { return m_pUIPage_Talking->IsTalking_WithNPC(); }
+	_bool IsTalking_SelectPage() { return m_pUIPage_Talking->IsTalking_SelectPage(); }
 
 	void Show_Select_Script(_wstring strLeft, _wstring strRight, _float fTime) { m_pUIPage_Talking->Show_Select_Script(strLeft, strRight, fTime); }
 	_bool IsLeft_LastSelect_Result() { return m_pUIPage_Talking->IsLeft_LastSelect_Result(); }
@@ -288,12 +289,21 @@ public:
 	void Start_Tutorial() 
 	{ 
 		m_pUIPage_Tutorial->OpenAction();
+		m_pUIPage_Play->KeyGuideOnOff(false);
 	}
 	void End_Tutorial()
 	{ 
 		m_pUIPage_Tutorial->CloseAction(); 
-		m_pUIPage_Play->KeyGuideOn();
+		m_pUIPage_Play->KeyGuideOnOff(true);
 	}
+
+	_bool IsTutorial_Open() { return m_pUIPage_Tutorial->GetPageAction(PAGEACTION::ACTION_ACTIVE); } 
+	_bool Get_TutorialPopup_Open() { return m_pUIPage_Tutorial->Get_TutorialPopup_Open(); }
+	_int Get_NowChapter() { return m_pUIPage_Tutorial->Get_NowChapter(); }
+
+	void Input_TrainingMonsterPointer_Attack(class CGameObject* pPoiter) { m_pUIPage_Tutorial->Input_TrainingMonsterPointer_Attack(pPoiter); }
+	void Input_TrainingMonsterPointer_Normal(class CGameObject* pPoiter) { m_pUIPage_Tutorial->Input_TrainingMonsterPointer_Normal(pPoiter); }
+
 #pragma endregion
 
 

@@ -126,6 +126,11 @@ void CUIPage_Ortho::Register_Pointer_Into_OrthoUIPage(UI_ORTHO_OBJ_TYPE eType, v
 	pNew->eType = eType;
 	pNew->pHost = static_cast<CGameObject*>(pObj);
 	m_Ortho_Host_list.push_back(pNew);
+
+	if (eType == UI_ORTHO_OBJ_TYPE::ORTHO_TRAINIG_MONSTER_ATTACK)
+		GET_GAMEINTERFACE->Input_TrainingMonsterPointer_Attack(pNew->pHost);
+	else if (eType == UI_ORTHO_OBJ_TYPE::ORTHO_TRAINIG_MONSTER_NORMAL)
+		GET_GAMEINTERFACE->Input_TrainingMonsterPointer_Normal(pNew->pHost);
 }
 
 HRESULT CUIPage_Ortho::Render_Ortho_UI()
@@ -187,6 +192,8 @@ void CUIPage_Ortho::Set_OnOff_OrthoUI(_bool bIsOn, void* pObj)
 						GET_GAMEINTERFACE->Input_Achievment_Data(8, 1);
 					else if (iter->eType == UI_ORTHO_OBJ_TYPE::ORTHO_BOSS_SIMON)
 						GET_GAMEINTERFACE->Input_Achievment_Data(9, 1);
+					else if ((iter->eType == UI_ORTHO_OBJ_TYPE::ORTHO_TRAINIG_MONSTER_ATTACK) || (iter->eType == UI_ORTHO_OBJ_TYPE::ORTHO_TRAINIG_MONSTER_NORMAL))
+						return;
 					else 
 						GET_GAMEINTERFACE->Input_Achievment_Data(6, 1);
 				}
@@ -261,6 +268,24 @@ void CUIPage_Ortho::CheckHost(_float fTimeDelta)
 
 			GET_GAMEINTERFACE->Activate_Boss_Hp_Bar(true);
 			GET_GAMEINTERFACE->Set_Boss_Hp_Bar_Info(pStat->strName, pStat->fHp, pStat->fMaxHp);
+			Make_Monster_Focusing((*iter)->pHost, fTimeDelta, fDistnace);
+			Make_Monster_SpecialHit((*iter)->pHost, fTimeDelta, fDistnace);
+			++iter;
+		}
+		else if ((*iter)->eType == UI_ORTHO_OBJ_TYPE::ORTHO_TRAINIG_MONSTER_ATTACK)
+		{
+			_float fDistnace = Check_Distance_From_Cam((*iter)->pHost);
+
+			Make_Monster_HP_Bar((*iter)->pHost, fTimeDelta, fDistnace);
+			Make_Monster_Focusing((*iter)->pHost, fTimeDelta, fDistnace);
+			Make_Monster_SpecialHit((*iter)->pHost, fTimeDelta, fDistnace);
+			++iter;
+		}
+		else if ((*iter)->eType == UI_ORTHO_OBJ_TYPE::ORTHO_TRAINIG_MONSTER_NORMAL)
+		{
+			_float fDistnace = Check_Distance_From_Cam((*iter)->pHost);
+
+			Make_Monster_HP_Bar((*iter)->pHost, fTimeDelta, fDistnace);
 			Make_Monster_Focusing((*iter)->pHost, fTimeDelta, fDistnace);
 			Make_Monster_SpecialHit((*iter)->pHost, fTimeDelta, fDistnace);
 			++iter;

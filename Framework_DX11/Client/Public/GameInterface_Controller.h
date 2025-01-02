@@ -144,7 +144,8 @@ public: // 외부에서 매니저 접근
 
 	// NPC 스크립트 
 	void Show_Script_Npc_Talking(NPC_SCRIPT eNPC, _int iScriptNum = -1) { m_pUIManager->Show_Script_Npc_Talking(eNPC, iScriptNum); }
-	_bool IsTlaking_WithNPC() { return m_pUIManager->IsTlaking_WithNPC(); }
+	_bool IsTalking_WithNPC() { return m_pUIManager->IsTalking_WithNPC(); }
+	_bool IsTalking_SelectPage() { return m_pUIManager->IsTalking_SelectPage(); }
 	void Next_Script() { m_pUIManager->Next_Script(); }
 	void OFF_Script() { m_pUIManager->OFF_Script(); }
 	void Show_Select_Script(_wstring strLeft, _wstring strRight, _float fTime) { m_pUIManager->Show_Select_Script(strLeft, strRight, fTime); }
@@ -178,6 +179,13 @@ public: // 외부에서 매니저 접근
 	// 튜토리얼
 	void Start_Tutorial() { return m_pUIManager->Start_Tutorial(); }
 	void End_Tutorial() { return m_pUIManager->End_Tutorial(); }
+
+	_bool IsTutorial_Open() { return m_pUIManager->IsTutorial_Open(); } // <- 튜토리얼 진행 중인 지 확인 
+	_bool Get_TutorialPopup_Open() { return m_pUIManager->Get_TutorialPopup_Open(); } // <- 튜토리얼 중 안내 팝업이 떴는 지 확인
+	_int Get_NowChapter() { return m_pUIManager->Get_NowChapter(); } // <- 현재 진행 중인 챕터 확인
+
+	void Input_TrainingMonsterPointer_Attack(class CGameObject* pPoiter) { m_pUIManager->Input_TrainingMonsterPointer_Attack(pPoiter); }
+	void Input_TrainingMonsterPointer_Normal(class CGameObject* pPoiter) { m_pUIManager->Input_TrainingMonsterPointer_Normal(pPoiter); }
 
 #pragma endregion
 
