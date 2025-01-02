@@ -24,6 +24,7 @@
 #include "State_RebornerBigA_SwingMultiple.h"
 
 #include "Effect_Manager.h"
+#include "Effect_Container.h"
 
 
 CRebornerBigA::CRebornerBigA(ID3D11Device* pDevice, ID3D11DeviceContext* pContext)
@@ -185,6 +186,16 @@ void CRebornerBigA::Active_CurrentWeaponCollider(_float fDamageRatio, _uint iCol
 void CRebornerBigA::DeActive_CurretnWeaponCollider(_uint iCollIndex)
 {
 	m_pWeapon->DeActive_Collider();
+}
+
+void CRebornerBigA::Active_Effect(const _uint eType, _bool isLoop)
+{
+	m_pSwingEffect->Set_Loop(true);
+}
+
+void CRebornerBigA::DeActive_Effect(const _uint eType)
+{
+	m_pSwingEffect->Set_Loop(false);
 }
 
 HRESULT CRebornerBigA::Ready_Components()
@@ -371,6 +382,20 @@ HRESULT CRebornerBigA::Ready_Weapon()
 	m_pWeapon->Appear();
 
 	m_pWeapon->DeActive_Collider();
+
+	return S_OK;
+}
+
+HRESULT CRebornerBigA::Ready_Effect()
+{
+	const _Matrix* pParetnMatrix = m_pTransformCom->Get_WorldMatrix_Ptr();
+	const _Matrix* pSocketBoneMatrix = m_pModelCom->Get_BoneCombindTransformationMatrix_Ptr(m_pModelCom->Get_UFBIndices(UFB_WEAPON));
+
+
+	m_pSwingEffect = CEffect_Manager::Get_Instance()->Clone_Effect(TEXT("Monster_Stick_Swing"), pParetnMatrix,
+		pSocketBoneMatrix, _Vec3(0.f, 0.f, 0.f), _Vec3(0.f, 0.f, 1.f), _Vec3(1.f, 1.f, 1.f));
+
+	m_pSwingEffect->Set_Loop(false);
 
 	return S_OK;
 }

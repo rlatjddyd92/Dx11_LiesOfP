@@ -28,6 +28,7 @@ HRESULT CState_RebornerBigA_SlashTwice::Start_State(void* pArg)
     m_iRouteTrack = 0;
     
     m_bSwingSound = { false };
+    m_bSwing = false;
 
     return S_OK;
 }
@@ -42,6 +43,7 @@ void CState_RebornerBigA_SlashTwice::Update(_float fTimeDelta)
         {
             ++m_iRouteTrack;
             m_bSwingSound = false;
+            m_bSwing = false;
             m_pMonster->Change_Animation(AN_LINKED_LAST, false, 0.1f, 0, true);
             return;
         }
@@ -131,6 +133,40 @@ void CState_RebornerBigA_SlashTwice::Sound_Check(_double CurTrackPos)
                 m_pMonster->Play_Sound(CPawn::PAWN_SOUND_EFFECT1, TEXT("SE_NPC_SK_WS_Staff_03.wav"), false);
                 m_bSwingSound = true;
             }
+        }
+    }
+}
+
+void CState_RebornerBigA_SlashTwice::Effect_Check(_double CurTrackPos)
+{
+    if (m_iRouteTrack == 0)
+    {
+        if (CurTrackPos >= 55.f && CurTrackPos <= 70.f)
+        {
+            if (!m_bSwing)
+            {
+                m_pMonster->Active_Effect(0, true);
+                m_bSwing = true;
+            }
+        }
+        else
+        {
+            m_pMonster->DeActive_Effect(0);
+        }
+    }
+    else
+    {
+        if (CurTrackPos >= 40.f && CurTrackPos <= 58.f)
+        {
+            if (!m_bSwing)
+            {
+                m_pMonster->Active_Effect(0, true);
+                m_bSwing = true;
+            }
+        }
+        else
+        {
+            m_pMonster->DeActive_Effect(0);
         }
     }
 }

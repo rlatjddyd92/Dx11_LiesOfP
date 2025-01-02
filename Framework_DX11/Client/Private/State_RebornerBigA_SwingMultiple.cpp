@@ -28,6 +28,7 @@ HRESULT CState_RebornerBigA_SwingMultiple::Start_State(void* pArg)
     m_iRouteTrack = 0;
 
     m_bSwingSound = false;
+    m_bSwing = false;
 
     return S_OK;
 }
@@ -42,6 +43,7 @@ void CState_RebornerBigA_SwingMultiple::Update(_float fTimeDelta)
         {
             ++m_iRouteTrack;
             m_bSwingSound = false;
+            m_bSwing = false;
             m_pMonster->SetUp_Animation(AN_LINKED_MIDDLE, false, 0, true);
             return;
         }
@@ -56,6 +58,7 @@ void CState_RebornerBigA_SwingMultiple::Update(_float fTimeDelta)
         {
             ++m_iRouteTrack;
             m_bSwingSound = false;
+            m_bSwing = false;
             m_pMonster->SetUp_Animation(AN_LINKED_LAST, false, 0, true);
             return;
         }
@@ -180,6 +183,59 @@ void CState_RebornerBigA_SwingMultiple::Sound_Check(_double CurTrackPos)
         else
         {
             m_bSwingSound = false;
+        }
+    }
+}
+
+void CState_RebornerBigA_SwingMultiple::Effect_Check(_double CurTrackPos)
+{
+    if (m_iRouteTrack == 0)
+    {
+        if (CurTrackPos >= 55.f && CurTrackPos <= 70.f)
+        {
+            if (!m_bSwing)
+            {
+                m_pMonster->Active_Effect(0, true);
+                m_bSwing = true;
+            }
+        }
+        else
+        {
+            m_pMonster->DeActive_Effect(0);
+        }
+    }
+    else if (m_iRouteTrack == 1)
+    {
+        if ((CurTrackPos >= 20.f && CurTrackPos <= 30.f) ||
+            (CurTrackPos >= 45.f && CurTrackPos <= 55.f))
+        {
+            if (!m_bSwing)
+            {
+                m_pMonster->Active_Effect(0, true);
+                m_bSwing = true;
+            }
+        }
+        else
+        {
+            m_pMonster->DeActive_Effect(0);
+            m_bSwing = false;
+        }
+    }
+    else
+    {
+        if ((CurTrackPos >= 37.f && CurTrackPos <= 45.f) ||
+            (CurTrackPos >= 142.f && CurTrackPos <= 149.f))
+        {
+            if (!m_bSwing)
+            {
+                m_pMonster->Active_Effect(0, true);
+                m_bSwing = true;
+            }
+        }
+        else
+        {
+            m_pMonster->DeActive_Effect(0);
+            m_bSwing = false;
         }
     }
 }

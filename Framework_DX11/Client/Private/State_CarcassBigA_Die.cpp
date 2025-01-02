@@ -23,23 +23,25 @@ HRESULT CState_CarcassBigA_Die::Start_State(void* pArg)
 {
     m_iRouteTrack = 0;
 
-    _Vec3 vUp = XMVector3Normalize(m_pMonster->Get_Transform()->Get_State(CTransform::STATE_UP));
-    _Vec3 vRight = XMVector3Normalize(m_pMonster->Get_Transform()->Get_State(CTransform::STATE_RIGHT));
-    _Vec3 vTargetDir = XMVector3Normalize(m_pMonster->Get_TargetDir());
-
-
-    _Vec3 vCrossUp = vRight.Cross(vTargetDir);
-
     _int iAnimIndex = {};
-    if (vCrossUp.y <= 0)
-    {
-        m_iDirCnt = DIR::DIR_FRONT;
-    }
-    else
+
+    _Vec3 vRight = XMVectorSetY(m_pMonster->Get_Transform()->Get_State(CTransform::STATE_RIGHT), 0);
+    _Vec3 vDir = m_pMonster->Get_TargetDir();
+    vDir.Normalize();
+    vRight.Normalize();
+
+    _Vec3 fDirCheck{};
+    fDirCheck = vRight.Cross(vDir);
+
+    if (fDirCheck.y < 0)
     {
         m_iDirCnt = DIR::DIR_BEHIND;
     }
-    m_pMonster->Change_Animation(AN_DIE_F - m_iDirCnt, false, 0.1f);
+    else
+    {
+        m_iDirCnt = DIR::DIR_FRONT;
+    }
+    m_pMonster->Change_Animation(AN_DIE_F + m_iDirCnt, false, 0.1f);
 
     return S_OK;
 }
@@ -61,7 +63,7 @@ void CState_CarcassBigA_Die::End_State()
 
 _bool CState_CarcassBigA_Die::End_Check()
 {
-    return  m_pMonster->Get_EndAnim(AN_DIE_F - m_iDirCnt);;
+    return  m_pMonster->Get_EndAnim(AN_DIE_F + m_iDirCnt);;
 }
 
 CState_CarcassBigA_Die* CState_CarcassBigA_Die::Create(CFsm* pFsm, CMonster* pMonster, _uint iStateNum, void* pArg)

@@ -62,6 +62,9 @@ void CState_CurruptedStrongArm_HitFatal::Update(_float fTimeDelta)
         {
             ++m_iAnimTrack;
             m_pMonster->Change_Animation(AN_DOWN_B + m_iDirCnt, false, 0.1f);
+
+            *m_pFatalAttacked = false;
+
             return;
         }
         break;
