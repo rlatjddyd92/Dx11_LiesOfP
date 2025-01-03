@@ -370,6 +370,7 @@ void CCutScene::End_Setting()
 		pPlayer->Get_Navigation()->Move_to_Cell(pPlayer->Get_RigidBody(), 268);
 		m_pObjects[BOSS1]->End_CutScene(0);
 		pPlayer->Init_PlayerCamera();
+
 		CMoveBlockObj::MOVEBLOCK_DESC desc = {};
 		desc.iTypeNum = CMoveBlockObj::RAXASIA1;
 		m_pGameInstance->Add_CloneObject_ToLayer(LEVEL_GAMEPLAY, TEXT("Layer_MoveBlockObj"), TEXT("Prototype_GameObject_MoveBlockObj"), &desc);

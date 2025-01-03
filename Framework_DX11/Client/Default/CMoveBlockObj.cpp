@@ -25,13 +25,14 @@ HRESULT CMoveBlockObj::Initialize(void* pArg)
 
 	if (FAILED(__super::Initialize(pArg)))
 		return E_FAIL;
+
 	switch (pDesc->iTypeNum)
 	{
 	case 0:	//RAXASIA1
 		m_pTransformCom->Rotation(0.f, 60.f, 0.f);
 		break;
 	case 1:	//RAXASIA2
-		m_pTransformCom->Rotation(0.f, 120, 0.f);
+		m_pTransformCom->Rotation(0.f, 60.f, 0.f);
 		break;
 	case 2:	//MANUS1
 		m_pTransformCom->Rotation(0.f, 133, 0.f);
@@ -39,26 +40,12 @@ HRESULT CMoveBlockObj::Initialize(void* pArg)
 	default:
 		break;
 	}
+
     if (FAILED(Ready_Components(pDesc)))
         return E_FAIL;
 
-    if (FAILED(Ready_Effect()))
-        return E_FAIL;
-
-	switch (pDesc->iTypeNum)
-	{
-	case 0:	//RAXASIA1
-		m_pRigidBodyCom->Set_GloblePose(_Vec3(-137.541f, -97.816f, -68.452f));
-		break;
-	case 1:	//RAXASIA2
-		m_pRigidBodyCom->Set_GloblePose(_Vec3(-39.413f, -97.809f, -68.452f));
-		break;
-	case 2:	//MANUS1
-		m_pRigidBodyCom->Set_GloblePose(_Vec3(16.641f, 0.069f,-16.234f));
-		break;
-	default:
-		break;
-	}
+	if (FAILED(Ready_Effect(pDesc)))
+		return E_FAIL;
 
 	return S_OK;
 }
@@ -147,24 +134,58 @@ HRESULT CMoveBlockObj::Ready_Components(MOVEBLOCK_DESC* pDesc)
 		TEXT("Com_RigidBody"), reinterpret_cast<CComponent**>(&m_pRigidBodyCom), &RigidBodyDesc)))
 		return E_FAIL;
 
+	switch (pDesc->iTypeNum)
+	{
+	case 0:	//RAXASIA1
+		m_pRigidBodyCom->Set_GloblePose(_Vec3(-137.541f, -97.816f, -68.452f));
+		break;
+	case 1:	//RAXASIA2
+		m_pRigidBodyCom->Set_GloblePose(_Vec3(-39.413f, -97.809f, -68.452f));
+		break;
+	case 2:	//MANUS1
+		m_pRigidBodyCom->Set_GloblePose(_Vec3(16.641f, 0.069f, -16.234f));
+		break;
+	default:
+		break;
+	}
+
 	return S_OK;
 }
 
-HRESULT CMoveBlockObj::Ready_Effect()
+HRESULT CMoveBlockObj::Ready_Effect(MOVEBLOCK_DESC* pDesc)
 {
-    CBossDoor_Veli::BOSSDOOR_DESC DoorDesc = {};
-    DoorDesc.fRotationPerSec = XMConvertToRadians(90.f);
-    DoorDesc.fSpeedPerSec = 1.f;
-    DoorDesc.iLevelIndex = LEVEL_GAMEPLAY;
-    // 자기 걸로 채워야 함.
-    DoorDesc.vPos = _Vec3();
-    DoorDesc.vRotation = _Vec3();
-    DoorDesc.vScale = _Vec3();
+	CBossDoor_Veli::BOSSDOOR_DESC DoorDesc = {};
+	DoorDesc.fRotationPerSec = XMConvertToRadians(90.f);
+	DoorDesc.fSpeedPerSec = 1.f;
+	DoorDesc.iLevelIndex = LEVEL_GAMEPLAY;
+	// 자기 걸로 채워야 함.
+	DoorDesc.vPos = (_Vec3)m_pTransformCom->Get_State(CTransform::STATE_POSITION);
+	DoorDesc.vScale = _Vec3(1.f, 1.f, 1.f);
 
-    m_pVeliEffect = static_cast<CBossDoor_Veli*>(m_pGameInstance->Clone_GameObject(TEXT("Prototype_GameObject_Effect_BossDoor_Veli"), &DoorDesc));
+	switch (pDesc->iTypeNum)
+	{
+	case 0:	//RAXASIA1
+		DoorDesc.vPos.y += 4.f;
+		DoorDesc.vRotation = _Vec3(90.f, 60.f, 0.f);
+		break;
+	case 1:	//RAXASIA2
+		DoorDesc.vPos.y += 3.f;
+		DoorDesc.vRotation = _Vec3(90.f, 60.f, 0.f);
+		break;
+	case 2:	//MANUS1
+		DoorDesc.vPos.y += 3.f;
+		DoorDesc.vRotation = _Vec3(90.f, 133, 0.f);
+		break;
+	default:
+		break;
+	}
 
-    if (nullptr == m_pVeliEffect)
-        return E_FAIL;
+	m_pVeliEffect = static_cast<CBossDoor_Veli*>(m_pGameInstance->Clone_GameObject(TEXT("Prototype_GameObject_Effect_BossDoor_Veli"), &DoorDesc));
+
+	if (nullptr == m_pVeliEffect)
+		return E_FAIL;
+
+	m_pVeliEffect->Set_State(CBossDoor_Veli::DOOR_CLOSE);
 
     return S_OK;
 }

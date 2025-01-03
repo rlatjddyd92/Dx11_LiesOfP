@@ -45,7 +45,7 @@ private:
 
 private:
 	HRESULT Ready_Components(MOVEBLOCK_DESC* pDesc);
-	HRESULT Ready_Effect();
+	HRESULT Ready_Effect(MOVEBLOCK_DESC* pDesc);
 
 public:
 	static CMoveBlockObj* Create(ID3D11Device* pDevice, ID3D11DeviceContext* pContext);

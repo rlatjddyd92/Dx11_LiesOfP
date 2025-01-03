@@ -108,10 +108,12 @@ HRESULT CWeapon_RebornerMaleFire_FireBreath::Render()
 	//if (FAILED(__super::Render()))
 	//	return E_FAIL;
 
+#ifdef _DEBUG
 	if (m_pColliderCom->IsActive())
 	{
 		m_pColliderCom->Render();
 	}
+#endif
 
 	return S_OK;
 }
