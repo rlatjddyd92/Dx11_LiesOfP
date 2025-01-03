@@ -141,9 +141,10 @@ void CUITutorial_Guide::Set_Guide(vector<struct CUIPage::UIPART_INFO*>& vecOrigi
 	}
 }
 
-void CUITutorial_Guide::Update_Guide_Wating()
+void CUITutorial_Guide::Update_Guide_Wating(_bool bIsEnding)
 {
-	m_pSharedPointer_Title->strText = TEXT("챕터 완료");
+	if (bIsEnding == true) m_pSharedPointer_Title->strText = TEXT("튜토리얼 완료");
+	else m_pSharedPointer_Title->strText = TEXT("챕터 완료");
 
 	for (auto& iter : m_vecSharedPointer_Ctrl_Upper)
 		iter->bRender = false;
@@ -160,7 +161,9 @@ void CUITutorial_Guide::Update_Guide_Wating()
 	m_vecSharedPointer_Ctrl_Upper[3]->fRatio = 0.f;
 
 	m_vecSharedPointer_Ctrl_Upper[3]->bRender = true;
-	m_vecSharedPointer_Ctrl_Upper[3]->strText = TEXT(": 다음 챕터 진행하기.");
+
+	if (bIsEnding == true) m_vecSharedPointer_Ctrl_Upper[3]->strText = TEXT(": 훈련소에서 나가기");
+	else m_vecSharedPointer_Ctrl_Upper[3]->strText = TEXT(": 다음 챕터 진행하기");
 
 	m_pSharedPointer_Frame->fRatio = 0.55f;
 }

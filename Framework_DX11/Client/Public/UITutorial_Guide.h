@@ -38,7 +38,7 @@ public:
 	virtual HRESULT Ready_UIPart_Group_Control() override;
 
 	void Set_Guide(vector<struct CUIPage::UIPART_INFO*>& vecOrigin);
-	void Update_Guide_Wating();
+	void Update_Guide_Wating(_bool bIsEnding = false);
 	void Update_Guide(TUTO_CHAPTER& NowData, _float fTimeDelta);
 
 protected:

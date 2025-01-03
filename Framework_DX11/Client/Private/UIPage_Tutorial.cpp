@@ -75,8 +75,6 @@ void CUIPage_Tutorial::Late_Update(_float fTimeDelta)
 		if (KEY_TAP(KEY::ENTER))
 			Next_Chapter();
 
-	//Test_Control(fTimeDelta);
-
 	Check_Mission_Complete(fTimeDelta);
 
 	Update_Tutorial_Info(fTimeDelta);
@@ -85,9 +83,6 @@ void CUIPage_Tutorial::Late_Update(_float fTimeDelta)
 	Update_Tutorial_Result(fTimeDelta);
 	Update_Tutorial_Popup(fTimeDelta);
 	Update_Tutorial_NowChapter(fTimeDelta);
-
-	/*for (auto& iter : m_vec_Group_Ctrl)
-		__super::UpdatePart_ByControl(iter);*/
 
 	__super::Late_Update(fTimeDelta);
 
@@ -146,8 +141,13 @@ void CUIPage_Tutorial::Update_Tutorial_Info(_float fTimeDelta)
 
 void CUIPage_Tutorial::Update_Tutorial_Guide(_float fTimeDelta)
 {
+	if (m_iNowChapter >= m_vecTutorial_ChapterData.size())
+		return;
+
 	if (m_bWating_NewChapter == false)
 		m_pGuide->Update_Guide(*m_vecTutorial_ChapterData[m_iNowChapter], fTimeDelta);
+	else if (m_iNowChapter == m_vecTutorial_ChapterData.size() - 1)
+		m_pGuide->Update_Guide_Wating(true);
 	else
 		m_pGuide->Update_Guide_Wating();
 }
@@ -299,17 +299,6 @@ void CUIPage_Tutorial::Check_Mission_Complete(_float fTimeDelta)
 			break;
 		}
 
-		if (iIndex >= m_vecTutorial_MissionData.size())
-		{
-			Set_Waiting_NextChapter();
-			break;
-		}
-		else if (m_vecTutorial_MissionData[iIndex]->iCapterIndex != m_iNowChapter)
-		{
-			if (bIsComplete == true) Set_Waiting_NextChapter();
-			break;
-		}
-
 		if (m_vecTutorial_MissionData[iIndex]->fNow >= m_vecTutorial_MissionData[iIndex]->fGoal)
 		{
 			m_vecTutorial_MissionData[iIndex]->fNow = m_vecTutorial_MissionData[iIndex]->fGoal;
@@ -320,6 +309,17 @@ void CUIPage_Tutorial::Check_Mission_Complete(_float fTimeDelta)
 			bIsComplete = false;
 
 		++iIndex;
+
+		if (iIndex >= m_vecTutorial_MissionData.size())
+		{
+			if (bIsComplete == true) Set_Waiting_NextChapter();
+			break;
+		}
+		else if (m_vecTutorial_MissionData[iIndex]->iCapterIndex != m_iNowChapter)
+		{
+			if (bIsComplete == true) Set_Waiting_NextChapter();
+			break;
+		}
 	}
 }
 
@@ -531,7 +531,7 @@ void CUIPage_Tutorial::Check_Player_Guard(_float fTimeDelta)
 	if ((iPlayerState == _int(CPlayer::PLAYER_STATE::OH_GUARD)) || (iPlayerState == _int(CPlayer::PLAYER_STATE::TH_GUARD)))
 	{
 		if (m_vGuardTime.x == 0.f)
-			ShowTiming(KEY::LSHIFT, 0.15f);
+			ShowTiming(KEY::LSHIFT, 0.17f); // <- 일반 막기 퍼펙트 시간
 
 		m_vGuardTime.x += fTimeDelta;
 		m_bGuard = true;
@@ -555,33 +555,37 @@ void CUIPage_Tutorial::Check_Player_Resion_Arm_Start()
 	if (m_bPlayer_StateChanged == false)
 		return;
 
-	if (m_vecTutorial_MissionData[m_iNow_Index + 0]->bComplete != false)
-		return;
+	if (m_vecTutorial_MissionData[m_iNow_Index + 0]->bComplete == false)
+	{
+		_int iPlayerState = GET_GAMEINTERFACE->Get_Player()->Get_Fsm()->Get_CurrentState();
 
-	_int iPlayerState = GET_GAMEINTERFACE->Get_Player()->Get_Fsm()->Get_CurrentState();
-
-	if (iPlayerState == _int(CPlayer::PLAYER_STATE::ARM_LOOP))
-		m_vecTutorial_MissionData[m_iNow_Index + 0] += 1;
+		if (iPlayerState == _int(CPlayer::PLAYER_STATE::ARM_LOOP))
+			m_vecTutorial_MissionData[m_iNow_Index + 0]->fNow += 1;
+	}
 }
 
 void CUIPage_Tutorial::Check_Player_Resion_Arm_Skill()
 {
-	if (m_bPlayer_StateChanged == false)
-		return;
+	/*if (m_bPlayer_StateChanged == false)
+		return;*/
 
 	_int iPlayerState = GET_GAMEINTERFACE->Get_Player()->Get_Fsm()->Get_CurrentState();
 
-	if (m_vecTutorial_MissionData[m_iNow_Index + 0]->bComplete != false)
+	if (m_vecTutorial_MissionData[m_iNow_Index + 0]->bComplete == false)
 	{
-		if ((iPlayerState == _int(CPlayer::PLAYER_STATE::ARM_SWING)) || (iPlayerState == _int(CPlayer::PLAYER_STATE::ARM_THRUST)))
-			m_vecTutorial_MissionData[m_iNow_Index + 0]->fNow += 1.f;
+		if ((KEY_HOLD(KEY::CTRL)) && KEY_TAP(KEY::LBUTTON))
+			if ((iPlayerState == _int(CPlayer::PLAYER_STATE::ARM_SWING)) || (iPlayerState == _int(CPlayer::PLAYER_STATE::ARM_THRUST)))
+				m_vecTutorial_MissionData[m_iNow_Index + 0]->fNow += 1.f;
 	}
 
-	if (m_vecTutorial_MissionData[m_iNow_Index + 1]->bComplete != false)
+	if ((KEY_HOLD(KEY::CTRL)) && KEY_TAP(KEY::LSHIFT))
+		ShowTiming(KEY::LSHIFT, 0.17f); // <- 리전 암 막기 퍼펙트 시간
+
+	if (m_vecTutorial_MissionData[m_iNow_Index + 1]->bComplete == false)
 	{
 		_int iCheck_Guard = 0;
 
-		iCheck_Guard += iPlayerState == _int(CPlayer::PLAYER_STATE::ARM_SWING) ? 1 : 0;
+		iCheck_Guard += iPlayerState == _int(CPlayer::PLAYER_STATE::ARM_GURAD_WEAK) ? 1 : 0;
 		iCheck_Guard += iPlayerState == _int(CPlayer::PLAYER_STATE::ARM_GURAD_HARD) ? 1 : 0;
 		iCheck_Guard += iPlayerState == _int(CPlayer::PLAYER_STATE::ARM_GURAD_HEAVY) ? 1 : 0;
 
@@ -595,7 +599,7 @@ void CUIPage_Tutorial::Check_Player_Resion_Arm_Counter()
 	if (m_bPlayer_StateChanged == false)
 		return;
 
-	if (m_vecTutorial_MissionData[m_iNow_Index + 0]->bComplete != false)
+	if (m_vecTutorial_MissionData[m_iNow_Index + 0]->bComplete == false)
 	{
 		_int iPlayerState = GET_GAMEINTERFACE->Get_Player()->Get_Fsm()->Get_CurrentState();
 
@@ -805,6 +809,7 @@ void CUIPage_Tutorial::Next_Chapter()
 	}
 	else
 	{
+		--m_iNowChapter;
 		GET_GAMEINTERFACE->Input_Achievment_Data(16, 1);
 		CloseAction();
 		// 여기에 종료 팝업 필요
