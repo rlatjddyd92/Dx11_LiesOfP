@@ -54,7 +54,7 @@ HRESULT CLevel_GamePlay::Initialize()
 
 	CMoveBlockObj::MOVEBLOCK_DESC desc = {};
 	desc.iTypeNum = CMoveBlockObj::RAXASIA1;
-	m_pGameInstance->Add_CloneObject_ToLayer(LEVEL_GAMEPLAY, TEXT("Layer_MoveBlockObj"), TEXT("Prototype_GameObject_MoveBlockObj"), &desc);
+	//m_pGameInstance->Add_CloneObject_ToLayer(LEVEL_GAMEPLAY, TEXT("Layer_MoveBlockObj"), TEXT("Prototype_GameObject_MoveBlockObj"), &desc);
 
 	// 24-11-19 김성용
 	// 게임 인터페이스를 인게임 모드로 전환
