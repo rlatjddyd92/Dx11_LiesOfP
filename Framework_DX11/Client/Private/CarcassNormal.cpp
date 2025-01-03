@@ -89,7 +89,7 @@ HRESULT CCarcassNormal::Initialize(void* pArg)
 	// 24-11-26 김성용
 	// 몬스터 직교 UI 접근 코드 
 	// 정식 코드  
-	GET_GAMEINTERFACE->Register_Pointer_Into_OrthoUIPage(UI_ORTHO_OBJ_TYPE::ORTHO_NORMAL_MONSTER, this);
+	GET_GAMEINTERFACE->Register_Pointer_Into_OrthoUIPage(UI_ORTHO_OBJ_TYPE::ORTHO_CARCASS_NORMAL, this);
 
 	GET_GAMEINTERFACE->Set_OnOff_OrthoUI(false, this);
 	return S_OK;

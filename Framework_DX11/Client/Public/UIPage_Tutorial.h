@@ -108,6 +108,7 @@ protected:
 	
 
 	// 단계 넘어가기 
+	void Set_Waiting_NextChapter();
 	void Next_Chapter();
 	
 
@@ -129,10 +130,11 @@ protected:
 
 	void Check_Player_Move(_float fTimeDelta); // 이동하기 미션
 	void Check_Player_Dash(_float fTimeDelta); // 회피 미션
+	void Check_Player_Focus(); // 포커스 진행
 	void Check_Player_Lbutton_Attack(); // 일반 공격 
 	void Check_Player_RButton_Attack(_float fTimeDelta); // 강공격
-	void Check_Player_Fable_Art(_bool bIsSecond); // 유저 페이블 아츠 사용
 	void Check_Dummy_Weakness(); // 그로기 성공
+	void Check_Player_Fable_Art(_bool bIsSecond); // 유저 페이블 아츠 사용
 	void Check_Dummy_Get_FatalAttack(); // 페이탈 어택 성공
 	void Check_Player_Switch_Weapon(); // 무기 변경
 	void Check_Player_Guard(_float fTimeDelta); // 가드, 퍼펙트 가드
@@ -154,6 +156,7 @@ protected:
 	_bool m_bStart = false; // <- 시작 안내
 	_bool m_bResult = false; // <- 종료 안내 
 
+	_bool m_bWating_NewChapter = false;
 	_bool m_bNewChapter = true;
 
 	_int m_iNowChapter = -1;

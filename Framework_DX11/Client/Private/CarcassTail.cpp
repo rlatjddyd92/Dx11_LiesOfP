@@ -83,7 +83,7 @@ HRESULT CCarcassTail::Initialize(void* pArg)
 	m_vCenterOffset = _Vec3{ 0.f, 0.91f, 0.f };
 
 	m_bDiscover = false;
-	GET_GAMEINTERFACE->Register_Pointer_Into_OrthoUIPage(UI_ORTHO_OBJ_TYPE::ORTHO_NORMAL_MONSTER, this);
+	GET_GAMEINTERFACE->Register_Pointer_Into_OrthoUIPage(UI_ORTHO_OBJ_TYPE::ORTHO_CARCASS_TAIL, this);
 
 	GET_GAMEINTERFACE->Set_OnOff_OrthoUI(false, this);
 

@@ -75,6 +75,10 @@ public:
 		_wstring strFunction_B = {};
 		_wstring strFunction_C = {};
 
+		_wstring strSound = {}; // 사운드 이름
+
+		_bool bSoundStart = true; // 사운드 재생 여부 
+
 		_float fAlpha = 0.f; // <- 투명 효과 변수
 	}SCRIPT;
 

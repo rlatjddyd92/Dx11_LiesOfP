@@ -71,9 +71,11 @@ void CUIPage_Tutorial::Late_Update(_float fTimeDelta)
 	if (m_iNowChapter == -1)
 		Next_Chapter();
 
-	Test_Control(fTimeDelta);
+	if (m_bWating_NewChapter == true)
+		if (KEY_TAP(KEY::ENTER))
+			Next_Chapter();
 
-	//Check_Mission_Complete(fTimeDelta);
+	Check_Mission_Complete(fTimeDelta);
 
 	Update_Tutorial_Info(fTimeDelta);
 	Update_Tutorial_Guide(fTimeDelta);
@@ -81,9 +83,6 @@ void CUIPage_Tutorial::Late_Update(_float fTimeDelta)
 	Update_Tutorial_Result(fTimeDelta);
 	Update_Tutorial_Popup(fTimeDelta);
 	Update_Tutorial_NowChapter(fTimeDelta);
-
-	/*for (auto& iter : m_vec_Group_Ctrl)
-		__super::UpdatePart_ByControl(iter);*/
 
 	__super::Late_Update(fTimeDelta);
 
@@ -142,7 +141,15 @@ void CUIPage_Tutorial::Update_Tutorial_Info(_float fTimeDelta)
 
 void CUIPage_Tutorial::Update_Tutorial_Guide(_float fTimeDelta)
 {
-	m_pGuide->Update_Guide(*m_vecTutorial_ChapterData[m_iNowChapter], fTimeDelta);
+	if (m_iNowChapter >= m_vecTutorial_ChapterData.size())
+		return;
+
+	if (m_bWating_NewChapter == false)
+		m_pGuide->Update_Guide(*m_vecTutorial_ChapterData[m_iNowChapter], fTimeDelta);
+	else if (m_iNowChapter == m_vecTutorial_ChapterData.size() - 1)
+		m_pGuide->Update_Guide_Wating(true);
+	else
+		m_pGuide->Update_Guide_Wating();
 }
 
 void CUIPage_Tutorial::Update_Tutorial_Timing(_float fTimeDelta)
@@ -169,6 +176,7 @@ void CUIPage_Tutorial::Update_Tutorial_Popup(_float fTimeDelta)
 	if (m_bNewChapter == false)
 		return;
 
+	if (m_bWating_NewChapter == false)
 	if (KEY_TAP(KEY::ENTER))
 	{
 		m_bPopupOpen = !m_bPopupOpen;
@@ -180,10 +188,15 @@ void CUIPage_Tutorial::Update_Tutorial_Popup(_float fTimeDelta)
 	if (m_bPopupOpen == true) m_pPopup->Update_Popup(*m_vecTutorial_ChapterData[m_iNowChapter], fTimeDelta);
 
 	m_bNewChapter = m_bPopupOpen;
+
+	m_bWating_NewChapter = false;
 }
 
 void CUIPage_Tutorial::Update_Tutorial_NowChapter(_float fTimeDelta)
 {
+	if (m_iNowChapter >= m_vecTutorial_ChapterData.size())
+		return;
+
 	list<_int>::iterator iter = m_vec_Group_Ctrl[_int(PART_GROUP::GROUP_INFO_SCORE)]->PartIndexlist.begin();
 
 	++iter;
@@ -238,27 +251,39 @@ void CUIPage_Tutorial::Check_Mission_Complete(_float fTimeDelta)
 	{
 	case 0: 
 		Check_Player_Move(fTimeDelta); // 이동하기 미션
+		break;
 	case 1:
 		Check_Player_Dash(fTimeDelta); // 회피 미션
+		break;
 	case 2:
+		Check_Player_Focus();
 		Check_Player_Lbutton_Attack(); // 일반 공격 
+		break;
 	case 3:
 		Check_Player_RButton_Attack(fTimeDelta); // 강공격
+		break;
 	case 4:
-		Check_Player_Fable_Art(false); // 유저 페이블 아츠 사용
-	case 5:
 		Check_Dummy_Weakness(); // 그로기 성공
 		Check_Dummy_Get_FatalAttack(); // 페이탈 어택 성공
+		break;
+	case 5:
+		Check_Player_Fable_Art(false); // 유저 페이블 아츠 사용
+		break;
 	case 6:
 		Check_Player_Switch_Weapon(); // 무기 변경
+		break;
 	case 7:
 		Check_Player_Guard(fTimeDelta); // 가드, 퍼펙트 가드
+		break;
 	case 8:
 		Check_Player_Resion_Arm_Start(); // 리전 암 전개
+		break;
 	case 9:
 		Check_Player_Resion_Arm_Skill(); // 리전 암 막기, 리전 암 공격
+		break;
 	case 10:
 		Check_Player_Resion_Arm_Counter(); // 리전 암 카운터 
+		break;
 	default:
 		break;
 	}
@@ -268,14 +293,9 @@ void CUIPage_Tutorial::Check_Mission_Complete(_float fTimeDelta)
 
 	while (1)
 	{
-		if (iIndex >= m_vecTutorial_MissionData.size())
+		if ((m_bNewChapter == false) && (KEY_TAP(KEY::N)))
 		{
 			Next_Chapter();
-			break;
-		}
-		else if (m_vecTutorial_MissionData[iIndex]->iCapterIndex != m_iNowChapter)
-		{
-			if (bIsComplete == true) Next_Chapter();
 			break;
 		}
 
@@ -289,6 +309,17 @@ void CUIPage_Tutorial::Check_Mission_Complete(_float fTimeDelta)
 			bIsComplete = false;
 
 		++iIndex;
+
+		if (iIndex >= m_vecTutorial_MissionData.size())
+		{
+			if (bIsComplete == true) Set_Waiting_NextChapter();
+			break;
+		}
+		else if (m_vecTutorial_MissionData[iIndex]->iCapterIndex != m_iNowChapter)
+		{
+			if (bIsComplete == true) Set_Waiting_NextChapter();
+			break;
+		}
 	}
 }
 
@@ -296,7 +327,16 @@ void CUIPage_Tutorial::Check_Player_Move(_float fTimeDelta)
 {
 	_int iPlayerState = GET_GAMEINTERFACE->Get_Player()->Get_Fsm()->Get_CurrentState();
 
-	if ((CPlayer::PLAYER_STATE::OH_WALK != iPlayerState) && (CPlayer::PLAYER_STATE::TH_WALK != iPlayerState))
+	_int iWalk = 0;
+
+	iWalk += CPlayer::PLAYER_STATE::OH_WALK == iPlayerState ? 1 : 0;
+	iWalk += CPlayer::PLAYER_STATE::OH_RUN == iPlayerState ? 1 : 0;
+	iWalk += CPlayer::PLAYER_STATE::OH_SPRINT == iPlayerState ? 1 : 0;
+	iWalk += CPlayer::PLAYER_STATE::TH_WALK == iPlayerState ? 1 : 0;
+	iWalk += CPlayer::PLAYER_STATE::TH_RUN == iPlayerState ? 1 : 0;
+	iWalk += CPlayer::PLAYER_STATE::TH_SPRINT == iPlayerState ? 1 : 0;
+
+	if (iWalk == 0)
 		return;
 
 	if (m_vecTutorial_MissionData[m_iNow_Index + 0]->bComplete == false)
@@ -318,6 +358,9 @@ void CUIPage_Tutorial::Check_Player_Move(_float fTimeDelta)
 
 void CUIPage_Tutorial::Check_Player_Dash(_float fTimeDelta)
 {
+	if (m_bPlayer_StateChanged == false)
+		return;
+
 	_int iPlayerState = GET_GAMEINTERFACE->Get_Player()->Get_Fsm()->Get_CurrentState();
 
 	if ((CPlayer::PLAYER_STATE::OH_DASH != iPlayerState) && (CPlayer::PLAYER_STATE::TH_DASH != iPlayerState))
@@ -332,8 +375,36 @@ void CUIPage_Tutorial::Check_Player_Dash(_float fTimeDelta)
 			m_vecTutorial_MissionData[m_iNow_Index + 1]->fNow += 1;
 }
 
+void CUIPage_Tutorial::Check_Player_Focus()
+{
+	if (m_vecTutorial_MissionData[m_iNow_Index + 0]->bComplete == false)
+	{
+		CPawn* pTarget = GET_GAMEINTERFACE->Get_Player()->Get_TargetMonster();
+
+		if (pTarget == nullptr)
+			return;
+
+		if ((pTarget != m_pSharedPonter_AttackMonster) && (pTarget != m_pSharedPonter_NormalMonster))
+			return;
+
+		m_vecTutorial_MissionData[m_iNow_Index + 0]->fNow += 1;
+	}
+	else
+	{
+		CPawn* pTarget = GET_GAMEINTERFACE->Get_Player()->Get_TargetMonster();
+
+		if (pTarget != nullptr)
+			return;
+
+		m_vecTutorial_MissionData[m_iNow_Index + 1]->fNow += 1;
+	}
+}
+
 void CUIPage_Tutorial::Check_Player_Lbutton_Attack()
 {
+	if (m_bPlayer_StateChanged == false)
+		return;
+
 	if (!KEY_TAP(KEY::LBUTTON))
 		return;
 
@@ -351,20 +422,23 @@ void CUIPage_Tutorial::Check_Player_Lbutton_Attack()
 	if (iLAttack == 0)
 		return;
 
-	if (m_vecTutorial_MissionData[m_iNow_Index + 0]->bComplete == false)
-		m_vecTutorial_MissionData[m_iNow_Index + 0]->fNow += 1;
+	if (m_vecTutorial_MissionData[m_iNow_Index + 2]->bComplete == false)
+		m_vecTutorial_MissionData[m_iNow_Index + 2]->fNow += 1;
 }
 
 void CUIPage_Tutorial::Check_Player_RButton_Attack(_float fTimeDelta)
 {
-	if ((!KEY_TAP(KEY::RBUTTON)) && (!KEY_HOLD(KEY::RBUTTON)))
+	_bool bIsRButton = ((KEY_TAP(KEY::RBUTTON)) || (KEY_HOLD(KEY::RBUTTON)));
+	_bool bIsCharge = (m_vHoldTime_RButton.x > 0.f);
+
+	if (bIsRButton == true)
 	{
-		if (m_vHoldTime_RButton.x < m_vHoldTime_RButton.y)
-		{
-			m_vHoldTime_RButton.x = 0.f;
-			return;
-		}
-		else if (m_vecTutorial_MissionData[m_iNow_Index + 1]->bComplete == false)
+		m_vHoldTime_RButton.x = min(m_vHoldTime_RButton.x + fTimeDelta, m_vHoldTime_RButton.y);
+		m_vecTutorial_MissionData[m_iNow_Index + 0]->fNow = max(m_vecTutorial_MissionData[m_iNow_Index + 0]->fNow, m_vHoldTime_RButton.x);
+	}
+	else if ((bIsRButton == false) && (bIsCharge == true))
+	{
+		if (m_vecTutorial_MissionData[m_iNow_Index + 1]->bComplete == false)
 		{
 			_int iPlayerState = GET_GAMEINTERFACE->Get_Player()->Get_Fsm()->Get_CurrentState();
 
@@ -377,18 +451,18 @@ void CUIPage_Tutorial::Check_Player_RButton_Attack(_float fTimeDelta)
 			iRAttack += CPlayer::PLAYER_STATE::SCISSOR_RATTACK1 == iPlayerState ? 1 : 0;
 
 			if (iRAttack == 0)
-				return;
-
-			m_vecTutorial_MissionData[m_iNow_Index + 1]->fNow += 1;
+				m_vecTutorial_MissionData[m_iNow_Index + 1]->fNow += 1;
 		}
+
+		m_vHoldTime_RButton.x = 0.f;
 	}
-		
-	m_vHoldTime_RButton.x = min(m_vHoldTime_RButton.x + fTimeDelta, m_vHoldTime_RButton.y);
-	m_vecTutorial_MissionData[m_iNow_Index + 0]->fNow = max(m_vecTutorial_MissionData[m_iNow_Index + 0]->fNow, m_vHoldTime_RButton.x);
 }
 
 void CUIPage_Tutorial::Check_Player_Fable_Art(_bool bIsSecond)
 {
+	if (m_bPlayer_StateChanged == false)
+		return;
+
 	_int iSecond = _int(bIsSecond);
 
 	_int iPlayerState = GET_GAMEINTERFACE->Get_Player()->Get_Fsm()->Get_CurrentState();
@@ -396,7 +470,7 @@ void CUIPage_Tutorial::Check_Player_Fable_Art(_bool bIsSecond)
 	if (!KEY_TAP(KEY::F))
 		return;
 
-	_int iRAttack = 0;
+	/*_int iRAttack = 0;
 
 	iRAttack += CPlayer::PLAYER_STATE::FLAME_FABLE == iPlayerState ? 1 : 0;
 	iRAttack += CPlayer::PLAYER_STATE::RAPIER_FABALE == iPlayerState ? 1 : 0;
@@ -405,12 +479,12 @@ void CUIPage_Tutorial::Check_Player_Fable_Art(_bool bIsSecond)
 	iRAttack += CPlayer::PLAYER_STATE::SCISSOR_FABAL2 == iPlayerState ? 1 : 0;
 
 	if (iRAttack == 0)
-		return;
+		return;*/
 
-	if ((!KEY_TAP(KEY::LSHIFT)) && (!KEY_HOLD(KEY::LSHIFT)))
-		m_vecTutorial_MissionData[m_iNow_Index + 0]->fNow += 1;
+	if ((KEY_TAP(KEY::LSHIFT)) || (KEY_HOLD(KEY::LSHIFT)))
+		m_vecTutorial_MissionData[m_iNow_Index + 1 + iSecond]->fNow += 1;
 	else 
-		m_vecTutorial_MissionData[m_iNow_Index + 1]->fNow += 1;
+		m_vecTutorial_MissionData[m_iNow_Index + 0 + iSecond]->fNow += 1;
 }
 
 void CUIPage_Tutorial::Check_Dummy_Weakness()
@@ -429,13 +503,16 @@ void CUIPage_Tutorial::Check_Dummy_Get_FatalAttack()
 	if (m_vecTutorial_MissionData[m_iNow_Index + 1]->bComplete == false)
 	{
 		if (_int(m_pSharedPonter_AttackMonster->Get_Fsm()->Get_CurrentState() == CMonster::MONSTER_STATE::HITFATAL)
-			+ _int(m_pSharedPonter_NormalMonster->Get_Fsm()->Get_CurrentState() == CMonster::MONSTER_STATE::HITFATAL) == 0)
+			+ _int(m_pSharedPonter_NormalMonster->Get_Fsm()->Get_CurrentState() == CMonster::MONSTER_STATE::HITFATAL) > 0)
 			m_vecTutorial_MissionData[m_iNow_Index + 1]->fNow += 1;
 	}
 }
 
 void CUIPage_Tutorial::Check_Player_Switch_Weapon()
 {
+	if (m_bPlayer_StateChanged == false)
+		return;
+
 	if (m_iBeforeWeapon == -1)
 		m_iBeforeWeapon = _int(GET_GAMEINTERFACE->Get_Player()->Get_WeaponType());
 	else if (m_vecTutorial_MissionData[m_iNow_Index + 0]->bComplete == false)
@@ -453,19 +530,11 @@ void CUIPage_Tutorial::Check_Player_Guard(_float fTimeDelta)
 
 	if ((iPlayerState == _int(CPlayer::PLAYER_STATE::OH_GUARD)) || (iPlayerState == _int(CPlayer::PLAYER_STATE::TH_GUARD)))
 	{
-		if ((!KEY_TAP(KEY::LSHIFT)) && (!KEY_HOLD(KEY::LSHIFT)))
-		{
-			m_vGuardTime.x = 0.f;
-			m_bGuard = false;
-		}
-		else
-		{
-			if (m_vGuardTime.x == 0.f)
-				ShowTiming(KEY::LSHIFT, 0.15f);
+		if (m_vGuardTime.x == 0.f)
+			ShowTiming(KEY::LSHIFT, 0.17f); // <- 일반 막기 퍼펙트 시간
 
-			m_vGuardTime.x += fTimeDelta;
-			m_bGuard = true;
-		}
+		m_vGuardTime.x += fTimeDelta;
+		m_bGuard = true;
 	}
 	else if ((iPlayerState == _int(CPlayer::PLAYER_STATE::OH_GUARDHIT)) || (iPlayerState == _int(CPlayer::PLAYER_STATE::TH_GUARDHIT)))
 	{
@@ -474,34 +543,49 @@ void CUIPage_Tutorial::Check_Player_Guard(_float fTimeDelta)
 		if (m_vGuardTime.x <= m_vGuardTime.y)
 			m_vecTutorial_MissionData[m_iNow_Index + 1]->fNow += 1;
 	}
+	else
+	{
+		m_vGuardTime.x = 0.f;
+		m_bGuard = false;
+	}
 }
 
 void CUIPage_Tutorial::Check_Player_Resion_Arm_Start()
 {
-	if (m_vecTutorial_MissionData[m_iNow_Index + 0]->bComplete != false)
+	if (m_bPlayer_StateChanged == false)
 		return;
 
-	_int iPlayerState = GET_GAMEINTERFACE->Get_Player()->Get_Fsm()->Get_CurrentState();
+	if (m_vecTutorial_MissionData[m_iNow_Index + 0]->bComplete == false)
+	{
+		_int iPlayerState = GET_GAMEINTERFACE->Get_Player()->Get_Fsm()->Get_CurrentState();
 
-	if (iPlayerState == _int(CPlayer::PLAYER_STATE::ARM_LOOP))
-		m_vecTutorial_MissionData[m_iNow_Index + 0] += 1;
+		if (iPlayerState == _int(CPlayer::PLAYER_STATE::ARM_LOOP))
+			m_vecTutorial_MissionData[m_iNow_Index + 0]->fNow += 1;
+	}
 }
 
 void CUIPage_Tutorial::Check_Player_Resion_Arm_Skill()
 {
+	/*if (m_bPlayer_StateChanged == false)
+		return;*/
+
 	_int iPlayerState = GET_GAMEINTERFACE->Get_Player()->Get_Fsm()->Get_CurrentState();
 
-	if (m_vecTutorial_MissionData[m_iNow_Index + 0]->bComplete != false)
+	if (m_vecTutorial_MissionData[m_iNow_Index + 0]->bComplete == false)
 	{
-		if ((iPlayerState == _int(CPlayer::PLAYER_STATE::ARM_SWING)) || (iPlayerState == _int(CPlayer::PLAYER_STATE::ARM_THRUST)))
-			m_vecTutorial_MissionData[m_iNow_Index + 0]->fNow += 1.f;
+		if ((KEY_HOLD(KEY::CTRL)) && KEY_TAP(KEY::LBUTTON))
+			if ((iPlayerState == _int(CPlayer::PLAYER_STATE::ARM_SWING)) || (iPlayerState == _int(CPlayer::PLAYER_STATE::ARM_THRUST)))
+				m_vecTutorial_MissionData[m_iNow_Index + 0]->fNow += 1.f;
 	}
 
-	if (m_vecTutorial_MissionData[m_iNow_Index + 1]->bComplete != false)
+	if ((KEY_HOLD(KEY::CTRL)) && KEY_TAP(KEY::LSHIFT))
+		ShowTiming(KEY::LSHIFT, 0.17f); // <- 리전 암 막기 퍼펙트 시간
+
+	if (m_vecTutorial_MissionData[m_iNow_Index + 1]->bComplete == false)
 	{
 		_int iCheck_Guard = 0;
 
-		iCheck_Guard += iPlayerState == _int(CPlayer::PLAYER_STATE::ARM_SWING) ? 1 : 0;
+		iCheck_Guard += iPlayerState == _int(CPlayer::PLAYER_STATE::ARM_GURAD_WEAK) ? 1 : 0;
 		iCheck_Guard += iPlayerState == _int(CPlayer::PLAYER_STATE::ARM_GURAD_HARD) ? 1 : 0;
 		iCheck_Guard += iPlayerState == _int(CPlayer::PLAYER_STATE::ARM_GURAD_HEAVY) ? 1 : 0;
 
@@ -512,7 +596,10 @@ void CUIPage_Tutorial::Check_Player_Resion_Arm_Skill()
 
 void CUIPage_Tutorial::Check_Player_Resion_Arm_Counter()
 {
-	if (m_vecTutorial_MissionData[m_iNow_Index + 0]->bComplete != false)
+	if (m_bPlayer_StateChanged == false)
+		return;
+
+	if (m_vecTutorial_MissionData[m_iNow_Index + 0]->bComplete == false)
 	{
 		_int iPlayerState = GET_GAMEINTERFACE->Get_Player()->Get_Fsm()->Get_CurrentState();
 
@@ -651,6 +738,8 @@ _int CUIPage_Tutorial::Check_KeyTexture_Index(_wstring strKeyName)
 		iResult = 250;
 	else if (strKeyName[0] == 'C')
 		iResult = 249;
+	else if (strKeyName[0] == 'M')
+		iResult = 303;
 
 	return iResult;
 }
@@ -698,6 +787,13 @@ void CUIPage_Tutorial::Update_Tutorial()
 
 }
 
+void CUIPage_Tutorial::Set_Waiting_NextChapter()
+{
+	m_bWating_NewChapter = true;
+	
+
+}
+
 void CUIPage_Tutorial::Next_Chapter()
 {
 	++m_iNowChapter;
@@ -713,6 +809,7 @@ void CUIPage_Tutorial::Next_Chapter()
 	}
 	else
 	{
+		--m_iNowChapter;
 		GET_GAMEINTERFACE->Input_Achievment_Data(16, 1);
 		CloseAction();
 		// 여기에 종료 팝업 필요

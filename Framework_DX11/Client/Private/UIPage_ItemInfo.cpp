@@ -90,6 +90,12 @@ void CUIPage_ItemInfo::Late_Update(_float fTimeDelta)
 	}
 
 	// New
+	m_fNewmarkGrow = min(m_fNewmarkGrow + (fTimeDelta * 120.f), 360.f);
+	if (m_fNewmarkGrow == 360.f) m_fNewmarkGrow = 0.f;
+
+	_float fAdjustAlpha = _float(sin(XMConvertToRadians(m_fNewmarkGrow)));
+	m_vecPart[_int(PART_GROUP::ITEMINFO_NEW)]->fTextureColor.w *= abs(fAdjustAlpha) + 0.5f;
+
 	while (!m_queueNewMarkPos.empty())
 	{
 		_Vec2 vPos = m_queueNewMarkPos.front();
@@ -99,6 +105,8 @@ void CUIPage_ItemInfo::Late_Update(_float fTimeDelta)
 
 		Input_Render_Info(*m_vecPart[_int(PART_GROUP::ITEMINFO_NEW)], eArea);
 	}
+
+	m_vecPart[_int(PART_GROUP::ITEMINFO_NEW)]->fTextureColor.w /= abs(fAdjustAlpha) + 0.5f;
 
 	// Action
 	if (m_bIsActive_Func)

@@ -97,7 +97,7 @@ HRESULT CRebornerBigA::Initialize(void* pArg)
 	// 정식 코드  
 
 	m_pSoundCom[CPawn::PAWN_SOUND_VOICE]->Play2D_Repeat(TEXT("SE_NPC_Carcass_Horseman_MT_Tentacle_Movement_02"), &g_fVoiceVolume);
-	GET_GAMEINTERFACE->Register_Pointer_Into_OrthoUIPage(UI_ORTHO_OBJ_TYPE::ORTHO_NORMAL_MONSTER, this);
+	GET_GAMEINTERFACE->Register_Pointer_Into_OrthoUIPage(UI_ORTHO_OBJ_TYPE::ORTHO_REBORNER_BIG, this);
 
 	GET_GAMEINTERFACE->Set_OnOff_OrthoUI(false, this);
 	return S_OK;

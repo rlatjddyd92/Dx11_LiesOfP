@@ -136,8 +136,11 @@ protected:
 	_bool m_bFocus = false;
 	_float m_fFocus_Fire_Move_Ratio = 0.f;
 
+	// New
 	queue<_Vec2> m_queueNewMarkPos;
+	_float m_fNewmarkGrow = 0.f;
 
+	// Func
 	_bool m_bIsActive_Func = false;
 	_int m_iNow_Func = -1;
 	ITEM_FUNC m_eActive_Func[4] = { ITEM_FUNC::FUNC_END, ITEM_FUNC::FUNC_END ,ITEM_FUNC::FUNC_END ,ITEM_FUNC::FUNC_END };
@@ -147,7 +150,11 @@ protected:
 
 	_bool m_bCheck_Active = false;
 
+	// Tooltip
 	_Vec2 m_vToolTip_Pos = { 1000.f,360.f };
+
+	
+
 
 public:
 	static CUIPage_ItemInfo* Create(ID3D11Device* pDevice, ID3D11DeviceContext* pContext);

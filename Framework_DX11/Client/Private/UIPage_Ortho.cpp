@@ -204,12 +204,87 @@ void CUIPage_Ortho::Set_OnOff_OrthoUI(_bool bIsOn, void* pObj)
 void CUIPage_Ortho::Initialize_Ortho_Info()
 {
 	// 직교 UI 별 보정치 세팅 
-	m_vecOrtho_Adjust.resize(_int(PART_GROUP::GROUP_END)); // <- 파트 그룹을 기준으로 정한다 (부모 인덱스가 -1인 것 기준)
-	m_vecOrtho_Adjust[_int(PART_GROUP::GROUP_HP_FRAME)] = { 0.f,3.f,0.f }; // 몬스터 체력바 (프레임, Fill 모두 적용됨)
-	m_vecOrtho_Adjust[_int(PART_GROUP::GROUP_HP_FILL)] = { 0.f,3.f,0.f }; // 몬스터 체력바 (프레임, Fill 모두 적용됨)
-	m_vecOrtho_Adjust[_int(PART_GROUP::GROUP_HP_COUNT)] = { 0.f,3.f,0.f }; // 몬스터 데미지 (프레임, Fill 모두 적용됨)
-	m_vecOrtho_Adjust[_int(PART_GROUP::GROUP_FOCUS)] = { 0.f,2.f,0.f }; // 몬스터 포커싱
-	m_vecOrtho_Adjust[_int(PART_GROUP::GROUP_SPECIAL_HIT)] = { 0.f,2.f,0.f }; // 몬스터 특수공격
+	m_vecOrtho_Adjust.resize(_int(UI_ORTHO_OBJ_TYPE::ORTHO_END));
+
+	for(auto& iter : m_vecOrtho_Adjust)
+		iter.resize(_int(PART_GROUP::GROUP_END));
+
+	// 일반 몬스터 
+	m_vecOrtho_Adjust[_int(UI_ORTHO_OBJ_TYPE::ORTHO_NORMAL_MONSTER)][_int(PART_GROUP::GROUP_HP_FRAME)] = { 0.f,4.f,0.f }; // 몬스터 체력바 (프레임, Fill 모두 적용됨)
+	m_vecOrtho_Adjust[_int(UI_ORTHO_OBJ_TYPE::ORTHO_NORMAL_MONSTER)][_int(PART_GROUP::GROUP_HP_FILL)] = { 0.f,4.f,0.f }; // 몬스터 체력바 (프레임, Fill 모두 적용됨)
+	m_vecOrtho_Adjust[_int(UI_ORTHO_OBJ_TYPE::ORTHO_NORMAL_MONSTER)][_int(PART_GROUP::GROUP_HP_COUNT)] = { 0.f,4.f,0.f }; // 몬스터 데미지 (프레임, Fill 모두 적용됨)
+	m_vecOrtho_Adjust[_int(UI_ORTHO_OBJ_TYPE::ORTHO_NORMAL_MONSTER)][_int(PART_GROUP::GROUP_FOCUS)] = { 0.f,2.f,0.f }; // 몬스터 포커싱
+	m_vecOrtho_Adjust[_int(UI_ORTHO_OBJ_TYPE::ORTHO_NORMAL_MONSTER)][_int(PART_GROUP::GROUP_SPECIAL_HIT)] = { 0.f,2.f,0.f }; // 몬스터 특수공격
+
+	// 락사시아
+	m_vecOrtho_Adjust[_int(UI_ORTHO_OBJ_TYPE::ORTHO_BOSS_RAXASIA)][_int(PART_GROUP::GROUP_HP_FRAME)] = { 0.f,3.f,0.f }; // 몬스터 체력바 (프레임, Fill 모두 적용됨)
+	m_vecOrtho_Adjust[_int(UI_ORTHO_OBJ_TYPE::ORTHO_BOSS_RAXASIA)][_int(PART_GROUP::GROUP_HP_FILL)] = { 0.f,3.f,0.f }; // 몬스터 체력바 (프레임, Fill 모두 적용됨)
+	m_vecOrtho_Adjust[_int(UI_ORTHO_OBJ_TYPE::ORTHO_BOSS_RAXASIA)][_int(PART_GROUP::GROUP_HP_COUNT)] = { 0.f,3.f,0.f }; // 몬스터 데미지 (프레임, Fill 모두 적용됨)
+	m_vecOrtho_Adjust[_int(UI_ORTHO_OBJ_TYPE::ORTHO_BOSS_RAXASIA)][_int(PART_GROUP::GROUP_FOCUS)] = { 0.f,1.f,0.f }; // 몬스터 포커싱
+	m_vecOrtho_Adjust[_int(UI_ORTHO_OBJ_TYPE::ORTHO_BOSS_RAXASIA)][_int(PART_GROUP::GROUP_SPECIAL_HIT)] = { 0.f,1.f,0.f }; // 몬스터 특수공격
+
+	// 시몬 마누스
+	m_vecOrtho_Adjust[_int(UI_ORTHO_OBJ_TYPE::ORTHO_BOSS_SIMON)][_int(PART_GROUP::GROUP_HP_FRAME)] = { 0.f,3.f,0.f }; // 몬스터 체력바 (프레임, Fill 모두 적용됨)
+	m_vecOrtho_Adjust[_int(UI_ORTHO_OBJ_TYPE::ORTHO_BOSS_SIMON)][_int(PART_GROUP::GROUP_HP_FILL)] = { 0.f,3.f,0.f }; // 몬스터 체력바 (프레임, Fill 모두 적용됨)
+	m_vecOrtho_Adjust[_int(UI_ORTHO_OBJ_TYPE::ORTHO_BOSS_SIMON)][_int(PART_GROUP::GROUP_HP_COUNT)] = { 0.f,3.f,0.f }; // 몬스터 데미지 (프레임, Fill 모두 적용됨)
+	m_vecOrtho_Adjust[_int(UI_ORTHO_OBJ_TYPE::ORTHO_BOSS_SIMON)][_int(PART_GROUP::GROUP_FOCUS)] = { 0.f,1.55f,0.f }; // 몬스터 포커싱
+	m_vecOrtho_Adjust[_int(UI_ORTHO_OBJ_TYPE::ORTHO_BOSS_SIMON)][_int(PART_GROUP::GROUP_SPECIAL_HIT)] = { 0.f,1.55f,0.f }; // 몬스터 특수공격
+
+	// 더미 (공격)
+	m_vecOrtho_Adjust[_int(UI_ORTHO_OBJ_TYPE::ORTHO_TRAINIG_MONSTER_ATTACK)][_int(PART_GROUP::GROUP_HP_FRAME)] = { 0.f,2.35f,0.f }; // 몬스터 체력바 (프레임, Fill 모두 적용됨)
+	m_vecOrtho_Adjust[_int(UI_ORTHO_OBJ_TYPE::ORTHO_TRAINIG_MONSTER_ATTACK)][_int(PART_GROUP::GROUP_HP_FILL)] = { 0.f,2.35f,0.f }; // 몬스터 체력바 (프레임, Fill 모두 적용됨)
+	m_vecOrtho_Adjust[_int(UI_ORTHO_OBJ_TYPE::ORTHO_TRAINIG_MONSTER_ATTACK)][_int(PART_GROUP::GROUP_HP_COUNT)] = { 0.f,2.35f,0.f }; // 몬스터 데미지 (프레임, Fill 모두 적용됨)
+	m_vecOrtho_Adjust[_int(UI_ORTHO_OBJ_TYPE::ORTHO_TRAINIG_MONSTER_ATTACK)][_int(PART_GROUP::GROUP_FOCUS)] = { 0.f,1.3f,0.f }; // 몬스터 포커싱
+	m_vecOrtho_Adjust[_int(UI_ORTHO_OBJ_TYPE::ORTHO_TRAINIG_MONSTER_ATTACK)][_int(PART_GROUP::GROUP_SPECIAL_HIT)] = { 0.f,1.3f,0.f }; // 몬스터 특수공격
+
+	// 더미 (일반)
+	m_vecOrtho_Adjust[_int(UI_ORTHO_OBJ_TYPE::ORTHO_TRAINIG_MONSTER_NORMAL)][_int(PART_GROUP::GROUP_HP_FRAME)] = { 0.f,2.35f,0.f }; // 몬스터 체력바 (프레임, Fill 모두 적용됨)
+	m_vecOrtho_Adjust[_int(UI_ORTHO_OBJ_TYPE::ORTHO_TRAINIG_MONSTER_NORMAL)][_int(PART_GROUP::GROUP_HP_FILL)] = { 0.f,2.35f,0.f }; // 몬스터 체력바 (프레임, Fill 모두 적용됨)
+	m_vecOrtho_Adjust[_int(UI_ORTHO_OBJ_TYPE::ORTHO_TRAINIG_MONSTER_NORMAL)][_int(PART_GROUP::GROUP_HP_COUNT)] = { 0.f,2.35f,0.f }; // 몬스터 데미지 (프레임, Fill 모두 적용됨)
+	m_vecOrtho_Adjust[_int(UI_ORTHO_OBJ_TYPE::ORTHO_TRAINIG_MONSTER_NORMAL)][_int(PART_GROUP::GROUP_FOCUS)] = { 0.f,1.3f,0.f }; // 몬스터 포커싱
+	m_vecOrtho_Adjust[_int(UI_ORTHO_OBJ_TYPE::ORTHO_TRAINIG_MONSTER_NORMAL)][_int(PART_GROUP::GROUP_SPECIAL_HIT)] = { 0.f,1.3f,0.f }; // 몬스터 특수공격
+
+	// Carcass_Big
+	m_vecOrtho_Adjust[_int(UI_ORTHO_OBJ_TYPE::ORTHO_CARCASS_BIG)][_int(PART_GROUP::GROUP_HP_FRAME)] = { 0.f,4.3f,0.f }; // 몬스터 체력바 (프레임, Fill 모두 적용됨)
+	m_vecOrtho_Adjust[_int(UI_ORTHO_OBJ_TYPE::ORTHO_CARCASS_BIG)][_int(PART_GROUP::GROUP_HP_FILL)] = { 0.f,4.3f,0.f }; // 몬스터 체력바 (프레임, Fill 모두 적용됨)
+	m_vecOrtho_Adjust[_int(UI_ORTHO_OBJ_TYPE::ORTHO_CARCASS_BIG)][_int(PART_GROUP::GROUP_HP_COUNT)] = { 0.f,4.3f,0.f }; // 몬스터 데미지 (프레임, Fill 모두 적용됨)
+	m_vecOrtho_Adjust[_int(UI_ORTHO_OBJ_TYPE::ORTHO_CARCASS_BIG)][_int(PART_GROUP::GROUP_FOCUS)] = { 0.f,2.15f,0.f }; // 몬스터 포커싱
+	m_vecOrtho_Adjust[_int(UI_ORTHO_OBJ_TYPE::ORTHO_CARCASS_BIG)][_int(PART_GROUP::GROUP_SPECIAL_HIT)] = { 0.f,2.15f,0.f }; // 몬스터 특수공격
+
+	// Carcass_Tail
+	m_vecOrtho_Adjust[_int(UI_ORTHO_OBJ_TYPE::ORTHO_CARCASS_TAIL)][_int(PART_GROUP::GROUP_HP_FRAME)] = { 0.f,1.f,0.f }; // 몬스터 체력바 (프레임, Fill 모두 적용됨)
+	m_vecOrtho_Adjust[_int(UI_ORTHO_OBJ_TYPE::ORTHO_CARCASS_TAIL)][_int(PART_GROUP::GROUP_HP_FILL)] = { 0.f,1.f,0.f }; // 몬스터 체력바 (프레임, Fill 모두 적용됨)
+	m_vecOrtho_Adjust[_int(UI_ORTHO_OBJ_TYPE::ORTHO_CARCASS_TAIL)][_int(PART_GROUP::GROUP_HP_COUNT)] = { 0.f,1.f,0.f }; // 몬스터 데미지 (프레임, Fill 모두 적용됨)
+	m_vecOrtho_Adjust[_int(UI_ORTHO_OBJ_TYPE::ORTHO_CARCASS_TAIL)][_int(PART_GROUP::GROUP_FOCUS)] = { 0.f,0.5f,0.f }; // 몬스터 포커싱
+	m_vecOrtho_Adjust[_int(UI_ORTHO_OBJ_TYPE::ORTHO_CARCASS_TAIL)][_int(PART_GROUP::GROUP_SPECIAL_HIT)] = { 0.f,0.5f,0.f }; // 몬스터 특수공격
+
+	// Carcass_Normal
+	m_vecOrtho_Adjust[_int(UI_ORTHO_OBJ_TYPE::ORTHO_CARCASS_NORMAL)][_int(PART_GROUP::GROUP_HP_FRAME)] = { 0.f,2.5f,0.f }; // 몬스터 체력바 (프레임, Fill 모두 적용됨)
+	m_vecOrtho_Adjust[_int(UI_ORTHO_OBJ_TYPE::ORTHO_CARCASS_NORMAL)][_int(PART_GROUP::GROUP_HP_FILL)] = { 0.f,2.5f,0.f }; // 몬스터 체력바 (프레임, Fill 모두 적용됨)
+	m_vecOrtho_Adjust[_int(UI_ORTHO_OBJ_TYPE::ORTHO_CARCASS_NORMAL)][_int(PART_GROUP::GROUP_HP_COUNT)] = { 0.f,2.5f,0.f }; // 몬스터 데미지 (프레임, Fill 모두 적용됨)
+	m_vecOrtho_Adjust[_int(UI_ORTHO_OBJ_TYPE::ORTHO_CARCASS_NORMAL)][_int(PART_GROUP::GROUP_FOCUS)] = { 0.f,1.1f,0.f }; // 몬스터 포커싱
+	m_vecOrtho_Adjust[_int(UI_ORTHO_OBJ_TYPE::ORTHO_CARCASS_NORMAL)][_int(PART_GROUP::GROUP_SPECIAL_HIT)] = { 0.f,1.1f,0.f }; // 몬스터 특수공격
+
+	// Currupted_Puppet
+	m_vecOrtho_Adjust[_int(UI_ORTHO_OBJ_TYPE::ORTHO_CURRUPTED_PUPPET)][_int(PART_GROUP::GROUP_HP_FRAME)] = { 0.f,2.f,0.f }; // 몬스터 체력바 (프레임, Fill 모두 적용됨)
+	m_vecOrtho_Adjust[_int(UI_ORTHO_OBJ_TYPE::ORTHO_CURRUPTED_PUPPET)][_int(PART_GROUP::GROUP_HP_FILL)] = { 0.f,2.f,0.f }; // 몬스터 체력바 (프레임, Fill 모두 적용됨)
+	m_vecOrtho_Adjust[_int(UI_ORTHO_OBJ_TYPE::ORTHO_CURRUPTED_PUPPET)][_int(PART_GROUP::GROUP_HP_COUNT)] = { 0.f,2.f,0.f }; // 몬스터 데미지 (프레임, Fill 모두 적용됨)
+	m_vecOrtho_Adjust[_int(UI_ORTHO_OBJ_TYPE::ORTHO_CURRUPTED_PUPPET)][_int(PART_GROUP::GROUP_FOCUS)] = { 0.f,1.5f,0.f }; // 몬스터 포커싱
+	m_vecOrtho_Adjust[_int(UI_ORTHO_OBJ_TYPE::ORTHO_CURRUPTED_PUPPET)][_int(PART_GROUP::GROUP_SPECIAL_HIT)] = { 0.f,1.5f,0.f }; // 몬스터 특수공격
+
+	// Reboner_Big
+	m_vecOrtho_Adjust[_int(UI_ORTHO_OBJ_TYPE::ORTHO_REBORNER_BIG)][_int(PART_GROUP::GROUP_HP_FRAME)] = { 0.f,2.f,0.f }; // 몬스터 체력바 (프레임, Fill 모두 적용됨)
+	m_vecOrtho_Adjust[_int(UI_ORTHO_OBJ_TYPE::ORTHO_REBORNER_BIG)][_int(PART_GROUP::GROUP_HP_FILL)] = { 0.f,2.f,0.f }; // 몬스터 체력바 (프레임, Fill 모두 적용됨)
+	m_vecOrtho_Adjust[_int(UI_ORTHO_OBJ_TYPE::ORTHO_REBORNER_BIG)][_int(PART_GROUP::GROUP_HP_COUNT)] = { 0.f,2.f,0.f }; // 몬스터 데미지 (프레임, Fill 모두 적용됨)
+	m_vecOrtho_Adjust[_int(UI_ORTHO_OBJ_TYPE::ORTHO_REBORNER_BIG)][_int(PART_GROUP::GROUP_FOCUS)] = { 0.f,1.5f,0.f }; // 몬스터 포커싱
+	m_vecOrtho_Adjust[_int(UI_ORTHO_OBJ_TYPE::ORTHO_REBORNER_BIG)][_int(PART_GROUP::GROUP_SPECIAL_HIT)] = { 0.f,1.5f,0.f }; // 몬스터 특수공격
+
+	// Reboner_Male
+	m_vecOrtho_Adjust[_int(UI_ORTHO_OBJ_TYPE::ORTHO_REBORNER_MALE)][_int(PART_GROUP::GROUP_HP_FRAME)] = { 0.f,2.f,0.f }; // 몬스터 체력바 (프레임, Fill 모두 적용됨)
+	m_vecOrtho_Adjust[_int(UI_ORTHO_OBJ_TYPE::ORTHO_REBORNER_MALE)][_int(PART_GROUP::GROUP_HP_FILL)] = { 0.f,2.f,0.f }; // 몬스터 체력바 (프레임, Fill 모두 적용됨)
+	m_vecOrtho_Adjust[_int(UI_ORTHO_OBJ_TYPE::ORTHO_REBORNER_MALE)][_int(PART_GROUP::GROUP_HP_COUNT)] = { 0.f,2.f,0.f }; // 몬스터 데미지 (프레임, Fill 모두 적용됨)
+	m_vecOrtho_Adjust[_int(UI_ORTHO_OBJ_TYPE::ORTHO_REBORNER_MALE)][_int(PART_GROUP::GROUP_FOCUS)] = { 0.f,1.5f,0.f }; // 몬스터 포커싱
+	m_vecOrtho_Adjust[_int(UI_ORTHO_OBJ_TYPE::ORTHO_REBORNER_MALE)][_int(PART_GROUP::GROUP_SPECIAL_HIT)] = { 0.f,1.5f,0.f }; // 몬스터 특수공격
 }
 
 void CUIPage_Ortho::CheckHost(_float fTimeDelta)
@@ -243,9 +318,9 @@ void CUIPage_Ortho::CheckHost(_float fTimeDelta)
 		{
 			_float fDistnace = Check_Distance_From_Cam((*iter)->pHost);
 
-			Make_Monster_HP_Bar((*iter)->pHost, fTimeDelta, fDistnace);
-			Make_Monster_Focusing((*iter)->pHost, fTimeDelta, fDistnace);
-			Make_Monster_SpecialHit((*iter)->pHost, fTimeDelta, fDistnace);
+			Make_Monster_HP_Bar((*iter)->pHost, fTimeDelta, fDistnace, (*iter)->eType);
+			Make_Monster_Focusing((*iter)->pHost, fTimeDelta, fDistnace, (*iter)->eType);
+			Make_Monster_SpecialHit((*iter)->pHost, fTimeDelta, fDistnace, (*iter)->eType);
 			++iter;
 		}
 		else if ((*iter)->eType == UI_ORTHO_OBJ_TYPE::ORTHO_BOSS_SIMON)
@@ -256,8 +331,8 @@ void CUIPage_Ortho::CheckHost(_float fTimeDelta)
 
 			GET_GAMEINTERFACE->Activate_Boss_Hp_Bar(true);
 			GET_GAMEINTERFACE->Set_Boss_Hp_Bar_Info(pStat->strName, pStat->fHp, pStat->fMaxHp);
-			Make_Monster_Focusing((*iter)->pHost, fTimeDelta, fDistnace);
-			Make_Monster_SpecialHit((*iter)->pHost, fTimeDelta, fDistnace);
+			Make_Monster_Focusing((*iter)->pHost, fTimeDelta, fDistnace, (*iter)->eType);
+			Make_Monster_SpecialHit((*iter)->pHost, fTimeDelta, fDistnace, (*iter)->eType);
 			++iter;
 		}
 		else if ((*iter)->eType == UI_ORTHO_OBJ_TYPE::ORTHO_BOSS_RAXASIA)
@@ -268,32 +343,86 @@ void CUIPage_Ortho::CheckHost(_float fTimeDelta)
 
 			GET_GAMEINTERFACE->Activate_Boss_Hp_Bar(true);
 			GET_GAMEINTERFACE->Set_Boss_Hp_Bar_Info(pStat->strName, pStat->fHp, pStat->fMaxHp);
-			Make_Monster_Focusing((*iter)->pHost, fTimeDelta, fDistnace);
-			Make_Monster_SpecialHit((*iter)->pHost, fTimeDelta, fDistnace);
+			Make_Monster_Focusing((*iter)->pHost, fTimeDelta, fDistnace, (*iter)->eType);
+			Make_Monster_SpecialHit((*iter)->pHost, fTimeDelta, fDistnace, (*iter)->eType);
 			++iter;
 		}
 		else if ((*iter)->eType == UI_ORTHO_OBJ_TYPE::ORTHO_TRAINIG_MONSTER_ATTACK)
 		{
 			_float fDistnace = Check_Distance_From_Cam((*iter)->pHost);
 
-			Make_Monster_HP_Bar((*iter)->pHost, fTimeDelta, fDistnace);
-			Make_Monster_Focusing((*iter)->pHost, fTimeDelta, fDistnace);
-			Make_Monster_SpecialHit((*iter)->pHost, fTimeDelta, fDistnace);
+			Make_Monster_HP_Bar((*iter)->pHost, fTimeDelta, fDistnace, (*iter)->eType);
+			Make_Monster_Focusing((*iter)->pHost, fTimeDelta, fDistnace, (*iter)->eType);
+			Make_Monster_SpecialHit((*iter)->pHost, fTimeDelta, fDistnace, (*iter)->eType);
 			++iter;
 		}
 		else if ((*iter)->eType == UI_ORTHO_OBJ_TYPE::ORTHO_TRAINIG_MONSTER_NORMAL)
 		{
 			_float fDistnace = Check_Distance_From_Cam((*iter)->pHost);
 
-			Make_Monster_HP_Bar((*iter)->pHost, fTimeDelta, fDistnace);
-			Make_Monster_Focusing((*iter)->pHost, fTimeDelta, fDistnace);
-			Make_Monster_SpecialHit((*iter)->pHost, fTimeDelta, fDistnace);
+			Make_Monster_HP_Bar((*iter)->pHost, fTimeDelta, fDistnace, (*iter)->eType);
+			Make_Monster_Focusing((*iter)->pHost, fTimeDelta, fDistnace, (*iter)->eType);
+			Make_Monster_SpecialHit((*iter)->pHost, fTimeDelta, fDistnace, (*iter)->eType);
+			++iter;
+		}
+		else if ((*iter)->eType == UI_ORTHO_OBJ_TYPE::ORTHO_CARCASS_BIG)
+		{
+			_float fDistnace = Check_Distance_From_Cam((*iter)->pHost);
+
+			Make_Monster_HP_Bar((*iter)->pHost, fTimeDelta, fDistnace, (*iter)->eType);
+			Make_Monster_Focusing((*iter)->pHost, fTimeDelta, fDistnace, (*iter)->eType);
+			Make_Monster_SpecialHit((*iter)->pHost, fTimeDelta, fDistnace, (*iter)->eType);
+			++iter;
+		}
+		else if ((*iter)->eType == UI_ORTHO_OBJ_TYPE::ORTHO_CARCASS_TAIL)
+		{
+			_float fDistnace = Check_Distance_From_Cam((*iter)->pHost);
+
+			Make_Monster_HP_Bar((*iter)->pHost, fTimeDelta, fDistnace, (*iter)->eType);
+			Make_Monster_Focusing((*iter)->pHost, fTimeDelta, fDistnace, (*iter)->eType);
+			Make_Monster_SpecialHit((*iter)->pHost, fTimeDelta, fDistnace, (*iter)->eType);
+			++iter;
+		}
+		else if ((*iter)->eType == UI_ORTHO_OBJ_TYPE::ORTHO_CARCASS_NORMAL)
+		{
+			_float fDistnace = Check_Distance_From_Cam((*iter)->pHost);
+
+			Make_Monster_HP_Bar((*iter)->pHost, fTimeDelta, fDistnace, (*iter)->eType);
+			Make_Monster_Focusing((*iter)->pHost, fTimeDelta, fDistnace, (*iter)->eType);
+			Make_Monster_SpecialHit((*iter)->pHost, fTimeDelta, fDistnace, (*iter)->eType);
+			++iter;
+		}
+		else if ((*iter)->eType == UI_ORTHO_OBJ_TYPE::ORTHO_CURRUPTED_PUPPET)
+		{
+			_float fDistnace = Check_Distance_From_Cam((*iter)->pHost);
+
+			Make_Monster_HP_Bar((*iter)->pHost, fTimeDelta, fDistnace, (*iter)->eType);
+			Make_Monster_Focusing((*iter)->pHost, fTimeDelta, fDistnace, (*iter)->eType);
+			Make_Monster_SpecialHit((*iter)->pHost, fTimeDelta, fDistnace, (*iter)->eType);
+			++iter;
+		}
+		else if ((*iter)->eType == UI_ORTHO_OBJ_TYPE::ORTHO_REBORNER_BIG)
+		{
+			_float fDistnace = Check_Distance_From_Cam((*iter)->pHost);
+
+			Make_Monster_HP_Bar((*iter)->pHost, fTimeDelta, fDistnace, (*iter)->eType);
+			Make_Monster_Focusing((*iter)->pHost, fTimeDelta, fDistnace, (*iter)->eType);
+			Make_Monster_SpecialHit((*iter)->pHost, fTimeDelta, fDistnace, (*iter)->eType);
+			++iter;
+		}
+		else if ((*iter)->eType == UI_ORTHO_OBJ_TYPE::ORTHO_REBORNER_MALE)
+		{
+			_float fDistnace = Check_Distance_From_Cam((*iter)->pHost);
+
+			Make_Monster_HP_Bar((*iter)->pHost, fTimeDelta, fDistnace, (*iter)->eType);
+			Make_Monster_Focusing((*iter)->pHost, fTimeDelta, fDistnace, (*iter)->eType);
+			Make_Monster_SpecialHit((*iter)->pHost, fTimeDelta, fDistnace, (*iter)->eType);
 			++iter;
 		}
 	}
 }
 
-void CUIPage_Ortho::Make_Monster_HP_Bar(CGameObject* pHost, _float fTimeDelta, _float fDistance)
+void CUIPage_Ortho::Make_Monster_HP_Bar(CGameObject* pHost, _float fTimeDelta, _float fDistance, UI_ORTHO_OBJ_TYPE eType)
 {
 	// 여기에 HP 바를 띄우는 논리가 필요함 
 
@@ -304,7 +433,7 @@ void CUIPage_Ortho::Make_Monster_HP_Bar(CGameObject* pHost, _float fTimeDelta, _
 	_float fDamege = pStat->fAtkDmg;
 
 	_Vec2 fPosition = { 0.f,0.f };
-	if (!Make_OrthoGraphy_Position(pHost, PART_GROUP::GROUP_HP_FRAME, &fPosition))
+	if (!Make_OrthoGraphy_Position(pHost, PART_GROUP::GROUP_HP_FRAME, &fPosition, eType))
 		return;
 
 	OR_RENDER* pRender_HP_Frame = new OR_RENDER;
@@ -324,7 +453,7 @@ void CUIPage_Ortho::Make_Monster_HP_Bar(CGameObject* pHost, _float fTimeDelta, _
 	}
 }
 
-void CUIPage_Ortho::Make_Monster_Focusing(CGameObject* pHost, _float fTimeDelta, _float fDistance)
+void CUIPage_Ortho::Make_Monster_Focusing(CGameObject* pHost, _float fTimeDelta, _float fDistance, UI_ORTHO_OBJ_TYPE eType)
 {
 	CPawn* pTarget = GET_GAMEINTERFACE->Get_Player()->Get_TargetMonster();
 
@@ -334,8 +463,37 @@ void CUIPage_Ortho::Make_Monster_Focusing(CGameObject* pHost, _float fTimeDelta,
 	if (pTarget != pHost)
 		return;
 
+	if (KEY_HOLD(KEY::ALT))
+	{
+		if (KEY_HOLD(KEY::UP))
+		{
+			m_vecOrtho_Adjust[_int(eType)][_int(PART_GROUP::GROUP_HP_FRAME)].y += 0.05f;
+			m_vecOrtho_Adjust[_int(eType)][_int(PART_GROUP::GROUP_HP_FILL)].y += 0.05f;
+			m_vecOrtho_Adjust[_int(eType)][_int(PART_GROUP::GROUP_HP_COUNT)].y += 0.05f;
+		}
+		else if (KEY_HOLD(KEY::DOWN))
+		{
+			m_vecOrtho_Adjust[_int(eType)][_int(PART_GROUP::GROUP_HP_FRAME)].y -= 0.05f;
+			m_vecOrtho_Adjust[_int(eType)][_int(PART_GROUP::GROUP_HP_FILL)].y -= 0.05f;
+			m_vecOrtho_Adjust[_int(eType)][_int(PART_GROUP::GROUP_HP_COUNT)].y -= 0.05f;
+		}
+	}
+	else if (KEY_HOLD(KEY::LSHIFT))
+	{
+		if (KEY_HOLD(KEY::UP))
+		{
+			m_vecOrtho_Adjust[_int(eType)][_int(PART_GROUP::GROUP_FOCUS)].y += 0.05f;
+			m_vecOrtho_Adjust[_int(eType)][_int(PART_GROUP::GROUP_SPECIAL_HIT)].y += 0.05f;
+		}
+		else if (KEY_HOLD(KEY::DOWN))
+		{
+			m_vecOrtho_Adjust[_int(eType)][_int(PART_GROUP::GROUP_FOCUS)].y -= 0.05f;
+			m_vecOrtho_Adjust[_int(eType)][_int(PART_GROUP::GROUP_SPECIAL_HIT)].y -= 0.05f;
+		}
+	}
+
 	_Vec2 fPosition = { 0.f,0.f };
-	if (!Make_OrthoGraphy_Position(pHost, PART_GROUP::GROUP_FOCUS, &fPosition))
+	if (!Make_OrthoGraphy_Position(pHost, PART_GROUP::GROUP_FOCUS, &fPosition, eType))
 		return;
 
 	OR_RENDER* pRender_Focusing = new OR_RENDER;
@@ -344,13 +502,13 @@ void CUIPage_Ortho::Make_Monster_Focusing(CGameObject* pHost, _float fTimeDelta,
 	m_queue_Ortho_Render_Ctrl.push(pRender_Focusing);
 }
 
-void CUIPage_Ortho::Make_Monster_SpecialHit(CGameObject* pHost, _float fTimeDelta, _float fDistance)
+void CUIPage_Ortho::Make_Monster_SpecialHit(CGameObject* pHost, _float fTimeDelta, _float fDistance, UI_ORTHO_OBJ_TYPE eType)
 {
 	if (!static_cast<CPawn*>(pHost)->Get_Status()->bFatalAttack)
 		return;
 
 	_Vec2 fPosition = { 0.f,0.f };
-	if (!Make_OrthoGraphy_Position(pHost, PART_GROUP::GROUP_SPECIAL_HIT, &fPosition))
+	if (!Make_OrthoGraphy_Position(pHost, PART_GROUP::GROUP_SPECIAL_HIT, &fPosition, eType))
 		return;
 
 	OR_RENDER* pRender_Special = new OR_RENDER;
@@ -360,14 +518,14 @@ void CUIPage_Ortho::Make_Monster_SpecialHit(CGameObject* pHost, _float fTimeDelt
 }
 
 
-_bool CUIPage_Ortho::Make_OrthoGraphy_Position(CGameObject* pHost, PART_GROUP eGroup, _Vec2* fPosition)
+_bool CUIPage_Ortho::Make_OrthoGraphy_Position(CGameObject* pHost, PART_GROUP eGroup, _Vec2* fPosition, UI_ORTHO_OBJ_TYPE eType)
 {
 	const _Matrix mMat = pHost->Get_Transform()->Get_WorldMatrix();
 	const _Matrix mProj = m_pGameInstance->Get_Transform(CPipeLine::D3DTS_PROJ);
 	const _Matrix mView = m_pGameInstance->Get_Transform(CPipeLine::D3DTS_VIEW);
 	const _Vec4 vSize = pHost->Get_Transform()->Get_Scaled();
 
-	_Vec3 fAdj = m_vecOrtho_Adjust[_int(eGroup)];
+	_Vec3 fAdj = m_vecOrtho_Adjust[_int(eType)][_int(eGroup)];
 	fAdj.x *= vSize.x;
 	fAdj.y *= vSize.y;
 	fAdj.z *= vSize.z;
@@ -445,6 +603,10 @@ void CUIPage_Ortho::Free()
 	}
 
 	m_vecPart.clear();
+
+	for (auto& iter : m_vecOrtho_Adjust)
+		iter.clear();
+
 	m_vecOrtho_Adjust.clear();
 
 	while (!m_queue_Ortho_Render_Ctrl.empty())
