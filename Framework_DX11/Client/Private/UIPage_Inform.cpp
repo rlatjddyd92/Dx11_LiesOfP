@@ -192,6 +192,10 @@ void CUIPage_Inform::Show_Dead(_float fTime_Emerge, _float fTime_Show)
 
 }
 
+void CUIPage_Inform::Show_PlayerDead_UI()
+{
+}
+
 void CUIPage_Inform::Update_Region(_float fTimeDelta)
 {
 	_float fRatio = Check_Ratio(&m_vLifeTime_Region, fTimeDelta);

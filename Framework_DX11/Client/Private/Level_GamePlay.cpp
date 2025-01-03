@@ -40,8 +40,8 @@ HRESULT CLevel_GamePlay::Initialize()
 	if (FAILED(Ready_Layer_Effect()))
 		return E_FAIL;
 
-	//if (FAILED(Ready_Layer_Monster()))
-	//	return E_FAIL;
+	/*if (FAILED(Ready_Layer_Monster()))
+		return E_FAIL;*/
 
 	if (FAILED(Ready_Layer_Paticle()))
 		return E_FAIL;	

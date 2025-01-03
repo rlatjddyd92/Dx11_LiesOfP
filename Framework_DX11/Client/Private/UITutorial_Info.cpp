@@ -136,7 +136,7 @@ void CUITutorial_Info::Set_Info(vector<struct CUIPage::UIPART_INFO*>& vecOrigin)
 
 void CUITutorial_Info::Update_Info(TUTO_MISSION& NowData, _float fTimeDelta)
 {
-	_float fRatio = _float(NowData.iMissionIndex) / 3.f;
+	_float fRatio = _float(NowData.iMissionIndex) / 3.5f;
 
 	m_vecSharedPointer_All[1]->fRatio = fRatio;
 	m_pSharedPointer_Mission_Title->strText = NowData.strTitle;
