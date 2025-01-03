@@ -278,7 +278,7 @@ public:
 	void			Calc_DebuffGain(DEBUFF_TYPE eDebuffType, _float fAmount);
 	void			Damaged(_float fAtkDmg);
 	void			Damaged_Guard(_float fAtkDmg, const _Matrix* pSocketBoneMatrix = nullptr);
-	void			Change_HitState(_float fAtkDmg, _Vec3 vHitPos);
+	void			Change_HitState(_float fAtkDmg, _Vec3 vHitPos, _uint iAttackStrength);
 	_bool			Decrease_Stamina(_float fAmount);
 	_bool			Check_Region_Fable01();
 	_bool			Check_Region_Fable02();

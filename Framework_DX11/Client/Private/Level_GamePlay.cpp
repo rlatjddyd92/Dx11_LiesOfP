@@ -17,7 +17,6 @@
 #include "CutScene.h"
 
 #include "CMoveBlockObj.h"
-#include "Decal_Blood.h"
 
 CLevel_GamePlay::CLevel_GamePlay(ID3D11Device* pDevice, ID3D11DeviceContext* pContext)
 	: CLevel{ pDevice, pContext }
@@ -53,9 +52,7 @@ HRESULT CLevel_GamePlay::Initialize()
 	if (FAILED(Ready_CutScene_Data()))
 		return E_FAIL;
 
-	CDecal_Blood::BLOOD_DECAL_DESC DEsc = {};
-	DEsc.vPos = _Vec3(0.f, 0.f, 0.f);
-	m_pGameInstance->Add_CloneObject_ToLayer(LEVEL_GAMEPLAY, TEXT("Layer_Decal_Blood"), TEXT("Prototype_GameObject_Decal_Blood"), &DEsc);
+
 
 	// 24-11-19 김성용
 	// 게임 인터페이스를 인게임 모드로 전환

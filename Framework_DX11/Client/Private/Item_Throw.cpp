@@ -102,6 +102,13 @@ void CItem_Throw::Update(_float fTimeDelta)
 			}
 		}
 	}
+	else if (m_isExplosion)
+	{
+		if (!m_pSoundCom->Get_IsPlaying())
+		{
+			m_isDead = true;
+		}
+	}
 
 }
 
@@ -203,8 +210,6 @@ void CItem_Throw::Explosion()
 	}
 
 	m_isExplosion = true;
-	m_isDead = true;
-
 }
 
 void CItem_Throw::Throw()
