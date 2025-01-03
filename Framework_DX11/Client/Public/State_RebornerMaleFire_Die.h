@@ -12,7 +12,7 @@ class CState_RebornerMaleFire_Die :
 {
 private:
     typedef enum {
-        AN_DIE_F = 22, AN_DIE_B = 21
+        AN_DIE_F = 21, AN_DIE_B = 22
         , AN_DIE_F_DOWN = 1, AN_DIE_B_DOWN = 0
     }ANIMNUM;
 

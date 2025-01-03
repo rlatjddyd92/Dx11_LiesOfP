@@ -130,6 +130,10 @@ HRESULT CAObj_Bullet::Render_LightDepth()
 
 void CAObj_Bullet::OnCollisionEnter(CGameObject* pOther)
 {
+}
+
+void CAObj_Bullet::OnCollisionStay(CGameObject* pOther)
+{
     //pOther check
     if (pOther->Get_Tag() == TEXT("Player"))
     {
@@ -154,10 +158,6 @@ void CAObj_Bullet::OnCollisionEnter(CGameObject* pOther)
         }
         m_pEffect->Set_Loop(false);
     }
-}
-
-void CAObj_Bullet::OnCollisionStay(CGameObject* pOther)
-{
 }
 
 void CAObj_Bullet::OnCollisionExit(CGameObject* pOther)

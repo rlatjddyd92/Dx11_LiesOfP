@@ -118,6 +118,10 @@ HRESULT CAObj_Wave::Render_LightDepth()
 
 void CAObj_Wave::OnCollisionEnter(CGameObject* pOther)
 {
+}
+
+void CAObj_Wave::OnCollisionStay(CGameObject* pOther)
+{
     //pOther check
     if (pOther->Get_Tag() == TEXT("Player"))
     {
@@ -138,10 +142,6 @@ void CAObj_Wave::OnCollisionEnter(CGameObject* pOther)
         }
         m_pEffect->Set_Loop(false);
     }
-}
-
-void CAObj_Wave::OnCollisionStay(CGameObject* pOther)
-{
 }
 
 void CAObj_Wave::OnCollisionExit(CGameObject* pOther)

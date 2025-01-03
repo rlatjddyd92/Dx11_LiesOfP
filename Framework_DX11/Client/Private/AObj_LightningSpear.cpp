@@ -134,6 +134,10 @@ HRESULT CAObj_LightningSpear::Render_LightDepth()
 
 void CAObj_LightningSpear::OnCollisionEnter(CGameObject* pOther)
 {
+}
+
+void CAObj_LightningSpear::OnCollisionStay(CGameObject* pOther)
+{
     //pOther check
     if (pOther->Get_Tag() == TEXT("Player"))
     {
@@ -157,7 +161,7 @@ void CAObj_LightningSpear::OnCollisionEnter(CGameObject* pOther)
                 m_pSoundCom[EFF_SOUND_EFFECT2]->Play2D(TEXT("SE_NPC_SimonManus_SK_PJ_Ergo_Direct_Hit_01.wav"), &g_fEffectVolume);
             }
 
-            
+
             m_isDead = true;
 
             CEffect_Manager::Get_Instance()->Add_Effect_ToLayer(LEVEL_GAMEPLAY, TEXT("SimonManus_Attack_LightningSpear_Impact_Ground"),
@@ -165,10 +169,6 @@ void CAObj_LightningSpear::OnCollisionEnter(CGameObject* pOther)
         }
         m_pEffect->Set_Loop(false);
     }
-}
-
-void CAObj_LightningSpear::OnCollisionStay(CGameObject* pOther)
-{
 }
 
 void CAObj_LightningSpear::OnCollisionExit(CGameObject* pOther)

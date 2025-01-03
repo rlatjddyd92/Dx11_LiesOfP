@@ -112,6 +112,10 @@ HRESULT CAObj_ThunderSpread::Render_LightDepth()
 
 void CAObj_ThunderSpread::OnCollisionEnter(CGameObject* pOther)
 {
+}
+
+void CAObj_ThunderSpread::OnCollisionStay(CGameObject* pOther)
+{
     //pOther check
     if (pOther->Get_Tag() == TEXT("Player"))
     {
@@ -132,10 +136,6 @@ void CAObj_ThunderSpread::OnCollisionEnter(CGameObject* pOther)
         }
         m_pEffect->Set_Loop(false);
     }
-}
-
-void CAObj_ThunderSpread::OnCollisionStay(CGameObject* pOther)
-{
 }
 
 void CAObj_ThunderSpread::OnCollisionExit(CGameObject* pOther)

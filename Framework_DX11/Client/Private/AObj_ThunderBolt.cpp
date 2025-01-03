@@ -238,7 +238,11 @@ HRESULT CAObj_ThunderBolt::Render_LightDepth()
 
 void CAObj_ThunderBolt::OnCollisionEnter(CGameObject* pOther)
 {
-    //pOther check
+    
+}
+
+void CAObj_ThunderBolt::OnCollisionStay(CGameObject* pOther)
+{//pOther check
     if (pOther->Get_Tag() == TEXT("Player") || (m_bCounter && pOther->Get_Tag() == TEXT("Monster")))
     {
         _bool bOverlapCheck = false;
@@ -284,7 +288,7 @@ void CAObj_ThunderBolt::OnCollisionEnter(CGameObject* pOther)
                 _Vec3 vUp = { 0.f, 1.f, 0.f };
                 _Vec3 vRight = vUp.Cross(vDir);
                 vUp = vDir.Cross(vRight);
-                
+
                 vDir += (vUp * fvariableY) + (vRight * fvariableX);
                 vDir.Normalize();
 
@@ -320,10 +324,6 @@ void CAObj_ThunderBolt::OnCollisionEnter(CGameObject* pOther)
             }
         }
     }
-}
-
-void CAObj_ThunderBolt::OnCollisionStay(CGameObject* pOther)
-{
 }
 
 void CAObj_ThunderBolt::OnCollisionExit(CGameObject* pOther)

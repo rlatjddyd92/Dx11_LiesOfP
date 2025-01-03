@@ -95,6 +95,10 @@ HRESULT CAObj_ThunderLanding::Render_LightDepth()
 
 void CAObj_ThunderLanding::OnCollisionEnter(CGameObject* pOther)
 {
+}
+
+void CAObj_ThunderLanding::OnCollisionStay(CGameObject* pOther)
+{
     //pOther check
     if (pOther->Get_Tag() == TEXT("Player"))
     {
@@ -114,10 +118,6 @@ void CAObj_ThunderLanding::OnCollisionEnter(CGameObject* pOther)
             pOther->Calc_DamageGain(m_fDamageAmount * m_fDamageRatio, _Vec3{}, HIT_TYPE::HIT_METAL, ATTACK_STRENGTH::ATK_NORMAL);
         }
     }
-}
-
-void CAObj_ThunderLanding::OnCollisionStay(CGameObject* pOther)
-{
 }
 
 void CAObj_ThunderLanding::OnCollisionExit(CGameObject* pOther)

@@ -100,6 +100,10 @@ HRESULT CWeapon_RebornerBigA_Stick::Render_LightDepth()
 
 void CWeapon_RebornerBigA_Stick::OnCollisionEnter(CGameObject* pOther)
 {
+}
+
+void CWeapon_RebornerBigA_Stick::OnCollisionStay(CGameObject* pOther)
+{
 	if (pOther->Get_Tag() == TEXT("Player"))
 	{
 		_bool bOverlapCheck = false;
@@ -119,10 +123,6 @@ void CWeapon_RebornerBigA_Stick::OnCollisionEnter(CGameObject* pOther)
 			pOther->Calc_DamageGain(m_fDamageAmount * m_fDamageRatio, vPos, HIT_METAL, m_iAtkStrength);
 		}
 	}
-}
-
-void CWeapon_RebornerBigA_Stick::OnCollisionStay(CGameObject* pOther)
-{
 }
 
 void CWeapon_RebornerBigA_Stick::OnCollisionExit(CGameObject* pOther)

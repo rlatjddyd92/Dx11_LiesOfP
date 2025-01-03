@@ -100,6 +100,10 @@ HRESULT CWeapon_Raxasia_P1_Shield::Render_LightDepth()
 
 void CWeapon_Raxasia_P1_Shield::OnCollisionEnter(CGameObject* pOther)
 {
+}
+
+void CWeapon_Raxasia_P1_Shield::OnCollisionStay(CGameObject* pOther)
+{
 	if (pOther->Get_Tag() == TEXT("Player"))
 	{
 		_bool bOverlapCheck = false;
@@ -122,10 +126,6 @@ void CWeapon_Raxasia_P1_Shield::OnCollisionEnter(CGameObject* pOther)
 				vPos, _Vec3{ m_pMonster->Get_TargetDir() });
 		}
 	}
-}
-
-void CWeapon_Raxasia_P1_Shield::OnCollisionStay(CGameObject* pOther)
-{
 }
 
 void CWeapon_Raxasia_P1_Shield::OnCollisionExit(CGameObject* pOther)

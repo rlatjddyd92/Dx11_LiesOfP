@@ -113,6 +113,10 @@ HRESULT CWeapon_SimonManus_Hammer::Render_LightDepth()
 
 void CWeapon_SimonManus_Hammer::OnCollisionEnter(CGameObject* pOther)
 {
+}
+
+void CWeapon_SimonManus_Hammer::OnCollisionStay(CGameObject* pOther)
+{
 	if (pOther->Get_Tag() == TEXT("Player"))
 	{
 		_bool bOverlapCheck = false;
@@ -132,10 +136,6 @@ void CWeapon_SimonManus_Hammer::OnCollisionEnter(CGameObject* pOther)
 			pOther->Calc_DamageGain(m_fDamageAmount * m_fDamageRatio, vPos, HIT_METAL, m_iAtkStrength);
 		}
 	}
-}
-
-void CWeapon_SimonManus_Hammer::OnCollisionStay(CGameObject* pOther)
-{
 }
 
 void CWeapon_SimonManus_Hammer::OnCollisionExit(CGameObject* pOther)

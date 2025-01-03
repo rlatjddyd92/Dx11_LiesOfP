@@ -76,6 +76,10 @@ HRESULT CColliderObject::Render()
 
 void CColliderObject::OnCollisionEnter(CGameObject* pOther)
 {
+}
+
+void CColliderObject::OnCollisionStay(CGameObject* pOther)
+{
 	if (pOther->Get_Tag() == TEXT("Player"))
 	{
 		_bool bOverlapCheck = false;
@@ -94,10 +98,6 @@ void CColliderObject::OnCollisionEnter(CGameObject* pOther)
 			pOther->Calc_DamageGain(m_fDamageAmount * m_fDamageRatio, m_WorldMatrix.Translation(), m_iHitType, m_iAtkStrength, (CGameObject*)m_pOwner);
 		}
 	}
-}
-
-void CColliderObject::OnCollisionStay(CGameObject* pOther)
-{
 }
 
 void CColliderObject::OnCollisionExit(CGameObject* pOther)
