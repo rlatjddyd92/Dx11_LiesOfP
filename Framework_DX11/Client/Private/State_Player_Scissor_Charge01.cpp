@@ -106,7 +106,11 @@ void CState_Player_Scissor_Charge01::Update(_float fTimeDelta)
 
     if (m_iChangeFrame < iFrame && iFrame < m_iChangeFrame + 15)
     {
-        if (m_isInputLButton)
+        if (m_pPlayer->Key_Hold(KEY::LSHIFT))
+        {
+            m_pPlayer->Change_State(CPlayer::OH_GUARD);
+        }
+        else if (m_isInputLButton)
             m_pPlayer->Change_State(CPlayer::SCISSOR_LATTACK0);
         else if (m_isInputRButton)
         {

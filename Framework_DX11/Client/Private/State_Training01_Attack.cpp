@@ -25,6 +25,17 @@ HRESULT CState_Training01_Attack::Initialize(_uint iStateNum, void* pArg)
 
 HRESULT CState_Training01_Attack::Start_State(void* pArg)
 {
+    _int iAttackStrength = dynamic_cast<CMonster_Training01*>(m_pMonster)->Get_AttackStrength();
+
+    if (iAttackStrength == ATK_STRONG)
+    {
+        m_pMonster->Get_Model()->Set_SpeedRatio(m_iAnimation_Attack, 2.4);
+    }
+    else
+    {
+        m_pMonster->Get_Model()->Set_SpeedRatio(m_iAnimation_Attack, 2.8);
+    }
+
     m_pMonster->Change_Animation(m_iAnimation_Attack, true, 0.1f);
 
     return S_OK;
@@ -42,6 +53,7 @@ void CState_Training01_Attack::Update(_float fTimeDelta)
 
 void CState_Training01_Attack::End_State()
 {
+    dynamic_cast<CMonster_Training01*>(m_pMonster)->Change_AttackType();
 }
 
 void CState_Training01_Attack::Control_Collider()

@@ -946,10 +946,16 @@ _bool CPlayer::Calc_DamageGain(_float fAtkDmg, _Vec3 vHitPos, _uint iHitType, _u
 
 		if (ATK_STRONG != iAttackStrength)
 		{
-			if (m_eWeaponType < 2)
-				m_pFsmCom->Change_State(OH_GUARDHIT, &vHitPos);
+			_bool isStrong;
+			if (ATK_NORMAL == iAttackStrength)
+				isStrong = true;
 			else
-				m_pFsmCom->Change_State(TH_GUARDHIT, &vHitPos);
+				isStrong = false;
+
+			if (m_eWeaponType < 2)
+				m_pFsmCom->Change_State(OH_GUARDHIT, &isStrong);
+			else
+				m_pFsmCom->Change_State(TH_GUARDHIT, &isStrong);
 
 			Choice_GuardSound(0, 0, false);
 			return false;
@@ -1191,6 +1197,15 @@ void CPlayer::Update_Stat(_float fTimeDelta)
 		m_fDebuffAcidDamageTime = 1.5f;
 	}
 #pragma endregion
+
+#pragma region 가위 공격력 버프
+	if (m_fAttackBuffTime > 0.f)
+	{
+		m_fAttackBuffTime -= fTimeDelta;
+		if (m_fAttackBuffTime <= 0.f)
+			m_fAttackBuffTime = 0.f;
+	}
+	
 }
 
 void CPlayer::Recovery_HP(_float fAmount)

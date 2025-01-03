@@ -105,7 +105,11 @@ void CState_Player_Scissor_Fable1::Update(_float fTimeDelta)
 
     if (!m_isInputFButton)
     {
-        if (m_iChangeFrame < iFrame && iFrame < m_iChangeFrame + 15)
+        if (m_pPlayer->Key_Hold(KEY::LSHIFT))
+        {
+            m_pPlayer->Change_State(CPlayer::OH_GUARD);
+        }
+        else if (m_iChangeFrame < iFrame && iFrame < m_iChangeFrame + 15)
         {
             if (m_isInputLButton)
                 m_pPlayer->Change_State(CPlayer::SCISSOR_LATTACK0);

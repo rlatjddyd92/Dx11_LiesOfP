@@ -24,21 +24,21 @@ HRESULT CState_Player_TH_GuardHit::Initialize(_uint iStateNum, void* pArg)
 
 HRESULT CState_Player_TH_GuardHit::Start_State(void* pArg)
 {
-    _bool isStrong = true;
+    _bool* pIsStrong = static_cast<_bool*>(pArg);
     m_isBreak = false;
 
     if (m_pPlayer->Get_Player_Stat().vGauge_Stamina.x <= 0)
     {
         m_isBreak = true;
-        m_pPlayer->Change_Animation(m_iAnimation_GuardHit_Break, false, 0.f);
+        m_pPlayer->Change_Animation(m_iAnimation_GuardHit_Break, false, 0.f, 0, true, true);
     }
-    else if (isStrong)
+    else if (pIsStrong)
     {
-        m_pPlayer->Change_Animation(m_iAnimation_GuardHit_Strong, false, 0.f);
+        m_pPlayer->Change_Animation(m_iAnimation_GuardHit_Strong, false, 0.f, 0, true, true);
     }
     else
     {
-        m_pPlayer->Change_Animation(m_iAnimation_GuardHit_Normal, false, 0.f);
+        m_pPlayer->Change_Animation(m_iAnimation_GuardHit_Normal, false, 0.f, 0, true, true);
     }
 
 

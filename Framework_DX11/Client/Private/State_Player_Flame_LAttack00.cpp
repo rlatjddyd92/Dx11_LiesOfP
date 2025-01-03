@@ -74,8 +74,14 @@ void CState_Player_Flame_LAttack00::Update(_float fTimeDelta)
 
     if (m_iChangeFrame < iFrame && iFrame < m_iChangeFrame + 15)
     {
-        if (m_isInputLButton)
+        if (m_pPlayer->Key_Hold(KEY::LSHIFT))
+        {
+            m_pPlayer->Change_State(CPlayer::TH_GUARD);
+        }
+        else if (m_isInputLButton)
+        {
             m_pPlayer->Change_State(CPlayer::FLAME_LATTACK1);
+        }
         else if (m_isInputRButton)
         {
             if (m_fRButtonTime > 0.15f)

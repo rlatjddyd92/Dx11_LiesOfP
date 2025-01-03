@@ -47,7 +47,6 @@ HRESULT CState_Player_Ladder::Start_State(void* pArg)
 {
     CLadder* pLadder = static_cast<CLadder*>(pArg);
 
-    //_Vec3* vLadderPos = static_cast<_Vec3*>(pArg);
     Choice_UpDown(pLadder);
     m_isInputW = false;
     m_isInputS = false;
