@@ -46,6 +46,11 @@ HRESULT CPhysX_Manager::Initialize()
 
     sceneDesc.contactReportStreamBufferSize = 16384;
     sceneDesc.contactPairSlabSize = 512;
+    
+    sceneDesc.flags |= PxSceneFlag::eENABLE_CCD; 
+    sceneDesc.flags |= PxSceneFlag::eENABLE_STABILIZATION;
+    sceneDesc.flags |= PxSceneFlag::eENABLE_AVERAGE_POINT;
+    sceneDesc.flags |= PxSceneFlag::eENABLE_FRICTION_EVERY_ITERATION;
 
 #ifdef __cuda_cuda_h__
     // GPU 관련 설정

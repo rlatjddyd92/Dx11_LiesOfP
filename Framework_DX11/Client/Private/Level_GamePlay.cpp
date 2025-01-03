@@ -16,6 +16,8 @@
 #include "Ladder.h"
 #include "CutScene.h"
 
+#include "CMoveBlockObj.h"
+
 CLevel_GamePlay::CLevel_GamePlay(ID3D11Device* pDevice, ID3D11DeviceContext* pContext)
 	: CLevel{ pDevice, pContext }
 {
@@ -38,8 +40,8 @@ HRESULT CLevel_GamePlay::Initialize()
 	if (FAILED(Ready_Layer_Effect()))
 		return E_FAIL;
 
-	if (FAILED(Ready_Layer_Monster()))
-		return E_FAIL;
+	//if (FAILED(Ready_Layer_Monster()))
+	//	return E_FAIL;
 
 	if (FAILED(Ready_Layer_Paticle()))
 		return E_FAIL;	
@@ -49,6 +51,10 @@ HRESULT CLevel_GamePlay::Initialize()
 
 	if (FAILED(Ready_CutScene_Data()))
 		return E_FAIL;
+
+	CMoveBlockObj::MOVEBLOCK_DESC desc = {};
+	desc.iTypeNum = CMoveBlockObj::RAXASIA1;
+	m_pGameInstance->Add_CloneObject_ToLayer(LEVEL_GAMEPLAY, TEXT("Layer_MoveBlockObj"), TEXT("Prototype_GameObject_MoveBlockObj"), &desc);
 
 	// 24-11-19 김성용
 	// 게임 인터페이스를 인게임 모드로 전환
@@ -442,36 +448,36 @@ HRESULT CLevel_GamePlay::Read_Map_Data()
 				}
 				else if (strLayerTag == "Layer_Monster")
 				{
-					if (wcscmp(pDesc.szModelTag, TEXT("Prototype_AnimModel_CarcassTail")) == 0)
-					{
-						if (FAILED(m_pGameInstance->Add_CloneObject_ToLayer(LEVEL_GAMEPLAY, TEXT("Layer_Monster"), TEXT("Prototype_GameObject_CarcassTail"), &pDesc)))
-							return E_FAIL;
-					}
-					else if (wcscmp(pDesc.szModelTag, TEXT("Prototype_AnimModel_CarcassBigA")) == 0)
-					{
-						if (FAILED(m_pGameInstance->Add_CloneObject_ToLayer(LEVEL_GAMEPLAY, TEXT("Layer_Monster"), TEXT("Prototype_GameObject_CarcassBigA"), &pDesc)))
-							return E_FAIL;
-					}
-					else if (wcscmp(pDesc.szModelTag, TEXT("Prototype_AnimModel_CarcassNormal")) == 0)
-					{
-						if (FAILED(m_pGameInstance->Add_CloneObject_ToLayer(LEVEL_GAMEPLAY, TEXT("Layer_Monster"), TEXT("Prototype_GameObject_CarcassNormal"), &pDesc)))
-							return E_FAIL;
-					}
-					else if (wcscmp(pDesc.szModelTag, TEXT("Prototype_AnimModel_Horesman")) == 0)
-					{
-						if (FAILED(m_pGameInstance->Add_CloneObject_ToLayer(LEVEL_GAMEPLAY, TEXT("Layer_Monster"), TEXT("Prototype_GameObject_CurruptedStrongArm"), &pDesc)))
-							return E_FAIL;
-					}
-					else if (wcscmp(pDesc.szModelTag, TEXT("Prototype_AnimModel_RebornerBigA")) == 0)
-					{
-						if (FAILED(m_pGameInstance->Add_CloneObject_ToLayer(LEVEL_GAMEPLAY, TEXT("Layer_Monster"), TEXT("Prototype_GameObject_RebornerBigA"), &pDesc)))
-							return E_FAIL;
-					}
-					else if (wcscmp(pDesc.szModelTag, TEXT("Prototype_AnimModel_RebornerMale")) == 0)
-					{
-						if (FAILED(m_pGameInstance->Add_CloneObject_ToLayer(LEVEL_GAMEPLAY, TEXT("Layer_Monster"), TEXT("Prototype_GameObject_RebornerMale"), &pDesc)))
-							return E_FAIL;
-					}
+					//if (wcscmp(pDesc.szModelTag, TEXT("Prototype_AnimModel_CarcassTail")) == 0)
+					//{
+					//	if (FAILED(m_pGameInstance->Add_CloneObject_ToLayer(LEVEL_GAMEPLAY, TEXT("Layer_Monster"), TEXT("Prototype_GameObject_CarcassTail"), &pDesc)))
+					//		return E_FAIL;
+					//}
+					//else if (wcscmp(pDesc.szModelTag, TEXT("Prototype_AnimModel_CarcassBigA")) == 0)
+					//{
+					//	if (FAILED(m_pGameInstance->Add_CloneObject_ToLayer(LEVEL_GAMEPLAY, TEXT("Layer_Monster"), TEXT("Prototype_GameObject_CarcassBigA"), &pDesc)))
+					//		return E_FAIL;
+					//}
+					//else if (wcscmp(pDesc.szModelTag, TEXT("Prototype_AnimModel_CarcassNormal")) == 0)
+					//{
+					//	if (FAILED(m_pGameInstance->Add_CloneObject_ToLayer(LEVEL_GAMEPLAY, TEXT("Layer_Monster"), TEXT("Prototype_GameObject_CarcassNormal"), &pDesc)))
+					//		return E_FAIL;
+					//}
+					//else if (wcscmp(pDesc.szModelTag, TEXT("Prototype_AnimModel_Horesman")) == 0)
+					//{
+					//	if (FAILED(m_pGameInstance->Add_CloneObject_ToLayer(LEVEL_GAMEPLAY, TEXT("Layer_Monster"), TEXT("Prototype_GameObject_CurruptedStrongArm"), &pDesc)))
+					//		return E_FAIL;
+					//}
+					//else if (wcscmp(pDesc.szModelTag, TEXT("Prototype_AnimModel_RebornerBigA")) == 0)
+					//{
+					//	if (FAILED(m_pGameInstance->Add_CloneObject_ToLayer(LEVEL_GAMEPLAY, TEXT("Layer_Monster"), TEXT("Prototype_GameObject_RebornerBigA"), &pDesc)))
+					//		return E_FAIL;
+					//}
+					//else if (wcscmp(pDesc.szModelTag, TEXT("Prototype_AnimModel_RebornerMale")) == 0)
+					//{
+					//	if (FAILED(m_pGameInstance->Add_CloneObject_ToLayer(LEVEL_GAMEPLAY, TEXT("Layer_Monster"), TEXT("Prototype_GameObject_RebornerMale"), &pDesc)))
+					//		return E_FAIL;
+					//}
 				}	
 				else if (strLayerTag == "Layer_Decal")
 				{

@@ -68,6 +68,8 @@ void CRigidBody::Update(_float fTimeDelta)
 		return;
 
 	PxRigidDynamic* pRigidDynamic = static_cast<PxRigidDynamic*>(m_PxActor);
+	pRigidDynamic->setSolverIterationCounts(32, 16);
+
 	if (m_pOwnerNavigation != nullptr)
 	{
 		PxTransform PlayerPxTransform = m_PxActor->getGlobalPose();
@@ -87,7 +89,8 @@ void CRigidBody::Update(_float fTimeDelta)
 
 			if(m_pOwnerNavigation->isMove(vPos + vSlide * fTimeDelta))
 			{
-				pRigidDynamic->setLinearVelocity(ConvertToPxVec3(vSlide));
+				pRigidDynamic->setLinearVelocity(ConvertToPxVec3(_Vec3(0.f, 0.f, 0.f)));
+				//pRigidDynamic->setLinearVelocity(ConvertToPxVec3(vSlide));
 			}
 			else
 			{
