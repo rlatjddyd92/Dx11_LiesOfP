@@ -1426,6 +1426,9 @@
     <Filter Include="02.GameObjects\12.AttackObject\RebornerMaleFire\Explosion">
       <UniqueIdentifier>{ccbccaef-ae58-4cdc-9f1a-818a3f89edc1}</UniqueIdentifier>
     </Filter>
+    <Filter Include="02.GameObjects\11.InteractObj\12.MoveBlockObj\BossDoor_Veli">
+      <UniqueIdentifier>{a85d83ed-2450-48d1-9fa9-bb24488e553c}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Client.h">
@@ -2622,6 +2625,9 @@
     <ClInclude Include="..\Public\AObj_Explosion.h">
       <Filter>02.GameObjects\12.AttackObject\RebornerMaleFire\Explosion</Filter>
     </ClInclude>
+    <ClInclude Include="..\public\BossDoor_Veli.h">
+      <Filter>02.GameObjects\11.InteractObj\12.MoveBlockObj\BossDoor_Veli</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Client.cpp">
@@ -3787,6 +3793,9 @@
     </ClCompile>
     <ClCompile Include="..\Private\AObj_Explosion.cpp">
       <Filter>02.GameObjects\12.AttackObject\RebornerMaleFire\Explosion</Filter>
+    </ClCompile>
+    <ClCompile Include="..\private\BossDoor_Veli.cpp">
+      <Filter>02.GameObjects\11.InteractObj\12.MoveBlockObj\BossDoor_Veli</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

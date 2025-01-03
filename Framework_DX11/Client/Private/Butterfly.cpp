@@ -41,7 +41,7 @@ HRESULT CButterfly::Initialize(void* pArg)
 	m_pTransformCom->Set_Scaled(0.15f, 0.15f, 0.15f);
 	m_pTransformCom->Rotation(0.f, 155.f, 0.f);
 
-	m_Effect = CEffect_Manager::Get_Instance()->Clone_Effect(TEXT("ButterFly_Fly"), m_pTransformCom->Get_WorldMatrix_Ptr(), nullptr, _Vec3(0.f, 0.f, 0.0f));
+	m_Effect = CEffect_Manager::Get_Instance()->Clone_Effect(TEXT("ButterFly_Fly"), m_pTransformCom->Get_WorldMatrix_Ptr(), nullptr, _Vec3(0.f, 1.22f, 0.0f));
 	m_Effect->Set_Loop(true);
 
 	return S_OK;
