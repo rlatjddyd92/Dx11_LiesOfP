@@ -137,6 +137,9 @@ HRESULT CUIPage_Talking::Ready_UIPart_Group_Control()
 		if (iter[8][0] != 'x')
 			pNewScript->strFunction_C = iter[8];
 
+		if (iter[9][0] != 'x')
+			pNewScript->strSound = iter[9];
+
 		m_vecNpc_ScriptInfo.back()->vecScript.push_back(pNewScript);
 	}
 	m_bRender = false;
@@ -313,6 +316,23 @@ void CUIPage_Talking::Update_Script(_float fTimeDelta)
 	m_vecPart[_int(PART_GROUP::TALKING_Back_Fx)]->bRender = true;
 	m_vecPart[_int(PART_GROUP::TALKING_Line)]->bRender = true;
 	
+	if ((pNow->bSoundStart == true) && (!pNow->strSound.empty()))
+	{
+		pNow->bSoundStart = false;
+
+		_int iSize = pNow->strSound.size();
+
+		TCHAR* szFileName = new TCHAR[iSize];
+
+		for (_int i = 0; i < iSize; ++i)
+		{
+			szFileName[i] = pNow->strSound[i];
+		}
+
+		m_pSoundCom->Play2D(szFileName, &g_fCutSceneVolume);
+
+		Safe_Delete_Array(szFileName);
+	}
 }
 
 void CUIPage_Talking::Update_Select(_float fTimeDelta)

@@ -486,6 +486,8 @@ void CPlayer::Change_State(_uint iState, void* pArg)
 	if (GET_GAMEINTERFACE->IsTalking_WithNPC())
 		return;
 
+	GET_GAMEINTERFACE->Set_PlayerStateChange();
+
 	__super::Change_State(iState, pArg);
 }
 
