@@ -57,7 +57,7 @@ void CAObj_ThunderBlast::Priority_Update(_float fTimeDelta)
 
 void CAObj_ThunderBlast::Update(_float fTimeDelta)
 {
-    if (m_pEffect->Get_Loop())
+    if (m_pEffect->Get_Dead())
     {
         m_isDead = true;
     }

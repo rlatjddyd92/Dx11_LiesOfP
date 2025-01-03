@@ -10,12 +10,15 @@
 // 정식 코드  
 #include "GameInterface_Controller.h"
 
-#include "State_RebornerMale_Idle.h"
-#include "State_RebornerMale_Die.h"
-#include "State_RebornerMale_HitFatal.h"
-#include "State_RebornerMale_KnockBack.h"
+#include "State_RebornerMaleFire_Idle.h"
+#include "State_RebornerMaleFire_Die.h"
+#include "State_RebornerMaleFire_HitFatal.h"
+#include "State_RebornerMaleFire_KnockBack.h"
+
+#include "State_RebornerMaleFire_Breath.h"
 
 #include "Effect_Manager.h"
+#include "Effect_Container.h"
 
 
 CRebornerMaleFire::CRebornerMaleFire(ID3D11Device* pDevice, ID3D11DeviceContext* pContext)
@@ -50,13 +53,16 @@ HRESULT CRebornerMaleFire::Initialize(void* pArg)
 	if (FAILED(Ready_Weapon()))
 		return E_FAIL;
 
+	if (FAILED(Ready_Effect()))
+		return E_FAIL;
+
 	//m_pNavigationCom->Move_to_Cell(m_pRigidBodyCom, pDefaultDesc->iCurrentCellNum);
 	//m_iInitRoomNum = m_pNavigationCom->Get_Cell_AreaNum(pDefaultDesc->iCurrentCellNum);
 
-	m_pModelCom->SetUp_Animation(1, true);
+	m_pModelCom->SetUp_Animation(18, true);
 
-	//if (FAILED(Ready_FSM()))
-	//	return E_FAIL;
+	if (FAILED(Ready_FSM()))
+		return E_FAIL;
 
 	m_strObjectTag = TEXT("Monster");
 
@@ -99,8 +105,13 @@ void CRebornerMaleFire::Priority_Update(_float fTimeDelta)
 		m_bDieState = true;
 		m_pFsmCom->Change_State(DIE);
 	}
+
+	if (!m_pFireEffect->Get_Dead())
+	{
+		m_pFireEffect->Priority_Update(fTimeDelta);
+	}
+
 	m_pWeapon->Priority_Update(fTimeDelta);
-	m_pColliderObject->Priority_Update(fTimeDelta);
 }
 
 void CRebornerMaleFire::Update(_float fTimeDelta)
@@ -111,7 +122,7 @@ void CRebornerMaleFire::Update(_float fTimeDelta)
 			_Vec3{ Calc_CenterPos() }, _Vec3{ 0, 0, 1 });
 	}
 
-	if (m_pGameInstance->Get_Player_AreaNum() == m_iInitRoomNum)
+	if (true)//m_pGameInstance->Get_Player_AreaNum() == m_iInitRoomNum
 		m_vCurRootMove = XMVector3TransformNormal(m_pModelCom->Play_Animation(fTimeDelta), m_pTransformCom->Get_WorldMatrix());
 	else
 		m_vCurRootMove = _Vec3(0.f, 0.f, 0.f);
@@ -127,14 +138,18 @@ void CRebornerMaleFire::Update(_float fTimeDelta)
 		m_pSoundCom[i]->Update(fTimeDelta);
 	}
 
+	if (!m_pFireEffect->Get_Dead())
+	{
+		m_pFireEffect->Update(fTimeDelta);
+	}
+
 	m_pGameInstance->Add_ColliderList(m_pColliderCom);
 	m_pWeapon->Update(fTimeDelta);
-	m_pColliderObject->Update(fTimeDelta);
 }
 
 void CRebornerMaleFire::Late_Update(_float fTimeDelta)
 {
-	if (m_pGameInstance->Get_Player_AreaNum() == m_iInitRoomNum)
+	if (true)//m_pGameInstance->Get_Player_AreaNum() == m_iInitRoomNum
 	{
 		if (m_pGameInstance->isIn_Frustum_WorldSpace(m_pTransformCom->Get_State(CTransform::STATE_POSITION), 50.f))
 		{
@@ -143,6 +158,10 @@ void CRebornerMaleFire::Late_Update(_float fTimeDelta)
 			m_pRigidBodyCom->Update(fTimeDelta);
 			m_pGameInstance->Add_RenderObject(CRenderer::RG_NONBLEND, this);
 
+			if (!m_pFireEffect->Get_Dead())
+			{
+				m_pFireEffect->Late_Update(fTimeDelta);
+			}
 
 			m_pGameInstance->Add_ColliderList(m_pColliderCom);
 			for (_int i = 0; i < CT_END - 1; ++i)
@@ -150,7 +169,6 @@ void CRebornerMaleFire::Late_Update(_float fTimeDelta)
 				m_pGameInstance->Add_ColliderList(m_EXCollider[i]);
 			}
 			m_pWeapon->Late_Update(fTimeDelta);
-			m_pColliderObject->Late_Update(fTimeDelta);
 		}
 	}
 }
@@ -162,7 +180,6 @@ HRESULT CRebornerMaleFire::Render()
 
 #ifdef _DEBUG
 	m_pColliderCom->Render();
-	m_pColliderObject->Render();
 	for (_int i = 0; i < CT_END - 1; ++i)
 	{
 		m_EXCollider[i]->Render();
@@ -174,12 +191,22 @@ HRESULT CRebornerMaleFire::Render()
 
 void CRebornerMaleFire::Active_CurrentWeaponCollider(_float fDamageRatio, _uint iCollIndex, _uint iHitType, _uint iAtkStrength)
 {
-	m_pColliderObject->Active_Collider(fDamageRatio, iCollIndex, iHitType, iAtkStrength);
+	m_pWeapon->Active_Collider(fDamageRatio, iCollIndex, iHitType, iAtkStrength);
 }
 
 void CRebornerMaleFire::DeActive_CurretnWeaponCollider(_uint iCollIndex)
 {
-	m_pColliderObject->DeActive_Collider();
+	m_pWeapon->DeActive_Collider();
+}
+
+void CRebornerMaleFire::Active_Effect(const _uint eType, _bool isLoop)
+{
+	m_pFireEffect->Set_Loop(true);
+}
+
+void CRebornerMaleFire::DeActive_Effect(const _uint eType)
+{
+	m_pFireEffect->Set_Loop(false);
 }
 
 HRESULT CRebornerMaleFire::Ready_Components()
@@ -188,7 +215,7 @@ HRESULT CRebornerMaleFire::Ready_Components()
 		return E_FAIL;
 
 	/* FOR.Com_Model */
-	if (FAILED(__super::Add_Component(LEVEL_GAMEPLAY, TEXT("Prototype_Component_Model_RebornerMale"),
+	if (FAILED(__super::Add_Component(LEVEL_GAMEPLAY, TEXT("Prototype_Component_Model_RebornerMaleFire"),
 		TEXT("Com_Model"), reinterpret_cast<CComponent**>(&m_pModelCom))))
 		return E_FAIL;
 
@@ -216,8 +243,8 @@ HRESULT CRebornerMaleFire::Ready_Components()
 	m_pColliderBindMatrix[CT_BODY_LOWER] = m_pModelCom->Get_BoneCombindTransformationMatrix_Ptr(5);
 
 	//UPPERArmLeft
-	ColliderDesc.vExtents = _float3(0.35f, 0.15f, 0.15f);
-	ColliderDesc.vCenter = _float3(0.2f, 0.f, 0.f);
+	ColliderDesc.vExtents = _float3(0.45f, 0.15f, 0.15f);
+	ColliderDesc.vCenter = _float3(0.35f, 0.f, 0.f);
 	ColliderDesc.vAngles = _float3(0.f, 0.f, 0.f);
 
 	if (FAILED(__super::Add_Component(LEVEL_STATIC, TEXT("Prototype_Component_Collider_OBB"),
@@ -233,8 +260,8 @@ HRESULT CRebornerMaleFire::Ready_Components()
 
 
 	//LOWERArmLeft
-	ColliderDesc.vExtents = _float3(0.4f, 0.15f, 0.15f);
-	ColliderDesc.vCenter = _float3(0.4f, 0.f, 0.f);
+	ColliderDesc.vExtents = _float3(0.45f, 0.15f, 0.15f);
+	ColliderDesc.vCenter = _float3(0.45f, 0.f, 0.f);
 	ColliderDesc.vAngles = _float3(0.f, 0.f, 0.f);
 
 	if (FAILED(__super::Add_Component(LEVEL_STATIC, TEXT("Prototype_Component_Collider_OBB"),
@@ -252,8 +279,8 @@ HRESULT CRebornerMaleFire::Ready_Components()
 
 
 	//UPPERLegLeft
-	ColliderDesc.vExtents = _float3(0.35f, 0.15f, 0.15f);
-	ColliderDesc.vCenter = _float3(0.3f, 0.f, 0.f);
+	ColliderDesc.vExtents = _float3(0.4f, 0.15f, 0.15f);
+	ColliderDesc.vCenter = _float3(0.35f, 0.f, 0.f);
 	ColliderDesc.vAngles = _float3(0.f, 0.f, 0.f);
 
 	if (FAILED(__super::Add_Component(LEVEL_STATIC, TEXT("Prototype_Component_Collider_OBB"),
@@ -290,28 +317,6 @@ HRESULT CRebornerMaleFire::Ready_Components()
 	{
 		m_EXCollider[i]->Set_Owner(this);
 	}
-
-
-	//유사 웨폰
-	/* FOR.Com_Collider_OBB */
-	CBounding_OBB::BOUNDING_OBB_DESC			ColliderOBBDesc_Obj{};
-
-	ColliderOBBDesc_Obj.vExtents = _float3(0.75f, 0.3f, 0.3f);
-	ColliderOBBDesc_Obj.vCenter = _float3(0.2f, 0.f, 0.f);
-	ColliderOBBDesc_Obj.vAngles = _float3(0.f, 0.f, 0.f);
-
-	CColliderObject::COLIDEROBJECT_DESC Desc{};
-
-	Desc.pBoundingDesc = &ColliderOBBDesc_Obj;
-	Desc.eType = CCollider::TYPE_OBB;
-	Desc.pSocketBoneMatrix = m_pModelCom->Get_BoneCombindTransformationMatrix_Ptr(m_pModelCom->Get_UFBIndices(UFB_FOOT_RIGHT) - 1);
-	Desc.pParentWorldMatrix = m_pTransformCom->Get_WorldMatrix_Ptr();
-	Desc.pSocketBoneMatrix2 = m_pTransformCom->Get_WorldMatrix_Ptr();
-	Desc.fDamageAmount = 100.f;
-	Desc.pOWner = this;
-
-	m_pColliderObject = dynamic_cast<CColliderObject*>(m_pGameInstance->Clone_GameObject(TEXT("Prototype_GameObject_ColliderObj"), &Desc));
-
 
 
 
@@ -353,10 +358,12 @@ HRESULT CRebornerMaleFire::Ready_FSM()
 
 
 
-	//m_pFsmCom->Add_State(CState_RebornerMale_Idle::Create(m_pFsmCom, this, IDLE, &Desc));
-	//m_pFsmCom->Add_State(CState_RebornerMale_HitFatal::Create(m_pFsmCom, this, HITFATAL, &Desc));
-	//m_pFsmCom->Add_State(CState_RebornerMale_Die::Create(m_pFsmCom, this, DIE, &Desc));
-	//m_pFsmCom->Add_State(CState_RebornerMale_KnockBack::Create(m_pFsmCom, this, KNOCKBACK, &Desc));
+	m_pFsmCom->Add_State(CState_RebornerMaleFire_Idle::Create(m_pFsmCom, this, IDLE, &Desc));
+	m_pFsmCom->Add_State(CState_RebornerMaleFire_HitFatal::Create(m_pFsmCom, this, HITFATAL, &Desc));
+	m_pFsmCom->Add_State(CState_RebornerMaleFire_Die::Create(m_pFsmCom, this, DIE, &Desc));
+	m_pFsmCom->Add_State(CState_RebornerMaleFire_KnockBack::Create(m_pFsmCom, this, KNOCKBACK, &Desc));
+
+	m_pFsmCom->Add_State(CState_RebornerMaleFire_Breath::Create(m_pFsmCom, this, BREATH, &Desc));
 
 	m_pFsmCom->Set_State(IDLE);
 
@@ -370,17 +377,31 @@ HRESULT CRebornerMaleFire::Ready_Weapon()
 {
 	CWeapon::MONSTER_WAPON_DESC		WeaponDesc{};
 	WeaponDesc.pParentWorldMatrix = m_pTransformCom->Get_WorldMatrix_Ptr();
-	WeaponDesc.pSocketBoneMatrix = m_pModelCom->Get_BoneCombindTransformationMatrix_Ptr(m_pModelCom->Get_UFBIndices(UFB_WEAPON));	//Weapon_R
+	WeaponDesc.pSocketBoneMatrix = m_pModelCom->Get_BoneCombindTransformationMatrix_Ptr(m_pModelCom->Get_UFBIndices(UFB_ROOT));
 
 	WeaponDesc.pParentAtk = &m_eStat.fAtk;
 
 	WeaponDesc.pMonster = this;
 
-	m_pWeapon = dynamic_cast<CWeapon*>(m_pGameInstance->Clone_GameObject(TEXT("Prototype_GameObject_Weapon_RebornerMale_Gun"), &WeaponDesc));
+	m_pWeapon = dynamic_cast<CWeapon*>(m_pGameInstance->Clone_GameObject(TEXT("Prototype_GameObject_Weapon_RebornerMaleFire_FireBreath"), &WeaponDesc));
 	if (nullptr == m_pWeapon)
 		return E_FAIL;
 
 	m_pWeapon->Appear();
+	m_pWeapon->DeActive_Collider();
+	return S_OK;
+}
+
+HRESULT CRebornerMaleFire::Ready_Effect()
+{
+	const _Matrix* pParetnMatrix = m_pTransformCom->Get_WorldMatrix_Ptr();
+	const _Matrix* pSocketBoneMatrix = m_pModelCom->Get_BoneCombindTransformationMatrix_Ptr(m_pModelCom->Get_UFBIndices(UFB_HEAD));
+
+
+	m_pFireEffect = CEffect_Manager::Get_Instance()->Clone_Effect(TEXT("Monster_FireBreath"), pParetnMatrix,
+		pSocketBoneMatrix, _Vec3(0.f, 0.f, 0.f), _Vec3(0.f, 0.f, 1.f), _Vec3(1.f, 1.f, 1.f), _Vec3{270.f, 0.f, 0.f});
+
+	m_pFireEffect->Set_Loop(false);
 
 	return S_OK;
 }
@@ -463,8 +484,6 @@ void CRebornerMaleFire::Free()
 	{
 		Safe_Release(m_EXCollider[i]);
 	}
-
-	Safe_Release(m_pColliderObject);
 
 	__super::Free();
 

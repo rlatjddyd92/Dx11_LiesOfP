@@ -1392,9 +1392,39 @@
     </Filter>
     <Filter Include="02.GameObjects\11.InteractObj\12.MoveBlockObj">
       <UniqueIdentifier>{40711a2e-f4e9-4b05-8ea4-63f2df6bc760}</UniqueIdentifier>
-	</Filter>
+    </Filter>
     <Filter Include="02.GameObjects\02.Pawn\01.Monster\Normal\RebornerMaleFire">
       <UniqueIdentifier>{1792178b-5bc8-492d-ab66-9d1f2f4278d3}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.GameObjects\06.Weapon\05.RebornerMaleFire">
+      <UniqueIdentifier>{f2067b83-e48a-48b7-9236-ad02f88eb6f0}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="05.Fsm\Monster\RebornerMaleFire">
+      <UniqueIdentifier>{09de5958-f767-47d0-9a97-6671d0f88a77}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="05.Fsm\Monster\RebornerMaleFire\Idle">
+      <UniqueIdentifier>{a01cfbbc-27e2-43fd-ad01-f17915538525}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="05.Fsm\Monster\RebornerMaleFire\Die">
+      <UniqueIdentifier>{c45cfc34-bda4-4e7e-8590-bc8ee026af95}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="05.Fsm\Monster\RebornerMaleFire\HitFatal">
+      <UniqueIdentifier>{4865ae4d-48d3-4de9-8eef-6b4c83087822}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="05.Fsm\Monster\RebornerMaleFire\KnockBack">
+      <UniqueIdentifier>{dac74cb5-1ef1-4e51-920f-d8087dd611fb}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="05.Fsm\Monster\RebornerMaleFire\Attack">
+      <UniqueIdentifier>{930ef056-a97b-4457-87b9-f1af7f33cc16}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="05.Fsm\Monster\RebornerMaleFire\Attack\Breath">
+      <UniqueIdentifier>{a53312e7-8e27-4f19-8ffe-83ea0b4fba22}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.GameObjects\12.AttackObject\RebornerMaleFire">
+      <UniqueIdentifier>{8c86135a-0043-437a-a20c-60d147f2470d}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.GameObjects\12.AttackObject\RebornerMaleFire\Explosion">
+      <UniqueIdentifier>{ccbccaef-ae58-4cdc-9f1a-818a3f89edc1}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -2567,9 +2597,30 @@
     </ClInclude>
     <ClInclude Include="CMoveBlockObj.h">
       <Filter>02.GameObjects\11.InteractObj\12.MoveBlockObj</Filter>
-	</ClInclude>
+    </ClInclude>
     <ClInclude Include="..\Public\RebornerMaleFire.h">
       <Filter>02.GameObjects\02.Pawn\01.Monster\Normal\RebornerMaleFire</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Public\Weapon_RebornerMaleFire_FireBreath.h">
+      <Filter>02.GameObjects\06.Weapon\05.RebornerMaleFire</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Public\State_RebornerMaleFire_Breath.h">
+      <Filter>05.Fsm\Monster\RebornerMaleFire\Attack\Breath</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Public\State_RebornerMaleFire_HitFatal.h">
+      <Filter>05.Fsm\Monster\RebornerMaleFire\HitFatal</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Public\State_RebornerMaleFire_Die.h">
+      <Filter>05.Fsm\Monster\RebornerMaleFire\Die</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Public\State_RebornerMaleFire_Idle.h">
+      <Filter>05.Fsm\Monster\RebornerMaleFire\Idle</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Public\State_RebornerMaleFire_KnockBack.h">
+      <Filter>05.Fsm\Monster\RebornerMaleFire\KnockBack</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Public\AObj_Explosion.h">
+      <Filter>02.GameObjects\12.AttackObject\RebornerMaleFire\Explosion</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -3712,9 +3763,30 @@
     </ClCompile>
     <ClCompile Include="CMoveBlockObj.cpp">
       <Filter>02.GameObjects\11.InteractObj\12.MoveBlockObj</Filter>
-	</ClCompile>
+    </ClCompile>
     <ClCompile Include="..\Private\RebornerMaleFire.cpp">
       <Filter>02.GameObjects\02.Pawn\01.Monster\Normal\RebornerMaleFire</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Private\Weapon_RebornerMaleFire_FireBreath.cpp">
+      <Filter>02.GameObjects\06.Weapon\05.RebornerMaleFire</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Private\State_RebornerMaleFire_KnockBack.cpp">
+      <Filter>05.Fsm\Monster\RebornerMaleFire\KnockBack</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Private\State_RebornerMaleFire_Breath.cpp">
+      <Filter>05.Fsm\Monster\RebornerMaleFire\Attack\Breath</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Private\State_RebornerMaleFire_HitFatal.cpp">
+      <Filter>05.Fsm\Monster\RebornerMaleFire\HitFatal</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Private\State_RebornerMaleFire_Die.cpp">
+      <Filter>05.Fsm\Monster\RebornerMaleFire\Die</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Private\State_RebornerMaleFire_Idle.cpp">
+      <Filter>05.Fsm\Monster\RebornerMaleFire\Idle</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Private\AObj_Explosion.cpp">
+      <Filter>02.GameObjects\12.AttackObject\RebornerMaleFire\Explosion</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

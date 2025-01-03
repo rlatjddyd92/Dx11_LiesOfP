@@ -277,7 +277,10 @@ void CWeapon::DeActive_AllEffect(_uint iHandIndex)
 
 void CWeapon::Appear()
 {
-	m_pModelCom->Update_Bone();
+	if (m_pModelCom != nullptr)
+	{
+		m_pModelCom->Update_Bone();
+	}
 
 	_matrix		SocketMatrix = *m_pSocketMatrix;
 

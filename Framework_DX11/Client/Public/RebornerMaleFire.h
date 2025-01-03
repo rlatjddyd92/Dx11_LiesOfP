@@ -25,8 +25,7 @@ public:
 
 public:
 	enum REBORNDERBIGA_STATE {
-		KICK = MONSTER_STATE_END
-		, RAPIDFIRE, RELOAD
+		BREATH = MONSTER_STATE_END
 	};
 
 private:
@@ -43,12 +42,15 @@ public:
 	virtual HRESULT Render() override;
 
 private:
-	CColliderObject* m_pColliderObject = { nullptr };
 	class CCollider* m_EXCollider[CT_END - 1] = { nullptr, nullptr };
 
 private:
 	virtual void	Active_CurrentWeaponCollider(_float fDamageRatio, _uint iCollIndex = 0, _uint iHitType = 0, _uint iAtkStrength = 0) override;
 	virtual void	DeActive_CurretnWeaponCollider(_uint iCollIndex = 0) override;
+
+	virtual void		Active_Effect(const _uint eType, _bool isLoop = true) override;
+	virtual void		DeActive_Effect(const _uint eType) override;
+
 
 	virtual _bool		Get_EffectsLoop(const _uint eType) { return false; };
 
@@ -56,10 +58,12 @@ private:
 
 	class CWeapon* m_pWeapon = { nullptr };
 
+	class CEffect_Container* m_pFireEffect = { nullptr };
 private:
 	HRESULT Ready_Components();
 	HRESULT Ready_FSM();
 	HRESULT Ready_Weapon();
+	HRESULT Ready_Effect();
 
 	void	Update_Collider();
 

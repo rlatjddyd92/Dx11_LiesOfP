@@ -24,6 +24,10 @@
 #include "RebornerBigA.h"
 #include "Weapon_RebornerMale_Gun.h"
 #include "RebornerMale.h"
+#include "RebornerMaleFire.h"
+#include "Weapon_RebornerMaleFire_FireBreath.h"
+#include "AObj_Explosion.h"
+
 #include "Weapon_RebornerBigA_Stick.h"
 #include "SimonManus.h"
 
@@ -424,6 +428,10 @@ HRESULT CLoader::Ready_Resources_For_LogoLevel()
 
 	m_pGameInstance->LoadSoundFile("Scenario/Object");
 	m_pGameInstance->LoadSoundFile("Scenario/CutScene");
+
+	m_pGameInstance->LoadSoundFile("Scenario/Voice/Gemini");
+	m_pGameInstance->LoadSoundFile("Scenario/Voice/Simon");
+	m_pGameInstance->LoadSoundFile("Scenario/Voice/Sophia");
 
 	m_pGameInstance->LoadSoundFile("Obj");
 
@@ -1072,6 +1080,12 @@ HRESULT CLoader::Ready_Resources_For_Monster()
 		CModel::Create(m_pDevice, m_pContext, CModel::TYPE_ANIM, "../Bin/ModelData/Anim/Monster/RebornerMale/RebornerMale_Weapon.dat", PreTransformMatrix, false))))
 		return E_FAIL;
 
+	//Prototype_Component_Model_RebornerMale
+	PreTransformMatrix = XMMatrixScaling(0.012f, 0.012f, 0.012f) * XMMatrixRotationY(XMConvertToRadians(270.0f));
+	if (FAILED(m_pGameInstance->Add_Prototype(LEVEL_GAMEPLAY, TEXT("Prototype_Component_Model_RebornerMaleFire"),
+		CModel::Create(m_pDevice, m_pContext, CModel::TYPE_ANIM, "../Bin/ModelData/Anim/CreatedBinFiles/RebornerMaleFire.dat", PreTransformMatrix, true))))
+		return E_FAIL;
+
 	//Prototype_Component_Model_RebornerBigA
 	PreTransformMatrix = XMMatrixScaling(0.01f, 0.01f, 0.01f) * XMMatrixRotationY(XMConvertToRadians(270.0f));
 	if (FAILED(m_pGameInstance->Add_Prototype(LEVEL_GAMEPLAY, TEXT("Prototype_Component_Model_RebornerBigA"),
@@ -1450,6 +1464,19 @@ HRESULT CLoader::Ready_Prototype()
 		CAObj_Bullet::Create(m_pDevice, m_pContext))))
 		return E_FAIL;
 
+
+	/* For. Prototype_GameObject_RebornerMaleFire */
+	if (FAILED(m_pGameInstance->Add_Prototype(TEXT("Prototype_GameObject_RebornerMaleFire"),
+		CRebornerMaleFire::Create(m_pDevice, m_pContext))))
+		return E_FAIL;
+
+	if (FAILED(m_pGameInstance->Add_Prototype(TEXT("Prototype_GameObject_Weapon_RebornerMaleFire_FireBreath"),
+		CWeapon_RebornerMaleFire_FireBreath::Create(m_pDevice, m_pContext))))
+		return E_FAIL;
+
+	if (FAILED(m_pGameInstance->Add_Prototype(TEXT("Prototype_GameObject_Explosion"),
+		CAObj_Explosion::Create(m_pDevice, m_pContext))))
+		return E_FAIL;
 
 	/* For. Prototype_GameObject_RebornerBigA */
 	if (FAILED(m_pGameInstance->Add_Prototype(TEXT("Prototype_GameObject_RebornerBigA"),
