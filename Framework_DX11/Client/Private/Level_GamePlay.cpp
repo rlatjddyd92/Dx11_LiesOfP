@@ -16,8 +16,6 @@
 #include "Ladder.h"
 #include "CutScene.h"
 
-#include "CMoveBlockObj.h"
-#include "Decal_Blood.h"
 CLevel_GamePlay::CLevel_GamePlay(ID3D11Device* pDevice, ID3D11DeviceContext* pContext)
 	: CLevel{ pDevice, pContext }
 {
@@ -50,15 +48,6 @@ HRESULT CLevel_GamePlay::Initialize()
 		return E_FAIL;	
 
 	if (FAILED(Ready_CutScene_Data()))
-		return E_FAIL;
-
-	//CMoveBlockObj::MOVEBLOCK_DESC desc = {};
-	//desc.iTypeNum = CMoveBlockObj::MANUS1;
-	//if (FAILED(m_pGameInstance->Add_CloneObject_ToLayer(LEVEL_GAMEPLAY, TEXT("Layer_MoveBlockObj"), TEXT("Prototype_GameObject_MoveBlockObj"), &desc)))
-	//	return E_FAIL;
-	CDecal_Blood::BLOOD_DECAL_DESC desc = {};
-	desc.vPos = { 0.f,0.f,0.f };
-	if (FAILED(m_pGameInstance->Add_CloneObject_ToLayer(LEVEL_GAMEPLAY, TEXT("Layer_MoveBlockObj"), TEXT("Prototype_GameObject_Decal_Blood"), &desc)))
 		return E_FAIL;
 
 	// 24-11-19 ±è¼º¿ë
@@ -417,8 +406,8 @@ HRESULT CLevel_GamePlay::Read_Map_Data()
 					 }
 					 else if (wcscmp(pDesc.szModelTag, TEXT("SK_FO_Monastery_TowerDoor_01")) == 0)
 					 {
-						 if (FAILED(m_pGameInstance->Add_CloneObject_ToLayer(LEVEL_GAMEPLAY, TEXT("Layer_TowerDoor"), TEXT("Prototype_GameObject_TowerDoor"), &pDesc)))
-							 return E_FAIL;
+					/*	 if (FAILED(m_pGameInstance->Add_CloneObject_ToLayer(LEVEL_GAMEPLAY, TEXT("Layer_TowerDoor"), TEXT("Prototype_GameObject_TowerDoor"), &pDesc)))
+							 return E_FAIL;*/
 					 }	 
 					 else if (wcscmp(pDesc.szModelTag, TEXT("SK_FO_Monastery_WallDeco_01_Scupture04")) == 0)
 					 {

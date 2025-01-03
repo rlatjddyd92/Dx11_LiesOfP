@@ -26,13 +26,13 @@ HRESULT CMoveBlockObj::Initialize(void* pArg)
 	switch (pDesc->iTypeNum)
 	{
 	case 0:	//RAXASIA1
-		m_pRigidBodyCom->Set_GloblePose(_Vec3(-137.541f, -97.816f, -68.452f));
+		m_pTransformCom->Rotation(0.f, 60.f, 0.f);
 		break;
 	case 1:	//RAXASIA2
-		m_pRigidBodyCom->Set_GloblePose(_Vec3(-39.413f, -97.809f, -68.452f));
+		m_pTransformCom->Rotation(0.f, 60.f, 0.f);
 		break;
 	case 2:	//MANUS1
-		m_pTransformCom->Rotation(0.f, 125.f, 0.f);
+		m_pTransformCom->Rotation(0.f, 133, 0.f);
 		break;
 	default:
 		break;
@@ -99,7 +99,7 @@ HRESULT CMoveBlockObj::Ready_Components(MOVEBLOCK_DESC* pDesc)
 {
 	/* For.Com_Collider */
 	CBounding_OBB::BOUNDING_OBB_DESC			ColliderDesc{};
-	ColliderDesc.vExtents = _float3(7.f, 3.f, 0.3f);
+	ColliderDesc.vExtents = _float3(10.f, 3.f, 0.5f);
 	ColliderDesc.vAngles = _float3(0.f, 0.f, 0.f);
 	ColliderDesc.vCenter = _float3(ColliderDesc.vExtents.x * 0.5f, ColliderDesc.vExtents.y*0.5f, ColliderDesc.vExtents.z * 0.5f);
 
@@ -126,7 +126,7 @@ HRESULT CMoveBlockObj::Ready_Components(MOVEBLOCK_DESC* pDesc)
 		PxRigidDynamicLockFlag::eLOCK_LINEAR_Y |
 		PxRigidDynamicLockFlag::eLOCK_LINEAR_Z
 		;
-
+	RigidBodyDesc.vOffset = _Vec3(0.f, ColliderDesc.vExtents.y * 0.5f, 0.f);
 	physX::GeometryBox BoxDesc;
 	BoxDesc.vSize = _Vec3(ColliderDesc.vExtents.x, ColliderDesc.vExtents.y, ColliderDesc.vExtents.z);
 	RigidBodyDesc.pGeometry = &BoxDesc;

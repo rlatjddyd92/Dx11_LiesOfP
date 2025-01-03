@@ -8,6 +8,7 @@
 #include "SimonManus.h"
 #include "Raxasia.h"
 #include "Sophia.h"
+#include "CMoveBlockObj.h"
 
 CCutScene::CCutScene(ID3D11Device* pDevice, ID3D11DeviceContext* pContext)
 	: CGameObject{ pDevice, pContext }
@@ -278,6 +279,12 @@ void CCutScene::First_Setting()
 		m_bDeactivePlayer = true;
 		break;
 	case BOSS1_DEAD:
+		CGameObject* pBlockObj = m_pGameInstance->Find_Object(LEVEL_GAMEPLAY, TEXT("Layer_MoveBlockObj"), 0);
+		if (pBlockObj != nullptr)
+			pBlockObj->Set_Dead(true);
+		pBlockObj = m_pGameInstance->Find_Object(LEVEL_GAMEPLAY, TEXT("Layer_MoveBlockObj"), 1);
+		if (pBlockObj != nullptr)
+			pBlockObj->Set_Dead(true);
 		break;
 	case BOSS2_MEET:
 		if (FAILED(m_pGameInstance->Add_CloneObject_ToLayer(LEVEL_GAMEPLAY, TEXT("Layer_SimonManus"), TEXT("Prototype_GameObject_SimonManus"))))
@@ -297,6 +304,9 @@ void CCutScene::First_Setting()
 	case BOSS2_DEFEAT:
 		m_bDeactivePlayer = true;
 		m_pObjects[BOSS2] = static_cast<CPawn*>(m_pGameInstance->Find_Object(LEVEL_GAMEPLAY, TEXT("Layer_SimonManus"), 0));
+		CGameObject* pBlockObj = m_pGameInstance->Find_Object(LEVEL_GAMEPLAY, TEXT("Layer_MoveBlockObj"), 0);
+		if(pBlockObj != nullptr)
+			pBlockObj->Set_Dead(true);
 		break;
 	default:
 		break;
@@ -355,6 +365,11 @@ void CCutScene::End_Setting()
 		pPlayer-> Get_Navigation()->Move_to_Cell(pPlayer->Get_RigidBody(), 268);
 		m_pObjects[BOSS1]->End_CutScene(0);
 		pPlayer->Init_PlayerCamera();
+		CMoveBlockObj::MOVEBLOCK_DESC desc = {};
+		desc.iTypeNum = CMoveBlockObj::RAXASIA1;
+		m_pGameInstance->Add_CloneObject_ToLayer(LEVEL_GAMEPLAY, TEXT("Layer_MoveBlockObj"), TEXT("Prototype_GameObject_MoveBlockObj"), &desc);
+		desc.iTypeNum = CMoveBlockObj::RAXASIA2;
+		m_pGameInstance->Add_CloneObject_ToLayer(LEVEL_GAMEPLAY, TEXT("Layer_MoveBlockObj"), TEXT("Prototype_GameObject_MoveBlockObj"), &desc);
 		break;
 	case BOSS1_PHASE2:
 		m_pObjects[BOSS1]->End_CutScene(1);
@@ -382,6 +397,9 @@ void CCutScene::End_Setting()
 		pPlayer->Get_Transform()->LookAt_NoHeight(pBoss2->Get_Transform()->Get_State(CTransform::STATE_POSITION));
 		pBoss2->End_CutScene(0);
 		pPlayer->Init_PlayerCamera();
+		CMoveBlockObj::MOVEBLOCK_DESC desc = {};
+		desc.iTypeNum = CMoveBlockObj::MANUS1;
+		m_pGameInstance->Add_CloneObject_ToLayer(LEVEL_GAMEPLAY, TEXT("Layer_MoveBlockObj"), TEXT("Prototype_GameObject_MoveBlockObj"), &desc);
 	}
 		break;	
 	case BOSS2_PHASE2:

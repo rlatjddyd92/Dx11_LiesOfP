@@ -41,8 +41,8 @@ HRESULT CPhysX_Manager::Initialize()
     sceneDesc.filterShader = PxDefaultSimulationFilterShader;
     sceneDesc.staticStructure = PxPruningStructureType::eDYNAMIC_AABB_TREE;
 
-    sceneDesc.solverBatchSize = 256;
-    sceneDesc.solverArticulationBatchSize = 32;
+    sceneDesc.solverBatchSize = 512;
+    sceneDesc.solverArticulationBatchSize = 128;
 
     sceneDesc.contactReportStreamBufferSize = 16384;
     sceneDesc.contactPairSlabSize = 512;
