@@ -194,7 +194,7 @@ HRESULT CCurruptedStrongArm_Puppet::Ready_Components()
 		return E_FAIL;
 	m_pColliderCom->Set_Owner(this);
 	m_pColliderBindMatrix[CT_BODY_UPPER] = m_pModelCom->Get_BoneCombindTransformationMatrix_Ptr(7);
-
+	
 
 	//LowerBody
 	ColliderDesc.vExtents = _float3(0.4f, 0.4f, 0.5f);

@@ -1390,6 +1390,9 @@
     <Filter Include="02.GameObjects\11.InteractObj\08.Sophia\Dissolve_Sophia_Death">
       <UniqueIdentifier>{da95df1b-1675-49d1-9f2b-2f18db97b9bc}</UniqueIdentifier>
     </Filter>
+    <Filter Include="02.GameObjects\02.Pawn\01.Monster\Normal\RebornerMaleFire">
+      <UniqueIdentifier>{1792178b-5bc8-492d-ab66-9d1f2f4278d3}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Client.h">
@@ -2543,7 +2546,7 @@
     </ClInclude>
     <ClInclude Include="..\public\Dissolve_Sophia_Death.h">
       <Filter>02.GameObjects\11.InteractObj\08.Sophia\Dissolve_Sophia_Death</Filter>
-	</ClInclude>
+    </ClInclude>
     <ClInclude Include="..\Public\UIPart_3D.h">
       <Filter>03.GameInterface_Controller\00.UIManager\02.UIPart_3D</Filter>
     </ClInclude>
@@ -2558,6 +2561,9 @@
     </ClInclude>
     <ClInclude Include="..\Public\UIPart_3D_Path.h">
       <Filter>03.GameInterface_Controller\00.UIManager\02.UIPart_3D\00.UIPart_3D_Path</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Public\RebornerMaleFire.h">
+      <Filter>02.GameObjects\02.Pawn\01.Monster\Normal\RebornerMaleFire</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -3682,7 +3688,7 @@
     </ClCompile>
     <ClCompile Include="..\private\Dissolve_Sophia_Death.cpp">
       <Filter>02.GameObjects\11.InteractObj\08.Sophia\Dissolve_Sophia_Death</Filter>
-	</ClCompile>
+    </ClCompile>
     <ClCompile Include="..\Private\UIPart_3D_Path.cpp">
       <Filter>03.GameInterface_Controller\00.UIManager\02.UIPart_3D\00.UIPart_3D_Path</Filter>
     </ClCompile>
@@ -3697,6 +3703,9 @@
     </ClCompile>
     <ClCompile Include="..\Private\UIPart_3D.cpp">
       <Filter>03.GameInterface_Controller\00.UIManager\02.UIPart_3D</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Private\RebornerMaleFire.cpp">
+      <Filter>02.GameObjects\02.Pawn\01.Monster\Normal\RebornerMaleFire</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
