@@ -100,6 +100,16 @@
 #include "SteelHeart.h"
 #include "Item_Dropped.h"
 #include "Butterfly.h"
+
+#pragma region DISSOLVE_EFFECT
+#include "Dissolve_Player_Dead.h"
+#include "Dissolve_SimonManus_Dead.h"
+#include "Dissolve_Raxasia_Dead.h"
+#include "Dissolve_Sophia_Death.h"
+#include "SimonManus_2P_Aura.h"
+#pragma endregion
+#include "BossDoor_Veli.h"
+
 #pragma endregion
 
 #include "Machine_EffectObj.h"
@@ -108,14 +118,8 @@
 #include "GameInstance.h"
 #include "GameInterface_Controller.h"
 
-#pragma region DISSOLVE_EFFECT
-#include "Dissolve_Player_Dead.h"
-#include "Dissolve_SimonManus_Dead.h"
-#include "Dissolve_Raxasia_Dead.h"
-#include "Dissolve_Sophia_Death.h"
 
-#include "SimonManus_2P_Aura.h"
-#pragma endregion
+
 
 CLoader::CLoader(ID3D11Device * pDevice, ID3D11DeviceContext * pContext)
 	: m_pDevice { pDevice }
@@ -1764,8 +1768,12 @@ HRESULT CLoader::Ready_Prototype()
 	if (FAILED(m_pGameInstance->Add_Prototype(TEXT("Prototype_GameObject_Effect_Dissolve_SimonManus_2P_Aura"),
 		CSimonManus_2P_Aura::Create(m_pDevice, m_pContext))))
 		return E_FAIL;
-
 #pragma endregion
+
+	/* For. Prototype_GameObject_Effect_BossDoor_Veli */
+	if (FAILED(m_pGameInstance->Add_Prototype(TEXT("Prototype_GameObject_Effect_BossDoor_Veli"),
+		CBossDoor_Veli::Create(m_pDevice, m_pContext))))
+		return E_FAIL;
 
 	return S_OK;
 }

@@ -41,9 +41,11 @@ public:
 private:
 	CCollider* m_pColliderCom = { nullptr };
 	CRigidBody* m_pRigidBodyCom = { nullptr };
+	class CBossDoor_Veli* m_pVeliEffect = { nullptr };
 
 private:
 	HRESULT Ready_Components(MOVEBLOCK_DESC* pDesc);
+	HRESULT Ready_Effect();
 
 public:
 	static CMoveBlockObj* Create(ID3D11Device* pDevice, ID3D11DeviceContext* pContext);
