@@ -37,9 +37,16 @@ private:
 //#endif
 
 private:	
+	_bool					m_isRadialBlur = {};
+	_float					m_fRadialStartDelay = {};
+	_float					m_fRadialDurationDelay = {};
+
+private:	
 	HRESULT Ready_Gara();
 	HRESULT Ready_Prototype_Component_Static();	
 	HRESULT Open_Level(LEVELID eStartLevelID);
+
+	void	Update_Radial(_float fTimeDelta);
 
 public:
 	static CMainApp* Create();
