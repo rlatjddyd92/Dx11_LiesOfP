@@ -86,6 +86,8 @@ void CUIPage_Tutorial::Late_Update(_float fTimeDelta)
 		__super::UpdatePart_ByControl(iter);*/
 
 	__super::Late_Update(fTimeDelta);
+
+	m_bPlayer_StateChanged = false;
 }
 
 HRESULT CUIPage_Tutorial::Render()
