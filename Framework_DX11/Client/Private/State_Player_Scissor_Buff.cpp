@@ -78,8 +78,14 @@ void CState_Player_Scissor_Buff::Update(_float fTimeDelta)
 
     else if (m_iChangeFrame < iFrame && iFrame < m_iChangeFrame + 15)
     {
-        if (m_isInputLButton)
+        if (m_pPlayer->Key_Hold(KEY::LSHIFT))
+        {
+            m_pPlayer->Change_State(CPlayer::OH_GUARD);
+        }
+        else if (m_isInputLButton)
+        {
             m_pPlayer->Change_State(CPlayer::SCISSOR_LATTACK0);
+        }
         else if (m_isInputRButton)
         {
             if (m_fRButtonTime > 0.15f)
@@ -87,6 +93,8 @@ void CState_Player_Scissor_Buff::Update(_float fTimeDelta)
             else
                 m_pPlayer->Change_State(CPlayer::SCISSOR_RATTACK0);
         }
+
+
     }
     else if (End_Check())
     {

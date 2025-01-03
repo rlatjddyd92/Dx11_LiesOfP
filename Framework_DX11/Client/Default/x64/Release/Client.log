@@ -64,8 +64,8 @@ C:\Users\user\Documents\GitHub\Dx11_LiesOfP\Framework_DX11\Client\Private\Item_M
   (소스 파일 '/x64/Release/unity_1W695NL0J35RUE0D.cpp'을(를) 컴파일하는 중)
   
   코드를 생성하고 있습니다.
-  14 of 10984 functions ( 0.1%) were compiled, the rest were copied from previous compilation.
-    3 functions were new in current compilation
-    30 functions had inline decision re-evaluated but remain unchanged
+  41 of 10985 functions ( 0.4%) were compiled, the rest were copied from previous compilation.
+    1 functions were new in current compilation
+    259 functions had inline decision re-evaluated but remain unchanged
   코드를 생성했습니다.
   Client.vcxproj -> C:\Users\user\Documents\GitHub\Dx11_LiesOfP\Framework_DX11\Client\Bin\Client.exe

@@ -19,7 +19,7 @@ public:
 
 	enum DEBUFF_TYPE { DEBUFF_FIRE, DEBUFF_ELEC, DEBUFF_ACID, DEBUFF_END };
 
-	enum EFFECT_TYPE 
+	enum EFFECT_TYPE
 	{
 		EFFECT_GRIND, EFFECT_HEAL,
 
@@ -117,7 +117,7 @@ public:
 		// UI 리전 1칸에 표시되는 양 
 		// 리전 게이지는 _int(현재 최대치) / _int(1칸 수치)의 값 만큼만 나타남 -> 현재 최대치 700, 1칸 수치 200이면 3칸만 뜬다 
 		_float fRegion_Interval = 200.f;
-		
+
 		// 에르고 
 		_int iErgo = 10000;
 
@@ -166,12 +166,12 @@ public:
 	class CWeapon_PlayerArm* Get_Arm() { return m_pWeapon_Arm; }
 
 	_bool					Get_IsArm() { return m_isArm; }
-	void					Set_IsArm(_bool isArm) { 
-		m_isArm = isArm; 
+	void					Set_IsArm(_bool isArm) {
+		m_isArm = isArm;
 		if (isArm)
 			m_fArmRecoveryTime = 1.f;
 	}
-	_Vec2* Get_ArmGuage_Ptr() { return &m_vGuage_Arm; }
+	_Vec2*					Get_ArmGuage_Ptr() { return &m_vGuage_Arm; }
 
 	_bool					Get_IsParry() { return m_isParry; }
 	void					Set_IsParry(_bool isParry) { m_isParry = isParry; }
@@ -193,18 +193,22 @@ public:
 	void					Set_WeaponType(WEAPON_TYPE eType) { m_eWeaponType = eType; }
 	class CWeapon*			Get_CurrentWeapon() { return m_pWeapon[m_eWeaponType]; }
 
-	void					Reset_Root() { m_vCurRootMove = m_vRootMoveStack = _vector{0,0,0,0}; }
+	void					Reset_Root() { m_vCurRootMove = m_vRootMoveStack = _vector{ 0,0,0,0 }; }
 
 	class CMonster*			Get_TargetMonster() { return m_pTargetMonster; }
 
 	void					Set_DissloveRatio(_float fRatio) { m_fDissloveRatio = fRatio; }
 
 	void					Set_isPlayingCutscene(_bool isPlaying) { m_isPlayingCutscene = isPlaying; }
+
+	_float					Get_AttackBuffTime() { return m_fAttackBuffTime; }
+	void					Set_AttackBuffTime(_float fTime) { m_fAttackBuffTime; }
+
 #pragma region PLAYER_STAT
-	STAT_INFO&				Get_Player_Stat() { return *m_tPlayer_Stat; }
+	STAT_INFO& Get_Player_Stat() { return *m_tPlayer_Stat; }
 	// 24-12-05 김성용
 	// UI 매니저 수정용 함수
-	STAT_INFO*				Get_Player_Stat_Adjust() { return m_tPlayer_Stat_Adjust; }
+	STAT_INFO* Get_Player_Stat_Adjust() { return m_tPlayer_Stat_Adjust; }
 
 #pragma endregion
 
@@ -247,7 +251,7 @@ public:
 	void			Appear_Weapon();
 	void			Disappear_Weapon();
 	void			Set_WeaponStrength(ATTACK_STRENGTH eStrength);
-	
+
 	_bool			Active_CurrentWeaponCollider(_float fDamageRatio = 1.f, _uint iHandIndex = 1);
 	void			DeActive_CurretnWeaponCollider(_uint iHandIndex = 1);
 
@@ -260,7 +264,7 @@ public:
 	void			Change_CameraMode(CPlayerCamera::CAMERA_MODE eMode);
 
 	void			LockOnOff();
-	CMonster*		Find_TargetMonster();
+	CMonster* Find_TargetMonster();
 
 	void			Play_CurrentWeaponSound(const _uint iType, const TCHAR* pSoundKey, _uint iHandIndex = 1);
 
@@ -272,7 +276,7 @@ public:
 
 	virtual _bool	Calc_DamageGain(_float fAtkDmg, _Vec3 vHitPos = { 0.f,0.f,0.f }, _uint iHitType = HIT_END, _uint iAttackStrength = ATK_END, CGameObject* pAttacker = nullptr) override;
 	void			Calc_DebuffGain(DEBUFF_TYPE eDebuffType, _float fAmount);
-	void			Damaged(_float fAtkDmg); 
+	void			Damaged(_float fAtkDmg);
 	void			Damaged_Guard(_float fAtkDmg, const _Matrix* pSocketBoneMatrix = nullptr);
 	void			Change_HitState(_float fAtkDmg, _Vec3 vHitPos);
 	_bool			Decrease_Stamina(_float fAmount);
@@ -309,7 +313,7 @@ private:
 	CTexture* m_pDissloveTexture = { nullptr };
 
 private:
-	CPlayerCamera*		m_pPlayerCamera = { nullptr };
+	CPlayerCamera* m_pPlayerCamera = { nullptr };
 
 	_bool				m_isJump = { false };
 	_bool				m_isGuard = { false };
@@ -327,19 +331,19 @@ private:
 	_float				m_fDebuffAcidDamageTime = {};
 	_float				m_fRecoveryStaminaTime = { 0.f };
 
-	CMonster*			m_pTargetMonster = { nullptr };
-	CMonster*			m_pIntersectMonster = { nullptr };
+	CMonster* m_pTargetMonster = { nullptr };
+	CMonster* m_pIntersectMonster = { nullptr };
 
-	class CWeapon*		m_pWeapon[WEP_END] = { nullptr, };
+	class CWeapon* m_pWeapon[WEP_END] = { nullptr, };
 	WEAPON_TYPE			m_eWeaponType = { WEP_RAPIER };
 
-	class CWeapon_PlayerArm*		m_pWeapon_Arm = { nullptr };
+	class CWeapon_PlayerArm* m_pWeapon_Arm = { nullptr };
 
 	class CItem_Throw* m_pThrowItem = { nullptr };
 	class CDissolve_Player_Dead* m_pDissolveEffect = { nullptr };
 
-	class CPlayerCollider_Fatal*	m_pFatalColliderObj = { nullptr };
-	class CMonster*					m_pContactMonster = { nullptr };
+	class CPlayerCollider_Fatal* m_pFatalColliderObj = { nullptr };
+	class CMonster* m_pContactMonster = { nullptr };
 	_bool							m_isFatalAttack = { false };
 
 private:
@@ -352,8 +356,8 @@ private:
 	// 24-11-27 김성용
 	// 플레이어 스탯 구조체 변수 
 #pragma region PLAYER_STAT
-	STAT_INFO*			m_tPlayer_Stat = { nullptr };
-	STAT_INFO*			m_tPlayer_Stat_Adjust = { nullptr };	// 
+	STAT_INFO* m_tPlayer_Stat = { nullptr };
+	STAT_INFO* m_tPlayer_Stat_Adjust = { nullptr };	// 
 #pragma endregion
 
 private:
@@ -364,6 +368,8 @@ private:
 
 	_float				m_fArmRecoveryTime = {};
 	_Vec2				m_vGuage_Arm = { 200.f, 200.f };
+
+	_float				m_fAttackBuffTime = {};
 
 private:
 

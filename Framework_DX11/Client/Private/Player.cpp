@@ -1197,6 +1197,15 @@ void CPlayer::Update_Stat(_float fTimeDelta)
 		m_fDebuffAcidDamageTime = 1.5f;
 	}
 #pragma endregion
+
+#pragma region 가위 공격력 버프
+	if (m_fAttackBuffTime > 0.f)
+	{
+		m_fAttackBuffTime -= fTimeDelta;
+		if (m_fAttackBuffTime <= 0.f)
+			m_fAttackBuffTime = 0.f;
+	}
+	
 }
 
 void CPlayer::Recovery_HP(_float fAmount)

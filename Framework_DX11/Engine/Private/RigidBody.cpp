@@ -285,6 +285,17 @@ HRESULT CRigidBody::Add_PxGeometry(RIGIDBODY_DESC* pDesc)
 
 		m_PxActor->attachShape(*pShape);
 		m_PxShapes.emplace_back(pShape);
+
+		if (!m_isStatic)
+		{
+			PxRigidDynamic* pRigidDynamic = static_cast<PxRigidDynamic*>(m_PxActor);
+			pRigidDynamic->setRigidBodyFlags(PxRigidBodyFlag::eENABLE_CCD);
+
+			pShape->setContactOffset(0.1f);  // 충돌 감지 민감도 조정
+
+			// restOffset 설정 (물체가 멈추는 최소 거리)
+			pShape->setRestOffset(0.05f);  // 충돌 해제 민감도 조정
+		}
 	}
 	break;
 	case physX::PX_SPHERE:
