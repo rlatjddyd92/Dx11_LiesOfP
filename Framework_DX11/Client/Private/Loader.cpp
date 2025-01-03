@@ -112,12 +112,14 @@
 #include "Dissolve_Sophia_Death.h"
 #include "SimonManus_2P_Aura.h"
 #pragma endregion
-#include "BossDoor_Veli.h"
 
+#include "BossDoor_Veli.h"
+#include "CMoveBlockObj.h"\
 #pragma endregion
 
 #include "Machine_EffectObj.h"
 #include "Decal.h"
+#include "Decal_Blood.h"
 
 #include "GameInstance.h"
 #include "GameInterface_Controller.h"
@@ -1741,6 +1743,11 @@ HRESULT CLoader::Ready_Prototype()
 	if (FAILED(m_pGameInstance->Add_Prototype(TEXT("Prototype_GameObject_Butterfly"),
 		CButterfly::Create(m_pDevice, m_pContext))))
 		return E_FAIL;
+
+	/* For. Prototype_GameObject_Butterfly */
+	if (FAILED(m_pGameInstance->Add_Prototype(TEXT("Prototype_GameObject_MoveBlockObj"),
+		CMoveBlockObj::Create(m_pDevice, m_pContext))))
+		return E_FAIL;
 #pragma endregion
 
 	/* For. Prototype_GameObject_Sky */
@@ -1768,6 +1775,10 @@ HRESULT CLoader::Ready_Prototype()
 	/* For. Prototype_GameObject_Decal*/
 	if (FAILED(m_pGameInstance->Add_Prototype(TEXT("Prototype_GameObject_Decal"),
 		CDecal::Create(m_pDevice, m_pContext))))
+		return E_FAIL;
+	/* For. Prototype_GameObject_Decal_Blood*/
+	if (FAILED(m_pGameInstance->Add_Prototype(TEXT("Prototype_GameObject_Decal_Blood"),
+		CDecal_Blood::Create(m_pDevice, m_pContext))))
 		return E_FAIL;
 
 #pragma region DISSOLVE_EFFECT

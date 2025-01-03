@@ -41,11 +41,16 @@ HRESULT CPhysX_Manager::Initialize()
     sceneDesc.filterShader = PxDefaultSimulationFilterShader;
     sceneDesc.staticStructure = PxPruningStructureType::eDYNAMIC_AABB_TREE;
 
-    sceneDesc.solverBatchSize = 256;
-    sceneDesc.solverArticulationBatchSize = 32;
+    sceneDesc.solverBatchSize = 512;
+    sceneDesc.solverArticulationBatchSize = 128;
 
     sceneDesc.contactReportStreamBufferSize = 16384;
     sceneDesc.contactPairSlabSize = 512;
+    
+    sceneDesc.flags |= PxSceneFlag::eENABLE_CCD; 
+    sceneDesc.flags |= PxSceneFlag::eENABLE_STABILIZATION;
+    sceneDesc.flags |= PxSceneFlag::eENABLE_AVERAGE_POINT;
+    sceneDesc.flags |= PxSceneFlag::eENABLE_FRICTION_EVERY_ITERATION;
 
 #ifdef __cuda_cuda_h__
     // GPU 관련 설정

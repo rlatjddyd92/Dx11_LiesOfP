@@ -49,6 +49,8 @@ HRESULT CRigidBody::Initialize(void* pArg)
 	m_pOwnerTransform = pDesc->pOwnerTransform;
 	m_pOwnerNavigation = pDesc->pOwnerNavigation;
 
+	m_vOffset = pDesc->vOffset;
+
 	if (FAILED(Add_PxActor(pDesc)))
 		return E_FAIL;
 
@@ -66,6 +68,8 @@ void CRigidBody::Update(_float fTimeDelta)
 		return;
 
 	PxRigidDynamic* pRigidDynamic = static_cast<PxRigidDynamic*>(m_PxActor);
+	pRigidDynamic->setSolverIterationCounts(32, 16);
+
 	if (m_pOwnerNavigation != nullptr)
 	{
 		PxTransform PlayerPxTransform = m_PxActor->getGlobalPose();
@@ -85,7 +89,8 @@ void CRigidBody::Update(_float fTimeDelta)
 
 			if(m_pOwnerNavigation->isMove(vPos + vSlide * fTimeDelta))
 			{
-				pRigidDynamic->setLinearVelocity(ConvertToPxVec3(vSlide));
+				pRigidDynamic->setLinearVelocity(ConvertToPxVec3(_Vec3(0.f, 0.f, 0.f)));
+				//pRigidDynamic->setLinearVelocity(ConvertToPxVec3(vSlide));
 			}
 			else
 			{
@@ -282,6 +287,8 @@ HRESULT CRigidBody::Add_PxGeometry(RIGIDBODY_DESC* pDesc)
 		m_PxActor->setGlobalPose(Transform);
 
 		pShape->setLocalPose(newLocalPose);
+		pShape->setContactOffset(0.1f);
+		pShape->setRestOffset(0.05f);
 
 		m_PxActor->attachShape(*pShape);
 		m_PxShapes.emplace_back(pShape);
@@ -316,6 +323,17 @@ HRESULT CRigidBody::Add_PxGeometry(RIGIDBODY_DESC* pDesc)
 		pShape = m_pPhysX->createShape(PxBoxGeometry(BoxGeometry->vSize.x * 0.5f, BoxGeometry->vSize.y * 0.5f, BoxGeometry->vSize.z * 0.5f), *m_PxMaterial, false, eShapeFlags);
 		if (!pShape)
 			return E_FAIL;
+
+		PxVec3 newPosition = ConvertToPxVec3(m_vOffset);// 캡슐의 새로운 로컬 위치
+		PxQuat newRotation(PxIdentity);        // 기본 회전 (필요에 따라 수정)
+
+		PxTransform newLocalPose(newPosition, newRotation);
+
+		PxTransform Transform = m_PxActor->getGlobalPose();
+
+		m_PxActor->setGlobalPose(Transform);
+
+		pShape->setLocalPose(newLocalPose);
 
 		m_PxActor->attachShape(*pShape);
 		m_PxShapes.emplace_back(pShape);

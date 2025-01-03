@@ -1428,6 +1428,9 @@
     </Filter>
     <Filter Include="02.GameObjects\11.InteractObj\12.MoveBlockObj\BossDoor_Veli">
       <UniqueIdentifier>{a85d83ed-2450-48d1-9fa9-bb24488e553c}</UniqueIdentifier>
+	</Filter>
+    <Filter Include="02.GameObjects\16.Decal\Decal_Blood">
+      <UniqueIdentifier>{c1035c53-ff8c-4be7-a14e-eccce099ddd3}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -2627,6 +2630,9 @@
     </ClInclude>
     <ClInclude Include="..\public\BossDoor_Veli.h">
       <Filter>02.GameObjects\11.InteractObj\12.MoveBlockObj\BossDoor_Veli</Filter>
+	</ClInclude>
+    <ClInclude Include="..\Public\Decal_Blood.h">
+      <Filter>02.GameObjects\16.Decal\Decal_Blood</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -3796,6 +3802,9 @@
     </ClCompile>
     <ClCompile Include="..\private\BossDoor_Veli.cpp">
       <Filter>02.GameObjects\11.InteractObj\12.MoveBlockObj\BossDoor_Veli</Filter>
+	</ClCompile>
+    <ClCompile Include="..\Private\Decal_Blood.cpp">
+      <Filter>02.GameObjects\16.Decal\Decal_Blood</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
