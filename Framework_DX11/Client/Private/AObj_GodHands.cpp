@@ -247,10 +247,6 @@ HRESULT CAObj_GodHands::Render_LightDepth()
 
 void CAObj_GodHands::OnCollisionEnter(CGameObject* pOther)
 {
-}
-
-void CAObj_GodHands::OnCollisionStay(CGameObject* pOther)
-{
     //pOther check
     if (pOther->Get_Tag() == TEXT("Player"))
     {
@@ -270,6 +266,10 @@ void CAObj_GodHands::OnCollisionStay(CGameObject* pOther)
             pOther->Calc_DamageGain(m_fDamageAmount * m_fDamageRatio, _Vec3{}, HIT_TYPE::HIT_METAL, ATTACK_STRENGTH::ATK_STRONG);
         }
     }
+}
+
+void CAObj_GodHands::OnCollisionStay(CGameObject* pOther)
+{
 }
 
 void CAObj_GodHands::OnCollisionExit(CGameObject* pOther)
