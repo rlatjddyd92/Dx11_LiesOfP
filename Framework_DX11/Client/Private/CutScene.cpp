@@ -306,6 +306,7 @@ void CCutScene::First_Setting()
 void CCutScene::End_Setting()
 {
 	m_bFinishe_Setting = true;
+	m_pGameInstance->Stop_BGM();
 
 	//UI 살려야 함
 	GET_GAMEINTERFACE->Fade_In(0.f);
@@ -348,7 +349,6 @@ void CCutScene::End_Setting()
 		dynamic_cast<CCutScene*>(m_pGameInstance->Find_Object(LEVEL_GAMEPLAY, TEXT("Layer_CutScene"), BOSS1_MEET2))->Start_Play();
 		break;
 	case BOSS1_MEET2:
-		m_pGameInstance->Stop_BGM();
 		pPlayer->IsActive(true);
 		pPlayer->Appear_Weapon();
 		pPlayer->Change_State(CPlayer::OH_IDLE);
@@ -357,7 +357,6 @@ void CCutScene::End_Setting()
 		pPlayer->Init_PlayerCamera();
 		break;
 	case BOSS1_PHASE2:
-		m_pGameInstance->Stop_BGM();
 		m_pObjects[BOSS1]->End_CutScene(1);
 		pPlayer->IsActive(true);
 		pPlayer->Get_Navigation()->Move_to_Cell(pPlayer->Get_RigidBody(), 268);
@@ -365,7 +364,6 @@ void CCutScene::End_Setting()
 		pPlayer->Init_PlayerCamera();
 		break;	
 	case BOSS1_DEAD:
-		m_pGameInstance->Stop_BGM();
 		m_pObjects[BOSS1]->End_CutScene(2);
 		pPlayer->Init_PlayerCamera();
 		break;	
@@ -400,7 +398,6 @@ void CCutScene::End_Setting()
 	case BOSS2_DEFEAT:
 		pPlayer->IsActive(true);
 		pPlayer->Get_Navigation()->Move_to_Cell(pPlayer->Get_RigidBody(), 40);
-		m_pGameInstance->Stop_BGM();
 		static_cast<CPawn*>(m_pGameInstance->Find_Object(LEVEL_GAMEPLAY, TEXT("Layer_SimonManus"), 0))->End_CutScene(2);
 		pPlayer->Init_PlayerCamera();
 		GET_GAMEINTERFACE->Show_Script_Npc_Talking(NPC_SCRIPT::SCR_MANUS);

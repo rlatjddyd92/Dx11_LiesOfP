@@ -1393,6 +1393,9 @@
     <Filter Include="02.GameObjects\11.InteractObj\12.MoveBlockObj">
       <UniqueIdentifier>{40711a2e-f4e9-4b05-8ea4-63f2df6bc760}</UniqueIdentifier>
     </Filter>
+    <Filter Include="02.GameObjects\16.Decal\Decal_Blood">
+      <UniqueIdentifier>{c1035c53-ff8c-4be7-a14e-eccce099ddd3}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Client.h">
@@ -2565,6 +2568,9 @@
     <ClInclude Include="CMoveBlockObj.h">
       <Filter>02.GameObjects\11.InteractObj\12.MoveBlockObj</Filter>
     </ClInclude>
+    <ClInclude Include="..\Public\Decal_Blood.h">
+      <Filter>02.GameObjects\16.Decal\Decal_Blood</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Client.cpp">
@@ -3706,6 +3712,9 @@
     </ClCompile>
     <ClCompile Include="CMoveBlockObj.cpp">
       <Filter>02.GameObjects\11.InteractObj\12.MoveBlockObj</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Private\Decal_Blood.cpp">
+      <Filter>02.GameObjects\16.Decal\Decal_Blood</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
