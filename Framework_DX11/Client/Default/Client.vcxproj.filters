@@ -2562,7 +2562,9 @@
     <ClInclude Include="..\Public\UIPart_3D_Path.h">
       <Filter>03.GameInterface_Controller\00.UIManager\02.UIPart_3D\00.UIPart_3D_Path</Filter>
     </ClInclude>
-    <ClInclude Include="CMoveBlockObj.h" />
+    <ClInclude Include="CMoveBlockObj.h">
+      <Filter>02.GameObjects\11.InteractObj\12.MoveBlockObj</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Client.cpp">
@@ -3702,7 +3704,9 @@
     <ClCompile Include="..\Private\UIPart_3D.cpp">
       <Filter>03.GameInterface_Controller\00.UIManager\02.UIPart_3D</Filter>
     </ClCompile>
-    <ClCompile Include="CMoveBlockObj.cpp" />
+    <ClCompile Include="CMoveBlockObj.cpp">
+      <Filter>02.GameObjects\11.InteractObj\12.MoveBlockObj</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <Image Include="Client.ico">
