@@ -485,6 +485,8 @@ void CRebornerMaleFire::Free()
 		Safe_Release(m_EXCollider[i]);
 	}
 
+	Safe_Release(m_pFireEffect);
+
 	__super::Free();
 
 	Safe_Release(m_pWeapon);
