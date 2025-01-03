@@ -54,7 +54,7 @@ void CState_Player_Arm_Guard_Hard::Update(_float fTimeDelta)
 
     if (m_iCounterStartFrame <= iFrame && m_iCounterEndFrame <= iFrame)
     {
-        if (m_isAwayCtrlKey && m_fCtrlKeyTime > 0.5f)
+        if (m_isAwayCtrlKey && m_fCtrlKeyTime > 0.4f)
         {
             m_pPlayer->Change_State(CPlayer::ARM_COUNTER);
             return;

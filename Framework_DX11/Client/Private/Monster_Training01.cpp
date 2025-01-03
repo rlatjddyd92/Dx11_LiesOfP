@@ -74,6 +74,8 @@ void CMonster_Training01::Priority_Update(_float fTimeDelta)
 {
 	__super::Set_UpTargetPos();
 
+	
+
 	m_pColliderObject->Priority_Update(fTimeDelta);
 }
 
@@ -122,6 +124,34 @@ HRESULT CMonster_Training01::Render()
 
 #endif
 	return S_OK;
+}
+
+void CMonster_Training01::Change_AttackType()
+{
+	if (m_iAttackCount >= 4)
+	{
+		m_pColliderObject->Set_AttackStrength(ATK_STRONG);
+		m_iAttackCount = 0;
+	}
+	else
+	{
+		if (m_isNormalAttack)
+		{
+			m_pColliderObject->Set_AttackStrength(ATK_NORMAL);
+		}
+		else
+		{
+			m_pColliderObject->Set_AttackStrength(ATK_WEAK);
+		}
+
+		++m_iAttackCount;
+		m_isNormalAttack != m_isNormalAttack;
+	}
+}
+
+_uint CMonster_Training01::Get_AttackStrength()
+{
+	return m_pColliderObject->Get_AttackStrength();
 }
 
 void CMonster_Training01::Active_CurrentWeaponCollider(_float fDamageRatio, _uint iCollIndex, _uint iHitType, _uint iAtkStrength)

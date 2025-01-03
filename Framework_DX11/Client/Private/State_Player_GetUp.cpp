@@ -18,8 +18,8 @@ HRESULT CState_Player_GetUp::Initialize(_uint iStateNum, void* pArg)
 
     m_pTrackPos = pDesc->pPrevTrackPos;
 
-    m_iAnimation_GetUp[GETUP_BACK] = m_pPlayer->Get_Model()->Find_AnimationIndex("AS_Pino_Down_Getup_B", 2.5f);
-    m_iAnimation_GetUp[GETUP_FRONT] = m_pPlayer->Get_Model()->Find_AnimationIndex("AS_Pino_Down_Getup_F", 2.5f);
+    m_iAnimation_GetUp[GETUP_BACK] = m_pPlayer->Get_Model()->Find_AnimationIndex("AS_Pino_Down_Getup_B", 2.7f);
+    m_iAnimation_GetUp[GETUP_FRONT] = m_pPlayer->Get_Model()->Find_AnimationIndex("AS_Pino_Down_Getup_F", 2.7f);
 
     m_iStateNum = iStateNum;
 
