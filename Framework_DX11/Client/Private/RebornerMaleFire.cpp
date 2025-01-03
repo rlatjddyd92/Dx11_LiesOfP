@@ -1,5 +1,5 @@
 #include "stdafx.h"
-#include "RebornerBigA.h"
+#include "RebornerMaleFire.h"
 
 #include "GameInstance.h"
 #include "Player.h"
@@ -10,39 +10,30 @@
 // 정식 코드  
 #include "GameInterface_Controller.h"
 
-
-#include "State_RebornerBigA_Idle.h"
-#include "State_RebornerBigA_Die.h"
-#include "State_RebornerBigA_Grogy.h"
-#include "State_RebornerBigA_HitFatal.h"
-#include "State_RebornerBigA_KnockBack.h"
-
-#include "State_RebornerBigA_SlashJump.h"
-#include "State_RebornerBigA_GuardSting.h"
-#include "State_RebornerBigA_RushSting.h"
-#include "State_RebornerBigA_SlashTwice.h"
-#include "State_RebornerBigA_SwingMultiple.h"
+#include "State_RebornerMale_Idle.h"
+#include "State_RebornerMale_Die.h"
+#include "State_RebornerMale_HitFatal.h"
+#include "State_RebornerMale_KnockBack.h"
 
 #include "Effect_Manager.h"
-#include "Effect_Container.h"
 
 
-CRebornerBigA::CRebornerBigA(ID3D11Device* pDevice, ID3D11DeviceContext* pContext)
+CRebornerMaleFire::CRebornerMaleFire(ID3D11Device* pDevice, ID3D11DeviceContext* pContext)
 	: CMonster{ pDevice, pContext }
 {
 }
 
-CRebornerBigA::CRebornerBigA(const CRebornerBigA& Prototype)
+CRebornerMaleFire::CRebornerMaleFire(const CRebornerMaleFire& Prototype)
 	: CMonster{ Prototype }
 {
 }
 
-HRESULT CRebornerBigA::Initialize_Prototype()
+HRESULT CRebornerMaleFire::Initialize_Prototype()
 {
 	return S_OK;
 }
 
-HRESULT CRebornerBigA::Initialize(void* pArg)
+HRESULT CRebornerMaleFire::Initialize(void* pArg)
 {
 	OBJECT_DEFAULT_DESC* pDefaultDesc = static_cast<OBJECT_DEFAULT_DESC*>(pArg);
 
@@ -59,16 +50,13 @@ HRESULT CRebornerBigA::Initialize(void* pArg)
 	if (FAILED(Ready_Weapon()))
 		return E_FAIL;
 
-	if (FAILED(Ready_Effect()))
-		return E_FAIL;
+	//m_pNavigationCom->Move_to_Cell(m_pRigidBodyCom, pDefaultDesc->iCurrentCellNum);
+	//m_iInitRoomNum = m_pNavigationCom->Get_Cell_AreaNum(pDefaultDesc->iCurrentCellNum);
 
-	m_pNavigationCom->Move_to_Cell(m_pRigidBodyCom, pDefaultDesc->iCurrentCellNum);
-	m_iInitRoomNum = m_pNavigationCom->Get_Cell_AreaNum(pDefaultDesc->iCurrentCellNum);
+	m_pModelCom->SetUp_Animation(1, true);
 
-	m_pModelCom->SetUp_Animation(51, true);
-
-	if (FAILED(Ready_FSM()))
-		return E_FAIL;
+	//if (FAILED(Ready_FSM()))
+	//	return E_FAIL;
 
 	m_strObjectTag = TEXT("Monster");
 
@@ -89,21 +77,19 @@ HRESULT CRebornerBigA::Initialize(void* pArg)
 	m_eStat.fMaxGrogyPoint = 50.f;
 
 	m_vCenterOffset = _Vec3{ 0.f, 1.78f, 0.f };
-	
+
 	m_bDiscover = false;
 
 	// 24-11-26 김성용
 	// 몬스터 직교 UI 접근 코드 
 	// 정식 코드  
-
-	m_pSoundCom[CPawn::PAWN_SOUND_VOICE]->Play2D_Repeat(TEXT("SE_NPC_Carcass_Horseman_MT_Tentacle_Movement_02"), &g_fVoiceVolume);
 	GET_GAMEINTERFACE->Register_Pointer_Into_OrthoUIPage(UI_ORTHO_OBJ_TYPE::ORTHO_NORMAL_MONSTER, this);
 
 	GET_GAMEINTERFACE->Set_OnOff_OrthoUI(false, this);
 	return S_OK;
 }
 
-void CRebornerBigA::Priority_Update(_float fTimeDelta)
+void CRebornerMaleFire::Priority_Update(_float fTimeDelta)
 {
 	__super::Priority_Update(fTimeDelta);
 
@@ -114,21 +100,17 @@ void CRebornerBigA::Priority_Update(_float fTimeDelta)
 		m_pFsmCom->Change_State(DIE);
 	}
 	m_pWeapon->Priority_Update(fTimeDelta);
-
-	if (!m_pSwingEffect->Get_Dead())
-	{
-		m_pSwingEffect->Priority_Update(fTimeDelta);
-	}
-
+	m_pColliderObject->Priority_Update(fTimeDelta);
 }
 
-void CRebornerBigA::Update(_float fTimeDelta)
+void CRebornerMaleFire::Update(_float fTimeDelta)
 {
 	if (KEY_TAP(KEY::R))
 	{
 		CEffect_Manager::Get_Instance()->Add_Effect_ToLayer(LEVEL_GAMEPLAY, TEXT("Monster_Impact"),
 			_Vec3{ Calc_CenterPos() }, _Vec3{ 0, 0, 1 });
 	}
+
 	if (m_pGameInstance->Get_Player_AreaNum() == m_iInitRoomNum)
 		m_vCurRootMove = XMVector3TransformNormal(m_pModelCom->Play_Animation(fTimeDelta), m_pTransformCom->Get_WorldMatrix());
 	else
@@ -145,16 +127,12 @@ void CRebornerBigA::Update(_float fTimeDelta)
 		m_pSoundCom[i]->Update(fTimeDelta);
 	}
 
-	if (!m_pSwingEffect->Get_Dead())
-	{
-		m_pSwingEffect->Update(fTimeDelta);
-	}
-
 	m_pGameInstance->Add_ColliderList(m_pColliderCom);
 	m_pWeapon->Update(fTimeDelta);
+	m_pColliderObject->Update(fTimeDelta);
 }
 
-void CRebornerBigA::Late_Update(_float fTimeDelta)
+void CRebornerMaleFire::Late_Update(_float fTimeDelta)
 {
 	if (m_pGameInstance->Get_Player_AreaNum() == m_iInitRoomNum)
 	{
@@ -165,10 +143,6 @@ void CRebornerBigA::Late_Update(_float fTimeDelta)
 			m_pRigidBodyCom->Update(fTimeDelta);
 			m_pGameInstance->Add_RenderObject(CRenderer::RG_NONBLEND, this);
 
-			if (!m_pSwingEffect->Get_Dead())
-			{
-				m_pSwingEffect->Late_Update(fTimeDelta);
-			}
 
 			m_pGameInstance->Add_ColliderList(m_pColliderCom);
 			for (_int i = 0; i < CT_END - 1; ++i)
@@ -176,17 +150,19 @@ void CRebornerBigA::Late_Update(_float fTimeDelta)
 				m_pGameInstance->Add_ColliderList(m_EXCollider[i]);
 			}
 			m_pWeapon->Late_Update(fTimeDelta);
+			m_pColliderObject->Late_Update(fTimeDelta);
 		}
 	}
 }
 
-HRESULT CRebornerBigA::Render()
+HRESULT CRebornerMaleFire::Render()
 {
 	if (FAILED(__super::Render()))
 		return E_FAIL;
 
 #ifdef _DEBUG
 	m_pColliderCom->Render();
+	m_pColliderObject->Render();
 	for (_int i = 0; i < CT_END - 1; ++i)
 	{
 		m_EXCollider[i]->Render();
@@ -196,40 +172,30 @@ HRESULT CRebornerBigA::Render()
 	return S_OK;
 }
 
-void CRebornerBigA::Active_CurrentWeaponCollider(_float fDamageRatio, _uint iCollIndex, _uint iHitType, _uint iAtkStrength)
+void CRebornerMaleFire::Active_CurrentWeaponCollider(_float fDamageRatio, _uint iCollIndex, _uint iHitType, _uint iAtkStrength)
 {
-	m_pWeapon->Active_Collider(fDamageRatio, iCollIndex, iHitType, iAtkStrength);
+	m_pColliderObject->Active_Collider(fDamageRatio, iCollIndex, iHitType, iAtkStrength);
 }
 
-void CRebornerBigA::DeActive_CurretnWeaponCollider(_uint iCollIndex)
+void CRebornerMaleFire::DeActive_CurretnWeaponCollider(_uint iCollIndex)
 {
-	m_pWeapon->DeActive_Collider();
+	m_pColliderObject->DeActive_Collider();
 }
 
-void CRebornerBigA::Active_Effect(const _uint eType, _bool isLoop)
-{
-	m_pSwingEffect->Set_Loop(true);
-}
-
-void CRebornerBigA::DeActive_Effect(const _uint eType)
-{
-	m_pSwingEffect->Set_Loop(false);
-}
-
-HRESULT CRebornerBigA::Ready_Components()
+HRESULT CRebornerMaleFire::Ready_Components()
 {
 	if (FAILED(__super::Ready_Components()))
 		return E_FAIL;
 
 	/* FOR.Com_Model */
-	if (FAILED(__super::Add_Component(LEVEL_GAMEPLAY, TEXT("Prototype_Component_Model_RebornerBigA"),
+	if (FAILED(__super::Add_Component(LEVEL_GAMEPLAY, TEXT("Prototype_Component_Model_RebornerMale"),
 		TEXT("Com_Model"), reinterpret_cast<CComponent**>(&m_pModelCom))))
 		return E_FAIL;
 
 	/* FOR.Com_Collider */		//Body
 	CBounding_OBB::BOUNDING_OBB_DESC			ColliderDesc{};
 	ColliderDesc.vExtents = _float3(0.4f, 0.3f, 0.35f);
-	ColliderDesc.vCenter = _float3(0.3f, 0.f, 0.f);
+	ColliderDesc.vCenter = _float3(0.4f, 0.f, 0.f);
 	ColliderDesc.vAngles = _float3(0.f, 0.f, 0.f);
 
 	if (FAILED(__super::Add_Component(LEVEL_STATIC, TEXT("Prototype_Component_Collider_OBB"),
@@ -240,8 +206,8 @@ HRESULT CRebornerBigA::Ready_Components()
 
 
 	//LowerBody
-	ColliderDesc.vExtents = _float3(0.4f, 0.3f, 0.3f);
-	ColliderDesc.vCenter = _float3(0.1f, 0.f, 0.f);
+	ColliderDesc.vExtents = _float3(0.3f, 0.3f, 0.3f);
+	ColliderDesc.vCenter = _float3(0.3f, 0.f, 0.f);
 	ColliderDesc.vAngles = _float3(0.f, 0.f, 0.f);
 
 	if (FAILED(__super::Add_Component(LEVEL_STATIC, TEXT("Prototype_Component_Collider_OBB"),
@@ -326,6 +292,29 @@ HRESULT CRebornerBigA::Ready_Components()
 	}
 
 
+	//유사 웨폰
+	/* FOR.Com_Collider_OBB */
+	CBounding_OBB::BOUNDING_OBB_DESC			ColliderOBBDesc_Obj{};
+
+	ColliderOBBDesc_Obj.vExtents = _float3(0.75f, 0.3f, 0.3f);
+	ColliderOBBDesc_Obj.vCenter = _float3(0.2f, 0.f, 0.f);
+	ColliderOBBDesc_Obj.vAngles = _float3(0.f, 0.f, 0.f);
+
+	CColliderObject::COLIDEROBJECT_DESC Desc{};
+
+	Desc.pBoundingDesc = &ColliderOBBDesc_Obj;
+	Desc.eType = CCollider::TYPE_OBB;
+	Desc.pSocketBoneMatrix = m_pModelCom->Get_BoneCombindTransformationMatrix_Ptr(m_pModelCom->Get_UFBIndices(UFB_FOOT_RIGHT) - 1);
+	Desc.pParentWorldMatrix = m_pTransformCom->Get_WorldMatrix_Ptr();
+	Desc.pSocketBoneMatrix2 = m_pTransformCom->Get_WorldMatrix_Ptr();
+	Desc.fDamageAmount = 100.f;
+	Desc.pOWner = this;
+
+	m_pColliderObject = dynamic_cast<CColliderObject*>(m_pGameInstance->Clone_GameObject(TEXT("Prototype_GameObject_ColliderObj"), &Desc));
+
+
+
+
 	// 항상 마지막에 생성하기
 	CRigidBody::RIGIDBODY_DESC RigidBodyDesc{};
 	RigidBodyDesc.isStatic = false;
@@ -341,7 +330,7 @@ HRESULT CRebornerBigA::Ready_Components()
 
 	physX::GeometryCapsule CapsuleDesc;
 	CapsuleDesc.fHeight = 1.5f;
-	CapsuleDesc.fRadius = 0.6f;
+	CapsuleDesc.fRadius = 0.5f;
 	RigidBodyDesc.pGeometry = &CapsuleDesc;
 	RigidBodyDesc.PxLockFlags = PxRigidDynamicLockFlag::eLOCK_ANGULAR_X |
 		PxRigidDynamicLockFlag::eLOCK_ANGULAR_Y |
@@ -355,7 +344,7 @@ HRESULT CRebornerBigA::Ready_Components()
 	return S_OK;
 }
 
-HRESULT CRebornerBigA::Ready_FSM()
+HRESULT CRebornerMaleFire::Ready_FSM()
 {
 	if (FAILED(__super::Ready_FSM()))
 		return E_FAIL;
@@ -363,17 +352,11 @@ HRESULT CRebornerBigA::Ready_FSM()
 	FSM_INIT_DESC Desc{};
 
 
-	m_pFsmCom->Add_State(CState_RebornerBigA_Idle::Create(m_pFsmCom, this, IDLE, &Desc));
-	m_pFsmCom->Add_State(CState_RebornerBigA_Grogy::Create(m_pFsmCom, this, GROGY, &Desc));
-	m_pFsmCom->Add_State(CState_RebornerBigA_HitFatal::Create(m_pFsmCom, this, HITFATAL, &Desc));
-	m_pFsmCom->Add_State(CState_RebornerBigA_Die::Create(m_pFsmCom, this, DIE, &Desc));
-	m_pFsmCom->Add_State(CState_RebornerBigA_KnockBack::Create(m_pFsmCom, this, KNOCKBACK, &Desc));
 
-	m_pFsmCom->Add_State(CState_RebornerBigA_GuardSting::Create(m_pFsmCom, this, GUARDSTING, &Desc));
-	m_pFsmCom->Add_State(CState_RebornerBigA_RushSting::Create(m_pFsmCom, this, RUSHSTING, &Desc));
-	m_pFsmCom->Add_State(CState_RebornerBigA_SlashTwice::Create(m_pFsmCom, this, SLASHTWICE, &Desc));
-	m_pFsmCom->Add_State(CState_RebornerBigA_SlashJump::Create(m_pFsmCom, this, SLASHJUMP, &Desc));
-	m_pFsmCom->Add_State(CState_RebornerBigA_SwingMultiple::Create(m_pFsmCom, this, SWINGMULTIPLE, &Desc));
+	//m_pFsmCom->Add_State(CState_RebornerMale_Idle::Create(m_pFsmCom, this, IDLE, &Desc));
+	//m_pFsmCom->Add_State(CState_RebornerMale_HitFatal::Create(m_pFsmCom, this, HITFATAL, &Desc));
+	//m_pFsmCom->Add_State(CState_RebornerMale_Die::Create(m_pFsmCom, this, DIE, &Desc));
+	//m_pFsmCom->Add_State(CState_RebornerMale_KnockBack::Create(m_pFsmCom, this, KNOCKBACK, &Desc));
 
 	m_pFsmCom->Set_State(IDLE);
 
@@ -383,7 +366,7 @@ HRESULT CRebornerBigA::Ready_FSM()
 
 }
 
-HRESULT CRebornerBigA::Ready_Weapon()
+HRESULT CRebornerMaleFire::Ready_Weapon()
 {
 	CWeapon::MONSTER_WAPON_DESC		WeaponDesc{};
 	WeaponDesc.pParentWorldMatrix = m_pTransformCom->Get_WorldMatrix_Ptr();
@@ -393,32 +376,16 @@ HRESULT CRebornerBigA::Ready_Weapon()
 
 	WeaponDesc.pMonster = this;
 
-	m_pWeapon = dynamic_cast<CWeapon*>(m_pGameInstance->Clone_GameObject(TEXT("Prototype_GameObject_Weapon_RebornerBigA_Stick"), &WeaponDesc));
+	m_pWeapon = dynamic_cast<CWeapon*>(m_pGameInstance->Clone_GameObject(TEXT("Prototype_GameObject_Weapon_RebornerMale_Gun"), &WeaponDesc));
 	if (nullptr == m_pWeapon)
 		return E_FAIL;
 
 	m_pWeapon->Appear();
 
-	m_pWeapon->DeActive_Collider();
-
 	return S_OK;
 }
 
-HRESULT CRebornerBigA::Ready_Effect()
-{
-	const _Matrix* pParetnMatrix = m_pTransformCom->Get_WorldMatrix_Ptr();
-	const _Matrix* pSocketBoneMatrix = m_pModelCom->Get_BoneCombindTransformationMatrix_Ptr(m_pModelCom->Get_UFBIndices(UFB_WEAPON));
-
-
-	m_pSwingEffect = CEffect_Manager::Get_Instance()->Clone_Effect(TEXT("Monster_Stick_Swing"), pParetnMatrix,
-		pSocketBoneMatrix, _Vec3(0.f, 0.f, 0.f), _Vec3(0.f, 0.f, 1.f), _Vec3(1.f, 1.f, 1.f));
-
-	m_pSwingEffect->Set_Loop(false);
-
-	return S_OK;
-}
-
-void CRebornerBigA::Update_Collider()
+void CRebornerMaleFire::Update_Collider()
 {
 	_float4x4 UpdateMat{};
 
@@ -446,7 +413,7 @@ void CRebornerBigA::Update_Collider()
 		, *(m_pColliderBindMatrix[CT_LOWERARM_RIGHT]) * WorldMat);
 	m_EXCollider[CT_LOWERARM_RIGHT]->Update(&UpdateMat);
 
-	
+
 	XMStoreFloat4x4(&UpdateMat
 		, *(m_pColliderBindMatrix[CT_UPPERLEG_LEFT]) * WorldMat);
 	m_EXCollider[CT_UPPERLEG_LEFT]->Update(&UpdateMat);
@@ -462,13 +429,13 @@ void CRebornerBigA::Update_Collider()
 	m_EXCollider[CT_LOWERLEG_RIGHT]->Update(&UpdateMat);
 }
 
-CRebornerBigA* CRebornerBigA::Create(ID3D11Device* pDevice, ID3D11DeviceContext* pContext)
+CRebornerMaleFire* CRebornerMaleFire::Create(ID3D11Device* pDevice, ID3D11DeviceContext* pContext)
 {
-	CRebornerBigA* pInstance = new CRebornerBigA(pDevice, pContext);
+	CRebornerMaleFire* pInstance = new CRebornerMaleFire(pDevice, pContext);
 
 	if (FAILED(pInstance->Initialize_Prototype()))
 	{
-		MSG_BOX(TEXT("Failed to Created : CRebornerBigA"));
+		MSG_BOX(TEXT("Failed to Created : CRebornerMaleFire"));
 		Safe_Release(pInstance);
 	}
 
@@ -477,25 +444,27 @@ CRebornerBigA* CRebornerBigA::Create(ID3D11Device* pDevice, ID3D11DeviceContext*
 
 
 
-CPawn* CRebornerBigA::Clone(void* pArg)
+CPawn* CRebornerMaleFire::Clone(void* pArg)
 {
-	CRebornerBigA* pInstance = new CRebornerBigA(*this);
+	CRebornerMaleFire* pInstance = new CRebornerMaleFire(*this);
 
 	if (FAILED(pInstance->Initialize(pArg)))
 	{
-		MSG_BOX(TEXT("Failed to Cloned : CRebornerBigA"));
+		MSG_BOX(TEXT("Failed to Cloned : CRebornerMaleFire"));
 		Safe_Release(pInstance);
 	}
 
 	return pInstance;
 }
 
-void CRebornerBigA::Free()
+void CRebornerMaleFire::Free()
 {
 	for (_uint i = 0; i < CT_END - 1; ++i)
 	{
 		Safe_Release(m_EXCollider[i]);
 	}
+
+	Safe_Release(m_pColliderObject);
 
 	__super::Free();
 

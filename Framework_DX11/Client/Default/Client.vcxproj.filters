@@ -1392,6 +1392,9 @@
     </Filter>
     <Filter Include="02.GameObjects\11.InteractObj\12.MoveBlockObj">
       <UniqueIdentifier>{40711a2e-f4e9-4b05-8ea4-63f2df6bc760}</UniqueIdentifier>
+	</Filter>
+    <Filter Include="02.GameObjects\02.Pawn\01.Monster\Normal\RebornerMaleFire">
+      <UniqueIdentifier>{1792178b-5bc8-492d-ab66-9d1f2f4278d3}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -2564,6 +2567,9 @@
     </ClInclude>
     <ClInclude Include="CMoveBlockObj.h">
       <Filter>02.GameObjects\11.InteractObj\12.MoveBlockObj</Filter>
+	</ClInclude>
+    <ClInclude Include="..\Public\RebornerMaleFire.h">
+      <Filter>02.GameObjects\02.Pawn\01.Monster\Normal\RebornerMaleFire</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -3706,6 +3712,9 @@
     </ClCompile>
     <ClCompile Include="CMoveBlockObj.cpp">
       <Filter>02.GameObjects\11.InteractObj\12.MoveBlockObj</Filter>
+	</ClCompile>
+    <ClCompile Include="..\Private\RebornerMaleFire.cpp">
+      <Filter>02.GameObjects\02.Pawn\01.Monster\Normal\RebornerMaleFire</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
