@@ -5,6 +5,7 @@
 #include "Monster.h"
 
 #include "Effect_Manager.h"
+#include "Effect_Container.h"
 
 CItem_Throw::CItem_Throw(ID3D11Device* pDevice, ID3D11DeviceContext* pContext)
 	: CGameObject{ pDevice, pContext }
@@ -52,12 +53,14 @@ HRESULT CItem_Throw::Initialize(void* pArg)
 
 	m_pTransformCom->Set_WorldMatrix(m_WorldMatrix);
 
+
+
 	return S_OK;
 }
 
 void CItem_Throw::Priority_Update(_float fTimeDelta)
 {
-
+	m_Effect->Priority_Update(fTimeDelta);
 }
 
 void CItem_Throw::Update(_float fTimeDelta)
@@ -100,6 +103,8 @@ void CItem_Throw::Update(_float fTimeDelta)
 				m_pColliderCom->Update(m_pTransformCom->Get_WorldMatrix_Ptr());
 				m_pGameInstance->Add_ColliderList(m_pColliderCom);
 			}
+
+			m_Effect->Update(fTimeDelta);
 		}
 	}
 	else if (m_isExplosion)
@@ -116,7 +121,7 @@ void CItem_Throw::Late_Update(_float fTimeDelta)
 {
 	__super::Late_Update(fTimeDelta);
 	m_pGameInstance->Add_RenderObject(CRenderer::RG_NONBLEND, this);
-
+	m_Effect->Late_Update(fTimeDelta);
 #ifdef _DEBUG
 	if (m_pColliderCom != nullptr)
 		m_pGameInstance->Add_DebugObject(m_pColliderCom);
@@ -253,12 +258,18 @@ HRESULT CItem_Throw::Ready_Components()
 	{
 	case SPECIAL_ITEM::SP_GRANADE:
 		strModelTag = TEXT("Prototype_Component_Model_Throw_Cluster");
+		m_Effect = CEffect_Manager::Get_Instance()->Clone_Effect(TEXT("Player_Item_Fire_Throw"), m_pTransformCom->Get_WorldMatrix_Ptr(), nullptr, _Vec3(0.f, 0.f, 0.15f));
+		m_Effect->Set_Loop(true);
 		break;
 	case SPECIAL_ITEM::SP_THERMITE:
 		strModelTag = TEXT("Prototype_Component_Model_Throw_Thermite");
+		m_Effect = CEffect_Manager::Get_Instance()->Clone_Effect(TEXT("Player_Item_Bomb_Throw"), m_pTransformCom->Get_WorldMatrix_Ptr(), nullptr, _Vec3(0.f, 0.f, 0.15f));
+		m_Effect->Set_Loop(true);
 		break;
 	case SPECIAL_ITEM::SP_THROW_BATTERY:
 		strModelTag = TEXT("Prototype_Component_Model_Throw_Battery");
+		m_Effect = CEffect_Manager::Get_Instance()->Clone_Effect(TEXT("Player_Item_Electric_Throw"), m_pTransformCom->Get_WorldMatrix_Ptr(), nullptr, _Vec3(0.f, 0.f, 0.15f));
+		m_Effect->Set_Loop(true);
 		break;
 	default:
 		return E_FAIL;
@@ -343,6 +354,12 @@ CGameObject* CItem_Throw::Clone(void* pArg)
 void CItem_Throw::Free()
 {
 	__super::Free();
+
+	if (true == m_isCloned)
+	{
+		m_Effect->Set_Cloned(false);
+		Safe_Release(m_Effect);
+	}
 
 	Safe_Release(m_pNavigationCom);
 	Safe_Release(m_pRigidBodyCom);

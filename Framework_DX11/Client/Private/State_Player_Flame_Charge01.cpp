@@ -146,7 +146,12 @@ void CState_Player_Flame_Charge01::Control_Collider()
     }
 
     if (isColliderActive)
-        m_pPlayer->Active_CurrentWeaponCollider();
+    {
+        if (m_pPlayer->Active_CurrentWeaponCollider())
+        {
+            m_pPlayer->Decrease_Stamina(45.f);
+        }
+    }
     else
         m_pPlayer->DeActive_CurretnWeaponCollider();
 }
