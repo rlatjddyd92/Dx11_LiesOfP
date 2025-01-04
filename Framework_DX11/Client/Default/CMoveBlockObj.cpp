@@ -140,7 +140,7 @@ HRESULT CMoveBlockObj::Ready_Components(MOVEBLOCK_DESC* pDesc)
 		m_pRigidBodyCom->Set_GloblePose(_Vec3(-137.541f, -97.816f, -68.452f));
 		break;
 	case 1:	//RAXASIA2
-		m_pRigidBodyCom->Set_GloblePose(_Vec3(-39.413f, -97.809f, -68.452f));
+		m_pRigidBodyCom->Set_GloblePose(_Vec3(-39.413f, -97.809f, -18.173f));
 		break;
 	case 2:	//MANUS1
 		m_pRigidBodyCom->Set_GloblePose(_Vec3(16.641f, 0.069f, -16.234f));
