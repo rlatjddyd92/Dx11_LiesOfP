@@ -98,6 +98,8 @@ public:
 
 	void Show_PlayerDead_UI();
 
+	_bool IsPlayerDead_UI_NowEnd() { return m_bIsPlayerDead_UI_NowEnd; }
+
 protected:
 	void Update_Region(_float fTimeDelta);
 	void Update_Inform(_float fTimeDelta);
@@ -124,8 +126,8 @@ protected:
 	// 플레이어 사망 
 	_Vec4 m_vPlayerDead_Time = { -1.f,0.f,0.f,0.f }; // <- 현재 Time, 등장하는 시간, 바늘과 중심기어를 빨강으로 변경하는 시간, 사라지는 시간
 
-
-
+	_int m_iPlayerDead_Phase = -1;
+	_bool m_bIsPlayerDead_UI_NowEnd = false; // <- 플레이어 사망 UI가 꺼지기 시작하는 타이밍에 단 한번만 true가 되는 변수 
 
 	_float m_fAngle_Clock_Hour_Start = 0.f;
 	_float m_fAngle_Clock_Minitue_Start = 0.f;
