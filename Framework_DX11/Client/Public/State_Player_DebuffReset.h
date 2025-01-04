@@ -30,6 +30,7 @@ private:
     _uint               m_iAnimation_Walk[WALK_END] = {};
 
     _bool               m_isCreateItem = { false };
+    _bool               m_isActiveItem = { false };
 
     _Vec4               m_vMoveDir = {};
 

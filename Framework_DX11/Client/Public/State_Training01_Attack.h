@@ -32,6 +32,7 @@ private:
     void                Control_Collider();
 
     _bool               m_isRimLight = {};
+    _bool               m_isEndRImLight = {};
     _Vec4               m_vRimLightColor = {};
 
 public:

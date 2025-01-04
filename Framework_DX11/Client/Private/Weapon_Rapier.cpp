@@ -7,11 +7,11 @@
 #include "GameInstance.h"
 #include "Effect_Manager.h"
 
-// 24-12-06 김성용
-// 내구도 조정 함수 연결을 위한 헤더 추가 
 #include "GameInterface_Controller.h"
-
 #include "Effect_Container.h"
+
+#include "ObjectPool.h"
+#include "BloodTrail.h"
 
 CWeapon_Rapier::CWeapon_Rapier(ID3D11Device* pDevice, ID3D11DeviceContext* pContext)
 	: CWeapon{ pDevice, pContext }
@@ -157,6 +157,8 @@ void CWeapon_Rapier::OnCollisionEnter(CGameObject* pOther)
 			if (m_pPlayer->Get_AttackBuffTime() > 0.f)
 				m_fFinalDamageAmount *= 1.2f;
 
+			GET_GAMEINTERFACE->Add_Potion_Gauge(m_fDamageAmount * 2.f);
+
 			if (pMonster->Calc_DamageGain(m_fFinalDamageAmount * m_fDamageRatio, vHitPos, HIT_METAL, m_eAttackStrength, this))
 			{
 				_Vec3 vPlayerLook = (_Vec3)m_pPlayer->Get_Transform()->Get_State(CTransform::STATE_LOOK);
@@ -195,8 +197,10 @@ void CWeapon_Rapier::OnCollisionEnter(CGameObject* pOther)
 						(_Vec3)pMonster->Calc_CenterPos(), vPlayerLook);
 				}
 
-				CEffect_Manager::Get_Instance()->Add_Effect_ToLayer(LEVEL_GAMEPLAY, TEXT("Player_Attack_Blood_Rapier"),
-					m_pParentMatrix, m_pSocketMatrix);
+				CObjectPool<CBloodTrail>::Get_GameObject()->Active(CBloodTrail::WEAPON_RAPIER);
+
+				//CEffect_Manager::Get_Instance()->Add_Effect_ToLayer(LEVEL_GAMEPLAY, TEXT("Player_Attack_Blood_Rapier"),
+				//	m_pParentMatrix, m_pSocketMatrix);
 
 				GET_GAMEINTERFACE->Add_Durable_Weapon(-5.f);
 

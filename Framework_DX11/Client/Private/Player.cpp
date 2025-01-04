@@ -153,13 +153,13 @@ HRESULT CPlayer::Initialize(void * pArg)
 	//m_pNavigationCom->Move_to_Cell(m_pRigidBodyCom, 427); //짧은사다리
 	//m_pNavigationCom->Move_to_Cell(m_pRigidBodyCom, 341); //아래엘베
 	//m_pNavigationCom->Move_to_Cell(m_pRigidBodyCom, 440); //상자랑 장애물
-	//m_pNavigationCom->Move_to_Cell(m_pRigidBodyCom, 1066); // 순간이동 1066
+	m_pNavigationCom->Move_to_Cell(m_pRigidBodyCom, 1066); // 순간이동 1066
 	//m_pNavigationCom->Move_to_Cell(m_pRigidBodyCom, 790); // 순간이동 790
 	//m_pNavigationCom->Move_to_Cell(m_pRigidBodyCom, 801); // 소피아 방
 	//m_pNavigationCom->Move_to_Cell(m_pRigidBodyCom, 1178); // 소피아 방 내부
 	//m_pNavigationCom->Move_to_Cell(m_pRigidBodyCom, 0); 
 	//m_pNavigationCom->Move_to_Cell(m_pRigidBodyCom, 268); // 락사시아 보스전
-	m_pNavigationCom->Move_to_Cell(m_pRigidBodyCom, 1333); // 튜토리얼
+	//m_pNavigationCom->Move_to_Cell(m_pRigidBodyCom, 1333); // 튜토리얼
 	//m_pNavigationCom->Move_to_Cell(m_pRigidBodyCom, 307); // 위에 엘베
 	//튜토리얼 끝나고 순간이동 후  y축 -120도 회전
 
@@ -292,17 +292,19 @@ void CPlayer::Update(_float fTimeDelta)
 
 	if (KEY_TAP(KEY::Q))
 	{
-		for (_uint i = 0; i < 30; ++i)
-		{
-			_Vec3 vPlayerPos = m_pTransformCom->Get_State(CTransform::STATE_POSITION);
-			vPlayerPos.x += m_pGameInstance->Get_Random(-1.f, 1.f);
-			vPlayerPos.z += m_pGameInstance->Get_Random(-1.f, 1.f);
+		//for (_uint i = 0; i < 30; ++i)
+		//{
+		//	_Vec3 vPlayerPos = m_pTransformCom->Get_State(CTransform::STATE_POSITION);
+		//	vPlayerPos.x += m_pGameInstance->Get_Random(-1.f, 1.f);
+		//	vPlayerPos.z += m_pGameInstance->Get_Random(-1.f, 1.f);
 
-			CDecal_Blood::BLOOD_DECAL_DESC DEsc = {};
-			DEsc.vPos = vPlayerPos;
-			m_pGameInstance->Add_CloneObject_ToLayer(LEVEL_GAMEPLAY, TEXT("Layer_Decal_Blood"), TEXT("Prototype_GameObject_Decal_Blood"), &DEsc);
-		}
+		//	CDecal_Blood::BLOOD_DECAL_DESC DEsc = {};
+		//	DEsc.vPos = vPlayerPos;
+		//	m_pGameInstance->Add_CloneObject_ToLayer(LEVEL_GAMEPLAY, TEXT("Layer_Decal_Blood"), TEXT("Prototype_GameObject_Decal_Blood"), &DEsc);
+		//}
 
+		// late call
+		CEffect_Manager::Get_Instance()->Add_Effect_ToLayer(LEVEL_GAMEPLAY, TEXT("Player_KillSophia"), (_Vec3)m_pTransformCom->Get_State(CTransform::STATE_POSITION));
 		//dynamic_cast<CCutScene*>(m_pGameInstance->Find_Object(LEVEL_GAMEPLAY, TEXT("Layer_CutScene"), SOPHIA_DEAD))->Start_Play();
 		//Change_State(FLAME_FATAL);
 	}
@@ -1220,9 +1222,14 @@ void CPlayer::Update_Stat(_float fTimeDelta)
 #pragma region 가위 공격력 버프
 	if (m_fAttackBuffTime > 0.f)
 	{
+		Active_Effect(EFFECT_ARM_BUFF);
+
 		m_fAttackBuffTime -= fTimeDelta;
 		if (m_fAttackBuffTime <= 0.f)
+		{
+			DeActive_Effect(EFFECT_ARM_BUFF);
 			m_fAttackBuffTime = 0.f;
+		}
 	}
 	
 }
@@ -1938,6 +1945,18 @@ HRESULT CPlayer::Ready_Effect()
 	pSocketBoneMatrix = m_pModelCom->Get_BoneCombindTransformationMatrix_Ptr("Bn_L_ForeTwist");
 	m_Effects[EFFECT_CUTSCENE_ARM_OPENDOOR] = m_pEffect_Manager->Clone_Effect(TEXT("Player_Arm_Electric"), pParetnMatrix,
 		pSocketBoneMatrix, _Vec3(0.f, 0.f, 0.f), _Vec3(0.f, 0.f, 0.f), _Vec3(1.f, 1.f, 1.f));
+
+	pSocketBoneMatrix = m_pModelCom->Get_BoneCombindTransformationMatrix_Ptr("Bip001-R-Hand");
+	m_Effects[EFFECT_ARM_BUFF] = m_pEffect_Manager->Clone_Effect(TEXT("Player_Scissor_Aura"), pParetnMatrix,
+		pSocketBoneMatrix, _Vec3(0.f, 0.f, 0.f), _Vec3(0.f, 0.f, 0.f), _Vec3(1.f, 1.f, 1.f), _Vec3(0.f, 0.f, 180.f));
+
+	m_Effects[EFFECT_ITEM_PURIFICATION] = m_pEffect_Manager->Clone_Effect(TEXT("Player_Item_Purification_Use"), pParetnMatrix,
+		pSocketBoneMatrix, _Vec3(0.f, 0.f, 0.f), _Vec3(0.f, 0.f, 0.f), _Vec3(1.f, 1.f, 1.f), _Vec3(0.f, 0.f, 0.f));
+
+	pSocketBoneMatrix = m_pModelCom->Get_BoneCombindTransformationMatrix_Ptr("Bip001-Spine");
+	m_Effects[EFFECT_ITEM_RESISTANCE] = m_pEffect_Manager->Clone_Effect(TEXT("Player_Item_Resistance_Active"), pParetnMatrix,
+		pSocketBoneMatrix, _Vec3(0.f, 0.f, 0.f), _Vec3(0.f, 0.f, 0.f), _Vec3(1.f, 1.f, 1.f));
+
 
 	CDissolve_Player_Dead::DISSOLVE_OBJECT_DESC TestDesc = {};
 	TestDesc.fRotationPerSec = 90.f;

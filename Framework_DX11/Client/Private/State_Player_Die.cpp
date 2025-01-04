@@ -98,7 +98,10 @@ void CState_Player_Die::Update(_float fTimeDelta)
         }
         else if (m_fDieTime > 0.4f && !m_isFadeOut)
         {
-            GET_GAMEINTERFACE->Fade_Out(TEXT(""), TEXT(""));
+            // 25-01-04 김성용
+          // 유저 사망 UI 관련 수정
+            GET_GAMEINTERFACE->Show_PlayerDead_UI();
+            //GET_GAMEINTERFACE->Fade_Out(TEXT(""), TEXT(""));
             m_isFadeOut = true;
         }
         else if (m_fDieTime > 1.5f && m_isFadeOut)

@@ -169,6 +169,7 @@ void CState_CarcassBigA_Idle::Calc_Act_Attack()
     {
         m_iAtkCnt = 0;
     }
+    m_iAtkCnt = 3;
 
     switch (m_iAtkCnt)
     {

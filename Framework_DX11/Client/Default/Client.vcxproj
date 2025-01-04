@@ -212,6 +212,7 @@
     <ClInclude Include="..\Public\Item_Dropped.h" />
     <ClInclude Include="..\Public\Monster_Training01.h" />
     <ClInclude Include="..\Public\Monster_Training02.h" />
+    <ClInclude Include="..\Public\ObjectPool.h" />
     <ClInclude Include="..\Public\PlayerCollider_Fatal.h" />
     <ClInclude Include="..\Public\RebornerMale.h" />
     <ClInclude Include="..\Public\RebornerMaleFire.h" />

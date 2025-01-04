@@ -205,6 +205,7 @@ void CUIPage_Inform::Show_PlayerDead_UI()
 	m_bUpdate = true;
 	m_fTopPartMove = -1.f;
 	m_vPlayerDead_Time = { 0.f, 1.f ,5.f ,1.f };
+	m_iPlayerDead_Phase = 0;
 
 	m_fAngle_Clock_Hour = m_fAngle_Clock_Hour_Start;
 	m_fAngle_Clock_Minitue = m_fAngle_Clock_Minitue_Start;
@@ -318,17 +319,24 @@ void CUIPage_Inform::Update_PlayerDead_UI(_float fTimeDelta)
 		return;
 	}
 
-	_int iPhase = 0;
-	if (m_vPlayerDead_Time.x > (m_vPlayerDead_Time.y + m_vPlayerDead_Time.z))
-		iPhase = 2;
-	else if (m_vPlayerDead_Time.x > m_vPlayerDead_Time.y)
-		iPhase = 1;
+	if (m_iPlayerDead_Phase == 1)
+		m_bIsPlayerDead_UI_NowEnd = true;
+	else 
+		m_bIsPlayerDead_UI_NowEnd = false;
 
-	Update_PlayerDead_Back(fTimeDelta, iPhase);
-	Update_PlayerDead_Static(fTimeDelta, iPhase);
-	Update_PlayerDead_Neddle(fTimeDelta, iPhase);
-	Update_PlayerDead_Debris(fTimeDelta, iPhase);
-	Update_PlayerDead_Message(fTimeDelta, iPhase);
+	if (m_vPlayerDead_Time.x > (m_vPlayerDead_Time.y + m_vPlayerDead_Time.z))
+		m_iPlayerDead_Phase = 2;
+	else if (m_vPlayerDead_Time.x > m_vPlayerDead_Time.y)
+		m_iPlayerDead_Phase = 1;
+
+	if (m_iPlayerDead_Phase != 2)
+		m_bIsPlayerDead_UI_NowEnd = false;
+
+	Update_PlayerDead_Back(fTimeDelta, m_iPlayerDead_Phase);
+	Update_PlayerDead_Static(fTimeDelta, m_iPlayerDead_Phase);
+	Update_PlayerDead_Neddle(fTimeDelta, m_iPlayerDead_Phase);
+	Update_PlayerDead_Debris(fTimeDelta, m_iPlayerDead_Phase);
+	Update_PlayerDead_Message(fTimeDelta, m_iPlayerDead_Phase);
 }
 
 void CUIPage_Inform::Update_PlayerDead_Back(_float fTimeDelta, _int iPhase)
