@@ -675,6 +675,13 @@ void CRaxasia::Change_Model(_uint iModelNum)
 	m_pModelCom->Get_BoneCombindTransformationMatrix_Ptr("helmet_01");
 }
 
+void CRaxasia::Resetting()
+{
+	m_isDead = true;
+
+	GET_GAMEINTERFACE->Set_OnOff_OrthoUI(false, this);
+}
+
 HRESULT CRaxasia::Ready_Components()
 {
 	if (FAILED(__super::Ready_Components()))

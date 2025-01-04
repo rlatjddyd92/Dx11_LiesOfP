@@ -205,6 +205,16 @@ _bool CMonster::Calc_DamageGain(_float fAtkDmg, _Vec3 vHitPos, _uint iHitType, _
 	m_eStat.fHp -= fAtkDmg;
 	m_eStat.fAtkDmg = fAtkDmg;
 
+	if (m_eStat.bWeakness)
+	{
+		if (iAttackStrength >= ATTACK_STRENGTH::ATK_NORMAL)
+		{
+			m_eStat.bWeakness = false;
+			m_eStat.bFatalAttack = true;
+
+		}
+	}
+
 	if (m_pFsmCom->Get_CurrentState() != HITFATAL)
 	{
 		if (!m_bDiscover)
@@ -216,6 +226,7 @@ _bool CMonster::Calc_DamageGain(_float fAtkDmg, _Vec3 vHitPos, _uint iHitType, _
 	if (iAttackStrength == ATTACK_STRENGTH::ATK_LAST)
 	{
 		m_bFatalAttacked = true;
+		m_eStat.bFatalAttack = false;
 	}
 
 	if (!m_bDiscover)

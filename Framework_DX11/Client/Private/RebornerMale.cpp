@@ -176,6 +176,32 @@ HRESULT CRebornerMale::Render()
 	return S_OK;
 }
 
+void CRebornerMale::Resetting()
+{
+	m_vRimLightColor = { 0.f, 0.f, 0.f, 0.f };
+
+	m_eStat.fHp = 160.f;
+	m_eStat.fMaxHp = 160.f;
+	m_eStat.fAtk = 40.f;
+
+	m_eStat.bWeakness = false;
+
+	m_eStat.fGrogyPoint = 0.f;
+	m_eStat.fMaxGrogyPoint = 30.f;
+
+	m_bDiscover = false;
+	m_bFirstMeetCheck = false;
+
+	m_bFatalAttacked = false;
+
+	m_pNavigationCom->Move_to_Cell(m_pRigidBodyCom, m_iOriginCellNum);
+	m_iInitRoomNum = m_pNavigationCom->Get_Cell_AreaNum(m_iOriginCellNum);
+
+	Change_State(CMonster::IDLE);
+
+	GET_GAMEINTERFACE->Set_OnOff_OrthoUI(false, this);
+}
+
 void CRebornerMale::Active_CurrentWeaponCollider(_float fDamageRatio, _uint iCollIndex, HIT_TYPE eHitType, ATTACK_STRENGTH eAtkStrength)
 {
 	m_pColliderObject->Active_Collider(fDamageRatio, iCollIndex, eHitType, eAtkStrength);

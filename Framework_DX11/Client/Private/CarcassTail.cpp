@@ -76,8 +76,8 @@ HRESULT CCarcassTail::Initialize(void* pArg)
 	m_vRimLightColor = { 0.f, 0.f, 0.f, 0.f };
 
 	m_eStat.fHp = 1000.f;
+	m_eStat.fMaxHp = 1000.f;
 	m_eStat.fAtk = 200.f;
-	//m_eStat.fDefence = 2.f;
 
 	m_vCenterOffset = _Vec3{ 0.f, 0.91f, 0.f };
 
@@ -166,6 +166,32 @@ HRESULT CCarcassTail::Render()
 	//}
 #endif
 	return S_OK;
+}
+
+void CCarcassTail::Resetting()
+{
+	m_vRimLightColor = { 0.f, 0.f, 0.f, 0.f };
+
+	m_eStat.fHp = 1000.f;
+	m_eStat.fMaxHp = 1000.f;
+	m_eStat.fAtk = 200.f;
+
+	m_eStat.fGrogyPoint = 0.f;
+	m_eStat.fMaxGrogyPoint = 210.f;
+
+	m_eStat.bWeakness = false;
+
+	m_bDiscover = false;
+	m_bFirstMeetCheck = false;
+
+	m_bFatalAttacked = false;
+
+	m_pNavigationCom->Move_to_Cell(m_pRigidBodyCom, m_iOriginCellNum);
+	m_iInitRoomNum = m_pNavigationCom->Get_Cell_AreaNum(m_iOriginCellNum);
+
+	Change_State(CMonster::IDLE);
+
+	GET_GAMEINTERFACE->Set_OnOff_OrthoUI(false, this);
 }
 
 void CCarcassTail::Active_CurrentWeaponCollider(_float fDamageRatio, _uint iCollIndex, HIT_TYPE eHitType, ATTACK_STRENGTH eAtkStrength)

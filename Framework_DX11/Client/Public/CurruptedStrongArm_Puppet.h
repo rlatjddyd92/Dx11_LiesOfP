@@ -43,6 +43,9 @@ public:
 	virtual void Late_Update(_float fTimeDelta) override;
 	virtual HRESULT Render() override;
 
+public:
+	virtual void		ReSpawn() override;
+
 private:
 	CColliderObject* m_pColliderObject[TYPE_END] = { nullptr };
 	class CCollider* m_EXCollider[CT_END - 1] = { nullptr, nullptr };

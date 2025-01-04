@@ -56,8 +56,10 @@ HRESULT CRebornerMaleFire::Initialize(void* pArg)
 	if (FAILED(Ready_Effect()))
 		return E_FAIL;
 
-	//m_pNavigationCom->Move_to_Cell(m_pRigidBodyCom, pDefaultDesc->iCurrentCellNum);
-	//m_iInitRoomNum = m_pNavigationCom->Get_Cell_AreaNum(pDefaultDesc->iCurrentCellNum);
+	m_iOriginCellNum = pDefaultDesc->iCurrentCellNum;
+
+	m_pNavigationCom->Move_to_Cell(m_pRigidBodyCom, m_iOriginCellNum);
+	m_iInitRoomNum = m_pNavigationCom->Get_Cell_AreaNum(m_iOriginCellNum);
 
 	m_pModelCom->SetUp_Animation(18, true);
 
@@ -84,6 +86,7 @@ HRESULT CRebornerMaleFire::Initialize(void* pArg)
 	m_vCenterOffset = _Vec3{ 0.f, 1.78f, 0.f };
 
 	m_bDiscover = false;
+	m_bFirstMeetCheck = false;
 
 	// 24-11-26 김성용
 	// 몬스터 직교 UI 접근 코드 
@@ -186,6 +189,33 @@ HRESULT CRebornerMaleFire::Render()
 
 #endif
 	return S_OK;
+}
+
+void CRebornerMaleFire::Resetting()
+{
+	m_vRimLightColor = { 0.f, 0.f, 0.f, 0.f };
+
+	m_eStat.fHp = 130.f;
+	m_eStat.fMaxHp = 130.f;
+	m_eStat.fAtk = 5.f;
+
+	m_eStat.bWeakness = false;
+
+	m_eStat.fGrogyPoint = 0.f;
+	m_eStat.fMaxGrogyPoint = 80.f;
+
+	m_bDiscover = false;
+	m_bFirstMeetCheck = false;
+
+	m_bFatalAttacked = false;
+
+	m_pNavigationCom->Move_to_Cell(m_pRigidBodyCom, m_iOriginCellNum);
+	m_iInitRoomNum = m_pNavigationCom->Get_Cell_AreaNum(m_iOriginCellNum);
+
+	Change_State(CMonster::IDLE);
+
+	GET_GAMEINTERFACE->Set_OnOff_OrthoUI(false, this);
+
 }
 
 void CRebornerMaleFire::Active_CurrentWeaponCollider(_float fDamageRatio, _uint iCollIndex, HIT_TYPE eHitType, ATTACK_STRENGTH eAtkStrength)
