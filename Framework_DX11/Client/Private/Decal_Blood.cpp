@@ -34,8 +34,10 @@ HRESULT CDecal_Blood::Initialize(void* pArg)
 	if (FAILED(Ready_Components(iType)))
 		return E_FAIL;
 
-	_float fSize = m_pGameInstance->Get_Random(0.6f, 1.f);
-	m_pTransformCom->Set_Scaled(fSize, fSize, fSize);
+	m_fCurrentSize = m_pGameInstance->Get_Random(0.3f, 1.f);
+	m_fShrinkSpeed = m_pGameInstance->Get_Random(0.3f, 0.4f);
+	m_fRenderTime = m_pGameInstance->Get_Random(1.f, 2.f);
+	m_pTransformCom->Set_Scaled(m_fCurrentSize, m_fCurrentSize, m_fCurrentSize);
 	m_pTransformCom->Set_State(CTransform::STATE_POSITION, pDesc->vPos);
 
 	return S_OK;
@@ -47,6 +49,16 @@ void CDecal_Blood::Priority_Update(_float fTimeDelta)
 
 void CDecal_Blood::Update(_float fTimeDelta)
 {
+	m_fRenderTimer += fTimeDelta;
+	if (m_fRenderTimer >= m_fRenderTime)
+	{
+		m_fCurrentSize -= (m_fShrinkSpeed * fTimeDelta);
+
+		if (m_fCurrentSize <= 0.f)
+			m_isDead = true;
+		else
+			m_pTransformCom->Set_Scaled(m_fCurrentSize, m_fCurrentSize, m_fCurrentSize);
+	}
 }
 
 void CDecal_Blood::Late_Update(_float fTimeDelta)
