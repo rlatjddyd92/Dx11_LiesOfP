@@ -65,8 +65,10 @@ HRESULT CCarcassTail::Initialize(void* pArg)
 	if (FAILED(Ready_Components()))
 		return E_FAIL;
 
-	m_pNavigationCom->Move_to_Cell(m_pRigidBodyCom, pDefaultDesc->iCurrentCellNum);
-	m_iInitRoomNum = m_pNavigationCom->Get_Cell_AreaNum(pDefaultDesc->iCurrentCellNum);
+	m_iOriginCellNum = pDefaultDesc->iCurrentCellNum;
+
+	m_pNavigationCom->Move_to_Cell(m_pRigidBodyCom, m_iOriginCellNum);
+	m_iInitRoomNum = m_pNavigationCom->Get_Cell_AreaNum(m_iOriginCellNum);
 
 	m_pModelCom->SetUp_Animation(rand() % 20, true);
 

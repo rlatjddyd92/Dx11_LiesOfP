@@ -44,7 +44,7 @@ public:
 	virtual HRESULT Render() override;
 
 public:
-	virtual void		ReSpawn() override;
+	virtual void		Resetting() override;
 
 private:
 	CColliderObject* m_pColliderObject[TYPE_END] = { nullptr };

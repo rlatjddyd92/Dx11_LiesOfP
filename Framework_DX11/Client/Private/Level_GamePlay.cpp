@@ -6,6 +6,7 @@
 #include "FreeCamera.h"
 #include "PlayerCamera.h"
 #include "GameInstance.h"
+#include "Layer.h"
 #include "GameInterface_Controller.h"
 
 #include "Effect_Container.h"
@@ -15,6 +16,7 @@
 #include "Player.h"
 #include "Ladder.h"
 #include "CutScene.h"
+#include "Monster.h"
 
 CLevel_GamePlay::CLevel_GamePlay(ID3D11Device* pDevice, ID3D11DeviceContext* pContext)
 	: CLevel{ pDevice, pContext }
@@ -85,6 +87,18 @@ void CLevel_GamePlay::Update(_float fTimeDelta)
 	if (m_pPlayer->Get_IsRespawnMonster())
 	{
 		// 몬스터 부활
+		vector<CGameObject*> ObjectVector = m_pGameInstance->Find_Layer(LEVELID::LEVEL_GAMEPLAY, TEXT("Layer_Monster"))->Get_ObjectList();
+
+		_uint iSize = ObjectVector.size();
+
+		for (_int i = 0; i < iSize; ++i)
+		{
+			static_cast<CMonster*>(ObjectVector[i])->Resetting();
+		}
+
+		static_cast<CMonster*>(m_pGameInstance->Find_Layer(LEVELID::LEVEL_GAMEPLAY, TEXT("Layer_Raxasia"))->Get_ObjectList()[0])->Resetting();
+
+		static_cast<CMonster*>(m_pGameInstance->Find_Layer(LEVELID::LEVEL_GAMEPLAY, TEXT("Layer_SimonManus"))->Get_ObjectList()[0])->Resetting();
 
 		m_pPlayer->Set_IsRespawnMonster(false);
 	}
