@@ -26,9 +26,12 @@ HRESULT CState_Training01_Attack::Initialize(_uint iStateNum, void* pArg)
 HRESULT CState_Training01_Attack::Start_State(void* pArg)
 {
     _int iAttackStrength = dynamic_cast<CMonster_Training01*>(m_pMonster)->Get_AttackStrength();
+    m_isRimLight = false;
 
     if (iAttackStrength == ATK_STRONG)
     {
+        m_isRimLight = true;
+        m_vRimLightColor = _Vec4(0.f, 0.f, 0.f, 0.5f);
         m_pMonster->Get_Model()->Set_SpeedRatio(m_iAnimation_Attack, 2.4);
     }
     else
@@ -43,9 +46,27 @@ HRESULT CState_Training01_Attack::Start_State(void* pArg)
 
 void CState_Training01_Attack::Update(_float fTimeDelta)
 {
+    _int iFrame = m_pMonster->Get_Frame();
+
     if (m_pMonster->Get_EndAnim(m_iAnimation_Attack))
     {
         m_pMonster->Change_State(CMonster::IDLE);
+    }
+
+    if (m_isRimLight)
+    {
+        if (iFrame < m_iColliderStartFrame)
+        {
+            m_vRimLightColor.x = max(m_vRimLightColor.x + 0.5f * fTimeDelta, 1.f);
+            m_vRimLightColor.w = max(m_vRimLightColor.w - 0.6f * fTimeDelta, 0.1f);
+        }
+        else
+        {
+            m_vRimLightColor.x = max(m_vRimLightColor.x - 0.7f * fTimeDelta, 0.f);
+            m_vRimLightColor.w = min(m_vRimLightColor.w + 0.7f * fTimeDelta, 0.5f);
+        }
+
+        m_pMonster->Set_RimLightColor(m_vRimLightColor);
     }
 
     Control_Collider();
@@ -54,6 +75,9 @@ void CState_Training01_Attack::Update(_float fTimeDelta)
 void CState_Training01_Attack::End_State()
 {
     dynamic_cast<CMonster_Training01*>(m_pMonster)->Change_AttackType();
+
+   // m_vRimLightColor = _Vec4(0.f, 0.f, 0.f, 0.f);
+   // m_pMonster->Set_RimLightColor(m_vRimLightColor);
 }
 
 void CState_Training01_Attack::Control_Collider()

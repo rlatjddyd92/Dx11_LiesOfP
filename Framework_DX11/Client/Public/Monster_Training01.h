@@ -45,6 +45,11 @@ private:
 	virtual void	Active_CurrentWeaponCollider(_float fDamageRatio, _uint iCollIndex = 0, HIT_TYPE eHitType = HIT_END, ATTACK_STRENGTH eAtkStrength = ATK_END) override;
 	virtual void	DeActive_CurretnWeaponCollider(_uint iCollIndex = 0) override;
 
+	virtual _bool		Calc_DamageGain(_float fAtkDmg, _Vec3 vHitPos = { 0.f,0.f,0.f }, _uint iHitType = HIT_END, _uint iAttackStrength = ATK_END, CGameObject* pAttacker = nullptr) override;
+
+	void			On_RimLight(_float fTimeDelta);
+	void			Off_RimLight(_float fTImeDelta);
+
 private:
 	CColliderObject* m_pColliderObject = { nullptr };
 
