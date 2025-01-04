@@ -65,15 +65,15 @@ HRESULT CCurruptedStrongArm_Puppet::Initialize(void* pArg)
 
 	m_vRimLightColor = { 0.f, 0.f, 0.f, 0.f };
 
-	m_eStat.fHp = 50.f;
-	m_eStat.fMaxHp = 50.f;
-	m_eStat.fAtk = 4.f;
-	m_eStat.fDefence = 3.f;
+	m_eStat.fHp = 400.f;
+	m_eStat.fMaxHp = 400.f;
+	m_eStat.fAtk = 260.f;
+	//m_eStat.fDefence = 3.f;
 
 	m_eStat.bWeakness = false;
 
 	m_eStat.fGrogyPoint = 0.f;
-	m_eStat.fMaxGrogyPoint = 50.f;
+	m_eStat.fMaxGrogyPoint = 130.f;
 
 	m_vCenterOffset = _Vec3{ 0.f, 1.55f, 0.f };
 
@@ -260,7 +260,7 @@ HRESULT CCurruptedStrongArm_Puppet::Ready_Components()
 	Desc.pSocketBoneMatrix = m_pModelCom->Get_BoneCombindTransformationMatrix_Ptr(m_pModelCom->Get_UFBIndices(UFB_HAND_LEFT));
 	Desc.pParentWorldMatrix = m_pTransformCom->Get_WorldMatrix_Ptr();
 	Desc.pSocketBoneMatrix2 = m_pTransformCom->Get_WorldMatrix_Ptr();
-	Desc.fDamageAmount = 100.f;
+	Desc.fDamageAmount = m_eStat.fAtk;
 
 	m_pColliderObject[TYPE_ARM_LEFT] = dynamic_cast<CColliderObject*>(m_pGameInstance->Clone_GameObject(TEXT("Prototype_GameObject_ColliderObj"), &Desc));
 
@@ -273,7 +273,7 @@ HRESULT CCurruptedStrongArm_Puppet::Ready_Components()
 	Desc.pSocketBoneMatrix = m_pModelCom->Get_BoneCombindTransformationMatrix_Ptr(m_pModelCom->Get_UFBIndices(UFB_HAND_RIGHT));
 	Desc.pParentWorldMatrix = m_pTransformCom->Get_WorldMatrix_Ptr();
 	Desc.pSocketBoneMatrix2 = m_pTransformCom->Get_WorldMatrix_Ptr();
-	Desc.fDamageAmount = 100.f;
+	Desc.fDamageAmount = m_eStat.fAtk;
 
 	m_pColliderObject[TYPE_ARM_RIGHT] = dynamic_cast<CColliderObject*>(m_pGameInstance->Clone_GameObject(TEXT("Prototype_GameObject_ColliderObj"), &Desc));
 
@@ -286,7 +286,7 @@ HRESULT CCurruptedStrongArm_Puppet::Ready_Components()
 	Desc.pSocketBoneMatrix = m_pModelCom->Get_BoneCombindTransformationMatrix_Ptr(285);
 	Desc.pParentWorldMatrix = m_pTransformCom->Get_WorldMatrix_Ptr();
 	Desc.pSocketBoneMatrix2 = m_pTransformCom->Get_WorldMatrix_Ptr();
-	Desc.fDamageAmount = 100.f;
+	Desc.fDamageAmount = m_eStat.fAtk;
 
 	m_pColliderObject[TYPE_TENTACLE_FL] = dynamic_cast<CColliderObject*>(m_pGameInstance->Clone_GameObject(TEXT("Prototype_GameObject_ColliderObj"), &Desc));
 
@@ -296,7 +296,7 @@ HRESULT CCurruptedStrongArm_Puppet::Ready_Components()
 	Desc.pSocketBoneMatrix = m_pModelCom->Get_BoneCombindTransformationMatrix_Ptr(299);
 	Desc.pParentWorldMatrix = m_pTransformCom->Get_WorldMatrix_Ptr();
 	Desc.pSocketBoneMatrix2 = m_pTransformCom->Get_WorldMatrix_Ptr();
-	Desc.fDamageAmount = 100.f;
+	Desc.fDamageAmount = m_eStat.fAtk;
 
 	m_pColliderObject[TYPE_TENTACLE_FR] = dynamic_cast<CColliderObject*>(m_pGameInstance->Clone_GameObject(TEXT("Prototype_GameObject_ColliderObj"), &Desc));
 
@@ -306,7 +306,7 @@ HRESULT CCurruptedStrongArm_Puppet::Ready_Components()
 	Desc.pSocketBoneMatrix = m_pModelCom->Get_BoneCombindTransformationMatrix_Ptr(311);
 	Desc.pParentWorldMatrix = m_pTransformCom->Get_WorldMatrix_Ptr();
 	Desc.pSocketBoneMatrix2 = m_pTransformCom->Get_WorldMatrix_Ptr();
-	Desc.fDamageAmount = 100.f;
+	Desc.fDamageAmount = m_eStat.fAtk;
 
 	m_pColliderObject[TYPE_TENTACLE_BL] = dynamic_cast<CColliderObject*>(m_pGameInstance->Clone_GameObject(TEXT("Prototype_GameObject_ColliderObj"), &Desc));
 
@@ -316,7 +316,7 @@ HRESULT CCurruptedStrongArm_Puppet::Ready_Components()
 	Desc.pSocketBoneMatrix = m_pModelCom->Get_BoneCombindTransformationMatrix_Ptr(321);
 	Desc.pParentWorldMatrix = m_pTransformCom->Get_WorldMatrix_Ptr();
 	Desc.pSocketBoneMatrix2 = m_pTransformCom->Get_WorldMatrix_Ptr();
-	Desc.fDamageAmount = 100.f;
+	Desc.fDamageAmount = m_eStat.fAtk;
 
 	m_pColliderObject[TYPE_TENTACLE_BR] = dynamic_cast<CColliderObject*>(m_pGameInstance->Clone_GameObject(TEXT("Prototype_GameObject_ColliderObj"), &Desc));
 

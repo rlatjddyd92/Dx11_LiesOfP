@@ -38,7 +38,7 @@ HRESULT CAObj_Bullet::Initialize(void* pArg)
     if (FAILED(Ready_Components()))
         return E_FAIL;
 
-    m_fDamageAmount = 30.f;
+    m_fDamageAmount = 40.f;
     m_fLifeDuration = 2.5f;
     m_fSpeed = 60.f;
     //m_fSpeed = 0.5f;

@@ -33,7 +33,8 @@ HRESULT CAObj_ThunderMark::Initialize(void* pArg)
     if (FAILED(Ready_Components()))
         return E_FAIL;
 
-    m_fDamageAmount = 28.f;
+    m_fDamageAmount = 250.f;
+
     m_fLifeDuration = 2.f;
 
     m_pColliderCom->IsActive(true);
@@ -154,7 +155,7 @@ void CAObj_ThunderMark::OnCollisionEnter(CGameObject* pOther)
         if (!bOverlapCheck)
         {
             m_DamagedObjects.push_back(pOther);
-            pOther->Calc_DamageGain(m_fDamageAmount * m_fDamageRatio, _Vec3{}, HIT_TYPE::HIT_METAL, ATTACK_STRENGTH::ATK_WEAK);
+            pOther->Calc_DamageGain(m_fDamageAmount * m_fDamageRatio, _Vec3{}, HIT_TYPE::HIT_ELECTRIC, ATTACK_STRENGTH::ATK_WEAK);
         }
     }
 }

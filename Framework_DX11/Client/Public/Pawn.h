@@ -18,7 +18,6 @@ public:
         _float            fHp{};
         _float            fMaxHp{};
         _float            fAtk{};
-        _float            fDefence{};
 
         _float            fGrogyPoint{};
         _float            fMaxGrogyPoint{};
@@ -26,7 +25,7 @@ public:
         _bool             bWeakness{}; // 체력바 하얀 표시
         _bool             bFatalAttack{}; // 발톱 표시
 
-        _float              fAtkDmg{};
+        _float            fAtkDmg{};
     };
 
 protected:

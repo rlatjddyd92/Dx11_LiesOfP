@@ -35,8 +35,6 @@ HRESULT CAObj_LightningBall::Initialize(void* pArg)
 
     m_pCopyPlayerTransformCom = static_cast<CTransform*>(m_pGameInstance->Find_Component(LEVEL_GAMEPLAY, TEXT("Layer_Player"), g_strTransformTag));
 
-    m_fDamageAmount = 20.f;
-
     if (m_pSoundCom[EFF_SOUND_EFFECT1] != nullptr)
     {
         m_pSoundCom[EFF_SOUND_EFFECT1]->Play2D(TEXT("SE_NPC_SK_FX_Ground_Exp_L_03.wav"), &g_fEffectVolume);
@@ -44,6 +42,8 @@ HRESULT CAObj_LightningBall::Initialize(void* pArg)
 
 
     m_strObjectTag = TEXT("MonsterWeapon");
+
+    //m_fDamageAmount = 270.f;
 
     m_fLifeTime = 0.f;
 

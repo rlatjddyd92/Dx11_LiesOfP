@@ -42,10 +42,10 @@ HRESULT CWeapon_Raxasia_P2_Shield::Initialize(void* pArg)
 		return E_FAIL;
 	}
 
-	*m_pParentAtk = 160.f;
+
 	m_strObjectTag = TEXT("MonsterWeapon");
 
-	m_fDamageAmount = 16.f;
+	m_fDamageAmount = *m_pParentAtk;
 
 	return S_OK;
 }

@@ -40,6 +40,7 @@
 #include "AObj_ChargeSwing.h"
 #include "AObj_GoldBall.h"
 #include "AObj_Thunder.h"
+#include "AObj_ThunderDischarge.h"
 #include "AObj_ThunderCalling.h"
 #include "AObj_LightningSpear.h"
 #include "AObj_LightningBall.h"
@@ -1516,6 +1517,9 @@ HRESULT CLoader::Ready_Prototype()
 		return E_FAIL;
 	if (FAILED(m_pGameInstance->Add_Prototype(TEXT("Prototype_GameObject_Thunder"),
 		CAObj_Thunder::Create(m_pDevice, m_pContext))))
+		return E_FAIL;
+	if (FAILED(m_pGameInstance->Add_Prototype(TEXT("Prototype_GameObject_ThunderDischarge"),
+		CAObj_ThunderDischarge::Create(m_pDevice, m_pContext))))
 		return E_FAIL;
 	if (FAILED(m_pGameInstance->Add_Prototype(TEXT("Prototype_GameObject_LightningBall"),
 		CAObj_LightningBall::Create(m_pDevice, m_pContext))))

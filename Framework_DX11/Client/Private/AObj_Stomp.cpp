@@ -34,7 +34,7 @@ HRESULT CAObj_Stomp::Initialize(void* pArg)
     if (FAILED(Ready_Components()))
         return E_FAIL;
 
-    m_fDamageAmount = 320.f;
+    m_fDamageAmount = 270.f;
     m_fLifeDuration = 0.2f;
     m_pColliderCom->IsActive(true);
 

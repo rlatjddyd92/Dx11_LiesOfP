@@ -40,10 +40,10 @@ HRESULT CWeapon_SimonManus_Hammer::Initialize(void* pArg)
 		return E_FAIL;
 	}
 
-	*m_pParentAtk = 200.f;
+
 	m_strObjectTag = TEXT("MonsterWeapon");
 
-	m_fDamageAmount = 20.f;
+	m_fDamageAmount = *m_pParentAtk;
 
 	return S_OK;
 }

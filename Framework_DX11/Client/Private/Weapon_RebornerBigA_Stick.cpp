@@ -40,11 +40,9 @@ HRESULT CWeapon_RebornerBigA_Stick::Initialize(void* pArg)
 		return E_FAIL;
 	}
 
-	*m_pParentAtk = 160.f;
 	m_strObjectTag = TEXT("MonsterWeapon");
 
-	m_fDamageAmount = 160.f;
-	m_fDamageAmount = 10.f;
+	m_fDamageAmount = *m_pParentAtk;
 
 	return S_OK;
 }

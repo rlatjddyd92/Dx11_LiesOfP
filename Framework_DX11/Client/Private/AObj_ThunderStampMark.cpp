@@ -44,7 +44,7 @@ HRESULT CAObj_ThunderStampMark::Initialize(void* pArg)
         m_pEffect->Set_Loop(true);
     }
 
-    m_fDamageAmount = 280.f;
+    m_fDamageAmount = 250.f;
     m_fLifeDuration = 1.f;
 
     m_pColliderCom->IsActive(true);

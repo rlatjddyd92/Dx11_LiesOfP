@@ -39,9 +39,10 @@ HRESULT CAObj_GoldBall::Initialize(void* pArg)
     if (FAILED(Ready_Components()))
         return E_FAIL;
 
-    m_fDamageAmount = 200.f;
-    m_fLifeDuration = 2.5f;
-    m_fSpeed = 10.f;
+    m_fDamageAmount = 270.f;
+
+    m_fLifeDuration = 2.f;
+    m_fSpeed = 15.f;
 
     m_pColliderCom->IsActive(true);
 

@@ -40,12 +40,12 @@ HRESULT CAObj_BlackBall::Initialize(void* pArg)
 
     m_pTransformCom->Look_Dir(_Vec4{ m_vMoveDir });
 
-    m_fDamageAmount = 30.f;
+
     m_fLifeDuration = 0.6f;
 
-    m_fSpeed = 4.f;
+    m_fSpeed = 5.f;
 
-    m_fThrowTime = 2.f;
+    m_fThrowTime = 1.5f;
     m_fDelayTime = 3.f;
 
     m_pCopyPlayerTransformCom = static_cast<CTransform*>(m_pGameInstance->Find_Component(LEVEL_GAMEPLAY, TEXT("Layer_Player"), g_strTransformTag));

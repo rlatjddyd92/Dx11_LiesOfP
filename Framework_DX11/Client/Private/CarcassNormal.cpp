@@ -72,15 +72,15 @@ HRESULT CCarcassNormal::Initialize(void* pArg)
 
 	m_vRimLightColor = { 0.f, 0.f, 0.f, 0.f };
 
-	m_eStat.fHp = 50.f;
-	m_eStat.fMaxHp = 50.f;
-	m_eStat.fAtk = 4.f;
-	m_eStat.fDefence = 3.f;
+	m_eStat.fHp = 120.f;
+	m_eStat.fMaxHp = 120.f;
+	m_eStat.fAtk = 120.f;
+	//m_eStat.fDefence = 3.f;
 
 	m_eStat.bWeakness = false;
 
 	m_eStat.fGrogyPoint = 0.f;
-	m_eStat.fMaxGrogyPoint = 50.f;
+	m_eStat.fMaxGrogyPoint = 80.f;
 
 	m_vCenterOffset = _Vec3{ 0.f, 1.2f, 0.f };
 
@@ -374,7 +374,7 @@ HRESULT CCarcassNormal::Ready_Weapon()
 	Desc.pSocketBoneMatrix = m_pModelCom->Get_BoneCombindTransformationMatrix_Ptr(m_pModelCom->Get_UFBIndices(UFB_HAND_LEFT) - 1);
 	Desc.pParentWorldMatrix = m_pTransformCom->Get_WorldMatrix_Ptr();
 	Desc.pSocketBoneMatrix2 = m_pTransformCom->Get_WorldMatrix_Ptr();
-	Desc.fDamageAmount = 80.f;
+	Desc.fDamageAmount = m_eStat.fAtk;
 
 	m_pColliderObject[TYPE_HAND_LEFT] = dynamic_cast<CColliderObject*>(m_pGameInstance->Clone_GameObject(TEXT("Prototype_GameObject_ColliderObj"), &Desc));
 
@@ -387,7 +387,7 @@ HRESULT CCarcassNormal::Ready_Weapon()
 	Desc.pSocketBoneMatrix = m_pModelCom->Get_BoneCombindTransformationMatrix_Ptr(m_pModelCom->Get_UFBIndices(UFB_HAND_RIGHT) - 1);
 	Desc.pParentWorldMatrix = m_pTransformCom->Get_WorldMatrix_Ptr();
 	Desc.pSocketBoneMatrix2 = m_pTransformCom->Get_WorldMatrix_Ptr();
-	Desc.fDamageAmount = 80.f;
+	Desc.fDamageAmount = m_eStat.fAtk;
 
 	m_pColliderObject[TYPE_HAND_RIGHT] = dynamic_cast<CColliderObject*>(m_pGameInstance->Clone_GameObject(TEXT("Prototype_GameObject_ColliderObj"), &Desc));
 
@@ -400,7 +400,7 @@ HRESULT CCarcassNormal::Ready_Weapon()
 	Desc.pSocketBoneMatrix = m_pModelCom->Get_BoneCombindTransformationMatrix_Ptr(m_pModelCom->Get_UFBIndices(UFB_HEAD));
 	Desc.pParentWorldMatrix = m_pTransformCom->Get_WorldMatrix_Ptr();
 	Desc.pSocketBoneMatrix2 = m_pTransformCom->Get_WorldMatrix_Ptr();
-	Desc.fDamageAmount = 80.f;
+	Desc.fDamageAmount = m_eStat.fAtk;
 
 	m_pColliderObject[TYPE_HEAD] = dynamic_cast<CColliderObject*>(m_pGameInstance->Clone_GameObject(TEXT("Prototype_GameObject_ColliderObj"), &Desc));
 

@@ -35,7 +35,8 @@ HRESULT CAObj_GodHands::Initialize(void* pArg)
     if (FAILED(Ready_Components()))
         return E_FAIL;
 
-    m_fDamageAmount = 200.f;
+    m_fDamageAmount = 270.f;
+
     m_fLifeDuration = 0.6f;
     m_fHandActTime = 3.9f;
     m_fSpeed = 2.2f;

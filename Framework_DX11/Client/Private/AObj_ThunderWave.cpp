@@ -37,7 +37,7 @@ HRESULT CAObj_ThunderWave::Initialize(void* pArg)
     if (FAILED(Ready_Components()))
         return E_FAIL;
 
-    m_fDamageAmount = 20.f;
+    m_fDamageAmount = 250.f;
     m_fLifeDuration = 1.2f;
     m_fSpeed = 35.f;
 

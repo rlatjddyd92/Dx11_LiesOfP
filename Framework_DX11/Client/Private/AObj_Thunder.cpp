@@ -33,7 +33,8 @@ HRESULT CAObj_Thunder::Initialize(void* pArg)
     if (FAILED(Ready_Components()))
         return E_FAIL;
 
-    m_fDamageAmount = 20.f;
+    m_fDamageAmount = 270.f;
+
     m_fLifeDuration = 0.2f;
     m_fAttackTime = 1.5f;
 
@@ -137,10 +138,6 @@ HRESULT CAObj_Thunder::Render_LightDepth()
 
 void CAObj_Thunder::OnCollisionEnter(CGameObject* pOther)
 {
-}
-
-void CAObj_Thunder::OnCollisionStay(CGameObject* pOther)
-{
     //pOther check
     if (pOther->Get_Tag() == TEXT("Player"))
     {
@@ -160,6 +157,10 @@ void CAObj_Thunder::OnCollisionStay(CGameObject* pOther)
             pOther->Calc_DamageGain(m_fDamageAmount * m_fDamageRatio, _Vec3{}, HIT_TYPE::HIT_METAL, ATTACK_STRENGTH::ATK_NORMAL);
         }
     }
+}
+
+void CAObj_Thunder::OnCollisionStay(CGameObject* pOther)
+{
 }
 
 void CAObj_Thunder::OnCollisionExit(CGameObject* pOther)

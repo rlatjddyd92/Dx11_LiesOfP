@@ -45,7 +45,8 @@ HRESULT CAObj_ThunderBolt::Initialize(void* pArg)
     if (FAILED(Ready_Components()))
         return E_FAIL;
     
-    m_fDamageAmount = 20.f;
+    m_fDamageAmount = 250.f;
+
     m_fLifeDuration = 0.3f;
     m_fSpeed = 20.f;
     m_bCounter = false;
@@ -97,7 +98,7 @@ void CAObj_ThunderBolt::Update(_float fTimeDelta)
     }
     case 1:         //»ý¼º
     {
-        if (!m_pEffects[m_iStateTrack]->Get_Loop())
+        if (!m_pEffects[m_iStateTrack]->Get_Dead())
         {
             ++m_iStateTrack;
             m_pColliderCom->IsActive(true);
