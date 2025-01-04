@@ -204,6 +204,9 @@ public:
 	_float					Get_AttackBuffTime() { return m_fAttackBuffTime; }
 	void					Set_AttackBuffTime(_float fTime) { m_fAttackBuffTime; }
 
+	_bool					Get_IsRespawnMonster() { return m_isRespawnMonster; }
+	void					Set_IsRespawnMonster(_bool isRespawn) { m_isRespawnMonster = isRespawn; }
+
 #pragma region PLAYER_STAT
 	STAT_INFO& Get_Player_Stat() { return *m_tPlayer_Stat; }
 	// 24-12-05 ±è¼º¿ë
@@ -327,6 +330,7 @@ private:
 	_bool				m_isLadderEnd = { false };
 	_bool				m_isTeleport = { false };
 	_bool				m_isCollisionMonster = { false };
+	_bool				m_isRespawnMonster = { false };
 
 	_float				m_fGuardTime = {};
 	_float				m_fDebuffSpeedRatio = { 1.f };

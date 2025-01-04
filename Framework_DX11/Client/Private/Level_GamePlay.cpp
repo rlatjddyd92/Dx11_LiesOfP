@@ -81,6 +81,13 @@ void CLevel_GamePlay::Update(_float fTimeDelta)
 		tDesc->isOnHDR = !tDesc->isOnHDR;
 
 	}
+
+	if (m_pPlayer->Get_IsRespawnMonster())
+	{
+		// 몬스터 부활
+
+		m_pPlayer->Set_IsRespawnMonster(false);
+	}
 }
 
 HRESULT CLevel_GamePlay::Render()

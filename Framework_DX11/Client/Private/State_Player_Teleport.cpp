@@ -237,6 +237,8 @@ void CState_Player_Teleport::Update_Stargazer(_float fTimeDelta)
         }
         else if (m_isEnd_Teleport)
         {
+            m_pPlayer->Set_IsRespawnMonster(true);
+
             m_isEnd_Teleport = false;
             m_pPlayer->Change_Animation(m_iAnimation_TeleportEnd, false, 0.3f);
 
@@ -296,6 +298,8 @@ void CState_Player_Teleport::Update_Die(_float fTimeDelta)
         {
             if (!m_isFadeIn)
             {
+                m_pPlayer->Set_IsRespawnMonster(true);
+
                 GET_GAMEINTERFACE->Fade_In(0.9f);
 
                 _Vec3 vPos = (_Vec3)m_pPlayer->Get_Transform()->Get_State(CTransform::STATE_POSITION);
