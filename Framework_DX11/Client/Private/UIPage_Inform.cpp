@@ -212,6 +212,9 @@ void CUIPage_Inform::Show_PlayerDead_UI()
 	m_fAngle_Clock_Hour_Pos = m_fAngle_Clock_Hour_Start;
 	m_fAngle_Clock_Minitue_Pos = m_fAngle_Clock_Minitue_Start;
 
+	m_bIsPlayerDead_UI_NowEnd = false;
+	m_bCheckNowEnd = false;
+
 	for (_int i = _int(PART_GROUP::INFORM_PlayerDeath_Back); i <= _int(PART_GROUP::INFORM_PlayerDeath_LieORDie); ++i)
 	{
 		m_vecPart[i]->bRender = true;
@@ -322,18 +325,17 @@ void CUIPage_Inform::Update_PlayerDead_UI(_float fTimeDelta)
 		return;
 	}
 
-	if (m_iPlayerDead_Phase == 1)
-		m_bIsPlayerDead_UI_NowEnd = true;
-	else 
-		m_bIsPlayerDead_UI_NowEnd = false;
-
 	if (m_vPlayerDead_Time.x > (m_vPlayerDead_Time.y + m_vPlayerDead_Time.z))
 		m_iPlayerDead_Phase = 2;
 	else if (m_vPlayerDead_Time.x > m_vPlayerDead_Time.y)
 		m_iPlayerDead_Phase = 1;
 
-	if (m_iPlayerDead_Phase != 2)
-		m_bIsPlayerDead_UI_NowEnd = false;
+	if ((m_iPlayerDead_Phase == 2) && (m_bCheckNowEnd == false))
+	{
+		m_bCheckNowEnd = true;
+		m_bIsPlayerDead_UI_NowEnd = true;
+	}
+		
 
 	Update_PlayerDead_Back(fTimeDelta, m_iPlayerDead_Phase);
 	Update_PlayerDead_Static(fTimeDelta, m_iPlayerDead_Phase);
