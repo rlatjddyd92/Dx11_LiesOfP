@@ -27,6 +27,10 @@ public:
 
 		EFFECT_CUTSCENE_ARM_OPENDOOR,
 
+		EFFECT_ARM_BUFF,
+
+		EFFECT_ITEM_PURIFICATION, EFFECT_ITEM_RESISTANCE,
+
 		EFFECT_END
 	};
 
@@ -202,7 +206,7 @@ public:
 	void					Set_isPlayingCutscene(_bool isPlaying) { m_isPlayingCutscene = isPlaying; }
 
 	_float					Get_AttackBuffTime() { return m_fAttackBuffTime; }
-	void					Set_AttackBuffTime(_float fTime) { m_fAttackBuffTime; }
+	void					Set_AttackBuffTime(_float fTime) { m_fAttackBuffTime = fTime; }
 
 	_bool					Get_IsRespawnMonster() { return m_isRespawnMonster; }
 	void					Set_IsRespawnMonster(_bool isRespawn) { m_isRespawnMonster = isRespawn; }

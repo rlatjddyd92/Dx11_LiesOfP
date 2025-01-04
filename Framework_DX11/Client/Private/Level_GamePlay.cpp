@@ -16,6 +16,13 @@
 #include "Ladder.h"
 #include "CutScene.h"
 
+#pragma region 풀링
+#include "ObjectPool.h"
+
+#include "BloodTrail.h"
+#include "Decal_Blood.h"
+#pragma endregion
+
 CLevel_GamePlay::CLevel_GamePlay(ID3D11Device* pDevice, ID3D11DeviceContext* pContext)
 	: CLevel{ pDevice, pContext }
 {
@@ -48,6 +55,9 @@ HRESULT CLevel_GamePlay::Initialize()
 		return E_FAIL;	
 
 	if (FAILED(Ready_CutScene_Data()))
+		return E_FAIL;
+
+	if (FAILED(Ready_PoolingObject()))
 		return E_FAIL;
 
 	GET_GAMEINTERFACE->SetIngame(true);
@@ -548,6 +558,24 @@ HRESULT CLevel_GamePlay::Ready_CutScene_Data()
 	return S_OK;
 }
 
+HRESULT CLevel_GamePlay::Ready_PoolingObject()
+{
+	CBloodTrail::BLOODTRAIL_DESC BloodTrailDesc{};
+	BloodTrailDesc.pParentMatrix = m_pPlayer->Get_Transform()->Get_WorldMatrix_Ptr();
+	BloodTrailDesc.pSocketMatrix = m_pPlayer->Get_Model()->Get_BoneCombindTransformationMatrix_Ptr("BN_Weapon_R");
+
+	for (_uint i = 0; i < 5; ++i)
+	{
+		CBloodTrail* pBloodTrail = dynamic_cast<CBloodTrail*>(m_pGameInstance->Get_CloneObject_ToLayer(LEVEL_GAMEPLAY, TEXT("Layer_Effect_Polling"), TEXT("Prototype_GameObject_Effect_BloodTrail"), &BloodTrailDesc));
+		if (!pBloodTrail)
+			return E_FAIL;
+
+		CObjectPool<CBloodTrail>::Return_GameObject(pBloodTrail);
+	}
+
+	return S_OK;
+}
+
 CLevel_GamePlay * CLevel_GamePlay::Create(ID3D11Device* pDevice, ID3D11DeviceContext* pContext)
 {
 	CLevel_GamePlay*		pInstance = new CLevel_GamePlay(pDevice, pContext);
@@ -565,6 +593,7 @@ void CLevel_GamePlay::Free()
 {
 	__super::Free();
 
+	CObjectPool<CBloodTrail>::Clear();
 
 	m_pGameInstance->Set_Listener(nullptr);
 	// 인스턴싱을 할 모델들을 모아둔 매니저 클리어하기

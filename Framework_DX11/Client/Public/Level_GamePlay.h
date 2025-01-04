@@ -26,12 +26,12 @@ public:
 
 	HRESULT Ready_Layer_Monster();
 	HRESULT Ready_Layer_Paticle();
-
 	
 	HRESULT Ready_Layer_Player();
 	HRESULT Read_Map_Data();
 	HRESULT Ready_CutScene_Data();
-	//HRESULT Ready_Layer_Monster(CLandObject::LANDOBJECT_DESC& LandObjectDesc);
+
+	HRESULT Ready_PoolingObject();
 	
 private:
 	class CPlayer*		m_pPlayer = { nullptr };
