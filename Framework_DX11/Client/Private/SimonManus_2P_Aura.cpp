@@ -4,12 +4,12 @@
 #include "Particle_Effect.h"
 
 CSimonManus_2P_Aura::CSimonManus_2P_Aura(ID3D11Device* pDevice, ID3D11DeviceContext* pContext)
-    : CGameObject(pDevice, pContext)
+    : CDissolve_Effect(pDevice, pContext)
 {
 }
 
 CSimonManus_2P_Aura::CSimonManus_2P_Aura(const CSimonManus_2P_Aura& Prototype)
-    : CGameObject(Prototype)
+    : CDissolve_Effect(Prototype)
 {
 }
 
@@ -26,16 +26,10 @@ HRESULT CSimonManus_2P_Aura::Initialize(void* pArg)
     if (FAILED(Ready_Componet()))
         return E_FAIL;
 
-    SIMONMANUS_2P_AURA_DESC* pDesc = static_cast<SIMONMANUS_2P_AURA_DESC*>(pArg);
-
-    m_pModelCom = pDesc->pModelCom;
-    Safe_AddRef(m_pModelCom);
+    DISSOLVE_OBJECT_DESC* pDesc = static_cast<DISSOLVE_OBJECT_DESC*>(pArg);
 
     m_pCutSceneModelCom = pDesc->pCutSceneModelCom;
     Safe_AddRef(m_pCutSceneModelCom);
-
-    m_pManus_TransformCom = pDesc->pManus_TransformCom;
-    Safe_AddRef(m_pManus_TransformCom);
 
     m_vTextureSize = pDesc->vTextureSize;
 
@@ -77,7 +71,7 @@ void CSimonManus_2P_Aura::Update(_float fTimeDelta)
     Movement.fRandomRatio = 1.f;
     Movement.fAccelLimit = 1.f;
     Movement.fAccelSpeed = 0.f;
-    Movement.WorldMatrix = m_pManus_TransformCom->Get_WorldMatrix();
+    Movement.WorldMatrix = m_pTarget_TransformCom->Get_WorldMatrix();
 
     CVIBuffer_Dissolve_Instance::DISSOLVE_DATA Data = {};
     Data.fThreshold = m_fThreshold;
@@ -93,7 +87,7 @@ void CSimonManus_2P_Aura::Update(_float fTimeDelta)
     }
     else
     {
-        if (true == m_pVIBufferCom->DispatchCS(m_pActionCS, m_pEmissiveTextureCom, m_pModelCom, Movement, Data))
+        if (true == m_pVIBufferCom->DispatchCS(m_pActionCS, m_pEmissiveTextureCom, m_pTarget_ModelCom, Movement, Data))
         {
             m_bOn = false;
         }
@@ -166,27 +160,18 @@ HRESULT CSimonManus_2P_Aura::Render()
 
 void CSimonManus_2P_Aura::Reset()
 {
-    CVIBuffer_Instancing::PARTICLE_MOVEMENT Movement = {};
-    CVIBuffer_Dissolve_Instance::DISSOLVE_DATA Data = {};
-
     if (true == m_bCutScene)
     {
-        m_pCutSceneVIBufferCom->DispatchCS(m_pResetCS, m_pEmissiveTextureCom, m_pCutSceneModelCom, Movement, Data);
-        m_pCutSceneVIBufferCom->Reset();
+        m_pCutSceneVIBufferCom->ResetCS(m_pResetCS);
     }
     else
     {
-        m_pVIBufferCom->DispatchCS(m_pResetCS, m_pEmissiveTextureCom, m_pModelCom, Movement, Data);
-        m_pVIBufferCom->Reset();
+        m_pVIBufferCom->ResetCS(m_pResetCS);
     }
-    
-
 }
 
-void CSimonManus_2P_Aura::Set_On(_bool bOn, _bool bCutScene)
+void CSimonManus_2P_Aura::Set_On(_bool bOn)
 {
-    m_bCutScene = bCutScene;
-
     if (true == bOn)
     {
         m_bOn = bOn;
@@ -201,21 +186,11 @@ void CSimonManus_2P_Aura::Set_On(_bool bOn, _bool bCutScene)
 
 HRESULT CSimonManus_2P_Aura::Ready_Componet()
 {
-    /* FOR.Com_Shader */
-    if (FAILED(__super::Add_Component(LEVEL_STATIC, TEXT("Prototype_Component_Shader_VtxDiffuseInstance"),
-        TEXT("Com_Shader"), reinterpret_cast<CComponent**>(&m_pShaderCom))))
-        return E_FAIL;
-
-    /* FOR.Com_VIBuffer */
-    if (FAILED(__super::Add_Component(LEVEL_GAMEPLAY, TEXT("Prototype_Component_VIBuffer_Dissolve_SimonManusP2_Aura"),
-        TEXT("Com_VIBuffer"), reinterpret_cast<CComponent**>(&m_pVIBufferCom))))
-        return E_FAIL;
-
     /* FOR.Com_VIBuffer_CutScene */
     if (FAILED(__super::Add_Component(LEVEL_GAMEPLAY, TEXT("Prototype_Component_VIBuffer_Dissolve_SimonManusP2_CutScene_Aura"),
         TEXT("Com_VIBuffer_CutScene"), reinterpret_cast<CComponent**>(&m_pCutSceneVIBufferCom))))
         return E_FAIL;
-
+    
     /* FOR.Com_Texture */
     if (FAILED(__super::Add_Component(LEVEL_GAMEPLAY, TEXT("Prototype_Component_Texture_T_SubUV_Aura_01_2x2_SC_LGS"),
         TEXT("Com_Texture"), reinterpret_cast<CComponent**>(&m_pTextureCom))))
@@ -224,11 +199,6 @@ HRESULT CSimonManus_2P_Aura::Ready_Componet()
     /* FOR.Com_Compute_Move */
     if (FAILED(__super::Add_Component(LEVEL_STATIC, TEXT("Prototype_Component_Shader_Compute_Dissolve_Move"),
         TEXT("Com_Compute_Move"), reinterpret_cast<CComponent**>(&m_pActionCS))))
-        return E_FAIL;
-
-    /* FOR.Com_Compute_Reset */
-    if (FAILED(__super::Add_Component(LEVEL_STATIC, TEXT("Prototype_Component_Shader_Compute_Dissolve_Reset"),
-        TEXT("Com_Compute_Reset"), reinterpret_cast<CComponent**>(&m_pResetCS))))
         return E_FAIL;
 
     /* FOR.Com_Texture */
@@ -270,19 +240,9 @@ void CSimonManus_2P_Aura::Free()
 {
     __super::Free();
 
-    Safe_Release(m_pShaderCom);
-    
-    Safe_Release(m_pVIBufferCom);
     Safe_Release(m_pCutSceneVIBufferCom);
-    
     Safe_Release(m_pTextureCom);
     Safe_Release(m_pActionCS);
-    Safe_Release(m_pResetCS);
-
-    Safe_Release(m_pModelCom);
     Safe_Release(m_pCutSceneModelCom);
-
-    Safe_Release(m_pManus_TransformCom);
-
     Safe_Release(m_pEmissiveTextureCom);
 }

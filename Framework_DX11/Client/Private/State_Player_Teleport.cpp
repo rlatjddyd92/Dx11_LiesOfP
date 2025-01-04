@@ -185,7 +185,7 @@ void CState_Player_Teleport::Update_SteppingStone(_float fTimeDelta)
             if (!m_isAppearStartEffect)
             {
                 CEffect_Manager::Get_Instance()->Add_Effect_ToLayer(LEVEL_GAMEPLAY, TEXT("Player_Teleport_Depart"), (_Vec3)m_pPlayer->Get_Transform()->Get_State(CTransform::STATE_POSITION));
-                m_pPlayer->On_DissolveEffect(true);
+                m_pPlayer->On_DissolveEffect(CPlayer::DISSOLVE_DEAD, true);
                 m_isAppearStartEffect = true;
             }
         }
@@ -259,7 +259,7 @@ void CState_Player_Teleport::Update_Stargazer(_float fTimeDelta)
             if (!m_isAppearStartEffect)
             {
                 CEffect_Manager::Get_Instance()->Add_Effect_ToLayer(LEVEL_GAMEPLAY, TEXT("Player_Teleport_Depart"), (_Vec3)m_pPlayer->Get_Transform()->Get_State(CTransform::STATE_POSITION));
-                m_pPlayer->On_DissolveEffect(true);
+                m_pPlayer->On_DissolveEffect(CPlayer::DISSOLVE_DEAD, true);
                 m_isAppearStartEffect = true;
             }
         }

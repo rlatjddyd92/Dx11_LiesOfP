@@ -5,12 +5,12 @@
 #include "Particle_Effect.h"
 
 CDissolve_Sophia_Death::CDissolve_Sophia_Death(ID3D11Device* pDevice, ID3D11DeviceContext* pContext)
-    : CGameObject(pDevice, pContext)
+    : CDissolve_Effect(pDevice, pContext)
 {
 }
 
 CDissolve_Sophia_Death::CDissolve_Sophia_Death(const CDissolve_Sophia_Death& Prototype)
-    : CGameObject(Prototype)
+    : CDissolve_Effect(Prototype)
 {
 }
 
@@ -28,12 +28,6 @@ HRESULT CDissolve_Sophia_Death::Initialize(void* pArg)
         return E_FAIL;
 
     DISSOLVE_OBJECT_DESC* pDesc = static_cast<DISSOLVE_OBJECT_DESC*>(pArg);
-
-    m_pModelCom = pDesc->pModelCom;
-    Safe_AddRef(m_pModelCom);
-
-    m_pSophiaTransformCom = pDesc->pSophiaTransformCom;
-    Safe_AddRef(m_pSophiaTransformCom);
 
     m_vTextureSize = { 2048.f, 2048.f };
 
@@ -72,14 +66,14 @@ void CDissolve_Sophia_Death::Update(_float fTimeDelta)
     Movement.fRandomRatio = 1.5f;
     Movement.fAccelLimit = 0.5f;
     Movement.fAccelSpeed = 1.f;
-    Movement.WorldMatrix = m_pSophiaTransformCom->Get_WorldMatrix();
+    Movement.WorldMatrix = m_pTarget_TransformCom->Get_WorldMatrix();
 
     CVIBuffer_Dissolve_Instance::DISSOLVE_DATA Data = {};
     Data.fThreshold = m_fThreshold;
     Data.iModelType = CModel::TYPE_NONANIM;
     Data.vTextureSize = m_vTextureSize;
 
-    if (true == m_pVIBufferCom->DispatchCS(m_pActionCS, m_pDissolveTextureCom, m_pModelCom, Movement, Data))
+    if (true == m_pVIBufferCom->DispatchCS(m_pActionCS, m_pDissolveTextureCom, m_pTarget_ModelCom, Movement, Data))
     {
         m_bOn = false;
         m_isDead = true;
@@ -138,27 +132,8 @@ HRESULT CDissolve_Sophia_Death::Render()
     return S_OK;
 }
 
-void CDissolve_Sophia_Death::Reset()
-{
-    CVIBuffer_Instancing::PARTICLE_MOVEMENT Movement = {};
-    CVIBuffer_Dissolve_Instance::DISSOLVE_DATA Data = {};
-
-    m_pVIBufferCom->DispatchCS(m_pResetCS, m_pDissolveTextureCom, m_pModelCom, Movement, Data);
-    m_pVIBufferCom->Reset();
-}
-
 HRESULT CDissolve_Sophia_Death::Ready_Componet()
 {
-    /* FOR.Com_Shader */
-    if (FAILED(__super::Add_Component(LEVEL_STATIC, TEXT("Prototype_Component_Shader_VtxDiffuseInstance"),
-        TEXT("Com_Shader"), reinterpret_cast<CComponent**>(&m_pShaderCom))))
-        return E_FAIL;
-
-    /* FOR.Com_Container */
-    if (FAILED(__super::Add_Component(LEVEL_GAMEPLAY, TEXT("Prototype_Component_VIBuffer_Dissolve_Sophia_Dead"),
-        TEXT("Com_Container"), reinterpret_cast<CComponent**>(&m_pVIBufferCom))))
-        return E_FAIL;
-
     /* FOR.Com_Texture */
     if (FAILED(__super::Add_Component(LEVEL_GAMEPLAY, TEXT("Prototype_Component_Texture_T_Shere_01_C_LGS"),
         TEXT("Com_Texture"), reinterpret_cast<CComponent**>(&m_pTextureCom))))
@@ -167,11 +142,6 @@ HRESULT CDissolve_Sophia_Death::Ready_Componet()
     /* FOR.Com_Compute_Move */
     if (FAILED(__super::Add_Component(LEVEL_STATIC, TEXT("Prototype_Component_Shader_Compute_Dissolve_Move"),
         TEXT("Com_Compute_Move"), reinterpret_cast<CComponent**>(&m_pActionCS))))
-        return E_FAIL;
-
-    /* FOR.Com_Compute_Reset */
-    if (FAILED(__super::Add_Component(LEVEL_STATIC, TEXT("Prototype_Component_Shader_Compute_Dissolve_Reset"),
-        TEXT("Com_Compute_Reset"), reinterpret_cast<CComponent**>(&m_pResetCS))))
         return E_FAIL;
 
     m_pDissolveTextureCom = CTexture::Create(m_pDevice, m_pContext, TEXT("../Bin/ModelData/Anim/Player/T_DissolveMask_A.dds"), 1);
@@ -209,13 +179,8 @@ void CDissolve_Sophia_Death::Free()
 {
     __super::Free();
 
-    Safe_Release(m_pShaderCom);
-    Safe_Release(m_pVIBufferCom);
     Safe_Release(m_pTextureCom);
     Safe_Release(m_pActionCS);
-    Safe_Release(m_pResetCS);
 
-    Safe_Release(m_pModelCom);
-    Safe_Release(m_pSophiaTransformCom);
     Safe_Release(m_pDissolveTextureCom);
 }

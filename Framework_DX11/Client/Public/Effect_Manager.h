@@ -66,7 +66,7 @@ private:
 	map<const _wstring, vector<class CEffect_Container*>>	m_EffectPooling;
 
 private:
-	HRESULT Load_Effects(const _wstring& strEffectPath);
+	HRESULT Load_Effects(const _wstring& strEffectPath, const _wstring& strTexturePath, const _wstring& strModelPath);
 	HRESULT Load_EffectContainers(const _wstring& strEffectPath);
 
 	HRESULT Load_Textures(const _wstring strTexturePath);
@@ -74,12 +74,12 @@ private:
 	HRESULT Load_Shaders();
 	HRESULT Load_Objects();
 
-	HRESULT Load_Particle_Effect(const _wstring& strResultPath);
-	HRESULT Load_Texture_Effect(const _wstring& strResultPath);
-	HRESULT Load_Mesh_Effect(const _wstring& strResultPath);
-	HRESULT Load_TrailOP_Effect(const _wstring strResultPath);
-	HRESULT Load_TrailTP_Effect(const _wstring strResultPath);
-	HRESULT Load_TrailMP_Effect(const _wstring strResultPath);
+	HRESULT Load_Particle_Effect(const _wstring& strResultPath, const _wstring& strTexturePath);
+	HRESULT Load_Texture_Effect(const _wstring& strResultPath, const _wstring& strTexturePath);
+	HRESULT Load_Mesh_Effect(const _wstring& strResultPath, const _wstring& strTexturePath, const _wstring& strModelPath);
+	HRESULT Load_TrailOP_Effect(const _wstring& strResultPath, const _wstring& strTexturePath);
+	HRESULT Load_TrailTP_Effect(const _wstring& strResultPath, const _wstring& strTexturePath);
+	HRESULT Load_TrailMP_Effect(const _wstring& strResultPath, const _wstring& strTexturePath);
 
 	_wstring Get_FileName(const _wstring& strFileTag);
 	_wstring Get_FileExtentin(const _wstring& strFileTag);
@@ -90,6 +90,10 @@ private:
 	class CEffect_Container* Clone_Effect_From_Prototype(const _wstring& strECTag, void* pArg);
 
 	HRESULT Effect_Pooling(const _wstring& strECTag, void* pArg, size_t iSize);
+
+	_wstring Erase_Text(const _wstring& strText, const _wstring& strRemove);
+	HRESULT Load_Texture(const _wstring& strTexturePath, const _wstring& strPrototypeTag);
+	HRESULT Load_Moedl(const _wstring& strModelPath, const _wstring& strPrototypeTag);
 
 public:
 	virtual void Free() override;

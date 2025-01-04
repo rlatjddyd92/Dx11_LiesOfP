@@ -1437,6 +1437,12 @@
     </Filter>
     <Filter Include="96.ObjectPool">
       <UniqueIdentifier>{9ee28dfe-06e1-4e56-85f9-09a61cb75164}</UniqueIdentifier>
+	</Filter>
+    <Filter Include="02.GameObjects\05.Effect\Dissolve_Effect">
+      <UniqueIdentifier>{cb27b1cf-8327-4c1b-935d-7b188622fd12}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02.GameObjects\02.Pawn\01.Monster\Dissolve_PowerAttack">
+      <UniqueIdentifier>{cd666ff9-0da7-4a7c-b213-e17b0e825404}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -2648,6 +2654,12 @@
     </ClInclude>
     <ClInclude Include="..\Public\ObjectPool.h">
       <Filter>96.ObjectPool</Filter>
+	</ClInclude>
+    <ClInclude Include="..\public\Dissolve_Effect.h">
+      <Filter>02.GameObjects\05.Effect\Dissolve_Effect</Filter>
+    </ClInclude>
+    <ClInclude Include="..\public\Dissolve_PowerAttack.h">
+      <Filter>02.GameObjects\02.Pawn\01.Monster\Dissolve_PowerAttack</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -3826,6 +3838,12 @@
     </ClCompile>
     <ClCompile Include="..\private\BloodTrail.cpp">
       <Filter>02.GameObjects\02.Pawn\00.Player\BloodTrail</Filter>
+    </ClCompile>
+    <ClCompile Include="..\private\Dissolve_Effect.cpp">
+      <Filter>02.GameObjects\05.Effect\Dissolve_Effect</Filter>
+    </ClCompile>
+    <ClCompile Include="..\private\Dissolve_PowerAttack.cpp">
+      <Filter>02.GameObjects\02.Pawn\01.Monster\Dissolve_PowerAttack</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

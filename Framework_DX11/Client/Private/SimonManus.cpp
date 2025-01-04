@@ -72,6 +72,7 @@
 // 고준호
 #include "SimonManus_2P_Aura.h"
 #include "Dissolve_SimonManus_Dead.h"
+#include "Dissolve_PowerAttack.h"
 
 CSimonManus::CSimonManus(ID3D11Device * pDevice, ID3D11DeviceContext * pContext)
 	: CMonster{ pDevice, pContext }
@@ -190,8 +191,10 @@ void CSimonManus::Priority_Update(_float fTimeDelta)
 			pEffect->Priority_Update(fTimeDelta);
 	}
 
-	m_pAuraEffect->Priority_Update(fTimeDelta);
-	m_pDissolveEffect->Priority_Update(fTimeDelta);
+	for (auto& pEffect : m_DissolveEffects)
+	{
+		pEffect->Priority_Update(fTimeDelta);
+	}
 }
 
 void CSimonManus::Update(_float fTimeDelta)
@@ -233,8 +236,10 @@ void CSimonManus::Update(_float fTimeDelta)
 			pEffect->Update(fTimeDelta);
 	}
 
-	m_pAuraEffect->Update(fTimeDelta);
-	m_pDissolveEffect->Update(fTimeDelta);
+	for (auto& pEffect : m_DissolveEffects)
+	{
+		pEffect->Update(fTimeDelta);
+	}
 
 	Update_Collider();
 
@@ -257,8 +262,11 @@ void CSimonManus::Late_Update(_float fTimeDelta)
 		if (!pEffect->Get_Dead())
 			pEffect->Late_Update(fTimeDelta);
 	}
-	m_pAuraEffect->Late_Update(fTimeDelta);
-	m_pDissolveEffect->Late_Update(fTimeDelta);
+
+	for (auto& pEffect : m_DissolveEffects)
+	{
+		pEffect->Late_Update(fTimeDelta);
+	}
 
 	m_pGameInstance->Add_RenderObject(CRenderer::RG_NONBLEND, this);
 	m_pGameInstance->Add_RenderObject(CRenderer::RG_SHADOWOBJ, this);
@@ -534,7 +542,7 @@ void CSimonManus::End_CutScene(_uint iCutSceneNum)
 		m_isStartDisslove = true;
 		m_pWeapon->IsActive(false);
 		Change_State(CSimonManus::DIE_TALKING);
-		m_pDissolveEffect->Set_On(true);
+		m_DissolveEffects[DISSOLVE_DEAD]->Set_On(true);
 	}
 
 	m_isCutScene = false;
@@ -553,7 +561,8 @@ void CSimonManus::Change_Model(_uint iModelNum)	// 컷신 2페이즈로 바꾸는 용도
 
 void CSimonManus::On_Aura(_bool bAura, _bool bCutScene)
 {
-	m_pAuraEffect->Set_On(bAura, bCutScene);
+	m_DissolveEffects[DISSOLVE_AURA]->Set_On(bAura);
+	static_cast<CSimonManus_2P_Aura*>(m_DissolveEffects[DISSOLVE_AURA])->Set_CutScene(bCutScene);
 }
 
 void CSimonManus::Resetting()
@@ -829,28 +838,45 @@ HRESULT CSimonManus::Ready_Effects()
 	}
 	m_Effects[WEAPON_PARTICLE]->Set_Loop(true);
 
+	m_DissolveEffects.resize(DISSOLVE_END);
+
 	// 고준호
-	CSimonManus_2P_Aura::SIMONMANUS_2P_AURA_DESC AuraDesc = {};
+	CSimonManus_2P_Aura::DISSOLVE_OBJECT_DESC AuraDesc = {};
 	AuraDesc.fRotationPerSec = XMConvertToRadians(90.f);
 	AuraDesc.fSpeedPerSec = 1.f;
 	AuraDesc.iLevelIndex = LEVEL_GAMEPLAY;
-	AuraDesc.pManus_TransformCom = m_pTransformCom;
-	AuraDesc.pModelCom = m_pExtraModelCom;
+	AuraDesc.pTarget_TransformCom = m_pTransformCom;
+	AuraDesc.pTarget_ModelCom = m_pExtraModelCom;
 	AuraDesc.pCutSceneModelCom = m_pCutSceneModelCom[MODEL_PHASE2];
+	AuraDesc.strVIBufferTag = TEXT("Prototype_Component_VIBuffer_Dissolve_SimonManusP2_Aura");
 
-	m_pAuraEffect = static_cast<CSimonManus_2P_Aura*>(m_pGameInstance->Clone_GameObject(TEXT("Prototype_GameObject_Effect_Dissolve_SimonManus_2P_Aura"), &AuraDesc));
+	m_DissolveEffects[DISSOLVE_AURA] = static_cast<CSimonManus_2P_Aura*>(m_pGameInstance->Clone_GameObject(TEXT("Prototype_GameObject_Effect_Dissolve_SimonManus_2P_Aura"), &AuraDesc));
 
 	CDissolve_SimonManus_Dead::DISSOLVE_OBJECT_DESC DissolveDesc = {};
 	DissolveDesc.fRotationPerSec = 90.f;
 	DissolveDesc.fSpeedPerSec = 1.f;
 	DissolveDesc.iLevelIndex = LEVEL_GAMEPLAY;
-	DissolveDesc.pModelCom = m_pExtraModelCom;
-	DissolveDesc.pManusTransformCom = m_pTransformCom;
+	DissolveDesc.pTarget_ModelCom = m_pExtraModelCom;
+	DissolveDesc.pTarget_TransformCom = m_pTransformCom;
 	DissolveDesc.pDissolveTextureCom = m_pDissloveTexture;
 	DissolveDesc.pThreshold = &m_fDissloveRatio;
 	DissolveDesc.vTextureSize = _float2(2048.f, 2048.f);
+	DissolveDesc.strVIBufferTag = TEXT("Prototype_Component_VIBuffer_Dissolve_SimonManus_Dead");
 
-	m_pDissolveEffect = static_cast<CDissolve_SimonManus_Dead*>(m_pGameInstance->Clone_GameObject(TEXT("Prototype_GameObject_Effect_Dissolve_SimonManus_Dead"), &DissolveDesc));
+	m_DissolveEffects[DISSOLVE_DEAD] = static_cast<CDissolve_SimonManus_Dead*>(m_pGameInstance->Clone_GameObject(TEXT("Prototype_GameObject_Effect_Dissolve_SimonManus_Dead"), &DissolveDesc));
+
+	CDissolve_Effect::DISSOLVE_EFFECT_DESC PowerAttackDesc = {};
+	PowerAttackDesc.fRotationPerSec = XMConvertToRadians(90.f);
+	PowerAttackDesc.fSpeedPerSec = 1.f;
+	PowerAttackDesc.iLevelIndex = LEVEL_GAMEPLAY;
+	PowerAttackDesc.pTarget_ModelCom = m_pModelCom;
+	PowerAttackDesc.pTarget_TransformCom = m_pTransformCom;
+	PowerAttackDesc.strVIBufferTag = TEXT("Prototype_Component_VIBuffer_Dissolve_SimonManusP1_PowerAttack");
+	m_DissolveEffects[DISSOLVE_POWERATTACK_P1] = static_cast<CDissolve_PowerAttack*>(m_pGameInstance->Clone_GameObject(TEXT("Prototype_GameObject_Effect_Dissolve_PowerAttack"), &PowerAttackDesc));
+
+	PowerAttackDesc.strVIBufferTag = TEXT("Prototype_Component_VIBuffer_Dissolve_SimonManusP2_PowerAttack");
+	m_DissolveEffects[DISSOLVE_POWERATTACK_P2] = static_cast<CDissolve_PowerAttack*>(m_pGameInstance->Clone_GameObject(TEXT("Prototype_GameObject_Effect_Dissolve_PowerAttack"), &PowerAttackDesc));
+
 
 	return S_OK;
 }
@@ -1031,8 +1057,9 @@ void CSimonManus::Free()
 	}
 	Safe_Release(m_pCutSceneFsmCom);
 
-	Safe_Release(m_pAuraEffect);
-	Safe_Release(m_pDissolveEffect);
+	for (auto& DissolveEffect : m_DissolveEffects)
+		Safe_Release(DissolveEffect);
+	m_DissolveEffects.clear();
 
 	__super::Free();
 

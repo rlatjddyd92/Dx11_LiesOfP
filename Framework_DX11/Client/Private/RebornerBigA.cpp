@@ -26,6 +26,7 @@
 #include "Effect_Manager.h"
 #include "Effect_Container.h"
 
+#include "Dissolve_PowerAttack.h"
 
 CRebornerBigA::CRebornerBigA(ID3D11Device* pDevice, ID3D11DeviceContext* pContext)
 	: CMonster{ pDevice, pContext }
@@ -113,6 +114,7 @@ void CRebornerBigA::Priority_Update(_float fTimeDelta)
 	{
 		m_pSwingEffect->Priority_Update(fTimeDelta);
 	}
+	m_pDissolveEffect->Priority_Update(fTimeDelta);
 
 }
 
@@ -143,6 +145,7 @@ void CRebornerBigA::Update(_float fTimeDelta)
 	{
 		m_pSwingEffect->Update(fTimeDelta);
 	}
+	m_pDissolveEffect->Update(fTimeDelta);
 
 	m_pGameInstance->Add_ColliderList(m_pColliderCom);
 	m_pWeapon->Update(fTimeDelta);
@@ -163,6 +166,7 @@ void CRebornerBigA::Late_Update(_float fTimeDelta)
 			{
 				m_pSwingEffect->Late_Update(fTimeDelta);
 			}
+			m_pDissolveEffect->Late_Update(fTimeDelta);
 
 			m_pGameInstance->Add_ColliderList(m_pColliderCom);
 			for (_int i = 0; i < CT_END - 1; ++i)
@@ -435,6 +439,18 @@ HRESULT CRebornerBigA::Ready_Effect()
 
 	m_pSwingEffect->Set_Loop(false);
 
+	CDissolve_Effect::DISSOLVE_EFFECT_DESC DissolveDesc = {};
+	DissolveDesc.fRotationPerSec = XMConvertToRadians(90.f);
+	DissolveDesc.fSpeedPerSec = 1.f;
+	DissolveDesc.iLevelIndex = LEVEL_GAMEPLAY;
+	DissolveDesc.pTarget_ModelCom = m_pModelCom;
+	DissolveDesc.pTarget_TransformCom = m_pTransformCom;
+	DissolveDesc.strVIBufferTag = TEXT("Prototype_Component_VIBuffer_Dissolve_RebornerBigA_PowerAttack");
+
+	m_pDissolveEffect = static_cast<CDissolve_PowerAttack*>(m_pGameInstance->Clone_GameObject(TEXT("Prototype_GameObject_Effect_Dissolve_PowerAttack"), &DissolveDesc));
+	if (nullptr == m_pDissolveEffect)
+		return E_FAIL;
+
 	return S_OK;
 }
 
@@ -526,4 +542,5 @@ void CRebornerBigA::Free()
 	__super::Free();
 
 	Safe_Release(m_pWeapon);
+	Safe_Release(m_pDissolveEffect);
 }

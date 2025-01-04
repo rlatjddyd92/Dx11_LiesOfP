@@ -71,6 +71,15 @@ public:
 		, EFFECT_END
 	};
 
+	enum DISSOLVE_EFFECT
+	{
+		DISSOLVE_DEAD,
+		DISSOLVE_POWERATTACK_P1,
+		DISSOLVE_POWERATTACK_P2,
+		DISSOLVE_END
+	};
+
+
 private:
 	CRaxasia(ID3D11Device* pDevice, ID3D11DeviceContext* pContext);
 	CRaxasia(const CRaxasia& Prototype);
@@ -144,7 +153,8 @@ private:
 	const _Matrix* m_pColliderBindMatrix[CT_END] = { nullptr, nullptr, nullptr };
 
 	class CRaxasia_Sword_CutScene*			m_pCutSceneWeapon = { nullptr };
-	class CDissolve_Raxasia_Dead*			m_pDissolveEffect = { nullptr };
+
+	vector<class CDissolve_Effect*> m_DissolveEffects;
 
 private:
 

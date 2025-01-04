@@ -54,6 +54,7 @@ private:
 	class CCollider*			m_EXCollider[CT_END - 1] = { nullptr, nullptr };
 	const _Matrix*				m_pColliderBindMatrix[CT_END] = { nullptr, nullptr, nullptr };
 
+	class CDissolve_Effect*		m_pDissolveEffect = { nullptr };
 
 private:
 	virtual void	Active_CurrentWeaponCollider(_float fDamageRatio, _uint iCollIndex = 0, HIT_TYPE eHitType = HIT_END, ATTACK_STRENGTH eAtkStrength = ATK_END) override;
@@ -64,6 +65,7 @@ private:
 private:
 	HRESULT Ready_Components();
 	HRESULT Ready_FSM();
+	HRESULT Ready_Effect();
 
 	void	Update_Collider();
 
