@@ -124,7 +124,10 @@ void CState_Player_Flame_LAttack00::Control_Collider()
 
     if (m_iColliderStartFrame <= iFrame && iFrame <= m_iColliderEndFrame)
     {
-        m_pPlayer->Active_CurrentWeaponCollider();
+        if (m_pPlayer->Active_CurrentWeaponCollider())
+        {
+            m_pPlayer->Decrease_Stamina(45.f);
+        }
     }
     else
     {
